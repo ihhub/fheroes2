@@ -337,7 +337,7 @@ void Battle::DialogBattleSettings( void )
     }
 
     if ( saveConfiguration ) {
-        conf.Save( "fheroes2.cfg" );
+        conf.Save( Settings::configFileName );
     }
 }
 
@@ -476,7 +476,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     text.Blit( pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 285 );
 
     if ( killed1.isValid() )
-        Army::DrawMons32Line( killed1, pos_rt.x + 25, pos_rt.y + 303, 270 );
+        Army::drawMiniMonsLine( killed1, pos_rt.x + 25, pos_rt.y + 303, 270 );
     else {
         text.Set( _( "None" ), Font::SMALL );
         text.Blit( pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 300 );
@@ -487,7 +487,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     text.Blit( pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 345 );
 
     if ( killed2.isValid() )
-        Army::DrawMons32Line( killed2, pos_rt.x + 25, pos_rt.y + 363, 270 );
+        Army::drawMiniMonsLine( killed2, pos_rt.x + 25, pos_rt.y + 363, 270 );
     else {
         text.Set( _( "None" ), Font::SMALL );
         text.Blit( pos_rt.x + ( pos_rt.width - text.w() ) / 2, pos_rt.y + 360 );
@@ -969,8 +969,9 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
 
     std::string str = hero.isCaptain() ? _( "Captain of %{name} states:" ) : _( "%{name} states:" );
     StringReplace( str, "%{name}", hero.GetName() );
+
     Text text( str, Font::BIG );
-    text.Blit( pos_rt.x + 320 - text.w() / 2, pos_rt.y + 30 );
+    text.Blit( pos_rt.x + 312 - text.w() / 2, pos_rt.y + 30 );
 
     str = _( "\"I will accept your surrender and grant you and your troops safe passage for the price of %{price} gold.\"" );
     StringReplace( str, "%{price}", cost );

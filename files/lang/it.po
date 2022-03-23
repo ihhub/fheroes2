@@ -2267,7 +2267,7 @@ msgstr ""
 msgid "Your army too big!"
 msgstr "Il tuo esercito è troppo grande"
 
-msgid "Choose game language:"
+msgid "Select Game Language:"
 msgstr "Scegli la lingua del gioco:"
 
 msgid "%{name} has gained a level."
@@ -7882,7 +7882,7 @@ msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr ""
 "Egli ha detto a lei: Bla bla bla... e poi lei ha detto: Bla, bla, bla..."
 
-msgid "An unknown force is being ressurected..."
+msgid "An unknown force is being resurrected..."
 msgstr "Una forza sconosciuta sta risorgendo..."
 
 #, fuzzy

@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 
 #include "agg.h"
 #include "agg_image.h"
@@ -514,13 +515,6 @@ double Castle::getVisitValue( const Heroes & hero ) const
     return spellValue + upgradeStrength + futureArmy.getReinforcementValue( getAvailableArmy( potentialFunds ) );
 }
 
-void Castle::ActionNewDay( void )
-{
-    EducateHeroes();
-
-    SetModes( ALLOWBUILD );
-}
-
 u32 * Castle::GetDwelling( u32 dw )
 {
     if ( isBuild( dw ) )
@@ -549,7 +543,14 @@ u32 * Castle::GetDwelling( u32 dw )
     return nullptr;
 }
 
-void Castle::ActionNewWeek( void )
+void Castle::ActionNewDay()
+{
+    EducateHeroes();
+
+    SetModes( ALLOWBUILD );
+}
+
+void Castle::ActionNewWeek()
 {
     // skip the first week
     if ( world.CountWeek() < 2 ) {
@@ -609,46 +610,44 @@ void Castle::ActionNewWeek( void )
                 JoinRNDArmy();
         }
     }
-}
 
-void Castle::ActionNewMonth( void )
-{
-    // skip the first month
-    if ( world.GetMonth() < 2 ) {
-        return;
-    }
+    // Monthly population growth bonuses should be calculated taking the weekly growth into account
+    if ( world.BeginMonth() ) {
+        assert( world.GetMonth() > 1 );
 
-    // population halved
-    if ( world.GetWeekType().GetType() == WeekName::PLAGUE ) {
-        for ( u32 ii = 0; ii < CASTLEMAXMONSTER; ++ii )
-            dwelling[ii] /= 2;
-    }
-    else
+        // population halved
+        if ( world.GetWeekType().GetType() == WeekName::PLAGUE ) {
+            for ( u32 ii = 0; ii < CASTLEMAXMONSTER; ++ii ) {
+                dwelling[ii] /= 2;
+            }
+        }
         // Month Of
-        if ( world.GetWeekType().GetType() == WeekName::MONSTERS ) {
-        const u32 dwellings[10] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
-                                    DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
-        u32 * dw = nullptr;
+        else if ( world.GetWeekType().GetType() == WeekName::MONSTERS ) {
+            const u32 dwellings[10] = { DWELLING_MONSTER1, DWELLING_UPGRADE2, DWELLING_UPGRADE3, DWELLING_UPGRADE4, DWELLING_UPGRADE5,
+                                        DWELLING_MONSTER2, DWELLING_MONSTER3, DWELLING_MONSTER4, DWELLING_MONSTER5, 0 };
+            u32 * dw = nullptr;
 
-        for ( u32 ii = 0; dwellings[ii]; ++ii )
-            if ( nullptr != ( dw = GetDwelling( dwellings[ii] ) ) ) {
-                const Monster mons( race, dwellings[ii] );
-                if ( mons.isValid() && mons.GetID() == world.GetWeekType().GetMonster() ) {
-                    *dw += *dw * GetGrownMonthOf() / 100;
-                    break;
+            for ( u32 ii = 0; dwellings[ii]; ++ii ) {
+                if ( nullptr != ( dw = GetDwelling( dwellings[ii] ) ) ) {
+                    const Monster mons( race, dwellings[ii] );
+                    if ( mons.isValid() && mons.GetID() == world.GetWeekType().GetMonster() ) {
+                        *dw += *dw * GetGrownMonthOf() / 100;
+                        break;
+                    }
                 }
             }
+        }
     }
 }
 
-// change castle color
+void Castle::ActionNewMonth() {}
+
 void Castle::ChangeColor( int cl )
 {
     SetColor( cl );
     army.SetColor( cl );
 }
 
-// return mage guild level
 int Castle::GetLevelMageGuild( void ) const
 {
     if ( building & BUILD_MAGEGUILD5 )
@@ -1311,7 +1310,7 @@ bool Castle::BuyBuilding( u32 build )
     case BUILD_CASTLE:
         building &= ~BUILD_TENT;
         Maps::UpdateCastleSprite( GetCenter(), race );
-        Maps::ClearFog( GetIndex(), Game::GetViewDistance( Game::VIEW_CASTLE ), GetColor() );
+        Maps::ClearFog( GetIndex(), GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ), GetColor() );
         break;
 
     case BUILD_MAGEGUILD1:
@@ -1898,28 +1897,28 @@ bool Castle::PresentBoat( void ) const
     return false;
 }
 
-u32 Castle::GetActualDwelling( u32 build ) const
+uint32_t Castle::GetActualDwelling( const uint32_t buildId ) const
 {
-    switch ( build ) {
+    switch ( buildId ) {
     case DWELLING_MONSTER1:
     case DWELLING_UPGRADE2:
     case DWELLING_UPGRADE3:
     case DWELLING_UPGRADE4:
     case DWELLING_UPGRADE5:
     case DWELLING_UPGRADE7:
-        return build;
+        return buildId;
     case DWELLING_MONSTER2:
-        return building & DWELLING_UPGRADE2 ? DWELLING_UPGRADE2 : build;
+        return building & DWELLING_UPGRADE2 ? DWELLING_UPGRADE2 : buildId;
     case DWELLING_MONSTER3:
-        return building & DWELLING_UPGRADE3 ? DWELLING_UPGRADE3 : build;
+        return building & DWELLING_UPGRADE3 ? DWELLING_UPGRADE3 : buildId;
     case DWELLING_MONSTER4:
-        return building & DWELLING_UPGRADE4 ? DWELLING_UPGRADE4 : build;
+        return building & DWELLING_UPGRADE4 ? DWELLING_UPGRADE4 : buildId;
     case DWELLING_MONSTER5:
-        return building & DWELLING_UPGRADE5 ? DWELLING_UPGRADE5 : build;
+        return building & DWELLING_UPGRADE5 ? DWELLING_UPGRADE5 : buildId;
     case DWELLING_MONSTER6:
-        return building & DWELLING_UPGRADE7 ? DWELLING_UPGRADE7 : ( building & DWELLING_UPGRADE6 ? DWELLING_UPGRADE6 : build );
+        return building & DWELLING_UPGRADE7 ? DWELLING_UPGRADE7 : ( building & DWELLING_UPGRADE6 ? DWELLING_UPGRADE6 : buildId );
     case DWELLING_UPGRADE6:
-        return building & DWELLING_UPGRADE7 ? DWELLING_UPGRADE7 : build;
+        return building & DWELLING_UPGRADE7 ? DWELLING_UPGRADE7 : buildId;
     default:
         break;
     }
@@ -2313,7 +2312,7 @@ u32 Castle::GetGrownMonthOf( void )
 
 void Castle::Scoute( void ) const
 {
-    Maps::ClearFog( GetIndex(), Game::GetViewDistance( Game::VIEW_CASTLE ), GetColor() );
+    Maps::ClearFog( GetIndex(), GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ), GetColor() );
 }
 
 void Castle::JoinRNDArmy( void )

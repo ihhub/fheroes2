@@ -38,6 +38,11 @@ if exist "$(MSBuildThisFileDirectory)..\maps" (
     )
 )
 
+if not exist "$(OutDir)files\data" (
+    mkdir "$(OutDir)files\data"
+)
+xcopy /Y /s /Q "$(MSBuildThisFileDirectory)..\files\data" "$(OutDir)files\data"
+
 xcopy /Y "$(MSBuildThisFileDirectory)..\fheroes2.cfg" "$(OutDir)"
 xcopy /Y "$(MSBuildThisFileDirectory)..\fheroes2.key" "$(OutDir)"
 

@@ -33,6 +33,11 @@ public:
 
     bool isPosition( const int32_t position ) const;
 
+    int32_t getPosition() const
+    {
+        return _index;
+    }
+
     bool isFound() const
     {
         return _isFound;

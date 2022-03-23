@@ -60,16 +60,6 @@ namespace Game
         TYPE_LOADFILE = 0x80,
         TYPE_MULTI = TYPE_HOTSEAT
     };
-    // distance_t
-    enum
-    {
-        // UNUSED = 0,
-        VIEW_CASTLE = 1,
-        VIEW_HEROES = 2,
-        VIEW_TELESCOPE = 3,
-        VIEW_OBSERVATION_TOWER = 4,
-        VIEW_MAGI_EYES = 5
-    };
 
     enum : int32_t
     {
@@ -209,7 +199,6 @@ namespace Game
     u32 GetRating( void );
     u32 GetGameOverScores( void );
     u32 GetLostTownDays( void );
-    u32 GetViewDistance( u32 );
     u32 GetWhirlpoolPercent( void );
     u32 SelectCountPlayers( void );
     void PlayPickupSound( void );

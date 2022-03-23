@@ -588,20 +588,6 @@ int Battle::Board::GetReflectDirection( int d )
     return UNKNOWN;
 }
 
-bool Battle::Board::isReflectDirection( int d )
-{
-    switch ( d ) {
-    case TOP_LEFT:
-    case LEFT:
-    case BOTTOM_LEFT:
-        return true;
-    default:
-        break;
-    }
-
-    return false;
-}
-
 bool Battle::Board::IsLeftDirection( const int32_t startCellId, const int32_t endCellId, const bool prevLeftDirection )
 {
     const int startX = startCellId % ARENAW;

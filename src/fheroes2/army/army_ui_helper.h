@@ -1,9 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2019 - 2022                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,26 +18,16 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <string>
+#pragma once
 
-#include "agg_image.h"
-#include "dialog.h"
-#include "game_delays.h"
-#include "icn.h"
-#include "translations.h"
-#include "ui_dialog.h"
-#include "ui_text.h"
-#include "world.h"
+#include <cstdint>
 
-void Castle::OpenTavern() const
+class Troops;
+
+namespace fheroes2
 {
-    std::string body( _( "A generous tip for the barkeep yields the following rumor:" ) );
-    body += "\n\n";
-    body += world.getCurrentRumor();
+    class Image;
 
-    const fheroes2::DynamicImageDialogElement imageUI( ICN::TAVWIN, { 0, 1 }, Game::getAnimationDelayValue( Game::CASTLE_TAVERN_DELAY ) );
-    const fheroes2::TextDialogElement textBodyUI( std::make_shared<fheroes2::Text>( body, fheroes2::FontType::normalWhite() ) );
-
-    fheroes2::showMessage( fheroes2::Text( GetStringBuilding( BUILD_TAVERN ), fheroes2::FontType::normalYellow() ), fheroes2::Text( "", {} ), Dialog::OK,
-                           { &imageUI, &textBodyUI } );
+    void drawMiniMonsters( const Troops & troops, int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawPower, bool compact,
+                           bool isScouteView, Image & output );
 }

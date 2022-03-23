@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -60,7 +60,6 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     _height = static_cast<int32_t>( height );
 
     smk_info_audio( _videoFile, &trackMask, channel, audioBitDepth, audioRate );
-    smk_enable_video( _videoFile, 1 );
 
     if ( usf > 0 )
         _fps = 1000000.0 / usf;
@@ -81,8 +80,10 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     for ( uint8_t i = 0; i < audioChannelCount; ++i ) {
         if ( trackMask & ( 1 << i ) ) {
             const unsigned long length = smk_get_audio_size( _videoFile, i );
+            if ( length == 0 ) {
+                continue;
+            }
             const uint8_t * data = smk_get_audio( _videoFile, i );
-            soundBuffer[i].reserve( soundBuffer[i].size() + length );
             soundBuffer[i].insert( soundBuffer[i].end(), data, data + length );
         }
     }
@@ -93,8 +94,10 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
         for ( uint8_t i = 0; i < audioChannelCount; ++i ) {
             if ( trackMask & ( 1 << i ) ) {
                 const unsigned long length = smk_get_audio_size( _videoFile, i );
+                if ( length == 0 ) {
+                    continue;
+                }
                 const uint8_t * data = smk_get_audio( _videoFile, i );
-                soundBuffer[i].reserve( soundBuffer[i].size() + length );
                 soundBuffer[i].insert( soundBuffer[i].end(), data, data + length );
             }
         }

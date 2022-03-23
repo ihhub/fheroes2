@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -116,6 +116,14 @@ namespace Logging
         std::ostringstream osss;                                                                                                                                         \
         osss << x << std::endl;                                                                                                                                          \
         sceClibPrintf( osss.str().c_str() );                                                                                                                             \
+    }
+#elif defined( MACOS_APP_BUNDLE )
+#include <syslog.h>
+#define COUT( x )                                                                                                                                                        \
+    {                                                                                                                                                                    \
+        std::ostringstream logMessage;                                                                                                                                   \
+        logMessage << x;                                                                                                                                                 \
+        syslog( LOG_WARNING, "fheroes2_log: %s", logMessage.str().c_str() );                                                                                             \
     }
 #else // Default: log to STDERR
 #define COUT( x )                                                                                                                                                        \

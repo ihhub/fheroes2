@@ -180,13 +180,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     // image background
     fheroes2::drawMainMenuScreen();
     if ( isFirstGameRun ) {
-        fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
-        const std::vector<fheroes2::SupportedLanguage> supportedLanguages = fheroes2::getSupportedLanguages();
-
-        if ( supportedLanguages.size() > 1 ) {
-            currentLanguage = fheroes2::selectLanguage( supportedLanguages, currentLanguage );
-            conf.setGameLanguage( fheroes2::getLanguageAbbreviation( currentLanguage ) );
-        }
+        fheroes2::selectLanguage( fheroes2::getSupportedLanguages(), fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
         Dialog::Message( _( "Greetings!" ), _( "Welcome to Free Heroes of Might and Magic II! Before starting the game please choose game resolution." ), Font::BIG,
                          Dialog::OK );
@@ -208,7 +202,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         fheroes2::showMessage( header, body, Dialog::OK );
 
         conf.resetFirstGameRun();
-        conf.Save( "fheroes2.cfg" );
+        conf.Save( Settings::configFileName );
     }
 
     outputMainMenuInTextSupportMode();
