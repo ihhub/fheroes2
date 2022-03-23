@@ -47,7 +47,7 @@ jobs:
         - name: macOS SDL1 App Bundle
           os: macos-10.15
           dependencies: sdl sdl_mixer sdl_image dylibbundler
-          env: { FHEROES2_SDL1: ON, MACOS_APP_BUNDLE: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_STRICT_COMPILATION: ON }
+          env: { FHEROES2_SDL1: ON, FHEROES2_MACOS_APP_BUNDLE: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_STRICT_COMPILATION: ON }
         - name: macOS SDL2
           os: macos-10.15
           dependencies: sdl2 sdl2_mixer sdl2_image
@@ -59,7 +59,7 @@ jobs:
         - name: macOS SDL2 App Bundle
           os: macos-10.15
           dependencies: sdl2 sdl2_mixer sdl2_image dylibbundler
-          env: { MACOS_APP_BUNDLE: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_STRICT_COMPILATION: ON }
+          env: { FHEROES2_MACOS_APP_BUNDLE: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_STRICT_COMPILATION: ON }
     name: Make (${{ matrix.config.name }})
     runs-on: ${{ matrix.config.os }}
     steps:

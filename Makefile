@@ -23,8 +23,8 @@
 # FHEROES2_WITH_DEBUG: build in debug mode
 # FHEROES2_WITH_IMAGE: build with SDL image support
 # FHEROES2_WITH_TOOLS: build tools
-# FHEROES2_STRICT_COMPILATION: build with strict compilation option (makes warnings into errors)
-# MACOS_APP_BUNDLE: Create a Mac app bundle (only valid when building on macOS)
+# FHEROES2_STRICT_COMPILATION: build with strict compilation option (turns warnings into errors)
+# FHEROES2_MACOS_APP_BUNDLE: create a Mac app bundle (only valid when building on macOS)
 #
 # -DCONFIGURE_FHEROES2_DATA: system fheroes2 game dir
 
@@ -36,12 +36,12 @@ TARGET	:= fheroes2
 
 all:
 	$(MAKE) -C src
-ifndef MACOS_APP_BUNDLE
+ifndef FHEROES2_MACOS_APP_BUNDLE
 	@cp src/dist/$(TARGET) .
 endif
 
 bundle:
-ifdef MACOS_APP_BUNDLE
+ifdef FHEROES2_MACOS_APP_BUNDLE
 	@mkdir -p "src/dist/${TARGET}.app/Contents/Resources/translations"
 	@mkdir -p "src/dist/${TARGET}.app/Contents/Resources/h2d"
 	@mkdir -p "src/dist/${TARGET}.app/Contents/MacOS"

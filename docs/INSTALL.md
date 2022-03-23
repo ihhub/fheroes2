@@ -114,9 +114,9 @@ brew install fheroes2
 * Download the source and compile with the `-DMACOS_APP_BUNDLE=ON` option (if using CMake) or using the following commands (with make):
 
 ```sh
-make MACOS_APP_BUNDLE=ON
+make FHEROES2_MACOS_APP_BUNDLE=ON
 make -C files/lang
-make MACOS_APP_BUNDLE=ON bundle
+make FHEROES2_MACOS_APP_BUNDLE=ON bundle
 ```
 
 * If you have a legally purchased copy of the original game, run the `extract_homm2_resources_for_app_bundle.sh` script supplied in the
