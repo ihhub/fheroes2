@@ -5,7 +5,7 @@ project(fheroes2 VERSION 0.9.13 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 
-include(CmakeDependentOption)
+include(CMakeDependentOption)
 include(GNUInstallDirs)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -17,10 +17,12 @@ option(USE_SYSTEM_LIBSMACKER "Use system libsmacker instead of the bundled versi
 option(ENABLE_STRICT_COMPILATION "Enable strict compilation mode (turns warnings into errors)" OFF)
 option(ENABLE_IMAGE "Enable SDL/SDL2 Image support (requires libpng)" ON)
 option(ENABLE_TOOLS "Enable additional tools" OFF)
-option(GET_HOMM2_DEMO "Fetch and install the HoMM II demo data" OFF)
 
 # Available only on macOS
-cmake_dependent_option(MACOS_APP_BUNDLE "Create a Mac app bundle" OFF APPLE OFF)
+cmake_dependent_option(MACOS_APP_BUNDLE "Create a Mac app bundle" OFF "APPLE" OFF)
+
+# Should not be available f we are creating a Mac app bundle
+cmake_dependent_option(GET_HOMM2_DEMO "Fetch and install the HoMM II demo data" OFF "NOT MACOS_APP_BUNDLE" OFF)
 
 set(USE_SDL_VERSION SDL2 CACHE STRING "Version of the SDL library used")
 set(FHEROES2_DATA "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}" CACHE STRING "Path to the fheroes2 data directory (relative to CMAKE_INSTALL_PREFIX)")
