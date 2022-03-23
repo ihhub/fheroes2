@@ -27,6 +27,7 @@
 #include <set>
 
 struct KingdomCastles;
+
 namespace Battle
 {
     class Units;
@@ -60,7 +61,9 @@ namespace AI
             , underThreat( inThreat )
             , safetyFactor( inSafety )
             , buildingValue( inValue )
-        {}
+        {
+            assert( castle != nullptr );
+        }
     };
 
     struct BattleTargetPair

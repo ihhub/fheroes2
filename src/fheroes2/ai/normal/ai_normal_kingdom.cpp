@@ -172,8 +172,7 @@ namespace AI
 
             const int32_t castleIndex = castle->GetIndex();
             const uint32_t regionID = world.GetTiles( castleIndex ).GetRegion();
-            sortedCastleList.emplace_back( castle, castlesInDanger.find( castleIndex ) != castlesInDanger.end(), _regions[regionID].safetyFactor,
-                                           castle->getBuildingValue() );
+            sortedCastleList.emplace_back( castle, castlesInDanger.count( castleIndex ) > 0, _regions[regionID].safetyFactor, castle->getBuildingValue() );
         }
 
         std::sort( sortedCastleList.begin(), sortedCastleList.end(), []( const AICastle & left, const AICastle & right ) {
@@ -340,7 +339,7 @@ namespace AI
                 ++availableHeroCount;
         }
 
-        std::set<int> castlesInDanger = findCastlesInDanger( castles, enemyArmies, myColor );
+        const std::set<int> castlesInDanger = findCastlesInDanger( castles, enemyArmies, myColor );
 
         int32_t heroLimit = world.w() / Maps::SMALL + 1;
         if ( _personality == EXPLORER )
