@@ -20,8 +20,7 @@
 
 # Options:
 #
-# DEBUG: build in debug mode
-#
+# FHEROES2_WITH_DEBUG: build in debug mode
 # FHEROES2_IMAGE_SUPPORT: build with SDL image support
 # WITH_TOOLS: build tools
 # FHEROES2_STRICT_COMPILATION: build with strict compilation option (makes warnings into errors)

@@ -20,7 +20,7 @@
 
 TARGET := fheroes2
 
-ifdef DEBUG
+ifdef FHEROES2_WITH_DEBUG
 CFLAGS := $(CFLAGS) -O0 -g -pedantic -DWITH_DEBUG
 else
 CFLAGS := -O3 $(CFLAGS)

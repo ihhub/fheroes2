@@ -23,7 +23,7 @@ jobs:
         - name: Linux SDL1 Debug
           os: ubuntu-latest
           dependencies: libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev gettext
-          env: { FHEROES2_SDL1: ON, WITH_TOOLS: ON, FHEROES2_STRICT_COMPILATION: ON, DEBUG: ON }
+          env: { FHEROES2_SDL1: ON, WITH_TOOLS: ON, FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_DEBUG: ON }
         - name: Linux SDL2 Release
           os: ubuntu-latest
           dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
@@ -35,7 +35,7 @@ jobs:
         - name: Linux SDL2 Debug
           os: ubuntu-latest
           dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
-          env: { WITH_TOOLS: ON, FHEROES2_STRICT_COMPILATION: ON, DEBUG: ON }
+          env: { WITH_TOOLS: ON, FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_DEBUG: ON }
         - name: macOS SDL1
           os: macos-10.15
           dependencies: sdl sdl_mixer sdl_image
