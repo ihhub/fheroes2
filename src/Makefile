@@ -55,8 +55,8 @@ else
 SDL_LIBS := $(SDL_LIBS) -lSDL2_mixer
 endif
 
-ifdef FHEROES2_IMAGE_SUPPORT
-CFLAGS := $(CFLAGS) -DFHEROES2_IMAGE_SUPPORT $(shell libpng-config --cflags)
+ifdef FHEROES2_WITH_IMAGE
+CFLAGS := $(CFLAGS) -DWITH_IMAGE $(shell libpng-config --cflags)
 ifdef FHEROES2_SDL1
 SDL_LIBS := $(SDL_LIBS) -lSDL_image $(shell libpng-config --libs)
 else

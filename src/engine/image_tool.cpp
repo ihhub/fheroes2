@@ -28,7 +28,7 @@
 #include <SDL_video.h>
 #endif
 
-#if defined( FHEROES2_IMAGE_SUPPORT )
+#if defined( WITH_IMAGE )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #define FHEROES2_ENABLE_PNG 1
 #include <SDL_image.h>

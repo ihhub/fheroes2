@@ -21,7 +21,7 @@
 # Options:
 #
 # FHEROES2_WITH_DEBUG: build in debug mode
-# FHEROES2_IMAGE_SUPPORT: build with SDL image support
+# FHEROES2_WITH_IMAGE: build with SDL image support
 # WITH_TOOLS: build tools
 # FHEROES2_STRICT_COMPILATION: build with strict compilation option (makes warnings into errors)
 # MACOS_APP_BUNDLE: Create a Mac app bundle (only valid when building on macOS)

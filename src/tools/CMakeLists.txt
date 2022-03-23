@@ -6,10 +6,10 @@ add_executable(til2img til2img.cpp)
 add_executable(xmi2mid xmi2mid_cli.cpp)
 
 target_compile_definitions(icn2img PRIVATE
-	$<$<BOOL:${ENABLE_IMAGE}>:FHEROES2_IMAGE_SUPPORT>
+	$<$<BOOL:${ENABLE_IMAGE}>:WITH_IMAGE>
 	)
 target_compile_definitions(til2img PRIVATE
-	$<$<BOOL:${ENABLE_IMAGE}>:FHEROES2_IMAGE_SUPPORT>
+	$<$<BOOL:${ENABLE_IMAGE}>:WITH_IMAGE>
 	)
 
 target_link_libraries(82m2wav
