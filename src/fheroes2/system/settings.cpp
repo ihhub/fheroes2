@@ -505,8 +505,8 @@ ListDirs Settings::GetRootDirs()
     ListDirs dirs;
 
     // from build
-#ifdef CONFIGURE_FHEROES2_DATA
-    dirs.push_back( EXPANDDEF( CONFIGURE_FHEROES2_DATA ) );
+#ifdef FHEROES2_DATA
+    dirs.push_back( EXPANDDEF( FHEROES2_DATA ) );
 #endif
 
     // from env

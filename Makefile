@@ -26,7 +26,7 @@
 # FHEROES2_STRICT_COMPILATION: build with strict compilation option (turns warnings into errors)
 # FHEROES2_MACOS_APP_BUNDLE: create a Mac app bundle (only valid when building on macOS)
 #
-# -DCONFIGURE_FHEROES2_DATA: system fheroes2 game dir
+# -DFHEROES2_DATA: fheroes2 data directory
 
 PROJECT_VERSION := 0.9.13
 
