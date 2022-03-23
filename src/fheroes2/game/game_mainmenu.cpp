@@ -202,7 +202,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         fheroes2::showMessage( header, body, Dialog::OK );
 
         conf.resetFirstGameRun();
-        conf.Save( "fheroes2.cfg" );
+        conf.Save( Settings::configFileName );
     }
 
     outputMainMenuInTextSupportMode();

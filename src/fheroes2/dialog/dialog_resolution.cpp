@@ -220,8 +220,10 @@ namespace Dialog
              && ( selectedResolution.width != currentResolution.width || selectedResolution.height != currentResolution.height ) ) {
             display.resize( selectedResolution.width, selectedResolution.height );
 
+#if !defined( MACOS_APP_BUNDLE )
             const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
             fheroes2::engine().setIcon( appIcon );
+#endif
 
             return true;
         }

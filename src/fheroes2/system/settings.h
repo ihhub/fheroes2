@@ -47,6 +47,8 @@ enum MusicSource
 class Settings
 {
 public:
+    static constexpr const char * configFileName = "fheroes2.cfg";
+
     enum : uint32_t
     {
         GAME_AUTOSAVE_BEGIN_DAY = 0x10000010,
