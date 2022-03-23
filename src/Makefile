@@ -41,7 +41,7 @@ ifdef FHEROES2_STRICT_COMPILATION
 CFLAGS := $(CFLAGS) -Werror
 endif
 
-ifdef FHEROES2_SDL1
+ifdef FHEROES2_WITH_SDL1
 SDL_LIBS := $(shell sdl-config --libs)
 SDL_FLAGS := $(shell sdl-config --cflags)
 else
@@ -49,7 +49,7 @@ SDL_LIBS := $(shell sdl2-config --libs)
 SDL_FLAGS := $(shell sdl2-config --cflags)
 endif
 
-ifdef FHEROES2_SDL1
+ifdef FHEROES2_WITH_SDL1
 SDL_LIBS := $(SDL_LIBS) -lSDL_mixer
 else
 SDL_LIBS := $(SDL_LIBS) -lSDL2_mixer
@@ -57,7 +57,7 @@ endif
 
 ifdef FHEROES2_WITH_IMAGE
 CFLAGS := $(CFLAGS) -DWITH_IMAGE $(shell libpng-config --cflags)
-ifdef FHEROES2_SDL1
+ifdef FHEROES2_WITH_SDL1
 SDL_LIBS := $(SDL_LIBS) -lSDL_image $(shell libpng-config --libs)
 else
 SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs)

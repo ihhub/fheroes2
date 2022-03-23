@@ -20,8 +20,8 @@
 
 # Options:
 #
-# FHEROES2_SDL1: build with SDL1 instead of SDL2 (which is used by default)
 # FHEROES2_STRICT_COMPILATION: build in strict compilation mode (turns warnings into errors)
+# FHEROES2_WITH_SDL1: build with SDL1 instead of SDL2 (which is used by default)
 # FHEROES2_WITH_DEBUG: build in debug mode
 # FHEROES2_WITH_IMAGE: build with SDL/SDL2 Image support (requires libpng)
 # FHEROES2_WITH_TOOLS: build additional tools
