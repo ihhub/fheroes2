@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.20)
 cmake_policy(SET CMP0074 NEW)
 
 project(fheroes2 VERSION 0.9.13 LANGUAGES C CXX)
@@ -19,7 +19,7 @@ option(MACOS_APP_BUNDLE "Create a Mac app bundle (only valid when building on ma
 option(GET_HOMM2_DEMO "Fetch and install the HoMM II demo data" OFF)
 
 set(USE_SDL_VERSION SDL2 CACHE STRING "Version of the SDL library used")
-set(FHEROES2_DATA "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}" CACHE STRING "Built-in path to the fheroes2 data directory")
+set(FHEROES2_DATA "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}" CACHE STRING "Path to the fheroes2 data directory (relative to CMAKE_INSTALL_PREFIX)")
 
 # For ComboBox in CMake GUI
 set_property(CACHE USE_SDL_VERSION PROPERTY STRINGS SDL SDL2)
