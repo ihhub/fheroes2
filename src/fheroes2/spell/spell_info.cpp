@@ -261,6 +261,16 @@ namespace fheroes2
             description += _( "The nearest town is %{town}." );
             StringReplace( description, "%{town}", castle->GetName() );
 
+            const Heroes * townGuest = castle->GetHeroes().Guest();
+            if ( townGuest != nullptr ) {
+                description += "\n \n";
+                std::string extraLine = _( "This town is occupied by your hero %{hero}." );
+                StringReplace( extraLine, "%{town}", castle->GetName() );
+                StringReplace( extraLine, "%{hero}", townGuest->GetName() );
+
+                description += extraLine;
+            }
+
             return description;
         }
 
