@@ -184,18 +184,22 @@ namespace
         }
     }
 
-    bool preferAttackFromHead( const Battle::Unit & attacker, const uint32_t cursorType )
+    bool preferAttackFromHead( const Battle::Unit & attacker, const int /* theme */ )
     {
         if ( !attacker.isWide() ) {
             return true;
         }
 
+        return true;
+
+        /* TODO: example code for implementing direct up/down attacks
         if ( attacker.isReflect() ) {
-            return cursorType != Cursor::SWORD_TOPRIGHT && cursorType != Cursor::SWORD_BOTTOMRIGHT;
+            return theme != Cursor::SWORD_TOPRIGHT && theme != Cursor::SWORD_BOTTOMRIGHT;
         }
         else {
-            return cursorType != Cursor::SWORD_TOPLEFT && cursorType != Cursor::SWORD_BOTTOMLEFT;
+            return theme != Cursor::SWORD_TOPLEFT && theme != Cursor::SWORD_BOTTOMLEFT;
         }
+        */
     }
 }
 
@@ -2536,7 +2540,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             if ( le.MouseClickLeft() )
                 MouseLeftClickBoardAction( themes, *cell, a );
             else if ( le.MousePressRight() )
-                MousePressRightBoardAction( themes, *cell );
+                MousePressRightBoardAction( *cell );
         }
         else {
             le.MouseClickLeft();
@@ -2722,7 +2726,7 @@ void Battle::Interface::ButtonSkipAction( Actions & a )
     }
 }
 
-void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell ) const
+void Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
 {
     const Unit * unitOnCell = cell.GetUnit();
 
@@ -2737,7 +2741,7 @@ void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell &
     }
 }
 
-void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell, Actions & a )
+void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell, Actions & a )
 {
     const int32_t index = cell.GetIndex();
     const Unit * b = cell.GetUnit();
