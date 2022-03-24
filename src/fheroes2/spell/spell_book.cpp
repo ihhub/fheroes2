@@ -77,8 +77,6 @@ namespace
     void SpellBookRedrawSpells( const SpellStorage & spells, std::vector<fheroes2::Rect> & coords, const size_t index, const int32_t px, const int32_t py,
                                 const HeroBase & hero, bool isRight, fheroes2::Image & output, fheroes2::Point outputOffset )
     {
-        const uint32_t heroSpellPoints = hero.GetSpellPoints();
-
         for ( int32_t i = 0; i < spellsPerPage; ++i ) {
             if ( spells.size() <= index + i )
                 return;
@@ -89,7 +87,7 @@ namespace
             const Spell & spell = spells[i + index];
             const std::string & spellName = spell.GetName();
             const uint32_t spellCost = spell.SpellPoint( &hero );
-            const bool isAvailable = heroSpellPoints >= spellCost;
+            const bool isAvailable = hero.CanCastSpell( spell );
 
             const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
             int vertOffset = 49 - icon.height();
