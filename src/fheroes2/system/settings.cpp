@@ -500,30 +500,30 @@ void Settings::SetProgramPath( const char * argv0 )
         path_program = argv0;
 }
 
-const std::set<std::string> & Settings::GetRootDirs()
+const std::vector<std::string> & Settings::GetRootDirs()
 {
-    static std::set<std::string> dirs;
+    static std::vector<std::string> dirs;
     if ( !dirs.empty() ) {
         return dirs;
     }
 
     // from build
 #ifdef FHEROES2_DATA
-    dirs.emplace( EXPANDDEF( FHEROES2_DATA ) );
+    dirs.emplace_back( EXPANDDEF( FHEROES2_DATA ) );
 #endif
 
     // from env
     const char * dataEnvPath = getenv( "FHEROES2_DATA" );
     if ( dataEnvPath != nullptr ) {
-        dirs.emplace( dataEnvPath );
+        dirs.emplace_back( dataEnvPath );
     }
 
     // from app path
-    dirs.emplace( System::GetDirname( Settings::Get().path_program ) );
+    dirs.emplace_back( System::GetDirname( Settings::Get().path_program ) );
 
     // os-specific directories
 #if defined( FHEROES2_VITA )
-    dirs.emplace( "ux0:app/FHOMM0002" );
+    dirs.emplace_back( "ux0:app/FHOMM0002" );
 #endif
 
 #if defined( MACOS_APP_BUNDLE )
@@ -532,7 +532,7 @@ const std::set<std::string> & Settings::GetRootDirs()
 
     CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL( CFBundleGetMainBundle() );
     if ( CFURLGetFileSystemRepresentation( resourcesURL, TRUE, reinterpret_cast<UInt8 *>( resourcePath ), PATH_MAX ) ) {
-        dirs.emplace( resourcePath );
+        dirs.emplace_back( resourcePath );
     }
     else {
         ERROR_LOG( "Unable to get app bundle path" );
@@ -541,14 +541,22 @@ const std::set<std::string> & Settings::GetRootDirs()
 #endif
 
     // user config directory
-    const std::string & config = System::GetConfigDirectory( "fheroes2" );
-    if ( !config.empty() )
-        dirs.emplace( config );
+    std::string configPath = System::GetConfigDirectory( "fheroes2" );
+    if ( !configPath.empty() ) {
+        dirs.emplace_back( std::move( configPath ) );
+    }
 
     // user data directory (may be the same as user config directory, so check this to avoid unnecessary work)
-    const std::string & data = System::GetDataDirectory( "fheroes2" );
-    if ( !data.empty() )
-        dirs.emplace( data );
+    std::string dataPath = System::GetDataDirectory( "fheroes2" );
+    if ( !dataPath.empty() ) {
+        dirs.emplace_back( std::move( dataPath ) );
+    }
+
+    // Remove all duplicates.
+    dirs.erase( std::unique( dirs.begin(), dirs.end() ), dirs.end() );
+
+    // Remove all paths that are not directories.
+    dirs.erase( std::remove_if( dirs.begin(), dirs.end(), []( const std::string & path ) { return !System::IsDirectory( path ); } ), dirs.end() );
 
     return dirs;
 }

@@ -29,8 +29,6 @@
 #include "maps_fileinfo.h"
 #include "players.h"
 
-#include <set>
-
 enum : int
 {
     SCROLL_SLOW = 1,
@@ -580,7 +578,7 @@ public:
 
     static std::string GetVersion();
 
-    static const std::set<std::string> & GetRootDirs();
+    static const std::vector<std::string> & GetRootDirs();
 
     static ListFiles FindFiles( const std::string & prefixDir, const std::string & fileNameFilter, const bool exactMatch );
 
