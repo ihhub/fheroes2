@@ -8143,6 +8143,8 @@ msgid ""
 "Vultures picking at the aftermath of a terrible battle. Your cursory search "
 "of the remains turns up an enchanted hourglass."
 msgstr ""
+"Vous vous retrouvez au milieu d'une scène macabre : Des vautours picorant les restes "
+"d'une terrible bataille. Votre recherche rapide des corps révèle un sablier enchanté."
 
 msgid ""
 "In reward for helping his cart out of a ditch, a traveling potion salesman "
