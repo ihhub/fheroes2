@@ -548,7 +548,7 @@ const std::vector<std::string> & Settings::GetRootDirs()
         dirs.emplace_back( std::move( configPath ) );
     }
 
-    // User data directory (may be the same as user config directory, so check this to avoid unnecessary work)
+    // User data directory.
     std::string dataPath = System::GetDataDirectory( "fheroes2" );
     if ( !dataPath.empty() && std::find( dirs.begin(), dirs.end(), dataPath ) == dirs.end() ) {
         dirs.emplace_back( std::move( dataPath ) );
