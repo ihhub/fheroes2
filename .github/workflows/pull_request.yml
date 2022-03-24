@@ -13,17 +13,11 @@ jobs:
     name: Code style check
     uses: ./.github/workflows/code_style_check.yml
 
-  cmake:
-    name: CMake
+  clang:
+    name: Clang Analyzer
     needs:
     - style
-    uses: ./.github/workflows/cmake.yml
-
-  make:
-    name: Make
-    needs:
-    - style
-    uses: ./.github/workflows/make.yml
+    uses: ./.github/workflows/clang_analyzer.yml
 
   msvc:
     name: MSVC
@@ -31,20 +25,22 @@ jobs:
     - style
     uses: ./.github/workflows/msvc.yml
 
-  clang:
-    name: Clang Analyzer
-    needs:
-    - cmake
-    - make
-    - msvc
-    uses: ./.github/workflows/clang_analyzer.yml
-
   sonarcloud:
     name: SonarCloud Analyzer
     needs:
-    - cmake
-    - make
-    - msvc
+    - style
     uses: ./.github/workflows/sonarcloud.yml
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  cmake:
+    name: CMake
+    needs:
+    - msvc
+    uses: ./.github/workflows/cmake.yml
+
+  make:
+    name: Make
+    needs:
+    - msvc
+    uses: ./.github/workflows/make.yml
