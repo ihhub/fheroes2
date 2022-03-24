@@ -5,6 +5,10 @@ on:
     branches: [ master ]
     paths: [ '**.cpp', '**.h' ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   tidy:
     name: Clang-Tidy
