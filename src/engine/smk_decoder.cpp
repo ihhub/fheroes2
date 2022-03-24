@@ -28,6 +28,11 @@
 #include <cassert>
 #include <cstring>
 
+namespace
+{
+    const size_t audioHeaderSize = 44;
+}
+
 SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     : _width( 0 )
     , _height( 0 )
@@ -83,6 +88,11 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
             if ( length == 0 ) {
                 continue;
             }
+
+            if ( soundBuffer[i].empty() ) {
+                soundBuffer[i].resize( audioHeaderSize );
+            }
+
             const uint8_t * data = smk_get_audio( _videoFile, i );
             soundBuffer[i].insert( soundBuffer[i].end(), data, data + length );
         }
@@ -97,6 +107,11 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
                 if ( length == 0 ) {
                     continue;
                 }
+
+                if ( soundBuffer[i].empty() ) {
+                    soundBuffer[i].resize( audioHeaderSize );
+                }
+
                 const uint8_t * data = smk_get_audio( _videoFile, i );
                 soundBuffer[i].insert( soundBuffer[i].end(), data, data + length );
             }
@@ -116,12 +131,16 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
     for ( size_t i = 0; i < soundBuffer.size(); ++i ) {
         if ( !soundBuffer[i].empty() ) {
             std::vector<uint8_t> & wavData = _audioChannel[channelCount];
+            std::swap( wavData, soundBuffer[i] );
+
+            const uint32_t originalSize = static_cast<uint32_t>( wavData.size() - audioHeaderSize );
+
             ++channelCount;
 
             // set up WAV header
-            StreamBuf wavHeader( 44 );
+            StreamBuf wavHeader( audioHeaderSize );
             wavHeader.putLE32( 0x46464952 ); // RIFF
-            wavHeader.putLE32( static_cast<uint32_t>( soundBuffer[i].size() ) + 0x24 ); // size
+            wavHeader.putLE32( originalSize + 0x24 ); // size
             wavHeader.putLE32( 0x45564157 ); // WAVE
             wavHeader.putLE32( 0x20746D66 ); // FMT
             wavHeader.putLE32( 0x10 ); // 16 == PCM
@@ -132,11 +151,9 @@ SMKVideoSequence::SMKVideoSequence( const std::string & filePath )
             wavHeader.putLE16( 0x01 ); // align
             wavHeader.putLE16( audioBitDepth[i] ); // bitsper
             wavHeader.putLE32( 0x61746164 ); // DATA
-            wavHeader.putLE32( static_cast<uint32_t>( soundBuffer[i].size() ) ); // size
+            wavHeader.putLE32( originalSize ); // size
 
-            wavData.resize( soundBuffer[i].size() + 44 );
-            wavData.assign( wavHeader.data(), wavHeader.data() + 44 );
-            wavData.insert( wavData.begin() + 44, soundBuffer[i].begin(), soundBuffer[i].end() );
+            memcpy( wavData.data(), wavHeader.data(), audioHeaderSize );
         }
     }
 
