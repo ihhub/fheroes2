@@ -130,6 +130,18 @@ std::string System::ConcatePath( const std::string & str1, const std::string & s
     return temp;
 }
 
+void System::appendOSSpecificDirectories( std::vector<std::string> & directories )
+{
+#if defined( FHEROES2_VITA )
+    const char * path = "ux0:app/FHOMM0002";
+    if ( std::find( directories.begin(), directories.end(), path ) == directories.end() ) {
+        directories.emplace_back( path );
+    }
+#else
+    (void)directories;
+#endif
+}
+
 std::string System::GetConfigDirectory( const std::string & prog )
 {
 #if defined( __LINUX__ )
