@@ -1487,7 +1487,7 @@ namespace
             fheroes2::FillTransform( font[236 - 32], 0, 0, font[236 - 32].width(), 2, 1 );
             fheroes2::Copy( font[6], 4, 0, font[236 - 32], 1, 0, 4, 2 );
             fheroes2::updateShadow( font[236 - 32], { -1, 1 }, 2 );
-            
+
             // o with grave accent `.
             font[242 - 32].resize( font[79].width(), font[79].height() + 3 );
             font[242 - 32].reset();
@@ -1531,7 +1531,7 @@ namespace
         // Small font.
         {
             std::vector<fheroes2::Sprite> & font = _icnVsSprite[ICN::SMALFONT];
-          
+
             // A with grave accent `.
             font[192 - 32].resize( font[33].width(), font[33].height() + 3 );
             font[192 - 32].reset();
