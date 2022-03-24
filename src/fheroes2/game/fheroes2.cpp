@@ -67,7 +67,7 @@ namespace
 
     void ReadConfigs()
     {
-        const std::string configurationFileName( "fheroes2.cfg" );
+        const std::string configurationFileName( Settings::configFileName );
         const std::string confFile = Settings::GetLastFile( "", configurationFileName );
 
         Settings & conf = Settings::Get();
@@ -134,8 +134,10 @@ namespace
             // Update mouse cursor when switching between software emulation and OS mouse modes.
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
 
+#if !defined( MACOS_APP_BUNDLE )
             const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
             fheroes2::engine().setIcon( appIcon );
+#endif
         }
 
         DisplayInitializer( const DisplayInitializer & ) = delete;

@@ -27,8 +27,8 @@ Please follow the instructions below to be able to build the project from source
   be missing depending on the version of the original game) to the project root directory.
 * Alternatively, go to the directory `script/demo` and run the file `download_demo_version.sh`.
   This script will download a demo version of the original game, which is the minimum required for development.
-* Run the `make` command in the root directory of the project to build it with **SDL2** or `make FHEROES2_SDL1="ON"` to build it
-  with **SDL1**.
+* Run the `make` command in the root directory of the project to build it with **SDL2** or `make FHEROES2_WITH_SDL1="ON"`
+  to build it with **SDL1**.
 
 <a name="playstation-vita"></a>
 ### PlayStation Vita

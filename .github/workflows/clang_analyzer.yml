@@ -20,9 +20,9 @@ jobs:
     - name: Analyze
       run: scan-build --status-bugs -v -o scan-build-result make -j 2
       env:
-        DEBUG: ON
         FHEROES2_STRICT_COMPILATION: ON
-        WITH_TOOLS: ON
+        FHEROES2_WITH_DEBUG: ON
+        FHEROES2_WITH_TOOLS: ON
     - uses: actions/upload-artifact@v2
       if: ${{ failure() }}
       with:

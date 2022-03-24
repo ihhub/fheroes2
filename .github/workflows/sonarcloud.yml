@@ -39,9 +39,9 @@ jobs:
       run: |
         ~/.sonarcloud/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir bw-output make -j 2
       env:
-        DEBUG: ON
         FHEROES2_STRICT_COMPILATION: ON
-        WITH_TOOLS: ON
+        FHEROES2_WITH_DEBUG: ON
+        FHEROES2_WITH_TOOLS: ON
     - name: Analyze
       run: |
         ~/.sonarcloud/sonar-scanner-"$SONAR_SCANNER_VERSION"-linux/bin/sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output \
