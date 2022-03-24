@@ -38,6 +38,7 @@ jobs:
           release_tag: fheroes2-windows-x64-SDL2
     name: MSVC (${{ matrix.config.name }})
     runs-on: windows-2019
+    timeout-minutes: 30
     defaults:
       run:
         shell: bash
