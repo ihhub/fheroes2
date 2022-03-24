@@ -65,12 +65,13 @@ namespace
         COLOR_ROAD = 0x7A,
 
         COLOR_BLUE = 0x47,
-        COLOR_GREEN = 0x67,
+        COLOR_GREEN = 0x69,
         COLOR_RED = 0xbd,
         COLOR_YELLOW = 0x70,
         COLOR_ORANGE = 0xcd,
         COLOR_PURPLE = 0x87,
-        COLOR_GRAY = 0x10
+        COLOR_GRAY = 0x10,
+        COLOR_WHITE = 0x0a
     };
 }
 
@@ -121,7 +122,7 @@ uint8_t GetPaletteIndexFromColor( int color )
         break;
     }
 
-    return COLOR_GRAY;
+    return COLOR_WHITE;
 }
 
 Interface::Radar::Radar( Basic & basic )

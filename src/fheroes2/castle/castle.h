@@ -120,7 +120,10 @@ public:
 
     Castle();
     Castle( s32, s32, int rs );
+    Castle( const Castle & ) = delete;
     ~Castle() override = default;
+
+    Castle & operator=( const Castle & ) = delete;
 
     void LoadFromMP2( std::vector<uint8_t> & data );
 
@@ -181,7 +184,9 @@ public:
     Army & GetActualArmy( void );
     double GetGarrisonStrength( const Heroes * attackingHero ) const;
     u32 getMonstersInDwelling( u32 ) const;
-    u32 GetActualDwelling( u32 ) const;
+
+    // Returns the correct dwelling type available in the castle. BUILD_NOTHING is returned if this is not a dwelling.
+    uint32_t GetActualDwelling( const uint32_t buildId ) const;
 
     bool RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force = false );
     bool RecruitMonster( const Troop & troop, bool showDialog = true );
@@ -196,9 +201,10 @@ public:
 
     void ChangeColor( int );
 
-    void ActionNewDay( void );
-    void ActionNewWeek( void );
-    void ActionNewMonth( void );
+    void ActionNewDay();
+    void ActionNewWeek();
+    void ActionNewMonth();
+
     void ActionPreBattle( void );
     void ActionAfterBattle( bool attacker_wins );
 
@@ -371,7 +377,7 @@ class AllCastles
 {
 public:
     AllCastles();
-    AllCastles( AllCastles & ) = delete;
+    AllCastles( const AllCastles & ) = delete;
 
     ~AllCastles();
 

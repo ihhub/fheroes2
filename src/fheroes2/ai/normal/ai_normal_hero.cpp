@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +22,7 @@
 
 #include "ai_normal.h"
 #include "game.h"
+#include "game_static.h"
 #include "ground.h"
 #include "heroes.h"
 #include "logging.h"
@@ -166,7 +167,8 @@ namespace
         }
 
         case MP2::OBJ_OBSERVATIONTOWER:
-            return Maps::getFogTileCountToBeRevealed( index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() ) > 0;
+            return Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() )
+                   > 0;
 
         case MP2::OBJ_OBELISK:
             return !hero.isVisited( tile, Visit::GLOBAL );
@@ -662,7 +664,8 @@ namespace AI
             return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_OBSERVATIONTOWER ) {
-            const int fogCountToUncover = Maps::getFogTileCountToBeRevealed( index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );
+            const int fogCountToUncover
+                = Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() );
             if ( fogCountToUncover <= 0 ) {
                 // Nothing to uncover.
                 return -dangerousTaskPenalty;
@@ -762,7 +765,7 @@ namespace AI
             const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
             int fogCountToUncover = 0;
             const int heroColor = hero.GetColor();
-            const int eyeViewDistance = Game::GetViewDistance( Game::VIEW_MAGI_EYES );
+            const int eyeViewDistance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
 
             for ( const int32_t eyeIndex : eyeMagiIndexes ) {
                 fogCountToUncover += Maps::getFogTileCountToBeRevealed( eyeIndex, eyeViewDistance, heroColor );
@@ -806,6 +809,7 @@ namespace AI
         // 1 tile distance is 100.0 value approximately
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject();
+        const bool anotherFriendlyHeroPresent = _regions[tile.GetRegion()].friendlyHeroes > 1;
 
         if ( objectType == MP2::OBJ_CASTLE ) {
             const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
@@ -847,13 +851,13 @@ namespace AI
             return 12000.0;
         }
         else if ( objectType == MP2::OBJ_MONSTER ) {
-            return 8000.0;
+            return anotherFriendlyHeroPresent ? 4000.0 : 1000.0;
         }
         else if ( objectType == MP2::OBJ_MINES || objectType == MP2::OBJ_SAWMILL || objectType == MP2::OBJ_ALCHEMYLAB ) {
             if ( tile.QuantityColor() == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
-            return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? 2000.0 : 1000.0;
+            return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? 3000.0 : 1500.0;
         }
         else if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
             if ( tile.QuantityColor() == hero.GetColor() ) {
@@ -864,27 +868,31 @@ namespace AI
         else if ( MP2::isArtifactObject( objectType ) && tile.QuantityArtifact().isValid() ) {
             return 1500.0 * tile.QuantityArtifact().getArtifactValue();
         }
+        else if ( objectType == MP2::OBJ_TREASURECHEST ) {
+            // Treasure chest without the artifact
+            return 1250.0;
+        }
         else if ( MP2::isPickupObject( objectType ) ) {
-            return 100.0;
+            return anotherFriendlyHeroPresent ? 100.0 : 500.0;
         }
         else if ( MP2::isCaptureObject( objectType ) && MP2::isQuantityObject( objectType ) ) {
             // Objects like WATERWHEEL, WINDMILL and MAGICGARDEN if capture setting is enabled
             return 100.0;
         }
         else if ( objectType == MP2::OBJ_XANADU ) {
-            return 2000.0;
+            return 3000.0;
         }
         else if ( objectType == MP2::OBJ_SHRINE1 ) {
-            return 100;
+            return 250;
         }
         else if ( objectType == MP2::OBJ_SHRINE2 ) {
-            return 250;
+            return 500;
         }
         else if ( objectType == MP2::OBJ_SHRINE3 ) {
             return 500;
         }
         else if ( MP2::isHeroUpgradeObject( objectType ) ) {
-            return 750.0;
+            return 1250.0;
         }
         else if ( MP2::isMonsterDwelling( objectType ) ) {
             return tile.QuantityTroop().GetStrength();
@@ -895,7 +903,8 @@ namespace AI
             return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_OBSERVATIONTOWER ) {
-            const int fogCountToUncover = Maps::getFogTileCountToBeRevealed( index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );
+            const int fogCountToUncover
+                = Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() );
             if ( fogCountToUncover <= 0 ) {
                 // Nothing to uncover.
                 return -dangerousTaskPenalty;
@@ -928,7 +937,7 @@ namespace AI
             if ( hero.GetSpellPoints() * 2 >= hero.GetMaxSpellPoints() ) {
                 return -2000; // no reason to visit the well with no magic book or with half of points
             }
-            return 0;
+            return 350.0;
         }
         else if ( objectType == MP2::OBJ_TEMPLE ) {
             if ( hero.GetArmy().AllTroopsAreUndead() ) {
@@ -995,7 +1004,7 @@ namespace AI
             const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
             int fogCountToUncover = 0;
             const int heroColor = hero.GetColor();
-            const int eyeViewDistance = Game::GetViewDistance( Game::VIEW_MAGI_EYES );
+            const int eyeViewDistance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
 
             for ( const int32_t eyeIndex : eyeMagiIndexes ) {
                 fogCountToUncover += Maps::getFogTileCountToBeRevealed( eyeIndex, eyeViewDistance, heroColor );

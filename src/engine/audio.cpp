@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <atomic>
+#include <cassert>
 #include <mutex>
 #include <numeric>
 
@@ -151,7 +152,11 @@ void Audio::Init()
             int channels = 0;
 
             Mix_QuerySpec( &hardware.freq, &hardware.format, &channels );
-            hardware.channels = channels;
+
+            // If this assertion blows up it means that SDL doesn't work properly.
+            assert( channels >= 0 && channels < 256 );
+
+            hardware.channels = static_cast<uint8_t>( channels );
 
             valid = true;
         }

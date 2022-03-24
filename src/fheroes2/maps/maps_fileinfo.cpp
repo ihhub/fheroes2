@@ -233,22 +233,17 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
     StreamFile fs;
 
     if ( !fs.open( filename, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "file not found " << filename );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "File is not found " << filename );
+        return false;
+    }
+
+    // magic byte
+    if ( fs.getBE32() != 0x5C000000 ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Not a valid map file " << filename );
         return false;
     }
 
     file = filename;
-    kingdom_colors = 0;
-    allow_human_colors = 0;
-    allow_comp_colors = 0;
-    rnd_races = 0;
-    localtime = 0;
-
-    // magic byte
-    if ( fs.getBE32() != 0x5C000000 ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "incorrect maps file " << filename );
-        return false;
-    }
 
     // level
     switch ( fs.getLE16() ) {

@@ -99,7 +99,7 @@ int main( int argc, char ** argv )
             std::string dstfile = System::ConcatePath( prefix, os.str() );
             std::string shortdstfile( os.str() ); // the name of destfile without the path
 
-#ifndef FHEROES2_IMAGE_SUPPORT
+#ifndef WITH_IMAGE
             dstfile += ".bmp";
             shortdstfile += ".bmp";
 #else

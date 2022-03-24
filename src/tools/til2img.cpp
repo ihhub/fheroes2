@@ -81,7 +81,7 @@ int main( int argc, char ** argv )
             stream << std::setw( 3 ) << std::setfill( '0' ) << cur;
             std::string dstfile = System::ConcatePath( prefix, stream.str() );
 
-#ifndef FHEROES2_IMAGE_SUPPORT
+#ifndef WITH_IMAGE
             dstfile += ".bmp";
 #else
             dstfile += ".png";

@@ -135,16 +135,18 @@ namespace
 
 namespace fheroes2
 {
-    SupportedLanguage selectLanguage( const std::vector<SupportedLanguage> & languages, const SupportedLanguage currentLanguage )
+    void selectLanguage( const std::vector<SupportedLanguage> & languages, const SupportedLanguage currentLanguage )
     {
         if ( languages.empty() ) {
             // Why do you even call this function having 0 languages?
             assert( 0 );
-            return SupportedLanguage::English;
+            Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( SupportedLanguage::English ) );
+            return;
         }
 
         if ( languages.size() == 1 ) {
-            return languages.front();
+            Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( languages.front() ) );
+            return;
         }
 
         size_t selectionId = 0;
@@ -158,7 +160,5 @@ namespace fheroes2
         while ( getLanguage( languages, chosenLanguage ) ) {
             Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( chosenLanguage ) );
         }
-
-        return chosenLanguage;
     }
 }

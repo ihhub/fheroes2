@@ -41,6 +41,7 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_text.h"
 #include "world.h"
 
 #include <cassert>
@@ -708,20 +709,19 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea
 
     cur_rt = fheroes2::Rect( cur_rt.x + 22, cur_rt.y + 9, 192, 154 );
     fheroes2::Point dst_pt;
-    Text text;
 
     // castle name
-    text.Set( castle.GetName(), Font::SMALL );
-    dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
-    dst_pt.y = cur_rt.y;
-    text.Blit( dst_pt.x, dst_pt.y );
+    fheroes2::Text text( castle.GetName(), fheroes2::FontType::smallWhite() );
+    dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
+    dst_pt.y = cur_rt.y + 3;
+    text.draw( dst_pt.x, dst_pt.y, display );
 
     // castle icon
     const Settings & conf = Settings::Get();
     const fheroes2::Sprite & castleIcon = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::LOCATORE : ICN::LOCATORS, 23 );
 
     dst_pt.x = cur_rt.x + ( cur_rt.width - castleIcon.width() ) / 2;
-    dst_pt.y += 11;
+    dst_pt.y += 10;
     fheroes2::Blit( castleIcon, display, dst_pt.x, dst_pt.y );
     fheroes2::drawCastleIcon( castle, display, fheroes2::Point( dst_pt.x + 4, dst_pt.y + 4 ) );
 
@@ -782,10 +782,10 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea
     // show guardian
     if ( isGuardianVisible ) {
         // hero name
-        text.Set( guardian->GetName(), Font::SMALL );
-        dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
+        text.set( guardian->GetName(), fheroes2::FontType::smallWhite() );
+        dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
         dst_pt.y += castleIcon.height() + 5;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.draw( dst_pt.x, dst_pt.y, display );
 
         // hero avatar
         const fheroes2::Sprite & port = guardian->GetPortrait( PORT_SMALL );
@@ -796,34 +796,34 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea
         }
     }
     else {
-        text.Set( _( "Defenders:" ) );
-        dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
-        dst_pt.y += castleIcon.height() + 5;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.set( _( "Defenders:" ), fheroes2::FontType::smallWhite() );
+        dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
+        dst_pt.y += castleIcon.height() + 2;
+        text.draw( dst_pt.x, dst_pt.y, display );
     }
 
     const uint32_t count = castle.GetArmy().GetCount();
 
     // draw defenders
     if ( count == 0 ) {
-        text.Set( _( "None" ) );
-        dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
-        dst_pt.y += 45;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.set( _( "None" ), fheroes2::FontType::smallWhite() );
+        dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
+        dst_pt.y += 47;
+        text.draw( dst_pt.x, dst_pt.y, display );
     }
     else if ( scoutSkillLevel > Skill::Level::NONE ) {
         const bool isScouteView = isFriend || isVisibleFromCrystalBall;
 
-        dst_pt.x = cur_rt.x - 5;
-        dst_pt.y += 20;
+        dst_pt.x = cur_rt.x - 1;
+        dst_pt.y += 21;
 
         Army::DrawMonsterLines( castle.GetArmy(), dst_pt.x, dst_pt.y, 192, scoutSkillLevel, isGuardianVisible, isScouteView );
     }
     else {
-        text.Set( _( "Unknown" ) );
-        dst_pt.x = cur_rt.x + ( cur_rt.width - text.w() ) / 2;
-        dst_pt.y += 45;
-        text.Blit( dst_pt.x, dst_pt.y );
+        text.set( _( "Unknown" ), fheroes2::FontType::smallWhite() );
+        dst_pt.x = cur_rt.x + ( cur_rt.width - text.width() ) / 2;
+        dst_pt.y += 47;
+        text.draw( dst_pt.x, dst_pt.y, display );
     }
 
     display.render();
@@ -1031,7 +1031,7 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Rect & activeArea
             text.Blit( dst_pt.x, dst_pt.y );
         }
 
-        Army::DrawMons32Line( hero.GetArmy(), cur_rt.x - 7, cur_rt.y + 116, 160 );
+        Army::drawMiniMonsLine( hero.GetArmy(), cur_rt.x - 7, cur_rt.y + 117, 160 );
     }
     else {
         // show limited

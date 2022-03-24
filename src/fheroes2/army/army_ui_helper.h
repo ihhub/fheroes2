@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,17 +20,14 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
+#include <cstdint>
 
-#include "game_video_type.h"
-#include "math_base.h"
+class Troops;
 
-namespace Video
+namespace fheroes2
 {
-    // Returns true if the file exists.
-    bool getVideoFilePath( const std::string & fileName, std::string & path );
+    class Image;
 
-    // Returns 0 by default if roi is empty
-    int ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<fheroes2::Rect> & roi = std::vector<fheroes2::Rect>() );
+    void drawMiniMonsters( const Troops & troops, int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count, uint32_t drawPower, bool compact,
+                           bool isScouteView, Image & output );
 }
