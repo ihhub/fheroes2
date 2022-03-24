@@ -170,6 +170,7 @@ namespace Battle
         uint32_t GetInitialCount() const;
         u32 GetDead( void ) const;
         u32 GetHitPoints( void ) const;
+        payment_t GetCost() const override; // used to calculate the cost of the surrender
 
         uint32_t GetShots() const override
         {

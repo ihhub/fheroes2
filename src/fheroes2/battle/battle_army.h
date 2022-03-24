@@ -76,7 +76,7 @@ namespace Battle
         u32 GetDeadCounts( void ) const;
         int GetColor( void ) const;
         int GetControl( void ) const;
-        uint32_t GetSurrenderCost( void ) const;
+        uint32_t GetSurrenderCost() const;
         Troops GetKilledTroops( void ) const;
         bool animateIdleUnits();
         void resetIdleAnimation();
