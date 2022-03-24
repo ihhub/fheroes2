@@ -4,16 +4,16 @@ if(MINGW)
 	set(MINGW_LIBRARIES mingw32 winmm)
 endif(MINGW)
 
-get_filename_component(CONFIGURE_FHEROES2_DATA_ABSOLUTE
-	${CONFIGURE_FHEROES2_DATA} ABSOLUTE
-	BASE_DIR ${CMAKE_INSTALL_PREFIX}
-	CACHE
-	)
-
 if(MACOS_APP_BUNDLE)
 	set(fheroes2Icon "${CMAKE_CURRENT_SOURCE_DIR}/../resources/fheroes2.icns")
 	set_source_files_properties(${fheroes2Icon} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+
 	add_executable(fheroes2 MACOSX_BUNDLE ${fheroes2Icon} ${FHEROES2_SOURCES} ${TRANSLATION_DATA})
+
+	target_compile_definitions(fheroes2 PRIVATE
+		$<$<BOOL:${MACOS_APP_BUNDLE}>:MACOS_APP_BUNDLE>
+		)
+
 	target_link_libraries(fheroes2 "-framework CoreFoundation")
 
 	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "${CMAKE_PROJECT_NAME}")
@@ -25,13 +25,21 @@ if(MACOS_APP_BUNDLE)
 	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_BUNDLE_VERSION "${CMAKE_PROJECT_VERSION}")
 	set_target_properties(fheroes2 PROPERTIES OUTPUT_NAME "${CMAKE_PROJECT_NAME}")
 else(MACOS_APP_BUNDLE)
+	cmake_path(ABSOLUTE_PATH FHEROES2_DATA
+		BASE_DIRECTORY ${CMAKE_INSTALL_PREFIX}
+		NORMALIZE
+		OUTPUT_VARIABLE FHEROES2_DATA_ABSOLUTE
+		)
+
 	add_executable(fheroes2 ${FHEROES2_SOURCES})
+
+	target_compile_definitions(fheroes2 PRIVATE
+		FHEROES2_DATA=${FHEROES2_DATA_ABSOLUTE}
+		)
+
+	install(TARGETS fheroes2 DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif(MACOS_APP_BUNDLE)
 
-target_compile_definitions(fheroes2 PRIVATE
-	CONFIGURE_FHEROES2_DATA=${CONFIGURE_FHEROES2_DATA_ABSOLUTE}
-	$<$<BOOL:${MACOS_APP_BUNDLE}>:MACOS_APP_BUNDLE>
-	)
 target_include_directories(fheroes2 PRIVATE
 	agg
 	ai
@@ -55,6 +63,7 @@ target_include_directories(fheroes2 PRIVATE
 	system
 	world
 	)
+
 target_link_libraries(fheroes2
 	${MINGW_LIBRARIES}  # Be sure define it first. Beware WinMain@16 error!!
 	${SDL_MIXER_LIBRARIES}
@@ -62,7 +71,3 @@ target_link_libraries(fheroes2
 	Threads::Threads
 	ZLIB::ZLIB
 	)
-
-if(NOT MACOS_APP_BUNDLE)
-	install(TARGETS fheroes2 DESTINATION ${CMAKE_INSTALL_BINDIR})
-endif(NOT MACOS_APP_BUNDLE)

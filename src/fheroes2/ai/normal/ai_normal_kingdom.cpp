@@ -163,6 +163,63 @@ namespace AI
         }
     }
 
+    std::vector<AICastle> Normal::getSortedCastleList( const KingdomCastles & castles, const std::set<int> & castlesInDanger )
+    {
+        std::vector<AICastle> sortedCastleList;
+        for ( Castle * castle : castles ) {
+            if ( !castle )
+                continue;
+
+            const int32_t castleIndex = castle->GetIndex();
+            const uint32_t regionID = world.GetTiles( castleIndex ).GetRegion();
+            sortedCastleList.emplace_back( castle, castlesInDanger.count( castleIndex ) > 0, _regions[regionID].safetyFactor, castle->getBuildingValue() );
+        }
+
+        std::sort( sortedCastleList.begin(), sortedCastleList.end(), []( const AICastle & left, const AICastle & right ) {
+            if ( !left.underThreat && !right.underThreat ) {
+                return left.safetyFactor > right.safetyFactor;
+            }
+            return left.buildingValue > right.buildingValue;
+        } );
+
+        return sortedCastleList;
+    }
+
+    std::set<int> Normal::findCastlesInDanger( const KingdomCastles & castles, const std::vector<std::pair<int, const Army *>> & enemyArmies, int myColor )
+    {
+        const uint32_t threatDistanceLimit = 2500; // 25 tiles, roughly how much maxed out hero can move in a turn
+        std::set<int> castlesInDanger;
+
+        for ( const std::pair<int, const Army *> & enemy : enemyArmies ) {
+            if ( enemy.second == nullptr )
+                continue;
+
+            const double attackerStrength = enemy.second->GetStrength();
+
+            for ( const Castle * castle : castles ) {
+                if ( !castle )
+                    continue;
+
+                const int castleIndex = castle->GetIndex();
+                // skip precise distance check if army is too far to be a threat
+                if ( Maps::GetApproximateDistance( enemy.first, castleIndex ) * Maps::Ground::roadPenalty > threatDistanceLimit )
+                    continue;
+
+                const double defenders = castle->GetArmy().GetStrength();
+
+                const double attackerThreat = attackerStrength - defenders;
+                if ( attackerThreat > 0 ) {
+                    const uint32_t dist = _pathfinder.getDistance( enemy.first, castleIndex, myColor, attackerStrength );
+                    if ( dist && dist < threatDistanceLimit ) {
+                        // castle is under threat
+                        castlesInDanger.insert( castleIndex );
+                    }
+                }
+            }
+        }
+        return castlesInDanger;
+    }
+
     void Normal::KingdomTurn( Kingdom & kingdom )
     {
         const int myColor = kingdom.GetColor();
@@ -282,36 +339,7 @@ namespace AI
                 ++availableHeroCount;
         }
 
-        const uint32_t threatDistanceLimit = 2500; // 25 tiles, roughly how much maxed out hero can move in a turn
-        std::set<int> castlesInDanger;
-
-        for ( auto enemy = enemyArmies.begin(); enemy != enemyArmies.end(); ++enemy ) {
-            if ( enemy->second == nullptr )
-                continue;
-
-            const double attackerStrength = enemy->second->GetStrength();
-
-            for ( size_t idx = 0; idx < castles.size(); ++idx ) {
-                const Castle * castle = castles[idx];
-                if ( castle ) {
-                    const int castleIndex = castle->GetIndex();
-                    // skip precise distance check if army is too far away to be a threat
-                    if ( Maps::GetApproximateDistance( enemy->first, castleIndex ) * Maps::Ground::roadPenalty > threatDistanceLimit )
-                        continue;
-
-                    const double defenders = castle->GetArmy().GetStrength();
-
-                    const double attackerThreat = attackerStrength - defenders;
-                    if ( attackerThreat > 0 ) {
-                        const uint32_t dist = _pathfinder.getDistance( enemy->first, castleIndex, myColor, attackerStrength );
-                        if ( dist && dist < threatDistanceLimit ) {
-                            // castle is under threat
-                            castlesInDanger.insert( castleIndex );
-                        }
-                    }
-                }
-            }
-        }
+        const std::set<int> castlesInDanger = findCastlesInDanger( castles, enemyArmies, myColor );
 
         int32_t heroLimit = world.w() / Maps::SMALL + 1;
         if ( _personality == EXPLORER )
@@ -333,17 +361,15 @@ namespace AI
         status.RedrawTurnProgress( 6 );
 
         // Step 4. Buy new heroes, adjust roles, sort heroes based on priority or strength
-
-        // sort castles by value: best first
-        VecCastles sortedCastleList( castles );
-        sortedCastleList.SortByBuildingValue();
+        std::vector<AICastle> sortedCastleList = getSortedCastleList( castles, castlesInDanger );
 
         if ( availableHeroCount < heroLimit ) {
             Castle * recruitmentCastle = nullptr;
             double bestArmyAvailable = -1.0;
 
             // search for best castle to recruit hero from
-            for ( Castle * castle : sortedCastleList ) {
+            for ( const AICastle & entry : sortedCastleList ) {
+                Castle * castle = entry.castle;
                 if ( castle && castle->isCastle() ) {
                     const Heroes * hero = castle->GetHeroes().Guest();
                     const int mapIndex = castle->GetIndex();
@@ -393,14 +419,13 @@ namespace AI
         if ( castles.size() != sortedCastleList.size() ) {
             evaluateRegionSafety();
 
-            sortedCastleList = castles;
-            sortedCastleList.SortByBuildingValue();
+            sortedCastleList = getSortedCastleList( castles, castlesInDanger );
         }
 
         // Step 6. Castle development according to kingdom budget
-        for ( Castle * castle : sortedCastleList ) {
-            if ( castle != nullptr ) {
-                CastleTurn( *castle, castlesInDanger.find( castle->GetIndex() ) != castlesInDanger.end() );
+        for ( const AICastle & entry : sortedCastleList ) {
+            if ( entry.castle != nullptr ) {
+                CastleTurn( *entry.castle, entry.underThreat );
             }
         }
     }

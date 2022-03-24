@@ -4,7 +4,7 @@ else()
 	add_compile_options(-Wall -Wextra -Wpedantic -Wfloat-conversion -Wshadow -Wfloat-equal -Wredundant-decls -Wdouble-promotion -Wunused -Wuninitialized)
 endif()
 
-if(FHEROES2_STRICT_COMPILATION)
+if(ENABLE_STRICT_COMPILATION)
 	if (MSVC)
 		add_compile_options(/WX)
 	else()

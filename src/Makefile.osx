@@ -15,7 +15,7 @@ comma_pattern := ,
 LINK_FLAGS := $(subst $(search_pattern),,$(LIBS))
 LINK_FLAGS := $(subst $(comma_pattern), ,$(LINK_FLAGS)) $(SIMPLE_LINK_FLAGS)
 
-ifdef MACOS_APP_BUNDLE
-CFLAGS := ${CFLAGS} -DMACOS_APP_BUNDLE=1
+ifdef FHEROES2_MACOS_APP_BUNDLE
+CFLAGS := ${CFLAGS} -DMACOS_APP_BUNDLE
 LDFLAGS := ${LDFLAGS} -framework CoreFoundation
 endif

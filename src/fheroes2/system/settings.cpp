@@ -508,8 +508,8 @@ const std::set<std::string> & Settings::GetRootDirs()
     }
 
     // from build
-#ifdef CONFIGURE_FHEROES2_DATA
-    dirs.push_back( EXPANDDEF( CONFIGURE_FHEROES2_DATA ) );
+#ifdef FHEROES2_DATA
+    dirs.emplace( EXPANDDEF( FHEROES2_DATA ) );
 #endif
 
     // from env
@@ -526,17 +526,6 @@ const std::set<std::string> & Settings::GetRootDirs()
     dirs.emplace( "ux0:app/FHOMM0002" );
 #endif
 
-    // user config directory
-    const std::string & config = System::GetConfigDirectory( "fheroes2" );
-    if ( !config.empty() )
-        dirs.emplace( config );
-
-    // user data directory (may be the same as user config directory, so check this to avoid unnecessary work)
-    const std::string & data = System::GetDataDirectory( "fheroes2" );
-    if ( !data.empty() ) {
-        dirs.emplace( data );
-    }
-
 #if defined( MACOS_APP_BUNDLE )
     // macOS app bundle Resources directory
     char resourcePath[PATH_MAX];
@@ -550,6 +539,16 @@ const std::set<std::string> & Settings::GetRootDirs()
     }
     CFRelease( resourcesURL );
 #endif
+
+    // user config directory
+    const std::string & config = System::GetConfigDirectory( "fheroes2" );
+    if ( !config.empty() )
+        dirs.emplace( config );
+
+    // user data directory (may be the same as user config directory, so check this to avoid unnecessary work)
+    const std::string & data = System::GetDataDirectory( "fheroes2" );
+    if ( !data.empty() )
+        dirs.emplace( data );
 
     return dirs;
 }
