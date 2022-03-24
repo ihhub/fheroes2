@@ -578,9 +578,12 @@ public:
 
     static std::string GetVersion();
 
-    static ListDirs GetRootDirs();
+    static const std::vector<std::string> & GetRootDirs();
 
     static ListFiles FindFiles( const std::string & prefixDir, const std::string & fileNameFilter, const bool exactMatch );
+
+    static bool findFile( const std::string & internalDirectory, const std::string & fileName, std::string & fullPath );
+
     static std::string GetLastFile( const std::string & prefix, const std::string & name );
 
 protected:

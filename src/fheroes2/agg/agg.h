@@ -38,6 +38,9 @@ namespace AGG
         AGGInitializer & operator=( const AGGInitializer & ) = delete;
 
         ~AGGInitializer();
+
+    private:
+        static bool init();
     };
 
     void LoadLOOPXXSounds( const std::vector<int> & vols, bool asyncronizedCall = false );

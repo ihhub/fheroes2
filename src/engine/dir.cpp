@@ -168,8 +168,3 @@ bool ListFiles::IsEmpty( const std::string & path, const std::string & filter, b
     list.ReadDir( path, filter, sensitive );
     return list.empty();
 }
-
-void ListDirs::Append( const std::list<std::string> & dirs )
-{
-    insert( end(), dirs.begin(), dirs.end() );
-}
