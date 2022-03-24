@@ -6,7 +6,6 @@ on:
 jobs:
   build:
     strategy:
-      fail-fast: false
       matrix:
         config:
         - name: SDL1 x86

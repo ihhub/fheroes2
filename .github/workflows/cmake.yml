@@ -6,7 +6,6 @@ on:
 jobs:
   build:
     strategy:
-      fail-fast: false
       matrix:
         config:
         - name: Linux SDL1
