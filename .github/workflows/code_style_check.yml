@@ -1,8 +1,7 @@
 name: Code style check
 
 on:
-  pull_request:
-    branches: [ master ]
+  workflow_call:
 
 jobs:
   check:

@@ -1,10 +1,10 @@
 name: SonarCloud Analyzer
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  workflow_call:
+    secrets:
+      SONAR_TOKEN:
+        required: true
 
 jobs:
   sonarcloud:
