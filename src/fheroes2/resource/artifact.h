@@ -26,6 +26,7 @@
 #include <set>
 #include <vector>
 
+#include "artifact_info.h"
 #include "interface_itemsbar.h"
 #include "mp2.h"
 #include "ui_tool.h"
@@ -271,6 +272,9 @@ public:
 
     bool ContainSpell( const Spell & ) const;
     bool isPresentArtifact( const Artifact & ) const;
+
+    bool isArtifactBonusPresent( const fheroes2::ArtifactBonusType type ) const;
+
     bool PushArtifact( const Artifact & );
 
     void RemoveArtifact( const Artifact & art );

@@ -392,6 +392,8 @@ namespace fheroes2
     bool isBonusStackable( const ArtifactBonusType bonus )
     {
         switch ( bonus ) {
+        case ArtifactBonusType::KNOWLEDGE_SKILL:
+        case ArtifactBonusType::SPELL_POWER_SKILL:
         case ArtifactBonusType::ATTACK_SKILL:
         case ArtifactBonusType::DEFENCE_SKILL:
             return true;
@@ -415,7 +417,7 @@ namespace fheroes2
         return false;
     }
 
-    std::string ArtifactData::getDescription() const
+    std::string ArtifactData::getDescription( const int extraParameter ) const
     {
         std::string description( _( baseDescription ) );
 
@@ -423,7 +425,13 @@ namespace fheroes2
 
         std::vector<ArtifactBonus>::const_iterator foundBonus = std::find( bonuses.begin(), bonuses.end(), ArtifactBonus( ArtifactBonusType::ADD_SPELL ) );
         if ( foundBonus != bonuses.end() ) {
-            StringReplace( description, "%{spell}", Spell( foundBonus->value ).GetName() );
+            if ( foundBonus->value == Spell::NONE ) {
+                assert( extraParameter != Spell::NONE );
+                StringReplace( description, "%{spell}", Spell( extraParameter ).GetName() );
+            }
+            else {
+                StringReplace( description, "%{spell}", Spell( foundBonus->value ).GetName() );
+            }
         }
         else if ( !bonuses.empty() ) {
             StringReplace( description, "%{count}", bonuses.front().value );

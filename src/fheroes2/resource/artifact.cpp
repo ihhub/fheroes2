@@ -29,7 +29,6 @@
 
 #include "agg_image.h"
 #include "artifact.h"
-#include "artifact_info.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
 #include "heroes.h"
@@ -225,7 +224,7 @@ int Artifact::Type( void ) const
 
 std::string Artifact::GetDescription( void ) const
 {
-    return fheroes2::getArtifactData( id ).getDescription();
+    return fheroes2::getArtifactData( id ).getDescription( ext );
 }
 
 u32 Artifact::ExtraValue( void ) const
@@ -559,6 +558,18 @@ bool BagArtifacts::ContainSpell( const Spell & spell ) const
 bool BagArtifacts::isPresentArtifact( const Artifact & art ) const
 {
     return end() != std::find( begin(), end(), art );
+}
+
+bool BagArtifacts::isArtifactBonusPresent( const fheroes2::ArtifactBonusType type ) const
+{
+    for ( const Artifact & artifact : *this ) {
+        const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( artifact.GetID() ).bonuses;
+        if ( std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( type ) ) != bonuses.end() ) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool BagArtifacts::PushArtifact( const Artifact & art )

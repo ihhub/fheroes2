@@ -954,10 +954,10 @@ void Battle::Unit::PostAttackAction()
 {
     // decrease shots
     if ( isArchers() && !isHandFighting() ) {
-        // check ammo cart artifact
         const HeroBase * hero = GetCommander();
-        if ( !hero || !hero->hasArtifact( Artifact::AMMO_CART ) )
+        if ( !hero || !hero->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::ENDLESS_AMMUNITION ) ) {
             --shots;
+        }
     }
 
     // clean berserker spell

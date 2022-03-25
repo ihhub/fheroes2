@@ -45,7 +45,6 @@ namespace fheroes2
         CRYSTAL_INCOME,
         GEMS_INCOME,
         SPELL_POINTS_GENERATION,
-        VIEW_DISTANCE,
         LAND_MOBILITY,
         SEA_MOBILITY,
 
@@ -54,15 +53,16 @@ namespace fheroes2
         CURSE_SPELL_COST_REDUCTION_PERCENT,
         BLESS_SPELL_COST_REDUCTION_PERCENT,
         SUMMONING_SPELL_COST_REDUCTION_PERCENT,
+
         EVERY_COMBAT_SPELL_DURATION,
-        HYPNOTIZE_SPELL_EXTRA_EFFECTIVENESS_PERCENT,
-        MIND_INFLUENCE_SPELL_COST_REDUCTION_PERCENT,
 
         COLD_SPELL_DAMAGE_REDUCTION_PERCENT,
         FIRE_SPELL_DAMAGE_REDUCTION_PERCENT,
         LIGHTNING_SPELL_DAMAGE_REDUCTION_PERCENT,
         ELEMENTAL_SPELL_DAMAGE_REDUCTION_PERCENT,
 
+        HYPNOTIZE_SPELL_EXTRA_EFFECTIVENESS_PERCENT,
+        MIND_INFLUENCE_SPELL_COST_REDUCTION_PERCENT,
         COLD_SPELL_EXTRA_EFFECTIVENESS_PERCENT,
         FIRE_SPELL_EXTRA_EFFECTIVENESS_PERCENT,
         LIGHTNING_SPELL_EXTRA_EFFECTIVENESS_PERCENT,
@@ -82,16 +82,11 @@ namespace fheroes2
         REMOVE_SHOOTING_PENALTY,
         EXTRA_CATAPULT_SHOTS,
         AREA_REVEAL_DISTANCE,
-
         ADD_SPELL,
-
         MONSTER_INFORMATION,
-
         SEA_BATTLE_MORALE_BOOST,
         SEA_BATTLE_LUCK_BOOST,
-
         DISABLE_ALL_SPELL_COMBAT_CASTING,
-
         NECROMANY_SKILL
     };
 
@@ -169,7 +164,7 @@ namespace fheroes2
         std::vector<ArtifactBonus> bonuses;
         std::vector<ArtifactCurse> curses;
 
-        std::string getDescription() const;
+        std::string getDescription( const int extraParameter ) const;
     };
 
     const ArtifactData & getArtifactData( const int artifactId );
