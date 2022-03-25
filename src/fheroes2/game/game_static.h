@@ -42,7 +42,6 @@ namespace GameStatic
     {
         CASTLE,
         HEROES,
-        TELESCOPE,
         OBSERVATION_TOWER,
         MAGI_EYES
     };

@@ -389,13 +389,20 @@ namespace
 
 namespace fheroes2
 {
-    bool isBonusStackable( const ArtifactBonusType bonus )
+    bool isBonusAccumulative( const ArtifactBonusType bonus )
     {
         switch ( bonus ) {
         case ArtifactBonusType::KNOWLEDGE_SKILL:
         case ArtifactBonusType::SPELL_POWER_SKILL:
         case ArtifactBonusType::ATTACK_SKILL:
         case ArtifactBonusType::DEFENCE_SKILL:
+        case ArtifactBonusType::GOLD_INCOME:
+        case ArtifactBonusType::WOOD_INCOME:
+        case ArtifactBonusType::MERCURY_INCOME:
+        case ArtifactBonusType::ORE_INCOME:
+        case ArtifactBonusType::SULFUR_INCOME:
+        case ArtifactBonusType::CRYSTAL_INCOME:
+        case ArtifactBonusType::GEMS_INCOME:
             return true;
         default:
             break;
@@ -404,11 +411,11 @@ namespace fheroes2
         return false;
     }
 
-    bool isCurseStackable( const ArtifactCurseType curse )
+    bool isCurseAccumulative( const ArtifactCurseType curse )
     {
         switch ( curse ) {
-        case ArtifactCurseType::MORALE:
-        case ArtifactCurseType::LUCK:
+        case ArtifactCurseType::SPELL_POWER_SKILL:
+        case ArtifactCurseType::GOLD_PENALTY:
             return true;
         default:
             break;

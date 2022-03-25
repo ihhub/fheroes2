@@ -35,8 +35,6 @@ namespace fheroes2
         ATTACK_SKILL,
         DEFENCE_SKILL,
         SPELL_POWER_SKILL,
-        MORALE,
-        LUCK,
         GOLD_INCOME,
         WOOD_INCOME,
         MERCURY_INCOME,
@@ -47,6 +45,9 @@ namespace fheroes2
         SPELL_POINTS_GENERATION,
         LAND_MOBILITY,
         SEA_MOBILITY,
+
+        MORALE,
+        LUCK,
 
         SURRENDER_COST_REDUCTION_PERCENT,
 
@@ -143,14 +144,19 @@ namespace fheroes2
             // Do nothing.
         }
 
+        bool operator==( const ArtifactCurse & another ) const
+        {
+            return type == another.type;
+        }
+
         ArtifactCurseType type;
 
         uint32_t value;
     };
 
-    bool isBonusStackable( const ArtifactBonusType bonus );
+    bool isBonusAccumulative( const ArtifactBonusType bonus );
 
-    bool isCurseStackable( const ArtifactCurseType curse );
+    bool isCurseAccumulative( const ArtifactCurseType curse );
 
     struct ArtifactData
     {

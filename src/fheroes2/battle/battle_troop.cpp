@@ -1138,8 +1138,7 @@ bool Battle::Unit::isArchers( void ) const
 void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const HeroBase * hero )
 {
     if ( hero ) {
-        for ( const Artifact::type_t art : { Artifact::WIZARD_HAT, Artifact::ENCHANTED_HOURGLASS } )
-            duration += hero->artifactCount( art ) * Artifact( art ).ExtraValue();
+        duration += hero->GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::EVERY_COMBAT_SPELL_DURATION );
     }
 
     switch ( spell.GetID() ) {
@@ -1249,8 +1248,10 @@ void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const He
 
     case Spell::HYPNOTIZE: {
         SetModes( SP_HYPNOTIZE );
-        uint32_t acount = hero ? hero->artifactCount( Artifact::GOLD_WATCH ) : 0;
-        affected.AddMode( SP_HYPNOTIZE, ( acount ? duration * acount * 2 : duration ) );
+
+        const uint32_t extraDurationPercentage
+            = hero ? hero->GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::HYPNOTIZE_SPELL_EXTRA_EFFECTIVENESS_PERCENT ) : 0;
+        affected.AddMode( SP_HYPNOTIZE, duration * ( 100 + extraDurationPercentage ) / 100 );
         break;
     }
 

@@ -551,7 +551,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point = UpdateMovementPoints( point, Skill::Secondary::NAVIGATION );
 
         // artifact bonus
-        point += artifactCount( Artifact::SAILORS_ASTROLABE_MOBILITY ) * 1000;
+        point += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_MOBILITY );
 
         // visited object
         point += 500 * world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, GetColor() );
@@ -590,15 +590,12 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point = UpdateMovementPoints( point, Skill::Secondary::LOGISTICS );
 
         // artifact bonus
-        point += artifactCount( Artifact::NOMAD_BOOTS_MOBILITY ) * 600;
-        point += artifactCount( Artifact::TRAVELER_BOOTS_MOBILITY ) * 300;
+        point += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::LAND_MOBILITY );
 
         // visited object
         if ( isObjectTypeVisited( MP2::OBJ_STABLES ) )
             point += 400;
     }
-
-    point += artifactCount( Artifact::TRUE_COMPASS_MOBILITY ) * 500;
 
     if ( isControlAI() ) {
         point += Difficulty::GetHeroMovementBonus( Game::getDifficulty() );
@@ -766,8 +763,8 @@ void Heroes::ReplenishSpellPoints()
     // everyday
     curr += GameStatic::GetHeroesRestoreSpellPointsPerDay();
 
-    // power ring action
-    curr += artifactCount( Artifact::POWER_RING ) * Artifact( Artifact::POWER_RING ).ExtraValue();
+    // Spell points from artifacts.
+    curr += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POINTS_GENERATION );
 
     // secondary skill
     curr += GetSecondaryValues( Skill::Secondary::MYSTICISM );
@@ -1284,8 +1281,8 @@ void Heroes::Scoute( const int tileIndex ) const
 
 int Heroes::GetScoute( void ) const
 {
-    return static_cast<int>( artifactCount( Artifact::TELESCOPE ) * GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::TELESCOPE )
-                             + GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::HEROES ) + GetSecondaryValues( Skill::Secondary::SCOUTING ) );
+    return static_cast<int>( GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE )
+                             +  GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::HEROES ) + GetSecondaryValues( Skill::Secondary::SCOUTING ) );
 }
 
 uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skill ) const
