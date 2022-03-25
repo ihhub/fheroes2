@@ -274,6 +274,7 @@ public:
     bool isPresentArtifact( const Artifact & ) const;
 
     bool isArtifactBonusPresent( const fheroes2::ArtifactBonusType type ) const;
+    bool isArtifactCursePresent( const fheroes2::ArtifactCurseType type ) const;
 
     uint32_t getTotalArtifactEffectValue( const fheroes2::ArtifactBonusType bonus ) const;
     uint32_t getTotalArtifactEffectValue( const fheroes2::ArtifactCurseType curse ) const;

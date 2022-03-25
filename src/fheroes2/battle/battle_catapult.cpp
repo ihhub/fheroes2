@@ -56,8 +56,7 @@ Battle::Catapult::Catapult( const HeroBase & hero, const Rand::DeterministicRand
         break;
     }
 
-    if ( hero.hasArtifact( Artifact::BALLISTA ) )
-        catShots += Artifact( Artifact::BALLISTA ).ExtraValue();
+    catShots += hero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::EXTRA_CATAPULT_SHOTS );
 }
 
 u32 Battle::Catapult::GetDamage() const

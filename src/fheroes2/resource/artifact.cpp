@@ -561,6 +561,18 @@ bool BagArtifacts::isArtifactBonusPresent( const fheroes2::ArtifactBonusType typ
     return false;
 }
 
+bool BagArtifacts::isArtifactCursePresent( const fheroes2::ArtifactCurseType type ) const
+{
+    for ( const Artifact & artifact : *this ) {
+        const std::vector<fheroes2::ArtifactCurse> & curses = fheroes2::getArtifactData( artifact.GetID() ).curses;
+        if ( std::find( curses.begin(), curses.end(), fheroes2::ArtifactCurse( type ) ) != curses.end() ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 uint32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactBonusType bonus ) const
 {
     uint32_t totalValue = 0;

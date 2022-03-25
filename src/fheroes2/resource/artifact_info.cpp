@@ -284,7 +284,7 @@ namespace
 
         artifactData[Artifact::WAND_NEGATION].bonuses.emplace_back( fheroes2::ArtifactBonusType::DISPEL_SPELL_IMMUNITY, 100 );
 
-        artifactData[Artifact::GOLDEN_BOW].bonuses.emplace_back( fheroes2::ArtifactBonusType::REMOVE_SHOOTING_PENALTY, 50 );
+        artifactData[Artifact::GOLDEN_BOW].bonuses.emplace_back( fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY );
 
         artifactData[Artifact::TELESCOPE].bonuses.emplace_back( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE, 1 );
 
