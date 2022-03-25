@@ -228,8 +228,6 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     campaignSaveData.reset();
     campaignSaveData.setCurrentScenarioInfoId( { chosenCampaign, 0 } );
 
-    AGG::PlayMusic( MUS::VICTORY, true, true );
-
     return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
 }
 
