@@ -870,7 +870,7 @@ std::set<Heroes *> Kingdoms::resetRecruits()
 bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
 {
     for ( const Heroes * hero : heroes ) {
-        if ( hero->hasArtifact( Artifact::CRYSTAL_BALL ) ) {
+        if ( hero->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::VIEW_MONSTER_INFORMATION ) ) {
             const uint32_t crystalBallDistance = hero->GetVisionsDistance();
             if ( Maps::GetApproximateDistance( hero->GetIndex(), dest ) <= crystalBallDistance ) {
                 return true;

@@ -506,7 +506,7 @@ namespace
 
         artifactData[Artifact::ARM_MARTYR].bonuses.emplace_back( fheroes2::ArtifactBonusType::SPELL_POWER_SKILL, 3 );
         // TODO: check undead morale penalty.
-        artifactData[Artifact::ARM_MARTYR].curses.emplace_back( fheroes2::ArtifactCurseType::MORALE, 3 );
+        artifactData[Artifact::ARM_MARTYR].curses.emplace_back( fheroes2::ArtifactCurseType::UNDEAD_PENALTY );
 
         artifactData[Artifact::BREASTPLATE_ANDURAN].bonuses.emplace_back( fheroes2::ArtifactBonusType::DEFENCE_SKILL, 5 );
 
@@ -520,7 +520,7 @@ namespace
         artifactData[Artifact::BATTLE_GARB].bonuses.emplace_back( fheroes2::ArtifactBonusType::LUCK, 10 );
         artifactData[Artifact::BATTLE_GARB].bonuses.emplace_back( fheroes2::ArtifactBonusType::ADD_SPELL, Spell::TOWNPORTAL );
 
-        artifactData[Artifact::CRYSTAL_BALL].bonuses.emplace_back( fheroes2::ArtifactBonusType::MONSTER_INFORMATION );
+        artifactData[Artifact::CRYSTAL_BALL].bonuses.emplace_back( fheroes2::ArtifactBonusType::VIEW_MONSTER_INFORMATION );
 
         artifactData[Artifact::HEART_FIRE].bonuses.emplace_back( fheroes2::ArtifactBonusType::FIRE_SPELL_DAMAGE_REDUCTION_PERCENT, 50 );
         artifactData[Artifact::HEART_FIRE].curses.emplace_back( fheroes2::ArtifactCurseType::COLD_SPELL_EXTRA_DAMAGE_PERCENT, 100 );

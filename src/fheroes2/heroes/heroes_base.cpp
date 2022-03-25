@@ -37,114 +37,6 @@
 #include "translations.h"
 #include "world.h"
 
-template <std::size_t size>
-int ArtifactsModifiersResult( int type, const std::array<uint8_t, size> & arts, const HeroBase & base, std::string * strs )
-{
-    int result = 0;
-
-    for ( const Artifact art : arts ) {
-        if ( art.isValid() ) {
-            const uint32_t acount = base.artifactCount( art );
-            if ( acount ) {
-                int32_t mod = art.ExtraValue();
-
-                switch ( art.GetID() ) {
-                case Artifact::SWORD_BREAKER:
-                    if ( type == MDF_ATTACK )
-                        mod = 1;
-                    break;
-                // power
-                case Artifact::BROACH_SHIELDING:
-                    if ( type == MDF_POWER )
-                        mod = -2;
-                    break;
-                // morale/luck
-                case Artifact::BATTLE_GARB:
-                    if ( type == MDF_MORALE || type == MDF_LUCK )
-                        mod = 10;
-                    break;
-                case Artifact::MASTHEAD:
-                    if ( type == MDF_MORALE || type == MDF_LUCK )
-                        mod = base.Modes( Heroes::SHIPMASTER ) ? art.ExtraValue() : 0;
-                    break;
-                // morale
-                case Artifact::FIZBIN_MISFORTUNE:
-                    if ( type == MDF_MORALE )
-                        mod = -static_cast<s32>( art.ExtraValue() );
-                    break;
-                default:
-                    break;
-                }
-
-                result += mod * acount;
-
-                if ( strs && mod ) {
-                    strs->append( art.GetName() );
-                    StringAppendModifiers( *strs, mod );
-                    strs->append( "\n" );
-                }
-            }
-        }
-    }
-
-    return result;
-}
-
-int ArtifactsModifiersAttack( const HeroBase & base, std::string * strs )
-{
-    const std::array<uint8_t, 14> arts
-        = { Artifact::SPIKED_HELM,   Artifact::THUNDER_MACE,      Artifact::GIANT_FLAIL,     Artifact::SWORD_BREAKER,  Artifact::SPIKED_SHIELD,
-            Artifact::POWER_AXE,     Artifact::LEGENDARY_SCEPTER, Artifact::DRAGON_SWORD,    Artifact::ULTIMATE_CROWN, Artifact::BATTLE_GARB,
-            Artifact::SWORD_ANDURAN, Artifact::HOLY_HAMMER,       Artifact::ULTIMATE_SHIELD, Artifact::ULTIMATE_SWORD };
-
-    return ArtifactsModifiersResult( MDF_ATTACK, arts, base, strs );
-}
-
-int ArtifactsModifiersDefense( const HeroBase & base, std::string * strs )
-{
-    const std::array<uint8_t, 13> arts
-        = { Artifact::SPIKED_HELM,       Artifact::ARMORED_GAUNTLETS,  Artifact::DEFENDER_HELM,  Artifact::SPIKED_SHIELD, Artifact::STEALTH_SHIELD,
-            Artifact::LEGENDARY_SCEPTER, Artifact::DIVINE_BREASTPLATE, Artifact::ULTIMATE_CROWN, Artifact::SWORD_BREAKER, Artifact::BREASTPLATE_ANDURAN,
-            Artifact::BATTLE_GARB,       Artifact::ULTIMATE_SHIELD,    Artifact::ULTIMATE_CLOAK };
-
-    return ArtifactsModifiersResult( MDF_DEFENSE, arts, base, strs );
-}
-
-int ArtifactsModifiersPower( const HeroBase & base, std::string * strs )
-{
-    const std::array<uint8_t, 15> arts
-        = { Artifact::WHITE_PEARL,    Artifact::BLACK_PEARL,    Artifact::CASTER_BRACELET, Artifact::MAGE_RING,       Artifact::LEGENDARY_SCEPTER,
-            Artifact::WITCHES_BROACH, Artifact::ARM_MARTYR,     Artifact::ULTIMATE_CROWN,  Artifact::ARCANE_NECKLACE, Artifact::BATTLE_GARB,
-            Artifact::STAFF_WIZARDRY, Artifact::HELMET_ANDURAN, Artifact::ULTIMATE_STAFF,  Artifact::ULTIMATE_WAND,   Artifact::BROACH_SHIELDING };
-
-    return ArtifactsModifiersResult( MDF_POWER, arts, base, strs );
-}
-
-int ArtifactsModifiersKnowledge( const HeroBase & base, std::string * strs )
-{
-    const std::array<uint8_t, 10> arts
-        = { Artifact::WHITE_PEARL,     Artifact::BLACK_PEARL,       Artifact::MINOR_SCROLL,   Artifact::MAJOR_SCROLL,   Artifact::SUPERIOR_SCROLL,
-            Artifact::FOREMOST_SCROLL, Artifact::LEGENDARY_SCEPTER, Artifact::ULTIMATE_CROWN, Artifact::ULTIMATE_STAFF, Artifact::ULTIMATE_BOOK };
-
-    return ArtifactsModifiersResult( MDF_KNOWLEDGE, arts, base, strs );
-}
-
-int ArtifactsModifiersMorale( const HeroBase & base, std::string * strs )
-{
-    const std::array<uint8_t, 7> arts = { Artifact::MEDAL_VALOR, Artifact::MEDAL_COURAGE, Artifact::MEDAL_HONOR,      Artifact::MEDAL_DISTINCTION,
-                                          Artifact::BATTLE_GARB, Artifact::MASTHEAD,      Artifact::FIZBIN_MISFORTUNE };
-
-    return ArtifactsModifiersResult( MDF_MORALE, arts, base, strs );
-}
-
-int ArtifactsModifiersLuck( const HeroBase & base, std::string * strs )
-{
-    const std::array<uint8_t, 6> arts
-        = { Artifact::RABBIT_FOOT, Artifact::GOLDEN_HORSESHOE, Artifact::GAMBLER_LUCKY_COIN, Artifact::FOUR_LEAF_CLOVER, Artifact::BATTLE_GARB, Artifact::MASTHEAD };
-
-    return ArtifactsModifiersResult( MDF_LUCK, arts, base, strs );
-}
-
 HeroBase::HeroBase( const int type, const int race )
     : magic_point( 0 )
     , move_point( 0 )
@@ -304,7 +196,13 @@ bool HeroBase::hasArtifact( const Artifact & art ) const
 
 int HeroBase::GetAttackModificator( std::string * strs ) const
 {
-    int result = ArtifactsModifiersAttack( *this, strs );
+    int result = 0;
+    if ( strs == nullptr ) {
+        result = GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::ATTACK_SKILL );
+    }
+    else {
+        result = GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::ATTACK_SKILL, *strs );
+    }
 
     // check castle modificator
     const Castle * castle = inCastle();
@@ -317,7 +215,13 @@ int HeroBase::GetAttackModificator( std::string * strs ) const
 
 int HeroBase::GetDefenseModificator( std::string * strs ) const
 {
-    int result = ArtifactsModifiersDefense( *this, strs );
+    int result = 0;
+    if ( strs == nullptr ) {
+        result = GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::DEFENCE_SKILL );
+    }
+    else {
+        result = GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::DEFENCE_SKILL, *strs );
+    }
 
     // check castle modificator
     const Castle * castle = inCastle();
@@ -330,7 +234,15 @@ int HeroBase::GetDefenseModificator( std::string * strs ) const
 
 int HeroBase::GetPowerModificator( std::string * strs ) const
 {
-    int result = ArtifactsModifiersPower( *this, strs );
+    int result = 0;
+    if ( strs == nullptr ) {
+        result = GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POWER_SKILL );
+        result -= GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactCurseType::SPELL_POWER_SKILL );
+    }
+    else {
+        result = GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POWER_SKILL, *strs );
+        result -= GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactCurseType::SPELL_POWER_SKILL, *strs );
+    }
 
     // check castle modificator
     const Castle * castle = inCastle();
@@ -343,7 +255,13 @@ int HeroBase::GetPowerModificator( std::string * strs ) const
 
 int HeroBase::GetKnowledgeModificator( std::string * strs ) const
 {
-    int result = ArtifactsModifiersKnowledge( *this, strs );
+    int result = 0;
+    if ( strs == nullptr ) {
+        result = GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::KNOWLEDGE_SKILL );
+    }
+    else {
+        result = GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::KNOWLEDGE_SKILL, *strs );
+    }
 
     // check castle modificator
     const Castle * castle = inCastle();
@@ -356,7 +274,23 @@ int HeroBase::GetKnowledgeModificator( std::string * strs ) const
 
 int HeroBase::GetMoraleModificator( std::string * strs ) const
 {
-    int result = ArtifactsModifiersMorale( *this, strs );
+    int result = 0;
+    if ( strs == nullptr ) {
+        result = GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::MORALE );
+        if ( Modes( Heroes::SHIPMASTER ) ) {
+            result += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_BATTLE_MORALE_BOOST );
+        }
+
+        result -= GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactCurseType::MORALE );
+    }
+    else {
+        result = GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::MORALE, *strs );
+        if ( Modes( Heroes::SHIPMASTER ) ) {
+            result += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_BATTLE_MORALE_BOOST, *strs );
+        }
+
+        result -= GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactCurseType::MORALE, *strs );
+    }
 
     // check castle modificator
     const Castle * castle = inCastle();
@@ -372,7 +306,19 @@ int HeroBase::GetMoraleModificator( std::string * strs ) const
 
 int HeroBase::GetLuckModificator( std::string * strs ) const
 {
-    int result = ArtifactsModifiersLuck( *this, strs );
+    int result = 0;
+    if ( strs == nullptr ) {
+        result = GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::LUCK );
+        if ( Modes( Heroes::SHIPMASTER ) ) {
+            result += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_BATTLE_LUCK_BOOST );
+        }
+    }
+    else {
+        result = GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::LUCK, *strs );
+        if ( Modes( Heroes::SHIPMASTER ) ) {
+            result += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_BATTLE_LUCK_BOOST, *strs );
+        }
+    }
 
     // check castle modificator
     const Castle * castle = inCastle();

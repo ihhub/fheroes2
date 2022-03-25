@@ -84,7 +84,7 @@ namespace fheroes2
         EXTRA_CATAPULT_SHOTS,
         AREA_REVEAL_DISTANCE,
         ADD_SPELL,
-        MONSTER_INFORMATION,
+        VIEW_MONSTER_INFORMATION,
         SEA_BATTLE_MORALE_BOOST,
         SEA_BATTLE_LUCK_BOOST,
         DISABLE_ALL_SPELL_COMBAT_CASTING,
@@ -95,7 +95,7 @@ namespace fheroes2
     {
         NO_JOINING_ARMIES,
         MORALE,
-        LUCK,
+        UNDEAD_PENALTY,
         GOLD_PENALTY,
         SPELL_POWER_SKILL,
         FIRE_SPELL_EXTRA_DAMAGE_PERCENT,
@@ -111,7 +111,7 @@ namespace fheroes2
             // Do nothing.
         }
 
-        ArtifactBonus( const ArtifactBonusType type_, const uint32_t value_ )
+        ArtifactBonus( const ArtifactBonusType type_, const int32_t value_ )
             : type( type_ )
             , value( value_ )
         {
@@ -125,7 +125,7 @@ namespace fheroes2
 
         ArtifactBonusType type;
 
-        uint32_t value;
+        int32_t value;
     };
 
     struct ArtifactCurse
@@ -137,7 +137,7 @@ namespace fheroes2
             // Do nothing.
         }
 
-        ArtifactCurse( const ArtifactCurseType type_, const uint32_t value_ )
+        ArtifactCurse( const ArtifactCurseType type_, const int32_t value_ )
             : type( type_ )
             , value( value_ )
         {
@@ -151,7 +151,7 @@ namespace fheroes2
 
         ArtifactCurseType type;
 
-        uint32_t value;
+        int32_t value;
     };
 
     bool isBonusAccumulative( const ArtifactBonusType bonus );

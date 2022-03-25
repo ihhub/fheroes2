@@ -573,12 +573,21 @@ bool BagArtifacts::isArtifactCursePresent( const fheroes2::ArtifactCurseType typ
     return false;
 }
 
-uint32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactBonusType bonus ) const
+int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactBonusType bonus ) const
 {
-    uint32_t totalValue = 0;
+    int32_t totalValue = 0;
 
     const bool isAccumulative = fheroes2::isBonusAccumulative( bonus );
     if ( isAccumulative ) {
+        for ( const Artifact & artifact : *this ) {
+            const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( artifact.GetID() ).bonuses;
+            auto bonusIter = std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( bonus ) );
+            if ( bonusIter != bonuses.end() ) {
+                totalValue += bonusIter->value;
+            }
+        }
+    }
+    else {
         std::set<int> usedArtifactIds;
         for ( const Artifact & artifact : *this ) {
             const int artifactId = artifact.GetID();
@@ -594,12 +603,55 @@ uint32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactBonu
             }
         }
     }
-    else {
+
+    return totalValue;
+}
+
+int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactBonusType bonus, std::string & description ) const
+{
+    int32_t totalValue = 0;
+
+    const bool isAccumulative = fheroes2::isBonusAccumulative( bonus );
+    if ( isAccumulative ) {
+        std::map<int, int> artifactValuePerId;
         for ( const Artifact & artifact : *this ) {
-            const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( artifact.GetID() ).bonuses;
+            const int artifactId = artifact.GetID();
+
+            const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( artifactId ).bonuses;
             auto bonusIter = std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( bonus ) );
             if ( bonusIter != bonuses.end() ) {
                 totalValue += bonusIter->value;
+                artifactValuePerId[artifactId] += bonusIter->value;
+            }
+        }
+
+        for ( const std::pair<int, int> & artifactInfo : artifactValuePerId ) {
+            description += Artifact( artifactInfo.first ).GetName();
+            description +=  " +" ;
+
+            description += std::to_string( artifactInfo.second );
+            description += '\n';
+        }
+    }
+    else {
+        std::set<int> usedArtifactIds;
+        for ( const Artifact & artifact : *this ) {
+            const int artifactId = artifact.GetID();
+            if ( !usedArtifactIds.insert( artifactId ).second ) {
+                // Artifact is present in multiple copies.
+                continue;
+            }
+
+            const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( artifactId ).bonuses;
+            auto bonusIter = std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( bonus ) );
+            if ( bonusIter != bonuses.end() ) {
+                totalValue += bonusIter->value;
+
+                description += artifact.GetName();
+                description +=  " +" ; // to show a positive value.
+
+                description += std::to_string( bonusIter->value );
+                description += '\n';
             }
         }
     }
@@ -607,12 +659,21 @@ uint32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactBonu
     return totalValue;
 }
 
-uint32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactCurseType curse ) const
+int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactCurseType curse ) const
 {
-    uint32_t totalValue = 0;
+    int32_t totalValue = 0;
 
     const bool isAccumulative = fheroes2::isCurseAccumulative( curse );
     if ( isAccumulative ) {
+        for ( const Artifact & artifact : *this ) {
+            const std::vector<fheroes2::ArtifactCurse> & curses = fheroes2::getArtifactData( artifact.GetID() ).curses;
+            auto curseIter = std::find( curses.begin(), curses.end(), fheroes2::ArtifactCurse( curse ) );
+            if ( curseIter != curses.end() ) {
+                totalValue += curseIter->value;
+            }
+        }
+    }
+    else {
         std::set<int> usedArtifactIds;
         for ( const Artifact & artifact : *this ) {
             const int artifactId = artifact.GetID();
@@ -628,12 +689,55 @@ uint32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactCurs
             }
         }
     }
-    else {
+
+    return totalValue;
+}
+
+int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactCurseType curse, std::string & description ) const
+{
+    int32_t totalValue = 0;
+
+    const bool isAccumulative = fheroes2::isCurseAccumulative( curse );
+    if ( isAccumulative ) {
+        std::map<int, int> artifactValuePerId;
         for ( const Artifact & artifact : *this ) {
-            const std::vector<fheroes2::ArtifactCurse> & curses = fheroes2::getArtifactData( artifact.GetID() ).curses;
+            const int artifactId = artifact.GetID();
+
+            const std::vector<fheroes2::ArtifactCurse> & curses = fheroes2::getArtifactData( artifactId ).curses;
             auto curseIter = std::find( curses.begin(), curses.end(), fheroes2::ArtifactCurse( curse ) );
             if ( curseIter != curses.end() ) {
                 totalValue += curseIter->value;
+                artifactValuePerId[artifactId] += curseIter->value;
+            }
+        }
+
+        for ( const std::pair<int, int> & artifactInfo : artifactValuePerId ) {
+            description += Artifact( artifactInfo.first ).GetName();
+            description +=  ' ' ;
+
+            description += std::to_string( artifactInfo.second );
+            description += '\n';
+        }
+    }
+    else {
+        std::set<int> usedArtifactIds;
+        for ( const Artifact & artifact : *this ) {
+            const int artifactId = artifact.GetID();
+            if ( !usedArtifactIds.insert( artifactId ).second ) {
+                // Artifact is present in multiple copies.
+                continue;
+            }
+
+            const std::vector<fheroes2::ArtifactCurse> & curses = fheroes2::getArtifactData( artifactId ).curses;
+            auto curseIter = std::find( curses.begin(), curses.end(), fheroes2::ArtifactCurse( curse ) );
+            if ( curseIter != curses.end() ) {
+                totalValue += curseIter->value;
+
+                description += artifact.GetName();
+                description +=  ' ' ;
+
+                description += std::to_string( curseIter->value );
+                description += '\n';
             }
         }
     }
