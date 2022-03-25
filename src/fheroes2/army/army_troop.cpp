@@ -124,12 +124,12 @@ bool Troop::isEmpty( void ) const
     return !isValid();
 }
 
-payment_t Troop::GetCost( void ) const
+payment_t Troop::GetCost() const
 {
     return Monster::GetCost() * count;
 }
 
-payment_t Troop::GetUpgradeCost( void ) const
+payment_t Troop::GetUpgradeCost() const
 {
     return Monster::GetUpgradeCost() * count;
 }

@@ -1119,6 +1119,12 @@ u32 Battle::Unit::GetHitPoints( void ) const
     return hp;
 }
 
+payment_t Battle::Unit::GetCost() const
+{
+    // Resurrected (not truly resurrected) units should not be taken into account when calculating the cost of surrender
+    return Monster::GetCost() * ( GetDead() > GetInitialCount() ? 0 : GetInitialCount() - GetDead() );
+}
+
 int Battle::Unit::GetControl( void ) const
 {
     return !GetArmy() ? CONTROL_AI : GetArmy()->GetControl();

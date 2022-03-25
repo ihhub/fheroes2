@@ -1023,12 +1023,12 @@ int Monster::ICNMonh( void ) const
     return id >= PEASANT && id <= WATER_ELEMENT ? ICN::MONH0000 + id - PEASANT : ICN::UNKNOWN;
 }
 
-payment_t Monster::GetCost( void ) const
+payment_t Monster::GetCost() const
 {
     return payment_t( fheroes2::getMonsterData( id ).generalStats.cost );
 }
 
-payment_t Monster::GetUpgradeCost( void ) const
+payment_t Monster::GetUpgradeCost() const
 {
     const Monster upgr = GetUpgrade();
     const payment_t pay = id != upgr.id ? upgr.GetCost() - GetCost() : GetCost();
