@@ -21,7 +21,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "artifact_info.h"
 #include "castle.h"
 #include "profit.h"
 #include "race.h"
