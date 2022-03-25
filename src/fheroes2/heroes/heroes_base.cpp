@@ -169,13 +169,13 @@ uint32_t HeroBase::artifactCount( const Artifact & art ) const
         unique = true;
         break;
     case 2:
-        unique = Settings::Get().ExtWorldUseUniqueArtifactsRS();
+        unique = false;
         break; /* resource affecting arts. */
     case 3:
-        unique = Settings::Get().ExtWorldUseUniqueArtifactsPS();
+        unique = false;
         break; /* primary/mp/sp arts. */
     case 4:
-        unique = Settings::Get().ExtWorldUseUniqueArtifactsSS();
+        unique = false;
         break; /* sec. skills arts. */
     default:
         break;

@@ -859,12 +859,6 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "world: Crystal Ball gives Identify Hero and Visions spells" );
     case Settings::WORLD_SCALE_NEUTRAL_ARMIES:
         return _( "world: Neutral armies scale with game difficulty" );
-    case Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS:
-        return _( "world: use unique artifacts providing resources" );
-    case Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS:
-        return _( "world: use unique artifacts affecting primary skills" );
-    case Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS:
-        return _( "world: use unique artifacts affecting secondary skills" );
     case Settings::WORLD_EXT_OBJECTS_CAPTURED:
         return _( "world: Windmills, Water Wheels and Magic Gardens can be captured" );
     case Settings::CASTLE_ALLOW_GUARDIANS:

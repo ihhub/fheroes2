@@ -92,9 +92,9 @@ public:
         WORLD_SCALE_NEUTRAL_ARMIES = 0x30000020,
         HEROES_ARENA_ANY_SKILLS = 0x30000080,
         // UNUSED = 0x30000100,
-        WORLD_USE_UNIQUE_ARTIFACTS_RS = 0x30000200,
-        WORLD_USE_UNIQUE_ARTIFACTS_PS = 0x30000400,
-        WORLD_USE_UNIQUE_ARTIFACTS_SS = 0x30000800,
+        // UNUSED = 0x30000200,
+        // UNUSED = 0x30000400,
+        // UNUSED = 0x30000800,
         // UNUSED = 0x30001000,
         WORLD_EXT_OBJECTS_CAPTURED = 0x30004000,
         // UNUSED = 0x30008000,
@@ -292,21 +292,6 @@ public:
     bool ExtWorldNeutralArmyDifficultyScaling() const
     {
         return ExtModes( WORLD_SCALE_NEUTRAL_ARMIES );
-    }
-
-    bool ExtWorldUseUniqueArtifactsRS() const
-    {
-        return ExtModes( WORLD_USE_UNIQUE_ARTIFACTS_RS );
-    }
-
-    bool ExtWorldUseUniqueArtifactsPS() const
-    {
-        return ExtModes( WORLD_USE_UNIQUE_ARTIFACTS_PS );
-    }
-
-    bool ExtWorldUseUniqueArtifactsSS() const
-    {
-        return ExtModes( WORLD_USE_UNIQUE_ARTIFACTS_SS );
     }
 
     bool ExtWorldExtObjectsCaptured() const

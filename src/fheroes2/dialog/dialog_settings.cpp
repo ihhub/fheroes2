@@ -154,9 +154,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::WORLD_SCOUTING_EXTENDED );
     states.push_back( Settings::WORLD_ARTIFACT_CRYSTAL_BALL );
     states.push_back( Settings::WORLD_SCALE_NEUTRAL_ARMIES );
-    states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS );
-    states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS );
-    states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS );
     states.push_back( Settings::HEROES_BUY_BOOK_FROM_SHRINES );
     states.push_back( Settings::HEROES_REMEMBER_POINTS_RETREAT );
     states.push_back( Settings::HEROES_TRANSCRIBING_SCROLLS );
