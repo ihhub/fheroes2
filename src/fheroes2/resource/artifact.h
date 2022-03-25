@@ -159,6 +159,7 @@ public:
         SWORD_ANDURAN,
         SPADE_NECROMANCY,
 
+        // IMPORTANT! Put all new artifacts just above this line.
         UNKNOWN
     };
 
