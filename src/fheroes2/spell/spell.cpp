@@ -181,25 +181,19 @@ u32 Spell::SpellPoint( const HeroBase * hero ) const
         return spells[id].spellPoints;
     }
 
-    const int32_t spellReductionPercentage = hero->GetBagArtifacts().getTotalArtifactEffectValue( type );
-    assert( spellReductionPercentage >= 0 );
-    if ( spellReductionPercentage <= 0 ) {
-        return spells[id].spellPoints;
+    int32_t spellCost = spells[id].spellPoints;
+
+    const std::vector<int32_t> spellReductionPercentage = hero->GetBagArtifacts().getTotalArtifactMultipliedPercent( type );
+    for ( const int32_t value : spellReductionPercentage ) {
+        assert( value >= 0 && value <= 100 );
+        spellCost = spellCost * ( 100 - value ) / 100;
     }
 
-    if ( spellReductionPercentage >= 100 ) {
-        // A spell cost cannot be lower than 1.
+    if ( spellCost < 1 ) {
         return 1;
     }
 
-    const int32_t resultedSpellCost = spells[id].spellPoints * ( 100 - spellReductionPercentage ) / 100;
-    assert( resultedSpellCost >= 0 );
-
-    if ( resultedSpellCost < 1 ) {
-        return 1;
-    }
-
-    return static_cast<uint32_t>( resultedSpellCost );
+    return static_cast<uint32_t>( spellCost );
 }
 
 int Spell::Level( void ) const

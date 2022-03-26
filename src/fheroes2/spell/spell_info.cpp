@@ -83,9 +83,12 @@ namespace fheroes2
             return damage;
         }
 
-        const int32_t extraDamagePercentage = hero->GetBagArtifacts().getTotalArtifactEffectValue( type );
+        const std::vector<int32_t> extraDamagePercentage = hero->GetBagArtifacts().getTotalArtifactMultipliedPercent( type );
+        for ( const int32_t value : extraDamagePercentage ) {
+            damage = damage * ( 100 + value ) / 100;
+        }
 
-        return damage * ( 100 + extraDamagePercentage ) / 100;
+        return damage;
     }
 
     uint32_t getSummonMonsterCount( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )
