@@ -1358,8 +1358,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, u32 spoint, const Hero
                     dmg = dmg * ( 100 - value ) / 100;
                 }
 
-                extraDamagePercent
-                    = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactCurseType::COLD_SPELL_EXTRA_DAMAGE_PERCENT );
+                extraDamagePercent = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactCurseType::COLD_SPELL_EXTRA_DAMAGE_PERCENT );
                 for ( const int32_t value : extraDamagePercent ) {
                     dmg = dmg * ( 100 + value ) / 100;
                 }
@@ -1382,8 +1381,7 @@ void Battle::Unit::SpellApplyDamage( const Spell & spell, u32 spoint, const Hero
                     dmg = dmg * ( 100 - value ) / 100;
                 }
 
-                extraDamagePercent
-                    = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactCurseType::FIRE_SPELL_EXTRA_DAMAGE_PERCENT );
+                extraDamagePercent = defendingHero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactCurseType::FIRE_SPELL_EXTRA_DAMAGE_PERCENT );
                 for ( const int32_t value : extraDamagePercent ) {
                     dmg = dmg * ( 100 + value ) / 100;
                 }
