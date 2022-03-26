@@ -202,7 +202,6 @@ public:
         ext = 0;
     }
 
-    u32 ExtraValue( void ) const;
     int Level( void ) const;
     int LoyaltyLevel( void ) const;
     int getArtifactValue() const;
@@ -276,10 +275,12 @@ public:
     bool isArtifactCursePresent( const fheroes2::ArtifactCurseType type ) const;
 
     int32_t getTotalArtifactEffectValue( const fheroes2::ArtifactBonusType bonus ) const;
-    int32_t getTotalArtifactEffectValue( const fheroes2::ArtifactCurseType curse ) const;
-
     int32_t getTotalArtifactEffectValue( const fheroes2::ArtifactBonusType bonus, std::string & description ) const;
+
+    int32_t getTotalArtifactEffectValue( const fheroes2::ArtifactCurseType curse ) const;
     int32_t getTotalArtifactEffectValue( const fheroes2::ArtifactCurseType curse, std::string & description ) const;
+
+    std::vector<int32_t> getTotalArtifactMultipliedPercent( const fheroes2::ArtifactBonusType bonus ) const;
 
     bool PushArtifact( const Artifact & );
 

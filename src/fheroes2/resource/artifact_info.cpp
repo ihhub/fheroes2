@@ -583,6 +583,32 @@ namespace fheroes2
         return false;
     }
 
+    bool isBonusMultiplied( const ArtifactBonusType bonus )
+    {
+        switch ( bonus ) {
+        case ArtifactBonusType::SURRENDER_COST_REDUCTION_PERCENT:
+        case ArtifactBonusType::CURSE_SPELL_COST_REDUCTION_PERCENT:
+        case ArtifactBonusType::BLESS_SPELL_COST_REDUCTION_PERCENT:
+        case ArtifactBonusType::SUMMONING_SPELL_COST_REDUCTION_PERCENT:
+        case ArtifactBonusType::MIND_INFLUENCE_SPELL_COST_REDUCTION_PERCENT:
+        case ArtifactBonusType::COLD_SPELL_DAMAGE_REDUCTION_PERCENT:
+        case ArtifactBonusType::FIRE_SPELL_DAMAGE_REDUCTION_PERCENT:
+        case ArtifactBonusType::LIGHTNING_SPELL_DAMAGE_REDUCTION_PERCENT:
+        case ArtifactBonusType::ELEMENTAL_SPELL_DAMAGE_REDUCTION_PERCENT:
+        case ArtifactBonusType::HYPNOTIZE_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+        case ArtifactBonusType::COLD_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+        case ArtifactBonusType::FIRE_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+        case ArtifactBonusType::LIGHTNING_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+        case ArtifactBonusType::RESURRECT_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+        case ArtifactBonusType::SUMMONING_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+            return true;
+        default:
+            break;
+        }
+
+        return false;
+    }
+
     bool isCurseAccumulative( const ArtifactCurseType curse )
     {
         switch ( curse ) {

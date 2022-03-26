@@ -98,10 +98,14 @@ namespace fheroes2
             return monsterCount;
         }
 
-        const int32_t summonSpellExtraEffectPercent
-            = hero->GetBagArtifacts().getTotalArtifactEffectValue( ArtifactBonusType::SUMMONING_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
+        const std::vector<int32_t> summonSpellExtraEffectPercent
+            = hero->GetBagArtifacts().getTotalArtifactMultipliedPercent( ArtifactBonusType::SUMMONING_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
 
-        return monsterCount * ( 100 + summonSpellExtraEffectPercent ) / 100;
+        for ( const int32_t value : summonSpellExtraEffectPercent ) {
+            monsterCount = monsterCount * ( 100 + value ) / 100;
+        }
+
+        return monsterCount;
     }
 
     uint32_t getHPRestorePoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )
@@ -123,10 +127,14 @@ namespace fheroes2
             return resurrectionPoints;
         }
 
-        const int32_t extraSpellEffectivenessPercent
-            = hero ->GetBagArtifacts().getTotalArtifactEffectValue( ArtifactBonusType::RESURRECT_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
+        const std::vector<int32_t> extraSpellEffectivenessPercent
+            = hero ->GetBagArtifacts().getTotalArtifactMultipliedPercent( ArtifactBonusType::RESURRECT_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
 
-        return resurrectionPoints * ( 100 + extraSpellEffectivenessPercent ) / 100;
+        for ( const int32_t value : extraSpellEffectivenessPercent ) {
+            resurrectionPoints = resurrectionPoints * ( 100 + value ) / 100;
+        }
+
+        return resurrectionPoints;
     }
 
     uint32_t getGuardianMonsterCount( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )

@@ -99,6 +99,7 @@ namespace fheroes2
         UNDEAD_PENALTY,
         GOLD_PENALTY,
         SPELL_POWER_SKILL,
+
         FIRE_SPELL_EXTRA_DAMAGE_PERCENT,
         COLD_SPELL_EXTRA_DAMAGE_PERCENT
     };
@@ -156,6 +157,8 @@ namespace fheroes2
     };
 
     bool isBonusAccumulative( const ArtifactBonusType bonus );
+
+    bool isBonusMultiplied( const ArtifactBonusType bonus );
 
     bool isCurseAccumulative( const ArtifactCurseType curse );
 
