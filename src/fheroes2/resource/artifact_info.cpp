@@ -460,7 +460,7 @@ namespace
 
         artifactData[Artifact::TELESCOPE].bonuses.emplace_back( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE, 1 );
 
-        artifactData[Artifact::STATESMAN_QUILL].bonuses.emplace_back( fheroes2::ArtifactBonusType::SURRENDER_COST_REDUCTION_PERCENT, 50 );
+        artifactData[Artifact::STATESMAN_QUILL].bonuses.emplace_back( fheroes2::ArtifactBonusType::SURRENDER_COST_REDUCTION_PERCENT, 10 );
 
         artifactData[Artifact::WIZARD_HAT].bonuses.emplace_back( fheroes2::ArtifactBonusType::EVERY_COMBAT_SPELL_DURATION, 10 );
 

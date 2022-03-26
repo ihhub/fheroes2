@@ -49,6 +49,8 @@ namespace
     const std::map<ArtifactSetData, std::vector<uint32_t>> artifactSets
         = { { ArtifactSetData( Artifact::BATTLE_GARB, gettext_noop( "The three Anduran artifacts magically combine into one." ) ),
               { Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN } } };
+
+    std::array<uint8_t, Artifact::UNKNOWN + 1> artifactGlobalStatus = {};
 }
 
 enum
@@ -215,11 +217,6 @@ bool Artifact::operator==( const Spell & spell ) const
 const char * Artifact::GetName( void ) const
 {
     return _( fheroes2::getArtifactData( id ).name );
-}
-
-int Artifact::Type( void ) const
-{
-    return artifacts[id].type;
 }
 
 std::string Artifact::GetDescription( void ) const
@@ -483,17 +480,17 @@ int Artifact::Rand( level_t lvl )
 
     // if possibly: make unique on map
     for ( u32 art = ULTIMATE_BOOK; art < UNKNOWN; ++art )
-        if ( ( lvl & Artifact( art ).Level() ) && !( artifacts[art].bits & ART_RNDDISABLED ) && !( artifacts[art].bits & ART_RNDUSED ) )
+        if ( ( lvl & Artifact( art ).Level() ) && !( artifactGlobalStatus[art] & ART_RNDDISABLED ) && !( artifactGlobalStatus[art] & ART_RNDUSED ) )
             v.push_back( art );
 
     if ( v.empty() ) {
         for ( u32 art = ULTIMATE_BOOK; art < UNKNOWN; ++art )
-            if ( ( lvl & Artifact( art ).Level() ) && !( artifacts[art].bits & ART_RNDDISABLED ) )
+            if ( ( lvl & Artifact( art ).Level() ) && !( artifactGlobalStatus[art] & ART_RNDDISABLED ) )
                 v.push_back( art );
     }
 
     int res = !v.empty() ? Rand::Get( v ) : Artifact::UNKNOWN;
-    artifacts[res].bits |= ART_RNDUSED;
+    artifactGlobalStatus[res] |= ART_RNDUSED;
 
     return res;
 }
@@ -883,9 +880,7 @@ u32 GoldInsteadArtifact( const MP2::MapObjectType objectType )
 
 void fheroes2::ResetArtifactStats()
 {
-    for ( artifactstats_t & item : artifacts ) {
-        item.bits = 0;
-    }
+    std::fill( artifactGlobalStatus.begin(), artifactGlobalStatus.end(), static_cast<uint8_t>( 0 ) );
 }
 
 void fheroes2::ExcludeArtifactFromRandom( const int artifactID )
@@ -894,7 +889,7 @@ void fheroes2::ExcludeArtifactFromRandom( const int artifactID )
 
     assert( id < artifacts.size() );
 
-    artifacts[id].bits |= ART_RNDDISABLED;
+    artifactGlobalStatus[id] |= ART_RNDDISABLED;
 }
 
 ArtifactsBar::ArtifactsBar( const Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar )

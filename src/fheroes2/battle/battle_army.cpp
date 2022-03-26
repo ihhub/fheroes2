@@ -176,8 +176,8 @@ uint32_t Battle::Force::GetSurrenderCost() const
     const HeroBase * commander = GetCommander();
 
     if ( commander ) {
-        const Artifact art( Artifact::STATESMAN_QUILL );
-        double mod = commander->hasArtifact( art ) ? art.ExtraValue() / 100.0 : 0.5;
+        const int32_t costReductionPercent = commander->GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SURRENDER_COST_REDUCTION_PERCENT );
+        double mod = costReductionPercent > 0 ? costReductionPercent / 100.0 : 0.5;
 
         switch ( commander->GetLevelSkill( Skill::Secondary::DIPLOMACY ) ) {
         case Skill::Level::BASIC:

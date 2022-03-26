@@ -160,35 +160,6 @@ BagArtifacts & HeroBase::GetBagArtifacts()
     return bag_artifacts;
 }
 
-uint32_t HeroBase::artifactCount( const Artifact & art ) const
-{
-    bool unique = true;
-
-    switch ( art.Type() ) {
-    case 1: // morale/luck arifacts
-        unique = true;
-        break;
-    case 2:
-        unique = false;
-        break; /* resource affecting arts. */
-    case 3:
-        unique = false;
-        break; /* primary/mp/sp arts. */
-    case 4:
-        unique = false;
-        break; /* sec. skills arts. */
-    default:
-        break;
-    }
-
-    if ( unique ) {
-        return bag_artifacts.isPresentArtifact( art ) ? 1 : 0;
-    }
-    else {
-        return bag_artifacts.Count( art );
-    }
-}
-
 bool HeroBase::hasArtifact( const Artifact & art ) const
 {
     return bag_artifacts.isPresentArtifact( art );

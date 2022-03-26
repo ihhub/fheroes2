@@ -58,32 +58,34 @@ namespace fheroes2
             return damage;
         }
 
+        ArtifactBonusType type = ArtifactBonusType::NONE;
+
         switch ( spell.GetID() ) {
         case Spell::COLDRAY:
         case Spell::COLDRING:
-            if ( hero->hasArtifact( Artifact::EVERCOLD_ICICLE ) ) {
-                damage += damage * Artifact( Artifact::EVERCOLD_ICICLE ).ExtraValue() / 100;
-            }
+            type = ArtifactBonusType::COLD_SPELL_EXTRA_EFFECTIVENESS_PERCENT;
             break;
 
         case Spell::FIREBALL:
         case Spell::FIREBLAST:
-            if ( hero->hasArtifact( Artifact::EVERHOT_LAVA_ROCK ) ) {
-                damage += damage * Artifact( Artifact::EVERHOT_LAVA_ROCK ).ExtraValue() / 100;
-            }
+            type = ArtifactBonusType::FIRE_SPELL_EXTRA_EFFECTIVENESS_PERCENT;
             break;
 
         case Spell::LIGHTNINGBOLT:
         case Spell::CHAINLIGHTNING:
-            if ( hero->hasArtifact( Artifact::LIGHTNING_ROD ) ) {
-                damage += damage * Artifact( Artifact::LIGHTNING_ROD ).ExtraValue() / 100;
-            }
+            type = ArtifactBonusType::LIGHTNING_SPELL_EXTRA_EFFECTIVENESS_PERCENT;
             break;
         default:
             break;
         }
 
-        return damage;
+        if ( type == ArtifactBonusType::NONE ) {
+            return damage;
+        }
+
+        const int32_t extraDamagePercentage = hero->GetBagArtifacts().getTotalArtifactEffectValue( type );
+
+        return damage * ( 100 + extraDamagePercentage ) / 100;
     }
 
     uint32_t getSummonMonsterCount( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )
@@ -91,16 +93,15 @@ namespace fheroes2
         assert( spellPower > 0 );
 
         uint32_t monsterCount = spell.ExtraValue() * spellPower;
+
         if ( hero == nullptr ) {
             return monsterCount;
         }
 
-        uint32_t artifactCount = hero->artifactCount( Artifact::BOOK_ELEMENTS );
-        if ( artifactCount > 0 ) {
-            monsterCount *= artifactCount * 2;
-        }
+        const int32_t summonSpellExtraEffectPercent
+            = hero->GetBagArtifacts().getTotalArtifactEffectValue( ArtifactBonusType::SUMMONING_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
 
-        return monsterCount;
+        return monsterCount * ( 100 + summonSpellExtraEffectPercent ) / 100;
     }
 
     uint32_t getHPRestorePoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )
@@ -117,16 +118,15 @@ namespace fheroes2
         assert( spellPower > 0 );
 
         uint32_t resurrectionPoints = spell.Resurrect() * spellPower;
+
         if ( hero == nullptr ) {
             return resurrectionPoints;
         }
 
-        uint32_t artifactCount = hero ? hero->artifactCount( Artifact::ANKH ) : 0;
-        if ( artifactCount ) {
-            resurrectionPoints *= artifactCount * 2;
-        }
+        const int32_t extraSpellEffectivenessPercent
+            = hero ->GetBagArtifacts().getTotalArtifactEffectValue( ArtifactBonusType::RESURRECT_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
 
-        return resurrectionPoints;
+        return resurrectionPoints * ( 100 + extraSpellEffectivenessPercent ) / 100;
     }
 
     uint32_t getGuardianMonsterCount( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )
@@ -153,7 +153,7 @@ namespace fheroes2
         const Kingdom & kingdom = hero.GetKingdom();
         const KingdomCastles & castles = kingdom.GetCastles();
 
-        const fheroes2::Point & heroPosition = hero.GetCenter();
+        const Point & heroPosition = hero.GetCenter();
         int32_t minDistance = -1;
 
         const Castle * nearestCastle = nullptr;
@@ -163,7 +163,7 @@ namespace fheroes2
                 continue;
             }
 
-            const fheroes2::Point & castlePosition = castle->GetCenter();
+            const Point & castlePosition = castle->GetCenter();
             const int32_t offsetX = heroPosition.x - castlePosition.x;
             const int32_t offsetY = heroPosition.y - castlePosition.y;
             const int32_t distance = offsetX * offsetX + offsetY * offsetY;

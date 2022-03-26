@@ -1305,7 +1305,7 @@ uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skil
 
 u32 Heroes::GetVisionsDistance( void ) const
 {
-    return 8 * std::max( 1U, artifactCount( Artifact::CRYSTAL_BALL ) );
+    return 8;
 }
 
 int Heroes::GetDirection( void ) const

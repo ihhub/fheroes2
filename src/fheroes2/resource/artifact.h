@@ -205,7 +205,6 @@ public:
     u32 ExtraValue( void ) const;
     int Level( void ) const;
     int LoyaltyLevel( void ) const;
-    int Type( void ) const;
     int getArtifactValue() const;
 
     // return index sprite objnarti.icn

@@ -118,7 +118,6 @@ public:
 
     BagArtifacts & GetBagArtifacts();
     const BagArtifacts & GetBagArtifacts() const;
-    uint32_t artifactCount( const Artifact & art ) const;
     bool hasArtifact( const Artifact & art ) const;
 
     void LoadDefaults( const int type, const int race );
