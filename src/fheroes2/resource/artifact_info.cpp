@@ -468,13 +468,13 @@ namespace
               {} },
 
             // Magic Book cannot be located on a map.
-            { gettext_noop( "Magic Book" ), gettext_noop( "The %{name} enables you to cast spells." ), nullptr },
+            { gettext_noop( "Magic Book" ), gettext_noop( "The %{name} enables you to cast spells." ), nullptr, {}, {} },
 
             // These are artifacts used only for map editor (?).
-            { gettext_noop( "Dummy 1" ), gettext_noop( "The reserved artifact." ), nullptr },
-            { gettext_noop( "Dummy 2" ), gettext_noop( "The reserved artifact." ), nullptr },
-            { gettext_noop( "Dummy 3" ), gettext_noop( "The reserved artifact." ), nullptr },
-            { gettext_noop( "Dummy 4" ), gettext_noop( "The reserved artifact." ), nullptr },
+            { gettext_noop( "Dummy 1" ), gettext_noop( "The reserved artifact." ), nullptr, {}, {} },
+            { gettext_noop( "Dummy 2" ), gettext_noop( "The reserved artifact." ), nullptr, {}, {} },
+            { gettext_noop( "Dummy 3" ), gettext_noop( "The reserved artifact." ), nullptr, {}, {} },
+            { gettext_noop( "Dummy 4" ), gettext_noop( "The reserved artifact." ), nullptr, {}, {} },
 
             { gettext_noop( "Spell Scroll" ),
               gettext_noop( "This %{name} gives your hero the ability to cast the %{spell} spell." ),
