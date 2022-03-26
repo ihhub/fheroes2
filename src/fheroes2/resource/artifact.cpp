@@ -475,7 +475,7 @@ int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactBonus
 
         for ( const std::pair<int, int> & artifactInfo : artifactValuePerId ) {
             description += Artifact( artifactInfo.first ).GetName();
-            description += " +" ;
+            description += " +";
 
             description += std::to_string( artifactInfo.second );
             description += '\n';
@@ -496,7 +496,7 @@ int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactBonus
                 totalValue += bonusIter->value;
 
                 description += artifact.GetName();
-                description += " +" ; // to show a positive value.
+                description += " +"; // to show a positive value.
 
                 description += std::to_string( bonusIter->value );
                 description += '\n';
