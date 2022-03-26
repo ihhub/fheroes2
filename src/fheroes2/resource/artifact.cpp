@@ -473,7 +473,7 @@ int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactBonus
             }
         }
 
-        for ( const std::pair<int, int> & artifactInfo : artifactValuePerId ) {
+        for ( const auto & artifactInfo : artifactValuePerId ) {
             description += Artifact( artifactInfo.first ).GetName();
             description += " +";
 
@@ -559,7 +559,7 @@ int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactCurse
             }
         }
 
-        for ( const std::pair<int, int> & artifactInfo : artifactValuePerId ) {
+        for ( const auto & artifactInfo : artifactValuePerId ) {
             description += Artifact( artifactInfo.first ).GetName();
             description += ' ';
 
