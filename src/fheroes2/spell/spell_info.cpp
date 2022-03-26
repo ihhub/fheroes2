@@ -131,7 +131,7 @@ namespace fheroes2
         }
 
         const std::vector<int32_t> extraSpellEffectivenessPercent
-            = hero ->GetBagArtifacts().getTotalArtifactMultipliedPercent( ArtifactBonusType::RESURRECT_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
+            = hero->GetBagArtifacts().getTotalArtifactMultipliedPercent( ArtifactBonusType::RESURRECT_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
 
         for ( const int32_t value : extraSpellEffectivenessPercent ) {
             resurrectionPoints = resurrectionPoints * ( 100 + value ) / 100;
