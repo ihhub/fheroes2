@@ -25,6 +25,7 @@
 #include "translations.h"
 
 #include <array>
+#include <sstream>
 
 namespace
 {
@@ -926,5 +927,216 @@ namespace fheroes2
         }
 
         return artifactData[artifactId];
+    }
+
+    std::string getArtifactDescription( const int artifactId )
+    {
+        const ArtifactData & data = getArtifactData( artifactId );
+
+        std::ostringstream os;
+        os << "----------" << std::endl;
+        os << "Name: " << data.name << std::endl;
+        os << "Description: " << data.getDescription( 0 ) << std::endl;
+        os << "Discovery event description: " << data.discoveryEventDescription << std::endl;
+
+        if ( !data.bonuses.empty() ) {
+            os << "Bonuses:" << std::endl;
+            for ( const ArtifactBonus & bonus : data.bonuses ) {
+                switch ( bonus.type ) {
+                case ArtifactBonusType::NONE:
+                    os << "None" << std::endl;
+                    break;
+                case ArtifactBonusType::KNOWLEDGE_SKILL:
+                    os << "Add " << bonus.value << " to hero's Knowledge Skill" << std::endl;
+                    break;
+                case ArtifactBonusType::ATTACK_SKILL:
+                    os << "Add " << bonus.value << " to hero's Attack Skill" << std::endl;
+                    break;
+                case ArtifactBonusType::DEFENCE_SKILL:
+                    os << "Add " << bonus.value << " to hero's Defence Skill" << std::endl;
+                    break;
+                case ArtifactBonusType::SPELL_POWER_SKILL:
+                    os << "Add " << bonus.value << " to hero's Spell Power Skill" << std::endl;
+                    break;
+                case ArtifactBonusType::GOLD_INCOME:
+                    os << "Increase daily kingdom's income by " << bonus.value << " gold" << std::endl;
+                    break;
+                case ArtifactBonusType::WOOD_INCOME:
+                    os << "Increase daily kingdom's income by " << bonus.value << " wood" << std::endl;
+                    break;
+                case ArtifactBonusType::MERCURY_INCOME:
+                    os << "Increase daily kingdom's income by " << bonus.value << " mercury" << std::endl;
+                    break;
+                case ArtifactBonusType::ORE_INCOME:
+                    os << "Increase daily kingdom's income by " << bonus.value << " ore" << std::endl;
+                    break;
+                case ArtifactBonusType::SULFUR_INCOME:
+                    os << "Increase daily kingdom's income by " << bonus.value << " sulfur" << std::endl;
+                    break;
+                case ArtifactBonusType::CRYSTAL_INCOME:
+                    os << "Increase daily kingdom's income by " << bonus.value << " crystal" << std::endl;
+                    break;
+                case ArtifactBonusType::GEMS_INCOME:
+                    os << "Increase daily kingdom's income by " << bonus.value << " gem" << std::endl;
+                    break;
+                case ArtifactBonusType::SPELL_POINTS_GENERATION:
+                    os << "Restore " << bonus.value << " spell points for a hero" << std::endl;
+                    break;
+                case ArtifactBonusType::LAND_MOBILITY:
+                    os << "Add " << bonus.value << " move points to a hero on Land" << std::endl;
+                    break;
+                case ArtifactBonusType::SEA_MOBILITY:
+                    os << "Add " << bonus.value << " move points to a hero on Sea" << std::endl;
+                    break;
+                case ArtifactBonusType::MORALE:
+                    os << "Increase army Morale by " << bonus.value << std::endl;
+                    break;
+                case ArtifactBonusType::LUCK:
+                    os << "Increase army Luck by " << bonus.value << std::endl;
+                    break;
+                case ArtifactBonusType::EVERY_COMBAT_SPELL_DURATION:
+                    os << "Increase every combat spell duration by " << bonus.value << " rounds" << std::endl;
+                    break;
+                case ArtifactBonusType::SURRENDER_COST_REDUCTION_PERCENT:
+                    os << "Reduce Surrender cost to " << bonus.value << " percent" << std::endl;
+                    break;
+                case ArtifactBonusType::CURSE_SPELL_COST_REDUCTION_PERCENT:
+                    os << "Reduce Curse spell cost by " << bonus.value << " percent" << std::endl;
+                    break;
+                case ArtifactBonusType::BLESS_SPELL_COST_REDUCTION_PERCENT:
+                    os << "Reduce Bless spell cost by " << bonus.value << " percent" << std::endl;
+                    break;
+                case ArtifactBonusType::SUMMONING_SPELL_COST_REDUCTION_PERCENT:
+                    os << "Reduce Summoning spell cost by " << bonus.value << " percent" << std::endl;
+                    break;
+                case ArtifactBonusType::MIND_INFLUENCE_SPELL_COST_REDUCTION_PERCENT:
+                    os << "Reduce Mind Influence related spell cost by " << bonus.value << " percent" << std::endl;
+                    break;
+                case ArtifactBonusType::COLD_SPELL_DAMAGE_REDUCTION_PERCENT:
+                    os << "Reduce Cold spell cost by " << bonus.value << " percent" << std::endl;
+                    break;
+                case ArtifactBonusType::FIRE_SPELL_DAMAGE_REDUCTION_PERCENT:
+                    os << "Reduce Fire spell cost by " << bonus.value << " percent" << std::endl;
+                    break;
+                case ArtifactBonusType::LIGHTNING_SPELL_DAMAGE_REDUCTION_PERCENT:
+                    os << "Reduce Lightning spell cost by " << bonus.value << " percent" << std::endl;
+                    break;
+                case ArtifactBonusType::ELEMENTAL_SPELL_DAMAGE_REDUCTION_PERCENT:
+                    os << "Reduce Elemental Storm and Armageddon spell cost by " << bonus.value << " percent" << std::endl;
+                    break;
+                case ArtifactBonusType::HYPNOTIZE_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+                    os << "Improve Hypnotize spell effectiveness by " << bonus.value << " percent" << std::endl;
+                    break;
+                case ArtifactBonusType::COLD_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+                    os << "Improve Cold spell effectiveness by " << bonus.value << " percent" << std::endl;
+                    break;
+                case ArtifactBonusType::FIRE_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+                    os << "Improve Fire spell effectiveness by " << bonus.value << " percent" << std::endl;
+                    break;
+                case ArtifactBonusType::LIGHTNING_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+                    os << "Improve Lightning spell effectiveness by " << bonus.value << " percent" << std::endl;
+                    break;
+                case ArtifactBonusType::RESURRECT_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+                    os << "Improve Resurrection spell effectiveness by " << bonus.value << " percent" << std::endl;
+                    break;
+                case ArtifactBonusType::SUMMONING_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+                    os << "Improve Sumonnining spell effectiveness by " << bonus.value << " percent" << std::endl;
+                    break;
+                case ArtifactBonusType::CURSE_SPELL_IMMUNITY:
+                    os << "Add immunity to Curse spells" << std::endl;
+                    break;
+                case ArtifactBonusType::HYPNOTIZE_SPELL_IMMUNITY:
+                    os << "Add immunity to Hypnotize spells" << std::endl;
+                    break;
+                case ArtifactBonusType::DEATH_SPELL_IMMUNITY:
+                    os << "Add immunity to Death spells" << std::endl;
+                    break;
+                case ArtifactBonusType::BERSERK_SPELL_IMMUNITY:
+                    os << "Add immunity to Berserk spells" << std::endl;
+                    break;
+                case ArtifactBonusType::BLIND_SPELL_IMMUNITY:
+                    os << "Add immunity to Blind spells" << std::endl;
+                    break;
+                case ArtifactBonusType::PARALYZE_SPELL_IMMUNITY:
+                    os << "Add immunity to Paralyze spells" << std::endl;
+                    break;
+                case ArtifactBonusType::HOLY_SPELL_IMMUNITY:
+                    os << "Add immunity to Holy spells" << std::endl;
+                    break;
+                case ArtifactBonusType::DISPEL_SPELL_IMMUNITY:
+                    os << "Add immunity to Dispel spells" << std::endl;
+                    break;
+                case ArtifactBonusType::ENDLESS_AMMUNITION:
+                    os << "Shooters have unlimited number of shots" << std::endl;
+                    break;
+                case ArtifactBonusType::NO_SHOOTING_PENALTY:
+                    os << "Shooters have no penalty over obstacles" << std::endl;
+                    break;
+                case ArtifactBonusType::EXTRA_CATAPULT_SHOTS:
+                    os << "Add " << bonus.value << " shots for catapult" << std::endl;
+                    break;
+                case ArtifactBonusType::AREA_REVEAL_DISTANCE:
+                    os << "Increase fog reveal area by " << bonus.value << std::endl;
+                    break;
+                case ArtifactBonusType::ADD_SPELL:
+                    os << "Add '" << Spell( bonus.value ).GetName() << "' spell to hero's list of spells" << std::endl;
+                    break;
+                case ArtifactBonusType::VIEW_MONSTER_INFORMATION:
+                    os << "Add ability to view monster information" << std::endl;
+                    break;
+                case ArtifactBonusType::SEA_BATTLE_MORALE_BOOST:
+                    os << "Increase army's Morale by " << bonus.value << " when in Sea" << std::endl;
+                    break;
+                case ArtifactBonusType::SEA_BATTLE_LUCK_BOOST:
+                    os << "Increase army's Luck by " << bonus.value << " when in Sea" << std::endl;
+                    break;
+                case ArtifactBonusType::DISABLE_ALL_SPELL_COMBAT_CASTING:
+                    os << "Disable all spell casting during battle" << std::endl;
+                    break;
+                case ArtifactBonusType::NECROMANCY_SKILL:
+                    os << "Increase Necromancy Skill by " << bonus.value << " percent" << std::endl;
+                    break;
+                default:
+                    // Did you add a new bonus type? Add the logic above!
+                    assert( 0 );
+                    break;
+                }
+            }
+        }
+
+        if ( !data.curses.empty() ) {
+            os << "Curses:" << std::endl;
+            for ( const ArtifactCurse & curse : data.curses ) {
+                switch ( curse.type ) {
+                case ArtifactCurseType::NO_JOINING_ARMIES:
+                    os << "No army can join hero" << std::endl;
+                    break;
+                case ArtifactCurseType::MORALE:
+                    os << "Decreases army's Morale by " << curse.value << std::endl;
+                    break;
+                case ArtifactCurseType::UNDEAD_PENALTY:
+                    os << "Add Undead Penalty to army's Morale" << std::endl;
+                    break;
+                case ArtifactCurseType::GOLD_PENALTY:
+                    os << "Deducts " << curse.value << " gold from kindgom daily" << std::endl;
+                    break;
+                case ArtifactCurseType::SPELL_POWER_SKILL:
+                    os << "Reduces Spell Power by " << curse.value << std::endl;
+                    break;
+                case ArtifactCurseType::FIRE_SPELL_EXTRA_DAMAGE_PERCENT:
+                    os << "Icreases Damage from Fire spells by " << curse.value << " percent" << std::endl;
+                    break;
+                case ArtifactCurseType::COLD_SPELL_EXTRA_DAMAGE_PERCENT:
+                    os << "Icreases Damage from Cold spells by " << curse.value << " percent" << std::endl;
+                    break;
+                default:
+                    // Did you add a new curse type? Add the logic above!
+                    assert( 0 );
+                    break;
+                }
+            }
+        }
+
+        return os.str();
     }
 }

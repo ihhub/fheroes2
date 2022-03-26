@@ -181,4 +181,6 @@ namespace fheroes2
     };
 
     const ArtifactData & getArtifactData( const int artifactId );
+
+    std::string getArtifactDescription( const int artifactId );
 }
