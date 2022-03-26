@@ -125,7 +125,7 @@ namespace AI
         double getSpellDisruptingRayRatio( const Battle::Unit & target ) const;
         double getSpellSlowRatio( const Battle::Unit & target ) const;
         double getSpellHasteRatio( const Battle::Unit & target ) const;
-        uint32_t spellDurationMultiplier( const Battle::Unit & target ) const;
+        int32_t spellDurationMultiplier( const Battle::Unit & target ) const;
 
         // turn variables that wouldn't persist
         const HeroBase * _commander = nullptr;
