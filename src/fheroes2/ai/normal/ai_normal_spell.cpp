@@ -478,8 +478,15 @@ namespace AI
     SpellcastOutcome BattlePlanner::spellResurrectValue( const Spell & spell, Battle::Arena & arena ) const
     {
         SpellcastOutcome bestOutcome;
-        const uint32_t ankhModifier = _commander->hasArtifact( Artifact::ANKH ) ? 2 : 1;
-        const uint32_t hpRestored = spell.Resurrect() * _commander->GetPower() * ankhModifier;
+
+        uint32_t hpRestored = spell.Resurrect() * _commander->GetPower();
+
+        const std::vector<int32_t> extraSpellEffectivenessPercent
+            = _commander->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::RESURRECT_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
+
+        for ( const int32_t value : extraSpellEffectivenessPercent ) {
+            hpRestored = hpRestored * ( 100 + value ) / 100;
+        }
 
         // Get friendly units list including the invalid and dead ones
         const Force & friendlyForce = arena.getForce( _myColor );
@@ -517,8 +524,12 @@ namespace AI
             }
 
             uint32_t count = spell.ExtraValue() * _commander->GetPower();
-            if ( _commander->hasArtifact( Artifact::BOOK_ELEMENTS ) )
-                count *= 2;
+            const std::vector<int32_t> summonSpellExtraEffectPercent
+                = _commander->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::SUMMONING_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
+
+            for ( const int32_t value : summonSpellExtraEffectPercent ) {
+                count = count * ( 100 + value ) / 100;
+            }
 
             const Troop summon( Monster( spell ), count );
             bestOutcome.value = summon.GetStrengthWithBonus( _commander->GetAttack(), _commander->GetDefense() );

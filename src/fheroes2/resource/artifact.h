@@ -281,6 +281,9 @@ public:
     int32_t getTotalArtifactEffectValue( const fheroes2::ArtifactCurseType curse, std::string & description ) const;
 
     std::vector<int32_t> getTotalArtifactMultipliedPercent( const fheroes2::ArtifactBonusType bonus ) const;
+    std::vector<int32_t> getTotalArtifactMultipliedPercent( const fheroes2::ArtifactCurseType curse ) const;
+
+    Artifact getFirstArtifactWithBonus( const fheroes2::ArtifactBonusType bonus ) const;
 
     bool PushArtifact( const Artifact & );
 

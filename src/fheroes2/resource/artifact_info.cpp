@@ -685,21 +685,21 @@ namespace
 
         artifactData[Artifact::ELEMENTAL_RING].bonuses.emplace_back( fheroes2::ArtifactBonusType::SUMMONING_SPELL_COST_REDUCTION_PERCENT, 50 );
 
-        artifactData[Artifact::HOLY_PENDANT].bonuses.emplace_back( fheroes2::ArtifactBonusType::CURSE_SPELL_IMMUNITY, 100 );
+        artifactData[Artifact::HOLY_PENDANT].bonuses.emplace_back( fheroes2::ArtifactBonusType::CURSE_SPELL_IMMUNITY );
 
-        artifactData[Artifact::PENDANT_FREE_WILL].bonuses.emplace_back( fheroes2::ArtifactBonusType::HYPNOTIZE_SPELL_IMMUNITY, 100 );
+        artifactData[Artifact::PENDANT_FREE_WILL].bonuses.emplace_back( fheroes2::ArtifactBonusType::HYPNOTIZE_SPELL_IMMUNITY );
 
-        artifactData[Artifact::PENDANT_LIFE].bonuses.emplace_back( fheroes2::ArtifactBonusType::DEATH_SPELL_IMMUNITY, 100 );
+        artifactData[Artifact::PENDANT_LIFE].bonuses.emplace_back( fheroes2::ArtifactBonusType::DEATH_SPELL_IMMUNITY );
 
-        artifactData[Artifact::SERENITY_PENDANT].bonuses.emplace_back( fheroes2::ArtifactBonusType::BERSERK_SPELL_IMMUNITY, 100 );
+        artifactData[Artifact::SERENITY_PENDANT].bonuses.emplace_back( fheroes2::ArtifactBonusType::BERSERK_SPELL_IMMUNITY );
 
-        artifactData[Artifact::SEEING_EYE_PENDANT].bonuses.emplace_back( fheroes2::ArtifactBonusType::BLIND_SPELL_IMMUNITY, 100 );
+        artifactData[Artifact::SEEING_EYE_PENDANT].bonuses.emplace_back( fheroes2::ArtifactBonusType::BLIND_SPELL_IMMUNITY );
 
-        artifactData[Artifact::KINETIC_PENDANT].bonuses.emplace_back( fheroes2::ArtifactBonusType::PARALYZE_SPELL_IMMUNITY, 100 );
+        artifactData[Artifact::KINETIC_PENDANT].bonuses.emplace_back( fheroes2::ArtifactBonusType::PARALYZE_SPELL_IMMUNITY );
 
-        artifactData[Artifact::PENDANT_DEATH].bonuses.emplace_back( fheroes2::ArtifactBonusType::HOLY_SPELL_IMMUNITY, 100 );
+        artifactData[Artifact::PENDANT_DEATH].bonuses.emplace_back( fheroes2::ArtifactBonusType::HOLY_SPELL_IMMUNITY );
 
-        artifactData[Artifact::WAND_NEGATION].bonuses.emplace_back( fheroes2::ArtifactBonusType::DISPEL_SPELL_IMMUNITY, 100 );
+        artifactData[Artifact::WAND_NEGATION].bonuses.emplace_back( fheroes2::ArtifactBonusType::DISPEL_SPELL_IMMUNITY );
 
         artifactData[Artifact::GOLDEN_BOW].bonuses.emplace_back( fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY );
 
@@ -794,19 +794,22 @@ namespace
 
         artifactData[Artifact::SWORD_ANDURAN].bonuses.emplace_back( fheroes2::ArtifactBonusType::ATTACK_SKILL, 5 );
 
-        artifactData[Artifact::SPADE_NECROMANCY].bonuses.emplace_back( fheroes2::ArtifactBonusType::NECROMANY_SKILL, 10 );
+        artifactData[Artifact::SPADE_NECROMANCY].bonuses.emplace_back( fheroes2::ArtifactBonusType::NECROMANCY_SKILL, 10 );
 
         artifactData[Artifact::UNKNOWN].bonuses.emplace_back( fheroes2::ArtifactBonusType::NONE );
 
         for ( const fheroes2::ArtifactData & artifact : artifactData ) {
-            assert( !artifact.bonuses.empty() || !artifact.curses.empty() );
+            if ( artifact.bonuses.empty() && artifact.curses.empty() ) {
+                // Artifact info is not populated properly. An artifact with no effects cannot exist.
+                assert( 0 );
+            }
         }
     }
 }
 
 namespace fheroes2
 {
-    bool isBonusAccumulative( const ArtifactBonusType bonus )
+    bool isBonusCumulative( const ArtifactBonusType bonus )
     {
         switch ( bonus ) {
         case ArtifactBonusType::KNOWLEDGE_SKILL:
@@ -854,11 +857,24 @@ namespace fheroes2
         return false;
     }
 
-    bool isCurseAccumulative( const ArtifactCurseType curse )
+    bool isCurseCumulative( const ArtifactCurseType curse )
     {
         switch ( curse ) {
         case ArtifactCurseType::SPELL_POWER_SKILL:
         case ArtifactCurseType::GOLD_PENALTY:
+            return true;
+        default:
+            break;
+        }
+
+        return false;
+    }
+
+    bool isCurseMultiplied( const ArtifactCurseType curse )
+    {
+        switch ( curse ) {
+        case ArtifactCurseType::FIRE_SPELL_EXTRA_DAMAGE_PERCENT:
+        case ArtifactCurseType::COLD_SPELL_EXTRA_DAMAGE_PERCENT:
             return true;
         default:
             break;

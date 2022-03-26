@@ -422,8 +422,7 @@ int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactBonus
 
     int32_t totalValue = 0;
 
-    const bool isAccumulative = fheroes2::isBonusAccumulative( bonus );
-    if ( isAccumulative ) {
+    if ( fheroes2::isBonusCumulative( bonus ) ) {
         for ( const Artifact & artifact : *this ) {
             const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( artifact.GetID() ).bonuses;
             auto bonusIter = std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( bonus ) );
@@ -459,8 +458,7 @@ int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactBonus
 
     int32_t totalValue = 0;
 
-    const bool isAccumulative = fheroes2::isBonusAccumulative( bonus );
-    if ( isAccumulative ) {
+    if ( fheroes2::isBonusCumulative( bonus ) ) {
         std::map<int, int> artifactValuePerId;
         for ( const Artifact & artifact : *this ) {
             const int artifactId = artifact.GetID();
@@ -509,10 +507,12 @@ int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactBonus
 
 int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactCurseType curse ) const
 {
+    // If this assertion blows up you're calling the method for a wrong type.
+    assert( !fheroes2::isCurseMultiplied( curse ) );
+
     int32_t totalValue = 0;
 
-    const bool isAccumulative = fheroes2::isCurseAccumulative( curse );
-    if ( isAccumulative ) {
+    if ( fheroes2::isCurseCumulative( curse ) ) {
         for ( const Artifact & artifact : *this ) {
             const std::vector<fheroes2::ArtifactCurse> & curses = fheroes2::getArtifactData( artifact.GetID() ).curses;
             auto curseIter = std::find( curses.begin(), curses.end(), fheroes2::ArtifactCurse( curse ) );
@@ -543,10 +543,12 @@ int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactCurse
 
 int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactCurseType curse, std::string & description ) const
 {
+    // If this assertion blows up you're calling the method for a wrong type.
+    assert( !fheroes2::isCurseMultiplied( curse ) );
+
     int32_t totalValue = 0;
 
-    const bool isAccumulative = fheroes2::isCurseAccumulative( curse );
-    if ( isAccumulative ) {
+    if ( fheroes2::isCurseCumulative( curse ) ) {
         std::map<int, int> artifactValuePerId;
         for ( const Artifact & artifact : *this ) {
             const int artifactId = artifact.GetID();
@@ -619,6 +621,47 @@ std::vector<int32_t> BagArtifacts::getTotalArtifactMultipliedPercent( const fher
     }
 
     return values;
+}
+
+std::vector<int32_t> BagArtifacts::getTotalArtifactMultipliedPercent( const fheroes2::ArtifactCurseType curse ) const
+{
+    if ( !fheroes2::isCurseMultiplied( curse ) ) {
+        // You are calling this method for a wrong curse type!
+        assert( 0 );
+        return {};
+    }
+
+    std::vector<int32_t> values;
+
+    std::set<int> usedArtifactIds;
+    for ( const Artifact & artifact : *this ) {
+        const int artifactId = artifact.GetID();
+        if ( !usedArtifactIds.insert( artifactId ).second ) {
+            // Artifact is present in multiple copies.
+            continue;
+        }
+
+        const std::vector<fheroes2::ArtifactCurse> & curses = fheroes2::getArtifactData( artifactId ).curses;
+        auto curseIter = std::find( curses.begin(), curses.end(), fheroes2::ArtifactCurse( curse ) );
+        if ( curseIter != curses.end() ) {
+            values.emplace_back( curseIter->value );
+        }
+    }
+
+    return values;
+}
+
+Artifact BagArtifacts::getFirstArtifactWithBonus( const fheroes2::ArtifactBonusType bonus ) const
+{
+    for ( const Artifact & artifact : *this ) {
+        const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( artifact.GetID() ).bonuses;
+        auto bonusIter = std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( bonus ) );
+        if ( bonusIter != bonuses.end() ) {
+            return artifact;
+        }
+    }
+
+    return { Artifact::UNKNOWN };
 }
 
 bool BagArtifacts::PushArtifact( const Artifact & art )

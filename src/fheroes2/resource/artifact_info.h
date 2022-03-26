@@ -71,6 +71,7 @@ namespace fheroes2
         RESURRECT_SPELL_EXTRA_EFFECTIVENESS_PERCENT,
         SUMMONING_SPELL_EXTRA_EFFECTIVENESS_PERCENT,
 
+        // 100% immunity from spells. The value for these bonuses should be ignored.
         CURSE_SPELL_IMMUNITY,
         HYPNOTIZE_SPELL_IMMUNITY,
         DEATH_SPELL_IMMUNITY,
@@ -89,7 +90,7 @@ namespace fheroes2
         SEA_BATTLE_MORALE_BOOST,
         SEA_BATTLE_LUCK_BOOST,
         DISABLE_ALL_SPELL_COMBAT_CASTING,
-        NECROMANY_SKILL
+        NECROMANCY_SKILL
     };
 
     enum class ArtifactCurseType : int32_t
@@ -156,11 +157,13 @@ namespace fheroes2
         int32_t value;
     };
 
-    bool isBonusAccumulative( const ArtifactBonusType bonus );
+    bool isBonusCumulative( const ArtifactBonusType bonus );
 
     bool isBonusMultiplied( const ArtifactBonusType bonus );
 
-    bool isCurseAccumulative( const ArtifactCurseType curse );
+    bool isCurseCumulative( const ArtifactCurseType curse );
+
+    bool isCurseMultiplied( const ArtifactCurseType curse );
 
     struct ArtifactData
     {
