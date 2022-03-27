@@ -949,6 +949,13 @@ namespace fheroes2
             os << "Bonuses:" << std::endl;
             for ( const ArtifactBonus & bonus : data.bonuses ) {
                 os << "   ";
+                if ( isBonusCumulative( bonus.type ) ) {
+                    os << "[ cumulative ] ";
+                }
+                else if ( isBonusMultiplied( bonus.type ) ) {
+                    os << "[ multiplied ] ";
+                }
+
                 switch ( bonus.type ) {
                 case ArtifactBonusType::NONE:
                     os << "None" << std::endl;
@@ -1115,6 +1122,13 @@ namespace fheroes2
             os << "Curses:" << std::endl;
             for ( const ArtifactCurse & curse : data.curses ) {
                 os << "   ";
+                if ( isCurseCumulative( curse.type ) ) {
+                    os << "[ cumulative ] ";
+                }
+                else if ( isCurseMultiplied( curse.type ) ) {
+                    os << "[ multiplied ] ";
+                }
+
                 switch ( curse.type ) {
                 case ArtifactCurseType::NO_JOINING_ARMIES:
                     os << "No army can join hero" << std::endl;
