@@ -936,12 +936,19 @@ namespace fheroes2
         std::ostringstream os;
         os << "----------" << std::endl;
         os << "Name: " << data.name << std::endl;
-        os << "Description: " << data.getDescription( 0 ) << std::endl;
-        os << "Discovery event description: " << data.discoveryEventDescription << std::endl;
+        os << "Description: " << data.getDescription( Spell::RANDOM ) << std::endl;
+
+        if ( data.discoveryEventDescription != nullptr ) {
+            os << "Discovery event description: " << data.discoveryEventDescription << std::endl;
+        }
+        else {
+            os << "No discovery event description" << std::endl;
+        }
 
         if ( !data.bonuses.empty() ) {
             os << "Bonuses:" << std::endl;
             for ( const ArtifactBonus & bonus : data.bonuses ) {
+                os << "   ";
                 switch ( bonus.type ) {
                 case ArtifactBonusType::NONE:
                     os << "None" << std::endl;
@@ -1107,6 +1114,7 @@ namespace fheroes2
         if ( !data.curses.empty() ) {
             os << "Curses:" << std::endl;
             for ( const ArtifactCurse & curse : data.curses ) {
+                os << "   ";
                 switch ( curse.type ) {
                 case ArtifactCurseType::NO_JOINING_ARMIES:
                     os << "No army can join hero" << std::endl;
