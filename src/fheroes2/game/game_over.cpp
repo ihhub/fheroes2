@@ -343,6 +343,9 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                 else {
                     AGG::ResetAudio();
                     Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
+                    // TODO : Implement function that displays the last frame of win.smk and
+                    // a dialog for name entry. AGG:PlayMusic is run here in order to start playing
+                    // before displaying the high score.
                     AGG::PlayMusic( MUS::VICTORY, true, true );
 
                     res = fheroes2::GameMode::HIGHSCORES;

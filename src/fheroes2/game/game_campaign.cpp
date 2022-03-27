@@ -816,6 +816,9 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
 
         AGG::ResetAudio();
         Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
+        // TODO : Implement function that displays the last frame of win.smk with score
+        // and a dialog for name entry. AGG:PlayMusic is run here in order to start
+        // playing before displaying the high score.
         AGG::PlayMusic( MUS::VICTORY, true, true );
         return fheroes2::GameMode::HIGHSCORES;
     }
