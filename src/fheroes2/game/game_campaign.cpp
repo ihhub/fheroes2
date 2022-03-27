@@ -816,6 +816,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
 
         AGG::ResetAudio();
         Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
+        AGG::PlayMusic( MUS::VICTORY, true, true );
         return fheroes2::GameMode::HIGHSCORES;
     }
 
