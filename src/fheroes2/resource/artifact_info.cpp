@@ -994,6 +994,9 @@ namespace fheroes2
                 else if ( isBonusUnique( bonus.type ) ) {
                     os << "[ unique ] ";
                 }
+                else {
+                    os << "[ cumulative per artifact type ] ";
+                }
 
                 switch ( bonus.type ) {
                 case ArtifactBonusType::NONE:
@@ -1169,6 +1172,9 @@ namespace fheroes2
                 }
                 else if ( isCurseUnique( curse.type ) ) {
                     os << "[ unique ] ";
+                }
+                else {
+                    os << "[ cumulative per artifact type ] ";
                 }
 
                 switch ( curse.type ) {
