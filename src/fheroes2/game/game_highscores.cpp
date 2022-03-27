@@ -478,11 +478,6 @@ fheroes2::GameMode Game::HighScores()
 
     const std::string highScoreDataPath = System::ConcatePath( GetSaveDir(), "fheroes2.hgs" );
 
-    // Stop all sounds, but not the music
-    Mixer::Stop();
-
-    AGG::PlayMusic( MUS::MAINMENU, true, true );
-
     if ( !hgs.Load( highScoreDataPath ) ) {
         // Unable to load the file. Let's populate with the default values.
         hgs.populateHighScoresStandard();
