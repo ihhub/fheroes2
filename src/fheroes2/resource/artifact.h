@@ -51,7 +51,7 @@ public:
         ART_NORANDOM = 0x20
     };
 
-    enum type_t
+    enum type_t : int
     {
         ULTIMATE_BOOK,
         ULTIMATE_SWORD,
@@ -189,7 +189,8 @@ public:
     }
 
     bool isUltimate( void ) const;
-    bool isAlchemistRemove( void ) const;
+
+    bool containsCurses() const;
 
     bool isValid() const
     {
@@ -204,6 +205,7 @@ public:
 
     int Level( void ) const;
     int LoyaltyLevel( void ) const;
+
     int getArtifactValue() const;
 
     // return index sprite objnarti.icn
@@ -274,16 +276,20 @@ public:
     bool isArtifactBonusPresent( const fheroes2::ArtifactBonusType type ) const;
     bool isArtifactCursePresent( const fheroes2::ArtifactCurseType type ) const;
 
+    // These methods must be called only for bonuses with cumulative effect.
     int32_t getTotalArtifactEffectValue( const fheroes2::ArtifactBonusType bonus ) const;
     int32_t getTotalArtifactEffectValue( const fheroes2::ArtifactBonusType bonus, std::string & description ) const;
 
     int32_t getTotalArtifactEffectValue( const fheroes2::ArtifactCurseType curse ) const;
     int32_t getTotalArtifactEffectValue( const fheroes2::ArtifactCurseType curse, std::string & description ) const;
 
+    // These methods must be called only for bonuses with multiplication effect.
     std::vector<int32_t> getTotalArtifactMultipliedPercent( const fheroes2::ArtifactBonusType bonus ) const;
     std::vector<int32_t> getTotalArtifactMultipliedPercent( const fheroes2::ArtifactCurseType curse ) const;
 
+    // Ideally, these methods should be called only for unique bonuses. However, it can be called for other bonus types.
     Artifact getFirstArtifactWithBonus( const fheroes2::ArtifactBonusType bonus ) const;
+    Artifact getFirstArtifactWithCurse( const fheroes2::ArtifactCurseType curse ) const;
 
     bool PushArtifact( const Artifact & );
 

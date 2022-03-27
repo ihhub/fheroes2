@@ -31,6 +31,7 @@ namespace fheroes2
     {
         NONE,
 
+        // These bonuses are cummulative means each copy of an artifact having it will add to the total value.
         KNOWLEDGE_SKILL,
         ATTACK_SKILL,
         DEFENCE_SKILL,
@@ -43,15 +44,21 @@ namespace fheroes2
         CRYSTAL_INCOME,
         GEMS_INCOME,
 
-        SPELL_POINTS_GENERATION,
-        LAND_MOBILITY,
-        SEA_MOBILITY,
-
+        // These bonuses are unique per artifact type but cumulative across multiple artifact types.
         MORALE,
         LUCK,
-
+        SEA_BATTLE_MORALE_BOOST,
+        SEA_BATTLE_LUCK_BOOST,
+        LAND_MOBILITY,
+        SEA_MOBILITY,
+        SPELL_POINTS_DAILY_GENERATION,
         EVERY_COMBAT_SPELL_DURATION,
+        EXTRA_CATAPULT_SHOTS,
+        AREA_REVEAL_DISTANCE,
+        ADD_SPELL,
+        NECROMANCY_SKILL,
 
+        // These bonuses are unique per artifac type but the effect is multiplied with different artifact types.
         SURRENDER_COST_REDUCTION_PERCENT,
 
         CURSE_SPELL_COST_REDUCTION_PERCENT,
@@ -71,7 +78,7 @@ namespace fheroes2
         RESURRECT_SPELL_EXTRA_EFFECTIVENESS_PERCENT,
         SUMMONING_SPELL_EXTRA_EFFECTIVENESS_PERCENT,
 
-        // 100% immunity from spells. The value for these bonuses should be ignored.
+        // All bonuses below are unique per hero. They do not require any extra values. Only one artifact with such bonus will be used.
         CURSE_SPELL_IMMUNITY,
         HYPNOTIZE_SPELL_IMMUNITY,
         DEATH_SPELL_IMMUNITY,
@@ -83,26 +90,26 @@ namespace fheroes2
 
         ENDLESS_AMMUNITION,
         NO_SHOOTING_PENALTY,
-        EXTRA_CATAPULT_SHOTS,
-        AREA_REVEAL_DISTANCE,
-        ADD_SPELL,
         VIEW_MONSTER_INFORMATION,
-        SEA_BATTLE_MORALE_BOOST,
-        SEA_BATTLE_LUCK_BOOST,
-        DISABLE_ALL_SPELL_COMBAT_CASTING,
-        NECROMANCY_SKILL
+        DISABLE_ALL_SPELL_COMBAT_CASTING
     };
 
     enum class ArtifactCurseType : int32_t
     {
-        NO_JOINING_ARMIES,
-        MORALE,
-        UNDEAD_PENALTY,
+        // These curses are cummulative means each copy of an artifact having it will add to the total value.
         GOLD_PENALTY,
         SPELL_POWER_SKILL,
 
+        // These curses are unique per artifact type but cumulative across multiple artifact types.
+        MORALE,
+
+        // These curses are unique per artifac type but the effect is multiplied with different artifact types.
         FIRE_SPELL_EXTRA_DAMAGE_PERCENT,
-        COLD_SPELL_EXTRA_DAMAGE_PERCENT
+        COLD_SPELL_EXTRA_DAMAGE_PERCENT,
+
+        // All curses below are unique per hero. They do not require any extra values. Only one artifact with such curse will be used.
+        NO_JOINING_ARMIES,
+        UNDEAD_PENALTY
     };
 
     struct ArtifactBonus
@@ -161,9 +168,13 @@ namespace fheroes2
 
     bool isBonusMultiplied( const ArtifactBonusType bonus );
 
+    bool isBonusUnique( const ArtifactBonusType bonus );
+
     bool isCurseCumulative( const ArtifactCurseType curse );
 
     bool isCurseMultiplied( const ArtifactCurseType curse );
+
+    bool isCurseUnique( const ArtifactCurseType curse );
 
     struct ArtifactData
     {

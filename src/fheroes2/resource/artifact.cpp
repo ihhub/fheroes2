@@ -25,7 +25,6 @@
 #include <array>
 #include <map>
 #include <string>
-#include <vector>
 
 #include "agg_image.h"
 #include "artifact.h"
@@ -51,13 +50,13 @@ namespace
               { Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN } } };
 
     std::array<uint8_t, Artifact::UNKNOWN + 1> artifactGlobalStatus = {};
-}
 
-enum
-{
-    ART_RNDDISABLED = 0x01,
-    ART_RNDUSED = 0x02
-};
+    enum
+    {
+        ART_RNDDISABLED = 0x01,
+        ART_RNDUSED = 0x02
+    };
+}
 
 bool Artifact::operator==( const Spell & spell ) const
 {
@@ -88,7 +87,7 @@ std::string Artifact::GetDescription( void ) const
     return fheroes2::getArtifactData( id ).getDescription( ext );
 }
 
-bool Artifact::isAlchemistRemove( void ) const
+bool Artifact::containsCurses() const
 {
     return !fheroes2::getArtifactData( id ).curses.empty();
 }
@@ -262,9 +261,10 @@ int Artifact::Level( void ) const
     return ART_NONE;
 }
 
-// Convert artifact flags into simple usable level value
 int Artifact::getArtifactValue() const
 {
+    // TODO: this method should return a value of the artifact based on its bonuses and curses.
+    // Right now it is based on a level of an artifact which makes some artifacts with different stats be valued as equal.
     const int level = Level();
 
     if ( level & ART_LEVEL1 ) {
@@ -290,6 +290,12 @@ int Artifact::GetSpell( void ) const
 
 void Artifact::SetSpell( int v )
 {
+    if ( id != SPELL_SCROLL ) {
+        // This method must be called only for Spell Scroll artifact.
+        assert( 0 );
+        return;
+    }
+
     const bool adv = Rand::Get( 1 ) != 0;
 
     switch ( v ) {
@@ -324,12 +330,12 @@ int Artifact::Rand( level_t lvl )
     v.reserve( 25 );
 
     // if possibly: make unique on map
-    for ( u32 art = ULTIMATE_BOOK; art < UNKNOWN; ++art )
+    for ( int art = ULTIMATE_BOOK; art < UNKNOWN; ++art )
         if ( ( lvl & Artifact( art ).Level() ) && !( artifactGlobalStatus[art] & ART_RNDDISABLED ) && !( artifactGlobalStatus[art] & ART_RNDUSED ) )
             v.push_back( art );
 
     if ( v.empty() ) {
-        for ( u32 art = ULTIMATE_BOOK; art < UNKNOWN; ++art )
+        for ( int art = ULTIMATE_BOOK; art < UNKNOWN; ++art )
             if ( ( lvl & Artifact( art ).Level() ) && !( artifactGlobalStatus[art] & ART_RNDDISABLED ) )
                 v.push_back( art );
     }
@@ -418,7 +424,7 @@ bool BagArtifacts::isArtifactCursePresent( const fheroes2::ArtifactCurseType typ
 int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactBonusType bonus ) const
 {
     // If this assertion blows up you're calling the method for a wrong type.
-    assert( !fheroes2::isBonusMultiplied( bonus ) );
+    assert( !fheroes2::isBonusMultiplied( bonus ) && !fheroes2::isBonusUnique( bonus ) );
 
     int32_t totalValue = 0;
 
@@ -436,7 +442,7 @@ int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactBonus
         for ( const Artifact & artifact : *this ) {
             const int artifactId = artifact.GetID();
             if ( !usedArtifactIds.insert( artifactId ).second ) {
-                // Artifact is present in multiple copies.
+                // The artifact is present in multiple copies.
                 continue;
             }
 
@@ -454,7 +460,7 @@ int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactBonus
 int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactBonusType bonus, std::string & description ) const
 {
     // If this assertion blows up you're calling the method for a wrong type.
-    assert( !fheroes2::isBonusMultiplied( bonus ) );
+    assert( !fheroes2::isBonusMultiplied( bonus ) && !fheroes2::isBonusUnique( bonus ) );
 
     int32_t totalValue = 0;
 
@@ -484,7 +490,7 @@ int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactBonus
         for ( const Artifact & artifact : *this ) {
             const int artifactId = artifact.GetID();
             if ( !usedArtifactIds.insert( artifactId ).second ) {
-                // Artifact is present in multiple copies.
+                // The artifact is present in multiple copies.
                 continue;
             }
 
@@ -508,7 +514,7 @@ int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactBonus
 int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactCurseType curse ) const
 {
     // If this assertion blows up you're calling the method for a wrong type.
-    assert( !fheroes2::isCurseMultiplied( curse ) );
+    assert( !fheroes2::isCurseMultiplied( curse ) && !fheroes2::isCurseUnique( curse ) );
 
     int32_t totalValue = 0;
 
@@ -526,7 +532,7 @@ int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactCurse
         for ( const Artifact & artifact : *this ) {
             const int artifactId = artifact.GetID();
             if ( !usedArtifactIds.insert( artifactId ).second ) {
-                // Artifact is present in multiple copies.
+                // The artifact is present in multiple copies.
                 continue;
             }
 
@@ -544,7 +550,7 @@ int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactCurse
 int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactCurseType curse, std::string & description ) const
 {
     // If this assertion blows up you're calling the method for a wrong type.
-    assert( !fheroes2::isCurseMultiplied( curse ) );
+    assert( !fheroes2::isCurseMultiplied( curse ) && !fheroes2::isCurseUnique( curse ) );
 
     int32_t totalValue = 0;
 
@@ -574,7 +580,7 @@ int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactCurse
         for ( const Artifact & artifact : *this ) {
             const int artifactId = artifact.GetID();
             if ( !usedArtifactIds.insert( artifactId ).second ) {
-                // Artifact is present in multiple copies.
+                // The artifact is present in multiple copies.
                 continue;
             }
 
@@ -609,7 +615,7 @@ std::vector<int32_t> BagArtifacts::getTotalArtifactMultipliedPercent( const fher
     for ( const Artifact & artifact : *this ) {
         const int artifactId = artifact.GetID();
         if ( !usedArtifactIds.insert( artifactId ).second ) {
-            // Artifact is present in multiple copies.
+            // The artifact is present in multiple copies.
             continue;
         }
 
@@ -637,7 +643,7 @@ std::vector<int32_t> BagArtifacts::getTotalArtifactMultipliedPercent( const fher
     for ( const Artifact & artifact : *this ) {
         const int artifactId = artifact.GetID();
         if ( !usedArtifactIds.insert( artifactId ).second ) {
-            // Artifact is present in multiple copies.
+            // The artifact is present in multiple copies.
             continue;
         }
 
@@ -664,30 +670,45 @@ Artifact BagArtifacts::getFirstArtifactWithBonus( const fheroes2::ArtifactBonusT
     return { Artifact::UNKNOWN };
 }
 
-bool BagArtifacts::PushArtifact( const Artifact & art )
+Artifact BagArtifacts::getFirstArtifactWithCurse( const fheroes2::ArtifactCurseType curse ) const
 {
-    if ( art.isValid() ) {
-        if ( art.GetID() == Artifact::MAGIC_BOOK && isPresentArtifact( art ) ) {
-            // Why do you push another magic book into the bag?
-            assert( 0 );
-            return false;
+    for ( const Artifact & artifact : *this ) {
+        const std::vector<fheroes2::ArtifactCurse> & curses = fheroes2::getArtifactData( artifact.GetID() ).curses;
+        auto curseIter = std::find( curses.begin(), curses.end(), fheroes2::ArtifactCurse( curse ) );
+        if ( curseIter != curses.end() ) {
+            return artifact;
         }
-
-        iterator it = std::find( begin(), end(), Artifact( Artifact::UNKNOWN ) );
-        if ( it == end() )
-            return false;
-
-        *it = art;
-
-        // Always put Magic Book at first place.
-        if ( art.GetID() == Artifact::MAGIC_BOOK ) {
-            std::swap( *it, front() );
-        }
-
-        return true;
     }
 
-    return false;
+    return { Artifact::UNKNOWN };
+}
+
+bool BagArtifacts::PushArtifact( const Artifact & art )
+{
+    if ( !art.isValid() ) {
+        // Why an invalid artifact is being pushed?
+        assert( 0 );
+        return false;
+    }
+
+    if ( art.GetID() == Artifact::MAGIC_BOOK && isPresentArtifact( art ) ) {
+        // Why do you push another magic book into the bag?
+        assert( 0 );
+        return false;
+    }
+
+    iterator it = std::find( begin(), end(), Artifact( Artifact::UNKNOWN ) );
+    if ( it == end() )
+        return false;
+
+    *it = art;
+
+    // Always put Magic Book at first place.
+    if ( art.GetID() == Artifact::MAGIC_BOOK ) {
+        std::swap( *it, front() );
+    }
+
+    return true;
 }
 
 void BagArtifacts::RemoveArtifact( const Artifact & art )

@@ -1745,7 +1745,7 @@ namespace AI
     void AIToAlchemistTower( Heroes & hero )
     {
         BagArtifacts & bag = hero.GetBagArtifacts();
-        const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.isAlchemistRemove(); } ) );
+        const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.containsCurses(); } ) );
         if ( cursed == 0 ) {
             return;
         }
@@ -1756,7 +1756,7 @@ namespace AI
             hero.GetKingdom().OddFundsResource( payment );
 
             for ( Artifact & artifact : bag ) {
-                if ( artifact.isAlchemistRemove() ) {
+                if ( artifact.containsCurses() ) {
                     artifact = Artifact::UNKNOWN;
                 }
             }

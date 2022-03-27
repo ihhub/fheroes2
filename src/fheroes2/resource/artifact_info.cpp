@@ -710,9 +710,9 @@ namespace
 
         artifactData[Artifact::WIZARD_HAT].bonuses.emplace_back( fheroes2::ArtifactBonusType::EVERY_COMBAT_SPELL_DURATION, 10 );
 
-        artifactData[Artifact::POWER_RING].bonuses.emplace_back( fheroes2::ArtifactBonusType::SPELL_POINTS_GENERATION, 2 );
+        artifactData[Artifact::POWER_RING].bonuses.emplace_back( fheroes2::ArtifactBonusType::SPELL_POINTS_DAILY_GENERATION, 2 );
 
-        artifactData[Artifact::AMMO_CART].bonuses.emplace_back( fheroes2::ArtifactBonusType::ENDLESS_AMMUNITION, 1 );
+        artifactData[Artifact::AMMO_CART].bonuses.emplace_back( fheroes2::ArtifactBonusType::ENDLESS_AMMUNITION );
 
         artifactData[Artifact::TAX_LIEN].curses.emplace_back( fheroes2::ArtifactCurseType::GOLD_PENALTY, 250 );
 
@@ -858,6 +858,29 @@ namespace fheroes2
         return false;
     }
 
+    bool isBonusUnique( const ArtifactBonusType bonus )
+    {
+        switch ( bonus ) {
+        case ArtifactBonusType::CURSE_SPELL_IMMUNITY:
+        case ArtifactBonusType::HYPNOTIZE_SPELL_IMMUNITY:
+        case ArtifactBonusType::DEATH_SPELL_IMMUNITY:
+        case ArtifactBonusType::BERSERK_SPELL_IMMUNITY:
+        case ArtifactBonusType::BLIND_SPELL_IMMUNITY:
+        case ArtifactBonusType::PARALYZE_SPELL_IMMUNITY:
+        case ArtifactBonusType::HOLY_SPELL_IMMUNITY:
+        case ArtifactBonusType::DISPEL_SPELL_IMMUNITY:
+        case ArtifactBonusType::ENDLESS_AMMUNITION:
+        case ArtifactBonusType::NO_SHOOTING_PENALTY:
+        case ArtifactBonusType::VIEW_MONSTER_INFORMATION:
+        case ArtifactBonusType::DISABLE_ALL_SPELL_COMBAT_CASTING:
+            return true;
+        default:
+            break;
+        }
+
+        return false;
+    }
+
     bool isCurseCumulative( const ArtifactCurseType curse )
     {
         switch ( curse ) {
@@ -876,6 +899,19 @@ namespace fheroes2
         switch ( curse ) {
         case ArtifactCurseType::FIRE_SPELL_EXTRA_DAMAGE_PERCENT:
         case ArtifactCurseType::COLD_SPELL_EXTRA_DAMAGE_PERCENT:
+            return true;
+        default:
+            break;
+        }
+
+        return false;
+    }
+
+    bool isCurseUnique( const ArtifactCurseType curse )
+    {
+        switch ( curse ) {
+        case ArtifactCurseType::NO_JOINING_ARMIES:
+        case ArtifactCurseType::UNDEAD_PENALTY:
             return true;
         default:
             break;
@@ -955,6 +991,9 @@ namespace fheroes2
                 else if ( isBonusMultiplied( bonus.type ) ) {
                     os << "[ multiplied ] ";
                 }
+                else if ( isBonusUnique( bonus.type ) ) {
+                    os << "[ unique ] ";
+                }
 
                 switch ( bonus.type ) {
                 case ArtifactBonusType::NONE:
@@ -993,7 +1032,7 @@ namespace fheroes2
                 case ArtifactBonusType::GEMS_INCOME:
                     os << "Increase daily kingdom's income by " << bonus.value << " gem" << std::endl;
                     break;
-                case ArtifactBonusType::SPELL_POINTS_GENERATION:
+                case ArtifactBonusType::SPELL_POINTS_DAILY_GENERATION:
                     os << "Restore " << bonus.value << " spell points for a hero" << std::endl;
                     break;
                 case ArtifactBonusType::LAND_MOBILITY:
@@ -1127,6 +1166,9 @@ namespace fheroes2
                 }
                 else if ( isCurseMultiplied( curse.type ) ) {
                     os << "[ multiplied ] ";
+                }
+                else if ( isCurseUnique( curse.type ) ) {
+                    os << "[ unique ] ";
                 }
 
                 switch ( curse.type ) {

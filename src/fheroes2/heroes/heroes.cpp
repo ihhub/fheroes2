@@ -764,7 +764,7 @@ void Heroes::ReplenishSpellPoints()
     curr += GameStatic::GetHeroesRestoreSpellPointsPerDay();
 
     // Spell points from artifacts.
-    curr += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POINTS_GENERATION );
+    curr += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POINTS_DAILY_GENERATION );
 
     // secondary skill
     curr += GetSecondaryValues( Skill::Secondary::MYSTICISM );

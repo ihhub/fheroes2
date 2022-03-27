@@ -2936,7 +2936,7 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int
 void ActionToAlchemistsTower( Heroes & hero )
 {
     BagArtifacts & bag = hero.GetBagArtifacts();
-    const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.isAlchemistRemove(); } ) );
+    const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.containsCurses(); } ) );
 
     const char * title = MP2::StringObject( MP2::OBJ_ALCHEMYTOWER );
 
@@ -2959,7 +2959,7 @@ void ActionToAlchemistsTower( Heroes & hero )
                 hero.GetKingdom().OddFundsResource( payment );
 
                 for ( Artifact & artifact : bag ) {
-                    if ( artifact.isAlchemistRemove() ) {
+                    if ( artifact.containsCurses() ) {
                         artifact = Artifact::UNKNOWN;
                     }
                 }
