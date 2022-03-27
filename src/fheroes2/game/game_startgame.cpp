@@ -646,8 +646,8 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     res = HumanTurn( loadedFromSave );
 
-                    // Audio has already been reset if scenario is won and WIN.SMK has played.
-                    if ( Game::CurrentMusic() == MUS::VICTORY ) {
+                    // Skip resetting Audio after winning scenario because MUS::VICTORY should continue playing.
+                    if ( res == fheroes2::GameMode::HIGHSCORES ) {
                         break;
                     }
 

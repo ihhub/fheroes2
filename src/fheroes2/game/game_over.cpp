@@ -343,7 +343,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                 else {
                     AGG::ResetAudio();
                     Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
-                    AGG::PlayMusic( MUS::VICTORY, true, false );
+                    AGG::PlayMusic( MUS::VICTORY, true, true );
 
                     res = fheroes2::GameMode::HIGHSCORES;
 
