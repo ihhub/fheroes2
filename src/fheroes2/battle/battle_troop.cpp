@@ -925,14 +925,11 @@ std::string Battle::Unit::String( bool more ) const
         GetCount() << " " << GetName() << ", " << Color::String( GetColor() ) << ", pos: " << GetHeadIndex() << ", " << GetTailIndex() << ( reflect ? ", reflect" : "" );
 
     if ( more )
-        ss << ", mode("
-           << "0x" << std::hex << modes << std::dec << ")"
-           << ", uid("
-           << "0x" << std::setw( 8 ) << std::setfill( '0' ) << std::hex << _uid << std::dec << ")"
+        ss << ", mode(" << GetHexString( modes ) << ")"
+           << ", uid(" << GetHexString( _uid ) << ")"
            << ", speed(" << Speed::String( GetSpeed() ) << ", " << static_cast<int>( GetSpeed() ) << ")"
            << ", hp(" << hp << ")"
-           << ", die(" << dead << ")"
-           << ")";
+           << ", died(" << dead << ")";
 
     ss << " ]";
 

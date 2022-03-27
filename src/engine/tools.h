@@ -24,15 +24,27 @@
 #define H2TOOLS_H
 
 #include <bitset>
+#include <iomanip>
 #include <list>
+#include <sstream>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 #include "math_base.h"
 #include "types.h"
 
 std::string GetStringShort( int );
-std::string GetHexString( int value, int width = 8 );
+
+template <typename T, typename = typename std::enable_if<std::is_integral<T>::value>::type>
+std::string GetHexString( T value, int width = 8 )
+{
+    std::ostringstream stream;
+
+    stream << "0x" << std::setw( width ) << std::setfill( '0' ) << std::hex << value;
+
+    return stream.str();
+}
 
 int GetInt( const std::string & );
 int Sign( int );

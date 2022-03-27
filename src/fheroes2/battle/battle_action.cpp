@@ -286,9 +286,7 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
         usage_spells.Append( spell );
     }
     else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   spell.GetName() << ", "
-                                   << "incorrect param" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "incorrect param: " << spell.GetName() );
     }
 }
 
@@ -332,19 +330,13 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
             b2->UpdateDirection();
         }
         else {
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                       "incorrect param"
-                           << ": " << b1->String( true ) << " and " << b2->String( true ) );
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "incorrect param: " << b1->String( true ) << " and " << b2->String( true ) );
         }
     }
     else {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   "incorrect param"
-                       << ": "
-                       << "uid: "
-                       << "0x" << std::setw( 8 ) << std::setfill( '0' ) << std::hex << uid1 << ", "
-                       << "uid: "
-                       << "0x" << std::setw( 8 ) << std::setfill( '0' ) << std::hex << uid2 );
+                   "incorrect param: "
+                       << "uid: " << GetHexString( uid1 ) << ", uid: " << GetHexString( uid2 ) );
     }
 }
 
@@ -402,8 +394,8 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
 
             if ( path.empty() ) {
                 DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                           "path empty, " << b->String() << " to "
-                                          << "dst: " << dst );
+                           "path is empty: " << b->String() << " to "
+                                             << "dst: " << dst );
                 return;
             }
 
@@ -451,9 +443,8 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
     }
     else {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   "incorrect param"
-                       << ": "
-                       << "uid: " << uid << ", dst: " << dst );
+                   "incorrect param: "
+                       << "uid: " << GetHexString( uid ) << ", dst: " << dst );
     }
 }
 
@@ -478,14 +469,13 @@ void Battle::Arena::ApplyActionSkip( Command & cmd )
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, battle->String() );
         }
         else {
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "uid: " << uid << " moved" );
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "uid: " << GetHexString( uid ) << " moved" );
         }
     }
     else {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   "incorrect param"
-                       << ": "
-                       << "uid: " << uid );
+                   "incorrect param: "
+                       << "uid: " << GetHexString( uid ) );
     }
 }
 
@@ -505,15 +495,13 @@ void Battle::Arena::ApplyActionEnd( Command & cmd )
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, battle->String() );
         }
         else {
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, "uid: " << uid << " moved" );
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, "uid: " << GetHexString( uid ) << " moved" );
         }
     }
     else {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   "incorrect param"
-                       << ": "
-                       << "uid: "
-                       << "0x" << std::setw( 8 ) << std::setfill( '0' ) << std::hex << uid );
+                   "incorrect param: "
+                       << "uid: " << GetHexString( uid ) );
     }
 }
 
@@ -545,10 +533,8 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
     }
     else {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   "incorrect param"
-                       << ": "
-                       << "uid: "
-                       << "0x" << std::setw( 8 ) << std::setfill( '0' ) << std::hex << uid );
+                   "incorrect param: "
+                       << "uid: " << GetHexString( uid ) );
     }
 }
 
@@ -933,10 +919,8 @@ void Battle::Arena::ApplyActionTower( Command & cmd )
     }
     else {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   "incorrect param"
-                       << ": "
-                       << "tower: " << type << ", uid: "
-                       << "0x" << std::setw( 8 ) << std::setfill( '0' ) << std::hex << uid );
+                   "incorrect param: "
+                       << "tower: " << type << ", uid: " << GetHexString( uid ) );
     }
 }
 
@@ -1084,8 +1068,7 @@ void Battle::Arena::ApplyActionSpellTeleport( Command & cmd )
     }
     else {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   "incorrect param"
-                       << ": "
+                   "incorrect param: "
                        << "src: " << src << ", dst: " << dst );
     }
 }
@@ -1169,7 +1152,7 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
             }
         }
         else {
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "new position not found!" );
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "no suitable position found" );
 
             if ( interface ) {
                 interface->SetStatus( _( "Spell failed!" ), true );
@@ -1178,8 +1161,7 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
     }
     else {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   "incorrect param"
-                       << ": "
+                   "incorrect param: "
                        << "who: " << who );
     }
 }
