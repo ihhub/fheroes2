@@ -646,7 +646,12 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     res = HumanTurn( loadedFromSave );
 
-                    // reset environment sounds and music theme at the end of the human turn
+                    // Audio has already been reset if scenario is won and WIN.SMK has played.
+                    if ( Game::CurrentMusic() == MUS::VICTORY ) {
+                        break;
+                    }
+
+                    // Reset environment sounds and music theme at the end of the human turn.
                     Game::SetCurrentMusic( MUS::UNKNOWN );
                     AGG::ResetAudio();
 
