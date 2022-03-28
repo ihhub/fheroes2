@@ -193,7 +193,7 @@ StreamBase & StreamBase::operator<<( const fheroes2::Point & point_ )
     return *this << point_.x << point_.y;
 }
 
-StreamBuf::StreamBuf( size_t sz )
+StreamBuf::StreamBuf( const size_t sz )
     : itbeg( nullptr )
     , itget( nullptr )
     , itput( nullptr )
@@ -217,6 +217,18 @@ StreamBuf::StreamBuf( const StreamBuf & st )
     , itend( nullptr )
 {
     copy( st );
+}
+
+StreamBuf::StreamBuf( StreamBuf && st ) noexcept
+    : itbeg( nullptr )
+    , itget( nullptr )
+    , itput( nullptr )
+    , itend( nullptr )
+{
+    std::swap( itbeg, st.itbeg );
+    std::swap( itget, st.itget );
+    std::swap( itput, st.itput );
+    std::swap( itend, st.itend );
 }
 
 StreamBuf::StreamBuf( const std::vector<u8> & buf )
@@ -251,6 +263,16 @@ StreamBuf & StreamBuf::operator=( const StreamBuf & st )
 {
     if ( &st != this )
         copy( st );
+    return *this;
+}
+
+StreamBuf & StreamBuf::operator=( StreamBuf && st ) noexcept
+{
+    std::swap( itbeg, st.itbeg );
+    std::swap( itget, st.itget );
+    std::swap( itput, st.itput );
+    std::swap( itend, st.itend );
+
     return *this;
 }
 

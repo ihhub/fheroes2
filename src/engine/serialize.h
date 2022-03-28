@@ -204,14 +204,17 @@ protected:
 class StreamBuf : public StreamBase
 {
 public:
-    explicit StreamBuf( size_t = 0 );
-    StreamBuf( const StreamBuf & );
+    explicit StreamBuf( const size_t sz = 0 );
+    StreamBuf( const StreamBuf & st );
+    StreamBuf( StreamBuf && st ) noexcept;
+
     explicit StreamBuf( const std::vector<u8> & );
     StreamBuf( const u8 *, size_t );
 
     ~StreamBuf() override;
 
-    StreamBuf & operator=( const StreamBuf & );
+    StreamBuf & operator=( const StreamBuf & st );
+    StreamBuf & operator=( StreamBuf && st ) noexcept;
 
     const u8 * data( void ) const;
     size_t size( void ) const;
