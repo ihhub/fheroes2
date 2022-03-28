@@ -211,7 +211,8 @@ StreamBuf::~StreamBuf()
 }
 
 StreamBuf::StreamBuf( StreamBuf && st ) noexcept
-    : itbeg( nullptr )
+    : StreamBase( std::move( st ) )
+    , itbeg( nullptr )
     , itget( nullptr )
     , itput( nullptr )
     , itend( nullptr )
@@ -252,6 +253,8 @@ StreamBuf::StreamBuf( const u8 * buf, size_t bufsz )
 
 StreamBuf & StreamBuf::operator=( StreamBuf && st ) noexcept
 {
+    StreamBase::operator=( std::move( st ) );
+
     std::swap( itbeg, st.itbeg );
     std::swap( itget, st.itget );
     std::swap( itput, st.itput );
