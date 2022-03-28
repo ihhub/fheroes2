@@ -438,8 +438,21 @@ std::vector<u8> StreamBuf::getRaw( size_t sz )
 
 void StreamBuf::putRaw( const char * ptr, size_t sz )
 {
-    for ( size_t it = 0; it < sz; ++it )
-        *this << ptr[it];
+    if ( sz == 0 ) {
+        return;
+    }
+
+    if ( sizep() < sz ) {
+        if ( sz < capacity() / 2 ) {
+            reallocbuf( capacity() + capacity() / 2 );
+        }
+        else {
+            reallocbuf( capacity() + sz );
+        }
+    }
+
+    memcpy( itput, ptr, sz );
+    itput = itput + sz;
 }
 
 std::string StreamBuf::toString( size_t sz )
@@ -615,8 +628,8 @@ void StreamFile::putRaw( const char * ptr, size_t sz )
 
 StreamBuf StreamFile::toStreamBuf( size_t sz )
 {
-    StreamBuf sb;
     std::vector<uint8_t> buf = getRaw( sz );
+    StreamBuf sb( buf.size() );
     sb.putRaw( reinterpret_cast<const char *>( &buf[0] ), buf.size() );
     return sb;
 }
