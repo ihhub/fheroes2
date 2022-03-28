@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cstring>
 #include <string>
 
@@ -450,6 +451,9 @@ void StreamBuf::putRaw( const char * ptr, size_t sz )
             reallocbuf( capacity() + sz );
         }
     }
+
+    // Make sure that the possible previous memory reallocation was correct.
+    assert( sizep() >= sz );
 
     memcpy( itput, ptr, sz );
     itput = itput + sz;
