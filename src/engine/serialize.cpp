@@ -210,15 +210,6 @@ StreamBuf::~StreamBuf()
         delete[] itbeg;
 }
 
-StreamBuf::StreamBuf( const StreamBuf & st )
-    : itbeg( nullptr )
-    , itget( nullptr )
-    , itput( nullptr )
-    , itend( nullptr )
-{
-    copy( st );
-}
-
 StreamBuf::StreamBuf( StreamBuf && st ) noexcept
     : itbeg( nullptr )
     , itget( nullptr )
@@ -257,13 +248,6 @@ StreamBuf::StreamBuf( const u8 * buf, size_t bufsz )
     itput = itend;
     setconstbuf( true );
     setbigendian( IS_BIGENDIAN ); /* default: hardware endian */
-}
-
-StreamBuf & StreamBuf::operator=( const StreamBuf & st )
-{
-    if ( &st != this )
-        copy( st );
-    return *this;
 }
 
 StreamBuf & StreamBuf::operator=( StreamBuf && st ) noexcept

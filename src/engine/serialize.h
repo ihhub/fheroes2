@@ -205,7 +205,7 @@ class StreamBuf : public StreamBase
 {
 public:
     explicit StreamBuf( const size_t sz = 0 );
-    StreamBuf( const StreamBuf & st );
+    StreamBuf( const StreamBuf & st ) = delete;
     StreamBuf( StreamBuf && st ) noexcept;
 
     explicit StreamBuf( const std::vector<u8> & );
@@ -213,7 +213,7 @@ public:
 
     ~StreamBuf() override;
 
-    StreamBuf & operator=( const StreamBuf & st );
+    StreamBuf & operator=( const StreamBuf & st ) = delete;
     StreamBuf & operator=( StreamBuf && st ) noexcept;
 
     const u8 * data( void ) const;
