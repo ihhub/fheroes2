@@ -28,7 +28,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
-#include <iomanip>
 
 #include "logging.h"
 #include "tools.h"
@@ -79,13 +78,6 @@ std::string GetStringShort( int value )
     }
 
     return std::to_string( value );
-}
-
-std::string GetHexString( int value, int width )
-{
-    std::ostringstream stream;
-    stream << "0x" << std::setw( width ) << std::setfill( '0' ) << std::hex << value;
-    return stream.str();
 }
 
 int CountBits( u32 val )
