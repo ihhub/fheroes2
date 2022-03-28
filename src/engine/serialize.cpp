@@ -253,12 +253,12 @@ StreamBuf::StreamBuf( const u8 * buf, size_t bufsz )
 
 StreamBuf & StreamBuf::operator=( StreamBuf && st ) noexcept
 {
-    StreamBase::operator=( std::move( st ) );
-
     std::swap( itbeg, st.itbeg );
     std::swap( itget, st.itget );
     std::swap( itput, st.itput );
     std::swap( itend, st.itend );
+
+    StreamBase::operator=( std::move( st ) );
 
     return *this;
 }
