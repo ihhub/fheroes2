@@ -334,20 +334,6 @@ void StreamBuf::reallocbuf( size_t sz )
     }
 }
 
-void StreamBuf::copy( const StreamBuf & sb )
-{
-    if ( capacity() < sb.size() )
-        reallocbuf( sb.size() );
-
-    std::copy( sb.itget, sb.itput, itbeg );
-
-    itput = itbeg + sb.tellp();
-    itget = itbeg + sb.tellg();
-    flags = 0;
-
-    setbigendian( sb.bigendian() );
-}
-
 void StreamBuf::put8( const uint8_t v )
 {
     if ( sizep() == 0 )

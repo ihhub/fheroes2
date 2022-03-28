@@ -246,7 +246,6 @@ protected:
     size_t sizeg( void ) const override;
     size_t sizep( void ) const override;
 
-    void copy( const StreamBuf & );
     void reallocbuf( size_t );
 
     u8 get8() override;
