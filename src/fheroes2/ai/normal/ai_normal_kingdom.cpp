@@ -236,7 +236,7 @@ namespace AI
         AGG::PlayMusic( MUS::COMPUTER_TURN, true, true );
 
         KingdomHeroes & heroes = kingdom.GetHeroes();
-        KingdomCastles & castles = kingdom.GetCastles();
+        const KingdomCastles & castles = kingdom.GetCastles();
 
         DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( myColor ) << " starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" );
         DEBUG_LOG( DBG_AI, DBG_TRACE, "Funds: " << kingdom.GetFunds().String() );
