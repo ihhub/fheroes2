@@ -42,7 +42,25 @@ public:
     StreamBase()
         : flags( 0 )
     {}
+
+    StreamBase( const StreamBase & ) = delete;
+
+    StreamBase( StreamBase && stream ) noexcept
+        : flags( 0 )
+    {
+        std::swap( flags, stream.flags );
+    }
+
     virtual ~StreamBase() = default;
+
+    StreamBase & operator=( const StreamBase & ) = delete;
+
+    StreamBase & operator=( StreamBase && stream ) noexcept
+    {
+        std::swap( flags, stream.flags );
+
+        return *this;
+    }
 
     void setbigendian( bool );
 
@@ -204,14 +222,17 @@ protected:
 class StreamBuf : public StreamBase
 {
 public:
-    explicit StreamBuf( size_t = 0 );
-    StreamBuf( const StreamBuf & );
+    explicit StreamBuf( const size_t sz = 0 );
+    StreamBuf( const StreamBuf & st ) = delete;
+    StreamBuf( StreamBuf && st ) noexcept;
+
     explicit StreamBuf( const std::vector<u8> & );
     StreamBuf( const u8 *, size_t );
 
     ~StreamBuf() override;
 
-    StreamBuf & operator=( const StreamBuf & );
+    StreamBuf & operator=( const StreamBuf & st ) = delete;
+    StreamBuf & operator=( StreamBuf && st ) noexcept;
 
     const u8 * data( void ) const;
     size_t size( void ) const;
@@ -243,7 +264,6 @@ protected:
     size_t sizeg( void ) const override;
     size_t sizep( void ) const override;
 
-    void copy( const StreamBuf & );
     void reallocbuf( size_t );
 
     u8 get8() override;
@@ -262,7 +282,10 @@ class StreamFile : public StreamBase
 public:
     StreamFile();
     StreamFile( const StreamFile & ) = delete;
+    StreamFile( StreamFile && ) = delete;
+
     StreamFile & operator=( const StreamFile & ) = delete;
+    StreamFile & operator=( StreamFile && ) = delete;
 
     ~StreamFile() override;
 
