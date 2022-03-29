@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -215,14 +216,6 @@ void Kingdom::ActionNewWeek( void )
     // remove week visit object
     visit_object.remove_if( Visit::isWeekLife );
 
-    // Heroes who surrendered on Sunday should still be available for hire next week
-    if ( world.CountDay() - recruits.getSurrenderDayOfHero1() > 1 ) {
-        recruits.SetHero1( nullptr );
-    }
-    if ( world.CountDay() - recruits.getSurrenderDayOfHero2() > 1 ) {
-        recruits.SetHero2( nullptr );
-    }
-
     // Settle a new set of recruits
     GetRecruits();
 }
@@ -313,6 +306,11 @@ void Kingdom::RemoveCastle( const Castle * castle )
 
     if ( isLoss() )
         LossPostActions();
+}
+
+bool Kingdom::isLosingGame() const
+{
+    return castles.empty();
 }
 
 u32 Kingdom::GetCountCastle( void ) const
@@ -454,7 +452,7 @@ const Recruits & Kingdom::GetRecruits()
     // In the first week, it is necessary to offer one native hero (or a hero given as a campaign award)
     const bool offerNativeHero = world.CountWeek() < 2 && recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN;
     // Special hero given as a campaign award
-    const Heroes * specialHireableHero = nullptr;
+    Heroes * specialHireableHero = nullptr;
 
     if ( isControlHuman() && Settings::Get().isCampaignGameType() && offerNativeHero ) {
         const std::vector<Campaign::CampaignAwardData> obtainedAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
@@ -464,7 +462,7 @@ const Recruits & Kingdom::GetRecruits()
                 continue;
             }
 
-            const Heroes * hero = world.GetHeroes( obtainedAward._subType );
+            Heroes * hero = world.GetHeroes( obtainedAward._subType );
 
             if ( hero && hero->isFreeman() ) {
                 specialHireableHero = hero;
@@ -490,6 +488,11 @@ const Recruits & Kingdom::GetRecruits()
     return recruits;
 }
 
+Recruits & Kingdom::GetCurrentRecruits()
+{
+    return recruits;
+}
+
 Puzzle & Kingdom::PuzzleMaps( void )
 {
     return puzzle_maps;
@@ -507,9 +510,9 @@ bool Kingdom::IsVisitTravelersTent( int col ) const
     return ( visited_tents_colors & ( 1 << col ) ) != 0;
 }
 
-bool Kingdom::AllowRecruitHero( bool check_payment, int level ) const
+bool Kingdom::AllowRecruitHero( bool check_payment ) const
 {
-    return ( heroes.size() < GetMaxHeroes() ) && ( !check_payment || AllowPayment( PaymentConditions::RecruitHero( level ) ) );
+    return ( heroes.size() < GetMaxHeroes() ) && ( !check_payment || AllowPayment( PaymentConditions::RecruitHero() ) );
 }
 
 void Kingdom::ApplyPlayWithStartingHero( void )
@@ -554,7 +557,7 @@ void Kingdom::ApplyPlayWithStartingHero( void )
             first = castles.front();
 
         Heroes * hero = world.GetFreemanHeroes( first->GetRace() );
-        if ( hero && AllowRecruitHero( false, 0 ) )
+        if ( hero && AllowRecruitHero( false ) )
             hero->Recruit( *first );
     }
 }
@@ -736,7 +739,7 @@ Heroes * Kingdom::GetLastBattleWinHero() const
     return Heroes::UNKNOWN != _lastBattleWinHeroID ? world.GetHeroes( _lastBattleWinHeroID ) : nullptr;
 }
 
-void Kingdom::appendSurrenderedHero( const Heroes & hero )
+void Kingdom::appendSurrenderedHero( Heroes & hero )
 {
     recruits.appendSurrenderedHero( hero, world.CountDay() );
 }
@@ -833,6 +836,40 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
             }
         }
     }
+}
+
+std::set<Heroes *> Kingdoms::resetRecruits()
+{
+    std::set<Heroes *> remainingRecruits;
+
+    for ( Kingdom & kingdom : kingdoms ) {
+        Recruits & recruits = kingdom.GetCurrentRecruits();
+
+        // Heroes who surrendered on Sunday should still be available for recruitment next week in
+        // the same kingdom, provided that this kingdom is still playable
+        if ( !kingdom.isPlay() || world.CountDay() - recruits.getSurrenderDayOfHero1() > 1 ) {
+            recruits.SetHero1( nullptr );
+        }
+        else {
+            Heroes * hero = recruits.GetHero1();
+
+            if ( hero ) {
+                remainingRecruits.insert( hero );
+            }
+        }
+        if ( !kingdom.isPlay() || world.CountDay() - recruits.getSurrenderDayOfHero2() > 1 ) {
+            recruits.SetHero2( nullptr );
+        }
+        else {
+            Heroes * hero = recruits.GetHero2();
+
+            if ( hero ) {
+                remainingRecruits.insert( hero );
+            }
+        }
+    }
+
+    return remainingRecruits;
 }
 
 // Check if tile is visible from any crystal ball of any hero

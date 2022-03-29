@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,14 +47,16 @@ enum MusicSource
 class Settings
 {
 public:
-    enum
+    static constexpr const char * configFileName = "fheroes2.cfg";
+
+    enum : uint32_t
     {
         GAME_AUTOSAVE_BEGIN_DAY = 0x10000010,
         GAME_REMEMBER_LAST_FOCUS = 0x10000020,
         GAME_SAVE_REWRITE_CONFIRM = 0x10000040,
         GAME_SHOW_SYSTEM_INFO = 0x10000100,
         // UNUSED = 0x10000200,
-        GAME_USE_FADE = 0x10000400,
+        // UNUSED = 0x10000400,
         GAME_EVIL_INTERFACE = 0x10001000,
         GAME_HIDE_INTERFACE = 0x10002000,
         // UNUSED = 0x10008000,
@@ -68,7 +71,7 @@ public:
         WORLD_ARTIFACT_CRYSTAL_BALL = 0x20000020,
         WORLD_SCOUTING_EXTENDED = 0x20000040,
         // UNUSED = 0x20000080,
-        WORLD_EYE_EAGLE_AS_SCHOLAR = 0x20000100,
+        // UNUSED = 0x20000100,
         HEROES_BUY_BOOK_FROM_SHRINES = 0x20000200,
         // UNUSED = 0x20000400,
         // UNUSED = 0x20000800,
@@ -80,10 +83,10 @@ public:
         HEROES_TRANSCRIBING_SCROLLS = 0x20020000,
         // UNUSED = 0x20040000,
         CASTLE_ALLOW_GUARDIANS = 0x20080000,
-        HEROES_COST_DEPENDED_FROM_LEVEL = 0x20800000,
+        // UNUSED = 0x20800000,
         HEROES_REMEMBER_POINTS_RETREAT = 0x21000000,
 
-        CASTLE_MAGEGUILD_POINTS_TURN = 0x30000001,
+        // UNUSED = 0x30000001,
         // UNUSED = 0x30000008,
         // UNUSED = 0x30000010,
         WORLD_SCALE_NEUTRAL_ARMIES = 0x30000020,
@@ -92,7 +95,7 @@ public:
         WORLD_USE_UNIQUE_ARTIFACTS_RS = 0x30000200,
         WORLD_USE_UNIQUE_ARTIFACTS_PS = 0x30000400,
         WORLD_USE_UNIQUE_ARTIFACTS_SS = 0x30000800,
-        WORLD_DISABLE_BARROW_MOUNDS = 0x30001000,
+        // UNUSED = 0x30001000,
         WORLD_EXT_OBJECTS_CAPTURED = 0x30004000,
         // UNUSED = 0x30008000,
 
@@ -113,30 +116,96 @@ public:
 
     std::string String() const;
     void SetCurrentFileInfo( const Maps::FileInfo & );
-    const Maps::FileInfo & CurrentFileInfo() const;
 
-    bool isCurrentMapPriceOfLoyalty() const;
+    const Maps::FileInfo & CurrentFileInfo() const
+    {
+        return current_maps_file;
+    }
 
-    int Debug() const;
-    int HeroesMoveSpeed() const;
-    int AIMoveSpeed() const;
-    int BattleSpeed() const;
-    int ScrollSpeed() const;
+    bool isCurrentMapPriceOfLoyalty() const
+    {
+        return current_maps_file._version == GameVersion::PRICE_OF_LOYALTY;
+    }
 
-    int GameDifficulty() const;
+    int Debug() const
+    {
+        return debug;
+    }
 
-    const std::string & getGameLanguage() const;
-    const std::string & loadedFileLanguage() const;
+    int HeroesMoveSpeed() const
+    {
+        return heroes_speed;
+    }
 
-    const fheroes2::Point & PosRadar() const;
-    const fheroes2::Point & PosButtons() const;
-    const fheroes2::Point & PosIcons() const;
-    const fheroes2::Point & PosStatus() const;
+    int AIMoveSpeed() const
+    {
+        return ai_speed;
+    }
 
-    void SetPosRadar( const fheroes2::Point & );
-    void SetPosButtons( const fheroes2::Point & );
-    void SetPosIcons( const fheroes2::Point & );
-    void SetPosStatus( const fheroes2::Point & );
+    int BattleSpeed() const
+    {
+        return battle_speed;
+    }
+
+    int ScrollSpeed() const
+    {
+        return scroll_speed;
+    }
+
+    int GameDifficulty() const
+    {
+        return game_difficulty;
+    }
+
+    const std::string & getGameLanguage() const
+    {
+        return _gameLanguage;
+    }
+
+    const std::string & loadedFileLanguage() const
+    {
+        return _loadedFileLanguage;
+    }
+
+    const fheroes2::Point & PosRadar() const
+    {
+        return pos_radr;
+    }
+
+    const fheroes2::Point & PosButtons() const
+    {
+        return pos_bttn;
+    }
+
+    const fheroes2::Point & PosIcons() const
+    {
+        return pos_icon;
+    }
+
+    const fheroes2::Point & PosStatus() const
+    {
+        return pos_stat;
+    }
+
+    void SetPosRadar( const fheroes2::Point & pt )
+    {
+        pos_radr = pt;
+    }
+
+    void SetPosButtons( const fheroes2::Point & pt )
+    {
+        pos_bttn = pt;
+    }
+
+    void SetPosIcons( const fheroes2::Point & pt )
+    {
+        pos_icon = pt;
+    }
+
+    void SetPosStatus( const fheroes2::Point & pt )
+    {
+        pos_stat = pt;
+    }
 
     bool FullScreen() const;
     bool ShowControlPanel() const;
@@ -151,8 +220,19 @@ public:
     bool BattleAutoSpellcast() const;
     bool BattleShowArmyOrder() const;
     bool isPriceOfLoyaltySupported() const;
-    bool LoadedGameVersion() const;
-    bool MusicMIDI() const;
+
+    bool LoadedGameVersion() const
+    {
+        // 0x80 value should be same as in Game::TYPE_LOADFILE enumeration value
+        // This constant not used here, to not drag dependency on the game.h and game.cpp in compilation target.
+        return ( game_type & 0x80 ) != 0;
+    }
+
+    bool MusicMIDI() const
+    {
+        return _musicType == MUSIC_MIDI_ORIGINAL || _musicType == MUSIC_MIDI_EXPANSION;
+    }
+
     bool isShowIntro() const;
 
     bool isVSyncEnabled() const;
@@ -169,42 +249,151 @@ public:
     void ExtResetModes( u32 );
     static std::string ExtName( const uint32_t settingId );
 
-    bool ExtHeroBuySpellBookFromShrine() const;
-    bool ExtHeroRecruitCostDependedFromLevel() const;
-    bool ExtHeroRememberPointsForRetreating() const;
-    bool ExtHeroAllowTranscribingScroll() const;
-    bool ExtHeroArenaCanChoiseAnySkills() const;
-    bool ExtWorldShowTerrainPenalty() const;
-    bool ExtWorldScouteExtended() const;
-    bool ExtWorldAllowSetGuardian() const;
-    bool ExtWorldArtifactCrystalBall() const;
-    bool ExtWorldEyeEagleAsScholar() const;
-    bool ExtWorldNeutralArmyDifficultyScaling() const;
-    bool ExtWorldUseUniqueArtifactsRS() const;
-    bool ExtWorldUseUniqueArtifactsPS() const;
-    bool ExtWorldUseUniqueArtifactsSS() const;
-    bool ExtWorldExtObjectsCaptured() const;
-    bool ExtWorldDisableBarrowMounds() const;
-    bool ExtCastleAllowGuardians() const;
-    bool ExtCastleGuildRestorePointsTurn() const;
-    bool ExtBattleShowDamage() const;
-    bool ExtBattleSoftWait() const;
-    bool ExtBattleDeterministicResult() const;
-    bool ExtBattleReverseWaitOrder() const;
-    bool ExtGameRememberLastFocus() const;
-    bool ExtGameContinueAfterVictory() const;
-    bool ExtGameRewriteConfirm() const;
-    bool ExtGameShowSystemInfo() const;
-    bool ExtGameAutosaveBeginOfDay() const;
-    bool ExtGameUseFade() const;
-    bool ExtGameEvilInterface() const;
-    bool ExtGameHideInterface() const;
+    bool ExtHeroBuySpellBookFromShrine() const
+    {
+        return ExtModes( HEROES_BUY_BOOK_FROM_SHRINES );
+    }
 
-    const fheroes2::Size & VideoMode() const;
+    bool ExtHeroRememberPointsForRetreating() const
+    {
+        return ExtModes( HEROES_REMEMBER_POINTS_RETREAT );
+    }
+
+    bool ExtHeroAllowTranscribingScroll() const
+    {
+        return ExtModes( HEROES_TRANSCRIBING_SCROLLS );
+    }
+
+    bool ExtHeroArenaCanChoiseAnySkills() const
+    {
+        return ExtModes( HEROES_ARENA_ANY_SKILLS );
+    }
+
+    bool ExtWorldShowTerrainPenalty() const
+    {
+        return ExtModes( WORLD_SHOW_TERRAIN_PENALTY );
+    }
+
+    bool ExtWorldScouteExtended() const
+    {
+        return ExtModes( WORLD_SCOUTING_EXTENDED );
+    }
+
+    bool ExtWorldAllowSetGuardian() const
+    {
+        return ExtModes( WORLD_ALLOW_SET_GUARDIAN );
+    }
+
+    bool ExtWorldArtifactCrystalBall() const
+    {
+        return ExtModes( WORLD_ARTIFACT_CRYSTAL_BALL );
+    }
+
+    bool ExtWorldNeutralArmyDifficultyScaling() const
+    {
+        return ExtModes( WORLD_SCALE_NEUTRAL_ARMIES );
+    }
+
+    bool ExtWorldUseUniqueArtifactsRS() const
+    {
+        return ExtModes( WORLD_USE_UNIQUE_ARTIFACTS_RS );
+    }
+
+    bool ExtWorldUseUniqueArtifactsPS() const
+    {
+        return ExtModes( WORLD_USE_UNIQUE_ARTIFACTS_PS );
+    }
+
+    bool ExtWorldUseUniqueArtifactsSS() const
+    {
+        return ExtModes( WORLD_USE_UNIQUE_ARTIFACTS_SS );
+    }
+
+    bool ExtWorldExtObjectsCaptured() const
+    {
+        return ExtModes( WORLD_EXT_OBJECTS_CAPTURED );
+    }
+
+    bool ExtCastleAllowGuardians() const
+    {
+        return ExtModes( CASTLE_ALLOW_GUARDIANS );
+    }
+
+    bool ExtBattleShowDamage() const
+    {
+        return ExtModes( GAME_BATTLE_SHOW_DAMAGE );
+    }
+
+    bool ExtBattleSoftWait() const
+    {
+        return ExtModes( BATTLE_SOFT_WAITING );
+    }
+
+    bool ExtBattleDeterministicResult() const
+    {
+        return ExtModes( BATTLE_DETERMINISTIC_RESULT );
+    }
+
+    bool ExtBattleReverseWaitOrder() const
+    {
+        return ExtModes( BATTLE_REVERSE_WAIT_ORDER );
+    }
+
+    bool ExtGameRememberLastFocus() const
+    {
+        return ExtModes( GAME_REMEMBER_LAST_FOCUS );
+    }
+
+    bool ExtGameContinueAfterVictory() const
+    {
+        return ExtModes( GAME_CONTINUE_AFTER_VICTORY );
+    }
+
+    bool ExtGameRewriteConfirm() const
+    {
+        return ExtModes( GAME_SAVE_REWRITE_CONFIRM );
+    }
+
+    bool ExtGameShowSystemInfo() const
+    {
+        return ExtModes( GAME_SHOW_SYSTEM_INFO );
+    }
+
+    bool ExtGameAutosaveBeginOfDay() const
+    {
+        return ExtModes( GAME_AUTOSAVE_BEGIN_DAY );
+    }
+
+    static bool ExtGameUseFade()
+    {
+        // TODO: fix fading effect for the original resolution (640 x 480) and enable back this option.
+        // return video_mode == fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+        return false;
+    }
+
+    bool ExtGameEvilInterface() const
+    {
+        return ExtModes( GAME_EVIL_INTERFACE );
+    }
+
+    bool ExtGameHideInterface() const
+    {
+        return ExtModes( GAME_HIDE_INTERFACE );
+    }
+
+    const fheroes2::Size & VideoMode() const
+    {
+        return video_mode;
+    }
 
     void SetDebug( int );
     void EnablePriceOfLoyaltySupport( const bool set );
-    void SetGameDifficulty( int );
+
+    void SetGameDifficulty( const int difficulty )
+    {
+        game_difficulty = difficulty;
+    }
+
     void SetEvilInterface( bool );
     void SetHideInterface( bool );
     void SetBattleGrid( bool );
@@ -226,7 +415,11 @@ public:
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
-    void SetMusicType( int v );
+
+    void SetMusicType( int v )
+    {
+        _musicType = MUSIC_EXTERNAL <= v ? MUSIC_EXTERNAL : static_cast<MusicSource>( v );
+    }
 
     bool setGameLanguage( const std::string & language );
 
@@ -256,7 +449,6 @@ public:
         return game_type;
     }
 
-    /* set game type */
     void SetGameType( int type )
     {
         game_type = type;
@@ -284,41 +476,114 @@ public:
         players.current_color = color;
     }
 
-    int PreferablyCountPlayers() const;
+    int PreferablyCountPlayers() const
+    {
+        return preferably_count_players;
+    }
+
     void SetPreferablyCountPlayers( int );
 
     // from maps info
-    bool AllowChangeRace( int ) const;
-    const std::string & MapsFile() const;
-    const std::string & MapsName() const;
-    const std::string & MapsDescription() const;
-    int MapsDifficulty() const;
-    fheroes2::Size MapsSize() const;
-    bool GameStartWithHeroes() const;
-    uint32_t ConditionWins() const;
-    uint32_t ConditionLoss() const;
-    bool WinsCompAlsoWins() const;
-    int WinsFindArtifactID() const;
-    bool WinsFindUltimateArtifact() const;
-    u32 WinsAccumulateGold() const;
-    fheroes2::Point WinsMapsPositionObject() const;
-    fheroes2::Point LossMapsPositionObject() const;
-    u32 LossCountDays() const;
-    int controllerPointerSpeed() const;
-
-    void SetMapsFile( const std::string & file );
-
-    std::string GetProgramPath() const
+    bool AllowChangeRace( int f ) const
     {
-        return path_program;
+        return ( current_maps_file.rnd_races & f ) != 0;
     }
+
+    const std::string & MapsFile() const
+    {
+        return current_maps_file.file;
+    }
+
+    const std::string & MapsName() const
+    {
+        return current_maps_file.name;
+    }
+
+    const std::string & MapsDescription() const
+    {
+        return current_maps_file.description;
+    }
+
+    int MapsDifficulty() const
+    {
+        return current_maps_file.difficulty;
+    }
+
+    fheroes2::Size MapsSize() const
+    {
+        return { current_maps_file.size_w, current_maps_file.size_h };
+    }
+
+    bool GameStartWithHeroes() const
+    {
+        return current_maps_file.startWithHeroInEachCastle;
+    }
+
+    uint32_t ConditionWins() const
+    {
+        return current_maps_file.ConditionWins();
+    }
+
+    uint32_t ConditionLoss() const
+    {
+        return current_maps_file.ConditionLoss();
+    }
+
+    bool WinsCompAlsoWins() const
+    {
+        return current_maps_file.WinsCompAlsoWins();
+    }
+
+    int WinsFindArtifactID() const
+    {
+        return current_maps_file.WinsFindArtifactID();
+    }
+
+    bool WinsFindUltimateArtifact() const
+    {
+        return current_maps_file.WinsFindUltimateArtifact();
+    }
+
+    u32 WinsAccumulateGold() const
+    {
+        return current_maps_file.WinsAccumulateGold();
+    }
+
+    fheroes2::Point WinsMapsPositionObject() const
+    {
+        return current_maps_file.WinsMapsPositionObject();
+    }
+
+    fheroes2::Point LossMapsPositionObject() const
+    {
+        return current_maps_file.LossMapsPositionObject();
+    }
+
+    u32 LossCountDays() const
+    {
+        return current_maps_file.LossCountDays();
+    }
+
+    int controllerPointerSpeed() const
+    {
+        return _controllerPointerSpeed;
+    }
+
+    void SetMapsFile( const std::string & file )
+    {
+        current_maps_file.file = file;
+    }
+
     void SetProgramPath( const char * );
 
     static std::string GetVersion();
 
-    static ListDirs GetRootDirs();
+    static const std::vector<std::string> & GetRootDirs();
 
     static ListFiles FindFiles( const std::string & prefixDir, const std::string & fileNameFilter, const bool exactMatch );
+
+    static bool findFile( const std::string & internalDirectory, const std::string & fileName, std::string & fullPath );
+
     static std::string GetLastFile( const std::string & prefix, const std::string & name );
 
 protected:

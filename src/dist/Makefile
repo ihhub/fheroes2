@@ -36,7 +36,7 @@ endif
 ifeq ($(PLATFORM), mingw)
 RES := ../resources/$(TARGET).res
 RC  := ../resources/fheroes2.rc
-ifdef DEBUG
+ifdef FHEROES2_WITH_DEBUG
 DEBUGFLAG := -DDEBUG
 endif
 endif
@@ -73,3 +73,4 @@ include $(wildcard *.d)
 
 clean:
 	rm -f *.pot *.pot~ *.o *.d *.exe $(TARGET) $(RES)
+	rm -rf *.app

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,16 +40,19 @@ namespace Campaign
             return _scenarios;
         }
 
-        const std::vector<int> & getScenariosAfter( const int scenarioID ) const;
-        std::vector<int> getStartingScenarios() const;
+        static const std::vector<ScenarioInfoId> & getScenariosAfter( const ScenarioInfoId & scenarioInfo );
+        std::vector<ScenarioInfoId> getStartingScenarios() const;
 
         bool isAllCampaignMapsPresent() const;
-        bool isLastScenario( const int scenarioID ) const;
-        bool isStartingScenario( const int scenarioID ) const;
+        bool isLastScenario( const Campaign::ScenarioInfoId & scenarioInfoId ) const;
 
-        void setCampaignID( const int campaignID );
+        void setCampaignID( const int campaignID )
+        {
+            _campaignID = campaignID;
+        }
+
         void setCampaignDescription( const std::string & campaignDescription );
-        void setCampaignScenarios( const std::vector<ScenarioData> & scenarios );
+        void setCampaignScenarios( std::vector<ScenarioData> && scenarios );
 
         static const CampaignData & getCampaignData( const int campaignID );
 
@@ -57,6 +60,8 @@ namespace Campaign
         int _campaignID;
         std::string _campaignDescription;
         std::vector<ScenarioData> _scenarios;
+
+        bool isStartingScenario( const ScenarioInfoId & scenarioInfo ) const;
     };
 
     struct CampaignAwardData
@@ -89,9 +94,11 @@ namespace Campaign
         CampaignAwardData( int id, uint32_t type, uint32_t subType, const std::string & customName );
         CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, const std::string & customName = std::string() );
 
-        std::string ToString() const;
+        std::string getName() const;
 
-        static std::vector<Campaign::CampaignAwardData> getCampaignAwardData( const int campaignID, const int scenarioID );
+        std::string getDescription() const;
+
+        static std::vector<Campaign::CampaignAwardData> getCampaignAwardData( const ScenarioInfoId & scenarioInfo );
         static std::vector<Campaign::CampaignAwardData> getExtraCampaignAwardData( const int campaignID );
 
         static const char * getAllianceJoiningMessage( const int monsterId );

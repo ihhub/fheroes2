@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,25 +27,25 @@ namespace fheroes2
 {
     enum class SupportedLanguage : int
     {
-        English = 0, // default language for all version of the game.
+        English = 0, // default language for all versions of the game.
         French, // GoG version
         Polish, // GoG version
         German, // GoG version
         Russian, // Buka and XXI Vek versions
-        Italian // Rare version?
+        Italian, // Rare version?
+        Czech // Local release occured in 2002 by CD Projekt
     };
 
     class LanguageSwitcher
     {
     public:
-        LanguageSwitcher() = delete;
-
-        LanguageSwitcher( const LanguageSwitcher & ) = delete;
-        LanguageSwitcher( const LanguageSwitcher && ) = delete;
-        LanguageSwitcher & operator=( const LanguageSwitcher & ) = delete;
-        LanguageSwitcher & operator=( const LanguageSwitcher && ) = delete;
-
         explicit LanguageSwitcher( const SupportedLanguage language );
+        LanguageSwitcher( const LanguageSwitcher & ) = delete;
+        LanguageSwitcher( LanguageSwitcher && ) = delete;
+
+        LanguageSwitcher & operator=( const LanguageSwitcher & ) = delete;
+        LanguageSwitcher & operator=( LanguageSwitcher && ) = delete;
+
         ~LanguageSwitcher();
 
     private:

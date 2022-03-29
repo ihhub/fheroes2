@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,88 +24,23 @@
 #include <string>
 
 #include "agg_image.h"
-#include "castle.h"
-#include "cursor.h"
 #include "dialog.h"
-#include "game.h"
 #include "game_delays.h"
 #include "icn.h"
-#include "settings.h"
-#include "text.h"
 #include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
-void Castle::OpenTavern( void ) const
+void Castle::OpenTavern() const
 {
-    const std::string & header = _( "A generous tip for the barkeep yields the following rumor:" );
-    const int system = ( Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM );
-    const int tavwin = ICN::TAVWIN;
-    const std::string & tavern = GetStringBuilding( BUILD_TAVERN );
-    const std::string & message = world.GetRumors();
+    std::string body( _( "A generous tip for the barkeep yields the following rumor:" ) );
+    body += "\n\n";
+    body += world.getCurrentRumor();
 
-    fheroes2::Display & display = fheroes2::Display::instance();
+    const fheroes2::DynamicImageDialogElement imageUI( ICN::TAVWIN, { 0, 1 }, Game::getAnimationDelayValue( Game::CASTLE_TAVERN_DELAY ) );
+    const fheroes2::TextDialogElement textBodyUI( std::make_shared<fheroes2::Text>( body, fheroes2::FontType::normalWhite() ) );
 
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-    Text text( tavern, Font::YELLOW_BIG );
-    const fheroes2::Sprite & s1 = fheroes2::AGG::GetICN( tavwin, 0 );
-    TextBox box1( header, Font::BIG, BOXAREA_WIDTH );
-    TextBox box2( message, Font::BIG, BOXAREA_WIDTH );
-
-    Dialog::FrameBox box( text.h() + 10 + s1.height() + 13 + box1.h() + 20 + box2.h(), true );
-
-    const fheroes2::Rect & pos = box.GetArea();
-    fheroes2::Point dst_pt( pos.x, pos.y );
-
-    text.Blit( pos.x + ( pos.width - text.w() ) / 2, dst_pt.y );
-
-    dst_pt.x = pos.x + ( pos.width - s1.width() ) / 2;
-    dst_pt.y += 10 + text.h();
-    fheroes2::Blit( s1, display, dst_pt.x, dst_pt.y );
-
-    dst_pt.x += 3;
-    dst_pt.y += 3;
-
-    const fheroes2::Sprite & tavernSprite = fheroes2::AGG::GetICN( tavwin, 1 );
-    fheroes2::Blit( tavernSprite, display, dst_pt.x, dst_pt.y );
-
-    if ( const u32 index = ICN::AnimationFrame( tavwin, 0, 0 ) ) {
-        const fheroes2::Sprite & animation = fheroes2::AGG::GetICN( tavwin, index );
-        fheroes2::Blit( animation, display, dst_pt.x + animation.x(), dst_pt.y + animation.y() );
-    }
-
-    box1.Blit( pos.x, dst_pt.y + s1.height() + 10 );
-    box2.Blit( pos.x, dst_pt.y + s1.height() + 10 + box1.h() + 20 );
-
-    // button ok
-    const fheroes2::Sprite & s4 = fheroes2::AGG::GetICN( system, 1 );
-    fheroes2::Button buttonOk( pos.x + ( pos.width - s4.width() ) / 2, pos.y + pos.height - s4.height(), system, 1, 2 );
-
-    buttonOk.draw();
-
-    display.render();
-
-    LocalEvent & le = LocalEvent::Get();
-    u32 frame = 0;
-
-    // message loop
-    while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
-        if ( le.MouseClickLeft( buttonOk.area() ) || HotKeyCloseWindow )
-            break;
-
-        // animation
-        if ( Game::validateAnimationDelay( Game::CASTLE_TAVERN_DELAY ) ) {
-            fheroes2::Blit( tavernSprite, display, dst_pt.x, dst_pt.y );
-
-            if ( const u32 index = ICN::AnimationFrame( tavwin, 0, frame ) ) {
-                const fheroes2::Sprite & s22 = fheroes2::AGG::GetICN( tavwin, index );
-                fheroes2::Blit( s22, display, dst_pt.x + s22.x(), dst_pt.y + s22.y() );
-            }
-            ++frame;
-
-            display.render();
-        }
-    }
+    fheroes2::showMessage( fheroes2::Text( GetStringBuilding( BUILD_TAVERN ), fheroes2::FontType::normalYellow() ), fheroes2::Text( "", {} ), Dialog::OK,
+                           { &imageUI, &textBodyUI } );
 }

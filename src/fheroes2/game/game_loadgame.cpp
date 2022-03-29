@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,12 +31,28 @@
 #include "game_mainmenu_ui.h"
 #include "icn.h"
 #include "localevent.h"
+#include "logging.h"
 #include "mus.h"
 #include "screen.h"
 #include "settings.h"
 #include "text.h"
 #include "translations.h"
 #include "ui_button.h"
+
+namespace
+{
+    void outputLoadGameInTextSupportMode()
+    {
+        START_TEXT_SUPPORT_MODE
+
+        COUT( "Load Game\n" )
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_STANDARD ) << " to choose Standard Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_CAMPAIGN ) << " to choose Campaign Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_MULTI ) << " to show Multi-Player Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to go back to Main Menu." )
+    }
+}
 
 fheroes2::GameMode Game::LoadCampaign()
 {
@@ -115,8 +132,13 @@ fheroes2::GameMode Game::LoadMulti()
 
 fheroes2::GameMode Game::LoadGame()
 {
-    Mixer::Pause();
+    outputLoadGameInTextSupportMode();
+
+    // Stop all sounds, but not the music
+    Mixer::Stop();
+
     AGG::PlayMusic( MUS::MAINMENU, true, true );
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
@@ -211,7 +233,9 @@ fheroes2::GameMode Game::LoadStandard()
 
 fheroes2::GameMode Game::DisplayLoadGameDialog()
 {
-    Mixer::Pause();
+    // Stop all sounds, but not the music
+    Mixer::Stop();
+
     AGG::PlayMusic( MUS::MAINMENU, true, true );
 
     // setup cursor

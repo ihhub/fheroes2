@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,6 +31,8 @@
 #include "text.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "zzlib.h"
 
 namespace
@@ -138,9 +140,15 @@ namespace Dialog
         ResolutionList resList( roi.getPosition() );
 
         resList.RedrawBackground( roi.getPosition() );
-        resList.SetScrollButtonUp( ICN::REQUESTS, 5, 6, fheroes2::Point( roi.x + 327, roi.y + 55 ) );
-        resList.SetScrollButtonDn( ICN::REQUESTS, 7, 8, fheroes2::Point( roi.x + 327, roi.y + 257 ) );
-        resList.SetScrollBar( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), fheroes2::Rect( roi.x + 328, roi.y + 73, 12, 180 ) );
+        resList.SetScrollButtonUp( ICN::REQUESTS, 5, 6, { roi.x + 327, roi.y + 55 } );
+        resList.SetScrollButtonDn( ICN::REQUESTS, 7, 8, { roi.x + 327, roi.y + 257 } );
+
+        const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
+        const fheroes2::Image scrollbarSlider
+            = fheroes2::generateScrollbarSlider( originalSilder, false, 180, 11, static_cast<int32_t>( resolutions.size() ), { 0, 0, originalSilder.width(), 8 },
+                                                 { 0, 7, originalSilder.width(), 8 } );
+        resList.setScrollBarArea( { roi.x + 328, roi.y + 73, 12, 180 } );
+        resList.setScrollBarImage( scrollbarSlider );
         resList.SetAreaMaxItems( 11 );
         resList.SetAreaItems( fheroes2::Rect( roi.x + 41, roi.y + 55 + 3, editBoxLength, 215 ) );
 
@@ -179,10 +187,21 @@ namespace Dialog
                 }
             }
             else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
-                selectedResolution = fheroes2::Size( 0, 0 );
+                selectedResolution = { 0, 0 };
                 break;
             }
-            else if ( resList.isSelected() ) {
+            else if ( le.MousePressRight( buttonCancel.area() ) ) {
+                fheroes2::Text header( _( "Cancel" ), fheroes2::FontType::normalYellow() );
+                fheroes2::Text body( _( "Exit this menu without doing anything." ), fheroes2::FontType::normalWhite() );
+                fheroes2::showMessage( header, body, 0 );
+            }
+            else if ( le.MousePressRight( buttonOk.area() ) ) {
+                fheroes2::Text header( _( "Okay" ), fheroes2::FontType::normalYellow() );
+                fheroes2::Text body( _( "Click to apply the selected resolution." ), fheroes2::FontType::normalWhite() );
+                fheroes2::showMessage( header, body, 0 );
+            }
+
+            if ( resList.isSelected() ) {
                 selectedResolution = resList.GetCurrent();
             }
 
@@ -201,8 +220,10 @@ namespace Dialog
              && ( selectedResolution.width != currentResolution.width || selectedResolution.height != currentResolution.height ) ) {
             display.resize( selectedResolution.width, selectedResolution.height );
 
+#if !defined( MACOS_APP_BUNDLE )
             const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
             fheroes2::engine().setIcon( appIcon );
+#endif
 
             return true;
         }

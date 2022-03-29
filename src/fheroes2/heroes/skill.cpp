@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -143,9 +144,9 @@ int Skill::Primary::LevelUp( int race, int level, uint32_t seed )
     return result;
 }
 
-const char * Skill::Primary::String( int skill )
+const char * Skill::Primary::String( const int skillType )
 {
-    switch ( skill ) {
+    switch ( skillType ) {
     case ATTACK:
         return _( "Attack Skill" );
     case DEFENSE:
@@ -155,6 +156,8 @@ const char * Skill::Primary::String( int skill )
     case KNOWLEDGE:
         return _( "Knowledge" );
     default:
+        // Are you sure that you are passing the correct skill type?
+        assert( 0 );
         break;
     }
 
@@ -172,27 +175,25 @@ std::string Skill::Primary::StringDescription( int skill, const Heroes * hero )
         if ( hero )
             hero->GetAttack( &ext );
         break;
-
     case DEFENSE:
         res = _( "Your defense skill is a bonus added to each creature's defense skill." );
         if ( hero )
             hero->GetDefense( &ext );
         break;
-
     case POWER:
         res = _( "Your spell power determines the length or power of a spell." );
         if ( hero )
             hero->GetPower( &ext );
         break;
-
     case KNOWLEDGE:
         res = _(
             "Your knowledge determines how many spell points your hero may have. Under normal circumstances, a hero is limited to 10 spell points per level of knowledge." );
         if ( hero )
             hero->GetKnowledge( &ext );
         break;
-
     default:
+        // Are you sure that you are passing the correct skill type?
+        assert( 0 );
         break;
     }
 
@@ -216,16 +217,18 @@ const char * Skill::Level::String( int level )
     case EXPERT:
         return _( "skill|Expert" );
     default:
+        // Are you sure that you are passing the correct skill level?
+        assert( 0 );
         break;
     }
 
     return "None";
 }
 
-std::string Skill::Level::StringWithBonus( const Heroes & hero, int skill, int level )
+std::string Skill::Level::StringWithBonus( const Heroes & hero, const Secondary & skill )
 {
-    const std::string levelStr = String( level );
-    if ( skill == Skill::Secondary::NECROMANCY && Skill::GetNecromancyBonus( hero ) > 0 ) {
+    const std::string levelStr = String( skill.Level() );
+    if ( skill.Skill() == Skill::Secondary::NECROMANCY && Skill::GetNecromancyBonus( hero ) > 0 ) {
         return levelStr + "+" + std::to_string( Skill::GetNecromancyBonus( hero ) );
     }
     return levelStr;
@@ -279,21 +282,6 @@ void Skill::Secondary::NextLevel( void )
     default:
         break;
     }
-}
-
-int Skill::Secondary::Skill( void ) const
-{
-    return first;
-}
-
-int Skill::Secondary::Level( void ) const
-{
-    return second;
-}
-
-bool Skill::Secondary::isSkill( int skill ) const
-{
-    return skill == first;
 }
 
 bool Skill::Secondary::isValid( void ) const
@@ -356,45 +344,42 @@ int Skill::Secondary::GetIndexSprite2( void ) const
 
 const char * Skill::Secondary::String( int skill )
 {
-    const char * str_skill[]
-        = {_( "Pathfinding" ), _( "Archery" ), _( "Logistics" ),  _( "Scouting" ),  _( "Diplomacy" ),  _( "Navigation" ), _( "Leadership" ), _( "Wisdom" ),
-           _( "Mysticism" ),   _( "Luck" ),    _( "Ballistics" ), _( "Eagle Eye" ), _( "Necromancy" ), _( "Estates" ),    "Unknown"};
-
     switch ( skill ) {
     case PATHFINDING:
-        return str_skill[0];
+        return _( "Pathfinding" );
     case ARCHERY:
-        return str_skill[1];
+        return _( "Archery" );
     case LOGISTICS:
-        return str_skill[2];
+        return _( "Logistics" );
     case SCOUTING:
-        return str_skill[3];
+        return _( "Scouting" );
     case DIPLOMACY:
-        return str_skill[4];
+        return _( "Diplomacy" );
     case NAVIGATION:
-        return str_skill[5];
+        return _( "Navigation" );
     case LEADERSHIP:
-        return str_skill[6];
+        return _( "Leadership" );
     case WISDOM:
-        return str_skill[7];
+        return _( "Wisdom" );
     case MYSTICISM:
-        return str_skill[8];
+        return _( "Mysticism" );
     case LUCK:
-        return str_skill[9];
+        return _( "Luck" );
     case BALLISTICS:
-        return str_skill[10];
+        return _( "Ballistics" );
     case EAGLEEYE:
-        return str_skill[11];
+        return _( "Eagle Eye" );
     case NECROMANCY:
-        return str_skill[12];
+        return _( "Necromancy" );
     case ESTATES:
-        return str_skill[13];
-
+        return _( "Estates" );
     default:
+        // Are you sure that you are passing the correct secondary skill type?
+        assert( 0 );
         break;
     }
 
-    return str_skill[14];
+    return "Unknown";
 }
 
 std::string Skill::Secondary::GetName( void ) const
@@ -416,7 +401,7 @@ std::string Skill::Secondary::GetName( void ) const
 std::string Skill::Secondary::GetNameWithBonus( const Heroes & hero ) const
 {
     if ( Skill() == NECROMANCY && Skill::GetNecromancyBonus( hero ) > 0 ) {
-        return GetName() + " (+" + std::to_string( Skill::GetNecromancyBonus( hero ) ) + ")";
+        return GetName() + " (+" + std::to_string( Skill::GetNecromancyBonus( hero ) ) + ')';
     }
     return GetName();
 }
@@ -539,6 +524,8 @@ std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
         str = _( "Your hero produces %{count} gold pieces per day as tax revenue from estates." );
         break;
     default:
+        // Are you sure that you are passing the correct secondary skill type?
+        assert( 0 );
         break;
     }
 

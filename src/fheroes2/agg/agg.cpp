@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -45,6 +46,68 @@
 #include "xmi.h"
 #include "zzlib.h"
 
+namespace
+{
+    const std::string externalMusicDirectory( "music" );
+
+    std::vector<std::string> getMusicDirectories()
+    {
+        std::vector<std::string> directories;
+        for ( const std::string & dir : Settings::GetRootDirs() ) {
+            std::string fullDirectoryPath = System::ConcatePath( dir, externalMusicDirectory );
+            if ( System::IsDirectory( fullDirectoryPath ) ) {
+                directories.emplace_back( std::move( fullDirectoryPath ) );
+            }
+        }
+
+        return directories;
+    }
+
+    std::string getExternalMusicFile( const int musicTrackId, const MUS::EXTERNAL_MUSIC_TYPE musicType, const std::vector<std::string> & directories )
+    {
+        if ( directories.empty() ) {
+            // Nothing to search.
+            return {};
+        }
+
+        // Instead of relying some generic functions we want to have maximum performance as I/O operations are the slowest.
+        std::vector<std::string> possibleFilenames;
+        possibleFilenames.reserve( directories.size() );
+
+        for ( const std::string & dir : directories ) {
+            possibleFilenames.emplace_back( System::ConcatePath( dir, MUS::getFileName( musicTrackId, musicType, ".flac" ) ) );
+        }
+
+        // Search for FLAC files as they have the best audio quality.
+        for ( const std::string & filename : possibleFilenames ) {
+            if ( System::IsFile( filename ) ) {
+                return filename;
+            }
+        }
+
+        // None of FLAC files found. Try OGG files.
+        for ( std::string & filename : possibleFilenames ) {
+            fheroes2::replaceStringEnding( filename, ".flac", ".ogg" );
+
+            if ( System::IsFile( filename ) ) {
+                return filename;
+            }
+        }
+
+        // No luck with even OGG. Try with MP3.
+        for ( std::string & filename : possibleFilenames ) {
+            fheroes2::replaceStringEnding( filename, ".ogg", ".mp3" );
+
+            if ( System::IsFile( filename ) ) {
+                return filename;
+            }
+        }
+
+        // Looks like music file does not exist.
+        return {};
+    }
+}
+
 namespace AGG
 {
     struct loop_sound_t
@@ -76,7 +139,6 @@ namespace AGG
     void LoadWAV( int m82, std::vector<u8> & );
     void LoadMID( int xmi, std::vector<u8> & );
 
-    bool ReadDataDir( void );
     std::vector<uint8_t> ReadMusicChunk( const std::string & key, const bool ignoreExpansion = false );
 
     void PlayMusicInternally( const int mus, const MusicSource musicType, const bool loop );
@@ -117,24 +179,8 @@ namespace AGG
 
         AsyncSoundManager & operator=( const AsyncSoundManager & ) = delete;
 
-        void pushStopMusic()
-        {
-            _createThreadIfNeeded();
-
-            std::lock_guard<std::mutex> mutexLock( _mutex );
-
-            while ( !_musicTasks.empty() ) {
-                _musicTasks.pop();
-            }
-
-            _musicTasks.emplace( -1, MUSIC_MIDI_ORIGINAL, true );
-            _runFlag = 1;
-            _workerNotification.notify_all();
-        }
-
         void pushMusic( const int musicId, const MusicSource musicType, const bool isLooped )
         {
-            assert( musicId >= 0 );
             _createThreadIfNeeded();
 
             std::lock_guard<std::mutex> mutexLock( _mutex );
@@ -299,12 +345,8 @@ namespace AGG
                     }
 
                     manager->_mutex.unlock();
-                    if ( musicTask.musicId >= 0 ) {
-                        PlayMusicInternally( musicTask.musicId, musicTask.musicType, musicTask.isLooped );
-                    }
-                    else {
-                        Music::Reset();
-                    }
+
+                    PlayMusicInternally( musicTask.musicId, musicTask.musicType, musicTask.isLooped );
                 }
                 else {
                     manager->_runFlag = 0;
@@ -318,39 +360,12 @@ namespace AGG
     AsyncSoundManager g_asyncSoundManager;
 }
 
-/* read data directory */
-bool AGG::ReadDataDir( void )
-{
-    Settings & conf = Settings::Get();
-
-    ListFiles aggs = Settings::FindFiles( "data", ".agg", false );
-
-    // not found agg, exit
-    if ( aggs.empty() )
-        return false;
-
-    // attach agg files
-    for ( ListFiles::const_iterator it = aggs.begin(); it != aggs.end(); ++it ) {
-        std::string lower = StringLower( *it );
-        if ( std::string::npos != lower.find( "heroes2.agg" ) && !heroes2_agg.isGood() ) {
-            heroes2_agg.open( *it );
-            g_midiHeroes2AGG.open( *it );
-        }
-        if ( std::string::npos != lower.find( "heroes2x.agg" ) && !heroes2x_agg.isGood() ) {
-            heroes2x_agg.open( *it );
-            g_midiHeroes2xAGG.open( *it );
-        }
-    }
-
-    conf.EnablePriceOfLoyaltySupport( heroes2x_agg.isGood() );
-
-    return heroes2_agg.isGood();
-}
-
 std::vector<uint8_t> AGG::ReadChunk( const std::string & key )
 {
     if ( heroes2x_agg.isGood() ) {
-        const std::vector<uint8_t> & buf = heroes2x_agg.read( key );
+        // Make sure that the below container is not const and not a reference
+        // so returning it from the function will invoke a move constructor instead of copy constructor.
+        std::vector<uint8_t> buf = heroes2x_agg.read( key );
         if ( !buf.empty() )
             return buf;
     }
@@ -361,7 +376,9 @@ std::vector<uint8_t> AGG::ReadChunk( const std::string & key )
 std::vector<uint8_t> AGG::ReadMusicChunk( const std::string & key, const bool ignoreExpansion )
 {
     if ( !ignoreExpansion && g_midiHeroes2xAGG.isGood() ) {
-        const std::vector<uint8_t> & buf = g_midiHeroes2xAGG.read( key );
+        // Make sure that the below container is not const and not a reference
+        // so returning it from the function will invoke a move constructor instead of copy constructor.
+        std::vector<uint8_t> buf = g_midiHeroes2xAGG.read( key );
         if ( !buf.empty() )
             return buf;
     }
@@ -369,7 +386,6 @@ std::vector<uint8_t> AGG::ReadMusicChunk( const std::string & key, const bool ig
     return g_midiHeroes2AGG.read( key );
 }
 
-/* load 82M object to AGG::Cache in Audio::CVT */
 void AGG::LoadWAV( int m82, std::vector<u8> & v )
 {
     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
@@ -398,7 +414,6 @@ void AGG::LoadWAV( int m82, std::vector<u8> & v )
     }
 }
 
-/* load XMI object */
 void AGG::LoadMID( int xmi, std::vector<u8> & v )
 {
     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) );
@@ -409,7 +424,6 @@ void AGG::LoadMID( int xmi, std::vector<u8> & v )
     }
 }
 
-/* return CVT */
 const std::vector<u8> & AGG::GetWAV( int m82 )
 {
     std::vector<u8> & v = wav_cache[m82];
@@ -418,7 +432,6 @@ const std::vector<u8> & AGG::GetWAV( int m82 )
     return v;
 }
 
-/* return MID */
 const std::vector<u8> & AGG::GetMID( int xmi )
 {
     std::vector<u8> & v = mid_cache[xmi];
@@ -504,9 +517,12 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols, const int s
     }
 }
 
-/* wrapper Audio::Play */
 void AGG::PlaySound( int m82, bool asyncronizedCall )
 {
+    if ( m82 == M82::UNKNOWN ) {
+        return;
+    }
+
     if ( asyncronizedCall ) {
         g_asyncSoundManager.pushSound( m82, Settings::Get().SoundVolume() );
     }
@@ -536,7 +552,6 @@ void AGG::PlaySoundInternally( const int m82, const int soundVolume )
     }
 }
 
-/* wrapper Audio::Play */
 void AGG::PlayMusic( int mus, bool loop, bool asyncronizedCall )
 {
     if ( MUS::UNUSED == mus || MUS::UNKNOWN == mus ) {
@@ -564,109 +579,73 @@ void AGG::PlayMusicInternally( const int mus, const MusicSource musicType, const
         return;
     }
 
-    const std::string prefix_music( "music" );
-
-    bool isSongFound = false;
-
     if ( musicType == MUSIC_EXTERNAL ) {
-        std::string filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::DOS_VERSION ) );
+        const std::vector<std::string> & musicDirectories = getMusicDirectories();
 
-        if ( !System::IsFile( filename ) ) {
-            filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::WIN_VERSION ) );
-            if ( !System::IsFile( filename ) ) {
-                filename.clear();
-            }
+        std::string filename = getExternalMusicFile( mus, MUS::EXTERNAL_MUSIC_TYPE::DOS_VERSION, musicDirectories );
+        if ( filename.empty() ) {
+            filename = getExternalMusicFile( mus, MUS::EXTERNAL_MUSIC_TYPE::WIN_VERSION, musicDirectories );
         }
 
         if ( filename.empty() ) {
-            filename = Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) );
-
-            if ( !System::IsFile( filename ) ) {
-                StringReplace( filename, ".ogg", ".mp3" );
-
-                if ( !System::IsFile( filename ) ) {
-                    DEBUG_LOG( DBG_ENGINE, DBG_WARN,
-                               "error read file: " << Settings::GetLastFile( prefix_music, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) ) << ", skipping..." );
-                    filename.clear();
-                }
-            }
+            filename = getExternalMusicFile( mus, MUS::EXTERNAL_MUSIC_TYPE::MAPPED, musicDirectories );
         }
 
-        if ( !filename.empty() ) {
+        if ( filename.empty() ) {
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Cannot find a file for " << mus << " track." )
+        }
+        else {
             Music::Play( filename, loop );
-            isSongFound = true;
+
+            Game::SetCurrentMusic( mus );
+
+            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::getFileName( mus, MUS::EXTERNAL_MUSIC_TYPE::MAPPED, " " ) )
+
+            return;
+        }
+    }
+
+    // Check if music needs to be pulled from HEROES2X
+    int xmi = XMI::UNKNOWN;
+    if ( musicType == MUSIC_MIDI_EXPANSION ) {
+        xmi = XMI::FromMUS( mus, g_midiHeroes2xAGG.isGood() );
+    }
+
+    if ( XMI::UNKNOWN == xmi ) {
+        xmi = XMI::FromMUS( mus, false );
+    }
+
+    if ( XMI::UNKNOWN != xmi ) {
+        const std::vector<u8> & v = GetMID( xmi );
+        if ( !v.empty() ) {
+            Music::Play( v, loop );
 
             Game::SetCurrentMusic( mus );
         }
-        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::GetString( mus, MUS::OGG_MUSIC_TYPE::MAPPED ) );
     }
-
-    if ( !isSongFound ) {
-        // Check if music needs to be pulled from HEROES2X
-        int xmi = XMI::UNKNOWN;
-        if ( musicType == MUSIC_MIDI_EXPANSION ) {
-            xmi = XMI::FromMUS( mus, g_midiHeroes2xAGG.isGood() );
-        }
-
-        if ( XMI::UNKNOWN == xmi ) {
-            xmi = XMI::FromMUS( mus, false );
-        }
-
-        if ( XMI::UNKNOWN != xmi ) {
-            const std::vector<u8> & v = GetMID( xmi );
-            if ( !v.empty() ) {
-                Music::Play( v, loop );
-
-                Game::SetCurrentMusic( mus );
-            }
-        }
-        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) );
-    }
+    DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) );
 }
 
-// This exists to avoid exposing AGG::ReadChunk
-std::vector<u8> AGG::LoadBINFRM( const char * frm_file )
+void AGG::ResetAudio()
 {
-    DEBUG_LOG( DBG_ENGINE, DBG_TRACE, frm_file );
-    return AGG::ReadChunk( frm_file );
-}
+    g_asyncSoundManager.sync();
 
-void AGG::ResetMixer( bool asyncronizedCall /* = false */ )
-{
-    if ( asyncronizedCall ) {
-        g_asyncSoundManager.pushStopMusic();
-        Mixer::Stop();
-    }
-    else {
-        g_asyncSoundManager.sync();
+    std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
 
-        std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
+    Music::Stop();
+    Mixer::Stop();
 
-        Mixer::Reset();
-    }
     loop_sounds.clear();
     loop_sounds.reserve( 7 );
 }
 
 AGG::AGGInitializer::AGGInitializer()
 {
-    if ( ReadDataDir() ) {
+    if ( init() ) {
         return;
     }
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
-
-    display.fill( 0 );
-    fheroes2::Copy( image, 0, 0, display, ( display.width() - image.width() ) / 2, ( display.height() - image.height() ) / 2, image.width(), image.height() );
-
-    LocalEvent & le = LocalEvent::Get();
-    while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() ) {
-        // Do nothing.
-    }
-
-    DEBUG_LOG( DBG_ENGINE, DBG_WARN, "No data files found." );
-    throw std::logic_error( "No data files found." );
+    throw std::logic_error( "No AGG data files found." );
 }
 
 AGG::AGGInitializer::~AGGInitializer()
@@ -674,4 +653,35 @@ AGG::AGGInitializer::~AGGInitializer()
     wav_cache.clear();
     mid_cache.clear();
     loop_sounds.clear();
+}
+
+bool AGG::AGGInitializer::init()
+{
+    std::string fullPath;
+    if ( Settings::findFile( "data", "heroes2.agg", fullPath ) ) {
+        if ( !heroes2_agg.open( fullPath ) ) {
+            return false;
+        }
+
+        if ( !g_midiHeroes2AGG.open( fullPath ) ) {
+            // How is it even possible that for the second time the file is not readable?
+            assert( 0 );
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+
+    // Both AGG files must be located in the same directory. In this case we modify the ending of the existing full path to avoid extra logic.
+    fheroes2::replaceStringEnding( fullPath, ".agg", "x.agg" );
+
+    if ( System::IsFile( fullPath ) ) {
+        heroes2x_agg.open( fullPath );
+        g_midiHeroes2xAGG.open( fullPath );
+    }
+
+    Settings::Get().EnablePriceOfLoyaltySupport( heroes2x_agg.isGood() );
+
+    return true;
 }

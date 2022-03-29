@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,9 +34,18 @@ class BuildingInfo
 public:
     BuildingInfo( const Castle & c, const building_t b );
 
-    uint32_t getBuilding( void ) const;
+    uint32_t getBuilding() const
+    {
+        return building;
+    }
+
     void SetPos( s32, s32 );
-    const fheroes2::Rect & GetArea( void ) const;
+
+    const fheroes2::Rect & GetArea() const
+    {
+        return area;
+    }
+
     const char * GetName( void ) const;
     void SetStatusMessage( StatusBar & ) const;
     bool IsDwelling( void ) const;

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -74,6 +75,11 @@ namespace
         }
 
         do {
+            if ( data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {
+                // Ignore any internal directories.
+                continue;
+            }
+
             std::string fullname = System::ConcatePath( path, data.cFileName );
 
             // FindFirstFile() searches for both long and short variants of names, so we need additional filtering
@@ -161,9 +167,4 @@ bool ListFiles::IsEmpty( const std::string & path, const std::string & filter, b
     ListFiles list;
     list.ReadDir( path, filter, sensitive );
     return list.empty();
-}
-
-void ListDirs::Append( const std::list<std::string> & dirs )
-{
-    insert( end(), dirs.begin(), dirs.end() );
 }

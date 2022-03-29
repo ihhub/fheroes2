@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -48,7 +48,7 @@ namespace
     fheroes2::Size GetNearestResolution( int width, int height, const std::vector<fheroes2::Size> & resolutions )
     {
         if ( resolutions.empty() )
-            return fheroes2::Size( width, height );
+            return { width, height };
 
         if ( width < 1 )
             width = 1;
@@ -126,10 +126,10 @@ namespace
         return indexes;
     }
 
-    const uint8_t * PALPalette()
+    const uint8_t * PALPalette( const bool forceDefaultPaletteUpdate = false )
     {
         static std::vector<uint8_t> palette;
-        if ( palette.empty() ) {
+        if ( palette.empty() || forceDefaultPaletteUpdate ) {
             const uint8_t * gamePalette = fheroes2::getGamePalette();
 
             palette.resize( 256 * 3 );
@@ -517,7 +517,7 @@ namespace
 
         fheroes2::Size getCurrentScreenResolution() const override
         {
-            return fheroes2::Size( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT );
+            return { VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT };
         }
 
         std::vector<fheroes2::Size> getAvailableResolutions() const override
@@ -543,7 +543,7 @@ namespace
             , _palettedTexturePointer( nullptr )
         {}
 
-        enum
+        enum : int32_t
         {
             VITA_FULLSCREEN_WIDTH = 960,
             VITA_FULLSCREEN_HEIGHT = 544,
@@ -915,13 +915,11 @@ namespace
                 flags |= SDL_WINDOW_RESIZABLE;
             }
 
-            _window = SDL_CreateWindow( "", _prevWindowPos.x, _prevWindowPos.y, width_, height_, flags );
+            _window = SDL_CreateWindow( _previousWindowTitle.data(), _prevWindowPos.x, _prevWindowPos.y, width_, height_, flags );
             if ( _window == nullptr ) {
                 clear();
                 return false;
             }
-
-            SDL_SetWindowTitle( _window, _previousWindowTitle.data() );
 
             _renderer = SDL_CreateRenderer( _window, -1, renderFlags() );
             if ( _renderer == nullptr ) {
@@ -1323,7 +1321,7 @@ namespace fheroes2
 
     void Display::render()
     {
-        render( Rect( 0, 0, width(), height() ) );
+        render( { 0, 0, width(), height() } );
     }
 
     void Display::render( const Rect & roi )
@@ -1378,7 +1376,7 @@ namespace fheroes2
                 updateImage = ( _renderSurface == nullptr );
                 if ( updateImage ) {
                     // Pre-processing step is applied to the whole image so we forcefully render the full frame.
-                    _engine->render( *this, Rect( 0, 0, width(), height() ) );
+                    _engine->render( *this, { 0, 0, width(), height() } );
                     return;
                 }
             }
@@ -1418,12 +1416,12 @@ namespace fheroes2
         _prevRoi = {};
     }
 
-    void Display::changePalette( const uint8_t * palette ) const
+    void Display::changePalette( const uint8_t * palette, const bool forceDefaultPaletteUpdate ) const
     {
-        if ( currentPalette == palette || ( palette == nullptr && currentPalette == PALPalette() ) )
+        if ( currentPalette == palette || ( palette == nullptr && currentPalette == PALPalette() && !forceDefaultPaletteUpdate ) )
             return;
 
-        currentPalette = ( palette == nullptr ) ? PALPalette() : palette;
+        currentPalette = ( palette == nullptr ) ? PALPalette( forceDefaultPaletteUpdate ) : palette;
 
         _engine->updatePalette( StandardPaletteIndexes() );
     }

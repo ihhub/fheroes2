@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -55,13 +56,13 @@ void Battle::ControlInfo::Redraw( void ) const
     fheroes2::Blit( cell, display, rtLocal.x, rtLocal.y );
     if ( result & CONTROL_HUMAN )
         fheroes2::Blit( mark, display, rtLocal.x + 3, rtLocal.y + 2 );
-    fheroes2::Text text( _( "Human" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    fheroes2::Text text( _( "Human" ), fheroes2::FontType::smallWhite() );
     text.draw( rtLocal.x + cell.width() + 5, rtLocal.y + 5, display );
 
     fheroes2::Blit( cell, display, rtAI.x, rtAI.y );
     if ( result & CONTROL_AI )
         fheroes2::Blit( mark, display, rtAI.x + 3, rtAI.y + 2 );
-    text.set( _( "AI" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( _( "AI" ), fheroes2::FontType::smallWhite() );
     text.draw( rtAI.x + cell.width() + 5, rtAI.y + 5, display );
 }
 
@@ -210,7 +211,7 @@ bool Battle::Only::ChangeSettings( void )
                     hero2->GetSecondarySkills().FillMax( Skill::Secondary() );
                 UpdateHero2( cur_pt );
                 if ( player2.isControlLocal() && nullptr == cinfo2 ) {
-                    cinfo2.reset( new ControlInfo( fheroes2::Point( cur_pt.x + 500, cur_pt.y + 425 ), player2.GetControl() ) );
+                    cinfo2.reset( new ControlInfo( { cur_pt.x + 500, cur_pt.y + 425 }, player2.GetControl() ) );
                 }
                 redraw = true;
             }
@@ -425,7 +426,7 @@ void Battle::Only::UpdateHero1( const fheroes2::Point & cur_pt )
 
         if ( moraleIndicator1 == nullptr ) {
             moraleIndicator1.reset( new MoraleIndicator( hero1 ) );
-            moraleIndicator1->SetPos( fheroes2::Point( cur_pt.x + 34, cur_pt.y + 75 ) );
+            moraleIndicator1->SetPos( { cur_pt.x + 34, cur_pt.y + 75 } );
         }
         else {
             moraleIndicator1->SetHero( hero1 );
@@ -433,7 +434,7 @@ void Battle::Only::UpdateHero1( const fheroes2::Point & cur_pt )
 
         if ( luckIndicator1 == nullptr ) {
             luckIndicator1.reset( new LuckIndicator( hero1 ) );
-            luckIndicator1->SetPos( fheroes2::Point( cur_pt.x + 34, cur_pt.y + 115 ) );
+            luckIndicator1->SetPos( { cur_pt.x + 34, cur_pt.y + 115 } );
         }
         else {
             luckIndicator1->SetHero( hero1 );
@@ -480,7 +481,7 @@ void Battle::Only::UpdateHero2( const fheroes2::Point & cur_pt )
 
         if ( moraleIndicator2 == nullptr ) {
             moraleIndicator2.reset( new MoraleIndicator( hero2 ) );
-            moraleIndicator2->SetPos( fheroes2::Point( cur_pt.x + 566, cur_pt.y + 75 ) );
+            moraleIndicator2->SetPos( { cur_pt.x + 566, cur_pt.y + 75 } );
         }
         else {
             moraleIndicator2->SetHero( hero2 );
@@ -488,7 +489,7 @@ void Battle::Only::UpdateHero2( const fheroes2::Point & cur_pt )
 
         if ( luckIndicator2 == nullptr ) {
             luckIndicator2.reset( new LuckIndicator( hero2 ) );
-            luckIndicator2->SetPos( fheroes2::Point( cur_pt.x + 566, cur_pt.y + 115 ) );
+            luckIndicator2->SetPos( { cur_pt.x + 566, cur_pt.y + 115 } );
         }
         else {
             luckIndicator2->SetHero( hero2 );
@@ -550,7 +551,7 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
         StringReplace( message, _( "%{race2} %{name2}" ), _( "Monsters" ) );
     }
 
-    fheroes2::Text text( message, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+    fheroes2::Text text( message, fheroes2::FontType::normalWhite() );
     text.draw( top.x + 320 - text.width() / 2, top.y + 29, display );
 
     // portrait
@@ -561,7 +562,7 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
     }
     else {
         fheroes2::Fill( display, rtPortrait1.x, rtPortrait1.y, rtPortrait1.width, rtPortrait1.height, 0 );
-        text.set( _( "N/A" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+        text.set( _( "N/A" ), fheroes2::FontType::normalWhite() );
         text.draw( rtPortrait1.x + ( rtPortrait1.width - text.width() ) / 2, rtPortrait1.y + rtPortrait1.height / 2 - 8, display );
     }
 
@@ -572,7 +573,7 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
     }
     else {
         fheroes2::Fill( display, rtPortrait2.x, rtPortrait2.y, rtPortrait2.width, rtPortrait2.height, 0 );
-        text.set( _( "N/A" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+        text.set( _( "N/A" ), fheroes2::FontType::normalWhite() );
         text.draw( rtPortrait2.x + ( rtPortrait2.width - text.width() ) / 2, rtPortrait2.y + rtPortrait2.height / 2 - 8, display );
     }
 
@@ -597,11 +598,11 @@ void Battle::Only::StartBattle( void )
 
     if ( hero1 ) {
         hero1->SetSpellPoints( hero1->GetMaxSpellPoints() );
-        hero1->Recruit( player1.GetColor(), fheroes2::Point( 5, 5 ) );
+        hero1->Recruit( player1.GetColor(), { 5, 5 } );
 
         if ( hero2 ) {
             hero2->SetSpellPoints( hero2->GetMaxSpellPoints() );
-            hero2->Recruit( player2.GetColor(), fheroes2::Point( 5, 6 ) );
+            hero2->Recruit( player2.GetColor(), { 5, 6 } );
         }
 
         Players::SetPlayerControl( player1.GetColor(), player1.GetControl() );

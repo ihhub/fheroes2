@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,6 +36,7 @@
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
+#include "logging.h"
 #include "mus.h"
 #include "settings.h"
 #include "text.h"
@@ -61,6 +63,19 @@ namespace
         CREDITS_DEFAULT = 13,
         QUIT_DEFAULT = 17
     };
+
+    void outputMainMenuInTextSupportMode()
+    {
+        START_TEXT_SUPPORT_MODE
+        COUT( "Main Menu\n" )
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_NEWGAME ) << " to choose New Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_LOADGAME ) << " to choose Load previously saved game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_HIGHSCORES ) << " to show High Scores." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_CREDITS ) << " to show Credits." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_SETTINGS ) << " to open Game Settings." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to Quit the game." )
+    }
 }
 
 void Game::mainGameLoop( bool isFirstGameRun )
@@ -148,7 +163,9 @@ void Game::mainGameLoop( bool isFirstGameRun )
 
 fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 {
-    Mixer::Pause();
+    // Stop all sounds, but not the music
+    Mixer::Stop();
+
     AGG::PlayMusic( MUS::MAINMENU, true, true );
 
     Settings & conf = Settings::Get();
@@ -163,13 +180,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     // image background
     fheroes2::drawMainMenuScreen();
     if ( isFirstGameRun ) {
-        fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
-        const std::vector<fheroes2::SupportedLanguage> supportedLanguages = fheroes2::getSupportedLanguages();
-
-        if ( supportedLanguages.size() > 1 ) {
-            currentLanguage = fheroes2::selectLanguage( supportedLanguages, currentLanguage );
-            conf.setGameLanguage( fheroes2::getLanguageAbbreviation( currentLanguage ) );
-        }
+        fheroes2::selectLanguage( fheroes2::getSupportedLanguages(), fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
         Dialog::Message( _( "Greetings!" ), _( "Welcome to Free Heroes of Might and Magic II! Before starting the game please choose game resolution." ), Font::BIG,
                          Dialog::OK );
@@ -179,21 +190,22 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             fheroes2::drawMainMenuScreen();
         }
 
-        fheroes2::Text header( _( "Please Remember" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+        fheroes2::Text header( _( "Please Remember" ), fheroes2::FontType::normalYellow() );
 
         fheroes2::MultiFontText body;
-        body.add( { _( "You can always change game resolution by clicking on the " ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
-        body.add( { _( "door" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
-        body.add( { _( " on the left side of main menu.\n\nTo switch between windowed and full screen modes\npress " ),
-                    { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
-        body.add( { _( "F4" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
-        body.add( { _( " key on the keyboard.\n\nEnjoy the game!" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+        body.add( { _( "You can always change game resolution by clicking on the " ), fheroes2::FontType::normalWhite() } );
+        body.add( { _( "door" ), fheroes2::FontType::normalYellow() } );
+        body.add( { _( " on the left side of main menu.\n\nTo switch between windowed and full screen modes\npress " ), fheroes2::FontType::normalWhite() } );
+        body.add( { _( "F4" ), fheroes2::FontType::normalYellow() } );
+        body.add( { _( " key on the keyboard.\n\nEnjoy the game!" ), fheroes2::FontType::normalWhite() } );
 
         fheroes2::showMessage( header, body, Dialog::OK );
 
         conf.resetFirstGameRun();
-        conf.Save( "fheroes2.cfg" );
+        conf.Save( Settings::configFileName );
     }
+
+    outputMainMenuInTextSupportMode();
 
     LocalEvent & le = LocalEvent::Get();
 

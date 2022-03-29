@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,12 +22,12 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cctype>
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
-#include <iomanip>
 
 #include "logging.h"
 #include "tools.h"
@@ -77,13 +78,6 @@ std::string GetStringShort( int value )
     }
 
     return std::to_string( value );
-}
-
-std::string GetHexString( int value, int width )
-{
-    std::ostringstream stream;
-    stream << "0x" << std::setw( width ) << std::setfill( '0' ) << std::hex << value;
-    return stream.str();
 }
 
 int CountBits( u32 val )
@@ -289,7 +283,7 @@ namespace fheroes2
         int32_t ns = std::div( ( dx > dy ? dx : dy ), 2 ).quot;
         Point pt( pt1 );
 
-        for ( u16 i = 0; i <= ( dx > dy ? dx : dy ); ++i ) {
+        for ( int32_t i = 0; i <= ( dx > dy ? dx : dy ); ++i ) {
             if ( dx > dy ) {
                 pt.x < pt2.x ? ++pt.x : --pt.x;
                 ns -= dy;
@@ -412,5 +406,24 @@ namespace fheroes2
         }
 
         return ~crc;
+    }
+
+    void replaceStringEnding( std::string & output, const char * originalEnding, const char * correctedEnding )
+    {
+        assert( originalEnding != nullptr && correctedEnding != nullptr );
+
+        const size_t originalEndingSize = strlen( originalEnding );
+        const size_t correctedEndingSize = strlen( correctedEnding );
+        if ( output.size() < originalEndingSize ) {
+            // The original string is smaller than the ending.
+            return;
+        }
+
+        if ( memcmp( output.data() + output.size() - originalEndingSize, originalEnding, originalEndingSize ) != 0 ) {
+            // The string does not have the required ending.
+            return;
+        }
+
+        output.replace( output.size() - originalEndingSize, originalEndingSize, correctedEnding, correctedEndingSize );
     }
 }

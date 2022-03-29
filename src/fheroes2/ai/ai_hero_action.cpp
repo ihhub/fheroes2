@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,6 +32,7 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"
+#include "game_static.h"
 #include "heroes.h"
 #include "interface_gamearea.h"
 #include "kingdom.h"
@@ -141,6 +143,7 @@ namespace AI
     void AIToJail( const Heroes & hero, const int32_t tileIndex );
     void AIToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, const int32_t tileIndex );
     void AIToAlchemistTower( Heroes & hero );
+    void AIToSirens( Heroes & hero, const MP2::MapObjectType objectType, const int32_t objectIndex );
 
     int AISelectPrimarySkill( const Heroes & hero )
     {
@@ -482,7 +485,10 @@ namespace AI
         case MP2::OBJ_TRADINGPOST:
         case MP2::OBJ_EYEMAGI:
         case MP2::OBJ_SPHINX:
+            break;
         case MP2::OBJ_SIRENS:
+            // AI must have some action even if it goes on this object by mistake.
+            AIToSirens( hero, objectType, dst_index );
             break;
         default:
             assert( !isActionObject ); // AI should know what to do with this type of action object! Please add logic for it.
@@ -572,7 +578,6 @@ namespace AI
             }
 
             Army & army = castle->GetActualArmy();
-            // bool allow_enter = false;
 
             if ( army.isValid() && army.GetColor() != hero.GetColor() ) {
                 DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " attack enemy castle " << castle->GetName() );
@@ -603,7 +608,6 @@ namespace AI
                     castle->Scoute();
 
                     hero.IncreaseExperience( res.GetExperienceAttacker() );
-                    // allow_enter = true;
                 }
                 else
                     // wins defender
@@ -618,7 +622,6 @@ namespace AI
                 hero.GetKingdom().AddCastle( castle );
                 world.CaptureObject( dst_index, hero.GetColor() );
                 castle->Scoute();
-                // allow_enter = true;
             }
         }
     }
@@ -820,7 +823,7 @@ namespace AI
         if ( !hero.isFriends( tile.QuantityColor() ) ) {
             bool capture = true;
 
-            if ( tile.CaptureObjectIsProtection() ) {
+            if ( tile.isCaptureObjectProtected() ) {
                 const Troop & troop = tile.QuantityTroop();
                 Army army;
                 army.JoinTroop( troop );
@@ -871,7 +874,7 @@ namespace AI
 
     void AIToObservationTower( Heroes & hero, s32 dst_index )
     {
-        Maps::ClearFog( dst_index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );
+        Maps::ClearFog( dst_index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() );
         hero.SetVisited( dst_index, Visit::GLOBAL );
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
@@ -1550,7 +1553,7 @@ namespace AI
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             Interface::Basic::Get().GetGameArea().SetCenter( prevPosition );
-            hero.FadeIn( fheroes2::Point( offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() ) );
+            hero.FadeIn( { offset.x * Game::AIHeroAnimSkip(), offset.y * Game::AIHeroAnimSkip() } );
         }
         hero.ActionNewPosition( true );
 
@@ -1563,9 +1566,6 @@ namespace AI
     {
         left.markHeroMeeting( right.GetID() );
         right.markHeroMeeting( left.GetID() );
-
-        if ( Settings::Get().ExtWorldEyeEagleAsScholar() )
-            Heroes::ScholarAction( left, right );
 
         const bool rightToLeft = right.getStatsValue() < left.getStatsValue();
 
@@ -1622,7 +1622,7 @@ namespace AI
 
                     bool resetHeroSprite = false;
                     if ( heroAnimationFrameCount > 0 ) {
-                        gameArea.ShiftCenter( fheroes2::Point( heroAnimationOffset.x * Game::AIHeroAnimSkip(), heroAnimationOffset.y * Game::AIHeroAnimSkip() ) );
+                        gameArea.ShiftCenter( { heroAnimationOffset.x * Game::AIHeroAnimSkip(), heroAnimationOffset.y * Game::AIHeroAnimSkip() } );
                         gameArea.SetRedraw();
                         heroAnimationFrameCount -= Game::AIHeroAnimSkip();
                         if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4
@@ -1634,7 +1634,7 @@ namespace AI
                                 ++heroAnimationSpriteId;
                         }
                         const int offsetStep = ( ( 4 - ( heroAnimationFrameCount & 0x3 ) ) & 0x3 ); // % 4
-                        hero.SetOffset( fheroes2::Point( heroAnimationOffset.x * offsetStep, heroAnimationOffset.y * offsetStep ) );
+                        hero.SetOffset( { heroAnimationOffset.x * offsetStep, heroAnimationOffset.y * offsetStep } );
                     }
 
                     if ( heroAnimationFrameCount == 0 ) {
@@ -1656,7 +1656,7 @@ namespace AI
                                 heroAnimationSpriteId = hero.GetSpriteIndex();
                                 if ( Game::AIHeroAnimSkip() < 4 ) {
                                     hero.SetSpriteIndex( heroAnimationSpriteId - 1 );
-                                    hero.SetOffset( fheroes2::Point( heroAnimationOffset.x * Game::AIHeroAnimSkip(), heroAnimationOffset.y * Game::AIHeroAnimSkip() ) );
+                                    hero.SetOffset( { heroAnimationOffset.x * Game::AIHeroAnimSkip(), heroAnimationOffset.y * Game::AIHeroAnimSkip() } );
                                 }
                                 else {
                                     ++heroAnimationSpriteId;
@@ -1737,7 +1737,7 @@ namespace AI
             hero.SetVisited( tileIndex, Visit::GLOBAL );
             const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
             for ( const int32_t index : eyeMagiIndexes ) {
-                Maps::ClearFog( index, Game::GetViewDistance( Game::VIEW_MAGI_EYES ), hero.GetColor() );
+                Maps::ClearFog( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ), hero.GetColor() );
             }
         }
     }
@@ -1763,5 +1763,19 @@ namespace AI
         }
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " visited Alchemist Tower to remove " << cursed << " artifacts." );
+    }
+
+    void AIToSirens( Heroes & hero, const MP2::MapObjectType objectType, const int32_t objectIndex )
+    {
+        if ( hero.isObjectTypeVisited( objectType ) ) {
+            return;
+        }
+
+        const uint32_t experience = hero.GetArmy().ActionToSirens();
+        hero.IncreaseExperience( experience );
+
+        hero.SetVisited( objectIndex );
+
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " visited Sirens and got " << experience << " experience." )
     }
 }

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -48,6 +49,8 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
 namespace
@@ -80,8 +83,6 @@ fheroes2::GameMode Game::StartGame()
 
     if ( !conf.LoadedGameVersion() )
         GameOver::Result::Get().Reset();
-
-    AGG::ResetMixer( true );
 
     Interface::Basic::Get().Reset();
 
@@ -116,19 +117,22 @@ void Game::DialogPlayers( int color, std::string str )
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::BRCREST, 5 ), sign, 4, 4 );
         break;
     default:
+        // Did you add a new color? Add the logic for it!
+        assert( 0 );
         break;
     }
 
-    Dialog::SpriteInfo( "", str, sign );
+    const fheroes2::CustomImageDialogElement imageUI( std::move( sign ) );
+    fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( std::move( str ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &imageUI } );
 }
 
-/* open castle wrapper */
 void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    Mixer::Pause();
+    // Stop all sounds, but not the music - it will be replaced by the music of the castle
+    Mixer::Stop();
 
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
@@ -192,7 +196,6 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
     basicInterface.RedrawFocus();
 }
 
-/* open heroes wrapper */
 void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss /* = false */ )
 {
     // setup cursor
@@ -310,7 +313,8 @@ void ShowEventDayDialog( void )
 
     for ( const EventDate & event : events ) {
         if ( event.resource.GetValidItemsCount() ) {
-            Dialog::ResourceInfo( event.title, event.message, event.resource );
+            fheroes2::showResourceMessage( fheroes2::Text( event.title, fheroes2::FontType::normalYellow() ),
+                                           fheroes2::Text( event.message, fheroes2::FontType::normalWhite() ), Dialog::OK, event.resource );
         }
         else if ( !event.message.empty() ) {
             Dialog::Message( event.title, event.message, Font::BIG, Dialog::OK );
@@ -375,8 +379,13 @@ int Interface::Basic::GetCursorFocusShipmaster( const Heroes & from_hero, const 
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.getCastle( tile.GetCenter() );
 
-        if ( castle )
+        if ( castle ) {
+            if ( tile.GetObject() == MP2::OBJN_CASTLE && water && tile.isPassableFrom( Direction::CENTER, true, false, from_hero.GetColor() ) ) {
+                return Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.GetRangeRouteDays( tile.GetIndex() ) );
+            }
+
             return from_hero.GetColor() == castle->GetColor() ? Cursor::CASTLE : Cursor::POINTER;
+        }
         break;
     }
 
@@ -440,7 +449,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
                     return ( from_hero.GetColor() == castle->GetColor() ) ? Cursor::CASTLE : Cursor::POINTER;
                 }
                 else {
-                    const bool protection = Maps::TileIsUnderProtection( tile.GetIndex() );
+                    const bool protection = Maps::isTileUnderProtection( tile.GetIndex() );
 
                     return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE ),
                                                    from_hero.GetRangeRouteDays( tile.GetIndex() ) );
@@ -496,16 +505,16 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
         else if ( MP2::isActionObject( tile.GetObject() ) ) {
             bool protection = false;
             if ( !MP2::isPickupObject( tile.GetObject() ) && !MP2::isAbandonedMine( tile.GetObject() ) ) {
-                protection = ( Maps::TileIsUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.CaptureObjectIsProtection() ) );
+                protection = ( Maps::isTileUnderProtection( tile.GetIndex() ) || ( !from_hero.isFriends( tile.QuantityColor() ) && tile.isCaptureObjectProtected() ) );
             }
             else {
-                protection = Maps::TileIsUnderProtection( tile.GetIndex() );
+                protection = Maps::isTileUnderProtection( tile.GetIndex() );
             }
 
             return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_ACTION ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
         else if ( tile.isPassableFrom( Direction::CENTER, from_hero.isShipMaster(), false, from_hero.GetColor() ) ) {
-            bool protection = Maps::TileIsUnderProtection( tile.GetIndex() );
+            bool protection = Maps::isTileUnderProtection( tile.GetIndex() );
 
             return Cursor::DistanceThemes( ( protection ? Cursor::CURSOR_HERO_FIGHT : Cursor::CURSOR_HERO_MOVE ), from_hero.GetRangeRouteDays( tile.GetIndex() ) );
         }
@@ -549,8 +558,8 @@ fheroes2::GameMode Interface::Basic::StartGame()
     radar.Build();
     radar.SetHide( true );
 
-    iconsPanel.ResetIcons();
-    iconsPanel.HideIcons();
+    iconsPanel.ResetIcons( ICON_ANY );
+    iconsPanel.HideIcons( ICON_ANY );
 
     statusWindow.Reset();
 
@@ -565,7 +574,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
     GameOver::Result & gameResult = GameOver::Result::Get();
     fheroes2::GameMode res = fheroes2::GameMode::END_TURN;
 
-    std::vector<Player *> sortedPlayers = conf.GetPlayers();
+    std::vector<Player *> sortedPlayers = conf.GetPlayers().getVector();
     std::sort( sortedPlayers.begin(), sortedPlayers.end(), SortPlayers );
 
     while ( res == fheroes2::GameMode::END_TURN ) {
@@ -603,16 +612,25 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
+                    // reset environment sounds and music theme at the beginning of the human turn
+                    Game::SetCurrentMusic( MUS::UNKNOWN );
+                    AGG::ResetAudio();
+
                     if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
                         // we need to hide the world map in hot seat mode
                         conf.SetCurrentColor( -1 );
 
-                        iconsPanel.HideIcons();
+                        iconsPanel.HideIcons( ICON_ANY );
                         statusWindow.Reset();
 
                         SetRedraw( REDRAW_GAMEAREA | REDRAW_STATUS | REDRAW_ICONS );
                         Redraw();
                         display.render();
+
+                        // reset the music after closing the dialog
+                        const Game::MusicRestorer musicRestorer;
+
+                        AGG::PlayMusic( MUS::NEW_MONTH, false );
 
                         Game::DialogPlayers( player->GetColor(), _( "%{color} player's turn." ) );
                     }
@@ -623,10 +641,15 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     kingdom.ActionBeforeTurn();
 
-                    iconsPanel.ShowIcons();
+                    iconsPanel.ShowIcons( ICON_ANY );
                     iconsPanel.SetRedraw();
 
                     res = HumanTurn( loadedFromSave );
+
+                    // reset environment sounds and music theme at the end of the human turn
+                    Game::SetCurrentMusic( MUS::UNKNOWN );
+                    AGG::ResetAudio();
+
                     break;
 
                 // CONTROL_AI turn
@@ -649,6 +672,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     kingdom.ActionBeforeTurn();
 
                     AI::Get().KingdomTurn( kingdom );
+
                     break;
                 }
 
@@ -702,11 +726,6 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
-
-    // current music will be set along with the focus, reset environment sounds
-    // and terrain music theme from the previous turn
-    Game::SetCurrentMusic( MUS::UNKNOWN );
-    AGG::ResetMixer();
 
     // set focus
     if ( conf.ExtGameRememberLastFocus() ) {
@@ -996,7 +1015,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             if ( hero ) {
                 bool resetHeroSprite = false;
                 if ( heroAnimationFrameCount > 0 ) {
-                    gameArea.ShiftCenter( fheroes2::Point( heroAnimationOffset.x * Game::HumanHeroAnimSkip(), heroAnimationOffset.y * Game::HumanHeroAnimSkip() ) );
+                    gameArea.ShiftCenter( { heroAnimationOffset.x * Game::HumanHeroAnimSkip(), heroAnimationOffset.y * Game::HumanHeroAnimSkip() } );
                     gameArea.SetRedraw();
                     heroAnimationFrameCount -= Game::HumanHeroAnimSkip();
                     if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4
@@ -1128,10 +1147,6 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         if ( !conf.ExtGameAutosaveBeginOfDay() )
             Game::AutoSave();
     }
-
-    // reset environment sounds and terrain music theme at the end of the human turn
-    Game::SetCurrentMusic( MUS::UNKNOWN );
-    AGG::ResetMixer();
 
     return res;
 }

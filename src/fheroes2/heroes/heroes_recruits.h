@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,24 +32,37 @@
 class Heroes;
 class StreamBase;
 
-struct Recruit
+class Recruit
 {
-    Recruit()
-        : id( Heroes::UNKNOWN )
-        , surrenderDay( 0 )
-    {}
+public:
+    Recruit();
+    Recruit( const Heroes & hero, const uint32_t surrenderDay );
+    explicit Recruit( const Heroes & hero );
+    Recruit( const Recruit & ) = delete;
 
-    Recruit( const Heroes & hero, const uint32_t heroSurrenderDay )
-        : id( hero.GetID() )
-        , surrenderDay( heroSurrenderDay )
-    {}
+    ~Recruit() = default;
 
-    explicit Recruit( const Heroes & hero )
-        : Recruit( hero, 0 )
-    {}
+    Recruit & operator=( const Recruit & ) = delete;
+    Recruit & operator=( Recruit && ) = default;
 
-    int id;
-    uint32_t surrenderDay;
+    int getID() const
+    {
+        return _id;
+    }
+
+    uint32_t getSurrenderDay() const
+    {
+        return _surrenderDay;
+    }
+
+    void setSurrenderDayTmp( const uint32_t surrenderDay );
+
+private:
+    int _id;
+    uint32_t _surrenderDay;
+
+    friend StreamBase & operator<<( StreamBase & msg, const Recruit & recruit );
+    friend StreamBase & operator>>( StreamBase & msg, Recruit & recruit );
 };
 
 class Recruits : public std::pair<Recruit, Recruit>
@@ -67,12 +81,12 @@ public:
     uint32_t getSurrenderDayOfHero1() const;
     uint32_t getSurrenderDayOfHero2() const;
 
-    void SetHero1( const Heroes * hero );
-    void SetHero2( const Heroes * hero );
+    void SetHero1( Heroes * hero );
+    void SetHero2( Heroes * hero );
 
-    void SetHero2Tmp( const Heroes * hero, const uint32_t heroSurrenderDay );
+    void SetHero2Tmp( Heroes * hero, const uint32_t heroSurrenderDay );
 
-    void appendSurrenderedHero( const Heroes & hero, const uint32_t heroSurrenderDay );
+    void appendSurrenderedHero( Heroes & hero, const uint32_t heroSurrenderDay );
 };
 
 StreamBase & operator<<( StreamBase & msg, const Recruit & recruit );

@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -377,7 +377,16 @@ namespace fheroes2
     Text::Text( const std::string & text, const FontType fontType )
         : _text( text )
         , _fontType( fontType )
-    {}
+    {
+        // Do nothing.
+    }
+
+    Text::Text( std::string && text, const FontType fontType )
+        : _text( std::move( text ) )
+        , _fontType( fontType )
+    {
+        // Do nothing.
+    }
 
     Text::~Text() = default;
 
@@ -393,6 +402,10 @@ namespace fheroes2
 
     int32_t Text::height( const int32_t maxWidth ) const
     {
+        if ( _text.empty() ) {
+            return 0;
+        }
+
         const int32_t fontHeight = getFontHeight( _fontType.size );
 
         std::deque<Point> offsets;
@@ -403,6 +416,10 @@ namespace fheroes2
 
     int32_t Text::rows( const int32_t maxWidth ) const
     {
+        if ( _text.empty() ) {
+            return 0;
+        }
+
         const int32_t fontHeight = getFontHeight( _fontType.size );
 
         std::deque<Point> offsets;
@@ -479,6 +496,17 @@ namespace fheroes2
         _fontType = fontType;
     }
 
+    void Text::set( std::string && text, const FontType fontType )
+    {
+        _text = std::move( text );
+        _fontType = fontType;
+    }
+
+    std::string Text::text() const
+    {
+        return _text;
+    }
+
     MultiFontText::~MultiFontText() = default;
 
     void MultiFontText::add( const Text & text )
@@ -488,10 +516,10 @@ namespace fheroes2
         }
     }
 
-    void MultiFontText::add( const Text && text )
+    void MultiFontText::add( Text && text )
     {
         if ( !text._text.empty() ) {
-            _texts.emplace_back( text );
+            _texts.emplace_back( std::move( text ) );
         }
     }
 
@@ -533,12 +561,24 @@ namespace fheroes2
 
     int32_t MultiFontText::rows( const int32_t maxWidth ) const
     {
+        if ( _texts.empty() ) {
+            return 0;
+        }
+
         const int32_t maxFontHeight = height();
 
         std::deque<Point> offsets;
         for ( const Text & text : _texts ) {
+            if ( text._text.empty() ) {
+                continue;
+            }
+
             getMultiRowInfo( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), maxWidth, text._fontType, maxFontHeight,
                              offsets );
+        }
+
+        if ( offsets.empty() ) {
+            return 0;
         }
 
         return offsets.back().y / maxFontHeight + 1;
@@ -622,5 +662,16 @@ namespace fheroes2
     bool MultiFontText::empty() const
     {
         return _texts.empty();
+    }
+
+    std::string MultiFontText::text() const
+    {
+        std::string output;
+
+        for ( const Text & singleText : _texts ) {
+            output += singleText.text();
+        }
+
+        return output;
     }
 }

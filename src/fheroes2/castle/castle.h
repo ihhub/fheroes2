@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -119,19 +120,29 @@ public:
 
     Castle();
     Castle( s32, s32, int rs );
+    Castle( const Castle & ) = delete;
     ~Castle() override = default;
+
+    Castle & operator=( const Castle & ) = delete;
 
     void LoadFromMP2( std::vector<uint8_t> & data );
 
-    Captain & GetCaptain( void );
-    const Captain & GetCaptain( void ) const;
+    Captain & GetCaptain()
+    {
+        return captain;
+    }
+
+    const Captain & GetCaptain() const
+    {
+        return captain;
+    }
 
     bool isCastle( void ) const;
     bool isCapital( void ) const;
     bool HaveNearlySea( void ) const;
     bool PresentBoat( void ) const;
-    bool AllowBuyHero( const Heroes &, std::string * = nullptr ) const;
-    bool isPosition( const fheroes2::Point & ) const;
+    bool AllowBuyHero( std::string * = nullptr ) const;
+    bool isPosition( const fheroes2::Point & pt ) const override;
     bool isNecromancyShrineBuild( void ) const;
 
     u32 CountBuildings( void ) const;
@@ -139,9 +150,15 @@ public:
     Heroes * RecruitHero( Heroes * );
     CastleHeroes GetHeroes( void ) const;
 
-    int GetRace( void ) const;
+    int GetRace() const
+    {
+        return race;
+    }
 
-    const std::string & GetName() const;
+    const std::string & GetName() const
+    {
+        return name;
+    }
 
     // This method must be called only at the time of map loading and only for castles with empty names.
     void setName( const std::set<std::string> & usedNames );
@@ -149,7 +166,12 @@ public:
     int GetControl( void ) const override;
 
     int GetLevelMageGuild( void ) const;
-    const MageGuild & GetMageGuild( void ) const;
+
+    const MageGuild & GetMageGuild() const
+    {
+        return mageguild;
+    }
+
     bool HaveLibraryCapability( void ) const;
     bool isLibraryBuild( void ) const;
     void MageGuildEducateHero( HeroBase & ) const;
@@ -162,7 +184,9 @@ public:
     Army & GetActualArmy( void );
     double GetGarrisonStrength( const Heroes * attackingHero ) const;
     u32 getMonstersInDwelling( u32 ) const;
-    u32 GetActualDwelling( u32 ) const;
+
+    // Returns the correct dwelling type available in the castle. BUILD_NOTHING is returned if this is not a dwelling.
+    uint32_t GetActualDwelling( const uint32_t buildId ) const;
 
     bool RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force = false );
     bool RecruitMonster( const Troop & troop, bool showDialog = true );
@@ -172,13 +196,15 @@ public:
     int getBuildingValue() const;
 
     // Used only for AI.
+    double getArmyRecruitmentValue() const;
     double getVisitValue( const Heroes & hero ) const;
 
     void ChangeColor( int );
 
-    void ActionNewDay( void );
-    void ActionNewWeek( void );
-    void ActionNewMonth( void );
+    void ActionNewDay();
+    void ActionNewWeek();
+    void ActionNewMonth();
+
     void ActionPreBattle( void );
     void ActionAfterBattle( bool attacker_wins );
 
@@ -194,7 +220,12 @@ public:
     int GetLuckModificator( std::string * ) const;
 
     bool AllowBuyBuilding( u32 ) const;
-    bool isBuild( u32 bd ) const;
+
+    bool isBuild( u32 bd ) const
+    {
+        return ( building & bd ) != 0;
+    }
+
     bool BuyBuilding( u32 );
     bool AllowBuyBoat( void ) const;
     bool BuyBoat( void ) const;
@@ -250,6 +281,7 @@ private:
     void OpenWell( void );
     void OpenMageGuild( const CastleHeroes & heroes ) const;
     void WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<fheroes2::RandomMonsterAnimation> & monsterAnimInfo ) const;
+    Troops getAvailableArmy( Funds potentialBudget ) const;
     void JoinRNDArmy( void );
     void PostLoad( void );
 
@@ -345,7 +377,7 @@ class AllCastles
 {
 public:
     AllCastles();
-    AllCastles( AllCastles & ) = delete;
+    AllCastles( const AllCastles & ) = delete;
 
     ~AllCastles();
 

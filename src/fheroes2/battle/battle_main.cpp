@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,6 +38,8 @@
 #include "skill.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
 namespace Battle
@@ -109,9 +112,9 @@ namespace
         }
     }
 
-    size_t computeBattleSeed( const int32_t mapIndex, const uint32_t mapSeed, const Army & army1, const Army & army2 )
+    uint32_t computeBattleSeed( const int32_t mapIndex, const uint32_t mapSeed, const Army & army1, const Army & army2 )
     {
-        size_t seed = static_cast<size_t>( mapIndex ) + static_cast<size_t>( mapSeed );
+        uint32_t seed = static_cast<uint32_t>( mapIndex ) + mapSeed;
 
         for ( size_t i = 0; i < army1.Size(); ++i ) {
             const Troop * troop = army1.GetTroop( i );
@@ -207,8 +210,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         showBattle = true;
 #endif
 
-    const size_t battleSeed = Settings::Get().ExtBattleDeterministicResult() ? computeBattleSeed( mapsindex, world.GetMapSeed(), army1, army2 )
-                                                                             : Rand::Get( std::numeric_limits<uint32_t>::max() );
+    const uint32_t battleSeed = Settings::Get().ExtBattleDeterministicResult() ? computeBattleSeed( mapsindex, world.GetMapSeed(), army1, army2 )
+                                                                               : Rand::Get( std::numeric_limits<uint32_t>::max() );
 
     bool isBattleOver = false;
     while ( !isBattleOver ) {
@@ -302,7 +305,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     }
 
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
-    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army1.String() );
+    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() );
 
     // update army
     if ( commander1 && commander1->isHeroes() ) {
@@ -369,7 +372,9 @@ void Battle::EagleEyeSkillAction( HeroBase & hero, const SpellStorage & spells, 
             StringReplace( msg, "%{name}", hero.GetName() );
             StringReplace( msg, "%{spell}", sp.GetName() );
             Game::PlayPickupSound();
-            Dialog::SpellInfo( "", msg, sp );
+
+            const fheroes2::SpellDialogElement spellUI( sp, &hero );
+            fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK, { &spellUI } );
         }
     }
 

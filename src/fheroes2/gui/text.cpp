@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -321,10 +322,6 @@ int32_t Text::getFitWidth( const std::string & text, const int fontId, const int
 
     return fitWidth;
 }
-
-TextBox::TextBox()
-    : align( ALIGN_CENTER )
-{}
 
 TextBox::TextBox( const std::string & msg, int ft, uint32_t width_ )
     : align( ALIGN_CENTER )

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -245,6 +246,8 @@ u32 Maps::Tiles::QuantityGold( void ) const
         case 1:
             return 1000;
         case 2:
+        case 4:
+            // Case 4 gives 2000 gold and an artifact.
             return 2000;
         case 3:
             return 5000;
@@ -267,9 +270,9 @@ ResourceCount Maps::Tiles::QuantityResourceCount( void ) const
         case 1:
             return ResourceCount( Resource::GOLD, QuantityGold() );
         case 2:
-            return ResourceCount( Resource::FromIndexSprite2( QuantityExt() - 1 ), 3 );
+            return ResourceCount( Resource::getResourceTypeFromIconIndex( QuantityExt() - 1 ), 3 );
         case 3:
-            return ResourceCount( Resource::FromIndexSprite2( QuantityExt() - 1 ), 5 );
+            return ResourceCount( Resource::getResourceTypeFromIconIndex( QuantityExt() - 1 ), 5 );
         default:
             break;
         }
@@ -445,7 +448,7 @@ void Maps::Tiles::QuantityReset( void )
         break;
     }
 
-    if ( MP2::isPickupObject( static_cast<MP2::MapObjectType>( mp2_object ) ) )
+    if ( MP2::isPickupObject( mp2_object ) )
         setAsEmpty();
 }
 
@@ -528,8 +531,10 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
                 QuantitySetVariant( cond );
                 QuantitySetArtifact( art );
 
-                if ( cond == 2 || cond == 3 )
-                    QuantitySetExt( Resource::GetIndexSprite2( Resource::Rand( false ) ) + 1 );
+                if ( cond == 2 || cond == 3 ) {
+                    // TODO: why do we use icon ICN index instead of map ICN index?
+                    QuantitySetExt( Resource::getIconIcnIndex( Resource::Rand( false ) ) + 1 );
+                }
             }
         }
         break;
@@ -885,8 +890,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
 
     case MP2::OBJ_BARROWMOUNDS:
-        if ( !Settings::Get().ExtWorldDisableBarrowMounds() )
-            UpdateDwellingPopulation( *this, isFirstLoad );
+        UpdateDwellingPopulation( *this, isFirstLoad );
         break;
 
     default:
@@ -1097,9 +1101,13 @@ void Maps::Tiles::UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad )
 void Maps::Tiles::UpdateMonsterPopulation( Tiles & tile )
 {
     const Troop & troop = tile.QuantityTroop();
+    const uint32_t troopCount = troop.GetCount();
 
-    if ( 0 == troop.GetCount() )
+    if ( troopCount == 0 ) {
         tile.MonsterSetCount( troop.GetRNDSize( false ) );
-    else if ( !tile.MonsterFixedCount() )
-        tile.MonsterSetCount( troop.GetCount() * 8 / 7 );
+    }
+    else if ( !tile.MonsterFixedCount() ) {
+        const uint32_t bonusUnit = ( Rand::Get( 1, 7 ) <= ( troopCount % 7 ) ) ? 1 : 0;
+        tile.MonsterSetCount( troopCount * 8 / 7 + bonusUnit );
+    }
 }

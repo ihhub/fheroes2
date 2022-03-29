@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -139,8 +140,6 @@ fheroes2::GameMode Game::Load( const std::string & fn )
         return fheroes2::GameMode::CANCEL;
     }
 
-    Game::ShowMapLoadingText();
-
     char major;
     char minor;
     fs >> major >> minor;
@@ -227,9 +226,15 @@ fheroes2::GameMode Game::Load( const std::string & fn )
 
     if ( conf.isCampaignGameType() ) {
         Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
-        fz >> saveData;
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0912_RELEASE, "Remove the usage of loadOldSaveSata method." );
+        if ( binver < FORMAT_VERSION_0912_RELEASE ) {
+            Campaign::CampaignSaveData::loadOldSaveSata( fz, saveData );
+        }
+        else {
+            fz >> saveData;
+        }
 
-        if ( !saveData.isStarting() && saveData.getCurrentScenarioID() == saveData.getLastCompletedScenarioID() ) {
+        if ( !saveData.isStarting() && saveData.getCurrentScenarioInfoId() == saveData.getLastCompletedScenarioInfoID() ) {
             // This is the end of the current scenario. We should show next scenario selection.
             returnValue = fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO_FROM_LOAD_FILE;
         }

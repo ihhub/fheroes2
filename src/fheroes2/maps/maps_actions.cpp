@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,6 +27,8 @@
 #include "kingdom.h"
 #include "serialize.h"
 #include "text.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
 StreamBase & operator<<( StreamBase & sb, const ActionSimple & st )
@@ -225,8 +228,10 @@ bool ActionDefault::Action( const ActionDefault * act )
 bool ActionArtifact::Action( ActionArtifact * act, Heroes & hero )
 {
     if ( act && act->artifact != Artifact::UNKNOWN ) {
-        if ( !act->message.empty() )
-            Dialog::ArtifactInfo( "", act->message, act->artifact );
+        if ( !act->message.empty() ) {
+            const fheroes2::ArtifactDialogElement artifactUI( act->artifact );
+            fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( act->message, fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
+        }
         hero.PickupArtifact( act->artifact );
         act->artifact = Artifact::UNKNOWN;
         return true;
@@ -238,7 +243,7 @@ bool ActionArtifact::Action( ActionArtifact * act, Heroes & hero )
 bool ActionResources::Action( ActionResources * act, const Heroes & hero )
 {
     if ( act && 0 < act->resources.GetValidItems() ) {
-        Dialog::ResourceInfo( "", act->message, act->resources );
+        fheroes2::showResourceMessage( fheroes2::Text( "", {} ), fheroes2::Text( act->message, fheroes2::FontType::normalWhite() ), Dialog::OK, act->resources );
         hero.GetKingdom().AddFundsResource( act->resources );
         act->resources.Reset();
         return true;

@@ -10,7 +10,7 @@ AppPublisherURL="https://github.com/ihhub/fheroes2"
 AppUpdatesURL="https://github.com/ihhub/fheroes2/releases"
 AppSupportURL="https://discord.gg/xF85vbZ"
 LicenseFile=..\..\LICENSE
-OutputBaseFilename={#AppName}_windows_{#Platform}_{#DeployConfName}
+OutputBaseFilename={#AppName}_windows_{#Platform}_{#DeployConfName}_installer
 DefaultDirName={pf}\{#AppName}
 DefaultGroupName={#AppName}
 UninstallDisplayIcon={app}\{#AppName}.exe
@@ -23,13 +23,6 @@ ArchitecturesInstallIn64BitMode=x64
 Source: "{#BuildDir}\{#AppName}.exe"; DestDir: "{app}"
 Source: "{#BuildDir}\lib*.dll"; DestDir: "{app}"
 Source: "{#BuildDir}\SDL*.dll"; DestDir: "{app}"
-#if DeployConfName == 'SDL2'
-Source: "{#BuildDir}\zlib*.dll"; DestDir: "{app}"
-#endif
-#if Platform == 'x86'
-Source: "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll"; DestDir: "{app}"
-Source: "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\vcruntime140.dll"; DestDir: "{app}"
-#endif
 Source: "..\..\docs\README.txt"; DestDir: "{app}"
 Source: "..\demo\download_demo_version.bat"; DestDir: "{app}"
 Source: "..\demo\download_demo_version.ps1"; DestDir: "{app}"

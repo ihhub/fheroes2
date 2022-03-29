@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,6 +40,12 @@ struct WorldNode : public PathfindingNode<MP2::MapObjectType>
         , _remainingMovePoints( remainingMovePoints )
     {}
 
+    WorldNode( const WorldNode & ) = delete;
+    WorldNode( WorldNode && ) = default;
+
+    WorldNode & operator=( const WorldNode & ) = delete;
+    WorldNode & operator=( WorldNode && ) = default;
+
     void resetNode() override
     {
         PathfindingNode::resetNode();
@@ -53,6 +59,9 @@ class WorldPathfinder : public Pathfinder<WorldNode>
 {
 public:
     WorldPathfinder() = default;
+    WorldPathfinder( const WorldPathfinder & ) = delete;
+
+    WorldPathfinder & operator=( const WorldPathfinder & ) = delete;
 
     // This method resizes the cache and re-calculates map offsets if values are out of sync with World class
     virtual void checkWorldSize();
@@ -84,11 +93,14 @@ class PlayerWorldPathfinder : public WorldPathfinder
 {
 public:
     PlayerWorldPathfinder() = default;
+    PlayerWorldPathfinder( const PlayerWorldPathfinder & ) = delete;
+
+    PlayerWorldPathfinder & operator=( const PlayerWorldPathfinder & ) = delete;
 
     void reset() override;
 
     void reEvaluateIfNeeded( const Heroes & hero );
-    std::list<Route::Step> buildPath( int targetIndex ) const;
+    std::list<Route::Step> buildPath( const int targetIndex ) const;
 
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx ) override;
@@ -101,6 +113,10 @@ public:
         : _advantage( advantage )
     {}
 
+    AIWorldPathfinder( const AIWorldPathfinder & ) = delete;
+
+    AIWorldPathfinder & operator=( const AIWorldPathfinder & ) = delete;
+
     void reset() override;
 
     void reEvaluateIfNeeded( const Heroes & hero );
@@ -112,13 +128,13 @@ public:
 
     bool isHeroPossiblyBlockingWay( const Heroes & hero );
 
-    std::vector<IndexObject> getObjectsOnTheWay( int targetIndex, bool checkAdjacent = false );
+    std::vector<IndexObject> getObjectsOnTheWay( const int targetIndex, const bool checkAdjacent = false ) const;
 
     // Used for non-hero armies, like castles or monsters
     uint32_t getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill = Skill::Level::EXPERT );
 
     // Override builds path to the nearest valid object
-    std::list<Route::Step> buildPath( int targetIndex, bool isPlanningMode = false ) const;
+    std::list<Route::Step> buildPath( const int targetIndex, const bool isPlanningMode = false ) const;
 
     // Faster, but does not re-evaluate the map (expose base class method)
     using Pathfinder::getDistance;
@@ -128,7 +144,7 @@ public:
         return _advantage;
     }
 
-    void setArmyStrengthMultplier( const double multiplier );
+    void setArmyStrengthMultiplier( const double multiplier );
 
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx ) override;

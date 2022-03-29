@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +23,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 
 #include "army.h"
 #include "castle.h"
@@ -30,6 +32,8 @@
 #include "race.h"
 #include "serialize.h"
 #include "settings.h"
+#include "spell_info.h"
+#include "tools.h"
 #include "translations.h"
 #include "world.h"
 
@@ -443,6 +447,43 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res ) const
         return false;
     }
 
+    const Heroes * hero = dynamic_cast<const Heroes *>( this );
+    if ( spell.isAdventure() && hero == nullptr ) {
+        // How is it possible that a captain can access this spell?
+        assert( 0 );
+        if ( res != nullptr ) {
+            *res = _( "Only heroes can cast this spell." );
+        }
+        return false;
+    }
+
+    if ( spell == Spell::TOWNGATE ) {
+        const Castle * castle = fheroes2::getNearestCastleTownGate( *hero );
+        if ( castle == nullptr ) {
+            if ( res != nullptr ) {
+                *res = _( "You do not currently own any town or castle, so you can't cast the spell." );
+            }
+            return false;
+        }
+
+        if ( castle->GetIndex() == hero->GetIndex() ) {
+            if ( res != nullptr ) {
+                *res = _( "This hero is already in a town, so you can't cast the spell." );
+            }
+            return false;
+        }
+
+        const Heroes * townGuest = castle->GetHeroes().Guest();
+        if ( townGuest != nullptr ) {
+            if ( res != nullptr ) {
+                *res = _( "The nearest town is %{town}.\n \nThis town is occupied by your hero %{hero}." );
+                StringReplace( *res, "%{town}", castle->GetName() );
+                StringReplace( *res, "%{hero}", townGuest->GetName() );
+            }
+            return false;
+        }
+    }
+
     if ( res ) {
         res->clear();
     }
@@ -471,14 +512,6 @@ bool HeroBase::CanTranscribeScroll( const Artifact & art ) const
     }
 
     return false;
-}
-
-bool HeroBase::CanTeachSpell( const Spell & spell ) const
-{
-    const int learning = GetLevelSkill( Skill::Secondary::EAGLEEYE );
-
-    return ( ( 4 == spell.Level() && Skill::Level::EXPERT == learning ) || ( 3 == spell.Level() && Skill::Level::ADVANCED <= learning )
-             || ( 3 > spell.Level() && Skill::Level::BASIC <= learning ) );
 }
 
 bool HeroBase::CanLearnSpell( const Spell & spell ) const

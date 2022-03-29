@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -161,18 +162,43 @@ public:
         UNKNOWN
     };
 
-    Artifact( int = UNKNOWN );
+    Artifact( int art = UNKNOWN )
+        : id( art >= 0 && art < UNKNOWN ? art : UNKNOWN )
+        , ext( 0 )
+    {
+        // Do nothing;
+    }
 
     bool operator==( const Spell & ) const;
-    bool operator==( const Artifact & ) const;
-    bool operator!=( const Artifact & ) const;
-    int GetID( void ) const;
+
+    bool operator==( const Artifact & art ) const
+    {
+        return id == art.id;
+    }
+
+    bool operator!=( const Artifact & art ) const
+    {
+        return id != art.id;
+    }
+
+    int GetID() const
+    {
+        return id;
+    }
 
     bool isUltimate( void ) const;
     bool isAlchemistRemove( void ) const;
-    bool isValid( void ) const;
 
-    void Reset( void );
+    bool isValid() const
+    {
+        return id != UNKNOWN;
+    }
+
+    void Reset()
+    {
+        id = UNKNOWN;
+        ext = 0;
+    }
 
     u32 ExtraValue( void ) const;
     int Level( void ) const;
@@ -180,12 +206,23 @@ public:
     int Type( void ) const;
     int getArtifactValue() const;
 
-    /* objnarti.icn */
-    u32 IndexSprite( void ) const;
-    /* artfx.icn */
-    u32 IndexSprite32( void ) const;
-    /* artifact.icn */
-    u32 IndexSprite64( void ) const;
+    // return index sprite objnarti.icn
+    u32 IndexSprite() const
+    {
+        return id < UNKNOWN ? id * 2 + 1 : 0;
+    }
+
+    // artfx.icn
+    u32 IndexSprite32() const
+    {
+        return id;
+    }
+
+    // reutrn index from artifact.icn
+    u32 IndexSprite64() const
+    {
+        return id + 1;
+    }
 
     void SetSpell( int );
     int GetSpell( void ) const;
@@ -195,7 +232,7 @@ public:
 
     static int Rand( level_t );
     static Artifact FromMP2IndexSprite( u32 );
-    static const char * GetScenario( const Artifact & );
+    static const char * getDiscoveryDescription( const Artifact & );
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Artifact & );

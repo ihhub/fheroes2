@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -170,7 +171,7 @@ void MapSphinx::LoadFromMP2( s32 index, StreamBuf st )
 bool MapSphinx::AnswerCorrect( const std::string & answer )
 {
     const std::string ans = StringLower( answer ).substr( 0, 4 );
-    auto checkAnswer = [ans]( const std::string & str ) { return StringLower( str ).substr( 0, 4 ) == ans; };
+    auto checkAnswer = [&ans]( const std::string & str ) { return StringLower( str ).substr( 0, 4 ) == ans; };
     return std::any_of( answers.begin(), answers.end(), checkAnswer );
 }
 

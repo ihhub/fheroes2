@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -276,36 +277,6 @@ int Battle::Unit::GetMorale() const
     return armyTroopMorale;
 }
 
-bool Battle::Unit::isUID( u32 v ) const
-{
-    return _uid == v;
-}
-
-u32 Battle::Unit::GetUID( void ) const
-{
-    return _uid;
-}
-
-Battle::Unit * Battle::Unit::GetMirror()
-{
-    return mirror;
-}
-
-void Battle::Unit::SetMirror( Unit * ptr )
-{
-    mirror = ptr;
-}
-
-u32 Battle::Unit::GetShots( void ) const
-{
-    return shots;
-}
-
-const Battle::Position & Battle::Unit::GetPosition( void ) const
-{
-    return position;
-}
-
 s32 Battle::Unit::GetHeadIndex( void ) const
 {
     return position.GetHead() ? position.GetHead()->GetIndex() : -1;
@@ -359,11 +330,6 @@ bool Battle::Unit::isValid( void ) const
     return GetCount() != 0;
 }
 
-bool Battle::Unit::isReflect( void ) const
-{
-    return reflect;
-}
-
 bool Battle::Unit::OutOfWalls( void ) const
 {
     return Board::isOutOfWallsIndex( GetHeadIndex() ) || ( isWide() && Board::isOutOfWallsIndex( GetTailIndex() ) );
@@ -392,15 +358,15 @@ bool Battle::Unit::canReach( const Unit & unit ) const
     return canReach( target );
 }
 
-bool Battle::Unit::isHandFighting( void ) const
+bool Battle::Unit::isHandFighting() const
 {
     if ( GetCount() && !Modes( CAP_TOWER ) ) {
-        const Indexes around = Board::GetAroundIndexes( *this );
+        for ( const int32_t nearbyIdx : Board::GetAroundIndexes( *this ) ) {
+            const Unit * nearbyUnit = Board::GetCell( nearbyIdx )->GetUnit();
 
-        for ( Indexes::const_iterator it = around.begin(); it != around.end(); ++it ) {
-            const Unit * enemy = Board::GetCell( *it )->GetUnit();
-            if ( enemy && enemy->GetColor() != GetColor() )
+            if ( nearbyUnit && nearbyUnit->GetColor() != GetCurrentColor() ) {
                 return true;
+            }
         }
     }
 
@@ -416,19 +382,9 @@ bool Battle::Unit::isHandFighting( const Unit & a, const Unit & b )
                           || ( b.isWide() && Board::isNearIndexes( a.GetTailIndex(), b.GetTailIndex() ) ) ) ) );
 }
 
-int Battle::Unit::GetAnimationState() const
-{
-    return animation.getCurrentState();
-}
-
 bool Battle::Unit::isIdling() const
 {
     return GetAnimationState() == Monster_Info::IDLE;
-}
-
-bool Battle::Unit::checkIdleDelay()
-{
-    return idleTimer.checkDelay();
 }
 
 void Battle::Unit::NewTurn( void )
@@ -766,9 +722,6 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
         return false;
     }
 
-    // check global
-    // if(GetArena()->DisableCastSpell(spell, msg)) return false; // disable - recursion!
-
     if ( hero && spell.isApplyToFriends() && GetColor() != hero->GetColor() )
         return false;
     if ( hero && spell.isApplyToEnemies() && GetColor() == hero->GetColor() && !forceApplyToAlly )
@@ -972,14 +925,11 @@ std::string Battle::Unit::String( bool more ) const
         GetCount() << " " << GetName() << ", " << Color::String( GetColor() ) << ", pos: " << GetHeadIndex() << ", " << GetTailIndex() << ( reflect ? ", reflect" : "" );
 
     if ( more )
-        ss << ", mode("
-           << "0x" << std::hex << modes << std::dec << ")"
-           << ", uid("
-           << "0x" << std::setw( 8 ) << std::setfill( '0' ) << std::hex << _uid << std::dec << ")"
+        ss << ", mode(" << GetHexString( modes ) << ")"
+           << ", uid(" << GetHexString( _uid ) << ")"
            << ", speed(" << Speed::String( GetSpeed() ) << ", " << static_cast<int>( GetSpeed() ) << ")"
            << ", hp(" << hp << ")"
-           << ", die(" << dead << ")"
-           << ")";
+           << ", died(" << dead << ")";
 
     ss << " ]";
 
@@ -1164,6 +1114,12 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
 u32 Battle::Unit::GetHitPoints( void ) const
 {
     return hp;
+}
+
+payment_t Battle::Unit::GetCost() const
+{
+    // Resurrected (not truly resurrected) units should not be taken into account when calculating the cost of surrender
+    return Monster::GetCost() * ( GetDead() > GetInitialCount() ? 0 : GetInitialCount() - GetDead() );
 }
 
 int Battle::Unit::GetControl( void ) const
@@ -1601,31 +1557,6 @@ bool Battle::Unit::isHaveDamage( void ) const
     return hp < count0 * Monster::GetHitPoints();
 }
 
-int Battle::Unit::GetFrame( void ) const
-{
-    return animation.getFrame();
-}
-
-void Battle::Unit::SetCustomAlpha( uint32_t alpha )
-{
-    customAlphaMask = alpha;
-}
-
-uint32_t Battle::Unit::GetCustomAlpha() const
-{
-    return customAlphaMask;
-}
-
-void Battle::Unit::IncreaseAnimFrame( bool loop )
-{
-    animation.playAnimation( loop );
-}
-
-bool Battle::Unit::isFinishAnimFrame( void ) const
-{
-    return animation.isLastFrame();
-}
-
 bool Battle::Unit::SwitchAnimation( int rule, bool reverse )
 {
     animation.switchAnimation( rule, reverse );
@@ -1669,24 +1600,17 @@ int Battle::Unit::M82Wnce() const
 
 int Battle::Unit::M82Expl( void ) const
 {
-    switch ( GetID() ) {
-    case Monster::VAMPIRE:
-    case Monster::VAMPIRE_LORD:
-        return M82::VAMPEXT1;
-    case Monster::LICH:
-    case Monster::POWER_LICH:
-        return M82::LICHEXPL;
-
-    default:
-        break;
-    }
-
-    return M82::UNKNOWN;
+    return fheroes2::getMonsterData( id ).sounds.explosion;
 }
 
-fheroes2::Rect Battle::Unit::GetRectPosition() const
+int Battle::Unit::M82Tkof() const
 {
-    return position.GetRect();
+    return fheroes2::getMonsterData( id ).sounds.takeoff;
+}
+
+int Battle::Unit::M82Land() const
+{
+    return fheroes2::getMonsterData( id ).sounds.landing;
 }
 
 fheroes2::Point Battle::Unit::GetBackPoint() const
@@ -1708,11 +1632,6 @@ fheroes2::Point Battle::Unit::GetCenterPoint() const
 fheroes2::Point Battle::Unit::GetStartMissileOffset( size_t direction ) const
 {
     return animation.getProjectileOffset( direction );
-}
-
-int Battle::Unit::GetArmyColor( void ) const
-{
-    return ArmyTroop::GetColor();
 }
 
 int Battle::Unit::GetColor( void ) const

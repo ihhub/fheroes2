@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,19 +40,29 @@ namespace
         fheroes2::DrawRect( image, roi, color );
         fheroes2::DrawRect( image, fheroes2::Rect( roi.x - 1, roi.y - 1, roi.width + 2, roi.height + 2 ), color );
     }
+
+    void playAudio( const std::vector<std::vector<uint8_t>> & audioChannels )
+    {
+        for ( const std::vector<uint8_t> & audio : audioChannels ) {
+            if ( !audio.empty() ) {
+                Mixer::Play( &audio[0], static_cast<uint32_t>( audio.size() ) );
+            }
+        }
+    }
 }
 
 namespace Video
 {
-    bool isVideoFile( const std::string & fileName, std::string & path )
+    bool getVideoFilePath( const std::string & fileName, std::string & path )
     {
-        std::string temp;
+        std::string fullPath;
 
-        for ( size_t i = 0; i < videoDir.size(); ++i ) {
-            ListFiles files = Settings::FindFiles( videoDir[i], fileName, true );
-            for ( std::string & name : files ) {
-                if ( System::IsFile( name ) ) { // file doesn't exist, so no need to even try to load it
-                    path.swap( name );
+        for ( const std::string & rootDir : Settings::GetRootDirs() ) {
+            for ( const std::string & localDir : videoDir ) {
+                fullPath = System::ConcatePath( rootDir, localDir );
+                fullPath = System::ConcatePath( fullPath, fileName );
+                if ( System::IsFile( fullPath ) ) {
+                    path.swap( fullPath );
                     return true;
                 }
             }
@@ -67,14 +77,26 @@ namespace Video
         const fheroes2::ScreenPaletteRestorer screenRestorer;
 
         std::string videoPath;
-        if ( !isVideoFile( fileName, videoPath ) ) { // file doesn't exist, so no need to even try to load it
-            DEBUG_LOG( DBG_GAME, DBG_INFO, fileName << " file does not exist" );
+        if ( !getVideoFilePath( fileName, videoPath ) ) {
+            // File doesn't exist, so no need to even try to load it.
+            DEBUG_LOG( DBG_GAME, DBG_INFO, fileName << " video file does not exist." );
             return 0;
         }
 
         SMKVideoSequence video( videoPath );
         if ( video.frameCount() < 1 ) // nothing to show
             return 0;
+
+        const std::vector<std::vector<uint8_t>> & audioChannels = video.getAudioChannels();
+        const bool hasAudio = Audio::isValid() && !audioChannels.empty();
+        if ( action == VideoAction::IGNORE_VIDEO ) {
+            // Since no video is rendered play audio if available.
+            if ( hasAudio ) {
+                playAudio( audioChannels );
+            }
+
+            return 0;
+        }
 
         const bool isLooped = ( action == VideoAction::LOOP_VIDEO || action == VideoAction::PLAY_TILL_AUDIO_END );
 
@@ -98,19 +120,6 @@ namespace Video
 
         const uint32_t delay = static_cast<uint32_t>( 1000.0 / video.fps() + 0.5 ); // This might be not very accurate but it's the best we can have now
 
-        const bool hasSound = Audio::isValid();
-        const std::vector<std::vector<uint8_t> > & sound = video.getAudioChannels();
-        if ( hasSound ) {
-            for ( std::vector<std::vector<uint8_t> >::const_iterator it = sound.begin(); it != sound.end(); ++it ) {
-                if ( !it->empty() )
-                    Mixer::Play( &( *it )[0], static_cast<uint32_t>( it->size() ), -1, false );
-            }
-        }
-
-        if ( action == VideoAction::IGNORE_VIDEO ) {
-            return 0;
-        }
-
         std::vector<uint8_t> palette;
         std::vector<uint8_t> prevPalette;
 
@@ -123,6 +132,11 @@ namespace Video
         Game::passAnimationDelay( Game::CUSTOM_DELAY );
 
         bool userMadeAction = false;
+
+        // Play audio just before rendering the frame. This is important to minimize synchronization issues between audio and video.
+        if ( hasAudio ) {
+            playAudio( audioChannels );
+        }
 
         LocalEvent & le = LocalEvent::Get();
         while ( le.HandleEvents( Game::isCustomDelayNeeded( delay ) ) ) {
@@ -140,7 +154,7 @@ namespace Video
             if ( roi.empty() ) {
                 if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
                     userMadeAction = true;
-                    Mixer::Reset();
+                    Mixer::Stop();
                     break;
                 }
             }
@@ -155,7 +169,7 @@ namespace Video
                 }
 
                 if ( roiChosen ) {
-                    Mixer::Reset();
+                    Mixer::Stop();
                     break;
                 }
             }
@@ -188,11 +202,8 @@ namespace Video
                 if ( isLooped && currentFrame >= video.frameCount() ) {
                     currentFrame = 0;
 
-                    if ( hasSound ) {
-                        for ( std::vector<std::vector<uint8_t> >::const_iterator it = sound.begin(); it != sound.end(); ++it ) {
-                            if ( !it->empty() )
-                                Mixer::Play( &( *it )[0], static_cast<uint32_t>( it->size() ), -1, false );
-                        }
+                    if ( hasAudio ) {
+                        playAudio( audioChannels );
                     }
                 }
             }

@@ -18,7 +18,7 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-ifdef FHEROES2_SDL1
+ifdef FHEROES2_WITH_SDL1
 SDL_LIBS := $(shell sdl-config --libs)
 SDL_FLAGS := $(shell sdl-config --cflags)
 else
@@ -36,8 +36,8 @@ CFLAGS := $(SDL_FLAGS) $(CFLAGS) -I../engine
 all: $(TARGETS)
 
 $(TARGETS): $(addsuffix .cpp, $(TARGETS)) $(LIBENGINE)
-	$(CXX) -c $@.cpp $(CFLAGS)
-	$(CXX) -o $@ $@.o $(LIBS)
+	$(CXX) $(CFLAGS) -c $@.cpp
+	$(CXX) $(LDFLAGS) -o $@ $@.o $(LIBS)
 
 clean:
 	rm -f *.o *.exe $(TARGETS)

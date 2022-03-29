@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,15 +24,27 @@
 #define H2TOOLS_H
 
 #include <bitset>
+#include <iomanip>
 #include <list>
+#include <sstream>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 #include "math_base.h"
 #include "types.h"
 
 std::string GetStringShort( int );
-std::string GetHexString( int value, int width = 8 );
+
+template <typename T, typename = typename std::enable_if<std::is_integral<T>::value>::type>
+std::string GetHexString( T value, int width = 8 )
+{
+    std::ostringstream stream;
+
+    stream << "0x" << std::setw( width ) << std::setfill( '0' ) << std::hex << value;
+
+    return stream.str();
+}
 
 int GetInt( const std::string & );
 int Sign( int );
@@ -74,7 +87,7 @@ namespace fheroes2
     uint32_t calculateCRC32( const uint8_t * data, const size_t length );
 
     template <class T>
-    void hashCombine( std::size_t & seed, const T & v )
+    void hashCombine( uint32_t & seed, const T & v )
     {
         std::hash<T> hasher;
         seed ^= hasher( v ) + 0x9e3779b9 + ( seed << 6 ) + ( seed >> 2 );
@@ -89,6 +102,8 @@ namespace fheroes2
         }
         return result;
     }
+
+    void replaceStringEnding( std::string & output, const char * originalEnding, const char * correctedEnding );
 }
 
 #endif

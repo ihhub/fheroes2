@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -411,8 +412,8 @@ bool Heroes::isInDeepOcean() const
     const bool isHeroMovedHalfOfCell = ( sprite_index < 45 && sprite_index % 9 > 4 );
     const int32_t tileIndex
         = ( isHeroMovedHalfOfCell && Maps::isValidDirection( GetIndex(), direction ) ) ? Maps::GetDirectionIndex( GetIndex(), direction ) : GetIndex();
-    for ( const int32_t aroundIndex : Maps::getAroundIndexes( tileIndex ) ) {
-        if ( !world.GetTiles( aroundIndex ).isWater() ) {
+    for ( const int32_t nearbyIndex : Maps::getAroundIndexes( tileIndex ) ) {
+        if ( !world.GetTiles( nearbyIndex ).isWater() ) {
             return false;
         }
     }
@@ -752,7 +753,6 @@ bool Heroes::MoveStep( bool fast )
 
 void Heroes::AngleStep( int to_direct )
 {
-    // bool check = false;
     bool clockwise = Direction::ShortDistanceClockWise( direction, to_direct );
 
     // start index

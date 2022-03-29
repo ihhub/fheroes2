@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,6 +23,7 @@
 #include "game.h"
 #include "icn.h"
 #include "localevent.h"
+#include "logging.h"
 #include "screen.h"
 #include "settings.h"
 #include "translations.h"
@@ -33,22 +34,12 @@
 #include <algorithm>
 #include <cassert>
 
-namespace fheroes2
+namespace
 {
-    SupportedLanguage selectLanguage( const std::vector<SupportedLanguage> & languages, const SupportedLanguage currentLanguage )
+    bool getLanguage( const std::vector<fheroes2::SupportedLanguage> & languages, fheroes2::SupportedLanguage & chosenLanguage )
     {
-        if ( languages.empty() ) {
-            // Why do you even call this function having 0 languages?
-            assert( 0 );
-            return SupportedLanguage::English;
-        }
-
-        if ( languages.size() == 1 ) {
-            return languages.front();
-        }
-
         size_t selectionId = 0;
-        auto currentLanguageIt = std::find( languages.begin(), languages.end(), currentLanguage );
+        auto currentLanguageIt = std::find( languages.begin(), languages.end(), chosenLanguage );
         if ( currentLanguageIt != languages.end() ) {
             selectionId = static_cast<size_t>( currentLanguageIt - languages.begin() );
         }
@@ -60,31 +51,31 @@ namespace fheroes2
 
         const int32_t languageCount = static_cast<int32_t>( languages.size() );
 
-        Display & display = Display::instance();
+        fheroes2::Display & display = fheroes2::Display::instance();
 
         const int okIcnId = Settings::Get().ExtGameEvilInterface() ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
-        const Sprite & buttonOkayImage = AGG::GetICN( okIcnId, 0 );
+        const fheroes2::Sprite & buttonOkayImage = fheroes2::AGG::GetICN( okIcnId, 0 );
 
-        StandardWindow window( languageAreaWidth + 2 * offsetFromBorders, 90 + languageAreaHeight * languageCount, display );
-        const Rect windowRoi = window.activeArea();
+        fheroes2::StandardWindow window( languageAreaWidth + 2 * offsetFromBorders, 90 + languageAreaHeight * languageCount, display );
+        const fheroes2::Rect windowRoi = window.activeArea();
 
-        ButtonSprite okayButton
+        fheroes2::ButtonSprite okayButton
             = makeButtonWithShadow( windowRoi.x + ( windowRoi.width - buttonOkayImage.width() ) / 2, windowRoi.y + windowRoi.height - 10 - buttonOkayImage.height(),
-                                    buttonOkayImage, AGG::GetICN( okIcnId, 1 ), display );
+                                    buttonOkayImage, fheroes2::AGG::GetICN( okIcnId, 1 ), display );
 
-        const Sprite & unselectedButtonSprite = AGG::GetICN( ICN::CELLWIN, 4 );
-        const Sprite & selectionSprite = AGG::GetICN( ICN::CELLWIN, 5 );
+        const fheroes2::Sprite & unselectedButtonSprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 4 );
+        const fheroes2::Sprite & selectionSprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 5 );
 
-        Sprite selectedButtonSprite = unselectedButtonSprite;
+        fheroes2::Sprite selectedButtonSprite = unselectedButtonSprite;
         Blit( selectionSprite, 0, 0, selectedButtonSprite, selectionSprite.x(), selectionSprite.y(), selectionSprite.width(), selectionSprite.height() );
 
-        ButtonGroup buttonGroup;
+        fheroes2::ButtonGroup buttonGroup;
         for ( int32_t i = 0; i < languageCount; ++i ) {
             buttonGroup.createButton( windowRoi.x + offsetFromBorders + unselectedButtonSprite.width() / 2, windowRoi.y + 40 + languageAreaHeight * i,
                                       unselectedButtonSprite, selectedButtonSprite, i );
         }
 
-        OptionButtonGroup optionButtonGroup;
+        fheroes2::OptionButtonGroup optionButtonGroup;
         for ( size_t i = 0; i < languages.size(); ++i ) {
             optionButtonGroup.addButton( &buttonGroup.button( i ) );
         }
@@ -95,19 +86,19 @@ namespace fheroes2
         buttonGroup.button( selectionId ).press();
         optionButtonGroup.draw();
 
-        const Text title( _( "Choose game language:" ), { FontSize::NORMAL, FontColor::YELLOW } );
+        const fheroes2::Text title( _( "Select Game Language:" ), fheroes2::FontType::normalYellow() );
         title.draw( windowRoi.x + ( windowRoi.width - title.width() ) / 2, windowRoi.y + 10, display );
 
         for ( int32_t i = 0; i < languageCount; ++i ) {
             fheroes2::LanguageSwitcher languageSwitcher( languages[i] );
-            const Text languageName( getLanguageName( languages[i] ), { FontSize::NORMAL, FontColor::WHITE } );
+            const fheroes2::Text languageName( getLanguageName( languages[i] ), fheroes2::FontType::normalWhite() );
             languageName.draw( windowRoi.x + offsetFromBorders + selectedButtonSprite.width() + offsetFromButton,
                                windowRoi.y + 40 + languageAreaHeight * i + 2 + ( selectedButtonSprite.height() - languageName.height() ) / 2, display );
         }
 
         display.render();
 
-        SupportedLanguage chosenLanguage = languages[selectionId];
+        chosenLanguage = languages[selectionId];
 
         std::vector<fheroes2::Rect> languageArea( languages.size() );
         for ( size_t i = 0; i < languages.size(); ++i ) {
@@ -125,7 +116,7 @@ namespace fheroes2
             }
 
             if ( le.MouseClickLeft( okayButton.area() ) || HotKeyCloseWindow ) {
-                break;
+                return false;
             }
 
             for ( size_t i = 0; i < languages.size(); ++i ) {
@@ -133,11 +124,41 @@ namespace fheroes2
                     buttonGroup.button( i ).press();
                     optionButtonGroup.draw();
                     chosenLanguage = languages[i];
-                    break;
+                    return true;
                 }
             }
         }
 
-        return chosenLanguage;
+        return false;
+    }
+}
+
+namespace fheroes2
+{
+    void selectLanguage( const std::vector<SupportedLanguage> & languages, const SupportedLanguage currentLanguage )
+    {
+        if ( languages.empty() ) {
+            // Why do you even call this function having 0 languages?
+            assert( 0 );
+            Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( SupportedLanguage::English ) );
+            return;
+        }
+
+        if ( languages.size() == 1 ) {
+            Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( languages.front() ) );
+            return;
+        }
+
+        size_t selectionId = 0;
+        auto currentLanguageIt = std::find( languages.begin(), languages.end(), currentLanguage );
+        if ( currentLanguageIt != languages.end() ) {
+            selectionId = static_cast<size_t>( currentLanguageIt - languages.begin() );
+        }
+
+        SupportedLanguage chosenLanguage = languages[selectionId];
+
+        while ( getLanguage( languages, chosenLanguage ) ) {
+            Settings::Get().setGameLanguage( fheroes2::getLanguageAbbreviation( chosenLanguage ) );
+        }
     }
 }

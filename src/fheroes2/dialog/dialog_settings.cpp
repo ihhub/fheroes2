@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -129,9 +130,6 @@ void SettingsListBox::ActionListSingleClick( u32 & item )
 
 void Dialog::ExtSettings( bool readonly )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const Settings & conf = Settings::Get();
-
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -142,39 +140,28 @@ void Dialog::ExtSettings( bool readonly )
     text.Blit( area.x + ( area.width - text.w() ) / 2, area.y + 6 );
 
     std::vector<u32> states;
-    states.reserve( 64 );
+    states.reserve( 32 );
 
     states.push_back( Settings::GAME_SAVE_REWRITE_CONFIRM );
     states.push_back( Settings::GAME_REMEMBER_LAST_FOCUS );
     states.push_back( Settings::GAME_SHOW_SYSTEM_INFO );
     states.push_back( Settings::GAME_BATTLE_SHOW_DAMAGE );
-
     states.push_back( Settings::GAME_AUTOSAVE_BEGIN_DAY );
-
-    if ( conf.VideoMode() == fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
-        states.push_back( Settings::GAME_USE_FADE );
-
     states.push_back( Settings::GAME_CONTINUE_AFTER_VICTORY );
     states.push_back( Settings::WORLD_SHOW_TERRAIN_PENALTY );
     states.push_back( Settings::WORLD_ALLOW_SET_GUARDIAN );
     states.push_back( Settings::WORLD_EXT_OBJECTS_CAPTURED );
     states.push_back( Settings::WORLD_SCOUTING_EXTENDED );
     states.push_back( Settings::WORLD_ARTIFACT_CRYSTAL_BALL );
-    states.push_back( Settings::WORLD_EYE_EAGLE_AS_SCHOLAR );
     states.push_back( Settings::WORLD_SCALE_NEUTRAL_ARMIES );
     states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS );
     states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS );
     states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS );
-    states.push_back( Settings::WORLD_DISABLE_BARROW_MOUNDS );
     states.push_back( Settings::HEROES_BUY_BOOK_FROM_SHRINES );
-    states.push_back( Settings::HEROES_COST_DEPENDED_FROM_LEVEL );
     states.push_back( Settings::HEROES_REMEMBER_POINTS_RETREAT );
     states.push_back( Settings::HEROES_TRANSCRIBING_SCROLLS );
     states.push_back( Settings::HEROES_ARENA_ANY_SKILLS );
-
     states.push_back( Settings::CASTLE_ALLOW_GUARDIANS );
-    states.push_back( Settings::CASTLE_MAGEGUILD_POINTS_TURN );
-
     states.push_back( Settings::BATTLE_SOFT_WAITING );
     states.push_back( Settings::BATTLE_REVERSE_WAIT_ORDER );
     states.push_back( Settings::BATTLE_DETERMINISTIC_RESULT );
@@ -188,20 +175,27 @@ void Dialog::ExtSettings( bool readonly )
     const int ah = 340;
 
     listbox.RedrawBackground( area.getPosition() );
-    listbox.SetScrollButtonUp( ICN::ESCROLL, 4, 5, fheroes2::Point( area.x + 295, area.y + 25 ) );
-    listbox.SetScrollButtonDn( ICN::ESCROLL, 6, 7, fheroes2::Point( area.x + 295, area.y + ah + 5 ) );
-    listbox.SetScrollBar( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), fheroes2::Rect( area.x + 298, area.y + 44, 10, ah - 42 ) );
+    listbox.SetScrollButtonUp( ICN::ESCROLL, 4, 5, { area.x + 295, area.y + 25 } );
+    listbox.SetScrollButtonDn( ICN::ESCROLL, 6, 7, { area.x + 295, area.y + ah + 5 } );
+
+    const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
+    const fheroes2::Image scrollbarSlider
+        = fheroes2::generateScrollbarSlider( originalSilder, false, ah - 42, ah / 40, static_cast<int32_t>( states.size() ), { 0, 0, originalSilder.width(), 8 },
+                                             { 0, 7, originalSilder.width(), 8 } );
+
+    listbox.setScrollBarArea( { area.x + 298, area.y + 44, 10, ah - 42 } );
+    listbox.setScrollBarImage( scrollbarSlider );
     listbox.SetAreaMaxItems( ah / 40 );
     listbox.SetAreaItems( fheroes2::Rect( area.x + 10, area.y + 30, 290, ah + 5 ) );
     listbox.SetListContent( states );
     listbox.Redraw();
 
-    LocalEvent & le = LocalEvent::Get();
-
     const fheroes2::Rect buttonsArea( area.x + 5, area.y, area.width - 10, area.height - 5 );
 
-    const int buttonIcnId = conf.ExtGameEvilInterface() ? ICN::SPANBTNE : ICN::SPANBTN;
+    const int buttonIcnId = Settings::Get().ExtGameEvilInterface() ? ICN::SPANBTNE : ICN::SPANBTN;
     const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( buttonIcnId, 0 );
+
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     fheroes2::ButtonSprite buttonOk
         = fheroes2::makeButtonWithShadow( buttonsArea.x + ( buttonsArea.width - buttonSprite.width() ) / 2, buttonsArea.y + buttonsArea.height - buttonSprite.height(),
@@ -211,6 +205,7 @@ void Dialog::ExtSettings( bool readonly )
     display.render();
 
     // message loop
+    LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 

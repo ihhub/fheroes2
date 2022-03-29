@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,6 +42,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 #include "world.h"
 
@@ -217,16 +219,14 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
             // upgrade
             if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::EVENT_UPGRADE_TROOP ) ) ) {
                 if ( UPGRADE_DISABLE & flags ) {
-                    const std::string msg( _( "You can't afford to upgrade your troops!" ) );
-                    if ( Dialog::YES == Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), Dialog::OK ) ) {
-                        result = Dialog::UPGRADE;
-                        break;
-                    }
+                    const fheroes2::Text description( _( "You can't afford to upgrade your troops!" ), fheroes2::FontType::normalWhite() );
+                    fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::OK, troop.GetUpgradeCost() );
                 }
                 else {
-                    const std::string msg = _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" );
+                    const fheroes2::Text description( _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" ),
+                                                      fheroes2::FontType::normalWhite() );
 
-                    if ( Dialog::YES == Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), Dialog::YES | Dialog::NO ) ) {
+                    if ( fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::YES | Dialog::NO, troop.GetUpgradeCost() ) == Dialog::YES ) {
                         result = Dialog::UPGRADE;
                         break;
                     }
@@ -248,7 +248,7 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
 
             for ( const auto & spellInfo : spellAreas ) {
                 if ( le.MousePressRight( spellInfo.first ) ) {
-                    Dialog::SpellInfo( spellInfo.second, nullptr, false );
+                    fheroes2::SpellDialogElement( spellInfo.second, nullptr ).showPopup( Dialog::ZERO );
                     break;
                 }
             }
@@ -538,13 +538,13 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
     if ( !descriptions.empty() ) {
         const int32_t descriptionWidth = 210;
         const int32_t maximumRowCount = 3;
-        const int32_t rowHeight = fheroes2::Text( std::string(), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } ).height();
+        const int32_t rowHeight = fheroes2::Text( std::string(), fheroes2::FontType::smallWhite() ).height();
 
         bool asSolidText = true;
         if ( descriptions.size() <= static_cast<size_t>( maximumRowCount ) ) {
             asSolidText = false;
             for ( const std::string & sentence : descriptions ) {
-                if ( fheroes2::Text( sentence, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } ).width() > descriptionWidth ) {
+                if ( fheroes2::Text( sentence, fheroes2::FontType::smallWhite() ).width() > descriptionWidth ) {
                     asSolidText = true;
                     break;
                 }
@@ -561,7 +561,7 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
                 description += sentence;
             }
 
-            const fheroes2::Text descriptionText( description, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+            const fheroes2::Text descriptionText( description, fheroes2::FontType::smallWhite() );
             const int32_t rowCount = descriptionText.rows( descriptionWidth );
 
             descriptionText.draw( offset.x + 37, offset.y + 185 + ( maximumRowCount - rowCount ) * rowHeight, descriptionWidth, fheroes2::Display::instance() );
@@ -569,7 +569,7 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
         else {
             int32_t sentenceId = maximumRowCount - static_cast<int32_t>( descriptions.size() ); // safe to cast as we check the size before.
             for ( const std::string & sentence : descriptions ) {
-                const fheroes2::Text descriptionText( sentence, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+                const fheroes2::Text descriptionText( sentence, fheroes2::FontType::smallWhite() );
 
                 descriptionText.draw( offset.x + 37, offset.y + 185 + sentenceId * rowHeight, descriptionWidth, fheroes2::Display::instance() );
                 ++sentenceId;
@@ -621,7 +621,7 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     const Text title( _( "Followers" ), Font::YELLOW_BIG );
 
     std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you.\nDo you accept?" );
-    StringReplace( message, "%{monster}", StringLower( troop.GetMultiName() ) );
+    StringReplace( message, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
 
     TextBox textbox( message, Font::BIG, BOXAREA_WIDTH );
     const int buttons = Dialog::YES | Dialog::NO;
@@ -647,8 +647,6 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() || hero.GetArmy().HasMonster( troop ) )
         btnHeroes.disable();
     else {
-        // TextBox textbox2(_("Not room in\nthe garrison"), Font::SMALL, 100);
-        // textbox2.Blit(btnHeroes.x - 35, btnHeroes.y - 30);
         btnHeroes.draw();
         btnGroup.button( 0 ).disable();
     }
@@ -714,7 +712,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
     StringReplace( message, "%{offer}", join );
     StringReplace( message, "%{total}", troop.GetCount() );
-    StringReplace( message, "%{monster}", StringLower( troop.GetPluralName( join ) ) );
+    StringReplace( message, "%{monster}", Translation::StringLower( troop.GetPluralName( join ) ) );
     StringReplace( message, "%{gold}", gold );
 
     TextBox textbox( message, Font::BIG, BOXAREA_WIDTH );

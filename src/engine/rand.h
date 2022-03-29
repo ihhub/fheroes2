@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -126,14 +127,14 @@ namespace Rand
     class DeterministicRandomGenerator
     {
     public:
-        explicit DeterministicRandomGenerator( const size_t initialSeed );
+        explicit DeterministicRandomGenerator( const uint32_t initialSeed );
 
         // prevent accidental copies
         DeterministicRandomGenerator( const DeterministicRandomGenerator & ) = delete;
         DeterministicRandomGenerator & operator=( const DeterministicRandomGenerator & ) = delete;
 
-        size_t GetSeed() const;
-        void UpdateSeed( const size_t seed );
+        uint32_t GetSeed() const;
+        void UpdateSeed( const uint32_t seed );
 
         uint32_t Get( const uint32_t from, const uint32_t to = 0 ) const;
 
@@ -141,7 +142,7 @@ namespace Rand
         const T & Get( const std::vector<T> & vec ) const
         {
             ++_currentSeed;
-            std::mt19937 seededGen( static_cast<uint32_t>( _currentSeed ) );
+            std::mt19937 seededGen( _currentSeed );
             return Rand::GetWithGen( vec, seededGen );
         }
 
@@ -149,11 +150,11 @@ namespace Rand
         void Shuffle( std::vector<T> & vector ) const
         {
             ++_currentSeed;
-            Rand::ShuffleWithSeed( vector, static_cast<uint32_t>( _currentSeed ) );
+            Rand::ShuffleWithSeed( vector, _currentSeed );
         }
 
     private:
-        mutable size_t _currentSeed; // this is mutable so clients that only call RNG method can receive a const instance
+        mutable uint32_t _currentSeed; // this is mutable so clients that only call RNG method can receive a const instance
     };
 }
 

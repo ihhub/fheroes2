@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,6 +38,7 @@
 #include "speed.h"
 #include "text.h"
 #include "translations.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 
 namespace
@@ -126,7 +128,7 @@ void Castle::OpenWell( void )
     buttonExit.draw();
 
     std::vector<fheroes2::RandomMonsterAnimation> monsterAnimInfo;
-    monsterAnimInfo.emplace_back( Monster( race, DWELLING_MONSTER1 ) );
+    monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER1 ) ) );
     monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER2 ) ) );
     monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER3 ) ) );
     monsterAnimInfo.emplace_back( Monster( race, GetActualDwelling( DWELLING_MONSTER4 ) ) );
@@ -195,36 +197,38 @@ void Castle::OpenWell( void )
                     Dialog::Message( "", _( "No creatures available for purchase." ), Font::BIG, Dialog::OK );
                 }
             }
-            else if ( Dialog::YES == Dialog::ResourceInfo( _( "Buy Creatures" ), str, total, Dialog::YES | Dialog::NO ) ) {
+            else if ( fheroes2::showResourceMessage( fheroes2::Text( _( "Buy Creatures" ), fheroes2::FontType::normalYellow() ),
+                                                     fheroes2::Text( str, fheroes2::FontType::normalWhite() ), Dialog::YES | Dialog::NO, total )
+                      == Dialog::YES ) {
                 for ( const Troop & troop : results ) {
                     RecruitMonster( troop, false );
                 }
             }
         }
         else if ( ( building & DWELLING_MONSTER1 ) && ( le.MouseClickLeft( rectMonster1 ) || pressedHotkeyBuildingID == DWELLING_MONSTER1 ) )
-            RecruitMonster( Dialog::RecruitMonster( Monster( race, DWELLING_MONSTER1 ), dwelling[0], true, 0 ) );
+            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER1 ) }, dwelling[0], true, 0 ) );
         else if ( ( building & DWELLING_MONSTER2 ) && ( le.MouseClickLeft( rectMonster2 ) || pressedHotkeyBuildingID == DWELLING_MONSTER2 ) )
-            RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER2 ) ), dwelling[1], true, 0 ) );
+            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER2 ) }, dwelling[1], true, 0 ) );
         else if ( ( building & DWELLING_MONSTER3 ) && ( le.MouseClickLeft( rectMonster3 ) || pressedHotkeyBuildingID == DWELLING_MONSTER3 ) )
-            RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER3 ) ), dwelling[2], true, 0 ) );
+            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER3 ) }, dwelling[2], true, 0 ) );
         else if ( ( building & DWELLING_MONSTER4 ) && ( le.MouseClickLeft( rectMonster4 ) || pressedHotkeyBuildingID == DWELLING_MONSTER4 ) )
-            RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER4 ) ), dwelling[3], true, 0 ) );
+            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER4 ) }, dwelling[3], true, 0 ) );
         else if ( ( building & DWELLING_MONSTER5 ) && ( le.MouseClickLeft( rectMonster5 ) || pressedHotkeyBuildingID == DWELLING_MONSTER5 ) )
-            RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER5 ) ), dwelling[4], true, 0 ) );
+            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER5 ) }, dwelling[4], true, 0 ) );
         else if ( ( building & DWELLING_MONSTER6 ) && ( le.MouseClickLeft( rectMonster6 ) || pressedHotkeyBuildingID == DWELLING_MONSTER6 ) )
-            RecruitMonster( Dialog::RecruitMonster( Monster( race, GetActualDwelling( DWELLING_MONSTER6 ) ), dwelling[5], true, 0 ) );
+            RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER6 ) }, dwelling[5], true, 0 ) );
         else if ( ( building & DWELLING_MONSTER1 ) && le.MousePressRight( rectMonster1 ) )
-            Dialog::DwellingInfo( Monster( race, DWELLING_MONSTER1 ), dwelling[0] );
+            Dialog::DwellingInfo( { race, GetActualDwelling( DWELLING_MONSTER1 ) }, dwelling[0] );
         else if ( ( building & DWELLING_MONSTER2 ) && le.MousePressRight( rectMonster2 ) )
-            Dialog::DwellingInfo( Monster( race, DWELLING_MONSTER2 ), dwelling[1] );
+            Dialog::DwellingInfo( { race, GetActualDwelling( DWELLING_MONSTER2 ) }, dwelling[1] );
         else if ( ( building & DWELLING_MONSTER3 ) && le.MousePressRight( rectMonster3 ) )
-            Dialog::DwellingInfo( Monster( race, DWELLING_MONSTER3 ), dwelling[2] );
+            Dialog::DwellingInfo( { race, GetActualDwelling( DWELLING_MONSTER3 ) }, dwelling[2] );
         else if ( ( building & DWELLING_MONSTER4 ) && le.MousePressRight( rectMonster4 ) )
-            Dialog::DwellingInfo( Monster( race, DWELLING_MONSTER4 ), dwelling[3] );
+            Dialog::DwellingInfo( { race, GetActualDwelling( DWELLING_MONSTER4 ) }, dwelling[3] );
         else if ( ( building & DWELLING_MONSTER5 ) && le.MousePressRight( rectMonster5 ) )
-            Dialog::DwellingInfo( Monster( race, DWELLING_MONSTER5 ), dwelling[4] );
+            Dialog::DwellingInfo( { race, GetActualDwelling( DWELLING_MONSTER5 ) }, dwelling[4] );
         else if ( ( building & DWELLING_MONSTER6 ) && le.MousePressRight( rectMonster6 ) )
-            Dialog::DwellingInfo( Monster( race, DWELLING_MONSTER6 ), dwelling[5] );
+            Dialog::DwellingInfo( { race, GetActualDwelling( DWELLING_MONSTER6 ) }, dwelling[5] );
 
         if ( Game::validateAnimationDelay( Game::CASTLE_UNIT_DELAY ) ) {
             WellRedrawInfoArea( cur_pt, monsterAnimInfo );
@@ -247,7 +251,7 @@ void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vect
     fheroes2::Point dst_pt;
     fheroes2::Point pt;
 
-    const fheroes2::FontType statsFontType{ fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE };
+    const fheroes2::FontType statsFontType = fheroes2::FontType::smallWhite();
 
     const fheroes2::Sprite & button = fheroes2::AGG::GetICN( ICN::BUYMAX, 0 );
     const fheroes2::Rect src_rt( 0, 461, button.width(), 19 );
@@ -447,7 +451,7 @@ void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vect
             dst_pt.y = pt.y + 122;
             text.draw( dst_pt.x, dst_pt.y, display );
 
-            text.set( std::to_string( available ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+            text.set( std::to_string( available ), fheroes2::FontType::normalYellow() );
             dst_pt.x = pt.x + 129 - text.width() / 2;
             dst_pt.y = pt.y + 120;
             text.draw( dst_pt.x, dst_pt.y, display );
