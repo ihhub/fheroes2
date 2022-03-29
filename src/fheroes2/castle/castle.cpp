@@ -640,7 +640,10 @@ void Castle::ActionNewWeek()
     }
 }
 
-void Castle::ActionNewMonth() {}
+void Castle::ActionNewMonth()
+{
+    // Do nothing.
+}
 
 void Castle::ChangeColor( int cl )
 {
