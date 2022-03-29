@@ -370,7 +370,6 @@ struct VecCastles : public std::vector<Castle *>
     Castle * GetFirstCastle( void ) const;
 
     void ChangeColors( int, int );
-    void SortByBuildingValue();
 };
 
 class AllCastles

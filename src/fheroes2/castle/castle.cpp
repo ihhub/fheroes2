@@ -2377,15 +2377,6 @@ Castle * VecCastles::GetFirstCastle( void ) const
     return end() != it ? *it : nullptr;
 }
 
-void VecCastles::SortByBuildingValue()
-{
-    std::sort( begin(), end(), []( const Castle * left, const Castle * right ) {
-        if ( left && right )
-            return left->getBuildingValue() > right->getBuildingValue();
-        return right == nullptr;
-    } );
-}
-
 void VecCastles::ChangeColors( int col1, int col2 )
 {
     for ( iterator it = begin(); it != end(); ++it )
