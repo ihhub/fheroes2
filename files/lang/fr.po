@@ -7978,8 +7978,8 @@ msgid ""
 "Ridding the countryside of the hideous Minotaur who made a sport of eating "
 "noblemen's Knights, you are honored with the Medal of Distinction."
 msgstr ""
-"Après avoir débarrassé ces terres de l'affreux Minotaure qui adorait dévorer les nobles chevaliers, 
-on vous décerne la médaille de la distinction."
+"Après avoir débarrassé ces terres de l'affreux Minotaure qui adorait dévorer les nobles chevaliers, "
+"on vous décerne la médaille de la distinction."
 
 msgid ""
 "You stumble upon a medal lying alongside the empty road. Adding the medal to "
