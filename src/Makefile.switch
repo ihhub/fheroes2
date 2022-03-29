@@ -23,6 +23,6 @@ include $(DEVKITPRO)/libnx/switch_rules
 ARCH := -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE
 CCFLAGS := $(CCFLAGS) $(ARCH) -D__SWITCH__
 
-CCFLAGS_TP := $(CFLAGS_TP) $(ARCH)
+CCFLAGS_TP := $(CCFLAGS_TP) $(ARCH)
 
 LIBS := $(LIBS) -lSDL2 -lpng16 -lbz2 -lvorbisidec -lmodplug -lmpg123 -lm -lopusfile -logg -lopus -ljpeg -lwebp -specs=$(DEVKITPRO)/libnx/switch.specs
