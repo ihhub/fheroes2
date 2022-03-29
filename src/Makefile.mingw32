@@ -20,11 +20,11 @@
 
 LIBS := $(LIBS) -lSDL -lmad -lvorbisfile -lvorbis -logg
 
-ifndef WITHOUT_IMAGE
+ifdef FHEROES2_WITH_IMAGE
 LIBS := $(LIBS) -lSDL -lpng -ljpeg
 endif
 
-ifdef WITH_ICONS
+ifdef FHEROES2_WITH_ICONS
 IDICON := 1099
 CCFLAGS := $(CCFLAGS) -DID_ICON=$(IDICON)
 export IDICON

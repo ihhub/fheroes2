@@ -38,6 +38,6 @@ SDL_LIBS := -L$(VITASDK)/arm-vita-eabi/lib -lSDL2_mixer -lSDL2 -lvita2d -lScePow
                                            -lvorbis -logg
 SDL_FLAGS := -I$(VITASDK)/arm-vita-eabi/include/SDL2
 
-ifndef WITHOUT_IMAGE
+ifdef FHEROES2_WITH_IMAGE
 SDL_LIBS := $(SDL_LIBS) -lSDL2_image -ljpeg -lpng
 endif
