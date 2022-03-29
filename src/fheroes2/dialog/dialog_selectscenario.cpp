@@ -416,32 +416,29 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
     listbox.SetAreaMaxItems( 9 );
     listbox.SetAreaItems( { rt.x + 55, rt.y + 55, 270, 175 } );
 
-    size_t selectedId = 0;
-
     switch ( selectedMapSize ) {
     case Maps::SMALL:
         listbox.SetListContent( small );
-        selectedId = GetSelectedMapId( small );
+        listbox.SetCurrent( GetSelectedMapId( small ) );
         break;
     case Maps::MEDIUM:
         listbox.SetListContent( medium );
-        selectedId = GetSelectedMapId( medium );
+        listbox.SetCurrent( GetSelectedMapId( medium ) );
         break;
     case Maps::LARGE:
         listbox.SetListContent( large );
-        selectedId = GetSelectedMapId( large );
+        listbox.SetCurrent( GetSelectedMapId( large ) );
         break;
     case Maps::XLARGE:
         listbox.SetListContent( xlarge );
-        selectedId = GetSelectedMapId( xlarge );
+        listbox.SetCurrent( GetSelectedMapId( xlarge ) );
         break;
     default:
         listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
-        selectedId = GetSelectedMapId( all );
+        listbox.SetCurrent( GetSelectedMapId( all ) );
         break;
     }
 
-    listbox.SetCurrent( selectedId );
     listbox.Redraw();
 
     buttonOk.draw();
@@ -491,6 +488,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
                 listbox.setScrollBarImage( updatedScrollbarSlider );
 
                 listbox.SetListContent( small );
+                listbox.SetCurrent( GetSelectedMapId( small ) );
+
                 currentPressedButton = &buttonSelectSmall;
                 currentPressedButton->press();
                 selectedMapSize = Maps::mapsize_t::SMALL;
@@ -510,6 +509,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
                 listbox.setScrollBarImage( updatedScrollbarSlider );
 
                 listbox.SetListContent( medium );
+                listbox.SetCurrent( GetSelectedMapId( medium ) );
+
                 currentPressedButton = &buttonSelectMedium;
                 currentPressedButton->press();
                 selectedMapSize = Maps::mapsize_t::MEDIUM;
@@ -529,6 +530,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
                 listbox.setScrollBarImage( updatedScrollbarSlider );
 
                 listbox.SetListContent( large );
+                listbox.SetCurrent( GetSelectedMapId( large ) );
+
                 currentPressedButton = &buttonSelectLarge;
                 currentPressedButton->press();
                 selectedMapSize = Maps::mapsize_t::LARGE;
@@ -548,6 +551,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
                 listbox.setScrollBarImage( updatedScrollbarSlider );
 
                 listbox.SetListContent( xlarge );
+                listbox.SetCurrent( GetSelectedMapId( xlarge ) );
+
                 currentPressedButton = &buttonSelectXLarge;
                 currentPressedButton->press();
                 selectedMapSize = Maps::mapsize_t::XLARGE;
@@ -562,6 +567,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
                 listbox.setScrollBarImage( updatedScrollbarSlider );
 
             listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
+            listbox.SetCurrent( GetSelectedMapId( all ) );
+
             currentPressedButton = &buttonSelectAll;
             currentPressedButton->press();
             selectedMapSize = Maps::mapsize_t::ZERO;
