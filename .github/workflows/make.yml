@@ -120,7 +120,7 @@ jobs:
     - name: Setup Vita SDK
       continue-on-error: true
       run: |
-        git clone https://github.com/vitasdk/vdpm
+        git clone --depth 1 https://github.com/vitasdk/vdpm
         cd vdpm
         export PATH="$VITASDK/bin:$PATH"
         ./bootstrap-vitasdk.sh
