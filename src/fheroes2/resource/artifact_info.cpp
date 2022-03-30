@@ -570,6 +570,8 @@ namespace
 
         assert( artifactData.size() == ( Artifact::UNKNOWN + 1 ) );
 
+        // Artifact bonus and curse 'value' is signed integer. However, it should not be negvative.
+
         artifactData[Artifact::ULTIMATE_BOOK].bonuses.emplace_back( fheroes2::ArtifactBonusType::KNOWLEDGE_SKILL, 12 );
 
         artifactData[Artifact::ULTIMATE_SWORD].bonuses.emplace_back( fheroes2::ArtifactBonusType::ATTACK_SKILL, 12 );
@@ -803,6 +805,18 @@ namespace
             if ( artifact.bonuses.empty() && artifact.curses.empty() ) {
                 // Artifact info is not populated properly. An artifact with no effects cannot exist.
                 assert( 0 );
+            }
+
+            for ( const fheroes2::ArtifactBonus & bonus : artifact.bonuses ) {
+                if ( bonus.value < 0 ) {
+                    assert( 0 );
+                }
+            }
+
+            for ( const fheroes2::ArtifactCurse & curse : artifact.curses ) {
+                if ( curse.value < 0 ) {
+                    assert( 0 );
+                }
             }
         }
     }

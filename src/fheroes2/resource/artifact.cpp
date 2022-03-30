@@ -569,7 +569,7 @@ int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactCurse
 
         for ( const auto & artifactInfo : artifactValuePerId ) {
             description += Artifact( artifactInfo.first ).GetName();
-            description += ' ';
+            description += " -";
 
             description += std::to_string( artifactInfo.second );
             description += '\n';
@@ -590,7 +590,7 @@ int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactCurse
                 totalValue += curseIter->value;
 
                 description += artifact.GetName();
-                description += ' ';
+                description += " -";
 
                 description += std::to_string( curseIter->value );
                 description += '\n';
