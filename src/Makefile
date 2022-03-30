@@ -59,9 +59,8 @@ CCFLAGS := $(CCFLAGS) -DWITH_DEBUG
 endif
 
 # TODO: Add -Wconversion -Wsign-conversion -Wextra-semi -Wswitch-default flags back once we fix all the corresponding code smells!
-CCFLAGS := $(CCFLAGS) -pedantic -Wall -Wextra -Wcast-align=strict -Wctor-dtor-privacy -Wdouble-promotion -Wfloat-conversion \
-           -Wfloat-equal -Winit-self -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wundef -Wuninitialized \
-           -Wunused
+CCFLAGS := $(CCFLAGS) -pedantic -Wall -Wextra -Wcast-align -Wctor-dtor-privacy -Wdouble-promotion -Wfloat-conversion -Wfloat-equal \
+           -Winit-self -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wundef -Wuninitialized -Wunused
 
 ifdef FHEROES2_STRICT_COMPILATION
 CCFLAGS := $(CCFLAGS) -Werror
