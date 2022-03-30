@@ -657,28 +657,63 @@ AGG::AGGInitializer::~AGGInitializer()
 
 bool AGG::AGGInitializer::init()
 {
-    std::string fullPath;
-    if ( Settings::findFile( "data", "heroes2.agg", fullPath ) ) {
-        if ( !heroes2_agg.open( fullPath ) ) {
-            return false;
-        }
-
-        if ( !g_midiHeroes2AGG.open( fullPath ) ) {
-            // How is it even possible that for the second time the file is not readable?
-            assert( 0 );
-            return false;
-        }
-    }
-    else {
+    const ListFiles aggFileNames = Settings::FindFiles( "data", ".agg", false );
+    if ( aggFileNames.empty() ) {
         return false;
     }
 
-    // Both AGG files must be located in the same directory. In this case we modify the ending of the existing full path to avoid extra logic.
-    fheroes2::replaceStringEnding( fullPath, ".agg", "x.agg" );
+    const std::string heroes2AggFileName( "heroes2.agg" );
+    std::string heroes2AggFilePath;
+    std::string aggLowerCaseFilePath;
 
-    if ( System::IsFile( fullPath ) ) {
-        heroes2x_agg.open( fullPath );
-        g_midiHeroes2xAGG.open( fullPath );
+    for ( const std::string & path : aggFileNames ) {
+        if ( path.size() < heroes2AggFileName.size() ) {
+            // Obviously this is not a correct file.
+            continue;
+        }
+
+        std::string tempPath = StringLower( path );
+
+        if ( tempPath.compare( tempPath.size() - heroes2AggFileName.size(), heroes2AggFileName.size(), heroes2AggFileName ) == 0 ) {
+            heroes2AggFilePath = path;
+            aggLowerCaseFilePath = std::move( tempPath );
+            break;
+        }
+    }
+
+    if ( heroes2AggFilePath.empty() ) {
+        // The main game resource file is not found.
+        return false;
+    }
+
+    if ( !heroes2_agg.open( heroes2AggFilePath ) ) {
+        return false;
+    }
+
+    if ( !g_midiHeroes2AGG.open( heroes2AggFilePath ) ) {
+        // How is it even possible that for the second time the file is not readable?
+        assert( 0 );
+        return false;
+    }
+
+    // Find "heroes2x.agg" file.
+    std::string heroes2XAggFilePath;
+    fheroes2::replaceStringEnding( aggLowerCaseFilePath, ".agg", "x.agg" );
+
+    for ( const std::string & path : aggFileNames ) {
+        if ( path.size() != aggLowerCaseFilePath.size() ) {
+            continue;
+        }
+
+        const std::string tempPath = StringLower( path );
+        if ( tempPath.compare( tempPath.size() - aggLowerCaseFilePath.size(), aggLowerCaseFilePath.size(), aggLowerCaseFilePath ) == 0 ) {
+            heroes2XAggFilePath = path;
+        }
+    }
+
+    if ( !heroes2XAggFilePath.empty() ) {
+        heroes2x_agg.open( heroes2XAggFilePath );
+        g_midiHeroes2xAGG.open( heroes2XAggFilePath );
     }
 
     Settings::Get().EnablePriceOfLoyaltySupport( heroes2x_agg.isGood() );
