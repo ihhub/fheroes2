@@ -21,7 +21,6 @@
 AR := arm-vita-eabi-gcc-ar
 CC := arm-vita-eabi-gcc
 CXX := arm-vita-eabi-g++
-LIBS := -lz
 
 ifdef FHEROES2_STRICT_COMPILATION
 CCFLAGS := $(CCFLAGS) -Wno-error=pedantic -Wno-error=float-equal

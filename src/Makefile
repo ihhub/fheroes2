@@ -29,13 +29,12 @@ CCFLAGS := -fsigned-char -pthread
 # Flags for the C compiler
 CFLAGS := $(CFLAGS)
 # Flags for the C++ compiler
-CXXFLAGS := $(CXXFLAGS) -std=c++11
+CXXFLAGS := $(CXXFLAGS)
 # Flags for the linker
 LDFLAGS := $(LDFLAGS) -pthread
-LIBS := -lz
 
 ifdef FHEROES2_WITH_DEBUG
-CCFLAGS := $(CCFLAGS) -O0 -g -DWITH_DEBUG
+CCFLAGS := $(CCFLAGS) -O0 -g
 else
 CCFLAGS := $(CCFLAGS) -O3
 endif
@@ -51,6 +50,13 @@ CXXFLAGS_TP := $(CXXFLAGS)
 #
 # Build options for fheroes2
 #
+
+CXXFLAGS := $(CXXFLAGS) -std=c++11
+LIBS := -lz
+
+ifdef FHEROES2_WITH_DEBUG
+CCFLAGS := $(CCFLAGS) -DWITH_DEBUG
+endif
 
 # TODO: Add -Wconversion -Wsign-conversion -Wextra-semi -Wswitch-default flags back once we fix all the corresponding code smells!
 CCFLAGS := $(CCFLAGS) -pedantic -Wall -Wextra -Wcast-align=strict -Wctor-dtor-privacy -Wdouble-promotion -Wfloat-conversion \
