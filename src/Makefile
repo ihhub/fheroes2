@@ -52,7 +52,7 @@ CXXFLAGS_TP := $(CXXFLAGS)
 # Build options for fheroes2
 #
 
-# Add -Wconversion -Wsign-conversion -Weffc++ -Wextra-semi flags back once we fix all other warnings!
+# Add -Wconversion -Wsign-conversion -Wextra-semi flags back once we fix all other warnings!
 CCFLAGS := $(CCFLAGS) -pedantic -Wall -Wextra -Wdouble-promotion -Wfloat-conversion -Wfloat-equal -Woverloaded-virtual -Wredundant-decls -Wshadow -Wuninitialized -Wunused
 
 ifdef FHEROES2_STRICT_COMPILATION
