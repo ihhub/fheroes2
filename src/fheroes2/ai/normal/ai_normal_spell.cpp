@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -530,5 +530,20 @@ namespace AI
             }
         }
         return bestOutcome;
+    }
+
+    double BattlePlanner::commanderMaximumSpellDamageValue( const HeroBase & commander )
+    {
+        const std::vector<Spell> & spells = commander.GetSpells();
+        const double spellPower = static_cast<double>( commander.GetPower() );
+
+        double bestValue = 0;
+        for ( const Spell & spell : spells ) {
+            if ( spell.isCombat() && spell.isDamage() && commander.GetSpellPoints() >= spell.SpellPoint() ) {
+                bestValue = std::max( bestValue, spell.Damage() * spellPower );
+            }
+        }
+
+        return bestValue;
     }
 }
