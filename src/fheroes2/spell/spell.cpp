@@ -113,9 +113,9 @@ spellstats_t spells[] = {
     { gettext_noop( "Summon Boat" ), 5, 0, 46, 0,
       gettext_noop(
           "Summons the nearest unoccupied, friendly boat to an adjacent shore location.  A friendly boat is one which you just built or were the most recent player to occupy." ) },
-    { gettext_noop( "Dimension Door" ), 10, 0, 47, 0, gettext_noop( "Allows the caster to magically transport to a nearby location." ) },
-    { gettext_noop( "Town Gate" ), 10, 0, 48, 0, gettext_noop( "Returns the caster to any town or castle currently owned." ) },
-    { gettext_noop( "Town Portal" ), 20, 0, 49, 0, gettext_noop( "Returns the hero to the town or castle of choice, provided it is controlled by you." ) },
+    { gettext_noop( "Dimension Door" ), 10, 225, 47, 0, gettext_noop( "Allows the caster to magically transport to a nearby location." ) },
+    { gettext_noop( "Town Gate" ), 10, 225, 48, 0, gettext_noop( "Returns the caster to any town or castle currently owned." ) },
+    { gettext_noop( "Town Portal" ), 20, 225, 49, 0, gettext_noop( "Returns the hero to the town or castle of choice, provided it is controlled by you." ) },
     { gettext_noop( "Visions" ), 6, 0, 50, 3, gettext_noop( "Visions predicts the likely outcome of an encounter with a neutral army camp." ) },
     { gettext_noop( "Haunt" ), 8, 0, 51, 4,
       gettext_noop( "Haunts a mine you control with Ghosts.  This mine stops producing resources.  (If I can't keep it, nobody will!)" ) },

@@ -437,14 +437,7 @@ namespace
         return false;
     }
 
-    struct HeroToMove
-    {
-        Heroes * hero = nullptr;
-        int patrolCenter = -1;
-        uint32_t patrolDistance = 0;
-    };
-
-    void addHeroToMove( Heroes * hero, std::vector<HeroToMove> & availableHeroes )
+    void addHeroToMove( Heroes * hero, std::vector<AI::HeroToMove> & availableHeroes )
     {
         if ( hero->Modes( Heroes::PATROL ) ) {
             if ( hero->GetSquarePatrol() == 0 ) {
@@ -460,7 +453,7 @@ namespace
         }
         else {
             availableHeroes.emplace_back();
-            HeroToMove & heroInfo = availableHeroes.back();
+            AI::HeroToMove & heroInfo = availableHeroes.back();
             heroInfo.hero = hero;
 
             if ( hero->Modes( Heroes::PATROL ) ) {
@@ -1055,10 +1048,11 @@ namespace AI
         return 0;
     }
 
-    int AI::Normal::getPriorityTarget( const Heroes & hero, double & maxPriority, int patrolIndex, uint32_t distanceLimit )
+    int AI::Normal::getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority, bool & usingDimensionDoor )
     {
+        const Heroes & hero = *heroInfo.hero;
         const double lowestPossibleValue = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
-        const bool heroInPatrolMode = patrolIndex != -1;
+        const bool heroInPatrolMode = heroInfo.patrolCenter != -1;
         const double heroStrength = hero.GetArmy().GetStrength();
 
         int priorityTarget = -1;
@@ -1079,11 +1073,19 @@ namespace AI
             const IndexObject & node = _mapObjects[idx];
 
             // Skip if hero in patrol mode and object outside of reach
-            if ( heroInPatrolMode && Maps::GetApproximateDistance( node.first, patrolIndex ) > distanceLimit )
+            if ( heroInPatrolMode && Maps::GetApproximateDistance( node.first, heroInfo.patrolCenter ) > heroInfo.patrolDistance )
                 continue;
 
             if ( objectValidator.isValid( node.first ) ) {
                 uint32_t dist = _pathfinder.getDistance( node.first );
+
+                bool use = false;
+                const uint32_t dimensionDoorDist = _pathfinder.getDimensionDoorDistance( hero, node.first );
+                if ( dimensionDoorDist && ( !dist || ( dist / 2 > dimensionDoorDist ) ) ) {
+                    dist = dimensionDoorDist;
+                    use = true;
+                }
+
                 if ( dist == 0 )
                     continue;
 
@@ -1120,6 +1122,7 @@ namespace AI
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
                     priorityTarget = node.first;
+                    usingDimensionDoor = use;
 #ifdef WITH_DEBUG
                     objectType = static_cast<MP2::MapObjectType>( node.second );
 #endif
@@ -1173,15 +1176,18 @@ namespace AI
             Heroes * bestHero = availableHeroes.front().hero;
             double maxPriority = 0;
             int bestTargetIndex = -1;
+            bool usingDimensionDoor = false;
 
             while ( true ) {
                 for ( const HeroToMove & heroInfo : availableHeroes ) {
                     double priority = -1;
-                    const int targetIndex = getPriorityTarget( *heroInfo.hero, priority, heroInfo.patrolCenter, heroInfo.patrolDistance );
+                    bool usingDimensionDoor2 = false;
+                    const int targetIndex = getPriorityTarget( heroInfo, priority, usingDimensionDoor2 );
                     if ( targetIndex != -1 && ( priority > maxPriority || bestTargetIndex == -1 ) ) {
                         maxPriority = priority;
                         bestTargetIndex = targetIndex;
                         bestHero = heroInfo.hero;
+                        usingDimensionDoor = usingDimensionDoor2;
                     }
                 }
 
@@ -1235,12 +1241,19 @@ namespace AI
                 }
             }
 
-            _pathfinder.reEvaluateIfNeeded( *bestHero );
-            bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );
-
             const size_t heroesBefore = heroes.size();
 
-            HeroesMove( *bestHero );
+            // flag if we actually want to jump
+            const std::list<Route::Step> & dimensionDoor = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
+            if ( usingDimensionDoor && dimensionDoor.size() ) {
+                HeroesCastDimensionDoor( *bestHero, dimensionDoor.front().GetIndex() );
+            }
+            else {
+                _pathfinder.reEvaluateIfNeeded( *bestHero );
+                bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );
+
+                HeroesMove( *bestHero );
+            }
 
             if ( heroes.size() > heroesBefore ) {
                 addHeroToMove( heroes.back(), availableHeroes );

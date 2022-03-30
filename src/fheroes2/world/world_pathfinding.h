@@ -130,6 +130,9 @@ public:
 
     std::vector<IndexObject> getObjectsOnTheWay( const int targetIndex, const bool checkAdjacent = false ) const;
 
+    std::list<Route::Step> getDimensionDoorPath( const Heroes & hero, int targetIndex );
+    uint32_t getDimensionDoorDistance( const Heroes & hero, int targetIndex );
+
     // Used for non-hero armies, like castles or monsters
     uint32_t getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill = Skill::Level::EXPERT );
 
