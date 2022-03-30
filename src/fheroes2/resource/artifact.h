@@ -166,7 +166,7 @@ public:
         : id( art >= 0 && art < UNKNOWN ? art : UNKNOWN )
         , ext( 0 )
     {
-        // Do nothing;
+        // Do nothing.
     }
 
     bool operator==( const Spell & ) const;
