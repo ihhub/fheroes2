@@ -1566,7 +1566,7 @@ namespace
             font[224 - 32].resize( font[65].width(), font[65].height() + 3 );
             font[224 - 32].reset();
             fheroes2::Copy( font[65], 0, 0, font[224 - 32], 0, 3, font[65].width(), font[65].height() );
-            fheroes2::Copy( font[192 - 32], 4, 0, font[224 - 32], 4, 0, 3, 2 );
+            fheroes2::Copy( font[192 - 32], 4, 0, font[224 - 32], 3, 0, 3, 2 );
             font[224 - 32].setPosition( font[65].x(), font[65].y() - 3 );
             fheroes2::updateShadow( font[224 - 32], { -1, 1 }, 2 );
 
@@ -1578,15 +1578,14 @@ namespace
             font[232 - 32].setPosition( font[69].x(), font[69].y() - 3 );
             fheroes2::updateShadow( font[232 - 32], { -1, 1 }, 2 );
 
-            // Generate i without dot on top and set to unused value.
-            font[173 - 32] = font[73];
-            fheroes2::FillTransform( font[173 - 32], 0, 0, font[173 - 32].width(), 2, 1 );
             // i with grave accent `.
             font[236 - 32].resize( font[73].width(), font[73].height() + 1 );
             font[236 - 32].reset();
-            fheroes2::Copy( font[173 - 32], 0, 0, font[236 - 32], 0, 2, font[173 - 32].width(), font[173 - 32].height() );
-            fheroes2::Copy( font[192 - 32], 4, 0, font[236 - 32], 2, 1, 3, 2 );
-            font[236 - 32].setPosition( font[73].x(), font[73].y() - 2 );
+            fheroes2::Copy( font[73], 0, 0, font[236 - 32], 0, 1, font[73].width(), font[73].height() );
+            // Generate i without dot on top.
+            fheroes2::FillTransform( font[236 - 32], 0, 0, font[236 - 32].width(), 3, 1 );
+            fheroes2::Copy( font[192 - 32], 4, 0, font[236 - 32], 2, 0, 2, 2 );
+            font[236 - 32].setPosition( font[73].x(), font[73].y() - 1 );
             fheroes2::updateShadow( font[236 - 32], { -1, 1 }, 2 );
 
             // o with grave accent `.
