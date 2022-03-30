@@ -911,23 +911,47 @@ void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUni
     }
 
     const int32_t validUnitCount = static_cast<int32_t>( std::count_if( orders->begin(), orders->end(), []( const Unit * unit ) { return unit->isValid(); } ) );
+    const int32_t maximumUnitsToDraw = area.width / armyOrderMonsterIconSize;
 
-    int32_t ox = area.x + ( area.width - armyOrderMonsterIconSize * validUnitCount ) / 2;
-    int32_t oy = area.y;
+    int32_t offsetX = area.x;
 
-    fheroes2::Rect::x = ox;
-    fheroes2::Rect::y = oy;
+    if ( validUnitCount > maximumUnitsToDraw ) {
+        offsetX += ( area.width - armyOrderMonsterIconSize * maximumUnitsToDraw ) / 2;
+    }
+    else {
+        offsetX += ( area.width - armyOrderMonsterIconSize * validUnitCount ) / 2;
+    }
+
+    fheroes2::Rect::x = offsetX;
+    fheroes2::Rect::y = area.y;
     fheroes2::Rect::height = armyOrderMonsterIconSize;
 
     rects.clear();
 
-    for ( Units::const_iterator it = orders->begin(); it != orders->end(); ++it ) {
-        if ( *it && ( *it )->isValid() ) {
-            rects.emplace_back( *it, fheroes2::Rect( ox, oy, armyOrderMonsterIconSize, armyOrderMonsterIconSize ) );
-            RedrawUnit( rects.back().second, **it, ( **it ).GetColor() == army_color2, current == *it, currentUnitColor, output );
-            ox += armyOrderMonsterIconSize;
-            fheroes2::Rect::width += armyOrderMonsterIconSize;
+    int32_t unitsDrawn = 0;
+    int32_t unitsProcessed = 0;
+
+    for ( const Unit * unit : *orders ) {
+        if ( unitsDrawn == maximumUnitsToDraw ) {
+            break;
         }
+
+        if ( unit == nullptr || !unit->isValid() ) {
+            continue;
+        }
+
+        if ( unit->Modes( Battle::TR_MOVED ) && ( validUnitCount - unitsProcessed > maximumUnitsToDraw ) ) {
+            ++unitsProcessed;
+            continue;
+        }
+
+        rects.emplace_back( unit, fheroes2::Rect( offsetX, area.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize ) );
+        RedrawUnit( rects.back().second, *unit, unit->GetColor() == army_color2, current == unit, currentUnitColor, output );
+        offsetX += armyOrderMonsterIconSize;
+        fheroes2::Rect::width += armyOrderMonsterIconSize;
+
+        ++unitsDrawn;
+        ++unitsProcessed;
     }
 }
 
