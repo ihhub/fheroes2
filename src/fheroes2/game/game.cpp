@@ -491,6 +491,8 @@ u32 Game::GetGameOverScores( void )
     case Maps::XLARGE:
         mapSizeFactor = 60;
         break;
+    default:
+        break;
     }
 
     const uint32_t daysFactor = world.CountDay() * mapSizeFactor / 100;

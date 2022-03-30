@@ -35,6 +35,10 @@
 class SelectEnum : public Interface::ListBox<int>
 {
 public:
+    using Interface::ListBox<int>::ActionListDoubleClick;
+    using Interface::ListBox<int>::ActionListSingleClick;
+    using Interface::ListBox<int>::ActionListPressRight;
+
     explicit SelectEnum( const fheroes2::Rect & rt )
         : Interface::ListBox<int>( rt.getPosition() )
         , area( rt )
@@ -101,6 +105,8 @@ public:
 class SelectEnumMonster : public SelectEnum
 {
 public:
+    using SelectEnum::ActionListPressRight;
+
     explicit SelectEnumMonster( const fheroes2::Rect & rt )
         : SelectEnum( rt )
     {}

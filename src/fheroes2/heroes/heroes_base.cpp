@@ -386,7 +386,7 @@ int HeroBase::GetLuckModificator( std::string * strs ) const
     return result;
 }
 
-double HeroBase::GetSpellcastStrength( const double armyLimit ) const
+double HeroBase::GetMagicStrategicValue( const double armyStrength ) const
 {
     const std::vector<Spell> & spells = GetSpells();
     const uint32_t currentSpellPoints = GetSpellPoints();
@@ -394,22 +394,28 @@ double HeroBase::GetSpellcastStrength( const double armyLimit ) const
 
     double bestValue = 0;
     for ( const Spell & spell : spells ) {
-        if ( spell.isCombat() && spell.SpellPoint() <= currentSpellPoints ) {
+        if ( spell.isCombat() ) {
             const int id = spell.GetID();
 
-            // High impact spells can turn tide of battle, otherwise look for damage spells
-            if ( spell.isSummon() ) {
-                bestValue = std::max( bestValue, Monster( spell ).GetMonsterStrength() * spell.ExtraValue() * spellPower );
+            const uint32_t spellCost = spell.SpellPoint();
+            const uint32_t casts = spellCost ? std::min( 10U, currentSpellPoints / spellCost ) : 0;
+
+            // use quadratic formula to diminish returns from subsequent spell casts, (up to x5 when spell has 10 uses)
+            const double amountModifier = ( casts == 1 ) ? 1 : casts - ( 0.05 * casts * casts );
+
+            if ( spell.isDamage() ) {
+                // Benchmark for Lightning for 20 power * 20 knowledge (maximum uses) is 2500.0
+                bestValue = std::max( bestValue, amountModifier * spell.Damage() * spellPower );
             }
-            else if ( spell.isDamage() ) {
-                // Benchmark for Lightning for 20 power * 20 knowledge (200 spell points) is 2500.0
-                bestValue = std::max( bestValue, spell.Damage() / 2.0 * spellPower * sqrt( currentSpellPoints / 2 ) );
+            // These high impact spells can turn tide of battle
+            else if ( spell.isResurrect() || spell.isMassActions() || id == Spell::BLIND || id == Spell::PARALYZE ) {
+                bestValue = std::max( bestValue, armyStrength * 0.1 * amountModifier );
             }
-            else if ( spell.isResurrect() || id == Spell::BLIND || id == Spell::PARALYZE ) {
-                bestValue = std::max( bestValue, armyLimit * 0.5 );
+            else if ( spell.isSummon() ) {
+                bestValue = std::max( bestValue, Monster( spell ).GetMonsterStrength() * spell.ExtraValue() * spellPower * amountModifier );
             }
             else {
-                bestValue = std::max( bestValue, armyLimit * 0.2 );
+                bestValue = std::max( bestValue, armyStrength * 0.04 * amountModifier );
             }
         }
     }

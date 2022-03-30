@@ -684,6 +684,9 @@ std::pair<int, int> Maps::Tiles::ColorRaceFromHeroSprite( const uint32_t heroSpr
     case 6:
         res.second = Race::RAND;
         break;
+    default:
+        assert( 0 );
+        break;
     }
 
     return res;
