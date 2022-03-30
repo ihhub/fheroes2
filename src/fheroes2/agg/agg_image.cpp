@@ -1414,7 +1414,7 @@ namespace
         {
             std::vector<fheroes2::Sprite> & font = _icnVsSprite[ICN::FONT];
 
-            // A with grave accent ` and generate the grave accent for further copying.
+            // A with grave accent ` and generate the grave accent for further use.
             font[192 - 32].resize( font[33].width(), font[33].height() + 3 );
             font[192 - 32].reset();
             fheroes2::Copy( font[33], 0, 0, font[192 - 32], 0, 3, font[33].width(), font[33].height() );
@@ -1496,7 +1496,7 @@ namespace
             fheroes2::Copy( font[192 - 32], 7, 0, font[249 - 32], 3, 0, 4, 2 );
             fheroes2::updateShadow( font[249 - 32], { -1, 2 }, 2 );
 
-            // e with acute accent and generate the accute accent for further copying.
+            // e with acute accent and generate the acute accent for further use.
             font[233 - 32].resize( font[69].width(), font[69].height() + 3 );
             font[233 - 32].reset();
             fheroes2::Copy( font[69], 0, 0, font[233 - 32], 0, 3, font[69].width(), font[69].height() );
@@ -1520,7 +1520,7 @@ namespace
         {
             std::vector<fheroes2::Sprite> & font = _icnVsSprite[ICN::SMALFONT];
 
-            // A with grave accent `.
+            // A with grave accent `. Generate grave accent for further use.
             font[192 - 32].resize( font[33].width(), font[33].height() + 3 );
             font[192 - 32].reset();
             fheroes2::Copy( font[33], 0, 0, font[192 - 32], 0, 4, font[33].width(), font[33].height() );
@@ -1534,9 +1534,7 @@ namespace
             font[200 - 32].resize( font[37].width(), font[37].height() + 4 );
             font[200 - 32].reset();
             fheroes2::Copy( font[37], 0, 0, font[200 - 32], 0, 4, font[37].width(), font[37].height() );
-            fheroes2::Copy( font[200 - 32], 4, 4, font[200 - 32], 4, 0, 1, 1 );
-            fheroes2::Copy( font[200 - 32], 4, 4, font[200 - 32], 5, 1, 1, 1 );
-            fheroes2::Copy( font[200 - 32], 4, 4, font[200 - 32], 6, 2, 1, 1 );
+            fheroes2::Copy( font[192 - 32], 4, 0, font[200 - 32], 4, 0, 3, 3 );
             font[200 - 32].setPosition( font[37].x(), font[37].y() - 4 );
             fheroes2::updateShadow( font[200 - 32], { -1, 1 }, 2 );
 
@@ -1544,9 +1542,7 @@ namespace
             font[204 - 32].resize( font[41].width(), font[41].height() + 4 );
             font[204 - 32].reset();
             fheroes2::Copy( font[41], 0, 0, font[204 - 32], 0, 4, font[41].width(), font[41].height() );
-            fheroes2::Copy( font[204 - 32], 3, 4, font[204 - 32], 1, 0, 1, 1 );
-            fheroes2::Copy( font[204 - 32], 3, 4, font[204 - 32], 2, 1, 1, 1 );
-            fheroes2::Copy( font[204 - 32], 3, 4, font[204 - 32], 3, 2, 1, 1 );
+            fheroes2::Copy( font[192 - 32], 4, 0, font[204 - 32], 1, 0, 3, 3 );
             font[204 - 32].setPosition( font[41].x(), font[41].y() - 4 );
             fheroes2::updateShadow( font[204 - 32], { -1, 1 }, 2 );
 
@@ -1554,9 +1550,7 @@ namespace
             font[210 - 32].resize( font[47].width(), font[47].height() + 4 );
             font[210 - 32].reset();
             fheroes2::Copy( font[47], 0, 0, font[210 - 32], 0, 4, font[47].width(), font[47].height() );
-            fheroes2::Copy( font[210 - 32], 3, 4, font[210 - 32], 3, 0, 1, 1 );
-            fheroes2::Copy( font[210 - 32], 3, 4, font[210 - 32], 4, 1, 1, 1 );
-            fheroes2::Copy( font[210 - 32], 3, 4, font[210 - 32], 5, 2, 1, 1 );
+            fheroes2::Copy( font[192 - 32], 4, 0, font[210 - 32], 4, 0, 3, 3 );
             font[210 - 32].setPosition( font[47].x(), font[47].y() - 4 );
             fheroes2::updateShadow( font[210 - 32], { -1, 1 }, 2 );
 
@@ -1564,9 +1558,7 @@ namespace
             font[217 - 32].resize( font[53].width(), font[53].height() + 4 );
             font[217 - 32].reset();
             fheroes2::Copy( font[53], 0, 0, font[217 - 32], 0, 4, font[53].width(), font[53].height() );
-            fheroes2::Copy( font[217 - 32], 3, 5, font[217 - 32], 4, 0, 1, 1 );
-            fheroes2::Copy( font[217 - 32], 3, 5, font[217 - 32], 5, 1, 1, 1 );
-            fheroes2::Copy( font[217 - 32], 3, 5, font[217 - 32], 6, 2, 1, 1 );
+            fheroes2::Copy( font[192 - 32], 4, 0, font[217 - 32], 4, 0, 3, 3 );
             font[217 - 32].setPosition( font[53].x(), font[53].y() - 4 );
             fheroes2::updateShadow( font[217 - 32], { -1, 1 }, 2 );
 
@@ -1574,8 +1566,7 @@ namespace
             font[224 - 32].resize( font[65].width(), font[65].height() + 3 );
             font[224 - 32].reset();
             fheroes2::Copy( font[65], 0, 0, font[224 - 32], 0, 3, font[65].width(), font[65].height() );
-            fheroes2::Copy( font[224 - 32], 4, 3, font[224 - 32], 3, 0, 1, 1 );
-            fheroes2::Copy( font[224 - 32], 4, 3, font[224 - 32], 4, 1, 1, 1 );
+            fheroes2::Copy( font[192 - 32], 4, 0, font[224 - 32], 4, 0, 3, 2 );
             font[224 - 32].setPosition( font[65].x(), font[65].y() - 3 );
             fheroes2::updateShadow( font[224 - 32], { -1, 1 }, 2 );
 
@@ -1583,24 +1574,26 @@ namespace
             font[232 - 32].resize( font[69].width(), font[69].height() + 3 );
             font[232 - 32].reset();
             fheroes2::Copy( font[69], 0, 0, font[232 - 32], 0, 3, font[69].width(), font[69].height() );
-            fheroes2::Copy( font[232 - 32], 4, 3, font[232 - 32], 3, 0, 1, 1 );
-            fheroes2::Copy( font[232 - 32], 4, 3, font[232 - 32], 4, 1, 1, 1 );
+            fheroes2::Copy( font[192 - 32], 4, 0, font[232 - 32], 3, 0, 3, 2 );
             font[232 - 32].setPosition( font[69].x(), font[69].y() - 3 );
             fheroes2::updateShadow( font[232 - 32], { -1, 1 }, 2 );
 
+            // Generate i without dot on top and set to unused value.
+            font[173 - 32] = font[73];
+            fheroes2::FillTransform( font[173 - 32], 0, 0, font[173 - 32].width(), 2, 1 );
             // i with grave accent `.
-            font[236 - 32] = font[73];
-            fheroes2::FillTransform( font[236 - 32], 0, 0, font[236 - 32].width(), 2, 1 );
-            fheroes2::Copy( font[236 - 32], 1, 2, font[236 - 32], 2, 0, 1, 1 );
-            fheroes2::Copy( font[236 - 32], 1, 2, font[236 - 32], 3, 1, 1, 1 );
+            font[236 - 32].resize( font[73].width(), font[73].height() + 1  );
+            font[236 - 32].reset();
+            fheroes2::Copy( font[173 - 32], 0, 0, font[236 - 32], 0, 2, font[173 - 32].width(), font[173 - 32].height() );
+            fheroes2::Copy( font[192 - 32], 4, 0, font[236 - 32], 2, 1, 3, 2 );
+            font[236 - 32].setPosition( font[73].x(), font[73].y() - 2 );
             fheroes2::updateShadow( font[236 - 32], { -1, 1 }, 2 );
 
             // o with grave accent `.
             font[242 - 32].resize( font[79].width(), font[79].height() + 3 );
             font[242 - 32].reset();
             fheroes2::Copy( font[79], 0, 0, font[242 - 32], 0, 3, font[79].width(), font[79].height() );
-            fheroes2::Copy( font[242 - 32], 4, 3, font[242 - 32], 2, 0, 1, 1 );
-            fheroes2::Copy( font[242 - 32], 4, 3, font[242 - 32], 3, 1, 1, 1 );
+            fheroes2::Copy( font[192 - 32], 4, 0, font[242 - 32], 3, 0, 3, 2 );
             font[242 - 32].setPosition( font[79].x(), font[79].y() - 3 );
             fheroes2::updateShadow( font[242 - 32], { -1, 1 }, 2 );
 
@@ -1608,21 +1601,11 @@ namespace
             font[249 - 32].resize( font[85].width(), font[85].height() + 3 );
             font[249 - 32].reset();
             fheroes2::Copy( font[85], 0, 0, font[249 - 32], 0, 3, font[85].width(), font[85].height() );
-            fheroes2::Copy( font[249 - 32], 1, 3, font[249 - 32], 3, 0, 1, 1 );
-            fheroes2::Copy( font[249 - 32], 1, 3, font[249 - 32], 4, 1, 1, 1 );
+            fheroes2::Copy( font[192 - 32], 4, 0, font[249 - 32], 3, 0, 3, 2 );
             font[249 - 32].setPosition( font[85].x(), font[85].y() - 3 );
             fheroes2::updateShadow( font[249 - 32], { -1, 1 }, 2 );
 
-            // e with acute accent.
-            font[233 - 32].resize( font[69].width(), font[69].height() + 3 );
-            font[233 - 32].reset();
-            fheroes2::Copy( font[69], 0, 0, font[233 - 32], 0, 3, font[69].width(), font[69].height() );
-            fheroes2::Copy( font[233 - 32], 4, 3, font[233 - 32], 3, 1, 1, 1 );
-            fheroes2::Copy( font[233 - 32], 4, 3, font[233 - 32], 4, 0, 1, 1 );
-            font[233 - 32].setPosition( font[69].x(), font[69].y() - 3 );
-            fheroes2::updateShadow( font[233 - 32], { -1, 1 }, 2 );
-
-            // E with acute accent.
+            // E with acute accent. Generate the acute accent for further use.
             font[201 - 32].resize( font[37].width(), font[37].height() + 4 );
             font[201 - 32].reset();
             fheroes2::Copy( font[37], 0, 0, font[201 - 32], 0, 4, font[37].width(), font[37].height() );
@@ -1631,6 +1614,14 @@ namespace
             fheroes2::Copy( font[201 - 32], 4, 4, font[201 - 32], 5, 0, 1, 1 );
             font[201 - 32].setPosition( font[37].x(), font[37].y() - 4 );
             fheroes2::updateShadow( font[201 - 32], { -1, 1 }, 2 );
+
+            // e with acute accent.
+            font[233 - 32].resize( font[69].width(), font[69].height() + 3 );
+            font[233 - 32].reset();
+            fheroes2::Copy( font[69], 0, 0, font[233 - 32], 0, 3, font[69].width(), font[69].height() );
+            fheroes2::Copy( font[201 - 32], 4, 0, font[233 - 32], 3, 0, 3, 2 );
+            font[233 - 32].setPosition( font[69].x(), font[69].y() - 3 );
+            fheroes2::updateShadow( font[233 - 32], { -1, 1 }, 2 );
         }
     }
 
