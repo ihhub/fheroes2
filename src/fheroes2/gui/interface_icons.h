@@ -95,6 +95,10 @@ namespace Interface
         void SetShow( bool );
 
     protected:
+        using Interface::ListBox<HEROES>::ActionListDoubleClick;
+        using Interface::ListBox<HEROES>::ActionListSingleClick;
+        using Interface::ListBox<HEROES>::ActionListPressRight;
+
         void ActionCurrentUp( void ) override;
         void ActionCurrentDn( void ) override;
         void ActionListDoubleClick( HEROES & ) override;
@@ -118,6 +122,10 @@ namespace Interface
         void SetShow( bool );
 
     protected:
+        using Interface::ListBox<CASTLE>::ActionListDoubleClick;
+        using Interface::ListBox<CASTLE>::ActionListSingleClick;
+        using Interface::ListBox<CASTLE>::ActionListPressRight;
+
         void ActionCurrentUp( void ) override;
         void ActionCurrentDn( void ) override;
         void ActionListDoubleClick( CASTLE & ) override;
