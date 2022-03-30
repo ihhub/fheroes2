@@ -117,7 +117,7 @@ void Battle::Board::SetPositionQuality( const Unit & b ) const
         const Indexes around = GetAroundIndexes( *unit );
         for ( const int32_t index : around ) {
             Cell * cell2 = GetCell( index );
-            if ( !cell2 || !cell2->isPassable3( b, false ) )
+            if ( !cell2 || !cell2->isPassableForUnit( b ) )
                 continue;
 
             const int32_t quality = cell2->GetQuality();
@@ -196,7 +196,7 @@ void Battle::Board::SetScanPassability( const Unit & unit )
         const bool isPassableBridge = bridge == nullptr || bridge->isPassable( unit );
 
         for ( std::size_t i = 0; i < size(); ++i ) {
-            if ( at( i ).isPassable3( unit, false ) && ( isPassableBridge || !isBridgeIndex( static_cast<int32_t>( i ), unit ) ) ) {
+            if ( at( i ).isPassableForUnit( unit ) && ( isPassableBridge || !isBridgeIndex( static_cast<int32_t>( i ), unit ) ) ) {
                 at( i ).setReachableForHead();
 
                 if ( unit.isWide() ) {
@@ -208,7 +208,7 @@ void Battle::Board::SetScanPassability( const Unit & unit )
     else {
         // Set passable cells.
         for ( const int32_t idx : GetDistanceIndexes( unit.GetHeadIndex(), unit.GetSpeed() ) ) {
-            GetPath( unit, Position::GetPositionWhenMoved( unit, idx ), false );
+            GetPath( unit, Position::GetPosition( unit, idx ), false );
         }
     }
 }
@@ -236,7 +236,7 @@ bool Battle::Board::GetPathForUnit( const Unit & unit, const Position & destinat
         const Cell & cell = at( cellId );
 
         // Ignore already visited or impassable cell
-        if ( visitedCells.at( cellId ) || !cell.isPassable4( unit, at( currentCellId ) ) ) {
+        if ( visitedCells.at( cellId ) || !cell.isPassableFromAdjacent( unit, at( currentCellId ) ) ) {
             continue;
         }
 
@@ -303,7 +303,7 @@ bool Battle::Board::GetPathForWideUnit( const Unit & unit, const Position & dest
         const Cell & cell = at( headCellId );
 
         // Ignore already visited or impassable cell
-        if ( visitedCells.at( headCellId ) || !cell.isPassable4( unit, at( currentHeadCellId ) ) ) {
+        if ( visitedCells.at( headCellId ) || !cell.isPassableFromAdjacent( unit, at( currentHeadCellId ) ) ) {
             continue;
         }
 
@@ -407,8 +407,7 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
     const bool isWideUnit = unit.isWide();
 
     // Check if destination is valid
-    if ( !destination.GetHead() || ( isWideUnit && !destination.GetTail() ) ) {
-        ERROR_LOG( "Invalid destination for unit " + unit.String() );
+    if ( destination.GetHead() == nullptr || ( isWideUnit && destination.GetTail() == nullptr ) ) {
         return result;
     }
 
@@ -526,7 +525,14 @@ int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & t
     }
 
     if ( attacker.isAllAdjacentCellsAttack() ) {
-        Position position = Position::GetPositionWhenMoved( attacker, from );
+        Position position = Position::GetPosition( attacker, from );
+
+        if ( position.GetHead() == nullptr || ( attacker.isWide() && position.GetTail() == nullptr ) ) {
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid position for " << attacker.String() << ", target: " << target.String() << ", cell: " << from );
+
+            return 0;
+        }
+
         Indexes aroundAttacker = GetAroundIndexes( position );
 
         std::set<const Unit *> unitsUnderAttack;
@@ -542,8 +548,10 @@ int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & t
         for ( const Unit * unit : unitsUnderAttack ) {
             attackValue += unit->GetScoreQuality( attacker );
         }
+
         return attackValue;
     }
+
     return target.GetScoreQuality( attacker );
 }
 
@@ -1094,29 +1102,21 @@ Battle::Indexes Battle::Board::GetDistanceIndexes( s32 center, u32 radius )
 
 bool Battle::Board::isValidMirrorImageIndex( s32 index, const Unit * troop )
 {
-    if ( troop == nullptr )
+    if ( troop == nullptr ) {
         return false;
+    }
 
     const Cell * cell = GetCell( index );
-    if ( cell == nullptr )
+    if ( cell == nullptr ) {
         return false;
+    }
 
-    const bool doubleHex = troop->isWide();
-    if ( index == troop->GetHeadIndex() || ( doubleHex && index == troop->GetTailIndex() ) )
+    if ( index == troop->GetHeadIndex() || ( troop->isWide() && index == troop->GetTailIndex() ) ) {
         return false;
+    }
 
-    if ( !cell->isPassable3( *troop, true ) )
+    if ( !cell->isPassableForUnit( *troop ) ) {
         return false;
-
-    if ( doubleHex ) {
-        const bool isReflected = troop->GetHeadIndex() < troop->GetTailIndex();
-        const int32_t tailIndex = isReflected ? index + 1 : index - 1;
-        const Cell * tailCell = GetCell( tailIndex );
-        if ( tailCell == nullptr || tailIndex == troop->GetHeadIndex() || tailIndex == troop->GetTailIndex() )
-            return false;
-
-        if ( !tailCell->isPassable3( *troop, true ) )
-            return false;
     }
 
     return true;
@@ -1237,21 +1237,6 @@ Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
     }
 
     return result;
-}
-
-int32_t Battle::Board::FixupDestinationCell( const Unit & currentUnit, const int32_t dst )
-{
-    // Only wide units may need this fixup
-    if ( !currentUnit.isWide() ) {
-        return dst;
-    }
-
-    const Position pos = Position::GetReachable( currentUnit, dst );
-
-    assert( pos.GetHead() != nullptr );
-    assert( pos.GetTail() != nullptr );
-
-    return pos.GetHead()->GetIndex();
 }
 
 std::string Battle::Board::GetMoatInfo( void )
