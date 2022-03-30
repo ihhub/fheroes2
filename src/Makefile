@@ -54,8 +54,7 @@ CXXFLAGS_TP := $(CXXFLAGS)
 
 # TODO: Add -Wconversion -Wsign-conversion -Wextra-semi -Wswitch-default flags back once we fix all the corresponding code smells!
 CCFLAGS := $(CCFLAGS) -pedantic -Wall -Wextra -Wcast-align=strict -Wctor-dtor-privacy -Wdouble-promotion -Wfloat-conversion \
-           -Wfloat-equal -Wlogical-op -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wstrict-null-sentinel \
-           -Wundef -Wuninitialized -Wunused
+           -Wfloat-equal -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wundef -Wuninitialized -Wunused
 
 ifdef FHEROES2_STRICT_COMPILATION
 CCFLAGS := $(CCFLAGS) -Werror
