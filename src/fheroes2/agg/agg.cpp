@@ -701,7 +701,7 @@ bool AGG::AGGInitializer::init()
     fheroes2::replaceStringEnding( aggLowerCaseFilePath, ".agg", "x.agg" );
 
     for ( const std::string & path : aggFileNames ) {
-        if ( path.size() != aggLowerCaseFilePath.size() ) {
+        if ( path.size() < aggLowerCaseFilePath.size() ) {
             continue;
         }
 
