@@ -62,6 +62,8 @@ std::string Luck::Description( int luck )
     case Luck::GREAT:
     case Luck::IRISH:
         return _( "Good luck sometimes lets your armies get lucky attacks (double strength) in combat." );
+    default:
+        break;
     }
 
     return "Unknown";

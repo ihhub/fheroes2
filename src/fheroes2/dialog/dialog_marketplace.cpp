@@ -766,6 +766,9 @@ u32 GetTradeCosts( const Kingdom & kingdom, int rs_from, int rs_to, bool trading
             else if ( 8 < markets )
                 return COSTLY_COSTLY9;
             break;
+
+        default:
+            break;
         }
         break;
 
@@ -844,6 +847,9 @@ u32 GetTradeCosts( const Kingdom & kingdom, int rs_from, int rs_to, bool trading
                 return COSTLY_UNCOSTLY8;
             else if ( 8 < markets )
                 return COSTLY_UNCOSTLY9;
+            break;
+
+        default:
             break;
         }
         break;

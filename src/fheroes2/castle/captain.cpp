@@ -214,6 +214,8 @@ fheroes2::Sprite Captain::GetPortrait( const PortraitType type ) const
             break;
         }
         break;
+    default:
+        break;
     }
 
     // We shouldn't even reach this code!

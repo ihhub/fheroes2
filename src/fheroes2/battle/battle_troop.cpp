@@ -1081,6 +1081,8 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
         // Ghost's ability to increase the numbers
         attackerThreat *= 3;
         break;
+    default:
+        break;
     }
 
     // force big priority on mirror images as they get destroyed in 1 hit

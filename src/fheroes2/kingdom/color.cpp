@@ -45,6 +45,8 @@ std::string Color::String( int color )
         return _( "Purple" );
     case Color::UNUSED:
         return "Unknown";
+    default:
+        break;
     }
 
     return "None";

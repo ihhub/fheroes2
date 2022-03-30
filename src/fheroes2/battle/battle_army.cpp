@@ -189,6 +189,8 @@ uint32_t Battle::Force::GetSurrenderCost() const
         case Skill::Level::EXPERT:
             mod *= 0.4;
             break;
+        default:
+            break;
         }
 
         res *= mod;

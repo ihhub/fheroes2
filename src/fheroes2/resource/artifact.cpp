@@ -266,6 +266,8 @@ bool Artifact::isAlchemistRemove( void ) const
     case HEART_ICE:
     case BROACH_SHIELDING:
         return true;
+    default:
+        break;
     }
 
     return false;
