@@ -1,15 +1,11 @@
 name: Make
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  workflow_call:
 
 jobs:
   build:
     strategy:
-      fail-fast: false
       matrix:
         config:
         - name: Linux SDL1 Release
@@ -62,6 +58,7 @@ jobs:
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_MACOS_APP_BUNDLE: ON }
     name: Make (${{ matrix.config.name }})
     runs-on: ${{ matrix.config.os }}
+    timeout-minutes: 30
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies (Linux)
@@ -106,6 +103,7 @@ jobs:
   build-psv:
     name: Make (PS Vita)
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies
@@ -172,6 +170,7 @@ jobs:
   build-switch:
     name: Make (Nintendo Switch)
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     container: devkitpro/devkita64:latest
     steps:
     - uses: actions/checkout@v2

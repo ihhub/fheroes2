@@ -470,6 +470,17 @@ bool ActionSpellDimensionDoor( Heroes & hero )
 bool ActionSpellTownGate( Heroes & hero )
 {
     const Castle * castle = fheroes2::getNearestCastleTownGate( hero );
+    if ( !castle ) {
+        // A hero must be able to have a destination castle. Something is wrong with the logic!
+        assert( 0 );
+        return false;
+    }
+
+    if ( castle->GetHeroes().Guest() && castle->GetHeroes().Guest() != &hero ) {
+        // The nearest town occupation must be checked before casting this spell. Something is wrong with the logic!
+        assert( 0 );
+        return false;
+    }
 
     Interface::Basic & I = Interface::Basic::Get();
 
@@ -477,15 +488,6 @@ bool ActionSpellTownGate( Heroes & hero )
     I.GetGameArea().SetCenter( hero.GetCenter() );
     I.RedrawFocus();
     I.Redraw();
-
-    if ( !castle ) {
-        Dialog::Message( "", _( "No available towns.\nSpell Failed!!!" ), Font::BIG, Dialog::OK );
-        return false;
-    }
-    else if ( castle->GetHeroes().Guest() && castle->GetHeroes().Guest() != &hero ) {
-        Dialog::Message( "", _( "Nearest town occupied.\nSpell Failed!!!" ), Font::BIG, Dialog::OK );
-        return false;
-    }
 
     return HeroesTownGate( hero, castle );
 }

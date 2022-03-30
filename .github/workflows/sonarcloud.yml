@@ -1,15 +1,16 @@
 name: SonarCloud Analyzer
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  workflow_call:
+    secrets:
+      SONAR_TOKEN:
+        required: true
 
 jobs:
   sonarcloud:
     name: SonarCloud Analyzer
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: ${{ github.repository == 'ihhub/fheroes2' && ( github.event_name == 'push' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository ) ) }}
     env:
       SONAR_SCANNER_VERSION: 4.5.0.2216

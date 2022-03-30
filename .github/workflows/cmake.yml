@@ -1,13 +1,11 @@
 name: CMake
 
 on:
-  pull_request:
-    branches: [ master ]
+  workflow_call:
 
 jobs:
   build:
     strategy:
-      fail-fast: false
       matrix:
         config:
         - name: Linux SDL1
@@ -36,6 +34,7 @@ jobs:
           options: -DUSE_SDL_VERSION=SDL2 -DMACOS_APP_BUNDLE=ON
     name: CMake (${{ matrix.config.name }})
     runs-on: ${{ matrix.config.os }}
+    timeout-minutes: 30
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies (Linux)

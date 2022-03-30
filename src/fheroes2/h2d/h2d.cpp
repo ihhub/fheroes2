@@ -31,23 +31,12 @@ namespace
 
     bool getH2DFilePath( const std::string & fileName, std::string & path )
     {
-        std::string fullPath;
-
 #if defined( MACOS_APP_BUNDLE )
+        return Settings::findFile( "h2d", fileName, path );
         const std::string internalDirectory( "h2d" );
 #else
-        const std::string internalDirectory( System::ConcatePath( "files", "data" ) );
+        return Settings::findFile( System::ConcatePath( "files", "data" ), fileName, path );
 #endif
-        for ( const std::string & rootDir : Settings::GetRootDirs() ) {
-            fullPath = System::ConcatePath( rootDir, internalDirectory );
-            fullPath = System::ConcatePath( fullPath, fileName );
-            if ( System::IsFile( fullPath ) ) {
-                path.swap( fullPath );
-                return true;
-            }
-        }
-
-        return false;
     }
 }
 

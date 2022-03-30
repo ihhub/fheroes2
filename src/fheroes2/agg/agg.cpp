@@ -139,7 +139,6 @@ namespace AGG
     void LoadWAV( int m82, std::vector<u8> & );
     void LoadMID( int xmi, std::vector<u8> & );
 
-    bool ReadDataDir( void );
     std::vector<uint8_t> ReadMusicChunk( const std::string & key, const bool ignoreExpansion = false );
 
     void PlayMusicInternally( const int mus, const MusicSource musicType, const bool loop );
@@ -359,34 +358,6 @@ namespace AGG
     };
 
     AsyncSoundManager g_asyncSoundManager;
-}
-
-bool AGG::ReadDataDir( void )
-{
-    Settings & conf = Settings::Get();
-
-    ListFiles aggs = Settings::FindFiles( "data", ".agg", false );
-
-    // not found agg, exit
-    if ( aggs.empty() )
-        return false;
-
-    // attach agg files
-    for ( ListFiles::const_iterator it = aggs.begin(); it != aggs.end(); ++it ) {
-        std::string lower = StringLower( *it );
-        if ( std::string::npos != lower.find( "heroes2.agg" ) && !heroes2_agg.isGood() ) {
-            heroes2_agg.open( *it );
-            g_midiHeroes2AGG.open( *it );
-        }
-        if ( std::string::npos != lower.find( "heroes2x.agg" ) && !heroes2x_agg.isGood() ) {
-            heroes2x_agg.open( *it );
-            g_midiHeroes2xAGG.open( *it );
-        }
-    }
-
-    conf.EnablePriceOfLoyaltySupport( heroes2x_agg.isGood() );
-
-    return heroes2_agg.isGood();
 }
 
 std::vector<uint8_t> AGG::ReadChunk( const std::string & key )
@@ -670,7 +641,7 @@ void AGG::ResetAudio()
 
 AGG::AGGInitializer::AGGInitializer()
 {
-    if ( ReadDataDir() ) {
+    if ( init() ) {
         return;
     }
 
@@ -682,4 +653,35 @@ AGG::AGGInitializer::~AGGInitializer()
     wav_cache.clear();
     mid_cache.clear();
     loop_sounds.clear();
+}
+
+bool AGG::AGGInitializer::init()
+{
+    std::string fullPath;
+    if ( Settings::findFile( "data", "heroes2.agg", fullPath ) ) {
+        if ( !heroes2_agg.open( fullPath ) ) {
+            return false;
+        }
+
+        if ( !g_midiHeroes2AGG.open( fullPath ) ) {
+            // How is it even possible that for the second time the file is not readable?
+            assert( 0 );
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+
+    // Both AGG files must be located in the same directory. In this case we modify the ending of the existing full path to avoid extra logic.
+    fheroes2::replaceStringEnding( fullPath, ".agg", "x.agg" );
+
+    if ( System::IsFile( fullPath ) ) {
+        heroes2x_agg.open( fullPath );
+        g_midiHeroes2xAGG.open( fullPath );
+    }
+
+    Settings::Get().EnablePriceOfLoyaltySupport( heroes2x_agg.isGood() );
+
+    return true;
 }

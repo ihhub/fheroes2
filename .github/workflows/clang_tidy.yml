@@ -5,10 +5,15 @@ on:
     branches: [ master ]
     paths: [ '**.cpp', '**.h' ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   tidy:
     name: Clang-Tidy
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: ${{ github.event_name == 'pull_request' }}
     steps:
     - uses: actions/checkout@v2

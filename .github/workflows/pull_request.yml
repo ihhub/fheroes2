@@ -1,0 +1,46 @@
+name: Pull Request
+
+on:
+  pull_request:
+    branches: [ master ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  style:
+    name: Code style check
+    uses: ./.github/workflows/code_style_check.yml
+
+  clang:
+    name: Clang Analyzer
+    needs:
+    - style
+    uses: ./.github/workflows/clang_analyzer.yml
+
+  msvc:
+    name: MSVC
+    needs:
+    - style
+    uses: ./.github/workflows/msvc.yml
+
+  sonarcloud:
+    name: SonarCloud Analyzer
+    needs:
+    - style
+    uses: ./.github/workflows/sonarcloud.yml
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  cmake:
+    name: CMake
+    needs:
+    - msvc
+    uses: ./.github/workflows/cmake.yml
+
+  make:
+    name: Make
+    needs:
+    - msvc
+    uses: ./.github/workflows/make.yml

@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 
 #include "army.h"
 #include "castle.h"
@@ -31,6 +32,8 @@
 #include "race.h"
 #include "serialize.h"
 #include "settings.h"
+#include "spell_info.h"
+#include "tools.h"
 #include "translations.h"
 #include "world.h"
 
@@ -442,6 +445,43 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res ) const
             *res = _( "Not enough move points." );
         }
         return false;
+    }
+
+    const Heroes * hero = dynamic_cast<const Heroes *>( this );
+    if ( spell.isAdventure() && hero == nullptr ) {
+        // How is it possible that a captain can access this spell?
+        assert( 0 );
+        if ( res != nullptr ) {
+            *res = _( "Only heroes can cast this spell." );
+        }
+        return false;
+    }
+
+    if ( spell == Spell::TOWNGATE ) {
+        const Castle * castle = fheroes2::getNearestCastleTownGate( *hero );
+        if ( castle == nullptr ) {
+            if ( res != nullptr ) {
+                *res = _( "You do not currently own any town or castle, so you can't cast the spell." );
+            }
+            return false;
+        }
+
+        if ( castle->GetIndex() == hero->GetIndex() ) {
+            if ( res != nullptr ) {
+                *res = _( "This hero is already in a town, so you can't cast the spell." );
+            }
+            return false;
+        }
+
+        const Heroes * townGuest = castle->GetHeroes().Guest();
+        if ( townGuest != nullptr ) {
+            if ( res != nullptr ) {
+                *res = _( "The nearest town is %{town}.\n \nThis town is occupied by your hero %{hero}." );
+                StringReplace( *res, "%{town}", castle->GetName() );
+                StringReplace( *res, "%{hero}", townGuest->GetName() );
+            }
+            return false;
+        }
     }
 
     if ( res ) {
