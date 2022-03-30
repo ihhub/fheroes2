@@ -1582,7 +1582,7 @@ namespace
             font[173 - 32] = font[73];
             fheroes2::FillTransform( font[173 - 32], 0, 0, font[173 - 32].width(), 2, 1 );
             // i with grave accent `.
-            font[236 - 32].resize( font[73].width(), font[73].height() + 1  );
+            font[236 - 32].resize( font[73].width(), font[73].height() + 1 );
             font[236 - 32].reset();
             fheroes2::Copy( font[173 - 32], 0, 0, font[236 - 32], 0, 2, font[173 - 32].width(), font[173 - 32].height() );
             fheroes2::Copy( font[192 - 32], 4, 0, font[236 - 32], 2, 1, 3, 2 );
