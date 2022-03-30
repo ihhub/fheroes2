@@ -910,7 +910,11 @@ void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUni
         return;
     }
 
-    const int32_t validUnitCount = static_cast<int32_t>( std::count_if( orders->begin(), orders->end(), []( const Unit * unit ) { return unit->isValid(); } ) );
+    const int32_t validUnitCount = static_cast<int32_t>( std::count_if( orders->begin(), orders->end(), []( const Unit * unit ) {
+        assert( unit != nullptr );
+        return unit->isValid();
+    } ) );
+
     const int32_t maximumUnitsToDraw = area.width / armyOrderMonsterIconSize;
 
     int32_t offsetX = area.x;
@@ -936,7 +940,8 @@ void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUni
             break;
         }
 
-        if ( unit == nullptr || !unit->isValid() ) {
+        assert( unit != nullptr );
+        if ( !unit->isValid() ) {
             continue;
         }
 
