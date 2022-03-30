@@ -53,7 +53,7 @@ CXXFLAGS_TP := $(CXXFLAGS)
 #
 
 # TODO: Add -Wconversion -Wsign-conversion -Wextra-semi flags back once we fix all the corresponding code smells!
-CCFLAGS := $(CCFLAGS) -pedantic -Wall -Wextra -Wdouble-promotion -Wfloat-conversion -Wfloat-equal -Woverloaded-virtual -Wredundant-decls -Wshadow -Wuninitialized -Wunused
+CCFLAGS := $(CCFLAGS) -pedantic -Wall -Wextra -Wcast-align=strict -Wdouble-promotion -Wfloat-conversion -Wfloat-equal -Woverloaded-virtual -Wredundant-decls -Wshadow -Wuninitialized -Wunused
 
 ifdef FHEROES2_STRICT_COMPILATION
 CCFLAGS := $(CCFLAGS) -Werror
