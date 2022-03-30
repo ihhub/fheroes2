@@ -570,6 +570,8 @@ namespace
             case Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES:
                 replaceArmy( humanKingdom.GetBestHero()->GetArmy(), Campaign::CampaignSaveData::Get().getCarryOverTroops() );
                 break;
+            default:
+                break;
             }
         }
     }

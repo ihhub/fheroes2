@@ -223,6 +223,10 @@ namespace Battle
     class StatusListBox : public ::Interface::ListBox<std::string>
     {
     public:
+        using ::Interface::ListBox<std::string>::ActionListDoubleClick;
+        using ::Interface::ListBox<std::string>::ActionListSingleClick;
+        using ::Interface::ListBox<std::string>::ActionListPressRight;
+
         StatusListBox()
             : openlog( false )
         {}

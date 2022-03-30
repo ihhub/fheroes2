@@ -72,6 +72,10 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell );
 class CastleIndexListBox : public Interface::ListBox<s32>
 {
 public:
+    using Interface::ListBox<s32>::ActionListDoubleClick;
+    using Interface::ListBox<s32>::ActionListSingleClick;
+    using Interface::ListBox<s32>::ActionListPressRight;
+
     CastleIndexListBox( const fheroes2::Rect & area, const fheroes2::Point & offset, int & res, const int townFrameIcnId, const int listBoxIcnId )
         : Interface::ListBox<int32_t>( offset )
         , result( res )

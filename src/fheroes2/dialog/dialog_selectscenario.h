@@ -30,6 +30,10 @@
 class ScenarioListBox : public Interface::ListBox<Maps::FileInfo>
 {
 public:
+    using Interface::ListBox<Maps::FileInfo>::ActionListDoubleClick;
+    using Interface::ListBox<Maps::FileInfo>::ActionListSingleClick;
+    using Interface::ListBox<Maps::FileInfo>::ActionListPressRight;
+
     explicit ScenarioListBox( const fheroes2::Point & pt )
         : Interface::ListBox<Maps::FileInfo>( pt )
         , selectOk( false )

@@ -495,6 +495,9 @@ bool Spell::isSingleTarget() const
     case MIRRORIMAGE:
     case SHIELD:
         return true;
+
+    default:
+        break;
     }
 
     return false;
