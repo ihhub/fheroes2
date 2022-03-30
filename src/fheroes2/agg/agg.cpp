@@ -706,8 +706,9 @@ bool AGG::AGGInitializer::init()
         }
 
         const std::string tempPath = StringLower( path );
-        if ( tempPath.compare( tempPath.size() - aggLowerCaseFilePath.size(), aggLowerCaseFilePath.size(), aggLowerCaseFilePath ) == 0 ) {
+        if ( tempPath == aggLowerCaseFilePath ) {
             heroes2XAggFilePath = path;
+            break;
         }
     }
 
