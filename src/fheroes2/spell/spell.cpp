@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -59,8 +60,8 @@ spellstats_t spells[] = {
       gettext_noop( "Removes all negative spells cast upon your forces, and restores up to %{count} HP per level of spell power, per creature." ) },
     { gettext_noop( "Resurrect" ), 12, 0, 13, 50, gettext_noop( "Resurrects creatures from a damaged or dead unit until end of combat." ) },
     { gettext_noop( "Resurrect True" ), 15, 0, 12, 50, gettext_noop( "Resurrects creatures from a damaged or dead unit permanently." ) },
-    { gettext_noop( "Haste" ), 3, 0, 14, 0, gettext_noop( "Increases the speed of any creature by %{count}." ) },
-    { gettext_noop( "Mass Haste" ), 10, 0, 61, 0, gettext_noop( "Increases the speed of all of your creatures by %{count}." ) },
+    { gettext_noop( "Haste" ), 3, 0, 14, 2, gettext_noop( "Increases the speed of any creature by %{count}." ) },
+    { gettext_noop( "Mass Haste" ), 10, 0, 61, 2, gettext_noop( "Increases the speed of all of your creatures by %{count}." ) },
     { gettext_noop( "spell|Slow" ), 3, 0, 1, 0, gettext_noop( "Slows target to half movement rate." ) },
     { gettext_noop( "Mass Slow" ), 15, 0, 62, 0, gettext_noop( "Slows all enemies to half movement rate." ) },
     { gettext_noop( "spell|Blind" ), 6, 0, 21, 0, gettext_noop( "Clouds the affected creatures' eyes, preventing them from moving." ) },
@@ -132,35 +133,6 @@ spellstats_t spells[] = {
       gettext_noop( "Turns the affected creature into stone.  A petrified creature receives half damage from a direct attack." ) },
 };
 
-Spell::Spell( int s )
-    : id( s > STONE ? NONE : s )
-{}
-
-bool Spell::operator<( const Spell & s ) const
-{
-    return id < s.id;
-}
-
-bool Spell::operator==( const Spell & s ) const
-{
-    return s.id == id;
-}
-
-bool Spell::operator!=( const Spell & s ) const
-{
-    return s.id != id;
-}
-
-bool Spell::isValid( void ) const
-{
-    return id != Spell::NONE;
-}
-
-int Spell::GetID( void ) const
-{
-    return id;
-}
-
 const char * Spell::GetName( void ) const
 {
     return _( spells[id].name );
@@ -218,11 +190,6 @@ u32 Spell::SpellPoint( const HeroBase * hero ) const
     }
 
     return res ? res : 1;
-}
-
-bool Spell::isLevel( int lvl ) const
-{
-    return Level() == lvl;
 }
 
 int Spell::Level( void ) const
@@ -343,16 +310,6 @@ bool Spell::isCombat( void ) const
     return true;
 }
 
-bool Spell::isFire() const
-{
-    return id == FIREBALL || id == FIREBLAST;
-}
-
-bool Spell::isCold() const
-{
-    return id == COLDRAY || id == COLDRING;
-}
-
 bool Spell::isGuardianType() const
 {
     switch ( id ) {
@@ -367,16 +324,6 @@ bool Spell::isGuardianType() const
     }
 
     return false;
-}
-
-bool Spell::isAdventure( void ) const
-{
-    return !isCombat();
-}
-
-bool Spell::isDamage( void ) const
-{
-    return Damage() != 0;
 }
 
 u32 Spell::Damage( void ) const
@@ -453,16 +400,6 @@ u32 Spell::Resurrect( void ) const
     }
 
     return 0;
-}
-
-bool Spell::isRestore( void ) const
-{
-    return Restore() != 0;
-}
-
-bool Spell::isResurrect( void ) const
-{
-    return Resurrect() != 0;
 }
 
 u32 Spell::ExtraValue( void ) const

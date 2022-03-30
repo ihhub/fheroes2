@@ -1,24 +1,25 @@
-/****************************************************************************
+/***************************************************************************
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
+ *                                                                         *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
  *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
- *                                                                          *
- *   This program is free software; you can redistribute it and/or modify   *
- *   it under the terms of the GNU General Public License as published by   *
- *   the Free Software Foundation; either version 2 of the License, or      *
- *   (at your option) any later version.                                    *
- *                                                                          *
- *   This program is distributed in the hope that it will be useful,        *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *   GNU General Public License for more details.                           *
- *                                                                          *
- *   You should have received a copy of the GNU General Public License      *
- *   along with this program; if not, write to the                          *
- *   Free Software Foundation, Inc.,                                        *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.              *
- ****************************************************************************/
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 
 #include <algorithm>
 #include <string>
@@ -40,6 +41,8 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 
 namespace
 {
@@ -388,10 +391,6 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     MovePointsScaleFixed();
     otherHero.MovePointsScaleFixed();
 
-    // scholar action
-    if ( Settings::Get().ExtWorldEyeEagleAsScholar() )
-        Heroes::ScholarAction( *this, otherHero );
-
     LocalEvent & le = LocalEvent::Get();
 
     // message loop
@@ -463,8 +462,12 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             // Use insert instead of std::merge to make appveyour happy
             assembledArtifacts.insert( otherHeroAssembledArtifacts.begin(), otherHeroAssembledArtifacts.end() );
 
-            for ( const ArtifactSetData & artifactSetData : assembledArtifacts )
-                Dialog::ArtifactInfo( "", _( artifactSetData._assembleMessage ), artifactSetData._assembledArtifactID );
+            for ( const ArtifactSetData & artifactSetData : assembledArtifacts ) {
+                const fheroes2::ArtifactDialogElement artifactUI( artifactSetData._assembledArtifactID );
+                fheroes2::showMessage( fheroes2::Text( Artifact( static_cast<int>( artifactSetData._assembledArtifactID ) ).GetName(),
+                                                       fheroes2::FontType::normalYellow() ),
+                                       fheroes2::Text( _( artifactSetData._assembleMessage ), fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
+            }
 
             selectArtifacts1.Redraw();
             selectArtifacts2.Redraw();
@@ -619,97 +622,4 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     armyCountBackgroundRestorerRight.reset();
     restorer.restore();
     display.render();
-}
-
-void Heroes::ScholarAction( Heroes & hero1, Heroes & hero2 )
-{
-    if ( !hero1.HaveSpellBook() || !hero2.HaveSpellBook() ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, "spell_book disabled" );
-        return;
-    }
-    else if ( !Settings::Get().ExtWorldEyeEagleAsScholar() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "EyeEagleAsScholar settings disabled" );
-        return;
-    }
-
-    const int scholar1 = hero1.GetLevelSkill( Skill::Secondary::EAGLEEYE );
-    const int scholar2 = hero2.GetLevelSkill( Skill::Secondary::EAGLEEYE );
-    int scholar = 0;
-
-    Heroes * teacher = nullptr;
-    Heroes * learner = nullptr;
-
-    if ( scholar1 && scholar1 >= scholar2 ) {
-        teacher = &hero1;
-        learner = &hero2;
-        scholar = scholar1;
-    }
-    else if ( scholar2 && scholar2 >= scholar1 ) {
-        teacher = &hero2;
-        learner = &hero1;
-        scholar = scholar2;
-    }
-    else {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Eagle Eye skill not found" );
-        return;
-    }
-
-    // skip bag artifacts
-    SpellStorage teach = teacher->spell_book.SetFilter( SpellBook::Filter::ALL );
-    SpellStorage learn = learner->spell_book.SetFilter( SpellBook::Filter::ALL );
-
-    // remove_if for learn spells
-    if ( !learn.empty() ) {
-        learn.erase( std::remove_if( learn.begin(), learn.end(),
-                                     [teacher]( const Spell & spell ) { return teacher->HaveSpell( spell ) || !teacher->CanTeachSpell( spell ); } ),
-                     learn.end() );
-    }
-
-    // remove_if for teach spells
-    if ( !teach.empty() ) {
-        teach.erase( std::remove_if( teach.begin(), teach.end(),
-                                     [learner, teacher]( const Spell & spell ) { return learner->HaveSpell( spell ) || !teacher->CanTeachSpell( spell ); } ),
-                     teach.end() );
-    }
-
-    std::string spells1;
-    std::string spells2;
-
-    // learning
-    for ( SpellStorage::const_iterator it = learn.begin(); it != learn.end(); ++it ) {
-        teacher->AppendSpellToBook( *it );
-        if ( !spells1.empty() )
-            spells1.append( it + 1 == learn.end() ? _( " and " ) : ", " );
-        spells1.append( ( *it ).GetName() );
-    }
-
-    // teacher
-    for ( SpellStorage::const_iterator it = teach.begin(); it != teach.end(); ++it ) {
-        learner->AppendSpellToBook( *it );
-        if ( !spells2.empty() )
-            spells2.append( it + 1 == teach.end() ? _( " and " ) : ", " );
-        spells2.append( ( *it ).GetName() );
-    }
-
-    if ( teacher->isControlHuman() || learner->isControlHuman() ) {
-        std::string message;
-
-        if ( !spells1.empty() && !spells2.empty() )
-            message = _( "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns %{spells1} from %{learner}, and teaches %{spells2} to %{learner}." );
-        else if ( !spells1.empty() )
-            message = _( "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns %{spells1} from %{learner}." );
-        else if ( !spells2.empty() )
-            message = _( "%{teacher}, whose %{level} %{scholar} knows many magical secrets, teaches %{spells2} to %{learner}." );
-
-        if ( !message.empty() ) {
-            StringReplace( message, "%{teacher}", teacher->GetName() );
-            StringReplace( message, "%{learner}", learner->GetName() );
-            StringReplace( message, "%{level}", Skill::Level::String( scholar ) );
-            StringReplace( message, "%{scholar}", Skill::Secondary::String( Skill::Secondary::EAGLEEYE ) );
-            StringReplace( message, "%{spells1}", spells1 );
-            StringReplace( message, "%{spells2}", spells2 );
-
-            Dialog::Message( _( "Scholar Ability" ), message, Font::BIG, Dialog::OK );
-        }
-    }
 }

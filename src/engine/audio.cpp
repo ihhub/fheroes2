@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +23,7 @@
 
 #include <algorithm>
 #include <atomic>
+#include <cassert>
 #include <mutex>
 #include <numeric>
 
@@ -110,7 +112,7 @@ namespace
 
     void PlayMusic( Mix_Music * mix, const bool loop )
     {
-        Music::Reset();
+        Music::Stop();
 
         int res = musicFadeIn ? Mix_FadeInMusic( mix, loop ? -1 : 0, musicFadeIn ) : Mix_PlayMusic( mix, loop ? -1 : 0 );
 
@@ -129,7 +131,12 @@ void Audio::Init()
 
     if ( fheroes2::isComponentInitialized( fheroes2::SystemInitializationComponent::Audio ) ) {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-        Mix_Init( MIX_INIT_OGG | MIX_INIT_MP3 | MIX_INIT_MOD );
+        const int initializationFlags = MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG;
+        const int initializedFlags = Mix_Init( initializationFlags );
+        if ( ( initializedFlags & initializationFlags ) != initializationFlags ) {
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN,
+                       "Expected music initialization flags as " << initializationFlags << " but received " << ( initializedFlags & initializationFlags ) )
+        }
 #endif
         hardware.freq = 22050;
         hardware.format = AUDIO_S16;
@@ -145,7 +152,11 @@ void Audio::Init()
             int channels = 0;
 
             Mix_QuerySpec( &hardware.freq, &hardware.format, &channels );
-            hardware.channels = channels;
+
+            // If this assertion blows up it means that SDL doesn't work properly.
+            assert( channels >= 0 && channels < 256 );
+
+            hardware.channels = static_cast<uint8_t>( channels );
 
             valid = true;
         }
@@ -162,8 +173,8 @@ void Audio::Quit()
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
     if ( valid && fheroes2::isComponentInitialized( fheroes2::SystemInitializationComponent::Audio ) ) {
-        Music::Reset();
-        Mixer::Reset();
+        Music::Stop();
+        Mixer::Stop();
 
         valid = false;
 
@@ -357,17 +368,6 @@ void Mixer::Stop( const int channel /* = -1 */ )
     }
 }
 
-void Mixer::Reset()
-{
-    const std::lock_guard<std::recursive_mutex> guard( mutex );
-
-    Music::Reset();
-
-    if ( valid ) {
-        Mix_HaltChannel( -1 );
-    }
-}
-
 bool Mixer::isPlaying( const int channel )
 {
     const std::lock_guard<std::recursive_mutex> guard( mutex );
@@ -445,16 +445,7 @@ int Music::Volume( int vol )
     return Mix_VolumeMusic( vol );
 }
 
-void Music::Pause()
-{
-    const std::lock_guard<std::recursive_mutex> guard( mutex );
-
-    if ( music ) {
-        Mix_PauseMusic();
-    }
-}
-
-void Music::Reset()
+void Music::Stop()
 {
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 

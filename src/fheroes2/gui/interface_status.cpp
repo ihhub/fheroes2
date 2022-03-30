@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,7 +44,7 @@ namespace
 }
 
 Interface::StatusWindow::StatusWindow( Basic & basic )
-    : BorderWindow( fheroes2::Rect( 0, 0, 144, 72 ) )
+    : BorderWindow( { 0, 0, 144, 72 } )
     , interface( basic )
     , _state( StatusType::STATUS_UNKNOWN )
     , _oldState( StatusType::STATUS_UNKNOWN )
@@ -260,7 +261,7 @@ void Interface::StatusWindow::DrawDayInfo( int oh ) const
 
     const int dayOfWeek = world.GetDay();
     const int weekOfMonth = world.GetWeek();
-    const int month = world.GetMonth();
+    const uint32_t month = world.GetMonth();
     const int icnType = Settings::Get().ExtGameEvilInterface() ? ICN::SUNMOONE : ICN::SUNMOON;
     uint32_t icnId = dayOfWeek > 1 ? 0 : ( ( weekOfMonth - 1 ) % 4 ) + 1;
     if ( dayOfWeek == 1 && weekOfMonth == 1 && month == 1 ) { // special case
@@ -270,13 +271,13 @@ void Interface::StatusWindow::DrawDayInfo( int oh ) const
     fheroes2::Blit( fheroes2::AGG::GetICN( icnType, icnId ), fheroes2::Display::instance(), pos.x, pos.y + 1 + oh );
 
     std::string message = _( "Month: %{month} Week: %{week}" );
-    StringReplace( message, "%{month}", world.GetMonth() );
-    StringReplace( message, "%{week}", world.GetWeek() );
+    StringReplace( message, "%{month}", month );
+    StringReplace( message, "%{week}", weekOfMonth );
     Text text( message, Font::SMALL );
     text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + 30 + oh );
 
     message = _( "Day: %{day}" );
-    StringReplace( message, "%{day}", world.GetDay() );
+    StringReplace( message, "%{day}", dayOfWeek );
     text.Set( message, Font::BIG );
     text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + 46 + oh );
 }
@@ -314,7 +315,7 @@ void Interface::StatusWindow::DrawResourceInfo( int oh ) const
     TextBox text( message, Font::SMALL, pos.width );
     text.Blit( pos.x, pos.y + 4 + oh );
 
-    const fheroes2::Sprite & spr = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::GetIndexSprite2( lastResource ) );
+    const fheroes2::Sprite & spr = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::getIconIcnIndex( lastResource ) );
     fheroes2::Blit( spr, fheroes2::Display::instance(), pos.x + ( pos.width - spr.width() ) / 2, pos.y + 6 + oh + text.h() );
 
     text.Set( std::to_string( countLastResource ), Font::SMALL, pos.width );
@@ -451,7 +452,7 @@ void Interface::StatusWindow::QueueEventProcessing( void )
         else {
             Dialog::Message(
                 _( "Status Window" ),
-                _( "This window provides information on the status of your hero or kingdom, and shows the date. Left click here to cycle throungh these windows." ),
+                _( "This window provides information on the status of your hero or kingdom, and shows the date. Left click here to cycle through these windows." ),
                 Font::BIG );
         }
     }

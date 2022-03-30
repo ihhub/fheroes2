@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -53,7 +54,7 @@ namespace
     std::string lastMapFileName;
     std::vector<Player> savedPlayers;
 
-    int save_version = CURRENT_FORMAT_VERSION;
+    uint16_t save_version = CURRENT_FORMAT_VERSION;
 
     std::string last_name;
 
@@ -167,12 +168,12 @@ void Game::SavePlayers( const std::string & mapFileName, const Players & players
     }
 }
 
-void Game::SetLoadVersion( int ver )
+void Game::SetLoadVersion( uint16_t ver )
 {
     save_version = ver;
 }
 
-int Game::GetLoadVersion( void )
+uint16_t Game::GetLoadVersion()
 {
     return save_version;
 }
@@ -275,7 +276,7 @@ void Game::ObjectFadeAnimation::PerformFadeTask()
     };
     auto redrawGameArea = []() {
         fheroes2::Display & display = fheroes2::Display::instance();
-        Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
+        const Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
 
         gameArea.Redraw( display, Interface::LEVEL_ALL );
 
@@ -401,7 +402,8 @@ void Game::EnvironmentSoundMixer()
 
 void Game::restoreSoundsForCurrentFocus()
 {
-    AGG::ResetMixer();
+    Game::SetCurrentMusic( MUS::UNKNOWN );
+    AGG::ResetAudio();
 
     switch ( Interface::GetFocusType() ) {
     case GameFocus::HEROES: {
@@ -514,26 +516,9 @@ u32 Game::GetGameOverScores( void )
     return GetRating() * ( 200 - daysScore ) / 100;
 }
 
-void Game::ShowMapLoadingText( void )
-{
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Rect pos( 0, display.height() / 2, display.width(), display.height() / 2 );
-    TextBox text( _( "Map is loading..." ), Font::BIG, pos.width );
-
-    // blit test
-    display.fill( 0 );
-    text.Blit( pos.x, pos.y );
-    display.render();
-}
-
 u32 Game::GetLostTownDays( void )
 {
     return GameStatic::GetGameOverLostDays();
-}
-
-u32 Game::GetViewDistance( u32 d )
-{
-    return GameStatic::GetOverViewDistance( d );
 }
 
 u32 Game::GetWhirlpoolPercent( void )

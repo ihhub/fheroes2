@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +23,7 @@
 #ifndef H2WORLD_H
 #define H2WORLD_H
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -34,7 +36,6 @@
 #include "world_pathfinding.h"
 #include "world_regions.h"
 
-class Recruits;
 class MapObjectSimple;
 class ActionSimple;
 struct MapEvent;
@@ -43,10 +44,13 @@ struct ListActions : public std::list<ActionSimple *>
 {
     ListActions() = default;
     ListActions( const ListActions & other ) = default;
-    ListActions & operator=( const ListActions & other ) = delete;
-    ListActions( const ListActions && other ) = delete;
-    ListActions & operator=( const ListActions && other ) = delete;
+    ListActions( ListActions && other ) = delete;
+
     ~ListActions();
+
+    ListActions & operator=( const ListActions & other ) = delete;
+    ListActions & operator=( ListActions && other ) = delete;
+
     void clear( void );
 };
 
@@ -54,10 +58,13 @@ struct MapObjects : public std::map<u32, MapObjectSimple *>
 {
     MapObjects() = default;
     MapObjects( const MapObjects & other ) = delete;
-    MapObjects & operator=( const MapObjects & other ) = delete;
-    MapObjects( const MapObjects && other ) = delete;
-    MapObjects & operator=( const MapObjects && other ) = delete;
+    MapObjects( MapObjects && other ) = delete;
+
     ~MapObjects();
+
+    MapObjects & operator=( const MapObjects & other ) = delete;
+    MapObjects & operator=( MapObjects && other ) = delete;
+
     void clear( void );
     void add( MapObjectSimple * );
     std::list<MapObjectSimple *> get( const fheroes2::Point & );
@@ -147,7 +154,6 @@ struct EventDate
 StreamBase & operator<<( StreamBase &, const EventDate & );
 StreamBase & operator>>( StreamBase &, EventDate & );
 
-using Rumors = std::list<std::string>;
 using EventsDate = std::list<EventDate>;
 using MapsTiles = std::vector<Maps::Tiles>;
 
@@ -155,13 +161,15 @@ class World : protected fheroes2::Size
 {
 public:
     World( const World & other ) = delete;
-    World & operator=( const World & other ) = delete;
-    World( const World && other ) = delete;
-    World & operator=( const World && other ) = delete;
+    World( World && other ) = delete;
+
     ~World()
     {
         Reset();
     }
+
+    World & operator=( const World & other ) = delete;
+    World & operator=( World && other ) = delete;
 
     bool LoadMapMP2( const std::string & );
 
@@ -211,8 +219,7 @@ public:
     Heroes * GetHeroes( const fheroes2::Point & );
 
     Heroes * FromJailHeroes( s32 );
-    Heroes * GetFreemanHeroes( int race = 0 ) const;
-    Heroes * GetFreemanHeroesSpecial( int heroID ) const;
+    Heroes * GetFreemanHeroes( const int race, const int heroIDToIgnore = Heroes::UNKNOWN ) const;
 
     const Heroes * GetHeroesCondWins( void ) const;
     const Heroes * GetHeroesCondLoss( void ) const;
@@ -226,27 +233,41 @@ public:
     size_t getSize() const;
     int GetDay( void ) const;
     int GetWeek( void ) const;
-    int GetMonth( void ) const;
-    u32 CountDay( void ) const;
-    u32 CountWeek( void ) const;
+
+    uint32_t GetMonth() const
+    {
+        return month;
+    }
+
+    u32 CountDay() const
+    {
+        return day;
+    }
+
+    u32 CountWeek() const
+    {
+        return week;
+    }
+
     bool BeginWeek( void ) const;
     bool BeginMonth( void ) const;
     bool LastDay( void ) const;
-    bool LastWeek( void ) const;
-    const Week & GetWeekType( void ) const;
+    bool FirstWeek() const;
+    bool LastWeek() const;
+    const Week & GetWeekType() const;
     std::string DateString( void ) const;
 
     void NewDay( void );
     void NewWeek( void );
     void NewMonth( void );
 
-    const std::string & GetRumors( void );
+    std::string getCurrentRumor() const;
 
-    s32 NextTeleport( s32 ) const;
-    MapsIndexes GetTeleportEndPoints( s32 ) const;
+    int32_t NextTeleport( const int32_t index ) const;
+    MapsIndexes GetTeleportEndPoints( const int32_t index ) const;
 
-    s32 NextWhirlpool( s32 ) const;
-    MapsIndexes GetWhirlpoolEndPoints( s32 ) const;
+    int32_t NextWhirlpool( const int32_t index ) const;
+    MapsIndexes GetWhirlpoolEndPoints( const int32_t index ) const;
 
     void CaptureObject( s32, int col );
     u32 CountCapturedObject( int obj, int col ) const;
@@ -259,7 +280,6 @@ public:
 
     void ActionForMagellanMaps( int color );
     void ClearFog( int color );
-    void UpdateRecruits( Recruits & ) const;
 
     uint32_t CheckKingdomWins( const Kingdom & ) const;
     bool KingdomIsWins( const Kingdom &, uint32_t wins ) const;
@@ -283,22 +303,18 @@ public:
     static u32 GetUniq( void );
 
     uint32_t GetMapSeed() const;
+    uint32_t GetWeekSeed() const;
 
     bool isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const;
 
 private:
-    World()
-        : fheroes2::Size( 0, 0 )
-        , _rumor( nullptr )
-        , _seed( 0 )
-    {}
+    World() = default;
 
     void Defaults( void );
     void Reset( void );
     void MonthOfMonstersAction( const Monster & );
     void ProcessNewMap();
     void PostLoad( const bool setTilePassabilities );
-    void pickRumor();
 
     bool isValidCastleEntrance( const fheroes2::Point & tilePosition ) const;
 
@@ -310,8 +326,7 @@ private:
     AllHeroes vec_heroes;
     AllCastles vec_castles;
     Kingdoms vec_kingdoms;
-    Rumors vec_rumors;
-    const std::string * _rumor;
+    std::vector<std::string> _rumors;
     EventsDate vec_eventsday;
 
     // index, object, color
@@ -323,27 +338,26 @@ private:
     uint32_t week = 0;
     uint32_t month = 0;
 
-    Week week_current;
-    Week week_next;
-
     int heroes_cond_wins = Heroes::UNKNOWN;
     int heroes_cond_loss = Heroes::UNKNOWN;
 
     MapActions map_actions;
     MapObjects map_objects;
 
-    // This data isn't serialized
-    Maps::Indexes _allTeleporters;
-    Maps::Indexes _whirlpoolTiles;
+    uint32_t _seed{ 0 }; // Map seed
+
+    // The following fields are not serialized
+
+    std::map<uint8_t, Maps::Indexes> _allTeleports; // All indexes of tiles that contain stone liths of a certain type (sprite index)
+    std::map<uint8_t, Maps::Indexes> _allWhirlpools; // All indexes of tiles that contain a certain part (sprite index) of the whirlpool
+
     std::vector<MapRegion> _regions;
     PlayerWorldPathfinder _pathfinder;
-
-    uint32_t _seed{ 0 }; // global seed for the map
-    size_t _weekSeed{ 0 }; // global seed for the map, for this week
 };
 
 StreamBase & operator<<( StreamBase &, const CapturedObject & );
 StreamBase & operator>>( StreamBase &, CapturedObject & );
+
 StreamBase & operator<<( StreamBase &, const World & );
 StreamBase & operator>>( StreamBase &, World & );
 

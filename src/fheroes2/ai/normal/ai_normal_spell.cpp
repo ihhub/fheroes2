@@ -41,7 +41,7 @@ namespace AI
         return Board::DistanceFromOriginX( unit.GetHeadIndex(), unit.isReflect() );
     }
 
-    SpellSelection BattlePlanner::selectBestSpell( Arena & arena, bool retreating ) const
+    SpellSelection BattlePlanner::selectBestSpell( Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const
     {
         // Cast best spell with highest heuristic on target pointer saved
         SpellSelection bestSpell;
@@ -53,8 +53,8 @@ namespace AI
         }
 
         const std::vector<Spell> allSpells = _commander->GetSpells();
-        const Units friendly( arena.getForce( _myColor ), true );
-        const Units enemies( arena.getEnemyForce( _myColor ), true );
+        const Units friendly( arena.getForce( _myColor ).getUnits(), true );
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), true );
 
         // Hero should conserve spellpoints if already spent more than half or his army is stronger
         // Threshold is 0.04 when armies are equal (= 20% of single unit)
@@ -87,7 +87,7 @@ namespace AI
                 continue;
 
             if ( spell.isDamage() ) {
-                checkSelectBestSpell( spell, spellDamageValue( spell, arena, friendly, enemies, retreating ) );
+                checkSelectBestSpell( spell, spellDamageValue( spell, arena, currentUnit, friendly, enemies, retreating ) );
             }
             else if ( spell.isEffectDispel() ) {
                 checkSelectBestSpell( spell, spellDispellValue( spell, friendly, enemies ) );
@@ -114,7 +114,8 @@ namespace AI
         return bestSpell;
     }
 
-    SpellcastOutcome BattlePlanner::spellDamageValue( const Spell & spell, Arena & arena, const Units & friendly, const Units & enemies, bool retreating ) const
+    SpellcastOutcome BattlePlanner::spellDamageValue( const Spell & spell, Arena & arena, const Battle::Unit & currentUnit, const Units & friendly, const Units & enemies,
+                                                      bool retreating ) const
     {
         SpellcastOutcome bestOutcome;
         if ( !spell.isDamage() )
@@ -150,18 +151,30 @@ namespace AI
                 spellHeuristic += damageHeuristic( enemy );
             }
             for ( const Unit * unit : friendly ) {
-                spellHeuristic -= damageHeuristic( unit );
+                const double valueLost = damageHeuristic( unit );
+                // check if we're retreating and will lose current unit
+                if ( retreating && unit->isUID( currentUnit.GetUID() ) && std::fabs( valueLost - unit->GetStrength() ) < 0.001 ) {
+                    // avoid this spell and return early
+                    return bestOutcome;
+                }
+                spellHeuristic -= valueLost;
             }
 
             bestOutcome.updateOutcome( spellHeuristic, -1 );
         }
         else {
             // Area of effect spells like Fireball
-            auto areaOfEffectCheck = [&damageHeuristic, &bestOutcome]( const TargetsInfo & targets, const int32_t index, int myColor ) {
+            auto areaOfEffectCheck = [&damageHeuristic, &bestOutcome, &currentUnit, &retreating]( const TargetsInfo & targets, const int32_t index, int myColor ) {
                 double spellHeuristic = 0;
                 for ( const TargetInfo & target : targets ) {
                     if ( target.defender->GetCurrentColor() == myColor ) {
-                        spellHeuristic -= damageHeuristic( target.defender );
+                        const double valueLost = damageHeuristic( target.defender );
+                        // check if we're retreating and will lose current unit
+                        if ( retreating && target.defender->isUID( currentUnit.GetUID() ) && std::fabs( valueLost - target.defender->GetStrength() ) < 0.001 ) {
+                            // avoid this spell and return without updating the outcome
+                            return;
+                        }
+                        spellHeuristic -= valueLost;
                     }
                     else {
                         spellHeuristic += damageHeuristic( target.defender );

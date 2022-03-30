@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -343,6 +344,13 @@ const char * Resource::String( int resource )
     return "Unknown";
 }
 
+const char * Resource::getDescription()
+{
+    return _( "There are seven resources in Heroes 2, used to build and improves castles, purchase troops and recruit heroes. Gold is the most common, required for "
+              "virtually everything. Wood and ore are used for most buildings. Gems, Mercury, Sulfur and Crystal are rare magical resources used for the most "
+              "powerful creatures and buildings." );
+}
+
 u32 Resource::GetIndexSprite( int resource )
 {
     switch ( resource ) {
@@ -392,10 +400,9 @@ int Resource::FromIndexSprite( u32 index )
     return UNKNOWN;
 }
 
-/* return index sprite resource.icn */
-u32 Resource::GetIndexSprite2( int resource )
+uint32_t Resource::getIconIcnIndex( const int resourceType )
 {
-    switch ( resource ) {
+    switch ( resourceType ) {
     case Resource::WOOD:
         return 0;
     case Resource::MERCURY:
@@ -411,13 +418,15 @@ u32 Resource::GetIndexSprite2( int resource )
     case Resource::GOLD:
         return 6;
     default:
+        // You are passing not a single resource type or an invalid one. Fix it!
+        assert( 0 );
         DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" );
     }
 
     return 0;
 }
 
-int Resource::FromIndexSprite2( u32 index )
+int Resource::getResourceTypeFromIconIndex( const uint32_t index )
 {
     switch ( index ) {
     case 0:
@@ -434,8 +443,9 @@ int Resource::FromIndexSprite2( u32 index )
         return GEMS;
     case 6:
         return GOLD;
-
     default:
+        // ICN index is wrong!
+        assert( 0 );
         break;
     }
 
@@ -577,9 +587,9 @@ void Resource::BoxSprite::Redraw( void ) const
         const fheroes2::Sprite & res2 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id + 1].second );
         const fheroes2::Sprite & res3 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id + 2].second );
 
-        RedrawResourceSprite( res1, fheroes2::Point( x, y ), 0, width_, offsetY, valueVsSprite[id].first );
-        RedrawResourceSprite( res2, fheroes2::Point( x, y ), 1, width_, offsetY, valueVsSprite[id + 1].first );
-        RedrawResourceSprite( res3, fheroes2::Point( x, y ), 2, width_, offsetY, valueVsSprite[id + 2].first );
+        RedrawResourceSprite( res1, { x, y }, 0, width_, offsetY, valueVsSprite[id].first );
+        RedrawResourceSprite( res2, { x, y }, 1, width_, offsetY, valueVsSprite[id + 1].first );
+        RedrawResourceSprite( res3, { x, y }, 2, width_, offsetY, valueVsSprite[id + 2].first );
 
         id += 3;
         offsetY += 45;
@@ -594,15 +604,15 @@ void Resource::BoxSprite::Redraw( void ) const
         const uint32_t width_ = isManyResources ? width / 3 : width / 2;
         const int32_t offsetX = isManyResources ? width_ / 2 : 0;
 
-        RedrawResourceSprite( res1, fheroes2::Point( x + offsetX, y ), 0, width_, offsetY, valueVsSprite[id].first );
-        RedrawResourceSprite( res2, fheroes2::Point( x + offsetX, y ), 1, width_, offsetY, valueVsSprite[id + 1].first );
+        RedrawResourceSprite( res1, { x + offsetX, y }, 0, width_, offsetY, valueVsSprite[id].first );
+        RedrawResourceSprite( res2, { x + offsetX, y }, 1, width_, offsetY, valueVsSprite[id + 1].first );
     }
     else if ( valueVsSprite.size() - id == 1 ) {
         const fheroes2::Sprite & res1 = fheroes2::AGG::GetICN( ICN::RESOURCE, valueVsSprite[id].second );
 
         const int32_t width_ = isManyResources ? width / 3 : width;
 
-        RedrawResourceSprite( res1, fheroes2::Point( x, y ), isManyResources ? 1 : 0, width_, offsetY, valueVsSprite[id].first );
+        RedrawResourceSprite( res1, { x, y }, isManyResources ? 1 : 0, width_, offsetY, valueVsSprite[id].first );
     }
 }
 
@@ -612,16 +622,6 @@ StreamBase & operator<<( StreamBase & msg, const Funds & res )
 }
 
 StreamBase & operator>>( StreamBase & msg, Funds & res )
-{
-    return msg >> res.wood >> res.mercury >> res.ore >> res.sulfur >> res.crystal >> res.gems >> res.gold;
-}
-
-StreamBase & operator<<( StreamBase & msg, const cost_t & res )
-{
-    return msg << res.wood << res.mercury << res.ore << res.sulfur << res.crystal << res.gems << res.gold;
-}
-
-StreamBase & operator>>( StreamBase & msg, cost_t & res )
 {
     return msg >> res.wood >> res.mercury >> res.ore >> res.sulfur >> res.crystal >> res.gems >> res.gold;
 }

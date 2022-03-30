@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,6 +28,8 @@
 #include "settings.h"
 #include "tinyconfig.h"
 
+#include <map>
+
 namespace Game
 {
     void HotKeysDefaults( void );
@@ -35,6 +38,97 @@ namespace Game
     void KeyboardGlobalFilter( int, int );
 
     KeySym key_events[EVENT_LAST];
+
+    const std::map<int, const char *> keyName = { { KEY_BACKSPACE, "Backspace" },
+                                                  { KEY_RETURN, "Enter" },
+                                                  { KEY_ESCAPE, "Escape" },
+                                                  { KEY_SPACE, "Space" },
+                                                  { KEY_EXCLAIM, "!" },
+                                                  { KEY_QUOTEDBL, "\"" },
+                                                  { KEY_HASH, "#" },
+                                                  { KEY_DOLLAR, "$" },
+                                                  { KEY_AMPERSAND, "&" },
+                                                  { KEY_QUOTE, "'" },
+                                                  { KEY_LEFTPAREN, "(" },
+                                                  { KEY_RIGHTPAREN, ")" },
+                                                  { KEY_ASTERISK, "*" },
+                                                  { KEY_PLUS, "+" },
+                                                  { KEY_COMMA, "," },
+                                                  { KEY_MINUS, "-" },
+                                                  { KEY_PERIOD, "." },
+                                                  { KEY_SLASH, "/" },
+                                                  { KEY_COLON, ":" },
+                                                  { KEY_SEMICOLON, ";" },
+                                                  { KEY_LESS, "<" },
+                                                  { KEY_EQUALS, "=" },
+                                                  { KEY_GREATER, ">" },
+                                                  { KEY_QUESTION, "?" },
+                                                  { KEY_AT, "@" },
+                                                  { KEY_LEFTBRACKET, "[" },
+                                                  { KEY_BACKSLASH, "\\" },
+                                                  { KEY_RIGHTBRACKET, "]" },
+                                                  { KEY_CARET, "^" },
+                                                  { KEY_UNDERSCORE, "_" },
+                                                  { KEY_UNDERSCORE, "_" },
+                                                  { KEY_ALT, "Alt" },
+                                                  { KEY_CONTROL, "Ctrl" },
+                                                  { KEY_SHIFT, "Shift" },
+                                                  { KEY_TAB, "Tab" },
+                                                  { KEY_DELETE, "Del" },
+                                                  { KEY_PAGEUP, "Page Up" },
+                                                  { KEY_PAGEDOWN, "Page Down" },
+                                                  { KEY_F1, "F1" },
+                                                  { KEY_F2, "F2" },
+                                                  { KEY_F3, "F3" },
+                                                  { KEY_F4, "F4" },
+                                                  { KEY_F5, "F5" },
+                                                  { KEY_F6, "F6" },
+                                                  { KEY_F7, "F7" },
+                                                  { KEY_F8, "F8" },
+                                                  { KEY_F9, "F9" },
+                                                  { KEY_F10, "F10" },
+                                                  { KEY_F11, "F11" },
+                                                  { KEY_F12, "F12" },
+                                                  { KEY_LEFT, "Left" },
+                                                  { KEY_RIGHT, "Right" },
+                                                  { KEY_UP, "Up" },
+                                                  { KEY_DOWN, "Down" },
+                                                  { KEY_0, "0" },
+                                                  { KEY_1, "1" },
+                                                  { KEY_2, "2" },
+                                                  { KEY_3, "3" },
+                                                  { KEY_4, "4" },
+                                                  { KEY_5, "5" },
+                                                  { KEY_6, "6" },
+                                                  { KEY_7, "7" },
+                                                  { KEY_8, "8" },
+                                                  { KEY_8, "9" },
+                                                  { KEY_a, "A" },
+                                                  { KEY_b, "B" },
+                                                  { KEY_c, "C" },
+                                                  { KEY_d, "D" },
+                                                  { KEY_e, "E" },
+                                                  { KEY_f, "F" },
+                                                  { KEY_g, "G" },
+                                                  { KEY_h, "H" },
+                                                  { KEY_i, "I" },
+                                                  { KEY_j, "J" },
+                                                  { KEY_k, "K" },
+                                                  { KEY_l, "L" },
+                                                  { KEY_m, "M" },
+                                                  { KEY_n, "N" },
+                                                  { KEY_o, "O" },
+                                                  { KEY_p, "P" },
+                                                  { KEY_q, "Q" },
+                                                  { KEY_r, "R" },
+                                                  { KEY_s, "S" },
+                                                  { KEY_t, "T" },
+                                                  { KEY_u, "U" },
+                                                  { KEY_v, "V" },
+                                                  { KEY_w, "W" },
+                                                  { KEY_x, "X" },
+                                                  { KEY_y, "Y" },
+                                                  { KEY_z, "Z" } };
 }
 
 const char * Game::EventsName( int evnt )
@@ -231,7 +325,7 @@ void Game::HotKeysDefaults( void )
 
     // battle
     key_events[EVENT_BATTLE_CASTSPELL] = KEY_c;
-    key_events[EVENT_BATTLE_RETREAT] = KEY_ESCAPE;
+    key_events[EVENT_BATTLE_RETREAT] = KEY_r;
     key_events[EVENT_BATTLE_SURRENDER] = KEY_s;
     key_events[EVENT_BATTLE_AUTOSWITCH] = KEY_a;
     key_events[EVENT_BATTLE_OPTIONS] = KEY_o;
@@ -318,6 +412,9 @@ void Game::HotKeysDefaults( void )
     key_events[EVENT_TOWN_TAVERN] = KEY_r;
     key_events[EVENT_TOWN_JUMP_TO_BUILD_SELECTION] = KEY_b; // also used to build castle, if starting on a village
 
+    key_events[EVENT_NEW_CAMPAIGN_SUCCESSION_WARS] = KEY_o;
+    key_events[EVENT_NEW_CAMPAIGN_PRICE_OF_LOYALTY] = KEY_e;
+
     key_events[EVENT_WELL_BUY_ALL_CREATURES] = KEY_m;
 }
 
@@ -331,6 +428,16 @@ bool Game::HotKeyHoldEvent( const int eventID )
 {
     const LocalEvent & le = LocalEvent::Get();
     return le.KeyHold() && le.KeyValue() == key_events[eventID];
+}
+
+const char * Game::getHotKeyNameByEventId( const int eventID )
+{
+    auto it = keyName.find( key_events[eventID] );
+    if ( it != keyName.end() ) {
+        return it->second;
+    }
+
+    return "???";
 }
 
 void Game::HotKeysLoad( const std::string & hotkeys )
@@ -363,6 +470,6 @@ void Game::KeyboardGlobalFilter( int sym, int mod )
 
         Settings & conf = Settings::Get();
         conf.setFullScreen( fheroes2::engine().isFullScreen() );
-        conf.Save( "fheroes2.cfg" );
+        conf.Save( Settings::configFileName );
     }
 }

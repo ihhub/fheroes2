@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -482,21 +483,6 @@ void LocalEvent::CloseVirtualKeyboard()
 #if defined( FHEROES2_VITA )
     dpadInputActive = false;
 #endif
-}
-
-const fheroes2::Point & LocalEvent::GetMousePressLeft( void ) const
-{
-    return mouse_pl;
-}
-
-void LocalEvent::SetModes( flag_t f )
-{
-    modes |= f;
-}
-
-void LocalEvent::ResetModes( flag_t f )
-{
-    modes &= ~f;
 }
 
 const char * KeySymGetName( KeySym sym )
@@ -1072,11 +1058,6 @@ void LocalEvent::PauseCycling() const
     fheroes2::Display::instance().subscribe( nullptr, nullptr );
 }
 
-void LocalEvent::ResumeCycling() const
-{
-    RegisterCycling();
-}
-
 LocalEvent & LocalEvent::GetClean()
 {
     LocalEvent & le = Get();
@@ -1501,11 +1482,6 @@ void LocalEvent::ProcessControllerAxisMotion()
 }
 #endif
 
-bool LocalEvent::MouseMotion( void ) const
-{
-    return ( modes & MOUSE_MOTION ) == MOUSE_MOTION;
-}
-
 bool LocalEvent::MousePressLeft( void ) const
 {
     return ( modes & MOUSE_PRESSED ) && SDL_BUTTON_LEFT == mouse_button;
@@ -1708,70 +1684,9 @@ bool LocalEvent::MouseWheelDn( void ) const
 #endif
 }
 
-bool LocalEvent::MousePressLeft( const fheroes2::Rect & rt ) const
-{
-    return MousePressLeft() && ( rt & mouse_pl );
-}
-
-bool LocalEvent::MousePressRight( const fheroes2::Rect & rt ) const
-{
-    return MousePressRight() && ( rt & mouse_pr );
-}
-
-bool LocalEvent::MouseReleaseLeft( const fheroes2::Rect & rt ) const
-{
-    return MouseReleaseLeft() && ( rt & mouse_rl );
-}
-
-bool LocalEvent::MouseReleaseRight( const fheroes2::Rect & rt ) const
-{
-    return MouseReleaseRight() && ( rt & mouse_rr );
-}
-
-void LocalEvent::ResetPressLeft( void )
-{
-    mouse_pl.x = -1;
-    mouse_pl.y = -1;
-}
-
-bool LocalEvent::MouseWheelUp( const fheroes2::Rect & rt ) const
-{
-    return MouseWheelUp() && ( rt & mouse_cu );
-}
-
-bool LocalEvent::MouseWheelDn( const fheroes2::Rect & rt ) const
-{
-    return MouseWheelDn() && ( rt & mouse_cu );
-}
-
-bool LocalEvent::MouseCursor( const fheroes2::Rect & rt ) const
-{
-    return rt & mouse_cu;
-}
-
 int LocalEvent::KeyMod( void ) const
 {
     return SDL_GetModState();
-}
-
-KeySym LocalEvent::KeyValue( void ) const
-{
-    return key_value;
-}
-
-bool LocalEvent::KeyPress( KeySym key ) const
-{
-    return key == key_value && ( modes & KEY_PRESSED );
-}
-
-void LocalEvent::SetGlobalFilterMouseEvents( void ( *pf )( s32, s32 ) )
-{
-    redraw_cursor_func = pf;
-}
-
-void LocalEvent::SetGlobalFilterKeysEvents( void ( *pf )( int, int ) )
-{
-    keyboard_filter_func = pf;
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -1798,9 +1713,14 @@ int LocalEvent::GlobalFilterEvents( const SDL_Event * event )
     return 1;
 }
 
-void LocalEvent::SetState( u32 type, bool enable )
+void LocalEvent::SetState( const uint32_t type, const bool enable )
 {
+    // SDL 1 and SDL 2 have different input argument types for event state.
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     SDL_EventState( type, enable ? SDL_ENABLE : SDL_IGNORE );
+#else
+    SDL_EventState( static_cast<uint8_t>( type ), enable ? SDL_ENABLE : SDL_IGNORE );
+#endif
 }
 
 void LocalEvent::SetStateDefaults( void )

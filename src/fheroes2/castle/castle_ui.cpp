@@ -143,7 +143,7 @@ namespace fheroes2
         const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::TOWNNAME, 0 );
         fheroes2::Blit( background, fheroes2::Display::instance(), offset.x + 320 - background.width() / 2, offset.y + 248 );
 
-        const fheroes2::Text text( castle.GetName(), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+        const fheroes2::Text text( castle.GetName(), fheroes2::FontType::smallWhite() );
         text.draw( offset.x + 320 - text.width() / 2, offset.y + 250, output );
     }
 

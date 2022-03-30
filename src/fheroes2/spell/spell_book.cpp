@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,6 +36,7 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 
 namespace
 {
@@ -69,14 +71,12 @@ namespace
             maximumHeight = bookmarkCloseOffset.y + bookmark_clos.height();
         }
 
-        return fheroes2::Size( bookPage.width() * 2, maximumHeight );
+        return { bookPage.width() * 2, maximumHeight };
     }
 
     void SpellBookRedrawSpells( const SpellStorage & spells, std::vector<fheroes2::Rect> & coords, const size_t index, const int32_t px, const int32_t py,
                                 const HeroBase & hero, bool isRight, fheroes2::Image & output, fheroes2::Point outputOffset )
     {
-        const uint32_t heroSpellPoints = hero.GetSpellPoints();
-
         for ( int32_t i = 0; i < spellsPerPage; ++i ) {
             if ( spells.size() <= index + i )
                 return;
@@ -87,7 +87,7 @@ namespace
             const Spell & spell = spells[i + index];
             const std::string & spellName = spell.GetName();
             const uint32_t spellCost = spell.SpellPoint( &hero );
-            const bool isAvailable = heroSpellPoints >= spellCost;
+            const bool isAvailable = hero.CanCastSpell( spell );
 
             const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
             int vertOffset = 49 - icon.height();
@@ -290,7 +290,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
                         }
                     }
                     else {
-                        Dialog::SpellInfo( *spell, &hero, true );
+                        fheroes2::SpellDialogElement( *spell, &hero ).showPopup( Dialog::OK );
                         display.render();
                     }
                 }
@@ -345,7 +345,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
             if ( 0 <= index ) {
                 const SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + current_index );
                 if ( spell < displayedSpells.end() ) {
-                    Dialog::SpellInfo( *spell, &hero, false );
+                    fheroes2::SpellDialogElement( *spell, &hero ).showPopup( Dialog::ZERO );
                     display.render();
                 }
             }
@@ -420,7 +420,7 @@ void SpellBook::Edit( const HeroBase & hero )
                 const SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + current_index );
 
                 if ( spell < displayedSpells.end() ) {
-                    Dialog::SpellInfo( *spell, &hero, true );
+                    fheroes2::SpellDialogElement( *spell, &hero ).showPopup( Dialog::OK );
                     redraw = true;
                 }
             }
@@ -439,7 +439,7 @@ void SpellBook::Edit( const HeroBase & hero )
                 const SpellStorage::const_iterator spell = displayedSpells.begin() + ( index + current_index );
 
                 if ( spell < displayedSpells.end() ) {
-                    Dialog::SpellInfo( *spell, &hero, false );
+                    fheroes2::SpellDialogElement( *spell, &hero ).showPopup( Dialog::ZERO );
                     redraw = true;
                 }
             }

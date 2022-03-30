@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -190,7 +191,7 @@ u32 Monster::GetDamageMax() const
     return fheroes2::getMonsterData( id ).battleStats.damageMax;
 }
 
-u32 Monster::GetShots() const
+uint32_t Monster::GetShots() const
 {
     return fheroes2::getMonsterData( id ).battleStats.shots;
 }
@@ -219,10 +220,10 @@ double Monster::GetMonsterStrength( int attack, int defense ) const
     // If no modified values were provided then re-calculate
     // GetAttack and GetDefense will call overloaded versions accounting for Hero bonuses
     if ( attack == -1 )
-        attack = battleStats.attack;
+        attack = GetAttack();
 
     if ( defense == -1 )
-        defense = battleStats.defense;
+        defense = GetDefense();
 
     const double attackDefense = 1.0 + attack * 0.1 + defense * 0.05;
     const double effectiveHP = battleStats.hp * ( ignoreRetaliation() ? 1.4 : 1 );
@@ -1022,12 +1023,12 @@ int Monster::ICNMonh( void ) const
     return id >= PEASANT && id <= WATER_ELEMENT ? ICN::MONH0000 + id - PEASANT : ICN::UNKNOWN;
 }
 
-payment_t Monster::GetCost( void ) const
+payment_t Monster::GetCost() const
 {
     return payment_t( fheroes2::getMonsterData( id ).generalStats.cost );
 }
 
-payment_t Monster::GetUpgradeCost( void ) const
+payment_t Monster::GetUpgradeCost() const
 {
     const Monster upgr = GetUpgrade();
     const payment_t pay = id != upgr.id ? upgr.GetCost() - GetCost() : GetCost();

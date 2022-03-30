@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -376,19 +376,34 @@ namespace
         const int32_t widthOut = out.width();
 
         const uint8_t * imageInY = in.image() + inY * widthIn + inX;
-        const uint8_t * transformInY = in.transform() + inY * widthIn + inX;
         uint8_t * imageOutY = out.image() + outY * widthOut + outX;
         const uint8_t * imageInYEnd = imageInY + height * widthIn;
 
-        for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut ) {
-            const uint8_t * imageInX = imageInY;
-            const uint8_t * transformInX = transformInY;
-            uint8_t * imageOutX = imageOutY;
-            const uint8_t * imageInXEnd = imageInX + width;
+        if ( in.singleLayer() ) {
+            // All pixels in a single layer image do not have any transform values so there is no need to check for them.
+            for ( ; imageInY != imageInYEnd; imageInY += widthIn, imageOutY += widthOut ) {
+                const uint8_t * imageInX = imageInY;
+                uint8_t * imageOutX = imageOutY;
+                const uint8_t * imageInXEnd = imageInX + width;
 
-            for ( ; imageInX != imageInXEnd; ++imageInX, ++imageOutX, ++transformInX ) {
-                if ( *transformInX == 0 ) { // only modify pixels with data
+                for ( ; imageInX != imageInXEnd; ++imageInX, ++imageOutX ) {
                     *imageOutX = palette[*imageInX];
+                }
+            }
+        }
+        else {
+            const uint8_t * transformInY = in.transform() + inY * widthIn + inX;
+
+            for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut ) {
+                const uint8_t * imageInX = imageInY;
+                const uint8_t * transformInX = transformInY;
+                uint8_t * imageOutX = imageOutY;
+                const uint8_t * imageInXEnd = imageInX + width;
+
+                for ( ; imageInX != imageInXEnd; ++imageInX, ++imageOutX, ++transformInX ) {
+                    if ( *transformInX == 0 ) { // only modify pixels with data
+                        *imageOutX = palette[*imageInX];
+                    }
                 }
             }
         }
@@ -476,7 +491,7 @@ namespace fheroes2
         if ( !empty() ) {
             const size_t totalSize = static_cast<size_t>( _width * _height );
             std::fill( image(), image() + totalSize, value );
-            std::fill( transform(), transform() + totalSize, 0 );
+            std::fill( transform(), transform() + totalSize, static_cast<uint8_t>( 0 ) );
         }
     }
 
@@ -504,8 +519,8 @@ namespace fheroes2
     {
         if ( !empty() ) {
             const size_t totalSize = static_cast<size_t>( _width * _height );
-            std::fill( image(), image() + totalSize, 0 );
-            std::fill( transform(), transform() + totalSize, 1 ); // skip all data
+            std::fill( image(), image() + totalSize, static_cast<uint8_t>( 0 ) );
+            std::fill( transform(), transform() + totalSize, static_cast<uint8_t>( 1 ) ); // skip all data
         }
     }
 
@@ -1117,7 +1132,7 @@ namespace fheroes2
 
             for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {
                 memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
-                std::fill( transformOutY, transformOutY + width, 0 );
+                std::fill( transformOutY, transformOutY + width, static_cast<uint8_t>( 0 ) );
             }
         }
         else {
@@ -1156,7 +1171,7 @@ namespace fheroes2
             blurRadius = height;
 
         Image out( width, height );
-        std::fill( out.transform(), out.transform() + width * height, 0 );
+        std::fill( out.transform(), out.transform() + width * height, static_cast<uint8_t>( 0 ) );
 
         uint8_t * imageOutY = out.image();
         const uint8_t * imageIn = in.image();
@@ -1229,6 +1244,8 @@ namespace fheroes2
         if ( width < 2 || height < 2 ) {
             return contour;
         }
+
+        assert( !contour.empty() );
 
         const uint8_t * inY = image.transform();
         uint8_t * outImageY = contour.image();
@@ -1496,19 +1513,23 @@ namespace fheroes2
         DrawLine( image, { roi.x, roi.y + roi.height - 1 }, { roi.x + roi.width, roi.y + roi.height - 1 }, value, roi );
     }
 
-    Image ExtractCommonPattern( const std::vector<Image> & input )
+    Image ExtractCommonPattern( const std::vector<const Image *> & input )
     {
         if ( input.empty() )
             return Image();
 
-        if ( input.size() == 1 )
-            return input.front();
+        assert( input.front() != nullptr );
 
-        if ( input[0].empty() )
+        if ( input.size() == 1 ) {
+            return *input.front();
+        }
+
+        if ( input[0]->empty() )
             return Image();
 
         for ( size_t i = 1; i < input.size(); ++i ) {
-            if ( input[i].width() != input[0].width() || input[i].height() != input[0].height() )
+            assert( input[i] != nullptr );
+            if ( input[i]->width() != input[0]->width() || input[i]->height() != input[0]->height() )
                 return Image();
         }
 
@@ -1516,11 +1537,11 @@ namespace fheroes2
         std::vector<const uint8_t *> transformIn( input.size() );
 
         for ( size_t i = 0; i < input.size(); ++i ) {
-            imageIn[i] = input[i].image();
-            transformIn[i] = input[i].transform();
+            imageIn[i] = input[i]->image();
+            transformIn[i] = input[i]->transform();
         }
 
-        Image out( input[0].width(), input[0].height() );
+        Image out( input[0]->width(), input[0]->height() );
         out.reset();
 
         uint8_t * imageOut = out.image();
@@ -1571,7 +1592,7 @@ namespace fheroes2
 
         for ( ; imageY != imageYEnd; imageY += imageWidth, transformY += imageWidth ) {
             std::fill( imageY, imageY + width, colorId );
-            std::fill( transformY, transformY + width, 0 );
+            std::fill( transformY, transformY + width, static_cast<uint8_t>( 0 ) );
         }
     }
 
@@ -1587,7 +1608,7 @@ namespace fheroes2
         const uint8_t * imageYEnd = imageY + height * imageWidth;
 
         for ( ; imageY != imageYEnd; imageY += imageWidth, transformY += imageWidth ) {
-            std::fill( imageY, imageY + width, 0 );
+            std::fill( imageY, imageY + width, static_cast<uint8_t>( 0 ) );
             std::fill( transformY, transformY + width, tranformId );
         }
     }
@@ -1813,6 +1834,8 @@ namespace fheroes2
         // Shadow has (-x, +y) offset.
         Sprite out( width - shadowOffset.x, height + shadowOffset.y, in.x() + shadowOffset.x, in.y() );
         out.reset();
+
+        assert( !out.empty() );
 
         const int32_t widthOut = out.width();
 

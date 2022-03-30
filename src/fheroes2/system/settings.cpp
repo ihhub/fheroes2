@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,6 +25,10 @@
 #include <cstdlib>
 #include <fstream>
 
+#if defined( MACOS_APP_BUNDLE )
+#include <CoreFoundation/CoreFoundation.h>
+#endif
+
 #include "difficulty.h"
 #include "game.h"
 #include "logging.h"
@@ -43,14 +48,15 @@
 
 namespace
 {
-    enum
+    enum : uint32_t
     {
         GLOBAL_FIRST_RUN = 0x00000001,
         GLOBAL_SHOW_INTRO = 0x00000002,
         GLOBAL_PRICELOYALTY = 0x00000004,
 
         GLOBAL_RENDER_VSYNC = 0x00000008,
-        // UNUSED = 0x00000010,
+        GLOBAL_TEXT_SUPPORT_MODE = 0x00000010,
+
         // UNUSED = 0x00000020,
 
         GLOBAL_SHOWCPANEL = 0x00000040,
@@ -60,17 +66,15 @@ namespace
         GLOBAL_SHOWSTATUS = 0x00000400,
 
         GLOBAL_FULLSCREEN = 0x00008000,
+
         // UNUSED = 0x00010000,
-
-        GLOBAL_MUSIC_EXT = 0x00020000,
-        GLOBAL_MUSIC_MIDI = 0x00040000,
-        GLOBAL_MUSIC = GLOBAL_MUSIC_EXT | GLOBAL_MUSIC_MIDI,
-
+        // UNUSED = 0x00020000,
+        // UNUSED = 0x00040000,
         // UNUSED = 0x00080000,
         // UNUSED = 0x00100000,
         // UNUSED = 0x00200000,
-        // UNUSED = 0x00400000,
 
+        GLOBAL_BATTLE_SHOW_ARMY_ORDER = 0x00400000,
         GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
         GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
         GLOBAL_BATTLE_SHOW_MOVE_SHADOW = 0x02000000,
@@ -86,7 +90,7 @@ std::string Settings::GetVersion()
 
 Settings::Settings()
     : debug( 0 )
-    , video_mode( fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
+    , video_mode( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
     , game_difficulty( Difficulty::NORMAL )
     , sound_volume( 6 )
     , music_volume( 6 )
@@ -101,11 +105,11 @@ Settings::Settings()
 {
     opt_global.SetModes( GLOBAL_FIRST_RUN );
     opt_global.SetModes( GLOBAL_SHOW_INTRO );
+
     opt_global.SetModes( GLOBAL_SHOWRADAR );
     opt_global.SetModes( GLOBAL_SHOWICONS );
     opt_global.SetModes( GLOBAL_SHOWBUTTONS );
     opt_global.SetModes( GLOBAL_SHOWSTATUS );
-    opt_global.SetModes( GLOBAL_MUSIC_EXT );
 
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_GRID );
     opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
@@ -186,7 +190,7 @@ bool Settings::Read( const std::string & filename )
 
 #ifndef WITH_DEBUG
     // reset devel
-    debug &= ~( DBG_DEVEL );
+    debug &= ~DBG_DEVEL;
 #endif
 
     Logging::SetDebugLevel( debug );
@@ -203,18 +207,12 @@ bool Settings::Read( const std::string & filename )
 
     if ( !sval.empty() ) {
         if ( sval == "original" ) {
-            opt_global.ResetModes( GLOBAL_MUSIC );
-            opt_global.SetModes( GLOBAL_MUSIC_MIDI );
             _musicType = MUSIC_MIDI_ORIGINAL;
         }
         else if ( sval == "expansion" ) {
-            opt_global.ResetModes( GLOBAL_MUSIC );
-            opt_global.SetModes( GLOBAL_MUSIC_MIDI );
             _musicType = MUSIC_MIDI_EXPANSION;
         }
         else if ( sval == "external" ) {
-            opt_global.ResetModes( GLOBAL_MUSIC );
-            opt_global.SetModes( GLOBAL_MUSIC_EXT );
             _musicType = MUSIC_EXTERNAL;
         }
     }
@@ -263,6 +261,10 @@ bool Settings::Read( const std::string & filename )
 
     if ( config.Exists( "auto spell casting" ) ) {
         setBattleAutoSpellcast( config.StrParams( "auto spell casting" ) == "on" );
+    }
+
+    if ( config.Exists( "battle army order" ) ) {
+        setBattleShowArmyOrder( config.StrParams( "battle army order" ) == "on" );
     }
 
     // videomode
@@ -315,6 +317,16 @@ bool Settings::Read( const std::string & filename )
         }
         else {
             opt_global.ResetModes( GLOBAL_RENDER_VSYNC );
+        }
+    }
+
+    if ( config.Exists( "text support mode" ) ) {
+        if ( config.StrParams( "text support mode" ) == "on" ) {
+            opt_global.SetModes( GLOBAL_TEXT_SUPPORT_MODE );
+            Logging::setTextSupportMode( true );
+        }
+        else {
+            opt_global.ResetModes( GLOBAL_TEXT_SUPPORT_MODE );
         }
     }
 
@@ -422,6 +434,9 @@ std::string Settings::String() const
     os << std::endl << "# auto combat spell casting: on/off" << std::endl;
     os << "auto spell casting = " << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
 
+    os << std::endl << "# show army order during battle: on/off" << std::endl;
+    os << "battle army order = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER ) ? "on" : "off" ) << std::endl;
+
     os << std::endl << "# game language (an empty value means English)" << std::endl;
     os << "lang = " << _gameLanguage << std::endl;
 
@@ -437,6 +452,9 @@ std::string Settings::String() const
     os << std::endl << "# enable V-Sync (Vertical Synchronization) for rendering" << std::endl;
     os << "v-sync = " << ( opt_global.Modes( GLOBAL_RENDER_VSYNC ) ? "on" : "off" ) << std::endl;
 
+    os << std::endl << "# enable text support mode to output extra information in console window" << std::endl;
+    os << "text support mode = " << ( opt_global.Modes( GLOBAL_TEXT_SUPPORT_MODE ) ? "on" : "off" ) << std::endl;
+
     return os.str();
 }
 
@@ -450,38 +468,9 @@ void Settings::SetCurrentFileInfo( const Maps::FileInfo & fi )
     preferably_count_players = 0;
 }
 
-const Maps::FileInfo & Settings::CurrentFileInfo() const
-{
-    return current_maps_file;
-}
-
-bool Settings::isCurrentMapPriceOfLoyalty() const
-{
-    return current_maps_file._version == GameVersion::PRICE_OF_LOYALTY;
-}
-
-/* return debug */
-int Settings::Debug() const
-{
-    return debug;
-}
-
-/* return game difficulty */
-int Settings::GameDifficulty() const
-{
-    return game_difficulty;
-}
-
-const std::string & Settings::getGameLanguage() const
-{
-    return _gameLanguage;
-}
-
 bool Settings::setGameLanguage( const std::string & language )
 {
     fheroes2::updateAlphabet( language );
-
-    Translation::setStripContext( '|' );
 
     _gameLanguage = language;
 
@@ -491,24 +480,18 @@ bool Settings::setGameLanguage( const std::string & language )
     }
 
     const std::string fileName = std::string( _gameLanguage ).append( ".mo" );
+#if defined( MACOS_APP_BUNDLE )
+    const ListFiles translations = Settings::FindFiles( "translations", fileName, false );
+#else
     const ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), fileName, false );
+#endif
 
     if ( !translations.empty() ) {
-        return Translation::bindDomain( language.c_str(), translations.back().c_str() ) && Translation::setDomain( language.c_str() );
+        return Translation::bindDomain( language.c_str(), translations.back().c_str() );
     }
 
     ERROR_LOG( "Translation file " << fileName << " is not found." )
     return false;
-}
-
-const std::string & Settings::loadedFileLanguage() const
-{
-    return _loadedFileLanguage;
-}
-
-void Settings::SetMapsFile( const std::string & file )
-{
-    current_maps_file.file = file;
 }
 
 void Settings::SetProgramPath( const char * argv0 )
@@ -517,34 +500,62 @@ void Settings::SetProgramPath( const char * argv0 )
         path_program = argv0;
 }
 
-ListDirs Settings::GetRootDirs()
+const std::vector<std::string> & Settings::GetRootDirs()
 {
-    ListDirs dirs;
+    static std::vector<std::string> dirs;
+    if ( !dirs.empty() ) {
+        return dirs;
+    }
 
-    // from build
-#ifdef CONFIGURE_FHEROES2_DATA
-    dirs.push_back( EXPANDDEF( CONFIGURE_FHEROES2_DATA ) );
+#ifdef FHEROES2_DATA
+    // Macro-defined path.
+    dirs.emplace_back( EXPANDDEF( FHEROES2_DATA ) );
 #endif
 
-    // from env
-    if ( getenv( "FHEROES2_DATA" ) )
-        dirs.push_back( getenv( "FHEROES2_DATA" ) );
+    // Environment variable.
+    const char * dataEnvPath = getenv( "FHEROES2_DATA" );
+    if ( dataEnvPath != nullptr && std::find( dirs.begin(), dirs.end(), dataEnvPath ) == dirs.end() ) {
+        dirs.emplace_back( dataEnvPath );
+    }
 
-    // from app path
-    dirs.push_back( System::GetDirname( Settings::Get().path_program ) );
+    // The location of the application.
+    std::string appPath = System::GetDirname( Settings::Get().path_program );
+    if ( !appPath.empty() && std::find( dirs.begin(), dirs.end(), appPath ) == dirs.end() ) {
+        dirs.emplace_back( std::move( appPath ) );
+    }
 
-    // os-specific directories
-    dirs.splice( dirs.end(), System::GetOSSpecificDirectories() );
+    // OS specific directories.
+    System::appendOSSpecificDirectories( dirs );
 
-    // user config directory
-    const std::string & config = System::GetConfigDirectory( "fheroes2" );
-    if ( !config.empty() )
-        dirs.push_back( config );
+#if defined( MACOS_APP_BUNDLE )
+    // macOS app bundle Resources directory
+    char resourcePath[PATH_MAX];
 
-    // user data directory (may be the same as user config directory, so check this to avoid unnecessary work)
-    const std::string & data = System::GetDataDirectory( "fheroes2" );
-    if ( !data.empty() && ( std::find( dirs.cbegin(), dirs.cend(), data ) == dirs.cend() ) )
-        dirs.push_back( data );
+    CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL( CFBundleGetMainBundle() );
+    if ( CFURLGetFileSystemRepresentation( resourcesURL, TRUE, reinterpret_cast<UInt8 *>( resourcePath ), PATH_MAX )
+         && std::find( dirs.begin(), dirs.end(), resourcePath ) == dirs.end() ) {
+        dirs.emplace_back( resourcePath );
+    }
+    else {
+        ERROR_LOG( "Unable to get app bundle path" );
+    }
+    CFRelease( resourcesURL );
+#endif
+
+    // User config directory.
+    std::string configPath = System::GetConfigDirectory( "fheroes2" );
+    if ( !configPath.empty() && std::find( dirs.begin(), dirs.end(), configPath ) == dirs.end() ) {
+        dirs.emplace_back( std::move( configPath ) );
+    }
+
+    // User data directory.
+    std::string dataPath = System::GetDataDirectory( "fheroes2" );
+    if ( !dataPath.empty() && std::find( dirs.begin(), dirs.end(), dataPath ) == dirs.end() ) {
+        dirs.emplace_back( std::move( dataPath ) );
+    }
+
+    // Remove all paths that are not directories.
+    dirs.erase( std::remove_if( dirs.begin(), dirs.end(), []( const std::string & path ) { return !System::IsDirectory( path ); } ), dirs.end() );
 
     return dirs;
 }
@@ -569,35 +580,26 @@ ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string 
     return res;
 }
 
+bool Settings::findFile( const std::string & internalDirectory, const std::string & fileName, std::string & fullPath )
+{
+    std::string tempPath;
+
+    for ( const std::string & rootDir : Settings::GetRootDirs() ) {
+        tempPath = System::ConcatePath( rootDir, internalDirectory );
+        tempPath = System::ConcatePath( tempPath, fileName );
+        if ( System::IsFile( tempPath ) ) {
+            fullPath.swap( tempPath );
+            return true;
+        }
+    }
+
+    return false;
+}
+
 std::string Settings::GetLastFile( const std::string & prefix, const std::string & name )
 {
     const ListFiles & files = FindFiles( prefix, name, true );
     return files.empty() ? name : files.back();
-}
-
-bool Settings::MusicMIDI() const
-{
-    return opt_global.Modes( GLOBAL_MUSIC_MIDI );
-}
-
-/* return move speed */
-int Settings::HeroesMoveSpeed() const
-{
-    return heroes_speed;
-}
-int Settings::AIMoveSpeed() const
-{
-    return ai_speed;
-}
-int Settings::BattleSpeed() const
-{
-    return battle_speed;
-}
-
-/* return scroll speed */
-int Settings::ScrollSpeed() const
-{
-    return scroll_speed;
 }
 
 /* set ai speed: 0 (don't show) - 10 */
@@ -638,6 +640,16 @@ void Settings::setBattleAutoSpellcast( bool enable )
     }
 }
 
+void Settings::setBattleShowArmyOrder( const bool enable )
+{
+    if ( enable ) {
+        opt_global.SetModes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
+    }
+    else {
+        opt_global.ResetModes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
+    }
+}
+
 void Settings::setFullScreen( const bool enable )
 {
     if ( enable ) {
@@ -657,13 +669,6 @@ void Settings::SetScrollSpeed( int speed )
 bool Settings::isPriceOfLoyaltySupported() const
 {
     return opt_global.Modes( GLOBAL_PRICELOYALTY );
-}
-
-bool Settings::LoadedGameVersion() const
-{
-    // 0x80 value should be same as in Game::TYPE_LOADFILE enumeration value
-    // This constant not used here, to not drag dependency on the game.h and game.cpp in compilation target.
-    return ( game_type & 0x80 ) != 0;
 }
 
 bool Settings::ShowControlPanel() const
@@ -716,9 +721,9 @@ bool Settings::BattleAutoSpellcast() const
     return opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST );
 }
 
-const fheroes2::Size & Settings::VideoMode() const
+bool Settings::BattleShowArmyOrder() const
 {
-    return video_mode;
+    return opt_global.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
 }
 
 /* set level debug */
@@ -726,11 +731,6 @@ void Settings::SetDebug( int d )
 {
     debug = d;
     Logging::SetDebugLevel( debug );
-}
-
-void Settings::SetGameDifficulty( int d )
-{
-    game_difficulty = d;
 }
 
 /* sound volume: 0 - 10 */
@@ -745,110 +745,14 @@ void Settings::SetMusicVolume( int v )
     music_volume = clamp( v, 0, 10 );
 }
 
-/* Set music type: check MusicSource enum */
-void Settings::SetMusicType( int v )
-{
-    _musicType = MUSIC_EXTERNAL <= v ? MUSIC_EXTERNAL : static_cast<MusicSource>( v );
-}
-
-bool Settings::isCampaignGameType() const
-{
-    return ( game_type & Game::TYPE_CAMPAIGN ) != 0;
-}
-
 void Settings::SetPreferablyCountPlayers( int c )
 {
     preferably_count_players = std::min( c, 6 );
 }
 
-int Settings::PreferablyCountPlayers() const
+bool Settings::isCampaignGameType() const
 {
-    return preferably_count_players;
-}
-
-const std::string & Settings::MapsFile() const
-{
-    return current_maps_file.file;
-}
-
-const std::string & Settings::MapsName() const
-{
-    return current_maps_file.name;
-}
-
-const std::string & Settings::MapsDescription() const
-{
-    return current_maps_file.description;
-}
-
-int Settings::MapsDifficulty() const
-{
-    return current_maps_file.difficulty;
-}
-
-fheroes2::Size Settings::MapsSize() const
-{
-    return fheroes2::Size( current_maps_file.size_w, current_maps_file.size_h );
-}
-
-bool Settings::AllowChangeRace( int f ) const
-{
-    return ( current_maps_file.rnd_races & f ) != 0;
-}
-
-bool Settings::GameStartWithHeroes() const
-{
-    return current_maps_file.startWithHeroInEachCastle;
-}
-
-uint32_t Settings::ConditionWins() const
-{
-    return current_maps_file.ConditionWins();
-}
-
-uint32_t Settings::ConditionLoss() const
-{
-    return current_maps_file.ConditionLoss();
-}
-
-bool Settings::WinsCompAlsoWins() const
-{
-    return current_maps_file.WinsCompAlsoWins();
-}
-
-int Settings::WinsFindArtifactID() const
-{
-    return current_maps_file.WinsFindArtifactID();
-}
-
-bool Settings::WinsFindUltimateArtifact() const
-{
-    return current_maps_file.WinsFindUltimateArtifact();
-}
-
-u32 Settings::WinsAccumulateGold() const
-{
-    return current_maps_file.WinsAccumulateGold();
-}
-
-fheroes2::Point Settings::WinsMapsPositionObject() const
-{
-    return current_maps_file.WinsMapsPositionObject();
-}
-
-fheroes2::Point Settings::LossMapsPositionObject() const
-{
-    return current_maps_file.LossMapsPositionObject();
-}
-
-u32 Settings::LossCountDays() const
-{
-    return current_maps_file.LossCountDays();
-}
-
-int Settings::controllerPointerSpeed() const
-{
-    return _controllerPointerSpeed;
+    return ( game_type & Game::TYPE_CAMPAIGN ) != 0;
 }
 
 void Settings::EnablePriceOfLoyaltySupport( const bool set )
@@ -915,7 +819,7 @@ void Settings::SetShowStatus( bool f )
 
 bool Settings::CanChangeInGame( u32 f ) const
 {
-    return ( f >> 28 ) == 0x01; // GAME_ and POCKETPC_
+    return ( f >> 28 ) == 0x01; // GAME_
 }
 
 bool Settings::ExtModes( u32 f ) const
@@ -948,43 +852,33 @@ std::string Settings::ExtName( const uint32_t settingId )
     case Settings::WORLD_SHOW_TERRAIN_PENALTY:
         return _( "world: show terrain penalty" );
     case Settings::WORLD_SCOUTING_EXTENDED:
-        return _( "world: scouting skill show extended content info" );
+        return _( "world: Scouting skill shows extended content info" );
     case Settings::WORLD_ALLOW_SET_GUARDIAN:
-        return _( "world: allow set guardian to objects" );
-    case Settings::WORLD_EYE_EAGLE_AS_SCHOLAR:
-        return _( "world: Eagle Eye also works like Scholar in H3." );
+        return _( "world: allow to set guardian to objects" );
     case Settings::WORLD_ARTIFACT_CRYSTAL_BALL:
-        return _( "world: Crystal Ball also added Identify Hero and Visions spells" );
+        return _( "world: Crystal Ball gives Identify Hero and Visions spells" );
     case Settings::WORLD_SCALE_NEUTRAL_ARMIES:
         return _( "world: Neutral armies scale with game difficulty" );
     case Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS:
-        return _( "world: use unique artifacts for resource affecting" );
+        return _( "world: use unique artifacts providing resources" );
     case Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS:
-        return _( "world: use unique artifacts for primary skills" );
+        return _( "world: use unique artifacts affecting primary skills" );
     case Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS:
-        return _( "world: use unique artifacts for secondary skills" );
+        return _( "world: use unique artifacts affecting secondary skills" );
     case Settings::WORLD_EXT_OBJECTS_CAPTURED:
-        return _( "world: Wind/Water Mills and Magic Garden can be captured" );
-    case Settings::WORLD_DISABLE_BARROW_MOUNDS:
-        return _( "world: disable Barrow Mounds" );
+        return _( "world: Windmills, Water Wheels and Magic Gardens can be captured" );
     case Settings::CASTLE_ALLOW_GUARDIANS:
         return _( "castle: allow guardians" );
-    case Settings::CASTLE_MAGEGUILD_POINTS_TURN:
-        return _( "castle: higher mage guilds regenerate more spell points/turn (20/40/60/80/100%)" );
     case Settings::HEROES_BUY_BOOK_FROM_SHRINES:
         return _( "heroes: allow buy a spellbook from Shrines" );
-    case Settings::HEROES_COST_DEPENDED_FROM_LEVEL:
-        return _( "heroes: recruit cost to be dependent on hero level" );
     case Settings::HEROES_REMEMBER_POINTS_RETREAT:
         return _( "heroes: remember move points for retreat/surrender result" );
     case Settings::HEROES_TRANSCRIBING_SCROLLS:
         return _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" );
     case Settings::HEROES_ARENA_ANY_SKILLS:
-        return _( "heroes: in Arena can choose any of primary skills" );
-    case Settings::BATTLE_SHOW_ARMY_ORDER:
-        return _( "battle: show army order" );
+        return _( "heroes: allow to choose any primary skill in Arena" );
     case Settings::BATTLE_SOFT_WAITING:
-        return _( "battle: soft wait troop" );
+        return _( "battle: allow soft wait for troops" );
     case Settings::BATTLE_REVERSE_WAIT_ORDER:
         return _( "battle: reverse wait order (fast, average, slow)" );
     case Settings::BATTLE_DETERMINISTIC_RESULT:
@@ -993,8 +887,6 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "game: show system info" );
     case Settings::GAME_AUTOSAVE_BEGIN_DAY:
         return _( "game: autosave will be made at the beginning of the day" );
-    case Settings::GAME_USE_FADE:
-        return _( "game: use fade" );
     case Settings::GAME_EVIL_INTERFACE:
         return _( "game: use evil interface" );
     case Settings::GAME_HIDE_INTERFACE:
@@ -1048,201 +940,6 @@ void Settings::ExtResetModes( u32 f )
     default:
         break;
     }
-}
-
-bool Settings::ExtCastleGuildRestorePointsTurn() const
-{
-    return ExtModes( CASTLE_MAGEGUILD_POINTS_TURN );
-}
-
-bool Settings::ExtCastleAllowGuardians() const
-{
-    return ExtModes( CASTLE_ALLOW_GUARDIANS );
-}
-
-bool Settings::ExtWorldShowTerrainPenalty() const
-{
-    return ExtModes( WORLD_SHOW_TERRAIN_PENALTY );
-}
-
-bool Settings::ExtWorldScouteExtended() const
-{
-    return ExtModes( WORLD_SCOUTING_EXTENDED );
-}
-
-bool Settings::ExtGameRememberLastFocus() const
-{
-    return ExtModes( GAME_REMEMBER_LAST_FOCUS );
-}
-
-bool Settings::ExtWorldAllowSetGuardian() const
-{
-    return ExtModes( WORLD_ALLOW_SET_GUARDIAN );
-}
-
-bool Settings::ExtWorldArtifactCrystalBall() const
-{
-    return ExtModes( WORLD_ARTIFACT_CRYSTAL_BALL );
-}
-
-bool Settings::ExtWorldEyeEagleAsScholar() const
-{
-    return ExtModes( WORLD_EYE_EAGLE_AS_SCHOLAR );
-}
-
-bool Settings::ExtHeroBuySpellBookFromShrine() const
-{
-    return ExtModes( HEROES_BUY_BOOK_FROM_SHRINES );
-}
-
-bool Settings::ExtHeroRecruitCostDependedFromLevel() const
-{
-    return ExtModes( HEROES_COST_DEPENDED_FROM_LEVEL );
-}
-
-bool Settings::ExtHeroRememberPointsForRetreating() const
-{
-    return ExtModes( HEROES_REMEMBER_POINTS_RETREAT );
-}
-
-bool Settings::ExtBattleShowDamage() const
-{
-    return ExtModes( GAME_BATTLE_SHOW_DAMAGE );
-}
-
-bool Settings::ExtHeroAllowTranscribingScroll() const
-{
-    return ExtModes( HEROES_TRANSCRIBING_SCROLLS );
-}
-
-bool Settings::ExtBattleShowBattleOrder() const
-{
-    return ExtModes( BATTLE_SHOW_ARMY_ORDER );
-}
-
-bool Settings::ExtBattleSoftWait() const
-{
-    return ExtModes( BATTLE_SOFT_WAITING );
-}
-
-bool Settings::ExtBattleDeterministicResult() const
-{
-    return ExtModes( BATTLE_DETERMINISTIC_RESULT );
-}
-
-bool Settings::ExtGameRewriteConfirm() const
-{
-    return ExtModes( GAME_SAVE_REWRITE_CONFIRM );
-}
-
-bool Settings::ExtGameShowSystemInfo() const
-{
-    return ExtModes( GAME_SHOW_SYSTEM_INFO );
-}
-
-bool Settings::ExtGameAutosaveBeginOfDay() const
-{
-    return ExtModes( GAME_AUTOSAVE_BEGIN_DAY );
-}
-
-bool Settings::ExtGameUseFade() const
-{
-    return video_mode == fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) && ExtModes( GAME_USE_FADE );
-}
-
-bool Settings::ExtGameEvilInterface() const
-{
-    return ExtModes( GAME_EVIL_INTERFACE );
-}
-
-bool Settings::ExtGameHideInterface() const
-{
-    return ExtModes( GAME_HIDE_INTERFACE );
-}
-
-bool Settings::ExtBattleReverseWaitOrder() const
-{
-    return ExtModes( BATTLE_REVERSE_WAIT_ORDER );
-}
-
-bool Settings::ExtWorldNeutralArmyDifficultyScaling() const
-{
-    return ExtModes( WORLD_SCALE_NEUTRAL_ARMIES );
-}
-
-bool Settings::ExtWorldUseUniqueArtifactsRS() const
-{
-    return ExtModes( WORLD_USE_UNIQUE_ARTIFACTS_RS );
-}
-
-bool Settings::ExtWorldUseUniqueArtifactsPS() const
-{
-    return ExtModes( WORLD_USE_UNIQUE_ARTIFACTS_PS );
-}
-
-bool Settings::ExtWorldUseUniqueArtifactsSS() const
-{
-    return ExtModes( WORLD_USE_UNIQUE_ARTIFACTS_SS );
-}
-
-bool Settings::ExtHeroArenaCanChoiseAnySkills() const
-{
-    return ExtModes( HEROES_ARENA_ANY_SKILLS );
-}
-
-bool Settings::ExtWorldExtObjectsCaptured() const
-{
-    return ExtModes( WORLD_EXT_OBJECTS_CAPTURED );
-}
-
-bool Settings::ExtWorldDisableBarrowMounds() const
-{
-    return ExtModes( WORLD_DISABLE_BARROW_MOUNDS );
-}
-
-bool Settings::ExtGameContinueAfterVictory() const
-{
-    return ExtModes( GAME_CONTINUE_AFTER_VICTORY );
-}
-
-const fheroes2::Point & Settings::PosRadar() const
-{
-    return pos_radr;
-}
-
-const fheroes2::Point & Settings::PosButtons() const
-{
-    return pos_bttn;
-}
-
-const fheroes2::Point & Settings::PosIcons() const
-{
-    return pos_icon;
-}
-
-const fheroes2::Point & Settings::PosStatus() const
-{
-    return pos_stat;
-}
-
-void Settings::SetPosRadar( const fheroes2::Point & pt )
-{
-    pos_radr = pt;
-}
-
-void Settings::SetPosButtons( const fheroes2::Point & pt )
-{
-    pos_bttn = pt;
-}
-
-void Settings::SetPosIcons( const fheroes2::Point & pt )
-{
-    pos_icon = pt;
-}
-
-void Settings::SetPosStatus( const fheroes2::Point & pt )
-{
-    pos_stat = pt;
 }
 
 void Settings::BinarySave() const

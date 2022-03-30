@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -453,10 +454,10 @@ const char * MP2::StringObject( const MapObjectType objectType, const int count 
     case OBJ_WAGON:
         return _( "Wagon" );
     case OBJ_LEANTO:
-        return _( "Lean To" );
+        return _( "Lean-To" );
     case OBJ_FLOTSAM:
         return _( "Flotsam" );
-    case OBJ_SHIPWRECKSURVIROR:
+    case OBJ_SHIPWRECKSURVIVOR:
         return _( "Shipwreck Survivor" );
     case OBJ_BOTTLE:
         return _( "Bottle" );
@@ -751,7 +752,7 @@ bool MP2::isWaterActionObject( const MapObjectType objectType )
     case OBJ_WHIRLPOOL:
     case OBJ_BUOY:
     case OBJ_BOTTLE:
-    case OBJ_SHIPWRECKSURVIROR:
+    case OBJ_SHIPWRECKSURVIVOR:
     case OBJ_FLOTSAM:
     case OBJ_MAGELLANMAPS:
     case OBJ_COAST:
@@ -965,7 +966,7 @@ bool MP2::isQuantityObject( const MapObjectType objectType )
     case OBJ_LEANTO:
     case OBJ_CAMPFIRE:
     case OBJ_FLOTSAM:
-    case OBJ_SHIPWRECKSURVIROR:
+    case OBJ_SHIPWRECKSURVIVOR:
     case OBJ_WATERCHEST:
     case OBJ_DERELICTSHIP:
     case OBJ_SHIPWRECK:
@@ -1009,7 +1010,7 @@ bool MP2::isPickupObject( const MapObjectType objectType )
 {
     switch ( objectType ) {
     case OBJ_WATERCHEST:
-    case OBJ_SHIPWRECKSURVIROR:
+    case OBJ_SHIPWRECKSURVIVOR:
     case OBJ_FLOTSAM:
     case OBJ_BOTTLE:
     case OBJ_TREASURECHEST:
@@ -1034,7 +1035,7 @@ bool MP2::isArtifactObject( const MapObjectType objectType )
     case OBJ_DAEMONCAVE:
     case OBJ_WATERCHEST:
     case OBJ_TREASURECHEST:
-    case OBJ_SHIPWRECKSURVIROR:
+    case OBJ_SHIPWRECKSURVIVOR:
     case OBJ_SHIPWRECK:
     case OBJ_GRAVEYARD:
         return true;
@@ -1122,22 +1123,27 @@ bool MP2::isProtectedObject( const MapObjectType objectType )
     return isCaptureObject( objectType );
 }
 
-bool MP2::isAbandonedMine( const MapObjectType objectType )
-{
-    return objectType == MP2::OBJN_ABANDONEDMINE || objectType == MP2::OBJ_ABANDONEDMINE;
-}
-
-bool MP2::isRemoveObject( const MapObjectType objectType )
+bool MP2::isSafeForFogDiscoveryObject( const MapObjectType objectType )
 {
     switch ( objectType ) {
-    case OBJ_MONSTER:
-    case OBJ_BARRIER:
+    // Stone liths and whirlpools are mandatory because they open access to new tiles
+    case OBJ_STONELITHS:
+    case OBJ_WHIRLPOOL:
+    // Sign messages are useless for AI, but they are harmless for fog discovery purposes
+    case OBJ_SIGN:
         return true;
     default:
         break;
     }
 
-    return isPickupObject( objectType );
+    // Action objects in general should be avoided for fog discovery purposes, because
+    // they may be guarded or may require wasting resources
+    return !isActionObject( objectType );
+}
+
+bool MP2::isAbandonedMine( const MapObjectType objectType )
+{
+    return objectType == MP2::OBJN_ABANDONEDMINE || objectType == MP2::OBJ_ABANDONEDMINE;
 }
 
 bool MP2::isNeedStayFront( const MapObjectType objectType )
@@ -1172,7 +1178,7 @@ int MP2::getActionObjectDirection( const MapObjectType objectType )
     case OBJ_MONSTER:
     case OBJ_ANCIENTLAMP:
     case OBJ_CAMPFIRE:
-    case OBJ_SHIPWRECKSURVIROR:
+    case OBJ_SHIPWRECKSURVIVOR:
     case OBJ_FLOTSAM:
     case OBJ_WATERCHEST:
     case OBJ_BUOY:

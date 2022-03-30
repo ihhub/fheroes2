@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -126,16 +127,16 @@ int32_t Rand::Queue::GetWithSeed( uint32_t seed )
     return Rand::Queue::Get( [seed]( uint32_t max ) { return Rand::GetWithSeed( 0, max, seed ); } );
 }
 
-Rand::DeterministicRandomGenerator::DeterministicRandomGenerator( const size_t initialSeed )
+Rand::DeterministicRandomGenerator::DeterministicRandomGenerator( const uint32_t initialSeed )
     : _currentSeed( initialSeed )
 {}
 
-size_t Rand::DeterministicRandomGenerator::GetSeed() const
+uint32_t Rand::DeterministicRandomGenerator::GetSeed() const
 {
     return _currentSeed;
 }
 
-void Rand::DeterministicRandomGenerator::UpdateSeed( const size_t seed )
+void Rand::DeterministicRandomGenerator::UpdateSeed( const uint32_t seed )
 {
     _currentSeed = seed;
 }
@@ -143,5 +144,5 @@ void Rand::DeterministicRandomGenerator::UpdateSeed( const size_t seed )
 uint32_t Rand::DeterministicRandomGenerator::Get( const uint32_t from, const uint32_t to /*= 0*/ ) const
 {
     ++_currentSeed;
-    return Rand::GetWithSeed( from, to, static_cast<uint32_t>( _currentSeed ) );
+    return Rand::GetWithSeed( from, to, _currentSeed );
 }

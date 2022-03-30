@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,6 +42,8 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
 void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const
@@ -321,7 +324,7 @@ fheroes2::GameMode Interface::Basic::EventGameInfo()
         fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::ImageRestorer saver( display, 0, 0, display.width(), display.height() );
 
-        AGG::ResetMixer();
+        AGG::ResetAudio();
 
         const fheroes2::GameMode returnMode = Game::SelectCampaignScenario( fheroes2::GameMode::CANCEL, true );
         if ( returnMode == fheroes2::GameMode::CANCEL ) {
@@ -371,7 +374,10 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
                     hero->PickupArtifact( ultimate );
                     std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );
                     StringReplace( msg, "%{artifact}", ultimate.GetName() );
-                    Dialog::ArtifactInfo( _( "Congratulations!" ), msg, ultimate.GetID() );
+
+                    const fheroes2::ArtifactDialogElement artifactUI( ultimate.GetID() );
+                    fheroes2::showMessage( fheroes2::Text( _( "Congratulations!" ), fheroes2::FontType::normalYellow() ),
+                                           fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
                 }
                 else
                     Dialog::Message( "", _( "Nothing here. Where could it be?" ), Font::BIG, Dialog::OK );
@@ -402,8 +408,10 @@ fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMod
         if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) ) {
             hero->Action( hero->GetIndex(), true );
 
-            // The action object (e.g. Stables or Well) can alter the status of the hero
-            iconsPanel.RedrawIcons( ICON_HEROES );
+            // The action object can alter the status of the hero (e.g. Stables or Well) or
+            // move it to another location (e.g. Stone Liths or Whirlpool)
+            ResetFocus( GameFocus::HEROES );
+            RedrawFocus();
 
             // If a hero completed an action we must verify the condition for the scenario.
             if ( hero->isAction() ) {

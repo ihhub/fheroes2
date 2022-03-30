@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,9 +38,18 @@ namespace Skill
 
 namespace GameStatic
 {
+    enum class FogDiscoveryType : int32_t
+    {
+        CASTLE,
+        HEROES,
+        TELESCOPE,
+        OBSERVATION_TOWER,
+        MAGI_EYES
+    };
+
     u32 GetLostOnWhirlpoolPercent( void );
     u32 GetGameOverLostDays( void );
-    u32 GetOverViewDistance( u32 );
+    uint32_t getFogDiscoveryDistance( const FogDiscoveryType type );
 
     u32 GetKingdomMaxHeroes( void );
 
@@ -49,7 +59,6 @@ namespace GameStatic
     u32 GetCastleGrownMonthOf( void );
 
     u32 GetHeroesRestoreSpellPointsPerDay( void );
-    u32 GetMageGuildRestoreSpellPointsPercentDay( int level );
 
     s32 ObjectVisitedModifiers( const MP2::MapObjectType objectType );
 

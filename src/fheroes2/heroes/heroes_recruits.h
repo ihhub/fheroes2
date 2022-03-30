@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,28 +24,72 @@
 #ifndef H2RECRUITS_H
 #define H2RECRUITS_H
 
+#include <cstdint>
 #include <utility>
+
+#include "heroes.h"
 
 class Heroes;
 class StreamBase;
 
-class Recruits : public std::pair<int, int>
+class Recruit
+{
+public:
+    Recruit();
+    Recruit( const Heroes & hero, const uint32_t surrenderDay );
+    explicit Recruit( const Heroes & hero );
+    Recruit( const Recruit & ) = delete;
+
+    ~Recruit() = default;
+
+    Recruit & operator=( const Recruit & ) = delete;
+    Recruit & operator=( Recruit && ) = default;
+
+    int getID() const
+    {
+        return _id;
+    }
+
+    uint32_t getSurrenderDay() const
+    {
+        return _surrenderDay;
+    }
+
+    void setSurrenderDayTmp( const uint32_t surrenderDay );
+
+private:
+    int _id;
+    uint32_t _surrenderDay;
+
+    friend StreamBase & operator<<( StreamBase & msg, const Recruit & recruit );
+    friend StreamBase & operator>>( StreamBase & msg, Recruit & recruit );
+};
+
+class Recruits : public std::pair<Recruit, Recruit>
 {
 public:
     Recruits();
 
-    void Reset( void );
+    void Reset();
 
-    int GetID1( void ) const;
-    int GetID2( void ) const;
+    int GetID1() const;
+    int GetID2() const;
 
-    Heroes * GetHero1( void );
-    Heroes * GetHero2( void );
+    Heroes * GetHero1() const;
+    Heroes * GetHero2() const;
 
-    void SetHero1( const Heroes * );
-    void SetHero2( const Heroes * );
+    uint32_t getSurrenderDayOfHero1() const;
+    uint32_t getSurrenderDayOfHero2() const;
+
+    void SetHero1( Heroes * hero );
+    void SetHero2( Heroes * hero );
+
+    void SetHero2Tmp( Heroes * hero, const uint32_t heroSurrenderDay );
+
+    void appendSurrenderedHero( Heroes & hero, const uint32_t heroSurrenderDay );
 };
 
-StreamBase & operator>>( StreamBase &, Recruits & );
+StreamBase & operator<<( StreamBase & msg, const Recruit & recruit );
+StreamBase & operator>>( StreamBase & msg, Recruit & recruit );
 
 #endif

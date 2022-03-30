@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,6 +26,25 @@
 #include "translations.h"
 
 #include <cassert>
+
+namespace
+{
+    void updateSpellDescription( const Spell & spell, std::string & description )
+    {
+        const uint32_t spellExtraValue = spell.ExtraValue();
+        switch ( spellExtraValue ) {
+        case 1:
+            StringReplace( description, "%{count}", _( "one" ) );
+            break;
+        case 2:
+            StringReplace( description, "%{count}", _( "two" ) );
+            break;
+        default:
+            StringReplace( description, "%{count}", spellExtraValue );
+            break;
+        }
+    }
+}
 
 namespace fheroes2
 {
@@ -159,11 +178,12 @@ namespace fheroes2
 
     std::string getSpellDescription( const Spell & spell, const HeroBase * hero )
     {
-        if ( hero == nullptr ) {
-            return spell.GetDescription();
-        }
-
         std::string description = spell.GetDescription();
+        updateSpellDescription( spell, description );
+
+        if ( hero == nullptr ) {
+            return description;
+        }
 
         if ( spell.isDamage() ) {
             description += "\n \n";
@@ -240,6 +260,16 @@ namespace fheroes2
 
             description += _( "The nearest town is %{town}." );
             StringReplace( description, "%{town}", castle->GetName() );
+
+            const Heroes * townGuest = castle->GetHeroes().Guest();
+            if ( townGuest != nullptr ) {
+                description += "\n \n";
+                std::string extraLine = _( "This town is occupied by your hero %{hero}." );
+                StringReplace( extraLine, "%{town}", castle->GetName() );
+                StringReplace( extraLine, "%{hero}", townGuest->GetName() );
+
+                description += extraLine;
+            }
 
             return description;
         }

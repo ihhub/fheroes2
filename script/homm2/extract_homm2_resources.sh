@@ -26,7 +26,9 @@ echo_stage "[1/3] determining destination directory"
 
 DEST_PATH=""
 
-if [[ -f fheroes2 && -x fheroes2 ]]; then
+if [[ -n "$2" ]]; then
+    DEST_PATH="$2"
+elif [[ -f fheroes2 && -x fheroes2 ]]; then
     DEST_PATH="."
 elif [[ -d ../../src ]]; then
     # Special hack for developers running this script from the source tree
@@ -36,7 +38,7 @@ fi
 if [[ -z "$DEST_PATH" || ! -d "$DEST_PATH" || ! -w "$DEST_PATH" ]]; then
     if [[ "$(uname 2> /dev/null)" == "Linux" ]]; then
         DEST_PATH="${XDG_CONFIG_HOME:-$HOME/.local/share}/fheroes2"
-    else
+    elif [[ -z "$2" ]]; then
         DEST_PATH="$HOME/.fheroes2"
     fi
 fi
@@ -45,7 +47,7 @@ echo_green "Destination directory: $DEST_PATH"
 
 echo_stage "[2/3] determining HoMM2 directory"
 
-if [[ "$#" == "1" ]]; then
+if [[ "$#" -gt "0" ]]; then
     HOMM2_PATH="$1"
 else
     read -e -p "Please enter the full path to the HoMM2 directory (e.g. /home/user/GOG Games/HoMM 2 Gold): " HOMM2_PATH

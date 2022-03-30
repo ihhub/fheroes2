@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,6 +32,7 @@
 #include "game.h"
 #include "game_delays.h"
 #include "game_interface.h"
+#include "game_static.h"
 #include "heroes.h"
 #include "icn.h"
 #include "kingdom.h"
@@ -48,7 +50,67 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
+
+namespace
+{
+    void DialogCaptureResourceObject( const std::string & hdr, const std::string & str, const int32_t resourceType )
+    {
+        const payment_t info = ProfitConditions::FromMine( resourceType );
+        int32_t resouceCount = 0;
+
+        switch ( resourceType ) {
+        case Resource::MERCURY:
+            resouceCount = info.mercury;
+            break;
+        case Resource::WOOD:
+            resouceCount = info.wood;
+            break;
+        case Resource::ORE:
+            resouceCount = info.ore;
+            break;
+        case Resource::SULFUR:
+            resouceCount = info.sulfur;
+            break;
+        case Resource::CRYSTAL:
+            resouceCount = info.crystal;
+            break;
+        case Resource::GEMS:
+            resouceCount = info.gems;
+            break;
+        case Resource::GOLD:
+            resouceCount = info.gold;
+            break;
+        default:
+            // You're passing an invalid resource type. Check your logic!
+            assert( 0 );
+            break;
+        }
+
+        std::string perday = _( "%{count} / day" );
+        StringReplace( perday, "%{count}", resouceCount );
+
+        std::string msg = str;
+        switch ( resouceCount ) {
+        case 1:
+            StringReplace( msg, "%{count}", _( "one" ) );
+            break;
+        case 2:
+            StringReplace( msg, "%{count}", _( "two" ) );
+            break;
+        default:
+            StringReplace( msg, "%{count}", resouceCount );
+            break;
+        }
+
+        fheroes2::ResourceDialogElement resourceUI( resourceType, std::move( perday ) );
+
+        fheroes2::showMessage( fheroes2::Text( hdr, fheroes2::FontType::normalYellow() ), fheroes2::Text( std::move( msg ), fheroes2::FontType::normalWhite() ),
+                               Dialog::OK, { &resourceUI } );
+    }
+}
 
 void ActionToCastle( Heroes & hero, s32 dst_index );
 void ActionToHeroes( Heroes & hero, s32 dst_index );
@@ -100,193 +162,8 @@ void ActionToJail( const Heroes & hero, const MP2::MapObjectType objectType, s32
 void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToEyeMagi( const Heroes & hero, const MP2::MapObjectType objectType );
 void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
-void ActionToBarrier( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
+void ActionToBarrier( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToTravellersTent( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
-
-u32 DialogCaptureResourceObject( const std::string & hdr, const std::string & str, u32 res, u32 buttons = Dialog::OK )
-{
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::GetIndexSprite2( res ) );
-    std::string msg = str;
-
-    // sprite resource with x / day test
-    fheroes2::Image sf( sprite.width() + 30, sprite.height() + 14 );
-    sf.reset();
-
-    fheroes2::Blit( sprite, sf, 15, 0 );
-
-    std::string perday = _( "%{count} / day" );
-    payment_t info = ProfitConditions::FromMine( res );
-    const s32 * current = nullptr;
-
-    switch ( res ) {
-    case Resource::MERCURY:
-        current = &info.mercury;
-        break;
-    case Resource::WOOD:
-        current = &info.wood;
-        break;
-    case Resource::ORE:
-        current = &info.ore;
-        break;
-    case Resource::SULFUR:
-        current = &info.sulfur;
-        break;
-    case Resource::CRYSTAL:
-        current = &info.crystal;
-        break;
-    case Resource::GEMS:
-        current = &info.gems;
-        break;
-    case Resource::GOLD:
-        current = &info.gold;
-        break;
-    default:
-        break;
-    }
-
-    if ( current ) {
-        StringReplace( perday, "%{count}", *current );
-
-        switch ( *current ) {
-        case 1:
-            StringReplace( msg, "%{count}", _( "one" ) );
-            break;
-        case 2:
-            StringReplace( msg, "%{count}", _( "two" ) );
-            break;
-        default:
-            StringReplace( msg, "%{count}", *current );
-            break;
-        }
-    }
-
-    Text text( perday, Font::SMALL );
-    text.Blit( ( sf.width() - text.w() ) / 2, sf.height() - 12, sf );
-
-    return Dialog::SpriteInfo( hdr, msg, sf, buttons );
-}
-
-u32 DialogGoldWithExp( const std::string & hdr, const std::string & msg, u32 count, u32 exp, u32 buttons = Dialog::OK )
-{
-    const fheroes2::Sprite & gold = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 4 );
-    fheroes2::Image image( sprite.width() + gold.width() + 50, sprite.width() + 10 );
-    image.reset();
-
-    fheroes2::Blit( gold, image, 0, image.height() - gold.height() - 12 );
-    fheroes2::Blit( sprite, image, gold.width() + 50, 0 );
-
-    Text text( std::to_string( count ), Font::SMALL );
-    text.Blit( ( gold.width() - text.w() ) / 2, image.height() - 12, image );
-    text.Set( std::to_string( exp ) );
-    text.Blit( gold.width() + 50 + ( sprite.width() - text.w() ) / 2, image.height() - 12, image );
-
-    return Dialog::SpriteInfo( hdr, msg, image, buttons );
-}
-
-u32 DialogArtifactWithExp( const std::string & hdr, const std::string & msg, const Artifact & art, u32 exp, u32 buttons = Dialog::OK )
-{
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 4 );
-    const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
-    const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
-
-    fheroes2::Image image( border.width() + sprite.width() + 50, border.height() );
-    image.reset();
-
-    fheroes2::Blit( border, image );
-    fheroes2::Blit( artifact, image, 5, 5 );
-    fheroes2::Blit( sprite, image, border.width() + 50, ( border.height() - sprite.height() ) / 2 );
-
-    Text text( std::to_string( exp ), Font::SMALL );
-    text.Blit( border.width() + 50 + ( sprite.width() - text.w() ) / 2, image.height() - 12, image );
-
-    return Dialog::SpriteInfo( hdr, msg, image, buttons );
-}
-
-u32 DialogWithExp( const std::string & hdr, const std::string & msg, u32 exp, u32 buttons = Dialog::OK )
-{
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 4 );
-
-    fheroes2::Image image( sprite.width(), sprite.height() + 12 );
-    image.reset();
-
-    fheroes2::Blit( sprite, image );
-    Text text( std::to_string( exp ), Font::SMALL );
-    text.Blit( ( sprite.width() - text.w() ) / 2, sprite.height(), image );
-
-    return Dialog::SpriteInfo( hdr, msg, image, buttons );
-}
-
-u32 DialogWithArtifactAndGold( const std::string & hdr, const std::string & msg, const Artifact & art, u32 count, u32 buttons = Dialog::OK )
-{
-    const fheroes2::Sprite & gold = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
-    const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::RESOURCE, 7 );
-    const fheroes2::Sprite & artifact = fheroes2::AGG::GetICN( ICN::ARTIFACT, art.IndexSprite64() );
-
-    fheroes2::Image image( border.width() + gold.width() + 50, border.height() );
-    image.reset();
-
-    fheroes2::Blit( border, image );
-    fheroes2::Blit( artifact, image, 5, 5 );
-    fheroes2::Blit( gold, image, border.width() + 50, ( border.height() - gold.height() ) / 2 );
-
-    Text text( std::to_string( count ), Font::SMALL );
-    text.Blit( border.width() + 50 + ( gold.width() - text.w() ) / 2, border.height() - 25, image );
-
-    return Dialog::SpriteInfo( hdr, msg, image, buttons );
-}
-
-u32 DialogWithGold( const std::string & hdr, const std::string & msg, u32 count, u32 buttons = Dialog::OK )
-{
-    const fheroes2::Sprite & gold = fheroes2::AGG::GetICN( ICN::RESOURCE, 6 );
-
-    fheroes2::Image image( gold.width(), gold.height() + 12 );
-    image.reset();
-
-    fheroes2::Blit( gold, image );
-
-    Text text( std::to_string( count ), Font::SMALL );
-    text.Blit( ( gold.width() - text.w() ) / 2, gold.height(), image );
-
-    return Dialog::SpriteInfo( hdr, msg, image, buttons );
-}
-
-u32 DialogMorale( const std::string & hdr, const std::string & msg, bool good, u32 count )
-{
-    if ( 1 > count )
-        count = 1;
-    if ( 3 < count )
-        count = 3;
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::EXPMRL, ( good ? 2 : 3 ) );
-    u32 offset = sprite.width() * 4 / 3;
-
-    fheroes2::Image image( sprite.width() + offset * ( count - 1 ), sprite.height() );
-    image.reset();
-
-    for ( u32 ii = 0; ii < count; ++ii )
-        fheroes2::Blit( sprite, image, offset * ii, 0 );
-
-    return Dialog::SpriteInfo( hdr, msg, image );
-}
-
-uint32_t DialogLuck( const std::string & hdr, const std::string & msg, bool good, uint32_t count )
-{
-    if ( 1 > count )
-        count = 1;
-    else if ( 3 < count )
-        count = 3;
-
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::EXPMRL, ( good ? 0 : 1 ) );
-    const uint32_t offset = sprite.width() * 2;
-
-    fheroes2::Image image( sprite.width() + offset * ( count - 1 ), sprite.height() );
-    image.reset();
-
-    for ( uint32_t i = 0; i < count; ++i )
-        fheroes2::Blit( sprite, image, offset * i, 0 );
-
-    return Dialog::SpriteInfo( hdr, msg, image );
-}
 
 void BattleLose( Heroes & hero, const Battle::Result & res, bool attacker, int color = Color::NONE )
 {
@@ -335,15 +212,18 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
     }
 }
 
-static void WhirlpoolTroopLooseEffect( Heroes & hero )
+static void WhirlpoolTroopLoseEffect( Heroes & hero )
 {
-    Troop * troop = hero.GetArmy().GetWeakestTroop();
-    assert( troop );
-    if ( !troop )
+    const Army & heroArmy = hero.GetArmy();
+
+    Troop * weakestTroop = heroArmy.GetWeakestTroop();
+    assert( weakestTroop != nullptr );
+    if ( weakestTroop == nullptr ) {
         return;
+    }
 
     // Whirlpool effect affects heroes only with more than one creature in more than one slot
-    if ( hero.GetArmy().GetCount() == 1 && troop->GetCount() == 1 ) {
+    if ( heroArmy.GetCount() == 1 && weakestTroop->GetCount() == 1 ) {
         return;
     }
 
@@ -351,11 +231,12 @@ static void WhirlpoolTroopLooseEffect( Heroes & hero )
         // TODO: Do we really have this dialog in-game in OG?
         Dialog::Message( _( "A whirlpool engulfs your ship." ), _( "Some of your army has fallen overboard." ), Font::BIG, Dialog::OK );
 
-        if ( troop->GetCount() == 1 ) {
-            troop->Reset();
+        if ( weakestTroop->GetCount() == 1 ) {
+            weakestTroop->Reset();
         }
         else {
-            troop->SetCount( Monster::GetCountFromHitPoints( troop->GetID(), troop->GetHitPoints() - troop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
+            weakestTroop->SetCount( Monster::GetCountFromHitPoints( weakestTroop->GetID(),
+                                                                    weakestTroop->GetHitPoints() - weakestTroop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
         }
 
         Interface::Basic::Get().GetStatusWindow().SetRedraw();
@@ -369,7 +250,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
     const Game::MusicRestorer musicRestorer;
 
     if ( GetKingdom().isControlAI() )
-        return AI::HeroesAction( *this, tileIndex, isDestination );
+        return AI::HeroesAction( *this, tileIndex );
 
     Maps::Tiles & tile = world.GetTiles( tileIndex );
     const MP2::MapObjectType objectType = tile.GetObject( tileIndex != GetIndex() );
@@ -459,7 +340,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToCoast( *this, tileIndex );
             break;
 
-            // resource object
+        // resource object
         case MP2::OBJ_WINDMILL:
         case MP2::OBJ_WATERWHEEL:
         case MP2::OBJ_MAGICGARDEN:
@@ -492,14 +373,14 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToFlotSam( *this, objectType, tileIndex );
             break;
 
-        case MP2::OBJ_SHIPWRECKSURVIROR:
+        case MP2::OBJ_SHIPWRECKSURVIVOR:
             ActionToShipwreckSurvivor( *this, objectType, tileIndex );
             break;
         case MP2::OBJ_ARTIFACT:
             ActionToArtifact( *this, tileIndex );
             break;
 
-            // shrine circle
+        // shrine circle
         case MP2::OBJ_SHRINE1:
         case MP2::OBJ_SHRINE2:
         case MP2::OBJ_SHRINE3:
@@ -563,7 +444,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToDaemonCave( *this, objectType, tileIndex );
             break;
 
-            // teleports
+        // teleports
         case MP2::OBJ_STONELITHS:
             ActionToTeleports( *this, tileIndex );
             break;
@@ -592,7 +473,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToAbandoneMine( *this, objectType, tileIndex );
             break;
 
-            // accept army
+        // accept army
         case MP2::OBJ_WATCHTOWER:
         case MP2::OBJ_EXCAVATION:
         case MP2::OBJ_CAVE:
@@ -606,7 +487,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToDwellingJoinMonster( *this, objectType, tileIndex );
             break;
 
-            // recruit army
+        // recruit army
         case MP2::OBJ_RUINS:
         case MP2::OBJ_TREECITY:
         case MP2::OBJ_WAGONCAMP:
@@ -653,7 +534,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToSphinx( *this, objectType, tileIndex );
             break;
 
-            // loyalty version
+        // loyalty version
         case MP2::OBJ_WATERALTAR:
         case MP2::OBJ_AIRALTAR:
         case MP2::OBJ_FIREALTAR:
@@ -693,7 +574,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             ActionToTravellersTent( *this, objectType, tileIndex );
             break;
 
-            // object
+        // other object
         default:
             break;
         }
@@ -759,7 +640,7 @@ void ActionToMonster( Heroes & hero, s32 dst_index )
     }
     else if ( join.reason == NeutralMonsterJoiningCondition::Reason::RunAway ) {
         std::string message = _( "The %{monster}, awed by the power of your forces, begin to scatter.\nDo you wish to pursue and engage them?" );
-        StringReplace( message, "%{monster}", StringLower( troop.GetMultiName() ) );
+        StringReplace( message, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
 
         if ( Dialog::Message( "", message, Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::NO ) {
             destroy = true;
@@ -998,10 +879,13 @@ void ActionToPickupResource( const Heroes & hero, const MP2::MapObjectType objec
         Dialog::Message( MP2::StringObject( objectType ), ( sign ? sign->message : "No message provided" ), Font::BIG, Dialog::OK );
     }
     else {
-        Funds funds = tile.QuantityFunds();
+        const Funds funds = tile.QuantityFunds();
 
         if ( objectType == MP2::OBJ_CAMPFIRE ) {
-            Dialog::ResourceInfo( MP2::StringObject( objectType ), _( "Ransacking an enemy camp, you discover a hidden cache of treasures." ), funds );
+            const fheroes2::Text header( MP2::StringObject( objectType ), fheroes2::FontType::normalYellow() );
+            const fheroes2::Text body( _( "Ransacking an enemy camp, you discover a hidden cache of treasures." ), fheroes2::FontType::normalWhite() );
+
+            fheroes2::showResourceMessage( header, body, Dialog::OK, funds );
         }
         else {
             ResourceCount rc = tile.QuantityResourceCount();
@@ -1070,9 +954,23 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
     }
 
     if ( rc.isValid() ) {
+        // The Magic Garden has a special sound
+        if ( !Settings::Get().MusicMIDI() && objectType == MP2::OBJ_MAGICGARDEN ) {
+            AGG::PlayMusic( MUS::TREEHOUSE, false );
+        }
+        // The Lean-To has a special sound
+        else if ( objectType == MP2::OBJ_LEANTO ) {
+            AGG::PlaySound( M82::EXPERNCE );
+        }
+        else {
+            AGG::PlaySound( M82::TREASURE );
+        }
+
         const Funds funds( rc );
-        AGG::PlaySound( M82::TREASURE );
-        Dialog::ResourceInfo( caption, msg, funds );
+
+        fheroes2::showResourceMessage( fheroes2::Text( caption, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                                       Dialog::OK, funds );
+
         hero.GetKingdom().AddFundsResource( funds );
 
         if ( cancapture )
@@ -1100,12 +998,14 @@ void ActionToSkeleton( Heroes & hero, const MP2::MapObjectType objectType, s32 d
 
     // artifact
     if ( tile.QuantityIsValid() ) {
-        Game::PlayPickupSound();
-
         if ( hero.IsFullBagArtifacts() ) {
             u32 gold = GoldInsteadArtifact( objectType );
             const Funds funds( Resource::GOLD, gold );
-            Dialog::ResourceInfo( title, _( "Treasure" ), funds, Dialog::OK );
+            AGG::PlaySound( M82::EXPERNCE );
+
+            fheroes2::showResourceMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ),
+                                           fheroes2::Text( _( "Treasure" ), fheroes2::FontType::normalWhite() ), Dialog::OK, funds );
+
             hero.GetKingdom().AddFundsResource( funds );
         }
         else {
@@ -1114,7 +1014,12 @@ void ActionToSkeleton( Heroes & hero, const MP2::MapObjectType objectType, s32 d
             message.append( _( "Searching through the tattered clothing, you find the %{artifact}." ) );
             StringReplace( message, "%{artifact}", art.GetName() );
             AGG::PlaySound( M82::TREASURE );
-            Dialog::ArtifactInfo( title, message, art );
+
+            const fheroes2::ArtifactDialogElement artifactUI( art );
+
+            fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( message, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &artifactUI } );
+
             hero.PickupArtifact( art );
         }
 
@@ -1151,7 +1056,12 @@ void ActionToWagon( Heroes & hero, s32 dst_index )
                 message.append( _( "Searching inside, you find the %{artifact}." ) );
                 StringReplace( message, "%{artifact}", art.GetName() );
                 AGG::PlaySound( M82::TREASURE );
-                Dialog::ArtifactInfo( title, message, art );
+
+                const fheroes2::ArtifactDialogElement artifactUI( art );
+
+                fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( message, fheroes2::FontType::normalWhite() ),
+                                       Dialog::OK, { &artifactUI } );
+
                 hero.PickupArtifact( art );
             }
         }
@@ -1160,7 +1070,10 @@ void ActionToWagon( Heroes & hero, s32 dst_index )
             AGG::PlaySound( M82::EXPERNCE );
             message += '\n';
             message.append( _( "Inside, you find some of the wagon's cargo still intact." ) );
-            Dialog::ResourceInfo( title, message, funds );
+
+            fheroes2::showResourceMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( message, fheroes2::FontType::normalWhite() ),
+                                           Dialog::OK, funds );
+
             hero.GetKingdom().AddFundsResource( funds );
         }
 
@@ -1188,7 +1101,10 @@ void ActionToFlotSam( const Heroes & hero, const MP2::MapObjectType objectType, 
     if ( 0 < funds.GetValidItemsCount() ) {
         msg = funds.wood && funds.gold ? _( "You search through the flotsam, and find some wood and some gold." )
                                        : _( "You search through the flotsam, and find some wood." );
-        Dialog::ResourceInfo( title, msg, funds );
+
+        fheroes2::showResourceMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                       funds );
+
         hero.GetKingdom().AddFundsResource( funds );
     }
     else {
@@ -1263,7 +1179,10 @@ void ActionToShrine( Heroes & hero, s32 dst_index )
         else {
             AGG::PlaySound( M82::TREASURE );
             hero.AppendSpellToBook( spell.GetID() );
-            Dialog::SpellInfo( head, body, spell.GetID() );
+
+            const fheroes2::SpellDialogElement spellUI( spell, &hero );
+            fheroes2::showMessage( fheroes2::Text( head, fheroes2::FontType::normalYellow() ), fheroes2::Text( body, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &spellUI } );
         }
     }
 
@@ -1274,8 +1193,6 @@ void ActionToShrine( Heroes & hero, s32 dst_index )
 void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
 {
     const Skill::Secondary & skill = world.GetTiles( dst_index ).QuantitySkill();
-
-    AGG::PlayMusic( MUS::SKILL, false );
 
     // If this assertion blows up the object is not set properly.
     assert( skill.isValid() );
@@ -1304,7 +1221,10 @@ void ActionToWitchsHut( Heroes & hero, const MP2::MapObjectType objectType, s32 
 
             msg.append( _( "An ancient and immortal witch living in a hut with bird's legs for stilts teaches you %{skill} for her own inscrutable purposes." ) );
             StringReplace( msg, "%{skill}", skill_name );
-            Dialog::SecondarySkillInfo( title, msg, skill, hero );
+
+            const fheroes2::SecondarySkillDialogElement secondarySkillUI( skill, hero );
+            fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &secondarySkillUI } );
         }
     }
 
@@ -1353,7 +1273,10 @@ void ActionToGoodLuckObject( Heroes & hero, const MP2::MapObjectType objectType,
         // modify luck
         hero.SetVisited( dst_index );
         AGG::PlaySound( M82::GOODLUCK );
-        DialogLuck( title, msg, true, 1 );
+
+        const fheroes2::LuckDialogElement luckUI( true );
+        fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                               { &luckUI } );
     }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
@@ -1383,7 +1306,7 @@ void ActionToPyramid( Heroes & hero, const MP2::MapObjectType objectType, s32 ds
                 msg += spell.GetName();
                 msg += "'.";
 
-                // check magick book
+                // Check Magic Book.
                 if ( !hero.HaveSpellBook() ) {
                     msg += '\n';
                     msg += _( "Unfortunately, you have no Magic Book to record the spell with." );
@@ -1398,7 +1321,10 @@ void ActionToPyramid( Heroes & hero, const MP2::MapObjectType objectType, s32 ds
                 }
 
                 if ( valid ) {
-                    Dialog::SpellInfo( title, msg, spell, true );
+                    const fheroes2::SpellDialogElement spellUI( spell, &hero );
+                    fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                                           Dialog::OK, { &spellUI } );
+
                     hero.AppendSpellToBook( spell );
                 }
                 else {
@@ -1416,7 +1342,10 @@ void ActionToPyramid( Heroes & hero, const MP2::MapObjectType objectType, s32 ds
             // modify luck
             AGG::PlaySound( M82::BADLUCK );
             const std::string msg = _( "You come upon the pyramid of a great and ancient king.\nRoutine exploration reveals that the pyramid is completely empty." );
-            DialogLuck( title, msg, false, 2 );
+
+            const fheroes2::LuckDialogElement luckUI( false );
+            fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &luckUI, &luckUI } );
 
             hero.SetVisited( dst_index, Visit::LOCAL );
             hero.SetVisited( dst_index, Visit::GLOBAL );
@@ -1514,7 +1443,10 @@ void ActionToPrimarySkillObject( Heroes & hero, const MP2::MapObjectType objectT
         // increase skill
         hero.IncreasePrimarySkill( skill );
         hero.SetVisited( dst_index );
-        Dialog::PrimarySkillInfo( title, msg, skill );
+
+        const fheroes2::PrimarySkillDialogElement primarySkillUI( skill, "+1" );
+        fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                               { &primarySkillUI } );
 
         // fix double action tile
         hero.SetVisitedWideTile( dst_index, objectType );
@@ -1568,15 +1500,28 @@ void ActionToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType objectTyp
                 if ( art.isValid() ) {
                     if ( hero.IsFullBagArtifacts() ) {
                         gold = GoldInsteadArtifact( objectType );
-                        DialogWithGold( title, win, gold );
+
+                        const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
+
+                        fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( win, fheroes2::FontType::normalWhite() ),
+                                               Dialog::OK, { &goldUI } );
                     }
                     else {
-                        DialogWithArtifactAndGold( title, win, art, gold );
+                        const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
+                        const fheroes2::ArtifactDialogElement artifactUI( art );
+
+                        fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( win, fheroes2::FontType::normalWhite() ),
+                                               Dialog::OK, { &artifactUI, &goldUI } );
+
                         hero.PickupArtifact( art );
                     }
                 }
-                else
-                    DialogWithGold( title, win, gold );
+                else {
+                    const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
+
+                    fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( win, fheroes2::FontType::normalWhite() ),
+                                           Dialog::OK, { &goldUI } );
+                }
 
                 hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
             }
@@ -1594,7 +1539,10 @@ void ActionToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType objectTyp
             hero.SetVisited( dst_index, Visit::LOCAL );
             hero.SetVisited( dst_index, Visit::GLOBAL );
             AGG::PlaySound( M82::BADMRLE );
-            DialogMorale( title, msg, false, 1 );
+
+            const fheroes2::MoraleDialogElement moraleUI( false );
+            fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &moraleUI } );
         }
     }
 
@@ -1644,7 +1592,16 @@ void ActionToGoodMoraleObject( Heroes & hero, const MP2::MapObjectType objectTyp
         // modify morale
         hero.SetVisited( dst_index );
         AGG::PlaySound( M82::GOODMRLE );
-        DialogMorale( title, msg, true, ( objectType == MP2::OBJ_TEMPLE ? 2 : 1 ) );
+
+        const fheroes2::MoraleDialogElement moraleUI( true );
+        std::vector<const fheroes2::DialogElement *> elementUI{ &moraleUI };
+        if ( objectType == MP2::OBJ_TEMPLE ) {
+            elementUI.emplace_back( &moraleUI );
+        }
+
+        fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                               elementUI );
+
         hero.IncreaseMovePoints( move );
 
         // fix double action tile
@@ -1661,7 +1618,7 @@ void ActionToExperienceObject( Heroes & hero, const MP2::MapObjectType objectTyp
     bool visited = hero.isVisited( tile );
     std::string msg;
 
-    u32 exp = 0;
+    int32_t exp = 0;
 
     switch ( objectType ) {
     case MP2::OBJ_GAZEBO:
@@ -1671,6 +1628,8 @@ void ActionToExperienceObject( Heroes & hero, const MP2::MapObjectType objectTyp
         break;
 
     default:
+        // Are you calling this function for a new object? Add the logic above!
+        assert( 0 );
         return;
     }
 
@@ -1686,7 +1645,10 @@ void ActionToExperienceObject( Heroes & hero, const MP2::MapObjectType objectTyp
         else {
             AGG::PlayMusic( MUS::EXPERIENCE, false );
         }
-        DialogWithExp( title, msg, exp );
+
+        const fheroes2::ExperienceDialogElement experienceUI( exp );
+        fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                               { &experienceUI } );
 
         // visit
         hero.SetVisited( dst_index );
@@ -1704,10 +1666,15 @@ void ActionToShipwreckSurvivor( Heroes & hero, const MP2::MapObjectType objectTy
 
     if ( hero.IsFullBagArtifacts() ) {
         const u32 gold = GoldInsteadArtifact( objectType );
-        DialogWithGold(
-            title,
-            _( "You've pulled a shipwreck survivor from certain death in an unforgiving ocean. Grateful, he says, \"I would give you an artifact as a reward, but you're all full.\"" ),
-            gold, Dialog::OK );
+
+        const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
+
+        fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ),
+                               fheroes2::Text( _( "You've pulled a shipwreck survivor from certain death in an unforgiving ocean. Grateful, he says, "
+                                                  "\"I would give you an artifact as a reward, but you're all full.\"" ),
+                                               fheroes2::FontType::normalWhite() ),
+                               Dialog::OK, { &goldUI } );
+
         hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
     }
     else {
@@ -1716,7 +1683,12 @@ void ActionToShipwreckSurvivor( Heroes & hero, const MP2::MapObjectType objectTy
             "You've pulled a shipwreck survivor from certain death in an unforgiving ocean. Grateful, he rewards you for your act of kindness by giving you the %{art}." );
         StringReplace( str, "%{art}", art.GetName() );
         AGG::PlaySound( M82::TREASURE );
-        Dialog::ArtifactInfo( title, str, art );
+
+        const fheroes2::ArtifactDialogElement artifactUI( art );
+
+        fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( str, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                               { &artifactUI } );
+
         hero.PickupArtifact( art );
     }
 
@@ -1767,7 +1739,12 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
             msg.append( _( "Do you wish to buy this artifact?" ) );
 
             AGG::PlaySound( M82::EXPERNCE );
-            if ( Dialog::YES == Dialog::ArtifactInfo( _( "Artifact" ), msg, art, Dialog::YES | Dialog::NO ) ) {
+
+            const fheroes2::ArtifactDialogElement artifactUI( art );
+            const fheroes2::Text titleText( title, fheroes2::FontType::normalYellow() );
+            const fheroes2::Text bodyText( msg, fheroes2::FontType::normalWhite() );
+
+            if ( Dialog::YES == fheroes2::showMessage( titleText, bodyText, Dialog::YES | Dialog::NO, { &artifactUI } ) ) {
                 if ( hero.GetKingdom().AllowPayment( payment ) ) {
                     result = true;
                     hero.GetKingdom().OddFundsResource( payment );
@@ -1790,7 +1767,12 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                 msg = _( "You've found the artifact: " );
                 msg.append( art.GetName() );
                 AGG::PlaySound( M82::TREASURE );
-                Dialog::ArtifactInfo( title, msg, art, Dialog::OK );
+
+                const fheroes2::ArtifactDialogElement artifactUI( art );
+
+                fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                       { &artifactUI } );
+
                 result = true;
             }
             else {
@@ -1842,7 +1824,11 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                     msg = _( "Victorious, you take your prize, the %{art}." );
                     StringReplace( msg, "%{art}", art.GetName() );
                     AGG::PlaySound( M82::TREASURE );
-                    Dialog::ArtifactInfo( title, msg, art.GetID() );
+
+                    const fheroes2::ArtifactDialogElement artifactUI( art );
+
+                    fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                                           Dialog::OK, { &artifactUI } );
                 }
                 else {
                     BattleLose( hero, res, true );
@@ -1853,15 +1839,20 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
             }
         }
         else {
-            if ( Artifact::GetScenario( art ) )
-                msg = Artifact::GetScenario( art );
+            const char * artifactDiscoveryDescription = Artifact::getDiscoveryDescription( art );
+            if ( artifactDiscoveryDescription != nullptr ) {
+                msg = artifactDiscoveryDescription;
+            }
             else {
                 msg = _( "You've found the artifact: " );
                 msg += '\n';
                 msg.append( art.GetName() );
             }
             AGG::PlaySound( M82::TREASURE );
-            Dialog::ArtifactInfo( title, msg, art );
+
+            const fheroes2::ArtifactDialogElement artifactUI( art );
+            fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &artifactUI } );
             result = true;
         }
 
@@ -1898,20 +1889,34 @@ void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, 
                     gold = GoldInsteadArtifact( objectType );
                     msg = _( "After spending hours trying to fish the chest out of the sea, you open it and find %{gold} gold pieces." );
                     StringReplace( msg, "%{gold}", gold );
-                    DialogWithGold( hdr, msg, gold );
+
+                    const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
+
+                    fheroes2::showMessage( fheroes2::Text( hdr, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                                           Dialog::OK, { &goldUI } );
                 }
                 else {
                     msg = _( "After spending hours trying to fish the chest out of the sea, you open it and find %{gold} gold and the %{art}." );
                     StringReplace( msg, "%{gold}", gold );
                     StringReplace( msg, "%{art}", art.GetName() );
-                    DialogWithArtifactAndGold( hdr, msg, art, gold );
+
+                    const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
+                    const fheroes2::ArtifactDialogElement artifactUI( art );
+
+                    fheroes2::showMessage( fheroes2::Text( hdr, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                                           Dialog::OK, { &artifactUI, &goldUI } );
+
                     hero.PickupArtifact( art );
                 }
             }
             else {
                 msg = _( "After spending hours trying to fish the chest out of the sea, you open it and find %{gold} gold pieces." );
                 StringReplace( msg, "%{gold}", gold );
-                DialogWithGold( hdr, msg, gold );
+
+                const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
+
+                fheroes2::showMessage( fheroes2::Text( hdr, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                       { &goldUI } );
             }
         }
         else {
@@ -1936,13 +1941,22 @@ void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, 
                 gold = GoldInsteadArtifact( objectType );
                 msg = _( "After scouring the area, you fall upon a hidden chest, containing the %{gold} gold pieces." );
                 StringReplace( msg, "%{gold}", gold );
-                DialogWithGold( hdr, msg, gold );
+
+                const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
+
+                fheroes2::showMessage( fheroes2::Text( hdr, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                       { &goldUI } );
             }
             else {
                 msg = _( "After scouring the area, you fall upon a hidden chest, containing the ancient artifact %{art}." );
                 StringReplace( msg, "%{art}", art.GetName() );
                 AGG::PlaySound( M82::TREASURE );
-                Dialog::ArtifactInfo( hdr, msg, art );
+
+                const fheroes2::ArtifactDialogElement artifactUI( art );
+
+                fheroes2::showMessage( fheroes2::Text( hdr, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                       { &artifactUI } );
+
                 hero.PickupArtifact( art );
             }
         }
@@ -1991,19 +2005,7 @@ void ActionToTeleports( Heroes & hero, s32 index_from )
         return;
     }
 
-    const Heroes * other_hero = world.GetTiles( index_to ).GetHeroes();
-    if ( other_hero ) {
-        ActionToHeroes( hero, index_to );
-
-        // lose battle
-        if ( hero.isFreeman() ) {
-            return;
-        }
-        else if ( !other_hero->isFreeman() ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "is busy..." );
-            return;
-        }
-    }
+    assert( world.GetTiles( index_to ).GetObject() != MP2::OBJ_HEROES );
 
     AGG::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
@@ -2052,7 +2054,7 @@ void ActionToWhirlpools( Heroes & hero, s32 index_from )
     hero.GetPath().Hide();
     hero.FadeIn();
 
-    WhirlpoolTroopLooseEffect( hero );
+    WhirlpoolTroopLoseEffect( hero );
 
     hero.GetPath().Reset();
     hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
@@ -2076,7 +2078,7 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
     Maps::Tiles & tile = world.GetTiles( dst_index );
     std::string header;
     std::string body;
-    u32 resource = Resource::UNKNOWN;
+    int32_t resource = Resource::UNKNOWN;
 
     switch ( objectType ) {
     case MP2::OBJ_ALCHEMYLAB:
@@ -2125,7 +2127,7 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
 
     case MP2::OBJ_LIGHTHOUSE:
         header = MP2::StringObject( objectType );
-        body = _( "The lighthouse is now under your control, and all of your ships will now move further each turn." );
+        body = _( "The lighthouse is now under your control, and all of your ships will now move further each day." );
         break;
 
     default:
@@ -2140,7 +2142,7 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
         bool capture = true;
 
         // check guardians
-        if ( tile.CaptureObjectIsProtection() ) {
+        if ( tile.isCaptureObjectProtected() ) {
             Army army( tile );
             const Monster & mons = tile.QuantityMonster();
 
@@ -2205,10 +2207,7 @@ void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType object
         std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you. Do you accept?" );
         StringReplace( message, "%{monster}", troop.GetMultiName() );
 
-        if ( !Settings::Get().MusicMIDI() && objectType == MP2::OBJ_WATCHTOWER )
-            AGG::PlayMusic( MUS::WATCHTOWER, false );
-        else
-            AGG::PlaySound( M82::EXPERNCE );
+        AGG::PlaySound( M82::EXPERNCE );
 
         if ( Dialog::YES == Dialog::Message( title, message, Font::BIG, Dialog::YES | Dialog::NO ) ) {
             if ( !hero.GetArmy().CanJoinTroop( troop ) )
@@ -2292,7 +2291,6 @@ void ActionToDwellingRecruitMonster( Heroes & hero, const MP2::MapObjectType obj
     default:
         return;
     }
-    AGG::PlayMusic( MUS::FromMapObject( objectType ), false );
 
     const Troop & troop = tile.QuantityTroop();
 
@@ -2385,13 +2383,9 @@ void ActionToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType obje
 
 void ActionToObservationTower( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
 {
-    if ( !Settings::Get().MusicMIDI() ) {
-        AGG::PlayMusic( MUS::WATCHTOWER, true );
-    }
-
     Dialog::Message( MP2::StringObject( objectType ), _( "From the observation tower, you are able to see distant lands." ), Font::BIG, Dialog::OK );
 
-    Maps::ClearFog( dst_index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );
+    Maps::ClearFog( dst_index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() );
 }
 
 void ActionToArtesianSpring( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
@@ -2520,6 +2514,7 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
             "A blacksmith working at the foundry offers to convert all Pikemen and Swordsmen's weapons brought to him from iron to steel. He also says that he knows a process that will convert Iron Golems into Steel Golems. Unfortunately, you have none of these troops in your army, so he can't help you." );
         break;
     }
+
     case MP2::OBJ_STABLES: {
         assert( !defaultMessage.empty() );
         msg1 = defaultMessage;
@@ -2614,7 +2609,15 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
             fheroes2::Blit( mon, surface, offsetX + 6 + mon.x(), 6 + mon.y() + offsetY );
             offsetX += border.width() + 4;
         }
-        Dialog::SpriteInfo( title, msg1, surface );
+
+        // The Hill Fort has a special sound
+        if ( objectType == MP2::OBJ_HILLFORT ) {
+            AGG::PlayMusic( MUS::HILLFORT, false );
+        }
+
+        const fheroes2::CustomImageDialogElement imageUI( std::move( surface ) );
+        fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg1, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                               { &imageUI } );
     }
     else {
         Dialog::Message( title, msg2, Font::BIG, Dialog::OK );
@@ -2666,23 +2669,33 @@ void ActionToEvent( Heroes & hero, s32 dst_index )
     if ( event_maps && event_maps->isAllow( hero.GetColor() ) ) {
         hero.SetMove( false );
 
+        std::vector<fheroes2::ResourceDialogElement> resourceUI = fheroes2::getResourceDialogElements( event_maps->resources );
+        std::unique_ptr<fheroes2::ArtifactDialogElement> artifactUI;
+
         if ( event_maps->resources.GetValidItemsCount() ) {
             hero.GetKingdom().AddFundsResource( event_maps->resources );
-            Dialog::ResourceInfo( "", event_maps->message, event_maps->resources );
         }
-        else if ( !event_maps->message.empty() )
-            Dialog::Message( "", event_maps->message, Font::BIG, Dialog::OK );
 
         const Artifact & art = event_maps->artifact;
         if ( art.isValid() ) {
             if ( hero.PickupArtifact( art ) ) {
-                std::string message( _( "You find %{artifact}." ) );
-                StringReplace( message, "%{artifact}", art.GetName() );
+                artifactUI.reset( new fheroes2::ArtifactDialogElement( art ) );
                 AGG::PlaySound( M82::TREASURE );
-                Dialog::ArtifactInfo( "", message, art );
                 Game::PlayPickupSound();
             }
         }
+
+        std::vector<const fheroes2::DialogElement *> elementUI;
+        elementUI.reserve( resourceUI.size() );
+        for ( const fheroes2::ResourceDialogElement & element : resourceUI ) {
+            elementUI.emplace_back( &element );
+        }
+
+        if ( artifactUI ) {
+            elementUI.emplace_back( artifactUI.get() );
+        }
+
+        fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( event_maps->message, fheroes2::FontType::normalWhite() ), Dialog::OK, elementUI );
 
         event_maps->SetVisited( hero.GetColor() );
 
@@ -2734,10 +2747,12 @@ void ActionToTreeKnowledge( Heroes & hero, const MP2::MapObjectType objectType, 
 
         // free
         if ( conditions ) {
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::EXPMRL, 4 );
             msg = _(
                 "Upon your approach, the tree opens its eyes in delight. \"Ahh, an adventurer! Allow me to teach you a little of what I have learned over the ages.\"" );
-            Dialog::SpriteInfo( title, msg, sprite );
+
+            const fheroes2::CustomImageDialogElement imageUI( fheroes2::AGG::GetICN( ICN::EXPMRL, 4 ) );
+            fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &imageUI } );
         }
         else {
             const ResourceCount & rc = tile.QuantityResourceCount();
@@ -2750,7 +2765,14 @@ void ActionToTreeKnowledge( Heroes & hero, const MP2::MapObjectType objectType, 
                 msg.append( _( "(Just bury it around my roots.)" ) );
                 StringReplace( msg, "%{res}", Resource::String( rc.first ) );
                 StringReplace( msg, "%{count}", rc.second );
-                conditions = Dialog::YES == Dialog::SpriteInfo( title, msg, fheroes2::AGG::GetICN( ICN::EXPMRL, 4 ), Dialog::YES | Dialog::NO );
+
+                const uint32_t possibleExperience = Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience();
+
+                const fheroes2::ExperienceDialogElement experienceUI( static_cast<int32_t>( possibleExperience ) );
+                const fheroes2::Text titleUI( title, fheroes2::FontType::normalYellow() );
+                const fheroes2::Text messageUI( msg, fheroes2::FontType::normalWhite() );
+
+                conditions = ( fheroes2::showMessage( titleUI, messageUI, Dialog::YES | Dialog::NO, { &experienceUI } ) == Dialog::YES );
             }
             else {
                 msg = _( "Tears brim in the eyes of the tree." );
@@ -2778,7 +2800,7 @@ void ActionToOracle( const Heroes & hero, const MP2::MapObjectType objectType )
 {
     Dialog::Message(
         MP2::StringObject( objectType ),
-        _( "Nestled among the trees sits a blind seer. After explaining the intent of your journey, the seer activates his crystal ball, allowing you to see the strengths and weaknesses of your opponents." ),
+        _( "Nestled among the trees sits a blind seer. After you explain the intent of your journey, the seer activates his crystal ball, allowing you to see the strengths and weaknesses of your opponents." ),
         Font::BIG, Dialog::OK );
 
     Dialog::ThievesGuild( true );
@@ -2790,8 +2812,6 @@ void ActionToOracle( const Heroes & hero, const MP2::MapObjectType objectType )
 void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
-
-    AGG::PlayMusic( MUS::DEMONCAVE, false );
 
     const std::string header = MP2::StringObject( objectType );
     if ( Dialog::YES
@@ -2821,7 +2841,12 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int
                     hero.IncreaseExperience( res.GetExperienceAttacker() );
                     msg = _( "Upon defeating the daemon's servants, you find a hidden cache with %{count} gold." );
                     StringReplace( msg, "%{count}", gold );
-                    DialogWithGold( header, msg, gold );
+
+                    const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
+
+                    fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                                           Dialog::OK, { &goldUI } );
+
                     hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
                 }
                 else {
@@ -2833,7 +2858,11 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int
                 const uint32_t exp = 1000;
                 msg = _( "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp} experience points." );
                 StringReplace( msg, "%{exp}", exp );
-                DialogWithExp( header, msg, exp );
+
+                const fheroes2::ExperienceDialogElement experienceUI( exp );
+                fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                       { &experienceUI } );
+
                 hero.IncreaseExperience( exp );
             }
             else if ( 2 == variant ) {
@@ -2842,7 +2871,12 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int
                     "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and receive %{exp} experience points and %{count} gold." );
                 StringReplace( msg, "%{exp}", exp );
                 StringReplace( msg, "%{count}", gold );
-                DialogGoldWithExp( header, msg, gold, exp );
+
+                const fheroes2::ExperienceDialogElement experienceUI( exp );
+                const fheroes2::ResourceDialogElement goldUI( Resource::GOLD, std::to_string( gold ) );
+                fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                       { &experienceUI, &goldUI } );
+
                 hero.IncreaseExperience( exp );
                 hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
             }
@@ -2852,8 +2886,12 @@ void ActionToDaemonCave( Heroes & hero, const MP2::MapObjectType objectType, int
                 msg = _(
                     "The Demon screams its challenge and attacks! After a short, desperate battle, you slay the monster and find the %{art} in the back of the cave." );
                 StringReplace( msg, "%{art}", art.GetName() );
-                if ( art.isValid() )
-                    DialogArtifactWithExp( header, msg, art, exp );
+                if ( art.isValid() ) {
+                    const fheroes2::ExperienceDialogElement experienceUI( exp );
+                    const fheroes2::ArtifactDialogElement artifactUI( art );
+                    fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                                           Dialog::OK, { &experienceUI, &artifactUI } );
+                }
                 hero.PickupArtifact( art );
                 hero.IncreaseExperience( exp );
             }
@@ -3003,19 +3041,31 @@ void ActionToSirens( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
     const std::string title( MP2::StringObject( objectType ) );
 
     if ( hero.isObjectTypeVisited( objectType ) ) {
-        Dialog::Message( title, _( "As the sirens sing their eerie song, your small, determined army manages to overcome the urge to dive headlong into the sea." ),
+        Dialog::Message( title, _( "You have your crew stop up their ears with wax before the sirens' eerie song has any chance of luring them to a watery grave." ),
                          Font::BIG, Dialog::OK );
     }
     else {
-        u32 exp = hero.GetArmy().ActionToSirens();
-        std::string str = _(
-            "You have your crew stop up their ears with wax before the sirens' eerie song has any chance of luring them to a watery grave. An eerie wailing song emanates from the sirens perched upon the rocks. Many of your crew fall under its spell, and dive into the water where they drown. You are now wiser for the visit, and gain %{exp} experience." );
-        StringReplace( str, "%{exp}", exp );
+        const uint32_t experience = hero.GetArmy().ActionToSirens();
+        if ( experience == 0 ) {
+            Dialog::Message( title, _( "As the sirens sing their eerie song, your small, determined army manages to overcome the urge to dive headlong into the sea." ),
+                         Font::BIG, Dialog::OK );
+        }
+        else {
+            const fheroes2::ExperienceDialogElement experienceUI( static_cast<int32_t>( experience ) );
+
+            std::string str = _(
+                "An eerie wailing song emanates from the sirens perched upon the rocks. Many of your crew fall under its spell, and dive into the water where they drown. You are now wiser for the visit, and gain %{exp} experience." );
+            StringReplace( str, "%{exp}", experience );
+
+            AGG::PlaySound( M82::EXPERNCE );
+
+            fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( str, fheroes2::FontType::normalWhite() ), Dialog::OK,
+                                   { &experienceUI } );
+
+            hero.IncreaseExperience( experience );
+        }
 
         hero.SetVisited( dst_index );
-        AGG::PlaySound( M82::EXPERNCE );
-        Dialog::Message( title, str, Font::BIG, Dialog::OK );
-        hero.IncreaseExperience( exp );
     }
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
@@ -3026,7 +3076,7 @@ void ActionToJail( const Heroes & hero, const MP2::MapObjectType objectType, s32
     const Kingdom & kingdom = hero.GetKingdom();
     const std::string title( MP2::StringObject( objectType ) );
 
-    if ( kingdom.AllowRecruitHero( false, 0 ) ) {
+    if ( kingdom.AllowRecruitHero( false ) ) {
         Maps::Tiles & tile = world.GetTiles( dst_index );
         AGG::PlaySound( M82::EXPERNCE );
         Dialog::Message(
@@ -3044,8 +3094,7 @@ void ActionToJail( const Heroes & hero, const MP2::MapObjectType objectType, s32
         Heroes * prisoner = world.FromJailHeroes( dst_index );
 
         if ( prisoner ) {
-            if ( prisoner->Recruit( hero.GetColor(), Maps::GetPoint( dst_index ) ) )
-                prisoner->ResetModes( Heroes::JAIL );
+            prisoner->Recruit( hero.GetColor(), Maps::GetPoint( dst_index ) );
         }
     }
     else {
@@ -3070,7 +3119,7 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, s32 ds
         if ( !vec_eyes.empty() ) {
             Interface::Basic & I = Interface::Basic::Get();
             for ( MapsIndexes::const_iterator it = vec_eyes.begin(); it != vec_eyes.end(); ++it ) {
-                Maps::ClearFog( *it, Game::GetViewDistance( Game::VIEW_MAGI_EYES ), hero.GetColor() );
+                Maps::ClearFog( *it, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ), hero.GetColor() );
                 I.GetGameArea().SetCenter( Maps::GetPoint( *it ) );
                 I.RedrawFocus();
                 I.Redraw();
@@ -3119,23 +3168,34 @@ void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
             if ( riddle->AnswerCorrect( answer ) ) {
                 const Funds & res = riddle->resources;
                 const Artifact art = riddle->artifact;
-                const std::string say = _( "Looking somewhat disappointed, the Sphinx sighs. You've answered my riddle so here's your reward. Now begone." );
+                const std::string say = _( "Looking somewhat disappointed, the Sphinx sighs. \"You've answered my riddle so here's your reward. Now begone.\"" );
                 const u32 count = res.GetValidItemsCount();
 
                 if ( count ) {
-                    if ( 1 == count && res.gold && art.isValid() )
-                        DialogWithArtifactAndGold( title, say, art, res.gold );
-                    else {
-                        Dialog::ResourceInfo( title, say, res );
-                        if ( art.isValid() ) {
-                            AGG::PlaySound( M82::TREASURE );
-                            Dialog::ArtifactInfo( title, say, art );
-                        }
+                    const std::vector<fheroes2::ResourceDialogElement> resourceUiElements = fheroes2::getResourceDialogElements( res );
+                    std::vector<const fheroes2::DialogElement *> uiElements;
+                    uiElements.reserve( resourceUiElements.size() );
+                    for ( const fheroes2::ResourceDialogElement & element : resourceUiElements ) {
+                        uiElements.emplace_back( &element );
                     }
+
+                    std::unique_ptr<fheroes2::ArtifactDialogElement> artifactUI;
+
+                    if ( art.isValid() ) {
+                        artifactUI.reset( new fheroes2::ArtifactDialogElement( art ) );
+                        uiElements.emplace_back( artifactUI.get() );
+                    }
+
+                    fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( say, fheroes2::FontType::normalWhite() ),
+                                           Dialog::OK, uiElements );
                 }
                 else if ( art.isValid() ) {
                     AGG::PlaySound( M82::TREASURE );
-                    Dialog::ArtifactInfo( title, say, art );
+
+                    const fheroes2::ArtifactDialogElement artifactUI( art );
+
+                    fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( say, fheroes2::FontType::normalWhite() ),
+                                           Dialog::OK, { &artifactUI } );
                 }
 
                 if ( art.isValid() )
@@ -3165,7 +3225,7 @@ void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToBarrier( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
+void ActionToBarrier( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
 {
     // A hero cannot stand on a barrier. He must stand in front of the barrier. Something wrong with logic!
     assert( hero.GetIndex() != dst_index );

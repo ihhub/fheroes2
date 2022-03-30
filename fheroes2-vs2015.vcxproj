@@ -262,15 +262,11 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_quickinfo.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_recrut.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_resolution.cpp" />
-    <ClCompile Include="src\fheroes2\dialog\dialog_resourceinfo.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_selectcount.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_selectfile.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_selectitems.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_selectscenario.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_settings.cpp" />
-    <ClCompile Include="src\fheroes2\dialog\dialog_skillinfo.cpp" />
-    <ClCompile Include="src\fheroes2\dialog\dialog_spellinfo.cpp" />
-    <ClCompile Include="src\fheroes2\dialog\dialog_spriteinfo.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_system_options.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_thievesguild.cpp" />
     <ClCompile Include="src\fheroes2\game\difficulty.cpp" />
@@ -310,6 +306,7 @@
     <ClCompile Include="src\fheroes2\gui\ui_base.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_button.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_dialog.cpp" />
+	<ClCompile Include="src\fheroes2\gui\ui_kingdom.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_language.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_scrollbar.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_text.cpp" />
@@ -330,6 +327,7 @@
     <ClCompile Include="src\fheroes2\heroes\route.cpp" />
     <ClCompile Include="src\fheroes2\heroes\skill.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\color.cpp" />
+	<ClCompile Include="src\fheroes2\kingdom\experience.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\kingdom.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\kingdom_overview.cpp" />
     <ClCompile Include="src\fheroes2\kingdom\luck.cpp" />
@@ -398,7 +396,6 @@
     <ClInclude Include="src\engine\localevent.h" />
     <ClInclude Include="src\engine\math_base.h" />
     <ClInclude Include="src\engine\pal.h" />
-    <ClInclude Include="src\engine\palette_h2.h" />
     <ClInclude Include="src\engine\pathfinding.h" />
     <ClInclude Include="src\engine\rand.h" />
     <ClInclude Include="src\engine\screen.h" />
@@ -486,6 +483,7 @@
     <ClInclude Include="src\fheroes2\gui\ui_base.h" />
     <ClInclude Include="src\fheroes2\gui\ui_button.h" />
     <ClInclude Include="src\fheroes2\gui\ui_dialog.h" />
+	<ClInclude Include="src\fheroes2\gui\ui_kingdom.h" />
     <ClInclude Include="src\fheroes2\gui\ui_language.h" />
     <ClInclude Include="src\fheroes2\gui\ui_scrollbar.h" />
     <ClInclude Include="src\fheroes2\gui\ui_text.h" />
@@ -503,6 +501,7 @@
     <ClInclude Include="src\fheroes2\heroes\skill_static.h" />
     <ClInclude Include="src\fheroes2\image\embedded_image.h" />
     <ClInclude Include="src\fheroes2\kingdom\color.h" />
+	<ClInclude Include="src\fheroes2\kingdom\experience.h" />
     <ClInclude Include="src\fheroes2\kingdom\kingdom.h" />
     <ClInclude Include="src\fheroes2\kingdom\luck.h" />
     <ClInclude Include="src\fheroes2\kingdom\morale.h" />

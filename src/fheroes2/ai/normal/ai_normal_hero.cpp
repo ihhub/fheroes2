@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +22,7 @@
 
 #include "ai_normal.h"
 #include "game.h"
+#include "game_static.h"
 #include "ground.h"
 #include "heroes.h"
 #include "logging.h"
@@ -42,7 +43,8 @@ namespace
                 return castle->GetHeroes().Guest() == nullptr;
             }
             else if ( !hero.isFriends( castle->GetColor() ) ) {
-                return hero.GetArmy().GetStrength() > castle->GetGarrisonStrength( &hero ) * AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM;
+                const double advantage = hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_MEDIUM;
+                return hero.GetArmy().GetStrength() > castle->GetGarrisonStrength( &hero ) * advantage;
             }
         }
         return false;
@@ -60,7 +62,7 @@ namespace
         }
 
         switch ( objectType ) {
-        case MP2::OBJ_SHIPWRECKSURVIROR:
+        case MP2::OBJ_SHIPWRECKSURVIVOR:
         case MP2::OBJ_WATERCHEST:
         case MP2::OBJ_FLOTSAM:
         case MP2::OBJ_BOTTLE:
@@ -77,8 +79,11 @@ namespace
 
         case MP2::OBJ_MAGELLANMAPS:
             return hero.isShipMaster() && !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANMAPS, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
+
         case MP2::OBJ_WHIRLPOOL:
-            return hero.isShipMaster() && !hero.isVisited( tile );
+            // AI should never consider a whirlpool as a destination point. It uses them only to make a path.
+            return false;
+
         case MP2::OBJ_COAST:
             // Coast is not an action object. If this assertion blows up then something wrong with the logic above.
             assert( 0 );
@@ -89,9 +94,9 @@ namespace
         case MP2::OBJ_ALCHEMYLAB:
         case MP2::OBJ_LIGHTHOUSE:
             if ( !hero.isFriends( tile.QuantityColor() ) ) {
-                if ( tile.CaptureObjectIsProtection() ) {
+                if ( tile.isCaptureObjectProtected() ) {
                     const Army enemy( tile );
-                    return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_SMALL );
+                    return army.isStrongerThan( enemy, AI::ARMY_ADVANTAGE_SMALL );
                 }
 
                 return true;
@@ -100,9 +105,9 @@ namespace
 
         case MP2::OBJ_ABANDONEDMINE:
             if ( !hero.isFriends( tile.QuantityColor() ) ) {
-                if ( tile.CaptureObjectIsProtection() ) {
+                if ( tile.isCaptureObjectProtected() ) {
                     const Army enemy( tile );
-                    return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_LARGE );
+                    return army.isStrongerThan( enemy, AI::ARMY_ADVANTAGE_LARGE );
                 }
 
                 return true;
@@ -118,9 +123,9 @@ namespace
         case MP2::OBJ_WATERWHEEL:
         case MP2::OBJ_WINDMILL:
             if ( Settings::Get().ExtWorldExtObjectsCaptured() && !hero.isFriends( tile.QuantityColor() ) ) {
-                if ( tile.CaptureObjectIsProtection() ) {
+                if ( tile.isCaptureObjectProtected() ) {
                     const Army enemy( tile );
-                    return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+                    return army.isStrongerThan( enemy, AI::ARMY_ADVANTAGE_MEDIUM );
                 }
 
                 return true;
@@ -154,7 +159,7 @@ namespace
             // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
             if ( 5 < variants && 14 > variants ) {
                 Army enemy( tile );
-                return army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_LARGE );
+                return army.isStrongerThan( enemy, AI::ARMY_ADVANTAGE_LARGE );
             }
 
             // other
@@ -162,7 +167,8 @@ namespace
         }
 
         case MP2::OBJ_OBSERVATIONTOWER:
-            return Maps::getFogTileCountToBeRevealed( index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() ) > 0;
+            return Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() )
+                   > 0;
 
         case MP2::OBJ_OBELISK:
             return !hero.isVisited( tile, Visit::GLOBAL );
@@ -303,7 +309,7 @@ namespace
         case MP2::OBJ_CITYDEAD:
         case MP2::OBJ_TROLLBRIDGE: {
             if ( Color::NONE == tile.QuantityColor() ) {
-                return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+                return army.isStrongerThan( Army( tile ), AI::ARMY_ADVANTAGE_MEDIUM );
             }
             else {
                 const Troop & troop = tile.QuantityTroop();
@@ -358,17 +364,17 @@ namespace
             if ( !hero.isVisited( tile, Visit::GLOBAL ) && tile.QuantityIsValid() ) {
                 Army enemy( tile );
                 return enemy.isValid() && Skill::Level::EXPERT == hero.GetLevelSkill( Skill::Secondary::WISDOM )
-                       && army.isStrongerThan( enemy, AI::ARMY_STRENGTH_ADVANTAGE_LARGE );
+                       && army.isStrongerThan( enemy, AI::ARMY_ADVANTAGE_LARGE );
             }
             break;
 
         case MP2::OBJ_DAEMONCAVE:
             if ( tile.QuantityIsValid() && 4 != tile.QuantityVariant() )
-                return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+                return army.isStrongerThan( Army( tile ), AI::ARMY_ADVANTAGE_MEDIUM );
             break;
 
         case MP2::OBJ_MONSTER:
-            return army.isStrongerThan( Army( tile ), AI::ARMY_STRENGTH_ADVANTAGE_MEDUIM );
+            return army.isStrongerThan( Army( tile ), hero.isLosingGame() ? 1.0 : AI::ARMY_ADVANTAGE_MEDIUM );
 
         case MP2::OBJ_SIGN:
             // AI has no brains to process anything from sign messages.
@@ -385,7 +391,7 @@ namespace
                     return false;
                 else if ( otherHeroInCastle )
                     return AIShouldVisitCastle( hero, index );
-                else if ( army.isStrongerThan( hero2->GetArmy(), AI::ARMY_STRENGTH_ADVANTAGE_SMALL ) )
+                else if ( army.isStrongerThan( hero2->GetArmy(), hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_SMALL ) )
                     return true;
             }
             break;
@@ -399,8 +405,8 @@ namespace
             return false;
 
         case MP2::OBJ_STONELITHS:
-            // check later
-            return true;
+            // AI should never consider a stone lith as a destination point. It uses them only to make a path.
+            return false;
 
         case MP2::OBJ_JAIL:
             return hero.GetKingdom().GetHeroes().size() < Kingdom::GetMaxHeroes();
@@ -584,6 +590,8 @@ namespace AI
             }
             else {
                 double value = castle->getBuildingValue() * 150.0 + 3000;
+                if ( hero.isLosingGame() )
+                    value += 15000;
                 // If the castle is defenseless
                 if ( !castle->GetActualArmy().isValid() )
                     value *= 1.25;
@@ -651,15 +659,13 @@ namespace AI
             return tile.QuantityTroop().GetStrength();
         }
         else if ( objectType == MP2::OBJ_STONELITHS ) {
-            const MapsIndexes & list = world.GetTeleportEndPoints( index );
-            for ( const int teleportIndex : list ) {
-                if ( world.GetTiles( teleportIndex ).isFog( hero.GetColor() ) )
-                    return 0;
-            }
-            return valueToIgnore;
+            // Stone lith is not considered by AI as an action object. If this assertion blows up something is wrong with the logic.
+            assert( 0 );
+            return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_OBSERVATIONTOWER ) {
-            const int fogCountToUncover = Maps::getFogTileCountToBeRevealed( index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );
+            const int fogCountToUncover
+                = Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() );
             if ( fogCountToUncover <= 0 ) {
                 // Nothing to uncover.
                 return -dangerousTaskPenalty;
@@ -676,12 +682,9 @@ namespace AI
             return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_WHIRLPOOL ) {
-            const MapsIndexes & list = world.GetWhirlpoolEndPoints( index );
-            for ( const int whirlpoolIndex : list ) {
-                if ( world.GetTiles( whirlpoolIndex ).isFog( hero.GetColor() ) )
-                    return -3000.0;
-            }
-            return -dangerousTaskPenalty; // no point to even loose the army for this
+            // Whirlpool is not considered by AI as an action object. If this assertion blows up something is wrong with the logic.
+            assert( 0 );
+            return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_BOAT ) {
             // Boat is not considered by AI as an action object. If this assertion blows up something is wrong with the logic.
@@ -762,7 +765,7 @@ namespace AI
             const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
             int fogCountToUncover = 0;
             const int heroColor = hero.GetColor();
-            const int eyeViewDistance = Game::GetViewDistance( Game::VIEW_MAGI_EYES );
+            const int eyeViewDistance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
 
             for ( const int32_t eyeIndex : eyeMagiIndexes ) {
                 fogCountToUncover += Maps::getFogTileCountToBeRevealed( eyeIndex, eyeViewDistance, heroColor );
@@ -806,6 +809,7 @@ namespace AI
         // 1 tile distance is 100.0 value approximately
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject();
+        const bool anotherFriendlyHeroPresent = _regions[tile.GetRegion()].friendlyHeroes > 1;
 
         if ( objectType == MP2::OBJ_CASTLE ) {
             const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
@@ -821,6 +825,8 @@ namespace AI
             }
             else {
                 double value = castle->getBuildingValue() * 500.0 + 15000;
+                if ( hero.isLosingGame() )
+                    value += 15000;
                 // If the castle is defenseless
                 if ( !castle->GetActualArmy().isValid() )
                     value *= 2.5;
@@ -845,13 +851,13 @@ namespace AI
             return 12000.0;
         }
         else if ( objectType == MP2::OBJ_MONSTER ) {
-            return 8000.0;
+            return anotherFriendlyHeroPresent ? 4000.0 : 1000.0;
         }
         else if ( objectType == MP2::OBJ_MINES || objectType == MP2::OBJ_SAWMILL || objectType == MP2::OBJ_ALCHEMYLAB ) {
             if ( tile.QuantityColor() == hero.GetColor() ) {
                 return -dangerousTaskPenalty; // don't even attempt to go here
             }
-            return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? 2000.0 : 1000.0;
+            return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? 3000.0 : 1500.0;
         }
         else if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
             if ( tile.QuantityColor() == hero.GetColor() ) {
@@ -862,41 +868,43 @@ namespace AI
         else if ( MP2::isArtifactObject( objectType ) && tile.QuantityArtifact().isValid() ) {
             return 1500.0 * tile.QuantityArtifact().getArtifactValue();
         }
+        else if ( objectType == MP2::OBJ_TREASURECHEST ) {
+            // Treasure chest without the artifact
+            return 1250.0;
+        }
         else if ( MP2::isPickupObject( objectType ) ) {
-            return 100.0;
+            return anotherFriendlyHeroPresent ? 100.0 : 500.0;
         }
         else if ( MP2::isCaptureObject( objectType ) && MP2::isQuantityObject( objectType ) ) {
             // Objects like WATERWHEEL, WINDMILL and MAGICGARDEN if capture setting is enabled
             return 100.0;
         }
         else if ( objectType == MP2::OBJ_XANADU ) {
-            return 2000.0;
+            return 3000.0;
         }
         else if ( objectType == MP2::OBJ_SHRINE1 ) {
-            return 100;
+            return 250;
         }
         else if ( objectType == MP2::OBJ_SHRINE2 ) {
-            return 250;
+            return 500;
         }
         else if ( objectType == MP2::OBJ_SHRINE3 ) {
             return 500;
         }
         else if ( MP2::isHeroUpgradeObject( objectType ) ) {
-            return 750.0;
+            return 1250.0;
         }
         else if ( MP2::isMonsterDwelling( objectType ) ) {
             return tile.QuantityTroop().GetStrength();
         }
         else if ( objectType == MP2::OBJ_STONELITHS ) {
-            const MapsIndexes & list = world.GetTeleportEndPoints( index );
-            for ( const int teleportIndex : list ) {
-                if ( world.GetTiles( teleportIndex ).isFog( hero.GetColor() ) )
-                    return 0;
-            }
-            return valueToIgnore;
+            // Stone lith is not considered by AI as an action object. If this assertion blows up something is wrong with the logic.
+            assert( 0 );
+            return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_OBSERVATIONTOWER ) {
-            const int fogCountToUncover = Maps::getFogTileCountToBeRevealed( index, Game::GetViewDistance( Game::VIEW_OBSERVATION_TOWER ), hero.GetColor() );
+            const int fogCountToUncover
+                = Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() );
             if ( fogCountToUncover <= 0 ) {
                 // Nothing to uncover.
                 return -dangerousTaskPenalty;
@@ -913,12 +921,9 @@ namespace AI
             return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_WHIRLPOOL ) {
-            const MapsIndexes & list = world.GetWhirlpoolEndPoints( index );
-            for ( const int whirlpoolIndex : list ) {
-                if ( world.GetTiles( whirlpoolIndex ).isFog( hero.GetColor() ) )
-                    return -3000.0;
-            }
-            return -dangerousTaskPenalty; // no point to even loose the army for this
+            // Whirlpool is not considered by AI as an action object. If this assertion blows up something is wrong with the logic.
+            assert( 0 );
+            return -dangerousTaskPenalty;
         }
         else if ( objectType == MP2::OBJ_BOAT ) {
             // Boat is not considered by AI as an action object. If this assertion blows up something is wrong the the logic.
@@ -932,7 +937,7 @@ namespace AI
             if ( hero.GetSpellPoints() * 2 >= hero.GetMaxSpellPoints() ) {
                 return -2000; // no reason to visit the well with no magic book or with half of points
             }
-            return 0;
+            return 350.0;
         }
         else if ( objectType == MP2::OBJ_TEMPLE ) {
             if ( hero.GetArmy().AllTroopsAreUndead() ) {
@@ -999,7 +1004,7 @@ namespace AI
             const MapsIndexes eyeMagiIndexes = Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true );
             int fogCountToUncover = 0;
             const int heroColor = hero.GetColor();
-            const int eyeViewDistance = Game::GetViewDistance( Game::VIEW_MAGI_EYES );
+            const int eyeViewDistance = GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES );
 
             for ( const int32_t eyeIndex : eyeMagiIndexes ) {
                 fogCountToUncover += Maps::getFogTileCountToBeRevealed( eyeIndex, eyeViewDistance, heroColor );
@@ -1149,7 +1154,7 @@ namespace AI
     bool Normal::HeroesTurn( VecHeroes & heroes )
     {
         if ( heroes.empty() ) {
-            // No heroes so we idicate that all heroes moved.
+            // No heroes so we indicate that all heroes moved.
             return true;
         }
 
@@ -1159,10 +1164,10 @@ namespace AI
             addHeroToMove( hero, availableHeroes );
         }
 
-        const double originalMonsterStrengthMultipler = _pathfinder.getCurrentArmyStrengthMultiplier();
+        const double originalMonsterStrengthMultiplier = _pathfinder.getCurrentArmyStrengthMultiplier();
 
         const int monsterStrengthMultiplierCount = 2;
-        const double monsterStrengthMultipliers[monsterStrengthMultiplierCount] = { ARMY_STRENGTH_ADVANTAGE_MEDUIM, ARMY_STRENGTH_ADVANTAGE_SMALL };
+        const double monsterStrengthMultipliers[monsterStrengthMultiplierCount] = { ARMY_ADVANTAGE_MEDIUM, ARMY_ADVANTAGE_SMALL };
 
         while ( !availableHeroes.empty() ) {
             Heroes * bestHero = availableHeroes.front().hero;
@@ -1185,46 +1190,47 @@ namespace AI
                 }
 
                 // If nowhere to move perhaps it's because of high monster estimation. Let's reduce it.
-                const double currentMonsterStrengthMultipler = _pathfinder.getCurrentArmyStrengthMultiplier();
-                bool setNewMultipler = false;
+                const double currentMonsterStrengthMultiplier = _pathfinder.getCurrentArmyStrengthMultiplier();
+                bool setNewMultiplier = false;
                 for ( int i = 0; i < monsterStrengthMultiplierCount; ++i ) {
-                    if ( currentMonsterStrengthMultipler > monsterStrengthMultipliers[i] ) {
-                        _pathfinder.setArmyStrengthMultplier( monsterStrengthMultipliers[i] );
-                        setNewMultipler = true;
+                    if ( currentMonsterStrengthMultiplier > monsterStrengthMultipliers[i] ) {
+                        _pathfinder.setArmyStrengthMultiplier( bestHero->isLosingGame() ? ARMY_ADVANTAGE_DESPERATE : monsterStrengthMultipliers[i] );
+                        setNewMultiplier = true;
                         break;
                     }
                 }
 
-                if ( !setNewMultipler ) {
+                if ( !setNewMultiplier ) {
                     break;
                 }
             }
 
             if ( bestTargetIndex == -1 ) {
-                if ( availableHeroes.size() > 1 ) {
-                    // Possibly heroes have nothing to do because one of them is blocking the way. Move a hero randomly and see what happens.
-                    for ( HeroToMove & heroInfo : availableHeroes ) {
-                        // Skip heroes who are in castles or on patrol.
-                        if ( heroInfo.patrolCenter >= 0 && heroInfo.hero->inCastle() != nullptr ) {
-                            continue;
-                        }
+                // Possibly heroes have nothing to do because one of them is blocking the way. Move a hero randomly and see what happens.
+                for ( HeroToMove & heroInfo : availableHeroes ) {
+                    // Skip heroes who are in castles or on patrol.
+                    if ( heroInfo.patrolCenter >= 0 && heroInfo.hero->inCastle() != nullptr ) {
+                        continue;
+                    }
 
-                        if ( !_pathfinder.isHeroPossiblyBlockingWay( *heroInfo.hero ) ) {
-                            continue;
-                        }
+                    if ( !_pathfinder.isHeroPossiblyBlockingWay( *heroInfo.hero ) ) {
+                        continue;
+                    }
 
-                        const int targetIndex = _pathfinder.getNeareastTileToMove( *heroInfo.hero );
-                        if ( targetIndex != -1 ) {
-                            bestTargetIndex = targetIndex;
-                            bestHero = heroInfo.hero;
-                            break;
-                        }
+                    const int targetIndex = _pathfinder.getNearestTileToMove( *heroInfo.hero );
+                    if ( targetIndex != -1 ) {
+                        bestTargetIndex = targetIndex;
+                        bestHero = heroInfo.hero;
+
+                        DEBUG_LOG( DBG_AI, DBG_INFO, bestHero->GetName() << " may be blocking the way. Moving to " << bestTargetIndex );
+
+                        break;
                     }
                 }
 
                 if ( bestTargetIndex == -1 ) {
                     // Nothing to do. Stop everything
-                    _pathfinder.setArmyStrengthMultplier( originalMonsterStrengthMultipler );
+                    _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
                     break;
                 }
             }
@@ -1250,7 +1256,7 @@ namespace AI
                 ++i;
             }
 
-            _pathfinder.setArmyStrengthMultplier( originalMonsterStrengthMultipler );
+            _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
         }
 
         const bool allHeroesMoved = availableHeroes.empty();
@@ -1261,7 +1267,7 @@ namespace AI
             }
         }
 
-        _pathfinder.setArmyStrengthMultplier( originalMonsterStrengthMultipler );
+        _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
 
         return allHeroesMoved;
     }

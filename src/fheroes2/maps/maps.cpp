@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -95,6 +96,42 @@ namespace
             }
         }
         return result;
+    }
+
+    bool isTileUnderMonsterProtection( const int32_t tileIndex, const int32_t monsterTileIndex )
+    {
+        const Maps::Tiles & tile = world.GetTiles( tileIndex );
+        const Maps::Tiles & monsterTile = world.GetTiles( monsterTileIndex );
+
+        // A pickupable object can be accessed without triggering a monster attack
+        if ( MP2::isPickupObject( tile.GetObject() ) || monsterTile.GetObject() != MP2::OBJ_MONSTER || tile.isWater() != monsterTile.isWater() ) {
+            return false;
+        }
+
+        const int directionToMonster = Maps::GetDirection( tileIndex, monsterTileIndex );
+        const int directionFromMonster = Direction::Reflect( directionToMonster );
+
+        // The tile is directly accessible to the monster
+        if ( ( tile.GetPassable() & directionToMonster ) && ( monsterTile.GetPassable() & directionFromMonster ) ) {
+            return true;
+        }
+
+        // The tile is not directly accessible to the monster, but he can still attack in the diagonal direction if, when the hero moves away from the tile
+        // in question in the vertical direction and the monster moves away from his tile in the horizontal direction, they would have to meet
+        if ( directionFromMonster == Direction::TOP_LEFT && ( tile.GetPassable() & Direction::BOTTOM ) && ( monsterTile.GetPassable() & Direction::LEFT ) ) {
+            return true;
+        }
+        if ( directionFromMonster == Direction::TOP_RIGHT && ( tile.GetPassable() & Direction::BOTTOM ) && ( monsterTile.GetPassable() & Direction::RIGHT ) ) {
+            return true;
+        }
+        if ( directionFromMonster == Direction::BOTTOM_RIGHT && ( tile.GetPassable() & Direction::TOP ) && ( monsterTile.GetPassable() & Direction::RIGHT ) ) {
+            return true;
+        }
+        if ( directionFromMonster == Direction::BOTTOM_LEFT && ( tile.GetPassable() & Direction::TOP ) && ( monsterTile.GetPassable() & Direction::LEFT ) ) {
+            return true;
+        }
+
+        return false;
     }
 }
 
@@ -398,75 +435,53 @@ Maps::Indexes Maps::GetObjectPositions( int32_t center, const MP2::MapObjectType
     return results;
 }
 
-bool MapsTileIsUnderProtection( int32_t from, int32_t index ) /* from: center, index: monster */
+bool Maps::isTileUnderProtection( const int32_t tileIndex )
 {
-    const Maps::Tiles & tile1 = world.GetTiles( from );
-    const Maps::Tiles & tile2 = world.GetTiles( index );
-
-    if ( !MP2::isPickupObject( tile1.GetObject() ) && tile2.GetObject() == MP2::OBJ_MONSTER && tile1.isWater() == tile2.isWater() ) {
-        const int monsterDirection = Maps::GetDirection( index, from );
-        // if monster can attack to
-        if ( ( tile2.GetPassable() & monsterDirection ) && ( tile1.GetPassable() & Maps::GetDirection( from, index ) ) )
-            return true;
-
-        // h2 specific monster attack: BOTTOM_LEFT impassable!
-        if ( Direction::BOTTOM_LEFT == monsterDirection && ( Direction::LEFT & tile2.GetPassable() ) && ( Direction::TOP & tile1.GetPassable() ) )
-            return true;
-
-        // h2 specific monster attack: BOTTOM_RIGHT impassable!
-        if ( Direction::BOTTOM_RIGHT == monsterDirection && ( Direction::RIGHT & tile2.GetPassable() ) && ( Direction::TOP & tile1.GetPassable() ) )
-            return true;
-    }
-
-    return false;
+    return world.GetTiles( tileIndex ).GetObject() == MP2::OBJ_MONSTER ? true : !getMonstersProtectingTile( tileIndex ).empty();
 }
 
-bool Maps::TileIsUnderProtection( int32_t center )
-{
-    return MP2::OBJ_MONSTER == world.GetTiles( center ).GetObject() ? true : !GetTilesUnderProtection( center ).empty();
-}
-
-Maps::Indexes Maps::GetTilesUnderProtection( int32_t center )
+Maps::Indexes Maps::getMonstersProtectingTile( const int32_t tileIndex )
 {
     Indexes result;
-    if ( !isValidAbsIndex( center ) )
+    if ( !isValidAbsIndex( tileIndex ) )
         return result;
 
     result.reserve( 9 );
     const int width = world.w();
-    const int x = center % width;
-    const int y = center / width;
+    const int x = tileIndex % width;
+    const int y = tileIndex / width;
 
-    auto validateAndInsert = [&result, &center]( const int index ) {
-        if ( MapsTileIsUnderProtection( center, index ) )
-            result.push_back( index );
+    auto validateAndInsert = [&result, tileIndex]( const int monsterTileIndex ) {
+        if ( isTileUnderMonsterProtection( tileIndex, monsterTileIndex ) ) {
+            result.push_back( monsterTileIndex );
+        }
     };
 
     if ( y > 0 ) {
         if ( x > 0 )
-            validateAndInsert( center - width - 1 );
+            validateAndInsert( tileIndex - width - 1 );
 
-        validateAndInsert( center - width );
+        validateAndInsert( tileIndex - width );
 
         if ( x < width - 1 )
-            validateAndInsert( center - width + 1 );
+            validateAndInsert( tileIndex - width + 1 );
     }
 
     if ( x > 0 )
-        validateAndInsert( center - 1 );
-    if ( MP2::OBJ_MONSTER == world.GetTiles( center ).GetObject() )
-        result.push_back( center );
+        validateAndInsert( tileIndex - 1 );
+    if ( MP2::OBJ_MONSTER == world.GetTiles( tileIndex ).GetObject() )
+        result.push_back( tileIndex );
     if ( x < width - 1 )
-        validateAndInsert( center + 1 );
+        validateAndInsert( tileIndex + 1 );
 
     if ( y < world.h() - 1 ) {
         if ( x > 0 )
-            validateAndInsert( center + width - 1 );
+            validateAndInsert( tileIndex + width - 1 );
 
-        validateAndInsert( center + width );
+        validateAndInsert( tileIndex + width );
 
         if ( x < width - 1 )
-            validateAndInsert( center + width + 1 );
+            validateAndInsert( tileIndex + width + 1 );
     }
 
     return result;
@@ -525,7 +540,7 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
         return;
     }
 
-    int raceIndex = 0; // Race::KNIGHT
+    uint8_t raceIndex = 0; // Race::KNIGHT
     switch ( race ) {
     case Race::BARB:
         raceIndex = 1;
@@ -551,9 +566,9 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
     const int shadowCoordinates[16][2] = { { -4, -2 }, { -3, -2 }, { -2, -2 }, { -1, -2 }, { -5, -1 }, { -4, -1 }, { -3, -1 }, { -2, -1 },
                                            { -1, -1 }, { -4, 0 },  { -3, 0 },  { -2, 0 },  { -1, 0 },  { -3, 1 },  { -2, 1 },  { -1, 1 } };
 
-    for ( int index = 0; index < 16; ++index ) {
-        const int fullTownIndex = index + ( isCastle ? 0 : 16 ) + raceIndex * 32;
-        const int lookupID = isRandom ? index + ( isCastle ? 0 : 16 ) : fullTownIndex;
+    for ( uint8_t index = 0; index < 16; ++index ) {
+        const uint8_t fullTownIndex = index + ( isCastle ? 0 : 16 ) + raceIndex * 32;
+        const uint8_t lookupID = isRandom ? index + ( isCastle ? 0 : 16 ) : fullTownIndex;
 
         const int castleTile = GetIndexFromAbsPoint( center.x + castleCoordinates[index][0], center.y + castleCoordinates[index][1] );
         if ( isValidAbsIndex( castleTile ) ) {

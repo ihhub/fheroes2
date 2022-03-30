@@ -22,6 +22,7 @@
 #include "localevent.h"
 #include "screen.h"
 #include "settings.h"
+#include "system.h"
 #include "text.h"
 #include "translations.h"
 
@@ -31,6 +32,7 @@
 #include <cstring>
 #include <ctime>
 #include <deque>
+#include <utility>
 
 namespace
 {
@@ -50,9 +52,10 @@ namespace
             const int32_t offsetX = 26;
             const int32_t offsetY = fheroes2::Display::instance().height() - 30;
 
-            std::time_t rawtime = std::time( nullptr );
+            const tm tmi = System::GetTM( std::time( nullptr ) );
+
             char mbstr[10] = { 0 };
-            std::strftime( mbstr, sizeof( mbstr ), "%H:%M:%S", std::localtime( &rawtime ) );
+            std::strftime( mbstr, sizeof( mbstr ), "%H:%M:%S", &tmi );
 
             std::string info( mbstr );
 
@@ -163,7 +166,7 @@ namespace fheroes2
     }
 
     TimedEventValidator::TimedEventValidator( std::function<bool()> verification, const uint64_t delayBeforeFirstUpdateMs, const uint64_t delayBetweenUpdateMs )
-        : _verification( verification )
+        : _verification( std::move( verification ) )
         , _delayBetweenUpdateMs( delayBetweenUpdateMs )
         , _delayBeforeFirstUpdateMs( delayBeforeFirstUpdateMs )
     {}
@@ -336,7 +339,7 @@ namespace fheroes2
         Image temp;
         Copy( display, temp );
 
-        FadeDisplay( temp, fheroes2::Point( 0, 0 ), 5, delayMs );
+        FadeDisplay( temp, { 0, 0 }, 5, delayMs );
 
         Copy( temp, display ); // restore the original image
     }

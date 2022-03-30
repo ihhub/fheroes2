@@ -1,6 +1,6 @@
 ###########################################################################
 #   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
-#   Copyright (C) 2021                                                    #
+#   Copyright (C) 2021 - 2022                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -23,7 +23,7 @@ MAKE	:= make
 
 PROJECT_TITLE := fheroes2
 PROJECT_AUTHOR := fheroes2 resurrection team
-PROJECT_VERSION := 0.9.11
+PROJECT_VERSION := 0.9.13
 
 PATH := $(PATH):/opt/devkitpro/portlibs/switch/bin/:/opt/devkitpro/tools/bin/
 

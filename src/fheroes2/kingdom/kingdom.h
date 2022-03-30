@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +23,8 @@
 #ifndef H2KINGDOM_H
 #define H2KINGDOM_H
 
+#include <set>
+
 #include "castle.h"
 #include "heroes_recruits.h"
 #include "mp2.h"
@@ -29,16 +32,6 @@
 #include "puzzle.h"
 
 struct CapturedObjects;
-
-struct LastLoseHero
-{
-    LastLoseHero()
-        : id( Heroes::UNKNOWN )
-        , date( 0 )
-    {}
-    int id;
-    u32 date;
-};
 
 struct KingdomCastles : public VecCastles
 {};
@@ -68,15 +61,12 @@ public:
     bool isPlay( void ) const;
     bool isLoss( void ) const;
     bool AllowPayment( const Funds & ) const;
-    bool AllowRecruitHero( bool check_payment, int level ) const;
-
-    void SetLastLostHero( const Heroes & );
-    void ResetLastLostHero( void );
+    bool AllowRecruitHero( bool check_payment ) const;
 
     void SetLastBattleWinHero( const Heroes & hero );
-
-    Heroes * GetLastLostHero( void ) const;
     Heroes * GetLastBattleWinHero() const;
+
+    void appendSurrenderedHero( Heroes & hero );
 
     Heroes * GetBestHero();
 
@@ -97,6 +87,7 @@ public:
     void AddFundsResource( const Funds & );
     void OddFundsResource( const Funds & );
 
+    bool isLosingGame() const;
     u32 GetCountCastle( void ) const;
     u32 GetCountTown( void ) const;
     u32 GetCountMarketplace( void ) const;
@@ -107,7 +98,12 @@ public:
 
     uint32_t GetCountArtifacts() const;
 
-    Recruits & GetRecruits( void );
+    // Returns a reference to the pair of heroes available for recruitment,
+    // updating it on the fly if necessary
+    const Recruits & GetRecruits();
+    // Returns a reference to the pair of heroes available for recruitment
+    // without making any changes in it
+    Recruits & GetCurrentRecruits();
 
     const KingdomHeroes & GetHeroes( void ) const
     {
@@ -154,7 +150,6 @@ public:
     void SetVisitTravelersTent( int color );
     bool IsVisitTravelersTent( int ) const;
 
-    void UpdateRecruits( void );
     void LossPostActions( void );
 
     bool IsTileVisibleFromCrystalBall( const int32_t dest ) const;
@@ -162,7 +157,7 @@ public:
     static u32 GetMaxHeroes( void );
 
 private:
-    cost_t _getKingdomStartingResources( const int difficulty );
+    cost_t _getKingdomStartingResources( const int difficulty ) const;
 
     friend StreamBase & operator<<( StreamBase &, const Kingdom & );
     friend StreamBase & operator>>( StreamBase &, Kingdom & );
@@ -177,7 +172,6 @@ private:
     KingdomHeroes heroes;
 
     Recruits recruits;
-    LastLoseHero lost_hero;
 
     std::list<IndexObject> visit_object;
 
@@ -215,6 +209,10 @@ public:
 
     void AddTributeEvents( CapturedObjects & captureobj, const uint32_t day, const MP2::MapObjectType objectType );
 
+    // Resets recruits in all kingdoms and returns a set of heroes that are still available for recruitment
+    // in the kingdoms
+    std::set<Heroes *> resetRecruits();
+
 private:
     friend StreamBase & operator<<( StreamBase &, const Kingdoms & );
     friend StreamBase & operator>>( StreamBase &, Kingdoms & );
@@ -228,8 +226,5 @@ StreamBase & operator>>( StreamBase &, Kingdom & );
 
 StreamBase & operator<<( StreamBase &, const Kingdoms & );
 StreamBase & operator>>( StreamBase &, Kingdoms & );
-
-StreamBase & operator<<( StreamBase & sb, const LastLoseHero & hero );
-StreamBase & operator>>( StreamBase & sb, LastLoseHero & hero );
 
 #endif

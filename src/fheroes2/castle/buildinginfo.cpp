@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -284,7 +285,7 @@ BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
     else if ( IsDwelling() ) {
         description = _( "The %{building} produces %{monster}." );
         StringReplace( description, "%{building}", Castle::GetStringBuilding( building, castle.GetRace() ) );
-        StringReplace( description, "%{monster}", StringLower( Monster( castle.GetRace(), building ).GetMultiName() ) );
+        StringReplace( description, "%{monster}", Translation::StringLower( Monster( castle.GetRace(), building ).GetMultiName() ) );
     }
     else
         description = Castle::GetDescriptionBuilding( building, castle.GetRace() );
@@ -318,20 +319,10 @@ BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
     }
 }
 
-uint32_t BuildingInfo::getBuilding( void ) const
-{
-    return building;
-}
-
 void BuildingInfo::SetPos( s32 x, s32 y )
 {
     area.x = x;
     area.y = y;
-}
-
-const fheroes2::Rect & BuildingInfo::GetArea( void ) const
-{
-    return area;
 }
 
 bool BuildingInfo::IsDwelling( void ) const
@@ -598,10 +589,10 @@ const char * GetBuildConditionDescription( int bcond )
 {
     switch ( bcond ) {
     case NOT_TODAY:
-        return _( "Cannot build. Already built here this turn." );
+        return _( "Cannot build. You have already built here today." );
 
     case NEED_CASTLE:
-        return _( "For this action it is necessary first to build a castle." );
+        return _( "For this action it is necessary to build a castle first." );
 
     default:
         break;

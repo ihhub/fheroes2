@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,8 +42,8 @@ namespace Game
 
     const std::string & GetLastSavename( void );
     void SetLastSavename( const std::string & );
-    void SetLoadVersion( int );
-    int GetLoadVersion( void );
+    void SetLoadVersion( uint16_t ver );
+    uint16_t GetLoadVersion();
 
     // type_t
     enum
@@ -59,18 +60,8 @@ namespace Game
         TYPE_LOADFILE = 0x80,
         TYPE_MULTI = TYPE_HOTSEAT
     };
-    // distance_t
-    enum
-    {
-        // UNUSED = 0,
-        VIEW_CASTLE = 1,
-        VIEW_HEROES = 2,
-        VIEW_TELESCOPE = 3,
-        VIEW_OBSERVATION_TOWER = 4,
-        VIEW_MAGI_EYES = 5
-    };
 
-    enum
+    enum : int32_t
     {
         EVENT_NONE,
         EVENT_BUTTON_NEWGAME,
@@ -156,11 +147,16 @@ namespace Game
 
         EVENT_WELL_BUY_ALL_CREATURES,
 
+        EVENT_NEW_CAMPAIGN_SUCCESSION_WARS,
+        EVENT_NEW_CAMPAIGN_PRICE_OF_LOYALTY,
+
         EVENT_LAST,
     };
 
     bool HotKeyPressEvent( int );
     bool HotKeyHoldEvent( const int eventID );
+
+    const char * getHotKeyNameByEventId( const int eventID );
 
     void mainGameLoop( bool isFirstGameRun );
 
@@ -203,10 +199,8 @@ namespace Game
     u32 GetRating( void );
     u32 GetGameOverScores( void );
     u32 GetLostTownDays( void );
-    u32 GetViewDistance( u32 );
     u32 GetWhirlpoolPercent( void );
     u32 SelectCountPlayers( void );
-    void ShowMapLoadingText( void );
     void PlayPickupSound( void );
     bool UpdateSoundsOnFocusUpdate();
     void SetUpdateSoundsOnFocusUpdate( bool update );

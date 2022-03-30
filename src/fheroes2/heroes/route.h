@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -90,22 +91,26 @@ namespace Route
         u32 GetFrontPenalty( void ) const;
         void setPath( const std::list<Step> & path, int32_t destIndex );
 
-        void Show( void )
+        void Show()
         {
             hide = false;
         }
-        void Hide( void )
+
+        void Hide()
         {
             hide = true;
         }
+
         void Reset();
         void PopFront( void );
 
         bool isValid( void ) const;
+
         bool isShow( void ) const
         {
             return !hide;
         }
+
         bool hasAllowedSteps() const;
 
         std::string String( void ) const;

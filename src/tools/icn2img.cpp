@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2022                                                    *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -98,7 +99,7 @@ int main( int argc, char ** argv )
             std::string dstfile = System::ConcatePath( prefix, os.str() );
             std::string shortdstfile( os.str() ); // the name of destfile without the path
 
-#ifndef FHEROES2_IMAGE_SUPPORT
+#ifndef WITH_IMAGE
             dstfile += ".bmp";
             shortdstfile += ".bmp";
 #else

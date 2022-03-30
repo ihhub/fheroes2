@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,6 +42,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_kingdom.h"
 #include "world.h"
 
 int Castle::DialogBuyHero( const Heroes * hero ) const
@@ -80,7 +82,7 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
 
     TextBox heroDescriptionText( str, Font::BIG, BOXAREA_WIDTH );
 
-    Resource::BoxSprite rbs( PaymentConditions::RecruitHero( hero->GetLevel() ), BOXAREA_WIDTH );
+    Resource::BoxSprite rbs( PaymentConditions::RecruitHero(), BOXAREA_WIDTH );
 
     Dialog::FrameBox box( recruitHeroText.h() + spacer + portrait_frame.height() + spacer + heroDescriptionText.h() + spacer + rbs.GetArea().height, true );
     const fheroes2::Rect & box_rt = box.GetArea();
@@ -111,7 +113,7 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
     fheroes2::Button button1( dst_pt.x, dst_pt.y, system, 1, 2 );
 
-    if ( !AllowBuyHero( *hero ) ) {
+    if ( !AllowBuyHero() ) {
         button1.disable();
     }
 
@@ -310,7 +312,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     fheroes2::MovableSprite cursorFormat( fheroes2::AGG::GetICN( ICN::HSICONS, 11 ) );
 
     if ( isBuild( BUILD_CAPTAIN ) ) {
-        text.Set( _( "Attack Skill" ) + std::string( " " ), Font::SMALL );
+        text.Set( Skill::Primary::String( Skill::Primary::ATTACK ) + std::string( " " ), Font::SMALL );
         dst_pt.x = cur_pt.x + 535;
         dst_pt.y = cur_pt.y + 168;
         text.Blit( dst_pt );
@@ -319,7 +321,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         dst_pt.x += 90;
         text.Blit( dst_pt );
 
-        text.Set( _( "Defense Skill" ) + std::string( " " ) );
+        text.Set( Skill::Primary::String( Skill::Primary::DEFENSE ) + std::string( " " ) );
         dst_pt.x = cur_pt.x + 535;
         dst_pt.y += 12;
         text.Blit( dst_pt );
@@ -328,7 +330,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         dst_pt.x += 90;
         text.Blit( dst_pt );
 
-        text.Set( _( "Spell Power" ) + std::string( " " ) );
+        text.Set( Skill::Primary::String( Skill::Primary::POWER ) + std::string( " " ) );
         dst_pt.x = cur_pt.x + 535;
         dst_pt.y += 12;
         text.Blit( dst_pt );
@@ -337,7 +339,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         dst_pt.x += 90;
         text.Blit( dst_pt );
 
-        text.Set( _( "Knowledge" ) + std::string( " " ) );
+        text.Set( Skill::Primary::String( Skill::Primary::KNOWLEDGE ) + std::string( " " ) );
         dst_pt.x = cur_pt.x + 535;
         dst_pt.y += 12;
         text.Blit( dst_pt );
@@ -358,14 +360,12 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     Kingdom & kingdom = GetKingdom();
 
     Heroes * hero1 = kingdom.GetRecruits().GetHero1();
-
-    Heroes * lastLostHero = kingdom.GetLastLostHero();
-    Heroes * hero2 = lastLostHero && lastLostHero != hero1 ? lastLostHero : kingdom.GetRecruits().GetHero2();
+    Heroes * hero2 = kingdom.GetRecruits().GetHero2();
 
     std::string not_allow1_msg;
     std::string not_allow2_msg;
-    const bool allow_buy_hero1 = hero1 ? AllowBuyHero( *hero1, &not_allow1_msg ) : false;
-    const bool allow_buy_hero2 = hero2 ? AllowBuyHero( *hero2, &not_allow2_msg ) : false;
+    const bool allow_buy_hero1 = hero1 ? AllowBuyHero( &not_allow1_msg ) : false;
+    const bool allow_buy_hero2 = hero2 ? AllowBuyHero( &not_allow2_msg ) : false;
 
     // first hero
     dst_pt.x = cur_pt.x + 443;
@@ -470,10 +470,10 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
 
         if ( le.MouseClickLeft( resActiveArea ) ) {
             fheroes2::ButtonRestorer exitRestorer( buttonExit );
-            Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), Dialog::OK );
+            fheroes2::showKingdomIncome( world.GetKingdom( GetColor() ), Dialog::OK );
         }
         else if ( le.MousePressRight( resActiveArea ) ) {
-            Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), 0 );
+            fheroes2::showKingdomIncome( world.GetKingdom( GetColor() ), 0 );
         }
         else if ( le.MousePressRight( buttonExit.area() ) ) {
             Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );

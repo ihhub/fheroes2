@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,6 +37,8 @@ class StreamBase;
 
 namespace Skill
 {
+    class Secondary;
+
     int GetLeadershipModifiers( int level, std::string * strs );
     int GetLuckModifiers( int level, std::string * strs );
 
@@ -53,7 +56,7 @@ namespace Skill
         };
 
         const char * String( int level );
-        std::string StringWithBonus( const Heroes & hero, int skill, int level );
+        std::string StringWithBonus( const Heroes & hero, const Secondary & skill );
     }
 
     class Secondary : public std::pair<int, int>
@@ -87,10 +90,21 @@ namespace Skill
         void SetLevel( int );
         void NextLevel( void );
 
-        int Level( void ) const;
-        int Skill( void ) const;
+        int Level() const
+        {
+            return second;
+        }
 
-        bool isSkill( int ) const;
+        int Skill() const
+        {
+            return first;
+        }
+
+        bool isSkill( int skill ) const
+        {
+            return skill == first;
+        }
+
         bool isValid( void ) const;
 
         std::string GetName( void ) const;
@@ -159,7 +173,7 @@ namespace Skill
 
         int LevelUp( int race, int level, uint32_t seed );
 
-        static const char * String( int );
+        static const char * String( const int skillType );
         static std::string StringDescription( int, const Heroes * );
         static int GetInitialSpell( int race );
 

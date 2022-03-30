@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2022                                                    *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -48,7 +49,8 @@ int main( int argc, char ** argv )
         return EXIT_SUCCESS;
     }
 
-    StreamFile sf1, sf2;
+    StreamFile sf1;
+    StreamFile sf2;
 
     if ( !sf1.open( argv[1], "rb" ) ) {
         std::cout << "error open file: " << argv[1] << std::endl;

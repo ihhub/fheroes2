@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -54,40 +55,40 @@ void Dialog::GameInfo( void )
 
     fheroes2::Text text;
 
-    text.set( conf.MapsName(), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } );
+    text.set( conf.MapsName(), fheroes2::FontType::normalWhite() );
     text.draw( pt.x + 52, pt.y + 32, 350, display );
 
-    text.set( _( "Map\nDifficulty" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( _( "Map\nDifficulty" ), fheroes2::FontType::smallWhite() );
     text.draw( pt.x + 50, pt.y + 56, 80, display );
 
-    text.set( _( "Game\nDifficulty" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( _( "Game\nDifficulty" ), fheroes2::FontType::smallWhite() );
     text.draw( pt.x + 140, pt.y + 56, 80, display );
 
-    text.set( _( "Rating" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( _( "Rating" ), fheroes2::FontType::smallWhite() );
     text.draw( pt.x + 230, pt.y + 78 - text.height( 80 ), 80, display );
 
-    text.set( _( "Map Size" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( _( "Map Size" ), fheroes2::FontType::smallWhite() );
     text.draw( pt.x + 322, pt.y + 78 - text.height( 80 ), 80, display );
 
-    text.set( Difficulty::String( conf.MapsDifficulty() ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( Difficulty::String( conf.MapsDifficulty() ), fheroes2::FontType::smallWhite() );
     text.draw( pt.x + 50, pt.y + 84, 80, display );
 
-    text.set( Difficulty::String( Game::getDifficulty() ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( Difficulty::String( Game::getDifficulty() ), fheroes2::FontType::smallWhite() );
     text.draw( pt.x + 140, pt.y + 84, 80, display );
 
-    text.set( std::to_string( Game::GetRating() ) + " %", { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( std::to_string( Game::GetRating() ) + " %", fheroes2::FontType::smallWhite() );
     text.draw( pt.x + 230, pt.y + 84, 80, display );
 
-    text.set( Maps::SizeString( conf.MapsSize().width ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( Maps::SizeString( conf.MapsSize().width ), fheroes2::FontType::smallWhite() );
     text.draw( pt.x + 322, pt.y + 84, 80, display );
 
-    text.set( conf.MapsDescription(), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( conf.MapsDescription(), fheroes2::FontType::smallWhite() );
     text.draw( pt.x + 52, pt.y + 107, 350, display );
 
-    text.set( _( "Opponents" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( _( "Opponents" ), fheroes2::FontType::smallWhite() );
     text.draw( pt.x + 52, pt.y + 152, 350, display );
 
-    text.set( _( "Class" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( _( "Class" ), fheroes2::FontType::smallWhite() );
     text.draw( pt.x + 52, pt.y + 227, 350, display );
 
     Interface::PlayersInfo playersInfo( true, true, false );
@@ -95,19 +96,19 @@ void Dialog::GameInfo( void )
     playersInfo.UpdateInfo( conf.GetPlayers(), fheroes2::Point( pt.x + 40, pt.y + 165 ), fheroes2::Point( pt.x + 40, pt.y + 240 ) );
     playersInfo.RedrawInfo( true );
 
-    text.set( _( "Victory\nConditions" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( _( "Victory\nConditions" ), fheroes2::FontType::smallWhite() );
     text.draw( pt.x + 40, pt.y + 347, 80, display );
 
-    text.set( GameOver::GetActualDescription( conf.ConditionWins() ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( GameOver::GetActualDescription( conf.ConditionWins() ), fheroes2::FontType::smallWhite() );
     text.draw( pt.x + 130, pt.y + 350, 272, display );
 
-    text.set( _( "Loss\nConditions" ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( _( "Loss\nConditions" ), fheroes2::FontType::smallWhite() );
     text.draw( pt.x + 40, pt.y + 392, 80, display );
 
-    text.set( GameOver::GetActualDescription( conf.ConditionLoss() ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+    text.set( GameOver::GetActualDescription( conf.ConditionLoss() ), fheroes2::FontType::smallWhite() );
     text.draw( pt.x + 130, pt.y + 398, 272, display );
 
-    text.set( _( "Score: " ) + std::to_string( Game::GetGameOverScores() ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::YELLOW } );
+    text.set( _( "Score: " ) + std::to_string( Game::GetGameOverScores() ), fheroes2::FontType::smallYellow() );
     text.draw( pt.x + 385 - text.width(), pt.y + 436, 80, display );
 
     fheroes2::Button buttonOk( pt.x + 178, pt.y + 426, ICN::REQUESTS, 1, 2 );

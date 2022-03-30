@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,55 +32,48 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 
-void DialogPrimaryOnly( const std::string & name, const std::string & primary )
+void DialogPrimaryOnly( const std::string & name, const int primarySkillType )
 {
     std::string message = _( "%{name} has gained a level." );
     message.append( "\n \n" );
     message.append( _( "%{skill} +1" ) );
     StringReplace( message, "%{name}", name );
-    StringReplace( message, "%{skill}", primary );
-    Dialog::Message( "", message, Font::BIG, Dialog::OK );
+    StringReplace( message, "%{skill}", Skill::Primary::String( primarySkillType ) );
+
+    const fheroes2::PrimarySkillDialogElement primarySkillUI( primarySkillType, "+1" );
+
+    fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( message, fheroes2::FontType::normalWhite() ), Dialog::OK, { &primarySkillUI } );
 }
 
-int DialogOneSecondary( const std::string & name, const std::string & primary, const Skill::Secondary & sec )
+int DialogOneSecondary( const Heroes & hero, const std::string & name, const int primarySkillType, const Skill::Secondary & sec )
 {
     std::string message = _( "%{name} has gained a level." );
     message.append( "\n \n" );
     message.append( _( "%{skill} +1" ) );
     StringReplace( message, "%{name}", name );
-    StringReplace( message, "%{skill}", primary );
+    StringReplace( message, "%{skill}", Skill::Primary::String( primarySkillType ) );
 
     message.append( "\n \n" );
     message.append( _( "You have learned %{skill}." ) );
     StringReplace( message, "%{skill}", sec.GetName() );
 
-    const fheroes2::Sprite & sprite_frame = fheroes2::AGG::GetICN( ICN::SECSKILL, 15 );
+    const fheroes2::SecondarySkillDialogElement secondarySkillUI( sec, hero );
 
-    // Create a surface with no alpha mode to fix SDL 1
-    fheroes2::Sprite drawSurface = sprite_frame;
-
-    // sprite
-    const fheroes2::Sprite & sprite_skill = fheroes2::AGG::GetICN( ICN::SECSKILL, sec.GetIndexSprite1() );
-    fheroes2::Blit( sprite_skill, drawSurface, 3, 3 );
-    // text
-    Text text_skill( Skill::Secondary::String( sec.Skill() ), Font::SMALL );
-    text_skill.Blit( 3 + ( sprite_skill.width() - text_skill.w() ) / 2, 6, drawSurface );
-    Text text_level( Skill::Level::String( sec.Level() ), Font::SMALL );
-    text_level.Blit( 3 + ( sprite_skill.width() - text_level.w() ) / 2, sprite_skill.height() - 12, drawSurface );
-
-    Dialog::SpriteInfo( "", message, drawSurface );
+    fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( message, fheroes2::FontType::normalWhite() ), Dialog::OK, { &secondarySkillUI } );
 
     return sec.Skill();
 }
 
-int DialogSelectSecondary( const std::string & name, const std::string & primary, const Skill::Secondary & sec1, const Skill::Secondary & sec2, Heroes & hero )
+int DialogSelectSecondary( const std::string & name, const int primarySkillType, const Skill::Secondary & sec1, const Skill::Secondary & sec2, Heroes & hero )
 {
     std::string header = _( "%{name} has gained a level." );
     header.append( "\n \n" );
     header.append( _( "%{skill} +1" ) );
     StringReplace( header, "%{name}", name );
-    StringReplace( header, "%{skill}", primary );
+    StringReplace( header, "%{skill}", Skill::Primary::String( primarySkillType ) );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -190,18 +184,18 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
         }
 
         if ( le.MouseClickLeft( rect_image1 ) ) {
-            Dialog::SecondarySkillInfo( sec1, hero );
+            fheroes2::SecondarySkillDialogElement( sec1, hero ).showPopup( Dialog::OK );
         }
         else if ( le.MouseClickLeft( rect_image2 ) ) {
-            Dialog::SecondarySkillInfo( sec2, hero );
+            fheroes2::SecondarySkillDialogElement( sec2, hero ).showPopup( Dialog::OK );
         }
 
         if ( le.MousePressRight( rect_image1 ) ) {
-            Dialog::SecondarySkillInfo( sec1, hero, false );
+            fheroes2::SecondarySkillDialogElement( sec1, hero ).showPopup( Dialog::ZERO );
             display.render();
         }
         else if ( le.MousePressRight( rect_image2 ) ) {
-            Dialog::SecondarySkillInfo( sec2, hero, false );
+            fheroes2::SecondarySkillDialogElement( sec2, hero ).showPopup( Dialog::ZERO );
             display.render();
         }
         else if ( le.MousePressRight( button_hero.area() ) ) {
@@ -212,16 +206,16 @@ int DialogSelectSecondary( const std::string & name, const std::string & primary
     return Skill::Secondary::UNKNOWN;
 }
 
-int Dialog::LevelUpSelectSkill( const std::string & name, const std::string & primary, const Skill::Secondary & sec1, const Skill::Secondary & sec2, Heroes & hero )
+int Dialog::LevelUpSelectSkill( const std::string & name, const int primarySkillType, const Skill::Secondary & sec1, const Skill::Secondary & sec2, Heroes & hero )
 {
     int result = Skill::Secondary::UNKNOWN;
 
     if ( Skill::Secondary::UNKNOWN == sec1.Skill() && Skill::Secondary::UNKNOWN == sec2.Skill() )
-        DialogPrimaryOnly( name, primary );
+        DialogPrimaryOnly( name, primarySkillType );
     else if ( Skill::Secondary::UNKNOWN == sec1.Skill() || Skill::Secondary::UNKNOWN == sec2.Skill() )
-        result = DialogOneSecondary( name, primary, ( Skill::Secondary::UNKNOWN == sec2.Skill() ? sec1 : sec2 ) );
+        result = DialogOneSecondary( hero, name, primarySkillType, ( Skill::Secondary::UNKNOWN == sec2.Skill() ? sec1 : sec2 ) );
     else
-        result = DialogSelectSecondary( name, primary, sec1, sec2, hero );
+        result = DialogSelectSecondary( name, primarySkillType, sec1, sec2, hero );
 
     return result;
 }

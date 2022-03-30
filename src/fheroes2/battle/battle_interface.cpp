@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -50,16 +51,18 @@
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "ui_window.h"
 #include "world.h"
 
 #include <cassert>
 
-#define ARMYORDERW 40
-
 namespace
 {
     const int32_t cellYOffset = -9;
+
+    const int32_t armyOrderMonsterIconSize = 43; // in both directions.
 
     struct LightningPoint
     {
@@ -105,7 +108,7 @@ namespace
             iterationCount = 5;
 
         std::vector<std::pair<LightningPoint, LightningPoint> > lines;
-        lines.emplace_back( LightningPoint( fheroes2::Point( 0, 0 ), 5 ), LightningPoint( fheroes2::Point( distance, 0 ), 3 ) );
+        lines.emplace_back( LightningPoint( { 0, 0 }, 5 ), LightningPoint( { distance, 0 }, 3 ) );
 
         int maxOffset = distance;
 
@@ -136,7 +139,7 @@ namespace
                     offsetY = static_cast<int>( Rand::Get( 1, 10 ) ) * maxOffset / 100;
                     const int32_t x = static_cast<int32_t>( ( middle.x - oldLines[i].first.point.x ) * 0.7 ) + middle.x;
                     const int32_t y = static_cast<int32_t>( ( middle.y - oldLines[i].first.point.y ) * 0.7 ) + middle.y + ( isPositive ? offsetY : -offsetY );
-                    lines.emplace_back( middlePoint, LightningPoint( fheroes2::Point( x, y ), 1 ) );
+                    lines.emplace_back( middlePoint, LightningPoint( { x, y }, 1 ) );
                 }
             }
 
@@ -169,16 +172,34 @@ namespace
                 const int x = xOffset * offset;
                 const int y = yOffset * offset;
 
-                fheroes2::DrawLine( surface, fheroes2::Point( first.x + x, first.y + y ), fheroes2::Point( second.x + x, second.y + y ), color, roi );
+                fheroes2::DrawLine( surface, { first.x + x, first.y + y }, { second.x + x, second.y + y }, color, roi );
             }
 
             for ( uint32_t thickness = lightning[i].second.thickness; thickness < lightning[i].first.thickness; ++thickness ) {
                 const bool isUpper = ( ( thickness % 2 ) == 1 );
                 const int offset = isUpper ? ( thickness + 1 ) / 2 : -static_cast<int>( ( thickness + 1 ) / 2 );
 
-                fheroes2::DrawLine( surface, fheroes2::Point( first.x + xOffset * offset, first.y + yOffset * offset ), second, color, roi );
+                fheroes2::DrawLine( surface, { first.x + xOffset * offset, first.y + yOffset * offset }, second, color, roi );
             }
         }
+    }
+
+    bool preferAttackFromHead( const Battle::Unit & attacker, const int /* theme */ )
+    {
+        if ( !attacker.isWide() ) {
+            return true;
+        }
+
+        return true;
+
+        /* TODO: example code for implementing direct up/down attacks
+        if ( attacker.isReflect() ) {
+            return theme != Cursor::SWORD_TOPRIGHT && theme != Cursor::SWORD_BOTTOMRIGHT;
+        }
+        else {
+            return theme != Cursor::SWORD_TOPLEFT && theme != Cursor::SWORD_BOTTOMLEFT;
+        }
+        */
     }
 }
 
@@ -208,9 +229,9 @@ namespace Battle
 
         void SetPosition( u32 px, u32 py )
         {
-            const uint32_t mx = 6;
-            const uint32_t sw = fheroes2::Display::DEFAULT_WIDTH;
-            const uint32_t sh = mx * 20;
+            const int32_t mx = 6;
+            const int32_t sw = fheroes2::Display::DEFAULT_WIDTH;
+            const int32_t sh = mx * 20;
             border.SetPosition( px, py - sh - 2, sw - 32, sh - 30 );
             const fheroes2::Rect & area = border.GetArea();
             const int32_t ax = area.x + area.width - 20;
@@ -220,10 +241,19 @@ namespace Battle
 
             SetScrollButtonUp( ICN::DROPLISL, 6, 7, fheroes2::Point( ax + 8, area.y - 10 ) );
             SetScrollButtonDn( ICN::DROPLISL, 8, 9, fheroes2::Point( ax + 8, area.y + area.height - 11 ) );
-            SetScrollBar( fheroes2::AGG::GetICN( ICN::DROPLISL, 13 ), fheroes2::Rect( ax + 5 + 8, buttonPgUp.area().y + buttonPgUp.area().height + 3, 12,
-                                                                                      buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 7 ) );
+
+            const int32_t scrollbarSliderAreaLength = buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 7;
+
+            setScrollBarArea( { ax + 5 + 8, buttonPgUp.area().y + buttonPgUp.area().height + 3, 12, scrollbarSliderAreaLength} );
+
+            const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
+            const fheroes2::Image scrollbarSlider
+                    = fheroes2::generateScrollbarSlider( originalSilder, false, scrollbarSliderAreaLength, VisibleItemCount(), static_cast<int32_t>( messages.size() ),
+                                                         { 0, 0, originalSilder.width(), 4 }, { 0, 4, originalSilder.width(), 8 } );
+
+            setScrollBarImage( scrollbarSlider );
             _scrollbar.hide();
-            SetAreaItems( fheroes2::Rect( area.x, area.y, area.width - 10, area.height ) );
+            SetAreaItems( { area.x, area.y, area.width - 10, area.height } );
             SetListContent( messages );
             _scrollbar.show();
         }
@@ -241,6 +271,14 @@ namespace Battle
             if ( !openlog ) {
                 _scrollbar.hide();
             }
+
+            const int32_t scrollbarSliderAreaLength = buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 7;
+            const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
+            const fheroes2::Image scrollbarSlider
+                    = fheroes2::generateScrollbarSlider( originalSilder, false, scrollbarSliderAreaLength, VisibleItemCount(), static_cast<int32_t>( messages.size() ),
+                                                         { 0, 0, originalSilder.width(), 4 }, { 0, 4, originalSilder.width(), 8 } );
+            setScrollBarImage( scrollbarSlider );
+            SetCurrentVisible();
         }
 
         void RedrawItem( const std::string & str, int32_t px, int32_t py, bool ) override
@@ -407,14 +445,14 @@ fheroes2::Image DrawHexagon( const uint8_t colorId )
     fheroes2::Image sf( w + 1, h + 1 );
     sf.reset();
 
-    fheroes2::DrawLine( sf, fheroes2::Point( r, 0 ), fheroes2::Point( 0, l ), colorId );
-    fheroes2::DrawLine( sf, fheroes2::Point( r, 0 ), fheroes2::Point( w, l ), colorId );
+    fheroes2::DrawLine( sf, { r, 0 }, { 0, l }, colorId );
+    fheroes2::DrawLine( sf, { r, 0 }, { w, l }, colorId );
 
-    fheroes2::DrawLine( sf, fheroes2::Point( 0, l + 1 ), fheroes2::Point( 0, h - l ), colorId );
-    fheroes2::DrawLine( sf, fheroes2::Point( w, l + 1 ), fheroes2::Point( w, h - l ), colorId );
+    fheroes2::DrawLine( sf, { 0, l + 1 }, { 0, h - l }, colorId );
+    fheroes2::DrawLine( sf, { w, l + 1 }, { w, h - l }, colorId );
 
-    fheroes2::DrawLine( sf, fheroes2::Point( r, h ), fheroes2::Point( 0, h - l ), colorId );
-    fheroes2::DrawLine( sf, fheroes2::Point( r, h ), fheroes2::Point( w, h - l ), colorId );
+    fheroes2::DrawLine( sf, { r, h }, { 0, h - l }, colorId );
+    fheroes2::DrawLine( sf, { r, h }, { w, h - l }, colorId );
 
     return sf;
 }
@@ -635,16 +673,6 @@ Battle::OpponentSprite::OpponentSprite( const fheroes2::Rect & area, const HeroB
     pos.height = sprite.height();
 }
 
-const HeroBase * Battle::OpponentSprite::GetHero( void ) const
-{
-    return base;
-}
-
-fheroes2::Point Battle::OpponentSprite::Offset() const
-{
-    return _offset;
-}
-
 void Battle::OpponentSprite::IncreaseAnimFrame( bool loop )
 {
     _currentAnim.playAnimation( loop );
@@ -654,16 +682,6 @@ void Battle::OpponentSprite::SetAnimation( int rule )
 {
     _animationType = rule;
     _currentAnim = getHeroAnimation( base, rule );
-}
-
-bool Battle::OpponentSprite::isFinishFrame( void ) const
-{
-    return _currentAnim.isLastFrame();
-}
-
-const fheroes2::Rect & Battle::OpponentSprite::GetArea( void ) const
-{
-    return pos;
 }
 
 fheroes2::Point Battle::OpponentSprite::GetCastPosition( void ) const
@@ -781,11 +799,6 @@ void Battle::Status::Redraw( void ) const
         bar2.Blit( x + ( back2.width() - bar2.w() ) / 2, y + back1.height() - 2 );
 }
 
-const std::string & Battle::Status::GetMessage( void ) const
-{
-    return message;
-}
-
 void Battle::Status::clear()
 {
     bar1.Clear();
@@ -796,19 +809,7 @@ Battle::ArmiesOrder::ArmiesOrder()
     : orders( nullptr )
     , army_color2( 0 )
 {
-    const fheroes2::Size sz( ARMYORDERW, ARMYORDERW );
-
-    sf_color[0].resize( sz.width, sz.height );
-    sf_color[0].reset();
-    fheroes2::DrawBorder( sf_color[0], fheroes2::GetColorId( 0xe0, 0xe0, 0 ) );
-
-    sf_color[1].resize( sz.width, sz.height );
-    sf_color[1].reset();
-    fheroes2::DrawBorder( sf_color[1], fheroes2::GetColorId( 0xe0, 0x48, 0 ) );
-
-    sf_color[2].resize( sz.width, sz.height );
-    sf_color[2].reset();
-    fheroes2::DrawBorder( sf_color[2], fheroes2::GetColorId( 0x90, 0xc0, 0 ) );
+    // Do nothing.
 }
 
 void Battle::ArmiesOrder::Set( const fheroes2::Rect & rt, const Units * units, int color )
@@ -841,52 +842,92 @@ void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const fheroes
         }
 }
 
-void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, bool revert, bool current, fheroes2::Image & output ) const
+void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
+                                      fheroes2::Image & output ) const
 {
-    const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, unit.GetSpriteIndex() );
+    // Render background.
+    const fheroes2::Sprite & backgroundOriginal = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+    fheroes2::Copy( backgroundOriginal, 37, 268, output, pos.x + 1, pos.y + 1, armyOrderMonsterIconSize - 2, armyOrderMonsterIconSize - 2 );
 
-    // background
-    fheroes2::Fill( output, pos.x, pos.y, pos.width, pos.height, fheroes2::GetColorId( 0x33, 0x33, 0x33 ) );
-    // mons32 sprite
+    // Draw a monster's sprite.
+    const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, unit.GetSpriteIndex() );
     fheroes2::Blit( mons32, output, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - ( mons32.height() + 3 < pos.height ? 3 : 0 ),
                     revert );
 
-    // window
-    if ( current )
-        fheroes2::Blit( sf_color[0], output, pos.x + 1, pos.y + 1 );
-    else if ( unit.Modes( Battle::TR_MOVED ) )
-        fheroes2::Blit( sf_color[1], output, pos.x + 1, pos.y + 1 );
-    else
-        fheroes2::Blit( sf_color[2], output, pos.x + 1, pos.y + 1 );
-
-    // number
-    Text number( std::to_string( unit.GetCount() ), Font::SMALL );
+    Text number( GetStringShort( unit.GetCount() ), Font::SMALL );
     number.Blit( pos.x + 2, pos.y + 2, output );
+
+    if ( isCurrentUnit ) {
+        fheroes2::DrawRect( output, { pos.x, pos.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize }, currentUnitColor );
+    }
+    else {
+        uint8_t color = 0;
+
+        switch ( unit.GetCurrentColor() ) {
+        case -1: // Berserkers
+            color = ARMY_COLOR_BLACK;
+            break;
+        case Color::BLUE:
+            color = ARMY_COLOR_BLUE;
+            break;
+        case Color::GREEN:
+            color = ARMY_COLOR_GREEN;
+            break;
+        case Color::RED:
+            color = ARMY_COLOR_RED;
+            break;
+        case Color::YELLOW:
+            color = ARMY_COLOR_YELLOW;
+            break;
+        case Color::ORANGE:
+            color = ARMY_COLOR_ORANGE;
+            break;
+        case Color::PURPLE:
+            color = ARMY_COLOR_PURPLE;
+            break;
+        case Color::NONE:
+            color = ARMY_COLOR_GRAY;
+            break;
+        default:
+            assert( 0 ); // Did you add another player color?
+            break;
+        }
+
+        fheroes2::DrawRect( output, { pos.x, pos.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize }, color );
+
+        if ( unit.Modes( Battle::TR_MOVED ) ) {
+            fheroes2::ApplyPalette( output, pos.x, pos.y, output, pos.x, pos.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize,
+                                    PAL::GetPalette( PAL::PaletteType::GRAY ) );
+            fheroes2::ApplyPalette( output, pos.x, pos.y, output, pos.x, pos.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize, 3 );
+        }
+    }
 }
 
-void Battle::ArmiesOrder::Redraw( const Unit * current, fheroes2::Image & output )
+void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output )
 {
-    if ( orders ) {
-        const int32_t ow = ARMYORDERW + 2;
+    if ( orders == nullptr ) {
+        // Nothing to show.
+        return;
+    }
 
-        const int32_t validUnitCount = static_cast<int32_t>( std::count_if( orders->begin(), orders->end(), []( const Unit * unit ) { return unit->isValid(); } ) );
+    const int32_t validUnitCount = static_cast<int32_t>( std::count_if( orders->begin(), orders->end(), []( const Unit * unit ) { return unit->isValid(); } ) );
 
-        int32_t ox = area.x + ( area.width - ow * validUnitCount ) / 2;
-        int32_t oy = area.y;
+    int32_t ox = area.x + ( area.width - armyOrderMonsterIconSize * validUnitCount ) / 2;
+    int32_t oy = area.y;
 
-        fheroes2::Rect::x = ox;
-        fheroes2::Rect::y = oy;
-        fheroes2::Rect::height = ow;
+    fheroes2::Rect::x = ox;
+    fheroes2::Rect::y = oy;
+    fheroes2::Rect::height = armyOrderMonsterIconSize;
 
-        rects.clear();
+    rects.clear();
 
-        for ( Units::const_iterator it = orders->begin(); it != orders->end(); ++it )
-            if ( *it && ( *it )->isValid() ) {
-                rects.emplace_back( *it, fheroes2::Rect( ox, oy, ow, ow ) );
-                RedrawUnit( rects.back().second, **it, ( **it ).GetColor() == army_color2, current == *it, output );
-                ox += ow;
-                fheroes2::Rect::width += ow;
-            }
+    for ( Units::const_iterator it = orders->begin(); it != orders->end(); ++it ) {
+        if ( *it && ( *it )->isValid() ) {
+            rects.emplace_back( *it, fheroes2::Rect( ox, oy, armyOrderMonsterIconSize, armyOrderMonsterIconSize ) );
+            RedrawUnit( rects.back().second, **it, ( **it ).GetColor() == army_color2, current == *it, currentUnitColor, output );
+            ox += armyOrderMonsterIconSize;
+            fheroes2::Rect::width += armyOrderMonsterIconSize;
+        }
     }
 }
 
@@ -901,6 +942,7 @@ Battle::Interface::Interface( Arena & a, s32 center )
     , humanturn_redraw( true )
     , animation_flags_frame( 0 )
     , catapult_frame( 0 )
+    , _breakAutoBattleForColor( 0 )
     , _contourColor( 110 )
     , _brightLandType( false )
     , _currentUnit( nullptr )
@@ -987,7 +1029,7 @@ Battle::Interface::Interface( Arena & a, s32 center )
     opponent2 = arena.GetCommander2() ? new OpponentSprite( _surfaceInnerArea, arena.GetCommander2(), true ) : nullptr;
 
     if ( Arena::GetCastle() )
-        main_tower = fheroes2::Rect( 570, 145, 70, 70 );
+        main_tower = fheroes2::Rect( 570, 145, 70, 160 );
 
     const fheroes2::Rect & area = border.GetArea();
 
@@ -1018,13 +1060,13 @@ Battle::Interface::Interface( Arena & a, s32 center )
         listlog->SetPosition( area.x, area.y + area.height - status.height );
     status.SetLogs( listlog );
 
-    AGG::ResetMixer();
+    AGG::ResetAudio();
     AGG::PlaySound( M82::PREBATTL );
 }
 
 Battle::Interface::~Interface()
 {
-    AGG::ResetMixer();
+    AGG::ResetAudio();
 
     if ( listlog )
         delete listlog;
@@ -1037,11 +1079,6 @@ Battle::Interface::~Interface()
 void Battle::Interface::SetArmiesOrder( const Units * units )
 {
     armies_order.Set( GetArea(), units, arena.GetArmyColor2() );
-}
-
-const fheroes2::Rect & Battle::Interface::GetArea( void ) const
-{
-    return _surfaceInnerArea;
 }
 
 fheroes2::Point Battle::Interface::GetMouseCursor() const
@@ -1100,8 +1137,8 @@ void Battle::Interface::RedrawPartialFinish()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    if ( Settings::Get().ExtBattleShowBattleOrder() )
-        armies_order.Redraw( _currentUnit, _mainSurface );
+    if ( Settings::Get().BattleShowArmyOrder() )
+        armies_order.Redraw( _currentUnit, _contourColor, _mainSurface );
 
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() ) {
@@ -1168,7 +1205,7 @@ void Battle::Interface::RedrawArmies()
                 RedrawCastleMainTower( *castle );
             }
             else if ( cellRowId == 7 ) { // Redraw catapult.
-                RedrawCastle2( *castle, Arena::CATAPULT_POS );
+                RedrawCastle( *castle, Arena::CATAPULT_POS );
             }
 
             std::vector<const Unit *> deadTroopBeforeWall;
@@ -1260,7 +1297,7 @@ void Battle::Interface::RedrawArmies()
                 RedrawTroopSprite( *movingTroopBeforeWall[i] );
             }
 
-            RedrawCastle2( *castle, wallCellId );
+            RedrawCastle( *castle, wallCellId );
 
             for ( size_t i = 0; i < deadTroopAfterWall.size(); ++i ) {
                 RedrawTroopSprite( *deadTroopAfterWall[i] );
@@ -1584,9 +1621,9 @@ void Battle::Interface::RedrawCover()
             case Spell::COLDRING: {
                 const Indexes around = Board::GetAroundIndexes( index_pos );
                 for ( size_t i = 0; i < around.size(); ++i ) {
-                    const Cell * aroundCell = Board::GetCell( around[i] );
-                    if ( aroundCell != nullptr ) {
-                        highlightCells.emplace( aroundCell );
+                    const Cell * nearbyCell = Board::GetCell( around[i] );
+                    if ( nearbyCell != nullptr ) {
+                        highlightCells.emplace( nearbyCell );
                     }
                 }
                 break;
@@ -1596,28 +1633,20 @@ void Battle::Interface::RedrawCover()
                 highlightCells.emplace( cell );
                 const Indexes around = Board::GetAroundIndexes( index_pos );
                 for ( size_t i = 0; i < around.size(); ++i ) {
-                    const Cell * aroundCell = Board::GetCell( around[i] );
-                    if ( aroundCell != nullptr ) {
-                        highlightCells.emplace( aroundCell );
+                    const Cell * nearbyCell = Board::GetCell( around[i] );
+                    if ( nearbyCell != nullptr ) {
+                        highlightCells.emplace( nearbyCell );
                     }
                 }
                 break;
             }
             case Spell::FIREBLAST: {
                 highlightCells.emplace( cell );
-                const Indexes around = Board::GetAroundIndexes( index_pos );
+                const Indexes around = Board::GetDistanceIndexes( index_pos, 2 );
                 for ( size_t i = 0; i < around.size(); ++i ) {
-                    const Cell * aroundCell = Board::GetCell( around[i] );
-                    if ( aroundCell != nullptr ) {
-                        highlightCells.emplace( aroundCell );
-                    }
-
-                    const Indexes aroundTwice = Board::GetAroundIndexes( around[i] );
-                    for ( size_t j = 0; j < aroundTwice.size(); ++j ) {
-                        const Cell * aroundCellTwice = Board::GetCell( aroundTwice[j] );
-                        if ( aroundCellTwice != nullptr ) {
-                            highlightCells.emplace( aroundCellTwice );
-                        }
+                    const Cell * nearbyCell = Board::GetCell( around[i] );
+                    if ( nearbyCell != nullptr ) {
+                        highlightCells.emplace( nearbyCell );
                     }
                 }
                 break;
@@ -1631,9 +1660,9 @@ void Battle::Interface::RedrawCover()
             highlightCells.emplace( cell );
             const Indexes around = Board::GetAroundIndexes( index_pos );
             for ( size_t i = 0; i < around.size(); ++i ) {
-                const Cell * aroundCell = Board::GetCell( around[i] );
-                if ( aroundCell != nullptr ) {
-                    highlightCells.emplace( aroundCell );
+                const Cell * nearbyCell = Board::GetCell( around[i] );
+                if ( nearbyCell != nullptr ) {
+                    highlightCells.emplace( nearbyCell );
                 }
             }
         }
@@ -1673,7 +1702,8 @@ void Battle::Interface::RedrawCover()
                 assert( 0 );
             }
 
-            const Position pos = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) );
+            const Position pos
+                = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( index_pos, direction ), preferAttackFromHead( *_currentUnit, cursorType ) );
 
             assert( pos.GetHead() != nullptr );
 
@@ -1686,18 +1716,27 @@ void Battle::Interface::RedrawCover()
             }
 
             if ( _currentUnit->isDoubleCellAttack() ) {
-                // We have to invert the direction.
-                int attackDirection = Board::GetDirection( pos.GetHead()->GetIndex(), index_pos );
-                if ( attackDirection == 0 ) {
-                    // It happens when a creature needs to swap tail and head for an attack move.
-                    attackDirection = Board::GetDirection( pos.GetTail()->GetIndex(), index_pos );
-                }
+                const Cell * secondAttackedCell = Board::GetCell( index_pos, Board::GetReflectDirection( direction ) );
 
-                assert( attackDirection != 0 );
-
-                const Cell * secondAttackedCell = Board::GetCell( index_pos, attackDirection );
-                if ( secondAttackedCell != nullptr ) {
+                if ( secondAttackedCell ) {
                     highlightCells.emplace( secondAttackedCell );
+                }
+            }
+            else if ( _currentUnit->isAllAdjacentCellsAttack() ) {
+                for ( const int32_t nearbyIdx : Board::GetAroundIndexes( pos ) ) {
+                    // Should already be highlighted
+                    if ( nearbyIdx == index_pos ) {
+                        continue;
+                    }
+
+                    const Cell * nearbyCell = Board::GetCell( nearbyIdx );
+                    assert( nearbyCell != nullptr );
+
+                    const Unit * nearbyUnit = nearbyCell->GetUnit();
+
+                    if ( nearbyUnit && nearbyUnit->GetColor() != _currentUnit->GetCurrentColor() ) {
+                        highlightCells.emplace( nearbyCell );
+                    }
                 }
             }
         }
@@ -1711,7 +1750,7 @@ void Battle::Interface::RedrawCover()
         const int spellPower = ( currentCommander == nullptr ) ? 0 : currentCommander->GetPower();
 
         for ( const Cell * highlightCell : highlightCells ) {
-            bool isApplicable = highlightCell->isPassable1( false );
+            bool isApplicable = highlightCell->isPassable( false );
 
             if ( isApplicable ) {
                 const Unit * highlightedUnit = highlightCell->GetUnit();
@@ -1743,6 +1782,45 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
         fheroes2::Blit( cover, _mainSurface, cover.x(), cover.y() );
     }
 
+    const Castle * castle = Arena::GetCastle();
+    int castleBackgroundIcnId = ICN::UNKNOWN;
+
+    if ( castle != nullptr ) {
+        switch ( castle->GetRace() ) {
+        case Race::BARB:
+            castleBackgroundIcnId = ICN::CASTBKGB;
+            break;
+        case Race::KNGT:
+            castleBackgroundIcnId = ICN::CASTBKGK;
+            break;
+        case Race::NECR:
+            castleBackgroundIcnId = ICN::CASTBKGN;
+            break;
+        case Race::SORC:
+            castleBackgroundIcnId = ICN::CASTBKGS;
+            break;
+        case Race::WRLK:
+            castleBackgroundIcnId = ICN::CASTBKGW;
+            break;
+        case Race::WZRD:
+            castleBackgroundIcnId = ICN::CASTBKGZ;
+            break;
+        default:
+            // DId you add a new race? Add the appropriate logic for it.
+            assert( 0 );
+            break;
+        }
+
+        const fheroes2::Sprite & castleBackground = fheroes2::AGG::GetICN( castleBackgroundIcnId, 1 );
+        fheroes2::Blit( castleBackground, _mainSurface, castleBackground.x(), castleBackground.y() );
+
+        // moat
+        if ( castle->isBuild( BUILD_MOAT ) ) {
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MOATWHOL, 0 );
+            fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
+        }
+    }
+
     if ( conf.BattleShowGrid() ) { // grid
         for ( const Cell & cell : board ) {
             fheroes2::Blit( sf_hexagon, _mainSurface, cell.GetPos().x, cell.GetPos().y );
@@ -1754,9 +1832,11 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
         RedrawLowObjects( cellId );
     }
 
-    const Castle * castle = Arena::GetCastle();
-    if ( castle )
-        RedrawCastle1( *castle );
+    if ( castle != nullptr ) {
+        // top wall
+        const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( castleBackgroundIcnId, castle->isFortificationBuild() ? 4 : 3 );
+        fheroes2::Blit( sprite2, _mainSurface, sprite2.x(), sprite2.y() );
+    }
 
     if ( !_movingUnit && conf.BattleShowMoveShadow() && _currentUnit && !( _currentUnit->GetCurrentControl() & CONTROL_AI ) ) { // shadow
         for ( const Cell & cell : board ) {
@@ -1767,48 +1847,7 @@ void Battle::Interface::RedrawCoverStatic( const Settings & conf, const Board & 
     }
 }
 
-void Battle::Interface::RedrawCastle1( const Castle & castle )
-{
-    int icn_castbkg = ICN::UNKNOWN;
-
-    switch ( castle.GetRace() ) {
-    default:
-    case Race::BARB:
-        icn_castbkg = ICN::CASTBKGB;
-        break;
-    case Race::KNGT:
-        icn_castbkg = ICN::CASTBKGK;
-        break;
-    case Race::NECR:
-        icn_castbkg = ICN::CASTBKGN;
-        break;
-    case Race::SORC:
-        icn_castbkg = ICN::CASTBKGS;
-        break;
-    case Race::WRLK:
-        icn_castbkg = ICN::CASTBKGW;
-        break;
-    case Race::WZRD:
-        icn_castbkg = ICN::CASTBKGZ;
-        break;
-    }
-
-    // castle cover
-    const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( icn_castbkg, 1 );
-    fheroes2::Blit( sprite1, _mainSurface, sprite1.x(), sprite1.y() );
-
-    // moat
-    if ( castle.isBuild( BUILD_MOAT ) ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MOATWHOL, 0 );
-        fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
-    }
-
-    // top wall
-    const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( icn_castbkg, castle.isFortificationBuild() ? 4 : 3 );
-    fheroes2::Blit( sprite2, _mainSurface, sprite2.x(), sprite2.y() );
-}
-
-void Battle::Interface::RedrawCastle2( const Castle & castle, int32_t cellId )
+void Battle::Interface::RedrawCastle( const Castle & castle, int32_t cellId )
 {
     const int castleIcnId = ICN::Get4Castle( castle.GetRace() );
 
@@ -2104,18 +2143,55 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     return arena.IsShootingPenalty( *_currentUnit, *b_enemy ) ? Cursor::WAR_BROKENARROW : Cursor::WAR_ARROW;
                 }
                 else {
-                    const int dir = cell->GetTriangleDirection( GetMouseCursor() );
-                    const int cursor = GetSwordCursorDirection( dir );
+                    // Find all possible directions where the current monster can attack.
+                    std::set<int> availableAttackDirection;
 
-                    if ( cursor && Board::isValidDirection( index_pos, dir ) ) {
-                        const s32 from = Board::GetIndexDirection( index_pos, dir );
-
-                        if ( Board::CanAttackUnitFromCell( *_currentUnit, from ) ) {
-                            statusMsg = _( "Attack %{monster}" );
-                            StringReplace( statusMsg, "%{monster}", b_enemy->GetName() );
-
-                            return cursor;
+                    for ( const int direction : { BOTTOM_RIGHT, BOTTOM_LEFT, RIGHT, TOP_RIGHT, TOP_LEFT, LEFT } ) {
+                        if ( Board::isValidDirection( index_pos, direction )
+                             && Board::CanAttackUnitFromCell( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) ) ) {
+                            availableAttackDirection.emplace( direction );
                         }
+                    }
+
+                    if ( !availableAttackDirection.empty() ) {
+                        int currentDirection = cell->GetTriangleDirection( GetMouseCursor() );
+                        if ( currentDirection == UNKNOWN ) {
+                            // This could happen when another window has popped up and the user moved the mouse.
+                            currentDirection = CENTER;
+                        }
+
+                        if ( availableAttackDirection.count( currentDirection ) == 0 ) {
+                            // This direction is not valid. Find the nearest one.
+                            if ( availableAttackDirection.size() == 1 ) {
+                                currentDirection = *availableAttackDirection.begin();
+                            }
+                            else {
+                                // First seach clockwise.
+                                direction_t clockWiseDirection = static_cast<direction_t>( currentDirection );
+                                direction_t antiClockWiseDirection = static_cast<direction_t>( currentDirection );
+
+                                while ( true ) {
+                                    ++clockWiseDirection;
+                                    if ( availableAttackDirection.count( clockWiseDirection ) > 0 ) {
+                                        currentDirection = clockWiseDirection;
+                                        break;
+                                    }
+
+                                    --antiClockWiseDirection;
+                                    if ( availableAttackDirection.count( antiClockWiseDirection ) > 0 ) {
+                                        currentDirection = antiClockWiseDirection;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        const int cursor = GetSwordCursorDirection( currentDirection );
+
+                        statusMsg = _( "Attack %{monster}" );
+                        StringReplace( statusMsg, "%{monster}", b_enemy->GetName() );
+
+                        return cursor;
                     }
                 }
             }
@@ -2160,7 +2236,7 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
 
             assert( unitToTeleport != nullptr );
 
-            if ( !b_stats && cell->isPassable3( *unitToTeleport, false ) ) {
+            if ( !b_stats && cell->isPassableForUnit( *unitToTeleport ) ) {
                 statusMsg = _( "Teleport here" );
                 return Cursor::SP_TELEPORT;
             }
@@ -2184,6 +2260,15 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
     statusMsg = _( "Select spell target" );
 
     return Cursor::WAR_NONE;
+}
+
+void Battle::Interface::getPendingActions( Actions & actions )
+{
+    if ( _breakAutoBattleForColor ) {
+        actions.emplace_back( CommandType::MSG_BATTLE_AUTO, _breakAutoBattleForColor );
+
+        _breakAutoBattleForColor = 0;
+    }
 }
 
 void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
@@ -2219,7 +2304,7 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
     while ( !humanturn_exit && le.HandleEvents() ) {
         // move cursor
         int32_t indexNew = -1;
-        if ( le.MouseCursor( fheroes2::Rect( _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height ) ) ) {
+        if ( le.MouseCursor( { _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height } ) ) {
             indexNew = board.GetIndexAbsPosition( GetMouseCursor() );
         }
         if ( index_pos != indexNew ) {
@@ -2231,9 +2316,6 @@ void Battle::Interface::HumanTurn( const Unit & b, Actions & a )
             HumanCastSpellTurn( b, a, msg );
         else
             HumanBattleTurn( b, a, msg );
-
-        if ( humanturn_exit )
-            cursor.SetThemes( Cursor::WAIT );
 
         // update status
         if ( msg != status.GetMessage() ) {
@@ -2340,7 +2422,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             Dialog::Message( _( "Ballista" ), ballistaMessage, Font::BIG, le.MousePressRight() ? 0 : Dialog::OK );
         }
     }
-    else if ( conf.ExtBattleShowBattleOrder() && le.MouseCursor( armiesOrderRect ) ) {
+    else if ( conf.BattleShowArmyOrder() && le.MouseCursor( armiesOrderRect ) ) {
         cursor.SetThemes( Cursor::POINTER );
         armies_order.QueueEventProcessing( msg, _interfacePosition.getPosition() );
     }
@@ -2439,7 +2521,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
 
         listlog->QueueEventProcessing();
     }
-    else if ( le.MouseCursor( fheroes2::Rect( _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height ) ) ) {
+    else if ( le.MouseCursor( { _interfacePosition.x, _interfacePosition.y, _interfacePosition.width, _interfacePosition.height - status.height } ) ) {
         const int themes = GetBattleCursor( msg );
 
         if ( cursor.Themes() != themes )
@@ -2458,7 +2540,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             if ( le.MouseClickLeft() )
                 MouseLeftClickBoardAction( themes, *cell, a );
             else if ( le.MousePressRight() )
-                MousePressRightBoardAction( themes, *cell );
+                MousePressRightBoardAction( *cell );
         }
         else {
             le.MouseClickLeft();
@@ -2468,8 +2550,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     else if ( le.MouseCursor( status ) ) {
         if ( listlog ) {
             msg = ( listlog->isOpenLog() ? _( "Hide logs" ) : _( "Show logs" ) );
-            if ( le.MouseClickLeft( status ) )
+            if ( le.MouseClickLeft( status ) ) {
                 listlog->SetOpenLog( !listlog->isOpenLog() );
+            }
+            else if ( le.MousePressRight( status ) ) {
+                fheroes2::showMessage( fheroes2::Text( _( "Message Bar" ), fheroes2::FontType::normalYellow() ),
+                                       fheroes2::Text( _( "Shows the results of individual monster's actions." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+            }
         }
         cursor.SetThemes( Cursor::WAR_POINTER );
     }
@@ -2504,15 +2591,6 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
                 return;
             }
 
-            if ( listlog ) {
-                std::string str = _( "%{color} casts a spell: %{spell}" );
-                const HeroBase * current_commander = arena.GetCurrentCommander();
-                if ( current_commander )
-                    StringReplace( str, "%{color}", Color::String( current_commander->GetColor() ) );
-                StringReplace( str, "%{spell}", humanturn_spell.GetName() );
-                listlog->AddMessage( str );
-            }
-
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, humanturn_spell.GetName() << ", dst: " << index_pos );
 
             if ( Cursor::SP_TELEPORT == cursor.Themes() ) {
@@ -2544,7 +2622,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
 
 void Battle::Interface::FadeArena( bool clearMessageLog )
 {
-    AGG::ResetMixer();
+    AGG::ResetAudio();
 
     if ( clearMessageLog ) {
         status.clear();
@@ -2592,9 +2670,10 @@ void Battle::Interface::EventAutoSwitch( const Unit & b, Actions & a )
 {
     btn_auto.drawOnPress();
 
-    a.push_back( Command( CommandType::MSG_BATTLE_AUTO, b.GetColor() ) );
+    if ( arena.CanToggleAutoBattle() ) {
+        a.emplace_back( CommandType::MSG_BATTLE_AUTO, b.GetColor() );
+    }
 
-    Cursor::Get().SetThemes( Cursor::WAIT );
     humanturn_redraw = true;
     humanturn_exit = true;
 
@@ -2647,25 +2726,44 @@ void Battle::Interface::ButtonSkipAction( Actions & a )
     }
 }
 
-void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell ) const
+void Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
 {
-    const Unit * b = cell.GetUnit();
+    const Unit * unitOnCell = cell.GetUnit();
 
-    if ( b ) {
-        Dialog::ArmyInfo( *b, Dialog::READONLY, b->isReflect() );
+    if ( unitOnCell != nullptr ) {
+        Dialog::ArmyInfo( *unitOnCell, Dialog::READONLY, unitOnCell->isReflect() );
+    }
+    else {
+        unitOnCell = arena.GraveyardLastTroop( cell.GetIndex() );
+        if ( unitOnCell != nullptr ) {
+            Dialog::ArmyInfo( *unitOnCell, Dialog::READONLY, unitOnCell->isReflect() );
+        }
     }
 }
 
-void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell, Actions & a )
+void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell, Actions & a )
 {
     const int32_t index = cell.GetIndex();
     const Unit * b = cell.GetUnit();
+
+    auto fixupDestinationCell = []( const Unit & unit, const int32_t dst, const bool tryHeadFirst ) {
+        // Only wide units may need this fixup
+        if ( !unit.isWide() ) {
+            return dst;
+        }
+
+        const Position pos = Position::GetReachable( unit, dst, tryHeadFirst );
+
+        assert( pos.GetHead() != nullptr && pos.GetTail() != nullptr );
+
+        return pos.GetHead()->GetIndex();
+    };
 
     if ( _currentUnit ) {
         switch ( themes ) {
         case Cursor::WAR_FLY:
         case Cursor::WAR_MOVE:
-            a.push_back( Command( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), Board::FixupDestinationCell( *_currentUnit, index ) ) );
+            a.push_back( Command( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), fixupDestinationCell( *_currentUnit, index, true ) ) );
             a.push_back( Command( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
             humanturn_exit = true;
             break;
@@ -2680,7 +2778,7 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
             const int dir = GetDirectionFromCursorSword( themes );
 
             if ( enemy && Board::isValidDirection( index, dir ) ) {
-                const int32_t move = Board::FixupDestinationCell( *_currentUnit, Board::GetIndexDirection( index, dir ) );
+                const int32_t move = fixupDestinationCell( *_currentUnit, Board::GetIndexDirection( index, dir ), preferAttackFromHead( *_currentUnit, themes ) );
 
                 if ( _currentUnit->GetHeadIndex() != move ) {
                     a.push_back( Command( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), move ) );
@@ -2810,11 +2908,11 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
         if ( Game::validateAnimationDelay( Game::BATTLE_MISSILE_DELAY ) ) {
             RedrawPartialStart();
             if ( isMage ) {
-                fheroes2::DrawLine( _mainSurface, fheroes2::Point( startPos.x, startPos.y - 2 ), fheroes2::Point( pnt->x, pnt->y - 2 ), 0x77 );
-                fheroes2::DrawLine( _mainSurface, fheroes2::Point( startPos.x, startPos.y - 1 ), fheroes2::Point( pnt->x, pnt->y - 1 ), 0xB5 );
+                fheroes2::DrawLine( _mainSurface, { startPos.x, startPos.y - 2 }, { pnt->x, pnt->y - 2 }, 0x77 );
+                fheroes2::DrawLine( _mainSurface, { startPos.x, startPos.y - 1 }, { pnt->x, pnt->y - 1 }, 0xB5 );
                 fheroes2::DrawLine( _mainSurface, startPos, *pnt, 0xBC );
-                fheroes2::DrawLine( _mainSurface, fheroes2::Point( startPos.x, startPos.y + 1 ), fheroes2::Point( pnt->x, pnt->y + 1 ), 0xB5 );
-                fheroes2::DrawLine( _mainSurface, fheroes2::Point( startPos.x, startPos.y + 2 ), fheroes2::Point( pnt->x, pnt->y + 2 ), 0x77 );
+                fheroes2::DrawLine( _mainSurface, { startPos.x, startPos.y + 1 }, { pnt->x, pnt->y + 1 }, 0xB5 );
+                fheroes2::DrawLine( _mainSurface, { startPos.x, startPos.y + 2 }, { pnt->x, pnt->y + 2 }, 0x77 );
             }
             else {
                 fheroes2::Blit( missile, _mainSurface, reverse ? pnt->x - missile.width() : pnt->x, ( angle > 0 ) ? pnt->y - missile.height() : pnt->y, reverse );
@@ -2920,7 +3018,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     }
 }
 
-void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & targets )
+void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsInfo & targets )
 {
     // post attack animation
     int attackStart = attacker.animation.getCurrentState();
@@ -2979,7 +3077,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, TargetsInfo & 
     _movingUnit = nullptr;
 }
 
-void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * attacker )
+void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Unit * attacker /* = nullptr */ )
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -2990,7 +3088,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
     std::vector<Unit *> mirrorImages;
     std::set<Unit *> resistantTarget;
 
-    for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
+    for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
         Unit * defender = it->defender;
         if ( defender == nullptr ) {
             continue;
@@ -3057,7 +3155,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 redrawBattleField = true;
             }
             else {
-                for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
+                for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
                     if ( ( *it ).defender ) {
                         redrawBattleField = true;
                         break;
@@ -3070,7 +3168,7 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 RedrawPartialFinish();
             }
 
-            const int finishedAnimationCount = std::count_if( targets.begin(), targets.end(), [&resistantTarget]( const TargetInfo & info ) {
+            const ptrdiff_t finishedAnimationCount = std::count_if( targets.begin(), targets.end(), [&resistantTarget]( const TargetInfo & info ) {
                 if ( info.defender == nullptr ) {
                     return false;
                 }
@@ -3080,16 +3178,20 @@ void Battle::Interface::RedrawActionWincesKills( TargetsInfo & targets, Unit * a
                 }
 
                 const int animationState = info.defender->GetAnimationState();
-                if ( animationState != Monster_Info::WNCE && animationState != Monster_Info::KILL ) {
+                if ( animationState == Monster_Info::WNCE ) {
+                    return false;
+                }
+
+                if ( animationState != Monster_Info::KILL ) {
                     return true;
                 }
 
                 return TargetInfo::isFinishAnimFrame( info );
             } );
 
-            finishedAnimation = ( finish == finishedAnimationCount );
+            finishedAnimation = ( finish == static_cast<int>( finishedAnimationCount ) );
 
-            for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
+            for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
                 if ( ( *it ).defender ) {
                     if ( it->defender->isFinishAnimFrame() && it->defender->GetAnimationState() == Monster_Info::WNCE ) {
                         it->defender->SwitchAnimation( Monster_Info::STATIC );
@@ -3249,6 +3351,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     unit.SwitchAnimation( Monster_Info::FLY_UP );
     // Take off animation is 30% length on average (original value)
+    AGG::PlaySound( unit.M82Tkof() );
     AnimateUnitWithDelay( unit, frameDelay * 3 / 10 );
 
     _movingUnit = nullptr;
@@ -3281,6 +3384,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     landAnim.push_back( Monster_Info::FLY_LAND );
     landAnim.push_back( Monster_Info::STATIC );
     unit.SwitchAnimation( landAnim );
+    AGG::PlaySound( unit.M82Land() );
     AnimateUnitWithDelay( unit, frameDelay );
 
     // restore
@@ -3312,11 +3416,11 @@ void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_
 
     std::string msg;
 
-    if ( target && target->GetHeadIndex() == dst ) {
+    if ( target && ( target->GetHeadIndex() == dst || ( target->isWide() && target->GetTailIndex() == dst ) ) ) {
         msg = _( "%{name} casts %{spell} on the %{troop}." );
         StringReplace( msg, "%{troop}", target->GetName() );
     }
-    else if ( spell.isApplyWithoutFocusObject() ) {
+    else {
         msg = _( "%{name} casts %{spell}." );
     }
 
@@ -3487,13 +3591,13 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
     if ( caster ) {
         OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
         if ( opponent ) {
-            opponent->SetAnimation( ( target ) ? OP_CAST_UP_RETURN : OP_CAST_MASS_RETURN );
+            opponent->SetAnimation( ( target != nullptr ) ? OP_CAST_UP_RETURN : OP_CAST_MASS_RETURN );
             AnimateOpponents( opponent );
         }
     }
 }
 
-void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, TargetsInfo & targets )
+void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, const TargetsInfo & targets )
 {
     if ( spell.isDamage() ) {
         uint32_t killed = 0;
@@ -4038,7 +4142,7 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Po
                 RedrawPartialStart();
 
                 RedrawLightning( lightningBolt, fheroes2::GetColorId( 0xff, 0xff, 0 ), _mainSurface,
-                                 fheroes2::Rect( roi.x + roiOffset.x, roi.y + roiOffset.y, roi.width, roi.height ) );
+                                 { roi.x + roiOffset.x, roi.y + roiOffset.y, roi.width, roi.height } );
                 fheroes2::ApplyPalette( _mainSurface, 7 );
 
                 RedrawPartialFinish();
@@ -4911,13 +5015,13 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
     }
 
     // break auto battle
-    if ( arena.CanBreakAutoBattle()
+    if ( arena.AutoBattleInProgress() && arena.CanToggleAutoBattle()
          && ( le.MouseClickLeft( btn_auto.area() )
               || ( le.KeyPress()
                    && ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_AUTOSWITCH )
-                        || ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_RETREAT )
+                        || ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT )
                              && Dialog::YES == Dialog::Message( "", _( "Break auto battle?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) ) ) ) ) {
-        arena.BreakAutoBattle();
+        _breakAutoBattleForColor = arena.GetCurrentColor();
     }
 }
 

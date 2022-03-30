@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -288,7 +289,7 @@ namespace MP2
 
     ///////////////////////////////////////////////////////////////////////////////
     // First bit indicates if you can interact with object
-    enum MapObjectType
+    enum MapObjectType : uint8_t
     {
         OBJ_ZERO = 0x00,
         OBJN_ALCHEMYLAB = 0x01,
@@ -523,7 +524,7 @@ namespace MP2
         OBJ_MAGELLANMAPS = 0xD9,
         OBJ_FLOTSAM = 0xDA,
         OBJ_DERELICTSHIP = 0xDB,
-        OBJ_SHIPWRECKSURVIROR = 0xDC,
+        OBJ_SHIPWRECKSURVIVOR = 0xDC,
         OBJ_BOTTLE = 0xDD,
         OBJ_MAGICWELL = 0xDE,
         OBJ_MAGICGARDEN = 0xDF,
@@ -587,9 +588,10 @@ namespace MP2
     bool isArtifactObject( const MapObjectType objectType );
     bool isHeroUpgradeObject( const MapObjectType objectType );
     bool isMonsterDwelling( const MapObjectType objectType );
-    bool isRemoveObject( const MapObjectType objectType );
     bool isAbandonedMine( const MapObjectType objectType );
     bool isProtectedObject( const MapObjectType objectType );
+    // Returns true if this object can be safely visited by AI for fog discovery purposes.
+    bool isSafeForFogDiscoveryObject( const MapObjectType objectType );
 
     bool isNeedStayFront( const MapObjectType objectType );
 

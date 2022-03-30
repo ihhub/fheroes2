@@ -1,6 +1,22 @@
-#
-# makefile
-#
+###########################################################################
+#   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
+#   Copyright (C) 2022                                                    #
+#                                                                         #
+#   This program is free software; you can redistribute it and/or modify  #
+#   it under the terms of the GNU General Public License as published by  #
+#   the Free Software Foundation; either version 2 of the License, or     #
+#   (at your option) any later version.                                   #
+#                                                                         #
+#   This program is distributed in the hope that it will be useful,       #
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of        #
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         #
+#   GNU General Public License for more details.                          #
+#                                                                         #
+#   You should have received a copy of the GNU General Public License     #
+#   along with this program; if not, write to the                         #
+#   Free Software Foundation, Inc.,                                       #
+#   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
+###########################################################################
 
 .PHONY: all clean merge
 
@@ -31,6 +47,12 @@ pl.mo: pl.po
 	LANG=pl.CP1250 LC_ALL=pl.CP1250 LC_CTYPE=pl.CP1250 sed -e 's/UTF-8/CP1250/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
 
+# Czech version uses CP1250	
+cs.mo: cs.po
+	iconv -f utf-8 -t CP1250 $< > $<.tmp
+	LANG=cs.CP1250 LC_ALL=cs.CP1250 LC_CTYPE=cs.CP1250 sed -e 's/UTF-8/CP1250/' $<.tmp > $<.2.tmp
+	msgfmt $<.2.tmp -o $@
+
 # Russian versions from "Buka" and "XXI vek" use CP1251 encoding (supported)
 # Russian version from "Fargus" uses Russian keyboard layout as encoding (not supported)
 # Russian alphabet can be transliterated on Debian with `konwert UTF8-ascii/1 -o $<.tmp $<`
@@ -39,14 +61,10 @@ ru.mo: ru.po
 	LANG=ru_RU.CP1251 LC_ALL=ru_RU.CP1251 LC_CTYPE=ru_RU.CP1251 sed -e 's/UTF-8/CP1251/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
 
-# German has locale-specific transliteration rules (ä -> ae, etc)
+# German version uses CP1252
 de.mo: de.po
-	sed -e 's/ä/ae/g' $< > $<.tmp
-	sed -i~ -e 's/ö/oe/g' $<.tmp
-	sed -i~ -e 's/ü/ue/g' $<.tmp
-	sed -i~ -e 's/Ö/Oe/g' $<.tmp
-	sed -i~ -e 's/Ü/Ue/g' $<.tmp
-	iconv -f utf-8 -t ascii//TRANSLIT $<.tmp > $<.2.tmp
+	iconv -f utf-8 -t CP1252 $< > $<.tmp
+	LANG=de.CP1252 LC_ALL=de.CP1252 LC_CTYPE=de.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
 
 # Norwegian has locale-specific transliteration rules (æ -> ae, etc)
