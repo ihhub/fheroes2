@@ -58,9 +58,10 @@ ifdef FHEROES2_WITH_DEBUG
 CCFLAGS := $(CCFLAGS) -DWITH_DEBUG
 endif
 
-# TODO: Add -Wconversion -Wsign-conversion -Wextra-semi -Wswitch-default flags back once we fix all the corresponding code smells!
+# TODO: Add -Wconversion -Wsign-conversion -Wextra-semi flags once we fix all the corresponding code smells
+# TODO: Add -Wswitch-default -Wold-style-cast flags once SDL headers can be compiled with them
 CCFLAGS := $(CCFLAGS) -pedantic -Wall -Wextra -Wcast-align -Wctor-dtor-privacy -Wdouble-promotion -Wfloat-conversion -Wfloat-equal \
-           -Winit-self -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wundef -Wuninitialized -Wunused
+           -Winit-self -Woverloaded-virtual -Wredundant-decls -Wshadow -Wundef -Wuninitialized -Wunused
 
 ifdef FHEROES2_STRICT_COMPILATION
 CCFLAGS := $(CCFLAGS) -Werror
