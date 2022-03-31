@@ -5280,7 +5280,7 @@ msgid "tent|Gold"
 msgstr "Dorata"
 
 msgid "tent|Green"
-msgstr "\vVerde"
+msgstr "Verde"
 
 msgid "tent|Orange"
 msgstr "Arancia"

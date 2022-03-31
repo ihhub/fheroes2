@@ -34,6 +34,9 @@ namespace Battle
     {
     public:
         Bridge();
+        Bridge( const Bridge & ) = delete;
+
+        Bridge & operator=( const Bridge & ) = delete;
 
         void Action( const Unit &, s32 );
 

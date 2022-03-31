@@ -33,6 +33,9 @@ class ArmyTroop;
 class ArmyBar : public Interface::ItemsActionBar<ArmyTroop>
 {
 public:
+    using Interface::ItemsActionBar<ArmyTroop>::RedrawItem;
+    using Interface::ItemsActionBar<ArmyTroop>::ActionBarRightMouseHold;
+
     ArmyBar( Army *, bool mini, bool ro, bool change = false );
 
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;

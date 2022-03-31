@@ -640,7 +640,10 @@ void Castle::ActionNewWeek()
     }
 }
 
-void Castle::ActionNewMonth() {}
+void Castle::ActionNewMonth()
+{
+    // Do nothing.
+}
 
 void Castle::ChangeColor( int cl )
 {
@@ -2372,15 +2375,6 @@ Castle * VecCastles::GetFirstCastle( void ) const
 {
     const_iterator it = std::find_if( begin(), end(), []( const Castle * castle ) { return castle->isCastle(); } );
     return end() != it ? *it : nullptr;
-}
-
-void VecCastles::SortByBuildingValue()
-{
-    std::sort( begin(), end(), []( const Castle * left, const Castle * right ) {
-        if ( left && right )
-            return left->getBuildingValue() > right->getBuildingValue();
-        return right == nullptr;
-    } );
 }
 
 void VecCastles::ChangeColors( int col1, int col2 )

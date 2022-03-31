@@ -285,6 +285,10 @@ const fheroes2::Sprite & SpriteFlag( const Heroes & hero, int index, bool rotate
         case Direction::BOTTOM_LEFT:
             offset = hero.isShipMaster() ? offsetShipBottomSideways[frameId] : offsetBottomSideways[frameId];
             break;
+
+        default:
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
+            break;
         }
     }
     return flag;

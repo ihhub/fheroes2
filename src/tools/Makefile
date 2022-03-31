@@ -1,6 +1,6 @@
 ###########################################################################
 #   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
-#   Copyright (C) 2021                                                    #
+#   Copyright (C) 2021 - 2022                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -29,14 +29,14 @@ endif
 TARGETS := extractor 82m2wav til2img icn2img xmi2mid_cli bin2txt
 LIBENGINE := ../engine/libengine.a
 LIBS := $(LIBENGINE) $(SDL_LIBS) $(LIBS)
-CFLAGS := $(SDL_FLAGS) $(CFLAGS) -I../engine
+CCFLAGS := $(CCFLAGS) $(SDL_FLAGS) -I../engine
 
 .PHONY: all clean
 
 all: $(TARGETS)
 
 $(TARGETS): $(addsuffix .cpp, $(TARGETS)) $(LIBENGINE)
-	$(CXX) $(CFLAGS) -c $@.cpp
+	$(CXX) $(CCFLAGS) $(CXXFLAGS) -c $@.cpp
 	$(CXX) $(LDFLAGS) -o $@ $@.o $(LIBS)
 
 clean:

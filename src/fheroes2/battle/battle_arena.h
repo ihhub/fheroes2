@@ -59,6 +59,7 @@ namespace Battle
     public:
         TroopsUidGenerator() = default;
         TroopsUidGenerator( const TroopsUidGenerator & ) = delete;
+
         TroopsUidGenerator & operator=( const TroopsUidGenerator & ) = delete;
 
         uint32_t GetUnique()
@@ -74,7 +75,13 @@ namespace Battle
     {
     public:
         Arena( Army & army1, Army & army2, s32 index, bool local, Rand::DeterministicRandomGenerator & randomGenerator );
+        Arena( const Arena & ) = delete;
+        Arena( Arena && ) = delete;
+
         ~Arena();
+
+        Arena & operator=( const Arena & ) = delete;
+        Arena & operator=( Arena && ) = delete;
 
         void Turns( void );
         bool BattleValid( void ) const;
@@ -186,12 +193,6 @@ namespace Battle
         };
 
     private:
-        Arena( const Arena & ) = delete;
-        Arena & operator=( const Arena & ) = delete;
-
-        Arena( const Arena && ) = delete;
-        Arena & operator=( const Arena && ) = delete;
-
         void RemoteTurn( const Unit &, Actions & );
         void HumanTurn( const Unit &, Actions & );
 

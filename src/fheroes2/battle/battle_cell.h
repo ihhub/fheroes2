@@ -55,6 +55,11 @@ namespace Battle
     {
     public:
         explicit Cell( int32_t );
+        Cell( const Cell & ) = delete;
+        Cell( Cell && ) = default;
+
+        Cell & operator=( const Cell & ) = delete;
+        Cell & operator=( Cell && ) = delete;
 
         void ResetQuality( void );
         void resetReachability();
@@ -70,9 +75,13 @@ namespace Battle
         bool isReachableForHead() const;
         bool isReachableForTail() const;
 
-        bool isPassable4( const Unit &, const Cell & ) const;
-        bool isPassable3( const Unit &, bool check_reflect ) const;
-        bool isPassable1( bool check_troop ) const;
+        // Checks that the cell is passable for the given unit located in a certain adjacent cell
+        bool isPassableFromAdjacent( const Unit & unit, const Cell & adjacent ) const;
+        // Checks that the cell is passable for the given unit, i.e. unit can occupy it with his head or tail
+        bool isPassableForUnit( const Unit & unit ) const;
+        // Checks that the cell is passable, i.e. does not contain an obstacle or (optionally) a unit
+        bool isPassable( const bool checkForUnit ) const;
+
         bool isPositionIncludePoint( const fheroes2::Point & ) const;
 
         s32 GetIndex( void ) const;
@@ -108,13 +117,15 @@ namespace Battle
         bool isReflect( void ) const;
         bool contains( int cellIndex ) const;
 
-        // Returns the position that the given unit would occupy after moving to the given index
-        static Position GetPositionWhenMoved( const Unit & unit, const int32_t dst );
+        // Returns the position that the given unit would occupy after moving to the
+        // cell with the given index (without taking into account the cell passability
+        // information) or an empty Position object if the given index is unreachable
+        static Position GetPosition( const Unit & unit, const int32_t dst );
 
         // Returns the reachable position for the current unit (to which the current
         // passability information relates) which corresponds to the given index or
         // an empty Position object if the given index is unreachable
-        static Position GetReachable( const Unit & currentUnit, const int32_t dst );
+        static Position GetReachable( const Unit & currentUnit, const int32_t dst, const bool tryHeadFirst = true );
 
         fheroes2::Rect GetRect( void ) const;
         Cell * GetHead( void );

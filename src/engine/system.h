@@ -25,6 +25,7 @@
 #define H2SYSTEM_H
 
 #include <ctime>
+#include <vector>
 
 #include "dir.h"
 
@@ -33,7 +34,7 @@ namespace System
     int MakeDirectory( const std::string & );
     std::string ConcatePath( const std::string &, const std::string & );
 
-    ListDirs GetOSSpecificDirectories();
+    void appendOSSpecificDirectories( std::vector<std::string> & directories );
     std::string GetConfigDirectory( const std::string & prog );
     std::string GetDataDirectory( const std::string & prog );
 

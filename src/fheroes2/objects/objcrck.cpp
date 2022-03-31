@@ -92,6 +92,8 @@ int ObjCrck::GetActionObject( u32 index )
         return MP2::OBJ_OBELISK;
     case 245:
         return MP2::OBJ_SAWMILL;
+    default:
+        break;
     }
 
     return MP2::OBJ_ZERO;

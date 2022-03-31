@@ -1089,7 +1089,7 @@ double Army::GetStrength() const
     }
 
     if ( commander ) {
-        result += commander->GetSpellcastStrength( result );
+        result += commander->GetMagicStrategicValue( result );
     }
 
     return result;

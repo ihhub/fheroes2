@@ -500,32 +500,41 @@ void Settings::SetProgramPath( const char * argv0 )
         path_program = argv0;
 }
 
-ListDirs Settings::GetRootDirs()
+const std::vector<std::string> & Settings::GetRootDirs()
 {
-    ListDirs dirs;
+    static std::vector<std::string> dirs;
+    if ( !dirs.empty() ) {
+        return dirs;
+    }
 
-    // from build
 #ifdef FHEROES2_DATA
-    dirs.push_back( EXPANDDEF( FHEROES2_DATA ) );
+    // Macro-defined path.
+    dirs.emplace_back( EXPANDDEF( FHEROES2_DATA ) );
 #endif
 
-    // from env
-    if ( getenv( "FHEROES2_DATA" ) )
-        dirs.push_back( getenv( "FHEROES2_DATA" ) );
+    // Environment variable.
+    const char * dataEnvPath = getenv( "FHEROES2_DATA" );
+    if ( dataEnvPath != nullptr && std::find( dirs.begin(), dirs.end(), dataEnvPath ) == dirs.end() ) {
+        dirs.emplace_back( dataEnvPath );
+    }
 
-    // from app path
-    dirs.push_back( System::GetDirname( Settings::Get().path_program ) );
+    // The location of the application.
+    std::string appPath = System::GetDirname( Settings::Get().path_program );
+    if ( !appPath.empty() && std::find( dirs.begin(), dirs.end(), appPath ) == dirs.end() ) {
+        dirs.emplace_back( std::move( appPath ) );
+    }
 
-    // os-specific directories
-    dirs.splice( dirs.end(), System::GetOSSpecificDirectories() );
+    // OS specific directories.
+    System::appendOSSpecificDirectories( dirs );
 
 #if defined( MACOS_APP_BUNDLE )
     // macOS app bundle Resources directory
     char resourcePath[PATH_MAX];
 
     CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL( CFBundleGetMainBundle() );
-    if ( CFURLGetFileSystemRepresentation( resourcesURL, TRUE, reinterpret_cast<UInt8 *>( resourcePath ), PATH_MAX ) ) {
-        dirs.push_back( resourcePath );
+    if ( CFURLGetFileSystemRepresentation( resourcesURL, TRUE, reinterpret_cast<UInt8 *>( resourcePath ), PATH_MAX )
+         && std::find( dirs.begin(), dirs.end(), resourcePath ) == dirs.end() ) {
+        dirs.emplace_back( resourcePath );
     }
     else {
         ERROR_LOG( "Unable to get app bundle path" );
@@ -533,15 +542,20 @@ ListDirs Settings::GetRootDirs()
     CFRelease( resourcesURL );
 #endif
 
-    // user config directory
-    const std::string & config = System::GetConfigDirectory( "fheroes2" );
-    if ( !config.empty() )
-        dirs.push_back( config );
+    // User config directory.
+    std::string configPath = System::GetConfigDirectory( "fheroes2" );
+    if ( !configPath.empty() && std::find( dirs.begin(), dirs.end(), configPath ) == dirs.end() ) {
+        dirs.emplace_back( std::move( configPath ) );
+    }
 
-    // user data directory (may be the same as user config directory, so check this to avoid unnecessary work)
-    const std::string & data = System::GetDataDirectory( "fheroes2" );
-    if ( !data.empty() && ( std::find( dirs.cbegin(), dirs.cend(), data ) == dirs.cend() ) )
-        dirs.push_back( data );
+    // User data directory.
+    std::string dataPath = System::GetDataDirectory( "fheroes2" );
+    if ( !dataPath.empty() && std::find( dirs.begin(), dirs.end(), dataPath ) == dirs.end() ) {
+        dirs.emplace_back( std::move( dataPath ) );
+    }
+
+    // Remove all paths that are not directories.
+    dirs.erase( std::remove_if( dirs.begin(), dirs.end(), []( const std::string & path ) { return !System::IsDirectory( path ); } ), dirs.end() );
 
     return dirs;
 }
@@ -564,6 +578,22 @@ ListFiles Settings::FindFiles( const std::string & prefixDir, const std::string 
     }
 
     return res;
+}
+
+bool Settings::findFile( const std::string & internalDirectory, const std::string & fileName, std::string & fullPath )
+{
+    std::string tempPath;
+
+    for ( const std::string & rootDir : Settings::GetRootDirs() ) {
+        tempPath = System::ConcatePath( rootDir, internalDirectory );
+        tempPath = System::ConcatePath( tempPath, fileName );
+        if ( System::IsFile( tempPath ) ) {
+            fullPath.swap( tempPath );
+            return true;
+        }
+    }
+
+    return false;
 }
 
 std::string Settings::GetLastFile( const std::string & prefix, const std::string & name )

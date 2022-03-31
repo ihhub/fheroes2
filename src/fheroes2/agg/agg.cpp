@@ -139,7 +139,6 @@ namespace AGG
     void LoadWAV( int m82, std::vector<u8> & );
     void LoadMID( int xmi, std::vector<u8> & );
 
-    bool ReadDataDir( void );
     std::vector<uint8_t> ReadMusicChunk( const std::string & key, const bool ignoreExpansion = false );
 
     void PlayMusicInternally( const int mus, const MusicSource musicType, const bool loop );
@@ -359,34 +358,6 @@ namespace AGG
     };
 
     AsyncSoundManager g_asyncSoundManager;
-}
-
-bool AGG::ReadDataDir( void )
-{
-    Settings & conf = Settings::Get();
-
-    ListFiles aggs = Settings::FindFiles( "data", ".agg", false );
-
-    // not found agg, exit
-    if ( aggs.empty() )
-        return false;
-
-    // attach agg files
-    for ( ListFiles::const_iterator it = aggs.begin(); it != aggs.end(); ++it ) {
-        std::string lower = StringLower( *it );
-        if ( std::string::npos != lower.find( "heroes2.agg" ) && !heroes2_agg.isGood() ) {
-            heroes2_agg.open( *it );
-            g_midiHeroes2AGG.open( *it );
-        }
-        if ( std::string::npos != lower.find( "heroes2x.agg" ) && !heroes2x_agg.isGood() ) {
-            heroes2x_agg.open( *it );
-            g_midiHeroes2xAGG.open( *it );
-        }
-    }
-
-    conf.EnablePriceOfLoyaltySupport( heroes2x_agg.isGood() );
-
-    return heroes2_agg.isGood();
 }
 
 std::vector<uint8_t> AGG::ReadChunk( const std::string & key )
@@ -670,7 +641,7 @@ void AGG::ResetAudio()
 
 AGG::AGGInitializer::AGGInitializer()
 {
-    if ( ReadDataDir() ) {
+    if ( init() ) {
         return;
     }
 
@@ -682,4 +653,67 @@ AGG::AGGInitializer::~AGGInitializer()
     wav_cache.clear();
     mid_cache.clear();
     loop_sounds.clear();
+}
+
+bool AGG::AGGInitializer::init()
+{
+    const ListFiles aggFileNames = Settings::FindFiles( "data", ".agg", false );
+    if ( aggFileNames.empty() ) {
+        return false;
+    }
+
+    const std::string heroes2AggFileName( "heroes2.agg" );
+    std::string heroes2AggFilePath;
+    std::string aggLowerCaseFilePath;
+
+    for ( const std::string & path : aggFileNames ) {
+        if ( path.size() < heroes2AggFileName.size() ) {
+            // Obviously this is not a correct file.
+            continue;
+        }
+
+        std::string tempPath = StringLower( path );
+
+        if ( tempPath.compare( tempPath.size() - heroes2AggFileName.size(), heroes2AggFileName.size(), heroes2AggFileName ) == 0 ) {
+            heroes2AggFilePath = path;
+            aggLowerCaseFilePath = std::move( tempPath );
+            break;
+        }
+    }
+
+    if ( heroes2AggFilePath.empty() ) {
+        // The main game resource file is not found.
+        return false;
+    }
+
+    if ( !heroes2_agg.open( heroes2AggFilePath ) ) {
+        return false;
+    }
+
+    if ( !g_midiHeroes2AGG.open( heroes2AggFilePath ) ) {
+        // How is it even possible that for the second time the file is not readable?
+        assert( 0 );
+        return false;
+    }
+
+    // Find "heroes2x.agg" file.
+    std::string heroes2XAggFilePath;
+    fheroes2::replaceStringEnding( aggLowerCaseFilePath, ".agg", "x.agg" );
+
+    for ( const std::string & path : aggFileNames ) {
+        const std::string tempPath = StringLower( path );
+        if ( tempPath == aggLowerCaseFilePath ) {
+            heroes2XAggFilePath = path;
+            break;
+        }
+    }
+
+    if ( !heroes2XAggFilePath.empty() ) {
+        heroes2x_agg.open( heroes2XAggFilePath );
+        g_midiHeroes2xAGG.open( heroes2XAggFilePath );
+    }
+
+    Settings::Get().EnablePriceOfLoyaltySupport( heroes2x_agg.isGood() );
+
+    return true;
 }

@@ -70,18 +70,26 @@ namespace
         return "ux0:data/fheroes2";
 #elif defined( __SWITCH__ )
         return "/switch/fheroes2";
-#elif defined( MACOS_APP_BUNDLE )
-        if ( getenv( "HOME" ) )
-            return System::ConcatePath( System::ConcatePath( getenv( "HOME" ), "Library/Preferences" ), prog );
-
-        return std::string();
 #endif
 
-        if ( getenv( "HOME" ) )
-            return System::ConcatePath( getenv( "HOME" ), std::string( "." ).append( prog ) );
+        const char * homeEnvPath = getenv( "HOME" );
 
-        if ( getenv( "APPDATA" ) )
-            return System::ConcatePath( getenv( "APPDATA" ), prog );
+#if defined( MACOS_APP_BUNDLE )
+        if ( homeEnvPath != nullptr ) {
+            return System::ConcatePath( System::ConcatePath( homeEnvPath, "Library/Preferences" ), prog );
+        }
+
+        return {};
+#endif
+
+        if ( homeEnvPath != nullptr ) {
+            return System::ConcatePath( homeEnvPath, std::string( "." ).append( prog ) );
+        }
+
+        const char * dataEnvPath = getenv( "APPDATA" );
+        if ( dataEnvPath != nullptr ) {
+            return System::ConcatePath( dataEnvPath, prog );
+        }
 
         std::string res;
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -122,15 +130,16 @@ std::string System::ConcatePath( const std::string & str1, const std::string & s
     return temp;
 }
 
-ListDirs System::GetOSSpecificDirectories()
+void System::appendOSSpecificDirectories( std::vector<std::string> & directories )
 {
-    ListDirs dirs;
-
 #if defined( FHEROES2_VITA )
-    dirs.emplace_back( "ux0:app/FHOMM0002" );
+    const char * path = "ux0:app/FHOMM0002";
+    if ( std::find( directories.begin(), directories.end(), path ) == directories.end() ) {
+        directories.emplace_back( path );
+    }
+#else
+    (void)directories;
 #endif
-
-    return dirs;
 }
 
 std::string System::GetConfigDirectory( const std::string & prog )
@@ -165,13 +174,14 @@ std::string System::GetDataDirectory( const std::string & prog )
         return System::ConcatePath( System::ConcatePath( homeEnv, ".local/share" ), prog );
     }
 
-    return std::string();
+    return {};
 #elif defined( MACOS_APP_BUNDLE )
-    if ( getenv( "HOME" ) ) {
-        return System::ConcatePath( System::ConcatePath( getenv( "HOME" ), "Library/Application Support" ), prog );
+    const char * homeEnv = getenv( "HOME" );
+    if ( homeEnv ) {
+        return System::ConcatePath( System::ConcatePath( homeEnv, "Library/Application Support" ), prog );
     }
 
-    return std::string();
+    return {};
 #else
     return GetHomeDirectory( prog );
 #endif

@@ -53,6 +53,9 @@ namespace Battle
     {
     public:
         explicit Catapult( const HeroBase & hero, const Rand::DeterministicRandomGenerator & randomGenerator );
+        Catapult( const Catapult & ) = delete;
+
+        Catapult & operator=( const Catapult & ) = delete;
 
         static fheroes2::Point GetTargetPosition( int target, bool hit );
 

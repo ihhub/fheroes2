@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -260,6 +260,16 @@ namespace fheroes2
 
             description += _( "The nearest town is %{town}." );
             StringReplace( description, "%{town}", castle->GetName() );
+
+            const Heroes * townGuest = castle->GetHeroes().Guest();
+            if ( townGuest != nullptr ) {
+                description += "\n \n";
+                std::string extraLine = _( "This town is occupied by your hero %{hero}." );
+                StringReplace( extraLine, "%{town}", castle->GetName() );
+                StringReplace( extraLine, "%{hero}", townGuest->GetName() );
+
+                description += extraLine;
+            }
 
             return description;
         }
