@@ -51,16 +51,10 @@ de.mo: de.po
 	LANG=de.CP1252 LC_ALL=de.CP1252 LC_CTYPE=de.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
 
-# Norwegian has locale-specific transliteration rules (æ -> ae, etc)
+# Norwegian uses CP1252 in the code currently
 nb.mo: nb.po
-	sed -e 's/æ/ae/g' $< > $<.tmp
-	sed -i~ -e 's/ø/oe/g' $<.tmp
-	sed -i~ -e 's/å/aa/g' $<.tmp
-	sed -i~ -e 's/Æ/Ae/g' $<.tmp
-	sed -i~ -e 's/Ø/Oe/g' $<.tmp
-	sed -i~ -e 's/Å/Aa/g' $<.tmp
-	sed -i~ -e 's/é/e/g' $<.tmp
-	iconv -f utf-8 -t ascii//TRANSLIT $<.tmp > $<.2.tmp
+	iconv -f utf-8 -t CP1252 $< > $<.tmp
+	LANG=nb.CP1252 LC_ALL=nb.CP1252 LC_CTYPE=nb.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
 
 # Italian
