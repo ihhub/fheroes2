@@ -91,7 +91,7 @@ namespace fheroes2
             languages.emplace_back( resourceLanguage );
         }
 
-        const std::set<SupportedLanguage> possibleLanguages{ SupportedLanguage::French, SupportedLanguage::Polish, SupportedLanguage::German,
+        const std::set<SupportedLanguage> possibleLanguages{ SupportedLanguage::French,  SupportedLanguage::Polish,  SupportedLanguage::German,
                                                              SupportedLanguage::Russian, SupportedLanguage::Italian, SupportedLanguage::Norwegian };
 
         for ( const SupportedLanguage language : possibleLanguages ) {
