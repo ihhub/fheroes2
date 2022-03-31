@@ -190,8 +190,8 @@ public:
     int ICNMonh( void ) const;
 
     u32 GetSpriteIndex( void ) const;
-    virtual payment_t GetCost() const;
-    virtual payment_t GetUpgradeCost() const;
+    payment_t GetCost() const;
+    payment_t GetUpgradeCost() const;
     u32 GetDwelling( void ) const;
 
     int GetMonsterSprite() const;

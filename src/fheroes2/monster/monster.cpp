@@ -1033,7 +1033,7 @@ payment_t Monster::GetCost() const
 payment_t Monster::GetUpgradeCost() const
 {
     const Monster upgr = GetUpgrade();
-    const payment_t pay = id != upgr.id ? upgr.Monster::GetCost() - Monster::GetCost() : Monster::GetCost();
+    const payment_t pay = id != upgr.id ? upgr.GetCost() - GetCost() : GetCost();
 
     return pay;
 }

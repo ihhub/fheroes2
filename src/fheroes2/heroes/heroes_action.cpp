@@ -623,7 +623,7 @@ void ActionToMonster( Heroes & hero, s32 dst_index )
         }
     }
     else if ( join.reason == NeutralMonsterJoiningCondition::Reason::ForMoney ) {
-        const int32_t joiningCost = troop.GetCost().gold;
+        const int32_t joiningCost = troop.GetTotalCost().gold;
 
         if ( Dialog::YES == Dialog::ArmyJoinWithCost( troop, join.monsterCount, joiningCost, hero ) ) {
             DEBUG_LOG( DBG_GAME, DBG_INFO, join.monsterCount << " " << troop.GetName() << " join " << hero.GetName() << " for " << joiningCost << " gold." );

@@ -628,7 +628,7 @@ bool ActionSpellVisions( Heroes & hero )
 
             msg += '\n';
             msg.append( _( "\n for a fee of %{gold} gold." ) );
-            StringReplace( msg, "%{gold}", troop.GetCost().gold );
+            StringReplace( msg, "%{gold}", troop.GetTotalCost().gold );
             break;
 
         case NeutralMonsterJoiningCondition::Reason::RunAway:
