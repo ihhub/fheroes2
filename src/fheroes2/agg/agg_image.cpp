@@ -1400,7 +1400,7 @@ namespace
             fheroes2::updateShadow( font[255 - 32], { -1, 1 }, 2 );
         }
     }
-    void generateNorwegianAlphabet() 
+    void generateNorwegianAlphabet()
     {
         // Resize fonts. Use CP1252 until UTF-8 support.
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
@@ -1435,7 +1435,7 @@ namespace
             fheroes2::updateShadow( font[229 - 32], { -1, 2 }, 2 );
 
             // O with / inside.
-            font[216 - 32].resize( font[47].width() + 2 , font[47].height() );
+            font[216 - 32].resize( font[47].width() + 2, font[47].height() );
             font[216 - 32].reset();
             fheroes2::Copy( font[47], 0, 0, font[216 - 32], 0, 0, font[47].width(), font[47].height() );
             fheroes2::Copy( font[56], 10, 0, font[216 - 32], 6, 3, 5, 5 );
@@ -1454,8 +1454,6 @@ namespace
             fheroes2::Copy( font[79], 6, 5, font[248 - 32], 6, 5, 1, 1 );
             fheroes2::Copy( font[88], 1, 6, font[248 - 32], 1, 6, 2, 1 );
             fheroes2::Copy( font[88], 7, 0, font[248 - 32], 7, 0, 2, 1 );
-
-
             font[248 - 32].setPosition( font[79].x(), font[79].y() );
             fheroes2::updateShadow( font[248 - 32], { -1, 2 }, 2 );
 
