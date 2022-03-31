@@ -81,8 +81,8 @@ nb.mo: nb.po
 
 # Italian
 it.mo: it.po
-	sed -e 'y/àèéìòùÀÈÉÌÒÙ/aeeiouAEEIOU/' $< > $<.tmp
-	iconv -f utf-8 -t ascii//TRANSLIT $<.tmp > $<.2.tmp
+	iconv -f utf-8 -t CP1252 $< > $<.tmp
+	LANG=it.CP1252 LC_ALL=it.CP1252 LC_CTYPE=it.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
 
 # All other languages: drop accents transliterated with `"` (which breaks translation file format)
