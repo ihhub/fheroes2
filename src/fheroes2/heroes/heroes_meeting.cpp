@@ -82,6 +82,8 @@ namespace
 class MeetingArmyBar : public ArmyBar
 {
 public:
+    using ArmyBar::RedrawItem;
+
     explicit MeetingArmyBar( Army * army )
         : ArmyBar( army, true, false, false )
     {}
@@ -142,6 +144,8 @@ private:
 class MeetingArtifactBar : public ArtifactsBar
 {
 public:
+    using ArtifactsBar::RedrawItem;
+
     explicit MeetingArtifactBar( const Heroes * hero )
         : ArtifactsBar( hero, true, false, false, false, nullptr )
     {}

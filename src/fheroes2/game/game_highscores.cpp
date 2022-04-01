@@ -29,7 +29,6 @@
 
 #include "agg.h"
 #include "agg_image.h"
-#include "audio.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -477,11 +476,6 @@ fheroes2::GameMode Game::HighScores()
     HGSData hgs;
 
     const std::string highScoreDataPath = System::ConcatePath( GetSaveDir(), "fheroes2.hgs" );
-
-    // Stop all sounds, but not the music
-    Mixer::Stop();
-
-    AGG::PlayMusic( MUS::MAINMENU, true, true );
 
     if ( !hgs.Load( highScoreDataPath ) ) {
         // Unable to load the file. Let's populate with the default values.

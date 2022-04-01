@@ -72,6 +72,10 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell );
 class CastleIndexListBox : public Interface::ListBox<s32>
 {
 public:
+    using Interface::ListBox<s32>::ActionListDoubleClick;
+    using Interface::ListBox<s32>::ActionListSingleClick;
+    using Interface::ListBox<s32>::ActionListPressRight;
+
     CastleIndexListBox( const fheroes2::Rect & area, const fheroes2::Point & offset, int & res, const int townFrameIcnId, const int listBoxIcnId )
         : Interface::ListBox<int32_t>( offset )
         , result( res )
@@ -624,7 +628,7 @@ bool ActionSpellVisions( Heroes & hero )
 
             msg += '\n';
             msg.append( _( "\n for a fee of %{gold} gold." ) );
-            StringReplace( msg, "%{gold}", troop.GetCost().gold );
+            StringReplace( msg, "%{gold}", troop.GetTotalCost().gold );
             break;
 
         case NeutralMonsterJoiningCondition::Reason::RunAway:

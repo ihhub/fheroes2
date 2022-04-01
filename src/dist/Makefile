@@ -1,6 +1,6 @@
 ###########################################################################
 #   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
-#   Copyright (C) 2021                                                    #
+#   Copyright (C) 2021 - 2022                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -24,13 +24,13 @@ endif
 
 TARGET := fheroes2
 LIBENGINE := ../engine/libengine.a
-CFLAGS := $(CFLAGS) -I../engine
+CCFLAGS := $(CCFLAGS) -I../engine
 
 LIBENGINE := $(LIBENGINE) ../thirdparty/libsmacker/libsmacker.a
-CFLAGS := $(CFLAGS) -I../thirdparty/libsmacker
+CCFLAGS := $(CCFLAGS) -I../thirdparty/libsmacker
 
 ifdef PREFIX
-CFLAGS := $(CFLAGS) -I$(PREFIX)/include
+CCFLAGS := $(CCFLAGS) -I$(PREFIX)/include
 endif
 
 ifeq ($(PLATFORM), mingw)
@@ -67,7 +67,7 @@ $(RES): $(RC)
 VPATH := $(SOURCEDIR)
 
 %.o: %.cpp
-	$(CXX) -c -MD $(addprefix -I, $(SOURCEDIR)) $< $(CFLAGS)
+	$(CXX) -c -MD $(addprefix -I, $(SOURCEDIR)) $< $(CCFLAGS) $(CXXFLAGS)
 
 include $(wildcard *.d)
 

@@ -183,6 +183,24 @@ namespace
             }
         }
     }
+
+    bool preferAttackFromHead( const Battle::Unit & attacker, const int /* theme */ )
+    {
+        if ( !attacker.isWide() ) {
+            return true;
+        }
+
+        return true;
+
+        /* TODO: example code for implementing direct up/down attacks
+        if ( attacker.isReflect() ) {
+            return theme != Cursor::SWORD_TOPRIGHT && theme != Cursor::SWORD_BOTTOMRIGHT;
+        }
+        else {
+            return theme != Cursor::SWORD_TOPLEFT && theme != Cursor::SWORD_BOTTOMLEFT;
+        }
+        */
+    }
 }
 
 namespace Battle
@@ -205,6 +223,10 @@ namespace Battle
     class StatusListBox : public ::Interface::ListBox<std::string>
     {
     public:
+        using ::Interface::ListBox<std::string>::ActionListDoubleClick;
+        using ::Interface::ListBox<std::string>::ActionListSingleClick;
+        using ::Interface::ListBox<std::string>::ActionListPressRight;
+
         StatusListBox()
             : openlog( false )
         {}
@@ -892,24 +914,53 @@ void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUni
         return;
     }
 
-    const int32_t validUnitCount = static_cast<int32_t>( std::count_if( orders->begin(), orders->end(), []( const Unit * unit ) { return unit->isValid(); } ) );
+    const int32_t validUnitCount = static_cast<int32_t>( std::count_if( orders->begin(), orders->end(), []( const Unit * unit ) {
+        assert( unit != nullptr );
+        return unit->isValid();
+    } ) );
 
-    int32_t ox = area.x + ( area.width - armyOrderMonsterIconSize * validUnitCount ) / 2;
-    int32_t oy = area.y;
+    const int32_t maximumUnitsToDraw = area.width / armyOrderMonsterIconSize;
 
-    fheroes2::Rect::x = ox;
-    fheroes2::Rect::y = oy;
+    int32_t offsetX = area.x;
+
+    if ( validUnitCount > maximumUnitsToDraw ) {
+        offsetX += ( area.width - armyOrderMonsterIconSize * maximumUnitsToDraw ) / 2;
+    }
+    else {
+        offsetX += ( area.width - armyOrderMonsterIconSize * validUnitCount ) / 2;
+    }
+
+    fheroes2::Rect::x = offsetX;
+    fheroes2::Rect::y = area.y;
     fheroes2::Rect::height = armyOrderMonsterIconSize;
 
     rects.clear();
 
-    for ( Units::const_iterator it = orders->begin(); it != orders->end(); ++it ) {
-        if ( *it && ( *it )->isValid() ) {
-            rects.emplace_back( *it, fheroes2::Rect( ox, oy, armyOrderMonsterIconSize, armyOrderMonsterIconSize ) );
-            RedrawUnit( rects.back().second, **it, ( **it ).GetColor() == army_color2, current == *it, currentUnitColor, output );
-            ox += armyOrderMonsterIconSize;
-            fheroes2::Rect::width += armyOrderMonsterIconSize;
+    int32_t unitsDrawn = 0;
+    int32_t unitsProcessed = 0;
+
+    for ( const Unit * unit : *orders ) {
+        if ( unitsDrawn == maximumUnitsToDraw ) {
+            break;
         }
+
+        assert( unit != nullptr );
+        if ( !unit->isValid() ) {
+            continue;
+        }
+
+        if ( unit->Modes( Battle::TR_MOVED ) && ( validUnitCount - unitsProcessed > maximumUnitsToDraw ) ) {
+            ++unitsProcessed;
+            continue;
+        }
+
+        rects.emplace_back( unit, fheroes2::Rect( offsetX, area.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize ) );
+        RedrawUnit( rects.back().second, *unit, unit->GetColor() == army_color2, current == unit, currentUnitColor, output );
+        offsetX += armyOrderMonsterIconSize;
+        fheroes2::Rect::width += armyOrderMonsterIconSize;
+
+        ++unitsDrawn;
+        ++unitsProcessed;
     }
 }
 
@@ -1684,7 +1735,8 @@ void Battle::Interface::RedrawCover()
                 assert( 0 );
             }
 
-            const Position pos = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) );
+            const Position pos
+                = Position::GetReachable( *_currentUnit, Board::GetIndexDirection( index_pos, direction ), preferAttackFromHead( *_currentUnit, cursorType ) );
 
             assert( pos.GetHead() != nullptr );
 
@@ -1731,7 +1783,7 @@ void Battle::Interface::RedrawCover()
         const int spellPower = ( currentCommander == nullptr ) ? 0 : currentCommander->GetPower();
 
         for ( const Cell * highlightCell : highlightCells ) {
-            bool isApplicable = highlightCell->isPassable1( false );
+            bool isApplicable = highlightCell->isPassable( false );
 
             if ( isApplicable ) {
                 const Unit * highlightedUnit = highlightCell->GetUnit();
@@ -2217,7 +2269,7 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
 
             assert( unitToTeleport != nullptr );
 
-            if ( !b_stats && cell->isPassable3( *unitToTeleport, false ) ) {
+            if ( !b_stats && cell->isPassableForUnit( *unitToTeleport ) ) {
                 statusMsg = _( "Teleport here" );
                 return Cursor::SP_TELEPORT;
             }
@@ -2521,7 +2573,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             if ( le.MouseClickLeft() )
                 MouseLeftClickBoardAction( themes, *cell, a );
             else if ( le.MousePressRight() )
-                MousePressRightBoardAction( themes, *cell );
+                MousePressRightBoardAction( *cell );
         }
         else {
             le.MouseClickLeft();
@@ -2707,7 +2759,7 @@ void Battle::Interface::ButtonSkipAction( Actions & a )
     }
 }
 
-void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell & cell ) const
+void Battle::Interface::MousePressRightBoardAction( const Cell & cell ) const
 {
     const Unit * unitOnCell = cell.GetUnit();
 
@@ -2722,16 +2774,29 @@ void Battle::Interface::MousePressRightBoardAction( u32 /*themes*/, const Cell &
     }
 }
 
-void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell, Actions & a )
+void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell, Actions & a )
 {
     const int32_t index = cell.GetIndex();
     const Unit * b = cell.GetUnit();
+
+    auto fixupDestinationCell = []( const Unit & unit, const int32_t dst, const bool tryHeadFirst ) {
+        // Only wide units may need this fixup
+        if ( !unit.isWide() ) {
+            return dst;
+        }
+
+        const Position pos = Position::GetReachable( unit, dst, tryHeadFirst );
+
+        assert( pos.GetHead() != nullptr && pos.GetTail() != nullptr );
+
+        return pos.GetHead()->GetIndex();
+    };
 
     if ( _currentUnit ) {
         switch ( themes ) {
         case Cursor::WAR_FLY:
         case Cursor::WAR_MOVE:
-            a.push_back( Command( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), Board::FixupDestinationCell( *_currentUnit, index ) ) );
+            a.push_back( Command( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), fixupDestinationCell( *_currentUnit, index, true ) ) );
             a.push_back( Command( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
             humanturn_exit = true;
             break;
@@ -2746,7 +2811,7 @@ void Battle::Interface::MouseLeftClickBoardAction( u32 themes, const Cell & cell
             const int dir = GetDirectionFromCursorSword( themes );
 
             if ( enemy && Board::isValidDirection( index, dir ) ) {
-                const int32_t move = Board::FixupDestinationCell( *_currentUnit, Board::GetIndexDirection( index, dir ) );
+                const int32_t move = fixupDestinationCell( *_currentUnit, Board::GetIndexDirection( index, dir ), preferAttackFromHead( *_currentUnit, themes ) );
 
                 if ( _currentUnit->GetHeadIndex() != move ) {
                     a.push_back( Command( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), move ) );

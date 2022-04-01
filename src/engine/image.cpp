@@ -1449,8 +1449,8 @@ namespace fheroes2
 
         const bool isValidRoi = roi.width > 0 && roi.height > 0;
 
-        const int32_t minX = isValidRoi ? roi.x : 0;
-        const int32_t minY = isValidRoi ? roi.y : 0;
+        const int32_t minX = isValidRoi ? std::max( roi.x, 0 ) : 0;
+        const int32_t minY = isValidRoi ? std::max( roi.y, 0 ) : 0;
         int32_t maxX = isValidRoi ? roi.x + roi.width : width;
         int32_t maxY = isValidRoi ? roi.y + roi.height : height;
 

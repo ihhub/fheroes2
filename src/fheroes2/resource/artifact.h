@@ -168,7 +168,7 @@ public:
         : id( art >= 0 && art < UNKNOWN ? art : UNKNOWN )
         , ext( 0 )
     {
-        // Do nothing;
+        // Do nothing.
     }
 
     bool operator==( const Spell & ) const;
@@ -313,6 +313,9 @@ public:
 class ArtifactsBar : public Interface::ItemsActionBar<Artifact>
 {
 public:
+    using Interface::ItemsActionBar<Artifact>::RedrawItem;
+    using Interface::ItemsActionBar<Artifact>::ActionBarRightMouseHold;
+
     ArtifactsBar( const Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar );
 
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;

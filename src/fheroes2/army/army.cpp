@@ -446,7 +446,7 @@ void Troops::UpgradeTroops( const Castle & castle )
 {
     for ( iterator it = begin(); it != end(); ++it )
         if ( ( *it )->isValid() ) {
-            payment_t payment = ( *it )->GetUpgradeCost();
+            payment_t payment = ( *it )->GetTotalUpgradeCost();
             Kingdom & kingdom = castle.GetKingdom();
 
             if ( castle.GetRace() == ( *it )->GetRace() && castle.isBuild( ( *it )->GetUpgrade().GetDwelling() ) && kingdom.AllowPayment( payment ) ) {
@@ -1089,7 +1089,7 @@ double Army::GetStrength() const
     }
 
     if ( commander ) {
-        result += commander->GetSpellcastStrength( result );
+        result += commander->GetMagicStrategicValue( result );
     }
 
     return result;

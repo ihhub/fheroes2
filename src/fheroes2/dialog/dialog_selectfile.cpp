@@ -87,6 +87,10 @@ bool RedrawExtraInfo( const fheroes2::Point &, const std::string &, const std::s
 class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
 {
 public:
+    using Interface::ListBox<Maps::FileInfo>::ActionListDoubleClick;
+    using Interface::ListBox<Maps::FileInfo>::ActionListSingleClick;
+    using Interface::ListBox<Maps::FileInfo>::ActionListPressRight;
+
     explicit FileInfoListBox( const fheroes2::Point & pt )
         : Interface::ListBox<Maps::FileInfo>( pt )
         , _isDoubleClicked( false )

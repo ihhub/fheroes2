@@ -499,13 +499,13 @@ double Castle::getVisitValue( const Heroes & hero ) const
     Funds potentialFunds = GetKingdom().GetFunds();
 
     for ( size_t i = 0; i < futureArmy.Size(); ++i ) {
-        Troop * monster = futureArmy.GetTroop( i );
-        if ( monster != nullptr && monster->isValid() ) {
-            const payment_t payment = monster->GetUpgradeCost();
+        Troop * troop = futureArmy.GetTroop( i );
+        if ( troop != nullptr && troop->isValid() ) {
+            const payment_t payment = troop->GetTotalUpgradeCost();
 
-            if ( GetRace() == monster->GetRace() && isBuild( monster->GetUpgrade().GetDwelling() ) && potentialFunds >= payment ) {
+            if ( GetRace() == troop->GetRace() && isBuild( troop->GetUpgrade().GetDwelling() ) && potentialFunds >= payment ) {
                 potentialFunds -= payment;
-                monster->Upgrade();
+                troop->Upgrade();
             }
         }
     }
@@ -640,7 +640,10 @@ void Castle::ActionNewWeek()
     }
 }
 
-void Castle::ActionNewMonth() {}
+void Castle::ActionNewMonth()
+{
+    // Do nothing.
+}
 
 void Castle::ChangeColor( int cl )
 {
@@ -805,7 +808,7 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
         count = dwelling[dwellingIndex];
 
     // buy
-    const payment_t paymentCosts = troop.GetCost();
+    const payment_t paymentCosts = troop.GetTotalCost();
     Kingdom & kingdom = GetKingdom();
 
     if ( !kingdom.AllowPayment( paymentCosts ) )
@@ -2372,15 +2375,6 @@ Castle * VecCastles::GetFirstCastle( void ) const
 {
     const_iterator it = std::find_if( begin(), end(), []( const Castle * castle ) { return castle->isCastle(); } );
     return end() != it ? *it : nullptr;
-}
-
-void VecCastles::SortByBuildingValue()
-{
-    std::sort( begin(), end(), []( const Castle * left, const Castle * right ) {
-        if ( left && right )
-            return left->getBuildingValue() > right->getBuildingValue();
-        return right == nullptr;
-    } );
 }
 
 void VecCastles::ChangeColors( int col1, int col2 )

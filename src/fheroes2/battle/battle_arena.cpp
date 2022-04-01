@@ -946,7 +946,10 @@ int32_t Battle::Arena::GetFreePositionNearHero( const int heroColor ) const
     assert( !cellIds.empty() );
 
     for ( const int cellId : cellIds ) {
-        if ( board[cellId].isPassable1( true ) && board[cellId].GetUnit() == nullptr ) {
+        if ( board[cellId].isPassable( true ) ) {
+            // TODO: remove this temporary assertion
+            assert( board[cellId].GetUnit() == nullptr );
+
             return cellId;
         }
     }

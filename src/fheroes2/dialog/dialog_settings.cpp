@@ -40,6 +40,10 @@
 class SettingsListBox : public Interface::ListBox<u32>
 {
 public:
+    using Interface::ListBox<u32>::ActionListDoubleClick;
+    using Interface::ListBox<u32>::ActionListSingleClick;
+    using Interface::ListBox<u32>::ActionListPressRight;
+
     SettingsListBox( const fheroes2::Point & pt, bool f )
         : Interface::ListBox<u32>( pt )
         , readonly( f )

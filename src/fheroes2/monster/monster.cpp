@@ -270,6 +270,8 @@ double Monster::GetMonsterStrength( int attack, int defense ) const
         // Ghost's ability to increase the numbers
         monsterSpecial += 2;
         break;
+    default:
+        break;
     }
 
     // Higher speed gives initiative advantage/first attack. Remap speed value to -0.2...+0.15, AVERAGE is 0

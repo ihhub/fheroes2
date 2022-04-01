@@ -47,6 +47,10 @@ namespace
     class ResolutionList : public Interface::ListBox<fheroes2::Size>
     {
     public:
+        using Interface::ListBox<fheroes2::Size>::ActionListSingleClick;
+        using Interface::ListBox<fheroes2::Size>::ActionListPressRight;
+        using Interface::ListBox<fheroes2::Size>::ActionListDoubleClick;
+
         explicit ResolutionList( const fheroes2::Point & offset )
             : Interface::ListBox<fheroes2::Size>( offset )
             , _isDoubleClicked( false )

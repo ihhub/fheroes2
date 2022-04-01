@@ -1,6 +1,6 @@
 ###########################################################################
 #   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
-#   Copyright (C) 2021                                                    #
+#   Copyright (C) 2021 - 2022                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -20,25 +20,51 @@
 
 TARGET := fheroes2
 
+#
+# Common build options for fheroes2 and third-party libraries
+#
+
+# Common flags for both C and C++ compilers
+CCFLAGS := -fsigned-char -pthread
+# Flags for the C compiler
+CFLAGS := $(CFLAGS)
+# Flags for the C++ compiler
+CXXFLAGS := $(CXXFLAGS)
+# Flags for the linker
+LDFLAGS := $(LDFLAGS) -pthread
+
 ifdef FHEROES2_WITH_DEBUG
-CFLAGS := $(CFLAGS) -O0 -g -pedantic -DWITH_DEBUG
+CCFLAGS := $(CCFLAGS) -O0 -g
 else
-CFLAGS := -O3 $(CFLAGS)
+CCFLAGS := $(CCFLAGS) -O3
 endif
 
-CFLAGS := $(CFLAGS) -fsigned-char -pthread
-CXXFLAGS := -std=c++11 $(CFLAGS)
-LDFLAGS := $(LDFLAGS) -pthread
-LIBS := -lz
+#
+# Build options for third-party libraries
+#
 
+CCFLAGS_TP := $(CCFLAGS)
 CFLAGS_TP := $(CFLAGS)
 CXXFLAGS_TP := $(CXXFLAGS)
 
-# Add -Wconversion -Wsign-conversion -Weffc++ -Woverloaded-virtual -Wextra-semi flags back once we fix all other warnings!
-CFLAGS := $(CXXFLAGS) -Wall -Wextra -Wpedantic -Wfloat-conversion -Wshadow -Wfloat-equal -Wredundant-decls -Wdouble-promotion -Wunused -Wuninitialized
+#
+# Build options for fheroes2
+#
+
+CXXFLAGS := $(CXXFLAGS) -std=c++11
+LIBS := -lz
+
+ifdef FHEROES2_WITH_DEBUG
+CCFLAGS := $(CCFLAGS) -DWITH_DEBUG
+endif
+
+# TODO: Add -Wconversion -Wsign-conversion -Wextra-semi flags once we fix all the corresponding code smells
+# TODO: Add -Wswitch-default -Wold-style-cast flags once SDL headers can be compiled with them
+CCFLAGS := $(CCFLAGS) -pedantic -Wall -Wextra -Wcast-align -Wctor-dtor-privacy -Wdouble-promotion -Wfloat-conversion -Wfloat-equal \
+           -Winit-self -Woverloaded-virtual -Wredundant-decls -Wshadow -Wundef -Wuninitialized -Wunused
 
 ifdef FHEROES2_STRICT_COMPILATION
-CFLAGS := $(CFLAGS) -Werror
+CCFLAGS := $(CCFLAGS) -Werror
 endif
 
 ifdef FHEROES2_WITH_SDL1
@@ -56,7 +82,7 @@ SDL_LIBS := $(SDL_LIBS) -lSDL2_mixer
 endif
 
 ifdef FHEROES2_WITH_IMAGE
-CFLAGS := $(CFLAGS) -DWITH_IMAGE $(shell libpng-config --cflags)
+CCFLAGS := $(CCFLAGS) -DWITH_IMAGE $(shell libpng-config --cflags)
 ifdef FHEROES2_WITH_SDL1
 SDL_LIBS := $(SDL_LIBS) -lSDL_image $(shell libpng-config --libs)
 else
@@ -93,15 +119,15 @@ endif
 
 include Makefile.$(PLATFORM)
 
-CFLAGS := $(SDL_FLAGS) $(CFLAGS)
+CCFLAGS := $(CCFLAGS) $(SDL_FLAGS)
 LIBS := $(SDL_LIBS) $(LIBS)
 
-export CC CXX AR LINK WINDRES LDFLAGS CFLAGS LIBS PLATFORM
+export CC CXX AR LINK WINDRES CCFLAGS CFLAGS CXXFLAGS LDFLAGS LIBS PLATFORM
 
 .PHONY: all clean
 
 all:
-	$(MAKE) -C thirdparty/libsmacker CFLAGS="$(CFLAGS_TP)"
+	$(MAKE) -C thirdparty/libsmacker CCFLAGS="$(CCFLAGS_TP)" CFLAGS="$(CFLAGS_TP)" CXXFLAGS="$(CXXFLAGS_TP)"
 	$(MAKE) -C engine
 	$(MAKE) -C dist
 ifdef FHEROES2_WITH_TOOLS

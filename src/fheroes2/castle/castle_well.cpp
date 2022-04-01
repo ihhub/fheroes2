@@ -43,6 +43,8 @@
 
 namespace
 {
+    const int32_t bottomBarOffsetY = 461;
+
     uint32_t HowManyRecruitMonster( const Castle & castle, Troops & tempArmy, const uint32_t dw, const Funds & add, Funds & res )
     {
         const Monster ms( castle.GetRace(), castle.GetActualDwelling( dw ) );
@@ -111,11 +113,11 @@ void Castle::OpenWell( void )
 
     // button exit
     dst_pt.x = cur_pt.x + 578;
-    dst_pt.y = cur_pt.y + 461;
+    dst_pt.y = cur_pt.y + bottomBarOffsetY;
     fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ICN::WELLXTRA, 0, 1 );
 
     dst_pt.x = cur_pt.x;
-    dst_pt.y = cur_pt.y + 461;
+    dst_pt.y = cur_pt.y + bottomBarOffsetY;
     fheroes2::Button buttonMax( dst_pt.x, dst_pt.y, ICN::BUYMAX, 0, 1 );
 
     const fheroes2::Rect rectMonster1( cur_pt.x + 20, cur_pt.y + 18, 288, 124 );
@@ -247,20 +249,24 @@ void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vect
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLBKG, 0 ), display, cur_pt.x, cur_pt.y );
 
-    fheroes2::Text text;
-    fheroes2::Point dst_pt;
     fheroes2::Point pt;
 
     const fheroes2::FontType statsFontType = fheroes2::FontType::smallWhite();
 
     const fheroes2::Sprite & button = fheroes2::AGG::GetICN( ICN::BUYMAX, 0 );
-    const fheroes2::Rect src_rt( 0, 461, button.width(), 19 );
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLBKG, 0 ), src_rt.x, src_rt.y, display, cur_pt.x + button.width() + 1, cur_pt.y + 461, src_rt.width, src_rt.height );
-    fheroes2::Fill( display, cur_pt.x + button.width(), cur_pt.y + 461, 1, src_rt.height, 0 );
+    const fheroes2::Rect src_rt( 0, bottomBarOffsetY, button.width(), 19 );
 
-    text.set( _( "Town Population Information and Statistics" ), fheroes2::FontType() );
-    dst_pt.x = cur_pt.x + 315 - text.width() / 2;
-    dst_pt.y = cur_pt.y + 464;
+    // The original ICN::WELLBKG image has incorrect bottom message bar with no yellow outline. Also the original graphics did not have MAX button.
+    const int32_t allowedBottomBarWidth = 578 - button.width();
+    const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
+
+    fheroes2::Blit( bottomBar, 0, 0, display, cur_pt.x + button.width(), cur_pt.y + bottomBarOffsetY, allowedBottomBarWidth / 2, bottomBar.height() );
+    fheroes2::Blit( bottomBar, bottomBar.width() - ( allowedBottomBarWidth - allowedBottomBarWidth / 2 ) - 1, 0, display,
+                    cur_pt.x + button.width() + allowedBottomBarWidth / 2, cur_pt.y + bottomBarOffsetY, allowedBottomBarWidth - allowedBottomBarWidth / 2,
+                    bottomBar.height() );
+
+    fheroes2::Text text( _( "Town Population Information and Statistics" ), fheroes2::FontType() );
+    fheroes2::Point dst_pt( cur_pt.x + 315 - text.width() / 2, cur_pt.y + 464 );
     text.draw( dst_pt.x, dst_pt.y, display );
 
     u32 dw = DWELLING_MONSTER1;
