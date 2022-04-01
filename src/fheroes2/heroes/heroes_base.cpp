@@ -29,8 +29,6 @@
 #include "castle.h"
 #include "heroes_base.h"
 #include "kingdom.h"
-#include "luck.h"
-#include "morale.h"
 #include "race.h"
 #include "serialize.h"
 #include "settings.h"
@@ -238,6 +236,15 @@ int HeroBase::GetKnowledgeModificator( std::string * strs ) const
 int HeroBase::GetMoraleModificator( std::string * strs ) const
 {
     int result = 0;
+
+    // check castle modificator
+    const Castle * castle = inCastle();
+    if ( castle )
+        result += castle->GetMoraleModificator( strs );
+
+    // army modificator
+    result += GetArmy().GetMoraleModificator( strs );
+
     if ( strs == nullptr ) {
         result = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::MORALE );
         if ( Modes( Heroes::SHIPMASTER ) ) {
@@ -245,11 +252,6 @@ int HeroBase::GetMoraleModificator( std::string * strs ) const
         }
 
         result -= bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactCurseType::MORALE );
-
-        const Artifact maxMoraleArtifact = bag_artifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_MORALE );
-        if ( maxMoraleArtifact.isValid() ) {
-            result = Morale::BLOOD;
-        }
     }
     else {
         result = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::MORALE, *strs );
@@ -258,23 +260,7 @@ int HeroBase::GetMoraleModificator( std::string * strs ) const
         }
 
         result -= bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactCurseType::MORALE, *strs );
-
-        const Artifact maxMoraleArtifact = bag_artifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_MORALE );
-        if ( maxMoraleArtifact.isValid() ) {
-            *strs += maxMoraleArtifact.GetName();
-            *strs += _( " gives you maximum morale" );
-            result = Morale::BLOOD;
-        }
     }
-
-    // check castle modificator
-    const Castle * castle = inCastle();
-
-    if ( castle )
-        result += castle->GetMoraleModificator( strs );
-
-    // army modificator
-    result += GetArmy().GetMoraleModificator( strs );
 
     return result;
 }
@@ -282,15 +268,19 @@ int HeroBase::GetMoraleModificator( std::string * strs ) const
 int HeroBase::GetLuckModificator( std::string * strs ) const
 {
     int result = 0;
+
+    // check castle modificator
+    const Castle * castle = inCastle();
+    if ( castle )
+        result += castle->GetLuckModificator( strs );
+
+    // army modificator
+    result += GetArmy().GetLuckModificator( strs );
+
     if ( strs == nullptr ) {
         result = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::LUCK );
         if ( Modes( Heroes::SHIPMASTER ) ) {
             result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_BATTLE_LUCK_BOOST );
-        }
-
-        const Artifact maxLuckArtifact = bag_artifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_LUCK );
-        if ( maxLuckArtifact.isValid() ) {
-            result = Luck::IRISH;
         }
     }
     else {
@@ -298,23 +288,7 @@ int HeroBase::GetLuckModificator( std::string * strs ) const
         if ( Modes( Heroes::SHIPMASTER ) ) {
             result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_BATTLE_LUCK_BOOST, *strs );
         }
-
-        const Artifact maxLuckArtifact = bag_artifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_LUCK );
-        if ( maxLuckArtifact.isValid() ) {
-            *strs += maxLuckArtifact.GetName();
-            *strs += _( " gives you maximum luck" );
-            result = Luck::IRISH;
-        }
     }
-
-    // check castle modificator
-    const Castle * castle = inCastle();
-
-    if ( castle )
-        result += castle->GetLuckModificator( strs );
-
-    // army modificator
-    result += GetArmy().GetLuckModificator( strs );
 
     return result;
 }

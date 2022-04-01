@@ -613,9 +613,6 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
 {
     int result = Morale::NORMAL;
 
-    // bonus artifact
-    result += GetMoraleModificator( strs );
-
     // bonus leadership
     result += Skill::GetLeadershipModifiers( GetLevelSkill( Skill::Secondary::LEADERSHIP ), strs );
 
@@ -624,7 +621,19 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
                                                        MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
     result += ObjectVisitedModifiersResult( objectTypes, *this, strs );
 
-    // result
+    // bonus artifact
+    result += GetMoraleModificator( strs );
+
+    // A special artifact ability presence must be the last check.
+    const Artifact maxMoraleArtifact = bag_artifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_MORALE );
+    if ( maxMoraleArtifact.isValid() ) {
+        if ( strs != nullptr ) {
+            *strs += maxMoraleArtifact.GetName();
+            *strs += _( " gives you maximum morale" );
+        }
+        result = Morale::BLOOD;
+    }
+
     return Morale::Normalize( result );
 }
 
@@ -637,15 +646,24 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
 {
     int result = Luck::NORMAL;
 
-    // bonus artifact
-    result += GetLuckModificator( strs );
-
     // bonus luck
     result += Skill::GetLuckModifiers( GetLevelSkill( Skill::Secondary::LUCK ), strs );
 
     // object visited
     const std::vector<MP2::MapObjectType> objectTypes{ MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
     result += ObjectVisitedModifiersResult( objectTypes, *this, strs );
+
+    // bonus artifact
+    result += GetLuckModificator( strs );
+
+    const Artifact maxLuckArtifact = bag_artifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_LUCK );
+    if ( maxLuckArtifact.isValid() ) {
+        if ( strs != nullptr ) {
+            *strs += maxLuckArtifact.GetName();
+            *strs += _( " gives you maximum luck" );
+        }
+        result = Luck::IRISH;
+    }
 
     return Luck::Normalize( result );
 }
