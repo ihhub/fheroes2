@@ -1769,7 +1769,7 @@ namespace
             updateSmallFontLetterShadow( font[229 - 32] );
 
             // O with / inside.
-            font[216 - 32].resize( font[47].width() + 2, font[47].height() );
+            font[216 - 32].resize( font[47].width(), font[47].height() );
             font[216 - 32].reset();
             fheroes2::Copy( font[47], 0, 0, font[216 - 32], 0, 0, font[47].width(), font[47].height() );
             fheroes2::Copy( font[56], 6, 0, font[216 - 32], 3, 2, 3, 3 );
@@ -1798,7 +1798,7 @@ namespace
             updateSmallFontLetterShadow( font[198 - 32] );
 
             // a attached to e.
-            font[230 - 32].resize( font[65].width() + 4, font[65].height() );
+            font[230 - 32].resize( font[65].width() + 3, font[65].height() );
             font[230 - 32].reset();
             fheroes2::Copy( font[65], 0, 0, font[230 - 32], 0, 0, font[65].width(), font[65].height() );
             fheroes2::Copy( font[69], 2, 0, font[230 - 32], 6, 0, font[69].width() - 2, font[69].height() );
@@ -1823,7 +1823,7 @@ namespace
             font[233 - 32].setPosition( font[69].x(), font[69].y() - 3 );
             updateSmallFontLetterShadow( font[233 - 32] );
 
-            // Proper lowercase k. Needs to have a smaller width by -1 after change.
+            // Proper lowercase k. TODO: Needs to have a smaller width by -1 after change.
             fheroes2::FillTransform( font[75], 3, 1, 5, 7, 1 );
             fheroes2::Copy( font[56], 6, 0, font[75], 3, 2, 3, 3 );
             fheroes2::Copy( font[65], 2, font[65].height() - 2, font[75], 5, 6, 2, 1 );
