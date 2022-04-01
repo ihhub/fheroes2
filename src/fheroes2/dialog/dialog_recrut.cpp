@@ -104,7 +104,7 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32
 
     // text recruit monster
     std::string str = _( "Recruit %{name}" );
-    StringReplace( str, "%{name}", monster.GetMultiName() );
+    StringReplace( str, "%{name}", Translation::StringLower( monster.GetMultiName() ) );
     Text text( str, Font::YELLOW_BIG );
     fheroes2::Point dst_pt( pos.x + ( pos.width - text.w() ) / 2, pos.y + 25 );
     text.Blit( dst_pt.x, dst_pt.y );

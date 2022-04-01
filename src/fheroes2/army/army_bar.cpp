@@ -336,7 +336,7 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
     }
     else if ( troop.isValid() ) {
         msg = _( "Select %{name}" );
-        StringReplace( msg, "%{name}", troop.GetName() );
+        StringReplace( msg, "%{name}", Translation::StringLower( troop.GetName() ) );
     }
 
     return false;
