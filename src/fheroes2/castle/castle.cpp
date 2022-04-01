@@ -499,13 +499,13 @@ double Castle::getVisitValue( const Heroes & hero ) const
     Funds potentialFunds = GetKingdom().GetFunds();
 
     for ( size_t i = 0; i < futureArmy.Size(); ++i ) {
-        Troop * monster = futureArmy.GetTroop( i );
-        if ( monster != nullptr && monster->isValid() ) {
-            const payment_t payment = monster->GetUpgradeCost();
+        Troop * troop = futureArmy.GetTroop( i );
+        if ( troop != nullptr && troop->isValid() ) {
+            const payment_t payment = troop->GetTotalUpgradeCost();
 
-            if ( GetRace() == monster->GetRace() && isBuild( monster->GetUpgrade().GetDwelling() ) && potentialFunds >= payment ) {
+            if ( GetRace() == troop->GetRace() && isBuild( troop->GetUpgrade().GetDwelling() ) && potentialFunds >= payment ) {
                 potentialFunds -= payment;
-                monster->Upgrade();
+                troop->Upgrade();
             }
         }
     }
@@ -808,7 +808,7 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
         count = dwelling[dwellingIndex];
 
     // buy
-    const payment_t paymentCosts = troop.GetCost();
+    const payment_t paymentCosts = troop.GetTotalCost();
     Kingdom & kingdom = GetKingdom();
 
     if ( !kingdom.AllowPayment( paymentCosts ) )

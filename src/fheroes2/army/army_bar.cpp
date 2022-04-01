@@ -535,13 +535,13 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
              castle && castle->GetRace() == troop.GetRace() && castle->isBuild( troop.GetUpgrade().GetDwelling() ) ) {
             flags |= Dialog::UPGRADE;
 
-            if ( !world.GetKingdom( _army->GetColor() ).AllowPayment( troop.GetUpgradeCost() ) )
+            if ( !world.GetKingdom( _army->GetColor() ).AllowPayment( troop.GetTotalUpgradeCost() ) )
                 flags |= Dialog::UPGRADE_DISABLE;
         }
 
         switch ( Dialog::ArmyInfo( troop, flags ) ) {
         case Dialog::UPGRADE:
-            world.GetKingdom( _army->GetColor() ).OddFundsResource( troop.GetUpgradeCost() );
+            world.GetKingdom( _army->GetColor() ).OddFundsResource( troop.GetTotalUpgradeCost() );
             troop.Upgrade();
             break;
 
