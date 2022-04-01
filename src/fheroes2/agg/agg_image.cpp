@@ -1731,7 +1731,8 @@ namespace
             font[201 - 32].setPosition( font[37].x(), font[37].y() - 3 );
             updateNormalFontLetterShadow( font[201 - 32] );
 
-            // Proper lowercase k.
+            // Proper lowercase k. Need to find solution for k changing
+            // for other languages in language menu too.
             fheroes2::FillTransform( font[75], 4, 1, 5, 8, 1 );
             fheroes2::Copy( font[43], 6, 5, font[75], 4, 7, 3, 1 );
             fheroes2::Copy( font[43], 6, 4, font[75], 4, 6, 4, 1 );
@@ -1821,6 +1822,14 @@ namespace
             fheroes2::Copy( font[201 - 32], 4, 0, font[233 - 32], 3, 0, 3, 2 );
             font[233 - 32].setPosition( font[69].x(), font[69].y() - 3 );
             updateSmallFontLetterShadow( font[233 - 32] );
+
+            // Proper lowercase k. Needs to have a smaller width by -1 after change.
+            fheroes2::FillTransform( font[75], 3, 1, 5, 7, 1 );
+            fheroes2::Copy( font[56], 6, 0, font[75], 3, 2, 3, 3 );
+            fheroes2::Copy( font[65], 2, font[65].height() - 2, font[75], 5, 6, 2, 1 );
+            fheroes2::Copy( font[65], 2, 0, font[75], 4, 5, 1, 1 );
+            font[75].setPosition( font[75].x(), font[75].y() );
+            updateSmallFontLetterShadow( font[75] );
         }
     }
 
