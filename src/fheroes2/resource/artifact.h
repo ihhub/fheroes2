@@ -190,7 +190,10 @@ public:
 
     bool isUltimate( void ) const;
 
-    bool containsCurses() const;
+    bool containsCurses() const
+    {
+        return !fheroes2::getArtifactData( id ).curses.empty();
+    }
 
     bool isValid() const
     {
@@ -230,7 +233,11 @@ public:
     int GetSpell( void ) const;
 
     const char * GetName( void ) const;
-    std::string GetDescription( void ) const;
+
+    std::string GetDescription() const
+    {
+        return fheroes2::getArtifactData( id ).getDescription( ext );
+    }
 
     static int Rand( level_t );
     static Artifact FromMP2IndexSprite( u32 );

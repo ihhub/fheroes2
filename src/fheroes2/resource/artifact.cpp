@@ -82,16 +82,6 @@ const char * Artifact::GetName( void ) const
     return _( fheroes2::getArtifactData( id ).name );
 }
 
-std::string Artifact::GetDescription( void ) const
-{
-    return fheroes2::getArtifactData( id ).getDescription( ext );
-}
-
-bool Artifact::containsCurses() const
-{
-    return !fheroes2::getArtifactData( id ).curses.empty();
-}
-
 bool Artifact::isUltimate( void ) const
 {
     switch ( id ) {
