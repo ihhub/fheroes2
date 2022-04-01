@@ -159,10 +159,10 @@ int HeroBase::GetAttackModificator( std::string * strs ) const
 {
     int result = 0;
     if ( strs == nullptr ) {
-        result = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::ATTACK_SKILL );
+        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::ATTACK_SKILL );
     }
     else {
-        result = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::ATTACK_SKILL, *strs );
+        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::ATTACK_SKILL, *strs );
     }
 
     // check castle modificator
@@ -178,10 +178,10 @@ int HeroBase::GetDefenseModificator( std::string * strs ) const
 {
     int result = 0;
     if ( strs == nullptr ) {
-        result = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::DEFENCE_SKILL );
+        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::DEFENCE_SKILL );
     }
     else {
-        result = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::DEFENCE_SKILL, *strs );
+        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::DEFENCE_SKILL, *strs );
     }
 
     // check castle modificator
@@ -197,11 +197,11 @@ int HeroBase::GetPowerModificator( std::string * strs ) const
 {
     int result = 0;
     if ( strs == nullptr ) {
-        result = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POWER_SKILL );
+        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POWER_SKILL );
         result -= bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactCurseType::SPELL_POWER_SKILL );
     }
     else {
-        result = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POWER_SKILL, *strs );
+        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POWER_SKILL, *strs );
         result -= bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactCurseType::SPELL_POWER_SKILL, *strs );
     }
 
@@ -218,10 +218,10 @@ int HeroBase::GetKnowledgeModificator( std::string * strs ) const
 {
     int result = 0;
     if ( strs == nullptr ) {
-        result = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::KNOWLEDGE_SKILL );
+        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::KNOWLEDGE_SKILL );
     }
     else {
-        result = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::KNOWLEDGE_SKILL, *strs );
+        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::KNOWLEDGE_SKILL, *strs );
     }
 
     // check castle modificator
@@ -246,7 +246,7 @@ int HeroBase::GetMoraleModificator( std::string * strs ) const
     result += GetArmy().GetMoraleModificator( strs );
 
     if ( strs == nullptr ) {
-        result = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::MORALE );
+        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::MORALE );
         if ( Modes( Heroes::SHIPMASTER ) ) {
             result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_BATTLE_MORALE_BOOST );
         }
@@ -254,7 +254,7 @@ int HeroBase::GetMoraleModificator( std::string * strs ) const
         result -= bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactCurseType::MORALE );
     }
     else {
-        result = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::MORALE, *strs );
+        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::MORALE, *strs );
         if ( Modes( Heroes::SHIPMASTER ) ) {
             result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_BATTLE_MORALE_BOOST, *strs );
         }
@@ -278,13 +278,13 @@ int HeroBase::GetLuckModificator( std::string * strs ) const
     result += GetArmy().GetLuckModificator( strs );
 
     if ( strs == nullptr ) {
-        result = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::LUCK );
+        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::LUCK );
         if ( Modes( Heroes::SHIPMASTER ) ) {
             result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_BATTLE_LUCK_BOOST );
         }
     }
     else {
-        result = bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::LUCK, *strs );
+        result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::LUCK, *strs );
         if ( Modes( Heroes::SHIPMASTER ) ) {
             result += bag_artifacts.getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_BATTLE_LUCK_BOOST, *strs );
         }
