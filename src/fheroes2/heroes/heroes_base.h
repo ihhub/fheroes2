@@ -116,8 +116,16 @@ public:
     void AppendSpellsToBook( const SpellStorage &, const bool without_wisdom = false );
     bool SpellBookActivate();
 
-    BagArtifacts & GetBagArtifacts();
-    const BagArtifacts & GetBagArtifacts() const;
+    BagArtifacts & GetBagArtifacts()
+    {
+        return bag_artifacts;
+    }
+
+    const BagArtifacts & GetBagArtifacts() const
+    {
+        return bag_artifacts;
+    }
+
     bool hasArtifact( const Artifact & art ) const;
 
     void LoadDefaults( const int type, const int race );

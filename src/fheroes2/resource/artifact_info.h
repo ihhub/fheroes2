@@ -91,7 +91,9 @@ namespace fheroes2
         ENDLESS_AMMUNITION,
         NO_SHOOTING_PENALTY,
         VIEW_MONSTER_INFORMATION,
-        DISABLE_ALL_SPELL_COMBAT_CASTING
+        DISABLE_ALL_SPELL_COMBAT_CASTING,
+        MAXIMUM_MORALE,
+        MAXIMUM_LUCK
     };
 
     enum class ArtifactCurseType : int32_t

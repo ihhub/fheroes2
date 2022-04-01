@@ -764,8 +764,8 @@ namespace
         artifactData[Artifact::BATTLE_GARB].bonuses.emplace_back( fheroes2::ArtifactBonusType::ATTACK_SKILL, 5 );
         artifactData[Artifact::BATTLE_GARB].bonuses.emplace_back( fheroes2::ArtifactBonusType::DEFENCE_SKILL, 5 );
         artifactData[Artifact::BATTLE_GARB].bonuses.emplace_back( fheroes2::ArtifactBonusType::SPELL_POWER_SKILL, 5 );
-        artifactData[Artifact::BATTLE_GARB].bonuses.emplace_back( fheroes2::ArtifactBonusType::MORALE, 10 );
-        artifactData[Artifact::BATTLE_GARB].bonuses.emplace_back( fheroes2::ArtifactBonusType::LUCK, 10 );
+        artifactData[Artifact::BATTLE_GARB].bonuses.emplace_back( fheroes2::ArtifactBonusType::MAXIMUM_MORALE );
+        artifactData[Artifact::BATTLE_GARB].bonuses.emplace_back( fheroes2::ArtifactBonusType::MAXIMUM_LUCK );
         artifactData[Artifact::BATTLE_GARB].bonuses.emplace_back( fheroes2::ArtifactBonusType::ADD_SPELL, Spell::TOWNPORTAL );
 
         artifactData[Artifact::CRYSTAL_BALL].bonuses.emplace_back( fheroes2::ArtifactBonusType::VIEW_MONSTER_INFORMATION );
@@ -1165,6 +1165,12 @@ namespace fheroes2
                     break;
                 case ArtifactBonusType::NECROMANCY_SKILL:
                     os << "Increase Necromancy Skill by " << bonus.value << " percent" << std::endl;
+                    break;
+                case ArtifactBonusType::MAXIMUM_MORALE:
+                    os << "Gives the army maximum Morale." << std::endl;
+                    break;
+                case ArtifactBonusType::MAXIMUM_LUCK:
+                    os << "Gives the army maximum Luck." << std::endl;
                     break;
                 default:
                     // Did you add a new bonus type? Add the logic above!
