@@ -613,7 +613,7 @@ std::string BuildingInfo::GetConditionDescription( void ) const
     case BUILD_DISABLE:
         if ( building == BUILD_SHIPYARD ) {
             res = _( "Cannot build %{name} because castle is too far from water." );
-            StringReplace( res, "%{name}", Castle::GetStringBuilding( BUILD_SHIPYARD, castle.GetRace() ) );
+            StringReplace( res, "%{name}", Translation::StringLower( Castle::GetStringBuilding( BUILD_SHIPYARD, castle.GetRace() ) ) );
         }
         else {
             res = _( "disable build." );
@@ -622,7 +622,7 @@ std::string BuildingInfo::GetConditionDescription( void ) const
 
     case LACK_RESOURCES:
         res = _( "Cannot afford %{name}." );
-        StringReplace( res, "%{name}", GetName() );
+        StringReplace( res, "%{name}", Translation::StringLower( GetName() ) );
         break;
 
     case ALREADY_BUILT:
@@ -632,12 +632,12 @@ std::string BuildingInfo::GetConditionDescription( void ) const
 
     case REQUIRES_BUILD:
         res = _( "Cannot build %{name}." );
-        StringReplace( res, "%{name}", GetName() );
+        StringReplace( res, "%{name}", Translation::StringLower( GetName() ) );
         break;
 
     case ALLOW_BUILD:
         res = _( "Build %{name}." );
-        StringReplace( res, "%{name}", GetName() );
+        StringReplace( res, "%{name}", Translation::StringLower( GetName()) );
         break;
 
     default:
