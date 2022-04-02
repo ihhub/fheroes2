@@ -1509,7 +1509,7 @@ namespace fheroes2
             }
         }
 
-void generateEnglishSpecificImages( const int id )
+        void generateEnglishSpecificImages( const int id )
         {
             switch ( id ) {
             case ICN::BTNBATTLEONLY:
