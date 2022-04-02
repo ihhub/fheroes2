@@ -46,6 +46,7 @@ namespace
             { "german", fheroes2::SupportedLanguage::German },   { "fr", fheroes2::SupportedLanguage::French },       { "french", fheroes2::SupportedLanguage::French },
             { "ru", fheroes2::SupportedLanguage::Russian },      { "russian", fheroes2::SupportedLanguage::Russian }, { "it", fheroes2::SupportedLanguage::Italian },
             { "italian", fheroes2::SupportedLanguage::Italian }, { "cs", fheroes2::SupportedLanguage::Czech },        { "czech", fheroes2::SupportedLanguage::Czech } };
+}
 
 namespace fheroes2
 {
