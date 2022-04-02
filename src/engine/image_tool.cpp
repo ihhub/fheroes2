@@ -30,7 +30,7 @@
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #if defined( WITH_IMAGE )
-#define FHEROES2_ENABLE_PNG 1
+#define ENABLE_PNG
 #include <SDL_image.h>
 #endif
 #endif
@@ -92,7 +92,7 @@ namespace
             }
         }
 
-#if defined( FHEROES2_ENABLE_PNG )
+#if defined( ENABLE_PNG )
         int res = 0;
         const std::string pngExtension( ".png" );
         if ( path.size() > pngExtension.size() && path.compare( path.size() - pngExtension.size(), pngExtension.size(), pngExtension ) == 0 ) {
@@ -299,7 +299,7 @@ namespace fheroes2
 
     bool isPNGFormatSupported()
     {
-#if defined( FHEROES2_ENABLE_PNG )
+#if defined( ENABLE_PNG )
         return true;
 #else
         return false;
