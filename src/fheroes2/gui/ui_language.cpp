@@ -50,6 +50,17 @@ namespace
 
 namespace fheroes2
 {
+    LanguageSwitcher::LanguageSwitcher( const SupportedLanguage language )
+        : _currentLanguage( Settings::Get().getGameLanguage() )
+    {
+        Settings::Get().setGameLanguage( getLanguageAbbreviation( language ) );
+    }
+
+    LanguageSwitcher::~LanguageSwitcher()
+    {
+        Settings::Get().setGameLanguage( _currentLanguage );
+    }
+
     SupportedLanguage getResourceLanguage()
     {
         const std::vector<uint8_t> & data = ::AGG::ReadChunk( ICN::GetString( ICN::FONT ) );
@@ -66,17 +77,6 @@ namespace fheroes2
         }
 
         return iter->second;
-    }
-
-    LanguageSwitcher::LanguageSwitcher( const SupportedLanguage language )
-        : _currentLanguage( Settings::Get().getGameLanguage() )
-    {
-        Settings::Get().setGameLanguage( getLanguageAbbreviation( language ) );
-    }
-
-    LanguageSwitcher::~LanguageSwitcher()
-    {
-        Settings::Get().setGameLanguage( _currentLanguage );
     }
 
     std::vector<SupportedLanguage> getSupportedLanguages()
