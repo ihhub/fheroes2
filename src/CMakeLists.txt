@@ -22,9 +22,9 @@ if (MSVC)
 	add_compile_options(/W4)
 else()
 	add_compile_options(
-		-pedantic -Wall -Wextra -Wcast-align -Wctor-dtor-privacy -Wdouble-promotion
-		-Wfloat-conversion -Wfloat-equal -Winit-self -Woverloaded-virtual -Wredundant-decls
-		-Wshadow -Wundef -Wuninitialized -Wunused
+		-pedantic -Wall -Wextra -Wctor-dtor-privacy -Wdouble-promotion -Wfloat-conversion
+		-Wfloat-equal -Winit-self -Woverloaded-virtual -Wredundant-decls -Wshadow -Wundef
+		-Wuninitialized -Wunused
 		)
 endif()
 
