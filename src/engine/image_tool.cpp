@@ -28,8 +28,8 @@
 #include <SDL_video.h>
 #endif
 
-#if defined( WITH_IMAGE )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
+#if defined( WITH_IMAGE )
 #define FHEROES2_ENABLE_PNG 1
 #include <SDL_image.h>
 #endif
@@ -295,5 +295,14 @@ namespace fheroes2
         }
 
         return sprite;
+    }
+
+    bool isPNGFormatSupported()
+    {
+#if defined( FHEROES2_ENABLE_PNG )
+        return true
+#else
+        return false;
+#endif
     }
 }
