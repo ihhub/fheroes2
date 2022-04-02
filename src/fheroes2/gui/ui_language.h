@@ -52,6 +52,8 @@ namespace fheroes2
         const std::string _currentLanguage;
     };
 
+    SupportedLanguage getResourceLanguage();
+
     // This function returns an array of supported languages. If the array contains only one language it must be English.
     std::vector<SupportedLanguage> getSupportedLanguages();
 
