@@ -1508,8 +1508,8 @@ namespace fheroes2
                 ApplyPalette( _icnVsSprite[icnId][i], palette );
             }
         }
-        
-        void generateICNEnglish( int id )
+
+void generateEnglishSpecificImages( const int id )
         {
             switch ( id ) {
             case ICN::BTNBATTLEONLY:
@@ -1536,11 +1536,13 @@ namespace fheroes2
                     Blit( GetICN( ICN::BTNHOTST, i ), 72 - i, 21, out, 84 - i, 28, 13, 13 );
                 }
             default:
+                // You're calling this function for non-specified ICN id. Check your logic!
+                assert( 0 );
                 break;
             }
         }
 
-        void generateICNGerman( int id )
+        void generateGermanSpecificImages( const int id )
         {
             switch ( id ) {
             case ICN::BTNBATTLEONLY:
@@ -1565,20 +1567,20 @@ namespace fheroes2
                     Blit( GetICN( ICN::BTNNEWGM, 4 + i ), 36 - i, 23, out, 78 - i, 23, 10, 14 );
                 }
             default:
+                // You're calling this function for non-specified ICN id. Check your logic!
+                assert( 0 );
                 break;
             }
         }
 
-        void generateICNLanguage( int id )
+        void generateLanguageSpecificImages( int id )
         {
-            const fheroes2::SupportedLanguage language = fheroes2::getResourceLanguage();
-            
-            switch ( language ) {
+            switch ( fheroes2::getResourceLanguage() ) {
             case fheroes2::SupportedLanguage::German:
-                generateICNGerman( id );
+                generateGermanSpecificImages( id );
                 break;
             default:
-                generateICNEnglish( id );
+                generateEnglishSpecificImages( id );
                 break;
             }
         }
@@ -1640,7 +1642,7 @@ namespace fheroes2
                 CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::GRAY_FONT );
                 return true;
             case ICN::BTNBATTLEONLY:
-                generateICNLanguage( id );
+                generateLanguageSpecificImages( id );
                 return true;
             case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
                 _icnVsSprite[id].resize( 2 );
