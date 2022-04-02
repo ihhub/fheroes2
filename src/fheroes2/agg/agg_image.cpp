@@ -1535,6 +1535,7 @@ namespace fheroes2
                     Blit( GetICN( ICN::BTNHOTST, i ), 47 - i, 21, out, 71 - i, 28, 12, 13 );
                     Blit( GetICN( ICN::BTNHOTST, i ), 72 - i, 21, out, 84 - i, 28, 13, 13 );
                 }
+                break;
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 assert( 0 );
@@ -1566,6 +1567,7 @@ namespace fheroes2
                     // add 'P'
                     Blit( GetICN( ICN::BTNNEWGM, 4 + i ), 36 - i, 23, out, 78 - i, 23, 10, 14 );
                 }
+                break;
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 assert( 0 );
