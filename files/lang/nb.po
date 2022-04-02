@@ -6044,7 +6044,7 @@ msgid "tent|Aqua"
 msgstr "Cyan"
 
 msgid "tent|Blue"
-msgstr "\vBlå"
+msgstr "Blå"
 
 msgid "tent|Brown"
 msgstr "Brun"

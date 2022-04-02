@@ -545,8 +545,7 @@ msgstr "La fortuna sorride su %{attacker}."
 
 msgid "High morale enables the %{monster} to attack again."
 msgstr ""
-"Un turno bonus viene dato a %{monster} per il morale buono.\vIl morale alto "
-"permette a %{monster} di attaccare ancora."
+"Il morale alto permette a %{monster} di attaccare ancora."
 
 msgid "Low morale causes the %{monster} to freeze in panic."
 msgstr "Per via di morale basso viene saltato il turno di %{monster}."
