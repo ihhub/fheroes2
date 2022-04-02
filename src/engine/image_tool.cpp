@@ -300,7 +300,7 @@ namespace fheroes2
     bool isPNGFormatSupported()
     {
 #if defined( FHEROES2_ENABLE_PNG )
-        return true
+        return true;
 #else
         return false;
 #endif
