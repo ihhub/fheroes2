@@ -39,6 +39,9 @@
 
 namespace
 {
+    const int32_t bottomBarOffsetY = 461;
+    const int32_t exitButtonOffsetX = 578;
+
     class RowSpells
     {
     public:
@@ -153,8 +156,14 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STONEBAK, 0 ), display, cur_pt.x, cur_pt.y );
 
-    // bar
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLXTRA, 2 ), display, cur_pt.x, cur_pt.y + 461 );
+    // The original ICN::WELLEXTRA image does not have a yellow outer frame.
+    const int32_t allowedBottomBarWidth = exitButtonOffsetX;
+    const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
+
+    // ICN::SMALLBAR image's first column contains all black pixels. This should not be drawn.
+    fheroes2::Blit( bottomBar, 1, 0, display, cur_pt.x, cur_pt.y + bottomBarOffsetY, allowedBottomBarWidth / 2, bottomBar.height() );
+    fheroes2::Blit( bottomBar, bottomBar.width() - ( allowedBottomBarWidth - allowedBottomBarWidth / 2 ) - 1, 0, display, cur_pt.x + allowedBottomBarWidth / 2,
+                    cur_pt.y + bottomBarOffsetY, allowedBottomBarWidth - allowedBottomBarWidth / 2, bottomBar.height() );
 
     // text bar
     Text text;
@@ -212,8 +221,7 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
     spells4.Redraw();
     spells5.Redraw();
 
-    // button exit
-    fheroes2::Button buttonExit( cur_pt.x + 578, cur_pt.y + 461, ICN::WELLXTRA, 0, 1 );
+    fheroes2::Button buttonExit( cur_pt.x + exitButtonOffsetX, cur_pt.y + bottomBarOffsetY, ICN::WELLXTRA, 0, 1 );
     buttonExit.draw();
 
     display.render();
