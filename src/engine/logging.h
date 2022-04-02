@@ -82,7 +82,7 @@ namespace Logging
     bool isTextSupportModeEnabled();
 }
 
-#if defined( __SWITCH__ )
+#if defined( TARGET_NINTENDO_SWITCH )
 #include <fstream>
 
 namespace Logging

@@ -35,7 +35,7 @@
 #endif
 
 #include <cstring>
-#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
+#if defined( FHEROES2_VITA ) || defined( TARGET_NINTENDO_SWITCH )
 #include <strings.h> // for strcasecmp
 #endif
 

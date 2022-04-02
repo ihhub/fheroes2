@@ -399,7 +399,7 @@ namespace
 }
 
 // Custom button mapping for Nintendo Switch
-#if defined( __SWITCH__ )
+#if defined( TARGET_NINTENDO_SWITCH )
 #undef SDL_CONTROLLER_BUTTON_A
 #undef SDL_CONTROLLER_BUTTON_B
 #undef SDL_CONTROLLER_BUTTON_DPAD_LEFT
@@ -458,7 +458,7 @@ void LocalEvent::CloseController()
 
 void LocalEvent::OpenTouchpad()
 {
-#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
+#if defined( FHEROES2_VITA ) || defined( TARGET_NINTENDO_SWITCH )
     const int touchNumber = SDL_GetNumTouchDevices();
     if ( touchNumber > 0 ) {
         _touchpadAvailable = true;
@@ -1403,7 +1403,7 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
         else if ( button.button == SDL_CONTROLLER_BUTTON_START ) {
             key_value = KEY_RETURN;
         }
-#if defined( __SWITCH__ )
+#if defined( TARGET_NINTENDO_SWITCH )
         // Custom button mapping for Nintendo Switch
         if ( button.button == SWITCH_BUTTON_Y ) {
             key_value = KEY_RETURN;
@@ -1742,7 +1742,7 @@ void LocalEvent::SetStateDefaults( void )
     SetState( SDL_SYSWMEVENT, false );
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
+#if defined( FHEROES2_VITA ) || defined( TARGET_NINTENDO_SWITCH )
     SetState( SDL_FINGERDOWN, true );
     SetState( SDL_FINGERUP, true );
     SetState( SDL_FINGERMOTION, true );

@@ -68,7 +68,7 @@ namespace
     {
 #if defined( FHEROES2_VITA )
         return "ux0:data/fheroes2";
-#elif defined( __SWITCH__ )
+#elif defined( TARGET_NINTENDO_SWITCH )
         return "/switch/fheroes2";
 #endif
 

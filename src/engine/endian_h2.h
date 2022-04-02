@@ -68,7 +68,7 @@
 #define be32toh( x ) __builtin_bswap32( x )
 #define le32toh( x ) ( x )
 
-#elif defined( __SWITCH__ )
+#elif defined( TARGET_NINTENDO_SWITCH )
 #include <machine/endian.h>
 #define LITTLE_ENDIAN _LITTLE_ENDIAN
 #define BIG_ENDIAN _BIG_ENDIAN
