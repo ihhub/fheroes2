@@ -57,7 +57,7 @@ $(TARGET).velf: $(TARGET).elf
 	vita-elf-create $< $@
 
 $(TARGET).elf:
-	$(MAKE) -f Makefile -C src FHEROES2_VITA=true
+	$(MAKE) -f Makefile -C src PLATFORM=vita
 	@cp src/dist/$(TARGET) $(TARGET).elf
 
 clean:

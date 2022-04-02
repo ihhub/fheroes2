@@ -38,7 +38,7 @@
 #include <cmath>
 #include <set>
 
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
 #include <vita2d.h>
 #endif
 
@@ -184,7 +184,7 @@ namespace
     const uint8_t * currentPalette = PALPalette();
 
 // If SDL library is used
-#if !defined( FHEROES2_VITA )
+#if !defined( TARGET_PS_VITA )
     class BaseSDLRenderer
     {
     protected:
@@ -492,7 +492,7 @@ namespace
 
 namespace
 {
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
     class RenderEngine : public fheroes2::BaseRenderEngine
     {
     public:

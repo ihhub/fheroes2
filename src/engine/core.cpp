@@ -28,7 +28,7 @@
 #include "localevent.h"
 #include "logging.h"
 
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
 #include <psp2/kernel/processmgr.h>
 #include <psp2/power.h>
 
@@ -38,7 +38,7 @@ int _newlib_heap_size_user = 192 * 1024 * 1024;
 
 namespace
 {
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
     void initHardwareInternally()
     {
         scePowerSetArmClockFrequency( 444 );

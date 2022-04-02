@@ -356,7 +356,7 @@ bool Settings::Save( const std::string & filename ) const
         return false;
 
     std::fstream file;
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
     const std::string vitaFilename = "ux0:data/fheroes2/" + filename;
     file.open( vitaFilename.data(), std::fstream::out | std::fstream::trunc );
 #else

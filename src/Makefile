@@ -127,10 +127,6 @@ PLATFORM := all
 endif
 endif
 
-ifdef FHEROES2_VITA
-PLATFORM := vita
-endif
-
 include Makefile.$(PLATFORM)
 
 CCFLAGS := $(CCFLAGS) $(SDL_FLAGS)

@@ -95,7 +95,7 @@ namespace Logging
         Logging::logFile << x << std::endl;                                                                                                                              \
         Logging::logFile.flush();                                                                                                                                        \
     }
-#elif defined( FHEROES2_VITA )
+#elif defined( TARGET_PS_VITA )
 #include <psp2/kernel/clib.h>
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \

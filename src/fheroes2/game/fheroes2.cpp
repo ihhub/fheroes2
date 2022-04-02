@@ -230,7 +230,7 @@ int main( int argc, char ** argv )
         std::set<fheroes2::SystemInitializationComponent> coreComponents{ fheroes2::SystemInitializationComponent::Audio,
                                                                           fheroes2::SystemInitializationComponent::Video };
 
-#if defined( FHEROES2_VITA ) || defined( TARGET_NINTENDO_SWITCH )
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
         coreComponents.emplace( fheroes2::SystemInitializationComponent::GameController );
 #endif
 
