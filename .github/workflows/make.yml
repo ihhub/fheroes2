@@ -141,9 +141,6 @@ jobs:
       env:
         FHEROES2_STRICT_COMPILATION: ON
         VITASDK: /usr/local/vitasdk
-    - name: Generate translations
-      run: |
-        make -C files/lang -j 2
     - name: Update Vita SDK cache
       run: |
         if [[ -d /usr/local/vitasdk ]]; then
@@ -154,7 +151,7 @@ jobs:
       if: ${{ github.event_name == 'push' }}
       run: |
         cp docs/README.txt docs/README_PSV.md .
-        zip fheroes2_psv_sdl2.zip fheroes2.vpk LICENSE fheroes2.key changelog.txt README.txt README_PSV.md files/lang/*.mo files/data/*.h2d
+        zip fheroes2_psv_sdl2.zip fheroes2.vpk LICENSE fheroes2.key changelog.txt README.txt README_PSV.md
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
       with:

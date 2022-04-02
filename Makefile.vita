@@ -41,7 +41,7 @@ $(TARGET).vpk: eboot.bin param.sfo translations
 	$(TARGET).vpk
 	@rm -r files/lang/vita_temp
 
-translations:
+translations: $(TARGET).elf
 	$(MAKE) -C files/lang
 	mkdir -p files/lang/vita_temp
 	cp files/lang/*.mo files/lang/vita_temp
