@@ -458,6 +458,11 @@ namespace Interface
             return maxItems;
         }
 
+        int _size() const
+        {
+            return content == nullptr ? 0 : static_cast<int>( content->size() );
+        }
+
     private:
         std::vector<Item> * content;
         int maxItems;
@@ -483,11 +488,6 @@ namespace Interface
                 if ( _topId < 0 || _topId >= _size() )
                     _topId = 0;
             }
-        }
-
-        int _size() const
-        {
-            return content == nullptr ? 0 : static_cast<int>( content->size() );
         }
 
         void UpdateScrollbarRange()
