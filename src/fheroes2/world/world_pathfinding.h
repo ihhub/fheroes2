@@ -66,6 +66,8 @@ public:
     // This method resizes the cache and re-calculates map offsets if values are out of sync with World class
     virtual void checkWorldSize();
 
+    static uint32_t calculatePathPenalty( const std::list<Route::Step> & path );
+
 protected:
     void processWorldMap();
     void checkAdjacentNodes( std::vector<int> & nodesToExplore, int currentNodeIdx );
@@ -130,8 +132,7 @@ public:
 
     std::vector<IndexObject> getObjectsOnTheWay( const int targetIndex, const bool checkAdjacent = false ) const;
 
-    std::list<Route::Step> getDimensionDoorPath( const Heroes & hero, int targetIndex );
-    uint32_t getDimensionDoorDistance( const Heroes & hero, int targetIndex );
+    std::list<Route::Step> getDimensionDoorPath( const Heroes & hero, int targetIndex ) const;
 
     // Used for non-hero armies, like castles or monsters
     uint32_t getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill = Skill::Level::EXPERT );

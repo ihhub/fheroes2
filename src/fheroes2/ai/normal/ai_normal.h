@@ -174,7 +174,7 @@ namespace AI
         std::vector<AICastle> getSortedCastleList( const KingdomCastles & castles, const std::set<int> & castlesInDanger );
 
         double getObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
-        int getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority, bool & usingDimensionDoor );
+        int getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority );
         void resetPathfinder() override;
 
     private:

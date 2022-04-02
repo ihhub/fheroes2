@@ -1048,7 +1048,7 @@ namespace AI
         return 0;
     }
 
-    int AI::Normal::getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority, bool & usingDimensionDoor )
+    int AI::Normal::getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority )
     {
         const Heroes & hero = *heroInfo.hero;
         const double lowestPossibleValue = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
@@ -1079,11 +1079,9 @@ namespace AI
             if ( objectValidator.isValid( node.first ) ) {
                 uint32_t dist = _pathfinder.getDistance( node.first );
 
-                bool use = false;
-                const uint32_t dimensionDoorDist = _pathfinder.getDimensionDoorDistance( hero, node.first );
-                if ( dimensionDoorDist && ( !dist || ( dist / 2 > dimensionDoorDist ) ) ) {
+                const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, node.first ) );
+                if ( dimensionDoorDist && ( !dist || dimensionDoorDist < dist / 2 ) ) {
                     dist = dimensionDoorDist;
-                    use = true;
                 }
 
                 if ( dist == 0 )
@@ -1122,7 +1120,6 @@ namespace AI
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
                     priorityTarget = node.first;
-                    usingDimensionDoor = use;
 #ifdef WITH_DEBUG
                     objectType = static_cast<MP2::MapObjectType>( node.second );
 #endif
@@ -1176,18 +1173,15 @@ namespace AI
             Heroes * bestHero = availableHeroes.front().hero;
             double maxPriority = 0;
             int bestTargetIndex = -1;
-            bool usingDimensionDoor = false;
 
             while ( true ) {
                 for ( const HeroToMove & heroInfo : availableHeroes ) {
                     double priority = -1;
-                    bool usingDimensionDoor2 = false;
-                    const int targetIndex = getPriorityTarget( heroInfo, priority, usingDimensionDoor2 );
+                    const int targetIndex = getPriorityTarget( heroInfo, priority );
                     if ( targetIndex != -1 && ( priority > maxPriority || bestTargetIndex == -1 ) ) {
                         maxPriority = priority;
                         bestTargetIndex = targetIndex;
                         bestHero = heroInfo.hero;
-                        usingDimensionDoor = usingDimensionDoor2;
                     }
                 }
 
@@ -1243,10 +1237,12 @@ namespace AI
 
             const size_t heroesBefore = heroes.size();
 
-            // flag if we actually want to jump
-            const std::list<Route::Step> & dimensionDoor = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
-            if ( usingDimensionDoor && dimensionDoor.size() ) {
-                HeroesCastDimensionDoor( *bestHero, dimensionDoor.front().GetIndex() );
+            // check if we want to use Dimension Door spell or move regularly
+            const std::list<Route::Step> & dimensionPath = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
+            uint32_t dimensionDoorDistance = AIWorldPathfinder::calculatePathPenalty( dimensionPath );
+            uint32_t moveDistance = _pathfinder.getDistance( bestTargetIndex );
+            if ( dimensionDoorDistance && ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) ) {
+                HeroesCastDimensionDoor( *bestHero, dimensionPath.front().GetIndex() );
             }
             else {
                 _pathfinder.reEvaluateIfNeeded( *bestHero );
