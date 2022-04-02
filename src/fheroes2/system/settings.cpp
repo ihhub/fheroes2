@@ -973,7 +973,7 @@ void Settings::BinaryLoad()
 
 bool Settings::FullScreen() const
 {
-    return System::isEmbededDevice() || opt_global.Modes( GLOBAL_FULLSCREEN );
+    return opt_global.Modes( GLOBAL_FULLSCREEN );
 }
 
 bool Settings::isVSyncEnabled() const

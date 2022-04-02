@@ -1235,7 +1235,7 @@ namespace
 
         int renderFlags() const
         {
-#if defined( __WIN32__ ) || defined( ANDROID )
+#if defined( __WIN32__ )
             return SDL_HWSURFACE | SDL_HWPALETTE;
 #else
             return SDL_SWSURFACE;

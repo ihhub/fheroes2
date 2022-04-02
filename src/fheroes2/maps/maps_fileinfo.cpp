@@ -21,7 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#if defined( ANDROID ) || defined( _MSC_VER )
+#if defined( _MSC_VER )
 #include <locale>
 #endif
 #include <algorithm>

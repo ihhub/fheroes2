@@ -82,21 +82,7 @@ namespace Logging
     bool isTextSupportModeEnabled();
 }
 
-#if defined( ANDROID ) // Android has a specific logging function
-#include <android/log.h>
-namespace std
-{
-    static const char * android_endl = "\n";
-}
-#define endl android_endl
-#define COUT( x )                                                                                                                                                        \
-    {                                                                                                                                                                    \
-        std::ostringstream osss;                                                                                                                                         \
-        osss << x;                                                                                                                                                       \
-        __android_log_print( ANDROID_LOG_INFO, "FHeroes2", "%s", osss.str().c_str() );                                                                                   \
-    }
-
-#elif defined( __SWITCH__ ) // Platforms which log to file
+#if defined( __SWITCH__ )
 #include <fstream>
 
 namespace Logging

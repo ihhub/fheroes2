@@ -28,7 +28,7 @@
 #include <map>
 #include <memory>
 
-#if defined( ANDROID ) || defined( _MSC_VER )
+#if defined( _MSC_VER )
 #include <clocale>
 #endif
 
@@ -262,9 +262,6 @@ bool System::IsFile( const std::string & name, bool writable )
     }
 
     return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 04 ) );
-#elif defined( ANDROID )
-    // TODO: check if it is really a file.
-    return writable ? 0 == access( name.c_str(), W_OK ) : true;
 #elif defined( FHEROES2_VITA )
     // TODO: check if it is really a file.
     return writable ? 0 == access( name.c_str(), W_OK ) : 0 == access( name.c_str(), R_OK );
@@ -302,9 +299,6 @@ bool System::IsDirectory( const std::string & name, bool writable )
     }
 
     return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 00 ) );
-#elif defined( ANDROID )
-    // TODO: check if it is really a directory.
-    return writable ? 0 == access( name.c_str(), W_OK ) : true;
 #elif defined( FHEROES2_VITA )
     // TODO: check if it is really a directory.
     return writable ? 0 == access( name.c_str(), W_OK ) : 0 == access( name.c_str(), R_OK );
@@ -329,14 +323,6 @@ int System::Unlink( const std::string & file )
 #else
     return unlink( file.c_str() );
 #endif
-}
-
-bool System::isEmbededDevice( void )
-{
-#if defined( ANDROID )
-    return true;
-#endif
-    return false;
 }
 
 #if !( defined( _MSC_VER ) || defined( __MINGW32__ ) )
