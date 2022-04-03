@@ -1236,6 +1236,7 @@ namespace AI
             }
 
             const size_t heroesBefore = heroes.size();
+            _pathfinder.reEvaluateIfNeeded( *bestHero );
 
             // check if we want to use Dimension Door spell or move regularly
             const std::list<Route::Step> & dimensionPath = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
@@ -1245,7 +1246,6 @@ namespace AI
                 HeroesCastDimensionDoor( *bestHero, dimensionPath.front().GetIndex() );
             }
             else {
-                _pathfinder.reEvaluateIfNeeded( *bestHero );
                 bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );
 
                 HeroesMove( *bestHero );
