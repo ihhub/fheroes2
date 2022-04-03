@@ -1649,23 +1649,40 @@ namespace
             // A with circle on top. Needs improvement
             font[197 - 32].resize( font[33].width(), font[33].height() + 6 );
             font[197 - 32].reset();
-            fheroes2::Copy( font[33], 0, 0, font[197 - 32], 0, 5, font[33].width(), font[33].height() );
-            // Generate the circle for further use.
-            fheroes2::Copy( font[79], 5, 0, font[197 - 32], 8, 0, 3, 1 );
-            fheroes2::Copy( font[79], 8, 3, font[197 - 32], 10, 1, 1, 3 );
-            fheroes2::Copy( font[79], 5, 0, font[197 - 32], 8, 3, 2, 1 );
-            fheroes2::Copy( font[79], 4, 1, font[197 - 32], 8, 1, 2, 2 );
-            fheroes2::Copy( font[79], 8, 3, font[197 - 32], 7, 1, 1, 3 );
-            fheroes2::Copy( font[79], 7, 0, font[197 - 32], 7, 0, 1, 1 );
-            font[197 - 32].setPosition( font[33].x(), font[33].y() - 5 );
+            fheroes2::Copy( font[33], 0, 1, font[197 - 32], 0, 3, font[33].width(), font[33].height() );
+            fheroes2::FillTransform( font[197 - 32], 1, 3, 5, 5, 1 );
+            fheroes2::FillTransform( font[197 - 32], 6, 3, 2, 1, 1 );
+            fheroes2::FillTransform( font[197 - 32], 10, 3, 1, 1, 1 );
+            fheroes2::FillTransform( font[197 - 32], 11, 5, 1, 1, 1 );
+            fheroes2::FillTransform( font[197 - 32], 6, 5, 1, 1, 1 );
+            fheroes2::Copy( font[75], 3, font[75].height() - 3, font[197 - 32], 8, 3, 1, 1 );
+            fheroes2::Copy( font[75], 3, font[75].height() - 3, font[197 - 32], 9, 3, 1, 1 );
+            fheroes2::Copy( font[197 - 32], 7, 4, font[197 - 32], 10, 4, 1, 1 );
+            fheroes2::Copy( font[197 - 32], 8, 4, font[197 - 32], 9, 4, 1, 1 );
+            fheroes2::Copy( font[79], 3, 6, font[197 - 32], 7, 2, 3, 1 );
+            fheroes2::Copy( font[79], 1, 2, font[197 - 32], 7, 1, 1, 1 );
+            fheroes2::Copy( font[79], 3, 0, font[197 - 32], 7, 0, 2, 1 );
+            fheroes2::Copy( font[79], font[69].width() - 3, 2, font[197 - 32], 8, 1, 1, 1 );
+            fheroes2::Copy( font[79], font[69].width() - 3, 2, font[197 - 32], 9, 1, 1, 1 );
+            fheroes2::Copy( font[69], font[69].width() - 2, 3, font[197 - 32], 8, 0, 2, 1 );
+            fheroes2::Copy( font[75], font[75].width() - 3, font[75].height() - 4, font[197 - 32], 9, 0, 2, 1 );
+            fheroes2::Copy( font[82], 3, font[82].height() - 4, font[197 - 32], 10, 1, 1, 2 );
+            font[197 - 32].setPosition( font[33].x(), font[33].y() - 2 );
             updateNormalFontLetterShadow( font[197 - 32] );
 
             // a with circle on top. Needs adapting to changes to capital A.
-            font[229 - 32].resize( font[65].width(), font[65].height() + 6 );
+            font[229 - 32].resize( font[65].width(), font[65].height() + 5 );
             font[229 - 32].reset();
-            fheroes2::Copy( font[65], 0, 0, font[229 - 32], 0, 5, font[65].width(), font[65].height() );
-            fheroes2::Copy( font[197 - 32], 7, 0, font[229 - 32], 3, 0, 4, 4 );
-            font[229 - 32].setPosition( font[65].x(), font[65].y() - 5 );
+            fheroes2::Copy( font[65], 0, 0, font[229 - 32], 0, 4, font[65].width(), font[65].height() );
+            fheroes2::Copy( font[197 - 32], 7, 0, font[229 - 32], 2, 0, 1, 2 );
+            fheroes2::Copy( font[197 - 32], 7, 0, font[229 - 32], 2, 2, 1, 1 );
+            fheroes2::Copy( font[197 - 32], 10, 0, font[229 - 32], 6, 0, 1, 3 );
+            fheroes2::Copy( font[229 - 32], 2, 4, font[229 - 32], 3, 0, 3, 1 );
+            fheroes2::Copy( font[229 - 32], 2, 4, font[229 - 32], 3, 2, 3, 1 );
+            fheroes2::Copy( font[197 - 32], 10, 2, font[229 - 32], 3, 1, 1, 1 );
+            fheroes2::Copy( font[197 - 32], 8, 1, font[229 - 32], 3, 3, 2, 1 );
+            fheroes2::Copy( font[197 - 32], 8, 1, font[229 - 32], 4, 1, 2, 1 );
+            font[229 - 32].setPosition( font[65].x(), font[65].y() - 4);
             updateNormalFontLetterShadow( font[229 - 32] );
 
             // O with / inside.
