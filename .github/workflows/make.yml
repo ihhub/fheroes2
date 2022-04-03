@@ -151,6 +151,7 @@ jobs:
       if: ${{ github.event_name == 'push' }}
       run: |
         cp docs/README.txt docs/README_PSV.md .
+        # Translations and H2D files are already included in fheroes2.vpk
         zip fheroes2_psv_sdl2.zip fheroes2.vpk LICENSE fheroes2.key changelog.txt README.txt README_PSV.md
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
