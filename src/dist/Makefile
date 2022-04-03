@@ -18,16 +18,17 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-ifeq ($(PREFIX),)
-PREFIX := /usr/local
-endif
-
 TARGET := fheroes2
+
 LIBENGINE := ../engine/libengine.a
 CCFLAGS := $(CCFLAGS) -I../engine
 
 LIBENGINE := $(LIBENGINE) ../thirdparty/libsmacker/libsmacker.a
 CCFLAGS := $(CCFLAGS) -I../thirdparty/libsmacker
+
+ifeq ($(PREFIX),)
+PREFIX := /usr/local
+endif
 
 ifdef PREFIX
 CCFLAGS := $(CCFLAGS) -I$(PREFIX)/include

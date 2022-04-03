@@ -54,57 +54,9 @@ LDFLAGS := $(LDFLAGS) -fsanitize=$(SANITIZERS)
 endif
 
 #
-# Build options for third-party libraries
+# Platform-specific build options
 #
 
-CCFLAGS_TP := $(CCFLAGS)
-CFLAGS_TP := $(CFLAGS)
-CXXFLAGS_TP := $(CXXFLAGS)
-
-#
-# Build options for fheroes2
-#
-
-CXXFLAGS := $(CXXFLAGS) -std=c++11
-LIBS := -lz
-
-ifdef FHEROES2_WITH_DEBUG
-CCFLAGS := $(CCFLAGS) -DWITH_DEBUG
-endif
-
-# TODO: Add -Wconversion -Wsign-conversion -Wextra-semi flags once we fix all the corresponding code smells
-# TODO: Add -Wswitch-default -Wold-style-cast flags once SDL headers can be compiled with them
-CCFLAGS := $(CCFLAGS) -pedantic -Wall -Wextra -Wcast-align -Wctor-dtor-privacy -Wdouble-promotion -Wfloat-conversion -Wfloat-equal \
-           -Winit-self -Woverloaded-virtual -Wredundant-decls -Wshadow -Wundef -Wuninitialized -Wunused
-
-ifdef FHEROES2_STRICT_COMPILATION
-CCFLAGS := $(CCFLAGS) -Werror
-endif
-
-ifdef FHEROES2_WITH_SDL1
-SDL_LIBS := $(shell sdl-config --libs)
-SDL_FLAGS := $(shell sdl-config --cflags)
-else
-SDL_LIBS := $(shell sdl2-config --libs)
-SDL_FLAGS := $(shell sdl2-config --cflags)
-endif
-
-ifdef FHEROES2_WITH_SDL1
-SDL_LIBS := $(SDL_LIBS) -lSDL_mixer
-else
-SDL_LIBS := $(SDL_LIBS) -lSDL2_mixer
-endif
-
-ifdef FHEROES2_WITH_IMAGE
-CCFLAGS := $(CCFLAGS) -DWITH_IMAGE $(shell libpng-config --cflags)
-ifdef FHEROES2_WITH_SDL1
-SDL_LIBS := $(SDL_LIBS) -lSDL_image $(shell libpng-config --libs)
-else
-SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs)
-endif
-endif
-
-# platform specific flags
 ifndef PLATFORM
 ifndef OS
 OS := $(shell uname)
@@ -128,6 +80,75 @@ endif
 endif
 
 include Makefile.$(PLATFORM)
+
+#
+# Build options for third-party libraries
+#
+
+CCFLAGS_TP := $(CCFLAGS)
+CFLAGS_TP := $(CFLAGS)
+CXXFLAGS_TP := $(CXXFLAGS)
+
+#
+# Build options for fheroes2
+#
+
+# *FLAGS_FH2 can be passed from platform-specific Makefiles
+CCFLAGS := $(CCFLAGS) $(CCFLAGS_FH2)
+CFLAGS := $(CFLAGS) $(CFLAGS_FH2)
+CXXFLAGS := $(CXXFLAGS) $(CXXFLAGS_FH2) -std=c++11
+
+LIBS := $(LIBS) -lz
+
+ifdef FHEROES2_WITH_DEBUG
+CCFLAGS := $(CCFLAGS) -DWITH_DEBUG
+endif
+ifdef FHEROES2_WITH_IMAGE
+CCFLAGS := $(CCFLAGS) -DWITH_IMAGE
+endif
+
+# TODO: Add -Wconversion -Wsign-conversion -Wextra-semi flags once we fix all the corresponding code smells
+# TODO: Add -Wswitch-default -Wold-style-cast flags once SDL headers can be compiled with them
+CCFLAGS := $(CCFLAGS) -pedantic -Wall -Wextra -Wcast-align -Wctor-dtor-privacy -Wdouble-promotion -Wfloat-conversion -Wfloat-equal \
+           -Winit-self -Woverloaded-virtual -Wredundant-decls -Wshadow -Wundef -Wuninitialized -Wunused
+
+ifdef FHEROES2_STRICT_COMPILATION
+CCFLAGS := $(CCFLAGS) -Werror
+endif
+
+#
+# SDL-related build options
+#
+
+# SDL_FLAGS can already be defined in a platform-specific Makefile
+ifeq ($(origin SDL_FLAGS),undefined)
+ifdef FHEROES2_WITH_SDL1
+SDL_FLAGS := $(shell sdl-config --cflags)
+else
+SDL_FLAGS := $(shell sdl2-config --cflags)
+endif
+
+ifdef FHEROES2_WITH_IMAGE
+SDL_FLAGS := $(SDL_FLAGS) $(shell libpng-config --cflags)
+endif
+endif
+
+# SDL_LIBS can already be defined in a platform-specific Makefile
+ifeq ($(origin SDL_LIBS),undefined)
+ifdef FHEROES2_WITH_SDL1
+SDL_LIBS := -lSDL_mixer $(shell sdl-config --libs)
+
+ifdef FHEROES2_WITH_IMAGE
+SDL_LIBS := $(SDL_LIBS) -lSDL_image $(shell libpng-config --libs)
+endif
+else
+SDL_LIBS := -lSDL2_mixer $(shell sdl2-config --libs)
+
+ifdef FHEROES2_WITH_IMAGE
+SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs)
+endif
+endif
+endif
 
 CCFLAGS := $(CCFLAGS) $(SDL_FLAGS)
 LIBS := $(SDL_LIBS) $(LIBS)

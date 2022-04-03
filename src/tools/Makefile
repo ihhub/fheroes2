@@ -18,18 +18,10 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-ifdef FHEROES2_WITH_SDL1
-SDL_LIBS := $(shell sdl-config --libs)
-SDL_FLAGS := $(shell sdl-config --cflags)
-else
-SDL_LIBS := $(shell sdl2-config --libs)
-SDL_FLAGS := $(shell sdl2-config --cflags)
-endif
-
 TARGETS := extractor 82m2wav til2img icn2img xmi2mid_cli bin2txt
+
 LIBENGINE := ../engine/libengine.a
-LIBS := $(LIBENGINE) $(SDL_LIBS) $(LIBS)
-CCFLAGS := $(CCFLAGS) $(SDL_FLAGS) -I../engine
+CCFLAGS := $(CCFLAGS) -I../engine
 
 .PHONY: all clean
 
@@ -37,7 +29,7 @@ all: $(TARGETS)
 
 $(TARGETS): $(addsuffix .cpp, $(TARGETS)) $(LIBENGINE)
 	$(CXX) $(CCFLAGS) $(CXXFLAGS) -c $@.cpp
-	$(CXX) $(LDFLAGS) -o $@ $@.o $(LIBS)
+	$(CXX) $(LDFLAGS) $@.o $(LIBENGINE) $(LIBS) -o $@
 
 clean:
 	rm -f *.o *.exe $(TARGETS)

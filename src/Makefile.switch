@@ -20,9 +20,10 @@
 
 include $(DEVKITPRO)/libnx/switch_rules
 
-ARCH := -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE
-CCFLAGS := $(CCFLAGS) $(ARCH) -DTARGET_NINTENDO_SWITCH
+CCFLAGS := $(CCFLAGS) $(shell sdl2-config --cflags) -fPIE
+CCFLAGS_FH2 := -DTARGET_NINTENDO_SWITCH
 
-CCFLAGS_TP := $(CCFLAGS_TP) $(ARCH)
+LIBS := $(LIBS) -lpng16 -lbz2 -lvorbisidec -lmodplug -lmpg123 -lm -lopusfile -logg -lopus -ljpeg -lwebp -specs=$(DEVKITPRO)/libnx/switch.specs
 
-LIBS := $(LIBS) -lSDL2 -lpng16 -lbz2 -lvorbisidec -lmodplug -lmpg123 -lm -lopusfile -logg -lopus -ljpeg -lwebp -specs=$(DEVKITPRO)/libnx/switch.specs
+# Prevent sdl-config from running
+SDL_FLAGS :=
