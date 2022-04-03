@@ -41,7 +41,7 @@ $(TARGET).vpk: eboot.bin param.sfo translations
 	$(TARGET).vpk
 	@rm -r files/lang/vita_temp
 
-translations:
+translations: $(TARGET).elf
 	$(MAKE) -C files/lang
 	mkdir -p files/lang/vita_temp
 	cp files/lang/*.mo files/lang/vita_temp
@@ -57,7 +57,7 @@ $(TARGET).velf: $(TARGET).elf
 	vita-elf-create $< $@
 
 $(TARGET).elf:
-	$(MAKE) -f Makefile -C src FHEROES2_VITA=true
+	$(MAKE) -f Makefile -C src PLATFORM=vita
 	@cp src/dist/$(TARGET) $(TARGET).elf
 
 clean:

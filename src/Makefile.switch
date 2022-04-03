@@ -21,7 +21,7 @@
 include $(DEVKITPRO)/libnx/switch_rules
 
 ARCH := -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE
-CCFLAGS := $(CCFLAGS) $(ARCH) -D__SWITCH__
+CCFLAGS := $(CCFLAGS) $(ARCH) -DTARGET_NINTENDO_SWITCH
 
 CCFLAGS_TP := $(CCFLAGS_TP) $(ARCH)
 

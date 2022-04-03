@@ -28,7 +28,7 @@
 #include <map>
 #include <memory>
 
-#if defined( ANDROID ) || defined( _MSC_VER )
+#if defined( _MSC_VER )
 #include <clocale>
 #endif
 
@@ -66,9 +66,9 @@ namespace
 {
     std::string GetHomeDirectory( const std::string & prog )
     {
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
         return "ux0:data/fheroes2";
-#elif defined( __SWITCH__ )
+#elif defined( TARGET_NINTENDO_SWITCH )
         return "/switch/fheroes2";
 #endif
 
@@ -110,7 +110,7 @@ int System::MakeDirectory( const std::string & path )
     return CreateDirectoryA( path.c_str(), nullptr );
 #elif defined( __WIN32__ ) && !defined( _MSC_VER )
     return mkdir( path.c_str() );
-#elif defined( FHEROES2_VITA )
+#elif defined( TARGET_PS_VITA )
     return sceIoMkdir( path.c_str(), 0777 );
 #else
     return mkdir( path.c_str(), S_IRWXU );
@@ -132,7 +132,7 @@ std::string System::ConcatePath( const std::string & str1, const std::string & s
 
 void System::appendOSSpecificDirectories( std::vector<std::string> & directories )
 {
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
     const char * path = "ux0:app/FHOMM0002";
     if ( std::find( directories.begin(), directories.end(), path ) == directories.end() ) {
         directories.emplace_back( path );
@@ -262,10 +262,7 @@ bool System::IsFile( const std::string & name, bool writable )
     }
 
     return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 04 ) );
-#elif defined( ANDROID )
-    // TODO: check if it is really a file.
-    return writable ? 0 == access( name.c_str(), W_OK ) : true;
-#elif defined( FHEROES2_VITA )
+#elif defined( TARGET_PS_VITA )
     // TODO: check if it is really a file.
     return writable ? 0 == access( name.c_str(), W_OK ) : 0 == access( name.c_str(), R_OK );
 #else
@@ -302,10 +299,7 @@ bool System::IsDirectory( const std::string & name, bool writable )
     }
 
     return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 00 ) );
-#elif defined( ANDROID )
-    // TODO: check if it is really a directory.
-    return writable ? 0 == access( name.c_str(), W_OK ) : true;
-#elif defined( FHEROES2_VITA )
+#elif defined( TARGET_PS_VITA )
     // TODO: check if it is really a directory.
     return writable ? 0 == access( name.c_str(), W_OK ) : 0 == access( name.c_str(), R_OK );
 #else
@@ -329,14 +323,6 @@ int System::Unlink( const std::string & file )
 #else
     return unlink( file.c_str() );
 #endif
-}
-
-bool System::isEmbededDevice( void )
-{
-#if defined( ANDROID )
-    return true;
-#endif
-    return false;
 }
 
 #if !( defined( _MSC_VER ) || defined( __MINGW32__ ) )

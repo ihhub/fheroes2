@@ -21,7 +21,11 @@
 if (MSVC)
 	add_compile_options(/W4)
 else()
-	add_compile_options(-Wall -Wextra -Wpedantic -Wfloat-conversion -Wshadow -Wfloat-equal -Wredundant-decls -Wdouble-promotion -Wunused -Wuninitialized)
+	add_compile_options(
+		-pedantic -Wall -Wextra -Wctor-dtor-privacy -Wdouble-promotion -Wfloat-conversion
+		-Wfloat-equal -Winit-self -Woverloaded-virtual -Wredundant-decls -Wshadow -Wundef
+		-Wuninitialized -Wunused
+		)
 endif()
 
 if(ENABLE_STRICT_COMPILATION)

@@ -48,8 +48,6 @@ namespace System
     bool IsDirectory( const std::string & name, bool writable = false );
     int Unlink( const std::string & );
 
-    bool isEmbededDevice( void );
-
     bool GetCaseInsensitivePath( const std::string & path, std::string & correctedPath );
 
     std::string FileNameToUTF8( const std::string & str );

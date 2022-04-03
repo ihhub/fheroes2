@@ -37,7 +37,7 @@ ifeq ($(PLATFORM), mingw)
 RES := ../resources/$(TARGET).res
 RC  := ../resources/fheroes2.rc
 ifdef FHEROES2_WITH_DEBUG
-DEBUGFLAG := -DDEBUG
+DEBUGFLAG := -DWITH_DEBUG
 endif
 endif
 
