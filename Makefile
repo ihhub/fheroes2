@@ -23,7 +23,9 @@
 # FHEROES2_STRICT_COMPILATION: build in strict compilation mode (turns warnings into errors)
 # FHEROES2_WITH_SDL1: build with SDL1 instead of SDL2 (which is used by default)
 # FHEROES2_WITH_DEBUG: build in debug mode
-# FHEROES2_WITH_IMAGE: build with SDL/SDL2 Image support (requires libpng)
+# FHEROES2_WITH_ASAN: build with UB Sanitizer and Address Sanitizer (small runtime overhead, incompatible with FHEROES2_WITH_TSAN)
+# FHEROES2_WITH_TSAN: build with UB Sanitizer and Thread Sanitizer (large runtime overhead, incompatible with FHEROES2_WITH_ASAN)
+# FHEROES2_WITH_IMAGE: build with SDL2 Image support (requires libpng)
 # FHEROES2_WITH_TOOLS: build additional tools
 # FHEROES2_MACOS_APP_BUNDLE: create a Mac app bundle (only valid when building on macOS)
 #

@@ -299,7 +299,7 @@ namespace
         case MP2::OBJ_EARTHALTAR:
         case MP2::OBJ_BARROWMOUNDS: {
             const Troop & troop = tile.QuantityTroop();
-            const payment_t & paymentCosts = troop.GetCost();
+            const payment_t & paymentCosts = troop.GetTotalCost();
 
             return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || !army.isFullHouse() );
         }
@@ -313,7 +313,7 @@ namespace
             }
             else {
                 const Troop & troop = tile.QuantityTroop();
-                const payment_t & paymentCosts = troop.GetCost();
+                const payment_t & paymentCosts = troop.GetTotalCost();
 
                 return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
             }
@@ -322,7 +322,7 @@ namespace
         // recruit genie
         case MP2::OBJ_ANCIENTLAMP: {
             const Troop & troop = tile.QuantityTroop();
-            const payment_t & paymentCosts = troop.GetCost();
+            const payment_t & paymentCosts = troop.GetTotalCost();
 
             return troop.isValid() && kingdom.AllowPayment( paymentCosts ) && ( army.HasMonster( troop.GetMonster() ) || ( !army.isFullHouse() ) );
         }

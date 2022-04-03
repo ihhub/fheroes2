@@ -97,15 +97,14 @@ int main( int argc, char ** argv )
             os << std::setw( 3 ) << std::setfill( '0' ) << ii;
 
             std::string dstfile = System::ConcatePath( prefix, os.str() );
-            std::string shortdstfile( os.str() ); // the name of destfile without the path
 
-#ifndef WITH_IMAGE
-            dstfile += ".bmp";
-            shortdstfile += ".bmp";
-#else
-            dstfile += ".png";
-            shortdstfile += ".png";
-#endif
+            if ( fheroes2::isPNGFormatSupported() ) {
+                dstfile += ".png";
+            }
+            else {
+                dstfile += ".bmp";
+            }
+
             std::cout << "Image " << ii + 1 << " has offset of [" << static_cast<int32_t>( head.offsetX ) << ", " << static_cast<int32_t>( head.offsetY ) << "]"
                       << std::endl;
 

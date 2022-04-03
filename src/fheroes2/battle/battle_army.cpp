@@ -168,7 +168,7 @@ uint32_t Battle::Force::GetSurrenderCost() const
             const Unit * unit = FindUID( uids.at( index ) );
 
             if ( unit && unit->isValid() ) {
-                res += unit->GetCost().gold;
+                res += unit->GetSurrenderCost().gold;
             }
         }
     }

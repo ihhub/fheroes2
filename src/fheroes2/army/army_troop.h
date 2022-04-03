@@ -53,8 +53,8 @@ public:
     u32 GetDamageMin( void ) const;
     u32 GetDamageMax( void ) const;
 
-    payment_t GetCost() const override;
-    payment_t GetUpgradeCost() const override;
+    payment_t GetTotalCost() const;
+    payment_t GetTotalUpgradeCost() const;
 
     virtual bool isValid( void ) const;
     virtual bool isEmpty( void ) const;

@@ -39,6 +39,20 @@ else
 CCFLAGS := $(CCFLAGS) -O3
 endif
 
+ifneq ($(or $(FHEROES2_WITH_ASAN),$(FHEROES2_WITH_TSAN)),)
+SANITIZERS := undefined
+
+ifdef FHEROES2_WITH_ASAN
+SANITIZERS := $(SANITIZERS),address
+endif
+ifdef FHEROES2_WITH_TSAN
+SANITIZERS := $(SANITIZERS),thread
+endif
+
+CCFLAGS := $(CCFLAGS) -fsanitize=$(SANITIZERS)
+LDFLAGS := $(LDFLAGS) -fsanitize=$(SANITIZERS)
+endif
+
 #
 # Build options for third-party libraries
 #

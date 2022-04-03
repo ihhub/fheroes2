@@ -49,24 +49,6 @@ namespace
             { "it", fheroes2::SupportedLanguage::Italian },   { "italian", fheroes2::SupportedLanguage::Italian },
             { "cs", fheroes2::SupportedLanguage::Czech },     { "czech", fheroes2::SupportedLanguage::Czech },
             { "nb", fheroes2::SupportedLanguage::Norwegian }, { "norwegian", fheroes2::SupportedLanguage::Norwegian } };
-
-    fheroes2::SupportedLanguage getResourceLanguage()
-    {
-        const std::vector<uint8_t> & data = ::AGG::ReadChunk( ICN::GetString( ICN::FONT ) );
-        if ( data.empty() ) {
-            // How is it possible to run the game without a font?
-            assert( 0 );
-            return fheroes2::SupportedLanguage::English;
-        }
-
-        const uint32_t crc32 = fheroes2::calculateCRC32( data.data(), data.size() );
-        auto iter = languageCRC32.find( crc32 );
-        if ( iter == languageCRC32.end() ) {
-            return fheroes2::SupportedLanguage::English;
-        }
-
-        return iter->second;
-    }
 }
 
 namespace fheroes2
@@ -80,6 +62,24 @@ namespace fheroes2
     LanguageSwitcher::~LanguageSwitcher()
     {
         Settings::Get().setGameLanguage( _currentLanguage );
+    }
+
+    SupportedLanguage getResourceLanguage()
+    {
+        const std::vector<uint8_t> & data = ::AGG::ReadChunk( ICN::GetString( ICN::FONT ) );
+        if ( data.empty() ) {
+            // How is it possible to run the game without a font?
+            assert( 0 );
+            return SupportedLanguage::English;
+        }
+
+        const uint32_t crc32 = calculateCRC32( data.data(), data.size() );
+        auto iter = languageCRC32.find( crc32 );
+        if ( iter == languageCRC32.end() ) {
+            return SupportedLanguage::English;
+        }
+
+        return iter->second;
     }
 
     std::vector<SupportedLanguage> getSupportedLanguages()
