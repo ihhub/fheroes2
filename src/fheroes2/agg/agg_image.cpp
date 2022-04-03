@@ -1647,26 +1647,15 @@ namespace
             std::vector<fheroes2::Sprite> & font = _icnVsSprite[ICN::FONT];
 
             // A with circle on top.
-            font[197 - 32].resize( font[33].width(), font[33].height() + 6 );
+            font[197 - 32].resize( font[33].width(), font[33].height() + 2 );
             font[197 - 32].reset();
-            fheroes2::Copy( font[33], 0, 1, font[197 - 32], 0, 3, font[33].width(), font[33].height() );
-            fheroes2::FillTransform( font[197 - 32], 1, 3, 5, 5, 1 );
-            fheroes2::FillTransform( font[197 - 32], 6, 3, 2, 1, 1 );
-            fheroes2::FillTransform( font[197 - 32], 10, 3, 1, 1, 1 );
-            fheroes2::FillTransform( font[197 - 32], 11, 5, 1, 1, 1 );
-            fheroes2::FillTransform( font[197 - 32], 6, 5, 1, 1, 1 );
-            fheroes2::Copy( font[75], 3, font[75].height() - 3, font[197 - 32], 8, 3, 1, 1 );
-            fheroes2::Copy( font[75], 3, font[75].height() - 3, font[197 - 32], 9, 3, 1, 1 );
-            fheroes2::Copy( font[197 - 32], 7, 4, font[197 - 32], 10, 4, 1, 1 );
-            fheroes2::Copy( font[197 - 32], 8, 4, font[197 - 32], 9, 4, 1, 1 );
-            fheroes2::Copy( font[79], 3, 6, font[197 - 32], 7, 2, 3, 1 );
-            fheroes2::Copy( font[79], 1, 2, font[197 - 32], 7, 1, 1, 1 );
-            fheroes2::Copy( font[79], 3, 0, font[197 - 32], 7, 0, 2, 1 );
-            fheroes2::Copy( font[79], font[69].width() - 3, 2, font[197 - 32], 8, 1, 1, 1 );
-            fheroes2::Copy( font[79], font[69].width() - 3, 2, font[197 - 32], 9, 1, 1, 1 );
-            fheroes2::Copy( font[69], font[69].width() - 2, 3, font[197 - 32], 8, 0, 2, 1 );
-            fheroes2::Copy( font[75], font[75].width() - 3, font[75].height() - 4, font[197 - 32], 9, 0, 2, 1 );
-            fheroes2::Copy( font[82], 3, font[82].height() - 4, font[197 - 32], 10, 1, 1, 2 );
+            fheroes2::Copy( font[33], 0, 3, font[197 - 32], 0, 5, font[33].width(), font[33].height() );
+            fheroes2::FillTransform( font[197 - 32], 2, 5, 3, 3, 1 );
+            fheroes2::Copy( font[80], 5, 6, font[197 - 32], 7, 4, 4, 1 );
+            fheroes2::Copy( font[80], 5, 6, font[197 - 32], 7, 0, 4, 1 );
+            fheroes2::Copy( font[80], 5, 6, font[197 - 32], 7, 2, 4, 1 );
+            fheroes2::Copy( font[84], 1, 0, font[197 - 32], 7, 1, 1, 1 );
+            fheroes2::Copy( font[84], 1, 0, font[197 - 32], 10, 1, 1, 1 );
             font[197 - 32].setPosition( font[33].x(), font[33].y() - 2 );
             updateNormalFontLetterShadow( font[197 - 32] );
 
@@ -1749,7 +1738,8 @@ namespace
             updateNormalFontLetterShadow( font[201 - 32] );
 
             // Proper lowercase k. Need to find solution for k changing
-            // for other languages in language menu too.
+            // for other languages in language menu upon selecting Norwegian.
+            // Can be seen for Polish/polski.
             fheroes2::FillTransform( font[75], 4, 1, 5, 8, 1 );
             fheroes2::Copy( font[43], 6, 5, font[75], 4, 7, 3, 1 );
             fheroes2::Copy( font[43], 6, 4, font[75], 4, 6, 4, 1 );
@@ -1840,8 +1830,11 @@ namespace
             font[233 - 32].setPosition( font[69].x(), font[69].y() - 3 );
             updateSmallFontLetterShadow( font[233 - 32] );
 
-            // Proper lowercase k. TODO: Needs to have a smaller width by -1 after change.
-            fheroes2::FillTransform( font[75], 3, 1, 5, 7, 1 );
+            // Proper lowercase k.
+            font[75].resize( 6, 8 );
+            font[75].reset();
+            fheroes2::Copy( font[76], 1, 0, font[75], 1, 0, 2, 7 );
+            fheroes2::Copy( font[76], 1, 0, font[75], 1, 6, 1, 1 );
             fheroes2::Copy( font[56], 6, 0, font[75], 3, 2, 3, 3 );
             fheroes2::Copy( font[65], 2, font[65].height() - 2, font[75], 5, 6, 2, 1 );
             fheroes2::Copy( font[65], 2, 0, font[75], 4, 5, 1, 1 );
