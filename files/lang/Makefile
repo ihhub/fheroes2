@@ -23,6 +23,7 @@ es.mo: es.po
 # Non-mapped characters are replaced by their non-accented equivalents
 fr.mo: fr.po
 	sed -e 'y/àâçéèêîïôùûüÉÊÀ/@*^~`|><#&$$uEEA/' $< > $<.tmp
+	sed -i~ -e 's/œ/oe/g' $<.tmp
 	msgfmt $<.tmp -o $@
 
 # Polish version uses CP1250
