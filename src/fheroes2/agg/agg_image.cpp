@@ -1646,7 +1646,7 @@ namespace
         {
             std::vector<fheroes2::Sprite> & font = _icnVsSprite[ICN::FONT];
 
-            // A with circle on top. Needs improvement
+            // A with circle on top.
             font[197 - 32].resize( font[33].width(), font[33].height() + 6 );
             font[197 - 32].reset();
             fheroes2::Copy( font[33], 0, 1, font[197 - 32], 0, 3, font[33].width(), font[33].height() );
@@ -1670,7 +1670,7 @@ namespace
             font[197 - 32].setPosition( font[33].x(), font[33].y() - 2 );
             updateNormalFontLetterShadow( font[197 - 32] );
 
-            // a with circle on top. Needs adapting to changes to capital A.
+            // a with circle on top.
             font[229 - 32].resize( font[65].width(), font[65].height() + 5 );
             font[229 - 32].reset();
             fheroes2::Copy( font[65], 0, 0, font[229 - 32], 0, 4, font[65].width(), font[65].height() );
