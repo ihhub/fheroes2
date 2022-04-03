@@ -1682,7 +1682,7 @@ namespace
             fheroes2::Copy( font[197 - 32], 10, 2, font[229 - 32], 3, 1, 1, 1 );
             fheroes2::Copy( font[197 - 32], 8, 1, font[229 - 32], 3, 3, 2, 1 );
             fheroes2::Copy( font[197 - 32], 8, 1, font[229 - 32], 4, 1, 2, 1 );
-            font[229 - 32].setPosition( font[65].x(), font[65].y() - 4);
+            font[229 - 32].setPosition( font[65].x(), font[65].y() - 4 );
             updateNormalFontLetterShadow( font[229 - 32] );
 
             // O with / inside.
