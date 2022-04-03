@@ -730,11 +730,12 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
     if ( !hero.HaveSpell( dimensionDoor ) || !Maps::isValidAbsIndex( targetIndex ) )
         return path;
 
-    const uint32_t spCost = std::max( 1U, dimensionDoor.SpellPoint() );
+    const uint32_t spCost = std::max( 1U, dimensionDoor.SpellPoint( &hero ) );
     const uint32_t movementCost = std::max( 1U, dimensionDoor.MovePoint() );
 
     const uint32_t maxCasts = std::min( hero.GetSpellPoints() / spCost, hero.GetMovePoints() / movementCost );
-    if ( maxCasts == 0 )
+    // minimum two casts to make sure there will be movement & spell points left to do the action
+    if ( maxCasts < 2 )
         return path;
 
     if ( world.GetTiles( targetIndex ).GetObject( false ) == MP2::OBJ_CASTLE ) {
@@ -743,11 +744,10 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
             return path;
     }
 
-    const fheroes2::Point startPoint = Maps::GetPoint( hero.GetIndex() );
     const fheroes2::Point targetPoint = Maps::GetPoint( targetIndex );
 
-    fheroes2::Point current = startPoint;
-    fheroes2::Point difference = targetPoint - startPoint;
+    fheroes2::Point current = Maps::GetPoint( hero.GetIndex() );
+    fheroes2::Point difference = targetPoint - current;
 
     const bool water = hero.isShipMaster();
     const Directions & directions = Direction::All();
@@ -769,9 +769,11 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
                     continue;
 
                 const int newIndex = anotherNodeIdx + _mapOffset[i];
+                if ( !Maps::isValidForDimensionDoor( newIndex, water ) )
+                    continue;
+
                 const fheroes2::Point newPoint = Maps::GetPoint( newIndex );
-                if ( std::abs( current.x - newPoint.x ) <= distanceLimit && std::abs( current.y - newPoint.y ) <= distanceLimit
-                     && Maps::isValidForDimensionDoor( newIndex, water ) ) {
+                if ( std::abs( current.x - newPoint.x ) <= distanceLimit && std::abs( current.y - newPoint.y ) <= distanceLimit ) {
                     path.emplace_back( newIndex, currentNodeIdx, Direction::CENTER, movementCost );
                     current = newPoint;
                     found = true;
@@ -780,7 +782,7 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
             }
 
             if ( !found )
-                return std::list<Route::Step>();
+                return {};
         }
         else {
             path.emplace_back( anotherNodeIdx, currentNodeIdx, Direction::CENTER, movementCost );
@@ -795,7 +797,7 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
         }
     }
 
-    return std::list<Route::Step>();
+    return {};
 }
 
 std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex, const bool isPlanningMode /* = false */ ) const
