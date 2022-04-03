@@ -220,13 +220,13 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
             if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::EVENT_UPGRADE_TROOP ) ) ) {
                 if ( UPGRADE_DISABLE & flags ) {
                     const fheroes2::Text description( _( "You can't afford to upgrade your troops!" ), fheroes2::FontType::normalWhite() );
-                    fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::OK, troop.GetUpgradeCost() );
+                    fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::OK, troop.GetTotalUpgradeCost() );
                 }
                 else {
                     const fheroes2::Text description( _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" ),
                                                       fheroes2::FontType::normalWhite() );
 
-                    if ( fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::YES | Dialog::NO, troop.GetUpgradeCost() ) == Dialog::YES ) {
+                    if ( fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::YES | Dialog::NO, troop.GetTotalUpgradeCost() ) == Dialog::YES ) {
                         result = Dialog::UPGRADE;
                         break;
                     }
