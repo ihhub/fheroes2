@@ -138,8 +138,6 @@ uint32_t GameStatic::getFogDiscoveryDistance( const FogDiscoveryType type )
         return 5;
     case FogDiscoveryType::HEROES:
         return 4;
-    case FogDiscoveryType::TELESCOPE:
-        return 1;
     case FogDiscoveryType::OBSERVATION_TOWER:
         return 20;
     case FogDiscoveryType::MAGI_EYES:

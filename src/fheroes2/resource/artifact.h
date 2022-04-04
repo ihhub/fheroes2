@@ -26,6 +26,7 @@
 #include <set>
 #include <vector>
 
+#include "artifact_info.h"
 #include "interface_itemsbar.h"
 #include "mp2.h"
 #include "ui_tool.h"
@@ -50,7 +51,7 @@ public:
         ART_NORANDOM = 0x20
     };
 
-    enum type_t
+    enum type_t : int
     {
         ULTIMATE_BOOK,
         ULTIMATE_SWORD,
@@ -159,6 +160,7 @@ public:
         SWORD_ANDURAN,
         SPADE_NECROMANCY,
 
+        // IMPORTANT! Put all new artifacts just above this line.
         UNKNOWN
     };
 
@@ -187,7 +189,11 @@ public:
     }
 
     bool isUltimate( void ) const;
-    bool isAlchemistRemove( void ) const;
+
+    bool containsCurses() const
+    {
+        return !fheroes2::getArtifactData( id ).curses.empty();
+    }
 
     bool isValid() const
     {
@@ -200,10 +206,9 @@ public:
         ext = 0;
     }
 
-    u32 ExtraValue( void ) const;
     int Level( void ) const;
     int LoyaltyLevel( void ) const;
-    int Type( void ) const;
+
     int getArtifactValue() const;
 
     // return index sprite objnarti.icn
@@ -228,7 +233,11 @@ public:
     int GetSpell( void ) const;
 
     const char * GetName( void ) const;
-    std::string GetDescription( void ) const;
+
+    std::string GetDescription() const
+    {
+        return fheroes2::getArtifactData( id ).getDescription( ext );
+    }
 
     static int Rand( level_t );
     static Artifact FromMP2IndexSprite( u32 );
@@ -270,6 +279,25 @@ public:
 
     bool ContainSpell( const Spell & ) const;
     bool isPresentArtifact( const Artifact & ) const;
+
+    bool isArtifactBonusPresent( const fheroes2::ArtifactBonusType type ) const;
+    bool isArtifactCursePresent( const fheroes2::ArtifactCurseType type ) const;
+
+    // These methods must be called only for bonuses with cumulative effect.
+    int32_t getTotalArtifactEffectValue( const fheroes2::ArtifactBonusType bonus ) const;
+    int32_t getTotalArtifactEffectValue( const fheroes2::ArtifactBonusType bonus, std::string & description ) const;
+
+    int32_t getTotalArtifactEffectValue( const fheroes2::ArtifactCurseType curse ) const;
+    int32_t getTotalArtifactEffectValue( const fheroes2::ArtifactCurseType curse, std::string & description ) const;
+
+    // These methods must be called only for bonuses with multiplication effect.
+    std::vector<int32_t> getTotalArtifactMultipliedPercent( const fheroes2::ArtifactBonusType bonus ) const;
+    std::vector<int32_t> getTotalArtifactMultipliedPercent( const fheroes2::ArtifactCurseType curse ) const;
+
+    // Ideally, these methods should be called only for unique bonuses. However, it can be called for other bonus types.
+    Artifact getFirstArtifactWithBonus( const fheroes2::ArtifactBonusType bonus ) const;
+    Artifact getFirstArtifactWithCurse( const fheroes2::ArtifactCurseType curse ) const;
+
     bool PushArtifact( const Artifact & );
 
     void RemoveArtifact( const Artifact & art );

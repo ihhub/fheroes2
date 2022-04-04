@@ -697,7 +697,7 @@ std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( cons
 
     // Filter those which are fully immuned
     for ( size_t i = 0; i < foundTroops.size(); ) {
-        if ( foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, heroSpellPower ) >= 100 ) {
+        if ( foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, heroSpellPower, hero ) >= 100 ) {
             ignoredTroops.push_back( foundTroops[i] );
             foundTroops.erase( foundTroops.begin() + i );
         }
@@ -709,7 +709,7 @@ std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( cons
     while ( result.size() != CHAIN_LIGHTNING_CREATURE_COUNT && !foundTroops.empty() ) {
         bool targetFound = false;
         for ( size_t i = 0; i < foundTroops.size(); ++i ) {
-            const int32_t resist = foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, heroSpellPower );
+            const int32_t resist = foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, heroSpellPower, hero );
             assert( resist >= 0 );
             if ( resist < static_cast<int32_t>( Rand::Get( 1, 100 ) ) ) {
                 ignoredTroops.push_back( foundTroops[i] );
@@ -885,7 +885,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
     if ( !ignoreMagicResistance ) {
         // Mark magically resistant troops (should be ignored in case of built-in creature spells)
         for ( auto & tgt : targets ) {
-            const uint32_t resist = tgt.defender->GetMagicResist( spell, hero ? hero->GetPower() : 0 );
+            const uint32_t resist = tgt.defender->GetMagicResist( spell, hero ? hero->GetPower() : 0, hero );
 
             if ( 0 < resist && 100 > resist && resist >= _randomGenerator.Get( 1, 100 ) ) {
                 tgt.resist = true;

@@ -422,7 +422,7 @@ namespace
             return false;
         case MP2::OBJ_ALCHEMYTOWER: {
             const BagArtifacts & bag = hero.GetBagArtifacts();
-            const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.isAlchemistRemove(); } ) );
+            const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.containsCurses(); } ) );
 
             const payment_t payment = PaymentConditions::ForAlchemist();
 

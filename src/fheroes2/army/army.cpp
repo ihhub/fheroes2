@@ -1016,7 +1016,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
     int result = Morale::NORMAL;
 
     // artifact "Arm of the Martyr" adds the undead morale penalty
-    hasUndead = hasUndead || ( GetCommander() && GetCommander()->hasArtifact( Artifact::ARM_MARTYR ) );
+    hasUndead = hasUndead || ( GetCommander() && GetCommander()->GetBagArtifacts().isArtifactCursePresent( fheroes2::ArtifactCurseType::UNDEAD_MORALE_PENALTY ) );
 
     const int count = static_cast<int>( races.size() );
     switch ( count ) {
@@ -1314,7 +1314,7 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
         }
     }
 
-    if ( hero.hasArtifact( Artifact::HIDEOUS_MASK ) ) {
+    if ( hero.GetBagArtifacts().isArtifactCursePresent( fheroes2::ArtifactCurseType::NO_JOINING_ARMIES ) ) {
         return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
     }
 

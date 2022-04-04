@@ -150,46 +150,50 @@ u32 Spell::MovePoint( void ) const
 
 u32 Spell::SpellPoint( const HeroBase * hero ) const
 {
-    u32 res = spells[id].spellPoints;
-    u32 acount = 0;
-
-    if ( hero ) {
-        switch ( id ) {
-        case BLESS:
-        case MASSBLESS:
-            acount = hero->artifactCount( Artifact::SNAKE_RING );
-            if ( acount )
-                res = spells[id].spellPoints / ( acount * 2 );
-            break;
-
-        case SUMMONEELEMENT:
-        case SUMMONAELEMENT:
-        case SUMMONFELEMENT:
-        case SUMMONWELEMENT:
-            acount = hero->artifactCount( Artifact::ELEMENTAL_RING );
-            if ( acount )
-                res = spells[id].spellPoints / ( acount * 2 );
-            break;
-
-        case CURSE:
-        case MASSCURSE:
-            acount = hero->artifactCount( Artifact::EVIL_EYE );
-            if ( acount )
-                res = spells[id].spellPoints / ( acount * 2 );
-            break;
-
-        default:
-            break;
-        }
-
-        if ( isMindInfluence() ) {
-            acount = hero->artifactCount( Artifact::SKULLCAP );
-            if ( acount )
-                res = spells[id].spellPoints / ( acount * 2 );
-        }
+    if ( hero == nullptr ) {
+        return spells[id].spellPoints;
     }
 
-    return res ? res : 1;
+    fheroes2::ArtifactBonusType type = fheroes2::ArtifactBonusType::NONE;
+    switch ( id ) {
+    case BLESS:
+    case MASSBLESS:
+        type = fheroes2::ArtifactBonusType::BLESS_SPELL_COST_REDUCTION_PERCENT;
+        break;
+    case SUMMONEELEMENT:
+    case SUMMONAELEMENT:
+    case SUMMONFELEMENT:
+    case SUMMONWELEMENT:
+        type = fheroes2::ArtifactBonusType::SUMMONING_SPELL_COST_REDUCTION_PERCENT;
+        break;
+    case CURSE:
+    case MASSCURSE:
+        type = fheroes2::ArtifactBonusType::CURSE_SPELL_COST_REDUCTION_PERCENT;
+        break;
+    default:
+        if ( isMindInfluence() ) {
+            type = fheroes2::ArtifactBonusType::MIND_INFLUENCE_SPELL_COST_REDUCTION_PERCENT;
+        }
+        break;
+    }
+
+    if ( type == fheroes2::ArtifactBonusType::NONE ) {
+        return spells[id].spellPoints;
+    }
+
+    int32_t spellCost = spells[id].spellPoints;
+
+    const std::vector<int32_t> spellReductionPercentage = hero->GetBagArtifacts().getTotalArtifactMultipliedPercent( type );
+    for ( const int32_t value : spellReductionPercentage ) {
+        assert( value >= 0 && value <= 100 );
+        spellCost = spellCost * ( 100 - value ) / 100;
+    }
+
+    if ( spellCost < 1 ) {
+        return 1;
+    }
+
+    return static_cast<uint32_t>( spellCost );
 }
 
 int Spell::Level( void ) const

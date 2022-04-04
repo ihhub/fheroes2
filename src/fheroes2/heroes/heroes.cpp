@@ -551,7 +551,7 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point = UpdateMovementPoints( point, Skill::Secondary::NAVIGATION );
 
         // artifact bonus
-        point += artifactCount( Artifact::SAILORS_ASTROLABE_MOBILITY ) * 1000;
+        point += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SEA_MOBILITY );
 
         // visited object
         point += 500 * world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, GetColor() );
@@ -590,15 +590,12 @@ u32 Heroes::GetMaxMovePoints( void ) const
         point = UpdateMovementPoints( point, Skill::Secondary::LOGISTICS );
 
         // artifact bonus
-        point += artifactCount( Artifact::NOMAD_BOOTS_MOBILITY ) * 600;
-        point += artifactCount( Artifact::TRAVELER_BOOTS_MOBILITY ) * 300;
+        point += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::LAND_MOBILITY );
 
         // visited object
         if ( isObjectTypeVisited( MP2::OBJ_STABLES ) )
             point += 400;
     }
-
-    point += artifactCount( Artifact::TRUE_COMPASS_MOBILITY ) * 500;
 
     if ( isControlAI() ) {
         point += Difficulty::GetHeroMovementBonus( Game::getDifficulty() );
@@ -616,9 +613,6 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
 {
     int result = Morale::NORMAL;
 
-    // bonus artifact
-    result += GetMoraleModificator( strs );
-
     // bonus leadership
     result += Skill::GetLeadershipModifiers( GetLevelSkill( Skill::Secondary::LEADERSHIP ), strs );
 
@@ -627,7 +621,19 @@ int Heroes::GetMoraleWithModificators( std::string * strs ) const
                                                        MP2::OBJ_GRAVEYARD, MP2::OBJ_DERELICTSHIP, MP2::OBJ_SHIPWRECK };
     result += ObjectVisitedModifiersResult( objectTypes, *this, strs );
 
-    // result
+    // bonus artifact
+    result += GetMoraleModificator( strs );
+
+    // A special artifact ability presence must be the last check.
+    const Artifact maxMoraleArtifact = bag_artifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_MORALE );
+    if ( maxMoraleArtifact.isValid() ) {
+        if ( strs != nullptr ) {
+            *strs += maxMoraleArtifact.GetName();
+            *strs += _( " gives you maximum morale" );
+        }
+        result = Morale::BLOOD;
+    }
+
     return Morale::Normalize( result );
 }
 
@@ -640,15 +646,24 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
 {
     int result = Luck::NORMAL;
 
-    // bonus artifact
-    result += GetLuckModificator( strs );
-
     // bonus luck
     result += Skill::GetLuckModifiers( GetLevelSkill( Skill::Secondary::LUCK ), strs );
 
     // object visited
     const std::vector<MP2::MapObjectType> objectTypes{ MP2::OBJ_MERMAID, MP2::OBJ_FAERIERING, MP2::OBJ_FOUNTAIN, MP2::OBJ_IDOL, MP2::OBJ_PYRAMID };
     result += ObjectVisitedModifiersResult( objectTypes, *this, strs );
+
+    // bonus artifact
+    result += GetLuckModificator( strs );
+
+    const Artifact maxLuckArtifact = bag_artifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_LUCK );
+    if ( maxLuckArtifact.isValid() ) {
+        if ( strs != nullptr ) {
+            *strs += maxLuckArtifact.GetName();
+            *strs += _( " gives you maximum luck" );
+        }
+        result = Luck::IRISH;
+    }
 
     return Luck::Normalize( result );
 }
@@ -766,8 +781,8 @@ void Heroes::ReplenishSpellPoints()
     // everyday
     curr += GameStatic::GetHeroesRestoreSpellPointsPerDay();
 
-    // power ring action
-    curr += artifactCount( Artifact::POWER_RING ) * Artifact( Artifact::POWER_RING ).ExtraValue();
+    // Spell points from artifacts.
+    curr += GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::SPELL_POINTS_DAILY_GENERATION );
 
     // secondary skill
     curr += GetSecondaryValues( Skill::Secondary::MYSTICISM );
@@ -1284,7 +1299,7 @@ void Heroes::Scoute( const int tileIndex ) const
 
 int Heroes::GetScoute( void ) const
 {
-    return static_cast<int>( artifactCount( Artifact::TELESCOPE ) * GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::TELESCOPE )
+    return static_cast<int>( GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE )
                              + GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::HEROES ) + GetSecondaryValues( Skill::Secondary::SCOUTING ) );
 }
 
@@ -1308,7 +1323,7 @@ uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skil
 
 u32 Heroes::GetVisionsDistance( void ) const
 {
-    return 8 * std::max( 1U, artifactCount( Artifact::CRYSTAL_BALL ) );
+    return 8;
 }
 
 int Heroes::GetDirection( void ) const

@@ -115,7 +115,12 @@ int Captain::GetMorale( void ) const
     // global modificator
     result += GetMoraleModificator( nullptr );
 
-    // result
+    // A special artifact ability presence must be the last check.
+    const Artifact maxMoraleArtifact = bag_artifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_MORALE );
+    if ( maxMoraleArtifact.isValid() ) {
+        result = Morale::BLOOD;
+    }
+
     return Morale::Normalize( result );
 }
 
@@ -126,7 +131,12 @@ int Captain::GetLuck( void ) const
     // global modificator
     result += GetLuckModificator( nullptr );
 
-    // result
+    // A special artifact ability presence must be the last check.
+    const Artifact maxLuckArtifact = bag_artifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_LUCK );
+    if ( maxLuckArtifact.isValid() ) {
+        result = Luck::IRISH;
+    }
+
     return Luck::Normalize( result );
 }
 

@@ -973,11 +973,15 @@ bool Battle::Arena::CanRetreatOpponent( int color ) const
 bool Battle::Arena::isSpellcastDisabled() const
 {
     const HeroBase * hero1 = army1->GetCommander();
-    const HeroBase * hero2 = army2->GetCommander();
-
-    if ( ( hero1 && hero1->hasArtifact( Artifact::SPHERE_NEGATION ) ) || ( hero2 && hero2->hasArtifact( Artifact::SPHERE_NEGATION ) ) ) {
+    if ( hero1 != nullptr && hero1->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::DISABLE_ALL_SPELL_COMBAT_CASTING ) ) {
         return true;
     }
+
+    const HeroBase * hero2 = army2->GetCommander();
+    if ( hero2 != nullptr && hero2->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::DISABLE_ALL_SPELL_COMBAT_CASTING ) ) {
+        return true;
+    }
+
     return false;
 }
 
@@ -1334,7 +1338,7 @@ bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defen
     const HeroBase * hero = attacker.GetCommander();
     if ( hero ) {
         // golden bow artifact
-        if ( hero->hasArtifact( Artifact::GOLDEN_BOW ) )
+        if ( hero->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY ) )
             return false;
 
         // archery skill
