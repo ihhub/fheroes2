@@ -1246,15 +1246,6 @@ void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const He
 
     case Spell::HYPNOTIZE: {
         SetModes( SP_HYPNOTIZE );
-
-        if ( hero != nullptr ) {
-            const std::vector<int32_t> extraDurationPercentage
-                = hero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::HYPNOTIZE_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
-            for ( const int32_t value : extraDurationPercentage ) {
-                duration = duration * ( 100 + value ) / 100;
-            }
-        }
-
         affected.AddMode( SP_HYPNOTIZE, duration );
         break;
     }

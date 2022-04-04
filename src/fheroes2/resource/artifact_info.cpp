@@ -753,8 +753,7 @@ namespace
         artifactData[Artifact::SPELL_SCROLL].bonuses.emplace_back( fheroes2::ArtifactBonusType::ADD_SPELL, Spell::NONE );
 
         artifactData[Artifact::ARM_MARTYR].bonuses.emplace_back( fheroes2::ArtifactBonusType::SPELL_POWER_SKILL, 3 );
-        // TODO: check undead morale penalty.
-        artifactData[Artifact::ARM_MARTYR].curses.emplace_back( fheroes2::ArtifactCurseType::UNDEAD_PENALTY );
+        artifactData[Artifact::ARM_MARTYR].curses.emplace_back( fheroes2::ArtifactCurseType::UNDEAD_MORALE_PENALTY );
 
         artifactData[Artifact::BREASTPLATE_ANDURAN].bonuses.emplace_back( fheroes2::ArtifactBonusType::DEFENCE_SKILL, 5 );
 
@@ -925,7 +924,7 @@ namespace fheroes2
     {
         switch ( curse ) {
         case ArtifactCurseType::NO_JOINING_ARMIES:
-        case ArtifactCurseType::UNDEAD_PENALTY:
+        case ArtifactCurseType::UNDEAD_MORALE_PENALTY:
             return true;
         default:
             break;
@@ -1204,7 +1203,7 @@ namespace fheroes2
                 case ArtifactCurseType::MORALE:
                     os << "Decreases army's Morale by " << curse.value << std::endl;
                     break;
-                case ArtifactCurseType::UNDEAD_PENALTY:
+                case ArtifactCurseType::UNDEAD_MORALE_PENALTY:
                     os << "Add Undead Penalty to army's Morale" << std::endl;
                     break;
                 case ArtifactCurseType::GOLD_PENALTY:

@@ -111,7 +111,7 @@ namespace fheroes2
 
         // All curses below are unique per hero. They do not require any extra values. Only one artifact with such curse will be used.
         NO_JOINING_ARMIES,
-        UNDEAD_PENALTY
+        UNDEAD_MORALE_PENALTY
     };
 
     struct ArtifactBonus

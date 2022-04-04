@@ -151,12 +151,20 @@ namespace fheroes2
 
     uint32_t getHypnorizeMonsterHPPoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )
     {
-        (void)hero;
-
         assert( spell == Spell::HYPNOTIZE );
         assert( spellPower > 0 );
 
-        return spell.ExtraValue() * spellPower;
+        uint32_t hpPoints = spell.ExtraValue() * spellPower;
+
+        if ( hero != nullptr ) {
+            const std::vector<int32_t> extraEffectiveness
+                = hero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::HYPNOTIZE_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
+            for ( const int32_t value : extraEffectiveness ) {
+                hpPoints = hpPoints * ( 100 + value ) / 100;
+            }
+        }
+
+        return hpPoints;
     }
 
     const Castle * getNearestCastleTownGate( const Heroes & hero )
