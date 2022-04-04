@@ -1788,8 +1788,8 @@ void Battle::Interface::RedrawCover()
             if ( isApplicable ) {
                 const Unit * highlightedUnit = highlightCell->GetUnit();
 
-                isApplicable = highlightedUnit == nullptr || !humanturn_spell.isValid()
-                               || !highlightedUnit->isMagicResist( humanturn_spell, spellPower, currentCommander );
+                isApplicable
+                    = highlightedUnit == nullptr || !humanturn_spell.isValid() || !highlightedUnit->isMagicResist( humanturn_spell, spellPower, currentCommander );
             }
 
             if ( isApplicable ) {
