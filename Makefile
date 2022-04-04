@@ -28,12 +28,10 @@
 # FHEROES2_WITH_IMAGE: build with SDL2 Image support (requires libpng)
 # FHEROES2_WITH_TOOLS: build additional tools
 # FHEROES2_MACOS_APP_BUNDLE: create a Mac app bundle (only valid when building on macOS)
-#
-# -DFHEROES2_DATA: set the built-in path to the fheroes2 data directory
+# FHEROES2_DATA: set the built-in path to the fheroes2 data directory (e.g. /usr/share/fheroes2)
 
+TARGET := fheroes2
 PROJECT_VERSION := 0.9.13
-
-TARGET	:= fheroes2
 
 .PHONY: all bundle clean
 

@@ -22,10 +22,19 @@ include $(DEVKITPRO)/libnx/switch_rules
 
 # Common flags (for both C and C++ compilers) for both third-party libraries and fheroes2
 CCFLAGS := $(CCFLAGS) $(shell sdl2-config --cflags) -fPIE
+LDFLAGS := $(LDFLAGS) -specs=$(DEVKITPRO)/libnx/switch.specs
 # Common flags (for both C and C++ compilers) for fheroes2 only
 CCFLAGS_FH2 := -DTARGET_NINTENDO_SWITCH
 
-LIBS := $(LIBS) -lpng16 -lbz2 -lvorbisidec -lmodplug -lmpg123 -lm -lopusfile -logg -lopus -ljpeg -lwebp -specs=$(DEVKITPRO)/libnx/switch.specs
+LIBS := $(LIBS) -lvorbisidec -lmodplug -lmpg123 -lopusfile -lopus -logg
+
+ifdef FHEROES2_WITH_IMAGE
+LIBS := $(LIBS) -ljpeg -lwebp
+endif
 
 # Prevent sdl2-config --cflags from running once again in the main Makefile
 SDL_FLAGS :=
+
+ifdef FHEROES2_WITH_IMAGE
+SDL_FLAGS := $(SDL_FLAGS) $(shell libpng-config --cflags)
+endif

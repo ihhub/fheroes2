@@ -27,11 +27,11 @@ TARGET := fheroes2
 # Common flags for both C and C++ compilers
 CCFLAGS := -fsigned-char -pthread
 # Flags for the C compiler
-CFLAGS := $(CFLAGS)
+CFLAGS :=
 # Flags for the C++ compiler
-CXXFLAGS := $(CXXFLAGS)
+CXXFLAGS :=
 # Flags for the linker
-LDFLAGS := $(LDFLAGS) -pthread
+LDFLAGS := -pthread
 
 ifdef FHEROES2_WITH_DEBUG
 CCFLAGS := $(CCFLAGS) -O0 -g
@@ -105,6 +105,9 @@ CCFLAGS := $(CCFLAGS) -DWITH_DEBUG
 endif
 ifdef FHEROES2_WITH_IMAGE
 CCFLAGS := $(CCFLAGS) -DWITH_IMAGE
+endif
+ifdef FHEROES2_DATA
+CCFLAGS := $(CCFLAGS) -DFHEROES2_DATA="$(FHEROES2_DATA)"
 endif
 
 # TODO: Add -Wconversion -Wsign-conversion -Wextra-semi flags once we fix all the corresponding code smells

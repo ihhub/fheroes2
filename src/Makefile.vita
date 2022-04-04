@@ -38,5 +38,5 @@ SDL_LIBS := -L$(VITASDK)/arm-vita-eabi/lib -lSDL2_mixer -lSDL2 -lvita2d -lScePow
                                            -lmpg123 -lvorbisfile -lvorbis -logg
 
 ifdef FHEROES2_WITH_IMAGE
-SDL_LIBS := $(SDL_LIBS) -lSDL2_image -ljpeg -lpng
+SDL_LIBS := $(SDL_LIBS) -lSDL2_image -lpng -ljpeg -lwebp
 endif
