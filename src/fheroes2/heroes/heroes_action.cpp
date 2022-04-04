@@ -2688,7 +2688,6 @@ void ActionToEvent( Heroes & hero, s32 dst_index )
             if ( hero.PickupArtifact( art ) ) {
                 artifactUI.reset( new fheroes2::ArtifactDialogElement( art ) );
                 AGG::PlaySound( M82::TREASURE );
-                Game::PlayPickupSound();
             }
         }
 
