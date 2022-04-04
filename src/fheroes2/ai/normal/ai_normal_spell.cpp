@@ -121,11 +121,12 @@ namespace AI
         if ( !spell.isDamage() )
             return bestOutcome;
 
+        const HeroBase * currentCommander = _commander;
         const int spellPower = _commander->GetPower();
         const uint32_t totalDamage = spell.Damage() * spellPower;
 
-        auto damageHeuristic = [&totalDamage, &spell, &spellPower, &retreating]( const Unit * unit ) {
-            const uint32_t damage = totalDamage * ( 100 - unit->GetMagicResist( spell, spellPower ) ) / 100;
+        auto damageHeuristic = [&totalDamage, &spell, &spellPower, &retreating, &currentCommander]( const Unit * unit ) {
+            const uint32_t damage = totalDamage * ( 100 - unit->GetMagicResist( spell, spellPower, currentCommander ) ) / 100;
             // If we're retreating we don't care about partial damage, only actual units killed
             if ( retreating )
                 return unit->GetMonsterStrength() * unit->HowManyWillKilled( damage );

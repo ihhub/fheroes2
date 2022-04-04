@@ -121,7 +121,12 @@ namespace Battle
         }
 
         bool isHaveDamage( void ) const;
-        bool isMagicResist( const Spell &, u32 ) const;
+
+        bool isMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const
+        {
+            return 100 <= GetMagicResist( spell, attackingArmySpellPower, attackingHero );
+        }
+
         bool OutOfWalls( void ) const;
         bool canReach( int index ) const;
         bool canReach( const Unit & unit ) const;
@@ -248,7 +253,7 @@ namespace Battle
         bool UpdateDirection( const fheroes2::Rect & );
         void PostKilledAction( void );
 
-        u32 GetMagicResist( const Spell &, u32 ) const;
+        u32 GetMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const;
         int GetSpellMagic() const;
 
         const HeroBase * GetCommander( void ) const;

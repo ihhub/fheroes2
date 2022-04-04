@@ -726,7 +726,7 @@ bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, 
         return false;
     if ( hero && spell.isApplyToEnemies() && GetColor() == hero->GetColor() && !forceApplyToAlly )
         return false;
-    if ( isMagicResist( spell, ( hero ? hero->GetPower() : 0 ) ) )
+    if ( isMagicResist( spell, ( hero ? hero->GetPower() : 0 ), hero ) )
         return false;
 
     const HeroBase * myhero = GetCommander();
@@ -1060,13 +1060,13 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
 
     switch ( id ) {
     case Monster::UNICORN:
-        attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::BLIND, DEFAULT_SPELL_DURATION ) ) / 100.0;
+        attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::BLIND, DEFAULT_SPELL_DURATION, nullptr ) ) / 100.0;
         break;
     case Monster::CYCLOPS:
-        attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::PARALYZE, DEFAULT_SPELL_DURATION ) ) / 100.0;
+        attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::PARALYZE, DEFAULT_SPELL_DURATION, nullptr ) ) / 100.0;
         break;
     case Monster::MEDUSA:
-        attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::STONE, DEFAULT_SPELL_DURATION ) ) / 100.0;
+        attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::STONE, DEFAULT_SPELL_DURATION, nullptr ) ) / 100.0;
         break;
     case Monster::VAMPIRE_LORD:
         // Lifesteal
@@ -1506,12 +1506,7 @@ bool Battle::Unit::isTwiceAttack( void ) const
     return ArmyTroop::isTwiceAttack();
 }
 
-bool Battle::Unit::isMagicResist( const Spell & spell, u32 spower ) const
-{
-    return 100 <= GetMagicResist( spell, spower );
-}
-
-u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
+u32 Battle::Unit::GetMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const
 {
     if ( Modes( SP_ANTIMAGIC ) )
         return 100;
@@ -1537,7 +1532,7 @@ u32 Battle::Unit::GetMagicResist( const Spell & spell, u32 spower ) const
         break;
 
     case Spell::HYPNOTIZE:
-        if ( fheroes2::getHypnorizeMonsterHPPoints( spell, spower, nullptr ) < hp )
+        if ( fheroes2::getHypnorizeMonsterHPPoints( spell, attackingArmySpellPower, attackingHero ) < hp )
             return 100;
         break;
 
