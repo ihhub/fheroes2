@@ -10,27 +10,27 @@ jobs:
         config:
         - name: Linux SDL1
           os: ubuntu-latest
-          dependencies: libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev gettext
+          dependencies: libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev gettext
           options: -DUSE_SDL_VERSION=SDL
         - name: Linux SDL2
           os: ubuntu-latest
-          dependencies: libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev gettext
+          dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
           options: -DUSE_SDL_VERSION=SDL2
         - name: macOS SDL1
           os: macos-latest
-          dependencies: sdl sdl_image sdl_mixer
+          dependencies: sdl sdl_mixer sdl_image
           options: -DUSE_SDL_VERSION=SDL
         - name: macOS SDL1 App Bundle
           os: macos-latest
-          dependencies: sdl sdl_image sdl_mixer dylibbundler
+          dependencies: sdl sdl_mixer sdl_image dylibbundler
           options: -DUSE_SDL_VERSION=SDL -DMACOS_APP_BUNDLE=ON
         - name: macOS SDL2
           os: macos-latest
-          dependencies: sdl2 sdl2_image sdl2_mixer
+          dependencies: sdl2 sdl2_mixer sdl2_image
           options: -DUSE_SDL_VERSION=SDL2
         - name: macOS SDL2 App Bundle
           os: macos-latest
-          dependencies: sdl2 sdl2_image sdl2_mixer dylibbundler
+          dependencies: sdl2 sdl2_mixer sdl2_image dylibbundler
           options: -DUSE_SDL_VERSION=SDL2 -DMACOS_APP_BUNDLE=ON
     name: CMake (${{ matrix.config.name }})
     runs-on: ${{ matrix.config.os }}
