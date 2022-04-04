@@ -22,8 +22,10 @@ AR := arm-vita-eabi-gcc-ar
 CC := arm-vita-eabi-gcc
 CXX := arm-vita-eabi-g++
 
+# Common flags (for both C and C++ compilers) for both third-party libraries and fheroes2
 CCFLAGS := $(CCFLAGS) -I$(VITASDK)/arm-vita-eabi/include -mcpu=cortex-a9 -mfpu=neon -fgraphite-identity -floop-nest-optimize -fno-lto -fno-tree-slp-vectorize
 LDFLAGS := $(LDFLAGS) -L$(VITASDK)/arm-vita-eabi/lib -L$(VITASDK)/lib -Wl,--sort-common -Wl,--whole-archive -Wl,--no-whole-archive -Wl,-q
+# Common flags (for both C and C++ compilers) for fheroes2 only
 CCFLAGS_FH2 := -DTARGET_PS_VITA
 
 ifdef FHEROES2_STRICT_COMPILATION

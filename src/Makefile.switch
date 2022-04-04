@@ -20,10 +20,12 @@
 
 include $(DEVKITPRO)/libnx/switch_rules
 
+# Common flags (for both C and C++ compilers) for both third-party libraries and fheroes2
 CCFLAGS := $(CCFLAGS) $(shell sdl2-config --cflags) -fPIE
+# Common flags (for both C and C++ compilers) for fheroes2 only
 CCFLAGS_FH2 := -DTARGET_NINTENDO_SWITCH
 
 LIBS := $(LIBS) -lpng16 -lbz2 -lvorbisidec -lmodplug -lmpg123 -lm -lopusfile -logg -lopus -ljpeg -lwebp -specs=$(DEVKITPRO)/libnx/switch.specs
 
-# Prevent sdl2-config from running
+# Prevent sdl2-config --cflags from running once again in the main Makefile
 SDL_FLAGS :=
