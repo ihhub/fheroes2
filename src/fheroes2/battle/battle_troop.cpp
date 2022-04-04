@@ -1532,7 +1532,7 @@ u32 Battle::Unit::GetMagicResist( const Spell & spell, const uint32_t attackingA
         break;
 
     case Spell::HYPNOTIZE:
-        if ( fheroes2::getHypnorizeMonsterHPPoints( spell, attackingArmySpellPower, attackingHero ) < hp )
+        if ( fheroes2::getHypnotizeMonsterHPPoints( spell, attackingArmySpellPower, attackingHero ) < hp )
             return 100;
         break;
 

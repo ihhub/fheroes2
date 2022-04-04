@@ -149,7 +149,7 @@ namespace fheroes2
         return spell.ExtraValue() * spellPower;
     }
 
-    uint32_t getHypnorizeMonsterHPPoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )
+    uint32_t getHypnotizeMonsterHPPoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )
     {
         assert( spell == Spell::HYPNOTIZE );
         assert( spellPower > 0 );
@@ -296,7 +296,7 @@ namespace fheroes2
         if ( spell == Spell::HYPNOTIZE ) {
             description += "\n \n";
             description += _( "This spell controls up to\n%{hp} HP." );
-            StringReplace( description, "%{hp}", getHypnorizeMonsterHPPoints( spell, hero->GetPower(), hero ) );
+            StringReplace( description, "%{hp}", getHypnotizeMonsterHPPoints( spell, hero->GetPower(), hero ) );
 
             return description;
         }
