@@ -25,5 +25,5 @@ CCFLAGS_FH2 := -DTARGET_NINTENDO_SWITCH
 
 LIBS := $(LIBS) -lpng16 -lbz2 -lvorbisidec -lmodplug -lmpg123 -lm -lopusfile -logg -lopus -ljpeg -lwebp -specs=$(DEVKITPRO)/libnx/switch.specs
 
-# Prevent sdl-config from running
+# Prevent sdl2-config from running
 SDL_FLAGS :=

@@ -136,13 +136,15 @@ endif
 # SDL_LIBS can already be defined in a platform-specific Makefile
 ifeq ($(origin SDL_LIBS),undefined)
 ifdef FHEROES2_WITH_SDL1
-SDL_LIBS := -lSDL_mixer $(shell sdl-config --libs)
+SDL_LIBS := $(shell sdl-config --libs)
+SDL_LIBS := $(subst $(firstword $(filter -l%,$(SDL_LIBS))),-lSDL_mixer $(firstword $(filter -l%,$(SDL_LIBS))),$(SDL_LIBS))
 
 ifdef FHEROES2_WITH_IMAGE
 SDL_LIBS := $(SDL_LIBS) -lSDL_image $(shell libpng-config --libs)
 endif
 else
-SDL_LIBS := -lSDL2_mixer $(shell sdl2-config --libs)
+SDL_LIBS := $(shell sdl2-config --libs)
+SDL_LIBS := $(subst $(firstword $(filter -l%,$(SDL_LIBS))),-lSDL2_mixer $(firstword $(filter -l%,$(SDL_LIBS))),$(SDL_LIBS))
 
 ifdef FHEROES2_WITH_IMAGE
 SDL_LIBS := $(SDL_LIBS) -lSDL2_image $(shell libpng-config --libs)
