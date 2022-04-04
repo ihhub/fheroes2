@@ -442,5 +442,4 @@ namespace AI
         }
         return false;
     }
-
 }
