@@ -22,8 +22,8 @@
 #define H2AI_NORMAL_H
 
 #include "ai.h"
-#include "world_pathfinding.h"
 #include "kingdom.h"
+#include "world_pathfinding.h"
 
 #include <set>
 
@@ -155,8 +155,8 @@ namespace AI
         void KingdomTurn( Kingdom & kingdom ) override;
         void CastleTurn( Castle & castle, bool defensive ) override;
         void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions ) override;
-        bool HeroesTurn( VecHeroes & heroes ) override;
-        uint8_t purchaseNewHeroes(VecHeroes &heroes, const std::vector<AICastle> &castles, const std::set<int> &castlesInDanger, int32_t availableHeroCount);
+        .ool HeroesTurn( VecHeroes & heroes ) override;
+        uint8_t purchaseNewHeroes( VecHeroes & heroes, const std::vector<AICastle> & castles, const std::set<int> & castlesInDanger, int32_t availableHeroCount );
 
         void revealFog( const Maps::Tiles & tile ) override;
 

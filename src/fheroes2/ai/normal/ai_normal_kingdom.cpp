@@ -240,13 +240,11 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( myColor ) << " starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" );
         DEBUG_LOG( DBG_AI, DBG_TRACE, "Funds: " << kingdom.GetFunds().String() );
 
-
         uint8_t purchasedHeroesCount;
 
-        do
-        {
+        do {
             purchasedHeroesCount = 0;
-            
+
             // Step 1. Scan visible map (based on game difficulty), add goals and threats
             std::vector<std::pair<int, const Army *>> enemyArmies;
 
@@ -360,7 +358,7 @@ namespace AI
             // Step 4. Buy new heroes, adjust roles, sort heroes based on priority or strength
             std::vector<AICastle> sortedCastleList = getSortedCastleList( castles, castlesInDanger );
 
-            purchasedHeroesCount = purchaseNewHeroes(heroes, sortedCastleList, castlesInDanger, availableHeroCount);
+            purchasedHeroesCount = purchaseNewHeroes( heroes, sortedCastleList, castlesInDanger, availableHeroCount );
 
             status.RedrawTurnProgress( 7 );
 
@@ -384,21 +382,22 @@ namespace AI
                 }
             }
 
-        } while(purchasedHeroesCount != 0); // If we have bought new heroes during this turn let's repeat the whole process. 
+        } while ( purchasedHeroesCount != 0 ); // If we have bought new heroes during this turn let's repeat the whole process.
     }
 
-	uint8_t Normal::purchaseNewHeroes(VecHeroes &heroes, const std::vector<AICastle> &sortedCastleList, const std::set<int> &castlesInDanger, int32_t availableHeroCount)
-	{
-    const bool slowEarlyGame = world.CountDay() < 5 && sortedCastleList.size() == 1;
-    int32_t heroLimit = world.w() / Maps::SMALL + 1;
-    const bool moreTasksForHeroes = HeroesTurn( heroes );
+    uint8_t Normal::purchaseNewHeroes( VecHeroes & heroes, const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger,
+                                       int32_t availableHeroCount )
+    {
+        const bool slowEarlyGame = world.CountDay() < 5 && sortedCastleList.size() == 1;
+        int32_t heroLimit = world.w() / Maps::SMALL + 1;
+        const bool moreTasksForHeroes = HeroesTurn( heroes );
 
-    if ( _personality == EXPLORER )
-        ++heroLimit;
-    if ( slowEarlyGame )
-        heroLimit = 2;
+        if ( _personality == EXPLORER )
+            ++heroLimit;
+        if ( slowEarlyGame )
+            heroLimit = 2;
 
- 		if ( availableHeroCount < heroLimit ) {
+        if ( availableHeroCount < heroLimit ) {
             Castle * recruitmentCastle = nullptr;
             double bestArmyAvailable = -1.0;
 
@@ -442,6 +441,6 @@ namespace AI
             }
         }
         return false;
-	  }
+    }
 
 }
