@@ -1684,6 +1684,30 @@ namespace AI
         }
     }
 
+    bool HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex )
+    {
+        const Spell dimensionDoor( Spell::DIMENSIONDOOR );
+        if ( !Maps::isValidAbsIndex( targetIndex ) || hero.GetMovePoints() < dimensionDoor.MovePoint() || hero.GetSpellPoints() < dimensionDoor.SpellPoint( &hero )
+             || !hero.HaveSpell( dimensionDoor ) )
+            return false;
+
+        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            hero.FadeOut();
+        }
+
+        hero.Move2Dest( targetIndex );
+        hero.SpellCasted( dimensionDoor );
+        hero.GetPath().Reset();
+
+        if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
+            Interface::Basic::Get().GetGameArea().SetCenter( hero.GetCenter() );
+            hero.FadeIn();
+        }
+
+        hero.ActionNewPosition( false );
+        return true;
+    }
+
     void AIWhirlpoolTroopLoseEffect( Heroes & hero )
     {
         Army & heroArmy = hero.GetArmy();
