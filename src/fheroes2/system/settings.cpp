@@ -855,8 +855,6 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "world: Scouting skill shows extended content info" );
     case Settings::WORLD_ALLOW_SET_GUARDIAN:
         return _( "world: allow to set guardian to objects" );
-    case Settings::WORLD_ARTIFACT_CRYSTAL_BALL:
-        return _( "world: Crystal Ball gives Identify Hero and Visions spells" );
     case Settings::WORLD_SCALE_NEUTRAL_ARMIES:
         return _( "world: Neutral armies scale with game difficulty" );
     case Settings::WORLD_EXT_OBJECTS_CAPTURED:
@@ -867,8 +865,6 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "heroes: allow buy a spellbook from Shrines" );
     case Settings::HEROES_REMEMBER_POINTS_RETREAT:
         return _( "heroes: remember move points for retreat/surrender result" );
-    case Settings::HEROES_TRANSCRIBING_SCROLLS:
-        return _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" );
     case Settings::HEROES_ARENA_ANY_SKILLS:
         return _( "heroes: allow to choose any primary skill in Arena" );
     case Settings::BATTLE_SOFT_WAITING:
