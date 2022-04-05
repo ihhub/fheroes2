@@ -42,6 +42,7 @@ jobs:
       env:
         FHEROES2_STRICT_COMPILATION: ON
         FHEROES2_WITH_DEBUG: ON
+        FHEROES2_WITH_IMAGE: ON
         FHEROES2_WITH_TOOLS: ON
     - name: Analyze
       run: |
