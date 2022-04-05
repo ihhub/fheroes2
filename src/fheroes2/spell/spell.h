@@ -33,7 +33,7 @@ class StreamBase;
 class Spell
 {
 public:
-    enum type_t
+    enum type_t : int32_t
     {
         NONE = 0,
         FIREBALL,
@@ -109,7 +109,10 @@ public:
         RANDOM4,
         RANDOM5,
 
-        STONE
+        STONE,
+
+        // IMPORTANT! Put all new spells above this line.
+        SPELL_COUNT
     };
 
     Spell( const int s = NONE )

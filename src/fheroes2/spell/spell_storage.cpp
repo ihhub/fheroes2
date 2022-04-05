@@ -92,23 +92,11 @@ void SpellStorage::Append( const BagArtifacts & bag )
 
 void SpellStorage::Append( const Artifact & art )
 {
-    switch ( art.GetID() ) {
-    case Artifact::SPELL_SCROLL:
-        Append( Spell( art.GetSpell() ) );
-        break;
-
-    case Artifact::CRYSTAL_BALL:
-        if ( Settings::Get().ExtWorldArtifactCrystalBall() ) {
-            Append( Spell( Spell::IDENTIFYHERO ) );
-            Append( Spell( Spell::VISIONS ) );
+    const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( art.GetID() ).bonuses;
+    for ( const fheroes2::ArtifactBonus & bonus : bonuses ) {
+        if ( bonus.type == fheroes2::ArtifactBonusType::ADD_SPELL ) {
+            assert( bonus.value > Spell::NONE && bonus.value < Spell::SPELL_COUNT );
+            Append( Spell( bonus.value ) );
         }
-        break;
-
-    case Artifact::BATTLE_GARB:
-        Append( Spell( Spell::TOWNPORTAL ) );
-        break;
-
-    default:
-        break;
     }
 }

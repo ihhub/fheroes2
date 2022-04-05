@@ -66,6 +66,13 @@ namespace AI
         }
     };
 
+    struct HeroToMove
+    {
+        Heroes * hero = nullptr;
+        int patrolCenter = -1;
+        uint32_t patrolDistance = 0;
+    };
+
     struct BattleTargetPair
     {
         int cell = -1;
@@ -167,7 +174,7 @@ namespace AI
         std::vector<AICastle> getSortedCastleList( const KingdomCastles & castles, const std::set<int> & castlesInDanger );
 
         double getObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
-        int getPriorityTarget( const Heroes & hero, double & maxPriority, int patrolIndex = -1, uint32_t distanceLimit = 0 );
+        int getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority );
         void resetPathfinder() override;
 
     private:

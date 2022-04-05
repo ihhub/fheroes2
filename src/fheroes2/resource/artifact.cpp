@@ -58,25 +58,6 @@ namespace
     };
 }
 
-bool Artifact::operator==( const Spell & spell ) const
-{
-    switch ( id ) {
-    case SPELL_SCROLL:
-        return ext == spell.GetID();
-
-    case Artifact::CRYSTAL_BALL:
-        return spell == Spell::IDENTIFYHERO || spell == Spell::VISIONS;
-
-    case Artifact::BATTLE_GARB:
-        return spell == Spell::TOWNPORTAL;
-
-    default:
-        break;
-    }
-
-    return false;
-}
-
 const char * Artifact::GetName( void ) const
 {
     return _( fheroes2::getArtifactData( id ).name );
@@ -273,11 +254,6 @@ int Artifact::getArtifactValue() const
     return 0;
 }
 
-int Artifact::GetSpell( void ) const
-{
-    return id == SPELL_SCROLL ? ext : Spell::NONE;
-}
-
 void Artifact::SetSpell( int v )
 {
     if ( id != SPELL_SCROLL ) {
@@ -377,9 +353,23 @@ BagArtifacts::BagArtifacts()
     : std::vector<Artifact>( HEROESMAXARTIFACT, Artifact::UNKNOWN )
 {}
 
-bool BagArtifacts::ContainSpell( const Spell & spell ) const
+bool BagArtifacts::ContainSpell( const int spellId ) const
 {
-    return end() != std::find( begin(), end(), spell );
+    assert( spellId > Spell::NONE && spellId < Spell::SPELL_COUNT );
+
+    for ( const Artifact & artifact : *this ) {
+        const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( artifact.GetID() ).bonuses;
+        for ( const fheroes2::ArtifactBonus & bonus : bonuses ) {
+            if ( bonus.type == fheroes2::ArtifactBonusType::ADD_SPELL ) {
+                assert( bonus.value > Spell::NONE && bonus.value < Spell::SPELL_COUNT );
+                if ( bonus.value == spellId ) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
 }
 
 bool BagArtifacts::isPresentArtifact( const Artifact & art ) const
@@ -765,16 +755,6 @@ bool BagArtifacts::ContainUltimateArtifact( void ) const
     return std::any_of( begin(), end(), []( const Artifact & art ) { return art.isUltimate(); } );
 }
 
-void BagArtifacts::RemoveScroll( const Artifact & art )
-{
-    Spell spell( art.GetSpell() );
-    if ( spell.isValid() ) {
-        iterator it = std::find( begin(), end(), spell );
-        if ( it != end() )
-            ( *it ).Reset();
-    }
-}
-
 std::string BagArtifacts::String( void ) const
 {
     std::string output;
@@ -955,31 +935,7 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
 
 bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
 {
-    if ( art.GetID() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && !read_only && _hero->CanTranscribeScroll( art ) ) {
-        Spell spell = art.GetSpell();
-
-        if ( !spell.isValid() ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "invalid spell" );
-        }
-        else if ( _hero->CanLearnSpell( spell ) ) {
-            std::string text = _(
-                "Do you want to use your knowledge of magical secrets to transcribe the %{spell} Scroll into your Magic Book?\nThe Spell Scroll will be consumed.\n Cost in spell points: %{sp}" );
-
-            StringReplace( text, "%{spell}", spell.GetName() );
-            StringReplace( text, "%{sp}", spell.SpellPoint() );
-
-            if ( spell.MovePoint() ) {
-                text += '\n';
-                text.append( _( "Move points: %{mp}" ) );
-                StringReplace( text, "%{mp}", spell.MovePoint() );
-            }
-
-            const uint32_t answer = Dialog::Message( _( "Transcribe Spell Scroll" ), text, Font::BIG, Dialog::YES | Dialog::NO );
-            if ( answer == Dialog::YES )
-                const_cast<Heroes *>( _hero )->TranscribeScroll( art );
-        }
-    }
-    else if ( art.isValid() ) {
+    if ( art.isValid() ) {
         fheroes2::ArtifactDialogElement( art ).showPopup( Dialog::OK );
     }
 
@@ -1024,8 +980,6 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
         if ( &art == art2 ) {
             if ( isMagicBook( art ) )
                 msg = _( "View Spells" );
-            else if ( art.GetID() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && !read_only && _hero->CanTranscribeScroll( art ) )
-                msg = _( "Transcribe Spell Scroll" );
             else {
                 msg = _( "View %{name} Info" );
                 StringReplace( msg, "%{name}", art.GetName() );

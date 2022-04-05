@@ -194,12 +194,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
             bool valid = ( dst >= 0 );
 
             if ( valid ) {
-                const Maps::Tiles & tile = world.GetTiles( dst );
-
-                const MP2::MapObjectType objectType = tile.GetObject( true );
-                const bool isActionObject = MP2::isActionObject( objectType );
-
-                valid = ( ( spellROI & mp ) && !isActionObject && ( tile.GetPassable() & Direction::CENTER ) != 0 && water == tile.isWater() );
+                valid = ( spellROI & mp ) && Maps::isValidForDimensionDoor( dst, water );
             }
 
             cursor.SetThemes( valid ? ( water ? static_cast<int>( Cursor::CURSOR_HERO_BOAT ) : static_cast<int>( Cursor::CURSOR_HERO_MOVE ) )
