@@ -150,6 +150,8 @@ namespace
 
     void generatePolishAlphabet()
     {
+        alphabetPreserver.restore();
+
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
             std::vector<fheroes2::Sprite> & original = _icnVsSprite[icnId];
 
@@ -180,6 +182,8 @@ namespace
 
     void generateGermanAlphabet()
     {
+        alphabetPreserver.restore();
+
         // Resize fonts.
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
             _icnVsSprite[icnId].resize( 96 );
@@ -349,6 +353,8 @@ namespace
 
     void generateFrenchAlphabet()
     {
+        alphabetPreserver.restore();
+
         // Resize fonts.
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
             _icnVsSprite[icnId].resize( 96 );
@@ -574,6 +580,8 @@ namespace
 
     void generateRussianAlphabet()
     {
+        alphabetPreserver.restore();
+
         // Resize fonts.
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
             std::vector<fheroes2::Sprite> & original = _icnVsSprite[icnId];
@@ -1403,6 +1411,8 @@ namespace
 
     void generateItalianAlphabet()
     {
+        alphabetPreserver.restore();
+
         // Resize fonts.
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
             _icnVsSprite[icnId].resize( 96 );
