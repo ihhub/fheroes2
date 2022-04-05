@@ -130,7 +130,7 @@ std::vector<Spell> HeroBase::GetSpells( const int lvl ) const
 
 bool HeroBase::HaveSpell( const Spell & spell, const bool skip_bag ) const
 {
-    return HaveSpellBook() && ( spell_book.isPresentSpell( spell ) || ( !skip_bag && bag_artifacts.ContainSpell( spell ) ) );
+    return HaveSpellBook() && ( spell_book.isPresentSpell( spell ) || ( !skip_bag && bag_artifacts.ContainSpell( spell.GetID() ) ) );
 }
 
 void HeroBase::AppendSpellToBook( const Spell & spell, const bool without_wisdom )
@@ -413,42 +413,12 @@ void HeroBase::SpellCasted( const Spell & spell )
         move_point -= ( spell.MovePoint() < move_point ? spell.MovePoint() : move_point );
 }
 
-bool HeroBase::CanTranscribeScroll( const Artifact & art ) const
-{
-    const Spell spell = art.GetSpell();
-
-    if ( spell.isValid() && CanCastSpell( spell ) ) {
-        const int learning = GetLevelSkill( Skill::Secondary::EAGLEEYE );
-
-        return ( ( 3 < spell.Level() && Skill::Level::EXPERT == learning ) || ( 3 == spell.Level() && Skill::Level::ADVANCED <= learning )
-                 || ( 3 > spell.Level() && Skill::Level::BASIC <= learning ) );
-    }
-
-    return false;
-}
-
 bool HeroBase::CanLearnSpell( const Spell & spell ) const
 {
     const int wisdom = GetLevelSkill( Skill::Secondary::WISDOM );
 
     return ( ( 4 < spell.Level() && Skill::Level::EXPERT == wisdom ) || ( 4 == spell.Level() && Skill::Level::ADVANCED <= wisdom )
              || ( 3 == spell.Level() && Skill::Level::BASIC <= wisdom ) || 3 > spell.Level() );
-}
-
-void HeroBase::TranscribeScroll( const Artifact & art )
-{
-    const Spell spell = art.GetSpell();
-
-    if ( spell.isValid() ) {
-        // add spell
-        spell_book.Append( spell );
-
-        // remove art
-        bag_artifacts.RemoveScroll( art );
-
-        // reduce mp and resource
-        SpellCasted( spell );
-    }
 }
 
 /* pack hero base */

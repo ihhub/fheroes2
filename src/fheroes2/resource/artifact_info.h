@@ -58,7 +58,7 @@ namespace fheroes2
         ADD_SPELL,
         NECROMANCY_SKILL,
 
-        // These bonuses are unique per artifac type but the effect is multiplied with different artifact types.
+        // These bonuses are unique per artifact type but the effect is multiplied with different artifact types.
         SURRENDER_COST_REDUCTION_PERCENT,
 
         CURSE_SPELL_COST_REDUCTION_PERCENT,
@@ -105,7 +105,7 @@ namespace fheroes2
         // These curses are unique per artifact type but cumulative across multiple artifact types.
         MORALE,
 
-        // These curses are unique per artifac type but the effect is multiplied with different artifact types.
+        // These curses are unique per artifact type but the effect is multiplied with different artifact types.
         FIRE_SPELL_EXTRA_DAMAGE_PERCENT,
         COLD_SPELL_EXTRA_DAMAGE_PERCENT,
 

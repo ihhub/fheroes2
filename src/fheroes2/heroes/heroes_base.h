@@ -102,8 +102,6 @@ public:
     bool HaveSpellPoints( const Spell & spell ) const;
     bool CanCastSpell( const Spell & spell, std::string * = nullptr ) const;
     bool CanLearnSpell( const Spell & spell ) const;
-    bool CanTranscribeScroll( const Artifact & art ) const;
-    void TranscribeScroll( const Artifact & art );
     void SpellCasted( const Spell & spell );
     void SetSpellPoints( const uint32_t points );
 

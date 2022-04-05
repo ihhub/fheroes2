@@ -68,7 +68,7 @@ public:
         // UNUSED = 0x20000001,
         // UNUSED = 0x20000002,
         WORLD_ALLOW_SET_GUARDIAN = 0x20000008,
-        WORLD_ARTIFACT_CRYSTAL_BALL = 0x20000020,
+        // UNUSED = 0x20000020,
         WORLD_SCOUTING_EXTENDED = 0x20000040,
         // UNUSED = 0x20000080,
         // UNUSED = 0x20000100,
@@ -80,7 +80,7 @@ public:
         WORLD_SHOW_TERRAIN_PENALTY = 0x20004000,
         // UNUSED = 0x20008000,
         // UNUSED = 0x20010000,
-        HEROES_TRANSCRIBING_SCROLLS = 0x20020000,
+        // UNUSED = 0x20020000,
         // UNUSED = 0x20040000,
         CASTLE_ALLOW_GUARDIANS = 0x20080000,
         // UNUSED = 0x20800000,
@@ -259,11 +259,6 @@ public:
         return ExtModes( HEROES_REMEMBER_POINTS_RETREAT );
     }
 
-    bool ExtHeroAllowTranscribingScroll() const
-    {
-        return ExtModes( HEROES_TRANSCRIBING_SCROLLS );
-    }
-
     bool ExtHeroArenaCanChoiseAnySkills() const
     {
         return ExtModes( HEROES_ARENA_ANY_SKILLS );
@@ -282,11 +277,6 @@ public:
     bool ExtWorldAllowSetGuardian() const
     {
         return ExtModes( WORLD_ALLOW_SET_GUARDIAN );
-    }
-
-    bool ExtWorldArtifactCrystalBall() const
-    {
-        return ExtModes( WORLD_ARTIFACT_CRYSTAL_BALL );
     }
 
     bool ExtWorldNeutralArmyDifficultyScaling() const

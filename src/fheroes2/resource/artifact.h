@@ -171,8 +171,6 @@ public:
         // Do nothing.
     }
 
-    bool operator==( const Spell & ) const;
-
     bool operator==( const Artifact & art ) const
     {
         return id == art.id;
@@ -277,7 +275,7 @@ class BagArtifacts : public std::vector<Artifact>
 public:
     BagArtifacts();
 
-    bool ContainSpell( const Spell & ) const;
+    bool ContainSpell( const int spellId ) const;
     bool isPresentArtifact( const Artifact & ) const;
 
     bool isArtifactBonusPresent( const fheroes2::ArtifactBonusType type ) const;
@@ -305,7 +303,6 @@ public:
     bool isFull( void ) const;
     bool ContainUltimateArtifact( void ) const;
 
-    void RemoveScroll( const Artifact & );
     void exchangeArtifacts( BagArtifacts & giftBag );
 
     int getArtifactValue() const;
