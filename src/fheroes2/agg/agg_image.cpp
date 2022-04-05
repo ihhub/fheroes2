@@ -1626,7 +1626,7 @@ namespace
 
     void generateAlphabet( const fheroes2::SupportedLanguage language )
     {
-        // Restore original 0-96 letters when changing language in case of changes to them. 
+        // Restore original 0-96 letters when changing language in case of changes to them.
         alphabetPreserver.restore();
 
         switch ( language ) {
