@@ -237,14 +237,13 @@ namespace AI
         KingdomHeroes & heroes = kingdom.GetHeroes();
         const KingdomCastles & castles = kingdom.GetCastles();
 
+        std::vector<AICastle> sortedCastleList;
+        std::set<int> castlesInDanger;
+
         DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( myColor ) << " starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" );
         DEBUG_LOG( DBG_AI, DBG_TRACE, "Funds: " << kingdom.GetFunds().String() );
 
-        uint8_t purchasedHeroesCount;
-
-        do {
-            purchasedHeroesCount = 0;
-
+        while ( true ) {
             // Step 1. Scan visible map (based on game difficulty), add goals and threats
             std::vector<std::pair<int, const Army *>> enemyArmies;
 
@@ -342,7 +341,7 @@ namespace AI
                     ++availableHeroCount;
             }
 
-            const std::set<int> castlesInDanger = findCastlesInDanger( castles, enemyArmies, myColor );
+            castlesInDanger = findCastlesInDanger( castles, enemyArmies, myColor );
 
             // Step 3. Do some hero stuff.
 
@@ -355,34 +354,35 @@ namespace AI
 
             status.RedrawTurnProgress( 6 );
 
-            // Step 4. Buy new heroes, adjust roles, sort heroes based on priority or strength
-            std::vector<AICastle> sortedCastleList = getSortedCastleList( castles, castlesInDanger );
-
-            purchasedHeroesCount = purchaseNewHeroes( heroes, sortedCastleList, castlesInDanger, availableHeroCount );
+            sortedCastleList = getSortedCastleList( castles, castlesInDanger );
 
             status.RedrawTurnProgress( 7 );
 
-            // Step 5. Move newly hired heroes if any.
+            // Step 4. Move newly hired heroes if any.
             setHeroRoles( heroes );
 
             HeroesTurn( heroes );
 
-            status.RedrawTurnProgress( 9 );
-
-            // sync up castle list (if conquered new ones during the turn)
-            if ( castles.size() != sortedCastleList.size() ) {
-                evaluateRegionSafety();
-                sortedCastleList = getSortedCastleList( castles, castlesInDanger );
+            // Step 5. Buy new heroes, adjust roles, sort heroes based on priority or strength
+            if ( purchaseNewHeroes( heroes, sortedCastleList, castlesInDanger, availableHeroCount ) == 0 ) {
+                break;
             }
+        }
 
-            // Step 6. Castle development according to kingdom budget
-            for ( const AICastle & entry : sortedCastleList ) {
-                if ( entry.castle != nullptr ) {
-                    CastleTurn( *entry.castle, entry.underThreat );
-                }
+        status.RedrawTurnProgress( 9 );
+
+        // sync up castle list (if conquered new ones during the turn)
+        if ( castles.size() != sortedCastleList.size() ) {
+            evaluateRegionSafety();
+            sortedCastleList = getSortedCastleList( castles, castlesInDanger );
+        }
+
+        // Step 6. Castle development according to kingdom budget
+        for ( const AICastle & entry : sortedCastleList ) {
+            if ( entry.castle != nullptr ) {
+                CastleTurn( *entry.castle, entry.underThreat );
             }
-
-        } while ( purchasedHeroesCount != 0 ); // If we have bought new heroes during this turn let's repeat the whole process.
+        }
     }
 
     uint8_t Normal::purchaseNewHeroes( VecHeroes & heroes, const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger,
