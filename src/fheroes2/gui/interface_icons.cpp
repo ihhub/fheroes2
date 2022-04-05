@@ -112,7 +112,7 @@ void Interface::CastleIcons::RedrawItem( const CASTLE & item, s32 ox, s32 oy, bo
 
 void Interface::CastleIcons::RedrawBackground( const fheroes2::Point & pos )
 {
-    redrawBackground( fheroes2::Display::instance(), pos, _size() );
+    redrawBackground( fheroes2::Display::instance(), pos, show ? _size() : 0 );
 }
 
 void Interface::CastleIcons::ActionCurrentUp()
@@ -200,7 +200,7 @@ void Interface::HeroesIcons::RedrawItem( const HEROES & item, s32 ox, s32 oy, bo
 
 void Interface::HeroesIcons::RedrawBackground( const fheroes2::Point & pos )
 {
-    redrawBackground( fheroes2::Display::instance(), pos, _size() );
+    redrawBackground( fheroes2::Display::instance(), pos, show ? _size() : 0 );
 }
 
 void Interface::HeroesIcons::ActionCurrentUp( void )
