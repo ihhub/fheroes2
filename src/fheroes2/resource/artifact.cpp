@@ -254,11 +254,6 @@ int Artifact::getArtifactValue() const
     return 0;
 }
 
-int Artifact::GetSpell( void ) const
-{
-    return id == SPELL_SCROLL ? ext : Spell::NONE;
-}
-
 void Artifact::SetSpell( int v )
 {
     if ( id != SPELL_SCROLL ) {

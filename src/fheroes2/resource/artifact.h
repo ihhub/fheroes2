@@ -228,7 +228,6 @@ public:
     }
 
     void SetSpell( int );
-    int GetSpell( void ) const;
 
     const char * GetName( void ) const;
 
