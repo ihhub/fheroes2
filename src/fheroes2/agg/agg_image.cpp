@@ -1842,7 +1842,6 @@ namespace
 
     void generateAlphabet( const fheroes2::SupportedLanguage language )
     {
-
         switch ( language ) {
         case fheroes2::SupportedLanguage::Polish:
             generatePolishAlphabet();
