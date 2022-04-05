@@ -1842,8 +1842,6 @@ namespace
 
     void generateAlphabet( const fheroes2::SupportedLanguage language )
     {
-        // Restore original 0-96 letters when changing language in case of changes to them.
-        alphabetPreserver.restore();
 
         switch ( language ) {
         case fheroes2::SupportedLanguage::Polish:
@@ -3471,6 +3469,8 @@ namespace fheroes2
             }
             else {
                 alphabetPreserver.preserve();
+                // Restore original letters when changing language to avoid changes to them being carried over.
+                alphabetPreserver.restore();
                 generateAlphabet( language );
             }
         }
