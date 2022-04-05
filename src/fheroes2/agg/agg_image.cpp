@@ -3468,6 +3468,8 @@ namespace fheroes2
             }
             else {
                 alphabetPreserver.preserve();
+                // Restore original letters when changing language to avoid changes to them being carried over.
+                alphabetPreserver.restore();
                 generateAlphabet( language );
             }
         }
