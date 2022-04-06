@@ -243,95 +243,95 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( myColor ) << " starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" );
         DEBUG_LOG( DBG_AI, DBG_TRACE, "Funds: " << kingdom.GetFunds().String() );
 
-        while ( true ) {
-            // Step 1. Scan visible map (based on game difficulty), add goals and threats
-            std::vector<std::pair<int, const Army *>> enemyArmies;
+        // Step 1. Scan visible map (based on game difficulty), add goals and threats
+        std::vector<std::pair<int, const Army *>> enemyArmies;
 
-            const int mapSize = world.w() * world.h();
-            _mapObjects.clear();
-            _regions.clear();
-            _regions.resize( world.getRegionCount() );
+        const int mapSize = world.w() * world.h();
+        _mapObjects.clear();
+        _regions.clear();
+        _regions.resize( world.getRegionCount() );
 
-            for ( int idx = 0; idx < mapSize; ++idx ) {
-                const Maps::Tiles & tile = world.GetTiles( idx );
-                MP2::MapObjectType objectType = tile.GetObject();
+        for ( int idx = 0; idx < mapSize; ++idx ) {
+            const Maps::Tiles & tile = world.GetTiles( idx );
+            MP2::MapObjectType objectType = tile.GetObject();
 
-                const uint32_t regionID = tile.GetRegion();
-                if ( regionID >= _regions.size() ) {
-                    // shouldn't be possible, assert
-                    assert( regionID < _regions.size() );
-                    continue;
-                }
-
-                RegionStats & stats = _regions[regionID];
-                if ( objectType != MP2::OBJ_COAST )
-                    stats.validObjects.emplace_back( idx, objectType );
-
-                if ( !tile.isFog( myColor ) ) {
-                    _mapObjects.emplace_back( idx, objectType );
-
-                    const int tileColor = tile.QuantityColor();
-                    if ( objectType == MP2::OBJ_HEROES ) {
-                        const Heroes * hero = tile.GetHeroes();
-                        if ( !hero )
-                            continue;
-
-                        if ( hero->GetColor() == myColor && !hero->Modes( Heroes::PATROL ) ) {
-                            ++stats.friendlyHeroes;
-
-                            const int wisdomLevel = hero->GetLevelSkill( Skill::Secondary::WISDOM );
-                            if ( wisdomLevel + 2 > stats.spellLevel )
-                                stats.spellLevel = wisdomLevel + 2;
-                        }
-                        else if ( !Players::isFriends( myColor, hero->GetColor() ) ) {
-                            const Army & heroArmy = hero->GetArmy();
-                            enemyArmies.emplace_back( idx, &heroArmy );
-
-                            const double heroThreat = heroArmy.GetStrength();
-                            if ( stats.highestThreat < heroThreat ) {
-                                stats.highestThreat = heroThreat;
-                            }
-                        }
-                        // check object underneath the hero as well (maybe a castle)
-                        objectType = tile.GetObject( false );
-                    }
-
-                    if ( objectType == MP2::OBJ_CASTLE ) {
-                        if ( myColor == tileColor || Players::isFriends( myColor, tileColor ) ) {
-                            ++stats.friendlyCastles;
-                        }
-                        else if ( tileColor != Color::NONE ) {
-                            ++stats.enemyCastles;
-
-                            const Castle * castle = world.getCastleEntrance( Maps::GetPoint( idx ) );
-                            if ( !castle )
-                                continue;
-
-                            const Army & castleArmy = castle->GetArmy();
-                            enemyArmies.emplace_back( idx, &castleArmy );
-
-                            const double castleThreat = castleArmy.GetStrength();
-                            if ( stats.highestThreat < castleThreat ) {
-                                stats.highestThreat = castleThreat;
-                            }
-                        }
-                    }
-                    else if ( objectType == MP2::OBJ_MONSTER ) {
-                        stats.averageMonster += Army( tile ).GetStrength();
-                        ++stats.monsterCount;
-                    }
-                }
-                else {
-                    ++stats.fogCount;
-                }
+            const uint32_t regionID = tile.GetRegion();
+            if ( regionID >= _regions.size() ) {
+                // shouldn't be possible, assert
+                assert( regionID < _regions.size() );
+                continue;
             }
 
-            evaluateRegionSafety();
+            RegionStats & stats = _regions[regionID];
+            if ( objectType != MP2::OBJ_COAST )
+                stats.validObjects.emplace_back( idx, objectType );
 
-            DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapObjects.size() << " valid objects" );
+            if ( !tile.isFog( myColor ) ) {
+                _mapObjects.emplace_back( idx, objectType );
 
-            status.RedrawTurnProgress( 1 );
+                const int tileColor = tile.QuantityColor();
+                if ( objectType == MP2::OBJ_HEROES ) {
+                    const Heroes * hero = tile.GetHeroes();
+                    if ( !hero )
+                        continue;
 
+                    if ( hero->GetColor() == myColor && !hero->Modes( Heroes::PATROL ) ) {
+                        ++stats.friendlyHeroes;
+
+                        const int wisdomLevel = hero->GetLevelSkill( Skill::Secondary::WISDOM );
+                        if ( wisdomLevel + 2 > stats.spellLevel )
+                            stats.spellLevel = wisdomLevel + 2;
+                    }
+                    else if ( !Players::isFriends( myColor, hero->GetColor() ) ) {
+                        const Army & heroArmy = hero->GetArmy();
+                        enemyArmies.emplace_back( idx, &heroArmy );
+
+                        const double heroThreat = heroArmy.GetStrength();
+                        if ( stats.highestThreat < heroThreat ) {
+                            stats.highestThreat = heroThreat;
+                        }
+                    }
+                    // check object underneath the hero as well (maybe a castle)
+                    objectType = tile.GetObject( false );
+                }
+
+                if ( objectType == MP2::OBJ_CASTLE ) {
+                    if ( myColor == tileColor || Players::isFriends( myColor, tileColor ) ) {
+                        ++stats.friendlyCastles;
+                    }
+                    else if ( tileColor != Color::NONE ) {
+                        ++stats.enemyCastles;
+
+                        const Castle * castle = world.getCastleEntrance( Maps::GetPoint( idx ) );
+                        if ( !castle )
+                            continue;
+
+                        const Army & castleArmy = castle->GetArmy();
+                        enemyArmies.emplace_back( idx, &castleArmy );
+
+                        const double castleThreat = castleArmy.GetStrength();
+                        if ( stats.highestThreat < castleThreat ) {
+                            stats.highestThreat = castleThreat;
+                        }
+                    }
+                }
+                else if ( objectType == MP2::OBJ_MONSTER ) {
+                    stats.averageMonster += Army( tile ).GetStrength();
+                    ++stats.monsterCount;
+                }
+            }
+            else {
+                ++stats.fogCount;
+            }
+        }
+
+        evaluateRegionSafety();
+
+        DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapObjects.size() << " valid objects" );
+
+        status.RedrawTurnProgress( 1 );
+
+        while ( true ) {
             // Step 2. Update AI variables and recalculate resource budget
             int32_t availableHeroCount = 0;
 
