@@ -20,8 +20,8 @@
 
 #pragma once
 
-#include <map>
 #include <cstdint>
+#include <map>
 #include <set>
 #include <stdexcept>
 #include <vector>
