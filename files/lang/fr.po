@@ -9281,7 +9281,7 @@ msgid "The nearest town is %{town}."
 msgstr "La ville la plus proche est %{town}."
 
 msgid "This town is occupied by your hero %{hero}."
-msgstr ""
+msgstr "Cette ville est occupée par votre héros %{hero}."
 
 msgid ""
 "This spell controls up to\n"
