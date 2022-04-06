@@ -130,7 +130,7 @@ namespace
             SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
 
             // Initialize local event processing.
-            LocalEvent::Get().RegisterCycling( [this](){ return _infoRenderer.preRender(); }, [this](){ return _infoRenderer.postRender(); } );
+            LocalEvent::Get().RegisterCycling( [this]() { return _infoRenderer.preRender(); }, [this]() { return _infoRenderer.postRender(); } );
 
             // Update mouse cursor when switching between software emulation and OS mouse modes.
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
@@ -253,8 +253,7 @@ int main( int argc, char ** argv )
         // Allocating less than 32 MB of memory makes no sense as this is a bare minimum amount of memory.
         size_t desiredMemorySize = 128 * 1024 * 1024;
         while ( desiredMemorySize >= 32 * 1024 * 1024 ) {
-            try
-            {
+            try {
                 fheroes2::MemoryAllocator::instance().reserve( desiredMemorySize );
             }
             catch ( const std::logic_error & ) {

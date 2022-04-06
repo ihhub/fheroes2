@@ -120,7 +120,7 @@ namespace fheroes2
         }
 
         if ( startLevel > from ) {
-            size_t memorySize = static_cast<size_t>(1) << (startLevel - 1);
+            size_t memorySize = static_cast<size_t>( 1 ) << ( startLevel - 1 );
 
             for ( ; startLevel > from; --startLevel, memorySize >>= 1 ) {
                 const size_t previousLevelValue = *_freeChunk[startLevel].begin();
@@ -137,10 +137,9 @@ namespace fheroes2
     {
         size_t memorySize = static_cast<size_t>( 1 ) << from;
 
-        for ( std::vector<std::set<size_t>>::iterator level = _freeChunk.begin() + from; level < _freeChunk.end();
-              ++level, memorySize <<= 1 ) {
-            std::set< size_t >::iterator pos = level->find( offset );
-            std::set< size_t >::iterator neighbour = pos;
+        for ( std::vector<std::set<size_t>>::iterator level = _freeChunk.begin() + from; level < _freeChunk.end(); ++level, memorySize <<= 1 ) {
+            std::set<size_t>::iterator pos = level->find( offset );
+            std::set<size_t>::iterator neighbour = pos;
             ++neighbour;
 
             if ( neighbour != level->end() ) {

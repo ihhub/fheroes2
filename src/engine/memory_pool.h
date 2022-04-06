@@ -45,7 +45,7 @@ namespace fheroes2
         // Returns a pointer to an allocated memory. If memory size of the allocated memory chuck is enough for requested size
         // then returns a pointer from preallocated memory, otherwise allocates heap memory.
         template <typename _DataType = uint8_t>
-        _DataType* allocate( size_t size = 1 )
+        _DataType * allocate( size_t size = 1 )
         {
             if ( _data != nullptr ) {
                 const size_t overallSize = size * sizeof( _DataType );
@@ -55,7 +55,7 @@ namespace fheroes2
 
                     if ( _split( level ) ) {
                         std::set<size_t>::iterator chunk = _freeChunk[level].begin();
-                        _DataType* address = reinterpret_cast<_DataType*>( _alignedData + *chunk );
+                        _DataType * address = reinterpret_cast<_DataType*>( _alignedData + *chunk );
                         _allocatedChunk.emplace( *chunk, level );
                         _freeChunk[level].erase( chunk );
                         return address;
@@ -76,8 +76,8 @@ namespace fheroes2
                 return;
             }
 
-            if ( _data != nullptr && reinterpret_cast<uint8_t*>( address ) >= _alignedData ) {
-                std::map<size_t, uint8_t>::iterator pos = _allocatedChunk.find( static_cast<size_t>( reinterpret_cast<uint8_t*>( address ) - _alignedData ) );
+            if ( _data != nullptr && reinterpret_cast<uint8_t *>( address ) >= _alignedData ) {
+                std::map<size_t, uint8_t>::iterator pos = _allocatedChunk.find( static_cast<size_t>( reinterpret_cast<uint8_t *>( address ) - _alignedData ) );
 
                 if ( pos != _allocatedChunk.end() ) {
                     _freeChunk[pos->second].insert( pos->first );
@@ -89,6 +89,7 @@ namespace fheroes2
 
             delete[] address;
         }
+
     private:
         std::vector<std::set<size_t>> _freeChunk; // free memory in preallocated memory
 
