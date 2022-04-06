@@ -156,8 +156,8 @@ namespace AI
         void CastleTurn( Castle & castle, bool defensive ) override;
         void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions ) override;
         bool HeroesTurn( VecHeroes & heroes ) override;
-        uint8_t purchaseNewHeroes( VecHeroes & heroes, const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger,
-                                   int32_t availableHeroCount );
+        bool purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, int32_t availableHeroCount,
+                                bool moreTasksForHeroes );
 
         void revealFog( const Maps::Tiles & tile ) override;
 

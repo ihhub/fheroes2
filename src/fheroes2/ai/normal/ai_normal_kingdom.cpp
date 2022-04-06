@@ -344,12 +344,12 @@ namespace AI
             castlesInDanger = findCastlesInDanger( castles, enemyArmies, myColor );
 
             // Step 3. Do some hero stuff.
-
             // If a hero is standing in a castle most likely he has nothing to do so let's try to give him more army.
             for ( Heroes * hero : heroes ) {
                 HeroesActionComplete( *hero );
             }
 
+            // Step 4. Reassign heroes roles
             setHeroRoles( heroes );
 
             status.RedrawTurnProgress( 6 );
@@ -358,13 +358,10 @@ namespace AI
 
             status.RedrawTurnProgress( 7 );
 
-            // Step 4. Move newly hired heroes if any.
-            setHeroRoles( heroes );
-
-            HeroesTurn( heroes );
+            const bool moreTaskForHeroes = HeroesTurn( heroes );
 
             // Step 5. Buy new heroes, adjust roles, sort heroes based on priority or strength
-            if ( purchaseNewHeroes( heroes, sortedCastleList, castlesInDanger, availableHeroCount ) == 0 ) {
+            if ( !purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {
                 break;
             }
         }
@@ -385,12 +382,11 @@ namespace AI
         }
     }
 
-    uint8_t Normal::purchaseNewHeroes( VecHeroes & heroes, const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger,
-                                       int32_t availableHeroCount )
+    bool Normal::purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, int32_t availableHeroCount,
+                                    bool moreTasksForHeroes )
     {
         const bool slowEarlyGame = world.CountDay() < 5 && sortedCastleList.size() == 1;
         int32_t heroLimit = world.w() / Maps::SMALL + 1;
-        const bool moreTasksForHeroes = HeroesTurn( heroes );
 
         if ( _personality == EXPLORER )
             ++heroLimit;
@@ -436,7 +432,6 @@ namespace AI
 
             // target found, buy hero
             if ( recruitmentCastle && recruitHero( *recruitmentCastle, !slowEarlyGame, false ) ) {
-                ++availableHeroCount;
                 return true;
             }
         }
