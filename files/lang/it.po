@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-06 16:47+0200\n"
-"PO-Revision-Date: 2022-04-06 17:23+0200\n"
+"PO-Revision-Date: 2022-04-06 17:36+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
 "Language: it\n"
@@ -1993,7 +1993,7 @@ msgid "Exit Town"
 msgstr "Esci dalla Città"
 
 msgid "Show Income"
-msgstr "Mostra Rendito"
+msgstr "Mostra Rendita"
 
 msgid "Swap Heroes"
 msgstr "Scambia Eroi"
@@ -2770,7 +2770,7 @@ msgid "Battles"
 msgstr "Battaglie"
 
 msgid "Manual"
-msgstr "Manuale"
+msgstr "Manuali"
 
 msgid "Toggle ambient music level."
 msgstr ""
@@ -2832,10 +2832,10 @@ msgid "6th"
 msgstr "Sesto"
 
 msgid "Oracle: Player Rankings"
-msgstr "Tempio - Graduat. Giocatore"
+msgstr "Tempio: Graduatoria Giocatori"
 
 msgid "Thieves' Guild: Player Rankings"
-msgstr "Lega dei Ladri: graduatoria"
+msgstr "Lega dei Ladri: Graduatoria"
 
 msgid "Number of Towns:"
 msgstr "Numero di Città:"
@@ -2853,7 +2853,7 @@ msgid "Wood & Ore:"
 msgstr "Legname e Ferro:"
 
 msgid "Gems, Cr, Slf & Mer:"
-msgstr "Gem, Cr, Zlf e Merc.:"
+msgstr "Gem, Cr, Zlf e Merc:"
 
 msgid "Obelisks Found:"
 msgstr "Obelischi Trovati:"
