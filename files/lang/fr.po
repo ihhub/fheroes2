@@ -8567,7 +8567,7 @@ msgstr ""
 "seul homme qui était connu pour porter une armure en or massif."
 
 msgid "Holy Hammer"
-msgstr "Marteau Saint"
+msgstr "Marteau saint"
 
 msgid ""
 "You come upon a battle where a Paladin has been mortally wounded by a group "
