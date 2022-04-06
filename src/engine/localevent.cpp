@@ -1041,7 +1041,7 @@ LocalEvent & LocalEvent::Get( void )
     return le;
 }
 
-void LocalEvent::RegisterCycling( std::function<void()> preRenderDrawing, std::function<void()> postRenderDrawing ) const
+void LocalEvent::RegisterCycling( std::function<void()> preRenderDrawing, std::function<void()> postRenderDrawing )
 {
     colorCycling.registerDrawing( preRenderDrawing, postRenderDrawing );
     colorCycling.resume();
@@ -1049,13 +1049,13 @@ void LocalEvent::RegisterCycling( std::function<void()> preRenderDrawing, std::f
     fheroes2::Display::instance().subscribe( ApplyCycling, ResetCycling );
 }
 
-void LocalEvent::PauseCycling() const
+void LocalEvent::PauseCycling()
 {
     colorCycling.pause();
     fheroes2::Display::instance().subscribe( nullptr, nullptr );
 }
 
-void LocalEvent::ResumeCycling() const
+void LocalEvent::ResumeCycling()
 {
     colorCycling.resume();
     fheroes2::Display::instance().subscribe( ApplyCycling, ResetCycling );

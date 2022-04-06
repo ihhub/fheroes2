@@ -130,7 +130,7 @@ namespace
             SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
 
             // Initialize local event processing.
-            LocalEvent::Get().RegisterCycling( [this]() { return _infoRenderer.preRender(); }, [this]() { return _infoRenderer.postRender(); } );
+            LocalEvent::RegisterCycling( [this]() { return _infoRenderer.preRender(); }, [this]() { return _infoRenderer.postRender(); } );
 
             // Update mouse cursor when switching between software emulation and OS mouse modes.
             fheroes2::cursor().registerUpdater( Cursor::Refresh );

@@ -168,13 +168,13 @@ namespace fheroes2
 
     ScreenPaletteRestorer::ScreenPaletteRestorer()
     {
-        LocalEvent::Get().PauseCycling();
+        LocalEvent::PauseCycling();
     }
 
     ScreenPaletteRestorer::~ScreenPaletteRestorer()
     {
         Display::instance().changePalette( nullptr );
-        LocalEvent::Get().ResumeCycling();
+        LocalEvent::ResumeCycling();
     }
 
     void ScreenPaletteRestorer::changePalette( const uint8_t * palette ) const

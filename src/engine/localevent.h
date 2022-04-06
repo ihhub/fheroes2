@@ -292,12 +292,12 @@ public:
 
     int KeyMod() const;
 
-    void RegisterCycling( std::function<void()> preRenderDrawing, std::function<void()> postRenderDrawing ) const;
+    static void RegisterCycling( std::function<void()> preRenderDrawing, std::function<void()> postRenderDrawing );
 
     // These two methods are useful for video playback
-    void PauseCycling() const;
+    static void PauseCycling();
 
-    void ResumeCycling() const;
+    static void ResumeCycling();
 
     void OpenVirtualKeyboard();
     void CloseVirtualKeyboard();
