@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-05 20:49+0200\n"
-"PO-Revision-Date: 2022-04-06 04:44+0200\n"
+"PO-Revision-Date: 2022-04-06 05:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -1342,16 +1342,16 @@ msgid "campaignBonus|Caster's Bracelet"
 msgstr "Bracelet magique"
 
 msgid "campaignBonus|Defender Helm"
-msgstr "Casque Protection"
+msgstr "Casque défenseur"
 
 msgid "campaignBonus|Breastplate"
-msgstr "Plastron Divin"
+msgstr "Plastron divin"
 
 msgid "campaignBonus|Dragon Sword"
-msgstr "L'épée du Dragon"
+msgstr "L'épée du dragon"
 
 msgid "campaignBonus|Fizbin Medal"
-msgstr "Fizbin"
+msgstr "Medaille Fizbin"
 
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Parchemin ultime"
@@ -1360,28 +1360,28 @@ msgid "campaignBonus|Hideous Mask"
 msgstr "Masque sinistre"
 
 msgid "campaignBonus|Mage's Ring"
-msgstr "Anneau Magicien"
+msgstr "Anneau magicien"
 
 msgid "campaignBonus|Major Scroll"
 msgstr "Parchemin majeur"
 
 msgid "campaignBonus|Medal of Honor"
-msgstr "Médaille honneur"
+msgstr "Médaille d'honneur"
 
 msgid "campaignBonus|Medal of Valor"
 msgstr "Médaille bravoure"
 
 msgid "campaignBonus|Minor Scroll"
-msgstr "Parchemin Mineur"
+msgstr "Parchemin mineur"
 
 msgid "campaignBonus|Nomad Boots"
-msgstr "Bottes de Nomade"
+msgstr "Brodequins"
 
 msgid "campaignBonus|Power Axe"
-msgstr "Puissante Hache"
+msgstr "Puissante hache"
 
 msgid "campaignBonus|Spiked Shield"
-msgstr "Bouclier pointes"
+msgstr "Bouclier à pointes"
 
 msgid "campaignBonus|Stealth Shield"
 msgstr "Bouclier furtif"
@@ -1390,10 +1390,10 @@ msgid "campaignBonus|Tax Lien"
 msgstr "Privilège fiscal"
 
 msgid "campaignBonus|Thunder Mace"
-msgstr "Massue Tonnerre"
+msgstr "Massue domination"
 
 msgid "campaignBonus|Traveler's Boots"
-msgstr "Bottes magiques"
+msgstr "Bottes sept lieues"
 
 msgid "campaignBonus|White Pearl"
 msgstr "Perle blanche"
@@ -1423,10 +1423,10 @@ msgid "campaignBonus|Steelskin"
 msgstr "Chair d'acier"
 
 msgid "campaignBonus|Summon Earth"
-msgstr "Invoquer Terre"
+msgstr "Invoquer terre"
 
 msgid "campaignBonus|View Heroes"
-msgstr "Voir Héros"
+msgstr "Voir héros"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
