@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-05 20:49+0200\n"
-"PO-Revision-Date: 2022-04-05 22:00+0200\n"
+"PO-Revision-Date: 2022-04-06 04:44+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -1366,7 +1366,7 @@ msgid "campaignBonus|Major Scroll"
 msgstr "Parchemin majeur"
 
 msgid "campaignBonus|Medal of Honor"
-msgstr "Médaille d'honneur"
+msgstr "Médaille honneur"
 
 msgid "campaignBonus|Medal of Valor"
 msgstr "Médaille bravoure"
@@ -1381,7 +1381,7 @@ msgid "campaignBonus|Power Axe"
 msgstr "Puissante Hache"
 
 msgid "campaignBonus|Spiked Shield"
-msgstr "Bouclier à pointes"
+msgstr "Bouclier pointes"
 
 msgid "campaignBonus|Stealth Shield"
 msgstr "Bouclier furtif"
@@ -1408,16 +1408,16 @@ msgid "campaignBonus|Fireblast"
 msgstr "Souffle de feu"
 
 msgid "campaignBonus|Mass Curse"
-msgstr "Grande malédiction"
+msgstr "Grde malédiction"
 
 msgid "campaignBonus|Mass Haste"
-msgstr "Célérité collective"
+msgstr "Célérité collec."
 
 msgid "campaignBonus|Mirror Image"
 msgstr "Miroir"
 
 msgid "campaignBonus|Resurrect"
-msgstr "Mort-vivant"
+msgstr "Résurrection"
 
 msgid "campaignBonus|Steelskin"
 msgstr "Chair d'acier"
