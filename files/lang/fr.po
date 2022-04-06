@@ -1342,7 +1342,7 @@ msgid "campaignBonus|Caster's Bracelet"
 msgstr "Bracelet magique"
 
 msgid "campaignBonus|Defender Helm"
-msgstr "Casque de Protection"
+msgstr "Casque Protection"
 
 msgid "campaignBonus|Breastplate"
 msgstr "Plastron Divin"
@@ -1360,7 +1360,7 @@ msgid "campaignBonus|Hideous Mask"
 msgstr "Masque sinistre"
 
 msgid "campaignBonus|Mage's Ring"
-msgstr "Anneau de Magicien"
+msgstr "Anneau Magicien"
 
 msgid "campaignBonus|Major Scroll"
 msgstr "Parchemin majeur"
@@ -1369,7 +1369,7 @@ msgid "campaignBonus|Medal of Honor"
 msgstr "Médaille d'honneur"
 
 msgid "campaignBonus|Medal of Valor"
-msgstr "Médaille de la bravoure"
+msgstr "Médaille bravoure"
 
 msgid "campaignBonus|Minor Scroll"
 msgstr "Parchemin Mineur"
@@ -1390,7 +1390,7 @@ msgid "campaignBonus|Tax Lien"
 msgstr "Privilège fiscal"
 
 msgid "campaignBonus|Thunder Mace"
-msgstr "Massue du Tonnerre"
+msgstr "Massue Tonnerre"
 
 msgid "campaignBonus|Traveler's Boots"
 msgstr "Bottes magiques"
