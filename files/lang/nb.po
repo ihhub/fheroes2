@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-07 12:29+0100\n"
-"PO-Revision-Date: 2022-04-06 16:32+0200\n"
+"POT-Creation-Date: 2022-04-06 16:34+0200\n"
+"PO-Revision-Date: 2022-04-06 16:41+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
 "Language: nb_NO\n"
@@ -80,7 +80,7 @@ msgid ""
 "Zounds of\n"
 "%{monster}"
 msgstr ""
-"Helsikes mange\n"
+"Helsikens mange\n"
 "%{monster}"
 
 msgid ""
@@ -89,6 +89,9 @@ msgid ""
 msgstr ""
 "En legion av\n"
 "%{monster}"
+
+msgid "army|Few"
+msgstr "Få"
 
 msgid "army|Several"
 msgstr "Noen"
@@ -113,9 +116,6 @@ msgstr "Helsike"
 
 msgid "army|Legion"
 msgstr "Legion"
-
-msgid "army|Few"
-msgstr "Få"
 
 msgid "All %{race} troops +1"
 msgstr "Kun styrker av slaget %{race}: +1"
@@ -393,6 +393,9 @@ msgstr "Ikke nok gull (%{gold})"
 msgid "%{name} states:"
 msgstr "%{name} erklærer:"
 
+msgid "Captain of %{name} states:"
+msgstr "Kapteinen av %{name} erklærer:"
+
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
@@ -499,6 +502,12 @@ msgstr "Gjem logg"
 
 msgid "Show logs"
 msgstr "Vis logg"
+
+msgid "Message Bar"
+msgstr ""
+
+msgid "Shows the results of individual monster's actions."
+msgstr ""
 
 msgid "%{name} skip their turn."
 msgstr "Troppen med %{name} hopper over turen."
@@ -2481,6 +2490,9 @@ msgstr "Bytt spilloppløsning."
 msgid "Experimental game settings."
 msgstr "Innstillinger for utprøvningsvalg."
 
+msgid "Okay"
+msgstr "Okay"
+
 msgid "Attention"
 msgstr "Advarsel"
 
@@ -2696,9 +2708,6 @@ msgstr "Tilgjengelig: %{count}"
 
 msgid "Number to buy:"
 msgstr "Antall valgt:"
-
-msgid "Okay"
-msgstr "Okay"
 
 msgid "Click to apply the selected resolution."
 msgstr "Trykk for å bruke den valgte oppløsningen."
@@ -3895,6 +3904,9 @@ msgstr "Italiensk"
 msgid "Czech"
 msgstr "Tsjekkisk"
 
+msgid "Norwegian"
+msgstr ""
+
 msgid ", FPS: "
 msgstr ", FPS: "
 
@@ -4101,6 +4113,12 @@ msgstr "Harkonas"
 
 msgid "Martine"
 msgstr "Martine"
+
+msgid " gives you maximum morale"
+msgstr " gir deg den beste kampånden"
+
+msgid " gives you maximum luck"
+msgstr "gir deg den beste flaksen"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Du kan ikke plukke opp denne gjenstanden. Du er allerede fullastet!"
@@ -5517,6 +5535,28 @@ msgstr ""
 msgid "Not enough move points."
 msgstr "Ikke nok skritt."
 
+msgid "Only heroes can cast this spell."
+msgstr "Kun helter kan bruke denne trolldommen."
+
+msgid ""
+"You do not currently own any town or castle, so you can't cast the spell."
+msgstr ""
+"Du eier for øyeblikket ingen byer eller borger, og kan derfor ikke bruke "
+"denne trolldommen."
+
+msgid "This hero is already in a town, so you can't cast the spell."
+msgstr ""
+"Helten befinner seg allerede i en by, og kan ikke denne trolldommen brukes."
+
+msgid ""
+"The nearest town is %{town}.\n"
+" \n"
+"This town is occupied by your hero %{hero}."
+msgstr ""
+"Den nærmeste byen er %{town}.\n"
+"\n"
+"Denne byen er blokkert av helten din %{hero}."
+
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race}en %{name} (level %{level})"
 
@@ -5631,13 +5671,6 @@ msgid ""
 "Spell Failed!!!"
 msgstr ""
 "Ingen tilgjengelige byer.\n"
-"Trolldom mislyktes!!!"
-
-msgid ""
-"Nearest town occupied.\n"
-"Spell Failed!!!"
-msgstr ""
-"Den nærmeste byen er opptatt.\n"
 "Trolldom mislyktes!!!"
 
 msgid ""
@@ -7304,6 +7337,21 @@ msgstr "% skade fra "
 msgid "The three Anduran artifacts magically combine into one."
 msgstr "De tre Anduran-gjenstandene blir på magisk vis om til én."
 
+msgid "View Spells"
+msgstr "Vis trolldommer"
+
+msgid "View %{name} Info"
+msgstr "Vis info om %{name}"
+
+msgid "Move %{name}"
+msgstr "Flytt %{name}"
+
+msgid "Cannot move the Spellbook"
+msgstr "Trylleboken kan ikke flyttes"
+
+msgid "This item can't be traded."
+msgstr "Denne tingen kan ikke byttes."
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "%{name} øker kunnskapen din med %{count}."
 
@@ -7356,520 +7404,15 @@ msgstr "%{name} gir deg en ekstra inntekt på %{count} gullstykker hver dag."
 msgid "Arcane Necklace of Magic"
 msgstr "Det mørke magihalskjedet"
 
-msgid "Caster's Bracelet of Magic"
-msgstr "Fortryllerens magiarmbånd"
-
-msgid "Mage's Ring of Power"
-msgstr "Magikerens kraftring"
-
-msgid "Witch's Broach of Magic"
-msgstr "Heksens brystnål av magi"
-
-msgid "Medal of Valor"
-msgstr "Medaljen av heltemot"
-
-msgid "The %{name} increases your morale."
-msgstr "%{name} styrker kampånden din."
-
-msgid "Medal of Courage"
-msgstr "Medaljen av tapperhet"
-
-msgid "Medal of Honor"
-msgstr "Æresmedaljen"
-
-msgid "Medal of Distinction"
-msgstr "Utmerkelsesmedaljen"
-
-msgid "Fizbin of Misfortune"
-msgstr "Fizbinen av uflaks"
-
-msgid "The %{name} greatly decreases your morale by %{count}."
-msgstr "%{name} svekker kampånden din skikkelig med %{count}."
-
-msgid "Thunder Mace of Dominion"
-msgstr "Tordenklubben av Herreveldet"
-
-msgid "Armored Gauntlets of Protection"
-msgstr "De pansrede hanskene av beskyttelse"
-
-msgid "The %{name} increase your defense skill by %{count}."
-msgstr "%{name} øker din forsvarsevne med %{count}."
-
-msgid "Defender Helm of Protection"
-msgstr "Forsvarerens hjelm av beskyttelse"
-
-msgid "Giant Flail of Dominion"
-msgstr "Kjempeklubben av Herreveldet"
-
-msgid "Ballista of Quickness"
-msgstr "Raskhetens ballist"
-
-msgid "The %{name} lets your catapult fire twice per combat round."
-msgstr "%{name} lar katapulten din avfyre to ganger hver kamprunde."
-
-msgid "Stealth Shield of Protection"
-msgstr "Skjuleskjoldet av beskyttelse"
-
-msgid "Dragon Sword of Dominion"
-msgstr "Dragesverdet av Herreveldet"
-
-msgid "Power Axe of Dominion"
-msgstr "Styrkeøksa av Herreveldet"
-
-msgid "Divine Breastplate of Protection"
-msgstr "Den gudommelige brystplata av beskyttelse"
-
-msgid "Minor Scroll of Knowledge"
-msgstr "Den mindre kunnskapsrullen"
-
-msgid "Major Scroll of Knowledge"
-msgstr "Den større kunnskapsrullen"
-
-msgid "Superior Scroll of Knowledge"
-msgstr "Den overlegne kunnskapsrullen"
-
-msgid "Foremost Scroll of Knowledge"
-msgstr "Den ypperste kunnskapsrullen"
-
-msgid "Endless Sack of Gold"
-msgstr "Den uendelige gullsekken"
-
-msgid "The %{name} provides you with %{count} gold per day."
-msgstr "%{name} gir deg %{count} gullstykker hver dag."
-
-msgid "Endless Bag of Gold"
-msgstr "Den uendelige gullbagen"
-
-msgid "Endless Purse of Gold"
-msgstr "Den uendelige gullvesken"
-
-msgid "Nomad Boots of Mobility"
-msgstr "Nomadens sko av bevegelighet"
-
-msgid "The %{name} increase your movement on land."
-msgstr "%{name} øker skrittene dine på land."
-
-msgid "Traveler's Boots of Mobility"
-msgstr "Vandrerens bevegelighetssko"
-
-msgid "Lucky Rabbit's Foot"
-msgstr "Lykkeharens pote"
-
-msgid "The %{name} increases your luck in combat."
-msgstr "%{name} gir deg mer flaks i kamp."
-
-msgid "Golden Horseshoe"
-msgstr "Den gylne hesteskoen"
-
-msgid "Gambler's Lucky Coin"
-msgstr "Pengespillerens lykkemynt"
-
-msgid "Four-Leaf Clover"
-msgstr "Firkløveren"
-
-msgid "The %{name} increases your movement on land and sea."
-msgstr "%{name} øker skrittene dine på land og til sjøs."
-
-msgid "True Compass of Mobility"
-msgstr "Det sanne kompasset av bevegelighet"
-
-msgid "Sailor's Astrolabe of Mobility"
-msgstr "Sjøfarerens sekstant av bevegelighet"
-
-msgid "The %{name} increases your movement on sea."
-msgstr "%{name} øker skrittene dine til sjøs."
-
-msgid "Evil Eye"
-msgstr "Ondskapens øye"
-
-msgid "The %{name} reduces the casting cost of curse spells by half."
-msgstr "%{name} halverer tapet av mana fra bruk av forbannelsesmagi."
-
-msgid "Enchanted Hourglass"
-msgstr "Det fortryllede timeglasset"
-
-msgid "The %{name} extends the duration of all your spells by %{count} turns."
-msgstr ""
-"%{name} forlenger varigheten av alle dine trolldommer med %{count} runder."
-
-msgid "Gold Watch"
-msgstr "Gulluret"
-
-msgid "The %{name} doubles the effectiveness of your hypnotize spells."
-msgstr "%{name} fordobler virkningsgraden til din hypnosemagi."
-
-msgid "Skullcap"
-msgstr "Kalotten"
-
-msgid "The %{name} halves the casting cost of all mind influencing spells."
-msgstr ""
-"%{name} halverer tapet av mana ved bruk av all slags tankepåvirkende "
-"trolldom."
-
-msgid "Ice Cloak"
-msgstr "Iskappe"
-
-msgid "The %{name} halves all damage your troops take from cold spells."
-msgstr "%{name}n halverer all skade styrkene dine får fra kuldemagi."
-
-msgid "Fire Cloak"
-msgstr "Flammekappe"
-
-msgid "The %{name} halves all damage your troops take from fire spells."
-msgstr "%{name}n halverer all skade styrkene dine påføres av ildmagi."
-
-msgid "Lightning Helm"
-msgstr "Lynhjelm"
-
-msgid "The %{name} halves all damage your troops take from lightning spells."
-msgstr "%{name}en halverer all skade styrkene dine påføres av lynmagi."
-
-msgid "Evercold Icicle"
-msgstr "Den evigkalde istappen"
-
-msgid ""
-"The %{name} causes your cold spells to do %{count} percent more damage to "
-"enemy troops."
-msgstr ""
-"%{name} gjør at kuldemagien din gjør %{count} prosent mer skade på "
-"fiendtlige styrker."
-
-msgid "Everhot Lava Rock"
-msgstr "Den evigvarme lavasteinen"
-
-msgid ""
-"The %{name} causes your fire spells to do %{count} percent more damage to "
-"enemy troops."
-msgstr ""
-"%{name} gjør at ildmagien din gjør %{count} prosent mer skade på fiendtlige "
-"styrker."
-
-msgid "Lightning Rod"
-msgstr "Lynstav"
-
-msgid ""
-"The %{name} causes your lightning spells to do %{count} percent more damage "
-"to enemy troops."
-msgstr ""
-"%{name}en gjør at lynmagien din gjør %{count} prosent mer skade på "
-"fiendtlige styrker."
-
-msgid "Snake-Ring"
-msgstr "Slangering"
-
-msgid "The %{name} halves the casting cost of all your bless spells."
-msgstr "%{name}en halverer tapet av mana ved bruk av velsignelsesmagi."
-
-msgid "Ankh"
-msgstr "Henkelkors"
-
-msgid ""
-"The %{name} doubles the effectiveness of all your resurrect and animate "
-"spells."
-msgstr ""
-"%{name}en fordobler virkningsgraden til all din gjenopplivnings- og "
-"gjenreisingsmagi."
-
-msgid "Book of Elements"
-msgstr "Boken om elementene"
-
-msgid "The %{name} doubles the effectiveness of all your summoning spells."
-msgstr "%{name} fordobler virkningsgraden til all din tilkallingsmagi."
-
-msgid "Elemental Ring"
-msgstr "Den elementære ringen"
-
-msgid "The %{name} halves the casting cost of all summoning spells."
-msgstr "%{name} halverer tapet av mana for all din tilkallingsmagi."
-
-msgid "Holy Pendant"
-msgstr "Det hellige halskjedet"
-
-msgid "The %{name} makes all your troops immune to curse spells."
-msgstr "%{name} gjør alle styrkene dine immune mot forbannelsesmagi."
-
-msgid "Pendant of Free Will"
-msgstr "Halskjedet av fri vilje"
-
-msgid "The %{name} makes all your troops immune to hypnotize spells."
-msgstr "%{name} gjør alle styrkene dine immune mot hypnosemagi."
-
-msgid "Pendant of Life"
-msgstr "Halskjedet av liv"
-
-msgid "The %{name} makes all your troops immune to death spells."
-msgstr "%{name} gjør alle styrkene dine immune mot dødsmagi."
-
-msgid "Serenity Pendant"
-msgstr "Halskjedet av sinnsro"
-
-msgid "The %{name} makes all your troops immune to berserk spells."
-msgstr "%{name} gjør alle styrkene dine immune mot berserkergang."
-
-msgid "Seeing-eye Pendant"
-msgstr "Halskjedet av det ublinde øyet"
-
-msgid "The %{name} makes all your troops immune to blindness spells."
-msgstr "%{name} gjør alle styrkene dine immune mot forblindelsesmagi."
-
-msgid "Kinetic Pendant"
-msgstr "Halskjedet av bevegelse"
-
-msgid "The %{name} makes all your troops immune to paralyze spells."
-msgstr "%{name} gjør alle styrkene dine immune mot lammelsesmagi."
-
-msgid "Pendant of Death"
-msgstr "Dødens halskjede"
-
-msgid "The %{name} makes all your troops immune to holy spells."
-msgstr "%{name} gjør alle styrkene dine immune mot hellig magi."
-
-msgid "The %{name} protects your troops from the Dispel Magic spell."
-msgstr "%{name} beskytter styrkene dine fra magiopphevelses trolldommen."
-
-msgid "Wand of Negation"
-msgstr "Tryllestaven av benektelse"
-
-msgid "Golden Bow"
-msgstr "Gullbue"
-
-msgid ""
-"The %{name} eliminates the %{count} percent penalty for your troops shooting "
-"past obstacles (e.g. castle walls)."
-msgstr ""
-"%{name}n fjerner minskningen på %{count} prosent av skaden troppene dine får "
-"når de skyter på tvers av hindringer\n"
-"(f.eks. forbi ringmurer)."
-
-msgid "Telescope"
-msgstr "Himmelkikkerten"
-
-msgid ""
-"The %{name} increases the amount of terrain your hero reveals when "
-"adventuring by %{count} extra square."
-msgstr ""
-"%{name} utvider mengden land som helten din avdekker ved forflytning med "
-"%{count} ekstra grad."
-
-msgid "Statesman's Quill"
-msgstr "Statsmannens fjærpenn"
-
-msgid ""
-"The %{name} reduces the cost of surrender to %{count} percent of the total "
-"cost of troops you have in your army."
-msgstr ""
-"%{name} minsker prisen for å overgi seg med %{count} prosent av den totale "
-"verdien av hærstyrken din."
-
-msgid "The %{name} increases the duration of your spells by %{count} turns."
-msgstr "%{name} øker varigheten til trolldommene dine med %{count} runder."
-
-msgid "Wizard's Hat"
-msgstr "Magimesterens hatt"
-
-msgid "Power Ring"
-msgstr "Tryllekraftsring"
-
-msgid "The %{name} returns %{count} extra spell points per day to your hero."
-msgstr "%{name}en fyller opp %{count} mana til helten din hver dag."
-
-msgid "Ammo Cart"
-msgstr "Ammunisjonsvogn"
-
-msgid "The %{name} provides endless ammunition for all your troops that shoot."
-msgstr "%{name}en forsyner de skytende styrkene dine med uendelig ammunisjon."
-
-msgid "Tax Lien"
-msgstr "Skattepant"
-
-msgid "The %{name} costs you %{count} gold pieces per day."
-msgstr "%{name}en koster deg %{count} gullstykker hver dag."
-
-msgid "Hideous Mask"
-msgstr "Den forferdelige masken"
-
-msgid "The %{name} prevents all 'wandering' armies from joining your hero."
-msgstr ""
-"%{name} hindrer alle \"omstreifende\" styrker fra å bli med helten din."
-
-msgid "Endless Pouch of Sulfur"
-msgstr "Den uendelige posen av svovel"
-
-msgid "The %{name} provides %{count} unit of sulfur per day."
-msgstr "%{name} gir deg %{count} enhet svovel hver dag."
-
-msgid "Endless Vial of Mercury"
-msgstr "Den uendelige kvikksølvkolben"
-
-msgid "The %{name} provides %{count} unit of mercury per day."
-msgstr "%{name} gir deg %{count} enhet kvikksølv hver dag."
-
-msgid "Endless Pouch of Gems"
-msgstr "Den uendelige edesteinsposen"
-
-msgid "The %{name} provides %{count} unit of gems per day."
-msgstr "%{name} gir deg %{count} enhet edelstein hver dag."
-
-msgid "Endless Cord of Wood"
-msgstr "Den uendelige vedfavnen"
-
-msgid "The %{name} provides %{count} unit of wood per day."
-msgstr "%{name} gir deg %{count} enheter ved hver dag."
-
-msgid "Endless Cart of Ore"
-msgstr "Den uendelige malmvogna"
-
-msgid "The %{name} provides %{count} unit of ore per day."
-msgstr "%{name} gir deg %{count} enheter malm hver dag."
-
-msgid "Endless Pouch of Crystal"
-msgstr "Den uendelige krystallposen"
-
-msgid "The %{name} provides %{count} unit of crystal per day."
-msgstr "%{name} gir deg %{count} enhet krystall hver dag."
-
-msgid "Spiked Helm"
-msgstr "Den piggete hjelmen"
-
-msgid "Spiked Shield"
-msgstr "Det piggete skjoldet"
-
-msgid "White Pearl"
-msgstr "Den hvite perlen"
-
-msgid "Black Pearl"
-msgstr "Den sorte perlen"
-
-msgid "Magic Book"
-msgstr "Tryllebok"
-
-msgid "The %{name} enables you to cast spells."
-msgstr "%{name}a gjør at du kan bruke trolldommer."
-
-msgid "Spell Scroll"
-msgstr "Trolldomsrull"
-
-msgid "This %{name} gives your hero the ability to cast the %{spell} spell."
-msgstr "Denne %{name}en gir helten din evnen til å bruke trolldommen %{spell}."
-
-msgid "Arm of the Martyr"
-msgstr "Martyrens arm"
-
-msgid ""
-"The %{name} increases your spell power by %{count} but adds the undead "
-"morale penalty."
-msgstr ""
-"%{name} øker tryllekraften din med %{count} men legger til vandød "
-"kampåndspåvirkning."
-
-msgid "Breastplate of Anduran"
-msgstr "Andurans brystplate"
-
-msgid "The %{name} increases your defense by %{count}."
-msgstr "%{name} øker forsvarsevnen din med %{count}."
-
-msgid "Broach of Shielding"
-msgstr "Brystnålen av beskyttelse"
-
-msgid ""
-"The %{name} provides %{count} percent protection from Armageddon and "
-"Elemental Storm, but decreases spell power by 2."
-msgstr ""
-"%{name} gir %{count} prosent beskyttelse mot ragnarok og elementær storm, "
-"men minsker tryllekraften med 2."
-
-msgid "Battle Garb of Anduran"
-msgstr "Andurans kamputstyr"
-
-msgid ""
-"The %{name} combines the powers of the three Anduran artifacts.  It provides "
-"maximum luck and morale for your troops and gives you the Town Portal spell."
-msgstr ""
-"%{name} slår sammen kreftene til alle de tre gjenstandene av Anduran. Den "
-"gir maksimal flaks og kampånd til styrkene dine og gir deg trolldommen "
-"Byportal."
-
-msgid "Crystal Ball"
-msgstr "Krystallkule"
-
-msgid ""
-"The %{name} lets you get more specific information about monsters, enemy "
-"heroes, and castles nearby the hero who holds it."
-msgstr ""
-"%{name}n lar deg få mer detaljert informasjon om monster, fiendtlige helter "
-"og borger i nærheten av helten som holder den."
-
-msgid "Heart of Fire"
-msgstr "Ildhjerte"
-
-msgid ""
-"The %{name} provides %{count} percent protection from fire, but doubles the "
-"damage taken from cold."
-msgstr ""
-"%{name}t gir %{count} prosent beskyttelse mot ild, men dobler skaden fra "
-"kulde."
-
-msgid "Heart of Ice"
-msgstr "Ishjerte"
-
-msgid ""
-"The %{name} provides %{count} percent protection from cold, but doubles the "
-"damage taken from fire."
-msgstr ""
-"%{name}t gir %{count} prosent beskyttelse mot kulde, men dobler skaden fra "
-"ild."
-
-msgid "Helmet of Anduran"
-msgstr "Andurans hjelm"
-
-msgid "Holy Hammer"
-msgstr "Den hellige hammeren"
-
-msgid "Legendary Scepter"
-msgstr "Det legendariske septeret"
-
-msgid "The %{name} adds %{count} points to all attributes."
-msgstr "%{name} legger til %{count} poeng til alle egenskaper."
-
-msgid "Masthead"
-msgstr "Mastetoppen"
-
-msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
-msgstr "%{name} øker flaksen og kampånden din med %{count} under sjøslag."
-
-msgid "Sphere of Negation"
-msgstr "Kulen av benektelse"
-
-msgid "The %{name} disables all spell casting, for both sides, in combat."
-msgstr "%{name} stanser all bruk av trolldom for begge sider i kampen."
-
-msgid "Staff of Wizardry"
-msgstr "Trolldomsstaven"
-
-msgid "The %{name} boosts your spell power by %{count}."
-msgstr "%{name} øker tryllekraften din med %{count}."
-
-msgid "Sword Breaker"
-msgstr "Sverdknuser"
-
-msgid "The %{name} increases your defense by %{count} and attack by 1."
-msgstr "%{name}en øker forsvarsevnen din med %{count} og angrepsevnen med 1."
-
-msgid "Sword of Anduran"
-msgstr "Andurans sverd"
-
-msgid "Spade of Necromancy"
-msgstr "Sortekunstnerens spade"
-
-msgid "The %{name} gives you increased necromancy skill."
-msgstr "%{name} forbedrer sortekunstevnen din."
-
 msgid ""
 "After rescuing a Sorceress from a cursed tomb, she rewards your heroism with "
 "an exquisite jeweled necklace."
 msgstr ""
 "Etter å ha reddet en Trollkone fra et forbannet gravkammet, belønner hun "
 "heltemotet ditt med et utsøkt halskjede av juveler."
+
+msgid "Caster's Bracelet of Magic"
+msgstr "Fortryllerens magiarmbånd"
 
 msgid ""
 "While searching through the rubble of a caved-in mine, you free a group of "
@@ -7878,6 +7421,9 @@ msgstr ""
 "Mens du lette gjennom restene fra en sammenfalt gruve, befridde du en gruppe "
 "med innesperrede dverger. I sin takknemmelighet gir lederen deg et armbånd "
 "av gull."
+
+msgid "Mage's Ring of Power"
+msgstr "Magikerens kraftring"
 
 msgid ""
 "A cry of pain leads you to a Centaur, caught in a trap. Upon setting the "
@@ -7888,6 +7434,9 @@ msgstr ""
 "hjulpet skapningen ut, gir han deg en liten taske. Blant gjenstandene i den "
 "finner du en fantastisk edelsteinsring."
 
+msgid "Witch's Broach of Magic"
+msgstr "Heksens brystnål av magi"
+
 msgid ""
 "Alongside the remains of a burnt witch lies a beautiful broach, intricately "
 "designed. Approaching the corpse with caution, you add the broach to your "
@@ -7896,12 +7445,21 @@ msgstr ""
 "Ved siden av restene til en brent heks ligger en vakker brystnål av nøye "
 "håndverk. Du går varsomt mot liket og tar brystnålen med deg."
 
+msgid "Medal of Valor"
+msgstr "Medaljen av heltemot"
+
+msgid "The %{name} increases your morale."
+msgstr "%{name} styrker kampånden din."
+
 msgid ""
 "Freeing a virtuous maiden from the clutches of an evil overlord, you are "
 "granted a Medal of Valor by the King's herald."
 msgstr ""
 "Etter å ha befridd en uskyldig ungpike fra fangenskapet til en ond hersker, "
 "blir du belønnet med en medalje for heltemot av det kongelige hoffet."
+
+msgid "Medal of Courage"
+msgstr "Medaljen av tapperhet"
 
 msgid ""
 "After saving a young boy from a vicious pack of Wolves, you return him to "
@@ -7911,12 +7469,18 @@ msgstr ""
 "han med tilbake til herregården til faren hans. Den takknemlige adelsmannen "
 "belønner deg med en medalje av tapperhet."
 
+msgid "Medal of Honor"
+msgstr "Æresmedaljen"
+
 msgid ""
 "After freeing a princess of a neighboring kingdom from the evil clutches of "
 "despicable slavers, she awards you with a Medal of Honor."
 msgstr ""
 "Etter å ha befridd en prinsesse fra et naborike fra det onde klørne til "
 "foraktelige slavehandlere, belønner hun deg med en medalje av ære."
+
+msgid "Medal of Distinction"
+msgstr "Utmerkelsesmedaljen"
 
 msgid ""
 "Ridding the countryside of the hideous Minotaur who made a sport of eating "
@@ -7925,6 +7489,12 @@ msgstr ""
 "Etter å ha fjernet fra bygdelandet en grusom minotaur som hadde gått inn for "
 "å jakte og spise adelsmennenes riddere, blir du hedret med en medalje for "
 "særskilt utmerkelse."
+
+msgid "Fizbin of Misfortune"
+msgstr "Fizbinen av uflaks"
+
+msgid "The %{name} greatly decreases your morale by %{count}."
+msgstr "%{name} svekker kampånden din skikkelig med %{count}."
 
 msgid ""
 "You stumble upon a medal lying alongside the empty road. Adding the medal to "
@@ -7936,12 +7506,21 @@ msgstr ""
 "attraktive Fizbinen av uflaks, som betydelig svekker styrkene dine sin "
 "kampånd."
 
+msgid "Thunder Mace of Dominion"
+msgstr "Tordenklubben av Herreveldet"
+
 msgid ""
 "During a sudden storm, a bolt of lightning strikes a tree, splitting it. "
 "Inside the tree you find a mysterious mace."
 msgstr ""
 "Under en plutselig storm, slår et lyn ned i et tre og deler det i to. På "
 "innsiden av treet finner du en mystisk klubbe."
+
+msgid "Armored Gauntlets of Protection"
+msgstr "De pansrede hanskene av beskyttelse"
+
+msgid "The %{name} increase your defense skill by %{count}."
+msgstr "%{name} øker din forsvarsevne med %{count}."
 
 msgid ""
 "You encounter the infamous Black Knight!  After a grueling duel ending in a "
@@ -7950,12 +7529,18 @@ msgstr ""
 "Du møter på den berømte Sorte ridder! Etter en intens uavgjort duell, tilbyr "
 "ridderen, av respekt, et par pansrede hansker."
 
+msgid "Defender Helm of Protection"
+msgstr "Forsvarerens hjelm av beskyttelse"
+
 msgid ""
 "A glint of golden light catches your eye. Upon further investigation, you "
 "find a golden helm hidden under a bush."
 msgstr ""
 "Et glimt av et gyllent gjenskinn fanger oppmerksomheten din. Ved nærmere "
 "undersøkelse, oppdager du en hjelm av gull bortgjemt under en busk."
+
+msgid "Giant Flail of Dominion"
+msgstr "Kjempeklubben av Herreveldet"
 
 msgid ""
 "A clumsy Giant has killed himself with his own flail. Knowing your superior "
@@ -7966,6 +7551,12 @@ msgstr ""
 "trygghet på dine langt bedre ferdigheter med dette våpenet, fjerner du i din "
 "selvsikkerhet den imponerende klubben fra den falne kjempen."
 
+msgid "Ballista of Quickness"
+msgstr "Raskhetens ballist"
+
+msgid "The %{name} lets your catapult fire twice per combat round."
+msgstr "%{name} lar katapulten din avfyre to ganger hver kamprunde."
+
 msgid ""
 "Walking through the ruins of an ancient walled city, you find the instrument "
 "of the city's destruction, an elaborately crafted ballista."
@@ -7973,12 +7564,18 @@ msgstr ""
 "Mens du går gjennom ruinene til en eldgammel innmuret by, finner du årsaken "
 "til byens ødeleggelse: en omhyggelig utarbeidet ballist."
 
+msgid "Stealth Shield of Protection"
+msgstr "Skjuleskjoldet av beskyttelse"
+
 msgid ""
 "A stone statue of a warrior holds a silver shield. As you remove the shield, "
 "the statue crumbles into dust."
 msgstr ""
 "En steinstatue av en kriger bærer et sølvskjold. I det du fjerner skjoldet "
 "faller statuen sammen i grus."
+
+msgid "Dragon Sword of Dominion"
+msgstr "Dragesverdet av Herreveldet"
 
 msgid ""
 "As you are walking along a narrow path, a nearby bush suddenly bursts into "
@@ -7989,6 +7586,9 @@ msgstr ""
 "Flammene foran deg blir om til en skikkelse av en prektig kvinne. Hun rekker "
 "ut et storslått sverd til deg."
 
+msgid "Power Axe of Dominion"
+msgstr "Styrkeøksa av Herreveldet"
+
 msgid ""
 "You see a silver axe embedded deeply in the ground. After several "
 "unsuccessful attempts by your army to remove the axe, you tightly grip the "
@@ -7997,6 +7597,9 @@ msgstr ""
 "Du får øynene på en sølvøks som er satt dypt ned i bakken. Etter flere "
 "mislykkede forsøk fra styrkene dine på å fjerne øksa, tar du et godt tak i "
 "øksas håndtak og uten anstrengelse får den ut."
+
+msgid "Divine Breastplate of Protection"
+msgstr "Den gudommelige brystplata av beskyttelse"
 
 msgid ""
 "A gang of Rogues is sifting through the possessions of dead warriors. "
@@ -8007,6 +7610,9 @@ msgstr ""
 "å ha jaget vekk plyndrerene, legger du merke til at de hadde oversett ei "
 "forseggjort brystplate."
 
+msgid "Minor Scroll of Knowledge"
+msgstr "Den mindre kunnskapsrullen"
+
 msgid ""
 "Before you appears a levitating glass case with a scroll, perched upon a bed "
 "of crimson velvet. At your touch, the lid opens and the scroll floats into "
@@ -8016,6 +7622,9 @@ msgstr ""
 "en kongelig rød pute. I det du berører den, åpner lokket seg og rullen flyr "
 "magisk inn i dine hender."
 
+msgid "Major Scroll of Knowledge"
+msgstr "Den større kunnskapsrullen"
+
 msgid ""
 "Visiting a local wiseman, you explain the intent of your journey. He reaches "
 "into a sack and withdraws a yellowed scroll and hands it to you."
@@ -8023,6 +7632,9 @@ msgstr ""
 "På besøk hos en lokal vismann forklarer du hensikten med ferden din. Han "
 "strekker hånden ned i sekken sin og ut av den drar han fram en gulnet "
 "skriftrull, som han overrekker deg."
+
+msgid "Superior Scroll of Knowledge"
+msgstr "Den overlegne kunnskapsrullen"
 
 msgid ""
 "You come across the remains of an ancient Druid. Bones, yellowed with age, "
@@ -8033,6 +7645,9 @@ msgstr ""
 "gul med tiden, kan synes på innsiden av den fillete kjortelen hennes. Du "
 "leter gjennom den og oppdager en bortgjemt skriftrull i foldene."
 
+msgid "Foremost Scroll of Knowledge"
+msgstr "Den ypperste kunnskapsrullen"
+
 msgid ""
 "Mangled bones, yellowed with age, peer from the ragged folds of a dead "
 "Druid's robe. Searching the robe, you discover a scroll hidden within."
@@ -8040,6 +7655,12 @@ msgstr ""
 "Oppsprukne knokler, som har gulnet med tiden, synes fra de fillete foldene "
 "til en omkommet druides kåpe. Du leter gjennom kåpen og oppdager en "
 "bortgjemt skriftrull."
+
+msgid "Endless Sack of Gold"
+msgstr "Den uendelige gullsekken"
+
+msgid "The %{name} provides you with %{count} gold per day."
+msgstr "%{name} gir deg %{count} gullstykker hver dag."
 
 msgid ""
 "A little leprechaun dances gleefully around a magic sack. Seeing you "
@@ -8052,12 +7673,18 @@ msgstr ""
 "febrilsk, før han forsvinner i løse luften. Du kommer på det gamle "
 "regnbuegnom ordtaket \"Finneren er vinneren\", og tar sekken og går din vei."
 
+msgid "Endless Bag of Gold"
+msgstr "Den uendelige gullbagen"
+
 msgid ""
 "A noblewoman, separated from her traveling companions, asks for your help. "
 "After escorting her home, she rewards you with a bag filled with gold."
 msgstr ""
 "En adelskvinne, som har mistet følge sitt, ber deg om hjelp. Etter å ha "
 "eskortert henne hjem, belønner hun deg med en sekk fylt med gull."
+
+msgid "Endless Purse of Gold"
+msgstr "Den uendelige gullvesken"
 
 msgid ""
 "In your travels, you find a leather purse filled with gold that once "
@@ -8067,6 +7694,12 @@ msgstr ""
 "Midt under reisen din, oppdager du en skinntaske fylt med gull som en gang "
 "skal ha tilhørt en mektig krigskonge med evnen til å forvandle alle "
 "ulevelige gjenstander til gull."
+
+msgid "Nomad Boots of Mobility"
+msgstr "Nomadens sko av bevegelighet"
+
+msgid "The %{name} increase your movement on land."
+msgstr "%{name} øker skrittene dine på land."
 
 msgid ""
 "A Nomad trader seeks protection from a tribe of Goblins. For your "
@@ -8079,6 +7712,9 @@ msgstr ""
 "typen skinn. Ved nærmere blikk ser du forunderlige eldgamle inngraveringer "
 "på skinnet."
 
+msgid "Traveler's Boots of Mobility"
+msgstr "Vandrerens bevegelighetssko"
+
 msgid ""
 "Discovering a pair of beautifully beaded boots made from the finest and "
 "softest leather, you thank the anonymous donor and add the boots to your "
@@ -8088,6 +7724,12 @@ msgstr ""
 "skinn. Du takker den navnløse giveren og legger skoene blant resten av "
 "tingene dine."
 
+msgid "Lucky Rabbit's Foot"
+msgstr "Lykkeharens pote"
+
+msgid "The %{name} increases your luck in combat."
+msgstr "%{name} gir deg mer flaks i kamp."
+
 msgid ""
 "A traveling merchant offers you a rabbit's foot, made of gleaming silver "
 "fur, for safe passage. The merchant explains the charm will increase your "
@@ -8096,6 +7738,9 @@ msgstr ""
 "En reisende handelsmann tilbyr deg en kaninpote laget av skinnende sølvpels, "
 "som skal gi deg en trygg reise. Handelsmannen forklarer at gjenstanden vil "
 "gi deg bedre hell i kamp."
+
+msgid "Golden Horseshoe"
+msgstr "Den gylne hesteskoen"
 
 msgid ""
 "An ensnared Unicorn whinnies in fright. Murmuring soothing words, you set "
@@ -8107,12 +7752,18 @@ msgstr ""
 "før den galopperer av gårde. Du ser ned på bakken og finner en gyllen "
 "hestesko."
 
+msgid "Gambler's Lucky Coin"
+msgstr "Pengespillerens lykkemynt"
+
 msgid ""
 "You have captured a mischievous imp who has been terrorizing the region. In "
 "exchange for his release, he rewards you with a magical coin."
 msgstr ""
 "Du fanget en rampete smådjevel som hadde skapt bråk i området. I bytte mot "
 "sin frihet, gir han deg en magisk mynt."
+
+msgid "Four-Leaf Clover"
+msgstr "Firkløveren"
 
 msgid ""
 "In the middle of a patch of dead and dry vegetation, to your surprise you "
@@ -8121,12 +7772,24 @@ msgstr ""
 "Midt i et stykke uttørket og livløs eng, finner du til din overraskelse en "
 "frisk og grønn firkløver."
 
+msgid "True Compass of Mobility"
+msgstr "Det sanne kompasset av bevegelighet"
+
+msgid "The %{name} increases your movement on land and sea."
+msgstr "%{name} øker skrittene dine på land og til sjøs."
+
 msgid ""
 "An old man claiming to be an inventor asks you to try his latest invention. "
 "He then hands you a compass."
 msgstr ""
 "En gammel mann som hevder at han er en oppfinner ber deg om å prøve den "
 "siste oppfinnelsen sin. Deretter, gir han deg et kompass."
+
+msgid "Sailor's Astrolabe of Mobility"
+msgstr "Sjøfarerens sekstant av bevegelighet"
+
+msgid "The %{name} increases your movement on sea."
+msgstr "%{name} øker skrittene dine til sjøs."
 
 msgid ""
 "An old sea captain is being tortured by Ogres. You save him, and in return "
@@ -8135,6 +7798,12 @@ msgstr ""
 "En gammel sjøulk driver og blir torturert av noen ogrer. Du befrir han, og "
 "til gjengjeld belønner han deg med en vidunderlig verktøy for å måle "
 "avstandene til stjernene."
+
+msgid "Evil Eye"
+msgstr "Ondskapens øye"
+
+msgid "The %{name} reduces the casting cost of curse spells by half."
+msgstr "%{name} halverer tapet av mana fra bruk av forbannelsesmagi."
 
 msgid ""
 "While venturing into a decrepit hut you find the Skeleton of a long dead "
@@ -8145,6 +7814,13 @@ msgstr ""
 "en for lengst død heks. Ved nærmere undersøkelse avdekker du et glassøye som "
 "ruller rundt på innsiden av en tom hodeskalle."
 
+msgid "Enchanted Hourglass"
+msgstr "Det fortryllede timeglasset"
+
+msgid "The %{name} extends the duration of all your spells by %{count} turns."
+msgstr ""
+"%{name} forlenger varigheten av alle dine trolldommer med %{count} runder."
+
 msgid ""
 "A surprise turn in the landscape finds you in the midst of a grisly scene:  "
 "Vultures picking at the aftermath of a terrible battle. Your cursory search "
@@ -8153,6 +7829,12 @@ msgstr ""
 "En forventet vending i landskapet bringer deg midt inn i et uhyggelig syn: "
 "Gribber som åtsler på levningene etter en forferdelig slag. Et raskt søk "
 "gjennom restene avdekker et fortryllet timeglass."
+
+msgid "Gold Watch"
+msgstr "Gulluret"
+
+msgid "The %{name} doubles the effectiveness of your hypnotize spells."
+msgstr "%{name} fordobler virkningsgraden til din hypnosemagi."
 
 msgid ""
 "In reward for helping his cart out of a ditch, a traveling potion salesman "
@@ -8163,6 +7845,14 @@ msgstr ""
 "grøfta, gir han deg en \"magisk\" gullur. Helt uvitende for han, er uret "
 "faktisk magisk."
 
+msgid "Skullcap"
+msgstr "Kalotten"
+
+msgid "The %{name} halves the casting cost of all mind influencing spells."
+msgstr ""
+"%{name} halverer tapet av mana ved bruk av all slags tankepåvirkende "
+"trolldom."
+
 msgid ""
 "A brief stop at an improbable rural inn yields an exchange of money, tales, "
 "and accidentally, luggage. You find a magical skullcap in your new backpack."
@@ -8170,6 +7860,12 @@ msgstr ""
 "En kort rast hos et uforventet vertshus langs landeveien fører til "
 "utveksling av penger, historier, og ved et uhell, reisegods. Du oppdager en "
 "magisk kalott i den nye ryggsekken din."
+
+msgid "Ice Cloak"
+msgstr "Iskappe"
+
+msgid "The %{name} halves all damage your troops take from cold spells."
+msgstr "%{name}n halverer all skade styrkene dine får fra kuldemagi."
 
 msgid ""
 "Responding to the panicked cries of a damsel in distress, you discover a "
@@ -8179,6 +7875,12 @@ msgstr ""
 "Du hører redselsskrikene til en dame i nød, og du oppdager en ung kvinne som "
 "rømmer fra en sulten bjørn. Du tar livet av bjørnen i grevens tid, og den "
 "takknemlige trollkvinnen vever deg en magisk kappe av bjørneskinnet."
+
+msgid "Fire Cloak"
+msgstr "Flammekappe"
+
+msgid "The %{name} halves all damage your troops take from fire spells."
+msgstr "%{name}n halverer all skade styrkene dine påføres av ildmagi."
 
 msgid ""
 "You've come upon a fight between a Necromancer and a Paladin. The "
@@ -8191,6 +7893,12 @@ msgstr ""
 "griper raskt inn og tar livet av den onde før nådestøtet. Den takknemlige "
 "ridderhelten gir deg ildkappen som takk for å ha reddet han."
 
+msgid "Lightning Helm"
+msgstr "Lynhjelm"
+
+msgid "The %{name} halves all damage your troops take from lightning spells."
+msgstr "%{name}en halverer all skade styrkene dine påføres av lynmagi."
+
 msgid ""
 "A traveling tinker in need of supplies offers you a helm with a thunderbolt "
 "design on its top in exchange for food and water. Curious, you accept, and "
@@ -8200,6 +7908,16 @@ msgstr ""
 "et lynmerke på toppen imot mat og vann. Av nysgjerrighet godtar du byttet, "
 "og senere oppdager du at det er en magisk hjelm."
 
+msgid "Evercold Icicle"
+msgstr "Den evigkalde istappen"
+
+msgid ""
+"The %{name} causes your cold spells to do %{count} percent more damage to "
+"enemy troops."
+msgstr ""
+"%{name} gjør at kuldemagien din gjør %{count} prosent mer skade på "
+"fiendtlige styrker."
+
 msgid ""
 "An icicle withstanding the full heat of the noonday sun attracts your "
 "attention. Intrigued, you break it off, and find that it does not melt in "
@@ -8208,6 +7926,16 @@ msgstr ""
 "En istapp, som tross den heftige varmen til middagssolen, griper "
 "oppmerksomheten din. I spenning brekker du den av og oppdager at den ikke "
 "smelter i hånden din heller."
+
+msgid "Everhot Lava Rock"
+msgstr "Den evigvarme lavasteinen"
+
+msgid ""
+"The %{name} causes your fire spells to do %{count} percent more damage to "
+"enemy troops."
+msgstr ""
+"%{name} gjør at ildmagien din gjør %{count} prosent mer skade på fiendtlige "
+"styrker."
 
 msgid ""
 "Your wanderings bring you into contact with a tribe of ape-like beings using "
@@ -8220,6 +7948,16 @@ msgstr ""
 "trenger det. Du syns synd på dem og lærer dem å lage ild med pinner. De tror "
 "derfor at du er en gud, og apene gir deg steinen sin."
 
+msgid "Lightning Rod"
+msgstr "Lynstav"
+
+msgid ""
+"The %{name} causes your lightning spells to do %{count} percent more damage "
+"to enemy troops."
+msgstr ""
+"%{name}en gjør at lynmagien din gjør %{count} prosent mer skade på "
+"fiendtlige styrker."
+
 msgid ""
 "While waiting out a storm, a lighting bolt strikes a nearby cottage's "
 "lightning rod, which melts and falls to the ground. The tip of the rod, "
@@ -8231,12 +7969,28 @@ msgstr ""
 "stangen overlever derimot, og når du berører den får det håret ditt til å "
 "reise seg. Hmm..."
 
+msgid "Snake-Ring"
+msgstr "Slangering"
+
+msgid "The %{name} halves the casting cost of all your bless spells."
+msgstr "%{name}en halverer tapet av mana ved bruk av velsignelsesmagi."
+
 msgid ""
 "You've found an oddly shaped ring on the finger of a long dead traveler. The "
 "ring looks like a snake biting its own tail."
 msgstr ""
 "Du fant en merkelig utformet ring på fingeren til en for lengst avdød "
 "reisende. Ringen ser ut som en slange som biter sin egen hale."
+
+msgid "Ankh"
+msgstr "Henkelkors"
+
+msgid ""
+"The %{name} doubles the effectiveness of all your resurrect and animate "
+"spells."
+msgstr ""
+"%{name}en fordobler virkningsgraden til all din gjenopplivnings- og "
+"gjenreisingsmagi."
 
 msgid ""
 "A fierce windstorm reveals the entrance to a buried tomb. Your investigation "
@@ -8247,6 +8001,12 @@ msgstr ""
 "nærmere undersøkelse oppdager du at graven allerede har blitt ransaket, men "
 "tyvene overså et henkelkors med et sølvkjede i mørket."
 
+msgid "Book of Elements"
+msgstr "Boken om elementene"
+
+msgid "The %{name} doubles the effectiveness of all your summoning spells."
+msgstr "%{name} fordobler virkningsgraden til all din tilkallingsmagi."
+
 msgid ""
 "You come across a conjurer who begs to accompany you and your army awhile "
 "for safety. You agree, and he offers as payment a copy of the book of the "
@@ -8255,6 +8015,12 @@ msgstr ""
 "Du kommer over en åndemaner som trygler deg om å få slå følge med deg og "
 "hæren din for en stund for sin egen trygghet. Du går med på det, og som "
 "betaling tilbyr han en kopi av Boken om elementene."
+
+msgid "Elemental Ring"
+msgstr "Den elementære ringen"
+
+msgid "The %{name} halves the casting cost of all summoning spells."
+msgstr "%{name} halverer tapet av mana for all din tilkallingsmagi."
 
 msgid ""
 "While pausing to rest, you notice a bobcat climbing a short tree to get at a "
@@ -8266,6 +8032,12 @@ msgstr ""
 "og skremmer vekk kattedyret. Når du tar en titt i reiret finner du en "
 "litensamling glinsende steiner og en ring."
 
+msgid "Holy Pendant"
+msgstr "Det hellige halskjedet"
+
+msgid "The %{name} makes all your troops immune to curse spells."
+msgstr "%{name} gjør alle styrkene dine immune mot forbannelsesmagi."
+
 msgid ""
 "In your wanderings you come across a hermit living in a small, tidy hut. "
 "Impressed with your mission, he takes time out from his meditations to bless "
@@ -8275,6 +8047,12 @@ msgstr ""
 "liten, ryddig hytte. Imponert av oppdraget ditt, tar seg en pause fra "
 "mediteringene sine for å velsigne deg og gi deg en magisk gjenstand imot "
 "forbannelser."
+
+msgid "Pendant of Free Will"
+msgstr "Halskjedet av fri vilje"
+
+msgid "The %{name} makes all your troops immune to hypnotize spells."
+msgstr "%{name} gjør alle styrkene dine immune mot hypnosemagi."
 
 msgid ""
 "Responding to cries for help, you find river Sprites making a sport of "
@@ -8288,6 +8066,12 @@ msgstr ""
 "med å være utenfor vannet og gir deg et magisk halskjede imot å få slippe "
 "fri."
 
+msgid "Pendant of Life"
+msgstr "Halskjedet av liv"
+
+msgid "The %{name} makes all your troops immune to death spells."
+msgstr "%{name} gjør alle styrkene dine immune mot dødsmagi."
+
 msgid ""
 "A brief roadside encounter with a small caravan and a game of knucklebones "
 "wins a magic pendant. Its former owner says that it protects from "
@@ -8296,6 +8080,12 @@ msgstr ""
 "Et kort møte med et smått reisefølge av handelsmenn og en runde håndbak der "
 "du kom seirende ut endte deg opp med et magisk halskjede. Dens forrige eier "
 "forklarer deg at det skal beskytte mot dødsbesvergelsene til sortekunstnere."
+
+msgid "Serenity Pendant"
+msgstr "Halskjedet av sinnsro"
+
+msgid "The %{name} makes all your troops immune to berserk spells."
+msgstr "%{name} gjør alle styrkene dine immune mot berserkergang."
 
 msgid ""
 "The sounds of combat draw you to the scene of a fight between an old "
@@ -8307,6 +8097,12 @@ msgstr ""
 "gammel barbar og en åtte-hodet hydra. Du griper akkurat inn i rett tid for å "
 "snu kampens favør over til mannen, og han belønner deg med et halskjede han "
 "har pleid å bruke for å berolige sinnet sitt før kamp."
+
+msgid "Seeing-eye Pendant"
+msgstr "Halskjedet av det ublinde øyet"
+
+msgid "The %{name} makes all your troops immune to blindness spells."
+msgstr "%{name} gjør alle styrkene dine immune mot forblindelsesmagi."
 
 msgid ""
 "You come upon a very old woman, long blind from cataracts and dying alone. "
@@ -8320,6 +8116,12 @@ msgstr ""
 "prydet med et nøye utformet øye. Halskjedet lar deg kunne se med øynene "
 "lukket."
 
+msgid "Kinetic Pendant"
+msgstr "Halskjedet av bevegelse"
+
+msgid "The %{name} makes all your troops immune to paralyze spells."
+msgstr "%{name} gjør alle styrkene dine immune mot lammelsesmagi."
+
 msgid ""
 "You come across a golem wearing a glowing pendant and blocking your way. "
 "Acting on a hunch, you cut the pendant from its neck. Deprived of its power "
@@ -8330,6 +8132,12 @@ msgstr ""
 "halsen på den. Nå uten en energikilde faller golemen sammen og etterlater "
 "deg det magiske halskjedet."
 
+msgid "Pendant of Death"
+msgstr "Dødens halskjede"
+
+msgid "The %{name} makes all your troops immune to holy spells."
+msgstr "%{name} gjør alle styrkene dine immune mot hellig magi."
+
 msgid ""
 "A quick and deadly battle with a Necromancer wins you his magical pendant. "
 "Later, a Wizard tells you that the pendant protects undead under your "
@@ -8338,6 +8146,12 @@ msgstr ""
 "En rask og dødelig kamp med en sortekunstner vinner deg det magiske "
 "halskjedet hans. Senere forteller en magimester deg at halskjedet beskytter "
 "vandøde under din makt fra trolldommer av hellige ord."
+
+msgid "Wand of Negation"
+msgstr "Tryllestaven av benektelse"
+
+msgid "The %{name} protects your troops from the Dispel Magic spell."
+msgstr "%{name} beskytter styrkene dine fra magiopphevelses trolldommen."
 
 msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
@@ -8348,12 +8162,33 @@ msgstr ""
 "av deg. Han overrekker deg en gave: En tryllestav som forhindrer bruken av "
 "trolldommen magiopphevelse mot styrkene dine."
 
+msgid "Golden Bow"
+msgstr "Gullbue"
+
+msgid ""
+"The %{name} eliminates the %{count} percent penalty for your troops shooting "
+"past obstacles (e.g. castle walls)."
+msgstr ""
+"%{name}n fjerner minskningen på %{count} prosent av skaden troppene dine får "
+"når de skyter på tvers av hindringer\n"
+"(f.eks. forbi ringmurer)."
+
 msgid ""
 "A chance meeting with a famous Archer finds you in a game of knucklebones "
 "pitting his bow against your horse. You win."
 msgstr ""
 "Et tilfeldig møte med en beryktet bueskytter fører til en runde med håndbak "
 "hvor han vedder bua si mot hesten din. Du vinner konkurransen."
+
+msgid "Telescope"
+msgstr "Himmelkikkerten"
+
+msgid ""
+"The %{name} increases the amount of terrain your hero reveals when "
+"adventuring by %{count} extra square."
+msgstr ""
+"%{name} utvider mengden land som helten din avdekker ved forflytning med "
+"%{count} ekstra grad."
 
 msgid ""
 "A merchant from far away lands trades you a new invention of his people for "
@@ -8368,6 +8203,16 @@ msgstr ""
 "\n"
 "teleskop."
 
+msgid "Statesman's Quill"
+msgstr "Statsmannens fjærpenn"
+
+msgid ""
+"The %{name} reduces the cost of surrender to %{count} percent of the total "
+"cost of troops you have in your army."
+msgstr ""
+"%{name} minsker prisen for å overgi seg med %{count} prosent av den totale "
+"verdien av hærstyrken din."
+
 msgid ""
 "You pause to help a diplomat with a broken axle fix his problem. In "
 "gratitude, he gives you a writing quill with magical properties which he "
@@ -8376,6 +8221,12 @@ msgstr ""
 "Du tar et avbrekk for å hjelpe en megler med å fiske en ødelagt aksling. Av "
 "takknemlighet gir han deg en fjærpenn med magiske egenskaper som han "
 "forklarer at vil \"hjelpe folk med å se ting på din måte\"."
+
+msgid "Wizard's Hat"
+msgstr "Magimesterens hatt"
+
+msgid "The %{name} increases the duration of your spells by %{count} turns."
+msgstr "%{name} øker varigheten til trolldommene dine med %{count} runder."
 
 msgid ""
 "You see a Wizard fleeing from a Griffin and riding like the wind. The Wizard "
@@ -8388,6 +8239,12 @@ msgstr ""
 "slått av av kanten til portalen. Griffen følger etter og portalen lukkes. Du "
 "plukker opp hatten, børster av den, og tar den på deg."
 
+msgid "Power Ring"
+msgstr "Tryllekraftsring"
+
+msgid "The %{name} returns %{count} extra spell points per day to your hero."
+msgstr "%{name}en fyller opp %{count} mana til helten din hver dag."
+
 msgid ""
 "You find a small tree that closely resembles the great Warlock Carnauth with "
 "a ring around one of its twigs. Scraps of clothing and rotting leather lead "
@@ -8399,12 +8256,24 @@ msgstr ""
 "og råttent skinn får deg til å mistenke at det faktisk ER Karnauth, men "
 "forvandlet. Siden du ikke kan hjelpe han, tar du magiske ringen."
 
+msgid "Ammo Cart"
+msgstr "Ammunisjonsvogn"
+
+msgid "The %{name} provides endless ammunition for all your troops that shoot."
+msgstr "%{name}en forsyner de skytende styrkene dine med uendelig ammunisjon."
+
 msgid ""
 "An ammunition cart in the middle of an old battlefield catches your eye. "
 "Inspection shows it to be in good working order, so  you take it along."
 msgstr ""
 "En ammunisjonsvogn i midten av en gammel slagmark fanger oppmerksomheten "
 "din. Nærmere inspeksjon viser at den er i god stand, så du tar den med deg."
+
+msgid "Tax Lien"
+msgstr "Skattepant"
+
+msgid "The %{name} costs you %{count} gold pieces per day."
+msgstr "%{name}en koster deg %{count} gullstykker hver dag."
 
 msgid ""
 "Your big spending habits have earned you a massive tax bill that you can't "
@@ -8418,6 +8287,13 @@ msgstr ""
 "av livet. Hak av herunder hvis du vil at én denar skal brukes til å støtte "
 "presidentens valgfond."
 
+msgid "Hideous Mask"
+msgstr "Den forferdelige masken"
+
+msgid "The %{name} prevents all 'wandering' armies from joining your hero."
+msgstr ""
+"%{name} hindrer alle \"omstreifende\" styrker fra å bli med helten din."
+
 msgid ""
 "Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
 "Warlock, unearths his fabled mask. Trembling, you put it on and it twists "
@@ -8430,6 +8306,12 @@ msgstr ""
 "egentlig den avskyelige masken til Gromluck Greene, og nå får du ikke "
 "kvittet deg med den."
 
+msgid "Endless Pouch of Sulfur"
+msgstr "Den uendelige posen av svovel"
+
+msgid "The %{name} provides %{count} unit of sulfur per day."
+msgstr "%{name} gir deg %{count} enhet svovel hver dag."
+
 msgid ""
 "You visit an alchemist who, upon seeing your army, is swayed by the "
 "righteousness of your cause. The newly loyal subject gives you his endless "
@@ -8438,6 +8320,12 @@ msgstr ""
 "Du besøker en alkymist som, ved synet av hæren din, blir grepet av "
 "rettskaffenheten til kallet ditt. Din nye trofaste støttespiller gir deg "
 "hans uendelige svovelpose for å bistå med innsatsen til krigen."
+
+msgid "Endless Vial of Mercury"
+msgstr "Den uendelige kvikksølvkolben"
+
+msgid "The %{name} provides %{count} unit of mercury per day."
+msgstr "%{name} gir deg %{count} enhet kvikksølv hver dag."
 
 msgid ""
 "A brief stop at a hastily abandoned Wizard's tower turns up a magical vial "
@@ -8448,6 +8336,12 @@ msgstr ""
 "avdekker en kolbe med kvikksølv som ser ut til å alltid ha igjen litt på "
 "bunnen. Du kjenner igjen en skatt når du ser en, og du setter en kork i den "
 "og slipper den i tasken din."
+
+msgid "Endless Pouch of Gems"
+msgstr "Den uendelige edesteinsposen"
+
+msgid "The %{name} provides %{count} unit of gems per day."
+msgstr "%{name} gir deg %{count} enhet edelstein hver dag."
 
 msgid ""
 "A short rainstorm brings forth a rainbow...and you can see the end of it. "
@@ -8460,6 +8354,12 @@ msgstr ""
 "eier den mislykkes i å hindre deg fra å ta den, og tilbyr en evigvarende "
 "pose med edelsteiner i bytte mot gullet sitt. Du godtar det."
 
+msgid "Endless Cord of Wood"
+msgstr "Den uendelige vedfavnen"
+
+msgid "The %{name} provides %{count} unit of wood per day."
+msgstr "%{name} gir deg %{count} enheter ved hver dag."
+
 msgid ""
 "Pausing to rest and light a cook fire, you pull wood out of a nearby pile of "
 "dead wood. As you keep pulling wood from the pile, you notice that it "
@@ -8471,6 +8371,12 @@ msgstr ""
 "at den ikke blir mindre. Du innser til din glede at veden er fortryllet og "
 "du tar den derfor med deg."
 
+msgid "Endless Cart of Ore"
+msgstr "Den uendelige malmvogna"
+
+msgid "The %{name} provides %{count} unit of ore per day."
+msgstr "%{name} gir deg %{count} enheter malm hver dag."
+
 msgid ""
 "You've found a Goblin weapon smithy making weapons for use against humans. "
 "With a tremendous yell you and your army descend upon their camp and drive "
@@ -8479,6 +8385,12 @@ msgstr ""
 "Du har kommet over en vettesmed som lager våpen til bruk mot mennesker. Med "
 "et mektig brøl stormer du og hæren din ned på leiren og jager dem vekk. "
 "Ransakingen avdekker en magisk malmvogn som aldri går tom for jern."
+
+msgid "Endless Pouch of Crystal"
+msgstr "Den uendelige krystallposen"
+
+msgid "The %{name} provides %{count} unit of crystal per day."
+msgstr "%{name} gir deg %{count} enhet krystall hver dag."
 
 msgid ""
 "Taking shelter from a storm in a small cave,  you notice a small patch of "
@@ -8491,6 +8403,9 @@ msgstr ""
 "merke til at den opprinnelige krystallen gror den tapte delen tilbake. Du "
 "bestemmer deg for å stappe hele mengden i en pose og tar den med deg."
 
+msgid "Spiked Helm"
+msgstr "Den piggete hjelmen"
+
 msgid ""
 "Your army is ambushed by a small tribe of wild (and none too bright) Orcs. "
 "You fend them off easily and the survivors flee in all directions. One of "
@@ -8501,6 +8416,9 @@ msgstr ""
 "orker. Du overvinner dem litt og de overlevende flykter i alle retninger. En "
 "av orkene hadde på seg en speilblank hjelm med tagger. Du tenker at den gjør "
 "seg bra som en souvenir og tar den med deg."
+
+msgid "Spiked Shield"
+msgstr "Det piggete skjoldet"
 
 msgid ""
 "You come upon a bridge spanning a dry gully. Before you can cross, a Troll "
@@ -8513,12 +8431,18 @@ msgstr ""
 "lar deg slippe forbi. Du nekter å betale og trollet stormer mot deg, og du "
 "blir nødt til å drepe det. Du tar det taggete skjoldet til det som trofé."
 
+msgid "White Pearl"
+msgstr "Den hvite perlen"
+
 msgid ""
 "A walk across a dry saltwater lake bed yields an unlikely prize:  A white "
 "pearl amidst shattered shells and debris."
 msgstr ""
 "En spasertur langs et uttørket brakkvann ender med oppdagelsen av en "
 "usedvanlig belønning:  En hvit perle blant de ødelagte skjellene og skrotet."
+
+msgid "Black Pearl"
+msgstr "Den sorte perlen"
 
 msgid ""
 "Rumors of a Griffin of unusual size preying upon the countryside lead you to "
@@ -8528,6 +8452,33 @@ msgstr ""
 "Ryktene om en griff av unormal størrelse som jakter ute på landsbygda ledet "
 "deg til hulen dens. En rask og brutal kamp fører til slutten på beistet, og "
 "du finner en stor svart perle når du leter gjennom det motbydelige redet."
+
+msgid "Magic Book"
+msgstr "Tryllebok"
+
+msgid "The %{name} enables you to cast spells."
+msgstr "%{name}a gjør at du kan bruke trolldommer."
+
+msgid "Dummy 1"
+msgstr "Plassholder 1"
+
+msgid "The reserved artifact."
+msgstr "Plassholdergjenstanden."
+
+msgid "Dummy 2"
+msgstr "Plassholder 2"
+
+msgid "Dummy 3"
+msgstr "Plassholder 3"
+
+msgid "Dummy 4"
+msgstr "Plassholder 4"
+
+msgid "Spell Scroll"
+msgstr "Trolldomsrull"
+
+msgid "This %{name} gives your hero the ability to cast the %{spell} spell."
+msgstr "Denne %{name}en gir helten din evnen til å bruke trolldommen %{spell}."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
@@ -8539,6 +8490,16 @@ msgstr ""
 "kalveskinn. Runene på beholderen er veldig gamle, og håndverket som ligger "
 "bak den er fantastisk. I det du tar ut rullen føler du deg fylt med magisk "
 "kraft."
+
+msgid "Arm of the Martyr"
+msgstr "Martyrens arm"
+
+msgid ""
+"The %{name} increases your spell power by %{count} but adds the undead "
+"morale penalty."
+msgstr ""
+"%{name} øker tryllekraften din med %{count} men legger til vandød "
+"kampåndspåvirkning."
 
 msgid ""
 "One of the less intelligent members of your party picks up an arm off of the "
@@ -8553,6 +8514,12 @@ msgstr ""
 "kaste den: den ser ut til å ha en slags magisk kraft som påvirker "
 "beslutningsevnen din."
 
+msgid "Breastplate of Anduran"
+msgstr "Andurans brystplate"
+
+msgid "The %{name} increases your defense by %{count}."
+msgstr "%{name} øker forsvarsevnen din med %{count}."
+
 msgid ""
 "You come upon a sign. It reads: \"Here lies the body of Anduran. Bow and "
 "swear fealty, and you shall be rewarded.\" You decide to do as it says. As "
@@ -8564,6 +8531,16 @@ msgstr ""
 "som står. I det du reiser deg føler du en kulde treffe huden din. Når du ser "
 "ned oppdager du at du plutselig har på deg en skinnende og vakker brystplate."
 
+msgid "Broach of Shielding"
+msgstr "Brystnålen av beskyttelse"
+
+msgid ""
+"The %{name} provides %{count} percent protection from Armageddon and "
+"Elemental Storm, but decreases spell power by 2."
+msgstr ""
+"%{name} gir %{count} prosent beskyttelse mot ragnarok og elementær storm, "
+"men minsker tryllekraften med 2."
+
 msgid ""
 "A kindly Sorceress thinks that your army's defenses could use a magical "
 "boost. She offers to enchant the Broach that you wear on your cloak, and you "
@@ -8573,6 +8550,17 @@ msgstr ""
 "en magisk forsterkning. Hun tilbyr å fortrylle brystnålen du har på kappen "
 "din, og du godtar det."
 
+msgid "Battle Garb of Anduran"
+msgstr "Andurans kamputstyr"
+
+msgid ""
+"The %{name} combines the powers of the three Anduran artifacts.  It provides "
+"maximum luck and morale for your troops and gives you the Town Portal spell."
+msgstr ""
+"%{name} slår sammen kreftene til alle de tre gjenstandene av Anduran. Den "
+"gir maksimal flaks og kampånd til styrkene dine og gir deg trolldommen "
+"Byportal."
+
 msgid ""
 "Out of pity for a poor peasant, you purchase a chest of old junk they are "
 "hawking for too much gold. Later, as you search through it, you find it "
@@ -8581,6 +8569,16 @@ msgstr ""
 "Av medlidenhet til en fattig bonde kjøper du ei kiste med gammelt skrap som "
 "han selger for alt for mye gull. Senere mens du går gjennom den oppdager du "
 "at den inneholder de 3 delene av det legendariske kamputstyret til Anduran!"
+
+msgid "Crystal Ball"
+msgstr "Krystallkule"
+
+msgid ""
+"The %{name} lets you get more specific information about monsters, enemy "
+"heroes, and castles nearby the hero who holds it."
+msgstr ""
+"%{name}n lar deg få mer detaljert informasjon om monster, fiendtlige helter "
+"og borger i nærheten av helten som holder den."
 
 msgid ""
 "You come upon a caravan of gypsies who are feasting and fortifying their "
@@ -8595,6 +8593,16 @@ msgstr ""
 "likevel. De ler seg i hjel, men beundrer motet ditt og gir deg en "
 "krystallkule."
 
+msgid "Heart of Fire"
+msgstr "Ildhjerte"
+
+msgid ""
+"The %{name} provides %{count} percent protection from fire, but doubles the "
+"damage taken from cold."
+msgstr ""
+"%{name}t gir %{count} prosent beskyttelse mot ild, men dobler skaden fra "
+"kulde."
+
 msgid ""
 "You enter a recently burned glade and come upon a Fire Elemental sitting "
 "atop a rock. It looks up, its flaming face contorted in a look of severe "
@@ -8606,6 +8614,16 @@ msgstr ""
 "utrykk av sterk smerte. Plutselig kaster den en skinnende gjenstand på deg. "
 "Du tar fram hendene for å skjerme deg, men den går rett igjennom og brenner "
 "seg inn i brystkassa di."
+
+msgid "Heart of Ice"
+msgstr "Ishjerte"
+
+msgid ""
+"The %{name} provides %{count} percent protection from cold, but doubles the "
+"damage taken from fire."
+msgstr ""
+"%{name}t gir %{count} prosent beskyttelse mot kulde, men dobler skaden fra "
+"ild."
 
 msgid ""
 "Suddenly, a biting coldness engulfs your body. You seize up, falling from "
@@ -8620,6 +8638,9 @@ msgstr ""
 "latter. Du snur deg rundt akkurat i tide til å se en frostkjempe løpe av "
 "gårde inn i skogen og forsvinne."
 
+msgid "Helmet of Anduran"
+msgstr "Andurans hjelm"
+
 msgid ""
 "You spy a gleaming object poking up out of the ground. You send a member of "
 "your party over to investigate. He comes back with a golden helmet in his "
@@ -8632,6 +8653,9 @@ msgstr ""
 "legendariske Anduran, det eneste mennesket kjent for å bruke en rustning av "
 "rent gull."
 
+msgid "Holy Hammer"
+msgstr "Den hellige hammeren"
+
 msgid ""
 "You come upon a battle where a Paladin has been mortally wounded by a group "
 "of Zombies. He asks you to take his hammer and finish what he started.  As "
@@ -8643,6 +8667,12 @@ msgstr ""
 "begynte. I det du plukker den opp begynner den å dure og så blir alt uklart. "
 "Zombiene ligger nå døde og det drypper blod fra hammeren. Du fester den til "
 "beltet ditt."
+
+msgid "Legendary Scepter"
+msgstr "Det legendariske septeret"
+
+msgid "The %{name} adds %{count} points to all attributes."
+msgstr "%{name} legger til %{count} poeng til alle egenskaper."
 
 msgid ""
 "Upon cresting a small hill, you come upon a ridiculous looking sight. A "
@@ -8657,6 +8687,12 @@ msgstr ""
 "stirrer bort på deg og svarer: \"Syns du dette er morsomt? Greit. Da kan du "
 "få bære den. Jeg foretrekker å fly uansett.\""
 
+msgid "Masthead"
+msgstr "Mastetoppen"
+
+msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
+msgstr "%{name} øker flaksen og kampånden din med %{count} under sjøslag."
+
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -8668,6 +8704,12 @@ msgstr ""
 "farvann. Han gir deg deretter et falmet kart som viser hvor han gjemte den. "
 "Etter mye leting finner du den bortgjemt under en brygge i nærheten."
 
+msgid "Sphere of Negation"
+msgstr "Kulen av benektelse"
+
+msgid "The %{name} disables all spell casting, for both sides, in combat."
+msgstr "%{name} stanser all bruk av trolldom for begge sider i kampen."
+
 msgid ""
 "You stop to help a Peasant catch a runaway mare. To show his gratitude, he "
 "hands you a tiny sphere. As soon as you grasp it, you feel the magical "
@@ -8676,6 +8718,12 @@ msgstr ""
 "Du stanser for å hjelpe en bonde med å fange en løpsk hingst. For å vise sin "
 "takknemmelighet gir han deg en liten kule. I det du griper den føler du den "
 "magiske energien tappes fra lemmene dine."
+
+msgid "Staff of Wizardry"
+msgstr "Trolldomsstaven"
+
+msgid "The %{name} boosts your spell power by %{count}."
+msgstr "%{name} øker tryllekraften din med %{count}."
 
 msgid ""
 "While out scaring up game, your troops find a mysterious staff levitating "
@@ -8687,6 +8735,12 @@ msgstr ""
 "svevde en meter over bakken. De overrekker deg den og du legger merke til en "
 "innrisset tekst. Det står: \"Vett slår muskler og magi trumfer et slag. Lytt "
 "til mine ord og du vil vinne hver dag.\""
+
+msgid "Sword Breaker"
+msgstr "Sverdknuser"
+
+msgid "The %{name} increases your defense by %{count} and attack by 1."
+msgstr "%{name}en øker forsvarsevnen din med %{count} og angrepsevnen med 1."
 
 msgid ""
 "A former Captain of the Guard admires your quest and gives you the enchanted "
@@ -8708,6 +8762,15 @@ msgstr ""
 "det berømte sverdet, er du takknemlig for at toskete troll ofte griper tak i "
 "feil ende av skarpe gjenstander."
 
+msgid "Sword of Anduran"
+msgstr "Andurans sverd"
+
+msgid "Spade of Necromancy"
+msgstr "Sortekunstnerens spade"
+
+msgid "The %{name} gives you increased necromancy skill."
+msgstr "%{name} forbedrer sortekunstevnen din."
+
 msgid ""
 "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, "
 "you discover it to be the enchanted shovel of the Gravediggers, long thought "
@@ -8717,37 +8780,8 @@ msgstr ""
 "nærmere titt oppdager du at det er den fortryllede spaden til Gravleggerne, "
 "lenge trodd å være forsvunnet av de dødelige."
 
-msgid ""
-"Do you want to use your knowledge of magical secrets to transcribe the "
-"%{spell} Scroll into your Magic Book?\n"
-"The Spell Scroll will be consumed.\n"
-" Cost in spell points: %{sp}"
-msgstr ""
-"Vil du bruke din kunnskap om magiske hemmeligheter for å overføre "
-"trolldomsrullen med %{spell} til trylleboka di?\n"
-"Trolldomsrullen vil bli ødelagt.\n"
-"Kostnad i mana: %{sp}"
-
-msgid "Move points: %{mp}"
-msgstr "Skritt: %{mp}"
-
-msgid "Transcribe Spell Scroll"
-msgstr "Overfør trolldomsrull"
-
-msgid "View Spells"
-msgstr "Vis trolldommer"
-
-msgid "View %{name} Info"
-msgstr "Vis info om %{name}"
-
-msgid "Move %{name}"
-msgstr "Flytt %{name}"
-
-msgid "Cannot move the Spellbook"
-msgstr "Trylleboken kan ikke flyttes"
-
-msgid "This item can't be traded."
-msgstr "Denne tingen kan ikke byttes."
+msgid "Invalid Artifact"
+msgstr "Ugyldig gjenstand"
 
 msgid "Wood"
 msgstr "Ved"
@@ -9344,6 +9378,9 @@ msgstr "Denne trolldommen tilkaller %{count} %{monster} for å beskytte gruva."
 msgid "The nearest town is %{town}."
 msgstr "Den nærmeste byen er%{town}."
 
+msgid "This town is occupied by your hero %{hero}."
+msgstr "Denne byen er blokkert av helten din %{hero}."
+
 msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
@@ -9366,56 +9403,23 @@ msgstr "Verden: Vis hvor mye skritt du taper på terrengene"
 msgid "world: Scouting skill shows extended content info"
 msgstr "Verden: Speiding gir deg utvidet info"
 
-#, fuzzy
 msgid "world: allow to set guardian to objects"
 msgstr "Verden: Tillat å plassere voktere på objekter"
-
-msgid "world: Crystal Ball gives Identify Hero and Visions spells"
-msgstr ""
-"Verden: Krystallkula gir også \"undersøk helt\" og \"syner\" trolldommene."
 
 msgid "world: Neutral armies scale with game difficulty"
 msgstr "Verden: Nøytrale hærer øker med spillets vanskelighetsgrad"
 
-#, fuzzy
-msgid "world: use unique artifacts providing resources"
-msgstr "Verden: Bruk spesielle gjenstander for å påvirke råvarer"
-
-#, fuzzy
-msgid "world: use unique artifacts affecting primary skills"
-msgstr "Verden: Bruke spesielle gjenstander for grunnferdigheter"
-
-#, fuzzy
-msgid "world: use unique artifacts affecting secondary skills"
-msgstr "Verden: Bruk spesielle gjenstander for sideferdigheter"
-
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr "Verden: Vind- og vannmøller og magisk hage kan bli flagget"
-
-msgid "world: disable Barrow Mounds"
-msgstr "Verden: Skru av gravhaug"
 
 msgid "castle: allow guardians"
 msgstr "Borg: Tillat helt som vokter"
 
-msgid ""
-"castle: higher mage guilds regenerate more spell points/turn "
-"(20/40/60/80/100%)"
-msgstr ""
-"Borg: Jo høyere magiforbund desto mer mana fylles opp for hver tur "
-"(20/40/60/80/100%)"
-
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "Helter: Tillat å kjøpe tryllebok fra magitempel"
 
-msgid "heroes: recruit cost depends on hero level"
-msgstr "Helter: Kostnaden for å verve avhenger av levelen til helten"
-
 msgid "heroes: remember move points for retreat/surrender result"
 msgstr "Helter: Husk skrittene for tilbaketrekkings-/overgivelsesresultatet"
-
-msgid "heroes: allow transcribing scrolls (needs: Eye Eagle skill)"
-msgstr "Helter: Tillat å tyde trolldomsruller (trenger: ferdigheten ørneblikk)"
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "Helter: I arenaen kan man velge en hvilken som helst av grunnevnene"
@@ -9434,9 +9438,6 @@ msgstr "Parti: Vis systeminfo"
 
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "Parti: Autolagringen skjer ved begynnelsen av dagen"
-
-msgid "game: use fade"
-msgstr "Parti: Ton ut bildet"
 
 msgid "game: use evil interface"
 msgstr "Parti: Bruk ondt grensesnitt"
@@ -9509,3 +9510,63 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "Nearest town occupied.\n"
+#~ "Spell Failed!!!"
+#~ msgstr ""
+#~ "Den nærmeste byen er opptatt.\n"
+#~ "Trolldom mislyktes!!!"
+
+#~ msgid ""
+#~ "Do you want to use your knowledge of magical secrets to transcribe the "
+#~ "%{spell} Scroll into your Magic Book?\n"
+#~ "The Spell Scroll will be consumed.\n"
+#~ " Cost in spell points: %{sp}"
+#~ msgstr ""
+#~ "Vil du bruke din kunnskap om magiske hemmeligheter for å overføre "
+#~ "trolldomsrullen med %{spell} til trylleboka di?\n"
+#~ "Trolldomsrullen vil bli ødelagt.\n"
+#~ "Kostnad i mana: %{sp}"
+
+#~ msgid "Move points: %{mp}"
+#~ msgstr "Skritt: %{mp}"
+
+#~ msgid "Transcribe Spell Scroll"
+#~ msgstr "Overfør trolldomsrull"
+
+#~ msgid "world: Crystal Ball gives Identify Hero and Visions spells"
+#~ msgstr ""
+#~ "Verden: Krystallkula gir også \"undersøk helt\" og \"syner\" trolldommene."
+
+#, fuzzy
+#~ msgid "world: use unique artifacts providing resources"
+#~ msgstr "Verden: Bruk spesielle gjenstander for å påvirke råvarer"
+
+#, fuzzy
+#~ msgid "world: use unique artifacts affecting primary skills"
+#~ msgstr "Verden: Bruke spesielle gjenstander for grunnferdigheter"
+
+#, fuzzy
+#~ msgid "world: use unique artifacts affecting secondary skills"
+#~ msgstr "Verden: Bruk spesielle gjenstander for sideferdigheter"
+
+#~ msgid "world: disable Barrow Mounds"
+#~ msgstr "Verden: Skru av gravhaug"
+
+#~ msgid ""
+#~ "castle: higher mage guilds regenerate more spell points/turn "
+#~ "(20/40/60/80/100%)"
+#~ msgstr ""
+#~ "Borg: Jo høyere magiforbund desto mer mana fylles opp for hver tur "
+#~ "(20/40/60/80/100%)"
+
+#~ msgid "heroes: recruit cost depends on hero level"
+#~ msgstr "Helter: Kostnaden for å verve avhenger av levelen til helten"
+
+#~ msgid "heroes: allow transcribing scrolls (needs: Eye Eagle skill)"
+#~ msgstr ""
+#~ "Helter: Tillat å tyde trolldomsruller (trenger: ferdigheten ørneblikk)"
+
+#~ msgid "game: use fade"
+#~ msgstr "Parti: Ton ut bildet"
