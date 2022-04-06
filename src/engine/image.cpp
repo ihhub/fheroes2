@@ -423,8 +423,8 @@ namespace fheroes2
     Image::Image( int32_t width_, int32_t height_ )
         : _width( 0 )
         , _height( 0 )
-        , _singleLayer( false )
         , _data( nullptr )
+        , _singleLayer( false )
     {
         resize( width_, height_ );
     }
@@ -432,8 +432,8 @@ namespace fheroes2
     Image::Image( const Image & image_ )
         : _width( 0 )
         , _height( 0 )
-        , _singleLayer( false )
         , _data( nullptr )
+        , _singleLayer( false )
     {
         copy( image_ );
     }
