@@ -1004,11 +1004,6 @@ namespace
             _isPaused = true;
         }
 
-        bool isPaused() const
-        {
-            return _isPaused;
-        }
-
         void resume()
         {
             _isPaused = false;
@@ -1064,11 +1059,6 @@ void LocalEvent::ResumeCycling() const
 {
     colorCycling.resume();
     fheroes2::Display::instance().subscribe( ApplyCycling, ResetCycling );
-}
-
-bool LocalEvent::isCyclingPaused() const
-{
-    return colorCycling.isPaused();
 }
 
 LocalEvent & LocalEvent::GetClean()

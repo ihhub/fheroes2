@@ -299,8 +299,6 @@ public:
 
     void ResumeCycling() const;
 
-    bool isCyclingPaused() const;
-
     void OpenVirtualKeyboard();
     void CloseVirtualKeyboard();
 
