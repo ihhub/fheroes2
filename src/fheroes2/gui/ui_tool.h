@@ -20,14 +20,36 @@
 
 #pragma once
 
+#include <chrono>
+#include <deque>
 #include <functional>
 
 #include "image.h"
+#include "text.h"
 #include "timing.h"
 #include "ui_base.h"
 
 namespace fheroes2
 {
+    class SystemInfoRenderer
+    {
+    public:
+        SystemInfoRenderer()
+            : _startTime( std::chrono::steady_clock::now() )
+        {
+            // Do nothing.
+        }
+
+        void preRender();
+
+        void postRender();
+
+    private:
+        std::chrono::time_point<std::chrono::steady_clock> _startTime;
+        TextSprite _text;
+        std::deque<double> _fps;
+    };
+
     class MovableSprite : public Sprite
     {
     public:
@@ -95,10 +117,4 @@ namespace fheroes2
     void InvertedFadeWithPalette( Image & image, const Rect & roi, const Rect & excludedRoi, uint8_t paletteId, int delayMs, int frameCount );
 
     void InvertedShadow( Image & image, const Rect & roi, const Rect & excludedRoi, const uint8_t paletteId, const int paletteCount );
-
-    // Display pre-render function to show screen system info
-    void PreRenderSystemInfo();
-
-    // Display post-render function to hide screen system info
-    void PostRenderSystemInfo();
 }

@@ -38,7 +38,7 @@ namespace fheroes2
         Image( const Image & image_ );
         Image( Image && image_ ) noexcept;
 
-        virtual ~Image() = default;
+        virtual ~Image();
 
         Image & operator=( const Image & image_ );
         Image & operator=( Image && image_ ) noexcept;
@@ -61,12 +61,12 @@ namespace fheroes2
 
         uint8_t * transform()
         {
-            return _data.get() + width() * height();
+            return _data + width() * height();
         }
 
         const uint8_t * transform() const
         {
-            return _data.get() + width() * height();
+            return _data + width() * height();
         }
 
         bool empty() const
@@ -98,7 +98,7 @@ namespace fheroes2
 
         int32_t _width;
         int32_t _height;
-        std::unique_ptr<uint8_t[]> _data; // holds 2 image layers
+        uint8_t * _data; // holds 2 image layers
 
         bool _singleLayer; // only for images which are not used for any other operations except displaying on screen. Non-copyable member.
     };

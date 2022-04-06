@@ -181,6 +181,7 @@
     <ClCompile Include="src\engine\image_tool.cpp" />
     <ClCompile Include="src\engine\localevent.cpp" />
     <ClCompile Include="src\engine\logging.cpp" />
+    <ClCompile Include="src\engine\memory_pool.cpp" />
     <ClCompile Include="src\engine\pal.cpp" />
     <ClCompile Include="src\engine\rand.cpp" />
     <ClCompile Include="src\engine\screen.cpp" />
@@ -398,6 +399,7 @@
     <ClInclude Include="src\engine\logging.h" />
     <ClInclude Include="src\engine\localevent.h" />
     <ClInclude Include="src\engine\math_base.h" />
+    <ClInclude Include="src\engine\memory_pool.h" />
     <ClInclude Include="src\engine\pal.h" />
     <ClInclude Include="src\engine\pathfinding.h" />
     <ClInclude Include="src\engine\rand.h" />

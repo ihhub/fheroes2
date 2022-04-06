@@ -1411,6 +1411,7 @@ namespace fheroes2
     void Display::release()
     {
         _engine->clear();
+        _cursor.reset();
         clear();
 
         _prevRoi = {};

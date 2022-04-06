@@ -993,18 +993,20 @@ namespace
             return !_isPaused && _prevDraw.getMs() >= 220;
         }
 
-        void registerDrawing( void ( *preRenderDrawing )(), void ( *postRenderDrawing )() )
+        void registerDrawing( std::function<void()> preRenderDrawing, std::function<void()> postRenderDrawing )
         {
-            if ( preRenderDrawing != nullptr )
-                _preRenderDrawing = preRenderDrawing;
-
-            if ( postRenderDrawing != nullptr )
-                _posRenderDrawing = postRenderDrawing;
+            _preRenderDrawing = preRenderDrawing;
+            _posRenderDrawing = postRenderDrawing;
         }
 
         void pause()
         {
             _isPaused = true;
+        }
+
+        bool isPaused() const
+        {
+            return _isPaused;
         }
 
         void resume()
@@ -1020,8 +1022,8 @@ namespace
         uint32_t _counter;
         bool _isPaused;
 
-        void ( *_preRenderDrawing )();
-        void ( *_posRenderDrawing )();
+        std::function<void()> _preRenderDrawing;
+        std::function<void()> _posRenderDrawing;
     };
 
     ColorCycling colorCycling;
@@ -1044,7 +1046,7 @@ LocalEvent & LocalEvent::Get( void )
     return le;
 }
 
-void LocalEvent::RegisterCycling( void ( *preRenderDrawing )(), void ( *postRenderDrawing )() ) const
+void LocalEvent::RegisterCycling( std::function<void()> preRenderDrawing, std::function<void()> postRenderDrawing ) const
 {
     colorCycling.registerDrawing( preRenderDrawing, postRenderDrawing );
     colorCycling.resume();
@@ -1056,6 +1058,17 @@ void LocalEvent::PauseCycling() const
 {
     colorCycling.pause();
     fheroes2::Display::instance().subscribe( nullptr, nullptr );
+}
+
+void LocalEvent::ResumeCycling() const
+{
+    colorCycling.resume();
+    fheroes2::Display::instance().subscribe( ApplyCycling, ResetCycling );
+}
+
+bool LocalEvent::isCyclingPaused() const
+{
+    return colorCycling.isPaused();
 }
 
 LocalEvent & LocalEvent::GetClean()

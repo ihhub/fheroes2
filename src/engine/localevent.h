@@ -24,6 +24,7 @@
 #ifndef H2LOCALEVENT_H
 #define H2LOCALEVENT_H
 
+#include <functional>
 #include <string>
 
 #include "math_base.h"
@@ -291,15 +292,14 @@ public:
 
     int KeyMod() const;
 
-    void RegisterCycling( void ( *preRenderDrawing )() = nullptr, void ( *postRenderDrawing )() = nullptr ) const;
+    void RegisterCycling( std::function<void()> preRenderDrawing, std::function<void()> postRenderDrawing ) const;
 
     // These two methods are useful for video playback
     void PauseCycling() const;
 
-    void ResumeCycling() const
-    {
-        RegisterCycling();
-    }
+    void ResumeCycling() const;
+
+    bool isCyclingPaused() const;
 
     void OpenVirtualKeyboard();
     void CloseVirtualKeyboard();

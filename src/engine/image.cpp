@@ -20,6 +20,7 @@
 
 #include "image.h"
 #include "image_palette.h"
+#include "memory_pool.h"
 
 #include <cassert>
 #include <cstdlib>
@@ -416,12 +417,14 @@ namespace fheroes2
         : _width( 0 )
         , _height( 0 )
         , _singleLayer( false )
+        , _data( nullptr )
     {}
 
     Image::Image( int32_t width_, int32_t height_ )
         : _width( 0 )
         , _height( 0 )
         , _singleLayer( false )
+        , _data( nullptr )
     {
         resize( width_, height_ );
     }
@@ -430,6 +433,7 @@ namespace fheroes2
         : _width( 0 )
         , _height( 0 )
         , _singleLayer( false )
+        , _data( nullptr )
     {
         copy( image_ );
     }
@@ -437,12 +441,19 @@ namespace fheroes2
     Image::Image( Image && image_ ) noexcept
         : _width( 0 )
         , _height( 0 )
-        , _data( std::move( image_._data ) )
+        , _data( nullptr )
         , _singleLayer( false )
     {
+        std::swap( _data, image_._data );
         std::swap( _singleLayer, image_._singleLayer );
         std::swap( _width, image_._width );
         std::swap( _height, image_._height );
+    }
+
+    Image::~Image()
+    {
+        MemoryAllocator::instance().free( _data );
+        _data = nullptr;
     }
 
     Image & Image::operator=( const Image & image_ )
@@ -470,17 +481,18 @@ namespace fheroes2
 
     uint8_t * Image::image()
     {
-        return _data.get();
+        return _data;
     }
 
     const uint8_t * Image::image() const
     {
-        return _data.get();
+        return _data;
     }
 
     void Image::clear()
     {
-        _data.reset();
+        MemoryAllocator::instance().free( _data );
+        _data = nullptr;
 
         _width = 0;
         _height = 0;
@@ -509,7 +521,7 @@ namespace fheroes2
 
         const size_t size = static_cast<size_t>( width_ * height_ );
 
-        _data.reset( new uint8_t[size * 2] );
+        _data = MemoryAllocator::instance().allocate( size * 2 );
 
         _width = width_;
         _height = height_;
@@ -538,13 +550,13 @@ namespace fheroes2
         const size_t size = static_cast<size_t>( image._width * image._height );
 
         if ( image._width != _width || image._height != _height ) {
-            _data.reset( new uint8_t[size * 2] );
+            _data = MemoryAllocator::instance().allocate( size * 2 );
 
             _width = image._width;
             _height = image._height;
         }
 
-        memcpy( _data.get(), image._data.get(), size * 2 );
+        memcpy( _data, image._data, size * 2 );
     }
 
     Sprite::Sprite()

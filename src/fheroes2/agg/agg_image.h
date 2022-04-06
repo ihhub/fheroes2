@@ -51,5 +51,7 @@ namespace fheroes2
         void updateAlphabet( const SupportedLanguage language, const bool loadOriginalAlphabet );
 
         bool isAlphabetSupported( const SupportedLanguage language );
+
+        void freeResources();
     }
 }

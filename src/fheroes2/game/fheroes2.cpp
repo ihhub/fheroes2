@@ -38,6 +38,7 @@
 #include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
+#include "memory_pool.h"
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
@@ -129,7 +130,7 @@ namespace
             SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
 
             // Initialize local event processing.
-            LocalEvent::Get().RegisterCycling( fheroes2::PreRenderSystemInfo, fheroes2::PostRenderSystemInfo );
+            LocalEvent::Get().RegisterCycling( [this](){ return _infoRenderer.preRender(); }, [this](){ return _infoRenderer.postRender(); } );
 
             // Update mouse cursor when switching between software emulation and OS mouse modes.
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
@@ -147,6 +148,9 @@ namespace
         {
             fheroes2::Display::instance().release();
         }
+
+    private:
+        fheroes2::SystemInfoRenderer _infoRenderer;
     };
 
     class DataInitializer
@@ -245,6 +249,21 @@ int main( int argc, char ** argv )
         }
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() );
+
+        // Allocating less than 32 MB of memory makes no sense as this is a bare minimum amount of memory.
+        size_t desiredMemorySize = 128 * 1024 * 1024;
+        while ( desiredMemorySize >= 32 * 1024 * 1024 ) {
+            try
+            {
+                fheroes2::MemoryAllocator::instance().reserve( desiredMemorySize );
+            }
+            catch ( const std::logic_error & ) {
+                desiredMemorySize /= 2;
+                continue;
+            }
+
+            break;
+        }
 
         const DisplayInitializer displayInitializer;
 

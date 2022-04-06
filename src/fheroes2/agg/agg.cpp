@@ -31,6 +31,7 @@
 
 #include "agg.h"
 #include "agg_file.h"
+#include "agg_image.h"
 #include "audio.h"
 #include "dir.h"
 #include "embedded_image.h"
@@ -653,6 +654,8 @@ AGG::AGGInitializer::~AGGInitializer()
     wav_cache.clear();
     mid_cache.clear();
     loop_sounds.clear();
+
+    fheroes2::AGG::freeResources();
 }
 
 bool AGG::AGGInitializer::init()

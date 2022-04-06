@@ -45,11 +45,10 @@ namespace
 
     std::vector<std::vector<fheroes2::Sprite>> _icnVsSprite( ICN::LASTICN );
     std::vector<std::vector<std::vector<fheroes2::Image>>> _tilVsImage( TIL::LASTTIL );
+    std::map<int, std::vector<fheroes2::Sprite>> _icnVsScaledSprite;
     const fheroes2::Sprite errorImage;
 
     const uint32_t headerSize = 6;
-
-    std::map<int, std::vector<fheroes2::Sprite>> _icnVsScaledSprite;
 
     bool IsValidICNId( int id )
     {
@@ -3489,6 +3488,13 @@ namespace fheroes2
             }
 
             return false;
+        }
+
+        void freeResources()
+        {
+            _icnVsSprite.clear();
+            _tilVsImage.clear();
+            _icnVsScaledSprite.clear();
         }
     }
 }
