@@ -3889,7 +3889,7 @@ msgid "Czech"
 msgstr "Tchèque"
 
 msgid "Norwegian"
-msgstr ""
+msgstr "Norvégien"
 
 msgid ", FPS: "
 msgstr ", FPS : "
