@@ -95,24 +95,24 @@ namespace Interface
 
         void Redraw( int f = 0 );
 
-        static bool isScrollLeft( const fheroes2::Point cursorPos )
+        static bool isScrollLeft( const fheroes2::Point & cursorPos )
         {
             return cursorPos.x < BORDERWIDTH;
         }
 
-        static bool isScrollRight( const fheroes2::Point cursorPos )
+        static bool isScrollRight( const fheroes2::Point & cursorPos )
         {
             const fheroes2::Display & display = fheroes2::Display::instance();
 
             return cursorPos.x >= display.width() - BORDERWIDTH;
         }
 
-        static bool isScrollTop( const fheroes2::Point cursorPos )
+        static bool isScrollTop( const fheroes2::Point & cursorPos )
         {
             return cursorPos.y < BORDERWIDTH;
         }
 
-        static bool isScrollBottom( const fheroes2::Point cursorPos )
+        static bool isScrollBottom( const fheroes2::Point & cursorPos )
         {
             const fheroes2::Display & display = fheroes2::Display::instance();
 
