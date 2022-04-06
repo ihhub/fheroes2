@@ -8446,17 +8446,3 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "%{color} casts a spell: %{spell}"
-#~ msgstr "%{color} getta la magia: %{spell}"
-
-#~ msgid "You find %{artifact}."
-#~ msgstr "Scopri l'artefatto: %{artifact}."
-
-#~ msgid "Move points: %{mp}"
-#~ msgstr "Punti Movim.: %{mp}"
-
-#~ msgid "Buy Monsters"
-#~ msgstr "Compra Truppe"
-
-#~ msgid "Cannot move artifact"
-#~ msgstr "Questo artefatto non si può muovere"
