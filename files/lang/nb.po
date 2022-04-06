@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-06 16:34+0200\n"
-"PO-Revision-Date: 2022-04-06 16:41+0200\n"
+"PO-Revision-Date: 2022-04-06 16:44+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
 "Language: nb_NO\n"
@@ -118,13 +118,13 @@ msgid "army|Legion"
 msgstr "Legion"
 
 msgid "All %{race} troops +1"
-msgstr "Kun styrker av slaget %{race}: +1"
+msgstr "Kun styrker av %{race}tilhørighet: +1"
 
 msgid "Multiple"
 msgstr "Flere"
 
 msgid "Troops of %{count} alignments -%{penalty}"
-msgstr "Styrker fra %{count} tilhørigheter -%{penalty}"
+msgstr "Straff for styrker fra %{count} tilhørigheter -%{penalty}"
 
 msgid "Some undead in group -1"
 msgstr "Vandøde blant styrkene -1"
@@ -9510,63 +9510,3 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ "Nearest town occupied.\n"
-#~ "Spell Failed!!!"
-#~ msgstr ""
-#~ "Den nærmeste byen er opptatt.\n"
-#~ "Trolldom mislyktes!!!"
-
-#~ msgid ""
-#~ "Do you want to use your knowledge of magical secrets to transcribe the "
-#~ "%{spell} Scroll into your Magic Book?\n"
-#~ "The Spell Scroll will be consumed.\n"
-#~ " Cost in spell points: %{sp}"
-#~ msgstr ""
-#~ "Vil du bruke din kunnskap om magiske hemmeligheter for å overføre "
-#~ "trolldomsrullen med %{spell} til trylleboka di?\n"
-#~ "Trolldomsrullen vil bli ødelagt.\n"
-#~ "Kostnad i mana: %{sp}"
-
-#~ msgid "Move points: %{mp}"
-#~ msgstr "Skritt: %{mp}"
-
-#~ msgid "Transcribe Spell Scroll"
-#~ msgstr "Overfør trolldomsrull"
-
-#~ msgid "world: Crystal Ball gives Identify Hero and Visions spells"
-#~ msgstr ""
-#~ "Verden: Krystallkula gir også \"undersøk helt\" og \"syner\" trolldommene."
-
-#, fuzzy
-#~ msgid "world: use unique artifacts providing resources"
-#~ msgstr "Verden: Bruk spesielle gjenstander for å påvirke råvarer"
-
-#, fuzzy
-#~ msgid "world: use unique artifacts affecting primary skills"
-#~ msgstr "Verden: Bruke spesielle gjenstander for grunnferdigheter"
-
-#, fuzzy
-#~ msgid "world: use unique artifacts affecting secondary skills"
-#~ msgstr "Verden: Bruk spesielle gjenstander for sideferdigheter"
-
-#~ msgid "world: disable Barrow Mounds"
-#~ msgstr "Verden: Skru av gravhaug"
-
-#~ msgid ""
-#~ "castle: higher mage guilds regenerate more spell points/turn "
-#~ "(20/40/60/80/100%)"
-#~ msgstr ""
-#~ "Borg: Jo høyere magiforbund desto mer mana fylles opp for hver tur "
-#~ "(20/40/60/80/100%)"
-
-#~ msgid "heroes: recruit cost depends on hero level"
-#~ msgstr "Helter: Kostnaden for å verve avhenger av levelen til helten"
-
-#~ msgid "heroes: allow transcribing scrolls (needs: Eye Eagle skill)"
-#~ msgstr ""
-#~ "Helter: Tillat å tyde trolldomsruller (trenger: ferdigheten ørneblikk)"
-
-#~ msgid "game: use fade"
-#~ msgstr "Parti: Ton ut bildet"
