@@ -55,7 +55,7 @@ namespace fheroes2
 
                     if ( _split( level ) ) {
                         std::set<size_t>::iterator chunk = _freeChunk[level].begin();
-                        _DataType * address = reinterpret_cast<_DataType*>( _alignedData + *chunk );
+                        _DataType * address = reinterpret_cast<_DataType *>( _alignedData + *chunk );
                         _allocatedChunk.emplace( *chunk, level );
                         _freeChunk[level].erase( chunk );
                         return address;
