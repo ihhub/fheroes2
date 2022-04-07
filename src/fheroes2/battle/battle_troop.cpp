@@ -387,7 +387,7 @@ bool Battle::Unit::isHandFighting( const Unit & attacker, const Unit & defender 
         return false;
     }
 
-    // If the attacker and the defender are next to each other, then it's is a melee attack
+    // If the attacker and the defender are next to each other, then this is a melee attack
     if ( Board::isNearIndexes( attacker.GetHeadIndex(), defender.GetHeadIndex() ) ) {
         return true;
     }
