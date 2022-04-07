@@ -1514,7 +1514,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const He
     }
 }
 
-bool Battle::Unit::isDoubleAttack( void ) const
+bool Battle::Unit::isDoubleAttack() const
 {
     switch ( GetID() ) {
     case Monster::ELF:

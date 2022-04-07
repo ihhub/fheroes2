@@ -110,7 +110,7 @@ namespace Battle
         bool isValid() const override;
         bool isArchers( void ) const;
         bool isFlying( void ) const;
-        bool isDoubleAttack( void ) const;
+        bool isDoubleAttack() const;
 
         bool AllowResponse( void ) const;
         // Checks whether this unit is forced to fight in melee (there is an enemy unit nearby)
