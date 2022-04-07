@@ -1071,7 +1071,7 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
     }
 
     // Monster special abilities
-    if ( isTwiceAttack() ) {
+    if ( isDoubleAttack() ) {
         if ( attackerIsArchers || ignoreRetaliation() || defender.Modes( TR_RESPONSED ) ) {
             attackerThreat *= 2;
         }
@@ -1514,7 +1514,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const He
     }
 }
 
-bool Battle::Unit::isTwiceAttack( void ) const
+bool Battle::Unit::isDoubleAttack( void ) const
 {
     switch ( GetID() ) {
     case Monster::ELF:
@@ -1526,7 +1526,7 @@ bool Battle::Unit::isTwiceAttack( void ) const
         break;
     }
 
-    return ArmyTroop::isTwiceAttack();
+    return ArmyTroop::isDoubleAttack();
 }
 
 u32 Battle::Unit::GetMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const

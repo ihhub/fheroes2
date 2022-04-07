@@ -176,7 +176,7 @@ public:
     bool isWide( void ) const;
     bool isArchers( void ) const;
     bool isAllowUpgrade( void ) const;
-    bool isTwiceAttack( void ) const;
+    bool isDoubleAttack( void ) const;
     bool isRegenerating( void ) const;
     bool isDoubleCellAttack( void ) const;
     bool isAllAdjacentCellsAttack() const;

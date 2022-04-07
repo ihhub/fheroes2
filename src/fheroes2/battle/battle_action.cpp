@@ -304,24 +304,22 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, attacker->String() << " to " << defender->String() );
 
         const bool handfighting = Unit::isHandFighting( *attacker, *defender );
-        // check position
+
         if ( attacker->isArchers() || handfighting ) {
             defender->SetBlindAnswer( defender->Modes( SP_BLIND ) );
 
-            // attack
             BattleProcess( *attacker, *defender, dst, dir );
 
             if ( defender->isValid() ) {
-                // defense answer
                 if ( handfighting && !attacker->ignoreRetaliation() && defender->AllowResponse() ) {
                     BattleProcess( *defender, *attacker );
                     defender->SetResponse();
                 }
+
                 defender->SetBlindAnswer( false );
 
-                // twice attack
-                if ( attacker->isValid() && attacker->isTwiceAttack() && !attacker->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
-                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "twice attack" );
+                if ( attacker->isValid() && attacker->isDoubleAttack() && !attacker->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
+                    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "double attack" );
                     BattleProcess( *attacker, *defender, dst, dir );
                 }
             }
