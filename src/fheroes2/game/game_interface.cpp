@@ -47,15 +47,9 @@ Interface::Basic::Basic()
 
 void Interface::Basic::Reset()
 {
-    const fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
 
     SetHideInterface( conf.ExtGameHideInterface() );
-
-    scrollLeft = fheroes2::Rect( 0, 0, BORDERWIDTH, display.height() );
-    scrollRight = fheroes2::Rect( display.width() - BORDERWIDTH, 0, BORDERWIDTH, display.height() );
-    scrollTop = fheroes2::Rect( 0, 0, display.width(), BORDERWIDTH );
-    scrollBottom = fheroes2::Rect( 0, display.height() - BORDERWIDTH, display.width(), BORDERWIDTH );
 }
 
 void Interface::Basic::SetHideInterface( bool f )
