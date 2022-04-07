@@ -869,8 +869,6 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "heroes: allow to choose any primary skill in Arena" );
     case Settings::BATTLE_SOFT_WAITING:
         return _( "battle: allow soft wait for troops" );
-    case Settings::BATTLE_REVERSE_WAIT_ORDER:
-        return _( "battle: reverse wait order (fast, average, slow)" );
     case Settings::BATTLE_DETERMINISTIC_RESULT:
         return _( "battle: deterministic events" );
     case Settings::GAME_SHOW_SYSTEM_INFO:

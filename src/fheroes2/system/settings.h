@@ -102,7 +102,7 @@ public:
         // UNUSED = 0x40004000,
         BATTLE_DETERMINISTIC_RESULT = 0x40008000,
         BATTLE_SOFT_WAITING = 0x40010000,
-        BATTLE_REVERSE_WAIT_ORDER = 0x40020000
+        // UNUSED = 0x40020000
     };
 
     Settings( const Settings & ) = delete;
@@ -307,11 +307,6 @@ public:
     bool ExtBattleDeterministicResult() const
     {
         return ExtModes( BATTLE_DETERMINISTIC_RESULT );
-    }
-
-    bool ExtBattleReverseWaitOrder() const
-    {
-        return ExtModes( BATTLE_REVERSE_WAIT_ORDER );
     }
 
     bool ExtGameRememberLastFocus() const

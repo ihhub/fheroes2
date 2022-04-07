@@ -140,7 +140,7 @@ namespace
             if ( ( *it1 )->GetSpeed() == ( *it2 )->GetSpeed() ) {
                 result = units1GoFirst ? *it1 : *it2;
             }
-            else if ( firstStage || Settings::Get().ExtBattleReverseWaitOrder() ) {
+            else if ( firstStage ) {
                 if ( ( *it1 )->GetSpeed() > ( *it2 )->GetSpeed() )
                     result = *it1;
                 else if ( ( *it2 )->GetSpeed() > ( *it1 )->GetSpeed() )
@@ -173,7 +173,7 @@ namespace
         Battle::Units units1( army1.getUnits(), true );
         Battle::Units units2( army2.getUnits(), true );
 
-        if ( firstStage || Settings::Get().ExtBattleReverseWaitOrder() ) {
+        if ( firstStage ) {
             units1.SortFastest();
             units2.SortFastest();
         }
@@ -218,17 +218,11 @@ namespace
             Battle::Units units1( army1.getUnits(), true );
             Battle::Units units2( army2.getUnits(), true );
 
-            if ( Settings::Get().ExtBattleReverseWaitOrder() ) {
-                units1.SortFastest();
-                units2.SortFastest();
-            }
-            else {
-                std::reverse( units1.begin(), units1.end() );
-                std::reverse( units2.begin(), units2.end() );
+            std::reverse( units1.begin(), units1.end() );
+            std::reverse( units2.begin(), units2.end() );
 
-                units1.SortSlowest();
-                units2.SortSlowest();
-            }
+            units1.SortSlowest();
+            units2.SortSlowest();
 
             Battle::Unit * unit = nullptr;
 
