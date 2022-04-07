@@ -353,7 +353,8 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
         assert( pos.GetHead() != nullptr && ( !unit->isWide() || pos.GetTail() != nullptr ) );
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE,
-                   unit->String() << ", dst: " << dst << ", (head: " << pos.GetHead()->GetIndex() << ", tail: " << ( unit->isWide() ? pos.GetTail()->GetIndex() : -1 ) << ")" );
+                   unit->String() << ", dst: " << dst << ", (head: " << pos.GetHead()->GetIndex() << ", tail: " << ( unit->isWide() ? pos.GetTail()->GetIndex() : -1 )
+                                  << ")" );
 
         Position finalPos;
 
