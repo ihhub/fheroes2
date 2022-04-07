@@ -924,7 +924,7 @@ msgstr ""
 "Les nains doivent être conquis avant de pouvoir interférer dans les plans du "
 "roi Archibald. Les forces de Roland ont plus d'un héros et de nombreux "
 "villages au départ, alors soyez prêt à être attaqué de plusieurs directions. "
-"Vous devez capturer touts les villages et tous les châteaux ennemis pour "
+"Vous devez capturer tous les villages et tous les châteaux ennemis pour "
 "remporter la victoire."
 
 msgid ""
@@ -1061,7 +1061,7 @@ msgstr ""
 "héros pour l'éternité."
 
 msgid "Border Towns"
-msgstr "Villes frontièrs"
+msgstr "Villes frontières"
 
 msgid "Conquer and Unify"
 msgstr "Conquérir et unifier"
