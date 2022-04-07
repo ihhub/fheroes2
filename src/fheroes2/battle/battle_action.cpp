@@ -292,51 +292,51 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
 
 void Battle::Arena::ApplyActionAttack( Command & cmd )
 {
-    const uint32_t uid1 = cmd.GetValue();
-    const uint32_t uid2 = cmd.GetValue();
+    const uint32_t attackerUID = cmd.GetValue();
+    const uint32_t defenderUID = cmd.GetValue();
     const int32_t dst = cmd.GetValue();
     const int32_t dir = cmd.GetValue();
 
-    Battle::Unit * b1 = GetTroopUID( uid1 );
-    Battle::Unit * b2 = GetTroopUID( uid2 );
+    Battle::Unit * attacker = GetTroopUID( attackerUID );
+    Battle::Unit * defender = GetTroopUID( defenderUID );
 
-    if ( b1 && b1->isValid() && b2 && b2->isValid() && ( b1->GetCurrentColor() != b2->GetColor() ) ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, b1->String() << " to " << b2->String() );
+    if ( attacker && attacker->isValid() && defender && defender->isValid() && ( attacker->GetCurrentColor() != defender->GetColor() ) ) {
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, attacker->String() << " to " << defender->String() );
 
-        const bool handfighting = Unit::isHandFighting( *b1, *b2 );
+        const bool handfighting = Unit::isHandFighting( *attacker, *defender );
         // check position
-        if ( b1->isArchers() || handfighting ) {
-            b2->SetBlindAnswer( b2->Modes( SP_BLIND ) );
+        if ( attacker->isArchers() || handfighting ) {
+            defender->SetBlindAnswer( defender->Modes( SP_BLIND ) );
 
             // attack
-            BattleProcess( *b1, *b2, dst, dir );
+            BattleProcess( *attacker, *defender, dst, dir );
 
-            if ( b2->isValid() ) {
+            if ( defender->isValid() ) {
                 // defense answer
-                if ( handfighting && !b1->ignoreRetaliation() && b2->AllowResponse() ) {
-                    BattleProcess( *b2, *b1 );
-                    b2->SetResponse();
+                if ( handfighting && !attacker->ignoreRetaliation() && defender->AllowResponse() ) {
+                    BattleProcess( *defender, *attacker );
+                    defender->SetResponse();
                 }
-                b2->SetBlindAnswer( false );
+                defender->SetBlindAnswer( false );
 
                 // twice attack
-                if ( b1->isValid() && b1->isTwiceAttack() && !b1->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
+                if ( attacker->isValid() && attacker->isTwiceAttack() && !attacker->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "twice attack" );
-                    BattleProcess( *b1, *b2, dst, dir );
+                    BattleProcess( *attacker, *defender, dst, dir );
                 }
             }
 
-            b1->UpdateDirection();
-            b2->UpdateDirection();
+            attacker->UpdateDirection();
+            defender->UpdateDirection();
         }
         else {
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "incorrect param: " << b1->String( true ) << " and " << b2->String( true ) );
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "incorrect param: " << attacker->String( true ) << " and " << defender->String( true ) );
         }
     }
     else {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN,
                    "incorrect param: "
-                       << "uid: " << GetHexString( uid1 ) << ", uid: " << GetHexString( uid2 ) );
+                       << "uid: " << GetHexString( attackerUID ) << ", uid: " << GetHexString( defenderUID ) );
     }
 }
 
@@ -902,18 +902,18 @@ void Battle::Arena::ApplyActionTower( Command & cmd )
     const uint32_t uid = cmd.GetValue();
 
     Tower * tower = GetTower( type );
-    Battle::Unit * b2 = GetTroopUID( uid );
+    Battle::Unit * unit = GetTroopUID( uid );
 
-    if ( b2 && b2->isValid() && tower ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "tower: " << type << ", attack to " << b2->String() );
+    if ( unit && unit->isValid() && tower ) {
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "tower: " << type << ", attack to " << unit->String() );
 
         TargetInfo target;
-        target.defender = b2;
-        target.damage = tower->GetDamage( *b2 );
+        target.defender = unit;
+        target.damage = tower->GetDamage( *unit );
 
         if ( interface )
-            interface->RedrawActionTowerPart1( *tower, *b2 );
-        target.killed = b2->ApplyDamage( *tower, target.damage );
+            interface->RedrawActionTowerPart1( *tower, *unit );
+        target.killed = unit->ApplyDamage( *tower, target.damage );
         if ( interface )
             interface->RedrawActionTowerPart2( *tower, target );
     }
