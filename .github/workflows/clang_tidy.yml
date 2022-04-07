@@ -14,7 +14,6 @@ jobs:
     name: Clang-Tidy
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    if: ${{ github.event_name == 'pull_request' }}
     steps:
     - uses: actions/checkout@v2
       with:
