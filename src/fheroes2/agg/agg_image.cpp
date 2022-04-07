@@ -2013,6 +2013,62 @@ namespace fheroes2
                     Blit( GetICN( ICN::BTNNEWGM, 4 + i ), 36 - i, 23, out, 78 - i, 23, 10, 14 );
                 }
                 break;
+
+            default:
+                // You're calling this function for non-specified ICN id. Check your logic!
+                assert( 0 );
+                break;
+            }
+        }
+        void generateFrenchSpecificImages( const int id )
+        {
+            switch ( id ) {
+            case ICN::BTNBATTLEONLY:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNNEWGM, 6 + i );
+                    // Clean the button
+                    Image uniform( 88, 23 );
+                    uniform.fill( ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 ) );
+                    Copy( uniform, 0, 0, out, 25, 18, uniform.width(), uniform.height() );
+                    const int32_t secondLine = 28;
+                    // Add 'MODE'
+                    Blit( GetICN( ICN::BTNNEWGM, 4 + i ), 40 - i, 13, out, 45 - i, 13, 50, 15 );
+                    // Clean up 'MODE'
+                    Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 114 - i, 18, out, 94 - i, 18, 1, 10 );
+                    // Add 'BA'
+                    Blit( GetICN( ICN::BTNBAUD, 2 + i ), 42 - i, 28, out, 28 - i, secondLine, 22, 15 );
+                    // Clean up 'BA'
+                    Blit( GetICN( ICN::BTNBAUD, 2 + i ), 42 - i, 31, out, 39 - i, secondLine, 1, 1 );
+                    Blit( GetICN( ICN::BTNBAUD, 2 + i ), 39 - i, 31, out, 49 - i, secondLine + 4, 1, 2 );
+                    // Add 'T'
+                    Blit( GetICN( ICN::BTNDC, 2 + i ), 89 - i, 21, out, 50 - i, secondLine, 12, 15 );
+                    // Clean up 'AT'
+                    // remove dot in top left corner
+                    Blit( GetICN( ICN::BTNDC, 2 + i ), 89 - i, 18, out, 50 - i, 28, 1, 1 );
+                    // White part on left hanging part of T
+                    Blit( GetICN( ICN::BTNDC, 2 + i ), 92 - i, 26, out, 49 - i, 32, 1, 3 );
+                    //Blit( GetICN( ICN::BTNDC, 2 + i ), 84 - i, 32, out, 49 - i, 34, 1, 1 );
+                    // hidden non-pressed, visible pressed
+                    
+                    /*Blit( GetICN( ICN::BTNDC, 2 + i ), 89 - i, 22, out, 49 - i, secondLine + 4, 1, 1 );*/
+                    //Bottom right part of T ?
+                    /*Blit( GetICN( ICN::BTNDC, 2 + i ), 89 - i, 21, out, 50 - i, secondLine + 9, 1, 1 );*/
+                   
+                    
+                    
+                    //// Add 'AI'.
+                    //Blit( GetICN( ICN::BTNMP, 6 + i ), 56 - i, 13, out, 62 - i, secondLine, 18, 14 );
+                    //// Clean up 'TA'
+                    //Blit( GetICN( ICN::BTNMP, 6 + i ), 54 - i, 25, out, 60 - i, secondLine + 12, 2, 2 );
+                    //// add 'LLE'
+                    //Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 85 - i, 13, out, 81 - i, secondLine, 31, 15 );
+
+                   
+                }
+                break;
+
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 assert( 0 );
@@ -2025,6 +2081,9 @@ namespace fheroes2
             switch ( fheroes2::getResourceLanguage() ) {
             case fheroes2::SupportedLanguage::German:
                 generateGermanSpecificImages( id );
+                break;
+            case fheroes2::SupportedLanguage::French:
+                generateFrenchSpecificImages( id );
                 break;
             default:
                 generateEnglishSpecificImages( id );
