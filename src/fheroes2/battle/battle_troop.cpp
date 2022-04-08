@@ -360,26 +360,49 @@ bool Battle::Unit::canReach( const Unit & unit ) const
 
 bool Battle::Unit::isHandFighting() const
 {
-    if ( GetCount() && !Modes( CAP_TOWER ) ) {
-        for ( const int32_t nearbyIdx : Board::GetAroundIndexes( *this ) ) {
-            const Unit * nearbyUnit = Board::GetCell( nearbyIdx )->GetUnit();
+    assert( isValid() );
 
-            if ( nearbyUnit && nearbyUnit->GetColor() != GetCurrentColor() ) {
-                return true;
-            }
+    // Towers never fight in close combat
+    if ( Modes( CAP_TOWER ) ) {
+        return false;
+    }
+
+    for ( const int32_t nearbyIdx : Board::GetAroundIndexes( *this ) ) {
+        const Unit * nearbyUnit = Board::GetCell( nearbyIdx )->GetUnit();
+
+        if ( nearbyUnit && nearbyUnit->GetColor() != GetCurrentColor() ) {
+            return true;
         }
     }
 
     return false;
 }
 
-bool Battle::Unit::isHandFighting( const Unit & a, const Unit & b )
+bool Battle::Unit::isHandFighting( const Unit & attacker, const Unit & defender )
 {
-    return a.isValid() && !a.Modes( CAP_TOWER ) && b.isValid() && b.GetColor() != a.GetCurrentColor()
-           && ( Board::isNearIndexes( a.GetHeadIndex(), b.GetHeadIndex() ) || ( b.isWide() && Board::isNearIndexes( a.GetHeadIndex(), b.GetTailIndex() ) )
-                || ( a.isWide()
-                     && ( Board::isNearIndexes( a.GetTailIndex(), b.GetHeadIndex() )
-                          || ( b.isWide() && Board::isNearIndexes( a.GetTailIndex(), b.GetTailIndex() ) ) ) ) );
+    assert( attacker.isValid() && defender.isValid() );
+
+    // Towers never fight in close combat
+    if ( attacker.Modes( CAP_TOWER ) ) {
+        return false;
+    }
+
+    // If the attacker and the defender are next to each other, then this is a melee attack
+    if ( Board::isNearIndexes( attacker.GetHeadIndex(), defender.GetHeadIndex() ) ) {
+        return true;
+    }
+    if ( defender.isWide() && Board::isNearIndexes( attacker.GetHeadIndex(), defender.GetTailIndex() ) ) {
+        return true;
+    }
+    if ( attacker.isWide() && Board::isNearIndexes( attacker.GetTailIndex(), defender.GetHeadIndex() ) ) {
+        return true;
+    }
+    if ( attacker.isWide() && defender.isWide() && Board::isNearIndexes( attacker.GetTailIndex(), defender.GetTailIndex() ) ) {
+        return true;
+    }
+
+    // Otherwise it's a shot
+    return false;
 }
 
 bool Battle::Unit::isIdling() const
@@ -1048,7 +1071,7 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
     }
 
     // Monster special abilities
-    if ( isTwiceAttack() ) {
+    if ( isDoubleAttack() ) {
         if ( attackerIsArchers || ignoreRetaliation() || defender.Modes( TR_RESPONSED ) ) {
             attackerThreat *= 2;
         }
@@ -1491,7 +1514,7 @@ void Battle::Unit::SpellRestoreAction( const Spell & spell, u32 spoint, const He
     }
 }
 
-bool Battle::Unit::isTwiceAttack( void ) const
+bool Battle::Unit::isDoubleAttack() const
 {
     switch ( GetID() ) {
     case Monster::ELF:
@@ -1503,7 +1526,7 @@ bool Battle::Unit::isTwiceAttack( void ) const
         break;
     }
 
-    return ArmyTroop::isTwiceAttack();
+    return ArmyTroop::isDoubleAttack();
 }
 
 u32 Battle::Unit::GetMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const

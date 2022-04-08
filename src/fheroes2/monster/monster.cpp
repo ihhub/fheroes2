@@ -230,7 +230,7 @@ double Monster::GetMonsterStrength( int attack, int defense ) const
 
     double damagePotential = ( battleStats.damageMin + battleStats.damageMax ) / 2.0;
 
-    if ( isTwiceAttack() ) {
+    if ( isDoubleAttack() ) {
         // Melee attacker will lose potential on second attack after retaliation
         damagePotential *= ( isArchers() || ignoreRetaliation() ) ? 2 : 1.75;
     }
@@ -418,7 +418,7 @@ bool Monster::isDragons() const
     return isAbilityPresent( fheroes2::MonsterAbilityType::DRAGON );
 }
 
-bool Monster::isTwiceAttack() const
+bool Monster::isDoubleAttack() const
 {
     return isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK ) || isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_SHOOTING );
 }
