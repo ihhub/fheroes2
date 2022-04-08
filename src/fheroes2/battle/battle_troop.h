@@ -110,9 +110,10 @@ namespace Battle
         bool isValid() const override;
         bool isArchers( void ) const;
         bool isFlying( void ) const;
-        bool isTwiceAttack( void ) const;
+        bool isDoubleAttack() const;
 
         bool AllowResponse( void ) const;
+        // Checks whether this unit is forced to fight in melee (there is an enemy unit nearby)
         bool isHandFighting() const;
 
         bool isReflect() const
@@ -259,7 +260,8 @@ namespace Battle
         const HeroBase * GetCommander( void ) const;
         const HeroBase * GetCurrentOrArmyCommander() const; // commander of the army with the current unit color (if valid), commander of the unit's army otherwise
 
-        static bool isHandFighting( const Unit &, const Unit & );
+        // Checks whether the attacker will fight the defender in melee
+        static bool isHandFighting( const Unit & attacker, const Unit & defender );
 
         int GetAnimationState() const
         {

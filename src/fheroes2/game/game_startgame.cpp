@@ -920,13 +920,13 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         if ( fheroes2::cursor().isFocusActive() ) {
             int scrollPosition = SCROLL_NONE;
 
-            if ( le.MouseCursor( GetScrollLeft() ) )
+            if ( isScrollLeft( le.GetMouseCursor() ) )
                 scrollPosition |= SCROLL_LEFT;
-            else if ( le.MouseCursor( GetScrollRight() ) )
+            else if ( isScrollRight( le.GetMouseCursor() ) )
                 scrollPosition |= SCROLL_RIGHT;
-            if ( le.MouseCursor( GetScrollTop() ) )
+            if ( isScrollTop( le.GetMouseCursor() ) )
                 scrollPosition |= SCROLL_TOP;
-            else if ( le.MouseCursor( GetScrollBottom() ) )
+            else if ( isScrollBottom( le.GetMouseCursor() ) )
                 scrollPosition |= SCROLL_BOTTOM;
 
             if ( scrollPosition != SCROLL_NONE ) {
@@ -1100,8 +1100,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         // fast scroll
         if ( gameArea.NeedScroll() && !isMovingHero ) {
             if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
-                if ( le.MouseCursor( GetScrollLeft() ) || le.MouseCursor( GetScrollRight() ) || le.MouseCursor( GetScrollTop() )
-                     || le.MouseCursor( GetScrollBottom() ) ) {
+                if ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
+                     || isScrollBottom( le.GetMouseCursor() ) ) {
                     cursor.SetThemes( gameArea.GetScrollCursor() );
                 }
 
