@@ -2015,6 +2015,7 @@ namespace fheroes2
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 assert( 0 );
+
                 break;
             }
         }
