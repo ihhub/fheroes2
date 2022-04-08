@@ -2045,20 +2045,8 @@ namespace fheroes2
                     // Add 'T'
                     Blit( GetICN( ICN::BTNDC, 2 + i ), 89 - i, 21, out, 50 - i, secondLine, 12, 15 );
                     // Clean up 'AT'
-                    // remove dot in top left corner
-                    Blit( GetICN( ICN::BTNDC, 2 + i ), 89 - i, 18, out, 50 - i, 28, 1, 1 );
-                    // White three white pixels on left hanging part of T
-                    /*Blit( GetICN( ICN::BTNDC, 2 + i ), 92 - i, 26, out, 49 - i, 32, 1, 3 );*/
-               
-                    //Blit( GetICN( ICN::BTNDC, 2 + i ), 84 - i, 32, out, 49 - i, 34, 1, 1 );
-                    // hidden non-pressed, visible pressed
-                    
-                    /*Blit( GetICN( ICN::BTNDC, 2 + i ), 89 - i, 22, out, 49 - i, secondLine + 4, 1, 1 );*/
-                    //Bottom right part of T ?
-                    /*Blit( GetICN( ICN::BTNDC, 2 + i ), 89 - i, 21, out, 50 - i, secondLine + 9, 1, 1 );*/
-                   
-                    
-                    
+                    Blit( GetICN( ICN::BTNDC, 2 + i ), 89 - i, 18, out, 50 - i, secondLine, 1, 1 );
+                    Blit( GetICN( ICN::BTNDC, 2 + i ), 92 - ( 5 * i ), 27 - i, out, 49 - i, secondLine + 4 + i, 1, 3 );
                     // Add 'AI'.
                     Blit( GetICN( ICN::BTNMP, 6 + i ), 56 - i, 13, out, 62 - i, secondLine, 18, 15 );
                     // Clean up 'TA'
@@ -2066,14 +2054,10 @@ namespace fheroes2
                     // add 'LLE'
                     Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 85 - i, 13, out, 81 - i, secondLine, 31, 15 );
                     // Clean up "IL"
-                    //Remove dark dot on stem
                     Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 85 - i, 18, out, 81 - i, secondLine + 7, 1, 1 );
-                    // add missing side flairs
                     Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 94 - i, 17, out, 80 - i, secondLine + 4, 2, 2 );
                     Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 93 - i, 25, out, 79 - i, secondLine + 12, 3, 3 );
-                    // clean up/remove unnecessary line right of I
                     Blit( GetICN( ICN::BTNDC, 4 + i ), 23 - i, 8, out, 79 - i, secondLine + 5, 1, 10 );
-                    // add single dot to I
                     Blit( GetICN( ICN::BTNMP, 6 + i ), 73 - i, 22, out, 79 - i, secondLine + 9, 1, 1 );
                 }
                 break;
