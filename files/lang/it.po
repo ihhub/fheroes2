@@ -6073,10 +6073,10 @@ msgid "Eye of the Magi"
 msgstr "Occhio del Mago"
 
 msgid "Mermaid"
-msgstr "Sirena"
+msgstr "Sirenetta"
 
 msgid "Sirens"
-msgstr "Arpie"
+msgstr "Sirene"
 
 msgid "Reefs"
 msgstr "Barriera Corallina"
