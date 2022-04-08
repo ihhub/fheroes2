@@ -7440,7 +7440,7 @@ msgstr ""
 "de nains piégés. Reconnaissant, le chef vous donne un bracelet en or."
 
 msgid "Mage's Ring of Power"
-msgstr "Anneau de puissance du Magicien"
+msgstr "Anneau de puissance du magicien"
 
 msgid ""
 "A cry of pain leads you to a Centaur, caught in a trap. Upon setting the "
@@ -7452,7 +7452,7 @@ msgstr ""
 "contenu, vous trouvez un anneau éblouissant orné de pierres précieuses."
 
 msgid "Witch's Broach of Magic"
-msgstr "Broche magique de la Sorcière"
+msgstr "Broche magique de la sorcière"
 
 msgid ""
 "Alongside the remains of a burnt witch lies a beautiful broach, intricately "
@@ -7595,7 +7595,7 @@ msgstr ""
 "moment où vous retirez le bouclier, la statue tombe en poussière."
 
 msgid "Dragon Sword of Dominion"
-msgstr "Épée de domination du Dragon"
+msgstr "Épée de domination du dragon"
 
 msgid ""
 "As you are walking along a narrow path, a nearby bush suddenly bursts into "
@@ -8173,7 +8173,7 @@ msgstr ""
 "un télescope."
 
 msgid "Statesman's Quill"
-msgstr "Plume de l'homme d'État"
+msgstr "Plume de l'homme d'état"
 
 msgid ""
 "The %{name} reduces the cost of surrender to %{count} percent of the total "
