@@ -289,6 +289,23 @@ void Artifact::SetSpell( int v )
     }
 }
 
+int32_t Artifact::getSpellId() const
+{
+    const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( id ).bonuses;
+    for ( const fheroes2::ArtifactBonus & bonus : bonuses ) {
+        if ( bonus.type == fheroes2::ArtifactBonusType::ADD_SPELL ) {
+            int32_t spellId = bonus.value;
+            if ( spellId == Spell::NONE ) {
+                spellId = ext;
+            }
+            assert( spellId > Spell::NONE && spellId < Spell::SPELL_COUNT );
+            return spellId;
+        }
+    }
+
+    return Spell::NONE;
+}
+
 /* get rand all artifact */
 int Artifact::Rand( level_t lvl )
 {
@@ -358,14 +375,8 @@ bool BagArtifacts::ContainSpell( const int spellId ) const
     assert( spellId > Spell::NONE && spellId < Spell::SPELL_COUNT );
 
     for ( const Artifact & artifact : *this ) {
-        const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( artifact.GetID() ).bonuses;
-        for ( const fheroes2::ArtifactBonus & bonus : bonuses ) {
-            if ( bonus.type == fheroes2::ArtifactBonusType::ADD_SPELL ) {
-                assert( bonus.value > Spell::NONE && bonus.value < Spell::SPELL_COUNT );
-                if ( bonus.value == spellId ) {
-                    return true;
-                }
-            }
+        if ( artifact.getSpellId() == spellId ) {
+            return true;
         }
     }
 

@@ -92,11 +92,5 @@ void SpellStorage::Append( const BagArtifacts & bag )
 
 void SpellStorage::Append( const Artifact & art )
 {
-    const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( art.GetID() ).bonuses;
-    for ( const fheroes2::ArtifactBonus & bonus : bonuses ) {
-        if ( bonus.type == fheroes2::ArtifactBonusType::ADD_SPELL ) {
-            assert( bonus.value > Spell::NONE && bonus.value < Spell::SPELL_COUNT );
-            Append( Spell( bonus.value ) );
-        }
-    }
+    Append( Spell( art.getSpellId() ) );
 }
