@@ -1893,6 +1893,11 @@ namespace
             // Other transform values are not relevant for transparency checks.
         }
     }
+
+    uint8_t getButtonFillingColor( const bool isReleasedState )
+    {
+        return isReleasedState ? fheroes2::GetColorId( 216, 184, 152 ) : fheroes2::GetColorId( 184, 136, 96 );
+    }
 }
 
 namespace fheroes2
@@ -1963,8 +1968,7 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNNEWGM, 6 + i );
                     // Clean the button
-                    const uint8_t fillColor = ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 );
-                    Fill( out, 25, 18, 88, 23, fillColor );
+                    Fill( out, 25, 18, 88, 23, getButtonFillingColor( i == 0 ) );
                     // Add 'ba'
                     Blit( GetICN( ICN::BTNCMPGN, i ), 41 - i, 28, out, 30 - i, 13, 28, 14 );
                     // Add 'tt'
@@ -1996,8 +2000,7 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNNEWGM, 6 + i );
                     // Clean the button
-                    const uint8_t fillColor = ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 );
-                    Fill( out, 25, 18, 88, 23, fillColor );
+                    Fill( out, 25, 18, 88, 23, getButtonFillingColor( i == 0 ) );
                     // Add 'K'
                     Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 34 - i, 23, out, 40 - i, 23, 12, 14 );
                     //'Add 'A'
@@ -2028,8 +2031,7 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNNEWGM, 6 + i );
                     // Clean the button
-                    const uint8_t fillColor = ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 );
-                    Fill( out, 25, 18, 88, 23, fillColor );
+                    Fill( out, 25, 18, 88, 23, getButtonFillingColor( i == 0 ) );
 
                     const int32_t secondLine = 28;
                     // Add 'MODE'
@@ -2078,8 +2080,7 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNNEWGM, 6 + i );
                     // clean the button
-                    const uint8_t fillColor = ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 );
-                    Fill( out, 25, 18, 88, 23, fillColor );
+                    Fill( out, 25, 18, 88, 23, getButtonFillingColor( i == 0 ) );
                     const int32_t offsetX = 46;
                     const int32_t offsetY = 23;
                     // Add 'BI'
@@ -2090,6 +2091,55 @@ namespace fheroes2
                     Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 45 - i, 23, out, offsetX + 23 - i, offsetY, 24, 11 );
                     // Add pixel to 'W'
                     Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 47 - i, 23 + i, out, offsetX + 38 - i, offsetY + i, 1, 1 );
+                }
+                break;
+
+            default:
+                // You're calling this function for non-specified ICN id. Check your logic!
+                assert( 0 );
+
+                break;
+            }
+        }
+
+        void generateItalianSpecificImages( const int id )
+        {
+            switch ( id ) {
+            case ICN::BTNBATTLEONLY:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNNEWGM, 6 + i );
+                    // clean the button
+                    uint8_t buttonFillingColor = getButtonFillingColor( i == 0 );
+                    Fill( out, 25, 18, 88, 23, buttonFillingColor );
+                    const int32_t offsetX = 16;
+                    const int32_t offsetY = 21;
+                    // Add 'B'
+                    Blit( GetICN( ICN::BTNBAUD, 0 + i ), 42 - i, 28, out, offsetX - i, offsetY, 13, 15 );
+                    Fill( out, offsetX + 11, offsetY + 13, 1, 2, buttonFillingColor );
+                    // Add 'A'
+                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 80 - i, 28, out, offsetX + 13 - i, offsetY, 14, 15 );
+                    Fill( out, offsetX + 13 - i, offsetY + 3, 1, 4, buttonFillingColor );
+                    // Add 'T'
+                    Blit( GetICN( ICN::BTNMP, 0 + i ), 74 - i, 5, out, offsetX + 27 - 2 * i, offsetY, 12, 15 );
+                    // Add 'T'
+                    Blit( GetICN( ICN::BTNMP, 0 + i ), 74 - i, 5, out, offsetX + 39 - 2 * i, offsetY, 12, 15 );
+                    // Add 'A'
+                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 80 - i, 28, out, offsetX + 50 - i, offsetY, 14, 15 );
+                    Fill( out, offsetX + 65 - i, offsetY + 5, 1, 2, buttonFillingColor );
+                    Fill( out, offsetX + 65 - i, offsetY + 14, 1, 3, buttonFillingColor );
+                    Fill( out, offsetX + 50 - i, offsetY + 3, 1, 4, buttonFillingColor );
+                    // Add 'G'
+                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 44 - i, 12, out, offsetX + 65 - i, offsetY, 11, 15 );
+                    // Add 'L'
+                    Blit( GetICN( ICN::BTNDC, 4 + i ), 77 - i, 21, out, offsetX + 77 - 2 * i, offsetY, 9, 15 );
+                    // Add 'I'
+                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 56 - i, 12, out, offsetX + 86 - i, offsetY, 7, 15 );
+                    // Add 'A'
+                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 80 - i, 28, out, offsetX + 93 - i, offsetY, 14, 15 );
+                    Fill( out, offsetX + 109 - i, offsetY + 5, 1, 2, buttonFillingColor );
+                    Fill( out, offsetX + 93 - i, offsetY + 3, 1, 4, buttonFillingColor );
                 }
                 break;
 
@@ -2112,6 +2162,9 @@ namespace fheroes2
                 break;
             case fheroes2::SupportedLanguage::Polish:
                 generatePolishSpecificImages( id );
+                break;
+            case fheroes2::SupportedLanguage::Italian:
+                generateItalianSpecificImages( id );
                 break;
             default:
                 generateEnglishSpecificImages( id );
