@@ -241,7 +241,6 @@ namespace
 
         const fheroes2::Sprite & hydra = fheroes2::AGG::GetICN( ICN::HYDRA, 11 );
         fheroes2::Blit( hydra, output, 2 * columnStep + ( columnStep - hydra.width() ) / 2, offsetY );
-        offsetY += hydra.height();
 
         const fheroes2::Sprite & goblin = fheroes2::AGG::GetICN( ICN::GOBLIN, 27 );
         fheroes2::Blit( goblin, output, ( output.width() - goblin.width() ) / 2, ( output.height() - goblin.height() ) / 2 );
