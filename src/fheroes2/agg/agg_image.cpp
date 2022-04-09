@@ -2124,9 +2124,9 @@ namespace fheroes2
                     // Clean up 'A'
                     Fill( out, offsetX + 13 + letterSpacing + 13 - i, offsetY + 5, 1, 1, fillColor );
                     // Add 'T'
-                    Blit( GetICN( ICN::BTNMP, 0 + i ), 74 - i, 5, out, offsetX + 27 + letterSpacing - i, offsetY, 12, 14 );
+                    Blit( GetICN( ICN::BTNMP, 0 + i ), 74 - i, 5, out, offsetX + 27 + letterSpacing - 2 * i, offsetY, 12, 14 );
                     // Add 'T'
-                    Blit( GetICN( ICN::BTNMP, 0 + i ), 74 - i, 5, out, offsetX + 39 + letterSpacing - i, offsetY, 12, 14 );
+                    Blit( GetICN( ICN::BTNMP, 0 + i ), 74 - i, 5, out, offsetX + 39 + letterSpacing - 2 * i, offsetY, 12, 14 );
                     // Add 'A'
                     Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 81 - i, 28, out, offsetX + 51 + letterSpacing - i, offsetY, 14, 14 );
                     // Clean up 'A'
@@ -2136,7 +2136,7 @@ namespace fheroes2
                     // Clean up 'G'
                     Fill( out, offsetX + 65 + letterSpacing + 1 - i, offsetY + 12, 1, 3, fillColor );
                     // Add 'L'
-                    Blit( GetICN( ICN::BTNDC, 4 + i ), 77 - i, 21, out, offsetX + 76 + letterSpacing + 2 - i, offsetY, 9, 15 );
+                    Blit( GetICN( ICN::BTNDC, 4 + i ), 77 - i, 21, out, offsetX + 76 + letterSpacing + 2 - 2 * i, offsetY, 9, 15 );
                     // Add 'I'
                     Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 56 - i, 12, out, offsetX + 85 + letterSpacing + 2 - i, offsetY, 7, 15 );
                     // Add 'A'
