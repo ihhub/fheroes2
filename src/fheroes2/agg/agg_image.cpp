@@ -2069,6 +2069,38 @@ namespace fheroes2
             }
         }
 
+        void generatePolishSpecificImages( const int id )
+        {
+            switch ( id ) {
+            case ICN::BTNBATTLEONLY:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNNEWGM, 6 + i );
+                    // clean the button
+                    const uint8_t fillColor = ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 );
+                    Fill( out, 25, 18, 88, 23, fillColor );
+                    const int32_t offsetX = 46;
+                    const int32_t offsetY = 23;
+                    // Add 'BI'
+                    Blit( GetICN( ICN::BTNMCFG, 2 + i ), 58 - i, 29, out, offsetX - i, offsetY, 14, 11 );
+                    // Add 'T'
+                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 24 - i, 29, out, offsetX + 14 - i, offsetY, 9, 11 );
+                    // Add 'WA'
+                    Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 45 - i, 23, out, offsetX + 23 - i, offsetY, 24, 11 );
+                    // Add pixel to 'W'
+                    Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 47 - i, 23 + i, out, offsetX + 38 - i, offsetY + i, 1, 1 );
+                }
+                break;
+
+            default:
+                // You're calling this function for non-specified ICN id. Check your logic!
+                assert( 0 );
+
+                break;
+            }
+        }
+
         void generateLanguageSpecificImages( int id )
         {
             switch ( fheroes2::getResourceLanguage() ) {
@@ -2077,6 +2109,9 @@ namespace fheroes2
                 break;
             case fheroes2::SupportedLanguage::French:
                 generateFrenchSpecificImages( id );
+                break;
+            case fheroes2::SupportedLanguage::Polish:
+                generatePolishSpecificImages( id );
                 break;
             default:
                 generateEnglishSpecificImages( id );
