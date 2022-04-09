@@ -68,9 +68,7 @@ namespace Video
                     targetFileName = StringLower( targetFileName );
 
                     for ( const std::string & filePath : videoFiles ) {
-                        std::string tempPath = StringLower( filePath );
-
-                        if ( tempPath == targetFileName ) {
+                        if ( StringLower( filePath ) == targetFileName ) {
                             path = filePath;
                             return true;
                         }
