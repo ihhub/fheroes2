@@ -229,6 +229,8 @@ public:
 
     void SetSpell( int );
 
+    int32_t getSpellId() const;
+
     const char * GetName( void ) const;
 
     std::string GetDescription() const
