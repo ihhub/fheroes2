@@ -28,6 +28,7 @@
 #include "settings.h"
 #include "smk_decoder.h"
 #include "system.h"
+#include "tools.h"
 #include "ui_tool.h"
 
 namespace
@@ -55,15 +56,25 @@ namespace Video
 {
     bool getVideoFilePath( const std::string & fileName, std::string & path )
     {
-        std::string fullPath;
-
         for ( const std::string & rootDir : Settings::GetRootDirs() ) {
             for ( const std::string & localDir : videoDir ) {
-                fullPath = System::ConcatePath( rootDir, localDir );
-                fullPath = System::ConcatePath( fullPath, fileName );
-                if ( System::IsFile( fullPath ) ) {
-                    path.swap( fullPath );
-                    return true;
+                const std::string fullDirPath = System::ConcatePath( rootDir, localDir );
+
+                if ( System::IsDirectory( fullDirPath ) ) {
+                    ListFiles videoFiles;
+                    videoFiles.FindFileInDir( fullDirPath, fileName, false );
+
+                    std::string targetFileName = System::ConcatePath( fullDirPath, fileName );
+                    targetFileName = StringLower( targetFileName );
+
+                    for ( const std::string & filePath : videoFiles ) {
+                        std::string tempPath = StringLower( filePath );
+
+                        if ( tempPath == targetFileName ) {
+                            path = filePath;
+                            return true;
+                        }
+                    }
                 }
             }
         }
