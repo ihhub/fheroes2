@@ -1,6 +1,6 @@
 version 0.9.14 (09 April 2022)
 - update and improve Italian translation
-- fenerate Polish "Battle Only" button
+- generate Polish "Battle Only" button
 - fix switching fullscreen mode in Mac OS for certain resolutions
 - generate French "Battle Only" button
 - fix a crash due to an assertion failure when the shooter hits back at a unit under Berserk spell
@@ -28,7 +28,7 @@ version 0.9.14 (09 April 2022)
 - prioritize AI castles further from enemy territory
 - take the weekly growth into account when calculating monthly population growth bonuses and fines
 - update minimap colors
-- optimize AI figther hero priorities
+- optimize AI fighter hero priorities
 - add native macOS application generation
 - build player influence map to inform AI kingdom development decisions
 - speed up data reading from AGG files
