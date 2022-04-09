@@ -416,7 +416,9 @@ namespace fheroes2
         : _width( 0 )
         , _height( 0 )
         , _singleLayer( false )
-    {}
+    {
+        // Do nothing.
+    }
 
     Image::Image( int32_t width_, int32_t height_ )
         : _width( 0 )
@@ -551,25 +553,33 @@ namespace fheroes2
         : Image( 0, 0 )
         , _x( 0 )
         , _y( 0 )
-    {}
+    {
+        // Do nothing.
+    }
 
     Sprite::Sprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ )
         : Image( width_, height_ )
         , _x( x_ )
         , _y( y_ )
-    {}
+    {
+        // Do nothing.
+    }
 
     Sprite::Sprite( const Image & image, int32_t x_, int32_t y_ )
         : Image( image )
         , _x( x_ )
         , _y( y_ )
-    {}
+    {
+        // Do nothing.
+    }
 
     Sprite::Sprite( const Sprite & sprite )
         : Image( sprite )
         , _x( sprite._x )
         , _y( sprite._y )
-    {}
+    {
+        // Do nothing.
+    }
 
     Sprite::Sprite( Sprite && sprite ) noexcept
         : Image( std::move( sprite ) )
@@ -1467,7 +1477,7 @@ namespace fheroes2
         uint8_t * transform = image.transform();
 
         if ( dx > dy ) {
-            int32_t ns = std::div( dx, 2 ).quot;
+            int32_t ns = dx / 2;
 
             for ( int32_t i = 0; i <= dx; ++i ) {
                 if ( x1 >= minX && x1 < maxX && y1 >= minY && y1 < maxY ) {
@@ -1484,7 +1494,7 @@ namespace fheroes2
             }
         }
         else {
-            int32_t ns = std::div( dy, 2 ).quot;
+            int32_t ns = dy / 2;
 
             for ( int32_t i = 0; i <= dy; ++i ) {
                 if ( x1 >= minX && x1 < maxX && y1 >= minY && y1 < maxY ) {

@@ -230,7 +230,7 @@ namespace AI
     void Base::BattleTurn( Battle::Arena &, const Battle::Unit & currentUnit, Battle::Actions & actions )
     {
         // end action
-        actions.push_back( Battle::Command( Battle::CommandType::MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );
+        actions.emplace_back( Battle::CommandType::MSG_BATTLE_END_TURN, currentUnit.GetUID() );
     }
 
     StreamBase & operator<<( StreamBase & msg, const AI::Base & instance )

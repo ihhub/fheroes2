@@ -67,7 +67,7 @@ namespace
         const int x = centerInPixel.x - pixelsW / 2;
         const int y = centerInPixel.y - pixelsH / 2;
 
-        return fheroes2::Rect( x, y, pixelsW, pixelsH );
+        return { x, y, pixelsW, pixelsH };
     }
 
     ViewWorld::ZoomLevel GetNextZoomLevel( const ViewWorld::ZoomLevel level, const bool cycle )

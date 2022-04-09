@@ -203,27 +203,28 @@ namespace
 
             const bool fullFrame = ( roi.width == imageWidth ) && ( roi.height == imageHeight );
 
+            const uint8_t * imageIn = image.image();
+
             if ( fullFrame ) {
                 if ( surface->format->BitsPerPixel == 32 ) {
                     uint32_t * out = static_cast<uint32_t *>( surface->pixels );
                     const uint32_t * outEnd = out + imageWidth * imageHeight;
-                    const uint8_t * in = image.image();
+                    const uint8_t * in = imageIn;
                     const uint32_t * transform = _palette32Bit.data();
 
                     for ( ; out != outEnd; ++out, ++in )
                         *out = *( transform + *in );
                 }
                 else if ( surface->format->BitsPerPixel == 8 ) {
-                    if ( surface->pixels != image.image() ) {
+                    if ( surface->pixels != imageIn ) {
                         if ( imageWidth % 4 != 0 ) {
                             const int32_t screenWidth = ( imageWidth / 4 ) * 4 + 4;
                             for ( int32_t i = 0; i < imageHeight; ++i ) {
-                                memcpy( reinterpret_cast<int8_t *>( surface->pixels ) + screenWidth * i, image.image() + imageWidth * i,
-                                        static_cast<size_t>( imageWidth ) );
+                                memcpy( reinterpret_cast<int8_t *>( surface->pixels ) + screenWidth * i, imageIn + imageWidth * i, static_cast<size_t>( imageWidth ) );
                             }
                         }
                         else {
-                            memcpy( surface->pixels, image.image(), static_cast<size_t>( imageWidth * imageHeight ) );
+                            memcpy( surface->pixels, imageIn, static_cast<size_t>( imageWidth * imageHeight ) );
                         }
                     }
                 }
@@ -232,7 +233,7 @@ namespace
                 if ( surface->format->BitsPerPixel == 32 ) {
                     uint32_t * outY = static_cast<uint32_t *>( surface->pixels );
                     const uint32_t * outYEnd = outY + imageWidth * roi.height;
-                    const uint8_t * inY = image.image() + roi.x + roi.y * imageWidth;
+                    const uint8_t * inY = imageIn + roi.x + roi.y * imageWidth;
                     const uint32_t * transform = _palette32Bit.data();
 
                     for ( ; outY != outYEnd; outY += imageWidth, inY += imageWidth ) {
@@ -245,12 +246,12 @@ namespace
                     }
                 }
                 else if ( surface->format->BitsPerPixel == 8 ) {
-                    if ( surface->pixels != image.image() ) {
+                    if ( surface->pixels != imageIn ) {
                         const int32_t screenWidth = ( imageWidth / 4 ) * 4 + 4;
                         const int32_t screenOffset = roi.x + roi.y * screenWidth;
                         const int32_t imageOffset = roi.x + roi.y * imageWidth;
                         for ( int32_t i = 0; i < roi.height; ++i ) {
-                            memcpy( reinterpret_cast<int8_t *>( surface->pixels ) + screenWidth * i + screenOffset, image.image() + imageOffset + imageWidth * i,
+                            memcpy( reinterpret_cast<int8_t *>( surface->pixels ) + screenWidth * i + screenOffset, imageIn + imageOffset + imageWidth * i,
                                     static_cast<size_t>( roi.width ) );
                         }
                     }
@@ -1309,20 +1310,10 @@ namespace fheroes2
         std::fill( transform(), transform() + width() * height(), static_cast<uint8_t>( 1 ) );
     }
 
-    bool Display::isDefaultSize() const
-    {
-        return width() == DEFAULT_WIDTH && height() == DEFAULT_HEIGHT;
-    }
-
     Display & Display::instance()
     {
         static Display display;
         return display;
-    }
-
-    void Display::render()
-    {
-        render( { 0, 0, width(), height() } );
     }
 
     void Display::render( const Rect & roi )
@@ -1388,12 +1379,6 @@ namespace fheroes2
         }
     }
 
-    void Display::subscribe( PreRenderProcessing preprocessing, PostRenderProcessing postprocessing )
-    {
-        _preprocessing = preprocessing;
-        _postprocessing = postprocessing;
-    }
-
     uint8_t * Display::image()
     {
         return _renderSurface != nullptr ? _renderSurface : Image::image();
@@ -1402,11 +1387,6 @@ namespace fheroes2
     const uint8_t * Display::image() const
     {
         return _renderSurface != nullptr ? _renderSurface : Image::image();
-    }
-
-    void Display::linkRenderSurface( uint8_t * surface )
-    {
-        _renderSurface = surface;
     }
 
     void Display::release()

@@ -227,14 +227,14 @@ void Battle::Cell::SetArea( const fheroes2::Rect & area )
     pos.height = CELLH;
 
     // center
-    coord[0] = fheroes2::Point( infl * pos.x + infl * pos.width / 2, infl * pos.y + infl * pos.height / 2 );
+    coord[0] = { infl * pos.x + infl * pos.width / 2, infl * pos.y + infl * pos.height / 2 };
     // coordinates
-    coord[1] = fheroes2::Point( infl * pos.x, infl * pos.y + infl * ( pos.height - cellHeightVerSide ) / 2 );
-    coord[2] = fheroes2::Point( infl * pos.x + infl * pos.width / 2, infl * pos.y );
-    coord[3] = fheroes2::Point( infl * pos.x + infl * pos.width, infl * pos.y + infl * ( pos.height - cellHeightVerSide ) / 2 );
-    coord[4] = fheroes2::Point( infl * pos.x + infl * pos.width, infl * pos.y + infl * pos.height - infl * ( pos.height - cellHeightVerSide ) / 2 );
-    coord[5] = fheroes2::Point( infl * pos.x + infl * pos.width / 2, infl * pos.y + infl * pos.height );
-    coord[6] = fheroes2::Point( infl * pos.x, infl * pos.y + infl * pos.height - infl * ( pos.height - cellHeightVerSide ) / 2 );
+    coord[1] = { infl * pos.x, infl * pos.y + infl * ( pos.height - cellHeightVerSide ) / 2 };
+    coord[2] = { infl * pos.x + infl * pos.width / 2, infl * pos.y };
+    coord[3] = { infl * pos.x + infl * pos.width, infl * pos.y + infl * ( pos.height - cellHeightVerSide ) / 2 };
+    coord[4] = { infl * pos.x + infl * pos.width, infl * pos.y + infl * pos.height - infl * ( pos.height - cellHeightVerSide ) / 2 };
+    coord[5] = { infl * pos.x + infl * pos.width / 2, infl * pos.y + infl * pos.height };
+    coord[6] = { infl * pos.x, infl * pos.y + infl * pos.height - infl * ( pos.height - cellHeightVerSide ) / 2 };
 }
 
 Battle::direction_t Battle::Cell::GetTriangleDirection( const fheroes2::Point & dst ) const

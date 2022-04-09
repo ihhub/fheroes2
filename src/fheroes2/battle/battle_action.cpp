@@ -48,20 +48,20 @@ namespace
     {
         const int spellPower = commander->GetPower();
         if ( ( spellPower > 0 ) && ( spellPower < 3 ) ) {
-            return std::make_pair( 0, 1 );
+            return { 0, 1 };
         }
         else if ( ( spellPower >= 3 ) && ( spellPower < 6 ) ) {
-            return std::make_pair( 0, 2 );
+            return { 0, 2 };
         }
         else if ( ( spellPower >= 6 ) && ( spellPower < 10 ) ) {
-            return std::make_pair( 0, 3 );
+            return { 0, 3 };
         }
         else if ( spellPower >= 10 ) {
-            return std::make_pair( 1, 3 );
+            return { 1, 3 };
         }
 
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "damage_range: unexpected spellPower value: " << spellPower << " for commander " << commander );
-        return std::make_pair( 0, 0 );
+        return { 0, 0 };
     }
 }
 
