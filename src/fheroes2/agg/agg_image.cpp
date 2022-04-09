@@ -2031,7 +2031,7 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNNEWGM, 6 + i );
                     // Clean the button
-                    Fill( out, 25, 18, 88, 23, getButtonFillingColor( i == 0) );
+                    Fill( out, 25, 18, 88, 23, getButtonFillingColor( i == 0 ) );
 
                     const int32_t secondLine = 28;
                     // Add 'MODE'
