@@ -1962,21 +1962,20 @@ namespace fheroes2
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNNEWGM, 6 + i );
-                    // clean the button
-                    Image uniform( 83, 23 );
-                    uniform.fill( ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 ) );
-                    Copy( uniform, 0, 0, out, 28, 18, uniform.width(), uniform.height() );
-                    // add 'ba'
+                    // Clean the button
+                    const uint8_t fillColor = ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 );
+                    Fill( out, 25, 18, 88, 23, fillColor );
+                    // Add 'ba'
                     Blit( GetICN( ICN::BTNCMPGN, i ), 41 - i, 28, out, 30 - i, 13, 28, 14 );
-                    // add 'tt'
+                    // Add 'tt'
                     Blit( GetICN( ICN::BTNNEWGM, i ), 25 - i, 13, out, 57 - i, 13, 13, 14 );
                     Blit( GetICN( ICN::BTNNEWGM, i ), 25 - i, 13, out, 70 - i, 13, 13, 14 );
-                    // add 'le'
+                    // Add 'le'
                     Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 97 - i, 21, out, 83 - i, 13, 13, 14 );
                     Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 86 - i, 21, out, 96 - i, 13, 13, 14 );
-                    // add 'on'
+                    // Add 'on'
                     Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 44 - i, 21, out, 40 - i, 28, 31, 14 );
-                    // add 'ly'
+                    // Add 'ly'
                     Blit( GetICN( ICN::BTNHOTST, i ), 47 - i, 21, out, 71 - i, 28, 12, 13 );
                     Blit( GetICN( ICN::BTNHOTST, i ), 72 - i, 21, out, 84 - i, 28, 13, 13 );
                 }
@@ -1996,26 +1995,76 @@ namespace fheroes2
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNNEWGM, 6 + i );
-                    // clean the button
-                    Image uniform( 88, 23 );
-                    uniform.fill( ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 ) );
-                    Copy( uniform, 0, 0, out, 25, 18, uniform.width(), uniform.height() );
-                    // add 'K'
+                    // Clean the button
+                    const uint8_t fillColor = ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 );
+                    Fill( out, 25, 18, 88, 23, fillColor );
+                    // Add 'K'
                     Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 34 - i, 23, out, 40 - i, 23, 12, 14 );
-                    //'add 'A'
+                    //'Add 'A'
                     Blit( GetICN( ICN::BTNNEWGM, 4 + i ), 56 - i, 23, out, 52 - i, 23, 13, 14 );
                     Blit( out, 20, 20, out, 52 - i + 12, 25, 3, 3 );
-                    // add 'M'
+                    // Add 'M'
                     Blit( GetICN( ICN::BTNNEWGM, 4 + i ), 39 - i, 8, out, 65 - i, 23, 14, 14 );
-                    // add 'F'
+                    // Add 'F'
                     Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 70 - i, 23, out, 87 - i, 23, 10, 14 );
-                    // add 'P'
+                    // Add 'P'
                     Blit( GetICN( ICN::BTNNEWGM, 4 + i ), 36 - i, 23, out, 78 - i, 23, 10, 14 );
                 }
                 break;
+
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 assert( 0 );
+
+                break;
+            }
+        }
+        void generateFrenchSpecificImages( const int id )
+        {
+            switch ( id ) {
+            case ICN::BTNBATTLEONLY:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNNEWGM, 6 + i );
+                    // Clean the button
+                    const uint8_t fillColor = ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 );
+                    Fill( out, 25, 18, 88, 23, fillColor );
+
+                    const int32_t secondLine = 28;
+                    // Add 'MODE'
+                    Blit( GetICN( ICN::BTNNEWGM, 4 + i ), 40 - i, 13, out, 45 - i, 13, 50, 15 );
+                    // Clean up 'MODE'
+                    Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 114 - i, 18, out, 94 - i, 18, 1, 10 );
+                    // Add 'BA'
+                    Blit( GetICN( ICN::BTNBAUD, 2 + i ), 42 - i, 28, out, 28 - i, secondLine, 22, 15 );
+                    // Clean up 'BA'
+                    Blit( GetICN( ICN::BTNBAUD, 2 + i ), 42 - i, 31, out, 39 - i, secondLine, 1, 1 );
+                    Blit( GetICN( ICN::BTNBAUD, 2 + i ), 39 - i, 31, out, 49 - i, secondLine + 4, 1, 2 );
+                    // Add 'T'
+                    Blit( GetICN( ICN::BTNDC, 2 + i ), 89 - i, 21, out, 50 - i, secondLine, 12, 15 );
+                    // Clean up 'AT'
+                    Blit( GetICN( ICN::BTNDC, 2 + i ), 89 - i, 18, out, 50 - i, secondLine, 1, 1 );
+                    Blit( GetICN( ICN::BTNDC, 2 + i ), 92 - ( 5 * i ), 27 - i, out, 49 - i, secondLine + 4 + i, 1, 3 );
+                    // Add 'AI'.
+                    Blit( GetICN( ICN::BTNMP, 6 + i ), 56 - i, 13, out, 62 - i, secondLine, 18, 15 );
+                    // Clean up 'TA'
+                    Blit( GetICN( ICN::BTNBAUD, 2 + i ), 51 - i, 40, out, 60 - i, secondLine + 12, 3, 3 );
+                    // Add 'LLE'
+                    Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 85 - i, 13, out, 81 - i, secondLine, 31, 15 );
+                    // Clean up "IL"
+                    Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 85 - i, 18, out, 81 - i, secondLine + 7, 1, 1 );
+                    Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 94 - i, 17, out, 80 - i, secondLine + 4, 2, 2 );
+                    Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 93 - i, 25, out, 79 - i, secondLine + 12, 3, 3 );
+                    Blit( GetICN( ICN::BTNDC, 4 + i ), 23 - i, 8, out, 79 - i, secondLine + 5, 1, 10 );
+                    Blit( GetICN( ICN::BTNMP, 6 + i ), 73 - i, 22, out, 79 - i, secondLine + 9, 1, 1 );
+                }
+                break;
+
+            default:
+                // You're calling this function for non-specified ICN id. Check your logic!
+                assert( 0 );
+
                 break;
             }
         }
@@ -2025,6 +2074,9 @@ namespace fheroes2
             switch ( fheroes2::getResourceLanguage() ) {
             case fheroes2::SupportedLanguage::German:
                 generateGermanSpecificImages( id );
+                break;
+            case fheroes2::SupportedLanguage::French:
+                generateFrenchSpecificImages( id );
                 break;
             default:
                 generateEnglishSpecificImages( id );
