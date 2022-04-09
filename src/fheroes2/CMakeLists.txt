@@ -25,10 +25,10 @@ if(MINGW)
 endif(MINGW)
 
 if(MACOS_APP_BUNDLE)
-	set(fheroes2Icon "${CMAKE_CURRENT_SOURCE_DIR}/../resources/fheroes2.icns")
-	set_source_files_properties(${fheroes2Icon} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+	set(FHEROES2_ICON "${CMAKE_CURRENT_SOURCE_DIR}/../resources/fheroes2.icns")
+	set_source_files_properties(${FHEROES2_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
-	add_executable(fheroes2 MACOSX_BUNDLE ${fheroes2Icon} ${FHEROES2_SOURCES} ${TRANSLATION_DATA})
+	add_executable(fheroes2 MACOSX_BUNDLE ${FHEROES2_ICON} ${FHEROES2_SOURCES} ${TRANSLATION_DATA})
 
 	target_compile_definitions(fheroes2 PRIVATE
 		$<$<BOOL:${MACOS_APP_BUNDLE}>:MACOS_APP_BUNDLE>
