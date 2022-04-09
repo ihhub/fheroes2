@@ -1,4 +1,6 @@
 version 0.9.14 (09 April 2022)
+- generate Italian "Battle Only" button
+- fix line breaking in welcome message for various languages
 - update and improve Italian translation
 - generate Polish "Battle Only" button
 - fix switching fullscreen mode in Mac OS for certain resolutions
