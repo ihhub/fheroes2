@@ -21,7 +21,9 @@
 cmake_minimum_required(VERSION 3.20)
 cmake_policy(SET CMP0074 NEW)
 
-project(fheroes2 VERSION 0.9.14 LANGUAGES C CXX)
+file(STRINGS ${CMAKE_SOURCE_DIR}/version.txt FHEROES2_VERSION LIMIT_COUNT 1 REGEX "^[0-9]+\.[0-9]+\.[0-9]+$")
+
+project(fheroes2 VERSION ${FHEROES2_VERSION} LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 
