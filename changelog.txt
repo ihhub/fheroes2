@@ -1,4 +1,62 @@
-version 0.9.13 (07 February 2022)
+version 0.9.14 (09 April 2022)
+- update and improve Italian translation
+- fenerate Polish "Battle Only" button
+- fix switching fullscreen mode in Mac OS for certain resolutions
+- generate French "Battle Only" button
+- fix a crash due to an assertion failure when the shooter hits back at a unit under Berserk spell
+- fix scrolling in full-screen mode in case of an aspect ratio mismatch
+- fix rare cases for incorrect letters being generated while switching languages
+- add Norwegian language option and font generation
+- update French translation
+- add initial implementation of Dimension Door spell usage for AI
+- fix Gold Watch artifact invalid bonus
+- rework artifact logic with proper separation and calculations of artifact's bonuses and curses
+- play only one sound while getting ar artifact within an event
+- speed up castle and hero icons on adventure map
+- add "Battle Only" button generation for German version of the game
+- fix Mage Guild bottom status bar rendering
+- fix incorrect artifact discovery description
+- add in-game Italian language option and diacritics
+- fix army order option related crash
+- fix High Score Music after winning scenario
+- adjust AI spell estimates
+- fix rendering of bottom bar in Well dialog
+- update Polish translation
+- remove unnecessary call to play VICTORY music during Campaign intro
+- fix the calculation of the cost of surrender
+- fix Town Gate spell logic
+- prioritize AI castles further from enemy territory
+- take the weekly growth into account when calculating monthly population growth bonuses and fines
+- update minimap colors
+- optimize AI figther hero priorities
+- add native macOS application generation
+- build player influence map to inform AI kingdom development decisions
+- speed up data reading from AGG files
+- update Norwegian translation
+- add a popup window for battle log
+- add a mandatory requirement of h2d file being present 
+- fix incorrect logic for palette application function
+- fix position of armies for quick info window for both castle and enemy hero
+- set the direction for attacking and defending units in battle in a more OG-like way
+- fix incorrect popup monster window in Well
+- greatly speedup heavy video loading
+- do not render extra frame while playing an audio only video file
+- properly center the first sentence in the battle surrender dialog
+- dynamically update Game Language dialog
+- fix translation and UI in Tavern dialog
+- add MP3 file support
+- increase the number of sound channels to 32
+- allow a hero to surrender to the captain during the siege
+- fix rare case of Shipwreck having no battle
+- display experience amount for Tree of Knowledge
+- fix Witch's Hut message body
+- for Anduran assembly window show artifact name as a title
+- for hero level up window with one secondary skill make the skill right clickable
+- for hero level up window with no secondary skill display the primary skill icon
+- add search for FLAC files if OGG files aren't found
+- add popup dialogs for Arena's skill choices
+
+version 0.9.13 (07 March 2022)
 - show captain quick info dialog in Kingdom Overview
 - add popup windows for campaign awards and bonuses
 - remove Map loading screen

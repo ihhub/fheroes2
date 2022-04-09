@@ -31,7 +31,7 @@
 # FHEROES2_DATA: set the built-in path to the fheroes2 data directory (e.g. /usr/share/fheroes2)
 
 TARGET := fheroes2
-PROJECT_VERSION := 0.9.13
+PROJECT_VERSION := 0.9.14
 
 .PHONY: all bundle clean
 
