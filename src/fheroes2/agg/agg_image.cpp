@@ -2113,32 +2113,35 @@ namespace fheroes2
                     // clean the button
                     uint8_t buttonFillingColor = getButtonFillingColor( i == 0 );
                     Fill( out, 25, 18, 88, 23, buttonFillingColor );
-                    const int32_t offsetX = 15;
+                    const int32_t offsetX = 16;
                     const int32_t offsetY = 21;
                     const int32_t letterSpacing = 1;
                     // Add 'B'
-                    Blit( GetICN( ICN::BTNBAUD, 0 + i ), 42 - i, 28, out, offsetX - i, offsetY, 13, 14 );
-                    Fill( out, offsetX + 11, offsetY + 13, 1, 1, buttonFillingColor );
+                    Blit( GetICN( ICN::BTNBAUD, 0 + i ), 42 - i, 28, out, offsetX - i, offsetY, 13, 15 );
+                    Fill( out, offsetX + 11, offsetY + 13, 1, 2, buttonFillingColor );
                     // Add 'A'
-                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 81 - i, 28, out, offsetX + 13 + letterSpacing - i, offsetY, 14, 14 );
-                    Fill( out, offsetX + 13 + letterSpacing + 13 - i, offsetY + 5, 1, 1, buttonFillingColor );
+                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 80 - i, 28, out, offsetX + 13 + letterSpacing - 1 - i, offsetY, 14, 15 );
+                    Fill( out, offsetX + 13 + letterSpacing - 1 - i, offsetY + 3, 1, 4, buttonFillingColor );
                     // Add 'T'
-                    Blit( GetICN( ICN::BTNMP, 0 + i ), 74 - i, 5, out, offsetX + 27 + letterSpacing - 2 * i, offsetY, 12, 14 );
+                    Blit( GetICN( ICN::BTNMP, 0 + i ), 74 - i, 5, out, offsetX + 27 + letterSpacing - 1 - 2 * i, offsetY, 12, 15 );
                     // Add 'T'
-                    Blit( GetICN( ICN::BTNMP, 0 + i ), 74 - i, 5, out, offsetX + 39 + letterSpacing - 2 * i, offsetY, 12, 14 );
+                    Blit( GetICN( ICN::BTNMP, 0 + i ), 74 - i, 5, out, offsetX + 39 + letterSpacing - 1 - 2 * i, offsetY, 12, 15 );
                     // Add 'A'
-                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 81 - i, 28, out, offsetX + 51 + letterSpacing - i, offsetY, 14, 14 );
-                    Fill( out, offsetX + 51 + letterSpacing + 13 - i, offsetY + 5, 1, 1, buttonFillingColor );
+                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 80 - i, 28, out, offsetX + 51 + letterSpacing - 2 - i, offsetY, 14, 15 );
+                    Fill( out, offsetX + 51 + letterSpacing + 13 - i, offsetY + 5, 1, 2, buttonFillingColor );
+                    Fill( out, offsetX + 63 + letterSpacing + 1 - i, offsetY + 14, 1, 3, buttonFillingColor );
+                    Fill( out, offsetX + 51 + letterSpacing - 2 - i, offsetY + 3, 1, 4, buttonFillingColor );
                     // Add 'G'
-                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 44 - i, 12, out, offsetX + 65 + letterSpacing + 1 - i, offsetY, 11, 14 );
-                    Fill( out, offsetX + 65 + letterSpacing + 1 - i, offsetY + 12, 1, 3, buttonFillingColor );
+                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 44 - i, 12, out, offsetX + 65 + letterSpacing - 1  - i, offsetY, 11, 15 );
+                    /*Fill( out, offsetX + 65 + letterSpacing + 1 - i, offsetY + 12, 1, 3, buttonFillingColor );*/
                     // Add 'L'
-                    Blit( GetICN( ICN::BTNDC, 4 + i ), 77 - i, 21, out, offsetX + 76 + letterSpacing + 2 - 2 * i, offsetY, 9, 15 );
+                    Blit( GetICN( ICN::BTNDC, 4 + i ), 77 - i, 21, out, offsetX + 76 + letterSpacing - 2 * i, offsetY, 9, 15 );
                     // Add 'I'
-                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 56 - i, 12, out, offsetX + 85 + letterSpacing + 2 - i, offsetY, 7, 15 );
+                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 56 - i, 12, out, offsetX + 85 + letterSpacing - i, offsetY, 7, 15 );
                     // Add 'A'
-                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 81 - i, 28, out, offsetX + 92 + letterSpacing + 3 - i, offsetY, 14, 14 );
-                    Fill( out, offsetX + 92 + letterSpacing + 3 + 13 - i, offsetY + 5, 1, 1, buttonFillingColor );
+                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 80 - i, 28, out, offsetX + 92 + letterSpacing - i, offsetY, 14, 15 );
+                    Fill( out, offsetX + 92 + letterSpacing + 3 + 13 - i, offsetY + 5, 1, 2, buttonFillingColor );
+                    Fill( out, offsetX + 92 + letterSpacing - i, offsetY + 3, 1, 4, buttonFillingColor );
                 }
                 break;
 
