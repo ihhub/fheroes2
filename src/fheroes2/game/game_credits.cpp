@@ -233,7 +233,7 @@ namespace
                                         "Andrii Kurdiumov\n"
                                         "dimag0g\n"
                                         "felix642\n"
-                                        "Arthusppp\n");
+                                        "Arthusppp\n" );
 
         name.Set( contributors + _( "and many other contributors!" ), Font::BIG, textWidth );
         name.Blit( 2 * columnStep + ( columnStep - name.w() ) / 2, offsetY, output );
@@ -300,8 +300,7 @@ namespace
         std::string contributors( "William Hoskinson\n"
                                   "Aleksei Mazur\n"
                                   "Connor Townsend\n"
-                                  "Brandon Wright\n"
-                                  );
+                                  "Brandon Wright\n" );
 
         name.Set( contributors, Font::BIG, output.width() - textInitialOffsetX );
         name.Blit( textInitialOffsetX + ( ( output.width() - textInitialOffsetX ) / 2 - name.w() ) / 2, offsetY, output );
