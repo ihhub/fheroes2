@@ -43,7 +43,7 @@ jobs:
       run:
         shell: bash
     env:
-      APP_VERSION: 0.9.13
+      APP_VERSION: 0.9.14
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies, cygwin and zip
