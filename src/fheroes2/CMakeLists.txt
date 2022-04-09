@@ -25,8 +25,8 @@ if(MINGW)
 endif(MINGW)
 
 if(MACOS_APP_BUNDLE)
-	set(FHEROES2_ICON "${CMAKE_CURRENT_SOURCE_DIR}/../resources/fheroes2.icns")
-	set_source_files_properties(${FHEROES2_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+	set(FHEROES2_ICON ${CMAKE_CURRENT_SOURCE_DIR}/../resources/fheroes2.icns)
+	set_source_files_properties(${FHEROES2_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
 	add_executable(fheroes2 MACOSX_BUNDLE ${FHEROES2_ICON} ${FHEROES2_SOURCES} ${TRANSLATION_DATA})
 
@@ -36,14 +36,14 @@ if(MACOS_APP_BUNDLE)
 
 	target_link_libraries(fheroes2 "-framework CoreFoundation")
 
-	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "${CMAKE_PROJECT_NAME}")
-	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_EXECUTABLE_NAME "${MACOSX_BUNDLE_BUNDLE_NAME}")
-	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/../resources/Info.plist.in")
-	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_ICON_FILE "fheroes2.icns")
-	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "com.fheroes2.${CMAKE_PROJECT_NAME}")
-	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_SHORT_VERSION_STRING "${CMAKE_PROJECT_VERSION}")
-	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_BUNDLE_VERSION "${CMAKE_PROJECT_VERSION}")
-	set_target_properties(fheroes2 PROPERTIES OUTPUT_NAME "${CMAKE_PROJECT_NAME}")
+	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME ${CMAKE_PROJECT_NAME})
+	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_EXECUTABLE_NAME ${MACOSX_BUNDLE_BUNDLE_NAME})
+	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/../resources/Info.plist.in)
+	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_ICON_FILE fheroes2.icns)
+	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER com.fheroes2.${CMAKE_PROJECT_NAME})
+	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_SHORT_VERSION_STRING ${CMAKE_PROJECT_VERSION})
+	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_BUNDLE_VERSION ${CMAKE_PROJECT_VERSION})
+	set_target_properties(fheroes2 PROPERTIES OUTPUT_NAME ${CMAKE_PROJECT_NAME})
 else(MACOS_APP_BUNDLE)
 	cmake_path(ABSOLUTE_PATH FHEROES2_DATA
 		BASE_DIRECTORY ${CMAKE_INSTALL_PREFIX}
