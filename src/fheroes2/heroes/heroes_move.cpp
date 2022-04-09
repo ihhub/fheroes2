@@ -238,21 +238,20 @@ const fheroes2::Sprite & SpriteFlag( const Heroes & hero, int index, bool rotate
     const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn_flag, index_sprite + frameId );
     if ( !hero.isMoveEnabled() ) {
         static const fheroes2::Point offsetTop[heroFrameCount] = { { 0, 0 }, { 0, 2 }, { 0, 3 }, { 0, 2 }, { 0, 0 }, { 0, 1 }, { 0, 3 }, { 0, 2 }, { 0, 1 } };
-        static const fheroes2::Point offsetBottom[heroFrameCount] = { { 0, 0 },  { 0, -1 }, { 0, -2 }, { 0, 0 }, { 0, -1 }, { 0, -2 }, { 0, -3 }, { 0, 0 },  { 0, -1 } };
-        static const fheroes2::Point offsetSideways[heroFrameCount] = { { 0, 0 },  { -1, 0 }, { 0, 0 }, { 1, 0 }, { 1, -1 }, { 2, -1 }, { 1, 0 },  { 0, 0 }, { 1, 0 } };
+        static const fheroes2::Point offsetBottom[heroFrameCount] = { { 0, 0 }, { 0, -1 }, { 0, -2 }, { 0, 0 }, { 0, -1 }, { 0, -2 }, { 0, -3 }, { 0, 0 }, { 0, -1 } };
+        static const fheroes2::Point offsetSideways[heroFrameCount] = { { 0, 0 }, { -1, 0 }, { 0, 0 }, { 1, 0 }, { 1, -1 }, { 2, -1 }, { 1, 0 }, { 0, 0 }, { 1, 0 } };
         static const fheroes2::Point offsetTopSideways[heroFrameCount]
-            = { { 0, 0 },  { -1, 0 }, { 0, 0 }, { -1, -1 }, { -2, -1 }, { -2, 0 }, { -1, 0 }, { 0, 0 }, { 1, 0 } };
+            = { { 0, 0 }, { -1, 0 }, { 0, 0 }, { -1, -1 }, { -2, -1 }, { -2, 0 }, { -1, 0 }, { 0, 0 }, { 1, 0 } };
         static const fheroes2::Point offsetBottomSideways[heroFrameCount]
-            = { { 0, 0 },   { -1, 0 },  { 0, -1 },  { 2, -2 }, { 0, -2 }, { -1, -3 }, { -1, -2 }, { -1, -1 }, { 1, 0 } };
+            = { { 0, 0 }, { -1, 0 }, { 0, -1 }, { 2, -2 }, { 0, -2 }, { -1, -3 }, { -1, -2 }, { -1, -1 }, { 1, 0 } };
 
-        static const fheroes2::Point offsetShipTopBottom[heroFrameCount]
-            = { { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 1 }, { 0, 1 }, { 0, 0 },  { 0, 1 }, { 0, 1 }, { 0, 1 } };
+        static const fheroes2::Point offsetShipTopBottom[heroFrameCount] = { { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 1 }, { 0, 1 }, { 0, 0 }, { 0, 1 }, { 0, 1 }, { 0, 1 } };
         static const fheroes2::Point offsetShipSideways[heroFrameCount]
-            = { { 0, -2 }, { 0, -1 }, { 0, 0 },  { 0, 1 }, { 0, 0 }, { 0, -1 }, { 0, 0 },  { 0, -1 }, { 0, 1 } };
+            = { { 0, -2 }, { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 0 }, { 0, -1 }, { 0, 0 }, { 0, -1 }, { 0, 1 } };
         static const fheroes2::Point offsetShipTopSideways[heroFrameCount]
-            = { { 0, 0 },  { 0, -1 }, { 0, 0 },  { 0, 1 }, { 0, 0 }, { 0, -1 }, { 0, 0 },  { 0, -1 }, { 0, 1 } };
+            = { { 0, 0 }, { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 0 }, { 0, -1 }, { 0, 0 }, { 0, -1 }, { 0, 1 } };
         static const fheroes2::Point offsetShipBottomSideways[heroFrameCount]
-            = { { 0, -2 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 },  { 0, 0 }, { 0, 0 }, { 0, 0 } };
+            = { { 0, -2 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
 
         switch ( hero.GetDirection() ) {
         case Direction::TOP:
