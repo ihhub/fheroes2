@@ -1893,6 +1893,11 @@ namespace
             // Other transform values are not relevant for transparency checks.
         }
     }
+
+    uint8_t getButtonFillingColor( const int32_t isReleasedState )
+    {
+        return isReleasedState ? fheroes2::GetColorId( 184, 136, 96 ) : fheroes2::GetColorId( 216, 184, 152 );
+    }
 }
 
 namespace fheroes2
@@ -1963,8 +1968,7 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNNEWGM, 6 + i );
                     // Clean the button
-                    const uint8_t fillColor = ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 );
-                    Fill( out, 25, 18, 88, 23, fillColor );
+                    Fill( out, 25, 18, 88, 23, getButtonFillingColor( i ) );
                     // Add 'ba'
                     Blit( GetICN( ICN::BTNCMPGN, i ), 41 - i, 28, out, 30 - i, 13, 28, 14 );
                     // Add 'tt'
@@ -1996,8 +2000,7 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNNEWGM, 6 + i );
                     // Clean the button
-                    const uint8_t fillColor = ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 );
-                    Fill( out, 25, 18, 88, 23, fillColor );
+                    Fill( out, 25, 18, 88, 23, getButtonFillingColor( i ) );
                     // Add 'K'
                     Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 34 - i, 23, out, 40 - i, 23, 12, 14 );
                     //'Add 'A'
@@ -2028,8 +2031,7 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNNEWGM, 6 + i );
                     // Clean the button
-                    const uint8_t fillColor = ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 );
-                    Fill( out, 25, 18, 88, 23, fillColor );
+                    Fill( out, 25, 18, 88, 23, getButtonFillingColor( i ) );
 
                     const int32_t secondLine = 28;
                     // Add 'MODE'
@@ -2078,8 +2080,7 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNNEWGM, 6 + i );
                     // clean the button
-                    const uint8_t fillColor = ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 );
-                    Fill( out, 25, 18, 88, 23, fillColor );
+                    Fill( out, 25, 18, 88, 23, getButtonFillingColor( i ) );
                     const int32_t offsetX = 46;
                     const int32_t offsetY = 23;
                     // Add 'BI'
@@ -2110,19 +2111,18 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNNEWGM, 6 + i );
                     // clean the button
-                    const uint8_t fillColor = ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 );
-                    Fill( out, 25, 18, 88, 23, fillColor );
+                    Fill( out, 25, 18, 88, 23, getButtonFillingColor( i ) );
                     const int32_t offsetX = 15;
                     const int32_t offsetY = 21;
                     const int32_t letterSpacing = 1;
                     // Add 'B'
                     Blit( GetICN( ICN::BTNBAUD, 0 + i ), 42 - i, 28, out, offsetX - i, offsetY, 13, 14 );
                     // Clean up 'B'
-                    Fill( out, offsetX + 11, offsetY + 13, 1, 1, fillColor );
+                    Fill( out, offsetX + 11, offsetY + 13, 1, 1, getButtonFillingColor( i ) );
                     // Add 'A'
                     Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 81 - i, 28, out, offsetX + 13 + letterSpacing - i, offsetY, 14, 14 );
                     // Clean up 'A'
-                    Fill( out, offsetX + 13 + letterSpacing + 13 - i, offsetY + 5, 1, 1, fillColor );
+                    Fill( out, offsetX + 13 + letterSpacing + 13 - i, offsetY + 5, 1, 1, getButtonFillingColor( i ) );
                     // Add 'T'
                     Blit( GetICN( ICN::BTNMP, 0 + i ), 74 - i, 5, out, offsetX + 27 + letterSpacing - 2 * i, offsetY, 12, 14 );
                     // Add 'T'
@@ -2130,11 +2130,11 @@ namespace fheroes2
                     // Add 'A'
                     Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 81 - i, 28, out, offsetX + 51 + letterSpacing - i, offsetY, 14, 14 );
                     // Clean up 'A'
-                    Fill( out, offsetX + 51 + letterSpacing + 13 - i, offsetY + 5, 1, 1, fillColor );
+                    Fill( out, offsetX + 51 + letterSpacing + 13 - i, offsetY + 5, 1, 1, getButtonFillingColor( i ) );
                     // Add 'G'
                     Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 44 - i, 12, out, offsetX + 65 + letterSpacing + 1 - i, offsetY, 11, 14 );
                     // Clean up 'G'
-                    Fill( out, offsetX + 65 + letterSpacing + 1 - i, offsetY + 12, 1, 3, fillColor );
+                    Fill( out, offsetX + 65 + letterSpacing + 1 - i, offsetY + 12, 1, 3, getButtonFillingColor( i ) );
                     // Add 'L'
                     Blit( GetICN( ICN::BTNDC, 4 + i ), 77 - i, 21, out, offsetX + 76 + letterSpacing + 2 - 2 * i, offsetY, 9, 15 );
                     // Add 'I'
@@ -2142,7 +2142,7 @@ namespace fheroes2
                     // Add 'A'
                     Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 81 - i, 28, out, offsetX + 92 + letterSpacing + 3 - i, offsetY, 14, 14 );
                     // Clean up 'A'
-                    Fill( out, offsetX + 92 + letterSpacing + 3 + 13 - i, offsetY + 5, 1, 1, fillColor );
+                    Fill( out, offsetX + 92 + letterSpacing + 3 + 13 - i, offsetY + 5, 1, 1, getButtonFillingColor( i ) );
                 }
                 break;
 
