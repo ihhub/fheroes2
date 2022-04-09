@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-06 16:34+0200\n"
-"PO-Revision-Date: 2022-04-09 12:43+0200\n"
+"PO-Revision-Date: 2022-04-09 12:50+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
 "Language: nb_NO\n"
@@ -3325,6 +3325,7 @@ msgstr ""
 msgid "Please Remember"
 msgstr "Ikke glem"
 
+# Needs extra whitespace to avoid yellow word splitting
 msgid "You can always change game resolution by clicking on the "
 msgstr "Du kan alltid bytte oppløsning ved å klikke på  "
 
