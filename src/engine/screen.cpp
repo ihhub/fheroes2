@@ -1052,12 +1052,8 @@ namespace
 
         void _toggleMouseCaptureMode()
         {
-            if ( SDL_GetNumVideoDisplays() < 2 ) {
-                // Less than 2 monitors in the system. Nothing to do.
-                return;
-            }
-
-            // This is a multi-display device. To properly support fullscreen mode it is important to lock mouse within application window area.
+            // To properly support fullscreen mode on devices with multiple displays or devices with notch,
+            // it is important to lock the mouse in the application window area.
             if ( isFullScreen() ) {
                 SDL_SetWindowGrab( _window, SDL_TRUE );
             }
