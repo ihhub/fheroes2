@@ -27,17 +27,12 @@ set(
 	GNU_CXX_WARN_OPTS
 	${GNU_CC_WARN_OPTS} -Wctor-dtor-privacy -Woverloaded-virtual
 	)
-
-add_compile_options($<$<OR:$<COMPILE_LANG_AND_ID:C,MSVC>,$<COMPILE_LANG_AND_ID:CXX,MSVC>>:/W4>)
-add_compile_options("$<$<COMPILE_LANG_AND_ID:C,AppleClang,Clang,GNU>:${GNU_CC_WARN_OPTS}>")
-add_compile_options("$<$<COMPILE_LANG_AND_ID:CXX,AppleClang,Clang,GNU>:${GNU_CXX_WARN_OPTS}>")
-
-if(ENABLE_STRICT_COMPILATION)
-	add_compile_options($<$<OR:$<COMPILE_LANG_AND_ID:C,MSVC>,$<COMPILE_LANG_AND_ID:CXX,MSVC>>:/WX>)
-	add_compile_options($<$<OR:$<COMPILE_LANG_AND_ID:C,AppleClang,Clang,GNU>,$<COMPILE_LANG_AND_ID:CXX,AppleClang,Clang,GNU>>:-Werror>)
-endif(ENABLE_STRICT_COMPILATION)
-
-add_compile_definitions($<$<CONFIG:Debug>:WITH_DEBUG>)
+set(
+	MSVC_CC_WARN_OPTS
+	/W4
+	/wd4244 # Suppress C4244 - possible data loss during conversion
+	/wd4267 # Suppress C4267 - possible data loss during conversion from size_t
+	)
 
 add_subdirectory(thirdparty)
 add_subdirectory(engine)

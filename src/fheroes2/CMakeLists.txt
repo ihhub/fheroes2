@@ -20,6 +20,15 @@
 
 file(GLOB_RECURSE FHEROES2_SOURCES CONFIGURE_DEPENDS *.cpp)
 
+add_compile_options("$<$<COMPILE_LANG_AND_ID:C,AppleClang,Clang,GNU>:${GNU_CC_WARN_OPTS}>")
+add_compile_options("$<$<COMPILE_LANG_AND_ID:CXX,AppleClang,Clang,GNU>:${GNU_CXX_WARN_OPTS}>")
+add_compile_options("$<$<OR:$<COMPILE_LANG_AND_ID:C,MSVC>,$<COMPILE_LANG_AND_ID:CXX,MSVC>>:${MSVC_CC_WARN_OPTS}>")
+
+if(ENABLE_STRICT_COMPILATION)
+	add_compile_options($<$<OR:$<COMPILE_LANG_AND_ID:C,AppleClang,Clang,GNU>,$<COMPILE_LANG_AND_ID:CXX,AppleClang,Clang,GNU>>:-Werror>)
+	add_compile_options($<$<OR:$<COMPILE_LANG_AND_ID:C,MSVC>,$<COMPILE_LANG_AND_ID:CXX,MSVC>>:/WX>)
+endif(ENABLE_STRICT_COMPILATION)
+
 if(MINGW)
 	set(MINGW_LIBRARIES mingw32 winmm)
 endif(MINGW)
@@ -31,6 +40,7 @@ if(MACOS_APP_BUNDLE)
 	add_executable(fheroes2 MACOSX_BUNDLE ${FHEROES2_ICON} ${FHEROES2_SOURCES} ${TRANSLATION_DATA})
 
 	target_compile_definitions(fheroes2 PRIVATE
+		$<$<CONFIG:Debug>:WITH_DEBUG>
 		$<$<BOOL:${MACOS_APP_BUNDLE}>:MACOS_APP_BUNDLE>
 		)
 
@@ -54,6 +64,9 @@ else(MACOS_APP_BUNDLE)
 	add_executable(fheroes2 ${FHEROES2_SOURCES})
 
 	target_compile_definitions(fheroes2 PRIVATE
+		# MSVC: suppress deprecation warnings
+		$<$<OR:$<COMPILE_LANG_AND_ID:C,MSVC>,$<COMPILE_LANG_AND_ID:CXX,MSVC>>:_CRT_SECURE_NO_WARNINGS>
+		$<$<CONFIG:Debug>:WITH_DEBUG>
 		FHEROES2_DATA=${FHEROES2_DATA_ABSOLUTE}
 		)
 
