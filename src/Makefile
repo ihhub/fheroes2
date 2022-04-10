@@ -112,8 +112,10 @@ endif
 
 # TODO: Add -Wconversion -Wsign-conversion -Wextra-semi flags once we fix all the corresponding code smells
 # TODO: Add -Wswitch-default -Wold-style-cast flags once SDL headers can be compiled with them
-CCFLAGS := $(CCFLAGS) -pedantic -Wall -Wextra -Wcast-align -Wctor-dtor-privacy -Wdouble-promotion -Wfloat-conversion -Wfloat-equal \
-           -Winit-self -Woverloaded-virtual -Wredundant-decls -Wshadow -Wundef -Wuninitialized -Wunused
+CCWARNOPTS := -pedantic -Wall -Wextra -Wcast-align -Wdouble-promotion -Wfloat-conversion -Wfloat-equal -Winit-self \
+              -Wredundant-decls -Wshadow -Wundef -Wuninitialized -Wunused
+CFLAGS := $(CFLAGS) $(CCWARNOPTS)
+CXXFLAGS := $(CXXFLAGS) $(CCWARNOPTS) -Wctor-dtor-privacy -Woverloaded-virtual
 
 ifdef FHEROES2_STRICT_COMPILATION
 CCFLAGS := $(CCFLAGS) -Werror
