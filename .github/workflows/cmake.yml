@@ -49,7 +49,7 @@ jobs:
         brew install ${{ matrix.config.dependencies }}
     - name: Build
       run: |
-        cmake -B build -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON ${{ matrix.config.options }}
+        cmake -B build -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON ${{ matrix.config.options }}
         cmake --build build -j2
     - name: Install
       run: |
@@ -68,9 +68,9 @@ jobs:
         C:/vcpkg/vcpkg --triplet x64-windows install sdl2 sdl2-mixer sdl2-image zlib
     - name: Build
       run: |
-        cmake -B build -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DUSE_SDL_VERSION=SDL2 \
+        cmake -B build -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DUSE_SDL_VERSION=SDL2 \
                        -DCMAKE_TOOLCHAIN_FILE="C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows
-        cmake --build build --config Release -j2
+        cmake --build build --config Debug -j2
     - name: Install
       run: |
-        cmake --install build
+        cmake --install build --config Debug
