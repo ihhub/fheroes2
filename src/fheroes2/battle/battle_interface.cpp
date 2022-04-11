@@ -2702,16 +2702,12 @@ void Battle::Interface::EventShowOptions( void )
 
 void Battle::Interface::EventAutoSwitch( const Unit & b, Actions & a )
 {
-    btn_auto.drawOnPress();
-
     if ( arena.CanToggleAutoBattle() ) {
         a.emplace_back( CommandType::MSG_BATTLE_AUTO, b.GetColor() );
     }
 
     humanturn_redraw = true;
     humanturn_exit = true;
-
-    btn_auto.drawOnRelease();
 }
 
 void Battle::Interface::ButtonAutoAction( const Unit & b, Actions & a )
