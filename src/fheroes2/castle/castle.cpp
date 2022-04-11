@@ -2475,6 +2475,20 @@ StreamBase & operator>>( StreamBase & msg, Castle & castle )
 
     msg >> static_cast<MapPosition &>( castle ) >> castle.modes >> castle.race >> castle.building >> castle.captain >> color >> castle.name >> castle.mageguild;
 
+    // Make sure that Mage Guild has all previous levels.
+    if ( castle.building & BUILD_MAGEGUILD5 ) {
+        castle.building |= BUILD_MAGEGUILD4;
+    }
+    if ( castle.building & BUILD_MAGEGUILD4 ) {
+        castle.building |= BUILD_MAGEGUILD3;
+    }
+    if ( castle.building & BUILD_MAGEGUILD3 ) {
+        castle.building |= BUILD_MAGEGUILD2;
+    }
+    if ( castle.building & BUILD_MAGEGUILD2 ) {
+        castle.building |= BUILD_MAGEGUILD1;
+    }
+
     msg >> dwellingcount;
     for ( u32 ii = 0; ii < dwellingcount; ++ii )
         msg >> castle.dwelling[ii];
