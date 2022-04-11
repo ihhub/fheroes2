@@ -1387,7 +1387,16 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
     Skill::Secondary sec2;
 
     secondary_skills.FindSkillsForLevelUp( _race, seeds.seedSecondaySkill1, seeds.seedSecondaySkill2, sec1, sec2 );
-    DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec1.Skill() ) << " or " << Skill::Secondary::String( sec2.Skill() ) );
+
+    if ( sec1.isValid() && sec2.isValid() ) {
+        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec1.Skill() ) << " or " << Skill::Secondary::String( sec2.Skill() ) );
+    }
+    else if ( sec1.isValid() ) {
+        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec1.Skill() ) );
+    }
+    else if ( sec2.isValid() ) {
+        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec2.Skill() ) );
+    }
 
     Skill::Secondary selected;
 
@@ -1401,10 +1410,11 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
     }
     else {
         AGG::PlaySound( M82::NWHEROLV );
-        int result = Dialog::LevelUpSelectSkill( name, primary, sec1, sec2, *this );
+        const int result = Dialog::LevelUpSelectSkill( name, primary, sec1, sec2, *this );
 
-        if ( Skill::Secondary::UNKNOWN != result )
-            selected = result == sec2.Skill() ? sec2 : sec1;
+        if ( Skill::Secondary::UNKNOWN != result ) {
+            selected = ( result == sec2.Skill() ) ? sec2 : sec1;
+        }
     }
 
     // level up sec. skill
