@@ -1095,7 +1095,7 @@ double Army::GetStrength() const
     return result;
 }
 
-void Army::Reset( bool soft )
+void Army::Reset( const bool soft /* = false */ )
 {
     Troops::Clean();
 

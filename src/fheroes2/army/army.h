@@ -157,7 +157,9 @@ public:
     ~Army() override;
 
     const Troops & getTroops() const;
-    void Reset( bool = false ); // reset: soft or hard
+    // Soft reset means reset to the default army (a few T1 and T2 units).
+    // Hard reset means reset to the minimum army (strictly one T1 unit).
+    void Reset( const bool soft = false );
     void setFromTile( const Maps::Tiles & tile );
 
     int GetColor( void ) const;
