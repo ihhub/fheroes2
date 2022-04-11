@@ -156,7 +156,8 @@ namespace
 
 namespace Battle
 {
-    void GetSummaryParams( int res1, int res2, const HeroBase * hero, u32 exp, LoopedAnimationSequence & sequence, std::string & title, std::string & msg );
+    void GetSummaryParams( uint32_t res1, uint32_t res2, const HeroBase * hero, uint32_t exp, LoopedAnimationSequence & sequence, std::string & title,
+                           std::string & msg );
     void RedrawBattleSettings( const std::vector<fheroes2::Rect> & areas );
     void RedrawOnOffSetting( const fheroes2::Rect & area, const std::string & name, uint32_t index, bool isSet );
 }
@@ -342,7 +343,8 @@ void Battle::DialogBattleSettings( void )
     }
 }
 
-void Battle::GetSummaryParams( int res1, int res2, const HeroBase * hero, u32 exp, LoopedAnimationSequence & sequence, std::string & title, std::string & msg )
+void Battle::GetSummaryParams( uint32_t res1, uint32_t res2, const HeroBase * hero, uint32_t exp, LoopedAnimationSequence & sequence, std::string & title,
+                               std::string & msg )
 {
     if ( res1 & RESULT_WINS ) {
         sequence.push( ICN::WINCMBT, true );
