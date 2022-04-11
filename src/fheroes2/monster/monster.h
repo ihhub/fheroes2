@@ -136,15 +136,26 @@ public:
     Monster( int race, u32 dw );
     virtual ~Monster() = default;
 
-    bool operator==( const Monster & ) const;
-    bool operator!=( const Monster & ) const;
+    bool operator==( const Monster & m ) const
+    {
+        return id == m.id;
+    }
+
+    bool operator!=( const Monster & m ) const
+    {
+        return id != m.id;
+    }
 
     int GetID( void ) const
     {
         return id;
     }
 
-    void Upgrade( void );
+    void Upgrade()
+    {
+        id = GetUpgrade().id;
+    }
+
     Monster GetUpgrade( void ) const;
     Monster GetDowngrade( void ) const;
 
@@ -155,13 +166,38 @@ public:
     virtual int GetLuck( void ) const;
     virtual int GetRace( void ) const;
 
-    u32 GetDamageMin( void ) const;
-    u32 GetDamageMax( void ) const;
+    uint32_t GetDamageMin() const
+    {
+        return fheroes2::getMonsterData( id ).battleStats.damageMin;
+    }
+
+    uint32_t GetDamageMax() const
+    {
+        return fheroes2::getMonsterData( id ).battleStats.damageMax;
+    }
+
     virtual uint32_t GetShots() const;
-    u32 GetHitPoints( void ) const;
-    u32 GetSpeed( void ) const;
-    u32 GetGrown( void ) const;
-    int GetMonsterLevel() const;
+
+    uint32_t GetHitPoints() const
+    {
+        return fheroes2::getMonsterData( id ).battleStats.hp;
+    }
+
+    uint32_t GetSpeed() const
+    {
+        return fheroes2::getMonsterData( id ).battleStats.speed;
+    }
+
+    uint32_t GetGrown() const
+    {
+        return fheroes2::getMonsterData( id ).generalStats.baseGrowth;
+    }
+
+    int GetMonsterLevel() const
+    {
+        return fheroes2::getMonsterData( id ).generalStats.level;
+    }
+
     LevelType GetRandomUnitLevel() const;
     u32 GetRNDSize( bool skip ) const;
 
@@ -169,32 +205,100 @@ public:
     const char * GetMultiName( void ) const;
     const char * GetPluralName( u32 ) const;
 
-    bool isValid( void ) const;
-    bool isElemental( void ) const;
-    bool isUndead( void ) const;
-    bool isFlying( void ) const;
-    bool isWide( void ) const;
-    bool isArchers( void ) const;
-    bool isAllowUpgrade( void ) const;
-    bool isDoubleAttack() const;
-    bool isRegenerating( void ) const;
-    bool isDoubleCellAttack( void ) const;
-    bool isAllAdjacentCellsAttack() const;
-    bool ignoreRetaliation( void ) const;
-    bool isDragons( void ) const;
-    bool isAffectedByMorale( void ) const;
+    bool isValid() const
+    {
+        return id != UNKNOWN;
+    }
+
+    bool isElemental() const
+    {
+        return isAbilityPresent( fheroes2::MonsterAbilityType::ELEMENTAL );
+    }
+
+    bool isUndead() const
+    {
+        return isAbilityPresent( fheroes2::MonsterAbilityType::UNDEAD );
+    }
+
+    bool isFlying() const
+    {
+        return isAbilityPresent( fheroes2::MonsterAbilityType::FLYING );
+    }
+
+    bool isWide() const
+    {
+        return isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
+    }
+
+    bool isArchers() const
+    {
+        return GetShots() > 0;
+    }
+
+    bool isAllowUpgrade() const
+    {
+        return id != GetUpgrade().id;
+    }
+
+    bool isDoubleAttack() const
+    {
+        return isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK ) || isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_SHOOTING );
+    }
+
+    bool isRegenerating() const
+    {
+        return isAbilityPresent( fheroes2::MonsterAbilityType::HP_REGENERATION );
+    }
+
+    bool isDoubleCellAttack() const
+    {
+        return isAbilityPresent( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
+    }
+
+    bool isAllAdjacentCellsAttack() const
+    {
+        return isAbilityPresent( fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK );
+    }
+
+    bool ignoreRetaliation() const
+    {
+        return isAbilityPresent( fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION );
+    }
+
+    bool isDragons() const
+    {
+        return isAbilityPresent( fheroes2::MonsterAbilityType::DRAGON );
+    }
+
+    bool isAffectedByMorale() const
+    {
+        // TODO: possible optimization: run through all abilities once.
+        return !( isUndead() || isElemental() );
+    }
 
     bool isAbilityPresent( const fheroes2::MonsterAbilityType abilityType ) const;
 
     double GetMonsterStrength( int attack = -1, int defense = -1 ) const;
-    int ICNMonh( void ) const;
 
-    u32 GetSpriteIndex( void ) const;
-    payment_t GetCost() const;
+    int ICNMonh() const;
+
+    uint32_t GetSpriteIndex() const
+    {
+        return UNKNOWN < id ? id - 1 : 0;
+    }
+
+    payment_t GetCost() const
+    {
+        return payment_t( fheroes2::getMonsterData( id ).generalStats.cost );
+    }
+
     payment_t GetUpgradeCost() const;
     u32 GetDwelling( void ) const;
 
-    int GetMonsterSprite() const;
+    int GetMonsterSprite() const
+    {
+        return fheroes2::getMonsterData( id ).icnId;
+    }
 
     static Monster Rand( const LevelType type );
 

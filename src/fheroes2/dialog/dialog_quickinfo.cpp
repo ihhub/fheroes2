@@ -431,7 +431,7 @@ namespace
     fheroes2::Rect MakeRectQuickInfo( const LocalEvent & le, const fheroes2::Sprite & imageBox, const fheroes2::Point & position = fheroes2::Point() )
     {
         if ( position.x > 0 && position.y > 0 ) {
-            return fheroes2::Rect( position.x - imageBox.width(), position.y, imageBox.width(), imageBox.height() );
+            return { position.x - imageBox.width(), position.y, imageBox.width(), imageBox.height() };
         }
 
         // place box next to mouse cursor
@@ -450,7 +450,7 @@ namespace
         xpos = clamp( xpos, BORDERWIDTH, ( ar.width - imageBox.width() ) + BORDERWIDTH );
         ypos = clamp( ypos, BORDERWIDTH, ( ar.height - imageBox.height() ) + BORDERWIDTH );
 
-        return fheroes2::Rect( xpos, ypos, imageBox.width(), imageBox.height() );
+        return { xpos, ypos, imageBox.width(), imageBox.height() };
     }
 
     uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, uint32_t dst )

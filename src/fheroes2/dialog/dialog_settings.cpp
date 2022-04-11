@@ -184,7 +184,7 @@ void Dialog::ExtSettings( bool readonly )
     listbox.setScrollBarArea( { area.x + 298, area.y + 44, 10, ah - 42 } );
     listbox.setScrollBarImage( scrollbarSlider );
     listbox.SetAreaMaxItems( ah / 40 );
-    listbox.SetAreaItems( fheroes2::Rect( area.x + 10, area.y + 30, 290, ah + 5 ) );
+    listbox.SetAreaItems( { area.x + 10, area.y + 30, 290, ah + 5 } );
     listbox.SetListContent( states );
     listbox.Redraw();
 
