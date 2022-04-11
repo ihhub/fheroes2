@@ -21,6 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
 #include <queue>
 
 #include "agg.h"
@@ -155,7 +156,7 @@ namespace
 
 namespace Battle
 {
-    void GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 exp, LoopedAnimationSequence & sequence, std::string & title, std::string & msg );
+    void GetSummaryParams( int res1, int res2, const HeroBase * hero, u32 exp, LoopedAnimationSequence & sequence, std::string & title, std::string & msg );
     void RedrawBattleSettings( const std::vector<fheroes2::Rect> & areas );
     void RedrawOnOffSetting( const fheroes2::Rect & area, const std::string & name, uint32_t index, bool isSet );
 }
@@ -341,41 +342,57 @@ void Battle::DialogBattleSettings( void )
     }
 }
 
-void Battle::GetSummaryParams( int res1, int res2, const HeroBase & hero, u32 exp, LoopedAnimationSequence & sequence, std::string & title, std::string & msg )
+void Battle::GetSummaryParams( int res1, int res2, const HeroBase * hero, u32 exp, LoopedAnimationSequence & sequence, std::string & title, std::string & msg )
 {
     if ( res1 & RESULT_WINS ) {
         sequence.push( ICN::WINCMBT, true );
-        if ( res2 & RESULT_SURRENDER )
-            title.append( _( "The enemy has surrendered!" ) );
-        else if ( res2 & RESULT_RETREAT )
-            title.append( _( "The enemy has fled!" ) );
-        else
-            title.append( _( "A glorious victory!" ) );
 
-        if ( hero.isHeroes() ) {
+        if ( res2 & RESULT_SURRENDER ) {
+            title.append( _( "The enemy has surrendered!" ) );
+        }
+        else if ( res2 & RESULT_RETREAT ) {
+            title.append( _( "The enemy has fled!" ) );
+        }
+        else {
+            title.append( _( "A glorious victory!" ) );
+        }
+
+        if ( hero && hero->isHeroes() ) {
             msg.append( _( "For valor in combat, %{name} receives %{exp} experience." ) );
-            StringReplace( msg, "%{name}", hero.GetName() );
+            StringReplace( msg, "%{name}", hero->GetName() );
             StringReplace( msg, "%{exp}", exp );
         }
     }
     else if ( res1 & RESULT_RETREAT ) {
+        assert( hero != nullptr );
+
         sequence.push( ICN::CMBTFLE1, false );
         sequence.push( ICN::CMBTFLE2, false );
         sequence.push( ICN::CMBTFLE3, false );
+
         msg.append( _( "The cowardly %{name} flees from battle." ) );
-        StringReplace( msg, "%{name}", hero.GetName() );
+        StringReplace( msg, "%{name}", hero->GetName() );
     }
     else if ( res1 & RESULT_SURRENDER ) {
+        assert( hero != nullptr );
+
         sequence.push( ICN::CMBTSURR, true );
+
         msg.append( _( "%{name} surrenders to the enemy, and departs in shame." ) );
-        StringReplace( msg, "%{name}", hero.GetName() );
+        StringReplace( msg, "%{name}", hero->GetName() );
     }
     else {
         sequence.push( ICN::CMBTLOS1, false );
         sequence.push( ICN::CMBTLOS2, false );
         sequence.push( ICN::CMBTLOS3, true );
-        msg.append( _( "Your force suffer a bitter defeat, and %{name} abandons your cause." ) );
-        StringReplace( msg, "%{name}", hero.GetName() );
+
+        if ( hero && hero->isHeroes() ) {
+            msg.append( _( "Your force suffer a bitter defeat, and %{name} abandons your cause." ) );
+            StringReplace( msg, "%{name}", hero->GetName() );
+        }
+        else {
+            msg.append( _( "Your force suffer a bitter defeat." ) );
+        }
     }
 }
 
@@ -396,42 +413,35 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     std::string title;
     LoopedAnimationSequence sequence;
 
-    if ( ( res.army1 & RESULT_WINS ) && army1->GetCommander() && army1->GetCommander()->isControlHuman() ) {
-        GetSummaryParams( res.army1, res.army2, *army1->GetCommander(), res.exp1, sequence, title, msg );
+    if ( ( res.army1 & RESULT_WINS ) && ( army1->GetControl() & CONTROL_HUMAN ) ) {
+        GetSummaryParams( res.army1, res.army2, army1->GetCommander(), res.exp1, sequence, title, msg );
         AGG::PlayMusic( MUS::BATTLEWIN, false );
     }
-    else if ( ( res.army2 & RESULT_WINS ) && army2->GetCommander() && army2->GetCommander()->isControlHuman() ) {
-        GetSummaryParams( res.army2, res.army1, *army2->GetCommander(), res.exp2, sequence, title, msg );
+    else if ( ( res.army2 & RESULT_WINS ) && ( army2->GetControl() & CONTROL_HUMAN ) ) {
+        GetSummaryParams( res.army2, res.army1, army2->GetCommander(), res.exp2, sequence, title, msg );
         AGG::PlayMusic( MUS::BATTLEWIN, false );
     }
-    else if ( army1->GetCommander() && army1->GetCommander()->isControlHuman() ) {
-        GetSummaryParams( res.army1, res.army2, *army1->GetCommander(), res.exp1, sequence, title, msg );
+    else if ( army1->GetControl() & CONTROL_HUMAN ) {
+        GetSummaryParams( res.army1, res.army2, army1->GetCommander(), res.exp1, sequence, title, msg );
         AGG::PlayMusic( MUS::BATTLELOSE, false );
     }
-    else if ( army2->GetCommander() && army2->GetCommander()->isControlHuman() ) {
-        GetSummaryParams( res.army2, res.army1, *army2->GetCommander(), res.exp2, sequence, title, msg );
+    else if ( army2->GetControl() & CONTROL_HUMAN ) {
+        GetSummaryParams( res.army2, res.army1, army2->GetCommander(), res.exp2, sequence, title, msg );
         AGG::PlayMusic( MUS::BATTLELOSE, false );
     }
-    else
-        // AI move
-        if ( army1->GetCommander() && army1->GetCommander()->isControlAI() ) {
-        // AI wins
-        if ( res.army1 & RESULT_WINS ) {
-            sequence.push( ICN::CMBTLOS1, false );
-            sequence.push( ICN::CMBTLOS2, false );
-            sequence.push( ICN::CMBTLOS3, false );
-            msg.append( _( "Your force suffer a bitter defeat." ) );
-        }
-        else
-            // Human wins
-            if ( res.army2 & RESULT_WINS ) {
-            sequence.push( ICN::WINCMBT, true );
-            msg.append( _( "A glorious victory!" ) );
-        }
+    else {
+        // AI vs AI battle, this dialog should not be shown at all
+        assert( 0 );
+
+        return false;
     }
 
-    if ( sequence.isFinished() ) // Cannot be!
+    if ( sequence.isFinished() ) {
+        // This shouldn't happen
+        assert( 0 );
+
         sequence.push( ICN::UNKNOWN, false );
+    }
 
     const bool isEvilInterface = conf.ExtGameEvilInterface();
     const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::WINLOSEE : ICN::WINLOSE ), 0 );

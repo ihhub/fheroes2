@@ -241,19 +241,21 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
             arena.FadeArena( clearMessageLog );
         }
 
-        if ( isHumanBattle ) {
-            if ( arena.DialogBattleSummary( result, artifactsToTransfer, !showBattle ) ) {
-                // If dialog returns true we will restart battle in manual mode
-                showBattle = true;
+        if ( isHumanBattle && arena.DialogBattleSummary( result, artifactsToTransfer, !showBattle ) ) {
+            // If dialog returns true we will restart battle in manual mode
+            showBattle = true;
 
-                // Reset army commander state
-                if ( commander1 )
-                    commander1->SetSpellPoints( initialSpellPoints1 );
-                if ( commander2 )
-                    commander2->SetSpellPoints( initialSpellPoints2 );
-                continue;
+            // Reset army commander state
+            if ( commander1 ) {
+                commander1->SetSpellPoints( initialSpellPoints1 );
             }
+            if ( commander2 ) {
+                commander2->SetSpellPoints( initialSpellPoints2 );
+            }
+
+            continue;
         }
+
         isBattleOver = true;
 
         if ( loserHero != nullptr && loserAbandoned ) {
