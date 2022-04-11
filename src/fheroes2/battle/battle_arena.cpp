@@ -1364,27 +1364,27 @@ bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defen
     return true;
 }
 
-Battle::Force & Battle::Arena::GetForce1( void )
+Battle::Force & Battle::Arena::GetForce1() const
 {
     return *army1;
 }
 
-Battle::Force & Battle::Arena::GetForce2( void )
+Battle::Force & Battle::Arena::GetForce2() const
 {
     return *army2;
 }
 
-Battle::Force & Battle::Arena::getForce( const int color )
+Battle::Force & Battle::Arena::getForce( const int color ) const
 {
     return ( army1->GetColor() == color ) ? *army1 : *army2;
 }
 
-Battle::Force & Battle::Arena::getEnemyForce( const int color )
+Battle::Force & Battle::Arena::getEnemyForce( const int color ) const
 {
     return ( army1->GetColor() == color ) ? *army2 : *army1;
 }
 
-Battle::Force & Battle::Arena::GetCurrentForce( void )
+Battle::Force & Battle::Arena::GetCurrentForce() const
 {
     return getForce( current_color );
 }
@@ -1406,12 +1406,12 @@ Battle::Result & Battle::Arena::GetResult( void )
 
 bool Battle::Arena::AutoBattleInProgress() const
 {
-    return ( auto_battle & current_color ) && GetCurrentCommander() && !GetCurrentCommander()->isControlAI();
+    return ( auto_battle & current_color ) && !( GetCurrentForce().GetControl() & CONTROL_AI );
 }
 
 bool Battle::Arena::CanToggleAutoBattle() const
 {
-    return GetCurrentCommander() && !GetCurrentCommander()->isControlAI();
+    return !( GetCurrentForce().GetControl() & CONTROL_AI );
 }
 
 const Rand::DeterministicRandomGenerator & Battle::Arena::GetRandomGenerator() const

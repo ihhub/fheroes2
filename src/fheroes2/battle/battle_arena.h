@@ -98,11 +98,11 @@ namespace Battle
         const HeroBase * GetCommander2( void ) const;
         const HeroBase * GetCurrentCommander( void ) const;
 
-        Force & GetForce1( void );
-        Force & GetForce2( void );
-        Force & getForce( const int color );
-        Force & getEnemyForce( const int color );
-        Force & GetCurrentForce( void );
+        Force & GetForce1() const;
+        Force & GetForce2() const;
+        Force & getForce( const int color ) const;
+        Force & getEnemyForce( const int color ) const;
+        Force & GetCurrentForce() const;
 
         int GetArmyColor1( void ) const;
         int GetArmyColor2( void ) const;
