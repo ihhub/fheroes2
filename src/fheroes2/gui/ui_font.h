@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2022                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,34 +20,12 @@
 
 #pragma once
 
-#include <cstdint>
+#include "image.h"
+#include "ui_language.h"
 
 namespace fheroes2
 {
-    class Image;
-    class Sprite;
-    enum class FontSize : uint8_t;
-    struct FontType;
-    enum class SupportedLanguage : int;
+    void generateAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite );
 
-    namespace AGG
-    {
-        const Sprite & GetICN( int icnId, uint32_t index );
-        uint32_t GetICNCount( int icnId );
-
-        // shapeId could be 0, 1, 2 or 3 only
-        const Image & GetTIL( int tilId, uint32_t index, uint32_t shapeId );
-        const Sprite & GetLetter( uint32_t character, uint32_t fontType );
-
-        // Returns the last supported ASCII character in existing font.
-        uint32_t ASCIILastSupportedCharacter( const uint32_t fontType );
-
-        int32_t GetAbsoluteICNHeight( int icnId );
-
-        uint32_t getCharacterLimit( const FontSize fontSize );
-        const Sprite & getChar( const uint8_t character, const FontType & fontType );
-
-        // This function must be called only at the type of setting up a new language.
-        void updateAlphabet( const SupportedLanguage language, const bool loadOriginalAlphabet );
-    }
+    bool isAlphabetSupported( const SupportedLanguage language );
 }
