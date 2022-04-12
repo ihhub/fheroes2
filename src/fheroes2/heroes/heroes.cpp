@@ -1389,13 +1389,13 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
     secondary_skills.FindSkillsForLevelUp( _race, seeds.seedSecondaySkill1, seeds.seedSecondaySkill2, sec1, sec2 );
 
     if ( sec1.isValid() && sec2.isValid() ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec1.Skill() ) << " or " << Skill::Secondary::String( sec2.Skill() ) );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec1.Skill() ) << " or " << Skill::Secondary::String( sec2.Skill() ) )
     }
     else if ( sec1.isValid() ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec1.Skill() ) );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec1.Skill() ) )
     }
     else if ( sec2.isValid() ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec2.Skill() ) );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " select " << Skill::Secondary::String( sec2.Skill() ) )
     }
 
     Skill::Secondary selected;
