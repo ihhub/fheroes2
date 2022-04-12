@@ -7,20 +7,34 @@
 
 set -e -o pipefail
 
-FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.(cpp|cc|c\+\+|cxx|c|h|hpp)$" || true))
+SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
+COPYRIGHT_HEADERS_DIR="$SCRIPT_DIR/copyright_headers"
 
-if [ -z "$FILES_TO_CHECK" ]; then
+CXX_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.(cpp|cc|c\+\+|cxx|c|h|hpp|rc)$" || true))
+MAKEFILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*(CMakeLists.txt|Makefile[^/]*)$" || true))
+
+if [ -z "$CXX_FILES_TO_CHECK" ] && [ -z "$MAKEFILES_TO_CHECK" ]; then
   echo "No source code to check if the copyright headers are correct."
   exit 0
 fi
 
-FORMAT_DIFF=$(python3 "$(dirname "${BASH_SOURCE[0]}")/check_copyright_headers.py" $FILES_TO_CHECK)
+if [ -n "$CXX_FILES_TO_CHECK" ]; then
+  CXX_FORMAT_DIFF=$(python3 "$SCRIPT_DIR/check_copyright_headers.py" "$COPYRIGHT_HEADERS_DIR/full_header_cxx.txt" \
+                                                                     "$COPYRIGHT_HEADERS_DIR/header_template_cxx.txt" \
+                                                                     $CXX_FILES_TO_CHECK)
+fi
+if [ -n "$MAKEFILES_TO_CHECK" ]; then
+  MKF_FORMAT_DIFF=$(python3 "$SCRIPT_DIR/check_copyright_headers.py" "$COPYRIGHT_HEADERS_DIR/full_header_mkf.txt" \
+                                                                     "$COPYRIGHT_HEADERS_DIR/header_template_mkf.txt" \
+                                                                     $MAKEFILES_TO_CHECK)
+fi
 
-if [ -z "$FORMAT_DIFF" ]; then
+if [ -z "$CXX_FORMAT_DIFF" ] && [ -z "$MKF_FORMAT_DIFF" ]; then
   echo "All source code in PR has proper copyright headers."
   exit 0
 else
   echo "Found invalid copyright headers!"
-  echo "$FORMAT_DIFF"
+  [ -n "$CXX_FORMAT_DIFF" ] && echo "$CXX_FORMAT_DIFF"
+  [ -n "$MKF_FORMAT_DIFF" ] && echo "$MKF_FORMAT_DIFF"
   exit 1
 fi
