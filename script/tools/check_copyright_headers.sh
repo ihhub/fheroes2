@@ -8,7 +8,7 @@
 set -e -o pipefail
 
 SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
-COPYRIGHT_HEADERS_DIR="$SCRIPT_DIR/copyright_headers"
+HEADERS_DIR="$SCRIPT_DIR/copyright_headers"
 
 CXX_FILES_TO_CHECK=$(git diff --name-only HEAD^ | (grep -E ".*\.(cpp|cc|c\+\+|cxx|c|h|hpp|rc)$" || true) \
                                                 | (grep -v "^src/thirdparty/.*/.*" || true))
@@ -21,13 +21,13 @@ if [ -z "$CXX_FILES_TO_CHECK" ] && [ -z "$MAKEFILES_TO_CHECK" ]; then
 fi
 
 if [ -n "$CXX_FILES_TO_CHECK" ]; then
-  CXX_FORMAT_DIFF=$(python3 "$SCRIPT_DIR/check_copyright_headers.py" "$COPYRIGHT_HEADERS_DIR/full_header_cxx.txt" \
-                                                                     "$COPYRIGHT_HEADERS_DIR/header_template_cxx.txt" \
+  CXX_FORMAT_DIFF=$(python3 "$SCRIPT_DIR/check_copyright_headers.py" "$HEADERS_DIR/full_header_cxx.txt" \
+                                                                     "$HEADERS_DIR/header_template_cxx.txt" \
                                                                      $CXX_FILES_TO_CHECK)
 fi
 if [ -n "$MAKEFILES_TO_CHECK" ]; then
-  MKF_FORMAT_DIFF=$(python3 "$SCRIPT_DIR/check_copyright_headers.py" "$COPYRIGHT_HEADERS_DIR/full_header_mkf.txt" \
-                                                                     "$COPYRIGHT_HEADERS_DIR/header_template_mkf.txt" \
+  MKF_FORMAT_DIFF=$(python3 "$SCRIPT_DIR/check_copyright_headers.py" "$HEADERS_DIR/full_header_mkf.txt" \
+                                                                     "$HEADERS_DIR/header_template_mkf.txt" \
                                                                      $MAKEFILES_TO_CHECK)
 fi
 
