@@ -122,8 +122,7 @@ Settings::Settings()
 
 Settings::~Settings()
 {
-    if ( !LoadedGameVersion() )
-        BinarySave();
+    BinarySave();
 }
 
 Settings & Settings::Get()
@@ -332,22 +331,7 @@ bool Settings::Read( const std::string & filename )
 
     BinaryLoad();
 
-    if ( video_mode.width > 0 && video_mode.height > 0 ) {
-        PostLoad();
-    }
-
     return true;
-}
-
-void Settings::PostLoad()
-{
-    if ( ExtModes( GAME_HIDE_INTERFACE ) ) {
-        opt_global.SetModes( GLOBAL_SHOWCPANEL );
-        opt_global.ResetModes( GLOBAL_SHOWRADAR );
-        opt_global.ResetModes( GLOBAL_SHOWICONS );
-        opt_global.ResetModes( GLOBAL_SHOWBUTTONS );
-        opt_global.ResetModes( GLOBAL_SHOWSTATUS );
-    }
 }
 
 bool Settings::Save( const std::string & filename ) const
@@ -368,6 +352,8 @@ bool Settings::Save( const std::string & filename ) const
 
     const std::string & data = String();
     file.write( data.data(), data.size() );
+
+    BinarySave();
 
     return true;
 }

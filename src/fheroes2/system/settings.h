@@ -240,9 +240,6 @@ public:
     bool isFirstGameRun() const;
     void resetFirstGameRun();
 
-    void BinarySave() const;
-    void BinaryLoad();
-
     bool CanChangeInGame( u32 ) const;
     bool ExtModes( u32 ) const;
     void ExtSetModes( u32 );
@@ -556,15 +553,15 @@ public:
 
     static std::string GetLastFile( const std::string & prefix, const std::string & name );
 
-protected:
-    void PostLoad();
-
 private:
     friend StreamBase & operator<<( StreamBase &, const Settings & );
     friend StreamBase & operator>>( StreamBase &, Settings & );
 
     Settings();
     ~Settings();
+
+    void BinarySave() const;
+    void BinaryLoad();
 
     BitModes opt_global;
     BitModes opt_game;

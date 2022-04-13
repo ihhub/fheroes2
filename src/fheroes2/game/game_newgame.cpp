@@ -398,8 +398,6 @@ fheroes2::GameMode Game::NewGame()
 
     AGG::PlayMusic( MUS::MAINMENU, true, true );
 
-    Settings & conf = Settings::Get();
-
     // reset last save name
     Game::SetLastSavename( "" );
 
@@ -407,9 +405,6 @@ fheroes2::GameMode Game::NewGame()
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
-
-    // load game settings
-    conf.BinaryLoad();
 
     fheroes2::drawMainMenuScreen();
     const fheroes2::Point buttonPos = drawButtonPanel();
