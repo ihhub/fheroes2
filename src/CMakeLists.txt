@@ -18,29 +18,25 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-if (MSVC)
-	add_compile_options(/W4)
-else()
-	add_compile_options(
-		-pedantic -Wall -Wextra -Wctor-dtor-privacy -Wdouble-promotion -Wfloat-conversion
-		-Wfloat-equal -Winit-self -Woverloaded-virtual -Wredundant-decls -Wshadow -Wundef
-		-Wuninitialized -Wunused
-		)
-endif()
-
-if(ENABLE_STRICT_COMPILATION)
-	if (MSVC)
-		add_compile_options(/WX)
-	else()
-		add_compile_options(-Werror)
-	endif()
-endif()
-
-add_compile_definitions($<$<CONFIG:Debug>:WITH_DEBUG>)
+set(
+	GNU_CC_WARN_OPTS
+	-pedantic -Wall -Wextra -Wdouble-promotion -Wfloat-conversion -Wfloat-equal -Winit-self
+	-Wredundant-decls -Wshadow -Wundef -Wuninitialized -Wunused
+	)
+set(
+	GNU_CXX_WARN_OPTS
+	${GNU_CC_WARN_OPTS} -Wctor-dtor-privacy -Woverloaded-virtual
+	)
+set(
+	MSVC_CC_WARN_OPTS
+	/W4
+	/wd4244 # Suppress C4244 - possible data loss during conversion
+	/wd4267 # Suppress C4267 - possible data loss during conversion from size_t
+	)
 
 add_subdirectory(thirdparty)
 add_subdirectory(engine)
 add_subdirectory(fheroes2)
 if(ENABLE_TOOLS)
 	add_subdirectory(tools)
-endif()
+endif(ENABLE_TOOLS)

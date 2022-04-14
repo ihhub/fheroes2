@@ -22,7 +22,7 @@ if(USE_SYSTEM_LIBSMACKER)
 	include(FindPkgConfig)
 
 	pkg_check_modules(smacker REQUIRED smacker)
-else()
+else(USE_SYSTEM_LIBSMACKER)
 	set(LIBSMACKER_SOURCES
 		libsmacker/smacker.c
 		libsmacker/smk_bitstream.c

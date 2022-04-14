@@ -21,7 +21,9 @@
 cmake_minimum_required(VERSION 3.20)
 cmake_policy(SET CMP0074 NEW)
 
-project(fheroes2 VERSION 0.9.14 LANGUAGES C CXX)
+file(STRINGS ${CMAKE_SOURCE_DIR}/version.txt FHEROES2_VERSION LIMIT_COUNT 1 REGEX "^[0-9]+\.[0-9]+\.[0-9]+$")
+
+project(fheroes2 VERSION ${FHEROES2_VERSION} LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 
@@ -45,7 +47,7 @@ cmake_dependent_option(MACOS_APP_BUNDLE "Create a Mac app bundle" OFF "APPLE" OF
 cmake_dependent_option(GET_HOMM2_DEMO "Fetch and install the HoMM II demo data" OFF "NOT MACOS_APP_BUNDLE" OFF)
 
 set(USE_SDL_VERSION SDL2 CACHE STRING "Version of the SDL library used")
-set(FHEROES2_DATA "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}" CACHE STRING "Path to the fheroes2 data directory (relative to CMAKE_INSTALL_PREFIX)")
+set(FHEROES2_DATA ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME} CACHE STRING "Path to the fheroes2 data directory (relative to CMAKE_INSTALL_PREFIX)")
 
 # For ComboBox in CMake GUI
 set_property(CACHE USE_SDL_VERSION PROPERTY STRINGS SDL SDL2)
@@ -103,32 +105,32 @@ if(MACOS_APP_BUNDLE)
 	add_custom_target(
 		app_bundle_h2d_files
 		ALL
-		COMMAND mkdir -p "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/h2d"
-		COMMAND cp *.h2d "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/h2d"
+		COMMAND mkdir -p ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/h2d
+		COMMAND cp *.h2d ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/h2d
 		DEPENDS fheroes2
-		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/files/data"
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/files/data
 		)
 	add_custom_target(
 		app_bundle_key_file
 		ALL
-		COMMAND cp fheroes2.key "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources"
+		COMMAND cp fheroes2.key ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources
 		DEPENDS fheroes2
-		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 		)
 	add_custom_target(
 		app_bundle_translations
 		ALL
-		COMMAND mkdir -p "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/translations"
-		COMMAND cp *.mo "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/translations"
+		COMMAND mkdir -p ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/translations
+		COMMAND cp *.mo ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/translations
 		DEPENDS translations
-		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/files/lang"
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/files/lang
 		)
 	add_custom_target(
 		run_dylibbundler
 		ALL
-		COMMAND dylibbundler -od -b -x "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/MacOS/${PROJECT_NAME}" -d "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/libs"
+		COMMAND dylibbundler -od -b -x ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/MacOS/${PROJECT_NAME} -d ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/libs
 		DEPENDS fheroes2 app_bundle_h2d_files app_bundle_key_file app_bundle_translations
-		WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 		)
 endif(MACOS_APP_BUNDLE)
 
