@@ -1611,9 +1611,7 @@ namespace
             font[201 - 32].setPosition( font[37].x(), font[37].y() - 3 );
             updateNormalFontLetterShadow( font[201 - 32] );
 
-            // Proper lowercase k. Need to find solution for k changing
-            // for other languages in language menu upon selecting Norwegian.
-            // Can be seen for Polish/polski.
+            // Proper lowercase k.
             fheroes2::FillTransform( font[75], 4, 1, 5, 8, 1 );
             fheroes2::Copy( font[43], 6, 5, font[75], 4, 7, 3, 1 );
             fheroes2::Copy( font[43], 6, 4, font[75], 4, 6, 4, 1 );
