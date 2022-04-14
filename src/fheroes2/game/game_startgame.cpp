@@ -964,42 +964,43 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 stopHero = true;
             }
         }
-        // cursor over radar
-        else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( radar.GetRect() ) ) {
+        // cursor is over the status window
+        else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.MouseCursor( statusWindow.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-            radar.QueueEventProcessing();
+            statusWindow.QueueEventProcessing();
         }
-        // cursor over icons panel
-        else if ( ( !isHiddenInterface || conf.ShowIcons() ) && le.MouseCursor( iconsPanel.GetRect() ) ) {
-            if ( Cursor::POINTER != cursor.Themes() )
-                cursor.SetThemes( Cursor::POINTER );
-            iconsPanel.QueueEventProcessing();
-        }
-        // cursor over buttons area
+        // cursor is over the buttons area
         else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.MouseCursor( buttonsArea.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             res = buttonsArea.QueueEventProcessing();
             isCursorOverButtons = true;
         }
-        // cursor over status area
-        else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.MouseCursor( statusWindow.GetRect() ) ) {
+        // cursor is over the icons panel
+        else if ( ( !isHiddenInterface || conf.ShowIcons() ) && le.MouseCursor( iconsPanel.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-            statusWindow.QueueEventProcessing();
+            iconsPanel.QueueEventProcessing();
         }
-        // cursor over control panel
+        // cursor is over the radar
+        else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( radar.GetRect() ) ) {
+            if ( Cursor::POINTER != cursor.Themes() )
+                cursor.SetThemes( Cursor::POINTER );
+            radar.QueueEventProcessing();
+        }
+        // cursor is over the control panel
         else if ( isHiddenInterface && conf.ShowControlPanel() && le.MouseCursor( controlPanel.GetArea() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             res = controlPanel.QueueEventProcessing();
         }
-        // cursor over game area
+        // cursor is over the game area
         else if ( le.MouseCursor( gameArea.GetROI() ) && !gameArea.NeedScroll() ) {
             gameArea.QueueEventProcessing();
         }
-        else if ( !gameArea.NeedScroll() ) { // empty interface area so we set cursor to a normal pointer
+        // cursor is somewhere else
+        else if ( !gameArea.NeedScroll() ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             gameArea.ResetCursorPosition();

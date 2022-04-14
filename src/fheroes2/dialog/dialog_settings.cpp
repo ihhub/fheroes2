@@ -221,5 +221,5 @@ void Dialog::ExtSettings( bool readonly )
         display.render();
     }
 
-    Settings::Get().BinarySave();
+    Settings::Get().Save( Settings::configFileName );
 }
