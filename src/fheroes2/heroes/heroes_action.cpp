@@ -2079,7 +2079,6 @@ void ActionToAbandoneMine( Heroes & hero, const MP2::MapObjectType objectType, s
     }
 }
 
-/* capture color object */
 void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
 {
     Maps::Tiles & tile = world.GetTiles( dst_index );
@@ -2172,7 +2171,7 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
             else
                 DialogCaptureResourceObject( header, body, resource );
 
-            // update abandone mine
+            // restore abandoned mine
             if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
                 Maps::Tiles::UpdateAbandoneMineSprite( tile );
                 hero.SetMapsObject( MP2::OBJ_MINES );
@@ -2181,9 +2180,8 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
             tile.QuantitySetColor( hero.GetColor() );
         }
     }
-    else
-        // set guardians
-        if ( Settings::Get().ExtWorldAllowSetGuardian() ) {
+    // set guardians
+    else if ( Settings::Get().ExtWorldAllowSetGuardian() ) {
         CapturedObject & co = world.GetCapturedObject( dst_index );
         Troop & troop1 = co.GetTroop();
         Troop troop2 = troop1;

@@ -823,10 +823,10 @@ namespace AI
         if ( !hero.isFriends( tile.QuantityColor() ) ) {
             bool capture = true;
 
+            // check guardians
             if ( tile.isCaptureObjectProtected() ) {
-                const Troop & troop = tile.QuantityTroop();
-                Army army;
-                army.JoinTroop( troop );
+                Army army( tile );
+                const Monster & mons = tile.QuantityMonster();
 
                 Battle::Result result = Battle::Loader( hero.GetArmy(), army, dst_index );
 
@@ -837,12 +837,12 @@ namespace AI
                 else {
                     capture = false;
                     AIBattleLose( hero, result, true, Color::NONE );
-                    tile.MonsterSetCount( army.GetCountMonsters( troop.GetMonster() ) );
+                    tile.MonsterSetCount( army.GetCountMonsters( mons ) );
                 }
             }
 
             if ( capture ) {
-                // update abandone mine
+                // restore abandoned mine
                 if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
                     Maps::Tiles::UpdateAbandoneMineSprite( tile );
                     hero.SetMapsObject( MP2::OBJ_MINES );
