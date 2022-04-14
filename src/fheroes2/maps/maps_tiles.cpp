@@ -600,7 +600,7 @@ bool Maps::Tiles::isShadowSprite( const uint8_t tileset, const uint8_t icnIndex 
     return isShadowSprite( MP2::GetICNObject( tileset ), icnIndex );
 }
 
-void Maps::Tiles::UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, const int resource )
+void Maps::Tiles::UpdateAbandonedMineLeftSprite( uint8_t & tileset, uint8_t & index, const int resource )
 {
     if ( ICN::OBJNGRAS == MP2::GetICNObject( tileset ) && 6 == index ) {
         tileset = 128; // MTNGRAS
@@ -633,7 +633,7 @@ void Maps::Tiles::UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & ind
     }
 }
 
-void Maps::Tiles::UpdateAbandoneMineRightSprite( uint8_t & tileset, uint8_t & index )
+void Maps::Tiles::UpdateAbandonedMineRightSprite( uint8_t & tileset, uint8_t & index )
 {
     if ( ICN::OBJNDIRT == MP2::GetICNObject( tileset ) && index == 9 ) {
         tileset = 104;
@@ -2068,25 +2068,25 @@ void Maps::Tiles::RemoveJailSprite( void )
     Remove( uniq );
 }
 
-void Maps::Tiles::UpdateAbandoneMineSprite( Tiles & tile )
+void Maps::Tiles::UpdateAbandonedMineSprite( Tiles & tile )
 {
     if ( tile.uniq ) {
         const int type = tile.QuantityResourceCount().first;
 
-        Tiles::UpdateAbandoneMineLeftSprite( tile.objectTileset, tile.objectIndex, type );
+        Tiles::UpdateAbandonedMineLeftSprite( tile.objectTileset, tile.objectIndex, type );
         for ( Addons::iterator it = tile.addons_level1.begin(); it != tile.addons_level1.end(); ++it )
-            Tiles::UpdateAbandoneMineLeftSprite( it->object, it->index, type );
+            Tiles::UpdateAbandonedMineLeftSprite( it->object, it->index, type );
 
         if ( Maps::isValidDirection( tile._index, Direction::RIGHT ) ) {
             Tiles & tile2 = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::RIGHT ) );
             TilesAddon * mines = tile2.FindAddonLevel1( tile.uniq );
 
             if ( mines )
-                Tiles::UpdateAbandoneMineRightSprite( mines->object, mines->index );
+                Tiles::UpdateAbandonedMineRightSprite( mines->object, mines->index );
 
             if ( tile2.GetObject() == MP2::OBJN_ABANDONEDMINE ) {
                 tile2.SetObject( MP2::OBJN_MINES );
-                Tiles::UpdateAbandoneMineRightSprite( tile2.objectTileset, tile2.objectIndex );
+                Tiles::UpdateAbandonedMineRightSprite( tile2.objectTileset, tile2.objectIndex );
             }
         }
     }

@@ -145,7 +145,7 @@ void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType object
 void ActionToDwellingRecruitMonster( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToArtesianSpring( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
-void ActionToAbandoneMine( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
+void ActionToAbandonedMine( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToXanadu( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectType, const std::string & defaultMessage );
 void ActionToMagellanMaps( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
@@ -470,7 +470,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
             break;
 
         case MP2::OBJ_ABANDONEDMINE:
-            ActionToAbandoneMine( *this, objectType, tileIndex );
+            ActionToAbandonedMine( *this, objectType, tileIndex );
             break;
 
         // accept army
@@ -2070,7 +2070,7 @@ void ActionToWhirlpools( Heroes & hero, s32 index_from )
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() );
 }
 
-void ActionToAbandoneMine( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
+void ActionToAbandonedMine( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
 {
     if ( Dialog::YES
          == Dialog::Message( MP2::StringObject( MP2::OBJ_ABANDONEDMINE ),
@@ -2173,7 +2173,7 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
 
             // restore abandoned mine
             if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
-                Maps::Tiles::UpdateAbandoneMineSprite( tile );
+                Maps::Tiles::UpdateAbandonedMineSprite( tile );
                 hero.SetMapsObject( MP2::OBJ_MINES );
             }
 

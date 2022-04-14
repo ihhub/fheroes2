@@ -132,7 +132,7 @@ namespace AI
     void AIToDwellingRecruitMonster( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
     void AIToDwellingBattleMonster( Heroes & hero, const MP2::MapObjectType objectType, const int32_t tileIndex );
     void AIToStables( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
-    void AIToAbandoneMine( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
+    void AIToAbandonedMine( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
     void AIToBarrier( const Heroes & hero, s32 dst_index );
     void AIToTravellersTent( const Heroes & hero, s32 dst_index );
     void AIToShipwreckSurvivor( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
@@ -304,7 +304,7 @@ namespace AI
             AIToCaptureObject( hero, objectType, dst_index );
             break;
         case MP2::OBJ_ABANDONEDMINE:
-            AIToAbandoneMine( hero, objectType, dst_index );
+            AIToAbandonedMine( hero, objectType, dst_index );
             break;
 
         case MP2::OBJ_SHIPWRECKSURVIVOR:
@@ -844,7 +844,7 @@ namespace AI
             if ( capture ) {
                 // restore abandoned mine
                 if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
-                    Maps::Tiles::UpdateAbandoneMineSprite( tile );
+                    Maps::Tiles::UpdateAbandonedMineSprite( tile );
                     hero.SetMapsObject( MP2::OBJ_MINES );
                 }
 
@@ -1400,7 +1400,7 @@ namespace AI
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() );
     }
 
-    void AIToAbandoneMine( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
+    void AIToAbandonedMine( Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index )
     {
         AIToCaptureObject( hero, objectType, dst_index );
     }
