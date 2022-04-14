@@ -654,7 +654,7 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell )
         tile.SetQuantity3( static_cast<uint8_t>( spell.GetID() ) );
 
         if ( spell == Spell::HAUNT ) {
-            world.CaptureObject( tile.GetIndex(), Color::UNUSED );
+            world.CaptureObject( tile.GetIndex(), Color::NONE );
             tile.removeFlags();
             hero.SetMapsObject( MP2::OBJ_ABANDONEDMINE );
         }
