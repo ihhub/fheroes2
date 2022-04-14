@@ -241,19 +241,21 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
             arena.FadeArena( clearMessageLog );
         }
 
-        if ( isHumanBattle ) {
-            if ( arena.DialogBattleSummary( result, artifactsToTransfer, !showBattle ) ) {
-                // If dialog returns true we will restart battle in manual mode
-                showBattle = true;
+        if ( isHumanBattle && arena.DialogBattleSummary( result, artifactsToTransfer, !showBattle ) ) {
+            // If dialog returns true we will restart battle in manual mode
+            showBattle = true;
 
-                // Reset army commander state
-                if ( commander1 )
-                    commander1->SetSpellPoints( initialSpellPoints1 );
-                if ( commander2 )
-                    commander2->SetSpellPoints( initialSpellPoints2 );
-                continue;
+            // Reset army commander state
+            if ( commander1 ) {
+                commander1->SetSpellPoints( initialSpellPoints1 );
             }
+            if ( commander2 ) {
+                commander2->SetSpellPoints( initialSpellPoints2 );
+            }
+
+            continue;
         }
+
         isBattleOver = true;
 
         if ( loserHero != nullptr && loserAbandoned ) {
@@ -307,20 +309,15 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() );
 
-    // update army
-    if ( commander1 && commander1->isHeroes() ) {
-        army1.resetInvalidMonsters();
-        // hard reset army
-        if ( !army1.isValid() || ( result.army1 & RESULT_RETREAT ) )
-            army1.Reset( false );
-    }
+    army1.resetInvalidMonsters();
+    army2.resetInvalidMonsters();
 
-    // update army
-    if ( commander2 && commander2->isHeroes() ) {
-        army2.resetInvalidMonsters();
-        // hard reset army
-        if ( !army2.isValid() || ( result.army2 & RESULT_RETREAT ) )
-            army2.Reset( false );
+    // reset the hero's army to the minimum army if the hero retreated or was defeated
+    if ( commander1 && commander1->isHeroes() && ( !army1.isValid() || ( result.army1 & RESULT_RETREAT ) ) ) {
+        army1.Reset( false );
+    }
+    if ( commander2 && commander2->isHeroes() && ( !army2.isValid() || ( result.army2 & RESULT_RETREAT ) ) ) {
+        army2.Reset( false );
     }
 
     DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1: " << ( result.army1 & RESULT_WINS ? "wins" : "loss" ) << ", army2: " << ( result.army2 & RESULT_WINS ? "wins" : "loss" ) );
