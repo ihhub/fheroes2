@@ -2193,9 +2193,6 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
             troop1.Set( troop2.GetMonster(), troop2.GetCount() );
     }
 
-    if ( objectType == MP2::OBJ_LIGHTHOUSE )
-        world.CaptureObject( dst_index, hero.GetColor() );
-
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " captured: " << MP2::StringObject( objectType ) );
 }
 
