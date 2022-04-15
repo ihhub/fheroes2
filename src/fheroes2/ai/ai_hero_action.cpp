@@ -836,8 +836,11 @@ namespace AI
                 }
                 else {
                     capture = false;
+
                     AIBattleLose( hero, result, true, Color::NONE );
-                    tile.MonsterSetCount( army.GetCountMonsters( mons ) );
+
+                    Troop & troop = world.GetCapturedObject( dst_index ).GetTroop();
+                    troop.SetCount( army.GetCountMonsters( mons ) );
                 }
             }
 
