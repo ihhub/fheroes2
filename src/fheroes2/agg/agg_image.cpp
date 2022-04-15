@@ -1349,8 +1349,8 @@ namespace fheroes2
                 populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 4 ), digits, isColorCursor ? Point( -2, 1 ) : Point( -4, -6 ) );
                 populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 5 ), digits, isColorCursor ? Point( 1, 1 ) : Point( -6, -6 ) );
                 populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 6 ), digits, isColorCursor ? Point( 0, 1 ) : Point( -8, -7 ) );
-                populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 7 ), digits, isColorCursor ? Point( -2, 1 ) : Point( -15, -8) );
-                populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 8 ), digits, isColorCursor ? Point( 1, 1 ) : Point( -16, -11) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 7 ), digits, isColorCursor ? Point( -2, 1 ) : Point( -15, -8 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 8 ), digits, isColorCursor ? Point( 1, 1 ) : Point( -16, -11 ) );
                 populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 9 ), digits, isColorCursor ? Point( -6, 1 ) : Point( -8, -1 ) );
                 populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 28 ), digits, isColorCursor ? Point( 0, 1 ) : Point( -8, -7) );
 
@@ -1649,7 +1649,7 @@ namespace fheroes2
                 LoadOriginalICN( ICN::ADVMCO );
 
                 _icnVsSprite[id].resize( _icnVsSprite[ICN::ADVMCO].size() );
-                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i) {
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
                     std::string digit;
                     if ( i < 9 ) {
                         digit += '0';
@@ -1665,7 +1665,7 @@ namespace fheroes2
                 LoadOriginalICN( ICN::SPELCO );
 
                 _icnVsSprite[id].resize( _icnVsSprite[ICN::SPELCO].size() );
-                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i) {
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
                     std::string digit;
                     if ( i < 10 ) {
                         digit += '0';
@@ -1681,7 +1681,7 @@ namespace fheroes2
                 LoadOriginalICN( ICN::CMSECO );
 
                 _icnVsSprite[id].resize( _icnVsSprite[ICN::CMSECO].size() );
-                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i) {
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
                     std::string digit;
                     if ( i < 9 ) {
                         digit += '0';
