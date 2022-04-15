@@ -111,11 +111,16 @@ namespace
             return {};
         }
 
-        const uint8_t blackColor = data[1];
+        StreamBuf imageStream( data );
+
+        const uint8_t blackColor = imageStream.get();
+
+        // Skip the second byte
+        imageStream.get();
         const uint8_t whiteColor = 11;
 
-        const int32_t width = *( reinterpret_cast<const uint16_t *>( data.data() + 2 ) );
-        const int32_t height = *( reinterpret_cast<const uint16_t *>( data.data() + 4 ) );
+        const int32_t width = imageStream.get16();
+        const int32_t height = imageStream.get16();
 
         if ( static_cast<int32_t>( data.size() ) != 6 + width * height ) {
             // It is an invalid BMP file.
