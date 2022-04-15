@@ -1351,7 +1351,7 @@ namespace fheroes2
                 populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 7 ), digits, isColorCursor ? Point( -2, 1 ) : Point( -15, -8 ) );
                 populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 8 ), digits, isColorCursor ? Point( 1, 1 ) : Point( -16, -11 ) );
                 populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 9 ), digits, isColorCursor ? Point( -6, 1 ) : Point( -8, -1 ) );
-                populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 28 ), digits, isColorCursor ? Point( 0, 1 ) : Point( -8, -7) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 28 ), digits, isColorCursor ? Point( 0, 1 ) : Point( -8, -7 ) );
 
                 return true;
             }

@@ -64,7 +64,7 @@ bool Cursor::SetThemes( int name, bool force )
             icnID = _blackWhiteCursorThemes ? ICN::BLACK_CURSOR_CMSSBW : ICN::CMSECO;
             break;
         case 0x4000:
-            icnID = _blackWhiteCursorThemes ?  ICN::BLACK_CURSOR_ADVENTURE_MAP : ICN::COLOR_CURSOR_ADVENTURE_MAP;
+            icnID = _blackWhiteCursorThemes ? ICN::BLACK_CURSOR_ADVENTURE_MAP : ICN::COLOR_CURSOR_ADVENTURE_MAP;
             break;
         default:
             break;
