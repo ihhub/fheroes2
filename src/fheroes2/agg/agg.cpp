@@ -83,7 +83,7 @@ namespace
             ListFiles musicFilePaths;
             musicFilePaths.ReadDir( dir, fileName, false );
             if ( musicFilePaths.empty() ) {
-               continue;
+                continue;
             }
 
             std::string correctFilePath = System::ConcatePath( dir, fileName );
@@ -610,7 +610,7 @@ void AGG::PlayMusicInternally( const int mus, const MusicSource musicType, const
 
         // To avoid extra I/O calls to data storage it might be useful to remember the last successful type of music and try to search for it next time.
         static std::array<MusicFileType, 3> musicFileTypes{ MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::DOS_VERSION ),
-            MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::WIN_VERSION ), MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::MAPPED ) };
+                                                            MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::WIN_VERSION ), MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::MAPPED ) };
 
         std::string filename;
 
