@@ -943,7 +943,8 @@ namespace ICN
         SWAP_ARROW_LEFT_TO_RIGHT,
         SWAP_ARROW_RIGHT_TO_LEFT,
 
-        CURSOR_ADVENTURE_MAP,
+        COLOR_CURSOR_ADVENTURE_MAP,
+        BLACK_CURSOR_ADVENTURE_MAP,
 
         DISMISS_HERO_DISABLED_BUTTON,
         NEW_CAMPAIGN_DISABLED_BUTTON,
@@ -962,6 +963,10 @@ namespace ICN
         GOOD_MARKET_BUTTON,
         EVIL_ARMY_BUTTON,
         EVIL_MARKET_BUTTON,
+
+        BLACK_CURSOR_ADVMBW,
+        BLACK_CURSOR_SPELBW,
+        BLACK_CURSOR_CMSSBW,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
