@@ -829,7 +829,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
 {
     Reset();
 
-    const bool isCaptureObject = MP2::isCaptureObject( tile.GetObject() );
+    const bool isCaptureObject = MP2::isCaptureObject( tile.GetObject( false ) );
     if ( isCaptureObject )
         color = tile.QuantityColor();
 
