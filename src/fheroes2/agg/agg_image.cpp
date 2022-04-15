@@ -113,7 +113,6 @@ namespace
 
         const uint8_t blackColor = data[1];
         const uint8_t whiteColor = 11;
-        
 
         const int32_t width = *( reinterpret_cast<const uint16_t *>( data.data() + 2 ) );
         const int32_t height = *( reinterpret_cast<const uint16_t *>( data.data() + 4 ) );
