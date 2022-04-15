@@ -845,7 +845,7 @@ namespace AI
             }
 
             if ( capture ) {
-                // restore abandoned mine
+                // restore the abandoned mine
                 if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
                     Maps::Tiles::UpdateAbandonedMineSprite( tile );
                     hero.SetMapsObject( MP2::OBJ_MINES );

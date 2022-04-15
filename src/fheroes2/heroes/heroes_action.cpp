@@ -2174,7 +2174,7 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
             else
                 DialogCaptureResourceObject( header, body, resource );
 
-            // restore abandoned mine
+            // restore the abandoned mine
             if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
                 Maps::Tiles::UpdateAbandonedMineSprite( tile );
                 hero.SetMapsObject( MP2::OBJ_MINES );
