@@ -214,19 +214,87 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     loadingScreen.Blit( display.width() / 2 - loadingScreen.w() / 2, display.height() / 2 - loadingScreen.h() / 2 );
     display.render();
 
-    const std::vector<fheroes2::Rect> campaignRoi{ { 382 + roiOffset.x, 58 + roiOffset.y, 222, 298 }, { 30 + roiOffset.x, 59 + roiOffset.y, 224, 297 } };
-
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
 
     Video::ShowVideo( "INTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
 
-    AGG::ResetAudio();
-    Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::IGNORE_VIDEO );
-    const int chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", Video::VideoAction::LOOP_VIDEO, campaignRoi );
+    const std::array<fheroes2::Rect, 2> campaignRoi{ fheroes2::Rect( 382 + roiOffset.x, 58 + roiOffset.y, 222, 298 ),
+                                                     fheroes2::Rect( 30 + roiOffset.x, 59 + roiOffset.y, 224, 297 ) };
 
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
     campaignSaveData.reset();
-    campaignSaveData.setCurrentScenarioInfoId( { chosenCampaign, 0 } );
+
+    std::unique_ptr<SMKVideoSequence> video = getVideo( "CHOOSE.SMK" );
+    if ( !video ) {
+        campaignSaveData.setCurrentScenarioInfoId( { Campaign::ROLAND_CAMPAIGN, 0 } );
+        return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
+    }
+
+    const uint64_t customDelay = static_cast<uint64_t>( std::lround( 1000.0 / video->fps() ) );
+
+    AGG::ResetAudio();
+
+    Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::IGNORE_VIDEO );
+
+    const fheroes2::ScreenPaletteRestorer screenRestorer;
+
+    std::vector<uint8_t> palette = video->getCurrentPalette();
+    screenRestorer.changePalette( palette.data() );
+
+    const CursorRestorer cursorRestorer2( true, Cursor::POINTER );
+
+    Cursor::Get().setVideoPlaybackCursor();
+
+    LocalEvent & le = LocalEvent::Get();
+    while ( le.HandleEvents( Game::isCustomDelayNeeded( customDelay ) ) ) {
+        if ( le.MouseClickLeft( campaignRoi[0] ) ) {
+            campaignSaveData.setCurrentScenarioInfoId( { Campaign::ROLAND_CAMPAIGN, 0 } );
+            break;
+        }
+        if ( le.MouseClickLeft( campaignRoi[1] ) ) {
+            campaignSaveData.setCurrentScenarioInfoId( { Campaign::ARCHIBALD_CAMPAIGN, 0 } );
+            break;
+        }
+
+        size_t highlightCampaignId = campaignRoi.size();
+
+        for ( size_t i = 0; i < campaignRoi.size(); ++i ) {
+            if ( le.MouseCursor( campaignRoi[i] ) ) {
+                highlightCampaignId = i;
+                break;
+            }
+        }
+
+        if ( Game::validateCustomAnimationDelay( customDelay ) ) {
+            fheroes2::Rect frameRoi( roiOffset.x, roiOffset.y, 0, 0 );
+            video->getNextFrame( display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, palette );
+
+            // fheroes2::Blit( display, frameRoi.x - roiOffset.x, frameRoi.y - roiOffset.y, display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height );
+
+            if ( highlightCampaignId < campaignRoi.size() ) {
+                const fheroes2::Rect & roi = campaignRoi[highlightCampaignId];
+                fheroes2::DrawRect( display, roi, 51 );
+                fheroes2::DrawRect( display, fheroes2::Rect( roi.x - 1, roi.y - 1, roi.width + 2, roi.height + 2 ), 51 );
+            }
+
+            display.render( frameRoi );
+
+            if ( video->frameCount() <= video->getCurrentFrame() ) {
+                video->resetFrame();
+            }
+        }
+    }
+
+
+    // Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::IGNORE_VIDEO );
+    // const int chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", Video::VideoAction::LOOP_VIDEO, campaignRoi );
+
+    // campaignSaveData.setCurrentScenarioInfoId( { chosenCampaign, 0 } );
+
+    screenRestorer.changePalette( nullptr );
+
+    display.fill( 0 );
+    display.render();
 
     return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
 }
