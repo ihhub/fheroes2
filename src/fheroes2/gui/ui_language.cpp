@@ -25,6 +25,7 @@
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_font.h"
 
 #include <cassert>
 #include <map>
@@ -95,7 +96,7 @@ namespace fheroes2
                                                              SupportedLanguage::Russian, SupportedLanguage::Italian, SupportedLanguage::Norwegian };
 
         for ( const SupportedLanguage language : possibleLanguages ) {
-            if ( language != resourceLanguage && AGG::isAlphabetSupported( language ) ) {
+            if ( language != resourceLanguage && isAlphabetSupported( language ) ) {
                 languages.emplace_back( language );
             }
         }
