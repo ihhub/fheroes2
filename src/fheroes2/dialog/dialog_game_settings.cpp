@@ -81,7 +81,7 @@ namespace
 
     void drawResolution( const fheroes2::Rect & optionRoi )
     {
-        fheroes2::Display & display = fheroes2::Display::instance();
+        const fheroes2::Display & display = fheroes2::Display::instance();
         const std::string resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() );
 
         drawOption( optionRoi, _( "Resolution" ), resolutionName.c_str(), ICN::SPANEL, 16 );
