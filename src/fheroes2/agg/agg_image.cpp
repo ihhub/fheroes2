@@ -117,7 +117,7 @@ namespace
         const int32_t width = *( reinterpret_cast<const uint16_t *>( data.data() + 2 ) );
         const int32_t height = *( reinterpret_cast<const uint16_t *>( data.data() + 4 ) );
 
-        if ( static_cast<int32_t>( data.size() ) !=  6 + width * height ) {
+        if ( static_cast<int32_t>( data.size() ) != 6 + width * height ) {
             // It is an invalid BMP file.
             return {};
         }
