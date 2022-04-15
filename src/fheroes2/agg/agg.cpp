@@ -89,7 +89,7 @@ namespace
             for ( const std::string & path : musicFilePaths ) {
                 const std::string temp = StringLower( path );
                 if ( temp == correctFilePath ) {
-                    fullPath = std::move( correctFilePath );
+                    fullPath = path;
                     return true;
                 }
             }
