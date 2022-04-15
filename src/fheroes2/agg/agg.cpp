@@ -34,18 +34,15 @@
 #include "agg_file.h"
 #include "audio.h"
 #include "dir.h"
-#include "embedded_image.h"
 #include "game.h"
 #include "localevent.h"
 #include "logging.h"
 #include "m82.h"
 #include "mus.h"
-#include "screen.h"
 #include "settings.h"
 #include "system.h"
 #include "tools.h"
 #include "xmi.h"
-#include "zzlib.h"
 
 namespace
 {
