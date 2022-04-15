@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <condition_variable>
 #include <map>
@@ -33,21 +34,31 @@
 #include "agg_file.h"
 #include "audio.h"
 #include "dir.h"
-#include "embedded_image.h"
 #include "game.h"
 #include "localevent.h"
 #include "logging.h"
 #include "m82.h"
 #include "mus.h"
-#include "screen.h"
 #include "settings.h"
 #include "system.h"
 #include "tools.h"
 #include "xmi.h"
-#include "zzlib.h"
 
 namespace
 {
+    struct MusicFileType
+    {
+        explicit MusicFileType( const MUS::EXTERNAL_MUSIC_TYPE type_ )
+            : type( type_ )
+        {
+            // Do nothing.
+        }
+
+        MUS::EXTERNAL_MUSIC_TYPE type = MUS::EXTERNAL_MUSIC_TYPE::WIN_VERSION;
+
+        std::array<std::string, 3> extension{ ".ogg", ".mp3", ".flac" };
+    };
+
     const std::string externalMusicDirectory( "music" );
 
     std::vector<std::string> getMusicDirectories()
@@ -63,44 +74,56 @@ namespace
         return directories;
     }
 
-    std::string getExternalMusicFile( const int musicTrackId, const MUS::EXTERNAL_MUSIC_TYPE musicType, const std::vector<std::string> & directories )
+    bool findMusicFile( const std::vector<std::string> & directories, const std::string & fileName, std::string & fullPath )
+    {
+        for ( const std::string & dir : directories ) {
+            ListFiles musicFilePaths;
+            musicFilePaths.ReadDir( dir, fileName, false );
+            if ( musicFilePaths.empty() ) {
+                continue;
+            }
+
+            std::string correctFilePath = System::ConcatePath( dir, fileName );
+            correctFilePath = StringLower( correctFilePath );
+
+            for ( const std::string & path : musicFilePaths ) {
+                const std::string temp = StringLower( path );
+                if ( temp == correctFilePath ) {
+                    fullPath = path;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    std::string getExternalMusicFile( const int musicTrackId, const std::vector<std::string> & directories, MusicFileType & musicType )
     {
         if ( directories.empty() ) {
             // Nothing to search.
             return {};
         }
 
-        // Instead of relying some generic functions we want to have maximum performance as I/O operations are the slowest.
-        std::vector<std::string> possibleFilenames;
-        possibleFilenames.reserve( directories.size() );
+        std::string fullPath;
 
-        for ( const std::string & dir : directories ) {
-            possibleFilenames.emplace_back( System::ConcatePath( dir, MUS::getFileName( musicTrackId, musicType, ".flac" ) ) );
+        std::string fileName = MUS::getFileName( musicTrackId, musicType.type, musicType.extension[0].c_str() );
+        if ( findMusicFile( directories, fileName, fullPath ) ) {
+            return fullPath;
         }
 
-        // Search for FLAC files as they have the best audio quality.
-        for ( const std::string & filename : possibleFilenames ) {
-            if ( System::IsFile( filename ) ) {
-                return filename;
-            }
+        fheroes2::replaceStringEnding( fileName, musicType.extension[0].c_str(), musicType.extension[1].c_str() );
+        if ( findMusicFile( directories, fileName, fullPath ) ) {
+            // Swap extensions to improve cache hit.
+            std::swap( musicType.extension[0], musicType.extension[1] );
+            return fullPath;
         }
 
-        // None of FLAC files found. Try OGG files.
-        for ( std::string & filename : possibleFilenames ) {
-            fheroes2::replaceStringEnding( filename, ".flac", ".ogg" );
-
-            if ( System::IsFile( filename ) ) {
-                return filename;
-            }
-        }
-
-        // No luck with even OGG. Try with MP3.
-        for ( std::string & filename : possibleFilenames ) {
-            fheroes2::replaceStringEnding( filename, ".ogg", ".mp3" );
-
-            if ( System::IsFile( filename ) ) {
-                return filename;
-            }
+        fheroes2::replaceStringEnding( fileName, musicType.extension[1].c_str(), musicType.extension[2].c_str() );
+        if ( findMusicFile( directories, fileName, fullPath ) ) {
+            // Swap extensions to improve cache hit.
+            std::swap( musicType.extension[0], musicType.extension[2] );
+            return fullPath;
         }
 
         // Looks like music file does not exist.
@@ -582,13 +605,21 @@ void AGG::PlayMusicInternally( const int mus, const MusicSource musicType, const
     if ( musicType == MUSIC_EXTERNAL ) {
         const std::vector<std::string> & musicDirectories = getMusicDirectories();
 
-        std::string filename = getExternalMusicFile( mus, MUS::EXTERNAL_MUSIC_TYPE::DOS_VERSION, musicDirectories );
-        if ( filename.empty() ) {
-            filename = getExternalMusicFile( mus, MUS::EXTERNAL_MUSIC_TYPE::WIN_VERSION, musicDirectories );
-        }
+        // To avoid extra I/O calls to data storage it might be useful to remember the last successful type of music and try to search for it next time.
+        static std::array<MusicFileType, 3> musicFileTypes{ MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::DOS_VERSION ),
+                                                            MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::WIN_VERSION ), MusicFileType( MUS::EXTERNAL_MUSIC_TYPE::MAPPED ) };
 
-        if ( filename.empty() ) {
-            filename = getExternalMusicFile( mus, MUS::EXTERNAL_MUSIC_TYPE::MAPPED, musicDirectories );
+        std::string filename;
+
+        for ( size_t i = 0; i < musicFileTypes.size(); ++i ) {
+            filename = getExternalMusicFile( mus, musicDirectories, musicFileTypes[i] );
+            if ( !filename.empty() ) {
+                if ( i > 0 ) {
+                    // Swap music types to improve cache hit.
+                    std::swap( musicFileTypes[0], musicFileTypes[i] );
+                }
+                break;
+            }
         }
 
         if ( filename.empty() ) {
