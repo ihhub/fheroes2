@@ -208,14 +208,14 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
 
 int Dialog::LevelUpSelectSkill( const std::string & name, const int primarySkillType, const Skill::Secondary & sec1, const Skill::Secondary & sec2, Heroes & hero )
 {
-    int result = Skill::Secondary::UNKNOWN;
-
-    if ( Skill::Secondary::UNKNOWN == sec1.Skill() && Skill::Secondary::UNKNOWN == sec2.Skill() )
+    if ( Skill::Secondary::UNKNOWN == sec1.Skill() && Skill::Secondary::UNKNOWN == sec2.Skill() ) {
         DialogPrimaryOnly( name, primarySkillType );
-    else if ( Skill::Secondary::UNKNOWN == sec1.Skill() || Skill::Secondary::UNKNOWN == sec2.Skill() )
-        result = DialogOneSecondary( hero, name, primarySkillType, ( Skill::Secondary::UNKNOWN == sec2.Skill() ? sec1 : sec2 ) );
-    else
-        result = DialogSelectSecondary( name, primarySkillType, sec1, sec2, hero );
+        return Skill::Secondary::UNKNOWN;
+    }
 
-    return result;
+    if ( Skill::Secondary::UNKNOWN == sec1.Skill() || Skill::Secondary::UNKNOWN == sec2.Skill() ) {
+        return DialogOneSecondary( hero, name, primarySkillType, ( Skill::Secondary::UNKNOWN == sec2.Skill() ? sec1 : sec2 ) );
+    }
+
+    return DialogSelectSecondary( name, primarySkillType, sec1, sec2, hero );
 }
