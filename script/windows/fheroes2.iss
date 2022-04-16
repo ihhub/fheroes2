@@ -20,7 +20,7 @@ ArchitecturesInstallIn64BitMode=x64
 #endif
 
 [Files]
-Source: "{#BuildDir}\{#AppName}.exe"; DestDir: "{app}"
+Source: "{#BuildDir}\{#AppName}.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#BuildDir}\lib*.dll"; DestDir: "{app}"
 Source: "{#BuildDir}\SDL*.dll"; DestDir: "{app}"
 Source: "..\..\docs\README.txt"; DestDir: "{app}"
