@@ -11,7 +11,7 @@ AppUpdatesURL="https://github.com/ihhub/fheroes2/releases"
 AppSupportURL="https://discord.gg/xF85vbZ"
 LicenseFile=..\..\LICENSE
 OutputBaseFilename={#AppName}_windows_{#Platform}_{#DeployConfName}_installer
-DefaultDirName={pf}\{#AppName}
+DefaultDirName={autopf}\{#AppName}
 DefaultGroupName={#AppName}
 UninstallDisplayIcon={app}\{#AppName}.exe
 OutputDir={#BuildDir}
@@ -43,7 +43,7 @@ Name: "{group}\Download demo version files"; Filename: "{app}\download_demo_vers
 Name: "{group}\Extract game resources from the original HoMM2 distribution"; Filename: "{app}\extract_homm2_resources.bat"; WorkingDir: "{app}"
 Name: "{group}\Game data files"; Filename: %WINDIR%\explorer.exe; Parameters: """%APPDATA%\{#AppName}"""
 Name: "{group}\Uninstall"; Filename: "{uninstallexe}"
-Name: "{commondesktop}\Free Heroes of Might & Magic II"; Filename: "{app}\{#AppName}.exe"; WorkingDir: "{app}"; Tasks: desktopicon
+Name: "{autodesktop}\Free Heroes of Might & Magic II"; Filename: "{app}\{#AppName}.exe"; WorkingDir: "{app}"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\extract_homm2_resources.bat"; Flags: runascurrentuser; Check: UseResourcesFromOriginalGame
