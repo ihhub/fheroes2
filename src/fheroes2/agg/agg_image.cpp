@@ -104,8 +104,9 @@ namespace
     }
 
     // BMP files within AGG are not Bitmap files.
-    fheroes2::Sprite loadBMPFile( const std::vector<uint8_t> & data )
+    fheroes2::Sprite loadBMPFile( const std::string & path )
     {
+        const std::vector<uint8_t> & data = AGG::ReadChunk( path );
         if ( data.size() < 6 ) {
             // It is an invalid BMP file.
             return {};
@@ -1660,8 +1661,7 @@ namespace fheroes2
                     }
                     digit += std::to_string( i + 1 );
 
-                    const std::vector<uint8_t> & body = ::AGG::ReadChunk( std::string( "ADVMBW" ) + digit + ".BMP" );
-                    _icnVsSprite[id][i] = loadBMPFile( body );
+                    _icnVsSprite[id][i] = loadBMPFile( std::string( "ADVMBW" ) + digit + ".BMP" );
                 }
                 return true;
             }
@@ -1676,8 +1676,7 @@ namespace fheroes2
                     }
                     digit += std::to_string( i );
 
-                    const std::vector<uint8_t> & body = ::AGG::ReadChunk( std::string( "SPELBW" ) + digit + ".BMP" );
-                    _icnVsSprite[id][i] = loadBMPFile( body );
+                    _icnVsSprite[id][i] = loadBMPFile( std::string( "SPELBW" ) + digit + ".BMP" );
                 }
                 return true;
             }
@@ -1692,8 +1691,7 @@ namespace fheroes2
                     }
                     digit += std::to_string( i + 1 );
 
-                    const std::vector<uint8_t> & body = ::AGG::ReadChunk( std::string( "CMSEBW" ) + digit + ".BMP" );
-                    _icnVsSprite[id][i] = loadBMPFile( body );
+                    _icnVsSprite[id][i] = loadBMPFile( std::string( "CMSEBW" ) + digit + ".BMP" );
                 }
                 return true;
             }
