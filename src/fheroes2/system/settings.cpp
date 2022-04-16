@@ -333,7 +333,7 @@ bool Settings::Read( const std::string & filename )
     if ( config.Exists( "monochrome cursor" ) ) {
         if ( config.StrParams( "monochrome cursor" ) == "on" ) {
             opt_global.SetModes( GLOBAL_MONOCHROME_CURSOR );
-            Cursor::Get().setBlackWhiteCursor( true );
+            Cursor::Get().setMonochromeCursor( true );
         }
         else {
             opt_global.ResetModes( GLOBAL_MONOCHROME_CURSOR );
