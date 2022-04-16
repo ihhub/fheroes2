@@ -182,6 +182,11 @@ public:
     // Only for software emulation.
     void setVideoPlaybackCursor();
 
+    void setMonochromeCursor( const bool enable )
+    {
+        _monochromeCursorThemes = enable;
+    }
+
 private:
     Cursor();
     ~Cursor() = default;
@@ -192,6 +197,8 @@ private:
     int theme;
     int32_t offset_x;
     int32_t offset_y;
+
+    bool _monochromeCursorThemes;
 };
 
 class CursorRestorer

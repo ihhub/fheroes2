@@ -62,12 +62,12 @@ namespace
         return id >= 0 && static_cast<size_t>( id ) < _tilVsImage.size();
     }
 
-    fheroes2::Image createDigit( const int32_t width, const int32_t height, const std::vector<fheroes2::Point> & points )
+    fheroes2::Image createDigit( const int32_t width, const int32_t height, const std::vector<fheroes2::Point> & points, const uint8_t pixelColor )
     {
         fheroes2::Image digit( width, height );
         digit.reset();
 
-        fheroes2::SetPixel( digit, points, 115 );
+        fheroes2::SetPixel( digit, points, pixelColor );
         fheroes2::Blit( fheroes2::CreateContour( digit, 35 ), digit );
 
         return digit;
@@ -101,6 +101,53 @@ namespace
             image.transform()[position] = 0;
             image.image()[position] = value;
         }
+    }
+
+    // BMP files within AGG are not Bitmap files.
+    fheroes2::Sprite loadBMPFile( const std::string & path )
+    {
+        const std::vector<uint8_t> & data = AGG::ReadChunk( path );
+        if ( data.size() < 6 ) {
+            // It is an invalid BMP file.
+            return {};
+        }
+
+        StreamBuf imageStream( data );
+
+        const uint8_t blackColor = imageStream.get();
+
+        // Skip the second byte
+        imageStream.get();
+        const uint8_t whiteColor = 11;
+
+        const int32_t width = imageStream.get16();
+        const int32_t height = imageStream.get16();
+
+        if ( static_cast<int32_t>( data.size() ) != 6 + width * height ) {
+            // It is an invalid BMP file.
+            return {};
+        }
+
+        fheroes2::Sprite output( width, height );
+        output.reset();
+
+        const uint8_t * input = data.data() + 6;
+        uint8_t * image = output.image();
+        const uint8_t * imageEnd = image + width * height;
+        uint8_t * transform = output.transform();
+
+        for ( ; image != imageEnd; ++image, ++transform, ++input ) {
+            if ( *input == 1 ) {
+                *image = whiteColor;
+                *transform = 0;
+            }
+            else if ( *input == 2 ) {
+                *image = blackColor;
+                *transform = 0;
+            }
+        }
+
+        return output;
     }
 
     // This class serves the purpose of preserving the original alphabet which is loaded from AGG files for cases when we generate new language alphabet.
@@ -1276,8 +1323,9 @@ namespace fheroes2
                     }
                 }
                 return true;
-            case ICN::CURSOR_ADVENTURE_MAP: {
-                // Create needed numbers
+            case ICN::COLOR_CURSOR_ADVENTURE_MAP:
+            case ICN::MONO_CURSOR_ADVENTURE_MAP: {
+                // Create needed digits.
                 const std::vector<Point> twoPoints = { { 2, 1 }, { 3, 1 }, { 1, 2 }, { 4, 2 }, { 3, 3 }, { 2, 4 }, { 1, 5 }, { 2, 5 }, { 3, 5 }, { 4, 5 } };
                 const std::vector<Point> threePoints = { { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 4 }, { 1, 5 }, { 2, 5 }, { 3, 5 } };
                 const std::vector<Point> fourPoints = { { 1, 1 }, { 3, 1 }, { 1, 2 }, { 3, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 3 }, { 3, 4 }, { 3, 5 } };
@@ -1287,24 +1335,29 @@ namespace fheroes2
                 const std::vector<Point> sevenPoints = { { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 1 }, { 4, 2 }, { 3, 3 }, { 2, 4 }, { 2, 5 } };
                 const std::vector<Point> plusPoints = { { 2, 1 }, { 1, 2 }, { 2, 2 }, { 3, 2 }, { 2, 3 } };
 
+                const bool isColorCursor = ( id == ICN::COLOR_CURSOR_ADVENTURE_MAP );
+                const uint8_t digitColor = isColorCursor ? 115 : 11;
+
                 std::vector<Image> digits( 7 );
-                digits[0] = createDigit( 6, 7, twoPoints );
-                digits[1] = createDigit( 6, 7, threePoints );
-                digits[2] = createDigit( 6, 7, fourPoints );
-                digits[3] = createDigit( 6, 7, fivePoints );
-                digits[4] = createDigit( 6, 7, sixPoints );
-                digits[5] = createDigit( 6, 7, sevenPoints );
-                digits[6] = addDigit( digits[5], createDigit( 5, 5, plusPoints ), { -1, -1 } );
+                digits[0] = createDigit( 6, 7, twoPoints, digitColor );
+                digits[1] = createDigit( 6, 7, threePoints, digitColor );
+                digits[2] = createDigit( 6, 7, fourPoints, digitColor );
+                digits[3] = createDigit( 6, 7, fivePoints, digitColor );
+                digits[4] = createDigit( 6, 7, sixPoints, digitColor );
+                digits[5] = createDigit( 6, 7, sevenPoints, digitColor );
+                digits[6] = addDigit( digits[5], createDigit( 5, 5, plusPoints, digitColor ), { -1, -1 } );
 
                 _icnVsSprite[id].reserve( 7 * 8 );
 
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 4 ), digits, { -2, 1 } );
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 5 ), digits, { 1, 1 } );
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 6 ), digits, { 0, 1 } );
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 7 ), digits, { -2, 1 } );
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 8 ), digits, { 1, 1 } );
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 9 ), digits, { -6, 1 } );
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 28 ), digits, { 0, 1 } );
+                const int originalCursorId = isColorCursor ? ICN::ADVMCO : ICN::MONO_CURSOR_ADVMBW;
+
+                populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 4 ), digits, isColorCursor ? Point( -2, 1 ) : Point( -4, -6 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 5 ), digits, isColorCursor ? Point( 1, 1 ) : Point( -6, -6 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 6 ), digits, isColorCursor ? Point( 0, 1 ) : Point( -8, -7 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 7 ), digits, isColorCursor ? Point( -2, 1 ) : Point( -15, -8 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 8 ), digits, isColorCursor ? Point( 1, 1 ) : Point( -16, -11 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 9 ), digits, isColorCursor ? Point( -6, 1 ) : Point( -8, -1 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 28 ), digits, isColorCursor ? Point( 0, 1 ) : Point( -8, -7 ) );
 
                 return true;
             }
@@ -1595,6 +1648,51 @@ namespace fheroes2
                     Copy( _icnVsSprite[id].front(), 52, 92, _icnVsSprite[id].front(), 54, 92, 1, 1 );
                 }
 
+                return true;
+            }
+            case ICN::MONO_CURSOR_ADVMBW: {
+                LoadOriginalICN( ICN::ADVMCO );
+
+                _icnVsSprite[id].resize( _icnVsSprite[ICN::ADVMCO].size() );
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    std::string digit;
+                    if ( i < 9 ) {
+                        digit += '0';
+                    }
+                    digit += std::to_string( i + 1 );
+
+                    _icnVsSprite[id][i] = loadBMPFile( std::string( "ADVMBW" ) + digit + ".BMP" );
+                }
+                return true;
+            }
+            case ICN::MONO_CURSOR_SPELBW: {
+                LoadOriginalICN( ICN::SPELCO );
+
+                _icnVsSprite[id].resize( _icnVsSprite[ICN::SPELCO].size() );
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    std::string digit;
+                    if ( i < 10 ) {
+                        digit += '0';
+                    }
+                    digit += std::to_string( i );
+
+                    _icnVsSprite[id][i] = loadBMPFile( std::string( "SPELBW" ) + digit + ".BMP" );
+                }
+                return true;
+            }
+            case ICN::MONO_CURSOR_CMSSBW: {
+                LoadOriginalICN( ICN::CMSECO );
+
+                _icnVsSprite[id].resize( _icnVsSprite[ICN::CMSECO].size() );
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    std::string digit;
+                    if ( i < 9 ) {
+                        digit += '0';
+                    }
+                    digit += std::to_string( i + 1 );
+
+                    _icnVsSprite[id][i] = loadBMPFile( std::string( "CMSEBW" ) + digit + ".BMP" );
+                }
                 return true;
             }
             default:

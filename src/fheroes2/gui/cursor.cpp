@@ -33,7 +33,10 @@ Cursor::Cursor()
     : theme( NONE )
     , offset_x( 0 )
     , offset_y( 0 )
-{}
+    , _monochromeCursorThemes( false )
+{
+    // Do nothing.
+}
 
 Cursor & Cursor::Get( void )
 {
@@ -52,16 +55,16 @@ bool Cursor::SetThemes( int name, bool force )
     if ( force || theme != name ) {
         theme = name;
 
-        int icnID = ICN::ADVMCO;
+        int icnID = _monochromeCursorThemes ? ICN::MONO_CURSOR_ADVMBW : ICN::ADVMCO;
         switch ( 0xF000 & name ) {
         case 0x3000:
-            icnID = ICN::SPELCO;
+            icnID = _monochromeCursorThemes ? ICN::MONO_CURSOR_SPELBW : ICN::SPELCO;
             break;
         case 0x2000:
-            icnID = ICN::CMSECO;
+            icnID = _monochromeCursorThemes ? ICN::MONO_CURSOR_CMSSBW : ICN::CMSECO;
             break;
         case 0x4000:
-            icnID = ICN::CURSOR_ADVENTURE_MAP;
+            icnID = _monochromeCursorThemes ? ICN::MONO_CURSOR_ADVENTURE_MAP : ICN::COLOR_CURSOR_ADVENTURE_MAP;
             break;
         default:
             break;

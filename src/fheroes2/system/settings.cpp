@@ -29,6 +29,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 #endif
 
+#include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
 #include "logging.h"
@@ -57,7 +58,7 @@ namespace
         GLOBAL_RENDER_VSYNC = 0x00000008,
         GLOBAL_TEXT_SUPPORT_MODE = 0x00000010,
 
-        // UNUSED = 0x00000020,
+        GLOBAL_MONOCHROME_CURSOR = 0x00000020,
 
         GLOBAL_SHOWCPANEL = 0x00000040,
         GLOBAL_SHOWRADAR = 0x00000080,
@@ -329,6 +330,16 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
+    if ( config.Exists( "monochrome cursor" ) ) {
+        if ( config.StrParams( "monochrome cursor" ) == "on" ) {
+            opt_global.SetModes( GLOBAL_MONOCHROME_CURSOR );
+            Cursor::Get().setMonochromeCursor( true );
+        }
+        else {
+            opt_global.ResetModes( GLOBAL_MONOCHROME_CURSOR );
+        }
+    }
+
     BinaryLoad();
 
     return true;
@@ -440,6 +451,9 @@ std::string Settings::String() const
 
     os << std::endl << "# enable text support mode to output extra information in console window" << std::endl;
     os << "text support mode = " << ( opt_global.Modes( GLOBAL_TEXT_SUPPORT_MODE ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# enable monochrome (black and white) cursors in the game" << std::endl;
+    os << "monochrome cursor = " << ( opt_global.Modes( GLOBAL_MONOCHROME_CURSOR ) ? "on" : "off" ) << std::endl;
 
     return os.str();
 }
