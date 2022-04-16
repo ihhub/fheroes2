@@ -58,7 +58,7 @@ namespace
         GLOBAL_RENDER_VSYNC = 0x00000008,
         GLOBAL_TEXT_SUPPORT_MODE = 0x00000010,
 
-        GLOBAL_BLACK_WHITE_CURSOR = 0x00000020,
+        GLOBAL_MONOCHROME_CURSOR = 0x00000020,
 
         GLOBAL_SHOWCPANEL = 0x00000040,
         GLOBAL_SHOWRADAR = 0x00000080,
@@ -330,13 +330,13 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
-    if ( config.Exists( "black-white cursor" ) ) {
-        if ( config.StrParams( "black-white cursor" ) == "on" ) {
-            opt_global.SetModes( GLOBAL_BLACK_WHITE_CURSOR );
+    if ( config.Exists( "monochrome cursor" ) ) {
+        if ( config.StrParams( "monochrome cursor" ) == "on" ) {
+            opt_global.SetModes( GLOBAL_MONOCHROME_CURSOR );
             Cursor::Get().setBlackWhiteCursor( true );
         }
         else {
-            opt_global.ResetModes( GLOBAL_BLACK_WHITE_CURSOR );
+            opt_global.ResetModes( GLOBAL_MONOCHROME_CURSOR );
         }
     }
 
@@ -452,8 +452,8 @@ std::string Settings::String() const
     os << std::endl << "# enable text support mode to output extra information in console window" << std::endl;
     os << "text support mode = " << ( opt_global.Modes( GLOBAL_TEXT_SUPPORT_MODE ) ? "on" : "off" ) << std::endl;
 
-    os << std::endl << "# enable black and white cursors in the game" << std::endl;
-    os << "black-white cursor = " << ( opt_global.Modes( GLOBAL_BLACK_WHITE_CURSOR ) ? "on" : "off" ) << std::endl;
+    os << std::endl << "# enable monochrome (black and white) cursors in the game" << std::endl;
+    os << "monochrome cursor = " << ( opt_global.Modes( GLOBAL_MONOCHROME_CURSOR ) ? "on" : "off" ) << std::endl;
 
     return os.str();
 }

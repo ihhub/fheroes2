@@ -1323,7 +1323,7 @@ namespace fheroes2
                 }
                 return true;
             case ICN::COLOR_CURSOR_ADVENTURE_MAP:
-            case ICN::BLACK_CURSOR_ADVENTURE_MAP: {
+            case ICN::MONO_CURSOR_ADVENTURE_MAP: {
                 // Create needed digits.
                 const std::vector<Point> twoPoints = { { 2, 1 }, { 3, 1 }, { 1, 2 }, { 4, 2 }, { 3, 3 }, { 2, 4 }, { 1, 5 }, { 2, 5 }, { 3, 5 }, { 4, 5 } };
                 const std::vector<Point> threePoints = { { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 4 }, { 1, 5 }, { 2, 5 }, { 3, 5 } };
@@ -1348,7 +1348,7 @@ namespace fheroes2
 
                 _icnVsSprite[id].reserve( 7 * 8 );
 
-                const int originalCursorId = isColorCursor ? ICN::ADVMCO : ICN::BLACK_CURSOR_ADVMBW;
+                const int originalCursorId = isColorCursor ? ICN::ADVMCO : ICN::MONO_CURSOR_ADVMBW;
 
                 populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 4 ), digits, isColorCursor ? Point( -2, 1 ) : Point( -4, -6 ) );
                 populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 5 ), digits, isColorCursor ? Point( 1, 1 ) : Point( -6, -6 ) );
@@ -1649,7 +1649,7 @@ namespace fheroes2
 
                 return true;
             }
-            case ICN::BLACK_CURSOR_ADVMBW: {
+            case ICN::MONO_CURSOR_ADVMBW: {
                 LoadOriginalICN( ICN::ADVMCO );
 
                 _icnVsSprite[id].resize( _icnVsSprite[ICN::ADVMCO].size() );
@@ -1665,7 +1665,7 @@ namespace fheroes2
                 }
                 return true;
             }
-            case ICN::BLACK_CURSOR_SPELBW: {
+            case ICN::MONO_CURSOR_SPELBW: {
                 LoadOriginalICN( ICN::SPELCO );
 
                 _icnVsSprite[id].resize( _icnVsSprite[ICN::SPELCO].size() );
@@ -1681,7 +1681,7 @@ namespace fheroes2
                 }
                 return true;
             }
-            case ICN::BLACK_CURSOR_CMSSBW: {
+            case ICN::MONO_CURSOR_CMSSBW: {
                 LoadOriginalICN( ICN::CMSECO );
 
                 _icnVsSprite[id].resize( _icnVsSprite[ICN::CMSECO].size() );
