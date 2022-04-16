@@ -816,7 +816,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             else if ( HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
                 res = EventExit();
             // end turn
-            else if ( HotKeyPressEvent( Game::EVENT_ENDTURN ) )
+            else if ( HotKeyPressEvent( Game::EVENT_END_TURN ) )
                 res = EventEndTurn();
             // next hero
             else if ( HotKeyPressEvent( Game::EVENT_NEXTHERO ) )
@@ -874,10 +874,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             else if ( HotKeyPressEvent( Game::EVENT_CONTINUE ) )
                 EventContinueMovement();
             // dig artifact
-            else if ( HotKeyPressEvent( Game::EVENT_DIGARTIFACT ) )
+            else if ( HotKeyPressEvent( Game::EVENT_DIG_ARTIFACT ) )
                 res = EventDigArtifact();
             // sleep hero
-            else if ( HotKeyPressEvent( Game::EVENT_SLEEPHERO ) )
+            else if ( HotKeyPressEvent( Game::EVENT_SLEEP_HERO ) )
                 EventSwitchHeroSleeping();
             // move hero
             else if ( HotKeyPressEvent( Game::EVENT_MOVELEFT ) )
