@@ -98,7 +98,7 @@ namespace Video
                 playAudio( audioChannels );
             }
 
-            return false;
+            return true;
         }
 
         const bool isLooped = ( action == VideoAction::LOOP_VIDEO || action == VideoAction::PLAY_TILL_AUDIO_END );
