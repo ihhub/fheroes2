@@ -412,8 +412,16 @@ void Game::HotKeysDefaults( void )
     key_events[EVENT_TOWN_TAVERN] = KEY_r;
     key_events[EVENT_TOWN_JUMP_TO_BUILD_SELECTION] = KEY_b; // also used to build castle, if starting on a village
 
-    key_events[EVENT_NEW_CAMPAIGN_SUCCESSION_WARS] = KEY_o;
-    key_events[EVENT_NEW_CAMPAIGN_PRICE_OF_LOYALTY] = KEY_e;
+    key_events[EVENT_NEW_CAMPAIGN_SELECTION_SUCCESSION_WARS] = KEY_o;
+    key_events[EVENT_NEW_CAMPAIGN_SELECTION_PRICE_OF_LOYALTY] = KEY_e;
+
+    key_events[EVENT_NEW_ROLAND_CAMPAIGN] = KEY_1;
+    key_events[EVENT_NEW_ARCHIBALD_CAMPAIGN] = KEY_2;
+
+    key_events[EVENT_NEW_PRICE_OF_LOYALTY_CAMPAIGN] = KEY_1;
+    key_events[EVENT_NEW_VOYAGE_HOME_CAMPAIGN] = KEY_2;
+    key_events[EVENT_NEW_WIZARDS_ISLE_CAMPAIGN] = KEY_3;
+    key_events[EVENT_NEW_DESCENDANTS_CAMPAIGN] = KEY_4;
 
     key_events[EVENT_WELL_BUY_ALL_CREATURES] = KEY_m;
 }
