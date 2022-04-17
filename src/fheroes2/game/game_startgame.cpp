@@ -604,8 +604,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
             skipTurns = false;
 
             if ( kingdom.isPlay() ) {
-                DEBUG_LOG( DBG_GAME, DBG_INFO,
-                           world.DateString() << ", color: " << Color::String( player->GetColor() ) << ", resource: " << kingdom.GetFunds().String() )
+                DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( player->GetColor() ) << ", resource: " << kingdom.GetFunds().String() )
 
                 radar.SetHide( true );
                 radar.SetRedraw();
