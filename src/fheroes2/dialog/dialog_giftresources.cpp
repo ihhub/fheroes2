@@ -62,14 +62,17 @@ struct SelectRecipientsColors
         : colors( Settings::Get().GetPlayers().GetActualColors() & ~senderColor )
         , recipients( 0 )
     {
+        
         positions.reserve( colors.size() );
 
         const int32_t colorCount = static_cast<int32_t>( colors.size() ); // safe to cast as the number of players <= 8.
 
         for ( int32_t i = 0; i < colorCount; ++i ) {
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
-
-            positions.emplace_back( pos.x + Game::GetStep4Player( i, sprite.width() + 15, colorCount ), pos.y, sprite.width(), sprite.height() );
+            int32_t temp = i * (sprite.width() + 15) * 6 / colorCount;
+            int32_t ceilCalc = temp + (((i * (sprite.width() + 15) * 6) % colorCount) > 0);
+            int32_t posx = ceilCalc + ( (sprite.width() + 15) / ( 2 * colorCount ) );
+            positions.emplace_back( pos.x + posx, pos.y, sprite.width(), sprite.height() );
         }
     }
 
@@ -221,7 +224,6 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
 
     text.Set( _( "Your Funds" ) );
     text.Blit( box.x + ( box.width - text.w() ) / 2, box.y + 55 );
-
     ResourceBar info1( funds1, box.x + 25, box.y + 80 );
     info1.Redraw();
 
