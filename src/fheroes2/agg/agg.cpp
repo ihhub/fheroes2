@@ -86,10 +86,11 @@ namespace
             std::string correctFilePath = System::ConcatePath( dir, fileName );
             correctFilePath = StringLower( correctFilePath );
 
-            for ( const std::string & path : musicFilePaths ) {
+            for ( std::string & path : musicFilePaths ) {
                 const std::string temp = StringLower( path );
                 if ( temp == correctFilePath ) {
-                    fullPath = path;
+                    // Avoid string copy.
+                    std::swap( fullPath, path );
                     return true;
                 }
             }

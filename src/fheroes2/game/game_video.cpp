@@ -65,9 +65,10 @@ namespace Video
                     std::string targetFileName = System::ConcatePath( fullDirPath, fileName );
                     targetFileName = StringLower( targetFileName );
 
-                    for ( const std::string & filePath : videoFiles ) {
+                    for ( std::string & filePath : videoFiles ) {
                         if ( StringLower( filePath ) == targetFileName ) {
-                            path = filePath;
+                            // Avoid string copy.
+                            std::swap( path, filePath );
 
                             if ( dirIdx > 0 ) {
                                 // Put the current directory at the first place to increase cache hit chance.
