@@ -422,6 +422,7 @@ uint32_t Resource::getIconIcnIndex( const int resourceType )
         // You are passing not a single resource type or an invalid one. Fix it!
         assert( 0 );
         DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" )
+        break;
     }
 
     return 0;
