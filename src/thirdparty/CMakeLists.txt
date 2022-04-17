@@ -25,8 +25,6 @@ if(USE_SYSTEM_LIBSMACKER)
 else(USE_SYSTEM_LIBSMACKER)
 	set(LIBSMACKER_SOURCES
 		libsmacker/smacker.c
-		libsmacker/smk_bitstream.c
-		libsmacker/smk_hufftree.c
 		)
 
 	add_library(smacker STATIC ${LIBSMACKER_SOURCES})
