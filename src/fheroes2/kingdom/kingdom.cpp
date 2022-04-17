@@ -75,7 +75,7 @@ void Kingdom::Init( int clr )
         resource = _getKingdomStartingResources( Game::getDifficulty() );
     }
     else {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" )
     }
 }
 
@@ -208,7 +208,7 @@ void Kingdom::ActionNewWeek( void )
         // debug a gift
         if ( IS_DEVEL() && isControlHuman() ) {
             Funds gift( 20, 20, 10, 10, 10, 10, 5000 );
-            DEBUG_LOG( DBG_GAME, DBG_INFO, "debug gift: " << gift.String() );
+            DEBUG_LOG( DBG_GAME, DBG_INFO, "debug gift: " << gift.String() )
             resource += gift;
         }
     }

@@ -2621,11 +2621,11 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
             if ( !Board::isValidIndex( index_pos ) ) {
                 DEBUG_LOG( DBG_BATTLE, DBG_WARN,
                            "dst: "
-                               << "out of range" );
+                               << "out of range" )
                 return;
             }
 
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, humanturn_spell.GetName() << ", dst: " << index_pos );
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, humanturn_spell.GetName() << ", dst: " << index_pos )
 
             if ( Cursor::SP_TELEPORT == cursor.Themes() ) {
                 if ( 0 > teleport_src )

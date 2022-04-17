@@ -65,7 +65,7 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx 
         return;
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() );
+    DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() )
 
     gameArea.SetRedraw();
 

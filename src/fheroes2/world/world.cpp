@@ -901,7 +901,7 @@ int32_t World::NextTeleport( const int32_t index ) const
 {
     const MapsIndexes teleports = GetTeleportEndPoints( index );
     if ( teleports.empty() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "not found" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "not found" )
         return index;
     }
 
@@ -936,7 +936,7 @@ int32_t World::NextWhirlpool( const int32_t index ) const
 {
     const MapsIndexes whilrpools = GetWhirlpoolEndPoints( index );
     if ( whilrpools.empty() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "not found" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "not found" )
         return index;
     }
 
@@ -1539,10 +1539,10 @@ void EventDate::LoadFromMP2( StreamBuf st )
         message = st.toString();
         DEBUG_LOG( DBG_GAME, DBG_INFO,
                    "event"
-                       << ": " << message );
+                       << ": " << message )
     }
     else {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown id" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown id" )
     }
 }
 

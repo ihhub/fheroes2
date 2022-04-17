@@ -129,7 +129,7 @@ const fheroes2::Sprite & SpriteHero( const Heroes & hero, int index, bool rotate
             break;
 
         default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown race" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown race" )
             break;
         }
 
@@ -163,7 +163,7 @@ const fheroes2::Sprite & SpriteHero( const Heroes & hero, int index, bool rotate
             break;
 
         default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" )
             break;
         }
 
@@ -196,7 +196,7 @@ const fheroes2::Sprite & SpriteFlag( const Heroes & hero, int index, bool rotate
         break;
 
     default:
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown color" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown color" )
         break;
     }
 
@@ -230,7 +230,7 @@ const fheroes2::Sprite & SpriteFlag( const Heroes & hero, int index, bool rotate
             break;
 
         default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" )
             break;
         }
 
@@ -274,7 +274,7 @@ const fheroes2::Sprite & SpriteFlag( const Heroes & hero, int index, bool rotate
             break;
 
         default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" )
             break;
         }
     }
@@ -312,7 +312,7 @@ const fheroes2::Sprite & SpriteShad( const Heroes & hero, int index )
             indexSprite = 63;
             break;
         default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" )
             break;
         }
 
@@ -369,7 +369,7 @@ const fheroes2::Sprite & SpriteFroth( const Heroes & hero, int index )
         break;
 
     default:
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" )
         break;
     }
 

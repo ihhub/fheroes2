@@ -428,7 +428,7 @@ Battle::Arena::~Arena()
 
 void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
 {
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, troop->String( true ) );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, troop->String( true ) )
 
     if ( troop->isAffectedByMorale() ) {
         troop->SetRandomMorale();
@@ -524,7 +524,7 @@ void Battle::Arena::Turns( void )
 {
     ++current_turn;
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, current_turn );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, current_turn )
 
     const Settings & conf = Settings::Get();
 
@@ -679,7 +679,7 @@ void Battle::Arena::Turns( void )
 
 void Battle::Arena::RemoteTurn( const Unit & b, Actions & a )
 {
-    DEBUG_LOG( DBG_BATTLE, DBG_WARN, "switch to AI turn" );
+    DEBUG_LOG( DBG_BATTLE, DBG_WARN, "switch to AI turn" )
     AI::Get().BattleTurn( *this, b, a );
 }
 
@@ -711,7 +711,7 @@ void Battle::Arena::TowerAction( const Tower & twr )
 
     // Normally this shouldn't happen
     if ( targetInfo.first == nullptr ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "No target found for the tower!" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "No target found for the tower!" )
 
         return;
     }
@@ -767,7 +767,7 @@ Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst ) c
         std::stringstream ss;
         for ( u32 ii = 0; ii < result.size(); ++ii )
             ss << result[ii] << ", ";
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, ss.str() );
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, ss.str() )
     }
 
     return result;
@@ -1238,7 +1238,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     const int32_t pos = GetFreePositionNearHero( current_color );
 
     if ( pos < 0 || !hero ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" )
         return nullptr;
     }
 
@@ -1269,18 +1269,18 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
         }
 
     if ( !affect ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "other elemental summon" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "other elemental summon" )
         return nullptr;
     }
 
     Monster mons( spell );
 
     if ( !mons.isValid() ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unknown id" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unknown id" )
         return nullptr;
     }
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << pos );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << pos )
 
     const uint32_t count = fheroes2::getSummonMonsterCount( spell, hero->GetPower(), hero );
     elem = new Unit( Troop( mons, count ), pos, hero == army2->GetCommander(), _randomGenerator, _uidGenerator.GetUnique() );
@@ -1291,7 +1291,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
         army.push_back( elem );
     }
     else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "is nullptr" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "is nullptr" )
     }
 
     return elem;
@@ -1311,7 +1311,7 @@ Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & b, s32 pos )
         GetCurrentForce().push_back( image );
     }
     else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" )
     }
 
     return image;

@@ -251,7 +251,7 @@ namespace
                 sf >> id;
 
                 if ( 0x950412de != id ) {
-                    ERROR_LOG( "incorrect mo id: " << GetHexString( id ) );
+                    ERROR_LOG( "incorrect mo id: " << GetHexString( id ) )
                     return false;
                 }
                 else {
@@ -260,7 +260,7 @@ namespace
                     sf >> major >> minor;
 
                     if ( 0 != major ) {
-                        ERROR_LOG( "incorrect major version: " << GetHexString( major, 4 ) );
+                        ERROR_LOG( "incorrect major version: " << GetHexString( major, 4 ) )
                         return false;
                     }
                     else {
@@ -311,7 +311,7 @@ namespace
                 if ( it == hash_offsets.end() )
                     hash_offsets[crc] = chunk( offset2, length2 );
                 else {
-                    ERROR_LOG( "incorrect hash for: " << msg1 );
+                    ERROR_LOG( "incorrect hash for: " << msg1 )
                 }
             }
 

@@ -181,7 +181,7 @@ int MP2::GetICNObject( const uint8_t tileset )
         break;
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown type: " << static_cast<int>( tileset ) );
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown type: " << static_cast<int>( tileset ) )
 
     return ICN::UNKNOWN;
 }
@@ -638,7 +638,7 @@ const char * MP2::StringObject( const MapObjectType objectType, const int count 
     case OBJ_UNKNW_FA:
         return "OBJ_UNKNW_FA";
     default:
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown object: " << static_cast<int>( objectType ) );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown object: " << static_cast<int>( objectType ) )
         break;
     }
 

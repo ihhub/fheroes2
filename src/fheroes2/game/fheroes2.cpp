@@ -244,7 +244,7 @@ int main( int argc, char ** argv )
             Music::SetFadeIn( 900 );
         }
 
-        DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() )
 
         const DisplayInitializer displayInitializer;
 
@@ -274,7 +274,7 @@ int main( int argc, char ** argv )
         Game::mainGameLoop( conf.isFirstGameRun() );
     }
     catch ( const std::exception & ex ) {
-        ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." );
+        ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." )
         return EXIT_FAILURE;
     }
 

@@ -84,7 +84,7 @@ namespace Video
         std::string videoPath;
         if ( !getVideoFilePath( fileName, videoPath ) ) {
             // File doesn't exist, so no need to even try to load it.
-            DEBUG_LOG( DBG_GAME, DBG_INFO, fileName << " video file does not exist." );
+            DEBUG_LOG( DBG_GAME, DBG_INFO, fileName << " video file does not exist." )
             return false;
         }
 

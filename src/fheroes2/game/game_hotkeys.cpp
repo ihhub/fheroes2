@@ -392,7 +392,7 @@ void Game::HotKeysLoad( const std::string & hotkeys )
             if ( ival ) {
                 const KeySym sym = GetKeySym( ival );
                 key_events[evnt] = sym;
-                DEBUG_LOG( DBG_GAME, DBG_INFO, "Event '" << getEventName( evnt ) << "' has key '" << KeySymGetName( sym ) << "'" );
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Event '" << getEventName( evnt ) << "' has key '" << KeySymGetName( sym ) << "'" )
             }
         }
     }

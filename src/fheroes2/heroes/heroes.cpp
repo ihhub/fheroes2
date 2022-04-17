@@ -269,7 +269,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
         portrait = st.get();
 
         if ( UNKNOWN <= portrait ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "custom portrait incorrect: " << portrait );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "custom portrait incorrect: " << portrait )
             portrait = hid;
         }
 
@@ -378,7 +378,7 @@ void Heroes::PostLoad( void )
         AI::Get().HeroesPostLoad( *this );
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( _race ) );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( _race ) )
 }
 
 int Heroes::GetID( void ) const
@@ -671,7 +671,7 @@ int Heroes::GetLuckWithModificators( std::string * strs ) const
 bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
 {
     if ( GetColor() != Color::NONE ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "hero is not a freeman" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "hero is not a freeman" )
 
         return false;
     }
@@ -1342,7 +1342,7 @@ int Heroes::GetRangeRouteDays( s32 dst ) const
     const u32 maxMovePoints = GetMaxMovePoints();
 
     uint32_t total = world.getDistance( *this, dst );
-    DEBUG_LOG( DBG_GAME, DBG_TRACE, "path distance: " << total );
+    DEBUG_LOG( DBG_GAME, DBG_TRACE, "path distance: " << total )
 
     if ( total > 0 ) {
         if ( move_point >= total )
@@ -1362,7 +1362,7 @@ int Heroes::GetRangeRouteDays( s32 dst ) const
         return 8;
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_TRACE, "unreachable point: " << dst );
+    DEBUG_LOG( DBG_GAME, DBG_TRACE, "unreachable point: " << dst )
     return 0;
 }
 
@@ -1373,7 +1373,7 @@ void Heroes::LevelUp( bool skipsecondary, bool autoselect )
     // level up primary skill
     const int primarySkill = Skill::Primary::LevelUp( _race, GetLevel(), seeds.seedPrimarySkill );
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "for " << GetName() << ", up " << Skill::Primary::String( primarySkill ) );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "for " << GetName() << ", up " << Skill::Primary::String( primarySkill ) )
 
     if ( !skipsecondary )
         LevelUpSecondarySkill( seeds, primarySkill, ( autoselect || isControlAI() ) );
@@ -1419,7 +1419,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
 
     // level up sec. skill
     if ( selected.isValid() ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << ", selected: " << Skill::Secondary::String( selected.Skill() ) );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << ", selected: " << Skill::Secondary::String( selected.Skill() ) )
         Skill::Secondary * secs = secondary_skills.FindSkill( selected.Skill() );
 
         if ( secs )
@@ -1960,7 +1960,7 @@ Heroes * AllHeroes::GetFreeman( const int race, const int heroIDToIgnore ) const
 
     // All the heroes are busy
     if ( freeman_heroes.empty() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "freeman is not found, all the heroes are busy." );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "freeman is not found, all the heroes are busy." )
         return nullptr;
     }
 

@@ -346,7 +346,7 @@ Artifact Artifact::FromMP2IndexSprite( u32 index )
     else if ( 0xAB == index )
         return Rand( ART_LEVEL3 );
 
-    DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown index: " << static_cast<int>( index ) );
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown index: " << static_cast<int>( index ) )
 
     return Artifact( UNKNOWN );
 }
