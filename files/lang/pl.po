@@ -2214,7 +2214,7 @@ msgstr ""
 "proponuje ci pomoc w rozwinięciu wybranej przez ciebie umiejętności."
 
 msgid "You can't afford to upgrade your troops!"
-msgstr "Nie możesz pozwolić sobie na ulepszenie oddziałów!"
+msgstr "Nie stać cię na ulepszenie oddziałów!"
 
 msgid ""
 "Your troops can be upgraded, but it will cost you dearly. Do you wish to "
