@@ -221,7 +221,7 @@ Battle::Cell::Cell( int32_t ii )
 
 void Battle::Cell::SetArea( const fheroes2::Rect & area )
 {
-    pos.x = area.x + 89 - ( ( ( index / ARENAW ) % 2 ) ? CELLW / 2 : 0 ) + ( CELLW ) * ( index % ARENAW );
+    pos.x = area.x + 89 - ( ( ( index / ARENAW ) % 2 ) ? CELLW / 2 : 0 ) + CELLW * ( index % ARENAW );
     pos.y = area.y + 62 + ( ( CELLH - ( CELLH - cellHeightVerSide ) / 2 ) * ( index / ARENAW ) );
     pos.width = CELLW;
     pos.height = CELLH;

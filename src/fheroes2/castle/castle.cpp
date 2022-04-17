@@ -97,7 +97,7 @@ Castle::Castle( s32 cx, s32 cy, int rc )
     army.SetCommander( &captain );
 }
 
-void Castle::LoadFromMP2( std::vector<uint8_t> & data )
+void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
 {
     StreamBuf st( data );
 
@@ -640,7 +640,7 @@ void Castle::ActionNewWeek()
     }
 }
 
-void Castle::ActionNewMonth()
+void Castle::ActionNewMonth() const
 {
     // Do nothing.
 }

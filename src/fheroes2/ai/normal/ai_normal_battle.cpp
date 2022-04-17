@@ -287,7 +287,7 @@ namespace AI
         return actions;
     }
 
-    void BattlePlanner::analyzeBattleState( Arena & arena, const Unit & currentUnit )
+    void BattlePlanner::analyzeBattleState( const Arena & arena, const Unit & currentUnit )
     {
         _myColor = currentUnit.GetCurrentColor();
         _commander = arena.getCommander( _myColor );
@@ -443,7 +443,7 @@ namespace AI
                    "Tactic " << _defensiveTactics << " chosen. Archers: " << _myShooterStr << ", vs enemy " << _enemyShooterStr << " ratio is " << enemyArcherRatio )
     }
 
-    Actions BattlePlanner::archerDecision( Arena & arena, const Unit & currentUnit ) const
+    Actions BattlePlanner::archerDecision( const Arena & arena, const Unit & currentUnit ) const
     {
         Actions actions;
         const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), true );
@@ -542,7 +542,7 @@ namespace AI
         return actions;
     }
 
-    BattleTargetPair BattlePlanner::meleeUnitOffense( Arena & arena, const Unit & currentUnit ) const
+    BattleTargetPair BattlePlanner::meleeUnitOffense( const Arena & arena, const Unit & currentUnit ) const
     {
         BattleTargetPair target;
         const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), true );
@@ -617,7 +617,7 @@ namespace AI
         return target;
     }
 
-    BattleTargetPair BattlePlanner::meleeUnitDefense( Arena & arena, const Unit & currentUnit ) const
+    BattleTargetPair BattlePlanner::meleeUnitDefense( const Arena & arena, const Unit & currentUnit ) const
     {
         BattleTargetPair target;
 

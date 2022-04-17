@@ -103,7 +103,7 @@ void Battle::Board::Reset( void )
 
 void Battle::Board::SetPositionQuality( const Unit & b ) const
 {
-    Arena * arena = GetArena();
+    const Arena * arena = GetArena();
     Units enemies( arena->getEnemyForce( b.GetCurrentColor() ).getUnits(), true );
 
     // Make sure archers are first here, so melee unit's score won't be double counted
@@ -134,7 +134,7 @@ void Battle::Board::SetPositionQuality( const Unit & b ) const
 
 void Battle::Board::SetEnemyQuality( const Unit & unit ) const
 {
-    Arena * arena = GetArena();
+    const Arena * arena = GetArena();
     Units enemies( arena->getEnemyForce( unit.GetColor() ).getUnits(), true );
     if ( unit.Modes( SP_BERSERKER ) ) {
         Units allies( arena->getForce( unit.GetColor() ).getUnits(), true );
@@ -493,7 +493,7 @@ std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startU
 int32_t Battle::Board::DoubleCellAttackValue( const Unit & attacker, const Unit & target, const int32_t from, const int32_t targetCell )
 {
     const Cell * behind = GetCell( targetCell, GetDirection( from, targetCell ) );
-    const Unit * secondaryTarget = ( behind ) ? behind->GetUnit() : nullptr;
+    const Unit * secondaryTarget = ( behind != nullptr ) ? behind->GetUnit() : nullptr;
     if ( secondaryTarget && secondaryTarget->GetUID() != target.GetUID() && secondaryTarget->GetUID() != attacker.GetUID() ) {
         return secondaryTarget->GetScoreQuality( attacker );
     }

@@ -107,7 +107,7 @@ namespace AI
     {
     public:
         Battle::Actions planUnitTurn( Battle::Arena & arena, const Battle::Unit & currentUnit );
-        void analyzeBattleState( Battle::Arena & arena, const Battle::Unit & currentUnit );
+        void analyzeBattleState( const Battle::Arena & arena, const Battle::Unit & currentUnit );
 
         // decision-making helpers
         bool isUnitFaster( const Battle::Unit & currentUnit, const Battle::Unit & target ) const;
@@ -118,14 +118,14 @@ namespace AI
     private:
         // to be exposed later once every BattlePlanner will be re-initialized at combat start
         Battle::Actions berserkTurn( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
-        Battle::Actions archerDecision( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
-        BattleTargetPair meleeUnitOffense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
-        BattleTargetPair meleeUnitDefense( Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        Battle::Actions archerDecision( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        BattleTargetPair meleeUnitOffense( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+        BattleTargetPair meleeUnitDefense( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
         SpellSelection selectBestSpell( Battle::Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const;
         SpellcastOutcome spellDamageValue( const Spell & spell, Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Units & friendly,
                                            const Battle::Units & enemies, bool retreating ) const;
         SpellcastOutcome spellDispellValue( const Spell & spell, const Battle::Units & friendly, const Battle::Units & enemies ) const;
-        SpellcastOutcome spellResurrectValue( const Spell & spell, Battle::Arena & arena ) const;
+        SpellcastOutcome spellResurrectValue( const Spell & spell, const Battle::Arena & arena ) const;
         SpellcastOutcome spellSummonValue( const Spell & spell, const Battle::Arena & arena, const int heroColor ) const;
         SpellcastOutcome spellEffectValue( const Spell & spell, const Battle::Units & targets ) const;
         double spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispell ) const;

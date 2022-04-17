@@ -307,7 +307,6 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::Determi
     , end_turn( false )
     , _randomGenerator( randomGenerator )
 {
-    const Settings & conf = Settings::Get();
     usage_spells.reserve( 20 );
 
     assert( arena == nullptr );
@@ -398,7 +397,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::Determi
     if ( interface ) {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        if ( conf.ExtGameUseFade() )
+        if ( Settings::ExtGameUseFade() )
             fheroes2::FadeDisplay();
 
         interface->fullRedraw();

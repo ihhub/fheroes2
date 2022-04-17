@@ -475,7 +475,7 @@ namespace AI
         return bestOutcome;
     }
 
-    SpellcastOutcome BattlePlanner::spellResurrectValue( const Spell & spell, Battle::Arena & arena ) const
+    SpellcastOutcome BattlePlanner::spellResurrectValue( const Spell & spell, const Battle::Arena & arena ) const
     {
         SpellcastOutcome bestOutcome;
 
