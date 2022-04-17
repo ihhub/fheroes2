@@ -165,11 +165,11 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         // Check second army first so attacker would win by default
         if ( !army2.isValid() ) {
             result.army1 = RESULT_WINS;
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid battle detected! Index " << mapsindex << ", Army: " << army2.String() );
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid battle detected! Index " << mapsindex << ", Army: " << army2.String() )
         }
         else {
             result.army2 = RESULT_WINS;
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid battle detected! Index " << mapsindex << ", Army: " << army1.String() );
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid battle detected! Index " << mapsindex << ", Army: " << army1.String() )
         }
         return result;
     }
@@ -218,8 +218,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         Rand::DeterministicRandomGenerator randomGenerator( battleSeed );
         Arena arena( army1, army2, mapsindex, showBattle, randomGenerator );
 
-        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
-        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() );
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() )
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() )
 
         while ( arena.BattleValid() ) {
             arena.Turns();
@@ -306,8 +306,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         }
     }
 
-    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
-    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() );
+    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() )
+    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() )
 
     army1.resetInvalidMonsters();
     army2.resetInvalidMonsters();
@@ -320,7 +320,7 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         army2.Reset( false );
     }
 
-    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1: " << ( result.army1 & RESULT_WINS ? "wins" : "loss" ) << ", army2: " << ( result.army2 & RESULT_WINS ? "wins" : "loss" ) );
+    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1: " << ( result.army1 & RESULT_WINS ? "wins" : "loss" ) << ", army2: " << ( result.army2 & RESULT_WINS ? "wins" : "loss" ) )
 
     return result;
 }
@@ -397,7 +397,7 @@ void Battle::NecromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsK
     if ( isControlHuman )
         arena.DialogBattleNecromancy( raiseCount, raisedMonsterType );
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "raise: " << raiseCount << mons.GetMultiName() );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "raise: " << raiseCount << mons.GetMultiName() )
 }
 
 u32 Battle::Result::AttackerResult( void ) const

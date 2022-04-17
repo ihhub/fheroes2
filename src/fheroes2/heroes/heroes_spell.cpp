@@ -255,7 +255,7 @@ bool Heroes::ActionSpellCast( const Spell & spell )
     }
 
     if ( apply ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " cast spell: " << spell.GetName() );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " cast spell: " << spell.GetName() )
         SpellCasted( spell );
         return true;
     }

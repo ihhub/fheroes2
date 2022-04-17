@@ -441,7 +441,7 @@ namespace
     {
         if ( hero->Modes( Heroes::PATROL ) ) {
             if ( hero->GetSquarePatrol() == 0 ) {
-                DEBUG_LOG( DBG_AI, DBG_TRACE, hero->GetName() << " standing still. Skip turn." );
+                DEBUG_LOG( DBG_AI, DBG_TRACE, hero->GetName() << " standing still. Skip turn." )
                 hero->SetModes( Heroes::MOVED );
                 return;
             }
@@ -1126,18 +1126,18 @@ namespace AI
 
                     DEBUG_LOG( DBG_AI, DBG_TRACE,
                                hero.GetName() << ": valid object at " << node.first << " value is " << value << " ("
-                                              << MP2::StringObject( static_cast<MP2::MapObjectType>( node.second ) ) << ")" );
+                                              << MP2::StringObject( static_cast<MP2::MapObjectType>( node.second ) ) << ")" )
                 }
             }
         }
 
         if ( priorityTarget != -1 ) {
             DEBUG_LOG( DBG_AI, DBG_INFO,
-                       hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" );
+                       hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" )
         }
         else if ( !heroInPatrolMode ) {
             priorityTarget = _pathfinder.getFogDiscoveryTile( hero );
-            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget );
+            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget )
         }
 
         return priorityTarget;
@@ -1222,7 +1222,7 @@ namespace AI
                         bestTargetIndex = targetIndex;
                         bestHero = heroInfo.hero;
 
-                        DEBUG_LOG( DBG_AI, DBG_INFO, bestHero->GetName() << " may be blocking the way. Moving to " << bestTargetIndex );
+                        DEBUG_LOG( DBG_AI, DBG_INFO, bestHero->GetName() << " may be blocking the way. Moving to " << bestTargetIndex )
 
                         break;
                     }

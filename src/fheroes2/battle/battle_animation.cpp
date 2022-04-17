@@ -424,7 +424,7 @@ bool AnimationState::switchAnimation( int animState, bool reverse )
         return true;
     }
     else {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, " AnimationState switched to invalid anim " << animState << " length " << _currentSequence.animationLength() );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, " AnimationState switched to invalid anim " << animState << " length " << _currentSequence.animationLength() )
     }
     return false;
 }
@@ -450,7 +450,7 @@ bool AnimationState::switchAnimation( const std::vector<int> & animationList, bo
         return true;
     }
     else {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, " AnimationState switched to invalid anim list of length " << animationList.size() );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, " AnimationState switched to invalid anim list of length " << animationList.size() )
     }
     return false;
 }

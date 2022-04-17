@@ -241,7 +241,7 @@ namespace
                 continue;
             }
 
-            VERBOSE_LOG( ICN::GetString( icnId ) << ": " << output );
+            VERBOSE_LOG( ICN::GetString( icnId ) << ": " << output )
         }
 
         completed = true;
@@ -1909,7 +1909,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
 
         DEBUG_LOG( DBG_GAME, DBG_WARN,
                    "Invalid object type index " << tile._index << ": type " << MP2::StringObject( originalObjectType ) << ", icn ID "
-                                                << static_cast<int>( tile.objectIndex ) );
+                                                << static_cast<int>( tile.objectIndex ) )
         break;
     }
 
@@ -2138,7 +2138,7 @@ void Maps::Tiles::UpdateRNDArtifactSprite( Tiles & tile )
     }
 
     if ( !art.isValid() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown artifact" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown artifact" )
         return;
     }
 
@@ -2468,7 +2468,7 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         }
         else {
             // unknown
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid direction for fog: " << around );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid direction for fog: " << around )
             const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
             area.DrawTile( dst, sf, mp );
             return;
@@ -2685,7 +2685,7 @@ int32_t Maps::Tiles::getIndexOfMainTile( const Maps::Tiles & tile )
     }
 
     // Most likely we have a broken object put by an editor.
-    DEBUG_LOG( DBG_GAME, DBG_WARN, "Tile " << tileIndex << " of type " << MP2::StringObject( objectType ) << " has no parent tile." );
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "Tile " << tileIndex << " of type " << MP2::StringObject( objectType ) << " has no parent tile." )
     return -1;
 }
 

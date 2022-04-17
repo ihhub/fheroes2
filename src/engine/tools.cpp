@@ -207,7 +207,7 @@ bool SaveMemToFile( const std::vector<u8> & data, const std::string & path )
     file.open( path, std::fstream::out | std::fstream::trunc | std::fstream::binary );
 
     if ( !file ) {
-        ERROR_LOG( "Unable to open file for writing: " << path );
+        ERROR_LOG( "Unable to open file for writing: " << path )
         return false;
     }
 

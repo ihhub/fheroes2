@@ -134,7 +134,7 @@ namespace Battle
         const Cell * unitHead = _start.GetHead();
         const Cell * unitTail = _start.GetTail();
         if ( !unitHead || ( unitIsWide && !unitTail ) ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Pathfinder: Invalid unit is passed in! " << unit.GetName() );
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Pathfinder: Invalid unit is passed in! " << unit.GetName() )
             return;
         }
 

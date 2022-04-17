@@ -153,7 +153,7 @@ void Battle::Board::SetEnemyQuality( const Unit & unit ) const
             if ( enemy->isWide() )
                 GetCell( enemy->GetTailIndex() )->SetQuality( score );
 
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, score << " for " << enemy->String() );
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, score << " for " << enemy->String() )
         }
     }
 }
@@ -455,7 +455,7 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
         DEBUG_LOG( DBG_BATTLE, DBG_WARN,
                    "Path is not found for " << unit.String() << ", destination: "
                                             << "(head cell ID: " << destination.GetHead()->GetIndex()
-                                            << ", tail cell ID: " << ( isWideUnit ? destination.GetTail()->GetIndex() : -1 ) << ")" );
+                                            << ", tail cell ID: " << ( isWideUnit ? destination.GetTail()->GetIndex() : -1 ) << ")" )
     }
 
     return result;
@@ -528,7 +528,7 @@ int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & t
         Position position = Position::GetPosition( attacker, from );
 
         if ( position.GetHead() == nullptr || ( attacker.isWide() && position.GetTail() == nullptr ) ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid position for " << attacker.String() << ", target: " << target.String() << ", cell: " << from );
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid position for " << attacker.String() << ", target: " << target.String() << ", cell: " << from )
 
             return 0;
         }

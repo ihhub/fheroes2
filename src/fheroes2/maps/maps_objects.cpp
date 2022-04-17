@@ -100,10 +100,10 @@ void MapEvent::LoadFromMP2( s32 index, StreamBuf st )
         message = st.toString();
         DEBUG_LOG( DBG_GAME, DBG_INFO,
                    "event"
-                       << ": " << message );
+                       << ": " << message )
     }
     else {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown id" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown id" )
     }
 }
 
@@ -161,10 +161,10 @@ void MapSphinx::LoadFromMP2( s32 index, StreamBuf st )
         valid = true;
         DEBUG_LOG( DBG_GAME, DBG_INFO,
                    "sphinx"
-                       << ": " << message );
+                       << ": " << message )
     }
     else {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown id" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown id" )
     }
 }
 
@@ -220,7 +220,7 @@ void MapSign::LoadFromMP2( s32 index, StreamBuf st )
     SetUID( index );
     DEBUG_LOG( DBG_GAME, DBG_INFO,
                "sign"
-                   << ": " << message );
+                   << ": " << message )
 }
 
 StreamBase & operator<<( StreamBase & msg, const MapSign & obj )

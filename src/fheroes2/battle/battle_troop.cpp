@@ -128,7 +128,7 @@ Battle::Unit::Unit( const Troop & t, int32_t pos, bool ref, const Rand::Determin
         SetPosition( pos );
     }
     else {
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Invalid position " << pos << " for board" );
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Invalid position " << pos << " for board" )
     }
 }
 
@@ -606,7 +606,7 @@ u32 Battle::Unit::ApplyDamage( u32 dmg )
             killed = GetCount();
         }
 
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, dmg << " to " << String() << " and killed: " << killed );
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, dmg << " to " << String() << " and killed: " << killed )
 
         // clean paralyze or stone magic
         if ( Modes( IS_PARALYZE_MAGIC ) ) {
@@ -677,7 +677,7 @@ void Battle::Unit::PostKilledAction( void )
     if ( tail )
         tail->SetUnit( nullptr );
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", is dead..." );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", is dead..." )
     // possible also..
 }
 
@@ -716,14 +716,14 @@ u32 Battle::Unit::ApplyDamage( Unit & enemy, u32 dmg )
         switch ( enemy.GetID() ) {
         case Monster::GHOST:
             resurrect = killed * static_cast<Monster &>( enemy ).GetHitPoints();
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrect );
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrect )
             // grow troop
             enemy.Resurrect( resurrect, true, false );
             break;
 
         case Monster::VAMPIRE_LORD:
             resurrect = killed * Monster::GetHitPoints();
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrect );
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrect )
             // restore hit points
             enemy.Resurrect( resurrect, false, false );
             break;
@@ -869,7 +869,7 @@ bool Battle::Unit::ApplySpell( const Spell & spell, const HeroBase * hero, Targe
     if ( !AllowApplySpell( spell, hero, nullptr, isForceApply ) )
         return false;
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " to " << String() );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " to " << String() )
 
     const u32 spoint = hero ? hero->GetPower() : DEFAULT_SPELL_DURATION;
 

@@ -288,7 +288,7 @@ namespace
                 break;
             }
             else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || le.MouseClickLeft( buttonOk.area() ) ) {
-                DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.MapsFile() << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) );
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.MapsFile() << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) )
                 result = fheroes2::GameMode::START_GAME;
                 break;
             }
@@ -380,13 +380,13 @@ namespace
 
             DEBUG_LOG( DBG_GAME, DBG_WARN,
                        conf.MapsFile() << ", "
-                                       << "unknown map format" );
+                                       << "unknown map format" )
             return fheroes2::GameMode::MAIN_MENU;
         }
 
         DEBUG_LOG( DBG_GAME, DBG_WARN,
                    conf.MapsFile() << ", "
-                                   << "unknown map format" );
+                                   << "unknown map format" )
         return fheroes2::GameMode::MAIN_MENU;
     }
 }

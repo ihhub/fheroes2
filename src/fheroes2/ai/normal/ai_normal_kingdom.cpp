@@ -154,7 +154,7 @@ namespace AI
                 for ( size_t idx = batchStart; idx < batchEnd; ++idx ) {
                     const size_t regionID = regionsToCheck[idx].first;
                     _regions[regionID].safetyFactor = regionsToCheck[idx].second;
-                    DEBUG_LOG( DBG_AI, DBG_TRACE, "Region " << regionID << " safety factor is " << _regions[regionID].safetyFactor );
+                    DEBUG_LOG( DBG_AI, DBG_TRACE, "Region " << regionID << " safety factor is " << _regions[regionID].safetyFactor )
                 }
                 batchStart = batchEnd;
                 batchEnd = regionsToCheck.size();
@@ -238,8 +238,8 @@ namespace AI
         KingdomHeroes & heroes = kingdom.GetHeroes();
         const KingdomCastles & castles = kingdom.GetCastles();
 
-        DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( myColor ) << " starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" );
-        DEBUG_LOG( DBG_AI, DBG_TRACE, "Funds: " << kingdom.GetFunds().String() );
+        DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( myColor ) << " starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" )
+        DEBUG_LOG( DBG_AI, DBG_TRACE, "Funds: " << kingdom.GetFunds().String() )
 
         // Step 1. Scan visible map (based on game difficulty), add goals and threats
         std::vector<std::pair<int, const Army *>> enemyArmies;
@@ -325,7 +325,7 @@ namespace AI
 
         evaluateRegionSafety();
 
-        DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapObjects.size() << " valid objects" );
+        DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapObjects.size() << " valid objects" )
 
         status.RedrawTurnProgress( 1 );
 

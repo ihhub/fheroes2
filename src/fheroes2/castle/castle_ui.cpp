@@ -57,7 +57,7 @@ namespace fheroes2
             break;
         default:
             assert( 0 );
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown race" );
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown race" )
         }
 
         const Sprite & castleImage = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::LOCATORE : ICN::LOCATORS, icnIndex );

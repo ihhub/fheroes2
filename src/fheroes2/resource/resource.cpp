@@ -85,7 +85,7 @@ Funds::Funds( int rs, u32 count )
         break;
 
     default:
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" )
         break;
     }
 }
@@ -369,7 +369,7 @@ u32 Resource::GetIndexSprite( int resource )
     case Resource::GOLD:
         return 13;
     default:
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" )
     }
 
     return 0;
@@ -420,7 +420,7 @@ uint32_t Resource::getIconIcnIndex( const int resourceType )
     default:
         // You are passing not a single resource type or an invalid one. Fix it!
         assert( 0 );
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" )
     }
 
     return 0;

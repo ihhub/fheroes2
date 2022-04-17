@@ -285,7 +285,7 @@ bool Settings::Read( const std::string & filename )
             video_mode.height = GetInt( height );
         }
         else {
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown video mode: " << value );
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown video mode: " << value )
         }
     }
 
@@ -537,7 +537,7 @@ const std::vector<std::string> & Settings::GetRootDirs()
         dirs.emplace_back( resourcePath );
     }
     else {
-        ERROR_LOG( "Unable to get app bundle path" );
+        ERROR_LOG( "Unable to get app bundle path" )
     }
     CFRelease( resourcesURL );
 #endif

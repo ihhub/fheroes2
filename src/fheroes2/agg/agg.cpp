@@ -411,7 +411,7 @@ std::vector<uint8_t> AGG::ReadMusicChunk( const std::string & key, const bool ig
 
 void AGG::LoadWAV( int m82, std::vector<u8> & v )
 {
-    DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
+    DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) )
     const std::vector<u8> & body = ReadMusicChunk( M82::GetString( m82 ) );
 
     if ( !body.empty() ) {
@@ -439,7 +439,7 @@ void AGG::LoadWAV( int m82, std::vector<u8> & v )
 
 void AGG::LoadMID( int xmi, std::vector<u8> & v )
 {
-    DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) );
+    DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) )
     const std::vector<uint8_t> & body = ReadMusicChunk( XMI::GetString( xmi ), xmi >= XMI::MIDI_ORIGINAL_KNIGHT );
 
     if ( !body.empty() ) {
@@ -534,7 +534,7 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols, const int s
                 else
                     loop_sounds.emplace_back( m82, ch );
 
-                DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
+                DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) )
             }
         }
     }
@@ -563,7 +563,7 @@ void AGG::PlaySoundInternally( const int m82, const int soundVolume )
 
     std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
 
-    DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) );
+    DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) )
 
     const std::vector<u8> & v = AGG::GetWAV( m82 );
     const int ch = Mixer::Play( &v[0], static_cast<uint32_t>( v.size() ), -1, false );
@@ -654,7 +654,7 @@ void AGG::PlayMusicInternally( const int mus, const MusicSource musicType, const
             Game::SetCurrentMusic( mus );
         }
     }
-    DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) );
+    DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) )
 }
 
 void AGG::ResetAudio()

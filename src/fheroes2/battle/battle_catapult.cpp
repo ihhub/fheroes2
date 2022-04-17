@@ -62,7 +62,7 @@ Battle::Catapult::Catapult( const HeroBase & hero, const Rand::DeterministicRand
 u32 Battle::Catapult::GetDamage() const
 {
     if ( doubleDamageChance == 100 || doubleDamageChance >= _randomGenerator.Get( 1, 100 ) ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Catapult dealt double damage! (" << doubleDamageChance << "% chance)" );
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Catapult dealt double damage! (" << doubleDamageChance << "% chance)" )
         return 2;
     }
 
@@ -134,7 +134,7 @@ int Battle::Catapult::GetTarget( const std::vector<u32> & values ) const
         return _randomGenerator.Get( targets );
     }
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target not found.." );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target not found.." )
 
     return 0;
 }
