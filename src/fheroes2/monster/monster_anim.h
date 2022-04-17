@@ -75,7 +75,7 @@ namespace fheroes2
         explicit RandomMonsterAnimation( const Monster & monster );
 
         RandomMonsterAnimation( const RandomMonsterAnimation & ) = delete;
-        RandomMonsterAnimation( RandomMonsterAnimation && ) noexcept = default;
+        RandomMonsterAnimation( RandomMonsterAnimation && ) = default;
 
         RandomMonsterAnimation & operator=( const RandomMonsterAnimation & ) = delete;
 
