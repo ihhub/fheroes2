@@ -1505,56 +1505,86 @@ static char smk_render_audio(struct smk_audio_t * s, unsigned char * p, unsigned
 		bit = smk_bs_read_1(&bs);
 
 		if (!bit) {
-			fputs("libsmacker::smk_render_audio - ERROR: initial get_bit returned 0\n", stderr);
+			fputs("libsmacker::smk_render_audio() - ERROR: initial get_bit returned 0\n", stderr);
 			goto error;
 		}
 
 		bit = smk_bs_read_1(&bs);
 
 		if (s->channels != (bit == 1 ? 2 : 1))
-			fputs("libsmacker::smk_render - ERROR: mono/stereo mismatch\n", stderr);
+			fputs("libsmacker::smk_render_audio() - ERROR: mono/stereo mismatch\n", stderr);
 
 		bit = smk_bs_read_1(&bs);
 
 		if (s->bitdepth != (bit == 1 ? 16 : 8))
-			fputs("libsmacker::smk_render - ERROR: 8-/16-bit mismatch\n", stderr);
+			fputs("libsmacker::smk_render_audio() - ERROR: 8-/16-bit mismatch\n", stderr);
 
 		/* build the trees */
-		smk_huff8_build(&aud_tree[0], &bs);
+		if (! smk_huff8_build(&aud_tree[0], &bs)) {
+			fputs("libsmacker::smk_render_audio() - ERROR: failed to build the trees\n", stderr);
+			goto error;
+		}
+
 		j = 1;
 		k = 1;
 
 		if (s->bitdepth == 16) {
-			smk_huff8_build(&aud_tree[1], &bs);
+			if (! smk_huff8_build(&aud_tree[1], &bs)) {
+				fputs("libsmacker::smk_render_audio() - ERROR: failed to build the trees\n", stderr);
+				goto error;
+			}
+
 			k = 2;
 		}
 
 		if (s->channels == 2) {
-			smk_huff8_build(&aud_tree[2], &bs);
+			if (! smk_huff8_build(&aud_tree[2], &bs)) {
+				fputs("libsmacker::smk_render_audio() - ERROR: failed to build the trees\n", stderr);
+				goto error;
+			}
+
 			j = 2;
 			k = 2;
 
 			if (s->bitdepth == 16) {
-				smk_huff8_build(&aud_tree[3], &bs);
+				if (! smk_huff8_build(&aud_tree[3], &bs)) {
+					fputs("libsmacker::smk_render_audio() - ERROR: failed to build the trees\n", stderr);
+					goto error;
+				}
+
 				k = 4;
 			}
 		}
 
 		/* read initial sound level */
 		if (s->channels == 2) {
-			unpack = smk_bs_read_8(&bs);
+			if ((unpack = smk_bs_read_8(&bs)) < 0) {
+				fputs("libsmacker::smk_render_audio() - ERROR: get_byte returned -1\n", stderr);
+				goto error;
+			}
 
 			if (s->bitdepth == 16) {
-				((short *)t)[1] = smk_bs_read_8(&bs);
+				if ((((short *)t)[1] = smk_bs_read_8(&bs)) < 0) {
+					fputs("libsmacker::smk_render_audio() - ERROR: get_byte returned -1\n", stderr);
+					goto error;
+				}
+
 				((short *)t)[1] |= (unpack << 8);
 			} else
 				((unsigned char *)t)[1] = (unsigned char)unpack;
 		}
 
-		unpack = smk_bs_read_8(&bs);
+		if ((unpack = smk_bs_read_8(&bs)) < 0) {
+			fputs("libsmacker::smk_render_audio() - ERROR: get_byte returned -1\n", stderr);
+			goto error;
+		}
 
 		if (s->bitdepth == 16) {
-			((short *)t)[0] = smk_bs_read_8(&bs);
+			if ((((short *)t)[0] = smk_bs_read_8(&bs)) < 0) {
+				fputs("libsmacker::smk_render_audio() - ERROR: get_byte returned -1\n", stderr);
+				goto error;
+			}
+
 			((short *)t)[0] |= (unpack << 8);
 		} else
 			((unsigned char *)t)[0] = (unsigned char)unpack;
