@@ -370,6 +370,7 @@ u32 Resource::GetIndexSprite( int resource )
         return 13;
     default:
         DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" )
+        break;
     }
 
     return 0;
