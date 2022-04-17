@@ -30,6 +30,7 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_text.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -133,10 +134,12 @@ struct ResourceBar
 
     static void RedrawResource( int type, s32 count, s32 posx, s32 posy )
     {
-        Text text( std::to_string( count ), Font::SMALL );
+        fheroes2::Display & display = fheroes2::Display::instance();
+        fheroes2::Text text( std::to_string( count ), fheroes2::FontType::smallWhite() );
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 + Resource::getIconIcnIndex( type ) );
         fheroes2::Blit( sprite, fheroes2::Display::instance(), posx, posy );
-        text.Blit( posx + ( sprite.width() - text.w() ) / 2, posy + sprite.height() - 12 );
+        // -12 -> -10 for +2 offset using new Text from ui_text.h and others 
+        text.draw( posx + ( sprite.width() - text.width() ) / 2, posy + sprite.height() - 10, display );
     }
 
     void Redraw( const Funds * res = nullptr ) const
@@ -212,23 +215,24 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
 
     Funds funds1( kingdom.GetFunds() );
     Funds funds2;
-    Text text;
+    fheroes2::Text text;
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 );
+    int32_t posx = ( 320 -  (sprite.width() + 240 ) ) / 2;
 
-    text.Set( _( "Select Recipients" ) );
-    text.Blit( box.x + ( box.width - text.w() ) / 2, box.y + 5 );
+    text.set( _( "Select Recipients" ), fheroes2::FontType::normalWhite() );
+    text.draw( box.x + ( box.width - text.width() ) / 2, box.y + 7, display );
 
     SelectRecipientsColors selector( fheroes2::Point( box.x + 65, box.y + 28 ), kingdom.GetColor() );
     selector.Redraw();
 
-    text.Set( _( "Your Funds" ) );
-    text.Blit( box.x + ( box.width - text.w() ) / 2, box.y + 55 );
-    ResourceBar info1( funds1, box.x + 25, box.y + 80 );
+    text.set( _( "Your Funds" ), fheroes2::FontType::normalWhite() );
+    text.draw( box.x + ( box.width - text.width() ) / 2, box.y + 57, display );
+    ResourceBar info1( funds1, box.x + posx, box.y + 80 );
     info1.Redraw();
 
-    text.Set( _( "Planned Gift" ) );
-    text.Blit( box.x + ( box.width - text.w() ) / 2, box.y + 125 );
-
-    ResourceBar info2( funds2, box.x + 25, box.y + 150 );
+    text.set( _( "Planned Gift" ), fheroes2::FontType::normalWhite() );
+    text.draw( box.x + ( box.width - text.width() ) / 2, box.y + 127, display );
+    ResourceBar info2( funds2, box.x + posx, box.y + 150 );
     info2.Redraw();
 
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
