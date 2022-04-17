@@ -62,16 +62,15 @@ struct SelectRecipientsColors
         : colors( Settings::Get().GetPlayers().GetActualColors() & ~senderColor )
         , recipients( 0 )
     {
-        
         positions.reserve( colors.size() );
 
         const int32_t colorCount = static_cast<int32_t>( colors.size() ); // safe to cast as the number of players <= 8.
 
         for ( int32_t i = 0; i < colorCount; ++i ) {
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
-            int32_t temp = i * (sprite.width() + 15) * 6 / colorCount;
-            int32_t ceilCalc = temp + (((i * (sprite.width() + 15) * 6) % colorCount) > 0);
-            int32_t posx = ceilCalc + ( (sprite.width() + 15) / ( 2 * colorCount ) );
+            int32_t temp = i * ( sprite.width() + 15 ) * 6 / colorCount;
+            int32_t ceilCalc = temp + ( ( ( i * ( sprite.width() + 15 ) * 6 ) % colorCount ) > 0 );
+            int32_t posx = ceilCalc + ( ( sprite.width() + 15 ) / ( 2 * colorCount ) );
             positions.emplace_back( pos.x + posx, pos.y, sprite.width(), sprite.height() );
         }
     }
@@ -87,7 +86,6 @@ struct SelectRecipientsColors
 
         for ( Colors::const_iterator it = colors.begin(); it != colors.end(); ++it ) {
             const fheroes2::Rect & pos = positions[std::distance( colors.begin(), it )];
-
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CELLWIN, 43 + Color::GetIndex( *it ) ), display, pos.x, pos.y );
             if ( recipients & *it )
                 fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ), display, pos.x + 2, pos.y + 2 );
