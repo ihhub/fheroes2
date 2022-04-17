@@ -54,7 +54,6 @@ jobs:
     - name: Generate version information
       run: |
         echo "FHEROES2_APP_VERSION=$(cat version.txt)" >> "$GITHUB_ENV"
-        echo "FHEROES2_BUILD_NUMBER=$((GITHUB_RUN_ID % 32768))" >> "$GITHUB_ENV"
     - name: Build
       run: |
         MSBuild.exe fheroes2-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
