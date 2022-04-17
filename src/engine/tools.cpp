@@ -66,10 +66,15 @@ std::string StringTrim( std::string str )
     return str;
 }
 
-/* convert to lower case */
 std::string StringLower( std::string str )
 {
     std::transform( str.begin(), str.end(), str.begin(), []( const unsigned char c ) { return std::tolower( c ); } );
+    return str;
+}
+
+std::string StringUpper( std::string str )
+{
+    std::transform( str.begin(), str.end(), str.begin(), []( const unsigned char c ) { return std::toupper( c ); } );
     return str;
 }
 

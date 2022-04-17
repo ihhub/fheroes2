@@ -50,7 +50,9 @@ int GetInt( const std::string & );
 int Sign( int );
 
 std::string StringTrim( std::string );
-std::string StringLower( std::string );
+
+std::string StringLower( std::string str );
+std::string StringUpper( std::string str );
 
 std::vector<std::string> StringSplit( const std::string &, const std::string & );
 
