@@ -38,6 +38,8 @@ namespace
 
     void playAudio( const std::vector<std::vector<uint8_t>> & audioChannels )
     {
+        Mixer::Volume( -1, Mixer::MaxVolume() * Settings::Get().SoundVolume() / 10 );
+
         for ( const std::vector<uint8_t> & audio : audioChannels ) {
             if ( !audio.empty() ) {
                 Mixer::Play( &audio[0], static_cast<uint32_t>( audio.size() ) );
