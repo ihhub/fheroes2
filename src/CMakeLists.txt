@@ -20,8 +20,8 @@
 
 set(
 	GNU_CC_WARN_OPTS
-	-pedantic -Wall -Wextra -Wdouble-promotion -Wfloat-conversion -Wfloat-equal -Winit-self
-	-Wredundant-decls -Wshadow -Wundef -Wuninitialized -Wunused
+	-pedantic -Wall -Wextra -Wdouble-promotion -Wextra-semi -Wfloat-conversion -Wfloat-equal
+	-Winit-self -Wredundant-decls -Wshadow -Wundef -Wuninitialized -Wunused
 	)
 set(
 	GNU_CXX_WARN_OPTS
