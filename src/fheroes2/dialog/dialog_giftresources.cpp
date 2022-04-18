@@ -216,7 +216,7 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     Funds funds2;
     fheroes2::Text text;
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 );
-    int32_t posx = ( 320 -  ( sprite.width() + 240 ) ) / 2;
+    int32_t posx = ( 320 - ( sprite.width() + 240 ) ) / 2;
     const fheroes2::FontType normalWhite = fheroes2::FontType::normalWhite();
 
     text.set( _( "Select Recipients" ), normalWhite );
