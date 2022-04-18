@@ -34,6 +34,7 @@ class HeroBase;
 class Heroes;
 class Kingdom;
 class Army;
+class Spell;
 struct VecHeroes;
 namespace Maps
 {
@@ -121,7 +122,8 @@ namespace AI
     // functionality in ai_hero_action.cpp
     void HeroesAction( Heroes & hero, s32 dst_index );
     void HeroesMove( Heroes & hero );
-    void HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex );
+    bool HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex );
+    bool HeroesCastViewSpell( Heroes & hero, const Spell & spell );
 
     // functionality in ai_common.cpp
     bool BuildIfAvailable( Castle & castle, int building );

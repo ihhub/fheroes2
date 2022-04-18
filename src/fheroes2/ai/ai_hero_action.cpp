@@ -1710,6 +1710,16 @@ namespace AI
         hero.ActionNewPosition( false );
     }
 
+    bool HeroesCastViewSpell( Heroes & hero, const Spell & spell )
+    {
+        if ( !hero.CanCastSpell( spell ) )
+            return false;
+
+        hero.SpellCasted( spell );
+
+        return true;
+    }
+
     void AIWhirlpoolTroopLoseEffect( Heroes & hero )
     {
         Army & heroArmy = hero.GetArmy();

@@ -37,6 +37,8 @@ namespace AI
 
     void Normal::revealFog( const Maps::Tiles & tile )
     {
-        _mapObjects.emplace_back( tile.GetIndex(), tile.GetObject() );
+        const MP2::MapObjectType object = tile.GetObject();
+        if ( object != MP2::OBJ_ZERO )
+            _mapObjects.emplace_back( tile.GetIndex(), object );
     }
 }
