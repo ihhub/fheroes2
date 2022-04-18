@@ -138,7 +138,6 @@ struct ResourceBar
         fheroes2::Text text( std::to_string( count ), fheroes2::FontType::smallWhite() );
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 + Resource::getIconIcnIndex( type ) );
         fheroes2::Blit( sprite, fheroes2::Display::instance(), posx, posy );
-        // -12 -> -10 for +2 offset using new Text from ui_text.h and others 
         text.draw( posx + ( sprite.width() - text.width() ) / 2, posy + sprite.height() - 10, display );
     }
 
@@ -217,7 +216,7 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     Funds funds2;
     fheroes2::Text text;
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 );
-    int32_t posx = ( 320 -  (sprite.width() + 240 ) ) / 2;
+    int32_t posx = ( 320 -  ( sprite.width() + 240 ) ) / 2;
     const fheroes2::FontType normalWhite = fheroes2::FontType::normalWhite();
 
     text.set( _( "Select Recipients" ), normalWhite );
