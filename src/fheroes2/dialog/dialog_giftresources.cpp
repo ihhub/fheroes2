@@ -67,8 +67,8 @@ struct SelectRecipientsColors
 
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
         const int32_t colorCount = static_cast<int32_t>( colors.size() ); // safe to cast as the number of players <= 8.
-        int32_t playerCtnrWidth = 2 * sprite.width() + ( colorCount - 1 ) * 22; // original spacing = 22
-        int32_t startx = 320 - playerCtnrWidth / 2;
+        int32_t playerContainerWidth = colorCount * sprite.width() + ( colorCount - 1 ) * 22; // original spacing = 22
+        int32_t startx = 320 - playerContainerWidth / 2;
 
         for ( int32_t i = 0; i < colorCount; ++i ) {
             int32_t posx = startx + i * ( 22 + sprite.width() );
@@ -214,12 +214,12 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
 
     Funds funds1( kingdom.GetFunds() );
     Funds funds2;
-    fheroes2::Text text;
+
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 );
     int32_t posx = ( 320 - ( sprite.width() + 240 ) ) / 2;
-    const fheroes2::FontType normalWhite = fheroes2::FontType::normalWhite();
 
-    text.set( _( "Select Recipients" ), normalWhite );
+    const fheroes2::FontType normalWhite = fheroes2::FontType::normalWhite();
+    fheroes2::Text text( _( "Select Recipients" ), normalWhite );
     text.draw( box.x + ( box.width - text.width() ) / 2, box.y + 7, display );
 
     SelectRecipientsColors selector( fheroes2::Point( box.x + 65, box.y + 28 ), kingdom.GetColor() );
@@ -230,7 +230,7 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     ResourceBar info1( funds1, box.x + posx, box.y + 80 );
     info1.Redraw();
 
-    text.set( _( "Planned Gift" ), fheroes2::FontType::normalWhite() );
+    text.set( _( "Planned Gift" ), normalWhite );
     text.draw( box.x + ( box.width - text.width() ) / 2, box.y + 127, display );
     ResourceBar info2( funds2, box.x + posx, box.y + 150 );
     info2.Redraw();
