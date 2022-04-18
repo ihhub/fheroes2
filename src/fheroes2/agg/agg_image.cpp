@@ -204,7 +204,7 @@ namespace
         }
 
         uint8_t * transform = image.transform();
-        uint8_t * transformEnd = transform + image.width() * image.height();
+        const uint8_t * transformEnd = transform + image.width() * image.height();
         for ( ; transform != transformEnd; ++transform ) {
             if ( *transform == 0 ) {
                 *transform = 1;

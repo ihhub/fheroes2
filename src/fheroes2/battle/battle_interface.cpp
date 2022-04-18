@@ -5006,7 +5006,7 @@ void Battle::Interface::RedrawBridgeAnimation( const bool bridgeDownAnimation )
         AGG::PlaySound( M82::DRAWBRG );
 }
 
-bool Battle::Interface::IdleTroopsAnimation( void )
+bool Battle::Interface::IdleTroopsAnimation() const
 {
     if ( Game::validateAnimationDelay( Game::BATTLE_IDLE_DELAY ) ) {
         const bool redrawNeeded = arena.GetForce1().animateIdleUnits();
@@ -5016,7 +5016,7 @@ bool Battle::Interface::IdleTroopsAnimation( void )
     return false;
 }
 
-void Battle::Interface::ResetIdleTroopAnimation( void )
+void Battle::Interface::ResetIdleTroopAnimation() const
 {
     arena.GetForce1().resetIdleAnimation();
     arena.GetForce2().resetIdleAnimation();
