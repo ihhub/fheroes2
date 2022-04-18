@@ -337,7 +337,7 @@ static int _smk_huff16_build_rec(struct smk_huff16_t * const t, struct smk_bit_t
 /* Entry point for building a big 16-bit tree. */
 static int smk_huff16_build(struct smk_huff16_t * const t, struct smk_bit_t * const bs, const unsigned int alloc_size)
 {
-	struct smk_huff8_t low8, hi8;
+	struct smk_huff8_t low8 = {0}, hi8 = {0};
 	size_t limit;
 	int value, i, bit;
 	/* null check */
@@ -1478,7 +1478,7 @@ static char smk_render_audio(struct smk_audio_t * s, unsigned char * p, unsigned
 	char bit;
 	short unpack, unpack2;
 	/* used for audio decoding */
-	struct smk_huff8_t aud_tree[4];
+	struct smk_huff8_t aud_tree[4] = {0};
 	/* null check */
 	assert(s);
 	assert(p);
