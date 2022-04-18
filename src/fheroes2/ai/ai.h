@@ -123,7 +123,7 @@ namespace AI
     void HeroesAction( Heroes & hero, s32 dst_index );
     void HeroesMove( Heroes & hero );
     bool HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex );
-    bool HeroesCastViewSpell( Heroes & hero, const Spell & spell );
+    bool HeroesCastAdventureSpell( Heroes & hero, const Spell & spell );
 
     // functionality in ai_common.cpp
     bool BuildIfAvailable( Castle & castle, int building );

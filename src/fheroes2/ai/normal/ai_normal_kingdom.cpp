@@ -257,7 +257,7 @@ namespace AI
             }
         }
 
-        if ( bestHeroToViewAll && HeroesCastViewSpell( *bestHeroToViewAll, Spell::VIEWALL ) ) {
+        if ( bestHeroToViewAll && HeroesCastAdventureSpell( *bestHeroToViewAll, Spell::VIEWALL ) ) {
             underViewSpell = true;
         }
 
