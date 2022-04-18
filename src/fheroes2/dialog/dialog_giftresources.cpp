@@ -65,14 +65,14 @@ struct SelectRecipientsColors
     {
         positions.reserve( colors.size() );
 
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
         const int32_t colorCount = static_cast<int32_t>( colors.size() ); // safe to cast as the number of players <= 8.
+        int32_t playerCtnrWidth = 2 * sprite.width() + ( colorCount - 1 ) * 22; // original spacing = 22
+        int32_t startx = 320 - playerCtnrWidth / 2;
 
         for ( int32_t i = 0; i < colorCount; ++i ) {
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
-            int32_t temp = i * ( sprite.width() + 15 ) * 6 / colorCount;
-            int32_t ceilCalc = temp + ( ( ( i * ( sprite.width() + 15 ) * 6 ) % colorCount ) > 0 );
-            int32_t posx = ceilCalc + ( ( sprite.width() + 15 ) / ( 2 * colorCount ) );
-            positions.emplace_back( pos.x + posx, pos.y, sprite.width(), sprite.height() );
+            int32_t posx = startx + i * ( 22 + sprite.width() );
+            positions.emplace_back( posx, pos.y, sprite.width(), sprite.height() );
         }
     }
 
@@ -218,14 +218,15 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     fheroes2::Text text;
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 );
     int32_t posx = ( 320 -  (sprite.width() + 240 ) ) / 2;
+    const fheroes2::FontType normalWhite = fheroes2::FontType::normalWhite();
 
-    text.set( _( "Select Recipients" ), fheroes2::FontType::normalWhite() );
+    text.set( _( "Select Recipients" ), normalWhite );
     text.draw( box.x + ( box.width - text.width() ) / 2, box.y + 7, display );
 
     SelectRecipientsColors selector( fheroes2::Point( box.x + 65, box.y + 28 ), kingdom.GetColor() );
     selector.Redraw();
 
-    text.set( _( "Your Funds" ), fheroes2::FontType::normalWhite() );
+    text.set( _( "Your Funds" ), normalWhite );
     text.draw( box.x + ( box.width - text.width() ) / 2, box.y + 57, display );
     ResourceBar info1( funds1, box.x + posx, box.y + 80 );
     info1.Redraw();
