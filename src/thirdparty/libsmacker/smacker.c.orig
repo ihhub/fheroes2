@@ -137,7 +137,7 @@ static int _smk_huff8_build_rec(struct smk_huff8_t * const t, struct smk_bit_t *
 			then build the right hand branch from there.
 		*/
 		/* track the current index */
-		value = (int)(t->size ++);
+		value = t->size ++;
 
 		/* go build the left branch */
 		if (! _smk_huff8_build_rec(t, bs)) {
@@ -147,7 +147,7 @@ static int _smk_huff8_build_rec(struct smk_huff8_t * const t, struct smk_bit_t *
 
 		/* now go back to our current location, and
 			mark our location as a "jump" */
-		t->tree[value] = SMK_HUFF8_BRANCH | (unsigned short)t->size;
+		t->tree[value] = SMK_HUFF8_BRANCH | t->size;
 
 		/* continue building the right side */
 		if (! _smk_huff8_build_rec(t, bs)) {
@@ -283,7 +283,7 @@ static int _smk_huff16_build_rec(struct smk_huff16_t * const t, struct smk_bit_t
 	if (bit) {
 		/* See tree-in-array explanation for HUFF8 above */
 		/* track the current index */
-		value = (int)(t->size ++);
+		value = t->size ++;
 
 		/* go build the left branch */
 		if (! _smk_huff16_build_rec(t, bs, low8, hi8, limit)) {
@@ -293,7 +293,7 @@ static int _smk_huff16_build_rec(struct smk_huff16_t * const t, struct smk_bit_t
 
 		/* now go back to our current location, and
 			mark our location as a "jump" */
-		t->tree[value] = SMK_HUFF16_BRANCH | (unsigned int)t->size;
+		t->tree[value] = SMK_HUFF16_BRANCH | t->size;
 
 		/* continue building the right side */
 		if (! _smk_huff16_build_rec(t, bs, low8, hi8, limit)) {
@@ -875,7 +875,7 @@ smk smk_open_memory(const unsigned char * buffer, const unsigned long size)
 	/* set up the read union for Memory mode */
 	fp.ram = (unsigned char *)buffer;
 
-	if ((s = smk_open_generic(0, fp, size, SMK_MODE_MEMORY)) == NULL)
+	if (!(s = smk_open_generic(0, fp, size, SMK_MODE_MEMORY)))
 		fprintf(stderr, "libsmacker::smk_open_memory(buffer,%lu) - ERROR: Fatal error in smk_open_generic, returning NULL.\n", size);
 
 	return s;
@@ -895,7 +895,7 @@ smk smk_open_filepointer(FILE * file, const unsigned char mode)
 	/* Copy file ptr to internal union */
 	fp.file = file;
 
-	if ((s = smk_open_generic(1, fp, 0, mode)) == NULL) {
+	if (!(s = smk_open_generic(1, fp, 0, mode))) {
 		fprintf(stderr, "libsmacker::smk_open_filepointer(file,%u) - ERROR: Fatal error in smk_open_generic, returning NULL.\n", mode);
 		fclose(fp.file);
 		goto error;
@@ -921,7 +921,7 @@ smk smk_open_file(const char * filename, const unsigned char mode)
 		return NULL;
 	}
 
-	if ((fp = fopen(filename, "rb")) == NULL) {
+	if (!(fp = fopen(filename, "rb"))) {
 		fprintf(stderr, "libsmacker::smk_open_file(%s,%u) - ERROR: could not open file\n", filename, mode);
 		perror("\tError reported was");
 		goto error;
@@ -1606,7 +1606,7 @@ static char smk_render(smk s)
 	assert(s);
 
 	/* Retrieve current chunk_size for this frame. */
-	if ((i = s->chunk_size[s->cur_frame]) == 0) {
+	if (!(i = s->chunk_size[s->cur_frame])) {
 		fprintf(stderr, "libsmacker::smk_render(s) - Warning: frame %lu: chunk_size is 0.\n", s->cur_frame);
 		goto error;
 	}
