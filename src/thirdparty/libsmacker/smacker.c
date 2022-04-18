@@ -406,8 +406,8 @@ static int smk_huff16_build(struct smk_huff16_t * const t, struct smk_bit_t * co
 			return 0;
 		}
 
-		/* check that we completely filled the tree */
-		if (limit != t->size) {
+		/* check that we completely filled the tree (IGNORED) */
+		if (limit != t->size && 0) {
 			fputs("libsmacker::smk_huff16_build() - ERROR: failed to completely decode huff16 tree\n", stderr);
 			free(t->tree);
 			t->tree = NULL;
@@ -420,7 +420,10 @@ static int smk_huff16_build(struct smk_huff16_t * const t, struct smk_bit_t * co
 		}
 
 		t->tree[0] = 0;
-		//t->cache[0] = t->cache[1] = t->cache[2] = 0;
+		t->cache[0] = t->cache[1] = t->cache[2] = 0;
+
+		/* Return immediately if there is no tree. */
+		return 1;
 	}
 
 	/* Check final end tag. */
