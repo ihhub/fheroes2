@@ -48,8 +48,8 @@ jobs:
       run: |
         cd script/windows
         ./install_packages.bat
-        choco.exe install cygwin cyg-get zip -y
-        cyg-get.bat make iconv gettext-devel
+        choco.exe install make gettext-devel -y --source cygwin
+        choco.exe install zip -y
     - uses: microsoft/setup-msbuild@v1
     - name: Generate version information
       run: |
