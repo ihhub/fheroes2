@@ -734,7 +734,7 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
     if ( currentSpellPoints < hero.GetMaxSpellPoints() * _spellPointsReserved )
         return path;
 
-    currentSpellPoints -= hero.GetMaxSpellPoints() * _spellPointsReserved;
+    currentSpellPoints -= static_cast<uint32_t>( hero.GetMaxSpellPoints() * _spellPointsReserved );
 
     const uint32_t movementCost = std::max( 1U, dimensionDoor.MovePoint() );
     const uint32_t maxCasts = std::min( currentSpellPoints / std::max( 1U, dimensionDoor.SpellPoint( &hero ) ), hero.GetMovePoints() / movementCost );
@@ -865,7 +865,7 @@ void AIWorldPathfinder::setArmyStrengthMultiplier( const double multiplier )
     }
 }
 
-void AIWorldPathfinder::setSpellPointReserve( const double divisor )
+void AIWorldPathfinder::setSpellPointReserve( const double reserve )
 {
-    _spellPointsReserved = divisor;
+    _spellPointsReserved = reserve;
 }
