@@ -33,6 +33,7 @@
 #include "ui_text.h"
 #include "ui_window.h"
 #include "world.h"
+#include<iostream>
 
 int32_t GetIndexClickRects( const std::vector<fheroes2::Rect> & rects )
 {
@@ -64,11 +65,13 @@ struct SelectRecipientsColors
         , recipients( 0 )
     {
         positions.reserve( colors.size() );
-
+        const fheroes2::StandardWindow frameborder( 320, 234 );
+        const fheroes2::Rect box( frameborder.activeArea() );
+        
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
         const int32_t colorCount = static_cast<int32_t>( colors.size() ); // safe to cast as the number of players <= 8.
         int32_t playerContainerWidth = colorCount * sprite.width() + ( colorCount - 1 ) * 22; // original spacing = 22
-        int32_t startx = 320 - playerContainerWidth / 2;
+        int32_t startx = box.x + 160 - playerContainerWidth / 2; // 160 = half, fixed width of brown box 
 
         for ( int32_t i = 0; i < colorCount; ++i ) {
             int32_t posx = startx + i * ( 22 + sprite.width() );
@@ -216,25 +219,23 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     Funds funds2;
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 );
-    int32_t posx = ( 320 - ( sprite.width() + 240 ) ) / 2;
+    int32_t posx = box.x + 160 - ( sprite.width() + 240 ) / 2; // 160 = half width of brown box, fixed
 
     const fheroes2::FontType normalWhite = fheroes2::FontType::normalWhite();
     fheroes2::Text text( _( "Select Recipients" ), normalWhite );
     text.draw( box.x + ( box.width - text.width() ) / 2, box.y + 7, display );
-
     SelectRecipientsColors selector( fheroes2::Point( box.x + 65, box.y + 28 ), kingdom.GetColor() );
     selector.Redraw();
 
     text.set( _( "Your Funds" ), normalWhite );
     text.draw( box.x + ( box.width - text.width() ) / 2, box.y + 57, display );
-    ResourceBar info1( funds1, box.x + posx, box.y + 80 );
+    ResourceBar info1( funds1, posx, box.y + 80 );
     info1.Redraw();
 
     text.set( _( "Planned Gift" ), normalWhite );
     text.draw( box.x + ( box.width - text.width() ) / 2, box.y + 127, display );
-    ResourceBar info2( funds2, box.x + posx, box.y + 150 );
+    ResourceBar info2( funds2, posx, box.y + 150 );
     info2.Redraw();
-
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
     const int okIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
     const int cancelIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON;
