@@ -33,7 +33,6 @@
 #include "ui_text.h"
 #include "ui_window.h"
 #include "world.h"
-#include<iostream>
 
 int32_t GetIndexClickRects( const std::vector<fheroes2::Rect> & rects )
 {
@@ -67,12 +66,11 @@ struct SelectRecipientsColors
         positions.reserve( colors.size() );
         const fheroes2::StandardWindow frameborder( 320, 234 );
         const fheroes2::Rect box( frameborder.activeArea() );
-        
+
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
         const int32_t colorCount = static_cast<int32_t>( colors.size() ); // safe to cast as the number of players <= 8.
         int32_t playerContainerWidth = colorCount * sprite.width() + ( colorCount - 1 ) * 22; // original spacing = 22
-        int32_t startx = box.x + 160 - playerContainerWidth / 2; // 160 = half, fixed width of brown box 
-
+        int32_t startx = box.x + 160 - playerContainerWidth / 2; // fixed half width of brown box = 160
         for ( int32_t i = 0; i < colorCount; ++i ) {
             int32_t posx = startx + i * ( 22 + sprite.width() );
             positions.emplace_back( posx, pos.y, sprite.width(), sprite.height() );
