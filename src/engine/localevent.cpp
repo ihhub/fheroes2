@@ -220,7 +220,7 @@ namespace
         return 0;
     }
 
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
     const int totalCharactersDPad = 38;
     bool dpadInputActive = false;
     bool currentUpper = false;
@@ -399,7 +399,7 @@ namespace
 }
 
 // Custom button mapping for Nintendo Switch
-#if defined( __SWITCH__ )
+#if defined( TARGET_NINTENDO_SWITCH )
 #undef SDL_CONTROLLER_BUTTON_A
 #undef SDL_CONTROLLER_BUTTON_B
 #undef SDL_CONTROLLER_BUTTON_DPAD_LEFT
@@ -458,7 +458,7 @@ void LocalEvent::CloseController()
 
 void LocalEvent::OpenTouchpad()
 {
-#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
     const int touchNumber = SDL_GetNumTouchDevices();
     if ( touchNumber > 0 ) {
         _touchpadAvailable = true;
@@ -473,14 +473,14 @@ void LocalEvent::OpenTouchpad()
 
 void LocalEvent::OpenVirtualKeyboard()
 {
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
     dpadInputActive = true;
 #endif
 }
 
 void LocalEvent::CloseVirtualKeyboard()
 {
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
     dpadInputActive = false;
 #endif
 }
@@ -815,7 +815,7 @@ bool PressIntKey( u32 max, u32 & result )
 
 size_t InsertKeySym( std::string & res, size_t pos, const KeySym sym, const int32_t mod )
 {
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
     (void)mod;
 
     // input with D-Pad
@@ -1273,7 +1273,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
 
         if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
-            ( *( redraw_cursor_func ) )( mouse_cu.x, mouse_cu.y );
+            ( *redraw_cursor_func )( mouse_cu.x, mouse_cu.y );
         }
 
         if ( event.type == SDL_FINGERDOWN ) {
@@ -1362,7 +1362,7 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
         ResetModes( KEY_PRESSED );
     }
     else if ( modes & KEY_PRESSED ) {
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
         if ( dpadInputActive ) {
             if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER || button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
                 key_value = KEY_SHIFT;
@@ -1403,7 +1403,7 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
         else if ( button.button == SDL_CONTROLLER_BUTTON_START ) {
             key_value = KEY_RETURN;
         }
-#if defined( __SWITCH__ )
+#if defined( TARGET_NINTENDO_SWITCH )
         // Custom button mapping for Nintendo Switch
         if ( button.button == SWITCH_BUTTON_Y ) {
             key_value = KEY_RETURN;
@@ -1457,7 +1457,7 @@ void LocalEvent::ProcessControllerAxisMotion()
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
 
         if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
-            ( *( redraw_cursor_func ) )( mouse_cu.x, mouse_cu.y );
+            ( *redraw_cursor_func )( mouse_cu.x, mouse_cu.y );
         }
     }
 
@@ -1742,7 +1742,7 @@ void LocalEvent::SetStateDefaults( void )
     SetState( SDL_SYSWMEVENT, false );
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
     SetState( SDL_FINGERDOWN, true );
     SetState( SDL_FINGERUP, true );
     SetState( SDL_FINGERMOTION, true );

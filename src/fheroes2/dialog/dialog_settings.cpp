@@ -156,18 +156,12 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::WORLD_ALLOW_SET_GUARDIAN );
     states.push_back( Settings::WORLD_EXT_OBJECTS_CAPTURED );
     states.push_back( Settings::WORLD_SCOUTING_EXTENDED );
-    states.push_back( Settings::WORLD_ARTIFACT_CRYSTAL_BALL );
     states.push_back( Settings::WORLD_SCALE_NEUTRAL_ARMIES );
-    states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS );
-    states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS );
-    states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS );
     states.push_back( Settings::HEROES_BUY_BOOK_FROM_SHRINES );
     states.push_back( Settings::HEROES_REMEMBER_POINTS_RETREAT );
-    states.push_back( Settings::HEROES_TRANSCRIBING_SCROLLS );
     states.push_back( Settings::HEROES_ARENA_ANY_SKILLS );
     states.push_back( Settings::CASTLE_ALLOW_GUARDIANS );
     states.push_back( Settings::BATTLE_SOFT_WAITING );
-    states.push_back( Settings::BATTLE_REVERSE_WAIT_ORDER );
     states.push_back( Settings::BATTLE_DETERMINISTIC_RESULT );
 
     std::sort( states.begin(), states.end(), []( uint32_t first, uint32_t second ) { return Settings::ExtName( first ) > Settings::ExtName( second ); } );
@@ -190,7 +184,7 @@ void Dialog::ExtSettings( bool readonly )
     listbox.setScrollBarArea( { area.x + 298, area.y + 44, 10, ah - 42 } );
     listbox.setScrollBarImage( scrollbarSlider );
     listbox.SetAreaMaxItems( ah / 40 );
-    listbox.SetAreaItems( fheroes2::Rect( area.x + 10, area.y + 30, 290, ah + 5 ) );
+    listbox.SetAreaItems( { area.x + 10, area.y + 30, 290, ah + 5 } );
     listbox.SetListContent( states );
     listbox.Redraw();
 
@@ -227,5 +221,5 @@ void Dialog::ExtSettings( bool readonly )
         display.render();
     }
 
-    Settings::Get().BinarySave();
+    Settings::Get().Save( Settings::configFileName );
 }

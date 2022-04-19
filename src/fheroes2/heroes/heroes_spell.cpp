@@ -46,13 +46,6 @@
 #include <cassert>
 #include <memory>
 
-namespace
-{
-    // Values are extracted from Heroes2 executable
-    const uint32_t dimensionDoorPenalty = 225;
-    const uint32_t townGatePenalty = 225;
-}
-
 void DialogSpellFailed( const Spell & spell );
 
 bool ActionSpellViewMines( const Heroes & hero );
@@ -262,7 +255,7 @@ bool Heroes::ActionSpellCast( const Spell & spell )
     }
 
     if ( apply ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " cast spell: " << spell.GetName() );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " cast spell: " << spell.GetName() )
         SpellCasted( spell );
         return true;
     }
@@ -284,7 +277,6 @@ bool HeroesTownGate( Heroes & hero, const Castle * castle )
         hero.GetPath().Hide();
         hero.FadeOut();
 
-        hero.ApplyPenaltyMovement( townGatePenalty );
         hero.Move2Dest( dst );
 
         I.GetGameArea().SetCenter( hero.GetCenter() );
@@ -450,7 +442,6 @@ bool ActionSpellDimensionDoor( Heroes & hero )
 
         hero.SpellCasted( Spell::DIMENSIONDOOR );
 
-        hero.ApplyPenaltyMovement( dimensionDoorPenalty );
         hero.Move2Dest( dst );
 
         I.GetGameArea().SetCenter( hero.GetCenter() );
@@ -532,9 +523,8 @@ bool ActionSpellTownPortal( Heroes & hero )
     listbox.setScrollBarArea( { area.x + 266, area.y + 68, 14, 119 } );
 
     const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( listIcnId, 10 );
-    const fheroes2::Image scrollbarSlider
-        = fheroes2::generateScrollbarSlider( originalSilder, false, 119, 5, static_cast<int32_t>( castles.size() ), { 0, 0, originalSilder.width(), 4 },
-                                             { 0, 4, originalSilder.width(), 8 } );
+    const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSilder, false, 119, 5, static_cast<int32_t>( castles.size() ),
+                                                                               { 0, 0, originalSilder.width(), 4 }, { 0, 4, originalSilder.width(), 8 } );
 
     listbox.setScrollBarImage( scrollbarSlider );
     listbox.SetAreaMaxItems( 5 );
@@ -664,7 +654,7 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell )
         tile.SetQuantity3( static_cast<uint8_t>( spell.GetID() ) );
 
         if ( spell == Spell::HAUNT ) {
-            world.CaptureObject( tile.GetIndex(), Color::UNUSED );
+            world.CaptureObject( tile.GetIndex(), Color::NONE );
             tile.removeFlags();
             hero.SetMapsObject( MP2::OBJ_ABANDONEDMINE );
         }

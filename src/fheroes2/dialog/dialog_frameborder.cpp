@@ -89,7 +89,7 @@ void Dialog::FrameBorder::SetPosition( int32_t posx, int32_t posy, int32_t encw,
     area.x = posx + border;
     area.y = posy + border;
 
-    top = fheroes2::Rect( posx, posy, area.width, border );
+    top = fheroes2::Rect( rect.x, rect.y, rect.width, border );
 }
 
 const fheroes2::Rect & Dialog::FrameBorder::GetTop() const

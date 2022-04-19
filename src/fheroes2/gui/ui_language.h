@@ -33,7 +33,8 @@ namespace fheroes2
         German, // GoG version
         Russian, // Buka and XXI Vek versions
         Italian, // Rare version?
-        Czech // Local release occured in 2002 by CD Projekt
+        Czech, // Local release occured in 2002 by CD Projekt
+        Norwegian // Original to fheroes2
     };
 
     class LanguageSwitcher
@@ -51,6 +52,8 @@ namespace fheroes2
     private:
         const std::string _currentLanguage;
     };
+
+    SupportedLanguage getResourceLanguage();
 
     // This function returns an array of supported languages. If the array contains only one language it must be English.
     std::vector<SupportedLanguage> getSupportedLanguages();

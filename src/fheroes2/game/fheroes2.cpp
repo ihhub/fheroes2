@@ -230,7 +230,7 @@ int main( int argc, char ** argv )
         std::set<fheroes2::SystemInitializationComponent> coreComponents{ fheroes2::SystemInitializationComponent::Audio,
                                                                           fheroes2::SystemInitializationComponent::Video };
 
-#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
         coreComponents.emplace( fheroes2::SystemInitializationComponent::GameController );
 #endif
 
@@ -244,7 +244,7 @@ int main( int argc, char ** argv )
             Music::SetFadeIn( 900 );
         }
 
-        DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() )
 
         const DisplayInitializer displayInitializer;
 
@@ -274,7 +274,7 @@ int main( int argc, char ** argv )
         Game::mainGameLoop( conf.isFirstGameRun() );
     }
     catch ( const std::exception & ex ) {
-        ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." );
+        ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." )
         return EXIT_FAILURE;
     }
 

@@ -42,8 +42,6 @@ jobs:
     defaults:
       run:
         shell: bash
-    env:
-      APP_VERSION: 0.9.13
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies, cygwin and zip
@@ -53,9 +51,9 @@ jobs:
         choco.exe install cygwin cyg-get zip -y
         cyg-get.bat make iconv gettext-devel
     - uses: microsoft/setup-msbuild@v1
-    - name: Generate build number
+    - name: Generate version information
       run: |
-        echo "fheroes2_build_version=$((GITHUB_RUN_NUMBER % 32768))" >> "$GITHUB_ENV"
+        echo "FHEROES2_APP_VERSION=$(cat version.txt)" >> "$GITHUB_ENV"
     - name: Build
       run: |
         MSBuild.exe fheroes2-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
@@ -71,7 +69,7 @@ jobs:
       shell: cmd
     - name: Create Inno Setup package
       run: |
-        iscc.exe script\windows\fheroes2.iss /DAppVersion="%APP_VERSION%" /DBuildDir="..\..\%BUILD_DIR%" ^
+        iscc.exe script\windows\fheroes2.iss /DAppVersion="%FHEROES2_APP_VERSION%" /DBuildDir="..\..\%BUILD_DIR%" ^
                  /DPlatform=${{ matrix.config.platform }} /DDeployConfName=${{ matrix.config.deploy_config }}
       shell: cmd
       env:

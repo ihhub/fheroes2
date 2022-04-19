@@ -92,23 +92,5 @@ void SpellStorage::Append( const BagArtifacts & bag )
 
 void SpellStorage::Append( const Artifact & art )
 {
-    switch ( art.GetID() ) {
-    case Artifact::SPELL_SCROLL:
-        Append( Spell( art.GetSpell() ) );
-        break;
-
-    case Artifact::CRYSTAL_BALL:
-        if ( Settings::Get().ExtWorldArtifactCrystalBall() ) {
-            Append( Spell( Spell::IDENTIFYHERO ) );
-            Append( Spell( Spell::VISIONS ) );
-        }
-        break;
-
-    case Artifact::BATTLE_GARB:
-        Append( Spell( Spell::TOWNPORTAL ) );
-        break;
-
-    default:
-        break;
-    }
+    Append( Spell( art.getSpellId() ) );
 }

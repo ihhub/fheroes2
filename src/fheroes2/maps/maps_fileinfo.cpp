@@ -21,7 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#if defined( ANDROID ) || defined( _MSC_VER )
+#if defined( _MSC_VER )
 #include <locale>
 #endif
 #include <algorithm>
@@ -233,13 +233,13 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
     StreamFile fs;
 
     if ( !fs.open( filename, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "File is not found " << filename );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "File is not found " << filename )
         return false;
     }
 
     // magic byte
     if ( fs.getBE32() != 0x5C000000 ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Not a valid map file " << filename );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Not a valid map file " << filename )
         return false;
     }
 
@@ -369,13 +369,13 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
 
         const Colors availableColors( kingdom_colors );
         if ( availableColors.empty() ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid list of kingdom colors during map load " << filename );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid list of kingdom colors during map load " << filename )
             return false;
         }
 
         const int numPlayersSide1 = wins1;
         if ( ( numPlayersSide1 <= 0 ) || ( numPlayersSide1 >= static_cast<int>( availableColors.size() ) ) ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid win condition parameter 1 during map load " << filename );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid win condition parameter 1 during map load " << filename )
             return false;
         }
 

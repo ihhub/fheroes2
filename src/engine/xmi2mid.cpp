@@ -66,7 +66,7 @@ XMI_Time readXMITime( const uint8_t * data )
 
     while ( *p & 0x80 ) {
         if ( 4 <= p - data ) {
-            ERROR_LOG( "Can't read XMI time: field bigger than 4 bytes" );
+            ERROR_LOG( "Can't read XMI time: field bigger than 4 bytes" )
             break;
         }
 
@@ -208,7 +208,7 @@ struct XMIData
                                 timb = sb.getRaw( iff.length );
                                 if ( timb.size() != iff.length ) {
                                     ERROR_LOG( "parse error: "
-                                               << "out of range" );
+                                               << "out of range" )
                                     break;
                                 }
                                 sb >> iff;
@@ -223,7 +223,7 @@ struct XMIData
                             // EVNT
                             if ( iff.ID != TAG_EVNT ) {
                                 ERROR_LOG( "parse error: "
-                                           << "evnt" );
+                                           << "evnt" )
                                 break;
                             }
 
@@ -231,25 +231,25 @@ struct XMIData
 
                             if ( evnt.size() != iff.length ) {
                                 ERROR_LOG( "parse error: "
-                                           << "out of range" );
+                                           << "out of range" )
                                 break;
                             }
                         }
                         else
-                            ERROR_LOG( "unknown tag: " << group.ID << " (expected FORM), " << group.type << " (expected XMID)" );
+                            ERROR_LOG( "unknown tag: " << group.ID << " (expected FORM), " << group.type << " (expected XMID)" )
                     }
                 }
                 else
                     ERROR_LOG( "parse error: "
-                               << "cat xmid" );
+                               << "cat xmid" )
             }
             else
                 ERROR_LOG( "parse error: "
-                           << "info" );
+                           << "info" )
         }
         else
             ERROR_LOG( "parse error: "
-                       << "form xdir" );
+                       << "form xdir" )
     }
 
     bool isvalid( void ) const
@@ -404,7 +404,7 @@ struct MidiEvents : public std::vector<MidiChunk>
                 // unused command
                 default:
                     emplace_back( 0, 0xFF, 0x2F, 0 );
-                    ERROR_LOG( "unknown st: " << GetHexString( static_cast<int>( *ptr ), 2 ) << ", ln: " << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) );
+                    ERROR_LOG( "unknown st: " << GetHexString( static_cast<int>( *ptr ), 2 ) << ", ln: " << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) )
                     break;
                 }
             }

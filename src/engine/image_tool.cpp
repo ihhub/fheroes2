@@ -28,9 +28,9 @@
 #include <SDL_video.h>
 #endif
 
-#if defined( WITH_IMAGE )
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#define FHEROES2_ENABLE_PNG 1
+#if defined( WITH_IMAGE )
+#define ENABLE_PNG
 #include <SDL_image.h>
 #endif
 #endif
@@ -92,7 +92,7 @@ namespace
             }
         }
 
-#if defined( FHEROES2_ENABLE_PNG )
+#if defined( ENABLE_PNG )
         int res = 0;
         const std::string pngExtension( ".png" );
         if ( path.size() > pngExtension.size() && path.compare( path.size() - pngExtension.size(), pngExtension.size(), pngExtension ) == 0 ) {
@@ -295,5 +295,14 @@ namespace fheroes2
         }
 
         return sprite;
+    }
+
+    bool isPNGFormatSupported()
+    {
+#if defined( ENABLE_PNG )
+        return true;
+#else
+        return false;
+#endif
     }
 }

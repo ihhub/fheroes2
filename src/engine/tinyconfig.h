@@ -32,12 +32,12 @@ class TinyConfig : protected std::multimap<std::string, std::string>
 public:
     TinyConfig( char sep = '=', char com = ';' );
 
-    bool Load( const std::string & );
+    bool Load( const std::string & cfile );
 
-    bool Exists( const std::string & ) const;
+    bool Exists( const std::string & key ) const;
 
-    int IntParams( const std::string & ) const;
-    std::string StrParams( const std::string & ) const;
+    int IntParams( const std::string & key ) const;
+    std::string StrParams( const std::string & key ) const;
 
 protected:
     char separator;

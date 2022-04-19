@@ -97,17 +97,17 @@ fheroes2::Point Battle::Tower::GetPortPosition( void ) const
 {
     switch ( type ) {
     case TWR_LEFT:
-        return fheroes2::Point( 410, 70 );
+        return { 410, 70 };
         break;
     case TWR_RIGHT:
-        return fheroes2::Point( 410, 320 );
+        return { 410, 320 };
     case TWR_CENTER:
-        return fheroes2::Point( 560, 170 );
+        return { 560, 170 };
     default:
         break;
     }
 
-    return fheroes2::Point();
+    return {};
 }
 
 void Battle::Tower::SetDestroy( void )

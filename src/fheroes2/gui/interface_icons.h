@@ -59,7 +59,7 @@ namespace Interface
             show = f;
         }
 
-        void RedrawBackground( const fheroes2::Point & ) const;
+        void redrawBackground( fheroes2::Image & output, const fheroes2::Point & offset, const int32_t validItemCount ) const;
 
         void SetIconsCount( const int32_t c )
         {

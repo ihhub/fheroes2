@@ -1,6 +1,6 @@
 ###########################################################################
 #   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
-#   Copyright (C) 2022                                                    #
+#   Copyright (C) {YR}                                                    #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -17,21 +17,3 @@
 #   Free Software Foundation, Inc.,                                       #
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
-
-LIBS := $(LIBS) -lSDL -lmad -lvorbisfile -lvorbis -logg
-
-ifdef FHEROES2_WITH_IMAGE
-LIBS := $(LIBS) -lSDL -lpng -ljpeg
-endif
-
-ifdef FHEROES2_WITH_ICONS
-IDICON := 1099
-CCFLAGS := $(CCFLAGS) -DID_ICON=$(IDICON)
-export IDICON
-endif
-
-AR := i686-w64-mingw32-ar
-CXX := i686-w64-mingw32-g++
-WINDRES := i686-w64-mingw32-windres
-CCFLAGS := $(CCFLAGS) -static
-LIBS := -static -Wl,-Bstatic $(LIBS) -lwinmm -ldxguid

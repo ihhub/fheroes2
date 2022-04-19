@@ -203,8 +203,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
 
     Interface::StatusWindow::ResetTimer();
 
-    const Settings & conf = Settings::Get();
-    bool needFade = conf.ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
+    bool needFade = Settings::ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
 
     Interface::Basic & I = Interface::Basic::Get();
     const Interface::GameArea & gameArea = I.GetGameArea();
@@ -604,8 +603,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
             skipTurns = false;
 
             if ( kingdom.isPlay() ) {
-                DEBUG_LOG( DBG_GAME, DBG_INFO,
-                           world.DateString() << ", color: " << Color::String( player->GetColor() ) << ", resource: " << kingdom.GetFunds().String() );
+                DEBUG_LOG( DBG_GAME, DBG_INFO, world.DateString() << ", color: " << Color::String( player->GetColor() ) << ", resource: " << kingdom.GetFunds().String() )
 
                 radar.SetHide( true );
                 radar.SetRedraw();
@@ -705,7 +703,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
         if ( skipTurns ) {
             DEBUG_LOG( DBG_GAME, DBG_WARN,
                        "the current player from the save file was not found"
-                           << ", player color: " << Color::String( conf.CurrentColor() ) );
+                           << ", player color: " << Color::String( conf.CurrentColor() ) )
 
             res = fheroes2::GameMode::MAIN_MENU;
         }
@@ -717,7 +715,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
     // if we are here, the res value should never be fheroes2::GameMode::END_TURN
     assert( res != fheroes2::GameMode::END_TURN );
 
-    if ( conf.ExtGameUseFade() )
+    if ( Settings::ExtGameUseFade() )
         fheroes2::FadeDisplay();
 
     return res;
@@ -816,7 +814,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             else if ( HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
                 res = EventExit();
             // end turn
-            else if ( HotKeyPressEvent( Game::EVENT_ENDTURN ) )
+            else if ( HotKeyPressEvent( Game::EVENT_END_TURN ) )
                 res = EventEndTurn();
             // next hero
             else if ( HotKeyPressEvent( Game::EVENT_NEXTHERO ) )
@@ -874,10 +872,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             else if ( HotKeyPressEvent( Game::EVENT_CONTINUE ) )
                 EventContinueMovement();
             // dig artifact
-            else if ( HotKeyPressEvent( Game::EVENT_DIGARTIFACT ) )
+            else if ( HotKeyPressEvent( Game::EVENT_DIG_ARTIFACT ) )
                 res = EventDigArtifact();
             // sleep hero
-            else if ( HotKeyPressEvent( Game::EVENT_SLEEPHERO ) )
+            else if ( HotKeyPressEvent( Game::EVENT_SLEEP_HERO ) )
                 EventSwitchHeroSleeping();
             // move hero
             else if ( HotKeyPressEvent( Game::EVENT_MOVELEFT ) )
@@ -920,13 +918,13 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         if ( fheroes2::cursor().isFocusActive() ) {
             int scrollPosition = SCROLL_NONE;
 
-            if ( le.MouseCursor( GetScrollLeft() ) )
+            if ( isScrollLeft( le.GetMouseCursor() ) )
                 scrollPosition |= SCROLL_LEFT;
-            else if ( le.MouseCursor( GetScrollRight() ) )
+            else if ( isScrollRight( le.GetMouseCursor() ) )
                 scrollPosition |= SCROLL_RIGHT;
-            if ( le.MouseCursor( GetScrollTop() ) )
+            if ( isScrollTop( le.GetMouseCursor() ) )
                 scrollPosition |= SCROLL_TOP;
-            else if ( le.MouseCursor( GetScrollBottom() ) )
+            else if ( isScrollBottom( le.GetMouseCursor() ) )
                 scrollPosition |= SCROLL_BOTTOM;
 
             if ( scrollPosition != SCROLL_NONE ) {
@@ -964,42 +962,43 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 stopHero = true;
             }
         }
-        // cursor over radar
-        else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( radar.GetRect() ) ) {
+        // cursor is over the status window
+        else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.MouseCursor( statusWindow.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-            radar.QueueEventProcessing();
+            statusWindow.QueueEventProcessing();
         }
-        // cursor over icons panel
-        else if ( ( !isHiddenInterface || conf.ShowIcons() ) && le.MouseCursor( iconsPanel.GetRect() ) ) {
-            if ( Cursor::POINTER != cursor.Themes() )
-                cursor.SetThemes( Cursor::POINTER );
-            iconsPanel.QueueEventProcessing();
-        }
-        // cursor over buttons area
+        // cursor is over the buttons area
         else if ( ( !isHiddenInterface || conf.ShowButtons() ) && le.MouseCursor( buttonsArea.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             res = buttonsArea.QueueEventProcessing();
             isCursorOverButtons = true;
         }
-        // cursor over status area
-        else if ( ( !isHiddenInterface || conf.ShowStatus() ) && le.MouseCursor( statusWindow.GetRect() ) ) {
+        // cursor is over the icons panel
+        else if ( ( !isHiddenInterface || conf.ShowIcons() ) && le.MouseCursor( iconsPanel.GetRect() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
-            statusWindow.QueueEventProcessing();
+            iconsPanel.QueueEventProcessing();
         }
-        // cursor over control panel
+        // cursor is over the radar
+        else if ( ( !isHiddenInterface || conf.ShowRadar() ) && le.MouseCursor( radar.GetRect() ) ) {
+            if ( Cursor::POINTER != cursor.Themes() )
+                cursor.SetThemes( Cursor::POINTER );
+            radar.QueueEventProcessing();
+        }
+        // cursor is over the control panel
         else if ( isHiddenInterface && conf.ShowControlPanel() && le.MouseCursor( controlPanel.GetArea() ) ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             res = controlPanel.QueueEventProcessing();
         }
-        // cursor over game area
+        // cursor is over the game area
         else if ( le.MouseCursor( gameArea.GetROI() ) && !gameArea.NeedScroll() ) {
             gameArea.QueueEventProcessing();
         }
-        else if ( !gameArea.NeedScroll() ) { // empty interface area so we set cursor to a normal pointer
+        // cursor is somewhere else
+        else if ( !gameArea.NeedScroll() ) {
             if ( Cursor::POINTER != cursor.Themes() )
                 cursor.SetThemes( Cursor::POINTER );
             gameArea.ResetCursorPosition();
@@ -1100,8 +1099,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         // fast scroll
         if ( gameArea.NeedScroll() && !isMovingHero ) {
             if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
-                if ( le.MouseCursor( GetScrollLeft() ) || le.MouseCursor( GetScrollRight() ) || le.MouseCursor( GetScrollTop() )
-                     || le.MouseCursor( GetScrollBottom() ) ) {
+                if ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
+                     || isScrollBottom( le.GetMouseCursor() ) ) {
                     cursor.SetThemes( gameArea.GetScrollCursor() );
                 }
 
@@ -1235,7 +1234,7 @@ void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps ) const
         const Settings & conf = Settings::Get();
         const Maps::Tiles & tile = world.GetTiles( index_maps );
 
-        DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() );
+        DEBUG_LOG( DBG_DEVEL, DBG_INFO, std::endl << tile.String() )
 
         if ( !IS_DEVEL() && tile.isFog( conf.CurrentColor() ) )
             Dialog::QuickInfo( tile );

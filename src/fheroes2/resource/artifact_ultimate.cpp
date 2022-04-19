@@ -77,15 +77,5 @@ StreamBase & operator<<( StreamBase & msg, const UltimateArtifact & ultimate )
 StreamBase & operator>>( StreamBase & msg, UltimateArtifact & ultimate )
 {
     Artifact & artifact = ultimate;
-    msg >> artifact >> ultimate._index >> ultimate._isFound;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_097_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_PRE_097_RELEASE ) {
-        msg >> ultimate._offset;
-    }
-    else {
-        ultimate._offset = fheroes2::Point();
-    }
-
-    return msg;
+    return msg >> artifact >> ultimate._index >> ultimate._isFound >> ultimate._offset;
 }

@@ -113,9 +113,9 @@ spellstats_t spells[] = {
     { gettext_noop( "Summon Boat" ), 5, 0, 46, 0,
       gettext_noop(
           "Summons the nearest unoccupied, friendly boat to an adjacent shore location.  A friendly boat is one which you just built or were the most recent player to occupy." ) },
-    { gettext_noop( "Dimension Door" ), 10, 0, 47, 0, gettext_noop( "Allows the caster to magically transport to a nearby location." ) },
-    { gettext_noop( "Town Gate" ), 10, 0, 48, 0, gettext_noop( "Returns the caster to any town or castle currently owned." ) },
-    { gettext_noop( "Town Portal" ), 20, 0, 49, 0, gettext_noop( "Returns the hero to the town or castle of choice, provided it is controlled by you." ) },
+    { gettext_noop( "Dimension Door" ), 10, 225, 47, 0, gettext_noop( "Allows the caster to magically transport to a nearby location." ) },
+    { gettext_noop( "Town Gate" ), 10, 225, 48, 0, gettext_noop( "Returns the caster to any town or castle currently owned." ) },
+    { gettext_noop( "Town Portal" ), 20, 225, 49, 0, gettext_noop( "Returns the hero to the town or castle of choice, provided it is controlled by you." ) },
     { gettext_noop( "Visions" ), 6, 0, 50, 3, gettext_noop( "Visions predicts the likely outcome of an encounter with a neutral army camp." ) },
     { gettext_noop( "Haunt" ), 8, 0, 51, 4,
       gettext_noop( "Haunts a mine you control with Ghosts.  This mine stops producing resources.  (If I can't keep it, nobody will!)" ) },
@@ -150,46 +150,50 @@ u32 Spell::MovePoint( void ) const
 
 u32 Spell::SpellPoint( const HeroBase * hero ) const
 {
-    u32 res = spells[id].spellPoints;
-    u32 acount = 0;
-
-    if ( hero ) {
-        switch ( id ) {
-        case BLESS:
-        case MASSBLESS:
-            acount = hero->artifactCount( Artifact::SNAKE_RING );
-            if ( acount )
-                res = spells[id].spellPoints / ( acount * 2 );
-            break;
-
-        case SUMMONEELEMENT:
-        case SUMMONAELEMENT:
-        case SUMMONFELEMENT:
-        case SUMMONWELEMENT:
-            acount = hero->artifactCount( Artifact::ELEMENTAL_RING );
-            if ( acount )
-                res = spells[id].spellPoints / ( acount * 2 );
-            break;
-
-        case CURSE:
-        case MASSCURSE:
-            acount = hero->artifactCount( Artifact::EVIL_EYE );
-            if ( acount )
-                res = spells[id].spellPoints / ( acount * 2 );
-            break;
-
-        default:
-            break;
-        }
-
-        if ( isMindInfluence() ) {
-            acount = hero->artifactCount( Artifact::SKULLCAP );
-            if ( acount )
-                res = spells[id].spellPoints / ( acount * 2 );
-        }
+    if ( hero == nullptr ) {
+        return spells[id].spellPoints;
     }
 
-    return res ? res : 1;
+    fheroes2::ArtifactBonusType type = fheroes2::ArtifactBonusType::NONE;
+    switch ( id ) {
+    case BLESS:
+    case MASSBLESS:
+        type = fheroes2::ArtifactBonusType::BLESS_SPELL_COST_REDUCTION_PERCENT;
+        break;
+    case SUMMONEELEMENT:
+    case SUMMONAELEMENT:
+    case SUMMONFELEMENT:
+    case SUMMONWELEMENT:
+        type = fheroes2::ArtifactBonusType::SUMMONING_SPELL_COST_REDUCTION_PERCENT;
+        break;
+    case CURSE:
+    case MASSCURSE:
+        type = fheroes2::ArtifactBonusType::CURSE_SPELL_COST_REDUCTION_PERCENT;
+        break;
+    default:
+        if ( isMindInfluence() ) {
+            type = fheroes2::ArtifactBonusType::MIND_INFLUENCE_SPELL_COST_REDUCTION_PERCENT;
+        }
+        break;
+    }
+
+    if ( type == fheroes2::ArtifactBonusType::NONE ) {
+        return spells[id].spellPoints;
+    }
+
+    int32_t spellCost = spells[id].spellPoints;
+
+    const std::vector<int32_t> spellReductionPercentage = hero->GetBagArtifacts().getTotalArtifactMultipliedPercent( type );
+    for ( const int32_t value : spellReductionPercentage ) {
+        assert( value >= 0 && value <= 100 );
+        spellCost = spellCost * ( 100 - value ) / 100;
+    }
+
+    if ( spellCost < 1 ) {
+        return 1;
+    }
+
+    return static_cast<uint32_t>( spellCost );
 }
 
 int Spell::Level( void ) const

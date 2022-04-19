@@ -47,21 +47,21 @@ namespace
     {
         switch ( race ) {
         case Race::KNGT:
-            return fheroes2::Point( 36, 10 );
+            return { 36, 10 };
         case Race::BARB:
-            return fheroes2::Point( 35, 9 );
+            return { 35, 9 };
         case Race::SORC:
-            return fheroes2::Point( 36, 10 );
+            return { 36, 10 };
         case Race::WRLK:
-            return fheroes2::Point( 34, 10 );
+            return { 34, 10 };
         case Race::WZRD:
-            return fheroes2::Point( 35, 9 );
+            return { 35, 9 };
         case Race::NECR:
-            return fheroes2::Point( 35, 10 );
+            return { 35, 10 };
         default:
             // Did you add a new race?
             assert( 0 );
-            return fheroes2::Point();
+            return {};
         }
     }
 }

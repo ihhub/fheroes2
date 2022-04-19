@@ -513,5 +513,5 @@ bool TextSprite::isShow( void ) const
 
 fheroes2::Rect TextSprite::GetRect( void ) const
 {
-    return fheroes2::Rect( _restorer.x(), _restorer.y(), _restorer.width(), _restorer.height() );
+    return { _restorer.x(), _restorer.y(), _restorer.width(), _restorer.height() };
 }

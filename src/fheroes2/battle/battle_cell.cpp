@@ -221,20 +221,20 @@ Battle::Cell::Cell( int32_t ii )
 
 void Battle::Cell::SetArea( const fheroes2::Rect & area )
 {
-    pos.x = area.x + 89 - ( ( ( index / ARENAW ) % 2 ) ? CELLW / 2 : 0 ) + ( CELLW ) * ( index % ARENAW );
+    pos.x = area.x + 89 - ( ( ( index / ARENAW ) % 2 ) ? CELLW / 2 : 0 ) + CELLW * ( index % ARENAW );
     pos.y = area.y + 62 + ( ( CELLH - ( CELLH - cellHeightVerSide ) / 2 ) * ( index / ARENAW ) );
     pos.width = CELLW;
     pos.height = CELLH;
 
     // center
-    coord[0] = fheroes2::Point( infl * pos.x + infl * pos.width / 2, infl * pos.y + infl * pos.height / 2 );
+    coord[0] = { infl * pos.x + infl * pos.width / 2, infl * pos.y + infl * pos.height / 2 };
     // coordinates
-    coord[1] = fheroes2::Point( infl * pos.x, infl * pos.y + infl * ( pos.height - cellHeightVerSide ) / 2 );
-    coord[2] = fheroes2::Point( infl * pos.x + infl * pos.width / 2, infl * pos.y );
-    coord[3] = fheroes2::Point( infl * pos.x + infl * pos.width, infl * pos.y + infl * ( pos.height - cellHeightVerSide ) / 2 );
-    coord[4] = fheroes2::Point( infl * pos.x + infl * pos.width, infl * pos.y + infl * pos.height - infl * ( pos.height - cellHeightVerSide ) / 2 );
-    coord[5] = fheroes2::Point( infl * pos.x + infl * pos.width / 2, infl * pos.y + infl * pos.height );
-    coord[6] = fheroes2::Point( infl * pos.x, infl * pos.y + infl * pos.height - infl * ( pos.height - cellHeightVerSide ) / 2 );
+    coord[1] = { infl * pos.x, infl * pos.y + infl * ( pos.height - cellHeightVerSide ) / 2 };
+    coord[2] = { infl * pos.x + infl * pos.width / 2, infl * pos.y };
+    coord[3] = { infl * pos.x + infl * pos.width, infl * pos.y + infl * ( pos.height - cellHeightVerSide ) / 2 };
+    coord[4] = { infl * pos.x + infl * pos.width, infl * pos.y + infl * pos.height - infl * ( pos.height - cellHeightVerSide ) / 2 };
+    coord[5] = { infl * pos.x + infl * pos.width / 2, infl * pos.y + infl * pos.height };
+    coord[6] = { infl * pos.x, infl * pos.y + infl * pos.height - infl * ( pos.height - cellHeightVerSide ) / 2 };
 }
 
 Battle::direction_t Battle::Cell::GetTriangleDirection( const fheroes2::Point & dst ) const

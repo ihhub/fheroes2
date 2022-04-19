@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -183,7 +183,7 @@ namespace AI
             status.RedrawTurnProgress( 8 );
         }
 
-        DEBUG_LOG( DBG_AI, DBG_TRACE, hero.GetName() << ", end" );
+        DEBUG_LOG( DBG_AI, DBG_TRACE, hero.GetName() << ", end" )
     }
 
     void Base::KingdomTurn( Kingdom & kingdom )
@@ -224,13 +224,13 @@ namespace AI
         status.RedrawTurnProgress( 8 );
         status.RedrawTurnProgress( 9 );
 
-        DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( color ) << " moved" );
+        DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( color ) << " moved" )
     }
 
     void Base::BattleTurn( Battle::Arena &, const Battle::Unit & currentUnit, Battle::Actions & actions )
     {
         // end action
-        actions.push_back( Battle::Command( Battle::CommandType::MSG_BATTLE_END_TURN, currentUnit.GetUID() ) );
+        actions.emplace_back( Battle::CommandType::MSG_BATTLE_END_TURN, currentUnit.GetUID() );
     }
 
     StreamBase & operator<<( StreamBase & msg, const AI::Base & instance )

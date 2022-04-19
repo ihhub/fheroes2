@@ -33,7 +33,10 @@ Cursor::Cursor()
     : theme( NONE )
     , offset_x( 0 )
     , offset_y( 0 )
-{}
+    , _monochromeCursorThemes( false )
+{
+    // Do nothing.
+}
 
 Cursor & Cursor::Get( void )
 {
@@ -52,22 +55,22 @@ bool Cursor::SetThemes( int name, bool force )
     if ( force || theme != name ) {
         theme = name;
 
-        int icnID = ICN::ADVMCO;
+        int icnID = _monochromeCursorThemes ? ICN::MONO_CURSOR_ADVMBW : ICN::ADVMCO;
         switch ( 0xF000 & name ) {
         case 0x3000:
-            icnID = ICN::SPELCO;
+            icnID = _monochromeCursorThemes ? ICN::MONO_CURSOR_SPELBW : ICN::SPELCO;
             break;
         case 0x2000:
-            icnID = ICN::CMSECO;
+            icnID = _monochromeCursorThemes ? ICN::MONO_CURSOR_CMSSBW : ICN::CMSECO;
             break;
         case 0x4000:
-            icnID = ICN::CURSOR_ADVENTURE_MAP;
+            icnID = _monochromeCursorThemes ? ICN::MONO_CURSOR_ADVENTURE_MAP : ICN::COLOR_CURSOR_ADVENTURE_MAP;
             break;
         default:
             break;
         }
         const fheroes2::Sprite & spr = fheroes2::AGG::GetICN( icnID, 0xFF & name );
-        SetOffset( name, fheroes2::Point( ( spr.width() - spr.x() ) / 2, ( spr.height() - spr.y() ) / 2 ) );
+        SetOffset( name, { ( spr.width() - spr.x() ) / 2, ( spr.height() - spr.y() ) / 2 } );
         fheroes2::cursor().update( spr, -offset_x, -offset_y );
 
         // immediately apply new offset, force
@@ -84,7 +87,7 @@ void Cursor::Redraw( int32_t x, int32_t y )
     if ( fheroes2::cursor().isSoftwareEmulation() ) {
         Cursor::Get().Move( x, y );
         if ( fheroes2::cursor().isVisible() ) {
-            fheroes2::Display::instance().render( fheroes2::Rect( x, y, 1, 1 ) );
+            fheroes2::Display::instance().render( { x, y, 1, 1 } );
         }
     }
 }
@@ -250,7 +253,7 @@ CursorRestorer::~CursorRestorer()
         if ( fheroes2::cursor().isSoftwareEmulation() ) {
             const fheroes2::Point & pos = LocalEvent::Get().GetMouseCursor();
 
-            fheroes2::Display::instance().render( fheroes2::Rect( pos.x, pos.y, 1, 1 ) );
+            fheroes2::Display::instance().render( { pos.x, pos.y, 1, 1 } );
         }
     }
 }

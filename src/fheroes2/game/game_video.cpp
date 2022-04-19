@@ -28,6 +28,7 @@
 #include "settings.h"
 #include "smk_decoder.h"
 #include "system.h"
+#include "tools.h"
 #include "ui_tool.h"
 
 namespace
@@ -35,14 +36,10 @@ namespace
     // Anim2 directory is used in Russian Buka version of the game.
     const std::vector<std::string> videoDir = { "anim", "anim2", System::ConcatePath( "heroes2", "anim" ), "data" };
 
-    void drawRectangle( const fheroes2::Rect & roi, fheroes2::Image & image, const uint8_t color )
-    {
-        fheroes2::DrawRect( image, roi, color );
-        fheroes2::DrawRect( image, fheroes2::Rect( roi.x - 1, roi.y - 1, roi.width + 2, roi.height + 2 ), color );
-    }
-
     void playAudio( const std::vector<std::vector<uint8_t>> & audioChannels )
     {
+        Mixer::Volume( -1, Mixer::MaxVolume() * Settings::Get().SoundVolume() / 10 );
+
         for ( const std::vector<uint8_t> & audio : audioChannels ) {
             if ( !audio.empty() ) {
                 Mixer::Play( &audio[0], static_cast<uint32_t>( audio.size() ) );
@@ -55,15 +52,23 @@ namespace Video
 {
     bool getVideoFilePath( const std::string & fileName, std::string & path )
     {
-        std::string fullPath;
-
         for ( const std::string & rootDir : Settings::GetRootDirs() ) {
             for ( const std::string & localDir : videoDir ) {
-                fullPath = System::ConcatePath( rootDir, localDir );
-                fullPath = System::ConcatePath( fullPath, fileName );
-                if ( System::IsFile( fullPath ) ) {
-                    path.swap( fullPath );
-                    return true;
+                const std::string fullDirPath = System::ConcatePath( rootDir, localDir );
+
+                if ( System::IsDirectory( fullDirPath ) ) {
+                    ListFiles videoFiles;
+                    videoFiles.FindFileInDir( fullDirPath, fileName, false );
+
+                    std::string targetFileName = System::ConcatePath( fullDirPath, fileName );
+                    targetFileName = StringLower( targetFileName );
+
+                    for ( const std::string & filePath : videoFiles ) {
+                        if ( StringLower( filePath ) == targetFileName ) {
+                            path = filePath;
+                            return true;
+                        }
+                    }
                 }
             }
         }
@@ -71,7 +76,7 @@ namespace Video
         return false;
     }
 
-    int ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<fheroes2::Rect> & roi )
+    bool ShowVideo( const std::string & fileName, const VideoAction action )
     {
         // Stop any cycling animation.
         const fheroes2::ScreenPaletteRestorer screenRestorer;
@@ -79,13 +84,13 @@ namespace Video
         std::string videoPath;
         if ( !getVideoFilePath( fileName, videoPath ) ) {
             // File doesn't exist, so no need to even try to load it.
-            DEBUG_LOG( DBG_GAME, DBG_INFO, fileName << " video file does not exist." );
-            return 0;
+            DEBUG_LOG( DBG_GAME, DBG_INFO, fileName << " video file does not exist." )
+            return false;
         }
 
         SMKVideoSequence video( videoPath );
         if ( video.frameCount() < 1 ) // nothing to show
-            return 0;
+            return false;
 
         const std::vector<std::vector<uint8_t>> & audioChannels = video.getAudioChannels();
         const bool hasAudio = Audio::isValid() && !audioChannels.empty();
@@ -95,22 +100,13 @@ namespace Video
                 playAudio( audioChannels );
             }
 
-            return 0;
+            return true;
         }
 
         const bool isLooped = ( action == VideoAction::LOOP_VIDEO || action == VideoAction::PLAY_TILL_AUDIO_END );
 
         // setup cursor
-        std::unique_ptr<const CursorRestorer> cursorRestorer;
-
-        if ( roi.empty() ) {
-            cursorRestorer.reset( new CursorRestorer( false, Cursor::Get().Themes() ) );
-        }
-        else {
-            cursorRestorer.reset( new CursorRestorer( true, Cursor::Get().Themes() ) );
-
-            Cursor::Get().setVideoPlaybackCursor();
-        }
+        const CursorRestorer cursorRestorer( false, Cursor::Get().Themes() );
 
         fheroes2::Display & display = fheroes2::Display::instance();
         display.fill( 0 );
@@ -124,10 +120,6 @@ namespace Video
         std::vector<uint8_t> prevPalette;
 
         bool isFrameReady = false;
-
-        int roiChosenId = 0;
-
-        const uint8_t selectionColor = 51;
 
         Game::passAnimationDelay( Game::CUSTOM_DELAY );
 
@@ -151,27 +143,10 @@ namespace Video
                 }
             }
 
-            if ( roi.empty() ) {
-                if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
-                    userMadeAction = true;
-                    Mixer::Stop();
-                    break;
-                }
-            }
-            else {
-                bool roiChosen = false;
-                for ( size_t i = 0; i < roi.size(); ++i ) {
-                    if ( le.MouseClickLeft( roi[i] ) ) {
-                        roiChosenId = static_cast<int>( i );
-                        roiChosen = true;
-                        break;
-                    }
-                }
-
-                if ( roiChosen ) {
-                    Mixer::Stop();
-                    break;
-                }
+            if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() ) {
+                userMadeAction = true;
+                Mixer::Stop();
+                break;
             }
 
             if ( Game::validateCustomAnimationDelay( delay ) ) {
@@ -180,13 +155,6 @@ namespace Video
                         video.resetFrame();
 
                     video.getNextFrame( display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, palette );
-
-                    for ( size_t i = 0; i < roi.size(); ++i ) {
-                        if ( le.MouseCursor( roi[i] ) ) {
-                            drawRectangle( roi[i], display, selectionColor );
-                            break;
-                        }
-                    }
                 }
                 isFrameReady = false;
 
@@ -215,13 +183,6 @@ namespace Video
 
                     video.getNextFrame( display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, palette );
 
-                    for ( size_t i = 0; i < roi.size(); ++i ) {
-                        if ( le.MouseCursor( roi[i] ) ) {
-                            drawRectangle( roi[i], display, selectionColor );
-                            break;
-                        }
-                    }
-
                     isFrameReady = true;
                 }
             }
@@ -237,6 +198,6 @@ namespace Video
 
         display.fill( 0 );
 
-        return roiChosenId;
+        return true;
     }
 }

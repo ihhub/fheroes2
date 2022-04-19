@@ -29,6 +29,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 #endif
 
+#include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
 #include "logging.h"
@@ -57,7 +58,7 @@ namespace
         GLOBAL_RENDER_VSYNC = 0x00000008,
         GLOBAL_TEXT_SUPPORT_MODE = 0x00000010,
 
-        // UNUSED = 0x00000020,
+        GLOBAL_MONOCHROME_CURSOR = 0x00000020,
 
         GLOBAL_SHOWCPANEL = 0x00000040,
         GLOBAL_SHOWRADAR = 0x00000080,
@@ -122,8 +123,7 @@ Settings::Settings()
 
 Settings::~Settings()
 {
-    if ( !LoadedGameVersion() )
-        BinarySave();
+    BinarySave();
 }
 
 Settings & Settings::Get()
@@ -285,7 +285,7 @@ bool Settings::Read( const std::string & filename )
             video_mode.height = GetInt( height );
         }
         else {
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown video mode: " << value );
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown video mode: " << value )
         }
     }
 
@@ -330,24 +330,19 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
+    if ( config.Exists( "monochrome cursor" ) ) {
+        if ( config.StrParams( "monochrome cursor" ) == "on" ) {
+            opt_global.SetModes( GLOBAL_MONOCHROME_CURSOR );
+            Cursor::Get().setMonochromeCursor( true );
+        }
+        else {
+            opt_global.ResetModes( GLOBAL_MONOCHROME_CURSOR );
+        }
+    }
+
     BinaryLoad();
 
-    if ( video_mode.width > 0 && video_mode.height > 0 ) {
-        PostLoad();
-    }
-
     return true;
-}
-
-void Settings::PostLoad()
-{
-    if ( ExtModes( GAME_HIDE_INTERFACE ) ) {
-        opt_global.SetModes( GLOBAL_SHOWCPANEL );
-        opt_global.ResetModes( GLOBAL_SHOWRADAR );
-        opt_global.ResetModes( GLOBAL_SHOWICONS );
-        opt_global.ResetModes( GLOBAL_SHOWBUTTONS );
-        opt_global.ResetModes( GLOBAL_SHOWSTATUS );
-    }
 }
 
 bool Settings::Save( const std::string & filename ) const
@@ -356,7 +351,7 @@ bool Settings::Save( const std::string & filename ) const
         return false;
 
     std::fstream file;
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
     const std::string vitaFilename = "ux0:data/fheroes2/" + filename;
     file.open( vitaFilename.data(), std::fstream::out | std::fstream::trunc );
 #else
@@ -368,6 +363,8 @@ bool Settings::Save( const std::string & filename ) const
 
     const std::string & data = String();
     file.write( data.data(), data.size() );
+
+    BinarySave();
 
     return true;
 }
@@ -455,6 +452,9 @@ std::string Settings::String() const
     os << std::endl << "# enable text support mode to output extra information in console window" << std::endl;
     os << "text support mode = " << ( opt_global.Modes( GLOBAL_TEXT_SUPPORT_MODE ) ? "on" : "off" ) << std::endl;
 
+    os << std::endl << "# enable monochrome (black and white) cursors in the game" << std::endl;
+    os << "monochrome cursor = " << ( opt_global.Modes( GLOBAL_MONOCHROME_CURSOR ) ? "on" : "off" ) << std::endl;
+
     return os.str();
 }
 
@@ -537,7 +537,7 @@ const std::vector<std::string> & Settings::GetRootDirs()
         dirs.emplace_back( resourcePath );
     }
     else {
-        ERROR_LOG( "Unable to get app bundle path" );
+        ERROR_LOG( "Unable to get app bundle path" )
     }
     CFRelease( resourcesURL );
 #endif
@@ -855,16 +855,8 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "world: Scouting skill shows extended content info" );
     case Settings::WORLD_ALLOW_SET_GUARDIAN:
         return _( "world: allow to set guardian to objects" );
-    case Settings::WORLD_ARTIFACT_CRYSTAL_BALL:
-        return _( "world: Crystal Ball gives Identify Hero and Visions spells" );
     case Settings::WORLD_SCALE_NEUTRAL_ARMIES:
         return _( "world: Neutral armies scale with game difficulty" );
-    case Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS:
-        return _( "world: use unique artifacts providing resources" );
-    case Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS:
-        return _( "world: use unique artifacts affecting primary skills" );
-    case Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS:
-        return _( "world: use unique artifacts affecting secondary skills" );
     case Settings::WORLD_EXT_OBJECTS_CAPTURED:
         return _( "world: Windmills, Water Wheels and Magic Gardens can be captured" );
     case Settings::CASTLE_ALLOW_GUARDIANS:
@@ -873,14 +865,10 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "heroes: allow buy a spellbook from Shrines" );
     case Settings::HEROES_REMEMBER_POINTS_RETREAT:
         return _( "heroes: remember move points for retreat/surrender result" );
-    case Settings::HEROES_TRANSCRIBING_SCROLLS:
-        return _( "heroes: allow transcribing scrolls (needs: Eye Eagle skill)" );
     case Settings::HEROES_ARENA_ANY_SKILLS:
         return _( "heroes: allow to choose any primary skill in Arena" );
     case Settings::BATTLE_SOFT_WAITING:
         return _( "battle: allow soft wait for troops" );
-    case Settings::BATTLE_REVERSE_WAIT_ORDER:
-        return _( "battle: reverse wait order (fast, average, slow)" );
     case Settings::BATTLE_DETERMINISTIC_RESULT:
         return _( "battle: deterministic events" );
     case Settings::GAME_SHOW_SYSTEM_INFO:
@@ -973,7 +961,7 @@ void Settings::BinaryLoad()
 
 bool Settings::FullScreen() const
 {
-    return System::isEmbededDevice() || opt_global.Modes( GLOBAL_FULLSCREEN );
+    return opt_global.Modes( GLOBAL_FULLSCREEN );
 }
 
 bool Settings::isVSyncEnabled() const

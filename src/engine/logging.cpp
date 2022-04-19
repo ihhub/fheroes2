@@ -71,7 +71,7 @@ namespace
 
 namespace Logging
 {
-#if defined( __SWITCH__ ) // Platforms which log to file
+#if defined( TARGET_NINTENDO_SWITCH )
     std::ofstream logFile;
 #endif
 
@@ -107,7 +107,7 @@ namespace Logging
 
     void InitLog()
     {
-#if defined( __SWITCH__ ) // Platforms which log to file
+#if defined( TARGET_NINTENDO_SWITCH )
         logFile.open( "fheroes2.log", std::ofstream::out );
 #elif defined( MACOS_APP_BUNDLE )
         openlog( "fheroes2", LOG_CONS | LOG_NDELAY, LOG_USER );

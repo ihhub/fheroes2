@@ -61,7 +61,7 @@ int32_t Interface::IconsBar::GetItemHeight()
 
 void Interface::RedrawCastleIcon( const Castle & castle, int32_t sx, int32_t sy )
 {
-    fheroes2::drawCastleIcon( castle, fheroes2::Display::instance(), fheroes2::Point( sx, sy ) );
+    fheroes2::drawCastleIcon( castle, fheroes2::Display::instance(), { sx, sy } );
 }
 
 void Interface::RedrawHeroesIcon( const Heroes & hero, s32 sx, s32 sy )
@@ -69,35 +69,35 @@ void Interface::RedrawHeroesIcon( const Heroes & hero, s32 sx, s32 sy )
     hero.PortraitRedraw( sx, sy, PORT_SMALL, fheroes2::Display::instance() );
 }
 
-void Interface::IconsBar::RedrawBackground( const fheroes2::Point & pos ) const
+void Interface::IconsBar::redrawBackground( fheroes2::Image & output, const fheroes2::Point & offset, const int32_t validItemCount ) const
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
     const fheroes2::Sprite & icnadv = fheroes2::AGG::GetICN( isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD, 0 );
-    const fheroes2::Sprite & back = fheroes2::AGG::GetICN( isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS, 1 );
     fheroes2::Rect srcrt( icnadv.width() - RADARWIDTH - BORDERWIDTH, RADARWIDTH + 2 * BORDERWIDTH, RADARWIDTH / 2, 32 );
 
-    fheroes2::Point dstpt( pos.x, pos.y );
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, output, offset.x, offset.y, srcrt.width, srcrt.height );
 
     srcrt.y = srcrt.y + srcrt.height;
-    dstpt.y = dstpt.y + srcrt.height;
+
+    int32_t internalOffsetY = offset.y + srcrt.height;
     srcrt.height = 32;
 
     if ( iconsCount > 2 ) {
         for ( int32_t i = 0; i < iconsCount - 2; ++i ) {
-            fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
-            dstpt.y += srcrt.height;
+            fheroes2::Blit( icnadv, srcrt.x, srcrt.y, output, offset.x, internalOffsetY, srcrt.width, srcrt.height );
+            internalOffsetY += srcrt.height;
         }
     }
 
     srcrt.y = srcrt.y + 64;
     srcrt.height = 32;
-    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, display, dstpt.x, dstpt.y, srcrt.width, srcrt.height );
+    fheroes2::Blit( icnadv, srcrt.x, srcrt.y, output, offset.x, internalOffsetY, srcrt.width, srcrt.height );
 
-    for ( int32_t i = 0; i < iconsCount; ++i )
-        fheroes2::Blit( back, display, pos.x + 5, pos.y + 5 + i * ( IconsBar::GetItemHeight() + 10 ) );
+    for ( int32_t i = validItemCount; i < iconsCount; ++i ) {
+        const fheroes2::Sprite & background = fheroes2::AGG::GetICN( isEvilInterface ? ICN::LOCATORE : ICN::LOCATORS, 1 + i % 8 );
+        fheroes2::Blit( background, output, offset.x + 5, offset.y + 5 + i * ( IconsBar::GetItemHeight() + 10 ) );
+    }
 }
 
 void Interface::CastleIcons::RedrawItem( const CASTLE & item, s32 ox, s32 oy, bool current )
@@ -112,7 +112,7 @@ void Interface::CastleIcons::RedrawItem( const CASTLE & item, s32 ox, s32 oy, bo
 
 void Interface::CastleIcons::RedrawBackground( const fheroes2::Point & pos )
 {
-    IconsBar::RedrawBackground( pos );
+    redrawBackground( fheroes2::Display::instance(), pos, show ? _size() : 0 );
 }
 
 void Interface::CastleIcons::ActionCurrentUp()
@@ -200,7 +200,7 @@ void Interface::HeroesIcons::RedrawItem( const HEROES & item, s32 ox, s32 oy, bo
 
 void Interface::HeroesIcons::RedrawBackground( const fheroes2::Point & pos )
 {
-    IconsBar::RedrawBackground( pos );
+    redrawBackground( fheroes2::Display::instance(), pos, show ? _size() : 0 );
 }
 
 void Interface::HeroesIcons::ActionCurrentUp( void )

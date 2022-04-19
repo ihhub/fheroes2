@@ -110,9 +110,10 @@ namespace Battle
         bool isValid() const override;
         bool isArchers( void ) const;
         bool isFlying( void ) const;
-        bool isTwiceAttack( void ) const;
+        bool isDoubleAttack() const;
 
         bool AllowResponse( void ) const;
+        // Checks whether this unit is forced to fight in melee (there is an enemy unit nearby)
         bool isHandFighting() const;
 
         bool isReflect() const
@@ -121,7 +122,12 @@ namespace Battle
         }
 
         bool isHaveDamage( void ) const;
-        bool isMagicResist( const Spell &, u32 ) const;
+
+        bool isMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const
+        {
+            return 100 <= GetMagicResist( spell, attackingArmySpellPower, attackingHero );
+        }
+
         bool OutOfWalls( void ) const;
         bool canReach( int index ) const;
         bool canReach( const Unit & unit ) const;
@@ -248,13 +254,14 @@ namespace Battle
         bool UpdateDirection( const fheroes2::Rect & );
         void PostKilledAction( void );
 
-        u32 GetMagicResist( const Spell &, u32 ) const;
+        u32 GetMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const;
         int GetSpellMagic() const;
 
         const HeroBase * GetCommander( void ) const;
         const HeroBase * GetCurrentOrArmyCommander() const; // commander of the army with the current unit color (if valid), commander of the unit's army otherwise
 
-        static bool isHandFighting( const Unit &, const Unit & );
+        // Checks whether the attacker will fight the defender in melee
+        static bool isHandFighting( const Unit & attacker, const Unit & defender );
 
         int GetAnimationState() const
         {

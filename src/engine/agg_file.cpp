@@ -42,11 +42,11 @@ namespace fheroes2
         StreamBuf nameEntries = _stream.toStreamBuf( nameEntriesSize );
 
         for ( size_t i = 0; i < count; ++i ) {
-            const std::string & name = nameEntries.toString( _maxFilenameSize );
+            std::string name = nameEntries.toString( _maxFilenameSize );
             fileEntries.getLE32(); // skip CRC (?) part
             const uint32_t fileOffset = fileEntries.getLE32();
             const uint32_t fileSize = fileEntries.getLE32();
-            _files.emplace( name, std::make_pair( fileSize, fileOffset ) );
+            _files.emplace( std::move( name ), std::make_pair( fileSize, fileOffset ) );
         }
         if ( _files.size() != count ) {
             _files.clear();

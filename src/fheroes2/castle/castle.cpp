@@ -97,7 +97,7 @@ Castle::Castle( s32 cx, s32 cy, int rc )
     army.SetCommander( &captain );
 }
 
-void Castle::LoadFromMP2( std::vector<uint8_t> & data )
+void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
 {
     StreamBuf st( data );
 
@@ -366,7 +366,7 @@ void Castle::PostLoad( void )
 
     // end
     DEBUG_LOG( DBG_GAME, DBG_INFO,
-               ( building & BUILD_CASTLE ? "castle" : "town" ) << ": " << name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( race ) );
+               ( building & BUILD_CASTLE ? "castle" : "town" ) << ": " << name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( race ) )
 }
 
 bool Castle::isCastle( void ) const
@@ -640,7 +640,7 @@ void Castle::ActionNewWeek()
     }
 }
 
-void Castle::ActionNewMonth()
+void Castle::ActionNewMonth() const
 {
     // Do nothing.
 }
@@ -759,7 +759,7 @@ Heroes * Castle::RecruitHero( Heroes * hero )
     if ( GetLevelMageGuild() )
         MageGuildEducateHero( *hero );
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", recruit: " << hero->GetName() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", recruit: " << hero->GetName() )
 
     return hero;
 }
@@ -829,7 +829,7 @@ bool Castle::RecruitMonster( const Troop & troop, bool showDialog )
     kingdom.OddFundsResource( paymentCosts );
     dwelling[dwellingIndex] -= count;
 
-    DEBUG_LOG( DBG_GAME, DBG_TRACE, name << " recruit: " << troop.GetMultiName() << "(" << count << ")" );
+    DEBUG_LOG( DBG_GAME, DBG_TRACE, name << " recruit: " << troop.GetMultiName() << "(" << count << ")" )
 
     return true;
 }
@@ -844,7 +844,7 @@ bool Castle::RecruitMonsterFromDwelling( uint32_t dw, uint32_t count, bool force
             Troop * weak = GetArmy().GetWeakestTroop();
             if ( weak && weak->GetStrength() < troop.GetStrength() ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO,
-                           name << ": " << troop.GetCount() << " " << troop.GetMultiName() << " replace " << weak->GetCount() << " " << weak->GetMultiName() );
+                           name << ": " << troop.GetCount() << " " << troop.GetMultiName() << " replace " << weak->GetCount() << " " << weak->GetMultiName() )
                 weak->Set( troop );
                 return true;
             }
@@ -1361,7 +1361,7 @@ bool Castle::BuyBuilding( u32 build )
     // disable day build
     ResetModes( ALLOWBUILD );
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, name << " build " << GetStringBuilding( build, race ) );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, name << " build " << GetStringBuilding( build, race ) )
     return true;
 }
 
@@ -1487,7 +1487,7 @@ int Castle::GetICNBoat( int race )
         break;
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_WARN, "return unknown" );
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "return unknown" )
     return ICN::UNKNOWN;
 }
 
@@ -1852,7 +1852,7 @@ int Castle::GetICNBuilding( u32 build, int race )
 
     DEBUG_LOG( DBG_GAME, DBG_WARN,
                "return unknown"
-                   << ", race: " << Race::String( race ) << ", build: " << Castle::GetStringBuilding( build, race ) << ", " << build );
+                   << ", race: " << Race::String( race ) << ", build: " << Castle::GetStringBuilding( build, race ) << ", " << build )
 
     return ICN::UNKNOWN;
 }

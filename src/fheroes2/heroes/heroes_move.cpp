@@ -129,7 +129,7 @@ const fheroes2::Sprite & SpriteHero( const Heroes & hero, int index, bool rotate
             break;
 
         default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown race" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown race" )
             break;
         }
 
@@ -163,7 +163,7 @@ const fheroes2::Sprite & SpriteHero( const Heroes & hero, int index, bool rotate
             break;
 
         default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" )
             break;
         }
 
@@ -196,7 +196,7 @@ const fheroes2::Sprite & SpriteFlag( const Heroes & hero, int index, bool rotate
         break;
 
     default:
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown color" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown color" )
         break;
     }
 
@@ -230,41 +230,28 @@ const fheroes2::Sprite & SpriteFlag( const Heroes & hero, int index, bool rotate
             break;
 
         default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" )
             break;
         }
 
     const int frameId = index % heroFrameCount;
     const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn_flag, index_sprite + frameId );
     if ( !hero.isMoveEnabled() ) {
-        static const fheroes2::Point offsetTop[heroFrameCount]
-            = { fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 2 ), fheroes2::Point( 0, 3 ), fheroes2::Point( 0, 2 ), fheroes2::Point( 0, 0 ),
-                fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 3 ), fheroes2::Point( 0, 2 ), fheroes2::Point( 0, 1 ) };
-        static const fheroes2::Point offsetBottom[heroFrameCount]
-            = { fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, -1 ), fheroes2::Point( 0, -2 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 0, -1 ),
-                fheroes2::Point( 0, -2 ), fheroes2::Point( 0, -3 ), fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, -1 ) };
-        static const fheroes2::Point offsetSideways[heroFrameCount]
-            = { fheroes2::Point( 0, 0 ),  fheroes2::Point( -1, 0 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 1, 0 ), fheroes2::Point( 1, -1 ),
-                fheroes2::Point( 2, -1 ), fheroes2::Point( 1, 0 ),  fheroes2::Point( 0, 0 ), fheroes2::Point( 1, 0 ) };
+        static const fheroes2::Point offsetTop[heroFrameCount] = { { 0, 0 }, { 0, 2 }, { 0, 3 }, { 0, 2 }, { 0, 0 }, { 0, 1 }, { 0, 3 }, { 0, 2 }, { 0, 1 } };
+        static const fheroes2::Point offsetBottom[heroFrameCount] = { { 0, 0 }, { 0, -1 }, { 0, -2 }, { 0, 0 }, { 0, -1 }, { 0, -2 }, { 0, -3 }, { 0, 0 }, { 0, -1 } };
+        static const fheroes2::Point offsetSideways[heroFrameCount] = { { 0, 0 }, { -1, 0 }, { 0, 0 }, { 1, 0 }, { 1, -1 }, { 2, -1 }, { 1, 0 }, { 0, 0 }, { 1, 0 } };
         static const fheroes2::Point offsetTopSideways[heroFrameCount]
-            = { fheroes2::Point( 0, 0 ),  fheroes2::Point( -1, 0 ), fheroes2::Point( 0, 0 ), fheroes2::Point( -1, -1 ), fheroes2::Point( -2, -1 ),
-                fheroes2::Point( -2, 0 ), fheroes2::Point( -1, 0 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 1, 0 ) };
+            = { { 0, 0 }, { -1, 0 }, { 0, 0 }, { -1, -1 }, { -2, -1 }, { -2, 0 }, { -1, 0 }, { 0, 0 }, { 1, 0 } };
         static const fheroes2::Point offsetBottomSideways[heroFrameCount]
-            = { fheroes2::Point( 0, 0 ),   fheroes2::Point( -1, 0 ),  fheroes2::Point( 0, -1 ),  fheroes2::Point( 2, -2 ), fheroes2::Point( 0, -2 ),
-                fheroes2::Point( -1, -3 ), fheroes2::Point( -1, -2 ), fheroes2::Point( -1, -1 ), fheroes2::Point( 1, 0 ) };
+            = { { 0, 0 }, { -1, 0 }, { 0, -1 }, { 2, -2 }, { 0, -2 }, { -1, -3 }, { -1, -2 }, { -1, -1 }, { 1, 0 } };
 
-        static const fheroes2::Point offsetShipTopBottom[heroFrameCount]
-            = { fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 1 ),
-                fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 1 ) };
+        static const fheroes2::Point offsetShipTopBottom[heroFrameCount] = { { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 1 }, { 0, 1 }, { 0, 0 }, { 0, 1 }, { 0, 1 }, { 0, 1 } };
         static const fheroes2::Point offsetShipSideways[heroFrameCount]
-            = { fheroes2::Point( 0, -2 ), fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 0 ),
-                fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 1 ) };
+            = { { 0, -2 }, { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 0 }, { 0, -1 }, { 0, 0 }, { 0, -1 }, { 0, 1 } };
         static const fheroes2::Point offsetShipTopSideways[heroFrameCount]
-            = { fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 0 ),
-                fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 1 ) };
+            = { { 0, 0 }, { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 0 }, { 0, -1 }, { 0, 0 }, { 0, -1 }, { 0, 1 } };
         static const fheroes2::Point offsetShipBottomSideways[heroFrameCount]
-            = { fheroes2::Point( 0, -2 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 0 ),
-                fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 0 ) };
+            = { { 0, -2 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
 
         switch ( hero.GetDirection() ) {
         case Direction::TOP:
@@ -287,7 +274,7 @@ const fheroes2::Sprite & SpriteFlag( const Heroes & hero, int index, bool rotate
             break;
 
         default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" )
             break;
         }
     }
@@ -325,7 +312,7 @@ const fheroes2::Sprite & SpriteShad( const Heroes & hero, int index )
             indexSprite = 63;
             break;
         default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" )
             break;
         }
 
@@ -382,7 +369,7 @@ const fheroes2::Sprite & SpriteFroth( const Heroes & hero, int index )
         break;
 
     default:
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" )
         break;
     }
 
@@ -1026,31 +1013,31 @@ fheroes2::Point Heroes::MovementDirection() const
 
     if ( direction == Direction::TOP ) {
         if ( sprite_index > 1 && sprite_index < 9 ) {
-            return fheroes2::Point( 0, -1 );
+            return { 0, -1 };
         }
     }
     else if ( direction == Direction::TOP_RIGHT || direction == Direction::TOP_LEFT ) {
         if ( sprite_index > 9 + 1 && sprite_index < 18 ) {
-            return fheroes2::Point( direction == Direction::TOP_RIGHT ? 1 : -1, -1 );
+            return { direction == Direction::TOP_RIGHT ? 1 : -1, -1 };
         }
     }
     else if ( direction == Direction::RIGHT || direction == Direction::LEFT ) {
         if ( sprite_index > 18 + 1 && sprite_index < 27 ) {
-            return fheroes2::Point( direction == Direction::RIGHT ? 1 : -1, 0 );
+            return { direction == Direction::RIGHT ? 1 : -1, 0 };
         }
     }
     else if ( direction == Direction::BOTTOM_RIGHT || direction == Direction::BOTTOM_LEFT ) {
         if ( sprite_index > 27 + 1 && sprite_index < 36 ) {
-            return fheroes2::Point( direction == Direction::BOTTOM_RIGHT ? 1 : -1, 1 );
+            return { direction == Direction::BOTTOM_RIGHT ? 1 : -1, 1 };
         }
     }
     else if ( direction == Direction::BOTTOM ) {
         if ( sprite_index > 36 + 1 && sprite_index < 45 ) {
-            return fheroes2::Point( 0, 1 );
+            return { 0, 1 };
         }
     }
 
-    return fheroes2::Point();
+    return {};
 }
 
 void Heroes::SetValidDirectionSprite()
