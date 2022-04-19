@@ -117,12 +117,12 @@ jobs:
         sudo apt-get -y update
         sudo apt-get -y install libgcc1 gettext
     - name: Prepare Vita SDK cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ~/.vitasdk-cache
-        key: build-psv-${{ github.sha }}
+        key: make-vitasdk-cache-${{ github.sha }}
         restore-keys: |
-          build-psv-
+          make-vitasdk-cache-
     - name: Setup Vita SDK
       continue-on-error: true
       run: |
