@@ -277,7 +277,7 @@ void ShowNewWeekDialog( void )
 
     // head
     std::string message = world.BeginMonth() ? _( "Astrologers proclaim Month of the %{name}." ) : _( "Astrologers proclaim Week of the %{name}." );
-    StringReplace( message, "%{name}", week.GetName() );
+    StringReplace( message, "%{name}", Translation::StringLower( week.GetName() ) );
     message += "\n \n";
 
     if ( week.GetType() == WeekName::MONSTERS ) {
@@ -291,7 +291,7 @@ void ShowNewWeekDialog( void )
                                                                   "After regular growth, the population of %{monster} increases by %{count} percent!", count );
             else
                 message += _( "%{monster} population increases by +%{count}." );
-            StringReplace( message, "%{monster}", monster.GetMultiName() );
+            StringReplace( message, "%{monster}", Translation::StringLower( monster.GetMultiName() ) );
             StringReplace( message, "%{count}", count );
             message += "\n \n";
         }
