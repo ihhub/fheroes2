@@ -8,7 +8,11 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-06 16:34+0200\n"
+<<<<<<< Updated upstream
 "PO-Revision-Date: 2022-04-20 04:14+0200\n"
+=======
+"PO-Revision-Date: 2022-04-20 05:05+0200\n"
+>>>>>>> Stashed changes
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Norwegian Bokmaal <nb@li.org>\n"
 "Language: nb_NO\n"
@@ -2786,7 +2790,7 @@ msgstr ""
 "Brett-type:\n"
 
 msgid "The Succession Wars"
-msgstr "Krigen om tronarvingen"
+msgstr "Tronarvingskrigen"
 
 msgid "Lose all your heroes and towns."
 msgstr "Mist alle helter og byer."
@@ -5640,8 +5644,8 @@ msgid ""
 "Current experience %{exp1}.\n"
 " Next level %{exp2}."
 msgstr ""
-"Nåværende erfaring %{exp1}.\n"
-" Neste level %{exp2}."
+"Nåværende erfaring: %{exp1}.\n"
+"Neste level: %{exp2}."
 
 msgid "Level %{level}"
 msgstr "Level %{level}"
@@ -5653,8 +5657,13 @@ msgid ""
 "special events."
 msgstr ""
 "%{name} har for øyeblikket %{point} av %{max} mana. Maksimal mana er 10 "
+<<<<<<< Updated upstream
 "ganger kunnskapen din. I visse tilfeller kan du få mer enn det kunnskapen "
 "din tilsier."
+=======
+"ganger kunnskapen din. I visse tilfeller kan du hå mer enn det kunnskapen "
+"din skulle tilsi på grunn av spesielle hendelser."
+>>>>>>> Stashed changes
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} møter %{name2}"
@@ -5677,7 +5686,7 @@ msgid "This spell is already in use."
 msgstr "Denne trolldommen er allerede i virkning."
 
 msgid "Enemy heroes are now fully identifiable."
-msgstr "De fiendtlige heltene er nå helt undersøkte."
+msgstr "De fiendtlige heltene er nå helt kartlagte."
 
 msgid "This spell cannot be used on a boat."
 msgstr "Denne trolldommen kan ikke bli brukt på et skip."
@@ -6165,7 +6174,7 @@ msgid "luck|Bad"
 msgstr "Dårlig"
 
 msgid "luck|Normal"
-msgstr "Vanlig"
+msgstr "Normal"
 
 msgid "luck|Good"
 msgstr "God"
@@ -6205,7 +6214,7 @@ msgid "morale|Poor"
 msgstr "Dårlig"
 
 msgid "morale|Normal"
-msgstr "Vanlig"
+msgstr "Normal"
 
 msgid "morale|Good"
 msgstr "God"
@@ -6217,17 +6226,17 @@ msgid "morale|Blood!"
 msgstr "Blod!"
 
 msgid "Bad morale may cause your armies to freeze in combat."
-msgstr "Dårlig kampånd kan få styrkene dine til å stivne til i kamp."
+msgstr "Negativ kampånd kan få styrkene dine til å stivne til i kamp."
 
 msgid ""
 "Neutral morale means your armies will never be blessed with extra attacks or "
 "freeze in combat."
 msgstr ""
-"Vanlig kampånd betyr at styrkene dine aldri verken vil bli velsignet med en "
+"Nøytral kampånd betyr at styrkene dine aldri verken vil bli velsignet med en "
 "ekstra tur, eller stivne til i kamp."
 
 msgid "Good morale may give your armies extra attacks in combat."
-msgstr "God kampånd kan gi styrkene dine en ekstra tur i kamp."
+msgstr "Positiv kampånd kan gi styrkene dine en ekstra tur i kamp."
 
 msgid "Knight"
 msgstr "Ridder"
@@ -9260,7 +9269,7 @@ msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr "Lar magibrukeren se detaljert informasjon om fiendtlige helter."
 
 msgid "Identify Hero"
-msgstr "Undersøk helt"
+msgstr "Kartlegg helt"
 
 msgid "Summon Boat"
 msgstr "Tilkall skip"
