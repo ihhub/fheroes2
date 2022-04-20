@@ -1687,11 +1687,11 @@ namespace AI
         }
     }
 
-    bool HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex )
+    void HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex )
     {
         const Spell dimensionDoor( Spell::DIMENSIONDOOR );
         if ( !Maps::isValidAbsIndex( targetIndex ) || !hero.CanCastSpell( dimensionDoor ) ) {
-            return false;
+            return;
         }
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
@@ -1708,7 +1708,6 @@ namespace AI
         }
 
         hero.ActionNewPosition( false );
-        return true;
     }
 
     void AIWhirlpoolTroopLoseEffect( Heroes & hero )

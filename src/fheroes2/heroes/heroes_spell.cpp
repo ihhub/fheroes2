@@ -190,24 +190,9 @@ void CastleIndexListBox::RedrawBackground( const fheroes2::Point & dst )
     fheroes2::Blit( lowerScrollbar, display, dst.x + 262, dst.y + offsetY );
 }
 
-bool Heroes::ActionSpellCast( const Spell & spell )
+void Heroes::ActionSpellCast( const Spell & spell )
 {
-    std::string error;
-
-    if ( spell == Spell::NONE || spell.isCombat() ) {
-        // This shouldn't happen
-        assert( 0 );
-
-        return false;
-    }
-
-    if ( !CanCastSpell( spell, &error ) ) {
-        if ( !error.empty() ) {
-            Dialog::Message( "Error", error, Font::BIG, Dialog::OK );
-        }
-
-        return false;
-    }
+    assert( spell.isValid() && !spell.isCombat() && CanCastSpell( spell ) );
 
     bool apply = false;
 
@@ -259,12 +244,13 @@ bool Heroes::ActionSpellCast( const Spell & spell )
         break;
     }
 
-    if ( apply ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " cast spell: " << spell.GetName() )
-        SpellCasted( spell );
-        return true;
+    if ( !apply ) {
+        return;
     }
-    return false;
+
+    DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " cast spell: " << spell.GetName() )
+
+    SpellCasted( spell );
 }
 
 bool HeroesTownGate( Heroes & hero, const Castle * castle )
