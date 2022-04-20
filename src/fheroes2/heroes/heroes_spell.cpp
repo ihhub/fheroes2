@@ -194,13 +194,18 @@ bool Heroes::ActionSpellCast( const Spell & spell )
 {
     std::string error;
 
-    if ( !CanMove() && ( spell == Spell::DIMENSIONDOOR || spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) ) {
-        Dialog::Message( "", _( "Your hero is too tired to cast this spell today. Try again tomorrow." ), Font::BIG, Dialog::OK );
+    if ( spell == Spell::NONE || spell.isCombat() ) {
+        // This shouldn't happen
+        assert( 0 );
+
         return false;
     }
-    else if ( spell == Spell::NONE || spell.isCombat() || !CanCastSpell( spell, &error ) ) {
-        if ( !error.empty() )
+
+    if ( !CanCastSpell( spell, &error ) ) {
+        if ( !error.empty() ) {
             Dialog::Message( "Error", error, Font::BIG, Dialog::OK );
+        }
+
         return false;
     }
 
