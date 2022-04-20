@@ -249,8 +249,8 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
         }
         else {
             message = _( "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}." );
-            StringReplace( message, "%{resto}", Resource::String( resourceTo ) );
-            StringReplace( message, "%{resfrom}", Resource::String( resourceFrom ) );
+            StringReplace( message, "%{resto}", Translation::StringLower( Resource::String( resourceTo ) ) );
+            StringReplace( message, "%{resfrom}", Translation::StringLower( Resource::String( resourceFrom ) ) );
             StringReplace( message, "%{count}", exchange_rate );
         }
         const TextBox displayMessage( message, Font::BIG, { pos_rt.x, pos_rt.y + 30, pos_rt.width, 100 } );
