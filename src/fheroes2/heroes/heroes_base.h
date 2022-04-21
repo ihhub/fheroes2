@@ -100,7 +100,7 @@ public:
 
     uint32_t GetSpellPoints() const;
     bool HaveSpellPoints( const Spell & spell ) const;
-    bool CanCastSpell( const Spell & spell, std::string * = nullptr ) const;
+    bool CanCastSpell( const Spell & spell, std::string * res = nullptr ) const;
     bool CanLearnSpell( const Spell & spell ) const;
     void SpellCasted( const Spell & spell );
     void SetSpellPoints( const uint32_t points );

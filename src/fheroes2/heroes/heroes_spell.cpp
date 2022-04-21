@@ -190,19 +190,9 @@ void CastleIndexListBox::RedrawBackground( const fheroes2::Point & dst )
     fheroes2::Blit( lowerScrollbar, display, dst.x + 262, dst.y + offsetY );
 }
 
-bool Heroes::ActionSpellCast( const Spell & spell )
+void Heroes::ActionSpellCast( const Spell & spell )
 {
-    std::string error;
-
-    if ( !CanMove() && ( spell == Spell::DIMENSIONDOOR || spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) ) {
-        Dialog::Message( "", _( "Your hero is too tired to cast this spell today. Try again tomorrow." ), Font::BIG, Dialog::OK );
-        return false;
-    }
-    else if ( spell == Spell::NONE || spell.isCombat() || !CanCastSpell( spell, &error ) ) {
-        if ( !error.empty() )
-            Dialog::Message( "Error", error, Font::BIG, Dialog::OK );
-        return false;
-    }
+    assert( spell.isValid() && !spell.isCombat() && CanCastSpell( spell ) );
 
     bool apply = false;
 
@@ -254,12 +244,13 @@ bool Heroes::ActionSpellCast( const Spell & spell )
         break;
     }
 
-    if ( apply ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " cast spell: " << spell.GetName() )
-        SpellCasted( spell );
-        return true;
+    if ( !apply ) {
+        return;
     }
-    return false;
+
+    DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " cast spell: " << spell.GetName() )
+
+    SpellCasted( spell );
 }
 
 bool HeroesTownGate( Heroes & hero, const Castle * castle )

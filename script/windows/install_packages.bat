@@ -20,7 +20,7 @@ powershell -Command "(New-Object System.Net.WebClient).DownloadFile('https://www
 echo [6/6] Downloading packages
 powershell -Command "(New-Object System.Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.5-VC.zip', '%tempPath%\sdl_image\sdl_image2.zip')"
 
-xcopy /Y /s /Q "setup_packages.bat" "..\..\VisualStudio\packages\installed"
+xcopy /Y /S /Q "setup_packages.bat" "..\..\VisualStudio\packages\installed"
 
 cd "%tempPath%"
 

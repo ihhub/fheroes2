@@ -730,13 +730,14 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
     if ( !hero.HaveSpell( dimensionDoor ) || !Maps::isValidAbsIndex( targetIndex ) )
         return path;
 
-    const uint32_t spCost = std::max( 1U, dimensionDoor.SpellPoint( &hero ) );
-    const uint32_t movementCost = std::max( 1U, dimensionDoor.MovePoint() );
-
-    const uint32_t maxCasts = std::min( hero.GetSpellPoints() / spCost, hero.GetMovePoints() / movementCost );
-    // minimum two casts to make sure there will be movement & spell points left to do the action
-    if ( maxCasts < 2 )
+    uint32_t currentSpellPoints = hero.GetSpellPoints();
+    if ( currentSpellPoints < hero.GetMaxSpellPoints() * _spellPointsReserved )
         return path;
+
+    currentSpellPoints -= static_cast<uint32_t>( hero.GetMaxSpellPoints() * _spellPointsReserved );
+
+    const uint32_t movementCost = std::max( 1U, dimensionDoor.MovePoint() );
+    const uint32_t maxCasts = std::min( currentSpellPoints / std::max( 1U, dimensionDoor.SpellPoint( &hero ) ), hero.GetMovePoints() / movementCost );
 
     if ( world.GetTiles( targetIndex ).GetObject( false ) == MP2::OBJ_CASTLE ) {
         targetIndex = Maps::GetDirectionIndex( targetIndex, Direction::BOTTOM );
@@ -753,7 +754,7 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
     const Directions & directions = Direction::All();
     const int32_t distanceLimit = Spell::CalculateDimensionDoorDistance() / 2;
 
-    uint32_t spellsUsed = 1; // start with 1 to avoid spending ALL move/spell points
+    uint32_t spellsUsed = 0;
     while ( maxCasts > spellsUsed ) {
         const int32_t currentNodeIdx = Maps::GetIndexFromAbsPoint( current );
         fheroes2::Point another = current;
@@ -862,4 +863,9 @@ void AIWorldPathfinder::setArmyStrengthMultiplier( const double multiplier )
         _advantage = multiplier;
         reset();
     }
+}
+
+void AIWorldPathfinder::setSpellPointReserve( const double reserve )
+{
+    _spellPointsReserved = reserve;
 }
