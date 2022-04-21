@@ -39,7 +39,9 @@ if(MACOS_APP_BUNDLE)
 
 	add_executable(fheroes2 MACOSX_BUNDLE ${FHEROES2_ICON} ${FHEROES2_SOURCES} ${TRANSLATION_DATA})
 
-	target_compile_definitions(fheroes2 PRIVATE
+	target_compile_definitions(
+		fheroes2
+		PRIVATE
 		$<$<CONFIG:Debug>:WITH_DEBUG>
 		$<$<BOOL:${MACOS_APP_BUNDLE}>:MACOS_APP_BUNDLE>
 		)
@@ -55,7 +57,8 @@ if(MACOS_APP_BUNDLE)
 	set_target_properties(fheroes2 PROPERTIES MACOSX_BUNDLE_BUNDLE_VERSION ${CMAKE_PROJECT_VERSION})
 	set_target_properties(fheroes2 PROPERTIES OUTPUT_NAME ${CMAKE_PROJECT_NAME})
 else(MACOS_APP_BUNDLE)
-	cmake_path(ABSOLUTE_PATH FHEROES2_DATA
+	cmake_path(
+		ABSOLUTE_PATH FHEROES2_DATA
 		BASE_DIRECTORY ${CMAKE_INSTALL_PREFIX}
 		NORMALIZE
 		OUTPUT_VARIABLE FHEROES2_DATA_ABSOLUTE
@@ -63,7 +66,9 @@ else(MACOS_APP_BUNDLE)
 
 	add_executable(fheroes2 ${FHEROES2_SOURCES})
 
-	target_compile_definitions(fheroes2 PRIVATE
+	target_compile_definitions(
+		fheroes2
+		PRIVATE
 		# MSVC: suppress deprecation warnings
 		$<$<OR:$<COMPILE_LANG_AND_ID:C,MSVC>,$<COMPILE_LANG_AND_ID:CXX,MSVC>>:_CRT_SECURE_NO_WARNINGS>
 		$<$<CONFIG:Debug>:WITH_DEBUG>
@@ -73,7 +78,9 @@ else(MACOS_APP_BUNDLE)
 	install(TARGETS fheroes2 DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif(MACOS_APP_BUNDLE)
 
-target_include_directories(fheroes2 PRIVATE
+target_include_directories(
+	fheroes2
+	PRIVATE
 	agg
 	ai
 	army
@@ -97,7 +104,8 @@ target_include_directories(fheroes2 PRIVATE
 	world
 	)
 
-target_link_libraries(fheroes2
+target_link_libraries(
+	fheroes2
 	${MINGW_LIBRARIES}  # Be sure define it first. Beware WinMain@16 error!!
 	${SDL_MIXER_LIBRARIES}
 	engine
