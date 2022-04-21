@@ -34,6 +34,11 @@
 #include "ui_window.h"
 #include "world.h"
 
+namespace
+{
+    const fheroes2::Size giftDialogSize( 320, 234 );
+}
+
 int32_t GetIndexClickRects( const std::vector<fheroes2::Rect> & rects )
 {
     LocalEvent & le = LocalEvent::Get();
@@ -64,16 +69,17 @@ struct SelectRecipientsColors
         , recipients( 0 )
     {
         positions.reserve( colors.size() );
-        const fheroes2::StandardWindow frameborder( 320, 234 );
-        const fheroes2::Rect box( frameborder.activeArea() );
+        const fheroes2::Display & display = fheroes2::Display::instance();
+        const fheroes2::Rect box( ( display.width() - giftDialogSize.width ) / 2, ( display.height() - giftDialogSize.height ) / 2, giftDialogSize.width,
+                                  giftDialogSize.height );
 
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
         const int32_t colorCount = static_cast<int32_t>( colors.size() ); // safe to cast as the number of players <= 8.
-        int32_t playerContainerWidth = colorCount * sprite.width() + ( colorCount - 1 ) * 22; // original spacing = 22
-        int32_t startx = box.x + 160 - playerContainerWidth / 2; // fixed half width of brown box = 160
+        const int32_t playerContainerWidth = colorCount * sprite.width() + ( colorCount - 1 ) * 22; // original spacing = 22
+        const int32_t startX = box.x + ( giftDialogSize.width - playerContainerWidth ) / 2;
         for ( int32_t i = 0; i < colorCount; ++i ) {
-            int32_t posx = startx + i * ( 22 + sprite.width() );
-            positions.emplace_back( posx, pos.y, sprite.width(), sprite.height() );
+            const int32_t posX = startX + i * ( 22 + sprite.width() );
+            positions.emplace_back( posX, pos.y, sprite.width(), sprite.height() );
         }
     }
 
@@ -88,6 +94,7 @@ struct SelectRecipientsColors
 
         for ( Colors::const_iterator it = colors.begin(); it != colors.end(); ++it ) {
             const fheroes2::Rect & pos = positions[std::distance( colors.begin(), it )];
+
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CELLWIN, 43 + Color::GetIndex( *it ) ), display, pos.x, pos.y );
             if ( recipients & *it )
                 fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CELLWIN, 2 ), display, pos.x + 2, pos.y + 2 );
@@ -138,7 +145,7 @@ struct ResourceBar
         fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::Text text( std::to_string( count ), fheroes2::FontType::smallWhite() );
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 + Resource::getIconIcnIndex( type ) );
-        fheroes2::Blit( sprite, fheroes2::Display::instance(), posx, posy );
+        fheroes2::Blit( sprite, display, posx, posy );
         text.draw( posx + ( sprite.width() - text.width() ) / 2, posy + sprite.height() - 10, display );
     }
 
@@ -217,7 +224,7 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
     Funds funds2;
 
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 );
-    int32_t posx = box.x + 160 - ( sprite.width() + 240 ) / 2; // 160 = half width of brown box, fixed
+    const int32_t posX = box.x + ( giftDialogSize.width - ( sprite.width() + 240 ) ) / 2;
 
     const fheroes2::FontType normalWhite = fheroes2::FontType::normalWhite();
     fheroes2::Text text( _( "Select Recipients" ), normalWhite );
@@ -227,13 +234,14 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
 
     text.set( _( "Your Funds" ), normalWhite );
     text.draw( box.x + ( box.width - text.width() ) / 2, box.y + 57, display );
-    ResourceBar info1( funds1, posx, box.y + 80 );
+    ResourceBar info1( funds1, posX, box.y + 80 );
     info1.Redraw();
 
     text.set( _( "Planned Gift" ), normalWhite );
     text.draw( box.x + ( box.width - text.width() ) / 2, box.y + 127, display );
-    ResourceBar info2( funds2, posx, box.y + 150 );
+    ResourceBar info2( funds2, posX, box.y + 150 );
     info2.Redraw();
+
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
     const int okIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
     const int cancelIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_CANCEL_BUTTON : ICN::NON_UNIFORM_GOOD_CANCEL_BUTTON;
