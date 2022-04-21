@@ -340,7 +340,7 @@ public:
     void Action( int tileIndex, bool isDestination );
     void ActionNewPosition( const bool allowMonsterAttack );
     void ApplyPenaltyMovement( uint32_t penalty );
-    bool ActionSpellCast( const Spell & );
+    void ActionSpellCast( const Spell & spell );
 
     bool MayCastAdventureSpells() const;
 

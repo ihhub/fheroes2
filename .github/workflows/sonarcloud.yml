@@ -30,12 +30,12 @@ jobs:
         unzip ~/.sonarcloud/build-wrapper-linux-x86.zip -d ~/.sonarcloud
         unzip ~/.sonarcloud/sonar-scanner-cli-"$SONAR_SCANNER_VERSION"-linux.zip -d ~/.sonarcloud
     - name: Prepare SonarCloud cfamily cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ~/.sonar-cfamily-cache
-        key: sonarcloud-${{ hashFiles( 'src/**/*.c', 'src/**/*.cpp', 'src/**/*.h' ) }}
+        key: sonarcloud-cfamily-cache-${{ hashFiles( 'src/**/*.c', 'src/**/*.cpp', 'src/**/*.h' ) }}
         restore-keys: |
-          sonarcloud-
+          sonarcloud-cfamily-cache-
     - name: Build
       run: |
         ~/.sonarcloud/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir bw-output make -j 2

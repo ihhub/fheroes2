@@ -330,7 +330,7 @@ double HeroBase::GetMagicStrategicValue( const double armyStrength ) const
     return bestValue;
 }
 
-bool HeroBase::CanCastSpell( const Spell & spell, std::string * res ) const
+bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr */ ) const
 {
     if ( !HaveSpellBook() ) {
         if ( res ) {
@@ -353,47 +353,50 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res ) const
         return false;
     }
 
-    if ( move_point < spell.MovePoint() ) {
-        if ( res ) {
-            *res = _( "Not enough move points." );
-        }
-        return false;
-    }
-
-    const Heroes * hero = dynamic_cast<const Heroes *>( this );
-    if ( spell.isAdventure() && hero == nullptr ) {
-        // How is it possible that a captain can access this spell?
-        assert( 0 );
-        if ( res != nullptr ) {
-            *res = _( "Only heroes can cast this spell." );
-        }
-        return false;
-    }
-
-    if ( spell == Spell::TOWNGATE ) {
-        const Castle * castle = fheroes2::getNearestCastleTownGate( *hero );
-        if ( castle == nullptr ) {
+    if ( spell.isAdventure() ) {
+        const Heroes * hero = dynamic_cast<const Heroes *>( this );
+        if ( hero == nullptr ) {
+            // How is it possible that a captain can access this spell?
+            assert( 0 );
             if ( res != nullptr ) {
-                *res = _( "You do not currently own any town or castle, so you can't cast the spell." );
+                *res = _( "Only heroes can cast this spell." );
             }
             return false;
         }
 
-        if ( castle->GetIndex() == hero->GetIndex() ) {
-            if ( res != nullptr ) {
-                *res = _( "This hero is already in a town, so you can't cast the spell." );
+        // A spell that consumes movement points can be cast if the hero is able to move from his current tile
+        if ( spell.MovePoint() > 0 && !hero->CanMove() ) {
+            if ( res ) {
+                *res = _( "Your hero is too tired to cast this spell today. Try again tomorrow." );
             }
             return false;
         }
 
-        const Heroes * townGuest = castle->GetHeroes().Guest();
-        if ( townGuest != nullptr ) {
-            if ( res != nullptr ) {
-                *res = _( "The nearest town is %{town}.\n \nThis town is occupied by your hero %{hero}." );
-                StringReplace( *res, "%{town}", castle->GetName() );
-                StringReplace( *res, "%{hero}", townGuest->GetName() );
+        if ( spell == Spell::TOWNGATE ) {
+            const Castle * castle = fheroes2::getNearestCastleTownGate( *hero );
+            if ( castle == nullptr ) {
+                if ( res != nullptr ) {
+                    *res = _( "You do not currently own any town or castle, so you can't cast the spell." );
+                }
+                return false;
             }
-            return false;
+
+            if ( castle->GetIndex() == hero->GetIndex() ) {
+                if ( res != nullptr ) {
+                    *res = _( "This hero is already in a town, so you can't cast the spell." );
+                }
+                return false;
+            }
+
+            const Heroes * townGuest = castle->GetHeroes().Guest();
+            if ( townGuest != nullptr ) {
+                if ( res != nullptr ) {
+                    *res = _( "The nearest town is %{town}.\n \nThis town is occupied by your hero %{hero}." );
+                    StringReplace( *res, "%{town}", castle->GetName() );
+                    StringReplace( *res, "%{hero}", townGuest->GetName() );
+                }
+                return false;
+            }
         }
     }
 

@@ -385,8 +385,6 @@
     <ClCompile Include="src\fheroes2\world\world_pathfinding.cpp" />
     <ClCompile Include="src\fheroes2\world\world_regions.cpp" />
     <ClCompile Include="src\thirdparty\libsmacker\smacker.c" />
-    <ClCompile Include="src\thirdparty\libsmacker\smk_bitstream.c" />
-    <ClCompile Include="src\thirdparty\libsmacker\smk_hufftree.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\agg_file.h" />
@@ -563,8 +561,6 @@
     <ClInclude Include="src\fheroes2\world\world_pathfinding.h" />
     <ClInclude Include="src\fheroes2\world\world_regions.h" />
     <ClInclude Include="src\thirdparty\libsmacker\smacker.h" />
-    <ClInclude Include="src\thirdparty\libsmacker\smk_bitstream.h" />
-    <ClInclude Include="src\thirdparty\libsmacker\smk_hufftree.h" />
     <ClInclude Include="src\thirdparty\libsmacker\smk_malloc.h" />
   </ItemGroup>
   <ItemGroup>

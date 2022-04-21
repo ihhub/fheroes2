@@ -23,6 +23,7 @@ ArchitecturesInstallIn64BitMode=x64
 Source: "{#BuildDir}\{#AppName}.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#BuildDir}\lib*.dll"; DestDir: "{app}"
 Source: "{#BuildDir}\SDL*.dll"; DestDir: "{app}"
+Source: "{#BuildDir}\smpeg.dll"; DestDir: "{app}"; Flags: skipifsourcedoesntexist
 Source: "..\..\docs\README.txt"; DestDir: "{app}"
 Source: "..\demo\download_demo_version.bat"; DestDir: "{app}"
 Source: "..\demo\download_demo_version.ps1"; DestDir: "{app}"
