@@ -168,12 +168,14 @@ if(NOT MACOS_APP_BUNDLE)
 		file(COPY ${demodata_SOURCE_DIR}/DATA/ DESTINATION data PATTERN *.*)
 		file(COPY ${demodata_SOURCE_DIR}/MAPS/ DESTINATION maps PATTERN *.*)
 
-		install(DIRECTORY ${demodata_SOURCE_DIR}/DATA/
+		install(
+			DIRECTORY ${demodata_SOURCE_DIR}/DATA/
 			DESTINATION ${FHEROES2_DATA}/data
 			FILES_MATCHING
 			PATTERN *.*
 			)
-		install(DIRECTORY ${demodata_SOURCE_DIR}/MAPS/
+		install(
+			DIRECTORY ${demodata_SOURCE_DIR}/MAPS/
 			DESTINATION ${FHEROES2_DATA}/maps
 			FILES_MATCHING
 			PATTERN *.*
