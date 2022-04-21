@@ -2148,22 +2148,22 @@ msgid "Castle Options"
 msgstr "Opcje zamku"
 
 msgid "Not enough resources to buy creatures."
-msgstr ""
+msgstr "Brak zasobów aby kupić stworzenia."
 
 msgid "No creatures available for purchase."
-msgstr ""
+msgstr "Brak stworzeń do zakupienia."
 
 msgid "Buy Creatures"
-msgstr ""
+msgstr "Zakup stworzeń"
 
 msgid "Town Population Information and Statistics"
 msgstr "Statystyki populacji miasta"
 
 msgid "Damg"
-msgstr ""
+msgstr "Obraż"
 
 msgid "HP"
-msgstr "Punkty życia"
+msgstr "PŻ"
 
 msgid "Growth"
 msgstr "Przyrost"
@@ -2214,13 +2214,13 @@ msgstr ""
 "proponuje ci pomoc w rozwinięciu wybranej przez ciebie umiejętności."
 
 msgid "You can't afford to upgrade your troops!"
-msgstr ""
+msgstr "Nie stać cię na ulepszenie oddziałów!"
 
 msgid ""
 "Your troops can be upgraded, but it will cost you dearly. Do you wish to "
 "upgrade them?"
 msgstr ""
-"Możesz ulepszyć swoje oddziały, ale będzie cię to sporo kosztować. Czy "
+"Możesz ulepszyć swoje oddziały, ale będzie cię to słono kosztować. Czy "
 "chcesz je ulepszyć?"
 
 msgid "Are you sure you want to dismiss this army?"
@@ -2242,7 +2242,7 @@ msgid "Damage"
 msgstr "Obrażenia"
 
 msgid "Hit Points"
-msgstr "PŻ"
+msgstr "Punkty życia"
 
 msgid "Hit Points Left"
 msgstr "Aktualne PŻ"
@@ -2293,10 +2293,10 @@ msgstr ""
 "Zgadzasz się?"
 
 msgid "(Rate: %{percent})"
-msgstr ""
+msgstr "(Przyłącza się %{percent}% oddziału)"
 
 msgid "Total: "
-msgstr ""
+msgstr "Masz: "
 
 msgid "No room in"
 msgstr "Brak wolnych "
@@ -2311,7 +2311,7 @@ msgid "Resource cost:"
 msgstr "Koszt:"
 
 msgid "Need: "
-msgstr ""
+msgstr "Potrzeba: "
 
 msgid "Load Game"
 msgstr "Wczytaj grę"
@@ -2359,7 +2359,7 @@ msgid "Change language of the game."
 msgstr "Zmień język gry."
 
 msgid "Select Game Resolution"
-msgstr "Wybierz rozdzielczość gry"
+msgstr "Wybierz rozdzielczość gry:"
 
 msgid "Change resolution of the game."
 msgstr "Zmień rozdzielczość gry."
@@ -2377,6 +2377,7 @@ msgid ""
 "Your version of Heroes of Might and Magic II does not support any languages "
 "except English."
 msgstr ""
+"Twoja wersja gry Heroes of Might and Magic II wspiera tylko język angielski."
 
 msgid ""
 "Map\n"
@@ -2451,7 +2452,7 @@ msgid "Your army too big!"
 msgstr "Twoja armia jest za duża!"
 
 msgid "Select Game Language:"
-msgstr "Zmień język gry:"
+msgstr "Wybierz język gry:"
 
 msgid "%{name} has gained a level."
 msgstr "%{name} zyskuje poziom."
@@ -2570,7 +2571,7 @@ msgid "Move Points"
 msgstr "Ptk. ruchu"
 
 msgid "Cost per troop:"
-msgstr ""
+msgstr "Koszt jednostki:"
 
 msgid "Available: %{count}"
 msgstr "Dostępne: %{count}"
@@ -2579,7 +2580,7 @@ msgid "Number to buy:"
 msgstr "Rekrutuj:"
 
 msgid "Click to apply the selected resolution."
-msgstr ""
+msgstr "Użyj wskazanej rozdzielczości."
 
 msgid "MAX"
 msgstr "MAKS"
@@ -2591,13 +2592,16 @@ msgid "Fast separation into slots:"
 msgstr "Szybki podział na sloty:"
 
 msgid "Map: "
-msgstr ""
+msgstr "Nazwa mapy: "
 
 msgid ""
 "\n"
 "\n"
 "Location: "
 msgstr ""
+"\n"
+"\n"
+"Położenie pliku: "
 
 msgid "File to Save:"
 msgstr "Zapisz plik:"
@@ -2778,7 +2782,7 @@ msgid "Accept the choice made."
 msgstr "Zastosuj wprowadzone zmiany."
 
 msgid "Experimental Game Settings"
-msgstr "Eksperymentalne ustawienia gry"
+msgstr "Eksperymentalne ustawienia gry:"
 
 msgid "off"
 msgstr "wyłączone"
@@ -3635,7 +3639,7 @@ msgid "Are you sure you want to overwrite the save with this name?"
 msgstr "Czy na pewno chcesz zapisać stan gry z taką samą nazwą?"
 
 msgid "Game saved successfully."
-msgstr "Udało się zapisać stan gry."
+msgstr "Stan gry zapisany."
 
 msgid "There was an issue during saving."
 msgstr "Wystąpił problem w czasie zapisu gry."
@@ -3736,25 +3740,28 @@ msgid "Kingdom Income per day."
 msgstr "Przychód"
 
 msgid "English"
-msgstr "angielski"
+msgstr "Angielski"
 
 msgid "French"
-msgstr "francuski"
+msgstr "Francuski"
 
 msgid "Polish"
-msgstr "polski"
+msgstr "Polski"
 
 msgid "German"
-msgstr "niemiecki"
+msgstr "Niemiecki"
 
 msgid "Russian"
-msgstr "rosyjski"
+msgstr "Rosyjski"
 
 msgid "Italian"
-msgstr "włoski"
+msgstr "Włoski"
 
 msgid "Czech"
-msgstr ""
+msgstr "Czeski"
+
+msgid "Norwegian"
+msgstr "Norweski"
 
 msgid ", FPS: "
 msgstr ", FPS: "
