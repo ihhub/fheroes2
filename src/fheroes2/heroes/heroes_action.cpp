@@ -1817,7 +1817,7 @@ void ActionToArtifact( Heroes & hero, s32 dst_index )
                 else {
                     msg = _(
                         "Through a clearing you observe an ancient artifact. Unfortunately, it's guarded by a nearby %{monster}. Do you want to fight the %{monster} for the artifact?" );
-                    StringReplace( msg, "%{monster}", troop->GetName() );
+                    StringReplace( msg, "%{monster}", Translation::StringLower( troop->GetName() ) );
                     battle = ( Dialog::YES == Dialog::Message( title, msg, Font::BIG, Dialog::YES | Dialog::NO ) );
                 }
             }
