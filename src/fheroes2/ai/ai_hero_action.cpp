@@ -1687,12 +1687,12 @@ namespace AI
         }
     }
 
-    bool HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex )
+    void HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex )
     {
         const Spell dimensionDoor( Spell::DIMENSIONDOOR );
-        if ( !Maps::isValidAbsIndex( targetIndex ) || hero.GetMovePoints() < dimensionDoor.MovePoint() || hero.GetSpellPoints() < dimensionDoor.SpellPoint( &hero )
-             || !hero.HaveSpell( dimensionDoor ) )
-            return false;
+        if ( !Maps::isValidAbsIndex( targetIndex ) || !hero.CanCastSpell( dimensionDoor ) ) {
+            return;
+        }
 
         if ( AIHeroesShowAnimation( hero, AIGetAllianceColors() ) ) {
             hero.FadeOut();
@@ -1708,7 +1708,6 @@ namespace AI
         }
 
         hero.ActionNewPosition( false );
-        return true;
     }
 
     void AIWhirlpoolTroopLoseEffect( Heroes & hero )
