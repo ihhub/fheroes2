@@ -1195,6 +1195,7 @@ namespace AI
                 for ( int i = 0; i < monsterStrengthMultiplierCount; ++i ) {
                     if ( currentMonsterStrengthMultiplier > monsterStrengthMultipliers[i] ) {
                         _pathfinder.setArmyStrengthMultiplier( bestHero->isLosingGame() ? ARMY_ADVANTAGE_DESPERATE : monsterStrengthMultipliers[i] );
+                        _pathfinder.setSpellPointReserve( 0 );
                         setNewMultiplier = true;
                         break;
                     }
@@ -1266,6 +1267,7 @@ namespace AI
             }
 
             _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
+            _pathfinder.setSpellPointReserve( 0.5 );
         }
 
         const bool allHeroesMoved = availableHeroes.empty();
@@ -1277,6 +1279,7 @@ namespace AI
         }
 
         _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
+        _pathfinder.setSpellPointReserve( 0.5 );
 
         return allHeroesMoved;
     }

@@ -149,6 +149,7 @@ public:
     }
 
     void setArmyStrengthMultiplier( const double multiplier );
+    void setSpellPointReserve( const double reserve );
 
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx ) override;
@@ -161,5 +162,6 @@ private:
 
     double _armyStrength = -1;
     double _advantage = 1.0;
+    double _spellPointsReserved = 0.5;
     Army _temporaryArmy; // for internal calculations
 };
