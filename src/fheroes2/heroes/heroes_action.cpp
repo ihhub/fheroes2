@@ -2210,7 +2210,7 @@ void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType object
         hero.MovePointsScaleFixed();
 
         std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you. Do you accept?" );
-        StringReplace( message, "%{monster}", troop.GetMultiName() );
+        StringReplace( message, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
 
         AGG::PlaySound( M82::EXPERNCE );
 

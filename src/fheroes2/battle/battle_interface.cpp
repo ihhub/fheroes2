@@ -3096,7 +3096,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsI
                 msg.append( " " );
                 msg.append( _n( "1 %{defender} perishes.", "%{count} %{defender} perish.", target.killed ) );
                 StringReplace( msg, "%{count}", target.killed );
-                StringReplace( msg, "%{defender}", target.defender->GetPluralName( target.killed ) );
+                StringReplace( msg, "%{defender}", Translation::StringLower( target.defender->GetPluralName( target.killed ) ) );
             }
         }
 
@@ -3339,7 +3339,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     }
 
     std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
-    StringReplace( msg, "%{monster}", unit.GetName() );
+    StringReplace( msg, "%{monster}", Translation::StringLower( unit.GetName() ) );
     StringReplace( msg, "%{src}", unit.GetHeadIndex() );
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
@@ -3435,7 +3435,7 @@ void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playS
         AGG::PlaySound( M82::RSBRYFZL );
     }
     std::string str( _( "The %{name} resist the spell!" ) );
-    StringReplace( str, "%{name}", target.GetName() );
+    StringReplace( str, "%{name}", Translation::StringLower( target.GetName() ) );
     status.SetMessage( str, true );
     status.SetMessage( "", false );
 }
@@ -3448,7 +3448,7 @@ void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_
 
     if ( target && ( target->GetHeadIndex() == dst || ( target->isWide() && target->GetTailIndex() == dst ) ) ) {
         msg = _( "%{name} casts %{spell} on the %{troop}." );
-        StringReplace( msg, "%{troop}", target->GetName() );
+        StringReplace( msg, "%{troop}", Translation::StringLower( target->GetName() ) );
     }
     else {
         msg = _( "%{name} casts %{spell}." );
@@ -3762,7 +3762,7 @@ void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Unit & attacke
 
     if ( msg ) {
         std::string str( msg );
-        StringReplace( str, "%{name}", target.defender->GetName() );
+        StringReplace( str, "%{name}", Translation::StringLower( target.defender->GetName() ) );
 
         status.SetMessage( str, true );
         status.SetMessage( "", false );
@@ -3777,7 +3777,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
     const fheroes2::Rect & pos = unit.GetRectPosition();
 
     std::string msg = isGoodLuck ? _( "Good luck shines on the %{attacker}." ) : _( "Bad luck descends on the %{attacker}." );
-    StringReplace( msg, "%{attacker}", unit.GetName() );
+    StringReplace( msg, "%{attacker}", Translation::StringLower( unit.GetName() ) );
     status.SetMessage( msg, true );
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
@@ -3845,13 +3845,13 @@ void Battle::Interface::RedrawActionMorale( Unit & b, bool good )
 
     if ( good ) {
         msg = _( "High morale enables the %{monster} to attack again." );
-        StringReplace( msg, "%{monster}", b.GetName() );
+        StringReplace( msg, "%{monster}", Translation::StringLower( b.GetName() ) );
         status.SetMessage( msg, true );
         RedrawTroopWithFrameAnimation( b, ICN::MORALEG, M82::GOODMRLE, NONE );
     }
     else {
         msg = _( "Low morale causes the %{monster} to freeze in panic." );
-        StringReplace( msg, "%{monster}", b.GetName() );
+        StringReplace( msg, "%{monster}", Translation::StringLower( b.GetName() ) );
         status.SetMessage( msg, true );
         RedrawTroopWithFrameAnimation( b, ICN::MORALEB, M82::BADMRLE, WINCE );
     }
@@ -3889,7 +3889,7 @@ void Battle::Interface::RedrawActionTowerPart2( const Tower & tower, const Targe
         msg += ' ';
         msg.append( _n( "1 %{defender} perishes.", "%{count} %{defender} perish.", target.killed ) );
         StringReplace( msg, "%{count}", target.killed );
-        StringReplace( msg, "%{defender}", target.defender->GetPluralName( target.killed ) );
+        StringReplace( msg, "%{defender}", Translation::StringLower( target.defender->GetPluralName( target.killed ) ) );
     }
 
     if ( !isMirror ) {
