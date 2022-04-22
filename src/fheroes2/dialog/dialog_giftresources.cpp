@@ -27,9 +27,9 @@
 #include "game.h"
 #include "icn.h"
 #include "settings.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 #include "ui_window.h"
 #include "world.h"
@@ -176,14 +176,13 @@ struct ResourceBar
             u32 cur = resource.Get( rs );
             u32 sel = cur;
             u32 max = mul > 1 ? ( funds.Get( rs ) + resource.Get( rs ) ) / mul : funds.Get( rs ) + resource.Get( rs );
-
             if ( 0 == mul ) {
-                Dialog::Message( "", _( "First select recipients!" ), Font::BIG, Dialog::OK );
+                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "First select recipients!" ), fheroes2::FontType::normalWhite() ), Dialog::OK );
             }
             else if ( 0 == max ) {
                 std::string msg = _( "You cannot select %{resource}!" );
                 StringReplace( msg, "%{resource}", Resource::String( rs ) );
-                Dialog::Message( "", msg, Font::BIG, Dialog::OK );
+                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK );
             }
             else {
                 std::string msg = _( "Select count %{resource}:" );
