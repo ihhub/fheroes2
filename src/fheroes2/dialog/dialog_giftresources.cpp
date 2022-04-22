@@ -60,6 +60,7 @@ int32_t GetIndexClickRects( const std::vector<fheroes2::Rect> & rects )
 
 struct SelectRecipientsColors
 {
+    static constexpr int recipientSpacing = 22;
     const Colors colors;
     int recipients;
     std::vector<fheroes2::Rect> positions;
@@ -75,10 +76,10 @@ struct SelectRecipientsColors
 
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
         const int32_t colorCount = static_cast<int32_t>( colors.size() ); // safe to cast as the number of players <= 8.
-        const int32_t playerContainerWidth = colorCount * sprite.width() + ( colorCount - 1 ) * 22; // original spacing = 22
+        const int32_t playerContainerWidth = colorCount * sprite.width() + ( colorCount - 1 ) * recipientSpacing;
         const int32_t startX = box.x + ( giftDialogSize.width - playerContainerWidth ) / 2;
         for ( int32_t i = 0; i < colorCount; ++i ) {
-            const int32_t posX = startX + i * ( 22 + sprite.width() );
+            const int32_t posX = startX + i * ( recipientSpacing + sprite.width() );
             positions.emplace_back( posX, pos.y, sprite.width(), sprite.height() );
         }
     }
