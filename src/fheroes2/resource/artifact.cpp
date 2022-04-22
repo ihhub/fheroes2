@@ -935,8 +935,16 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
         }
     }
     else {
-        if ( can_change )
-            art = Dialog::SelectArtifact();
+        if ( can_change ) {
+            const Artifact newArtifact = Dialog::SelectArtifact();
+
+            if ( isMagicBook( newArtifact ) ) {
+                const_cast<Heroes *>( _hero )->SpellBookActivate();
+            }
+            else {
+                art = newArtifact;
+            }
+        }
 
         return false;
     }
