@@ -683,7 +683,7 @@ bool BagArtifacts::PushArtifact( const Artifact & art )
     }
 
     if ( art.GetID() == Artifact::MAGIC_BOOK && isPresentArtifact( art ) ) {
-        // Wee add a magic book while adding a hero on the map.
+        // We add a magic book while adding a hero on the map.
         // In case if a map creator set Magic Book to be an artifact of the hero we face two Magic Books situation.
         return false;
     }
