@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-05 20:49+0200\n"
-"PO-Revision-Date: 2022-04-09 12:36+0200\n"
+"PO-Revision-Date: 2022-04-22 17:03+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -92,31 +92,31 @@ msgstr ""
 "%{monster}"
 
 msgid "army|Few"
-msgstr "Peu"
+msgstr "1-4"
 
 msgid "army|Several"
-msgstr "Plusieurs"
+msgstr "5-9"
 
 msgid "army|Pack"
-msgstr "Groupe"
+msgstr "10-19"
 
 msgid "army|Lots"
-msgstr "Troupe"
+msgstr "20-49"
 
 msgid "army|Horde"
-msgstr "Horde"
+msgstr "50-99"
 
 msgid "army|Throng"
-msgstr "Foule"
+msgstr "100-249"
 
 msgid "army|Swarm"
-msgstr "Colonie"
+msgstr "250-499"
 
 msgid "army|Zounds"
-msgstr "Armée"
+msgstr "500-999"
 
 msgid "army|Legion"
-msgstr "Légion"
+msgstr "1000+"
 
 msgid "All %{race} troops +1"
 msgstr "+1 pour toutes les troupes %{race}"
