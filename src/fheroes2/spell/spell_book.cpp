@@ -86,7 +86,7 @@ namespace
 
             const Spell & spell = spells[i + index];
             const std::string & spellName = spell.GetName();
-            const uint32_t spellCost = spell.SpellPoint( &hero );
+            const uint32_t spellCost = spell.spellPoints( &hero );
             const bool isAvailable = hero.CanCastSpell( spell );
 
             const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
@@ -283,7 +283,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
                             break;
                         }
                         else {
-                            StringReplace( str, "%{mana}", ( *spell ).SpellPoint( &hero ) );
+                            StringReplace( str, "%{mana}", ( *spell ).spellPoints( &hero ) );
                             StringReplace( str, "%{point}", hero.GetSpellPoints() );
                             Dialog::Message( spell->GetName(), str, Font::BIG, Dialog::OK );
                             display.render();

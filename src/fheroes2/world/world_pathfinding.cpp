@@ -736,8 +736,8 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
 
     currentSpellPoints -= static_cast<uint32_t>( hero.GetMaxSpellPoints() * _spellPointsReserved );
 
-    const uint32_t movementCost = std::max( 1U, dimensionDoor.MovePoint() );
-    const uint32_t maxCasts = std::min( currentSpellPoints / std::max( 1U, dimensionDoor.SpellPoint( &hero ) ), hero.GetMovePoints() / movementCost );
+    const uint32_t movementCost = std::max( 1U, dimensionDoor.movePoints() );
+    const uint32_t maxCasts = std::min( currentSpellPoints / std::max( 1U, dimensionDoor.spellPoints( &hero ) ), hero.GetMovePoints() / movementCost );
 
     if ( world.GetTiles( targetIndex ).GetObject( false ) == MP2::OBJ_CASTLE ) {
         targetIndex = Maps::GetDirectionIndex( targetIndex, Direction::BOTTOM );

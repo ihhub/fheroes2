@@ -70,7 +70,7 @@ namespace AI
             // Diminish spell effectiveness based on spell point cost
             // 1. Divide cost by 3 to make level 1 spells a baseline (1:1)
             // 2. Use square root to make sure relationship isn't linear for high-level spells
-            const double spellPointValue = retreating ? outcome.value : outcome.value / sqrt( spell.SpellPoint( _commander ) / 3.0 );
+            const double spellPointValue = retreating ? outcome.value : outcome.value / sqrt( spell.spellPoints( _commander ) / 3.0 );
             const bool ignoreThreshold = retreating || spell.isResurrect();
 
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " value is " << spellPointValue << ", best target is " << outcome.cell )
@@ -549,7 +549,7 @@ namespace AI
 
         double bestValue = 0;
         for ( const Spell & spell : spells ) {
-            if ( spell.isCombat() && spell.isDamage() && commander.GetSpellPoints() >= spell.SpellPoint() ) {
+            if ( spell.isCombat() && spell.isDamage() && commander.GetSpellPoints() >= spell.spellPoints() ) {
                 bestValue = std::max( bestValue, spell.Damage() * spellPower );
             }
         }
