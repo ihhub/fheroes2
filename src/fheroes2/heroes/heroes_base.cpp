@@ -412,8 +412,8 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
 
 void HeroBase::SpellCasted( const Spell & spell )
 {
-    magic_point -= ( spell.spellPoints( this ) < magic_point ? spell.spellPoints( this ) : magic_point );
-    move_point -= ( spell.movePoints() < move_point ? spell.movePoints() : move_point );
+    magic_point -= std::min( spell.spellPoints( this ), magic_point );
+    move_point -= std::min( spell.movePoints(), move_point );
 }
 
 bool HeroBase::CanLearnSpell( const Spell & spell ) const
