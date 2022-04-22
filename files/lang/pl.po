@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-19 14:50+0100\n"
-"PO-Revision-Date: 2022-04-09 12:42+0200\n"
+"PO-Revision-Date: 2022-04-22 20:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -717,10 +717,10 @@ msgid "Elven Alliance"
 msgstr "Przymierze elfów"
 
 msgid "Kraeger defeated"
-msgstr ""
+msgstr "Kraeger pokonany"
 
 msgid "Wayward Son"
-msgstr ""
+msgstr "Nieobliczalny syn"
 
 msgid "Uncle Ivan"
 msgstr "Wuj Ivan"
@@ -734,7 +734,7 @@ msgid "Carator Mines"
 msgstr "Kopalnie Caratora"
 
 msgid "Force of Arms"
-msgstr ""
+msgstr "Siła oręża"
 
 #, fuzzy
 msgid "Save the Dwarves"
@@ -745,7 +745,7 @@ msgid "The Crown"
 msgstr "Korona"
 
 msgid "The Gauntlet"
-msgstr ""
+msgstr "Rękawica"
 
 #, fuzzy
 msgid "Turning Point"
@@ -922,19 +922,19 @@ msgid ""
 msgstr ""
 
 msgid "Arrow's Flight"
-msgstr ""
+msgstr "Lot strzały"
 
 msgid "Island of Chaos"
-msgstr ""
+msgstr "Wyspa chaosu"
 
 msgid "The Abyss"
-msgstr ""
+msgstr "Otchłań"
 
 msgid "Uprising"
-msgstr ""
+msgstr "Powstanie"
 
 msgid "Aurora Borealis"
-msgstr ""
+msgstr "Zorza polarna"
 
 #, fuzzy
 msgid "Betrayal's End"
@@ -945,7 +945,7 @@ msgid "Corruption's Heart"
 msgstr "Kwatera kapitana"
 
 msgid "The Giant's Pass"
-msgstr ""
+msgstr "Przełęcz Olbrzyma"
 
 msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
@@ -990,29 +990,27 @@ msgid ""
 "hero for all time."
 msgstr ""
 
-#, fuzzy
 msgid "Border Towns"
-msgstr "Borderlands"
+msgstr "Miasta Graniczne"
 
 msgid "Conquer and Unify"
-msgstr ""
+msgstr "Podbój i Zjednoczenie"
 
-#, fuzzy
 msgid "Crazy Uncle Ivan"
-msgstr "Wuj Ivan"
+msgstr "Szalony Wuj Ivan"
 
 msgid "The Wayward Son"
-msgstr ""
+msgstr "Nieobliczalny Syn"
 
 msgid "Ivory Gates"
-msgstr ""
+msgstr "Bramy z Kośći Słoniowej"
 
 #, fuzzy
 msgid "The Elven Lands"
 msgstr "Siedem Jezior"
 
 msgid "The Epic Battle"
-msgstr ""
+msgstr "Epicka Bitwa"
 
 #, fuzzy
 msgid "The Southern War"
@@ -1068,10 +1066,10 @@ msgid "Power's End"
 msgstr "Pierścień mocy"
 
 msgid "The Eternal Scrolls"
-msgstr ""
+msgstr "Wieczny Zwój"
 
 msgid "The Shrouded Isles"
-msgstr ""
+msgstr "Ukryte Wyspy"
 
 msgid ""
 "Your mission is to vanquish the warring mages in the magical Shrouded Isles. "
@@ -1097,16 +1095,16 @@ msgid ""
 msgstr ""
 
 msgid "Blood is Thicker"
-msgstr ""
+msgstr "Gęstsza Krew"
 
 msgid "King and Country"
-msgstr ""
+msgstr "Król i Kraj"
 
 msgid "Pirate Isles"
-msgstr "Wyspy piratów"
+msgstr "Wyspy Piratów"
 
 msgid "Stranded"
-msgstr ""
+msgstr "Na Mieliźnie"
 
 #, fuzzy
 msgid ""
@@ -1132,58 +1130,59 @@ msgid ""
 msgstr ""
 
 msgid " bane"
-msgstr ""
+msgstr " zguba"
 
-#, fuzzy
 msgid " alliance"
-msgstr "Zerwany sojusz"
+msgstr " sojusz"
 
 msgid "Carry-over forces"
-msgstr ""
+msgstr "Przeniesione siły"
 
 msgid " bonus"
-msgstr ""
+msgstr " bonus"
 
 msgid " defeated"
-msgstr ""
+msgstr " pokonany"
 
 msgid " will always run away from your army."
-msgstr ""
+msgstr " zawsze ucieknie przed twoją armią."
 
 msgid " will be willing to always join your army."
-msgstr ""
+msgstr " zawsze dołączy do twojej armii."
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
 msgstr ""
+"Artefact \"%{artifact}\" zostanie przeniesiony do następnego scenariusza."
 
 msgid "The army will be carried over the scenario."
-msgstr ""
+msgstr "Armia zostanie przeniesiona do następnego scenariusza"
 
 msgid ""
 "The kingdom will have additional %{resource} at the start of the scenario."
-msgstr ""
+msgstr "Królestwo otrzyma dodatkowe %{resource} na starcie scenariusza."
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
-msgstr ""
+msgstr "Zaklęcie \"%{spell}\" zostanie przeniesione do następnego scenariusza"
 
 msgid "%{hero} hero can be hired in the scenario."
-msgstr ""
+msgstr "Bohater %{hero} może być zwerbowany w tym scenariuszu"
 
 msgid "Defeated %{hero} hero will not appear in the subsequent scenarios."
-msgstr ""
+msgstr "Pokonany bohater %{hero} nie będzie dostępny w kolejnych scenariuszach"
 
 msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr ""
-"Krasnoludy rozpoznają swoich sojuszników i chętnie przyłączają się do Twoich "
-"sił."
+"Krasnoludy rozpoznają w tobie sojusznika i chętnie przyłączają się do ciebie."
 
 msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
 msgstr ""
+"Ogry rozpoznają cię jako zmorę krasnoludów i powoli zmierzają ku tobie aby "
+"wesprzeć twoje siły."
 
 msgid ""
 "The dragons, snarling and growling, agree to join forces with you, their "
 "'Ally'."
-msgstr ""
+msgstr "Warczące i burczące smoki przystają na dołączenie do twojej armi."
 
 msgid ""
 "As you approach the group of elves, their leader calls them all to "
@@ -1191,30 +1190,43 @@ msgid ""
 "fearless ally of ours?\"  The group explodes with cheers as they run to join "
 "your ranks."
 msgstr ""
+"Kiedy zbliżasz się do grupy elfów, jej przywódca zwołuje wszystkich i "
+"wykrzykuje, \"Kto jest na tyle odwarzny by dolaczyć do naszego "
+"nieustraszonego sprzymierzeńca?\" Członkowie grupy wiwatują i biegną do "
+"ciebie by dolączyć do twoich szeregów."
 
 msgid ""
 "The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may "
 "pass.\""
 msgstr ""
+"Witają cię krasnoludy, \"Przyjaciel Rolanda jest naszym przyjacielem. Możesz "
+"przejść\""
 
 msgid ""
 "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
 msgstr ""
+"Ogry chrząkają na znak uznania, \"Sprzymierzeńcy Archibalda mogą przejść\""
 
 msgid ""
 "The dragons see you and call out.  \"Our alliance with Archibald compels us "
 "to join you.  Unfortunately you have no room.  A pity!\"  They quickly "
 "scatter."
 msgstr ""
+"Smoki widzą cię i wykrzykują. \"Nasze przymierze z Archibaldem nakazuje nam "
+"przyłączyć się do ciebie. Jednakże nie ma miejsca w twoich szeregach, co za "
+"szkoda!\". Smoki momentalnie się rozpraszają."
 
 msgid ""
 "The elves stand at attention as you approach.  Their leader calls to you and "
 "says, \"Let us not impede your progress, ally!  Move on, and may victory be "
 "yours.\""
 msgstr ""
+"Elfy stają na baczność, gdy się zbliżasz. Ich przywódca woła cię i mówi, "
+"\"Nie będziemy wchodzić ci w drogę towarzyszu! Ruszaj dalej i niech "
+"zwycięstwo będzie twoje.\""
 
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
-msgstr ""
+msgstr "\"Zmora krasnoludów, ratuj się kto może!!!\""
 
 msgid "campaignBonus|Ballista"
 msgstr "Balista"
@@ -1340,12 +1352,13 @@ msgstr "Pokaż bohaterów"
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
 "scenario."
-msgstr ""
+msgstr "Główny bohater otrzyma artefakt \"%{artifact}\" na starcie scenariusza"
 
 msgid ""
 "The kingdom will have additional %{amount} %{resource} at the start of the "
 "scenario."
 msgstr ""
+"Królestwo otrzyma dodatkowe %{amount} %{resource} na starcie scenariusza."
 
 #, fuzzy
 msgid ""
