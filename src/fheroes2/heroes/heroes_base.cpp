@@ -105,7 +105,12 @@ void HeroBase::SetSpellPoints( const uint32_t points )
 
 bool HeroBase::HaveSpellPoints( const Spell & spell ) const
 {
-    return magic_point >= spell.SpellPoint( this );
+    return magic_point >= spell.spellPoints( this );
+}
+
+bool HeroBase::haveMovePoints( const Spell & spell ) const
+{
+    return move_point >= spell.minMovePoints();
 }
 
 void HeroBase::EditSpellBook()
@@ -304,7 +309,7 @@ double HeroBase::GetMagicStrategicValue( const double armyStrength ) const
         if ( spell.isCombat() ) {
             const int id = spell.GetID();
 
-            const uint32_t spellCost = spell.SpellPoint();
+            const uint32_t spellCost = spell.spellPoints();
             const uint32_t casts = spellCost ? std::min( 10U, currentSpellPoints / spellCost ) : 0;
 
             // use quadratic formula to diminish returns from subsequent spell casts, (up to x5 when spell has 10 uses)
@@ -364,8 +369,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             return false;
         }
 
-        // A spell that consumes movement points can be cast if the hero is able to move from his current tile
-        if ( spell.MovePoint() > 0 && !hero->CanMove() ) {
+        if ( !haveMovePoints( spell ) ) {
             if ( res ) {
                 *res = _( "Your hero is too tired to cast this spell today. Try again tomorrow." );
             }
@@ -408,12 +412,8 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
 
 void HeroBase::SpellCasted( const Spell & spell )
 {
-    // spell point cost
-    magic_point -= ( spell.SpellPoint( this ) < magic_point ? spell.SpellPoint( this ) : magic_point );
-
-    // move point cost
-    if ( spell.MovePoint() )
-        move_point -= ( spell.MovePoint() < move_point ? spell.MovePoint() : move_point );
+    magic_point -= std::min( spell.spellPoints( this ), magic_point );
+    move_point -= std::min( spell.movePoints(), move_point );
 }
 
 bool HeroBase::CanLearnSpell( const Spell & spell ) const
