@@ -146,6 +146,7 @@ public:
 
     u32 SpellPoint( const HeroBase * hero = nullptr ) const;
     u32 MovePoint( void ) const;
+    uint32_t minMovePoints() const;
     int Level( void ) const;
     u32 Damage( void ) const;
     u32 Restore( void ) const;

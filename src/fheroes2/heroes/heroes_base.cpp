@@ -108,6 +108,11 @@ bool HeroBase::HaveSpellPoints( const Spell & spell ) const
     return magic_point >= spell.SpellPoint( this );
 }
 
+bool HeroBase::haveMovePoints( const Spell & spell ) const
+{
+    return move_point >= spell.minMovePoints();
+}
+
 void HeroBase::EditSpellBook()
 {
     spell_book.Edit( *this );
@@ -364,8 +369,7 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             return false;
         }
 
-        // A spell that consumes movement points can be cast if the hero is able to move from his current tile
-        if ( spell.MovePoint() > 0 && !hero->CanMove() ) {
+        if ( !haveMovePoints( spell ) ) {
             if ( res ) {
                 *res = _( "Your hero is too tired to cast this spell today. Try again tomorrow." );
             }
