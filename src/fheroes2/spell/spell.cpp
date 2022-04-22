@@ -33,9 +33,9 @@
 struct spellstats_t
 {
     const char * name;
-    uint8_t spellPoints;
-    uint16_t movePoints;
-    uint16_t minMovePoints;
+    uint8_t spellPoints; // The number of spell points consumed/required by this spell
+    uint16_t movePoints; // The number of movement points consumed by this spell
+    uint16_t minMovePoints; // The minimum number of movement points required to cast this spell
     uint32_t imageId;
     uint8_t extraValue;
     const char * description;
@@ -144,7 +144,7 @@ const char * Spell::GetDescription( void ) const
     return _( spells[id].description );
 }
 
-u32 Spell::MovePoint( void ) const
+uint32_t Spell::movePoints() const
 {
     return spells[id].movePoints;
 }
@@ -154,7 +154,7 @@ uint32_t Spell::minMovePoints() const
     return spells[id].minMovePoints;
 }
 
-u32 Spell::SpellPoint( const HeroBase * hero ) const
+uint32_t Spell::spellPoints( const HeroBase * hero ) const
 {
     if ( hero == nullptr ) {
         return spells[id].spellPoints;
