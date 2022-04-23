@@ -89,7 +89,7 @@ namespace
 
     void drawExperimentalOptions( const fheroes2::Rect & optionRoi )
     {
-        drawOption( optionRoi, _( "Experimental" ), _( "Settings" ), ICN::SPANEL, 14 );
+        drawOption( optionRoi, _( "Settings" ), _( "Experimental" ), ICN::SPANEL, 14 );
     }
 
     void drawMusicVolumeOptions( const fheroes2::Rect & optionRoi )
