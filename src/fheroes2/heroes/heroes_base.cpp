@@ -344,16 +344,16 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         return false;
     }
 
-    if ( !HaveSpell( spell ) ) {
+    if ( !HaveSpellPoints( spell ) ) {
         if ( res ) {
-            *res = _( "The spell is not found." );
+            *res = _( "That spell costs %{mana} mana. You only have %{point} mana, so you can't cast the spell." );
         }
         return false;
     }
 
-    if ( !HaveSpellPoints( spell ) ) {
+    if ( !HaveSpell( spell ) ) {
         if ( res ) {
-            *res = _( "That spell costs %{mana} mana. You only have %{point} mana, so you can't cast the spell." );
+            *res = _( "The spell is not found." );
         }
         return false;
     }
