@@ -1357,12 +1357,12 @@ int Heroes::getNumOfTravelDays( int32_t dstIdx ) const
         const uint32_t stepPenalty = step.GetPenalty();
 
         if ( movePoints >= stepPenalty ) {
-            // This movement takes place on the same turn
+            // This movement takes place on the same day
             movePoints -= stepPenalty;
         }
         else {
-            // This movement takes place at the beginning of a new turn: start with max
-            // movement points, don't carry leftovers from the previous turn
+            // This movement takes place at the beginning of a new day: start with max
+            // movement points, don't carry leftovers from the previous day
             assert( maxMovePoints >= stepPenalty );
 
             movePoints = maxMovePoints - stepPenalty;
