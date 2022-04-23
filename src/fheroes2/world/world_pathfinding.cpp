@@ -781,6 +781,10 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
                 if ( !Maps::isValidForDimensionDoor( newIndex, water ) )
                     continue;
 
+                // check if we are near destination - skip if we can't move there after
+                if ( anotherNodeIdx == targetIndex && !isValidPath( anotherNodeIdx, directions[i], _currentColor ) )
+                    continue;
+
                 const fheroes2::Point newPoint = Maps::GetPoint( newIndex );
                 if ( std::abs( current.x - newPoint.x ) <= distanceLimit && std::abs( current.y - newPoint.y ) <= distanceLimit ) {
                     path.emplace_back( newIndex, currentNodeIdx, Direction::CENTER, movementCost );
