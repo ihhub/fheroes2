@@ -424,6 +424,7 @@ namespace
             fheroes2::Copy( font[67], 0, 0, font[62], 0, 0, font[67].width(), font[67].height() );
             fheroes2::Copy( font[62], 3, 4, font[62], 3, 5, 1, 1 );
             fheroes2::Copy( font[62], 3, 4, font[62], 2, 6, 1, 1 );
+            font[62].setPosition( font[67].x(), font[67].y() );
             updateSmallFontLetterShadow( font[62] );
 
             font[64].resize( font[69].width(), font[69].height() + 2 );

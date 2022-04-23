@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <map>
 #include <string>
 
@@ -683,7 +684,7 @@ bool BagArtifacts::PushArtifact( const Artifact & art )
     }
 
     if ( art.GetID() == Artifact::MAGIC_BOOK && isPresentArtifact( art ) ) {
-        // Wee add a magic book while adding a hero on the map.
+        // We add a magic book while adding a hero on the map.
         // In case if a map creator set Magic Book to be an artifact of the hero we face two Magic Books situation.
         return false;
     }
@@ -935,8 +936,16 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
         }
     }
     else {
-        if ( can_change )
-            art = Dialog::SelectArtifact();
+        if ( can_change ) {
+            const Artifact newArtifact = Dialog::SelectArtifact();
+
+            if ( isMagicBook( newArtifact ) ) {
+                const_cast<Heroes *>( _hero )->SpellBookActivate();
+            }
+            else {
+                art = newArtifact;
+            }
+        }
 
         return false;
     }

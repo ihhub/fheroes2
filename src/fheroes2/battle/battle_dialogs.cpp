@@ -601,6 +601,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                 const fheroes2::Point artifactOffset( pos_rt.x + 119, pos_rt.y + 310 );
 
                 fheroes2::Blit( border, display, artifactOffset.x, artifactOffset.y );
+                fheroes2::Fill( display, artifactOffset.x + 8, artifactOffset.y + 8, artifact.width(), artifact.height(), 0 );
                 fheroes2::Blit( artifact, display, artifactOffset.x + 8, artifactOffset.y + 8 );
 
                 TextBox artName( art.GetName(), Font::SMALL, bsTextWidth );
