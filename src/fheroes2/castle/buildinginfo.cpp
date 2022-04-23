@@ -637,7 +637,7 @@ std::string BuildingInfo::GetConditionDescription( void ) const
 
     case ALLOW_BUILD:
         res = _( "Build %{name}." );
-        StringReplace( res, "%{name}", Translation::StringLower( GetName()) );
+        StringReplace( res, "%{name}", Translation::StringLower( GetName() ) );
         break;
 
     default:
