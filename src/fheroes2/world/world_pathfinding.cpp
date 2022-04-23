@@ -731,15 +731,23 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
         return path;
 
     uint32_t currentSpellPoints = hero.GetSpellPoints();
-    if ( currentSpellPoints < hero.GetMaxSpellPoints() * _spellPointsReserved )
-        return path;
 
-    currentSpellPoints -= static_cast<uint32_t>( hero.GetMaxSpellPoints() * _spellPointsReserved );
+    const Maps::Tiles & tile = world.GetTiles( targetIndex );
+    const MP2::MapObjectType objectType = tile.GetObject( true );
+
+    // Reserve spell points only if target isn't a well that will replenish lost SP
+    if ( objectType != MP2::OBJ_MAGICWELL && objectType != MP2::OBJ_ARTESIANSPRING ) {
+        if ( currentSpellPoints < hero.GetMaxSpellPoints() * _spellPointsReserved )
+            return path;
+
+        currentSpellPoints -= static_cast<uint32_t>( hero.GetMaxSpellPoints() * _spellPointsReserved );
+    }
 
     const uint32_t movementCost = std::max( 1U, dimensionDoor.movePoints() );
     const uint32_t maxCasts = std::min( currentSpellPoints / std::max( 1U, dimensionDoor.spellPoints( &hero ) ), hero.GetMovePoints() / movementCost );
 
-    if ( world.GetTiles( targetIndex ).GetObject( false ) == MP2::OBJ_CASTLE ) {
+    // Have to explicitly call GetObject( false ) since hero might be standing on it
+    if ( tile.GetObject( false ) == MP2::OBJ_CASTLE ) {
         targetIndex = Maps::GetDirectionIndex( targetIndex, Direction::BOTTOM );
         if ( !Maps::isValidAbsIndex( targetIndex ) )
             return path;
