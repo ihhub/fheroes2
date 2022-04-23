@@ -335,7 +335,6 @@ double HeroBase::GetMagicStrategicValue( const double armyStrength ) const
     return bestValue;
 }
 
-
 bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr */ ) const
 {
     if ( !HaveSpellBook() ) {
