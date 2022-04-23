@@ -128,13 +128,16 @@ bool HeroBase::isPotentSpellcaster() const
         case Spell::ARMAGEDDON:
             if ( power > 5 )
                 return true;
+            break;
         case Spell::RESURRECT:
         case Spell::RESURRECTTRUE:
             if ( !GetArmy().AllTroopsAreUndead() )
                 return true;
+            break;
         case Spell::ANIMATEDEAD:
             if ( GetArmy().AllTroopsAreUndead() )
                 return true;
+            break;
         default:
             break;
         }
