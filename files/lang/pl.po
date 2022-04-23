@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-19 14:50+0100\n"
-"PO-Revision-Date: 2022-04-22 20:57+0200\n"
+"PO-Revision-Date: 2022-04-23 12:22+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -997,13 +997,13 @@ msgid "Conquer and Unify"
 msgstr "Podbój i Zjednoczenie"
 
 msgid "Crazy Uncle Ivan"
-msgstr "Szalony Wuj Ivan"
+msgstr "Szalony wuj Ivan"
 
 msgid "The Wayward Son"
 msgstr "Nieobliczalny Syn"
 
 msgid "Ivory Gates"
-msgstr "Bramy z Kośći Słoniowej"
+msgstr "Ivory Gates"
 
 #, fuzzy
 msgid "The Elven Lands"
@@ -1130,7 +1130,7 @@ msgid ""
 msgstr ""
 
 msgid " bane"
-msgstr " zguba"
+msgstr " pogromca"
 
 msgid " alliance"
 msgstr " sojusz"
@@ -1176,8 +1176,8 @@ msgstr ""
 
 msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
 msgstr ""
-"Ogry rozpoznają cię jako zmorę krasnoludów i powoli zmierzają ku tobie aby "
-"wesprzeć twoje siły."
+"Ogry rozpoznają cię jako pogromce krasnoludów i powoli zmierzają ku tobie "
+"aby wesprzeć twoje siły."
 
 msgid ""
 "The dragons, snarling and growling, agree to join forces with you, their "
@@ -1226,7 +1226,7 @@ msgstr ""
 "zwycięstwo będzie twoje.\""
 
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
-msgstr "\"Zmora krasnoludów, ratuj się kto może!!!\""
+msgstr "\"Pogromca krasnoludów, ratuj się kto może!!!\""
 
 msgid "campaignBonus|Ballista"
 msgstr "Balista"
