@@ -295,7 +295,8 @@ namespace fheroes2
         Blit( frame, 0, 0, output, offset.x, offset.y, frame.width(), frame.height() );
 
         const Sprite & artifact = AGG::GetICN( ICN::ARTIFACT, _artifact.IndexSprite64() );
-        Blit( artifact, 0, 0, output, offset.x + 6, offset.y + 6, artifact.width(), artifact.height() );
+        Fill( output, offset.x + 6, offset.y + 6, artifact.width(), artifact.height(), 0 );
+        Blit( artifact, output, offset.x + 6, offset.y + 6 );
     }
 
     void ArtifactDialogElement::processEvents( const Point & offset ) const
