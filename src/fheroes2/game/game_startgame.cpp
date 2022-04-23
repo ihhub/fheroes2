@@ -495,7 +495,8 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
     }
 
     case MP2::OBJ_BOAT:
-        return from_hero.Modes( Heroes::GUARDIAN ) ? Cursor::POINTER : Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
+        return from_hero.Modes( Heroes::GUARDIAN ) ? Cursor::POINTER
+                                                   : Cursor::DistanceThemes( Cursor::CURSOR_HERO_BOAT, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
     case MP2::OBJ_BARRIER:
         return Cursor::DistanceThemes( Cursor::CURSOR_HERO_ACTION, from_hero.getNumOfTravelDays( tile.GetIndex() ) );
     default:
