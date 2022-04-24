@@ -333,7 +333,7 @@ namespace fheroes2
                     Blit( GetICN( ICN::CPANEL, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
                 }
                 break;
-             case ICN::BTNGIFT_EVIL:
+            case ICN::BTNGIFT_EVIL:
                 _icnVsSprite[id].resize( 2 );
                 for ( uint32_t i = 0; i < 2; ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
@@ -445,19 +445,19 @@ namespace fheroes2
                     /*Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 6, 4, 72, 15 );*/
 
                     // add 'D'
-                     Blit( GetICN( ICN::CPANEL, 4 + i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
+                    Blit( GetICN( ICN::CPANEL, 4 + i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
 
                     // add 'O'
-                     Blit( GetICN( ICN::CAMPXTRG, i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
+                    Blit( GetICN( ICN::CAMPXTRG, i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
 
                     // add 'N'
-                     Blit( GetICN( ICN::TRADPOST, 17 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
+                    Blit( GetICN( ICN::TRADPOST, 17 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
 
                     // add 'N'
-                     Blit( GetICN( ICN::TRADPOST, 17 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
+                    Blit( GetICN( ICN::TRADPOST, 17 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
 
                     // add 'ER'
-                     Blit( GetICN( ICN::CAMPXTRG, 2 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
+                    Blit( GetICN( ICN::CAMPXTRG, 2 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
                 }
                 break;
             case ICN::BTNGIFT_EVIL:
