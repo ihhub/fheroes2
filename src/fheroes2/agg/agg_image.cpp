@@ -429,6 +429,52 @@ namespace fheroes2
                 }
                 break;
 
+            case ICN::BTNGIFT_GOOD:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TRADPOST, 17 + i );
+
+                    // clean the button
+                    Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0 ) );
+                    /*Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 6, 4, 72, 15 );*/
+
+                    //// add 'G'
+                    // Blit( GetICN( ICN::CPANEL, i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
+
+                    //// add 'I'
+                    // Blit( GetICN( ICN::APANEL, 4 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
+
+                    //// add 'F'
+                    // Blit( GetICN( ICN::APANEL, 4 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
+
+                    //// add 'T'
+                    // Blit( GetICN( ICN::CPANEL, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
+                }
+                break;
+            case ICN::BTNGIFT_EVIL:
+                _icnVsSprite[id].resize( 2 );
+                for ( uint32_t i = 0; i < 2; ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TRADPOSE, 17 + i );
+
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEME, 11 + i ), 10, 6, out, 6, 4, 72, 15 );
+
+                    //// add 'G'
+                    // Blit( GetICN( ICN::CPANELE, i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
+
+                    //// add 'I'
+                    // Blit( GetICN( ICN::APANELE, 4 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
+
+                    //// add 'F'
+                    // Blit( GetICN( ICN::APANELE, 4 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
+
+                    //// add 'T'
+                    // Blit( GetICN( ICN::CPANELE, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
+                }
+                break;
+
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 assert( 0 );
