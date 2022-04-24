@@ -221,9 +221,7 @@ namespace
         if ( isGoodInterface ) {
             return isReleasedState ? fheroes2::GetColorId( 216, 184, 152 ) : fheroes2::GetColorId( 184, 136, 96 );
         }
-        else {
-            return isReleasedState ? fheroes2::GetColorId( 180, 180, 180 ) : fheroes2::GetColorId( 144, 144, 144 );
-        }
+        return isReleasedState ? fheroes2::GetColorId( 180, 180, 180 ) : fheroes2::GetColorId( 144, 144, 144 );
     }
 }
 
@@ -313,7 +311,7 @@ namespace fheroes2
                 break;
             case ICN::BTNGIFT_GOOD:
                 _icnVsSprite[id].resize( 2 );
-                for ( uint32_t i = 0; i < 2; ++i ) {
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::TRADPOST, 17 + i );
 
@@ -335,7 +333,7 @@ namespace fheroes2
                 break;
             case ICN::BTNGIFT_EVIL:
                 _icnVsSprite[id].resize( 2 );
-                for ( uint32_t i = 0; i < 2; ++i ) {
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::TRADPOSE, 17 + i );
 
@@ -462,7 +460,7 @@ namespace fheroes2
                 break;
             case ICN::BTNGIFT_EVIL:
                 _icnVsSprite[id].resize( 2 );
-                for ( uint32_t i = 0; i < 2; ++i ) {
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::TRADPOSE, 17 + i );
 
