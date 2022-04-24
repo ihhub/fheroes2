@@ -216,9 +216,14 @@ namespace
         }
     }
 
-    uint8_t getButtonFillingColor( const bool isReleasedState )
+    uint8_t getButtonFillingColor( const bool isReleasedState, const bool isGoodInterface = true )
     {
-        return isReleasedState ? fheroes2::GetColorId( 216, 184, 152 ) : fheroes2::GetColorId( 184, 136, 96 );
+        if ( isGoodInterface ) {
+            return isReleasedState ? fheroes2::GetColorId( 216, 184, 152 ) : fheroes2::GetColorId( 184, 136, 96 );
+        }
+        else {
+            return isReleasedState ? fheroes2::GetColorId( 180, 180, 180 ) : fheroes2::GetColorId( 144, 144, 144 );
+        }
     }
 }
 
@@ -459,7 +464,8 @@ namespace fheroes2
                     out = GetICN( ICN::TRADPOSE, 17 + i );
 
                     // clean the button
-                    Blit( GetICN( ICN::SYSTEME, 11 + i ), 10, 6, out, 6, 4, 72, 15 );
+                    /*Blit( GetICN( ICN::SYSTEME, 11 + i ), 10, 6, out, 6, 4, 72, 15 );*/
+                    Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0, false ) );
 
                     //// add 'G'
                     // Blit( GetICN( ICN::CPANELE, i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
