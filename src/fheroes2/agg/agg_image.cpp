@@ -444,17 +444,20 @@ namespace fheroes2
                     Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0 ) );
                     /*Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 6, 4, 72, 15 );*/
 
-                    //// add 'G'
-                    // Blit( GetICN( ICN::CPANEL, i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
+                    // add 'D'
+                     Blit( GetICN( ICN::CPANEL, 4 + i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
 
-                    //// add 'I'
-                    // Blit( GetICN( ICN::APANEL, 4 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
+                    // add 'O'
+                     Blit( GetICN( ICN::CAMPXTRG, i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
 
-                    //// add 'F'
-                    // Blit( GetICN( ICN::APANEL, 4 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
+                    // add 'N'
+                     Blit( GetICN( ICN::TRADPOST, 17 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
 
-                    //// add 'T'
-                    // Blit( GetICN( ICN::CPANEL, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
+                    // add 'N'
+                     Blit( GetICN( ICN::TRADPOST, 17 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
+
+                    // add 'ER'
+                     Blit( GetICN( ICN::CAMPXTRG, 2 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
                 }
                 break;
             case ICN::BTNGIFT_EVIL:
@@ -464,20 +467,22 @@ namespace fheroes2
                     out = GetICN( ICN::TRADPOSE, 17 + i );
 
                     // clean the button
-                    /*Blit( GetICN( ICN::SYSTEME, 11 + i ), 10, 6, out, 6, 4, 72, 15 );*/
                     Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0, false ) );
 
-                    //// add 'G'
-                    // Blit( GetICN( ICN::CPANELE, i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
+                    // add 'D'
+                    Blit( GetICN( ICN::CPANEL, 4 + i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
 
-                    //// add 'I'
-                    // Blit( GetICN( ICN::APANELE, 4 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
+                    // add 'O'
+                    Blit( GetICN( ICN::CAMPXTRG, i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
 
-                    //// add 'F'
-                    // Blit( GetICN( ICN::APANELE, 4 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
+                    // add 'N'
+                    Blit( GetICN( ICN::TRADPOST, 17 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
 
-                    //// add 'T'
-                    // Blit( GetICN( ICN::CPANELE, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
+                    // add 'N'
+                    Blit( GetICN( ICN::TRADPOST, 17 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
+
+                    // add 'ER'
+                    Blit( GetICN( ICN::CAMPXTRG, 2 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
                 }
                 break;
 
