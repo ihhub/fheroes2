@@ -103,6 +103,48 @@ void HeroBase::SetSpellPoints( const uint32_t points )
     magic_point = points;
 }
 
+bool HeroBase::isPotentSpellcaster() const
+{
+    // With knowledge 5 or less there isn't enough spell points to make a difference
+    if ( knowledge <= 5 )
+        return false;
+
+    for ( const Spell & spell : spell_book ) {
+        // This list is based on spells AI can use efficiently - should be updated later on
+        switch ( spell.GetID() ) {
+        case Spell::BLIND:
+        case Spell::PARALYZE:
+        case Spell::DIMENSIONDOOR:
+        case Spell::SUMMONAELEMENT:
+        case Spell::SUMMONEELEMENT:
+        case Spell::SUMMONFELEMENT:
+        case Spell::SUMMONWELEMENT:
+        case Spell::MIRRORIMAGE:
+            return true;
+        case Spell::COLDRAY:
+        case Spell::LIGHTNINGBOLT:
+        case Spell::CHAINLIGHTNING:
+        case Spell::METEORSHOWER:
+        case Spell::ARMAGEDDON:
+            if ( power > 5 )
+                return true;
+            break;
+        case Spell::RESURRECT:
+        case Spell::RESURRECTTRUE:
+            if ( !GetArmy().AllTroopsAreUndead() )
+                return true;
+            break;
+        case Spell::ANIMATEDEAD:
+            if ( GetArmy().AllTroopsAreUndead() )
+                return true;
+            break;
+        default:
+            break;
+        }
+    }
+    return false;
+}
+
 bool HeroBase::HaveSpellPoints( const Spell & spell ) const
 {
     return magic_point >= spell.spellPoints( this );
