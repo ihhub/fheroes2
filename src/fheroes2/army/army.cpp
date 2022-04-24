@@ -985,9 +985,18 @@ int Army::GetLuck( void ) const
     return currentCommander != nullptr ? currentCommander->GetLuck() : GetLuckModificator( nullptr );
 }
 
-int Army::GetLuckModificator( const std::string * ) const
+int Army::GetLuckModificator( std::string * strs ) const
 {
-    return Luck::NORMAL;
+    int result = Luck::NORMAL;
+
+    // check castle modificator
+    const Castle * castle = inCastle();
+
+    if ( castle ) {
+        result += castle->GetLuckModificator( strs );
+    }
+
+    return result;
 }
 
 int Army::GetMorale( void ) const
@@ -1014,6 +1023,13 @@ int Army::GetMoraleModificator( std::string * strs ) const
         return Morale::NORMAL;
 
     int result = Morale::NORMAL;
+
+    // check castle modificator
+    const Castle * castle = inCastle();
+
+    if ( castle ) {
+        result += castle->GetMoraleModificator( strs );
+    }
 
     // artifact "Arm of the Martyr" adds the undead morale penalty
     hasUndead = hasUndead || ( GetCommander() && GetCommander()->GetBagArtifacts().isArtifactCursePresent( fheroes2::ArtifactCurseType::UNDEAD_MORALE_PENALTY ) );

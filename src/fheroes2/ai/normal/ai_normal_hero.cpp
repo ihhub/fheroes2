@@ -684,14 +684,14 @@ namespace AI
             assert( 0 );
             return -dangerousTaskPenalty;
         }
-        else if ( objectType == MP2::OBJ_MAGICWELL ) {
+        else if ( objectType == MP2::OBJ_MAGICWELL || objectType == MP2::OBJ_ARTESIANSPRING ) {
             if ( !hero.HaveSpellBook() ) {
                 return -dangerousTaskPenalty;
             }
             if ( hero.GetSpellPoints() * 2 >= hero.GetMaxSpellPoints() ) {
                 return -2000; // no reason to visit the well with no magic book or with half of points
             }
-            return 0;
+            return hero.isPotentSpellcaster() ? 1500 : 0;
         }
         else if ( objectType == MP2::OBJ_TEMPLE ) {
             if ( hero.GetArmy().AllTroopsAreUndead() ) {
@@ -923,14 +923,14 @@ namespace AI
             assert( 0 );
             return -dangerousTaskPenalty;
         }
-        else if ( objectType == MP2::OBJ_MAGICWELL ) {
+        else if ( objectType == MP2::OBJ_MAGICWELL || objectType == MP2::OBJ_ARTESIANSPRING ) {
             if ( !hero.HaveSpellBook() ) {
                 return -dangerousTaskPenalty;
             }
             if ( hero.GetSpellPoints() * 2 >= hero.GetMaxSpellPoints() ) {
                 return -2000; // no reason to visit the well with no magic book or with half of points
             }
-            return 350.0;
+            return hero.isPotentSpellcaster() ? 2500 : 0;
         }
         else if ( objectType == MP2::OBJ_TEMPLE ) {
             if ( hero.GetArmy().AllTroopsAreUndead() ) {

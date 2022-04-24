@@ -103,6 +103,48 @@ void HeroBase::SetSpellPoints( const uint32_t points )
     magic_point = points;
 }
 
+bool HeroBase::isPotentSpellcaster() const
+{
+    // With knowledge 5 or less there isn't enough spell points to make a difference
+    if ( knowledge <= 5 )
+        return false;
+
+    for ( const Spell & spell : spell_book ) {
+        // This list is based on spells AI can use efficiently - should be updated later on
+        switch ( spell.GetID() ) {
+        case Spell::BLIND:
+        case Spell::PARALYZE:
+        case Spell::DIMENSIONDOOR:
+        case Spell::SUMMONAELEMENT:
+        case Spell::SUMMONEELEMENT:
+        case Spell::SUMMONFELEMENT:
+        case Spell::SUMMONWELEMENT:
+        case Spell::MIRRORIMAGE:
+            return true;
+        case Spell::COLDRAY:
+        case Spell::LIGHTNINGBOLT:
+        case Spell::CHAINLIGHTNING:
+        case Spell::METEORSHOWER:
+        case Spell::ARMAGEDDON:
+            if ( power > 5 )
+                return true;
+            break;
+        case Spell::RESURRECT:
+        case Spell::RESURRECTTRUE:
+            if ( !GetArmy().AllTroopsAreUndead() )
+                return true;
+            break;
+        case Spell::ANIMATEDEAD:
+            if ( GetArmy().AllTroopsAreUndead() )
+                return true;
+            break;
+        default:
+            break;
+        }
+    }
+    return false;
+}
+
 bool HeroBase::HaveSpellPoints( const Spell & spell ) const
 {
     return magic_point >= spell.spellPoints( this );
@@ -242,12 +284,7 @@ int HeroBase::GetMoraleModificator( std::string * strs ) const
 {
     int result = 0;
 
-    // check castle modificator
-    const Castle * castle = inCastle();
-    if ( castle )
-        result += castle->GetMoraleModificator( strs );
-
-    // army modificator
+    // army modificator (including the castle modificator)
     result += GetArmy().GetMoraleModificator( strs );
 
     if ( strs == nullptr ) {
@@ -274,12 +311,7 @@ int HeroBase::GetLuckModificator( std::string * strs ) const
 {
     int result = 0;
 
-    // check castle modificator
-    const Castle * castle = inCastle();
-    if ( castle )
-        result += castle->GetLuckModificator( strs );
-
-    // army modificator
+    // army modificator (including the castle modificator)
     result += GetArmy().GetLuckModificator( strs );
 
     if ( strs == nullptr ) {
@@ -344,16 +376,16 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         return false;
     }
 
-    if ( !HaveSpell( spell ) ) {
+    if ( !HaveSpellPoints( spell ) ) {
         if ( res ) {
-            *res = _( "The spell is not found." );
+            *res = _( "That spell costs %{mana} mana. You only have %{point} mana, so you can't cast the spell." );
         }
         return false;
     }
 
-    if ( !HaveSpellPoints( spell ) ) {
+    if ( !HaveSpell( spell ) ) {
         if ( res ) {
-            *res = _( "That spell costs %{mana} mana. You only have %{point} mana, so you can't cast the spell." );
+            *res = _( "The spell is not found." );
         }
         return false;
     }

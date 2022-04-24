@@ -184,16 +184,21 @@ public:
 
     void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
     {
-        Artifact art( index );
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        const Artifact art( index );
+
+        const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
+        fheroes2::Fill( display, dstx + 5, dsty + 3, artifactSprite.width(), artifactSprite.height(), 0 );
+        fheroes2::Blit( artifactSprite, display, dstx + 5, dsty + 3 );
 
         if ( current ) {
             fheroes2::Text text( art.GetName(), fheroes2::FontType::normalYellow() );
-            text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
+            text.draw( dstx + 50, dsty + 10, display );
         }
         else {
             fheroes2::Text text( art.GetName(), fheroes2::FontType() );
-            text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
+            text.draw( dstx + 50, dsty + 10, display );
         }
     }
 

@@ -1337,33 +1337,48 @@ void Heroes::setDirection( int directionToSet )
         direction = directionToSet;
 }
 
-int Heroes::GetRangeRouteDays( s32 dst ) const
+int Heroes::getNumOfTravelDays( int32_t dstIdx ) const
 {
-    const u32 maxMovePoints = GetMaxMovePoints();
+    assert( Maps::isValidAbsIndex( dstIdx ) );
 
-    uint32_t total = world.getDistance( *this, dst );
-    DEBUG_LOG( DBG_GAME, DBG_TRACE, "path distance: " << total )
+    const uint32_t maxMovePoints = GetMaxMovePoints();
+    const std::list<Route::Step> routePath = world.getPath( *this, dstIdx );
 
-    if ( total > 0 ) {
-        if ( move_point >= total )
-            return 1;
+    if ( routePath.empty() ) {
+        DEBUG_LOG( DBG_GAME, DBG_TRACE, "unreachable point: " << dstIdx )
 
-        total -= move_point;
-
-        int moveDays = 2;
-        while ( moveDays < 8 ) {
-            if ( maxMovePoints >= total )
-                return moveDays;
-
-            total -= maxMovePoints;
-            ++moveDays;
-        }
-
-        return 8;
+        return 0;
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_TRACE, "unreachable point: " << dst )
-    return 0;
+    uint32_t movePoints = GetMovePoints();
+    int days = 1;
+
+    for ( const Route::Step & step : routePath ) {
+        const uint32_t stepPenalty = step.GetPenalty();
+
+        if ( movePoints >= stepPenalty ) {
+            // This movement takes place on the same day
+            movePoints -= stepPenalty;
+        }
+        else {
+            // This movement takes place at the beginning of a new day: start with max
+            // movement points, don't carry leftovers from the previous day
+            assert( maxMovePoints >= stepPenalty );
+
+            movePoints = maxMovePoints - stepPenalty;
+            ++days;
+
+            // Stop at 8 days
+            if ( days >= 8 ) {
+                break;
+            }
+        }
+    }
+
+    // Return no more than 8 days
+    assert( days <= 8 );
+
+    return days;
 }
 
 void Heroes::LevelUp( bool skipsecondary, bool autoselect )
