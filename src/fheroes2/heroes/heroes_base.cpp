@@ -284,12 +284,7 @@ int HeroBase::GetMoraleModificator( std::string * strs ) const
 {
     int result = 0;
 
-    // check castle modificator
-    const Castle * castle = inCastle();
-    if ( castle )
-        result += castle->GetMoraleModificator( strs );
-
-    // army modificator
+    // army modificator (including the castle modificator)
     result += GetArmy().GetMoraleModificator( strs );
 
     if ( strs == nullptr ) {
@@ -316,12 +311,7 @@ int HeroBase::GetLuckModificator( std::string * strs ) const
 {
     int result = 0;
 
-    // check castle modificator
-    const Castle * castle = inCastle();
-    if ( castle )
-        result += castle->GetLuckModificator( strs );
-
-    // army modificator
+    // army modificator (including the castle modificator)
     result += GetArmy().GetLuckModificator( strs );
 
     if ( strs == nullptr ) {
