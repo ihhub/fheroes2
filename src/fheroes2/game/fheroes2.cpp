@@ -56,11 +56,11 @@ namespace
 
     int PrintHelp( const char * basename )
     {
-        COUT( "Usage: " << basename << " [OPTIONS]" );
+        COUT( "Usage: " << basename << " [OPTIONS]" )
 #ifdef WITH_DEBUG
-        COUT( "  -d <level>\tprint debug messages, see src/engine/logging.h for possible values of <level> argument" );
+        COUT( "  -d <level>\tprint debug messages, see src/engine/logging.h for possible values of <level> argument" )
 #endif
-        COUT( "  -h\t\tprint this help message and exit" );
+        COUT( "  -h\t\tprint this help message and exit" )
 
         return EXIT_SUCCESS;
     }

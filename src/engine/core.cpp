@@ -102,7 +102,7 @@ namespace
         const uint32_t sdlFlags = getSDLInitFlags( components ) | SDL_INIT_TIMER;
 
         if ( SDL_Init( sdlFlags ) < 0 ) {
-            ERROR_LOG( SDL_GetError() );
+            ERROR_LOG( SDL_GetError() )
             return false;
         }
 
