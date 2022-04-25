@@ -484,24 +484,8 @@ namespace fheroes2
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::TRADPOSE, 17 + i );
-
                     // clean the button
                     Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0, false ) );
-
-                    //// add 'D'
-                    //Blit( GetICN( ICN::CPANEL, 4 + i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
-
-                    //// add 'O'
-                    //Blit( GetICN( ICN::CAMPXTRG, i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
-
-                    //// add 'N'
-                    //Blit( GetICN( ICN::TRADPOST, 17 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
-
-                    //// add 'N'
-                    //Blit( GetICN( ICN::TRADPOST, 17 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
-
-                    //// add 'ER'
-                    //Blit( GetICN( ICN::CAMPXTRG, 2 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
 
                     const int32_t offsetY = 5;
                     // Add 'D'
