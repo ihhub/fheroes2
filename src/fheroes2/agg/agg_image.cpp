@@ -353,6 +353,18 @@ namespace fheroes2
                     Blit( GetICN( ICN::CPANELE, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
                 }
                 break;
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::RECRUIT, 4 + i );
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6 + i, out, 30 - 2 * i, 5 + i, 31, 15 );
+                    // add 'IN'
+                    Copy( GetICN( ICN::APANEL, 4 + i ), 23 - i, 22 + i, out, 33 - i, 6 + i, 8, 14 ); // letter 'I'
+                    Copy( GetICN( ICN::APANEL, 4 + i ), 31 - i, 22 + i, out, 44 - i, 6 + i, 17, 14 ); // letter 'N'
+                }
+                break;
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 assert( 0 );
@@ -704,16 +716,7 @@ namespace fheroes2
                 generateLanguageSpecificImages( id );
                 return true;
             case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
-                _icnVsSprite[id].resize( 2 );
-                for ( uint32_t i = 0; i < static_cast<uint32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::RECRUIT, 4 + i );
-                    // clean the button
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6 + i, out, 30 - 2 * i, 5 + i, 31, 15 );
-                    // add 'IN'
-                    Copy( GetICN( ICN::APANEL, 4 + i ), 23 - i, 22 + i, out, 33 - i, 6 + i, 8, 14 ); // letter 'I'
-                    Copy( GetICN( ICN::APANEL, 4 + i ), 31 - i, 22 + i, out, 44 - i, 6 + i, 17, 14 ); // letter 'N'
-                }
+                generateLanguageSpecificImages( id );
                 return true;
             case ICN::SPELLS:
                 LoadOriginalICN( id );
