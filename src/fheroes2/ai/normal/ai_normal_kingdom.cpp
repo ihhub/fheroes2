@@ -456,9 +456,6 @@ namespace AI
         }
 
         // target found, buy hero
-        if ( recruitmentCastle && recruitHero( *recruitmentCastle, !slowEarlyGame, false ) ) {
-            return true;
-        }
-        return false;
+        return recruitmentCastle && recruitHero( *recruitmentCastle, !slowEarlyGame, false )
     }
 }
