@@ -516,7 +516,8 @@ namespace fheroes2
                     // Clean up 'NN'
                     Fill( out, offsetXD + offsetXO + offsetXN + offsetXN - i, offsetY + 9, 1, 1, getButtonFillingColor( i == 0, false ) );
                     // Add 'ER'
-                    Blit( GetICN( ICN::CAMPXTRE, 2 + i ), 73 - ( 6 * i ), 5 + ( 2 * i ), out, offsetXD + offsetXO + offsetXN + offsetXN + offsetXN - ( 2 * i ), offsetY + ( 2 * i ), 23, 14 - i );
+                    Blit( GetICN( ICN::CAMPXTRE, 2 + i ), 73 - ( 6 * i ), 5 + ( 2 * i ), out, offsetXD + offsetXO + offsetXN + offsetXN + offsetXN - ( 2 * i ),
+                          offsetY + ( 2 * i ), 23, 14 - i );
                     // Restore button ornament
                     Blit( GetICN( ICN::TRADPOSE, 17 + i ), offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20, offsetY, out,
                           offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20, offsetY, 1, 1 );
