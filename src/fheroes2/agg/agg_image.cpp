@@ -440,9 +440,9 @@ namespace fheroes2
                     // clean the button
                     Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0 ) );
 
-                    const int32_t offsetXD = 14;
                     const int32_t offsetY = 5;
                     // Add 'D'
+                    const int32_t offsetXD = 14;
                     Blit( GetICN( ICN::CPANEL, 4 + i ), 48 - i, 28 + i, out, offsetXD - i, offsetY + i, 10, 15 );
                     // Clean up 'D' and restore button ornament
                     Blit( GetICN( ICN::CPANEL, 4 + i ), 48 - i, 36, out, offsetXD - 1 - i, offsetY + 4 + i, 1, 1 );
@@ -471,11 +471,14 @@ namespace fheroes2
                     // Add 'ER'
                     Blit( GetICN( ICN::CAMPXTRG, 2 + i ), 75 - ( 8 * i ), 5, out, offsetXD + offsetXO + offsetXN + offsetXN + offsetXN - ( 2 * i ), offsetY, 23, 15 );
                     // Restore button ornament
-                    Blit( GetICN( ICN::TRADPOST, 17 + i ), offsetXD + 10 + 13 + 13 + 13 + 20, offsetY, out, offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20,
+                    Blit( GetICN( ICN::TRADPOST, 17 + i ), offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20, offsetY, out,
+                          offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20,
                           offsetY, 1, 1 );
-                    Blit( GetICN( ICN::TRADPOST, 17 + i ), offsetXD + 10 + 13 + 13 + 13 + 21, offsetY + 1, out, offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21,
+                    Blit( GetICN( ICN::TRADPOST, 17 + i ), offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21, offsetY + 1, out,
+                          offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21,
                           offsetY + 1, 2, 3 );
-                    Blit( GetICN( ICN::TRADPOST, 17 + i ), offsetXD + 10 + 13 + 13 + 13 + 20, offsetY, out, offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21,
+                    Blit( GetICN( ICN::TRADPOST, 17 + i ), offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20, offsetY, out,
+                          offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21,
                           offsetY + 4, 1, 1 );
                 }
                 break;
