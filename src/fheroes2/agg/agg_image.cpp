@@ -443,7 +443,7 @@ namespace fheroes2
                     /*Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 6, 4, 72, 15 );*/
 
                     // add 'D'
-                    Blit( GetICN( ICN::CPANEL, 4 + i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
+                    Blit( GetICN( ICN::CPANEL, 4 + i ), 48 - i, 28, out, 14 - i, 5, 10, 15 );
 
                     // add 'O'
                     Blit( GetICN( ICN::CAMPXTRG, i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
