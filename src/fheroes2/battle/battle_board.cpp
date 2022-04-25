@@ -103,7 +103,7 @@ void Battle::Board::Reset( void )
 
 void Battle::Board::SetPositionQuality( const Unit & b ) const
 {
-    Arena * arena = GetArena();
+    const Arena * arena = GetArena();
     Units enemies( arena->getEnemyForce( b.GetCurrentColor() ).getUnits(), true );
 
     // Make sure archers are first here, so melee unit's score won't be double counted
@@ -134,7 +134,7 @@ void Battle::Board::SetPositionQuality( const Unit & b ) const
 
 void Battle::Board::SetEnemyQuality( const Unit & unit ) const
 {
-    Arena * arena = GetArena();
+    const Arena * arena = GetArena();
     Units enemies( arena->getEnemyForce( unit.GetColor() ).getUnits(), true );
     if ( unit.Modes( SP_BERSERKER ) ) {
         Units allies( arena->getForce( unit.GetColor() ).getUnits(), true );
@@ -153,7 +153,7 @@ void Battle::Board::SetEnemyQuality( const Unit & unit ) const
             if ( enemy->isWide() )
                 GetCell( enemy->GetTailIndex() )->SetQuality( score );
 
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, score << " for " << enemy->String() );
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, score << " for " << enemy->String() )
         }
     }
 }
@@ -455,7 +455,7 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
         DEBUG_LOG( DBG_BATTLE, DBG_WARN,
                    "Path is not found for " << unit.String() << ", destination: "
                                             << "(head cell ID: " << destination.GetHead()->GetIndex()
-                                            << ", tail cell ID: " << ( isWideUnit ? destination.GetTail()->GetIndex() : -1 ) << ")" );
+                                            << ", tail cell ID: " << ( isWideUnit ? destination.GetTail()->GetIndex() : -1 ) << ")" )
     }
 
     return result;
@@ -493,7 +493,7 @@ std::vector<Battle::Unit *> Battle::Board::GetNearestTroops( const Unit * startU
 int32_t Battle::Board::DoubleCellAttackValue( const Unit & attacker, const Unit & target, const int32_t from, const int32_t targetCell )
 {
     const Cell * behind = GetCell( targetCell, GetDirection( from, targetCell ) );
-    const Unit * secondaryTarget = ( behind ) ? behind->GetUnit() : nullptr;
+    const Unit * secondaryTarget = ( behind != nullptr ) ? behind->GetUnit() : nullptr;
     if ( secondaryTarget && secondaryTarget->GetUID() != target.GetUID() && secondaryTarget->GetUID() != attacker.GetUID() ) {
         return secondaryTarget->GetScoreQuality( attacker );
     }
@@ -528,7 +528,7 @@ int32_t Battle::Board::OptimalAttackValue( const Unit & attacker, const Unit & t
         Position position = Position::GetPosition( attacker, from );
 
         if ( position.GetHead() == nullptr || ( attacker.isWide() && position.GetTail() == nullptr ) ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid position for " << attacker.String() << ", target: " << target.String() << ", cell: " << from );
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid position for " << attacker.String() << ", target: " << target.String() << ", cell: " << from )
 
             return 0;
         }

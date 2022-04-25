@@ -52,7 +52,7 @@ namespace
                 res.clear();
                 std::string errorDesc( "zlib error: " );
                 errorDesc += std::to_string( ret );
-                ERROR_LOG( errorDesc.c_str() );
+                ERROR_LOG( errorDesc.c_str() )
             }
         }
 
@@ -74,7 +74,7 @@ namespace
                 res.clear();
                 std::string errorDesc( "zlib error: " );
                 errorDesc += std::to_string( ret );
-                ERROR_LOG( errorDesc.c_str() );
+                ERROR_LOG( errorDesc.c_str() )
             }
         }
 

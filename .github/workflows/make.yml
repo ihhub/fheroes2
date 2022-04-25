@@ -10,7 +10,7 @@ jobs:
         config:
         - name: Linux SDL1 Release
           os: ubuntu-latest
-          dependencies: libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev gettext
+          dependencies: libsdl1.2-dev libsdl-mixer1.2-dev gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON }
           package_name: fheroes2_ubuntu_sdl1.zip
           package_files: fheroes2 LICENSE fheroes2.key script/linux/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
@@ -18,11 +18,11 @@ jobs:
           release_tag: fheroes2-linux-sdl1_dev
         - name: Linux SDL1 Debug
           os: ubuntu-latest
-          dependencies: libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev gettext
+          dependencies: libsdl1.2-dev libsdl-mixer1.2-dev gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON, FHEROES2_WITH_DEBUG: ON, FHEROES2_WITH_ASAN: ON }
         - name: Linux SDL2 Release
           os: ubuntu-latest
-          dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
+          dependencies: libsdl2-dev libsdl2-mixer-dev gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON }
           package_name: fheroes2_ubuntu_sdl2.zip
           package_files: fheroes2 LICENSE fheroes2.key script/linux/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
@@ -31,10 +31,10 @@ jobs:
         - name: Linux SDL2 Debug
           os: ubuntu-latest
           dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
-          env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_DEBUG: ON, FHEROES2_WITH_TSAN: ON }
+          env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_IMAGE: ON, FHEROES2_WITH_DEBUG: ON, FHEROES2_WITH_TSAN: ON }
         - name: macOS SDL1
           os: macos-10.15
-          dependencies: sdl sdl_mixer sdl_image
+          dependencies: sdl sdl_mixer
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON }
           package_name: fheroes2_macos10_15_sdl1_x86-64.zip
           package_files: fheroes2 LICENSE fheroes2.key script/macos/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
@@ -42,11 +42,11 @@ jobs:
           release_tag: fheroes2-osx-sdl1_dev
         - name: macOS SDL1 App Bundle
           os: macos-10.15
-          dependencies: sdl sdl_mixer sdl_image dylibbundler
+          dependencies: sdl sdl_mixer dylibbundler
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON, FHEROES2_MACOS_APP_BUNDLE: ON }
         - name: macOS SDL2
           os: macos-10.15
-          dependencies: sdl2 sdl2_mixer sdl2_image
+          dependencies: sdl2 sdl2_mixer
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON }
           package_name: fheroes2_macos10_15_sdl2_x86-64.zip
           package_files: fheroes2 LICENSE fheroes2.key script/macos/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
@@ -54,7 +54,7 @@ jobs:
           release_tag: fheroes2-osx-sdl2_dev
         - name: macOS SDL2 App Bundle
           os: macos-10.15
-          dependencies: sdl2 sdl2_mixer sdl2_image dylibbundler
+          dependencies: sdl2 sdl2_mixer dylibbundler
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_MACOS_APP_BUNDLE: ON }
     name: Make (${{ matrix.config.name }})
     runs-on: ${{ matrix.config.os }}
@@ -84,10 +84,16 @@ jobs:
         make -j 2 bundle
       env: ${{ matrix.config.env }}
     - name: Create package
-      if: ${{ github.event_name == 'push' && matrix.config.package_name != '' && matrix.config.package_files != '' }}
+      if: ${{ matrix.config.package_name != '' && matrix.config.package_files != '' }}
       run: |
         cp docs/README.txt script/demo/download_demo_version.sh script/homm2/extract_homm2_resources.sh .
         zip ${{ matrix.config.package_name }} ${{ matrix.config.package_files }}
+    - uses: actions/upload-artifact@v2
+      if: ${{ github.event_name == 'pull_request' && matrix.config.package_name != '' }}
+      with:
+        name: ${{ matrix.config.package_name }}
+        path: ${{ matrix.config.package_name }}
+        if-no-files-found: error
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' && matrix.config.package_name != '' && matrix.config.release_name != '' && matrix.config.release_tag != '' }}
       with:
@@ -111,12 +117,12 @@ jobs:
         sudo apt-get -y update
         sudo apt-get -y install libgcc1 gettext
     - name: Prepare Vita SDK cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ~/.vitasdk-cache
-        key: build-psv-${{ github.sha }}
+        key: make-vitasdk-cache-${{ github.sha }}
         restore-keys: |
-          build-psv-
+          make-vitasdk-cache-
     - name: Setup Vita SDK
       continue-on-error: true
       run: |
@@ -148,11 +154,16 @@ jobs:
             sudo mv /usr/local/vitasdk ~/.vitasdk-cache
         fi
     - name: Create package
-      if: ${{ github.event_name == 'push' }}
       run: |
         cp docs/README.txt docs/README_PSV.md .
         # Translations and H2D files are already included in fheroes2.vpk
         zip fheroes2_psv_sdl2.zip fheroes2.vpk LICENSE fheroes2.key changelog.txt README.txt README_PSV.md
+    - uses: actions/upload-artifact@v2
+      if: ${{ github.event_name == 'pull_request' }}
+      with:
+        name: fheroes2_psv_sdl2.zip
+        path: fheroes2_psv_sdl2.zip
+        if-no-files-found: error
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
       with:
@@ -187,10 +198,15 @@ jobs:
       run: |
         make -C files/lang -j 2
     - name: Create package
-      if: ${{ github.event_name == 'push' }}
       run: |
         cp docs/README.txt docs/README_switch.md .
         zip fheroes2_switch_sdl2.zip fheroes2.nro LICENSE fheroes2.key changelog.txt README.txt README_switch.md files/lang/*.mo files/data/*.h2d
+    - uses: actions/upload-artifact@v2
+      if: ${{ github.event_name == 'pull_request' }}
+      with:
+        name: fheroes2_switch_sdl2.zip
+        path: fheroes2_switch_sdl2.zip
+        if-no-files-found: error
     - uses: ncipollo/release-action@v1
       if: ${{ github.event_name == 'push' }}
       with:

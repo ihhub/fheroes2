@@ -140,7 +140,7 @@ namespace
             if ( ( *it1 )->GetSpeed() == ( *it2 )->GetSpeed() ) {
                 result = units1GoFirst ? *it1 : *it2;
             }
-            else if ( firstStage || Settings::Get().ExtBattleReverseWaitOrder() ) {
+            else if ( firstStage ) {
                 if ( ( *it1 )->GetSpeed() > ( *it2 )->GetSpeed() )
                     result = *it1;
                 else if ( ( *it2 )->GetSpeed() > ( *it1 )->GetSpeed() )
@@ -173,7 +173,7 @@ namespace
         Battle::Units units1( army1.getUnits(), true );
         Battle::Units units2( army2.getUnits(), true );
 
-        if ( firstStage || Settings::Get().ExtBattleReverseWaitOrder() ) {
+        if ( firstStage ) {
             units1.SortFastest();
             units2.SortFastest();
         }
@@ -218,17 +218,11 @@ namespace
             Battle::Units units1( army1.getUnits(), true );
             Battle::Units units2( army2.getUnits(), true );
 
-            if ( Settings::Get().ExtBattleReverseWaitOrder() ) {
-                units1.SortFastest();
-                units2.SortFastest();
-            }
-            else {
-                std::reverse( units1.begin(), units1.end() );
-                std::reverse( units2.begin(), units2.end() );
+            std::reverse( units1.begin(), units1.end() );
+            std::reverse( units2.begin(), units2.end() );
 
-                units1.SortSlowest();
-                units2.SortSlowest();
-            }
+            units1.SortSlowest();
+            units2.SortSlowest();
 
             Battle::Unit * unit = nullptr;
 
@@ -313,7 +307,6 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::Determi
     , end_turn( false )
     , _randomGenerator( randomGenerator )
 {
-    const Settings & conf = Settings::Get();
     usage_spells.reserve( 20 );
 
     assert( arena == nullptr );
@@ -404,7 +397,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::Determi
     if ( interface ) {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        if ( conf.ExtGameUseFade() )
+        if ( Settings::ExtGameUseFade() )
             fheroes2::FadeDisplay();
 
         interface->fullRedraw();
@@ -434,7 +427,7 @@ Battle::Arena::~Arena()
 
 void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
 {
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, troop->String( true ) );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, troop->String( true ) )
 
     if ( troop->isAffectedByMorale() ) {
         troop->SetRandomMorale();
@@ -459,7 +452,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
         }
         else if ( troop->Modes( MORALE_BAD ) && !troop->Modes( TR_SKIPMOVE ) ) {
             // bad morale, happens only if the unit wasn't waiting for a turn
-            actions.push_back( Command( CommandType::MSG_BATTLE_MORALE, troop->GetUID(), false ) );
+            actions.emplace_back( CommandType::MSG_BATTLE_MORALE, troop->GetUID(), false );
             end_turn = true;
         }
         else {
@@ -530,7 +523,7 @@ void Battle::Arena::Turns( void )
 {
     ++current_turn;
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, current_turn );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, current_turn )
 
     const Settings & conf = Settings::Get();
 
@@ -685,7 +678,7 @@ void Battle::Arena::Turns( void )
 
 void Battle::Arena::RemoteTurn( const Unit & b, Actions & a )
 {
-    DEBUG_LOG( DBG_BATTLE, DBG_WARN, "switch to AI turn" );
+    DEBUG_LOG( DBG_BATTLE, DBG_WARN, "switch to AI turn" )
     AI::Get().BattleTurn( *this, b, a );
 }
 
@@ -717,7 +710,7 @@ void Battle::Arena::TowerAction( const Tower & twr )
 
     // Normally this shouldn't happen
     if ( targetInfo.first == nullptr ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "No target found for the tower!" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "No target found for the tower!" )
 
         return;
     }
@@ -773,7 +766,7 @@ Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst ) c
         std::stringstream ss;
         for ( u32 ii = 0; ii < result.size(); ++ii )
             ss << result[ii] << ", ";
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, ss.str() );
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, ss.str() )
     }
 
     return result;
@@ -973,11 +966,15 @@ bool Battle::Arena::CanRetreatOpponent( int color ) const
 bool Battle::Arena::isSpellcastDisabled() const
 {
     const HeroBase * hero1 = army1->GetCommander();
-    const HeroBase * hero2 = army2->GetCommander();
-
-    if ( ( hero1 && hero1->hasArtifact( Artifact::SPHERE_NEGATION ) ) || ( hero2 && hero2->hasArtifact( Artifact::SPHERE_NEGATION ) ) ) {
+    if ( hero1 != nullptr && hero1->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::DISABLE_ALL_SPELL_COMBAT_CASTING ) ) {
         return true;
     }
+
+    const HeroBase * hero2 = army2->GetCommander();
+    if ( hero2 != nullptr && hero2->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::DISABLE_ALL_SPELL_COMBAT_CASTING ) ) {
+        return true;
+    }
+
     return false;
 }
 
@@ -1240,7 +1237,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     const int32_t pos = GetFreePositionNearHero( current_color );
 
     if ( pos < 0 || !hero ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" )
         return nullptr;
     }
 
@@ -1271,18 +1268,18 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
         }
 
     if ( !affect ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "other elemental summon" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "other elemental summon" )
         return nullptr;
     }
 
     Monster mons( spell );
 
     if ( !mons.isValid() ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unknown id" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unknown id" )
         return nullptr;
     }
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << pos );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << pos )
 
     const uint32_t count = fheroes2::getSummonMonsterCount( spell, hero->GetPower(), hero );
     elem = new Unit( Troop( mons, count ), pos, hero == army2->GetCommander(), _randomGenerator, _uidGenerator.GetUnique() );
@@ -1293,7 +1290,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
         army.push_back( elem );
     }
     else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "is nullptr" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "is nullptr" )
     }
 
     return elem;
@@ -1313,7 +1310,7 @@ Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & b, s32 pos )
         GetCurrentForce().push_back( image );
     }
     else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" );
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" )
     }
 
     return image;
@@ -1334,7 +1331,7 @@ bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defen
     const HeroBase * hero = attacker.GetCommander();
     if ( hero ) {
         // golden bow artifact
-        if ( hero->hasArtifact( Artifact::GOLDEN_BOW ) )
+        if ( hero->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY ) )
             return false;
 
         // archery skill
@@ -1366,27 +1363,27 @@ bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defen
     return true;
 }
 
-Battle::Force & Battle::Arena::GetForce1( void )
+Battle::Force & Battle::Arena::GetForce1() const
 {
     return *army1;
 }
 
-Battle::Force & Battle::Arena::GetForce2( void )
+Battle::Force & Battle::Arena::GetForce2() const
 {
     return *army2;
 }
 
-Battle::Force & Battle::Arena::getForce( const int color )
+Battle::Force & Battle::Arena::getForce( const int color ) const
 {
     return ( army1->GetColor() == color ) ? *army1 : *army2;
 }
 
-Battle::Force & Battle::Arena::getEnemyForce( const int color )
+Battle::Force & Battle::Arena::getEnemyForce( const int color ) const
 {
     return ( army1->GetColor() == color ) ? *army2 : *army1;
 }
 
-Battle::Force & Battle::Arena::GetCurrentForce( void )
+Battle::Force & Battle::Arena::GetCurrentForce() const
 {
     return getForce( current_color );
 }
@@ -1408,12 +1405,12 @@ Battle::Result & Battle::Arena::GetResult( void )
 
 bool Battle::Arena::AutoBattleInProgress() const
 {
-    return ( auto_battle & current_color ) && GetCurrentCommander() && !GetCurrentCommander()->isControlAI();
+    return ( auto_battle & current_color ) && !( GetCurrentForce().GetControl() & CONTROL_AI );
 }
 
 bool Battle::Arena::CanToggleAutoBattle() const
 {
-    return GetCurrentCommander() && !GetCurrentCommander()->isControlAI();
+    return !( GetCurrentForce().GetControl() & CONTROL_AI );
 }
 
 const Rand::DeterministicRandomGenerator & Battle::Arena::GetRandomGenerator() const

@@ -82,7 +82,7 @@ namespace
         Mix_Chunk * sample = Mix_LoadWAV( System::FileNameToUTF8( file ).c_str() );
 
         if ( !sample ) {
-            ERROR_LOG( Mix_GetError() );
+            ERROR_LOG( Mix_GetError() )
         }
 
         return sample;
@@ -93,7 +93,7 @@ namespace
         Mix_Chunk * sample = Mix_LoadWAV_RW( SDL_RWFromConstMem( ptr, size ), 1 );
 
         if ( !sample ) {
-            ERROR_LOG( Mix_GetError() );
+            ERROR_LOG( Mix_GetError() )
         }
 
         return sample;
@@ -104,7 +104,7 @@ namespace
         int res = Mix_PlayChannel( channel, sample, loop ? -1 : 0 );
 
         if ( res == -1 ) {
-            ERROR_LOG( Mix_GetError() );
+            ERROR_LOG( Mix_GetError() )
         }
 
         return res;
@@ -117,7 +117,7 @@ namespace
         int res = musicFadeIn ? Mix_FadeInMusic( mix, loop ? -1 : 0, musicFadeIn ) : Mix_PlayMusic( mix, loop ? -1 : 0 );
 
         if ( res < 0 ) {
-            ERROR_LOG( Mix_GetError() );
+            ERROR_LOG( Mix_GetError() )
         }
         else {
             music = mix;
@@ -144,7 +144,7 @@ void Audio::Init()
         hardware.samples = 2048;
 
         if ( 0 != Mix_OpenAudio( hardware.freq, hardware.format, hardware.channels, hardware.samples ) ) {
-            ERROR_LOG( Mix_GetError() );
+            ERROR_LOG( Mix_GetError() )
 
             valid = false;
         }
@@ -162,7 +162,7 @@ void Audio::Init()
         }
     }
     else {
-        ERROR_LOG( "The audio subsystem was not initialized." );
+        ERROR_LOG( "The audio subsystem was not initialized." )
 
         valid = false;
     }
@@ -389,7 +389,7 @@ void Music::Play( const std::vector<uint8_t> & v, const bool loop )
         SDL_FreeRW( rwops );
 
         if ( !mix ) {
-            ERROR_LOG( Mix_GetError() );
+            ERROR_LOG( Mix_GetError() )
         }
         else {
             PlayMusic( mix, loop );
@@ -405,7 +405,7 @@ void Music::Play( const std::string & file, const bool loop )
         Mix_Music * mix = Mix_LoadMUS( System::FileNameToUTF8( file ).c_str() );
 
         if ( !mix ) {
-            ERROR_LOG( Mix_GetError() );
+            ERROR_LOG( Mix_GetError() )
         }
         else {
             PlayMusic( mix, loop );

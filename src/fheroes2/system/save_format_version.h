@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,9 +31,8 @@ enum SaveFileFormat : uint16_t
     FORMAT_VERSION_PRE1_0912_RELEASE = 9800,
     FORMAT_VERSION_097_RELEASE = 9701,
     FORMAT_VERSION_PRE_097_RELEASE = 9700,
-    FORMAT_VERSION_096_RELEASE = 9600,
 
-    LAST_SUPPORTED_FORMAT_VERSION = FORMAT_VERSION_096_RELEASE,
+    LAST_SUPPORTED_FORMAT_VERSION = FORMAT_VERSION_PRE_097_RELEASE,
 
     CURRENT_FORMAT_VERSION = FORMAT_VERSION_0912_RELEASE
 };

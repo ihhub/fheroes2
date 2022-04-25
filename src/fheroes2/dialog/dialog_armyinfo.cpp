@@ -485,7 +485,7 @@ std::vector<std::pair<fheroes2::Rect, Spell>> DrawBattleStats( const fheroes2::P
             const fheroes2::Point imageOffset( ow, dst.y + maxSpriteHeight - sprite.height() );
 
             fheroes2::Blit( sprite, fheroes2::Display::instance(), imageOffset.x, imageOffset.y );
-            output.emplace_back( std::make_pair( fheroes2::Rect( imageOffset.x, imageOffset.y, sprite.width(), sprite.height() ), modeToSpell( spell.mode ) ) );
+            output.emplace_back( fheroes2::Rect( imageOffset.x, imageOffset.y, sprite.width(), sprite.height() ), modeToSpell( spell.mode ) );
 
             if ( spell.duration > 0 ) {
                 text.Set( std::to_string( spell.duration ), Font::SMALL );
@@ -513,7 +513,7 @@ std::vector<std::pair<fheroes2::Rect, Spell>> DrawBattleStats( const fheroes2::P
             const fheroes2::Point imageOffset( ow - sprite.width(), dst.y + maxSpriteHeight - sprite.height() );
 
             fheroes2::Blit( sprite, fheroes2::Display::instance(), imageOffset.x, imageOffset.y );
-            output.emplace_back( std::make_pair( fheroes2::Rect( imageOffset.x, imageOffset.y, sprite.width(), sprite.height() ), modeToSpell( spellIt->mode ) ) );
+            output.emplace_back( fheroes2::Rect( imageOffset.x, imageOffset.y, sprite.width(), sprite.height() ), modeToSpell( spellIt->mode ) );
 
             if ( spellIt->duration > 0 ) {
                 text.Set( std::to_string( spellIt->duration ), Font::SMALL );

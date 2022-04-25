@@ -27,276 +27,212 @@
 #include "screen.h"
 #include "settings.h"
 #include "tinyconfig.h"
+#include "tools.h"
 
+#include <array>
+#include <cassert>
 #include <map>
+
+namespace
+{
+    std::array<KeySym, Game::EVENT_LAST> key_events{ KEY_NONE };
+
+    const char * getEventName( const int eventId )
+    {
+        switch ( eventId ) {
+        case Game::EVENT_BUTTON_NEWGAME:
+            return "button newgame";
+        case Game::EVENT_BUTTON_LOADGAME:
+            return "button loadgame";
+        case Game::EVENT_BUTTON_HIGHSCORES:
+            return "button highscores";
+        case Game::EVENT_BUTTON_CREDITS:
+            return "button credits";
+        case Game::EVENT_BUTTON_STANDARD:
+            return "button standard";
+        case Game::EVENT_BUTTON_CAMPAIGN:
+            return "button campain";
+        case Game::EVENT_BUTTON_MULTI:
+            return "button multigame";
+        case Game::EVENT_BUTTON_SETTINGS:
+            return "button settings";
+        case Game::EVENT_BUTTON_SELECT:
+            return "button select";
+        case Game::EVENT_BUTTON_HOTSEAT:
+            return "button hotseat";
+        case Game::EVENT_BUTTON_HOST:
+            return "button host";
+        case Game::EVENT_BUTTON_GUEST:
+            return "button guest";
+        case Game::EVENT_BUTTON_BATTLEONLY:
+            return "button battleonly";
+        case Game::EVENT_DEFAULT_READY:
+            return "default ready";
+        case Game::EVENT_DEFAULT_EXIT:
+            return "default exit";
+        case Game::EVENT_DEFAULT_LEFT:
+            return "default left";
+        case Game::EVENT_DEFAULT_RIGHT:
+            return "default right";
+        case Game::EVENT_SYSTEM_FULLSCREEN:
+            return "system fullscreen";
+        case Game::EVENT_SYSTEM_SCREENSHOT:
+            return "system screenshot";
+        case Game::EVENT_SLEEP_HERO:
+            return "sleep hero";
+        case Game::EVENT_END_TURN:
+            return "end turn";
+        case Game::EVENT_NEXTHERO:
+            return "next hero";
+        case Game::EVENT_NEXTTOWN:
+            return "next town";
+        case Game::EVENT_CONTINUE:
+            return "continue move";
+        case Game::EVENT_SAVEGAME:
+            return "save game";
+        case Game::EVENT_LOADGAME:
+            return "load game";
+        case Game::EVENT_FILEOPTIONS:
+            return "show file dialog";
+        case Game::EVENT_SYSTEMOPTIONS:
+            return "show system options";
+        case Game::EVENT_PUZZLEMAPS:
+            return "show puzzle maps";
+        case Game::EVENT_INFOGAME:
+            return "show game info";
+        case Game::EVENT_DIG_ARTIFACT:
+            return "dig artifact";
+        case Game::EVENT_CASTSPELL:
+            return "cast spell";
+        case Game::EVENT_KINGDOM_INFO:
+            return "kingdom overview";
+        case Game::EVENT_VIEW_WORLD:
+            return "view world";
+        case Game::EVENT_DEFAULTACTION:
+            return "default action";
+        case Game::EVENT_BATTLE_CASTSPELL:
+            return "battle cast spell";
+        case Game::EVENT_BATTLE_RETREAT:
+            return "battle retreat";
+        case Game::EVENT_BATTLE_SURRENDER:
+            return "battle surrender";
+        case Game::EVENT_BATTLE_AUTOSWITCH:
+            return "battle auto switch";
+        case Game::EVENT_BATTLE_OPTIONS:
+            return "battle options";
+        case Game::EVENT_BATTLE_HARDSKIP:
+            return "battle.hard skip";
+        case Game::EVENT_BATTLE_SOFTSKIP:
+            return "battle soft skip";
+        case Game::EVENT_MOVELEFT:
+            return "move left";
+        case Game::EVENT_MOVERIGHT:
+            return "move right";
+        case Game::EVENT_MOVETOP:
+            return "move top";
+        case Game::EVENT_MOVEBOTTOM:
+            return "move bottom";
+        case Game::EVENT_MOVETOPLEFT:
+            return "move top left";
+        case Game::EVENT_MOVETOPRIGHT:
+            return "move top right";
+        case Game::EVENT_MOVEBOTTOMLEFT:
+            return "move bottom left";
+        case Game::EVENT_MOVEBOTTOMRIGHT:
+            return "move bottom right";
+        case Game::EVENT_OPENFOCUS:
+            return "open focus";
+        case Game::EVENT_SCROLLLEFT:
+            return "scroll left";
+        case Game::EVENT_SCROLLRIGHT:
+            return "scroll right";
+        case Game::EVENT_SCROLLUP:
+            return "scroll up";
+        case Game::EVENT_SCROLLDOWN:
+            return "scroll down";
+        case Game::EVENT_CTRLPANEL:
+            return "control panel";
+        case Game::EVENT_SHOWRADAR:
+            return "show radar";
+        case Game::EVENT_SHOWBUTTONS:
+            return "show buttons";
+        case Game::EVENT_SHOWSTATUS:
+            return "show status";
+        case Game::EVENT_SHOWICONS:
+            return "show icons";
+        case Game::EVENT_SPLIT_STACK_BY_HALF:
+            return "split stack by half";
+        case Game::EVENT_SPLIT_STACK_BY_ONE:
+            return "split stack by one";
+        case Game::EVENT_JOIN_STACKS:
+            return "join stacks";
+        case Game::EVENT_UPGRADE_TROOP:
+            return "upgrade troop";
+        case Game::EVENT_DISMISS_TROOP:
+            return "dismiss troop";
+        case Game::EVENT_TOWN_DWELLING_LEVEL_1:
+            return "town dwelling level 1";
+        case Game::EVENT_TOWN_DWELLING_LEVEL_2:
+            return "town dwelling level 2";
+        case Game::EVENT_TOWN_DWELLING_LEVEL_3:
+            return "town dwelling level 3";
+        case Game::EVENT_TOWN_DWELLING_LEVEL_4:
+            return "town dwelling level 4";
+        case Game::EVENT_TOWN_DWELLING_LEVEL_5:
+            return "town dwelling level 5";
+        case Game::EVENT_TOWN_DWELLING_LEVEL_6:
+            return "town dwelling level 6";
+        case Game::EVENT_TOWN_WELL:
+            return "town well";
+        case Game::EVENT_TOWN_MARKETPLACE:
+            return "town marketplace";
+        case Game::EVENT_TOWN_MAGE_GUILD:
+            return "town mageguild";
+        case Game::EVENT_TOWN_SHIPYARD:
+            return "town shipyard";
+        case Game::EVENT_TOWN_THIEVES_GUILD:
+            return "town guild";
+        case Game::EVENT_TOWN_TAVERN:
+            return "town tavern";
+        case Game::EVENT_TOWN_JUMP_TO_BUILD_SELECTION:
+            return "town build";
+        case Game::EVENT_WELL_BUY_ALL_CREATURES:
+            return "well buy all creatures";
+        case Game::EVENT_NEW_CAMPAIGN_SELECTION_SUCCESSION_WARS:
+            return "the succession wars campaign selection";
+        case Game::EVENT_NEW_CAMPAIGN_SELECTION_PRICE_OF_LOYALTY:
+            return "the price of loyalty campaign selection";
+        case Game::EVENT_NEW_ROLAND_CAMPAIGN:
+            return "roland campaign";
+        case Game::EVENT_NEW_ARCHIBALD_CAMPAIGN:
+            return "archibald campaign";
+        case Game::EVENT_NEW_PRICE_OF_LOYALTY_CAMPAIGN:
+            return "the price of loyalty campaign";
+        case Game::EVENT_NEW_VOYAGE_HOME_CAMPAIGN:
+            return "voyage home campaign";
+        case Game::EVENT_NEW_WIZARDS_ISLE_CAMPAIGN:
+            return "wizard's isle campaign";
+        case Game::EVENT_NEW_DESCENDANTS_CAMPAIGN:
+            return "descendants campaign";
+        default:
+            // Did you add a new hot key event? Add the logic for it!
+            assert( 0 );
+            break;
+        }
+        return nullptr;
+    }
+}
 
 namespace Game
 {
     void HotKeysDefaults( void );
     void HotKeysLoad( const std::string & );
-    const char * EventsName( int );
     void KeyboardGlobalFilter( int, int );
-
-    KeySym key_events[EVENT_LAST];
-
-    const std::map<int, const char *> keyName = { { KEY_BACKSPACE, "Backspace" },
-                                                  { KEY_RETURN, "Enter" },
-                                                  { KEY_ESCAPE, "Escape" },
-                                                  { KEY_SPACE, "Space" },
-                                                  { KEY_EXCLAIM, "!" },
-                                                  { KEY_QUOTEDBL, "\"" },
-                                                  { KEY_HASH, "#" },
-                                                  { KEY_DOLLAR, "$" },
-                                                  { KEY_AMPERSAND, "&" },
-                                                  { KEY_QUOTE, "'" },
-                                                  { KEY_LEFTPAREN, "(" },
-                                                  { KEY_RIGHTPAREN, ")" },
-                                                  { KEY_ASTERISK, "*" },
-                                                  { KEY_PLUS, "+" },
-                                                  { KEY_COMMA, "," },
-                                                  { KEY_MINUS, "-" },
-                                                  { KEY_PERIOD, "." },
-                                                  { KEY_SLASH, "/" },
-                                                  { KEY_COLON, ":" },
-                                                  { KEY_SEMICOLON, ";" },
-                                                  { KEY_LESS, "<" },
-                                                  { KEY_EQUALS, "=" },
-                                                  { KEY_GREATER, ">" },
-                                                  { KEY_QUESTION, "?" },
-                                                  { KEY_AT, "@" },
-                                                  { KEY_LEFTBRACKET, "[" },
-                                                  { KEY_BACKSLASH, "\\" },
-                                                  { KEY_RIGHTBRACKET, "]" },
-                                                  { KEY_CARET, "^" },
-                                                  { KEY_UNDERSCORE, "_" },
-                                                  { KEY_UNDERSCORE, "_" },
-                                                  { KEY_ALT, "Alt" },
-                                                  { KEY_CONTROL, "Ctrl" },
-                                                  { KEY_SHIFT, "Shift" },
-                                                  { KEY_TAB, "Tab" },
-                                                  { KEY_DELETE, "Del" },
-                                                  { KEY_PAGEUP, "Page Up" },
-                                                  { KEY_PAGEDOWN, "Page Down" },
-                                                  { KEY_F1, "F1" },
-                                                  { KEY_F2, "F2" },
-                                                  { KEY_F3, "F3" },
-                                                  { KEY_F4, "F4" },
-                                                  { KEY_F5, "F5" },
-                                                  { KEY_F6, "F6" },
-                                                  { KEY_F7, "F7" },
-                                                  { KEY_F8, "F8" },
-                                                  { KEY_F9, "F9" },
-                                                  { KEY_F10, "F10" },
-                                                  { KEY_F11, "F11" },
-                                                  { KEY_F12, "F12" },
-                                                  { KEY_LEFT, "Left" },
-                                                  { KEY_RIGHT, "Right" },
-                                                  { KEY_UP, "Up" },
-                                                  { KEY_DOWN, "Down" },
-                                                  { KEY_0, "0" },
-                                                  { KEY_1, "1" },
-                                                  { KEY_2, "2" },
-                                                  { KEY_3, "3" },
-                                                  { KEY_4, "4" },
-                                                  { KEY_5, "5" },
-                                                  { KEY_6, "6" },
-                                                  { KEY_7, "7" },
-                                                  { KEY_8, "8" },
-                                                  { KEY_8, "9" },
-                                                  { KEY_a, "A" },
-                                                  { KEY_b, "B" },
-                                                  { KEY_c, "C" },
-                                                  { KEY_d, "D" },
-                                                  { KEY_e, "E" },
-                                                  { KEY_f, "F" },
-                                                  { KEY_g, "G" },
-                                                  { KEY_h, "H" },
-                                                  { KEY_i, "I" },
-                                                  { KEY_j, "J" },
-                                                  { KEY_k, "K" },
-                                                  { KEY_l, "L" },
-                                                  { KEY_m, "M" },
-                                                  { KEY_n, "N" },
-                                                  { KEY_o, "O" },
-                                                  { KEY_p, "P" },
-                                                  { KEY_q, "Q" },
-                                                  { KEY_r, "R" },
-                                                  { KEY_s, "S" },
-                                                  { KEY_t, "T" },
-                                                  { KEY_u, "U" },
-                                                  { KEY_v, "V" },
-                                                  { KEY_w, "W" },
-                                                  { KEY_x, "X" },
-                                                  { KEY_y, "Y" },
-                                                  { KEY_z, "Z" } };
-}
-
-const char * Game::EventsName( int evnt )
-{
-    switch ( evnt ) {
-    case EVENT_BUTTON_NEWGAME:
-        return "button newgame";
-    case EVENT_BUTTON_LOADGAME:
-        return "button loadgame";
-    case EVENT_BUTTON_HIGHSCORES:
-        return "button highscores";
-    case EVENT_BUTTON_CREDITS:
-        return "button credits";
-    case EVENT_BUTTON_STANDARD:
-        return "button standard";
-    case EVENT_BUTTON_CAMPAIGN:
-        return "button campain";
-    case EVENT_BUTTON_MULTI:
-        return "button multigame";
-    case EVENT_BUTTON_SETTINGS:
-        return "button settings";
-    case EVENT_BUTTON_SELECT:
-        return "button select";
-    case EVENT_BUTTON_HOTSEAT:
-        return "button hotseat";
-    case EVENT_BUTTON_HOST:
-        return "button host";
-    case EVENT_BUTTON_GUEST:
-        return "button guest";
-    case EVENT_BUTTON_BATTLEONLY:
-        return "button battleonly";
-
-    case EVENT_DEFAULT_READY:
-        return "default ready";
-    case EVENT_DEFAULT_EXIT:
-        return "default exit";
-    case EVENT_DEFAULT_LEFT:
-        return "default left";
-    case EVENT_DEFAULT_RIGHT:
-        return "default right";
-
-    case EVENT_SYSTEM_FULLSCREEN:
-        return "system fullscreen";
-    case EVENT_SYSTEM_SCREENSHOT:
-        return "system screenshot";
-
-    case EVENT_SLEEPHERO:
-        return "sleep hero";
-    case EVENT_ENDTURN:
-        return "end turn";
-    case EVENT_NEXTHERO:
-        return "next hero";
-    case EVENT_NEXTTOWN:
-        return "next town";
-    case EVENT_CONTINUE:
-        return "continue move";
-    case EVENT_SAVEGAME:
-        return "save game";
-    case EVENT_LOADGAME:
-        return "load game";
-    case EVENT_FILEOPTIONS:
-        return "show file dialog";
-    case EVENT_SYSTEMOPTIONS:
-        return "show system options";
-    case EVENT_PUZZLEMAPS:
-        return "show puzzle maps";
-    case EVENT_INFOGAME:
-        return "show game info";
-    case EVENT_DIGARTIFACT:
-        return "dig artifact";
-    case EVENT_CASTSPELL:
-        return "cast spell";
-    case EVENT_KINGDOM_INFO:
-        return "kingdom overview";
-    case EVENT_VIEW_WORLD:
-        return "view world";
-    case EVENT_DEFAULTACTION:
-        return "default action";
-
-    case EVENT_BATTLE_CASTSPELL:
-        return "battle cast spell";
-    case EVENT_BATTLE_RETREAT:
-        return "battle retreat";
-    case EVENT_BATTLE_SURRENDER:
-        return "battle surrender";
-    case EVENT_BATTLE_AUTOSWITCH:
-        return "battle auto switch";
-    case EVENT_BATTLE_OPTIONS:
-        return "battle options";
-    case EVENT_BATTLE_HARDSKIP:
-        return "battle.hard skip";
-    case EVENT_BATTLE_SOFTSKIP:
-        return "battle soft skip";
-
-    case EVENT_MOVELEFT:
-        return "move left";
-    case EVENT_MOVERIGHT:
-        return "move right";
-    case EVENT_MOVETOP:
-        return "move top";
-    case EVENT_MOVEBOTTOM:
-        return "move bottom";
-    case EVENT_MOVETOPLEFT:
-        return "move top left";
-    case EVENT_MOVETOPRIGHT:
-        return "move top right";
-    case EVENT_MOVEBOTTOMLEFT:
-        return "move bottom left";
-    case EVENT_MOVEBOTTOMRIGHT:
-        return "move bottom right";
-    case EVENT_OPENFOCUS:
-        return "open focus";
-    case EVENT_SCROLLLEFT:
-        return "scroll left";
-    case EVENT_SCROLLRIGHT:
-        return "scroll right";
-    case EVENT_SCROLLUP:
-        return "scroll up";
-    case EVENT_SCROLLDOWN:
-        return "scroll down";
-    case EVENT_CTRLPANEL:
-        return "control panel";
-    case EVENT_SHOWRADAR:
-        return "show radar";
-    case EVENT_SHOWBUTTONS:
-        return "show buttons";
-    case EVENT_SHOWSTATUS:
-        return "show status";
-    case EVENT_SHOWICONS:
-        return "show icons";
-
-    case EVENT_TOWN_DWELLING_LEVEL_1:
-        return "town dwelling level 1";
-    case EVENT_TOWN_DWELLING_LEVEL_2:
-        return "town dwelling level 2";
-    case EVENT_TOWN_DWELLING_LEVEL_3:
-        return "town dwelling level 3";
-    case EVENT_TOWN_DWELLING_LEVEL_4:
-        return "town dwelling level 4";
-    case EVENT_TOWN_DWELLING_LEVEL_5:
-        return "town dwelling level 5";
-    case EVENT_TOWN_DWELLING_LEVEL_6:
-        return "town dwelling level 6";
-    case EVENT_TOWN_WELL:
-        return "town well";
-    case EVENT_TOWN_MARKETPLACE:
-        return "town marketplace";
-    case EVENT_TOWN_MAGE_GUILD:
-        return "town mageguild";
-    case EVENT_TOWN_SHIPYARD:
-        return "town shipyard";
-    case EVENT_TOWN_THIEVES_GUILD:
-        return "town guild";
-    case EVENT_TOWN_TAVERN:
-        return "town tavern";
-    case EVENT_TOWN_JUMP_TO_BUILD_SELECTION:
-        return "town build";
-    case EVENT_WELL_BUY_ALL_CREATURES:
-        return "well buy all creatures";
-    default:
-        break;
-    }
-    return nullptr;
 }
 
 void Game::HotKeysDefaults( void )
 {
-    std::fill( &key_events[0], &key_events[EVENT_LAST], KEY_NONE );
+    std::fill( key_events.begin(), key_events.end(), KEY_NONE );
 
     // main menu
     key_events[EVENT_BUTTON_NEWGAME] = KEY_n;
@@ -333,9 +269,9 @@ void Game::HotKeysDefaults( void )
     key_events[EVENT_BATTLE_SOFTSKIP] = KEY_SPACE;
 
     // sleep hero
-    key_events[EVENT_SLEEPHERO] = KEY_z;
+    key_events[EVENT_SLEEP_HERO] = KEY_z;
     // end turn
-    key_events[EVENT_ENDTURN] = KEY_e;
+    key_events[EVENT_END_TURN] = KEY_e;
     // next hero
     key_events[EVENT_NEXTHERO] = KEY_h;
     // next town
@@ -355,7 +291,7 @@ void Game::HotKeysDefaults( void )
     // show game info
     key_events[EVENT_INFOGAME] = KEY_i;
     // dig artifact
-    key_events[EVENT_DIGARTIFACT] = KEY_d;
+    key_events[EVENT_DIG_ARTIFACT] = KEY_d;
     // cast spell
     key_events[EVENT_CASTSPELL] = KEY_c;
     // kingdom overview
@@ -388,9 +324,9 @@ void Game::HotKeysDefaults( void )
     key_events[EVENT_SCROLLUP] = KEY_KP8;
     key_events[EVENT_SCROLLDOWN] = KEY_KP2;
     // split
-    key_events[EVENT_STACKSPLIT_SHIFT] = KEY_SHIFT;
-    key_events[EVENT_STACKSPLIT_CTRL] = KEY_CONTROL;
-    key_events[EVENT_JOINSTACKS] = KEY_ALT;
+    key_events[EVENT_SPLIT_STACK_BY_HALF] = KEY_SHIFT;
+    key_events[EVENT_SPLIT_STACK_BY_ONE] = KEY_CONTROL;
+    key_events[EVENT_JOIN_STACKS] = KEY_ALT;
 
     key_events[EVENT_UPGRADE_TROOP] = KEY_u;
     key_events[EVENT_DISMISS_TROOP] = KEY_d;
@@ -412,8 +348,16 @@ void Game::HotKeysDefaults( void )
     key_events[EVENT_TOWN_TAVERN] = KEY_r;
     key_events[EVENT_TOWN_JUMP_TO_BUILD_SELECTION] = KEY_b; // also used to build castle, if starting on a village
 
-    key_events[EVENT_NEW_CAMPAIGN_SUCCESSION_WARS] = KEY_o;
-    key_events[EVENT_NEW_CAMPAIGN_PRICE_OF_LOYALTY] = KEY_e;
+    key_events[EVENT_NEW_CAMPAIGN_SELECTION_SUCCESSION_WARS] = KEY_o;
+    key_events[EVENT_NEW_CAMPAIGN_SELECTION_PRICE_OF_LOYALTY] = KEY_e;
+
+    key_events[EVENT_NEW_ROLAND_CAMPAIGN] = KEY_1;
+    key_events[EVENT_NEW_ARCHIBALD_CAMPAIGN] = KEY_2;
+
+    key_events[EVENT_NEW_PRICE_OF_LOYALTY_CAMPAIGN] = KEY_1;
+    key_events[EVENT_NEW_VOYAGE_HOME_CAMPAIGN] = KEY_2;
+    key_events[EVENT_NEW_WIZARDS_ISLE_CAMPAIGN] = KEY_3;
+    key_events[EVENT_NEW_DESCENDANTS_CAMPAIGN] = KEY_4;
 
     key_events[EVENT_WELL_BUY_ALL_CREATURES] = KEY_m;
 }
@@ -430,14 +374,9 @@ bool Game::HotKeyHoldEvent( const int eventID )
     return le.KeyHold() && le.KeyValue() == key_events[eventID];
 }
 
-const char * Game::getHotKeyNameByEventId( const int eventID )
+std::string Game::getHotKeyNameByEventId( const int eventID )
 {
-    auto it = keyName.find( key_events[eventID] );
-    if ( it != keyName.end() ) {
-        return it->second;
-    }
-
-    return "???";
+    return StringUpper( KeySymGetName( key_events[eventID] ) );
 }
 
 void Game::HotKeysLoad( const std::string & hotkeys )
@@ -447,15 +386,13 @@ void Game::HotKeysLoad( const std::string & hotkeys )
     if ( config.Load( hotkeys ) ) {
         int ival = 0;
 
-        for ( int evnt = EVENT_NONE; evnt < EVENT_LAST; ++evnt ) {
-            const char * name = EventsName( evnt );
-            if ( name ) {
-                ival = config.IntParams( name );
-                if ( ival ) {
-                    const KeySym sym = GetKeySym( ival );
-                    key_events[evnt] = sym;
-                    DEBUG_LOG( DBG_GAME, DBG_INFO, "events: " << EventsName( evnt ) << ", key: " << KeySymGetName( sym ) );
-                }
+        for ( int evnt = EVENT_NONE + 1; evnt < EVENT_LAST; ++evnt ) {
+            const char * name = getEventName( evnt );
+            ival = config.IntParams( name );
+            if ( ival ) {
+                const KeySym sym = GetKeySym( ival );
+                key_events[evnt] = sym;
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Event '" << getEventName( evnt ) << "' has key '" << KeySymGetName( sym ) << "'" )
             }
         }
     }

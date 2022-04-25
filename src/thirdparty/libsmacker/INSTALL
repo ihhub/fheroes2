@@ -1,0 +1,84 @@
+libsmacker
+http://libsmacker.sourceforge.net
+
+Compilation and Install Notes
+---
+
+There are two ways to compile libsmacker for use in your own programs.
+
+1. DIRECT COMPILATION
+
+This method is preferred when you can't (or don't want to) build a system
+library.  Simply take the various smk_* and smacker.* files, add them to your
+project, and compile them in as usual.
+
+All external functions (those you, a user, would care about) are contained in
+smacker.h - so, in your main program, just
+
+	#include "smacker.h"
+
+and you're ready to decode smk files.
+
+To ease the process of managing libsmacker compilation, and to keep your source
+tree uncluttered, you may wish to use libsmacker as a compiled static library
+instead.  This allows you to redistribute it, or compile once / separately from
+your project, but with the advantage that linking against it does not create a
+run-time dependency.  See the next section.
+
+2. LIBRARY COMPILATION
+
+libsmacker is distributed as a standard autotools-based package.  The build
+requires a GNU- or BSD-compatible "make" program.  Optionally, you may need
+autotools development packages installed to regenerate some distribution
+files if you wish to provide your own distribution.
+
+From the root directory, run "./configure" - this will perform some checks on
+your system to find the name of your C compiler, desired compilation flags,
+etc.  At the end of the configure process, there will be a generated Makefile.
+Simply run "make" to build your files.
+
+Compilation via autotools results in these files - though depending on your
+system, compilation output may go into a .libs/ subfolder:
+
+* libsmacker.a
+* libsmacker.so (and several versioned symlinks)
+* driver
+* smk2avi
+
+The "libsmacker.a" is a static library file which can be compiled in with an
+existing codebase:
+
+	cc main.c extra.c libsmacker.a
+
+or (better)
+
+	cc main.c -lsmacker
+
+The "libsmacker.so" is a shared object file.  Compiling with this means it
+needs to be distributed along with your application; this might be useful to
+save space if you have multiple programs that use libsmacker.
+
+"driver" and "smk2avi" are example programs that show how to use libsmacker.
+They can also test a successful build.
+
+3. INSTALLATION
+
+The makefile from "configure" can be used to install the .so and corresponding
+.h file to correct locations - simply run "make install".  This will copy the
+files to $PREFIX and make them available system-wide to other developers or
+applications.
+
+4. CONTROLLING BUILD PARAMETERS
+Altering build parameters is done by different flags to "configure".  The
+default is to build both a static AND shared library, as well as the two demo
+programs.  Also by default, CFLAGS is set to "-O2 -g".  To change this, for
+example making a debug build, use something like:
+
+	./configure CFLAGS="-O0"
+
+or an optimized release build:
+
+	./configure CFLAGS="-march=i686 -O2 -DNDEBUG"
+
+Once reconfigured, running "make" will apply CFLAGS to calls to the C compiler,
+passing your options on to the underlying build system.

@@ -42,20 +42,18 @@ jobs:
     defaults:
       run:
         shell: bash
-    env:
-      APP_VERSION: 0.9.13
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies, cygwin and zip
       run: |
         cd script/windows
         ./install_packages.bat
-        choco.exe install cygwin cyg-get zip -y
-        cyg-get.bat make iconv gettext-devel
+        choco.exe install make gettext-devel -y --source cygwin
+        choco.exe install zip -y
     - uses: microsoft/setup-msbuild@v1
-    - name: Generate build number
+    - name: Generate version information
       run: |
-        echo "fheroes2_build_version=$((GITHUB_RUN_NUMBER % 32768))" >> "$GITHUB_ENV"
+        echo "FHEROES2_APP_VERSION=$(cat version.txt)" >> "$GITHUB_ENV"
     - name: Build
       run: |
         MSBuild.exe fheroes2-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
@@ -71,7 +69,7 @@ jobs:
       shell: cmd
     - name: Create Inno Setup package
       run: |
-        iscc.exe script\windows\fheroes2.iss /DAppVersion="%APP_VERSION%" /DBuildDir="..\..\%BUILD_DIR%" ^
+        iscc.exe script\windows\fheroes2.iss /DAppVersion="%FHEROES2_APP_VERSION%" /DBuildDir="..\..\%BUILD_DIR%" ^
                  /DPlatform=${{ matrix.config.platform }} /DDeployConfName=${{ matrix.config.deploy_config }}
       shell: cmd
       env:
@@ -79,7 +77,8 @@ jobs:
     - name: Create ZIP package
       run: |
         zip.exe -j "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip "$BUILD_DIR"\\fheroes2.exe "$BUILD_DIR"\\SDL*.dll "$BUILD_DIR"\\lib*.dll \
-                script\\demo\\*.bat script\\demo\\*.ps1 script\\homm2\\*.bat script\\homm2\\*.ps1 LICENSE fheroes2.key changelog.txt docs\\README.txt
+                "$BUILD_DIR"\\smpeg.dll script\\demo\\*.bat script\\demo\\*.ps1 script\\homm2\\*.bat script\\homm2\\*.ps1 LICENSE fheroes2.key \
+                changelog.txt docs\\README.txt
         zip.exe "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip files\\lang\\*.mo files\\data\\*.h2d
       env:
         BUILD_DIR: build\${{ matrix.config.platform }}\${{ matrix.config.build_config }}

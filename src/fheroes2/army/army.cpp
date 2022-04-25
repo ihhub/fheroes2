@@ -340,7 +340,7 @@ bool Troops::JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirs
             else
                 ( *it )->Set( mons, count );
 
-            DEBUG_LOG( DBG_GAME, DBG_INFO, std::dec << count << " " << ( *it )->GetName() );
+            DEBUG_LOG( DBG_GAME, DBG_INFO, std::dec << count << " " << ( *it )->GetName() )
             return true;
         }
     }
@@ -829,7 +829,7 @@ void Army::setFromTile( const Maps::Tiles & tile )
 {
     Reset();
 
-    const bool isCaptureObject = MP2::isCaptureObject( tile.GetObject() );
+    const bool isCaptureObject = MP2::isCaptureObject( tile.GetObject( false ) );
     if ( isCaptureObject )
         color = tile.QuantityColor();
 
@@ -985,9 +985,18 @@ int Army::GetLuck( void ) const
     return currentCommander != nullptr ? currentCommander->GetLuck() : GetLuckModificator( nullptr );
 }
 
-int Army::GetLuckModificator( const std::string * ) const
+int Army::GetLuckModificator( std::string * strs ) const
 {
-    return Luck::NORMAL;
+    int result = Luck::NORMAL;
+
+    // check castle modificator
+    const Castle * castle = inCastle();
+
+    if ( castle ) {
+        result += castle->GetLuckModificator( strs );
+    }
+
+    return result;
 }
 
 int Army::GetMorale( void ) const
@@ -1015,8 +1024,15 @@ int Army::GetMoraleModificator( std::string * strs ) const
 
     int result = Morale::NORMAL;
 
+    // check castle modificator
+    const Castle * castle = inCastle();
+
+    if ( castle ) {
+        result += castle->GetMoraleModificator( strs );
+    }
+
     // artifact "Arm of the Martyr" adds the undead morale penalty
-    hasUndead = hasUndead || ( GetCommander() && GetCommander()->hasArtifact( Artifact::ARM_MARTYR ) );
+    hasUndead = hasUndead || ( GetCommander() && GetCommander()->GetBagArtifacts().isArtifactCursePresent( fheroes2::ArtifactCurseType::UNDEAD_MORALE_PENALTY ) );
 
     const int count = static_cast<int>( races.size() );
     switch ( count ) {
@@ -1062,7 +1078,7 @@ int Army::GetMoraleModificator( std::string * strs ) const
 double Army::GetStrength() const
 {
     double result = 0;
-    const uint32_t archery = ( commander ) ? commander->GetSecondaryValues( Skill::Secondary::ARCHERY ) : 0;
+    const uint32_t archery = ( commander != nullptr ) ? commander->GetSecondaryValues( Skill::Secondary::ARCHERY ) : 0;
     // Hero bonus calculation is slow, cache it
     const int bonusAttack = ( commander ? commander->GetAttack() : 0 );
     const int bonusDefense = ( commander ? commander->GetDefense() : 0 );
@@ -1095,7 +1111,7 @@ double Army::GetStrength() const
     return result;
 }
 
-void Army::Reset( bool soft )
+void Army::Reset( const bool soft /* = false */ )
 {
     Troops::Clean();
 
@@ -1226,7 +1242,7 @@ bool Army::isStrongerThan( const Army & target, double safetyRatio ) const
     const double str1 = GetStrength();
     const double str2 = target.GetStrength() * safetyRatio;
 
-    DEBUG_LOG( DBG_GAME, DBG_TRACE, "Comparing troops: " << str1 << " versus " << str2 );
+    DEBUG_LOG( DBG_GAME, DBG_TRACE, "Comparing troops: " << str1 << " versus " << str2 )
 
     return str1 > str2;
 }
@@ -1314,7 +1330,7 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
         }
     }
 
-    if ( hero.hasArtifact( Artifact::HIDEOUS_MASK ) ) {
+    if ( hero.GetBagArtifacts().isArtifactCursePresent( fheroes2::ArtifactCurseType::NO_JOINING_ARMIES ) ) {
         return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
     }
 

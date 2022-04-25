@@ -276,7 +276,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     listbox.setScrollBarArea( { rt.x + 328, rt.y + 73, 12, 180 } );
     listbox.setScrollBarImage( scrollbarSlider );
     listbox.SetAreaMaxItems( 11 );
-    listbox.SetAreaItems( fheroes2::Rect( rt.x + 40, rt.y + 55, 265, 215 ) );
+    listbox.SetAreaItems( { rt.x + 40, rt.y + 55, 265, 215 } );
     listbox.SetListContent( lists );
 
     std::string filename;

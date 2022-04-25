@@ -98,15 +98,37 @@ namespace
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to come back to Main Menu." )
     }
 
-    void outputNewCampaignInTextSupportMode()
+    void outputNewCampaignSelectionInTextSupportMode()
     {
         START_TEXT_SUPPORT_MODE
 
         COUT( "New Campaign\n" )
 
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_NEW_CAMPAIGN_SUCCESSION_WARS ) << " to choose The Succession Wars Campaign." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_NEW_CAMPAIGN_PRICE_OF_LOYALTY ) << " to choose The Price of Loyalty Campaign." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_NEW_CAMPAIGN_SELECTION_SUCCESSION_WARS ) << " to choose The Succession Wars Campaign." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_NEW_CAMPAIGN_SELECTION_PRICE_OF_LOYALTY ) << " to choose The Price of Loyalty Campaign." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to come back to Main Menu." )
+    }
+
+    void outputNewSuccessionWarsCampaignInTextSupportMode()
+    {
+        START_TEXT_SUPPORT_MODE
+
+        COUT( "Choose your Lord:\n" )
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_NEW_ROLAND_CAMPAIGN ) << " to choose Roland Campaign." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_NEW_ARCHIBALD_CAMPAIGN ) << " to choose Archibald Campaign." )
+    }
+
+    void outputPriceOfLoyaltyCampaignInTextSupportMode()
+    {
+        START_TEXT_SUPPORT_MODE
+
+        COUT( "Select your campaign\n" )
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_NEW_PRICE_OF_LOYALTY_CAMPAIGN ) << " to choose The Price of Loyalty Campaign." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_NEW_VOYAGE_HOME_CAMPAIGN ) << " to choose Voyage Home Campaign." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_NEW_WIZARDS_ISLE_CAMPAIGN ) << " to choose Wizard's Isle Campaign." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_NEW_DESCENDANTS_CAMPAIGN ) << " to choose Descendants Campaign." )
     }
 }
 
@@ -156,7 +178,7 @@ fheroes2::GameMode Game::CampaignSelection()
         return fheroes2::GameMode::NEW_SUCCESSION_WARS_CAMPAIGN;
     }
 
-    outputNewCampaignInTextSupportMode();
+    outputNewCampaignSelectionInTextSupportMode();
 
     fheroes2::drawMainMenuScreen();
     const fheroes2::Point buttonPos = drawButtonPanel();
@@ -177,9 +199,9 @@ fheroes2::GameMode Game::CampaignSelection()
         le.MousePressLeft( buttonPriceOfLoyalty.area() ) ? buttonPriceOfLoyalty.drawOnPress() : buttonPriceOfLoyalty.drawOnRelease();
         le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonSuccessionWars.area() ) || HotKeyPressEvent( EVENT_NEW_CAMPAIGN_SUCCESSION_WARS ) )
+        if ( le.MouseClickLeft( buttonSuccessionWars.area() ) || HotKeyPressEvent( EVENT_NEW_CAMPAIGN_SELECTION_SUCCESSION_WARS ) )
             return fheroes2::GameMode::NEW_SUCCESSION_WARS_CAMPAIGN;
-        if ( le.MouseClickLeft( buttonPriceOfLoyalty.area() ) || HotKeyPressEvent( EVENT_NEW_CAMPAIGN_PRICE_OF_LOYALTY ) )
+        if ( le.MouseClickLeft( buttonPriceOfLoyalty.area() ) || HotKeyPressEvent( EVENT_NEW_CAMPAIGN_SELECTION_PRICE_OF_LOYALTY ) )
             return fheroes2::GameMode::NEW_PRICE_OF_LOYALTY_CAMPAIGN;
         if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
             return fheroes2::GameMode::MAIN_MENU;
@@ -214,19 +236,77 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     loadingScreen.Blit( display.width() / 2 - loadingScreen.w() / 2, display.height() / 2 - loadingScreen.h() / 2 );
     display.render();
 
-    const std::vector<fheroes2::Rect> campaignRoi{ { 382 + roiOffset.x, 58 + roiOffset.y, 222, 298 }, { 30 + roiOffset.x, 59 + roiOffset.y, 224, 297 } };
-
-    const CursorRestorer cursorRestorer( false, Cursor::POINTER );
-
     Video::ShowVideo( "INTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
-
-    AGG::ResetAudio();
-    Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::IGNORE_VIDEO );
-    const int chosenCampaign = Video::ShowVideo( "CHOOSE.SMK", Video::VideoAction::LOOP_VIDEO, campaignRoi );
 
     Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
     campaignSaveData.reset();
-    campaignSaveData.setCurrentScenarioInfoId( { chosenCampaign, 0 } );
+
+    std::unique_ptr<SMKVideoSequence> video = getVideo( "CHOOSE.SMK" );
+    if ( !video ) {
+        campaignSaveData.setCurrentScenarioInfoId( { Campaign::ROLAND_CAMPAIGN, 0 } );
+        return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
+    }
+
+    const std::array<fheroes2::Rect, 2> campaignRoi{ fheroes2::Rect( 382 + roiOffset.x, 58 + roiOffset.y, 222, 298 ),
+                                                     fheroes2::Rect( 30 + roiOffset.x, 59 + roiOffset.y, 224, 297 ) };
+
+    const uint64_t customDelay = static_cast<uint64_t>( std::lround( 1000.0 / video->fps() ) );
+
+    outputNewSuccessionWarsCampaignInTextSupportMode();
+
+    AGG::ResetAudio();
+    Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::IGNORE_VIDEO );
+
+    const fheroes2::ScreenPaletteRestorer screenRestorer;
+
+    std::vector<uint8_t> palette = video->getCurrentPalette();
+    screenRestorer.changePalette( palette.data() );
+
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    Cursor::Get().setVideoPlaybackCursor();
+
+    LocalEvent & le = LocalEvent::Get();
+    while ( le.HandleEvents( Game::isCustomDelayNeeded( customDelay ) ) ) {
+        if ( le.MouseClickLeft( campaignRoi[0] ) || HotKeyPressEvent( EVENT_NEW_ROLAND_CAMPAIGN ) ) {
+            campaignSaveData.setCurrentScenarioInfoId( { Campaign::ROLAND_CAMPAIGN, 0 } );
+            break;
+        }
+        if ( le.MouseClickLeft( campaignRoi[1] ) || HotKeyPressEvent( EVENT_NEW_ARCHIBALD_CAMPAIGN ) ) {
+            campaignSaveData.setCurrentScenarioInfoId( { Campaign::ARCHIBALD_CAMPAIGN, 0 } );
+            break;
+        }
+
+        size_t highlightCampaignId = campaignRoi.size();
+
+        for ( size_t i = 0; i < campaignRoi.size(); ++i ) {
+            if ( le.MouseCursor( campaignRoi[i] ) ) {
+                highlightCampaignId = i;
+                break;
+            }
+        }
+
+        if ( Game::validateCustomAnimationDelay( customDelay ) ) {
+            fheroes2::Rect frameRoi( roiOffset.x, roiOffset.y, 0, 0 );
+            video->getNextFrame( display, frameRoi.x, frameRoi.y, frameRoi.width, frameRoi.height, palette );
+
+            if ( highlightCampaignId < campaignRoi.size() ) {
+                const fheroes2::Rect & roi = campaignRoi[highlightCampaignId];
+                fheroes2::DrawRect( display, roi, 51 );
+                fheroes2::DrawRect( display, { roi.x - 1, roi.y - 1, roi.width + 2, roi.height + 2 }, 51 );
+            }
+
+            display.render( frameRoi );
+
+            if ( video->frameCount() <= video->getCurrentFrame() ) {
+                video->resetFrame();
+            }
+        }
+    }
+
+    screenRestorer.changePalette( nullptr );
+
+    display.fill( 0 );
+    display.render();
 
     return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
 }
@@ -244,6 +324,8 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
         // File doesn't exist. Fallback to PoL campaign.
         return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
     }
+
+    outputPriceOfLoyaltyCampaignInTextSupportMode();
 
     const fheroes2::ScreenPaletteRestorer screenRestorer;
 
@@ -284,22 +366,22 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
 
     LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( highlightCampaignId < videos.size() ? Game::isCustomDelayNeeded( customDelay ) : true ) ) {
-        if ( le.MouseClickLeft( activeCampaignArea[0] ) ) {
+        if ( le.MouseClickLeft( activeCampaignArea[0] ) || HotKeyPressEvent( EVENT_NEW_PRICE_OF_LOYALTY_CAMPAIGN ) ) {
             campaignSaveData.setCurrentScenarioInfoId( { Campaign::PRICE_OF_LOYALTY_CAMPAIGN, 0 } );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }
-        if ( le.MouseClickLeft( activeCampaignArea[1] ) ) {
+        if ( le.MouseClickLeft( activeCampaignArea[1] ) || HotKeyPressEvent( EVENT_NEW_VOYAGE_HOME_CAMPAIGN ) ) {
             campaignSaveData.setCurrentScenarioInfoId( { Campaign::VOYAGE_HOME_CAMPAIGN, 0 } );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }
-        if ( le.MouseClickLeft( activeCampaignArea[2] ) ) {
+        if ( le.MouseClickLeft( activeCampaignArea[2] ) || HotKeyPressEvent( EVENT_NEW_WIZARDS_ISLE_CAMPAIGN ) ) {
             campaignSaveData.setCurrentScenarioInfoId( { Campaign::WIZARDS_ISLE_CAMPAIGN, 0 } );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
         }
-        if ( le.MouseClickLeft( activeCampaignArea[3] ) ) {
+        if ( le.MouseClickLeft( activeCampaignArea[3] ) || HotKeyPressEvent( EVENT_NEW_DESCENDANTS_CAMPAIGN ) ) {
             campaignSaveData.setCurrentScenarioInfoId( { Campaign::DESCENDANTS_CAMPAIGN, 0 } );
             gameChoice = fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             break;
@@ -398,8 +480,6 @@ fheroes2::GameMode Game::NewGame()
 
     AGG::PlayMusic( MUS::MAINMENU, true, true );
 
-    Settings & conf = Settings::Get();
-
     // reset last save name
     Game::SetLastSavename( "" );
 
@@ -407,9 +487,6 @@ fheroes2::GameMode Game::NewGame()
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     fheroes2::Display & display = fheroes2::Display::instance();
-
-    // load game settings
-    conf.BinaryLoad();
 
     fheroes2::drawMainMenuScreen();
     const fheroes2::Point buttonPos = drawButtonPanel();

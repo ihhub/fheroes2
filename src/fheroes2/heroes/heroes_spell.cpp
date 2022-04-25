@@ -46,13 +46,6 @@
 #include <cassert>
 #include <memory>
 
-namespace
-{
-    // Values are extracted from Heroes2 executable
-    const uint32_t dimensionDoorPenalty = 225;
-    const uint32_t townGatePenalty = 225;
-}
-
 void DialogSpellFailed( const Spell & spell );
 
 bool ActionSpellViewMines( const Heroes & hero );
@@ -197,19 +190,9 @@ void CastleIndexListBox::RedrawBackground( const fheroes2::Point & dst )
     fheroes2::Blit( lowerScrollbar, display, dst.x + 262, dst.y + offsetY );
 }
 
-bool Heroes::ActionSpellCast( const Spell & spell )
+void Heroes::ActionSpellCast( const Spell & spell )
 {
-    std::string error;
-
-    if ( !CanMove() && ( spell == Spell::DIMENSIONDOOR || spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) ) {
-        Dialog::Message( "", _( "Your hero is too tired to cast this spell today. Try again tomorrow." ), Font::BIG, Dialog::OK );
-        return false;
-    }
-    else if ( spell == Spell::NONE || spell.isCombat() || !CanCastSpell( spell, &error ) ) {
-        if ( !error.empty() )
-            Dialog::Message( "Error", error, Font::BIG, Dialog::OK );
-        return false;
-    }
+    assert( spell.isValid() && !spell.isCombat() && CanCastSpell( spell ) );
 
     bool apply = false;
 
@@ -261,12 +244,13 @@ bool Heroes::ActionSpellCast( const Spell & spell )
         break;
     }
 
-    if ( apply ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " cast spell: " << spell.GetName() );
-        SpellCasted( spell );
-        return true;
+    if ( !apply ) {
+        return;
     }
-    return false;
+
+    DEBUG_LOG( DBG_GAME, DBG_INFO, GetName() << " cast spell: " << spell.GetName() )
+
+    SpellCasted( spell );
 }
 
 bool HeroesTownGate( Heroes & hero, const Castle * castle )
@@ -284,7 +268,6 @@ bool HeroesTownGate( Heroes & hero, const Castle * castle )
         hero.GetPath().Hide();
         hero.FadeOut();
 
-        hero.ApplyPenaltyMovement( townGatePenalty );
         hero.Move2Dest( dst );
 
         I.GetGameArea().SetCenter( hero.GetCenter() );
@@ -450,7 +433,6 @@ bool ActionSpellDimensionDoor( Heroes & hero )
 
         hero.SpellCasted( Spell::DIMENSIONDOOR );
 
-        hero.ApplyPenaltyMovement( dimensionDoorPenalty );
         hero.Move2Dest( dst );
 
         I.GetGameArea().SetCenter( hero.GetCenter() );
@@ -532,9 +514,8 @@ bool ActionSpellTownPortal( Heroes & hero )
     listbox.setScrollBarArea( { area.x + 266, area.y + 68, 14, 119 } );
 
     const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( listIcnId, 10 );
-    const fheroes2::Image scrollbarSlider
-        = fheroes2::generateScrollbarSlider( originalSilder, false, 119, 5, static_cast<int32_t>( castles.size() ), { 0, 0, originalSilder.width(), 4 },
-                                             { 0, 4, originalSilder.width(), 8 } );
+    const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSilder, false, 119, 5, static_cast<int32_t>( castles.size() ),
+                                                                               { 0, 0, originalSilder.width(), 4 }, { 0, 4, originalSilder.width(), 8 } );
 
     listbox.setScrollBarImage( scrollbarSlider );
     listbox.SetAreaMaxItems( 5 );
@@ -664,7 +645,7 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell )
         tile.SetQuantity3( static_cast<uint8_t>( spell.GetID() ) );
 
         if ( spell == Spell::HAUNT ) {
-            world.CaptureObject( tile.GetIndex(), Color::UNUSED );
+            world.CaptureObject( tile.GetIndex(), Color::NONE );
             tile.removeFlags();
             hero.SetMapsObject( MP2::OBJ_ABANDONEDMINE );
         }

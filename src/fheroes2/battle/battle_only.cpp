@@ -91,7 +91,7 @@ Battle::Only::Only()
     player2.SetControl( CONTROL_AI );
 }
 
-bool Battle::Only::ChangeSettings( void )
+bool Battle::Only::ChangeSettings()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -120,6 +120,7 @@ bool Battle::Only::ChangeSettings( void )
 
     hero1 = world.GetHeroes( Heroes::LORDKILBURN );
     hero1->GetSecondarySkills().FillMax( Skill::Secondary() );
+
     army1 = &hero1->GetArmy();
 
     RedrawBaseInfo( cur_pt );
@@ -581,7 +582,7 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
     fheroes2::RedrawPrimarySkillInfo( top, primskill_bar1.get(), primskill_bar2.get() );
 }
 
-void Battle::Only::StartBattle( void )
+void Battle::Only::StartBattle()
 {
     Settings & conf = Settings::Get();
 

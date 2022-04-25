@@ -83,8 +83,8 @@ namespace Game
         EVENT_DEFAULT_RIGHT,
         EVENT_SYSTEM_FULLSCREEN,
         EVENT_SYSTEM_SCREENSHOT,
-        EVENT_SLEEPHERO,
-        EVENT_ENDTURN,
+        EVENT_SLEEP_HERO,
+        EVENT_END_TURN,
         EVENT_NEXTHERO,
         EVENT_NEXTTOWN,
         EVENT_CONTINUE,
@@ -93,7 +93,7 @@ namespace Game
         EVENT_FILEOPTIONS,
         EVENT_PUZZLEMAPS,
         EVENT_INFOGAME,
-        EVENT_DIGARTIFACT,
+        EVENT_DIG_ARTIFACT,
         EVENT_CASTSPELL,
         EVENT_KINGDOM_INFO,
         EVENT_VIEW_WORLD,
@@ -124,9 +124,9 @@ namespace Game
         EVENT_SHOWBUTTONS,
         EVENT_SHOWSTATUS,
         EVENT_SHOWICONS,
-        EVENT_STACKSPLIT_SHIFT,
-        EVENT_STACKSPLIT_CTRL,
-        EVENT_JOINSTACKS,
+        EVENT_SPLIT_STACK_BY_HALF,
+        EVENT_SPLIT_STACK_BY_ONE,
+        EVENT_JOIN_STACKS,
         EVENT_UPGRADE_TROOP,
         EVENT_DISMISS_TROOP,
         EVENT_TOWN_DWELLING_LEVEL_1,
@@ -147,16 +147,24 @@ namespace Game
 
         EVENT_WELL_BUY_ALL_CREATURES,
 
-        EVENT_NEW_CAMPAIGN_SUCCESSION_WARS,
-        EVENT_NEW_CAMPAIGN_PRICE_OF_LOYALTY,
+        EVENT_NEW_CAMPAIGN_SELECTION_SUCCESSION_WARS,
+        EVENT_NEW_CAMPAIGN_SELECTION_PRICE_OF_LOYALTY,
 
+        EVENT_NEW_ROLAND_CAMPAIGN,
+        EVENT_NEW_ARCHIBALD_CAMPAIGN,
+        EVENT_NEW_PRICE_OF_LOYALTY_CAMPAIGN,
+        EVENT_NEW_VOYAGE_HOME_CAMPAIGN,
+        EVENT_NEW_WIZARDS_ISLE_CAMPAIGN,
+        EVENT_NEW_DESCENDANTS_CAMPAIGN,
+
+        // Put all new events above this line.
         EVENT_LAST,
     };
 
     bool HotKeyPressEvent( int );
     bool HotKeyHoldEvent( const int eventID );
 
-    const char * getHotKeyNameByEventId( const int eventID );
+    std::string getHotKeyNameByEventId( const int eventID );
 
     void mainGameLoop( bool isFirstGameRun );
 

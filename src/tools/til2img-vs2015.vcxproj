@@ -193,8 +193,6 @@
     <ClCompile Include="..\engine\zzlib.cpp" />
     <ClCompile Include="til2img.cpp" />
     <ClCompile Include="..\thirdparty\libsmacker\smacker.c" />
-    <ClCompile Include="..\thirdparty\libsmacker\smk_bitstream.c" />
-    <ClCompile Include="..\thirdparty\libsmacker\smk_hufftree.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\engine\agg_file.h" />
@@ -223,8 +221,6 @@
     <ClInclude Include="..\engine\types.h" />
     <ClInclude Include="..\engine\zzlib.h" />
     <ClInclude Include="..\thirdparty\libsmacker\smacker.h" />
-    <ClInclude Include="..\thirdparty\libsmacker\smk_bitstream.h" />
-    <ClInclude Include="..\thirdparty\libsmacker\smk_hufftree.h" />
     <ClInclude Include="..\thirdparty\libsmacker\smk_malloc.h" />
   </ItemGroup>
   <ItemDefinitionGroup />

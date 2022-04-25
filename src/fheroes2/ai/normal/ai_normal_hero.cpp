@@ -422,7 +422,7 @@ namespace
             return false;
         case MP2::OBJ_ALCHEMYTOWER: {
             const BagArtifacts & bag = hero.GetBagArtifacts();
-            const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.isAlchemistRemove(); } ) );
+            const uint32_t cursed = static_cast<uint32_t>( std::count_if( bag.begin(), bag.end(), []( const Artifact & art ) { return art.containsCurses(); } ) );
 
             const payment_t payment = PaymentConditions::ForAlchemist();
 
@@ -437,18 +437,11 @@ namespace
         return false;
     }
 
-    struct HeroToMove
-    {
-        Heroes * hero = nullptr;
-        int patrolCenter = -1;
-        uint32_t patrolDistance = 0;
-    };
-
-    void addHeroToMove( Heroes * hero, std::vector<HeroToMove> & availableHeroes )
+    void addHeroToMove( Heroes * hero, std::vector<AI::HeroToMove> & availableHeroes )
     {
         if ( hero->Modes( Heroes::PATROL ) ) {
             if ( hero->GetSquarePatrol() == 0 ) {
-                DEBUG_LOG( DBG_AI, DBG_TRACE, hero->GetName() << " standing still. Skip turn." );
+                DEBUG_LOG( DBG_AI, DBG_TRACE, hero->GetName() << " standing still. Skip turn." )
                 hero->SetModes( Heroes::MOVED );
                 return;
             }
@@ -460,7 +453,7 @@ namespace
         }
         else {
             availableHeroes.emplace_back();
-            HeroToMove & heroInfo = availableHeroes.back();
+            AI::HeroToMove & heroInfo = availableHeroes.back();
             heroInfo.hero = hero;
 
             if ( hero->Modes( Heroes::PATROL ) ) {
@@ -691,14 +684,14 @@ namespace AI
             assert( 0 );
             return -dangerousTaskPenalty;
         }
-        else if ( objectType == MP2::OBJ_MAGICWELL ) {
+        else if ( objectType == MP2::OBJ_MAGICWELL || objectType == MP2::OBJ_ARTESIANSPRING ) {
             if ( !hero.HaveSpellBook() ) {
                 return -dangerousTaskPenalty;
             }
             if ( hero.GetSpellPoints() * 2 >= hero.GetMaxSpellPoints() ) {
                 return -2000; // no reason to visit the well with no magic book or with half of points
             }
-            return 0;
+            return hero.isPotentSpellcaster() ? 1500 : 0;
         }
         else if ( objectType == MP2::OBJ_TEMPLE ) {
             if ( hero.GetArmy().AllTroopsAreUndead() ) {
@@ -930,14 +923,14 @@ namespace AI
             assert( 0 );
             return -dangerousTaskPenalty;
         }
-        else if ( objectType == MP2::OBJ_MAGICWELL ) {
+        else if ( objectType == MP2::OBJ_MAGICWELL || objectType == MP2::OBJ_ARTESIANSPRING ) {
             if ( !hero.HaveSpellBook() ) {
                 return -dangerousTaskPenalty;
             }
             if ( hero.GetSpellPoints() * 2 >= hero.GetMaxSpellPoints() ) {
                 return -2000; // no reason to visit the well with no magic book or with half of points
             }
-            return 350.0;
+            return hero.isPotentSpellcaster() ? 2500 : 0;
         }
         else if ( objectType == MP2::OBJ_TEMPLE ) {
             if ( hero.GetArmy().AllTroopsAreUndead() ) {
@@ -1055,10 +1048,11 @@ namespace AI
         return 0;
     }
 
-    int AI::Normal::getPriorityTarget( const Heroes & hero, double & maxPriority, int patrolIndex, uint32_t distanceLimit )
+    int AI::Normal::getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority )
     {
+        const Heroes & hero = *heroInfo.hero;
         const double lowestPossibleValue = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
-        const bool heroInPatrolMode = patrolIndex != -1;
+        const bool heroInPatrolMode = heroInfo.patrolCenter != -1;
         const double heroStrength = hero.GetArmy().GetStrength();
 
         int priorityTarget = -1;
@@ -1079,11 +1073,17 @@ namespace AI
             const IndexObject & node = _mapObjects[idx];
 
             // Skip if hero in patrol mode and object outside of reach
-            if ( heroInPatrolMode && Maps::GetApproximateDistance( node.first, patrolIndex ) > distanceLimit )
+            if ( heroInPatrolMode && Maps::GetApproximateDistance( node.first, heroInfo.patrolCenter ) > heroInfo.patrolDistance )
                 continue;
 
             if ( objectValidator.isValid( node.first ) ) {
                 uint32_t dist = _pathfinder.getDistance( node.first );
+
+                const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, node.first ) );
+                if ( dimensionDoorDist && ( !dist || dimensionDoorDist < dist / 2 ) ) {
+                    dist = dimensionDoorDist;
+                }
+
                 if ( dist == 0 )
                     continue;
 
@@ -1126,18 +1126,18 @@ namespace AI
 
                     DEBUG_LOG( DBG_AI, DBG_TRACE,
                                hero.GetName() << ": valid object at " << node.first << " value is " << value << " ("
-                                              << MP2::StringObject( static_cast<MP2::MapObjectType>( node.second ) ) << ")" );
+                                              << MP2::StringObject( static_cast<MP2::MapObjectType>( node.second ) ) << ")" )
                 }
             }
         }
 
         if ( priorityTarget != -1 ) {
             DEBUG_LOG( DBG_AI, DBG_INFO,
-                       hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" );
+                       hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" )
         }
         else if ( !heroInPatrolMode ) {
             priorityTarget = _pathfinder.getFogDiscoveryTile( hero );
-            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget );
+            DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget )
         }
 
         return priorityTarget;
@@ -1177,7 +1177,7 @@ namespace AI
             while ( true ) {
                 for ( const HeroToMove & heroInfo : availableHeroes ) {
                     double priority = -1;
-                    const int targetIndex = getPriorityTarget( *heroInfo.hero, priority, heroInfo.patrolCenter, heroInfo.patrolDistance );
+                    const int targetIndex = getPriorityTarget( heroInfo, priority );
                     if ( targetIndex != -1 && ( priority > maxPriority || bestTargetIndex == -1 ) ) {
                         maxPriority = priority;
                         bestTargetIndex = targetIndex;
@@ -1195,6 +1195,7 @@ namespace AI
                 for ( int i = 0; i < monsterStrengthMultiplierCount; ++i ) {
                     if ( currentMonsterStrengthMultiplier > monsterStrengthMultipliers[i] ) {
                         _pathfinder.setArmyStrengthMultiplier( bestHero->isLosingGame() ? ARMY_ADVANTAGE_DESPERATE : monsterStrengthMultipliers[i] );
+                        _pathfinder.setSpellPointReserve( 0 );
                         setNewMultiplier = true;
                         break;
                     }
@@ -1222,7 +1223,7 @@ namespace AI
                         bestTargetIndex = targetIndex;
                         bestHero = heroInfo.hero;
 
-                        DEBUG_LOG( DBG_AI, DBG_INFO, bestHero->GetName() << " may be blocking the way. Moving to " << bestTargetIndex );
+                        DEBUG_LOG( DBG_AI, DBG_INFO, bestHero->GetName() << " may be blocking the way. Moving to " << bestTargetIndex )
 
                         break;
                     }
@@ -1235,12 +1236,21 @@ namespace AI
                 }
             }
 
-            _pathfinder.reEvaluateIfNeeded( *bestHero );
-            bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );
-
             const size_t heroesBefore = heroes.size();
+            _pathfinder.reEvaluateIfNeeded( *bestHero );
 
-            HeroesMove( *bestHero );
+            // check if we want to use Dimension Door spell or move regularly
+            const std::list<Route::Step> & dimensionPath = _pathfinder.getDimensionDoorPath( *bestHero, bestTargetIndex );
+            const uint32_t dimensionDoorDistance = AIWorldPathfinder::calculatePathPenalty( dimensionPath );
+            const uint32_t moveDistance = _pathfinder.getDistance( bestTargetIndex );
+            if ( dimensionDoorDistance && ( !moveDistance || dimensionDoorDistance < moveDistance / 2 ) ) {
+                HeroesCastDimensionDoor( *bestHero, dimensionPath.front().GetIndex() );
+            }
+            else {
+                bestHero->GetPath().setPath( _pathfinder.buildPath( bestTargetIndex ), bestTargetIndex );
+
+                HeroesMove( *bestHero );
+            }
 
             if ( heroes.size() > heroesBefore ) {
                 addHeroToMove( heroes.back(), availableHeroes );
@@ -1257,6 +1267,7 @@ namespace AI
             }
 
             _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
+            _pathfinder.setSpellPointReserve( 0.5 );
         }
 
         const bool allHeroesMoved = availableHeroes.empty();
@@ -1268,6 +1279,7 @@ namespace AI
         }
 
         _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
+        _pathfinder.setSpellPointReserve( 0.5 );
 
         return allHeroesMoved;
     }

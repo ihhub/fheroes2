@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -57,7 +57,7 @@ namespace fheroes2
             break;
         default:
             assert( 0 );
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown race" );
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown race" )
         }
 
         const Sprite & castleImage = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::LOCATORE : ICN::LOCATORS, icnIndex );

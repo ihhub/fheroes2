@@ -109,7 +109,7 @@ bool World::LoadMapMP2( const std::string & filename )
 
     StreamFile fs;
     if ( !fs.open( filename, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME | DBG_ENGINE, DBG_WARN, "file not found " << filename.c_str() );
+        DEBUG_LOG( DBG_GAME | DBG_ENGINE, DBG_WARN, "file not found " << filename.c_str() )
         return false;
     }
 
@@ -166,7 +166,7 @@ bool World::LoadMapMP2( const std::string & filename )
     }
 
     if ( width == 0 || height == 0 || width != height ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "incrrect maps size" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "incrrect maps size" )
         return false;
     }
 
@@ -183,7 +183,7 @@ bool World::LoadMapMP2( const std::string & filename )
     }
 
     const size_t endof_addons = fs.tell();
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "read all tiles addons, tellg: " << endof_addons );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "read all tiles addons, tellg: " << endof_addons )
 
     // offset data
     fs.seek( MP2::MP2OFFSETDATA );
@@ -211,7 +211,7 @@ bool World::LoadMapMP2( const std::string & filename )
         size_t addonIndex = mp2tile.nextAddonIndex;
         while ( addonIndex > 0 ) {
             if ( vec_mp2addons.size() <= addonIndex ) {
-                DEBUG_LOG( DBG_GAME, DBG_WARN, "index out of range" );
+                DEBUG_LOG( DBG_GAME, DBG_WARN, "index out of range" )
                 break;
             }
             tile.AddonsPushLevel1( vec_mp2addons[addonIndex] );
@@ -238,7 +238,7 @@ bool World::LoadMapMP2( const std::string & filename )
         }
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "read all tiles, tellg: " << fs.tell() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "read all tiles, tellg: " << fs.tell() )
 
     // after addons
     fs.seek( endof_addons );
@@ -293,14 +293,14 @@ bool World::LoadMapMP2( const std::string & filename )
         default:
             DEBUG_LOG( DBG_GAME, DBG_WARN,
                        "castle block: "
-                           << "unknown id: " << id << ", maps index: " << cx + cy * width );
+                           << "unknown id: " << id << ", maps index: " << cx + cy * width )
             break;
         }
         // preload in to capture objects cache
         map_captureobj.Set( Maps::GetIndexFromAbsPoint( cx, cy ), MP2::OBJ_CASTLE, Color::NONE );
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "read coord castles, tellg: " << fs.tell() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "read coord castles, tellg: " << fs.tell() )
     fs.seek( endof_addons + ( 72 * 3 ) );
 
     // cood resource kingdoms
@@ -350,12 +350,12 @@ bool World::LoadMapMP2( const std::string & filename )
         default:
             DEBUG_LOG( DBG_GAME, DBG_WARN,
                        "kingdom block: "
-                           << "unknown id: " << id << ", maps index: " << cx + cy * width );
+                           << "unknown id: " << id << ", maps index: " << cx + cy * width )
             break;
         }
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "read coord other resource, tellg: " << fs.tell() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "read coord other resource, tellg: " << fs.tell() )
     fs.seek( endof_addons + ( 72 * 3 ) + ( 144 * 3 ) );
 
     // byte: num obelisks (01 default)
@@ -403,7 +403,7 @@ bool World::LoadMapMP2( const std::string & filename )
                 if ( MP2::SIZEOFMP2CASTLE != pblock.size() ) {
                     DEBUG_LOG( DBG_GAME, DBG_WARN,
                                "read castle: "
-                                   << "incorrect size block: " << pblock.size() );
+                                   << "incorrect size block: " << pblock.size() )
                 }
                 else {
                     Castle * castle = getCastleEntrance( Maps::GetPoint( findobject ) );
@@ -414,7 +414,7 @@ bool World::LoadMapMP2( const std::string & filename )
                     else {
                         DEBUG_LOG( DBG_GAME, DBG_WARN,
                                    "load castle: "
-                                       << "not found, index: " << findobject );
+                                       << "not found, index: " << findobject )
                     }
                 }
                 break;
@@ -424,7 +424,7 @@ bool World::LoadMapMP2( const std::string & filename )
                 if ( MP2::SIZEOFMP2CASTLE != pblock.size() ) {
                     DEBUG_LOG( DBG_GAME, DBG_WARN,
                                "read castle: "
-                                   << "incorrect size block: " << pblock.size() );
+                                   << "incorrect size block: " << pblock.size() )
                 }
                 else {
                     // Random castle's entrance tile is marked as OBJ_RNDCASTLE or OBJ_RNDTOWN instead of OBJ_CASTLE.
@@ -438,7 +438,7 @@ bool World::LoadMapMP2( const std::string & filename )
                     else {
                         DEBUG_LOG( DBG_GAME, DBG_WARN,
                                    "load castle: "
-                                       << "not found, index: " << findobject );
+                                       << "not found, index: " << findobject )
                     }
                 }
                 break;
@@ -447,7 +447,7 @@ bool World::LoadMapMP2( const std::string & filename )
                 if ( MP2::SIZEOFMP2HEROES != pblock.size() ) {
                     DEBUG_LOG( DBG_GAME, DBG_WARN,
                                "read heroes: "
-                                   << "incorrect size block: " << pblock.size() );
+                                   << "incorrect size block: " << pblock.size() )
                 }
                 else {
                     int race = Race::KNGT;
@@ -484,7 +484,7 @@ bool World::LoadMapMP2( const std::string & filename )
                 if ( MP2::SIZEOFMP2HEROES != pblock.size() ) {
                     DEBUG_LOG( DBG_GAME, DBG_WARN,
                                "read heroes: "
-                                   << "incorrect size block: " << pblock.size() );
+                                   << "incorrect size block: " << pblock.size() )
                 }
                 else {
                     std::pair<int, int> colorRace = Maps::Tiles::ColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
@@ -507,7 +507,7 @@ bool World::LoadMapMP2( const std::string & filename )
                             hero->LoadFromMP2( findobject, colorRace.first, colorRace.second, StreamBuf( pblock ) );
                     }
                     else {
-                        DEBUG_LOG( DBG_GAME, DBG_WARN, "load heroes maximum" );
+                        DEBUG_LOG( DBG_GAME, DBG_WARN, "load heroes maximum" )
                     }
                 }
                 break;
@@ -551,13 +551,13 @@ bool World::LoadMapMP2( const std::string & filename )
             else if ( MP2::SIZEOFMP2RUMOR - 1 < pblock.size() ) {
                 if ( pblock[8] ) {
                     _rumors.emplace_back( StreamBuf( &pblock[8], pblock.size() - 8 ).toString() );
-                    DEBUG_LOG( DBG_GAME, DBG_INFO, "add rumors: " << _rumors.back() );
+                    DEBUG_LOG( DBG_GAME, DBG_INFO, "add rumors: " << _rumors.back() )
                 }
             }
         }
         // debug
         else {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "read maps: unknown block addons, size: " << pblock.size() );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "read maps: unknown block addons, size: " << pblock.size() )
         }
     }
 
@@ -577,7 +577,7 @@ bool World::LoadMapMP2( const std::string & filename )
 
     ProcessNewMap();
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "end load" );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "end load" )
     return true;
 }
 

@@ -153,7 +153,7 @@ namespace AI
                 for ( size_t idx = batchStart; idx < batchEnd; ++idx ) {
                     const size_t regionID = regionsToCheck[idx].first;
                     _regions[regionID].safetyFactor = regionsToCheck[idx].second;
-                    DEBUG_LOG( DBG_AI, DBG_TRACE, "Region " << regionID << " safety factor is " << _regions[regionID].safetyFactor );
+                    DEBUG_LOG( DBG_AI, DBG_TRACE, "Region " << regionID << " safety factor is " << _regions[regionID].safetyFactor )
                 }
                 batchStart = batchEnd;
                 batchEnd = regionsToCheck.size();
@@ -237,10 +237,29 @@ namespace AI
         KingdomHeroes & heroes = kingdom.GetHeroes();
         const KingdomCastles & castles = kingdom.GetCastles();
 
-        DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( myColor ) << " starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" );
-        DEBUG_LOG( DBG_AI, DBG_TRACE, "Funds: " << kingdom.GetFunds().String() );
+        DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( myColor ) << " starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" )
+        DEBUG_LOG( DBG_AI, DBG_TRACE, "Funds: " << kingdom.GetFunds().String() )
 
         // Step 1. Scan visible map (based on game difficulty), add goals and threats
+        bool underViewSpell = false;
+        int32_t availableHeroCount = 0;
+        Heroes * bestHeroToViewAll = nullptr;
+
+        for ( Heroes * hero : heroes ) {
+            const double strength = hero->GetArmy().GetStrength();
+            _combinedHeroStrength += strength;
+            if ( !hero->Modes( Heroes::PATROL ) )
+                ++availableHeroCount;
+
+            if ( hero->HaveSpell( Spell::VIEWALL ) && ( !bestHeroToViewAll || hero->HasSecondarySkill( Skill::Secondary::MYSTICISM ) ) ) {
+                bestHeroToViewAll = hero;
+            }
+        }
+
+        if ( bestHeroToViewAll && HeroesCastAdventureSpell( *bestHeroToViewAll, Spell::VIEWALL ) ) {
+            underViewSpell = true;
+        }
+
         std::vector<std::pair<int, const Army *>> enemyArmies;
 
         const int mapSize = world.w() * world.h();
@@ -260,71 +279,72 @@ namespace AI
             }
 
             RegionStats & stats = _regions[regionID];
-            if ( objectType != MP2::OBJ_COAST )
-                stats.validObjects.emplace_back( idx, objectType );
+            if ( !underViewSpell && tile.isFog( myColor ) ) {
+                ++stats.fogCount;
+                continue;
+            }
 
-            if ( !tile.isFog( myColor ) ) {
-                _mapObjects.emplace_back( idx, objectType );
+            if ( objectType == MP2::OBJ_ZERO || objectType == MP2::OBJ_COAST )
+                continue;
 
-                const int tileColor = tile.QuantityColor();
-                if ( objectType == MP2::OBJ_HEROES ) {
-                    const Heroes * hero = tile.GetHeroes();
-                    if ( !hero )
+            stats.validObjects.emplace_back( idx, objectType );
+            _mapObjects.emplace_back( idx, objectType );
+
+            if ( objectType == MP2::OBJ_HEROES ) {
+                const Heroes * hero = tile.GetHeroes();
+                if ( !hero )
+                    continue;
+
+                if ( hero->GetColor() == myColor && !hero->Modes( Heroes::PATROL ) ) {
+                    ++stats.friendlyHeroes;
+
+                    const int wisdomLevel = hero->GetLevelSkill( Skill::Secondary::WISDOM );
+                    if ( wisdomLevel + 2 > stats.spellLevel )
+                        stats.spellLevel = wisdomLevel + 2;
+                }
+                else if ( !Players::isFriends( myColor, hero->GetColor() ) ) {
+                    const Army & heroArmy = hero->GetArmy();
+                    enemyArmies.emplace_back( idx, &heroArmy );
+
+                    const double heroThreat = heroArmy.GetStrength();
+                    if ( stats.highestThreat < heroThreat ) {
+                        stats.highestThreat = heroThreat;
+                    }
+                }
+                // check object underneath the hero as well (maybe a castle)
+                objectType = tile.GetObject( false );
+            }
+
+            const int tileColor = tile.QuantityColor();
+            if ( objectType == MP2::OBJ_CASTLE ) {
+                if ( myColor == tileColor || Players::isFriends( myColor, tileColor ) ) {
+                    ++stats.friendlyCastles;
+                }
+                else if ( tileColor != Color::NONE ) {
+                    ++stats.enemyCastles;
+
+                    const Castle * castle = world.getCastleEntrance( Maps::GetPoint( idx ) );
+                    if ( !castle )
                         continue;
 
-                    if ( hero->GetColor() == myColor && !hero->Modes( Heroes::PATROL ) ) {
-                        ++stats.friendlyHeroes;
+                    const Army & castleArmy = castle->GetArmy();
+                    enemyArmies.emplace_back( idx, &castleArmy );
 
-                        const int wisdomLevel = hero->GetLevelSkill( Skill::Secondary::WISDOM );
-                        if ( wisdomLevel + 2 > stats.spellLevel )
-                            stats.spellLevel = wisdomLevel + 2;
+                    const double castleThreat = castleArmy.GetStrength();
+                    if ( stats.highestThreat < castleThreat ) {
+                        stats.highestThreat = castleThreat;
                     }
-                    else if ( !Players::isFriends( myColor, hero->GetColor() ) ) {
-                        const Army & heroArmy = hero->GetArmy();
-                        enemyArmies.emplace_back( idx, &heroArmy );
-
-                        const double heroThreat = heroArmy.GetStrength();
-                        if ( stats.highestThreat < heroThreat ) {
-                            stats.highestThreat = heroThreat;
-                        }
-                    }
-                    // check object underneath the hero as well (maybe a castle)
-                    objectType = tile.GetObject( false );
-                }
-
-                if ( objectType == MP2::OBJ_CASTLE ) {
-                    if ( myColor == tileColor || Players::isFriends( myColor, tileColor ) ) {
-                        ++stats.friendlyCastles;
-                    }
-                    else if ( tileColor != Color::NONE ) {
-                        ++stats.enemyCastles;
-
-                        const Castle * castle = world.getCastleEntrance( Maps::GetPoint( idx ) );
-                        if ( !castle )
-                            continue;
-
-                        const Army & castleArmy = castle->GetArmy();
-                        enemyArmies.emplace_back( idx, &castleArmy );
-
-                        const double castleThreat = castleArmy.GetStrength();
-                        if ( stats.highestThreat < castleThreat ) {
-                            stats.highestThreat = castleThreat;
-                        }
-                    }
-                }
-                else if ( objectType == MP2::OBJ_MONSTER ) {
-                    stats.averageMonster += Army( tile ).GetStrength();
-                    ++stats.monsterCount;
                 }
             }
-            else {
-                ++stats.fogCount;
+            else if ( objectType == MP2::OBJ_MONSTER ) {
+                stats.averageMonster += Army( tile ).GetStrength();
+                ++stats.monsterCount;
             }
         }
 
         evaluateRegionSafety();
 
-        DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapObjects.size() << " valid objects" );
+        DEBUG_LOG( DBG_AI, DBG_TRACE, Color::String( myColor ) << " found " << _mapObjects.size() << " valid objects" )
 
         status.RedrawTurnProgress( 1 );
 
@@ -333,22 +353,13 @@ namespace AI
         std::vector<AICastle> sortedCastleList;
         std::set<int> castlesInDanger;
         while ( true ) {
-            // Step 2. Update AI variables and recalculate resource budget
-            int32_t availableHeroCount = 0;
-
-            for ( Heroes * hero : heroes ) {
-                _combinedHeroStrength += hero->GetArmy().GetStrength();
-                if ( !hero->Modes( Heroes::PATROL ) )
-                    ++availableHeroCount;
-            }
-
-            // Step 3. Do some hero stuff.
+            // Step 2. Do some hero stuff.
             // If a hero is standing in a castle most likely he has nothing to do so let's try to give him more army.
             for ( Heroes * hero : heroes ) {
                 HeroesActionComplete( *hero );
             }
 
-            // Step 4. Reassign heroes roles
+            // Step 3. Reassign heroes roles
             setHeroRoles( heroes );
 
             if ( progressStatus == 6 ) {
@@ -371,7 +382,7 @@ namespace AI
 
             const bool moreTaskForHeroes = HeroesTurn( heroes );
 
-            // Step 5. Buy new heroes, adjust roles, sort heroes based on priority or strength
+            // Step 4. Buy new heroes, adjust roles, sort heroes based on priority or strength
             if ( !purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {
                 break;
             }
@@ -385,7 +396,7 @@ namespace AI
             sortedCastleList = getSortedCastleList( castles, castlesInDanger );
         }
 
-        // Step 6. Castle development according to kingdom budget
+        // Step 5. Castle development according to kingdom budget
         for ( const AICastle & entry : sortedCastleList ) {
             if ( entry.castle != nullptr ) {
                 CastleTurn( *entry.castle, entry.underThreat );

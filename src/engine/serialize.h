@@ -166,7 +166,7 @@ public:
         for ( u32 ii = 0; ii < size; ++ii ) {
             std::pair<Type1, Type2> pr;
             *this >> pr;
-            v.insert( pr );
+            v.emplace( std::move( pr ) );
         }
         return *this;
     }

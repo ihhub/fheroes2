@@ -306,6 +306,7 @@
     <ClCompile Include="src\fheroes2\gui\ui_base.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_button.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_dialog.cpp" />
+	<ClCompile Include="src\fheroes2\gui\ui_font.cpp" />
 	<ClCompile Include="src\fheroes2\gui\ui_kingdom.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_language.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_scrollbar.cpp" />
@@ -367,6 +368,7 @@
     <ClCompile Include="src\fheroes2\objects\objxloc.cpp" />
     <ClCompile Include="src\fheroes2\objects\trees.cpp" />
     <ClCompile Include="src\fheroes2\resource\artifact.cpp" />
+    <ClCompile Include="src\fheroes2\resource\artifact_info.cpp" />
     <ClCompile Include="src\fheroes2\resource\artifact_ultimate.cpp" />
     <ClCompile Include="src\fheroes2\resource\resource.cpp" />
     <ClCompile Include="src\fheroes2\spell\spell.cpp" />
@@ -381,8 +383,6 @@
     <ClCompile Include="src\fheroes2\world\world_pathfinding.cpp" />
     <ClCompile Include="src\fheroes2\world\world_regions.cpp" />
     <ClCompile Include="src\thirdparty\libsmacker\smacker.c" />
-    <ClCompile Include="src\thirdparty\libsmacker\smk_bitstream.c" />
-    <ClCompile Include="src\thirdparty\libsmacker\smk_hufftree.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\agg_file.h" />
@@ -483,6 +483,7 @@
     <ClInclude Include="src\fheroes2\gui\ui_base.h" />
     <ClInclude Include="src\fheroes2\gui\ui_button.h" />
     <ClInclude Include="src\fheroes2\gui\ui_dialog.h" />
+	<ClInclude Include="src\fheroes2\gui\ui_font.h" />
 	<ClInclude Include="src\fheroes2\gui\ui_kingdom.h" />
     <ClInclude Include="src\fheroes2\gui\ui_language.h" />
     <ClInclude Include="src\fheroes2\gui\ui_scrollbar.h" />
@@ -540,6 +541,7 @@
     <ClInclude Include="src\fheroes2\objects\objxloc.h" />
     <ClInclude Include="src\fheroes2\objects\trees.h" />
     <ClInclude Include="src\fheroes2\resource\artifact.h" />
+    <ClInclude Include="src\fheroes2\resource\artifact_info.h" />
     <ClInclude Include="src\fheroes2\resource\artifact_ultimate.h" />
     <ClInclude Include="src\fheroes2\resource\resource.h" />
     <ClInclude Include="src\fheroes2\spell\spell.h" />
@@ -556,8 +558,6 @@
     <ClInclude Include="src\fheroes2\world\world_pathfinding.h" />
     <ClInclude Include="src\fheroes2\world\world_regions.h" />
     <ClInclude Include="src\thirdparty\libsmacker\smacker.h" />
-    <ClInclude Include="src\thirdparty\libsmacker\smk_bitstream.h" />
-    <ClInclude Include="src\thirdparty\libsmacker\smk_hufftree.h" />
     <ClInclude Include="src\thirdparty\libsmacker\smk_malloc.h" />
   </ItemGroup>
   <ItemGroup>

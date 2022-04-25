@@ -68,7 +68,7 @@ public:
         // UNUSED = 0x20000001,
         // UNUSED = 0x20000002,
         WORLD_ALLOW_SET_GUARDIAN = 0x20000008,
-        WORLD_ARTIFACT_CRYSTAL_BALL = 0x20000020,
+        // UNUSED = 0x20000020,
         WORLD_SCOUTING_EXTENDED = 0x20000040,
         // UNUSED = 0x20000080,
         // UNUSED = 0x20000100,
@@ -80,7 +80,7 @@ public:
         WORLD_SHOW_TERRAIN_PENALTY = 0x20004000,
         // UNUSED = 0x20008000,
         // UNUSED = 0x20010000,
-        HEROES_TRANSCRIBING_SCROLLS = 0x20020000,
+        // UNUSED = 0x20020000,
         // UNUSED = 0x20040000,
         CASTLE_ALLOW_GUARDIANS = 0x20080000,
         // UNUSED = 0x20800000,
@@ -92,9 +92,9 @@ public:
         WORLD_SCALE_NEUTRAL_ARMIES = 0x30000020,
         HEROES_ARENA_ANY_SKILLS = 0x30000080,
         // UNUSED = 0x30000100,
-        WORLD_USE_UNIQUE_ARTIFACTS_RS = 0x30000200,
-        WORLD_USE_UNIQUE_ARTIFACTS_PS = 0x30000400,
-        WORLD_USE_UNIQUE_ARTIFACTS_SS = 0x30000800,
+        // UNUSED = 0x30000200,
+        // UNUSED = 0x30000400,
+        // UNUSED = 0x30000800,
         // UNUSED = 0x30001000,
         WORLD_EXT_OBJECTS_CAPTURED = 0x30004000,
         // UNUSED = 0x30008000,
@@ -102,7 +102,7 @@ public:
         // UNUSED = 0x40004000,
         BATTLE_DETERMINISTIC_RESULT = 0x40008000,
         BATTLE_SOFT_WAITING = 0x40010000,
-        BATTLE_REVERSE_WAIT_ORDER = 0x40020000
+        // UNUSED = 0x40020000
     };
 
     Settings( const Settings & ) = delete;
@@ -240,9 +240,6 @@ public:
     bool isFirstGameRun() const;
     void resetFirstGameRun();
 
-    void BinarySave() const;
-    void BinaryLoad();
-
     bool CanChangeInGame( u32 ) const;
     bool ExtModes( u32 ) const;
     void ExtSetModes( u32 );
@@ -257,11 +254,6 @@ public:
     bool ExtHeroRememberPointsForRetreating() const
     {
         return ExtModes( HEROES_REMEMBER_POINTS_RETREAT );
-    }
-
-    bool ExtHeroAllowTranscribingScroll() const
-    {
-        return ExtModes( HEROES_TRANSCRIBING_SCROLLS );
     }
 
     bool ExtHeroArenaCanChoiseAnySkills() const
@@ -284,29 +276,9 @@ public:
         return ExtModes( WORLD_ALLOW_SET_GUARDIAN );
     }
 
-    bool ExtWorldArtifactCrystalBall() const
-    {
-        return ExtModes( WORLD_ARTIFACT_CRYSTAL_BALL );
-    }
-
     bool ExtWorldNeutralArmyDifficultyScaling() const
     {
         return ExtModes( WORLD_SCALE_NEUTRAL_ARMIES );
-    }
-
-    bool ExtWorldUseUniqueArtifactsRS() const
-    {
-        return ExtModes( WORLD_USE_UNIQUE_ARTIFACTS_RS );
-    }
-
-    bool ExtWorldUseUniqueArtifactsPS() const
-    {
-        return ExtModes( WORLD_USE_UNIQUE_ARTIFACTS_PS );
-    }
-
-    bool ExtWorldUseUniqueArtifactsSS() const
-    {
-        return ExtModes( WORLD_USE_UNIQUE_ARTIFACTS_SS );
     }
 
     bool ExtWorldExtObjectsCaptured() const
@@ -332,11 +304,6 @@ public:
     bool ExtBattleDeterministicResult() const
     {
         return ExtModes( BATTLE_DETERMINISTIC_RESULT );
-    }
-
-    bool ExtBattleReverseWaitOrder() const
-    {
-        return ExtModes( BATTLE_REVERSE_WAIT_ORDER );
     }
 
     bool ExtGameRememberLastFocus() const
@@ -586,15 +553,15 @@ public:
 
     static std::string GetLastFile( const std::string & prefix, const std::string & name );
 
-protected:
-    void PostLoad();
-
 private:
     friend StreamBase & operator<<( StreamBase &, const Settings & );
     friend StreamBase & operator>>( StreamBase &, Settings & );
 
     Settings();
     ~Settings();
+
+    void BinarySave() const;
+    void BinaryLoad();
 
     BitModes opt_global;
     BitModes opt_game;

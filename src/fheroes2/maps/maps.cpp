@@ -410,6 +410,12 @@ Maps::Indexes Maps::GetFreeIndexesAroundTile( const int32_t center )
     return results;
 }
 
+bool Maps::isValidForDimensionDoor( int32_t targetIndex, bool isWater )
+{
+    const Maps::Tiles & tile = world.GetTiles( targetIndex );
+    return ( tile.GetPassable() & Direction::CENTER ) != 0 && isWater == tile.isWater() && !MP2::isActionObject( tile.GetObject( true ) );
+}
+
 Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType )
 {
     Indexes results = getAroundIndexes( center );
@@ -536,7 +542,7 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
     if ( isRandom && ( objectType != MP2::OBJ_RNDCASTLE && objectType != MP2::OBJ_RNDTOWN ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN,
                    "incorrect object"
-                       << ", index: " << GetIndexFromAbsPoint( center.x, center.y ) );
+                       << ", index: " << GetIndexFromAbsPoint( center.x, center.y ) )
         return;
     }
 

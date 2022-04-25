@@ -141,15 +141,15 @@ namespace
 
     bool IsSplitHotkeyUsed( ArmyTroop & troopFrom, Army * armyTarget )
     {
-        if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_CTRL ) ) {
+        if ( Game::HotKeyHoldEvent( Game::EVENT_SPLIT_STACK_BY_ONE ) ) {
             RedistributeTroopByOne( troopFrom, armyTarget );
             return true;
         }
-        else if ( Game::HotKeyHoldEvent( Game::EVENT_JOINSTACKS ) ) {
+        else if ( Game::HotKeyHoldEvent( Game::EVENT_JOIN_STACKS ) ) {
             armyTarget->JoinAllTroopsOfType( troopFrom );
             return true;
         }
-        else if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
+        else if ( Game::HotKeyHoldEvent( Game::EVENT_SPLIT_STACK_BY_HALF ) ) {
             RedistributeTroopEvenly( troopFrom, armyTarget );
             return true;
         }
@@ -382,7 +382,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
         const bool isSameTroopType = troop.isValid() && troop.GetID() == selectedTroop->GetID();
 
         // prioritize standard split via shift hotkey
-        if ( ( !troop.isValid() || isSameTroopType ) && Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
+        if ( ( !troop.isValid() || isSameTroopType ) && Game::HotKeyHoldEvent( Game::EVENT_SPLIT_STACK_BY_HALF ) ) {
             RedistributeArmy( *selectedTroop, troop, _army );
             ResetSelected();
         }
@@ -398,7 +398,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
         // exchange
         else if ( selectedTroop ) {
             // count this as an attempt to split to a troop type that is not the same
-            if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) )
+            if ( Game::HotKeyHoldEvent( Game::EVENT_SPLIT_STACK_BY_HALF ) )
                 ResetSelected();
             else if ( IsSplitHotkeyUsed( troop, _army ) )
                 return false;
@@ -468,7 +468,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
 
     // specifically for shift hotkey, handle this logic before anything else
     // this will ensure that clicking on a different troop type while shift key is pressed will not show the split dialogue, which can be ambiguous
-    if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
+    if ( Game::HotKeyHoldEvent( Game::EVENT_SPLIT_STACK_BY_HALF ) ) {
         if ( destTroop.isEmpty() || isSameTroopType ) {
             RedistributeArmy( selectedTroop, destTroop, _army );
             ResetSelected();

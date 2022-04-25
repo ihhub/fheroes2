@@ -154,7 +154,7 @@ namespace Dialog
         resList.setScrollBarArea( { roi.x + 328, roi.y + 73, 12, 180 } );
         resList.setScrollBarImage( scrollbarSlider );
         resList.SetAreaMaxItems( 11 );
-        resList.SetAreaItems( fheroes2::Rect( roi.x + 41, roi.y + 55 + 3, editBoxLength, 215 ) );
+        resList.SetAreaItems( { roi.x + 41, roi.y + 55 + 3, editBoxLength, 215 } );
 
         resList.SetListContent( resolutions );
 

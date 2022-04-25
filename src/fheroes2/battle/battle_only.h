@@ -64,13 +64,15 @@ namespace Battle
 
         Only & operator=( const Only & ) = delete;
 
-        bool ChangeSettings( void );
-        void RedrawBaseInfo( const fheroes2::Point & ) const;
-        void StartBattle( void );
-        void UpdateHero1( const fheroes2::Point & );
-        void UpdateHero2( const fheroes2::Point & );
+        bool ChangeSettings();
+        void StartBattle();
 
     private:
+        void RedrawBaseInfo( const fheroes2::Point & top ) const;
+
+        void UpdateHero1( const fheroes2::Point & cur_pt );
+        void UpdateHero2( const fheroes2::Point & cur_pt );
+
         Heroes * hero1;
         Heroes * hero2;
 

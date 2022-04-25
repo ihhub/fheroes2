@@ -721,7 +721,7 @@ fheroes2::Point Battle::OpponentSprite::GetCastPosition( void ) const
         break;
     }
 
-    return fheroes2::Point( pos.x + ( reflect ? offset.x : pos.width - offset.x ), pos.y + pos.height / 2 + offset.y );
+    return { pos.x + ( reflect ? offset.x : pos.width - offset.x ), pos.y + pos.height / 2 + offset.y };
 }
 
 void Battle::OpponentSprite::Redraw( fheroes2::Image & dst ) const
@@ -1503,7 +1503,7 @@ fheroes2::Point GetTroopPosition( const Battle::Unit & unit, const fheroes2::Spr
 
     const int32_t offsetY = rt.y + rt.height + sprite.y() + cellYOffset;
 
-    return fheroes2::Point( offsetX, offsetY );
+    return { offsetX, offsetY };
 }
 
 void Battle::Interface::RedrawTroopSprite( const Unit & unit )
@@ -1788,7 +1788,8 @@ void Battle::Interface::RedrawCover()
             if ( isApplicable ) {
                 const Unit * highlightedUnit = highlightCell->GetUnit();
 
-                isApplicable = highlightedUnit == nullptr || !humanturn_spell.isValid() || !highlightedUnit->isMagicResist( humanturn_spell, spellPower );
+                isApplicable
+                    = highlightedUnit == nullptr || !humanturn_spell.isValid() || !highlightedUnit->isMagicResist( humanturn_spell, spellPower, currentCommander );
             }
 
             if ( isApplicable ) {
@@ -2382,13 +2383,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     if ( le.KeyPress() ) {
         // skip
         if ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_HARDSKIP ) ) {
-            a.push_back( Command( CommandType::MSG_BATTLE_SKIP, b.GetUID(), true ) );
+            a.emplace_back( CommandType::MSG_BATTLE_SKIP, b.GetUID(), true );
             humanturn_exit = true;
         }
         else
             // soft skip
             if ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_SOFTSKIP ) ) {
-            a.push_back( Command( CommandType::MSG_BATTLE_SKIP, b.GetUID(), !conf.ExtBattleSoftWait() ) );
+            a.emplace_back( CommandType::MSG_BATTLE_SKIP, b.GetUID(), !conf.ExtBattleSoftWait() );
             humanturn_exit = true;
         }
         else
@@ -2420,14 +2421,14 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
                 // fast wins game
                 arena.GetResult().army1 = RESULT_WINS;
                 humanturn_exit = true;
-                a.push_back( Command( CommandType::MSG_BATTLE_END_TURN, b.GetUID() ) );
+                a.emplace_back( CommandType::MSG_BATTLE_END_TURN, b.GetUID() );
                 break;
 
             case KEY_l:
                 // fast loss game
                 arena.GetResult().army1 = RESULT_LOSS;
                 humanturn_exit = true;
-                a.push_back( Command( CommandType::MSG_BATTLE_END_TURN, b.GetUID() ) );
+                a.emplace_back( CommandType::MSG_BATTLE_END_TURN, b.GetUID() );
                 break;
 
             default:
@@ -2620,29 +2621,29 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
             if ( !Board::isValidIndex( index_pos ) ) {
                 DEBUG_LOG( DBG_BATTLE, DBG_WARN,
                            "dst: "
-                               << "out of range" );
+                               << "out of range" )
                 return;
             }
 
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, humanturn_spell.GetName() << ", dst: " << index_pos );
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, humanturn_spell.GetName() << ", dst: " << index_pos )
 
             if ( Cursor::SP_TELEPORT == cursor.Themes() ) {
                 if ( 0 > teleport_src )
                     teleport_src = index_pos;
                 else {
-                    a.push_back( Command( CommandType::MSG_BATTLE_CAST, Spell::TELEPORT, teleport_src, index_pos ) );
+                    a.emplace_back( CommandType::MSG_BATTLE_CAST, Spell::TELEPORT, teleport_src, index_pos );
                     humanturn_spell = Spell::NONE;
                     humanturn_exit = true;
                     teleport_src = -1;
                 }
             }
             else if ( Cursor::SP_MIRRORIMAGE == cursor.Themes() ) {
-                a.push_back( Command( CommandType::MSG_BATTLE_CAST, Spell::MIRRORIMAGE, index_pos ) );
+                a.emplace_back( CommandType::MSG_BATTLE_CAST, Spell::MIRRORIMAGE, index_pos );
                 humanturn_spell = Spell::NONE;
                 humanturn_exit = true;
             }
             else {
-                a.push_back( Command( CommandType::MSG_BATTLE_CAST, humanturn_spell.GetID(), index_pos ) );
+                a.emplace_back( CommandType::MSG_BATTLE_CAST, humanturn_spell.GetID(), index_pos );
                 humanturn_spell = Spell::NONE;
                 humanturn_exit = true;
             }
@@ -2701,16 +2702,12 @@ void Battle::Interface::EventShowOptions( void )
 
 void Battle::Interface::EventAutoSwitch( const Unit & b, Actions & a )
 {
-    btn_auto.drawOnPress();
-
     if ( arena.CanToggleAutoBattle() ) {
         a.emplace_back( CommandType::MSG_BATTLE_AUTO, b.GetColor() );
     }
 
     humanturn_redraw = true;
     humanturn_exit = true;
-
-    btn_auto.drawOnRelease();
 }
 
 void Battle::Interface::ButtonAutoAction( const Unit & b, Actions & a )
@@ -2742,7 +2739,7 @@ void Battle::Interface::ButtonWaitAction( Actions & a )
     le.MousePressLeft( btn_wait.area() ) ? btn_wait.drawOnPress() : btn_wait.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_wait.area() ) && _currentUnit ) {
-        a.push_back( Command( CommandType::MSG_BATTLE_SKIP, _currentUnit->GetUID(), false ) );
+        a.emplace_back( CommandType::MSG_BATTLE_SKIP, _currentUnit->GetUID(), false );
         humanturn_exit = true;
     }
 }
@@ -2754,7 +2751,7 @@ void Battle::Interface::ButtonSkipAction( Actions & a )
     le.MousePressLeft( btn_skip.area() ) ? btn_skip.drawOnPress() : btn_skip.drawOnRelease();
 
     if ( le.MouseClickLeft( btn_skip.area() ) && _currentUnit ) {
-        a.push_back( Command( CommandType::MSG_BATTLE_SKIP, _currentUnit->GetUID(), true ) );
+        a.emplace_back( CommandType::MSG_BATTLE_SKIP, _currentUnit->GetUID(), true );
         humanturn_exit = true;
     }
 }
@@ -2796,8 +2793,8 @@ void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell
         switch ( themes ) {
         case Cursor::WAR_FLY:
         case Cursor::WAR_MOVE:
-            a.push_back( Command( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), fixupDestinationCell( *_currentUnit, index, true ) ) );
-            a.push_back( Command( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
+            a.emplace_back( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), fixupDestinationCell( *_currentUnit, index, true ) );
+            a.emplace_back( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() );
             humanturn_exit = true;
             break;
 
@@ -2814,10 +2811,10 @@ void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell
                 const int32_t move = fixupDestinationCell( *_currentUnit, Board::GetIndexDirection( index, dir ), preferAttackFromHead( *_currentUnit, themes ) );
 
                 if ( _currentUnit->GetHeadIndex() != move ) {
-                    a.push_back( Command( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), move ) );
+                    a.emplace_back( CommandType::MSG_BATTLE_MOVE, _currentUnit->GetUID(), move );
                 }
-                a.push_back( Command( CommandType::MSG_BATTLE_ATTACK, _currentUnit->GetUID(), enemy->GetUID(), index, Board::GetReflectDirection( dir ) ) );
-                a.push_back( Command( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
+                a.emplace_back( CommandType::MSG_BATTLE_ATTACK, _currentUnit->GetUID(), enemy->GetUID(), index, Board::GetReflectDirection( dir ) );
+                a.emplace_back( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() );
                 humanturn_exit = true;
             }
             break;
@@ -2828,8 +2825,8 @@ void Battle::Interface::MouseLeftClickBoardAction( int themes, const Cell & cell
             const Unit * enemy = b;
 
             if ( enemy ) {
-                a.push_back( Command( CommandType::MSG_BATTLE_ATTACK, _currentUnit->GetUID(), enemy->GetUID(), index, 0 ) );
-                a.push_back( Command( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
+                a.emplace_back( CommandType::MSG_BATTLE_ATTACK, _currentUnit->GetUID(), enemy->GetUID(), index, 0 );
+                a.emplace_back( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() );
                 humanturn_exit = true;
             }
             break;
@@ -3025,7 +3022,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
             AnimateUnitWithDelay( attacker, Game::ApplyBattleSpeed( attacker.animation.getShootingSpeed() ) );
         }
 
-        const fheroes2::Point missileStart = fheroes2::Point( shooterPos.x + ( attacker.isReflect() ? -offset.x : offset.x ), shooterPos.y + offset.y );
+        const fheroes2::Point missileStart( shooterPos.x + ( attacker.isReflect() ? -offset.x : offset.x ), shooterPos.y + offset.y );
 
         // draw missile animation
         RedrawMissileAnimation( missileStart, targetPos, angle, attacker.GetID() );
@@ -4229,7 +4226,7 @@ void Battle::Interface::RedrawActionChainLightningSpell( const TargetsInfo & tar
 
     for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
         const fheroes2::Rect & pos = it->defender->GetRectPosition();
-        points.push_back( fheroes2::Point( pos.x + pos.width / 2, pos.y ) );
+        points.emplace_back( pos.x + pos.width / 2, pos.y );
     }
 
     RedrawLightningOnTargets( points, _surfaceInnerArea );
@@ -5009,7 +5006,7 @@ void Battle::Interface::RedrawBridgeAnimation( const bool bridgeDownAnimation )
         AGG::PlaySound( M82::DRAWBRG );
 }
 
-bool Battle::Interface::IdleTroopsAnimation( void )
+bool Battle::Interface::IdleTroopsAnimation() const
 {
     if ( Game::validateAnimationDelay( Game::BATTLE_IDLE_DELAY ) ) {
         const bool redrawNeeded = arena.GetForce1().animateIdleUnits();
@@ -5019,7 +5016,7 @@ bool Battle::Interface::IdleTroopsAnimation( void )
     return false;
 }
 
-void Battle::Interface::ResetIdleTroopAnimation( void )
+void Battle::Interface::ResetIdleTroopAnimation() const
 {
     arena.GetForce1().resetIdleAnimation();
     arena.GetForce2().resetIdleAnimation();
@@ -5084,7 +5081,7 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
                             Dialog::Message( "", msg, Font::BIG, Dialog::OK );
                         else if ( hero->CanCastSpell( spell, &error ) ) {
                             if ( spell.isApplyWithoutFocusObject() ) {
-                                a.push_back( Command( CommandType::MSG_BATTLE_CAST, spell.GetID(), -1 ) );
+                                a.emplace_back( CommandType::MSG_BATTLE_CAST, spell.GetID(), -1 );
                                 humanturn_redraw = true;
                                 humanturn_exit = true;
                             }
@@ -5106,8 +5103,8 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
     case 2: {
         if ( arena.CanRetreatOpponent( _currentUnit->GetCurrentOrArmyColor() ) ) {
             if ( Dialog::YES == Dialog::Message( "", _( "Are you sure you want to retreat?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
-                a.push_back( Command( CommandType::MSG_BATTLE_RETREAT ) );
-                a.push_back( Command( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
+                a.emplace_back( CommandType::MSG_BATTLE_RETREAT );
+                a.emplace_back( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() );
                 humanturn_exit = true;
             }
         }
@@ -5127,8 +5124,8 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
                 Kingdom & kingdom = world.GetKingdom( arena.GetCurrentColor() );
 
                 if ( DialogBattleSurrender( *enemy, cost, kingdom ) ) {
-                    a.push_back( Command( CommandType::MSG_BATTLE_SURRENDER ) );
-                    a.push_back( Command( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() ) );
+                    a.emplace_back( CommandType::MSG_BATTLE_SURRENDER );
+                    a.emplace_back( CommandType::MSG_BATTLE_END_TURN, _currentUnit->GetUID() );
                     humanturn_exit = true;
                 }
             }

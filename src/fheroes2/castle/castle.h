@@ -125,7 +125,7 @@ public:
 
     Castle & operator=( const Castle & ) = delete;
 
-    void LoadFromMP2( std::vector<uint8_t> & data );
+    void LoadFromMP2( const std::vector<uint8_t> & data );
 
     Captain & GetCaptain()
     {
@@ -203,7 +203,7 @@ public:
 
     void ActionNewDay();
     void ActionNewWeek();
-    void ActionNewMonth();
+    void ActionNewMonth() const;
 
     void ActionPreBattle( void );
     void ActionAfterBattle( bool attacker_wins );

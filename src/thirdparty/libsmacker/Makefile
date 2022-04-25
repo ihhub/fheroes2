@@ -24,10 +24,10 @@ TARGET	:= libsmacker
 
 all: $(TARGET).a
 
-$(TARGET).a: $(patsubst %.c, %.o, $(wildcard *.c)) 
+$(TARGET).a: smacker.o
 	$(AR) crvs $@ $^
 
-%.o: %.c
+smacker.o: smacker.c
 	$(CC) -c -MD $< $(CCFLAGS) $(CFLAGS)
 
 include $(wildcard *.d)

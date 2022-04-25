@@ -1273,7 +1273,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
 
         if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
-            ( *( redraw_cursor_func ) )( mouse_cu.x, mouse_cu.y );
+            ( *redraw_cursor_func )( mouse_cu.x, mouse_cu.y );
         }
 
         if ( event.type == SDL_FINGERDOWN ) {
@@ -1457,7 +1457,7 @@ void LocalEvent::ProcessControllerAxisMotion()
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
 
         if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
-            ( *( redraw_cursor_func ) )( mouse_cu.x, mouse_cu.y );
+            ( *redraw_cursor_func )( mouse_cu.x, mouse_cu.y );
         }
     }
 

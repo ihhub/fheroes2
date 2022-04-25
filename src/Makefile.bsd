@@ -20,4 +20,4 @@
 
 AR := ar
 CXX := g++
-LIBS := $(LIBS) -L/usr/local/lib
+LDFLAGS := $(LDFLAGS) -L/usr/local/lib

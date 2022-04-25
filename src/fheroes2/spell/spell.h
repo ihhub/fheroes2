@@ -33,7 +33,7 @@ class StreamBase;
 class Spell
 {
 public:
-    enum type_t
+    enum type_t : int32_t
     {
         NONE = 0,
         FIREBALL,
@@ -109,7 +109,10 @@ public:
         RANDOM4,
         RANDOM5,
 
-        STONE
+        STONE,
+
+        // IMPORTANT! Put all new spells above this line.
+        SPELL_COUNT
     };
 
     Spell( const int s = NONE )
@@ -141,8 +144,12 @@ public:
     const char * GetName( void ) const;
     const char * GetDescription( void ) const;
 
-    u32 SpellPoint( const HeroBase * hero = nullptr ) const;
-    u32 MovePoint( void ) const;
+    // Returns the number of spell points consumed/required by this spell
+    uint32_t spellPoints( const HeroBase * hero = nullptr ) const;
+    // Returns the number of movement points consumed by this spell
+    uint32_t movePoints() const;
+    // Returns the minimum number of movement points required to cast this spell
+    uint32_t minMovePoints() const;
     int Level( void ) const;
     u32 Damage( void ) const;
     u32 Restore( void ) const;

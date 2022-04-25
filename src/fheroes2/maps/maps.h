@@ -70,6 +70,7 @@ namespace Maps
     Indexes ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType, const bool ignoreHeroes );
     Indexes GetFreeIndexesAroundTile( const int32_t center );
 
+    bool isValidForDimensionDoor( int32_t targetIndex, bool isWater );
     // Checks if the tile is guarded by a monster
     bool isTileUnderProtection( const int32_t tileIndex );
     // Returns a list of indexes of tiles with monsters guarding the given tile

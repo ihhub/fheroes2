@@ -31,6 +31,6 @@ namespace Video
     // Returns true if the file exists.
     bool getVideoFilePath( const std::string & fileName, std::string & path );
 
-    // Returns 0 by default if roi is empty
-    int ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<fheroes2::Rect> & roi = std::vector<fheroes2::Rect>() );
+    // Returns false if the video is not present or it is corrupted.
+    bool ShowVideo( const std::string & fileName, const VideoAction action );
 }
