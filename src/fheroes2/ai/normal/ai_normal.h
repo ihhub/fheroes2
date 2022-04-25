@@ -156,8 +156,6 @@ namespace AI
         void CastleTurn( Castle & castle, bool defensive ) override;
         void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions ) override;
         bool HeroesTurn( VecHeroes & heroes ) override;
-        bool purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, int32_t availableHeroCount,
-                                bool moreTasksForHeroes );
 
         void revealFog( const Maps::Tiles & tile ) override;
 
@@ -182,8 +180,10 @@ namespace AI
         BattlePlanner _battlePlanner;
 
         double getHunterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
-
         double getFighterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
+
+        bool purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, int32_t availableHeroCount,
+                                bool moreTasksForHeroes );
     };
 }
 
