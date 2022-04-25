@@ -472,14 +472,11 @@ namespace fheroes2
                     Blit( GetICN( ICN::CAMPXTRG, 2 + i ), 75 - ( 8 * i ), 5, out, offsetXD + offsetXO + offsetXN + offsetXN + offsetXN - ( 2 * i ), offsetY, 23, 15 );
                     // Restore button ornament
                     Blit( GetICN( ICN::TRADPOST, 17 + i ), offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20, offsetY, out,
-                          offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20,
-                          offsetY, 1, 1 );
+                          offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20, offsetY, 1, 1 );
                     Blit( GetICN( ICN::TRADPOST, 17 + i ), offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21, offsetY + 1, out,
-                          offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21,
-                          offsetY + 1, 2, 3 );
+                          offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21, offsetY + 1, 2, 3 );
                     Blit( GetICN( ICN::TRADPOST, 17 + i ), offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20, offsetY, out,
-                          offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21,
-                          offsetY + 4, 1, 1 );
+                          offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21, offsetY + 4, 1, 1 );
                 }
                 break;
             case ICN::BTNGIFT_EVIL:
@@ -491,20 +488,58 @@ namespace fheroes2
                     // clean the button
                     Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0, false ) );
 
-                    // add 'D'
-                    Blit( GetICN( ICN::CPANEL, 4 + i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
+                    //// add 'D'
+                    //Blit( GetICN( ICN::CPANEL, 4 + i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
 
-                    // add 'O'
-                    Blit( GetICN( ICN::CAMPXTRG, i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
+                    //// add 'O'
+                    //Blit( GetICN( ICN::CAMPXTRG, i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
 
-                    // add 'N'
-                    Blit( GetICN( ICN::TRADPOST, 17 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
+                    //// add 'N'
+                    //Blit( GetICN( ICN::TRADPOST, 17 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
 
-                    // add 'N'
-                    Blit( GetICN( ICN::TRADPOST, 17 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
+                    //// add 'N'
+                    //Blit( GetICN( ICN::TRADPOST, 17 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
 
-                    // add 'ER'
-                    Blit( GetICN( ICN::CAMPXTRG, 2 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
+                    //// add 'ER'
+                    //Blit( GetICN( ICN::CAMPXTRG, 2 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
+
+                    const int32_t offsetY = 5;
+                    // Add 'D'
+                    const int32_t offsetXD = 14;
+                    Blit( GetICN( ICN::CPANELE, 4 + i ), 48 - i, 28 + i, out, offsetXD - i, offsetY + i, 10, 15 );
+                    // Clean up 'D' and restore button ornament
+                    Blit( GetICN( ICN::CPANELE, 4 + i ), 48 - i, 36, out, offsetXD - 1 - i, offsetY + 4 + i, 1, 1 );
+                    Blit( GetICN( ICN::CPANELE, 4 + i ), 48 - i, 35, out, offsetXD - i, offsetY + 9 + i, 1, 2 );
+                    Blit( GetICN( ICN::CPANELE, 4 + i ), 48 - i, 35, out, offsetXD - 1 - i, offsetY + 13 + i, 1, 1 );
+                    Fill( out, offsetXD + 9 - i, offsetY + 13 + i, 1, 1, getButtonFillingColor( i == 0, false ) );
+                    Blit( GetICN( ICN::TRADPOSE, 17 + i ), offsetXD, offsetY, out, offsetXD, offsetY, 1, 1 );
+                    // Add 'O'
+                    const int32_t offsetXO = 10;
+                    Blit( GetICN( ICN::CAMPXTRE, i ), 38 - ( 5 * i ), 5 + ( 1 * i ), out, offsetXD + offsetXO + 1 - i, offsetY + i, 13 - i, 15 );
+                    // Clean up 'DO'
+                    Blit( GetICN( ICN::CPANELE, 4 + i ), 51 - i, 34, out, offsetXD + offsetXO - i, offsetY + 5, 2, 2 );
+                    Blit( GetICN( ICN::CPANELE, 4 + i ), 51 - i, 34, out, offsetXD + offsetXO - i, offsetY + 7, 1, 1 + i );
+                    Blit( GetICN( ICN::CPANELE, 4 + i ), 55 - i, 28 + i, out, offsetXD + 9 - i, offsetY + 2 + i, 3, 3 );
+                    Fill( out, offsetXD + 11 - i, offsetY + i, 2, 2, getButtonFillingColor( i == 0, false ) );
+                    // Add 'N'
+                    const int32_t offsetXN = 13;
+                    Blit( GetICN( ICN::TRADPOSE, 17 + i ), 50 - i, 5, out, offsetXD + offsetXO + offsetXN - i, offsetY, 14, 15 );
+                    // Clean up 'ON'
+                    Fill( out, offsetXD + offsetXO + offsetXN, offsetY, 1, 1, getButtonFillingColor( i == 0, false ) );
+                    Fill( out, offsetXD + offsetXO + offsetXN - i, offsetY + 9, 1, 1, getButtonFillingColor( i == 0, false ) );
+                    // Add 'N'
+                    Blit( GetICN( ICN::TRADPOSE, 17 + i ), 50 - i, 5, out, offsetXD + 10 + offsetXN + offsetXN - i, offsetY, 14, 15 );
+                    // Clean up 'NN'
+                    Fill( out, offsetXD + offsetXO + offsetXN + offsetXN - i, offsetY + 9, 1, 1, getButtonFillingColor( i == 0, false ) );
+                    // Add 'ER'
+                    Blit( GetICN( ICN::CAMPXTRE, 2 + i ), 73 - ( 6 * i ), 5, out, offsetXD + offsetXO + offsetXN + offsetXN + offsetXN - ( 2 * i ), offsetY, 23, 15 );
+                    // Restore button ornament
+                    Blit( GetICN( ICN::TRADPOSE, 17 + i ), offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20, offsetY, out,
+                          offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20, offsetY, 1, 1 );
+                    Blit( GetICN( ICN::TRADPOSE, 17 + i ), offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21, offsetY + 1, out,
+                          offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21, offsetY + 1, 2, 3 );
+                    Blit( GetICN( ICN::TRADPOSE, 17 + i ), offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20, offsetY, out,
+                          offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21, offsetY + 4, 1, 1 );
                 }
                 break;
 
