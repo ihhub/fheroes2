@@ -500,7 +500,7 @@ namespace fheroes2
                     Fill( out, offsetXD + 9 - i, offsetY + i, 1, 1, getButtonFillingColor( i == 0, false ) );
                     // Add 'O'
                     const int32_t offsetXO = 10;
-                    Blit( GetICN( ICN::APANELE, 4 + i ), 50 - ( 1 * i ), 20 + ( 1 * i ), out, offsetXD + offsetXO + 1 - i, offsetY + i , 13 - i, 14 );
+                    Blit( GetICN( ICN::APANELE, 4 + i ), 50 - i, 20 + i, out, offsetXD + offsetXO + 1 - i, offsetY + i, 13 - i, 14 );
                     // Clean up 'DO'
                     Blit( GetICN( ICN::CPANELE, 4 + i ), 51 - i, 34, out, offsetXD + offsetXO - i, offsetY + 5, 2, 2 );
                     Blit( GetICN( ICN::CPANELE, 4 + i ), 51 - i, 34, out, offsetXD + offsetXO - i, offsetY + 7, 1, 1 + i );
