@@ -546,6 +546,24 @@ namespace fheroes2
                           offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21, offsetY + 4, 1, 1 );
                 }
                 break;
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::RECRUIT, 4 + i );
+                    // Clean the button and leave 'M'
+                    Fill( out, 31 - 2 * i, 5 + i, 25, 15, getButtonFillingColor( i == 0 ) );
+                    Fill( out, 29 - 2 * i, 17 + i, 2, 2, getButtonFillingColor( i == 0 ) );
+                    // Add 'I'
+                    Blit( GetICN( ICN::APANEL, 4 + i ), 25 - i, 19 + i, out, 32 - i, 4 + i, 7 - i, 15 );
+                    Blit( GetICN( ICN::RECRUIT, 4 + i ), 28 - i, 7 + i, out, 36 - i, 7 + i, 3, 9 );
+                    Fill( out, 37 - i, 16 + i, 2, 3, getButtonFillingColor( i == 0 ) );
+                    // Add 'N'
+                    Blit( GetICN( ICN::TRADPOST, 17 + i ), 50 - i, 5, out, 41 - i, 5, 14, 15 );
+                    Fill( out, 41 - i, 5, 1, 1, getButtonFillingColor( i == 0 ) );
+                    Fill( out, 41 - i, 5 + 9, 1, 1, getButtonFillingColor( i == 0 ) );
+                }
+                break;
 
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
