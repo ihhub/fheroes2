@@ -382,7 +382,7 @@ namespace
         }
     }
 
-    const std::string getSecondarySkillCampaignName( const uint32_t secondarySkillId, const uint32_t secondarySkillLevel ) 
+    const std::string getSecondarySkillCampaignName( const int32_t secondarySkillId, const int32_t secondarySkillLevel )
     {
         switch ( secondarySkillId ) {
         case Skill::Secondary::ARCHERY:
@@ -484,9 +484,9 @@ namespace
             case Skill::Level::EXPERT:
                 return _( "campaignBonus|Expert Necromancy" );
             }
-        case Skill::Secondary::PATHFINDING :
+        case Skill::Secondary::PATHFINDING:
             switch ( secondarySkillLevel ) {
-            case Skill::Level::BASIC :
+            case Skill::Level::BASIC:
                 return _( "campaignBonus|Basic Pathfinding" );
             case Skill::Level::ADVANCED:
                 return _( "campaignBonus|Advanced Pathfinding" );
