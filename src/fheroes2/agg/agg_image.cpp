@@ -395,14 +395,13 @@ namespace fheroes2
                     Blit( GetICN( ICN::BTNNEWGM, 4 + i ), 36 - i, 23, out, 78 - i, 23, 10, 14 );
                 }
                 break;
-
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 assert( 0 );
-
                 break;
             }
         }
+
         void generateFrenchSpecificImages( const int id )
         {
             switch ( id ) {
@@ -443,7 +442,6 @@ namespace fheroes2
                     Blit( GetICN( ICN::BTNMP, 6 + i ), 73 - i, 22, out, 79 - i, secondLine + 9, 1, 1 );
                 }
                 break;
-
             case ICN::BTNGIFT_GOOD:
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
@@ -564,11 +562,9 @@ namespace fheroes2
                     Fill( out, 41 - i, 5 + 9, 1, 1, getButtonFillingColor( i == 0 ) );
                 }
                 break;
-
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 assert( 0 );
-
                 break;
             }
         }
@@ -595,11 +591,9 @@ namespace fheroes2
                     Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 47 - i, 23 + i, out, offsetX + 38 - i, offsetY + i, 1, 1 );
                 }
                 break;
-
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 assert( 0 );
-
                 break;
             }
         }
@@ -644,11 +638,9 @@ namespace fheroes2
                     Fill( out, offsetX + 93 - i, offsetY + 3, 1, 4, buttonFillingColor );
                 }
                 break;
-
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 assert( 0 );
-
                 break;
             }
         }
@@ -729,12 +721,6 @@ namespace fheroes2
                 return true;
             case ICN::GRAY_SMALL_FONT:
                 CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::GRAY_FONT );
-                return true;
-            case ICN::BTNBATTLEONLY:
-                generateLanguageSpecificImages( id );
-                return true;
-            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
-                generateLanguageSpecificImages( id );
                 return true;
             case ICN::SPELLS:
                 LoadOriginalICN( id );
@@ -823,8 +809,10 @@ namespace fheroes2
                     Blit( GetICN( ICN::RECRUIT, 4 + i ), 12, 6, out, 7, 3, 50, 12 );
                 }
                 return true;
+            case ICN::BTNBATTLEONLY:
             case ICN::BTNGIFT_GOOD:
             case ICN::BTNGIFT_EVIL:
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
                 generateLanguageSpecificImages( id );
                 return true;
             case ICN::BTNCONFIG:
