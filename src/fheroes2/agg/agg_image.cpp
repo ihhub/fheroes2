@@ -403,6 +403,7 @@ namespace fheroes2
                 break;
             }
         }
+
         void generateFrenchSpecificImages( const int id )
         {
             switch ( id ) {
