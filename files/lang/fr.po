@@ -2534,7 +2534,7 @@ msgid ""
 "Difficulty"
 msgstr ""
 "Difficulté\n"
-" du jeu"
+"du jeu"
 
 msgid "Rating"
 msgstr "Taux"
