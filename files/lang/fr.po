@@ -2,13 +2,13 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # fheroes2 team <fhomm2@gmail.com>, 2021
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-26 19:25+0200\n"
-"PO-Revision-Date: 2022-04-26 16:43+0200\n"
+"PO-Revision-Date: 2022-04-26 19:46+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -700,15 +700,13 @@ msgid "Sorceress Guild"
 msgstr "Guilde de Sorcières"
 
 msgid "Necromancer Guild"
-msgstr "Guilde Nécromancie"
+msgstr "Guilde Nécromante"
 
-#, fuzzy
 msgid "Ogre Alliance"
-msgstr "Alliance des Nains"
+msgstr "Alliance des Ogres"
 
-#, fuzzy
 msgid "Dwarfbane"
-msgstr "Nain"
+msgstr "Fléau des Nains"
 
 msgid "Dragon Alliance"
 msgstr "Alliance des Dragons"
@@ -6421,9 +6419,8 @@ msgstr "Grande"
 msgid "maps|Extra Large"
 msgstr "Très grande"
 
-#, fuzzy
 msgid "maps|Custom Size"
-msgstr "Voir toutes les cartes, sans tenir compte de leur taille."
+msgstr "Taille Personnalisée"
 
 msgid "Ore Mine"
 msgstr "Mine de fer"
