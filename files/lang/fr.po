@@ -2,12 +2,12 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # fheroes2 team <fhomm2@gmail.com>, 2021
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-05 20:49+0200\n"
+"POT-Creation-Date: 2022-04-26 19:25+0200\n"
 "PO-Revision-Date: 2022-04-26 16:43+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -701,6 +701,14 @@ msgstr "Guilde de Sorcières"
 
 msgid "Necromancer Guild"
 msgstr "Guilde Nécromancie"
+
+#, fuzzy
+msgid "Ogre Alliance"
+msgstr "Alliance des Nains"
+
+#, fuzzy
+msgid "Dwarfbane"
+msgstr "Nain"
 
 msgid "Dragon Alliance"
 msgstr "Alliance des Dragons"
@@ -2458,6 +2466,27 @@ msgstr "Expérimental"
 msgid "Settings"
 msgstr "Paramètres"
 
+msgid "off"
+msgstr "coupé"
+
+msgid "Music"
+msgstr "Musique"
+
+msgid "Effects"
+msgstr "Effets"
+
+msgid "MIDI"
+msgstr "MIDI"
+
+msgid "MIDI Expansion"
+msgstr "MIDI Expansion"
+
+msgid "External"
+msgstr "Externe"
+
+msgid "Music Type"
+msgstr "Musique"
+
 msgid "Select Game Language"
 msgstr "Choix de la langue"
 
@@ -2472,6 +2501,15 @@ msgstr "Changer la résolution du jeu."
 
 msgid "Experimental game settings."
 msgstr "Paramètres de jeu expérimentaux."
+
+msgid "Toggle ambient music level."
+msgstr "Change le volume de la musique."
+
+msgid "Toggle foreground sounds level."
+msgstr "Change le volume des effets sonores."
+
+msgid "Change the type of music."
+msgstr "Change de type de musique."
 
 msgid "Okay"
 msgstr "OK"
@@ -2900,27 +2938,6 @@ msgstr "Confirmez le choix."
 msgid "Experimental Game Settings"
 msgstr "Paramètres de jeu expérimentaux"
 
-msgid "off"
-msgstr "coupé"
-
-msgid "Music"
-msgstr "Musique"
-
-msgid "Effects"
-msgstr "Effets"
-
-msgid "MIDI"
-msgstr "MIDI"
-
-msgid "MIDI Expansion"
-msgstr "MIDI Expansion"
-
-msgid "External"
-msgstr "Externe"
-
-msgid "Music Type"
-msgstr "Musique"
-
 msgid "Jump"
 msgstr "Immédiat"
 
@@ -2965,15 +2982,6 @@ msgstr "Batailles"
 
 msgid "Manual"
 msgstr "Manuel"
-
-msgid "Toggle ambient music level."
-msgstr "Change le volume de la musique."
-
-msgid "Toggle foreground sounds level."
-msgstr "Change le volume des effets sonores."
-
-msgid "Change the type of music."
-msgstr "Change de type de musique."
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3136,9 +3144,6 @@ msgstr "Merci spécial à"
 msgid "and many other contributors!"
 msgstr "et aux nombreux autres contributeurs !"
 
-msgid "Original project before 0.7"
-msgstr "Projet original avant 0.7"
-
 msgid "Support us at"
 msgstr "Soutenez-nous sur"
 
@@ -3150,6 +3155,9 @@ msgstr "Besoin d'aide avec le jeu ?"
 
 msgid "and many-many other supporters!"
 msgstr "et beaucoup, beaucoup d'autres supporteurs !"
+
+msgid "Original project before 0.7"
+msgstr "Projet original avant 0.7"
 
 msgid "Original Heroes of Might and Magic II team"
 msgstr "L'équipe originale de Heroes of Might and Magic II"
@@ -5548,9 +5556,6 @@ msgstr ""
 msgid "Spell book is not present."
 msgstr "Le grimoire n'est pas présent."
 
-msgid "The spell is not found."
-msgstr "Sort introuvable."
-
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
 "cast the spell."
@@ -5558,11 +5563,16 @@ msgstr ""
 "Ce sort coûte %{mana} mana. Vous n'avez que %{point} mana, vous ne pouvez "
 "donc pas lancer le sort."
 
-msgid "Not enough move points."
-msgstr "Pas assez de points de mouvement."
+msgid "The spell is not found."
+msgstr "Sort introuvable."
 
 msgid "Only heroes can cast this spell."
 msgstr "Seuls les héros peuvent lancer ce sort."
+
+msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
+msgstr ""
+"Votre héros est trop fatigué pour lancer ce sort aujourd'hui. Essayez à "
+"nouveau demain."
 
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
@@ -5674,11 +5684,6 @@ msgstr "Portes du village"
 
 msgid "Select town to port to."
 msgstr "Sélectionnez la destination."
-
-msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
-msgstr ""
-"Votre héros est trop fatigué pour lancer ce sort aujourd'hui. Essayez à "
-"nouveau demain."
 
 msgid "%{spell} failed!!!"
 msgstr "%{spell} a échoué !"
@@ -9343,10 +9348,6 @@ msgstr ""
 msgid "battle: allow soft wait for troops"
 msgstr "combat : permettre aux créatures d'attendre au cours du combat"
 
-msgid "battle: reverse wait order (fast, average, slow)"
-msgstr ""
-"combat : inverser l'ordre des créatures qui ont attendu (rapide, moyen, lent)"
-
 msgid "battle: deterministic events"
 msgstr "bataille : événements déterministes"
 
@@ -9428,3 +9429,11 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Not enough move points."
+#~ msgstr "Pas assez de points de mouvement."
+
+#~ msgid "battle: reverse wait order (fast, average, slow)"
+#~ msgstr ""
+#~ "combat : inverser l'ordre des créatures qui ont attendu (rapide, moyen, "
+#~ "lent)"
