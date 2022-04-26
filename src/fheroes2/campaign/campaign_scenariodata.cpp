@@ -382,6 +382,140 @@ namespace
         }
     }
 
+    const std::string getSecondarySkillCampaignName( const uint32_t secondarySkillId, const uint32_t secondarySkillLevel ) 
+    {
+        switch ( secondarySkillId ) {
+        case Skill::Secondary::ARCHERY:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Archery" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Archery" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Archery" );
+            }
+        case Skill::Secondary::BALLISTICS:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Ballistics" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Ballistics" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Ballistics" );
+            }
+        case Skill::Secondary::DIPLOMACY:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Diplomacy" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Diplomacy" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Diplomacy" );
+            }
+        case Skill::Secondary::EAGLEEYE:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Eagle Eye" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Eagle Eye" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Eagle Eye" );
+            }
+        case Skill::Secondary::ESTATES:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Estates" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Estates" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Estates" );
+            }
+        case Skill::Secondary::LEADERSHIP:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Leadership" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Leadership" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Leadership" );
+            }
+        case Skill::Secondary::LOGISTICS:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Logistics" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Logistics" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Logistics" );
+            }
+        case Skill::Secondary::LUCK:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Luck" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Luck" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Luck" );
+            }
+        case Skill::Secondary::MYSTICISM:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Mysticism" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Mysticism" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Mysticism" );
+            }
+        case Skill::Secondary::NAVIGATION:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Navigation" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Navigation" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Navigation" );
+            }
+        case Skill::Secondary::NECROMANCY:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Necromancy" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Necromancy" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Necromancy" );
+            }
+        case Skill::Secondary::PATHFINDING :
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC :
+                return _( "campaignBonus|Basic Pathfinding" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Pathfinding" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Pathfinding" );
+            }
+        case Skill::Secondary::SCOUTING:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Scouting" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Scouting" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Scouting" );
+            }
+        case Skill::Secondary::WISDOM:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Wisdom" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Wisdom" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Wisdom" );
+            }
+        default:
+            return Skill::Secondary( secondarySkillId, secondarySkillLevel ).GetName();
+        }
+    }
+
     const char * getSpellCampaignName( const Uint32 spellId )
     {
         switch ( spellId ) {
@@ -485,7 +619,7 @@ namespace Campaign
             objectName = Skill::Primary::String( _subType );
             break;
         case ScenarioBonusData::SKILL_SECONDARY:
-            objectName = Skill::Secondary( _subType, _amount ).GetName();
+            objectName = getSecondarySkillCampaignName( _subType, _amount );
             break;
         default:
             assert( 0 ); // some new bonus?
