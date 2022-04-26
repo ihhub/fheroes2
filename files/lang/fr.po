@@ -9429,11 +9429,3 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Not enough move points."
-#~ msgstr "Pas assez de points de mouvement."
-
-#~ msgid "battle: reverse wait order (fast, average, slow)"
-#~ msgstr ""
-#~ "combat : inverser l'ordre des créatures qui ont attendu (rapide, moyen, "
-#~ "lent)"
