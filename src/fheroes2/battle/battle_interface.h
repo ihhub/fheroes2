@@ -218,11 +218,13 @@ namespace Battle
 
         PopupDamageInfo & operator=( const PopupDamageInfo & ) = delete;
 
-        void SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender, const fheroes2::Point & offset );
+        void setBattleUIRect( const fheroes2::Rect & battleUIRect );
+        void SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender );
         void Reset();
-        void Redraw( int, int );
+        void Redraw();
 
     private:
+        fheroes2::Rect _battleUIRect;
         const Cell * _cell;
         const Unit * _attacker;
         const Unit * _defender;
