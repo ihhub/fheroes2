@@ -382,6 +382,184 @@ namespace
         }
     }
 
+    std::string getSecondarySkillCampaignName( const uint32_t secondarySkillId, const uint32_t secondarySkillLevel )
+    {
+        switch ( secondarySkillId ) {
+        case Skill::Secondary::ARCHERY:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Archery" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Archery" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Archery" );
+            }
+            // There cannot be other valid values of the skill level
+            assert( 0 );
+            return {};
+        case Skill::Secondary::BALLISTICS:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Ballistics" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Ballistics" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Ballistics" );
+            }
+            // There cannot be other valid values of the skill level
+            assert( 0 );
+            return {};
+        case Skill::Secondary::DIPLOMACY:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Diplomacy" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Diplomacy" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Diplomacy" );
+            }
+            // There cannot be other valid values of the skill level
+            assert( 0 );
+            return {};
+        case Skill::Secondary::EAGLEEYE:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Eagle Eye" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Eagle Eye" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Eagle Eye" );
+            }
+            // There cannot be other valid values of the skill level
+            assert( 0 );
+            return {};
+        case Skill::Secondary::ESTATES:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Estates" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Estates" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Estates" );
+            }
+            // There cannot be other valid values of the skill level
+            assert( 0 );
+            return {};
+        case Skill::Secondary::LEADERSHIP:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Leadership" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Leadership" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Leadership" );
+            }
+            // There cannot be other valid values of the skill level
+            assert( 0 );
+            return {};
+        case Skill::Secondary::LOGISTICS:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Logistics" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Logistics" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Logistics" );
+            }
+            // There cannot be other valid values of the skill level
+            assert( 0 );
+            return {};
+        case Skill::Secondary::LUCK:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Luck" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Luck" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Luck" );
+            }
+            // There cannot be other valid values of the skill level
+            assert( 0 );
+            return {};
+        case Skill::Secondary::MYSTICISM:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Mysticism" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Mysticism" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Mysticism" );
+            }
+            // There cannot be other valid values of the skill level
+            assert( 0 );
+            return {};
+        case Skill::Secondary::NAVIGATION:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Navigation" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Navigation" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Navigation" );
+            }
+            // There cannot be other valid values of the skill level
+            assert( 0 );
+            return {};
+        case Skill::Secondary::NECROMANCY:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Necromancy" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Necromancy" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Necromancy" );
+            }
+            // There cannot be other valid values of the skill level
+            assert( 0 );
+            return {};
+        case Skill::Secondary::PATHFINDING:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Pathfinding" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Pathfinding" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Pathfinding" );
+            }
+            // There cannot be other valid values of the skill level
+            assert( 0 );
+            return {};
+        case Skill::Secondary::SCOUTING:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Scouting" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Scouting" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Scouting" );
+            }
+            // There cannot be other valid values of the skill level
+            assert( 0 );
+            return {};
+        case Skill::Secondary::WISDOM:
+            switch ( secondarySkillLevel ) {
+            case Skill::Level::BASIC:
+                return _( "campaignBonus|Basic Wisdom" );
+            case Skill::Level::ADVANCED:
+                return _( "campaignBonus|Advanced Wisdom" );
+            case Skill::Level::EXPERT:
+                return _( "campaignBonus|Expert Wisdom" );
+            }
+            // There cannot be other valid values of the skill level
+            assert( 0 );
+            return {};
+        default:
+            // There cannot be other valid values of secondary skills
+            assert( 0 );
+            return {};
+        }
+    }
+
     const char * getSpellCampaignName( const Uint32 spellId )
     {
         switch ( spellId ) {
@@ -485,7 +663,7 @@ namespace Campaign
             objectName = Skill::Primary::String( _subType );
             break;
         case ScenarioBonusData::SKILL_SECONDARY:
-            objectName = Skill::Secondary( _subType, _amount ).GetName();
+            objectName = getSecondarySkillCampaignName( _subType, _amount );
             break;
         default:
             assert( 0 ); // some new bonus?
