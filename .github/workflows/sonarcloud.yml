@@ -36,6 +36,9 @@ jobs:
         key: sonarcloud-cfamily-cache-${{ hashFiles( 'src/**/*.c', 'src/**/*.cpp', 'src/**/*.h' ) }}
         restore-keys: |
           sonarcloud-cfamily-cache-
+    - name: Generate version information
+      run: |
+        sed -i~ "s/%{version}/$(cat version.txt)/" sonar-project.properties
     - name: Build
       run: |
         ~/.sonarcloud/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir bw-output make -j 2

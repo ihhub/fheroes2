@@ -165,7 +165,9 @@ public:
         if ( !arifact.isValid() )
             return;
 
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTFX, arifact.IndexSprite32() ), image, roi.x + 1, roi.y + 1 );
+        const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, arifact.IndexSprite32() );
+        fheroes2::Fill( image, roi.x + 1, roi.y + 1, artifactSprite.width(), artifactSprite.height(), 0 );
+        fheroes2::Blit( artifactSprite, image, roi.x + 1, roi.y + 1 );
 
         if ( isSelected ) {
             spcursor.setPosition( roi.x, roi.y );

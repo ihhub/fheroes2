@@ -105,6 +105,7 @@ public:
     bool CanLearnSpell( const Spell & spell ) const;
     void SpellCasted( const Spell & spell );
     void SetSpellPoints( const uint32_t points );
+    bool isPotentSpellcaster() const;
 
     std::vector<Spell> GetSpells( const int lvl = -1 ) const;
     void EditSpellBook();
