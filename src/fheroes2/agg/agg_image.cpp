@@ -730,12 +730,6 @@ namespace fheroes2
             case ICN::GRAY_SMALL_FONT:
                 CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::GRAY_FONT );
                 return true;
-            case ICN::BTNBATTLEONLY:
-                generateLanguageSpecificImages( id );
-                return true;
-            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
-                generateLanguageSpecificImages( id );
-                return true;
             case ICN::SPELLS:
                 LoadOriginalICN( id );
                 _icnVsSprite[id].resize( 66 );
@@ -823,8 +817,10 @@ namespace fheroes2
                     Blit( GetICN( ICN::RECRUIT, 4 + i ), 12, 6, out, 7, 3, 50, 12 );
                 }
                 return true;
+            case ICN::BTNBATTLEONLY:
             case ICN::BTNGIFT_GOOD:
             case ICN::BTNGIFT_EVIL:
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
                 generateLanguageSpecificImages( id );
                 return true;
             case ICN::BTNCONFIG:
