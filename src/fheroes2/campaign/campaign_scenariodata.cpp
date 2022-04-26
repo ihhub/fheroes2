@@ -382,7 +382,7 @@ namespace
         }
     }
 
-    const std::string getSecondarySkillCampaignName( const int32_t secondarySkillId, const int32_t secondarySkillLevel )
+    std::string getSecondarySkillCampaignName( const uint32_t secondarySkillId, const uint32_t secondarySkillLevel )
     {
         switch ( secondarySkillId ) {
         case Skill::Secondary::ARCHERY:
