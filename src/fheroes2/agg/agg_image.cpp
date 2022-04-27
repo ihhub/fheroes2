@@ -287,6 +287,15 @@ namespace fheroes2
         void generateDefaultImages( const int id )
         {
             switch ( id ) {
+            case ICN::BTNBATTLEONLY:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // Clean button
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+                break;
             case ICN::BTNGIFT_GOOD:
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
@@ -306,6 +315,7 @@ namespace fheroes2
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::RECRUIT, 4 + i );
+                    Fill( out, 11 - i, 4 + i, 52, 17, getButtonFillingColor( i == 0 ) );
                 }
                 break;
             default:
