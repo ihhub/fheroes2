@@ -697,33 +697,39 @@ namespace fheroes2
 
         void generateLanguageSpecificImages( int id )
         {
+            // Language-specific image generators, may fail
             switch ( fheroes2::getResourceLanguage() ) {
             case fheroes2::SupportedLanguage::German:
-                if ( !generateGermanSpecificImages( id ) ) {
-                    generateMissingButtons( id );
+                if ( generateGermanSpecificImages( id ) ) {
+                    return;
                 }
                 break;
             case fheroes2::SupportedLanguage::French:
-                if ( !generateFrenchSpecificImages( id ) ) {
-                    generateMissingButtons( id );
+                if ( generateFrenchSpecificImages( id ) ) {
+                    return;
                 }
                 break;
             case fheroes2::SupportedLanguage::Polish:
-                if ( !generatePolishSpecificImages( id ) ) {
-                    generateMissingButtons( id );
+                if ( generatePolishSpecificImages( id ) ) {
+                    return;
                 }
                 break;
             case fheroes2::SupportedLanguage::Italian:
-                if ( !generateItalianSpecificImages( id ) ) {
-                    generateMissingButtons( id );
+                if ( generateItalianSpecificImages( id ) ) {
+                    return;
+                }
+                break;
+            case fheroes2::SupportedLanguage::English:
+                if ( generateEnglishSpecificImages( id ) ) {
+                    return;
                 }
                 break;
             default:
-                if ( !generateEnglishSpecificImages( id ) ) {
-                    generateMissingButtons( id );
-                }
                 break;
             }
+            // Image generator of a last resort, must provide the generation of the "default" variant
+            // for all image ids for which this function can be called, and must not fail.
+            generateMissingButtons( id );
         }
 
         bool LoadModifiedICN( int id )
