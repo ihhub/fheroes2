@@ -395,6 +395,34 @@ namespace fheroes2
                     Blit( GetICN( ICN::BTNNEWGM, 4 + i ), 36 - i, 23, out, 78 - i, 23, 10, 14 );
                 }
                 break;
+            case ICN::BTNGIFT_GOOD:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TRADPOST, 17 + i );
+                    // clean the button
+                    Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0 ) );
+                }
+                break;
+            case ICN::BTNGIFT_EVIL:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TRADPOSE, 17 + i );
+                    // clean the button
+                    Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0, false ) );
+                }
+                break;
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::RECRUIT, 4 + i );
+                    // Clean the button and leave 'M'
+                    Fill( out, 31 - 2 * i, 5 + i, 25, 15, getButtonFillingColor( i == 0 ) );
+                    Fill( out, 29 - 2 * i, 17 + i, 2, 2, getButtonFillingColor( i == 0 ) );
+                }
+                break;
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 assert( 0 );
@@ -591,6 +619,34 @@ namespace fheroes2
                     Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 47 - i, 23 + i, out, offsetX + 38 - i, offsetY + i, 1, 1 );
                 }
                 break;
+            case ICN::BTNGIFT_GOOD:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TRADPOST, 17 + i );
+                    // clean the button
+                    Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0 ) );
+                }
+                break;
+            case ICN::BTNGIFT_EVIL:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TRADPOSE, 17 + i );
+                    // clean the button
+                    Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0, false ) );
+                }
+                break;
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::RECRUIT, 4 + i );
+                    // Clean the button and leave 'M'
+                    Fill( out, 31 - 2 * i, 5 + i, 25, 15, getButtonFillingColor( i == 0 ) );
+                    Fill( out, 29 - 2 * i, 17 + i, 2, 2, getButtonFillingColor( i == 0 ) );
+                }
+                break;
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 assert( 0 );
@@ -636,6 +692,34 @@ namespace fheroes2
                     Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 80 - i, 28, out, offsetX + 93 - i, offsetY, 14, 15 );
                     Fill( out, offsetX + 109 - i, offsetY + 5, 1, 2, buttonFillingColor );
                     Fill( out, offsetX + 93 - i, offsetY + 3, 1, 4, buttonFillingColor );
+                }
+                break;
+            case ICN::BTNGIFT_GOOD:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TRADPOST, 17 + i );
+                    // clean the button
+                    Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0 ) );
+                }
+                break;
+            case ICN::BTNGIFT_EVIL:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TRADPOSE, 17 + i );
+                    // clean the button
+                    Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0, false ) );
+                }
+                break;
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::RECRUIT, 4 + i );
+                    // Clean the button and leave 'M'
+                    Fill( out, 31 - 2 * i, 5 + i, 25, 15, getButtonFillingColor( i == 0 ) );
+                    Fill( out, 29 - 2 * i, 17 + i, 2, 2, getButtonFillingColor( i == 0 ) );
                 }
                 break;
             default:
