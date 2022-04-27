@@ -630,6 +630,7 @@ namespace fheroes2
                     // Add pixel to 'W'
                     Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 47 - i, 23 + i, out, offsetX + 38 - i, offsetY + i, 1, 1 );
                 }
+                return true;
             case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
