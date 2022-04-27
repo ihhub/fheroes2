@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-27 00:13+0200\n"
-"PO-Revision-Date: 2022-04-27 00:08+0200\n"
+"PO-Revision-Date: 2022-04-27 20:46+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -1405,173 +1405,131 @@ msgstr "Bottes de 7 lieues"
 msgid "campaignBonus|White Pearl"
 msgstr "Perle blanche"
 
-#, fuzzy
 msgid "campaignBonus|Basic Archery"
-msgstr "Perle noire"
+msgstr "Principes de Tir à l'arc"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Archery"
 msgstr "Tir à l'arc avancé"
 
-#, fuzzy
 msgid "campaignBonus|Expert Archery"
-msgstr "Puissante hache"
+msgstr "Expert en Tir à l'arc"
 
-#, fuzzy
 msgid "campaignBonus|Basic Ballistics"
-msgstr "Baliste"
+msgstr "Principes de Balistique"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Ballistics"
-msgstr "Baliste"
+msgstr "Balistique Avancée"
 
-#, fuzzy
 msgid "campaignBonus|Expert Ballistics"
-msgstr "Baliste"
+msgstr "Expert en Balistique"
 
-#, fuzzy
 msgid "campaignBonus|Basic Diplomacy"
-msgstr "Plastron divin"
+msgstr "Principes de Diplomatie"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Diplomacy"
 msgstr "Diplomatie Avancée"
 
-#, fuzzy
 msgid "campaignBonus|Expert Diplomacy"
 msgstr "Expert en Diplomatie"
 
-#, fuzzy
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr "Perle noire"
+msgstr "Principes d'Oeil d'aigle"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Eagle Eye"
 msgstr "Oeil d'aigle Avancé"
 
-#, fuzzy
 msgid "campaignBonus|Expert Eagle Eye"
 msgstr "Expert en Oeil d'aigle"
 
-#, fuzzy
 msgid "campaignBonus|Basic Estates"
-msgstr "Baliste"
+msgstr "Principes de Finances"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Estates"
-msgstr "Plastron divin"
+msgstr "Finances Avancées"
 
-#, fuzzy
 msgid "campaignBonus|Expert Estates"
-msgstr "Plastron divin"
+msgstr "Expert en Finances"
 
-#, fuzzy
 msgid "campaignBonus|Basic Leadership"
-msgstr "Perle noire"
+msgstr "Principes de Charisme"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Leadership"
 msgstr "Charisme Avancée"
 
-#, fuzzy
 msgid "campaignBonus|Expert Leadership"
 msgstr "Expert en Charisme"
 
-#, fuzzy
 msgid "campaignBonus|Basic Logistics"
-msgstr "Baliste"
+msgstr "Principes de Logistique"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Logistics"
 msgstr "Logistique Avancée"
 
-#, fuzzy
 msgid "campaignBonus|Expert Logistics"
 msgstr "Expert en Logistique"
 
-#, fuzzy
 msgid "campaignBonus|Basic Luck"
-msgstr "Grde malédiction"
+msgstr "Principes de Chance"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Luck"
-msgstr "Privilège fiscal"
+msgstr "Chance Avancée"
 
-#, fuzzy
 msgid "campaignBonus|Expert Luck"
-msgstr "Privilège fiscal"
+msgstr "Expert en Chance"
 
-#, fuzzy
 msgid "campaignBonus|Basic Mysticism"
-msgstr "Baliste"
+msgstr "Principes de Mysticisme"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Mysticism"
 msgstr "Mysticisme Avancé"
 
-#, fuzzy
 msgid "campaignBonus|Expert Mysticism"
 msgstr "Expert en Mysticisme"
 
-#, fuzzy
 msgid "campaignBonus|Basic Navigation"
-msgstr "Foudre"
+msgstr "Principes de Navigation"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Navigation"
 msgstr "Navigation Avancée"
 
-#, fuzzy
 msgid "campaignBonus|Expert Navigation"
 msgstr "Expert en Navigation"
 
-#, fuzzy
 msgid "campaignBonus|Basic Necromancy"
-msgstr "Perle noire"
+msgstr "Principes de Nécromancie"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Necromancy"
 msgstr "Nécromancie Avancée"
 
-#, fuzzy
 msgid "campaignBonus|Expert Necromancy"
 msgstr "Expert en Nécromancie"
 
-#, fuzzy
 msgid "campaignBonus|Basic Pathfinding"
-msgstr "Foudre"
+msgstr "Principes d'Orientation"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Pathfinding"
-msgstr "Orientation avancée"
+msgstr "Orientation Avancée"
 
-#, fuzzy
 msgid "campaignBonus|Expert Pathfinding"
 msgstr "Expert en Orientation"
 
-#, fuzzy
 msgid "campaignBonus|Basic Scouting"
-msgstr "Anneau magicien"
+msgstr "Principes de Reconnaissance"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Scouting"
-msgstr "Anneau magicien"
+msgstr "Reconnaissance Avancée"
 
-#, fuzzy
 msgid "campaignBonus|Expert Scouting"
-msgstr "Privilège fiscal"
+msgstr "Expert en Reconnaissance"
 
-#, fuzzy
 msgid "campaignBonus|Basic Wisdom"
-msgstr "Baliste"
+msgstr "Principes de Sagesse"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Wisdom"
-msgstr "Mort-vivant"
+msgstr "Sagesse Avancée"
 
-#, fuzzy
 msgid "campaignBonus|Expert Wisdom"
-msgstr "Bouclier à pointes"
+msgstr "Expert en Sagesse"
 
 msgid "campaignBonus|Animate Dead"
 msgstr "Mort-vivant"
