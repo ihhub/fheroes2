@@ -284,7 +284,50 @@ namespace fheroes2
             }
         }
 
-        void generateEnglishSpecificImages( const int id )
+        void generateDefaultImages( const int id )
+        {
+            switch ( id ) {
+            case ICN::BTNBATTLEONLY:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // Clean button
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+                break;
+            case ICN::BTNGIFT_GOOD:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::SYSTEM, 11 + i );
+                }
+                break;
+            case ICN::BTNGIFT_EVIL:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::SYSTEME, 11 + i );
+                }
+                break;
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::RECRUIT, 4 + i );
+                    Fill( out, 11 - i, 4 + i, 52, 17, getButtonFillingColor( i == 0 ) );
+                }
+                break;
+            default:
+                // You're calling this function for non-specified ICN id. Check your logic!
+                // Did you add a new image for one language without generating a default
+                // for other languages?
+                assert( 0 );
+                break;
+            }
+        }
+
+        bool generateEnglishSpecificImages( const int id )
         {
             switch ( id ) {
             case ICN::BTNBATTLEONLY:
@@ -308,7 +351,7 @@ namespace fheroes2
                     Blit( GetICN( ICN::BTNHOTST, i ), 47 - i, 21, out, 71 - i, 28, 12, 13 );
                     Blit( GetICN( ICN::BTNHOTST, i ), 72 - i, 21, out, 84 - i, 28, 13, 13 );
                 }
-                break;
+                return true;
             case ICN::BTNGIFT_GOOD:
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
@@ -330,7 +373,7 @@ namespace fheroes2
                     // add 'T'
                     Blit( GetICN( ICN::CPANEL, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
                 }
-                break;
+                return true;
             case ICN::BTNGIFT_EVIL:
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
@@ -352,7 +395,7 @@ namespace fheroes2
                     // add 'T'
                     Blit( GetICN( ICN::CPANELE, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
                 }
-                break;
+                return true;
             case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
@@ -364,15 +407,14 @@ namespace fheroes2
                     Copy( GetICN( ICN::APANEL, 4 + i ), 23 - i, 22 + i, out, 33 - i, 6 + i, 8, 14 ); // letter 'I'
                     Copy( GetICN( ICN::APANEL, 4 + i ), 31 - i, 22 + i, out, 44 - i, 6 + i, 17, 14 ); // letter 'N'
                 }
-                break;
+                return true;
             default:
-                // You're calling this function for non-specified ICN id. Check your logic!
-                assert( 0 );
                 break;
             }
+            return false;
         }
 
-        void generateGermanSpecificImages( const int id )
+        bool generateGermanSpecificImages( const int id )
         {
             switch ( id ) {
             case ICN::BTNBATTLEONLY:
@@ -394,15 +436,26 @@ namespace fheroes2
                     // Add 'P'
                     Blit( GetICN( ICN::BTNNEWGM, 4 + i ), 36 - i, 23, out, 78 - i, 23, 10, 14 );
                 }
-                break;
+                return true;
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::RECRUIT, 4 + i );
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6 + i, out, 30 - 2 * i, 5 + i, 31, 15 );
+                    // add 'IN'
+                    Copy( GetICN( ICN::APANEL, 4 + i ), 23 - i, 22 + i, out, 33 - i, 6 + i, 8, 14 ); // letter 'I'
+                    Copy( GetICN( ICN::APANEL, 4 + i ), 31 - i, 22 + i, out, 44 - i, 6 + i, 17, 14 ); // letter 'N'
+                }
+                return true;
             default:
-                // You're calling this function for non-specified ICN id. Check your logic!
-                assert( 0 );
                 break;
             }
+            return false;
         }
 
-        void generateFrenchSpecificImages( const int id )
+        bool generateFrenchSpecificImages( const int id )
         {
             switch ( id ) {
             case ICN::BTNBATTLEONLY:
@@ -441,7 +494,7 @@ namespace fheroes2
                     Blit( GetICN( ICN::BTNDC, 4 + i ), 23 - i, 8, out, 79 - i, secondLine + 5, 1, 10 );
                     Blit( GetICN( ICN::BTNMP, 6 + i ), 73 - i, 22, out, 79 - i, secondLine + 9, 1, 1 );
                 }
-                break;
+                return true;
             case ICN::BTNGIFT_GOOD:
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
@@ -488,7 +541,7 @@ namespace fheroes2
                     Blit( GetICN( ICN::TRADPOST, 17 + i ), offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20, offsetY, out,
                           offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21, offsetY + 4, 1, 1 );
                 }
-                break;
+                return true;
             case ICN::BTNGIFT_EVIL:
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
@@ -543,7 +596,7 @@ namespace fheroes2
                     Blit( GetICN( ICN::TRADPOSE, 17 + i ), offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20, offsetY, out,
                           offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21, offsetY + 4, 1, 1 );
                 }
-                break;
+                return true;
             case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
@@ -561,15 +614,14 @@ namespace fheroes2
                     Fill( out, 41 - i, 5, 1, 1, getButtonFillingColor( i == 0 ) );
                     Fill( out, 41 - i, 5 + 9, 1, 1, getButtonFillingColor( i == 0 ) );
                 }
-                break;
+                return true;
             default:
-                // You're calling this function for non-specified ICN id. Check your logic!
-                assert( 0 );
                 break;
             }
+            return false;
         }
 
-        void generatePolishSpecificImages( const int id )
+        bool generatePolishSpecificImages( const int id )
         {
             switch ( id ) {
             case ICN::BTNBATTLEONLY:
@@ -590,15 +642,26 @@ namespace fheroes2
                     // Add pixel to 'W'
                     Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 47 - i, 23 + i, out, offsetX + 38 - i, offsetY + i, 1, 1 );
                 }
-                break;
+                return true;
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::RECRUIT, 4 + i );
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6 + i, out, 30 - 2 * i, 5 + i, 31, 15 );
+                    // add 'IN'
+                    Copy( GetICN( ICN::APANEL, 4 + i ), 23 - i, 22 + i, out, 33 - i, 6 + i, 8, 14 ); // letter 'I'
+                    Copy( GetICN( ICN::APANEL, 4 + i ), 31 - i, 22 + i, out, 44 - i, 6 + i, 17, 14 ); // letter 'N'
+                }
+                return true;
             default:
-                // You're calling this function for non-specified ICN id. Check your logic!
-                assert( 0 );
                 break;
             }
+            return false;
         }
 
-        void generateItalianSpecificImages( const int id )
+        bool generateItalianSpecificImages( const int id )
         {
             switch ( id ) {
             case ICN::BTNBATTLEONLY:
@@ -637,33 +700,48 @@ namespace fheroes2
                     Fill( out, offsetX + 109 - i, offsetY + 5, 1, 2, buttonFillingColor );
                     Fill( out, offsetX + 93 - i, offsetY + 3, 1, 4, buttonFillingColor );
                 }
-                break;
+                return true;
             default:
-                // You're calling this function for non-specified ICN id. Check your logic!
-                assert( 0 );
                 break;
             }
+            return false;
         }
 
         void generateLanguageSpecificImages( int id )
         {
+            // Language-specific image generators, may fail
             switch ( fheroes2::getResourceLanguage() ) {
             case fheroes2::SupportedLanguage::German:
-                generateGermanSpecificImages( id );
+                if ( generateGermanSpecificImages( id ) ) {
+                    return;
+                }
                 break;
             case fheroes2::SupportedLanguage::French:
-                generateFrenchSpecificImages( id );
+                if ( generateFrenchSpecificImages( id ) ) {
+                    return;
+                }
                 break;
             case fheroes2::SupportedLanguage::Polish:
-                generatePolishSpecificImages( id );
+                if ( generatePolishSpecificImages( id ) ) {
+                    return;
+                }
                 break;
             case fheroes2::SupportedLanguage::Italian:
-                generateItalianSpecificImages( id );
+                if ( generateItalianSpecificImages( id ) ) {
+                    return;
+                }
+                break;
+            case fheroes2::SupportedLanguage::English:
+                if ( generateEnglishSpecificImages( id ) ) {
+                    return;
+                }
                 break;
             default:
-                generateEnglishSpecificImages( id );
                 break;
             }
+            // Image generator of a last resort, must provide the generation of the "default" variant
+            // for all image ids for which this function can be called, and must not fail.
+            generateDefaultImages( id );
         }
 
         bool LoadModifiedICN( int id )
