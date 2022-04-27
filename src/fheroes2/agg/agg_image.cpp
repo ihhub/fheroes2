@@ -284,6 +284,37 @@ namespace fheroes2
             }
         }
 
+        void generateMissingButtons( const int id )
+        {
+            switch ( id ) {
+            case ICN::BTNGIFT_GOOD:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::SYSTEM, 11 + i );
+                }
+                break;
+            case ICN::BTNGIFT_EVIL:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::SYSTEME, 11 + i );
+                }
+                break;
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::RECRUIT, 4 + i );
+                }
+                break;
+            default:
+                // You're calling this function for non-specified ICN id. Check your logic!
+                assert( 0 );
+                break;
+            }
+        }
+
         bool generateEnglishSpecificImages( const int id )
         {
             switch ( id ) {
@@ -657,16 +688,6 @@ namespace fheroes2
                     Fill( out, offsetX + 93 - i, offsetY + 3, 1, 4, buttonFillingColor );
                 }
                 return true;
-            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
-                _icnVsSprite[id].resize( 2 );
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::RECRUIT, 4 + i );
-                    // Clean the button and leave 'M'
-                    Fill( out, 31 - 2 * i, 5 + i, 25, 15, getButtonFillingColor( i == 0 ) );
-                    Fill( out, 29 - 2 * i, 17 + i, 2, 2, getButtonFillingColor( i == 0 ) );
-                }
-                return true;
             default:
                 break;
             }
@@ -677,19 +698,29 @@ namespace fheroes2
         {
             switch ( fheroes2::getResourceLanguage() ) {
             case fheroes2::SupportedLanguage::German:
-                generateGermanSpecificImages( id );
+                if ( !generateGermanSpecificImages( id ) ) {
+                    generateMissingButtons( id );
+                }
                 break;
             case fheroes2::SupportedLanguage::French:
-                generateFrenchSpecificImages( id );
+                if ( !generateFrenchSpecificImages( id ) ) {
+                    generateMissingButtons( id );
+                }
                 break;
             case fheroes2::SupportedLanguage::Polish:
-                generatePolishSpecificImages( id );
+                if ( !generatePolishSpecificImages( id ) ) {
+                    generateMissingButtons( id );
+                }
                 break;
             case fheroes2::SupportedLanguage::Italian:
-                generateItalianSpecificImages( id );
+                if ( !generateItalianSpecificImages( id ) ) {
+                    generateMissingButtons( id );
+                }
                 break;
             default:
-                generateEnglishSpecificImages( id );
+                if ( !generateEnglishSpecificImages( id ) ) {
+                    generateMissingButtons( id );
+                }
                 break;
             }
         }
