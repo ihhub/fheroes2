@@ -284,7 +284,7 @@ namespace fheroes2
             }
         }
 
-        void generateMissingButtons( const int id )
+        void generateDefaultImages( const int id )
         {
             switch ( id ) {
             case ICN::BTNGIFT_GOOD:
@@ -729,7 +729,7 @@ namespace fheroes2
             }
             // Image generator of a last resort, must provide the generation of the "default" variant
             // for all image ids for which this function can be called, and must not fail.
-            generateMissingButtons( id );
+            generateDefaultImages( id );
         }
 
         bool LoadModifiedICN( int id )
