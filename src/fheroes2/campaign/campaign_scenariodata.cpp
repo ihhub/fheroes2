@@ -393,10 +393,11 @@ namespace
                 return _( "campaignBonus|Advanced Archery" );
             case Skill::Level::EXPERT:
                 return _( "campaignBonus|Expert Archery" );
+            default:
+                // There cannot be other valid values of the skill level
+                assert( 0 );
+                return {};
             }
-            // There cannot be other valid values of the skill level
-            assert( 0 );
-            return {};
         case Skill::Secondary::BALLISTICS:
             switch ( secondarySkillLevel ) {
             case Skill::Level::BASIC:
@@ -405,10 +406,11 @@ namespace
                 return _( "campaignBonus|Advanced Ballistics" );
             case Skill::Level::EXPERT:
                 return _( "campaignBonus|Expert Ballistics" );
+            default:
+                // There cannot be other valid values of the skill level
+                assert( 0 );
+                return {};
             }
-            // There cannot be other valid values of the skill level
-            assert( 0 );
-            return {};
         case Skill::Secondary::DIPLOMACY:
             switch ( secondarySkillLevel ) {
             case Skill::Level::BASIC:
@@ -417,10 +419,11 @@ namespace
                 return _( "campaignBonus|Advanced Diplomacy" );
             case Skill::Level::EXPERT:
                 return _( "campaignBonus|Expert Diplomacy" );
+            default:
+                // There cannot be other valid values of the skill level
+                assert( 0 );
+                return {};
             }
-            // There cannot be other valid values of the skill level
-            assert( 0 );
-            return {};
         case Skill::Secondary::EAGLEEYE:
             switch ( secondarySkillLevel ) {
             case Skill::Level::BASIC:
@@ -429,10 +432,11 @@ namespace
                 return _( "campaignBonus|Advanced Eagle Eye" );
             case Skill::Level::EXPERT:
                 return _( "campaignBonus|Expert Eagle Eye" );
+            default:
+                // There cannot be other valid values of the skill level
+                assert( 0 );
+                return {};
             }
-            // There cannot be other valid values of the skill level
-            assert( 0 );
-            return {};
         case Skill::Secondary::ESTATES:
             switch ( secondarySkillLevel ) {
             case Skill::Level::BASIC:
@@ -441,10 +445,11 @@ namespace
                 return _( "campaignBonus|Advanced Estates" );
             case Skill::Level::EXPERT:
                 return _( "campaignBonus|Expert Estates" );
+            default:
+                // There cannot be other valid values of the skill level
+                assert( 0 );
+                return {};
             }
-            // There cannot be other valid values of the skill level
-            assert( 0 );
-            return {};
         case Skill::Secondary::LEADERSHIP:
             switch ( secondarySkillLevel ) {
             case Skill::Level::BASIC:
@@ -453,10 +458,11 @@ namespace
                 return _( "campaignBonus|Advanced Leadership" );
             case Skill::Level::EXPERT:
                 return _( "campaignBonus|Expert Leadership" );
+            default:
+                // There cannot be other valid values of the skill level
+                assert( 0 );
+                return {};
             }
-            // There cannot be other valid values of the skill level
-            assert( 0 );
-            return {};
         case Skill::Secondary::LOGISTICS:
             switch ( secondarySkillLevel ) {
             case Skill::Level::BASIC:
@@ -465,10 +471,11 @@ namespace
                 return _( "campaignBonus|Advanced Logistics" );
             case Skill::Level::EXPERT:
                 return _( "campaignBonus|Expert Logistics" );
+            default:
+                // There cannot be other valid values of the skill level
+                assert( 0 );
+                return {};
             }
-            // There cannot be other valid values of the skill level
-            assert( 0 );
-            return {};
         case Skill::Secondary::LUCK:
             switch ( secondarySkillLevel ) {
             case Skill::Level::BASIC:
@@ -477,10 +484,11 @@ namespace
                 return _( "campaignBonus|Advanced Luck" );
             case Skill::Level::EXPERT:
                 return _( "campaignBonus|Expert Luck" );
+            default:
+                // There cannot be other valid values of the skill level
+                assert( 0 );
+                return {};
             }
-            // There cannot be other valid values of the skill level
-            assert( 0 );
-            return {};
         case Skill::Secondary::MYSTICISM:
             switch ( secondarySkillLevel ) {
             case Skill::Level::BASIC:
@@ -489,10 +497,11 @@ namespace
                 return _( "campaignBonus|Advanced Mysticism" );
             case Skill::Level::EXPERT:
                 return _( "campaignBonus|Expert Mysticism" );
+            default:
+                // There cannot be other valid values of the skill level
+                assert( 0 );
+                return {};
             }
-            // There cannot be other valid values of the skill level
-            assert( 0 );
-            return {};
         case Skill::Secondary::NAVIGATION:
             switch ( secondarySkillLevel ) {
             case Skill::Level::BASIC:
@@ -501,10 +510,11 @@ namespace
                 return _( "campaignBonus|Advanced Navigation" );
             case Skill::Level::EXPERT:
                 return _( "campaignBonus|Expert Navigation" );
+            default:
+                // There cannot be other valid values of the skill level
+                assert( 0 );
+                return {};
             }
-            // There cannot be other valid values of the skill level
-            assert( 0 );
-            return {};
         case Skill::Secondary::NECROMANCY:
             switch ( secondarySkillLevel ) {
             case Skill::Level::BASIC:
@@ -513,10 +523,11 @@ namespace
                 return _( "campaignBonus|Advanced Necromancy" );
             case Skill::Level::EXPERT:
                 return _( "campaignBonus|Expert Necromancy" );
+            default:
+                // There cannot be other valid values of the skill level
+                assert( 0 );
+                return {};
             }
-            // There cannot be other valid values of the skill level
-            assert( 0 );
-            return {};
         case Skill::Secondary::PATHFINDING:
             switch ( secondarySkillLevel ) {
             case Skill::Level::BASIC:
@@ -525,10 +536,11 @@ namespace
                 return _( "campaignBonus|Advanced Pathfinding" );
             case Skill::Level::EXPERT:
                 return _( "campaignBonus|Expert Pathfinding" );
+            default:
+                // There cannot be other valid values of the skill level
+                assert( 0 );
+                return {};
             }
-            // There cannot be other valid values of the skill level
-            assert( 0 );
-            return {};
         case Skill::Secondary::SCOUTING:
             switch ( secondarySkillLevel ) {
             case Skill::Level::BASIC:
@@ -537,10 +549,11 @@ namespace
                 return _( "campaignBonus|Advanced Scouting" );
             case Skill::Level::EXPERT:
                 return _( "campaignBonus|Expert Scouting" );
+            default:
+                // There cannot be other valid values of the skill level
+                assert( 0 );
+                return {};
             }
-            // There cannot be other valid values of the skill level
-            assert( 0 );
-            return {};
         case Skill::Secondary::WISDOM:
             switch ( secondarySkillLevel ) {
             case Skill::Level::BASIC:
@@ -549,10 +562,11 @@ namespace
                 return _( "campaignBonus|Advanced Wisdom" );
             case Skill::Level::EXPERT:
                 return _( "campaignBonus|Expert Wisdom" );
+            default:
+                // There cannot be other valid values of the skill level
+                assert( 0 );
+                return {};
             }
-            // There cannot be other valid values of the skill level
-            assert( 0 );
-            return {};
         default:
             // There cannot be other valid values of secondary skills
             assert( 0 );
