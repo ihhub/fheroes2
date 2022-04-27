@@ -399,18 +399,14 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::TRADPOST, 17 + i );
-                    // clean the button
-                    Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0 ) );
+                    out = GetICN( ICN::SYSTEM, 11 + i );
                 }
                 break;
             case ICN::BTNGIFT_EVIL:
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::TRADPOSE, 17 + i );
-                    // clean the button
-                    Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0, false ) );
+                    out = GetICN( ICN::SYSTEME, 11 + i );
                 }
                 break;
             case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
@@ -623,18 +619,14 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::TRADPOST, 17 + i );
-                    // clean the button
-                    Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0 ) );
+                    out = GetICN( ICN::SYSTEM, 11 + i );
                 }
                 break;
             case ICN::BTNGIFT_EVIL:
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::TRADPOSE, 17 + i );
-                    // clean the button
-                    Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0, false ) );
+                    out = GetICN( ICN::SYSTEME, 11 + i );
                 }
                 break;
             case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
@@ -698,18 +690,14 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::TRADPOST, 17 + i );
-                    // clean the button
-                    Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0 ) );
+                    out = GetICN( ICN::SYSTEM, 11 + i );
                 }
                 break;
             case ICN::BTNGIFT_EVIL:
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::TRADPOSE, 17 + i );
-                    // clean the button
-                    Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0, false ) );
+                    out = GetICN( ICN::SYSTEME, 11 + i );
                 }
                 break;
             case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
