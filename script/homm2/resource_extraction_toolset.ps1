@@ -97,7 +97,7 @@ try {
     $mainForm = New-Object -TypeName "System.Windows.Forms.Form" -Property @{Text = "Resource Extraction Toolset"}
 
     $flacMusicExtractionGroupBox = New-Object -TypeName "System.Windows.Forms.GroupBox" -Property @{
-        Text = "Extract GOG FLAC music archive"
+        Text = "Extract the GOG FLAC music archive"
         Dock = "Fill"
         Padding = 32
         AllowDrop = $true
