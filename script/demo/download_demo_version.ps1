@@ -146,13 +146,13 @@ try {
 
     $zip = $shell.NameSpace((Resolve-Path "$demoPath\h2demo.zip").Path)
 
-    foreach ($item in $zip.items()) {
+    foreach ($item in $zip.Items()) {
         $shell.Namespace((Resolve-Path $demoPath).Path).CopyHere($item, 0x14)
     }
 
     $zip = $shell.NameSpace((Resolve-Path "$demoPath\wing32.zip").Path)
 
-    foreach ($item in $zip.items()) {
+    foreach ($item in $zip.Items()) {
         $shell.Namespace((Resolve-Path $demoPath).Path).CopyHere($item, 0x14)
     }
 
@@ -171,10 +171,10 @@ try {
     $data = $shell.NameSpace((Resolve-Path "$demoPath\DATA").Path)
     $maps = $shell.NameSpace((Resolve-Path "$demoPath\MAPS").Path)
 
-    foreach ($item in $data.items()) {
+    foreach ($item in $data.Items()) {
         $shell.Namespace((Resolve-Path $dataPath).Path).CopyHere($item, 0x14)
     }
-    foreach ($item in $maps.items()) {
+    foreach ($item in $maps.Items()) {
         $shell.Namespace((Resolve-Path $mapsPath).Path).CopyHere($item, 0x14)
     }
 } catch {

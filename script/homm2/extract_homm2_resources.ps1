@@ -120,7 +120,7 @@ try {
 
             $content = $shell.NameSpace((Resolve-Path "$homm2Path\$srcDir").Path)
 
-            foreach ($item in $content.items()) {
+            foreach ($item in $content.Items()) {
                 $shell.Namespace((Resolve-Path "$destPath\$destDir").Path).CopyHere($item, 0x14)
             }
         }
