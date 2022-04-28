@@ -1,13 +1,41 @@
 $ErrorActionPreference = "Stop"
 
 try {
-    function Copy-FLACMusic {
+    function Test-DragDropFile {
+        param (
+            [string[]]$FileDropList,
+            [string]$AllowedExtension
+        )
+
+        if ($FileDropList.Count -Ne 1) {
+            return $false
+        }
+        if (-Not (Test-Path -Path $FileDropList[0] -PathType Leaf)) {
+            return $false
+        }
+
+        $fileExtension = (Get-ChildItem $FileDropList[0]).Extension
+
+        if ($null -Eq $fileExtension) {
+            return $false
+        }
+
+        $fileExtension = $fileExtension.ToLower()
+
+        if ($fileExtension -Ne $AllowedExtension) {
+            return $false
+        }
+
+        return $true
+    }
+
+    function Copy-GOGMusic {
         param (
             [string]$ArchiveName,
             [string]$DestPath
         )
 
-        Write-Host -ForegroundColor Green "Extracting FLAC music files, please wait..."
+        Write-Host -ForegroundColor Green "Extracting GOG OST files, please wait..."
 
         $musicPath = "$DestPath\music"
 
@@ -33,14 +61,25 @@ try {
             $shell.Namespace((Resolve-Path "$musicPath\$randName").Path).CopyHere($item, 0x14)
         }
 
-        foreach ($item in (Get-ChildItem -Path "$musicPath\$randName" -Filter "*.flac" -Recurse)) {
-            $trackNumber = ($item.Name | Select-String -Pattern "[0-9]{2}").Matches[0].Value
+        foreach ($item in (Get-ChildItem -Path "$musicPath\$randName" -Recurse)) {
+            $fileExtension = (Get-ChildItem $item.FullName).Extension
 
-            if ($null -Eq $trackNumber) {
+            if ($null -Eq $fileExtension) {
                 continue
             }
 
-            Copy-Item -Path $item.FullName -Destination "$musicPath\Track$trackNumber.flac"
+            $fileExtension = $fileExtension.ToLower()
+
+            if (($fileExtension -Ne ".mp3") -And ($fileExtension -Ne ".flac")) {
+                continue
+            }
+            if ($item.Name -notmatch "[0-9]{2}") {
+                continue
+            }
+
+            $trackNumber = ($item.Name | Select-String -Pattern "[0-9]{2}").Matches[0].Value
+
+            Copy-Item -Path $item.FullName -Destination "$musicPath\Track$trackNumber$fileExtension"
         }
 
         Remove-Item -Path "$musicPath\$randName" -Recurse
@@ -92,71 +131,71 @@ try {
 
     Write-Host "[2/2] running the resource extraction toolset"
 
+    $commandToRun = $null
+
     [void][System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
 
     $mainForm = New-Object -TypeName "System.Windows.Forms.Form" -Property @{Text = "Resource Extraction Toolset"}
 
-    $flacMusicExtractionGroupBox = New-Object -TypeName "System.Windows.Forms.GroupBox" -Property @{
-        Text = "Extract the GOG FLAC music archive"
+    $gogOSTExtractionGroupBox = New-Object -TypeName "System.Windows.Forms.GroupBox" -Property @{
+        Text = "Extract a GOG OST archive"
         Dock = "Fill"
         Padding = 32
         AllowDrop = $true
     }
-    $flacMusicExtractionGroupBox.Add_DragEnter({
-        $fileDropList = $_.Data.GetFileDropList()
-
-        if ($fileDropList.Count -Ne 1) {
+    $gogOSTExtractionGroupBox.Add_DragEnter({
+        if (-Not (Test-DragDropFile -FileDropList $_.Data.GetFileDropList() -AllowedExtension ".zip")) {
             return
         }
 
-        if ((Test-Path -Path $fileDropList[0] -PathType Leaf) -And ((Get-ChildItem $fileDropList[0]).Extension.ToLower() -Eq ".zip")) {
-            $_.Effect = [Windows.Forms.DragDropEffects]::copy
-        }
+        $_.Effect = [Windows.Forms.DragDropEffects]::Copy
     })
-    $flacMusicExtractionGroupBox.add_DragDrop({
+    $gogOSTExtractionGroupBox.add_DragDrop({
         $fileDropList = $_.Data.GetFileDropList()
 
-        if ($fileDropList.Count -Ne 1) {
+        if (-Not (Test-DragDropFile -FileDropList $fileDropList -AllowedExtension ".zip")) {
             return
         }
 
-        if (-Not (Test-Path -Path $fileDropList[0] -PathType Leaf) -Or ((Get-ChildItem $fileDropList[0]).Extension.ToLower() -Ne ".zip")) {
-            return
-        }
+        $global:commandToRun = {Copy-GOGMusic -ArchiveName $fileDropList[0] -DestPath $destPath}.GetNewClosure()
 
         $mainForm.Close()
-
-        Copy-FLACMusic -ArchiveName $fileDropList[0] -DestPath $destPath
     })
-    $mainForm.Controls.Add($flacMusicExtractionGroupBox)
+    $mainForm.Controls.Add($gogOSTExtractionGroupBox)
 
-    $flacMusicExtractionBrowseButton = New-Object -TypeName "System.Windows.Forms.Button" -Property @{
-        Text = "Choose an archive file..."
+    $gogOSTExtractionBrowseButton = New-Object -TypeName "System.Windows.Forms.Button" -Property @{
+        Text = "Choose an OST archive file..."
         Dock = "Top"
     }
-    $flacMusicExtractionBrowseButton.Add_Click({
+    $gogOSTExtractionBrowseButton.Add_Click({
         $fileDialog = New-Object -TypeName "System.Windows.Forms.OpenFileDialog" -Property @{
             Filter = "ZIP Archives (*.zip)|*.zip"
         }
 
         [void]$fileDialog.ShowDialog()
 
-        if ($fileDialog.FileName -Ne "") {
-            $mainForm.Close()
-
-            Copy-FLACMusic -ArchiveName $fileDialog.FileName -DestPath $destPath
+        if ($fileDialog.FileName -Eq "") {
+            return
         }
-    })
-    $flacMusicExtractionGroupBox.Controls.Add($flacMusicExtractionBrowseButton)
 
-    $flacMusicExtractionDragLabel = New-Object -TypeName "System.Windows.Forms.Label" -Property @{
-        Text = "Or drag && drop an archive file here"
+        $global:commandToRun = {Copy-GOGMusic -ArchiveName $fileDialog.FileName -DestPath $destPath}.GetNewClosure()
+
+        $mainForm.Close()
+    })
+    $gogOSTExtractionGroupBox.Controls.Add($gogOSTExtractionBrowseButton)
+
+    $gogOSTExtractionDragLabel = New-Object -TypeName "System.Windows.Forms.Label" -Property @{
+        Text = "Or drag && drop an OST archive file here"
         Dock = "Bottom"
         TextAlign = "MiddleCenter"
     }
-    $flacMusicExtractionGroupBox.Controls.Add($flacMusicExtractionDragLabel)
+    $gogOSTExtractionGroupBox.Controls.Add($gogOSTExtractionDragLabel)
 
     [System.Windows.Forms.Application]::Run($mainForm)
+
+    if ($null -Ne $commandToRun) {
+        & $commandToRun
+    }
 } catch {
     Write-Host -ForegroundColor Red (-Join("FATAL ERROR: ", ($_ | Out-String)))
 } finally {
