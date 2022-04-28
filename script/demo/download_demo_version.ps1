@@ -182,5 +182,5 @@ try {
 } finally {
     Write-Host "Press any key to exit..."
 
-    [void][System.Console]::ReadKey($true);
+    [void][System.Console]::ReadKey($true)
 }
