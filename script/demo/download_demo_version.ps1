@@ -40,7 +40,7 @@ try {
 
                     return ($output | Select-String -Pattern "^[0-9A-Fa-f]{64}$").Line.ToUpper()
                 } catch {
-                    Write-Host -ForegroundColor Yellow "WARNING: Neither Get-FileHash cmdlet nor certutil.exe are supported on this system, hash of downloaded file cannot be verified"
+                    Write-Host -ForegroundColor Yellow "WARNING: Neither the Get-FileHash cmdlet nor certutil.exe is supported on this system, the hash of the downloaded file cannot be verified"
 
                     if ($null -Ne $output) {
                         Write-Host -ForegroundColor Yellow (-Join("certutil.exe output: ", ($output | Out-String)))
@@ -62,7 +62,7 @@ try {
     Write-Host -ForegroundColor Green (-Join("This script will download the demo version of the original Heroes of Might and Magic II`r`n", `
                                              "It may take a few minutes, please wait...`r`n"))
 
-    Write-Host "[1/5] determining destination directory"
+    Write-Host "[1/5] determining the destination directory"
 
     $destPath = $null
 
@@ -90,7 +90,7 @@ try {
         }
     } catch {
         if ($null -Eq $Env:APPDATA) {
-            Write-Host -ForegroundColor Red "FATAL ERROR: Unable to determine destination directory"
+            Write-Host -ForegroundColor Red "FATAL ERROR: Unable to determine the destination directory"
 
             return
         }
@@ -104,7 +104,7 @@ try {
 
     Write-Host -ForegroundColor Green (-Join("Destination directory: ", (Resolve-Path $destPath).Path))
 
-    Write-Host "[2/5] downloading demo version"
+    Write-Host "[2/5] downloading the demo version"
 
     $demoPath = "$destPath\demo"
 
@@ -125,7 +125,7 @@ try {
         return
     }
 
-    Write-Host "[3/5] downloading wing32.dll library"
+    Write-Host "[3/5] downloading the wing32.dll library"
 
     Get-FileViaHTTP -URL $wing32URL -FilePath "$demoPath\wing32.zip"
 
