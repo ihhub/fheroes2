@@ -538,7 +538,6 @@ bool ActionSpellTownPortal( Heroes & hero )
 
     btnGroup.button( 0 ).disable();
 
-
     btnGroup.addButton( fheroes2::makeButtonWithShadow( area.x + area.width - border - buttonCancelSprite.width(),
                                                         area.y + area.height - border - buttonCancelSprite.height(), buttonCancelSprite,
                                                         fheroes2::AGG::GetICN( cancelIcnId, 1 ), display ),
