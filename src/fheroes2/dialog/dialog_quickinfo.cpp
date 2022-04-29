@@ -674,8 +674,8 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
         }
 
     int32_t objectTextBorderedWidth = pos.width - 2 * BORDERWIDTH;
-    fheroes2::Text textNew( name_object, fheroes2::FontType::smallWhite() );
-    textNew.draw( pos.x + 22, pos.y - 6 + ( ( pos.height - textNew.height( objectTextBorderedWidth ) ) / 2 ), objectTextBorderedWidth, display );
+    fheroes2::Text text( name_object, fheroes2::FontType::smallWhite() );
+    text.draw( pos.x + 22, pos.y - 6 + ( ( pos.height - text.height( objectTextBorderedWidth ) ) / 2 ), objectTextBorderedWidth, display );
 
     outputInTextSupportMode( tile, name_object );
 
