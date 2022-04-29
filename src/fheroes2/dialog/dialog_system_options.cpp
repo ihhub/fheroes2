@@ -48,8 +48,6 @@ namespace
         Close
     };
 
-
-
     void drawOption( const fheroes2::Rect & optionRoi, const fheroes2::Sprite & icon, const std::string & titleText, const std::string & valueText )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -411,7 +409,7 @@ namespace
 
                 fheroes2::showMessage( header, body, 0 );
             }
-                
+
             else if ( le.MousePressRight( soundVolumeRoi ) ) {
                 fheroes2::Text header( _( "Effects" ), normalYellow );
                 fheroes2::Text body( _( "Toggle foreground sounds level." ), normalWhite );
