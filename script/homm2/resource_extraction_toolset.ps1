@@ -38,6 +38,7 @@ try {
         Write-Host -ForegroundColor Green "Extracting GOG OST files, please wait..."
 
         $musicPath = "$DestPath\music"
+        $tempPath = $null
 
         if (-Not (Test-Path -Path $musicPath -PathType Container)) {
             [void](New-Item -Path $musicPath -ItemType "directory")
@@ -45,9 +46,10 @@ try {
 
         while ($true) {
             $randName = [System.IO.Path]::GetRandomFileName()
+            $tempPath = "$DestPath\$randName"
 
-            if (-Not (Test-Path -Path "$musicPath\$randName")) {
-                [void](New-Item -Path "$musicPath\$randName" -ItemType "directory")
+            if (-Not (Test-Path -Path $tempPath)) {
+                [void](New-Item -Path $tempPath -ItemType "directory")
 
                 break
             }
@@ -58,10 +60,10 @@ try {
         $zip = $shell.NameSpace((Resolve-Path $ArchiveName).Path)
 
         foreach ($item in $zip.Items()) {
-            $shell.Namespace((Resolve-Path "$musicPath\$randName").Path).CopyHere($item, 0x14)
+            $shell.Namespace((Resolve-Path $tempPath).Path).CopyHere($item, 0x14)
         }
 
-        foreach ($item in (Get-ChildItem -Path "$musicPath\$randName" -Recurse)) {
+        foreach ($item in (Get-ChildItem -Path $tempPath -Recurse)) {
             $fileExtension = (Get-ChildItem $item.FullName).Extension
 
             if ($null -Eq $fileExtension) {
@@ -82,7 +84,7 @@ try {
             Copy-Item -Path $item.FullName -Destination "$musicPath\Track$trackNumber$fileExtension"
         }
 
-        Remove-Item -Path "$musicPath\$randName" -Recurse
+        Remove-Item -Path $tempPath -Recurse
     }
 
     Write-Host -ForegroundColor Green "This script will run the extraction toolset to extract and copy additional game resources from the original distribution of Heroes of Might and Magic II`r`n"
