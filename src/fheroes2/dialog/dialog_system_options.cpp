@@ -33,6 +33,7 @@
 #include "text.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_text.h"
 
 #include <cassert>
 
@@ -47,18 +48,23 @@ namespace
         Close
     };
 
-    const int textOffset = 2;
 
-    void drawOption( const fheroes2::Rect & optionRoi, const fheroes2::Sprite & icon, const std::string & title, const std::string & value )
+
+    void drawOption( const fheroes2::Rect & optionRoi, const fheroes2::Sprite & icon, const std::string & titleText, const std::string & valueText )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        fheroes2::Blit( icon, display, optionRoi.x, optionRoi.y );
-        Text text( title, Font::SMALL );
-        text.Blit( optionRoi.x + ( optionRoi.width - text.w() ) / 2, optionRoi.y - text.h() - textOffset );
+        const fheroes2::FontType smallWhite = fheroes2::FontType::smallWhite();
 
-        text.Set( value );
-        text.Blit( optionRoi.x + ( optionRoi.width - text.w() ) / 2, optionRoi.y + optionRoi.height + textOffset );
+        const fheroes2::Text title( titleText, smallWhite );
+        const fheroes2::Text value( valueText, smallWhite );
+
+        const int16_t textMaxWidth = 87;
+
+        title.draw( optionRoi.x - 12, optionRoi.y - title.height( textMaxWidth ), textMaxWidth, display );
+        value.draw( optionRoi.x + ( optionRoi.width - value.width() ) / 2, optionRoi.y + optionRoi.height + 4, display );
+
+        fheroes2::Blit( icon, display, optionRoi.x, optionRoi.y );
     }
 
     void drawDialog( const std::vector<fheroes2::Rect> & rects )
