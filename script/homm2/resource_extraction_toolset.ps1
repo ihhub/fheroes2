@@ -35,14 +35,15 @@ try {
             [string]$DestPath
         )
 
-        Write-Host -ForegroundColor Green "Extracting GOG OST files, please wait..."
+        $gogMusicPath = "$DestPath\music.gog"
 
-        $musicPath = "$DestPath\music"
-        $tempPath = $null
-
-        if (-Not (Test-Path -Path $musicPath -PathType Container)) {
-            [void](New-Item -Path $musicPath -ItemType "directory")
+        if (-Not (Test-Path -Path $gogMusicPath -PathType Container)) {
+            [void](New-Item -Path $gogMusicPath -ItemType "directory")
         }
+
+        Write-Host -ForegroundColor Green (-Join("GOG OST directory: ", (Resolve-Path $gogMusicPath).Path))
+
+        $tempPath = $null
 
         while ($true) {
             $randName = [System.IO.Path]::GetRandomFileName()
@@ -54,6 +55,8 @@ try {
                 break
             }
         }
+
+        Write-Host -ForegroundColor Green "Extracting GOG OST files, please wait..."
 
         $shell = New-Object -ComObject "Shell.Application"
 
@@ -81,7 +84,7 @@ try {
 
             $trackNumber = ($item.Name | Select-String -Pattern "[0-9]{2}").Matches[0].Value
 
-            Copy-Item -Path $item.FullName -Destination "$musicPath\Track$trackNumber$fileExtension"
+            Copy-Item -Path $item.FullName -Destination "$gogMusicPath\Track$trackNumber$fileExtension"
         }
 
         Remove-Item -Path $tempPath -Recurse
