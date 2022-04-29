@@ -168,11 +168,11 @@ try {
         AllowDrop = $true
     }
     $gogOSTExtractionGroupBox.Add_DragEnter({
-        if (-Not (Test-DragDropFile -FileDropList $_.Data.GetFileDropList() -AllowedExtension ".zip")) {
-            return
+        if (Test-DragDropFile -FileDropList $_.Data.GetFileDropList() -AllowedExtension ".zip") {
+            $_.Effect = [Windows.Forms.DragDropEffects]::Copy
+        } else {
+            $_.Effect = [Windows.Forms.DragDropEffects]::None
         }
-
-        $_.Effect = [Windows.Forms.DragDropEffects]::Copy
     })
     $gogOSTExtractionGroupBox.add_DragDrop({
         $fileDropList = $_.Data.GetFileDropList()
