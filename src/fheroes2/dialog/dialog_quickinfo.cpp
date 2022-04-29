@@ -967,7 +967,7 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Rect & activeArea
     const fheroes2::Sprite & r_flag = fheroes2::AGG::GetICN( ICN::FLAG32, index + 1 );
     dst_pt.x = cur_rt.x + ( cur_rt.width + 40 ) / 2;
     fheroes2::Blit( r_flag, display, dst_pt.x, dst_pt.y );
-    
+
     const uint16_t statNumberColumn = 89;
     const uint16_t statRow = 12;
 
@@ -983,7 +983,7 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Rect & activeArea
         text.draw( dst_pt.x, dst_pt.y, display );
 
         // defense
-        text.set(_( "Defense:" ), smallWhite );
+        text.set( _( "Defense:" ), smallWhite );
         dst_pt.x = cur_rt.x + 10;
         dst_pt.y += statRow;
         text.draw( dst_pt.x, dst_pt.y, display );
