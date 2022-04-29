@@ -24,7 +24,6 @@
 #include "ai_normal.h"
 #include "game_interface.h"
 #include "ground.h"
-#include "kingdom.h"
 #include "logging.h"
 #include "mus.h"
 #include "world.h"
@@ -349,97 +348,114 @@ namespace AI
 
         status.RedrawTurnProgress( 1 );
 
-        // Step 2. Update AI variables and recalculate resource budget
-        const bool slowEarlyGame = world.CountDay() < 5 && castles.size() == 1;
+        uint32_t progressStatus = 6;
 
-        const std::set<int> castlesInDanger = findCastlesInDanger( castles, enemyArmies, myColor );
-
-        int32_t heroLimit = world.w() / Maps::SMALL + 1;
-        if ( _personality == EXPLORER )
-            ++heroLimit;
-        if ( slowEarlyGame )
-            heroLimit = 2;
-
-        // Step 3. Do some hero stuff.
-
-        // If a hero is standing in a castle most likely he has nothing to do so let's try to give him more army.
-        for ( Heroes * hero : heroes ) {
-            HeroesActionComplete( *hero );
-        }
-
-        setHeroRoles( heroes );
-
-        const bool moreTasksForHeroes = HeroesTurn( heroes );
-
-        status.RedrawTurnProgress( 6 );
-
-        // Step 4. Buy new heroes, adjust roles, sort heroes based on priority or strength
-        std::vector<AICastle> sortedCastleList = getSortedCastleList( castles, castlesInDanger );
-
-        if ( availableHeroCount < heroLimit ) {
-            Castle * recruitmentCastle = nullptr;
-            double bestArmyAvailable = -1.0;
-
-            // search for best castle to recruit hero from
-            for ( const AICastle & entry : sortedCastleList ) {
-                Castle * castle = entry.castle;
-                if ( castle && castle->isCastle() ) {
-                    const Heroes * hero = castle->GetHeroes().Guest();
-                    const int mapIndex = castle->GetIndex();
-
-                    // Make sure there is no hero in castle already and we're not under threat while having other heroes.
-                    if ( hero != nullptr || ( availableHeroCount > 0 && castlesInDanger.find( mapIndex ) != castlesInDanger.end() ) )
-                        continue;
-
-                    const uint32_t regionID = world.GetTiles( mapIndex ).GetRegion();
-                    const int heroesInRegion = _regions[regionID].friendlyHeroes;
-
-                    if ( heroesInRegion > 1 )
-                        continue;
-
-                    const size_t neighboursCount = world.getRegion( regionID ).getNeighboursCount();
-
-                    // don't buy another hero if there's nothing to do or castle is on an island
-                    if ( heroesInRegion > 0 && ( !moreTasksForHeroes || ( castles.size() > 1 && neighboursCount == 0 ) ) ) {
-                        continue;
-                    }
-
-                    const double availableArmy = castle->getArmyRecruitmentValue();
-
-                    if ( recruitmentCastle == nullptr || availableArmy > bestArmyAvailable ) {
-                        recruitmentCastle = castle;
-                        bestArmyAvailable = availableArmy;
-                    }
-                }
+        std::vector<AICastle> sortedCastleList;
+        std::set<int> castlesInDanger;
+        while ( true ) {
+            // Step 2. Do some hero stuff.
+            // If a hero is standing in a castle most likely he has nothing to do so let's try to give him more army.
+            for ( Heroes * hero : heroes ) {
+                HeroesActionComplete( *hero );
             }
 
-            // target found, buy hero
-            if ( recruitmentCastle && recruitHero( *recruitmentCastle, !slowEarlyGame, false ) ) {
-                ++availableHeroCount;
+            // Step 3. Reassign heroes roles
+            setHeroRoles( heroes );
+
+            if ( progressStatus == 6 ) {
+                status.RedrawTurnProgress( 6 );
+                ++progressStatus;
+            }
+            else {
+                status.RedrawTurnProgress( 8 );
+            }
+
+            castlesInDanger = findCastlesInDanger( castles, enemyArmies, myColor );
+            sortedCastleList = getSortedCastleList( castles, castlesInDanger );
+
+            if ( progressStatus == 7 ) {
+                status.RedrawTurnProgress( 7 );
+            }
+            else {
+                status.RedrawTurnProgress( 8 );
+            }
+
+            const bool moreTaskForHeroes = HeroesTurn( heroes );
+
+            // Step 4. Buy new heroes, adjust roles, sort heroes based on priority or strength
+            if ( !purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {
+                break;
             }
         }
-
-        status.RedrawTurnProgress( 7 );
-
-        // Step 5. Move newly hired heroes if any.
-        setHeroRoles( heroes );
-
-        HeroesTurn( heroes );
 
         status.RedrawTurnProgress( 9 );
 
         // sync up castle list (if conquered new ones during the turn)
         if ( castles.size() != sortedCastleList.size() ) {
             evaluateRegionSafety();
-
             sortedCastleList = getSortedCastleList( castles, castlesInDanger );
         }
 
-        // Step 6. Castle development according to kingdom budget
+        // Step 5. Castle development according to kingdom budget
         for ( const AICastle & entry : sortedCastleList ) {
             if ( entry.castle != nullptr ) {
                 CastleTurn( *entry.castle, entry.underThreat );
             }
         }
+    }
+
+    bool Normal::purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, int32_t availableHeroCount,
+                                    bool moreTasksForHeroes )
+    {
+        const bool slowEarlyGame = world.CountDay() < 5 && sortedCastleList.size() == 1;
+        int32_t heroLimit = world.w() / Maps::SMALL + 1;
+
+        if ( _personality == EXPLORER )
+            ++heroLimit;
+        if ( slowEarlyGame )
+            heroLimit = 2;
+
+        if ( availableHeroCount >= heroLimit ) {
+            return false;
+        }
+
+        Castle * recruitmentCastle = nullptr;
+        double bestArmyAvailable = -1.0;
+
+        // search for best castle to recruit hero from
+        for ( const AICastle & entry : sortedCastleList ) {
+            Castle * castle = entry.castle;
+            if ( castle && castle->isCastle() ) {
+                const Heroes * hero = castle->GetHeroes().Guest();
+                const int mapIndex = castle->GetIndex();
+
+                // Make sure there is no hero in castle already and we're not under threat while having other heroes.
+                if ( hero != nullptr || ( availableHeroCount > 0 && castlesInDanger.find( mapIndex ) != castlesInDanger.end() ) )
+                    continue;
+
+                const uint32_t regionID = world.GetTiles( mapIndex ).GetRegion();
+                const int heroesInRegion = _regions[regionID].friendlyHeroes;
+
+                if ( heroesInRegion > 1 )
+                    continue;
+
+                const size_t neighboursCount = world.getRegion( regionID ).getNeighboursCount();
+
+                // don't buy another hero if there's nothing to do or castle is on an island
+                if ( heroesInRegion > 0 && ( !moreTasksForHeroes || ( sortedCastleList.size() > 1 && neighboursCount == 0 ) ) ) {
+                    continue;
+                }
+
+                const double availableArmy = castle->getArmyRecruitmentValue();
+
+                if ( recruitmentCastle == nullptr || availableArmy > bestArmyAvailable ) {
+                    recruitmentCastle = castle;
+                    bestArmyAvailable = availableArmy;
+                }
+            }
+        }
+
+        // target found, buy hero
+        return recruitmentCastle && recruitHero( *recruitmentCastle, !slowEarlyGame, false );
     }
 }
