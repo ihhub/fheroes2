@@ -40,6 +40,12 @@ try {
         if (-Not (Test-Path -Path $gogMusicPath -PathType Container)) {
             [void](New-Item -Path $gogMusicPath -ItemType "directory")
         }
+        if (-Not (Test-Path -Path "$gogMusicPath\pol" -PathType Container)) {
+            [void](New-Item -Path "$gogMusicPath\pol" -ItemType "directory")
+        }
+        if (-Not (Test-Path -Path "$gogMusicPath\sw" -PathType Container)) {
+            [void](New-Item -Path "$gogMusicPath\sw" -ItemType "directory")
+        }
 
         Write-Host -ForegroundColor Green (-Join("GOG OST directory: ", (Resolve-Path $gogMusicPath).Path))
 
@@ -66,6 +72,9 @@ try {
             $shell.Namespace((Resolve-Path $tempPath).Path).CopyHere($item, 0x14)
         }
 
+        # Additional PoL soundtrack id -> SW soundtrack id
+        $polSWMap = @{"44" = "05"; "45" = "06"; "46" = "07"; "47" = "08"; "48" = "09"; "49" = "10"}
+
         foreach ($item in (Get-ChildItem -Path $tempPath -Recurse)) {
             $fileExtension = (Get-ChildItem $item.FullName).Extension
 
@@ -83,6 +92,16 @@ try {
             }
 
             $trackNumber = ($item.Name | Select-String -Pattern "[0-9]{2}").Matches[0].Value
+
+            # Castle soundtracks from the Succession Wars
+            if ($polSWMap.Values -contains $trackNumber) {
+                Copy-Item -Path $item.FullName -Destination "$gogMusicPath\sw\Track$trackNumber$fileExtension"
+            # Castle soundtracks from the Price of Loyalty expansion
+            } elseif ($polSWMap.Keys -contains $trackNumber) {
+                $trackNumber = $polSWMap[$trackNumber]
+
+                Copy-Item -Path $item.FullName -Destination "$gogMusicPath\pol\Track$trackNumber$fileExtension"
+            }
 
             Copy-Item -Path $item.FullName -Destination "$gogMusicPath\Track$trackNumber$fileExtension"
         }
