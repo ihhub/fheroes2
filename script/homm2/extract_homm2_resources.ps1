@@ -6,7 +6,8 @@ try {
             [string]$Path
         )
 
-        if ((Test-Path -Path "$Path\HEROES2.EXE" -PathType Leaf) -And
+        if (((Test-Path -Path "$Path\HEROES2.EXE" -PathType Leaf) -Or
+             (Test-Path -Path "$Path\HEROES2W.EXE" -PathType Leaf)) -And
             (Test-Path -Path "$Path\DATA" -PathType Container) -And
             (Test-Path -Path "$Path\MAPS" -PathType Container)) {
             return $true
