@@ -99,8 +99,8 @@ namespace
         // Some operating systems do not work well with SDL so they return very limited number of high resolutions.
         // Populate missing resolutions into the list.
         const std::vector<fheroes2::Size> possibleResolutions
-            = { { 640, 480 },   { 800, 600 },  { 1024, 768 },  { 1152, 864 }, { 1280, 600 }, { 1280, 720 },  { 1280, 768 }, { 1280, 960 }, { 1280, 1024 },
-                { 1360, 768 }, { 1400, 1050 }, { 1440, 900 }, { 1600, 900 }, { 1680, 1050 }, { 1920, 1080 } };
+            = { { 640, 480 },   { 800, 600 },  { 1024, 768 },  { 1152, 864 }, { 1280, 600 }, { 1280, 720 },  { 1280, 768 }, { 1280, 960 },
+                { 1280, 1024 }, { 1360, 768 }, { 1400, 1050 }, { 1440, 900 }, { 1600, 900 }, { 1680, 1050 }, { 1920, 1080 } };
 
         const fheroes2::Size currentResolution = resolutions.back();
         for ( size_t i = 0; i < possibleResolutions.size(); ++i ) {
