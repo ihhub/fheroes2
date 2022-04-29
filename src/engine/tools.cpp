@@ -80,8 +80,8 @@ std::string StringUpper( std::string str )
 
 std::string GetStringShort( int value )
 {
-    if ( std::abs( value ) > 1000 ) {
-        if ( std::abs( value ) > 1000000 ) {
+    if ( std::abs( value ) >= 1000 ) {
+        if ( std::abs( value ) >= 1000000 ) {
             return std::to_string( value / 1000000 ) + 'M';
         }
 
