@@ -35,19 +35,7 @@ try {
             [string]$DestPath
         )
 
-        $gogMusicPath = "$DestPath\music.gog"
-
-        if (-Not (Test-Path -Path $gogMusicPath -PathType Container)) {
-            [void](New-Item -Path $gogMusicPath -ItemType "directory")
-        }
-        if (-Not (Test-Path -Path "$gogMusicPath\pol" -PathType Container)) {
-            [void](New-Item -Path "$gogMusicPath\pol" -ItemType "directory")
-        }
-        if (-Not (Test-Path -Path "$gogMusicPath\sw" -PathType Container)) {
-            [void](New-Item -Path "$gogMusicPath\sw" -ItemType "directory")
-        }
-
-        Write-Host -ForegroundColor Green (-Join("GOG OST directory: ", (Resolve-Path $gogMusicPath).Path))
+        Write-Host -ForegroundColor Green "Extracting GOG OST files, please wait..."
 
         $tempPath = $null
 
@@ -62,8 +50,6 @@ try {
             }
         }
 
-        Write-Host -ForegroundColor Green "Extracting GOG OST files, please wait..."
-
         $shell = New-Object -ComObject "Shell.Application"
 
         $zip = $shell.NameSpace((Resolve-Path $ArchiveName).Path)
@@ -72,10 +58,39 @@ try {
             $shell.Namespace((Resolve-Path $tempPath).Path).CopyHere($item, 0x14)
         }
 
+        $tmpMusicPath = $null
+
+        while ($true) {
+            $randName = [System.IO.Path]::GetRandomFileName()
+            $tmpMusicPath = "$DestPath\$randName"
+
+            if (-Not (Test-Path -Path $tmpMusicPath)) {
+                [void](New-Item -Path $tmpMusicPath -ItemType "directory")
+
+                break
+            }
+        }
+
+        if (-Not (Test-Path -Path $tmpMusicPath -PathType Container)) {
+            [void](New-Item -Path $tmpMusicPath -ItemType "directory")
+        }
+        if (-Not (Test-Path -Path "$tmpMusicPath\pol" -PathType Container)) {
+            [void](New-Item -Path "$tmpMusicPath\pol" -ItemType "directory")
+        }
+        if (-Not (Test-Path -Path "$tmpMusicPath\sw" -PathType Container)) {
+            [void](New-Item -Path "$tmpMusicPath\sw" -ItemType "directory")
+        }
+
         # Additional PoL soundtrack id -> SW soundtrack id
         $polSWMap = @{"44" = "05"; "45" = "06"; "46" = "07"; "47" = "08"; "48" = "09"; "49" = "10"}
 
+        $musicType = $null
+
         foreach ($item in (Get-ChildItem -Path $tempPath -Recurse)) {
+            if ($item.Name -notmatch "[0-9]{2}") {
+                continue
+            }
+
             $fileExtension = (Get-ChildItem $item.FullName).Extension
 
             if ($null -Eq $fileExtension) {
@@ -84,10 +99,14 @@ try {
 
             $fileExtension = $fileExtension.ToLower()
 
-            if (($fileExtension -Ne ".mp3") -And ($fileExtension -Ne ".flac")) {
-                continue
-            }
-            if ($item.Name -notmatch "[0-9]{2}") {
+            if ($fileExtension -Eq ".flac") {
+                $musicType = $fileExtension
+            } elseif ($fileExtension -Eq ".mp3") {
+                # An archive with FLAC can contain some MP3 files
+                if ($null -Eq $musicType) {
+                    $musicType = $fileExtension
+                }
+            } else {
                 continue
             }
 
@@ -95,18 +114,45 @@ try {
 
             # Castle soundtracks from the Succession Wars
             if ($polSWMap.Values -contains $trackNumber) {
-                Copy-Item -Path $item.FullName -Destination "$gogMusicPath\sw\Track$trackNumber$fileExtension"
+                Copy-Item -Path $item.FullName -Destination "$tmpMusicPath\sw\Track$trackNumber$fileExtension"
             # Castle soundtracks from the Price of Loyalty expansion
             } elseif ($polSWMap.Keys -contains $trackNumber) {
                 $trackNumber = $polSWMap[$trackNumber]
 
-                Copy-Item -Path $item.FullName -Destination "$gogMusicPath\pol\Track$trackNumber$fileExtension"
+                Copy-Item -Path $item.FullName -Destination "$tmpMusicPath\pol\Track$trackNumber$fileExtension"
             }
 
-            Copy-Item -Path $item.FullName -Destination "$gogMusicPath\Track$trackNumber$fileExtension"
+            Copy-Item -Path $item.FullName -Destination "$tmpMusicPath\Track$trackNumber$fileExtension"
         }
 
         Remove-Item -Path $tempPath -Recurse
+
+        if ($null -Eq $musicType) {
+            Remove-Item -Path $tmpMusicPath -Recurse
+
+            Write-Host -ForegroundColor Yellow "WARNING: No soundtracks were found"
+        } else {
+            $dirName = $null
+            $uniqId = 0
+
+            while ($true) {
+                if ($uniqId -Eq 0) {
+                    $dirName = "music$musicType"
+                } else {
+                    $dirName = "music$musicType.$uniqId"
+                }
+
+                if (-Not (Test-Path -Path "$DestPath\$dirName")) {
+                    break
+                }
+
+                $uniqId++
+            }
+
+            Rename-Item -Path $tmpMusicPath -NewName $dirName
+
+            Write-Host -ForegroundColor Green (-Join("GOG OST directory: ", (Resolve-Path "$DestPath\$dirName").Path))
+        }
     }
 
     Write-Host -ForegroundColor Green "This script will run the extraction toolset to extract and copy additional game resources from the original distribution of Heroes of Might and Magic II`r`n"
