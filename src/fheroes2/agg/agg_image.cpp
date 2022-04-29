@@ -1892,6 +1892,18 @@ namespace fheroes2
                 }
                 return true;
             }
+            case ICN::ARTIFACT:
+                LoadOriginalICN( id );
+                // Fix "Arm of the Martyr" artifact rendering.
+                if ( _icnVsSprite[id].size() > 88 ) {
+                    Sprite & originalImage = _icnVsSprite[id][88];
+                    Sprite temp( originalImage.width(), originalImage.height() );
+                    temp.setPosition( originalImage.x(), originalImage.y() );
+                    temp.fill( 0 );
+                    Blit( originalImage, temp );
+                    originalImage = std::move( temp );
+                }
+                break;
             default:
                 break;
             }

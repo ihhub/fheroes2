@@ -166,7 +166,6 @@ public:
             return;
 
         const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, arifact.IndexSprite32() );
-        fheroes2::Fill( image, roi.x + 1, roi.y + 1, artifactSprite.width(), artifactSprite.height(), 0 );
         fheroes2::Blit( artifactSprite, image, roi.x + 1, roi.y + 1 );
 
         if ( isSelected ) {
@@ -235,18 +234,15 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
     const fheroes2::Point cur_pt( ( display.width() - backSprite.width() ) / 2, ( display.height() - backSprite.height() ) / 2 );
     fheroes2::ImageRestorer restorer( display, cur_pt.x, cur_pt.y, backSprite.width(), backSprite.height() );
-    fheroes2::Point dst_pt( cur_pt );
-    std::string message;
 
     fheroes2::Rect src_rt( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
     // background
-    dst_pt.x = cur_pt.x;
-    dst_pt.y = cur_pt.y;
+    fheroes2::Point dst_pt( cur_pt );
     fheroes2::Blit( backSprite, src_rt.x, src_rt.y, display, dst_pt.x, dst_pt.y, src_rt.width, src_rt.height );
 
     // header
-    message = _( "%{name1} meets %{name2}" );
+    std::string message( _( "%{name1} meets %{name2}" ) );
     StringReplace( message, "%{name1}", GetName() );
     StringReplace( message, "%{name2}", otherHero.GetName() );
     Text text( message, Font::BIG );
