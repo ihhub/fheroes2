@@ -30,9 +30,9 @@
 #include "localevent.h"
 #include "screen.h"
 #include "settings.h"
-#include "text.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 
 #include <cassert>
@@ -402,26 +402,70 @@ namespace
                 saveAutoBattle = true;
             }
 
-            if ( le.MousePressRight( musicVolumeRoi ) )
-                Dialog::Message( _( "Music" ), _( "Toggle ambient music level." ), Font::BIG );
-            else if ( le.MousePressRight( soundVolumeRoi ) )
-                Dialog::Message( _( "Effects" ), _( "Toggle foreground sounds level." ), Font::BIG );
-            else if ( le.MousePressRight( musicTypeRoi ) )
-                Dialog::Message( _( "Music Type" ), _( "Change the type of music." ), Font::BIG );
-            else if ( le.MousePressRight( heroSpeedRoi ) )
-                Dialog::Message( _( "Hero Speed" ), _( "Change the speed at which your heroes move on the main screen." ), Font::BIG );
-            else if ( le.MousePressRight( aiSpeedRoi ) )
-                Dialog::Message( _( "Enemy Speed" ), _( "Sets the speed that A.I. heroes move at.  You can also elect not to view A.I. movement at all." ), Font::BIG );
-            else if ( le.MousePressRight( scrollSpeedRoi ) )
-                Dialog::Message( _( "Scroll Speed" ), _( "Sets the speed at which you scroll the window." ), Font::BIG );
-            else if ( le.MousePressRight( interfaceTypeRoi ) )
-                Dialog::Message( _( "Interface Type" ), _( "Toggle the type of interface you want to use." ), Font::BIG );
-            else if ( le.MousePressRight( interfaceStateRoi ) )
-                Dialog::Message( _( "Interface" ), _( "Toggle interface visibility." ), Font::BIG );
-            else if ( le.MousePressRight( battleResolveRoi ) )
-                Dialog::Message( _( "Battles" ), _( "Toggle instant battle mode." ), Font::BIG );
-            else if ( le.MousePressRight( buttonOkay.area() ) )
-                Dialog::Message( _( "Okay" ), _( "Exit this menu." ), Font::BIG );
+            const fheroes2::FontType normalYellow = fheroes2::FontType::normalYellow();
+            const fheroes2::FontType normalWhite = fheroes2::FontType::normalWhite();
+
+            if ( le.MousePressRight( musicVolumeRoi ) ) {
+                fheroes2::Text header( _( "Music" ), normalYellow );
+                fheroes2::Text body( _( "Toggle ambient music level." ), normalWhite );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
+                
+            else if ( le.MousePressRight( soundVolumeRoi ) ) {
+                fheroes2::Text header( _( "Effects" ), normalYellow );
+                fheroes2::Text body( _( "Toggle foreground sounds level." ), normalWhite );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
+            else if ( le.MousePressRight( musicTypeRoi ) ) {
+                fheroes2::Text header( _( "Music Type" ), normalYellow );
+                fheroes2::Text body( _( "Change the type of music." ), normalWhite );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
+            else if ( le.MousePressRight( heroSpeedRoi ) ) {
+                fheroes2::Text header( _( "Hero Speed" ), normalYellow );
+                fheroes2::Text body( _( "Change the speed at which your heroes move on the main screen." ), normalWhite );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
+            else if ( le.MousePressRight( aiSpeedRoi ) ) {
+                fheroes2::Text header( _( "Enemy Speed" ), normalYellow );
+                fheroes2::Text body( _( "Sets the speed that A.I. heroes move at.  You can also elect not to view A.I. movement at all." ), normalWhite );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
+            else if ( le.MousePressRight( scrollSpeedRoi ) ) {
+                fheroes2::Text header( _( "Scroll Speed" ), normalYellow );
+                fheroes2::Text body( _( "Sets the speed at which you scroll the window." ), normalWhite );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
+            else if ( le.MousePressRight( interfaceTypeRoi ) ) {
+                fheroes2::Text header( _( "Interface Type" ), normalYellow );
+                fheroes2::Text body( _( "Toggle the type of interface you want to use." ), normalWhite );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
+            else if ( le.MousePressRight( interfaceStateRoi ) ) {
+                fheroes2::Text header( _( "Interface" ), normalYellow );
+                fheroes2::Text body( _( "Toggle interface visibility." ), normalWhite );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
+            else if ( le.MousePressRight( battleResolveRoi ) ) {
+                fheroes2::Text header( _( "Battles" ), normalYellow );
+                fheroes2::Text body( _( "Toggle instant battle mode." ), normalWhite );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
+            else if ( le.MousePressRight( buttonOkay.area() ) ) {
+                fheroes2::Text header( _( "Okay" ), normalYellow );
+                fheroes2::Text body( _( "Exit this menu." ), normalWhite );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
 
             if ( saveMusicVolume || saveSoundVolume || saveMusicType || saveHeroSpeed || saveAISpeed || saveScrollSpeed || saveAutoBattle ) {
                 // redraw
