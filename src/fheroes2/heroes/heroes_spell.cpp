@@ -550,13 +550,13 @@ bool ActionSpellTownPortal( Heroes & hero )
         result = btnGroup.processEvents();
         listbox.QueueEventProcessing();
 
+        if ( !listbox.IsNeedRedraw() ) {
+            continue;
+        }
+
         if ( listbox.isSelected() ) {
             btnGroup.button( 0 ).enable();
             btnGroup.draw();
-        }
-
-        if ( !listbox.IsNeedRedraw() ) {
-            continue;
         }
 
         listbox.Redraw();
