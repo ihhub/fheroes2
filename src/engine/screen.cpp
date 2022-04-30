@@ -102,12 +102,12 @@ namespace
             = { { 640, 480 },   { 800, 600 },  { 1024, 768 },  { 1152, 864 }, { 1280, 600 }, { 1280, 720 },  { 1280, 768 }, { 1280, 960 },
                 { 1280, 1024 }, { 1360, 768 }, { 1400, 1050 }, { 1440, 900 }, { 1600, 900 }, { 1680, 1050 }, { 1920, 1080 } };
 
-        const fheroes2::Size currentResolution = resolutions.back();
-        for ( size_t i = 0; i < possibleResolutions.size(); ++i ) {
-            if ( currentResolution.width < possibleResolutions[i].width || currentResolution.height < possibleResolutions[i].height ) {
+        const fheroes2::Size lowestResolution = resolutions.back();
+        for ( const fheroes2::Size & resolution : possibleResolutions ) {
+            if ( lowestResolution.width < resolution.width || lowestResolution.height < resolution.height ) {
                 continue;
             }
-            resolutions.emplace_back( possibleResolutions[i] );
+            resolutions.emplace_back( resolution );
         }
 
         std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
