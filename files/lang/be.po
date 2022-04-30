@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-05 20:49+0200\n"
-"PO-Revision-Date: 2022-04-30 17:36+0200\n"
+"POT-Creation-Date: 2022-04-30 17:56+0200\n"
+"PO-Revision-Date: 2022-04-30 17:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: be\n"
@@ -650,6 +650,12 @@ msgstr ""
 msgid "Necromancer Guild"
 msgstr ""
 
+msgid "Ogre Alliance"
+msgstr ""
+
+msgid "Dwarfbane"
+msgstr ""
+
 msgid "Dragon Alliance"
 msgstr ""
 
@@ -1192,6 +1198,132 @@ msgid "campaignBonus|Traveler's Boots"
 msgstr ""
 
 msgid "campaignBonus|White Pearl"
+msgstr ""
+
+msgid "campaignBonus|Basic Archery"
+msgstr ""
+
+msgid "campaignBonus|Advanced Archery"
+msgstr ""
+
+msgid "campaignBonus|Expert Archery"
+msgstr ""
+
+msgid "campaignBonus|Basic Ballistics"
+msgstr ""
+
+msgid "campaignBonus|Advanced Ballistics"
+msgstr ""
+
+msgid "campaignBonus|Expert Ballistics"
+msgstr ""
+
+msgid "campaignBonus|Basic Diplomacy"
+msgstr ""
+
+msgid "campaignBonus|Advanced Diplomacy"
+msgstr ""
+
+msgid "campaignBonus|Expert Diplomacy"
+msgstr ""
+
+msgid "campaignBonus|Basic Eagle Eye"
+msgstr ""
+
+msgid "campaignBonus|Advanced Eagle Eye"
+msgstr ""
+
+msgid "campaignBonus|Expert Eagle Eye"
+msgstr ""
+
+msgid "campaignBonus|Basic Estates"
+msgstr ""
+
+msgid "campaignBonus|Advanced Estates"
+msgstr ""
+
+msgid "campaignBonus|Expert Estates"
+msgstr ""
+
+msgid "campaignBonus|Basic Leadership"
+msgstr ""
+
+msgid "campaignBonus|Advanced Leadership"
+msgstr ""
+
+msgid "campaignBonus|Expert Leadership"
+msgstr ""
+
+msgid "campaignBonus|Basic Logistics"
+msgstr ""
+
+msgid "campaignBonus|Advanced Logistics"
+msgstr ""
+
+msgid "campaignBonus|Expert Logistics"
+msgstr ""
+
+msgid "campaignBonus|Basic Luck"
+msgstr ""
+
+msgid "campaignBonus|Advanced Luck"
+msgstr ""
+
+msgid "campaignBonus|Expert Luck"
+msgstr ""
+
+msgid "campaignBonus|Basic Mysticism"
+msgstr ""
+
+msgid "campaignBonus|Advanced Mysticism"
+msgstr ""
+
+msgid "campaignBonus|Expert Mysticism"
+msgstr ""
+
+msgid "campaignBonus|Basic Navigation"
+msgstr ""
+
+msgid "campaignBonus|Advanced Navigation"
+msgstr ""
+
+msgid "campaignBonus|Expert Navigation"
+msgstr ""
+
+msgid "campaignBonus|Basic Necromancy"
+msgstr ""
+
+msgid "campaignBonus|Advanced Necromancy"
+msgstr ""
+
+msgid "campaignBonus|Expert Necromancy"
+msgstr ""
+
+msgid "campaignBonus|Basic Pathfinding"
+msgstr ""
+
+msgid "campaignBonus|Advanced Pathfinding"
+msgstr ""
+
+msgid "campaignBonus|Expert Pathfinding"
+msgstr ""
+
+msgid "campaignBonus|Basic Scouting"
+msgstr ""
+
+msgid "campaignBonus|Advanced Scouting"
+msgstr ""
+
+msgid "campaignBonus|Expert Scouting"
+msgstr ""
+
+msgid "campaignBonus|Basic Wisdom"
+msgstr ""
+
+msgid "campaignBonus|Advanced Wisdom"
+msgstr ""
+
+msgid "campaignBonus|Expert Wisdom"
 msgstr ""
 
 msgid "campaignBonus|Animate Dead"
@@ -2182,6 +2314,27 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
+msgid "off"
+msgstr ""
+
+msgid "Music"
+msgstr ""
+
+msgid "Effects"
+msgstr ""
+
+msgid "MIDI"
+msgstr ""
+
+msgid "MIDI Expansion"
+msgstr ""
+
+msgid "External"
+msgstr ""
+
+msgid "Music Type"
+msgstr ""
+
 msgid "Select Game Language"
 msgstr ""
 
@@ -2195,6 +2348,15 @@ msgid "Change resolution of the game."
 msgstr ""
 
 msgid "Experimental game settings."
+msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr ""
+
+msgid "Toggle foreground sounds level."
+msgstr ""
+
+msgid "Change the type of music."
 msgstr ""
 
 msgid "Okay"
@@ -2384,7 +2546,22 @@ msgstr ""
 msgid "%{name} (Level %{level})"
 msgstr ""
 
-msgid "Move Points"
+msgid "Attack:"
+msgstr ""
+
+msgid "Defense:"
+msgstr ""
+
+msgid "Spell Power:"
+msgstr ""
+
+msgid "Knowledge:"
+msgstr ""
+
+msgid "Spell Points:"
+msgstr ""
+
+msgid "Move Points:"
 msgstr ""
 
 msgid "Cost per troop:"
@@ -2588,27 +2765,6 @@ msgstr ""
 msgid "Experimental Game Settings"
 msgstr ""
 
-msgid "off"
-msgstr ""
-
-msgid "Music"
-msgstr ""
-
-msgid "Effects"
-msgstr ""
-
-msgid "MIDI"
-msgstr ""
-
-msgid "MIDI Expansion"
-msgstr ""
-
-msgid "External"
-msgstr ""
-
-msgid "Music Type"
-msgstr ""
-
 msgid "Jump"
 msgstr ""
 
@@ -2652,15 +2808,6 @@ msgid "Battles"
 msgstr ""
 
 msgid "Manual"
-msgstr ""
-
-msgid "Toggle ambient music level."
-msgstr ""
-
-msgid "Toggle foreground sounds level."
-msgstr ""
-
-msgid "Change the type of music."
 msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -2821,9 +2968,6 @@ msgstr ""
 msgid "and many other contributors!"
 msgstr ""
 
-msgid "Original project before 0.7"
-msgstr ""
-
 msgid "Support us at"
 msgstr ""
 
@@ -2834,6 +2978,9 @@ msgid "Need help with the game?"
 msgstr ""
 
 msgid "and many-many other supporters!"
+msgstr ""
+
+msgid "Original project before 0.7"
 msgstr ""
 
 msgid "Original Heroes of Might and Magic II team"
@@ -4694,18 +4841,18 @@ msgstr ""
 msgid "Spell book is not present."
 msgstr ""
 
-msgid "The spell is not found."
-msgstr ""
-
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
 "cast the spell."
 msgstr ""
 
-msgid "Not enough move points."
+msgid "The spell is not found."
 msgstr ""
 
 msgid "Only heroes can cast this spell."
+msgstr ""
+
+msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
 msgid ""
@@ -4802,9 +4949,6 @@ msgid "Town Portal"
 msgstr ""
 
 msgid "Select town to port to."
-msgstr ""
-
-msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
 msgid "%{spell} failed!!!"
@@ -8085,9 +8229,6 @@ msgid "heroes: allow to choose any primary skill in Arena"
 msgstr ""
 
 msgid "battle: allow soft wait for troops"
-msgstr ""
-
-msgid "battle: reverse wait order (fast, average, slow)"
 msgstr ""
 
 msgid "battle: deterministic events"
