@@ -535,6 +535,9 @@ bool ActionSpellTownPortal( Heroes & hero )
     btnGroup.addButton( fheroes2::makeButtonWithShadow( area.x + border, area.y + area.height - border - buttonOkSprite.height(), buttonOkSprite,
                                                         fheroes2::AGG::GetICN( okIcnId, 1 ), display ),
                         Dialog::OK );
+
+    btnGroup.button( 0 ).disable();
+
     btnGroup.addButton( fheroes2::makeButtonWithShadow( area.x + area.width - border - buttonCancelSprite.width(),
                                                         area.y + area.height - border - buttonCancelSprite.height(), buttonCancelSprite,
                                                         fheroes2::AGG::GetICN( cancelIcnId, 1 ), display ),
@@ -549,6 +552,11 @@ bool ActionSpellTownPortal( Heroes & hero )
 
         if ( !listbox.IsNeedRedraw() ) {
             continue;
+        }
+
+        if ( listbox.isSelected() ) {
+            btnGroup.button( 0 ).enable();
+            btnGroup.draw();
         }
 
         listbox.Redraw();
