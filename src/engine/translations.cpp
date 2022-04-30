@@ -101,6 +101,7 @@ namespace
         LOCALE_EN,
         LOCALE_AF,
         LOCALE_AR,
+        LOCALE_BE,
         LOCALE_BG,
         LOCALE_CA,
         LOCALE_CS,
@@ -131,7 +132,8 @@ namespace
         LOCALE_SL,
         LOCALE_SR,
         LOCALE_SV,
-        LOCALE_TR
+        LOCALE_TR,
+        LOCALE_UK
     };
 
     struct chunk
@@ -346,6 +348,8 @@ namespace Translation
             current->locale = LocaleType::LOCALE_AF;
         else if ( str == "ar" || str == "arabic" )
             current->locale = LocaleType::LOCALE_AR;
+        else if ( str == "be" || str == "belarusian" )
+            current->locale = LocaleType::LOCALE_BE;
         else if ( str == "bg" || str == "bulgarian" )
             current->locale = LocaleType::LOCALE_BG;
         else if ( str == "ca" || str == "catalan" )
@@ -406,7 +410,8 @@ namespace Translation
             current->locale = LocaleType::LOCALE_SV;
         else if ( str == "tr" || str == "turkish" )
             current->locale = LocaleType::LOCALE_TR;
-
+        else if ( str == "uk" || str == "ukrainian" )
+            current->locale = LocaleType::LOCALE_UK;
         return true;
     }
 
@@ -431,6 +436,8 @@ namespace Translation
         if ( current )
             switch ( current->locale ) {
             case LocaleType::LOCALE_AF:
+            case LocaleType::LOCALE_BE:
+                return current->ngettext( str, n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 12 || n % 100 > 14 ) ? 1 : 2 );
             case LocaleType::LOCALE_EU:
             case LocaleType::LOCALE_ID:
             case LocaleType::LOCALE_LA:
@@ -477,6 +484,8 @@ namespace Translation
                 return current->ngettext( str, ( n != 1 ) );
             case LocaleType::LOCALE_PL:
                 return current->ngettext( str, ( n == 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
+            case LocaleType::LOCALE_UK:
+                return current->ngettext( str, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 12 || n % 100 > 14 ) ? 1 : 2 ) );
             default:
                 break;
             }
