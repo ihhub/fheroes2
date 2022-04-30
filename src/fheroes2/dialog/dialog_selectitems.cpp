@@ -189,7 +189,6 @@ public:
         const Artifact art( index );
 
         const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
-        fheroes2::Fill( display, dstx + 5, dsty + 3, artifactSprite.width(), artifactSprite.height(), 0 );
         fheroes2::Blit( artifactSprite, display, dstx + 5, dsty + 3 );
 
         if ( current ) {
