@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-30 17:56+0200\n"
-"PO-Revision-Date: 2022-04-30 17:57+0200\n"
+"PO-Revision-Date: 2022-04-30 18:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: be\n"
@@ -460,15 +460,12 @@ msgstr ""
 msgid "%{name} skip their turn."
 msgstr ""
 
-# if only 1 monster: "... passe ..."
 msgid "%{name} wait their turn."
 msgstr ""
 
-# if only 1 monster: "... attend"
 msgid "%{attacker} do %{damage} damage."
 msgstr ""
 
-# if only 1 monster: "... inflige ..."
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
 msgstr[0] ""
@@ -2490,11 +2487,9 @@ msgstr ""
 msgid "guarded by "
 msgstr ""
 
-# artifact is guarded by? (=gardé). A mine is guarded by? (=gardée). Ruins are guarded by? (=gardées).
 msgid "guarded by %{count} %{monster}"
 msgstr ""
 
-# same "gardé/e/s problem as above.
 msgid "(available: %{count})"
 msgstr ""
 
@@ -3122,7 +3117,6 @@ msgstr ""
 msgid "Please Remember"
 msgstr ""
 
-# Needs extra whitespace to avoid yellow word splitting
 msgid "You can always change game resolution by clicking on the "
 msgstr ""
 
@@ -8297,7 +8291,6 @@ msgstr ""
 msgid "A Black Dragon will take out a Titan any day of the week."
 msgstr ""
 
-# Orignal H2-fr: Un Dragon noir peut vaincre un Titan à tout moment.
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr ""
 
