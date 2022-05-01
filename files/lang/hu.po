@@ -3476,11 +3476,11 @@ msgid "No maps available!"
 msgstr "Nincs használható térkép!"
 
 #, fuzzy
-msgid "Astrologers proclaim Month of the %{name}."
+msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Az Asztrológusok kihírdették a %{name} havát."
 
 #, fuzzy
-msgid "Astrologers proclaim Week of the %{name}."
+msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Az Asztrológusok kihírdették a %{name} hetét."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
@@ -3495,7 +3495,7 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "%{monster} population increases by +%{count}."
+msgid "%{monster} growth +%{count}."
 msgstr ""
 
 msgid " All populations are halved."

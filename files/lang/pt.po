@@ -3411,11 +3411,11 @@ msgid "No maps available!"
 msgstr "Não há mapas disponíveis!"
 
 #, fuzzy
-msgid "Astrologers proclaim Month of the %{name}."
+msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrólogos proclamar o mês do %{name}."
 
 #, fuzzy
-msgid "Astrologers proclaim Week of the %{name}."
+msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Astrólogos proclamar a semana do %{name}."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
@@ -3430,7 +3430,7 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "%{monster} population increases by +%{count}."
+msgid "%{monster} growth +%{count}."
 msgstr ""
 
 msgid " All populations are halved."

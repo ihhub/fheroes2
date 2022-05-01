@@ -3524,10 +3524,10 @@ msgstr "Kliknij, aby wrócić do głównego menu."
 msgid "No maps available!"
 msgstr "Mapy niedostępne!"
 
-msgid "Astrologers proclaim Month of the %{name}."
+msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologowie zapowiadają Miesiąc %{name}."
 
-msgid "Astrologers proclaim Week of the %{name}."
+msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Astrologowie zapowiadają Tydzień %{name}."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
@@ -3550,7 +3550,7 @@ msgstr[2] ""
 "procent!"
 
 # literally, this wont work in Polish. I.e. single: "Feniks", plural "Feniksy", but "Populacja Feniksów zwiększa się o +3."...
-msgid "%{monster} population increases by +%{count}."
+msgid "%{monster} growth +%{count}."
 msgstr "%{monster} zwiększają populację o +%{count}."
 
 msgid " All populations are halved."
