@@ -52,10 +52,10 @@ Alternatively, you can download the precompiled binaries of the latest commit (s
   game resources from it (you can also do this later by clicking the appropriate shortcut in the program's group in the Windows Start
   menu).
 
-* If you purchased a copy of the original game only after installing fheroes2, you can run the `Extract game resources from the
-  original HoMM2 distribution` shortcut in the program's group in the Windows Start menu. This script will try to perform an automatic
-  search for an existing installation of the original game and extract all the necessary resource files. If it can't find an existing
-  installation, you will be prompted to enter the location of the original game manually.
+* If you purchased a copy of the original game only after installing fheroes2, you can run the `Extract game resources from the original
+  distribution of HoMM2` shortcut in the program's group in the Windows Start menu. This script will try to perform an automatic search
+  for an existing installation of the original game and extract all the necessary resource files. If it can't find an existing installation,
+  you will be prompted to enter the location of the original game manually.
 
 * As an alternative to the previous step, you can manually copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
   be missing depending on the version of the original game) from the original game directory to the fheroes2 installation directory.
