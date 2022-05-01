@@ -51,7 +51,7 @@ namespace
             { "cs", fheroes2::SupportedLanguage::Czech },      { "czech", fheroes2::SupportedLanguage::Czech },
             { "nb", fheroes2::SupportedLanguage::Norwegian },  { "norwegian", fheroes2::SupportedLanguage::Norwegian },
             { "be", fheroes2::SupportedLanguage::Belarusian }, { "belarusian", fheroes2::SupportedLanguage::Belarusian },
-            { "ua", fheroes2::SupportedLanguage::Ukrainian },  { "ukrainian", fheroes2::SupportedLanguage::Ukrainian },
+            { "uk", fheroes2::SupportedLanguage::Ukrainian },  { "ukrainian", fheroes2::SupportedLanguage::Ukrainian },
             { "bg", fheroes2::SupportedLanguage::Bulgarian },  { "bulgarian", fheroes2::SupportedLanguage::Bulgarian } };
 }
 
@@ -180,7 +180,7 @@ namespace fheroes2
         case SupportedLanguage::Bulgarian:
             return "bg";
         case SupportedLanguage::Ukrainian:
-            return "ua";
+            return "uk";
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
