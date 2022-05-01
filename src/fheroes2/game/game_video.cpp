@@ -61,23 +61,18 @@ namespace Video
                 if ( System::IsDirectory( fullDirPath ) ) {
                     ListFiles videoFiles;
                     videoFiles.FindFileInDir( fullDirPath, fileName, false );
-
-                    std::string targetFileName = System::ConcatePath( fullDirPath, fileName );
-                    targetFileName = StringLower( targetFileName );
-
-                    for ( std::string & filePath : videoFiles ) {
-                        if ( StringLower( filePath ) == targetFileName ) {
-                            // Avoid string copy.
-                            std::swap( path, filePath );
-
-                            if ( dirIdx > 0 ) {
-                                // Put the current directory at the first place to increase cache hit chance.
-                                std::swap( videoDir[0], videoDir[dirIdx] );
-                            }
-
-                            return true;
-                        }
+                    if ( videoFiles.empty() ) {
+                        continue;
                     }
+
+                    std::swap( videoFiles.front(), path );
+
+                    if ( dirIdx > 0 ) {
+                        // Put the current directory at the first place to increase cache hit chance.
+                        std::swap( videoDir[0], videoDir[dirIdx] );
+                    }
+
+                    return true;
                 }
             }
         }
