@@ -43,13 +43,16 @@ namespace
 
     // Strings in this map must in lower case and non translatable.
     const std::map<std::string, fheroes2::SupportedLanguage> languageName
-        = { { "pl", fheroes2::SupportedLanguage::Polish },    { "polish", fheroes2::SupportedLanguage::Polish },
-            { "de", fheroes2::SupportedLanguage::German },    { "german", fheroes2::SupportedLanguage::German },
-            { "fr", fheroes2::SupportedLanguage::French },    { "french", fheroes2::SupportedLanguage::French },
-            { "ru", fheroes2::SupportedLanguage::Russian },   { "russian", fheroes2::SupportedLanguage::Russian },
-            { "it", fheroes2::SupportedLanguage::Italian },   { "italian", fheroes2::SupportedLanguage::Italian },
-            { "cs", fheroes2::SupportedLanguage::Czech },     { "czech", fheroes2::SupportedLanguage::Czech },
-            { "nb", fheroes2::SupportedLanguage::Norwegian }, { "norwegian", fheroes2::SupportedLanguage::Norwegian } };
+        = { { "pl", fheroes2::SupportedLanguage::Polish },     { "polish", fheroes2::SupportedLanguage::Polish },
+            { "de", fheroes2::SupportedLanguage::German },     { "german", fheroes2::SupportedLanguage::German },
+            { "fr", fheroes2::SupportedLanguage::French },     { "french", fheroes2::SupportedLanguage::French },
+            { "ru", fheroes2::SupportedLanguage::Russian },    { "russian", fheroes2::SupportedLanguage::Russian },
+            { "it", fheroes2::SupportedLanguage::Italian },    { "italian", fheroes2::SupportedLanguage::Italian },
+            { "cs", fheroes2::SupportedLanguage::Czech },      { "czech", fheroes2::SupportedLanguage::Czech },
+            { "nb", fheroes2::SupportedLanguage::Norwegian },  { "norwegian", fheroes2::SupportedLanguage::Norwegian },
+            { "be", fheroes2::SupportedLanguage::Belarusian }, { "belarusian", fheroes2::SupportedLanguage::Belarusian },
+            { "ua", fheroes2::SupportedLanguage::Ukrainian },  { "ukrainian", fheroes2::SupportedLanguage::Ukrainian },
+            { "bg", fheroes2::SupportedLanguage::Bulgarian },  { "bulgarian", fheroes2::SupportedLanguage::Bulgarian } };
 }
 
 namespace fheroes2
@@ -92,8 +95,9 @@ namespace fheroes2
             languages.emplace_back( resourceLanguage );
         }
 
-        const std::set<SupportedLanguage> possibleLanguages{ SupportedLanguage::French,  SupportedLanguage::Polish,  SupportedLanguage::German,
-                                                             SupportedLanguage::Russian, SupportedLanguage::Italian, SupportedLanguage::Norwegian };
+        const std::set<SupportedLanguage> possibleLanguages{ SupportedLanguage::French,     SupportedLanguage::Polish,    SupportedLanguage::German,
+                                                             SupportedLanguage::Russian,    SupportedLanguage::Italian,   SupportedLanguage::Norwegian,
+                                                             SupportedLanguage::Belarusian, SupportedLanguage::Bulgarian, SupportedLanguage::Ukrainian };
 
         for ( const SupportedLanguage language : possibleLanguages ) {
             if ( language != resourceLanguage && isAlphabetSupported( language ) ) {
@@ -139,6 +143,12 @@ namespace fheroes2
             return _( "Czech" );
         case SupportedLanguage::Norwegian:
             return _( "Norwegian" );
+        case SupportedLanguage::Belarusian:
+            return _( "Belarusian" );
+        case SupportedLanguage::Bulgarian:
+            return _( "Bulgarian" );
+        case SupportedLanguage::Ukrainian:
+            return _( "Ukrainian" );
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -165,6 +175,12 @@ namespace fheroes2
             return "cs";
         case SupportedLanguage::Norwegian:
             return "nb";
+        case SupportedLanguage::Belarusian:
+            return "be";
+        case SupportedLanguage::Bulgarian:
+            return "bg";
+        case SupportedLanguage::Ukrainian:
+            return "ua";
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );

@@ -133,7 +133,7 @@ namespace
         LOCALE_SR,
         LOCALE_SV,
         LOCALE_TR,
-        LOCALE_UK
+        LOCALE_UA
     };
 
     struct chunk
@@ -410,8 +410,8 @@ namespace Translation
             current->locale = LocaleType::LOCALE_SV;
         else if ( str == "tr" || str == "turkish" )
             current->locale = LocaleType::LOCALE_TR;
-        else if ( str == "uk" || str == "ukrainian" )
-            current->locale = LocaleType::LOCALE_UK;
+        else if ( str == "ua" || str == "ukrainian" )
+            current->locale = LocaleType::LOCALE_UA;
         return true;
     }
 
@@ -484,7 +484,7 @@ namespace Translation
                 return current->ngettext( str, ( n != 1 ) );
             case LocaleType::LOCALE_PL:
                 return current->ngettext( str, ( n == 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
-            case LocaleType::LOCALE_UK:
+            case LocaleType::LOCALE_UA:
                 return current->ngettext( str, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 12 || n % 100 > 14 ) ? 1 : 2 ) );
             default:
                 break;
