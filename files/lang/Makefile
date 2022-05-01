@@ -75,9 +75,9 @@ bg.mo: bg.po
 	msgfmt $<.2.tmp -o $@
 
 # Ukrainian language uses CP1251.
-ua.mo: ua.po
+uk.mo: uk.po
 	iconv -f utf-8 -t CP1251 $< > $<.tmp
-	LANG=ua_UA.CP1251 LC_ALL=ua_UA.CP1251 LC_CTYPE=ua_UA.CP1251 sed -e 's/UTF-8/CP1251/' $<.tmp > $<.2.tmp
+	LANG=uk_UK.CP1251 LC_ALL=uk_UK.CP1251 LC_CTYPE=uk_UK.CP1251 sed -e 's/UTF-8/CP1251/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
 
 # German version uses CP1252
