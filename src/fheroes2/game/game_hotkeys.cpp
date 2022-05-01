@@ -26,9 +26,9 @@
 #include "logging.h"
 #include "screen.h"
 #include "settings.h"
+#include "system.h"
 #include "tinyconfig.h"
 #include "tools.h"
-#include "system.h"
 
 #include <array>
 #include <cassert>

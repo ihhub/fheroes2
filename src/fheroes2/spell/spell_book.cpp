@@ -226,8 +226,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
             current_index -= spellsPerPage * 2;
             redraw = true;
         }
-        else if ( ( le.MouseClickLeft( next_list ) || HotKeyPressEvent( Game::MOVE_RIGHT ) )
-                  && displayedSpells.size() > ( current_index + ( spellsPerPage * 2 ) ) ) {
+        else if ( ( le.MouseClickLeft( next_list ) || HotKeyPressEvent( Game::MOVE_RIGHT ) ) && displayedSpells.size() > ( current_index + ( spellsPerPage * 2 ) ) ) {
             current_index += spellsPerPage * 2;
             redraw = true;
         }
