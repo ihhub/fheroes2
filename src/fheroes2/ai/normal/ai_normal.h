@@ -22,6 +22,7 @@
 #define H2AI_NORMAL_H
 
 #include "ai.h"
+#include "kingdom.h"
 #include "world_pathfinding.h"
 
 #include <set>
@@ -186,8 +187,10 @@ namespace AI
         BattlePlanner _battlePlanner;
 
         double getHunterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
-
         double getFighterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
+
+        bool purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, int32_t availableHeroCount,
+                                bool moreTasksForHeroes );
     };
 }
 

@@ -51,7 +51,13 @@
 #if defined( _MSC_VER )
 #include <io.h>
 #else
+
+#if defined( TARGET_PS_VITA )
+#include <psp2/io/stat.h>
+#else
 #include <sys/stat.h>
+#endif
+
 #include <unistd.h>
 #endif
 

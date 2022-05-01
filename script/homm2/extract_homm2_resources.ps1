@@ -6,7 +6,8 @@ try {
             [string]$Path
         )
 
-        if ((Test-Path -Path "$Path\HEROES2.EXE" -PathType Leaf) -And
+        if (((Test-Path -Path "$Path\HEROES2.EXE" -PathType Leaf) -Or
+             (Test-Path -Path "$Path\HEROES2W.EXE" -PathType Leaf)) -And
             (Test-Path -Path "$Path\DATA" -PathType Container) -And
             (Test-Path -Path "$Path\MAPS" -PathType Container)) {
             return $true
@@ -15,9 +16,9 @@ try {
         return $false
     }
 
-    Write-Host -ForegroundColor Green "This script will extract and copy game resources from the original Heroes of Might and Magic II distribution`r`n"
+    Write-Host -ForegroundColor Green "This script will extract and copy game resources from the original distribution of Heroes of Might and Magic II`r`n"
 
-    Write-Host "[1/3] determining destination directory"
+    Write-Host "[1/3] determining the destination directory"
 
     $destPath = $null
 
@@ -45,7 +46,7 @@ try {
         }
     } catch {
         if ($null -Eq $Env:APPDATA) {
-            Write-Host -ForegroundColor Red "FATAL ERROR: Unable to determine destination directory"
+            Write-Host -ForegroundColor Red "FATAL ERROR: Unable to determine the destination directory"
 
             return
         }
@@ -59,7 +60,7 @@ try {
 
     Write-Host -ForegroundColor Green (-Join("Destination directory: ", (Resolve-Path $destPath).Path))
 
-    Write-Host "[2/3] determining HoMM2 directory"
+    Write-Host "[2/3] determining the HoMM2 directory"
 
     $homm2Path = $null
 
@@ -87,12 +88,12 @@ try {
     }
 
     if ($null -Eq $homm2Path) {
-        Write-Host -ForegroundColor Yellow "WARNING: Unable to determine HoMM2 directory"
+        Write-Host -ForegroundColor Yellow "WARNING: Unable to determine the HoMM2 directory"
 
         $homm2Path = Read-Host -Prompt "Please enter the full path to the HoMM2 directory (e.g. C:\GOG Games\HoMM 2 Gold)"
 
         if (-Not (Test-HoMM2DirectoryPath -Path $homm2Path)) {
-            Write-Host -ForegroundColor Red "FATAL ERROR: Unable to find HoMM2 directory"
+            Write-Host -ForegroundColor Red "FATAL ERROR: Unable to find the HoMM2 directory"
 
             return
         }
@@ -120,7 +121,7 @@ try {
 
             $content = $shell.NameSpace((Resolve-Path "$homm2Path\$srcDir").Path)
 
-            foreach ($item in $content.items()) {
+            foreach ($item in $content.Items()) {
                 $shell.Namespace((Resolve-Path "$destPath\$destDir").Path).CopyHere($item, 0x14)
             }
         }
@@ -148,5 +149,5 @@ try {
 } finally {
     Write-Host "Press any key to exit..."
 
-    [void][System.Console]::ReadKey($true);
+    [void][System.Console]::ReadKey($true)
 }

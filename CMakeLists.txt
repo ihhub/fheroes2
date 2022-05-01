@@ -191,6 +191,10 @@ if(NOT MACOS_APP_BUNDLE)
 			FILES script/homm2/extract_homm2_resources.bat script/homm2/extract_homm2_resources.ps1
 			DESTINATION ${CMAKE_INSTALL_DOCDIR}/homm2
 			)
+		install(
+			FILES script/homm2/resource_extraction_toolset.bat script/homm2/resource_extraction_toolset.ps1
+			DESTINATION ${CMAKE_INSTALL_DOCDIR}/homm2
+			)
 	else(WIN32)
 		install(
 			DIRECTORY files/lang/
