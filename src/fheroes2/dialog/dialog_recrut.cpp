@@ -495,10 +495,10 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, const boo
             display.render();
         }
 
-        if ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) )
+        if ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::DEFAULT_READY ) ) )
             break;
 
-        if ( le.MouseClickLeft( buttonCancel.area() ) || ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) && !skipEventCheck ) ) {
+        if ( le.MouseClickLeft( buttonCancel.area() ) || ( Game::HotKeyPressEvent( Game::DEFAULT_EXIT ) && !skipEventCheck ) ) {
             result = 0;
             break;
         }

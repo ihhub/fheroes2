@@ -812,103 +812,103 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             if ( isMovingHero )
                 stopHero = true;
             // exit dialog
-            else if ( HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
+            else if ( HotKeyPressEvent( Game::DEFAULT_EXIT ) )
                 res = EventExit();
             // end turn
-            else if ( HotKeyPressEvent( Game::EVENT_END_TURN ) )
+            else if ( HotKeyPressEvent( Game::END_TURN ) )
                 res = EventEndTurn();
             // next hero
-            else if ( HotKeyPressEvent( Game::EVENT_NEXTHERO ) )
+            else if ( HotKeyPressEvent( Game::NEXT_HERO ) )
                 EventNextHero();
             // next town
-            else if ( HotKeyPressEvent( Game::EVENT_NEXTTOWN ) )
+            else if ( HotKeyPressEvent( Game::NEXT_TOWN ) )
                 EventNextTown();
             // new game
-            else if ( HotKeyPressEvent( Game::EVENT_BUTTON_NEWGAME ) )
+            else if ( HotKeyPressEvent( Game::MAIN_MENU_NEW_GAME ) )
                 res = EventNewGame();
             // save game
-            else if ( HotKeyPressEvent( Game::EVENT_SAVEGAME ) )
+            else if ( HotKeyPressEvent( Game::SAVE_GAME ) )
                 EventSaveGame();
             // load game
-            else if ( HotKeyPressEvent( Game::EVENT_LOADGAME ) ) {
+            else if ( HotKeyPressEvent( Game::MAIN_MENU_LOAD_GAME ) ) {
                 res = EventLoadGame();
             }
             // file options
-            else if ( HotKeyPressEvent( Game::EVENT_FILEOPTIONS ) )
+            else if ( HotKeyPressEvent( Game::FILE_OPTIONS ) )
                 res = EventFileDialog();
             // system options
-            else if ( HotKeyPressEvent( Game::EVENT_SYSTEMOPTIONS ) )
+            else if ( HotKeyPressEvent( Game::SYSTEM_OPTIONS ) )
                 EventSystemDialog();
             // puzzle map
-            else if ( HotKeyPressEvent( Game::EVENT_PUZZLEMAPS ) )
+            else if ( HotKeyPressEvent( Game::PUZZLE_MAP ) )
                 EventPuzzleMaps();
             // info game
-            else if ( HotKeyPressEvent( Game::EVENT_INFOGAME ) )
+            else if ( HotKeyPressEvent( Game::INFO_GAME ) )
                 res = EventGameInfo();
             // cast spell
-            else if ( HotKeyPressEvent( Game::EVENT_CASTSPELL ) )
+            else if ( HotKeyPressEvent( Game::CAST_SPELL ) )
                 EventCastSpell();
             // kingdom overview
-            else if ( HotKeyPressEvent( Game::EVENT_KINGDOM_INFO ) )
+            else if ( HotKeyPressEvent( Game::KINGDOM_INFO ) )
                 EventKingdomInfo();
             // view world
-            else if ( HotKeyPressEvent( Game::EVENT_VIEW_WORLD ) )
+            else if ( HotKeyPressEvent( Game::VIEW_WORLD ) )
                 EventViewWorld();
             // show/hide control panel
-            else if ( HotKeyPressEvent( Game::EVENT_CTRLPANEL ) )
+            else if ( HotKeyPressEvent( Game::CONTROL_PANEL ) )
                 EventSwitchShowControlPanel();
             // hide/show radar
-            else if ( HotKeyPressEvent( Game::EVENT_SHOWRADAR ) )
+            else if ( HotKeyPressEvent( Game::SHOW_RADAR ) )
                 EventSwitchShowRadar();
             // hide/show buttons
-            else if ( HotKeyPressEvent( Game::EVENT_SHOWBUTTONS ) )
+            else if ( HotKeyPressEvent( Game::SHOW_BUTTONS ) )
                 EventSwitchShowButtons();
             // hide/show status window
-            else if ( HotKeyPressEvent( Game::EVENT_SHOWSTATUS ) )
+            else if ( HotKeyPressEvent( Game::SHOW_STATUS ) )
                 EventSwitchShowStatus();
             // hide/show hero/town icons
-            else if ( HotKeyPressEvent( Game::EVENT_SHOWICONS ) )
+            else if ( HotKeyPressEvent( Game::SHOW_ICONS ) )
                 EventSwitchShowIcons();
             // hero movement
-            else if ( HotKeyPressEvent( Game::EVENT_CONTINUE ) )
+            else if ( HotKeyPressEvent( Game::CONTINUE ) )
                 EventContinueMovement();
             // dig artifact
-            else if ( HotKeyPressEvent( Game::EVENT_DIG_ARTIFACT ) )
+            else if ( HotKeyPressEvent( Game::DIG_ARTIFACT ) )
                 res = EventDigArtifact();
             // sleep hero
-            else if ( HotKeyPressEvent( Game::EVENT_SLEEP_HERO ) )
+            else if ( HotKeyPressEvent( Game::SLEEP_HERO ) )
                 EventSwitchHeroSleeping();
             // move hero
-            else if ( HotKeyPressEvent( Game::EVENT_MOVELEFT ) )
+            else if ( HotKeyPressEvent( Game::MOVE_LEFT ) )
                 EventKeyArrowPress( Direction::LEFT );
-            else if ( HotKeyPressEvent( Game::EVENT_MOVERIGHT ) )
+            else if ( HotKeyPressEvent( Game::MOVE_RIGHT ) )
                 EventKeyArrowPress( Direction::RIGHT );
-            else if ( HotKeyPressEvent( Game::EVENT_MOVETOP ) )
+            else if ( HotKeyPressEvent( Game::MOVE_TOP ) )
                 EventKeyArrowPress( Direction::TOP );
-            else if ( HotKeyPressEvent( Game::EVENT_MOVEBOTTOM ) )
+            else if ( HotKeyPressEvent( Game::MOVE_BOTTOM ) )
                 EventKeyArrowPress( Direction::BOTTOM );
-            else if ( HotKeyPressEvent( Game::EVENT_MOVETOPLEFT ) )
+            else if ( HotKeyPressEvent( Game::MOVE_TOP_LEFT ) )
                 EventKeyArrowPress( Direction::TOP_LEFT );
-            else if ( HotKeyPressEvent( Game::EVENT_MOVETOPRIGHT ) )
+            else if ( HotKeyPressEvent( Game::MOVE_TOP_RIGHT ) )
                 EventKeyArrowPress( Direction::TOP_RIGHT );
-            else if ( HotKeyPressEvent( Game::EVENT_MOVEBOTTOMLEFT ) )
+            else if ( HotKeyPressEvent( Game::MOVE_BOTTOM_LEFT ) )
                 EventKeyArrowPress( Direction::BOTTOM_LEFT );
-            else if ( HotKeyPressEvent( Game::EVENT_MOVEBOTTOMRIGHT ) )
+            else if ( HotKeyPressEvent( Game::MOVE_BOTTOM_RIGHT ) )
                 EventKeyArrowPress( Direction::BOTTOM_RIGHT );
             // scroll maps
-            else if ( HotKeyPressEvent( Game::EVENT_SCROLLLEFT ) )
+            else if ( HotKeyPressEvent( Game::SCROLL_LEFT ) )
                 gameArea.SetScroll( SCROLL_LEFT );
-            else if ( HotKeyPressEvent( Game::EVENT_SCROLLRIGHT ) )
+            else if ( HotKeyPressEvent( Game::SCROLL_RIGHT ) )
                 gameArea.SetScroll( SCROLL_RIGHT );
-            else if ( HotKeyPressEvent( Game::EVENT_SCROLLUP ) )
+            else if ( HotKeyPressEvent( Game::SCROLL_UP ) )
                 gameArea.SetScroll( SCROLL_TOP );
-            else if ( HotKeyPressEvent( Game::EVENT_SCROLLDOWN ) )
+            else if ( HotKeyPressEvent( Game::SCROLL_DOWN ) )
                 gameArea.SetScroll( SCROLL_BOTTOM );
             // default action
-            else if ( HotKeyPressEvent( Game::EVENT_DEFAULTACTION ) )
+            else if ( HotKeyPressEvent( Game::DEFAULT_ACTION ) )
                 res = EventDefaultAction( res );
             // open focus
-            else if ( HotKeyPressEvent( Game::EVENT_OPENFOCUS ) )
+            else if ( HotKeyPressEvent( Game::OPEN_FOCUS ) )
                 EventOpenFocus();
         }
 

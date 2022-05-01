@@ -281,9 +281,9 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
         buttonOk.isEnabled() && le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-        if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) )
+        if ( Game::HotKeyPressEvent( Game::DEFAULT_READY ) || ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) )
             break;
-        else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancel.area() ) ) {
+        else if ( Game::HotKeyPressEvent( Game::DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancel.area() ) ) {
             res.clear();
             break;
         }

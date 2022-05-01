@@ -47,10 +47,10 @@ namespace
 
         COUT( "Load Game\n" )
 
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_STANDARD ) << " to choose Standard Game." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_CAMPAIGN ) << " to choose Campaign Game." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_MULTI ) << " to show Multi-Player Game." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to go back to Main Menu." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::MAIN_MENU_STANDARD ) << " to choose Standard Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::MAIN_MENU_CAMPAIGN ) << " to choose Campaign Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::MAIN_MENU_MULTI ) << " to show Multi-Player Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::DEFAULT_EXIT ) << " to go back to Main Menu." )
     }
 }
 
@@ -104,7 +104,7 @@ fheroes2::GameMode Game::LoadMulti()
         le.MousePressLeft( buttonHotSeat.area() ) ? buttonHotSeat.drawOnPress() : buttonHotSeat.drawOnRelease();
         le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonHotSeat.area() ) || HotKeyPressEvent( EVENT_BUTTON_HOTSEAT ) ) {
+        if ( le.MouseClickLeft( buttonHotSeat.area() ) || HotKeyPressEvent( MAIN_MENU_HOTSEAT ) ) {
             if ( ListFiles::IsEmpty( GetSaveDir(), GetSaveFileExtension( Game::TYPE_HOTSEAT ), false ) ) {
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
             }
@@ -112,7 +112,7 @@ fheroes2::GameMode Game::LoadMulti()
                 return fheroes2::GameMode::LOAD_HOT_SEAT;
             }
         }
-        else if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) ) {
+        else if ( HotKeyPressEvent( DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) ) {
             return fheroes2::GameMode::LOAD_GAME;
         }
 
@@ -186,7 +186,7 @@ fheroes2::GameMode Game::LoadGame()
             le.MousePressLeft( buttons[i].area() ) ? buttons[i].drawOnPress() : buttons[i].drawOnRelease();
         }
 
-        if ( le.MouseClickLeft( buttons[0].area() ) || HotKeyPressEvent( EVENT_BUTTON_STANDARD ) ) {
+        if ( le.MouseClickLeft( buttons[0].area() ) || HotKeyPressEvent( MAIN_MENU_STANDARD ) ) {
             if ( ListFiles::IsEmpty( GetSaveDir(), GetSaveFileExtension( Game::TYPE_STANDARD ), false ) ) {
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
             }
@@ -194,7 +194,7 @@ fheroes2::GameMode Game::LoadGame()
                 return fheroes2::GameMode::LOAD_STANDARD;
             }
         }
-        else if ( le.MouseClickLeft( buttons[1].area() ) || HotKeyPressEvent( EVENT_BUTTON_CAMPAIGN ) ) {
+        else if ( le.MouseClickLeft( buttons[1].area() ) || HotKeyPressEvent( MAIN_MENU_CAMPAIGN ) ) {
             if ( ListFiles::IsEmpty( GetSaveDir(), GetSaveFileExtension( Game::TYPE_CAMPAIGN ), false ) ) {
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
             }
@@ -202,10 +202,10 @@ fheroes2::GameMode Game::LoadGame()
                 return fheroes2::GameMode::LOAD_CAMPAIN;
             }
         }
-        else if ( le.MouseClickLeft( buttons[2].area() ) || HotKeyPressEvent( EVENT_BUTTON_MULTI ) ) {
+        else if ( le.MouseClickLeft( buttons[2].area() ) || HotKeyPressEvent( MAIN_MENU_MULTI ) ) {
             return fheroes2::GameMode::LOAD_MULTI;
         }
-        else if ( le.MouseClickLeft( buttons[3].area() ) || HotKeyPressEvent( EVENT_DEFAULT_EXIT ) ) {
+        else if ( le.MouseClickLeft( buttons[3].area() ) || HotKeyPressEvent( DEFAULT_EXIT ) ) {
             return fheroes2::GameMode::MAIN_MENU;
         }
         else if ( le.MousePressRight( buttons[0].area() ) ) {

@@ -217,10 +217,7 @@ void Game::Init( void )
 
     Game::AnimateDelaysInitialize();
 
-    HotKeysDefaults();
-
-    const std::string hotkeys = Settings::GetLastFile( "", "fheroes2.key" );
-    Game::HotKeysLoad( hotkeys );
+    Game::HotKeysLoad( Settings::GetLastFile( "", "fheroes2.key" ) );
 }
 
 int Game::CurrentMusic()

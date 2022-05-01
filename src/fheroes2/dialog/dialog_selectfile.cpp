@@ -333,13 +333,13 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         bool needRedraw = false;
         bool isListboxSelected = listbox.isSelected();
 
-        if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || listbox.isDoubleClicked() ) {
+        if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::DEFAULT_READY ) || listbox.isDoubleClicked() ) {
             if ( !filename.empty() )
                 result = System::ConcatePath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
             else if ( isListboxSelected )
                 result = listbox.GetCurrent().file;
         }
-        else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+        else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::DEFAULT_EXIT ) ) {
             break;
         }
         else if ( le.MouseClickLeft( enter_field ) && isEditing ) {
