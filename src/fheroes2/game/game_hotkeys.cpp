@@ -52,7 +52,7 @@ namespace
     {
         switch ( category ) {
         case HotKeyCategory::DEFAULT_EVENTS:
-            return "Default events";
+            return "Default actions";
         case HotKeyCategory::MAIN_GAME:
             return "Main Menu";
         case HotKeyCategory::WORLD_MAP:
@@ -74,11 +74,27 @@ namespace
 
     struct HotKeyEventInfo
     {
-        HotKeyCategory category = HotKeyCategory::DEFAULT_EVENTS;
+        HotKeyEventInfo()
+            : category( HotKeyCategory::DEFAULT_EVENTS )
+            , name( "" )
+            , key( KEY_NONE )
+        {
+            // Do nothing.
+        }
 
-        const char * name = "";
+        HotKeyEventInfo( const HotKeyCategory category_, const char * name_, const KeySym key_ )
+            : category( category_ )
+            , name( name_ )
+            , key( key_ )
+        {
+            // Do nothing.
+        }
 
-        KeySym key = KEY_NONE;
+        HotKeyCategory category;
+
+        const char * name;
+
+        KeySym key;
     };
 
     std::array<HotKeyEventInfo, Game::NO_EVENT> hotKeyEventInfo;
@@ -127,19 +143,19 @@ namespace
         hotKeyEventInfo[Game::BATTLE_SKIP] = { HotKeyCategory::BATTLE, "skip turn in battle", KEY_SPACE };
         hotKeyEventInfo[Game::BATTLE_WAIT] = { HotKeyCategory::BATTLE, "wait in battle", KEY_w };
 
-        hotKeyEventInfo[Game::SLEEP_HERO] = { HotKeyCategory::WORLD_MAP, "put hero to sleep", KEY_z };
-        hotKeyEventInfo[Game::END_TURN] = { HotKeyCategory::WORLD_MAP, "end turn", KEY_e };
-        hotKeyEventInfo[Game::NEXT_HERO] = { HotKeyCategory::WORLD_MAP, "next hero", KEY_h };
-        hotKeyEventInfo[Game::NEXT_TOWN] = { HotKeyCategory::WORLD_MAP, "next town", KEY_t };
-        hotKeyEventInfo[Game::CONTINUE] = { HotKeyCategory::WORLD_MAP, "move hero", KEY_m };
         hotKeyEventInfo[Game::SAVE_GAME] = { HotKeyCategory::WORLD_MAP, "save game", KEY_s };
+        hotKeyEventInfo[Game::NEXT_HERO] = { HotKeyCategory::WORLD_MAP, "next hero", KEY_h };
+        hotKeyEventInfo[Game::CONTINUE_HERO_MOVEMENT] = { HotKeyCategory::WORLD_MAP, "continue hero movement", KEY_m };
+        hotKeyEventInfo[Game::CAST_SPELL] = { HotKeyCategory::WORLD_MAP, "cast spell", KEY_c };
+        hotKeyEventInfo[Game::SLEEP_HERO] = { HotKeyCategory::WORLD_MAP, "put hero to sleep", KEY_z };
+        hotKeyEventInfo[Game::NEXT_TOWN] = { HotKeyCategory::WORLD_MAP, "next town", KEY_t };
+        hotKeyEventInfo[Game::END_TURN] = { HotKeyCategory::WORLD_MAP, "end turn", KEY_e };
         hotKeyEventInfo[Game::FILE_OPTIONS] = { HotKeyCategory::WORLD_MAP, "file options", KEY_f };
         hotKeyEventInfo[Game::SYSTEM_OPTIONS] = { HotKeyCategory::WORLD_MAP, "system options", KEY_o };
         hotKeyEventInfo[Game::PUZZLE_MAP] = { HotKeyCategory::WORLD_MAP, "puzzle map", KEY_p };
-        hotKeyEventInfo[Game::INFO_GAME] = { HotKeyCategory::WORLD_MAP, "game info", KEY_i };
+        hotKeyEventInfo[Game::SCENARIO_INFORMATION] = { HotKeyCategory::WORLD_MAP, "scenario information", KEY_i };
         hotKeyEventInfo[Game::DIG_ARTIFACT] = { HotKeyCategory::WORLD_MAP, "dig for artifact", KEY_d };
-        hotKeyEventInfo[Game::CAST_SPELL] = { HotKeyCategory::WORLD_MAP, "cast spell", KEY_c };
-        hotKeyEventInfo[Game::KINGDOM_INFO] = { HotKeyCategory::WORLD_MAP, "kingdom view", KEY_k };
+        hotKeyEventInfo[Game::KINGDOM_SUMMARY] = { HotKeyCategory::WORLD_MAP, "kingdom summary", KEY_k };
         hotKeyEventInfo[Game::VIEW_WORLD] = { HotKeyCategory::WORLD_MAP, "view world", KEY_v };
         hotKeyEventInfo[Game::DEFAULT_ACTION] = { HotKeyCategory::WORLD_MAP, "default action", KEY_SPACE };
         hotKeyEventInfo[Game::OPEN_FOCUS] = { HotKeyCategory::WORLD_MAP, "open focus", KEY_RETURN };
@@ -182,7 +198,7 @@ namespace
         os << std::endl;
 
         HotKeyCategory currentCategory = hotKeyEventInfo[Game::NONE + 1].category;
-        os << "# Event category: " << getHotKeyCategoryName( currentCategory ) << std::endl;
+        os << "# " << getHotKeyCategoryName( currentCategory ) << ':' << std::endl;
 
 #if defined( WITH_DEBUG )
         std::set<const char *> duplicationStringVerifier;
@@ -192,7 +208,7 @@ namespace
             if ( currentCategory != hotKeyEventInfo[eventId].category ) {
                 currentCategory = hotKeyEventInfo[eventId].category;
                 os << std::endl;
-                os << "# Event category: " << getHotKeyCategoryName( currentCategory ) << std::endl;
+                os << "# " << getHotKeyCategoryName( currentCategory ) << ':' << std::endl;
             }
 
             assert( strlen( hotKeyEventInfo[eventId].name ) > 0 );

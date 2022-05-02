@@ -814,53 +814,38 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             // exit dialog
             else if ( HotKeyPressEvent( Game::DEFAULT_EXIT ) )
                 res = EventExit();
-            // end turn
             else if ( HotKeyPressEvent( Game::END_TURN ) )
                 res = EventEndTurn();
-            // next hero
             else if ( HotKeyPressEvent( Game::NEXT_HERO ) )
                 EventNextHero();
-            // next town
             else if ( HotKeyPressEvent( Game::NEXT_TOWN ) )
                 EventNextTown();
-            // new game
             else if ( HotKeyPressEvent( Game::MAIN_MENU_NEW_GAME ) )
                 res = EventNewGame();
-            // save game
             else if ( HotKeyPressEvent( Game::SAVE_GAME ) )
                 EventSaveGame();
-            // load game
             else if ( HotKeyPressEvent( Game::MAIN_MENU_LOAD_GAME ) ) {
                 res = EventLoadGame();
             }
-            // file options
             else if ( HotKeyPressEvent( Game::FILE_OPTIONS ) )
                 res = EventFileDialog();
-            // system options
             else if ( HotKeyPressEvent( Game::SYSTEM_OPTIONS ) )
                 EventSystemDialog();
-            // puzzle map
             else if ( HotKeyPressEvent( Game::PUZZLE_MAP ) )
                 EventPuzzleMaps();
-            // info game
-            else if ( HotKeyPressEvent( Game::INFO_GAME ) )
-                res = EventGameInfo();
-            // cast spell
+            else if ( HotKeyPressEvent( Game::SCENARIO_INFORMATION ) )
+                res = EventScenarioInformation();
             else if ( HotKeyPressEvent( Game::CAST_SPELL ) )
                 EventCastSpell();
-            // kingdom overview
-            else if ( HotKeyPressEvent( Game::KINGDOM_INFO ) )
+            else if ( HotKeyPressEvent( Game::KINGDOM_SUMMARY ) )
                 EventKingdomInfo();
-            // view world
             else if ( HotKeyPressEvent( Game::VIEW_WORLD ) )
                 EventViewWorld();
             // show/hide control panel
             else if ( HotKeyPressEvent( Game::CONTROL_PANEL ) )
                 EventSwitchShowControlPanel();
-            // hide/show radar
             else if ( HotKeyPressEvent( Game::SHOW_RADAR ) )
                 EventSwitchShowRadar();
-            // hide/show buttons
             else if ( HotKeyPressEvent( Game::SHOW_BUTTONS ) )
                 EventSwitchShowButtons();
             // hide/show status window
@@ -869,13 +854,10 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             // hide/show hero/town icons
             else if ( HotKeyPressEvent( Game::SHOW_ICONS ) )
                 EventSwitchShowIcons();
-            // hero movement
-            else if ( HotKeyPressEvent( Game::CONTINUE ) )
+            else if ( HotKeyPressEvent( Game::CONTINUE_HERO_MOVEMENT ) )
                 EventContinueMovement();
-            // dig artifact
             else if ( HotKeyPressEvent( Game::DIG_ARTIFACT ) )
                 res = EventDigArtifact();
-            // sleep hero
             else if ( HotKeyPressEvent( Game::SLEEP_HERO ) )
                 EventSwitchHeroSleeping();
             // move hero
