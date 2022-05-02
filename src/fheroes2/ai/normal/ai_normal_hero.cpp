@@ -557,9 +557,9 @@ namespace
     {
         switch ( hero.getAIRole() ) {
         case Heroes::Role::HUNTER:
-            return -dangerousTaskPenalty;
+            return -dangerousTaskPenalty / 2;
         case Heroes::Role::FIGHTER:
-            return -dangerousTaskPenalty * 2;
+            return -dangerousTaskPenalty;
         default:
             // If you set a new type of a hero you must add the logic here.
             assert( 0 );
@@ -1137,13 +1137,6 @@ namespace AI
                 double value = valueStorage.value( node, dist );
 
                 getObjectValue( node.first, dist, value );
-
-                if ( dist > leftMovePoints ) {
-                    // Distant object which is out of reach for the current turn must have lower priority.
-                    dist = leftMovePoints + ( dist - leftMovePoints ) * 2;
-                }
-
-                value = ScaleWithDistance( value, dist );
 
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
