@@ -134,7 +134,7 @@ msgid "View %{name}"
 msgstr "Voir %{name}"
 
 msgid "Move or right click to redistribute %{name}"
-msgstr "Déplacer ou faire un clic droit pour répartir les troupes"
+msgstr "Déplacer ou faire un clic droit pour répartir les %{name}"
 
 msgid "Combine %{name} armies"
 msgstr "Fusionner les armées de %{name}"
