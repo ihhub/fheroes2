@@ -86,6 +86,7 @@ namespace
 
         HotKeyEventInfo( const HotKeyEventInfo & ) = default;
         HotKeyEventInfo( HotKeyEventInfo && ) = default;
+        ~HotKeyEventInfo() = default;
 
         HotKeyEventInfo & operator=( const HotKeyEventInfo & ) = default;
         HotKeyEventInfo & operator=( HotKeyEventInfo && ) = default;
