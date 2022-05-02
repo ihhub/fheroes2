@@ -74,16 +74,6 @@ namespace
 
     struct HotKeyEventInfo
     {
-        HotKeyEventInfo() = default;
-
-        HotKeyEventInfo( const HotKeyCategory category_, const char * name_, const KeySym key_ )
-            : category( category_ )
-            , name( name_ )
-            , key( key_ )
-        {
-            // Do nothing.
-        }
-
         HotKeyCategory category = HotKeyCategory::DEFAULT_EVENTS;
 
         const char * name = "";
