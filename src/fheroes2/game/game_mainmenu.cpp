@@ -31,6 +31,7 @@
 #include "dialog_resolution.h"
 #include "game.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_mainmenu_ui.h"
 #include "icn.h"
