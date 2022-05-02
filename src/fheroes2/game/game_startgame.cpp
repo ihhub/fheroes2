@@ -34,6 +34,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_io.h"
 #include "game_over.h"

@@ -27,6 +27,7 @@
 #include "audio.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game_hotkeys.h"
 #include "game_io.h"
 #include "game_mainmenu_ui.h"
 #include "icn.h"

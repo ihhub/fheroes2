@@ -30,6 +30,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_credits.h"
+#include "game_hotkeys.h"
 #include "game_io.h"
 #include "game_video.h"
 #include "icn.h"

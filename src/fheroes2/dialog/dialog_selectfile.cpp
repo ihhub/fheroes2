@@ -34,6 +34,7 @@
 #include "dialog.h"
 #include "dir.h"
 #include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "interface_list.h"
 #include "maps_fileinfo.h"

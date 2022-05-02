@@ -30,6 +30,7 @@
 #include "dialog.h"
 #include "dialog_game_settings.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "game_mainmenu_ui.h"
 #include "game_video.h"
 #include "icn.h"

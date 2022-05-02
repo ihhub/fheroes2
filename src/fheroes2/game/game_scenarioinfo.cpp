@@ -33,6 +33,7 @@
 #include "dialog_selectscenario.h"
 #include "difficulty.h"
 #include "game.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_mainmenu_ui.h"
 #include "gamedefs.h"

@@ -34,6 +34,7 @@
 #include "cursor.h"
 #include "game.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "heroes.h"
 #include "icn.h"
 #include "kingdom.h"

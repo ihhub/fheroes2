@@ -26,7 +26,7 @@
 #include "army.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "race.h"
 #include "text.h"

@@ -27,7 +27,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "difficulty.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "localevent.h"
 #include "maps.h"

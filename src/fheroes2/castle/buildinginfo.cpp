@@ -29,7 +29,7 @@
 #include "army_troop.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "m82.h"
 #include "monster.h"

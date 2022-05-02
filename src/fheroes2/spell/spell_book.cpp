@@ -28,7 +28,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "heroes_base.h"
 #include "icn.h"
 #include "image_tool.h"

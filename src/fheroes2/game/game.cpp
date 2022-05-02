@@ -33,6 +33,7 @@
 #include "game.h"
 #include "game_credits.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_static.h"
 #include "icn.h"
@@ -79,8 +80,6 @@ namespace
 namespace Game
 {
     void AnimateDelaysInitialize( void );
-    void KeyboardGlobalFilter( int, int );
-    void HotKeysLoad( const std::string & );
 
     namespace ObjectFadeAnimation
     {

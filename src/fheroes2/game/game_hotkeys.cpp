@@ -21,7 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "game.h"
+#include "game_hotkeys.h"
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
@@ -224,12 +224,6 @@ namespace
     }
 }
 
-namespace Game
-{
-    void HotKeysLoad( const std::string & );
-    void KeyboardGlobalFilter( int, int );
-}
-
 bool Game::HotKeyPressEvent( const HotKeyEvent eventID )
 {
     const LocalEvent & le = LocalEvent::Get();
@@ -247,13 +241,13 @@ std::string Game::getHotKeyNameByEventId( const HotKeyEvent eventID )
     return StringUpper( KeySymGetName( hotKeyEventInfo[eventID].key ) );
 }
 
-void Game::HotKeysLoad( const std::string & hotkeys )
+void Game::HotKeysLoad( std::string filename )
 {
     initializeHotKeyEvents();
 
     TinyConfig config( '=', '#' );
 
-    if ( config.Load( hotkeys ) ) {
+    if ( config.Load( filename ) ) {
         std::map<std::string, KeySym> nameToKey;
         for ( int32_t i = KEY_NONE + 1; i < KEY_LAST; ++i ) {
             const KeySym key = static_cast<KeySym>( i );
@@ -278,7 +272,7 @@ void Game::HotKeysLoad( const std::string & hotkeys )
         }
     }
     else {
-        const std::string filename = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.key" );
+        filename = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.key" );
         std::fstream file;
         file.open( filename.data(), std::fstream::out | std::fstream::trunc );
         if ( !file )
