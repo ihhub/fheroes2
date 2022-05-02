@@ -547,9 +547,8 @@ namespace fheroes2
         const int32_t truncationSymbolWidth
             = getLineWidth( reinterpret_cast<const uint8_t *>( truncatedEnding.data() ), static_cast<int32_t>( truncatedEnding.size() ), _fontType );
 
-        const int32_t maxCharacterCount
-            = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType,
-                                    maxWidth - truncationSymbolWidth );
+        const int32_t maxCharacterCount = getMaxCharacterCount( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType,
+                                                                maxWidth - truncationSymbolWidth );
 
         _text.resize( maxCharacterCount );
         _text += truncatedEnding;
