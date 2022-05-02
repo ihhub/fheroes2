@@ -23,10 +23,10 @@
 
 #include <cassert>
 
-#include "buildinginfo.h"
 #include "agg.h"
 #include "agg_image.h"
 #include "army_troop.h"
+#include "buildinginfo.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game_hotkeys.h"
