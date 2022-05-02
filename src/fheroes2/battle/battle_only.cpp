@@ -28,7 +28,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
 #include "icn.h"
@@ -181,11 +181,11 @@ bool Battle::Only::ChangeSettings()
     while ( !exit && le.HandleEvents() ) {
         buttonStart.isEnabled() && le.MousePressLeft( buttonStart.area() ) ? buttonStart.drawOnPress() : buttonStart.drawOnRelease();
 
-        if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStart.area() ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) {
+        if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStart.area() ) ) || Game::HotKeyPressEvent( Game::DEFAULT_READY ) ) {
             result = true;
             exit = true;
         }
-        else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
+        else if ( Game::HotKeyPressEvent( Game::DEFAULT_EXIT ) )
             exit = true;
 
         if ( allow1 && le.MouseClickLeft( rtPortrait1 ) ) {

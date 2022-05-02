@@ -22,7 +22,7 @@
 #include "agg_image.h"
 #include "color.h"
 #include "cursor.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "icn.h"
 #include "image.h"

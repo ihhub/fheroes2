@@ -33,6 +33,7 @@
 #include "game.h"
 #include "game_credits.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_static.h"
 #include "icn.h"
@@ -79,10 +80,6 @@ namespace
 namespace Game
 {
     void AnimateDelaysInitialize( void );
-    void KeyboardGlobalFilter( int, int );
-
-    void HotKeysDefaults( void );
-    void HotKeysLoad( const std::string & );
 
     namespace ObjectFadeAnimation
     {
@@ -217,10 +214,7 @@ void Game::Init( void )
 
     Game::AnimateDelaysInitialize();
 
-    HotKeysDefaults();
-
-    const std::string hotkeys = Settings::GetLastFile( "", "fheroes2.key" );
-    Game::HotKeysLoad( hotkeys );
+    Game::HotKeysLoad( Settings::GetLastFile( "", "fheroes2.key" ) );
 }
 
 int Game::CurrentMusic()

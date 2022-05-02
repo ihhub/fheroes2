@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,7 +21,7 @@
 #include "ui_button.h"
 #include "agg_image.h"
 #include "dialog.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "localevent.h"
 #include "pal.h"
@@ -396,10 +396,10 @@ namespace fheroes2
 
         for ( size_t i = 0; i < _button.size(); ++i ) {
             if ( _button[i]->isEnabled() ) {
-                if ( ( _value[i] == Dialog::YES || _value[i] == Dialog::OK ) && Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) {
+                if ( ( _value[i] == Dialog::YES || _value[i] == Dialog::OK ) && Game::HotKeyPressEvent( Game::DEFAULT_READY ) ) {
                     return _value[i];
                 }
-                if ( ( _value[i] == Dialog::CANCEL || _value[i] == Dialog::NO ) && Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+                if ( ( _value[i] == Dialog::CANCEL || _value[i] == Dialog::NO ) && Game::HotKeyPressEvent( Game::DEFAULT_EXIT ) ) {
                     return _value[i];
                 }
             }

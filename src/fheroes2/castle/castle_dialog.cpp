@@ -34,6 +34,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "heroes.h"
 #include "icn.h"
 #include "kingdom.h"
@@ -58,43 +59,43 @@ namespace
 
     building_t getPressedBuildingHotkey()
     {
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_1 ) ) {
+        if ( HotKeyPressEvent( Game::TOWN_DWELLING_LEVEL_1 ) ) {
             return DWELLING_MONSTER1;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_2 ) ) {
+        if ( HotKeyPressEvent( Game::TOWN_DWELLING_LEVEL_2 ) ) {
             return DWELLING_MONSTER2;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_3 ) ) {
+        if ( HotKeyPressEvent( Game::TOWN_DWELLING_LEVEL_3 ) ) {
             return DWELLING_MONSTER3;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_4 ) ) {
+        if ( HotKeyPressEvent( Game::TOWN_DWELLING_LEVEL_4 ) ) {
             return DWELLING_MONSTER4;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_5 ) ) {
+        if ( HotKeyPressEvent( Game::TOWN_DWELLING_LEVEL_5 ) ) {
             return DWELLING_MONSTER5;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_6 ) ) {
+        if ( HotKeyPressEvent( Game::TOWN_DWELLING_LEVEL_6 ) ) {
             return DWELLING_MONSTER6;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_MARKETPLACE ) ) {
+        if ( HotKeyPressEvent( Game::TOWN_MARKETPLACE ) ) {
             return BUILD_MARKETPLACE;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_WELL ) ) {
+        if ( HotKeyPressEvent( Game::TOWN_WELL ) ) {
             return BUILD_WELL;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_MAGE_GUILD ) ) {
+        if ( HotKeyPressEvent( Game::TOWN_MAGE_GUILD ) ) {
             return BUILD_MAGEGUILD;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_SHIPYARD ) ) {
+        if ( HotKeyPressEvent( Game::TOWN_SHIPYARD ) ) {
             return BUILD_SHIPYARD;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_THIEVES_GUILD ) ) {
+        if ( HotKeyPressEvent( Game::TOWN_THIEVES_GUILD ) ) {
             return BUILD_THIEVESGUILD;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_TAVERN ) ) {
+        if ( HotKeyPressEvent( Game::TOWN_TAVERN ) ) {
             return BUILD_TAVERN;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_JUMP_TO_BUILD_SELECTION ) ) {
+        if ( HotKeyPressEvent( Game::TOWN_JUMP_TO_BUILD_SELECTION ) ) {
             return BUILD_CASTLE;
         }
 
@@ -408,12 +409,12 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 break;
             }
             if ( buttonPrevCastle.isEnabled()
-                 && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
+                 && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::MOVE_LEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
                 result = CastleDialogReturnValue::PreviousCastle;
                 break;
             }
             if ( buttonNextCastle.isEnabled()
-                 && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
+                 && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::MOVE_RIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
                 result = CastleDialogReturnValue::NextCastle;
                 break;
             }

@@ -26,7 +26,7 @@
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "interface_list.h"
 #include "localevent.h"
