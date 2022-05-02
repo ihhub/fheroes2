@@ -141,6 +141,9 @@ namespace fheroes2
         void set( const std::string & text, const FontType fontType );
         void set( std::string && text, const FontType fontType );
 
+        // This method modifies the underlying text and ends it with '...' the text if it is longer than provided width.
+        void fit( const int32_t maxWidth );
+
         std::string text() const override;
 
     private:
