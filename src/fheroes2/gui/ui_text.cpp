@@ -537,6 +537,11 @@ namespace fheroes2
 
     void Text::fit( const int32_t maxWidth )
     {
+        assert( maxWidth > 0 ); // Why is the limit less than 1?
+        if ( maxWidth <= 0 ) {
+            return;
+        }
+
         const int32_t originalTextWidth = getTruncatedLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType );
         if ( originalTextWidth <= maxWidth ) {
             // Nothing to do. The text is shorter than the provided maximum width.
