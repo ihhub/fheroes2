@@ -74,27 +74,11 @@ namespace
 
     struct HotKeyEventInfo
     {
-        HotKeyEventInfo()
-            : category( HotKeyCategory::DEFAULT_EVENTS )
-            , name( "" )
-            , key( KEY_NONE )
-        {
-            // Do nothing.
-        }
+        HotKeyCategory category = HotKeyCategory::DEFAULT_EVENTS;
 
-        HotKeyEventInfo( const HotKeyCategory category_, const char * name_, const KeySym key_ )
-            : category( category_ )
-            , name( name_ )
-            , key( key_ )
-        {
-            // Do nothing.
-        }
+        const char * name = "";
 
-        HotKeyCategory category;
-
-        const char * name;
-
-        KeySym key;
+        KeySym key = KEY_NONE;
     };
 
     std::array<HotKeyEventInfo, Game::NO_EVENT> hotKeyEventInfo;
