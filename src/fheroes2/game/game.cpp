@@ -80,8 +80,6 @@ namespace Game
 {
     void AnimateDelaysInitialize( void );
     void KeyboardGlobalFilter( int, int );
-
-    void HotKeysDefaults( void );
     void HotKeysLoad( const std::string & );
 
     namespace ObjectFadeAnimation

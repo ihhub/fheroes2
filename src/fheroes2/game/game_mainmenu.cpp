@@ -295,15 +295,23 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             display.render();
         }
 
-        if ( HotKeyPressEvent( MAIN_MENU_NEW_GAME ) || le.MouseClickLeft( buttonNewGame.area() ) )
+        if ( HotKeyPressEvent( MAIN_MENU_NEW_GAME ) || le.MouseClickLeft( buttonNewGame.area() ) ) {
             return fheroes2::GameMode::NEW_GAME;
-        else if ( HotKeyPressEvent( MAIN_MENU_LOAD_GAME ) || le.MouseClickLeft( buttonLoadGame.area() ) )
+        }
+
+        if ( HotKeyPressEvent( MAIN_MENU_LOAD_GAME ) || le.MouseClickLeft( buttonLoadGame.area() ) ) {
             return fheroes2::GameMode::LOAD_GAME;
-        else if ( HotKeyPressEvent( MAIN_MENU_HIGHSCORES ) || le.MouseClickLeft( buttonHighScores.area() ) )
+        }
+
+        if ( HotKeyPressEvent( MAIN_MENU_HIGHSCORES ) || le.MouseClickLeft( buttonHighScores.area() ) ) {
             return fheroes2::GameMode::HIGHSCORES;
-        else if ( HotKeyPressEvent( MAIN_MENU_CREDITS ) || le.MouseClickLeft( buttonCredits.area() ) )
+        }
+
+        if ( HotKeyPressEvent( MAIN_MENU_CREDITS ) || le.MouseClickLeft( buttonCredits.area() ) ) {
             return fheroes2::GameMode::CREDITS;
-        else if ( HotKeyPressEvent( DEFAULT_EXIT ) || le.MouseClickLeft( buttonQuit.area() ) ) {
+        }
+
+        if ( HotKeyPressEvent( DEFAULT_EXIT ) || le.MouseClickLeft( buttonQuit.area() ) ) {
             if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 // if ( Settings::ExtGameUseFade() )
                 //     display.Fade();

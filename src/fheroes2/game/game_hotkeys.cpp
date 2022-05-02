@@ -97,12 +97,10 @@ namespace
         KeySym key;
     };
 
-    std::array<HotKeyEventInfo, Game::NO_EVENT> hotKeyEventInfo{ HotKeyEventInfo( HotKeyCategory::DEFAULT_EVENTS, "", KEY_NONE ) };
+    std::array<HotKeyEventInfo, Game::NO_EVENT> hotKeyEventInfo;
 
     void initializeHotKeyEvents()
     {
-        std::fill( hotKeyEventInfo.begin(), hotKeyEventInfo.end(), HotKeyEventInfo( HotKeyCategory::DEFAULT_EVENTS, "", KEY_NONE ) );
-
         // Make sure that event name is unique!
         hotKeyEventInfo[Game::MAIN_MENU_NEW_GAME] = { HotKeyCategory::MAIN_GAME, "new game", KEY_n };
         hotKeyEventInfo[Game::MAIN_MENU_LOAD_GAME] = { HotKeyCategory::MAIN_GAME, "load game", KEY_l };

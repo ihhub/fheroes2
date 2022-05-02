@@ -145,11 +145,11 @@ namespace
             RedistributeTroopByOne( troopFrom, armyTarget );
             return true;
         }
-        else if ( Game::HotKeyHoldEvent( Game::JOIN_STACKS ) ) {
+        if ( Game::HotKeyHoldEvent( Game::JOIN_STACKS ) ) {
             armyTarget->JoinAllTroopsOfType( troopFrom );
             return true;
         }
-        else if ( Game::HotKeyHoldEvent( Game::SPLIT_STACK_BY_HALF ) ) {
+        if ( Game::HotKeyHoldEvent( Game::SPLIT_STACK_BY_HALF ) ) {
             RedistributeTroopEvenly( troopFrom, armyTarget );
             return true;
         }
