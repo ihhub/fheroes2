@@ -557,9 +557,9 @@ namespace
     {
         switch ( hero.getAIRole() ) {
         case Heroes::Role::HUNTER:
-            return -dangerousTaskPenalty / 2;
-        case Heroes::Role::FIGHTER:
             return -dangerousTaskPenalty;
+        case Heroes::Role::FIGHTER:
+            return -dangerousTaskPenalty * 2;
         default:
             // If you set a new type of a hero you must add the logic here.
             assert( 0 );
