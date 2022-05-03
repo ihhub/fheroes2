@@ -111,13 +111,6 @@ if(MACOS_APP_BUNDLE)
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/files/data
 		)
 	add_custom_target(
-		app_bundle_key_file
-		ALL
-		COMMAND cp fheroes2.key ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources
-		DEPENDS fheroes2
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-		)
-	add_custom_target(
 		app_bundle_translations
 		ALL
 		COMMAND mkdir -p ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/translations
@@ -129,7 +122,7 @@ if(MACOS_APP_BUNDLE)
 		run_dylibbundler
 		ALL
 		COMMAND dylibbundler -od -b -x ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/MacOS/${PROJECT_NAME} -d ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/libs
-		DEPENDS fheroes2 app_bundle_h2d_files app_bundle_key_file app_bundle_translations
+		DEPENDS fheroes2 app_bundle_h2d_files app_bundle_translations
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 		)
 endif(MACOS_APP_BUNDLE)
@@ -138,10 +131,6 @@ endif(MACOS_APP_BUNDLE)
 # Installation of auxiliary files
 #
 if(NOT MACOS_APP_BUNDLE)
-	install(
-		FILES fheroes2.key
-		DESTINATION ${FHEROES2_DATA}
-		)
 	install(
 		DIRECTORY files/data/
 		DESTINATION ${FHEROES2_DATA}/files/data

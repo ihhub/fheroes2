@@ -24,7 +24,7 @@
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "localevent.h"
 #include "settings.h"
@@ -281,13 +281,16 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
         buttonOk.isEnabled() && le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-        if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) )
+        if ( Game::HotKeyPressEvent( Game::DEFAULT_READY ) || ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) ) {
             break;
-        else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancel.area() ) ) {
+        }
+
+        if ( Game::HotKeyPressEvent( Game::DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancel.area() ) ) {
             res.clear();
             break;
         }
-        else if ( le.KeyPress() ) {
+
+        if ( le.KeyPress() ) {
             if ( charLimit == 0 || charLimit > res.size() || le.KeyValue() == KeySym::KEY_BACKSPACE )
                 charInsertPos = InsertKeySym( res, charInsertPos, le.KeyValue(), le.KeyMod() );
             redraw = true;

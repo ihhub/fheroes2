@@ -460,8 +460,11 @@ namespace
         }
     }
 
-    void generateRussianAlphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
+    // CP-1251 supports Russian, Ukranian, Belarussian, Bulgarian, Serbian Cyrillic, Macedonian and English.
+    void generateCP1251Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
+        // TODO: add support for Serbian Cyrillic and Macedonian languages by generating missing letters.
+
         // Resize fonts.
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
             std::vector<fheroes2::Sprite> & original = icnVsSprite[icnId];
@@ -487,6 +490,53 @@ namespace
             font[168 - 32].setPosition( font[37 + offset].x(), font[37 + offset].y() - 3 );
             updateNormalFontLetterShadow( font[168 - 32] );
 
+            font[161 - 32].resize( font[57 + offset].width(), font[57 + offset].height() + 3 );
+            font[161 - 32].reset();
+            fheroes2::Copy( font[57 + offset], 0, 0, font[161 - 32], 0, 3, font[57 + offset].width(), font[57 + offset].height() );
+            fheroes2::Copy( font[168 - 32], 3, 0, font[161 - 32], 7, 0, 2, 3 );
+            font[161 - 32].setPosition( font[57 + offset].x(), font[57 + offset].y() - 3 );
+            updateNormalFontLetterShadow( font[161 - 32] );
+
+            font[162 - 32].resize( font[89 + offset].width(), font[89 + offset].height() + 3 );
+            font[162 - 32].reset();
+            fheroes2::Copy( font[89 + offset], 0, 0, font[162 - 32], 0, 3, font[89 + offset].width(), font[89 + offset].height() );
+            fheroes2::Copy( font[89 + offset], 4, 1, font[162 - 32], 6, 0, 1, 1 );
+            fheroes2::Copy( font[89 + offset], 4, 0, font[162 - 32], 6, 1, 1, 1 );
+            font[162 - 32].setPosition( font[89 + offset].x(), font[89 + offset].y() - 3 );
+            updateNormalFontLetterShadow( font[162 - 32] );
+
+            // C with a horizontal line in the middle.
+            font[170 - 32] = font[67 - 32];
+            fheroes2::Copy( font[170 - 32], 7, 0, font[170 - 32], 6, 5, 4, 2 );
+            updateNormalFontLetterShadow( font[170 - 32] );
+
+            font[186 - 32] = font[99 - 32];
+            fheroes2::Copy( font[186 - 32], 4, 0, font[186 - 32], 3, 3, 3, 1 );
+            updateNormalFontLetterShadow( font[186 - 32] );
+
+            // I and i with 2 dots.
+            font[175 - 32].resize( font[73 - 32].width(), font[73 - 32].height() + 3 );
+            font[175 - 32].reset();
+            fheroes2::Copy( font[73 - 32], 0, 0, font[175 - 32], 0, 3, font[73 - 32].width(), font[73 - 32].height() );
+            fheroes2::Copy( font[168 - 32], 3, 0, font[175 - 32], 2, 0, 5, 3 );
+            font[175 - 32].setPosition( font[73 - 32].x(), font[73 - 32].y() - 3 );
+
+            font[191 - 32] = font[105 - 32];
+            fheroes2::FillTransform( font[191 - 32], 2, 0, 1, 3, 1 );
+
+            // J and j.
+            font[163 - 32] = font[74 - 32];
+            font[188 - 32] = font[106 - 32];
+
+            // S and s.
+            font[189 - 32] = font[83 - 32];
+            font[190 - 32] = font[115 - 32];
+
+            // I and i.
+            font[178 - 32] = font[73 - 32];
+            font[179 - 32] = font[105 - 32];
+
+            // A
             font[192 - 32] = font[33];
 
             font[193 - 32] = font[34 + offset];
@@ -499,6 +549,16 @@ namespace
 
             font[195 - 32] = font[38];
             fheroes2::FillTransform( font[195 - 32], 6, 4, 3, 4, 1 );
+
+            // The same letter as above but with a vertical line at the top.
+            font[165 - 32].resize( font[195 - 32].width(), font[195 - 32].height() + 1 );
+            font[165 - 32].reset();
+            fheroes2::Copy( font[195 - 32], 0, 0, font[165 - 32], 0, 1, font[195 - 32].width(), font[195 - 32].height() );
+            fheroes2::Copy( font[195 - 32], 9, 1, font[165 - 32], 9, 0, 2, 1 );
+            fheroes2::Copy( font[195 - 32], 9, 1, font[165 - 32], 10, 1, 1, 1 );
+            fheroes2::Copy( font[195 - 32], 10, 0, font[165 - 32], 10, 2, 1, 1 );
+            fheroes2::Copy( font[195 - 32], 8, 1, font[165 - 32], 9, 2, 1, 1 );
+            font[165 - 32].setPosition( font[195 - 32].x(), font[195 - 32].y() - 1 );
 
             font[196 - 32] = font[36 + offset];
 
@@ -714,6 +774,15 @@ namespace
             fheroes2::SetTransformPixel( font[227 - 32], 4, 2, 1 );
             updateNormalFontLetterShadow( font[227 - 32] );
 
+            // The same letter as above but with a verical line at the top.
+            font[180 - 32].resize( font[227 - 32].width(), font[227 - 32].height() + 1 );
+            font[180 - 32].reset();
+            fheroes2::Copy( font[227 - 32], 0, 0, font[180 - 32], 0, 1, font[227 - 32].width(), font[227 - 32].height() );
+            fheroes2::Copy( font[227 - 32], 6, 1, font[180 - 32], 6, 0, 3, 1 );
+            fheroes2::FillTransform( font[180 - 32], 7, 2, 2, 1, 1 );
+            fheroes2::FillTransform( font[180 - 32], 6, 4, 2, 1, 1 );
+            font[180 - 32].setPosition( font[227 - 32].x(), font[227 - 32].y() - 1 );
+
             font[228 - 32] = font[71];
             font[229 - 32] = font[37 + offset];
 
@@ -902,6 +971,49 @@ namespace
             font[168 - 32].setPosition( font[37].x(), font[37].y() );
             updateSmallFontLetterShadow( font[168 - 32] );
 
+            font[161 - 32].resize( font[57 + offset].width(), font[57 + offset].height() + 2 );
+            font[161 - 32].reset();
+            fheroes2::Copy( font[57 + offset], 0, 0, font[161 - 32], 0, 2, font[57 + offset].width(), font[57 + offset].height() );
+            fheroes2::Copy( font[57 + offset], 2, 0, font[161 - 32], 5, 0, 2, 1 );
+            font[161 - 32].setPosition( font[57 + offset].x(), font[57 + offset].y() - 2 );
+            updateSmallFontLetterShadow( font[161 - 32] );
+
+            font[162 - 32].resize( font[89 + offset].width(), font[89 + offset].height() + 2 );
+            font[162 - 32].reset();
+            fheroes2::Copy( font[89 + offset], 0, 0, font[162 - 32], 0, 2, font[89 + offset].width(), font[89 + offset].height() );
+            fheroes2::Copy( font[89 + offset], 1, 0, font[162 - 32], 4, 0, 2, 1 );
+            font[162 - 32].setPosition( font[89 + offset].x(), font[89 + offset].y() - 2 );
+            updateSmallFontLetterShadow( font[162 - 32] );
+
+            // C with a horizontal line in the middle.
+            font[170 - 32] = font[67 - 32];
+            fheroes2::Copy( font[170 - 32], 3, 0, font[170 - 32], 2, 3, 3, 1 );
+            updateSmallFontLetterShadow( font[170 - 32] );
+
+            font[186 - 32] = font[99 - 32];
+            fheroes2::Copy( font[186 - 32], 2, 0, font[186 - 32], 2, 2, 2, 1 );
+            updateSmallFontLetterShadow( font[186 - 32] );
+
+            // I and i with 2 dots.
+            font[175 - 32] = font[73 - 32];
+
+            font[191 - 32] = font[105 - 32];
+            fheroes2::Copy( font[105 - 32], 1, 0, font[191 - 32], 0, 0, 2, 2 );
+            fheroes2::Copy( font[105 - 32], 1, 0, font[191 - 32], 2, 0, 2, 2 );
+
+            // J and j.
+            font[163 - 32] = font[74 - 32];
+            font[188 - 32] = font[106 - 32];
+
+            // S and s.
+            font[189 - 32] = font[83 - 32];
+            font[190 - 32] = font[115 - 32];
+
+            // I and i.
+            font[178 - 32] = font[73 - 32];
+            font[179 - 32] = font[105 - 32];
+
+            // A.
             font[192 - 32] = font[33 + offset];
 
             font[193 - 32] = font[34 + offset];
@@ -917,6 +1029,15 @@ namespace
             fheroes2::Copy( font[193 - 32], 3, 0, font[195 - 32], 4, 0, 4, 1 );
             font[195 - 32].setPosition( font[193 - 32].x(), font[193 - 32].y() );
             updateSmallFontLetterShadow( font[195 - 32] );
+
+            // The same letter as above but with a vertical line of top.
+            font[165 - 32].resize( font[195 - 32].width() - 1, font[195 - 32].height() + 1 );
+            font[165 - 32].reset();
+            fheroes2::Copy( font[195 - 32], 0, 0, font[165 - 32], 0, 1, font[195 - 32].width() - 1, font[195 - 32].height() );
+            fheroes2::Copy( font[195 - 32], 2, 0, font[165 - 32], 6, 0, 1, 1 );
+            fheroes2::FillTransform( font[165 - 32], 6, 2, 1, 1, 1 );
+            font[165 - 32].setPosition( font[195 - 32].x(), font[195 - 32].y() - 1 );
+            updateSmallFontLetterShadow( font[165 - 32] );
 
             font[196 - 32] = font[36 + offset];
             font[197 - 32] = font[37 + offset];
@@ -1115,6 +1236,15 @@ namespace
             fheroes2::Copy( font[227 - 32], 3, 1, font[227 - 32], 3, 0, 1, 1 );
             fheroes2::FillTransform( font[227 - 32], 3, 1, 1, 1, 1 );
             updateSmallFontLetterShadow( font[227 - 32] );
+
+            // The same letter as above but with a vertical line of top.
+            font[180 - 32].resize( font[227 - 32].width() - 1, font[227 - 32].height() + 1 );
+            font[180 - 32].reset();
+            fheroes2::Copy( font[227 - 32], 0, 0, font[180 - 32], 0, 1, font[227 - 32].width() - 1, font[227 - 32].height() );
+            fheroes2::Copy( font[227 - 32], 5, 0, font[180 - 32], 5, 0, 1, 1 );
+            fheroes2::FillTransform( font[180 - 32], 5, 2, 1, 1, 1 );
+            font[180 - 32].setPosition( font[227 - 32].x(), font[227 - 32].y() - 1 );
+            updateSmallFontLetterShadow( font[180 - 32] );
 
             font[228 - 32] = font[71];
 
@@ -1731,8 +1861,11 @@ namespace fheroes2
         case SupportedLanguage::French:
             generateFrenchAlphabet( icnVsSprite );
             break;
+        case SupportedLanguage::Belarusian:
+        case SupportedLanguage::Bulgarian:
         case SupportedLanguage::Russian:
-            generateRussianAlphabet( icnVsSprite );
+        case SupportedLanguage::Ukrainian:
+            generateCP1251Alphabet( icnVsSprite );
             break;
         case SupportedLanguage::Italian:
             generateItalianAlphabet( icnVsSprite );
@@ -1762,6 +1895,9 @@ namespace fheroes2
         case SupportedLanguage::Italian:
         case SupportedLanguage::Norwegian:
         case SupportedLanguage::Russian:
+        case SupportedLanguage::Belarusian:
+        case SupportedLanguage::Bulgarian:
+        case SupportedLanguage::Ukrainian:
             return true;
         default:
             break;

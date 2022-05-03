@@ -25,6 +25,7 @@
 #include "dialog_language_selection.h"
 #include "dialog_resolution.h"
 #include "game.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_mainmenu_ui.h"
 #include "icn.h"
@@ -89,7 +90,7 @@ namespace
 
     void drawExperimentalOptions( const fheroes2::Rect & optionRoi )
     {
-        drawOption( optionRoi, _( "Experimental" ), _( "Settings" ), ICN::SPANEL, 14 );
+        drawOption( optionRoi, _( "Settings" ), _( "Experimental" ), ICN::SPANEL, 14 );
     }
 
     void drawMusicVolumeOptions( const fheroes2::Rect & optionRoi )

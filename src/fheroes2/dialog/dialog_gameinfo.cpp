@@ -26,6 +26,7 @@
 #include "dialog.h"
 #include "difficulty.h"
 #include "game.h"
+#include "game_hotkeys.h"
 #include "game_over.h"
 #include "icn.h"
 #include "localevent.h"

@@ -61,111 +61,6 @@ namespace Game
         TYPE_MULTI = TYPE_HOTSEAT
     };
 
-    enum : int32_t
-    {
-        EVENT_NONE,
-        EVENT_BUTTON_NEWGAME,
-        EVENT_BUTTON_LOADGAME,
-        EVENT_BUTTON_HIGHSCORES,
-        EVENT_BUTTON_CREDITS,
-        EVENT_BUTTON_STANDARD,
-        EVENT_BUTTON_CAMPAIGN,
-        EVENT_BUTTON_MULTI,
-        EVENT_BUTTON_SETTINGS,
-        EVENT_BUTTON_SELECT,
-        EVENT_BUTTON_HOTSEAT,
-        EVENT_BUTTON_HOST,
-        EVENT_BUTTON_GUEST,
-        EVENT_BUTTON_BATTLEONLY,
-        EVENT_DEFAULT_READY,
-        EVENT_DEFAULT_EXIT,
-        EVENT_DEFAULT_LEFT,
-        EVENT_DEFAULT_RIGHT,
-        EVENT_SYSTEM_FULLSCREEN,
-        EVENT_SYSTEM_SCREENSHOT,
-        EVENT_SLEEP_HERO,
-        EVENT_END_TURN,
-        EVENT_NEXTHERO,
-        EVENT_NEXTTOWN,
-        EVENT_CONTINUE,
-        EVENT_SAVEGAME,
-        EVENT_LOADGAME,
-        EVENT_FILEOPTIONS,
-        EVENT_PUZZLEMAPS,
-        EVENT_INFOGAME,
-        EVENT_DIG_ARTIFACT,
-        EVENT_CASTSPELL,
-        EVENT_KINGDOM_INFO,
-        EVENT_VIEW_WORLD,
-        EVENT_DEFAULTACTION,
-        EVENT_OPENFOCUS,
-        EVENT_SYSTEMOPTIONS,
-        EVENT_BATTLE_CASTSPELL,
-        EVENT_BATTLE_RETREAT,
-        EVENT_BATTLE_SURRENDER,
-        EVENT_BATTLE_AUTOSWITCH,
-        EVENT_BATTLE_OPTIONS,
-        EVENT_BATTLE_HARDSKIP,
-        EVENT_BATTLE_SOFTSKIP,
-        EVENT_MOVELEFT,
-        EVENT_MOVERIGHT,
-        EVENT_MOVETOP,
-        EVENT_MOVEBOTTOM,
-        EVENT_MOVETOPLEFT,
-        EVENT_MOVETOPRIGHT,
-        EVENT_MOVEBOTTOMLEFT,
-        EVENT_MOVEBOTTOMRIGHT,
-        EVENT_SCROLLLEFT,
-        EVENT_SCROLLRIGHT,
-        EVENT_SCROLLUP,
-        EVENT_SCROLLDOWN,
-        EVENT_CTRLPANEL,
-        EVENT_SHOWRADAR,
-        EVENT_SHOWBUTTONS,
-        EVENT_SHOWSTATUS,
-        EVENT_SHOWICONS,
-        EVENT_SPLIT_STACK_BY_HALF,
-        EVENT_SPLIT_STACK_BY_ONE,
-        EVENT_JOIN_STACKS,
-        EVENT_UPGRADE_TROOP,
-        EVENT_DISMISS_TROOP,
-        EVENT_TOWN_DWELLING_LEVEL_1,
-        EVENT_TOWN_DWELLING_LEVEL_2,
-        EVENT_TOWN_DWELLING_LEVEL_3,
-        EVENT_TOWN_DWELLING_LEVEL_4,
-        EVENT_TOWN_DWELLING_LEVEL_5,
-        EVENT_TOWN_DWELLING_LEVEL_6,
-        EVENT_TOWN_WELL,
-        EVENT_TOWN_MARKETPLACE,
-        EVENT_TOWN_MAGE_GUILD,
-        EVENT_TOWN_SHIPYARD,
-        EVENT_TOWN_THIEVES_GUILD,
-
-        // town screen exclusive, not applied to build screen!
-        EVENT_TOWN_TAVERN,
-        EVENT_TOWN_JUMP_TO_BUILD_SELECTION,
-
-        EVENT_WELL_BUY_ALL_CREATURES,
-
-        EVENT_NEW_CAMPAIGN_SELECTION_SUCCESSION_WARS,
-        EVENT_NEW_CAMPAIGN_SELECTION_PRICE_OF_LOYALTY,
-
-        EVENT_NEW_ROLAND_CAMPAIGN,
-        EVENT_NEW_ARCHIBALD_CAMPAIGN,
-        EVENT_NEW_PRICE_OF_LOYALTY_CAMPAIGN,
-        EVENT_NEW_VOYAGE_HOME_CAMPAIGN,
-        EVENT_NEW_WIZARDS_ISLE_CAMPAIGN,
-        EVENT_NEW_DESCENDANTS_CAMPAIGN,
-
-        // Put all new events above this line.
-        EVENT_LAST,
-    };
-
-    bool HotKeyPressEvent( int );
-    bool HotKeyHoldEvent( const int eventID );
-
-    std::string getHotKeyNameByEventId( const int eventID );
-
     void mainGameLoop( bool isFirstGameRun );
 
     fheroes2::GameMode MainMenu( bool isFirstGameRun );
@@ -288,7 +183,5 @@ namespace Game
     std::string CountScoute( uint32_t count, int scoute, bool shorts = false );
     std::string CountThievesGuild( uint32_t monsterCount, int guildCount );
 }
-
-#define HotKeyCloseWindow ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) )
 
 #endif
