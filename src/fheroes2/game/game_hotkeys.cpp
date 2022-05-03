@@ -254,33 +254,38 @@ void Game::HotKeysLoad( std::string filename )
 {
     initializeHotKeyEvents();
 
-    TinyConfig config( '=', '#' );
+    bool isFilePresent = System::IsFile( filename );
+    if ( isFilePresent ) {
+        TinyConfig config( '=', '#' );
+        isFilePresent = config.Load( filename );
 
-    if ( config.Load( filename ) ) {
-        std::map<std::string, fheroes2::Key> nameToKey;
-        for ( int32_t i = static_cast<int32_t>( fheroes2::Key::NONE ); i < static_cast<int32_t>( fheroes2::Key::LAST_KEY ); ++i ) {
-            const fheroes2::Key key = static_cast<fheroes2::Key>( i );
-            nameToKey.emplace( StringUpper( KeySymGetName( key ) ), key );
-        }
-
-        for ( int eventId = NONE + 1; eventId < NO_EVENT; ++eventId ) {
-            const char * eventName = hotKeyEventInfo[eventId].name;
-            std::string value = config.StrParams( eventName );
-            if ( value.empty() ) {
-                continue;
+        if ( isFilePresent ) {
+            std::map<std::string, fheroes2::Key> nameToKey;
+            for ( int32_t i = static_cast<int32_t>( fheroes2::Key::NONE ); i < static_cast<int32_t>( fheroes2::Key::LAST_KEY ); ++i ) {
+                const fheroes2::Key key = static_cast<fheroes2::Key>( i );
+                nameToKey.emplace( StringUpper( KeySymGetName( key ) ), key );
             }
 
-            value = StringUpper( value );
-            auto foundKey = nameToKey.find( value );
-            if ( foundKey == nameToKey.end() ) {
-                continue;
-            }
+            for ( int eventId = NONE + 1; eventId < NO_EVENT; ++eventId ) {
+                const char * eventName = hotKeyEventInfo[eventId].name;
+                std::string value = config.StrParams( eventName );
+                if ( value.empty() ) {
+                    continue;
+                }
 
-            hotKeyEventInfo[eventId].key = foundKey->second;
-            DEBUG_LOG( DBG_GAME, DBG_INFO, "Event '" << hotKeyEventInfo[eventId].name << "' has key '" << value << "'" )
+                value = StringUpper( value );
+                auto foundKey = nameToKey.find( value );
+                if ( foundKey == nameToKey.end() ) {
+                    continue;
+                }
+
+                hotKeyEventInfo[eventId].key = foundKey->second;
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Event '" << hotKeyEventInfo[eventId].name << "' has key '" << value << "'" )
+            }
         }
     }
-    else {
+
+    if ( !isFilePresent ) {
         filename = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.key" );
         std::fstream file;
         file.open( filename.data(), std::fstream::out | std::fstream::trunc );

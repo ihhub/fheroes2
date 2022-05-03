@@ -336,7 +336,7 @@ namespace Interface
 
                 return true;
             }
-            else if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_PAGE_DOWN ) && ( _topId + maxItems < _size() ) ) {
+            if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_PAGE_DOWN ) && ( _topId + maxItems < _size() ) ) {
                 needRedraw = true;
 
                 _topId += maxItems;
@@ -348,7 +348,7 @@ namespace Interface
 
                 return true;
             }
-            else if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_UP ) && ( _currentId > 0 ) ) {
+            if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_UP ) && ( _currentId > 0 ) ) {
                 needRedraw = true;
 
                 --_currentId;
@@ -357,7 +357,7 @@ namespace Interface
 
                 return true;
             }
-            else if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_DOWN ) && ( _currentId + 1 < _size() ) ) {
+            if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_DOWN ) && ( _currentId + 1 < _size() ) ) {
                 needRedraw = true;
 
                 ++_currentId;
@@ -366,7 +366,7 @@ namespace Interface
 
                 return true;
             }
-            else if ( ( le.MouseClickLeft( buttonPgUp.area() ) || le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( _scrollbar.getArea() )
+            if ( ( le.MouseClickLeft( buttonPgUp.area() ) || le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( _scrollbar.getArea() )
                         || _timedButtonPgUp.isDelayPassed() )
                       && ( _topId > 0 ) ) {
                 needRedraw = true;
@@ -376,7 +376,7 @@ namespace Interface
 
                 return true;
             }
-            else if ( ( le.MouseClickLeft( buttonPgDn.area() ) || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( _scrollbar.getArea() )
+            if ( ( le.MouseClickLeft( buttonPgDn.area() ) || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( _scrollbar.getArea() )
                         || _timedButtonPgDn.isDelayPassed() )
                       && ( _topId + maxItems < _size() ) ) {
                 needRedraw = true;
@@ -386,7 +386,7 @@ namespace Interface
 
                 return true;
             }
-            else if ( le.MousePressLeft( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
+            if ( le.MousePressLeft( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
                 needRedraw = true;
 
                 UpdateScrollbarRange();
