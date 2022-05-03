@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-05 20:49+0200\n"
-"PO-Revision-Date: 2022-04-09 12:36+0200\n"
+"POT-Creation-Date: 2022-05-03 12:00+0200\n"
+"PO-Revision-Date: 2022-05-03 12:41+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -23,10 +23,10 @@ msgid "Warrior"
 msgstr "Guerrier"
 
 msgid "Builder"
-msgstr "Constructeur"
+msgstr "Bâtisseur"
 
 msgid "Explorer"
-msgstr "Explorateur"
+msgstr "Voyageur"
 
 msgid ""
 "A few\n"
@@ -92,31 +92,31 @@ msgstr ""
 "%{monster}"
 
 msgid "army|Few"
-msgstr "Peu"
+msgstr "1-4"
 
 msgid "army|Several"
-msgstr "Plusieurs"
+msgstr "5-9"
 
 msgid "army|Pack"
-msgstr "Groupe"
+msgstr "10-19"
 
 msgid "army|Lots"
-msgstr "Troupe"
+msgstr "20-49"
 
 msgid "army|Horde"
-msgstr "Horde"
+msgstr "50-99"
 
 msgid "army|Throng"
-msgstr "Foule"
+msgstr "100-249"
 
 msgid "army|Swarm"
-msgstr "Colonie"
+msgstr "250-499"
 
 msgid "army|Zounds"
-msgstr "Armée"
+msgstr "500-999"
 
 msgid "army|Legion"
-msgstr "Légion"
+msgstr "1000+"
 
 msgid "All %{race} troops +1"
 msgstr "+1 pour toutes les troupes %{race}"
@@ -134,7 +134,7 @@ msgid "View %{name}"
 msgstr "Voir %{name}"
 
 msgid "Move or right click to redistribute %{name}"
-msgstr "Déplacez ou faites un clic droit pour redistribuer %{name}"
+msgstr "Déplacer ou faire un clic droit pour répartir les %{name}"
 
 msgid "Combine %{name} armies"
 msgstr "Fusionner les armées de %{name}"
@@ -608,7 +608,7 @@ msgid "No spells to cast."
 msgstr "Aucun sort disponible."
 
 msgid "Are you sure you want to retreat?"
-msgstr "Êtes vous sur de vouloir sonner la retraite ?"
+msgstr "Êtes vous sûr de vouloir sonner la retraite ?"
 
 msgid "Retreat disabled"
 msgstr "Retraite impossible"
@@ -700,7 +700,13 @@ msgid "Sorceress Guild"
 msgstr "Guilde de Sorcières"
 
 msgid "Necromancer Guild"
-msgstr "Guilde de Nécromanciens"
+msgstr "Guilde Nécromante"
+
+msgid "Ogre Alliance"
+msgstr "Alliance des Ogres"
+
+msgid "Dwarfbane"
+msgstr "Fléau des Nains"
 
 msgid "Dragon Alliance"
 msgstr "Alliance des Dragons"
@@ -811,9 +817,9 @@ msgid ""
 "to the enemy castle. Any troops you have in your army at the end of this "
 "scenario will be with you in the final battle."
 msgstr ""
-"Rassemblez une armée aussi nombreuse que possible et capturez le château "
-"ennemi en 8 semaines. Vous n'êtes confronté qu'à un seul ennemi, mais vous "
-"devez parcourir un long chemin pour atteindre le château ennemi. Toutes les "
+"Rassemblez une armée aussi grande que possible et capturez le château ennemi "
+"en 8 semaines. Vous n'êtes confronté qu'à un seul ennemi, mais vous devez "
+"parcourir un long chemin pour atteindre le château ennemi. Toutes les "
 "troupes que vous avez dans votre armée à la fin de ce scénario seront avec "
 "vous lors de la bataille finale."
 
@@ -909,11 +915,11 @@ msgid ""
 "have no castle and must take one within 7 days, or lose this battle. (Hint: "
 "The nearest castle is to the southeast.)"
 msgstr ""
-"Des sorciers bienfaisants ont pris le château des Nécromanciens. Vous devez "
-"le reprendre pour remporter la victoire. Rappelez-vous que si vous commencez "
-"avec une puissante armée, vous n'avez pas de château et devez en prendre un "
-"dans les 7 jours, ou vous perdrez cette bataille. (Indice : le château le "
-"plus proche est au sud-est)."
+"Des sorciers bienfaisants ont pris le Château des Nécromanciens. Reprenez-le "
+"pour remporter la victoire. Rappelez-vous que si vous commencez avec une "
+"puissante armée, vous n'avez pas de château et devez en prendre un dans les "
+"7 jours, ou vous perdrez cette bataille. (Indice : le château le plus proche "
+"est au sud-est)."
 
 msgid ""
 "The dwarves need conquering before they can interfere in King Archibald's "
@@ -1278,7 +1284,8 @@ msgstr ""
 "Les nains reconnaissent leurs alliés et se joignent volontiers à vos forces."
 
 msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
-msgstr "Les ogres vous reconnaissent comme le Dwarfbane et vous rallient."
+msgstr ""
+"Les ogres vous reconnaissent comme le Fléau des Nains et vous rallient."
 
 msgid ""
 "The dragons, snarling and growling, agree to join forces with you, their "
@@ -1330,7 +1337,7 @@ msgstr ""
 "que la victoire soit vôtre.\""
 
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
-msgstr "\"Le Dwarfbane !!!!, sauve qui peut.\""
+msgstr "\"Le Fléau des Nains !!!!, sauve qui peut.\""
 
 msgid "campaignBonus|Ballista"
 msgstr "Baliste"
@@ -1393,10 +1400,136 @@ msgid "campaignBonus|Thunder Mace"
 msgstr "Massue domination"
 
 msgid "campaignBonus|Traveler's Boots"
-msgstr "Bottes sept lieues"
+msgstr "Bottes de sept lieues"
 
 msgid "campaignBonus|White Pearl"
 msgstr "Perle blanche"
+
+msgid "campaignBonus|Basic Archery"
+msgstr "Principes d'Archerie"
+
+msgid "campaignBonus|Advanced Archery"
+msgstr "Archerie avancée"
+
+msgid "campaignBonus|Expert Archery"
+msgstr "Experte en Archerie"
+
+msgid "campaignBonus|Basic Ballistics"
+msgstr "Principes de Balistique"
+
+msgid "campaignBonus|Advanced Ballistics"
+msgstr "Balistique avancée"
+
+msgid "campaignBonus|Expert Ballistics"
+msgstr "Expert en Balistique"
+
+msgid "campaignBonus|Basic Diplomacy"
+msgstr "Principes de Diplomatie"
+
+msgid "campaignBonus|Advanced Diplomacy"
+msgstr "Diplomatie avancée"
+
+msgid "campaignBonus|Expert Diplomacy"
+msgstr "Expert en Diplomatie"
+
+msgid "campaignBonus|Basic Eagle Eye"
+msgstr "Principes d'Oeil d'aigle"
+
+msgid "campaignBonus|Advanced Eagle Eye"
+msgstr "Oeil d'aigle avancé"
+
+msgid "campaignBonus|Expert Eagle Eye"
+msgstr "Expert en Oeil d'aigle"
+
+msgid "campaignBonus|Basic Estates"
+msgstr "Principes de Finances"
+
+msgid "campaignBonus|Advanced Estates"
+msgstr "Finances avancées"
+
+msgid "campaignBonus|Expert Estates"
+msgstr "Expert en Finances"
+
+msgid "campaignBonus|Basic Leadership"
+msgstr "Principes de Charisme"
+
+msgid "campaignBonus|Advanced Leadership"
+msgstr "Charisme avancée"
+
+msgid "campaignBonus|Expert Leadership"
+msgstr "Expert en Charisme"
+
+msgid "campaignBonus|Basic Logistics"
+msgstr "Principes de Logistique"
+
+msgid "campaignBonus|Advanced Logistics"
+msgstr "Logistique avancée"
+
+msgid "campaignBonus|Expert Logistics"
+msgstr "Expert en Logistique"
+
+msgid "campaignBonus|Basic Luck"
+msgstr "Principes de Chance"
+
+msgid "campaignBonus|Advanced Luck"
+msgstr "Chance avancée"
+
+msgid "campaignBonus|Expert Luck"
+msgstr "Expert en Chance"
+
+msgid "campaignBonus|Basic Mysticism"
+msgstr "Principes de Mysticisme"
+
+msgid "campaignBonus|Advanced Mysticism"
+msgstr "Mysticisme avancé"
+
+msgid "campaignBonus|Expert Mysticism"
+msgstr "Expert en Mysticisme"
+
+msgid "campaignBonus|Basic Navigation"
+msgstr "Principes de Navigation"
+
+msgid "campaignBonus|Advanced Navigation"
+msgstr "Navigation avancée"
+
+msgid "campaignBonus|Expert Navigation"
+msgstr "Expert en Navigation"
+
+msgid "campaignBonus|Basic Necromancy"
+msgstr "Principes de Nécromancie"
+
+msgid "campaignBonus|Advanced Necromancy"
+msgstr "Nécromancie avancée"
+
+msgid "campaignBonus|Expert Necromancy"
+msgstr "Expert en Nécromancie"
+
+msgid "campaignBonus|Basic Pathfinding"
+msgstr "Principes d'Orientation"
+
+msgid "campaignBonus|Advanced Pathfinding"
+msgstr "Orientation avancée"
+
+msgid "campaignBonus|Expert Pathfinding"
+msgstr "Expert en Orientation"
+
+msgid "campaignBonus|Basic Scouting"
+msgstr "Principes de Reconnaissance"
+
+msgid "campaignBonus|Advanced Scouting"
+msgstr "Reconnaissance avancée"
+
+msgid "campaignBonus|Expert Scouting"
+msgstr "Expert en Reconnaissance"
+
+msgid "campaignBonus|Basic Wisdom"
+msgstr "Principes de Sagesse"
+
+msgid "campaignBonus|Advanced Wisdom"
+msgstr "Sagesse avancée"
+
+msgid "campaignBonus|Expert Wisdom"
+msgstr "Expert en Sagesse"
 
 msgid "campaignBonus|Animate Dead"
 msgstr "Mort-vivant"
@@ -1408,10 +1541,10 @@ msgid "campaignBonus|Fireblast"
 msgstr "Souffle de feu"
 
 msgid "campaignBonus|Mass Curse"
-msgstr "Grde malédiction"
+msgstr "Grande malédiction"
 
 msgid "campaignBonus|Mass Haste"
-msgstr "Célérité collec."
+msgstr "Célérité collective"
 
 msgid "campaignBonus|Mirror Image"
 msgstr "Miroir"
@@ -1487,8 +1620,7 @@ msgid "Requires:"
 msgstr "Nécessite :"
 
 msgid "Cannot build. You have already built here today."
-msgstr ""
-"Construction impossible. Une construction a déjà eu lieu ici aujourd'hui."
+msgstr "Construction impossible. Une construction a déjà eu lieu aujourd'hui."
 
 msgid "For this action it is necessary to build a castle first."
 msgstr "Pour effectuer cette action il faut d'abord construire un château."
@@ -1938,7 +2070,7 @@ msgid "Laboratory"
 msgstr "Laboratoire"
 
 msgid "Shrine"
-msgstr "Mausolée"
+msgstr "Autel des ténèbres"
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
@@ -2044,8 +2176,8 @@ msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
 "percent."
 msgstr ""
-"Le Mausolée augmente la puissance de nécromancie de tous les nécromanciens "
-"de 10 pour cents."
+"L'Autel des ténèbres augmente la puissance de nécromancie de tous les "
+"nécromanciens de 10 pour cents."
 
 msgid ""
 "The Thieves' Guild provides information on enemy players. Thieves' Guilds "
@@ -2328,7 +2460,7 @@ msgstr ""
 "vous les améliorer ?"
 
 msgid "Are you sure you want to dismiss this army?"
-msgstr "Êtes vous sur de vouloir renvoyer cette troupe ?"
+msgstr "Êtes vous sûr de vouloir renvoyer cette troupe ?"
 
 msgid "Attack Skill"
 msgstr "Attaque"
@@ -2405,10 +2537,10 @@ msgid "Total: "
 msgstr "Total : "
 
 msgid "No room in"
-msgstr "Pas de place dans"
+msgstr "Pas de place"
 
 msgid "the garrison"
-msgstr "la garnison"
+msgstr "dans l'armée"
 
 msgid "Build a new ship:"
 msgstr "Construire un nouveau navire :"
@@ -2453,10 +2585,31 @@ msgid "Resolution"
 msgstr "Résolution"
 
 msgid "Experimental"
-msgstr "Expérimental"
+msgstr "Expérimentaux"
 
 msgid "Settings"
 msgstr "Paramètres"
+
+msgid "off"
+msgstr "coupé"
+
+msgid "Music"
+msgstr "Musique"
+
+msgid "Effects"
+msgstr "Effets"
+
+msgid "MIDI"
+msgstr "MIDI"
+
+msgid "MIDI Expansion"
+msgstr "MIDI Expansion"
+
+msgid "External"
+msgstr "Externe"
+
+msgid "Music Type"
+msgstr "Musique"
 
 msgid "Select Game Language"
 msgstr "Choix de la langue"
@@ -2472,6 +2625,15 @@ msgstr "Changer la résolution du jeu."
 
 msgid "Experimental game settings."
 msgstr "Paramètres de jeu expérimentaux."
+
+msgid "Toggle ambient music level."
+msgstr "Change le volume de la musique."
+
+msgid "Toggle foreground sounds level."
+msgstr "Change le volume des effets sonores."
+
+msgid "Change the type of music."
+msgstr "Change de type de musique."
 
 msgid "Okay"
 msgstr "OK"
@@ -2490,15 +2652,15 @@ msgid ""
 "Map\n"
 "Difficulty"
 msgstr ""
-"Carte\n"
-"Difficulté"
+"Difficulté\n"
+"de la carte"
 
 msgid ""
 "Game\n"
 "Difficulty"
 msgstr ""
-"Jeu\n"
-"Difficulté"
+"Difficulté\n"
+"du jeu"
 
 msgid "Rating"
 msgstr "Taux"
@@ -2677,8 +2839,23 @@ msgstr "Inconnu"
 msgid "%{name} (Level %{level})"
 msgstr "%{name} (niveau %{level})"
 
-msgid "Move Points"
-msgstr "Mouvement"
+msgid "Attack:"
+msgstr "Attaque :"
+
+msgid "Defense:"
+msgstr "Défense :"
+
+msgid "Spell Power:"
+msgstr "Puissance :"
+
+msgid "Knowledge:"
+msgstr "Connaissance :"
+
+msgid "Spell Points:"
+msgstr "Mana :"
+
+msgid "Move Points:"
+msgstr "Mouvement :"
 
 msgid "Cost per troop:"
 msgstr "Coût par troupe :"
@@ -2696,10 +2873,10 @@ msgid "MAX"
 msgstr "MAX"
 
 msgid "How many troops to move?"
-msgstr "Combien de troupes à déplacer ?"
+msgstr "Troupes à déplacer :"
 
 msgid "Fast separation into slots:"
-msgstr "Séparation rapide des troupes :"
+msgstr "Répartition rapide :"
 
 msgid "Map: "
 msgstr "Carte : "
@@ -2900,27 +3077,6 @@ msgstr "Confirmez le choix."
 msgid "Experimental Game Settings"
 msgstr "Paramètres de jeu expérimentaux"
 
-msgid "off"
-msgstr "coupé"
-
-msgid "Music"
-msgstr "Musique"
-
-msgid "Effects"
-msgstr "Effets"
-
-msgid "MIDI"
-msgstr "MIDI"
-
-msgid "MIDI Expansion"
-msgstr "MIDI Expansion"
-
-msgid "External"
-msgstr "Externe"
-
-msgid "Music Type"
-msgstr "Musique"
-
 msgid "Jump"
 msgstr "Immédiat"
 
@@ -2965,15 +3121,6 @@ msgstr "Batailles"
 
 msgid "Manual"
 msgstr "Manuel"
-
-msgid "Toggle ambient music level."
-msgstr "Change le volume de la musique."
-
-msgid "Toggle foreground sounds level."
-msgstr "Change le volume des effets sonores."
-
-msgid "Change the type of music."
-msgstr "Change de type de musique."
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3050,7 +3197,7 @@ msgid "Wood & Ore:"
 msgstr "Bois et Fer :"
 
 msgid "Gems, Cr, Slf & Mer:"
-msgstr "Rubis, Cr, Sfr & Mer :"
+msgstr "Rubis, Cr, Sfr et Mer :"
 
 msgid "Obelisks Found:"
 msgstr "Obélisques trouvés :"
@@ -3128,16 +3275,13 @@ msgid "Development"
 msgstr "Développement"
 
 msgid "Visit us at "
-msgstr "Rendez-vous sur"
+msgstr "Rendez-vous sur "
 
 msgid "Special Thanks to"
 msgstr "Merci spécial à"
 
 msgid "and many other contributors!"
 msgstr "et aux nombreux autres contributeurs !"
-
-msgid "Original project before 0.7"
-msgstr "Projet original avant 0.7"
 
 msgid "Support us at"
 msgstr "Soutenez-nous sur"
@@ -3150,6 +3294,9 @@ msgstr "Besoin d'aide avec le jeu ?"
 
 msgid "and many-many other supporters!"
 msgstr "et beaucoup, beaucoup d'autres supporteurs !"
+
+msgid "Original project before 0.7"
+msgstr "Projet original avant 0.7"
 
 msgid "Original Heroes of Might and Magic II team"
 msgstr "L'équipe originale de Heroes of Might and Magic II"
@@ -3766,11 +3913,12 @@ msgstr "Sauvegarde réussie."
 msgid "There was an issue during saving."
 msgstr "Il y a eu un problème lors de la sauvegarde."
 
+# Needs line break to have insectile space but keep partie and ? together.
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
 msgstr ""
-"Êtes-vous sûr de vouloir charger une nouvelle partie ? (Votre partie en "
-"cours sera perdue)"
+"Êtes-vous sûr de vouloir charger une nouvelle\n"
+"partie ? (Votre partie en cours sera perdue)"
 
 msgid "Try looking on land!!!"
 msgstr "Essayez de chercher sur la terre ferme !!!"
@@ -3892,6 +4040,15 @@ msgstr "Tchèque"
 
 msgid "Norwegian"
 msgstr "Norvégien"
+
+msgid "Belarusian"
+msgstr "Biélorusse"
+
+msgid "Bulgarian"
+msgstr "Bulgare"
+
+msgid "Ukrainian"
+msgstr "Ukrainien"
 
 msgid ", FPS: "
 msgstr ", FPS : "
@@ -5548,9 +5705,6 @@ msgstr ""
 msgid "Spell book is not present."
 msgstr "Le grimoire n'est pas présent."
 
-msgid "The spell is not found."
-msgstr "Sort introuvable."
-
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
 "cast the spell."
@@ -5558,11 +5712,16 @@ msgstr ""
 "Ce sort coûte %{mana} mana. Vous n'avez que %{point} mana, vous ne pouvez "
 "donc pas lancer le sort."
 
-msgid "Not enough move points."
-msgstr "Pas assez de points de mouvement."
+msgid "The spell is not found."
+msgstr "Sort introuvable."
 
 msgid "Only heroes can cast this spell."
 msgstr "Seuls les héros peuvent lancer ce sort."
+
+msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
+msgstr ""
+"Votre héros est trop fatigué pour lancer ce sort aujourd'hui. Essayez à "
+"nouveau demain."
 
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
@@ -5675,11 +5834,6 @@ msgstr "Portes du village"
 msgid "Select town to port to."
 msgstr "Sélectionnez la destination."
 
-msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
-msgstr ""
-"Votre héros est trop fatigué pour lancer ce sort aujourd'hui. Essayez à "
-"nouveau demain."
-
 msgid "%{spell} failed!!!"
 msgstr "%{spell} a échoué !"
 
@@ -5778,7 +5932,7 @@ msgid "Pathfinding"
 msgstr "Orientation"
 
 msgid "Archery"
-msgstr "Tir à l'arc"
+msgstr "Archerie"
 
 msgid "Logistics"
 msgstr "Logistique"
@@ -5814,13 +5968,13 @@ msgid "Estates"
 msgstr "Finances"
 
 msgid "Advanced Archery"
-msgstr "Tir à l'arc avancé"
+msgstr "Archerie avancée"
 
 msgid "Advanced Pathfinding"
 msgstr "Orientation avancée"
 
 msgid "Basic Archery"
-msgstr "Principes de Tir à l'arc"
+msgstr "Principes d'Archerie"
 
 msgid "Basic Pathfinding"
 msgstr "Principes d'Orientation"
@@ -5838,7 +5992,7 @@ msgid "Basic Scouting"
 msgstr "Principes de Reconnaissance"
 
 msgid "Expert Archery"
-msgstr "Expert en Tir à l'arc"
+msgstr "Expert en Archerie"
 
 msgid "Expert Logistics"
 msgstr "Expert en Logistique"
@@ -6273,7 +6427,7 @@ msgid "Multi"
 msgstr "Multi"
 
 msgid "race|Random"
-msgstr "Hasard"
+msgstr "Aléatoire"
 
 msgid "race|Neutral"
 msgstr "Neutre"
@@ -6417,7 +6571,7 @@ msgid "maps|Extra Large"
 msgstr "Très grande"
 
 msgid "maps|Custom Size"
-msgstr "Voir toutes les cartes, sans tenir compte de leur taille."
+msgstr "Taille Personnalisée"
 
 msgid "Ore Mine"
 msgstr "Mine de fer"
@@ -6715,7 +6869,7 @@ msgid "Random Monster"
 msgstr "Monstre Aléatoire"
 
 msgid "Random Ultimate Artifact"
-msgstr "Ultime artéfact aléatoire."
+msgstr "Ultime artéfact aléatoire"
 
 msgid "Idol"
 msgstr "Idole"
@@ -7928,7 +8082,7 @@ msgid ""
 "A traveling tinker in need of supplies offers you a helm with a thunderbolt "
 "design on its top in exchange for food and water. Curious, you accept, and "
 "later find out that the helm is magical."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Evercold Icicle"
 msgstr "Glaçon très froid"
@@ -7944,7 +8098,7 @@ msgid ""
 "An icicle withstanding the full heat of the noonday sun attracts your "
 "attention. Intrigued, you break it off, and find that it does not melt in "
 "your hand."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Everhot Lava Rock"
 msgstr "Caillou de lave très chaude"
@@ -7961,7 +8115,7 @@ msgid ""
 "a magical lava rock that never cools to light their fires. You take pity on "
 "them and teach them to make fire with sticks. Believing you to be a god, the "
 "apes give you their rock."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Lightning Rod"
 msgstr "Baguette éclair"
@@ -7978,7 +8132,7 @@ msgid ""
 "lightning rod, which melts and falls to the ground. The tip of the rod, "
 "however, survives intact and makes your hair stand on end when you touch it. "
 "Hmm..."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Snake-Ring"
 msgstr "Anneau du serpent"
@@ -8007,7 +8161,7 @@ msgid ""
 "A fierce windstorm reveals the entrance to a buried tomb. Your investigation "
 "reveals that the tomb has already been looted, but the thieves overlooked an "
 "ankh on a silver chain in the dark."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Book of Elements"
 msgstr "Livre des éléments"
@@ -8019,7 +8173,7 @@ msgid ""
 "You come across a conjurer who begs to accompany you and your army awhile "
 "for safety. You agree, and he offers as payment a copy of the book of the "
 "elements."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Elemental Ring"
 msgstr "Anneau élémentaire"
@@ -8031,7 +8185,7 @@ msgid ""
 "While pausing to rest, you notice a bobcat climbing a short tree to get at a "
 "crow's nest. On impulse, you climb the tree yourself and scare off the cat. "
 "When you look in the nest, you find a collection of shiny stones and a ring."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Holy Pendant"
 msgstr "Pendentif sacré"
@@ -8043,7 +8197,7 @@ msgid ""
 "In your wanderings you come across a hermit living in a small, tidy hut. "
 "Impressed with your mission, he takes time out from his meditations to bless "
 "and give you a charm against curses."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Pendant of Free Will"
 msgstr "Pendentif du libre arbitre"
@@ -8056,7 +8210,7 @@ msgid ""
 "dunking an old man. Feeling vengeful, you rescue the man and drag a Sprite "
 "onto dry land for awhile. The Sprite, uncomfortable in the air, gives you a "
 "magic pendant to let him go."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Pendant of Life"
 msgstr "Pendentif de la vie"
@@ -8068,7 +8222,7 @@ msgid ""
 "A brief roadside encounter with a small caravan and a game of knucklebones "
 "wins a magic pendant. Its former owner says that it protects from "
 "Necromancers' death spells."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Serenity Pendant"
 msgstr "Pendentif de la sérénité"
@@ -8081,7 +8235,7 @@ msgid ""
 "Barbarian and an eight-headed Hydra. Your timely intervention swings the "
 "battle in favor of the man, and he rewards you with a pendant he used to use "
 "to calm his mind for battle."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Seeing-eye Pendant"
 msgstr "Pendentif du chien d'aveugle"
@@ -8094,7 +8248,7 @@ msgid ""
 "You tend to her final needs and promise a proper burial. Grateful, she gives "
 "you a magic pendant emblazoned with a stylized eye. It lets you see with "
 "your eyes closed."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Kinetic Pendant"
 msgstr "Pendentif cinétique"
@@ -8106,7 +8260,7 @@ msgid ""
 "You come across a golem wearing a glowing pendant and blocking your way. "
 "Acting on a hunch, you cut the pendant from its neck. Deprived of its power "
 "source, the golem breaks down, leaving you with the magical pendant."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Pendant of Death"
 msgstr "Pendentif de la mort"
@@ -8118,7 +8272,7 @@ msgid ""
 "A quick and deadly battle with a Necromancer wins you his magical pendant. "
 "Later, a Wizard tells you that the pendant protects undead under your "
 "control from holy word spells."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Wand of Negation"
 msgstr "Baguette de la négation"
@@ -8130,7 +8284,7 @@ msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
 "He presents  you with a gift:  A wand that prevents the use of the dispel "
 "magic spell on your allies."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Golden Bow"
 msgstr "Arc doré"
@@ -8187,7 +8341,7 @@ msgid ""
 "You pause to help a diplomat with a broken axle fix his problem. In "
 "gratitude, he gives you a writing quill with magical properties which he "
 "says will \"help people see things your way\"."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Wizard's Hat"
 msgstr "Chapeau du sorcier"
@@ -8200,7 +8354,7 @@ msgid ""
 "opens a portal and rides through, getting his hat knocked off by the edge of "
 "the gate. The Griffin follows; the gate closes. You pick the hat up, dust it "
 "off, and put it on."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Power Ring"
 msgstr "Anneau de puissance"
@@ -8215,7 +8369,7 @@ msgid ""
 "a ring around one of its twigs. Scraps of clothing and rotting leather lead "
 "you to suspect that it IS Carnauth, transformed. Since you can't help him, "
 "you take the magic ring."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Ammo Cart"
 msgstr "Cartouche de munition"
@@ -8228,7 +8382,7 @@ msgstr ""
 msgid ""
 "An ammunition cart in the middle of an old battlefield catches your eye. "
 "Inspection shows it to be in good working order, so  you take it along."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Tax Lien"
 msgstr "Privilège fiscal"
@@ -8241,7 +8395,7 @@ msgid ""
 "hope to pay. The tax man takes pity and agrees to only take 250 gold a day "
 "from your account for life. Check here if you want one dollar to go to the "
 "presidential campaign election fund."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Hideous Mask"
 msgstr "Masque sinistre"
@@ -8255,7 +8409,7 @@ msgid ""
 "Warlock, unearths his fabled mask. Trembling, you put it on and it twists "
 "your visage into an awful grimace!  Oh no!  It's actually the hideous mask "
 "of Gromluck Greene, and you are stuck with it."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Endless Pouch of Sulfur"
 msgstr "Sac de souffre sans fin"
@@ -8267,7 +8421,7 @@ msgid ""
 "You visit an alchemist who, upon seeing your army, is swayed by the "
 "righteousness of your cause. The newly loyal subject gives you his endless "
 "pouch of sulfur to help with the war effort."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Endless Vial of Mercury"
 msgstr "Fiole de mercure sans fin"
@@ -8279,7 +8433,7 @@ msgid ""
 "A brief stop at a hastily abandoned Wizard's tower turns up a magical vial "
 "of mercury that always has a little left on the bottom. Recognizing a "
 "treasure when you see one, you cap it and slip it in your pocket."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Endless Pouch of Gems"
 msgstr "Bourse de rubis sans fin"
@@ -8292,7 +8446,7 @@ msgid ""
 "Riding quickly, you seize the pot of gold you find there. The leprechaun who "
 "owns it, unable to stop you from taking it, offers an endless pouch of gems "
 "for the return of his gold. You accept."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Endless Cord of Wood"
 msgstr "Tas de bois sans fin"
@@ -8305,7 +8459,7 @@ msgid ""
 "dead wood. As you keep pulling wood from the pile, you notice that it "
 "doesn't shrink. You realize to your delight that the wood is enchanted, so "
 "you take it along."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Endless Cart of Ore"
 msgstr "Charrette de fer sans fin"
@@ -8317,7 +8471,7 @@ msgid ""
 "You've found a Goblin weapon smithy making weapons for use against humans. "
 "With a tremendous yell you and your army descend upon their camp and drive "
 "them away. A search finds a magic ore cart that never runs out of iron."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Endless Pouch of Crystal"
 msgstr "Bourse de cristal sans fin"
@@ -8330,7 +8484,7 @@ msgid ""
 "crystal in one corner. Curious, you break a piece off and notice that the "
 "original crystal grows the lost piece back. You decide to stuff the entire "
 "patch into a pouch and take it with you."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Spiked Helm"
 msgstr "Casque à pointes"
@@ -8340,7 +8494,7 @@ msgid ""
 "You fend them off easily and the survivors flee in all directions. One of "
 "the Orcs was wearing a polished spiked helm. Figuring it will make a good "
 "souvenir, you take it."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Spiked Shield"
 msgstr "Bouclier à pointes"
@@ -8350,7 +8504,7 @@ msgid ""
 "steps out from under the bridge and demands payment before it will permit "
 "you to pass. You refuse, and the Troll charges, forcing you to slay it. You "
 "take its spiked shield as a trophy."
-msgstr ""
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "White Pearl"
 msgstr "Perle blanche"
@@ -8386,7 +8540,7 @@ msgid "Dummy 1"
 msgstr "Emplacement 1"
 
 msgid "The reserved artifact."
-msgstr "L'artefact réservé"
+msgstr "L'artefact réservé."
 
 msgid "Dummy 2"
 msgstr "Emplacement 2"
@@ -9311,7 +9465,7 @@ msgid "world: show terrain penalty"
 msgstr "monde : afficher la pénalité de terrain"
 
 msgid "world: Scouting skill shows extended content info"
-msgstr "monde : Reconnaissance аffiche des infos supplémentaires"
+msgstr "monde : Reconnaissance affiche des infos supplémentaires"
 
 msgid "world: allow to set guardian to objects"
 msgstr "monde : autoriser le placement de gardiens pour certains lieux"
@@ -9341,10 +9495,6 @@ msgstr ""
 
 msgid "battle: allow soft wait for troops"
 msgstr "combat : permettre aux créatures d'attendre au cours du combat"
-
-msgid "battle: reverse wait order (fast, average, slow)"
-msgstr ""
-"combat : inverser l'ordre des créatures qui ont attendu (rapide, moyen, lent)"
 
 msgid "battle: deterministic events"
 msgstr "bataille : événements déterministes"

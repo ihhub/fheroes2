@@ -188,7 +188,7 @@ bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cu
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
         bool redraw_count = false;
 
-        if ( PressIntKey( max, cur ) ) {
+        if ( fheroes2::PressIntKey( max, cur ) ) {
             sel.SetCur( cur );
             redraw_count = true;
         }
@@ -291,7 +291,7 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
         }
 
         if ( le.KeyPress() ) {
-            if ( charLimit == 0 || charLimit > res.size() || le.KeyValue() == KeySym::KEY_BACKSPACE )
+            if ( charLimit == 0 || charLimit > res.size() || le.KeyValue() == fheroes2::Key::KEY_BACKSPACE )
                 charInsertPos = InsertKeySym( res, charInsertPos, le.KeyValue(), le.KeyMod() );
             redraw = true;
         }
@@ -409,7 +409,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
         if ( buttonMin.isVisible() )
             le.MousePressLeft( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
 
-        if ( PressIntKey( redistributeMax, redistributeCount ) ) {
+        if ( fheroes2::PressIntKey( redistributeMax, redistributeCount ) ) {
             sel.SetCur( redistributeCount );
             redraw_count = true;
         }

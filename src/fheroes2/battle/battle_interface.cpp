@@ -2419,14 +2419,14 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
 #ifdef WITH_DEBUG
         if ( IS_DEVEL() )
             switch ( le.KeyValue() ) {
-            case KEY_w:
+            case fheroes2::Key::KEY_W:
                 // fast wins game
                 arena.GetResult().army1 = RESULT_WINS;
                 humanturn_exit = true;
                 a.emplace_back( CommandType::MSG_BATTLE_END_TURN, b.GetUID() );
                 break;
 
-            case KEY_l:
+            case fheroes2::Key::KEY_L:
                 // fast loss game
                 arena.GetResult().army1 = RESULT_LOSS;
                 humanturn_exit = true;

@@ -37,6 +37,11 @@ namespace Game
         MAIN_MENU_MULTI,
         MAIN_MENU_SETTINGS,
         MAIN_MENU_SELECT_MAP,
+        MAIN_MENU_MAP_SIZE_SMALL,
+        MAIN_MENU_MAP_SIZE_MEDIUM,
+        MAIN_MENU_MAP_SIZE_LARGE,
+        MAIN_MENU_MAP_SIZE_EXTRA_LARGE,
+        MAIN_MENU_MAP_SIZE_ALL,
         MAIN_MENU_HOTSEAT,
         MAIN_MENU_BATTLEONLY,
         MAIN_MENU_NEW_CAMPAIGN_SELECTION_SUCCESSION_WARS,
@@ -126,7 +131,7 @@ namespace Game
 
     std::string getHotKeyNameByEventId( const HotKeyEvent eventID );
 
-    void KeyboardGlobalFilter( int sym, int mod );
+    void KeyboardGlobalFilter( int sdlKey, int mod );
 
     void HotKeysLoad( std::string filename );
 }

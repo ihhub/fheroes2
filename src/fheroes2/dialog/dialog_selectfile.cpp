@@ -350,7 +350,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
             needRedraw = true;
         }
-        else if ( isEditing && le.KeyPress() && ( !is_limit || KEY_BACKSPACE == le.KeyValue() || KEY_DELETE == le.KeyValue() ) ) {
+        else if ( isEditing && le.KeyPress() && ( !is_limit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() ) ) {
             charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), le.KeyMod() );
             if ( filename.empty() )
                 buttonOk.disable();
@@ -374,7 +374,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             }
         }
 
-        if ( !isEditing && le.KeyPress( KEY_DELETE ) && isListboxSelected ) {
+        if ( !isEditing && le.KeyPress( fheroes2::Key::KEY_DELETE ) && isListboxSelected ) {
             std::string msg( _( "Are you sure you want to delete file:" ) );
             msg.append( "\n \n" );
             msg.append( System::GetBasename( listbox.GetCurrent().file ) );
