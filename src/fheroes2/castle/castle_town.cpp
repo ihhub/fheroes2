@@ -30,7 +30,7 @@
 #include "castle_ui.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "heroes.h"
 #include "icn.h"
 #include "kingdom.h"
@@ -131,10 +131,10 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
         le.MousePressLeft( button1.area() ) ? button1.drawOnPress() : button1.drawOnRelease();
         le.MousePressLeft( button2.area() ) ? button2.drawOnPress() : button2.drawOnRelease();
 
-        if ( button1.isEnabled() && ( le.MouseClickLeft( button1.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) )
+        if ( button1.isEnabled() && ( le.MouseClickLeft( button1.area() ) || Game::HotKeyPressEvent( Game::DEFAULT_READY ) ) )
             return Dialog::OK;
 
-        if ( le.MouseClickLeft( button2.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
+        if ( le.MouseClickLeft( button2.area() ) || Game::HotKeyPressEvent( Game::DEFAULT_EXIT ) )
             break;
     }
 
@@ -460,11 +460,11 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
             break;
 
         if ( buttonPrevCastle.isEnabled()
-             && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
+             && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::MOVE_LEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
             return ConstructionDialogResult::PrevConstructionWindow;
         }
         if ( buttonNextCastle.isEnabled()
-             && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
+             && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::MOVE_RIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
             return ConstructionDialogResult::NextConstructionWindow;
         }
 

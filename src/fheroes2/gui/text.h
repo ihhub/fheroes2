@@ -39,8 +39,7 @@ namespace Font
         YELLOW_BIG = 0x04,
         YELLOW_SMALL = 0x08,
         GRAY_BIG = 0x10,
-        GRAY_SMALL = 0x20,
-        WHITE_LARGE = 0x40
+        GRAY_SMALL = 0x20
     };
 }
 enum
@@ -70,7 +69,8 @@ public:
     void Set( int );
 
     void Clear( void );
-    size_t Size( void ) const;
+
+    size_t Size() const;
 
     int w( void ) const
     {
@@ -110,10 +110,20 @@ public:
     void Show( void );
     void Hide( void );
 
-    bool isShow( void ) const;
+    bool isShow() const
+    {
+        return !hide;
+    }
 
-    int w() const;
-    int h() const;
+    int w() const
+    {
+        return gw;
+    }
+
+    int h() const
+    {
+        return gh + 5;
+    }
 
     fheroes2::Rect GetRect( void ) const;
 
@@ -129,7 +139,11 @@ public:
     TextBox( const std::string &, int, const fheroes2::Rect & );
 
     void Set( const std::string &, int, uint32_t width_ );
-    void SetAlign( int type );
+
+    void SetAlign( int type )
+    {
+        align = type;
+    }
 
     int32_t w() const
     {

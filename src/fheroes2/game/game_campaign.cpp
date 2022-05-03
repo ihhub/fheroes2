@@ -30,6 +30,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_credits.h"
+#include "game_hotkeys.h"
 #include "game_io.h"
 #include "game_video.h"
 #include "icn.h"
@@ -342,9 +343,14 @@ namespace
         mapDescription.Blit( top.x + 34, top.y + 132 );
 
         const int textChoiceWidth = 160;
+        const fheroes2::Point initialOffset{ top.x + 425, top.y + 211 };
+        fheroes2::Display & display = fheroes2::Display::instance();
+
         for ( size_t i = 0; i < bonuses.size(); ++i ) {
-            Text choice( bonuses[i].getName(), Font::BIG );
-            choice.Blit( top.x + 425, top.y + 209 + 22 * static_cast<int>( i ) - choice.h() / 2, textChoiceWidth );
+            fheroes2::Text choice( bonuses[i].getName(), fheroes2::FontType::normalWhite() );
+            choice.fitToOneRow( textChoiceWidth );
+
+            choice.draw( initialOffset.x, initialOffset.y + 22 * static_cast<int>( i ) - choice.height() / 2, display );
         }
     }
 
@@ -717,13 +723,13 @@ namespace
         }
 
         if ( allowToRestart ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to Restart scenario." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::DEFAULT_READY ) << " to Restart scenario." )
         }
         else {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to Start scenario." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::DEFAULT_READY ) << " to Start scenario." )
         }
 
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to Exit this dialog." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::DEFAULT_EXIT ) << " to Exit this dialog." )
     }
 }
 
@@ -1006,7 +1012,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             }
         }
 
-        if ( le.MouseClickLeft( buttonCancel.area() ) || HotKeyPressEvent( EVENT_DEFAULT_EXIT ) ) {
+        if ( le.MouseClickLeft( buttonCancel.area() ) || HotKeyPressEvent( DEFAULT_EXIT ) ) {
             return prevMode;
         }
 
@@ -1030,7 +1036,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             fheroes2::showMessage( fheroes2::Text( _( "Restart" ), fheroes2::FontType::normalYellow() ),
                                    fheroes2::Text( _( "Restart the current scenario." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
-        else if ( ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || HotKeyPressEvent( EVENT_DEFAULT_READY ) ) ) || restartButtonClicked ) {
+        else if ( ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || HotKeyPressEvent( DEFAULT_READY ) ) ) || restartButtonClicked ) {
             if ( restartButtonClicked
                  && Dialog::Message( _( "Restart" ), _( "Are you sure you want to restart this scenario?" ), Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::NO ) {
                 continue;

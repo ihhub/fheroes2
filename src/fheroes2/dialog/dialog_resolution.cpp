@@ -22,7 +22,7 @@
 #include "agg_image.h"
 #include "cursor.h"
 #include "embedded_image.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "interface_list.h"
@@ -185,12 +185,12 @@ namespace Dialog
 
             resList.QueueEventProcessing();
 
-            if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || resList.isDoubleClicked() ) {
+            if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::DEFAULT_READY ) || resList.isDoubleClicked() ) {
                 if ( resList.isSelected() ) {
                     break;
                 }
             }
-            else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+            else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::DEFAULT_EXIT ) ) {
                 selectedResolution = { 0, 0 };
                 break;
             }

@@ -34,7 +34,12 @@ namespace fheroes2
         Russian, // Buka and XXI Vek versions
         Italian, // Rare version?
         Czech, // Local release occured in 2002 by CD Projekt
-        Norwegian // Original to fheroes2
+
+        // All languages listed below are original to fheroes2.
+        Belarusian,
+        Bulgarian,
+        Norwegian,
+        Ukrainian
     };
 
     class LanguageSwitcher
