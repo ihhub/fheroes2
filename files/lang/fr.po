@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-03 12:00+0200\n"
-"PO-Revision-Date: 2022-05-03 12:07+0200\n"
+"PO-Revision-Date: 2022-05-03 12:41+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -1406,130 +1406,130 @@ msgid "campaignBonus|White Pearl"
 msgstr "Perle blanche"
 
 msgid "campaignBonus|Basic Archery"
-msgstr "Tir à l'arc niveau 1"
+msgstr "Principes d'Archerie"
 
 msgid "campaignBonus|Advanced Archery"
-msgstr "Tir à l'arc avancé"
+msgstr "Archerie avancée"
 
 msgid "campaignBonus|Expert Archery"
-msgstr "Tir à l'arc expert"
+msgstr "Experte en Archerie"
 
 msgid "campaignBonus|Basic Ballistics"
-msgstr "Balistique niveau 1"
+msgstr "Principes de Balistique"
 
 msgid "campaignBonus|Advanced Ballistics"
 msgstr "Balistique avancée"
 
 msgid "campaignBonus|Expert Ballistics"
-msgstr "Balistique experte"
+msgstr "Expert en Balistique"
 
 msgid "campaignBonus|Basic Diplomacy"
-msgstr "Diplomatie niveau 1"
+msgstr "Principes de Diplomatie"
 
 msgid "campaignBonus|Advanced Diplomacy"
 msgstr "Diplomatie avancée"
 
 msgid "campaignBonus|Expert Diplomacy"
-msgstr "Diplomatie experte"
+msgstr "Expert en Diplomatie"
 
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr "Oeil d'aigle niv. 1"
+msgstr "Principes d'Oeil d'aigle"
 
 msgid "campaignBonus|Advanced Eagle Eye"
 msgstr "Oeil d'aigle avancé"
 
 msgid "campaignBonus|Expert Eagle Eye"
-msgstr "Oeil d'aigle expert"
+msgstr "Expert en Oeil d'aigle"
 
 msgid "campaignBonus|Basic Estates"
-msgstr "Finances niveau 1"
+msgstr "Principes de Finances"
 
 msgid "campaignBonus|Advanced Estates"
 msgstr "Finances avancées"
 
 msgid "campaignBonus|Expert Estates"
-msgstr "Expert en finances"
+msgstr "Expert en Finances"
 
 msgid "campaignBonus|Basic Leadership"
-msgstr "Charisme niveau 1"
+msgstr "Principes de Charisme"
 
 msgid "campaignBonus|Advanced Leadership"
 msgstr "Charisme avancée"
 
 msgid "campaignBonus|Expert Leadership"
-msgstr "Expert en charisme"
+msgstr "Expert en Charisme"
 
 msgid "campaignBonus|Basic Logistics"
-msgstr "Logistique niveau 1"
+msgstr "Principes de Logistique"
 
 msgid "campaignBonus|Advanced Logistics"
 msgstr "Logistique avancée"
 
 msgid "campaignBonus|Expert Logistics"
-msgstr "Logistique experte"
+msgstr "Expert en Logistique"
 
 msgid "campaignBonus|Basic Luck"
-msgstr "Chance niveau 1"
+msgstr "Principes de Chance"
 
 msgid "campaignBonus|Advanced Luck"
 msgstr "Chance avancée"
 
 msgid "campaignBonus|Expert Luck"
-msgstr "Expert en chance"
+msgstr "Expert en Chance"
 
 msgid "campaignBonus|Basic Mysticism"
-msgstr "Mysticisme niv.1"
+msgstr "Principes de Mysticisme"
 
 msgid "campaignBonus|Advanced Mysticism"
 msgstr "Mysticisme avancé"
 
 msgid "campaignBonus|Expert Mysticism"
-msgstr "Mysticisme expert"
+msgstr "Expert en Mysticisme"
 
 msgid "campaignBonus|Basic Navigation"
-msgstr "Navigation niv. 1"
+msgstr "Principes de Navigation"
 
 msgid "campaignBonus|Advanced Navigation"
-msgstr "Navigation niv. 2"
+msgstr "Navigation avancée"
 
 msgid "campaignBonus|Expert Navigation"
-msgstr "Navigation niv. 3"
+msgstr "Expert en Navigation"
 
 msgid "campaignBonus|Basic Necromancy"
-msgstr "Nécromancie niv. 1"
+msgstr "Principes de Nécromancie"
 
 msgid "campaignBonus|Advanced Necromancy"
-msgstr "Nécromancie niv. 2"
+msgstr "Nécromancie avancée"
 
 msgid "campaignBonus|Expert Necromancy"
-msgstr "Nécromancie niv. 3"
+msgstr "Expert en Nécromancie"
 
 msgid "campaignBonus|Basic Pathfinding"
-msgstr "Orientation niv. 1"
+msgstr "Principes d'Orientation"
 
 msgid "campaignBonus|Advanced Pathfinding"
-msgstr "Orientation niv. 2"
+msgstr "Orientation avancée"
 
 msgid "campaignBonus|Expert Pathfinding"
-msgstr "Orientation niv. 3"
+msgstr "Expert en Orientation"
 
 msgid "campaignBonus|Basic Scouting"
-msgstr "Reconnaissance n. 1"
+msgstr "Principes de Reconnaissance"
 
 msgid "campaignBonus|Advanced Scouting"
-msgstr "Reconnaissance n. 2"
+msgstr "Reconnaissance avancée"
 
 msgid "campaignBonus|Expert Scouting"
-msgstr "Reconnaissance n. 3"
+msgstr "Expert en Reconnaissance"
 
 msgid "campaignBonus|Basic Wisdom"
-msgstr "Sagesse niveau 1"
+msgstr "Principes de Sagesse"
 
 msgid "campaignBonus|Advanced Wisdom"
 msgstr "Sagesse avancée"
 
 msgid "campaignBonus|Expert Wisdom"
-msgstr "Expert en sagesse"
+msgstr "Expert en Sagesse"
 
 msgid "campaignBonus|Animate Dead"
 msgstr "Mort-vivant"
@@ -5932,7 +5932,7 @@ msgid "Pathfinding"
 msgstr "Orientation"
 
 msgid "Archery"
-msgstr "Tir à l'arc"
+msgstr "Archerie"
 
 msgid "Logistics"
 msgstr "Logistique"
@@ -5968,13 +5968,13 @@ msgid "Estates"
 msgstr "Finances"
 
 msgid "Advanced Archery"
-msgstr "Tir à l'arc avancé"
+msgstr "Archerie avancée"
 
 msgid "Advanced Pathfinding"
 msgstr "Orientation avancée"
 
 msgid "Basic Archery"
-msgstr "Principes de Tir à l'arc"
+msgstr "Principes d'Archerie"
 
 msgid "Basic Pathfinding"
 msgstr "Principes d'Orientation"
@@ -5992,7 +5992,7 @@ msgid "Basic Scouting"
 msgstr "Principes de Reconnaissance"
 
 msgid "Expert Archery"
-msgstr "Expert en Tir à l'arc"
+msgstr "Expert en Archerie"
 
 msgid "Expert Logistics"
 msgstr "Expert en Logistique"
