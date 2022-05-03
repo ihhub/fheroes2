@@ -53,7 +53,7 @@ else
     read -e -p "Please enter the full path to the HoMM2 directory (e.g. /home/user/GOG Games/HoMM 2 Gold): " HOMM2_PATH
 fi
 
-if [[ ! -f "$HOMM2_PATH/HEROES2.EXE" || ! -d "$HOMM2_PATH/DATA" || ! -d "$HOMM2_PATH/MAPS" ]]; then
+if [[ ( ! -f "$HOMM2_PATH/HEROES2.EXE" && ! -f "$HOMM2_PATH/HEROES2W.EXE" ) || ! -d "$HOMM2_PATH/DATA" || ! -d "$HOMM2_PATH/MAPS" ]]; then
     echo_red "Unable to find the HoMM2 directory. Installation aborted."
     exit 1
 fi
@@ -71,10 +71,11 @@ cd "$DEST_PATH"
 [[ ! -d maps ]]  && mkdir maps
 [[ ! -d music ]] && mkdir music
 
-[[ -d "$HOMM2_PATH/ANIM" ]]  && cp -r "$HOMM2_PATH/ANIM"/*  anim
-[[ -d "$HOMM2_PATH/DATA" ]]  && cp -r "$HOMM2_PATH/DATA"/*  data
-[[ -d "$HOMM2_PATH/MAPS" ]]  && cp -r "$HOMM2_PATH/MAPS"/*  maps
-[[ -d "$HOMM2_PATH/MUSIC" ]] && cp -r "$HOMM2_PATH/MUSIC"/* music
+[[ -d "$HOMM2_PATH/HEROES2/ANIM" ]] && cp -r "$HOMM2_PATH/HEROES2/ANIM"/* anim
+[[ -d "$HOMM2_PATH/ANIM" ]]         && cp -r "$HOMM2_PATH/ANIM"/*         anim
+[[ -d "$HOMM2_PATH/DATA" ]]         && cp -r "$HOMM2_PATH/DATA"/*         data
+[[ -d "$HOMM2_PATH/MAPS" ]]         && cp -r "$HOMM2_PATH/MAPS"/*         maps
+[[ -d "$HOMM2_PATH/MUSIC" ]]        && cp -r "$HOMM2_PATH/MUSIC"/*        music
 
 if [[ ! -f "$HOMM2_PATH/homm2.gog" ]]; then
     exit 0
