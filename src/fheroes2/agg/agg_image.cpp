@@ -2068,9 +2068,8 @@ namespace fheroes2
                 return GetICN( ICN::FONT, character - 0x20 );
             case Font::SMALL:
                 return GetICN( ICN::SMALFONT, character - 0x20 );
-            case Font::WHITE_LARGE:
-                return GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
             default:
+                assert( 0 );
                 break;
             }
 
@@ -2083,13 +2082,13 @@ namespace fheroes2
             case Font::BIG:
             case Font::GRAY_BIG:
             case Font::YELLOW_BIG:
-            case Font::WHITE_LARGE:
                 return static_cast<uint32_t>( GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
             case Font::SMALL:
             case Font::GRAY_SMALL:
             case Font::YELLOW_SMALL:
                 return static_cast<uint32_t>( GetMaximumICNIndex( ICN::SMALFONT ) ) + 0x20 - 1;
             default:
+                assert( 0 );
                 return 0;
             }
         }

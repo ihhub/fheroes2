@@ -22,8 +22,8 @@
 #include "game_delays.h"
 #include "localevent.h"
 #include "screen.h"
-#include "text.h"
 #include "translations.h"
+#include "ui_text.h"
 
 void fheroes2::showTeamInfo()
 {
@@ -32,12 +32,15 @@ void fheroes2::showTeamInfo()
 
     Display & display = Display::instance();
 
-    TextBox text( _( "fheroes2 Resurrection Team presents" ), Font::WHITE_LARGE, 500 );
-    const Rect roi( ( display.width() - text.w() ) / 2, ( display.height() - text.h() ) / 2, text.w(), text.h() );
+    Text text( _( "fheroes2 Resurrection Team presents" ), FontType{ FontSize::LARGE, FontColor::WHITE } );
+    const int32_t correctedTextWidth = text.width( 500 );
+
+    const Rect roi{ ( display.width() - correctedTextWidth ) / 2, ( display.height() - text.height( correctedTextWidth ) ) / 2, text.width(),
+                    text.height( correctedTextWidth ) };
 
     Image textImage( roi.width, roi.height );
     textImage.fill( 0 );
-    text.Blit( 0, 0, textImage );
+    text.draw( 0, 0, correctedTextWidth, textImage );
 
     // First frame must be fully rendered.
     display.fill( 0 );

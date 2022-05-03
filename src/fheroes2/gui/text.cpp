@@ -33,11 +33,6 @@ namespace
     {
         return font == Font::SMALL || font == Font::YELLOW_SMALL || font == Font::GRAY_SMALL;
     }
-
-    bool isLargeFont( int font )
-    {
-        return font == Font::WHITE_LARGE;
-    }
 }
 
 class TextAscii
@@ -96,8 +91,6 @@ int TextAscii::charWidth( const uint8_t character, const int ft )
     if ( character < 0x21 || character > fheroes2::AGG::ASCIILastSupportedCharacter( ft ) ) {
         if ( isSmallFont( ft ) )
             return 4;
-        else if ( isLargeFont( ft ) )
-            return 12;
         else
             return 6;
     }
@@ -110,8 +103,6 @@ int TextAscii::fontHeight( const int f )
 {
     if ( isSmallFont( f ) )
         return 8 + 2 + 1;
-    else if ( isLargeFont( f ) )
-        return 26 + 6 + 1;
     else
         return 13 + 3 + 1;
 }
@@ -359,11 +350,6 @@ void TextBox::Set( const std::string & msg, int ft, uint32_t width_ )
     }
 }
 
-void TextBox::SetAlign( int f )
-{
-    align = f;
-}
-
 void TextBox::Append( const std::string & msg, int ft, u32 width_ )
 {
     uint32_t www = 0;
@@ -494,21 +480,6 @@ void TextSprite::SetFont( int ft )
 void TextSprite::SetPos( s32 ax, s32 ay )
 {
     _restorer.update( ax, ay, gw, gh + 5 );
-}
-
-int TextSprite::w( void ) const
-{
-    return gw;
-}
-
-int TextSprite::h( void ) const
-{
-    return gh + 5;
-}
-
-bool TextSprite::isShow( void ) const
-{
-    return !hide;
 }
 
 fheroes2::Rect TextSprite::GetRect( void ) const

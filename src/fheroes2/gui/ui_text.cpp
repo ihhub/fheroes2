@@ -400,6 +400,25 @@ namespace fheroes2
         return getFontHeight( _fontType.size );
     }
 
+    int32_t Text::width( const int32_t maxWidth ) const
+    {
+        if ( _text.empty() ) {
+            return 0;
+        }
+
+        const int32_t fontHeight = getFontHeight( _fontType.size );
+
+        std::deque<Point> offsets;
+        getMultiRowInfo( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), maxWidth, _fontType, fontHeight, offsets );
+
+        int32_t maxRowWidth = offsets.front().x;
+        for ( const Point & point : offsets ) {
+            maxRowWidth = std::max( maxRowWidth, point.x );
+        }
+
+        return maxRowWidth;
+    }
+
     int32_t Text::height( const int32_t maxWidth ) const
     {
         if ( _text.empty() ) {
@@ -545,6 +564,24 @@ namespace fheroes2
         }
 
         return maxHeight;
+    }
+
+    int32_t MultiFontText::width( const int32_t maxWidth ) const
+    {
+        const int32_t maxFontHeight = height();
+
+        std::deque<Point> offsets;
+        for ( const Text & text : _texts ) {
+            getMultiRowInfo( reinterpret_cast<const uint8_t *>( text._text.data() ), static_cast<int32_t>( text._text.size() ), maxWidth, text._fontType, maxFontHeight,
+                             offsets );
+        }
+
+        int32_t maxRowWidth = offsets.front().x;
+        for ( const Point & point : offsets ) {
+            maxRowWidth = std::max( maxRowWidth, point.x );
+        }
+
+        return maxRowWidth;
     }
 
     int32_t MultiFontText::height( const int32_t maxWidth ) const
