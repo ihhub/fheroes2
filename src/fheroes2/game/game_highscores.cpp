@@ -524,9 +524,6 @@ fheroes2::GameMode Game::HighScores()
 
     // highscores loop
     while ( le.HandleEvents() ) {
-        // key code info
-        if ( Settings::Get().Debug() == 0x12 && le.KeyPress() )
-            Dialog::Message( "Key Press:", std::to_string( le.KeyValue() ), Font::SMALL, Dialog::OK );
         if ( buttonCampain.isEnabled() ) {
             le.MousePressLeft( buttonCampain.area() ) ? buttonCampain.drawOnPress() : buttonCampain.drawOnRelease();
         }
