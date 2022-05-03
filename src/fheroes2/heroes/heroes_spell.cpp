@@ -496,8 +496,7 @@ bool ActionSpellTownPortal( Heroes & hero )
             castles.push_back( ( **it ).GetIndex() );
 
     if ( castles.empty() ) {
-        Dialog::Message( "", _( "No available towns.\nSpell Failed!!!" ), Font::BIG, Dialog::OK );
-        return false;
+        assert( 0 );
     }
 
     std::unique_ptr<fheroes2::StandardWindow> frameborder( new fheroes2::StandardWindow( 290, 252 ) );

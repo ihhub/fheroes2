@@ -5597,13 +5597,6 @@ msgid "This spell can be casted only nearby water."
 msgstr "Dieser Zauber kann nur in der Nähe von Wasser gewirkt werden."
 
 msgid ""
-"No available towns.\n"
-"Spell Failed!!!"
-msgstr ""
-"Keine Städte verfügbar.\n"
-"Zauberspruch fehlgeschlagen!!!"
-
-msgid ""
 "Nearest town occupied.\n"
 "Spell Failed!!!"
 msgstr ""
