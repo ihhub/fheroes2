@@ -248,7 +248,7 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
         }
 
         // exit
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             return Dialog::CANCEL;
 
         // heroes troops

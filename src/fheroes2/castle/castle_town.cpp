@@ -456,7 +456,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
             le.MousePressLeft( buttonNextCastle.area() ) ? buttonNextCastle.drawOnPress() : buttonNextCastle.drawOnRelease();
         }
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;
 
         if ( buttonPrevCastle.isEnabled()

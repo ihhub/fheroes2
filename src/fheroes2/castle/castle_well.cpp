@@ -159,7 +159,7 @@ void Castle::OpenWell( void )
         le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
         const building_t pressedHotkeyBuildingID = getPressedBuildingHotkey();
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow ) {
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
         }
         if ( le.MouseClickLeft( buttonMax.area() ) || HotKeyPressEvent( Game::HotKeyEvent::WELL_BUY_ALL_CREATURES ) ) {

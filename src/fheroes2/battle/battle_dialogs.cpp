@@ -325,7 +325,7 @@ void Battle::DialogBattleSettings( void )
             Dialog::Message( _( "Shadow Cursor" ), _( "Toggle on or off a shadow showing the current hex location of the mouse cursor." ), Font::BIG );
         }
 
-        if ( HotKeyCloseWindow || le.MouseClickLeft( btn_ok.area() ) ) {
+        if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( btn_ok.area() ) ) {
             break;
         }
 
@@ -539,7 +539,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
         }
 
         // exit
-        if ( HotKeyCloseWindow || le.MouseClickLeft( btnOk->area() ) )
+        if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( btnOk->area() ) )
             break;
 
         if ( allowToCancel && le.MouseClickLeft( btnCancel.area() ) ) {
@@ -618,7 +618,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                     }
 
                     // exit
-                    if ( HotKeyCloseWindow || le.MouseClickLeft( btnOk->area() ) )
+                    if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( btnOk->area() ) )
                         break;
 
                     // animation
@@ -707,7 +707,7 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount, const uin
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
         // exit
-        if ( HotKeyCloseWindow || le.MouseClickLeft( buttonOk.area() ) )
+        if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( buttonOk.area() ) )
             break;
 
         // animation
@@ -902,7 +902,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
         }
 
         // exit
-        if ( HotKeyCloseWindow || le.MouseClickLeft( btnClose.area() ) )
+        if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( btnClose.area() ) )
             break;
 
         if ( statusMessage != status.GetMessage() ) {

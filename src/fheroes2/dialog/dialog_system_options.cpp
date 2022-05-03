@@ -266,7 +266,7 @@ namespace
         while ( le.HandleEvents() ) {
             le.MousePressLeft( buttonOkay.area() ) ? buttonOkay.drawOnPress() : buttonOkay.drawOnRelease();
 
-            if ( le.MouseClickLeft( buttonOkay.area() ) || HotKeyCloseWindow ) {
+            if ( le.MouseClickLeft( buttonOkay.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
 

@@ -129,11 +129,14 @@ namespace Game
     bool HotKeyPressEvent( const HotKeyEvent eventID );
     bool HotKeyHoldEvent( const HotKeyEvent eventID );
 
+    inline bool HotKeyCloseWindow()
+    {
+        return HotKeyPressEvent( HotKeyEvent::DEFAULT_EXIT ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_READY );
+    }
+
     std::string getHotKeyNameByEventId( const HotKeyEvent eventID );
 
     void KeyboardGlobalFilter( int sdlKey, int mod );
 
     void HotKeysLoad( std::string filename );
 }
-
-#define HotKeyCloseWindow ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_EXIT ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_READY ) )

@@ -204,7 +204,7 @@ namespace
                 okayButton.drawOnRelease();
             }
 
-            if ( le.MouseClickLeft( okayButton.area() ) || HotKeyCloseWindow ) {
+            if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
             if ( le.MouseClickLeft( windowLanguageRoi ) ) {
