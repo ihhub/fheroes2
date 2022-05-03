@@ -25,6 +25,7 @@
 #define H2BATTLE_COMMAND_H
 
 #include <functional>
+#include <type_traits>
 
 #include "battle_board.h"
 

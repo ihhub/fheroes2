@@ -106,12 +106,6 @@ namespace fheroes2
     }
 
     void replaceStringEnding( std::string & output, const char * originalEnding, const char * correctedEnding );
-
-    template <typename T>
-    constexpr typename std::underlying_type<T>::type enumToUnderlying( T value )
-    {
-        return static_cast<typename std::underlying_type<T>::type>( value );
-    }
 }
 
 #endif
