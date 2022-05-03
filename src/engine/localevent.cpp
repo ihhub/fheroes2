@@ -682,7 +682,6 @@ enum SwitchJoyconKeys
 
 namespace fheroes2
 {
-    
     const char * KeySymGetName( const Key key )
     {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -745,7 +744,7 @@ namespace fheroes2
 
     size_t InsertKeySym( std::string & res, size_t pos, const Key key, const int32_t mod )
     {
-    #if defined( TARGET_PS_VITA )
+#if defined( TARGET_PS_VITA )
         (void)mod;
 
         // input with D-Pad
@@ -837,7 +836,7 @@ namespace fheroes2
         default:
             break;
         }
-    #else
+#else
         switch ( key ) {
         case fheroes2::Key::KEY_BACKSPACE:
             if ( !res.empty() && pos ) {
@@ -879,7 +878,7 @@ namespace fheroes2
             }
         }
         }
-    #endif
+#endif
 
         return pos;
     }
