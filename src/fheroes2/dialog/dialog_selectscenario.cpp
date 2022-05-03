@@ -500,7 +500,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
             needRedraw = true;
         }
-        else if ( le.MouseClickLeft( buttonSelectMedium.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_MEDIUM ) /*&& buttonSelectMedium.isEnabled()*/ ) {
+        else if ( le.MouseClickLeft( buttonSelectMedium.area() )
+                  || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_MEDIUM ) /*&& buttonSelectMedium.isEnabled()*/ ) {
             if ( medium.empty() ) {
                 Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
                 currentPressedButton->drawOnPress();
@@ -519,7 +520,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
             needRedraw = true;
         }
-        else if ( le.MouseClickLeft( buttonSelectLarge.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_LARGE ) /*&& buttonSelectLarge.isEnabled()*/ ) {
+        else if ( le.MouseClickLeft( buttonSelectLarge.area() )
+                  || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_LARGE ) /*&& buttonSelectLarge.isEnabled()*/ ) {
             if ( large.empty() ) {
                 Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
                 currentPressedButton->drawOnPress();
@@ -538,7 +540,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
             needRedraw = true;
         }
-        else if ( le.MouseClickLeft( buttonSelectXLarge.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE ) /*&& buttonSelectXLarge.isEnabled()*/ ) {
+        else if ( le.MouseClickLeft( buttonSelectXLarge.area() )
+                  || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE ) /*&& buttonSelectXLarge.isEnabled()*/ ) {
             if ( xlarge.empty() ) {
                 Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
                 currentPressedButton->drawOnPress();

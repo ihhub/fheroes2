@@ -121,7 +121,8 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL )] = { HotKeyCategory::MAIN_GAME, "select small map size", fheroes2::Key::KEY_S };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_MEDIUM )] = { HotKeyCategory::MAIN_GAME, "select medium map size", fheroes2::Key::KEY_M };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_LARGE )] = { HotKeyCategory::MAIN_GAME, "select large map size", fheroes2::Key::KEY_L };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE )] = { HotKeyCategory::MAIN_GAME, "select extra large map size", fheroes2::Key::KEY_X };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE )]
+            = { HotKeyCategory::MAIN_GAME, "select extra large map size", fheroes2::Key::KEY_X };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_ALL )] = { HotKeyCategory::MAIN_GAME, "select all map sizes", fheroes2::Key::KEY_A };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_HOTSEAT )] = { HotKeyCategory::MAIN_GAME, "hotseat game", fheroes2::Key::KEY_H };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_BATTLEONLY )] = { HotKeyCategory::MAIN_GAME, "battle only game", fheroes2::Key::KEY_B };
@@ -131,7 +132,8 @@ namespace
             = { HotKeyCategory::MAIN_GAME, "the price of loyalty campaign selection", fheroes2::Key::KEY_E };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_ROLAND_CAMPAIGN )] = { HotKeyCategory::MAIN_GAME, "roland campaign", fheroes2::Key::KEY_1 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_ARCHIBALD_CAMPAIGN )] = { HotKeyCategory::MAIN_GAME, "archibald campaign", fheroes2::Key::KEY_2 };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_PRICE_OF_LOYALTY_CAMPAIGN )] = { HotKeyCategory::MAIN_GAME, "the price of loyalty campaign", fheroes2::Key::KEY_1 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_PRICE_OF_LOYALTY_CAMPAIGN )]
+            = { HotKeyCategory::MAIN_GAME, "the price of loyalty campaign", fheroes2::Key::KEY_1 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_VOYAGE_HOME_CAMPAIGN )] = { HotKeyCategory::MAIN_GAME, "voyage home campaign", fheroes2::Key::KEY_2 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_WIZARDS_ISLE_CAMPAIGN )] = { HotKeyCategory::MAIN_GAME, "wizard's isle campaign", fheroes2::Key::KEY_3 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_DESCENDANTS_CAMPAIGN )] = { HotKeyCategory::MAIN_GAME, "descendants campaign", fheroes2::Key::KEY_4 };
@@ -306,7 +308,8 @@ void Game::HotKeysLoad( std::string filename )
 void Game::KeyboardGlobalFilter( int sdlKey, int mod )
 {
     // system hotkeys
-    if ( fheroes2::getKeyFromSDL( sdlKey ) == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::SYSTEM_FULLSCREEN )].key && !( ( mod & KMOD_ALT ) || ( mod & KMOD_CTRL ) ) ) {
+    if ( fheroes2::getKeyFromSDL( sdlKey ) == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::SYSTEM_FULLSCREEN )].key
+         && !( ( mod & KMOD_ALT ) || ( mod & KMOD_CTRL ) ) ) {
         fheroes2::engine().toggleFullScreen();
         fheroes2::Display::instance().render();
 

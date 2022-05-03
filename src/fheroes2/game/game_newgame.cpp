@@ -105,8 +105,10 @@ namespace
 
         COUT( "New Campaign\n" )
 
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_NEW_CAMPAIGN_SELECTION_SUCCESSION_WARS ) << " to choose The Succession Wars Campaign." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_NEW_CAMPAIGN_SELECTION_PRICE_OF_LOYALTY ) << " to choose The Price of Loyalty Campaign." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_NEW_CAMPAIGN_SELECTION_SUCCESSION_WARS )
+                       << " to choose The Succession Wars Campaign." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_NEW_CAMPAIGN_SELECTION_PRICE_OF_LOYALTY )
+                       << " to choose The Price of Loyalty Campaign." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_EXIT ) << " to come back to Main Menu." )
     }
 

@@ -334,7 +334,8 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         bool needRedraw = false;
         bool isListboxSelected = listbox.isSelected();
 
-        if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_READY ) || listbox.isDoubleClicked() ) {
+        if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_READY )
+             || listbox.isDoubleClicked() ) {
             if ( !filename.empty() )
                 result = System::ConcatePath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
             else if ( isListboxSelected )
