@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 10:57+0200\n"
-"PO-Revision-Date: 2022-05-01 07:55+0200\n"
+"POT-Creation-Date: 2022-05-03 12:00+0200\n"
+"PO-Revision-Date: 2022-05-03 12:05+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -1400,7 +1400,7 @@ msgid "campaignBonus|Thunder Mace"
 msgstr "Massue domination"
 
 msgid "campaignBonus|Traveler's Boots"
-msgstr "Bottes de 7 lieues"
+msgstr "Bottes de sept lieues"
 
 msgid "campaignBonus|White Pearl"
 msgstr "Perle blanche"
@@ -1541,10 +1541,10 @@ msgid "campaignBonus|Fireblast"
 msgstr "Souffle de feu"
 
 msgid "campaignBonus|Mass Curse"
-msgstr "Grde malédiction"
+msgstr "Grande malédiction"
 
 msgid "campaignBonus|Mass Haste"
-msgstr "Célérité collec."
+msgstr "Célérité collective"
 
 msgid "campaignBonus|Mirror Image"
 msgstr "Miroir"
@@ -2839,8 +2839,23 @@ msgstr "Inconnu"
 msgid "%{name} (Level %{level})"
 msgstr "%{name} (niveau %{level})"
 
-msgid "Move Points"
-msgstr "Mouvement"
+msgid "Attack:"
+msgstr "Attaque :"
+
+msgid "Defense:"
+msgstr "Défense :"
+
+msgid "Spell Power:"
+msgstr "Puissance :"
+
+msgid "Knowledge:"
+msgstr "Connaissance :"
+
+msgid "Spell Points:"
+msgstr "Mana :"
+
+msgid "Move Points:"
+msgstr "Mouvement :"
 
 msgid "Cost per troop:"
 msgstr "Coût par troupe :"
@@ -4025,6 +4040,15 @@ msgstr "Tchèque"
 
 msgid "Norwegian"
 msgstr "Norvégien"
+
+msgid "Belarusian"
+msgstr "Biélorusse"
+
+msgid "Bulgarian"
+msgstr "Bulgare"
+
+msgid "Ukrainian"
+msgstr "Ukrainien"
 
 msgid ", FPS: "
 msgstr ", FPS : "
