@@ -343,9 +343,14 @@ namespace
         mapDescription.Blit( top.x + 34, top.y + 132 );
 
         const int textChoiceWidth = 160;
+        const fheroes2::Point initialOffset{ top.x + 425, top.y + 211 };
+        fheroes2::Display & display = fheroes2::Display::instance();
+
         for ( size_t i = 0; i < bonuses.size(); ++i ) {
-            Text choice( bonuses[i].getName(), Font::BIG );
-            choice.Blit( top.x + 425, top.y + 209 + 22 * static_cast<int>( i ) - choice.h() / 2, textChoiceWidth );
+            fheroes2::Text choice( bonuses[i].getName(), fheroes2::FontType::normalWhite() );
+            choice.fitToOneRow( textChoiceWidth );
+
+            choice.draw( initialOffset.x, initialOffset.y + 22 * static_cast<int>( i ) - choice.height() / 2, display );
         }
     }
 
