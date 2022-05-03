@@ -108,12 +108,12 @@ try {
     } else {
         $shell = New-Object -ComObject "Shell.Application"
 
-        foreach ($srcDir in @("ANIM", "DATA", "MAPS", "MUSIC")) {
+        foreach ($srcDir in @("HEROES2\ANIM", "ANIM", "DATA", "MAPS", "MUSIC")) {
             if (-Not (Test-Path -Path "$homm2Path\$srcDir" -PathType Container)) {
                 continue
             }
 
-            $destDir = $srcDir.ToLower()
+            $destDir = (Split-Path $srcDir -Leaf).ToLower()
 
             if (-Not (Test-Path -Path "$destPath\$destDir" -PathType Container)) {
                 [void](New-Item -Path "$destPath\$destDir" -ItemType "directory")
