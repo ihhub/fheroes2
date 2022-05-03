@@ -222,11 +222,11 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
 
     // message loop
     while ( le.HandleEvents() ) {
-        if ( ( le.MouseClickLeft( prev_list ) || HotKeyPressEvent( Game::MOVE_LEFT ) ) && current_index != 0 ) {
+        if ( ( le.MouseClickLeft( prev_list ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) ) && current_index != 0 ) {
             current_index -= spellsPerPage * 2;
             redraw = true;
         }
-        else if ( ( le.MouseClickLeft( next_list ) || HotKeyPressEvent( Game::MOVE_RIGHT ) ) && displayedSpells.size() > ( current_index + ( spellsPerPage * 2 ) ) ) {
+        else if ( ( le.MouseClickLeft( next_list ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) ) && displayedSpells.size() > ( current_index + ( spellsPerPage * 2 ) ) ) {
             current_index += spellsPerPage * 2;
             redraw = true;
         }
@@ -410,7 +410,7 @@ void SpellBook::Edit( const HeroBase & hero )
             current_index += spellsPerPage * 2;
             redraw = true;
         }
-        else if ( le.MouseClickLeft( clos_rt ) || Game::HotKeyPressEvent( Game::DEFAULT_EXIT ) )
+        else if ( le.MouseClickLeft( clos_rt ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_EXIT ) )
             break;
         else if ( le.MouseClickLeft( pos ) ) {
             const int32_t index = GetRectIndex( coords, le.GetMouseCursor() );

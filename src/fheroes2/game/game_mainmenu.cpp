@@ -70,12 +70,12 @@ namespace
         START_TEXT_SUPPORT_MODE
         COUT( "Main Menu\n" )
 
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::MAIN_MENU_NEW_GAME ) << " to choose New Game." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::MAIN_MENU_LOAD_GAME ) << " to choose Load previously saved game." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::MAIN_MENU_HIGHSCORES ) << " to show High Scores." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::MAIN_MENU_CREDITS ) << " to show Credits." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::MAIN_MENU_SETTINGS ) << " to open Game Settings." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::DEFAULT_EXIT ) << " to Quit the game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_NEW_GAME ) << " to choose New Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) << " to choose Load previously saved game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_HIGHSCORES ) << " to show High Scores." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_CREDITS ) << " to show Credits." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_SETTINGS ) << " to open Game Settings." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_EXIT ) << " to Quit the game." )
     }
 }
 
@@ -296,30 +296,30 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             display.render();
         }
 
-        if ( HotKeyPressEvent( MAIN_MENU_NEW_GAME ) || le.MouseClickLeft( buttonNewGame.area() ) ) {
+        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_GAME ) || le.MouseClickLeft( buttonNewGame.area() ) ) {
             return fheroes2::GameMode::NEW_GAME;
         }
 
-        if ( HotKeyPressEvent( MAIN_MENU_LOAD_GAME ) || le.MouseClickLeft( buttonLoadGame.area() ) ) {
+        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_LOAD_GAME ) || le.MouseClickLeft( buttonLoadGame.area() ) ) {
             return fheroes2::GameMode::LOAD_GAME;
         }
 
-        if ( HotKeyPressEvent( MAIN_MENU_HIGHSCORES ) || le.MouseClickLeft( buttonHighScores.area() ) ) {
+        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_HIGHSCORES ) || le.MouseClickLeft( buttonHighScores.area() ) ) {
             return fheroes2::GameMode::HIGHSCORES;
         }
 
-        if ( HotKeyPressEvent( MAIN_MENU_CREDITS ) || le.MouseClickLeft( buttonCredits.area() ) ) {
+        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_CREDITS ) || le.MouseClickLeft( buttonCredits.area() ) ) {
             return fheroes2::GameMode::CREDITS;
         }
 
-        if ( HotKeyPressEvent( DEFAULT_EXIT ) || le.MouseClickLeft( buttonQuit.area() ) ) {
+        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_EXIT ) || le.MouseClickLeft( buttonQuit.area() ) ) {
             if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 // if ( Settings::ExtGameUseFade() )
                 //     display.Fade();
                 return fheroes2::GameMode::QUIT_GAME;
             }
         }
-        else if ( HotKeyPressEvent( MAIN_MENU_SETTINGS ) || le.MouseClickLeft( settingsArea ) ) {
+        else if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_SETTINGS ) || le.MouseClickLeft( settingsArea ) ) {
             fheroes2::openGameSettings();
 
             // force interface to reset area and positions

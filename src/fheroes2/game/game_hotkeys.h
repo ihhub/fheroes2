@@ -24,7 +24,7 @@
 
 namespace Game
 {
-    enum HotKeyEvent : int32_t
+    enum class HotKeyEvent : int32_t
     {
         NONE,
 
@@ -131,4 +131,4 @@ namespace Game
     void HotKeysLoad( std::string filename );
 }
 
-#define HotKeyCloseWindow ( Game::HotKeyPressEvent( Game::DEFAULT_EXIT ) || Game::HotKeyPressEvent( Game::DEFAULT_READY ) )
+#define HotKeyCloseWindow ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_EXIT ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_READY ) )

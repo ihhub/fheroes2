@@ -396,10 +396,10 @@ namespace fheroes2
 
         for ( size_t i = 0; i < _button.size(); ++i ) {
             if ( _button[i]->isEnabled() ) {
-                if ( ( _value[i] == Dialog::YES || _value[i] == Dialog::OK ) && Game::HotKeyPressEvent( Game::DEFAULT_READY ) ) {
+                if ( ( _value[i] == Dialog::YES || _value[i] == Dialog::OK ) && Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_READY ) ) {
                     return _value[i];
                 }
-                if ( ( _value[i] == Dialog::CANCEL || _value[i] == Dialog::NO ) && Game::HotKeyPressEvent( Game::DEFAULT_EXIT ) ) {
+                if ( ( _value[i] == Dialog::CANCEL || _value[i] == Dialog::NO ) && Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_EXIT ) ) {
                     return _value[i];
                 }
             }
