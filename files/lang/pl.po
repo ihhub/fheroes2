@@ -4,13 +4,13 @@
 # fheroes2 team <fhomm2@gmail.com>, 2021
 # Igor Orlov <igororlov@inbox.ru>, 2009.
 # Andrey Afletdinov <afletdinov@mail.dc.baikal.ru>, 2009.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 17:09+0200\n"
-"PO-Revision-Date: 2022-04-25 23:09+0200\n"
+"PO-Revision-Date: 2022-05-02 23:43+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -157,17 +157,14 @@ msgstr "Podaj liczbę"
 msgid "%{name} half the enemy troops!"
 msgstr "%{name} Połowa żołnierzy wroga!"
 
-#, fuzzy
 msgid "%{name} has turned off the auto battle"
-msgstr "Zadaje obrażenia wszystkim nieumarłym na polu bitwy."
+msgstr "%{name} wyłączył automatyczną walkę"
 
-#, fuzzy
 msgid "%{name} has turned on the auto battle"
-msgstr "Zadaje obrażenia wszystkim nieumarłym na polu bitwy."
+msgstr "%{name} włączył automatyczną walkę"
 
-#, fuzzy
 msgid "Spell failed!"
-msgstr "czar nie udany!"
+msgstr "Czar nieudany!"
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
@@ -397,9 +394,8 @@ msgstr "Brakuje złota (%{gold})"
 msgid "%{name} states:"
 msgstr "%{name} oznajmia:"
 
-#, fuzzy
 msgid "Captain of %{name} states:"
-msgstr "Kapitan, %{name}"
+msgstr "Kapitan %{name} oznajmia:"
 
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
@@ -510,10 +506,10 @@ msgid "Show logs"
 msgstr "Pokaż logi"
 
 msgid "Message Bar"
-msgstr ""
+msgstr "Pasek Wiadomości"
 
 msgid "Shows the results of individual monster's actions."
-msgstr ""
+msgstr "Pokazuje rezultat akcji wykonanych przez indiwidualną jednostkę."
 
 msgid "%{name} skip their turn."
 msgstr "%{name} pomija turę."
@@ -702,33 +698,26 @@ msgstr ""
 msgid "%{count} %{name} rise(s) from the dead!"
 msgstr "%{count} %{name} powstaje z martwych!"
 
-#, fuzzy
 msgid "Dwarven Alliance"
-msgstr "Przymierze krasnoludów"
+msgstr "Przymierze Krasnolud."
 
-#, fuzzy
 msgid "Sorceress Guild"
-msgstr "Czarodziejka"
+msgstr "Gildia Czarodziejek"
 
-#, fuzzy
 msgid "Necromancer Guild"
-msgstr "Nekromanta"
+msgstr "Gildia Nekromantów"
 
-#, fuzzy
 msgid "Ogre Alliance"
-msgstr "Przymierze krasnoludów"
+msgstr "Przymierze Ogrów"
 
-#, fuzzy
 msgid "Dwarfbane"
-msgstr "Krasnolud"
+msgstr "Pogromca Krasnolud."
 
-#, fuzzy
 msgid "Dragon Alliance"
-msgstr "Przymierze smoków"
+msgstr "Przymierze Smoków"
 
-#, fuzzy
 msgid "Elven Alliance"
-msgstr "Przymierze elfów"
+msgstr "Przymierze Elfów"
 
 msgid "Kraeger defeated"
 msgstr "Kraeger pokonany"
@@ -739,42 +728,35 @@ msgstr "Krnąbrny Syn"
 msgid "Uncle Ivan"
 msgstr "Wuj Ivan"
 
-#, fuzzy
 msgid "Annexation"
-msgstr "\"Annexation\""
+msgstr "Aneksja"
 
-#, fuzzy
 msgid "Carator Mines"
 msgstr "Kopalnie Caratora"
 
 msgid "Force of Arms"
 msgstr "Siła oręża"
 
-#, fuzzy
 msgid "Save the Dwarves"
-msgstr "Uratuj krasnoludy"
+msgstr "Uratuj Krasnoludy"
 
-#, fuzzy
 msgid "The Crown"
 msgstr "Korona"
 
 msgid "The Gauntlet"
 msgstr "Rękawica"
 
-#, fuzzy
 msgid "Turning Point"
-msgstr "Punkt zwrotny"
+msgstr "Punkt Zwrotny"
 
-#, fuzzy
 msgid "Betrayal"
-msgstr "Zdrada!"
+msgstr "Zdrada"
 
-#, fuzzy
 msgid "Corlagon's Defense"
-msgstr "Corlagon"
+msgstr "Obrona Corlagonu"
 
 msgid "Final Justice"
-msgstr ""
+msgstr "Ostateczna Sprawiedliwość"
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
@@ -843,39 +825,32 @@ msgid ""
 "traitor."
 msgstr ""
 
-#, fuzzy
 msgid "Barbarian Wars"
-msgstr "Wojny barbarzyńców"
+msgstr "Wojny Barbarzyńców"
 
 msgid "First Blood"
 msgstr "Pierwsza krew"
 
-#, fuzzy
 msgid "Necromancers"
 msgstr "Nekromanci"
 
-#, fuzzy
 msgid "Slay the Dwarves"
-msgstr "Krasnoludzcy wojownicy"
+msgstr "Zabić Krasnoludy"
 
-#, fuzzy
 msgid "Country Lords"
 msgstr "Kraina Władców"
 
-#, fuzzy
 msgid "Dragon Master"
 msgstr "Władca Smoków"
 
 msgid "Rebellion"
 msgstr "Bunt"
 
-#, fuzzy
 msgid "Apocalypse"
 msgstr "Apokalipsa"
 
-#, fuzzy
 msgid "Greater Glory"
-msgstr "Wielki druid"
+msgstr "Większa Chwała"
 
 msgid ""
 "King Archibald requires you to defeat the three enemies in this region.  "
@@ -936,7 +911,7 @@ msgid ""
 msgstr ""
 
 msgid "Arrow's Flight"
-msgstr "Lot strzały"
+msgstr "Lot Strzały"
 
 msgid "Island of Chaos"
 msgstr "Wyspa Chaosu"
@@ -950,13 +925,11 @@ msgstr "Powstanie"
 msgid "Aurora Borealis"
 msgstr "Zorza Polarna"
 
-#, fuzzy
 msgid "Betrayal's End"
-msgstr "Zdrada!"
+msgstr "Kres Zdrady"
 
-#, fuzzy
 msgid "Corruption's Heart"
-msgstr "Kwatera kapitana"
+msgstr "Serce Zepsucia"
 
 msgid "The Giant's Pass"
 msgstr "Przełęcz Olbrzyma"
@@ -996,7 +969,7 @@ msgid ""
 msgstr ""
 
 msgid "For the good of the Empire, eliminate Kraeger."
-msgstr ""
+msgstr "Dla dobra królestwa, wyeliminuj Kraegera."
 
 msgid ""
 "At last, you have the opportunity and the facilities to rid the Empire of "
@@ -1008,7 +981,7 @@ msgid "Border Towns"
 msgstr "Miasta Graniczne"
 
 msgid "Conquer and Unify"
-msgstr "Podbój i Zjednoczenie"
+msgstr "Zjednoczenie"
 
 msgid "Crazy Uncle Ivan"
 msgstr "Szalony Wuj Ivan"
@@ -1019,16 +992,14 @@ msgstr "Krnąbrny Syn"
 msgid "Ivory Gates"
 msgstr "Ivory Gates"
 
-#, fuzzy
 msgid "The Elven Lands"
-msgstr "Siedem Jezior"
+msgstr "Krainy Elfów"
 
 msgid "The Epic Battle"
 msgstr "Epicka Bitwa"
 
-#, fuzzy
 msgid "The Southern War"
-msgstr "Druga Strona"
+msgstr "Wojna na Południu"
 
 msgid ""
 "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the "
@@ -1071,19 +1042,17 @@ msgid ""
 "everyone, and don't lose the hero Jarkonas VI."
 msgstr ""
 
-#, fuzzy
 msgid "Fount of Wizardry"
-msgstr "Kostur czarodziejstwa"
+msgstr "Źródło Magii"
 
-#, fuzzy
 msgid "Power's End"
-msgstr "Pierścień mocy"
+msgstr "Koniec Potęgi"
 
 msgid "The Eternal Scrolls"
 msgstr "Wieczne Zwoje"
 
 msgid "The Shrouded Isles"
-msgstr "Ukryte Wyspy"
+msgstr "Zamglone Wyspy"
 
 msgid ""
 "Your mission is to vanquish the warring mages in the magical Shrouded Isles. "
@@ -1109,7 +1078,7 @@ msgid ""
 msgstr ""
 
 msgid "Blood is Thicker"
-msgstr "Gęstsza Krew"
+msgstr "Więzy Krwi"
 
 msgid "King and Country"
 msgstr "Król i Kraj"
@@ -1118,7 +1087,7 @@ msgid "Pirate Isles"
 msgstr "Wyspy Piratów"
 
 msgid "Stranded"
-msgstr "Na Mieliźnie"
+msgstr "Rozbitek"
 
 #, fuzzy
 msgid ""
@@ -1246,261 +1215,198 @@ msgstr "\"Pogromca Krasnoludów, ratuj się kto może!!!\""
 msgid "campaignBonus|Ballista"
 msgstr "Balista"
 
-#, fuzzy
 msgid "campaignBonus|Black Pearl"
 msgstr "Czarna perła"
 
-#, fuzzy
 msgid "campaignBonus|Caster's Bracelet"
 msgstr "Magiczna bransol"
 
-#, fuzzy
 msgid "campaignBonus|Defender Helm"
 msgstr "Hełm obrońcy"
 
-#, fuzzy
 msgid "campaignBonus|Breastplate"
 msgstr "Napierśnik"
 
-#, fuzzy
 msgid "campaignBonus|Dragon Sword"
 msgstr "Smoczy miecz"
 
-#, fuzzy
 msgid "campaignBonus|Fizbin Medal"
 msgstr "Fizbin"
 
-#, fuzzy
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Doskonały zwój"
 
-#, fuzzy
 msgid "campaignBonus|Hideous Mask"
 msgstr "Potworna maska"
 
-#, fuzzy
 msgid "campaignBonus|Mage's Ring"
 msgstr "Pierścień maga"
 
-#, fuzzy
 msgid "campaignBonus|Major Scroll"
 msgstr "Większy zwój"
 
-#, fuzzy
 msgid "campaignBonus|Medal of Honor"
 msgstr "Medal Honoru"
 
-#, fuzzy
 msgid "campaignBonus|Medal of Valor"
 msgstr "Medal Męstwa"
 
-#, fuzzy
 msgid "campaignBonus|Minor Scroll"
 msgstr "Pomniejszy zwój"
 
-#, fuzzy
 msgid "campaignBonus|Nomad Boots"
 msgstr "Buty nomada"
 
 msgid "campaignBonus|Power Axe"
 msgstr "Potężny topór"
 
-#, fuzzy
 msgid "campaignBonus|Spiked Shield"
-msgstr "Rogata tarcza"
+msgstr "Kolczata tarcza"
 
-#, fuzzy
 msgid "campaignBonus|Stealth Shield"
 msgstr "Maskuj. tarcza"
 
 msgid "campaignBonus|Tax Lien"
 msgstr "Weksel fiskalny"
 
-#, fuzzy
 msgid "campaignBonus|Thunder Mace"
 msgstr "Grzm. maczuga"
 
-#, fuzzy
 msgid "campaignBonus|Traveler's Boots"
 msgstr "Buty podróżnika"
 
-#, fuzzy
 msgid "campaignBonus|White Pearl"
 msgstr "Biała perła"
 
-#, fuzzy
 msgid "campaignBonus|Basic Archery"
-msgstr "Czarna perła"
+msgstr "Podstawowe łucznictwo"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Archery"
 msgstr "Zawaansowane łucznictwo"
 
-#, fuzzy
 msgid "campaignBonus|Expert Archery"
-msgstr "Potężny topór"
+msgstr "Mistrzowskie łucznictwo"
 
-#, fuzzy
 msgid "campaignBonus|Basic Ballistics"
-msgstr "Balista"
+msgstr "Podstawowa balistyka"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Ballistics"
-msgstr "Balista"
+msgstr "Zawaansowana balistyka"
 
-#, fuzzy
 msgid "campaignBonus|Expert Ballistics"
-msgstr "Balista"
+msgstr "Mistrzowska balistyka"
 
-#, fuzzy
 msgid "campaignBonus|Basic Diplomacy"
-msgstr "Napierśnik"
+msgstr "Podstawowa dyplomacja"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Diplomacy"
 msgstr "Zawaansowana dyplomacja"
 
-#, fuzzy
 msgid "campaignBonus|Expert Diplomacy"
 msgstr "Mistrzowska dyplomacja"
 
-#, fuzzy
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr "Czarna perła"
+msgstr "Podstawowe sokole oko"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Eagle Eye"
-msgstr "Zawaansowany wzrok orła"
+msgstr "Zawaansowane sokole oko"
 
-#, fuzzy
 msgid "campaignBonus|Expert Eagle Eye"
-msgstr "Mistrzowski wzrok orła"
+msgstr "Mistrzowskie sokole oko"
 
-#, fuzzy
 msgid "campaignBonus|Basic Estates"
-msgstr "Balista"
+msgstr "Podstawowe finanse"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Estates"
-msgstr "Napierśnik"
+msgstr "Zawaansowane finanse"
 
-#, fuzzy
 msgid "campaignBonus|Expert Estates"
-msgstr "Napierśnik"
+msgstr "Mistrzowskie finanse"
 
-#, fuzzy
 msgid "campaignBonus|Basic Leadership"
-msgstr "Czarna perła"
+msgstr "Podstawowe dowodzenie"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Leadership"
-msgstr "Zawaansowane przywództwo"
+msgstr "Zawaansowane dowodzenie"
 
-#, fuzzy
 msgid "campaignBonus|Expert Leadership"
-msgstr "Mistrzowskie przywództwo"
+msgstr "Mistrzowskie dowodzenie"
 
-#, fuzzy
 msgid "campaignBonus|Basic Logistics"
-msgstr "Balista"
+msgstr "Podstawowa logistyka"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Logistics"
 msgstr "Zawaansowana logistyka"
 
-#, fuzzy
 msgid "campaignBonus|Expert Logistics"
 msgstr "Mistrzowska logistyka"
 
-#, fuzzy
 msgid "campaignBonus|Basic Luck"
-msgstr "Grupowa klątwa"
+msgstr "Podstawowe szczęście"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Luck"
-msgstr "Weksel fiskalny"
+msgstr "Zawaansowane szczęście"
 
-#, fuzzy
 msgid "campaignBonus|Expert Luck"
-msgstr "Weksel fiskalny"
+msgstr "Mistrzowskie szczęście"
 
-#, fuzzy
 msgid "campaignBonus|Basic Mysticism"
-msgstr "Balista"
+msgstr "Podstawowy mistycyzm"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Mysticism"
 msgstr "Zawaansowany mistycyzm"
 
-#, fuzzy
 msgid "campaignBonus|Expert Mysticism"
 msgstr "Mistrzowski mistycyzm"
 
-#, fuzzy
 msgid "campaignBonus|Basic Navigation"
-msgstr "Łańcuch piorunów"
+msgstr "Podstawowa nawigacja"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Navigation"
 msgstr "Zawaansowana nawigacja"
 
-#, fuzzy
 msgid "campaignBonus|Expert Navigation"
 msgstr "Mistrzowska nawigacja"
 
-#, fuzzy
 msgid "campaignBonus|Basic Necromancy"
-msgstr "Czarna perła"
+msgstr "Podstawowa nekromancja"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Necromancy"
 msgstr "Zawaansowana nekromancja"
 
-#, fuzzy
 msgid "campaignBonus|Expert Necromancy"
 msgstr "Mistrzowska nekromancja"
 
-#, fuzzy
 msgid "campaignBonus|Basic Pathfinding"
-msgstr "Łańcuch piorunów"
+msgstr "Podstawowe znaj. drogi"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Pathfinding"
-msgstr "Zaawansowany Znajdowanie Drogi"
+msgstr "Zaawansowane znaj. drogi"
 
-#, fuzzy
 msgid "campaignBonus|Expert Pathfinding"
-msgstr "Ekspert Znajdowanie Drogi"
+msgstr "Mistrzowskie znaj. drogi"
 
-#, fuzzy
 msgid "campaignBonus|Basic Scouting"
-msgstr "Pierścień maga"
+msgstr "Podstawowy zwiad"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Scouting"
-msgstr "Pierścień maga"
+msgstr "Zawaansowany zwiad"
 
-#, fuzzy
 msgid "campaignBonus|Expert Scouting"
-msgstr "Weksel fiskalny"
+msgstr "Mistrzowski zwiad"
 
-#, fuzzy
 msgid "campaignBonus|Basic Wisdom"
-msgstr "Balista"
+msgstr "Podstawowa mądrość"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Wisdom"
-msgstr "Ożywienie martwych"
+msgstr "Zawaansowana mądrość"
 
-#, fuzzy
 msgid "campaignBonus|Expert Wisdom"
-msgstr "Rogata tarcza"
+msgstr "Mistrzowska mądrość"
 
-#, fuzzy
 msgid "campaignBonus|Animate Dead"
 msgstr "Ożywienie martwych"
 
-#, fuzzy
 msgid "campaignBonus|Chain Lightning"
 msgstr "Łańcuch piorunów"
 
@@ -1508,27 +1414,23 @@ msgid "campaignBonus|Fireblast"
 msgstr "Eksplozja Ognia"
 
 msgid "campaignBonus|Mass Curse"
-msgstr "Grupowa klątwa"
+msgstr "Grupowa Klątwa"
 
 msgid "campaignBonus|Mass Haste"
-msgstr "Grupowe przyspieszenie"
+msgstr "Grupowe Przyspieszenie"
 
-#, fuzzy
 msgid "campaignBonus|Mirror Image"
 msgstr "Lustrzane odbicie"
 
 msgid "campaignBonus|Resurrect"
 msgstr "Ożywienie"
 
-#, fuzzy
 msgid "campaignBonus|Steelskin"
 msgstr "Stalowa skóra"
 
-#, fuzzy
 msgid "campaignBonus|Summon Earth"
 msgstr "Przyw. ziemi"
 
-#, fuzzy
 msgid "campaignBonus|View Heroes"
 msgstr "Pokaż bohaterów"
 
@@ -1544,25 +1446,25 @@ msgid ""
 msgstr ""
 "Królestwo otrzyma dodatkowe %{amount} %{resource} na starcie scenariusza."
 
-#, fuzzy
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
-msgstr "Ten czar przywoła %{count} %{monster} do pilnowania kopalni."
+msgstr "Główny bohater otrzyma %{count} %{monster} na starcie scenariusza."
 
 msgid ""
 "The main hero will have \"%{spell}\" spell at the start of the scenario."
-msgstr ""
+msgstr "Główny bohater otrzyma zaklęcie \"%{spell}\" na starcie scenariusza."
 
 msgid "The starting race of the scenario will be %{race}."
-msgstr ""
+msgstr "Początkową rasą w scenariuszu będzie %{race}."
 
 msgid ""
 "The main hero will have additional %{count} %{skill} at the start of the "
 "scenario."
 msgstr ""
+"Główny bohater otrzyma dodatkowe %{count} %{skill} na starcie scenariusza."
 
 msgid "The main hero will have %{skill} at the start of the scenario."
-msgstr ""
+msgstr "Główny bohater otrzyma %{skill} na starcie scenariusza."
 
 msgid "Roland"
 msgstr "Roland"
@@ -1574,15 +1476,13 @@ msgid "The Price of Loyalty"
 msgstr "Cena Lojalności"
 
 msgid "Voyage Home"
-msgstr ""
+msgstr "Podróż do Domu"
 
-#, fuzzy
 msgid "Wizard's Isle"
-msgstr "Kapelusz czarodzieja"
+msgstr "Wyspa Czarodzieja"
 
-#, fuzzy
 msgid "Descendants"
-msgstr "Chłopi"
+msgstr "Potomkowie"
 
 msgid "The %{building} produces %{monster}."
 msgstr "%{building} - tu rekrutuje się: %{monster}."
@@ -1840,7 +1740,7 @@ msgid "Cannot recruit - you have too many Heroes."
 msgstr "Nie możesz rekrutować - masz za dużo bohaterów."
 
 msgid "Cannot afford a Hero"
-msgstr "Nie stać cię na bohatera."
+msgstr "Nie stać cię na bohatera"
 
 msgid "There is no room in the garrison for this army."
 msgstr "W garnizonie nie ma miejsca na dla tej jednostki."
@@ -3175,25 +3075,22 @@ msgid "and more..."
 msgstr "i więcej..."
 
 msgid "Start the selected scenario."
-msgstr ""
+msgstr "Rozpocznij wybrany scenariusz."
 
-#, fuzzy
 msgid "View Intro"
-msgstr "Pokaż bohatera"
+msgstr "Zobacz Wprowadzenie"
 
 msgid "View Intro videos for the current state of the campaign."
-msgstr ""
+msgstr "Zobacz filmy wprowadzające dla obecnego stanu kampanii."
 
 msgid "Restart"
-msgstr ""
+msgstr "Rozpocznij od nowa"
 
-#, fuzzy
 msgid "Restart the current scenario."
-msgstr "Zapisz bieżącą grę."
+msgstr "Rozpocznij od nowa obecny scenariusz."
 
-#, fuzzy
 msgid "Are you sure you want to restart this scenario?"
-msgstr "Czy na pewno chcesz zwolnić tego bohatera?"
+msgstr "Czy na pewno chcesz rozpocząć od nowa obecny scenariusz?"
 
 msgid "Campaign Scenario loading failure"
 msgstr "Problem z uruchomieniem scenariusza kampanii"
@@ -3217,7 +3114,7 @@ msgid "Special Thanks to"
 msgstr "Specjalnie podziękowania dla"
 
 msgid "and many other contributors!"
-msgstr ""
+msgstr "i wielu innych!"
 
 msgid "Support us at"
 msgstr "Wesprzyj nas"
@@ -3304,6 +3201,8 @@ msgid ""
 "Invalid file game type. Please ensure that you are running the latest type "
 "of save files."
 msgstr ""
+"Nieprawidłowy typ pliku. Upewnij się że używasz najnowszego typu plików "
+"zapisujących grę."
 
 msgid "Warning"
 msgstr "Uwaga"
@@ -3520,7 +3419,7 @@ msgid "Play with 6 human players."
 msgstr "Grajcie w sześć osób."
 
 msgid "Dragon city has fallen!  You are now the Master of the Dragons."
-msgstr ""
+msgstr "Smocze miasto upadło! Jesteś teraz Władcą Smoków."
 
 msgid ""
 "You captured %{name}!\n"
@@ -3932,9 +3831,8 @@ msgstr "Wyświetl informacje o %{skill}"
 msgid "Kingdom Income"
 msgstr "Przychód"
 
-#, fuzzy
 msgid "Kingdom Income per day."
-msgstr "Przychód"
+msgstr "Dzienny przychód królestwa."
 
 msgid "English"
 msgstr "Angielski"
@@ -4168,13 +4066,13 @@ msgid "Martine"
 msgstr "Martine"
 
 msgid " gives you maximum morale"
-msgstr ""
+msgstr " zapewnia ci maksymalne morale"
 
 msgid " gives you maximum luck"
-msgstr ""
+msgstr " zapewnia ci maksymalne szczęście"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
-msgstr ""
+msgstr "Nie możesz podnieść tego artefaktu, twój plecak jest pełny!"
 
 msgid "To cast spells, you must first buy a spell book for %{gold} gold."
 msgstr ""
@@ -5552,7 +5450,7 @@ msgid "The spell is not found."
 msgstr "Zaklęcie nie zostało znalezione."
 
 msgid "Only heroes can cast this spell."
-msgstr ""
+msgstr "Tylko bohaterowie mogą rzucać to zaklęcie."
 
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
@@ -5562,18 +5460,22 @@ msgstr ""
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
+"Nie posiadasz w tym momęcie żadnego miasta lub zamku, z tego powodu nie "
+"możesz rzucić zaklęcia."
 
-#, fuzzy
 msgid "This hero is already in a town, so you can't cast the spell."
 msgstr ""
-"To zaklęcie kosztuje %{mana} pkt. magii. Masz tylko %{point}, więc nie "
-"możesz go rzucić."
+"Ten bohater znajduje się już w zamku, z tego powodu nie możesz rzucić "
+"zaklęcia."
 
 msgid ""
 "The nearest town is %{town}.\n"
 " \n"
 "This town is occupied by your hero %{hero}."
 msgstr ""
+"Najbliższym miastem jest %{town}.\n"
+" \n"
+"To miasto jest zajęte przez twojego bohatera %{hero}."
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name}, %{race} (poziom %{level})"
@@ -5801,16 +5703,16 @@ msgid "Advanced Archery"
 msgstr "Zawaansowane łucznictwo"
 
 msgid "Advanced Pathfinding"
-msgstr "Zaawansowany Znajdowanie Drogi"
+msgstr "Zaawansowane znaj. drogi"
 
 msgid "Basic Archery"
 msgstr "Podstawowe łucznictwo"
 
 msgid "Basic Pathfinding"
-msgstr "Podstawowy Znajdowanie Drogi"
+msgstr "Podstawowe znaj. drogi"
 
 msgid "Expert Pathfinding"
-msgstr "Ekspert Znajdowanie Drogi"
+msgstr "Mistrzowskie znaj. drogi"
 
 msgid "Advanced Logistics"
 msgstr "Zawaansowana logistyka"
@@ -5819,7 +5721,7 @@ msgid "Basic Logistics"
 msgstr "Podstawowa logistyka"
 
 msgid "Basic Scouting"
-msgstr "Podstawowy Zwiadowca"
+msgstr "Podstawowy zwiad"
 
 msgid "Expert Archery"
 msgstr "Mistrzowskie łucznictwo"
@@ -5831,7 +5733,7 @@ msgid "Advanced Diplomacy"
 msgstr "Zawaansowana dyplomacja"
 
 msgid "Advanced Scouting"
-msgstr "Zaawansowany Zwiadowca"
+msgstr "Zaawansowany zwiad"
 
 msgid "Basic Diplomacy"
 msgstr "Podstawowa dyplomacja"
@@ -5840,7 +5742,7 @@ msgid "Expert Diplomacy"
 msgstr "Mistrzowska dyplomacja"
 
 msgid "Expert Scouting"
-msgstr "Ekspert Zwiadowca"
+msgstr "Mistrzowski zwiad"
 
 msgid "Advanced Leadership"
 msgstr "Zawaansowane przywództwo"
