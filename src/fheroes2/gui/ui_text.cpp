@@ -145,7 +145,7 @@ namespace
     // Ignore spaces at the end of the line. This function must be used only at the time of final rendering.
     int32_t getTruncatedLineWidth( const uint8_t * data, const int32_t size, const fheroes2::FontType & fontType )
     {
-        assert( data != nullptr && size != 0 );
+        assert( data != nullptr && size > 0 );
 
         const CharValidator validator( fontType.size );
 
@@ -535,7 +535,7 @@ namespace fheroes2
         _fontType = fontType;
     }
 
-    void Text::fit( const int32_t maxWidth )
+    void Text::fitToOneRow( const int32_t maxWidth )
     {
         assert( maxWidth > 0 ); // Why is the limit less than 1?
         if ( maxWidth <= 0 ) {
@@ -544,7 +544,7 @@ namespace fheroes2
 
         const int32_t originalTextWidth = getTruncatedLineWidth( reinterpret_cast<const uint8_t *>( _text.data() ), static_cast<int32_t>( _text.size() ), _fontType );
         if ( originalTextWidth <= maxWidth ) {
-            // Nothing to do. The text is shorter than the provided maximum width.
+            // Nothing to do. The text is not longer than the provided maximum width.
             return;
         }
 
