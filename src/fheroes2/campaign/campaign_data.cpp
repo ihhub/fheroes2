@@ -472,11 +472,10 @@ namespace
                                     scenarioDescription[4],
                                     Campaign::VideoSequence{ { "MIXDES12.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "DES12.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
-                                    emptyPlayback );
-        scenarioDatas.emplace_back( scenarioInfo[5], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[7] }, "CAMP2_06.HXC", scenarioName[5], scenarioDescription[5],
                                     Campaign::VideoSequence{ { "MIXDES13.SMK", Video::VideoAction::IGNORE_VIDEO },
-                                                             { "DES13.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
-                                    emptyPlayback );
+                                                             { "DES13.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
+        scenarioDatas.emplace_back( scenarioInfo[5], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[7] }, "CAMP2_06.HXC", scenarioName[5], scenarioDescription[5],
+                                    emptyPlayback, emptyPlayback );
         scenarioDatas.emplace_back( scenarioInfo[6], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[7] }, "CAMP2_07.HXC", scenarioName[6], scenarioDescription[6],
                                     emptyPlayback, emptyPlayback );
         scenarioDatas.emplace_back( scenarioInfo[7], std::vector<Campaign::ScenarioInfoId>{}, "CAMP2_08.HXC", scenarioName[7], scenarioDescription[7],
