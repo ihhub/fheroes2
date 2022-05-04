@@ -3437,10 +3437,10 @@ msgstr "Klicka för att gå tillbaka till huvudmenyn."
 msgid "No maps available!"
 msgstr "Inga kartor tillgängliga!"
 
-msgid "Astrologers proclaim Month of the %{name}."
+msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologerna utropar %{name} månad."
 
-msgid "Astrologers proclaim Week of the %{name}."
+msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Astrologerna utropar %{name} vecka."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
@@ -3460,7 +3460,7 @@ msgstr[1] ""
 "Efter en vanlig ökning har beståndet av %{monster} fördubblats med %{count} "
 "procent!"
 
-msgid "%{monster} population increases by +%{count}."
+msgid "%{monster} growth +%{count}."
 msgstr "Populationen av %{monster} ökar med +%{count}."
 
 msgid " All populations are halved."

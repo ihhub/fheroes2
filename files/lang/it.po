@@ -3386,10 +3386,10 @@ msgstr ""
 msgid "No maps available!"
 msgstr ""
 
-msgid "Astrologers proclaim Month of the %{name}."
+msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Gli Astrologi prevedono il mese di %{name}."
 
-msgid "Astrologers proclaim Week of the %{name}."
+msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Gli Astrologi prevedono la settimana di %{name}."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
@@ -3410,7 +3410,7 @@ msgstr[1] ""
 "Dopo un periodo di crescita normale, la populazione di %{monster} incrementa "
 "di %{count} percento!"
 
-msgid "%{monster} population increases by +%{count}."
+msgid "%{monster} growth +%{count}."
 msgstr "Crescita %{monster} +%{count}."
 
 msgid " All populations are halved."

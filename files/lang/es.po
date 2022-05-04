@@ -3581,10 +3581,10 @@ msgstr "Haz clic para volver al menú principal"
 msgid "No maps available!"
 msgstr "¡Ningún mapa disponible!"
 
-msgid "Astrologers proclaim Month of the %{name}."
+msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Los Astrólogos proclaman el Mes de  %{name}."
 
-msgid "Astrologers proclaim Week of the %{name}."
+msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Los Astrólogos proclaman la Semana de  %{name}."
 
 #, fuzzy
@@ -3604,7 +3604,7 @@ msgstr[1] ""
 "Por el crecimiento normal, ¡La población de {monster} se ha doblado!"
 
 #, fuzzy
-msgid "%{monster} population increases by +%{count}."
+msgid "%{monster} growth +%{count}."
 msgstr "Aumenta la velocidad de cualquier criatura en %{count}."
 
 msgid " All populations are halved."
