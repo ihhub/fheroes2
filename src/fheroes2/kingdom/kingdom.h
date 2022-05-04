@@ -50,6 +50,16 @@ public:
         KINGDOM_OVERVIEW_CASTLE_SELECTION = 0x0008
     };
 
+    enum
+    {
+        INCOME_CAPTURED = 0x01,
+        INCOME_CASTLES = 0x02,
+        INCOME_ARTIFACTS = 0x04,
+        INCOME_HERO_SKILLS = 0x08,
+        INCOME_CAMPAIGN_BONUS = 0x10,
+        INCOME_ALL = 0xFF
+    };
+
     Kingdom();
     ~Kingdom() override = default;
 
