@@ -5850,13 +5850,6 @@ msgid "This spell can be casted only nearby water."
 msgstr "Ce sort ne peut être lancé qu'à proximité de l'eau."
 
 msgid ""
-"No available towns.\n"
-"Spell Failed!!!"
-msgstr ""
-"Pas de villages disponibles.\n"
-"Le sort a échoué !"
-
-msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
 "work."
 msgstr ""

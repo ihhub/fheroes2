@@ -496,7 +496,8 @@ bool ActionSpellTownPortal( Heroes & hero )
             castles.push_back( ( **it ).GetIndex() );
 
     if ( castles.empty() ) {
-        Dialog::Message( "", _( "No available towns.\nSpell Failed!!!" ), Font::BIG, Dialog::OK );
+        // This should never happen. The logic behind this must not allow to call this function.
+        assert( 0 );
         return false;
     }
 
