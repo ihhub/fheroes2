@@ -1089,7 +1089,7 @@ msgstr ""
 msgid " will always run away from your army."
 msgstr ""
 
-msgid " will be willing to always join your army."
+msgid " will be willing to join your army."
 msgstr ""
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
@@ -1105,10 +1105,10 @@ msgstr ""
 msgid "\"%{spell}\" spell will be carried over the scenario."
 msgstr ""
 
-msgid "%{hero} hero can be hired in the scenario."
+msgid "%{hero} can be hired in the scenario."
 msgstr ""
 
-msgid "Defeated %{hero} hero will not appear in the subsequent scenarios."
+msgid "%{hero} has been defeated and will not appear in the subsequent scenarios."
 msgstr ""
 
 msgid "The dwarves recognize their allies and gladly join your forces."
@@ -1265,7 +1265,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The kingdom will have additional %{amount} %{resource} at the start of the "
+"The kingdom will receive %{amount} additional %{resource} at the start of the "
 "scenario."
 msgstr ""
 

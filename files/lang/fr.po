@@ -1255,7 +1255,7 @@ msgstr " vaincu"
 msgid " will always run away from your army."
 msgstr " fuiront toujours face à votre armée."
 
-msgid " will be willing to always join your army."
+msgid " will be willing to join your army."
 msgstr " vondront toujours se joindre à votre armée."
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
@@ -1273,10 +1273,10 @@ msgstr ""
 msgid "\"%{spell}\" spell will be carried over the scenario."
 msgstr "Le sort \"%{spell}\" sera conservé dans le scénario suivant."
 
-msgid "%{hero} hero can be hired in the scenario."
+msgid "%{hero} can be hired in the scenario."
 msgstr "Le héros %{hero} peut être recruté dans ce scénario."
 
-msgid "Defeated %{hero} hero will not appear in the subsequent scenarios."
+msgid "%{hero} has been defeated and will not appear in the subsequent scenarios."
 msgstr "Le héros vaincu %{hero} n'apparaîtra pas dans les scénarios suivants."
 
 msgid "The dwarves recognize their allies and gladly join your forces."
@@ -1568,7 +1568,7 @@ msgstr ""
 "Le héros principal recevra l'artefact \"%{artifact}\" au début du scénario."
 
 msgid ""
-"The kingdom will have additional %{amount} %{resource} at the start of the "
+"The kingdom will receive %{amount} additional %{resource} at the start of the "
 "scenario."
 msgstr ""
 "Le royaume bénéficiera de %{amount} %{resource} supplémentaire(s) au début "

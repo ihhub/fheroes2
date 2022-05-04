@@ -67,7 +67,7 @@ namespace Campaign
     struct CampaignAwardData
     {
     public:
-        enum AwardType : int
+        enum AwardType : int32_t
         {
             TYPE_CREATURE_CURSE, // eg: dwarf bane
             TYPE_CREATURE_ALLIANCE, // eg: dwarf alliance
@@ -82,17 +82,18 @@ namespace Campaign
         // NOTE: Carry over forces shouldn't use these other than id, type and startScenarioID
         // IDs are here so that we just have to store an int instead of the entire award data in a campaign save data
         // also usable when we have to remove specific awards when completing a mission (PoL campaign)
-        int _id;
-        uint32_t _type;
-        uint32_t _subType;
-        uint32_t _amount;
-        uint32_t _startScenarioID;
+        int32_t _id;
+        int32_t _type;
+        int32_t _subType;
+        int32_t _amount;
+        int32_t _startScenarioID;
         std::string _customName;
 
-        CampaignAwardData( int id, uint32_t type, uint32_t subType );
-        CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount );
-        CampaignAwardData( int id, uint32_t type, uint32_t subType, const std::string & customName );
-        CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, const std::string & customName = std::string() );
+        CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType );
+        CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType, const int32_t amount );
+        CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType, std::string customName );
+        CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType, const int32_t amount, const int32_t startScenarioID,
+                           std::string customName = std::string() );
 
         std::string getName() const;
 

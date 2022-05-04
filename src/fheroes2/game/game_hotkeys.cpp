@@ -137,6 +137,12 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_VOYAGE_HOME_CAMPAIGN )] = { HotKeyCategory::MAIN_GAME, "voyage home campaign", fheroes2::Key::KEY_2 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_WIZARDS_ISLE_CAMPAIGN )] = { HotKeyCategory::MAIN_GAME, "wizard's isle campaign", fheroes2::Key::KEY_3 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_DESCENDANTS_CAMPAIGN )] = { HotKeyCategory::MAIN_GAME, "descendants campaign", fheroes2::Key::KEY_4 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_SELECT_FIRST_BONUS )]
+            = { HotKeyCategory::MAIN_GAME, "select first campaign bonus", fheroes2::Key::KEY_1 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_SELECT_SECOND_BONUS )]
+            = { HotKeyCategory::MAIN_GAME, "select second campaign bonus", fheroes2::Key::KEY_2 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_SELECT_THIRD_BONUS )]
+            = { HotKeyCategory::MAIN_GAME, "select third campaign bonus", fheroes2::Key::KEY_3 };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_READY )] = { HotKeyCategory::DEFAULT_EVENTS, "default okay event", fheroes2::Key::KEY_RETURN };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_EXIT )] = { HotKeyCategory::DEFAULT_EVENTS, "default cancel event", fheroes2::Key::KEY_ESCAPE };

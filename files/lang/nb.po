@@ -1243,7 +1243,7 @@ msgstr " fanget"
 msgid " will always run away from your army."
 msgstr " kommer alltid til å rømme i frykt fra hæren din."
 
-msgid " will be willing to always join your army."
+msgid " will be willing to join your army."
 msgstr " kommer alltid til å ønske å bli med i hæren din."
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
@@ -1260,10 +1260,10 @@ msgstr "Kongedømmet ditt vil få ekstra %{resource} ved begynnelsen av brettet.
 msgid "\"%{spell}\" spell will be carried over the scenario."
 msgstr "Trolldommen %{spell} vil bli brakt med videre til det neste brettet."
 
-msgid "%{hero} hero can be hired in the scenario."
+msgid "%{hero} can be hired in the scenario."
 msgstr "Helten %{hero} kan bli vervet på brettet."
 
-msgid "Defeated %{hero} hero will not appear in the subsequent scenarios."
+msgid "%{hero} has been defeated and will not appear in the subsequent scenarios."
 msgstr ""
 "Helten %{hero} vil ikke komme i senere brett dersom han/hun har blitt fanget."
 
@@ -1433,7 +1433,7 @@ msgstr ""
 "%{artifact}."
 
 msgid ""
-"The kingdom will have additional %{amount} %{resource} at the start of the "
+"The kingdom will receive %{amount} additional %{resource} at the start of the "
 "scenario."
 msgstr "Kongedømmet ditt vil begynne brettet med %{amount} ekstra %{resource}."
 
