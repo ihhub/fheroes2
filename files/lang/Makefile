@@ -97,6 +97,12 @@ it.mo: it.po
 	iconv -f utf-8 -t CP1252 $< > $<.tmp
 	LANG=it.CP1252 LC_ALL=it.CP1252 LC_CTYPE=it.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
+	
+# Romanian uses CP1250
+ro.mo: ro.po
+	iconv -f utf-8 -t CP1250 $< > $<.tmp
+	LANG=ro.CP1250 LC_ALL=ro.CP1250 LC_CTYPE=ro.CP1250 sed -e 's/UTF-8/CP1250/' $<.tmp > $<.2.tmp
+	msgfmt $<.2.tmp -o $@
 
 # All other languages: drop accents transliterated with `"` (which breaks translation file format)
 # and transliterate the rest with default iconv rules
