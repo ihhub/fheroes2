@@ -1276,7 +1276,7 @@ msgstr "Le sort \"%{spell}\" sera conservé dans le scénario suivant."
 msgid "%{hero} can be hired in the scenario."
 msgstr "Le héros %{hero} peut être recruté dans ce scénario."
 
-msgid "Defeated %{hero} will not appear in the subsequent scenarios."
+msgid "%{hero} has been defeated and will not appear in the subsequent scenarios."
 msgstr "Le héros vaincu %{hero} n'apparaîtra pas dans les scénarios suivants."
 
 msgid "The dwarves recognize their allies and gladly join your forces."

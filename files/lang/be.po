@@ -1086,7 +1086,7 @@ msgstr ""
 msgid "%{hero} can be hired in the scenario."
 msgstr ""
 
-msgid "Defeated %{hero} will not appear in the subsequent scenarios."
+msgid "%{hero} has been defeated and will not appear in the subsequent scenarios."
 msgstr ""
 
 msgid "The dwarves recognize their allies and gladly join your forces."

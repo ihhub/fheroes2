@@ -838,7 +838,7 @@ namespace Campaign
             return description;
         }
         case CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO: {
-            std::string description( _( "Defeated %{hero} will not appear in the subsequent scenarios." ) );
+            std::string description( _( "%{hero} has been defeated and will not appear in the subsequent scenarios." ) );
             StringReplace( description, "%{hero}", Heroes( _subType, 0 ).GetName() );
             return description;
         }

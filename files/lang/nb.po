@@ -1263,7 +1263,7 @@ msgstr "Trolldommen %{spell} vil bli brakt med videre til det neste brettet."
 msgid "%{hero} can be hired in the scenario."
 msgstr "Helten %{hero} kan bli vervet på brettet."
 
-msgid "Defeated %{hero} will not appear in the subsequent scenarios."
+msgid "%{hero} has been defeated and will not appear in the subsequent scenarios."
 msgstr ""
 "Helten %{hero} vil ikke komme i senere brett dersom han/hun har blitt fanget."
 
