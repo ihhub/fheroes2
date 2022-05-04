@@ -1846,7 +1846,7 @@ namespace
         }
     }
 
-    void generateRomanianAlphabeth( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
+    void generateRomanianAlphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
         // Resize fonts. Romanian uses CP1250 encoding
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
@@ -1907,7 +1907,7 @@ namespace fheroes2
             generateNorwegianAlphabet( icnVsSprite );
             break;
         case SupportedLanguage::Romanian:
-            generateRomanianAlphabeth( icnVsSprite );
+            generateRomanianAlphabet( icnVsSprite );
             break;
         default:
             // Add new language generation code!
