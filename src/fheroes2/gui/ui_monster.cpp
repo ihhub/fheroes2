@@ -18,19 +18,41 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "ui_kingdom.h"
-#include "kingdom.h"
-#include "translations.h"
-#include "ui_dialog.h"
-#include "ui_text.h"
+#include "agg_image.h"
+#include "icn.h"
+#include "monster.h"
+#include "race.h"
+#include "ui_monster.h"
 
 namespace fheroes2
 {
-    void showKingdomIncome( const Kingdom & kingdom, const int buttons )
+    void renderMonsterFrame( const Monster & monster, Image & output, const Point & offset )
     {
-        const Text header( _( "Kingdom Income" ), FontType::normalYellow() );
-        const Text body( _( "Kingdom Income per day." ), FontType::normalWhite() );
+        switch ( monster.GetRace() ) {
+        case Race::KNGT:
+            Blit( AGG::GetICN( ICN::STRIP, 4 ), output, offset.x, offset.y );
+            break;
+        case Race::BARB:
+            Blit( AGG::GetICN( ICN::STRIP, 5 ), output, offset.x, offset.y );
+            break;
+        case Race::SORC:
+            Blit( AGG::GetICN( ICN::STRIP, 6 ), output, offset.x, offset.y );
+            break;
+        case Race::WRLK:
+            Blit( AGG::GetICN( ICN::STRIP, 7 ), output, offset.x, offset.y );
+            break;
+        case Race::WZRD:
+            Blit( AGG::GetICN( ICN::STRIP, 8 ), output, offset.x, offset.y );
+            break;
+        case Race::NECR:
+            Blit( AGG::GetICN( ICN::STRIP, 9 ), output, offset.x, offset.y );
+            break;
+        default:
+            Blit( AGG::GetICN( ICN::STRIP, 10 ), output, offset.x, offset.y );
+            break;
+        }
 
-        showResourceMessage( header, body, buttons, kingdom.GetIncome( Kingdom::INCOME_ALL ) );
+        const fheroes2::Sprite & monsterImage = fheroes2::AGG::GetICN( monster.ICNMonh(), 0 );
+        fheroes2::Blit( monsterImage, output, offset.x + monsterImage.x(), offset.y + monsterImage.y() );
     }
 }

@@ -82,6 +82,21 @@ namespace fheroes2
         void changePalette( const uint8_t * palette ) const;
     };
 
+    struct GameInterfaceTypeRestorer
+    {
+        GameInterfaceTypeRestorer() = delete;
+        explicit GameInterfaceTypeRestorer( const bool isEvilInterface_ );
+
+        ~GameInterfaceTypeRestorer();
+
+        GameInterfaceTypeRestorer( const GameInterfaceTypeRestorer & ) = delete;
+        GameInterfaceTypeRestorer & operator=( const GameInterfaceTypeRestorer & ) = delete;
+
+        const bool isEvilInterface;
+
+        const bool isOriginalEvilInterface;
+    };
+
     Image CreateDeathWaveEffect( const Image & in, int32_t x, int32_t waveWidth, int32_t waveHeight );
 
     Image CreateRippleEffect( const Image & in, int32_t frameId, double scaleX = 0.05, double waveFrequency = 20.0 );

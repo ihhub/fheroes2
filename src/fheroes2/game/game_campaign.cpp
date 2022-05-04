@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <array>
 #include <cassert>
 
 #include "agg.h"
@@ -39,6 +40,7 @@
 #include "settings.h"
 #include "text.h"
 #include "translations.h"
+#include "ui_campaign.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "world.h"
@@ -366,8 +368,7 @@ namespace
 
         for ( size_t i = 0; i < bonuses.size(); ++i ) {
             if ( le.MousePressRight( { top.x + 414, top.y + 198 + 22 * static_cast<int>( i ), 200, 22 } ) ) {
-                fheroes2::showMessage( fheroes2::Text( bonuses[i].getName(), fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( bonuses[i].getDescription(), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                fheroes2::showScenarioBonusDataPopupWindow( bonuses[i] );
                 return true;
             }
         }
@@ -388,20 +389,28 @@ namespace
         const size_t awardCount = obtainedAwards.size();
         const size_t indexEnd = awardCount <= 4 ? awardCount : 4;
         const int yOffset = awardCount > 3 ? 16 : 22;
+        const int initialOffsetY = 102;
 
-        Text award;
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        if ( awardCount == 0 ) {
+            const fheroes2::Text text( _( "None" ), fheroes2::FontType::normalWhite() );
+            text.draw( top.x + 425, top.y + initialOffsetY - text.height() / 2, textAwardWidth, display );
+            return;
+        }
+
+        fheroes2::Text award;
         for ( size_t i = 0; i < indexEnd; ++i ) {
-            if ( i < 3 )
-                award.Set( obtainedAwards[i].getName(), Font::BIG );
-            else // if we have exactly 4 obtained awards, display the fourth award, otherwise show "and more..."
-                award.Set( awardCount == 4 ? obtainedAwards[i].getName() : std::string( _( "and more..." ) ), Font::BIG );
-
-            if ( award.w() > textAwardWidth ) {
-                award.Blit( top.x + 425, top.y + 100 + yOffset * static_cast<int>( i ) - award.h() / 2, textAwardWidth );
+            if ( i < 3 ) {
+                award.set( obtainedAwards[i].getName(), fheroes2::FontType::normalWhite() );
             }
             else {
-                award.Blit( top.x + 425 + ( textAwardWidth - award.w() ) / 2, top.y + 100 + yOffset * static_cast<int>( i ) - award.h() / 2 );
+                // if we have exactly 4 obtained awards, display the fourth award, otherwise show "and more..."
+                award.set( awardCount == 4 ? obtainedAwards[i].getName() : std::string( _( "and more..." ) ), fheroes2::FontType::normalWhite() );
             }
+
+            award.fitToOneRow( textAwardWidth );
+            award.draw( top.x + 425 + ( textAwardWidth - award.width() ) / 2, top.y + initialOffsetY + yOffset * static_cast<int>( i ) - award.height() / 2, display );
         }
     }
 
@@ -425,8 +434,7 @@ namespace
 
         for ( size_t i = 0; i < indexEnd; ++i ) {
             if ( le.MousePressRight( { top.x + 414, top.y + 100 - yOffset / 2 + yOffset * static_cast<int>( i ), 200, yOffset } ) ) {
-                fheroes2::showMessage( fheroes2::Text( obtainedAwards[i].getName(), fheroes2::FontType::normalYellow() ),
-                                       fheroes2::Text( obtainedAwards[i].getDescription(), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                fheroes2::showAwardDataPopupWindow( obtainedAwards[i] );
                 return true;
             }
         }
@@ -525,7 +533,7 @@ namespace
             case Campaign::ScenarioBonusData::SKILL_PRIMARY:
                 assert( bestHero != nullptr );
                 if ( bestHero != nullptr ) {
-                    for ( uint32_t i = 0; i < scenarioBonus._amount; ++i )
+                    for ( int32_t i = 0; i < scenarioBonus._amount; ++i )
                         bestHero->IncreasePrimarySkill( scenarioBonus._subType );
                 }
                 break;
@@ -549,7 +557,7 @@ namespace
         Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
 
         for ( size_t i = 0; i < awards.size(); ++i ) {
-            if ( currentScenarioInfoId.scenarioId < static_cast<int>( awards[i]._startScenarioID ) )
+            if ( currentScenarioInfoId.scenarioId < awards[i]._startScenarioID )
                 continue;
 
             switch ( awards[i]._type ) {
@@ -565,7 +573,7 @@ namespace
                     const KingdomHeroes & heroes = kingdom.GetHeroes();
 
                     for ( size_t j = 0; j < heroes.size(); ++j ) {
-                        if ( heroes[j]->GetID() == static_cast<int>( awards[i]._subType ) ) {
+                        if ( heroes[j]->GetID() == awards[i]._subType ) {
                             heroes[j]->SetKillerColor( humanKingdom.GetColor() );
                             heroes[j]->SetFreeman( Battle::RESULT_LOSS );
                             break;
@@ -722,6 +730,22 @@ namespace
             }
         }
 
+        COUT( "Bonuses:" )
+        const std::vector<Campaign::ScenarioBonusData> & bonusChoices = scenario.getBonuses();
+        for ( size_t i = 0; i < bonusChoices.size(); ++i ) {
+            COUT( "- " << bonusChoices[i].getName() << " : " << bonusChoices[i].getDescription() )
+        }
+
+        if ( bonusChoices.size() > 0 ) {
+            COUT( "-  Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::CAMPAIGN_SELECT_FIRST_BONUS ) << " to select the first bonus." );
+        }
+        if ( bonusChoices.size() > 1 ) {
+            COUT( "-  Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::CAMPAIGN_SELECT_SECOND_BONUS ) << " to select the second bonus." );
+        }
+        if ( bonusChoices.size() > 2 ) {
+            COUT( "-  Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::CAMPAIGN_SELECT_THIRD_BONUS ) << " to select the third bonus." );
+        }
+
         if ( allowToRestart ) {
             COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_READY ) << " to Restart scenario." )
         }
@@ -755,14 +779,19 @@ bool Game::isPriceOfLoyaltyCampaignPresent()
 fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile )
 {
     Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
+    const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( saveData.getCampaignID() );
 
     if ( !isLoadingSaveFile ) {
         saveData.addCurrentMapToFinished();
         saveData.addDaysPassed( world.CountDay() );
-        Game::SaveCompletedCampaignScenario();
+
+        if ( !campaignData.isLastScenario( saveData.getLastCompletedScenarioInfoID() ) ) {
+            Game::SaveCompletedCampaignScenario();
+        }
     }
 
-    const std::vector<Campaign::CampaignAwardData> obtainableAwards = Campaign::CampaignAwardData::getCampaignAwardData( saveData.getLastCompletedScenarioInfoID() );
+    const Campaign::ScenarioInfoId & lastCompletedScenarioInfo = saveData.getLastCompletedScenarioInfoID();
+    const std::vector<Campaign::CampaignAwardData> obtainableAwards = Campaign::CampaignAwardData::getCampaignAwardData( lastCompletedScenarioInfo );
 
     // TODO: Check for awards that have to be obtained with 'freak' conditions
     for ( size_t i = 0; i < obtainableAwards.size(); ++i ) {
@@ -817,8 +846,6 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
 
     playPreviosScenarioVideo();
 
-    const Campaign::ScenarioInfoId & lastCompletedScenarioInfo = saveData.getLastCompletedScenarioInfoID();
-    const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( saveData.getCampaignID() );
     if ( campaignData.isLastScenario( lastCompletedScenarioInfo ) ) {
         Game::ShowCredits();
 
@@ -854,6 +881,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
     const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
     const Campaign::ScenarioData & scenario = scenarios[currentScenarioInfoId.scenarioId];
+
+    fheroes2::GameInterfaceTypeRestorer gameInterfaceRestorer( chosenCampaignID != Campaign::ROLAND_CAMPAIGN );
 
     if ( !allowToRestart ) {
         playCurrentScenarioVideo();
@@ -986,6 +1015,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         choiceArea[i].width += 170;
     }
 
+    const std::array<Game::HotKeyEvent, 3> hotKeyBonusChoice { Game::HotKeyEvent::CAMPAIGN_SELECT_FIRST_BONUS, Game::HotKeyEvent::CAMPAIGN_SELECT_SECOND_BONUS,
+                                                               Game::HotKeyEvent::CAMPAIGN_SELECT_THIRD_BONUS };
+
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
@@ -996,10 +1028,12 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
 
         for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
-            if ( le.MousePressLeft( choiceArea[i] ) ) {
+
+            if ( le.MousePressLeft( choiceArea[i] ) || ( i < hotKeyBonusChoice.size() && HotKeyPressEvent( hotKeyBonusChoice[i] ) ) ) {
                 buttonChoices.button( i ).press();
                 optionButtonGroup.draw();
                 scenarioBonus = bonusChoices[i];
+                display.render();
 
                 break;
             }

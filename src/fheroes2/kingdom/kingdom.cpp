@@ -607,10 +607,23 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
         }
     }
 
-    if ( INCOME_HEROSKILLS & type ) {
+    if ( INCOME_HERO_SKILLS & type ) {
         // estates skill bonus
         for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
             totalIncome.gold += ( **ith ).GetSecondaryValues( Skill::Secondary::ESTATES );
+    }
+
+    if ( type & INCOME_CAMPAIGN_BONUS ) {
+        if ( Settings::Get().isCampaignGameType() ) {
+            const std::vector<Campaign::CampaignAwardData> awards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
+            for ( const Campaign::CampaignAwardData & award : awards ) {
+                if ( award._type != Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS ) {
+                    continue;
+                }
+
+                totalIncome += Funds( award._subType, award._amount );
+            }
+        }
     }
 
     if ( isControlAI() ) {

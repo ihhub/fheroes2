@@ -204,6 +204,22 @@ namespace fheroes2
         Display::instance().changePalette( palette );
     }
 
+    GameInterfaceTypeRestorer::GameInterfaceTypeRestorer( const bool isEvilInterface_ )
+        : isEvilInterface( isEvilInterface_ )
+        , isOriginalEvilInterface( Settings::Get().ExtGameEvilInterface() )
+    {
+        if ( isEvilInterface != isOriginalEvilInterface ) {
+            Settings::Get().SetEvilInterface( isEvilInterface );
+        }
+    }
+
+    GameInterfaceTypeRestorer::~GameInterfaceTypeRestorer()
+    {
+        if ( isEvilInterface != isOriginalEvilInterface ) {
+            Settings::Get().SetEvilInterface( isOriginalEvilInterface );
+        }
+    }
+
     Image CreateDeathWaveEffect( const Image & in, int32_t x, int32_t waveWidth, int32_t waveHeight )
     {
         if ( in.empty() )
