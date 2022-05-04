@@ -1845,6 +1845,39 @@ namespace
             updateSmallFontLetterShadow( font[75] );
         }
     }
+
+    void generateRomanianAlphabeth( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
+    {
+        // Resize fonts. Romanian uses CP1250 encoding
+        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            std::vector<fheroes2::Sprite> & original = icnVsSprite[icnId];
+
+            original.resize( 96 );
+            original.insert( original.end(), 160, original[0] );
+            // Uppercase S with cedilla
+            original[170 - 32] = original[83 - 32];
+            // Lowercase s with cedilla
+            original[186 - 32] = original[115 - 32];
+            // Uppercase A with circumflex
+            original[194 - 32] = original[65 - 32];
+            // Uppercase A with breve
+            original[195 - 32] = original[65 - 32];
+            // Uppercase I with circumflex
+            original[206 - 32] = original[73 - 32];
+            // Uppercase T with cedilla
+            original[222 - 32] = original[84 - 32];
+            // Lowercase a with circumflex
+            original[226 - 32] = original[97 - 32];
+            // Lowercase a with breve
+            original[227 - 32] = original[97 - 32];
+            // Lowercase i with circumflex
+            original[238 - 32] = original[105 - 32];
+            // Lowercase t with cedilla
+            original[254 - 32] = original[116 - 32];
+           
+        }
+        // TODO: modify newly added characters accordingly.
+    }
 }
 
 namespace fheroes2
@@ -1873,6 +1906,9 @@ namespace fheroes2
         case SupportedLanguage::Norwegian:
             generateNorwegianAlphabet( icnVsSprite );
             break;
+        case SupportedLanguage::Romanian:
+            generateRomanianAlphabeth( icnVsSprite );
+            break;
         default:
             // Add new language generation code!
             assert( 0 );
@@ -1898,6 +1934,7 @@ namespace fheroes2
         case SupportedLanguage::Belarusian:
         case SupportedLanguage::Bulgarian:
         case SupportedLanguage::Ukrainian:
+        case SupportedLanguage::Romanian:
             return true;
         default:
             break;
