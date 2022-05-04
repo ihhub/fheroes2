@@ -700,8 +700,8 @@ namespace Campaign
             return description;
         }
         case ScenarioBonusData::RESOURCES: {
-            std::string description( _amount > 0 ? _( "The kingdom will have by %{amount} more %{resource} at the start of the scenario." ) :
-                                                   _( "The kingdom will have by %{amount} less %{resource} at the start of the scenario." ) );
+            std::string description( _amount > 0 ? _( "The kingdom will have by %{amount} more %{resource} at the start of the scenario." )
+                                                 : _( "The kingdom will have by %{amount} less %{resource} at the start of the scenario." ) );
             StringReplace( description, "%{amount}", std::to_string( std::abs( _amount ) ) );
             StringReplace( description, "%{resource}", Resource::String( _subType ) );
             return description;
@@ -709,7 +709,7 @@ namespace Campaign
         case ScenarioBonusData::TROOP: {
             std::string description( _( "The main hero will have %{count} %{monster} at the start of the scenario." ) );
             StringReplace( description, "%{count}", std::to_string( _amount ) );
-            StringReplace( description, "%{monster}", Monster(  _subType ).GetPluralName( _amount ) );
+            StringReplace( description, "%{monster}", Monster( _subType ).GetPluralName( _amount ) );
             return description;
         }
         case ScenarioBonusData::SPELL: {

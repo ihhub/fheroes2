@@ -21,10 +21,10 @@
 #include <cassert>
 
 #include "agg_image.h"
-#include "dialog.h"
 #include "campaign_data.h"
 #include "campaign_scenariodata.h"
 #include "campaign_savedata.h"
+#include "dialog.h"
 #include "heroes.h"
 #include "icn.h"
 #include "monster.h"

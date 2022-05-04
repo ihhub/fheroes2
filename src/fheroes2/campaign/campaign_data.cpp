@@ -823,7 +823,7 @@ namespace Campaign
         }
         case CampaignAwardData::TYPE_RESOURCE_BONUS: {
             std::string description( _( "The kingdom will have +%{count} %{resource} each day." ) );
-            StringReplace( description, "%{count}", std::to_string(  _amount ) );
+            StringReplace( description, "%{count}", std::to_string( _amount ) );
             StringReplace( description, "%{resource}", Resource::String( _subType ) );
             return description;
         }

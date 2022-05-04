@@ -18,11 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include "ui_monster.h"
 #include "agg_image.h"
 #include "icn.h"
 #include "monster.h"
 #include "race.h"
-#include "ui_monster.h"
 
 namespace fheroes2
 {
