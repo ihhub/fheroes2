@@ -1874,7 +1874,6 @@ namespace
             original[238 - 32] = original[105 - 32];
             // Lowercase t with cedilla
             original[254 - 32] = original[116 - 32];
-           
         }
         // TODO: modify newly added characters accordingly.
     }

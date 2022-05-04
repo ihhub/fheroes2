@@ -97,7 +97,8 @@ namespace fheroes2
 
         const std::set<SupportedLanguage> possibleLanguages{ SupportedLanguage::French,     SupportedLanguage::Polish,    SupportedLanguage::German,
                                                              SupportedLanguage::Russian,    SupportedLanguage::Italian,   SupportedLanguage::Norwegian,
-                                                             SupportedLanguage::Belarusian, SupportedLanguage::Bulgarian, SupportedLanguage::Ukrainian, SupportedLanguage::Romanian };
+                                                             SupportedLanguage::Belarusian, SupportedLanguage::Bulgarian, SupportedLanguage::Ukrainian,
+                                                             SupportedLanguage::Romanian };
 
         for ( const SupportedLanguage language : possibleLanguages ) {
             if ( language != resourceLanguage && isAlphabetSupported( language ) ) {
