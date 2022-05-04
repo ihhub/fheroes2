@@ -5683,13 +5683,6 @@ msgid "This spell can be casted only nearby water."
 msgstr "Denne trolldommen kan kun bli brukt i nærheten av vann."
 
 msgid ""
-"No available towns.\n"
-"Spell Failed!!!"
-msgstr ""
-"Ingen tilgjengelige byer.\n"
-"Trolldom mislyktes!!!"
-
-msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
 "work."
 msgstr ""

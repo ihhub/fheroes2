@@ -5682,9 +5682,11 @@ msgid "This spell can be casted only nearby water."
 msgstr "Ten czar może być rzucony tylko przy wodzie."
 
 msgid ""
-"No available towns.\n"
+"Nearest town occupied.\n"
 "Spell Failed!!!"
-msgstr "Brak dostępnego miasta. Zaklęcie się nie udało!!!"
+msgstr ""
+"Najbliższe miasto jest zajęte.\n"
+"Zaklęcie się nie udało!!!"
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "

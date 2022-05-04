@@ -5261,12 +5261,6 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"No available towns.\n"
-"Spell Failed!!!"
-msgstr "Nincs használható város. Sikertelen Varázslat!!!"
-
-#, fuzzy
-msgid ""
 "Nearest town occupied.\n"
 "Spell Failed!!!"
 msgstr "Nincs használható város. Sikertelen Varázslat!!!"

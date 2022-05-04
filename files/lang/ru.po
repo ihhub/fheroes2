@@ -5456,13 +5456,6 @@ msgid "This spell can be casted only nearby water."
 msgstr "Это заклинание действует только у воды."
 
 msgid ""
-"No available towns.\n"
-"Spell Failed!!!"
-msgstr ""
-"Нет доступных городов.\n"
-"Неудачный вызов магии!"
-
-msgid ""
 "Nearest town occupied.\n"
 "Spell Failed!!!"
 msgstr "Нет доступных городов для этой магии!!!"

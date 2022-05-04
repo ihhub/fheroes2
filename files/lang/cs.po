@@ -4826,11 +4826,6 @@ msgid "This spell can be casted only nearby water."
 msgstr ""
 
 msgid ""
-"No available towns.\n"
-"Spell Failed!!!"
-msgstr ""
-
-msgid ""
 "Nearest town occupied.\n"
 "Spell Failed!!!"
 msgstr ""
