@@ -700,8 +700,8 @@ namespace Campaign
             return description;
         }
         case ScenarioBonusData::RESOURCES: {
-            std::string description( _amount > 0 ? _( "The kingdom will receive by %{amount} more %{resource} at the start of the scenario." )
-                                                 : _( "The kingdom will have by %{amount} less %{resource} at the start of the scenario." ) );
+            std::string description( _amount > 0 ? _( "The kingdom will receive %{amount} additional %{resource} at the start of the scenario." )
+                                                 : _( "The kingdom will have %{amount} less %{resource} at the start of the scenario." ) );
             StringReplace( description, "%{amount}", std::to_string( std::abs( _amount ) ) );
             StringReplace( description, "%{resource}", Resource::String( _subType ) );
             return description;
