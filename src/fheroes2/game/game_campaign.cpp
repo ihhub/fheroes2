@@ -1039,7 +1039,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
 
         for ( uint32_t i = 0; i < selectableScenariosCount; ++i ) {
-            if ( currentScenarioInfoId != selectableScenarios[i] && le.MousePressLeft( selectableScenarioButtons.button( i ).area() ) ) {
+            if ( currentScenarioInfoId != selectableScenarios[i] && le.MouseClickLeft( selectableScenarioButtons.button( i ).area() ) ) {
                 campaignSaveData.setCurrentScenarioInfoId( selectableScenarios[i] );
                 return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             }
