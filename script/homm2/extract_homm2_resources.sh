@@ -20,9 +20,9 @@ function echo_stage {
     echo
 }
 
-echo_green "This script will extract and copy game resources from the original Heroes of Might and Magic II distribution"
+echo_green "This script will extract and copy game resources from the original distribution of Heroes of Might and Magic II"
 
-echo_stage "[1/3] determining destination directory"
+echo_stage "[1/3] determining the destination directory"
 
 DEST_PATH=""
 
@@ -45,7 +45,7 @@ fi
 
 echo_green "Destination directory: $DEST_PATH"
 
-echo_stage "[2/3] determining HoMM2 directory"
+echo_stage "[2/3] determining the HoMM2 directory"
 
 if [[ "$#" -gt "0" ]]; then
     HOMM2_PATH="$1"
@@ -53,8 +53,8 @@ else
     read -e -p "Please enter the full path to the HoMM2 directory (e.g. /home/user/GOG Games/HoMM 2 Gold): " HOMM2_PATH
 fi
 
-if [[ ! -f "$HOMM2_PATH/HEROES2.EXE" || ! -d "$HOMM2_PATH/DATA" || ! -d "$HOMM2_PATH/MAPS" ]]; then
-    echo_red "Unable to find HoMM2 directory. Installation aborted."
+if [[ ( ! -f "$HOMM2_PATH/HEROES2.EXE" && ! -f "$HOMM2_PATH/HEROES2W.EXE" ) || ! -d "$HOMM2_PATH/DATA" || ! -d "$HOMM2_PATH/MAPS" ]]; then
+    echo_red "Unable to find the HoMM2 directory. Installation aborted."
     exit 1
 fi
 
@@ -71,10 +71,11 @@ cd "$DEST_PATH"
 [[ ! -d maps ]]  && mkdir maps
 [[ ! -d music ]] && mkdir music
 
-[[ -d "$HOMM2_PATH/ANIM" ]]  && cp -r "$HOMM2_PATH/ANIM"/*  anim
-[[ -d "$HOMM2_PATH/DATA" ]]  && cp -r "$HOMM2_PATH/DATA"/*  data
-[[ -d "$HOMM2_PATH/MAPS" ]]  && cp -r "$HOMM2_PATH/MAPS"/*  maps
-[[ -d "$HOMM2_PATH/MUSIC" ]] && cp -r "$HOMM2_PATH/MUSIC"/* music
+[[ -d "$HOMM2_PATH/HEROES2/ANIM" ]] && cp -r "$HOMM2_PATH/HEROES2/ANIM"/* anim
+[[ -d "$HOMM2_PATH/ANIM" ]]         && cp -r "$HOMM2_PATH/ANIM"/*         anim
+[[ -d "$HOMM2_PATH/DATA" ]]         && cp -r "$HOMM2_PATH/DATA"/*         data
+[[ -d "$HOMM2_PATH/MAPS" ]]         && cp -r "$HOMM2_PATH/MAPS"/*         maps
+[[ -d "$HOMM2_PATH/MUSIC" ]]        && cp -r "$HOMM2_PATH/MUSIC"/*        music
 
 if [[ ! -f "$HOMM2_PATH/homm2.gog" ]]; then
     exit 0
@@ -82,11 +83,11 @@ fi
 
 # Special case - CD image from GOG
 if [[ "$(command -v python)" == "" ]]; then
-    echo_yellow "python not found in your system. Please install it and re-run this script to extract animation resources."
+    echo_yellow "python was not found in your system. Please install it and re-run this script to extract animation resources."
     exit 0
 fi
 if [[ "$(command -v bsdtar)" == "" ]]; then
-    echo_yellow "bsdtar not found in your system. Please install it and re-run this script to extract animation resources."
+    echo_yellow "bsdtar was not found in your system. Please install it and re-run this script to extract animation resources."
     exit 0
 fi
 

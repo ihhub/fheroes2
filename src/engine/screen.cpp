@@ -96,23 +96,21 @@ namespace
             return { { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } };
         }
 
-        // If here is only one resolution and it is bigger than the original we failed to find any resolutions except the current.
-        // In this case populate the list with missing resolutions.
-        if ( resolutions.size() == 1 && resolutions.front().width > fheroes2::Display::DEFAULT_WIDTH && resolutions.front().height > fheroes2::Display::DEFAULT_HEIGHT ) {
-            const std::vector<fheroes2::Size> possibleResolutions
-                = { { 640, 480 },   { 800, 600 },  { 1024, 768 },  { 1152, 864 }, { 1280, 600 }, { 1280, 720 },  { 1280, 768 }, { 1280, 960 },
-                    { 1280, 1024 }, { 1360, 768 }, { 1400, 1050 }, { 1440, 900 }, { 1600, 900 }, { 1680, 1050 }, { 1920, 1080 } };
+        // Some operating systems do not work well with SDL so they return very limited number of high resolutions.
+        // Populate missing resolutions into the list.
+        const std::vector<fheroes2::Size> possibleResolutions
+            = { { 640, 480 },   { 800, 600 },  { 1024, 768 },  { 1152, 864 }, { 1280, 600 }, { 1280, 720 },  { 1280, 768 }, { 1280, 960 },
+                { 1280, 1024 }, { 1360, 768 }, { 1400, 1050 }, { 1440, 900 }, { 1600, 900 }, { 1680, 1050 }, { 1920, 1080 } };
 
-            const fheroes2::Size currentResolution = resolutions.front();
-            for ( size_t i = 0; i < possibleResolutions.size(); ++i ) {
-                if ( currentResolution.width <= possibleResolutions[i].width || currentResolution.height <= possibleResolutions[i].height ) {
-                    continue;
-                }
-                resolutions.emplace_back( possibleResolutions[i] );
+        const fheroes2::Size lowestResolution = resolutions.back();
+        for ( const fheroes2::Size & resolution : possibleResolutions ) {
+            if ( lowestResolution.width < resolution.width || lowestResolution.height < resolution.height ) {
+                continue;
             }
-
-            std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
+            resolutions.emplace_back( resolution );
         }
+
+        std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
 
         return resolutions;
     }

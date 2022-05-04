@@ -26,6 +26,7 @@
 #include "dialog.h"
 #include "difficulty.h"
 #include "game.h"
+#include "game_hotkeys.h"
 #include "game_over.h"
 #include "icn.h"
 #include "localevent.h"
@@ -127,7 +128,7 @@ void Dialog::GameInfo( void )
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         le.MousePressLeft( buttonCfg.area() ) ? buttonCfg.drawOnPress() : buttonCfg.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonOk.area() ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() )
             break;
 
         if ( le.MouseClickLeft( buttonCfg.area() ) ) {

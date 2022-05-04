@@ -21,387 +21,295 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "game.h"
+#include "game_hotkeys.h"
 #include "localevent.h"
 #include "logging.h"
 #include "screen.h"
 #include "settings.h"
+#include "system.h"
 #include "tinyconfig.h"
 #include "tools.h"
 
 #include <array>
 #include <cassert>
+#include <fstream>
 #include <map>
+#include <set>
+#include <type_traits>
 
 namespace
 {
-    std::array<KeySym, Game::EVENT_LAST> key_events{ KEY_NONE };
-
-    const char * getEventName( const int eventId )
+    enum class HotKeyCategory : uint8_t
     {
-        switch ( eventId ) {
-        case Game::EVENT_BUTTON_NEWGAME:
-            return "button newgame";
-        case Game::EVENT_BUTTON_LOADGAME:
-            return "button loadgame";
-        case Game::EVENT_BUTTON_HIGHSCORES:
-            return "button highscores";
-        case Game::EVENT_BUTTON_CREDITS:
-            return "button credits";
-        case Game::EVENT_BUTTON_STANDARD:
-            return "button standard";
-        case Game::EVENT_BUTTON_CAMPAIGN:
-            return "button campain";
-        case Game::EVENT_BUTTON_MULTI:
-            return "button multigame";
-        case Game::EVENT_BUTTON_SETTINGS:
-            return "button settings";
-        case Game::EVENT_BUTTON_SELECT:
-            return "button select";
-        case Game::EVENT_BUTTON_HOTSEAT:
-            return "button hotseat";
-        case Game::EVENT_BUTTON_HOST:
-            return "button host";
-        case Game::EVENT_BUTTON_GUEST:
-            return "button guest";
-        case Game::EVENT_BUTTON_BATTLEONLY:
-            return "button battleonly";
-        case Game::EVENT_DEFAULT_READY:
-            return "default ready";
-        case Game::EVENT_DEFAULT_EXIT:
-            return "default exit";
-        case Game::EVENT_DEFAULT_LEFT:
-            return "default left";
-        case Game::EVENT_DEFAULT_RIGHT:
-            return "default right";
-        case Game::EVENT_SYSTEM_FULLSCREEN:
-            return "system fullscreen";
-        case Game::EVENT_SYSTEM_SCREENSHOT:
-            return "system screenshot";
-        case Game::EVENT_SLEEP_HERO:
-            return "sleep hero";
-        case Game::EVENT_END_TURN:
-            return "end turn";
-        case Game::EVENT_NEXTHERO:
-            return "next hero";
-        case Game::EVENT_NEXTTOWN:
-            return "next town";
-        case Game::EVENT_CONTINUE:
-            return "continue move";
-        case Game::EVENT_SAVEGAME:
-            return "save game";
-        case Game::EVENT_LOADGAME:
-            return "load game";
-        case Game::EVENT_FILEOPTIONS:
-            return "show file dialog";
-        case Game::EVENT_SYSTEMOPTIONS:
-            return "show system options";
-        case Game::EVENT_PUZZLEMAPS:
-            return "show puzzle maps";
-        case Game::EVENT_INFOGAME:
-            return "show game info";
-        case Game::EVENT_DIG_ARTIFACT:
-            return "dig artifact";
-        case Game::EVENT_CASTSPELL:
-            return "cast spell";
-        case Game::EVENT_KINGDOM_INFO:
-            return "kingdom overview";
-        case Game::EVENT_VIEW_WORLD:
-            return "view world";
-        case Game::EVENT_DEFAULTACTION:
-            return "default action";
-        case Game::EVENT_BATTLE_CASTSPELL:
-            return "battle cast spell";
-        case Game::EVENT_BATTLE_RETREAT:
-            return "battle retreat";
-        case Game::EVENT_BATTLE_SURRENDER:
-            return "battle surrender";
-        case Game::EVENT_BATTLE_AUTOSWITCH:
-            return "battle auto switch";
-        case Game::EVENT_BATTLE_OPTIONS:
-            return "battle options";
-        case Game::EVENT_BATTLE_HARDSKIP:
-            return "battle.hard skip";
-        case Game::EVENT_BATTLE_SOFTSKIP:
-            return "battle soft skip";
-        case Game::EVENT_MOVELEFT:
-            return "move left";
-        case Game::EVENT_MOVERIGHT:
-            return "move right";
-        case Game::EVENT_MOVETOP:
-            return "move top";
-        case Game::EVENT_MOVEBOTTOM:
-            return "move bottom";
-        case Game::EVENT_MOVETOPLEFT:
-            return "move top left";
-        case Game::EVENT_MOVETOPRIGHT:
-            return "move top right";
-        case Game::EVENT_MOVEBOTTOMLEFT:
-            return "move bottom left";
-        case Game::EVENT_MOVEBOTTOMRIGHT:
-            return "move bottom right";
-        case Game::EVENT_OPENFOCUS:
-            return "open focus";
-        case Game::EVENT_SCROLLLEFT:
-            return "scroll left";
-        case Game::EVENT_SCROLLRIGHT:
-            return "scroll right";
-        case Game::EVENT_SCROLLUP:
-            return "scroll up";
-        case Game::EVENT_SCROLLDOWN:
-            return "scroll down";
-        case Game::EVENT_CTRLPANEL:
-            return "control panel";
-        case Game::EVENT_SHOWRADAR:
-            return "show radar";
-        case Game::EVENT_SHOWBUTTONS:
-            return "show buttons";
-        case Game::EVENT_SHOWSTATUS:
-            return "show status";
-        case Game::EVENT_SHOWICONS:
-            return "show icons";
-        case Game::EVENT_SPLIT_STACK_BY_HALF:
-            return "split stack by half";
-        case Game::EVENT_SPLIT_STACK_BY_ONE:
-            return "split stack by one";
-        case Game::EVENT_JOIN_STACKS:
-            return "join stacks";
-        case Game::EVENT_UPGRADE_TROOP:
-            return "upgrade troop";
-        case Game::EVENT_DISMISS_TROOP:
-            return "dismiss troop";
-        case Game::EVENT_TOWN_DWELLING_LEVEL_1:
-            return "town dwelling level 1";
-        case Game::EVENT_TOWN_DWELLING_LEVEL_2:
-            return "town dwelling level 2";
-        case Game::EVENT_TOWN_DWELLING_LEVEL_3:
-            return "town dwelling level 3";
-        case Game::EVENT_TOWN_DWELLING_LEVEL_4:
-            return "town dwelling level 4";
-        case Game::EVENT_TOWN_DWELLING_LEVEL_5:
-            return "town dwelling level 5";
-        case Game::EVENT_TOWN_DWELLING_LEVEL_6:
-            return "town dwelling level 6";
-        case Game::EVENT_TOWN_WELL:
-            return "town well";
-        case Game::EVENT_TOWN_MARKETPLACE:
-            return "town marketplace";
-        case Game::EVENT_TOWN_MAGE_GUILD:
-            return "town mageguild";
-        case Game::EVENT_TOWN_SHIPYARD:
-            return "town shipyard";
-        case Game::EVENT_TOWN_THIEVES_GUILD:
-            return "town guild";
-        case Game::EVENT_TOWN_TAVERN:
-            return "town tavern";
-        case Game::EVENT_TOWN_JUMP_TO_BUILD_SELECTION:
-            return "town build";
-        case Game::EVENT_WELL_BUY_ALL_CREATURES:
-            return "well buy all creatures";
-        case Game::EVENT_NEW_CAMPAIGN_SELECTION_SUCCESSION_WARS:
-            return "the succession wars campaign selection";
-        case Game::EVENT_NEW_CAMPAIGN_SELECTION_PRICE_OF_LOYALTY:
-            return "the price of loyalty campaign selection";
-        case Game::EVENT_NEW_ROLAND_CAMPAIGN:
-            return "roland campaign";
-        case Game::EVENT_NEW_ARCHIBALD_CAMPAIGN:
-            return "archibald campaign";
-        case Game::EVENT_NEW_PRICE_OF_LOYALTY_CAMPAIGN:
-            return "the price of loyalty campaign";
-        case Game::EVENT_NEW_VOYAGE_HOME_CAMPAIGN:
-            return "voyage home campaign";
-        case Game::EVENT_NEW_WIZARDS_ISLE_CAMPAIGN:
-            return "wizard's isle campaign";
-        case Game::EVENT_NEW_DESCENDANTS_CAMPAIGN:
-            return "descendants campaign";
+        DEFAULT_EVENTS,
+        MAIN_GAME,
+        WORLD_MAP,
+        BATTLE,
+        CASTLE,
+        MONSTER
+    };
+
+    const char * getHotKeyCategoryName( const HotKeyCategory category )
+    {
+        switch ( category ) {
+        case HotKeyCategory::DEFAULT_EVENTS:
+            return "Default actions";
+        case HotKeyCategory::MAIN_GAME:
+            return "Main Menu";
+        case HotKeyCategory::WORLD_MAP:
+            return "World Map";
+        case HotKeyCategory::BATTLE:
+            return "Battle";
+        case HotKeyCategory::CASTLE:
+            return "Castle";
+        case HotKeyCategory::MONSTER:
+            return "Monster";
         default:
-            // Did you add a new hot key event? Add the logic for it!
+            // Did you add a new category? Add the logic above!
             assert( 0 );
             break;
         }
-        return nullptr;
+
+        return "";
+    }
+
+    struct HotKeyEventInfo
+    {
+        HotKeyEventInfo() = default;
+
+        HotKeyEventInfo( const HotKeyCategory category_, const char * name_, const fheroes2::Key key_ )
+            : category( category_ )
+            , name( name_ )
+            , key( key_ )
+        {
+            // Do nothing.
+        }
+
+        HotKeyEventInfo( const HotKeyEventInfo & ) = default;
+        HotKeyEventInfo( HotKeyEventInfo && ) = default;
+        ~HotKeyEventInfo() = default;
+
+        HotKeyEventInfo & operator=( const HotKeyEventInfo & ) = default;
+        HotKeyEventInfo & operator=( HotKeyEventInfo && ) = default;
+
+        HotKeyCategory category = HotKeyCategory::DEFAULT_EVENTS;
+
+        const char * name = "";
+
+        fheroes2::Key key = fheroes2::Key::NONE;
+    };
+
+    constexpr typename std::underlying_type<Game::HotKeyEvent>::type hotKeyEventToInt( Game::HotKeyEvent value )
+    {
+        return static_cast<typename std::underlying_type<Game::HotKeyEvent>::type>( value );
+    }
+
+    std::array<HotKeyEventInfo, hotKeyEventToInt( Game::HotKeyEvent::NO_EVENT )> hotKeyEventInfo;
+
+    void initializeHotKeyEvents()
+    {
+        // Make sure that event name is unique!
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_GAME )] = { HotKeyCategory::MAIN_GAME, "new game", fheroes2::Key::KEY_N };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME )] = { HotKeyCategory::MAIN_GAME, "load game", fheroes2::Key::KEY_L };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_HIGHSCORES )] = { HotKeyCategory::MAIN_GAME, "highscores", fheroes2::Key::KEY_H };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_CREDITS )] = { HotKeyCategory::MAIN_GAME, "credits", fheroes2::Key::KEY_C };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_STANDARD )] = { HotKeyCategory::MAIN_GAME, "standard game", fheroes2::Key::KEY_S };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_CAMPAIGN )] = { HotKeyCategory::MAIN_GAME, "campaign game", fheroes2::Key::KEY_C };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_MULTI )] = { HotKeyCategory::MAIN_GAME, "multi-player game", fheroes2::Key::KEY_M };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_SETTINGS )] = { HotKeyCategory::MAIN_GAME, "settings", fheroes2::Key::KEY_T };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_SELECT_MAP )] = { HotKeyCategory::MAIN_GAME, "select map", fheroes2::Key::KEY_S };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL )] = { HotKeyCategory::MAIN_GAME, "select small map size", fheroes2::Key::KEY_S };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_MEDIUM )] = { HotKeyCategory::MAIN_GAME, "select medium map size", fheroes2::Key::KEY_M };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_LARGE )] = { HotKeyCategory::MAIN_GAME, "select large map size", fheroes2::Key::KEY_L };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE )]
+            = { HotKeyCategory::MAIN_GAME, "select extra large map size", fheroes2::Key::KEY_X };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_ALL )] = { HotKeyCategory::MAIN_GAME, "select all map sizes", fheroes2::Key::KEY_A };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_HOTSEAT )] = { HotKeyCategory::MAIN_GAME, "hotseat game", fheroes2::Key::KEY_H };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_BATTLEONLY )] = { HotKeyCategory::MAIN_GAME, "battle only game", fheroes2::Key::KEY_B };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_CAMPAIGN_SELECTION_SUCCESSION_WARS )]
+            = { HotKeyCategory::MAIN_GAME, "the succession wars campaign selection", fheroes2::Key::KEY_O };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_CAMPAIGN_SELECTION_PRICE_OF_LOYALTY )]
+            = { HotKeyCategory::MAIN_GAME, "the price of loyalty campaign selection", fheroes2::Key::KEY_E };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_ROLAND_CAMPAIGN )] = { HotKeyCategory::MAIN_GAME, "roland campaign", fheroes2::Key::KEY_1 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_ARCHIBALD_CAMPAIGN )] = { HotKeyCategory::MAIN_GAME, "archibald campaign", fheroes2::Key::KEY_2 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_PRICE_OF_LOYALTY_CAMPAIGN )]
+            = { HotKeyCategory::MAIN_GAME, "the price of loyalty campaign", fheroes2::Key::KEY_1 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_VOYAGE_HOME_CAMPAIGN )] = { HotKeyCategory::MAIN_GAME, "voyage home campaign", fheroes2::Key::KEY_2 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_WIZARDS_ISLE_CAMPAIGN )] = { HotKeyCategory::MAIN_GAME, "wizard's isle campaign", fheroes2::Key::KEY_3 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_DESCENDANTS_CAMPAIGN )] = { HotKeyCategory::MAIN_GAME, "descendants campaign", fheroes2::Key::KEY_4 };
+
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_READY )] = { HotKeyCategory::DEFAULT_EVENTS, "default okay event", fheroes2::Key::KEY_RETURN };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_EXIT )] = { HotKeyCategory::DEFAULT_EVENTS, "default cancel event", fheroes2::Key::KEY_ESCAPE };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_LEFT )] = { HotKeyCategory::DEFAULT_EVENTS, "left selection", fheroes2::Key::NONE };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_RIGHT )] = { HotKeyCategory::DEFAULT_EVENTS, "right selection", fheroes2::Key::NONE };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MOVE_LEFT )] = { HotKeyCategory::DEFAULT_EVENTS, "move left", fheroes2::Key::KEY_LEFT };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MOVE_RIGHT )] = { HotKeyCategory::DEFAULT_EVENTS, "move right", fheroes2::Key::KEY_RIGHT };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MOVE_TOP )] = { HotKeyCategory::DEFAULT_EVENTS, "move up", fheroes2::Key::KEY_UP };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MOVE_BOTTOM )] = { HotKeyCategory::DEFAULT_EVENTS, "move bottom", fheroes2::Key::KEY_DOWN };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MOVE_TOP_LEFT )] = { HotKeyCategory::DEFAULT_EVENTS, "move top bottom", fheroes2::Key::NONE };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MOVE_TOP_RIGHT )] = { HotKeyCategory::DEFAULT_EVENTS, "move top right", fheroes2::Key::NONE };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MOVE_BOTTOM_LEFT )] = { HotKeyCategory::DEFAULT_EVENTS, "move bottom left", fheroes2::Key::NONE };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MOVE_BOTTOM_RIGHT )] = { HotKeyCategory::DEFAULT_EVENTS, "move bottom right", fheroes2::Key::NONE };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SYSTEM_FULLSCREEN )] = { HotKeyCategory::DEFAULT_EVENTS, "toggle fullscreen", fheroes2::Key::KEY_F4 };
+
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_RETREAT )] = { HotKeyCategory::BATTLE, "retreat from battle", fheroes2::Key::KEY_R };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_SURRENDER )] = { HotKeyCategory::BATTLE, "surrender during battle", fheroes2::Key::KEY_S };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_AUTOSWITCH )] = { HotKeyCategory::BATTLE, "toggle battle auto mode", fheroes2::Key::KEY_A };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_OPTIONS )] = { HotKeyCategory::BATTLE, "battle options", fheroes2::Key::KEY_O };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_SKIP )] = { HotKeyCategory::BATTLE, "skip turn in battle", fheroes2::Key::KEY_SPACE };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_WAIT )] = { HotKeyCategory::BATTLE, "wait in battle", fheroes2::Key::KEY_W };
+
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SAVE_GAME )] = { HotKeyCategory::WORLD_MAP, "save game", fheroes2::Key::KEY_S };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEXT_HERO )] = { HotKeyCategory::WORLD_MAP, "next hero", fheroes2::Key::KEY_H };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CONTINUE_HERO_MOVEMENT )] = { HotKeyCategory::WORLD_MAP, "continue hero movement", fheroes2::Key::KEY_M };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAST_SPELL )] = { HotKeyCategory::WORLD_MAP, "cast spell", fheroes2::Key::KEY_C };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SLEEP_HERO )] = { HotKeyCategory::WORLD_MAP, "put hero to sleep", fheroes2::Key::KEY_Z };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEXT_TOWN )] = { HotKeyCategory::WORLD_MAP, "next town", fheroes2::Key::KEY_T };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::END_TURN )] = { HotKeyCategory::WORLD_MAP, "end turn", fheroes2::Key::KEY_E };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::FILE_OPTIONS )] = { HotKeyCategory::WORLD_MAP, "file options", fheroes2::Key::KEY_F };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SYSTEM_OPTIONS )] = { HotKeyCategory::WORLD_MAP, "system options", fheroes2::Key::KEY_O };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::PUZZLE_MAP )] = { HotKeyCategory::WORLD_MAP, "puzzle map", fheroes2::Key::KEY_P };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SCENARIO_INFORMATION )] = { HotKeyCategory::WORLD_MAP, "scenario information", fheroes2::Key::KEY_I };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DIG_ARTIFACT )] = { HotKeyCategory::WORLD_MAP, "dig for artifact", fheroes2::Key::KEY_D };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::KINGDOM_SUMMARY )] = { HotKeyCategory::WORLD_MAP, "kingdom summary", fheroes2::Key::KEY_K };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::VIEW_WORLD )] = { HotKeyCategory::WORLD_MAP, "view world", fheroes2::Key::KEY_V };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_ACTION )] = { HotKeyCategory::WORLD_MAP, "default action", fheroes2::Key::KEY_SPACE };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::OPEN_FOCUS )] = { HotKeyCategory::WORLD_MAP, "open focus", fheroes2::Key::KEY_RETURN };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CONTROL_PANEL )] = { HotKeyCategory::WORLD_MAP, "control panel", fheroes2::Key::KEY_1 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SHOW_RADAR )] = { HotKeyCategory::WORLD_MAP, "show radar", fheroes2::Key::KEY_2 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SHOW_BUTTONS )] = { HotKeyCategory::WORLD_MAP, "show game buttons", fheroes2::Key::KEY_3 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SHOW_STATUS )] = { HotKeyCategory::WORLD_MAP, "show status", fheroes2::Key::KEY_4 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SHOW_ICONS )] = { HotKeyCategory::WORLD_MAP, "show icons", fheroes2::Key::KEY_5 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SCROLL_LEFT )] = { HotKeyCategory::WORLD_MAP, "scroll left", fheroes2::Key::KEY_KP_4 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SCROLL_RIGHT )] = { HotKeyCategory::WORLD_MAP, "scroll right", fheroes2::Key::KEY_KP_6 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SCROLL_UP )] = { HotKeyCategory::WORLD_MAP, "scroll up", fheroes2::Key::KEY_KP_8 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SCROLL_DOWN )] = { HotKeyCategory::WORLD_MAP, "scroll down", fheroes2::Key::KEY_KP_2 };
+
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SPLIT_STACK_BY_HALF )] = { HotKeyCategory::MONSTER, "split stack by half", fheroes2::Key::KEY_SHIFT };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SPLIT_STACK_BY_ONE )] = { HotKeyCategory::MONSTER, "split stack by one", fheroes2::Key::KEY_CONTROL };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::JOIN_STACKS )] = { HotKeyCategory::MONSTER, "join stacks", fheroes2::Key::KEY_ALT };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::UPGRADE_TROOP )] = { HotKeyCategory::MONSTER, "upgrade troop", fheroes2::Key::KEY_U };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DISMISS_TROOP )] = { HotKeyCategory::MONSTER, "dismiss troop", fheroes2::Key::KEY_D };
+
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_1 )] = { HotKeyCategory::CASTLE, "town dwelling level 1", fheroes2::Key::KEY_1 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_2 )] = { HotKeyCategory::CASTLE, "town dwelling level 2", fheroes2::Key::KEY_2 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_3 )] = { HotKeyCategory::CASTLE, "town dwelling level 3", fheroes2::Key::KEY_3 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_4 )] = { HotKeyCategory::CASTLE, "town dwelling level 4", fheroes2::Key::KEY_4 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_5 )] = { HotKeyCategory::CASTLE, "town dwelling level 5", fheroes2::Key::KEY_5 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_6 )] = { HotKeyCategory::CASTLE, "town dwelling level 6", fheroes2::Key::KEY_6 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_WELL )] = { HotKeyCategory::CASTLE, "well", fheroes2::Key::KEY_W };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_MAGE_GUILD )] = { HotKeyCategory::CASTLE, "mage guild", fheroes2::Key::KEY_S };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_MARKETPLACE )] = { HotKeyCategory::CASTLE, "marketplace", fheroes2::Key::KEY_M };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_THIEVES_GUILD )] = { HotKeyCategory::CASTLE, "thieves guild", fheroes2::Key::KEY_T };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_SHIPYARD )] = { HotKeyCategory::CASTLE, "shipyard", fheroes2::Key::KEY_N };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_TAVERN )] = { HotKeyCategory::CASTLE, "tavern", fheroes2::Key::KEY_R };
+        // It is also used to build castle in a town.
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_JUMP_TO_BUILD_SELECTION )] = { HotKeyCategory::CASTLE, "castle construction", fheroes2::Key::KEY_B };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::WELL_BUY_ALL_CREATURES )] = { HotKeyCategory::CASTLE, "buy all monsters in well", fheroes2::Key::KEY_M };
+    }
+
+    std::string getHotKeyFileContent()
+    {
+        std::ostringstream os;
+        os << "# fheroes2 hotkey file (saved by version " << Settings::GetVersion() << ")" << std::endl;
+        os << std::endl;
+
+        HotKeyCategory currentCategory = hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NONE ) + 1].category;
+        os << "# " << getHotKeyCategoryName( currentCategory ) << ':' << std::endl;
+
+#if defined( WITH_DEBUG )
+        std::set<const char *> duplicationStringVerifier;
+#endif
+
+        for ( int32_t eventId = hotKeyEventToInt( Game::HotKeyEvent::NONE ) + 1; eventId < hotKeyEventToInt( Game::HotKeyEvent::NO_EVENT ); ++eventId ) {
+            if ( currentCategory != hotKeyEventInfo[eventId].category ) {
+                currentCategory = hotKeyEventInfo[eventId].category;
+                os << std::endl;
+                os << "# " << getHotKeyCategoryName( currentCategory ) << ':' << std::endl;
+            }
+
+            assert( strlen( hotKeyEventInfo[eventId].name ) > 0 );
+#if defined( WITH_DEBUG )
+            const bool isUnique = duplicationStringVerifier.emplace( hotKeyEventInfo[eventId].name ).second;
+            assert( isUnique );
+#endif
+
+            os << hotKeyEventInfo[eventId].name << " = " << StringUpper( KeySymGetName( hotKeyEventInfo[eventId].key ) ) << std::endl;
+        }
+
+        return os.str();
     }
 }
 
-namespace Game
-{
-    void HotKeysDefaults( void );
-    void HotKeysLoad( const std::string & );
-    void KeyboardGlobalFilter( int, int );
-}
-
-void Game::HotKeysDefaults( void )
-{
-    std::fill( key_events.begin(), key_events.end(), KEY_NONE );
-
-    // main menu
-    key_events[EVENT_BUTTON_NEWGAME] = KEY_n;
-    key_events[EVENT_BUTTON_LOADGAME] = KEY_l;
-    key_events[EVENT_BUTTON_HIGHSCORES] = KEY_h;
-    key_events[EVENT_BUTTON_CREDITS] = KEY_c;
-    key_events[EVENT_BUTTON_STANDARD] = KEY_s;
-    key_events[EVENT_BUTTON_CAMPAIGN] = KEY_c;
-    key_events[EVENT_BUTTON_MULTI] = KEY_m;
-    key_events[EVENT_BUTTON_SETTINGS] = KEY_t;
-    key_events[EVENT_BUTTON_SELECT] = KEY_s;
-    key_events[EVENT_BUTTON_HOTSEAT] = KEY_h;
-    key_events[EVENT_BUTTON_HOST] = KEY_h;
-    key_events[EVENT_BUTTON_GUEST] = KEY_g;
-    key_events[EVENT_BUTTON_BATTLEONLY] = KEY_b;
-
-    // default
-    key_events[EVENT_DEFAULT_READY] = KEY_RETURN;
-    key_events[EVENT_DEFAULT_EXIT] = KEY_ESCAPE;
-    key_events[EVENT_DEFAULT_LEFT] = KEY_NONE;
-    key_events[EVENT_DEFAULT_RIGHT] = KEY_NONE;
-
-    // system
-    key_events[EVENT_SYSTEM_FULLSCREEN] = KEY_F4;
-    key_events[EVENT_SYSTEM_SCREENSHOT] = KEY_PRINT;
-
-    // battle
-    key_events[EVENT_BATTLE_CASTSPELL] = KEY_c;
-    key_events[EVENT_BATTLE_RETREAT] = KEY_r;
-    key_events[EVENT_BATTLE_SURRENDER] = KEY_s;
-    key_events[EVENT_BATTLE_AUTOSWITCH] = KEY_a;
-    key_events[EVENT_BATTLE_OPTIONS] = KEY_o;
-    key_events[EVENT_BATTLE_HARDSKIP] = KEY_h;
-    key_events[EVENT_BATTLE_SOFTSKIP] = KEY_SPACE;
-
-    // sleep hero
-    key_events[EVENT_SLEEP_HERO] = KEY_z;
-    // end turn
-    key_events[EVENT_END_TURN] = KEY_e;
-    // next hero
-    key_events[EVENT_NEXTHERO] = KEY_h;
-    // next town
-    key_events[EVENT_NEXTTOWN] = KEY_t;
-    // continue (move hero)
-    key_events[EVENT_CONTINUE] = KEY_m;
-    // save game
-    key_events[EVENT_SAVEGAME] = KEY_s;
-    // load game
-    key_events[EVENT_LOADGAME] = KEY_l;
-    // show file dialog
-    key_events[EVENT_FILEOPTIONS] = KEY_f;
-    // show system options
-    key_events[EVENT_SYSTEMOPTIONS] = KEY_o;
-    // show puzzle maps
-    key_events[EVENT_PUZZLEMAPS] = KEY_p;
-    // show game info
-    key_events[EVENT_INFOGAME] = KEY_i;
-    // dig artifact
-    key_events[EVENT_DIG_ARTIFACT] = KEY_d;
-    // cast spell
-    key_events[EVENT_CASTSPELL] = KEY_c;
-    // kingdom overview
-    key_events[EVENT_KINGDOM_INFO] = KEY_k;
-    // view world
-    key_events[EVENT_VIEW_WORLD] = KEY_v;
-    // default action
-    key_events[EVENT_DEFAULTACTION] = KEY_SPACE;
-    // move hero
-    key_events[EVENT_MOVELEFT] = KEY_LEFT;
-    key_events[EVENT_MOVERIGHT] = KEY_RIGHT;
-    key_events[EVENT_MOVETOP] = KEY_UP;
-    key_events[EVENT_MOVEBOTTOM] = KEY_DOWN;
-    key_events[EVENT_MOVETOPLEFT] = KEY_NONE;
-    key_events[EVENT_MOVETOPRIGHT] = KEY_NONE;
-    key_events[EVENT_MOVEBOTTOMLEFT] = KEY_NONE;
-    key_events[EVENT_MOVEBOTTOMRIGHT] = KEY_NONE;
-    // open focus
-    key_events[EVENT_OPENFOCUS] = KEY_RETURN;
-    // control panel
-    key_events[EVENT_CTRLPANEL] = KEY_1;
-    key_events[EVENT_SHOWRADAR] = KEY_2;
-    key_events[EVENT_SHOWBUTTONS] = KEY_3;
-    key_events[EVENT_SHOWSTATUS] = KEY_4;
-    key_events[EVENT_SHOWICONS] = KEY_5;
-    // system:
-    // gamepad scroll bindings
-    key_events[EVENT_SCROLLLEFT] = KEY_KP4;
-    key_events[EVENT_SCROLLRIGHT] = KEY_KP6;
-    key_events[EVENT_SCROLLUP] = KEY_KP8;
-    key_events[EVENT_SCROLLDOWN] = KEY_KP2;
-    // split
-    key_events[EVENT_SPLIT_STACK_BY_HALF] = KEY_SHIFT;
-    key_events[EVENT_SPLIT_STACK_BY_ONE] = KEY_CONTROL;
-    key_events[EVENT_JOIN_STACKS] = KEY_ALT;
-
-    key_events[EVENT_UPGRADE_TROOP] = KEY_u;
-    key_events[EVENT_DISMISS_TROOP] = KEY_d;
-
-    // town + build screen
-    key_events[EVENT_TOWN_DWELLING_LEVEL_1] = KEY_1;
-    key_events[EVENT_TOWN_DWELLING_LEVEL_2] = KEY_2;
-    key_events[EVENT_TOWN_DWELLING_LEVEL_3] = KEY_3;
-    key_events[EVENT_TOWN_DWELLING_LEVEL_4] = KEY_4;
-    key_events[EVENT_TOWN_DWELLING_LEVEL_5] = KEY_5;
-    key_events[EVENT_TOWN_DWELLING_LEVEL_6] = KEY_6;
-    key_events[EVENT_TOWN_WELL] = KEY_w;
-    key_events[EVENT_TOWN_MAGE_GUILD] = KEY_s;
-    key_events[EVENT_TOWN_MARKETPLACE] = KEY_m;
-    key_events[EVENT_TOWN_THIEVES_GUILD] = KEY_t;
-    key_events[EVENT_TOWN_SHIPYARD] = KEY_n;
-
-    // town screen only
-    key_events[EVENT_TOWN_TAVERN] = KEY_r;
-    key_events[EVENT_TOWN_JUMP_TO_BUILD_SELECTION] = KEY_b; // also used to build castle, if starting on a village
-
-    key_events[EVENT_NEW_CAMPAIGN_SELECTION_SUCCESSION_WARS] = KEY_o;
-    key_events[EVENT_NEW_CAMPAIGN_SELECTION_PRICE_OF_LOYALTY] = KEY_e;
-
-    key_events[EVENT_NEW_ROLAND_CAMPAIGN] = KEY_1;
-    key_events[EVENT_NEW_ARCHIBALD_CAMPAIGN] = KEY_2;
-
-    key_events[EVENT_NEW_PRICE_OF_LOYALTY_CAMPAIGN] = KEY_1;
-    key_events[EVENT_NEW_VOYAGE_HOME_CAMPAIGN] = KEY_2;
-    key_events[EVENT_NEW_WIZARDS_ISLE_CAMPAIGN] = KEY_3;
-    key_events[EVENT_NEW_DESCENDANTS_CAMPAIGN] = KEY_4;
-
-    key_events[EVENT_WELL_BUY_ALL_CREATURES] = KEY_m;
-}
-
-bool Game::HotKeyPressEvent( int evnt )
+bool Game::HotKeyPressEvent( const HotKeyEvent eventID )
 {
     const LocalEvent & le = LocalEvent::Get();
-    return le.KeyPress() && le.KeyValue() == key_events[evnt];
+    return le.KeyPress() && le.KeyValue() == hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
 }
 
-bool Game::HotKeyHoldEvent( const int eventID )
+bool Game::HotKeyHoldEvent( const HotKeyEvent eventID )
 {
     const LocalEvent & le = LocalEvent::Get();
-    return le.KeyHold() && le.KeyValue() == key_events[eventID];
+    return le.KeyHold() && le.KeyValue() == hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
 }
 
-std::string Game::getHotKeyNameByEventId( const int eventID )
+std::string Game::getHotKeyNameByEventId( const HotKeyEvent eventID )
 {
-    return StringUpper( KeySymGetName( key_events[eventID] ) );
+    return StringUpper( KeySymGetName( hotKeyEventInfo[hotKeyEventToInt( eventID )].key ) );
 }
 
-void Game::HotKeysLoad( const std::string & hotkeys )
+void Game::HotKeysLoad( std::string filename )
 {
-    TinyConfig config( '=', '#' );
+    initializeHotKeyEvents();
 
-    if ( config.Load( hotkeys ) ) {
-        int ival = 0;
+    bool isFilePresent = System::IsFile( filename );
+    if ( isFilePresent ) {
+        TinyConfig config( '=', '#' );
+        isFilePresent = config.Load( filename );
 
-        for ( int evnt = EVENT_NONE + 1; evnt < EVENT_LAST; ++evnt ) {
-            const char * name = getEventName( evnt );
-            ival = config.IntParams( name );
-            if ( ival ) {
-                const KeySym sym = GetKeySym( ival );
-                key_events[evnt] = sym;
-                DEBUG_LOG( DBG_GAME, DBG_INFO, "Event '" << getEventName( evnt ) << "' has key '" << KeySymGetName( sym ) << "'" )
+        if ( isFilePresent ) {
+            std::map<std::string, fheroes2::Key> nameToKey;
+            for ( int32_t i = static_cast<int32_t>( fheroes2::Key::NONE ); i < static_cast<int32_t>( fheroes2::Key::LAST_KEY ); ++i ) {
+                const fheroes2::Key key = static_cast<fheroes2::Key>( i );
+                nameToKey.emplace( StringUpper( KeySymGetName( key ) ), key );
+            }
+
+            for ( int eventId = hotKeyEventToInt( HotKeyEvent::NONE ) + 1; eventId < hotKeyEventToInt( HotKeyEvent::NO_EVENT ); ++eventId ) {
+                const char * eventName = hotKeyEventInfo[eventId].name;
+                std::string value = config.StrParams( eventName );
+                if ( value.empty() ) {
+                    continue;
+                }
+
+                value = StringUpper( value );
+                auto foundKey = nameToKey.find( value );
+                if ( foundKey == nameToKey.end() ) {
+                    continue;
+                }
+
+                hotKeyEventInfo[eventId].key = foundKey->second;
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "Event '" << hotKeyEventInfo[eventId].name << "' has key '" << value << "'" )
             }
         }
     }
+
+    if ( !isFilePresent ) {
+        filename = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.key" );
+        std::fstream file;
+        file.open( filename.data(), std::fstream::out | std::fstream::trunc );
+        if ( !file )
+            return;
+
+        const std::string & data = getHotKeyFileContent();
+        file.write( data.data(), data.size() );
+    }
 }
 
-void Game::KeyboardGlobalFilter( int sym, int mod )
+void Game::KeyboardGlobalFilter( int sdlKey, int mod )
 {
     // system hotkeys
-    if ( sym == key_events[EVENT_SYSTEM_FULLSCREEN] && !( ( mod & KMOD_ALT ) || ( mod & KMOD_CTRL ) ) ) {
+    if ( fheroes2::getKeyFromSDL( sdlKey ) == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::SYSTEM_FULLSCREEN )].key
+         && !( ( mod & KMOD_ALT ) || ( mod & KMOD_CTRL ) ) ) {
         fheroes2::engine().toggleFullScreen();
         fheroes2::Display::instance().render();
 

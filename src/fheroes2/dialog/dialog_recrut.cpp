@@ -25,7 +25,7 @@
 #include "bin_info.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "kingdom.h"
 #include "monster.h"
@@ -369,7 +369,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, const boo
 
         bool updateCost = false;
         if ( allowDowngradedMonster && upgrades.size() > 1 ) {
-            if ( le.MouseClickLeft( monsterSwitchLeft.area() ) || le.KeyPress( KEY_LEFT ) ) {
+            if ( le.MouseClickLeft( monsterSwitchLeft.area() ) || le.KeyPress( fheroes2::Key::KEY_LEFT ) ) {
                 for ( size_t i = 0; i < upgrades.size(); ++i ) {
                     if ( upgrades[i] == monster ) {
                         if ( i < upgrades.size() - 1 ) {
@@ -383,7 +383,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, const boo
                 }
                 updateCost = true;
             }
-            else if ( le.MouseClickLeft( monsterSwitchRight.area() ) || le.KeyPress( KEY_RIGHT ) ) {
+            else if ( le.MouseClickLeft( monsterSwitchRight.area() ) || le.KeyPress( fheroes2::Key::KEY_RIGHT ) ) {
                 for ( size_t i = 0; i < upgrades.size(); ++i ) {
                     if ( upgrades[i] == monster ) {
                         if ( i > 0 ) {
@@ -419,7 +419,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, const boo
             skipEventCheck = true;
         }
 
-        if ( PressIntKey( max, result ) ) {
+        if ( fheroes2::PressIntKey( max, result ) ) {
             paymentCosts = paymentMonster * result;
             redraw = true;
             maxmin.clear();
@@ -432,7 +432,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, const boo
             }
         }
 
-        if ( ( le.MouseWheelUp( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.KeyPress( KEY_UP ) || timedButtonUp.isDelayPassed() ) && result < max ) {
+        if ( ( le.MouseWheelUp( rtWheel ) || le.MouseClickLeft( buttonUp.area() ) || le.KeyPress( fheroes2::Key::KEY_UP ) || timedButtonUp.isDelayPassed() )
+             && result < max ) {
             ++result;
             paymentCosts += paymentMonster;
             redraw = true;
@@ -445,7 +446,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, const boo
                 maxmin = SwitchMaxMinButtons( buttonMax, buttonMin, false );
             }
         }
-        else if ( ( le.MouseWheelDn( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.KeyPress( KEY_DOWN ) || timedButtonDn.isDelayPassed() ) && result ) {
+        else if ( ( le.MouseWheelDn( rtWheel ) || le.MouseClickLeft( buttonDn.area() ) || le.KeyPress( fheroes2::Key::KEY_DOWN ) || timedButtonDn.isDelayPassed() )
+                  && result ) {
             --result;
             paymentCosts -= paymentMonster;
             redraw = true;
@@ -495,10 +497,10 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, const boo
             display.render();
         }
 
-        if ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) )
+        if ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_READY ) ) )
             break;
 
-        if ( le.MouseClickLeft( buttonCancel.area() ) || ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) && !skipEventCheck ) ) {
+        if ( le.MouseClickLeft( buttonCancel.area() ) || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_EXIT ) && !skipEventCheck ) ) {
             result = 0;
             break;
         }

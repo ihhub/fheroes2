@@ -20,7 +20,7 @@
 
 #include "dialog_language_selection.h"
 #include "agg_image.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "localevent.h"
 #include "logging.h"
@@ -115,7 +115,7 @@ namespace
                 okayButton.drawOnRelease();
             }
 
-            if ( le.MouseClickLeft( okayButton.area() ) || HotKeyCloseWindow ) {
+            if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
                 return false;
             }
 

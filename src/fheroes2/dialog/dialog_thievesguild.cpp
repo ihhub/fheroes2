@@ -29,6 +29,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "kingdom.h"
 #include "monster.h"
@@ -511,7 +512,7 @@ void Dialog::ThievesGuild( bool oracle )
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;
     }
 }

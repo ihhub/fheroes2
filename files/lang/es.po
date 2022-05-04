@@ -5583,12 +5583,6 @@ msgstr ""
 
 #, fuzzy
 msgid ""
-"No available towns.\n"
-"Spell Failed!!!"
-msgstr "No hay disponible ninguna ciudad. ¡¡¡ Hechizo fallido!!!"
-
-#, fuzzy
-msgid ""
 "Nearest town occupied.\n"
 "Spell Failed!!!"
 msgstr "No hay disponible ninguna ciudad. ¡¡¡ Hechizo fallido!!!"

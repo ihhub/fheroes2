@@ -27,6 +27,7 @@
 #include "castle.h"
 #include "cursor.h"
 #include "game.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "icn.h"
@@ -754,7 +755,7 @@ void Kingdom::openOverviewDialog()
         }
 
         // Exit this dialog.
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;
 
         // switch view: heroes/castle

@@ -23,7 +23,7 @@
 
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "localevent.h"
 #include "logging.h"
 #include "text.h"
@@ -43,16 +43,16 @@ namespace
         COUT( message )
 
         if ( buttonTypes & Dialog::YES ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose YES." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_READY ) << " to choose YES." )
         }
         if ( buttonTypes & Dialog::NO ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose NO." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_EXIT ) << " to choose NO." )
         }
         if ( buttonTypes & Dialog::OK ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose OK." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_READY ) << " to choose OK." )
         }
         if ( buttonTypes & Dialog::CANCEL ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose CANCEL." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_EXIT ) << " to choose CANCEL." )
         }
     }
 }

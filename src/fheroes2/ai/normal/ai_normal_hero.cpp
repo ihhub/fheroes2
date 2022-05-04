@@ -552,6 +552,22 @@ namespace
         // scale non-linearly (more value lost as distance increases)
         return value - ( distance * std::log10( distance ) );
     }
+
+    double getFogDiscoveryValue( const Heroes & hero )
+    {
+        switch ( hero.getAIRole() ) {
+        case Heroes::Role::HUNTER:
+            return -dangerousTaskPenalty;
+        case Heroes::Role::FIGHTER:
+            return -dangerousTaskPenalty * 2;
+        default:
+            // If you set a new type of a hero you must add the logic here.
+            assert( 0 );
+            break;
+        }
+
+        return -dangerousTaskPenalty;
+    }
 }
 
 namespace AI
@@ -1069,6 +1085,37 @@ namespace AI
         ObjectValidator objectValidator( hero, _pathfinder );
         ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
+        auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero, leftMovePoints]( const int destination, uint32_t & distance, double & value ) {
+            const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( destination );
+            for ( const IndexObject & pair : list ) {
+                if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) ) {
+                    const double extraValue = valueStorage.value( pair, 0 ); // object is on the way, we don't loose any movement points.
+                    if ( extraValue > 0 ) {
+                        // There is no need to reduce the quality of the object even if the path has others.
+                        value += extraValue;
+                    }
+                }
+            }
+
+            const RegionStats & regionStats = _regions[world.GetTiles( destination ).GetRegion()];
+
+            if ( heroStrength < regionStats.highestThreat ) {
+                const Castle * castle = world.getCastleEntrance( Maps::GetPoint( destination ) );
+
+                if ( castle && ( castle->GetGarrisonStrength( &hero ) <= 0 || castle->GetColor() == hero.GetColor() ) )
+                    value -= dangerousTaskPenalty / 2;
+                else
+                    value -= dangerousTaskPenalty;
+            }
+
+            if ( distance > leftMovePoints ) {
+                // Distant object which is out of reach for the current turn must have lower priority.
+                distance = leftMovePoints + ( distance - leftMovePoints ) * 2;
+            }
+
+            value = ScaleWithDistance( value, distance );
+        };
+
         for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
             const IndexObject & node = _mapObjects[idx];
 
@@ -1089,33 +1136,7 @@ namespace AI
 
                 double value = valueStorage.value( node, dist );
 
-                const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( node.first );
-                for ( const IndexObject & pair : list ) {
-                    if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) ) {
-                        const double extraValue = valueStorage.value( pair, 0 ); // object is on the way, we don't loose any movement points.
-                        if ( extraValue > 0 ) {
-                            // There is no need to reduce the quality of the object even if the path has others.
-                            value += extraValue;
-                        }
-                    }
-                }
-                const RegionStats & regionStats = _regions[world.GetTiles( node.first ).GetRegion()];
-
-                if ( heroStrength < regionStats.highestThreat ) {
-                    const Castle * castle = world.getCastleEntrance( Maps::GetPoint( node.first ) );
-
-                    if ( castle && ( castle->GetGarrisonStrength( &hero ) <= 0 || castle->GetColor() == hero.GetColor() ) )
-                        value -= dangerousTaskPenalty / 2;
-                    else
-                        value -= dangerousTaskPenalty;
-                }
-
-                if ( dist > leftMovePoints ) {
-                    // Distant object which is out of reach for the current turn must have lower priority.
-                    dist = leftMovePoints + ( dist - leftMovePoints ) * 2;
-                }
-
-                value = ScaleWithDistance( value, dist );
+                getObjectValue( node.first, dist, value );
 
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
@@ -1131,12 +1152,24 @@ namespace AI
             }
         }
 
+        double fogDiscoveryValue = getFogDiscoveryValue( hero );
+        const int fogDiscoveryTarget = _pathfinder.getFogDiscoveryTile( hero );
+        if ( fogDiscoveryTarget >= 0 ) {
+            uint32_t distanceToFogDiscovery = _pathfinder.getDistance( fogDiscoveryTarget );
+
+            getObjectValue( fogDiscoveryTarget, distanceToFogDiscovery, fogDiscoveryValue );
+        }
+
         if ( priorityTarget != -1 ) {
+            if ( fogDiscoveryTarget >= 0 && fogDiscoveryValue > maxPriority ) {
+                priorityTarget = fogDiscoveryTarget;
+                maxPriority = fogDiscoveryValue;
+            }
             DEBUG_LOG( DBG_AI, DBG_INFO,
                        hero.GetName() << ": priority selected: " << priorityTarget << " value is " << maxPriority << " (" << MP2::StringObject( objectType ) << ")" )
         }
         else if ( !heroInPatrolMode ) {
-            priorityTarget = _pathfinder.getFogDiscoveryTile( hero );
+            priorityTarget = fogDiscoveryTarget;
             DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " can't find an object. Scouting the fog of war at " << priorityTarget )
         }
 

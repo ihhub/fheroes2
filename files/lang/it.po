@@ -5023,11 +5023,6 @@ msgid "This spell can be casted only nearby water."
 msgstr ""
 
 msgid ""
-"No available towns.\n"
-"Spell Failed!!!"
-msgstr ""
-
-msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
 "work."
 msgstr ""

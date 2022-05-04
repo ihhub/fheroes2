@@ -5313,11 +5313,6 @@ msgstr "Denna stad kan inte uppgraderas till ett slott."
 msgid "This spell can be casted only nearby water."
 msgstr ""
 
-msgid ""
-"No available towns.\n"
-"Spell Failed!!!"
-msgstr "Ingen stad tillgänlig. Besvärjelsen misslyckades!!!"
-
 #, fuzzy
 msgid ""
 "Nearest town occupied.\n"

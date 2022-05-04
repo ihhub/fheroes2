@@ -22,7 +22,7 @@
 #include "agg_image.h"
 #include "color.h"
 #include "cursor.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "icn.h"
 #include "image.h"
@@ -577,7 +577,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
 
         bool changed = false;
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow ) {
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
         }
         else if ( le.MouseClickLeft( buttonZoom.area() ) ) {

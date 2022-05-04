@@ -24,7 +24,7 @@
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "localevent.h"
 #include "settings.h"
@@ -96,7 +96,7 @@ int Dialog::AdventureOptions( bool enabledig )
             result = Dialog::DIG;
             break;
         }
-        if ( le.MouseClickLeft( buttonCancel.area() ) || HotKeyCloseWindow ) {
+        if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
             result = Dialog::CANCEL;
             break;
         }

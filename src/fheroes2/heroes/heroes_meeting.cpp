@@ -31,6 +31,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_hotkeys.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
 #include "icn.h"
@@ -425,7 +426,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             moveArtifactsToHero2.drawOnRelease();
         }
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;
 
         // selector troops event
