@@ -71,7 +71,7 @@ msgstr ""
 msgid ""
 "A legion of\n"
 "%{monster}"
-msgstr ""
+msgstr "Легіон"
 
 msgid "army|Few"
 msgstr ""
@@ -3609,6 +3609,9 @@ msgstr ""
 
 msgid "Norwegian"
 msgstr ""
+
+msgid "Belarusian"
+msgstr "Беларускі"
 
 msgid ", FPS: "
 msgstr ""
