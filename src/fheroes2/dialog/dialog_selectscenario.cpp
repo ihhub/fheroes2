@@ -472,16 +472,16 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
         bool needRedraw = false;
 
-        if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::DEFAULT_READY ) || listbox.selectOk ) {
+        if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_READY ) || listbox.selectOk ) {
             MapsFileInfoList::const_iterator it = std::find( all.begin(), all.end(), listbox.GetCurrent() );
             return ( it != all.end() ) ? &( *it ) : nullptr;
         }
 
-        if ( Game::HotKeyPressEvent( Game::DEFAULT_EXIT ) ) {
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_EXIT ) ) {
             return nullptr;
         }
 
-        if ( le.MouseClickLeft( buttonSelectSmall.area() ) || HotKeyPressEvent( Game::MAIN_MENU_MAP_SIZE_SMALL ) /*&& buttonSelectSmall.isEnabled()*/ ) {
+        if ( le.MouseClickLeft( buttonSelectSmall.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL ) /*&& buttonSelectSmall.isEnabled()*/ ) {
             if ( small.empty() ) {
                 Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
                 currentPressedButton->drawOnPress();
@@ -500,7 +500,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
             needRedraw = true;
         }
-        else if ( le.MouseClickLeft( buttonSelectMedium.area() ) || HotKeyPressEvent( Game::MAIN_MENU_MAP_SIZE_MEDIUM ) /*&& buttonSelectMedium.isEnabled()*/ ) {
+        else if ( le.MouseClickLeft( buttonSelectMedium.area() )
+                  || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_MEDIUM ) /*&& buttonSelectMedium.isEnabled()*/ ) {
             if ( medium.empty() ) {
                 Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
                 currentPressedButton->drawOnPress();
@@ -519,7 +520,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
             needRedraw = true;
         }
-        else if ( le.MouseClickLeft( buttonSelectLarge.area() ) || HotKeyPressEvent( Game::MAIN_MENU_MAP_SIZE_LARGE ) /*&& buttonSelectLarge.isEnabled()*/ ) {
+        else if ( le.MouseClickLeft( buttonSelectLarge.area() )
+                  || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_LARGE ) /*&& buttonSelectLarge.isEnabled()*/ ) {
             if ( large.empty() ) {
                 Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
                 currentPressedButton->drawOnPress();
@@ -538,7 +540,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
             needRedraw = true;
         }
-        else if ( le.MouseClickLeft( buttonSelectXLarge.area() ) || HotKeyPressEvent( Game::MAIN_MENU_MAP_SIZE_EXTRA_LARGE ) /*&& buttonSelectXLarge.isEnabled()*/ ) {
+        else if ( le.MouseClickLeft( buttonSelectXLarge.area() )
+                  || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE ) /*&& buttonSelectXLarge.isEnabled()*/ ) {
             if ( xlarge.empty() ) {
                 Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
                 currentPressedButton->drawOnPress();
@@ -557,7 +560,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
             needRedraw = true;
         }
-        else if ( le.MouseClickLeft( buttonSelectAll.area() ) || HotKeyPressEvent( Game::MAIN_MENU_MAP_SIZE_ALL ) ) {
+        else if ( le.MouseClickLeft( buttonSelectAll.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_ALL ) ) {
             const fheroes2::Image updatedScrollbarSlider
                     = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( all.size() ), { 0, 0, originalSilder.width(), 8 },
                                                          { 0, 7, originalSilder.width(), 8 } );

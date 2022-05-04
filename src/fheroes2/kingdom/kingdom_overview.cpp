@@ -755,7 +755,7 @@ void Kingdom::openOverviewDialog()
         }
 
         // Exit this dialog.
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;
 
         // switch view: heroes/castle

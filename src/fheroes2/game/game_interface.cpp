@@ -180,7 +180,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
             cursor.SetThemes( Cursor::POINTER );
 
             le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-            if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
                 break;
         }
         else if ( visibleArea & mp ) {

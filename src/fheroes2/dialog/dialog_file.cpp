@@ -104,7 +104,7 @@ fheroes2::GameMode Dialog::FileOptions()
                 break;
             }
         }
-        else if ( le.MouseClickLeft( buttonCancel.area() ) || HotKeyCloseWindow ) {
+        else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
             result = fheroes2::GameMode::CANCEL;
             break;
         }

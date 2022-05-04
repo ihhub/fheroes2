@@ -207,7 +207,7 @@ void Dialog::ExtSettings( bool readonly )
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonOk.area() ) || HotKeyCloseWindow ) {
+        if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
             break;
         }
 

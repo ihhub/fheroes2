@@ -181,11 +181,11 @@ bool Battle::Only::ChangeSettings()
     while ( !exit && le.HandleEvents() ) {
         buttonStart.isEnabled() && le.MousePressLeft( buttonStart.area() ) ? buttonStart.drawOnPress() : buttonStart.drawOnRelease();
 
-        if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStart.area() ) ) || Game::HotKeyPressEvent( Game::DEFAULT_READY ) ) {
+        if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStart.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_READY ) ) {
             result = true;
             exit = true;
         }
-        else if ( Game::HotKeyPressEvent( Game::DEFAULT_EXIT ) )
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_EXIT ) )
             exit = true;
 
         if ( allow1 && le.MouseClickLeft( rtPortrait1 ) ) {

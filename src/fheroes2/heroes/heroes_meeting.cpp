@@ -426,7 +426,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             moveArtifactsToHero2.drawOnRelease();
         }
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;
 
         // selector troops event

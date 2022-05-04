@@ -248,7 +248,7 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
         }
 
         // exit
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             return Dialog::CANCEL;
 
         // heroes troops
@@ -283,13 +283,13 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
 
         // prev hero
         if ( buttonPrevHero.isEnabled()
-             && ( le.MouseClickLeft( buttonPrevHero.area() ) || HotKeyPressEvent( Game::MOVE_LEFT ) || timedButtonPrevHero.isDelayPassed() ) ) {
+             && ( le.MouseClickLeft( buttonPrevHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) || timedButtonPrevHero.isDelayPassed() ) ) {
             return Dialog::PREV;
         }
 
         // next hero
         if ( buttonNextHero.isEnabled()
-             && ( le.MouseClickLeft( buttonNextHero.area() ) || HotKeyPressEvent( Game::MOVE_RIGHT ) || timedButtonNextHero.isDelayPassed() ) ) {
+             && ( le.MouseClickLeft( buttonNextHero.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) || timedButtonNextHero.isDelayPassed() ) ) {
             return Dialog::NEXT;
         }
 
