@@ -127,6 +127,7 @@ namespace
         LOCALE_NL,
         LOCALE_PL,
         LOCALE_PT,
+        LOCALE_RO,
         LOCALE_RU,
         LOCALE_SK,
         LOCALE_SL,
@@ -398,6 +399,8 @@ namespace Translation
             current->locale = LocaleType::LOCALE_PL;
         else if ( str == "pt" || str == "portuguese" )
             current->locale = LocaleType::LOCALE_PT;
+        else if ( str == "ro" || str == "romanian" )
+            current->locale = LocaleType::LOCALE_RO;
         else if ( str == "ru" || str == "russian" )
             current->locale = LocaleType::LOCALE_RU;
         else if ( str == "sk" || str == "slovak" )
@@ -456,6 +459,8 @@ namespace Translation
             case LocaleType::LOCALE_IT:
                 return current->ngettext( str, 0 );
             case LocaleType::LOCALE_NL:
+            case LocaleType::LOCALE_RO:
+                return current->ngettext( str, ( n == 1 ? 0 : n == 0 || ( n != 1 && n % 100 >= 1 && n % 100 <= 19 ) ? 1 : 2 ) );
             case LocaleType::LOCALE_SV:
                 return current->ngettext( str, ( n != 1 ) );
             case LocaleType::LOCALE_SK:
