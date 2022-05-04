@@ -1433,7 +1433,7 @@ msgstr ""
 "%{artifact}."
 
 msgid ""
-"The kingdom will have by %{amount} more %{resource} at the start of the "
+"The kingdom will receive by %{amount} more %{resource} at the start of the "
 "scenario."
 msgstr "Kongedømmet ditt vil begynne brettet med %{amount} ekstra %{resource}."
 

@@ -1539,7 +1539,7 @@ msgstr ""
 "Główny bohater otrzyma artefakt \"%{artifact}\" na starcie scenariusza."
 
 msgid ""
-"The kingdom will have by %{amount} more %{resource} at the start of the "
+"The kingdom will receive by %{amount} more %{resource} at the start of the "
 "scenario."
 msgstr ""
 "Królestwo otrzyma dodatkowe %{amount} %{resource} na starcie scenariusza."

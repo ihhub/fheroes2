@@ -63,7 +63,7 @@ namespace fheroes2
         case Campaign::ScenarioBonusData::ARTIFACT: {
             const Artifact artifact( bonusData._subType );
             const ArtifactDialogElement artifactUI( artifact );
-            const TextDialogElement artifactDescriptionUI( std::shared_ptr<TextBase>( new Text( artifact.GetDescription(), FontType::normalWhite() ) ) );
+            const TextDialogElement artifactDescriptionUI( std::make_shared<Text>( artifact.GetDescription(), FontType::normalWhite() ) );
 
             showMessage( Text( "", FontType::normalWhite() ), Text( bonusData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
                          { &artifactUI, &artifactDescriptionUI } );
@@ -86,7 +86,7 @@ namespace fheroes2
         case Campaign::ScenarioBonusData::SPELL: {
             const Spell spell( bonusData._subType );
             const SpellDialogElement spellUI( spell, nullptr );
-            const TextDialogElement spellDescriptionUI( std::shared_ptr<TextBase>( new Text( spell.GetDescription(), FontType::normalWhite() ) ) );
+            const TextDialogElement spellDescriptionUI( std::make_shared<Text>( spell.GetDescription(), FontType::normalWhite() ) );
 
             showMessage( Text( "", FontType::normalWhite() ), Text( bonusData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
                          { &spellUI, &spellDescriptionUI } );
@@ -102,7 +102,7 @@ namespace fheroes2
         case Campaign::ScenarioBonusData::SKILL_PRIMARY: {
             const PrimarySkillDialogElement primarySkillUI( bonusData._subType, "+" + std::to_string( bonusData._amount ) );
             const TextDialogElement skillDescriptionUI(
-                std::shared_ptr<TextBase>( new Text( Skill::Primary::StringDescription( bonusData._subType, nullptr ), FontType::normalWhite() ) ) );
+                std::make_shared<Text>( Skill::Primary::StringDescription( bonusData._subType, nullptr ), FontType::normalWhite() ) );
 
             showMessage( Text( "", FontType::normalWhite() ), Text( bonusData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
                          { &primarySkillUI, &skillDescriptionUI } );
@@ -112,7 +112,7 @@ namespace fheroes2
             Heroes fakeHero;
             Skill::Secondary skill( bonusData._subType, bonusData._amount );
             const SecondarySkillDialogElement secondarySkillUI( skill, fakeHero );
-            const TextDialogElement skillDescriptionUI( std::shared_ptr<TextBase>( new Text( skill.GetDescription( fakeHero ), FontType::normalWhite() ) ) );
+            const TextDialogElement skillDescriptionUI( std::make_shared<Text>( skill.GetDescription( fakeHero ), FontType::normalWhite() ) );
 
             showMessage( Text( "", FontType::normalWhite() ), Text( bonusData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
                          { &secondarySkillUI, &skillDescriptionUI } );
@@ -149,7 +149,7 @@ namespace fheroes2
         case Campaign::CampaignAwardData::TYPE_GET_ARTIFACT: {
             const Artifact artifact( awardData._subType );
             const ArtifactDialogElement artifactUI( artifact );
-            const TextDialogElement artifactDescriptionUI( std::shared_ptr<TextBase>( new Text( artifact.GetDescription(), FontType::normalWhite() ) ) );
+            const TextDialogElement artifactDescriptionUI( std::make_shared<Text>( artifact.GetDescription(), FontType::normalWhite() ) );
 
             showMessage( Text( "", FontType::normalWhite() ), Text( awardData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
                          { &artifactUI, &artifactDescriptionUI } );
@@ -182,7 +182,7 @@ namespace fheroes2
         case Campaign::CampaignAwardData::TYPE_GET_SPELL: {
             const Spell spell( awardData._subType );
             const SpellDialogElement spellUI( spell, nullptr );
-            const TextDialogElement spellDescriptionUI( std::shared_ptr<TextBase>( new Text( spell.GetDescription(), FontType::normalWhite() ) ) );
+            const TextDialogElement spellDescriptionUI( std::make_shared<Text>( spell.GetDescription(), FontType::normalWhite() ) );
 
             showMessage( Text( "", FontType::normalWhite() ), Text( awardData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
                          { &spellUI, &spellDescriptionUI } );
