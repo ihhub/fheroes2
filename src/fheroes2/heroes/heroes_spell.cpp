@@ -496,7 +496,9 @@ bool ActionSpellTownPortal( Heroes & hero )
             castles.push_back( ( **it ).GetIndex() );
 
     if ( castles.empty() ) {
+        // This should never happen. The logic behind this must not allow to call this function.
         assert( 0 );
+        return false;
     }
 
     std::unique_ptr<fheroes2::StandardWindow> frameborder( new fheroes2::StandardWindow( 290, 252 ) );
