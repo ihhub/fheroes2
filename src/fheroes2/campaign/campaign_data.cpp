@@ -733,20 +733,20 @@ namespace Campaign
         // Do nothing.
     }
 
-    CampaignAwardData::CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType, const std::string & customName )
-        : CampaignAwardData( id, type, subType, 1, 0, customName )
+    CampaignAwardData::CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType, std::string customName )
+        : CampaignAwardData( id, type, subType, 1, 0, std::move( customName ) )
     {
         // Do nothing.
     }
 
     CampaignAwardData::CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType, const int32_t amount, const int32_t startScenarioID,
-                                          const std::string & customName )
+                                          std::string customName )
         : _id( id )
         , _type( type )
         , _subType( subType )
         , _amount( amount )
         , _startScenarioID( startScenarioID )
-        , _customName( customName )
+        , _customName( std::move( customName ) )
     {
         // Do nothing.
     }

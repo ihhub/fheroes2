@@ -1161,7 +1161,7 @@ msgstr " pokonany"
 msgid " will always run away from your army."
 msgstr " zawsze ucieknie przed twoją armią."
 
-msgid " will be willing to always join your army."
+msgid " will be willing to join your army."
 msgstr " zawsze dołączy do twojej armii."
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
@@ -1178,10 +1178,10 @@ msgstr "Królestwo otrzyma dodatkowe %{resource} na starcie scenariusza."
 msgid "\"%{spell}\" spell will be carried over the scenario."
 msgstr "Zaklęcie \"%{spell}\" zostanie przeniesione do następnego scenariusza."
 
-msgid "%{hero} hero can be hired in the scenario."
+msgid "%{hero} can be hired in the scenario."
 msgstr "Bohater %{hero} może być zwerbowany w tym scenariuszu."
 
-msgid "Defeated %{hero} hero will not appear in the subsequent scenarios."
+msgid "Defeated %{hero} will not appear in the subsequent scenarios."
 msgstr ""
 "Pokonany bohater %{hero} nie będzie dostępny w kolejnych scenariuszach."
 
@@ -1539,7 +1539,7 @@ msgstr ""
 "Główny bohater otrzyma artefakt \"%{artifact}\" na starcie scenariusza."
 
 msgid ""
-"The kingdom will have additional %{amount} %{resource} at the start of the "
+"The kingdom will have by %{amount} more %{resource} at the start of the "
 "scenario."
 msgstr ""
 "Królestwo otrzyma dodatkowe %{amount} %{resource} na starcie scenariusza."

@@ -732,8 +732,8 @@ namespace
 
         COUT( "Bonuses:" )
         const std::vector<Campaign::ScenarioBonusData> & bonusChoices = scenario.getBonuses();
-        for ( size_t i = 0; i < bonusChoices.size(); ++i ) {
-            COUT( "- " << bonusChoices[i].getName() << " : " << bonusChoices[i].getDescription() )
+        for ( const Campaign::ScenarioBonusData & bonus : bonusChoices ) {
+            COUT( "- " << bonus.getName() << " : " << bonus.getDescription() )
         }
 
         if ( bonusChoices.size() > 0 ) {
