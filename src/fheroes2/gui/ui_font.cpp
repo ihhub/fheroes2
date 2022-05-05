@@ -35,31 +35,51 @@ namespace
         fheroes2::updateShadow( letter, { -1, 1 }, 2 );
     }
 
-    void generatePolishAlphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
+    void generateCP1250Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
             std::vector<fheroes2::Sprite> & original = icnVsSprite[icnId];
 
             original.resize( 96 );
             original.insert( original.end(), 128, original[0] );
-            original[108] = original[51];
-            original[111] = original[58];
-            original[124] = original[83];
-            original[127] = original[90];
-            original[131] = original[44];
-            original[133] = original[33];
-            original[143] = original[58];
-            original[147] = original[76];
-            original[153] = original[65];
-            original[159] = original[90];
-            original[166] = original[35];
-            original[170] = original[37];
-            original[177] = original[46];
-            original[179] = original[47];
-            original[198] = original[67];
-            original[202] = original[69];
-            original[209] = original[78];
-            original[211] = original[79];
+            original[140 - 32] = original[83 - 32];
+            original[143 - 32] = original[90 - 32];
+            original[156 - 32] = original[115 - 32];
+            original[159 - 32] = original[122 - 32];
+            original[163 - 32] = original[76 - 32];
+            original[165 - 32] = original[65 - 32];
+            // Uppercase S with cedilla
+            original[170 - 32] = original[83 - 32];
+            original[175 - 32] = original[90 - 32];
+            original[179 - 32] = original[108 - 32];
+            original[185 - 32] = original[97 - 32];
+            // Lowercase s with cedilla
+            original[186 - 32] = original[115 - 32];
+            original[191 - 32] = original[122 - 32];
+            // Uppercase A with circumflex
+            original[194 - 32] = original[65 - 32];
+            // Uppercase A with breve
+            original[195 - 32] = original[65 - 32];
+            original[198 - 32] = original[67 - 32];
+            original[202 - 32] = original[69 - 32];
+            // Uppercase I with circumflex
+            original[206 - 32] = original[73 - 32];
+            original[209 - 32] = original[78 - 32];
+            original[211 - 32] = original[79 - 32];
+            // Uppercase T with cedilla
+            original[222 - 32] = original[84 - 32];
+            // Lowercase a with circumflex
+            original[226 - 32] = original[97 - 32];
+            // Lowercase a with breve
+            original[227 - 32] = original[97 - 32];
+            original[230 - 32] = original[99 - 32];
+            original[234 - 32] = original[101 - 32];
+            // Lowercase i with circumflex
+            original[238 - 32] = original[105 - 32];
+            original[241 - 32] = original[110 - 32];
+            original[243 - 32] = original[111 - 32];
+            // Lowercase t with cedilla
+            original[254 - 32] = original[116 - 32];
         }
 
         // TODO: modify newly added characters accordingly.
@@ -1853,7 +1873,8 @@ namespace fheroes2
     {
         switch ( language ) {
         case SupportedLanguage::Polish:
-            generatePolishAlphabet( icnVsSprite );
+        case SupportedLanguage::Romanian:
+            generateCP1250Alphabet( icnVsSprite );
             break;
         case SupportedLanguage::German:
             generateGermanAlphabet( icnVsSprite );
@@ -1898,6 +1919,7 @@ namespace fheroes2
         case SupportedLanguage::Belarusian:
         case SupportedLanguage::Bulgarian:
         case SupportedLanguage::Ukrainian:
+        case SupportedLanguage::Romanian:
             return true;
         default:
             break;
