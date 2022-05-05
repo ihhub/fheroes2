@@ -39,6 +39,8 @@ msgid ""
 "Several\n"
 "%{monster}"
 msgstr ""
+"Некалькі/n"
+"%{monster}"
 
 msgid ""
 "A pack of\n"
