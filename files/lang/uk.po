@@ -2410,9 +2410,8 @@ msgstr ""
 msgid "Music Type"
 msgstr "Тип музики"
 
-#, fuzzy
 msgid "Select Game Language"
-msgstr "Вибрати мову гри"
+msgstr "Обрати мову гри"
 
 msgid "Change language of the game."
 msgstr ""
@@ -2511,9 +2510,8 @@ msgstr ""
 msgid "Your army too big!"
 msgstr "Ваша армія завелика!"
 
-#, fuzzy
 msgid "Select Game Language:"
-msgstr "Вибрати мову гри:"
+msgstr "Обрати мову гри:"
 
 msgid "%{name} has gained a level."
 msgstr ""
@@ -2770,9 +2768,8 @@ msgstr "Немає мап такого розміру"
 msgid "Small Maps"
 msgstr "Маленькі Мапи"
 
-#, fuzzy
 msgid "View only maps of size small (36 x 36)."
-msgstr "Дивіться лише мапи малого розміру (36 x 36)."
+msgstr "Дивитися лише мапи малого розміру (36 x 36)."
 
 msgid "Medium Maps"
 msgstr ""
@@ -5394,27 +5391,21 @@ msgid ""
 "Your hero produces %{count} gold pieces per day as tax revenue from estates."
 msgstr ""
 
-#, fuzzy
 msgid "Blue"
 msgstr "Синій"
 
-#, fuzzy
 msgid "Green"
 msgstr "Зелений"
 
-#, fuzzy
 msgid "Red"
 msgstr "Червоний"
 
-#, fuzzy
 msgid "Yellow"
 msgstr "Жовтий"
 
-#, fuzzy
 msgid "Orange"
-msgstr "Оранжевий"
+msgstr "Помаранчевий"
 
-#, fuzzy
 msgid "Purple"
 msgstr "Фіолетовий"
 
@@ -5551,27 +5542,21 @@ msgstr ""
 msgid "morale|Treason"
 msgstr "Зрада"
 
-#, fuzzy
 msgid "morale|Awful"
 msgstr "Жахлива"
 
-#, fuzzy
 msgid "morale|Poor"
 msgstr "Погана"
 
-#, fuzzy
 msgid "morale|Normal"
 msgstr "Звичайна"
 
-#, fuzzy
 msgid "morale|Good"
 msgstr "Добра"
 
-#, fuzzy
 msgid "morale|Great"
 msgstr "Чудова"
 
-#, fuzzy
 msgid "morale|Blood!"
 msgstr "Кров!"
 
@@ -6608,7 +6593,6 @@ msgstr ""
 msgid "Double damage to Undead"
 msgstr ""
 
-#
 msgid "% magic resistance"
 msgstr ""
 
@@ -6630,27 +6614,21 @@ msgstr ""
 msgid "% immunity to %{spell} spell"
 msgstr ""
 
-#
 msgid "% damage from Elemental spells"
 msgstr ""
 
-#
 msgid "% chance to Dispel beneficial spells"
 msgstr ""
 
-#
 msgid "% chance to Paralyze"
 msgstr ""
 
-#
 msgid "% chance to Petrify"
 msgstr ""
 
-#
 msgid "% chance to Blind"
 msgstr ""
 
-#
 msgid "% chance to Curse"
 msgstr ""
 
@@ -6693,7 +6671,6 @@ msgstr ""
 msgid "Decreases enemy's morale by "
 msgstr ""
 
-#
 msgid "% chance to halve enemy"
 msgstr ""
 
@@ -6706,25 +6683,21 @@ msgstr ""
 msgid "No Morale"
 msgstr ""
 
-#
 msgid "200% damage from Fire spells"
 msgstr ""
 
-#
 msgid "200% damage from Cold spells"
 msgstr ""
 
 msgid "% damage from %{spell} spell"
 msgstr ""
 
-#
 msgid "% immunity to "
 msgstr ""
 
 msgid "Lightning"
 msgstr ""
 
-#
 msgid "% damage from "
 msgstr ""
 
@@ -8370,7 +8343,6 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr ""
 
-#, fuzzy
 msgid "world: show terrain penalty"
 msgstr "мир: показувати пенальті місцевості"
 
@@ -8386,11 +8358,9 @@ msgstr ""
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 
-#, fuzzy
 msgid "castle: allow guardians"
 msgstr "замок: дозволити захистників"
 
-#, fuzzy
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "герої: дозволити придбати книгу чарів з Святинь"
 
@@ -8406,13 +8376,11 @@ msgstr ""
 msgid "battle: deterministic events"
 msgstr ""
 
-#, fuzzy
 msgid "game: show system info"
 msgstr "гра: показувати системну інфу"
 
-#, fuzzy
 msgid "game: autosave will be made at the beginning of the day"
-msgstr "гра: робити автозберігання на початку дня"
+msgstr "гра: автозберігати на початку дня"
 
 msgid "game: use evil interface"
 msgstr ""
@@ -8477,12 +8445,11 @@ msgstr ""
 msgid "An unknown force is being resurrected..."
 msgstr ""
 
-#, fuzzy
 msgid ""
 "Check the newest version of the game at\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-"Перевірити нові версію гри на\n"
+"Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
