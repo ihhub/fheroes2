@@ -193,7 +193,7 @@ namespace
 
         Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.ExtGameEvilInterface();
-        const int dialogIcnId = isEvilInterface ? ICN::SPANBKG : ICN::SPANBKGE;
+        const int dialogIcnId = isEvilInterface ? ICN::SPANBKGE : ICN::SPANBKG;
         const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( dialogIcnId, 0 );
         const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( dialogIcnId, 1 );
 
