@@ -43,16 +43,16 @@ namespace
         COUT( message )
 
         if ( buttonTypes & Dialog::YES ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_READY ) << " to choose YES." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_OKAY ) << " to choose YES." )
         }
         if ( buttonTypes & Dialog::NO ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_EXIT ) << " to choose NO." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to choose NO." )
         }
         if ( buttonTypes & Dialog::OK ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_READY ) << " to choose OK." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_OKAY ) << " to choose OK." )
         }
         if ( buttonTypes & Dialog::CANCEL ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_EXIT ) << " to choose CANCEL." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to choose CANCEL." )
         }
     }
 }

@@ -2609,7 +2609,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
     LocalEvent & le = LocalEvent::Get();
 
     // reset cast
-    if ( le.MousePressRight() || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_EXIT ) ) {
+    if ( le.MousePressRight() || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
         humanturn_spell = Spell::NONE;
         teleport_src = -1;
     }
@@ -5051,7 +5051,7 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
          && ( le.MouseClickLeft( btn_auto.area() )
               || ( le.KeyPress()
                    && ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTOSWITCH )
-                        || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_EXIT )
+                        || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL )
                              && Dialog::YES == Dialog::Message( "", _( "Break auto battle?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) ) ) ) ) {
         _breakAutoBattleForColor = arena.GetCurrentColor();
     }

@@ -813,7 +813,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             if ( isMovingHero )
                 stopHero = true;
             // exit dialog
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_EXIT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) )
                 res = EventExit();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::END_TURN ) )
                 res = EventEndTurn();

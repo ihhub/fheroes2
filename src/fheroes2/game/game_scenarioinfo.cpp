@@ -284,11 +284,11 @@ namespace
 
                 display.render();
             }
-            else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancel.area() ) ) {
+            else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
                 result = fheroes2::GameMode::MAIN_MENU;
                 break;
             }
-            else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_READY ) || le.MouseClickLeft( buttonOk.area() ) ) {
+            else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) {
                 DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.MapsFile() << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) )
                 result = fheroes2::GameMode::START_GAME;
                 break;

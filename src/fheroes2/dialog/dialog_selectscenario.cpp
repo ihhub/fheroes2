@@ -469,12 +469,12 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
         bool needRedraw = false;
 
-        if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_READY ) || listbox.selectOk ) {
+        if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || listbox.selectOk ) {
             MapsFileInfoList::const_iterator it = std::find( all.begin(), all.end(), listbox.GetCurrent() );
             return ( it != all.end() ) ? &( *it ) : nullptr;
         }
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_EXIT ) ) {
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             return nullptr;
         }
 
