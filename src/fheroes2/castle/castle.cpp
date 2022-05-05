@@ -1182,50 +1182,61 @@ u32 Castle::GetBuildingRequirement( u32 build ) const
     return requirement;
 }
 
-/* check allow buy building */
-int Castle::CheckBuyBuilding( u32 build ) const
+int Castle::CheckBuyBuilding( const uint32_t build ) const
 {
-    if ( build & building )
+    if ( build & building ) {
         return ALREADY_BUILT;
+    }
 
     switch ( build ) {
-    // allow build castle
     case BUILD_CASTLE:
-        if ( !Modes( ALLOWCASTLE ) )
+        if ( !Modes( ALLOWCASTLE ) ) {
             return BUILD_DISABLE;
+        }
         break;
-    // buid shipyard only nearly sea
     case BUILD_SHIPYARD:
-        if ( !HaveNearlySea() )
+        if ( !HaveNearlySea() ) {
             return BUILD_DISABLE;
+        }
         break;
     case BUILD_SHRINE:
-        if ( Race::NECR != GetRace() || !Settings::Get().isCurrentMapPriceOfLoyalty() )
+        if ( Race::NECR != GetRace() || !Settings::Get().isCurrentMapPriceOfLoyalty() ) {
             return BUILD_DISABLE;
+        }
         break;
     case BUILD_TAVERN:
-        if ( Race::NECR == GetRace() )
+        if ( Race::NECR == GetRace() ) {
             return BUILD_DISABLE;
+        }
         break;
-
     default:
         break;
     }
 
-    if ( !Modes( ALLOWBUILD ) )
+    if ( build >= BUILD_MAGEGUILD2 && build <= BUILD_MAGEGUILD5 ) {
+        const uint32_t prevMageGuild = build >> 1;
+
+        if ( !( building & prevMageGuild ) ) {
+            return BUILD_DISABLE;
+        }
+    }
+
+    if ( !Modes( ALLOWBUILD ) ) {
         return NOT_TODAY;
+    }
 
     if ( isCastle() ) {
-        if ( build == BUILD_TENT )
+        if ( build == BUILD_TENT ) {
             return BUILD_DISABLE;
+        }
     }
     else {
-        if ( build != BUILD_CASTLE )
+        if ( build != BUILD_CASTLE ) {
             return NEED_CASTLE;
+        }
     }
 
     switch ( build ) {
-        // check upgrade dwelling
     case DWELLING_UPGRADE2:
         if ( ( Race::WRLK | Race::WZRD ) & race )
             return UNKNOWN_UPGRADE;
@@ -1255,16 +1266,17 @@ int Castle::CheckBuyBuilding( u32 build ) const
         break;
     }
 
-    // check build requirements
-    const u32 requirement = Castle::GetBuildingRequirement( build );
+    const uint32_t requirement = Castle::GetBuildingRequirement( build );
 
-    for ( u32 itr = 0x00000001; itr; itr <<= 1 )
-        if ( ( requirement & itr ) && !( building & itr ) )
+    for ( uint32_t itr = 0x00000001; itr; itr <<= 1 ) {
+        if ( ( requirement & itr ) && !( building & itr ) ) {
             return REQUIRES_BUILD;
+        }
+    }
 
-    // check valid payment
-    if ( !GetKingdom().AllowPayment( PaymentConditions::BuyBuilding( race, build ) ) )
+    if ( !GetKingdom().AllowPayment( PaymentConditions::BuyBuilding( race, build ) ) ) {
         return LACK_RESOURCES;
+    }
 
     return ALLOW_BUILD;
 }
