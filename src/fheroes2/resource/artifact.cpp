@@ -944,6 +944,10 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
             }
             else {
                 art = newArtifact;
+
+                if ( art.GetID() == Artifact::SPELL_SCROLL ) {
+                    art.SetSpell( Spell::RANDOM );
+                }
             }
         }
 
