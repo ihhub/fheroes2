@@ -263,6 +263,23 @@ std::string Game::getHotKeyNameByEventId( const HotKeyEvent eventID )
     return StringUpper( KeySymGetName( hotKeyEventInfo[hotKeyEventToInt( eventID )].key ) );
 }
 
+std::string Game::getHotKeyEventNameByEventId( const HotKeyEvent eventID )
+{
+    return hotKeyEventInfo[hotKeyEventToInt( eventID )].name;
+}
+
+std::vector<Game::HotKeyEvent> Game::getAllHotKeyEvents()
+{
+    std::vector<Game::HotKeyEvent> events;
+    events.reserve( hotKeyEventInfo.size() - 2 );
+
+    for ( size_t i = 1; i < hotKeyEventInfo.size() - 1; ++i ) {
+        events.emplace_back( static_cast<Game::HotKeyEvent>( i ) );
+    }
+
+    return events;
+}
+
 void Game::HotKeysLoad( std::string filename )
 {
     initializeHotKeyEvents();

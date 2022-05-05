@@ -660,6 +660,30 @@ void Settings::setFullScreen( const bool enable )
     }
 }
 
+void Settings::setMonochromeCursor( const bool enable )
+{
+    if ( enable ) {
+        opt_global.SetModes( GLOBAL_MONOCHROME_CURSOR );
+        Cursor::Get().setMonochromeCursor( true );
+    }
+    else {
+        opt_global.ResetModes( GLOBAL_MONOCHROME_CURSOR );
+        Cursor::Get().setMonochromeCursor( false );
+    }
+}
+
+void Settings::setTextSupportMode( const bool enable )
+{
+    if ( enable ) {
+        opt_global.SetModes( GLOBAL_TEXT_SUPPORT_MODE );
+        Logging::setTextSupportMode( true );
+    }
+    else {
+        opt_global.ResetModes( GLOBAL_TEXT_SUPPORT_MODE );
+        Logging::setTextSupportMode( false );
+    }
+}
+
 /* set scroll speed: 1 - 4 */
 void Settings::SetScrollSpeed( int speed )
 {
@@ -669,6 +693,16 @@ void Settings::SetScrollSpeed( int speed )
 bool Settings::isPriceOfLoyaltySupported() const
 {
     return opt_global.Modes( GLOBAL_PRICELOYALTY );
+}
+
+bool Settings::isMonochromeCursorEnabled() const
+{
+    return opt_global.Modes( GLOBAL_MONOCHROME_CURSOR );
+}
+
+bool Settings::isTextSupportModeEnabled() const
+{
+    return opt_global.Modes( GLOBAL_TEXT_SUPPORT_MODE );
 }
 
 bool Settings::ShowControlPanel() const

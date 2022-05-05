@@ -21,6 +21,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace Game
 {
@@ -137,6 +138,10 @@ namespace Game
     }
 
     std::string getHotKeyNameByEventId( const HotKeyEvent eventID );
+
+    std::string getHotKeyEventNameByEventId( const HotKeyEvent eventID );
+
+    std::vector<Game::HotKeyEvent> getAllHotKeyEvents();
 
     void KeyboardGlobalFilter( int sdlKey, int mod );
 

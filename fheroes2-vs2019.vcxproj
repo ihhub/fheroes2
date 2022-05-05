@@ -257,6 +257,7 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_gameinfo.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_giftresources.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_guardian.cpp" />
+    <ClCompile Include="src\fheroes2\dialog\dialog_hotkeys.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_language_selection.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_levelup.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_marketplace.cpp" />
@@ -453,6 +454,7 @@
     <ClInclude Include="src\fheroes2\castle\mageguild.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_game_settings.h" />
+    <ClInclude Include="src\fheroes2\dialog\dialog_hotkeys.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_language_selection.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_resolution.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_selectitems.h" />

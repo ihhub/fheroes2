@@ -182,6 +182,7 @@ public:
     // Only for software emulation.
     void setVideoPlaybackCursor();
 
+    // Do not call this method directly anywhere except Settings.
     void setMonochromeCursor( const bool enable )
     {
         _monochromeCursorThemes = enable;
