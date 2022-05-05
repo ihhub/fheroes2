@@ -96,17 +96,17 @@ namespace
             // Do nothing.
         }
 
-        void ActionListSingleClick( Game::HotKeyEvent & ) override
+        void ActionListSingleClick( Game::HotKeyEvent & /*unused*/ ) override
         {
             // Do nothing.
         }
 
-        void ActionListPressRight( Game::HotKeyEvent & ) override
+        void ActionListPressRight( Game::HotKeyEvent & /*unused*/ ) override
         {
             // Do nothing.
         }
 
-        void ActionListDoubleClick( Game::HotKeyEvent & ) override
+        void ActionListDoubleClick( Game::HotKeyEvent & /*unused*/ ) override
         {
             // Do nothing.
         }
@@ -174,7 +174,7 @@ namespace fheroes2
             if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyCloseWindow() ) {
                 return;
             }
-            else if ( le.MousePressRight( buttonOk.area() ) ) {
+            if ( le.MousePressRight( buttonOk.area() ) ) {
                 fheroes2::Text header( _( "Okay" ), fheroes2::FontType::normalYellow() );
                 fheroes2::Text body( _( "Exit this menu without doing anything." ), fheroes2::FontType::normalWhite() );
                 fheroes2::showMessage( header, body, 0 );

@@ -444,7 +444,7 @@ namespace fheroes2
                 break;
             case SelectedWindow::CursorType:
                 conf.setMonochromeCursor( !conf.isMonochromeCursorEnabled() );
-                ::Cursor::Get().Refresh();
+                ::Cursor::Refresh();
                 windowType = SelectedWindow::UpdateSettings;
                 break;
             case SelectedWindow::TextSupportMode:
