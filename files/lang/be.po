@@ -32,7 +32,7 @@ msgid ""
 "A few\n"
 "%{monster}"
 msgstr ""
-"Трошкі/n"
+"Трохі/n"
 "%{monster}"
 
 msgid ""
@@ -46,64 +46,77 @@ msgid ""
 "A pack of\n"
 "%{monster}"
 msgstr ""
+"Крыху/n"
+"%{monster}"
 
 msgid ""
 "Lots of\n"
 "%{monster}"
 msgstr ""
+"Шмат/n"
+"%{monster}"
 
 msgid ""
 "A horde of\n"
 "%{monster}"
 msgstr ""
+"Арда/n"
+"%{monster}"
 
 msgid ""
 "A throng of\n"
 "%{monster}"
 msgstr ""
+"Натоўп/n"
+"%{monster}"
 
 msgid ""
 "A swarm of\n"
 "%{monster}"
 msgstr ""
+"Рой/n"
+"%{monster}"
 
 msgid ""
 "Zounds of\n"
 "%{monster}"
 msgstr ""
+"Безліч/n"
+"%{monster}"
 
 msgid ""
 "A legion of\n"
 "%{monster}"
-msgstr "Легіон\n"
+msgstr ""
+"Легіён\n"
 "%{monster}"
 
 msgid "army|Few"
-msgstr ""
+msgstr "Трохі"
 
 msgid "army|Several"
-msgstr ""
+msgstr "Некалькі"
 
 msgid "army|Pack"
-msgstr ""
+msgstr "Крыху"
 
 msgid "army|Lots"
-msgstr ""
+msgstr "Шмат"
 
 msgid "army|Horde"
-msgstr ""
+msgstr "Арда"
 
 msgid "army|Throng"
-msgstr ""
+msgstr "Натоўп"
 
 msgid "army|Swarm"
-msgstr ""
+msgstr "Рой"
 
 msgid "army|Zounds"
-msgstr ""
+msgstr "Безліч"
 
 msgid "army|Legion"
-msgstr ""
+msgstr "Легіён"
 
 msgid "All %{race} troops +1"
 msgstr ""
@@ -226,28 +239,28 @@ msgid ""
 msgstr ""
 
 msgid "The enemy has surrendered!"
-msgstr ""
+msgstr "Праціўнік здаўся!"
 
 msgid "The enemy has fled!"
-msgstr ""
+msgstr "Праціўнік уцёк!"
 
 msgid "A glorious victory!"
-msgstr ""
+msgstr "Выдатная перамога!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
-msgstr ""
+msgstr "За мужнасць у баі %{name} атрымлівае %{exp} вопыту."
 
 msgid "The cowardly %{name} flees from battle."
-msgstr ""
+msgstr "%{name} баязліва ўцякае з поля бітвы."
 
 msgid "%{name} surrenders to the enemy, and departs in shame."
-msgstr ""
+msgstr "%{name} здаўся праціўніку і пакінуў з ганьбай."
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
-msgstr ""
+msgstr "Вашы войскі былі знішчаны і %{name} пакідае вас."
 
 msgid "Your force suffer a bitter defeat."
-msgstr ""
+msgstr "Вашы войскі былі знішчаны."
 
 msgid "Battlefield Casualties"
 msgstr ""
