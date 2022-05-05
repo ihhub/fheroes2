@@ -151,7 +151,7 @@ namespace
 
     void drawHotKeyOptions( const fheroes2::Rect & optionRoi )
     {
-        drawOption( optionRoi, _( "Hot Keys" ), _( "In-game" ), ICN::CSPANEL, 4 );
+        drawOption( optionRoi, _( "Hot Keys" ), _( "In-game" ), ICN::CSPANEL, 5 );
     }
 
     void drawCursorTypeOptions( const fheroes2::Rect & optionRoi )
