@@ -1032,7 +1032,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
         }
 
         // exit
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_EXIT ) || le.MouseClickLeft( btnDecline.area() ) )
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( btnDecline.area() ) )
             break;
     }
 

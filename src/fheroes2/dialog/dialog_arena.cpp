@@ -118,11 +118,11 @@ int Dialog::SelectSkillFromArena( void )
 
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_LEFT ) && Skill::Primary::UNKNOWN != InfoSkillPrev( res ) ) {
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) && Skill::Primary::UNKNOWN != InfoSkillPrev( res ) ) {
             res = InfoSkillPrev( res );
             redraw = true;
         }
-        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_RIGHT ) && Skill::Primary::UNKNOWN != InfoSkillNext( res ) ) {
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) && Skill::Primary::UNKNOWN != InfoSkillNext( res ) ) {
             res = InfoSkillNext( res );
             redraw = true;
         }
@@ -161,7 +161,7 @@ int Dialog::SelectSkillFromArena( void )
             display.render();
         }
 
-        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_READY ) || le.MouseClickLeft( buttonOk.area() ) )
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) )
             break;
     }
 

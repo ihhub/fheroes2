@@ -411,7 +411,7 @@ void SpellBook::Edit( const HeroBase & hero )
             current_index += spellsPerPage * 2;
             redraw = true;
         }
-        else if ( le.MouseClickLeft( clos_rt ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_EXIT ) )
+        else if ( le.MouseClickLeft( clos_rt ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) )
             break;
         else if ( le.MouseClickLeft( pos ) ) {
             const int32_t index = GetRectIndex( coords, le.GetMouseCursor() );
