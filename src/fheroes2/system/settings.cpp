@@ -670,6 +670,8 @@ void Settings::setMonochromeCursor( const bool enable )
         opt_global.ResetModes( GLOBAL_MONOCHROME_CURSOR );
         Cursor::Get().setMonochromeCursor( false );
     }
+
+    Cursor::Refresh();
 }
 
 void Settings::setTextSupportMode( const bool enable )
