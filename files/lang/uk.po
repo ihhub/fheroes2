@@ -2108,7 +2108,7 @@ msgid ""
 msgstr ""
 
 msgid "This town may not be upgraded to a castle."
-msgstr ""
+msgstr "Розбудува замку в цьому мiстi неможлива"
 
 #, fuzzy
 msgid "Town"
@@ -5706,53 +5706,41 @@ msgstr ""
 msgid "week|Condor"
 msgstr ""
 
-#, fuzzy
 msgid "Desert"
 msgstr "Пустеля"
 
-#, fuzzy
 msgid "Snow"
 msgstr "Сніг"
 
-#, fuzzy
 msgid "Wasteland"
 msgstr "Пустощі"
 
-#, fuzzy
 msgid "Beach"
 msgstr "Пляж"
 
-#, fuzzy
 msgid "Lava"
 msgstr "Лава"
 
-#, fuzzy
 msgid "Dirt"
-msgstr "Земля"
+msgstr "Багнюка"
 
-#, fuzzy
 msgid "Grass"
 msgstr "Трава"
 
-#, fuzzy
 msgid "Ocean"
 msgstr "Океан"
 
-#, fuzzy
 msgid "maps|Small"
 msgstr "Мала"
 
-#, fuzzy
 msgid "maps|Medium"
 msgstr "Середня"
 
-#, fuzzy
 msgid "maps|Large"
 msgstr "Велика"
 
-#, fuzzy
 msgid "maps|Extra Large"
-msgstr "Дуже велика"
+msgstr "Надвелика"
 
 msgid "maps|Custom Size"
 msgstr ""
