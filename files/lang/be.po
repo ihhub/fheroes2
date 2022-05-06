@@ -5424,7 +5424,7 @@ msgid "luck|Bad"
 msgstr "Дрэнная"
 
 msgid "luck|Normal"
-msgstr "Звыйчайная"
+msgstr "Звычайная"
 
 msgid "luck|Good"
 msgstr "Добрая"
