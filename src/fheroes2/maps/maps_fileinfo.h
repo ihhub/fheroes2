@@ -108,7 +108,7 @@ namespace Maps
 
         enum LossCondition : uint8_t
         {
-            LOSS_DEFAULT = 0,
+            LOSS_EVERYTHING = 0,
             LOSS_TOWN = 1,
             LOSS_HERO = 2,
             LOSS_OUT_OF_TIME = 3

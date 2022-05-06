@@ -23,14 +23,21 @@
 #include "agg.h"
 #include "ai_normal.h"
 #include "game_interface.h"
+#include "game_over.h"
 #include "ground.h"
 #include "logging.h"
 #include "mus.h"
+#include "settings.h"
 #include "world.h"
 
 namespace
 {
     const double fighterStrengthMultiplier = 3;
+
+    bool isHeroLossCondition()
+    {
+        return ( Settings::Get().ConditionWins() & GameOver::WINS_HERO ) != 0;
+    }
 
     void setHeroRoles( KingdomHeroes & heroes )
     {
@@ -39,9 +46,18 @@ namespace
             return;
         }
 
+        const Heroes * heroToLoose = isHeroLossCondition() ? world.GetHeroesCondWins() : nullptr;
+
         if ( heroes.size() == 1 ) {
-            // A single hero has no roles.
-            heroes[0]->setAIRole( Heroes::Role::HUNTER );
+            if ( heroToLoose == heroes[0] ) {
+                // TODO: a hero to be lost must be marked as a champion.
+                heroes[0]->setAIRole( Heroes::Role::FIGHTER );
+            }
+            else {
+                // A single hero has no roles.
+                heroes[0]->setAIRole( Heroes::Role::HUNTER );
+            }
+
             return;
         }
 
@@ -57,6 +73,12 @@ namespace
         const double medianStrength = heroStrength[heroStrength.size() / 2].first;
 
         for ( std::pair<double, Heroes *> & hero : heroStrength ) {
+            // TODO: a hero to be lost must be marked as a champion.
+            if ( hero.second == heroToLoose ) {
+                hero.second->setAIRole( Heroes::Role::FIGHTER );
+                continue;
+            }
+
             if ( hero.first > medianStrength * fighterStrengthMultiplier ) {
                 hero.second->setAIRole( Heroes::Role::FIGHTER );
             }
