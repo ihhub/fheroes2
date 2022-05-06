@@ -255,7 +255,7 @@ int Artifact::getArtifactValue() const
     return 0;
 }
 
-void Artifact::SetSpell( int v )
+void Artifact::SetSpell( const int v )
 {
     if ( id != SPELL_SCROLL ) {
         // This method must be called only for Spell Scroll artifact.
@@ -944,6 +944,10 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
             }
             else {
                 art = newArtifact;
+
+                if ( art.GetID() == Artifact::SPELL_SCROLL ) {
+                    art.SetSpell( Spell::RANDOM );
+                }
             }
         }
 

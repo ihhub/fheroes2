@@ -209,7 +209,7 @@ public:
 
     int getArtifactValue() const;
 
-    // return index sprite objnarti.icn
+    // return index of the sprite from objnarti.icn
     u32 IndexSprite() const
     {
         return id < UNKNOWN ? id * 2 + 1 : 0;
@@ -221,14 +221,13 @@ public:
         return id;
     }
 
-    // reutrn index from artifact.icn
+    // return index from artifact.icn
     u32 IndexSprite64() const
     {
         return id + 1;
     }
 
-    void SetSpell( int );
-
+    void SetSpell( const int v );
     int32_t getSpellId() const;
 
     const char * GetName( void ) const;
