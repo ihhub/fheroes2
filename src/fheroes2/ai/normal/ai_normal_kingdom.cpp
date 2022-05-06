@@ -46,10 +46,10 @@ namespace
             return;
         }
 
-        const Heroes * heroToLoose = isHeroLossCondition() ? world.GetHeroesCondWins() : nullptr;
+        const Heroes * heroToLose = isHeroLossCondition() ? world.GetHeroesCondWins() : nullptr;
 
         if ( heroes.size() == 1 ) {
-            if ( heroToLoose == heroes[0] ) {
+            if ( heroToLose == heroes[0] ) {
                 // TODO: a hero to be lost must be marked as a champion.
                 heroes[0]->setAIRole( Heroes::Role::FIGHTER );
             }
@@ -74,7 +74,7 @@ namespace
 
         for ( std::pair<double, Heroes *> & hero : heroStrength ) {
             // TODO: a hero to be lost must be marked as a champion.
-            if ( hero.second == heroToLoose ) {
+            if ( hero.second == heroToLose ) {
                 hero.second->setAIRole( Heroes::Role::FIGHTER );
                 continue;
             }
