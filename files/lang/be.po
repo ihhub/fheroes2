@@ -186,10 +186,10 @@ msgid ""
 msgstr ""
 
 msgid "Speed"
-msgstr ""
+msgstr "Скорасць"
 
 msgid "Speed: %{speed}"
-msgstr ""
+msgstr "Скорасць: %{speed}"
 
 msgid "Army Order"
 msgstr ""
@@ -298,25 +298,25 @@ msgid "Captain of %{name}"
 msgstr ""
 
 msgid "Attack"
-msgstr ""
+msgstr "Атака"
 
 msgid "Defense"
-msgstr ""
+msgstr "Абарона"
 
 msgid "Spell Power"
-msgstr ""
+msgstr "Моц"
 
 msgid "Knowledge"
-msgstr ""
+msgstr "Веды"
 
 msgid "Morale"
-msgstr ""
+msgstr "Мараль"
 
 msgid "Luck"
-msgstr ""
+msgstr "Удача"
 
 msgid "Spell Points"
-msgstr ""
+msgstr "Адзінкі магіі"
 
 msgid "Hero's Options"
 msgstr ""
@@ -584,10 +584,10 @@ msgid "Surrender disabled"
 msgstr ""
 
 msgid "Damage: %{max}"
-msgstr ""
+msgstr "Урон: %{max}"
 
 msgid "Damage: %{min} - %{max}"
-msgstr ""
+msgstr "Урон: %{min} - %{max}"
 
 msgid "Perish: %{max}"
 msgstr ""
@@ -2217,25 +2217,25 @@ msgid "Are you sure you want to dismiss this army?"
 msgstr ""
 
 msgid "Attack Skill"
-msgstr ""
+msgstr "Атака"
 
 msgid "Defense Skill"
-msgstr ""
+msgstr "Абарона"
 
 msgid "Shots"
-msgstr ""
+msgstr "Стрэлы"
 
 msgid "Shots Left"
-msgstr ""
+msgstr "Астатак стрэлаў"
 
 msgid "Damage"
-msgstr ""
+msgstr "Урон"
 
 msgid "Hit Points"
-msgstr ""
+msgstr "Здароўе"
 
 msgid "Hit Points Left"
-msgstr ""
+msgstr "Астатак здароўя"
 
 msgid "Followers"
 msgstr ""
@@ -5415,25 +5415,25 @@ msgid "View Towns and Castles."
 msgstr ""
 
 msgid "luck|Cursed"
-msgstr ""
+msgstr "Праклятая"
 
 msgid "luck|Awful"
-msgstr ""
+msgstr "Няздольная"
 
 msgid "luck|Bad"
-msgstr ""
+msgstr "Дрэнная"
 
 msgid "luck|Normal"
-msgstr ""
+msgstr "Звыйчайная"
 
 msgid "luck|Good"
-msgstr ""
+msgstr "Добрая"
 
 msgid "luck|Great"
-msgstr ""
+msgstr "Выдатная"
 
 msgid "luck|Irish"
-msgstr ""
+msgstr "Багатая"
 
 msgid ""
 "Bad luck sometimes falls on your armies in combat, causing their attacks to "
@@ -5451,25 +5451,25 @@ msgid ""
 msgstr ""
 
 msgid "morale|Treason"
-msgstr ""
+msgstr "Здрадная"
 
 msgid "morale|Awful"
-msgstr ""
+msgstr "Няздольная"
 
 msgid "morale|Poor"
-msgstr ""
+msgstr "Кепская"
 
 msgid "morale|Normal"
-msgstr ""
+msgstr "Звычайная"
 
 msgid "morale|Good"
-msgstr ""
+msgstr "Добрая"
 
 msgid "morale|Great"
-msgstr ""
+msgstr "Выдатная"
 
 msgid "morale|Blood!"
-msgstr ""
+msgstr "Лютая"
 
 msgid "Bad morale may cause your armies to freeze in combat."
 msgstr ""
@@ -5483,22 +5483,22 @@ msgid "Good morale may give your armies extra attacks in combat."
 msgstr ""
 
 msgid "Knight"
-msgstr ""
+msgstr "Рыцар"
 
 msgid "Barbarian"
-msgstr ""
+msgstr "Варвар"
 
 msgid "Sorceress"
-msgstr ""
+msgstr "Чараўніца"
 
 msgid "Warlock"
-msgstr ""
+msgstr "Вядзьмак"
 
 msgid "Wizard"
-msgstr ""
+msgstr "Чарадзей"
 
 msgid "Necromancer"
-msgstr ""
+msgstr "Некрамант"
 
 msgid "Multi"
 msgstr ""
@@ -5510,34 +5510,34 @@ msgid "race|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
-msgstr ""
+msgstr "На месцы"
 
 msgid "speed|Crawling"
-msgstr ""
+msgstr "Ледзь поўзае"
 
 msgid "speed|Very Slow"
-msgstr ""
+msgstr "Марудная"
 
 msgid "speed|Slow"
-msgstr ""
+msgstr "Няспешная"
 
 msgid "speed|Average"
-msgstr ""
+msgstr "Ніштаватая"
 
 msgid "speed|Fast"
-msgstr ""
+msgstr "Хуткая"
 
 msgid "speed|Very Fast"
-msgstr ""
+msgstr "Шпаркая"
 
 msgid "speed|Ultra Fast"
-msgstr ""
+msgstr "Імклівая"
 
 msgid "speed|Blazing"
-msgstr ""
+msgstr "Нястрымная"
 
 msgid "speed|Instant"
-msgstr ""
+msgstr "Імгненная"
 
 msgid "week|PLAGUE"
 msgstr ""
