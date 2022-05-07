@@ -440,7 +440,7 @@ namespace Translation
             switch ( current->locale ) {
             case LocaleType::LOCALE_AF:
             case LocaleType::LOCALE_BE:
-                return current->ngettext( str, (n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 12 || n % 100 > 14 ) ? 1 : 2) );
+                return current->ngettext( str, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 12 || n % 100 > 14 ) ? 1 : 2 ) );
             case LocaleType::LOCALE_EU:
             case LocaleType::LOCALE_ID:
             case LocaleType::LOCALE_LA:
