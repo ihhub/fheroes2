@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-03 12:01+0600\n"
-"PO-Revision-Date: 2022-05-03 14:15+0600\n"
+"POT-Creation-Date: 2022-05-07 06:08+0200\n"
+"PO-Revision-Date: 2022-05-07 06:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -1123,8 +1123,7 @@ msgstr ""
 msgid "The army will be carried over the scenario."
 msgstr ""
 
-msgid ""
-"The kingdom will have additional %{resource} at the start of the scenario."
+msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr ""
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
@@ -1133,7 +1132,8 @@ msgstr ""
 msgid "%{hero} can be hired in the scenario."
 msgstr ""
 
-msgid "%{hero} has been defeated and will not appear in the subsequent scenarios."
+msgid ""
+"%{hero} has been defeated and will not appear in the subsequent scenarios."
 msgstr ""
 
 msgid "The dwarves recognize their allies and gladly join your forces."
@@ -1406,7 +1406,12 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The kingdom will receive %{amount} additional %{resource} at the start of the "
+"The kingdom will receive %{amount} additional %{resource} at the start of "
+"the scenario."
+msgstr ""
+
+msgid ""
+"The kingdom will have %{amount} less %{resource} at the start of the "
 "scenario."
 msgstr ""
 
@@ -2410,6 +2415,25 @@ msgstr ""
 msgid "Music Type"
 msgstr "Тип музики"
 
+msgid "Hot Keys"
+msgstr ""
+
+msgid "In-game"
+msgstr ""
+
+msgid "Black & White"
+msgstr ""
+
+msgid "Mouse Cursor"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+#, fuzzy
+msgid "Text Support"
+msgstr "Телепортуватися сюди"
+
 msgid "Select Game Language"
 msgstr "Обрати мову гри"
 
@@ -2432,6 +2456,19 @@ msgid "Toggle foreground sounds level."
 msgstr ""
 
 msgid "Change the type of music."
+msgstr ""
+
+msgid "Check all Hot Keys used in the game."
+msgstr ""
+
+msgid ""
+"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
+"move as smoothly as black and white ones."
+msgstr ""
+
+msgid ""
+"Toggle text support mode to output extra information about windows and "
+"events in the game."
 msgstr ""
 
 #, fuzzy
@@ -2509,6 +2546,9 @@ msgstr ""
 #, fuzzy
 msgid "Your army too big!"
 msgstr "Ваша армія завелика!"
+
+msgid "Hot Keys:"
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Обрати мову гри:"
@@ -3483,10 +3523,10 @@ msgstr ""
 msgid "No maps available!"
 msgstr ""
 
-msgid "Astrologers proclaim Month of the %{name}."
+msgid "Astrologers proclaim the Month of the %{name}."
 msgstr ""
 
-msgid "Astrologers proclaim Week of the %{name}."
+msgid "Astrologers proclaim the Week of the %{name}."
 msgstr ""
 
 msgid "After regular growth, the population of %{monster} is doubled!"
@@ -3502,7 +3542,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "%{monster} population increases by +%{count}."
+msgid "%{monster} growth +%{count}."
 msgstr ""
 
 msgid " All populations are halved."
@@ -3709,6 +3749,9 @@ msgstr ""
 
 msgid "Ukrainian"
 msgstr "Українська"
+
+msgid "Romanian"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ""
@@ -5059,11 +5102,6 @@ msgid "This spell cannot be used on a boat."
 msgstr ""
 
 msgid "This spell can be casted only nearby water."
-msgstr ""
-
-msgid ""
-"No available towns.\n"
-"Spell Failed!!!"
 msgstr ""
 
 msgid ""

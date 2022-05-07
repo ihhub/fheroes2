@@ -4,13 +4,13 @@
 # fheroes2 team <fhomm2@gmail.com>, 2021
 # Igor Orlov <igororlov@inbox.ru>, 2009.
 # Andrey Afletdinov <afletdinov@mail.dc.baikal.ru>, 2009.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 17:09+0200\n"
-"PO-Revision-Date: 2022-04-25 23:09+0200\n"
+"POT-Creation-Date: 2022-05-07 06:08+0200\n"
+"PO-Revision-Date: 2022-05-07 06:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -1171,8 +1171,8 @@ msgstr ""
 msgid "The army will be carried over the scenario."
 msgstr "Armia zostanie przeniesiona do następnego scenariusza."
 
-msgid ""
-"The kingdom will have additional %{resource} at the start of the scenario."
+#, fuzzy
+msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr "Królestwo otrzyma dodatkowe %{resource} na starcie scenariusza."
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
@@ -1181,7 +1181,8 @@ msgstr "Zaklęcie \"%{spell}\" zostanie przeniesione do następnego scenariusza.
 msgid "%{hero} can be hired in the scenario."
 msgstr "Bohater %{hero} może być zwerbowany w tym scenariuszu."
 
-msgid "%{hero} has been defeated and will not appear in the subsequent scenarios."
+msgid ""
+"%{hero} has been defeated and will not appear in the subsequent scenarios."
 msgstr ""
 "Pokonany bohater %{hero} nie będzie dostępny w kolejnych scenariuszach."
 
@@ -1539,10 +1540,16 @@ msgstr ""
 "Główny bohater otrzyma artefakt \"%{artifact}\" na starcie scenariusza."
 
 msgid ""
-"The kingdom will receive %{amount} additional %{resource} at the start of the "
-"scenario."
+"The kingdom will receive %{amount} additional %{resource} at the start of "
+"the scenario."
 msgstr ""
 "Królestwo otrzyma dodatkowe %{amount} %{resource} na starcie scenariusza."
+
+#, fuzzy
+msgid ""
+"The kingdom will have %{amount} less %{resource} at the start of the "
+"scenario."
+msgstr "Królestwo otrzyma dodatkowe %{resource} na starcie scenariusza."
 
 #, fuzzy
 msgid ""
@@ -2570,6 +2577,28 @@ msgstr "Zewnętrzna"
 msgid "Music Type"
 msgstr "Rodzaj muzyki"
 
+#, fuzzy
+msgid "Hot Keys"
+msgstr "Na zmianę"
+
+msgid "In-game"
+msgstr ""
+
+#, fuzzy
+msgid "Black & White"
+msgstr "Blackridge"
+
+#, fuzzy
+msgid "Mouse Cursor"
+msgstr "Cieniowanie kursora"
+
+msgid "Color"
+msgstr ""
+
+#, fuzzy
+msgid "Text Support"
+msgstr "QA i wsparcie"
+
 msgid "Select Game Language"
 msgstr "Wybierz język gry"
 
@@ -2593,6 +2622,19 @@ msgstr "Zmiana poziomu głośności efektów."
 
 msgid "Change the type of music."
 msgstr "Zmienia rodzaj muzyki."
+
+msgid "Check all Hot Keys used in the game."
+msgstr ""
+
+msgid ""
+"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
+"move as smoothly as black and white ones."
+msgstr ""
+
+msgid ""
+"Toggle text support mode to output extra information about windows and "
+"events in the game."
+msgstr ""
 
 msgid "Okay"
 msgstr "Ok"
@@ -2677,6 +2719,9 @@ msgstr "Ustaw strażnika"
 
 msgid "Your army too big!"
 msgstr "Twoja armia jest za duża!"
+
+msgid "Hot Keys:"
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Wybierz język gry:"
@@ -2794,7 +2839,28 @@ msgstr "Nieznany"
 msgid "%{name} (Level %{level})"
 msgstr "%{name} (poziom %{level})"
 
-msgid "Move Points"
+#, fuzzy
+msgid "Attack:"
+msgstr "Atak"
+
+#, fuzzy
+msgid "Defense:"
+msgstr "Obrona"
+
+#, fuzzy
+msgid "Spell Power:"
+msgstr "Moc zaklęć"
+
+#, fuzzy
+msgid "Knowledge:"
+msgstr "Wiedza"
+
+#, fuzzy
+msgid "Spell Points:"
+msgstr "Ptk. magii"
+
+#, fuzzy
+msgid "Move Points:"
 msgstr "Ptk. ruchu"
 
 msgid "Cost per troop:"
@@ -3959,6 +4025,19 @@ msgstr "Czeski"
 
 msgid "Norwegian"
 msgstr "Norweski"
+
+msgid "Belarusian"
+msgstr ""
+
+#, fuzzy
+msgid "Bulgarian"
+msgstr "Barbarzyńca"
+
+msgid "Ukrainian"
+msgstr ""
+
+msgid "Romanian"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -5680,13 +5759,6 @@ msgstr "Ten czar nie może być rzucony z łodzi."
 
 msgid "This spell can be casted only nearby water."
 msgstr "Ten czar może być rzucony tylko przy wodzie."
-
-msgid ""
-"Nearest town occupied.\n"
-"Spell Failed!!!"
-msgstr ""
-"Najbliższe miasto jest zajęte.\n"
-"Zaklęcie się nie udało!!!"
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
@@ -9257,3 +9329,10 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "Nearest town occupied.\n"
+#~ "Spell Failed!!!"
+#~ msgstr ""
+#~ "Najbliższe miasto jest zajęte.\n"
+#~ "Zaklęcie się nie udało!!!"
