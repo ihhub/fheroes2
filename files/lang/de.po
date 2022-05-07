@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-07 06:08+0200\n"
-"PO-Revision-Date: 2022-05-07 06:18+0200\n"
+"POT-Creation-Date: 2022-05-07 22:32+0200\n"
+"PO-Revision-Date: 2022-05-07 23:00+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -153,15 +153,12 @@ msgstr "Anzahl festlegen"
 msgid "%{name} half the enemy troops!"
 msgstr "%{name} halbieren die feindlichen Truppen!"
 
-#, fuzzy
 msgid "%{name} has turned off the auto battle"
-msgstr "Schadet allen Untoten im Kampf."
+msgstr "%{name} hat den automatischen Kampf ausgeschaltet"
 
-#, fuzzy
 msgid "%{name} has turned on the auto battle"
-msgstr "Schadet allen Untoten im Kampf."
+msgstr "%{name} hat den automatischen Kampf eingeschaltet"
 
-#, fuzzy
 msgid "Spell failed!"
 msgstr "Zauberspruch fehlgeschlagen!"
 
@@ -511,16 +508,16 @@ msgid "Show logs"
 msgstr "Protokolle einblenden"
 
 msgid "Message Bar"
-msgstr ""
+msgstr "Nachrichtenleiste"
 
 msgid "Shows the results of individual monster's actions."
 msgstr ""
 
 msgid "%{name} skip their turn."
-msgstr "%{name} aussetzt den Zug"
+msgstr "%{name} setzt den Zug aus."
 
 msgid "%{name} wait their turn."
-msgstr "%{name} wartet auf der Zug"
+msgstr "%{name} wartet auf den Zug."
 
 msgid "%{attacker} do %{damage} damage."
 msgstr "%{attacker} verursachen %{damage} Schaden."
@@ -599,7 +596,7 @@ msgid "%{tower} does %{damage} damage."
 msgstr "%{tower} verursacht %{damage} Schaden."
 
 msgid "The mirror image is created."
-msgstr "Das Spiegelbild ist herbeigerufen!"
+msgstr "Das Spiegelbild wurde erstellt!"
 
 msgid "The mirror image is destroyed!"
 msgstr "Das Spiegelbild ist zerstört!"
@@ -708,13 +705,11 @@ msgstr "Gilde der Zauberinnen"
 msgid "Necromancer Guild"
 msgstr "Totenbeschwörer-Gilde"
 
-#, fuzzy
 msgid "Ogre Alliance"
-msgstr "Zwergen-Allianz"
+msgstr "Oger-Allianz"
 
-#, fuzzy
 msgid "Dwarfbane"
-msgstr "Zwerg"
+msgstr "Zwergenwurzel"
 
 msgid "Dragon Alliance"
 msgstr "Drachen-Allianz"
@@ -752,9 +747,8 @@ msgstr "Fehdehandschuh"
 msgid "Turning Point"
 msgstr "Wendepunkt"
 
-#, fuzzy
 msgid "Betrayal"
-msgstr "Das Ende des Betrugs"
+msgstr "Verrat"
 
 msgid "Corlagon's Defense"
 msgstr "Corlagons Kampf"
@@ -1266,13 +1260,13 @@ msgid " defeated"
 msgstr " besiegt"
 
 msgid " will always run away from your army."
-msgstr ""
+msgstr "werden immer vor Ihrer Armee weglaufen."
 
 msgid " will be willing to join your army."
-msgstr ""
+msgstr " bereit sein werden, sich Ihrer Armee anzuschließen."
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
-msgstr ""
+msgstr "Das Artefakt \"%{artifact}\" wird in das Szenario übernommen."
 
 msgid "The army will be carried over the scenario."
 msgstr ""
@@ -1281,14 +1275,16 @@ msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr ""
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
-msgstr ""
+msgstr "\"%{spell}\" wird in das Szenario übernommen."
 
 msgid "%{hero} can be hired in the scenario."
-msgstr ""
+msgstr "%{hero} kann in dem Szenario angeheuert werden."
 
 msgid ""
 "%{hero} has been defeated and will not appear in the subsequent scenarios."
 msgstr ""
+"%{hero} wurde besiegt und wird in den folgenden Szenarien nicht mehr "
+"erscheinen."
 
 msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr ""
@@ -1631,10 +1627,9 @@ msgid ""
 "scenario."
 msgstr ""
 
-#, fuzzy
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
-msgstr "Dieser Zauber beschwört %{count} %{monster}, um die Mine zu bewachen."
+msgstr "Der Hauptheld hat zu Beginn des Szenarios %{count} %{monster}."
 
 msgid ""
 "The main hero will have \"%{spell}\" spell at the start of the scenario."
@@ -1661,15 +1656,13 @@ msgid "The Price of Loyalty"
 msgstr "The Price of Loyalty"
 
 msgid "Voyage Home"
-msgstr ""
+msgstr "Heimreise"
 
-#, fuzzy
 msgid "Wizard's Isle"
-msgstr "Hut des Zauberers"
+msgstr "Die Insel der Zauberer"
 
-#, fuzzy
 msgid "Descendants"
-msgstr "Bauern"
+msgstr "Nachkommen"
 
 msgid "The %{building} produces %{monster}."
 msgstr "Der %{building} produziert %{monster}."
@@ -2671,27 +2664,23 @@ msgstr "Extern"
 msgid "Music Type"
 msgstr "Klangtyp"
 
-#, fuzzy
 msgid "Hot Keys"
-msgstr "Heißer Stuhl"
+msgstr "Hotkeys"
 
 msgid "In-game"
-msgstr ""
+msgstr "Im Spiel"
 
-#, fuzzy
 msgid "Black & White"
-msgstr "Blackridge"
+msgstr "Schwarz & Weiß"
 
-#, fuzzy
 msgid "Mouse Cursor"
-msgstr "Schatten-Zeiger"
+msgstr "Mauszeiger"
 
 msgid "Color"
-msgstr ""
+msgstr "Farbe"
 
-#, fuzzy
 msgid "Text Support"
-msgstr "QA und Unterstützung"
+msgstr "Text-Unterst."
 
 msgid "Select Game Language"
 msgstr "Spielsprache auswählen"
@@ -2718,7 +2707,7 @@ msgid "Change the type of music."
 msgstr "Klangtyp ändern."
 
 msgid "Check all Hot Keys used in the game."
-msgstr ""
+msgstr "Überprüfen Sie alle im Spiel verwendeten Hotkeys."
 
 msgid ""
 "Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
@@ -2816,7 +2805,7 @@ msgid "Your army too big!"
 msgstr "Ihre Armee ist zu groß!"
 
 msgid "Hot Keys:"
-msgstr ""
+msgstr "Hotkeys:"
 
 msgid "Select Game Language:"
 msgstr "Spielsprache wählen:"
@@ -2831,7 +2820,7 @@ msgid "You have learned %{skill}."
 msgstr "Sie haben %{skill} gelernt."
 
 msgid "You may learn either:"
-msgstr "Sie dürfen lernen entweder"
+msgstr "Sie dürfen lernen entweder:"
 
 msgid "or"
 msgstr "oder"
@@ -2937,29 +2926,23 @@ msgstr "Unbekannt"
 msgid "%{name} (Level %{level})"
 msgstr "%{name} (Stufe %{level})"
 
-#, fuzzy
 msgid "Attack:"
-msgstr "Angriff"
+msgstr "Angriff:"
 
-#, fuzzy
 msgid "Defense:"
-msgstr "Verteid."
+msgstr "Verteidigung:"
 
-#, fuzzy
 msgid "Spell Power:"
-msgstr "Z-Kraft"
+msgstr "Zauberkraft:"
 
-#, fuzzy
 msgid "Knowledge:"
-msgstr "Wissen"
+msgstr "Wissen:"
 
-#, fuzzy
 msgid "Spell Points:"
-msgstr "ZS-Punkte"
+msgstr "Zauberpunkte:"
 
-#, fuzzy
 msgid "Move Points:"
-msgstr "BW-Punkte"
+msgstr "Bewegungspunkte:"
 
 msgid "Cost per troop:"
 msgstr "Kosten pro Truppe:"
@@ -2971,7 +2954,7 @@ msgid "Number to buy:"
 msgstr "Anzahl:"
 
 msgid "Click to apply the selected resolution."
-msgstr ""
+msgstr "Klicken Sie, um die ausgewählte Auflösung anzuwenden."
 
 msgid "MAX"
 msgstr "MAX"
@@ -3347,23 +3330,20 @@ msgstr "und mehr..."
 msgid "Start the selected scenario."
 msgstr ""
 
-#, fuzzy
 msgid "View Intro"
-msgstr "Helden anzeigen"
+msgstr "Intro ansehen"
 
 msgid "View Intro videos for the current state of the campaign."
-msgstr ""
+msgstr "Sehen Sie sich die Intro-Videos zum aktuellen Stand der Kampagne an."
 
 msgid "Restart"
-msgstr ""
+msgstr "Neustart"
 
-#, fuzzy
 msgid "Restart the current scenario."
-msgstr "Das aktuelle Spiel speichern."
+msgstr "Neustart des aktuellen Szenarios."
 
-#, fuzzy
 msgid "Are you sure you want to restart this scenario?"
-msgstr "Sind Sie sicher, dass Sie diesen Helden entlassen wollen?"
+msgstr "Sind Sie sicher, dass Sie dieses Szenario neu starten wollen?"
 
 msgid "Campaign Scenario loading failure"
 msgstr "Fehler beim Laden des Feldzugspiels"
@@ -3382,7 +3362,7 @@ msgid "Development"
 msgstr "Entwicklung"
 
 msgid "Visit us at "
-msgstr "Besuchen Sie uns bei"
+msgstr "Besuchen Sie uns bei "
 
 msgid "Special Thanks to"
 msgstr "Besonderen Dank an"
@@ -4126,9 +4106,8 @@ msgstr "Info über %{skill} anzeigen"
 msgid "Kingdom Income"
 msgstr "Einkommen"
 
-#, fuzzy
 msgid "Kingdom Income per day."
-msgstr "Einkommen"
+msgstr "Einkommen des Königreichs pro Tag."
 
 msgid "English"
 msgstr "Englisch"
@@ -4149,23 +4128,22 @@ msgid "Italian"
 msgstr "Italienisch"
 
 msgid "Czech"
-msgstr ""
+msgstr "Tschechisch"
 
 msgid "Norwegian"
-msgstr ""
+msgstr "Norwegisch"
 
 msgid "Belarusian"
-msgstr ""
+msgstr "Weißrussisch"
 
-#, fuzzy
 msgid "Bulgarian"
-msgstr "Barbar"
+msgstr "Bulgarisch"
 
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ukrainisch"
 
 msgid "Romanian"
-msgstr ""
+msgstr "Rumänisch"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -4375,10 +4353,10 @@ msgid "Martine"
 msgstr "Martine"
 
 msgid " gives you maximum morale"
-msgstr ""
+msgstr " gibt Ihnen maximale Moral"
 
 msgid " gives you maximum luck"
-msgstr ""
+msgstr " gibt Ihnen maximales Glück"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr ""
@@ -5404,7 +5382,7 @@ msgstr ""
 "\""
 
 msgid " and "
-msgstr "und"
+msgstr " und "
 
 msgid ""
 "All of the %{monsters} you have in your army have been trained by the battle "
@@ -5839,7 +5817,7 @@ msgid "The spell is not found."
 msgstr "Der Zauberspruch wird nicht gefunden."
 
 msgid "Only heroes can cast this spell."
-msgstr ""
+msgstr "Nur Helden können diesen Zauberspruch wirken."
 
 msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
@@ -5850,11 +5828,10 @@ msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
 
-#, fuzzy
 msgid "This hero is already in a town, so you can't cast the spell."
 msgstr ""
-"Dieser Zauberspruch kostet %{mana} Mana. Sie haben nur %{point} Mana, also "
-"können Sie den Zauber nicht wirken."
+"Dieser Held befindet sich bereits in einer Stadt, sodass Ihr den Zauber "
+"nicht wirken könnt."
 
 msgid ""
 "The nearest town is %{town}.\n"
@@ -6402,9 +6379,8 @@ msgstr "Lila"
 msgid "tent|Red"
 msgstr "Rotes"
 
-#, fuzzy
 msgid "Experience"
-msgstr "Experimentelle"
+msgstr "Erfahrung"
 
 msgid ""
 "Experience allows your heroes to go up levels, increasing their primary and "
@@ -6439,7 +6415,7 @@ msgid "Towns/Castles"
 msgstr "Stadt/Burg"
 
 msgid "View Towns and Castles."
-msgstr "Städte anzeigen"
+msgstr "Städte anzeigen."
 
 msgid "luck|Cursed"
 msgstr "Verfluchtes"
@@ -8525,25 +8501,20 @@ msgstr "Zauberbuch"
 msgid "The %{name} enables you to cast spells."
 msgstr "Das %{name} ermöglicht Sie die Zaubersprüche zu wirken."
 
-#, fuzzy
 msgid "Dummy 1"
-msgstr "Mumie"
+msgstr "Dummy 1"
 
-#, fuzzy
 msgid "The reserved artifact."
-msgstr "mit 1 Artefakt."
+msgstr "Das reservierte Artefakt."
 
-#, fuzzy
 msgid "Dummy 2"
-msgstr "Mumie"
+msgstr "Dummy 2"
 
-#, fuzzy
 msgid "Dummy 3"
-msgstr "Mumie"
+msgstr "Dummy 3"
 
-#, fuzzy
 msgid "Dummy 4"
-msgstr "Mumie"
+msgstr "Dummy 4"
 
 msgid "Spell Scroll"
 msgstr "Zauberspruchrolle"
@@ -8860,9 +8831,8 @@ msgstr ""
 "Untersuchung entdecken Sie, dass es sich um die verzauberte Spaten der "
 "Totengräber handelt, die die Sterblichen schon lange verloren glaubten."
 
-#, fuzzy
 msgid "Invalid Artifact"
-msgstr "Zufälliges Artefakt"
+msgstr "Ungültiges Artefakt"
 
 msgid "Wood"
 msgstr "Holz"
