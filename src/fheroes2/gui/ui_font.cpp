@@ -1251,17 +1251,6 @@ namespace
             fheroes2::Copy( font[253 - 32], 1, 0, font[231 - 32], 1, 1, 1, 1 );
             updateSmallFontLetterShadow( font[231 - 32] );
 
-            // o with / inside.
-            font[248 - 32].resize( font[79].width(), font[79].height() );
-            font[248 - 32].reset();
-            fheroes2::Copy( font[79], 0, 0, font[248 - 32], 0, 0, font[79].width(), font[79].height() );
-            fheroes2::Copy( font[88], 5, 0, font[248 - 32], 3, 2, 4, 4 );
-            fheroes2::Copy( font[79], 6, 5, font[248 - 32], 6, 5, 1, 1 );
-            fheroes2::Copy( font[88], 1, 6, font[248 - 32], 1, 6, 2, 1 );
-            fheroes2::Copy( font[88], 7, 0, font[248 - 32], 7, 0, 2, 1 );
-            font[248 - 32].setPosition( font[79].x(), font[79].y() );
-            updateNormalFontLetterShadow( font[248 - 32] );
-
             font[254 - 32].resize( font[79].width() + 2, font[79].height() );
             font[254 - 32].reset();
             fheroes2::Copy( font[82], 1, 0, font[254 - 32], 1, 0, 2, 5 );
