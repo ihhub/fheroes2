@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-07 22:32+0200\n"
-"PO-Revision-Date: 2022-05-07 23:00+0200\n"
+"PO-Revision-Date: 2022-05-07 23:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -396,9 +396,8 @@ msgstr "Nicht genug Gold (%{gold})"
 msgid "%{name} states:"
 msgstr "%{name} erklärt:"
 
-#, fuzzy
 msgid "Captain of %{name} states:"
-msgstr "Hauptmann von %{name}"
+msgstr "Hauptmann von %{name}:"
 
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
@@ -596,7 +595,7 @@ msgid "%{tower} does %{damage} damage."
 msgstr "%{tower} verursacht %{damage} Schaden."
 
 msgid "The mirror image is created."
-msgstr "Das Spiegelbild wurde erstellt!"
+msgstr "Das Spiegelbild wird erstellt."
 
 msgid "The mirror image is destroyed!"
 msgstr "Das Spiegelbild ist zerstört!"
@@ -1260,7 +1259,7 @@ msgid " defeated"
 msgstr " besiegt"
 
 msgid " will always run away from your army."
-msgstr "werden immer vor Ihrer Armee weglaufen."
+msgstr " werden immer vor Ihrer Armee weglaufen."
 
 msgid " will be willing to join your army."
 msgstr " bereit sein werden, sich Ihrer Armee anzuschließen."
@@ -1269,7 +1268,7 @@ msgid "\"%{artifact}\" artifact will be carried over the scenario."
 msgstr "Das Artefakt \"%{artifact}\" wird in das Szenario übernommen."
 
 msgid "The army will be carried over the scenario."
-msgstr ""
+msgstr "Die Armee wird über das Szenario mitgenommen."
 
 msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr ""
@@ -1414,39 +1413,32 @@ msgstr "Reisestiefel"
 msgid "campaignBonus|White Pearl"
 msgstr "Weisse Perle"
 
-#, fuzzy
 msgid "campaignBonus|Basic Archery"
-msgstr "Schwarze Perle"
+msgstr "Einfach Bogen"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Archery"
 msgstr "Verbessert Bogen"
 
-#, fuzzy
 msgid "campaignBonus|Expert Archery"
-msgstr "Power-Axt"
+msgstr "Meisterhaft Bogen"
 
 #, fuzzy
 msgid "campaignBonus|Basic Ballistics"
 msgstr "Ballista"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Ballistics"
-msgstr "Ballista"
+msgstr "Verbesserte Ballistik"
 
-#, fuzzy
 msgid "campaignBonus|Expert Ballistics"
-msgstr "Ballista"
+msgstr "Meisterhafte Ballistik"
 
 #, fuzzy
 msgid "campaignBonus|Basic Diplomacy"
 msgstr "Brustpanzer"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Diplomacy"
 msgstr "Verbesserte Diplomatie"
 
-#, fuzzy
 msgid "campaignBonus|Expert Diplomacy"
 msgstr "Meisterhafte Diplomatie"
 
@@ -1454,11 +1446,9 @@ msgstr "Meisterhafte Diplomatie"
 msgid "campaignBonus|Basic Eagle Eye"
 msgstr "Schwarze Perle"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Eagle Eye"
 msgstr "Verbessertes Adlerauge"
 
-#, fuzzy
 msgid "campaignBonus|Expert Eagle Eye"
 msgstr "Meisterhaftes Adlerauge"
 
@@ -1466,23 +1456,19 @@ msgstr "Meisterhaftes Adlerauge"
 msgid "campaignBonus|Basic Estates"
 msgstr "Ballista"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Estates"
-msgstr "Brustpanzer"
+msgstr "Verbessert Grundbesitz"
 
-#, fuzzy
 msgid "campaignBonus|Expert Estates"
-msgstr "Brustpanzer"
+msgstr "Meisterhaft Grundbesitz"
 
 #, fuzzy
 msgid "campaignBonus|Basic Leadership"
 msgstr "Schwarze Perle"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Leadership"
 msgstr "Verbesserte Führung"
 
-#, fuzzy
 msgid "campaignBonus|Expert Leadership"
 msgstr "Meisterhafte Führung"
 
@@ -1490,11 +1476,9 @@ msgstr "Meisterhafte Führung"
 msgid "campaignBonus|Basic Logistics"
 msgstr "Ballista"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Logistics"
 msgstr "Verbesserte Logistik"
 
-#, fuzzy
 msgid "campaignBonus|Expert Logistics"
 msgstr "Meisterhafte Logistik"
 
@@ -1502,23 +1486,19 @@ msgstr "Meisterhafte Logistik"
 msgid "campaignBonus|Basic Luck"
 msgstr "Massenfluch"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Luck"
-msgstr "Steuererklärung"
+msgstr "Verbessertes Glück"
 
-#, fuzzy
 msgid "campaignBonus|Expert Luck"
-msgstr "Steuererklärung"
+msgstr "Meisterhaftes Glück"
 
 #, fuzzy
 msgid "campaignBonus|Basic Mysticism"
 msgstr "Ballista"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Mysticism"
 msgstr "Verbesserte Mystik"
 
-#, fuzzy
 msgid "campaignBonus|Expert Mysticism"
 msgstr "Meisterhafte Mystik"
 
@@ -1526,61 +1506,47 @@ msgstr "Meisterhafte Mystik"
 msgid "campaignBonus|Basic Navigation"
 msgstr "Kettenblitzstrahl"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Navigation"
 msgstr "Verbesserte Navigation"
 
-#, fuzzy
 msgid "campaignBonus|Expert Navigation"
 msgstr "Meisterhafte Navigation"
 
-#, fuzzy
 msgid "campaignBonus|Basic Necromancy"
-msgstr "Schwarze Perle"
+msgstr "Einfache Nekromantie"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Necromancy"
 msgstr "Verbesserte Nekromantie"
 
-#, fuzzy
 msgid "campaignBonus|Expert Necromancy"
 msgstr "Meisterhafte Nekromantie"
 
-#, fuzzy
 msgid "campaignBonus|Basic Pathfinding"
-msgstr "Kettenblitzstrahl"
+msgstr "Einfaches Pfadfinden"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Pathfinding"
 msgstr "Verbessert Pfadfinden"
 
-#, fuzzy
 msgid "campaignBonus|Expert Pathfinding"
 msgstr "Meisterhaft Pfadfinden"
 
-#, fuzzy
 msgid "campaignBonus|Basic Scouting"
-msgstr "Ring des Magiers"
+msgstr "Einfaches Spähen"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Scouting"
-msgstr "Ring des Magiers"
+msgstr "Verbessertes Spähen"
 
-#, fuzzy
 msgid "campaignBonus|Expert Scouting"
-msgstr "Steuererklärung"
+msgstr "Meisterhaftes Spähen"
 
-#, fuzzy
 msgid "campaignBonus|Basic Wisdom"
-msgstr "Ballista"
+msgstr "Einfache Weisheit"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Wisdom"
-msgstr "Tote beleben"
+msgstr "Verbesserte Weisheit"
 
-#, fuzzy
 msgid "campaignBonus|Expert Wisdom"
-msgstr "Stachelschild"
+msgstr "Meisterhafte Weisheit"
 
 msgid "campaignBonus|Animate Dead"
 msgstr "Tote beleben"
@@ -2960,7 +2926,7 @@ msgid "MAX"
 msgstr "MAX"
 
 msgid "How many troops to move?"
-msgstr "Truppen zu verlegen"
+msgstr "Wie viele Truppen sollen verlegt werden?"
 
 msgid "Fast separation into slots:"
 msgstr "Schnelle Trennung in Schlitze:"
@@ -3328,7 +3294,7 @@ msgid "and more..."
 msgstr "und mehr..."
 
 msgid "Start the selected scenario."
-msgstr ""
+msgstr "Startet das ausgewählte Szenario."
 
 msgid "View Intro"
 msgstr "Intro ansehen"
@@ -5689,18 +5655,15 @@ msgstr ""
 "Während die Sirenen ihr unheimliches Lied singen, schafft es Ihre kleine, "
 "entschlossene Armee, den Drang zu überwinden, kopfüber ins Meer zu stürzen."
 
-#, fuzzy
 msgid ""
 "An eerie wailing song emanates from the sirens perched upon the rocks. Many "
 "of your crew fall under its spell, and dive into the water where they drown. "
 "You are now wiser for the visit, and gain %{exp} experience."
 msgstr ""
-"Sie lassen Ihre Mannschaft die Ohren mit Wachs verstopfen, bevor der "
-"unheimliche Gesang der Sirenen eine Chance hat, sie in ein wässriges Grab zu "
-"locken. Ein unheimlicher Heulgesang geht von den Sirenen aus, die auf den "
-"Felsen hocken. Viele Ihrer Mannschaft fallen in seinen Bann und stürzen sich "
-"ins Wasser, wo sie ertrinken. Sie sind nun um diesen Besuch reicher und "
-"gewinnen %{exp} Erfahrung."
+"Von den auf den Felsen sitzenden Sirenen geht ein unheimlicher Heulgesang "
+"aus. Viele Ihrer Mannschaft geraten in seinen Bann und tauchen ins Wasser, "
+"wo sie ertrinken. Ihr seid nun um diesen Besuch reicher und erhaltet %{exp} "
+"Erfahrung."
 
 msgid ""
 "In a dazzling display of daring, you break into the local jail and free the "
@@ -6066,7 +6029,7 @@ msgid "Basic Archery"
 msgstr "Einfach Bogen"
 
 msgid "Basic Pathfinding"
-msgstr "Einfach Pfadfinden"
+msgstr "Einfaches Pfadfinden"
 
 msgid "Expert Pathfinding"
 msgstr "Meisterhaft Pfadfinden"
@@ -7687,6 +7650,10 @@ msgid ""
 "creature free, he hands you a small pouch. Emptying the contents, you find a "
 "dazzling jeweled ring."
 msgstr ""
+"Ein Schmerzensschrei führt euch zu einem Zentauren, der in einer Falle "
+"gefangen ist. Nachdem er die Kreatur befreit hat, überreicht er Ihnen einen "
+"kleinen Beutel. Wenn ihr den Inhalt ausleert, findet ihr einen schillernden "
+"Ring mit Juwelen."
 
 msgid "Witch's Broach of Magic"
 msgstr "Hexenbrosche der Magie"
@@ -7770,6 +7737,8 @@ msgid ""
 "A glint of golden light catches your eye. Upon further investigation, you "
 "find a golden helm hidden under a bush."
 msgstr ""
+"Ein goldener Lichtschimmer fällt euch ins Auge. Bei näherer Untersuchung "
+"entdeckt ihr einen goldenen Helm, der unter einem Busch versteckt ist."
 
 msgid "Giant Flail of Dominion"
 msgstr "Riesige Peitsche der Herrschaft"
@@ -7779,6 +7748,9 @@ msgid ""
 "skill with this weapon, you confidently remove the spectacular flail from "
 "the fallen Giant."
 msgstr ""
+"Ein ungeschickter Riese hat sich mit seinem eigenen Dreschflegel getötet. Im "
+"Wissen um Ihre überragenden Fähigkeiten mit dieser Waffe nehmt Ihr dem "
+"gefallenen Riesen selbstbewusst den spektakulären Dreschflegel ab."
 
 msgid "Ballista of Quickness"
 msgstr "Balliste der Schnelligkeit"
@@ -7825,6 +7797,9 @@ msgid ""
 "Scaring off the scavengers, you note the Rogues had overlooked a beautiful "
 "breastplate."
 msgstr ""
+"Eine Bande von Schurken durchwühlt die Besitztümer toter Krieger. Ihr "
+"verscheucht die Aasfresser und bemerkt, dass die Schurken einen schönen "
+"Brustpanzer übersehen haben."
 
 msgid "Minor Scroll of Knowledge"
 msgstr "Kleine Schriftrolle des Wissens"
@@ -7872,6 +7847,11 @@ msgid ""
 "ferociously, vanishing into thin air. Remembering the old leprechaun saying "
 "'Finders Keepers', you grab the sack and leave."
 msgstr ""
+"Ein kleiner Kobold tanzt vergnügt um einen Zaubersack herum. Als er euch "
+"kommen sieht, bleibt er mitten im Schritt stehen. Der kleine Mann schreit "
+"auf, stampft wild mit dem Fuß auf und löst sich in Luft auf. Ihr erinnert "
+"euch an das alte Kobold-Sprichwort \"Wers findet, dem gehörts\", schnappt "
+"euch den Sack und geht."
 
 msgid "Endless Bag of Gold"
 msgstr "Endlose Goldtasche"
@@ -8019,6 +7999,9 @@ msgid ""
 "A brief stop at an improbable rural inn yields an exchange of money, tales, "
 "and accidentally, luggage. You find a magical skullcap in your new backpack."
 msgstr ""
+"Bei einem kurzen Halt in einem unwahrscheinlichen ländlichen Gasthaus werden "
+"Geld, Geschichten und zufällig auch Gepäck ausgetauscht. Ihr findet eine "
+"magische Schädeldecke in eurem neuen Rucksack."
 
 msgid "Ice Cloak"
 msgstr "Eismantel"
@@ -8139,6 +8122,9 @@ msgid ""
 "reveals that the tomb has already been looted, but the thieves overlooked an "
 "ankh on a silver chain in the dark."
 msgstr ""
+"Ein heftiger Windsturm enthüllt den Eingang zu einem vergrabenen Grab. Ihre "
+"Untersuchung ergibt, dass das Grab bereits geplündert wurde, aber die Diebe "
+"haben in der Dunkelheit ein Ankh an einer Silberkette übersehen."
 
 msgid "Book of Elements"
 msgstr "Buch der Elemente"
@@ -8200,6 +8186,10 @@ msgid ""
 "wins a magic pendant. Its former owner says that it protects from "
 "Necromancers' death spells."
 msgstr ""
+"Bei einer kurzen Begegnung mit einer kleinen Karawane am Straßenrand und "
+"einem Spiel mit Schlagringen wird ein magischer Anhänger gewonnen. Sein "
+"früherer Besitzer sagt, dass er vor den Todeszaubern der Totenbeschwörer "
+"schützt."
 
 msgid "Serenity Pendant"
 msgstr "Anhänger der Heiterkeit"
@@ -8278,6 +8268,8 @@ msgid ""
 "A chance meeting with a famous Archer finds you in a game of knucklebones "
 "pitting his bow against your horse. You win."
 msgstr ""
+"Bei einem zufälligen Treffen mit einem berühmten Bogenschützen treten Sie "
+"mit seinem Bogen gegen Ihr Pferd an. Ihr gewinnt."
 
 msgid "Telescope"
 msgstr "Teleskop"
@@ -8404,6 +8396,10 @@ msgid ""
 "of mercury that always has a little left on the bottom. Recognizing a "
 "treasure when you see one, you cap it and slip it in your pocket."
 msgstr ""
+"Bei einem kurzen Zwischenstopp in einem hastig verlassenen Turm der Zauberer "
+"findet man eine magische Phiole mit Quecksilber, von der immer ein wenig am "
+"Boden übrig bleibt. Da ihr einen Schatz erkennt, wenn ihr einen seht, "
+"verschließt ihr ihn und steckt ihn in eure Tasche."
 
 msgid "Endless Pouch of Gems"
 msgstr "Endloser Edelsteinbeutel"
@@ -8543,7 +8539,7 @@ msgid ""
 "morale penalty."
 msgstr ""
 "Der %{name} erhöht Ihre Zauberkraft um %{count}, fügt aber eine Strafe auf "
-"die Moral für die Untote in der Armee hinzu"
+"die Moral für die Untote in der Armee hinzu."
 
 msgid ""
 "One of the less intelligent members of your party picks up an arm off of the "
@@ -9409,7 +9405,7 @@ msgid "The nearest town is %{town}."
 msgstr "Die nächstgelegene Stadt ist %{town}."
 
 msgid "This town is occupied by your hero %{hero}."
-msgstr ""
+msgstr "Diese Stadt ist von Ihrem Helden %{hero} besetzt."
 
 msgid ""
 "This spell controls up to\n"
