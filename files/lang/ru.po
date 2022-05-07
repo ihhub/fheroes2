@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-22 19:25+0100\n"
-"PO-Revision-Date: 2022-01-25 10:25+0100\n"
+"POT-Creation-Date: 2022-05-07 06:08+0200\n"
+"PO-Revision-Date: 2022-05-07 06:19+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 msgid "Warrior"
 msgstr "Воин"
@@ -94,6 +94,9 @@ msgstr ""
 "Легион\n"
 "%{monster}"
 
+msgid "army|Few"
+msgstr "Мало"
+
 msgid "army|Several"
 msgstr "Несколько"
 
@@ -117,9 +120,6 @@ msgstr "Тьма"
 
 msgid "army|Legion"
 msgstr "Легион"
-
-msgid "army|Few"
-msgstr "Мало"
 
 msgid "All %{race} troops +1"
 msgstr "Все существа одной фракции +1"
@@ -391,6 +391,10 @@ msgstr "Не хватает %{gold} золота"
 msgid "%{name} states:"
 msgstr "%{name} объявляет:"
 
+#, fuzzy
+msgid "Captain of %{name} states:"
+msgstr "Капитан замка %{name}."
+
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
@@ -498,6 +502,12 @@ msgstr "Спрятать журнал"
 
 msgid "Show logs"
 msgstr "Показать журнал"
+
+msgid "Message Bar"
+msgstr ""
+
+msgid "Shows the results of individual monster's actions."
+msgstr ""
 
 msgid "%{name} skip their turn."
 msgstr "%{name} пропускают ход."
@@ -691,6 +701,14 @@ msgstr "Гильдия волшебниц"
 
 msgid "Necromancer Guild"
 msgstr "Гильдия некромантов"
+
+#, fuzzy
+msgid "Ogre Alliance"
+msgstr "Альянс гномов"
+
+#, fuzzy
+msgid "Dwarfbane"
+msgstr "Гном"
 
 msgid "Dragon Alliance"
 msgstr "Альянс драконов"
@@ -1220,6 +1238,31 @@ msgstr " бонус"
 msgid " defeated"
 msgstr " поражение"
 
+msgid " will always run away from your army."
+msgstr ""
+
+msgid " will be willing to join your army."
+msgstr ""
+
+msgid "\"%{artifact}\" artifact will be carried over the scenario."
+msgstr ""
+
+msgid "The army will be carried over the scenario."
+msgstr ""
+
+msgid "The kingdom will have +%{count} %{resource} each day."
+msgstr ""
+
+msgid "\"%{spell}\" spell will be carried over the scenario."
+msgstr ""
+
+msgid "%{hero} can be hired in the scenario."
+msgstr ""
+
+msgid ""
+"%{hero} has been defeated and will not appear in the subsequent scenarios."
+msgstr ""
+
 msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr ""
 "Гномы узнают своих союзников и с радостью присоединяются к Вашим силам."
@@ -1343,6 +1386,174 @@ msgstr "Сапоги Путника"
 msgid "campaignBonus|White Pearl"
 msgstr "Бел. Жемчужина"
 
+#, fuzzy
+msgid "campaignBonus|Basic Archery"
+msgstr "Чёрн. Жемчужина"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Archery"
+msgstr "Продвинутая стрельба"
+
+#, fuzzy
+msgid "campaignBonus|Expert Archery"
+msgstr "Топор Власти"
+
+#, fuzzy
+msgid "campaignBonus|Basic Ballistics"
+msgstr "Баллиста"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Ballistics"
+msgstr "Баллиста"
+
+#, fuzzy
+msgid "campaignBonus|Expert Ballistics"
+msgstr "Баллиста"
+
+#, fuzzy
+msgid "campaignBonus|Basic Diplomacy"
+msgstr "Защитный Доспех"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Diplomacy"
+msgstr "Продвинутая дипломатия"
+
+#, fuzzy
+msgid "campaignBonus|Expert Diplomacy"
+msgstr "Экспертная дипломатия"
+
+#, fuzzy
+msgid "campaignBonus|Basic Eagle Eye"
+msgstr "Чёрн. Жемчужина"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Eagle Eye"
+msgstr "Продвинутый орлиный взор"
+
+#, fuzzy
+msgid "campaignBonus|Expert Eagle Eye"
+msgstr "Экспертный орлиный взор"
+
+#, fuzzy
+msgid "campaignBonus|Basic Estates"
+msgstr "Баллиста"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Estates"
+msgstr "Защитный Доспех"
+
+#, fuzzy
+msgid "campaignBonus|Expert Estates"
+msgstr "Защитный Доспех"
+
+#, fuzzy
+msgid "campaignBonus|Basic Leadership"
+msgstr "Чёрн. Жемчужина"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Leadership"
+msgstr "Продвинутое лидерство"
+
+#, fuzzy
+msgid "campaignBonus|Expert Leadership"
+msgstr "Экспертное лидерство"
+
+#, fuzzy
+msgid "campaignBonus|Basic Logistics"
+msgstr "Баллиста"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Logistics"
+msgstr "Продвинутая логистика"
+
+#, fuzzy
+msgid "campaignBonus|Expert Logistics"
+msgstr "Экспертная логистика"
+
+#, fuzzy
+msgid "campaignBonus|Basic Luck"
+msgstr "Общее проклятие"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Luck"
+msgstr "Податная"
+
+#, fuzzy
+msgid "campaignBonus|Expert Luck"
+msgstr "Податная"
+
+#, fuzzy
+msgid "campaignBonus|Basic Mysticism"
+msgstr "Баллиста"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Mysticism"
+msgstr "Продвинутый мистицизм"
+
+#, fuzzy
+msgid "campaignBonus|Expert Mysticism"
+msgstr "Экспертный мистицизм"
+
+#, fuzzy
+msgid "campaignBonus|Basic Navigation"
+msgstr "Цепь молний"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Navigation"
+msgstr "Продвинутая навигация"
+
+#, fuzzy
+msgid "campaignBonus|Expert Navigation"
+msgstr "Экспертная навигация"
+
+#, fuzzy
+msgid "campaignBonus|Basic Necromancy"
+msgstr "Чёрн. Жемчужина"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Necromancy"
+msgstr "Продвинутая некромантия"
+
+#, fuzzy
+msgid "campaignBonus|Expert Necromancy"
+msgstr "Экспертная некромантия"
+
+#, fuzzy
+msgid "campaignBonus|Basic Pathfinding"
+msgstr "Цепь молний"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Pathfinding"
+msgstr "Продвинутый следопыт"
+
+#, fuzzy
+msgid "campaignBonus|Expert Pathfinding"
+msgstr "Экспертный следопыт"
+
+#, fuzzy
+msgid "campaignBonus|Basic Scouting"
+msgstr "Кольцо Мага"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Scouting"
+msgstr "Кольцо Мага"
+
+#, fuzzy
+msgid "campaignBonus|Expert Scouting"
+msgstr "Податная"
+
+#, fuzzy
+msgid "campaignBonus|Basic Wisdom"
+msgstr "Баллиста"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Wisdom"
+msgstr "Поднять нежить"
+
+#, fuzzy
+msgid "campaignBonus|Expert Wisdom"
+msgstr "Шипованный Щит"
+
 msgid "campaignBonus|Animate Dead"
 msgstr "Поднять нежить"
 
@@ -1372,6 +1583,61 @@ msgstr "Элементаль"
 
 msgid "campaignBonus|View Heroes"
 msgstr "Показать героев"
+
+msgid ""
+"The main hero will have \"%{artifact}\" artifact at the start of the "
+"scenario."
+msgstr ""
+
+msgid ""
+"The kingdom will receive %{amount} additional %{resource} at the start of "
+"the scenario."
+msgstr ""
+
+msgid ""
+"The kingdom will have %{amount} less %{resource} at the start of the "
+"scenario."
+msgstr ""
+
+#, fuzzy
+msgid ""
+"The main hero will have %{count} %{monster} at the start of the scenario."
+msgstr "Это заклинание вызывает %{count} %{monster} для охраны шахты."
+
+msgid ""
+"The main hero will have \"%{spell}\" spell at the start of the scenario."
+msgstr ""
+
+msgid "The starting race of the scenario will be %{race}."
+msgstr ""
+
+msgid ""
+"The main hero will have additional %{count} %{skill} at the start of the "
+"scenario."
+msgstr ""
+
+msgid "The main hero will have %{skill} at the start of the scenario."
+msgstr ""
+
+msgid "Roland"
+msgstr "Роланд"
+
+msgid "Archibald"
+msgstr "Арчибальд"
+
+msgid "The Price of Loyalty"
+msgstr "Цена верности"
+
+msgid "Voyage Home"
+msgstr ""
+
+#, fuzzy
+msgid "Wizard's Isle"
+msgstr "Шляпа Мага"
+
+#, fuzzy
+msgid "Descendants"
+msgstr "Крестьяне"
 
 msgid "The %{building} produces %{monster}."
 msgstr "%{monster} доступны для найма в этом строении."
@@ -2011,9 +2277,6 @@ msgstr ""
 "Чтобы Вас пропустили в гильдию магов, Вы должны купить книгу заклинаний, но "
 "к сожалению, Ваша сумка и так переполнена артефактами."
 
-msgid "Kingdom Income"
-msgstr "Доход"
-
 msgid "Exit"
 msgstr "Закрыть"
 
@@ -2103,12 +2366,6 @@ msgid ""
 msgstr ""
 "Сомкнутый боевой порядок предписывает отрядам Вашей армии организовать "
 "плотное построение посередине стартового расположения войск в бою."
-
-msgid "Attack Skill"
-msgstr "Атака"
-
-msgid "Defense Skill"
-msgstr "Защита"
 
 msgid "Spread Formation"
 msgstr "Разомкнутый строй"
@@ -2208,6 +2465,12 @@ msgstr ""
 
 msgid "Are you sure you want to dismiss this army?"
 msgstr "Вы уверены, что хотите распустить этот отряд?"
+
+msgid "Attack Skill"
+msgstr "Атака"
+
+msgid "Defense Skill"
+msgstr "Защита"
 
 msgid "Shots"
 msgstr "Выстрелов"
@@ -2329,6 +2592,49 @@ msgstr "Расширенные"
 msgid "Settings"
 msgstr "Настройки"
 
+msgid "off"
+msgstr "выкл."
+
+msgid "Music"
+msgstr "Музыка"
+
+msgid "Effects"
+msgstr "Эффекты"
+
+msgid "MIDI"
+msgstr "MIDI"
+
+msgid "MIDI Expansion"
+msgstr "Расширение MIDI"
+
+msgid "External"
+msgstr "Внешний"
+
+msgid "Music Type"
+msgstr "Тип музыки"
+
+#, fuzzy
+msgid "Hot Keys"
+msgstr "За одним компьютером"
+
+msgid "In-game"
+msgstr ""
+
+#, fuzzy
+msgid "Black & White"
+msgstr "Блэкридж"
+
+#, fuzzy
+msgid "Mouse Cursor"
+msgstr "Тень-курсор"
+
+msgid "Color"
+msgstr ""
+
+#, fuzzy
+msgid "Text Support"
+msgstr "Контроль качества и поддержка"
+
 msgid "Select Game Language"
 msgstr "Выберите язык игры:"
 
@@ -2343,6 +2649,31 @@ msgstr "Изменить разрешение экрана."
 
 msgid "Experimental game settings."
 msgstr "Вы можете настроить игру по своему усмотрению."
+
+msgid "Toggle ambient music level."
+msgstr "Уровень музыки."
+
+msgid "Toggle foreground sounds level."
+msgstr "Уровень звуков."
+
+msgid "Change the type of music."
+msgstr "Изменить тип музыки."
+
+msgid "Check all Hot Keys used in the game."
+msgstr ""
+
+msgid ""
+"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
+"move as smoothly as black and white ones."
+msgstr ""
+
+msgid ""
+"Toggle text support mode to output extra information about windows and "
+"events in the game."
+msgstr ""
+
+msgid "Okay"
+msgstr "Принять"
 
 msgid "Attention"
 msgstr "Внимание"
@@ -2425,6 +2756,9 @@ msgstr "Установить охрану"
 
 msgid "Your army too big!"
 msgstr "Ваша армия слишком большая!"
+
+msgid "Hot Keys:"
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Выберите язык игры:"
@@ -2546,7 +2880,28 @@ msgstr "Неизвестный"
 msgid "%{name} (Level %{level})"
 msgstr "%{name} (Уровень %{level})"
 
-msgid "Move Points"
+#, fuzzy
+msgid "Attack:"
+msgstr "Атака"
+
+#, fuzzy
+msgid "Defense:"
+msgstr "Защита"
+
+#, fuzzy
+msgid "Spell Power:"
+msgstr "Сила магии"
+
+#, fuzzy
+msgid "Knowledge:"
+msgstr "Знания"
+
+#, fuzzy
+msgid "Spell Points:"
+msgstr "Очки магии"
+
+#, fuzzy
+msgid "Move Points:"
 msgstr "Запас хода"
 
 msgid "Cost per troop:"
@@ -2557,9 +2912,6 @@ msgstr "Доступно: %{count}"
 
 msgid "Number to buy:"
 msgstr "Нанять:"
-
-msgid "Okay"
-msgstr "Принять"
 
 msgid "Click to apply the selected resolution."
 msgstr "Щёлкните, чтобы применить выбранное разрешение экрана."
@@ -2632,9 +2984,6 @@ msgstr ""
 
 msgid "The Succession Wars"
 msgstr "Война за престол"
-
-msgid "The Price of Loyalty"
-msgstr "Цена верности"
 
 msgid "Lose all your heroes and towns."
 msgstr "Потерять всех героев и все города."
@@ -2773,33 +3122,6 @@ msgstr "Принять изменения."
 msgid "Experimental Game Settings"
 msgstr "Настройки игры"
 
-msgid "one"
-msgstr "1"
-
-msgid "two"
-msgstr "2"
-
-msgid "off"
-msgstr "выкл."
-
-msgid "Music"
-msgstr "Музыка"
-
-msgid "Effects"
-msgstr "Эффекты"
-
-msgid "MIDI"
-msgstr "MIDI"
-
-msgid "MIDI Expansion"
-msgstr "Расширение MIDI"
-
-msgid "External"
-msgstr "Внешний"
-
-msgid "Music Type"
-msgstr "Тип музыки"
-
 msgid "Jump"
 msgstr "Н"
 
@@ -2844,15 +3166,6 @@ msgstr "Битвы"
 
 msgid "Manual"
 msgstr "Вручную"
-
-msgid "Toggle ambient music level."
-msgstr "Уровень музыки."
-
-msgid "Toggle foreground sounds level."
-msgstr "Уровень звуков."
-
-msgid "Change the type of music."
-msgstr "Изменить тип музыки."
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -2970,17 +3283,28 @@ msgstr "Эксперт"
 msgid "difficulty|Impossible"
 msgstr "Невозможная"
 
-msgid "Map is loading..."
-msgstr "Загрузка..."
-
 msgid "and more..."
 msgstr "и т.д."
 
-msgid "Are you sure you want to restart this scenario?"
-msgstr "Вы действительно хотите начать этот сценарий сначала?"
+msgid "Start the selected scenario."
+msgstr ""
+
+#, fuzzy
+msgid "View Intro"
+msgstr "Просмотреть героя"
+
+msgid "View Intro videos for the current state of the campaign."
+msgstr ""
 
 msgid "Restart"
 msgstr "Начать сначала"
+
+#, fuzzy
+msgid "Restart the current scenario."
+msgstr "Сохранить текущую игру."
+
+msgid "Are you sure you want to restart this scenario?"
+msgstr "Вы действительно хотите начать этот сценарий сначала?"
 
 msgid "Campaign Scenario loading failure"
 msgstr "Сбой загрузки сценария кампании"
@@ -3006,9 +3330,6 @@ msgstr "Особая благодарность"
 msgid "and many other contributors!"
 msgstr "и многим другим участникам"
 
-msgid "Original project before 0.7"
-msgstr "Разработчик до 0.7"
-
 msgid "Support us at"
 msgstr "Поддержите нас"
 
@@ -3020,6 +3341,9 @@ msgstr "Вам нужна помощь по игре?"
 
 msgid "and many-many other supporters!"
 msgstr "и многим другим, кто поддерживает нас!"
+
+msgid "Original project before 0.7"
+msgstr "Разработчик до 0.7"
 
 msgid "Original Heroes of Might and Magic II team"
 msgstr "Команда разработчиков New World Computing 1996 года"
@@ -3705,6 +4029,13 @@ msgstr "%{color} игрок"
 msgid "View %{skill} Info"
 msgstr "Информация о навыке %{skill}"
 
+msgid "Kingdom Income"
+msgstr "Доход"
+
+#, fuzzy
+msgid "Kingdom Income per day."
+msgstr "Доход"
+
 msgid "English"
 msgstr "Английский"
 
@@ -3725,6 +4056,22 @@ msgstr "Итальянский"
 
 msgid "Czech"
 msgstr "Чешский"
+
+msgid "Norwegian"
+msgstr ""
+
+msgid "Belarusian"
+msgstr ""
+
+#, fuzzy
+msgid "Bulgarian"
+msgstr "Варвар"
+
+msgid "Ukrainian"
+msgstr ""
+
+msgid "Romanian"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -3891,17 +4238,11 @@ msgstr "Роксана"
 msgid "Sandro"
 msgstr "Сандро"
 
-msgid "Archibald"
-msgstr "Арчибальд"
-
 msgid "Lord Corlagon"
 msgstr "Лорд Корлагон"
 
 msgid "Lord Halton"
 msgstr "Лорд Халтон"
-
-msgid "Roland"
-msgstr "Роланд"
 
 msgid "Sister Eliza"
 msgstr "Сестра Элиза"
@@ -3939,6 +4280,12 @@ msgstr "Джарконас"
 msgid "Martine"
 msgstr "Мартина"
 
+msgid " gives you maximum morale"
+msgstr ""
+
+msgid " gives you maximum luck"
+msgstr ""
+
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Вы не можете забрать этот артефакт, у Вас нет свободного места!"
 
@@ -3955,6 +4302,12 @@ msgstr "Желаете купить?"
 
 msgid "%{count} / day"
 msgstr "%{count} / день"
+
+msgid "one"
+msgstr "1"
+
+msgid "two"
+msgstr "2"
 
 msgid "You are unable to recruit at this time, your ranks are full."
 msgstr "Для этого отряда нет места."
@@ -4459,9 +4812,6 @@ msgstr ""
 msgid "Do you wish to buy this artifact?"
 msgstr "Хотите приобрести этот артефакт?"
 
-msgid "Artifact"
-msgstr "Артефакт"
-
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
 "leprechaun stamps his foot and ignores you."
@@ -4961,9 +5311,6 @@ msgstr ""
 "Капитан вздыхает. \"Вам не хватает денег, да? Вы же не думаете, что я отдам "
 "их Вам просто так?!\""
 
-msgid "You find %{artifact}."
-msgstr "Вы нашли %{artifact}."
-
 msgid ""
 "You come upon an obelisk made from a type of stone you have never seen "
 "before. Staring at it intensely, the smooth surface suddenly changes to an "
@@ -5191,6 +5538,11 @@ msgid "The Arena guards turn you away."
 msgstr "Стража арены преградила Вам дорогу и не пропустила внутрь."
 
 msgid ""
+"You have your crew stop up their ears with wax before the sirens' eerie song "
+"has any chance of luring them to a watery grave."
+msgstr ""
+
+msgid ""
 "As the sirens sing their eerie song, your small, determined army manages to "
 "overcome the urge to dive headlong into the sea."
 msgstr ""
@@ -5198,12 +5550,11 @@ msgstr ""
 "чтобы послушать их пение, которое запросто может погубить всех в морской "
 "пучине."
 
+#, fuzzy
 msgid ""
-"You have your crew stop up their ears with wax before the sirens' eerie song "
-"has any chance of luring them to a watery grave. An eerie wailing song "
-"emanates from the sirens perched upon the rocks. Many of your crew fall "
-"under its spell, and dive into the water where they drown. You are now wiser "
-"for the visit, and gain %{exp} experience."
+"An eerie wailing song emanates from the sirens perched upon the rocks. Many "
+"of your crew fall under its spell, and dive into the water where they drown. "
+"You are now wiser for the visit, and gain %{exp} experience."
 msgstr ""
 "Над камнями разнеслась жуткая песня сирен. Многие из Вашей команды бросились "
 "в воду под действием этих чар и утонули в морской пучине. Для Вас это был "
@@ -5309,16 +5660,35 @@ msgstr ""
 msgid "Spell book is not present."
 msgstr "Книги заклинаний нет."
 
-msgid "The spell is not found."
-msgstr "Заклинание не найдено."
-
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
 "cast the spell."
 msgstr "Заклинание требует %{mana} очков магии. У Вас только %{point}."
 
-msgid "Not enough move points."
-msgstr "Недостаточно очков передвижения."
+msgid "The spell is not found."
+msgstr "Заклинание не найдено."
+
+msgid "Only heroes can cast this spell."
+msgstr ""
+
+msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
+msgstr ""
+"Ваш герой очень устал, и не сможет применять магию сегодня. Попробуйте ещё "
+"раз завтра."
+
+msgid ""
+"You do not currently own any town or castle, so you can't cast the spell."
+msgstr ""
+
+#, fuzzy
+msgid "This hero is already in a town, so you can't cast the spell."
+msgstr "Заклинание требует %{mana} очков магии. У Вас только %{point}."
+
+msgid ""
+"The nearest town is %{town}.\n"
+" \n"
+"This town is occupied by your hero %{hero}."
+msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race} %{name} (уровень %{level})"
@@ -5405,40 +5775,11 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} встретил %{name2}"
 
-msgid ""
-"%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
-"%{spells1} from %{learner}, and teaches %{spells2} to %{learner}."
-msgstr ""
-"%{teacher}, который %{level} %{scholar} знает много магических секретов, "
-"изучает %{spells1} от %{learner}, и обучает %{spells2} для %{learner}."
-
-msgid ""
-"%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
-"%{spells1} from %{learner}."
-msgstr ""
-"%{teacher}, который %{level} %{scholar} знает много магических секретов, "
-"изучает %{spells1} от %{learner}"
-
-msgid ""
-"%{teacher}, whose %{level} %{scholar} knows many magical secrets, teaches "
-"%{spells2} to %{learner}."
-msgstr ""
-"%{teacher}, который %{level} %{scholar} знает много магических секретов, "
-"обучает %{spells2} для %{learner}."
-
-msgid "Scholar Ability"
-msgstr "Обучение Магии"
-
 msgid "Town Portal"
 msgstr "Портал города"
 
 msgid "Select town to port to."
 msgstr "Выберите город для телепортации."
-
-msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
-msgstr ""
-"Ваш герой очень устал, и не сможет применять магию сегодня. Попробуйте ещё "
-"раз завтра."
 
 msgid "%{spell} failed!!!"
 msgstr "Неудачный вызов %{spell}!"
@@ -5454,11 +5795,6 @@ msgstr "Это заклинание не действует в море."
 
 msgid "This spell can be casted only nearby water."
 msgstr "Это заклинание действует только у воды."
-
-msgid ""
-"Nearest town occupied.\n"
-"Spell Failed!!!"
-msgstr "Нет доступных городов для этой магии!!!"
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
@@ -5527,29 +5863,32 @@ msgstr "Продвинутый"
 msgid "skill|Expert"
 msgstr "Эксперт"
 
+msgid "Pathfinding"
+msgstr "Следопыт"
+
 msgid "Archery"
 msgstr "Стрельба"
-
-msgid "Diplomacy"
-msgstr "Дипломатия"
-
-msgid "Leadership"
-msgstr "Лидерство"
 
 msgid "Logistics"
 msgstr "Логистика"
 
-msgid "Navigation"
-msgstr "Навигация"
-
-msgid "Pathfinding"
-msgstr "Следопыт"
-
 msgid "Scouting"
 msgstr "Разведка"
 
+msgid "Diplomacy"
+msgstr "Дипломатия"
+
+msgid "Navigation"
+msgstr "Навигация"
+
+msgid "Leadership"
+msgstr "Лидерство"
+
 msgid "Wisdom"
 msgstr "Мудрость"
+
+msgid "Mysticism"
+msgstr "Мистицизм"
 
 msgid "Ballistics"
 msgstr "Баллистика"
@@ -5557,14 +5896,11 @@ msgstr "Баллистика"
 msgid "Eagle Eye"
 msgstr "Орлиный взор"
 
-msgid "Estates"
-msgstr "Казначей"
-
-msgid "Mysticism"
-msgstr "Мистицизм"
-
 msgid "Necromancy"
 msgstr "Некромантия"
+
+msgid "Estates"
+msgstr "Казначей"
 
 msgid "Advanced Archery"
 msgstr "Продвинутая стрельба"
@@ -5877,6 +6213,15 @@ msgstr "Фиолетовый"
 
 msgid "tent|Red"
 msgstr "Красный"
+
+#, fuzzy
+msgid "Experience"
+msgstr "Расширенные"
+
+msgid ""
+"Experience allows your heroes to go up levels, increasing their primary and "
+"secondary skills."
+msgstr ""
 
 msgid "Hero/Stats"
 msgstr "Герой/Характеристика"
@@ -6417,6 +6762,9 @@ msgstr "Ресурс"
 
 msgid "Whirlpool"
 msgstr "Водоворот"
+
+msgid "Artifact"
+msgstr "Артефакт"
 
 msgid "Boat"
 msgstr "Корабль"
@@ -7087,6 +7435,21 @@ msgstr "% урона от "
 msgid "The three Anduran artifacts magically combine into one."
 msgstr "Три магических артефакта Андурана, объединяются в один."
 
+msgid "View Spells"
+msgstr "Просмотреть заклинания"
+
+msgid "View %{name} Info"
+msgstr "Информация о %{name}"
+
+msgid "Move %{name}"
+msgstr "Переместить %{name}"
+
+msgid "Cannot move the Spellbook"
+msgstr "Невозможно переместить книгу заклинаний"
+
+msgid "This item can't be traded."
+msgstr "Эту вещь нельзя продать."
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "%{name} увеличивает Знания на %{count}."
 
@@ -7138,14 +7501,36 @@ msgstr "%{name} приносит каждый день по %{count} золот�
 msgid "Arcane Necklace of Magic"
 msgstr "Ожерелье Тайной Магии"
 
+msgid ""
+"After rescuing a Sorceress from a cursed tomb, she rewards your heroism with "
+"an exquisite jeweled necklace."
+msgstr ""
+
 msgid "Caster's Bracelet of Magic"
 msgstr "Магический Браслет"
+
+msgid ""
+"While searching through the rubble of a caved-in mine, you free a group of "
+"trapped Dwarves. Grateful, the leader gives you a golden bracelet."
+msgstr ""
 
 msgid "Mage's Ring of Power"
 msgstr "Кольцо Мага"
 
+msgid ""
+"A cry of pain leads you to a Centaur, caught in a trap. Upon setting the "
+"creature free, he hands you a small pouch. Emptying the contents, you find a "
+"dazzling jeweled ring."
+msgstr ""
+
 msgid "Witch's Broach of Magic"
 msgstr "Брошь Ведьмы"
+
+msgid ""
+"Alongside the remains of a burnt witch lies a beautiful broach, intricately "
+"designed. Approaching the corpse with caution, you add the broach to your "
+"inventory."
+msgstr ""
 
 msgid "Medal of Valor"
 msgstr "Медаль Отваги"
@@ -7153,14 +7538,34 @@ msgstr "Медаль Отваги"
 msgid "The %{name} increases your morale."
 msgstr "%{name} увеличивает Вашу мораль."
 
+msgid ""
+"Freeing a virtuous maiden from the clutches of an evil overlord, you are "
+"granted a Medal of Valor by the King's herald."
+msgstr ""
+
 msgid "Medal of Courage"
 msgstr "Медаль Мужества"
+
+msgid ""
+"After saving a young boy from a vicious pack of Wolves, you return him to "
+"his father's manor. The grateful nobleman awards you with a Medal of Courage."
+msgstr ""
 
 msgid "Medal of Honor"
 msgstr "Медаль Доблести"
 
+msgid ""
+"After freeing a princess of a neighboring kingdom from the evil clutches of "
+"despicable slavers, she awards you with a Medal of Honor."
+msgstr ""
+
 msgid "Medal of Distinction"
 msgstr "Медаль Почёта"
+
+msgid ""
+"Ridding the countryside of the hideous Minotaur who made a sport of eating "
+"noblemen's Knights, you are honored with the Medal of Distinction."
+msgstr ""
 
 msgid "Fizbin of Misfortune"
 msgstr "Символ Неудачи"
@@ -7168,8 +7573,19 @@ msgstr "Символ Неудачи"
 msgid "The %{name} greatly decreases your morale by %{count}."
 msgstr "%{name} снижает Вашу мораль на %{count}."
 
+msgid ""
+"You stumble upon a medal lying alongside the empty road. Adding the medal to "
+"your inventory, you become aware that you have acquired the undesirable "
+"Fizbin of Misfortune, greatly decreasing your army's morale."
+msgstr ""
+
 msgid "Thunder Mace of Dominion"
 msgstr "Громовая Палица"
+
+msgid ""
+"During a sudden storm, a bolt of lightning strikes a tree, splitting it. "
+"Inside the tree you find a mysterious mace."
+msgstr ""
 
 msgid "Armored Gauntlets of Protection"
 msgstr "Защитная Перчатка"
@@ -7177,11 +7593,27 @@ msgstr "Защитная Перчатка"
 msgid "The %{name} increase your defense skill by %{count}."
 msgstr "%{name} увеличивает силу защиты на %{count}."
 
+msgid ""
+"You encounter the infamous Black Knight!  After a grueling duel ending in a "
+"draw, the Knight, out of respect, offers you a pair of armored gauntlets."
+msgstr ""
+
 msgid "Defender Helm of Protection"
 msgstr "Шлем Защитника"
 
+msgid ""
+"A glint of golden light catches your eye. Upon further investigation, you "
+"find a golden helm hidden under a bush."
+msgstr ""
+
 msgid "Giant Flail of Dominion"
 msgstr "Гигантский Цеп"
+
+msgid ""
+"A clumsy Giant has killed himself with his own flail. Knowing your superior "
+"skill with this weapon, you confidently remove the spectacular flail from "
+"the fallen Giant."
+msgstr ""
 
 msgid "Ballista of Quickness"
 msgstr "Баллиста"
@@ -7189,29 +7621,79 @@ msgstr "Баллиста"
 msgid "The %{name} lets your catapult fire twice per combat round."
 msgstr "%{name} позволяет дважды произвести выстрел из катапульты за один ход."
 
+msgid ""
+"Walking through the ruins of an ancient walled city, you find the instrument "
+"of the city's destruction, an elaborately crafted ballista."
+msgstr ""
+
 msgid "Stealth Shield of Protection"
 msgstr "Незримый Щит"
+
+msgid ""
+"A stone statue of a warrior holds a silver shield. As you remove the shield, "
+"the statue crumbles into dust."
+msgstr ""
 
 msgid "Dragon Sword of Dominion"
 msgstr "Драконий Меч"
 
+msgid ""
+"As you are walking along a narrow path, a nearby bush suddenly bursts into "
+"flames. Before your eyes the flames become the image of a beautiful woman. "
+"She holds out a magnificent sword to you."
+msgstr ""
+
 msgid "Power Axe of Dominion"
 msgstr "Топор Власти"
+
+msgid ""
+"You see a silver axe embedded deeply in the ground. After several "
+"unsuccessful attempts by your army to remove the axe, you tightly grip the "
+"handle of the axe and effortlessly pull it free."
+msgstr ""
 
 msgid "Divine Breastplate of Protection"
 msgstr "Божественный Доспех"
 
+msgid ""
+"A gang of Rogues is sifting through the possessions of dead warriors. "
+"Scaring off the scavengers, you note the Rogues had overlooked a beautiful "
+"breastplate."
+msgstr ""
+
 msgid "Minor Scroll of Knowledge"
 msgstr "Малый Свиток Знания"
+
+msgid ""
+"Before you appears a levitating glass case with a scroll, perched upon a bed "
+"of crimson velvet. At your touch, the lid opens and the scroll floats into "
+"your awaiting hands."
+msgstr ""
 
 msgid "Major Scroll of Knowledge"
 msgstr "Большой Свиток Знания"
 
+msgid ""
+"Visiting a local wiseman, you explain the intent of your journey. He reaches "
+"into a sack and withdraws a yellowed scroll and hands it to you."
+msgstr ""
+
 msgid "Superior Scroll of Knowledge"
 msgstr "Могущественный Свиток Знания"
 
+msgid ""
+"You come across the remains of an ancient Druid. Bones, yellowed with age, "
+"peer from the ragged folds of her robe. Searching the robe, you discover a "
+"scroll hidden in the folds."
+msgstr ""
+
 msgid "Foremost Scroll of Knowledge"
 msgstr "Свиток Высшего Знания"
+
+msgid ""
+"Mangled bones, yellowed with age, peer from the ragged folds of a dead "
+"Druid's robe. Searching the robe, you discover a scroll hidden within."
+msgstr ""
 
 msgid "Endless Sack of Gold"
 msgstr "Бездонный Мешок"
@@ -7219,11 +7701,29 @@ msgstr "Бездонный Мешок"
 msgid "The %{name} provides you with %{count} gold per day."
 msgstr "%{name} ежедневно приносит Вам %{count} золотых."
 
+msgid ""
+"A little leprechaun dances gleefully around a magic sack. Seeing you "
+"approach, he stops in mid-stride. The little man screams and stamps his foot "
+"ferociously, vanishing into thin air. Remembering the old leprechaun saying "
+"'Finders Keepers', you grab the sack and leave."
+msgstr ""
+
 msgid "Endless Bag of Gold"
 msgstr "Бездонная Сума"
 
+msgid ""
+"A noblewoman, separated from her traveling companions, asks for your help. "
+"After escorting her home, she rewards you with a bag filled with gold."
+msgstr ""
+
 msgid "Endless Purse of Gold"
 msgstr "Бездонный Кошель"
+
+msgid ""
+"In your travels, you find a leather purse filled with gold that once "
+"belonged to a great warrior king who had the ability to transform any "
+"inanimate object into gold."
+msgstr ""
 
 msgid "Nomad Boots of Mobility"
 msgstr "Башмаки Кочевника"
@@ -7231,8 +7731,21 @@ msgstr "Башмаки Кочевника"
 msgid "The %{name} increase your movement on land."
 msgstr "%{name} увеличивают Ваше передвижение по земле."
 
+msgid ""
+"A Nomad trader seeks protection from a tribe of Goblins. For your "
+"assistance, he gives you a finely crafted pair of boots made from the "
+"softest leather. Looking closely, you see fascinating ancient carvings "
+"engraved on the leather."
+msgstr ""
+
 msgid "Traveler's Boots of Mobility"
 msgstr "Сапоги Путника"
+
+msgid ""
+"Discovering a pair of beautifully beaded boots made from the finest and "
+"softest leather, you thank the anonymous donor and add the boots to your "
+"inventory."
+msgstr ""
 
 msgid "Lucky Rabbit's Foot"
 msgstr "Кроличья Лапка"
@@ -7240,20 +7753,47 @@ msgstr "Кроличья Лапка"
 msgid "The %{name} increases your luck in combat."
 msgstr "%{name} увеличивает Вашу удачу в бою."
 
+msgid ""
+"A traveling merchant offers you a rabbit's foot, made of gleaming silver "
+"fur, for safe passage. The merchant explains the charm will increase your "
+"luck in combat."
+msgstr ""
+
 msgid "Golden Horseshoe"
 msgstr "Золотая Подкова"
+
+msgid ""
+"An ensnared Unicorn whinnies in fright. Murmuring soothing words, you set "
+"her free. Snorting and stamping her front hoof once, she gallops off. "
+"Looking down you see a golden horseshoe."
+msgstr ""
 
 msgid "Gambler's Lucky Coin"
 msgstr "Счастливая Монета"
 
+msgid ""
+"You have captured a mischievous imp who has been terrorizing the region. In "
+"exchange for his release, he rewards you with a magical coin."
+msgstr ""
+
 msgid "Four-Leaf Clover"
 msgstr "Четырёхлистник"
+
+msgid ""
+"In the middle of a patch of dead and dry vegetation, to your surprise you "
+"find a healthy green four-leaf clover."
+msgstr ""
+
+msgid "True Compass of Mobility"
+msgstr "Компас"
 
 msgid "The %{name} increases your movement on land and sea."
 msgstr "%{name} увеличивает Ваше передвижение по земле и воде."
 
-msgid "True Compass of Mobility"
-msgstr "Компас"
+msgid ""
+"An old man claiming to be an inventor asks you to try his latest invention. "
+"He then hands you a compass."
+msgstr ""
 
 msgid "Sailor's Astrolabe of Mobility"
 msgstr "Астролябия"
@@ -7261,11 +7801,22 @@ msgstr "Астролябия"
 msgid "The %{name} increases your movement on sea."
 msgstr "%{name} увеличивает Ваше передвижение по воде."
 
+msgid ""
+"An old sea captain is being tortured by Ogres. You save him, and in return "
+"he rewards you with a wondrous instrument to measure the distance of a star."
+msgstr ""
+
 msgid "Evil Eye"
 msgstr "Дурной Глаз"
 
 msgid "The %{name} reduces the casting cost of curse spells by half."
 msgstr "%{name} снижает стоимость заклинаний проклятия на половину."
+
+msgid ""
+"While venturing into a decrepit hut you find the Skeleton of a long dead "
+"witch. Investigation of the remains reveals a glass eye rolling around "
+"inside an empty skull."
+msgstr ""
 
 msgid "Enchanted Hourglass"
 msgstr "Зачарованные Часы"
@@ -7273,17 +7824,34 @@ msgstr "Зачарованные Часы"
 msgid "The %{name} extends the duration of all your spells by %{count} turns."
 msgstr "%{name} увеличивает длительность всех заклинаний на %{count} ход."
 
+msgid ""
+"A surprise turn in the landscape finds you in the midst of a grisly scene:  "
+"Vultures picking at the aftermath of a terrible battle. Your cursory search "
+"of the remains turns up an enchanted hourglass."
+msgstr ""
+
 msgid "Gold Watch"
 msgstr "Золотые Часы"
 
 msgid "The %{name} doubles the effectiveness of your hypnotize spells."
 msgstr "%{name} удваивают эффект заклинаний гипноза."
 
+msgid ""
+"In reward for helping his cart out of a ditch, a traveling potion salesman "
+"gives you a \"magic\" gold watch. Unbeknownst to him, the watch really is "
+"magical."
+msgstr ""
+
 msgid "Skullcap"
 msgstr "Ермолка"
 
 msgid "The %{name} halves the casting cost of all mind influencing spells."
 msgstr "%{name} снижает вдвое стоимость всех заклинаний основанных на разуме."
+
+msgid ""
+"A brief stop at an improbable rural inn yields an exchange of money, tales, "
+"and accidentally, luggage. You find a magical skullcap in your new backpack."
+msgstr ""
 
 msgid "Ice Cloak"
 msgstr "Ледяная Накидка"
@@ -7292,6 +7860,12 @@ msgid "The %{name} halves all damage your troops take from cold spells."
 msgstr ""
 "%{name} снижает вдвое весь урон нанесённый Вашим отрядам заклинаниями холода."
 
+msgid ""
+"Responding to the panicked cries of a damsel in distress, you discover a "
+"young woman fleeing from a hungry bear. You slay the beast in the nick of "
+"time, and the grateful Sorceress weaves a magic cloak from the bear's hide."
+msgstr ""
+
 msgid "Fire Cloak"
 msgstr "Огненная Накидка"
 
@@ -7299,12 +7873,25 @@ msgid "The %{name} halves all damage your troops take from fire spells."
 msgstr ""
 "%{name} снижает вдвое весь урон нанесённый Вашим отрядам заклинаниями огня."
 
+msgid ""
+"You've come upon a fight between a Necromancer and a Paladin. The "
+"Necromancer blasts the Paladin with a fire bolt, bringing him to his knees. "
+"Acting quickly, you slay the evil one before the final blow. The grateful "
+"Paladin gives you the fire cloak that saved him."
+msgstr ""
+
 msgid "Lightning Helm"
 msgstr "Громовой Шлем"
 
 msgid "The %{name} halves all damage your troops take from lightning spells."
 msgstr ""
 "%{name} снижает вдвое весь урон нанесённый Вашим отрядам заклинаниями молний."
+
+msgid ""
+"A traveling tinker in need of supplies offers you a helm with a thunderbolt "
+"design on its top in exchange for food and water. Curious, you accept, and "
+"later find out that the helm is magical."
+msgstr ""
 
 msgid "Evercold Icicle"
 msgstr "Нетающий Лёд"
@@ -7314,6 +7901,12 @@ msgid ""
 "enemy troops."
 msgstr "%{name} увеличивает на %{count} процентов урон от заклинаний холода."
 
+msgid ""
+"An icicle withstanding the full heat of the noonday sun attracts your "
+"attention. Intrigued, you break it off, and find that it does not melt in "
+"your hand."
+msgstr ""
+
 msgid "Everhot Lava Rock"
 msgstr "Горячий Камень"
 
@@ -7321,6 +7914,13 @@ msgid ""
 "The %{name} causes your fire spells to do %{count} percent more damage to "
 "enemy troops."
 msgstr "%{name} увеличивает на %{count} процентов урон от заклинаний огня."
+
+msgid ""
+"Your wanderings bring you into contact with a tribe of ape-like beings using "
+"a magical lava rock that never cools to light their fires. You take pity on "
+"them and teach them to make fire with sticks. Believing you to be a god, the "
+"apes give you their rock."
+msgstr ""
 
 msgid "Lightning Rod"
 msgstr "Жезл Молний"
@@ -7330,11 +7930,23 @@ msgid ""
 "to enemy troops."
 msgstr "%{name} увеличивает на %{count} процентов урон от заклинаний молнии."
 
+msgid ""
+"While waiting out a storm, a lighting bolt strikes a nearby cottage's "
+"lightning rod, which melts and falls to the ground. The tip of the rod, "
+"however, survives intact and makes your hair stand on end when you touch it. "
+"Hmm..."
+msgstr ""
+
 msgid "Snake-Ring"
 msgstr "Кольцо Змеи"
 
 msgid "The %{name} halves the casting cost of all your bless spells."
 msgstr "%{name} снижает стоимость всех заклинаний благословения."
+
+msgid ""
+"You've found an oddly shaped ring on the finger of a long dead traveler. The "
+"ring looks like a snake biting its own tail."
+msgstr ""
 
 msgid "Ankh"
 msgstr "Символ Жизни"
@@ -7344,17 +7956,35 @@ msgid ""
 "spells."
 msgstr "%{name} удваивает эффективность всех Ваших заклинаний оживления."
 
+msgid ""
+"A fierce windstorm reveals the entrance to a buried tomb. Your investigation "
+"reveals that the tomb has already been looted, but the thieves overlooked an "
+"ankh on a silver chain in the dark."
+msgstr ""
+
 msgid "Book of Elements"
 msgstr "Книга Стихий"
 
 msgid "The %{name} doubles the effectiveness of all your summoning spells."
 msgstr "%{name} удваивает эффективность всех Ваших заклинаний призыва."
 
+msgid ""
+"You come across a conjurer who begs to accompany you and your army awhile "
+"for safety. You agree, and he offers as payment a copy of the book of the "
+"elements."
+msgstr ""
+
 msgid "Elemental Ring"
 msgstr "Кольцо Стихий"
 
 msgid "The %{name} halves the casting cost of all summoning spells."
 msgstr "%{name} снижает наполовину стоимость всех Ваших заклинаний призыва."
+
+msgid ""
+"While pausing to rest, you notice a bobcat climbing a short tree to get at a "
+"crow's nest. On impulse, you climb the tree yourself and scare off the cat. "
+"When you look in the nest, you find a collection of shiny stones and a ring."
+msgstr ""
 
 msgid "Holy Pendant"
 msgstr "Святой Кулон"
@@ -7363,6 +7993,12 @@ msgid "The %{name} makes all your troops immune to curse spells."
 msgstr ""
 "%{name} делает все Ваши отряды невосприимчивыми к заклинаниям проклятия."
 
+msgid ""
+"In your wanderings you come across a hermit living in a small, tidy hut. "
+"Impressed with your mission, he takes time out from his meditations to bless "
+"and give you a charm against curses."
+msgstr ""
+
 msgid "Pendant of Free Will"
 msgstr "Подвеска Свободы"
 
@@ -7370,17 +8006,37 @@ msgid "The %{name} makes all your troops immune to hypnotize spells."
 msgstr ""
 "%{name} воли делает все Ваши отряды невосприимчивыми к заклинаниям гипноза."
 
+msgid ""
+"Responding to cries for help, you find river Sprites making a sport of "
+"dunking an old man. Feeling vengeful, you rescue the man and drag a Sprite "
+"onto dry land for awhile. The Sprite, uncomfortable in the air, gives you a "
+"magic pendant to let him go."
+msgstr ""
+
 msgid "Pendant of Life"
 msgstr "Кулон Жизни"
 
 msgid "The %{name} makes all your troops immune to death spells."
 msgstr "%{name} делает все Ваши отряды невосприимчивыми к заклинаниям смерти."
 
+msgid ""
+"A brief roadside encounter with a small caravan and a game of knucklebones "
+"wins a magic pendant. Its former owner says that it protects from "
+"Necromancers' death spells."
+msgstr ""
+
 msgid "Serenity Pendant"
 msgstr "Подвеска Покоя"
 
 msgid "The %{name} makes all your troops immune to berserk spells."
 msgstr "%{name} делает все Ваши отряды невосприимчивыми к заклинанию берсерка."
+
+msgid ""
+"The sounds of combat draw you to the scene of a fight between an old "
+"Barbarian and an eight-headed Hydra. Your timely intervention swings the "
+"battle in favor of the man, and he rewards you with a pendant he used to use "
+"to calm his mind for battle."
+msgstr ""
 
 msgid "Seeing-eye Pendant"
 msgstr "Всевидящий Глаз"
@@ -7389,11 +8045,24 @@ msgid "The %{name} makes all your troops immune to blindness spells."
 msgstr ""
 "%{name} делает все Ваши отряды невосприимчивыми к заклинанию ослепления."
 
+msgid ""
+"You come upon a very old woman, long blind from cataracts and dying alone. "
+"You tend to her final needs and promise a proper burial. Grateful, she gives "
+"you a magic pendant emblazoned with a stylized eye. It lets you see with "
+"your eyes closed."
+msgstr ""
+
 msgid "Kinetic Pendant"
 msgstr "Кулон Стремительности"
 
 msgid "The %{name} makes all your troops immune to paralyze spells."
 msgstr "%{name} делает все Ваши отряды невосприимчивыми к заклинанию паралича."
+
+msgid ""
+"You come across a golem wearing a glowing pendant and blocking your way. "
+"Acting on a hunch, you cut the pendant from its neck. Deprived of its power "
+"source, the golem breaks down, leaving you with the magical pendant."
+msgstr ""
 
 msgid "Pendant of Death"
 msgstr "Кулон Смерти"
@@ -7403,11 +8072,23 @@ msgstr ""
 "%{name} делает все Ваши отряды невосприимчивыми к заклинаниям изгнания "
 "нежити."
 
-msgid "The %{name} protects your troops from the Dispel Magic spell."
-msgstr "%{name} защищает Ваши отряды от заклятий снятия чар."
+msgid ""
+"A quick and deadly battle with a Necromancer wins you his magical pendant. "
+"Later, a Wizard tells you that the pendant protects undead under your "
+"control from holy word spells."
+msgstr ""
 
 msgid "Wand of Negation"
 msgstr "Посох Отрицания"
+
+msgid "The %{name} protects your troops from the Dispel Magic spell."
+msgstr "%{name} защищает Ваши отряды от заклятий снятия чар."
+
+msgid ""
+"You meet an old Wizard friend of yours traveling in the opposite direction. "
+"He presents  you with a gift:  A wand that prevents the use of the dispel "
+"magic spell on your allies."
+msgstr ""
 
 msgid "Golden Bow"
 msgstr "Золотой Лук"
@@ -7418,6 +8099,11 @@ msgid ""
 msgstr ""
 "%{name} уменьшает на %{count} процентов штраф при стрельбе за преграды."
 
+msgid ""
+"A chance meeting with a famous Archer finds you in a game of knucklebones "
+"pitting his bow against your horse. You win."
+msgstr ""
+
 msgid "Telescope"
 msgstr "Телескоп"
 
@@ -7425,6 +8111,14 @@ msgid ""
 "The %{name} increases the amount of terrain your hero reveals when "
 "adventuring by %{count} extra square."
 msgstr "%{name} увеличивает радиус обзора героя на %{count} клетку."
+
+msgid ""
+"A merchant from far away lands trades you a new invention of his people for "
+"traveling supplies. It makes distant objects appear closer, and he calls "
+"it...\n"
+"\n"
+"a telescope."
+msgstr ""
 
 msgid "Statesman's Quill"
 msgstr "Перо Дипломата"
@@ -7436,13 +8130,26 @@ msgstr ""
 "%{name} снижает стоимость сдачи до %{count} процентов от общей стоимости "
 "войска."
 
+msgid ""
+"You pause to help a diplomat with a broken axle fix his problem. In "
+"gratitude, he gives you a writing quill with magical properties which he "
+"says will \"help people see things your way\"."
+msgstr ""
+
+msgid "Wizard's Hat"
+msgstr "Шляпа Мага"
+
 msgid "The %{name} increases the duration of your spells by %{count} turns."
 msgstr ""
 "%{name} увеличивает продолжительность всех Ваших заклинаний на %{count} "
 "ходов."
 
-msgid "Wizard's Hat"
-msgstr "Шляпа Мага"
+msgid ""
+"You see a Wizard fleeing from a Griffin and riding like the wind. The Wizard "
+"opens a portal and rides through, getting his hat knocked off by the edge of "
+"the gate. The Griffin follows; the gate closes. You pick the hat up, dust it "
+"off, and put it on."
+msgstr ""
 
 msgid "Power Ring"
 msgstr "Кольцо Силы"
@@ -7450,11 +8157,23 @@ msgstr "Кольцо Силы"
 msgid "The %{name} returns %{count} extra spell points per day to your hero."
 msgstr "%{name} восстанавливает %{count} очка магии в день."
 
+msgid ""
+"You find a small tree that closely resembles the great Warlock Carnauth with "
+"a ring around one of its twigs. Scraps of clothing and rotting leather lead "
+"you to suspect that it IS Carnauth, transformed. Since you can't help him, "
+"you take the magic ring."
+msgstr ""
+
 msgid "Ammo Cart"
 msgstr "Оружейный Обоз"
 
 msgid "The %{name} provides endless ammunition for all your troops that shoot."
 msgstr "%{name} обеспечивает бесконечными боеприпасами всех Ваших стрелков."
+
+msgid ""
+"An ammunition cart in the middle of an old battlefield catches your eye. "
+"Inspection shows it to be in good working order, so  you take it along."
+msgstr ""
 
 msgid "Tax Lien"
 msgstr "Долговая Расписка"
@@ -7462,11 +8181,25 @@ msgstr "Долговая Расписка"
 msgid "The %{name} costs you %{count} gold pieces per day."
 msgstr "%{name} стоит Вам %{count} золотых ежедневно."
 
+msgid ""
+"Your big spending habits have earned you a massive tax bill that you can't "
+"hope to pay. The tax man takes pity and agrees to only take 250 gold a day "
+"from your account for life. Check here if you want one dollar to go to the "
+"presidential campaign election fund."
+msgstr ""
+
 msgid "Hideous Mask"
 msgstr "Ужасная Маска"
 
 msgid "The %{name} prevents all 'wandering' armies from joining your hero."
 msgstr "%{name} не позволяет нейтральным войскам вступать в Вашу армию."
+
+msgid ""
+"Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
+"Warlock, unearths his fabled mask. Trembling, you put it on and it twists "
+"your visage into an awful grimace!  Oh no!  It's actually the hideous mask "
+"of Gromluck Greene, and you are stuck with it."
+msgstr ""
 
 msgid "Endless Pouch of Sulfur"
 msgstr "Мешочек Серы"
@@ -7474,11 +8207,23 @@ msgstr "Мешочек Серы"
 msgid "The %{name} provides %{count} unit of sulfur per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру серы."
 
+msgid ""
+"You visit an alchemist who, upon seeing your army, is swayed by the "
+"righteousness of your cause. The newly loyal subject gives you his endless "
+"pouch of sulfur to help with the war effort."
+msgstr ""
+
 msgid "Endless Vial of Mercury"
 msgstr "Колба Ртути"
 
 msgid "The %{name} provides %{count} unit of mercury per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру ртути."
+
+msgid ""
+"A brief stop at a hastily abandoned Wizard's tower turns up a magical vial "
+"of mercury that always has a little left on the bottom. Recognizing a "
+"treasure when you see one, you cap it and slip it in your pocket."
+msgstr ""
 
 msgid "Endless Pouch of Gems"
 msgstr "Мешочек Самоцветов"
@@ -7486,11 +8231,25 @@ msgstr "Мешочек Самоцветов"
 msgid "The %{name} provides %{count} unit of gems per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру самоцветов."
 
+msgid ""
+"A short rainstorm brings forth a rainbow...and you can see the end of it. "
+"Riding quickly, you seize the pot of gold you find there. The leprechaun who "
+"owns it, unable to stop you from taking it, offers an endless pouch of gems "
+"for the return of his gold. You accept."
+msgstr ""
+
 msgid "Endless Cord of Wood"
 msgstr "Вязанка Дров"
 
 msgid "The %{name} provides %{count} unit of wood per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру древесины."
+
+msgid ""
+"Pausing to rest and light a cook fire, you pull wood out of a nearby pile of "
+"dead wood. As you keep pulling wood from the pile, you notice that it "
+"doesn't shrink. You realize to your delight that the wood is enchanted, so "
+"you take it along."
+msgstr ""
 
 msgid "Endless Cart of Ore"
 msgstr "Вагонетка Руды"
@@ -7498,23 +8257,61 @@ msgstr "Вагонетка Руды"
 msgid "The %{name} provides %{count} unit of ore per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру руды."
 
+msgid ""
+"You've found a Goblin weapon smithy making weapons for use against humans. "
+"With a tremendous yell you and your army descend upon their camp and drive "
+"them away. A search finds a magic ore cart that never runs out of iron."
+msgstr ""
+
 msgid "Endless Pouch of Crystal"
 msgstr "Мешочек Кристаллов"
 
 msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру кристаллов."
 
+msgid ""
+"Taking shelter from a storm in a small cave,  you notice a small patch of "
+"crystal in one corner. Curious, you break a piece off and notice that the "
+"original crystal grows the lost piece back. You decide to stuff the entire "
+"patch into a pouch and take it with you."
+msgstr ""
+
 msgid "Spiked Helm"
 msgstr "Шипованный Шлем"
+
+msgid ""
+"Your army is ambushed by a small tribe of wild (and none too bright) Orcs. "
+"You fend them off easily and the survivors flee in all directions. One of "
+"the Orcs was wearing a polished spiked helm. Figuring it will make a good "
+"souvenir, you take it."
+msgstr ""
 
 msgid "Spiked Shield"
 msgstr "Шипованный Щит"
 
+msgid ""
+"You come upon a bridge spanning a dry gully. Before you can cross, a Troll "
+"steps out from under the bridge and demands payment before it will permit "
+"you to pass. You refuse, and the Troll charges, forcing you to slay it. You "
+"take its spiked shield as a trophy."
+msgstr ""
+
 msgid "White Pearl"
 msgstr "Белая Жемчужина"
 
+msgid ""
+"A walk across a dry saltwater lake bed yields an unlikely prize:  A white "
+"pearl amidst shattered shells and debris."
+msgstr ""
+
 msgid "Black Pearl"
 msgstr "Чёрная Жемчужина"
+
+msgid ""
+"Rumors of a Griffin of unusual size preying upon the countryside lead you to "
+"its cave lair. A quick, brutal fight dispatches the beast, and a search of "
+"its foul nest turns up a huge black pearl."
+msgstr ""
 
 msgid "Magic Book"
 msgstr "Волшебная Книга"
@@ -7522,123 +8319,31 @@ msgstr "Волшебная Книга"
 msgid "The %{name} enables you to cast spells."
 msgstr "%{name} позволяет использовать заклинания."
 
+#, fuzzy
+msgid "Dummy 1"
+msgstr "Мумия"
+
+#, fuzzy
+msgid "The reserved artifact."
+msgstr "с 1 артефактом."
+
+#, fuzzy
+msgid "Dummy 2"
+msgstr "Мумия"
+
+#, fuzzy
+msgid "Dummy 3"
+msgstr "Мумия"
+
+#, fuzzy
+msgid "Dummy 4"
+msgstr "Мумия"
+
 msgid "Spell Scroll"
 msgstr "Свиток Заклинания"
 
 msgid "This %{name} gives your hero the ability to cast the %{spell} spell."
 msgstr "%{name} позволяет Вашему герою произносить заклинание %{spell}."
-
-msgid "Arm of the Martyr"
-msgstr "Рука Мученика"
-
-msgid ""
-"The %{name} increases your spell power by %{count} but adds the undead "
-"morale penalty."
-msgstr ""
-"%{name} увеличивает силу магии на %{count}, но добавляет штраф к морали, как "
-"за нахождение нежити в отряде."
-
-msgid "Breastplate of Anduran"
-msgstr "Кираса Андурана"
-
-msgid "The %{name} increases your defense by %{count}."
-msgstr "%{name} увеличивает силу защиты на %{count}."
-
-msgid "Broach of Shielding"
-msgstr "Защитная Брошь"
-
-msgid ""
-"The %{name} provides %{count} percent protection from Armageddon and "
-"Elemental Storm, but decreases spell power by 2."
-msgstr ""
-"%{name} увеличивает защиту от 'Армагеддона' и 'Бури стихий' на %{count} "
-"процентов, но также уменьшает силу магии на 2 пункта."
-
-msgid "Battle Garb of Anduran"
-msgstr "Боевой Доспех Андурана"
-
-msgid ""
-"The %{name} combines the powers of the three Anduran artifacts.  It provides "
-"maximum luck and morale for your troops and gives you the Town Portal spell."
-msgstr ""
-"%{name} сочетает в себе силу трёх артефактов Андурана. Он увеличивает удачу "
-"и мораль ваших войск, а также даёт Вам заклинание 'Портал города'."
-
-msgid "Crystal Ball"
-msgstr "Кристальный Шар"
-
-msgid ""
-"The %{name} lets you get more specific information about monsters, enemy "
-"heroes, and castles nearby the hero who holds it."
-msgstr ""
-"%{name} предоставляет подробную информацию о монстрах, вражеских героях и "
-"замках, рядом с которыми стоит герой."
-
-msgid "Heart of Fire"
-msgstr "Сердце Огня"
-
-msgid ""
-"The %{name} provides %{count} percent protection from fire, but doubles the "
-"damage taken from cold."
-msgstr ""
-"%{name} увеличивает защиту от магии огня на %{count} процентов, но также в "
-"два раза увеличивает урон от магии холода."
-
-msgid "Heart of Ice"
-msgstr "Сердце Льда"
-
-msgid ""
-"The %{name} provides %{count} percent protection from cold, but doubles the "
-"damage taken from fire."
-msgstr ""
-"%{name} увеличивает защиту от магии холода на %{count} процентов, но также в "
-"два раза увеличивает урон от магии огня."
-
-msgid "Helmet of Anduran"
-msgstr "Шлем Андурана"
-
-msgid "Holy Hammer"
-msgstr "Святой Молот"
-
-msgid "Legendary Scepter"
-msgstr "Легендарный Скипетр"
-
-msgid "The %{name} adds %{count} points to all attributes."
-msgstr "%{name} увеличивает все основные параметры на %{count}."
-
-msgid "Masthead"
-msgstr "Наконечник Мачты"
-
-msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
-msgstr ""
-"%{name}, при сражениях на воде, увеличивает ваши удачу и мораль на %{count}."
-
-msgid "Sphere of Negation"
-msgstr "Сфера Отрицания"
-
-msgid "The %{name} disables all spell casting, for both sides, in combat."
-msgstr "%{name} запрещает всем на поле боя использовать магию."
-
-msgid "Staff of Wizardry"
-msgstr "Волшебный Посох"
-
-msgid "The %{name} boosts your spell power by %{count}."
-msgstr "%{name} увеличивает силу магии на %{count}."
-
-msgid "Sword Breaker"
-msgstr "Мечелом"
-
-msgid "The %{name} increases your defense by %{count} and attack by 1."
-msgstr "%{name} увеличивает силу защиты на %{count}, и атаки на 1."
-
-msgid "Sword of Anduran"
-msgstr "Меч Андурана"
-
-msgid "Spade of Necromancy"
-msgstr "Лопата Могильщика"
-
-msgid "The %{name} gives you increased necromancy skill."
-msgstr "%{name} увеличивает навык искусства Некромантов."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
@@ -7650,6 +8355,16 @@ msgstr ""
 "Руны на нём очень древние, а мастерство, с которым он был собран, поражает "
 "воображение. Когда Вы достаёте свиток, Вы чувствуете, что пропитаны "
 "магической силой."
+
+msgid "Arm of the Martyr"
+msgstr "Рука Мученика"
+
+msgid ""
+"The %{name} increases your spell power by %{count} but adds the undead "
+"morale penalty."
+msgstr ""
+"%{name} увеличивает силу магии на %{count}, но добавляет штраф к морали, как "
+"за нахождение нежити в отряде."
 
 msgid ""
 "One of the less intelligent members of your party picks up an arm off of the "
@@ -7664,6 +8379,12 @@ msgstr ""
 "она обладает какой-то магической силой, которая влияет на принятие Вами "
 "решений."
 
+msgid "Breastplate of Anduran"
+msgstr "Кираса Андурана"
+
+msgid "The %{name} increases your defense by %{count}."
+msgstr "%{name} увеличивает силу защиты на %{count}."
+
 msgid ""
 "You come upon a sign. It reads: \"Here lies the body of Anduran. Bow and "
 "swear fealty, and you shall be rewarded.\" You decide to do as it says. As "
@@ -7675,6 +8396,16 @@ msgstr ""
 "и чувствуете холод на коже. Осматривая себя, Вы обнаружили, что Вы носите "
 "блестящую броню."
 
+msgid "Broach of Shielding"
+msgstr "Защитная Брошь"
+
+msgid ""
+"The %{name} provides %{count} percent protection from Armageddon and "
+"Elemental Storm, but decreases spell power by 2."
+msgstr ""
+"%{name} увеличивает защиту от 'Армагеддона' и 'Бури стихий' на %{count} "
+"процентов, но также уменьшает силу магии на 2 пункта."
+
 msgid ""
 "A kindly Sorceress thinks that your army's defenses could use a magical "
 "boost. She offers to enchant the Broach that you wear on your cloak, and you "
@@ -7684,6 +8415,16 @@ msgstr ""
 "поддержку. Она предлагает заколдовать брошь, что Вы носите на Вашем плаще, и "
 "Вы соглашаетесь."
 
+msgid "Battle Garb of Anduran"
+msgstr "Боевой Доспех Андурана"
+
+msgid ""
+"The %{name} combines the powers of the three Anduran artifacts.  It provides "
+"maximum luck and morale for your troops and gives you the Town Portal spell."
+msgstr ""
+"%{name} сочетает в себе силу трёх артефактов Андурана. Он увеличивает удачу "
+"и мораль ваших войск, а также даёт Вам заклинание 'Портал города'."
+
 msgid ""
 "Out of pity for a poor peasant, you purchase a chest of old junk they are "
 "hawking for too much gold. Later, as you search through it, you find it "
@@ -7691,6 +8432,16 @@ msgid ""
 msgstr ""
 "Из жалости к бедным крестьянам, Вы приобретаете груду старья. Позже, Вы "
 "находите в нём 3 части легендарного боевого доспеха Андурана!"
+
+msgid "Crystal Ball"
+msgstr "Кристальный Шар"
+
+msgid ""
+"The %{name} lets you get more specific information about monsters, enemy "
+"heroes, and castles nearby the hero who holds it."
+msgstr ""
+"%{name} предоставляет подробную информацию о монстрах, вражеских героях и "
+"замках, рядом с которыми стоит герой."
 
 msgid ""
 "You come upon a caravan of gypsies who are feasting and fortifying their "
@@ -7705,6 +8456,16 @@ msgstr ""
 "Вы решаете попробовать... Цыгане смеются над Вашими попытками, но восхищаясь "
 "Вашим мужеством, отдают Вам 'Кристальный Шар'."
 
+msgid "Heart of Fire"
+msgstr "Сердце Огня"
+
+msgid ""
+"The %{name} provides %{count} percent protection from fire, but doubles the "
+"damage taken from cold."
+msgstr ""
+"%{name} увеличивает защиту от магии огня на %{count} процентов, но также в "
+"два раза увеличивает урон от магии холода."
+
 msgid ""
 "You enter a recently burned glade and come upon a Fire Elemental sitting "
 "atop a rock. It looks up, its flaming face contorted in a look of severe "
@@ -7715,6 +8476,16 @@ msgstr ""
 "пылающее лицо искажено от сильной боли. Затем он бросает светящийся сгусток "
 "на Вас. Вы делаете жест руками, чтобы заблокировать его, но сгусток проходит "
 "через Ваши руки и тело."
+
+msgid "Heart of Ice"
+msgstr "Сердце Льда"
+
+msgid ""
+"The %{name} provides %{count} percent protection from cold, but doubles the "
+"damage taken from fire."
+msgstr ""
+"%{name} увеличивает защиту от магии холода на %{count} процентов, но также в "
+"два раза увеличивает урон от магии огня."
 
 msgid ""
 "Suddenly, a biting coldness engulfs your body. You seize up, falling from "
@@ -7727,6 +8498,9 @@ msgstr ""
 "утихает, Вы поднимаетесь и слышите смех. Вы успеваете обернуться как раз "
 "вовремя, чтобы увидеть Ледяного Гиганта скрывающегося в лесу."
 
+msgid "Helmet of Anduran"
+msgstr "Шлем Андурана"
+
 msgid ""
 "You spy a gleaming object poking up out of the ground. You send a member of "
 "your party over to investigate. He comes back with a golden helmet in his "
@@ -7736,6 +8510,9 @@ msgstr ""
 "Вы заметили блестящий объект недалеко в земле, и отправляете своего "
 "помощника раскопать его. Он возвращается с золотым шлемом в руках. Вы "
 "узнаёте легендарный шлем Андурана."
+
+msgid "Holy Hammer"
+msgstr "Святой Молот"
 
 msgid ""
 "You come upon a battle where a Paladin has been mortally wounded by a group "
@@ -7747,6 +8524,12 @@ msgstr ""
 "просит Вас забрать его молот и закончить битву. Вы подбираете магический "
 "молот, он начинает издавать мелодичные звуки, и потом все вокруг рушится. "
 "Все Зомби уничтожены. Залитый кровью молот Вы прицепляете к своему ремню."
+
+msgid "Legendary Scepter"
+msgstr "Легендарный Скипетр"
+
+msgid "The %{name} adds %{count} points to all attributes."
+msgstr "%{name} увеличивает все основные параметры на %{count}."
 
 msgid ""
 "Upon cresting a small hill, you come upon a ridiculous looking sight. A "
@@ -7761,6 +8544,13 @@ msgstr ""
 "Фея смотрит на Вас и отвечает: \"Вы думаете, это смешно? Хорошо. Забирайте "
 "его себе, а я улетаю.\""
 
+msgid "Masthead"
+msgstr "Наконечник Мачты"
+
+msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
+msgstr ""
+"%{name}, при сражениях на воде, увеличивает ваши удачу и мораль на %{count}."
+
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -7772,6 +8562,12 @@ msgstr ""
 "отмечено, где он спрятал её. После продолжительных поисков, Вы находите "
 "шляпу."
 
+msgid "Sphere of Negation"
+msgstr "Сфера Отрицания"
+
+msgid "The %{name} disables all spell casting, for both sides, in combat."
+msgstr "%{name} запрещает всем на поле боя использовать магию."
+
 msgid ""
 "You stop to help a Peasant catch a runaway mare. To show his gratitude, he "
 "hands you a tiny sphere. As soon as you grasp it, you feel the magical "
@@ -7780,6 +8576,12 @@ msgstr ""
 "Вы остановились помочь Крестьянам поймать сбежавшую лошадь. Чтобы выразить "
 "благодарность, они вручают Вам крохотную сферу. Лишь только взяв её, Вы "
 "чувствуете, как магическая энергия высасывается из Ваших рук."
+
+msgid "Staff of Wizardry"
+msgstr "Волшебный Посох"
+
+msgid "The %{name} boosts your spell power by %{count}."
+msgstr "%{name} увеличивает силу магии на %{count}."
 
 msgid ""
 "While out scaring up game, your troops find a mysterious staff levitating "
@@ -7790,6 +8592,12 @@ msgstr ""
 "Вы замечаете таинственный посох, парящий около трёх футов от земли, "
 "распугавший всю дичь в округе. На нём Вы заметили надпись: \"Ум лучше "
 "мускулов, а магия победит силу. Всегда помни это.\""
+
+msgid "Sword Breaker"
+msgstr "Мечелом"
+
+msgid "The %{name} increases your defense by %{count} and attack by 1."
+msgstr "%{name} увеличивает силу защиты на %{count}, и атаки на 1."
 
 msgid ""
 "A former Captain of the Guard admires your quest and gives you the enchanted "
@@ -7811,6 +8619,15 @@ msgstr ""
 "Вы благодарите судьбу за то, что недалекие Тролли имеют обыкновение хватать "
 "острые предметы не за тот конец."
 
+msgid "Sword of Anduran"
+msgstr "Меч Андурана"
+
+msgid "Spade of Necromancy"
+msgstr "Лопата Могильщика"
+
+msgid "The %{name} gives you increased necromancy skill."
+msgstr "%{name} увеличивает навык искусства Некромантов."
+
 msgid ""
 "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, "
 "you discover it to be the enchanted shovel of the Gravediggers, long thought "
@@ -7820,37 +8637,9 @@ msgstr ""
 "что это зачарованная лопата гробокопателей, считавшаяся давным-давно "
 "потерянной смертными."
 
-msgid ""
-"Do you want to use your knowledge of magical secrets to transcribe the "
-"%{spell} Scroll into your Magic Book?\n"
-"The Spell Scroll will be consumed.\n"
-" Cost in spell points: %{sp}"
-msgstr ""
-"Вы желаете использовать Ваше знание волшебных секретов, чтобы переписать "
-"Свиток %{spell} в Вашу магическую книгу?\n"
-"Свиток будет уничтожен.\n"
-"Цена: %{sp} очков магии"
-
-msgid "Move points: %{mp}"
-msgstr "Очки движения: %{mp}"
-
-msgid "Transcribe Spell Scroll"
-msgstr "Переписать свиток заклинания"
-
-msgid "View Spells"
-msgstr "Просмотреть заклинания"
-
-msgid "View %{name} Info"
-msgstr "Информация о %{name}"
-
-msgid "Move %{name}"
-msgstr "Переместить %{name}"
-
-msgid "Cannot move the Spellbook"
-msgstr "Невозможно переместить книгу заклинаний"
-
-msgid "This item can't be traded."
-msgstr "Эту вещь нельзя продать."
+#, fuzzy
+msgid "Invalid Artifact"
+msgstr "Случайный артефакт"
 
 msgid "Wood"
 msgstr "Древесина"
@@ -7872,6 +8661,14 @@ msgstr "Самоцветы"
 
 msgid "Gold"
 msgstr "Золото"
+
+msgid ""
+"There are seven resources in Heroes 2, used to build and improves castles, "
+"purchase troops and recruit heroes. Gold is the most common, required for "
+"virtually everything. Wood and ore are used for most buildings. Gems, "
+"Mercury, Sulfur and Crystal are rare magical resources used for the most "
+"powerful creatures and buildings."
+msgstr ""
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
@@ -8403,6 +9200,9 @@ msgstr "Это заклинание вызывает %{count} %{monster} для 
 msgid "The nearest town is %{town}."
 msgstr "Это заклинание перенесёт героя в %{town}"
 
+msgid "This town is occupied by your hero %{hero}."
+msgstr ""
+
 msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
@@ -8429,66 +9229,28 @@ msgstr "мир: навык разведки покажет дополнител�
 msgid "world: allow to set guardian to objects"
 msgstr "мир: разрешить охранников для дополнительных объектов"
 
-msgid "world: Eagle Eye also works like Scholar in H3."
-msgstr "мир: Орлиный взор также работает как Scholar (H3)"
-
-msgid "world: Crystal Ball gives Identify Hero and Visions spells"
-msgstr ""
-"мир: артефакт Кристальный Шар добавляет заклинания Опознать героя и Видения "
-"в книгу героя"
-
 msgid "world: Neutral armies scale with game difficulty"
 msgstr "мир: размер нейтральных армий зависит от сложности"
-
-msgid "world: use unique artifacts providing resources"
-msgstr "мир: запретить эффект повторных артефактов, приносящих доход ресурсов"
-
-msgid "world: use unique artifacts affecting primary skills"
-msgstr "мир: запретить эффект повторных артефактов для первичных навыков"
-
-msgid "world: use unique artifacts affecting secondary skills"
-msgstr "мир: запретить эффект повторных артефактов для вторичных навыков"
 
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 "мир: возможность установить флаг на постройках: Водяная/Ветряная Мельница, "
 "Волшебный Сад"
 
-msgid "world: disable Barrow Mounds"
-msgstr "мир: запретить покупку Привидений"
-
 msgid "castle: allow guardians"
 msgstr "замок: разрешить защитников (как в H3)"
-
-msgid ""
-"castle: higher mage guilds regenerate more spell points/turn "
-"(20/40/60/80/100%)"
-msgstr ""
-"замок: гильдия магов регенерирует ману в зависимости от уровня здания "
-"(20/40/60/80/100%)"
 
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "герои: разрешить покупку магической книги в святилищах"
 
-msgid "heroes: recruit cost depends on hero level"
-msgstr "герои: цена найма зависит от уровня"
-
 msgid "heroes: remember move points for retreat/surrender result"
 msgstr "герои: при бегстве запомнить MP/SP для текущего дня"
-
-msgid "heroes: allow transcribing scrolls (needs: Eye Eagle skill)"
-msgstr ""
-"герои: переписывание заклинаний из свитков в книгу (необходим навык Орлиный "
-"взор)"
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "герои: в постройке Арена можно получить любой первичный навык"
 
 msgid "battle: allow soft wait for troops"
 msgstr "битва: использовать альтернативный пропуск хода (как в H3)"
-
-msgid "battle: reverse wait order (fast, average, slow)"
-msgstr "битва: обратный порядок после ожидания (первый быстрый)"
 
 msgid "battle: deterministic events"
 msgstr "битва: детерминированные события"
@@ -8498,9 +9260,6 @@ msgstr "игра: показать информационную строку (в
 
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "игра: автосохранение в начале дня"
-
-msgid "game: use fade"
-msgstr "игра: использовать плавное затухание при смене экрана"
 
 msgid "game: use evil interface"
 msgstr "игра: использовать серую тему интерфейса"
@@ -8573,6 +9332,103 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Map is loading..."
+#~ msgstr "Загрузка..."
+
+#~ msgid "You find %{artifact}."
+#~ msgstr "Вы нашли %{artifact}."
+
+#~ msgid "Not enough move points."
+#~ msgstr "Недостаточно очков передвижения."
+
+#~ msgid ""
+#~ "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
+#~ "%{spells1} from %{learner}, and teaches %{spells2} to %{learner}."
+#~ msgstr ""
+#~ "%{teacher}, который %{level} %{scholar} знает много магических секретов, "
+#~ "изучает %{spells1} от %{learner}, и обучает %{spells2} для %{learner}."
+
+#~ msgid ""
+#~ "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
+#~ "%{spells1} from %{learner}."
+#~ msgstr ""
+#~ "%{teacher}, который %{level} %{scholar} знает много магических секретов, "
+#~ "изучает %{spells1} от %{learner}"
+
+#~ msgid ""
+#~ "%{teacher}, whose %{level} %{scholar} knows many magical secrets, teaches "
+#~ "%{spells2} to %{learner}."
+#~ msgstr ""
+#~ "%{teacher}, который %{level} %{scholar} знает много магических секретов, "
+#~ "обучает %{spells2} для %{learner}."
+
+#~ msgid "Scholar Ability"
+#~ msgstr "Обучение Магии"
+
+#~ msgid ""
+#~ "Nearest town occupied.\n"
+#~ "Spell Failed!!!"
+#~ msgstr "Нет доступных городов для этой магии!!!"
+
+#~ msgid ""
+#~ "Do you want to use your knowledge of magical secrets to transcribe the "
+#~ "%{spell} Scroll into your Magic Book?\n"
+#~ "The Spell Scroll will be consumed.\n"
+#~ " Cost in spell points: %{sp}"
+#~ msgstr ""
+#~ "Вы желаете использовать Ваше знание волшебных секретов, чтобы переписать "
+#~ "Свиток %{spell} в Вашу магическую книгу?\n"
+#~ "Свиток будет уничтожен.\n"
+#~ "Цена: %{sp} очков магии"
+
+#~ msgid "Move points: %{mp}"
+#~ msgstr "Очки движения: %{mp}"
+
+#~ msgid "Transcribe Spell Scroll"
+#~ msgstr "Переписать свиток заклинания"
+
+#~ msgid "world: Eagle Eye also works like Scholar in H3."
+#~ msgstr "мир: Орлиный взор также работает как Scholar (H3)"
+
+#~ msgid "world: Crystal Ball gives Identify Hero and Visions spells"
+#~ msgstr ""
+#~ "мир: артефакт Кристальный Шар добавляет заклинания Опознать героя и "
+#~ "Видения в книгу героя"
+
+#~ msgid "world: use unique artifacts providing resources"
+#~ msgstr ""
+#~ "мир: запретить эффект повторных артефактов, приносящих доход ресурсов"
+
+#~ msgid "world: use unique artifacts affecting primary skills"
+#~ msgstr "мир: запретить эффект повторных артефактов для первичных навыков"
+
+#~ msgid "world: use unique artifacts affecting secondary skills"
+#~ msgstr "мир: запретить эффект повторных артефактов для вторичных навыков"
+
+#~ msgid "world: disable Barrow Mounds"
+#~ msgstr "мир: запретить покупку Привидений"
+
+#~ msgid ""
+#~ "castle: higher mage guilds regenerate more spell points/turn "
+#~ "(20/40/60/80/100%)"
+#~ msgstr ""
+#~ "замок: гильдия магов регенерирует ману в зависимости от уровня здания "
+#~ "(20/40/60/80/100%)"
+
+#~ msgid "heroes: recruit cost depends on hero level"
+#~ msgstr "герои: цена найма зависит от уровня"
+
+#~ msgid "heroes: allow transcribing scrolls (needs: Eye Eagle skill)"
+#~ msgstr ""
+#~ "герои: переписывание заклинаний из свитков в книгу (необходим навык "
+#~ "Орлиный взор)"
+
+#~ msgid "battle: reverse wait order (fast, average, slow)"
+#~ msgstr "битва: обратный порядок после ожидания (первый быстрый)"
+
+#~ msgid "game: use fade"
+#~ msgstr "игра: использовать плавное затухание при смене экрана"
 
 #~ msgid "%{color} casts a spell: %{spell}"
 #~ msgstr "%{color} использует магию: %{spell}"
