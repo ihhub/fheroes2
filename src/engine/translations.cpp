@@ -452,6 +452,7 @@ namespace Translation
                 return current->ngettext( str, ( n != 1 ) );
             case LocaleType::LOCALE_DA:
             case LocaleType::LOCALE_DE:
+                return current->ngettext( str, ( n != 1 ) );
             case LocaleType::LOCALE_ES:
                 return current->ngettext( str, ( n != 1 ) );
             case LocaleType::LOCALE_ET:
@@ -483,7 +484,9 @@ namespace Translation
                 return current->ngettext( str, ( n > 1 ) );
             case LocaleType::LOCALE_HR:
             case LocaleType::LOCALE_RU:
+                return current->ngettext( str, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
             case LocaleType::LOCALE_LT:
+                return current->ngettext( str, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
             case LocaleType::LOCALE_LV:
                 return current->ngettext( str, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
             case LocaleType::LOCALE_MK:
