@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 17:09+0200\n"
-"PO-Revision-Date: 2022-05-02 23:43+0200\n"
+"PO-Revision-Date: 2022-05-08 00:29+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -509,7 +509,7 @@ msgid "Message Bar"
 msgstr "Pasek Wiadomości"
 
 msgid "Shows the results of individual monster's actions."
-msgstr "Pokazuje rezultat akcji wykonanych przez indiwidualną jednostkę."
+msgstr "Pokazuje rezultat akcji wykonanych przez indywidualną jednostkę."
 
 msgid "%{name} skip their turn."
 msgstr "%{name} pomija turę."
@@ -753,7 +753,7 @@ msgid "Betrayal"
 msgstr "Zdrada"
 
 msgid "Corlagon's Defense"
-msgstr "Obrona Corlagonu"
+msgstr "Obrona Corlagona"
 
 msgid "Final Justice"
 msgstr "Ostateczna Sprawiedliwość"
@@ -835,7 +835,7 @@ msgid "Necromancers"
 msgstr "Nekromanci"
 
 msgid "Slay the Dwarves"
-msgstr "Zabić Krasnoludy"
+msgstr "Zniszcz Krasnoludy"
 
 msgid "Country Lords"
 msgstr "Kraina Władców"
@@ -1246,10 +1246,10 @@ msgid "campaignBonus|Major Scroll"
 msgstr "Większy zwój"
 
 msgid "campaignBonus|Medal of Honor"
-msgstr "Medal Honoru"
+msgstr "Medal honoru"
 
 msgid "campaignBonus|Medal of Valor"
-msgstr "Medal Męstwa"
+msgstr "Medal męstwa"
 
 msgid "campaignBonus|Minor Scroll"
 msgstr "Pomniejszy zwój"
@@ -1261,7 +1261,7 @@ msgid "campaignBonus|Power Axe"
 msgstr "Potężny topór"
 
 msgid "campaignBonus|Spiked Shield"
-msgstr "Kolczata tarcza"
+msgstr "Rogata tarcza"
 
 msgid "campaignBonus|Stealth Shield"
 msgstr "Maskuj. tarcza"
@@ -1279,118 +1279,118 @@ msgid "campaignBonus|White Pearl"
 msgstr "Biała perła"
 
 msgid "campaignBonus|Basic Archery"
-msgstr "Podstawowe łucznictwo"
+msgstr "Podst. łucznictwo"
 
 msgid "campaignBonus|Advanced Archery"
-msgstr "Zawaansowane łucznictwo"
+msgstr "Zaawan. łucznictwo"
 
 msgid "campaignBonus|Expert Archery"
-msgstr "Mistrzowskie łucznictwo"
+msgstr "Mistrz. łucznictwo"
 
 msgid "campaignBonus|Basic Ballistics"
-msgstr "Podstawowa balistyka"
+msgstr "Podst. balistyka"
 
 msgid "campaignBonus|Advanced Ballistics"
-msgstr "Zawaansowana balistyka"
+msgstr "Zaawan. balistyka"
 
 msgid "campaignBonus|Expert Ballistics"
-msgstr "Mistrzowska balistyka"
+msgstr "Mistrz. balistyka"
 
 msgid "campaignBonus|Basic Diplomacy"
-msgstr "Podstawowa dyplomacja"
+msgstr "Podst. dyplomacja"
 
 msgid "campaignBonus|Advanced Diplomacy"
-msgstr "Zawaansowana dyplomacja"
+msgstr "Zaawan. dyplomacja"
 
 msgid "campaignBonus|Expert Diplomacy"
-msgstr "Mistrzowska dyplomacja"
+msgstr "Mistrz. dyplomacja"
 
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr "Podstawowe sokole oko"
+msgstr "Podst. sokole oko"
 
 msgid "campaignBonus|Advanced Eagle Eye"
-msgstr "Zawaansowane sokole oko"
+msgstr "Zaawan. sokole oko"
 
 msgid "campaignBonus|Expert Eagle Eye"
-msgstr "Mistrzowskie sokole oko"
+msgstr "Mistrz. sokole oko"
 
 msgid "campaignBonus|Basic Estates"
 msgstr "Podstawowe finanse"
 
 msgid "campaignBonus|Advanced Estates"
-msgstr "Zawaansowane finanse"
+msgstr "Zaawan. finanse"
 
 msgid "campaignBonus|Expert Estates"
 msgstr "Mistrzowskie finanse"
 
 msgid "campaignBonus|Basic Leadership"
-msgstr "Podstawowe dowodzenie"
+msgstr "Podst. dowodzenie"
 
 msgid "campaignBonus|Advanced Leadership"
-msgstr "Zawaansowane dowodzenie"
+msgstr "Zaawan. dowodzenie"
 
 msgid "campaignBonus|Expert Leadership"
-msgstr "Mistrzowskie dowodzenie"
+msgstr "Mistrz. dowodzenie"
 
 msgid "campaignBonus|Basic Logistics"
-msgstr "Podstawowa logistyka"
+msgstr "Podst. logistyka"
 
 msgid "campaignBonus|Advanced Logistics"
-msgstr "Zawaansowana logistyka"
+msgstr "Zaawan. logistyka"
 
 msgid "campaignBonus|Expert Logistics"
-msgstr "Mistrzowska logistyka"
+msgstr "Mistrz. logistyka"
 
 msgid "campaignBonus|Basic Luck"
-msgstr "Podstawowe szczęście"
+msgstr "Podst. szczęście"
 
 msgid "campaignBonus|Advanced Luck"
-msgstr "Zawaansowane szczęście"
+msgstr "Zaawan. szczęście"
 
 msgid "campaignBonus|Expert Luck"
-msgstr "Mistrzowskie szczęście"
+msgstr "Mistrz. szczęście"
 
 msgid "campaignBonus|Basic Mysticism"
-msgstr "Podstawowy mistycyzm"
+msgstr "Podst. mistycyzm"
 
 msgid "campaignBonus|Advanced Mysticism"
-msgstr "Zawaansowany mistycyzm"
+msgstr "Zaawan. mistycyzm"
 
 msgid "campaignBonus|Expert Mysticism"
-msgstr "Mistrzowski mistycyzm"
+msgstr "Mistrz. mistycyzm"
 
 msgid "campaignBonus|Basic Navigation"
-msgstr "Podstawowa nawigacja"
+msgstr "Podst. nawigacja"
 
 msgid "campaignBonus|Advanced Navigation"
-msgstr "Zawaansowana nawigacja"
+msgstr "Zaawan. nawigacja"
 
 msgid "campaignBonus|Expert Navigation"
-msgstr "Mistrzowska nawigacja"
+msgstr "Mistrz. nawigacja"
 
 msgid "campaignBonus|Basic Necromancy"
-msgstr "Podstawowa nekromancja"
+msgstr "Podst. nekromancja"
 
 msgid "campaignBonus|Advanced Necromancy"
-msgstr "Zawaansowana nekromancja"
+msgstr "Zaawan. nekromancja"
 
 msgid "campaignBonus|Expert Necromancy"
-msgstr "Mistrzowska nekromancja"
+msgstr "Mistrz. nekromancja"
 
 msgid "campaignBonus|Basic Pathfinding"
-msgstr "Podstawowe znaj. drogi"
+msgstr "Podst. znaj. drogi"
 
 msgid "campaignBonus|Advanced Pathfinding"
-msgstr "Zaawansowane znaj. drogi"
+msgstr "Zaawan. znaj. drogi"
 
 msgid "campaignBonus|Expert Pathfinding"
-msgstr "Mistrzowskie znaj. drogi"
+msgstr "Mistrz. znaj. drogi"
 
 msgid "campaignBonus|Basic Scouting"
 msgstr "Podstawowy zwiad"
 
 msgid "campaignBonus|Advanced Scouting"
-msgstr "Zawaansowany zwiad"
+msgstr "Zaawan. zwiad"
 
 msgid "campaignBonus|Expert Scouting"
 msgstr "Mistrzowski zwiad"
@@ -1399,7 +1399,7 @@ msgid "campaignBonus|Basic Wisdom"
 msgstr "Podstawowa mądrość"
 
 msgid "campaignBonus|Advanced Wisdom"
-msgstr "Zawaansowana mądrość"
+msgstr "Zaawan. mądrość"
 
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Mistrzowska mądrość"
@@ -1411,13 +1411,13 @@ msgid "campaignBonus|Chain Lightning"
 msgstr "Łańcuch piorunów"
 
 msgid "campaignBonus|Fireblast"
-msgstr "Eksplozja Ognia"
+msgstr "Eksplozja ognia"
 
 msgid "campaignBonus|Mass Curse"
-msgstr "Grupowa Klątwa"
+msgstr "Grupowa klątwa"
 
 msgid "campaignBonus|Mass Haste"
-msgstr "Grupowe Przyspieszenie"
+msgstr "Grupowe przyspieszenie"
 
 msgid "campaignBonus|Mirror Image"
 msgstr "Lustrzane odbicie"
@@ -3200,9 +3200,7 @@ msgstr "Obejrzyj najlepsze wyniki kampanii"
 msgid ""
 "Invalid file game type. Please ensure that you are running the latest type "
 "of save files."
-msgstr ""
-"Nieprawidłowy typ pliku. Upewnij się że używasz najnowszego typu plików "
-"zapisujących grę."
+msgstr "Ten zapis gry nie jest obsługiwany przez aktualną wersję gry."
 
 msgid "Warning"
 msgstr "Uwaga"
@@ -5655,7 +5653,7 @@ msgid "skill|Basic"
 msgstr "Podstawowa"
 
 msgid "skill|Advanced"
-msgstr "Zawaansowana"
+msgstr "Zaawansowana"
 
 msgid "skill|Expert"
 msgstr "Ekspert"
@@ -5700,7 +5698,7 @@ msgid "Estates"
 msgstr "Finanse"
 
 msgid "Advanced Archery"
-msgstr "Zawaansowane łucznictwo"
+msgstr "Zaawansowane łucznictwo"
 
 msgid "Advanced Pathfinding"
 msgstr "Zaawansowane znaj. drogi"
@@ -5715,7 +5713,7 @@ msgid "Expert Pathfinding"
 msgstr "Mistrzowskie znaj. drogi"
 
 msgid "Advanced Logistics"
-msgstr "Zawaansowana logistyka"
+msgstr "Zaawansowana logistyka"
 
 msgid "Basic Logistics"
 msgstr "Podstawowa logistyka"
@@ -5730,7 +5728,7 @@ msgid "Expert Logistics"
 msgstr "Mistrzowska logistyka"
 
 msgid "Advanced Diplomacy"
-msgstr "Zawaansowana dyplomacja"
+msgstr "Zaawansowana dyplomacja"
 
 msgid "Advanced Scouting"
 msgstr "Zaawansowany zwiad"
@@ -5745,13 +5743,13 @@ msgid "Expert Scouting"
 msgstr "Mistrzowski zwiad"
 
 msgid "Advanced Leadership"
-msgstr "Zawaansowane przywództwo"
+msgstr "Zaawansowane dowodzenie"
 
 msgid "Advanced Navigation"
-msgstr "Zawaansowana nawigacja"
+msgstr "Zaawansowana nawigacja"
 
 msgid "Basic Leadership"
-msgstr "Podstawowe przywództwo"
+msgstr "Podstawowe dowodzenie"
 
 msgid "Basic Navigation"
 msgstr "Podstawowa nawigacja"
@@ -5760,7 +5758,7 @@ msgid "Expert Navigation"
 msgstr "Mistrzowska nawigacja"
 
 msgid "Advanced Wisdom"
-msgstr "Zawaansowana mądrość"
+msgstr "Zaawansowana mądrość"
 
 msgid "Basic Mysticism"
 msgstr "Podstawowy mistycyzm"
@@ -5769,16 +5767,16 @@ msgid "Basic Wisdom"
 msgstr "Podstawowa mądrość"
 
 msgid "Expert Leadership"
-msgstr "Mistrzowskie przywództwo"
+msgstr "Mistrzowskie dowodzenie"
 
 msgid "Expert Wisdom"
 msgstr "Mistrzowska mądrość"
 
 msgid "Advanced Luck"
-msgstr "Zawaansowane szczęście"
+msgstr "Zaawansowane szczęście"
 
 msgid "Advanced Mysticism"
-msgstr "Zawaansowany mistycyzm"
+msgstr "Zaawansowany mistycyzm"
 
 msgid "Basic Luck"
 msgstr "Podstawowe szczęście"
@@ -5790,40 +5788,40 @@ msgid "Expert Mysticism"
 msgstr "Mistrzowski mistycyzm"
 
 msgid "Advanced Ballistics"
-msgstr "Zawaansowana balistyka"
+msgstr "Zaawansowana balistyka"
 
 msgid "Advanced Eagle Eye"
-msgstr "Zawaansowany wzrok orła"
+msgstr "Zaawansowane sokole oko"
 
 msgid "Basic Ballistics"
 msgstr "Podstawowa balistyka"
 
 msgid "Basic Eagle Eye"
-msgstr "Podstowowy wzrok orła"
+msgstr "Podstowowe sokole oko"
 
 msgid "Expert Ballistics"
 msgstr "Mistrzowska balistyka"
 
 msgid "Advanced Necromancy"
-msgstr "Zawaansowana nekromancja"
+msgstr "Zaawansowana nekromancja"
 
 msgid "Basic Estates"
-msgstr "Podstawowy Majątek"
+msgstr "Podstawowe finanse"
 
 msgid "Basic Necromancy"
-msgstr "Podstowowa nekromancja"
+msgstr "Podstawowa nekromancja"
 
 msgid "Expert Eagle Eye"
-msgstr "Mistrzowski wzrok orła"
+msgstr "Mistrzowskie sokole oko"
 
 msgid "Expert Necromancy"
 msgstr "Mistrzowska nekromancja"
 
 msgid "Advanced Estates"
-msgstr "Zaawansowany Majątek"
+msgstr "Zaawansowane finanse"
 
 msgid "Expert Estates"
-msgstr "Ekspert Majątek"
+msgstr "Mistrzowskie finanse"
 
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."
@@ -7348,7 +7346,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Courage"
-msgstr "Medal Odwagi"
+msgstr "Medal odwagi"
 
 msgid ""
 "After saving a young boy from a vicious pack of Wolves, you return him to "
@@ -7356,7 +7354,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Honor"
-msgstr "Medal Honoru"
+msgstr "Medal honoru"
 
 msgid ""
 "After freeing a princess of a neighboring kingdom from the evil clutches of "
@@ -7364,7 +7362,7 @@ msgid ""
 msgstr ""
 
 msgid "Medal of Distinction"
-msgstr "Medal Uznania"
+msgstr "Medal uznania"
 
 msgid ""
 "Ridding the countryside of the hideous Minotaur who made a sport of eating "
@@ -7372,7 +7370,7 @@ msgid ""
 msgstr ""
 
 msgid "Fizbin of Misfortune"
-msgstr "Fizbin Nieszczęścia"
+msgstr "Fizbin nieszczęścia"
 
 msgid "The %{name} greatly decreases your morale by %{count}."
 msgstr "%{name} znacząco zmniejsza twoje morale o %{count}."
