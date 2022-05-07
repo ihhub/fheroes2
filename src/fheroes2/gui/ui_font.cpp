@@ -1449,7 +1449,7 @@ namespace
             updateSmallFontLetterShadow( font[255 - 32] );
         }
     }
-    // CP1252 supports Italian, Spanish Norwegian, Swedish and Danish (and French but OG has custom encoding)
+    // CP1252 supports German, Italian, Spanish, Norwegian, Swedish and Danish (and French but OG has custom encoding)
     void generateCP1252Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
         // Resize fonts.
@@ -1681,6 +1681,9 @@ namespace
         {
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
 
+            // Inverted question mark ?. Replaced with normal for now.
+            font[191 - 32] = font[63 - 32];
+
             // A with grave accent `. Generate grave accent for further use.
             font[192 - 32].resize( font[33].width(), font[33].height() + 3 );
             font[192 - 32].reset();
@@ -1690,6 +1693,9 @@ namespace
             fheroes2::Copy( font[192 - 32], 4, 4, font[192 - 32], 6, 2, 1, 1 );
             font[192 - 32].setPosition( font[33].x(), font[33].y() - 4 );
             updateSmallFontLetterShadow( font[192 - 32] );
+
+            // A with acute accent.
+            font[193 - 32] = font[33];
 
             // A with circle on top.
             font[197 - 32].resize( font[33].width(), font[33].height() + 4 );
@@ -1740,6 +1746,12 @@ namespace
             font[204 - 32].setPosition( font[41].x(), font[41].y() - 4 );
             updateSmallFontLetterShadow( font[204 - 32] );
 
+            // I with accute accent.
+            font[205 - 32] = font[41];
+
+            // N with tilde ~
+            font[209 - 32] = font[46];
+
             // O with grave accent `.
             font[210 - 32].resize( font[47].width(), font[47].height() + 4 );
             font[210 - 32].reset();
@@ -1747,6 +1759,9 @@ namespace
             fheroes2::Copy( font[192 - 32], 4, 0, font[210 - 32], 4, 0, 3, 3 );
             font[210 - 32].setPosition( font[47].x(), font[47].y() - 4 );
             updateSmallFontLetterShadow( font[210 - 32] );
+
+            // O with accute accent.
+            font[211 - 32] = font[47];
 
             // O with / inside.
             font[216 - 32].resize( font[47].width(), font[47].height() );
@@ -1766,6 +1781,9 @@ namespace
             font[217 - 32].setPosition( font[53].x(), font[53].y() - 4 );
             updateSmallFontLetterShadow( font[217 - 32] );
 
+            // U with accute accent.
+            font[218 - 32] = font[53];
+
             // a with grave accent `.
             font[224 - 32].resize( font[65].width(), font[65].height() + 3 );
             font[224 - 32].reset();
@@ -1773,6 +1791,9 @@ namespace
             fheroes2::Copy( font[192 - 32], 4, 0, font[224 - 32], 3, 0, 3, 2 );
             font[224 - 32].setPosition( font[65].x(), font[65].y() - 3 );
             updateSmallFontLetterShadow( font[224 - 32] );
+
+            // a with accute accent.
+            font[225 - 32] = font[65];
 
             // a with circle on top.
             font[229 - 32].resize( font[65].width(), font[65].height() + 3 );
@@ -1816,6 +1837,12 @@ namespace
             font[236 - 32].setPosition( font[73].x(), font[73].y() - 1 );
             updateSmallFontLetterShadow( font[236 - 32] );
 
+            // i with accute accent.
+            font[237 - 32] = font[73];
+
+            // n with tilde ~.
+            font[241 - 32] = font[110 - 32];
+
             // o with grave accent `.
             font[242 - 32].resize( font[79].width(), font[79].height() + 3 );
             font[242 - 32].reset();
@@ -1823,6 +1850,9 @@ namespace
             fheroes2::Copy( font[192 - 32], 4, 0, font[242 - 32], 3, 0, 3, 2 );
             font[242 - 32].setPosition( font[79].x(), font[79].y() - 3 );
             updateSmallFontLetterShadow( font[242 - 32] );
+
+            // o with accute accent.
+            font[243 - 32] = font[79];
 
             // o with / inside.
             font[248 - 32].resize( font[79].width(), font[79].height() );
@@ -1841,6 +1871,9 @@ namespace
             fheroes2::Copy( font[192 - 32], 4, 0, font[249 - 32], 3, 0, 3, 2 );
             font[249 - 32].setPosition( font[85].x(), font[85].y() - 3 );
             updateSmallFontLetterShadow( font[249 - 32] );
+
+            // u with accute accent.
+            font[250 - 32] = font[85];
 
             // Proper lowercase k. Kept at end in case any letters use it for generation.
             font[75].resize( 6, 8 );
