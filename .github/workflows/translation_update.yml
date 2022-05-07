@@ -26,6 +26,6 @@ jobs:
         make -C files/lang -j 2
     - name: Commit changes
       run: |
-        git add src/dist/fheroes2.pot files/lang/*.po
+        git add files/lang/*.po
         git commit -m "Update translation files" || true
         git push origin "$GITHUB_REF"

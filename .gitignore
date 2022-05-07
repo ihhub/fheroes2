@@ -28,6 +28,7 @@
 *.app
 
 # GNU gettext
+*.pot
 *.pot~
 *.po~
 *.po.tmp
