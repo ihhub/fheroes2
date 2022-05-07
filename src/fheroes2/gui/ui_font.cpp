@@ -1308,7 +1308,7 @@ namespace
             fheroes2::Copy( font[192 - 32], 4, 4, font[192 - 32], 9, 1, 1, 1 );
             fheroes2::Copy( font[192 - 32], 3, 3, font[192 - 32], 10, 1, 1, 1 );
             updateNormalFontLetterShadow( font[192 - 32] );
-            
+
             // A with acute accent.
             font[193 - 32] = font[33];
 
@@ -1589,7 +1589,6 @@ namespace
             fheroes2::Copy( font[43], 6, 6, font[75], 4, 8, 4, 1 );
             font[75].setPosition( font[75].x(), font[75].y() );
             updateNormalFontLetterShadow( font[75] );
-
         }
         // Small font.
         {
