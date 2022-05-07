@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-03 12:00+0200\n"
-"PO-Revision-Date: 2022-05-03 12:41+0200\n"
+"POT-Creation-Date: 2022-05-07 06:08+0200\n"
+"PO-Revision-Date: 2022-05-07 06:18+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -1264,8 +1264,8 @@ msgstr "L'artefact \"%{artifact}\" sera conservé dans le scénario suivant."
 msgid "The army will be carried over the scenario."
 msgstr "L'armée sera conservée dans le scénario suivant."
 
-msgid ""
-"The kingdom will have additional %{resource} at the start of the scenario."
+#, fuzzy
+msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr ""
 "Le royaume obtiendra des ressources supplémentaires en %{resource} au début "
 "du scénario."
@@ -1276,7 +1276,8 @@ msgstr "Le sort \"%{spell}\" sera conservé dans le scénario suivant."
 msgid "%{hero} can be hired in the scenario."
 msgstr "Le héros %{hero} peut être recruté dans ce scénario."
 
-msgid "%{hero} has been defeated and will not appear in the subsequent scenarios."
+msgid ""
+"%{hero} has been defeated and will not appear in the subsequent scenarios."
 msgstr "Le héros vaincu %{hero} n'apparaîtra pas dans les scénarios suivants."
 
 msgid "The dwarves recognize their allies and gladly join your forces."
@@ -1568,10 +1569,18 @@ msgstr ""
 "Le héros principal recevra l'artefact \"%{artifact}\" au début du scénario."
 
 msgid ""
-"The kingdom will receive %{amount} additional %{resource} at the start of the "
-"scenario."
+"The kingdom will receive %{amount} additional %{resource} at the start of "
+"the scenario."
 msgstr ""
 "Le royaume bénéficiera de %{amount} %{resource} supplémentaire(s) au début "
+"du scénario."
+
+#, fuzzy
+msgid ""
+"The kingdom will have %{amount} less %{resource} at the start of the "
+"scenario."
+msgstr ""
+"Le royaume obtiendra des ressources supplémentaires en %{resource} au début "
 "du scénario."
 
 msgid ""
@@ -2611,6 +2620,28 @@ msgstr "Externe"
 msgid "Music Type"
 msgstr "Musique"
 
+#, fuzzy
+msgid "Hot Keys"
+msgstr "Hot Seat"
+
+msgid "In-game"
+msgstr ""
+
+#, fuzzy
+msgid "Black & White"
+msgstr "Blackridge"
+
+#, fuzzy
+msgid "Mouse Cursor"
+msgstr "Ombre du curseur"
+
+msgid "Color"
+msgstr ""
+
+#, fuzzy
+msgid "Text Support"
+msgstr "AQ et support"
+
 msgid "Select Game Language"
 msgstr "Choix de la langue"
 
@@ -2634,6 +2665,19 @@ msgstr "Change le volume des effets sonores."
 
 msgid "Change the type of music."
 msgstr "Change de type de musique."
+
+msgid "Check all Hot Keys used in the game."
+msgstr ""
+
+msgid ""
+"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
+"move as smoothly as black and white ones."
+msgstr ""
+
+msgid ""
+"Toggle text support mode to output extra information about windows and "
+"events in the game."
+msgstr ""
 
 msgid "Okay"
 msgstr "OK"
@@ -2719,6 +2763,9 @@ msgstr "Assigner Gardien"
 
 msgid "Your army too big!"
 msgstr "Votre armée est trop grande !"
+
+msgid "Hot Keys:"
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Choix de la langue :"
@@ -4049,6 +4096,9 @@ msgstr "Bulgare"
 
 msgid "Ukrainian"
 msgstr "Ukrainien"
+
+msgid "Romanian"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ", FPS : "
