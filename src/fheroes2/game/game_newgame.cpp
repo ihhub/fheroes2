@@ -96,7 +96,7 @@ namespace
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_CAMPAIGN ) << " to choose Campaign Game." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_MULTI ) << " to choose Multiplayer Game." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_SETTINGS ) << " to open Game Settings." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_EXIT ) << " to come back to Main Menu." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to come back to Main Menu." )
     }
 
     void outputNewCampaignSelectionInTextSupportMode()
@@ -105,11 +105,9 @@ namespace
 
         COUT( "New Campaign\n" )
 
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_NEW_CAMPAIGN_SELECTION_SUCCESSION_WARS )
-                       << " to choose The Succession Wars Campaign." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_NEW_CAMPAIGN_SELECTION_PRICE_OF_LOYALTY )
-                       << " to choose The Price of Loyalty Campaign." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_EXIT ) << " to come back to Main Menu." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_NEW_ORIGINAL_CAMPAIGN ) << " to choose The Original Campaign." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_NEW_EXPANSION_CAMPAIGN ) << " to choose The Expansion Campaign." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to come back to Main Menu." )
     }
 
     void outputNewSuccessionWarsCampaignInTextSupportMode()
@@ -202,11 +200,11 @@ fheroes2::GameMode Game::CampaignSelection()
         le.MousePressLeft( buttonPriceOfLoyalty.area() ) ? buttonPriceOfLoyalty.drawOnPress() : buttonPriceOfLoyalty.drawOnRelease();
         le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonSuccessionWars.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_CAMPAIGN_SELECTION_SUCCESSION_WARS ) )
+        if ( le.MouseClickLeft( buttonSuccessionWars.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_ORIGINAL_CAMPAIGN ) )
             return fheroes2::GameMode::NEW_SUCCESSION_WARS_CAMPAIGN;
-        if ( le.MouseClickLeft( buttonPriceOfLoyalty.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_CAMPAIGN_SELECTION_PRICE_OF_LOYALTY ) )
+        if ( le.MouseClickLeft( buttonPriceOfLoyalty.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_EXPANSION_CAMPAIGN ) )
             return fheroes2::GameMode::NEW_PRICE_OF_LOYALTY_CAMPAIGN;
-        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
+        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancelGame.area() ) )
             return fheroes2::GameMode::MAIN_MENU;
 
         if ( le.MousePressRight( buttonSuccessionWars.area() ) ) {
@@ -457,7 +455,7 @@ fheroes2::GameMode Game::NewNetwork()
         le.MousePressLeft( buttonGuest.area() ) ? buttonGuest.drawOnPress() : buttonGuest.drawOnRelease();
         le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
 
-        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
+        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancelGame.area() ) )
             return fheroes2::GameMode::MAIN_MENU;
 
         // right info
@@ -538,7 +536,7 @@ fheroes2::GameMode Game::NewGame()
             fheroes2::openGameSettings();
             return fheroes2::GameMode::MAIN_MENU;
         }
-        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
+        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancelGame.area() ) )
             return fheroes2::GameMode::MAIN_MENU;
 
         if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_BATTLEONLY ) || le.MouseClickLeft( buttonBattleGame.area() ) )
@@ -592,7 +590,7 @@ fheroes2::GameMode Game::NewMulti()
 
         if ( le.MouseClickLeft( buttonHotSeat.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_HOTSEAT ) )
             return fheroes2::GameMode::NEW_HOT_SEAT;
-        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) )
+        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancelGame.area() ) )
             return fheroes2::GameMode::MAIN_MENU;
 
         // right info
@@ -652,7 +650,7 @@ u32 Game::SelectCountPlayers( void )
         if ( le.MouseClickLeft( button6Players.area() ) || le.KeyPress( fheroes2::Key::KEY_6 ) )
             return 6;
 
-        if ( HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancel.area() ) )
+        if ( HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) )
             return 0;
 
         // right info

@@ -231,7 +231,7 @@ public:
     bool BuyBoat( void ) const;
     u32 GetBuildingRequirement( u32 ) const;
 
-    int CheckBuyBuilding( u32 ) const;
+    int CheckBuyBuilding( const uint32_t build ) const;
     static int GetAllBuildingStatus( const Castle & );
 
     void Scoute( void ) const;

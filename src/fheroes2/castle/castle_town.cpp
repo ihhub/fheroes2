@@ -131,10 +131,10 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
         le.MousePressLeft( button1.area() ) ? button1.drawOnPress() : button1.drawOnRelease();
         le.MousePressLeft( button2.area() ) ? button2.drawOnPress() : button2.drawOnRelease();
 
-        if ( button1.isEnabled() && ( le.MouseClickLeft( button1.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_READY ) ) )
+        if ( button1.isEnabled() && ( le.MouseClickLeft( button1.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) )
             return Dialog::OK;
 
-        if ( le.MouseClickLeft( button2.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_EXIT ) )
+        if ( le.MouseClickLeft( button2.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) )
             break;
     }
 

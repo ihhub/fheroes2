@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -80,6 +80,21 @@ namespace fheroes2
         ScreenPaletteRestorer & operator=( const ScreenPaletteRestorer & ) = delete;
 
         void changePalette( const uint8_t * palette ) const;
+    };
+
+    struct GameInterfaceTypeRestorer
+    {
+        GameInterfaceTypeRestorer() = delete;
+        explicit GameInterfaceTypeRestorer( const bool isEvilInterface_ );
+
+        ~GameInterfaceTypeRestorer();
+
+        GameInterfaceTypeRestorer( const GameInterfaceTypeRestorer & ) = delete;
+        GameInterfaceTypeRestorer & operator=( const GameInterfaceTypeRestorer & ) = delete;
+
+        const bool isEvilInterface;
+
+        const bool isOriginalEvilInterface;
     };
 
     Image CreateDeathWaveEffect( const Image & in, int32_t x, int32_t waveWidth, int32_t waveHeight );

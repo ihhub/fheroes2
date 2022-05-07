@@ -51,7 +51,7 @@ namespace
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_STANDARD ) << " to choose Standard Game." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_CAMPAIGN ) << " to choose Campaign Game." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_MULTI ) << " to show Multi-Player Game." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_EXIT ) << " to go back to Main Menu." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to go back to Main Menu." )
     }
 }
 
@@ -113,7 +113,7 @@ fheroes2::GameMode Game::LoadMulti()
                 return fheroes2::GameMode::LOAD_HOT_SEAT;
             }
         }
-        else if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) ) {
+        else if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancelGame.area() ) ) {
             return fheroes2::GameMode::LOAD_GAME;
         }
 
@@ -206,7 +206,7 @@ fheroes2::GameMode Game::LoadGame()
         else if ( le.MouseClickLeft( buttons[2].area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_MULTI ) ) {
             return fheroes2::GameMode::LOAD_MULTI;
         }
-        else if ( le.MouseClickLeft( buttons[3].area() ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_EXIT ) ) {
+        else if ( le.MouseClickLeft( buttons[3].area() ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) ) {
             return fheroes2::GameMode::MAIN_MENU;
         }
         else if ( le.MousePressRight( buttons[0].area() ) ) {

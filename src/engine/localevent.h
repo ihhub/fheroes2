@@ -40,7 +40,7 @@ namespace fheroes2
     {
         NONE,
         KEY_BACKSPACE,
-        KEY_RETURN,
+        KEY_ENTER, // This is for both Enter keys on keyboards. Check getKeyFromSDL() function for explanation.
         KEY_ESCAPE,
         KEY_SPACE,
         KEY_EXCLAIM,

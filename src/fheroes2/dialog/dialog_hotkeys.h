@@ -18,19 +18,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "ui_kingdom.h"
-#include "kingdom.h"
-#include "translations.h"
-#include "ui_dialog.h"
-#include "ui_text.h"
+#pragma once
 
 namespace fheroes2
 {
-    void showKingdomIncome( const Kingdom & kingdom, const int buttons )
-    {
-        const Text header( _( "Kingdom Income" ), FontType::normalYellow() );
-        const Text body( _( "Kingdom Income per day." ), FontType::normalWhite() );
-
-        showResourceMessage( header, body, buttons, kingdom.GetIncome( Kingdom::INCOME_ALL ) );
-    }
+    void openHotkeysDialog();
 }

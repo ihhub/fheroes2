@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-06 16:34+0200\n"
-"PO-Revision-Date: 2022-04-24 20:44+0200\n"
+"POT-Creation-Date: 2022-05-07 06:08+0200\n"
+"PO-Revision-Date: 2022-05-07 06:18+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -705,6 +705,14 @@ msgstr "Trollkvinneforbundet"
 msgid "Necromancer Guild"
 msgstr "Sortekunstnerforb."
 
+#, fuzzy
+msgid "Ogre Alliance"
+msgstr "Dvergealliansen"
+
+#, fuzzy
+msgid "Dwarfbane"
+msgstr "Dverg"
+
 msgid "Dragon Alliance"
 msgstr "Dragealliansen"
 
@@ -1243,7 +1251,7 @@ msgstr " fanget"
 msgid " will always run away from your army."
 msgstr " kommer alltid til å rømme i frykt fra hæren din."
 
-msgid " will be willing to always join your army."
+msgid " will be willing to join your army."
 msgstr " kommer alltid til å ønske å bli med i hæren din."
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
@@ -1253,17 +1261,18 @@ msgstr ""
 msgid "The army will be carried over the scenario."
 msgstr "Hæren din vil følge deg med videre til det neste brettet."
 
-msgid ""
-"The kingdom will have additional %{resource} at the start of the scenario."
+#, fuzzy
+msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr "Kongedømmet ditt vil få ekstra %{resource} ved begynnelsen av brettet."
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
 msgstr "Trolldommen %{spell} vil bli brakt med videre til det neste brettet."
 
-msgid "%{hero} hero can be hired in the scenario."
+msgid "%{hero} can be hired in the scenario."
 msgstr "Helten %{hero} kan bli vervet på brettet."
 
-msgid "Defeated %{hero} hero will not appear in the subsequent scenarios."
+msgid ""
+"%{hero} has been defeated and will not appear in the subsequent scenarios."
 msgstr ""
 "Helten %{hero} vil ikke komme i senere brett dersom han/hun har blitt fanget."
 
@@ -1395,6 +1404,174 @@ msgstr "Vandrerens sko"
 msgid "campaignBonus|White Pearl"
 msgstr "Den hvite perlen"
 
+#, fuzzy
+msgid "campaignBonus|Basic Archery"
+msgstr "Den sorte perlen"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Archery"
+msgstr "Forbedret skyting"
+
+#, fuzzy
+msgid "campaignBonus|Expert Archery"
+msgstr "Styrkeøksa"
+
+#, fuzzy
+msgid "campaignBonus|Basic Ballistics"
+msgstr "Hurtigballisten"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Ballistics"
+msgstr "Hurtigballisten"
+
+#, fuzzy
+msgid "campaignBonus|Expert Ballistics"
+msgstr "Hurtigballisten"
+
+#, fuzzy
+msgid "campaignBonus|Basic Diplomacy"
+msgstr "Brystplate"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Diplomacy"
+msgstr "Forbedret megling"
+
+#, fuzzy
+msgid "campaignBonus|Expert Diplomacy"
+msgstr "Ekspert megling"
+
+#, fuzzy
+msgid "campaignBonus|Basic Eagle Eye"
+msgstr "Den sorte perlen"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Eagle Eye"
+msgstr "Forbedret ørneblikk"
+
+#, fuzzy
+msgid "campaignBonus|Expert Eagle Eye"
+msgstr "Ekspert ørneblikk"
+
+#, fuzzy
+msgid "campaignBonus|Basic Estates"
+msgstr "Hurtigballisten"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Estates"
+msgstr "Brystplate"
+
+#, fuzzy
+msgid "campaignBonus|Expert Estates"
+msgstr "Brystplate"
+
+#, fuzzy
+msgid "campaignBonus|Basic Leadership"
+msgstr "Den sorte perlen"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Leadership"
+msgstr "Forbedret lederskap"
+
+#, fuzzy
+msgid "campaignBonus|Expert Leadership"
+msgstr "Ekspert lederskap"
+
+#, fuzzy
+msgid "campaignBonus|Basic Logistics"
+msgstr "Hurtigballisten"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Logistics"
+msgstr "Forbedret logistikk"
+
+#, fuzzy
+msgid "campaignBonus|Expert Logistics"
+msgstr "Ekspert logistikk"
+
+#, fuzzy
+msgid "campaignBonus|Basic Luck"
+msgstr "Masseforbannelse"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Luck"
+msgstr "Skattepant"
+
+#, fuzzy
+msgid "campaignBonus|Expert Luck"
+msgstr "Skattepant"
+
+#, fuzzy
+msgid "campaignBonus|Basic Mysticism"
+msgstr "Hurtigballisten"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Mysticism"
+msgstr "Forbedret mystikk"
+
+#, fuzzy
+msgid "campaignBonus|Expert Mysticism"
+msgstr "Ekspert mystikk"
+
+#, fuzzy
+msgid "campaignBonus|Basic Navigation"
+msgstr "Kjedelyn"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Navigation"
+msgstr "Forbedret skipsfart"
+
+#, fuzzy
+msgid "campaignBonus|Expert Navigation"
+msgstr "Ekspert skipsfart"
+
+#, fuzzy
+msgid "campaignBonus|Basic Necromancy"
+msgstr "Den sorte perlen"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Necromancy"
+msgstr "Forbedret sortekunst"
+
+#, fuzzy
+msgid "campaignBonus|Expert Necromancy"
+msgstr "Ekspert sortekunst"
+
+#, fuzzy
+msgid "campaignBonus|Basic Pathfinding"
+msgstr "Kjedelyn"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Pathfinding"
+msgstr "Forbedret kartlesing"
+
+#, fuzzy
+msgid "campaignBonus|Expert Pathfinding"
+msgstr "Ekspert kartlesing"
+
+#, fuzzy
+msgid "campaignBonus|Basic Scouting"
+msgstr "Magikerens ring"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Scouting"
+msgstr "Magikerens ring"
+
+#, fuzzy
+msgid "campaignBonus|Expert Scouting"
+msgstr "Skattepant"
+
+#, fuzzy
+msgid "campaignBonus|Basic Wisdom"
+msgstr "Hurtigballisten"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Wisdom"
+msgstr "Dødebesjelning"
+
+#, fuzzy
+msgid "campaignBonus|Expert Wisdom"
+msgstr "Piggskjoldet"
+
 msgid "campaignBonus|Animate Dead"
 msgstr "Dødebesjelning"
 
@@ -1433,9 +1610,15 @@ msgstr ""
 "%{artifact}."
 
 msgid ""
-"The kingdom will have additional %{amount} %{resource} at the start of the "
-"scenario."
+"The kingdom will receive %{amount} additional %{resource} at the start of "
+"the scenario."
 msgstr "Kongedømmet ditt vil begynne brettet med %{amount} ekstra %{resource}."
+
+#, fuzzy
+msgid ""
+"The kingdom will have %{amount} less %{resource} at the start of the "
+"scenario."
+msgstr "Kongedømmet ditt vil få ekstra %{resource} ved begynnelsen av brettet."
 
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
@@ -2480,6 +2663,51 @@ msgstr "Eksperimentelle"
 msgid "Settings"
 msgstr "Innstillinger"
 
+msgid "off"
+msgstr "av"
+
+msgid "Music"
+msgstr "Musikk"
+
+msgid "Effects"
+msgstr "Lydeffekter"
+
+msgid "MIDI"
+msgstr "MIDI"
+
+msgid "MIDI Expansion"
+msgstr "MIDI Expansion"
+
+msgid "External"
+msgstr "Ekstern"
+
+msgid "Music Type"
+msgstr "Musikktype"
+
+#, fuzzy
+msgid "Hot Keys"
+msgstr "Byttespilling"
+
+msgid "In-game"
+msgstr ""
+
+#, fuzzy
+msgid "Black & White"
+msgstr "Svartfjellryggen"
+
+#, fuzzy
+msgid "Mouse Cursor"
+msgstr ""
+"Skygge-\n"
+"markør"
+
+msgid "Color"
+msgstr ""
+
+#, fuzzy
+msgid "Text Support"
+msgstr "Kvalitetssikring og støtte"
+
 msgid "Select Game Language"
 msgstr "Velg spillspråk"
 
@@ -2494,6 +2722,28 @@ msgstr "Endre oppløsningen til spillet."
 
 msgid "Experimental game settings."
 msgstr "Innstillinger for utprøvningsvalg."
+
+msgid "Toggle ambient music level."
+msgstr "Juster volumet til musikken."
+
+msgid "Toggle foreground sounds level."
+msgstr "Juster volumet til lydeffekter og videosnutter."
+
+msgid "Change the type of music."
+msgstr "Skift typen musikk."
+
+msgid "Check all Hot Keys used in the game."
+msgstr ""
+
+msgid ""
+"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
+"move as smoothly as black and white ones."
+msgstr ""
+
+msgid ""
+"Toggle text support mode to output extra information about windows and "
+"events in the game."
+msgstr ""
 
 msgid "Okay"
 msgstr "Okay"
@@ -2582,6 +2832,9 @@ msgstr "Plasser vokter"
 
 msgid "Your army too big!"
 msgstr "Hæren din er for stor!"
+
+msgid "Hot Keys:"
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Velg spillets språk:"
@@ -2701,7 +2954,28 @@ msgstr "Uvisst"
 msgid "%{name} (Level %{level})"
 msgstr "%{name} (Level %{level})"
 
-msgid "Move Points"
+#, fuzzy
+msgid "Attack:"
+msgstr "Angrep"
+
+#, fuzzy
+msgid "Defense:"
+msgstr "Forsvar"
+
+#, fuzzy
+msgid "Spell Power:"
+msgstr "Kraft"
+
+#, fuzzy
+msgid "Knowledge:"
+msgstr "Kunnskap"
+
+#, fuzzy
+msgid "Spell Points:"
+msgstr "Mana"
+
+#, fuzzy
+msgid "Move Points:"
 msgstr "Skritt"
 
 msgid "Cost per troop:"
@@ -2923,27 +3197,6 @@ msgstr "Bekreft valget."
 msgid "Experimental Game Settings"
 msgstr "Eksperimentelle innstillinger"
 
-msgid "off"
-msgstr "av"
-
-msgid "Music"
-msgstr "Musikk"
-
-msgid "Effects"
-msgstr "Lydeffekter"
-
-msgid "MIDI"
-msgstr "MIDI"
-
-msgid "MIDI Expansion"
-msgstr "MIDI Expansion"
-
-msgid "External"
-msgstr "Ekstern"
-
-msgid "Music Type"
-msgstr "Musikktype"
-
 msgid "Jump"
 msgstr "Sprang"
 
@@ -2991,15 +3244,6 @@ msgstr "Kampstyring"
 
 msgid "Manual"
 msgstr "Manuell"
-
-msgid "Toggle ambient music level."
-msgstr "Juster volumet til musikken."
-
-msgid "Toggle foreground sounds level."
-msgstr "Juster volumet til lydeffekter og videosnutter."
-
-msgid "Change the type of music."
-msgstr "Skift typen musikk."
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Skift hastigheten heltene dine flytter seg på brettet."
@@ -3165,9 +3409,6 @@ msgstr "Spesielt takk til"
 msgid "and many other contributors!"
 msgstr "og mange andre bidragsytere!"
 
-msgid "Original project before 0.7"
-msgstr "Opprinnelig prosjekt før 0.7"
-
 msgid "Support us at"
 msgstr "Støtt oss på"
 
@@ -3179,6 +3420,9 @@ msgstr "Behov for hjelp med spillet?"
 
 msgid "and many-many other supporters!"
 msgstr "og mange flere støttespillere!"
+
+msgid "Original project before 0.7"
+msgstr "Opprinnelig prosjekt før 0.7"
 
 msgid "Original Heroes of Might and Magic II team"
 msgstr "Det opprinnelige Heroes of Might and Magic II teamet"
@@ -3659,10 +3903,10 @@ msgstr "Klikk her for å dra tilbake til hovedmenyen."
 msgid "No maps available!"
 msgstr "Ingen brett finnes!"
 
-msgid "Astrologers proclaim Month of the %{name}."
+msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologene varsler at det er måneden av %{name}."
 
-msgid "Astrologers proclaim Week of the %{name}."
+msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Astrologene varsler at det er uka av %{name}."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
@@ -3681,7 +3925,7 @@ msgstr[1] ""
 "Etter en vanlig vekst øker nå befolkningen av %{monster} med %{count} "
 "prosent!"
 
-msgid "%{monster} population increases by +%{count}."
+msgid "%{monster} growth +%{count}."
 msgstr "Alle befolkninger med %{monster} vokser med +%{count}."
 
 msgid " All populations are halved."
@@ -3911,6 +4155,19 @@ msgstr "Tsjekkisk"
 
 msgid "Norwegian"
 msgstr "Norsk"
+
+msgid "Belarusian"
+msgstr ""
+
+#, fuzzy
+msgid "Bulgarian"
+msgstr "Barbar"
+
+msgid "Ukrainian"
+msgstr ""
+
+msgid "Romanian"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -5539,9 +5796,6 @@ msgstr ""
 msgid "Spell book is not present."
 msgstr "Ingen tryllebok er til å finne."
 
-msgid "The spell is not found."
-msgstr "Trolldommen ble ikke funnet."
-
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
 "cast the spell."
@@ -5549,11 +5803,16 @@ msgstr ""
 "Denne trolldommen koster %{mana} mana. Du har kun %{point} mana, så du kan "
 "ikke bruke denne trolldommen."
 
-msgid "Not enough move points."
-msgstr "Ikke nok skritt."
+msgid "The spell is not found."
+msgstr "Trolldommen ble ikke funnet."
 
 msgid "Only heroes can cast this spell."
 msgstr "Kun helter kan bruke denne trolldommen."
+
+msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
+msgstr ""
+"Din helt er for sliten til å bruke denne trolldommen i dag. Prøv igjen i "
+"morgen."
 
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
@@ -5662,11 +5921,6 @@ msgstr "Byportal"
 msgid "Select town to port to."
 msgstr "Velg by å reise til."
 
-msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
-msgstr ""
-"Din helt er for sliten til å bruke denne trolldommen i dag. Prøv igjen i "
-"morgen."
-
 msgid "%{spell} failed!!!"
 msgstr "%{spell} mislyktes!"
 
@@ -5681,13 +5935,6 @@ msgstr "Denne trolldommen kan ikke bli brukt på et skip."
 
 msgid "This spell can be casted only nearby water."
 msgstr "Denne trolldommen kan kun bli brukt i nærheten av vann."
-
-msgid ""
-"No available towns.\n"
-"Spell Failed!!!"
-msgstr ""
-"Ingen tilgjengelige byer.\n"
-"Trolldom mislyktes!!!"
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
@@ -9442,9 +9689,6 @@ msgstr "Helter: I arenaen kan man velge en hvilken som helst av grunnevnene"
 msgid "battle: allow soft wait for troops"
 msgstr "Kamp: Avvent styrke til rundens slutt"
 
-msgid "battle: reverse wait order (fast, average, slow)"
-msgstr "Kamp: Snu opp-ned på rekkefølgen (rask, middels, sein)"
-
 msgid "battle: deterministic events"
 msgstr "Kamp: Forutbestemte turer"
 
@@ -9525,3 +9769,9 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Not enough move points."
+#~ msgstr "Ikke nok skritt."
+
+#~ msgid "battle: reverse wait order (fast, average, slow)"
+#~ msgstr "Kamp: Snu opp-ned på rekkefølgen (rask, middels, sein)"

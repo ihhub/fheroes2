@@ -21,6 +21,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace Game
 {
@@ -44,19 +45,21 @@ namespace Game
         MAIN_MENU_MAP_SIZE_ALL,
         MAIN_MENU_HOTSEAT,
         MAIN_MENU_BATTLEONLY,
-        MAIN_MENU_NEW_CAMPAIGN_SELECTION_SUCCESSION_WARS,
-        MAIN_MENU_NEW_CAMPAIGN_SELECTION_PRICE_OF_LOYALTY,
+        MAIN_MENU_NEW_ORIGINAL_CAMPAIGN,
+        MAIN_MENU_NEW_EXPANSION_CAMPAIGN,
         NEW_ROLAND_CAMPAIGN,
         NEW_ARCHIBALD_CAMPAIGN,
         NEW_PRICE_OF_LOYALTY_CAMPAIGN,
         NEW_VOYAGE_HOME_CAMPAIGN,
         NEW_WIZARDS_ISLE_CAMPAIGN,
         NEW_DESCENDANTS_CAMPAIGN,
+        CAMPAIGN_SELECT_FIRST_BONUS,
+        CAMPAIGN_SELECT_SECOND_BONUS,
+        CAMPAIGN_SELECT_THIRD_BONUS,
+        CAMPAIGN_VIEW_INTRO,
 
-        DEFAULT_READY,
-        DEFAULT_EXIT,
-        DEFAULT_LEFT,
-        DEFAULT_RIGHT,
+        DEFAULT_OKAY,
+        DEFAULT_CANCEL,
         MOVE_LEFT,
         MOVE_RIGHT,
         MOVE_TOP,
@@ -131,10 +134,14 @@ namespace Game
 
     inline bool HotKeyCloseWindow()
     {
-        return HotKeyPressEvent( HotKeyEvent::DEFAULT_EXIT ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_READY );
+        return HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_OKAY );
     }
 
     std::string getHotKeyNameByEventId( const HotKeyEvent eventID );
+
+    std::string getHotKeyEventNameByEventId( const HotKeyEvent eventID );
+
+    std::vector<Game::HotKeyEvent> getAllHotKeyEvents();
 
     void KeyboardGlobalFilter( int sdlKey, int mod );
 

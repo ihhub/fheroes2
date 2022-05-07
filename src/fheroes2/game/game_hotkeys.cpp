@@ -126,10 +126,10 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_ALL )] = { HotKeyCategory::MAIN_GAME, "select all map sizes", fheroes2::Key::KEY_A };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_HOTSEAT )] = { HotKeyCategory::MAIN_GAME, "hotseat game", fheroes2::Key::KEY_H };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_BATTLEONLY )] = { HotKeyCategory::MAIN_GAME, "battle only game", fheroes2::Key::KEY_B };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_CAMPAIGN_SELECTION_SUCCESSION_WARS )]
-            = { HotKeyCategory::MAIN_GAME, "the succession wars campaign selection", fheroes2::Key::KEY_O };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_CAMPAIGN_SELECTION_PRICE_OF_LOYALTY )]
-            = { HotKeyCategory::MAIN_GAME, "the price of loyalty campaign selection", fheroes2::Key::KEY_E };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_ORIGINAL_CAMPAIGN )]
+            = { HotKeyCategory::MAIN_GAME, "choose the original campaign", fheroes2::Key::KEY_O };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MAIN_MENU_NEW_EXPANSION_CAMPAIGN )]
+            = { HotKeyCategory::MAIN_GAME, "choose the expansion campaign", fheroes2::Key::KEY_E };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_ROLAND_CAMPAIGN )] = { HotKeyCategory::MAIN_GAME, "roland campaign", fheroes2::Key::KEY_1 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_ARCHIBALD_CAMPAIGN )] = { HotKeyCategory::MAIN_GAME, "archibald campaign", fheroes2::Key::KEY_2 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_PRICE_OF_LOYALTY_CAMPAIGN )]
@@ -137,19 +137,24 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_VOYAGE_HOME_CAMPAIGN )] = { HotKeyCategory::MAIN_GAME, "voyage home campaign", fheroes2::Key::KEY_2 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_WIZARDS_ISLE_CAMPAIGN )] = { HotKeyCategory::MAIN_GAME, "wizard's isle campaign", fheroes2::Key::KEY_3 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::NEW_DESCENDANTS_CAMPAIGN )] = { HotKeyCategory::MAIN_GAME, "descendants campaign", fheroes2::Key::KEY_4 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_SELECT_FIRST_BONUS )]
+            = { HotKeyCategory::MAIN_GAME, "select first campaign bonus", fheroes2::Key::KEY_1 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_SELECT_SECOND_BONUS )]
+            = { HotKeyCategory::MAIN_GAME, "select second campaign bonus", fheroes2::Key::KEY_2 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_SELECT_THIRD_BONUS )]
+            = { HotKeyCategory::MAIN_GAME, "select third campaign bonus", fheroes2::Key::KEY_3 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_VIEW_INTRO )] = { HotKeyCategory::MAIN_GAME, "view campaign intro", fheroes2::Key::KEY_V };
 
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_READY )] = { HotKeyCategory::DEFAULT_EVENTS, "default okay event", fheroes2::Key::KEY_RETURN };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_EXIT )] = { HotKeyCategory::DEFAULT_EVENTS, "default cancel event", fheroes2::Key::KEY_ESCAPE };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_LEFT )] = { HotKeyCategory::DEFAULT_EVENTS, "left selection", fheroes2::Key::NONE };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_RIGHT )] = { HotKeyCategory::DEFAULT_EVENTS, "right selection", fheroes2::Key::NONE };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_OKAY )] = { HotKeyCategory::DEFAULT_EVENTS, "default okay event", fheroes2::Key::KEY_ENTER };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_CANCEL )] = { HotKeyCategory::DEFAULT_EVENTS, "default cancel event", fheroes2::Key::KEY_ESCAPE };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MOVE_LEFT )] = { HotKeyCategory::DEFAULT_EVENTS, "move left", fheroes2::Key::KEY_LEFT };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MOVE_RIGHT )] = { HotKeyCategory::DEFAULT_EVENTS, "move right", fheroes2::Key::KEY_RIGHT };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MOVE_TOP )] = { HotKeyCategory::DEFAULT_EVENTS, "move up", fheroes2::Key::KEY_UP };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MOVE_BOTTOM )] = { HotKeyCategory::DEFAULT_EVENTS, "move bottom", fheroes2::Key::KEY_DOWN };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MOVE_TOP_LEFT )] = { HotKeyCategory::DEFAULT_EVENTS, "move top bottom", fheroes2::Key::NONE };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MOVE_TOP_RIGHT )] = { HotKeyCategory::DEFAULT_EVENTS, "move top right", fheroes2::Key::NONE };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MOVE_BOTTOM_LEFT )] = { HotKeyCategory::DEFAULT_EVENTS, "move bottom left", fheroes2::Key::NONE };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MOVE_BOTTOM_RIGHT )] = { HotKeyCategory::DEFAULT_EVENTS, "move bottom right", fheroes2::Key::NONE };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MOVE_TOP_LEFT )] = { HotKeyCategory::DEFAULT_EVENTS, "move top left", fheroes2::Key::KEY_KP_7 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MOVE_TOP_RIGHT )] = { HotKeyCategory::DEFAULT_EVENTS, "move top right", fheroes2::Key::KEY_KP_9 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MOVE_BOTTOM_LEFT )] = { HotKeyCategory::DEFAULT_EVENTS, "move bottom left", fheroes2::Key::KEY_KP_1 };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::MOVE_BOTTOM_RIGHT )] = { HotKeyCategory::DEFAULT_EVENTS, "move bottom right", fheroes2::Key::KEY_KP_3 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SYSTEM_FULLSCREEN )] = { HotKeyCategory::DEFAULT_EVENTS, "toggle fullscreen", fheroes2::Key::KEY_F4 };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_RETREAT )] = { HotKeyCategory::BATTLE, "retreat from battle", fheroes2::Key::KEY_R };
@@ -174,7 +179,7 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::KINGDOM_SUMMARY )] = { HotKeyCategory::WORLD_MAP, "kingdom summary", fheroes2::Key::KEY_K };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::VIEW_WORLD )] = { HotKeyCategory::WORLD_MAP, "view world", fheroes2::Key::KEY_V };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_ACTION )] = { HotKeyCategory::WORLD_MAP, "default action", fheroes2::Key::KEY_SPACE };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::OPEN_FOCUS )] = { HotKeyCategory::WORLD_MAP, "open focus", fheroes2::Key::KEY_RETURN };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::OPEN_FOCUS )] = { HotKeyCategory::WORLD_MAP, "open focus", fheroes2::Key::KEY_ENTER };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CONTROL_PANEL )] = { HotKeyCategory::WORLD_MAP, "control panel", fheroes2::Key::KEY_1 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SHOW_RADAR )] = { HotKeyCategory::WORLD_MAP, "show radar", fheroes2::Key::KEY_2 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SHOW_BUTTONS )] = { HotKeyCategory::WORLD_MAP, "show game buttons", fheroes2::Key::KEY_3 };
@@ -258,6 +263,23 @@ std::string Game::getHotKeyNameByEventId( const HotKeyEvent eventID )
     return StringUpper( KeySymGetName( hotKeyEventInfo[hotKeyEventToInt( eventID )].key ) );
 }
 
+std::string Game::getHotKeyEventNameByEventId( const HotKeyEvent eventID )
+{
+    return hotKeyEventInfo[hotKeyEventToInt( eventID )].name;
+}
+
+std::vector<Game::HotKeyEvent> Game::getAllHotKeyEvents()
+{
+    std::vector<Game::HotKeyEvent> events;
+    events.reserve( hotKeyEventInfo.size() - 2 );
+
+    for ( size_t i = 1; i < hotKeyEventInfo.size() - 1; ++i ) {
+        events.emplace_back( static_cast<Game::HotKeyEvent>( i ) );
+    }
+
+    return events;
+}
+
 void Game::HotKeysLoad( std::string filename )
 {
     initializeHotKeyEvents();
@@ -293,21 +315,19 @@ void Game::HotKeysLoad( std::string filename )
         }
     }
 
-    if ( !isFilePresent ) {
-        filename = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.key" );
-        std::fstream file;
-        file.open( filename.data(), std::fstream::out | std::fstream::trunc );
-        if ( !file )
-            return;
+    // Save the latest information into the file.
+    filename = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.key" );
+    std::fstream file;
+    file.open( filename.data(), std::fstream::out | std::fstream::trunc );
+    if ( !file )
+        return;
 
-        const std::string & data = getHotKeyFileContent();
-        file.write( data.data(), data.size() );
-    }
+    const std::string & data = getHotKeyFileContent();
+    file.write( data.data(), data.size() );
 }
 
 void Game::KeyboardGlobalFilter( int sdlKey, int mod )
 {
-    // system hotkeys
     if ( fheroes2::getKeyFromSDL( sdlKey ) == hotKeyEventInfo[hotKeyEventToInt( HotKeyEvent::SYSTEM_FULLSCREEN )].key
          && !( ( mod & KMOD_ALT ) || ( mod & KMOD_CTRL ) ) ) {
         fheroes2::engine().toggleFullScreen();

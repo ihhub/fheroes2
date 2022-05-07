@@ -277,7 +277,7 @@ void ShowNewWeekDialog( void )
     const Week & week = world.GetWeekType();
 
     // head
-    std::string message = world.BeginMonth() ? _( "Astrologers proclaim Month of the %{name}." ) : _( "Astrologers proclaim Week of the %{name}." );
+    std::string message = world.BeginMonth() ? _( "Astrologers proclaim the Month of the %{name}." ) : _( "Astrologers proclaim the Week of the %{name}." );
     StringReplace( message, "%{name}", week.GetName() );
     message += "\n \n";
 
@@ -291,7 +291,7 @@ void ShowNewWeekDialog( void )
                                                             : _n( "After regular growth, the population of %{monster} increases by %{count} percent!",
                                                                   "After regular growth, the population of %{monster} increases by %{count} percent!", count );
             else
-                message += _( "%{monster} population increases by +%{count}." );
+                message += _( "%{monster} growth +%{count}." );
             StringReplace( message, "%{monster}", monster.GetMultiName() );
             StringReplace( message, "%{count}", count );
             message += "\n \n";
@@ -813,7 +813,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             if ( isMovingHero )
                 stopHero = true;
             // exit dialog
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_EXIT ) )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) )
                 res = EventExit();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::END_TURN ) )
                 res = EventEndTurn();
