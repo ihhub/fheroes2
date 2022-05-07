@@ -1,0 +1,31 @@
+name: Translation update
+
+on:
+  workflow_call:
+
+jobs:
+  check:
+    name: Translation update
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        sudo apt-get -y update
+        sudo apt-get -y install gettext
+    - name: Setup Git
+      run: |
+        git config user.name "GitHub Actions Bot"
+        git config user.email "action@github.com"
+    - name: Generate POT
+      run: |
+        make -C src/dist -j 2 pot
+    - name: Generate translations
+      run: |
+        make -C files/lang -j 2
+    - name: Commit changes
+      run: |
+        git add src/dist/fheroes2.pot files/lang/*.po
+        git commit -m "Update translation files" || true
+        git push origin "$GITHUB_REF"
