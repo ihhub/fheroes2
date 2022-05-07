@@ -1,3 +1,67 @@
+version 0.9.15 (07 May 2022)
+- add HotKey window and expand the list of system options
+- do not allow higher-level Mage Guilds to be built if the previous-level Mage Guild has not been built yet
+- Battle Only mode: always assign a random spell to the Spell Scroll
+- add initial support for Romanian language
+- add more conditions to define a blocking AI hero
+- fix incorrect video playback on Descendants campaign, scenario 5
+- change some descriptions of campaign awards and bonuses
+- do not auto save after the completion of the last scenario in a campaign
+- add images and full description of bonuses and awards by right mouse click
+- fix some incorrect campaign bonuses
+- display None if no awards available for the current scenario
+- add hot keys to select bonuses
+- fix rendering of campaign UI window as it was very slow on response on changing bonuses
+- fix missing kingdom income value for scenarios with additional bonus resources
+- game type interface for campaign window must be unique and should not depend on overall game interface
+- allow already selected scenario to appear in ALL scenarios list
+- improved Week of the creature window
+- changed town portal's text and condition to be similar to town gate
+- update Russian translation
+- properly extract animations from the GOG distribution of HoMM2 for Windows
+- update French translation
+- improve search for video files
+- add text truncation method to be used in campaign's choices and awards
+- encourage AI to explore more
+- redesign Hot Key event file handling
+- add double-lined headers to adventure map options
+- add Belarusian, Bulgarian and Ukrainian languages support
+- populate resolution list based till the lowest resolution
+- fix 1000 and 100000 short values display
+- update hero quick info popup dialog
+- disable Town Portal dialog OK button by default
+- changed AI's turn to be repeated multiple times for heroes
+- generate French 'MIN' button
+- generate French 'GIFT' button
+- add Translation Context for Secondary Skill Campaign Bonuses
+- add Ogre Alliance and Dwarfbane full strings for translation
+- fix the positioning of the damage info popup
+- update Norwegian translation
+- fix calculation of morale & luck modifiers for in-castle army without a commander
+- properly calculate the number of travel days to the destination tile for a hero
+- AI should replenish lost spell points more frequently
+- do not allow a hero to have multiple spell books in the "Battle Only" mode
+- fix rendering of the Arm of the Martyr's shadow
+- AI uses View All spell to scout fog
+- hero should have at least 69MP to cast Dimension Door, Town Gate and Town Portal spells
+- fix spacing of player squares in Select Recipients window and properly center resource icons for "Your Funds" and "Planned Gift" horizontally
+- fix French small font Cedilla c rendering
+- update Polish translation
+- reserve half of AI spell points for Dimension Door spell
+- hero should be able to cast spells that consume movement points if he is able to move from his current tile
+- fix MP3 support in Windows SDL1 packages
+- reset the mixer volume before playing video soundtracks
+- expand Test Support mode to cover all campaign related actions
+- add Black-White cursor support
+- add music control options to the configuration dialog
+- fix failing music file search
+- properly work with guardians on the objects that can be captured
+- fix call to get secondary skill name leading to a crash
+- fix multiple issues related to the interface settings
+- allow to change the auto battle settings if player's army doesn't have a commander
+- fix a crash when a hero tries to get a second magic book
+- always grab the mouse in fullscreen mode to properly support devices with notch
+
 version 0.9.14 (09 April 2022)
 - generate Italian "Battle Only" button
 - fix line breaking in welcome message for various languages
