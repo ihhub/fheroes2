@@ -1463,7 +1463,7 @@ namespace
         {
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::FONT];
 
-            // Upside down question mark ?.
+            // Inverted question mark ?. Replaced with normal for now.
             font[191 - 32] = font[63 - 32];
 
             // A with grave accent ` and generate the grave accent for further use.
@@ -1530,6 +1530,9 @@ namespace
             fheroes2::Copy( font[192 - 32], 7, 0, font[204 - 32], 3, 0, 4, 2 );
             updateNormalFontLetterShadow( font[204 - 32] );
 
+            // I with accute accent.
+            font[205 - 32] = font[41];
+
             // N with tilde ~
             font[209 - 32] = font[46];
 
@@ -1540,6 +1543,9 @@ namespace
             font[210 - 32].setPosition( font[47].x(), font[47].y() - 3 );
             fheroes2::Copy( font[192 - 32], 7, 0, font[210 - 32], 6, 0, 4, 2 );
             updateNormalFontLetterShadow( font[210 - 32] );
+
+            // O with accute accent.
+            font[211 - 32] = font[47];
 
             // O with / inside.
             font[216 - 32].resize( font[47].width() + 2, font[47].height() );
@@ -1561,6 +1567,9 @@ namespace
             fheroes2::Copy( font[192 - 32], 7, 0, font[217 - 32], 5, 0, 4, 2 );
             updateNormalFontLetterShadow( font[217 - 32] );
 
+            // U with accute accent.
+            font[218 - 32] = font[53];
+
             // a with grave accent `.
             font[224 - 32].resize( font[65].width(), font[65].height() + 3 );
             font[224 - 32].reset();
@@ -1568,6 +1577,9 @@ namespace
             font[224 - 32].setPosition( font[65].x(), font[65].y() - 3 );
             fheroes2::Copy( font[192 - 32], 7, 0, font[224 - 32], 3, 0, 4, 2 );
             updateNormalFontLetterShadow( font[224 - 32] );
+
+            // a with accute accent.
+            font[225 - 32] = font[65];
 
             // a with circle on top.
             font[229 - 32].resize( font[65].width(), font[65].height() + 5 );
@@ -1615,6 +1627,9 @@ namespace
             fheroes2::Copy( font[192 - 32], 7, 0, font[236 - 32], 1, 0, 4, 2 );
             updateNormalFontLetterShadow( font[236 - 32] );
 
+            // i with accute accent.
+            font[237 - 32] = font[73];
+
             // n with tilde ~.
             font[241 - 32] = font[110 - 32];
 
@@ -1625,6 +1640,9 @@ namespace
             font[242 - 32].setPosition( font[79].x(), font[79].y() - 3 );
             fheroes2::Copy( font[192 - 32], 7, 0, font[242 - 32], 3, 0, 4, 2 );
             updateNormalFontLetterShadow( font[242 - 32] );
+
+            // o with accute accent.
+            font[243 - 32] = font[79];
 
             // o with / inside.
             font[248 - 32].resize( font[79].width(), font[79].height() );
@@ -1644,6 +1662,9 @@ namespace
             font[249 - 32].setPosition( font[85].x(), font[85].y() - 3 );
             fheroes2::Copy( font[192 - 32], 7, 0, font[249 - 32], 3, 0, 4, 2 );
             updateNormalFontLetterShadow( font[249 - 32] );
+
+            // u with accute accent.
+            font[250 - 32] = font[85];
 
             // Proper lowercase k. Kept at end in case any letters use it for generation.
             fheroes2::FillTransform( font[75], 4, 1, 5, 8, 1 );
@@ -1857,8 +1878,6 @@ namespace fheroes2
             generateCP1251Alphabet( icnVsSprite );
             break;
         case SupportedLanguage::Norwegian:
-            //generateNorwegianAlphabet( icnVsSprite );
-            //break;
         case SupportedLanguage::Spanish:
         case SupportedLanguage::Italian:
             generateCP1252Alphabet( icnVsSprite );
