@@ -830,6 +830,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             }
             else if ( HotKeyPressEvent( Game::HotKeyEvent::FILE_OPTIONS ) )
                 res = EventFileDialog();
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::ADVENTURE_OPTIONS ) )
+                res = EventAdventureDialog();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::SYSTEM_OPTIONS ) )
                 EventSystemDialog();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::PUZZLE_MAP ) )
