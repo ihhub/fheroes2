@@ -80,19 +80,19 @@ int Dialog::AdventureOptions( bool enabledig )
         le.MousePressLeft( buttonDig.area() ) ? buttonDig.drawOnPress() : buttonDig.drawOnRelease();
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonWorld.area() ) ) {
+        if ( le.MouseClickLeft( buttonWorld.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::VIEW_WORLD ) ) {
             result = Dialog::WORLD;
             break;
         }
-        if ( le.MouseClickLeft( buttonPuzzle.area() ) ) {
+        if ( le.MouseClickLeft( buttonPuzzle.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::PUZZLE_MAP ) ) {
             result = Dialog::PUZZLE;
             break;
         }
-        if ( le.MouseClickLeft( buttonInfo.area() ) ) {
+        if ( le.MouseClickLeft( buttonInfo.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::SCENARIO_INFORMATION ) ) {
             result = Dialog::INFO;
             break;
         }
-        if ( le.MouseClickLeft( buttonDig.area() ) && buttonDig.isEnabled() ) {
+        if ( ( le.MouseClickLeft( buttonDig.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DIG_ARTIFACT ) ) && buttonDig.isEnabled() ) {
             result = Dialog::DIG;
             break;
         }

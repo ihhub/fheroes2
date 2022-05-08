@@ -78,6 +78,7 @@ namespace Game
         NEXT_TOWN,
         END_TURN,
         FILE_OPTIONS,
+        ADVENTURE_OPTIONS,
         PUZZLE_MAP,
         SCENARIO_INFORMATION,
         DIG_ARTIFACT,
