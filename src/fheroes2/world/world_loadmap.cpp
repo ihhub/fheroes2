@@ -575,24 +575,6 @@ bool World::LoadMapMP2( const std::string & filename )
         fheroes2::ExcludeArtifactFromRandom( art.GetID() );
     }
 
-    // Make AI aware of a special castle which is a winning condition for a human player.
-    if ( ( conf.ConditionWins() & GameOver::WINS_TOWN ) == GameOver::WINS_TOWN ) {
-        Castle * castle = vec_castles.Get( conf.WinsMapsPositionObject() );
-        assert( castle != nullptr );
-        if ( castle != nullptr ) {
-            castle->SetModes( Castle::CAPITAL );
-        }
-    }
-
-    // Make AI aware of a special castle to be defended in order not to loose it.
-    if ( ( conf.ConditionLoss() & GameOver::LOSS_TOWN ) == GameOver::LOSS_TOWN ) {
-        Castle * castle = vec_castles.Get( conf.LossMapsPositionObject() );
-        assert( castle != nullptr );
-        if ( castle != nullptr ) {
-            castle->SetModes( Castle::CAPITAL );
-        }
-    }
-
     ProcessNewMap();
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, "end load" )
@@ -708,11 +690,21 @@ void World::ProcessNewMap()
         const Heroes * hero = GetHeroes( conf.WinsMapsPositionObject() );
         heroes_cond_wins = hero ? hero->GetID() : Heroes::UNKNOWN;
     }
+
     if ( GameOver::LOSS_HERO & conf.ConditionLoss() ) {
         Heroes * hero = GetHeroes( conf.LossMapsPositionObject() );
         if ( hero ) {
             heroes_cond_loss = hero->GetID();
             hero->SetModes( Heroes::NOTDISMISS | Heroes::NOTDEFAULTS );
+        }
+    }
+
+    // Make AI aware of a special castle which is a winning condition for a human player.
+    if ( ( conf.ConditionWins() & GameOver::WINS_TOWN ) == GameOver::WINS_TOWN ) {
+        Castle * castle = vec_castles.Get( conf.WinsMapsPositionObject() );
+        assert( castle != nullptr );
+        if ( castle != nullptr ) {
+            castle->SetModes( Castle::CAPITAL );
         }
     }
 

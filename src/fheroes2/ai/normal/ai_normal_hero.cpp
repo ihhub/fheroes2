@@ -23,6 +23,7 @@
 #include "ai_normal.h"
 #include "game.h"
 #include "game_static.h"
+#include "game_over.h"
 #include "ground.h"
 #include "heroes.h"
 #include "logging.h"
@@ -35,6 +36,18 @@
 
 namespace
 {
+    bool isCastleLossConditionForHuman( const Castle * castle )
+    {
+        assert( castle != nullptr );
+
+        const Settings & conf = Settings::Get();
+        if ( ( conf.ConditionLoss() & GameOver::LOSS_TOWN ) == 0 ) {
+            return false;
+        }
+
+        return castle->GetCenter() == conf.LossMapsPositionObject();
+    }
+
     bool AIShouldVisitCastle( const Heroes & hero, int castleIndex )
     {
         const Castle * castle = world.getCastleEntrance( Maps::GetPoint( castleIndex ) );
@@ -604,6 +617,11 @@ namespace AI
                 // If the castle is defenseless
                 if ( !castle->GetActualArmy().isValid() )
                     value *= 1.25;
+
+                if ( isCastleLossConditionForHuman( castle ) ) {
+                    value += 20000;
+                }
+
                 return value;
             }
         }
@@ -839,6 +857,11 @@ namespace AI
                 // If the castle is defenseless
                 if ( !castle->GetActualArmy().isValid() )
                     value *= 2.5;
+
+                if ( isCastleLossConditionForHuman( castle ) ) {
+                    value += 20000;
+                }
+
                 return value;
             }
         }
