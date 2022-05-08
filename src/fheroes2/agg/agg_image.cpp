@@ -1932,8 +1932,7 @@ namespace fheroes2
                     FillTransform( image, 44, 67, 1, windowBottom - 67, 1 );
                     FillTransform( image, 45, 71, 1, windowBottom - 71, 1 );
                     FillTransform( image, 49, 70, 1, windowBottom - 70, 1 );
-                    FillTransform( image, 50, 68, 1, windowBottom - 68, 1 );
-                    FillTransform( image, 51, 68, 1, windowBottom - 68, 1 );
+                    FillTransform( image, 50, 68, 2, windowBottom - 68, 1 );
                     FillTransform( image, 52, 69, 1, windowBottom - 69, 1 );
                     FillTransform( image, 53, 74, 1, windowBottom - 74, 1 );
                     FillTransform( image, 57, 70, 1, windowBottom - 70, 1 );
