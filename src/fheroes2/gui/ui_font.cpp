@@ -1380,7 +1380,7 @@ namespace
             fheroes2::Copy( font[193 - 32], 7, 0, font[205 - 32], 3, 0, 4, 2 );
             font[205 - 32].setPosition( font[41].x(), font[41].y() - 3 );
             updateNormalFontLetterShadow( font[205 - 32] );
-            
+
             // N with tilde ~
             font[209 - 32] = font[46];
 
@@ -1437,7 +1437,6 @@ namespace
             fheroes2::Copy( font[193 - 32], 7, 0, font[218 - 32], 5, 0, 4, 2 );
             font[218 - 32].setPosition( font[53].x(), font[53].y() - 3 );
             updateNormalFontLetterShadow( font[218 - 32] );
-
 
             // U with 2 dots on top.
             font[220 - 32].resize( font[53].width(), font[53].height() + 3 );
