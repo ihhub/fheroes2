@@ -1283,6 +1283,9 @@ namespace
         {
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::FONT];
 
+            // Inverted exclamation mark ?. Replaced with normal for now.
+            font[161 - 32] = font[33 - 32];
+
             // Inverted question mark ?. Replaced with normal for now.
             font[191 - 32] = font[63 - 32];
 
@@ -1529,13 +1532,13 @@ namespace
 
             // i with grave accent `.
             font[236 - 32] = font[73];
-            fheroes2::FillTransform( font[236 - 32], 0, 0, font[236 - 32].width(), 2, 1 );
+            fheroes2::FillTransform( font[236 - 32], 0, 0, font[236 - 32].width(), 3, 1 );
             fheroes2::Copy( font[192 - 32], 7, 0, font[236 - 32], 1, 0, 4, 2 );
             updateNormalFontLetterShadow( font[236 - 32] );
 
             // i with acute accent.
             font[237 - 32] = font[73];
-            fheroes2::FillTransform( font[237 - 32], 0, 0, font[237 - 32].width(), 2, 1 );
+            fheroes2::FillTransform( font[237 - 32], 0, 0, font[237 - 32].width(), 3, 1 );
             fheroes2::Copy( font[193 - 32], 7, 0, font[237 - 32], 1, 0, 4, 2 );
             updateNormalFontLetterShadow( font[237 - 32] );
 
