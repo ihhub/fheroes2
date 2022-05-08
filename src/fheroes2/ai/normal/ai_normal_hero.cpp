@@ -22,8 +22,8 @@
 
 #include "ai_normal.h"
 #include "game.h"
-#include "game_static.h"
 #include "game_over.h"
+#include "game_static.h"
 #include "ground.h"
 #include "heroes.h"
 #include "logging.h"
