@@ -1283,11 +1283,38 @@ namespace
         {
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::FONT];
 
-            // Inverted exclamation mark ?. Replaced with normal for now.
-            font[161 - 32] = font[33 - 32];
+            // Inverted exclamation mark !.
+            font[161 - 32].resize( font[33 - 32].width() + 1, font[33 - 32].height() + 3 );
+            font[161 - 32].reset();
+            fheroes2::Copy( font[33 - 32], 1, 0, font[161 - 32], 1, 3, font[33 - 32].width(), font[33 - 32].height() );
+            {
+                // TODO: add proper Flip function variant.
+                fheroes2::Sprite temp = font[161 - 32];
+                temp = fheroes2::Flip( temp, false, true );
+                fheroes2::Copy( temp, 0, 2, font[161 - 32], 1, 2, temp.width(), temp.height() );
+            }
+            font[161 - 32].setPosition( font[33 - 32].x(), font[33 - 32].y() + 2 );
+            updateNormalFontLetterShadow( font[161 - 32] );
 
             // Inverted question mark ?. Replaced with normal for now.
-            font[191 - 32] = font[63 - 32];
+            font[191 - 32].resize( font[63 - 32].width() + 1, font[63 - 32].height() );
+            font[191 - 32].reset();
+            fheroes2::Copy( font[63 - 32], 1, 0, font[191 - 32], 0, 0, font[63 - 32].width(), 11 );
+            {
+                // TODO: add proper Flip function variant.
+                fheroes2::Sprite temp = font[191 - 32];
+                temp = fheroes2::Flip( temp, true, true );
+                fheroes2::Copy( temp, 1, 2, font[191 - 32], 0, 0, temp.width(), temp.height() );
+            }
+            // Remove old shadows
+            fheroes2::FillTransform( font[191 - 32], 6, 1, 1, 2, 1 );
+            fheroes2::FillTransform( font[191 - 32], 5, 2, 1, 1, 1 );
+            fheroes2::FillTransform( font[191 - 32], 2, 4, 1, 1, 1 );
+            fheroes2::FillTransform( font[191 - 32], 3, 8, 5, 1, 1 );
+            fheroes2::FillTransform( font[191 - 32], 4, 7, 3, 1, 1 );
+            fheroes2::FillTransform( font[191 - 32], 8, 5, 1, 1, 1 );
+            font[191 - 32].setPosition( font[63 - 32].x(), font[63 - 32].y() + 2 );
+            updateNormalFontLetterShadow( font[191 - 32] );
 
             // A with grave accent ` and generate the grave accent for further use.
             font[192 - 32].resize( font[33].width(), font[33].height() + 3 );
