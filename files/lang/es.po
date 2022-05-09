@@ -397,7 +397,7 @@ msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
 msgstr ""
-"\"Aceptaré tu rendición y daré salvoconducto a ti y tus tropas por %{price} "
+"\"Aceptaré tu rendición y concederé salvoconducto a ti y tus tropas por %{price} "
 "monedas de oro.\""
 
 msgid "View %{monster} info"
@@ -760,7 +760,7 @@ msgid "Annexation"
 msgstr "Anexión"
 
 msgid "Carator Mines"
-msgstr "Minas Carator"
+msgstr "Minas de Carator"
 
 #, fuzzy
 msgid "Force of Arms"
@@ -858,7 +858,7 @@ msgid ""
 msgstr ""
 
 msgid "Barbarian Wars"
-msgstr "Guerras Barbaras"
+msgstr "Guerras Bárbaras"
 
 msgid "First Blood"
 msgstr "Primera Sangre"
