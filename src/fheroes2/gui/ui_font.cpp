@@ -1415,7 +1415,7 @@ namespace
             font[209 - 32].reset();
             fheroes2::Copy( font[46], 0, 0, font[209 - 32], 0, 3, font[46].width(), font[46].height() );
             fheroes2::Copy( font[37 - 32], 7, 5, font[209 - 32], 4, 0, 5, 2 );
-            fheroes2::Copy( font[37 - 32], 8, 8, font[209 - 32], 8, 2, 3, 1);
+            fheroes2::Copy( font[37 - 32], 8, 8, font[209 - 32], 8, 2, 3, 1 );
             fheroes2::Copy( font[37 - 32], 10, 7, font[209 - 32], 10, 1, 2, 1 );
             font[209 - 32].setPosition( font[46].x(), font[46].y() - 3 );
             updateNormalFontLetterShadow( font[209 - 32] );
