@@ -1408,8 +1408,17 @@ namespace
             font[205 - 32].setPosition( font[41].x(), font[41].y() - 3 );
             updateNormalFontLetterShadow( font[205 - 32] );
 
-            // N with tilde ~
+            // N with tilde ~. Generate accent for further use.
+            // TODO: Move tilde generation code to A with tilde when adding Portuguese.
             font[209 - 32] = font[46];
+            font[209 - 32].resize( font[46].width(), font[46].height() + 3 );
+            font[209 - 32].reset();
+            fheroes2::Copy( font[46], 0, 0, font[209 - 32], 0, 3, font[46].width(), font[46].height() );
+            fheroes2::Copy( font[37 - 32], 7, 5, font[209 - 32], 4, 0, 5, 2 );
+            fheroes2::Copy( font[37 - 32], 8, 8, font[209 - 32], 8, 2, 3, 1);
+            fheroes2::Copy( font[37 - 32], 10, 7, font[209 - 32], 10, 1, 2, 1 );
+            font[209 - 32].setPosition( font[46].x(), font[46].y() - 3 );
+            updateNormalFontLetterShadow( font[209 - 32] );
 
             // O with grave accent `.
             font[210 - 32].resize( font[47].width(), font[47].height() + 3 );
@@ -1570,6 +1579,12 @@ namespace
 
             // n with tilde ~.
             font[241 - 32] = font[110 - 32];
+            font[241 - 32].resize( font[110 - 32].width(), font[110 - 32].height() + 4 );
+            font[241 - 32].reset();
+            fheroes2::Copy( font[110 - 32], 0, 0, font[241 - 32], 0, 4, font[110 - 32].width(), font[110 - 32].height() );
+            fheroes2::Copy( font[209 - 32], 4, 0, font[241 - 32], 1, 0, 8, 3 );
+            font[241 - 32].setPosition( font[110 - 32].x(), font[110 - 32].y() - 4 );
+            updateNormalFontLetterShadow( font[241 - 32] );
 
             // o with grave accent `.
             font[242 - 32].resize( font[79].width(), font[79].height() + 3 );
