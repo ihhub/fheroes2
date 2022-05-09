@@ -21,9 +21,9 @@ jobs:
     - name: Generate POT
       run: |
         make -C src/dist -j 2 pot
-    - name: Generate translations
+    - name: Merge PO with POT
       run: |
-        make -C files/lang -j 2
+        make -C files/lang -j 2 merge
     - name: Commit changes
       run: |
         set -o pipefail
