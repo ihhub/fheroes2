@@ -1410,7 +1410,6 @@ namespace
 
             // N with tilde ~. Generate accent for further use.
             // TODO: Move tilde generation code to A with tilde when adding Portuguese.
-            font[209 - 32] = font[46];
             font[209 - 32].resize( font[46].width(), font[46].height() + 3 );
             font[209 - 32].reset();
             fheroes2::Copy( font[46], 0, 0, font[209 - 32], 0, 3, font[46].width(), font[46].height() );
@@ -1578,7 +1577,6 @@ namespace
             updateNormalFontLetterShadow( font[237 - 32] );
 
             // n with tilde ~.
-            font[241 - 32] = font[110 - 32];
             font[241 - 32].resize( font[110 - 32].width(), font[110 - 32].height() + 4 );
             font[241 - 32].reset();
             fheroes2::Copy( font[110 - 32], 0, 0, font[241 - 32], 0, 4, font[110 - 32].width(), font[110 - 32].height() );
