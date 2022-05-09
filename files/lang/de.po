@@ -8437,7 +8437,7 @@ msgid ""
 "pitting his bow against your horse. You win."
 msgstr ""
 "Ein zufälliges Treffen mit einem berühmten Bogenschützen führt zu einem "
-"Spiel mit Astragalen und er setzt seinen Bogen gegen ihr Pferd ein. Ihr "
+"Spiel mit Astragalen und er setzt seinen Bogen auf ihr Pferd. Ihr "
 "gewinnt."
 
 msgid "Telescope"
