@@ -220,6 +220,8 @@ public:
     bool BattleAutoSpellcast() const;
     bool BattleShowArmyOrder() const;
     bool isPriceOfLoyaltySupported() const;
+    bool isMonochromeCursorEnabled() const;
+    bool isTextSupportModeEnabled() const;
 
     bool LoadedGameVersion() const
     {
@@ -379,6 +381,8 @@ public:
     void setBattleAutoSpellcast( bool enable );
     void setBattleShowArmyOrder( const bool enable );
     void setFullScreen( const bool enable );
+    void setMonochromeCursor( const bool enable );
+    void setTextSupportMode( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );

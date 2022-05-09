@@ -655,6 +655,42 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
         return true;
     }
 
+    const bool topLeftSideUnreachable = !Maps::isValidDirection( start, Direction::TOP_LEFT ) || _cache[start - 1 - world.w()]._cost == 0;
+    if ( topLeftSideUnreachable && !leftSideUnreachable && !topSideUnreachable && bottomSideUnreachable ) {
+        return true;
+    }
+
+    const bool topRightSideUnreachable = !Maps::isValidDirection( start, Direction::TOP_RIGHT ) || _cache[start + 1 - world.w()]._cost == 0;
+    if ( topRightSideUnreachable && !rightSideUnreachable && !topSideUnreachable && bottomSideUnreachable ) {
+        return true;
+    }
+
+    const bool bottomLeftSideUnreachable = !Maps::isValidDirection( start, Direction::BOTTOM_LEFT ) || _cache[start - 1 + world.w()]._cost == 0;
+    if ( bottomLeftSideUnreachable && !leftSideUnreachable && !bottomSideUnreachable && topSideUnreachable ) {
+        return true;
+    }
+
+    const bool bottomRightSideUnreachable = !Maps::isValidDirection( start, Direction::BOTTOM_RIGHT ) || _cache[start + 1 + world.w()]._cost == 0;
+    if ( bottomRightSideUnreachable && !rightSideUnreachable && !bottomSideUnreachable && topSideUnreachable ) {
+        return true;
+    }
+
+    if ( bottomLeftSideUnreachable && topLeftSideUnreachable && !leftSideUnreachable ) {
+        return true;
+    }
+
+    if ( topLeftSideUnreachable && topRightSideUnreachable && !topSideUnreachable ) {
+        return true;
+    }
+
+    if ( bottomRightSideUnreachable && topRightSideUnreachable && !rightSideUnreachable ) {
+        return true;
+    }
+
+    if ( bottomLeftSideUnreachable && bottomRightSideUnreachable && !bottomSideUnreachable ) {
+        return true;
+    }
+
     // Is the hero standing on Stoneliths?
     return world.GetTiles( start ).GetObject( false ) == MP2::OBJ_STONELITHS;
 }

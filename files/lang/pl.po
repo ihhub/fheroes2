@@ -1130,7 +1130,7 @@ msgstr " pokonany"
 msgid " will always run away from your army."
 msgstr " zawsze ucieknie przed twoją armią."
 
-msgid " will be willing to always join your army."
+msgid " will be willing to join your army."
 msgstr " zawsze dołączy do twojej armii."
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
@@ -1140,17 +1140,18 @@ msgstr ""
 msgid "The army will be carried over the scenario."
 msgstr "Armia zostanie przeniesiona do następnego scenariusza."
 
-msgid ""
-"The kingdom will have additional %{resource} at the start of the scenario."
+#, fuzzy
+msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr "Królestwo otrzyma dodatkowe %{resource} na starcie scenariusza."
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
 msgstr "Zaklęcie \"%{spell}\" zostanie przeniesione do następnego scenariusza."
 
-msgid "%{hero} hero can be hired in the scenario."
+msgid "%{hero} can be hired in the scenario."
 msgstr "Bohater %{hero} może być zwerbowany w tym scenariuszu."
 
-msgid "Defeated %{hero} hero will not appear in the subsequent scenarios."
+msgid ""
+"%{hero} has been defeated and will not appear in the subsequent scenarios."
 msgstr ""
 "Pokonany bohater %{hero} nie będzie dostępny w kolejnych scenariuszach."
 
@@ -1441,11 +1442,17 @@ msgstr ""
 "Główny bohater otrzyma artefakt \"%{artifact}\" na starcie scenariusza."
 
 msgid ""
-"The kingdom will have additional %{amount} %{resource} at the start of the "
-"scenario."
+"The kingdom will receive %{amount} additional %{resource} at the start of "
+"the scenario."
 msgstr ""
 "Królestwo otrzyma dodatkowe %{amount} %{resource} na starcie scenariusza."
 
+msgid ""
+"The kingdom will have %{amount} less %{resource} at the start of the "
+"scenario."
+msgstr "Królestwo otrzyma dodatkowe %{resource} na starcie scenariusza."
+
+#, fuzzy
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
 msgstr "Główny bohater otrzyma %{count} %{monster} na starcie scenariusza."
@@ -2470,6 +2477,28 @@ msgstr "Zewnętrzna"
 msgid "Music Type"
 msgstr "Rodzaj muzyki"
 
+#, fuzzy
+msgid "Hot Keys"
+msgstr "Na zmianę"
+
+msgid "In-game"
+msgstr ""
+
+#, fuzzy
+msgid "Black & White"
+msgstr "Blackridge"
+
+#, fuzzy
+msgid "Mouse Cursor"
+msgstr "Cieniowanie kursora"
+
+msgid "Color"
+msgstr ""
+
+#, fuzzy
+msgid "Text Support"
+msgstr "QA i wsparcie"
+
 msgid "Select Game Language"
 msgstr "Wybierz język gry"
 
@@ -2493,6 +2522,19 @@ msgstr "Zmiana poziomu głośności efektów."
 
 msgid "Change the type of music."
 msgstr "Zmienia rodzaj muzyki."
+
+msgid "Check all Hot Keys used in the game."
+msgstr ""
+
+msgid ""
+"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
+"move as smoothly as black and white ones."
+msgstr ""
+
+msgid ""
+"Toggle text support mode to output extra information about windows and "
+"events in the game."
+msgstr ""
 
 msgid "Okay"
 msgstr "Ok"
@@ -2577,6 +2619,9 @@ msgstr "Ustaw strażnika"
 
 msgid "Your army too big!"
 msgstr "Twoja armia jest za duża!"
+
+msgid "Hot Keys:"
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Wybierz język gry:"
@@ -2694,7 +2739,28 @@ msgstr "Nieznany"
 msgid "%{name} (Level %{level})"
 msgstr "%{name} (poziom %{level})"
 
-msgid "Move Points"
+#, fuzzy
+msgid "Attack:"
+msgstr "Atak"
+
+#, fuzzy
+msgid "Defense:"
+msgstr "Obrona"
+
+#, fuzzy
+msgid "Spell Power:"
+msgstr "Moc zaklęć"
+
+#, fuzzy
+msgid "Knowledge:"
+msgstr "Wiedza"
+
+#, fuzzy
+msgid "Spell Points:"
+msgstr "Ptk. magii"
+
+#, fuzzy
+msgid "Move Points:"
 msgstr "Ptk. ruchu"
 
 msgid "Cost per troop:"
@@ -3603,10 +3669,10 @@ msgstr "Kliknij, aby wrócić do głównego menu."
 msgid "No maps available!"
 msgstr "Mapy niedostępne!"
 
-msgid "Astrologers proclaim Month of the %{name}."
+msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Astrologowie zapowiadają Miesiąc %{name}."
 
-msgid "Astrologers proclaim Week of the %{name}."
+msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Astrologowie zapowiadają Tydzień %{name}."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
@@ -3629,7 +3695,7 @@ msgstr[2] ""
 "procent!"
 
 # literally, this wont work in Polish. I.e. single: "Feniks", plural "Feniksy", but "Populacja Feniksów zwiększa się o +3."...
-msgid "%{monster} population increases by +%{count}."
+msgid "%{monster} growth +%{count}."
 msgstr "%{monster} zwiększają populację o +%{count}."
 
 msgid " All populations are halved."
@@ -3855,6 +3921,19 @@ msgstr "Czeski"
 
 msgid "Norwegian"
 msgstr "Norweski"
+
+msgid "Belarusian"
+msgstr ""
+
+#, fuzzy
+msgid "Bulgarian"
+msgstr "Barbarzyńca"
+
+msgid "Ukrainian"
+msgstr ""
+
+msgid "Romanian"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -5580,11 +5659,6 @@ msgstr "Ten czar nie może być rzucony z łodzi."
 
 msgid "This spell can be casted only nearby water."
 msgstr "Ten czar może być rzucony tylko przy wodzie."
-
-msgid ""
-"No available towns.\n"
-"Spell Failed!!!"
-msgstr "Brak dostępnego miasta. Zaklęcie się nie udało!!!"
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
@@ -9155,3 +9229,10 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid ""
+#~ "Nearest town occupied.\n"
+#~ "Spell Failed!!!"
+#~ msgstr ""
+#~ "Najbliższe miasto jest zajęte.\n"
+#~ "Zaklęcie się nie udało!!!"

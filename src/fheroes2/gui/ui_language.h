@@ -39,6 +39,7 @@ namespace fheroes2
         Belarusian,
         Bulgarian,
         Norwegian,
+        Romanian,
         Ukrainian
     };
 

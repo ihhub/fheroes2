@@ -104,7 +104,7 @@ namespace
 
         const fheroes2::Size lowestResolution = resolutions.back();
         for ( const fheroes2::Size & resolution : possibleResolutions ) {
-            if ( lowestResolution.width < resolution.width || lowestResolution.height < resolution.height ) {
+            if ( lowestResolution.width < resolution.width || lowestResolution.height < resolution.height || resolution == lowestResolution ) {
                 continue;
             }
             resolutions.emplace_back( resolution );

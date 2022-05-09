@@ -529,7 +529,7 @@ fheroes2::GameMode Game::HighScores()
         }
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow() )
             return fheroes2::GameMode::MAIN_MENU;
 
         if ( le.MousePressRight( buttonExit.area() ) ) {

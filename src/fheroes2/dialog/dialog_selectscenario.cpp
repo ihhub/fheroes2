@@ -416,32 +416,29 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
     listbox.SetAreaMaxItems( 9 );
     listbox.SetAreaItems( { rt.x + 55, rt.y + 55, 270, 175 } );
 
-    size_t selectedId = 0;
-
     switch ( selectedMapSize ) {
     case Maps::SMALL:
         listbox.SetListContent( small );
-        selectedId = GetSelectedMapId( small );
+        listbox.SetCurrent( GetSelectedMapId( small ) );
         break;
     case Maps::MEDIUM:
         listbox.SetListContent( medium );
-        selectedId = GetSelectedMapId( medium );
+        listbox.SetCurrent( GetSelectedMapId( medium ) );
         break;
     case Maps::LARGE:
         listbox.SetListContent( large );
-        selectedId = GetSelectedMapId( large );
+        listbox.SetCurrent( GetSelectedMapId( large ) );
         break;
     case Maps::XLARGE:
         listbox.SetListContent( xlarge );
-        selectedId = GetSelectedMapId( xlarge );
+        listbox.SetCurrent( GetSelectedMapId( xlarge ) );
         break;
     default:
         listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
-        selectedId = GetSelectedMapId( all );
+        listbox.SetCurrent( GetSelectedMapId( all ) );
         break;
     }
 
-    listbox.SetCurrent( selectedId );
     listbox.Redraw();
 
     buttonOk.draw();
@@ -472,16 +469,16 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
         bool needRedraw = false;
 
-        if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::DEFAULT_READY ) || listbox.selectOk ) {
+        if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || listbox.selectOk ) {
             MapsFileInfoList::const_iterator it = std::find( all.begin(), all.end(), listbox.GetCurrent() );
             return ( it != all.end() ) ? &( *it ) : nullptr;
         }
 
-        if ( Game::HotKeyPressEvent( Game::DEFAULT_EXIT ) ) {
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             return nullptr;
         }
 
-        if ( le.MouseClickLeft( buttonSelectSmall.area() ) || HotKeyPressEvent( Game::MAIN_MENU_MAP_SIZE_SMALL ) /*&& buttonSelectSmall.isEnabled()*/ ) {
+        if ( le.MouseClickLeft( buttonSelectSmall.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL ) /*&& buttonSelectSmall.isEnabled()*/ ) {
             if ( small.empty() ) {
                 Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
                 currentPressedButton->drawOnPress();
@@ -493,6 +490,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
                 listbox.setScrollBarImage( updatedScrollbarSlider );
 
                 listbox.SetListContent( small );
+                listbox.SetCurrent( GetSelectedMapId( small ) );
+
                 currentPressedButton = &buttonSelectSmall;
                 currentPressedButton->press();
                 selectedMapSize = Maps::mapsize_t::SMALL;
@@ -500,7 +499,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
             needRedraw = true;
         }
-        else if ( le.MouseClickLeft( buttonSelectMedium.area() ) || HotKeyPressEvent( Game::MAIN_MENU_MAP_SIZE_MEDIUM ) /*&& buttonSelectMedium.isEnabled()*/ ) {
+        else if ( le.MouseClickLeft( buttonSelectMedium.area() )
+                  || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_MEDIUM ) /*&& buttonSelectMedium.isEnabled()*/ ) {
             if ( medium.empty() ) {
                 Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
                 currentPressedButton->drawOnPress();
@@ -512,6 +512,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
                 listbox.setScrollBarImage( updatedScrollbarSlider );
 
                 listbox.SetListContent( medium );
+                listbox.SetCurrent( GetSelectedMapId( medium ) );
+
                 currentPressedButton = &buttonSelectMedium;
                 currentPressedButton->press();
                 selectedMapSize = Maps::mapsize_t::MEDIUM;
@@ -519,7 +521,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
             needRedraw = true;
         }
-        else if ( le.MouseClickLeft( buttonSelectLarge.area() ) || HotKeyPressEvent( Game::MAIN_MENU_MAP_SIZE_LARGE ) /*&& buttonSelectLarge.isEnabled()*/ ) {
+        else if ( le.MouseClickLeft( buttonSelectLarge.area() )
+                  || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_LARGE ) /*&& buttonSelectLarge.isEnabled()*/ ) {
             if ( large.empty() ) {
                 Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
                 currentPressedButton->drawOnPress();
@@ -531,6 +534,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
                 listbox.setScrollBarImage( updatedScrollbarSlider );
 
                 listbox.SetListContent( large );
+                listbox.SetCurrent( GetSelectedMapId( large ) );
+
                 currentPressedButton = &buttonSelectLarge;
                 currentPressedButton->press();
                 selectedMapSize = Maps::mapsize_t::LARGE;
@@ -538,7 +543,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
             needRedraw = true;
         }
-        else if ( le.MouseClickLeft( buttonSelectXLarge.area() ) || HotKeyPressEvent( Game::MAIN_MENU_MAP_SIZE_EXTRA_LARGE ) /*&& buttonSelectXLarge.isEnabled()*/ ) {
+        else if ( le.MouseClickLeft( buttonSelectXLarge.area() )
+                  || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE ) /*&& buttonSelectXLarge.isEnabled()*/ ) {
             if ( xlarge.empty() ) {
                 Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
                 currentPressedButton->drawOnPress();
@@ -550,6 +556,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
                 listbox.setScrollBarImage( updatedScrollbarSlider );
 
                 listbox.SetListContent( xlarge );
+                listbox.SetCurrent( GetSelectedMapId( xlarge ) );
+
                 currentPressedButton = &buttonSelectXLarge;
                 currentPressedButton->press();
                 selectedMapSize = Maps::mapsize_t::XLARGE;
@@ -557,13 +565,15 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
             needRedraw = true;
         }
-        else if ( le.MouseClickLeft( buttonSelectAll.area() ) || HotKeyPressEvent( Game::MAIN_MENU_MAP_SIZE_ALL ) ) {
+        else if ( le.MouseClickLeft( buttonSelectAll.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_ALL ) ) {
             const fheroes2::Image updatedScrollbarSlider
                     = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( all.size() ), { 0, 0, originalSilder.width(), 8 },
                                                          { 0, 7, originalSilder.width(), 8 } );
                 listbox.setScrollBarImage( updatedScrollbarSlider );
 
             listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
+            listbox.SetCurrent( GetSelectedMapId( all ) );
+
             currentPressedButton = &buttonSelectAll;
             currentPressedButton->press();
             selectedMapSize = Maps::mapsize_t::ZERO;

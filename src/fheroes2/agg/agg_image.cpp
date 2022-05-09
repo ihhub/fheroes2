@@ -775,7 +775,7 @@ namespace fheroes2
                 }
 
                 // Some checks that we really have CP1251 font
-                const int32_t verifiedFontWidth = ( id == ICN::FONT ) ? 19 : 12;
+                int32_t verifiedFontWidth = ( id == ICN::FONT ) ? 19 : 12;
                 if ( imageArray.size() == 162 && imageArray[121].width() == verifiedFontWidth ) {
                     // Engine expects that letter indexes correspond to charcode - 0x20.
                     // In case CP1251 font.icn contains sprites for chars 0x20-0x7F, 0xC0-0xDF, 0xA8, 0xE0-0xFF, 0xB8 (in that order).
@@ -785,6 +785,19 @@ namespace fheroes2
                     std::swap( imageArray[152], imageArray[225] ); // and 0xB8 to it's places.
                     imageArray.pop_back();
                     imageArray.erase( imageArray.begin() + 192 );
+                }
+                // German version uses CP1252
+                verifiedFontWidth = ( id == ICN::FONT ) ? 10 : 7;
+                if ( imageArray.size() == 103 && imageArray[99].width() == verifiedFontWidth ) {
+                    imageArray.insert( imageArray.begin() + 96, 124, imageArray[0] );
+                    std::swap( imageArray[164], imageArray[224] );
+                    std::swap( imageArray[182], imageArray[225] );
+                    std::swap( imageArray[188], imageArray[226] );
+                    std::swap( imageArray[191], imageArray[223] );
+                    std::swap( imageArray[196], imageArray[220] );
+                    std::swap( imageArray[214], imageArray[221] );
+                    std::swap( imageArray[220], imageArray[222] );
+                    imageArray.erase( imageArray.begin() + 221, imageArray.end() );
                 }
                 return true;
             }
@@ -1903,7 +1916,34 @@ namespace fheroes2
                     Blit( originalImage, temp );
                     originalImage = std::move( temp );
                 }
-                break;
+                return true;
+            case ICN::TWNSDW_5:
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() && _icnVsSprite[id][0].width() == 140 && _icnVsSprite[id][0].height() == 165 ) {
+                    Sprite & image = _icnVsSprite[id][0];
+                    // Red Tower has multiple defects.
+                    // First one is the area between columns in middle of the Tower is prerendered. We need to remove it.
+                    const int32_t windowBottom = 88;
+                    FillTransform( image, 39, 68, 1, windowBottom - 68, 1 );
+                    FillTransform( image, 40, 67, 1, windowBottom - 67, 1 );
+                    FillTransform( image, 41, 66, 1, windowBottom - 66, 1 );
+                    FillTransform( image, 42, 65, 1, windowBottom - 65, 1 );
+                    FillTransform( image, 43, 66, 1, windowBottom - 66, 1 );
+                    FillTransform( image, 44, 67, 1, windowBottom - 67, 1 );
+                    FillTransform( image, 45, 71, 1, windowBottom - 71, 1 );
+                    FillTransform( image, 49, 70, 1, windowBottom - 70, 1 );
+                    FillTransform( image, 50, 68, 2, windowBottom - 68, 1 );
+                    FillTransform( image, 52, 69, 1, windowBottom - 69, 1 );
+                    FillTransform( image, 53, 74, 1, windowBottom - 74, 1 );
+                    FillTransform( image, 57, 70, 1, windowBottom - 70, 1 );
+                    FillTransform( image, 58, 67, 1, windowBottom - 67, 1 );
+                    FillTransform( image, 59, 66, 1, windowBottom - 66, 1 );
+                    FillTransform( image, 60, 65, 2, windowBottom - 65, 1 );
+                    FillTransform( image, 62, 67, 1, windowBottom - 67, 1 );
+                    FillTransform( image, 63, 69, 1, windowBottom - 69, 1 );
+                    FillTransform( image, 64, 72, 1, windowBottom - 72, 1 );
+                }
+                return true;
             default:
                 break;
             }

@@ -325,7 +325,7 @@ void Battle::DialogBattleSettings( void )
             Dialog::Message( _( "Shadow Cursor" ), _( "Toggle on or off a shadow showing the current hex location of the mouse cursor." ), Font::BIG );
         }
 
-        if ( HotKeyCloseWindow || le.MouseClickLeft( btn_ok.area() ) ) {
+        if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( btn_ok.area() ) ) {
             break;
         }
 
@@ -539,7 +539,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
         }
 
         // exit
-        if ( HotKeyCloseWindow || le.MouseClickLeft( btnOk->area() ) )
+        if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( btnOk->area() ) )
             break;
 
         if ( allowToCancel && le.MouseClickLeft( btnCancel.area() ) ) {
@@ -618,7 +618,7 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
                     }
 
                     // exit
-                    if ( HotKeyCloseWindow || le.MouseClickLeft( btnOk->area() ) )
+                    if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( btnOk->area() ) )
                         break;
 
                     // animation
@@ -707,7 +707,7 @@ void Battle::Arena::DialogBattleNecromancy( const uint32_t raiseCount, const uin
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
         // exit
-        if ( HotKeyCloseWindow || le.MouseClickLeft( buttonOk.area() ) )
+        if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( buttonOk.area() ) )
             break;
 
         // animation
@@ -862,13 +862,13 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
         if ( !buttons && !le.MousePressRight() )
             break;
 
-        if ( Game::HotKeyPressEvent( Game::CAST_SPELL ) || ( btnCast.isEnabled() && le.MouseClickLeft( btnCast.area() ) ) )
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::CAST_SPELL ) || ( btnCast.isEnabled() && le.MouseClickLeft( btnCast.area() ) ) )
             result = 1;
 
-        if ( Game::HotKeyPressEvent( Game::BATTLE_RETREAT ) || ( btnRetreat.isEnabled() && le.MouseClickLeft( btnRetreat.area() ) ) )
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_RETREAT ) || ( btnRetreat.isEnabled() && le.MouseClickLeft( btnRetreat.area() ) ) )
             result = 2;
 
-        if ( Game::HotKeyPressEvent( Game::BATTLE_SURRENDER ) || ( btnSurrender.isEnabled() && le.MouseClickLeft( btnSurrender.area() ) ) )
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SURRENDER ) || ( btnSurrender.isEnabled() && le.MouseClickLeft( btnSurrender.area() ) ) )
             result = 3;
 
         if ( le.MouseClickLeft( portraitArea ) && actionHero != nullptr ) {
@@ -902,7 +902,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
         }
 
         // exit
-        if ( HotKeyCloseWindow || le.MouseClickLeft( btnClose.area() ) )
+        if ( Game::HotKeyCloseWindow() || le.MouseClickLeft( btnClose.area() ) )
             break;
 
         if ( statusMessage != status.GetMessage() ) {
@@ -1032,7 +1032,7 @@ bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & k
         }
 
         // exit
-        if ( Game::HotKeyPressEvent( Game::DEFAULT_EXIT ) || le.MouseClickLeft( btnDecline.area() ) )
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( btnDecline.area() ) )
             break;
     }
 

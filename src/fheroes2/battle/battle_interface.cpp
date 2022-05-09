@@ -2384,35 +2384,35 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
 
     if ( le.KeyPress() ) {
         // skip
-        if ( Game::HotKeyPressEvent( Game::BATTLE_SKIP ) ) {
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SKIP ) ) {
             a.emplace_back( CommandType::MSG_BATTLE_SKIP, b.GetUID(), true );
             humanturn_exit = true;
         }
         else
             // soft skip
-            if ( Game::HotKeyPressEvent( Game::BATTLE_WAIT ) ) {
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_WAIT ) ) {
             a.emplace_back( CommandType::MSG_BATTLE_SKIP, b.GetUID(), !conf.ExtBattleSoftWait() );
             humanturn_exit = true;
         }
         else
             // options
-            if ( Game::HotKeyPressEvent( Game::BATTLE_OPTIONS ) )
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_OPTIONS ) )
             EventShowOptions();
         else
             // auto switch
-            if ( Game::HotKeyPressEvent( Game::BATTLE_AUTOSWITCH ) )
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTOSWITCH ) )
             EventAutoSwitch( b, a );
         else
             // cast
-            if ( Game::HotKeyPressEvent( Game::CAST_SPELL ) )
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::CAST_SPELL ) )
             ProcessingHeroDialogResult( 1, a );
         else
             // retreat
-            if ( Game::HotKeyPressEvent( Game::BATTLE_RETREAT ) )
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_RETREAT ) )
             ProcessingHeroDialogResult( 2, a );
         else
             // surrender
-            if ( Game::HotKeyPressEvent( Game::BATTLE_SURRENDER ) )
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SURRENDER ) )
             ProcessingHeroDialogResult( 3, a );
 
             // debug only
@@ -2609,7 +2609,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
     LocalEvent & le = LocalEvent::Get();
 
     // reset cast
-    if ( le.MousePressRight() || Game::HotKeyPressEvent( Game::DEFAULT_EXIT ) ) {
+    if ( le.MousePressRight() || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
         humanturn_spell = Spell::NONE;
         teleport_src = -1;
     }
@@ -5050,8 +5050,8 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
     if ( arena.AutoBattleInProgress() && arena.CanToggleAutoBattle()
          && ( le.MouseClickLeft( btn_auto.area() )
               || ( le.KeyPress()
-                   && ( Game::HotKeyPressEvent( Game::BATTLE_AUTOSWITCH )
-                        || ( Game::HotKeyPressEvent( Game::DEFAULT_EXIT )
+                   && ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTOSWITCH )
+                        || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL )
                              && Dialog::YES == Dialog::Message( "", _( "Break auto battle?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) ) ) ) ) {
         _breakAutoBattleForColor = arena.GetCurrentColor();
     }

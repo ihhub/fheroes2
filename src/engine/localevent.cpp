@@ -39,7 +39,7 @@ namespace
             return SDLK_UNKNOWN;
         case fheroes2::Key::KEY_BACKSPACE:
             return SDLK_BACKSPACE;
-        case fheroes2::Key::KEY_RETURN:
+        case fheroes2::Key::KEY_ENTER:
             return SDLK_RETURN;
         case fheroes2::Key::KEY_ESCAPE:
             return SDLK_ESCAPE;
@@ -883,8 +883,13 @@ namespace fheroes2
         return pos;
     }
 
-    Key getKeyFromSDL( const int sdlKey )
+    Key getKeyFromSDL( int sdlKey )
     {
+        // SDL interprets keyboard Numpad Enter as a separate key. However, in the game we should handle it in the same way as the normal Enter.
+        if ( sdlKey == SDLK_KP_ENTER ) {
+            sdlKey = SDLK_RETURN;
+        }
+
         static std::map<int, Key> sdlValueToKey;
         if ( sdlValueToKey.empty() ) {
             // The map is empty let's populate it.
@@ -1425,12 +1430,12 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
             key_value = fheroes2::Key::KEY_F;
         }
         else if ( button.button == SDL_CONTROLLER_BUTTON_START ) {
-            key_value = fheroes2::Key::KEY_RETURN;
+            key_value = fheroes2::Key::KEY_ENTER;
         }
 #if defined( TARGET_NINTENDO_SWITCH )
         // Custom button mapping for Nintendo Switch
         if ( button.button == SWITCH_BUTTON_Y ) {
-            key_value = fheroes2::Key::KEY_RETURN;
+            key_value = fheroes2::Key::KEY_ENTER;
         }
         else if ( button.button == SWITCH_BUTTON_X ) {
             key_value = fheroes2::Key::KEY_ESCAPE;

@@ -577,7 +577,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
 
         bool changed = false;
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow ) {
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
         }
         else if ( le.MouseClickLeft( buttonZoom.area() ) ) {

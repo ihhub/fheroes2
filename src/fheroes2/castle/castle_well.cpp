@@ -74,22 +74,22 @@ namespace
 
     building_t getPressedBuildingHotkey()
     {
-        if ( HotKeyPressEvent( Game::TOWN_DWELLING_LEVEL_1 ) ) {
+        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_1 ) ) {
             return DWELLING_MONSTER1;
         }
-        if ( HotKeyPressEvent( Game::TOWN_DWELLING_LEVEL_2 ) ) {
+        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_2 ) ) {
             return DWELLING_MONSTER2;
         }
-        if ( HotKeyPressEvent( Game::TOWN_DWELLING_LEVEL_3 ) ) {
+        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_3 ) ) {
             return DWELLING_MONSTER3;
         }
-        if ( HotKeyPressEvent( Game::TOWN_DWELLING_LEVEL_4 ) ) {
+        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_4 ) ) {
             return DWELLING_MONSTER4;
         }
-        if ( HotKeyPressEvent( Game::TOWN_DWELLING_LEVEL_5 ) ) {
+        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_5 ) ) {
             return DWELLING_MONSTER5;
         }
-        if ( HotKeyPressEvent( Game::TOWN_DWELLING_LEVEL_6 ) ) {
+        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_6 ) ) {
             return DWELLING_MONSTER6;
         }
 
@@ -159,10 +159,10 @@ void Castle::OpenWell( void )
         le.MousePressLeft( buttonMax.area() ) ? buttonMax.drawOnPress() : buttonMax.drawOnRelease();
         const building_t pressedHotkeyBuildingID = getPressedBuildingHotkey();
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow ) {
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
         }
-        if ( le.MouseClickLeft( buttonMax.area() ) || HotKeyPressEvent( Game::WELL_BUY_ALL_CREATURES ) ) {
+        if ( le.MouseClickLeft( buttonMax.area() ) || HotKeyPressEvent( Game::HotKeyEvent::WELL_BUY_ALL_CREATURES ) ) {
             std::vector<Troop> results;
             Funds cur;
             Funds total;
