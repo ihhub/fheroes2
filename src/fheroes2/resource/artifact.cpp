@@ -25,6 +25,7 @@
 #include <array>
 #include <cassert>
 #include <map>
+#include <numeric>
 #include <string>
 
 #include "agg_image.h"
