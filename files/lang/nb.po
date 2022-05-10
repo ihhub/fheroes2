@@ -3570,7 +3570,7 @@ msgstr "Heisann!"
 msgid ""
 "Welcome to fheroes2! Before starting the game please choose game resolution."
 msgstr ""
-"Velkommen til Free Heroes of Might and Magic II! Vennligst velg "
+"Velkommen til fheroes2! Vennligst velg "
 "skjermoppløsning før du begynner."
 
 msgid "Please Remember"

@@ -3199,7 +3199,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Original Heroes of Might and Magic II team"
-msgstr "Esci da Free Heroes of Might and Magic II."
+msgstr "Esci da fheroes2."
 
 msgid "Designed and Directed"
 msgstr ""
@@ -3333,7 +3333,7 @@ msgstr "Saluti!"
 msgid ""
 "Welcome to fheroes2! Before starting the game please choose game resolution."
 msgstr ""
-"Benvenuti a Free Heroes of Might and Magic II! Gentilmente, prima di "
+"Benvenuti a fheroes2! Gentilmente, prima di "
 "cominciare il gioco scegli una risoluzione per il gioco."
 
 msgid "Please Remember"
@@ -3371,7 +3371,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Quit fheroes2 and return to the operating system."
-msgstr "Lascia Free Heroes of Might and Magic II."
+msgstr "Lascia fheroes2."
 
 msgid "Credits"
 msgstr "Titoli di coda"

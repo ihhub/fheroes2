@@ -3486,7 +3486,7 @@ msgstr "Добро пожаловать!"
 msgid ""
 "Welcome to fheroes2! Before starting the game please choose game resolution."
 msgstr ""
-"Добро пожаловать в Free Heroes of Might and Magic II! Перед началом игры, "
+"Добро пожаловать в fheroes2! Перед началом игры, "
 "пожалуйста, выберите разрешение экрана."
 
 msgid "Please Remember"
