@@ -2585,7 +2585,7 @@ msgid "Quit"
 msgstr "Quitter"
 
 msgid "Quit out of fheroes2."
-msgstr ""
+msgstr "Quittez fheroes2."
 
 msgid "Language"
 msgstr "Langue"

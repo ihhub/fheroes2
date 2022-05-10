@@ -2649,7 +2649,7 @@ msgid "Quit"
 msgstr "Avslutt"
 
 msgid "Quit out of fheroes2."
-msgstr ""
+msgstr "Gå ut av fheroes2."
 
 msgid "Language"
 msgstr "Språk"

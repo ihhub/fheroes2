@@ -2433,7 +2433,7 @@ msgid "Quit"
 msgstr "Esci"
 
 msgid "Quit out of fheroes2."
-msgstr ""
+msgstr "Esci da fheroes2."
 
 msgid "Language"
 msgstr "Lingua"

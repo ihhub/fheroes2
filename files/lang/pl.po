@@ -2442,7 +2442,7 @@ msgid "Quit"
 msgstr "Wyjście"
 
 msgid "Quit out of fheroes2."
-msgstr ""
+msgstr "Zamknij fheroes2."
 
 msgid "Language"
 msgstr "Język"
