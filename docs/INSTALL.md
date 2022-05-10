@@ -2,7 +2,7 @@
 
 ## Requirements
 
-You will need to have a demo version or the full version of **HoMM2** game to be able to play. We strongly
+You will need to have a demo version or the full version of **Heroes of Might and Magic II** game to be able to play. We strongly
 advise to purchase the original game on [**GOG**](https://www.gog.com) or [**Ubisoft Store**](https://store.ubi.com) platforms.
 
 Alternatively, you can **download a free demo version of the game (in English only) using the bundled script**. See detailed
