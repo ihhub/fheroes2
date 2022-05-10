@@ -9773,12 +9773,3 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Quit out of Free Heroes of Might and Magic II."
-#~ msgstr "Gå ut av Free Heroes of Might and Magic II."
-
-#~ msgid "Not enough move points."
-#~ msgstr "Ikke nok skritt."
-
-#~ msgid "battle: reverse wait order (fast, average, slow)"
-#~ msgstr "Kamp: Snu opp-ned på rekkefølgen (rask, middels, sein)"

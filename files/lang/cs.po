@@ -8566,15 +8566,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#, fuzzy
-#~ msgid "The %{name} increases the duration of your spells by %{count} turn."
-#~ msgid_plural ""
-#~ "The %{name} increases the duration of your spells by %{count} turns."
-#~ msgstr[0] "Pomník zvyšuje příjem města o 250 za den."
-#~ msgstr[1] "Pomník zvyšuje příjem města o 250 za den."
-#~ msgstr[2] "Pomník zvyšuje příjem města o 250 za den."
-
-#, fuzzy
-#~ msgid "View Stats"
-#~ msgstr "Hrdinové"

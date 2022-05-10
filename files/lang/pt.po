@@ -8886,23 +8886,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Map is loading..."
-#~ msgstr "Carregando Mapa..."
-
-#, fuzzy
-#~ msgid "Move points: %{mp}"
-#~ msgstr "Mana"
-
-#, fuzzy
-#~ msgid "Buy Monsters"
-#~ msgstr "Melhor Criatura:"
-
-#, fuzzy
-#~ msgid "Cannot move artifact"
-#~ msgstr "Não é possível mover o último exército à fortaleza"
-
-#, fuzzy
-#~ msgid "View Stats"
-#~ msgstr "Melhor Herói em Stats:"

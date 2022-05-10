@@ -8579,32 +8579,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "The %{name} provides %{count} unit of crystal/day."
-#~ msgstr "%{name} teikia %{count} kristalą per dieną."
-
-#, fuzzy
-#~ msgid ""
-#~ "The %{name} extends the duration of all your spells by %{count} turn."
-#~ msgid_plural ""
-#~ "The %{name} extends the duration of all your spells by %{count} turns."
-#~ msgstr[0] ""
-#~ "Šulinys padidina prieaugį visuose būstuose % {count} būtybėm per savaitę."
-#~ msgstr[1] ""
-#~ "Šulinys padidina prieaugį visuose būstuose % {count} būtybėm per savaitę."
-#~ msgstr[2] ""
-#~ "Šulinys padidina prieaugį visuose būstuose % {count} būtybėm per savaitę."
-
-#, fuzzy
-#~ msgid "The %{name} increases the duration of your spells by %{count} turn."
-#~ msgid_plural ""
-#~ "The %{name} increases the duration of your spells by %{count} turns."
-#~ msgstr[0] ""
-#~ "Šulinys padidina prieaugį visuose būstuose % {count} būtybėm per savaitę."
-#~ msgstr[1] ""
-#~ "Šulinys padidina prieaugį visuose būstuose % {count} būtybėm per savaitę."
-#~ msgstr[2] ""
-#~ "Šulinys padidina prieaugį visuose būstuose % {count} būtybėm per savaitę."
-
-#~ msgid "Cannot move artifact"
-#~ msgstr "Negalima perkelti artefakto"

@@ -9624,6 +9624,3 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Quit out of Free Heroes of Might and Magic II."
-#~ msgstr "Quittez le jeu Free Heroes of Might and Magic II."

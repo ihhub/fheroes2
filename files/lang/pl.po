@@ -9332,13 +9332,3 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Quit out of Free Heroes of Might and Magic II."
-#~ msgstr "Zamknij Free Heroes of Might and Magic II."
-
-#~ msgid ""
-#~ "Nearest town occupied.\n"
-#~ "Spell Failed!!!"
-#~ msgstr ""
-#~ "Najbliższe miasto jest zajęte.\n"
-#~ "Zaklęcie się nie udało!!!"
