@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-10 16:15+0200\n"
-"PO-Revision-Date: 2022-05-10 16:16+0200\n"
+"PO-Revision-Date: 2022-05-10 16:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -3314,9 +3314,8 @@ msgstr ""
 msgid "Original project before 0.7"
 msgstr ""
 
-#, fuzzy
 msgid "Original Heroes of Might and Magic II team"
-msgstr "Avsluta Heroes of Might and Magic och återgå till operativsystemet."
+msgstr ""
 
 msgid "Designed and Directed"
 msgstr ""
@@ -3489,7 +3488,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Quit fheroes2 and return to the operating system."
-msgstr "Avsluta Heroes of Might and Magic och återgå till operativsystemet."
+msgstr "Avsluta fheroes2 och återgå till operativsystemet."
 
 msgid "Credits"
 msgstr "Tack till"
