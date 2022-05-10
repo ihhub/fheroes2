@@ -51,7 +51,7 @@ namespace
 {
     std::string GetCaption()
     {
-        return std::string( "fheroes2, version: " + Settings::GetVersion() );
+        return std::string( "fheroes2 engine, version: " + Settings::GetVersion() );
     }
 
     int PrintHelp( const char * basename )

@@ -48,12 +48,12 @@ BEGIN
         BEGIN
             VALUE "Comments",         "Visit us at https://ihhub.github.io/fheroes2\0"
             VALUE "CompanyName",      "fheroes2 Resurrection team\0"
-            VALUE "FileDescription",  "Free game engine reimplementation of HoMM2 game engine\0"
+            VALUE "FileDescription",  "Free implementation of the Heroes of Might and Magic II game engine\0"
             VALUE "FileVersion",      FH2_VERSION_STR
             VALUE "InternalName",     "fheroes2\0"
             VALUE "LegalCopyright",   "\251 2022 fheroes2 Resurrection team <fhomm2@gmail.com>. All rights for the original HoMM II game belong to Ubisoft\0"
             VALUE "OriginalFilename", "fheroes2.exe\0"
-            VALUE "ProductName",      "fheroes2 Resurrection engine\0"
+            VALUE "ProductName",      "fheroes2 engine\0"
             VALUE "ProductVersion",   FH2_VERSION_STR
         END
     END
