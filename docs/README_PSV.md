@@ -3,7 +3,7 @@
 ## Install
 Install fheroes2.vpk to your Vita.
 
-fheroes2 requires data files from the original Heroes of Might and Magic II.
+fheroes2 requires data files from the original HoMM2.
 
 Copy HEROES2.AGG and HEROES2X.AGG (if you own Price of Loyalty expansion) from the original games "DATA" folder into
 "ux0:data/fheroes2/data" and everything from "MAPS" folder into "ux0:data/fheroes2/maps".

@@ -1,6 +1,6 @@
 # fheroes2
 
-**Free Heroes of Might and Magic II** (fheroes2) is a recreation of HoMM2 game engine.
+**fheroes2 Resurrection** (fheroes2) is a recreation of HoMM2 game engine.
 
 This open source multiplatform project, written from scratch, is designed to reproduce the original game with significant
 improvements in the gameplay, graphics and logic (including support for high-resolution graphics, improved AI, numerous fixes
