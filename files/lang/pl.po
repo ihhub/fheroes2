@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-10 06:51+0200\n"
-"PO-Revision-Date: 2022-05-10 06:57+0200\n"
+"POT-Creation-Date: 2022-05-10 16:15+0200\n"
+"PO-Revision-Date: 2022-05-10 16:16+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -2644,7 +2644,8 @@ msgstr "Uwaga"
 
 #, fuzzy
 msgid ""
-"Your version of fheroes2 does not support any other languages than English."
+"Your version of Heroes of Might and Magic II does not support any other "
+"languages than English."
 msgstr ""
 "Twoja wersja gry Heroes of Might and Magic II wspiera tylko język angielski."
 
@@ -3301,7 +3302,7 @@ msgid "Original project before 0.7"
 msgstr "Przed wersją 0.7"
 
 #, fuzzy
-msgid "Original Heroes II team"
+msgid "Original Heroes of Might and Magic II team"
 msgstr "Oryginał Heroes of Might and Magic II przygotowali"
 
 msgid "Designed and Directed"
@@ -3503,7 +3504,9 @@ msgstr "Wybierz język, rozdzielczość i ustawienia gry."
 msgid "Game Settings"
 msgstr "Ustawienia gry"
 
-msgid "Either Roland's or Archibald's campaign from the original Heroes II."
+msgid ""
+"Either Roland's or Archibald's campaign from the original Heroes of Might "
+"and Magic II."
 msgstr ""
 
 msgid "Original Campaign"

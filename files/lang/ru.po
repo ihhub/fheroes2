@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-10 06:51+0200\n"
-"PO-Revision-Date: 2022-05-10 06:57+0200\n"
+"POT-Creation-Date: 2022-05-10 16:15+0200\n"
+"PO-Revision-Date: 2022-05-10 16:16+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
 "Language: ru\n"
@@ -2680,7 +2680,8 @@ msgstr "Внимание"
 
 #, fuzzy
 msgid ""
-"Your version of fheroes2 does not support any other languages than English."
+"Your version of Heroes of Might and Magic II does not support any other "
+"languages than English."
 msgstr ""
 "Ваша версия Heroes of Might and Magic II не поддерживает никакие языки, "
 "кроме английского."
@@ -3346,7 +3347,7 @@ msgid "Original project before 0.7"
 msgstr "Разработчик до 0.7"
 
 #, fuzzy
-msgid "Original Heroes II team"
+msgid "Original Heroes of Might and Magic II team"
 msgstr "Команда разработчиков New World Computing 1996 года"
 
 msgid "Designed and Directed"
@@ -3543,7 +3544,9 @@ msgid "Game Settings"
 msgstr "Настройки игры"
 
 #, fuzzy
-msgid "Either Roland's or Archibald's campaign from the original Heroes II."
+msgid ""
+"Either Roland's or Archibald's campaign from the original Heroes of Might "
+"and Magic II."
 msgstr "Кампании Роланда и Арчибальда из оригинальных Героев Меча и Магии II."
 
 msgid "Original Campaign"
