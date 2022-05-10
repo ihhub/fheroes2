@@ -14,7 +14,7 @@ Magic II game to be able to play.
 If you do not have the original Heroes of Might and Magic II game, run the
 'download_demo_version.bat' file for Windows or 'download_demo_version.sh' for Linux
 OS and macOS. This script will download and install all the necessary files from the
-demo version of the original HoMM2 game.
+demo version of the original Heroes of Might and Magic II game.
 
 If you have a legally purchased copy of the original game, run the
 'extract_homm2_resources.bat' file for Windows or 'extract_homm2_resources.sh' for Linux
