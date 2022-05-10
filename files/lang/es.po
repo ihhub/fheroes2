@@ -6334,7 +6334,7 @@ msgid "luck|Awful"
 msgstr "Horrible"
 
 msgid "luck|Bad"
-msgstr "Malo"
+msgstr "Mala"
 
 msgid "luck|Normal"
 msgstr "Normal"
@@ -6910,7 +6910,7 @@ msgstr "Botella"
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
 msgstr[0] "Jardín mágico"
-msgstr[1] "Jardínes mágicos"
+msgstr[1] "Jardines mágicos"
 
 msgid "Random Artifact - Treasure"
 msgstr ""
@@ -7026,7 +7026,7 @@ msgid "Champion"
 msgstr "Campeón"
 
 msgid "Champions"
-msgstr "Caballeros"
+msgstr "Campeones"
 
 msgid "Paladin"
 msgstr "Paladín"
@@ -7086,7 +7086,7 @@ msgid "War Troll"
 msgstr "Troll de Guerra"
 
 msgid "War Trolls"
-msgstr "Troll de Guerra"
+msgstr "Trolls de Guerra"
 
 msgid "Cyclopes"
 msgstr "Cíclopes"
