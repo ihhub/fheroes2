@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-07 06:08+0200\n"
-"PO-Revision-Date: 2022-05-07 06:19+0200\n"
+"POT-Creation-Date: 2022-05-10 06:51+0200\n"
+"PO-Revision-Date: 2022-05-10 06:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -2533,7 +2533,7 @@ msgstr ""
 msgid "Quit"
 msgstr "Avsluta"
 
-msgid "Quit out of Free Heroes of Might and Magic II."
+msgid "Quit out of fheroes2."
 msgstr ""
 
 msgid "Language"
@@ -2641,8 +2641,7 @@ msgid "Attention"
 msgstr "\"Tillägg\""
 
 msgid ""
-"Your version of Heroes of Might and Magic II does not support any languages "
-"except English."
+"Your version of fheroes2 does not support any other languages than English."
 msgstr ""
 
 msgid ""
@@ -3315,7 +3314,7 @@ msgid "Original project before 0.7"
 msgstr ""
 
 #, fuzzy
-msgid "Original Heroes of Might and Magic II team"
+msgid "Original Heroes II team"
 msgstr "Avsluta Heroes of Might and Magic och återgå till operativsystemet."
 
 msgid "Designed and Directed"
@@ -3459,8 +3458,7 @@ msgid "Greetings!"
 msgstr "Inställningar"
 
 msgid ""
-"Welcome to Free Heroes of Might and Magic II! Before starting the game "
-"please choose game resolution."
+"Welcome to fheroes2! Before starting the game please choose game resolution."
 msgstr ""
 
 msgid "Please Remember"
@@ -3488,7 +3486,8 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-msgid "Quit Heroes of Might and Magic and return to the operating system."
+#, fuzzy
+msgid "Quit fheroes2 and return to the operating system."
 msgstr "Avsluta Heroes of Might and Magic och återgå till operativsystemet."
 
 msgid "Credits"
@@ -3510,9 +3509,7 @@ msgstr ""
 msgid "Game Settings"
 msgstr "Inställningar"
 
-msgid ""
-"Either Roland's or Archibald's campaign from the original Heroes of Might "
-"and Magic II."
+msgid "Either Roland's or Archibald's campaign from the original Heroes II."
 msgstr ""
 
 msgid "Original Campaign"
