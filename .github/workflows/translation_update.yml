@@ -48,15 +48,16 @@ jobs:
               head: "${{ env.PR_BRANCH }}",
               base: "${{ github.ref }}",
           });
-          let assignees = await github.rest.issues.addAssignees({
+          let assigneesPromise = github.rest.issues.addAssignees({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: pr.data.number,
               assignees: [context.repo.owner],
           });
-          let labels = await github.rest.issues.addLabels({
+          let labelsPromise = github.rest.issues.addLabels({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: pr.data.number,
               labels: ["improvement", "translation"],
           });
+          await Promise.all([assigneesPromise, labelsPromise]);
