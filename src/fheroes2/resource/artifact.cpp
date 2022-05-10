@@ -235,24 +235,76 @@ int Artifact::Level( void ) const
 
 int Artifact::getArtifactValue() const
 {
-    // TODO: this method should return a value of the artifact based on its bonuses and curses.
-    // Right now it is based on a level of an artifact which makes some artifacts with different stats be valued as equal.
-    const int level = Level();
+    int artifactValue = 0;
+    const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( id ).bonuses;
+    const std::vector<fheroes2::ArtifactCurse> & curses = fheroes2::getArtifactData( id ).curses;
+    artifactValue += std::accumulate( bonuses.begin(), bonuses.end(), 0, []( int sum, const fheroes2::ArtifactBonus & bonus ) {
+        switch ( bonus.type ) {
+        case fheroes2::ArtifactBonusType::ADD_SPELL:
+            return sum + Spell( bonus.value ).Level();
+        case fheroes2::ArtifactBonusType::GOLD_INCOME:
+            return sum + bonus.value / 1000;
+        case fheroes2::ArtifactBonusType::SEA_MOBILITY:
+            return sum + bonus.value / 500;
+        case fheroes2::ArtifactBonusType::LAND_MOBILITY:
+            return sum + bonus.value / 300;
+        case fheroes2::ArtifactBonusType::CURSE_SPELL_COST_REDUCTION_PERCENT:
+        case fheroes2::ArtifactBonusType::BLESS_SPELL_COST_REDUCTION_PERCENT:
+        case fheroes2::ArtifactBonusType::SUMMONING_SPELL_COST_REDUCTION_PERCENT:
+        case fheroes2::ArtifactBonusType::MIND_INFLUENCE_SPELL_COST_REDUCTION_PERCENT:
+        case fheroes2::ArtifactBonusType::COLD_SPELL_DAMAGE_REDUCTION_PERCENT:
+        case fheroes2::ArtifactBonusType::FIRE_SPELL_DAMAGE_REDUCTION_PERCENT:
+        case fheroes2::ArtifactBonusType::LIGHTNING_SPELL_DAMAGE_REDUCTION_PERCENT:
+        case fheroes2::ArtifactBonusType::ELEMENTAL_SPELL_DAMAGE_REDUCTION_PERCENT:
+        case fheroes2::ArtifactBonusType::HYPNOTIZE_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+        case fheroes2::ArtifactBonusType::COLD_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+        case fheroes2::ArtifactBonusType::FIRE_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+        case fheroes2::ArtifactBonusType::LIGHTNING_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+        case fheroes2::ArtifactBonusType::RESURRECT_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+        case fheroes2::ArtifactBonusType::SUMMONING_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+            return sum + bonus.value / 50;
+        case fheroes2::ArtifactBonusType::NECROMANCY_SKILL:
+        case fheroes2::ArtifactBonusType::SURRENDER_COST_REDUCTION_PERCENT:
+            return sum + bonus.value / 10;
+        case fheroes2::ArtifactBonusType::EVERY_COMBAT_SPELL_DURATION:
+            return sum + bonus.value / 2;
+        case fheroes2::ArtifactBonusType::CURSE_SPELL_IMMUNITY:
+        case fheroes2::ArtifactBonusType::HYPNOTIZE_SPELL_IMMUNITY:
+        case fheroes2::ArtifactBonusType::DEATH_SPELL_IMMUNITY:
+        case fheroes2::ArtifactBonusType::BERSERK_SPELL_IMMUNITY:
+        case fheroes2::ArtifactBonusType::BLIND_SPELL_IMMUNITY:
+        case fheroes2::ArtifactBonusType::PARALYZE_SPELL_IMMUNITY:
+        case fheroes2::ArtifactBonusType::HOLY_SPELL_IMMUNITY:
+        case fheroes2::ArtifactBonusType::DISPEL_SPELL_IMMUNITY:
+        case fheroes2::ArtifactBonusType::ENDLESS_AMMUNITION:
+        case fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY:
+        case fheroes2::ArtifactBonusType::VIEW_MONSTER_INFORMATION:
+            return sum + 1;
+        case fheroes2::ArtifactBonusType::MAXIMUM_MORALE:
+        case fheroes2::ArtifactBonusType::DISABLE_ALL_SPELL_COMBAT_CASTING:
+        case fheroes2::ArtifactBonusType::MAXIMUM_LUCK:
+            return sum + 3;
+        default:
+            return sum + bonus.value;
+        }
+    } );
 
-    if ( level & ART_LEVEL1 ) {
-        return 1;
-    }
-    else if ( level & ART_LEVEL2 ) {
-        return 2;
-    }
-    else if ( level & ART_LEVEL3 ) {
-        return 3;
-    }
-    else if ( level & ART_ULTIMATE ) {
-        return 5;
-    }
+    artifactValue -= std::accumulate( curses.begin(), curses.end(), 0, []( int sum, const fheroes2::ArtifactCurse & curse ) {
+        switch ( curse.type ) {
+        case fheroes2::ArtifactCurseType::GOLD_PENALTY:
+            return sum + curse.value / 250;
+        case fheroes2::ArtifactCurseType::COLD_SPELL_EXTRA_DAMAGE_PERCENT:
+        case fheroes2::ArtifactCurseType::FIRE_SPELL_EXTRA_DAMAGE_PERCENT:
+            return sum + curse.value / 100;
+        case fheroes2::ArtifactCurseType::NO_JOINING_ARMIES:
+        case fheroes2::ArtifactCurseType::UNDEAD_MORALE_PENALTY:
+            return sum + 1;
+        default:
+            return sum + curse.value;
+        }
+    } );
 
-    return 0;
+    return artifactValue;
 }
 
 void Artifact::SetSpell( int v )
