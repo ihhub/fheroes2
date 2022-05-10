@@ -127,7 +127,7 @@ msgid "Multiple"
 msgstr "Multi"
 
 msgid "Troops of %{count} alignments -%{penalty}"
-msgstr "Tropas de %{count} líneas -%{penalty}"
+msgstr "Tropas de %{count} alineamientos -%{penalty}"
 
 msgid "Some undead in group -1"
 msgstr "Algunos nomuertos en tu ejercito -1"
@@ -3600,7 +3600,7 @@ msgid ""
 "Play with 2 human players, and optionally, up to 4 additional computer "
 "players."
 msgstr ""
-"Jugar con 4 jugadores humanos y ,opcionalmente, hasta 2 jugadores virtuales."
+"Jugar con 2 jugadores humanos y opcionalmente, hasta 4 jugadores virtuales."
 
 msgid "3 Players"
 msgstr "3 Jugadores"
@@ -3619,7 +3619,7 @@ msgid ""
 "Play with 4 human players, and optionally, up to 2 additional computer "
 "players."
 msgstr ""
-"Jugar con 2 jugadores humanos y opcionalmente, hasta con 4 jugadores "
+"Jugar con 4 jugadores humanos y opcionalmente, hasta con 2 jugadores "
 "virtuales."
 
 msgid "5 Players"
@@ -5582,8 +5582,8 @@ msgid ""
 "has any chance of luring them to a watery grave."
 msgstr ""
 "Obligas a tu tripulación a ponerse tapones en los oídos antes de que la "
-"inquietante canción de las sirenas tenga pueda atraerlos a una tumba "
-"acuática."
+"inquietante canción de las sirenas pueda atraerlos a una muerte "
+"segura."
 
 msgid ""
 "As the sirens sing their eerie song, your small, determined army manages to "
@@ -5780,15 +5780,14 @@ msgid "Show previous hero"
 msgstr "Ver ciudad anterior"
 
 msgid "Show next hero"
-msgstr "Mostrar Héroe siguiente"
+msgstr "Mostrar el siguiente héroe"
 
 #, fuzzy
 msgid "Blood Morale"
 msgstr "Buena Moral"
 
-#, fuzzy
 msgid "%{morale} Morale"
-msgstr "Normal"
+msgstr "%{morale} Moral"
 
 msgid "%{luck} Luck"
 msgstr ""
@@ -6096,8 +6095,7 @@ msgstr ""
 
 msgid "%{skill} eliminates the movement penalty for rough terrain."
 msgstr ""
-"%{skill} reduce la penalización al movimiento debida a terreno agreste en un "
-"%{count} por ciento."
+"%{skill} elimina la penalización de movimiento por terreno agreste."
 
 #, fuzzy
 msgid ""
@@ -6315,7 +6313,7 @@ msgid "Heroes"
 msgstr "Héroes"
 
 msgid "View Heroes."
-msgstr "Ver Heroes."
+msgstr "Mostrar Héroes."
 
 #, fuzzy
 msgid "Towns/Castles"
@@ -6338,7 +6336,7 @@ msgid "luck|Normal"
 msgstr "Normal"
 
 msgid "luck|Good"
-msgstr "bueno"
+msgstr "Buena"
 
 msgid "luck|Great"
 msgstr "Grande"
@@ -6435,25 +6433,25 @@ msgid "speed|Crawling"
 msgstr "Arrastrando"
 
 msgid "speed|Very Slow"
-msgstr "Muy lento"
+msgstr "Muy lenta"
 
 msgid "speed|Slow"
-msgstr "Lento"
+msgstr "Lenta"
 
 msgid "speed|Average"
 msgstr "Media"
 
 msgid "speed|Fast"
-msgstr "Rápido"
+msgstr "Rápida"
 
 msgid "speed|Very Fast"
-msgstr "Muy rápido"
+msgstr "Muy rápida"
 
 msgid "speed|Ultra Fast"
-msgstr "Ultra rápido"
+msgstr "Ultra rápida"
 
 msgid "speed|Blazing"
-msgstr "fugaz"
+msgstr "Fugaz"
 
 msgid "speed|Instant"
 msgstr "Instantáneo"
@@ -7105,7 +7103,7 @@ msgid "Dwarves"
 msgstr "Enanos"
 
 msgid "Battle Dwarf"
-msgstr "Enanos de Combate"
+msgstr "Enano de Combate"
 
 msgid "Battle Dwarves"
 msgstr "Enanos de Combate"
@@ -7189,7 +7187,7 @@ msgid "Green Dragons"
 msgstr "Dragones Verdes"
 
 msgid "Red Dragon"
-msgstr "Dragón rojo"
+msgstr "Dragón Rojo"
 
 msgid "Red Dragons"
 msgstr "Dragones Rojos"
