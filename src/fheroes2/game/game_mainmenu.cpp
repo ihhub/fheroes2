@@ -183,8 +183,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     if ( isFirstGameRun ) {
         fheroes2::selectLanguage( fheroes2::getSupportedLanguages(), fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
-        Dialog::Message( _( "Greetings!" ), _( "Welcome to fheroes2! Before starting the game please choose game resolution." ), Font::BIG,
-                         Dialog::OK );
+        Dialog::Message( _( "Greetings!" ), _( "Welcome to fheroes2! Before starting the game please choose game resolution." ), Font::BIG, Dialog::OK );
 
         bool isResolutionChanged = Dialog::SelectResolution();
         if ( isResolutionChanged ) {
