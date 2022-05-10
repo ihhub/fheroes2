@@ -426,7 +426,7 @@ namespace fheroes2
                     conf.setGameLanguage( getLanguageAbbreviation( SupportedLanguage::English ) );
 
                     Text header( _( "Attention" ), FontType::normalYellow() );
-                    Text body( _( "Your version of Heroes of Might and Magic II does not support any languages except English." ), FontType::normalWhite() );
+                    Text body( _( "Your version of fheroes2 does not support any other languages than English." ), FontType::normalWhite() );
 
                     showMessage( header, body, Dialog::OK );
                 }

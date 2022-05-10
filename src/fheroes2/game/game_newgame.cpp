@@ -208,7 +208,7 @@ fheroes2::GameMode Game::CampaignSelection()
             return fheroes2::GameMode::MAIN_MENU;
 
         if ( le.MousePressRight( buttonSuccessionWars.area() ) ) {
-            Dialog::Message( _( "Original Campaign" ), _( "Either Roland's or Archibald's campaign from the original Heroes of Might and Magic II." ), Font::BIG );
+            Dialog::Message( _( "Original Campaign" ), _( "Either Roland's or Archibald's campaign from the original Heroes II." ), Font::BIG );
         }
         if ( le.MousePressRight( buttonPriceOfLoyalty.area() ) ) {
             Dialog::Message( _( "Expansion Campaign" ), _( "One of the four new campaigns from the Price of Loyalty expansion set." ), Font::BIG );

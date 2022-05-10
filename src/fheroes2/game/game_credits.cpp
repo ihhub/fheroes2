@@ -144,7 +144,7 @@ namespace
         output.fill( 0 );
         output._disableTransformLayer();
 
-        Text caption( "Free Heroes of Might and Magic II (" + Settings::GetVersion() + ")", Font::YELLOW_BIG );
+        Text caption( "fheroes2 (" + Settings::GetVersion() + ")", Font::YELLOW_BIG );
         caption.Blit( output.width() / 2 - caption.w() / 2, 15, output );
 
         return output;
@@ -362,7 +362,7 @@ namespace
         const fheroes2::FontType titleFontType = fheroes2::FontType::normalYellow();
         const fheroes2::FontType nameFontType = fheroes2::FontType::normalWhite();
 
-        fheroes2::Text title( _( "Original Heroes of Might and Magic II team" ), nameFontType );
+        fheroes2::Text title( _( "Original Heroes II team" ), nameFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10, output );
 
         const int32_t textInitialOffsetY = 35;
@@ -503,7 +503,7 @@ namespace
         const fheroes2::FontType titleFontType = fheroes2::FontType::normalYellow();
         const fheroes2::FontType nameFontType = fheroes2::FontType::normalWhite();
 
-        fheroes2::Text title( _( "Original Heroes of Might and Magic II team" ), nameFontType );
+        fheroes2::Text title( _( "Original Heroes II team" ), nameFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10, output );
 
         const int32_t textInitialOffsetY = 35;
