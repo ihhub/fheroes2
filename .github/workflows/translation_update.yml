@@ -52,7 +52,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: pr.data.number,
-              assignees: [context.repo.owner],
+              assignees: ["${{ github.actor }}"],
           });
           let labelsPromise = github.rest.issues.addLabels({
               owner: context.repo.owner,
