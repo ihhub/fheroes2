@@ -319,11 +319,13 @@ std::string Game::GetSaveFileBaseName()
     std::string baseName = Settings::Get().CurrentFileInfo().name;
 
     // Replace all non-ASCII characters by exclamation marks
-    std::replace_if( baseName.begin(), baseName.end(), []( const unsigned char c ) { return ( c > 127 ); }, '!' );
+    std::replace_if(
+        baseName.begin(), baseName.end(), []( const unsigned char c ) { return ( c > 127 ); }, '!' );
     // Remove all non-printable characters
     baseName.erase( std::remove_if( baseName.begin(), baseName.end(), []( const unsigned char c ) { return !std::isprint( c ); } ), baseName.end() );
     // Replace all remaining non-alphanumeric characters (excluding exclamation marks) by underscores
-    std::replace_if( baseName.begin(), baseName.end(), []( const unsigned char c ) { return ( c != '!' && !std::isalnum( c ) ); }, '_' );
+    std::replace_if(
+        baseName.begin(), baseName.end(), []( const unsigned char c ) { return ( c != '!' && !std::isalnum( c ) ); }, '_' );
     // If in the end there are no characters left, set the base name to "newgame"
     if ( baseName.empty() ) {
         baseName = "newgame";

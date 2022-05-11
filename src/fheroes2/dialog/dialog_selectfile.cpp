@@ -218,8 +218,8 @@ std::string Dialog::SelectFileSave()
 {
     std::ostringstream os;
 
-    os << System::ConcatePath( Game::GetSaveDir(), Game::GetSaveFileBaseName() ) <<
-        '_' << std::setw( 4 ) << std::setfill( '0' ) << world.CountDay() << Game::GetSaveFileExtension();
+    os << System::ConcatePath( Game::GetSaveDir(), Game::GetSaveFileBaseName() ) << '_' << std::setw( 4 ) << std::setfill( '0' ) << world.CountDay()
+       << Game::GetSaveFileExtension();
 
     return SelectFileListSimple( _( "File to Save:" ), os.str(), true );
 }
