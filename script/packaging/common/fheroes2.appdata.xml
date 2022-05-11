@@ -8,7 +8,7 @@
   <description>
     <p>Free Heroes of Might and Magic II (fheroes2) is a recreation of HoMM2 game engine.</p>
     <p>This open source multiplatform project, written from scratch, is designed to reproduce the original game with significant improvements in the gameplay, graphics and logic (including support for high-resolution graphics, improved AI, numerous fixes and UI improvements), breathing new life into one of the most addictive turn-based strategies.</p>
-    <p>To play fheroes2 you will need to copy the 'ANIM', 'DATA', 'MAPS' and 'MUSIC' folders from Heroes II to the fheroes2 folder.
+    <p>To play fheroes2 you will need to copy the 'ANIM', 'DATA', 'MAPS' and 'MUSIC' folders from Heroes II to the fheroes2 folder (e.g. '~/.var/app/io.github.ihhub.Fheroes2/data/fheroes2').
   </description>
   <url type="homepage">https://ihhub.github.io/fheroes2/</url>
   <url type="bugtracker">https://github.com/ihhub/fheroes2/issues</url>
