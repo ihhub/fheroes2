@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cctype>
 #include <ctime>
 
 #include "campaign_savedata.h"
@@ -312,6 +314,24 @@ std::string Game::GetSaveDir()
     return System::ConcatePath( System::ConcatePath( System::GetDataDirectory( "fheroes2" ), "files" ), "save" );
 }
 
+std::string Game::GetSaveFileBaseName()
+{
+    std::string baseName = Settings::Get().CurrentFileInfo().name;
+
+    // Replace all non-ASCII characters by exclamation marks
+    std::replace_if( baseName.begin(), baseName.end(), []( const unsigned char c ) { return ( c > 127 ); }, '!' );
+    // Remove all non-printable characters
+    baseName.erase( std::remove_if( baseName.begin(), baseName.end(), []( const unsigned char c ) { return !std::isprint( c ); } ), baseName.end() );
+    // Replace all remaining non-alphanumeric characters (excluding exclamation marks) by underscores
+    std::replace_if( baseName.begin(), baseName.end(), []( const unsigned char c ) { return ( c != '!' && !std::isalnum( c ) ); }, '_' );
+    // If in the end there are no characters left, set the base name to "newgame"
+    if ( baseName.empty() ) {
+        baseName = "newgame";
+    }
+
+    return baseName;
+}
+
 std::string Game::GetSaveFileExtension()
 {
     return GetSaveFileExtension( Settings::Get().GameType() );
@@ -331,10 +351,5 @@ std::string Game::GetSaveFileExtension( const int gameType )
 
 bool Game::SaveCompletedCampaignScenario()
 {
-    const std::string & name = Settings::Get().CurrentFileInfo().name;
-
-    std::string base = name.empty() ? "newgame" : name;
-    std::replace_if( base.begin(), base.end(), ::isspace, '_' );
-
-    return Save( System::ConcatePath( Game::GetSaveDir(), base ) + "_Complete" + Game::GetSaveFileExtension() );
+    return Save( System::ConcatePath( GetSaveDir(), GetSaveFileBaseName() ) + "_Complete" + GetSaveFileExtension() );
 }

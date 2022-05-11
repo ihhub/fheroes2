@@ -83,7 +83,7 @@ namespace Dialog
     int AdventureOptions( bool enabledig );
     fheroes2::GameMode FileOptions();
     std::string SelectFileLoad( void );
-    std::string SelectFileSave( void );
+    std::string SelectFileSave();
     // show info cell maps
     void QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile = false );
     void QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea, const fheroes2::Point & position = fheroes2::Point() );
