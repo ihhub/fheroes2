@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>fheroes2.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0</project_license>
+  <name>fheroes2</name>
+  <summary>Free Heroes of Might and Magic II (fheroes2) is a recreation of HoMM2 game engine.</summary>
+  <description>
+    <p>Free Heroes of Might and Magic II (fheroes2) is a recreation of HoMM2 game engine.</p>
+    <p>This open source multiplatform project, written from scratch, is designed to reproduce the original game with significant improvements in the gameplay, graphics and logic (including support for high-resolution graphics, improved AI, numerous fixes and UI improvements), breathing new life into one of the most addictive turn-based strategies.</p>
+    <p>To play fheroes2 you will need to copy the 'ANIM', 'DATA', 'MAPS' and 'MUSIC' folders from Heroes II to the fheroes2 folder.
+  </description>
+  <url type="homepage">https://ihhub.github.io/fheroes2/</url>
+  <url type="bugtracker">https://github.com/ihhub/fheroes2/issues</url>
+  <content_rating type="oars-1.0">
+    <content_attribute id="violence-cartoon">mild</content_attribute>
+    <content_attribute id="violence-fantasy">mild</content_attribute>
+    <content_attribute id="violence-realistic">none</content_attribute>
+    <content_attribute id="violence-bloodshed">none</content_attribute>
+    <content_attribute id="violence-sexual">none</content_attribute>
+    <content_attribute id="drugs-alcohol">none</content_attribute>
+    <content_attribute id="drugs-narcotics">none</content_attribute>
+    <content_attribute id="drugs-tobacco">none</content_attribute>
+    <content_attribute id="sex-nudity">none</content_attribute>
+    <content_attribute id="sex-themes">none</content_attribute>
+    <content_attribute id="language-profanity">none</content_attribute>
+    <content_attribute id="language-humor">none</content_attribute>
+    <content_attribute id="language-discrimination">none</content_attribute>
+    <content_attribute id="social-chat">none</content_attribute>
+    <content_attribute id="social-info">none</content_attribute>
+    <content_attribute id="social-audio">none</content_attribute>
+    <content_attribute id="social-location">none</content_attribute>
+    <content_attribute id="social-contacts">none</content_attribute>
+    <content_attribute id="money-purchasing">none</content_attribute>
+    <content_attribute id="money-gambling">none</content_attribute>
+  </content_rating>
+  <releases>
+    <release date="2022-05-07" version="v0.9.15">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/0.9.15</url>
+    </release>
+  </releases>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/ihhub/fheroes2/4ce7b1148b0c2ec4e5da67aeb79522942c7d6a95/docs/images/screenshots/screenshot_world_map.png</image>
+      <caption>Map</caption>
+    </screenshot>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/ihhub/fheroes2/4ce7b1148b0c2ec4e5da67aeb79522942c7d6a95/docs/images/screenshots/screenshot_castle.png</image>
+      <caption>Castle</caption>
+    </screenshot>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/ihhub/fheroes2/4ce7b1148b0c2ec4e5da67aeb79522942c7d6a95/docs/images/screenshots/screenshot_battle.png</image>
+      <caption>Battle</caption>
+    </screenshot>
+  </screenshots>
+</component>
