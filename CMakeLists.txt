@@ -206,7 +206,7 @@ if(NOT MACOS_APP_BUNDLE)
 			DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/metainfo
 			)
 		install(
-			FILES resources/fheroes2.png
+			FILES src/resources/fheroes2.png
 			DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/128x128/apps
 			)
 		install(
