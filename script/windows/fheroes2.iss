@@ -38,7 +38,7 @@ Source: "..\..\files\data\*.h2d"; DestDir: "{app}\files\data"
 Name: desktopicon; Description: "Desktop shortcut"
 
 [Icons]
-Name: "{group}\Free Heroes of Might & Magic II"; Filename: "{app}\{#AppName}.exe"; WorkingDir: "{app}"
+Name: "{group}\fheroes2"; Filename: "{app}\{#AppName}.exe"; WorkingDir: "{app}"
 Name: "{group}\Download the demo version of the original HoMM2"; Filename: "{app}\download_demo_version.bat"; WorkingDir: "{app}"
 Name: "{group}\Extract game resources from the original distribution of HoMM2"; Filename: "{app}\extract_homm2_resources.bat"; WorkingDir: "{app}"
 Name: "{group}\Resource extraction toolset"; Filename: "{app}\resource_extraction_toolset.bat"; WorkingDir: "{app}"
