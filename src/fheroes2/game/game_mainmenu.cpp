@@ -328,7 +328,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
         // right info
         if ( le.MousePressRight( buttonQuit.area() ) )
-            Dialog::Message( _( "Quit" ), _( "Quit out of Heroes of Might and Magic II." ), Font::BIG );
+            Dialog::Message( _( "Quit" ), _( "Quit Heroes of Might and Magic II and return to the operating system." ), Font::BIG );
         else if ( le.MousePressRight( buttonLoadGame.area() ) )
             Dialog::Message( _( "Load Game" ), _( "Load a previously saved game." ), Font::BIG );
         else if ( le.MousePressRight( buttonCredits.area() ) )
