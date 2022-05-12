@@ -2,8 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # fheroes2 team <fhomm2@gmail.com>, 2022
-# Andrii Kurdiumov <kant2002@gmail.com>, 2022
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
@@ -283,7 +282,7 @@ msgstr "Боягузливий %{name} тікає від бою."
 
 #, fuzzy
 msgid "%{name} surrenders to the enemy, and departs in shame."
-msgstr "%{name} здається ворогові й відходить з соромом."
+msgstr "%{name} здається ворогові й відходить з ганьбою."
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
 msgstr ""
@@ -297,7 +296,7 @@ msgstr "Жертви на полі бою"
 
 #, fuzzy
 msgid "Attacker"
-msgstr "Нападаючий"
+msgstr "Нападник"
 
 msgid "None"
 msgstr ""
@@ -354,7 +353,6 @@ msgstr "Мораль"
 msgid "Luck"
 msgstr "Вдача"
 
-#, fuzzy
 msgid "Spell Points"
 msgstr "Одиниці Чар"
 
@@ -1152,7 +1150,7 @@ msgstr ""
 msgid " will always run away from your army."
 msgstr ""
 
-msgid " will be willing to always join your army."
+msgid " will be willing to join your army."
 msgstr ""
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
@@ -1167,7 +1165,7 @@ msgstr ""
 msgid "\"%{spell}\" spell will be carried over the scenario."
 msgstr ""
 
-msgid "%{hero} hero can be hired in the scenario."
+msgid "%{hero} can be hired in the scenario."
 msgstr ""
 
 msgid ""
@@ -2477,7 +2475,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Text Support"
-msgstr "Телепортуватися сюди"
+msgstr ""
 
 msgid "Select Game Language"
 msgstr "Обрати мову гри"
@@ -2732,9 +2730,8 @@ msgstr "Сила Чарів:"
 msgid "Knowledge:"
 msgstr "Знання:"
 
-#, fuzzy
 msgid "Spell Points:"
-msgstr "Очки Чарів:"
+msgstr "Одиниці Чар:"
 
 #, fuzzy
 msgid "Move Points:"
