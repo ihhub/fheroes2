@@ -421,7 +421,7 @@ msgstr "Дивитися інфо %{monster}"
 
 #, fuzzy
 msgid "Shoot %{monster}"
-msgstr "Вистрілити в %{monster}"
+msgstr "Вистрілити у %{monster}"
 
 #, fuzzy
 msgid "(1 shot left)"
@@ -540,7 +540,7 @@ msgstr "%{name} пропускає свою чергу."
 
 #, fuzzy
 msgid "%{name} wait their turn."
-msgstr "%{name} чекає своєї черги."
+msgstr "%{name} чекає на свою чергу." 
 
 #, fuzzy
 msgid "%{attacker} do %{damage} damage."
@@ -2149,7 +2149,7 @@ msgid ""
 msgstr ""
 
 msgid "This town may not be upgraded to a castle."
-msgstr "Розбудува замку в цьому мiстi неможлива."
+msgstr "Розбудова замку в цьому мiстi неможлива."
 
 #, fuzzy
 msgid "Town"
