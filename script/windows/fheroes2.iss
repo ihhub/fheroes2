@@ -44,7 +44,7 @@ Name: "{group}\Extract game resources from the original distribution of HoMM2"; 
 Name: "{group}\Resource extraction toolset"; Filename: "{app}\resource_extraction_toolset.bat"; WorkingDir: "{app}"
 Name: "{group}\Game data files"; Filename: %WINDIR%\explorer.exe; Parameters: """%APPDATA%\{#AppName}"""
 Name: "{group}\Uninstall"; Filename: "{uninstallexe}"
-Name: "{autodesktop}\Free Heroes of Might & Magic II"; Filename: "{app}\{#AppName}.exe"; WorkingDir: "{app}"; Tasks: desktopicon
+Name: "{autodesktop}\fheroes2"; Filename: "{app}\{#AppName}.exe"; WorkingDir: "{app}"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\extract_homm2_resources.bat"; Flags: runascurrentuser; Check: UseResourcesFromOriginalGame
