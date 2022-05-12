@@ -39,4 +39,4 @@ fheroes2 is a volunteer effort. We encourage you to pitch in and join the team!
 
 Thanks! :heart: :heart: :heart:
 
-fheroes2 Team
+fheroes2 Resurrection Team
