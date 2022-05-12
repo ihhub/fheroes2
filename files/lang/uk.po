@@ -156,7 +156,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Exchange %{name2} with %{name}"
-msgstr "Поміняти %{name2} на %{name}"
+msgstr "Обміняти %{name2} на %{name}"
 
 msgid "Select %{name}"
 msgstr ""
@@ -172,11 +172,11 @@ msgstr ""
 
 #, fuzzy
 msgid "%{name} has turned off the auto battle"
-msgstr "%{name} виключив авто-битву"
+msgstr "%{name} вимкнув авто-битву"
 
 #, fuzzy
 msgid "%{name} has turned on the auto battle"
-msgstr "%{name} включив авто-битву"
+msgstr "%{name} ввімкнув авто-битву"
 
 #, fuzzy
 msgid "Spell failed!"
@@ -2419,7 +2419,7 @@ msgid "Quit"
 msgstr "Вихід"
 
 msgid "Quit out of Heroes of Might and Magic II."
-msgstr "Вийдіть із Heroes of Might and Magic II."
+msgstr "Залишити Heroes of Might and Magic II."
 
 #, fuzzy
 msgid "Language"
@@ -4004,7 +4004,7 @@ msgid "Mog"
 msgstr ""
 
 msgid "Solmyr"
-msgstr "Солмір"
+msgstr "Солмир"
 
 msgid "Ceallach"
 msgstr ""
