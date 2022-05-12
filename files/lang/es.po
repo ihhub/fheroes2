@@ -4290,7 +4290,7 @@ msgid "Sister Eliza"
 msgstr "Hermana Eliza"
 
 msgid "Brother Brax"
-msgstr "Hermano Bax"
+msgstr "Hermano Brax"
 
 msgid "Dainwin"
 msgstr "Dainwin"
@@ -6987,10 +6987,10 @@ msgid "Archers"
 msgstr "Arqueros"
 
 msgid "Ranger"
-msgstr "Montaraz"
+msgstr "Cazador"
 
 msgid "Rangers"
-msgstr "Arqueros Expertos"
+msgstr "Cazadores"
 
 msgid "Pikeman"
 msgstr "Piquero"
@@ -7002,7 +7002,7 @@ msgid "Veteran Pikeman"
 msgstr "Piquero veterano"
 
 msgid "Veteran Pikemen"
-msgstr "Alabarderos"
+msgstr "Piqueros veteranos"
 
 msgid "Swordsman"
 msgstr "Espadachín"
