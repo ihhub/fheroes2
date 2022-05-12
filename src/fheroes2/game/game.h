@@ -116,6 +116,7 @@ namespace Game
     void SavePlayers( const std::string & mapFileName, const Players & players );
 
     std::string GetSaveDir();
+    std::string GetSaveFileBaseName();
     std::string GetSaveFileExtension();
     std::string GetSaveFileExtension( const int gameType );
 
