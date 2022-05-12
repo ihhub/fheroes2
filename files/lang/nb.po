@@ -2,12 +2,12 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # fheroes2 team <fhomm2@gmail.com>, 2021
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-10 16:15+0200\n"
+"POT-Creation-Date: 2022-05-12 17:03+0200\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2648,8 +2648,9 @@ msgstr "Lagre det nåværende spillet."
 msgid "Quit"
 msgstr "Avslutt"
 
-msgid "Quit out of fheroes2."
-msgstr "Gå ut av fheroes2."
+#, fuzzy
+msgid "Quit out of Heroes of Might and Magic II."
+msgstr "Det opprinnelige Heroes of Might and Magic II teamet"
 
 msgid "Language"
 msgstr "Språk"
@@ -3568,7 +3569,8 @@ msgstr "Heisann!"
 
 #, fuzzy
 msgid ""
-"Welcome to fheroes2! Before starting the game please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
+"starting the game please choose game resolution."
 msgstr ""
 "Velkommen til fheroes2! Vennligst velg skjermoppløsning før du begynner."
 
@@ -3606,7 +3608,7 @@ msgstr ""
 "Vi håper du nyter spillet!"
 
 #, fuzzy
-msgid "Quit fheroes2 and return to the operating system."
+msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Forlat fheroes2 og dra tilbake til operativsystemet."
 
 msgid "Credits"
@@ -9772,3 +9774,6 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Quit out of fheroes2."
+#~ msgstr "Gå ut av fheroes2."

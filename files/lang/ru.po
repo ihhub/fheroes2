@@ -4,12 +4,12 @@
 # fheroes2 team <fhomm2@gmail.com>, 2021
 # Igor Orlov <igororlov@inbox.ru>, 2009.
 # Andrey Afletdinov <afletdinov@gmail.com>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-10 16:15+0200\n"
+"POT-Creation-Date: 2022-05-12 17:03+0200\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -2577,8 +2577,9 @@ msgstr "Сохранить текущую игру."
 msgid "Quit"
 msgstr "Выход"
 
-msgid "Quit out of fheroes2."
-msgstr "Выйти из fheroes2."
+#, fuzzy
+msgid "Quit out of Heroes of Might and Magic II."
+msgstr "Команда разработчиков New World Computing 1996 года"
 
 msgid "Language"
 msgstr "Язык"
@@ -3484,7 +3485,8 @@ msgstr "Добро пожаловать!"
 
 #, fuzzy
 msgid ""
-"Welcome to fheroes2! Before starting the game please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
+"starting the game please choose game resolution."
 msgstr ""
 "Добро пожаловать в fheroes2! Перед началом игры, пожалуйста, выберите "
 "разрешение экрана."
@@ -3522,7 +3524,7 @@ msgstr ""
 "Наслаждайтесь игрой!"
 
 #, fuzzy
-msgid "Quit fheroes2 and return to the operating system."
+msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Завершить игру fheroes2."
 
 msgid "Credits"
@@ -9336,3 +9338,6 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Quit out of fheroes2."
+#~ msgstr "Выйти из fheroes2."
