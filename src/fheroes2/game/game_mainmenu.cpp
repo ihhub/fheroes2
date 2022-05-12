@@ -183,7 +183,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     if ( isFirstGameRun ) {
         fheroes2::selectLanguage( fheroes2::getSupportedLanguages(), fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
-        Dialog::Message( _( "Greetings!" ), _( "Welcome to fheroes2! Before starting the game please choose game resolution." ), Font::BIG, Dialog::OK );
+        Dialog::Message( _( "Greetings!" ), _( "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before starting the game please choose game resolution." ), Font::BIG, Dialog::OK );
 
         bool isResolutionChanged = Dialog::SelectResolution();
         if ( isResolutionChanged ) {
@@ -328,7 +328,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
         // right info
         if ( le.MousePressRight( buttonQuit.area() ) )
-            Dialog::Message( _( "Quit" ), _( "Quit fheroes2 and return to the operating system." ), Font::BIG );
+            Dialog::Message( _( "Quit" ), _( "Quit out of Heroes of Might and Magic II." ), Font::BIG );
         else if ( le.MousePressRight( buttonLoadGame.area() ) )
             Dialog::Message( _( "Load Game" ), _( "Load a previously saved game." ), Font::BIG );
         else if ( le.MousePressRight( buttonCredits.area() ) )
