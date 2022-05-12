@@ -95,6 +95,53 @@ namespace
 
         return BUILD_NOTHING;
     }
+   
+}
+
+ void Castle::RecruitCastleMax( const Troops & currentCastleArmy, std::vector<u32> allCastleDwellings )
+{
+    std::vector<Troop> results;
+    Funds cur;
+    Funds total;
+    std::string str;
+
+    Troops tempArmy( currentCastleArmy );
+
+    for ( const uint32_t dwellingType : allCastleDwellings ) {
+        const uint32_t canRecruit = HowManyRecruitMonster( *this, tempArmy, dwellingType, total, cur );
+        if ( canRecruit != 0 ) {
+            const Monster ms( race, GetActualDwelling( dwellingType ) );
+            results.emplace_back( ms, canRecruit );
+            total += cur;
+            str.append( ms.GetPluralName( canRecruit ) );
+            str.append( " - " );
+            str.append( std::to_string( canRecruit ) );
+            str += '\n';
+        }
+    }
+
+    if ( str.empty() ) {
+        bool isCreaturePresent = false;
+        for ( int i = 0; i < CASTLEMAXMONSTER; ++i ) {
+            if ( dwelling[i] > 0 ) {
+                isCreaturePresent = true;
+                break;
+            }
+        }
+        if ( isCreaturePresent ) {
+            Dialog::Message( "", _( "Not enough resources to buy creatures." ), Font::BIG, Dialog::OK );
+        }
+        else {
+            Dialog::Message( "", _( "No creatures available for purchase." ), Font::BIG, Dialog::OK );
+        }
+    }
+    else if ( fheroes2::showResourceMessage( fheroes2::Text( _( "Buy Creatures" ), fheroes2::FontType::normalYellow() ),
+                                             fheroes2::Text( str, fheroes2::FontType::normalWhite() ), Dialog::YES | Dialog::NO, total )
+              == Dialog::YES ) {
+        for ( const Troop & troop : results ) {
+            RecruitMonster( troop, false );
+        }
+    }
 }
 
 void Castle::OpenWell( void )
@@ -141,14 +188,14 @@ void Castle::OpenWell( void )
 
     buttonMax.draw();
 
-    std::vector<u32> alldwellings;
-    alldwellings.reserve( 6 );
-    alldwellings.push_back( DWELLING_MONSTER6 );
-    alldwellings.push_back( DWELLING_MONSTER5 );
-    alldwellings.push_back( DWELLING_MONSTER4 );
-    alldwellings.push_back( DWELLING_MONSTER3 );
-    alldwellings.push_back( DWELLING_MONSTER2 );
-    alldwellings.push_back( DWELLING_MONSTER1 );
+    std::vector<u32> allDwellings;
+    allDwellings.reserve( 6 );
+    allDwellings.push_back( DWELLING_MONSTER6 );
+    allDwellings.push_back( DWELLING_MONSTER5 );
+    allDwellings.push_back( DWELLING_MONSTER4 );
+    allDwellings.push_back( DWELLING_MONSTER3 );
+    allDwellings.push_back( DWELLING_MONSTER2 );
+    allDwellings.push_back( DWELLING_MONSTER1 );
 
     display.render();
 
@@ -163,49 +210,8 @@ void Castle::OpenWell( void )
             break;
         }
         if ( le.MouseClickLeft( buttonMax.area() ) || HotKeyPressEvent( Game::HotKeyEvent::WELL_BUY_ALL_CREATURES ) ) {
-            std::vector<Troop> results;
-            Funds cur;
-            Funds total;
-            std::string str;
-
             const Troops & currentArmy = GetArmy();
-            Troops tempArmy( currentArmy );
-
-            for ( const uint32_t dwellingType : alldwellings ) {
-                const uint32_t canRecruit = HowManyRecruitMonster( *this, tempArmy, dwellingType, total, cur );
-                if ( canRecruit != 0 ) {
-                    const Monster ms( race, GetActualDwelling( dwellingType ) );
-                    results.emplace_back( ms, canRecruit );
-                    total += cur;
-                    str.append( ms.GetPluralName( canRecruit ) );
-                    str.append( " - " );
-                    str.append( std::to_string( canRecruit ) );
-                    str += '\n';
-                }
-            }
-
-            if ( str.empty() ) {
-                bool isCreaturePresent = false;
-                for ( int i = 0; i < CASTLEMAXMONSTER; ++i ) {
-                    if ( dwelling[i] > 0 ) {
-                        isCreaturePresent = true;
-                        break;
-                    }
-                }
-                if ( isCreaturePresent ) {
-                    Dialog::Message( "", _( "Not enough resources to buy creatures." ), Font::BIG, Dialog::OK );
-                }
-                else {
-                    Dialog::Message( "", _( "No creatures available for purchase." ), Font::BIG, Dialog::OK );
-                }
-            }
-            else if ( fheroes2::showResourceMessage( fheroes2::Text( _( "Buy Creatures" ), fheroes2::FontType::normalYellow() ),
-                                                     fheroes2::Text( str, fheroes2::FontType::normalWhite() ), Dialog::YES | Dialog::NO, total )
-                      == Dialog::YES ) {
-                for ( const Troop & troop : results ) {
-                    RecruitMonster( troop, false );
-                }
-            }
+            RecruitCastleMax( currentArmy, allDwellings );
         }
         else if ( ( building & DWELLING_MONSTER1 ) && ( le.MouseClickLeft( rectMonster1 ) || pressedHotkeyBuildingID == DWELLING_MONSTER1 ) )
             RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER1 ) }, dwelling[0], true, 0 ) );
