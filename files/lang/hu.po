@@ -2,13 +2,13 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-07 06:08+0200\n"
-"PO-Revision-Date: 2022-05-07 06:18+0200\n"
+"POT-Creation-Date: 2022-05-12 17:03+0200\n"
+"PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
@@ -2573,8 +2573,9 @@ msgstr ""
 msgid "Quit"
 msgstr "Kilépés"
 
-msgid "Quit out of Free Heroes of Might and Magic II."
-msgstr ""
+#, fuzzy
+msgid "Quit out of Heroes of Might and Magic II."
+msgstr "Kilépés a játékból és visszatérés az operációs rendszerhez."
 
 msgid "Language"
 msgstr ""
@@ -2682,8 +2683,8 @@ msgid "Attention"
 msgstr "animáció"
 
 msgid ""
-"Your version of Heroes of Might and Magic II does not support any languages "
-"except English."
+"Your version of Heroes of Might and Magic II does not support any other "
+"languages than English."
 msgstr ""
 
 msgid ""
@@ -3504,8 +3505,8 @@ msgid "Greetings!"
 msgstr "Beállítások"
 
 msgid ""
-"Welcome to Free Heroes of Might and Magic II! Before starting the game "
-"please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
+"starting the game please choose game resolution."
 msgstr ""
 
 msgid "Please Remember"
@@ -3533,7 +3534,8 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-msgid "Quit Heroes of Might and Magic and return to the operating system."
+#, fuzzy
+msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Kilépés a játékból és visszatérés az operációs rendszerhez."
 
 msgid "Credits"
@@ -9252,65 +9254,3 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "%{color} casts a spell: %{spell}"
-#~ msgstr "%{name} %{spell} -t  varázsol."
-
-#, fuzzy
-#~ msgid "Map is loading..."
-#~ msgstr "Térképek töltése..."
-
-#~ msgid "You find %{artifact}."
-#~ msgstr "Megtaláltad a %{artifact}."
-
-#, fuzzy
-#~ msgid ""
-#~ "Nearest town occupied.\n"
-#~ "Spell Failed!!!"
-#~ msgstr "Nincs használható város. Sikertelen Varázslat!!!"
-
-#, fuzzy
-#~ msgid "Transcribe Spell Scroll"
-#~ msgstr "Varázstekercs"
-
-#, fuzzy
-#~ msgid "world: disable Barrow Mounds"
-#~ msgstr "Barrow Dombság"
-
-#, fuzzy
-#~ msgid "Power Axe"
-#~ msgstr "Erő"
-
-#, fuzzy
-#~ msgid "Buy Monsters"
-#~ msgstr "Szörnyek"
-
-#, fuzzy
-#~ msgid ""
-#~ "The %{name} extends the duration of all your spells by %{count} turn."
-#~ msgid_plural ""
-#~ "The %{name} extends the duration of all your spells by %{count} turns."
-#~ msgstr[0] ""
-#~ "A Bűvös Homokóra meghosszabítja az összes varázslatod hatóidejét 2 körrel."
-#~ msgstr[1] ""
-#~ "A Bűvös Homokóra meghosszabítja az összes varázslatod hatóidejét 2 körrel."
-
-#, fuzzy
-#~ msgid "The %{name} increases the duration of your spells by %{count} turn."
-#~ msgid_plural ""
-#~ "The %{name} increases the duration of your spells by %{count} turns."
-#~ msgstr[0] "A Varázslósüveg 10 körre növeli a varázslataid hatóidejét."
-#~ msgstr[1] "A Varázslósüveg 10 körre növeli a varázslataid hatóidejét."
-
-#, fuzzy
-#~ msgid "Cannot move artifact"
-#~ msgstr " egy varázstárggyal"
-
-#, fuzzy
-#~ msgid "Join Error"
-#~ msgstr "Hiba"
-
-#, fuzzy
-#~ msgid "View Stats"
-#~ msgstr "Varázstárgyak mutatása"

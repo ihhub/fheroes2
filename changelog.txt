@@ -1659,7 +1659,7 @@ version 0.7 (18th April 2020)
 - required building names are displayed on a separate line each
 - fix no building image for already built building for right mouse click
 - fix incorrect image for Captains Quarters
-- renamed 'Free Heroes II' to 'Free Heroes of Might and Magic II'
+- renamed 'Free Heroes II' to 'fheroes2'
 - show disabled "Continue Movement" button for castle 
 - fix number of monsters being displayed in a black box
 - add a script to download a demo version of the original game
