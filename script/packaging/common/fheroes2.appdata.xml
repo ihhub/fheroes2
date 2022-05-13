@@ -42,15 +42,15 @@
   <screenshots>
     <screenshot type="default">
       <image>https://raw.githubusercontent.com/ihhub/fheroes2/4ce7b1148b0c2ec4e5da67aeb79522942c7d6a95/docs/images/screenshots/screenshot_world_map.png</image>
-      <caption>Map</caption>
+      <caption>Map-Screen</caption>
     </screenshot>
     <screenshot type="default">
       <image>https://raw.githubusercontent.com/ihhub/fheroes2/4ce7b1148b0c2ec4e5da67aeb79522942c7d6a95/docs/images/screenshots/screenshot_castle.png</image>
-      <caption>Castle</caption>
+      <caption>Castle-Screen</caption>
     </screenshot>
     <screenshot type="default">
       <image>https://raw.githubusercontent.com/ihhub/fheroes2/4ce7b1148b0c2ec4e5da67aeb79522942c7d6a95/docs/images/screenshots/screenshot_battle.png</image>
-      <caption>Battle</caption>
+      <caption>Battle-Screen</caption>
     </screenshot>
   </screenshots>
 </component>
