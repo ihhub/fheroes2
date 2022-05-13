@@ -28,7 +28,7 @@
 TARGET := fheroes2
 MAKE := make
 
-PROJECT_TITLE := Free Heroes of Might & Magic II
+PROJECT_TITLE := fheroes2
 PROJECT_TITLEID := FHOMM0002
 
 .PHONY: all clean $(TARGET).vpk param.sfo $(TARGET).elf translations

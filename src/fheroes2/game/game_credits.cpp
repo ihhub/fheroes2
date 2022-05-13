@@ -144,7 +144,7 @@ namespace
         output.fill( 0 );
         output._disableTransformLayer();
 
-        Text caption( "Free Heroes of Might and Magic II (" + Settings::GetVersion() + ")", Font::YELLOW_BIG );
+        Text caption( "fheroes2 engine (" + Settings::GetVersion() + ")", Font::YELLOW_BIG );
         caption.Blit( output.width() / 2 - caption.w() / 2, 15, output );
 
         return output;

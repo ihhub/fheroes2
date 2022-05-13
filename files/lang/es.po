@@ -2,13 +2,13 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-07 06:08+0200\n"
-"PO-Revision-Date: 2022-05-07 06:18+0200\n"
+"POT-Creation-Date: 2022-05-12 17:03+0200\n"
+"PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -2638,8 +2638,9 @@ msgstr ""
 msgid "Quit"
 msgstr "Salir"
 
-msgid "Quit out of Free Heroes of Might and Magic II."
-msgstr ""
+#, fuzzy
+msgid "Quit out of Heroes of Might and Magic II."
+msgstr "Salir del juego y volver al sistema operativo."
 
 msgid "Language"
 msgstr ""
@@ -2748,8 +2749,8 @@ msgid "Attention"
 msgstr "\"Anexión\""
 
 msgid ""
-"Your version of Heroes of Might and Magic II does not support any languages "
-"except English."
+"Your version of Heroes of Might and Magic II does not support any other "
+"languages than English."
 msgstr ""
 
 msgid ""
@@ -3585,8 +3586,8 @@ msgid "Greetings!"
 msgstr "Ajustes"
 
 msgid ""
-"Welcome to Free Heroes of Might and Magic II! Before starting the game "
-"please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
+"starting the game please choose game resolution."
 msgstr ""
 
 msgid "Please Remember"
@@ -3614,7 +3615,8 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-msgid "Quit Heroes of Might and Magic and return to the operating system."
+#, fuzzy
+msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr "Salir del juego y volver al sistema operativo."
 
 msgid "Credits"
@@ -9632,111 +9634,3 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "%{color} casts a spell: %{spell}"
-#~ msgstr "%{color} lanzó el hechizo: %{spell}"
-
-#, fuzzy
-#~ msgid "Map is loading..."
-#~ msgstr "Cargando mapas..."
-
-#~ msgid "You find %{artifact}."
-#~ msgstr "Encuentras: %{artifact}."
-
-#~ msgid ""
-#~ "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
-#~ "%{spells1} from %{learner}, and teaches %{spells2} to %{learner}."
-#~ msgstr ""
-#~ "%{teacher}, cuyo %{scholar} %{level} conoce muchos secretos mágicos, "
-#~ "aprende %{spells1} de %{learner}, y enseña %{spells2} a %{learner}."
-
-#~ msgid ""
-#~ "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
-#~ "%{spells1} from %{learner}."
-#~ msgstr ""
-#~ "%{teacher}, cuyo %{scholar} %{level} conoce muchos secretos mágicos, "
-#~ "aprende %{spells1} de %{learner}."
-
-#~ msgid ""
-#~ "%{teacher}, whose %{level} %{scholar} knows many magical secrets, teaches "
-#~ "%{spells2} to %{learner}."
-#~ msgstr ""
-#~ "%{teacher}, cuyo %{scholar} %{level} conoce muchos secretos mágicos, "
-#~ "enseña %{spells1} a %{learner}."
-
-#~ msgid "Scholar Ability"
-#~ msgstr "Habilidad de Erudito"
-
-#, fuzzy
-#~ msgid ""
-#~ "Nearest town occupied.\n"
-#~ "Spell Failed!!!"
-#~ msgstr "No hay disponible ninguna ciudad. ¡¡¡ Hechizo fallido!!!"
-
-#, fuzzy
-#~ msgid ""
-#~ "Do you want to use your knowledge of magical secrets to transcribe the "
-#~ "%{spell} Scroll into your Magic Book?\n"
-#~ "The Spell Scroll will be consumed.\n"
-#~ " Cost in spell points: %{sp}"
-#~ msgstr ""
-#~ "¿Quieres usar tu conocimiento en los secretos de la mágia para "
-#~ "transcribir el Pergamino %{spell} en tu libro de hechizos?\n"
-#~ "El Pergamino será consumido.\n"
-#~ " Maná: %{sp}"
-
-#, fuzzy
-#~ msgid "Move points: %{mp}"
-#~ msgstr "Puntos de movimiento"
-
-#, fuzzy
-#~ msgid "Transcribe Spell Scroll"
-#~ msgstr "Pegamino del Hechizo"
-
-#~ msgid "game: use fade"
-#~ msgstr "juego: usar difuminado"
-
-#, fuzzy
-#~ msgid "Power Axe"
-#~ msgstr "Poder"
-
-#, fuzzy
-#~ msgid "battle: show army order"
-#~ msgstr "batalla: espera de tropa fluido"
-
-#, fuzzy
-#~ msgid "Buy Monsters"
-#~ msgstr "Comprar Monstruos:"
-
-#, fuzzy
-#~ msgid ""
-#~ "The %{name} extends the duration of all your spells by %{count} turn."
-#~ msgid_plural ""
-#~ "The %{name} extends the duration of all your spells by %{count} turns."
-#~ msgstr[0] ""
-#~ "El Pozo incrementa el ritmo de crecimiento de todas las moradas en "
-#~ "%{count} criaturas por semana."
-#~ msgstr[1] ""
-#~ "El Pozo incrementa el ritmo de crecimiento de todas las moradas en "
-#~ "%{count} criaturas por semana."
-
-#, fuzzy
-#~ msgid "The %{name} increases the duration of your spells by %{count} turn."
-#~ msgid_plural ""
-#~ "The %{name} increases the duration of your spells by %{count} turns."
-#~ msgstr[0] ""
-#~ "La Granja incrementa la producción de Campesinos en %{count} por semana."
-#~ msgstr[1] ""
-#~ "La Granja incrementa la producción de Campesinos en %{count} por semana."
-
-#~ msgid "game: autosave on"
-#~ msgstr "juego: autoguardado activado"
-
-#, fuzzy
-#~ msgid "Join Error"
-#~ msgstr "Error"
-
-#, fuzzy
-#~ msgid "View Stats"
-#~ msgstr "Ver Artefactos"

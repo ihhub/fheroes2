@@ -118,7 +118,7 @@ fheroes2::GameMode Dialog::FileOptions()
             Dialog::Message( _( "Save Game" ), _( "Save the current game." ), Font::BIG );
         }
         else if ( le.MousePressRight( buttonQuit.area() ) ) {
-            Dialog::Message( _( "Quit" ), _( "Quit out of Free Heroes of Might and Magic II." ), Font::BIG );
+            Dialog::Message( _( "Quit" ), _( "Quit out of Heroes of Might and Magic II." ), Font::BIG );
         }
         else if ( le.MousePressRight( buttonCancel.area() ) ) {
             Dialog::Message( _( "Cancel" ), _( "Exit this menu without doing anything." ), Font::BIG );

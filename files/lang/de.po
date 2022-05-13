@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-07 06:08+0200\n"
-"PO-Revision-Date: 2022-05-07 06:18+0200\n"
+"POT-Creation-Date: 2022-05-12 17:03+0200\n"
+"PO-Revision-Date: 2022-05-12 17:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -2635,8 +2635,8 @@ msgstr "Das aktuelle Spiel speichern."
 msgid "Quit"
 msgstr "Beenden"
 
-msgid "Quit out of Free Heroes of Might and Magic II."
-msgstr "Free Heroes of Might and Magic II beenden."
+msgid "Quit out of Heroes of Might and Magic II."
+msgstr "Heroes of Might and Magic II beenden."
 
 msgid "Language"
 msgstr "Sprache"
@@ -2736,9 +2736,10 @@ msgstr "Okay"
 msgid "Attention"
 msgstr "Achtung"
 
+#, fuzzy
 msgid ""
-"Your version of Heroes of Might and Magic II does not support any languages "
-"except English."
+"Your version of Heroes of Might and Magic II does not support any other "
+"languages than English."
 msgstr ""
 "Ihre Version von Heroes of Might and Magic II unterstützt keine anderen "
 "Sprachen als Englisch."
@@ -3405,6 +3406,7 @@ msgstr "und viele, viele andere Unterstützer!"
 msgid "Original project before 0.7"
 msgstr "Ursprüngliches Projekt vor 0.7"
 
+#, fuzzy
 msgid "Original Heroes of Might and Magic II team"
 msgstr "Original Heroes of Might and Magic II Team"
 
@@ -3545,12 +3547,13 @@ msgstr "fheroes2 Resurrection Team präsentiert"
 msgid "Greetings!"
 msgstr "Grüße!"
 
+#, fuzzy
 msgid ""
-"Welcome to Free Heroes of Might and Magic II! Before starting the game "
-"please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
+"starting the game please choose game resolution."
 msgstr ""
-"Willkommen bei Free Heroes of Might and Magic II! Bevor Sie das Spiel "
-"starten, wählen Sie bitte die Spielauflösung."
+"Willkommen bei fheroes2! Bevor Sie das Spiel starten, wählen Sie bitte die "
+"Spielauflösung."
 
 msgid "Please Remember"
 msgstr "Bitte merken"
@@ -3586,8 +3589,9 @@ msgstr ""
 "\n"
 "Viel Spaß beim Spielen!"
 
-msgid "Quit Heroes of Might and Magic and return to the operating system."
-msgstr "Heroes of Might and Magic beenden und zum Betriebssystem zurückkehren."
+#, fuzzy
+msgid "Quit Heroes of Might and Magic II and return to the operating system."
+msgstr "fheroes2 beenden und zum Betriebssystem zurückkehren."
 
 msgid "Credits"
 msgstr "Kreditschriften"
@@ -3607,6 +3611,7 @@ msgstr "Sprache, Auflösung und Einstellungen des Spiels ändern."
 msgid "Game Settings"
 msgstr "Spieleinstellungen"
 
+#, fuzzy
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
 "and Magic II."
@@ -9568,178 +9573,5 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "%{color} casts a spell: %{spell}"
-#~ msgstr "%{color} zaubert %{spell}"
-
-#~ msgid "Map is loading..."
-#~ msgstr "Karte wird geladen..."
-
-#~ msgid "You find %{artifact}."
-#~ msgstr "Sie finden %{artifact}."
-
-#~ msgid "Not enough move points."
-#~ msgstr "Nicht genug Bewegungspunkte."
-
-#~ msgid ""
-#~ "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
-#~ "%{spells1} from %{learner}, and teaches %{spells2} to %{learner}."
-#~ msgstr ""
-#~ "%{teacher}, dessen %{level} %{scholar} viele magische Geheimnisse kennt, "
-#~ "lernt %{spells1} von %{learner} und lehrt %{spells2} den %{learner}."
-
-#~ msgid ""
-#~ "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
-#~ "%{spells1} from %{learner}."
-#~ msgstr ""
-#~ "%{teacher}, dessen %{level} %{scholar} viele magische Geheimnisse kennt, "
-#~ "lernt %{spells1} von %{learner}."
-
-#~ msgid ""
-#~ "%{teacher}, whose %{level} %{scholar} knows many magical secrets, teaches "
-#~ "%{spells2} to %{learner}."
-#~ msgstr ""
-#~ "%{teacher}, dessen %{level} %{scholar} viele magische Geheimnisse kennt, "
-#~ "lehrt %{spells2} den %{learner}."
-
-#~ msgid "Scholar Ability"
-#~ msgstr "Gelehrtenfähigkeit"
-
-#~ msgid ""
-#~ "Nearest town occupied.\n"
-#~ "Spell Failed!!!"
-#~ msgstr ""
-#~ "Nächstgelegene Stadt besetzt.\n"
-#~ "Zauberspruch fehlgeschlagen!!!"
-
-#~ msgid ""
-#~ "Do you want to use your knowledge of magical secrets to transcribe the "
-#~ "%{spell} Scroll into your Magic Book?\n"
-#~ "The Spell Scroll will be consumed.\n"
-#~ " Cost in spell points: %{sp}"
-#~ msgstr ""
-#~ "Wollen Sie Ihre Wissen über magische Geheimnisse nutzen, um die %{spell} "
-#~ "Schriftrolle in dein Zauberbuch zu übertragen?\n"
-#~ "Die Zauberschriftrolle wird verbraucht.\n"
-#~ " Kosten in Zauberpunkten: %{sp}"
-
-#~ msgid "Move points: %{mp}"
-#~ msgstr "Beweg.-pt.: %{mp}"
-
-#~ msgid "Transcribe Spell Scroll"
-#~ msgstr "Zauberschriftrolle umschreiben"
-
-#~ msgid "world: Eagle Eye also works like Scholar in H3."
-#~ msgstr "Welt: Eagle Eye funktioniert auch als Scholar in H3."
-
-#~ msgid "world: Crystal Ball gives Identify Hero and Visions spells"
-#~ msgstr ""
-#~ "Welt: Kristallkugel fügt die Zauber \"Held identifizieren\" und \"Visionen"
-#~ "\" hinzu"
-
-#~ msgid "world: use unique artifacts providing resources"
-#~ msgstr "Welt: einzigartige Artefakte zur Ressourcenversorgung verwenden"
-
-#~ msgid "world: use unique artifacts affecting primary skills"
-#~ msgstr "Welt: einzigartige Artefakte für Primärfähigkeiten verwenden"
-
-#~ msgid "world: use unique artifacts affecting secondary skills"
-#~ msgstr "Welt: einzigartige Artefakte für sekundäre Fertigkeiten verwenden"
-
-#~ msgid "world: disable Barrow Mounds"
-#~ msgstr "Welt: Vergrabenen Karren deaktivieren"
-
-#~ msgid ""
-#~ "castle: higher mage guilds regenerate more spell points/turn "
-#~ "(20/40/60/80/100%)"
-#~ msgstr ""
-#~ "Burg: Höhere Magiergilden regenerieren mehr Punkte pro Runde "
-#~ "(20/40/60/80/100%)"
-
-#~ msgid "heroes: recruit cost depends on hero level"
-#~ msgstr "Helden: Rekrutierungskosten Sind von der Heldenstufe abhängig"
-
-#~ msgid "heroes: allow transcribing scrolls (needs: Eye Eagle skill)"
-#~ msgstr ""
-#~ "Helden: Umschreiben von Schriftrollen erlauben (benötigt Adleraugen)"
-
-#~ msgid "battle: reverse wait order (fast, average, slow)"
-#~ msgstr ""
-#~ "Kampf: Umgekehrte Reihenfolge der Wartezeiten (schnell, normal, langsam)"
-
-#~ msgid "game: use fade"
-#~ msgstr "Spiel: Überblendung verwenden"
-
-#~ msgid "Power Axe"
-#~ msgstr "Power-Axt"
-
-#~ msgid "battle: show army order"
-#~ msgstr "Schlacht: Reihenfolge von Armeen anzeigen"
-
-#~ msgid "Buy Monsters"
-#~ msgstr "Monster kaufen"
-
-#~ msgid "The %{name} provides %{count} unit of crystal/day."
-#~ msgstr "Der %{name} liefert %{count} Einheit Kristall pro Tag."
-
-#~ msgid "Cannot move artifact"
-#~ msgstr "Artefakt kann nicht übergibt werden"
-
-#, fuzzy
-#~ msgid ""
-#~ "The %{name} extends the duration of all your spells by %{count} turn."
-#~ msgid_plural ""
-#~ "The %{name} extends the duration of all your spells by %{count} turns."
-#~ msgstr[0] ""
-#~ "Der Brunnen erhöht die Wachstumsrate aller Behausungen um %{count} "
-#~ "Lebewesen pro Woche."
-#~ msgstr[1] ""
-#~ "Der Brunnen erhöht die Wachstumsrate aller Behausungen um %{count} "
-#~ "Lebewesen pro Woche."
-
-#, fuzzy
-#~ msgid "The %{name} increases the duration of your spells by %{count} turn."
-#~ msgid_plural ""
-#~ "The %{name} increases the duration of your spells by %{count} turns."
-#~ msgstr[0] "Die Farm erhöht die Produktion von Bauern um %{count} pro Woche."
-#~ msgstr[1] "Die Farm erhöht die Produktion von Bauern um %{count} pro Woche."
-
-#, fuzzy
-#~ msgid "game: autosave on"
-#~ msgstr "Spiel laden"
-
-#~ msgid "Troops of 4 alignments -2"
-#~ msgstr "Truppen aus 4 Gattungen -2"
-
-#~ msgid "Troops of 5 alignments -3"
-#~ msgstr "Truppen aus 5 Gattungen -3"
-
-#~ msgid "Army is full"
-#~ msgstr "Armee ist voll"
-
-#~ msgid ""
-#~ "Upon defeating the Skeletons you spend several hours sifting through the "
-#~ "debris and find nothing. Such a despicable act reduces your army's morale."
-#~ msgstr ""
-#~ "Nachdem Sie die Skelette besiegt haben, verbringen Sie mehrere Stunden "
-#~ "damit, die Trümmer zu durchsuchen und finden nichts. Solch eine "
-#~ "verabscheuungswürdige Tat senkt die Moral Ihrer Armee."
-
-#, fuzzy
-#~ msgid ""
-#~ "Cannot recruit - you have already recruited a hero in the current week."
-#~ msgstr ""
-#~ "Kann nicht rekrutieren - Sie haben bereits einen Helden in der laufenden "
-#~ "Woche rekrutiert."
-
-#~ msgid "Lose the heroes: %{name}."
-#~ msgstr "Die Helden: %{name} verlieren."
-
-#~ msgid "MirrorImage created"
-#~ msgstr "Spiegelbild erstellt"
-
-#~ msgid ""
-#~ "%{color} has fallen!\n"
-#~ "All is lost."
-#~ msgstr ""
-#~ "%{color} ist gefallen!\n"
-#~ "Alles ist verloren."
+#~ msgid "Quit out of fheroes2."
+#~ msgstr "fheroes2 beenden."
