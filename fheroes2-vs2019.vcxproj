@@ -242,7 +242,6 @@
     <ClCompile Include="src\fheroes2\castle\castle_mageguild.cpp" />
     <ClCompile Include="src\fheroes2\castle\castle_tavern.cpp" />
     <ClCompile Include="src\fheroes2\castle\castle_town.cpp" />
-    <ClCompile Include="src\fheroes2\castle\castle_ui.cpp" />
     <ClCompile Include="src\fheroes2\castle\castle_well.cpp" />
     <ClCompile Include="src\fheroes2\castle\mageguild.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_adventure.cpp" />
@@ -309,6 +308,7 @@
     <ClCompile Include="src\fheroes2\gui\ui_base.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_button.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_campaign.cpp" />
+    <ClCompile Include="src\fheroes2\gui\ui_castle.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_dialog.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_font.cpp" />
     <ClCompile Include="src\fheroes2\gui\ui_kingdom.cpp" />
@@ -450,7 +450,6 @@
     <ClInclude Include="src\fheroes2\castle\castle.h" />
     <ClInclude Include="src\fheroes2\castle\castle_building_info.h" />
     <ClInclude Include="src\fheroes2\castle\castle_heroes.h" />
-    <ClInclude Include="src\fheroes2\castle\castle_ui.h" />
     <ClInclude Include="src\fheroes2\castle\mageguild.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_game_settings.h" />
@@ -491,6 +490,7 @@
     <ClInclude Include="src\fheroes2\gui\ui_base.h" />
     <ClInclude Include="src\fheroes2\gui\ui_button.h" />
     <ClInclude Include="src\fheroes2\gui\ui_campaign.h" />
+    <ClInclude Include="src\fheroes2\gui\ui_castle.h" />
     <ClInclude Include="src\fheroes2\gui\ui_dialog.h" />
     <ClInclude Include="src\fheroes2\gui\ui_font.h" />
     <ClInclude Include="src\fheroes2\gui\ui_kingdom.h" />

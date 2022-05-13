@@ -27,14 +27,11 @@
 #include "agg_image.h"
 #include "castle.h"
 #include "castle_building_info.h"
-#include "castle_ui.h"
-#include "game.h"
 #include "game_delays.h"
 #include "icn.h"
 #include "race.h"
 #include "settings.h"
-#include "text.h"
-#include "tools.h"
+#include "ui_castle.h"
 
 void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const CastleDialog::CacheBuildings & orders,
                                   const CastleDialog::FadeBuilding & alphaBuilding, const uint32_t animationIndex );
@@ -87,8 +84,7 @@ namespace
                         return;
                 }
 
-                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TWNBEXT2, 0 );
-                CastleDialog::RedrawBuildingSpriteToArea( sprite, position.x + sprite.x(), position.y + sprite.y(), roi, alpha );
+                fheroes2::drawCastleDialogBuilding( ICN::TWNBEXT2, 0, castle, position, roi, alpha );
             }
 
             if ( buildId == DWELLING_MONSTER3 || buildId == BUILD_THIEVESGUILD ) {
@@ -101,8 +97,7 @@ namespace
                         return;
                 }
 
-                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TWNBEXT3, 0 );
-                CastleDialog::RedrawBuildingSpriteToArea( sprite, position.x + sprite.x(), position.y + sprite.y(), roi, alpha );
+                fheroes2::drawCastleDialogBuilding( ICN::TWNBEXT3, 0, castle, position, roi, alpha );
             }
         }
         else if ( race == Race::NECR ) {
@@ -115,16 +110,9 @@ namespace
                     return;
             }
 
-            const fheroes2::Sprite & bridge = fheroes2::AGG::GetICN( ICN::NECROMANCER_CASTLE_CAPTAIN_QUARTERS_BRIDGE, 0 );
-            CastleDialog::RedrawBuildingSpriteToArea( bridge, position.x + bridge.x(), position.y + bridge.y(), roi, alpha );
+            fheroes2::drawCastleDialogBuilding( ICN::NECROMANCER_CASTLE_CAPTAIN_QUARTERS_BRIDGE, 0, castle, position, roi, alpha );
         }
     }
-}
-
-void CastleDialog::RedrawBuildingSpriteToArea( const fheroes2::Sprite & sprite, s32 dst_x, s32 dst_y, const fheroes2::Rect & max, uint8_t alpha )
-{
-    std::pair<fheroes2::Rect, fheroes2::Point> res = Fixed4Blit( { dst_x, dst_y, sprite.width(), sprite.height() }, max );
-    fheroes2::AlphaBlit( sprite, res.first.x, res.first.y, fheroes2::Display::instance(), res.second.x, res.second.y, res.first.width, res.first.height, alpha );
 }
 
 CastleDialog::CacheBuildings::CacheBuildings( const Castle & castle, const fheroes2::Point & top )
@@ -244,11 +232,8 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
             break;
         }
 
-        const fheroes2::Sprite & bayBaseSprite = fheroes2::AGG::GetICN( bayIcnId, 0 );
-        const fheroes2::Sprite & bayExtraSprite = fheroes2::AGG::GetICN( bayIcnId, bayExtraIndex );
-
-        CastleDialog::RedrawBuildingSpriteToArea( bayBaseSprite, dst_pt.x + bayBaseSprite.x(), dst_pt.y + bayBaseSprite.y(), max );
-        CastleDialog::RedrawBuildingSpriteToArea( bayExtraSprite, dst_pt.x + bayExtraSprite.x(), dst_pt.y + bayExtraSprite.y(), max );
+        fheroes2::drawCastleDialogBuilding( bayIcnId, 0, castle, dst_pt, max );
+        fheroes2::drawCastleDialogBuilding( bayIcnId, bayExtraIndex, castle, dst_pt, max );
     }
 
     // redraw all builds
@@ -349,9 +334,7 @@ void CastleDialog::CastleRedrawBuilding( const Castle & castle, const fheroes2::
 
     if ( icn != ICN::UNKNOWN ) {
         // simple first sprite
-        const fheroes2::Sprite & sprite1 = fheroes2::AGG::GetICN( icn, index );
-
-        CastleDialog::RedrawBuildingSpriteToArea( sprite1, dst_pt.x + sprite1.x(), dst_pt.y + sprite1.y(), max, alpha );
+        fheroes2::drawCastleDialogBuilding( icn, index, castle, dst_pt, max, alpha );
 
         // Special case: Knight castle's flags are overlapped by Right Turret so we need to draw flags after drawing the Turret.
         const bool knightCastleCase = ( race == Race::KNGT && castle.isBuild( BUILD_RIGHTTURRET ) && castle.isBuild( BUILD_CASTLE ) );
@@ -362,9 +345,7 @@ void CastleDialog::CastleRedrawBuilding( const Castle & castle, const fheroes2::
 
         // second anime sprite
         if ( const u32 index2 = ICN::AnimationFrame( icn, index, frame ) ) {
-            const fheroes2::Sprite & sprite2 = fheroes2::AGG::GetICN( icn, index2 );
-
-            CastleDialog::RedrawBuildingSpriteToArea( sprite2, dst_pt.x + sprite2.x(), dst_pt.y + sprite2.y(), max, alpha );
+            fheroes2::drawCastleDialogBuilding( icn, index2, castle, dst_pt, max, alpha );
         }
 
         if ( knightCastleCase && build == BUILD_RIGHTTURRET ) {
@@ -372,9 +353,7 @@ void CastleDialog::CastleRedrawBuilding( const Castle & castle, const fheroes2::
             const int castleIcn = Castle::GetICNBuilding( BUILD_CASTLE, race );
             const uint32_t flagAnimFrame = ICN::AnimationFrame( castleIcn, index, frame );
             if ( flagAnimFrame > 0 ) {
-                const fheroes2::Sprite & castleFlagSprite = fheroes2::AGG::GetICN( castleIcn, flagAnimFrame );
-
-                CastleDialog::RedrawBuildingSpriteToArea( castleFlagSprite, dst_pt.x + castleFlagSprite.x(), dst_pt.y + castleFlagSprite.y(), max, alpha );
+                fheroes2::drawCastleDialogBuilding( castleIcn, flagAnimFrame, castle, dst_pt, max, alpha );
             }
         }
     }
@@ -394,42 +373,39 @@ void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const fh
         if ( castle.PresentBoat() ) {
             const int icn2 = Castle::GetICNBoat( castle.GetRace() );
 
-            const fheroes2::Sprite & sprite40 = fheroes2::AGG::GetICN( icn2, 0 );
-            CastleDialog::RedrawBuildingSpriteToArea( sprite40, dst_pt.x + sprite40.x(), dst_pt.y + sprite40.y(), max, alpha );
+            fheroes2::drawCastleDialogBuilding( icn2, 0, castle, dst_pt, max, alpha );
 
             if ( const u32 index2 = ICN::AnimationFrame( icn2, 0, frame ) ) {
-                const fheroes2::Sprite & sprite41 = fheroes2::AGG::GetICN( icn2, index2 );
-                CastleDialog::RedrawBuildingSpriteToArea( sprite41, dst_pt.x + sprite41.x(), dst_pt.y + sprite41.y(), max, alpha );
+                fheroes2::drawCastleDialogBuilding( icn2, index2, castle, dst_pt, max, alpha );
             }
         }
         else {
             if ( const u32 index2 = ICN::AnimationFrame( icn, 0, frame ) ) {
-                const fheroes2::Sprite & sprite3 = fheroes2::AGG::GetICN( icn, index2 );
-                CastleDialog::RedrawBuildingSpriteToArea( sprite3, dst_pt.x + sprite3.x(), dst_pt.y + sprite3.y(), max, alpha );
+                fheroes2::drawCastleDialogBuilding( icn, index2, castle, dst_pt, max, alpha );
             }
         }
     }
     else if ( Race::SORC == castle.GetRace() && BUILD_WEL2 == build ) { // sorc and anime wel2 or statue
         const int icn2 = castle.isBuild( BUILD_STATUE ) ? ICN::TWNSEXT1 : icn;
 
-        const fheroes2::Sprite & sprite20 = fheroes2::AGG::GetICN( icn2, 0 );
-        CastleDialog::RedrawBuildingSpriteToArea( sprite20, dst_pt.x + sprite20.x(), dst_pt.y + sprite20.y(), max, alpha );
+        fheroes2::drawCastleDialogBuilding( icn2, 0, castle, dst_pt, max, alpha );
 
         if ( const u32 index2 = ICN::AnimationFrame( icn2, 0, frame ) ) {
-            const fheroes2::Sprite & sprite21 = fheroes2::AGG::GetICN( icn2, index2 );
-            CastleDialog::RedrawBuildingSpriteToArea( sprite21, dst_pt.x + sprite21.x(), dst_pt.y + sprite21.y(), max, alpha );
+            fheroes2::drawCastleDialogBuilding( icn2, index2, castle, dst_pt, max, alpha );
         }
     }
     else if ( castle.GetRace() == Race::KNGT && BUILD_WEL2 == build && !castle.isBuild( BUILD_CASTLE ) ) {
         const fheroes2::Sprite & rightFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_RIGHT_FARM, 0 );
         const fheroes2::Sprite & leftFarm = fheroes2::AGG::GetICN( ICN::KNIGHT_CASTLE_LEFT_FARM, 0 );
-        CastleDialog::RedrawBuildingSpriteToArea( leftFarm, dst_pt.x + rightFarm.x() - leftFarm.width(), dst_pt.y + rightFarm.y(), max, alpha );
+        fheroes2::drawCastleDialogBuilding( ICN::KNIGHT_CASTLE_LEFT_FARM, 0, castle, { dst_pt.x + rightFarm.x() - leftFarm.width(), dst_pt.y + rightFarm.y() }, max,
+                                            alpha );
     }
     else if ( castle.GetRace() == Race::BARB && BUILD_CAPTAIN == build && !castle.isBuild( BUILD_CASTLE ) ) {
         const fheroes2::Sprite & rightCaptainQuarters = fheroes2::AGG::GetICN( ICN::TWNBCAPT, 0 );
         const fheroes2::Sprite & leftCaptainQuarters = fheroes2::AGG::GetICN( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0 );
-        CastleDialog::RedrawBuildingSpriteToArea( leftCaptainQuarters, dst_pt.x + rightCaptainQuarters.x() - leftCaptainQuarters.width() + leftCaptainQuarters.x(),
-                                                  dst_pt.y + rightCaptainQuarters.y() + leftCaptainQuarters.y(), max, alpha );
+        fheroes2::drawCastleDialogBuilding( ICN::BARBARIAN_CASTLE_CAPTAIN_QUARTERS_LEFT_SIDE, 0, castle,
+                                            { dst_pt.x + rightCaptainQuarters.x() - leftCaptainQuarters.width() + leftCaptainQuarters.x(),
+                                              dst_pt.y + rightCaptainQuarters.y() + leftCaptainQuarters.y() }, max, alpha );
     }
 }
 
