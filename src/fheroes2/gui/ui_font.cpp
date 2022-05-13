@@ -1313,6 +1313,10 @@ namespace
             fheroes2::FillTransform( font[191 - 32], 8, 5, 1, 1, 1 );
             font[191 - 32].setPosition( font[63 - 32].x(), font[63 - 32].y() + 2 );
             updateNormalFontLetterShadow( font[191 - 32] );
+            // Improve generated shadows
+            fheroes2::FillTransform( font[191 - 32], 0, 8, 1, 1, 1 );
+            fheroes2::FillTransform( font[191 - 32], 0, 12, 1, 1, 1 );
+            fheroes2::FillTransform( font[191 - 32], 7, 12, 1, 1, 1 );
 
             // A with grave accent ` and generate the grave accent for further use.
             font[192 - 32].resize( font[33].width(), font[33].height() + 3 );
