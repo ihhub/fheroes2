@@ -81,8 +81,7 @@ namespace
 
     std::vector<fheroes2::Rect> getColorEffectiveAreas( const int32_t icnId, const uint32_t icnIndex )
     {
-        switch ( icnId )
-        {
+        switch ( icnId ) {
         case ICN::TWNZCSTL:
             if ( icnIndex == 0 ) {
                 return { fheroes2::Rect( 76, 7, 3, 3 ), fheroes2::Rect( 96, 7, 3, 3 ), fheroes2::Rect( 178, 11, 3, 3 ) };
@@ -153,8 +152,7 @@ namespace
 
     bool isImagePlayerColorDependent( const int32_t icnId )
     {
-        switch ( icnId )
-        {
+        switch ( icnId ) {
         case ICN::TWNZCSTL:
         case ICN::TWNKCSTL:
         case ICN::TWNKDW_4:
