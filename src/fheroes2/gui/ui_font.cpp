@@ -1294,7 +1294,7 @@ namespace
             font[161 - 32].setPosition( font[33 - 32].x(), font[33 - 32].y() + 2 );
             updateNormalFontLetterShadow( font[161 - 32] );
 
-            // Inverted question mark ?. Replaced with normal for now.
+            // Inverted question mark ?.
             font[191 - 32].resize( font[63 - 32].width() + 1, font[63 - 32].height() );
             font[191 - 32].reset();
             fheroes2::Copy( font[63 - 32], 1, 0, font[191 - 32], 0, 0, font[63 - 32].width(), 11 );
@@ -1676,7 +1676,7 @@ namespace
             font[161 - 32].setPosition( font[33 - 32].x(), font[33 - 32].y() + 2 );
             updateSmallFontLetterShadow( font[161 - 32] );
 
-            // Inverted question mark ?. Replaced with normal for now.
+            // Inverted question mark ?.
             font[191 - 32].resize( font[63 - 32].width(), font[63 - 32].height() );
             font[191 - 32].reset();
             fheroes2::Copy( font[63 - 32], 1, 0, font[191 - 32], 0, 0, font[63 - 32].width(), 7 );
