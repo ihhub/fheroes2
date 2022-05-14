@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-14 00:18+0000\n"
-"PO-Revision-Date: 2022-05-10 16:34+0200\n"
+"PO-Revision-Date: 2022-05-14 00:58-0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
@@ -32,220 +32,228 @@ msgid ""
 "A few\n"
 "%{monster}"
 msgstr ""
-"Um pouco de\n"
+"1 à 4\n"
 "%{monster}"
 
 msgid ""
 "Several\n"
 "%{monster}"
 msgstr ""
-"Alguns\n"
+"5 à 9\n"
 "%{monster}"
 
 msgid ""
 "A pack of\n"
 "%{monster}"
 msgstr ""
-"Muito pouco de\n"
+"10 à 19\n"
 "%{monster}"
 
 msgid ""
 "Lots of\n"
 "%{monster}"
 msgstr ""
-"Muitos de\n"
+"20 à 49\n"
 "%{monster}"
 
 msgid ""
 "A horde of\n"
 "%{monster}"
 msgstr ""
-"Uma horada de\n"
+"50 à 99\n"
 "%{monster}"
 
 msgid ""
 "A throng of\n"
 "%{monster}"
 msgstr ""
-"Uma multidão de\n"
+"100 à 249\n"
 "%{monster}"
 
 msgid ""
 "A swarm of\n"
 "%{monster}"
 msgstr ""
-"Um enxame de\n"
+"250 à 499\n"
 "%{monster}"
 
 msgid ""
 "Zounds of\n"
 "%{monster}"
 msgstr ""
-"Um inferno de\n"
+"500 à 999\n"
 "%{monster}"
 
 msgid ""
 "A legion of\n"
 "%{monster}"
 msgstr ""
-"Uma legião de\n"
+"+1000\n"
 "%{monster}"
 
 msgid "army|Few"
-msgstr ""
+msgstr "1 à 4"
 
 msgid "army|Several"
-msgstr ""
+msgstr "5 à 9"
 
 msgid "army|Pack"
-msgstr ""
+msgstr "10 à 19"
 
 msgid "army|Lots"
-msgstr ""
+msgstr "20 à 49"
 
 msgid "army|Horde"
-msgstr ""
+msgstr "50 à 99"
 
 msgid "army|Throng"
-msgstr ""
+msgstr "100 à 249"
 
 msgid "army|Swarm"
-msgstr ""
+msgstr "250 à 499"
 
 msgid "army|Zounds"
-msgstr ""
+msgstr "500 à 999"
 
 msgid "army|Legion"
-msgstr ""
+msgstr "+1000"
 
 msgid "All %{race} troops +1"
-msgstr "Toda tropa de %{race}  +1"
+msgstr "+1 para todas as tropas de %{race}"
 
 msgid "Multiple"
-msgstr ""
+msgstr "Múltiplo"
 
-#, fuzzy
 msgid "Troops of %{count} alignments -%{penalty}"
-msgstr "Tropas de Nivel 3 -1"
+msgstr "Tropas de %{count} alinhamentos -%{penalty}"
 
-#, fuzzy
 msgid "Some undead in group -1"
-msgstr "Algum morto-vivo no grupo -1"
+msgstr "Alguns mortos-vivos no grupo -1"
 
 msgid "View %{name}"
 msgstr "Ver %{name}"
 
-#, fuzzy
 msgid "Move or right click to redistribute %{name}"
-msgstr "Mova e clica com o botao direito para redistribuir %{name}"
+msgstr "Mova ou clique com o botão direito para redistribuir %{name}"
 
 msgid "Combine %{name} armies"
-msgstr "Juntar os exércitos de %{name}"
+msgstr "Combinar os exércitos de %{name}"
 
 msgid "Exchange %{name2} with %{name}"
 msgstr "Trocar %{name2} com %{name}"
 
 msgid "Select %{name}"
-msgstr "Selecione %{name}"
+msgstr "Selecionar %{name}"
 
-#, fuzzy
 msgid "Cannot move last troop"
-msgstr "Não é possível mover o último exército à fortaleza"
+msgstr "Não é possível mover a última tropa"
 
 msgid "Set Count"
-msgstr ""
+msgstr "Defina a quantidade"
 
 msgid "%{name} half the enemy troops!"
 msgstr "%{name} metade das tropas inimigas!"
 
-#, fuzzy
 msgid "%{name} has turned off the auto battle"
-msgstr "Retornar à batalha."
+msgstr "%{name} desativou a batalha automática"
 
-#, fuzzy
 msgid "%{name} has turned on the auto battle"
-msgstr "Retornar à batalha."
+msgstr "%{name} ativou a batalha automática"
 
-#, fuzzy
 msgid "Spell failed!"
-msgstr "feitiço falhou!"
+msgstr "O feitiço falhou!"
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
 "combat spells."
 msgstr ""
+"O artefato Esfera da Negação está ativo para esta batalha, desativando todos "
+"os feitiços de combate."
 
 msgid "You have already cast a spell this round."
-msgstr "Você já lançou um feitiço nesse round."
+msgstr "Você já lançou um feitiço nesse turno."
 
 msgid "That spell will affect no one!"
-msgstr "Esta magia não afetará ninguem!"
+msgstr "Esta magia não afetará ninguém!"
 
 msgid "You may only summon one type of elemental per combat."
-msgstr "Você só pode convocar um tipo de Elemento por combate."
+msgstr "Você só pode invocar um tipo de Elemento por combate."
 
 msgid "There is no open space adjacent to your hero to summon an Elemental to."
-msgstr "Não há espaço adjacente aberto para o seu herói lançar um Elemento."
+msgstr "Não há espaço aberto adjacente ao seu herói para invocar um Elemental."
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
 "half movement rate."
 msgstr ""
+"O Fosso reduz em -%{count} a habilidade de defesa de qualquer unidade e "
+"diminui para metade a taxa de movimento."
 
 msgid "Speed"
-msgstr "Veloc."
+msgstr "Velocidade"
 
 msgid "Speed: %{speed}"
-msgstr "Rapidez: %{speed}"
+msgstr "Velocidade: %{speed}"
 
 msgid "Army Order"
-msgstr ""
+msgstr "Ordem de Jogo"
 
 msgid "Auto Spell Casting"
-msgstr ""
+msgstr "Auto Feitiço"
 
 msgid "Grid"
-msgstr ""
+msgstr "Grade"
 
-#, fuzzy
 msgid "Shadow Movement"
-msgstr "Continuar a Andar"
+msgstr "Sombra de Movimento"
 
 msgid "Shadow Cursor"
-msgstr "Sombra do cursor"
+msgstr "Sombra do Cursor"
 
-#, fuzzy
 msgid "Off"
-msgstr "off"
+msgstr "Desativar"
 
 msgid "On"
-msgstr "Ligado"
+msgstr "Ativar"
 
 msgid "Set the speed of combat actions and animations."
-msgstr ""
+msgstr "Definir a velocidade das ações de combate e animações."
 
 msgid "Toggle to display army order during the battle."
 msgstr ""
+"Ativar ou desativar a exibição da ordem de jogo das criaturas durante a "
+"batalha."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
 "is on. (Note: This does not affect spell casting for computer players in any "
 "way, nor does it affect quick combat.)"
 msgstr ""
+"Ativa ou desativa o lançamento dos feitiços pelo computador quando o combate "
+"automático esta ligado. (Nota: Isto não afeta de forma alguma o lançamento "
+"de feitiços para jogadores controlados pelo computador, nem afeta o combate "
+"rápido)."
 
 msgid ""
 "Toggle the hex grid on or off. The hex grid always underlies movement, even "
 "if turned off. This switch only determines if the grid is visible."
 msgstr ""
+"Ativa ou desativa a grade hexagonal. A grade hexagonal está sempre "
+"subjacente ao movimento, mesmo se desativada. Esta opção apenas determina se "
+"a grade estará visível."
 
 msgid ""
 "Toggle on or off shadows showing where your creatures can move and attack."
 msgstr ""
+"Ativa ou desativa as sombras que mostram onde suas criaturas podem se mover "
+"e atacar."
 
 msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
+"Ativa ou desativa uma sombra mostrando a localização hexagonal atual do "
+"cursor do mouse."
 
 msgid "The enemy has surrendered!"
 msgstr "O inimigo desistiu!"
@@ -254,25 +262,25 @@ msgid "The enemy has fled!"
 msgstr "O inimigo fugiu!"
 
 msgid "A glorious victory!"
-msgstr "Uma vitoria gloriosa!"
+msgstr "Uma vitória gloriosa!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
-msgstr "Pelo valor em combate, %{name} recebe %{exp} de experiência."
+msgstr "Por sua coragem em combate, %{name} recebe %{exp} de experiência."
 
 msgid "The cowardly %{name} flees from battle."
-msgstr "O covarde %{name} fugiu da batalha."
+msgstr "%{name} se acovarda e foge da batalha."
 
 msgid "%{name} surrenders to the enemy, and departs in shame."
-msgstr "%{name} rende-se ao inimigo, e retira-se na vergonha."
+msgstr "%{name} rende-se ao inimigo, e retira-se com vergonha."
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
-msgstr ""
+msgstr "Sua força sofre uma amarga derrota, e %{name} abandona sua causa."
 
 msgid "Your force suffer a bitter defeat."
-msgstr ""
+msgstr "Suas forças sofrem uma amarga derrota."
 
 msgid "Battlefield Casualties"
-msgstr "Feridos em Guerras"
+msgstr "Baixas no Campo de Batalha"
 
 msgid "Attacker"
 msgstr "Agressor"
@@ -284,29 +292,30 @@ msgid "Defender"
 msgstr "Defensor"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "À medida que você alcança %{name}, ele desaparece misteriosamente."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr ""
+"À medida que seu inimigo alcança %{name}, ele desaparece misteriosamente."
 
 msgid "You have captured an enemy artifact!"
 msgstr "Vou capturou um artefato inimigo!"
 
-#, fuzzy
 msgid "Necromancy!"
-msgstr "Necromante:"
+msgstr "Necromancia!"
 
 msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
 msgstr ""
+"Praticando as artes negras da necromancia, você é capaz de ressuscitar "
+"%{count} dos inimigos mortos para retornar sob seu serviço como %{monster}."
 
 msgid "%{name} the %{race}"
-msgstr "%{name} a %{race}"
+msgstr "%{name}: %{race}"
 
-#, fuzzy
 msgid "Captain of %{name}"
-msgstr "Não pôde arcar com as despesas %{name}"
+msgstr "Capitão de %{name}"
 
 msgid "Attack"
 msgstr "Ataque"
@@ -315,7 +324,7 @@ msgid "Defense"
 msgstr "Defesa"
 
 msgid "Spell Power"
-msgstr "Poder de Magia"
+msgstr "Força Mágica"
 
 msgid "Knowledge"
 msgstr "Conhecimento"
@@ -329,15 +338,14 @@ msgstr "Sorte"
 msgid "Spell Points"
 msgstr "Mana"
 
-#, fuzzy
 msgid "Hero's Options"
 msgstr "Opções do Herói"
 
 msgid "Cast Spell"
-msgstr "Magia"
+msgstr "Lançar Feitiço"
 
 msgid "Retreat"
-msgstr "Retirada"
+msgstr "Retirar-se"
 
 msgid "Surrender"
 msgstr "Render-se"
@@ -346,15 +354,14 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 msgid "Hero Screen"
-msgstr "Tela do herói"
+msgstr "Tela do Herói"
 
-#, fuzzy
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
 msgstr ""
-"Lançar uma magia. Você só pode lançar uma magia por rodada. Uma nova rodada "
-"é iniciada quando toda criatura tem tido a sua vez."
+"Lança um feitiço mágico. Você só pode lançar um feitiço por turno de "
+"combate. O turno é reiniciado quando cada criatura tiver jogado um turno."
 
 msgid ""
 "Retreat your hero, abandoning your creatures. Your hero will be available "
@@ -373,309 +380,293 @@ msgstr ""
 "suas criaturas vivas estarão disponíveis para recrutar novamente."
 
 msgid "Open Hero Screen to view full information about the hero."
-msgstr "Abra tela do herói para ver todas as informações sobre."
+msgstr "Abra a Tela do Herói para ver todas as informações sobre ele."
 
 msgid "Return to the battle."
 msgstr "Retornar à batalha."
 
 msgid "Not enough gold (%{gold})"
-msgstr "Sem ouro o suficiente (%{gold})"
+msgstr "Ouro insuficiente (%{gold})"
 
 msgid "%{name} states:"
-msgstr "%{name} estados:"
+msgstr "Estado de %{name}:"
 
-#, fuzzy
 msgid "Captain of %{name} states:"
-msgstr "Não pôde arcar com as despesas %{name}"
+msgstr "Capitão de %{name}:"
 
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
 msgstr ""
+"\"Aceitarei sua rendição e concederei a você e a suas tropas uma passagem "
+"segura pelo preço de %{price} ouro.\""
 
 msgid "View %{monster} info"
 msgstr "Ver informação de %{monster}"
 
-#, fuzzy
 msgid "Shoot %{monster}"
-msgstr ""
-"Atirar em %{monster}Muitos de\n"
-"%{monster}"
+msgstr "Disparar em %{monster}"
 
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
-msgstr[0] "(Resta 1 tiro)"
-msgstr[1] "(Restam %{count} tiros"
+msgstr[0] "(1 disparo restante)"
+msgstr[1] "(%{count} disparos restantes)"
 
 msgid "Attack %{monster}"
 msgstr "Atacar %{monster}"
 
 msgid "Fly %{monster} here"
-msgstr ""
+msgstr "Voar com %{monster} até aqui"
 
 msgid "Move %{monster} here"
-msgstr "Mover %{monster} daqui"
+msgstr "Mover %{monster} até aqui"
 
 msgid "Turn %{turn}"
 msgstr "Turno %{turn}"
 
 msgid "Teleport here"
-msgstr "Se teleportar pra cá"
+msgstr "Teletransportar-se até aqui"
 
 msgid "Invalid teleport destination"
-msgstr "Destino de teleporte inválido"
+msgstr "Destino de teletransporte inválido"
 
 msgid "Cast %{spell} on %{monster}"
-msgstr ""
+msgstr "Lançar %{spell} em %{monster}"
 
 msgid "Cast %{spell}"
-msgstr ""
+msgstr "Lançar %{spell}"
 
 msgid "Select spell target"
-msgstr ""
+msgstr "Selecionar alvo do feitiço"
 
 msgid "View Ballista info"
-msgstr ""
+msgstr "Ver informações da Balista"
 
 msgid "Ballista"
-msgstr ""
+msgstr "Balista"
 
-#, fuzzy
 msgid "Enable auto combat"
-msgstr "Combate automático"
+msgstr "Ativar combate automático"
 
 msgid "Allows the computer to fight out the battle for you."
-msgstr ""
+msgstr "Permite que o computador lute a batalha por você."
 
 msgid "Auto Combat"
 msgstr "Combate Automático"
 
 msgid "Customize system options"
-msgstr "Customizar opções do sistema"
+msgstr "Personalizar opções do sistema"
 
 msgid "Allows you to customize the combat screen."
-msgstr ""
+msgstr "Permite personalizar a tela de combate."
 
 msgid "System Options"
 msgstr "Opções do Sistema"
 
-#, fuzzy
 msgid "Wait this unit"
-msgstr "Passar a vez desta criatura"
+msgstr "Esta unidade está esperando"
 
 msgid "Wait"
-msgstr ""
+msgstr "Esperar"
 
 msgid ""
 "Waits the current creature. The current creature delays its turn until after "
 "all other creatures have had their turn."
 msgstr ""
+"Espera a criatura atual. A criatura atual atrasa seu turno até que todas as "
+"outras criaturas tenham jogado o seu turno."
 
-#, fuzzy
 msgid "Skip this unit"
-msgstr "Passar a vez desta criatura"
+msgstr "Pular o turno desta unidade"
 
 msgid "Skip"
-msgstr ""
+msgstr "Pular"
 
 msgid ""
 "Skips the current creature. The current creature ends its turn and does not "
 "get to go again until the next round."
 msgstr ""
+"Pula a criatura atual. A criatura atual termina sua vez e não faz seu "
+"movimento até a próxima rodada."
 
-#, fuzzy
 msgid "View Hero's options"
-msgstr "Opções do Herói"
+msgstr "Ver as opções do Herói"
 
 msgid "View opposing Hero"
-msgstr "Ver Heróis oponentes"
+msgstr "Ver o Herói Oponentes"
 
 msgid "Hide logs"
-msgstr "Esconder logs"
+msgstr "Ocultar registro"
 
 msgid "Show logs"
-msgstr "Mostrar logs"
+msgstr "Mostrar registros"
 
 msgid "Message Bar"
-msgstr ""
+msgstr "Barra de Mensagem"
 
 msgid "Shows the results of individual monster's actions."
-msgstr ""
+msgstr "Mostra os resultados das ações individuais dos monstros."
 
-#, fuzzy
 msgid "%{name} skip their turn."
-msgstr "%{name} a %{race}."
+msgstr "%{name} pulou seu turno."
 
-#, fuzzy
 msgid "%{name} wait their turn."
-msgstr "%{name} a %{race}."
+msgstr "%{name} espera seu turno."
 
 msgid "%{attacker} do %{damage} damage."
-msgstr ""
+msgstr "%{damage} de dano de %{attacker}."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 criatura morreu."
+msgstr[1] "%{count} criaturas morreram."
 
 msgid "1 %{defender} perishes."
 msgid_plural "%{count} %{defender} perish."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 %{defender} morreu."
+msgstr[1] "%{count} %{defender} morreram."
 
 msgid "Moved %{monster}: %{src}, %{dst}"
-msgstr ""
+msgstr "Movimento de %{monster}: %{src}, %{dst}"
 
-#, fuzzy
 msgid "Moved %{monster}"
-msgstr ""
-"Muitos de\n"
-"%{monster}"
+msgstr "%{monster} moveu"
 
 msgid "The %{name} resist the spell!"
-msgstr "%{name} resisitiu ao feitiço!"
+msgstr "%{name} resistiu ao feitiço!"
 
 msgid "%{name} casts %{spell} on the %{troop}."
-msgstr ""
+msgstr "%{name} lança %{spell} sobre %{troop}."
 
 msgid "%{name} casts %{spell}."
-msgstr ""
+msgstr "%{name} lança %{spell}."
 
 msgid "The %{spell} does %{damage} damage to one undead creature."
-msgstr ""
+msgstr "%{spell} causa %{damage} de dano a uma criatura morta-viva."
 
 msgid "The %{spell} does %{damage} damage to all undead creatures."
-msgstr ""
+msgstr "%{spell} causa %{damage} de dano a todas as criaturas mortas-vivas."
 
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
-msgstr ""
+msgstr "%{spell} causa %{damage} de dano, %{count} criaturas morreram."
 
 msgid "The %{spell} does %{damage} damage."
-msgstr "O %{spell} fez %{damage} de dano."
+msgstr "%{spell} causa %{damage} de dano."
 
 msgid "The %{spell} does %{damage} damage to one living creature."
-msgstr "O %{spell} fez %{damage} de dano a uma criatura viva."
+msgstr "%{spell} causa %{damage} de dano a uma criatura viva."
 
 msgid "The %{spell} does %{damage} damage to all living creatures."
-msgstr ""
+msgstr "%{spell} causa %{damage} de dano a todos as criaturas vivas."
 
 msgid "The Unicorns' attack blinds the %{name}!"
-msgstr ""
+msgstr "O ataque dos Unicórnios cega a unidade %{name}!"
 
 msgid "The Medusas' gaze turns the %{name} to stone!"
-msgstr ""
+msgstr "O olhar das Medusas transformam a unidade %{name} em pedra!"
 
 msgid "The Mummies' curse falls upon the %{name}!"
-msgstr ""
+msgstr "A maldição das Múmias recai sobre a unidade %{name}!"
 
 msgid "The %{name} are paralyzed by the Cyclopes!"
 msgstr "%{name} está paralisado pelos Ciclopes!"
 
 msgid "The Archmagi dispel all good spells on your %{name}!"
-msgstr ""
+msgstr "O Arquimago dissipa todos os feitiços bons em seu %{name}!"
 
 msgid "Bad luck descends on the %{attacker}."
-msgstr ""
+msgstr "O azar recai em %{attacker}."
 
 msgid "Good luck shines on the %{attacker}."
-msgstr ""
+msgstr "A boa sorte recai em %{attacker}."
 
 msgid "High morale enables the %{monster} to attack again."
-msgstr ""
+msgstr "A moral alta permite outro ataque de %{monster}."
 
 msgid "Low morale causes the %{monster} to freeze in panic."
-msgstr ""
+msgstr "A baixa moral congela %{monster} pro pânico."
 
 msgid "%{tower} does %{damage} damage."
-msgstr "%{tower} causou %{damage} damage."
+msgstr "%{tower} causa %{damage} de dano."
 
 msgid "The mirror image is created."
-msgstr "A imagem no espelho está criada."
+msgstr "A imagem de espelho está criada."
 
 msgid "The mirror image is destroyed!"
-msgstr "A imagem no espelho está destruída!"
+msgstr "A imagem de espelho está destruída!"
 
 msgid "Break auto battle?"
-msgstr ""
+msgstr "Interromper a batalha automática?"
 
 msgid "Error"
 msgstr "Erro"
 
 msgid "No spells to cast."
-msgstr ""
+msgstr "Sem feitiços para lançar."
 
 msgid "Are you sure you want to retreat?"
-msgstr "Tem certeza de que quer a retirada?"
+msgstr "Você tem certeza de que deseja se retirar?"
 
-#, fuzzy
 msgid "Retreat disabled"
-msgstr "Retirada"
+msgstr "Retirada desativada"
 
-#, fuzzy
 msgid "Surrender disabled"
-msgstr "Render-se"
+msgstr "Rendição desativada"
 
-#, fuzzy
 msgid "Damage: %{max}"
-msgstr "Dia: %{day}"
+msgstr "Dano: %{max}"
 
 msgid "Damage: %{min} - %{max}"
 msgstr "Dano: %{min} - %{max}"
 
-#, fuzzy
 msgid "Perish: %{max}"
-msgstr "Dia: %{day}"
+msgstr "Morrem: %{max}"
 
 msgid "Perish: %{min} - %{max}"
-msgstr ""
+msgstr "Morrem: %{min} - %{max}"
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
 msgstr ""
+"Através da observação com os olhos de águia, %{name} foi capaz de aprender o "
+"feitiço %{spell}."
 
 msgid "Human"
-msgstr ""
+msgstr "Humano"
 
 msgid "AI"
-msgstr ""
+msgstr "IA"
 
 msgid "Please select another hero."
-msgstr ""
+msgstr "Por favor, selecione outro herói."
 
-#, fuzzy
 msgid "Set Attack Skill"
-msgstr "Habilidade de Ataque"
+msgstr "Definir Hab. de Ataque"
 
-#, fuzzy
 msgid "Set Defense Skill"
-msgstr "Habilidade de Defesa"
+msgstr "Definir Defesa"
 
-#, fuzzy
 msgid "Set Power Skill"
-msgstr "Poder de Magia"
+msgstr "Definir Força"
 
-#, fuzzy
 msgid "Set Knowledge Skill"
-msgstr "Conhecimento"
+msgstr "Definir Conhecimento"
 
-#, fuzzy
 msgid "%{race1} %{name1}"
-msgstr "Ver %{name}"
+msgstr "%{name1} %{race1}"
 
 msgid "vs"
-msgstr ""
+msgstr "vs"
 
-#, fuzzy
 msgid "%{race2} %{name2}"
-msgstr "Ver %{name}"
+msgstr "%{name2} %{race2}"
 
-#, fuzzy
 msgid "Monsters"
-msgstr "Melhor Criatura:"
+msgstr "Monstros"
 
 msgid "N/A"
-msgstr ""
+msgstr "N/D"
 
 msgid "Left Turret"
 msgstr "Torre Esquerda"
@@ -684,82 +675,80 @@ msgid "Right Turret"
 msgstr "Torre Direita"
 
 msgid "The %{name} fires with the strength of %{count} Archers"
-msgstr ""
+msgstr "%{name} dispara com a força de %{count} Arqueiros"
 
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr ""
+msgstr "cada um com um bônus de +%{attack} para sua habilidade de ataque."
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
 "spell."
 msgstr ""
+"O artefato %{artifact} está ativado para esta batalha, desativando o feitiço "
+"%{spell}."
 
 msgid "%{count} %{name} rise(s) from the dead!"
-msgstr ""
+msgstr "%{count} %{name} se ergue(m) da morte!"
 
 msgid "Dwarven Alliance"
-msgstr ""
+msgstr "Aliança Anã"
 
-#, fuzzy
 msgid "Sorceress Guild"
-msgstr "Guilda de Ladrões"
+msgstr "Guilda de Feiticeiras"
 
-#, fuzzy
 msgid "Necromancer Guild"
-msgstr "Necromante:"
+msgstr "Guilda de Necromantes"
 
 msgid "Ogre Alliance"
-msgstr ""
+msgstr "Aliança dos Ogros"
 
 msgid "Dwarfbane"
-msgstr ""
+msgstr "Flagelo Anão"
 
 msgid "Dragon Alliance"
-msgstr ""
+msgstr "Aliança dos Dragões"
 
 msgid "Elven Alliance"
-msgstr ""
+msgstr "Aliança Élfica"
 
 msgid "Kraeger defeated"
-msgstr ""
+msgstr "Kraeger derrotado"
 
 msgid "Wayward Son"
-msgstr ""
+msgstr "Filho Rebelde"
 
 msgid "Uncle Ivan"
-msgstr ""
+msgstr "Tio Ivan"
 
-#, fuzzy
 msgid "Annexation"
-msgstr "animação"
+msgstr "Anexação"
 
 msgid "Carator Mines"
-msgstr ""
+msgstr "Minas de Carator"
 
 msgid "Force of Arms"
-msgstr ""
+msgstr "Força das Armas"
 
 msgid "Save the Dwarves"
-msgstr ""
+msgstr "Salve os Anões"
 
 msgid "The Crown"
-msgstr ""
+msgstr "A Coroa"
 
 msgid "The Gauntlet"
-msgstr ""
+msgstr "A Manopla"
 
-#, fuzzy
 msgid "Turning Point"
-msgstr "HP"
+msgstr "Momento Decisivo"
 
 msgid "Betrayal"
-msgstr ""
+msgstr "Traição"
 
 msgid "Corlagon's Defense"
-msgstr ""
+msgstr "A Defesa de Corlagon"
 
 msgid "Final Justice"
-msgstr ""
+msgstr "Justiça Final"
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
@@ -767,29 +756,45 @@ msgid ""
 "will spend most of their time fighting with one another.  Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
+"Roland precisa de você para derrotar os lordes perto de seu castelo para "
+"iniciar sua guerra de rebelião contra seu irmão.  Eles não são aliados uns "
+"dos outros, portanto passarão a maior parte de seu tempo lutando uns com os "
+"outros.  A vitória é sua quando você tiver derrotado todos os castelos e "
+"heróis deles."
 
 msgid ""
 "The local lords refuse to swear allegiance to Roland, and must be subdued. "
 "They are wealthy and powerful, so be prepared for a tough fight. Capture all "
 "enemy castles to win."
 msgstr ""
+"Os lordes locais recusam-se a jurar fidelidade a Roland, e devem ser "
+"subjugados. Eles são ricos e poderosos, portanto esteja preparado para uma "
+"luta dura. Capture todos os castelos inimigos para vencer."
 
 msgid ""
 "Your task is to defend the Dwarves against Archibald's forces. Capture all "
 "of the enemy towns and castles to win, and be sure not to lose all of the "
 "dwarf towns at once, or the enemy will have won."
 msgstr ""
+"Sua tarefa é defender os Anões contra as forças do Arquibaldo. Capture todas "
+"as cidades e castelos inimigos para ganhar, e certifique-se de não perder "
+"todas as cidades anãs de uma só vez, ou o inimigo vencerá."
 
 msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
+"Você enfrentará quatro inimigos aliados em uma luta direta por recursos e "
+"tesouros. Capture todos os castelos inimigos para vencer."
 
 msgid ""
 "Your enemies are allied against you and start close by, so be ready to come "
 "out fighting. You will need to own all four castles in this small valley to "
 "win."
 msgstr ""
+"Seus inimigos são aliados contra você e começam por perto, portanto esteja "
+"pronto para sair lutando. Você precisará possuir todos os quatro castelos "
+"neste pequeno vale para vencer."
 
 msgid ""
 "The Sorceress' guild of Noraston has requested Roland's aid against an "
@@ -797,6 +802,10 @@ msgid ""
 "don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy "
 "castle on an island in the ocean.)"
 msgstr ""
+"A Guilda de Feiticeiras de Noraston solicitou a ajuda de Roland contra um "
+"ataque dos aliados de Arquibaldo. Capture todos os castelos inimigos para "
+"ganhar, e não perca Noraston, ou você perderá o cenário. (Dica: Há um "
+"castelo inimigo em uma ilha no oceano)."
 
 msgid ""
 "Gather as large an army as possible and capture the enemy castle within 8 "
@@ -804,11 +813,17 @@ msgid ""
 "to the enemy castle. Any troops you have in your army at the end of this "
 "scenario will be with you in the final battle."
 msgstr ""
+"Reúna o maior exército possível e capture o castelo inimigo em 8 semanas. "
+"Você se opõe a apenas um inimigo, mas deve percorrer um longo caminho para "
+"chegar ao castelo inimigo. Quaisquer tropas que você tenha em seu exército "
+"no final deste cenário estarão com você na batalha final."
 
 msgid ""
 "Find the Crown before Archibald's heroes find it. Roland will need the Crown "
 "for the final battle against Archibald."
 msgstr ""
+"Encontre a Coroa antes que os heróis de Arquibaldo a encontrem. Roland vai "
+"precisar da Coroa para a batalha final contra Arquibaldo."
 
 msgid ""
 "Three allied enemies stand before you and victory, including Lord Corlagon. "
@@ -816,45 +831,54 @@ msgid ""
 "enemy. Remember that capturing Lord Corlagon will ensure that he will not "
 "fight against you in the final scenario."
 msgstr ""
+"Três inimigos aliados estão no seu caminho até a vitória, incluindo o Lorde "
+"Corlagon. Roland está em um castelo a noroeste, e você perderá se ele cair "
+"para o inimigo. Lembre-se de que capturar o Lorde Corlagon garantirá que ele "
+"não irá lutar contra você no cenário final."
 
 msgid ""
 "This is the final battle. Both you and your enemy are armed to the teeth, "
 "and all are allied against you. Capture Archibald to end the war!"
 msgstr ""
+"Esta é a batalha final. Tanto você como seu inimigo estão armados até os "
+"dentes, e todos estão contra você. Capture Arquibaldo para acabar com a "
+"guerra!"
 
 msgid ""
 "Switching sides leaves you with three castles against the enemy's one.  This "
 "battle will be the easiest one you will face for the rest of the war..."
 "traitor."
 msgstr ""
+"A troca de lado deixa você com três castelos contra o do inimigo.  Esta "
+"batalha será a mais fácil que você enfrentará durante o resto da guerra... "
+"traidor."
 
 msgid "Barbarian Wars"
-msgstr ""
+msgstr "Guerras Bárbaras"
 
 msgid "First Blood"
-msgstr ""
+msgstr "Sangue Primeiro"
 
-#, fuzzy
 msgid "Necromancers"
-msgstr "Necromante:"
+msgstr "Necromantes"
 
 msgid "Slay the Dwarves"
-msgstr ""
+msgstr "Matem os Anões"
 
 msgid "Country Lords"
-msgstr ""
+msgstr "Lordes das Terras"
 
 msgid "Dragon Master"
-msgstr ""
+msgstr "Mestre Dragão"
 
 msgid "Rebellion"
-msgstr ""
+msgstr "Rebelião"
 
 msgid "Apocalypse"
-msgstr ""
+msgstr "Apocalipse"
 
 msgid "Greater Glory"
-msgstr ""
+msgstr "Maior Glória"
 
 msgid ""
 "King Archibald requires you to defeat the three enemies in this region.  "
@@ -862,6 +886,10 @@ msgid ""
 "energy fighting amongst themselves.  You will win when you own all of the "
 "enemy castles and there are no more heroes left to fight."
 msgstr ""
+"O Rei Arquibaldo exige que você derrote os três inimigos nesta região.  Eles "
+"não são aliados um do outro, por isso gastarão a maior parte de sua energia "
+"lutando entre si.  Vocês vencerão quando forem donos de todos os castelos "
+"inimigos e não restar mais heróis para lutar."
 
 msgid ""
 "You must unify the barbarian tribes of the north by conquering them. As in "
@@ -869,6 +897,10 @@ msgid ""
 "more resources at their disposal. You will win when you own all of the enemy "
 "castles and there are no more heroes left to fight."
 msgstr ""
+"É preciso unificar as tribos bárbaras do norte, conquistando-as. Como na "
+"missão anterior, os inimigos não estão aliados contra você, mas eles têm "
+"mais recursos à sua disposição. Vocês vencerão quando forem donos de todos "
+"os castelos inimigos e não restar mais heróis para lutar."
 
 msgid ""
 "Do-gooder wizards have taken the Necromancers' castle. You must retake it to "
@@ -876,6 +908,10 @@ msgid ""
 "have no castle and must take one within 7 days, or lose this battle. (Hint: "
 "The nearest castle is to the southeast.)"
 msgstr ""
+"Os feiticeiros do bem tomaram o castelo dos Necromantes. É preciso retomá-lo "
+"para alcançar a vitória. Lembre-se que enquanto você começa com um exército "
+"poderoso, você não tem castelo e deve tomar um dentro de 7 dias, ou perderá "
+"esta batalha. (Dica: O castelo mais próximo é o do sudeste)."
 
 msgid ""
 "The dwarves need conquering before they can interfere in King Archibald's "
@@ -883,18 +919,29 @@ msgid ""
 "so be ready for attack from multiple directions. You must capture all of the "
 "enemy towns and castles to claim victory."
 msgstr ""
+"Os anões precisam ser conquistados antes que possam interferir nos planos do "
+"Rei Arquibaldo. As forças de Roland têm mais de um herói e muitas cidades "
+"por onde começar, portanto, esteja pronto para ataques de várias direções. "
+"Você deve capturar todas as cidades e castelos inimigos para reivindicar a "
+"vitória."
 
 msgid ""
 "You must put down a peasant revolt led by Roland's forces. All are allied "
 "against you, but you have Lord Corlagon, an experienced hero, to help you. "
 "Capture all enemy castles to win."
 msgstr ""
+"Você deve acabar com uma revolta  camponesa liderada pelas forças de Roland. "
+"Todos estão aliados contra você, mas você tem Lorde Corlagon, um herói "
+"experiente, para lhe ajudar. Capture todos os castelos inimigos para vencer."
 
 msgid ""
 "There are two enemies allied against you in this mission. Both are well "
 "armed and seek to evict you from their island. Avoid them and capture Dragon "
 "City to win."
 msgstr ""
+"Há dois inimigos aliados contra você nesta missão. Ambos estão bem armados e "
+"procuram expulsá-lo de sua ilha. Evite-os e capture a Cidade Dragão para "
+"vencer."
 
 msgid ""
 "Your orders are to conquer the country lords that have sworn to serve "
@@ -902,42 +949,50 @@ msgid ""
 "without a castle, you must hurry to capture one before the end of the week. "
 "Capture all enemy castles for victory."
 msgstr ""
+"Suas ordens são para conquistar os Lordes das Terras que juraram servir a "
+"Roland. Todos os castelos inimigos estão unificados contra vocês. Já que "
+"você começa sem castelo, você deve se apressar para capturar um antes do "
+"final da semana. Capture todos os castelos inimigos para obter a vitória."
 
 msgid ""
 "Find the Crown before Roland's heroes find it. Archibald will need the Crown "
 "for the final battle against Roland."
 msgstr ""
+"Encontre a Coroa antes que os heróis de Roland a encontrem. Arquibaldo vai "
+"precisar da Coroa para a batalha final contra Roland."
 
 msgid ""
 "This is the final battle. Both you and your enemy are armed to the teeth, "
 "and all are allied against you. Capture Roland to win the war, and be sure "
 "not to lose Archibald in the fight!"
 msgstr ""
+"Esta é a batalha final. Tanto você quanto seu inimigo estão armados até os "
+"dentes, e todos estão aliados contra você. Capture Roland para ganhar a "
+"guerra, e não perca Arquibaldo na luta!"
 
 msgid "Arrow's Flight"
-msgstr ""
+msgstr "Voo da Flecha"
 
 msgid "Island of Chaos"
-msgstr ""
+msgstr "Ilha do Caos"
 
 msgid "The Abyss"
-msgstr ""
+msgstr "O Abismo"
 
 msgid "Uprising"
-msgstr ""
+msgstr "Insurreição"
 
 msgid "Aurora Borealis"
-msgstr ""
+msgstr "Aurora Boreal"
 
 msgid "Betrayal's End"
-msgstr ""
+msgstr "Fim da Traição"
 
-#, fuzzy
 msgid "Corruption's Heart"
-msgstr "Quartel do Capitão"
+msgstr "Coração da Corrupção"
 
 msgid "The Giant's Pass"
-msgstr ""
+msgstr "O Passo do Gigante"
 
 msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
