@@ -26,7 +26,6 @@
 #include "agg_image.h"
 #include "army.h"
 #include "castle.h"
-#include "castle_ui.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -40,6 +39,7 @@
 #include "settings.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_castle.h"
 #include "ui_text.h"
 #include "world.h"
 
