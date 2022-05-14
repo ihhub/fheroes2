@@ -65,7 +65,7 @@ namespace fheroes2
             const ArtifactDialogElement artifactUI( artifact );
             const TextDialogElement artifactDescriptionUI( std::make_shared<Text>( artifact.GetDescription(), FontType::normalWhite() ) );
 
-            showMessage( Text( "", FontType::normalWhite() ), Text( bonusData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
+            showMessage( Text( bonusData.getName(), FontType::normalYellow() ), Text( bonusData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
                          { &artifactUI, &artifactDescriptionUI } );
             break;
         }
@@ -73,14 +73,16 @@ namespace fheroes2
             const std::string resourceAmount = std::to_string( bonusData._amount );
             const ResourceDialogElement resourceUI( bonusData._subType, ( bonusData._amount > 0 ? "+" + resourceAmount : resourceAmount ) );
 
-            showMessage( Text( "", FontType::normalWhite() ), Text( bonusData.getDescription(), FontType::normalWhite() ), Dialog::ZERO, { &resourceUI } );
+            showMessage( Text( bonusData.getName(), FontType::normalYellow() ), Text( bonusData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
+                         { &resourceUI } );
             break;
         }
         case Campaign::ScenarioBonusData::TROOP: {
             const Monster monster( bonusData._subType );
             const CustomImageDialogElement monsterUI( getMonsterFrame( monster, bonusData._amount ) );
 
-            showMessage( Text( "", FontType::normalWhite() ), Text( bonusData.getDescription(), FontType::normalWhite() ), Dialog::ZERO, { &monsterUI } );
+            showMessage( Text( bonusData.getName(), FontType::normalYellow() ), Text( bonusData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
+                         { &monsterUI } );
             break;
         }
         case Campaign::ScenarioBonusData::SPELL: {
@@ -88,7 +90,7 @@ namespace fheroes2
             const SpellDialogElement spellUI( spell, nullptr );
             const TextDialogElement spellDescriptionUI( std::make_shared<Text>( spell.GetDescription(), FontType::normalWhite() ) );
 
-            showMessage( Text( "", FontType::normalWhite() ), Text( bonusData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
+            showMessage( Text( bonusData.getName(), FontType::normalYellow() ), Text( bonusData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
                          { &spellUI, &spellDescriptionUI } );
             break;
         }
@@ -96,7 +98,7 @@ namespace fheroes2
         case Campaign::ScenarioBonusData::STARTING_RACE_AND_ARMY: {
             const CustomImageDialogElement raceUI( AGG::GetICN( ICN::Get4Captain( bonusData._subType ), 1 ) );
 
-            showMessage( Text( "", FontType::normalWhite() ), Text( bonusData.getDescription(), FontType::normalWhite() ), Dialog::ZERO, { &raceUI } );
+            showMessage( Text( bonusData.getName(), FontType::normalYellow() ), Text( bonusData.getDescription(), FontType::normalWhite() ), Dialog::ZERO, { &raceUI } );
             break;
         }
         case Campaign::ScenarioBonusData::SKILL_PRIMARY: {
@@ -104,7 +106,7 @@ namespace fheroes2
             const TextDialogElement skillDescriptionUI(
                 std::make_shared<Text>( Skill::Primary::StringDescription( bonusData._subType, nullptr ), FontType::normalWhite() ) );
 
-            showMessage( Text( "", FontType::normalWhite() ), Text( bonusData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
+            showMessage( Text( bonusData.getName(), FontType::normalYellow() ), Text( bonusData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
                          { &primarySkillUI, &skillDescriptionUI } );
             break;
         }
@@ -114,7 +116,7 @@ namespace fheroes2
             const SecondarySkillDialogElement secondarySkillUI( skill, fakeHero );
             const TextDialogElement skillDescriptionUI( std::make_shared<Text>( skill.GetDescription( fakeHero ), FontType::normalWhite() ) );
 
-            showMessage( Text( "", FontType::normalWhite() ), Text( bonusData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
+            showMessage( Text( bonusData.getName(), FontType::normalYellow() ), Text( bonusData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
                          { &secondarySkillUI, &skillDescriptionUI } );
             break;
         }
@@ -143,7 +145,7 @@ namespace fheroes2
                 uiElements.emplace_back( monsterUI.back().get() );
             }
 
-            showMessage( Text( "", FontType::normalWhite() ), Text( awardData.getDescription(), FontType::normalWhite() ), Dialog::ZERO, uiElements );
+            showMessage( Text( awardData.getName(), FontType::normalYellow() ), Text( awardData.getDescription(), FontType::normalWhite() ), Dialog::ZERO, uiElements );
             break;
         }
         case Campaign::CampaignAwardData::TYPE_GET_ARTIFACT: {
@@ -151,7 +153,7 @@ namespace fheroes2
             const ArtifactDialogElement artifactUI( artifact );
             const TextDialogElement artifactDescriptionUI( std::make_shared<Text>( artifact.GetDescription(), FontType::normalWhite() ) );
 
-            showMessage( Text( "", FontType::normalWhite() ), Text( awardData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
+            showMessage( Text( awardData.getName(), FontType::normalYellow() ), Text( awardData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
                          { &artifactUI, &artifactDescriptionUI } );
             break;
         }
@@ -168,7 +170,7 @@ namespace fheroes2
                 uiElements.emplace_back( monsterUI.back().get() );
             }
 
-            showMessage( Text( "", FontType::normalWhite() ), Text( awardData.getDescription(), FontType::normalWhite() ), Dialog::ZERO, uiElements );
+            showMessage( Text( awardData.getName(), FontType::normalYellow() ), Text( awardData.getDescription(), FontType::normalWhite() ), Dialog::ZERO, uiElements );
             break;
         }
         case Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS: {
@@ -176,7 +178,8 @@ namespace fheroes2
             const std::string resourceAmount = std::to_string( awardData._amount );
             const ResourceDialogElement resourceUI( resourceType, ( awardData._amount > 0 ? "+" + resourceAmount : resourceAmount ) );
 
-            showMessage( Text( "", FontType::normalWhite() ), Text( awardData.getDescription(), FontType::normalWhite() ), Dialog::ZERO, { &resourceUI } );
+            showMessage( Text( awardData.getName(), FontType::normalYellow() ), Text( awardData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
+                         { &resourceUI } );
             break;
         }
         case Campaign::CampaignAwardData::TYPE_GET_SPELL: {
@@ -184,7 +187,7 @@ namespace fheroes2
             const SpellDialogElement spellUI( spell, nullptr );
             const TextDialogElement spellDescriptionUI( std::make_shared<Text>( spell.GetDescription(), FontType::normalWhite() ) );
 
-            showMessage( Text( "", FontType::normalWhite() ), Text( awardData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
+            showMessage( Text( awardData.getName(), FontType::normalYellow() ), Text( awardData.getDescription(), FontType::normalWhite() ), Dialog::ZERO,
                          { &spellUI, &spellDescriptionUI } );
             break;
         }
@@ -196,7 +199,7 @@ namespace fheroes2
 
             const CustomImageDialogElement heroUI( std::move( output ) );
 
-            showMessage( Text( "", FontType::normalWhite() ), Text( awardData.getDescription(), FontType::normalWhite() ), Dialog::ZERO, { &heroUI } );
+            showMessage( Text( awardData.getName(), FontType::normalYellow() ), Text( awardData.getDescription(), FontType::normalWhite() ), Dialog::ZERO, { &heroUI } );
             break;
         }
         default:
