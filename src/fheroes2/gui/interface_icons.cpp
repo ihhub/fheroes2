@@ -23,13 +23,13 @@
 
 #include "interface_icons.h"
 #include "agg_image.h"
-#include "castle_ui.h"
 #include "game.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "icn.h"
 #include "kingdom.h"
 #include "settings.h"
+#include "ui_castle.h"
 #include "world.h"
 
 namespace
