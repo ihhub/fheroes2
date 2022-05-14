@@ -54,7 +54,7 @@ namespace
             { "uk", fheroes2::SupportedLanguage::Ukrainian },  { "ukrainian", fheroes2::SupportedLanguage::Ukrainian },
             { "bg", fheroes2::SupportedLanguage::Bulgarian },  { "bulgarian", fheroes2::SupportedLanguage::Bulgarian },
             { "es", fheroes2::SupportedLanguage::Spanish },    { "spanish", fheroes2::SupportedLanguage::Spanish },
-            { "pt", fheroes2::SupportedLanguage::Portuguese },  { "portuguese", fheroes2::SupportedLanguage::Portuguese } };
+            { "pt", fheroes2::SupportedLanguage::Portuguese }, { "portuguese", fheroes2::SupportedLanguage::Portuguese } };
 }
 
 namespace fheroes2
@@ -100,7 +100,7 @@ namespace fheroes2
         const std::set<SupportedLanguage> possibleLanguages{ SupportedLanguage::French,     SupportedLanguage::Polish,    SupportedLanguage::German,
                                                              SupportedLanguage::Russian,    SupportedLanguage::Italian,   SupportedLanguage::Norwegian,
                                                              SupportedLanguage::Belarusian, SupportedLanguage::Bulgarian, SupportedLanguage::Ukrainian,
-                                                             SupportedLanguage::Romanian,   SupportedLanguage::Spanish, SupportedLanguage::Portuguese };
+                                                             SupportedLanguage::Romanian,   SupportedLanguage::Spanish,   SupportedLanguage::Portuguese };
 
         for ( const SupportedLanguage language : possibleLanguages ) {
             if ( language != resourceLanguage && isAlphabetSupported( language ) ) {
