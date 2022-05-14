@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-14 00:18+0000\n"
+"POT-Creation-Date: 2022-05-14 11:28+0000\n"
 "PO-Revision-Date: 2022-05-12 17:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -4118,6 +4118,9 @@ msgstr "Ukrainisch"
 
 msgid "Romanian"
 msgstr "Rumänisch"
+
+msgid "Spanish"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ", FPS: "
