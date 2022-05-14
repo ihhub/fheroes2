@@ -2035,6 +2035,7 @@ namespace fheroes2
         case SupportedLanguage::German:
         case SupportedLanguage::Italian:
         case SupportedLanguage::Norwegian:
+        case SupportedLanguage::Portuguese:
         case SupportedLanguage::Spanish:
             generateCP1252Alphabet( icnVsSprite );
             break;
