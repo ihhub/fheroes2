@@ -2064,6 +2064,7 @@ namespace fheroes2
         case SupportedLanguage::Russian:
         case SupportedLanguage::Belarusian:
         case SupportedLanguage::Bulgarian:
+        case SupportedLanguage::Portuguese:
         case SupportedLanguage::Spanish:
         case SupportedLanguage::Ukrainian:
         case SupportedLanguage::Romanian:
