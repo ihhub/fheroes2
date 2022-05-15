@@ -193,7 +193,7 @@ public:
     void recruitBestAvailable( Funds budget );
     uint32_t getRecruitLimit( const Monster & monster, const Funds & budget ) const;
 
-    void RecruitCastleMax( const Troops & currentCastleArmy, std::vector<u32> allCastleDwellings );
+    void RecruitCastleMax( const Troops & currentCastleArmy, const std::vector<u32> & allCastleDwellings );
 
     int getBuildingValue() const;
 

@@ -101,7 +101,7 @@ namespace
 
 }
 
-void Castle::RecruitCastleMax( const Troops & currentCastleArmy, std::vector<u32> allCastleDwellings )
+void Castle::RecruitCastleMax( const Troops & currentCastleArmy, const std::vector<u32> & allCastleDwellings )
 {
     std::vector<Troop> totalRecruitmentResult;
     Funds currentMonsterCost;
