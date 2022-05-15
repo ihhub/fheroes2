@@ -98,10 +98,10 @@ namespace
 
         return BUILD_NOTHING;
     }
-   
+
 }
 
- void Castle::RecruitCastleMax( const Troops & currentCastleArmy, std::vector<u32> allCastleDwellings )
+void Castle::RecruitCastleMax( const Troops & currentCastleArmy, std::vector<u32> allCastleDwellings )
 {
     std::vector<Troop> totalRecruitmentResult;
     Funds currentMonsterCost;
@@ -153,26 +153,23 @@ namespace
         }
         if ( isCreaturePresent ) {
             if ( !canAffordOneCreature ) {
-                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Not enough resources to buy creatures." ), normalWhite ),
-                                       Dialog::OK );
+                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Not enough resources to buy creatures." ), normalWhite ), Dialog::OK );
             }
             else {
-                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "There is no room in the garrison for new creatures." ), normalWhite ),
-                                       Dialog::OK );
+                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "There is no room in the garrison for new creatures." ), normalWhite ), Dialog::OK );
             }
         }
         else {
-            fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "No creatures available for purchase." ), normalWhite ),
-                                   Dialog::OK );
+            fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "No creatures available for purchase." ), normalWhite ), Dialog::OK );
         }
     }
     else if ( fheroes2::showResourceMessage( fheroes2::Text( _( "Recruit these troops?" ), fheroes2::FontType::normalYellow() ),
                                              fheroes2::Text( monstersRecruitedText, normalWhite ), Dialog::YES | Dialog::NO, totalMonstersCost )
               == Dialog::YES ) {
-             for ( const Troop & troop : totalRecruitmentResult ) {
+         for ( const Troop & troop : totalRecruitmentResult ) {
             RecruitMonster( troop, false );
-             }
          }
+    }
 }
 
 void Castle::OpenWell( void )
