@@ -166,9 +166,9 @@ void Castle::RecruitCastleMax( const Troops & currentCastleArmy, std::vector<u32
     else if ( fheroes2::showResourceMessage( fheroes2::Text( _( "Recruit these troops?" ), fheroes2::FontType::normalYellow() ),
                                              fheroes2::Text( monstersRecruitedText, normalWhite ), Dialog::YES | Dialog::NO, totalMonstersCost )
               == Dialog::YES ) {
-         for ( const Troop & troop : totalRecruitmentResult ) {
+        for ( const Troop & troop : totalRecruitmentResult ) {
             RecruitMonster( troop, false );
-         }
+        }
     }
 }
 
