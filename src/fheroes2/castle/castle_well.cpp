@@ -156,14 +156,14 @@ void Castle::RecruitCastleMax( const Troops & currentCastleArmy, const std::vect
                 fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Not enough resources to buy creatures." ), normalWhite ), Dialog::OK );
             }
             else {
-                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "There is no room in the garrison for new creatures." ), normalWhite ), Dialog::OK );
+                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "You are unable to recruit at this time, your ranks are full." ), normalWhite ), Dialog::OK );
             }
         }
         else {
             fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "No creatures available for purchase." ), normalWhite ), Dialog::OK );
         }
     }
-    else if ( fheroes2::showResourceMessage( fheroes2::Text( _( "Recruit these troops?" ), fheroes2::FontType::normalYellow() ),
+    else if ( fheroes2::showResourceMessage( fheroes2::Text( _( "Recruit Creatures" ), fheroes2::FontType::normalYellow() ),
                                              fheroes2::Text( monstersRecruitedText, normalWhite ), Dialog::YES | Dialog::NO, totalMonstersCost )
               == Dialog::YES ) {
         for ( const Troop & troop : totalRecruitmentResult ) {
