@@ -45,10 +45,10 @@ namespace
 {
     const int32_t bottomBarOffsetY = 461;
 
-    uint32_t HowManyRecruitMonster( const Castle & castle, Troops & tempArmy, const uint32_t dw, const Funds & add, Funds & res )
+    uint32_t HowManyRecruitMonster( const Castle & castle, Troops & tempCastleArmy, Troops & tempHeroArmy, const uint32_t dw, const Funds & add, Funds & res )
     {
-        const Monster ms( castle.GetRace(), castle.GetActualDwelling( dw ) );
-        if ( !tempArmy.CanJoinTroop( ms ) )
+        const Monster monsters( castle.GetRace(), castle.GetActualDwelling( dw ) );
+        if ( !tempCastleArmy.CanJoinTroop( monsters ) && !tempHeroArmy.CanJoinTroop( monsters ) )
             return 0;
 
         uint32_t count = castle.getMonstersInDwelling( dw );
@@ -57,7 +57,7 @@ namespace
         const Kingdom & kingdom = castle.GetKingdom();
 
         while ( count ) {
-            payment = ms.GetCost() * count;
+            payment = monsters.GetCost() * count;
             res = payment;
             payment += add;
             if ( kingdom.AllowPayment( payment ) )
@@ -66,7 +66,10 @@ namespace
         }
 
         if ( count > 0 ) {
-            tempArmy.JoinTroop( ms, count );
+            if ( tempCastleArmy.CanJoinTroop( monsters ) )
+                tempCastleArmy.JoinTroop( monsters, count );
+            else if ( tempHeroArmy.CanJoinTroop( monsters ) )
+                tempHeroArmy.JoinTroop( monsters, count );
         }
 
         return count;
@@ -100,45 +103,69 @@ namespace
 
  void Castle::RecruitCastleMax( const Troops & currentCastleArmy, std::vector<u32> allCastleDwellings )
 {
-    std::vector<Troop> results;
-    Funds cur;
-    Funds total;
-    std::string str;
+    std::vector<Troop> totalRecruitmentResult;
+    Funds currentMonsterCost;
+    Funds totalMonstersCost;
+    std::string monstersRecruitedText;
 
-    Troops tempArmy( currentCastleArmy );
+    Troops tempCastleArmy( currentCastleArmy );
+    Troops tempGuestArmy;
+
+    const CastleHeroes heroes = GetHeroes();
+
+    if ( heroes.Guest() ) {
+        tempGuestArmy = heroes.Guest()->GetArmy();
+    }
 
     for ( const uint32_t dwellingType : allCastleDwellings ) {
-        const uint32_t canRecruit = HowManyRecruitMonster( *this, tempArmy, dwellingType, total, cur );
-        if ( canRecruit != 0 ) {
-            const Monster ms( race, GetActualDwelling( dwellingType ) );
-            results.emplace_back( ms, canRecruit );
-            total += cur;
-            str.append( ms.GetPluralName( canRecruit ) );
-            str.append( " - " );
-            str.append( std::to_string( canRecruit ) );
-            str += '\n';
+        const uint32_t recruitableNumber = HowManyRecruitMonster( *this, tempCastleArmy, tempGuestArmy, dwellingType, totalMonstersCost, currentMonsterCost );
+
+        if ( recruitableNumber ) {
+            const Monster recruitableMonster( race, GetActualDwelling( dwellingType ) );
+
+            totalRecruitmentResult.emplace_back( recruitableMonster, recruitableNumber );
+            totalMonstersCost += currentMonsterCost;
+
+            monstersRecruitedText.append( recruitableMonster.GetPluralName( recruitableNumber ) );
+            monstersRecruitedText.append( " - " );
+            monstersRecruitedText.append( std::to_string( recruitableNumber ) );
+            monstersRecruitedText += '\n';
         }
     }
 
-    if ( str.empty() ) {
+    if ( monstersRecruitedText.empty() ) {
         bool isCreaturePresent = false;
-        for ( int i = 0; i < CASTLEMAXMONSTER; ++i ) {
-            if ( dwelling[i] > 0 ) {
+        bool canAffordOneCreature = false;
+
+        for ( uint32_t currentDwelling = DWELLING_MONSTER1; currentDwelling <= DWELLING_MONSTER6; currentDwelling <<= 1 ) {
+            if ( getMonstersInDwelling( currentDwelling ) > 0 ) {
+                const Monster monsters( race, currentDwelling );
+                const payment_t payment = monsters.GetCost();
+
+                if ( GetKingdom().AllowPayment( payment ) ) {
+                    canAffordOneCreature = true;
+                }
                 isCreaturePresent = true;
                 break;
             }
         }
+        
         if ( isCreaturePresent ) {
-            Dialog::Message( "", _( "Not enough resources to buy creatures." ), Font::BIG, Dialog::OK );
+            if ( !canAffordOneCreature ) {
+                Dialog::Message( "", _( "Not enough resources to buy creatures." ), Font::BIG, Dialog::OK );
+            }
+            else {
+                Dialog::Message( "", _( "There is no room in the garrison for new creatures." ), Font::BIG, Dialog::OK );
+            }
         }
         else {
             Dialog::Message( "", _( "No creatures available for purchase." ), Font::BIG, Dialog::OK );
         }
     }
     else if ( fheroes2::showResourceMessage( fheroes2::Text( _( "Buy Creatures" ), fheroes2::FontType::normalYellow() ),
-                                             fheroes2::Text( str, fheroes2::FontType::normalWhite() ), Dialog::YES | Dialog::NO, total )
+                                             fheroes2::Text( monstersRecruitedText, fheroes2::FontType::normalWhite() ), Dialog::YES | Dialog::NO, totalMonstersCost )
               == Dialog::YES ) {
-        for ( const Troop & troop : results ) {
+        for ( const Troop & troop : totalRecruitmentResult ) {
             RecruitMonster( troop, false );
         }
     }
