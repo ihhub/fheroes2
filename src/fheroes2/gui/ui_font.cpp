@@ -1381,6 +1381,9 @@ namespace
             font[198 - 32].setPosition( font[33].x(), font[33].y() );
             updateNormalFontLetterShadow( font[198 - 32] );
 
+            // C with cedilla.
+            font[199 - 32] = font[35];
+
             // E with grave accent `.
             font[200 - 32].resize( font[37].width(), font[37].height() + 3 );
             font[200 - 32].reset();
@@ -1567,6 +1570,9 @@ namespace
             fheroes2::Copy( font[69], 3, 0, font[230 - 32], 8, 0, 6, 8 );
             font[230 - 32].setPosition( font[65].x(), font[65].y() );
             updateNormalFontLetterShadow( font[230 - 32] );
+
+            // c with cedilla.
+            font[231 - 32] = font[67];
 
             // e with grave accent `.
             font[232 - 32].resize( font[69].width(), font[69].height() + 3 );
@@ -1778,6 +1784,9 @@ namespace
             font[198 - 32].setPosition( font[33].x(), font[33].y() );
             updateSmallFontLetterShadow( font[198 - 32] );
 
+            // C with cedilla.
+            font[199 - 32] = font[35];
+
             // E with grave accent `.
             font[200 - 32].resize( font[37].width(), font[37].height() + 4 );
             font[200 - 32].reset();
@@ -1948,6 +1957,9 @@ namespace
             fheroes2::Copy( font[69], 2, 0, font[230 - 32], 6, 0, font[69].width() - 2, font[69].height() );
             font[230 - 32].setPosition( font[65].x(), font[65].y() );
             updateSmallFontLetterShadow( font[230 - 32] );
+
+            // c with cedilla.
+            font[231 - 32] = font[67];
 
             // e with grave accent `.
             font[232 - 32].resize( font[69].width(), font[69].height() + 3 );
