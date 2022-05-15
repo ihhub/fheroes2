@@ -114,7 +114,7 @@ void Castle::RecruitCastleMax( const Troops & currentCastleArmy, const std::vect
     const CastleHeroes heroes = GetHeroes();
 
     if ( heroes.Guest() ) {
-        tempGuestArmy = heroes.Guest()->GetArmy();
+        tempGuestArmy = heroes.Guest()->GetArmy().getTroops();
     }
 
     for ( const uint32_t dwellingType : allCastleDwellings ) {
