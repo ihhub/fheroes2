@@ -36,7 +36,7 @@
 #include "monster_anim.h"
 #include "resource.h"
 #include "speed.h"
-#include "text.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
@@ -126,12 +126,14 @@ namespace
             totalRecruitmentResult.emplace_back( recruitableMonster, recruitableNumber );
             totalMonstersCost += currentMonsterCost;
 
-            monstersRecruitedText.append( recruitableMonster.GetPluralName( recruitableNumber ) );
-            monstersRecruitedText.append( " - " );
-            monstersRecruitedText.append( std::to_string( recruitableNumber ) );
+            monstersRecruitedText.append( _( "%{monster} : %{amount}" ) );
+            StringReplace( monstersRecruitedText, "%{monster}", recruitableMonster.GetPluralName( recruitableNumber ) );
+            StringReplace( monstersRecruitedText, "%{amount}", std::to_string( recruitableNumber ) );
             monstersRecruitedText += '\n';
         }
     }
+
+    const fheroes2::FontType normalWhite = fheroes2::FontType::normalWhite();
 
     if ( monstersRecruitedText.empty() ) {
         bool isCreaturePresent = false;
@@ -149,26 +151,28 @@ namespace
                 break;
             }
         }
-        
         if ( isCreaturePresent ) {
             if ( !canAffordOneCreature ) {
-                Dialog::Message( "", _( "Not enough resources to buy creatures." ), Font::BIG, Dialog::OK );
+                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Not enough resources to buy creatures." ), normalWhite ),
+                                       Dialog::OK );
             }
             else {
-                Dialog::Message( "", _( "There is no room in the garrison for new creatures." ), Font::BIG, Dialog::OK );
+                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "There is no room in the garrison for new creatures." ), normalWhite ),
+                                       Dialog::OK );
             }
         }
         else {
-            Dialog::Message( "", _( "No creatures available for purchase." ), Font::BIG, Dialog::OK );
+            fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "No creatures available for purchase." ), normalWhite ),
+                                   Dialog::OK );
         }
     }
-    else if ( fheroes2::showResourceMessage( fheroes2::Text( _( "Buy Creatures" ), fheroes2::FontType::normalYellow() ),
-                                             fheroes2::Text( monstersRecruitedText, fheroes2::FontType::normalWhite() ), Dialog::YES | Dialog::NO, totalMonstersCost )
+    else if ( fheroes2::showResourceMessage( fheroes2::Text( _( "Recruit these troops?" ), fheroes2::FontType::normalYellow() ),
+                                             fheroes2::Text( monstersRecruitedText, normalWhite ), Dialog::YES | Dialog::NO, totalMonstersCost )
               == Dialog::YES ) {
-        for ( const Troop & troop : totalRecruitmentResult ) {
+             for ( const Troop & troop : totalRecruitmentResult ) {
             RecruitMonster( troop, false );
-        }
-    }
+             }
+         }
 }
 
 void Castle::OpenWell( void )
