@@ -98,7 +98,6 @@ namespace
 
         return BUILD_NOTHING;
     }
-
 }
 
 void Castle::RecruitCastleMax( const Troops & currentCastleArmy, const std::vector<u32> & allCastleDwellings )
@@ -153,7 +152,7 @@ void Castle::RecruitCastleMax( const Troops & currentCastleArmy, const std::vect
         }
         if ( isCreaturePresent ) {
             if ( !canAffordOneCreature ) {
-                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Not enough resources to buy creatures." ), normalWhite ), Dialog::OK );
+                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "Not enough resources to recruit creatures." ), normalWhite ), Dialog::OK );
             }
             else {
                 fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "You are unable to recruit at this time, your ranks are full." ), normalWhite ),
