@@ -931,9 +931,4 @@ namespace fheroes2
 
         return spellResistance;
     }
-
-    bool isAbilityPresent( const int monsterId, const MonsterAbilityType abilityType )
-    {
-        return ::isAbilityPresent( getMonsterData( monsterId ).battleStats.abilities, abilityType );
-    }
 }

@@ -196,7 +196,5 @@ namespace fheroes2
     std::vector<std::string> getMonsterPropertiesDescription( const int monsterId );
 
     uint32_t getSpellResistance( const int monsterId, const int spellId );
-
-    bool isAbilityPresent( const int monsterId, const MonsterAbilityType abilityType );
 }
 #endif
