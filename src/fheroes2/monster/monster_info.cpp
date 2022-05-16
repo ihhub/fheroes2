@@ -38,44 +38,50 @@ namespace
 {
     std::vector<fheroes2::MonsterData> monsterData;
 
-    double getMonsterBaseStrength( const int monsterId )
+    bool isAbilityPresent( const std::vector<fheroes2::MonsterAbility> & abilities, const fheroes2::MonsterAbilityType abilityType )
     {
-        const fheroes2::MonsterBattleStats & battleStats = fheroes2::getMonsterData( monsterId ).battleStats;
+        return std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( abilityType ) ) != abilities.end();
+    }
 
-        const double effectiveHP = battleStats.hp * ( isAbilityPresent( monsterId, fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION ) ? 1.4 : 1 );
+    double getMonsterBaseStrength( const int monsterId, const fheroes2::MonsterData & data )
+    {
+        const fheroes2::MonsterBattleStats & battleStats = data.battleStats;
+        const std::vector<fheroes2::MonsterAbility> & abilities = battleStats.abilities;
+
+        const double effectiveHP = battleStats.hp * ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION ) ? 1.4 : 1 );
         const bool isArchers = ( battleStats.shots > 0 );
 
         double damagePotential = ( battleStats.damageMin + battleStats.damageMax ) / 2.0;
 
-        if ( isAbilityPresent( monsterId, fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK ) ) {
+        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK ) ) {
             // Melee attacker will lose potential on second attack after retaliation
-            damagePotential *= ( isArchers || isAbilityPresent( monsterId, fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION ) ) ? 2 : 1.75;
+            damagePotential *= ( isArchers || isAbilityPresent( abilities, fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION ) ) ? 2 : 1.75;
         }
 
-        if ( isAbilityPresent( monsterId, fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD ) ) {
+        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD ) ) {
             damagePotential *= 1.15; // 15% of all Monsters are Undead, deals double dmg
         }
 
-        if ( isAbilityPresent( monsterId, fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK ) ) {
+        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK ) ) {
             damagePotential *= 1.2;
         }
 
-        if ( isAbilityPresent( monsterId, fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
             damagePotential *= 1.25;
         }
 
-        if ( isAbilityPresent( monsterId, fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK )
-             || isAbilityPresent( monsterId, fheroes2::MonsterAbilityType::AREA_SHOT ) ) {
+        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK )
+             || isAbilityPresent( abilities, fheroes2::MonsterAbilityType::AREA_SHOT ) ) {
             damagePotential *= 1.3;
         }
 
         double monsterSpecial = 1.0;
 
         if ( isArchers ) {
-            monsterSpecial += isAbilityPresent( monsterId, fheroes2::MonsterAbilityType::NO_MELEE_PENALTY ) ? 0.5 : 0.4;
+            monsterSpecial += isAbilityPresent( abilities, fheroes2::MonsterAbilityType::NO_MELEE_PENALTY ) ? 0.5 : 0.4;
         }
 
-        if ( isAbilityPresent( monsterId, fheroes2::MonsterAbilityType::FLYING ) ) {
+        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::FLYING ) ) {
             monsterSpecial += 0.3;
         }
 
@@ -532,7 +538,7 @@ namespace
 
         // Calculate base value of monster strength.
         for ( int i = 0; i < Monster::MONSTER_COUNT; ++i ) {
-            monsterData[i].battleStats.monsterBaseStrength = getMonsterBaseStrength( i );
+            monsterData[i].battleStats.monsterBaseStrength = getMonsterBaseStrength( i, monsterData[i] );
         }
 
         // TODO: verify that no duplicates of abilities and weaknesses exist.
@@ -928,8 +934,6 @@ namespace fheroes2
 
     bool isAbilityPresent( const int monsterId, const MonsterAbilityType abilityType )
     {
-        const std::vector<MonsterAbility> & abilities = getMonsterData( monsterId ).battleStats.abilities;
-
-        return std::find( abilities.begin(), abilities.end(), MonsterAbility( abilityType ) ) != abilities.end();
+        return ::isAbilityPresent( getMonsterData( monsterId ).battleStats.abilities, abilityType );
     }
 }
