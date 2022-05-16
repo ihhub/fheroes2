@@ -85,24 +85,24 @@ namespace
             monsterSpecial += 0.3;
         }
 
+        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::ENEMY_HALFING ) ) {
+            monsterSpecial += 1;
+        }
+
+        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
+            monsterSpecial += 2;
+        }
+
+        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
+            monsterSpecial += 0.3;
+        }
+
         switch ( monsterId ) {
         case Monster::UNICORN:
         case Monster::CYCLOPS:
         case Monster::MEDUSA:
             // 20% to Blind, Paralyze and Petrify
             monsterSpecial += 0.2;
-            break;
-        case Monster::VAMPIRE_LORD:
-            // Lifesteal
-            monsterSpecial += 0.3;
-            break;
-        case Monster::GENIE:
-            // Genie's ability to half enemy troops
-            monsterSpecial += 1;
-            break;
-        case Monster::GHOST:
-            // Ghost's ability to increase the numbers
-            monsterSpecial += 2;
             break;
         default:
             break;
