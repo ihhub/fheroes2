@@ -189,7 +189,7 @@ namespace AI
         BattlePlanner _battlePlanner;
 
         // Monster strength is constant over the same turn for AI but its calculation is a heavy operation.
-        // In order to avoid extra computations during AI turn is it important to keep cache of monster strength but update it when an action on a monster is taken.
+        // In order to avoid extra computations during AI turn it is important to keep cache of monster strength but update it when an action on a monster is taken.
         std::map<int32_t, double> _neutralMonsterStrengthCache;
 
         double getHunterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
