@@ -199,7 +199,7 @@ namespace
             if ( hero.isObjectTypeVisited( objectType, Visit::GLOBAL )
                  && ( spell == Spell::VIEWARTIFACTS || spell == Spell::VIEWHEROES || spell == Spell::VIEWMINES || spell == Spell::VIEWRESOURCES
                       || spell == Spell::VIEWTOWNS || spell == Spell::IDENTIFYHERO || spell == Spell::VISIONS ) ) {
-                // AI never uses View spells.
+                // AI never uses View spells except "View All".
                 return false;
             }
             return true;
