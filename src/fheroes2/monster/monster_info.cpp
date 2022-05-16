@@ -215,9 +215,9 @@ namespace
             { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Random Monster 4
         };
 
-        // Monster abilities and weaknesses will be added later.
+        // Monster abilities and weaknesses will be added later. Base strength is calculated based on abilities.
         const fheroes2::MonsterBattleStats monsterBattleStats[Monster::MONSTER_COUNT] = {
-            // attack | defence | damageMin | damageMax | hp | speed | shots | abilities | weaknesses
+            // attack | defence | damageMin | damageMax | hp | speed | shots | baseStrength | abilities | weaknesses
             { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, 0, {}, {} }, // Unknown Monster
             { 1, 1, 1, 1, 1, Speed::VERYSLOW, 0, 0, {}, {} }, // Peasant
             { 5, 3, 2, 3, 10, Speed::VERYSLOW, 12, 0, {}, {} }, // Archer
