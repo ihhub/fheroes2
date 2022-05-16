@@ -276,12 +276,7 @@ public:
         return !( isUndead() || isElemental() );
     }
 
-    bool isAbilityPresent( const fheroes2::MonsterAbilityType abilityType ) const
-    {
-        const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( id ).battleStats.abilities;
-
-        return std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( abilityType ) ) != abilities.end();
-    }
+    bool isAbilityPresent( const fheroes2::MonsterAbilityType abilityType ) const;
 
     double GetMonsterStrength( int attack = -1, int defense = -1 ) const;
 

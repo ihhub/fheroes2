@@ -272,6 +272,13 @@ u32 Monster::GetRNDSize( bool skip_factor ) const
     return ( result > 1 ) ? Rand::Get( result / 2, result ) : 1;
 }
 
+bool Monster::isAbilityPresent( const fheroes2::MonsterAbilityType abilityType ) const
+{
+    const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( id ).battleStats.abilities;
+
+    return std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( abilityType ) ) != abilities.end();
+}
+
 Monster Monster::GetDowngrade() const
 {
     switch ( id ) {
