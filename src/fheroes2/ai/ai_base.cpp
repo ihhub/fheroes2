@@ -229,7 +229,7 @@ namespace AI
 
     void Base::BattleTurn( Battle::Arena &, const Battle::Unit & currentUnit, Battle::Actions & actions )
     {
-        // end action
+        // Since this is just a basic implementation - just finish the unit's turn
         actions.emplace_back( Battle::CommandType::MSG_BATTLE_END_TURN, currentUnit.GetUID() );
     }
 

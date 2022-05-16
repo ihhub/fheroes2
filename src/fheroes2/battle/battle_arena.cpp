@@ -394,6 +394,8 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::Determi
             board.SetCobjObjects( world.GetTiles( index ), seededGen );
     }
 
+    AI::Get().battleBegins();
+
     if ( interface ) {
         fheroes2::Display & display = fheroes2::Display::instance();
 
