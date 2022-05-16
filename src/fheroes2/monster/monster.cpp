@@ -179,8 +179,6 @@ double Monster::GetMonsterStrength( int attack, int defense ) const
         defense = GetDefense();
 
     const double attackDefense = 1.0 + attack * 0.1 + defense * 0.05;
-
-    // Additonal HP and Damage effectiveness diminishes with every combat round; strictly x4 HP == x2 unit count
     return attackDefense * fheroes2::getMonsterData( id ).battleStats.monsterBaseStrength;
 }
 
