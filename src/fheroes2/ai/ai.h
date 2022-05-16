@@ -69,16 +69,12 @@ namespace AI
     class Base
     {
     public:
-        virtual void KingdomTurn( Kingdom & kingdom );
-        virtual void CastleTurn( Castle & castle, bool defensive );
-        virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & unit, Battle::Actions & actions );
-        virtual void HeroTurn( Heroes & hero );
-        virtual bool HeroesTurn( VecHeroes & )
-        {
-            return true;
-        }
+        virtual void KingdomTurn( Kingdom & kingdom ) = 0;
+        virtual void CastleTurn( Castle & castle, bool defensive ) = 0;
+        virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & unit, Battle::Actions & actions ) = 0;
+        virtual bool HeroesTurn( VecHeroes & heroes ) = 0;
 
-        virtual void revealFog( const Maps::Tiles & tile );
+        virtual void revealFog( const Maps::Tiles & tile ) = 0;
 
         virtual void HeroesAdd( const Heroes & hero );
         virtual void HeroesRemove( const Heroes & hero );
@@ -98,7 +94,6 @@ namespace AI
         virtual void CastlePreBattle( Castle & castle );
         virtual void CastleAfterBattle( Castle & castle, bool attackerWins );
 
-        virtual const char * Type() const;
         virtual int GetPersonality() const; // To be utilized in future.
         virtual std::string GetPersonalityString() const;
 
