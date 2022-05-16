@@ -276,7 +276,10 @@ public:
         return !( isUndead() || isElemental() );
     }
 
-    bool isAbilityPresent( const fheroes2::MonsterAbilityType abilityType ) const;
+    bool isAbilityPresent( const fheroes2::MonsterAbilityType abilityType ) const
+    {
+        return fheroes2::isAbilityPresent( id, abilityType );
+    }
 
     double GetMonsterStrength( int attack = -1, int defense = -1 ) const;
 

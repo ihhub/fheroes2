@@ -134,6 +134,8 @@ namespace fheroes2
         uint32_t speed;
         uint32_t shots;
 
+        double monsterBaseStrength;
+
         std::vector<MonsterAbility> abilities;
         std::vector<MonsterWeakness> weaknesses;
     };
@@ -194,5 +196,7 @@ namespace fheroes2
     std::vector<std::string> getMonsterPropertiesDescription( const int monsterId );
 
     uint32_t getSpellResistance( const int monsterId, const int spellId );
+
+    bool isAbilityPresent( const int monsterId, const MonsterAbilityType abilityType );
 }
 #endif
