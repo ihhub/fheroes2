@@ -308,11 +308,6 @@ void Kingdom::RemoveCastle( const Castle * castle )
         LossPostActions();
 }
 
-bool Kingdom::isLosingGame() const
-{
-    return castles.empty();
-}
-
 u32 Kingdom::GetCountCastle( void ) const
 {
     return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), Castle::PredicateIsCastle ) );

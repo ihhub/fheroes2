@@ -167,7 +167,7 @@ namespace AI
         void revealFog( const Maps::Tiles & tile ) override;
 
         void HeroesPreBattle( HeroBase & hero, bool isAttacking ) override;
-        void HeroesActionComplete( Heroes & hero ) override;
+        void HeroesActionComplete( Heroes & hero, const MP2::MapObjectType objectType ) override;
 
         bool recruitHero( Castle & castle, bool buyArmy, bool underThreat );
         void evaluateRegionSafety();
@@ -178,6 +178,8 @@ namespace AI
         int getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority );
         void resetPathfinder() override;
 
+        double getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType );
+
     private:
         // following data won't be saved/serialized
         double _combinedHeroStrength = 0;
@@ -186,11 +188,20 @@ namespace AI
         AIWorldPathfinder _pathfinder;
         BattlePlanner _battlePlanner;
 
+        // Monster strength is constant over the same turn for AI but its calculation is a heavy operation.
+        // In order to avoid extra computations during AI turn is it important to keep cache of monster strength but update it when an action on a monster is taken.
+        std::map<int32_t, double> _neutralMonsterStrengthCache;
+
         double getHunterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getFighterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
 
         bool purchaseNewHeroes( const std::vector<AICastle> & sortedCastleList, const std::set<int> & castlesInDanger, int32_t availableHeroCount,
                                 bool moreTasksForHeroes );
+
+        static bool isMonsterStrengthCacheable( const MP2::MapObjectType objectType )
+        {
+            return objectType == MP2::OBJ_MONSTER;
+        }
     };
 }
 
