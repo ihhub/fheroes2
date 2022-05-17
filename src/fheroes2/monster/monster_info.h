@@ -134,6 +134,8 @@ namespace fheroes2
         uint32_t speed;
         uint32_t shots;
 
+        double monsterBaseStrength;
+
         std::vector<MonsterAbility> abilities;
         std::vector<MonsterWeakness> weaknesses;
     };

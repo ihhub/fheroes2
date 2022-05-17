@@ -170,8 +170,6 @@ uint32_t Monster::GetShots() const
 // Doesn't account for situational special bonuses such as spell immunity
 double Monster::GetMonsterStrength( int attack, int defense ) const
 {
-    const fheroes2::MonsterBattleStats & battleStats = fheroes2::getMonsterData( id ).battleStats;
-
     // If no modified values were provided then re-calculate
     // GetAttack and GetDefense will call overloaded versions accounting for Hero bonuses
     if ( attack == -1 )
@@ -181,61 +179,7 @@ double Monster::GetMonsterStrength( int attack, int defense ) const
         defense = GetDefense();
 
     const double attackDefense = 1.0 + attack * 0.1 + defense * 0.05;
-    const double effectiveHP = battleStats.hp * ( ignoreRetaliation() ? 1.4 : 1 );
-
-    double damagePotential = ( battleStats.damageMin + battleStats.damageMax ) / 2.0;
-
-    if ( isDoubleAttack() ) {
-        // Melee attacker will lose potential on second attack after retaliation
-        damagePotential *= ( isArchers() || ignoreRetaliation() ) ? 2 : 1.75;
-    }
-    if ( isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD ) )
-        damagePotential *= 1.15; // 15% of all Monsters are Undead, deals double dmg
-    if ( isDoubleCellAttack() )
-        damagePotential *= 1.2;
-    if ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) )
-        damagePotential *= 1.25;
-    if ( isAbilityPresent( fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK ) || isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) )
-        damagePotential *= 1.3;
-
-    double monsterSpecial = 1.0;
-    if ( isArchers() ) {
-        monsterSpecial += isAbilityPresent( fheroes2::MonsterAbilityType::NO_MELEE_PENALTY ) ? 0.5 : 0.4;
-    }
-    if ( isFlying() ) {
-        monsterSpecial += 0.3;
-    }
-
-    switch ( id ) {
-    case Monster::UNICORN:
-    case Monster::CYCLOPS:
-    case Monster::MEDUSA:
-        // 20% to Blind, Paralyze and Petrify
-        monsterSpecial += 0.2;
-        break;
-    case Monster::VAMPIRE_LORD:
-        // Lifesteal
-        monsterSpecial += 0.3;
-        break;
-    case Monster::GENIE:
-        // Genie's ability to half enemy troops
-        monsterSpecial += 1;
-        break;
-    case Monster::GHOST:
-        // Ghost's ability to increase the numbers
-        monsterSpecial += 2;
-        break;
-    default:
-        break;
-    }
-
-    // Higher speed gives initiative advantage/first attack. Remap speed value to -0.2...+0.15, AVERAGE is 0
-    // Punish slow speeds more as unit won't participate in first rounds and slows down strategic army
-    const int speedDiff = battleStats.speed - Speed::AVERAGE;
-    monsterSpecial += ( speedDiff < 0 ) ? speedDiff * 0.1 : speedDiff * 0.05;
-
-    // Additonal HP and Damage effectiveness diminishes with every combat round; strictly x4 HP == x2 unit count
-    return sqrt( damagePotential * effectiveHP ) * attackDefense * monsterSpecial;
+    return attackDefense * fheroes2::getMonsterData( id ).battleStats.monsterBaseStrength;
 }
 
 u32 Monster::GetRNDSize( bool skip_factor ) const
