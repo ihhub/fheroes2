@@ -25,6 +25,7 @@
 #define H2AI_H
 
 #include "gamedefs.h"
+#include "mp2.h"
 #include "rand.h"
 
 class StreamBase;
@@ -83,7 +84,7 @@ namespace AI
         virtual void HeroesPostLoad( Heroes & hero );
         virtual bool HeroesCanMove( const Heroes & hero );
         virtual bool HeroesGetTask( Heroes & hero );
-        virtual void HeroesActionComplete( Heroes & hero );
+        virtual void HeroesActionComplete( Heroes & hero, const MP2::MapObjectType objectType );
         virtual void HeroesActionNewPosition( Heroes & hero );
         virtual void HeroesClearTask( const Heroes & hero );
         virtual void HeroesLevelUp( Heroes & hero );
@@ -119,7 +120,7 @@ namespace AI
     Base & Get( AI_TYPE type = AI_TYPE::NORMAL );
 
     // functionality in ai_hero_action.cpp
-    void HeroesAction( Heroes & hero, s32 dst_index );
+    void HeroesAction( Heroes & hero, const int32_t dst_index );
     void HeroesMove( Heroes & hero );
     void HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex );
     bool HeroesCastAdventureSpell( Heroes & hero, const Spell & spell );

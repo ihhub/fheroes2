@@ -360,7 +360,7 @@ namespace fheroes2
 #elif defined( BYTE_ORDER ) && defined( BIG_ENDIAN ) && BYTE_ORDER == BIG_ENDIAN
         std::reverse_copy( begin, end, reinterpret_cast<char *>( &result ) );
 #else
-        static_assert( false, "Unknown byte order" );
+#error "Unknown byte order"
 #endif
 
         return result;
