@@ -205,8 +205,6 @@ namespace AI
 
     bool BattlePlanner::isLimitOfTurnsExceeded( const Arena & arena, Actions & actions )
     {
-        assert( MAX_TURNS_WITHOUT_DEATHS > 0 );
-
         const int currentColor = arena.GetCurrentColor();
 
         // Not the attacker's turn, no further checks
