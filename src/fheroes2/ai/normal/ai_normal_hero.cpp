@@ -35,31 +35,42 @@
 
 namespace
 {
-    bool AIShouldVisitCastle( const Heroes & hero, int castleIndex )
+    bool AIShouldVisitCastle( const Heroes & hero, int castleIndex, const double heroArmyStrength )
     {
         const Castle * castle = world.getCastleEntrance( Maps::GetPoint( castleIndex ) );
-        if ( castle ) {
-            if ( hero.GetColor() == castle->GetColor() ) {
-                return castle->GetHeroes().Guest() == nullptr;
-            }
-            else if ( !hero.isFriends( castle->GetColor() ) ) {
-                const double advantage = hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_MEDIUM;
-                return hero.GetArmy().GetStrength() > castle->GetGarrisonStrength( &hero ) * advantage;
-            }
+        if ( castle == nullptr ) {
+            return false;
         }
+
+        if ( hero.GetColor() == castle->GetColor() ) {
+            return castle->GetHeroes().Guest() == nullptr;
+        }
+
+        if ( !hero.isFriends( castle->GetColor() ) ) {
+            const double advantage = hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_MEDIUM;
+            return heroArmyStrength > castle->GetGarrisonStrength( &hero ) * advantage;
+        }
+
         return false;
     }
 
-    bool HeroesValidObject( const Heroes & hero, const int32_t index, const AIWorldPathfinder & pathfinder )
+    bool isHeroStrongerThan( const Maps::Tiles & tile, const MP2::MapObjectType objectType, AI::Normal & ai, const double heroArmyStrength,
+                             const double targetStrengthMultiplier )
+    {
+        return heroArmyStrength > ai.getTargetArmyStrength( tile, objectType ) * targetStrengthMultiplier;
+    }
+
+    bool HeroesValidObject( const Heroes & hero, const int32_t index, const AIWorldPathfinder & pathfinder, AI::Normal & ai, const double heroArmyStrength )
     {
         const Maps::Tiles & tile = world.GetTiles( index );
         const MP2::MapObjectType objectType = tile.GetObject();
-        const Army & army = hero.GetArmy();
-        const Kingdom & kingdom = hero.GetKingdom();
 
         if ( !MP2::isActionObject( objectType ) ) {
             return false;
         }
+
+        const Army & army = hero.GetArmy();
+        const Kingdom & kingdom = hero.GetKingdom();
 
         switch ( objectType ) {
         case MP2::OBJ_SHIPWRECKSURVIVOR:
@@ -69,7 +80,7 @@ namespace
             return hero.isShipMaster();
 
         case MP2::OBJ_BUOY:
-            return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD && !hero.GetArmy().AllTroopsAreUndead();
+            return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD && !army.AllTroopsAreUndead();
 
         case MP2::OBJ_MERMAID:
             return !hero.isObjectTypeVisited( objectType ) && hero.GetLuck() < Luck::IRISH;
@@ -95,8 +106,7 @@ namespace
         case MP2::OBJ_LIGHTHOUSE:
             if ( !hero.isFriends( tile.QuantityColor() ) ) {
                 if ( tile.isCaptureObjectProtected() ) {
-                    const Army enemy( tile );
-                    return army.isStrongerThan( enemy, AI::ARMY_ADVANTAGE_SMALL );
+                    return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_SMALL );
                 }
 
                 return true;
@@ -106,8 +116,7 @@ namespace
         case MP2::OBJ_ABANDONEDMINE:
             if ( !hero.isFriends( tile.QuantityColor() ) ) {
                 if ( tile.isCaptureObjectProtected() ) {
-                    const Army enemy( tile );
-                    return army.isStrongerThan( enemy, AI::ARMY_ADVANTAGE_LARGE );
+                    return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
                 }
 
                 return true;
@@ -124,8 +133,7 @@ namespace
         case MP2::OBJ_WINDMILL:
             if ( Settings::Get().ExtWorldExtObjectsCaptured() && !hero.isFriends( tile.QuantityColor() ) ) {
                 if ( tile.isCaptureObjectProtected() ) {
-                    const Army enemy( tile );
-                    return army.isStrongerThan( enemy, AI::ARMY_ADVANTAGE_MEDIUM );
+                    return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
                 }
 
                 return true;
@@ -158,8 +166,7 @@ namespace
 
             // 6 - 50 rogues, 7 - 1 gin, 8,9,10,11,12,13 - 1 monster level4
             if ( 5 < variants && 14 > variants ) {
-                Army enemy( tile );
-                return army.isStrongerThan( enemy, AI::ARMY_ADVANTAGE_LARGE );
+                return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
             }
 
             // other
@@ -190,9 +197,9 @@ namespace
             }
 
             if ( hero.isObjectTypeVisited( objectType, Visit::GLOBAL )
-                 && ( spell == Spell::VIEWALL || spell == Spell::VIEWARTIFACTS || spell == Spell::VIEWHEROES || spell == Spell::VIEWMINES || spell == Spell::VIEWRESOURCES
+                 && ( spell == Spell::VIEWARTIFACTS || spell == Spell::VIEWHEROES || spell == Spell::VIEWMINES || spell == Spell::VIEWRESOURCES
                       || spell == Spell::VIEWTOWNS || spell == Spell::IDENTIFYHERO || spell == Spell::VISIONS ) ) {
-                // AI never uses View spells.
+                // AI never uses View spells except "View All".
                 return false;
             }
             return true;
@@ -216,7 +223,7 @@ namespace
                 return false;
             }
 
-            if ( hero.GetArmy().AllTroopsAreUndead() && skillType == Skill::Secondary::LEADERSHIP ) {
+            if ( army.AllTroopsAreUndead() && skillType == Skill::Secondary::LEADERSHIP ) {
                 // For undead army it's pointless to have Leadership skill.
                 return false;
             }
@@ -249,7 +256,7 @@ namespace
             return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD;
 
         case MP2::OBJ_TEMPLE:
-            return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD && !hero.GetArmy().AllTroopsAreUndead();
+            return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD && !army.AllTroopsAreUndead();
 
         case MP2::OBJ_MAGICWELL:
             return !hero.isObjectTypeVisited( MP2::OBJ_MAGICWELL ) && hero.HaveSpellBook() && hero.GetSpellPoints() < hero.GetMaxSpellPoints();
@@ -309,7 +316,7 @@ namespace
         case MP2::OBJ_CITYDEAD:
         case MP2::OBJ_TROLLBRIDGE: {
             if ( Color::NONE == tile.QuantityColor() ) {
-                return army.isStrongerThan( Army( tile ), AI::ARMY_ADVANTAGE_MEDIUM );
+                return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
             }
             else {
                 const Troop & troop = tile.QuantityTroop();
@@ -356,7 +363,7 @@ namespace
         case MP2::OBJ_DERELICTSHIP:
             if ( !hero.isVisited( tile, Visit::GLOBAL ) && tile.QuantityIsValid() ) {
                 Army enemy( tile );
-                return enemy.isValid() && army.isStrongerThan( enemy, 2 );
+                return enemy.isValid() && isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, 2 );
             }
             break;
 
@@ -364,17 +371,17 @@ namespace
             if ( !hero.isVisited( tile, Visit::GLOBAL ) && tile.QuantityIsValid() ) {
                 Army enemy( tile );
                 return enemy.isValid() && Skill::Level::EXPERT == hero.GetLevelSkill( Skill::Secondary::WISDOM )
-                       && army.isStrongerThan( enemy, AI::ARMY_ADVANTAGE_LARGE );
+                       && isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_LARGE );
             }
             break;
 
         case MP2::OBJ_DAEMONCAVE:
             if ( tile.QuantityIsValid() && 4 != tile.QuantityVariant() )
-                return army.isStrongerThan( Army( tile ), AI::ARMY_ADVANTAGE_MEDIUM );
+                return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, AI::ARMY_ADVANTAGE_MEDIUM );
             break;
 
         case MP2::OBJ_MONSTER:
-            return army.isStrongerThan( Army( tile ), hero.isLosingGame() ? 1.0 : AI::ARMY_ADVANTAGE_MEDIUM );
+            return isHeroStrongerThan( tile, objectType, ai, heroArmyStrength, ( hero.isLosingGame() ? 1.0 : AI::ARMY_ADVANTAGE_MEDIUM ) );
 
         case MP2::OBJ_SIGN:
             // AI has no brains to process anything from sign messages.
@@ -390,7 +397,7 @@ namespace
                 else if ( hero.isFriends( hero2->GetColor() ) )
                     return false;
                 else if ( otherHeroInCastle )
-                    return AIShouldVisitCastle( hero, index );
+                    return AIShouldVisitCastle( hero, index, heroArmyStrength );
                 else if ( army.isStrongerThan( hero2->GetArmy(), hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_SMALL ) )
                     return true;
             }
@@ -398,7 +405,7 @@ namespace
         }
 
         case MP2::OBJ_CASTLE:
-            return AIShouldVisitCastle( hero, index );
+            return AIShouldVisitCastle( hero, index, heroArmyStrength );
 
         case MP2::OBJ_BOAT:
             // AI should never consider a boat as a destination point. It uses them only to make a path.
@@ -409,7 +416,7 @@ namespace
             return false;
 
         case MP2::OBJ_JAIL:
-            return hero.GetKingdom().GetHeroes().size() < Kingdom::GetMaxHeroes();
+            return kingdom.GetHeroes().size() < Kingdom::GetMaxHeroes();
         case MP2::OBJ_HUTMAGI:
             return !hero.isObjectTypeVisited( MP2::OBJ_HUTMAGI, Visit::GLOBAL ) && !Maps::GetObjectPositions( MP2::OBJ_EYEMAGI, true ).empty();
         case MP2::OBJ_TRADINGPOST:
@@ -426,7 +433,7 @@ namespace
 
             const payment_t payment = PaymentConditions::ForAlchemist();
 
-            return cursed > 0 && hero.GetKingdom().AllowPayment( payment );
+            return cursed > 0 && kingdom.AllowPayment( payment );
         }
         default:
             // Did you add a new action object but forget to add AI interaction for it?
@@ -467,10 +474,14 @@ namespace
     class ObjectValidator
     {
     public:
-        explicit ObjectValidator( const Heroes & hero, const AIWorldPathfinder & pathfinder )
+        explicit ObjectValidator( const Heroes & hero, const AIWorldPathfinder & pathfinder, AI::Normal & ai )
             : _hero( hero )
             , _pathfinder( pathfinder )
-        {}
+            , _ai( ai )
+            , _heroArmyStrength( hero.GetArmy().GetStrength() )
+        {
+            // Do nothing.
+        }
 
         bool isValid( const int index )
         {
@@ -479,7 +490,7 @@ namespace
                 return iter->second;
             }
 
-            const bool valid = HeroesValidObject( _hero, index, _pathfinder );
+            const bool valid = HeroesValidObject( _hero, index, _pathfinder, _ai, _heroArmyStrength );
             _validObjects[index] = valid;
             return valid;
         }
@@ -487,6 +498,11 @@ namespace
     private:
         const Heroes & _hero;
         const AIWorldPathfinder & _pathfinder;
+        AI::Normal & _ai;
+
+        // Hero's strength value is valid till any action is done.
+        // Since an instance of this class is used only for evaluation of the future movement it is appropriate to cache the strength.
+        const double _heroArmyStrength;
 
         std::map<int, bool> _validObjects;
     };
@@ -1082,7 +1098,7 @@ namespace AI
 
         const uint32_t leftMovePoints = hero.GetMovePoints();
 
-        ObjectValidator objectValidator( hero, _pathfinder );
+        ObjectValidator objectValidator( hero, _pathfinder, *this );
         ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
         auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero, leftMovePoints]( const int destination, uint32_t & distance, double & value ) {
@@ -1176,11 +1192,19 @@ namespace AI
         return priorityTarget;
     }
 
-    void Normal::HeroesActionComplete( Heroes & hero )
+    void Normal::HeroesActionComplete( Heroes & hero, const MP2::MapObjectType objectType )
     {
         Castle * castle = hero.inCastleMutable();
         if ( castle ) {
             ReinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
+        }
+
+        if ( isMonsterStrengthCacheable( objectType ) ) {
+            // An object can be at the same tile at the hero or on a neighbouring tile so erase all tiles around the hero including the tile where the hero is standing.
+            const int32_t heroIndex = hero.GetIndex();
+            for ( int32_t offset : { 0, 1, -1, world.w(), world.w() + 1, world.w() - 1, -world.w(), -world.w() + 1, -world.w() - 1 } ) {
+                _neutralMonsterStrengthCache.erase( heroIndex + offset );
+            }
         }
     }
 

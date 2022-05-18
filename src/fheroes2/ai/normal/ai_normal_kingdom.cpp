@@ -237,6 +237,9 @@ namespace AI
         KingdomHeroes & heroes = kingdom.GetHeroes();
         const KingdomCastles & castles = kingdom.GetCastles();
 
+        // Clear the cache of neutral monsters as their strength might have changed.
+        _neutralMonsterStrengthCache.clear();
+
         DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( myColor ) << " starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" )
         DEBUG_LOG( DBG_AI, DBG_TRACE, "Funds: " << kingdom.GetFunds().String() )
 
@@ -315,8 +318,8 @@ namespace AI
                 objectType = tile.GetObject( false );
             }
 
-            const int tileColor = tile.QuantityColor();
             if ( objectType == MP2::OBJ_CASTLE ) {
+                const int tileColor = tile.QuantityColor();
                 if ( myColor == tileColor || Players::isFriends( myColor, tileColor ) ) {
                     ++stats.friendlyCastles;
                 }
@@ -356,7 +359,7 @@ namespace AI
             // Step 2. Do some hero stuff.
             // If a hero is standing in a castle most likely he has nothing to do so let's try to give him more army.
             for ( Heroes * hero : heroes ) {
-                HeroesActionComplete( *hero );
+                HeroesActionComplete( *hero, MP2::OBJ_ZERO );
             }
 
             // Step 3. Reassign heroes roles
@@ -457,5 +460,23 @@ namespace AI
 
         // target found, buy hero
         return recruitmentCastle && recruitHero( *recruitmentCastle, !slowEarlyGame, false );
+    }
+
+    double Normal::getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType )
+    {
+        if ( !isMonsterStrengthCacheable( objectType ) ) {
+            return Army( tile ).GetStrength();
+        }
+
+        const int32_t tileId = tile.GetIndex();
+
+        auto iter = _neutralMonsterStrengthCache.find( tileId );
+        if ( iter != _neutralMonsterStrengthCache.end() ) {
+            // Cache hit.
+            return iter->second;
+        }
+
+        auto newEntry = _neutralMonsterStrengthCache.emplace( tileId, Army( tile ).GetStrength() );
+        return newEntry.first->second;
     }
 }

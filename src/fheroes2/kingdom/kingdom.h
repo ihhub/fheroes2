@@ -97,7 +97,11 @@ public:
     void AddFundsResource( const Funds & );
     void OddFundsResource( const Funds & );
 
-    bool isLosingGame() const;
+    bool isLosingGame() const
+    {
+        return castles.empty();
+    }
+
     u32 GetCountCastle( void ) const;
     u32 GetCountTown( void ) const;
     u32 GetCountMarketplace( void ) const;
