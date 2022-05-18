@@ -151,7 +151,6 @@ namespace Maps
             return pack_sprite_index & 0x3FFF;
         }
 
-
         uint32_t TileSpriteShape() const
         {
             return pack_sprite_index >> 14;
