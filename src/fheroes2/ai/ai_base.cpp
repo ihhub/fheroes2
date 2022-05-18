@@ -18,26 +18,13 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
 #include "ai.h"
-#include "battle_arena.h"
-#include "battle_command.h"
-#include "battle_troop.h"
-#include "game_interface.h"
 #include "heroes.h"
-#include "kingdom.h"
-#include "logging.h"
-#include "mus.h"
 #include "serialize.h"
 #include "translations.h"
 
 namespace AI
 {
-    const char * Base::Type() const
-    {
-        return "base";
-    }
-
     int Base::GetPersonality() const
     {
         return _personality;
@@ -56,7 +43,7 @@ namespace AI
             break;
         }
 
-        return Type();
+        return _( "None" );
     }
 
     void Base::Reset()
@@ -70,11 +57,6 @@ namespace AI
     }
 
     void Base::CastleAfterBattle( Castle &, bool )
-    {
-        // Do nothing.
-    }
-
-    void Base::CastleTurn( Castle &, bool )
     {
         // Do nothing.
     }
@@ -119,11 +101,6 @@ namespace AI
         // Do nothing.
     }
 
-    void Base::revealFog( const Maps::Tiles & )
-    {
-        // Do nothing.
-    }
-
     std::string Base::HeroesString( const Heroes & )
     {
         return std::string();
@@ -154,83 +131,6 @@ namespace AI
     bool Base::HeroesCanMove( const Heroes & hero )
     {
         return hero.MayStillMove( false, false ) && !hero.Modes( Heroes::MOVED );
-    }
-
-    void Base::HeroTurn( Heroes & hero )
-    {
-        Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
-
-        hero.ResetModes( Heroes::MOVED );
-
-        while ( Base::HeroesCanMove( hero ) ) {
-            // turn indicator
-            status.RedrawTurnProgress( 3 );
-            status.RedrawTurnProgress( 4 );
-
-            // get task for heroes
-            Base::HeroesGetTask( hero );
-
-            // turn indicator
-            status.RedrawTurnProgress( 5 );
-            status.RedrawTurnProgress( 6 );
-
-            // heroes AI turn
-            AI::HeroesMove( hero );
-            hero.SetModes( Heroes::MOVED );
-
-            // turn indicator
-            status.RedrawTurnProgress( 7 );
-            status.RedrawTurnProgress( 8 );
-        }
-
-        DEBUG_LOG( DBG_AI, DBG_TRACE, hero.GetName() << ", end" )
-    }
-
-    void Base::KingdomTurn( Kingdom & kingdom )
-    {
-        KingdomHeroes & heroes = kingdom.GetHeroes();
-        KingdomCastles & castles = kingdom.GetCastles();
-
-        const int color = kingdom.GetColor();
-
-        if ( kingdom.isLoss() || color == Color::NONE ) {
-            kingdom.LossPostActions();
-            return;
-        }
-
-        AGG::PlayMusic( MUS::COMPUTER_TURN, true, true );
-
-        Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
-
-        // indicator
-        status.RedrawTurnProgress( 0 );
-
-        status.RedrawTurnProgress( 1 );
-
-        // castles AI turn
-        for ( KingdomCastles::iterator it = castles.begin(); it != castles.end(); ++it )
-            if ( *it )
-                CastleTurn( **it, false );
-
-        status.RedrawTurnProgress( 3 );
-
-        // heroes turns
-        for ( KingdomHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it )
-            if ( *it )
-                HeroTurn( **it );
-
-        status.RedrawTurnProgress( 6 );
-        status.RedrawTurnProgress( 7 );
-        status.RedrawTurnProgress( 8 );
-        status.RedrawTurnProgress( 9 );
-
-        DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( color ) << " moved" )
-    }
-
-    void Base::BattleTurn( Battle::Arena &, const Battle::Unit & currentUnit, Battle::Actions & actions )
-    {
-        // end action
-        actions.emplace_back( Battle::CommandType::MSG_BATTLE_END_TURN, currentUnit.GetUID() );
     }
 
     StreamBase & operator<<( StreamBase & msg, const AI::Base & instance )

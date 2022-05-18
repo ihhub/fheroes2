@@ -107,8 +107,14 @@ namespace AI
     class BattlePlanner
     {
     public:
+        // Should be called at the beginning of the battle
+        void battleBegins();
+
+        // Checks whether the limit of turns is exceeded for the attacking AI-controlled
+        // hero and inserts an appropriate action to the action list if necessary
+        bool isLimitOfTurnsExceeded( const Battle::Arena & arena, Battle::Actions & actions );
+
         Battle::Actions planUnitTurn( Battle::Arena & arena, const Battle::Unit & currentUnit );
-        void analyzeBattleState( const Battle::Arena & arena, const Battle::Unit & currentUnit );
 
         // decision-making helpers
         bool isUnitFaster( const Battle::Unit & currentUnit, const Battle::Unit & target ) const;
@@ -117,24 +123,42 @@ namespace AI
         bool checkRetreatCondition( const Heroes & hero ) const;
 
     private:
-        // to be exposed later once every BattlePlanner will be re-initialized at combat start
+        void analyzeBattleState( const Battle::Arena & arena, const Battle::Unit & currentUnit );
+
         Battle::Actions berserkTurn( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
         Battle::Actions archerDecision( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+
         BattleTargetPair meleeUnitOffense( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
         BattleTargetPair meleeUnitDefense( const Battle::Arena & arena, const Battle::Unit & currentUnit ) const;
+
         SpellSelection selectBestSpell( Battle::Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const;
+
         SpellcastOutcome spellDamageValue( const Spell & spell, Battle::Arena & arena, const Battle::Unit & currentUnit, const Battle::Units & friendly,
                                            const Battle::Units & enemies, bool retreating ) const;
         SpellcastOutcome spellDispellValue( const Spell & spell, const Battle::Units & friendly, const Battle::Units & enemies ) const;
         SpellcastOutcome spellResurrectValue( const Spell & spell, const Battle::Arena & arena ) const;
         SpellcastOutcome spellSummonValue( const Spell & spell, const Battle::Arena & arena, const int heroColor ) const;
         SpellcastOutcome spellEffectValue( const Spell & spell, const Battle::Units & targets ) const;
+
         double spellEffectValue( const Spell & spell, const Battle::Unit & target, bool targetIsLast, bool forDispell ) const;
         double getSpellDisruptingRayRatio( const Battle::Unit & target ) const;
         double getSpellSlowRatio( const Battle::Unit & target ) const;
         double getSpellHasteRatio( const Battle::Unit & target ) const;
         int32_t spellDurationMultiplier( const Battle::Unit & target ) const;
+
         static double commanderMaximumSpellDamageValue( const HeroBase & commander );
+
+        const Rand::DeterministicRandomGenerator * _randomGenerator = nullptr;
+
+        // When this limit of turns without deaths is exceeded for an attacking AI-controlled hero,
+        // the auto battle should be interrupted (one way or another)
+        const uint32_t MAX_TURNS_WITHOUT_DEATHS = 50;
+
+        // Member variables related to the logic of checking the limit of the number of turns
+        uint32_t _currentTurnNumber = 0;
+        uint32_t _numberOfRemainingTurnsWithoutDeaths = MAX_TURNS_WITHOUT_DEATHS;
+        uint32_t _attackerForceNumberOfDead = 0;
+        uint32_t _defenderForceNumberOfDead = 0;
 
         // turn variables that wouldn't persist
         const HeroBase * _commander = nullptr;
@@ -151,14 +175,13 @@ namespace AI
         bool _defendingCastle = false;
         bool _considerRetreat = false;
         bool _defensiveTactics = false;
-
-        const Rand::DeterministicRandomGenerator * _randomGenerator = nullptr;
     };
 
     class Normal : public Base
     {
     public:
         Normal();
+
         void KingdomTurn( Kingdom & kingdom ) override;
         void CastleTurn( Castle & castle, bool defensive ) override;
         void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions ) override;
@@ -177,6 +200,8 @@ namespace AI
         double getObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         int getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority );
         void resetPathfinder() override;
+
+        void battleBegins() override;
 
         double getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType );
 
