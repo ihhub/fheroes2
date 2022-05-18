@@ -417,7 +417,7 @@ msgstr ""
 
 #, fuzzy
 msgid "View %{monster} info"
-msgstr "Дивитися інфо %{monster}"
+msgstr "Дізнатися про %{monster}"
 
 #, fuzzy
 msgid "Shoot %{monster}"
@@ -477,7 +477,7 @@ msgstr "Дозволяє комп’ютеру вести битву за вас
 
 #, fuzzy
 msgid "Auto Combat"
-msgstr "Автоматичний Бій"
+msgstr "Автоматичний бій"
 
 #, fuzzy
 msgid "Customize system options"
@@ -2287,7 +2287,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Exit this menu without doing anything."
-msgstr "Вийти з цього меню, нічого не роблячи."
+msgstr "Нічого не робити, натомість залишити це меню."
 
 msgid "Arena"
 msgstr ""
@@ -3332,7 +3332,7 @@ msgstr ""
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
-"Вийдіть із Heroes of Might and Magic II і поверніться до операційної системи."
+"Залишити Heroes of Might and Magic II і повернутися до операційної системи."
 
 msgid "Credits"
 msgstr ""
