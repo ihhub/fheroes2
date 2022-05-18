@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-07 06:08+0200\n"
-"PO-Revision-Date: 2022-05-07 06:18+0200\n"
+"POT-Creation-Date: 2022-05-14 11:28+0000\n"
+"PO-Revision-Date: 2022-05-12 17:04+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "Language: cs\n"
@@ -2418,7 +2418,7 @@ msgstr ""
 msgid "Quit"
 msgstr "Ukončit"
 
-msgid "Quit out of Free Heroes of Might and Magic II."
+msgid "Quit out of Heroes of Might and Magic II."
 msgstr ""
 
 msgid "Language"
@@ -2520,8 +2520,8 @@ msgid "Attention"
 msgstr "animace"
 
 msgid ""
-"Your version of Heroes of Might and Magic II does not support any languages "
-"except English."
+"Your version of Heroes of Might and Magic II does not support any other "
+"languages than English."
 msgstr ""
 
 msgid ""
@@ -3178,9 +3178,8 @@ msgstr ""
 msgid "Original project before 0.7"
 msgstr ""
 
-#, fuzzy
 msgid "Original Heroes of Might and Magic II team"
-msgstr "Ukončí Heroes of Might and Magic a vrátí se do operačního systému."
+msgstr ""
 
 msgid "Designed and Directed"
 msgstr ""
@@ -3314,8 +3313,8 @@ msgid "Greetings!"
 msgstr ""
 
 msgid ""
-"Welcome to Free Heroes of Might and Magic II! Before starting the game "
-"please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
+"starting the game please choose game resolution."
 msgstr ""
 
 msgid "Please Remember"
@@ -3343,8 +3342,8 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-msgid "Quit Heroes of Might and Magic and return to the operating system."
-msgstr "Ukončí Heroes of Might and Magic a vrátí se do operačního systému."
+msgid "Quit Heroes of Might and Magic II and return to the operating system."
+msgstr "Ukončí Heroes of Might and Magic II a vrátí se do operačního systému."
 
 msgid "Credits"
 msgstr "Autoři"
@@ -3829,6 +3828,9 @@ msgid "Ukrainian"
 msgstr ""
 
 msgid "Romanian"
+msgstr ""
+
+msgid "Spanish"
 msgstr ""
 
 msgid ", FPS: "
@@ -8566,15 +8568,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#, fuzzy
-#~ msgid "The %{name} increases the duration of your spells by %{count} turn."
-#~ msgid_plural ""
-#~ "The %{name} increases the duration of your spells by %{count} turns."
-#~ msgstr[0] "Pomník zvyšuje příjem města o 250 za den."
-#~ msgstr[1] "Pomník zvyšuje příjem města o 250 za den."
-#~ msgstr[2] "Pomník zvyšuje příjem města o 250 za den."
-
-#, fuzzy
-#~ msgid "View Stats"
-#~ msgstr "Hrdinové"

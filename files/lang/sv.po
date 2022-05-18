@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-07 06:08+0200\n"
-"PO-Revision-Date: 2022-05-07 06:19+0200\n"
+"POT-Creation-Date: 2022-05-14 11:28+0000\n"
+"PO-Revision-Date: 2022-05-10 16:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -2533,7 +2533,7 @@ msgstr ""
 msgid "Quit"
 msgstr "Avsluta"
 
-msgid "Quit out of Free Heroes of Might and Magic II."
+msgid "Quit out of Heroes of Might and Magic II."
 msgstr ""
 
 msgid "Language"
@@ -2641,8 +2641,8 @@ msgid "Attention"
 msgstr "\"Tillägg\""
 
 msgid ""
-"Your version of Heroes of Might and Magic II does not support any languages "
-"except English."
+"Your version of Heroes of Might and Magic II does not support any other "
+"languages than English."
 msgstr ""
 
 msgid ""
@@ -3314,9 +3314,8 @@ msgstr ""
 msgid "Original project before 0.7"
 msgstr ""
 
-#, fuzzy
 msgid "Original Heroes of Might and Magic II team"
-msgstr "Avsluta Heroes of Might and Magic och återgå till operativsystemet."
+msgstr ""
 
 msgid "Designed and Directed"
 msgstr ""
@@ -3459,8 +3458,8 @@ msgid "Greetings!"
 msgstr "Inställningar"
 
 msgid ""
-"Welcome to Free Heroes of Might and Magic II! Before starting the game "
-"please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
+"starting the game please choose game resolution."
 msgstr ""
 
 msgid "Please Remember"
@@ -3488,8 +3487,9 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-msgid "Quit Heroes of Might and Magic and return to the operating system."
-msgstr "Avsluta Heroes of Might and Magic och återgå till operativsystemet."
+#, fuzzy
+msgid "Quit Heroes of Might and Magic II and return to the operating system."
+msgstr "Avsluta fheroes2 och återgå till operativsystemet."
 
 msgid "Credits"
 msgstr "Tack till"
@@ -4049,6 +4049,9 @@ msgid "Ukrainian"
 msgstr ""
 
 msgid "Romanian"
+msgstr ""
+
+msgid "Spanish"
 msgstr ""
 
 msgid ", FPS: "
@@ -9179,110 +9182,3 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "%{color} casts a spell: %{spell}"
-#~ msgstr "%{color} kastar besvärjelse: %{spell}"
-
-#, fuzzy
-#~ msgid "Map is loading..."
-#~ msgstr "Laddar kartor..."
-
-#~ msgid "You find %{artifact}."
-#~ msgstr "Du hittade %{artifact}."
-
-#~ msgid ""
-#~ "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
-#~ "%{spells1} from %{learner}, and teaches %{spells2} to %{learner}."
-#~ msgstr ""
-#~ "%{teacher}, vars %{level} %{scholar} vet många magiska hemligheter, lär "
-#~ "sig %{spells1} från %{learner}, och lär %{spells2} till %{learner}."
-
-#~ msgid ""
-#~ "%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
-#~ "%{spells1} from %{learner}."
-#~ msgstr ""
-#~ "%{teacher}, vars %{level} %{scholar} vet många magiska hemligheter, lär "
-#~ "sig %{spells1} från %{learner}."
-
-#~ msgid ""
-#~ "%{teacher}, whose %{level} %{scholar} knows many magical secrets, teaches "
-#~ "%{spells2} to %{learner}."
-#~ msgstr ""
-#~ "%{teacher}, vars %{level} %{scholar} vet många magiska hemligheter, lär "
-#~ "sig %{spells2} till %{learner}."
-
-#, fuzzy
-#~ msgid ""
-#~ "Nearest town occupied.\n"
-#~ "Spell Failed!!!"
-#~ msgstr "Ingen stad tillgänlig. Besvärjelsen misslyckades!!!"
-
-#, fuzzy
-#~ msgid ""
-#~ "Do you want to use your knowledge of magical secrets to transcribe the "
-#~ "%{spell} Scroll into your Magic Book?\n"
-#~ "The Spell Scroll will be consumed.\n"
-#~ " Cost in spell points: %{sp}"
-#~ msgstr ""
-#~ "Vill du använda din kunskap om magiska hemligheter för att överföra "
-#~ "%{spell}rullen till din besvärjelsebok?\n"
-#~ "Rullen kommer att förstöras.\n"
-#~ "Magipoäng: %{sp}"
-
-#~ msgid "Move points: %{mp}"
-#~ msgstr "Förflyttningspoäng: %{mp}"
-
-#~ msgid "Transcribe Spell Scroll"
-#~ msgstr "Överföra besvärjelserulle"
-
-#~ msgid "heroes: recruit cost depends on hero level"
-#~ msgstr "Hjältar: Rekryteringskostnad beror på hjältens level"
-
-#~ msgid "battle: reverse wait order (fast, average, slow)"
-#~ msgstr "strid: omvänd väntordning (snabb, medel, långsam)"
-
-#~ msgid "game: use fade"
-#~ msgstr "spel: Använd toning"
-
-#, fuzzy
-#~ msgid "Power Axe"
-#~ msgstr "Effekt"
-
-#~ msgid "Buy Monsters"
-#~ msgstr "Köp monster"
-
-#, fuzzy
-#~ msgid ""
-#~ "The %{name} extends the duration of all your spells by %{count} turn."
-#~ msgid_plural ""
-#~ "The %{name} extends the duration of all your spells by %{count} turns."
-#~ msgstr[0] ""
-#~ "%{name} höjer alla dina grundläggande färdigheter med %{count} poäng."
-#~ msgstr[1] ""
-#~ "%{name} höjer alla dina grundläggande färdigheter med %{count} poäng."
-
-#, fuzzy
-#~ msgid "The %{name} increases the duration of your spells by %{count} turn."
-#~ msgid_plural ""
-#~ "The %{name} increases the duration of your spells by %{count} turns."
-#~ msgstr[0] ""
-#~ "%{name} höjer alla dina grundläggande färdigheter med %{count} poäng."
-#~ msgstr[1] ""
-#~ "%{name} höjer alla dina grundläggande färdigheter med %{count} poäng."
-
-#~ msgid "game: autosave on"
-#~ msgstr "spel: Autospara på"
-
-#, fuzzy
-#~ msgid "Join Error"
-#~ msgstr "Fel"
-
-#, fuzzy
-#~ msgid "View Stats"
-#~ msgstr "Visa artefakter."
-
-#~ msgid "unions: allow meeting heroes"
-#~ msgstr "unioner: Tillåt att träffa hjältar"
-
-#~ msgid "unions: allow castle visiting"
-#~ msgstr "unioner: Tillåt att besöka slott"

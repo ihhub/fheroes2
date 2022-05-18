@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -22,7 +22,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cctype>
 #include <ctime>
 #include <iomanip>
 #include <iterator>
@@ -215,21 +214,14 @@ MapsFileInfoList GetSortedMapsFileInfoList( void )
     return list2;
 }
 
-std::string Dialog::SelectFileSave( void )
+std::string Dialog::SelectFileSave()
 {
-    const Settings & conf = Settings::Get();
-    const std::string & name = conf.CurrentFileInfo().name;
-
-    std::string base = !name.empty() ? name : "newgame";
-    base.erase( std::find_if( base.begin(), base.end(), ::ispunct ), base.end() );
-    std::replace_if( base.begin(), base.end(), ::isspace, '_' );
     std::ostringstream os;
 
-    os << System::ConcatePath( Game::GetSaveDir(), base ) <<
-        // add postfix:
-        '_' << std::setw( 4 ) << std::setfill( '0' ) << world.CountDay() << Game::GetSaveFileExtension();
-    std::string lastfile = os.str();
-    return SelectFileListSimple( _( "File to Save:" ), lastfile, true );
+    os << System::ConcatePath( Game::GetSaveDir(), Game::GetSaveFileBaseName() ) << '_' << std::setw( 4 ) << std::setfill( '0' ) << world.CountDay()
+       << Game::GetSaveFileExtension();
+
+    return SelectFileListSimple( _( "File to Save:" ), os.str(), true );
 }
 
 std::string Dialog::SelectFileLoad( void )

@@ -1,5 +1,5 @@
 ###########################################################################
-#   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
+#   fheroes2: https://github.com/ihhub/fheroes2                           #
 #   Copyright (C) 2022                                                    #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
@@ -31,8 +31,8 @@ merge:
 # Spanish: drop accents transliterated with `"` (which breaks translation file format)
 # and transliterate the rest using the es_ES.UTF-8 locale
 es.mo: es.po
-	sed -e 'y/äëïöőüűÄËÏŐÖÜŰ/aeioouuAEIOOUU/' $< > $<.tmp
-	LANG=es_ES.UTF-8 LC_ALL=es_ES.UTF-8 LC_CTYPE=es_ES.UTF-8 iconv -f utf-8 -t ascii//TRANSLIT $<.tmp > $<.2.tmp
+	iconv -f utf-8 -t CP1252 $< > $<.tmp
+	LANG=es.CP1252 LC_ALL=es.CP1252 LC_CTYPE=es.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
 
 # In French, accented characters are mapped to unused ASCII characters

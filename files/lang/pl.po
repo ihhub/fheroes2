@@ -2438,8 +2438,9 @@ msgstr "Zapisz bieżącą grę."
 msgid "Quit"
 msgstr "Wyjście"
 
-msgid "Quit out of Free Heroes of Might and Magic II."
-msgstr "Zamknij Free Heroes of Might and Magic II."
+#, fuzzy
+msgid "Quit out of Heroes of Might and Magic II."
+msgstr "Oryginał Heroes of Might and Magic II przygotowali"
 
 msgid "Language"
 msgstr "Język"
@@ -2536,9 +2537,10 @@ msgstr "Ok"
 msgid "Attention"
 msgstr "Uwaga"
 
+#, fuzzy
 msgid ""
-"Your version of Heroes of Might and Magic II does not support any languages "
-"except English."
+"Your version of Heroes of Might and Magic II does not support any other "
+"languages than English."
 msgstr ""
 "Twoja wersja gry Heroes of Might and Magic II wspiera tylko język angielski."
 
@@ -3185,6 +3187,7 @@ msgstr "i wielu, wielu innym!"
 msgid "Original project before 0.7"
 msgstr "Przed wersją 0.7"
 
+#, fuzzy
 msgid "Original Heroes of Might and Magic II team"
 msgstr "Oryginał Heroes of Might and Magic II przygotowali"
 
@@ -3322,12 +3325,11 @@ msgstr "fheroes2 Resurrection Team prezentuje"
 msgid "Greetings!"
 msgstr "Witaj!"
 
+#, fuzzy
 msgid ""
-"Welcome to Free Heroes of Might and Magic II! Before starting the game "
-"please choose game resolution."
-msgstr ""
-"Free Heroes of Might and Magic II wita! Przed rozpoczęciem gry wybierz "
-"rozdzielczość gry."
+"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
+"starting the game please choose game resolution."
+msgstr "fheroes2 wita! Przed rozpoczęciem gry wybierz rozdzielczość gry."
 
 msgid "Please Remember"
 msgstr "Pamiętaj"
@@ -3364,9 +3366,9 @@ msgstr ""
 "\n"
 "Przyjemnej zabawy!"
 
-msgid "Quit Heroes of Might and Magic and return to the operating system."
-msgstr ""
-"Zakończenie gry Heroes of Might and Magic i powrót do systemu operacyjnego."
+#, fuzzy
+msgid "Quit Heroes of Might and Magic II and return to the operating system."
+msgstr "Zakończenie gry fheroes2 i powrót do systemu operacyjnego."
 
 msgid "Credits"
 msgstr "Autorzy"
@@ -3921,6 +3923,9 @@ msgstr "Ukraiński"
 
 msgid "Romanian"
 msgstr "Rumuński"
+
+msgid "Spanish"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -9223,9 +9228,5 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid ""
-#~ "Nearest town occupied.\n"
-#~ "Spell Failed!!!"
-#~ msgstr ""
-#~ "Najbliższe miasto jest zajęte.\n"
-#~ "Zaklęcie się nie udało!!!"
+#~ msgid "Quit out of fheroes2."
+#~ msgstr "Zamknij fheroes2."

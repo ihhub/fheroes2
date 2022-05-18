@@ -13,10 +13,10 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
     - name: Download analysis results
-      uses: actions/github-script@v3
+      uses: actions/github-script@v6
       with:
         script: |
-          let artifacts = await github.actions.listWorkflowRunArtifacts({
+          let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: ${{ github.event.workflow_run.id }},
@@ -24,7 +24,7 @@ jobs:
           let matchArtifact = artifacts.data.artifacts.filter((artifact) => {
               return artifact.name == "clang-tidy-result"
           })[0];
-          let download = await github.actions.downloadArtifact({
+          let download = await github.rest.actions.downloadArtifact({
               owner: context.repo.owner,
               repo: context.repo.repo,
               artifact_id: matchArtifact.id,
@@ -45,10 +45,10 @@ jobs:
         ref: ${{ env.PR_HEAD_REF }}
         persist-credentials: false
     - name: Redownload analysis results
-      uses: actions/github-script@v3
+      uses: actions/github-script@v6
       with:
         script: |
-          let artifacts = await github.actions.listWorkflowRunArtifacts({
+          let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: ${{ github.event.workflow_run.id }},
@@ -56,7 +56,7 @@ jobs:
           let matchArtifact = artifacts.data.artifacts.filter((artifact) => {
               return artifact.name == "clang-tidy-result"
           })[0];
-          let download = await github.actions.downloadArtifact({
+          let download = await github.rest.actions.downloadArtifact({
               owner: context.repo.owner,
               repo: context.repo.repo,
               artifact_id: matchArtifact.id,

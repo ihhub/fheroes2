@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -144,7 +144,7 @@ namespace
         output.fill( 0 );
         output._disableTransformLayer();
 
-        Text caption( "Free Heroes of Might and Magic II (" + Settings::GetVersion() + ")", Font::YELLOW_BIG );
+        Text caption( "fheroes2 engine (" + Settings::GetVersion() + ")", Font::YELLOW_BIG );
         caption.Blit( output.width() / 2 - caption.w() / 2, 15, output );
 
         return output;

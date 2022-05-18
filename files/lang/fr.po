@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-07 06:08+0200\n"
-"PO-Revision-Date: 2022-05-07 06:18+0200\n"
+"POT-Creation-Date: 2022-05-14 11:28+0000\n"
+"PO-Revision-Date: 2022-05-12 17:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -2584,8 +2584,8 @@ msgstr "Enregistrer le jeu en cours."
 msgid "Quit"
 msgstr "Quitter"
 
-msgid "Quit out of Free Heroes of Might and Magic II."
-msgstr "Quittez le jeu Free Heroes of Might and Magic II."
+msgid "Quit out of Heroes of Might and Magic II."
+msgstr "Quittez Heroes of Might and Magic II."
 
 msgid "Language"
 msgstr "Langue"
@@ -2685,9 +2685,10 @@ msgstr "OK"
 msgid "Attention"
 msgstr "Attention"
 
+#, fuzzy
 msgid ""
-"Your version of Heroes of Might and Magic II does not support any languages "
-"except English."
+"Your version of Heroes of Might and Magic II does not support any other "
+"languages than English."
 msgstr ""
 "Votre version de Heroes of Might and Magic II ne prend en charge aucune "
 "langue autre que l'anglais."
@@ -3345,6 +3346,7 @@ msgstr "et beaucoup, beaucoup d'autres supporteurs !"
 msgid "Original project before 0.7"
 msgstr "Projet original avant 0.7"
 
+#, fuzzy
 msgid "Original Heroes of Might and Magic II team"
 msgstr "L'équipe originale de Heroes of Might and Magic II"
 
@@ -3484,12 +3486,13 @@ msgstr "L'équipe fheroes2 Resurrection présente"
 msgid "Greetings!"
 msgstr "Salutations !"
 
+#, fuzzy
 msgid ""
-"Welcome to Free Heroes of Might and Magic II! Before starting the game "
-"please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
+"starting the game please choose game resolution."
 msgstr ""
-"Bienvenue à Free Heroes of Might and Magic II ! Avant de commencer le jeu "
-"choisissez la résolution du jeu."
+"Bienvenue à fheroes2 ! Avant de commencer le jeu choisissez la résolution du "
+"jeu."
 
 msgid "Please Remember"
 msgstr "N'oubliez pas"
@@ -3526,9 +3529,9 @@ msgstr ""
 "\n"
 "Profitez du jeu !"
 
-msgid "Quit Heroes of Might and Magic and return to the operating system."
-msgstr ""
-"Quitter Heroes of Might and Magic et retourner au système d'exploitation."
+#, fuzzy
+msgid "Quit Heroes of Might and Magic II and return to the operating system."
+msgstr "Quitter fheroes2 et retourner au système d'exploitation."
 
 msgid "Credits"
 msgstr "Crédits"
@@ -3548,6 +3551,7 @@ msgstr "Changer la langue, la résolution et les paramètres du jeu."
 msgid "Game Settings"
 msgstr "Paramètres du jeu"
 
+#, fuzzy
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
 "and Magic II."
@@ -4098,6 +4102,9 @@ msgid "Ukrainian"
 msgstr "Ukrainien"
 
 msgid "Romanian"
+msgstr ""
+
+msgid "Spanish"
 msgstr ""
 
 msgid ", FPS: "
@@ -9620,3 +9627,6 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Quit out of fheroes2."
+#~ msgstr "Quittez fheroes2."

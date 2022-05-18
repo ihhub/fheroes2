@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -426,7 +426,7 @@ namespace fheroes2
                     conf.setGameLanguage( getLanguageAbbreviation( SupportedLanguage::English ) );
 
                     Text header( _( "Attention" ), FontType::normalYellow() );
-                    Text body( _( "Your version of Heroes of Might and Magic II does not support any languages except English." ), FontType::normalWhite() );
+                    Text body( _( "Your version of Heroes of Might and Magic II does not support any other languages than English." ), FontType::normalWhite() );
 
                     showMessage( header, body, Dialog::OK );
                 }
