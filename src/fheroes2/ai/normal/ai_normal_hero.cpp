@@ -47,7 +47,7 @@ namespace
 
         const Settings & conf = Settings::Get();
         // This is either a town which human might lose or AI should capture it to win.
-        if ( ( ( conf.ConditionLoss() & GameOver::LOSS_TOWN ) == 0 ) && ( ( conf.ConditionLoss() & GameOver::LOSS_ENEMY_WINS_TOWN ) == 0 ) ) {
+        if ( conf.ConditionLoss() & ( GameOver::LOSS_TOWN | GameOver::LOSS_ENEMY_WINS_TOWN ) == 0 ) {
             // None of conditions apply.
             return false;
         }
