@@ -325,10 +325,6 @@ namespace
 
                 const uint32_t offset2 = buf.get32();
 
-                if ( length1 == 0 || length2 == 0 ) {
-                    continue;
-                }
-
                 std::map<u32, chunk>::const_iterator it = hash_offsets.find( crc );
                 if ( it == hash_offsets.end() )
                     hash_offsets[crc] = chunk( offset2, length2 );
