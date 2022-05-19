@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-14 11:28+0000\n"
+"POT-Creation-Date: 2022-05-18 14:57+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -26,6 +26,9 @@ msgstr "Bygger"
 
 msgid "Explorer"
 msgstr "Utforsker"
+
+msgid "None"
+msgstr "Ingen"
 
 msgid ""
 "A few\n"
@@ -288,9 +291,6 @@ msgstr "Slagmarksoffer"
 
 msgid "Attacker"
 msgstr "Angripende side"
-
-msgid "None"
-msgstr "Ingen"
 
 msgid "Defender"
 msgstr "Forsvarende side"
