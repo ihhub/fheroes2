@@ -40,8 +40,15 @@ namespace
     {
         assert( castle != nullptr );
 
+        if ( Colors( Players::HumanColors() ).size() > 1 ) {
+            // This is a multiplayer mode. Castle loss condition is not applied for such games.
+            return false;
+        }
+
         const Settings & conf = Settings::Get();
-        if ( ( conf.ConditionLoss() & GameOver::LOSS_TOWN ) == 0 ) {
+        // This is either a town which human might lose or AI should capture it to win.
+        if ( ( ( conf.ConditionLoss() & GameOver::LOSS_TOWN ) == 0 ) && ( ( conf.ConditionLoss() & GameOver::LOSS_ENEMY_WINS_TOWN ) == 0 ) ) {
+            // None of conditions apply.
             return false;
         }
 
