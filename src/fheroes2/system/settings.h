@@ -515,9 +515,9 @@ public:
         return current_maps_file.WinsFindUltimateArtifact();
     }
 
-    u32 WinsAccumulateGold() const
+    uint32_t getWinningGoldAccumulationValue() const
     {
-        return current_maps_file.WinsAccumulateGold();
+        return current_maps_file.getWinningGoldAccumulationValue();
     }
 
     fheroes2::Point WinsMapsPositionObject() const

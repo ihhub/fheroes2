@@ -499,51 +499,6 @@ int Maps::FileInfo::WinsFindArtifactID( void ) const
     return wins1 ? wins1 - 1 : Artifact::UNKNOWN;
 }
 
-bool Maps::FileInfo::WinsFindUltimateArtifact( void ) const
-{
-    return 0 == wins1;
-}
-
-u32 Maps::FileInfo::WinsAccumulateGold( void ) const
-{
-    return wins1 * 1000;
-}
-
-fheroes2::Point Maps::FileInfo::WinsMapsPositionObject( void ) const
-{
-    return fheroes2::Point( wins1, wins2 );
-}
-
-fheroes2::Point Maps::FileInfo::LossMapsPositionObject( void ) const
-{
-    return fheroes2::Point( loss1, loss2 );
-}
-
-u32 Maps::FileInfo::LossCountDays( void ) const
-{
-    return loss1;
-}
-
-int Maps::FileInfo::AllowCompHumanColors( void ) const
-{
-    return allow_human_colors & allow_comp_colors;
-}
-
-int Maps::FileInfo::AllowHumanColors( void ) const
-{
-    return allow_human_colors;
-}
-
-int Maps::FileInfo::HumanOnlyColors( void ) const
-{
-    return allow_human_colors & ~allow_comp_colors;
-}
-
-int Maps::FileInfo::ComputerOnlyColors( void ) const
-{
-    return allow_comp_colors & ~allow_human_colors;
-}
-
 bool Maps::FileInfo::isAllowCountPlayers( int playerCount ) const
 {
     const int humanOnly = Color::Count( HumanOnlyColors() );
@@ -552,9 +507,9 @@ bool Maps::FileInfo::isAllowCountPlayers( int playerCount ) const
     return humanOnly <= playerCount && playerCount <= humanOnly + compHuman;
 }
 
-bool Maps::FileInfo::isMultiPlayerMap( void ) const
+bool Maps::FileInfo::isMultiPlayerMap() const
 {
-    return 1 < Color::Count( HumanOnlyColors() );
+    return Color::Count( HumanOnlyColors() ) > 1;
 }
 
 std::string Maps::FileInfo::String( void ) const

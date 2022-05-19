@@ -61,10 +61,26 @@ namespace Maps
 
         bool isAllowCountPlayers( int playerCount ) const;
         bool isMultiPlayerMap( void ) const;
-        int AllowCompHumanColors( void ) const;
-        int AllowHumanColors( void ) const;
-        int HumanOnlyColors( void ) const;
-        int ComputerOnlyColors( void ) const;
+
+        int AllowCompHumanColors() const
+        {
+            return allow_human_colors & allow_comp_colors;
+        }
+
+        int AllowHumanColors() const
+        {
+            return allow_human_colors;
+        }
+
+        int HumanOnlyColors() const
+        {
+            return allow_human_colors & ~allow_comp_colors;
+        }
+
+        int ComputerOnlyColors() const
+        {
+            return allow_comp_colors & ~allow_human_colors;
+        }
 
         int KingdomRace( int color ) const;
 
@@ -72,11 +88,31 @@ namespace Maps
         uint32_t ConditionLoss() const;
         bool WinsCompAlsoWins( void ) const;
         int WinsFindArtifactID( void ) const;
-        bool WinsFindUltimateArtifact( void ) const;
-        u32 WinsAccumulateGold( void ) const;
-        fheroes2::Point WinsMapsPositionObject( void ) const;
-        fheroes2::Point LossMapsPositionObject( void ) const;
-        u32 LossCountDays( void ) const;
+
+        bool WinsFindUltimateArtifact() const
+        {
+            return 0 == wins1;
+        }
+
+        uint32_t getWinningGoldAccumulationValue() const
+        {
+            return wins1 * 1000;
+        }
+
+        fheroes2::Point WinsMapsPositionObject() const
+        {
+            return fheroes2::Point( wins1, wins2 );
+        }
+
+        fheroes2::Point LossMapsPositionObject() const
+        {
+            return fheroes2::Point( loss1, loss2 );
+        }
+
+        u32 LossCountDays( void ) const
+        {
+            return loss1;
+        }
 
         std::string String( void ) const;
         void Reset( void );

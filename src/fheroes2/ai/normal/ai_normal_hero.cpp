@@ -40,19 +40,23 @@ namespace
     {
         assert( castle != nullptr );
 
-        if ( Colors( Players::HumanColors() ).size() > 1 ) {
-            // This is a multiplayer mode. Castle loss condition is not applied for such games.
-            return false;
-        }
-
         const Settings & conf = Settings::Get();
-        // This is either a town which human might lose or AI should capture it to win.
-        if ( ( conf.ConditionLoss() & ( GameOver::LOSS_TOWN | GameOver::LOSS_ENEMY_WINS_TOWN ) ) == 0 ) {
-            // None of conditions apply.
+        if ( conf.CurrentFileInfo().isMultiPlayerMap() ) {
+            // This is a multiplayer mode. Town related conditions are not applied for such game.
             return false;
         }
 
-        return castle->GetCenter() == conf.LossMapsPositionObject();
+        if ( ( ( conf.ConditionLoss() & GameOver::LOSS_TOWN ) != 0 ) && ( castle->GetCenter() == conf.LossMapsPositionObject() ) ) {
+            // It is a loss town condition for human.
+            return true;
+        }
+
+        if ( ( conf.WinsCompAlsoWins() && ( conf.ConditionWins() & GameOver::WINS_TOWN ) != 0 ) && ( castle->GetCenter() == conf.WinsMapsPositionObject() ) ) {
+            // It is a town capture winning condition for AI.
+            return true;
+        }
+
+        return false;
     }
 
     bool AIShouldVisitCastle( const Heroes & hero, int castleIndex, const double heroArmyStrength )
