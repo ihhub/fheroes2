@@ -702,7 +702,7 @@ void World::ProcessNewMap()
     }
 
     // Make this castle as a special condition to win or lose. AI should try to capture or protect it.
-    if ( Colors( Players::HumanColors() ).size() == 1 && winningConditions & ( GameOver::WINS_TOWN | GameOver::LOSS_ENEMY_WINS_TOWN ) != 0 ) {
+    if ( Colors( Players::HumanColors() ).size() == 1 && ( winningConditions & ( GameOver::WINS_TOWN | GameOver::LOSS_ENEMY_WINS_TOWN ) ) != 0 ) {
         Castle * castle = vec_castles.Get( conf.WinsMapsPositionObject() );
         assert( castle != nullptr );
         if ( castle != nullptr ) {
