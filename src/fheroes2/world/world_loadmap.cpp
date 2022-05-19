@@ -686,9 +686,7 @@ void World::ProcessNewMap()
     const Settings & conf = Settings::Get();
 
     // update wins, loss conditions
-    const uint32_t winningConditions = conf.ConditionWins();
-
-    if ( GameOver::WINS_HERO & winningConditions ) {
+    if ( GameOver::WINS_HERO & conf.ConditionWins() ) {
         const Heroes * hero = GetHeroes( conf.WinsMapsPositionObject() );
         heroes_cond_wins = hero ? hero->GetID() : Heroes::UNKNOWN;
     }
@@ -702,7 +700,8 @@ void World::ProcessNewMap()
     }
 
     // Make this castle as a special condition to win or lose. AI should try to capture or protect it.
-    if ( Colors( Players::HumanColors() ).size() == 1 && ( winningConditions & ( GameOver::WINS_TOWN | GameOver::LOSS_ENEMY_WINS_TOWN ) ) != 0 ) {
+    if ( Colors( Players::HumanColors() ).size() == 1 && ( ( conf.ConditionWins() & GameOver::WINS_TOWN ) != 0
+         || ( conf.ConditionLoss() & ( GameOver::LOSS_ENEMY_WINS_TOWN | GameOver::LOSS_TOWN ) ) != 0 ) ) {
         Castle * castle = vec_castles.Get( conf.WinsMapsPositionObject() );
         assert( castle != nullptr );
         if ( castle != nullptr ) {
