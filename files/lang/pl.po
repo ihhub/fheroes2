@@ -31,6 +31,9 @@ msgstr "Budowniczy"
 msgid "Explorer"
 msgstr "Badacz"
 
+msgid "None"
+msgstr "Brak"
+
 msgid ""
 "A few\n"
 "%{monster}"
@@ -287,9 +290,6 @@ msgstr "Ofiary walki"
 
 msgid "Attacker"
 msgstr "Atakujący"
-
-msgid "None"
-msgstr "Brak"
 
 msgid "Defender"
 msgstr "Obrońca"
@@ -3927,6 +3927,10 @@ msgstr "Rumuński"
 
 msgid "Spanish"
 msgstr ""
+
+#, fuzzy
+msgid "Portuguese"
+msgstr "Rozbójnicy"
 
 msgid ", FPS: "
 msgstr ", FPS: "
