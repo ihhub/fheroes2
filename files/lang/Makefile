@@ -96,6 +96,12 @@ nb.mo: nb.po
 	iconv -f utf-8 -t CP1252 $< > $<.tmp
 	LANG=nb.CP1252 LC_ALL=nb.CP1252 LC_CTYPE=nb.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
+	
+# Swedish uses CP1252
+sv.mo: sv.po
+	iconv -f utf-8 -t CP1252 $< > $<.tmp
+	LANG=sv.CP1252 LC_ALL=sv.CP1252 LC_CTYPE=sv.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp
+	msgfmt $<.2.tmp -o $@
 
 # Italian
 it.mo: it.po
