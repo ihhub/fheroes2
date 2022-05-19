@@ -101,15 +101,15 @@ namespace Maps
 
         fheroes2::Point WinsMapsPositionObject() const
         {
-            return fheroes2::Point( wins1, wins2 );
+            return { wins1, wins2 };
         }
 
         fheroes2::Point LossMapsPositionObject() const
         {
-            return fheroes2::Point( loss1, loss2 );
+            return { loss1, loss2 };
         }
 
-        u32 LossCountDays( void ) const
+        uint32_t LossCountDays() const
         {
             return loss1;
         }
