@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-14 00:18+0000\n"
+"POT-Creation-Date: 2022-05-19 00:36+0000\n"
 "PO-Revision-Date: 2022-05-10 16:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -30,6 +30,9 @@ msgstr "Будівник"
 #, fuzzy
 msgid "Explorer"
 msgstr "Мандрівник"
+
+msgid "None"
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -283,9 +286,6 @@ msgstr ""
 #, fuzzy
 msgid "Attacker"
 msgstr "Нападаючий"
-
-msgid "None"
-msgstr ""
 
 #, fuzzy
 msgid "Defender"
@@ -3751,6 +3751,12 @@ msgid "Ukrainian"
 msgstr "Українська"
 
 msgid "Romanian"
+msgstr ""
+
+msgid "Spanish"
+msgstr ""
+
+msgid "Portuguese"
 msgstr ""
 
 msgid ", FPS: "

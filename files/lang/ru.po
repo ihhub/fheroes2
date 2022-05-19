@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-14 00:18+0000\n"
+"POT-Creation-Date: 2022-05-19 00:36+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -30,6 +30,9 @@ msgstr "Строитель"
 
 msgid "Explorer"
 msgstr "Разведчик"
+
+msgid "None"
+msgstr "Отсутствуют"
 
 msgid ""
 "A few\n"
@@ -280,9 +283,6 @@ msgstr "Потери на поле боя:"
 
 msgid "Attacker"
 msgstr "Нападавший"
-
-msgid "None"
-msgstr "Отсутствуют"
 
 msgid "Defender"
 msgstr "Оборонявшийся"
@@ -4078,6 +4078,13 @@ msgstr ""
 
 msgid "Romanian"
 msgstr ""
+
+msgid "Spanish"
+msgstr ""
+
+#, fuzzy
+msgid "Portuguese"
+msgstr "Разбойники"
 
 msgid ", FPS: "
 msgstr ", FPS: "

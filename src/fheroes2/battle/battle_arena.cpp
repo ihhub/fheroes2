@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -393,6 +393,8 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::Determi
         else
             board.SetCobjObjects( world.GetTiles( index ), seededGen );
     }
+
+    AI::Get().battleBegins();
 
     if ( interface ) {
         fheroes2::Display & display = fheroes2::Display::instance();

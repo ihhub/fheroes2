@@ -28,6 +28,9 @@ msgstr "Construtor"
 msgid "Explorer"
 msgstr "Explorador"
 
+msgid "None"
+msgstr "Nenhum"
+
 msgid ""
 "A few\n"
 "%{monster}"
@@ -284,9 +287,6 @@ msgstr "Baixas no Campo de Batalha"
 
 msgid "Attacker"
 msgstr "Agressor"
-
-msgid "None"
-msgstr "Nenhum"
 
 msgid "Defender"
 msgstr "Defensor"
@@ -4070,6 +4070,12 @@ msgstr "Ucraniano"
 
 msgid "Romanian"
 msgstr "Romeno"
+
+msgid "Spanish"
+msgstr ""
+
+msgid "Portuguese"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ", QPS: "

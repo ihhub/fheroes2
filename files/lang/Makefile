@@ -1,5 +1,5 @@
 ###########################################################################
-#   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
+#   fheroes2: https://github.com/ihhub/fheroes2                           #
 #   Copyright (C) 2022                                                    #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
@@ -28,8 +28,7 @@ merge:
 %.po: ../../src/dist/fheroes2.pot
 	msgmerge -U --no-location $@ $<
 
-# Spanish: drop accents transliterated with `"` (which breaks translation file format)
-# and transliterate the rest using the es_ES.UTF-8 locale
+# Spanish uses CP1252
 es.mo: es.po
 	iconv -f utf-8 -t CP1252 $< > $<.tmp
 	LANG=es.CP1252 LC_ALL=es.CP1252 LC_CTYPE=es.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp
@@ -41,6 +40,12 @@ fr.mo: fr.po
 	sed -e 'y/àâçéèêîïôùûüÉÊÀ/@*^~`|><#&$$uEEA/' $< > $<.tmp
 	sed -i~ -e 's/œ/oe/g' $<.tmp
 	msgfmt $<.tmp -o $@
+	
+# Portuguese uses CP1252	
+pt.mo: pt.po
+	iconv -f utf-8 -t CP1252 $< > $<.tmp
+	LANG=pt.CP1252 LC_ALL=pt.CP1252 LC_CTYPE=pt.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp
+	msgfmt $<.2.tmp -o $@
 
 # Polish version uses CP1250
 pl.mo: pl.po
