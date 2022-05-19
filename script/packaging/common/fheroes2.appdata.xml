@@ -4,9 +4,9 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0</project_license>
   <name>fheroes2</name>
-  <summary>fheroes2 is a recreation of HoMM2 game engine.</summary>
+  <summary>fheroes2 is a recreation of Heroes of Might and Magic II game engine.</summary>
   <description>
-    <p>fheroes2 is a recreation of HoMM2 game engine.</p>
+    <p>fheroes2 is a recreation of Heroes of Might and Magic II game engine.</p>
     <p>This open source multiplatform project, written from scratch, is designed to reproduce the original game with significant improvements in the gameplay, graphics and logic (including support for high-resolution graphics, improved AI, numerous fixes and UI improvements), breathing new life into one of the most addictive turn-based strategies.</p>
   </description>
   <url type="homepage">https://ihhub.github.io/fheroes2/</url>
@@ -22,15 +22,15 @@
   </releases>
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/ihhub/fheroes2/4ce7b1148b0c2ec4e5da67aeb79522942c7d6a95/docs/images/screenshots/screenshot_world_map.png</image>
+      <image>https://github.com/ihhub/fheroes2/blob/master/docs/images/screenshots/screenshot_world_map.png?raw=true</image>
       <caption>Map-Screen</caption>
     </screenshot>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/ihhub/fheroes2/4ce7b1148b0c2ec4e5da67aeb79522942c7d6a95/docs/images/screenshots/screenshot_castle.png</image>
+      <image>https://github.com/ihhub/fheroes2/blob/master/docs/images/screenshots/screenshot_castle.png?raw=true</image>
       <caption>Castle-Screen</caption>
     </screenshot>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/ihhub/fheroes2/4ce7b1148b0c2ec4e5da67aeb79522942c7d6a95/docs/images/screenshots/screenshot_battle.png</image>
+      <image>https://github.com/ihhub/fheroes2/blob/master/docs/images/screenshots/screenshot_battle.png?raw=true</image>
       <caption>Battle-Screen</caption>
     </screenshot>
   </screenshots>
