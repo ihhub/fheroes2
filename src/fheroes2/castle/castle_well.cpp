@@ -45,7 +45,7 @@ namespace
 {
     const int32_t bottomBarOffsetY = 461;
 
-    uint32_t HowManyRecruitMonster( const Castle & castle, Troops & tempCastleArmy, Troops & tempHeroArmy, const uint32_t dw, const Funds & add, Funds & res )
+    uint32_t howManyRecruitMonster( const Castle & castle, Troops & tempCastleArmy, Troops & tempHeroArmy, const uint32_t dw, const Funds & add, Funds & res )
     {
         const Monster monsters( castle.GetRace(), castle.GetActualDwelling( dw ) );
         if ( !tempCastleArmy.CanJoinTroop( monsters ) && !tempHeroArmy.CanJoinTroop( monsters ) )
@@ -100,7 +100,7 @@ namespace
     }
 }
 
-void Castle::RecruitCastleMax( const Troops & currentCastleArmy, const std::vector<u32> & allCastleDwellings )
+void Castle::recruitCastleMax( const Troops & currentCastleArmy, const std::vector<u32> & allCastleDwellings )
 {
     std::vector<Troop> totalRecruitmentResult;
     Funds currentMonsterCost;
@@ -117,7 +117,7 @@ void Castle::RecruitCastleMax( const Troops & currentCastleArmy, const std::vect
     }
 
     for ( const uint32_t dwellingType : allCastleDwellings ) {
-        const uint32_t recruitableNumber = HowManyRecruitMonster( *this, tempCastleArmy, tempGuestArmy, dwellingType, totalMonstersCost, currentMonsterCost );
+        const uint32_t recruitableNumber = howManyRecruitMonster( *this, tempCastleArmy, tempGuestArmy, dwellingType, totalMonstersCost, currentMonsterCost );
 
         if ( recruitableNumber ) {
             const Monster recruitableMonster( race, GetActualDwelling( dwellingType ) );
@@ -125,7 +125,7 @@ void Castle::RecruitCastleMax( const Troops & currentCastleArmy, const std::vect
             totalRecruitmentResult.emplace_back( recruitableMonster, recruitableNumber );
             totalMonstersCost += currentMonsterCost;
 
-            monstersRecruitedText.append( _( "%{monster} : %{amount}" ) );
+            monstersRecruitedText.append( "%{monster} : %{amount}" );
             StringReplace( monstersRecruitedText, "%{monster}", recruitableMonster.GetPluralName( recruitableNumber ) );
             StringReplace( monstersRecruitedText, "%{amount}", std::to_string( recruitableNumber ) );
             monstersRecruitedText += '\n';
@@ -216,7 +216,7 @@ void Castle::OpenWell( void )
 
     buttonMax.draw();
 
-    std::vector<u32> allDwellings;
+    std::vector<uint32_t> allDwellings;
     allDwellings.reserve( 6 );
     allDwellings.push_back( DWELLING_MONSTER6 );
     allDwellings.push_back( DWELLING_MONSTER5 );
@@ -239,7 +239,7 @@ void Castle::OpenWell( void )
         }
         if ( le.MouseClickLeft( buttonMax.area() ) || HotKeyPressEvent( Game::HotKeyEvent::WELL_BUY_ALL_CREATURES ) ) {
             const Troops & currentArmy = GetArmy();
-            RecruitCastleMax( currentArmy, allDwellings );
+            recruitCastleMax( currentArmy, allDwellings );
         }
         else if ( ( building & DWELLING_MONSTER1 ) && ( le.MouseClickLeft( rectMonster1 ) || pressedHotkeyBuildingID == DWELLING_MONSTER1 ) )
             RecruitMonster( Dialog::RecruitMonster( { race, GetActualDwelling( DWELLING_MONSTER1 ) }, dwelling[0], true, 0 ) );
