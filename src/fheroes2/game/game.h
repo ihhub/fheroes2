@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -116,6 +116,7 @@ namespace Game
     void SavePlayers( const std::string & mapFileName, const Players & players );
 
     std::string GetSaveDir();
+    std::string GetSaveFileBaseName();
     std::string GetSaveFileExtension();
     std::string GetSaveFileExtension( const int gameType );
 

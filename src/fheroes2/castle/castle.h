@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -201,6 +201,8 @@ public:
     void recruitBestAvailable( Funds budget );
     uint32_t getRecruitLimit( const Monster & monster, const Funds & budget ) const;
 
+    void recruitCastleMax( const Troops & currentCastleArmy, const std::vector<uint32_t> & allCastleDwellings );
+
     int getBuildingValue() const;
 
     // Used only for AI.
@@ -367,7 +369,6 @@ namespace CastleDialog
 
     void RedrawAllBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding,
                             const uint32_t animationIndex );
-    void RedrawBuildingSpriteToArea( const fheroes2::Sprite &, s32, s32, const fheroes2::Rect &, uint8_t alpha = 255 );
 
     void CastleRedrawBuilding( const Castle &, const fheroes2::Point &, u32 build, u32 frame, uint8_t alpha = 255 );
     void CastleRedrawBuildingExtended( const Castle &, const fheroes2::Point &, u32 build, u32 frame, uint8_t alpha = 255 );

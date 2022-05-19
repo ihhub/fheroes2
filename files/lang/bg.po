@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-07 06:08+0200\n"
-"PO-Revision-Date: 2022-05-07 06:18+0200\n"
+"POT-Creation-Date: 2022-05-19 00:36+0000\n"
+"PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -25,6 +25,9 @@ msgid "Builder"
 msgstr ""
 
 msgid "Explorer"
+msgstr ""
+
+msgid "None"
 msgstr ""
 
 msgid ""
@@ -247,9 +250,6 @@ msgid "Battlefield Casualties"
 msgstr ""
 
 msgid "Attacker"
-msgstr ""
-
-msgid "None"
 msgstr ""
 
 msgid "Defender"
@@ -2297,7 +2297,7 @@ msgstr ""
 msgid "Quit"
 msgstr ""
 
-msgid "Quit out of Free Heroes of Might and Magic II."
+msgid "Quit out of Heroes of Might and Magic II."
 msgstr ""
 
 msgid "Language"
@@ -2395,8 +2395,8 @@ msgid "Attention"
 msgstr ""
 
 msgid ""
-"Your version of Heroes of Might and Magic II does not support any languages "
-"except English."
+"Your version of Heroes of Might and Magic II does not support any other "
+"languages than English."
 msgstr ""
 
 msgid ""
@@ -3145,8 +3145,8 @@ msgid "Greetings!"
 msgstr ""
 
 msgid ""
-"Welcome to Free Heroes of Might and Magic II! Before starting the game "
-"please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
+"starting the game please choose game resolution."
 msgstr ""
 
 msgid "Please Remember"
@@ -3174,7 +3174,7 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-msgid "Quit Heroes of Might and Magic and return to the operating system."
+msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 
 msgid "Credits"
@@ -3654,6 +3654,12 @@ msgid "Ukrainian"
 msgstr ""
 
 msgid "Romanian"
+msgstr ""
+
+msgid "Spanish"
+msgstr ""
+
+msgid "Portuguese"
 msgstr ""
 
 msgid ", FPS: "

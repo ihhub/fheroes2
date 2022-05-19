@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -865,16 +865,6 @@ void Maps::Tiles::SetTile( u32 sprite_index, u32 shape )
     pack_sprite_index = PackTileSpriteIndex( sprite_index, shape );
 }
 
-u32 Maps::Tiles::TileSpriteIndex( void ) const
-{
-    return pack_sprite_index & 0x3FFF;
-}
-
-u32 Maps::Tiles::TileSpriteShape( void ) const
-{
-    return pack_sprite_index >> 14;
-}
-
 const fheroes2::Image & Maps::Tiles::GetTileSurface( void ) const
 {
     return fheroes2::AGG::GetTIL( TIL::GROUND32, TileSpriteIndex(), TileSpriteShape() );
@@ -1186,11 +1176,6 @@ int Maps::Tiles::GetGround( void ) const
         return Maps::Ground::WASTELAND;
 
     return Maps::Ground::BEACH;
-}
-
-bool Maps::Tiles::isWater( void ) const
-{
-    return 30 > TileSpriteIndex();
 }
 
 void Maps::Tiles::RedrawTile( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const

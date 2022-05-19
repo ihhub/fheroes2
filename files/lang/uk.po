@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-07 06:08+0200\n"
-"PO-Revision-Date: 2022-05-07 06:19+0200\n"
+"POT-Creation-Date: 2022-05-19 00:36+0000\n"
+"PO-Revision-Date: 2022-05-10 16:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -19,17 +19,17 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#, fuzzy
 msgid "Warrior"
 msgstr "Воїн"
 
-#, fuzzy
 msgid "Builder"
 msgstr "Будівник"
 
-#, fuzzy
 msgid "Explorer"
 msgstr "Мандрівник"
+
+msgid "None"
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -100,11 +100,13 @@ msgstr ""
 "Легіон\n"
 "%{monster}"
 
+#, fuzzy
 msgid "army|Few"
-msgstr ""
+msgstr "Мало"
 
+#, fuzzy
 msgid "army|Several"
-msgstr ""
+msgstr "Кілька"
 
 #, fuzzy
 msgid "army|Pack"
@@ -129,8 +131,9 @@ msgstr "Юрба"
 msgid "army|Zounds"
 msgstr ""
 
+#, fuzzy
 msgid "army|Legion"
-msgstr ""
+msgstr "Легіон"
 
 msgid "All %{race} troops +1"
 msgstr ""
@@ -144,8 +147,9 @@ msgstr ""
 msgid "Some undead in group -1"
 msgstr ""
 
+#, fuzzy
 msgid "View %{name}"
-msgstr ""
+msgstr "Дивитися %{name}"
 
 msgid "Move or right click to redistribute %{name}"
 msgstr ""
@@ -153,8 +157,9 @@ msgstr ""
 msgid "Combine %{name} armies"
 msgstr ""
 
+#, fuzzy
 msgid "Exchange %{name2} with %{name}"
-msgstr ""
+msgstr "Обміняти %{name2} на %{name}"
 
 msgid "Select %{name}"
 msgstr ""
@@ -168,14 +173,17 @@ msgstr ""
 msgid "%{name} half the enemy troops!"
 msgstr ""
 
+#, fuzzy
 msgid "%{name} has turned off the auto battle"
-msgstr ""
+msgstr "%{name} вимкнув авто-битву"
 
+#, fuzzy
 msgid "%{name} has turned on the auto battle"
-msgstr ""
+msgstr "%{name} ввімкнув авто-битву"
 
+#, fuzzy
 msgid "Spell failed!"
-msgstr ""
+msgstr "Чари не вдалися!"
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
@@ -199,20 +207,24 @@ msgid ""
 "half movement rate."
 msgstr ""
 
+#, fuzzy
 msgid "Speed"
-msgstr ""
+msgstr "Швидкість"
 
+#, fuzzy
 msgid "Speed: %{speed}"
-msgstr ""
+msgstr "Швидкість: %{speed}"
 
 msgid "Army Order"
 msgstr ""
 
+#, fuzzy
 msgid "Auto Spell Casting"
-msgstr ""
+msgstr "Автоматичне накладання чар"
 
+#, fuzzy
 msgid "Grid"
-msgstr ""
+msgstr "Сітка"
 
 msgid "Shadow Movement"
 msgstr ""
@@ -226,8 +238,9 @@ msgstr ""
 msgid "On"
 msgstr ""
 
+#, fuzzy
 msgid "Set the speed of combat actions and animations."
-msgstr ""
+msgstr "Встановити швидкість бойових дій та анімації."
 
 msgid "Toggle to display army order during the battle."
 msgstr ""
@@ -259,17 +272,20 @@ msgstr ""
 msgid "The enemy has fled!"
 msgstr "Ворог втік!"
 
+#, fuzzy
 msgid "A glorious victory!"
-msgstr ""
+msgstr "Славетна перемога!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
 msgstr ""
 
+#, fuzzy
 msgid "The cowardly %{name} flees from battle."
-msgstr ""
+msgstr "Боягузливий %{name} тікає від бою."
 
+#, fuzzy
 msgid "%{name} surrenders to the enemy, and departs in shame."
-msgstr ""
+msgstr "%{name} здається ворогові й відходить з ганьбою."
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
 msgstr ""
@@ -277,15 +293,13 @@ msgstr ""
 msgid "Your force suffer a bitter defeat."
 msgstr ""
 
+#, fuzzy
 msgid "Battlefield Casualties"
-msgstr ""
+msgstr "Жертви на полі бою"
 
 #, fuzzy
 msgid "Attacker"
-msgstr "Нападаючий"
-
-msgid "None"
-msgstr ""
+msgstr "Нападник"
 
 #, fuzzy
 msgid "Defender"
@@ -311,8 +325,9 @@ msgstr ""
 msgid "%{name} the %{race}"
 msgstr ""
 
+#, fuzzy
 msgid "Captain of %{name}"
-msgstr ""
+msgstr "Капітан %{name}"
 
 #, fuzzy
 msgid "Attack"
@@ -322,11 +337,13 @@ msgstr "Атака"
 msgid "Defense"
 msgstr "Захист"
 
+#, fuzzy
 msgid "Spell Power"
-msgstr ""
+msgstr "Сила Чарів"
 
+#, fuzzy
 msgid "Knowledge"
-msgstr ""
+msgstr "Знання"
 
 #, fuzzy
 msgid "Morale"
@@ -337,22 +354,26 @@ msgid "Luck"
 msgstr "Вдача"
 
 msgid "Spell Points"
-msgstr ""
+msgstr "Одиниці Чар"
 
 msgid "Hero's Options"
 msgstr ""
 
+#, fuzzy
 msgid "Cast Spell"
-msgstr ""
+msgstr "Накласти чари"
 
+#, fuzzy
 msgid "Retreat"
-msgstr ""
+msgstr "Втікти"
 
+#, fuzzy
 msgid "Surrender"
-msgstr ""
+msgstr "Здатися"
 
+#, fuzzy
 msgid "Cancel"
-msgstr ""
+msgstr "Скасувати"
 
 msgid "Hero Screen"
 msgstr ""
@@ -394,24 +415,28 @@ msgid ""
 "for the price of %{price} gold.\""
 msgstr ""
 
+#, fuzzy
 msgid "View %{monster} info"
-msgstr ""
+msgstr "Дізнатися про %{monster}"
 
+#, fuzzy
 msgid "Shoot %{monster}"
-msgstr ""
+msgstr "Вистрілити у %{monster}"
 
+#, fuzzy
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "(Залишився 1 постріл)"
+msgstr[1] "(Залишилося %{count} постріла)"
+msgstr[2] "(Залишилося %{count} пострілів)"
 
 #, fuzzy
 msgid "Attack %{monster}"
 msgstr "Атакувати %{monster}"
 
+#, fuzzy
 msgid "Fly %{monster} here"
-msgstr ""
+msgstr "%{monster} летітиме сюди"
 
 msgid "Move %{monster} here"
 msgstr ""
@@ -442,29 +467,36 @@ msgstr ""
 msgid "Ballista"
 msgstr "Баліста"
 
+#, fuzzy
 msgid "Enable auto combat"
-msgstr ""
+msgstr "Увімкнути автоматичний бій"
 
+#, fuzzy
 msgid "Allows the computer to fight out the battle for you."
-msgstr ""
+msgstr "Дозволяє комп’ютеру вести битву за вас."
 
+#, fuzzy
 msgid "Auto Combat"
-msgstr ""
+msgstr "Автоматичний бій"
 
+#, fuzzy
 msgid "Customize system options"
-msgstr ""
+msgstr "Налаштувати параметри системи"
 
+#, fuzzy
 msgid "Allows you to customize the combat screen."
-msgstr ""
+msgstr "Дозволяє налаштувати екран бою."
 
+#, fuzzy
 msgid "System Options"
-msgstr ""
+msgstr "Параметри Системи"
 
 msgid "Wait this unit"
 msgstr ""
 
+#, fuzzy
 msgid "Wait"
-msgstr ""
+msgstr "Чекати"
 
 msgid ""
 "Waits the current creature. The current creature delays its turn until after "
@@ -474,8 +506,9 @@ msgstr ""
 msgid "Skip this unit"
 msgstr ""
 
+#, fuzzy
 msgid "Skip"
-msgstr ""
+msgstr "Пропустити"
 
 msgid ""
 "Skips the current creature. The current creature ends its turn and does not "
@@ -501,14 +534,17 @@ msgstr ""
 msgid "Shows the results of individual monster's actions."
 msgstr ""
 
+#, fuzzy
 msgid "%{name} skip their turn."
-msgstr ""
+msgstr "%{name} пропускає свою чергу."
 
+#, fuzzy
 msgid "%{name} wait their turn."
-msgstr ""
+msgstr "%{name} чекає на свою чергу." 
 
+#, fuzzy
 msgid "%{attacker} do %{damage} damage."
-msgstr ""
+msgstr "%{attacker} завдає %{damage} шкоди."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
@@ -2113,17 +2149,19 @@ msgid ""
 msgstr ""
 
 msgid "This town may not be upgraded to a castle."
-msgstr "Розбудува замку в цьому мiстi неможлива"
+msgstr "Розбудова замку в цьому мiстi неможлива."
 
 #, fuzzy
 msgid "Town"
 msgstr "Місто"
 
+#, fuzzy
 msgid "Exit Castle"
-msgstr ""
+msgstr "Вийти з замку"
 
+#, fuzzy
 msgid "Exit Town"
-msgstr ""
+msgstr "Вийти з міста"
 
 msgid "Show Income"
 msgstr ""
@@ -2247,8 +2285,9 @@ msgstr ""
 msgid "Digging"
 msgstr ""
 
+#, fuzzy
 msgid "Exit this menu without doing anything."
-msgstr ""
+msgstr "Нічого не робити, натомість залишити це меню."
 
 msgid "Arena"
 msgstr ""
@@ -2352,8 +2391,9 @@ msgstr ""
 msgid "Load Game"
 msgstr "Завантажити Гру"
 
+#, fuzzy
 msgid "No save files to load."
-msgstr ""
+msgstr "Немає файлів збереження для завантаження."
 
 #, fuzzy
 msgid "New Game"
@@ -2362,21 +2402,24 @@ msgstr "Нова Гра"
 msgid "Start a single or multi-player game."
 msgstr ""
 
+#, fuzzy
 msgid "Load a previously saved game."
-msgstr ""
+msgstr "Завантажте раніше збережену гру."
 
+#, fuzzy
 msgid "Save Game"
-msgstr ""
+msgstr "Зберегти Гру"
 
+#, fuzzy
 msgid "Save the current game."
-msgstr ""
+msgstr "Збережіть поточну гру."
 
 #, fuzzy
 msgid "Quit"
 msgstr "Вихід"
 
-msgid "Quit out of Free Heroes of Might and Magic II."
-msgstr ""
+msgid "Quit out of Heroes of Might and Magic II."
+msgstr "Залишити Heroes of Might and Magic II."
 
 #, fuzzy
 msgid "Language"
@@ -2432,13 +2475,13 @@ msgstr ""
 
 #, fuzzy
 msgid "Text Support"
-msgstr "Телепортуватися сюди"
+msgstr ""
 
 msgid "Select Game Language"
 msgstr "Обрати мову гри"
 
 msgid "Change language of the game."
-msgstr ""
+msgstr "Змінити мову гри."
 
 msgid "Select Game Resolution"
 msgstr ""
@@ -2479,19 +2522,25 @@ msgid "Attention"
 msgstr ""
 
 msgid ""
-"Your version of Heroes of Might and Magic II does not support any languages "
-"except English."
+"Your version of Heroes of Might and Magic II does not support any other "
+"languages than English."
 msgstr ""
 
+#, fuzzy
 msgid ""
 "Map\n"
 "Difficulty"
 msgstr ""
+"Складність\n"
+"Мапи"
 
+#, fuzzy
 msgid ""
 "Game\n"
 "Difficulty"
 msgstr ""
+"Складність\n"
+"Гри"
 
 msgid "Rating"
 msgstr ""
@@ -2673,17 +2722,20 @@ msgstr "Атака:"
 msgid "Defense:"
 msgstr "Захист:"
 
+#, fuzzy
 msgid "Spell Power:"
-msgstr ""
+msgstr "Сила Чарів:"
 
+#, fuzzy
 msgid "Knowledge:"
-msgstr ""
+msgstr "Знання:"
 
 msgid "Spell Points:"
-msgstr ""
+msgstr "Одиниці Чар:"
 
+#, fuzzy
 msgid "Move Points:"
-msgstr ""
+msgstr "Очки Переміщення:"
 
 msgid "Cost per troop:"
 msgstr ""
@@ -2697,8 +2749,9 @@ msgstr ""
 msgid "Click to apply the selected resolution."
 msgstr ""
 
+#, fuzzy
 msgid "MAX"
-msgstr ""
+msgstr "МАКС"
 
 msgid "How many troops to move?"
 msgstr ""
@@ -2706,8 +2759,9 @@ msgstr ""
 msgid "Fast separation into slots:"
 msgstr ""
 
+#, fuzzy
 msgid "Map: "
-msgstr ""
+msgstr "Мапа: "
 
 msgid ""
 "\n"
@@ -2823,11 +2877,13 @@ msgstr ""
 msgid "View only maps of size large (108 x 108)."
 msgstr ""
 
+#, fuzzy
 msgid "Extra Large Maps"
-msgstr ""
+msgstr "Надвелики Мапи"
 
+#, fuzzy
 msgid "View only maps of size extra large (144 x 144)."
-msgstr ""
+msgstr "Дивитися лише мапи надвеликого розміру (144 x 144)."
 
 #, fuzzy
 msgid "All Maps"
@@ -2912,8 +2968,9 @@ msgstr ""
 msgid "Good"
 msgstr ""
 
+#, fuzzy
 msgid "Interface Type"
-msgstr ""
+msgstr "Тип Інтерфейсу"
 
 msgid "Hide"
 msgstr ""
@@ -3082,8 +3139,9 @@ msgstr ""
 msgid "QA and Support"
 msgstr ""
 
+#, fuzzy
 msgid "Development"
-msgstr ""
+msgstr "Розробка"
 
 msgid "Visit us at "
 msgstr ""
@@ -3166,8 +3224,9 @@ msgstr ""
 msgid "Unknown Hero"
 msgstr ""
 
+#, fuzzy
 msgid "Your Name"
-msgstr ""
+msgstr "Ваше Ім'я"
 
 msgid "Campaign"
 msgstr ""
@@ -3217,8 +3276,9 @@ msgstr ""
 msgid "A single player game playing out a single map."
 msgstr ""
 
+#, fuzzy
 msgid "Standard Game"
-msgstr ""
+msgstr "Стандартна Гра"
 
 msgid "A single player game playing through a series of maps."
 msgstr ""
@@ -3241,8 +3301,8 @@ msgid "Greetings!"
 msgstr ""
 
 msgid ""
-"Welcome to Free Heroes of Might and Magic II! Before starting the game "
-"please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
+"starting the game please choose game resolution."
 msgstr ""
 
 msgid "Please Remember"
@@ -3270,8 +3330,9 @@ msgid ""
 "Enjoy the game!"
 msgstr ""
 
-msgid "Quit Heroes of Might and Magic and return to the operating system."
+msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
+"Залишити Heroes of Might and Magic II і повернутися до операційної системи."
 
 msgid "Credits"
 msgstr ""
@@ -3753,6 +3814,12 @@ msgstr "Українська"
 msgid "Romanian"
 msgstr ""
 
+msgid "Spanish"
+msgstr ""
+
+msgid "Portuguese"
+msgstr ""
+
 msgid ", FPS: "
 msgstr ""
 
@@ -3763,16 +3830,16 @@ msgid "%{object} raided"
 msgstr ""
 
 msgid "Ector"
-msgstr ""
+msgstr "Ектор"
 
 msgid "Gwenneth"
 msgstr ""
 
 msgid "Lord Kilburn"
-msgstr ""
+msgstr "Лорд Кілбурн"
 
 msgid "Sir Gallant"
-msgstr ""
+msgstr "Сір Галант"
 
 msgid "Tyro"
 msgstr ""
@@ -3904,16 +3971,16 @@ msgid "Rialdo"
 msgstr ""
 
 msgid "Zam"
-msgstr ""
+msgstr "Зам"
 
 msgid "Zom"
-msgstr ""
+msgstr "Зом"
 
 msgid "Celia"
 msgstr ""
 
 msgid "Roxana"
-msgstr ""
+msgstr "Роксана"
 
 msgid "Sandro"
 msgstr ""
@@ -3934,13 +4001,13 @@ msgid "Dainwin"
 msgstr ""
 
 msgid "Joseph"
-msgstr ""
+msgstr "Джозеф"
 
 msgid "Mog"
 msgstr ""
 
 msgid "Solmyr"
-msgstr ""
+msgstr "Солмир"
 
 msgid "Ceallach"
 msgstr ""

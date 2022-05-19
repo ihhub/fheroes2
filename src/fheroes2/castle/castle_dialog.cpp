@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -29,7 +29,6 @@
 #include "army_bar.h"
 #include "castle.h"
 #include "castle_building_info.h"
-#include "castle_ui.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -47,6 +46,7 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_castle.h"
 #include "ui_kingdom.h"
 #include "ui_text.h"
 #include "ui_tool.h"

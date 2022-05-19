@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -83,7 +83,7 @@ namespace Dialog
     int AdventureOptions( bool enabledig );
     fheroes2::GameMode FileOptions();
     std::string SelectFileLoad( void );
-    std::string SelectFileSave( void );
+    std::string SelectFileSave();
     // show info cell maps
     void QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile = false );
     void QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea, const fheroes2::Point & position = fheroes2::Point() );

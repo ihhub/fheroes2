@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -237,7 +237,7 @@ namespace AI
         hero.SetFreeman( reason );
     }
 
-    void HeroesAction( Heroes & hero, s32 dst_index )
+    void HeroesAction( Heroes & hero, const int32_t dst_index )
     {
         const Maps::Tiles & tile = world.GetTiles( dst_index );
         const MP2::MapObjectType objectType = tile.GetObject( dst_index != hero.GetIndex() );
@@ -501,7 +501,7 @@ namespace AI
 
         // ignore empty tiles
         if ( isAction )
-            AI::Get().HeroesActionComplete( hero );
+            AI::Get().HeroesActionComplete( hero, objectType );
     }
 
     void AIToHeroes( Heroes & hero, s32 dst_index )

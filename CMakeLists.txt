@@ -1,5 +1,5 @@
 ###########################################################################
-#   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
+#   fheroes2: https://github.com/ihhub/fheroes2                           #
 #   Copyright (C) 2022                                                    #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
@@ -200,6 +200,18 @@ if(NOT MACOS_APP_BUNDLE)
 			FILES script/homm2/extract_homm2_resources.sh
 			PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
 			DESTINATION ${CMAKE_INSTALL_DOCDIR}/homm2
+			)
+		install(
+			FILES script/packaging/common/fheroes2.appdata.xml
+			DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/metainfo
+			)
+		install(
+			FILES src/resources/fheroes2.png
+			DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/128x128/apps
+			)
+		install(
+			FILES script/packaging/common/fheroes2.desktop
+			DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications
 			)
 	endif(WIN32)
 endif(NOT MACOS_APP_BUNDLE)

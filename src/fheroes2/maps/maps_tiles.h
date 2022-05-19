@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -140,10 +140,21 @@ namespace Maps
 
         uint16_t GetPassable() const;
         int GetGround() const;
-        bool isWater() const;
 
-        u32 TileSpriteIndex( void ) const;
-        u32 TileSpriteShape( void ) const;
+        bool isWater() const
+        {
+            return 30 > TileSpriteIndex();
+        }
+
+        uint32_t TileSpriteIndex() const
+        {
+            return pack_sprite_index & 0x3FFF;
+        }
+
+        uint32_t TileSpriteShape() const
+        {
+            return pack_sprite_index >> 14;
+        }
 
         const fheroes2::Image & GetTileSurface( void ) const;
 
