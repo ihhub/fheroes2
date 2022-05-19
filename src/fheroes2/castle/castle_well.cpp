@@ -100,7 +100,7 @@ namespace
     }
 }
 
-void Castle::recruitCastleMax( const Troops & currentCastleArmy, const std::vector<u32> & allCastleDwellings )
+void Castle::recruitCastleMax( const Troops & currentCastleArmy, const std::vector<uint32_t> & allCastleDwellings )
 {
     std::vector<Troop> totalRecruitmentResult;
     Funds currentMonsterCost;
@@ -119,17 +119,18 @@ void Castle::recruitCastleMax( const Troops & currentCastleArmy, const std::vect
     for ( const uint32_t dwellingType : allCastleDwellings ) {
         const uint32_t recruitableNumber = howManyRecruitMonster( *this, tempCastleArmy, tempGuestArmy, dwellingType, totalMonstersCost, currentMonsterCost );
 
-        if ( recruitableNumber ) {
-            const Monster recruitableMonster( race, GetActualDwelling( dwellingType ) );
-
-            totalRecruitmentResult.emplace_back( recruitableMonster, recruitableNumber );
-            totalMonstersCost += currentMonsterCost;
-
-            monstersRecruitedText.append( "%{monster} : %{amount}" );
-            StringReplace( monstersRecruitedText, "%{monster}", recruitableMonster.GetPluralName( recruitableNumber ) );
-            StringReplace( monstersRecruitedText, "%{amount}", std::to_string( recruitableNumber ) );
-            monstersRecruitedText += '\n';
+        if ( recruitableNumber == 0 ) {
+            continue;
         }
+        const Monster recruitableMonster( race, GetActualDwelling( dwellingType ) );
+
+        totalRecruitmentResult.emplace_back( recruitableMonster, recruitableNumber );
+        totalMonstersCost += currentMonsterCost;
+
+        monstersRecruitedText.append( "%{monster} : %{amount}" );
+        StringReplace( monstersRecruitedText, "%{monster}", recruitableMonster.GetPluralName( recruitableNumber ) );
+        StringReplace( monstersRecruitedText, "%{amount}", std::to_string( recruitableNumber ) );
+        monstersRecruitedText += '\n';
     }
 
     const fheroes2::FontType normalWhite = fheroes2::FontType::normalWhite();
