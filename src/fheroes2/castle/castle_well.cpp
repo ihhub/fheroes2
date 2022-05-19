@@ -36,7 +36,6 @@
 #include "monster_anim.h"
 #include "resource.h"
 #include "speed.h"
-#include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
@@ -127,9 +126,9 @@ void Castle::recruitCastleMax( const Troops & currentCastleArmy, const std::vect
         totalRecruitmentResult.emplace_back( recruitableMonster, recruitableNumber );
         totalMonstersCost += currentMonsterCost;
 
-        monstersRecruitedText.append( "%{monster} : %{amount}" );
-        StringReplace( monstersRecruitedText, "%{monster}", recruitableMonster.GetPluralName( recruitableNumber ) );
-        StringReplace( monstersRecruitedText, "%{amount}", std::to_string( recruitableNumber ) );
+        monstersRecruitedText += recruitableMonster.GetPluralName( recruitableNumber );
+        monstersRecruitedText += " : ";
+        monstersRecruitedText += std::to_string( recruitableNumber );
         monstersRecruitedText += '\n';
     }
 
