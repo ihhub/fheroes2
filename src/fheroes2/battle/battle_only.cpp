@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -28,7 +28,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
 #include "icn.h"
@@ -91,7 +91,7 @@ Battle::Only::Only()
     player2.SetControl( CONTROL_AI );
 }
 
-bool Battle::Only::ChangeSettings( void )
+bool Battle::Only::ChangeSettings()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -120,6 +120,7 @@ bool Battle::Only::ChangeSettings( void )
 
     hero1 = world.GetHeroes( Heroes::LORDKILBURN );
     hero1->GetSecondarySkills().FillMax( Skill::Secondary() );
+
     army1 = &hero1->GetArmy();
 
     RedrawBaseInfo( cur_pt );
@@ -180,11 +181,11 @@ bool Battle::Only::ChangeSettings( void )
     while ( !exit && le.HandleEvents() ) {
         buttonStart.isEnabled() && le.MousePressLeft( buttonStart.area() ) ? buttonStart.drawOnPress() : buttonStart.drawOnRelease();
 
-        if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStart.area() ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) {
+        if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStart.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             result = true;
             exit = true;
         }
-        else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) )
             exit = true;
 
         if ( allow1 && le.MouseClickLeft( rtPortrait1 ) ) {
@@ -581,7 +582,7 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
     fheroes2::RedrawPrimarySkillInfo( top, primskill_bar1.get(), primskill_bar2.get() );
 }
 
-void Battle::Only::StartBattle( void )
+void Battle::Only::StartBattle()
 {
     Settings & conf = Settings::Get();
 

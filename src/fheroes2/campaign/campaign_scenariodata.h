@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -82,7 +82,7 @@ namespace Campaign
     struct ScenarioBonusData
     {
     public:
-        enum BonusType
+        enum BonusType : int32_t
         {
             RESOURCES = 0,
             ARTIFACT,
@@ -94,12 +94,12 @@ namespace Campaign
             STARTING_RACE_AND_ARMY
         };
 
-        uint32_t _type;
-        uint32_t _subType;
-        uint32_t _amount;
+        int32_t _type;
+        int32_t _subType;
+        int32_t _amount;
 
         ScenarioBonusData();
-        ScenarioBonusData( uint32_t type, uint32_t subType, uint32_t amount );
+        ScenarioBonusData( const int32_t type, const int32_t subType, const int32_t amount );
 
         friend StreamBase & operator<<( StreamBase & msg, const ScenarioBonusData & data );
         friend StreamBase & operator>>( StreamBase & msg, ScenarioBonusData & data );

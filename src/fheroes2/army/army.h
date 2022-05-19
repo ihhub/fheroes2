@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -177,8 +177,8 @@ public:
 
     int GetMorale( void ) const;
     int GetLuck( void ) const;
-    int GetMoraleModificator( std::string * ) const;
-    int GetLuckModificator( const std::string * ) const;
+    int GetMoraleModificator( std::string * strs ) const;
+    int GetLuckModificator( std::string * strs ) const;
     uint32_t ActionToSirens() const;
 
     const HeroBase * GetCommander( void ) const;

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -218,11 +218,13 @@ namespace Battle
 
         PopupDamageInfo & operator=( const PopupDamageInfo & ) = delete;
 
-        void SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender, const fheroes2::Point & offset );
+        void setBattleUIRect( const fheroes2::Rect & battleUIRect );
+        void SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender );
         void Reset();
-        void Redraw( int, int );
+        void Redraw();
 
     private:
+        fheroes2::Rect _battleUIRect;
         const Cell * _cell;
         const Unit * _attacker;
         const Unit * _defender;

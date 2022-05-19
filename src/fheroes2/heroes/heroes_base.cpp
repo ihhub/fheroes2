@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -103,9 +103,56 @@ void HeroBase::SetSpellPoints( const uint32_t points )
     magic_point = points;
 }
 
+bool HeroBase::isPotentSpellcaster() const
+{
+    // With knowledge 5 or less there isn't enough spell points to make a difference
+    if ( knowledge <= 5 )
+        return false;
+
+    for ( const Spell & spell : spell_book ) {
+        // This list is based on spells AI can use efficiently - should be updated later on
+        switch ( spell.GetID() ) {
+        case Spell::BLIND:
+        case Spell::PARALYZE:
+        case Spell::DIMENSIONDOOR:
+        case Spell::SUMMONAELEMENT:
+        case Spell::SUMMONEELEMENT:
+        case Spell::SUMMONFELEMENT:
+        case Spell::SUMMONWELEMENT:
+        case Spell::MIRRORIMAGE:
+            return true;
+        case Spell::COLDRAY:
+        case Spell::LIGHTNINGBOLT:
+        case Spell::CHAINLIGHTNING:
+        case Spell::METEORSHOWER:
+        case Spell::ARMAGEDDON:
+            if ( power > 5 )
+                return true;
+            break;
+        case Spell::RESURRECT:
+        case Spell::RESURRECTTRUE:
+            if ( !GetArmy().AllTroopsAreUndead() )
+                return true;
+            break;
+        case Spell::ANIMATEDEAD:
+            if ( GetArmy().AllTroopsAreUndead() )
+                return true;
+            break;
+        default:
+            break;
+        }
+    }
+    return false;
+}
+
 bool HeroBase::HaveSpellPoints( const Spell & spell ) const
 {
-    return magic_point >= spell.SpellPoint( this );
+    return magic_point >= spell.spellPoints( this );
+}
+
+bool HeroBase::haveMovePoints( const Spell & spell ) const
+{
+    return move_point >= spell.minMovePoints();
 }
 
 void HeroBase::EditSpellBook()
@@ -237,12 +284,7 @@ int HeroBase::GetMoraleModificator( std::string * strs ) const
 {
     int result = 0;
 
-    // check castle modificator
-    const Castle * castle = inCastle();
-    if ( castle )
-        result += castle->GetMoraleModificator( strs );
-
-    // army modificator
+    // army modificator (including the castle modificator)
     result += GetArmy().GetMoraleModificator( strs );
 
     if ( strs == nullptr ) {
@@ -269,12 +311,7 @@ int HeroBase::GetLuckModificator( std::string * strs ) const
 {
     int result = 0;
 
-    // check castle modificator
-    const Castle * castle = inCastle();
-    if ( castle )
-        result += castle->GetLuckModificator( strs );
-
-    // army modificator
+    // army modificator (including the castle modificator)
     result += GetArmy().GetLuckModificator( strs );
 
     if ( strs == nullptr ) {
@@ -304,7 +341,7 @@ double HeroBase::GetMagicStrategicValue( const double armyStrength ) const
         if ( spell.isCombat() ) {
             const int id = spell.GetID();
 
-            const uint32_t spellCost = spell.SpellPoint();
+            const uint32_t spellCost = spell.spellPoints();
             const uint32_t casts = spellCost ? std::min( 10U, currentSpellPoints / spellCost ) : 0;
 
             // use quadratic formula to diminish returns from subsequent spell casts, (up to x5 when spell has 10 uses)
@@ -339,16 +376,16 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         return false;
     }
 
-    if ( !HaveSpell( spell ) ) {
+    if ( !HaveSpellPoints( spell ) ) {
         if ( res ) {
-            *res = _( "The spell is not found." );
+            *res = _( "That spell costs %{mana} mana. You only have %{point} mana, so you can't cast the spell." );
         }
         return false;
     }
 
-    if ( !HaveSpellPoints( spell ) ) {
+    if ( !HaveSpell( spell ) ) {
         if ( res ) {
-            *res = _( "That spell costs %{mana} mana. You only have %{point} mana, so you can't cast the spell." );
+            *res = _( "The spell is not found." );
         }
         return false;
     }
@@ -364,22 +401,27 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
             return false;
         }
 
-        // A spell that consumes movement points can be cast if the hero is able to move from his current tile
-        if ( spell.MovePoint() > 0 && !hero->CanMove() ) {
+        if ( !haveMovePoints( spell ) ) {
             if ( res ) {
                 *res = _( "Your hero is too tired to cast this spell today. Try again tomorrow." );
             }
             return false;
         }
 
-        if ( spell == Spell::TOWNGATE ) {
-            const Castle * castle = fheroes2::getNearestCastleTownGate( *hero );
-            if ( castle == nullptr ) {
+        if ( spell == Spell::TOWNGATE || spell == Spell::TOWNPORTAL ) {
+            const KingdomCastles & castles = hero->GetKingdom().GetCastles();
+            bool hasCastles = std::any_of( castles.begin(), castles.end(), []( const Castle * castle ) { return castle && !castle->GetHeroes().Guest(); } );
+            if ( !hasCastles ) {
                 if ( res != nullptr ) {
                     *res = _( "You do not currently own any town or castle, so you can't cast the spell." );
                 }
                 return false;
             }
+        }
+
+        if ( spell == Spell::TOWNGATE ) {
+            const Castle * castle = fheroes2::getNearestCastleTownGate( *hero );
+            assert( castle != nullptr );
 
             if ( castle->GetIndex() == hero->GetIndex() ) {
                 if ( res != nullptr ) {
@@ -408,12 +450,8 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
 
 void HeroBase::SpellCasted( const Spell & spell )
 {
-    // spell point cost
-    magic_point -= ( spell.SpellPoint( this ) < magic_point ? spell.SpellPoint( this ) : magic_point );
-
-    // move point cost
-    if ( spell.MovePoint() )
-        move_point -= ( spell.MovePoint() < move_point ? spell.MovePoint() : move_point );
+    magic_point -= std::min( spell.spellPoints( this ), magic_point );
+    move_point -= std::min( spell.movePoints(), move_point );
 }
 
 bool HeroBase::CanLearnSpell( const Spell & spell ) const

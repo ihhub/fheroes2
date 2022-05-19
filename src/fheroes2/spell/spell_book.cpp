@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -28,7 +28,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "heroes_base.h"
 #include "icn.h"
 #include "image_tool.h"
@@ -86,7 +86,7 @@ namespace
 
             const Spell & spell = spells[i + index];
             const std::string & spellName = spell.GetName();
-            const uint32_t spellCost = spell.SpellPoint( &hero );
+            const uint32_t spellCost = spell.spellPoints( &hero );
             const bool isAvailable = hero.CanCastSpell( spell );
 
             const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
@@ -222,11 +222,11 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
 
     // message loop
     while ( le.HandleEvents() ) {
-        if ( ( le.MouseClickLeft( prev_list ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) ) && current_index != 0 ) {
+        if ( ( le.MouseClickLeft( prev_list ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) ) && current_index != 0 ) {
             current_index -= spellsPerPage * 2;
             redraw = true;
         }
-        else if ( ( le.MouseClickLeft( next_list ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) )
+        else if ( ( le.MouseClickLeft( next_list ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) )
                   && displayedSpells.size() > ( current_index + ( spellsPerPage * 2 ) ) ) {
             current_index += spellsPerPage * 2;
             redraw = true;
@@ -267,7 +267,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
         else if ( le.MousePressRight( next_list ) ) {
             Dialog::Message( "", _( "View next page" ), Font::BIG );
         }
-        else if ( le.MouseClickLeft( clos_rt ) || HotKeyCloseWindow )
+        else if ( le.MouseClickLeft( clos_rt ) || Game::HotKeyCloseWindow() )
             break;
         else if ( le.MouseClickLeft( pos ) ) {
             const int32_t index = GetRectIndex( coords, le.GetMouseCursor() );
@@ -283,7 +283,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
                             break;
                         }
                         else {
-                            StringReplace( str, "%{mana}", ( *spell ).SpellPoint( &hero ) );
+                            StringReplace( str, "%{mana}", ( *spell ).spellPoints( &hero ) );
                             StringReplace( str, "%{point}", hero.GetSpellPoints() );
                             Dialog::Message( spell->GetName(), str, Font::BIG, Dialog::OK );
                             display.render();
@@ -411,7 +411,7 @@ void SpellBook::Edit( const HeroBase & hero )
             current_index += spellsPerPage * 2;
             redraw = true;
         }
-        else if ( le.MouseClickLeft( clos_rt ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
+        else if ( le.MouseClickLeft( clos_rt ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) )
             break;
         else if ( le.MouseClickLeft( pos ) ) {
             const int32_t index = GetRectIndex( coords, le.GetMouseCursor() );

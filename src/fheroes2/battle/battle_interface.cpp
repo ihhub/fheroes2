@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cstdlib>
 
 #include "agg.h"
@@ -37,8 +38,8 @@
 #include "battle_tower.h"
 #include "battle_troop.h"
 #include "castle.h"
-#include "game.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "ground.h"
 #include "icn.h"
 #include "interface_list.h"
@@ -55,8 +56,6 @@
 #include "ui_text.h"
 #include "ui_window.h"
 #include "world.h"
-
-#include <cassert>
 
 namespace
 {
@@ -997,6 +996,9 @@ Battle::Interface::Interface( Arena & a, s32 center )
                                          _surfaceInnerArea.width, _surfaceInnerArea.height );
     border.SetPosition( _interfacePosition.x - BORDERWIDTH, _interfacePosition.y - BORDERWIDTH, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
+    // damage info popup
+    popup.setBattleUIRect( _interfacePosition );
+
     // cover
     const bool trees = !Maps::ScanAroundObject( center, MP2::OBJ_TREES ).empty();
     const Maps::Tiles & tile = world.GetTiles( center );
@@ -1205,7 +1207,7 @@ void Battle::Interface::RedrawInterface( void )
         btn_wait.draw();
     btn_skip.draw();
 
-    popup.Redraw( _interfacePosition.x + _interfacePosition.width + 60, _interfacePosition.y + _interfacePosition.height );
+    popup.Redraw();
 
     if ( listlog && listlog->isOpenLog() ) {
         listlog->Redraw();
@@ -2382,49 +2384,49 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
 
     if ( le.KeyPress() ) {
         // skip
-        if ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_HARDSKIP ) ) {
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SKIP ) ) {
             a.emplace_back( CommandType::MSG_BATTLE_SKIP, b.GetUID(), true );
             humanturn_exit = true;
         }
         else
             // soft skip
-            if ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_SOFTSKIP ) ) {
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_WAIT ) ) {
             a.emplace_back( CommandType::MSG_BATTLE_SKIP, b.GetUID(), !conf.ExtBattleSoftWait() );
             humanturn_exit = true;
         }
         else
             // options
-            if ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_OPTIONS ) )
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_OPTIONS ) )
             EventShowOptions();
         else
             // auto switch
-            if ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_AUTOSWITCH ) )
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTOSWITCH ) )
             EventAutoSwitch( b, a );
         else
             // cast
-            if ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_CASTSPELL ) )
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::CAST_SPELL ) )
             ProcessingHeroDialogResult( 1, a );
         else
             // retreat
-            if ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_RETREAT ) )
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_RETREAT ) )
             ProcessingHeroDialogResult( 2, a );
         else
             // surrender
-            if ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_SURRENDER ) )
+            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SURRENDER ) )
             ProcessingHeroDialogResult( 3, a );
 
             // debug only
 #ifdef WITH_DEBUG
         if ( IS_DEVEL() )
             switch ( le.KeyValue() ) {
-            case KEY_w:
+            case fheroes2::Key::KEY_W:
                 // fast wins game
                 arena.GetResult().army1 = RESULT_WINS;
                 humanturn_exit = true;
                 a.emplace_back( CommandType::MSG_BATTLE_END_TURN, b.GetUID() );
                 break;
 
-            case KEY_l:
+            case fheroes2::Key::KEY_L:
                 // fast loss game
                 arena.GetResult().army1 = RESULT_LOSS;
                 humanturn_exit = true;
@@ -2566,7 +2568,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
         if ( cell ) {
             if ( CursorAttack( themes ) ) {
                 const Unit * b_enemy = cell->GetUnit();
-                popup.SetInfo( cell, _currentUnit, b_enemy, _interfacePosition.getPosition() );
+                popup.SetInfo( cell, _currentUnit, b_enemy );
             }
             else
                 popup.Reset();
@@ -2607,7 +2609,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
     LocalEvent & le = LocalEvent::Get();
 
     // reset cast
-    if ( le.MousePressRight() || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+    if ( le.MousePressRight() || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
         humanturn_spell = Spell::NONE;
         teleport_src = -1;
     }
@@ -5048,8 +5050,8 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
     if ( arena.AutoBattleInProgress() && arena.CanToggleAutoBattle()
          && ( le.MouseClickLeft( btn_auto.area() )
               || ( le.KeyPress()
-                   && ( Game::HotKeyPressEvent( Game::EVENT_BATTLE_AUTOSWITCH )
-                        || ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT )
+                   && ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTOSWITCH )
+                        || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL )
                              && Dialog::YES == Dialog::Message( "", _( "Break auto battle?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) ) ) ) ) {
         _breakAutoBattleForColor = arena.GetCurrentColor();
     }
@@ -5149,7 +5151,12 @@ Battle::PopupDamageInfo::PopupDamageInfo()
     , _redraw( false )
 {}
 
-void Battle::PopupDamageInfo::SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender, const fheroes2::Point & offset )
+void Battle::PopupDamageInfo::setBattleUIRect( const fheroes2::Rect & battleUIRect )
+{
+    _battleUIRect = battleUIRect;
+}
+
+void Battle::PopupDamageInfo::SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender )
 {
     if ( cell == nullptr || attacker == nullptr || defender == nullptr ) {
         return;
@@ -5163,79 +5170,78 @@ void Battle::PopupDamageInfo::SetInfo( const Cell * cell, const Unit * attacker,
     _cell = cell;
     _attacker = attacker;
     _defender = defender;
-
-    const fheroes2::Rect & rt = cell->GetPos();
-    SetPosition( rt.x + rt.width + offset.x, rt.y + offset.y, 20, 20 );
 }
 
-void Battle::PopupDamageInfo::Reset( void )
+void Battle::PopupDamageInfo::Reset()
 {
     if ( _redraw ) {
         restorer.restore();
+
         _redraw = false;
         _cell = nullptr;
         _attacker = nullptr;
         _defender = nullptr;
     }
+
     Game::AnimateResetDelay( Game::BATTLE_POPUP_DELAY );
 }
 
-void Battle::PopupDamageInfo::Redraw( int maxw, int /*maxh*/ )
+void Battle::PopupDamageInfo::Redraw()
 {
-    if ( _redraw ) {
-        uint32_t tmp1 = _attacker->CalculateMinDamage( *_defender );
-        uint32_t tmp2 = _attacker->CalculateMaxDamage( *_defender );
-
-        if ( _attacker->Modes( SP_BLESS ) )
-            tmp1 = tmp2;
-        else if ( _attacker->Modes( SP_CURSE ) )
-            tmp2 = tmp1;
-
-        std::string str = tmp1 == tmp2 ? _( "Damage: %{max}" ) : _( "Damage: %{min} - %{max}" );
-
-        StringReplace( str, "%{min}", tmp1 );
-        StringReplace( str, "%{max}", tmp2 );
-
-        Text text1( str, Font::SMALL );
-
-        tmp1 = _defender->HowManyWillKilled( tmp1 );
-        tmp2 = _defender->HowManyWillKilled( tmp2 );
-
-        if ( tmp1 > _defender->GetCount() )
-            tmp1 = _defender->GetCount();
-        if ( tmp2 > _defender->GetCount() )
-            tmp2 = _defender->GetCount();
-
-        str = tmp1 == tmp2 ? _( "Perish: %{max}" ) : _( "Perish: %{min} - %{max}" );
-
-        StringReplace( str, "%{min}", tmp1 );
-        StringReplace( str, "%{max}", tmp2 );
-
-        Text text2( str, Font::SMALL );
-
-        int tw = 5 + ( text1.w() > text2.w() ? text1.w() : text2.w() );
-        int th = ( text1.h() + text2.h() );
-
-        const fheroes2::Rect & borderArea = GetArea();
-        const fheroes2::Rect & borderRect = GetRect();
-        const fheroes2::Rect & pos = _cell->GetPos();
-
-        int tx = borderRect.x;
-        int ty = borderRect.y;
-
-        if ( borderRect.x + borderRect.width > maxw ) {
-            tx = maxw - borderRect.width - 5;
-            ty = pos.y - pos.height;
-        }
-
-        if ( borderRect.x != tx || borderRect.y != ty || borderArea.width != tw || borderArea.height != th ) {
-            SetPosition( tx, ty, tw, th );
-        }
-
-        const fheroes2::Rect & currectArea = GetRect();
-        Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), currectArea );
-
-        text1.Blit( borderArea.x, borderArea.y );
-        text2.Blit( borderArea.x, borderArea.y + borderArea.height / 2 );
+    if ( !_redraw ) {
+        return;
     }
+
+    assert( _cell != nullptr && _attacker != nullptr && _defender != nullptr );
+
+    uint32_t minDamage = _attacker->CalculateMinDamage( *_defender );
+    uint32_t maxDamage = _attacker->CalculateMaxDamage( *_defender );
+
+    if ( _attacker->Modes( SP_BLESS ) ) {
+        minDamage = maxDamage;
+    }
+    else if ( _attacker->Modes( SP_CURSE ) ) {
+        maxDamage = minDamage;
+    }
+
+    std::string str = minDamage == maxDamage ? _( "Damage: %{max}" ) : _( "Damage: %{min} - %{max}" );
+
+    StringReplace( str, "%{min}", minDamage );
+    StringReplace( str, "%{max}", maxDamage );
+
+    Text damageText( str, Font::SMALL );
+
+    const uint32_t minNumKilled = _defender->HowManyWillKilled( minDamage );
+    const uint32_t maxNumKilled = _defender->HowManyWillKilled( maxDamage );
+
+    assert( minNumKilled <= _defender->GetCount() && maxNumKilled <= _defender->GetCount() );
+
+    str = minNumKilled == maxNumKilled ? _( "Perish: %{max}" ) : _( "Perish: %{min} - %{max}" );
+
+    StringReplace( str, "%{min}", minNumKilled );
+    StringReplace( str, "%{max}", maxNumKilled );
+
+    Text killedText( str, Font::SMALL );
+
+    const fheroes2::Rect & cellRect = _cell->GetPos();
+    const int y = _battleUIRect.y + cellRect.y;
+    const int w = std::max( damageText.w(), killedText.w() );
+    const int h = damageText.h() + killedText.h();
+
+    SetPosition( _battleUIRect.x + cellRect.x + cellRect.width, y, w, h );
+
+    const fheroes2::Rect & borderRect = GetRect();
+    const fheroes2::Display & display = fheroes2::Display::instance();
+
+    // If the damage info popup doesn't fit on the screen, then try to place it on the other side of the cell
+    if ( ( fheroes2::Rect( 0, 0, display.width(), display.height() ) ^ borderRect ) != borderRect ) {
+        SetPosition( _battleUIRect.x + cellRect.x - borderRect.width, y, w, h );
+    }
+
+    Dialog::FrameBorder::RenderOther( fheroes2::AGG::GetICN( ICN::CELLWIN, 1 ), borderRect );
+
+    const fheroes2::Rect & borderArea = GetArea();
+
+    damageText.Blit( borderArea.x, borderArea.y );
+    killedText.Blit( borderArea.x, borderArea.y + borderArea.height / 2 );
 }

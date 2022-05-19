@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -102,7 +102,7 @@ namespace
         const uint32_t sdlFlags = getSDLInitFlags( components ) | SDL_INIT_TIMER;
 
         if ( SDL_Init( sdlFlags ) < 0 ) {
-            ERROR_LOG( SDL_GetError() );
+            ERROR_LOG( SDL_GetError() )
             return false;
         }
 

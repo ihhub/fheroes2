@@ -1,5 +1,5 @@
 ###########################################################################
-#   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
+#   fheroes2: https://github.com/ihhub/fheroes2                           #
 #   Copyright (C) 2022                                                    #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
@@ -20,8 +20,8 @@
 
 set(
 	GNU_CC_WARN_OPTS
-	-pedantic -Wall -Wextra -Wcast-align -Wdouble-promotion -Wextra-semi -Wfloat-conversion
-	-Wfloat-equal -Winit-self -Wredundant-decls -Wshadow -Wundef -Wuninitialized -Wunused
+	-pedantic -Wall -Wextra -Wcast-align -Wextra-semi -Wfloat-conversion -Wfloat-equal
+	-Winit-self -Wredundant-decls -Wshadow -Wundef -Wuninitialized -Wunused
 	)
 set(
 	GNU_CXX_WARN_OPTS

@@ -1,5 +1,5 @@
 ###########################################################################
-#   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
+#   fheroes2: https://github.com/ihhub/fheroes2                           #
 #   Copyright (C) 2021 - 2022                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
@@ -111,9 +111,9 @@ CCFLAGS := $(CCFLAGS) -DFHEROES2_DATA="$(FHEROES2_DATA)"
 endif
 
 # TODO: Add -Wconversion -Wsign-conversion flags once we fix all the corresponding code smells
-# TODO: Add -Wswitch-default -Wold-style-cast flags once SDL headers can be compiled with them
-CCWARNOPTS := -pedantic -Wall -Wextra -Wcast-align -Wdouble-promotion -Wextra-semi -Wfloat-conversion \
-              -Wfloat-equal -Winit-self -Wredundant-decls -Wshadow -Wundef -Wuninitialized -Wunused
+# TODO: Add -Wdouble-promotion -Wold-style-cast -Wswitch-default flags once SDL headers can be compiled with them
+CCWARNOPTS := -pedantic -Wall -Wextra -Wcast-align -Wextra-semi -Wfloat-conversion -Wfloat-equal \
+              -Winit-self -Wredundant-decls -Wshadow -Wundef -Wuninitialized -Wunused
 CFLAGS := $(CFLAGS) $(CCWARNOPTS)
 CXXFLAGS := $(CXXFLAGS) $(CCWARNOPTS) -Wctor-dtor-privacy -Woverloaded-virtual
 

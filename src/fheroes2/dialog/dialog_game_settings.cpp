@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -21,10 +21,13 @@
 #include "dialog_game_settings.h"
 #include "agg_image.h"
 #include "audio.h"
+#include "cursor.h"
 #include "dialog.h"
+#include "dialog_hotkeys.h"
 #include "dialog_language_selection.h"
 #include "dialog_resolution.h"
 #include "game.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_mainmenu_ui.h"
 #include "icn.h"
@@ -56,6 +59,11 @@ namespace
     const fheroes2::Rect soundVolumeRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
     const fheroes2::Rect musicTypeRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y + offsetBetweenOptions.height, optionWindowSize,
                                        optionWindowSize };
+    const fheroes2::Rect hotKeyRoi{ optionOffset.x, optionOffset.y + 2 * offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
+    const fheroes2::Rect cursorTypeRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + 2 * offsetBetweenOptions.height, optionWindowSize,
+                                        optionWindowSize };
+    const fheroes2::Rect textSupportModeRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y + 2 * offsetBetweenOptions.height, optionWindowSize,
+                                             optionWindowSize };
 
     void drawOption( const fheroes2::Rect & optionRoi, const char * titleText, const char * nameText, const int icnId, const uint32_t icnIndex )
     {
@@ -89,7 +97,7 @@ namespace
 
     void drawExperimentalOptions( const fheroes2::Rect & optionRoi )
     {
-        drawOption( optionRoi, _( "Experimental" ), _( "Settings" ), ICN::SPANEL, 14 );
+        drawOption( optionRoi, _( "Settings" ), _( "Experimental" ), ICN::SPANEL, 14 );
     }
 
     void drawMusicVolumeOptions( const fheroes2::Rect & optionRoi )
@@ -141,12 +149,40 @@ namespace
         drawOption( optionRoi, _( "Music Type" ), value.c_str(), ICN::SPANEL, Audio::isValid() ? 11 : 10 );
     }
 
+    void drawHotKeyOptions( const fheroes2::Rect & optionRoi )
+    {
+        drawOption( optionRoi, _( "Hot Keys" ), _( "In-game" ), ICN::CSPANEL, 5 );
+    }
+
+    void drawCursorTypeOptions( const fheroes2::Rect & optionRoi )
+    {
+        if ( Settings::Get().isMonochromeCursorEnabled() ) {
+            drawOption( optionRoi, _( "Mouse Cursor" ), _( "Black & White" ), ICN::SPANEL, 20 );
+        }
+        else {
+            drawOption( optionRoi, _( "Mouse Cursor" ), _( "Color" ), ICN::SPANEL, 21 );
+        }
+    }
+
+    void drawTextSupportModeOptions( const fheroes2::Rect & optionRoi )
+    {
+        if ( Settings::Get().isTextSupportModeEnabled() ) {
+            drawOption( optionRoi, _( "Text Support" ), _( "On" ), ICN::CSPANEL, 4 );
+        }
+        else {
+            drawOption( optionRoi, _( "Text Support" ), _( "Off" ), ICN::SPANEL, 9 );
+        }
+    }
+
     enum class SelectedWindow : int
     {
         Configuration,
         Resolution,
         Language,
         Options,
+        HotKeys,
+        CursorType,
+        TextSupportMode,
         UpdateSettings,
         Exit
     };
@@ -157,7 +193,7 @@ namespace
 
         Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.ExtGameEvilInterface();
-        const int dialogIcnId = isEvilInterface ? ICN::CSPANBKE : ICN::CSPANBKG;
+        const int dialogIcnId = isEvilInterface ? ICN::SPANBKGE : ICN::SPANBKG;
         const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( dialogIcnId, 0 );
         const fheroes2::Sprite & dialogShadow = fheroes2::AGG::GetICN( dialogIcnId, 1 );
 
@@ -182,14 +218,21 @@ namespace
         const fheroes2::Rect windowSoundVolumeRoi( soundVolumeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowMusicTypeRoi( musicTypeRoi + windowRoi.getPosition() );
 
+        const fheroes2::Rect windowHotKeyRoi( hotKeyRoi + windowRoi.getPosition() );
+        const fheroes2::Rect windowCursorTypeRoi( cursorTypeRoi + windowRoi.getPosition() );
+        const fheroes2::Rect windowTextSupportModeRoi( textSupportModeRoi + windowRoi.getPosition() );
+
         drawLanguage( windowLanguageRoi );
         drawResolution( windowResolutionRoi );
         drawExperimentalOptions( windowOptionsRoi );
         drawMusicVolumeOptions( windowMusicVolumeRoi );
         drawSoundVolumeOptions( windowSoundVolumeRoi );
         drawMusicTypeOptions( windowMusicTypeRoi );
+        drawHotKeyOptions( windowHotKeyRoi );
+        drawCursorTypeOptions( windowCursorTypeRoi );
+        drawTextSupportModeOptions( windowTextSupportModeRoi );
 
-        fheroes2::ButtonSprite okayButton( windowRoi.x + 112, windowRoi.y + 252, buttonOkayReleased, buttonOkayPressed );
+        fheroes2::ButtonSprite okayButton( windowRoi.x + 112, windowRoi.y + 362, buttonOkayReleased, buttonOkayPressed );
         okayButton.draw();
 
         display.render();
@@ -203,7 +246,7 @@ namespace
                 okayButton.drawOnRelease();
             }
 
-            if ( le.MouseClickLeft( okayButton.area() ) || HotKeyCloseWindow ) {
+            if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
             }
             if ( le.MouseClickLeft( windowLanguageRoi ) ) {
@@ -214,6 +257,15 @@ namespace
             }
             if ( le.MouseClickLeft( windowOptionsRoi ) ) {
                 return SelectedWindow::Options;
+            }
+            if ( le.MouseClickLeft( windowHotKeyRoi ) ) {
+                return SelectedWindow::HotKeys;
+            }
+            if ( le.MouseClickLeft( windowCursorTypeRoi ) ) {
+                return SelectedWindow::CursorType;
+            }
+            if ( le.MouseClickLeft( windowTextSupportModeRoi ) ) {
+                return SelectedWindow::TextSupportMode;
             }
             if ( le.MouseClickLeft( windowMusicTypeRoi ) ) {
                 int type = conf.MusicType() + 1;
@@ -306,6 +358,26 @@ namespace
 
                 fheroes2::showMessage( header, body, 0 );
             }
+            else if ( le.MousePressRight( windowHotKeyRoi ) ) {
+                fheroes2::Text header( _( "Hot Keys" ), fheroes2::FontType::normalYellow() );
+                fheroes2::Text body( _( "Check all Hot Keys used in the game." ), fheroes2::FontType::normalWhite() );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
+            else if ( le.MousePressRight( windowCursorTypeRoi ) ) {
+                fheroes2::Text header( _( "Mouse Cursor" ), fheroes2::FontType::normalYellow() );
+                fheroes2::Text body( _( "Toggle color cursors on/off. Color cursors look nicer, but sometimes don't move as smoothly as black and white ones." ),
+                                     fheroes2::FontType::normalWhite() );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
+            else if ( le.MousePressRight( windowTextSupportModeRoi ) ) {
+                fheroes2::Text header( _( "Text Support" ), fheroes2::FontType::normalYellow() );
+                fheroes2::Text body( _( "Toggle text support mode to output extra information about windows and events in the game." ),
+                                     fheroes2::FontType::normalWhite() );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
             else if ( le.MousePressRight( okayButton.area() ) ) {
                 fheroes2::Text header( _( "Okay" ), fheroes2::FontType::normalYellow() );
                 fheroes2::Text body( _( "Exit this menu." ), fheroes2::FontType::normalWhite() );
@@ -324,6 +396,8 @@ namespace fheroes2
     {
         drawMainMenuScreen();
 
+        Settings & conf = Settings::Get();
+
         SelectedWindow windowType = SelectedWindow::Configuration;
         while ( windowType != SelectedWindow::Exit ) {
             switch ( windowType ) {
@@ -332,7 +406,7 @@ namespace fheroes2
                 break;
             case SelectedWindow::Resolution:
                 if ( Dialog::SelectResolution() ) {
-                    Settings::Get().Save( Settings::configFileName );
+                    conf.Save( Settings::configFileName );
                     // force interface to reset area and positions
                     Interface::Basic::Get().Reset();
                 }
@@ -340,7 +414,6 @@ namespace fheroes2
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::Language: {
-                Settings & conf = Settings::Get();
 
                 const std::vector<SupportedLanguage> supportedLanguages = getSupportedLanguages();
 
@@ -353,22 +426,32 @@ namespace fheroes2
                     conf.setGameLanguage( getLanguageAbbreviation( SupportedLanguage::English ) );
 
                     Text header( _( "Attention" ), FontType::normalYellow() );
-                    Text body( _( "Your version of Heroes of Might and Magic II does not support any languages except English." ), FontType::normalWhite() );
+                    Text body( _( "Your version of Heroes of Might and Magic II does not support any other languages than English." ), FontType::normalWhite() );
 
                     showMessage( header, body, Dialog::OK );
                 }
 
-                Settings::Get().Save( Settings::configFileName );
-
-                windowType = SelectedWindow::Configuration;
+                windowType = SelectedWindow::UpdateSettings;
                 break;
             }
             case SelectedWindow::Options:
                 Dialog::ExtSettings( false );
                 windowType = SelectedWindow::Configuration;
                 break;
+            case SelectedWindow::HotKeys:
+                fheroes2::openHotkeysDialog();
+                windowType = SelectedWindow::Configuration;
+                break;
+            case SelectedWindow::CursorType:
+                conf.setMonochromeCursor( !conf.isMonochromeCursorEnabled() );
+                windowType = SelectedWindow::UpdateSettings;
+                break;
+            case SelectedWindow::TextSupportMode:
+                conf.setTextSupportMode( !conf.isTextSupportModeEnabled() );
+                windowType = SelectedWindow::UpdateSettings;
+                break;
             case SelectedWindow::UpdateSettings:
-                Settings::Get().Save( Settings::configFileName );
+                conf.Save( Settings::configFileName );
                 windowType = SelectedWindow::Configuration;
                 break;
             default:

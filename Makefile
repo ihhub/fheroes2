@@ -1,5 +1,5 @@
 ###########################################################################
-#   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
+#   fheroes2: https://github.com/ihhub/fheroes2                           #
 #   Copyright (C) 2021 - 2022                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
@@ -46,7 +46,6 @@ ifdef FHEROES2_MACOS_APP_BUNDLE
 	@mkdir -p "src/dist/$(TARGET).app/Contents/Resources/translations"
 	@mkdir -p "src/dist/$(TARGET).app/Contents/Resources/h2d"
 	@mkdir -p "src/dist/$(TARGET).app/Contents/MacOS"
-	@cp ./fheroes2.key "src/dist/$(TARGET).app/Contents/Resources"
 	@cp ./src/resources/fheroes2.icns "src/dist/$(TARGET).app/Contents/Resources"
 	@cp ./files/lang/*.mo "src/dist/$(TARGET).app/Contents/Resources/translations"
 	@cp ./files/data/*.h2d "src/dist/$(TARGET).app/Contents/Resources/h2d"

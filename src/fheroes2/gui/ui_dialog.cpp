@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -23,8 +23,8 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "experience.h"
-#include "game.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "heroes_indicator.h"
 #include "icn.h"
 #include "localevent.h"
@@ -60,16 +60,16 @@ namespace
         COUT( body.text() )
 
         if ( buttonTypes & Dialog::YES ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose YES." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_OKAY ) << " to choose YES." )
         }
         if ( buttonTypes & Dialog::NO ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose NO." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to choose NO." )
         }
         if ( buttonTypes & Dialog::OK ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose OK." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_OKAY ) << " to choose OK." )
         }
         if ( buttonTypes & Dialog::CANCEL ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose CANCEL." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to choose CANCEL." )
         }
     }
 }
@@ -295,7 +295,7 @@ namespace fheroes2
         Blit( frame, 0, 0, output, offset.x, offset.y, frame.width(), frame.height() );
 
         const Sprite & artifact = AGG::GetICN( ICN::ARTIFACT, _artifact.IndexSprite64() );
-        Blit( artifact, 0, 0, output, offset.x + 6, offset.y + 6, artifact.width(), artifact.height() );
+        Blit( artifact, output, offset.x + 6, offset.y + 6 );
     }
 
     void ArtifactDialogElement::processEvents( const Point & offset ) const
@@ -414,7 +414,7 @@ namespace fheroes2
     {
         assert( spell.isValid() );
 
-        const Text spellNameText( std::string( _spell.GetName() ) + " [" + std::to_string( _spell.SpellPoint( nullptr ) ) + ']', FontType::smallWhite() );
+        const Text spellNameText( std::string( _spell.GetName() ) + " [" + std::to_string( _spell.spellPoints( nullptr ) ) + ']', FontType::smallWhite() );
 
         const Sprite & icn = AGG::GetICN( ICN::SPELLS, _spell.IndexSprite() );
         _area = { std::max( icn.width(), spellNameText.width() ), icn.height() + textOffsetFromElement + spellNameText.height() };
@@ -422,7 +422,7 @@ namespace fheroes2
 
     void SpellDialogElement::draw( Image & output, const Point & offset ) const
     {
-        const Text spellNameText( std::string( _spell.GetName() ) + " [" + std::to_string( _spell.SpellPoint( nullptr ) ) + ']', FontType::smallWhite() );
+        const Text spellNameText( std::string( _spell.GetName() ) + " [" + std::to_string( _spell.spellPoints( nullptr ) ) + ']', FontType::smallWhite() );
         const Sprite & icn = AGG::GetICN( ICN::SPELLS, _spell.IndexSprite() );
 
         const int32_t maxWidth = std::max( icn.width(), spellNameText.width() );

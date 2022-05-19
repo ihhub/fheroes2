@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -24,6 +24,8 @@
 #ifndef H2LOCALEVENT_H
 #define H2LOCALEVENT_H
 
+#include <map>
+#include <set>
 #include <string>
 
 #include "math_base.h"
@@ -32,149 +34,133 @@
 
 #include <SDL.h>
 
-enum KeySym
+namespace fheroes2
 {
-    KEY_NONE = -1,
+    enum class Key : int32_t
+    {
+        NONE,
+        KEY_BACKSPACE,
+        KEY_ENTER, // This is for both Enter keys on keyboards. Check getKeyFromSDL() function for explanation.
+        KEY_ESCAPE,
+        KEY_SPACE,
+        KEY_EXCLAIM,
+        KEY_DOUBLE_QUOTE,
+        KEY_HASH,
+        KEY_DOLLAR,
+        KEY_AMPERSAND,
+        KEY_QUOTE,
+        KEY_LEFT_PARENTHESIS,
+        KEY_RIGHT_PARENTHESIS,
+        KEY_ASTERISK,
+        KEY_PLUS,
+        KEY_COMMA,
+        KEY_MINUS,
+        KEY_PERIOD,
+        KEY_SLASH,
+        KEY_COLON,
+        KEY_SEMICOLON,
+        KEY_LESS,
+        KEY_EQUALS,
+        KEY_GREATER,
+        KEY_QUESTION,
+        KEY_AT,
+        KEY_LEFT_BRACKET,
+        KEY_BACKSLASH,
+        KEY_RIGHT_BRACKET,
+        KEY_CARET,
+        KEY_UNDERSCORE,
+        KEY_ALT,
+        KEY_CONTROL,
+        KEY_SHIFT,
+        KEY_TAB,
+        KEY_DELETE,
+        KEY_PAGE_UP,
+        KEY_PAGE_DOWN,
+        KEY_F1,
+        KEY_F2,
+        KEY_F3,
+        KEY_F4,
+        KEY_F5,
+        KEY_F6,
+        KEY_F7,
+        KEY_F8,
+        KEY_F9,
+        KEY_F10,
+        KEY_F11,
+        KEY_F12,
+        KEY_LEFT,
+        KEY_RIGHT,
+        KEY_UP,
+        KEY_DOWN,
+        KEY_0,
+        KEY_1,
+        KEY_2,
+        KEY_3,
+        KEY_4,
+        KEY_5,
+        KEY_6,
+        KEY_7,
+        KEY_8,
+        KEY_9,
+        KEY_A,
+        KEY_B,
+        KEY_C,
+        KEY_D,
+        KEY_E,
+        KEY_F,
+        KEY_G,
+        KEY_H,
+        KEY_I,
+        KEY_J,
+        KEY_K,
+        KEY_L,
+        KEY_M,
+        KEY_N,
+        KEY_O,
+        KEY_P,
+        KEY_Q,
+        KEY_R,
+        KEY_S,
+        KEY_T,
+        KEY_U,
+        KEY_V,
+        KEY_W,
+        KEY_X,
+        KEY_Y,
+        KEY_Z,
+        KEY_PRINT,
+        KEY_KP_0,
+        KEY_KP_1,
+        KEY_KP_2,
+        KEY_KP_3,
+        KEY_KP_4,
+        KEY_KP_5,
+        KEY_KP_6,
+        KEY_KP_7,
+        KEY_KP_8,
+        KEY_KP_9,
+        KEY_KP_PERIOD,
+        KEY_KP_DIVIDE,
+        KEY_KP_MULTIPLY,
+        KEY_KP_MINUS,
+        KEY_KP_PLUS,
+        KEY_KP_ENTER,
+        KEY_KP_EQUALS,
+        KEY_HOME,
+        KEY_END,
 
-    KEY_UNKNOWN = SDLK_UNKNOWN,
+        // Put all new keys before this line.
+        LAST_KEY
+    };
 
-    KEY_BACKSPACE = SDLK_BACKSPACE,
-    KEY_RETURN = SDLK_RETURN,
-    KEY_ESCAPE = SDLK_ESCAPE,
-    KEY_SPACE = SDLK_SPACE,
-    KEY_EXCLAIM = SDLK_EXCLAIM,
-    KEY_QUOTEDBL = SDLK_QUOTEDBL,
-    KEY_HASH = SDLK_HASH,
-    KEY_DOLLAR = SDLK_DOLLAR,
-    KEY_AMPERSAND = SDLK_AMPERSAND,
-    KEY_QUOTE = SDLK_QUOTE,
-    KEY_LEFTPAREN = SDLK_LEFTPAREN,
-    KEY_RIGHTPAREN = SDLK_RIGHTPAREN,
-    KEY_ASTERISK = SDLK_ASTERISK,
-    KEY_PLUS = SDLK_PLUS,
-    KEY_COMMA = SDLK_COMMA,
-    KEY_MINUS = SDLK_MINUS,
-    KEY_PERIOD = SDLK_PERIOD,
-    KEY_SLASH = SDLK_SLASH,
-    KEY_COLON = SDLK_COLON,
-    KEY_SEMICOLON = SDLK_SEMICOLON,
-    KEY_LESS = SDLK_LESS,
-    KEY_EQUALS = SDLK_EQUALS,
-    KEY_GREATER = SDLK_GREATER,
-    KEY_QUESTION = SDLK_QUESTION,
-    KEY_AT = SDLK_AT,
-    KEY_LEFTBRACKET = SDLK_LEFTBRACKET,
-    KEY_BACKSLASH = SDLK_BACKSLASH,
-    KEY_RIGHTBRACKET = SDLK_RIGHTBRACKET,
-    KEY_CARET = SDLK_CARET,
-    KEY_UNDERSCORE = SDLK_UNDERSCORE,
-    KEY_ALT = SDLK_LALT,
-    KEY_CONTROL = SDLK_LCTRL,
-    KEY_SHIFT = SDLK_LSHIFT,
-    KEY_TAB = SDLK_TAB,
-    KEY_DELETE = SDLK_DELETE,
-    KEY_PAGEUP = SDLK_PAGEUP,
-    KEY_PAGEDOWN = SDLK_PAGEDOWN,
-    KEY_F1 = SDLK_F1,
-    KEY_F2 = SDLK_F2,
-    KEY_F3 = SDLK_F3,
-    KEY_F4 = SDLK_F4,
-    KEY_F5 = SDLK_F5,
-    KEY_F6 = SDLK_F6,
-    KEY_F7 = SDLK_F7,
-    KEY_F8 = SDLK_F8,
-    KEY_F9 = SDLK_F9,
-    KEY_F10 = SDLK_F10,
-    KEY_F11 = SDLK_F11,
-    KEY_F12 = SDLK_F12,
-    KEY_LEFT = SDLK_LEFT,
-    KEY_RIGHT = SDLK_RIGHT,
-    KEY_UP = SDLK_UP,
-    KEY_DOWN = SDLK_DOWN,
-    KEY_0 = SDLK_0,
-    KEY_1 = SDLK_1,
-    KEY_2 = SDLK_2,
-    KEY_3 = SDLK_3,
-    KEY_4 = SDLK_4,
-    KEY_5 = SDLK_5,
-    KEY_6 = SDLK_6,
-    KEY_7 = SDLK_7,
-    KEY_8 = SDLK_8,
-    KEY_9 = SDLK_9,
-    KEY_a = SDLK_a,
-    KEY_b = SDLK_b,
-    KEY_c = SDLK_c,
-    KEY_d = SDLK_d,
-    KEY_e = SDLK_e,
-    KEY_f = SDLK_f,
-    KEY_g = SDLK_g,
-    KEY_h = SDLK_h,
-    KEY_i = SDLK_i,
-    KEY_j = SDLK_j,
-    KEY_k = SDLK_k,
-    KEY_l = SDLK_l,
-    KEY_m = SDLK_m,
-    KEY_n = SDLK_n,
-    KEY_o = SDLK_o,
-    KEY_p = SDLK_p,
-    KEY_q = SDLK_q,
-    KEY_r = SDLK_r,
-    KEY_s = SDLK_s,
-    KEY_t = SDLK_t,
-    KEY_u = SDLK_u,
-    KEY_v = SDLK_v,
-    KEY_w = SDLK_w,
-    KEY_x = SDLK_x,
-    KEY_y = SDLK_y,
-    KEY_z = SDLK_z,
+    const char * KeySymGetName( const Key key );
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    KEY_PRINT = SDLK_PRINTSCREEN,
-    KEY_KP0 = SDLK_KP_0,
-    KEY_KP1 = SDLK_KP_1,
-    KEY_KP2 = SDLK_KP_2,
-    KEY_KP3 = SDLK_KP_3,
-    KEY_KP4 = SDLK_KP_4,
-    KEY_KP5 = SDLK_KP_5,
-    KEY_KP6 = SDLK_KP_6,
-    KEY_KP7 = SDLK_KP_7,
-    KEY_KP8 = SDLK_KP_8,
-    KEY_KP9 = SDLK_KP_9,
-#else
-    KEY_PRINT = SDLK_PRINT,
-    KEY_KP0 = SDLK_KP0,
-    KEY_KP1 = SDLK_KP1,
-    KEY_KP2 = SDLK_KP2,
-    KEY_KP3 = SDLK_KP3,
-    KEY_KP4 = SDLK_KP4,
-    KEY_KP5 = SDLK_KP5,
-    KEY_KP6 = SDLK_KP6,
-    KEY_KP7 = SDLK_KP7,
-    KEY_KP8 = SDLK_KP8,
-    KEY_KP9 = SDLK_KP9,
-#endif
+    bool PressIntKey( u32 max, u32 & result );
 
-    KEY_KP_PERIOD = SDLK_KP_PERIOD,
-    KEY_KP_DIVIDE = SDLK_KP_DIVIDE,
-    KEY_KP_MULTIPLY = SDLK_KP_MULTIPLY,
-    KEY_KP_MINUS = SDLK_KP_MINUS,
-    KEY_KP_PLUS = SDLK_KP_PLUS,
-    KEY_KP_ENTER = SDLK_KP_ENTER,
-    KEY_KP_EQUALS = SDLK_KP_EQUALS,
+    size_t InsertKeySym( std::string & res, size_t pos, const Key key, const int32_t mod );
 
-    KEY_HOME = SDLK_HOME,
-    KEY_END = SDLK_END,
-
-    KEY_LAST
-};
-
-const char * KeySymGetName( KeySym );
-
-KeySym GetKeySym( int );
-
-bool PressIntKey( u32 max, u32 & result );
-
-size_t InsertKeySym( std::string & res, size_t pos, const KeySym sym, const int32_t mod );
+    Key getKeyFromSDL( const int sdlKey );
+}
 
 class LocalEvent
 {
@@ -274,7 +260,7 @@ public:
         return modes & KEY_PRESSED;
     }
 
-    bool KeyPress( KeySym key ) const
+    bool KeyPress( fheroes2::Key key ) const
     {
         return key == key_value && ( modes & KEY_PRESSED );
     }
@@ -284,7 +270,7 @@ public:
         return ( modes & KEY_HOLD ) != 0;
     }
 
-    KeySym KeyValue() const
+    fheroes2::Key KeyValue() const
     {
         return key_value;
     }
@@ -304,11 +290,9 @@ public:
     void OpenVirtualKeyboard();
     void CloseVirtualKeyboard();
 
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     void OpenController();
     void CloseController();
     void OpenTouchpad();
-#endif
 
     void SetControllerPointerSpeed( const int newSpeed )
     {
@@ -367,7 +351,7 @@ private:
     }
 
     int modes;
-    KeySym key_value;
+    fheroes2::Key key_value;
     int mouse_button;
 
     fheroes2::Point mouse_pl; // press left

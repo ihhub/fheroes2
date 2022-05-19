@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -31,10 +31,12 @@
 #include "tools.h"
 #include "ui_tool.h"
 
+#include <array>
+
 namespace
 {
     // Anim2 directory is used in Russian Buka version of the game.
-    const std::vector<std::string> videoDir = { "anim", "anim2", System::ConcatePath( "heroes2", "anim" ), "data" };
+    std::array<std::string, 4> videoDir = { "anim", "anim2", System::ConcatePath( "heroes2", "anim" ), "data" };
 
     void playAudio( const std::vector<std::vector<uint8_t>> & audioChannels )
     {
@@ -53,22 +55,24 @@ namespace Video
     bool getVideoFilePath( const std::string & fileName, std::string & path )
     {
         for ( const std::string & rootDir : Settings::GetRootDirs() ) {
-            for ( const std::string & localDir : videoDir ) {
-                const std::string fullDirPath = System::ConcatePath( rootDir, localDir );
+            for ( size_t dirIdx = 0; dirIdx < videoDir.size(); ++dirIdx ) {
+                const std::string fullDirPath = System::ConcatePath( rootDir, videoDir[dirIdx] );
 
                 if ( System::IsDirectory( fullDirPath ) ) {
                     ListFiles videoFiles;
                     videoFiles.FindFileInDir( fullDirPath, fileName, false );
-
-                    std::string targetFileName = System::ConcatePath( fullDirPath, fileName );
-                    targetFileName = StringLower( targetFileName );
-
-                    for ( const std::string & filePath : videoFiles ) {
-                        if ( StringLower( filePath ) == targetFileName ) {
-                            path = filePath;
-                            return true;
-                        }
+                    if ( videoFiles.empty() ) {
+                        continue;
                     }
+
+                    std::swap( videoFiles.front(), path );
+
+                    if ( dirIdx > 0 ) {
+                        // Put the current directory at the first place to increase cache hit chance.
+                        std::swap( videoDir[0], videoDir[dirIdx] );
+                    }
+
+                    return true;
                 }
             }
         }

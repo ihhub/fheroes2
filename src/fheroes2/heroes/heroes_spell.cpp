@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -496,7 +496,8 @@ bool ActionSpellTownPortal( Heroes & hero )
             castles.push_back( ( **it ).GetIndex() );
 
     if ( castles.empty() ) {
-        Dialog::Message( "", _( "No available towns.\nSpell Failed!!!" ), Font::BIG, Dialog::OK );
+        // This should never happen. The logic behind this must not allow to call this function.
+        assert( 0 );
         return false;
     }
 
@@ -535,6 +536,9 @@ bool ActionSpellTownPortal( Heroes & hero )
     btnGroup.addButton( fheroes2::makeButtonWithShadow( area.x + border, area.y + area.height - border - buttonOkSprite.height(), buttonOkSprite,
                                                         fheroes2::AGG::GetICN( okIcnId, 1 ), display ),
                         Dialog::OK );
+
+    btnGroup.button( 0 ).disable();
+
     btnGroup.addButton( fheroes2::makeButtonWithShadow( area.x + area.width - border - buttonCancelSprite.width(),
                                                         area.y + area.height - border - buttonCancelSprite.height(), buttonCancelSprite,
                                                         fheroes2::AGG::GetICN( cancelIcnId, 1 ), display ),
@@ -549,6 +553,11 @@ bool ActionSpellTownPortal( Heroes & hero )
 
         if ( !listbox.IsNeedRedraw() ) {
             continue;
+        }
+
+        if ( listbox.isSelected() ) {
+            btnGroup.button( 0 ).enable();
+            btnGroup.draw();
         }
 
         listbox.Redraw();

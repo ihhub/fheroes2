@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -93,6 +93,9 @@ namespace fheroes2
         // Returns height of a text as a single-line text only.
         virtual int32_t height() const = 0;
 
+        // Returns width of a text as a multi-line text limited by maximum width of a line.
+        virtual int32_t width( const int32_t maxWidth ) const = 0;
+
         // Returns height of a text as a multi-line text limited by width of a line.
         virtual int32_t height( const int32_t maxWidth ) const = 0;
 
@@ -130,7 +133,9 @@ namespace fheroes2
         int32_t width() const override;
         int32_t height() const override;
 
+        int32_t width( const int32_t maxWidth ) const override;
         int32_t height( const int32_t maxWidth ) const override;
+
         int32_t rows( const int32_t maxWidth ) const override;
 
         void draw( const int32_t x, const int32_t y, Image & output ) const override;
@@ -140,6 +145,9 @@ namespace fheroes2
 
         void set( const std::string & text, const FontType fontType );
         void set( std::string && text, const FontType fontType );
+
+        // This method modifies the underlying text and ends it with '...' if it is longer than the provided width.
+        void fitToOneRow( const int32_t maxWidth );
 
         std::string text() const override;
 
@@ -161,7 +169,9 @@ namespace fheroes2
         int32_t width() const override;
         int32_t height() const override;
 
+        int32_t width( const int32_t maxWidth ) const override;
         int32_t height( const int32_t maxWidth ) const override;
+
         int32_t rows( const int32_t maxWidth ) const override;
 
         void draw( const int32_t x, const int32_t y, Image & output ) const override;

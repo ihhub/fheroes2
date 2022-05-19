@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -34,7 +34,15 @@ namespace fheroes2
         Russian, // Buka and XXI Vek versions
         Italian, // Rare version?
         Czech, // Local release occured in 2002 by CD Projekt
-        Norwegian // Original to fheroes2
+
+        // All languages listed below are original to fheroes2.
+        Belarusian,
+        Bulgarian,
+        Norwegian,
+        Portuguese,
+        Romanian,
+        Spanish,
+        Ukrainian
     };
 
     class LanguageSwitcher

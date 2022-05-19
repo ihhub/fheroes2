@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -308,11 +308,6 @@ void Kingdom::RemoveCastle( const Castle * castle )
         LossPostActions();
 }
 
-bool Kingdom::isLosingGame() const
-{
-    return castles.empty();
-}
-
 u32 Kingdom::GetCountCastle( void ) const
 {
     return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), Castle::PredicateIsCastle ) );
@@ -607,10 +602,21 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
         }
     }
 
-    if ( INCOME_HEROSKILLS & type ) {
+    if ( INCOME_HERO_SKILLS & type ) {
         // estates skill bonus
         for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
             totalIncome.gold += ( **ith ).GetSecondaryValues( Skill::Secondary::ESTATES );
+    }
+
+    if ( ( type & INCOME_CAMPAIGN_BONUS ) && Settings::Get().isCampaignGameType() ) {
+        const std::vector<Campaign::CampaignAwardData> awards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
+        for ( const Campaign::CampaignAwardData & award : awards ) {
+            if ( award._type != Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS ) {
+                continue;
+            }
+
+            totalIncome += Funds( award._subType, award._amount );
+        }
     }
 
     if ( isControlAI() ) {

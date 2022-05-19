@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-08 19:02+0200\n"
-"PO-Revision-Date: 2022-04-09 12:31+0200\n"
+"POT-Creation-Date: 2022-05-19 00:36+0000\n"
+"PO-Revision-Date: 2022-05-12 17:11+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
 "Language: it\n"
@@ -27,6 +27,9 @@ msgstr "Costruire"
 
 msgid "Explorer"
 msgstr "Esplorare"
+
+msgid "None"
+msgstr "Nessun/a"
 
 msgid ""
 "A few\n"
@@ -272,9 +275,6 @@ msgstr "Vittime in Battaglia"
 
 msgid "Attacker"
 msgstr "Attaccante"
-
-msgid "None"
-msgstr "Nessun/a"
 
 msgid "Defender"
 msgstr "Difensore"
@@ -674,6 +674,13 @@ msgstr ""
 
 msgid "Necromancer Guild"
 msgstr ""
+
+msgid "Ogre Alliance"
+msgstr ""
+
+#, fuzzy
+msgid "Dwarfbane"
+msgstr "Nano"
 
 msgid "Dragon Alliance"
 msgstr ""
@@ -1089,7 +1096,7 @@ msgstr ""
 msgid " will always run away from your army."
 msgstr ""
 
-msgid " will be willing to always join your army."
+msgid " will be willing to join your army."
 msgstr ""
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
@@ -1098,17 +1105,17 @@ msgstr ""
 msgid "The army will be carried over the scenario."
 msgstr ""
 
-msgid ""
-"The kingdom will have additional %{resource} at the start of the scenario."
+msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr ""
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
 msgstr ""
 
-msgid "%{hero} hero can be hired in the scenario."
+msgid "%{hero} can be hired in the scenario."
 msgstr ""
 
-msgid "Defeated %{hero} hero will not appear in the subsequent scenarios."
+msgid ""
+"%{hero} has been defeated and will not appear in the subsequent scenarios."
 msgstr ""
 
 msgid "The dwarves recognize their allies and gladly join your forces."
@@ -1225,6 +1232,174 @@ msgid "campaignBonus|White Pearl"
 msgstr "La Perla Bianca"
 
 #, fuzzy
+msgid "campaignBonus|Basic Archery"
+msgstr "La Perla Nera"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Archery"
+msgstr "Tiro con L'Arco Avanzato"
+
+#, fuzzy
+msgid "campaignBonus|Expert Archery"
+msgstr "La Perla Bianca"
+
+#, fuzzy
+msgid "campaignBonus|Basic Ballistics"
+msgstr "La Perla Nera"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Ballistics"
+msgstr "Balistica Avanzata"
+
+#, fuzzy
+msgid "campaignBonus|Expert Ballistics"
+msgstr "Balistica Esperta"
+
+#, fuzzy
+msgid "campaignBonus|Basic Diplomacy"
+msgstr "La Perla Nera"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Diplomacy"
+msgstr "Diplomazia Avanzata"
+
+#, fuzzy
+msgid "campaignBonus|Expert Diplomacy"
+msgstr "Diplomazia Esperta"
+
+#, fuzzy
+msgid "campaignBonus|Basic Eagle Eye"
+msgstr "La Perla Nera"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Eagle Eye"
+msgstr "Vista Avanzata"
+
+#, fuzzy
+msgid "campaignBonus|Expert Eagle Eye"
+msgstr "Vista Esperta"
+
+#, fuzzy
+msgid "campaignBonus|Basic Estates"
+msgstr "La Perla Nera"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Estates"
+msgstr "Investimenti Avanzati"
+
+#, fuzzy
+msgid "campaignBonus|Expert Estates"
+msgstr "Mostra Eroi"
+
+#, fuzzy
+msgid "campaignBonus|Basic Leadership"
+msgstr "La Perla Nera"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Leadership"
+msgstr "Carisma Avanzato"
+
+#, fuzzy
+msgid "campaignBonus|Expert Leadership"
+msgstr "Carisma Esperto"
+
+#, fuzzy
+msgid "campaignBonus|Basic Logistics"
+msgstr "Fulmini in Serie"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Logistics"
+msgstr "Logistica Avanzata"
+
+#, fuzzy
+msgid "campaignBonus|Expert Logistics"
+msgstr "Logistica Esperta"
+
+#, fuzzy
+msgid "campaignBonus|Basic Luck"
+msgstr "La Perla Nera"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Luck"
+msgstr "Anima i Morti"
+
+#, fuzzy
+msgid "campaignBonus|Expert Luck"
+msgstr "La Perla Bianca"
+
+#, fuzzy
+msgid "campaignBonus|Basic Mysticism"
+msgstr "Misticismo Normale"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Mysticism"
+msgstr "Misticismo Avanzato"
+
+#, fuzzy
+msgid "campaignBonus|Expert Mysticism"
+msgstr "Misticismo Esperto"
+
+#, fuzzy
+msgid "campaignBonus|Basic Navigation"
+msgstr "Fulmini in Serie"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Navigation"
+msgstr "Navigazione Avanzata"
+
+#, fuzzy
+msgid "campaignBonus|Expert Navigation"
+msgstr "Navigazione Esperta"
+
+#, fuzzy
+msgid "campaignBonus|Basic Necromancy"
+msgstr "La Perla Nera"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Necromancy"
+msgstr "Negromanzia Avanzata"
+
+#, fuzzy
+msgid "campaignBonus|Expert Necromancy"
+msgstr "Negromanzia Esperta"
+
+#, fuzzy
+msgid "campaignBonus|Basic Pathfinding"
+msgstr "Fulmini in Serie"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Pathfinding"
+msgstr "Orientamento Avanzato"
+
+#, fuzzy
+msgid "campaignBonus|Expert Pathfinding"
+msgstr "Orientamento Esperto"
+
+#, fuzzy
+msgid "campaignBonus|Basic Scouting"
+msgstr "Fulmini in Serie"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Scouting"
+msgstr "Esplorazione Avanzata"
+
+#, fuzzy
+msgid "campaignBonus|Expert Scouting"
+msgstr "La Perla Bianca"
+
+#, fuzzy
+msgid "campaignBonus|Basic Wisdom"
+msgstr "La Perla Nera"
+
+#, fuzzy
+msgid "campaignBonus|Advanced Wisdom"
+msgstr "Anima i Morti"
+
+#, fuzzy
+msgid "campaignBonus|Expert Wisdom"
+msgstr "Scudo Segreto"
+
+#, fuzzy
 msgid "campaignBonus|Animate Dead"
 msgstr "Anima i Morti"
 
@@ -1265,7 +1440,12 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The kingdom will have additional %{amount} %{resource} at the start of the "
+"The kingdom will receive %{amount} additional %{resource} at the start of "
+"the scenario."
+msgstr ""
+
+msgid ""
+"The kingdom will have %{amount} less %{resource} at the start of the "
 "scenario."
 msgstr ""
 
@@ -2252,8 +2432,9 @@ msgstr "Salva la partita in corso."
 msgid "Quit"
 msgstr "Esci"
 
-msgid "Quit out of Free Heroes of Might and Magic II."
-msgstr "Esci da Free Heroes of Might and Magic II."
+#, fuzzy
+msgid "Quit out of Heroes of Might and Magic II."
+msgstr "Esci da fheroes2."
 
 msgid "Language"
 msgstr "Lingua"
@@ -2266,6 +2447,50 @@ msgstr "Sperimentale"
 
 msgid "Settings"
 msgstr "Impostazioni"
+
+msgid "off"
+msgstr "Muto"
+
+msgid "Music"
+msgstr "Musica"
+
+msgid "Effects"
+msgstr "Effetti"
+
+msgid "MIDI"
+msgstr "MIDI"
+
+msgid "MIDI Expansion"
+msgstr "Espansione MIDI"
+
+msgid "External"
+msgstr "Esterna"
+
+msgid "Music Type"
+msgstr "Stile di Musica"
+
+msgid "Hot Keys"
+msgstr ""
+
+msgid "In-game"
+msgstr ""
+
+#, fuzzy
+msgid "Black & White"
+msgstr "Ponte"
+
+#, fuzzy
+msgid "Mouse Cursor"
+msgstr "Cursore Ombra"
+
+msgid "Color"
+msgstr ""
+
+#, fuzzy
+msgid "Text Support"
+msgstr ""
+"Tele-\n"
+"trasporto"
 
 msgid "Select Game Language"
 msgstr "Scegli lingua del gioco"
@@ -2282,15 +2507,38 @@ msgstr "Cambia la risoluzione del gioco."
 msgid "Experimental game settings."
 msgstr "Impostazioni sperimentali del gioco."
 
+msgid "Toggle ambient music level."
+msgstr ""
+
+msgid "Toggle foreground sounds level."
+msgstr ""
+
+msgid "Change the type of music."
+msgstr ""
+
+msgid "Check all Hot Keys used in the game."
+msgstr ""
+
+msgid ""
+"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
+"move as smoothly as black and white ones."
+msgstr ""
+
+msgid ""
+"Toggle text support mode to output extra information about windows and "
+"events in the game."
+msgstr ""
+
 msgid "Okay"
 msgstr "Okay"
 
 msgid "Attention"
 msgstr "Attenzione"
 
+#, fuzzy
 msgid ""
-"Your version of Heroes of Might and Magic II does not support any languages "
-"except English."
+"Your version of Heroes of Might and Magic II does not support any other "
+"languages than English."
 msgstr ""
 "La tua versione di Heroes of Might and Magic II non supporta altre lingue "
 "che l'inglese."
@@ -2366,6 +2614,9 @@ msgstr ""
 
 msgid "Your army too big!"
 msgstr "Il tuo esercito è troppo grande"
+
+msgid "Hot Keys:"
+msgstr ""
 
 msgid "Select Game Language:"
 msgstr "Scegli la lingua del gioco:"
@@ -2481,7 +2732,28 @@ msgstr "Sconosciuta"
 msgid "%{name} (Level %{level})"
 msgstr "%{name} (Livello %{level})"
 
-msgid "Move Points"
+#, fuzzy
+msgid "Attack:"
+msgstr "Attacco"
+
+#, fuzzy
+msgid "Defense:"
+msgstr "Difesa"
+
+#, fuzzy
+msgid "Spell Power:"
+msgstr "Potere"
+
+#, fuzzy
+msgid "Knowledge:"
+msgstr "Sapere"
+
+#, fuzzy
+msgid "Spell Points:"
+msgstr "Pt. Magia"
+
+#, fuzzy
+msgid "Move Points:"
 msgstr "Pt. Movim."
 
 msgid "Cost per troop:"
@@ -2706,27 +2978,6 @@ msgstr "Accetta la scelta."
 msgid "Experimental Game Settings"
 msgstr "Impostazioni Sperimentali"
 
-msgid "off"
-msgstr "Muto"
-
-msgid "Music"
-msgstr "Musica"
-
-msgid "Effects"
-msgstr "Effetti"
-
-msgid "MIDI"
-msgstr "MIDI"
-
-msgid "MIDI Expansion"
-msgstr "Espansione MIDI"
-
-msgid "External"
-msgstr "Esterna"
-
-msgid "Music Type"
-msgstr "Stile di Musica"
-
 msgid "Jump"
 msgstr "Salta"
 
@@ -2771,15 +3022,6 @@ msgstr "Battaglie"
 
 msgid "Manual"
 msgstr "Manuali"
-
-msgid "Toggle ambient music level."
-msgstr ""
-
-msgid "Toggle foreground sounds level."
-msgstr ""
-
-msgid "Change the type of music."
-msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -2941,9 +3183,6 @@ msgstr ""
 msgid "and many other contributors!"
 msgstr ""
 
-msgid "Original project before 0.7"
-msgstr ""
-
 msgid "Support us at"
 msgstr ""
 
@@ -2956,8 +3195,12 @@ msgstr ""
 msgid "and many-many other supporters!"
 msgstr ""
 
-msgid "Original Heroes of Might and Magic II team"
+msgid "Original project before 0.7"
 msgstr ""
+
+#, fuzzy
+msgid "Original Heroes of Might and Magic II team"
+msgstr "Esci da fheroes2."
 
 msgid "Designed and Directed"
 msgstr ""
@@ -3088,11 +3331,11 @@ msgid "Greetings!"
 msgstr "Saluti!"
 
 msgid ""
-"Welcome to Free Heroes of Might and Magic II! Before starting the game "
-"please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
+"starting the game please choose game resolution."
 msgstr ""
-"Benvenuti a Free Heroes of Might and Magic II! Gentilmente, prima di "
-"cominciare il gioco scegli una risoluzione per il gioco."
+"Benvenuti a fheroes2! Gentilmente, prima di cominciare il gioco scegli una "
+"risoluzione per il gioco."
 
 msgid "Please Remember"
 msgstr "Non Dimenticare"
@@ -3127,8 +3370,9 @@ msgstr ""
 "\n"
 "Divertiti!"
 
-msgid "Quit Heroes of Might and Magic and return to the operating system."
-msgstr "Lascia Free Heroes of Might and Magic II."
+#, fuzzy
+msgid "Quit Heroes of Might and Magic II and return to the operating system."
+msgstr "Lascia fheroes2."
 
 msgid "Credits"
 msgstr "Titoli di coda"
@@ -3150,6 +3394,7 @@ msgstr "Cambia la risoluzione del gioco."
 msgid "Game Settings"
 msgstr "Impostazioni del gioco."
 
+#, fuzzy
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
 "and Magic II."
@@ -3386,10 +3631,10 @@ msgstr ""
 msgid "No maps available!"
 msgstr ""
 
-msgid "Astrologers proclaim Month of the %{name}."
+msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Gli Astrologi prevedono il mese di %{name}."
 
-msgid "Astrologers proclaim Week of the %{name}."
+msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Gli Astrologi prevedono la settimana di %{name}."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
@@ -3410,7 +3655,7 @@ msgstr[1] ""
 "Dopo un periodo di crescita normale, la populazione di %{monster} incrementa "
 "di %{count} percento!"
 
-msgid "%{monster} population increases by +%{count}."
+msgid "%{monster} growth +%{count}."
 msgstr "Crescita %{monster} +%{count}."
 
 msgid " All populations are halved."
@@ -3621,6 +3866,26 @@ msgstr ""
 
 msgid "Norwegian"
 msgstr ""
+
+msgid "Belarusian"
+msgstr ""
+
+#, fuzzy
+msgid "Bulgarian"
+msgstr "Barbaro"
+
+msgid "Ukrainian"
+msgstr ""
+
+msgid "Romanian"
+msgstr ""
+
+msgid "Spanish"
+msgstr ""
+
+#, fuzzy
+msgid "Portuguese"
+msgstr "Furfanti"
 
 msgid ", FPS: "
 msgstr ""
@@ -4888,18 +5153,18 @@ msgstr ""
 msgid "Spell book is not present."
 msgstr ""
 
-msgid "The spell is not found."
-msgstr ""
-
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
 "cast the spell."
 msgstr ""
 
-msgid "Not enough move points."
+msgid "The spell is not found."
 msgstr ""
 
 msgid "Only heroes can cast this spell."
+msgstr ""
+
+msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
 msgstr ""
 
 msgid ""
@@ -5004,9 +5269,6 @@ msgstr "Alla Porta"
 msgid "Select town to port to."
 msgstr ""
 
-msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
-msgstr ""
-
 msgid "%{spell} failed!!!"
 msgstr "%{spell} fallita!!!"
 
@@ -5020,11 +5282,6 @@ msgid "This spell cannot be used on a boat."
 msgstr ""
 
 msgid "This spell can be casted only nearby water."
-msgstr ""
-
-msgid ""
-"No available towns.\n"
-"Spell Failed!!!"
 msgstr ""
 
 msgid ""
@@ -8450,3 +8707,6 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Quit out of fheroes2."
+#~ msgstr "Esci da fheroes2."

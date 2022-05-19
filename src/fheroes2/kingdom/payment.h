@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -27,15 +27,6 @@
 #include "resource.h"
 
 using payment_t = Funds;
-
-enum
-{
-    INCOME_CAPTURED = 0x01,
-    INCOME_CASTLES = 0x02,
-    INCOME_ARTIFACTS = 0x04,
-    INCOME_HEROSKILLS = 0x08,
-    INCOME_ALL = 0xFF
-};
 
 namespace PaymentConditions
 {

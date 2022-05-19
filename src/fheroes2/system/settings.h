@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -220,6 +220,8 @@ public:
     bool BattleAutoSpellcast() const;
     bool BattleShowArmyOrder() const;
     bool isPriceOfLoyaltySupported() const;
+    bool isMonochromeCursorEnabled() const;
+    bool isTextSupportModeEnabled() const;
 
     bool LoadedGameVersion() const
     {
@@ -379,6 +381,8 @@ public:
     void setBattleAutoSpellcast( bool enable );
     void setBattleShowArmyOrder( const bool enable );
     void setFullScreen( const bool enable );
+    void setMonochromeCursor( const bool enable );
+    void setTextSupportMode( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );

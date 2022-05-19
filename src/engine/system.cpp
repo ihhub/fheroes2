@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -51,7 +51,13 @@
 #if defined( _MSC_VER )
 #include <io.h>
 #else
+
+#if defined( TARGET_PS_VITA )
+#include <psp2/io/stat.h>
+#else
 #include <sys/stat.h>
+#endif
+
 #include <unistd.h>
 #endif
 

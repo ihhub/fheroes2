@@ -1,5 +1,5 @@
 ###########################################################################
-#   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
+#   fheroes2: https://github.com/ihhub/fheroes2                           #
 #   Copyright (C) 2022                                                    #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
@@ -28,11 +28,10 @@ merge:
 %.po: ../../src/dist/fheroes2.pot
 	msgmerge -U --no-location $@ $<
 
-# Spanish: drop accents transliterated with `"` (which breaks translation file format)
-# and transliterate the rest using the es_ES.UTF-8 locale
+# Spanish uses CP1252
 es.mo: es.po
-	sed -e 'y/äëïöőüűÄËÏŐÖÜŰ/aeioouuAEIOOUU/' $< > $<.tmp
-	LANG=es_ES.UTF-8 LC_ALL=es_ES.UTF-8 LC_CTYPE=es_ES.UTF-8 iconv -f utf-8 -t ascii//TRANSLIT $<.tmp > $<.2.tmp
+	iconv -f utf-8 -t CP1252 $< > $<.tmp
+	LANG=es.CP1252 LC_ALL=es.CP1252 LC_CTYPE=es.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
 
 # In French, accented characters are mapped to unused ASCII characters
@@ -41,6 +40,12 @@ fr.mo: fr.po
 	sed -e 'y/àâçéèêîïôùûüÉÊÀ/@*^~`|><#&$$uEEA/' $< > $<.tmp
 	sed -i~ -e 's/œ/oe/g' $<.tmp
 	msgfmt $<.tmp -o $@
+	
+# Portuguese uses CP1252	
+pt.mo: pt.po
+	iconv -f utf-8 -t CP1252 $< > $<.tmp
+	LANG=pt.CP1252 LC_ALL=pt.CP1252 LC_CTYPE=pt.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp
+	msgfmt $<.2.tmp -o $@
 
 # Polish version uses CP1250
 pl.mo: pl.po
@@ -62,6 +67,24 @@ ru.mo: ru.po
 	LANG=ru_RU.CP1251 LC_ALL=ru_RU.CP1251 LC_CTYPE=ru_RU.CP1251 sed -e 's/UTF-8/CP1251/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
 
+# Belarusian language uses CP1251.
+be.mo: be.po
+	iconv -f utf-8 -t CP1251 $< > $<.tmp
+	LANG=be_BE.CP1251 LC_ALL=be_BE.CP1251 LC_CTYPE=be_BE.CP1251 sed -e 's/UTF-8/CP1251/' $<.tmp > $<.2.tmp
+	msgfmt $<.2.tmp -o $@
+
+# Bulgarian language uses CP1251.
+bg.mo: bg.po
+	iconv -f utf-8 -t CP1251 $< > $<.tmp
+	LANG=bg_BG.CP1251 LC_ALL=bg_BG.CP1251 LC_CTYPE=bg_BG.CP1251 sed -e 's/UTF-8/CP1251/' $<.tmp > $<.2.tmp
+	msgfmt $<.2.tmp -o $@
+
+# Ukrainian language uses CP1251.
+uk.mo: uk.po
+	iconv -f utf-8 -t CP1251 $< > $<.tmp
+	LANG=uk_UK.CP1251 LC_ALL=uk_UK.CP1251 LC_CTYPE=uk_UK.CP1251 sed -e 's/UTF-8/CP1251/' $<.tmp > $<.2.tmp
+	msgfmt $<.2.tmp -o $@
+
 # German version uses CP1252
 de.mo: de.po
 	iconv -f utf-8 -t CP1252 $< > $<.tmp
@@ -78,6 +101,12 @@ nb.mo: nb.po
 it.mo: it.po
 	iconv -f utf-8 -t CP1252 $< > $<.tmp
 	LANG=it.CP1252 LC_ALL=it.CP1252 LC_CTYPE=it.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp
+	msgfmt $<.2.tmp -o $@
+	
+# Romanian uses CP1250
+ro.mo: ro.po
+	iconv -f utf-8 -t CP1250 $< > $<.tmp
+	LANG=ro.CP1250 LC_ALL=ro.CP1250 LC_CTYPE=ro.CP1250 sed -e 's/UTF-8/CP1250/' $<.tmp > $<.2.tmp
 	msgfmt $<.2.tmp -o $@
 
 # All other languages: drop accents transliterated with `"` (which breaks translation file format)

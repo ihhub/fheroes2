@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -305,7 +305,10 @@ public:
 
     const Route::Path & GetPath() const;
     Route::Path & GetPath();
-    int GetRangeRouteDays( s32 ) const;
+    // Returns the number of travel days to the tile with the dstIdx index using the pathfinder from the World global
+    // object, or zero if the destination tile is unreachable. The number of days returned is limited, see the source
+    // of this method.
+    int getNumOfTravelDays( int32_t dstIdx ) const;
     void ShowPath( bool );
     // Calculates the hero's path to the tile with the dstIdx index using the pathfinder from the World global object.
     // Recalculates the existing path if dstIdx is negative. Not applicable if you want to use a pathfinder other than

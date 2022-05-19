@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -101,6 +101,7 @@ namespace
         LOCALE_EN,
         LOCALE_AF,
         LOCALE_AR,
+        LOCALE_BE,
         LOCALE_BG,
         LOCALE_CA,
         LOCALE_CS,
@@ -126,12 +127,14 @@ namespace
         LOCALE_NL,
         LOCALE_PL,
         LOCALE_PT,
+        LOCALE_RO,
         LOCALE_RU,
         LOCALE_SK,
         LOCALE_SL,
         LOCALE_SR,
         LOCALE_SV,
-        LOCALE_TR
+        LOCALE_TR,
+        LOCALE_UK
     };
 
     struct chunk
@@ -346,6 +349,8 @@ namespace Translation
             current->locale = LocaleType::LOCALE_AF;
         else if ( str == "ar" || str == "arabic" )
             current->locale = LocaleType::LOCALE_AR;
+        else if ( str == "be" || str == "belarusian" )
+            current->locale = LocaleType::LOCALE_BE;
         else if ( str == "bg" || str == "bulgarian" )
             current->locale = LocaleType::LOCALE_BG;
         else if ( str == "ca" || str == "catalan" )
@@ -394,6 +399,8 @@ namespace Translation
             current->locale = LocaleType::LOCALE_PL;
         else if ( str == "pt" || str == "portuguese" )
             current->locale = LocaleType::LOCALE_PT;
+        else if ( str == "ro" || str == "romanian" )
+            current->locale = LocaleType::LOCALE_RO;
         else if ( str == "ru" || str == "russian" )
             current->locale = LocaleType::LOCALE_RU;
         else if ( str == "sk" || str == "slovak" )
@@ -406,7 +413,8 @@ namespace Translation
             current->locale = LocaleType::LOCALE_SV;
         else if ( str == "tr" || str == "turkish" )
             current->locale = LocaleType::LOCALE_TR;
-
+        else if ( str == "uk" || str == "ukrainian" )
+            current->locale = LocaleType::LOCALE_UK;
         return true;
     }
 
@@ -431,26 +439,31 @@ namespace Translation
         if ( current )
             switch ( current->locale ) {
             case LocaleType::LOCALE_AF:
-            case LocaleType::LOCALE_EU:
-            case LocaleType::LOCALE_ID:
-            case LocaleType::LOCALE_LA:
-            case LocaleType::LOCALE_TR:
-                return current->ngettext( str, 0 );
-            case LocaleType::LOCALE_AR:
-                return current->ngettext( str, ( n == 0 ? 0 : n == 1 ? 1 : n == 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 && n % 100 <= 99 ? 4 : 5 ) );
             case LocaleType::LOCALE_BG:
             case LocaleType::LOCALE_DA:
             case LocaleType::LOCALE_DE:
             case LocaleType::LOCALE_ES:
             case LocaleType::LOCALE_ET:
+            case LocaleType::LOCALE_EU:
             case LocaleType::LOCALE_FI:
             case LocaleType::LOCALE_GL:
             case LocaleType::LOCALE_HE:
+            case LocaleType::LOCALE_ID:
             case LocaleType::LOCALE_IT:
-                return current->ngettext( str, 0 );
+            case LocaleType::LOCALE_LA:
+            case LocaleType::LOCALE_NB:
             case LocaleType::LOCALE_NL:
             case LocaleType::LOCALE_SV:
+            case LocaleType::LOCALE_TR:
                 return current->ngettext( str, ( n != 1 ) );
+            case LocaleType::LOCALE_EL:
+            case LocaleType::LOCALE_FR:
+            case LocaleType::LOCALE_PT:
+                return current->ngettext( str, ( n > 1 ) );
+            case LocaleType::LOCALE_AR:
+                return current->ngettext( str, ( n == 0 ? 0 : n == 1 ? 1 : n == 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 && n % 100 <= 99 ? 4 : 5 ) );
+            case LocaleType::LOCALE_RO:
+                return current->ngettext( str, ( n == 1 ? 0 : n == 0 || ( n != 1 && n % 100 >= 1 && n % 100 <= 19 ) ? 1 : 2 ) );
             case LocaleType::LOCALE_SK:
                 return current->ngettext( str, ( ( n == 1 ) ? 1 : ( n >= 2 && n <= 4 ) ? 2 : 0 ) );
             case LocaleType::LOCALE_SL:
@@ -462,21 +475,19 @@ namespace Translation
                                                                                                                    : 2 ) );
             case LocaleType::LOCALE_CS:
                 return current->ngettext( str, ( ( n == 1 ) ? 0 : ( n >= 2 && n <= 4 ) ? 1 : 2 ) );
-            case LocaleType::LOCALE_EL:
-            case LocaleType::LOCALE_FR:
-            case LocaleType::LOCALE_PT:
-                return current->ngettext( str, ( n > 1 ) );
             case LocaleType::LOCALE_HR:
-            case LocaleType::LOCALE_RU:
-            case LocaleType::LOCALE_LT:
             case LocaleType::LOCALE_LV:
+            case LocaleType::LOCALE_RU:
                 return current->ngettext( str, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
+            case LocaleType::LOCALE_LT:
+                return current->ngettext( str, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
             case LocaleType::LOCALE_MK:
                 return current->ngettext( str, ( n == 1 || n % 10 == 1 ? 0 : 1 ) );
-            case LocaleType::LOCALE_NB:
-                return current->ngettext( str, ( n != 1 ) );
             case LocaleType::LOCALE_PL:
                 return current->ngettext( str, ( n == 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
+            case LocaleType::LOCALE_BE:
+            case LocaleType::LOCALE_UK:
+                return current->ngettext( str, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 12 || n % 100 > 14 ) ? 1 : 2 ) );
             default:
                 break;
             }

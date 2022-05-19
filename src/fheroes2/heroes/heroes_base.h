@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -100,10 +100,12 @@ public:
 
     uint32_t GetSpellPoints() const;
     bool HaveSpellPoints( const Spell & spell ) const;
+    bool haveMovePoints( const Spell & spell ) const;
     bool CanCastSpell( const Spell & spell, std::string * res = nullptr ) const;
     bool CanLearnSpell( const Spell & spell ) const;
     void SpellCasted( const Spell & spell );
     void SetSpellPoints( const uint32_t points );
+    bool isPotentSpellcaster() const;
 
     std::vector<Spell> GetSpells( const int lvl = -1 ) const;
     void EditSpellBook();

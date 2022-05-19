@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -25,6 +25,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "icn.h"
 #include "localevent.h"
@@ -103,7 +104,7 @@ fheroes2::GameMode Dialog::FileOptions()
                 break;
             }
         }
-        else if ( le.MouseClickLeft( buttonCancel.area() ) || HotKeyCloseWindow ) {
+        else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
             result = fheroes2::GameMode::CANCEL;
             break;
         }
@@ -117,7 +118,7 @@ fheroes2::GameMode Dialog::FileOptions()
             Dialog::Message( _( "Save Game" ), _( "Save the current game." ), Font::BIG );
         }
         else if ( le.MousePressRight( buttonQuit.area() ) ) {
-            Dialog::Message( _( "Quit" ), _( "Quit out of Free Heroes of Might and Magic II." ), Font::BIG );
+            Dialog::Message( _( "Quit" ), _( "Quit out of Heroes of Might and Magic II." ), Font::BIG );
         }
         else if ( le.MousePressRight( buttonCancel.area() ) ) {
             Dialog::Message( _( "Cancel" ), _( "Exit this menu without doing anything." ), Font::BIG );

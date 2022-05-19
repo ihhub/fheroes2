@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -33,6 +33,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "game_over.h"
 #include "icn.h"
 #ifdef WITH_DEBUG
@@ -523,15 +524,12 @@ fheroes2::GameMode Game::HighScores()
 
     // highscores loop
     while ( le.HandleEvents() ) {
-        // key code info
-        if ( Settings::Get().Debug() == 0x12 && le.KeyPress() )
-            Dialog::Message( "Key Press:", std::to_string( le.KeyValue() ), Font::SMALL, Dialog::OK );
         if ( buttonCampain.isEnabled() ) {
             le.MousePressLeft( buttonCampain.area() ) ? buttonCampain.drawOnPress() : buttonCampain.drawOnRelease();
         }
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow() )
             return fheroes2::GameMode::MAIN_MENU;
 
         if ( le.MousePressRight( buttonExit.area() ) ) {
