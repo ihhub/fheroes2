@@ -294,13 +294,11 @@ namespace
                 }
             }
 
-
             uint32_t totalTranslationStrings = count;
 
             // generate hash table
             for ( uint32_t index = 0; index < count; ++index ) {
                 buf.seek( offset_strings1 + index * 8 /* length, offset */ );
-
 
                 const uint32_t length1 = buf.get32();
                 if ( length1 == 0 ) {
