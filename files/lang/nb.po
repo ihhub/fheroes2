@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-19 00:36+0000\n"
+"POT-Creation-Date: 2022-05-20 02:21+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2453,13 +2453,18 @@ msgstr "Forlat borgvalg"
 msgid "Castle Options"
 msgstr "Borgvalg"
 
-msgid "Not enough resources to buy creatures."
+#, fuzzy
+msgid "Not enough resources to recruit creatures."
 msgstr "Ikke nok råvarer til å kjøpe krigere."
+
+msgid "You are unable to recruit at this time, your ranks are full."
+msgstr "Du kan ikke verve noen fordi hæren din har ikke plass."
 
 msgid "No creatures available for purchase."
 msgstr "Ingen krigere tilgjengelige for verving."
 
-msgid "Buy Creatures"
+#, fuzzy
+msgid "Recruit Creatures"
 msgstr "Verv krigere"
 
 msgid "Town Population Information and Statistics"
@@ -4177,6 +4182,9 @@ msgstr ""
 msgid "Spanish"
 msgstr ""
 
+msgid "Swedish"
+msgstr ""
+
 #, fuzzy
 msgid "Portuguese"
 msgstr "Røvere"
@@ -4415,9 +4423,6 @@ msgstr "1"
 
 msgid "two"
 msgstr "2"
-
-msgid "You are unable to recruit at this time, your ranks are full."
-msgstr "Du kan ikke verve noen fordi hæren din har ikke plass."
 
 msgid "A whirlpool engulfs your ship."
 msgstr "Virvelstrømmen sluker skipet ditt."

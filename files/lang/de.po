@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-19 00:36+0000\n"
+"POT-Creation-Date: 2022-05-20 02:21+0000\n"
 "PO-Revision-Date: 2022-05-12 17:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2399,13 +2399,18 @@ msgstr "Burg Optionen verlassen"
 msgid "Castle Options"
 msgstr "Burg Optionen"
 
-msgid "Not enough resources to buy creatures."
+#, fuzzy
+msgid "Not enough resources to recruit creatures."
 msgstr "Nicht genug Ressourcen für den Kauf von Kreaturen."
+
+msgid "You are unable to recruit at this time, your ranks are full."
+msgstr "Sie können zur Zeit nicht rekrutieren, Ihre Ränge sind voll."
 
 msgid "No creatures available for purchase."
 msgstr "Keine Kreatur zum Kauf verfügbar."
 
-msgid "Buy Creatures"
+#, fuzzy
+msgid "Recruit Creatures"
 msgstr "Kreaturen kaufen"
 
 msgid "Town Population Information and Statistics"
@@ -4122,6 +4127,9 @@ msgstr "Rumänisch"
 msgid "Spanish"
 msgstr ""
 
+msgid "Swedish"
+msgstr ""
+
 #, fuzzy
 msgid "Portuguese"
 msgstr "Schurken"
@@ -4363,9 +4371,6 @@ msgstr "1"
 
 msgid "two"
 msgstr "2"
-
-msgid "You are unable to recruit at this time, your ranks are full."
-msgstr "Sie können zur Zeit nicht rekrutieren, Ihre Ränge sind voll."
 
 msgid "A whirlpool engulfs your ship."
 msgstr "Ein Strudel verschlingt Ihr Schiff."
