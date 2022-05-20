@@ -43,12 +43,12 @@ namespace
         const Settings & conf = Settings::Get();
         const bool isSinglePlayer = ( Colors( Players::HumanColors() ).size() == 1 );
 
-        if ( isSinglePlayer && ( ( conf.ConditionLoss() & GameOver::LOSS_TOWN ) != 0 ) && ( castle->GetCenter() == conf.LossMapsPositionObject() ) ) {
+        if ( isSinglePlayer && ( conf.ConditionLoss() & GameOver::LOSS_TOWN ) != 0 && castle->GetCenter() == conf.LossMapsPositionObject() ) {
             // It is a loss town condition for human.
             return true;
         }
 
-        if ( ( conf.WinsCompAlsoWins() && ( conf.ConditionWins() & GameOver::WINS_TOWN ) != 0 ) && ( castle->GetCenter() == conf.WinsMapsPositionObject() ) ) {
+        if ( conf.WinsCompAlsoWins() && ( conf.ConditionWins() & GameOver::WINS_TOWN ) != 0 && castle->GetCenter() == conf.WinsMapsPositionObject() ) {
             // It is a town capture winning condition for AI.
             return true;
         }
