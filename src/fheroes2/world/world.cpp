@@ -1132,7 +1132,7 @@ const Heroes * World::GetHeroesCondLoss( void ) const
     return GetHeroes( heroes_cond_loss );
 }
 
-bool World::KingdomIsWins( const Kingdom & kingdom, uint32_t wins ) const
+bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 {
     const Settings & conf = Settings::Get();
 
@@ -1142,7 +1142,6 @@ bool World::KingdomIsWins( const Kingdom & kingdom, uint32_t wins ) const
 
     case GameOver::WINS_TOWN: {
         const Castle * town = getCastleEntrance( conf.WinsMapsPositionObject() );
-        // check comp also wins
         return ( kingdom.isControlHuman() || conf.WinsCompAlsoWins() ) && ( town && town->GetColor() == kingdom.GetColor() );
     }
 
@@ -1167,7 +1166,6 @@ bool World::KingdomIsWins( const Kingdom & kingdom, uint32_t wins ) const
     }
 
     case GameOver::WINS_GOLD:
-        // check comp also wins
         return ( ( kingdom.isControlHuman() || conf.WinsCompAlsoWins() ) && 0 < kingdom.GetFunds().Get( Resource::GOLD )
                  && static_cast<u32>( kingdom.GetFunds().Get( Resource::GOLD ) ) >= conf.getWinningGoldAccumulationValue() );
 
@@ -1178,20 +1176,11 @@ bool World::KingdomIsWins( const Kingdom & kingdom, uint32_t wins ) const
     return false;
 }
 
-bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const
+bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
 {
-    const Colors colors( Game::GetKingdomColors() );
-    for ( const int color : colors ) {
-        const Kingdom & kingdom = world.GetKingdom( color );
-        if ( kingdom.isVisited( dstIndex, objectType ) ) {
-            return true;
-        }
-    }
-    return false;
-}
+    // This method can only be called for a human-controlled kingdom
+    assert( kingdom.isControlHuman() );
 
-bool World::KingdomIsLoss( const Kingdom & kingdom, uint32_t loss ) const
-{
     const Settings & conf = Settings::Get();
 
     switch ( loss ) {
@@ -1210,7 +1199,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, uint32_t loss ) const
     }
 
     case GameOver::LOSS_TIME:
-        return ( CountDay() > conf.LossCountDays() && kingdom.isControlHuman() );
+        return ( CountDay() > conf.LossCountDays() );
 
     default:
         break;
@@ -1221,6 +1210,9 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, uint32_t loss ) const
 
 uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
 {
+    // This method can only be called for a human-controlled kingdom
+    assert( kingdom.isControlHuman() );
+
     const Settings & conf = Settings::Get();
 
     if ( conf.isCampaignGameType() ) {
@@ -1249,9 +1241,12 @@ uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
 
 uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
 {
+    // This method can only be called for a human-controlled kingdom
+    assert( kingdom.isControlHuman() );
+
     const Settings & conf = Settings::Get();
 
-    // first, check if the other players have not completed WINS_TOWN, WINS_HERO, WINS_ARTIFACT or WINS_GOLD yet
+    // First of all, check if the other players have not completed WINS_TOWN, WINS_HERO, WINS_ARTIFACT or WINS_GOLD yet
     const std::array<std::pair<uint32_t, uint32_t>, 4> enemy_wins = { std::make_pair<uint32_t, uint32_t>( GameOver::WINS_TOWN, GameOver::LOSS_ENEMY_WINS_TOWN ),
                                                                       std::make_pair<uint32_t, uint32_t>( GameOver::WINS_HERO, GameOver::LOSS_ENEMY_WINS_HERO ),
                                                                       std::make_pair<uint32_t, uint32_t>( GameOver::WINS_ARTIFACT, GameOver::LOSS_ENEMY_WINS_ARTIFACT ),
@@ -1267,7 +1262,7 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
         }
     }
 
-    if ( conf.isCampaignGameType() && kingdom.isControlHuman() ) {
+    if ( conf.isCampaignGameType() ) {
         const Campaign::ScenarioLossCondition lossCondition = Campaign::getCurrentScenarioLossCondition();
         if ( lossCondition == Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES ) {
             const KingdomCastles & castles = kingdom.GetCastles();
@@ -1365,6 +1360,18 @@ uint32_t World::GetWeekSeed() const
     fheroes2::hashCombine( weekSeed, week );
 
     return weekSeed;
+}
+
+bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const
+{
+    const Colors colors( Game::GetKingdomColors() );
+    for ( const int color : colors ) {
+        const Kingdom & kingdom = world.GetKingdom( color );
+        if ( kingdom.isVisited( dstIndex, objectType ) ) {
+            return true;
+        }
+    }
+    return false;
 }
 
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )

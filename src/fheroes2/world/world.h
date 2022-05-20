@@ -281,10 +281,11 @@ public:
     void ActionForMagellanMaps( int color );
     void ClearFog( int color );
 
-    uint32_t CheckKingdomWins( const Kingdom & ) const;
-    bool KingdomIsWins( const Kingdom &, uint32_t wins ) const;
-    uint32_t CheckKingdomLoss( const Kingdom & ) const;
-    bool KingdomIsLoss( const Kingdom &, uint32_t loss ) const;
+    bool KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const;
+    bool KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const;
+
+    uint32_t CheckKingdomWins( const Kingdom & kingdom ) const;
+    uint32_t CheckKingdomLoss( const Kingdom & kingdom ) const;
 
     void AddEventDate( const EventDate & );
     EventsDate GetEventsDate( int color ) const;
