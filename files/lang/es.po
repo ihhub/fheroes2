@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-19 00:36+0000\n"
+"POT-Creation-Date: 2022-05-20 02:21+0000\n"
 "PO-Revision-Date: 2022-05-14 22:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -2379,14 +2379,18 @@ msgstr "Opciones del castillo"
 msgid "Castle Options"
 msgstr "Opciones del castillo"
 
-msgid "Not enough resources to buy creatures."
+msgid "Not enough resources to recruit creatures."
 msgstr ""
+
+msgid "You are unable to recruit at this time, your ranks are full."
+msgstr "Eres incapaz de reclutar ahora mismo, tus filas están completas."
 
 msgid "No creatures available for purchase."
 msgstr ""
 
-msgid "Buy Creatures"
-msgstr ""
+#, fuzzy
+msgid "Recruit Creatures"
+msgstr "Reclutar Heroe"
 
 msgid "Town Population Information and Statistics"
 msgstr "Población y estadísticas de la ciudad"
@@ -4119,6 +4123,9 @@ msgstr ""
 msgid "Spanish"
 msgstr "Español"
 
+msgid "Swedish"
+msgstr ""
+
 #, fuzzy
 msgid "Portuguese"
 msgstr "Bandidos"
@@ -4361,9 +4368,6 @@ msgstr "uno"
 
 msgid "two"
 msgstr "dos"
-
-msgid "You are unable to recruit at this time, your ranks are full."
-msgstr "Eres incapaz de reclutar ahora mismo, tus filas están completas."
 
 msgid "A whirlpool engulfs your ship."
 msgstr "Un remolino engulle tu nave."

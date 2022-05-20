@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-19 00:36+0000\n"
+"POT-Creation-Date: 2022-05-20 02:21+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -2251,13 +2251,18 @@ msgstr "Wyjście z zamku"
 msgid "Castle Options"
 msgstr "Opcje zamku"
 
-msgid "Not enough resources to buy creatures."
+#, fuzzy
+msgid "Not enough resources to recruit creatures."
 msgstr "Brak zasobów aby kupić stworzenia."
+
+msgid "You are unable to recruit at this time, your ranks are full."
+msgstr "Nie możesz teraz rekrutować, w twojej armii nie ma już miejsca."
 
 msgid "No creatures available for purchase."
 msgstr "Brak stworzeń do zakupienia."
 
-msgid "Buy Creatures"
+#, fuzzy
+msgid "Recruit Creatures"
 msgstr "Zakup stworzeń"
 
 msgid "Town Population Information and Statistics"
@@ -3940,6 +3945,9 @@ msgstr ""
 msgid "Spanish"
 msgstr ""
 
+msgid "Swedish"
+msgstr ""
+
 #, fuzzy
 msgid "Portuguese"
 msgstr "Rozbójnicy"
@@ -4180,9 +4188,6 @@ msgstr "jeden"
 
 msgid "two"
 msgstr "dwa"
-
-msgid "You are unable to recruit at this time, your ranks are full."
-msgstr "Nie możesz teraz rekrutować, w twojej armii nie ma już miejsca."
 
 msgid "A whirlpool engulfs your ship."
 msgstr "Statek zostaje wciągnięty przez wir."

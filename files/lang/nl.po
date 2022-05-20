@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-19 00:36+0000\n"
+"POT-Creation-Date: 2022-05-20 02:21+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -2127,13 +2127,16 @@ msgstr ""
 msgid "Castle Options"
 msgstr ""
 
-msgid "Not enough resources to buy creatures."
+msgid "Not enough resources to recruit creatures."
+msgstr ""
+
+msgid "You are unable to recruit at this time, your ranks are full."
 msgstr ""
 
 msgid "No creatures available for purchase."
 msgstr ""
 
-msgid "Buy Creatures"
+msgid "Recruit Creatures"
 msgstr ""
 
 msgid "Town Population Information and Statistics"
@@ -3662,6 +3665,9 @@ msgstr ""
 msgid "Spanish"
 msgstr ""
 
+msgid "Swedish"
+msgstr ""
+
 msgid "Portuguese"
 msgstr ""
 
@@ -3897,9 +3903,6 @@ msgid "one"
 msgstr ""
 
 msgid "two"
-msgstr ""
-
-msgid "You are unable to recruit at this time, your ranks are full."
 msgstr ""
 
 msgid "A whirlpool engulfs your ship."
