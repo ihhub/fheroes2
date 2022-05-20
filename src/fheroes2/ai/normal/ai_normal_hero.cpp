@@ -41,12 +41,9 @@ namespace
         assert( castle != nullptr );
 
         const Settings & conf = Settings::Get();
-        if ( conf.CurrentFileInfo().isMultiPlayerMap() ) {
-            // This is a multiplayer mode. Town related conditions are not applied for such game.
-            return false;
-        }
+        const bool isSinglePlayer = ( Colors( Players::HumanColors() ).size() == 1 );
 
-        if ( ( ( conf.ConditionLoss() & GameOver::LOSS_TOWN ) != 0 ) && ( castle->GetCenter() == conf.LossMapsPositionObject() ) ) {
+        if ( isSinglePlayer && ( ( conf.ConditionLoss() & GameOver::LOSS_TOWN ) != 0 ) && ( castle->GetCenter() == conf.LossMapsPositionObject() ) ) {
             // It is a loss town condition for human.
             return true;
         }

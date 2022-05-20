@@ -699,27 +699,6 @@ void World::ProcessNewMap()
         }
     }
 
-    if ( !conf.CurrentFileInfo().isMultiPlayerMap() ) {
-        if ( ( conf.ConditionWins() & GameOver::WINS_TOWN ) != 0 ) {
-            // It is a winning town condition for human. Defend the castle!
-            // The condition might also be applied for AI.
-            Castle * castle = vec_castles.Get( conf.WinsMapsPositionObject() );
-            assert( castle != nullptr );
-            if ( castle != nullptr ) {
-                castle->SetModes( Castle::CAPITAL );
-            }
-        }
-
-        if ( ( conf.ConditionLoss() & GameOver::LOSS_TOWN ) != 0 ) {
-            // It is a loss town condition for human.
-            Castle * castle = vec_castles.Get( conf.LossMapsPositionObject() );
-            assert( castle != nullptr );
-            if ( castle != nullptr ) {
-                castle->SetModes( Castle::CAPITAL );
-            }
-        }
-    }
-
     // Set Ultimate Artifact.
     fheroes2::Point ultimate_pos;
     MapsTiles::iterator it = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isObject( MP2::OBJ_RNDULTIMATEARTIFACT ); } );
