@@ -208,6 +208,9 @@ public:
     Heroes();
     Heroes( int heroid, int rc );
     Heroes( int heroID, int race, int initialLevel );
+    Heroes( const Heroes & ) = delete;
+
+    Heroes & operator=( const Heroes & ) = delete;
 
     bool isValid() const override;
     bool isFreeman( void ) const;
