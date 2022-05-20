@@ -1162,6 +1162,9 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
     }
 
     case GameOver::WINS_SIDE: {
+        // This method can only be called with this condition for a human-controlled kingdom
+        assert( kingdom.isControlHuman() );
+
         return !( Game::GetActualKingdomColors() & ~Players::GetPlayerFriends( kingdom.GetColor() ) );
     }
 
