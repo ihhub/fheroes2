@@ -437,17 +437,17 @@ namespace
                 if ( hero.GetColor() == otherHero->GetColor() && !hero.hasMetWithHero( otherHero->GetID() ) ) {
                     return !otherHeroInCastle;
                 }
-                else if ( hero.isFriends( otherHero->GetColor() ) ) {
+                if ( hero.isFriends( otherHero->GetColor() ) ) {
                     return false;
                 }
                 // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
-                else if ( isDefeatOfHeroVictoryConditionForHuman( otherHero ) ) {
+                if ( isDefeatOfHeroVictoryConditionForHuman( otherHero ) ) {
                     return false;
                 }
-                else if ( otherHeroInCastle ) {
+                if ( otherHeroInCastle ) {
                     return AIShouldVisitCastle( hero, index, heroArmyStrength );
                 }
-                else if ( army.isStrongerThan( otherHero->GetArmy(), hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_SMALL ) ) {
+                if ( army.isStrongerThan( otherHero->GetArmy(), hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_SMALL ) ) {
                     return true;
                 }
             }
