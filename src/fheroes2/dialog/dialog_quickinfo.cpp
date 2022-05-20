@@ -241,7 +241,7 @@ namespace
         std::string str = MP2::StringObject( tile.GetObject( false ) );
 
         if ( owned || ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) ) {
-            str += '\n';
+            str += "\n \n";
             const Troop & troop = tile.QuantityTroop();
             if ( troop.isValid() ) {
                 str.append( _( "(available: %{count})" ) );
