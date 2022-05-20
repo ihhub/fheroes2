@@ -78,19 +78,21 @@ namespace
         std::string msg;
 
         switch ( info.conditions_loss ) {
-        case 0:
+        case Maps::FileInfo::LOSS_EVERYTHING:
             msg = _( "Lose all your heroes and towns." );
             break;
-        case 1:
+        case Maps::FileInfo::LOSS_TOWN:
             msg = _( "Lose a specific town." );
             break;
-        case 2:
+        case Maps::FileInfo::LOSS_HERO:
             msg = _( "Lose a specific hero." );
             break;
-        case 3:
+        case Maps::FileInfo::LOSS_OUT_OF_TIME:
             msg = _( "Run out of time. Fail to win by a certain point." );
             break;
         default:
+            // This is an unknown condition. Add the logic for it above!
+            assert( 0 );
             return;
         }
         Dialog::Message( _( "Loss Condition" ), msg, Font::BIG );
@@ -101,25 +103,27 @@ namespace
         std::string msg;
 
         switch ( info.conditions_wins ) {
-        case 0:
+        case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
             msg = _( "Defeat all enemy heroes and towns." );
             break;
-        case 1:
+        case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
             msg = _( "Capture a specific town." );
             break;
-        case 2:
+        case Maps::FileInfo::VICTORY_KILL_HERO:
             msg = _( "Defeat a specific hero." );
             break;
-        case 3:
+        case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT:
             msg = _( "Find a specific artifact." );
             break;
-        case 4:
+        case Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE:
             msg = _( "Your side defeats the opposing side." );
             break;
-        case 5:
+        case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD:
             msg = _( "Accumulate a large amount of gold." );
             break;
         default:
+            // This is an unknown condition. Add the logic for it above!
+            assert( 0 );
             return;
         }
         Dialog::Message( _( "Victory Condition" ), msg, Font::BIG );

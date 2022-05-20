@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-19 00:36+0000\n"
+"POT-Creation-Date: 2022-05-20 02:21+0000\n"
 "PO-Revision-Date: 2022-05-12 17:11+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -2241,15 +2241,19 @@ msgid "Castle Options"
 msgstr "Opzioni Castello"
 
 #, fuzzy
-msgid "Not enough resources to buy creatures."
+msgid "Not enough resources to recruit creatures."
 msgstr "Mancano risorse per comprare truppe."
+
+msgid "You are unable to recruit at this time, your ranks are full."
+msgstr ""
 
 #, fuzzy
 msgid "No creatures available for purchase."
 msgstr "Niente truppe disponibili da comprare."
 
-msgid "Buy Creatures"
-msgstr ""
+#, fuzzy
+msgid "Recruit Creatures"
+msgstr "Recluta Eroe"
 
 msgid "Town Population Information and Statistics"
 msgstr "Populazione e Dati della Città"
@@ -3883,6 +3887,9 @@ msgstr ""
 msgid "Spanish"
 msgstr ""
 
+msgid "Swedish"
+msgstr ""
+
 #, fuzzy
 msgid "Portuguese"
 msgstr "Furfanti"
@@ -4122,9 +4129,6 @@ msgstr "1"
 
 msgid "two"
 msgstr "2"
-
-msgid "You are unable to recruit at this time, your ranks are full."
-msgstr ""
 
 msgid "A whirlpool engulfs your ship."
 msgstr "Un gorgo travolge la tua nave."

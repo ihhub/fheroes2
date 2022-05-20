@@ -2249,13 +2249,18 @@ msgstr "Wyjście z zamku"
 msgid "Castle Options"
 msgstr "Opcje zamku"
 
-msgid "Not enough resources to buy creatures."
+#, fuzzy
+msgid "Not enough resources to recruit creatures."
 msgstr "Brak zasobów aby kupić stworzenia."
+
+msgid "You are unable to recruit at this time, your ranks are full."
+msgstr "Nie możesz teraz rekrutować, w twojej armii nie ma już miejsca."
 
 msgid "No creatures available for purchase."
 msgstr "Brak stworzeń do zakupienia."
 
-msgid "Buy Creatures"
+#, fuzzy
+msgid "Recruit Creatures"
 msgstr "Zakup stworzeń"
 
 msgid "Town Population Information and Statistics"
@@ -3928,6 +3933,9 @@ msgstr "Rumuński"
 msgid "Spanish"
 msgstr ""
 
+msgid "Swedish"
+msgstr ""
+
 #, fuzzy
 msgid "Portuguese"
 msgstr "Rozbójnicy"
@@ -4168,9 +4176,6 @@ msgstr "jeden"
 
 msgid "two"
 msgstr "dwa"
-
-msgid "You are unable to recruit at this time, your ranks are full."
-msgstr "Nie możesz teraz rekrutować, w twojej armii nie ma już miejsca."
 
 msgid "A whirlpool engulfs your ship."
 msgstr "Statek zostaje wciągnięty przez wir."

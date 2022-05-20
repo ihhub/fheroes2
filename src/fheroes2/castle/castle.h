@@ -137,8 +137,16 @@ public:
         return captain;
     }
 
-    bool isCastle( void ) const;
-    bool isCapital( void ) const;
+    bool isCastle() const
+    {
+        return ( building & BUILD_CASTLE ) != 0;
+    }
+
+    bool isCapital() const
+    {
+        return Modes( CAPITAL );
+    }
+
     bool HaveNearlySea( void ) const;
     bool PresentBoat( void ) const;
     bool AllowBuyHero( std::string * = nullptr ) const;

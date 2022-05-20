@@ -244,17 +244,17 @@ namespace
         bool open( const std::string & file )
         {
             StreamFile sf;
-
-            if ( !sf.open( file, "rb" ) )
+            if ( !sf.open( file, "rb" ) ) {
                 return false;
+            }
 
             {
-                size_t size = sf.size();
+                const size_t size = sf.size();
                 u32 id = 0;
                 sf >> id;
 
                 if ( 0x950412de != id ) {
-                    ERROR_LOG( "incorrect mo id: " << GetHexString( id ) )
+                    ERROR_LOG( "Incorrect mo file ID: " << GetHexString( id ) )
                     return false;
                 }
                 else {
@@ -277,48 +277,61 @@ namespace
             }
 
             // parse encoding and plural forms
-            if ( count ) {
+            if ( count > 0 ) {
                 buf.seek( offset_strings2 );
                 u32 length2 = buf.get32();
                 u32 offset2 = buf.get32();
-
-                const std::string tag1( "Content-Type" );
-                const std::string sep1( "charset=" );
-                const std::string tag2( "Plural-Forms" );
-                const std::string sep2( ": " );
 
                 buf.seek( offset2 );
                 std::vector<std::string> tags = StringSplit( buf.toString( length2 ), "\n" );
 
                 for ( std::vector<std::string>::const_iterator it = tags.begin(); it != tags.end(); ++it ) {
                     if ( encoding.empty() )
-                        encoding = getTag( *it, tag1, sep1 );
+                        encoding = getTag( *it, "Content-Type", "charset=" );
 
                     if ( plural_forms.empty() )
-                        plural_forms = getTag( *it, tag2, sep2 );
+                        plural_forms = getTag( *it, "Plural-Forms", ": " );
                 }
             }
 
+            uint32_t totalTranslationStrings = count;
+
             // generate hash table
-            for ( u32 index = 0; index < count; ++index ) {
+            for ( uint32_t index = 0; index < count; ++index ) {
                 buf.seek( offset_strings1 + index * 8 /* length, offset */ );
-                u32 length1 = buf.get32();
-                u32 offset1 = buf.get32();
+
+                const uint32_t length1 = buf.get32();
+                if ( length1 == 0 ) {
+                    // This is an empty translation. Skip it.
+                    --totalTranslationStrings;
+                    continue;
+                }
+
+                const uint32_t offset1 = buf.get32();
                 buf.seek( offset1 );
                 const std::string msg1 = buf.toString( length1 );
-                u32 crc = crc32b( msg1.c_str() );
+
+                const uint32_t crc = crc32b( msg1.c_str() );
                 buf.seek( offset_strings2 + index * 8 /* length, offset */ );
-                u32 length2 = buf.get32();
-                u32 offset2 = buf.get32();
+
+                const uint32_t length2 = buf.get32();
+                if ( length2 == 0 ) {
+                    // This is an empty translation. Skip it.
+                    --totalTranslationStrings;
+                    continue;
+                }
+
+                const uint32_t offset2 = buf.get32();
+
                 std::map<u32, chunk>::const_iterator it = hash_offsets.find( crc );
                 if ( it == hash_offsets.end() )
                     hash_offsets[crc] = chunk( offset2, length2 );
                 else {
-                    ERROR_LOG( "incorrect hash for: " << msg1 )
+                    ERROR_LOG( "Incorrect hash value for: " << msg1 )
                 }
             }
 
-            return true;
+            return ( totalTranslationStrings > 0 );
         }
     };
 
