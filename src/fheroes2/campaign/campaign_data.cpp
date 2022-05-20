@@ -248,7 +248,6 @@ namespace
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::ROLAND_CAMPAIGN );
-        campaignData.setCampaignName( _( "Roland Campaign" ) );
         campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
@@ -351,7 +350,6 @@ namespace
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::ARCHIBALD_CAMPAIGN );
-        campaignData.setCampaignName( _( "Archibald Campaign" ) );
         campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
@@ -421,7 +419,6 @@ namespace
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::PRICE_OF_LOYALTY_CAMPAIGN );
-        campaignData.setCampaignName( _( "Price of Loyalty" ) );
         campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
@@ -487,7 +484,6 @@ namespace
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::DESCENDANTS_CAMPAIGN );
-        campaignData.setCampaignName( _( "Descendants" ) );
         campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
@@ -536,7 +532,6 @@ namespace
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::WIZARDS_ISLE_CAMPAIGN );
-        campaignData.setCampaignName( _( "Wizards' Isle" ) );
         campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
@@ -582,7 +577,6 @@ namespace
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::VOYAGE_HOME_CAMPAIGN );
-        campaignData.setCampaignName( _( "Voyage Home" ) );
         campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
@@ -680,11 +674,6 @@ namespace Campaign
     void CampaignData::setCampaignScenarios( std::vector<ScenarioData> && scenarios )
     {
         _scenarios = std::move( scenarios );
-    }
-
-    void CampaignData::setCampaignName( const std::string & campaignName )
-    {
-        _campaignName = campaignName;
     }
 
     const CampaignData & CampaignData::getCampaignData( const int campaignID )
