@@ -256,6 +256,9 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
                 RedrawHighScoresCampaign( top.x, top.y, monsterAnimationFrameId );
             else
                 RedrawHighScoresStandard( top.x, top.y, monsterAnimationFrameId );
+
+            buttonOtherHighScore.draw();
+            buttonExit.draw();
             display.render();
         }
     }
