@@ -1162,7 +1162,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
     }
 
     case GameOver::WINS_SIDE: {
-        // This method can only be called with this condition for a human-controlled kingdom
+        // This method should be called with this condition only for a human-controlled kingdom
         assert( kingdom.isControlHuman() );
 
         return !( Game::GetActualKingdomColors() & ~Players::GetPlayerFriends( kingdom.GetColor() ) );
@@ -1181,7 +1181,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 
 bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
 {
-    // This method can only be called for a human-controlled kingdom
+    // This method should only be called for a human-controlled kingdom
     assert( kingdom.isControlHuman() );
 
     const Settings & conf = Settings::Get();
@@ -1213,7 +1213,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
 
 uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
 {
-    // This method can only be called for a human-controlled kingdom
+    // This method should only be called for a human-controlled kingdom
     assert( kingdom.isControlHuman() );
 
     const Settings & conf = Settings::Get();
@@ -1244,7 +1244,7 @@ uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
 
 uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
 {
-    // This method can only be called for a human-controlled kingdom
+    // This method should only be called for a human-controlled kingdom
     assert( kingdom.isControlHuman() );
 
     const Settings & conf = Settings::Get();
