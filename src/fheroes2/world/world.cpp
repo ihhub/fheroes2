@@ -1138,6 +1138,9 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 
     switch ( wins ) {
     case GameOver::WINS_ALL:
+        // This method should be called with this condition only for a human-controlled kingdom
+        assert( kingdom.isControlHuman() );
+
         return kingdom.GetColor() == vec_kingdoms.GetNotLossColors();
 
     case GameOver::WINS_TOWN: {
@@ -1151,6 +1154,9 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
     }
 
     case GameOver::WINS_ARTIFACT: {
+        // This method should be called with this condition only for a human-controlled kingdom
+        assert( kingdom.isControlHuman() );
+
         const KingdomHeroes & heroes = kingdom.GetHeroes();
         if ( conf.WinsFindUltimateArtifact() ) {
             return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->HasUltimateArtifact(); } );
@@ -1161,12 +1167,11 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
         }
     }
 
-    case GameOver::WINS_SIDE: {
+    case GameOver::WINS_SIDE:
         // This method should be called with this condition only for a human-controlled kingdom
         assert( kingdom.isControlHuman() );
 
         return !( Game::GetActualKingdomColors() & ~Players::GetPlayerFriends( kingdom.GetColor() ) );
-    }
 
     case GameOver::WINS_GOLD:
         return ( ( kingdom.isControlHuman() || conf.WinsCompAlsoWins() ) && 0 < kingdom.GetFunds().Get( Resource::GOLD )
@@ -1249,10 +1254,9 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
 
     const Settings & conf = Settings::Get();
 
-    // First of all, check if the other players have not completed WINS_TOWN, WINS_HERO, WINS_ARTIFACT or WINS_GOLD yet
+    // First of all, check if the other players have not completed WINS_TOWN, WINS_HERO or WINS_GOLD yet
     const std::array<std::pair<uint32_t, uint32_t>, 4> enemy_wins = { std::make_pair<uint32_t, uint32_t>( GameOver::WINS_TOWN, GameOver::LOSS_ENEMY_WINS_TOWN ),
                                                                       std::make_pair<uint32_t, uint32_t>( GameOver::WINS_HERO, GameOver::LOSS_ENEMY_WINS_HERO ),
-                                                                      std::make_pair<uint32_t, uint32_t>( GameOver::WINS_ARTIFACT, GameOver::LOSS_ENEMY_WINS_ARTIFACT ),
                                                                       std::make_pair<uint32_t, uint32_t>( GameOver::WINS_GOLD, GameOver::LOSS_ENEMY_WINS_GOLD ) };
 
     for ( const auto & item : enemy_wins ) {

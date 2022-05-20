@@ -124,13 +124,6 @@ namespace
             break;
         }
 
-        case GameOver::LOSS_ENEMY_WINS_ARTIFACT: {
-            body = _( "The enemy has found the %{name}.\nYour quest is a failure." );
-            const Artifact art = conf.WinsFindArtifactID();
-            StringReplace( body, "%{name}", art.GetName() );
-            break;
-        }
-
         case GameOver::LOSS_ENEMY_WINS_GOLD: {
             body = _( "The enemy has built up over %{count} gold in his treasury.\nYou must bow done in defeat before his wealth and power." );
             StringReplace( body, "%{count}", conf.getWinningGoldAccumulationValue() );

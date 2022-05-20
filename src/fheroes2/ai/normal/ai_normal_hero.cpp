@@ -36,6 +36,13 @@
 
 namespace
 {
+    bool isArtifactVictoryConditionForHuman( const Artifact & art )
+    {
+        const Settings & conf = Settings::Get();
+
+        return ( ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) != 0 && art.GetID() == conf.WinsFindArtifactID() );
+    }
+
     bool isCastleLossConditionForHuman( const Castle * castle )
     {
         assert( castle != nullptr );
@@ -87,6 +94,11 @@ namespace
         const MP2::MapObjectType objectType = tile.GetObject();
 
         if ( !MP2::isActionObject( objectType ) ) {
+            return false;
+        }
+
+        // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
+        if ( MP2::isArtifactObject( objectType ) && tile.QuantityArtifact().isValid() && isArtifactVictoryConditionForHuman( tile.QuantityArtifact() ) ) {
             return false;
         }
 
@@ -682,6 +694,12 @@ namespace AI
             return 3000.0;
         }
         else if ( MP2::isArtifactObject( objectType ) && tile.QuantityArtifact().isValid() ) {
+            // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
+            if ( isArtifactVictoryConditionForHuman( tile.QuantityArtifact() ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
             return 1000.0 * tile.QuantityArtifact().getArtifactValue();
         }
         else if ( MP2::isPickupObject( objectType ) ) {
@@ -922,6 +940,12 @@ namespace AI
             return 5000.0;
         }
         else if ( MP2::isArtifactObject( objectType ) && tile.QuantityArtifact().isValid() ) {
+            // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
+            if ( isArtifactVictoryConditionForHuman( tile.QuantityArtifact() ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
             return 1500.0 * tile.QuantityArtifact().getArtifactValue();
         }
         else if ( objectType == MP2::OBJ_TREASURECHEST ) {

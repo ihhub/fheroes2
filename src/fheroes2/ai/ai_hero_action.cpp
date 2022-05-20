@@ -1272,6 +1272,7 @@ namespace AI
             kingdom.PuzzleMaps().Update( kingdom.CountVisitedObjects( MP2::OBJ_OBELISK ), world.CountObeliskOnMaps() );
             // TODO: once any piece of the puzzle is open and the area is discovered and a hero has nothing to do make him dig around this area.
             // TODO: once all pieces are open add a special condition to make AI to dig the Ultimate artifact.
+            // TODO: do not dig for an Ultimate artifact if the winning condition of the map is to find this artifact.
         }
 
         DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() )
