@@ -2353,9 +2353,6 @@ msgstr "Opções do Castelo"
 msgid "Not enough resources to recruit creatures."
 msgstr ""
 
-msgid "You are unable to recruit at this time, your ranks are full."
-msgstr ""
-
 msgid "No creatures available for purchase."
 msgstr ""
 
