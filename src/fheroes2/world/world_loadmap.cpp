@@ -690,7 +690,6 @@ void World::ProcessNewMap()
         const Heroes * hero = GetHeroes( conf.WinsMapsPositionObject() );
         heroes_cond_wins = hero ? hero->GetID() : Heroes::UNKNOWN;
     }
-
     if ( GameOver::LOSS_HERO & conf.ConditionLoss() ) {
         Heroes * hero = GetHeroes( conf.LossMapsPositionObject() );
         if ( hero ) {
