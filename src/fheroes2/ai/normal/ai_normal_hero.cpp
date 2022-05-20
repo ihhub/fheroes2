@@ -22,6 +22,7 @@
 
 #include "ai_normal.h"
 #include "game.h"
+#include "game_over.h"
 #include "game_static.h"
 #include "ground.h"
 #include "heroes.h"
@@ -35,6 +36,26 @@
 
 namespace
 {
+    bool isCastleLossConditionForHuman( const Castle * castle )
+    {
+        assert( castle != nullptr );
+
+        const Settings & conf = Settings::Get();
+        const bool isSinglePlayer = ( Colors( Players::HumanColors() ).size() == 1 );
+
+        if ( isSinglePlayer && ( conf.ConditionLoss() & GameOver::LOSS_TOWN ) != 0 && castle->GetCenter() == conf.LossMapsPositionObject() ) {
+            // It is a loss town condition for human.
+            return true;
+        }
+
+        if ( conf.WinsCompAlsoWins() && ( conf.ConditionWins() & GameOver::WINS_TOWN ) != 0 && castle->GetCenter() == conf.WinsMapsPositionObject() ) {
+            // It is a town capture winning condition for AI.
+            return true;
+        }
+
+        return false;
+    }
+
     bool AIShouldVisitCastle( const Heroes & hero, int castleIndex, const double heroArmyStrength )
     {
         const Castle * castle = world.getCastleEntrance( Maps::GetPoint( castleIndex ) );
@@ -620,6 +641,11 @@ namespace AI
                 // If the castle is defenseless
                 if ( !castle->GetActualArmy().isValid() )
                     value *= 1.25;
+
+                if ( isCastleLossConditionForHuman( castle ) ) {
+                    value += 20000;
+                }
+
                 return value;
             }
         }
@@ -855,6 +881,11 @@ namespace AI
                 // If the castle is defenseless
                 if ( !castle->GetActualArmy().isValid() )
                     value *= 2.5;
+
+                if ( isCastleLossConditionForHuman( castle ) ) {
+                    value += 20000;
+                }
+
                 return value;
             }
         }

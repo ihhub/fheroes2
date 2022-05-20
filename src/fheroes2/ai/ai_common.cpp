@@ -54,7 +54,11 @@ namespace AI
 
     uint32_t GetResourceMultiplier( const Castle & castle, uint32_t min, uint32_t max )
     {
-        return castle.isCapital() ? 1 : Rand::Get( min, max );
+        if ( castle.isCapital() ) {
+            return 1;
+        }
+
+        return Rand::Get( min, max );
     }
 
     void ReinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget )
