@@ -20,11 +20,11 @@
 
 #include <array>
 #include <ctime>
+#include <functional>
 #include <string>
 
 #include "highscores.h"
 #include "zzlib.h"
-#include <functional>
 
 namespace
 {
