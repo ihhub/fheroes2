@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -34,6 +34,7 @@
 #include "game.h"
 #include "game_logo.h"
 #include "game_video.h"
+#include "h2d.h"
 #include "image_palette.h"
 #include "localevent.h"
 #include "logging.h"
@@ -50,23 +51,23 @@ namespace
 {
     std::string GetCaption()
     {
-        return std::string( "Free Heroes of Might and Magic II, version: " + Settings::GetVersion() );
+        return std::string( "fheroes2 engine, version: " + Settings::GetVersion() );
     }
 
     int PrintHelp( const char * basename )
     {
-        COUT( "Usage: " << basename << " [OPTIONS]" );
+        COUT( "Usage: " << basename << " [OPTIONS]" )
 #ifdef WITH_DEBUG
-        COUT( "  -d <level>\tprint debug messages, see src/engine/logging.h for possible values of <level> argument" );
+        COUT( "  -d <level>\tprint debug messages, see src/engine/logging.h for possible values of <level> argument" )
 #endif
-        COUT( "  -h\t\tprint this help message and exit" );
+        COUT( "  -h\t\tprint this help message and exit" )
 
         return EXIT_SUCCESS;
     }
 
     void ReadConfigs()
     {
-        const std::string configurationFileName( "fheroes2.cfg" );
+        const std::string configurationFileName( Settings::configFileName );
         const std::string confFile = Settings::GetLastFile( "", configurationFileName );
 
         Settings & conf = Settings::Get();
@@ -82,7 +83,7 @@ namespace
     {
         const std::string configDir = System::GetConfigDirectory( "fheroes2" );
 
-        if ( !configDir.empty() && !System::IsDirectory( configDir ) ) {
+        if ( !System::IsDirectory( configDir ) ) {
             System::MakeDirectory( configDir );
         }
     }
@@ -133,8 +134,10 @@ namespace
             // Update mouse cursor when switching between software emulation and OS mouse modes.
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
 
+#if !defined( MACOS_APP_BUNDLE )
             const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
             fheroes2::engine().setIcon( appIcon );
+#endif
         }
 
         DisplayInitializer( const DisplayInitializer & ) = delete;
@@ -144,6 +147,45 @@ namespace
         {
             fheroes2::Display::instance().release();
         }
+    };
+
+    class DataInitializer
+    {
+    public:
+        DataInitializer()
+        {
+            const fheroes2::ScreenPaletteRestorer screenRestorer;
+
+            try {
+                _aggInitializer.reset( new AGG::AGGInitializer );
+
+                _h2dInitializer.reset( new fheroes2::h2d::H2DInitializer );
+            }
+            catch ( ... ) {
+                fheroes2::Display & display = fheroes2::Display::instance();
+                const fheroes2::Image & image = CreateImageFromZlib( 290, 190, errorMessage, sizeof( errorMessage ), false );
+
+                display.fill( 0 );
+                fheroes2::Resize( image, display );
+
+                display.render();
+
+                LocalEvent & le = LocalEvent::Get();
+                while ( le.HandleEvents() && !le.KeyPress() && !le.MouseClickLeft() ) {
+                    // Do nothing.
+                }
+
+                throw;
+            }
+        }
+
+        DataInitializer( const DataInitializer & ) = delete;
+        DataInitializer & operator=( const DataInitializer & ) = delete;
+        ~DataInitializer() = default;
+
+    private:
+        std::unique_ptr<AGG::AGGInitializer> _aggInitializer;
+        std::unique_ptr<fheroes2::h2d::H2DInitializer> _h2dInitializer;
     };
 }
 
@@ -157,7 +199,7 @@ int main( int argc, char ** argv )
         const fheroes2::HardwareInitializer hardwareInitializer;
         Logging::InitLog();
 
-        DEBUG_LOG( DBG_ALL, DBG_INFO, GetCaption() );
+        COUT( GetCaption() )
 
         Settings & conf = Settings::Get();
         conf.SetProgramPath( argv[0] );
@@ -188,25 +230,25 @@ int main( int argc, char ** argv )
         std::set<fheroes2::SystemInitializationComponent> coreComponents{ fheroes2::SystemInitializationComponent::Audio,
                                                                           fheroes2::SystemInitializationComponent::Video };
 
-#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
         coreComponents.emplace( fheroes2::SystemInitializationComponent::GameController );
 #endif
 
         const fheroes2::CoreInitializer coreInitializer( coreComponents );
 
         if ( Audio::isValid() ) {
-            Mixer::SetChannels( 16 );
+            Mixer::SetChannels( 32 );
             Mixer::Volume( -1, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
 
             Music::Volume( Mixer::MaxVolume() * conf.MusicVolume() / 10 );
             Music::SetFadeIn( 900 );
         }
 
-        DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() )
 
         const DisplayInitializer displayInitializer;
 
-        const AGG::AGGInitializer aggInitializer;
+        const DataInitializer dataInitializer;
 
         // Load palette.
         fheroes2::setGamePalette( AGG::ReadChunk( "KB.PAL" ) );
@@ -232,7 +274,7 @@ int main( int argc, char ** argv )
         Game::mainGameLoop( conf.isFirstGameRun() );
     }
     catch ( const std::exception & ex ) {
-        ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." );
+        ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." )
         return EXIT_FAILURE;
     }
 

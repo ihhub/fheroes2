@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -25,6 +25,7 @@
 #define H2AI_H
 
 #include "gamedefs.h"
+#include "mp2.h"
 #include "rand.h"
 
 class StreamBase;
@@ -34,6 +35,7 @@ class HeroBase;
 class Heroes;
 class Kingdom;
 class Army;
+class Spell;
 struct VecHeroes;
 namespace Maps
 {
@@ -68,16 +70,12 @@ namespace AI
     class Base
     {
     public:
-        virtual void KingdomTurn( Kingdom & kingdom );
-        virtual void CastleTurn( Castle & castle, bool defensive );
-        virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & unit, Battle::Actions & actions );
-        virtual void HeroTurn( Heroes & hero );
-        virtual bool HeroesTurn( VecHeroes & )
-        {
-            return true;
-        }
+        virtual void KingdomTurn( Kingdom & kingdom ) = 0;
+        virtual void CastleTurn( Castle & castle, bool defensive ) = 0;
+        virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & unit, Battle::Actions & actions ) = 0;
+        virtual bool HeroesTurn( VecHeroes & heroes ) = 0;
 
-        virtual void revealFog( const Maps::Tiles & tile );
+        virtual void revealFog( const Maps::Tiles & tile ) = 0;
 
         virtual void HeroesAdd( const Heroes & hero );
         virtual void HeroesRemove( const Heroes & hero );
@@ -86,7 +84,7 @@ namespace AI
         virtual void HeroesPostLoad( Heroes & hero );
         virtual bool HeroesCanMove( const Heroes & hero );
         virtual bool HeroesGetTask( Heroes & hero );
-        virtual void HeroesActionComplete( Heroes & hero );
+        virtual void HeroesActionComplete( Heroes & hero, const MP2::MapObjectType objectType );
         virtual void HeroesActionNewPosition( Heroes & hero );
         virtual void HeroesClearTask( const Heroes & hero );
         virtual void HeroesLevelUp( Heroes & hero );
@@ -97,12 +95,15 @@ namespace AI
         virtual void CastlePreBattle( Castle & castle );
         virtual void CastleAfterBattle( Castle & castle, bool attackerWins );
 
-        virtual const char * Type() const;
         virtual int GetPersonality() const; // To be utilized in future.
         virtual std::string GetPersonalityString() const;
 
         virtual void Reset();
         virtual void resetPathfinder() = 0;
+
+        // Should be called at the beginning of the battle even if no AI-controlled players are
+        // involved in the battle - because of the possibility of using instant or auto battle
+        virtual void battleBegins() = 0;
 
         virtual ~Base() = default;
 
@@ -119,8 +120,10 @@ namespace AI
     Base & Get( AI_TYPE type = AI_TYPE::NORMAL );
 
     // functionality in ai_hero_action.cpp
-    void HeroesAction( Heroes & hero, s32 dst_index );
+    void HeroesAction( Heroes & hero, const int32_t dst_index );
     void HeroesMove( Heroes & hero );
+    void HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex );
+    bool HeroesCastAdventureSpell( Heroes & hero, const Spell & spell );
 
     // functionality in ai_common.cpp
     bool BuildIfAvailable( Castle & castle, int building );

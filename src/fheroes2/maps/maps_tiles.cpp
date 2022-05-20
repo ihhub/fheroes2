@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -241,7 +241,7 @@ namespace
                 continue;
             }
 
-            VERBOSE_LOG( ICN::GetString( icnId ) << ": " << output );
+            VERBOSE_LOG( ICN::GetString( icnId ) << ": " << output )
         }
 
         completed = true;
@@ -600,7 +600,7 @@ bool Maps::Tiles::isShadowSprite( const uint8_t tileset, const uint8_t icnIndex 
     return isShadowSprite( MP2::GetICNObject( tileset ), icnIndex );
 }
 
-void Maps::Tiles::UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & index, const int resource )
+void Maps::Tiles::UpdateAbandonedMineLeftSprite( uint8_t & tileset, uint8_t & index, const int resource )
 {
     if ( ICN::OBJNGRAS == MP2::GetICNObject( tileset ) && 6 == index ) {
         tileset = 128; // MTNGRAS
@@ -633,7 +633,7 @@ void Maps::Tiles::UpdateAbandoneMineLeftSprite( uint8_t & tileset, uint8_t & ind
     }
 }
 
-void Maps::Tiles::UpdateAbandoneMineRightSprite( uint8_t & tileset, uint8_t & index )
+void Maps::Tiles::UpdateAbandonedMineRightSprite( uint8_t & tileset, uint8_t & index )
 {
     if ( ICN::OBJNDIRT == MP2::GetICNObject( tileset ) && index == 9 ) {
         tileset = 104;
@@ -683,6 +683,9 @@ std::pair<int, int> Maps::Tiles::ColorRaceFromHeroSprite( const uint32_t heroSpr
         break;
     case 6:
         res.second = Race::RAND;
+        break;
+    default:
+        assert( 0 );
         break;
     }
 
@@ -860,16 +863,6 @@ void Maps::Tiles::resetObjectSprite()
 void Maps::Tiles::SetTile( u32 sprite_index, u32 shape )
 {
     pack_sprite_index = PackTileSpriteIndex( sprite_index, shape );
-}
-
-u32 Maps::Tiles::TileSpriteIndex( void ) const
-{
-    return pack_sprite_index & 0x3FFF;
-}
-
-u32 Maps::Tiles::TileSpriteShape( void ) const
-{
-    return pack_sprite_index >> 14;
 }
 
 const fheroes2::Image & Maps::Tiles::GetTileSurface( void ) const
@@ -1183,11 +1176,6 @@ int Maps::Tiles::GetGround( void ) const
         return Maps::Ground::WASTELAND;
 
     return Maps::Ground::BEACH;
-}
-
-bool Maps::Tiles::isWater( void ) const
-{
-    return 30 > TileSpriteIndex();
 }
 
 void Maps::Tiles::RedrawTile( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
@@ -1507,7 +1495,7 @@ std::string Maps::Tiles::String( void ) const
        << "Tile index      : " << _index << ", "
        << "point: (" << GetCenter().x << ", " << GetCenter().y << ")" << std::endl
        << "uniq            : " << uniq << std::endl
-       << "mp2 object      : " << GetObject() << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
+       << "mp2 object      : " << static_cast<int>( GetObject() ) << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
        << "tileset         : " << static_cast<int>( objectTileset ) << ", (" << ICN::GetString( MP2::GetICNObject( objectTileset ) ) << ")" << std::endl
        << "object index    : " << static_cast<int>( objectIndex ) << ", (animated: " << hasSpriteAnimation() << ")" << std::endl
        << "level           : " << static_cast<int>( _level ) << std::endl
@@ -1585,7 +1573,7 @@ std::string Maps::Tiles::String( void ) const
 
         os << "capture color   : " << Color::String( co.objcol.second ) << std::endl;
         if ( co.guardians.isValid() ) {
-            os << "capture guard   : " << co.guardians.GetName() << std::endl << "capture caunt   : " << co.guardians.GetCount() << std::endl;
+            os << "capture guard   : " << co.guardians.GetName() << std::endl << "capture count   : " << co.guardians.GetCount() << std::endl;
         }
     }
 
@@ -1906,7 +1894,7 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
 
         DEBUG_LOG( DBG_GAME, DBG_WARN,
                    "Invalid object type index " << tile._index << ": type " << MP2::StringObject( originalObjectType ) << ", icn ID "
-                                                << static_cast<int>( tile.objectIndex ) );
+                                                << static_cast<int>( tile.objectIndex ) )
         break;
     }
 
@@ -2065,25 +2053,25 @@ void Maps::Tiles::RemoveJailSprite( void )
     Remove( uniq );
 }
 
-void Maps::Tiles::UpdateAbandoneMineSprite( Tiles & tile )
+void Maps::Tiles::UpdateAbandonedMineSprite( Tiles & tile )
 {
     if ( tile.uniq ) {
         const int type = tile.QuantityResourceCount().first;
 
-        Tiles::UpdateAbandoneMineLeftSprite( tile.objectTileset, tile.objectIndex, type );
+        Tiles::UpdateAbandonedMineLeftSprite( tile.objectTileset, tile.objectIndex, type );
         for ( Addons::iterator it = tile.addons_level1.begin(); it != tile.addons_level1.end(); ++it )
-            Tiles::UpdateAbandoneMineLeftSprite( it->object, it->index, type );
+            Tiles::UpdateAbandonedMineLeftSprite( it->object, it->index, type );
 
         if ( Maps::isValidDirection( tile._index, Direction::RIGHT ) ) {
             Tiles & tile2 = world.GetTiles( Maps::GetDirectionIndex( tile._index, Direction::RIGHT ) );
             TilesAddon * mines = tile2.FindAddonLevel1( tile.uniq );
 
             if ( mines )
-                Tiles::UpdateAbandoneMineRightSprite( mines->object, mines->index );
+                Tiles::UpdateAbandonedMineRightSprite( mines->object, mines->index );
 
             if ( tile2.GetObject() == MP2::OBJN_ABANDONEDMINE ) {
                 tile2.SetObject( MP2::OBJN_MINES );
-                Tiles::UpdateAbandoneMineRightSprite( tile2.objectTileset, tile2.objectIndex );
+                Tiles::UpdateAbandonedMineRightSprite( tile2.objectTileset, tile2.objectIndex );
             }
         }
     }
@@ -2135,7 +2123,7 @@ void Maps::Tiles::UpdateRNDArtifactSprite( Tiles & tile )
     }
 
     if ( !art.isValid() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown artifact" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown artifact" )
         return;
     }
 
@@ -2465,7 +2453,7 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         }
         else {
             // unknown
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid direction for fog: " << around );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid direction for fog: " << around )
             const fheroes2::Image & sf = fheroes2::AGG::GetTIL( TIL::CLOF32, ( mp.x + mp.y ) % 4, 0 );
             area.DrawTile( dst, sf, mp );
             return;
@@ -2682,7 +2670,7 @@ int32_t Maps::Tiles::getIndexOfMainTile( const Maps::Tiles & tile )
     }
 
     // Most likely we have a broken object put by an editor.
-    DEBUG_LOG( DBG_GAME, DBG_WARN, "Tile " << tileIndex << " of type " << MP2::StringObject( objectType ) << " has no parent tile." );
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "Tile " << tileIndex << " of type " << MP2::StringObject( objectType ) << " has no parent tile." )
     return -1;
 }
 

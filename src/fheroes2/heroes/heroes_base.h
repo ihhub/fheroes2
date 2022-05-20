@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -96,17 +96,16 @@ public:
     int GetKnowledgeModificator( std::string * = nullptr ) const;
     int GetMoraleModificator( std::string * = nullptr ) const;
     int GetLuckModificator( std::string * = nullptr ) const;
-    double GetSpellcastStrength( const double armyLimit ) const;
+    double GetMagicStrategicValue( const double armyStrength ) const;
 
     uint32_t GetSpellPoints() const;
     bool HaveSpellPoints( const Spell & spell ) const;
-    bool CanCastSpell( const Spell & spell, std::string * = nullptr ) const;
-    bool CanTeachSpell( const Spell & spell ) const;
+    bool haveMovePoints( const Spell & spell ) const;
+    bool CanCastSpell( const Spell & spell, std::string * res = nullptr ) const;
     bool CanLearnSpell( const Spell & spell ) const;
-    bool CanTranscribeScroll( const Artifact & art ) const;
-    void TranscribeScroll( const Artifact & art );
     void SpellCasted( const Spell & spell );
     void SetSpellPoints( const uint32_t points );
+    bool isPotentSpellcaster() const;
 
     std::vector<Spell> GetSpells( const int lvl = -1 ) const;
     void EditSpellBook();
@@ -117,9 +116,16 @@ public:
     void AppendSpellsToBook( const SpellStorage &, const bool without_wisdom = false );
     bool SpellBookActivate();
 
-    BagArtifacts & GetBagArtifacts();
-    const BagArtifacts & GetBagArtifacts() const;
-    uint32_t artifactCount( const Artifact & art ) const;
+    BagArtifacts & GetBagArtifacts()
+    {
+        return bag_artifacts;
+    }
+
+    const BagArtifacts & GetBagArtifacts() const
+    {
+        return bag_artifacts;
+    }
+
     bool hasArtifact( const Artifact & art ) const;
 
     void LoadDefaults( const int type, const int race );

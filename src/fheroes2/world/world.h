@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -44,10 +44,13 @@ struct ListActions : public std::list<ActionSimple *>
 {
     ListActions() = default;
     ListActions( const ListActions & other ) = default;
-    ListActions & operator=( const ListActions & other ) = delete;
-    ListActions( const ListActions && other ) = delete;
-    ListActions & operator=( const ListActions && other ) = delete;
+    ListActions( ListActions && other ) = delete;
+
     ~ListActions();
+
+    ListActions & operator=( const ListActions & other ) = delete;
+    ListActions & operator=( ListActions && other ) = delete;
+
     void clear( void );
 };
 
@@ -55,10 +58,13 @@ struct MapObjects : public std::map<u32, MapObjectSimple *>
 {
     MapObjects() = default;
     MapObjects( const MapObjects & other ) = delete;
-    MapObjects & operator=( const MapObjects & other ) = delete;
-    MapObjects( const MapObjects && other ) = delete;
-    MapObjects & operator=( const MapObjects && other ) = delete;
+    MapObjects( MapObjects && other ) = delete;
+
     ~MapObjects();
+
+    MapObjects & operator=( const MapObjects & other ) = delete;
+    MapObjects & operator=( MapObjects && other ) = delete;
+
     void clear( void );
     void add( MapObjectSimple * );
     std::list<MapObjectSimple *> get( const fheroes2::Point & );
@@ -148,7 +154,6 @@ struct EventDate
 StreamBase & operator<<( StreamBase &, const EventDate & );
 StreamBase & operator>>( StreamBase &, EventDate & );
 
-using Rumors = std::list<std::string>;
 using EventsDate = std::list<EventDate>;
 using MapsTiles = std::vector<Maps::Tiles>;
 
@@ -156,13 +161,15 @@ class World : protected fheroes2::Size
 {
 public:
     World( const World & other ) = delete;
-    World & operator=( const World & other ) = delete;
-    World( const World && other ) = delete;
-    World & operator=( const World && other ) = delete;
+    World( World && other ) = delete;
+
     ~World()
     {
         Reset();
     }
+
+    World & operator=( const World & other ) = delete;
+    World & operator=( World && other ) = delete;
 
     bool LoadMapMP2( const std::string & );
 
@@ -226,9 +233,22 @@ public:
     size_t getSize() const;
     int GetDay( void ) const;
     int GetWeek( void ) const;
-    int GetMonth( void ) const;
-    u32 CountDay( void ) const;
-    u32 CountWeek( void ) const;
+
+    uint32_t GetMonth() const
+    {
+        return month;
+    }
+
+    u32 CountDay() const
+    {
+        return day;
+    }
+
+    u32 CountWeek() const
+    {
+        return week;
+    }
+
     bool BeginWeek( void ) const;
     bool BeginMonth( void ) const;
     bool LastDay( void ) const;
@@ -241,7 +261,7 @@ public:
     void NewWeek( void );
     void NewMonth( void );
 
-    const std::string & GetRumors() const;
+    std::string getCurrentRumor() const;
 
     int32_t NextTeleport( const int32_t index ) const;
     MapsIndexes GetTeleportEndPoints( const int32_t index ) const;
@@ -288,9 +308,7 @@ public:
     bool isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const;
 
 private:
-    World()
-        : fheroes2::Size( 0, 0 )
-    {}
+    World() = default;
 
     void Defaults( void );
     void Reset( void );
@@ -308,7 +326,7 @@ private:
     AllHeroes vec_heroes;
     AllCastles vec_castles;
     Kingdoms vec_kingdoms;
-    Rumors vec_rumors;
+    std::vector<std::string> _rumors;
     EventsDate vec_eventsday;
 
     // index, object, color

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -56,14 +56,13 @@ Battle::Catapult::Catapult( const HeroBase & hero, const Rand::DeterministicRand
         break;
     }
 
-    if ( hero.hasArtifact( Artifact::BALLISTA ) )
-        catShots += Artifact( Artifact::BALLISTA ).ExtraValue();
+    catShots += hero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::EXTRA_CATAPULT_SHOTS );
 }
 
 u32 Battle::Catapult::GetDamage() const
 {
     if ( doubleDamageChance == 100 || doubleDamageChance >= _randomGenerator.Get( 1, 100 ) ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Catapult dealt double damage! (" << doubleDamageChance << "% chance)" );
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Catapult dealt double damage! (" << doubleDamageChance << "% chance)" )
         return 2;
     }
 
@@ -135,7 +134,7 @@ int Battle::Catapult::GetTarget( const std::vector<u32> & values ) const
         return _randomGenerator.Get( targets );
     }
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target not found.." );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "target not found.." )
 
     return 0;
 }

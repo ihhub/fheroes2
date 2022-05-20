@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -85,6 +85,9 @@ namespace Game
     bool isDelayNeeded( const std::vector<Game::DelayType> & delayTypes );
 
     bool isCustomDelayNeeded( const uint64_t delayMs );
+
+    // Custom delay must never be called in this function.
+    uint64_t getAnimationDelayValue( const DelayType delayType );
 }
 
 #endif

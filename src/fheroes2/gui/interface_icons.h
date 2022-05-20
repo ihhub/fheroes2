@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -27,6 +27,8 @@
 #include "interface_border.h"
 #include "interface_list.h"
 
+#include <cassert>
+
 enum icons_t
 {
     ICON_HEROES = 0x01,
@@ -36,42 +38,46 @@ enum icons_t
 
 namespace Interface
 {
+    class Basic;
+
     using HEROES = Heroes *;
     using CASTLE = Castle *;
 
     class IconsBar
     {
     public:
-        IconsBar( u32 count, const fheroes2::Image & sf )
+        IconsBar( const int32_t count, const fheroes2::Image & sf )
             : marker( sf )
             , iconsCount( count )
             , show( true )
-        {}
+        {
+            assert( count >= 0 );
+        }
 
         void SetShow( bool f )
         {
             show = f;
         }
 
-        bool IsShow( void ) const
-        {
-            return show;
-        }
+        void redrawBackground( fheroes2::Image & output, const fheroes2::Point & offset, const int32_t validItemCount ) const;
 
-        void RedrawBackground( const fheroes2::Point & ) const;
-
-        void SetIconsCount( u32 c )
+        void SetIconsCount( const int32_t c )
         {
             iconsCount = c;
         }
 
-        static u32 GetItemWidth( void );
-        static u32 GetItemHeight( void );
+        int32_t getIconCount() const
+        {
+            return iconsCount;
+        }
+
+        static int32_t GetItemWidth();
+        static int32_t GetItemHeight();
         static bool IsVisible( void );
 
     protected:
         const fheroes2::Image & marker;
-        u32 iconsCount;
+        int32_t iconsCount;
         bool show;
     };
 
@@ -81,7 +87,7 @@ namespace Interface
     class HeroesIcons : public Interface::ListBox<HEROES>, public IconsBar
     {
     public:
-        HeroesIcons( u32 count, const fheroes2::Image & sf )
+        HeroesIcons( const int32_t count, const fheroes2::Image & sf )
             : IconsBar( count, sf )
         {}
 
@@ -89,6 +95,10 @@ namespace Interface
         void SetShow( bool );
 
     protected:
+        using Interface::ListBox<HEROES>::ActionListDoubleClick;
+        using Interface::ListBox<HEROES>::ActionListSingleClick;
+        using Interface::ListBox<HEROES>::ActionListPressRight;
+
         void ActionCurrentUp( void ) override;
         void ActionCurrentDn( void ) override;
         void ActionListDoubleClick( HEROES & ) override;
@@ -104,7 +114,7 @@ namespace Interface
     class CastleIcons : public Interface::ListBox<CASTLE>, public IconsBar
     {
     public:
-        CastleIcons( u32 count, const fheroes2::Image & sf )
+        CastleIcons( const int32_t count, const fheroes2::Image & sf )
             : IconsBar( count, sf )
         {}
 
@@ -112,6 +122,10 @@ namespace Interface
         void SetShow( bool );
 
     protected:
+        using Interface::ListBox<CASTLE>::ActionListDoubleClick;
+        using Interface::ListBox<CASTLE>::ActionListSingleClick;
+        using Interface::ListBox<CASTLE>::ActionListPressRight;
+
         void ActionCurrentUp( void ) override;
         void ActionCurrentDn( void ) override;
         void ActionListDoubleClick( CASTLE & ) override;
@@ -124,17 +138,15 @@ namespace Interface
         fheroes2::Point _topLeftCorner;
     };
 
-    class Basic;
-
     class IconsPanel : public BorderWindow
     {
     public:
-        explicit IconsPanel( Basic & );
+        explicit IconsPanel( Basic & basic );
 
         void SetPos( s32, s32 ) override;
         void SavePosition( void ) override;
         void SetRedraw( void ) const;
-        void SetRedraw( icons_t ) const;
+        void SetRedraw( const icons_t type ) const;
 
         void Redraw( void );
         void QueueEventProcessing( void );
@@ -142,11 +154,11 @@ namespace Interface
         void Select( Heroes * const );
         void Select( Castle * const );
 
-        bool IsSelected( icons_t ) const;
-        void ResetIcons( icons_t = ICON_ANY );
-        void HideIcons( icons_t = ICON_ANY );
-        void ShowIcons( icons_t = ICON_ANY );
-        void RedrawIcons( icons_t = ICON_ANY );
+        bool IsSelected( const icons_t type ) const;
+        void ResetIcons( const icons_t type );
+        void HideIcons( const icons_t type );
+        void ShowIcons( const icons_t type );
+        void RedrawIcons( const icons_t type );
         void SetCurrentVisible( void );
 
     private:

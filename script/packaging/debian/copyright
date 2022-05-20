@@ -3,7 +3,7 @@ Upstream-Name: fheroes2
 Source: https://github.com/ihhub/fheroes2/releases
 
 Files: *
-Copyright: 2019-2021 fheroes2 team <fhomm2@gmail.com>
+Copyright: 2019-2022 fheroes2 team <fhomm2@gmail.com>
            2008-2009 Josh Matthews <josh@joshmatthews.net>
            2008-2013 Andrey Afletdinov <fheroes2@gmail.com>
 License: GPL-2.0+

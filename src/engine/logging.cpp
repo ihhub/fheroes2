@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,12 +24,18 @@
 #include <windows.h>
 #endif
 
+#if defined( MACOS_APP_BUNDLE )
+#include <syslog.h>
+#endif
+
 #include "logging.h"
 #include "system.h"
 
 namespace
 {
     int g_debug = DBG_ALL_WARN + DBG_ALL_INFO;
+
+    bool textSupportMode = false;
 
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
     // Sets the Windows console codepage to the system codepage
@@ -65,7 +71,7 @@ namespace
 
 namespace Logging
 {
-#if defined( __SWITCH__ ) // Platforms which log to file
+#if defined( TARGET_NINTENDO_SWITCH )
     std::ofstream logFile;
 #endif
 
@@ -101,14 +107,27 @@ namespace Logging
 
     void InitLog()
     {
-#if defined( __SWITCH__ ) // Platforms which log to file
+#if defined( TARGET_NINTENDO_SWITCH )
         logFile.open( "fheroes2.log", std::ofstream::out );
+#elif defined( MACOS_APP_BUNDLE )
+        openlog( "fheroes2", LOG_CONS | LOG_NDELAY, LOG_USER );
+        setlogmask( LOG_UPTO( LOG_WARNING ) );
 #endif
     }
 
     void SetDebugLevel( const int debugLevel )
     {
         g_debug = debugLevel;
+    }
+
+    void setTextSupportMode( const bool enableTextSupportMode )
+    {
+        textSupportMode = enableTextSupportMode;
+    }
+
+    bool isTextSupportModeEnabled()
+    {
+        return textSupportMode;
     }
 }
 

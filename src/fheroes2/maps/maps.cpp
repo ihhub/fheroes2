@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -39,42 +39,6 @@
 
 namespace
 {
-    std::vector<int32_t> getTileToClearIndicies( const int32_t tileIndex, int scouteValue, const int playerColor )
-    {
-        std::vector<int32_t> indicies;
-
-        if ( scouteValue <= 0 || !Maps::isValidAbsIndex( tileIndex ) ) {
-            return indicies;
-        }
-
-        const fheroes2::Point center = Maps::GetPoint( tileIndex );
-
-        // AI is cheating!
-        const bool isAIPlayer = world.GetKingdom( playerColor ).isControlAI();
-        if ( isAIPlayer ) {
-            scouteValue += Difficulty::GetScoutingBonus( Game::getDifficulty() );
-        }
-
-        const int revealRadiusSquared = scouteValue * scouteValue + 4; // constant factor for "backwards compatibility"
-        for ( int32_t y = center.y - scouteValue; y <= center.y + scouteValue; ++y ) {
-            if ( y < 0 || y >= world.h() )
-                continue;
-
-            for ( int32_t x = center.x - scouteValue; x <= center.x + scouteValue; ++x ) {
-                if ( x < 0 || x >= world.w() )
-                    continue;
-
-                const int32_t dx = x - center.x;
-                const int32_t dy = y - center.y;
-                if ( revealRadiusSquared >= dx * dx + dy * dy ) {
-                    indicies.emplace_back( Maps::GetIndexFromAbsPoint( x, y ) );
-                }
-            }
-        }
-
-        return indicies;
-    }
-
     Maps::Indexes MapsIndexesFilteredObject( const Maps::Indexes & indexes, const MP2::MapObjectType objectType, const bool ignoreHeroes = true )
     {
         Maps::Indexes result;
@@ -360,37 +324,87 @@ Maps::Indexes Maps::getAroundIndexes( const int32_t tileIndex, const int32_t max
     return results;
 }
 
-void Maps::ClearFog( const int32_t tileIndex, const int scouteValue, const int playerColor )
+void Maps::ClearFog( const int32_t tileIndex, int scouteValue, const int playerColor )
 {
-    const std::vector<int32_t> tileIndicies = getTileToClearIndicies( tileIndex, scouteValue, playerColor );
-    if ( tileIndicies.empty() ) {
+    if ( scouteValue <= 0 || !Maps::isValidAbsIndex( tileIndex ) ) {
         // Nothing to uncover.
         return;
     }
 
+    const fheroes2::Point center = Maps::GetPoint( tileIndex );
+
+    // AI is cheating!
     const bool isAIPlayer = world.GetKingdom( playerColor ).isControlAI();
+    if ( isAIPlayer ) {
+        scouteValue += Difficulty::GetScoutingBonus( Game::getDifficulty() );
+    }
+
     const int alliedColors = Players::GetPlayerFriends( playerColor );
 
-    for ( const int32_t index : tileIndicies ) {
-        Maps::Tiles & tile = world.GetTiles( index );
-        if ( isAIPlayer && tile.isFog( playerColor ) ) {
-            AI::Get().revealFog( tile );
-        }
+    const int revealRadiusSquared = scouteValue * scouteValue + 4; // constant factor for "backwards compatibility"
 
-        tile.ClearFog( alliedColors );
+    const int32_t minY = std::max( center.y - scouteValue, 0 );
+    const int32_t maxY = std::min( center.y + scouteValue, world.h() - 1 );
+    assert( minY < maxY );
+
+    const int32_t minX = std::max( center.x - scouteValue, 0 );
+    const int32_t maxX = std::min( center.x + scouteValue, world.w() - 1 );
+    assert( minX < maxX );
+
+    for ( int32_t y = minY; y <= maxY; ++y ) {
+        const int32_t dy = y - center.y;
+
+        for ( int32_t x = minX; x <= maxX; ++x ) {
+            const int32_t dx = x - center.x;
+            if ( revealRadiusSquared >= dx * dx + dy * dy ) {
+                Maps::Tiles & tile = world.GetTiles( x, y );
+                if ( isAIPlayer && tile.isFog( playerColor ) ) {
+                    AI::Get().revealFog( tile );
+                }
+
+                tile.ClearFog( alliedColors );
+            }
+        }
     }
 }
 
-int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, const int scouteValue, const int playerColor )
+int32_t Maps::getFogTileCountToBeRevealed( const int32_t tileIndex, int scouteValue, const int playerColor )
 {
-    const std::vector<int32_t> tileIndicies = getTileToClearIndicies( tileIndex, scouteValue, playerColor );
+    if ( scouteValue <= 0 || !Maps::isValidAbsIndex( tileIndex ) ) {
+        return 0;
+    }
+
+    const fheroes2::Point center = Maps::GetPoint( tileIndex );
+
+    // AI is cheating!
+    const bool isAIPlayer = world.GetKingdom( playerColor ).isControlAI();
+    if ( isAIPlayer ) {
+        scouteValue += Difficulty::GetScoutingBonus( Game::getDifficulty() );
+    }
+
+    const int revealRadiusSquared = scouteValue * scouteValue + 4; // constant factor for "backwards compatibility"
+
+    const int32_t minY = std::max( center.y - scouteValue, 0 );
+    const int32_t maxY = std::min( center.y + scouteValue, world.h() - 1 );
+    assert( minY < maxY );
+
+    const int32_t minX = std::max( center.x - scouteValue, 0 );
+    const int32_t maxX = std::min( center.x + scouteValue, world.w() - 1 );
+    assert( minX < maxX );
 
     int32_t tileCount = 0;
 
-    for ( const int32_t index : tileIndicies ) {
-        const Maps::Tiles & tile = world.GetTiles( index );
-        if ( tile.isFog( playerColor ) ) {
-            ++tileCount;
+    for ( int32_t y = minY; y <= maxY; ++y ) {
+        const int32_t dy = y - center.y;
+
+        for ( int32_t x = minX; x <= maxX; ++x ) {
+            const int32_t dx = x - center.x;
+            if ( revealRadiusSquared >= dx * dx + dy * dy ) {
+                const Maps::Tiles & tile = world.GetTiles( x, y );
+                if ( tile.isFog( playerColor ) ) {
+                    ++tileCount;
+                }
+            }
         }
     }
 
@@ -408,6 +422,12 @@ Maps::Indexes Maps::GetFreeIndexesAroundTile( const int32_t center )
     Indexes results = getAroundIndexes( center );
     results.erase( std::remove_if( results.begin(), results.end(), []( const int32_t tile ) { return !world.GetTiles( tile ).isClearGround(); } ), results.end() );
     return results;
+}
+
+bool Maps::isValidForDimensionDoor( int32_t targetIndex, bool isWater )
+{
+    const Maps::Tiles & tile = world.GetTiles( targetIndex );
+    return ( tile.GetPassable() & Direction::CENTER ) != 0 && isWater == tile.isWater() && !MP2::isActionObject( tile.GetObject( true ) );
 }
 
 Maps::Indexes Maps::ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType )
@@ -536,7 +556,7 @@ void Maps::UpdateCastleSprite( const fheroes2::Point & center, int race, bool is
     if ( isRandom && ( objectType != MP2::OBJ_RNDCASTLE && objectType != MP2::OBJ_RNDTOWN ) ) {
         DEBUG_LOG( DBG_GAME, DBG_WARN,
                    "incorrect object"
-                       << ", index: " << GetIndexFromAbsPoint( center.x, center.y ) );
+                       << ", index: " << GetIndexFromAbsPoint( center.x, center.y ) )
         return;
     }
 

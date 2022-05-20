@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -75,7 +75,7 @@ void Kingdom::Init( int clr )
         resource = _getKingdomStartingResources( Game::getDifficulty() );
     }
     else {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" )
     }
 }
 
@@ -208,7 +208,7 @@ void Kingdom::ActionNewWeek( void )
         // debug a gift
         if ( IS_DEVEL() && isControlHuman() ) {
             Funds gift( 20, 20, 10, 10, 10, 10, 5000 );
-            DEBUG_LOG( DBG_GAME, DBG_INFO, "debug gift: " << gift.String() );
+            DEBUG_LOG( DBG_GAME, DBG_INFO, "debug gift: " << gift.String() )
             resource += gift;
         }
     }
@@ -306,11 +306,6 @@ void Kingdom::RemoveCastle( const Castle * castle )
 
     if ( isLoss() )
         LossPostActions();
-}
-
-bool Kingdom::isLosingGame() const
-{
-    return castles.empty();
 }
 
 u32 Kingdom::GetCountCastle( void ) const
@@ -510,9 +505,9 @@ bool Kingdom::IsVisitTravelersTent( int col ) const
     return ( visited_tents_colors & ( 1 << col ) ) != 0;
 }
 
-bool Kingdom::AllowRecruitHero( bool check_payment, int level ) const
+bool Kingdom::AllowRecruitHero( bool check_payment ) const
 {
-    return ( heroes.size() < GetMaxHeroes() ) && ( !check_payment || AllowPayment( PaymentConditions::RecruitHero( level ) ) );
+    return ( heroes.size() < GetMaxHeroes() ) && ( !check_payment || AllowPayment( PaymentConditions::RecruitHero() ) );
 }
 
 void Kingdom::ApplyPlayWithStartingHero( void )
@@ -557,7 +552,7 @@ void Kingdom::ApplyPlayWithStartingHero( void )
             first = castles.front();
 
         Heroes * hero = world.GetFreemanHeroes( first->GetRace() );
-        if ( hero && AllowRecruitHero( false, 0 ) )
+        if ( hero && AllowRecruitHero( false ) )
             hero->Recruit( *first );
     }
 }
@@ -599,24 +594,29 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
     }
 
     if ( INCOME_ARTIFACTS & type ) {
-        // find artifacts
-        const std::array<int, 10> artifacts
-            = { Artifact::GOLDEN_GOOSE,         Artifact::ENDLESS_SACK_GOLD,    Artifact::ENDLESS_BAG_GOLD,   Artifact::ENDLESS_PURSE_GOLD,
-                Artifact::ENDLESS_POUCH_SULFUR, Artifact::ENDLESS_VIAL_MERCURY, Artifact::ENDLESS_POUCH_GEMS, Artifact::ENDLESS_CORD_WOOD,
-                Artifact::ENDLESS_CART_ORE,     Artifact::ENDLESS_POUCH_CRYSTAL };
-
         for ( const Heroes * hero : heroes ) {
-            for ( const int art : artifacts )
-                totalIncome += ProfitConditions::FromArtifact( art ) * hero->artifactCount( Artifact( art ) );
-            // TAX_LIEN
-            totalIncome -= ProfitConditions::FromArtifact( Artifact::TAX_LIEN ) * hero->artifactCount( Artifact( Artifact::TAX_LIEN ) );
+            const BagArtifacts & bag = hero->GetBagArtifacts();
+            for ( const Artifact & artifact : bag ) {
+                totalIncome += ProfitConditions::FromArtifact( artifact.GetID() );
+            }
         }
     }
 
-    if ( INCOME_HEROSKILLS & type ) {
+    if ( INCOME_HERO_SKILLS & type ) {
         // estates skill bonus
         for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
             totalIncome.gold += ( **ith ).GetSecondaryValues( Skill::Secondary::ESTATES );
+    }
+
+    if ( ( type & INCOME_CAMPAIGN_BONUS ) && Settings::Get().isCampaignGameType() ) {
+        const std::vector<Campaign::CampaignAwardData> awards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
+        for ( const Campaign::CampaignAwardData & award : awards ) {
+            if ( award._type != Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS ) {
+                continue;
+            }
+
+            totalIncome += Funds( award._subType, award._amount );
+        }
     }
 
     if ( isControlAI() ) {
@@ -876,7 +876,7 @@ std::set<Heroes *> Kingdoms::resetRecruits()
 bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
 {
     for ( const Heroes * hero : heroes ) {
-        if ( hero->hasArtifact( Artifact::CRYSTAL_BALL ) ) {
+        if ( hero->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::VIEW_MONSTER_INFORMATION ) ) {
             const uint32_t crystalBallDistance = hero->GetVisionsDistance();
             if ( Maps::GetApproximateDistance( hero->GetIndex(), dest ) <= crystalBallDistance ) {
                 return true;

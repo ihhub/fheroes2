@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -124,9 +124,13 @@ namespace Interface
             buttonPgDn.setPosition( pos.x, pos.y );
         }
 
-        void SetScrollBar( const fheroes2::Image & image, const fheroes2::Rect & area )
+        void setScrollBarArea( const fheroes2::Rect & area )
         {
             _scrollbar.setArea( area );
+        }
+
+        void setScrollBarImage( const fheroes2::Image & image )
+        {
             _scrollbar.setImage( image );
         }
 
@@ -319,7 +323,7 @@ namespace Interface
             if ( !IsValid() )
                 return false;
 
-            if ( useHotkeys && le.KeyPress( KEY_PAGEUP ) && ( _topId > 0 ) ) {
+            if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_PAGE_UP ) && ( _topId > 0 ) ) {
                 needRedraw = true;
 
                 if ( _topId > maxItems )
@@ -332,7 +336,7 @@ namespace Interface
 
                 return true;
             }
-            else if ( useHotkeys && le.KeyPress( KEY_PAGEDOWN ) && ( _topId + maxItems < _size() ) ) {
+            if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_PAGE_DOWN ) && ( _topId + maxItems < _size() ) ) {
                 needRedraw = true;
 
                 _topId += maxItems;
@@ -344,7 +348,7 @@ namespace Interface
 
                 return true;
             }
-            else if ( useHotkeys && le.KeyPress( KEY_UP ) && ( _currentId > 0 ) ) {
+            if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_UP ) && ( _currentId > 0 ) ) {
                 needRedraw = true;
 
                 --_currentId;
@@ -353,7 +357,7 @@ namespace Interface
 
                 return true;
             }
-            else if ( useHotkeys && le.KeyPress( KEY_DOWN ) && ( _currentId + 1 < _size() ) ) {
+            if ( useHotkeys && le.KeyPress( fheroes2::Key::KEY_DOWN ) && ( _currentId + 1 < _size() ) ) {
                 needRedraw = true;
 
                 ++_currentId;
@@ -362,9 +366,9 @@ namespace Interface
 
                 return true;
             }
-            else if ( ( le.MouseClickLeft( buttonPgUp.area() ) || le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( _scrollbar.getArea() )
-                        || _timedButtonPgUp.isDelayPassed() )
-                      && ( _topId > 0 ) ) {
+            if ( ( le.MouseClickLeft( buttonPgUp.area() ) || le.MouseWheelUp( rtAreaItems ) || le.MouseWheelUp( _scrollbar.getArea() )
+                   || _timedButtonPgUp.isDelayPassed() )
+                 && ( _topId > 0 ) ) {
                 needRedraw = true;
 
                 --_topId;
@@ -372,9 +376,9 @@ namespace Interface
 
                 return true;
             }
-            else if ( ( le.MouseClickLeft( buttonPgDn.area() ) || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( _scrollbar.getArea() )
-                        || _timedButtonPgDn.isDelayPassed() )
-                      && ( _topId + maxItems < _size() ) ) {
+            if ( ( le.MouseClickLeft( buttonPgDn.area() ) || le.MouseWheelDn( rtAreaItems ) || le.MouseWheelDn( _scrollbar.getArea() )
+                   || _timedButtonPgDn.isDelayPassed() )
+                 && ( _topId + maxItems < _size() ) ) {
                 needRedraw = true;
 
                 ++_topId;
@@ -382,7 +386,7 @@ namespace Interface
 
                 return true;
             }
-            else if ( le.MousePressLeft( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
+            if ( le.MousePressLeft( _scrollbar.getArea() ) && ( _size() > maxItems ) ) {
                 needRedraw = true;
 
                 UpdateScrollbarRange();
@@ -454,6 +458,11 @@ namespace Interface
             return maxItems;
         }
 
+        int _size() const
+        {
+            return content == nullptr ? 0 : static_cast<int>( content->size() );
+        }
+
     private:
         std::vector<Item> * content;
         int maxItems;
@@ -479,11 +488,6 @@ namespace Interface
                 if ( _topId < 0 || _topId >= _size() )
                     _topId = 0;
             }
-        }
-
-        int _size() const
-        {
-            return content == nullptr ? 0 : static_cast<int>( content->size() );
         }
 
         void UpdateScrollbarRange()

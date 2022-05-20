@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -95,24 +95,28 @@ namespace Interface
 
         void Redraw( int f = 0 );
 
-        const fheroes2::Rect & GetScrollLeft() const
+        static bool isScrollLeft( const fheroes2::Point & cursorPos )
         {
-            return scrollLeft;
+            return cursorPos.x < BORDERWIDTH;
         }
 
-        const fheroes2::Rect & GetScrollRight() const
+        static bool isScrollRight( const fheroes2::Point & cursorPos )
         {
-            return scrollRight;
+            const fheroes2::Display & display = fheroes2::Display::instance();
+
+            return cursorPos.x >= display.width() - BORDERWIDTH;
         }
 
-        const fheroes2::Rect & GetScrollTop() const
+        static bool isScrollTop( const fheroes2::Point & cursorPos )
         {
-            return scrollTop;
+            return cursorPos.y < BORDERWIDTH;
         }
 
-        const fheroes2::Rect & GetScrollBottom() const
+        static bool isScrollBottom( const fheroes2::Point & cursorPos )
         {
-            return scrollBottom;
+            const fheroes2::Display & display = fheroes2::Display::instance();
+
+            return cursorPos.y >= display.height() - BORDERWIDTH;
         }
 
         int32_t GetDimensionDoorDestination( const int32_t from, const int32_t distance, const bool water );
@@ -159,7 +163,7 @@ namespace Interface
         void EventOpenFocus( void ) const;
         fheroes2::GameMode EventSaveGame() const;
         void EventPuzzleMaps( void ) const;
-        static fheroes2::GameMode EventGameInfo();
+        static fheroes2::GameMode EventScenarioInformation();
         void EventSystemDialog() const;
         void EventNextHero( void );
         void EventNextTown( void );
@@ -209,11 +213,6 @@ namespace Interface
         ControlPanel controlPanel;
 
         int redraw;
-
-        fheroes2::Rect scrollLeft;
-        fheroes2::Rect scrollRight;
-        fheroes2::Rect scrollBottom;
-        fheroes2::Rect scrollTop;
     };
 }
 

@@ -22,11 +22,13 @@ function echo_stage {
 echo_green "This script will download the demo version of the original Heroes of Might and Magic II"
 echo_green "It may take a few minutes, please wait..."
 
-echo_stage "[1/4] determining destination directory"
+echo_stage "[1/4] determining the destination directory"
 
 DEST_PATH=""
 
-if [[ -f fheroes2 && -x fheroes2 ]]; then
+if [[ -n "$1" ]]; then
+    DEST_PATH="$1"
+elif [[ -f fheroes2 && -x fheroes2 ]]; then
     DEST_PATH="."
 elif [[ -d ../../src ]]; then
     # Special hack for developers running this script from the source tree
@@ -36,14 +38,14 @@ fi
 if [[ -z "$DEST_PATH" || ! -d "$DEST_PATH" || ! -w "$DEST_PATH" ]]; then
     if [[ "$(uname 2> /dev/null)" == "Linux" ]]; then
         DEST_PATH="${XDG_CONFIG_HOME:-$HOME/.local/share}/fheroes2"
-    else
+    elif [[ -z "$1" ]]; then
         DEST_PATH="$HOME/.fheroes2"
     fi
 fi
 
 echo_green "Destination directory: $DEST_PATH"
 
-echo_stage "[2/4] downloading demo version"
+echo_stage "[2/4] downloading the demo version"
 
 [[ ! -d "$DEST_PATH/demo" ]] && mkdir -p "$DEST_PATH/demo"
 
@@ -54,7 +56,7 @@ if [[ "$(command -v wget)" != "" ]]; then
 elif [[ "$(command -v curl)" != "" ]]; then
     curl -O -L "$H2DEMO_URL" > h2demo.zip
 else
-    echo_red "wget or curl not found in your system. Unable to download demo version. Installation aborted."
+    echo_red "Neither wget nor curl were found in your system. Unable to download the demo version. Installation aborted."
     exit 1
 fi
 
@@ -65,7 +67,7 @@ if [[ "$(command -v shasum)" != "" ]]; then
 elif [[ "$(command -v sha256sum)" != "" ]]; then
     sha256sum --check --strict checksums
 else
-    echo_red "shasum or sha256sum not found in your system. Unable to verify downloaded file. Installation aborted."
+    echo_red "Neither shasum nor sha256sum were found in your system. Unable to verify the downloaded file. Installation aborted."
     exit 1
 fi
 

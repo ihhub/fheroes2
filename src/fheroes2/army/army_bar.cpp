@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -26,12 +26,13 @@
 #include "army.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "race.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_monster.h"
 #include "world.h"
 
 #include <cassert>
@@ -141,15 +142,15 @@ namespace
 
     bool IsSplitHotkeyUsed( ArmyTroop & troopFrom, Army * armyTarget )
     {
-        if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_CTRL ) ) {
+        if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::SPLIT_STACK_BY_ONE ) ) {
             RedistributeTroopByOne( troopFrom, armyTarget );
             return true;
         }
-        else if ( Game::HotKeyHoldEvent( Game::EVENT_JOINSTACKS ) ) {
+        if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::JOIN_STACKS ) ) {
             armyTarget->JoinAllTroopsOfType( troopFrom );
             return true;
         }
-        else if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
+        if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::SPLIT_STACK_BY_HALF ) ) {
             RedistributeTroopEvenly( troopFrom, armyTarget );
             return true;
         }
@@ -166,7 +167,7 @@ ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
     , can_change( change )
 {
     if ( use_mini_sprite )
-        SetBackground( fheroes2::Size( 43, 43 ), fheroes2::GetColorId( 0, 45, 0 ) );
+        SetBackground( { 43, 43 }, fheroes2::GetColorId( 0, 45, 0 ) );
     else {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::STRIP, 2 );
         SetItemSize( sprite.width(), sprite.height() );
@@ -245,40 +246,12 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const fheroes2::Rect & pos, bool se
 
             fheroes2::Blit( mons32, srcrt.x, srcrt.y, dstsf, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - 1, srcrt.width,
                             srcrt.height );
-        }
-        else {
-            switch ( troop.GetRace() ) {
-            case Race::KNGT:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 4 ), dstsf, pos.x, pos.y );
-                break;
-            case Race::BARB:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 5 ), dstsf, pos.x, pos.y );
-                break;
-            case Race::SORC:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 6 ), dstsf, pos.x, pos.y );
-                break;
-            case Race::WRLK:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 7 ), dstsf, pos.x, pos.y );
-                break;
-            case Race::WZRD:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 8 ), dstsf, pos.x, pos.y );
-                break;
-            case Race::NECR:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 9 ), dstsf, pos.x, pos.y );
-                break;
-            default:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 10 ), dstsf, pos.x, pos.y );
-                break;
-            }
 
-            const fheroes2::Sprite & spmonh = fheroes2::AGG::GetICN( troop.ICNMonh(), 0 );
-            fheroes2::Blit( spmonh, dstsf, pos.x + spmonh.x(), pos.y + spmonh.y() );
-        }
-
-        if ( use_mini_sprite ) {
             text.Blit( pos.x + pos.width - text.w() - 3, pos.y + pos.height - text.h(), dstsf );
         }
         else {
+            fheroes2::renderMonsterFrame( troop, dstsf, pos.getPosition() );
+
             text.Blit( pos.x + pos.width - text.w() - 3, pos.y + pos.height - text.h() - 1, dstsf );
         }
 
@@ -382,7 +355,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
         const bool isSameTroopType = troop.isValid() && troop.GetID() == selectedTroop->GetID();
 
         // prioritize standard split via shift hotkey
-        if ( ( !troop.isValid() || isSameTroopType ) && Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
+        if ( ( !troop.isValid() || isSameTroopType ) && Game::HotKeyHoldEvent( Game::HotKeyEvent::SPLIT_STACK_BY_HALF ) ) {
             RedistributeArmy( *selectedTroop, troop, _army );
             ResetSelected();
         }
@@ -398,7 +371,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
         // exchange
         else if ( selectedTroop ) {
             // count this as an attempt to split to a troop type that is not the same
-            if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) )
+            if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::SPLIT_STACK_BY_HALF ) )
                 ResetSelected();
             else if ( IsSplitHotkeyUsed( troop, _army ) )
                 return false;
@@ -468,7 +441,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & 
 
     // specifically for shift hotkey, handle this logic before anything else
     // this will ensure that clicking on a different troop type while shift key is pressed will not show the split dialogue, which can be ambiguous
-    if ( Game::HotKeyHoldEvent( Game::EVENT_STACKSPLIT_SHIFT ) ) {
+    if ( Game::HotKeyHoldEvent( Game::HotKeyEvent::SPLIT_STACK_BY_HALF ) ) {
         if ( destTroop.isEmpty() || isSameTroopType ) {
             RedistributeArmy( selectedTroop, destTroop, _army );
             ResetSelected();
@@ -535,13 +508,13 @@ bool ArmyBar::ActionBarLeftMouseDoubleClick( ArmyTroop & troop )
              castle && castle->GetRace() == troop.GetRace() && castle->isBuild( troop.GetUpgrade().GetDwelling() ) ) {
             flags |= Dialog::UPGRADE;
 
-            if ( !world.GetKingdom( _army->GetColor() ).AllowPayment( troop.GetUpgradeCost() ) )
+            if ( !world.GetKingdom( _army->GetColor() ).AllowPayment( troop.GetTotalUpgradeCost() ) )
                 flags |= Dialog::UPGRADE_DISABLE;
         }
 
         switch ( Dialog::ArmyInfo( troop, flags ) ) {
         case Dialog::UPGRADE:
-            world.GetKingdom( _army->GetColor() ).OddFundsResource( troop.GetUpgradeCost() );
+            world.GetKingdom( _army->GetColor() ).OddFundsResource( troop.GetTotalUpgradeCost() );
             troop.Upgrade();
             break;
 

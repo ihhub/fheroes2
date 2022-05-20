@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -65,12 +65,13 @@ namespace
         COLOR_ROAD = 0x7A,
 
         COLOR_BLUE = 0x47,
-        COLOR_GREEN = 0x67,
+        COLOR_GREEN = 0x69,
         COLOR_RED = 0xbd,
         COLOR_YELLOW = 0x70,
         COLOR_ORANGE = 0xcd,
         COLOR_PURPLE = 0x87,
-        COLOR_GRAY = 0x10
+        COLOR_GRAY = 0x10,
+        COLOR_WHITE = 0x0a
     };
 }
 
@@ -121,11 +122,11 @@ uint8_t GetPaletteIndexFromColor( int color )
         break;
     }
 
-    return COLOR_GRAY;
+    return COLOR_WHITE;
 }
 
 Interface::Radar::Radar( Basic & basic )
-    : BorderWindow( fheroes2::Rect( 0, 0, RADARWIDTH, RADARWIDTH ) )
+    : BorderWindow( { 0, 0, RADARWIDTH, RADARWIDTH } )
     , radarType( RadarType::WorldMap )
     , interface( basic )
     , hide( true )
@@ -314,7 +315,6 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                 }
                 break;
             }
-
             case MP2::OBJ_CASTLE:
             case MP2::OBJN_CASTLE: {
                 if ( visibleTile || revealTowns ) {
@@ -324,7 +324,6 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                 }
                 break;
             }
-
             case MP2::OBJ_DRAGONCITY:
             case MP2::OBJ_LIGHTHOUSE:
             case MP2::OBJ_ALCHEMYLAB:
@@ -334,19 +333,28 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                     fillColor = GetPaletteIndexFromColor( tile.QuantityColor() );
                 }
                 break;
-
+            case MP2::OBJN_DRAGONCITY:
+            case MP2::OBJN_LIGHTHOUSE:
+            case MP2::OBJN_ALCHEMYLAB:
+            case MP2::OBJN_MINES:
+            case MP2::OBJN_SAWMILL:
+                if ( visibleTile || revealMines ) {
+                    const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
+                    if ( mainTileIndex >= 0 ) {
+                        fillColor = GetPaletteIndexFromColor( world.GetTiles( mainTileIndex ).QuantityColor() );
+                    }
+                }
+                break;
             case MP2::OBJ_ARTIFACT:
                 if ( visibleTile || revealArtifacts ) {
                     fillColor = COLOR_GRAY;
                 }
                 break;
-
             case MP2::OBJ_RESOURCE:
                 if ( visibleTile || revealResources ) {
                     fillColor = COLOR_GRAY;
                 }
                 break;
-
             default:
                 if ( visibleTile ) {
                     continue;
@@ -428,7 +436,7 @@ void Interface::Radar::QueueEventProcessing( void )
             if ( rect & pt ) {
                 fheroes2::Rect visibleROI( gamearea.GetVisibleTileROI() );
                 const fheroes2::Point prev( visibleROI.x, visibleROI.y );
-                gamearea.SetCenter( fheroes2::Point( ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height ) );
+                gamearea.SetCenter( { ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height } );
                 visibleROI = gamearea.GetVisibleTileROI();
                 if ( prev.x != visibleROI.x || prev.y != visibleROI.y ) {
                     RedrawCursor();
@@ -443,11 +451,11 @@ void Interface::Radar::QueueEventProcessing( void )
 
             if ( le.MouseWheelUp() ) {
                 if ( rect.width != world.w() || rect.height != world.h() )
-                    newSize = fheroes2::Size( world.w(), world.h() );
+                    newSize = { world.w(), world.h() };
             }
             else if ( le.MouseWheelDn() ) {
                 if ( rect.width != RADARWIDTH || rect.height != RADARWIDTH )
-                    newSize = fheroes2::Size( RADARWIDTH, RADARWIDTH );
+                    newSize = { RADARWIDTH, RADARWIDTH };
             }
 
             ChangeAreaSize( newSize );
@@ -466,13 +474,13 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
             const fheroes2::Point & pt = le.GetMouseCursor();
 
             if ( rect & pt ) {
-                const fheroes2::Rect initROI = roi.GetROIinPixels();
+                const fheroes2::Rect & initROI = roi.GetROIinPixels();
                 const fheroes2::Point prevCoordsTopLeft( initROI.x, initROI.y );
                 const fheroes2::Point newCoordsCenter( ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height );
                 const fheroes2::Point newCoordsTopLeft( newCoordsCenter.x - initROI.width / 2, newCoordsCenter.y - initROI.height / 2 );
 
                 if ( prevCoordsTopLeft != newCoordsTopLeft ) {
-                    return roi.ChangeCenter( fheroes2::Point( newCoordsCenter.x * TILEWIDTH, newCoordsCenter.y * TILEWIDTH ) );
+                    return roi.ChangeCenter( { newCoordsCenter.x * TILEWIDTH, newCoordsCenter.y * TILEWIDTH } );
                 }
             }
         }

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -33,7 +33,7 @@ class StreamBase;
 class Spell
 {
 public:
-    enum type_t
+    enum type_t : int32_t
     {
         NONE = 0,
         FIREBALL,
@@ -109,22 +109,47 @@ public:
         RANDOM4,
         RANDOM5,
 
-        STONE
+        STONE,
+
+        // IMPORTANT! Put all new spells above this line.
+        SPELL_COUNT
     };
 
-    Spell( int = NONE );
+    Spell( const int s = NONE )
+        : id( s > STONE ? NONE : s )
+    {
+        // Do nothing.
+    }
 
-    bool operator<( const Spell & ) const;
-    bool operator==( const Spell & ) const;
-    bool operator!=( const Spell & ) const;
+    bool operator<( const Spell & s ) const
+    {
+        return id < s.id;
+    }
 
-    int GetID( void ) const;
+    bool operator==( const Spell & s ) const
+    {
+        return s.id == id;
+    }
+
+    bool operator!=( const Spell & s ) const
+    {
+        return s.id != id;
+    }
+
+    int GetID() const
+    {
+        return id;
+    }
 
     const char * GetName( void ) const;
     const char * GetDescription( void ) const;
 
-    u32 SpellPoint( const HeroBase * hero = nullptr ) const;
-    u32 MovePoint( void ) const;
+    // Returns the number of spell points consumed/required by this spell
+    uint32_t spellPoints( const HeroBase * hero = nullptr ) const;
+    // Returns the number of movement points consumed by this spell
+    uint32_t movePoints() const;
+    // Returns the minimum number of movement points required to cast this spell
+    uint32_t minMovePoints() const;
     int Level( void ) const;
     u32 Damage( void ) const;
     u32 Restore( void ) const;
@@ -132,14 +157,40 @@ public:
 
     u32 ExtraValue( void ) const;
 
-    bool isValid( void ) const;
-    bool isLevel( int ) const;
+    bool isValid() const
+    {
+        return id != Spell::NONE;
+    }
+
+    bool isLevel( int lvl ) const
+    {
+        return Level() == lvl;
+    }
+
     bool isCombat( void ) const;
-    bool isAdventure( void ) const;
-    bool isDamage( void ) const;
+
+    bool isAdventure() const
+    {
+        return !isCombat();
+    }
+
+    bool isDamage() const
+    {
+        return Damage() != 0;
+    }
+
     bool isSingleTarget() const;
-    bool isRestore( void ) const;
-    bool isResurrect( void ) const;
+
+    bool isRestore() const
+    {
+        return Restore() != 0;
+    }
+
+    bool isResurrect() const
+    {
+        return Resurrect() != 0;
+    }
+
     bool isMindInfluence( void ) const;
     bool isUndeadOnly( void ) const;
     bool isALiveOnly( void ) const;
@@ -151,8 +202,16 @@ public:
     bool isApplyToEnemies( void ) const;
     bool isMassActions( void ) const;
     bool isRaceCompatible( int race ) const;
-    bool isFire() const;
-    bool isCold() const;
+
+    bool isFire() const
+    {
+        return id == FIREBALL || id == FIREBLAST;
+    }
+
+    bool isCold() const
+    {
+        return id == COLDRAY || id == COLDRING;
+    }
 
     bool isGuardianType() const;
 

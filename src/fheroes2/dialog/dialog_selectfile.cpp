@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -22,7 +22,6 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <cctype>
 #include <ctime>
 #include <iomanip>
 #include <iterator>
@@ -34,6 +33,7 @@
 #include "dialog.h"
 #include "dir.h"
 #include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "interface_list.h"
 #include "maps_fileinfo.h"
@@ -87,6 +87,10 @@ bool RedrawExtraInfo( const fheroes2::Point &, const std::string &, const std::s
 class FileInfoListBox : public Interface::ListBox<Maps::FileInfo>
 {
 public:
+    using Interface::ListBox<Maps::FileInfo>::ActionListDoubleClick;
+    using Interface::ListBox<Maps::FileInfo>::ActionListSingleClick;
+    using Interface::ListBox<Maps::FileInfo>::ActionListPressRight;
+
     explicit FileInfoListBox( const fheroes2::Point & pt )
         : Interface::ListBox<Maps::FileInfo>( pt )
         , _isDoubleClicked( false )
@@ -107,13 +111,13 @@ public:
         std::string fullPath = info.file;
         StringReplace( fullPath, "\\", "/" );
 
-        fheroes2::Text header( ResizeToShortName( info.file ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+        fheroes2::Text header( ResizeToShortName( info.file ), fheroes2::FontType::normalYellow() );
 
         fheroes2::MultiFontText body;
-        body.add( { _( "Map: " ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
-        body.add( { info.name, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
-        body.add( { _( "\n\nLocation: " ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
-        body.add( { fullPath, { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+        body.add( { _( "Map: " ), fheroes2::FontType::normalYellow() } );
+        body.add( { info.name, fheroes2::FontType::normalWhite() } );
+        body.add( { _( "\n\nLocation: " ), fheroes2::FontType::normalYellow() } );
+        body.add( { fullPath, fheroes2::FontType::normalWhite() } );
 
         fheroes2::showMessage( header, body, Dialog::ZERO );
     }
@@ -210,21 +214,14 @@ MapsFileInfoList GetSortedMapsFileInfoList( void )
     return list2;
 }
 
-std::string Dialog::SelectFileSave( void )
+std::string Dialog::SelectFileSave()
 {
-    const Settings & conf = Settings::Get();
-    const std::string & name = conf.CurrentFileInfo().name;
-
-    std::string base = !name.empty() ? name : "newgame";
-    base.erase( std::find_if( base.begin(), base.end(), ::ispunct ), base.end() );
-    std::replace_if( base.begin(), base.end(), ::isspace, '_' );
     std::ostringstream os;
 
-    os << System::ConcatePath( Game::GetSaveDir(), base ) <<
-        // add postfix:
-        '_' << std::setw( 4 ) << std::setfill( '0' ) << world.CountDay() << Game::GetSaveFileExtension();
-    std::string lastfile = os.str();
-    return SelectFileListSimple( _( "File to Save:" ), lastfile, true );
+    os << System::ConcatePath( Game::GetSaveDir(), Game::GetSaveFileBaseName() ) << '_' << std::setw( 4 ) << std::setfill( '0' ) << world.CountDay()
+       << Game::GetSaveFileExtension();
+
+    return SelectFileListSimple( _( "File to Save:" ), os.str(), true );
 }
 
 std::string Dialog::SelectFileLoad( void )
@@ -261,11 +258,18 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
     FileInfoListBox listbox( rt.getPosition() );
 
     listbox.RedrawBackground( rt.getPosition() );
-    listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, fheroes2::Point( rt.x + 327, rt.y + 55 ) );
-    listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, fheroes2::Point( rt.x + 327, rt.y + 257 ) );
-    listbox.SetScrollBar( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), fheroes2::Rect( rt.x + 328, rt.y + 73, 12, 180 ) );
+    listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, { rt.x + 327, rt.y + 55 } );
+    listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, { rt.x + 327, rt.y + 257 } );
+
+    const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
+    const fheroes2::Image scrollbarSlider
+        = fheroes2::generateScrollbarSlider( originalSilder, false, 180, 11, static_cast<int32_t>( lists.size() ), { 0, 0, originalSilder.width(), 8 },
+                                             { 0, 7, originalSilder.width(), 8 } );
+
+    listbox.setScrollBarArea( { rt.x + 328, rt.y + 73, 12, 180 } );
+    listbox.setScrollBarImage( scrollbarSlider );
     listbox.SetAreaMaxItems( 11 );
-    listbox.SetAreaItems( fheroes2::Rect( rt.x + 40, rt.y + 55, 265, 215 ) );
+    listbox.SetAreaItems( { rt.x + 40, rt.y + 55, 265, 215 } );
     listbox.SetListContent( lists );
 
     std::string filename;
@@ -322,13 +326,14 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         bool needRedraw = false;
         bool isListboxSelected = listbox.isSelected();
 
-        if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || listbox.isDoubleClicked() ) {
+        if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
+             || listbox.isDoubleClicked() ) {
             if ( !filename.empty() )
                 result = System::ConcatePath( Game::GetSaveDir(), filename + Game::GetSaveFileExtension() );
             else if ( isListboxSelected )
                 result = listbox.GetCurrent().file;
         }
-        else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+        else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             break;
         }
         else if ( le.MouseClickLeft( enter_field ) && isEditing ) {
@@ -338,7 +343,7 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
 
             needRedraw = true;
         }
-        else if ( isEditing && le.KeyPress() && ( !is_limit || KEY_BACKSPACE == le.KeyValue() || KEY_DELETE == le.KeyValue() ) ) {
+        else if ( isEditing && le.KeyPress() && ( !is_limit || fheroes2::Key::KEY_BACKSPACE == le.KeyValue() || fheroes2::Key::KEY_DELETE == le.KeyValue() ) ) {
             charInsertPos = InsertKeySym( filename, charInsertPos, le.KeyValue(), le.KeyMod() );
             if ( filename.empty() )
                 buttonOk.disable();
@@ -355,14 +360,14 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
         }
         else if ( le.MousePressRight( buttonOk.area() ) ) {
             if ( isEditing ) {
-                Dialog::Message( _( "OK" ), _( "Click to save the current game." ), Font::BIG );
+                Dialog::Message( _( "Okay" ), _( "Click to save the current game." ), Font::BIG );
             }
             else {
-                Dialog::Message( _( "OK" ), _( "Click to load a previously saved game." ), Font::BIG );
+                Dialog::Message( _( "Okay" ), _( "Click to load a previously saved game." ), Font::BIG );
             }
         }
 
-        if ( !isEditing && le.KeyPress( KEY_DELETE ) && isListboxSelected ) {
+        if ( !isEditing && le.KeyPress( fheroes2::Key::KEY_DELETE ) && isListboxSelected ) {
             std::string msg( _( "Are you sure you want to delete file:" ) );
             msg.append( "\n \n" );
             msg.append( System::GetBasename( listbox.GetCurrent().file ) );
@@ -371,6 +376,13 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
                 listbox.RemoveSelected();
                 if ( lists.empty() || filename.empty() )
                     buttonOk.disable();
+
+                const fheroes2::Image updatedScrollbarSlider
+                    = fheroes2::generateScrollbarSlider( originalSilder, false, 180, 11, static_cast<int32_t>( lists.size() ), { 0, 0, originalSilder.width(), 8 },
+                                                         { 0, 7, originalSilder.width(), 8 } );
+
+                listbox.setScrollBarImage( updatedScrollbarSlider );
+
                 listbox.SetListContent( lists );
             }
 

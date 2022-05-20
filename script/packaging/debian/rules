@@ -3,7 +3,7 @@
 # output every command that modifies files on the build system.
 #export DH_VERBOSE = 1
 
-export DEB_CFLAGS_MAINT_APPEND = -DCONFIGURE_FHEROES2_DATA=/usr/share/games/fheroes2
+export DEB_CFLAGS_MAINT_APPEND = -DFHEROES2_DATA=/usr/share/games/fheroes2
 
 %:
 	dh $@ --parallel

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -110,15 +110,19 @@ StreamBase & operator>>( StreamBase &, Funds & );
 namespace Resource
 {
     const char * String( int resource );
+
+    const char * getDescription();
+
     int Rand( const bool includeGold );
 
     /* return index sprite objnrsrc.icn */
     u32 GetIndexSprite( int resource );
     int FromIndexSprite( u32 index );
 
-    /* return index sprite resource.icn */
-    u32 GetIndexSprite2( int resource );
-    int FromIndexSprite2( u32 index );
+    // Return index sprite from resource.icn.
+    uint32_t getIconIcnIndex( const int resourceType );
+
+    int getResourceTypeFromIconIndex( const uint32_t index );
 
     class BoxSprite : protected fheroes2::Rect
     {

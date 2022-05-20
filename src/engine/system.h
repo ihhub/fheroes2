@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -25,6 +25,7 @@
 #define H2SYSTEM_H
 
 #include <ctime>
+#include <vector>
 
 #include "dir.h"
 
@@ -33,7 +34,7 @@ namespace System
     int MakeDirectory( const std::string & );
     std::string ConcatePath( const std::string &, const std::string & );
 
-    ListDirs GetOSSpecificDirectories();
+    void appendOSSpecificDirectories( std::vector<std::string> & directories );
     std::string GetConfigDirectory( const std::string & prog );
     std::string GetDataDirectory( const std::string & prog );
 
@@ -46,8 +47,6 @@ namespace System
     bool IsFile( const std::string & name, bool writable = false );
     bool IsDirectory( const std::string & name, bool writable = false );
     int Unlink( const std::string & );
-
-    bool isEmbededDevice( void );
 
     bool GetCaseInsensitivePath( const std::string & path, std::string & correctedPath );
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cstring>
 #include <string>
 
@@ -41,16 +42,6 @@ void StreamBase::setconstbuf( bool f )
         flags &= ~0x00001000;
 }
 
-bool StreamBase::isconstbuf( void ) const
-{
-    return ( flags & 0x00001000 ) != 0;
-}
-
-bool StreamBase::bigendian( void ) const
-{
-    return ( flags & 0x80000000 ) != 0;
-}
-
 void StreamBase::setbigendian( bool f )
 {
     if ( f )
@@ -65,11 +56,6 @@ void StreamBase::setfail( bool f )
         flags |= 0x00000001;
     else
         flags &= ~0x00000001;
-}
-
-bool StreamBase::fail( void ) const
-{
-    return flags & 0x00000001;
 }
 
 u16 StreamBase::get16()
@@ -207,7 +193,7 @@ StreamBase & StreamBase::operator<<( const fheroes2::Point & point_ )
     return *this << point_.x << point_.y;
 }
 
-StreamBuf::StreamBuf( size_t sz )
+StreamBuf::StreamBuf( const size_t sz )
     : itbeg( nullptr )
     , itget( nullptr )
     , itput( nullptr )
@@ -224,13 +210,17 @@ StreamBuf::~StreamBuf()
         delete[] itbeg;
 }
 
-StreamBuf::StreamBuf( const StreamBuf & st )
-    : itbeg( nullptr )
+StreamBuf::StreamBuf( StreamBuf && st ) noexcept
+    : StreamBase( std::move( st ) )
+    , itbeg( nullptr )
     , itget( nullptr )
     , itput( nullptr )
     , itend( nullptr )
 {
-    copy( st );
+    std::swap( itbeg, st.itbeg );
+    std::swap( itget, st.itget );
+    std::swap( itput, st.itput );
+    std::swap( itend, st.itend );
 }
 
 StreamBuf::StreamBuf( const std::vector<u8> & buf )
@@ -261,10 +251,17 @@ StreamBuf::StreamBuf( const u8 * buf, size_t bufsz )
     setbigendian( IS_BIGENDIAN ); /* default: hardware endian */
 }
 
-StreamBuf & StreamBuf::operator=( const StreamBuf & st )
+StreamBuf & StreamBuf::operator=( StreamBuf && st ) noexcept
 {
-    if ( &st != this )
-        copy( st );
+    if ( &st != this ) {
+        StreamBase::operator=( std::move( st ) );
+
+        std::swap( itbeg, st.itbeg );
+        std::swap( itget, st.itget );
+        std::swap( itput, st.itput );
+        std::swap( itend, st.itend );
+    }
+
     return *this;
 }
 
@@ -340,20 +337,6 @@ void StreamBuf::reallocbuf( size_t sz )
         itbeg = ptr;
         itend = itbeg + sz;
     }
-}
-
-void StreamBuf::copy( const StreamBuf & sb )
-{
-    if ( capacity() < sb.size() )
-        reallocbuf( sb.size() );
-
-    std::copy( sb.itget, sb.itput, itbeg );
-
-    itput = itbeg + sb.tellp();
-    itget = itbeg + sb.tellg();
-    flags = 0;
-
-    setbigendian( sb.bigendian() );
 }
 
 void StreamBuf::put8( const uint8_t v )
@@ -453,8 +436,24 @@ std::vector<u8> StreamBuf::getRaw( size_t sz )
 
 void StreamBuf::putRaw( const char * ptr, size_t sz )
 {
-    for ( size_t it = 0; it < sz; ++it )
-        *this << ptr[it];
+    if ( sz == 0 ) {
+        return;
+    }
+
+    if ( sizep() < sz ) {
+        if ( sz < capacity() / 2 ) {
+            reallocbuf( capacity() + capacity() / 2 );
+        }
+        else {
+            reallocbuf( capacity() + sz );
+        }
+    }
+
+    // Make sure that the possible previous memory reallocation was correct.
+    assert( sizep() >= sz );
+
+    memcpy( itput, ptr, sz );
+    itput = itput + sz;
 }
 
 std::string StreamBuf::toString( size_t sz )
@@ -489,7 +488,7 @@ bool StreamFile::open( const std::string & fn, const std::string & mode )
 {
     _file = std::fopen( fn.c_str(), mode.c_str() );
     if ( !_file )
-        ERROR_LOG( fn );
+        ERROR_LOG( fn )
     return _file != nullptr;
 }
 
@@ -630,8 +629,8 @@ void StreamFile::putRaw( const char * ptr, size_t sz )
 
 StreamBuf StreamFile::toStreamBuf( size_t sz )
 {
-    StreamBuf sb;
     std::vector<uint8_t> buf = getRaw( sz );
+    StreamBuf sb( buf.size() );
     sb.putRaw( reinterpret_cast<const char *>( &buf[0] ), buf.size() );
     return sb;
 }

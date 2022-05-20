@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -47,14 +47,16 @@ public:
     {}
     virtual ~ActionSimple() = default;
 
-    int GetType( void ) const
+    int GetType() const
     {
         return type;
     }
-    u32 GetUID( void ) const
+
+    u32 GetUID() const
     {
         return uid;
     }
+
     void SetUID( u32 v )
     {
         uid = v;

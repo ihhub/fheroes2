@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -47,6 +47,7 @@
 #include "serialize.h"
 #include "settings.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 namespace
@@ -361,7 +362,7 @@ void World::Reset( void )
     vec_eventsday.clear();
 
     // rumors
-    vec_rumors.clear();
+    _rumors.clear();
 
     // castles
     vec_castles.Clear();
@@ -555,21 +556,6 @@ int World::GetDay( void ) const
 int World::GetWeek( void ) const
 {
     return LastWeek() ? WEEKOFMONTH : week % WEEKOFMONTH;
-}
-
-int World::GetMonth( void ) const
-{
-    return month;
-}
-
-u32 World::CountDay( void ) const
-{
-    return day;
-}
-
-u32 World::CountWeek( void ) const
-{
-    return week;
 }
 
 bool World::BeginWeek( void ) const
@@ -813,11 +799,78 @@ void World::MonthOfMonstersAction( const Monster & mons )
     }
 }
 
-const std::string & World::GetRumors() const
+std::string World::getCurrentRumor() const
 {
-    assert( !vec_rumors.empty() );
+    const uint32_t standardRumorCount = 10;
+    const uint32_t totalRumorCount = static_cast<uint32_t>( _rumors.size() ) + standardRumorCount;
+    const uint32_t chosenRumorId = Rand::GetWithSeed( 0, totalRumorCount - 1, GetWeekSeed() );
 
-    return Rand::GetWithSeed( vec_rumors, GetWeekSeed() );
+    switch ( chosenRumorId ) {
+    case 0: {
+        std::string rumor( _( "The ultimate artifact is really the %{name}." ) );
+        StringReplace( rumor, "%{name}", ultimate_artifact.GetName() );
+        return rumor;
+    }
+    case 1: {
+        std::string rumor( _( "The ultimate artifact may be found in the %{name} regions of the world." ) );
+        const int32_t artifactIndex = ultimate_artifact.getPosition();
+        const fheroes2::Point artifactPos = Maps::GetPoint( artifactIndex );
+
+        if ( height / 3 > artifactPos.y ) {
+            if ( width / 3 > artifactPos.x ) {
+                StringReplace( rumor, "%{name}", _( "north-west" ) );
+            }
+            else if ( 2 * width / 3 > artifactPos.x ) {
+                StringReplace( rumor, "%{name}", _( "north" ) );
+            }
+            else {
+                StringReplace( rumor, "%{name}", _( "north-east" ) );
+            }
+        }
+        else if ( 2 * height / 3 > artifactPos.y ) {
+            if ( width / 3 > artifactPos.x ) {
+                StringReplace( rumor, "%{name}", _( "west" ) );
+            }
+            else if ( 2 * width / 3 > artifactPos.x ) {
+                StringReplace( rumor, "%{name}", _( "center" ) );
+            }
+            else {
+                StringReplace( rumor, "%{name}", _( "east" ) );
+            }
+        }
+        else if ( width / 3 > artifactPos.x ) {
+            StringReplace( rumor, "%{name}", _( "south-west" ) );
+        }
+        else if ( 2 * width / 3 > artifactPos.x ) {
+            StringReplace( rumor, "%{name}", _( "south" ) );
+        }
+        else {
+            StringReplace( rumor, "%{name}", _( "south-east" ) );
+        }
+        return rumor;
+    }
+    case 2:
+        return _( "The truth is out there." );
+    case 3:
+        return _( "The dark side is stronger." );
+    case 4:
+        return _( "The end of the world is near." );
+    case 5:
+        return _( "The bones of Lord Slayer are buried in the foundation of the arena." );
+    case 6:
+        return _( "A Black Dragon will take out a Titan any day of the week." );
+    case 7:
+        return _( "He told her: Yada yada yada...  and then she said: Blah, blah, blah..." );
+    case 8:
+        return _( "An unknown force is being resurrected..." );
+    case 9:
+        return _( "Check the newest version of the game at\nhttps://github.com/ihhub/\nfheroes2/releases" );
+    default:
+        break;
+    }
+
+    assert( chosenRumorId >= standardRumorCount && chosenRumorId < totalRumorCount );
+    return _rumors[chosenRumorId - standardRumorCount];
 }
 
 MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
@@ -848,7 +901,7 @@ int32_t World::NextTeleport( const int32_t index ) const
 {
     const MapsIndexes teleports = GetTeleportEndPoints( index );
     if ( teleports.empty() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "not found" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "not found" )
         return index;
     }
 
@@ -883,7 +936,7 @@ int32_t World::NextWhirlpool( const int32_t index ) const
 {
     const MapsIndexes whilrpools = GetWhirlpoolEndPoints( index );
     if ( whilrpools.empty() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "not found" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "not found" )
         return index;
     }
 
@@ -1116,7 +1169,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, uint32_t wins ) const
     case GameOver::WINS_GOLD:
         // check comp also wins
         return ( ( kingdom.isControlHuman() || conf.WinsCompAlsoWins() ) && 0 < kingdom.GetFunds().Get( Resource::GOLD )
-                 && static_cast<u32>( kingdom.GetFunds().Get( Resource::GOLD ) ) >= conf.WinsAccumulateGold() );
+                 && static_cast<u32>( kingdom.GetFunds().Get( Resource::GOLD ) ) >= conf.getWinningGoldAccumulationValue() );
 
     default:
         break;
@@ -1405,7 +1458,7 @@ StreamBase & operator<<( StreamBase & msg, const World & w )
     const uint16_t width = static_cast<uint16_t>( w.width );
     const uint16_t height = static_cast<uint16_t>( w.height );
 
-    return msg << width << height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w.vec_rumors << w.vec_eventsday << w.map_captureobj
+    return msg << width << height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w._rumors << w.vec_eventsday << w.map_captureobj
                << w.ultimate_artifact << w.day << w.week << w.month << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions << w.map_objects << w._seed;
 }
 
@@ -1419,7 +1472,7 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     w.width = width;
     w.height = height;
 
-    msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
+    msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
         >> w.month;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_0912_RELEASE, "Remove the check below." );
@@ -1486,10 +1539,10 @@ void EventDate::LoadFromMP2( StreamBuf st )
         message = st.toString();
         DEBUG_LOG( DBG_GAME, DBG_INFO,
                    "event"
-                       << ": " << message );
+                       << ": " << message )
     }
     else {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown id" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown id" )
     }
 }
 

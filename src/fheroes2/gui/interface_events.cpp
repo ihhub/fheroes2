@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -42,6 +42,8 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
 void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const
@@ -63,7 +65,7 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx 
         return;
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() );
+    DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() )
 
     gameArea.SetRedraw();
 
@@ -217,7 +219,7 @@ fheroes2::GameMode Interface::Basic::EventAdventureDialog()
         break;
 
     case Dialog::INFO:
-        return EventGameInfo();
+        return EventScenarioInformation();
 
     case Dialog::DIG:
         return EventDigArtifact();
@@ -316,7 +318,7 @@ void Interface::Basic::EventPuzzleMaps( void ) const
     world.GetKingdom( Settings::Get().CurrentColor() ).PuzzleMaps().ShowMapsDialog();
 }
 
-fheroes2::GameMode Interface::Basic::EventGameInfo()
+fheroes2::GameMode Interface::Basic::EventScenarioInformation()
 {
     if ( Settings::Get().isCampaignGameType() ) {
         fheroes2::Display & display = fheroes2::Display::instance();
@@ -372,7 +374,10 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
                     hero->PickupArtifact( ultimate );
                     std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );
                     StringReplace( msg, "%{artifact}", ultimate.GetName() );
-                    Dialog::ArtifactInfo( _( "Congratulations!" ), msg, ultimate.GetID() );
+
+                    const fheroes2::ArtifactDialogElement artifactUI( ultimate.GetID() );
+                    fheroes2::showMessage( fheroes2::Text( _( "Congratulations!" ), fheroes2::FontType::normalYellow() ),
+                                           fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
                 }
                 else
                     Dialog::Message( "", _( "Nothing here. Where could it be?" ), Font::BIG, Dialog::OK );

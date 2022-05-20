@@ -81,11 +81,13 @@ int main( int argc, char ** argv )
             stream << std::setw( 3 ) << std::setfill( '0' ) << cur;
             std::string dstfile = System::ConcatePath( prefix, stream.str() );
 
-#ifndef FHEROES2_IMAGE_SUPPORT
-            dstfile += ".bmp";
-#else
-            dstfile += ".png";
-#endif
+            if ( fheroes2::isPNGFormatSupported() ) {
+                dstfile += ".png";
+            }
+            else {
+                dstfile += ".bmp";
+            }
+
             if ( debugMode ) {
                 std::cout << "Saving " << dstfile << std::endl;
             }

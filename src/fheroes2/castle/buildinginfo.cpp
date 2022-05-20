@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -23,13 +23,13 @@
 
 #include <cassert>
 
-#include "buildinginfo.h"
 #include "agg.h"
 #include "agg_image.h"
 #include "army_troop.h"
+#include "buildinginfo.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "m82.h"
 #include "monster.h"
@@ -47,21 +47,21 @@ namespace
     {
         switch ( race ) {
         case Race::KNGT:
-            return fheroes2::Point( 36, 10 );
+            return { 36, 10 };
         case Race::BARB:
-            return fheroes2::Point( 35, 9 );
+            return { 35, 9 };
         case Race::SORC:
-            return fheroes2::Point( 36, 10 );
+            return { 36, 10 };
         case Race::WRLK:
-            return fheroes2::Point( 34, 10 );
+            return { 34, 10 };
         case Race::WZRD:
-            return fheroes2::Point( 35, 9 );
+            return { 35, 9 };
         case Race::NECR:
-            return fheroes2::Point( 35, 10 );
+            return { 35, 10 };
         default:
             // Did you add a new race?
             assert( 0 );
-            return fheroes2::Point();
+            return {};
         }
     }
 }
@@ -319,20 +319,10 @@ BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
     }
 }
 
-uint32_t BuildingInfo::getBuilding( void ) const
-{
-    return building;
-}
-
 void BuildingInfo::SetPos( s32 x, s32 y )
 {
     area.x = x;
     area.y = y;
-}
-
-const fheroes2::Rect & BuildingInfo::GetArea( void ) const
-{
-    return area;
 }
 
 bool BuildingInfo::IsDwelling( void ) const
@@ -585,10 +575,10 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
         le.MousePressLeft( button1.area() ) ? button1.drawOnPress() : button1.drawOnRelease();
         le.MousePressLeft( button2.area() ) ? button2.drawOnPress() : button2.drawOnRelease();
 
-        if ( button1.isEnabled() && ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || le.MouseClickLeft( button1.area() ) ) )
+        if ( button1.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( button1.area() ) ) )
             return true;
 
-        if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( button2.area() ) )
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( button2.area() ) )
             break;
     }
 

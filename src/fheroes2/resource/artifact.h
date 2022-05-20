@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -26,6 +26,7 @@
 #include <set>
 #include <vector>
 
+#include "artifact_info.h"
 #include "interface_itemsbar.h"
 #include "mp2.h"
 #include "ui_tool.h"
@@ -50,7 +51,7 @@ public:
         ART_NORANDOM = 0x20
     };
 
-    enum type_t
+    enum type_t : int
     {
         ULTIMATE_BOOK,
         ULTIMATE_SWORD,
@@ -159,44 +160,86 @@ public:
         SWORD_ANDURAN,
         SPADE_NECROMANCY,
 
+        // IMPORTANT! Put all new artifacts just above this line.
         UNKNOWN
     };
 
-    Artifact( int = UNKNOWN );
+    Artifact( int art = UNKNOWN )
+        : id( art >= 0 && art < UNKNOWN ? art : UNKNOWN )
+        , ext( 0 )
+    {
+        // Do nothing.
+    }
 
-    bool operator==( const Spell & ) const;
-    bool operator==( const Artifact & ) const;
-    bool operator!=( const Artifact & ) const;
-    int GetID( void ) const;
+    bool operator==( const Artifact & art ) const
+    {
+        return id == art.id;
+    }
+
+    bool operator!=( const Artifact & art ) const
+    {
+        return id != art.id;
+    }
+
+    int GetID() const
+    {
+        return id;
+    }
 
     bool isUltimate( void ) const;
-    bool isAlchemistRemove( void ) const;
-    bool isValid( void ) const;
 
-    void Reset( void );
+    bool containsCurses() const
+    {
+        return !fheroes2::getArtifactData( id ).curses.empty();
+    }
 
-    u32 ExtraValue( void ) const;
+    bool isValid() const
+    {
+        return id != UNKNOWN;
+    }
+
+    void Reset()
+    {
+        id = UNKNOWN;
+        ext = 0;
+    }
+
     int Level( void ) const;
     int LoyaltyLevel( void ) const;
-    int Type( void ) const;
+
     int getArtifactValue() const;
 
-    /* objnarti.icn */
-    u32 IndexSprite( void ) const;
-    /* artfx.icn */
-    u32 IndexSprite32( void ) const;
-    /* artifact.icn */
-    u32 IndexSprite64( void ) const;
+    // return index of the sprite from objnarti.icn
+    u32 IndexSprite() const
+    {
+        return id < UNKNOWN ? id * 2 + 1 : 0;
+    }
 
-    void SetSpell( int );
-    int GetSpell( void ) const;
+    // artfx.icn
+    u32 IndexSprite32() const
+    {
+        return id;
+    }
+
+    // return index from artifact.icn
+    u32 IndexSprite64() const
+    {
+        return id + 1;
+    }
+
+    void SetSpell( const int v );
+    int32_t getSpellId() const;
 
     const char * GetName( void ) const;
-    std::string GetDescription( void ) const;
+
+    std::string GetDescription() const
+    {
+        return fheroes2::getArtifactData( id ).getDescription( ext );
+    }
 
     static int Rand( level_t );
     static Artifact FromMP2IndexSprite( u32 );
-    static const char * GetScenario( const Artifact & );
+    static const char * getDiscoveryDescription( const Artifact & );
 
 private:
     friend StreamBase & operator<<( StreamBase &, const Artifact & );
@@ -232,8 +275,27 @@ class BagArtifacts : public std::vector<Artifact>
 public:
     BagArtifacts();
 
-    bool ContainSpell( const Spell & ) const;
+    bool ContainSpell( const int spellId ) const;
     bool isPresentArtifact( const Artifact & ) const;
+
+    bool isArtifactBonusPresent( const fheroes2::ArtifactBonusType type ) const;
+    bool isArtifactCursePresent( const fheroes2::ArtifactCurseType type ) const;
+
+    // These methods must be called only for bonuses with cumulative effect.
+    int32_t getTotalArtifactEffectValue( const fheroes2::ArtifactBonusType bonus ) const;
+    int32_t getTotalArtifactEffectValue( const fheroes2::ArtifactBonusType bonus, std::string & description ) const;
+
+    int32_t getTotalArtifactEffectValue( const fheroes2::ArtifactCurseType curse ) const;
+    int32_t getTotalArtifactEffectValue( const fheroes2::ArtifactCurseType curse, std::string & description ) const;
+
+    // These methods must be called only for bonuses with multiplication effect.
+    std::vector<int32_t> getTotalArtifactMultipliedPercent( const fheroes2::ArtifactBonusType bonus ) const;
+    std::vector<int32_t> getTotalArtifactMultipliedPercent( const fheroes2::ArtifactCurseType curse ) const;
+
+    // Ideally, these methods should be called only for unique bonuses. However, it can be called for other bonus types.
+    Artifact getFirstArtifactWithBonus( const fheroes2::ArtifactBonusType bonus ) const;
+    Artifact getFirstArtifactWithCurse( const fheroes2::ArtifactCurseType curse ) const;
+
     bool PushArtifact( const Artifact & );
 
     void RemoveArtifact( const Artifact & art );
@@ -241,7 +303,6 @@ public:
     bool isFull( void ) const;
     bool ContainUltimateArtifact( void ) const;
 
-    void RemoveScroll( const Artifact & );
     void exchangeArtifacts( BagArtifacts & giftBag );
 
     int getArtifactValue() const;
@@ -256,6 +317,9 @@ public:
 class ArtifactsBar : public Interface::ItemsActionBar<Artifact>
 {
 public:
+    using Interface::ItemsActionBar<Artifact>::RedrawItem;
+    using Interface::ItemsActionBar<Artifact>::ActionBarRightMouseHold;
+
     ArtifactsBar( const Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar );
 
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;

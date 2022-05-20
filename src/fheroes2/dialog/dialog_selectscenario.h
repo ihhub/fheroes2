@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -30,6 +30,10 @@
 class ScenarioListBox : public Interface::ListBox<Maps::FileInfo>
 {
 public:
+    using Interface::ListBox<Maps::FileInfo>::ActionListDoubleClick;
+    using Interface::ListBox<Maps::FileInfo>::ActionListSingleClick;
+    using Interface::ListBox<Maps::FileInfo>::ActionListPressRight;
+
     explicit ScenarioListBox( const fheroes2::Point & pt )
         : Interface::ListBox<Maps::FileInfo>( pt )
         , selectOk( false )
@@ -65,7 +69,7 @@ public:
 
 namespace Dialog
 {
-    const Maps::FileInfo * SelectScenario( const MapsFileInfoList & maps, size_t selectedId );
+    const Maps::FileInfo * SelectScenario( const MapsFileInfoList & all );
 }
 
 #endif

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -97,7 +97,7 @@ void Interface::Basic::ResetFocus( int priority )
         Focus & focus = player->GetFocus();
         Kingdom & myKingdom = world.GetKingdom( player->GetColor() );
 
-        iconsPanel.ResetIcons();
+        iconsPanel.ResetIcons( ICON_ANY );
 
         switch ( priority ) {
         case GameFocus::FIRSTHERO: {

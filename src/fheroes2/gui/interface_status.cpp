@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -44,7 +44,7 @@ namespace
 }
 
 Interface::StatusWindow::StatusWindow( Basic & basic )
-    : BorderWindow( fheroes2::Rect( 0, 0, 144, 72 ) )
+    : BorderWindow( { 0, 0, 144, 72 } )
     , interface( basic )
     , _state( StatusType::STATUS_UNKNOWN )
     , _oldState( StatusType::STATUS_UNKNOWN )
@@ -109,79 +109,82 @@ void Interface::StatusWindow::SetState( const StatusType status )
 void Interface::StatusWindow::Redraw( void ) const
 {
     const Settings & conf = Settings::Get();
+    if ( conf.ExtGameHideInterface() && !conf.ShowStatus() ) {
+        // The window is hidden.
+        return;
+    }
+
     const fheroes2::Rect & pos = GetArea();
 
-    if ( !conf.ExtGameHideInterface() || conf.ShowStatus() ) {
-        if ( conf.ExtGameHideInterface() ) {
-            fheroes2::Fill( fheroes2::Display::instance(), pos.x, pos.y, pos.width, pos.height, fheroes2::GetColorId( 0x51, 0x31, 0x18 ) );
-            BorderWindow::Redraw();
-        }
-        else {
-            DrawBackground();
-        }
+    if ( conf.ExtGameHideInterface() ) {
+        fheroes2::Fill( fheroes2::Display::instance(), pos.x, pos.y, pos.width, pos.height, fheroes2::GetColorId( 0x51, 0x31, 0x18 ) );
+        BorderWindow::Redraw();
+    }
+    else {
+        DrawBackground();
+    }
 
-        // draw info: Day and Funds and Army
-        const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
-        const int32_t stonHeight = ston.height();
+    // draw info: Day and Funds and Army
+    const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
+    const int32_t stonHeight = ston.height();
 
-        if ( StatusType::STATUS_AITURN == _state ) {
-            DrawAITurns();
+    if ( StatusType::STATUS_AITURN == _state ) {
+        DrawAITurns();
+    }
+    else if ( StatusType::STATUS_UNKNOWN != _state && pos.height >= ( stonHeight * 3 + 15 ) ) {
+        DrawDayInfo();
+
+        if ( conf.CurrentColor() & Players::HumanColors() ) {
+            DrawKingdomInfo( stonHeight + 5 );
+
+            if ( _state != StatusType::STATUS_RESOURCE )
+                DrawArmyInfo( 2 * stonHeight + 10 );
+            else
+                DrawResourceInfo( 2 * stonHeight + 10 );
         }
-        else if ( StatusType::STATUS_UNKNOWN != _state && pos.height >= ( stonHeight * 3 + 15 ) ) {
+    }
+    else if ( StatusType::STATUS_UNKNOWN != _state && pos.height >= ( stonHeight * 2 + 15 ) ) {
+        DrawDayInfo();
+
+        switch ( _state ) {
+        case StatusType::STATUS_FUNDS:
+            DrawKingdomInfo( stonHeight + 5 );
+            break;
+        case StatusType::STATUS_DAY:
+        case StatusType::STATUS_ARMY:
+            DrawArmyInfo( stonHeight + 5 );
+            break;
+        case StatusType::STATUS_RESOURCE:
+            DrawResourceInfo( stonHeight + 5 );
+            break;
+        case StatusType::STATUS_UNKNOWN:
+        case StatusType::STATUS_AITURN:
+            assert( 0 ); // we shouldn't even reach this code
+            break;
+        default:
+            break;
+        }
+    }
+    else {
+        switch ( _state ) {
+        case StatusType::STATUS_DAY:
             DrawDayInfo();
-
-            if ( conf.CurrentColor() & Players::HumanColors() ) {
-                DrawKingdomInfo( stonHeight + 5 );
-
-                if ( _state != StatusType::STATUS_RESOURCE )
-                    DrawArmyInfo( 2 * stonHeight + 10 );
-                else
-                    DrawResourceInfo( 2 * stonHeight + 10 );
-            }
-        }
-        else if ( StatusType::STATUS_UNKNOWN != _state && pos.height >= ( stonHeight * 2 + 15 ) ) {
-            DrawDayInfo();
-
-            switch ( _state ) {
-            case StatusType::STATUS_FUNDS:
-                DrawKingdomInfo( stonHeight + 5 );
-                break;
-            case StatusType::STATUS_DAY:
-            case StatusType::STATUS_ARMY:
-                DrawArmyInfo( stonHeight + 5 );
-                break;
-            case StatusType::STATUS_RESOURCE:
-                DrawResourceInfo( stonHeight + 5 );
-                break;
-            case StatusType::STATUS_UNKNOWN:
-            case StatusType::STATUS_AITURN:
-                assert( 0 ); // we shouldn't even reach this code
-                break;
-            default:
-                break;
-            }
-        }
-        else {
-            switch ( _state ) {
-            case StatusType::STATUS_DAY:
-                DrawDayInfo();
-                break;
-            case StatusType::STATUS_FUNDS:
-                DrawKingdomInfo();
-                break;
-            case StatusType::STATUS_ARMY:
-                DrawArmyInfo();
-                break;
-            case StatusType::STATUS_RESOURCE:
-                DrawResourceInfo();
-                break;
-            case StatusType::STATUS_UNKNOWN:
-            case StatusType::STATUS_AITURN:
-                assert( 0 ); // we shouldn't even reach this code
-                break;
-            default:
-                break;
-            }
+            break;
+        case StatusType::STATUS_FUNDS:
+            DrawKingdomInfo();
+            break;
+        case StatusType::STATUS_ARMY:
+            DrawArmyInfo();
+            break;
+        case StatusType::STATUS_RESOURCE:
+            DrawResourceInfo();
+            break;
+        case StatusType::STATUS_UNKNOWN:
+        case StatusType::STATUS_AITURN:
+            assert( 0 ); // we shouldn't even reach this code
+            break;
+        default:
+            break;
         }
     }
 }
@@ -261,7 +264,7 @@ void Interface::StatusWindow::DrawDayInfo( int oh ) const
 
     const int dayOfWeek = world.GetDay();
     const int weekOfMonth = world.GetWeek();
-    const int month = world.GetMonth();
+    const uint32_t month = world.GetMonth();
     const int icnType = Settings::Get().ExtGameEvilInterface() ? ICN::SUNMOONE : ICN::SUNMOON;
     uint32_t icnId = dayOfWeek > 1 ? 0 : ( ( weekOfMonth - 1 ) % 4 ) + 1;
     if ( dayOfWeek == 1 && weekOfMonth == 1 && month == 1 ) { // special case
@@ -271,13 +274,13 @@ void Interface::StatusWindow::DrawDayInfo( int oh ) const
     fheroes2::Blit( fheroes2::AGG::GetICN( icnType, icnId ), fheroes2::Display::instance(), pos.x, pos.y + 1 + oh );
 
     std::string message = _( "Month: %{month} Week: %{week}" );
-    StringReplace( message, "%{month}", world.GetMonth() );
-    StringReplace( message, "%{week}", world.GetWeek() );
+    StringReplace( message, "%{month}", month );
+    StringReplace( message, "%{week}", weekOfMonth );
     Text text( message, Font::SMALL );
     text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + 30 + oh );
 
     message = _( "Day: %{day}" );
-    StringReplace( message, "%{day}", world.GetDay() );
+    StringReplace( message, "%{day}", dayOfWeek );
     text.Set( message, Font::BIG );
     text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + 46 + oh );
 }
@@ -315,7 +318,7 @@ void Interface::StatusWindow::DrawResourceInfo( int oh ) const
     TextBox text( message, Font::SMALL, pos.width );
     text.Blit( pos.x, pos.y + 4 + oh );
 
-    const fheroes2::Sprite & spr = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::GetIndexSprite2( lastResource ) );
+    const fheroes2::Sprite & spr = fheroes2::AGG::GetICN( ICN::RESOURCE, Resource::getIconIcnIndex( lastResource ) );
     fheroes2::Blit( spr, fheroes2::Display::instance(), pos.x + ( pos.width - spr.width() ) / 2, pos.y + 6 + oh + text.h() );
 
     text.Set( std::to_string( countLastResource ), Font::SMALL, pos.width );
@@ -339,61 +342,58 @@ void Interface::StatusWindow::DrawArmyInfo( int oh ) const
 
 void Interface::StatusWindow::DrawAITurns( void ) const
 {
+    // restore background
+    DrawBackground();
+
+    fheroes2::Display & display = fheroes2::Display::instance();
+
+    const fheroes2::Sprite & glass = fheroes2::AGG::GetICN( ICN::HOURGLAS, 0 );
+    const fheroes2::Rect & pos = GetArea();
+
+    s32 dst_x = pos.x + ( pos.width - glass.width() ) / 2;
+    s32 dst_y = pos.y + ( pos.height - glass.height() ) / 2;
+
+    fheroes2::Blit( glass, display, dst_x, dst_y );
+
+    int color_index = 0;
+
     const Settings & conf = Settings::Get();
-
-    if ( !conf.ExtGameHideInterface() || conf.ShowStatus() ) {
-        // restore background
-        DrawBackground();
-
-        fheroes2::Display & display = fheroes2::Display::instance();
-
-        const fheroes2::Sprite & glass = fheroes2::AGG::GetICN( ICN::HOURGLAS, 0 );
-        const fheroes2::Rect & pos = GetArea();
-
-        s32 dst_x = pos.x + ( pos.width - glass.width() ) / 2;
-        s32 dst_y = pos.y + ( pos.height - glass.height() ) / 2;
-
-        fheroes2::Blit( glass, display, dst_x, dst_y );
-
-        int color_index = 0;
-
-        switch ( conf.CurrentColor() ) {
-        case Color::BLUE:
-            color_index = 0;
-            break;
-        case Color::GREEN:
-            color_index = 1;
-            break;
-        case Color::RED:
-            color_index = 2;
-            break;
-        case Color::YELLOW:
-            color_index = 3;
-            break;
-        case Color::ORANGE:
-            color_index = 4;
-            break;
-        case Color::PURPLE:
-            color_index = 5;
-            break;
-        default:
-            return;
-        }
-
-        const fheroes2::Sprite & crest = fheroes2::AGG::GetICN( ICN::BRCREST, color_index );
-
-        dst_x += 2;
-        dst_y += 2;
-
-        fheroes2::Blit( crest, display, dst_x, dst_y );
-
-        const fheroes2::Sprite & sand = fheroes2::AGG::GetICN( ICN::HOURGLAS, 1 + ( turn_progress % 10 ) );
-
-        dst_x += ( glass.width() - sand.width() - sand.x() - 3 );
-        dst_y += sand.y();
-
-        fheroes2::Blit( sand, display, dst_x, dst_y );
+    switch ( conf.CurrentColor() ) {
+    case Color::BLUE:
+        color_index = 0;
+        break;
+    case Color::GREEN:
+        color_index = 1;
+        break;
+    case Color::RED:
+        color_index = 2;
+        break;
+    case Color::YELLOW:
+        color_index = 3;
+        break;
+    case Color::ORANGE:
+        color_index = 4;
+        break;
+    case Color::PURPLE:
+        color_index = 5;
+        break;
+    default:
+        return;
     }
+
+    const fheroes2::Sprite & crest = fheroes2::AGG::GetICN( ICN::BRCREST, color_index );
+
+    dst_x += 2;
+    dst_y += 2;
+
+    fheroes2::Blit( crest, display, dst_x, dst_y );
+
+    const fheroes2::Sprite & sand = fheroes2::AGG::GetICN( ICN::HOURGLAS, 1 + ( turn_progress % 10 ) );
+
+    dst_x += ( glass.width() - sand.width() - sand.x() - 3 );
+    dst_y += sand.y();
+
+    fheroes2::Blit( sand, display, dst_x, dst_y );
 }
 
 void Interface::StatusWindow::DrawBackground( void ) const
@@ -463,6 +463,6 @@ void Interface::StatusWindow::RedrawTurnProgress( u32 v )
     turn_progress = v;
     SetRedraw();
 
-    interface.Redraw();
-    fheroes2::Display::instance().render();
+    Redraw();
+    fheroes2::Display::instance().render( GetArea() );
 }

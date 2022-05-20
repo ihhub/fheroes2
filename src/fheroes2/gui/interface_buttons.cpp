@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -32,7 +32,7 @@
 #include "world.h"
 
 Interface::ButtonsArea::ButtonsArea( Basic & basic )
-    : BorderWindow( fheroes2::Rect( 0, 0, 144, 72 ) )
+    : BorderWindow( { 0, 0, 144, 72 } )
     , interface( basic )
 {}
 

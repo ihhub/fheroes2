@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -54,7 +54,10 @@ public:
     void PushBack( const Monster &, u32 );
     void PopBack( void );
 
-    size_t Size( void ) const;
+    size_t Size() const
+    {
+        return size();
+    }
 
     Troop * GetTroop( size_t );
     const Troop * GetTroop( size_t ) const;
@@ -101,7 +104,6 @@ public:
 
     void JoinStrongest( Troops &, bool );
 
-    void DrawMons32Line( int32_t, int32_t, uint32_t, uint32_t, uint32_t, uint32_t, bool, bool ) const;
     void SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots );
     void AssignToFirstFreeSlot( const Troop &, const uint32_t splitCount );
     void JoinAllTroopsOfType( const Troop & targetTroop );
@@ -142,8 +144,8 @@ public:
 
     static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
 
-    static void DrawMons32Line( const Troops &, s32, s32, u32, u32 = 0, u32 = 0 );
-    static void DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawPower, bool compact = true,
+    static void drawMiniMonsLine( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first = 0, u32 count = 0 );
+    static void DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawType, bool compact = true,
                                   bool isScouteView = true );
 
     explicit Army( HeroBase * s = nullptr );
@@ -154,7 +156,10 @@ public:
     Army & operator=( Army && ) = delete;
     ~Army() override;
 
-    void Reset( bool = false ); // reset: soft or hard
+    const Troops & getTroops() const;
+    // Soft reset means reset to the default army (a few T1 and T2 units).
+    // Hard reset means reset to the minimum army (strictly one T1 unit).
+    void Reset( const bool soft = false );
     void setFromTile( const Maps::Tiles & tile );
 
     int GetColor( void ) const;
@@ -165,17 +170,24 @@ public:
     bool isStrongerThan( const Army & target, double safetyRatio = 1.0 ) const;
     bool isMeleeDominantArmy() const;
 
-    void SetColor( int );
+    void SetColor( int cl )
+    {
+        color = cl;
+    }
 
     int GetMorale( void ) const;
     int GetLuck( void ) const;
-    int GetMoraleModificator( std::string * ) const;
-    int GetLuckModificator( const std::string * ) const;
-    u32 ActionToSirens( void );
+    int GetMoraleModificator( std::string * strs ) const;
+    int GetLuckModificator( std::string * strs ) const;
+    uint32_t ActionToSirens() const;
 
     const HeroBase * GetCommander( void ) const;
     HeroBase * GetCommander( void );
-    void SetCommander( HeroBase * );
+
+    void SetCommander( HeroBase * c )
+    {
+        commander = c;
+    }
 
     const Castle * inCastle( void ) const;
 
@@ -183,10 +195,21 @@ public:
 
     void JoinStrongestFromArmy( Army & );
 
-    void SetSpreadFormat( bool );
-    bool isSpreadFormat( void ) const;
+    void SetSpreadFormat( bool f )
+    {
+        combat_format = f;
+    }
 
-    bool isFullHouse( void ) const;
+    bool isSpreadFormat() const
+    {
+        return combat_format;
+    }
+
+    bool isFullHouse() const
+    {
+        return GetCount() == size();
+    }
+
     bool SaveLastTroop( void ) const;
 
     Monster GetStrongestMonster() const;

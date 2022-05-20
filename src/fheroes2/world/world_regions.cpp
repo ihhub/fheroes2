@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -85,8 +85,8 @@ namespace
         for ( uint8_t direction = 0; direction < 8; ++direction ) {
             const int newIndex = ConvertExtendedIndex( nodeIndex, rawDataWidth ) + offsets[direction];
             MapRegionNode & newTile = rawData[newIndex];
-            if ( newTile.passable & GetDirectionBitmask( direction, true ) ) {
-                if ( newTile.type == REGION_NODE_OPEN && newTile.isWater == region._isWater ) {
+            if ( newTile.passable & GetDirectionBitmask( direction, true ) && newTile.isWater == region._isWater ) {
+                if ( newTile.type == REGION_NODE_OPEN ) {
                     newTile.type = region._id;
                     region._nodes.push_back( newTile );
                 }
@@ -330,7 +330,7 @@ void World::ComputeStaticAnalysis()
     }
 
     // Step 8. Fill missing data (if there's a small island/lake or unreachable terrain)
-    FindMissingRegions( data, fheroes2::Size( width, height ), _regions );
+    FindMissingRegions( data, { width, height }, _regions );
 
     // Step 9. Assign regions to the map tiles and finalize the data
     for ( MapRegion & reg : _regions ) {
@@ -354,6 +354,11 @@ void World::ComputeStaticAnalysis()
                 // neighbours is a set that will force the uniqness
                 reg._neighbours.insert( vec_tiles[exitIndex].GetRegion() );
             }
+        }
+
+        // Fix missing references
+        for ( uint32_t adjacent : reg._neighbours ) {
+            _regions[adjacent]._neighbours.insert( reg._id );
         }
     }
 }

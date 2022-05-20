@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -156,6 +156,15 @@ void WorldPathfinder::checkWorldSize()
     }
 }
 
+uint32_t WorldPathfinder::calculatePathPenalty( const std::list<Route::Step> & path )
+{
+    uint32_t dist = 0;
+    for ( const Route::Step & step : path ) {
+        dist += step.GetPenalty();
+    }
+    return dist;
+}
+
 uint32_t WorldPathfinder::getMovementPenalty( int src, int dst, int direction ) const
 {
     const Maps::Tiles & srcTile = world.GetTiles( src );
@@ -275,7 +284,7 @@ void PlayerWorldPathfinder::reset()
 
 void PlayerWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 {
-    auto currentSettings = std::forward_as_tuple( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints );
+    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints );
     const auto newSettings = std::make_tuple( hero.GetIndex(), static_cast<uint8_t>( hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) ), hero.GetColor(),
                                               hero.GetMovePoints(), hero.GetMaxMovePoints() );
 
@@ -378,7 +387,7 @@ void AIWorldPathfinder::reset()
 
 void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 {
-    auto currentSettings = std::forward_as_tuple( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength );
+    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength );
     const auto newSettings = std::make_tuple( hero.GetIndex(), static_cast<uint8_t>( hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) ), hero.GetColor(),
                                               hero.GetMovePoints(), hero.GetMaxMovePoints(), hero.GetArmy().GetStrength() );
 
@@ -391,7 +400,7 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 
 void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill )
 {
-    auto currentSettings = std::forward_as_tuple( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength );
+    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength );
     const auto newSettings = std::make_tuple( start, skill, color, 0U, 0U, armyStrength );
 
     if ( currentSettings != newSettings ) {
@@ -646,6 +655,42 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
         return true;
     }
 
+    const bool topLeftSideUnreachable = !Maps::isValidDirection( start, Direction::TOP_LEFT ) || _cache[start - 1 - world.w()]._cost == 0;
+    if ( topLeftSideUnreachable && !leftSideUnreachable && !topSideUnreachable && bottomSideUnreachable ) {
+        return true;
+    }
+
+    const bool topRightSideUnreachable = !Maps::isValidDirection( start, Direction::TOP_RIGHT ) || _cache[start + 1 - world.w()]._cost == 0;
+    if ( topRightSideUnreachable && !rightSideUnreachable && !topSideUnreachable && bottomSideUnreachable ) {
+        return true;
+    }
+
+    const bool bottomLeftSideUnreachable = !Maps::isValidDirection( start, Direction::BOTTOM_LEFT ) || _cache[start - 1 + world.w()]._cost == 0;
+    if ( bottomLeftSideUnreachable && !leftSideUnreachable && !bottomSideUnreachable && topSideUnreachable ) {
+        return true;
+    }
+
+    const bool bottomRightSideUnreachable = !Maps::isValidDirection( start, Direction::BOTTOM_RIGHT ) || _cache[start + 1 + world.w()]._cost == 0;
+    if ( bottomRightSideUnreachable && !rightSideUnreachable && !bottomSideUnreachable && topSideUnreachable ) {
+        return true;
+    }
+
+    if ( bottomLeftSideUnreachable && topLeftSideUnreachable && !leftSideUnreachable ) {
+        return true;
+    }
+
+    if ( topLeftSideUnreachable && topRightSideUnreachable && !topSideUnreachable ) {
+        return true;
+    }
+
+    if ( bottomRightSideUnreachable && topRightSideUnreachable && !rightSideUnreachable ) {
+        return true;
+    }
+
+    if ( bottomLeftSideUnreachable && bottomRightSideUnreachable && !bottomSideUnreachable ) {
+        return true;
+    }
+
     // Is the hero standing on Stoneliths?
     return world.GetTiles( start ).GetObject( false ) == MP2::OBJ_STONELITHS;
 }
@@ -713,6 +758,97 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int target
     return result;
 }
 
+std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & hero, int targetIndex ) const
+{
+    std::list<Route::Step> path;
+
+    const Spell dimensionDoor( Spell::DIMENSIONDOOR );
+    if ( !hero.HaveSpell( dimensionDoor ) || !Maps::isValidAbsIndex( targetIndex ) )
+        return path;
+
+    uint32_t currentSpellPoints = hero.GetSpellPoints();
+
+    const Maps::Tiles & tile = world.GetTiles( targetIndex );
+    const MP2::MapObjectType objectType = tile.GetObject( true );
+
+    // Reserve spell points only if target isn't a well that will replenish lost SP
+    if ( objectType != MP2::OBJ_MAGICWELL && objectType != MP2::OBJ_ARTESIANSPRING ) {
+        if ( currentSpellPoints < hero.GetMaxSpellPoints() * _spellPointsReserved )
+            return path;
+
+        currentSpellPoints -= static_cast<uint32_t>( hero.GetMaxSpellPoints() * _spellPointsReserved );
+    }
+
+    const uint32_t movementCost = std::max( 1U, dimensionDoor.movePoints() );
+    const uint32_t maxCasts = std::min( currentSpellPoints / std::max( 1U, dimensionDoor.spellPoints( &hero ) ), hero.GetMovePoints() / movementCost );
+
+    // Have to explicitly call GetObject( false ) since hero might be standing on it
+    if ( tile.GetObject( false ) == MP2::OBJ_CASTLE ) {
+        targetIndex = Maps::GetDirectionIndex( targetIndex, Direction::BOTTOM );
+        if ( !Maps::isValidAbsIndex( targetIndex ) )
+            return path;
+    }
+
+    const fheroes2::Point targetPoint = Maps::GetPoint( targetIndex );
+
+    fheroes2::Point current = Maps::GetPoint( hero.GetIndex() );
+    fheroes2::Point difference = targetPoint - current;
+
+    const bool water = hero.isShipMaster();
+    const Directions & directions = Direction::All();
+    const int32_t distanceLimit = Spell::CalculateDimensionDoorDistance() / 2;
+
+    uint32_t spellsUsed = 0;
+    while ( maxCasts > spellsUsed ) {
+        const int32_t currentNodeIdx = Maps::GetIndexFromAbsPoint( current );
+        fheroes2::Point another = current;
+        another.x += ( difference.x > 0 ) ? std::min( difference.x, distanceLimit ) : std::max( difference.x, -distanceLimit );
+        another.y += ( difference.y > 0 ) ? std::min( difference.y, distanceLimit ) : std::max( difference.y, -distanceLimit );
+
+        const int32_t anotherNodeIdx = Maps::GetIndexFromAbsPoint( another );
+        bool found = Maps::isValidForDimensionDoor( anotherNodeIdx, water );
+
+        if ( !found ) {
+            for ( size_t i = 0; i < directions.size(); ++i ) {
+                if ( !Maps::isValidDirection( anotherNodeIdx, directions[i] ) )
+                    continue;
+
+                const int newIndex = anotherNodeIdx + _mapOffset[i];
+                if ( !Maps::isValidForDimensionDoor( newIndex, water ) )
+                    continue;
+
+                // check if we are near destination - skip if we can't move there after
+                if ( anotherNodeIdx == targetIndex && !isValidPath( anotherNodeIdx, directions[i], _currentColor ) )
+                    continue;
+
+                const fheroes2::Point newPoint = Maps::GetPoint( newIndex );
+                if ( std::abs( current.x - newPoint.x ) <= distanceLimit && std::abs( current.y - newPoint.y ) <= distanceLimit ) {
+                    path.emplace_back( newIndex, currentNodeIdx, Direction::CENTER, movementCost );
+                    current = newPoint;
+                    found = true;
+                    break;
+                }
+            }
+
+            if ( !found )
+                return {};
+        }
+        else {
+            path.emplace_back( anotherNodeIdx, currentNodeIdx, Direction::CENTER, movementCost );
+            current = another;
+        }
+
+        ++spellsUsed;
+
+        difference = targetPoint - current;
+        if ( std::abs( difference.x ) <= 1 && std::abs( difference.y ) <= 1 ) {
+            return path;
+        }
+    }
+
+    return {};
+}
+
 std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex, const bool isPlanningMode /* = false */ ) const
 {
     assert( _pathStart != -1 && targetIndex != -1 );
@@ -775,4 +911,9 @@ void AIWorldPathfinder::setArmyStrengthMultiplier( const double multiplier )
         _advantage = multiplier;
         reset();
     }
+}
+
+void AIWorldPathfinder::setSpellPointReserve( const double reserve )
+{
+    _spellPointsReserved = reserve;
 }

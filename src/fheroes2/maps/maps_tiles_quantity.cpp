@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -246,6 +246,8 @@ u32 Maps::Tiles::QuantityGold( void ) const
         case 1:
             return 1000;
         case 2:
+        case 4:
+            // Case 4 gives 2000 gold and an artifact.
             return 2000;
         case 3:
             return 5000;
@@ -268,9 +270,9 @@ ResourceCount Maps::Tiles::QuantityResourceCount( void ) const
         case 1:
             return ResourceCount( Resource::GOLD, QuantityGold() );
         case 2:
-            return ResourceCount( Resource::FromIndexSprite2( QuantityExt() - 1 ), 3 );
+            return ResourceCount( Resource::getResourceTypeFromIconIndex( QuantityExt() - 1 ), 3 );
         case 3:
-            return ResourceCount( Resource::FromIndexSprite2( QuantityExt() - 1 ), 5 );
+            return ResourceCount( Resource::getResourceTypeFromIconIndex( QuantityExt() - 1 ), 5 );
         default:
             break;
         }
@@ -529,8 +531,10 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
                 QuantitySetVariant( cond );
                 QuantitySetArtifact( art );
 
-                if ( cond == 2 || cond == 3 )
-                    QuantitySetExt( Resource::GetIndexSprite2( Resource::Rand( false ) ) + 1 );
+                if ( cond == 2 || cond == 3 ) {
+                    // TODO: why do we use icon ICN index instead of map ICN index?
+                    QuantitySetExt( Resource::getIconIcnIndex( Resource::Rand( false ) ) + 1 );
+                }
             }
         }
         break;
@@ -886,8 +890,7 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
         break;
 
     case MP2::OBJ_BARROWMOUNDS:
-        if ( !Settings::Get().ExtWorldDisableBarrowMounds() )
-            UpdateDwellingPopulation( *this, isFirstLoad );
+        UpdateDwellingPopulation( *this, isFirstLoad );
         break;
 
     default:

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <atomic>
+#include <cassert>
 #include <mutex>
 #include <numeric>
 
@@ -81,7 +82,7 @@ namespace
         Mix_Chunk * sample = Mix_LoadWAV( System::FileNameToUTF8( file ).c_str() );
 
         if ( !sample ) {
-            ERROR_LOG( Mix_GetError() );
+            ERROR_LOG( Mix_GetError() )
         }
 
         return sample;
@@ -92,7 +93,7 @@ namespace
         Mix_Chunk * sample = Mix_LoadWAV_RW( SDL_RWFromConstMem( ptr, size ), 1 );
 
         if ( !sample ) {
-            ERROR_LOG( Mix_GetError() );
+            ERROR_LOG( Mix_GetError() )
         }
 
         return sample;
@@ -103,7 +104,7 @@ namespace
         int res = Mix_PlayChannel( channel, sample, loop ? -1 : 0 );
 
         if ( res == -1 ) {
-            ERROR_LOG( Mix_GetError() );
+            ERROR_LOG( Mix_GetError() )
         }
 
         return res;
@@ -116,7 +117,7 @@ namespace
         int res = musicFadeIn ? Mix_FadeInMusic( mix, loop ? -1 : 0, musicFadeIn ) : Mix_PlayMusic( mix, loop ? -1 : 0 );
 
         if ( res < 0 ) {
-            ERROR_LOG( Mix_GetError() );
+            ERROR_LOG( Mix_GetError() )
         }
         else {
             music = mix;
@@ -130,7 +131,12 @@ void Audio::Init()
 
     if ( fheroes2::isComponentInitialized( fheroes2::SystemInitializationComponent::Audio ) ) {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-        Mix_Init( MIX_INIT_OGG | MIX_INIT_MP3 | MIX_INIT_MOD );
+        const int initializationFlags = MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG;
+        const int initializedFlags = Mix_Init( initializationFlags );
+        if ( ( initializedFlags & initializationFlags ) != initializationFlags ) {
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN,
+                       "Expected music initialization flags as " << initializationFlags << " but received " << ( initializedFlags & initializationFlags ) )
+        }
 #endif
         hardware.freq = 22050;
         hardware.format = AUDIO_S16;
@@ -138,7 +144,7 @@ void Audio::Init()
         hardware.samples = 2048;
 
         if ( 0 != Mix_OpenAudio( hardware.freq, hardware.format, hardware.channels, hardware.samples ) ) {
-            ERROR_LOG( Mix_GetError() );
+            ERROR_LOG( Mix_GetError() )
 
             valid = false;
         }
@@ -146,13 +152,17 @@ void Audio::Init()
             int channels = 0;
 
             Mix_QuerySpec( &hardware.freq, &hardware.format, &channels );
-            hardware.channels = channels;
+
+            // If this assertion blows up it means that SDL doesn't work properly.
+            assert( channels >= 0 && channels < 256 );
+
+            hardware.channels = static_cast<uint8_t>( channels );
 
             valid = true;
         }
     }
     else {
-        ERROR_LOG( "The audio subsystem was not initialized." );
+        ERROR_LOG( "The audio subsystem was not initialized." )
 
         valid = false;
     }
@@ -379,7 +389,7 @@ void Music::Play( const std::vector<uint8_t> & v, const bool loop )
         SDL_FreeRW( rwops );
 
         if ( !mix ) {
-            ERROR_LOG( Mix_GetError() );
+            ERROR_LOG( Mix_GetError() )
         }
         else {
             PlayMusic( mix, loop );
@@ -395,7 +405,7 @@ void Music::Play( const std::string & file, const bool loop )
         Mix_Music * mix = Mix_LoadMUS( System::FileNameToUTF8( file ).c_str() );
 
         if ( !mix ) {
-            ERROR_LOG( Mix_GetError() );
+            ERROR_LOG( Mix_GetError() )
         }
         else {
             PlayMusic( mix, loop );

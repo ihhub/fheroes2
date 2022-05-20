@@ -1,6 +1,6 @@
 # fheroes2
 
-**Free Heroes of Might and Magic II** (fheroes2) is a recreation of HoMM2 game engine.
+**fheroes2** is a recreation of the Heroes of Might and Magic II game engine.
 
 This open source multiplatform project, written from scratch, is designed to reproduce the original game with significant
 improvements in the gameplay, graphics and logic (including support for high-resolution graphics, improved AI, numerous fixes
@@ -38,7 +38,6 @@ This repository is the place for everyone. If you want to contribute, please rea
 
 To build the project from source please follow [**this guide**](DEVELOPMENT.md).
 
-[![Build status](https://ci.appveyor.com/api/projects/status/ih6cw0yr1yuxf4ll?svg=true)](https://ci.appveyor.com/project/ihhub/fheroes2)
 [![Build Status](https://github.com/ihhub/fheroes2/workflows/GitHub%20Actions/badge.svg)](https://github.com/ihhub/fheroes2/actions)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=bugs)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=code_smells)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2)

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -53,6 +53,9 @@ namespace Battle
     {
     public:
         explicit Catapult( const HeroBase & hero, const Rand::DeterministicRandomGenerator & randomGenerator );
+        Catapult( const Catapult & ) = delete;
+
+        Catapult & operator=( const Catapult & ) = delete;
 
         static fheroes2::Point GetTargetPosition( int target, bool hit );
 

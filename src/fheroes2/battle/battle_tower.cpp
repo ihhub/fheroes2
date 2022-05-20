@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -57,12 +57,15 @@ const char * Battle::Tower::GetName( void ) const
         return _( "Left Turret" );
     case TWR_RIGHT:
         return _( "Right Turret" );
-
+    case TWR_CENTER:
+        return _( "Ballista" );
     default:
+        // This is not a valid Tower type!
+        assert( 0 );
         break;
     }
 
-    return _( "Ballista" );
+    return nullptr;
 }
 
 bool Battle::Tower::isValid( void ) const
@@ -94,17 +97,17 @@ fheroes2::Point Battle::Tower::GetPortPosition( void ) const
 {
     switch ( type ) {
     case TWR_LEFT:
-        return fheroes2::Point( 410, 70 );
+        return { 410, 70 };
         break;
     case TWR_RIGHT:
-        return fheroes2::Point( 410, 320 );
+        return { 410, 320 };
     case TWR_CENTER:
-        return fheroes2::Point( 560, 170 );
+        return { 560, 170 };
     default:
         break;
     }
 
-    return fheroes2::Point();
+    return {};
 }
 
 void Battle::Tower::SetDestroy( void )

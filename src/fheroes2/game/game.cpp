@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -33,6 +33,7 @@
 #include "game.h"
 #include "game_credits.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_static.h"
 #include "icn.h"
@@ -79,10 +80,6 @@ namespace
 namespace Game
 {
     void AnimateDelaysInitialize( void );
-    void KeyboardGlobalFilter( int, int );
-
-    void HotKeysDefaults( void );
-    void HotKeysLoad( const std::string & );
 
     namespace ObjectFadeAnimation
     {
@@ -217,10 +214,7 @@ void Game::Init( void )
 
     Game::AnimateDelaysInitialize();
 
-    HotKeysDefaults();
-
-    const std::string hotkeys = Settings::GetLastFile( "", "fheroes2.key" );
-    Game::HotKeysLoad( hotkeys );
+    Game::HotKeysLoad( Settings::GetLastFile( "", "fheroes2.key" ) );
 }
 
 int Game::CurrentMusic()
@@ -491,6 +485,8 @@ u32 Game::GetGameOverScores( void )
     case Maps::XLARGE:
         mapSizeFactor = 60;
         break;
+    default:
+        break;
     }
 
     const uint32_t daysFactor = world.CountDay() * mapSizeFactor / 100;
@@ -516,26 +512,9 @@ u32 Game::GetGameOverScores( void )
     return GetRating() * ( 200 - daysScore ) / 100;
 }
 
-void Game::ShowMapLoadingText( void )
-{
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Rect pos( 0, display.height() / 2, display.width(), display.height() / 2 );
-    TextBox text( _( "Map is loading..." ), Font::BIG, pos.width );
-
-    // blit test
-    display.fill( 0 );
-    text.Blit( pos.x, pos.y );
-    display.render();
-}
-
 u32 Game::GetLostTownDays( void )
 {
     return GameStatic::GetGameOverLostDays();
-}
-
-u32 Game::GetViewDistance( u32 d )
-{
-    return GameStatic::GetOverViewDistance( d );
 }
 
 u32 Game::GetWhirlpoolPercent( void )

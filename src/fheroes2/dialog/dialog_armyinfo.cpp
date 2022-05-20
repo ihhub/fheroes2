@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -29,8 +29,8 @@
 #include "battle_cell.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "luck.h"
 #include "monster.h"
@@ -42,6 +42,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 #include "world.h"
 
@@ -216,25 +217,23 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
             le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
             // upgrade
-            if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::EVENT_UPGRADE_TROOP ) ) ) {
+            if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::UPGRADE_TROOP ) ) ) {
                 if ( UPGRADE_DISABLE & flags ) {
-                    const std::string msg( _( "You can't afford to upgrade your troops!" ) );
-                    if ( Dialog::YES == Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), Dialog::OK ) ) {
-                        result = Dialog::UPGRADE;
-                        break;
-                    }
+                    const fheroes2::Text description( _( "You can't afford to upgrade your troops!" ), fheroes2::FontType::normalWhite() );
+                    fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::OK, troop.GetTotalUpgradeCost() );
                 }
                 else {
-                    const std::string msg = _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" );
+                    const fheroes2::Text description( _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" ),
+                                                      fheroes2::FontType::normalWhite() );
 
-                    if ( Dialog::YES == Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), Dialog::YES | Dialog::NO ) ) {
+                    if ( fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::YES | Dialog::NO, troop.GetTotalUpgradeCost() ) == Dialog::YES ) {
                         result = Dialog::UPGRADE;
                         break;
                     }
                 }
             }
             // dismiss
-            if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::EVENT_DISMISS_TROOP ) )
+            if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DISMISS_TROOP ) )
                  && Dialog::YES
                         == Dialog::Message( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ), Font::BIG,
                                             Dialog::YES | Dialog::NO ) ) {
@@ -242,14 +241,14 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 break;
             }
             // exit
-            if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow ) {
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 result = Dialog::CANCEL;
                 break;
             }
 
             for ( const auto & spellInfo : spellAreas ) {
                 if ( le.MousePressRight( spellInfo.first ) ) {
-                    Dialog::SpellInfo( spellInfo.second, nullptr, false );
+                    fheroes2::SpellDialogElement( spellInfo.second, nullptr ).showPopup( Dialog::ZERO );
                     break;
                 }
             }
@@ -486,7 +485,7 @@ std::vector<std::pair<fheroes2::Rect, Spell>> DrawBattleStats( const fheroes2::P
             const fheroes2::Point imageOffset( ow, dst.y + maxSpriteHeight - sprite.height() );
 
             fheroes2::Blit( sprite, fheroes2::Display::instance(), imageOffset.x, imageOffset.y );
-            output.emplace_back( std::make_pair( fheroes2::Rect( imageOffset.x, imageOffset.y, sprite.width(), sprite.height() ), modeToSpell( spell.mode ) ) );
+            output.emplace_back( fheroes2::Rect( imageOffset.x, imageOffset.y, sprite.width(), sprite.height() ), modeToSpell( spell.mode ) );
 
             if ( spell.duration > 0 ) {
                 text.Set( std::to_string( spell.duration ), Font::SMALL );
@@ -514,7 +513,7 @@ std::vector<std::pair<fheroes2::Rect, Spell>> DrawBattleStats( const fheroes2::P
             const fheroes2::Point imageOffset( ow - sprite.width(), dst.y + maxSpriteHeight - sprite.height() );
 
             fheroes2::Blit( sprite, fheroes2::Display::instance(), imageOffset.x, imageOffset.y );
-            output.emplace_back( std::make_pair( fheroes2::Rect( imageOffset.x, imageOffset.y, sprite.width(), sprite.height() ), modeToSpell( spellIt->mode ) ) );
+            output.emplace_back( fheroes2::Rect( imageOffset.x, imageOffset.y, sprite.width(), sprite.height() ), modeToSpell( spellIt->mode ) );
 
             if ( spellIt->duration > 0 ) {
                 text.Set( std::to_string( spellIt->duration ), Font::SMALL );
@@ -539,13 +538,13 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
     if ( !descriptions.empty() ) {
         const int32_t descriptionWidth = 210;
         const int32_t maximumRowCount = 3;
-        const int32_t rowHeight = fheroes2::Text( std::string(), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } ).height();
+        const int32_t rowHeight = fheroes2::Text( std::string(), fheroes2::FontType::smallWhite() ).height();
 
         bool asSolidText = true;
         if ( descriptions.size() <= static_cast<size_t>( maximumRowCount ) ) {
             asSolidText = false;
             for ( const std::string & sentence : descriptions ) {
-                if ( fheroes2::Text( sentence, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } ).width() > descriptionWidth ) {
+                if ( fheroes2::Text( sentence, fheroes2::FontType::smallWhite() ).width() > descriptionWidth ) {
                     asSolidText = true;
                     break;
                 }
@@ -562,7 +561,7 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
                 description += sentence;
             }
 
-            const fheroes2::Text descriptionText( description, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+            const fheroes2::Text descriptionText( description, fheroes2::FontType::smallWhite() );
             const int32_t rowCount = descriptionText.rows( descriptionWidth );
 
             descriptionText.draw( offset.x + 37, offset.y + 185 + ( maximumRowCount - rowCount ) * rowHeight, descriptionWidth, fheroes2::Display::instance() );
@@ -570,7 +569,7 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
         else {
             int32_t sentenceId = maximumRowCount - static_cast<int32_t>( descriptions.size() ); // safe to cast as we check the size before.
             for ( const std::string & sentence : descriptions ) {
-                const fheroes2::Text descriptionText( sentence, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+                const fheroes2::Text descriptionText( sentence, fheroes2::FontType::smallWhite() );
 
                 descriptionText.draw( offset.x + 37, offset.y + 185 + sentenceId * rowHeight, descriptionWidth, fheroes2::Display::instance() );
                 ++sentenceId;

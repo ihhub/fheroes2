@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -31,11 +31,13 @@
 #include "dialog_resolution.h"
 #include "game.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_mainmenu_ui.h"
 #include "icn.h"
 #include "image.h"
 #include "localevent.h"
+#include "logging.h"
 #include "mus.h"
 #include "settings.h"
 #include "text.h"
@@ -62,6 +64,19 @@ namespace
         CREDITS_DEFAULT = 13,
         QUIT_DEFAULT = 17
     };
+
+    void outputMainMenuInTextSupportMode()
+    {
+        START_TEXT_SUPPORT_MODE
+        COUT( "Main Menu\n" )
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_NEW_GAME ) << " to choose New Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) << " to choose Load previously saved game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_HIGHSCORES ) << " to show High Scores." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_CREDITS ) << " to show Credits." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_SETTINGS ) << " to open Game Settings." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to Quit the game." )
+    }
 }
 
 void Game::mainGameLoop( bool isFirstGameRun )
@@ -169,15 +184,10 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     // image background
     fheroes2::drawMainMenuScreen();
     if ( isFirstGameRun ) {
-        fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
-        const std::vector<fheroes2::SupportedLanguage> supportedLanguages = fheroes2::getSupportedLanguages();
+        fheroes2::selectLanguage( fheroes2::getSupportedLanguages(), fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
-        if ( supportedLanguages.size() > 1 ) {
-            currentLanguage = fheroes2::selectLanguage( supportedLanguages, currentLanguage );
-            conf.setGameLanguage( fheroes2::getLanguageAbbreviation( currentLanguage ) );
-        }
-
-        Dialog::Message( _( "Greetings!" ), _( "Welcome to Free Heroes of Might and Magic II! Before starting the game please choose game resolution." ), Font::BIG,
+        Dialog::Message( _( "Greetings!" ),
+                         _( "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before starting the game please choose game resolution." ), Font::BIG,
                          Dialog::OK );
 
         bool isResolutionChanged = Dialog::SelectResolution();
@@ -185,21 +195,22 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             fheroes2::drawMainMenuScreen();
         }
 
-        fheroes2::Text header( _( "Please Remember" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } );
+        fheroes2::Text header( _( "Please Remember" ), fheroes2::FontType::normalYellow() );
 
         fheroes2::MultiFontText body;
-        body.add( { _( "You can always change game resolution by clicking on the " ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
-        body.add( { _( "door" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
-        body.add( { _( " on the left side of main menu.\n\nTo switch between windowed and full screen modes\npress " ),
-                    { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
-        body.add( { _( "F4" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::YELLOW } } );
-        body.add( { _( " key on the keyboard.\n\nEnjoy the game!" ), { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE } } );
+        body.add( { _( "You can always change game resolution by clicking on the " ), fheroes2::FontType::normalWhite() } );
+        body.add( { _( "door" ), fheroes2::FontType::normalYellow() } );
+        body.add( { _( " on the left side of main menu.\n\nTo switch between windowed and full screen modes\npress " ), fheroes2::FontType::normalWhite() } );
+        body.add( { _( "F4" ), fheroes2::FontType::normalYellow() } );
+        body.add( { _( " key on the keyboard.\n\nEnjoy the game!" ), fheroes2::FontType::normalWhite() } );
 
         fheroes2::showMessage( header, body, Dialog::OK );
 
         conf.resetFirstGameRun();
-        conf.Save( "fheroes2.cfg" );
+        conf.Save( Settings::configFileName );
     }
+
+    outputMainMenuInTextSupportMode();
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -248,7 +259,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     while ( true ) {
         if ( !le.HandleEvents( true, true ) ) {
             if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
-                // if ( conf.ExtGameUseFade() )
+                // if ( Settings::ExtGameUseFade() )
                 //    display.Fade();
                 break;
             }
@@ -289,22 +300,30 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             display.render();
         }
 
-        if ( HotKeyPressEvent( EVENT_BUTTON_NEWGAME ) || le.MouseClickLeft( buttonNewGame.area() ) )
+        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_GAME ) || le.MouseClickLeft( buttonNewGame.area() ) ) {
             return fheroes2::GameMode::NEW_GAME;
-        else if ( HotKeyPressEvent( EVENT_BUTTON_LOADGAME ) || le.MouseClickLeft( buttonLoadGame.area() ) )
+        }
+
+        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_LOAD_GAME ) || le.MouseClickLeft( buttonLoadGame.area() ) ) {
             return fheroes2::GameMode::LOAD_GAME;
-        else if ( HotKeyPressEvent( EVENT_BUTTON_HIGHSCORES ) || le.MouseClickLeft( buttonHighScores.area() ) )
+        }
+
+        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_HIGHSCORES ) || le.MouseClickLeft( buttonHighScores.area() ) ) {
             return fheroes2::GameMode::HIGHSCORES_STANDARD;
-        else if ( HotKeyPressEvent( EVENT_BUTTON_CREDITS ) || le.MouseClickLeft( buttonCredits.area() ) )
+        }
+
+        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_CREDITS ) || le.MouseClickLeft( buttonCredits.area() ) ) {
             return fheroes2::GameMode::CREDITS;
-        else if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonQuit.area() ) ) {
+        }
+
+        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonQuit.area() ) ) {
             if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
-                // if ( conf.ExtGameUseFade() )
+                // if ( Settings::ExtGameUseFade() )
                 //     display.Fade();
                 return fheroes2::GameMode::QUIT_GAME;
             }
         }
-        else if ( HotKeyPressEvent( EVENT_BUTTON_SETTINGS ) || le.MouseClickLeft( settingsArea ) ) {
+        else if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_SETTINGS ) || le.MouseClickLeft( settingsArea ) ) {
             fheroes2::openGameSettings();
 
             // force interface to reset area and positions
@@ -314,7 +333,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
         // right info
         if ( le.MousePressRight( buttonQuit.area() ) )
-            Dialog::Message( _( "Quit" ), _( "Quit Heroes of Might and Magic and return to the operating system." ), Font::BIG );
+            Dialog::Message( _( "Quit" ), _( "Quit Heroes of Might and Magic II and return to the operating system." ), Font::BIG );
         else if ( le.MousePressRight( buttonLoadGame.area() ) )
             Dialog::Message( _( "Load Game" ), _( "Load a previously saved game." ), Font::BIG );
         else if ( le.MousePressRight( buttonCredits.area() ) )

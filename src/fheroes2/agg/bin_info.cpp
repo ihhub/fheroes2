@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -241,13 +241,13 @@ namespace Bin_Info
             return mapIterator->second;
         }
         else {
-            const MonsterAnimInfo info( monsterID, AGG::LoadBINFRM( Bin_Info::GetFilename( monsterID ) ) );
+            const MonsterAnimInfo info( monsterID, AGG::ReadChunk( Bin_Info::GetFilename( monsterID ) ) );
             if ( info.isValid() ) {
                 _animMap[monsterID] = info;
                 return info;
             }
             else {
-                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( monsterID ) << ", index: " << monsterID );
+                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( monsterID ) << ", index: " << monsterID )
             }
         }
         return MonsterAnimInfo();

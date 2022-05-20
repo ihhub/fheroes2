@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,25 +33,36 @@ namespace fheroes2
         German, // GoG version
         Russian, // Buka and XXI Vek versions
         Italian, // Rare version?
-        Czech // Local release occured in 2002 by CD Projekt
+        Czech, // Local release occured in 2002 by CD Projekt
+
+        // All languages listed below are original to fheroes2.
+        Belarusian,
+        Bulgarian,
+        Norwegian,
+        Portuguese,
+        Romanian,
+        Spanish,
+        Swedish,
+        Ukrainian
     };
 
     class LanguageSwitcher
     {
     public:
-        LanguageSwitcher() = delete;
-
-        LanguageSwitcher( const LanguageSwitcher & ) = delete;
-        LanguageSwitcher( const LanguageSwitcher && ) = delete;
-        LanguageSwitcher & operator=( const LanguageSwitcher & ) = delete;
-        LanguageSwitcher & operator=( const LanguageSwitcher && ) = delete;
-
         explicit LanguageSwitcher( const SupportedLanguage language );
+        LanguageSwitcher( const LanguageSwitcher & ) = delete;
+        LanguageSwitcher( LanguageSwitcher && ) = delete;
+
+        LanguageSwitcher & operator=( const LanguageSwitcher & ) = delete;
+        LanguageSwitcher & operator=( LanguageSwitcher && ) = delete;
+
         ~LanguageSwitcher();
 
     private:
         const std::string _currentLanguage;
     };
+
+    SupportedLanguage getResourceLanguage();
 
     // This function returns an array of supported languages. If the array contains only one language it must be English.
     std::vector<SupportedLanguage> getSupportedLanguages();

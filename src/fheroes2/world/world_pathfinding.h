@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,6 +40,12 @@ struct WorldNode : public PathfindingNode<MP2::MapObjectType>
         , _remainingMovePoints( remainingMovePoints )
     {}
 
+    WorldNode( const WorldNode & ) = delete;
+    WorldNode( WorldNode && ) = default;
+
+    WorldNode & operator=( const WorldNode & ) = delete;
+    WorldNode & operator=( WorldNode && ) = default;
+
     void resetNode() override
     {
         PathfindingNode::resetNode();
@@ -53,9 +59,14 @@ class WorldPathfinder : public Pathfinder<WorldNode>
 {
 public:
     WorldPathfinder() = default;
+    WorldPathfinder( const WorldPathfinder & ) = delete;
+
+    WorldPathfinder & operator=( const WorldPathfinder & ) = delete;
 
     // This method resizes the cache and re-calculates map offsets if values are out of sync with World class
     virtual void checkWorldSize();
+
+    static uint32_t calculatePathPenalty( const std::list<Route::Step> & path );
 
 protected:
     void processWorldMap();
@@ -84,6 +95,9 @@ class PlayerWorldPathfinder : public WorldPathfinder
 {
 public:
     PlayerWorldPathfinder() = default;
+    PlayerWorldPathfinder( const PlayerWorldPathfinder & ) = delete;
+
+    PlayerWorldPathfinder & operator=( const PlayerWorldPathfinder & ) = delete;
 
     void reset() override;
 
@@ -101,6 +115,10 @@ public:
         : _advantage( advantage )
     {}
 
+    AIWorldPathfinder( const AIWorldPathfinder & ) = delete;
+
+    AIWorldPathfinder & operator=( const AIWorldPathfinder & ) = delete;
+
     void reset() override;
 
     void reEvaluateIfNeeded( const Heroes & hero );
@@ -113,6 +131,8 @@ public:
     bool isHeroPossiblyBlockingWay( const Heroes & hero );
 
     std::vector<IndexObject> getObjectsOnTheWay( const int targetIndex, const bool checkAdjacent = false ) const;
+
+    std::list<Route::Step> getDimensionDoorPath( const Heroes & hero, int targetIndex ) const;
 
     // Used for non-hero armies, like castles or monsters
     uint32_t getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill = Skill::Level::EXPERT );
@@ -129,6 +149,7 @@ public:
     }
 
     void setArmyStrengthMultiplier( const double multiplier );
+    void setSpellPointReserve( const double reserve );
 
 private:
     void processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx ) override;
@@ -141,5 +162,6 @@ private:
 
     double _armyStrength = -1;
     double _advantage = 1.0;
+    double _spellPointsReserved = 0.5;
     Army _temporaryArmy; // for internal calculations
 };

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -34,9 +34,18 @@ class BuildingInfo
 public:
     BuildingInfo( const Castle & c, const building_t b );
 
-    uint32_t getBuilding( void ) const;
+    uint32_t getBuilding() const
+    {
+        return building;
+    }
+
     void SetPos( s32, s32 );
-    const fheroes2::Rect & GetArea( void ) const;
+
+    const fheroes2::Rect & GetArea() const
+    {
+        return area;
+    }
+
     const char * GetName( void ) const;
     void SetStatusMessage( StatusBar & ) const;
     bool IsDwelling( void ) const;

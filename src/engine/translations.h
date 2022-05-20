@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -32,8 +32,6 @@ namespace Translation
 
     // Reset any translation to the default language - English.
     void reset();
-
-    void setStripContext( char strip );
 
     const char * gettext( const char * str );
     const char * gettext( const std::string & str );

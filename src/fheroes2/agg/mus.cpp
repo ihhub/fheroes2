@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -21,8 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <array>
 #include <iomanip>
-#include <sstream>
 #include <string>
 
 #include "ground.h"
@@ -32,74 +32,111 @@
 #include "rand.h"
 #include "settings.h"
 
-namespace MUS
+namespace
 {
-    const struct
+    struct MusMapItem
     {
         int type;
         const char * string;
-    } musmap[] = { { UNUSED, "" },
-                   { DATATRACK, "" },
-                   { BATTLE1, "Battle 1" },
-                   { BATTLE2, "Battle 2" },
-                   { BATTLE3, "Battle 3" },
-                   { SORCERESS, "Sorceress Castle" },
-                   { WARLOCK, "Warlock Castle" },
-                   { NECROMANCER, "Necromancer Castle" },
-                   { KNIGHT, "Knight Castle" },
-                   { BARBARIAN, "Barbarian Castle" },
-                   { WIZARD, "Wizard Castle" },
-                   { LAVA, "Lava Theme" },
-                   { WASTELAND, "Wasteland Theme" },
-                   { DESERT, "Desert Theme" },
-                   { SNOW, "Snow Theme" },
-                   { SWAMP, "Swamp Theme" },
-                   { OCEAN, "Ocean Theme" },
-                   { DIRT, "Dirt Theme" },
-                   { GRASS, "Grass Theme" },
-                   { LOSTGAME, "Lost Game" },
-                   { NEW_WEEK, "New Week" },
-                   { NEW_MONTH, "New Month" },
-                   { ARCHIBALD_CAMPAIGN_SCREEN, "Archibald Campaign" },
-                   { PUZZLE, "Map Puzzle" },
-                   { ROLAND_CAMPAIGN_SCREEN, "Roland Campaign" },
-                   { CARAVANS, "25" },
-                   { CARAVANS_2, "26" },
-                   { CARAVANS_3, "27" },
-                   { COMPUTER_TURN, "AI Turn" },
-                   { BATTLEWIN, "Battle Won" },
-                   { BATTLELOSE, "Battle Lost" },
-                   { DUNGEON, "Dungeon" },
-                   { WATERSPRING, "Waterspring" },
-                   { ARABIAN, "Arabian" },
-                   { HILLFORT, "Hillfort" },
-                   { TREEHOUSE, "Treehouse" },
-                   { DEMONCAVE, "Demoncave" },
-                   { EXPERIENCE, "Experience" },
-                   { SKILL, "Skill" },
-                   { WATCHTOWER, "Watchtower" },
-                   { XANADU, "Xanadu" },
-                   { ULTIMATE_ARTIFACT, "Ultimate Artifact" },
-                   { MAINMENU, "Main Menu" },
-                   { VICTORY, "Scenario Victory" },
-                   { UNKNOWN, "UNKNOWN" } };
+    };
 
-    std::string GetString( int musicTrack, OGG_MUSIC_TYPE musicType )
+    void addTrackId( std::string & output, const int musicTrackId )
     {
-        std::stringstream sstream;
-        if ( musicType == OGG_MUSIC_TYPE::MAPPED ) {
-            sstream << std::setw( 2 ) << std::setfill( '0' ) << musicTrack;
-            sstream << " " << ( UNUSED <= musicTrack && UNKNOWN > musicTrack ? musmap[musicTrack].string : musmap[UNKNOWN].string ) << ".ogg";
-        }
-        else if ( musicType == OGG_MUSIC_TYPE::DOS_VERSION ) {
-            // GOG version format, data track was ignored there so 02 becomes 01
-            sstream << "homm2_" << std::setw( 2 ) << std::setfill( '0' ) << musicTrack - 1 << ".ogg";
-        }
-        else if ( musicType == OGG_MUSIC_TYPE::WIN_VERSION ) {
-            sstream << "Track" << std::setw( 2 ) << std::setfill( '0' ) << musicTrack << ".ogg";
+        if ( musicTrackId < 10 ) {
+            output += '0';
         }
 
-        return sstream.str();
+        output += std::to_string( musicTrackId );
+    }
+
+    const std::array<MusMapItem, 45> musmap = { { { MUS::UNUSED, "" },
+                                                  { MUS::DATATRACK, "" },
+                                                  { MUS::BATTLE1, "Battle 1" },
+                                                  { MUS::BATTLE2, "Battle 2" },
+                                                  { MUS::BATTLE3, "Battle 3" },
+                                                  { MUS::SORCERESS, "Sorceress Castle" },
+                                                  { MUS::WARLOCK, "Warlock Castle" },
+                                                  { MUS::NECROMANCER, "Necromancer Castle" },
+                                                  { MUS::KNIGHT, "Knight Castle" },
+                                                  { MUS::BARBARIAN, "Barbarian Castle" },
+                                                  { MUS::WIZARD, "Wizard Castle" },
+                                                  { MUS::LAVA, "Lava Theme" },
+                                                  { MUS::WASTELAND, "Wasteland Theme" },
+                                                  { MUS::DESERT, "Desert Theme" },
+                                                  { MUS::SNOW, "Snow Theme" },
+                                                  { MUS::SWAMP, "Swamp Theme" },
+                                                  { MUS::OCEAN, "Ocean Theme" },
+                                                  { MUS::DIRT, "Dirt Theme" },
+                                                  { MUS::GRASS, "Grass Theme" },
+                                                  { MUS::LOSTGAME, "Lost Game" },
+                                                  { MUS::NEW_WEEK, "New Week" },
+                                                  { MUS::NEW_MONTH, "New Month" },
+                                                  { MUS::ARCHIBALD_CAMPAIGN_SCREEN, "Archibald Campaign" },
+                                                  { MUS::PUZZLE, "Map Puzzle" },
+                                                  { MUS::ROLAND_CAMPAIGN_SCREEN, "Roland Campaign" },
+                                                  { MUS::CARAVANS, "25" },
+                                                  { MUS::CARAVANS_2, "26" },
+                                                  { MUS::CARAVANS_3, "27" },
+                                                  { MUS::COMPUTER_TURN, "AI Turn" },
+                                                  { MUS::BATTLEWIN, "Battle Won" },
+                                                  { MUS::BATTLELOSE, "Battle Lost" },
+                                                  { MUS::DUNGEON, "Dungeon" },
+                                                  { MUS::WATERSPRING, "Waterspring" },
+                                                  { MUS::ARABIAN, "Arabian" },
+                                                  { MUS::HILLFORT, "Hillfort" },
+                                                  { MUS::TREEHOUSE, "Treehouse" },
+                                                  { MUS::DEMONCAVE, "Demoncave" },
+                                                  { MUS::EXPERIENCE, "Experience" },
+                                                  { MUS::SKILL, "Skill" },
+                                                  { MUS::WATCHTOWER, "Watchtower" },
+                                                  { MUS::XANADU, "Xanadu" },
+                                                  { MUS::ULTIMATE_ARTIFACT, "Ultimate Artifact" },
+                                                  { MUS::MAINMENU, "Main Menu" },
+                                                  { MUS::VICTORY, "Scenario Victory" },
+                                                  { MUS::UNKNOWN, "UNKNOWN" } } };
+}
+
+namespace MUS
+{
+    std::string getFileName( const int musicTrackId, const EXTERNAL_MUSIC_TYPE musicType, const char * fileExtension )
+    {
+        assert( fileExtension != nullptr );
+
+        if ( musicTrackId <= UNUSED || musicTrackId > UNKNOWN ) {
+            // You are passing an invalid music track ID!
+            assert( 0 );
+            return {};
+        }
+
+        if ( musicType == EXTERNAL_MUSIC_TYPE::MAPPED ) {
+            std::string output;
+            addTrackId( output, musicTrackId );
+            output += ' ';
+
+            output += musmap[musicTrackId].string;
+            output += fileExtension;
+            return output;
+        }
+
+        if ( musicType == EXTERNAL_MUSIC_TYPE::DOS_VERSION ) {
+            std::string output( "homm2_" );
+
+            // GOG version format, data track was ignored there so 02 becomes 01
+            addTrackId( output, musicTrackId - 1 );
+            output += fileExtension;
+            return output;
+        }
+
+        if ( musicType == EXTERNAL_MUSIC_TYPE::WIN_VERSION ) {
+            std::string output( "Track" );
+            addTrackId( output, musicTrackId );
+            output += fileExtension;
+            return output;
+        }
+
+        // Did you add a new type of music?
+        assert( 0 );
+        return {};
     }
 }
 
@@ -211,7 +248,7 @@ int MUS::FromMapObject( const MP2::MapObjectType objectType )
     }
 }
 
-int MUS::GetBattleRandom( void )
+int MUS::GetBattleRandom()
 {
     switch ( Rand::Get( 1, 3 ) ) {
     case 1:
@@ -221,7 +258,10 @@ int MUS::GetBattleRandom( void )
     case 3:
         return BATTLE3;
     default:
+        // How is it even possible?
+        assert( 0 );
         break;
     }
+
     return UNKNOWN;
 }

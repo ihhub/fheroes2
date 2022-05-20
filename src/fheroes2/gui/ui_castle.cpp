@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,17 +18,153 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "castle_ui.h"
+#include "ui_castle.h"
 #include "agg_image.h"
 #include "castle.h"
+#include "color.h"
 #include "icn.h"
 #include "logging.h"
 #include "race.h"
 #include "settings.h"
+#include "tools.h"
 #include "ui_text.h"
 
 #include <array>
 #include <cassert>
+
+namespace
+{
+    const int32_t originalCastleFlagStartColorId = 152;
+    const int32_t originalCastleFlagColorLength = 16 + 7;
+
+    std::vector<uint8_t> getModifiedPalette( const uint8_t inputStartId, const uint8_t inputLength, const uint8_t outputStartId, const uint8_t outputLength )
+    {
+        assert( inputLength > 0 && outputLength > 0 );
+
+        std::vector<uint8_t> output( 256 );
+        for ( int32_t i = 0; i < 256; ++i ) {
+            output[i] = static_cast<uint8_t>( i );
+        }
+
+        for ( uint8_t i = 0; i < inputLength; ++i ) {
+            output[i + inputStartId] = outputStartId + i * outputLength / inputLength;
+        }
+
+        return output;
+    }
+
+    std::vector<uint8_t> getModifiedPaletteByPlayerColor( const uint8_t inputStartId, const uint8_t inputLength, const int playerColor )
+    {
+        switch ( playerColor ) {
+        case Color::BLUE:
+            return getModifiedPalette( inputStartId, inputLength, 63, 16 + 6 );
+        case Color::GREEN:
+            return getModifiedPalette( inputStartId, inputLength, 85, 16 + 7 );
+        case Color::RED:
+            return getModifiedPalette( inputStartId, inputLength, 175, 16 + 7 );
+        case Color::YELLOW:
+            return getModifiedPalette( inputStartId, inputLength, 108, 16 + 7 );
+        case Color::ORANGE:
+            return getModifiedPalette( inputStartId, inputLength, 199, 16 );
+        case Color::PURPLE:
+            return getModifiedPalette( inputStartId, inputLength, 132, 16 + 5 );
+        default:
+            // Did you add a new color? Please add the logic above.
+            assert( 0 );
+            break;
+        }
+
+        return getModifiedPalette( inputStartId, inputLength, inputStartId, inputLength );
+    }
+
+    std::vector<fheroes2::Rect> getColorEffectiveAreas( const int32_t icnId, const uint32_t icnIndex )
+    {
+        switch ( icnId ) {
+        case ICN::TWNZCSTL:
+            if ( icnIndex == 0 ) {
+                return { fheroes2::Rect( 76, 7, 3, 3 ), fheroes2::Rect( 96, 7, 3, 3 ), fheroes2::Rect( 178, 11, 3, 3 ) };
+            }
+            else {
+                const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icnId, icnIndex );
+                return { fheroes2::Rect( 0, 0, image.width(), image.height() ) };
+            }
+            break;
+        case ICN::TWNKCSTL:
+            if ( icnIndex == 0 ) {
+                return { fheroes2::Rect( 127, 36, 3, 3 ), fheroes2::Rect( 287, 6, 3, 3 ) };
+            }
+            else {
+                const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icnId, icnIndex );
+                return { fheroes2::Rect( 0, 0, image.width(), image.height() ) };
+            }
+            break;
+        case ICN::TWNKDW_4:
+        case ICN::TWNKUP_4:
+            if ( icnIndex == 0 ) {
+                return { fheroes2::Rect( 61, 3, 1, 1 ) };
+            }
+            else {
+                return { fheroes2::Rect( 59, 0, 6, 5 ) };
+            }
+            break;
+        case ICN::TWNKLTUR:
+            if ( icnIndex == 0 ) {
+                return { fheroes2::Rect( 5, 6, 3, 3 ) };
+            }
+            else {
+                const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icnId, icnIndex );
+                return { fheroes2::Rect( 0, 0, image.width(), image.height() ) };
+            }
+            break;
+        case ICN::TWNKRTUR:
+            if ( icnIndex == 0 ) {
+                return { fheroes2::Rect( 55, 6, 3, 3 ) };
+            }
+            else {
+                const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icnId, icnIndex );
+                return { fheroes2::Rect( 0, 0, image.width(), image.height() ) };
+            }
+            break;
+        default:
+            // You are calling this function for unsupported image ID. Verify your logic!
+            assert( 0 );
+            break;
+        }
+
+        return {};
+    }
+
+    fheroes2::Sprite getModifiedByColorImage( const int32_t icnId, const uint32_t icnIndex, const int32_t colorId )
+    {
+        const std::vector<fheroes2::Rect> regions = getColorEffectiveAreas( icnId, icnIndex );
+        const std::vector<uint8_t> palette = getModifiedPaletteByPlayerColor( originalCastleFlagStartColorId, originalCastleFlagColorLength, colorId );
+
+        fheroes2::Sprite temp = fheroes2::AGG::GetICN( icnId, icnIndex );
+
+        for ( const fheroes2::Rect & roi : regions ) {
+            fheroes2::ApplyPalette( temp, roi.x, roi.y, temp, roi.x, roi.y, roi.width, roi.height, palette );
+        }
+
+        return temp;
+    }
+
+    bool isImagePlayerColorDependent( const int32_t icnId )
+    {
+        switch ( icnId ) {
+        case ICN::TWNZCSTL:
+        case ICN::TWNKCSTL:
+        case ICN::TWNKDW_4:
+        case ICN::TWNKUP_4:
+        case ICN::TWNKLTUR:
+        case ICN::TWNKRTUR:
+            return true;
+        default:
+            break;
+        }
+
+        return false;
+    }
+}
 
 namespace fheroes2
 {
@@ -57,7 +193,7 @@ namespace fheroes2
             break;
         default:
             assert( 0 );
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown race" );
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "unknown race" )
         }
 
         const Sprite & castleImage = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::LOCATORE : ICN::LOCATORS, icnIndex );
@@ -111,8 +247,7 @@ namespace fheroes2
 
         fheroes2::Blit( goldImage, output, roi.x + ( roi.width - goldImage.width() ) / 2, roi.y + offsetY[3] );
 
-        fheroes2::Text text;
-        text.set( std::to_string( kingdomTreasures.wood ), fontType );
+        fheroes2::Text text( std::to_string( kingdomTreasures.wood ), fontType );
         text.draw( leftColumnOffset + ( maxWidth - text.width() ) / 2, roi.y + offsetY[0] + maxHeight + 1, output );
 
         text.set( std::to_string( kingdomTreasures.sulfur ), fontType );
@@ -143,7 +278,7 @@ namespace fheroes2
         const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::TOWNNAME, 0 );
         fheroes2::Blit( background, fheroes2::Display::instance(), offset.x + 320 - background.width() / 2, offset.y + 248 );
 
-        const fheroes2::Text text( castle.GetName(), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+        const fheroes2::Text text( castle.GetName(), fheroes2::FontType::smallWhite() );
         text.draw( offset.x + 320 - text.width() / 2, offset.y + 250, output );
     }
 
@@ -158,5 +293,15 @@ namespace fheroes2
         Blit( sprite, result, 2, 2 );
 
         return result;
+    }
+
+    void drawCastleDialogBuilding( const int32_t icnId, const uint32_t icnIndex, const Castle & castle, const Point & offset, const Rect & renderArea,
+                                   const uint8_t alpha )
+    {
+        const fheroes2::Sprite & image
+            = isImagePlayerColorDependent( icnId ) ? getModifiedByColorImage( icnId, icnIndex, castle.GetColor() ) : AGG::GetICN( icnId, icnIndex );
+
+        std::pair<fheroes2::Rect, fheroes2::Point> roi = Fixed4Blit( { offset.x + image.x(), offset.y + image.y(), image.width(), image.height() }, renderArea );
+        fheroes2::AlphaBlit( image, roi.first.x, roi.first.y, fheroes2::Display::instance(), roi.second.x, roi.second.y, roi.first.width, roi.first.height, alpha );
     }
 }

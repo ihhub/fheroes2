@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -943,7 +943,8 @@ namespace ICN
         SWAP_ARROW_LEFT_TO_RIGHT,
         SWAP_ARROW_RIGHT_TO_LEFT,
 
-        CURSOR_ADVENTURE_MAP,
+        COLOR_CURSOR_ADVENTURE_MAP,
+        MONO_CURSOR_ADVENTURE_MAP,
 
         DISMISS_HERO_DISABLED_BUTTON,
         NEW_CAMPAIGN_DISABLED_BUTTON,
@@ -963,12 +964,16 @@ namespace ICN
         EVIL_ARMY_BUTTON,
         EVIL_MARKET_BUTTON,
 
+        MONO_CURSOR_ADVMBW,
+        MONO_CURSOR_SPELBW,
+        MONO_CURSOR_CMSSBW,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };
 
     const char * GetString( int );
-    u32 AnimationFrame( int icn, u32, u32, bool = false );
+    u32 AnimationFrame( int icn, u32 start, u32 ticket, bool quantity = false );
     bool HighlyObjectSprite( int icn, u32 );
     int PORTxxxx( int heroId );
 

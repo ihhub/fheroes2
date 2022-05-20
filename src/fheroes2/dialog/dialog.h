@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -40,10 +40,7 @@ class Castle;
 class Kingdom;
 class HeroBase;
 class Heroes;
-class Artifact;
-class Spell;
 class Monster;
-class Funds;
 class Troop;
 struct CapturedObject;
 
@@ -86,23 +83,15 @@ namespace Dialog
     int AdventureOptions( bool enabledig );
     fheroes2::GameMode FileOptions();
     std::string SelectFileLoad( void );
-    std::string SelectFileSave( void );
+    std::string SelectFileSave();
     // show info cell maps
     void QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile = false );
     void QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea, const fheroes2::Point & position = fheroes2::Point() );
-    void QuickInfo( const Heroes & hero, const fheroes2::Rect & activeArea, const fheroes2::Point & position = fheroes2::Point() );
+    void QuickInfo( const HeroBase & hero, const fheroes2::Rect & activeArea, const fheroes2::Point & position = fheroes2::Point() );
     int Message( const std::string &, const std::string &, int ft, int buttons = 0 /* buttons: OK : CANCEL : OK|CANCEL : YES|NO */ );
     void ExtSettings( bool );
-    int LevelUpSelectSkill( const std::string &, const std::string &, const Skill::Secondary &, const Skill::Secondary &, Heroes & );
+    int LevelUpSelectSkill( const std::string & name, const int primarySkillType, const Skill::Secondary & sec1, const Skill::Secondary & sec2, Heroes & hero );
     bool SelectGoldOrExp( const std::string &, const std::string &, u32 gold, u32 expr, const Heroes & );
-    void SpellInfo( const Spell & spell, const HeroBase * hero, const bool showOkayButton );
-    void SpellInfo( const std::string &, const std::string &, const Spell &, bool ok_button = true );
-    void SecondarySkillInfo( const Skill::Secondary &, const Heroes & hero, const bool ok_button = true );
-    void SecondarySkillInfo( const std::string &, const std::string &, const Skill::Secondary &, const Heroes & hero, const bool ok_button = true );
-    void PrimarySkillInfo( const std::string &, const std::string &, int );
-    int SpriteInfo( const std::string &, const std::string &, const fheroes2::Image &, int buttons = Dialog::OK );
-    int ArtifactInfo( const std::string &, const std::string &, const Artifact &, int buttons = Dialog::OK );
-    int ResourceInfo( const std::string &, const std::string &, const Funds &, int buttons = Dialog::OK );
     int SelectSkillFromArena( void );
     bool SelectCount( const std::string &, u32 min, u32 max, u32 & res, int step = 1 );
     bool InputString( const std::string & header, std::string & result, const std::string & title = std::string(), const size_t charLimit = 0 );
@@ -158,7 +147,7 @@ namespace Dialog
 
         int BorderWidth() const;
         int BorderHeight() const;
-        void SetPosition( int32_t posx, int32_t posy, uint32_t encw, uint32_t ench );
+        void SetPosition( int32_t posx, int32_t posy, int32_t encw, int32_t ench );
 
         bool isValid() const;
         const fheroes2::Rect & GetRect() const;

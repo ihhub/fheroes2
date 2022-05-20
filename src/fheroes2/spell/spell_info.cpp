@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,6 +27,25 @@
 
 #include <cassert>
 
+namespace
+{
+    void updateSpellDescription( const Spell & spell, std::string & description )
+    {
+        const uint32_t spellExtraValue = spell.ExtraValue();
+        switch ( spellExtraValue ) {
+        case 1:
+            StringReplace( description, "%{count}", _( "one" ) );
+            break;
+        case 2:
+            StringReplace( description, "%{count}", _( "two" ) );
+            break;
+        default:
+            StringReplace( description, "%{count}", spellExtraValue );
+            break;
+        }
+    }
+}
+
 namespace fheroes2
 {
     uint32_t getSpellDamage( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )
@@ -39,29 +58,34 @@ namespace fheroes2
             return damage;
         }
 
+        ArtifactBonusType type = ArtifactBonusType::NONE;
+
         switch ( spell.GetID() ) {
         case Spell::COLDRAY:
         case Spell::COLDRING:
-            if ( hero->hasArtifact( Artifact::EVERCOLD_ICICLE ) ) {
-                damage += damage * Artifact( Artifact::EVERCOLD_ICICLE ).ExtraValue() / 100;
-            }
+            type = ArtifactBonusType::COLD_SPELL_EXTRA_EFFECTIVENESS_PERCENT;
             break;
 
         case Spell::FIREBALL:
         case Spell::FIREBLAST:
-            if ( hero->hasArtifact( Artifact::EVERHOT_LAVA_ROCK ) ) {
-                damage += damage * Artifact( Artifact::EVERHOT_LAVA_ROCK ).ExtraValue() / 100;
-            }
+            type = ArtifactBonusType::FIRE_SPELL_EXTRA_EFFECTIVENESS_PERCENT;
             break;
 
         case Spell::LIGHTNINGBOLT:
         case Spell::CHAINLIGHTNING:
-            if ( hero->hasArtifact( Artifact::LIGHTNING_ROD ) ) {
-                damage += damage * Artifact( Artifact::LIGHTNING_ROD ).ExtraValue() / 100;
-            }
+            type = ArtifactBonusType::LIGHTNING_SPELL_EXTRA_EFFECTIVENESS_PERCENT;
             break;
         default:
             break;
+        }
+
+        if ( type == ArtifactBonusType::NONE ) {
+            return damage;
+        }
+
+        const std::vector<int32_t> extraDamagePercentage = hero->GetBagArtifacts().getTotalArtifactMultipliedPercent( type );
+        for ( const int32_t value : extraDamagePercentage ) {
+            damage = damage * ( 100 + value ) / 100;
         }
 
         return damage;
@@ -72,13 +96,16 @@ namespace fheroes2
         assert( spellPower > 0 );
 
         uint32_t monsterCount = spell.ExtraValue() * spellPower;
+
         if ( hero == nullptr ) {
             return monsterCount;
         }
 
-        uint32_t artifactCount = hero->artifactCount( Artifact::BOOK_ELEMENTS );
-        if ( artifactCount > 0 ) {
-            monsterCount *= artifactCount * 2;
+        const std::vector<int32_t> summonSpellExtraEffectPercent
+            = hero->GetBagArtifacts().getTotalArtifactMultipliedPercent( ArtifactBonusType::SUMMONING_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
+
+        for ( const int32_t value : summonSpellExtraEffectPercent ) {
+            monsterCount = monsterCount * ( 100 + value ) / 100;
         }
 
         return monsterCount;
@@ -98,13 +125,16 @@ namespace fheroes2
         assert( spellPower > 0 );
 
         uint32_t resurrectionPoints = spell.Resurrect() * spellPower;
+
         if ( hero == nullptr ) {
             return resurrectionPoints;
         }
 
-        uint32_t artifactCount = hero ? hero->artifactCount( Artifact::ANKH ) : 0;
-        if ( artifactCount ) {
-            resurrectionPoints *= artifactCount * 2;
+        const std::vector<int32_t> extraSpellEffectivenessPercent
+            = hero->GetBagArtifacts().getTotalArtifactMultipliedPercent( ArtifactBonusType::RESURRECT_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
+
+        for ( const int32_t value : extraSpellEffectivenessPercent ) {
+            resurrectionPoints = resurrectionPoints * ( 100 + value ) / 100;
         }
 
         return resurrectionPoints;
@@ -119,14 +149,22 @@ namespace fheroes2
         return spell.ExtraValue() * spellPower;
     }
 
-    uint32_t getHypnorizeMonsterHPPoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )
+    uint32_t getHypnotizeMonsterHPPoints( const Spell & spell, const uint32_t spellPower, const HeroBase * hero )
     {
-        (void)hero;
-
         assert( spell == Spell::HYPNOTIZE );
         assert( spellPower > 0 );
 
-        return spell.ExtraValue() * spellPower;
+        uint32_t hpPoints = spell.ExtraValue() * spellPower;
+
+        if ( hero != nullptr ) {
+            const std::vector<int32_t> extraEffectiveness
+                = hero->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::HYPNOTIZE_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
+            for ( const int32_t value : extraEffectiveness ) {
+                hpPoints = hpPoints * ( 100 + value ) / 100;
+            }
+        }
+
+        return hpPoints;
     }
 
     const Castle * getNearestCastleTownGate( const Heroes & hero )
@@ -134,7 +172,7 @@ namespace fheroes2
         const Kingdom & kingdom = hero.GetKingdom();
         const KingdomCastles & castles = kingdom.GetCastles();
 
-        const fheroes2::Point & heroPosition = hero.GetCenter();
+        const Point & heroPosition = hero.GetCenter();
         int32_t minDistance = -1;
 
         const Castle * nearestCastle = nullptr;
@@ -144,7 +182,7 @@ namespace fheroes2
                 continue;
             }
 
-            const fheroes2::Point & castlePosition = castle->GetCenter();
+            const Point & castlePosition = castle->GetCenter();
             const int32_t offsetX = heroPosition.x - castlePosition.x;
             const int32_t offsetY = heroPosition.y - castlePosition.y;
             const int32_t distance = offsetX * offsetX + offsetY * offsetY;
@@ -159,11 +197,12 @@ namespace fheroes2
 
     std::string getSpellDescription( const Spell & spell, const HeroBase * hero )
     {
-        if ( hero == nullptr ) {
-            return spell.GetDescription();
-        }
-
         std::string description = spell.GetDescription();
+        updateSpellDescription( spell, description );
+
+        if ( hero == nullptr ) {
+            return description;
+        }
 
         if ( spell.isDamage() ) {
             description += "\n \n";
@@ -241,13 +280,23 @@ namespace fheroes2
             description += _( "The nearest town is %{town}." );
             StringReplace( description, "%{town}", castle->GetName() );
 
+            const Heroes * townGuest = castle->GetHeroes().Guest();
+            if ( townGuest != nullptr ) {
+                description += "\n \n";
+                std::string extraLine = _( "This town is occupied by your hero %{hero}." );
+                StringReplace( extraLine, "%{town}", castle->GetName() );
+                StringReplace( extraLine, "%{hero}", townGuest->GetName() );
+
+                description += extraLine;
+            }
+
             return description;
         }
 
         if ( spell == Spell::HYPNOTIZE ) {
             description += "\n \n";
             description += _( "This spell controls up to\n%{hp} HP." );
-            StringReplace( description, "%{hp}", getHypnorizeMonsterHPPoints( spell, hero->GetPower(), hero ) );
+            StringReplace( description, "%{hp}", getHypnotizeMonsterHPPoints( spell, hero->GetPower(), hero ) );
 
             return description;
         }

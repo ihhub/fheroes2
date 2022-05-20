@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -58,19 +58,19 @@ namespace
     {
         switch ( race ) {
         case Race::KNGT:
-            return fheroes2::Point( 43, 9 );
+            return { 43, 9 };
         case Race::BARB:
-            return fheroes2::Point( 42, 8 );
+            return { 42, 8 };
         case Race::SORC:
-            return fheroes2::Point( 43, 9 );
+            return { 43, 9 };
         case Race::WRLK:
-            return fheroes2::Point( 41, 9 );
+            return { 41, 9 };
         case Race::WZRD:
-            return fheroes2::Point( 42, 10 );
+            return { 42, 10 };
         case Race::NECR:
-            return fheroes2::Point( 42, 9 );
+            return { 42, 9 };
         default:
-            return fheroes2::Point();
+            return {};
         }
     }
 }
@@ -115,7 +115,12 @@ int Captain::GetMorale( void ) const
     // global modificator
     result += GetMoraleModificator( nullptr );
 
-    // result
+    // A special artifact ability presence must be the last check.
+    const Artifact maxMoraleArtifact = bag_artifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_MORALE );
+    if ( maxMoraleArtifact.isValid() ) {
+        result = Morale::BLOOD;
+    }
+
     return Morale::Normalize( result );
 }
 
@@ -126,7 +131,12 @@ int Captain::GetLuck( void ) const
     // global modificator
     result += GetLuckModificator( nullptr );
 
-    // result
+    // A special artifact ability presence must be the last check.
+    const Artifact maxLuckArtifact = bag_artifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_LUCK );
+    if ( maxLuckArtifact.isValid() ) {
+        result = Luck::IRISH;
+    }
+
     return Luck::Normalize( result );
 }
 
@@ -213,6 +223,8 @@ fheroes2::Sprite Captain::GetPortrait( const PortraitType type ) const
         default:
             break;
         }
+        break;
+    default:
         break;
     }
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -27,6 +27,7 @@
 #include "castle.h"
 #include "cursor.h"
 #include "game.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "icn.h"
@@ -38,6 +39,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_kingdom.h"
 #include "ui_window.h"
 #include "world.h"
 
@@ -90,7 +92,7 @@ struct HeroRow
         hero = ptr;
 
         armyBar.reset( new ArmyBar( &hero->GetArmy(), true, false ) );
-        armyBar->SetBackground( fheroes2::Size( 41, 53 ), fheroes2::GetColorId( 72, 28, 0 ) );
+        armyBar->SetBackground( { 41, 53 }, fheroes2::GetColorId( 72, 28, 0 ) );
         armyBar->SetColRows( 5, 1 );
         armyBar->SetHSpace( -1 );
 
@@ -168,11 +170,18 @@ StatsHeroesList::StatsHeroesList( const fheroes2::Rect & area, const fheroes2::P
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
 
     SetTopLeft( offset );
-    SetScrollBar( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), fheroes2::Rect( offset.x + scrollbarOffset + 2, offset.y + 18, back.width(), back.height() - 2 ) );
-    SetScrollButtonUp( ICN::SCROLL, 0, 1, fheroes2::Point( offset.x + scrollbarOffset, offset.y ) );
-    SetScrollButtonDn( ICN::SCROLL, 2, 3, fheroes2::Point( offset.x + scrollbarOffset, offset.y + 20 + back.height() ) );
+    setScrollBarArea( { offset.x + scrollbarOffset + 2, offset.y + 18, back.width(), back.height() - 2 } );
+
+    const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::SCROLL, 4 );
+    const fheroes2::Image scrollbarSlider
+        = fheroes2::generateScrollbarSlider( originalSilder, false, back.height() - 2, 4, static_cast<int32_t>( heroes.size() ), { 0, 0, originalSilder.width(), 8 },
+                                             { 0, 7, originalSilder.width(), 8 } );
+
+    setScrollBarImage( scrollbarSlider );
+    SetScrollButtonUp( ICN::SCROLL, 0, 1, { offset.x + scrollbarOffset, offset.y } );
+    SetScrollButtonDn( ICN::SCROLL, 2, 3, { offset.x + scrollbarOffset, offset.y + 20 + back.height() } );
     SetAreaMaxItems( 4 );
-    SetAreaItems( fheroes2::Rect( offset.x + 30, offset.y + 17, 594, 344 ) );
+    SetAreaItems( { offset.x + 30, offset.y + 17, 594, 344 } );
     SetContent( heroes );
 }
 
@@ -190,7 +199,15 @@ void StatsHeroesList::SetContent( const KingdomHeroes & heroes )
 bool StatsHeroesList::Refresh( KingdomHeroes & heroes )
 {
     if ( heroes.size() != content.size() ) {
+        const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
+        const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::SCROLL, 4 );
+        const fheroes2::Image scrollbarSlider
+            = fheroes2::generateScrollbarSlider( originalSilder, false, back.height() - 2, 4, static_cast<int32_t>( heroes.size() ), { 0, 0, originalSilder.width(), 8 },
+                                                 { 0, 7, originalSilder.width(), 8 } );
+        setScrollBarImage( scrollbarSlider );
+
         SetContent( heroes );
+
         return true;
     }
     for ( size_t i = 0; i < content.size(); ++i ) {
@@ -336,7 +353,7 @@ struct CstlRow
         const uint8_t fill = fheroes2::GetColorId( 40, 12, 0 );
 
         armyBarGuard.reset( new ArmyBar( &castle->GetArmy(), true, false ) );
-        armyBarGuard->SetBackground( fheroes2::Size( 41, 41 ), fill );
+        armyBarGuard->SetBackground( { 41, 41 }, fill );
         armyBarGuard->SetColRows( 5, 1 );
         armyBarGuard->SetHSpace( -1 );
 
@@ -344,7 +361,7 @@ struct CstlRow
 
         if ( heroes.Guest() ) {
             armyBarGuest.reset( new ArmyBar( &heroes.Guest()->GetArmy(), true, false ) );
-            armyBarGuest->SetBackground( fheroes2::Size( 41, 41 ), fill );
+            armyBarGuest->SetBackground( { 41, 41 }, fill );
             armyBarGuest->SetColRows( 5, 1 );
             armyBarGuest->SetHSpace( -1 );
         }
@@ -352,7 +369,7 @@ struct CstlRow
             armyBarGuest.reset();
         }
 
-        dwellingsBar.reset( new DwellingsBar( *castle, fheroes2::Size( 39, 52 ) ) );
+        dwellingsBar.reset( new DwellingsBar( *castle, { 39, 52 } ) );
         dwellingsBar->SetColRows( 6, 1 );
         dwellingsBar->SetHSpace( 2 );
     }
@@ -409,11 +426,18 @@ StatsCastlesList::StatsCastlesList( const fheroes2::Rect & area, const fheroes2:
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::OVERVIEW, 13 );
 
     SetTopLeft( offset );
-    SetScrollBar( fheroes2::AGG::GetICN( ICN::SCROLL, 4 ), fheroes2::Rect( offset.x + scrollbarOffset + 2, offset.y + 18, back.width(), back.height() - 2 ) );
-    SetScrollButtonUp( ICN::SCROLL, 0, 1, fheroes2::Point( offset.x + scrollbarOffset, offset.y ) );
-    SetScrollButtonDn( ICN::SCROLL, 2, 3, fheroes2::Point( offset.x + scrollbarOffset, offset.y + 20 + back.height() ) );
+    setScrollBarArea( { offset.x + scrollbarOffset + 2, offset.y + 18, back.width(), back.height() - 2 } );
+
+    const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::SCROLL, 4 );
+    const fheroes2::Image scrollbarSlider
+        = fheroes2::generateScrollbarSlider( originalSilder, false, back.height() - 2, 4, static_cast<int32_t>( castles.size() ), { 0, 0, originalSilder.width(), 8 },
+                                             { 0, 7, originalSilder.width(), 8 } );
+
+    setScrollBarImage( scrollbarSlider );
+    SetScrollButtonUp( ICN::SCROLL, 0, 1, { offset.x + scrollbarOffset, offset.y } );
+    SetScrollButtonDn( ICN::SCROLL, 2, 3, { offset.x + scrollbarOffset, offset.y + 20 + back.height() } );
     SetAreaMaxItems( 4 );
-    SetAreaItems( fheroes2::Rect( offset.x + 30, offset.y + 17, 594, 344 ) );
+    SetAreaItems( { offset.x + 30, offset.y + 17, 594, 344 } );
 
     content.reserve( castles.size() );
 
@@ -455,8 +479,12 @@ void StatsCastlesList::ActionListPressRight( CstlRow & row, const fheroes2::Poin
             Dialog::QuickInfo( *row.castle, _area );
         else if ( fheroes2::Rect( ox + 82, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) {
             const Heroes * hero = row.castle->GetHeroes().GuardFirst();
-            if ( hero )
+            if ( hero ) {
                 Dialog::QuickInfo( *hero, _area );
+            }
+            else if ( row.castle->isBuild( BUILD_CAPTAIN ) ) {
+                Dialog::QuickInfo( row.castle->GetCaptain(), _area );
+            }
         }
     }
 }
@@ -508,8 +536,13 @@ void StatsCastlesList::RedrawItem( const CstlRow & row, s32 dstx, s32 dsty, bool
                       + std::to_string( hero->GetKnowledge() ) );
             text.Blit( dstx + 104 - text.w() / 2, dsty + 43 );
         }
-        else {
-            row.castle->GetCaptain().PortraitRedraw( dstx + 82, dsty + 19, PORT_SMALL, fheroes2::Display::instance() );
+        else if ( row.castle->GetCaptain().isValid() ) {
+            const Captain & captain = row.castle->GetCaptain();
+            captain.PortraitRedraw( dstx + 82, dsty + 19, PORT_SMALL, fheroes2::Display::instance() );
+            const std::string sep = "-";
+            text.Set( std::to_string( captain.GetAttack() ) + sep + std::to_string( captain.GetDefense() ) + sep + std::to_string( captain.GetPower() ) + sep
+                      + std::to_string( captain.GetKnowledge() ) );
+            text.Blit( dstx + 104 - text.w() / 2, dsty + 43 );
         }
 
         text.Set( row.castle->GetName() );
@@ -566,7 +599,7 @@ void StatsCastlesList::RedrawBackground( const fheroes2::Point & dst )
 
 void RedrawIncomeInfo( const fheroes2::Point & pt, const Kingdom & myKingdom )
 {
-    const Funds income = myKingdom.GetIncome( INCOME_ARTIFACTS | INCOME_HEROSKILLS );
+    const Funds income = myKingdom.GetIncome( Kingdom::INCOME_ARTIFACTS | Kingdom::INCOME_HERO_SKILLS | Kingdom::INCOME_CAMPAIGN_BONUS );
     Text text( "", Font::SMALL );
 
     text.Set( CapturedExtInfoString( Resource::WOOD, myKingdom.GetColor(), income ) );
@@ -718,11 +751,11 @@ void Kingdom::openOverviewDialog()
             Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
         }
         else if ( le.MousePressRight( rectIncome ) ) {
-            Dialog::ResourceInfo( _( "Income" ), "", GetIncome( INCOME_ALL ), 0 );
+            fheroes2::showKingdomIncome( *this, 0 );
         }
 
         // Exit this dialog.
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;
 
         // switch view: heroes/castle
@@ -744,7 +777,7 @@ void Kingdom::openOverviewDialog()
         redraw |= listStats->QueueEventProcessing();
 
         if ( le.MouseClickLeft( rectIncome ) ) {
-            Dialog::ResourceInfo( _( "Income" ), "", GetIncome( INCOME_ALL ), Dialog::OK );
+            fheroes2::showKingdomIncome( *this, Dialog::OK );
         }
 
         if ( !listStats->IsNeedRedraw() && !redraw ) {

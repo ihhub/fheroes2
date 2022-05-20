@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -70,6 +70,7 @@ namespace Maps
     Indexes ScanAroundObject( const int32_t center, const MP2::MapObjectType objectType, const bool ignoreHeroes );
     Indexes GetFreeIndexesAroundTile( const int32_t center );
 
+    bool isValidForDimensionDoor( int32_t targetIndex, bool isWater );
     // Checks if the tile is guarded by a monster
     bool isTileUnderProtection( const int32_t tileIndex );
     // Returns a list of indexes of tiles with monsters guarding the given tile
@@ -78,9 +79,9 @@ namespace Maps
     Indexes GetObjectPositions( const MP2::MapObjectType objectType, bool ignoreHeroes );
     Indexes GetObjectPositions( int32_t center, const MP2::MapObjectType objectType, bool ignoreHeroes );
 
-    void ClearFog( const int32_t tileIndex, const int scouteValue, const int playerColor );
+    void ClearFog( const int32_t tileIndex, int scouteValue, const int playerColor );
 
-    int32_t getFogTileCountToBeRevealed( const int32_t tileIndex, const int scouteValue, const int playerColor );
+    int32_t getFogTileCountToBeRevealed( const int32_t tileIndex, int scouteValue, const int playerColor );
 
     // This method should be avoided unless high precision is not important.
     uint32_t GetApproximateDistance( const int32_t pos1, const int32_t pos2 );

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -33,6 +33,7 @@
 #include "dialog_selectscenario.h"
 #include "difficulty.h"
 #include "game.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_mainmenu_ui.h"
 #include "gamedefs.h"
@@ -72,22 +73,6 @@ namespace
         }
     }
 
-    size_t GetSelectedMapId( const MapsFileInfoList & lists )
-    {
-        const Settings & conf = Settings::Get();
-
-        const std::string & mapName = conf.CurrentFileInfo().name;
-        const std::string & mapFileName = System::GetBasename( conf.CurrentFileInfo().file );
-        size_t mapId = 0;
-        for ( MapsFileInfoList::const_iterator mapIter = lists.begin(); mapIter != lists.end(); ++mapIter, ++mapId ) {
-            if ( ( mapIter->name == mapName ) && ( System::GetBasename( mapIter->file ) == mapFileName ) ) {
-                return mapId;
-            }
-        }
-
-        return 0;
-    }
-
     void RedrawScenarioStaticInfo( const fheroes2::Rect & rt, bool firstDraw = false )
     {
         const Settings & conf = Settings::Get();
@@ -104,7 +89,7 @@ namespace
         // Redraw select button as the original image has a wrong position of it
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::NGEXTRA, 64 ), display, rt.x + 309, rt.y + 45 );
 
-        fheroes2::FontType normalWhiteFont = { fheroes2::FontSize::NORMAL, fheroes2::FontColor::WHITE };
+        fheroes2::FontType normalWhiteFont = fheroes2::FontType::normalWhite();
 
         // text scenario
         fheroes2::Text text( _( "Scenario:" ), normalWhiteFont );
@@ -129,13 +114,13 @@ namespace
 
     void RedrawDifficultyInfo( const fheroes2::Point & dst )
     {
-        const uint32_t width = 77;
-        const uint32_t height = 70;
+        const int32_t width = 77;
+        const int32_t height = 70;
 
-        for ( u32 current = Difficulty::EASY; current <= Difficulty::IMPOSSIBLE; ++current ) {
-            const uint32_t offset = width * current;
+        for ( int32_t current = Difficulty::EASY; current <= Difficulty::IMPOSSIBLE; ++current ) {
+            const int32_t offset = width * current;
 
-            fheroes2::Text text( Difficulty::String( current ), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+            fheroes2::Text text( Difficulty::String( current ), fheroes2::FontType::smallWhite() );
             text.draw( dst.x + 31 + offset - ( text.width() / 2 ), dst.y + height, fheroes2::Display::instance() );
         }
     }
@@ -261,7 +246,7 @@ namespace
         while ( true ) {
             if ( !le.HandleEvents( true, true ) ) {
                 if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
-                    if ( conf.ExtGameUseFade() ) {
+                    if ( Settings::ExtGameUseFade() ) {
                         fheroes2::FadeDisplay();
                     }
                     return fheroes2::GameMode::QUIT_GAME;
@@ -276,8 +261,8 @@ namespace
             le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
             // click select
-            if ( HotKeyPressEvent( Game::EVENT_BUTTON_SELECT ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
-                const Maps::FileInfo * fi = Dialog::SelectScenario( lists, GetSelectedMapId( lists ) );
+            if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_SELECT_MAP ) || le.MouseClickLeft( buttonSelectMaps.area() ) ) {
+                const Maps::FileInfo * fi = Dialog::SelectScenario( lists );
 
                 if ( fi ) {
                     Game::SavePlayers( conf.CurrentFileInfo().file, conf.GetPlayers() );
@@ -299,12 +284,12 @@ namespace
 
                 display.render();
             }
-            else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancel.area() ) ) {
+            else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
                 result = fheroes2::GameMode::MAIN_MENU;
                 break;
             }
-            else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || le.MouseClickLeft( buttonOk.area() ) ) {
-                DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.MapsFile() << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) );
+            else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) ) {
+                DEBUG_LOG( DBG_GAME, DBG_INFO, "select maps: " << conf.MapsFile() << ", difficulty: " << Difficulty::String( Game::getDifficulty() ) )
                 result = fheroes2::GameMode::START_GAME;
                 break;
             }
@@ -362,7 +347,7 @@ namespace
                                  _( "The difficulty rating reflects a combination of various settings for your game. This number will be applied to your final score." ),
                                  Font::BIG );
                 else if ( le.MousePressRight( buttonOk.area() ) )
-                    Dialog::Message( _( "OK" ), _( "Click to accept these settings and start a new game." ), Font::BIG );
+                    Dialog::Message( _( "Okay" ), _( "Click to accept these settings and start a new game." ), Font::BIG );
                 else if ( le.MousePressRight( buttonCancel.area() ) )
                     Dialog::Message( _( "Cancel" ), _( "Click to return to the main menu." ), Font::BIG );
                 else
@@ -380,11 +365,10 @@ namespace
         Settings & conf = Settings::Get();
 
         conf.GetPlayers().SetStartGame();
-        if ( conf.ExtGameUseFade() ) {
+        if ( Settings::ExtGameUseFade() ) {
             fheroes2::FadeDisplay();
         }
 
-        Game::ShowMapLoadingText();
         // Load maps
         std::string lower = StringLower( conf.MapsFile() );
 
@@ -397,13 +381,13 @@ namespace
 
             DEBUG_LOG( DBG_GAME, DBG_WARN,
                        conf.MapsFile() << ", "
-                                       << "unknown map format" );
+                                       << "unknown map format" )
             return fheroes2::GameMode::MAIN_MENU;
         }
 
         DEBUG_LOG( DBG_GAME, DBG_WARN,
                    conf.MapsFile() << ", "
-                                   << "unknown map format" );
+                                   << "unknown map format" )
         return fheroes2::GameMode::MAIN_MENU;
     }
 }

@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,7 +38,7 @@
 #include <cmath>
 #include <set>
 
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
 #include <vita2d.h>
 #endif
 
@@ -48,7 +48,7 @@ namespace
     fheroes2::Size GetNearestResolution( int width, int height, const std::vector<fheroes2::Size> & resolutions )
     {
         if ( resolutions.empty() )
-            return fheroes2::Size( width, height );
+            return { width, height };
 
         if ( width < 1 )
             width = 1;
@@ -96,23 +96,21 @@ namespace
             return { { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } };
         }
 
-        // If here is only one resolution and it is bigger than the original we failed to find any resolutions except the current.
-        // In this case populate the list with missing resolutions.
-        if ( resolutions.size() == 1 && resolutions.front().width > fheroes2::Display::DEFAULT_WIDTH && resolutions.front().height > fheroes2::Display::DEFAULT_HEIGHT ) {
-            const std::vector<fheroes2::Size> possibleResolutions
-                = { { 640, 480 },   { 800, 600 },  { 1024, 768 },  { 1152, 864 }, { 1280, 600 }, { 1280, 720 },  { 1280, 768 }, { 1280, 960 },
-                    { 1280, 1024 }, { 1360, 768 }, { 1400, 1050 }, { 1440, 900 }, { 1600, 900 }, { 1680, 1050 }, { 1920, 1080 } };
+        // Some operating systems do not work well with SDL so they return very limited number of high resolutions.
+        // Populate missing resolutions into the list.
+        const std::vector<fheroes2::Size> possibleResolutions
+            = { { 640, 480 },   { 800, 600 },  { 1024, 768 },  { 1152, 864 }, { 1280, 600 }, { 1280, 720 },  { 1280, 768 }, { 1280, 960 },
+                { 1280, 1024 }, { 1360, 768 }, { 1400, 1050 }, { 1440, 900 }, { 1600, 900 }, { 1680, 1050 }, { 1920, 1080 } };
 
-            const fheroes2::Size currentResolution = resolutions.front();
-            for ( size_t i = 0; i < possibleResolutions.size(); ++i ) {
-                if ( currentResolution.width <= possibleResolutions[i].width || currentResolution.height <= possibleResolutions[i].height ) {
-                    continue;
-                }
-                resolutions.emplace_back( possibleResolutions[i] );
+        const fheroes2::Size lowestResolution = resolutions.back();
+        for ( const fheroes2::Size & resolution : possibleResolutions ) {
+            if ( lowestResolution.width < resolution.width || lowestResolution.height < resolution.height || resolution == lowestResolution ) {
+                continue;
             }
-
-            std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
+            resolutions.emplace_back( resolution );
         }
+
+        std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
 
         return resolutions;
     }
@@ -184,7 +182,7 @@ namespace
     const uint8_t * currentPalette = PALPalette();
 
 // If SDL library is used
-#if !defined( FHEROES2_VITA )
+#if !defined( TARGET_PS_VITA )
     class BaseSDLRenderer
     {
     protected:
@@ -203,27 +201,28 @@ namespace
 
             const bool fullFrame = ( roi.width == imageWidth ) && ( roi.height == imageHeight );
 
+            const uint8_t * imageIn = image.image();
+
             if ( fullFrame ) {
                 if ( surface->format->BitsPerPixel == 32 ) {
                     uint32_t * out = static_cast<uint32_t *>( surface->pixels );
                     const uint32_t * outEnd = out + imageWidth * imageHeight;
-                    const uint8_t * in = image.image();
+                    const uint8_t * in = imageIn;
                     const uint32_t * transform = _palette32Bit.data();
 
                     for ( ; out != outEnd; ++out, ++in )
                         *out = *( transform + *in );
                 }
                 else if ( surface->format->BitsPerPixel == 8 ) {
-                    if ( surface->pixels != image.image() ) {
+                    if ( surface->pixels != imageIn ) {
                         if ( imageWidth % 4 != 0 ) {
                             const int32_t screenWidth = ( imageWidth / 4 ) * 4 + 4;
                             for ( int32_t i = 0; i < imageHeight; ++i ) {
-                                memcpy( reinterpret_cast<int8_t *>( surface->pixels ) + screenWidth * i, image.image() + imageWidth * i,
-                                        static_cast<size_t>( imageWidth ) );
+                                memcpy( reinterpret_cast<int8_t *>( surface->pixels ) + screenWidth * i, imageIn + imageWidth * i, static_cast<size_t>( imageWidth ) );
                             }
                         }
                         else {
-                            memcpy( surface->pixels, image.image(), static_cast<size_t>( imageWidth * imageHeight ) );
+                            memcpy( surface->pixels, imageIn, static_cast<size_t>( imageWidth * imageHeight ) );
                         }
                     }
                 }
@@ -232,7 +231,7 @@ namespace
                 if ( surface->format->BitsPerPixel == 32 ) {
                     uint32_t * outY = static_cast<uint32_t *>( surface->pixels );
                     const uint32_t * outYEnd = outY + imageWidth * roi.height;
-                    const uint8_t * inY = image.image() + roi.x + roi.y * imageWidth;
+                    const uint8_t * inY = imageIn + roi.x + roi.y * imageWidth;
                     const uint32_t * transform = _palette32Bit.data();
 
                     for ( ; outY != outYEnd; outY += imageWidth, inY += imageWidth ) {
@@ -245,12 +244,12 @@ namespace
                     }
                 }
                 else if ( surface->format->BitsPerPixel == 8 ) {
-                    if ( surface->pixels != image.image() ) {
+                    if ( surface->pixels != imageIn ) {
                         const int32_t screenWidth = ( imageWidth / 4 ) * 4 + 4;
                         const int32_t screenOffset = roi.x + roi.y * screenWidth;
                         const int32_t imageOffset = roi.x + roi.y * imageWidth;
                         for ( int32_t i = 0; i < roi.height; ++i ) {
-                            memcpy( reinterpret_cast<int8_t *>( surface->pixels ) + screenWidth * i + screenOffset, image.image() + imageOffset + imageWidth * i,
+                            memcpy( reinterpret_cast<int8_t *>( surface->pixels ) + screenWidth * i + screenOffset, imageIn + imageOffset + imageWidth * i,
                                     static_cast<size_t>( roi.width ) );
                         }
                     }
@@ -492,7 +491,7 @@ namespace
 
 namespace
 {
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
     class RenderEngine : public fheroes2::BaseRenderEngine
     {
     public:
@@ -517,7 +516,7 @@ namespace
 
         fheroes2::Size getCurrentScreenResolution() const override
         {
-            return fheroes2::Size( VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT );
+            return { VITA_FULLSCREEN_WIDTH, VITA_FULLSCREEN_HEIGHT };
         }
 
         std::vector<fheroes2::Size> getAvailableResolutions() const override
@@ -543,7 +542,7 @@ namespace
             , _palettedTexturePointer( nullptr )
         {}
 
-        enum
+        enum : int32_t
         {
             VITA_FULLSCREEN_WIDTH = 960,
             VITA_FULLSCREEN_HEIGHT = 544,
@@ -709,10 +708,6 @@ namespace
             uint32_t flags = SDL_GetWindowFlags( _window );
             if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP ) {
                 flags = 0;
-
-                if ( _windowedSize.width != 0 && _windowedSize.height != 0 ) {
-                    SDL_SetWindowSize( _window, _windowedSize.width, _windowedSize.height );
-                }
             }
             else {
 #if defined( __WIN32__ )
@@ -729,6 +724,11 @@ namespace
             }
 
             SDL_SetWindowFullscreen( _window, flags );
+
+            if ( flags == 0 && _windowedSize.width != 0 && _windowedSize.height != 0 ) {
+                SDL_SetWindowSize( _window, _windowedSize.width, _windowedSize.height );
+            }
+
             _retrieveWindowInfo();
 
             _toggleMouseCaptureMode();
@@ -761,9 +761,9 @@ namespace
                     }
                 }
 
-#if defined( __SWITCH__ )
+#if defined( TARGET_NINTENDO_SWITCH )
                 // Nintendo Switch supports arbitrary resolutions via the HW scaler
-                // 848x480 is the smallest resolution supported by Free Heroes 2
+                // 848x480 is the smallest resolution supported by fheroes2
                 resolutionSet.emplace( 848, 480 );
 #endif
                 filteredResolutions = FilterResolutions( resolutionSet );
@@ -915,13 +915,11 @@ namespace
                 flags |= SDL_WINDOW_RESIZABLE;
             }
 
-            _window = SDL_CreateWindow( "", _prevWindowPos.x, _prevWindowPos.y, width_, height_, flags );
+            _window = SDL_CreateWindow( _previousWindowTitle.data(), _prevWindowPos.x, _prevWindowPos.y, width_, height_, flags );
             if ( _window == nullptr ) {
                 clear();
                 return false;
             }
-
-            SDL_SetWindowTitle( _window, _previousWindowTitle.data() );
 
             _renderer = SDL_CreateRenderer( _window, -1, renderFlags() );
             if ( _renderer == nullptr ) {
@@ -1042,7 +1040,7 @@ namespace
             _currentScreenResolution.width = displayMode.w;
             _currentScreenResolution.height = displayMode.h;
 
-#if defined( __SWITCH__ )
+#if defined( TARGET_NINTENDO_SWITCH )
             // On a Nintendo Switch the game is always fullscreen
             _activeWindowROI = fheroes2::Rect( 0, 0, _currentScreenResolution.width, _currentScreenResolution.height );
 #else
@@ -1053,12 +1051,8 @@ namespace
 
         void _toggleMouseCaptureMode()
         {
-            if ( SDL_GetNumVideoDisplays() < 2 ) {
-                // Less than 2 monitors in the system. Nothing to do.
-                return;
-            }
-
-            // This is a multi-display device. To properly support fullscreen mode it is important to lock mouse within application window area.
+            // To properly support fullscreen mode on devices with multiple displays or devices with notch,
+            // it is important to lock the mouse in the application window area.
             if ( isFullScreen() ) {
                 SDL_SetWindowGrab( _window, SDL_TRUE );
             }
@@ -1237,7 +1231,7 @@ namespace
 
         int renderFlags() const
         {
-#if defined( __WIN32__ ) || defined( ANDROID )
+#if defined( __WIN32__ )
             return SDL_HWSURFACE | SDL_HWPALETTE;
 #else
             return SDL_SWSURFACE;
@@ -1310,20 +1304,10 @@ namespace fheroes2
         std::fill( transform(), transform() + width() * height(), static_cast<uint8_t>( 1 ) );
     }
 
-    bool Display::isDefaultSize() const
-    {
-        return width() == DEFAULT_WIDTH && height() == DEFAULT_HEIGHT;
-    }
-
     Display & Display::instance()
     {
         static Display display;
         return display;
-    }
-
-    void Display::render()
-    {
-        render( Rect( 0, 0, width(), height() ) );
     }
 
     void Display::render( const Rect & roi )
@@ -1378,7 +1362,7 @@ namespace fheroes2
                 updateImage = ( _renderSurface == nullptr );
                 if ( updateImage ) {
                     // Pre-processing step is applied to the whole image so we forcefully render the full frame.
-                    _engine->render( *this, Rect( 0, 0, width(), height() ) );
+                    _engine->render( *this, { 0, 0, width(), height() } );
                     return;
                 }
             }
@@ -1389,12 +1373,6 @@ namespace fheroes2
         }
     }
 
-    void Display::subscribe( PreRenderProcessing preprocessing, PostRenderProcessing postprocessing )
-    {
-        _preprocessing = preprocessing;
-        _postprocessing = postprocessing;
-    }
-
     uint8_t * Display::image()
     {
         return _renderSurface != nullptr ? _renderSurface : Image::image();
@@ -1403,11 +1381,6 @@ namespace fheroes2
     const uint8_t * Display::image() const
     {
         return _renderSurface != nullptr ? _renderSurface : Image::image();
-    }
-
-    void Display::linkRenderSurface( uint8_t * surface )
-    {
-        _renderSurface = surface;
     }
 
     void Display::release()

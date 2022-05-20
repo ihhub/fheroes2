@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -59,6 +59,7 @@ namespace Battle
     public:
         TroopsUidGenerator() = default;
         TroopsUidGenerator( const TroopsUidGenerator & ) = delete;
+
         TroopsUidGenerator & operator=( const TroopsUidGenerator & ) = delete;
 
         uint32_t GetUnique()
@@ -74,7 +75,13 @@ namespace Battle
     {
     public:
         Arena( Army & army1, Army & army2, s32 index, bool local, Rand::DeterministicRandomGenerator & randomGenerator );
+        Arena( const Arena & ) = delete;
+        Arena( Arena && ) = delete;
+
         ~Arena();
+
+        Arena & operator=( const Arena & ) = delete;
+        Arena & operator=( Arena && ) = delete;
 
         void Turns( void );
         bool BattleValid( void ) const;
@@ -91,11 +98,11 @@ namespace Battle
         const HeroBase * GetCommander2( void ) const;
         const HeroBase * GetCurrentCommander( void ) const;
 
-        Force & GetForce1( void );
-        Force & GetForce2( void );
-        Force & getForce( const int color );
-        Force & getEnemyForce( const int color );
-        Force & GetCurrentForce( void );
+        Force & GetForce1() const;
+        Force & GetForce2() const;
+        Force & getForce( const int color ) const;
+        Force & getEnemyForce( const int color ) const;
+        Force & GetCurrentForce() const;
 
         int GetArmyColor1( void ) const;
         int GetArmyColor2( void ) const;
@@ -186,12 +193,6 @@ namespace Battle
         };
 
     private:
-        Arena( const Arena & ) = delete;
-        Arena & operator=( const Arena & ) = delete;
-
-        Arena( const Arena && ) = delete;
-        Arena & operator=( const Arena && ) = delete;
-
         void RemoteTurn( const Unit &, Actions & );
         void HumanTurn( const Unit &, Actions & );
 

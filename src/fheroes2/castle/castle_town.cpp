@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -27,10 +27,9 @@
 #include "agg_image.h"
 #include "buildinginfo.h"
 #include "castle.h"
-#include "castle_ui.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "heroes.h"
 #include "icn.h"
 #include "kingdom.h"
@@ -42,6 +41,8 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_castle.h"
+#include "ui_kingdom.h"
 #include "world.h"
 
 int Castle::DialogBuyHero( const Heroes * hero ) const
@@ -81,7 +82,7 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
 
     TextBox heroDescriptionText( str, Font::BIG, BOXAREA_WIDTH );
 
-    Resource::BoxSprite rbs( PaymentConditions::RecruitHero( hero->GetLevel() ), BOXAREA_WIDTH );
+    Resource::BoxSprite rbs( PaymentConditions::RecruitHero(), BOXAREA_WIDTH );
 
     Dialog::FrameBox box( recruitHeroText.h() + spacer + portrait_frame.height() + spacer + heroDescriptionText.h() + spacer + rbs.GetArea().height, true );
     const fheroes2::Rect & box_rt = box.GetArea();
@@ -112,7 +113,7 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
     dst_pt.y = box_rt.y + box_rt.height - fheroes2::AGG::GetICN( system, 1 ).height();
     fheroes2::Button button1( dst_pt.x, dst_pt.y, system, 1, 2 );
 
-    if ( !AllowBuyHero( *hero ) ) {
+    if ( !AllowBuyHero() ) {
         button1.disable();
     }
 
@@ -130,10 +131,10 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
         le.MousePressLeft( button1.area() ) ? button1.drawOnPress() : button1.drawOnRelease();
         le.MousePressLeft( button2.area() ) ? button2.drawOnPress() : button2.drawOnRelease();
 
-        if ( button1.isEnabled() && ( le.MouseClickLeft( button1.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) )
+        if ( button1.isEnabled() && ( le.MouseClickLeft( button1.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) )
             return Dialog::OK;
 
-        if ( le.MouseClickLeft( button2.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
+        if ( le.MouseClickLeft( button2.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) )
             break;
     }
 
@@ -311,7 +312,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     fheroes2::MovableSprite cursorFormat( fheroes2::AGG::GetICN( ICN::HSICONS, 11 ) );
 
     if ( isBuild( BUILD_CAPTAIN ) ) {
-        text.Set( _( "Attack Skill" ) + std::string( " " ), Font::SMALL );
+        text.Set( Skill::Primary::String( Skill::Primary::ATTACK ) + std::string( " " ), Font::SMALL );
         dst_pt.x = cur_pt.x + 535;
         dst_pt.y = cur_pt.y + 168;
         text.Blit( dst_pt );
@@ -320,7 +321,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         dst_pt.x += 90;
         text.Blit( dst_pt );
 
-        text.Set( _( "Defense Skill" ) + std::string( " " ) );
+        text.Set( Skill::Primary::String( Skill::Primary::DEFENSE ) + std::string( " " ) );
         dst_pt.x = cur_pt.x + 535;
         dst_pt.y += 12;
         text.Blit( dst_pt );
@@ -329,7 +330,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         dst_pt.x += 90;
         text.Blit( dst_pt );
 
-        text.Set( _( "Spell Power" ) + std::string( " " ) );
+        text.Set( Skill::Primary::String( Skill::Primary::POWER ) + std::string( " " ) );
         dst_pt.x = cur_pt.x + 535;
         dst_pt.y += 12;
         text.Blit( dst_pt );
@@ -338,7 +339,7 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         dst_pt.x += 90;
         text.Blit( dst_pt );
 
-        text.Set( _( "Knowledge" ) + std::string( " " ) );
+        text.Set( Skill::Primary::String( Skill::Primary::KNOWLEDGE ) + std::string( " " ) );
         dst_pt.x = cur_pt.x + 535;
         dst_pt.y += 12;
         text.Blit( dst_pt );
@@ -363,8 +364,8 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
 
     std::string not_allow1_msg;
     std::string not_allow2_msg;
-    const bool allow_buy_hero1 = hero1 ? AllowBuyHero( *hero1, &not_allow1_msg ) : false;
-    const bool allow_buy_hero2 = hero2 ? AllowBuyHero( *hero2, &not_allow2_msg ) : false;
+    const bool allow_buy_hero1 = hero1 ? AllowBuyHero( &not_allow1_msg ) : false;
+    const bool allow_buy_hero2 = hero2 ? AllowBuyHero( &not_allow2_msg ) : false;
 
     // first hero
     dst_pt.x = cur_pt.x + 443;
@@ -455,24 +456,24 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
             le.MousePressLeft( buttonNextCastle.area() ) ? buttonNextCastle.drawOnPress() : buttonNextCastle.drawOnRelease();
         }
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;
 
         if ( buttonPrevCastle.isEnabled()
-             && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
+             && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
             return ConstructionDialogResult::PrevConstructionWindow;
         }
         if ( buttonNextCastle.isEnabled()
-             && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
+             && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
             return ConstructionDialogResult::NextConstructionWindow;
         }
 
         if ( le.MouseClickLeft( resActiveArea ) ) {
             fheroes2::ButtonRestorer exitRestorer( buttonExit );
-            Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), Dialog::OK );
+            fheroes2::showKingdomIncome( world.GetKingdom( GetColor() ), Dialog::OK );
         }
         else if ( le.MousePressRight( resActiveArea ) ) {
-            Dialog::ResourceInfo( _( "Income" ), "", world.GetKingdom( GetColor() ).GetIncome( INCOME_ALL ), 0 );
+            fheroes2::showKingdomIncome( world.GetKingdom( GetColor() ), 0 );
         }
         else if ( le.MousePressRight( buttonExit.area() ) ) {
             Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );

@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2022                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,20 +17,15 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #pragma once
 
 #include "image.h"
-
-class Castle;
-class Funds;
+#include "ui_language.h"
 
 namespace fheroes2
 {
-    void drawCastleIcon( const Castle & castle, Image & output, const Point & offset );
+    void generateAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite );
 
-    Rect drawResourcePanel( const Funds & kingdomTreasures, Image & output, const Point & offset );
-
-    void drawCastleName( const Castle & castle, Image & output, const Point & offset );
-
-    Sprite getHeroExchangeImage();
+    bool isAlphabetSupported( const SupportedLanguage language );
 }

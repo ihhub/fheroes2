@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -29,13 +29,13 @@
 
 #include "agg.h"
 #include "agg_image.h"
-#include "audio.h"
 #include "campaign_data.h"
 #include "campaign_savedata.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "game_over.h"
 #include "highscores.h"
 #include "icn.h"
@@ -171,11 +171,6 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    // Stop all sounds, but not the music
-    Mixer::Stop();
-
-    AGG::PlayMusic( MUS::MAINMENU, true, true );
-
     const std::string highScoreDataPath = System::ConcatePath( GetSaveDir(), highScoreFileName );
 
     if ( !highScoreDataContainer.load( highScoreDataPath ) ) {
@@ -243,14 +238,10 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     // highscores loop
     while ( le.HandleEvents() ) {
-        // key code info
-        if ( Settings::Get().Debug() == 0x12 && le.KeyPress() )
-            Dialog::Message( "Key Press:", std::to_string( le.KeyValue() ), Font::SMALL, Dialog::OK );
-
         le.MousePressLeft( buttonOtherHighScore.area() ) ? buttonOtherHighScore.drawOnPress() : buttonOtherHighScore.drawOnRelease();
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow() )
             return fheroes2::GameMode::MAIN_MENU;
         if ( le.MouseClickLeft( buttonOtherHighScore.area() ) )
             return isCampaign ? fheroes2::GameMode::HIGHSCORES_STANDARD : fheroes2::GameMode::HIGHSCORES_CAMPAIGN;

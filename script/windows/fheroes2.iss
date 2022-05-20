@@ -10,8 +10,8 @@ AppPublisherURL="https://github.com/ihhub/fheroes2"
 AppUpdatesURL="https://github.com/ihhub/fheroes2/releases"
 AppSupportURL="https://discord.gg/xF85vbZ"
 LicenseFile=..\..\LICENSE
-OutputBaseFilename={#AppName}_windows_{#Platform}_{#DeployConfName}
-DefaultDirName={pf}\{#AppName}
+OutputBaseFilename={#AppName}_windows_{#Platform}_{#DeployConfName}_installer
+DefaultDirName={autopf}\{#AppName}
 DefaultGroupName={#AppName}
 UninstallDisplayIcon={app}\{#AppName}.exe
 OutputDir={#BuildDir}
@@ -20,23 +20,16 @@ ArchitecturesInstallIn64BitMode=x64
 #endif
 
 [Files]
-Source: "{#BuildDir}\{#AppName}.exe"; DestDir: "{app}"
+Source: "{#BuildDir}\{#AppName}.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#BuildDir}\lib*.dll"; DestDir: "{app}"
 Source: "{#BuildDir}\SDL*.dll"; DestDir: "{app}"
-#if DeployConfName == 'SDL2'
-Source: "{#BuildDir}\zlib*.dll"; DestDir: "{app}"
-#endif
-#if Platform == 'x86'
-Source: "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll"; DestDir: "{app}"
-Source: "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\vcruntime140.dll"; DestDir: "{app}"
-#endif
+Source: "{#BuildDir}\smpeg.dll"; DestDir: "{app}"; Flags: skipifsourcedoesntexist
 Source: "..\..\docs\README.txt"; DestDir: "{app}"
-Source: "..\demo\download_demo_version.bat"; DestDir: "{app}"
-Source: "..\demo\download_demo_version.ps1"; DestDir: "{app}"
-Source: "..\homm2\extract_homm2_resources.bat"; DestDir: "{app}"
-Source: "..\homm2\extract_homm2_resources.ps1"; DestDir: "{app}"
+Source: "..\demo\*.bat"; DestDir: "{app}"
+Source: "..\demo\*.ps1"; DestDir: "{app}"
+Source: "..\homm2\*.bat"; DestDir: "{app}"
+Source: "..\homm2\*.ps1"; DestDir: "{app}"
 Source: "..\..\changelog.txt"; DestDir: "{app}"
-Source: "..\..\fheroes2.key"; DestDir: "{app}"
 Source: "..\..\LICENSE"; DestDir: "{app}"
 Source: "..\..\files\lang\*.mo"; DestDir: "{app}\files\lang"
 Source: "..\..\files\data\*.h2d"; DestDir: "{app}\files\data"
@@ -45,12 +38,13 @@ Source: "..\..\files\data\*.h2d"; DestDir: "{app}\files\data"
 Name: desktopicon; Description: "Desktop shortcut"
 
 [Icons]
-Name: "{group}\Free Heroes of Might & Magic II"; Filename: "{app}\{#AppName}.exe"; WorkingDir: "{app}"
-Name: "{group}\Download demo version files"; Filename: "{app}\download_demo_version.bat"; WorkingDir: "{app}"
-Name: "{group}\Extract game resources from the original HoMM2 distribution"; Filename: "{app}\extract_homm2_resources.bat"; WorkingDir: "{app}"
+Name: "{group}\fheroes2"; Filename: "{app}\{#AppName}.exe"; WorkingDir: "{app}"
+Name: "{group}\Download the demo version of the original HoMM2"; Filename: "{app}\download_demo_version.bat"; WorkingDir: "{app}"
+Name: "{group}\Extract game resources from the original distribution of HoMM2"; Filename: "{app}\extract_homm2_resources.bat"; WorkingDir: "{app}"
+Name: "{group}\Resource extraction toolset"; Filename: "{app}\resource_extraction_toolset.bat"; WorkingDir: "{app}"
 Name: "{group}\Game data files"; Filename: %WINDIR%\explorer.exe; Parameters: """%APPDATA%\{#AppName}"""
 Name: "{group}\Uninstall"; Filename: "{uninstallexe}"
-Name: "{commondesktop}\Free Heroes of Might & Magic II"; Filename: "{app}\{#AppName}.exe"; WorkingDir: "{app}"; Tasks: desktopicon
+Name: "{autodesktop}\fheroes2"; Filename: "{app}\{#AppName}.exe"; WorkingDir: "{app}"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\extract_homm2_resources.bat"; Flags: runascurrentuser; Check: UseResourcesFromOriginalGame

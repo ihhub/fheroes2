@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -27,6 +27,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "maps.h"
 #include "settings.h"
@@ -47,15 +48,9 @@ Interface::Basic::Basic()
 
 void Interface::Basic::Reset()
 {
-    const fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
 
     SetHideInterface( conf.ExtGameHideInterface() );
-
-    scrollLeft = fheroes2::Rect( 0, 0, BORDERWIDTH, display.height() );
-    scrollRight = fheroes2::Rect( display.width() - BORDERWIDTH, 0, BORDERWIDTH, display.height() );
-    scrollTop = fheroes2::Rect( 0, 0, display.width(), BORDERWIDTH );
-    scrollBottom = fheroes2::Rect( 0, display.height() - BORDERWIDTH, display.width(), BORDERWIDTH );
 }
 
 void Interface::Basic::SetHideInterface( bool f )
@@ -185,7 +180,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
             cursor.SetThemes( Cursor::POINTER );
 
             le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-            if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
                 break;
         }
         else if ( visibleArea & mp ) {
@@ -194,12 +189,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
             bool valid = ( dst >= 0 );
 
             if ( valid ) {
-                const Maps::Tiles & tile = world.GetTiles( dst );
-
-                const MP2::MapObjectType objectType = tile.GetObject( true );
-                const bool isActionObject = MP2::isActionObject( objectType );
-
-                valid = ( ( spellROI & mp ) && !isActionObject && ( tile.GetPassable() & Direction::CENTER ) != 0 && water == tile.isWater() );
+                valid = ( spellROI & mp ) && Maps::isValidForDimensionDoor( dst, water );
             }
 
             cursor.SetThemes( valid ? ( water ? static_cast<int>( Cursor::CURSOR_HERO_BOAT ) : static_cast<int>( Cursor::CURSOR_HERO_MOVE ) )

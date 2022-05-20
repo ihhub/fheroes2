@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -46,6 +46,9 @@ namespace Battle
     {
     public:
         Graveyard() = default;
+        Graveyard( const Graveyard & ) = delete;
+
+        Graveyard & operator=( const Graveyard & ) = delete;
 
         Indexes GetClosedCells( void ) const;
         void AddTroop( const Unit & );

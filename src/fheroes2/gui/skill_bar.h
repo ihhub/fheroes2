@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,7 +46,7 @@ public:
 private:
     const Heroes * _hero;
     fheroes2::Image backsf;
-    bool use_mini_sprite;
+    const bool useSmallSize;
     std::vector<int> content;
     fheroes2::Point toff;
     std::string msg;

@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,11 +24,6 @@
 
 namespace fheroes2
 {
-    bool AGGFile::isGood() const
-    {
-        return !_stream.fail() && !_files.empty();
-    }
-
     bool AGGFile::open( const std::string & fileName )
     {
         if ( !_stream.open( fileName, "rb" ) )
@@ -47,11 +42,11 @@ namespace fheroes2
         StreamBuf nameEntries = _stream.toStreamBuf( nameEntriesSize );
 
         for ( size_t i = 0; i < count; ++i ) {
-            const std::string & name = nameEntries.toString( _maxFilenameSize );
+            std::string name = nameEntries.toString( _maxFilenameSize );
             fileEntries.getLE32(); // skip CRC (?) part
             const uint32_t fileOffset = fileEntries.getLE32();
             const uint32_t fileSize = fileEntries.getLE32();
-            _files.emplace( name, std::make_pair( fileSize, fileOffset ) );
+            _files.emplace( std::move( name ), std::make_pair( fileSize, fileOffset ) );
         }
         if ( _files.size() != count ) {
             _files.clear();

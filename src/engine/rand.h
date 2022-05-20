@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -94,16 +94,6 @@ namespace Rand
 
         typename std::list<T>::const_iterator it = list.begin();
         std::advance( it, Rand::Get( static_cast<uint32_t>( list.size() - 1 ) ) );
-        return *it;
-    }
-
-    template <typename T>
-    const T & GetWithSeed( const std::list<T> & list, uint32_t seed )
-    {
-        assert( !list.empty() );
-
-        typename std::list<T>::const_iterator it = list.begin();
-        std::advance( it, Rand::GetWithSeed( 0, static_cast<uint32_t>( list.size() - 1 ), seed ) );
         return *it;
     }
 

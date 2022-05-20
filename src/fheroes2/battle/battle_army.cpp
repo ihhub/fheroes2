@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -141,7 +141,7 @@ bool Battle::Force::isValid( const bool considerBattlefieldArmy /* = true */ ) c
     }
 
     // Consider only the state of the original army
-    for ( uint32_t index = 0; index < army.Size(); ++index ) {
+    for ( size_t index = 0; index < army.Size(); ++index ) {
         const Troop * troop = army.GetTroop( index );
 
         if ( troop && troop->isValid() ) {
@@ -156,20 +156,35 @@ bool Battle::Force::isValid( const bool considerBattlefieldArmy /* = true */ ) c
     return false;
 }
 
-uint32_t Battle::Force::GetSurrenderCost( void ) const
+uint32_t Battle::Force::GetSurrenderCost() const
 {
     double res = 0;
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() ) {
-            const payment_t & payment = ( *it )->GetCost();
-            res += payment.gold;
+    // Consider only the units from the original army
+    for ( size_t index = 0; index < army.Size(); ++index ) {
+        const Troop * troop = army.GetTroop( index );
+
+        if ( troop && troop->isValid() ) {
+            const Unit * unit = FindUID( uids.at( index ) );
+
+            if ( unit && unit->isValid() ) {
+                res += unit->GetSurrenderCost().gold;
+            }
         }
+    }
 
     const HeroBase * commander = GetCommander();
+
     if ( commander ) {
-        const Artifact art( Artifact::STATESMAN_QUILL );
-        double mod = commander->hasArtifact( art ) ? art.ExtraValue() / 100.0 : 0.5;
+        const std::vector<int32_t> costReductionPercent
+            = commander->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::SURRENDER_COST_REDUCTION_PERCENT );
+        double mod = 0.5;
+        if ( !costReductionPercent.empty() ) {
+            mod = 1;
+            for ( const int32_t value : costReductionPercent ) {
+                mod = mod * value / 100;
+            }
+        }
 
         switch ( commander->GetLevelSkill( Skill::Secondary::DIPLOMACY ) ) {
         case Skill::Level::BASIC:
@@ -181,9 +196,13 @@ uint32_t Battle::Force::GetSurrenderCost( void ) const
         case Skill::Level::EXPERT:
             mod *= 0.4;
             break;
+        default:
+            break;
         }
+
         res *= mod;
     }
+
     // Total cost should always be at least 1 gold
     return res >= 1 ? static_cast<uint32_t>( res + 0.5 ) : 1;
 }

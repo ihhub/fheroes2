@@ -1,13 +1,13 @@
 name: Code style check
 
 on:
-  pull_request:
-    branches: [ master ]
+  workflow_call:
 
 jobs:
   check:
     name: Code style check
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
     - uses: actions/checkout@v2
       with:
@@ -16,5 +16,14 @@ jobs:
       run: |
         sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-12 100
         sudo update-alternatives --install /usr/bin/clang-format-diff clang-format-diff /usr/bin/clang-format-diff-12 100
-    - name: Run clang-format-diff
-      run: bash ./script/tools/check_code_format.sh
+    - name: Check code format
+      run: |
+        bash script/tools/check_code_format.sh
+    - name: Check copyright headers
+      run: |
+        bash script/tools/check_copyright_headers.sh
+    - name: Check LegalCopyright date in fheroes2.rc
+      run: |
+        (grep "VALUE \"LegalCopyright\", *\"\\\\251 $(date +%Y) fheroes2 Resurrection team" src/resources/fheroes2.rc > /dev/null && \
+         echo "The date specified in the LegalCopyright entry is valid.") || \
+        (echo "Please update the date in the LegalCopyright entry!" && false)

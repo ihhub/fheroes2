@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <array>
 #include <cassert>
 
 #include "agg.h"
@@ -30,13 +31,18 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_credits.h"
+#include "game_hotkeys.h"
 #include "game_io.h"
 #include "game_video.h"
 #include "icn.h"
+#include "logging.h"
 #include "race.h"
 #include "settings.h"
 #include "text.h"
 #include "translations.h"
+#include "ui_campaign.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
 namespace
@@ -338,11 +344,36 @@ namespace
         TextBox mapDescription( scenario.getDescription(), Font::BIG, 356 );
         mapDescription.Blit( top.x + 34, top.y + 132 );
 
-        const int textChoiceWidth = 155;
+        const int textChoiceWidth = 160;
+        const fheroes2::Point initialOffset{ top.x + 425, top.y + 211 };
+        fheroes2::Display & display = fheroes2::Display::instance();
+
         for ( size_t i = 0; i < bonuses.size(); ++i ) {
-            Text choice( bonuses[i].ToString(), Font::BIG );
-            choice.Blit( top.x + 425, top.y + 209 + 22 * static_cast<int>( i ) - choice.h() / 2, textChoiceWidth );
+            fheroes2::Text choice( bonuses[i].getName(), fheroes2::FontType::normalWhite() );
+            choice.fitToOneRow( textChoiceWidth );
+
+            choice.draw( initialOffset.x, initialOffset.y + 22 * static_cast<int>( i ) - choice.height() / 2, display );
         }
+    }
+
+    bool displayScenarioBonusPopupWindow( const Campaign::ScenarioData & scenario, const fheroes2::Point & top )
+    {
+        const std::vector<Campaign::ScenarioBonusData> & bonuses = scenario.getBonuses();
+        if ( bonuses.empty() ) {
+            // Nothing to process.
+            return false;
+        }
+
+        const LocalEvent & le = LocalEvent::Get();
+
+        for ( size_t i = 0; i < bonuses.size(); ++i ) {
+            if ( le.MousePressRight( { top.x + 414, top.y + 198 + 22 * static_cast<int>( i ), 200, 22 } ) ) {
+                fheroes2::showScenarioBonusDataPopupWindow( bonuses[i] );
+                return true;
+            }
+        }
+
+        return false;
     }
 
     void drawObtainedCampaignAwards( const Campaign::CampaignSaveData & campaignSaveData, const fheroes2::Point & top )
@@ -358,21 +389,57 @@ namespace
         const size_t awardCount = obtainedAwards.size();
         const size_t indexEnd = awardCount <= 4 ? awardCount : 4;
         const int yOffset = awardCount > 3 ? 16 : 22;
+        const int initialOffsetY = 102;
 
-        Text award;
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        if ( awardCount == 0 ) {
+            const fheroes2::Text text( _( "None" ), fheroes2::FontType::normalWhite() );
+            text.draw( top.x + 425, top.y + initialOffsetY - text.height() / 2, textAwardWidth, display );
+            return;
+        }
+
+        fheroes2::Text award;
         for ( size_t i = 0; i < indexEnd; ++i ) {
-            if ( i < 3 )
-                award.Set( obtainedAwards[i].ToString(), Font::BIG );
-            else // if we have exactly 4 obtained awards, display the fourth award, otherwise show "and more..."
-                award.Set( awardCount == 4 ? obtainedAwards[i].ToString() : std::string( _( "and more..." ) ), Font::BIG );
-
-            if ( award.w() > textAwardWidth ) {
-                award.Blit( top.x + 425, top.y + 100 + yOffset * static_cast<int>( i ) - award.h() / 2, textAwardWidth );
+            if ( i < 3 ) {
+                award.set( obtainedAwards[i].getName(), fheroes2::FontType::normalWhite() );
             }
             else {
-                award.Blit( top.x + 425 + ( textAwardWidth - award.w() ) / 2, top.y + 100 + yOffset * static_cast<int>( i ) - award.h() / 2 );
+                // if we have exactly 4 obtained awards, display the fourth award, otherwise show "and more..."
+                award.set( awardCount == 4 ? obtainedAwards[i].getName() : std::string( _( "and more..." ) ), fheroes2::FontType::normalWhite() );
+            }
+
+            award.fitToOneRow( textAwardWidth );
+            award.draw( top.x + 425 + ( textAwardWidth - award.width() ) / 2, top.y + initialOffsetY + yOffset * static_cast<int>( i ) - award.height() / 2, display );
+        }
+    }
+
+    bool displayScenarioAwardsPopupWindow( const Campaign::CampaignSaveData & campaignSaveData, const fheroes2::Point & top )
+    {
+        if ( isBetrayalScenario( campaignSaveData.getCurrentScenarioInfoId() ) ) {
+            return false;
+        }
+
+        const std::vector<Campaign::CampaignAwardData> obtainedAwards = campaignSaveData.getObtainedCampaignAwards();
+        if ( obtainedAwards.empty() ) {
+            // Nothing to process.
+            return false;
+        }
+
+        const size_t awardCount = obtainedAwards.size();
+        const size_t indexEnd = awardCount <= 4 ? awardCount : 4;
+        const int yOffset = awardCount > 3 ? 16 : 22;
+
+        const LocalEvent & le = LocalEvent::Get();
+
+        for ( size_t i = 0; i < indexEnd; ++i ) {
+            if ( le.MousePressRight( { top.x + 414, top.y + 100 - yOffset / 2 + yOffset * static_cast<int>( i ), 200, yOffset } ) ) {
+                fheroes2::showAwardDataPopupWindow( obtainedAwards[i] );
+                return true;
             }
         }
+
+        return false;
     }
 
     void replaceArmy( Army & army, const std::vector<Troop> & troops )
@@ -466,7 +533,7 @@ namespace
             case Campaign::ScenarioBonusData::SKILL_PRIMARY:
                 assert( bestHero != nullptr );
                 if ( bestHero != nullptr ) {
-                    for ( uint32_t i = 0; i < scenarioBonus._amount; ++i )
+                    for ( int32_t i = 0; i < scenarioBonus._amount; ++i )
                         bestHero->IncreasePrimarySkill( scenarioBonus._subType );
                 }
                 break;
@@ -490,7 +557,7 @@ namespace
         Kingdom & humanKingdom = world.GetKingdom( Players::HumanColors() );
 
         for ( size_t i = 0; i < awards.size(); ++i ) {
-            if ( currentScenarioInfoId.scenarioId < static_cast<int>( awards[i]._startScenarioID ) )
+            if ( currentScenarioInfoId.scenarioId < awards[i]._startScenarioID )
                 continue;
 
             switch ( awards[i]._type ) {
@@ -506,7 +573,7 @@ namespace
                     const KingdomHeroes & heroes = kingdom.GetHeroes();
 
                     for ( size_t j = 0; j < heroes.size(); ++j ) {
-                        if ( heroes[j]->GetID() == static_cast<int>( awards[i]._subType ) ) {
+                        if ( heroes[j]->GetID() == awards[i]._subType ) {
                             heroes[j]->SetKillerColor( humanKingdom.GetColor() );
                             heroes[j]->SetFreeman( Battle::RESULT_LOSS );
                             break;
@@ -516,6 +583,8 @@ namespace
                 break;
             case Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES:
                 replaceArmy( humanKingdom.GetBestHero()->GetArmy(), Campaign::CampaignSaveData::Get().getCarryOverTroops() );
+                break;
+            default:
                 break;
             }
         }
@@ -634,6 +703,60 @@ namespace
             break;
         }
     }
+
+    void outputCampaignScenarioInfoInTextSupportMode( const bool allowToRestart )
+    {
+        START_TEXT_SUPPORT_MODE
+
+        const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+        const int chosenCampaignID = campaignSaveData.getCampaignID();
+        const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( chosenCampaignID );
+        const int scenarioId = campaignSaveData.getCurrentScenarioID();
+        const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
+        const Campaign::ScenarioData & scenario = scenarios[scenarioId];
+
+        COUT( "Scenario Information\n" )
+        COUT( "'" << Campaign::getCampaignName( chosenCampaignID ) << "' campaign, scenario " << scenarioId + 1 << ": " << scenario.getScenarioName() )
+        COUT( "Description: " << scenario.getDescription() << '\n' )
+
+        const std::vector<Campaign::CampaignAwardData> obtainedAwards = campaignSaveData.getObtainedCampaignAwards();
+        if ( obtainedAwards.empty() ) {
+            COUT( "Awards: None" )
+        }
+        else {
+            COUT( "Awards:" )
+            for ( const Campaign::CampaignAwardData & award : obtainedAwards ) {
+                COUT( "- " << award.getName() << " : " << award.getDescription() )
+            }
+        }
+
+        COUT( "Bonuses:" )
+        const std::vector<Campaign::ScenarioBonusData> & bonusChoices = scenario.getBonuses();
+        for ( const Campaign::ScenarioBonusData & bonus : bonusChoices ) {
+            COUT( "- " << bonus.getName() << " : " << bonus.getDescription() )
+        }
+
+        if ( !bonusChoices.empty() ) {
+            COUT( "-  Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::CAMPAIGN_SELECT_FIRST_BONUS ) << " to select the first bonus." )
+        }
+        if ( bonusChoices.size() > 1 ) {
+            COUT( "-  Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::CAMPAIGN_SELECT_SECOND_BONUS ) << " to select the second bonus." )
+        }
+        if ( bonusChoices.size() > 2 ) {
+            COUT( "-  Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::CAMPAIGN_SELECT_THIRD_BONUS ) << " to select the third bonus." )
+        }
+
+        if ( allowToRestart ) {
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_OKAY ) << " to Restart scenario." )
+        }
+        else {
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_OKAY ) << " to Start scenario." )
+        }
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::CAMPAIGN_VIEW_INTRO ) << " to View Intro Video." )
+
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to Exit this dialog." )
+    }
 }
 
 bool Game::isSuccessionWarsCampaignPresent()
@@ -658,14 +781,19 @@ bool Game::isPriceOfLoyaltyCampaignPresent()
 fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile )
 {
     Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
+    const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( saveData.getCampaignID() );
 
     if ( !isLoadingSaveFile ) {
         saveData.addCurrentMapToFinished();
         saveData.addDaysPassed( world.CountDay() );
-        Game::SaveCompletedCampaignScenario();
+
+        if ( !campaignData.isLastScenario( saveData.getLastCompletedScenarioInfoID() ) ) {
+            Game::SaveCompletedCampaignScenario();
+        }
     }
 
-    const std::vector<Campaign::CampaignAwardData> obtainableAwards = Campaign::CampaignAwardData::getCampaignAwardData( saveData.getLastCompletedScenarioInfoID() );
+    const Campaign::ScenarioInfoId & lastCompletedScenarioInfo = saveData.getLastCompletedScenarioInfoID();
+    const std::vector<Campaign::CampaignAwardData> obtainableAwards = Campaign::CampaignAwardData::getCampaignAwardData( lastCompletedScenarioInfo );
 
     // TODO: Check for awards that have to be obtained with 'freak' conditions
     for ( size_t i = 0; i < obtainableAwards.size(); ++i ) {
@@ -720,13 +848,15 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
 
     playPreviosScenarioVideo();
 
-    const Campaign::ScenarioInfoId & lastCompletedScenarioInfo = saveData.getLastCompletedScenarioInfoID();
-    const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( saveData.getCampaignID() );
     if ( campaignData.isLastScenario( lastCompletedScenarioInfo ) ) {
         Game::ShowCredits();
 
         AGG::ResetAudio();
         Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
+        // TODO : Implement function that displays the last frame of win.smk with score
+        // and a dialog for name entry. AGG:PlayMusic is run here in order to start
+        // playing before displaying the high score.
+        AGG::PlayMusic( MUS::VICTORY, true, true );
         return fheroes2::GameMode::HIGHSCORES_CAMPAIGN;
     }
 
@@ -754,9 +884,13 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     const std::vector<Campaign::ScenarioData> & scenarios = campaignData.getAllScenarios();
     const Campaign::ScenarioData & scenario = scenarios[currentScenarioInfoId.scenarioId];
 
+    fheroes2::GameInterfaceTypeRestorer gameInterfaceRestorer( chosenCampaignID != Campaign::ROLAND_CAMPAIGN );
+
     if ( !allowToRestart ) {
         playCurrentScenarioVideo();
     }
+
+    outputCampaignScenarioInfoInTextSupportMode( allowToRestart );
 
     playCampaignMusic( chosenCampaignID );
 
@@ -804,7 +938,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     const fheroes2::Point optionButtonOffset( 590, 199 );
     const int32_t optionButtonStep = 22;
 
-    const fheroes2::Sprite & pressedButton = fheroes2::AGG::GetICN( ICN::CAMPXTRG, allowToRestart ? 9 : 8 );
+    const fheroes2::Sprite & pressedButton = fheroes2::AGG::GetICN( ICN::CAMPXTRG, 8 );
     fheroes2::Sprite releaseButton( pressedButton.width(), pressedButton.height(), pressedButton.x(), pressedButton.y() );
     fheroes2::Copy( backgroundImage, optionButtonOffset.x + pressedButton.x(), optionButtonOffset.y + pressedButton.y(), releaseButton, 0, 0, releaseButton.width(),
                     releaseButton.height() );
@@ -883,6 +1017,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         choiceArea[i].width += 170;
     }
 
+    const std::array<Game::HotKeyEvent, 3> hotKeyBonusChoice{ Game::HotKeyEvent::CAMPAIGN_SELECT_FIRST_BONUS, Game::HotKeyEvent::CAMPAIGN_SELECT_SECOND_BONUS,
+                                                              Game::HotKeyEvent::CAMPAIGN_SELECT_THIRD_BONUS };
+
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
@@ -891,32 +1028,50 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         if ( allowToRestart ) {
             le.MousePressLeft( buttonRestart.area() ) ? buttonRestart.drawOnPress() : buttonRestart.drawOnRelease();
         }
-        else {
-            for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
-                if ( le.MousePressLeft( choiceArea[i] ) ) {
-                    buttonChoices.button( i ).press();
-                    optionButtonGroup.draw();
-                    scenarioBonus = bonusChoices[i];
 
-                    break;
-                }
+        for ( uint32_t i = 0; i < bonusChoiceCount; ++i ) {
+            if ( le.MousePressLeft( choiceArea[i] ) || ( i < hotKeyBonusChoice.size() && HotKeyPressEvent( hotKeyBonusChoice[i] ) ) ) {
+                buttonChoices.button( i ).press();
+                optionButtonGroup.draw();
+                scenarioBonus = bonusChoices[i];
+                display.render();
+
+                break;
             }
         }
 
         for ( uint32_t i = 0; i < selectableScenariosCount; ++i ) {
-            if ( currentScenarioInfoId != selectableScenarios[i] && le.MousePressLeft( selectableScenarioButtons.button( i ).area() ) ) {
+            if ( currentScenarioInfoId != selectableScenarios[i] && le.MouseClickLeft( selectableScenarioButtons.button( i ).area() ) ) {
                 campaignSaveData.setCurrentScenarioInfoId( selectableScenarios[i] );
                 return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
             }
         }
 
-        if ( le.MouseClickLeft( buttonCancel.area() ) || HotKeyPressEvent( EVENT_DEFAULT_EXIT ) ) {
+        if ( le.MouseClickLeft( buttonCancel.area() ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) ) {
             return prevMode;
         }
 
+        displayScenarioAwardsPopupWindow( campaignSaveData, top ) || displayScenarioBonusPopupWindow( scenario, top );
+
         const bool restartButtonClicked = ( buttonRestart.isEnabled() && le.MouseClickLeft( buttonRestart.area() ) );
 
-        if ( ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || HotKeyPressEvent( EVENT_DEFAULT_READY ) ) ) || restartButtonClicked ) {
+        if ( le.MousePressRight( buttonCancel.area() ) ) {
+            fheroes2::showMessage( fheroes2::Text( _( "Cancel" ), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( _( "Exit this menu without doing anything." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+        }
+        else if ( !allowToRestart && le.MousePressRight( buttonOk.area() ) ) {
+            fheroes2::showMessage( fheroes2::Text( _( "Okay" ), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( _( "Start the selected scenario." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+        }
+        else if ( le.MousePressRight( buttonViewIntro.area() ) ) {
+            fheroes2::showMessage( fheroes2::Text( _( "View Intro" ), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( _( "View Intro videos for the current state of the campaign." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+        }
+        else if ( allowToRestart && le.MousePressRight( buttonRestart.area() ) ) {
+            fheroes2::showMessage( fheroes2::Text( _( "Restart" ), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( _( "Restart the current scenario." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+        }
+        else if ( ( buttonOk.isEnabled() && ( le.MouseClickLeft( buttonOk.area() ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_OKAY ) ) ) || restartButtonClicked ) {
             if ( restartButtonClicked
                  && Dialog::Message( _( "Restart" ), _( "Are you sure you want to restart this scenario?" ), Font::BIG, Dialog::YES | Dialog::NO ) == Dialog::NO ) {
                 continue;
@@ -938,11 +1093,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             Players & players = conf.GetPlayers();
             players.SetStartGame();
-            if ( conf.ExtGameUseFade() )
+            if ( Settings::ExtGameUseFade() )
                 fheroes2::FadeDisplay();
 
-            fheroes2::ImageRestorer restorer( display );
-            Game::ShowMapLoadingText();
             conf.SetGameType( Game::TYPE_CAMPAIGN );
 
             if ( !world.LoadMapMP2( mapInfo.file ) ) {
@@ -950,8 +1103,6 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
                 conf.SetCurrentFileInfo( Maps::FileInfo() );
                 continue;
             }
-
-            restorer.reset();
 
             // meanwhile, the others should be called after players.SetStartGame()
             if ( scenarioBonus._type != Campaign::ScenarioBonusData::STARTING_RACE ) {
@@ -965,7 +1116,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             return fheroes2::GameMode::START_GAME;
         }
-        else if ( le.MouseClickLeft( buttonViewIntro.area() ) ) {
+        else if ( le.MouseClickLeft( buttonViewIntro.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_VIEW_INTRO ) ) {
             AGG::ResetAudio();
             fheroes2::ImageRestorer restorer( display, top.x, top.y, backgroundImage.width(), backgroundImage.height() );
             playPreviosScenarioVideo();

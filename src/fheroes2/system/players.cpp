@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -281,7 +281,7 @@ void Players::Init( int colors )
         _players[Color::GetIndex( *it )] = back();
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "Players: " << String() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Players: " << String() )
 }
 
 void Players::Init( const Maps::FileInfo & fi )
@@ -313,12 +313,12 @@ void Players::Init( const Maps::FileInfo & fi )
         if ( first )
             first->SetControl( CONTROL_HUMAN );
 
-        DEBUG_LOG( DBG_GAME, DBG_INFO, "Players: " << String() );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, "Players: " << String() )
     }
     else {
         DEBUG_LOG( DBG_GAME, DBG_INFO,
                    "Players: "
-                       << "unknown colors" );
+                       << "unknown colors" )
     }
 }
 
@@ -435,7 +435,7 @@ void Players::SetStartGame( void )
     current_color = Color::NONE;
     human_colors = Color::NONE;
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, String() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, String() )
 }
 
 int Players::HumanColors( void )

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -113,7 +113,7 @@ int32_t Rand::Queue::Get( const std::function<uint32_t( uint32_t )> & randomFunc
             return ( *it ).first;
     }
 
-    ERROR_LOG( "weight not found, return 0" );
+    ERROR_LOG( "weight not found, return 0" )
     return 0;
 }
 

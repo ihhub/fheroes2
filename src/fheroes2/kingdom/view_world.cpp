@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,7 +22,7 @@
 #include "agg_image.h"
 #include "color.h"
 #include "cursor.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "icn.h"
 #include "image.h"
@@ -67,7 +67,7 @@ namespace
         const int x = centerInPixel.x - pixelsW / 2;
         const int y = centerInPixel.y - pixelsH / 2;
 
-        return fheroes2::Rect( x, y, pixelsW, pixelsH );
+        return { x, y, pixelsW, pixelsH };
     }
 
     ViewWorld::ZoomLevel GetNextZoomLevel( const ViewWorld::ZoomLevel level, const bool cycle )
@@ -180,7 +180,7 @@ namespace
             // Draw sub-blocks of the main map, and resize them to draw them on lower-res cached versions:
             for ( int x = 0; x < worldWidthPixels; x += blockSizeX ) {
                 for ( int y = 0; y < worldHeightPixels; y += blockSizeY ) {
-                    gamearea.SetCenterInPixels( fheroes2::Point( x + blockSizeX / 2, y + blockSizeY / 2 ) );
+                    gamearea.SetCenterInPixels( { x + blockSizeX / 2, y + blockSizeY / 2 } );
                     gamearea.Redraw( temporaryImg, drawingFlags );
 
                     for ( size_t i = 0; i < cachedImages.size(); ++i ) {
@@ -250,7 +250,7 @@ namespace
         const int32_t worldWidth = world.w();
         const int32_t worldHeight = world.h();
 
-        const fheroes2::Rect roiPixels = ROI.GetROIinPixels();
+        const fheroes2::Rect & roiPixels = ROI.GetROIinPixels();
 
         const int offsetX = roiPixels.x * tileSize / TILEWIDTH;
         const int offsetY = roiPixels.y * tileSize / TILEWIDTH;
@@ -448,7 +448,7 @@ bool ViewWorld::ZoomROIs::updateCenter()
 
 bool ViewWorld::ZoomROIs::ChangeCenter( const fheroes2::Point & centerInPixels )
 {
-    const fheroes2::Rect currentRect = GetROIinPixels();
+    const fheroes2::Rect & currentRect = GetROIinPixels();
     const fheroes2::Size worldSize( world.w() * TILEWIDTH, world.h() * TILEWIDTH );
     fheroes2::Point newCenter;
 
@@ -577,7 +577,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
 
         bool changed = false;
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow ) {
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
         }
         else if ( le.MouseClickLeft( buttonZoom.area() ) ) {

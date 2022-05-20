@@ -1,6 +1,6 @@
 ###########################################################################
 #   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
-#   Copyright (C) 2021                                                    #
+#   Copyright (C) 2021 - 2022                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -18,8 +18,9 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-TARGET	:= libengine
-CFLAGS := $(CFLAGS) -I../thirdparty/libsmacker
+TARGET := libengine
+
+CCFLAGS := $(CCFLAGS) -I../thirdparty/libsmacker
 
 .PHONY: all clean
 
@@ -29,7 +30,7 @@ $(TARGET).a: $(patsubst %.cpp, %.o, $(wildcard *.cpp))
 	$(AR) crvs $@ $^
 
 %.o: %.cpp
-	$(CXX) -c -MD $< $(CFLAGS)
+	$(CXX) -c -MD $< $(CCFLAGS) $(CXXFLAGS)
 
 include $(wildcard *.d)
 

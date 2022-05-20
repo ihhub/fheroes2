@@ -1,17 +1,15 @@
 name: Clang Analyzer
 
 on:
-  pull_request:
-    branches: [ master ]
+  workflow_call:
 
 jobs:
   clang:
     name: Clang Analyzer
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
     - uses: actions/checkout@v2
-      with:
-        fetch-depth: 50
     - name: Install dependencies and clang-tools
       run: |
         sudo apt-get -y update
@@ -20,11 +18,13 @@ jobs:
       run: |
         sudo update-alternatives --install /usr/bin/scan-build scan-build /usr/bin/scan-build-12 100
     - name: Analyze
-      run: scan-build --status-bugs -v -o scan-build-result make -j 2
+      run: |
+        scan-build --status-bugs -v -o scan-build-result make -j 2
       env:
-        DEBUG: ON
         FHEROES2_STRICT_COMPILATION: ON
-        WITH_TOOLS: ON
+        FHEROES2_WITH_DEBUG: ON
+        FHEROES2_WITH_IMAGE: ON
+        FHEROES2_WITH_TOOLS: ON
     - uses: actions/upload-artifact@v2
       if: ${{ failure() }}
       with:

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -32,6 +32,7 @@
 #include "audio.h"
 #include "logging.h"
 #include "serialize.h"
+#include "tools.h"
 
 namespace
 {
@@ -65,7 +66,7 @@ XMI_Time readXMITime( const uint8_t * data )
 
     while ( *p & 0x80 ) {
         if ( 4 <= p - data ) {
-            ERROR_LOG( "Can't read XMI time: field bigger than 4 bytes" );
+            ERROR_LOG( "Can't read XMI time: field bigger than 4 bytes" )
             break;
         }
 
@@ -207,7 +208,7 @@ struct XMIData
                                 timb = sb.getRaw( iff.length );
                                 if ( timb.size() != iff.length ) {
                                     ERROR_LOG( "parse error: "
-                                               << "out of range" );
+                                               << "out of range" )
                                     break;
                                 }
                                 sb >> iff;
@@ -222,7 +223,7 @@ struct XMIData
                             // EVNT
                             if ( iff.ID != TAG_EVNT ) {
                                 ERROR_LOG( "parse error: "
-                                           << "evnt" );
+                                           << "evnt" )
                                 break;
                             }
 
@@ -230,25 +231,25 @@ struct XMIData
 
                             if ( evnt.size() != iff.length ) {
                                 ERROR_LOG( "parse error: "
-                                           << "out of range" );
+                                           << "out of range" )
                                 break;
                             }
                         }
                         else
-                            ERROR_LOG( "unknown tag: " << group.ID << " (expected FORM), " << group.type << " (expected XMID)" );
+                            ERROR_LOG( "unknown tag: " << group.ID << " (expected FORM), " << group.type << " (expected XMID)" )
                     }
                 }
                 else
                     ERROR_LOG( "parse error: "
-                               << "cat xmid" );
+                               << "cat xmid" )
             }
             else
                 ERROR_LOG( "parse error: "
-                           << "info" );
+                           << "info" )
         }
         else
             ERROR_LOG( "parse error: "
-                       << "form xdir" );
+                       << "form xdir" )
     }
 
     bool isvalid( void ) const
@@ -354,59 +355,58 @@ struct MidiEvents : public std::vector<MidiChunk>
                     // stop parsing
                     break;
                 }
-                else
-                    switch ( *ptr >> 4 ) {
-                    // metadata
-                    case 0x0F: {
-                        ++ptr; // skip 0xFF
-                        const uint8_t metaType = *( ptr++ );
-                        const uint8_t metaLength = *( ptr++ );
-                        emplace_back( delta, 0xFF, metaType, ptr, metaLength );
-                        // Tempo switch
-                        if ( metaType == 0x51 && metaLength == 3 ) {
-                            // 24bit big endian
-                            trackTempo = ( ( ( *ptr << 8 ) | *( ptr + 1 ) ) << 8 ) | *( ptr + 2 );
-                        }
-                        ptr += metaLength;
-                        break;
+
+                switch ( *ptr >> 4 ) {
+                // metadata
+                case 0x0F: {
+                    ++ptr; // skip 0xFF
+                    const uint8_t metaType = *( ptr++ );
+                    const uint8_t metaLength = *( ptr++ );
+                    emplace_back( delta, static_cast<uint8_t>( 0xFF ), metaType, ptr, metaLength );
+                    // Tempo switch
+                    if ( metaType == 0x51 && metaLength == 3 ) {
+                        // 24bit big endian
+                        trackTempo = ( ( ( *ptr << 8 ) | *( ptr + 1 ) ) << 8 ) | *( ptr + 2 );
                     }
+                    ptr += metaLength;
+                    break;
+                }
 
-                    // key pressure
-                    case 0x0A:
-                    // control change
-                    case 0x0B:
-                    // pitch bend
-                    case 0x0E:
-                        emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
-                        ptr += 3;
-                        break;
+                // key pressure
+                case 0x0A:
+                // control change
+                case 0x0B:
+                // pitch bend
+                case 0x0E:
+                    emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
+                    ptr += 3;
+                    break;
 
-                    // XMI events doesn't have note off events
-                    // note on
-                    case 0x09: {
-                        emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
-                        const XMI_Time duration = readXMITime( ptr + 3 );
-                        // note off
-                        emplace_back( delta + duration.first, *ptr - 0x10, *( ptr + 1 ), 0x7F );
-                        ptr += 3 + duration.second;
-                        break;
-                    }
+                // XMI events doesn't have note off events
+                // note on
+                case 0x09: {
+                    emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
+                    const XMI_Time duration = readXMITime( ptr + 3 );
+                    // note off
+                    emplace_back( delta + duration.first, *ptr - 0x10, *( ptr + 1 ), 0x7F );
+                    ptr += 3 + duration.second;
+                    break;
+                }
 
-                    // program change
-                    case 0x0C:
-                    // channel aftertouch
-                    case 0x0D:
-                        emplace_back( delta, *ptr, *( ptr + 1 ) );
-                        ptr += 2;
-                        break;
+                // program change
+                case 0x0C:
+                // channel aftertouch
+                case 0x0D:
+                    emplace_back( delta, *ptr, *( ptr + 1 ) );
+                    ptr += 2;
+                    break;
 
-                    // unused command
-                    default:
-                        emplace_back( 0, 0xFF, 0x2F, 0 );
-                        ERROR_LOG( "unknown st: 0x" << std::setw( 2 ) << std::setfill( '0' ) << std::hex << static_cast<int>( *ptr )
-                                                    << ", ln: " << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) );
-                        break;
-                    }
+                // unused command
+                default:
+                    emplace_back( 0, 0xFF, 0x2F, 0 );
+                    ERROR_LOG( "unknown st: " << GetHexString( static_cast<int>( *ptr ), 2 ) << ", ln: " << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) )
+                    break;
+                }
             }
         }
 
