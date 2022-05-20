@@ -68,11 +68,6 @@ namespace HighScore
     class HighScoreDataContainer
     {
     public:
-        HighScoreDataContainer()
-            : _highScoresStandard()
-            , _highScoresCampaign()
-        {}
-
         bool load( const std::string & fileName );
         bool save( const std::string & fileName ) const;
         void registerScoreStandard( const std::string & playerName, const std::string & scenarioName, const uint32_t days, const uint32_t rating );
