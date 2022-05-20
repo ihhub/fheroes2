@@ -45,7 +45,7 @@ namespace
         return ( ( conf.ConditionWins() & GameOver::WINS_HERO ) != 0 && hero == world.GetHeroesCondWins() );
     }
 
-    bool isArtifactVictoryConditionForHuman( const Artifact & art )
+    bool isFindArtifactVictoryConditionForHuman( const Artifact & art )
     {
         const Settings & conf = Settings::Get();
 
@@ -107,7 +107,7 @@ namespace
         }
 
         // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
-        if ( MP2::isArtifactObject( objectType ) && tile.QuantityArtifact().isValid() && isArtifactVictoryConditionForHuman( tile.QuantityArtifact() ) ) {
+        if ( MP2::isArtifactObject( objectType ) && tile.QuantityArtifact().isValid() && isFindArtifactVictoryConditionForHuman( tile.QuantityArtifact() ) ) {
             return false;
         }
 
@@ -725,7 +725,7 @@ namespace AI
         }
         else if ( MP2::isArtifactObject( objectType ) && tile.QuantityArtifact().isValid() ) {
             // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
-            if ( isArtifactVictoryConditionForHuman( tile.QuantityArtifact() ) ) {
+            if ( isFindArtifactVictoryConditionForHuman( tile.QuantityArtifact() ) ) {
                 assert( 0 );
                 return -dangerousTaskPenalty;
             }
@@ -984,7 +984,7 @@ namespace AI
         }
         else if ( MP2::isArtifactObject( objectType ) && tile.QuantityArtifact().isValid() ) {
             // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
-            if ( isArtifactVictoryConditionForHuman( tile.QuantityArtifact() ) ) {
+            if ( isFindArtifactVictoryConditionForHuman( tile.QuantityArtifact() ) ) {
                 assert( 0 );
                 return -dangerousTaskPenalty;
             }
