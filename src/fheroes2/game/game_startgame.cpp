@@ -647,7 +647,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     res = HumanTurn( loadedFromSave );
 
                     // Skip resetting Audio after winning scenario because MUS::VICTORY should continue playing.
-                    if ( res == fheroes2::GameMode::HIGHSCORES ) {
+                    if ( res == fheroes2::GameMode::HIGHSCORES_STANDARD ) {
                         break;
                     }
 
