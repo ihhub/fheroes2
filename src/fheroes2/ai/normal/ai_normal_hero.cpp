@@ -83,12 +83,22 @@ namespace
             return castle->GetHeroes().Guest() == nullptr;
         }
 
-        if ( !hero.isFriends( castle->GetColor() ) ) {
-            const double advantage = hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_MEDIUM;
-            return heroArmyStrength > castle->GetGarrisonStrength( &hero ) * advantage;
+        if ( hero.isFriends( castle->GetColor() ) ) {
+            return false;
         }
 
-        return false;
+        // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
+        const Heroes * castleGuest = castle->GetHeroes().Guest();
+        if ( castleGuest && isDefeatOfHeroVictoryConditionForHuman( castleGuest ) ) {
+            return false;
+        }
+        const Heroes * castleGuard = castle->GetHeroes().Guard();
+        if ( castleGuard && isDefeatOfHeroVictoryConditionForHuman( castleGuard ) ) {
+            return false;
+        }
+
+        const double advantage = hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_MEDIUM;
+        return heroArmyStrength > castle->GetGarrisonStrength( &hero ) * advantage;
     }
 
     bool isHeroStrongerThan( const Maps::Tiles & tile, const MP2::MapObjectType objectType, AI::Normal & ai, const double heroArmyStrength,
@@ -663,20 +673,37 @@ namespace AI
 
                 return value;
             }
-            else {
-                double value = castle->getBuildingValue() * 150.0 + 3000;
-                if ( hero.isLosingGame() )
-                    value += 15000;
-                // If the castle is defenseless
-                if ( !castle->GetActualArmy().isValid() )
-                    value *= 1.25;
 
-                if ( isCastleLossConditionForHuman( castle ) ) {
-                    value += 20000;
-                }
-
-                return value;
+            // Hero should never visit castles belonging to friendly kingdoms
+            if ( hero.isFriends( castle->GetColor() ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
             }
+
+            // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
+            const Heroes * castleGuest = castle->GetHeroes().Guest();
+            if ( castleGuest && isDefeatOfHeroVictoryConditionForHuman( castleGuest ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+            const Heroes * castleGuard = castle->GetHeroes().Guard();
+            if ( castleGuard && isDefeatOfHeroVictoryConditionForHuman( castleGuard ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            double value = castle->getBuildingValue() * 150.0 + 3000;
+            if ( hero.isLosingGame() )
+                value += 15000;
+            // If the castle is defenseless
+            if ( !castle->GetActualArmy().isValid() )
+                value *= 1.25;
+
+            if ( isCastleLossConditionForHuman( castle ) ) {
+                value += 20000;
+            }
+
+            return value;
         }
         else if ( objectType == MP2::OBJ_HEROES ) {
             const Heroes * otherHero = tile.GetHeroes();
@@ -694,7 +721,7 @@ namespace AI
                 return ( value < 250 ) ? valueToIgnore : std::min( value, 10000.0 );
             }
 
-            // Hero should never meet friendly heroes from another kingdom
+            // Hero should never meet heroes from friendly kingdoms
             if ( hero.isFriends( otherHero->GetColor() ) ) {
                 assert( 0 );
                 return -dangerousTaskPenalty;
@@ -922,20 +949,37 @@ namespace AI
 
                 return value / 2;
             }
-            else {
-                double value = castle->getBuildingValue() * 500.0 + 15000;
-                if ( hero.isLosingGame() )
-                    value += 15000;
-                // If the castle is defenseless
-                if ( !castle->GetActualArmy().isValid() )
-                    value *= 2.5;
 
-                if ( isCastleLossConditionForHuman( castle ) ) {
-                    value += 20000;
-                }
-
-                return value;
+            // Hero should never visit castles belonging to friendly kingdoms
+            if ( hero.isFriends( castle->GetColor() ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
             }
+
+            // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
+            const Heroes * castleGuest = castle->GetHeroes().Guest();
+            if ( castleGuest && isDefeatOfHeroVictoryConditionForHuman( castleGuest ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+            const Heroes * castleGuard = castle->GetHeroes().Guard();
+            if ( castleGuard && isDefeatOfHeroVictoryConditionForHuman( castleGuard ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            double value = castle->getBuildingValue() * 500.0 + 15000;
+            if ( hero.isLosingGame() )
+                value += 15000;
+            // If the castle is defenseless
+            if ( !castle->GetActualArmy().isValid() )
+                value *= 2.5;
+
+            if ( isCastleLossConditionForHuman( castle ) ) {
+                value += 20000;
+            }
+
+            return value;
         }
         else if ( objectType == MP2::OBJ_HEROES ) {
             const Heroes * otherHero = tile.GetHeroes();
@@ -953,7 +997,7 @@ namespace AI
                 return ( value < 250 ) ? valueToIgnore : std::min( value, 5000.0 );
             }
 
-            // Hero should never meet friendly heroes from another kingdom
+            // Hero should never meet heroes from friendly kingdoms
             if ( hero.isFriends( otherHero->GetColor() ) ) {
                 assert( 0 );
                 return -dangerousTaskPenalty;
