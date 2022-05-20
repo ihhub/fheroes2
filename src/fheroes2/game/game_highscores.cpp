@@ -465,7 +465,7 @@ fheroes2::GameMode Game::HighScores()
 {
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() && world.CountDay() ) {
-        std::string msg = std::string( "Developer mode, not save! \n \n Your result: " ) + std::to_string( GetGameOverScores() );
+        std::string msg = std::string( "Developer mode is active, the result will not be saved! \n \n Your result: " ) + std::to_string( GetGameOverScores() );
         Dialog::Message( "High Scores", msg, Font::BIG, Dialog::OK );
         return fheroes2::GameMode::MAIN_MENU;
     }
