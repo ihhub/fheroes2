@@ -1205,7 +1205,8 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, uint32_t loss ) const
 
     case GameOver::LOSS_HERO: {
         const Heroes * hero = GetHeroesCondLoss();
-        return ( hero && Heroes::UNKNOWN != heroes_cond_loss && hero->isFreeman() );
+        // The hero in question is either a freeman or was defeated and then hired by an AI-controlled kingdom
+        return ( hero && Heroes::UNKNOWN != heroes_cond_loss && ( hero->isFreeman() || GetKingdom( hero->GetColor() ).isControlAI() ) );
     }
 
     case GameOver::LOSS_TIME:
