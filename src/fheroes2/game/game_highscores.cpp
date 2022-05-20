@@ -211,9 +211,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
         if ( isCampaign ) {
             const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
-            const Campaign::CampaignData & campaignData = Campaign::CampaignData::getCampaignData( campaignSaveData.getCampaignID() );
-
-            highScoreDataContainer.registerScoreCampaign( player, campaignData.getCampaignName(), campaignSaveData.getDaysPassed() );
+            highScoreDataContainer.registerScoreCampaign( player, Campaign::getCampaignName( campaignSaveData.getCampaignID() ), campaignSaveData.getDaysPassed() );
         }
         else {
             const uint32_t rating = GetGameOverScores();
