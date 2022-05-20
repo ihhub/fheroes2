@@ -248,7 +248,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
         }
         else if ( le.MousePressRight( buttonOtherHighScore.area() ) ) {
-            Dialog::Message( _( "Standard" ), _( isCampaign ? "View High Scores for Standard Maps." : "View High Scores for Campaigns." ), Font::BIG );
+            Dialog::Message( _( "Standard" ), _( isCampaign ? _( "View High Scores for Standard Maps." ) : _( "View High Scores for Campaigns." ) ), Font::BIG );
         }
 
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
