@@ -1149,6 +1149,9 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
     }
 
     case GameOver::WINS_HERO: {
+        // This method should be called with this condition only for a human-controlled kingdom
+        assert( kingdom.isControlHuman() );
+
         const Heroes * hero = GetHeroesCondWins();
         return ( hero && Heroes::UNKNOWN != heroes_cond_wins && hero->isFreeman() && hero->GetKillerColor() == kingdom.GetColor() );
     }
@@ -1254,9 +1257,8 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
 
     const Settings & conf = Settings::Get();
 
-    // First of all, check if the other players have not completed WINS_TOWN, WINS_HERO or WINS_GOLD yet
+    // First of all, check if the other players have not completed WINS_TOWN or WINS_GOLD yet
     const std::array<std::pair<uint32_t, uint32_t>, 4> enemy_wins = { std::make_pair<uint32_t, uint32_t>( GameOver::WINS_TOWN, GameOver::LOSS_ENEMY_WINS_TOWN ),
-                                                                      std::make_pair<uint32_t, uint32_t>( GameOver::WINS_HERO, GameOver::LOSS_ENEMY_WINS_HERO ),
                                                                       std::make_pair<uint32_t, uint32_t>( GameOver::WINS_GOLD, GameOver::LOSS_ENEMY_WINS_GOLD ) };
 
     for ( const auto & item : enemy_wins ) {

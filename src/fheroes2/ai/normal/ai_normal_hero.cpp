@@ -36,6 +36,15 @@
 
 namespace
 {
+    bool isDefeatOfHeroVictoryConditionForHuman( const Heroes * hero )
+    {
+        assert( hero != nullptr );
+
+        const Settings & conf = Settings::Get();
+
+        return ( ( conf.ConditionWins() & GameOver::WINS_HERO ) != 0 && hero == world.GetHeroesCondWins() );
+    }
+
     bool isArtifactVictoryConditionForHuman( const Artifact & art )
     {
         const Settings & conf = Settings::Get();
@@ -421,18 +430,26 @@ namespace
             return false;
 
         case MP2::OBJ_HEROES: {
-            const Heroes * hero2 = tile.GetHeroes();
-            if ( hero2 ) {
-                const bool otherHeroInCastle = ( hero2->inCastle() != nullptr );
+            const Heroes * otherHero = tile.GetHeroes();
+            if ( otherHero ) {
+                const bool otherHeroInCastle = ( otherHero->inCastle() != nullptr );
 
-                if ( hero.GetColor() == hero2->GetColor() && !hero.hasMetWithHero( hero2->GetID() ) )
+                if ( hero.GetColor() == otherHero->GetColor() && !hero.hasMetWithHero( otherHero->GetID() ) ) {
                     return !otherHeroInCastle;
-                else if ( hero.isFriends( hero2->GetColor() ) )
+                }
+                else if ( hero.isFriends( otherHero->GetColor() ) ) {
                     return false;
-                else if ( otherHeroInCastle )
+                }
+                // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
+                else if ( isDefeatOfHeroVictoryConditionForHuman( otherHero ) ) {
+                    return false;
+                }
+                else if ( otherHeroInCastle ) {
                     return AIShouldVisitCastle( hero, index, heroArmyStrength );
-                else if ( army.isStrongerThan( hero2->GetArmy(), hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_SMALL ) )
+                }
+                else if ( army.isStrongerThan( otherHero->GetArmy(), hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_SMALL ) ) {
                     return true;
+                }
             }
             break;
         }
@@ -676,6 +693,19 @@ namespace AI
                 // limit the max value of friendly hero meeting to 30 tiles
                 return ( value < 250 ) ? valueToIgnore : std::min( value, 10000.0 );
             }
+
+            // Hero should never meet friendly heroes from another kingdom
+            if ( hero.isFriends( otherHero->GetColor() ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
+            if ( isDefeatOfHeroVictoryConditionForHuman( otherHero ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
             return 5000.0;
         }
         else if ( objectType == MP2::OBJ_MONSTER ) {
@@ -922,6 +952,19 @@ namespace AI
                 // limit the max value of friendly hero meeting to 30 tiles
                 return ( value < 250 ) ? valueToIgnore : std::min( value, 5000.0 );
             }
+
+            // Hero should never meet friendly heroes from another kingdom
+            if ( hero.isFriends( otherHero->GetColor() ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
+            if ( isDefeatOfHeroVictoryConditionForHuman( otherHero ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
             return 12000.0;
         }
         else if ( objectType == MP2::OBJ_MONSTER ) {
