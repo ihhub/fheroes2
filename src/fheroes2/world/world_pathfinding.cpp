@@ -35,6 +35,8 @@ namespace
 {
     bool isFindArtifactVictoryConditionForHuman( const Artifact & art )
     {
+        assert( art.isValid() );
+
         const Settings & conf = Settings::Get();
 
         if ( ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) != 0 ) {
@@ -88,25 +90,20 @@ namespace
             return otherHero->GetArmy().GetStrength() > armyStrength;
         }
 
-        if ( objectType == MP2::OBJ_MONSTER ) {
-            return Army( tile ).GetStrength() > armyStrength;
-        }
-
-        if ( objectType == MP2::OBJ_ARTIFACT ) {
+        // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
+        if ( MP2::isArtifactObject( objectType ) ) {
             const Artifact art = tile.QuantityArtifact();
 
-            // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
             if ( art.isValid() && isFindArtifactVictoryConditionForHuman( art ) ) {
                 return true;
             }
-
-            // Artifact is guarded
-            if ( tile.QuantityVariant() > 5 ) {
-                return Army( tile ).GetStrength() > armyStrength;
-            }
         }
 
-        // check if AI has the key for the barrier
+        // Monster or artifact guarded by a monster
+        if ( objectType == MP2::OBJ_MONSTER || ( objectType == MP2::OBJ_ARTIFACT && tile.QuantityVariant() > 5 ) )
+            return Army( tile ).GetStrength() > armyStrength;
+
+        // Check if AI has the key for the barrier
         if ( objectType == MP2::OBJ_BARRIER && world.GetKingdom( color ).IsVisitTravelersTent( tile.QuantityColor() ) )
             return false;
 
@@ -114,7 +111,7 @@ namespace
         if ( objectType == MP2::OBJ_BOAT )
             return false;
 
-        // if none of the special cases apply, check if tile can be moved on
+        // If none of the special cases apply, check if tile can be moved on
         return MP2::isNeedStayFront( objectType );
     }
 

@@ -56,6 +56,8 @@ namespace
 
     bool isFindArtifactVictoryConditionForHuman( const Artifact & art )
     {
+        assert( art.isValid() );
+
         const Settings & conf = Settings::Get();
 
         if ( ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) != 0 ) {
