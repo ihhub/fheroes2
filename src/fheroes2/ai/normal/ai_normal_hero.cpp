@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 
 #include "ai_normal.h"
 #include "game.h"
@@ -445,26 +446,27 @@ namespace
 
         case MP2::OBJ_HEROES: {
             const Heroes * otherHero = tile.GetHeroes();
-            if ( otherHero ) {
-                const bool otherHeroInCastle = ( otherHero->inCastle() != nullptr );
+            assert( otherHero != nullptr );
 
-                if ( hero.GetColor() == otherHero->GetColor() && !hero.hasMetWithHero( otherHero->GetID() ) ) {
-                    return !otherHeroInCastle;
-                }
-                if ( hero.isFriends( otherHero->GetColor() ) ) {
-                    return false;
-                }
-                // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
-                if ( otherHero == world.GetHeroesCondWins() ) {
-                    return false;
-                }
-                if ( otherHeroInCastle ) {
-                    return AIShouldVisitCastle( hero, index, heroArmyStrength );
-                }
-                if ( army.isStrongerThan( otherHero->GetArmy(), hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_SMALL ) ) {
-                    return true;
-                }
+            const bool otherHeroInCastle = ( otherHero->inCastle() != nullptr );
+
+            if ( hero.GetColor() == otherHero->GetColor() && !hero.hasMetWithHero( otherHero->GetID() ) ) {
+                return !otherHeroInCastle;
             }
+            if ( hero.isFriends( otherHero->GetColor() ) ) {
+                return false;
+            }
+            // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
+            if ( otherHero == world.GetHeroesCondWins() ) {
+                return false;
+            }
+            if ( otherHeroInCastle ) {
+                return AIShouldVisitCastle( hero, index, heroArmyStrength );
+            }
+            if ( army.isStrongerThan( otherHero->GetArmy(), hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_SMALL ) ) {
+                return true;
+            }
+
             break;
         }
 
