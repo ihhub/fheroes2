@@ -692,8 +692,9 @@ void World::ProcessNewMap()
     }
     if ( GameOver::LOSS_HERO & conf.ConditionLoss() ) {
         Heroes * hero = GetHeroes( conf.LossMapsPositionObject() );
+        heroes_cond_loss = hero ? hero->GetID() : Heroes::UNKNOWN;
+
         if ( hero ) {
-            heroes_cond_loss = hero->GetID();
             hero->SetModes( Heroes::NOTDISMISS | Heroes::NOTDEFAULTS );
         }
     }

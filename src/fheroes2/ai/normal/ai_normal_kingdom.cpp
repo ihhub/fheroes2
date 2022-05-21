@@ -27,17 +27,11 @@
 #include "ground.h"
 #include "logging.h"
 #include "mus.h"
-#include "settings.h"
 #include "world.h"
 
 namespace
 {
     const double fighterStrengthMultiplier = 3;
-
-    const Heroes * getHeroWhoseDefeatIsVictoryConditionForHuman()
-    {
-        return ( ( Settings::Get().ConditionWins() & GameOver::WINS_HERO ) != 0 ) ? world.GetHeroesCondWins() : nullptr;
-    }
 
     void setHeroRoles( KingdomHeroes & heroes )
     {
@@ -46,7 +40,7 @@ namespace
             return;
         }
 
-        const Heroes * valuableHero = getHeroWhoseDefeatIsVictoryConditionForHuman();
+        const Heroes * valuableHero = world.GetHeroesCondWins();
 
         if ( heroes.size() == 1 ) {
             if ( valuableHero != nullptr && valuableHero == heroes[0] ) {
@@ -94,7 +88,7 @@ namespace AI
     bool Normal::recruitHero( Castle & castle, bool buyArmy, bool underThreat )
     {
         // Re-hiring a hero related to the WINS_HERO condition is not allowed
-        const Heroes * heroToIgnore = getHeroWhoseDefeatIsVictoryConditionForHuman();
+        const Heroes * heroToIgnore = world.GetHeroesCondWins();
 
         Kingdom & kingdom = castle.GetKingdom();
         const Recruits & rec = kingdom.GetRecruits();

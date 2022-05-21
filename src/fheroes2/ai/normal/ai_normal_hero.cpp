@@ -40,9 +40,7 @@ namespace
     {
         assert( hero != nullptr );
 
-        const Settings & conf = Settings::Get();
-
-        return ( ( conf.ConditionWins() & GameOver::WINS_HERO ) != 0 && hero == world.GetHeroesCondWins() );
+        return ( hero == world.GetHeroesCondWins() );
     }
 
     bool isHeroWhoseDefeatIsVictoryConditionForHumanInCastle( const Castle * castle )

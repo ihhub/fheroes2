@@ -57,13 +57,18 @@ namespace
         // Special cases: check if we can defeat the Hero/Monster and pass through
         if ( objectType == MP2::OBJ_HEROES ) {
             const Heroes * otherHero = tile.GetHeroes();
-            if ( otherHero ) {
-                if ( otherHero->isFriends( color ) ) {
-                    return true;
-                }
+            assert( otherHero != nullptr );
 
-                return otherHero->GetArmy().GetStrength() > armyStrength;
+            if ( otherHero->isFriends( color ) ) {
+                return true;
             }
+
+            // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
+            if ( otherHero == world.GetHeroesCondWins() ) {
+                return true;
+            }
+
+            return otherHero->GetArmy().GetStrength() > armyStrength;
         }
 
         if ( objectType == MP2::OBJ_MONSTER || ( objectType == MP2::OBJ_ARTIFACT && tile.QuantityVariant() > 5 ) )
