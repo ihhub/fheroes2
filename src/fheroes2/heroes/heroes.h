@@ -229,9 +229,6 @@ public:
     int GetType() const override;
     int GetControl() const override;
 
-    int GetKillerColor( void ) const;
-    void SetKillerColor( int );
-
     const Army & GetArmy() const override;
     Army & GetArmy() override;
 
@@ -435,7 +432,6 @@ private:
     };
 
     std::string name;
-    ColorBase killer_color;
     u32 experience;
     s32 move_point_scale;
 

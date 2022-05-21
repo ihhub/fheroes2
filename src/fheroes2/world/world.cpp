@@ -1161,12 +1161,8 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
             return false;
         }
 
-        if ( hero->isFreeman() ) {
-            return hero->GetKillerColor() == kingdom.GetColor();
-        }
-
-        // The hero in question should not be hired by a human-controlled kingdom
-        return GetKingdom( hero->GetColor() ).isControlHuman();
+        // The hero in question should be either a freeman or be hired by a human-controlled kingdom
+        return ( hero->isFreeman() || GetKingdom( hero->GetColor() ).isControlHuman() );
     }
 
     case GameOver::WINS_ARTIFACT: {

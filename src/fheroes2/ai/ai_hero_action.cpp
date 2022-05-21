@@ -218,7 +218,7 @@ namespace AI
         return Skill::Primary::UNKNOWN;
     }
 
-    void AIBattleLose( Heroes & hero, const Battle::Result & res, bool attacker, int color, const fheroes2::Point * centerOn = nullptr, const bool playSound = false )
+    void AIBattleLose( Heroes & hero, const Battle::Result & res, bool attacker, const fheroes2::Point * centerOn = nullptr, const bool playSound = false )
     {
         const uint32_t reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
@@ -233,7 +233,6 @@ namespace AI
             hero.FadeOut();
         }
 
-        hero.SetKillerColor( color );
         hero.SetFreeman( reason );
     }
 
@@ -533,11 +532,11 @@ namespace AI
 
             // loss defender
             if ( !res.DefenderWins() )
-                AIBattleLose( *other_hero, res, false, hero.GetColor(), nullptr, playVanishingHeroSound );
+                AIBattleLose( *other_hero, res, false, nullptr, playVanishingHeroSound );
 
             // loss attacker
             if ( !res.AttackerWins() )
-                AIBattleLose( hero, res, true, other_hero->GetColor(), &( other_hero->GetCenter() ), playVanishingHeroSound );
+                AIBattleLose( hero, res, true, &( other_hero->GetCenter() ), playVanishingHeroSound );
 
             // wins attacker
             if ( res.AttackerWins() ) {
@@ -594,11 +593,11 @@ namespace AI
 
                 // loss defender
                 if ( !res.DefenderWins() && defender )
-                    AIBattleLose( *defender, res, false, hero.GetColor(), nullptr, playVanishingHeroSound );
+                    AIBattleLose( *defender, res, false, nullptr, playVanishingHeroSound );
 
                 // loss attacker
                 if ( !res.AttackerWins() )
-                    AIBattleLose( hero, res, true, castle->GetColor(), &( castle->GetCenter() ), playVanishingHeroSound );
+                    AIBattleLose( hero, res, true, &( castle->GetCenter() ), playVanishingHeroSound );
 
                 // wins attacker
                 if ( res.AttackerWins() ) {
@@ -682,7 +681,7 @@ namespace AI
                 destroy = true;
             }
             else {
-                AIBattleLose( hero, res, true, Color::NONE );
+                AIBattleLose( hero, res, true );
                 tile.MonsterSetCount( army.GetCountMonsters( troop.GetMonster() ) );
                 if ( tile.MonsterJoinConditionFree() )
                     tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
@@ -837,7 +836,7 @@ namespace AI
                 else {
                     capture = false;
 
-                    AIBattleLose( hero, result, true, Color::NONE );
+                    AIBattleLose( hero, result, true );
 
                     Troop & troop = world.GetCapturedObject( dst_index ).GetTroop();
                     troop.SetCount( army.GetCountMonsters( mons ) );
@@ -1213,7 +1212,7 @@ namespace AI
                 hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
             }
             else {
-                AIBattleLose( hero, res, true, Color::NONE );
+                AIBattleLose( hero, res, true );
             }
         }
 
@@ -1253,7 +1252,7 @@ namespace AI
                 hero.SetVisited( dst_index, Visit::GLOBAL );
             }
             else {
-                AIBattleLose( hero, res, true, Color::NONE );
+                AIBattleLose( hero, res, true );
             }
         }
         else {
@@ -1309,7 +1308,7 @@ namespace AI
                 hero.GetKingdom().AddFundsResource( tile.QuantityFunds() );
             }
             else {
-                AIBattleLose( hero, res, true, Color::NONE );
+                AIBattleLose( hero, res, true );
             }
 
             tile.QuantityReset();
@@ -1375,7 +1374,7 @@ namespace AI
                 hero.unmarkHeroMeeting();
             }
             else {
-                AIBattleLose( hero, res, true, Color::NONE );
+                AIBattleLose( hero, res, true );
                 allowToRecruit = false;
             }
         }
@@ -1482,7 +1481,7 @@ namespace AI
                     result = true;
                 }
                 else {
-                    AIBattleLose( hero, res, true, Color::NONE );
+                    AIBattleLose( hero, res, true );
                 }
             }
             else {
