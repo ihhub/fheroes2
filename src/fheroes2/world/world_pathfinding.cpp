@@ -23,14 +23,23 @@
 #include <set>
 #include <tuple>
 
+#include "game_over.h"
 #include "ground.h"
 #include "logging.h"
 #include "rand.h"
+#include "settings.h"
 #include "world.h"
 #include "world_pathfinding.h"
 
 namespace
 {
+    bool isFindArtifactVictoryConditionForHuman( const Artifact & art )
+    {
+        const Settings & conf = Settings::Get();
+
+        return ( ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) != 0 && art.GetID() == conf.WinsFindArtifactID() );
+    }
+
     bool isTileBlocked( int tileIndex, bool fromWater )
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
@@ -71,8 +80,23 @@ namespace
             return otherHero->GetArmy().GetStrength() > armyStrength;
         }
 
-        if ( objectType == MP2::OBJ_MONSTER || ( objectType == MP2::OBJ_ARTIFACT && tile.QuantityVariant() > 5 ) )
+        if ( objectType == MP2::OBJ_MONSTER ) {
             return Army( tile ).GetStrength() > armyStrength;
+        }
+
+        if ( objectType == MP2::OBJ_ARTIFACT ) {
+            const Artifact art = tile.QuantityArtifact();
+
+            // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
+            if ( art.isValid() && isFindArtifactVictoryConditionForHuman( art ) ) {
+                return true;
+            }
+
+            // Artifact is guarded
+            if ( tile.QuantityVariant() > 5 ) {
+                return Army( tile ).GetStrength() > armyStrength;
+            }
+        }
 
         // check if AI has the key for the barrier
         if ( objectType == MP2::OBJ_BARRIER && world.GetKingdom( color ).IsVisitTravelersTent( tile.QuantityColor() ) )

@@ -221,8 +221,8 @@ public:
     Heroes * FromJailHeroes( s32 );
     Heroes * GetFreemanHeroes( const int race, const int heroIDToIgnore = Heroes::UNKNOWN ) const;
 
-    const Heroes * GetHeroesCondWins( void ) const;
-    const Heroes * GetHeroesCondLoss( void ) const;
+    const Heroes * GetHeroesCondWins() const;
+    const Heroes * GetHeroesCondLoss() const;
 
     CastleHeroes GetHeroes( const Castle & ) const;
 

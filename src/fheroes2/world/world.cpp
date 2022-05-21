@@ -1122,12 +1122,12 @@ void World::RemoveMapObject( const MapObjectSimple * obj )
         map_objects.remove( obj->GetUID() );
 }
 
-const Heroes * World::GetHeroesCondWins( void ) const
+const Heroes * World::GetHeroesCondWins() const
 {
     return ( ( Settings::Get().ConditionWins() & GameOver::WINS_HERO ) != 0 ) ? GetHeroes( heroes_cond_wins ) : nullptr;
 }
 
-const Heroes * World::GetHeroesCondLoss( void ) const
+const Heroes * World::GetHeroesCondLoss() const
 {
     return ( ( Settings::Get().ConditionLoss() & GameOver::LOSS_HERO ) != 0 ) ? GetHeroes( heroes_cond_loss ) : nullptr;
 }

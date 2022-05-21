@@ -122,8 +122,12 @@ namespace
         }
 
         // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
-        if ( MP2::isArtifactObject( objectType ) && tile.QuantityArtifact().isValid() && isFindArtifactVictoryConditionForHuman( tile.QuantityArtifact() ) ) {
-            return false;
+        if ( MP2::isArtifactObject( objectType ) ) {
+            const Artifact art = tile.QuantityArtifact();
+
+            if ( art.isValid() && isFindArtifactVictoryConditionForHuman( art ) ) {
+                return false;
+            }
         }
 
         const Army & army = hero.GetArmy();
@@ -752,13 +756,15 @@ namespace AI
             return 3000.0;
         }
         else if ( MP2::isArtifactObject( objectType ) && tile.QuantityArtifact().isValid() ) {
+            const Artifact art = tile.QuantityArtifact();
+
             // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
-            if ( isFindArtifactVictoryConditionForHuman( tile.QuantityArtifact() ) ) {
+            if ( isFindArtifactVictoryConditionForHuman( art ) ) {
                 assert( 0 );
                 return -dangerousTaskPenalty;
             }
 
-            return 1000.0 * tile.QuantityArtifact().getArtifactValue();
+            return 1000.0 * art.getArtifactValue();
         }
         else if ( MP2::isPickupObject( objectType ) ) {
             return 850.0;
@@ -1023,13 +1029,15 @@ namespace AI
             return 5000.0;
         }
         else if ( MP2::isArtifactObject( objectType ) && tile.QuantityArtifact().isValid() ) {
+            const Artifact art = tile.QuantityArtifact();
+
             // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
-            if ( isFindArtifactVictoryConditionForHuman( tile.QuantityArtifact() ) ) {
+            if ( isFindArtifactVictoryConditionForHuman( art ) ) {
                 assert( 0 );
                 return -dangerousTaskPenalty;
             }
 
-            return 1500.0 * tile.QuantityArtifact().getArtifactValue();
+            return 1500.0 * art.getArtifactValue();
         }
         else if ( objectType == MP2::OBJ_TREASURECHEST ) {
             // Treasure chest without the artifact
