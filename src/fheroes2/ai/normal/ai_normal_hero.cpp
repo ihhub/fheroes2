@@ -45,22 +45,21 @@ namespace
         return ( ( conf.ConditionWins() & GameOver::WINS_HERO ) != 0 && hero == world.GetHeroesCondWins() );
     }
 
-    bool isCastleBelongToHeroWhoseDefeatIsVictoryConditionForHuman( const Castle * castle )
+    bool isHeroWhoseDefeatIsVictoryConditionForHumanInCastle( const Castle * castle )
     {
         assert( castle != nullptr );
 
-        const Settings & conf = Settings::Get();
-
-        if ( ( conf.ConditionWins() & GameOver::WINS_HERO ) == 0 ) {
-            return false;
+        const Heroes * castleGuest = castle->GetHeroes().Guest();
+        if ( castleGuest && isDefeatOfHeroVictoryConditionForHuman( castleGuest ) ) {
+            return true;
         }
 
-        const Heroes * hero = world.GetHeroesCondWins();
-        if ( hero == nullptr || hero->isFreeman() ) {
-            return false;
+        const Heroes * castleGuard = castle->GetHeroes().Guard();
+        if ( castleGuard && isDefeatOfHeroVictoryConditionForHuman( castleGuard ) ) {
+            return true;
         }
 
-        return ( ( castle->GetColor() & Color::ALL ) && castle->GetColor() == hero->GetColor() );
+        return false;
     }
 
     bool isFindArtifactVictoryConditionForHuman( const Artifact & art )
@@ -105,9 +104,9 @@ namespace
             return false;
         }
 
-        // WINS_HERO victory condition does not apply to AI-controlled players, we have to ignore the castles
-        // belonging to the kingdom to which the target hero belongs in order to avoid his defeat by AI
-        if ( isCastleBelongToHeroWhoseDefeatIsVictoryConditionForHuman( castle ) ) {
+        // WINS_HERO victory condition does not apply to AI-controlled players, we have to ignore the castle with this hero
+        // to keep him alive for the human player
+        if ( isHeroWhoseDefeatIsVictoryConditionForHumanInCastle( castle ) ) {
             return false;
         }
 
@@ -694,9 +693,9 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            // WINS_HERO victory condition does not apply to AI-controlled players, we have to ignore the castles
-            // belonging to the kingdom to which the target hero belongs in order to avoid his defeat by AI
-            if ( isCastleBelongToHeroWhoseDefeatIsVictoryConditionForHuman( castle ) ) {
+            // WINS_HERO victory condition does not apply to AI-controlled players, we have to ignore the castle with this hero
+            // to keep him alive for the human player
+            if ( isHeroWhoseDefeatIsVictoryConditionForHumanInCastle( castle ) ) {
                 assert( 0 );
                 return -dangerousTaskPenalty;
             }
@@ -965,9 +964,9 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            // WINS_HERO victory condition does not apply to AI-controlled players, we have to ignore the castles
-            // belonging to the kingdom to which the target hero belongs in order to avoid his defeat by AI
-            if ( isCastleBelongToHeroWhoseDefeatIsVictoryConditionForHuman( castle ) ) {
+            // WINS_HERO victory condition does not apply to AI-controlled players, we have to ignore the castle with this hero
+            // to keep him alive for the human player
+            if ( isHeroWhoseDefeatIsVictoryConditionForHumanInCastle( castle ) ) {
                 assert( 0 );
                 return -dangerousTaskPenalty;
             }
