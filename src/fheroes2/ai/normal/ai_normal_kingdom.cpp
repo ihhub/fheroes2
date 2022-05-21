@@ -34,9 +34,9 @@ namespace
 {
     const double fighterStrengthMultiplier = 3;
 
-    bool isHeroLossCondition()
+    const Heroes * getHeroWhoseDefeatIsVictoryConditionForHuman()
     {
-        return ( Settings::Get().ConditionWins() & GameOver::WINS_HERO ) != 0;
+        return ( ( Settings::Get().ConditionWins() & GameOver::WINS_HERO ) != 0 ) ? world.GetHeroesCondWins() : nullptr;
     }
 
     void setHeroRoles( KingdomHeroes & heroes )
@@ -46,11 +46,11 @@ namespace
             return;
         }
 
-        const Heroes * heroToLose = isHeroLossCondition() ? world.GetHeroesCondWins() : nullptr;
+        const Heroes * valuableHero = getHeroWhoseDefeatIsVictoryConditionForHuman();
 
         if ( heroes.size() == 1 ) {
-            if ( heroToLose != nullptr && heroToLose == heroes[0] ) {
-                // TODO: a hero to be lost must be marked as a champion.
+            if ( valuableHero != nullptr && valuableHero == heroes[0] ) {
+                // TODO: a valuable hero must be marked as a champion.
                 heroes[0]->setAIRole( Heroes::Role::FIGHTER );
             }
             else {
@@ -73,8 +73,8 @@ namespace
         const double medianStrength = heroStrength[heroStrength.size() / 2].first;
 
         for ( std::pair<double, Heroes *> & hero : heroStrength ) {
-            // TODO: a hero to be lost must be marked as a champion.
-            if ( heroToLose != nullptr && hero.second == heroToLose ) {
+            // TODO: a valuable hero must be marked as a champion.
+            if ( valuableHero != nullptr && hero.second == valuableHero ) {
                 hero.second->setAIRole( Heroes::Role::FIGHTER );
                 continue;
             }
@@ -93,16 +93,26 @@ namespace AI
 {
     bool Normal::recruitHero( Castle & castle, bool buyArmy, bool underThreat )
     {
+        // Re-hiring a hero related to the WINS_HERO condition is not allowed
+        const Heroes * heroToIgnore = getHeroWhoseDefeatIsVictoryConditionForHuman();
+
         Kingdom & kingdom = castle.GetKingdom();
         const Recruits & rec = kingdom.GetRecruits();
+
         Heroes * recruit = nullptr;
-        Heroes * firstRecruit = rec.GetHero1();
-        Heroes * secondRecruit = rec.GetHero2();
-        if ( firstRecruit && secondRecruit && secondRecruit->getRecruitValue() > firstRecruit->getRecruitValue() ) {
-            recruit = castle.RecruitHero( secondRecruit );
+        Heroes * firstRecruit = ( rec.GetHero1() != heroToIgnore ) ? rec.GetHero1() : nullptr;
+        Heroes * secondRecruit = ( rec.GetHero2() != heroToIgnore ) ? rec.GetHero2() : nullptr;
+
+        if ( firstRecruit && secondRecruit ) {
+            if ( secondRecruit->getRecruitValue() > firstRecruit->getRecruitValue() ) {
+                recruit = castle.RecruitHero( secondRecruit );
+            }
+            else {
+                recruit = castle.RecruitHero( firstRecruit );
+            }
         }
         else {
-            recruit = castle.RecruitHero( firstRecruit );
+            recruit = firstRecruit ? castle.RecruitHero( firstRecruit ) : castle.RecruitHero( secondRecruit );
         }
 
         if ( recruit && buyArmy ) {
