@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 
 #include "artifact.h"
 #include "campaign_data.h"
