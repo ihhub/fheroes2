@@ -1214,227 +1214,299 @@ msgstr ""
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
 msgstr ""
 
+#, fuzzy
 msgid "campaignBonus|Ballista"
-msgstr ""
+msgstr "Баліста"
 
+#, fuzzy
 msgid "campaignBonus|Black Pearl"
-msgstr ""
+msgstr "Чорна перлина"
 
 msgid "campaignBonus|Caster's Bracelet"
 msgstr ""
 
+#, fuzzy
 msgid "campaignBonus|Defender Helm"
-msgstr ""
+msgstr "Шолом захисника"
 
+#, fuzzy
 msgid "campaignBonus|Breastplate"
-msgstr ""
+msgstr "Нагрудник"
 
+#, fuzzy
 msgid "campaignBonus|Dragon Sword"
-msgstr ""
+msgstr "Меч дракона"
 
 msgid "campaignBonus|Fizbin Medal"
 msgstr ""
 
+#, fuzzy
 msgid "campaignBonus|Foremost Scroll"
-msgstr ""
+msgstr "Вищий сувій"
 
+#, fuzzy
 msgid "campaignBonus|Hideous Mask"
-msgstr ""
+msgstr "Мерзенна маска"
 
+#, fuzzy
 msgid "campaignBonus|Mage's Ring"
-msgstr ""
+msgstr "Кільце Мага"
 
+#, fuzzy
 msgid "campaignBonus|Major Scroll"
-msgstr ""
+msgstr "Великий сувій"
 
+#, fuzzy
 msgid "campaignBonus|Medal of Honor"
-msgstr ""
+msgstr "Почесну медаль"
 
+#, fuzzy
 msgid "campaignBonus|Medal of Valor"
-msgstr ""
+msgstr "Медаль за доблесть"
 
+#, fuzzy
 msgid "campaignBonus|Minor Scroll"
-msgstr ""
+msgstr "Малий сувій"
 
+#, fuzzy
 msgid "campaignBonus|Nomad Boots"
-msgstr ""
+msgstr "Чоботи кочівника"
 
+#, fuzzy
 msgid "campaignBonus|Power Axe"
-msgstr ""
+msgstr "Сокира Сили"
 
+#, fuzzy
 msgid "campaignBonus|Spiked Shield"
-msgstr ""
+msgstr "Щит із шипами"
 
+#, fuzzy
 msgid "campaignBonus|Stealth Shield"
-msgstr ""
+msgstr "Незримий щит"
 
+#, fuzzy
 msgid "campaignBonus|Tax Lien"
-msgstr ""
+msgstr "Податкова грамота"
 
+#, fuzzy
 msgid "campaignBonus|Thunder Mace"
-msgstr ""
+msgstr "Громова булава"
 
+#, fuzzy
 msgid "campaignBonus|Traveler's Boots"
-msgstr ""
+msgstr "Чоботи мандрівника"
 
+#, fuzzy
 msgid "campaignBonus|White Pearl"
-msgstr ""
+msgstr "Біла перлина"
 
+#, fuzzy
 msgid "campaignBonus|Basic Archery"
-msgstr ""
+msgstr "Базова Стрільба"
 
+#, fuzzy
 msgid "campaignBonus|Advanced Archery"
-msgstr ""
+msgstr "Просунута Стрільба"
 
+#, fuzzy
 msgid "campaignBonus|Expert Archery"
-msgstr ""
+msgstr "Експертна Стрільба"
 
+#, fuzzy
 msgid "campaignBonus|Basic Ballistics"
-msgstr ""
+msgstr "Базова Балістика"
 
+#, fuzzy
 msgid "campaignBonus|Advanced Ballistics"
-msgstr ""
+msgstr "Просунута Балістика"
 
+#, fuzzy
 msgid "campaignBonus|Expert Ballistics"
-msgstr ""
+msgstr "Експертна Балістика"
 
+#, fuzzy
 msgid "campaignBonus|Basic Diplomacy"
-msgstr ""
+msgstr "Базова Дипломатія"
 
+#, fuzzy
 msgid "campaignBonus|Advanced Diplomacy"
-msgstr ""
+msgstr "Просунута Дипломатія"
 
+#, fuzzy
 msgid "campaignBonus|Expert Diplomacy"
-msgstr ""
+msgstr "Експертна Дипломатія"
 
+#, fuzzy
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr ""
+msgstr "Базовий Орлиний зір"
 
+#, fuzzy
 msgid "campaignBonus|Advanced Eagle Eye"
-msgstr ""
+msgstr "Просунутий Орлиний зір"
 
+#, fuzzy
 msgid "campaignBonus|Expert Eagle Eye"
-msgstr ""
+msgstr "Експертний Орлиний зір"
 
+#, fuzzy
 msgid "campaignBonus|Basic Estates"
-msgstr ""
+msgstr "Базова Шляхетність"
 
+#, fuzzy
 msgid "campaignBonus|Advanced Estates"
-msgstr ""
+msgstr "Просунута Шляхетність"
 
+#, fuzzy
 msgid "campaignBonus|Expert Estates"
-msgstr ""
+msgstr "Експертна Шляхетність"
 
+#, fuzzy
 msgid "campaignBonus|Basic Leadership"
-msgstr ""
+msgstr "Базове Лідерство"
 
+#, fuzzy
 msgid "campaignBonus|Advanced Leadership"
-msgstr ""
+msgstr "Просунуте Лідерство"
 
+#, fuzzy
 msgid "campaignBonus|Expert Leadership"
-msgstr ""
+msgstr "Експертне Лідерство"
 
+#, fuzzy
 msgid "campaignBonus|Basic Logistics"
-msgstr ""
+msgstr "Базова Логістика"
 
+#, fuzzy
 msgid "campaignBonus|Advanced Logistics"
-msgstr ""
+msgstr "Просунута Логістика"
 
+#, fuzzy
 msgid "campaignBonus|Expert Logistics"
-msgstr ""
+msgstr "Експертна Логістика"
 
+#, fuzzy
 msgid "campaignBonus|Basic Luck"
-msgstr ""
+msgstr "Базова Удача"
 
+#, fuzzy
 msgid "campaignBonus|Advanced Luck"
-msgstr ""
+msgstr "Просунута Удача"
 
+#, fuzzy
 msgid "campaignBonus|Expert Luck"
-msgstr ""
+msgstr "Еспертна Удача"
 
+#, fuzzy
 msgid "campaignBonus|Basic Mysticism"
-msgstr ""
+msgstr "Базовий Містицизм"
 
+#, fuzzy
 msgid "campaignBonus|Advanced Mysticism"
-msgstr ""
+msgstr "Просунутий Містицизм"
 
+#, fuzzy
 msgid "campaignBonus|Expert Mysticism"
-msgstr ""
+msgstr "Експертний Містицизм"
 
+#, fuzzy
 msgid "campaignBonus|Basic Navigation"
-msgstr ""
+msgstr "Базова Навігація"
 
+#, fuzzy
 msgid "campaignBonus|Advanced Navigation"
-msgstr ""
+msgstr "Просунута Навігація"
 
+#, fuzzy
 msgid "campaignBonus|Expert Navigation"
-msgstr ""
+msgstr "Експертна Навігація"
 
+#, fuzzy
 msgid "campaignBonus|Basic Necromancy"
-msgstr ""
+msgstr "Базова Некромантія"
 
+#, fuzzy
 msgid "campaignBonus|Advanced Necromancy"
-msgstr ""
+msgstr "Просунута Некромантія"
 
+#, fuzzy
 msgid "campaignBonus|Expert Necromancy"
-msgstr ""
+msgstr "Експертна Некромантія"
 
+#, fuzzy
 msgid "campaignBonus|Basic Pathfinding"
-msgstr ""
+msgstr "Базовий Пошук шляху"
 
+#, fuzzy
 msgid "campaignBonus|Advanced Pathfinding"
-msgstr ""
+msgstr "Просунутий Пошук шляху"
 
+#, fuzzy
 msgid "campaignBonus|Expert Pathfinding"
-msgstr ""
+msgstr "Експертний Пошук шляху"
 
+#, fuzzy
 msgid "campaignBonus|Basic Scouting"
-msgstr ""
+msgstr "Базова Розвідка"
 
+#, fuzzy
 msgid "campaignBonus|Advanced Scouting"
-msgstr ""
+msgstr "Просунута Розвідка"
 
+#, fuzzy
 msgid "campaignBonus|Expert Scouting"
-msgstr ""
+msgstr "Експертна Розвідка"
 
+#, fuzzy
 msgid "campaignBonus|Basic Wisdom"
-msgstr ""
+msgstr "Базова Мудрість"
 
+#, fuzzy
 msgid "campaignBonus|Advanced Wisdom"
-msgstr ""
+msgstr "Просунута Мудрість"
 
+#, fuzzy
 msgid "campaignBonus|Expert Wisdom"
-msgstr ""
+msgstr "Експертна Мудрість"
 
+#, fuzzy
 msgid "campaignBonus|Animate Dead"
-msgstr ""
+msgstr "Підняття немертвих"
 
+#, fuzzy
 msgid "campaignBonus|Chain Lightning"
-msgstr ""
+msgstr "Цеп блискавок"
 
+#, fuzzy
 msgid "campaignBonus|Fireblast"
-msgstr ""
+msgstr "Вогняний вибух"
 
+#, fuzzy
 msgid "campaignBonus|Mass Curse"
-msgstr ""
+msgstr "Масове прокляття"
 
+#, fuzzy
 msgid "campaignBonus|Mass Haste"
-msgstr ""
+msgstr "Масове прискорення"
 
+#, fuzzy
 msgid "campaignBonus|Mirror Image"
-msgstr ""
+msgstr "Зеркальний фантом"
 
+#, fuzzy
 msgid "campaignBonus|Resurrect"
-msgstr ""
+msgstr "Воскресіння"
 
+#, fuzzy
 msgid "campaignBonus|Steelskin"
-msgstr ""
+msgstr "Сталева кожа"
 
+#, fuzzy
 msgid "campaignBonus|Summon Earth"
-msgstr ""
+msgstr "Клич Землі"
 
+#, fuzzy
 msgid "campaignBonus|View Heroes"
-msgstr ""
+msgstr "Показ героїв"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
@@ -5221,282 +5293,382 @@ msgid ""
 "knowledge."
 msgstr ""
 
+#, fuzzy
 msgid "Current Modifiers:"
-msgstr ""
+msgstr "Наявні модифікатори:"
 
+#, fuzzy
 msgid "skill|Basic"
-msgstr ""
+msgstr "Базовий"
 
+#, fuzzy
 msgid "skill|Advanced"
-msgstr ""
+msgstr "Просунутий"
 
+#, fuzzy
 msgid "skill|Expert"
-msgstr ""
+msgstr "Експертний"
 
+#, fuzzy
 msgid "Pathfinding"
-msgstr ""
+msgstr "Пошук шляху"
 
+#, fuzzy
 msgid "Archery"
-msgstr ""
+msgstr "Стрільба"
 
+#, fuzzy
 msgid "Logistics"
-msgstr ""
+msgstr "Логістика"
 
+#, fuzzy
 msgid "Scouting"
-msgstr ""
+msgstr "Розвідка"
 
+#, fuzzy
 msgid "Diplomacy"
-msgstr ""
+msgstr "Дипломатія"
 
+#, fuzzy
 msgid "Navigation"
-msgstr ""
+msgstr "Навігація"
 
+#, fuzzy
 msgid "Leadership"
-msgstr ""
+msgstr "Лідерство"
 
+#, fuzzy
 msgid "Wisdom"
-msgstr ""
+msgstr "Мудрість"
 
+#, fuzzy
 msgid "Mysticism"
-msgstr ""
+msgstr "Містицизм"
 
 #, fuzzy
 msgid "Ballistics"
-msgstr "Баліста"
+msgstr "Балістика"
 
+#, fuzzy
 msgid "Eagle Eye"
-msgstr ""
+msgstr "Орлиний зір"
 
+#, fuzzy
 msgid "Necromancy"
-msgstr ""
+msgstr "Некромантія"
 
+#, fuzzy
 msgid "Estates"
-msgstr ""
+msgstr "Шляхетність"
 
+#, fuzzy
 msgid "Advanced Archery"
-msgstr ""
+msgstr "Проснута Стрільба"
 
+#, fuzzy
 msgid "Advanced Pathfinding"
-msgstr ""
+msgstr "Просунутий Пошук шляху"
 
+#, fuzzy
 msgid "Basic Archery"
-msgstr ""
+msgstr "Базова Стрільба"
 
+#, fuzzy
 msgid "Basic Pathfinding"
-msgstr ""
+msgstr "Базовий Пошук шляху"
 
+#, fuzzy
 msgid "Expert Pathfinding"
-msgstr ""
+msgstr "Експертний Пошук шляху"
 
+#, fuzzy
 msgid "Advanced Logistics"
-msgstr ""
+msgstr "Просунута Логістика"
 
+#, fuzzy
 msgid "Basic Logistics"
-msgstr ""
+msgstr "Базова Логістика"
 
+#, fuzzy
 msgid "Basic Scouting"
-msgstr ""
+msgstr "Базова Розвідка"
 
+#, fuzzy
 msgid "Expert Archery"
-msgstr ""
+msgstr "Експертна Стрільба"
 
+#, fuzzy
 msgid "Expert Logistics"
-msgstr ""
+msgstr "Експертна Логістика"
 
+#, fuzzy
 msgid "Advanced Diplomacy"
-msgstr ""
+msgstr "Просунута Дипломатія"
 
+#, fuzzy
 msgid "Advanced Scouting"
-msgstr ""
+msgstr "Просунута Розвідка"
 
+#, fuzzy
 msgid "Basic Diplomacy"
-msgstr ""
+msgstr "Базова Дипломатія"
 
+#, fuzzy
 msgid "Expert Diplomacy"
-msgstr ""
+msgstr "Експертна Дипломатія"
 
+#, fuzzy
 msgid "Expert Scouting"
-msgstr ""
+msgstr "Експертна Розвідка"
 
+#, fuzzy
 msgid "Advanced Leadership"
-msgstr ""
+msgstr "Просунуте Лідерство"
 
+#, fuzzy
 msgid "Advanced Navigation"
-msgstr ""
+msgstr "Просунута Навігація"
 
+#, fuzzy
 msgid "Basic Leadership"
-msgstr ""
+msgstr "Базове Лідерство"
 
+#, fuzzy
 msgid "Basic Navigation"
-msgstr ""
+msgstr "Базова Навігація"
 
+#, fuzzy
 msgid "Expert Navigation"
-msgstr ""
+msgstr "Експертна Навігація"
 
+#, fuzzy
 msgid "Advanced Wisdom"
-msgstr ""
+msgstr "Просунута Мудрість"
 
+#, fuzzy
 msgid "Basic Mysticism"
-msgstr ""
+msgstr "Базовий Містицизм"
 
+#, fuzzy
 msgid "Basic Wisdom"
-msgstr ""
+msgstr "Базова Мудрість"
 
+#, fuzzy
 msgid "Expert Leadership"
-msgstr ""
+msgstr "Експертне Лідерство"
 
+#, fuzzy
 msgid "Expert Wisdom"
-msgstr ""
+msgstr "Експертна Мудрість"
 
+#, fuzzy
 msgid "Advanced Luck"
-msgstr ""
+msgstr "Просунута Вдача"
 
+#, fuzzy
 msgid "Advanced Mysticism"
-msgstr ""
+msgstr "Просунутий Містицизм"
 
+#, fuzzy
 msgid "Basic Luck"
-msgstr ""
+msgstr "Базова Вдача"
 
+#, fuzzy
 msgid "Expert Luck"
-msgstr ""
+msgstr "Експертна Вдача"
 
+#, fuzzy
 msgid "Expert Mysticism"
-msgstr ""
+msgstr "Експертний Містицизм"
 
+#, fuzzy
 msgid "Advanced Ballistics"
-msgstr ""
+msgstr "Просунута Балістика"
 
+#, fuzzy
 msgid "Advanced Eagle Eye"
-msgstr ""
+msgstr "Просунутий Орлиний Зір"
 
+#, fuzzy
 msgid "Basic Ballistics"
-msgstr ""
+msgstr "Базова Балістика"
 
+#, fuzzy
 msgid "Basic Eagle Eye"
-msgstr ""
+msgstr "Базовий Орлиний Зір"
 
+#, fuzzy
 msgid "Expert Ballistics"
-msgstr ""
+msgstr "Експертна Балістика"
 
+#, fuzzy
 msgid "Advanced Necromancy"
-msgstr ""
+msgstr "Просунута Некромантія"
 
+#, fuzzy
 msgid "Basic Estates"
-msgstr ""
+msgstr "Базова Шляхетність"
 
+#, fuzzy
 msgid "Basic Necromancy"
-msgstr ""
+msgstr "Базова Некромантія"
 
+#, fuzzy
 msgid "Expert Eagle Eye"
-msgstr ""
+msgstr "Експертний Орлиний Зір"
 
+#, fuzzy
 msgid "Expert Necromancy"
-msgstr ""
+msgstr "Експертна Некромантія"
 
+#, fuzzy
 msgid "Advanced Estates"
-msgstr ""
+msgstr "Просунута Шляхетність"
 
+#, fuzzy
 msgid "Expert Estates"
-msgstr ""
+msgstr "Експертна Шляхетність"
 
+#, fuzzy
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."
 msgstr ""
+"%{skill} знижує штраф за переміщення по нерівній території на %{count} "
+"відсотків."
 
+#, fuzzy
 msgid "%{skill} eliminates the movement penalty for rough terrain."
-msgstr ""
+msgstr "%{skill} усуває штраф за переміщення по нерівній території."
 
+#, fuzzy
 msgid ""
 "%{skill} increases the damage done by range attacking creatures by %{count} "
 "percent."
 msgstr ""
+"%{skill} підвищує шкоду від істот, що атакують з відстані на %{count} "
+"відсотків."
 
+#, fuzzy
 msgid "%{skill} increases your hero's movement points by %{count} percent."
-msgstr ""
+msgstr "%{skill} підвищує одиниці руху Вашого героя на %{count} відсотків."
 
+#, fuzzy
 msgid "%{skill} increases your hero's viewable area by one square."
 msgid_plural ""
 "%{skill} increases your hero's viewable area by %{count} squares."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%{skill} підвищує радіус огляду героя на один квадрат."
+msgstr[1] "%{skill} підвищує радіус огляду героя на %{count} квадрата."
+msgstr[2] "%{skill} підвищує радіус огляду героя на %{count} квадратів."
 
+#, fuzzy
 msgid ""
 "%{skill} allows you to negotiate with monsters who are weaker than your "
 "group. "
 msgstr ""
+"%{skill} дозволяє Вам домовлятися із потворами, що слабші за вашу групу. "
 
+#, fuzzy
 msgid "Approximately %{count} percent of the creatures may offer to join you."
-msgstr ""
+msgstr "Приблизно %{count} відсотків істот можуть захотіти приєднатись до Вас."
 
+#, fuzzy
 msgid "All of the creatures may offer to join you."
-msgstr ""
+msgstr "Всі істоти можуть захотіти приєднатись до Вас."
 
+#, fuzzy
 msgid ""
 "%{skill} increases your hero's movement points over water by %{count} "
 "percent."
-msgstr ""
+msgstr "содиниці руху героя по воді на %{count} відсотків."
 
+#, fuzzy
 msgid "%{skill} increases your hero's troops morale by %{count}."
-msgstr ""
+msgstr "%{skill} підвищує мораль військ Вашого героя на %{count}."
 
+#, fuzzy
 msgid "%{skill} allows your hero to learn third level spells."
-msgstr ""
+msgstr "%{skill} дозволяє Вашому герою вчити чари третього рівня."
 
+#, fuzzy
 msgid "%{skill} allows your hero to learn fourth level spells."
-msgstr ""
+msgstr "%{skill} дозволяє Вашому герою вчити чари четвертого рівня."
 
+#, fuzzy
 msgid "%{skill} allows your hero to learn fifth level spells."
-msgstr ""
+msgstr "%{skill} дозволяє Вашому герою вчити чари п'ятого рівня."
 
+#, fuzzy
 msgid "%{skill} regenerates one of your hero's spell points per day."
 msgid_plural ""
 "%{skill} regenerates %{count} of your hero's spell points per day."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%{skill} відновлює одину одиницю мани героя щодня."
+msgstr[1] "%{skill} відновлює %{count} одиниці мани героя щодня."
+msgstr[2] "%{skill} відновлює %{count} одиниць мани героя щодня."
 
+#, fuzzy
 msgid "%{skill} increases your hero's luck by %{count}."
-msgstr ""
+msgstr "%{skill} підвищує вдачу героя на %{count}."
 
+#, fuzzy
 msgid ""
 "%{skill} gives your hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
+"%{skill} дає пострілам катапульти Вашого героя більший шанс влучити і "
+"пошкодити стіни замка."
 
+#, fuzzy
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
+"%{skill} дає пострілам катапульти Вашого героя додатковий постріл і підвищує "
+"шанс пошкодження стін замка кожним пострілом."
 
+#, fuzzy
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
+"%{skill} дає пострілам катапульти Вашого героя додатковий постріл і кожний "
+"постріл гарантовано руйнує будь-яку стіну окрім Лицарського замка."
 
+#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
 "2nd level enemy spell used against him in a combat."
 msgstr ""
+"%{skill} дає герою %{count} відсотків шанс вивчити чари 1-го або 2-го рівня "
+"з тих, що ворог використовував проти нього в бою."
 
+#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) used against him in combat."
 msgstr ""
+"%{skill} дає герою %{count} відсотків шанс вивчити чари 3-го або нижче рівня "
+"з тих, що ворог використовував проти нього в бою."
 
+#, fuzzy
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) used against him in combat."
 msgstr ""
+"%{skill} дає герою %{count} відсотків шанс вивчити чари 4-го або нижче рівня "
+"з тих, що ворог використовував проти нього в бою."
 
+#, fuzzy
 msgid ""
 "%{skill} allows %{count} percent of the creatures killed in combat to be "
 "brought back from the dead as Skeletons."
 msgstr ""
+"%{skill} дозволяє %{count} відсоткам істот вбитих у бою повернутися з "
+"мертвих у виді Скелетів."
 
+#, fuzzy
 msgid ""
 "Your hero produces %{count} gold pieces per day as tax revenue from estates."
-msgstr ""
+msgstr "Ваш герой збирає %{count} золота податків з маєтків."
 
 msgid "Blue"
 msgstr "Синій"
@@ -5516,53 +5688,69 @@ msgstr "Помаранчевий"
 msgid "Purple"
 msgstr "Фіолетовий"
 
+#, fuzzy
 msgid "barrier|Aqua"
-msgstr ""
+msgstr "Бірюзовий"
 
+#, fuzzy
 msgid "barrier|Blue"
-msgstr ""
+msgstr "Синій"
 
+#, fuzzy
 msgid "barrier|Brown"
-msgstr ""
+msgstr "Коричневий"
 
+#, fuzzy
 msgid "barrier|Gold"
-msgstr ""
+msgstr "Золотий"
 
+#, fuzzy
 msgid "barrier|Green"
-msgstr ""
+msgstr "Зелений"
 
+#, fuzzy
 msgid "barrier|Orange"
-msgstr ""
+msgstr "Помаранчевий"
 
+#, fuzzy
 msgid "barrier|Purple"
-msgstr ""
+msgstr "Фіолетовий"
 
+#, fuzzy
 msgid "barrier|Red"
-msgstr ""
+msgstr "Червоний"
 
+#, fuzzy
 msgid "tent|Aqua"
-msgstr ""
+msgstr "Бірюзовий"
 
+#, fuzzy
 msgid "tent|Blue"
-msgstr ""
+msgstr "Синій"
 
+#, fuzzy
 msgid "tent|Brown"
-msgstr ""
+msgstr "Коричневий"
 
+#, fuzzy
 msgid "tent|Gold"
-msgstr ""
+msgstr "Золотий"
 
+#, fuzzy
 msgid "tent|Green"
-msgstr ""
+msgstr "Зелений"
 
+#, fuzzy
 msgid "tent|Orange"
-msgstr ""
+msgstr "Помаранчевий"
 
+#, fuzzy
 msgid "tent|Purple"
-msgstr ""
+msgstr "Фіолетовий"
 
+#, fuzzy
 msgid "tent|Red"
-msgstr ""
+msgstr "Червоний"
 
 msgid "Experience"
 msgstr ""
