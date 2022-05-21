@@ -36,24 +36,17 @@
 
 namespace
 {
-    bool isDefeatOfHeroVictoryConditionForHuman( const Heroes * hero )
-    {
-        assert( hero != nullptr );
-
-        return ( hero == world.GetHeroesCondWins() );
-    }
-
     bool isHeroWhoseDefeatIsVictoryConditionForHumanInCastle( const Castle * castle )
     {
         assert( castle != nullptr );
 
         const Heroes * castleGuest = castle->GetHeroes().Guest();
-        if ( castleGuest && isDefeatOfHeroVictoryConditionForHuman( castleGuest ) ) {
+        if ( castleGuest && castleGuest == world.GetHeroesCondWins() ) {
             return true;
         }
 
         const Heroes * castleGuard = castle->GetHeroes().Guard();
-        if ( castleGuard && isDefeatOfHeroVictoryConditionForHuman( castleGuard ) ) {
+        if ( castleGuard && castleGuard == world.GetHeroesCondWins() ) {
             return true;
         }
 
@@ -462,7 +455,7 @@ namespace
                     return false;
                 }
                 // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
-                if ( isDefeatOfHeroVictoryConditionForHuman( otherHero ) ) {
+                if ( otherHero == world.GetHeroesCondWins() ) {
                     return false;
                 }
                 if ( otherHeroInCastle ) {
@@ -734,7 +727,7 @@ namespace AI
             }
 
             // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
-            if ( isDefeatOfHeroVictoryConditionForHuman( otherHero ) ) {
+            if ( otherHero == world.GetHeroesCondWins() ) {
                 assert( 0 );
                 return -dangerousTaskPenalty;
             }
@@ -1005,7 +998,7 @@ namespace AI
             }
 
             // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
-            if ( isDefeatOfHeroVictoryConditionForHuman( otherHero ) ) {
+            if ( otherHero == world.GetHeroesCondWins() ) {
                 assert( 0 );
                 return -dangerousTaskPenalty;
             }
