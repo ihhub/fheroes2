@@ -58,7 +58,15 @@ namespace
     {
         const Settings & conf = Settings::Get();
 
-        return ( ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) != 0 && art.GetID() == conf.WinsFindArtifactID() );
+        if ( ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) != 0 ) {
+            if ( conf.WinsFindUltimateArtifact() ) {
+                return art.isUltimate();
+            }
+
+            return ( art.GetID() == conf.WinsFindArtifactID() );
+        }
+
+        return false;
     }
 
     bool isCastleLossConditionForHuman( const Castle * castle )
