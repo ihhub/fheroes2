@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <cassert>
+#include <utility>
 
 #include "agg.h"
 #include "ai_normal.h"
@@ -87,15 +88,15 @@ namespace AI
 {
     bool Normal::recruitHero( Castle & castle, bool buyArmy, bool underThreat )
     {
-        // Re-hiring a hero related to the WINS_HERO condition is not allowed
-        const Heroes * heroToIgnore = world.GetHeroesCondWins();
+        // Re-hiring a hero related to any of the WINS_HERO or LOSS_HERO conditions is not allowed
+        const auto heroesToIgnore = std::make_pair( world.GetHeroesCondWins(), world.GetHeroesCondLoss() );
 
         Kingdom & kingdom = castle.GetKingdom();
         const Recruits & rec = kingdom.GetRecruits();
 
         Heroes * recruit = nullptr;
-        Heroes * firstRecruit = ( rec.GetHero1() != heroToIgnore ) ? rec.GetHero1() : nullptr;
-        Heroes * secondRecruit = ( rec.GetHero2() != heroToIgnore ) ? rec.GetHero2() : nullptr;
+        Heroes * firstRecruit = ( rec.GetHero1() != heroesToIgnore.first && rec.GetHero1() != heroesToIgnore.second ) ? rec.GetHero1() : nullptr;
+        Heroes * secondRecruit = ( rec.GetHero2() != heroesToIgnore.first && rec.GetHero2() != heroesToIgnore.second ) ? rec.GetHero2() : nullptr;
 
         if ( firstRecruit && secondRecruit ) {
             if ( secondRecruit->getRecruitValue() > firstRecruit->getRecruitValue() ) {

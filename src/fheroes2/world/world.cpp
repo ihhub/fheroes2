@@ -1222,7 +1222,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
             return false;
         }
 
-        // The hero in question should be either a freeman or be defeated and then hired by an AI-controlled kingdom
+        // The hero in question should be either a freeman or be hired by an AI-controlled kingdom
         return ( hero->isFreeman() || GetKingdom( hero->GetColor() ).isControlAI() );
     }
 
