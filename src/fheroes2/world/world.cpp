@@ -1152,8 +1152,21 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
         // This method should be called with this condition only for a human-controlled kingdom
         assert( kingdom.isControlHuman() );
 
+        if ( heroes_cond_wins == Heroes::UNKNOWN ) {
+            return false;
+        }
+
         const Heroes * hero = GetHeroesCondWins();
-        return ( hero && Heroes::UNKNOWN != heroes_cond_wins && hero->isFreeman() && hero->GetKillerColor() == kingdom.GetColor() );
+        if ( hero == nullptr ) {
+            return false;
+        }
+
+        if ( hero->isFreeman() ) {
+            return hero->GetKillerColor() == kingdom.GetColor();
+        }
+
+        // The hero in question should not be hired by a human-controlled kingdom
+        return GetKingdom( hero->GetColor() ).isControlHuman();
     }
 
     case GameOver::WINS_ARTIFACT: {
@@ -1204,9 +1217,17 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
     }
 
     case GameOver::LOSS_HERO: {
+        if ( heroes_cond_loss == Heroes::UNKNOWN ) {
+            return false;
+        }
+
         const Heroes * hero = GetHeroesCondLoss();
-        // The hero in question is either a freeman or was defeated and then hired by an AI-controlled kingdom
-        return ( hero && Heroes::UNKNOWN != heroes_cond_loss && ( hero->isFreeman() || GetKingdom( hero->GetColor() ).isControlAI() ) );
+        if ( hero == nullptr ) {
+            return false;
+        }
+
+        // The hero in question should be either a freeman or be defeated and then hired by an AI-controlled kingdom
+        return ( hero->isFreeman() || GetKingdom( hero->GetColor() ).isControlAI() );
     }
 
     case GameOver::LOSS_TIME:
