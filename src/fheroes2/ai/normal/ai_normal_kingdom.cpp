@@ -88,15 +88,23 @@ namespace AI
 {
     bool Normal::recruitHero( Castle & castle, bool buyArmy, bool underThreat )
     {
-        // Re-hiring a hero related to any of the WINS_HERO or LOSS_HERO conditions is not allowed
-        const auto heroesToIgnore = std::make_pair( world.GetHeroesCondWins(), world.GetHeroesCondLoss() );
-
         Kingdom & kingdom = castle.GetKingdom();
         const Recruits & rec = kingdom.GetRecruits();
 
         Heroes * recruit = nullptr;
-        Heroes * firstRecruit = ( rec.GetHero1() != heroesToIgnore.first && rec.GetHero1() != heroesToIgnore.second ) ? rec.GetHero1() : nullptr;
-        Heroes * secondRecruit = ( rec.GetHero2() != heroesToIgnore.first && rec.GetHero2() != heroesToIgnore.second ) ? rec.GetHero2() : nullptr;
+
+        // Re-hiring a hero related to any of the WINS_HERO or LOSS_HERO conditions is not allowed
+        const auto heroesToIgnore = std::make_pair( world.GetHeroesCondWins(), world.GetHeroesCondLoss() );
+
+        Heroes * firstRecruit = rec.GetHero1();
+        if ( firstRecruit == heroesToIgnore.first || firstRecruit == heroesToIgnore.second ) {
+            firstRecruit = nullptr;
+        }
+
+        Heroes * secondRecruit = rec.GetHero2();
+        if ( secondRecruit == heroesToIgnore.first || secondRecruit == heroesToIgnore.second ) {
+            secondRecruit = nullptr;
+        }
 
         if ( firstRecruit && secondRecruit ) {
             if ( secondRecruit->getRecruitValue() > firstRecruit->getRecruitValue() ) {
@@ -106,8 +114,11 @@ namespace AI
                 recruit = castle.RecruitHero( firstRecruit );
             }
         }
-        else {
-            recruit = firstRecruit ? castle.RecruitHero( firstRecruit ) : castle.RecruitHero( secondRecruit );
+        else if ( firstRecruit ) {
+            recruit = castle.RecruitHero( firstRecruit );
+        }
+        else if ( secondRecruit ) {
+            recruit = castle.RecruitHero( secondRecruit );
         }
 
         if ( recruit && buyArmy ) {
