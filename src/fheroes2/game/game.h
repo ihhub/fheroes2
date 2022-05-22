@@ -66,8 +66,6 @@ namespace Game
     fheroes2::GameMode MainMenu( bool isFirstGameRun );
     fheroes2::GameMode NewGame();
     fheroes2::GameMode LoadGame();
-    fheroes2::GameMode HighScoresStandard();
-    fheroes2::GameMode HighScoresCampaign();
     fheroes2::GameMode Credits();
     fheroes2::GameMode NewStandard();
     fheroes2::GameMode CampaignSelection();
