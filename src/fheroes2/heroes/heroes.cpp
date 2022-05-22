@@ -259,7 +259,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
     else
         st.skip( 15 );
 
-    // custom portrate
+    // custom portrait
     bool custom_portrait = ( st.get() != 0 );
 
     if ( custom_portrait ) {
@@ -350,10 +350,9 @@ void Heroes::PostLoad( void )
     save_maps_object = MP2::OBJ_ZERO;
 
     // fix zero army
-    if ( !army.isValid() )
+    if ( !army.isValid() ) {
         army.Reset( false );
-    else
-        SetModes( CUSTOMARMY );
+    }
 
     // level up
     int level = GetLevel();
