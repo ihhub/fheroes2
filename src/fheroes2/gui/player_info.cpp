@@ -271,7 +271,7 @@ void Interface::PlayersInfo::RedrawInfo( bool show_play_info ) const /* show_pla
         fheroes2::Blit( playerIcon, display, rect1.x, rect1.y );
 
         // playerIcon sprite is missing a column of pixels.
-        fheroes2::Blit(playerIcon, 3, playerIcon.height() - 14, display, rect1.x + rect1.height + 14, rect1.y + rect1.width - 18, 1, 11);   
+        fheroes2::Blit( playerIcon, 3, playerIcon.height() - 14, display, rect1.x + rect1.height + 14, rect1.y + rect1.width - 18, 1, 11 );   
 
         if ( currentSelectedPlayer != nullptr && it->player == currentSelectedPlayer ) {
             fheroes2::Image selection( playerIcon.width(), playerIcon.height() );
