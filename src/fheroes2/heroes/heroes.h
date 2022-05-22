@@ -175,7 +175,9 @@ public:
         // UNUSED = 0x00010000,
 
         CUSTOMSKILLS = 0x00020000,
-        SKIPPED_TURN = 0x00040000,
+
+        // UNUSED = 0x00040000,
+
         WAITING = 0x00080000,
         MOVED = 0x00100000
     };

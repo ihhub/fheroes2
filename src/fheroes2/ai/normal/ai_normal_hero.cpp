@@ -475,7 +475,7 @@ namespace
             }
         }
 
-        hero->ResetModes( Heroes::WAITING | Heroes::MOVED | Heroes::SKIPPED_TURN );
+        hero->ResetModes( Heroes::WAITING | Heroes::MOVED );
         if ( !hero->MayStillMove( false, false ) ) {
             hero->SetModes( Heroes::MOVED );
         }
