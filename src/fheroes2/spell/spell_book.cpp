@@ -167,7 +167,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
                        const std::function<void( const std::string & )> * statusCallback /*= nullptr*/ ) const
 {
     if ( !hero.HaveSpellBook() ) {
-        Dialog::Message( "", _( "No spell to cast." ), Font::BIG, Dialog::OK );
+        Dialog::Message( "", _( "Spell book is not present." ), Font::BIG, Dialog::OK );
         return Spell::NONE;
     }
 
