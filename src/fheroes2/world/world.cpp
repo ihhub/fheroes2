@@ -1392,7 +1392,7 @@ bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int3
 {
     const Colors colors( Game::GetKingdomColors() );
     for ( const int color : colors ) {
-        const Kingdom & kingdom = world.GetKingdom( color );
+        const Kingdom & kingdom = GetKingdom( color );
         if ( kingdom.isVisited( dstIndex, objectType ) ) {
             return true;
         }
