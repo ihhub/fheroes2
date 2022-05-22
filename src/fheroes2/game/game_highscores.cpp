@@ -119,7 +119,7 @@ namespace
             text.Blit( ox + 88, oy + 70 );
 
             text.Set( data.scenarioName );
-            text.Blit( ox + 250, oy + 70 );
+            text.Blit( ox + 280, oy + 70 );
 
             text.Set( std::to_string( data.dayCount ) );
             text.Blit( ox + 455, oy + 70 );
