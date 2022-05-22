@@ -31,10 +31,10 @@ namespace fheroes2
     struct HighscoreData
     {
         HighscoreData() = default;
-        HighscoreData( const std::string & playerName_, const std::string & scenarioName_, const uint32_t completionTime_, const uint32_t dayCount_,
-                       const uint32_t rating_, const uint32_t mapSeed_ )
-            : playerName( playerName_ )
-            , scenarioName( scenarioName_ )
+        HighscoreData( std::string playerName_, std::string scenarioName_, const uint32_t completionTime_, const uint32_t dayCount_, const uint32_t rating_,
+                       const uint32_t mapSeed_ )
+            : playerName( std::move( playerName_ ) )
+            , scenarioName( std::move( scenarioName_ ) )
             , completionTime( completionTime_ )
             , dayCount( dayCount_ )
             , rating( rating_ )
@@ -45,6 +45,9 @@ namespace fheroes2
 
         HighscoreData( HighscoreData & ) = default;
         HighscoreData( HighscoreData && ) = default;
+
+        ~HighscoreData() = default;
+
         HighscoreData & operator=( const HighscoreData & data ) = default;
         HighscoreData & operator=( HighscoreData && data ) noexcept = default;
 
