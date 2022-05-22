@@ -691,7 +691,7 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
     SetCenter( pt );
     setDirection( Direction::RIGHT );
 
-    if ( !Modes( SAVE_MP_POINTS ) ) {
+    if ( !Modes( SAVEMP ) ) {
         move_point = GetMaxMovePoints();
     }
     MovePointsScaleFixed();
@@ -738,7 +738,7 @@ void Heroes::ActionNewDay( void )
     visit_object.remove_if( Visit::isDayLife );
 
     // new day, new capacities
-    ResetModes( SAVE_MP_POINTS );
+    ResetModes( SAVEMP );
 }
 
 void Heroes::ActionNewWeek( void )
@@ -1524,8 +1524,8 @@ void Heroes::SetFreeman( int reason )
         SetModes( ACTION );
 
         if ( ( Battle::RESULT_RETREAT | Battle::RESULT_SURRENDER ) & reason ) {
-            if ( Settings::Get().ExtHeroRememberPointsForRetreating() ) {
-                SetModes( SAVE_MP_POINTS );
+            if ( Settings::Get().ExtHeroRememberMovementPointsWhenRetreating() ) {
+                SetModes( SAVEMP );
             }
 
             if ( heroColor != Color::NONE ) {

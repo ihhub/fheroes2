@@ -150,15 +150,21 @@ public:
     enum flags_t : uint32_t
     {
         SHIPMASTER = 0x00000001,
+
         // UNUSED = 0x00000002,
+
         SPELLCASTED = 0x00000004,
         ENABLEMOVE = 0x00000008,
+
         // UNUSED = 0x00000010,
         // UNUSED = 0x00000020,
-        RECRUIT = 0x00000040, // Hero is available for recruitment in any kingdom
+
+        // Hero is available for recruitment in any kingdom
+        RECRUIT = 0x00000040,
         JAIL = 0x00000080,
         ACTION = 0x00000100,
-        SAVE_MP_POINTS = 0x00000200,
+        // Hero should remember his movement points when retreating or surrendering, related to Settings::HEROES_REMEMBER_MP_WHEN_RETREATING
+        SAVEMP = 0x00000200,
         SLEEPER = 0x00000400,
         GUARDIAN = 0x00000800,
         NOTDEFAULTS = 0x00001000,
