@@ -355,7 +355,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                             continueAfterVictory = true;
 
                             // Game::HighScores() calls ResetResult()
-                            Game::HighScoresStandard();
+                            Game::DisplayHighScores( false );
 
                             Interface::Basic & I = Interface::Basic::Get();
 
