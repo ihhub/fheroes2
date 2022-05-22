@@ -22,47 +22,32 @@
 #define H2HIGHSCORES_H
 
 #include <string>
+#include <vector>
 
 #include "monster.h"
 
-class StreamBase;
-
-namespace HighScore
+namespace fheroes2
 {
-    struct HighScoreStandardData
+    struct HighscoreData
     {
-        HighScoreStandardData()
-            : _player()
-            , _scenarioName()
-            , _localTime( 0 )
-            , _days( 0 )
-            , _rating( 0 )
-        {}
+        bool HighscoreData::operator==( const HighscoreData & other ) const
+        {
+            // Ignore player name and completion time.
+            return scenarioName == other.scenarioName && dayCount == other.dayCount && rating == other.rating && mapSeed == other.mapSeed;
+        }
 
-        bool operator==( const HighScoreStandardData & other ) const;
+        std::string playerName;
+        std::string scenarioName;
+        uint32_t completionTime{ 0 };
+        uint32_t dayCount{ 0 };
 
-        std::string _player;
-        std::string _scenarioName;
-        uint32_t _localTime;
-        uint32_t _days;
-        uint32_t _rating;
-    };
+        // Rating is used only for standalone scenarios. Campaigns do not use this member.
+        uint32_t rating{ 0 };
 
-    struct HighScoreCampaignData
-    {
-        HighScoreCampaignData()
-            : _player()
-            , _campaignName()
-            , _localTime( 0 )
-            , _days( 0 )
-        {}
+        // Map seed is used to identify the same game compeltion to avoid duplicates in highscores.
+        uint32_t mapSeed{ 0 };
 
-        bool operator==( const HighScoreCampaignData & other ) const;
-
-        std::string _player;
-        std::string _campaignName;
-        uint32_t _localTime;
-        uint32_t _days;
+        static uint32_t generateCompletionTime();
     };
 
     class HighScoreDataContainer
@@ -70,16 +55,20 @@ namespace HighScore
     public:
         bool load( const std::string & fileName );
         bool save( const std::string & fileName ) const;
-        void registerScoreStandard( const std::string & playerName, const std::string & scenarioName, const uint32_t days, const uint32_t rating );
-        void registerScoreCampaign( const std::string & playerName, const std::string & campaignName, const uint32_t days );
-        void populateDefaultHighScoresStandard();
 
-        const std::vector<HighScoreStandardData> & getHighScoresStandard() const
+        void registerScoreStandard( HighscoreData && data );
+        void registerScoreCampaign( HighscoreData && data );
+
+        void populateStandardDefaultHighScores();
+
+        void populateCampaignDefaultHighScores();
+
+        const std::vector<HighscoreData> & getHighScoresStandard() const
         {
             return _highScoresStandard;
         }
 
-        const std::vector<HighScoreCampaignData> & getHighScoresCampaign() const
+        const std::vector<HighscoreData> & getHighScoresCampaign() const
         {
             return _highScoresCampaign;
         }
@@ -88,8 +77,8 @@ namespace HighScore
         static Monster getMonsterByDay( const size_t dayCount );
 
     private:
-        std::vector<HighScoreStandardData> _highScoresStandard;
-        std::vector<HighScoreCampaignData> _highScoresCampaign;
+        std::vector<HighscoreData> _highScoresStandard;
+        std::vector<HighscoreData> _highScoresCampaign;
     };
 }
 
