@@ -196,8 +196,8 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
         if ( isCampaign ) {
             const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
-            highScoreDataContainer.registerScoreCampaign( { player, Campaign::getCampaignName( campaignSaveData.getCampaignID() ),
-                                                            completionTime, campaignSaveData.getDaysPassed(), 0, world.GetMapSeed() } );
+            highScoreDataContainer.registerScoreCampaign(
+                { player, Campaign::getCampaignName( campaignSaveData.getCampaignID() ), completionTime, campaignSaveData.getDaysPassed(), 0, world.GetMapSeed() } );
         }
         else {
             const uint32_t rating = GetGameOverScores();
