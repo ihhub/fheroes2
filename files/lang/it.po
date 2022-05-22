@@ -8536,6 +8536,7 @@ msgstr ""
 "Trasforma la creatura colpita in pietra. Una creatura impietrita subisce "
 "metà dei danni da un attacco diretto."
 
+#, fuzzy
 msgid "You have no Magic Book, so you cannot cast a spell."
 msgstr ""
 
