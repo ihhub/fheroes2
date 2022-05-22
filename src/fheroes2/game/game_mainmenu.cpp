@@ -96,10 +96,10 @@ void Game::mainGameLoop( bool isFirstGameRun )
             result = Game::LoadGame();
             break;
         case fheroes2::GameMode::HIGHSCORES_STANDARD:
-            result = Game::HighScoresStandard();
+            result = Game::DisplayHighScores( false );
             break;
         case fheroes2::GameMode::HIGHSCORES_CAMPAIGN:
-            result = Game::HighScoresCampaign();
+            result = Game::DisplayHighScores( true );
             break;
         case fheroes2::GameMode::CREDITS:
             result = Game::Credits();
