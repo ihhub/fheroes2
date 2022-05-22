@@ -72,6 +72,7 @@ namespace fheroes2
         uint32_t mapSeed{ 0 };
 
         static uint32_t generateCompletionTime();
+
     private:
         friend StreamBase & operator<<( StreamBase &, const HighscoreData & );
         friend StreamBase & operator>>( StreamBase &, HighscoreData & );
