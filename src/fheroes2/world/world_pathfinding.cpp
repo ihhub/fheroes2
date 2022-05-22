@@ -39,15 +39,15 @@ namespace
 
         const Settings & conf = Settings::Get();
 
-        if ( ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) != 0 ) {
-            if ( conf.WinsFindUltimateArtifact() ) {
-                return art.isUltimate();
-            }
-
-            return ( art.GetID() == conf.WinsFindArtifactID() );
+        if ( ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) == 0 ) {
+            return false;
         }
 
-        return false;
+        if ( conf.WinsFindUltimateArtifact() ) {
+            return art.isUltimate();
+        }
+
+        return ( art.GetID() == conf.WinsFindArtifactID() );
     }
 
     bool isTileBlocked( int tileIndex, bool fromWater )
