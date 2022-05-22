@@ -1157,9 +1157,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
         }
 
         const Heroes * hero = GetHeroesCondWins();
-        if ( hero == nullptr ) {
-            return false;
-        }
+        assert( hero != nullptr );
 
         // The hero in question should be either a freeman or be hired by a human-controlled kingdom
         return ( hero->isFreeman() || GetKingdom( hero->GetColor() ).isControlHuman() );
@@ -1218,9 +1216,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
         }
 
         const Heroes * hero = GetHeroesCondLoss();
-        if ( hero == nullptr ) {
-            return false;
-        }
+        assert( hero != nullptr );
 
         // The hero in question should be either a freeman or be hired by an AI-controlled kingdom
         return ( hero->isFreeman() || GetKingdom( hero->GetColor() ).isControlAI() );
