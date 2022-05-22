@@ -232,7 +232,12 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
         }
         else if ( le.MousePressRight( buttonOtherHighScore.area() ) ) {
-            Dialog::Message( _( "Standard" ), _( isCampaign ? "View High Scores for Standard Maps." : "View High Scores for Campaigns." ), Font::BIG );
+            if ( isCampaign ) {
+                Dialog::Message( _( "Standard" ), _( "View High Scores for Standard Maps." ), Font::BIG );
+            }
+            else {
+                Dialog::Message( _( "Campaign" ), _( "View High Scores for Campaigns." ), Font::BIG );
+            }
         }
 
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
