@@ -9063,6 +9063,10 @@ msgstr ""
 "Zmienia dotknięte stworzenie w kamień. Skamieniała jednostka otrzymuje "
 "połowę obrażeń z ataku wręcz."
 
+#, fuzzy
+msgid "You have no Magic Book, so you cannot cast a spell."
+msgstr ""
+
 msgid "No spell to cast."
 msgstr "Brak zaklęć."
 

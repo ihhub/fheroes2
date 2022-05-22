@@ -8422,6 +8422,9 @@ msgid ""
 "damage from a direct attack."
 msgstr ""
 
+msgid "You have no Magic Book, so you cannot cast a spell."
+msgstr ""
+
 msgid "No spell to cast."
 msgstr ""
 

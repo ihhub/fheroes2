@@ -9613,6 +9613,10 @@ msgstr ""
 "Forvandler den påvirkede skapningen til stein. En forsteinet skapning tar "
 "halv skade fra direkte angrep."
 
+#, fuzzy
+msgid "You have no Magic Book, so you cannot cast a spell."
+msgstr ""
+
 # Used on adventure map. Plural is right for norwegian.
 msgid "No spell to cast."
 msgstr "Ingen trolldommer tilgjengelige."
