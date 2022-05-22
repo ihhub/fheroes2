@@ -84,15 +84,14 @@ namespace
         }
 
         entries.emplace_back( data );
-        std::sort( entries.begin(), entries.end(), []( const fheroes2::HighscoreData & first, const fheroes2::HighscoreData & second )
-            {
-                if ( first.rating == 0 && second.rating == 0 ) {
-                    // Ratings are 0 only for campaigns.
-                    return  first.dayCount < second.dayCount;
-                }
+        std::sort( entries.begin(), entries.end(), []( const fheroes2::HighscoreData & first, const fheroes2::HighscoreData & second ) {
+            if ( first.rating == 0 && second.rating == 0 ) {
+                // Ratings are 0 only for campaigns.
+                return first.dayCount < second.dayCount;
+            }
 
-                return first.rating > second.rating;
-            } );
+            return first.rating > second.rating;
+        } );
 
         if ( entries.size() > highscoreMaximumEntries ) {
             entries.resize( highscoreMaximumEntries );
