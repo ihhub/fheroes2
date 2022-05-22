@@ -5579,7 +5579,8 @@ msgstr "Всі істоти можуть захотіти приєднатись
 msgid ""
 "%{skill} increases your hero's movement points over water by %{count} "
 "percent."
-msgstr "содиниці руху героя по воді на %{count} відсотків."
+msgstr ""
+"%{skill} підвищує одиниці руху Вашого героя по воді на %{count} відсотків."
 
 #, fuzzy
 msgid "%{skill} increases your hero's troops morale by %{count}."
