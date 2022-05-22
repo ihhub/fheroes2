@@ -21,11 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
 #include <array>
-#include <ctime>
-#include <string>
-#include <vector>
 
 #include "agg.h"
 #include "agg_image.h"
@@ -56,7 +52,7 @@
 namespace
 {
     const std::string highScoreFileName = "fheroes2.hgs";
-    HighScore::HighScoreDataContainer highScoreDataContainer;
+    fheroes2::HighScoreDataContainer highScoreDataContainer;
 
     void RedrawHighScoresStandard( int32_t ox, int32_t oy, uint32_t & monsterAnimationFrameId )
     {
@@ -64,7 +60,7 @@ namespace
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        // image background
+        // Draw background.
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HSBKG, 0 ), display, ox, oy );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HISCORE, 6 ), display, ox + 50, oy + 31 );
 
@@ -72,30 +68,28 @@ namespace
         text.Set( Font::BIG );
 
         const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
-        const std::vector<HighScore::HighScoreStandardData> & highScores = highScoreDataContainer.getHighScoresStandard();
+        const std::vector<fheroes2::HighscoreData> & highScores = highScoreDataContainer.getHighScoresStandard();
 
-        for ( size_t i = 0; i < highScores.size(); ++i ) {
-            const HighScore::HighScoreStandardData & hgs = highScores[i];
-
-            text.Set( hgs._player );
+        for ( const fheroes2::HighscoreData & data : highScores ) {
+            text.Set( data.playerName );
             text.Blit( ox + 88, oy + 70 );
 
-            text.Set( hgs._scenarioName );
+            text.Set( data.scenarioName );
             text.Blit( ox + 244, oy + 70 );
 
-            text.Set( std::to_string( hgs._days ) );
+            text.Set( std::to_string( data.dayCount ) );
             text.Blit( ox + 403, oy + 70 );
 
-            text.Set( std::to_string( hgs._rating ) );
+            text.Set( std::to_string( data.rating ) );
             text.Blit( ox + 484, oy + 70 );
 
-            const Monster monster = HighScore::HighScoreDataContainer::getMonsterByRating( hgs._rating );
+            const Monster monster = fheroes2::HighScoreDataContainer::getMonsterByRating( data.rating );
             const uint32_t baseMonsterAnimationIndex = monster.GetSpriteIndex() * 9;
             const fheroes2::Sprite & baseMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, baseMonsterAnimationIndex );
             fheroes2::Blit( baseMonsterSprite, display, baseMonsterSprite.x() + ox + 554, baseMonsterSprite.y() + oy + 91 );
 
             // Animation frame of a creature is based on its position on screen and common animation frame ID.
-            const uint32_t monsterAnimationId = monsterAnimationSequence[( ox + oy + hgs._days + monsterAnimationFrameId ) % monsterAnimationSequence.size()];
+            const uint32_t monsterAnimationId = monsterAnimationSequence[( ox + oy + data.dayCount + monsterAnimationFrameId ) % monsterAnimationSequence.size()];
             const uint32_t secondaryMonsterAnimationIndex = baseMonsterAnimationIndex + 1 + monsterAnimationId;
             const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, secondaryMonsterAnimationIndex );
             fheroes2::Blit( secondaryMonsterSprite, display, secondaryMonsterSprite.x() + ox + 554, secondaryMonsterSprite.y() + oy + 91 );
@@ -110,7 +104,7 @@ namespace
 
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        // image background
+        // Draw background.
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HSBKG, 0 ), display, ox, oy );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HISCORE, 7 ), display, ox + 50, oy + 31 );
 
@@ -118,27 +112,25 @@ namespace
         text.Set( Font::BIG );
 
         const std::array<uint8_t, 15> & monsterAnimationSequence = fheroes2::getMonsterAnimationSequence();
-        const std::vector<HighScore::HighScoreCampaignData> & highScores = highScoreDataContainer.getHighScoresCampaign();
+        const std::vector<fheroes2::HighscoreData> & highScores = highScoreDataContainer.getHighScoresCampaign();
 
-        for ( size_t i = 0; i < highScores.size(); ++i ) {
-            const HighScore::HighScoreCampaignData & hgs = highScores[i];
-
-            text.Set( hgs._player );
+        for ( const fheroes2::HighscoreData & data : highScores ) {
+            text.Set( data.playerName );
             text.Blit( ox + 88, oy + 70 );
 
-            text.Set( hgs._campaignName );
+            text.Set( data.scenarioName );
             text.Blit( ox + 250, oy + 70 );
 
-            text.Set( std::to_string( hgs._days ) );
+            text.Set( std::to_string( data.dayCount ) );
             text.Blit( ox + 455, oy + 70 );
 
-            const Monster monster = HighScore::HighScoreDataContainer::getMonsterByDay( hgs._days );
+            const Monster monster = fheroes2::HighScoreDataContainer::getMonsterByDay( data.dayCount );
             const uint32_t baseMonsterAnimationIndex = monster.GetSpriteIndex() * 9;
             const fheroes2::Sprite & baseMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, baseMonsterAnimationIndex );
             fheroes2::Blit( baseMonsterSprite, display, baseMonsterSprite.x() + ox + 554, baseMonsterSprite.y() + oy + 91 );
 
             // Animation frame of a creature is based on its position on screen and common animation frame ID.
-            uint32_t monsterAnimationId = monsterAnimationSequence[( ox + oy + hgs._days + monsterAnimationFrameId ) % monsterAnimationSequence.size()];
+            uint32_t monsterAnimationId = monsterAnimationSequence[( ox + oy + data.dayCount + monsterAnimationFrameId ) % monsterAnimationSequence.size()];
             const uint32_t secondaryMonsterAnimationIndex = baseMonsterAnimationIndex + 1 + monsterAnimationId;
             const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, secondaryMonsterAnimationIndex );
             fheroes2::Blit( secondaryMonsterSprite, display, secondaryMonsterSprite.x() + ox + 554, secondaryMonsterSprite.y() + oy + 91 );
@@ -146,16 +138,6 @@ namespace
             oy += 40;
         }
     }
-}
-
-fheroes2::GameMode Game::HighScoresStandard()
-{
-    return DisplayHighScores( false );
-}
-
-fheroes2::GameMode Game::HighScoresCampaign()
-{
-    return DisplayHighScores( true );
 }
 
 fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
@@ -175,7 +157,8 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     if ( !highScoreDataContainer.load( highScoreDataPath ) ) {
         // Unable to load the file. Let's populate with the default values.
-        highScoreDataContainer.populateDefaultHighScoresStandard();
+        highScoreDataContainer.populateStandardDefaultHighScores();
+        highScoreDataContainer.populateCampaignDefaultHighScores();
         highScoreDataContainer.save( highScoreDataPath );
     }
 
@@ -209,14 +192,17 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         if ( player.empty() )
             player = _( "Unknown Hero" );
 
+        const uint32_t completionTime = fheroes2::HighscoreData::generateCompletionTime();
+
         if ( isCampaign ) {
             const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
-            highScoreDataContainer.registerScoreCampaign( player, Campaign::getCampaignName( campaignSaveData.getCampaignID() ), campaignSaveData.getDaysPassed() );
+            highScoreDataContainer.registerScoreCampaign( { player, Campaign::getCampaignName( campaignSaveData.getCampaignID() ),
+                                                            completionTime, campaignSaveData.getDaysPassed(), 0, world.GetMapSeed() } );
         }
         else {
             const uint32_t rating = GetGameOverScores();
             const uint32_t days = world.CountDay();
-            highScoreDataContainer.registerScoreStandard( player, Settings::Get().CurrentFileInfo().name, days, rating );
+            highScoreDataContainer.registerScoreStandard( { player, Settings::Get().CurrentFileInfo().name, completionTime, days, rating, world.GetMapSeed() } );
         }
 
         highScoreDataContainer.save( highScoreDataPath );
@@ -233,8 +219,6 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
     }
 
     LocalEvent & le = LocalEvent::Get();
-
-    // highscores loop
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonOtherHighScore.area() ) ? buttonOtherHighScore.drawOnPress() : buttonOtherHighScore.drawOnRelease();
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
@@ -248,7 +232,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
         }
         else if ( le.MousePressRight( buttonOtherHighScore.area() ) ) {
-            Dialog::Message( _( "Standard" ), _( isCampaign ? _( "View High Scores for Standard Maps." ) : _( "View High Scores for Campaigns." ) ), Font::BIG );
+            Dialog::Message( _( "Standard" ), _( isCampaign ? "View High Scores for Standard Maps." : "View High Scores for Campaigns." ), Font::BIG );
         }
 
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
