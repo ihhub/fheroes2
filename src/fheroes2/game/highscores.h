@@ -30,7 +30,25 @@ namespace fheroes2
 {
     struct HighscoreData
     {
-        bool HighscoreData::operator==( const HighscoreData & other ) const
+        HighscoreData() = default;
+        HighscoreData( const std::string & playerName_, const std::string & scenarioName_, const uint32_t completionTime_, const uint32_t dayCount_,
+                       const uint32_t rating_, const uint32_t mapSeed_ )
+            : playerName( playerName_ )
+            , scenarioName( scenarioName_ )
+            , completionTime( completionTime_ )
+            , dayCount( dayCount_ )
+            , rating( rating_ )
+            , mapSeed( mapSeed_ )
+        {
+            // Do nothing.
+        }
+
+        HighscoreData( HighscoreData & ) = default;
+        HighscoreData( HighscoreData && ) = default;
+        HighscoreData & operator=( const HighscoreData & data ) = default;
+        HighscoreData & operator=( HighscoreData && data ) noexcept = default;
+        
+        bool operator==( const HighscoreData & other ) const
         {
             // Ignore player name and completion time.
             return scenarioName == other.scenarioName && dayCount == other.dayCount && rating == other.rating && mapSeed == other.mapSeed;
