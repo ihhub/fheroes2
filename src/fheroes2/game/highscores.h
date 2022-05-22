@@ -47,7 +47,7 @@ namespace fheroes2
         HighscoreData( HighscoreData && ) = default;
         HighscoreData & operator=( const HighscoreData & data ) = default;
         HighscoreData & operator=( HighscoreData && data ) noexcept = default;
-        
+
         bool operator==( const HighscoreData & other ) const
         {
             // Ignore player name and completion time.
