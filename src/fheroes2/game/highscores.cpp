@@ -18,19 +18,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
 #include <array>
 #include <ctime>
-#include <functional>
-#include <string>
 
 #include "highscores.h"
 #include "zzlib.h"
 
 namespace
 {
-    const uint16_t hgsID1 = 0xF1F3;
-    const uint16_t hgsID2 = 0xF1F4;
-    const uint8_t hgsArraySizeMax = 10;
+    const uint32_t highscoreFileMagicValue = 0xBADC0DE;
+    const size_t highscoreMaximumEntries = 10;
 
     const std::array<Monster::monster_t, 66> monstersInRanking = { Monster::PEASANT,       Monster::GOBLIN,
                                                                    Monster::SPRITE,        Monster::HALFLING,
@@ -66,117 +64,88 @@ namespace
                                                                    Monster::GREEN_DRAGON,  Monster::RED_DRAGON,
                                                                    Monster::TITAN,         Monster::BLACK_DRAGON };
 
-    bool RatingSort( const HighScore::HighScoreStandardData & h1, const HighScore::HighScoreStandardData & h2 )
+    StreamBase & operator<<( StreamBase & msg, const fheroes2::HighscoreData & data )
     {
-        return h1._rating > h2._rating;
+        return msg << data.playerName << data.scenarioName << data.completionTime << data.dayCount << data.rating << data.mapSeed;
     }
 
-    bool DaysSort( const HighScore::HighScoreCampaignData & h1, const HighScore::HighScoreCampaignData & h2 )
+    StreamBase & operator>>( StreamBase & msg, fheroes2::HighscoreData & data )
     {
-        return h1._days < h2._days;
+        return msg >> data.playerName >> data.scenarioName >> data.completionTime >> data.dayCount >> data.rating >> data.mapSeed;
     }
 
-    template <typename T>
-    void TrySaveScore( std::vector<T> & highScores, T & highScore, bool( scoreCompareFunction )( const T & score1, const T & score2 ) )
+    void saveHighscoreEntry( fheroes2::HighscoreData && data, std::vector<fheroes2::HighscoreData> & entries )
     {
-        // duplicate score
-        if ( highScores.end() != std::find( highScores.begin(), highScores.end(), highScore ) )
+        auto iter = std::find( entries.begin(), entries.end(), data );
+        if ( iter != entries.end() ) {
+            // This is the same game completion. Just replace the entry.
+            *iter = std::move( data );
             return;
+        }
 
-        highScores.emplace_back( highScore );
-        std::sort( highScores.begin(), highScores.end(), scoreCompareFunction );
-        if ( highScores.size() > hgsArraySizeMax )
-            highScores.resize( hgsArraySizeMax );
+        entries.emplace_back( data );
+        std::sort( entries.begin(), entries.end(), []( const fheroes2::HighscoreData & first, const fheroes2::HighscoreData & second )
+            {
+                if ( first.rating == 0 && second.rating == 0 ) {
+                    // Ratings are 0 only for campaigns.
+                    return  first.dayCount < second.dayCount;
+                }
+
+                return first.rating > second.rating;
+            } );
+
+        if ( entries.size() > highscoreMaximumEntries ) {
+            entries.resize( highscoreMaximumEntries );
+        }
     }
 }
 
-namespace HighScore
+namespace fheroes2
 {
-    StreamBase & operator<<( StreamBase & msg, const HighScoreStandardData & data )
+    uint32_t HighscoreData::generateCompletionTime()
     {
-        return msg << data._player << data._scenarioName << data._localTime << data._days << data._rating;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, HighScoreStandardData & data )
-    {
-        return msg >> data._player >> data._scenarioName >> data._localTime >> data._days >> data._rating;
-    }
-
-    bool HighScoreStandardData::operator==( const HighScoreStandardData & other ) const
-    {
-        return _player == other._player && _scenarioName == other._scenarioName && _days == other._days;
-    }
-
-    StreamBase & operator<<( StreamBase & msg, const HighScoreCampaignData & data )
-    {
-        return msg << data._player << data._campaignName << data._localTime << data._days;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, HighScoreCampaignData & data )
-    {
-        return msg >> data._player >> data._campaignName >> data._localTime >> data._days;
-    }
-
-    bool HighScoreCampaignData::operator==( const HighScoreCampaignData & other ) const
-    {
-        return _player == other._player && _campaignName == other._campaignName && _days == other._days;
+        return static_cast<uint32_t>( std::time( nullptr ) );
     }
 
     bool HighScoreDataContainer::load( const std::string & fileName )
     {
         ZStreamFile hdata;
-        if ( !hdata.read( fileName ) )
+        if ( !hdata.read( fileName ) ) {
             return false;
+        }
 
         hdata.setbigendian( true );
-        u16 hgs_id = 0;
+        uint32_t magicValue = 0;
 
-        hdata >> hgs_id;
+        hdata >> magicValue;
 
-        if ( hgs_id == hgsID1 ) {
-            hdata >> _highScoresStandard;
-            return !hdata.fail();
-        }
-        if ( hgs_id == hgsID2 ) {
-            hdata >> _highScoresStandard >> _highScoresCampaign;
-            return !hdata.fail();
+        if ( magicValue != highscoreFileMagicValue ) {
+            // It is not a highscore file.
+            return false;
         }
 
-        return false;
+        hdata >> _highScoresStandard >> _highScoresCampaign;
+
+        return !hdata.fail();
     }
 
     bool HighScoreDataContainer::save( const std::string & fileName ) const
     {
         ZStreamFile hdata;
         hdata.setbigendian( true );
-        hdata << hgsID2 << _highScoresStandard << _highScoresCampaign;
+        hdata << highscoreFileMagicValue << _highScoresStandard << _highScoresCampaign;
 
         return !hdata.fail() && hdata.write( fileName );
     }
 
-    void HighScoreDataContainer::registerScoreStandard( const std::string & playerName, const std::string & scenarioName, const uint32_t days, const uint32_t rating )
+    void HighScoreDataContainer::registerScoreStandard( HighscoreData && data )
     {
-        HighScoreStandardData highScore;
-
-        highScore._player = playerName;
-        highScore._scenarioName = scenarioName;
-        highScore._localTime = std::time( nullptr );
-        highScore._days = days;
-        highScore._rating = rating;
-
-        TrySaveScore( _highScoresStandard, highScore, RatingSort );
+        saveHighscoreEntry( std::move( data ), _highScoresStandard );
     }
 
-    void HighScoreDataContainer::registerScoreCampaign( const std::string & playerName, const std::string & campaignName, const uint32_t days )
+    void HighScoreDataContainer::registerScoreCampaign( HighscoreData && data )
     {
-        HighScoreCampaignData highScore;
-
-        highScore._player = playerName;
-        highScore._campaignName = campaignName;
-        highScore._localTime = std::time( nullptr );
-        highScore._days = days;
-
-        TrySaveScore( _highScoresCampaign, highScore, DaysSort );
+        saveHighscoreEntry( std::move( data ), _highScoresCampaign );
     }
 
     Monster HighScoreDataContainer::getMonsterByRating( const size_t rating )
@@ -284,17 +253,35 @@ namespace HighScore
         return Monster( monster );
     }
 
-    void HighScoreDataContainer::populateDefaultHighScoresStandard()
+    void HighScoreDataContainer::populateStandardDefaultHighScores()
     {
-        registerScoreStandard( "Lord Kilburn", "Beltway", 70, 150 );
-        registerScoreStandard( "Tsabu", "Deathgate", 80, 140 );
-        registerScoreStandard( "Sir Galant", "Enroth", 90, 130 );
-        registerScoreStandard( "Thundax", "Lost Continent", 100, 120 );
-        registerScoreStandard( "Lord Haart", "Mountain King", 120, 110 );
-        registerScoreStandard( "Ariel", "Pandemonium", 140, 100 );
-        registerScoreStandard( "Rebecca", "Terra Firma", 160, 90 );
-        registerScoreStandard( "Sandro", "The Clearing", 180, 80 );
-        registerScoreStandard( "Crodo", "Vikings!", 200, 70 );
-        registerScoreStandard( "Barock", "Wastelands", 240, 60 );
+        const uint32_t currentTime = HighscoreData::generateCompletionTime();
+
+        registerScoreStandard( { "Lord Kilburn", "Beltway", currentTime, 70, 150, 0 } );
+        registerScoreStandard( { "Tsabu", "Deathgate", currentTime, 80, 140, 0 } );
+        registerScoreStandard( { "Sir Galant", "Enroth", currentTime, 90, 130, 0 } );
+        registerScoreStandard( { "Thundax", "Lost Continent", currentTime, 100, 120, 0 } );
+        registerScoreStandard( { "Lord Haart", "Mountain King", currentTime, 120, 110, 0 } );
+        registerScoreStandard( { "Ariel", "Pandemonium", currentTime, 140, 100, 0 } );
+        registerScoreStandard( { "Rebecca", "Terra Firma", currentTime, 160, 90, 0 } );
+        registerScoreStandard( { "Sandro", "The Clearing", currentTime, 180, 80, 0 } );
+        registerScoreStandard( { "Crodo", "Vikings!", currentTime, 200, 70, 0 } );
+        registerScoreStandard( { "Barock", "Wastelands", currentTime, 240, 60, 0 } );
+    }
+
+    void HighScoreDataContainer::populateCampaignDefaultHighScores()
+    {
+        const uint32_t currentTime = HighscoreData::generateCompletionTime();
+
+        registerScoreCampaign( { "Antoine", "Roland", currentTime, 600, 0, 0 } );
+        registerScoreCampaign( { "Astra", "Archibald", currentTime, 650, 0, 0 } );
+        registerScoreCampaign( { "Agar", "Roland", currentTime, 700, 0, 0 } );
+        registerScoreCampaign( { "Vatawna", "Archibald", currentTime, 750, 0, 0 } );
+        registerScoreCampaign( { "Vesper", "Roland", currentTime, 800, 0, 0 } );
+        registerScoreCampaign( { "Ambrose", "Archibald", currentTime, 850, 0, 0 } );
+        registerScoreCampaign( { "Troyan", "Roland", currentTime, 900, 0, 0 } );
+        registerScoreCampaign( { "Jojosh", "Archibald", currentTime, 1000, 0, 0 } );
+        registerScoreCampaign( { "Wrathmont", "Roland", currentTime, 2000, 0, 0 } );
+        registerScoreCampaign( { "Maximus", "Archibald", currentTime, 3000, 0, 0 } );
     }
 }
