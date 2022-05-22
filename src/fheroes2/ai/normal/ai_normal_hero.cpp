@@ -475,7 +475,7 @@ namespace
             }
         }
 
-        hero->ResetModes( Heroes::WAITING | Heroes::MOVED );
+        hero->ResetModes( Heroes::MOVED );
         if ( !hero->MayStillMove( false, false ) ) {
             hero->SetModes( Heroes::MOVED );
         }
