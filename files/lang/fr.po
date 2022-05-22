@@ -9458,9 +9458,8 @@ msgstr ""
 "Transforme en pierre la créature affectée.  Une créature pétrifiée reçoit la "
 "moitié des dégâts d'une attaque directe."
 
-#, fuzzy
 msgid "You have no Magic Book, so you cannot cast a spell."
-msgstr ""
+msgstr "Vous n'avez pas de grimoire, vous ne pouvez donc pas lancer un sort."
 
 msgid "No spell to cast."
 msgstr "Aucun sort à lancer."
