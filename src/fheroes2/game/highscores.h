@@ -26,10 +26,13 @@
 
 #include "monster.h"
 
+class StreamBase;
+
 namespace fheroes2
 {
     struct HighscoreData
     {
+    public:
         HighscoreData() = default;
         HighscoreData( std::string playerName_, std::string scenarioName_, const uint32_t completionTime_, const uint32_t dayCount_, const uint32_t rating_,
                        const uint32_t mapSeed_ )
@@ -69,6 +72,9 @@ namespace fheroes2
         uint32_t mapSeed{ 0 };
 
         static uint32_t generateCompletionTime();
+    private:
+        friend StreamBase & operator<<( StreamBase &, const HighscoreData & );
+        friend StreamBase & operator>>( StreamBase &, HighscoreData & );
     };
 
     class HighScoreDataContainer
@@ -101,6 +107,9 @@ namespace fheroes2
         std::vector<HighscoreData> _highScoresStandard;
         std::vector<HighscoreData> _highScoresCampaign;
     };
+
+    StreamBase & operator<<( StreamBase & msg, const HighscoreData & data );
+    StreamBase & operator>>( StreamBase & msg, HighscoreData & data );
 }
 
 #endif
