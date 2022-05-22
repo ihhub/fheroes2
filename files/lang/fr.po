@@ -8613,8 +8613,8 @@ msgstr "Emplacement 4"
 msgid "Spell Scroll"
 msgstr "Parchemin magique"
 
-msgid "This %{name} gives your hero the ability to cast the %{spell} spell."
-msgstr "Ce %{name} donne à votre héros la capacité de lancer le sort %{spell}."
+msgid "This %{name} gives your hero the ability to cast the %{spell} spell if your hero has a Magic Book."
+msgstr "Ce %{name} donne à votre héros la capacité de lancer le sort %{spell} si celui-ci possède un grimoire."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "

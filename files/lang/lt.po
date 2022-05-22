@@ -7737,7 +7737,7 @@ msgstr ""
 msgid "Spell Scroll"
 msgstr ""
 
-msgid "This %{name} gives your hero the ability to cast the %{spell} spell."
+msgid "This %{name} gives your hero the ability to cast the %{spell} spell if your hero has a Magic Book."
 msgstr ""
 
 msgid ""
