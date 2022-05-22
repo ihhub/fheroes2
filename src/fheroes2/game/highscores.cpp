@@ -64,16 +64,6 @@ namespace
                                                                    Monster::GREEN_DRAGON,  Monster::RED_DRAGON,
                                                                    Monster::TITAN,         Monster::BLACK_DRAGON };
 
-    StreamBase & operator<<( StreamBase & msg, const fheroes2::HighscoreData & data )
-    {
-        return msg << data.playerName << data.scenarioName << data.completionTime << data.dayCount << data.rating << data.mapSeed;
-    }
-
-    StreamBase & operator>>( StreamBase & msg, fheroes2::HighscoreData & data )
-    {
-        return msg >> data.playerName >> data.scenarioName >> data.completionTime >> data.dayCount >> data.rating >> data.mapSeed;
-    }
-
     void saveHighscoreEntry( fheroes2::HighscoreData && data, std::vector<fheroes2::HighscoreData> & entries )
     {
         auto iter = std::find( entries.begin(), entries.end(), data );
@@ -104,6 +94,16 @@ namespace fheroes2
     uint32_t HighscoreData::generateCompletionTime()
     {
         return static_cast<uint32_t>( std::time( nullptr ) );
+    }
+
+    StreamBase & operator<<( StreamBase & msg, const HighscoreData & data )
+    {
+        return msg << data.playerName << data.scenarioName << data.completionTime << data.dayCount << data.rating << data.mapSeed;
+    }
+
+    StreamBase & operator>>( StreamBase & msg, HighscoreData & data )
+    {
+        return msg >> data.playerName >> data.scenarioName >> data.completionTime >> data.dayCount >> data.rating >> data.mapSeed;
     }
 
     bool HighScoreDataContainer::load( const std::string & fileName )
