@@ -306,7 +306,7 @@ public:
 
     void exchangeArtifacts( BagArtifacts & giftBag );
 
-    int getArtifactValue() const;
+    double getArtifactValue() const;
     u32 CountArtifacts( void ) const;
     u32 Count( const Artifact & ) const;
 
