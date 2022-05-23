@@ -95,8 +95,11 @@ void Game::mainGameLoop( bool isFirstGameRun )
         case fheroes2::GameMode::LOAD_GAME:
             result = Game::LoadGame();
             break;
-        case fheroes2::GameMode::HIGHSCORES:
-            result = Game::HighScores();
+        case fheroes2::GameMode::HIGHSCORES_STANDARD:
+            result = Game::DisplayHighScores( false );
+            break;
+        case fheroes2::GameMode::HIGHSCORES_CAMPAIGN:
+            result = Game::DisplayHighScores( true );
             break;
         case fheroes2::GameMode::CREDITS:
             result = Game::Credits();
@@ -306,7 +309,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         }
 
         if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_HIGHSCORES ) || le.MouseClickLeft( buttonHighScores.area() ) ) {
-            return fheroes2::GameMode::HIGHSCORES;
+            return fheroes2::GameMode::HIGHSCORES_STANDARD;
         }
 
         if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_CREDITS ) || le.MouseClickLeft( buttonCredits.area() ) ) {

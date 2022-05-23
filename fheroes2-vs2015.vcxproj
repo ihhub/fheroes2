@@ -289,6 +289,7 @@
     <ClCompile Include="src\fheroes2\game\game_startgame.cpp" />
     <ClCompile Include="src\fheroes2\game\game_static.cpp" />
     <ClCompile Include="src\fheroes2\game\game_video.cpp" />
+    <ClCompile Include="src\fheroes2\game\highscores.cpp" />
     <ClCompile Include="src\fheroes2\gui\cursor.cpp" />
     <ClCompile Include="src\fheroes2\gui\interface_border.cpp" />
     <ClCompile Include="src\fheroes2\gui\interface_buttons.cpp" />
@@ -470,6 +471,7 @@
     <ClInclude Include="src\fheroes2\game\game_static.h" />
     <ClInclude Include="src\fheroes2\game\game_video.h" />
     <ClInclude Include="src\fheroes2\game\game_video_type.h" />
+    <ClInclude Include="src\fheroes2\game\highscores.h" />
     <ClInclude Include="src\fheroes2\gui\cursor.h" />
     <ClInclude Include="src\fheroes2\gui\interface_border.h" />
     <ClInclude Include="src\fheroes2\gui\interface_buttons.h" />
