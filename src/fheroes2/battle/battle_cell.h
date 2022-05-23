@@ -112,7 +112,7 @@ namespace Battle
             : std::pair<Cell *, Cell *>( nullptr, nullptr )
         {}
 
-        void Set( s32 head, bool wide, bool reflect );
+        void Set( const int32_t head, const bool wide, const bool reflect );
         void Swap( void );
         bool isReflect( void ) const;
         bool contains( int cellIndex ) const;

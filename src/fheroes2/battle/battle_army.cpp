@@ -87,18 +87,33 @@ Battle::Force::Force( Army & parent, bool opposite, const Rand::DeterministicRan
 {
     uids.reserve( army.Size() );
 
-    for ( u32 index = 0; index < army.Size(); ++index ) {
-        const Troop * troop = army.GetTroop( index );
-        const u32 position = army.isSpreadFormat() ? index * 22 : 22 + index * 11;
-        u32 uid = 0;
+    for ( size_t i = 0; i < army.Size(); ++i ) {
+        const Troop * troop = army.GetTroop( i );
 
-        if ( troop && troop->isValid() ) {
-            push_back( new Unit( *troop, opposite ? position + 10 : position, opposite, randomGenerator, generator.GetUnique() ) );
-            back()->SetArmy( army );
-            uid = back()->GetUID();
+        if ( troop == nullptr || !troop->isValid() ) {
+            uids.push_back( 0 );
+
+            continue;
         }
 
-        uids.push_back( uid );
+        int32_t idx = army.isSpreadFormat() ? i * 22 : 22 + i * 11;
+
+        if ( opposite ) {
+            idx += ( troop->isWide() ? 9 : 10 );
+        }
+        else if ( troop->isWide() ) {
+            idx += 1;
+        }
+
+        Position pos;
+        pos.Set( idx, troop->isWide(), opposite );
+
+        assert( pos.GetHead() != nullptr && ( !troop->isWide() || pos.GetTail() != nullptr ) );
+
+        push_back( new Unit( *troop, pos, opposite, randomGenerator, generator.GetUnique() ) );
+        back()->SetArmy( army );
+
+        uids.push_back( back()->GetUID() );
     }
 }
 

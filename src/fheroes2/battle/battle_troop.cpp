@@ -105,7 +105,7 @@ u32 Battle::ModesAffected::FindZeroDuration( void ) const
     return it == end() ? 0 : ( *it ).first;
 }
 
-Battle::Unit::Unit( const Troop & t, int32_t pos, bool ref, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid )
+Battle::Unit::Unit( const Troop & t, const Position & pos, const bool ref, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid )
     : ArmyTroop( nullptr, t )
     , animation( id )
     , _uid( uid )
@@ -121,15 +121,7 @@ Battle::Unit::Unit( const Troop & t, int32_t pos, bool ref, const Rand::Determin
     , customAlphaMask( 255 )
     , _randomGenerator( randomGenerator )
 {
-    // set position
-    if ( Board::isValidIndex( pos ) ) {
-        if ( t.isWide() )
-            pos += ( reflect ? -1 : 1 );
-        SetPosition( pos );
-    }
-    else {
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Invalid position " << pos << " for board" )
-    }
+    SetPosition( pos );
 }
 
 Battle::Unit::~Unit()
@@ -142,34 +134,42 @@ Battle::Unit::~Unit()
 
 void Battle::Unit::SetPosition( s32 pos )
 {
-    if ( position.GetHead() )
+    if ( position.GetHead() ) {
         position.GetHead()->SetUnit( nullptr );
-    if ( position.GetTail() )
+    }
+    if ( position.GetTail() ) {
         position.GetTail()->SetUnit( nullptr );
+    }
 
     position.Set( pos, isWide(), reflect );
 
-    if ( position.GetHead() )
+    if ( position.GetHead() ) {
         position.GetHead()->SetUnit( this );
-    if ( position.GetTail() )
+    }
+    if ( position.GetTail() ) {
         position.GetTail()->SetUnit( this );
+    }
 }
 
 void Battle::Unit::SetPosition( const Position & pos )
 {
-    if ( position.GetHead() )
+    if ( position.GetHead() ) {
         position.GetHead()->SetUnit( nullptr );
-    if ( position.GetTail() )
+    }
+    if ( position.GetTail() ) {
         position.GetTail()->SetUnit( nullptr );
+    }
 
     position = pos;
 
-    if ( position.GetHead() )
+    if ( position.GetHead() ) {
         position.GetHead()->SetUnit( this );
-    if ( position.GetTail() )
+    }
+    if ( position.GetTail() ) {
         position.GetTail()->SetUnit( this );
+    }
 
-    if ( isWide() ) {
+    if ( isWide() && position.GetHead() && position.GetTail() ) {
         reflect = GetHeadIndex() < GetTailIndex();
     }
 }

@@ -227,8 +227,10 @@ namespace Battle
         // automatically. When an attack is made by firing a shot, the dir should be UNKNOWN (zero).
         void BattleProcess( Unit & attacker, Unit & defender, int32_t dst = -1, int dir = -1 );
 
-        Unit * CreateElemental( const Spell & );
-        Unit * CreateMirrorImage( Unit & unit, const int32_t pos );
+        Unit * CreateElemental( const Spell & spell );
+        // Creates and returns a mirror image of the given unit. The returned mirror image will have an invalid
+        // position, which should be updated separately.
+        Unit * CreateMirrorImage( Unit & unit );
 
         Force * army1;
         Force * army2;

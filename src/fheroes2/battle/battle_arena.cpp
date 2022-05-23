@@ -1236,9 +1236,9 @@ const HeroBase * Battle::Arena::GetCurrentCommander( void ) const
 Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
 {
     const HeroBase * hero = GetCurrentCommander();
-    const int32_t pos = GetFreePositionNearHero( current_color );
+    const int32_t idx = GetFreePositionNearHero( current_color );
 
-    if ( pos < 0 || !hero ) {
+    if ( idx < 0 || !hero ) {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" )
         return nullptr;
     }
@@ -1281,37 +1281,43 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
         return nullptr;
     }
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << pos )
+    assert( !mons.isWide() );
 
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << idx )
+
+    const bool reflect = ( hero == army2->GetCommander() );
     const uint32_t count = fheroes2::getSummonMonsterCount( spell, hero->GetPower(), hero );
-    elem = new Unit( Troop( mons, count ), pos, hero == army2->GetCommander(), _randomGenerator, _uidGenerator.GetUnique() );
 
-    if ( elem ) {
-        elem->SetModes( CAP_SUMMONELEM );
-        elem->SetArmy( hero->GetArmy() );
-        army.push_back( elem );
-    }
-    else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "is nullptr" )
-    }
+    Position pos;
+    pos.Set( idx, mons.isWide(), reflect );
+
+    // An elemental could not be a wide unit
+    assert( pos.GetHead() != nullptr && pos.GetTail() == nullptr );
+
+    elem = new Unit( Troop( mons, count ), pos, reflect, _randomGenerator, _uidGenerator.GetUnique() );
+
+    elem->SetModes( CAP_SUMMONELEM );
+    elem->SetArmy( hero->GetArmy() );
+
+    army.push_back( elem );
 
     return elem;
 }
 
-Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & unit, const int32_t pos )
+Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & unit )
 {
-    Unit * image = new Unit( unit, pos, unit.isReflect(), _randomGenerator, _uidGenerator.GetUnique() );
+    Unit * mirrorUnit = new Unit( unit, {}, unit.isReflect(), _randomGenerator, _uidGenerator.GetUnique() );
 
-    image->SetArmy( *unit.GetArmy() );
-    image->SetMirror( &unit );
-    image->SetModes( CAP_MIRRORIMAGE );
+    mirrorUnit->SetArmy( *unit.GetArmy() );
+    mirrorUnit->SetMirror( &unit );
+    mirrorUnit->SetModes( CAP_MIRRORIMAGE );
 
-    unit.SetMirror( image );
+    unit.SetMirror( mirrorUnit );
     unit.SetModes( CAP_MIRROROWNER );
 
-    GetCurrentForce().push_back( image );
+    GetCurrentForce().push_back( mirrorUnit );
 
-    return image;
+    return mirrorUnit;
 }
 
 bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defender ) const

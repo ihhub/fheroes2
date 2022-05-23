@@ -1112,44 +1112,42 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
 void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
 {
     const int32_t who = cmd.GetValue();
-    Unit * troop = GetTroopBoard( who );
+    Unit * unit = GetTroopBoard( who );
 
-    if ( troop && troop->isValid() ) {
-        Indexes distances = Board::GetDistanceIndexes( troop->GetHeadIndex(), 4 );
+    if ( unit && unit->isValid() ) {
+        Indexes distances = Board::GetDistanceIndexes( unit->GetHeadIndex(), 4 );
 
-        const int32_t centerIndex = troop->GetHeadIndex();
+        const int32_t centerIndex = unit->GetHeadIndex();
         std::sort( distances.begin(), distances.end(), [centerIndex]( const int32_t index1, const int32_t index2 ) {
             return Battle::Board::GetDistance( centerIndex, index1 ) < Battle::Board::GetDistance( centerIndex, index2 );
         } );
 
         Indexes::const_iterator it
-            = std::find_if( distances.begin(), distances.end(), [troop]( const int32_t v ) { return Battle::Board::isValidMirrorImageIndex( v, troop ); } );
+            = std::find_if( distances.begin(), distances.end(), [unit]( const int32_t v ) { return Battle::Board::isValidMirrorImageIndex( v, unit ); } );
         if ( it != distances.end() ) {
-            const Position pos = Position::GetPosition( *troop, *it );
-            assert( pos.GetHead() != nullptr && ( !troop->isWide() || pos.GetTail() != nullptr ) );
+            Unit * mirrorUnit = CreateMirrorImage( *unit );
+            assert( mirrorUnit != nullptr );
 
-            const s32 dst = pos.GetHead()->GetIndex();
+            const Position pos = Position::GetPosition( *mirrorUnit, *it );
+            assert( pos.GetHead() != nullptr && ( !unit->isWide() || pos.GetTail() != nullptr ) );
 
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "set position: " << dst )
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "set position: " << pos.GetHead()->GetIndex() )
 
             if ( interface ) {
                 const HeroBase * commander = GetCurrentCommander();
                 assert( commander != nullptr );
 
                 TargetInfo targetInfo;
-                targetInfo.defender = troop;
+                targetInfo.defender = unit;
 
                 TargetsInfo targetsInfo;
                 targetsInfo.push_back( targetInfo );
 
                 interface->RedrawActionSpellCastStatus( Spell( Spell::MIRRORIMAGE ), who, commander->GetName(), targetsInfo );
-                interface->RedrawActionMirrorImageSpell( *troop, pos );
+                interface->RedrawActionMirrorImageSpell( *unit, pos );
             }
 
-            Unit * mirror = CreateMirrorImage( *troop, dst );
-            if ( mirror ) {
-                mirror->SetPosition( pos );
-            }
+            mirrorUnit->SetPosition( pos );
         }
         else {
             DEBUG_LOG( DBG_BATTLE, DBG_WARN, "no suitable position found" )
