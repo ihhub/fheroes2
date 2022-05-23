@@ -1254,7 +1254,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     assert( hero != nullptr );
 
     const int32_t idx = GetFreePositionNearHero( current_color );
-    assert( idx >= 0 );
+    assert( Board::isValidIndex( idx ) );
 
     Monster mons( spell );
     assert( mons.isValid() && !mons.isWide() );
