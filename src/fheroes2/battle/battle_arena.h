@@ -228,7 +228,7 @@ namespace Battle
         void BattleProcess( Unit & attacker, Unit & defender, int32_t dst = -1, int dir = -1 );
 
         Unit * CreateElemental( const Spell & );
-        Unit * CreateMirrorImage( Unit &, s32 );
+        Unit * CreateMirrorImage( Unit & unit, const int32_t pos );
 
         Force * army1;
         Force * army2;

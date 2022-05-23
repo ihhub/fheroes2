@@ -1298,22 +1298,18 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     return elem;
 }
 
-Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & b, s32 pos )
+Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & unit, const int32_t pos )
 {
-    Unit * image = new Unit( b, pos, b.isReflect(), _randomGenerator, _uidGenerator.GetUnique() );
+    Unit * image = new Unit( unit, pos, unit.isReflect(), _randomGenerator, _uidGenerator.GetUnique() );
 
-    if ( image ) {
-        b.SetMirror( image );
-        image->SetArmy( *b.GetArmy() );
-        image->SetMirror( &b );
-        image->SetModes( CAP_MIRRORIMAGE );
-        b.SetModes( CAP_MIRROROWNER );
+    image->SetArmy( *unit.GetArmy() );
+    image->SetMirror( &unit );
+    image->SetModes( CAP_MIRRORIMAGE );
 
-        GetCurrentForce().push_back( image );
-    }
-    else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" )
-    }
+    unit.SetMirror( image );
+    unit.SetModes( CAP_MIRROROWNER );
+
+    GetCurrentForce().push_back( image );
 
     return image;
 }
