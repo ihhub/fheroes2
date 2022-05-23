@@ -132,7 +132,7 @@ Battle::Unit::~Unit()
     }
 }
 
-void Battle::Unit::SetPosition( s32 pos )
+void Battle::Unit::SetPosition( const int32_t idx )
 {
     if ( position.GetHead() ) {
         position.GetHead()->SetUnit( nullptr );
@@ -141,7 +141,7 @@ void Battle::Unit::SetPosition( s32 pos )
         position.GetTail()->SetUnit( nullptr );
     }
 
-    position.Set( pos, isWide(), reflect );
+    position.Set( idx, isWide(), reflect );
 
     if ( position.GetHead() ) {
         position.GetHead()->SetUnit( this );

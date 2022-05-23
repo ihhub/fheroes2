@@ -152,8 +152,8 @@ namespace Battle
             return position;
         }
 
-        void SetPosition( s32 );
-        void SetPosition( const Position & );
+        void SetPosition( const int32_t idx );
+        void SetPosition( const Position & pos );
         void SetReflection( bool );
 
         u32 GetAttack() const override;
