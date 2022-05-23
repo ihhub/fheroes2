@@ -79,8 +79,6 @@ namespace Battle
         Unit( const Troop & t, const Position & pos, const bool ref, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid );
         Unit( const Unit & ) = delete;
 
-        ~Unit() override;
-
         Unit & operator=( const Unit & ) = delete;
 
         bool isModes( u32 ) const override;
