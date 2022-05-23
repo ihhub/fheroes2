@@ -207,7 +207,7 @@ public:
     int Level( void ) const;
     int LoyaltyLevel( void ) const;
 
-    int getArtifactValue() const;
+    double getArtifactValue() const;
 
     // return index sprite objnarti.icn
     u32 IndexSprite() const

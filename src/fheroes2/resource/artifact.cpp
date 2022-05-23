@@ -234,25 +234,26 @@ int Artifact::Level( void ) const
     return ART_NONE;
 }
 
-int Artifact::getArtifactValue() const
+double Artifact::getArtifactValue() const
 {
-    int artifactValue = 0;
-    const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( id ).bonuses;
-    const std::vector<fheroes2::ArtifactCurse> & curses = fheroes2::getArtifactData( id ).curses;
+    double artifactValue = 0;
+    const fheroes2::ArtifactData & data = fheroes2::getArtifactData( id );
+    const std::vector<fheroes2::ArtifactBonus> & bonuses = data.bonuses;
+    const std::vector<fheroes2::ArtifactCurse> & curses = data.curses;
 
-    for(const fheroes2::ArtifactBonus& bonus : bonuses) {
+    for ( const fheroes2::ArtifactBonus & bonus : bonuses ) {
         switch ( bonus.type ) {
         case fheroes2::ArtifactBonusType::ADD_SPELL:
             artifactValue += Spell( bonus.value ).Level();
             break;
         case fheroes2::ArtifactBonusType::GOLD_INCOME:
-            artifactValue += bonus.value / 1000;
+            artifactValue += static_cast<double>( bonus.value ) / 1000.0;
             break;
         case fheroes2::ArtifactBonusType::SEA_MOBILITY:
-            artifactValue += bonus.value / 500;
+            artifactValue += static_cast<double>( bonus.value ) / 500.0;
             break;
         case fheroes2::ArtifactBonusType::LAND_MOBILITY:
-            artifactValue += bonus.value / 300;
+            artifactValue += static_cast<double>( bonus.value ) / 300.0;
             break;
         case fheroes2::ArtifactBonusType::CURSE_SPELL_COST_REDUCTION_PERCENT:
         case fheroes2::ArtifactBonusType::BLESS_SPELL_COST_REDUCTION_PERCENT:
@@ -268,14 +269,14 @@ int Artifact::getArtifactValue() const
         case fheroes2::ArtifactBonusType::LIGHTNING_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
         case fheroes2::ArtifactBonusType::RESURRECT_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
         case fheroes2::ArtifactBonusType::SUMMONING_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
-            artifactValue += bonus.value / 50;
+            artifactValue += static_cast<double>( bonus.value ) / 50.0;
             break;
         case fheroes2::ArtifactBonusType::NECROMANCY_SKILL:
         case fheroes2::ArtifactBonusType::SURRENDER_COST_REDUCTION_PERCENT:
-            artifactValue += bonus.value / 10;
+            artifactValue += static_cast<double>( bonus.value ) / 10.0;
             break;
         case fheroes2::ArtifactBonusType::EVERY_COMBAT_SPELL_DURATION:
-            artifactValue += bonus.value / 2;
+            artifactValue += static_cast<double>( bonus.value ) / 2.0;
             break;
         case fheroes2::ArtifactBonusType::CURSE_SPELL_IMMUNITY:
         case fheroes2::ArtifactBonusType::HYPNOTIZE_SPELL_IMMUNITY:
@@ -296,29 +297,31 @@ int Artifact::getArtifactValue() const
             artifactValue += 3;
             break;
         default:
-            artifactValue += bonus.value;
+            // Did you add a new artifact ? Add your logic here.
+            assert( 0 );
             break;
         }
-    } 
+    }
 
-    for(const fheroes2::ArtifactCurse& curse : curses){ 
+    for ( const fheroes2::ArtifactCurse & curse : curses ) {
         switch ( curse.type ) {
         case fheroes2::ArtifactCurseType::GOLD_PENALTY:
-            artifactValue -= curse.value / 250;
+            artifactValue -= static_cast<double>( curse.value ) / 250.0;
             break;
         case fheroes2::ArtifactCurseType::COLD_SPELL_EXTRA_DAMAGE_PERCENT:
         case fheroes2::ArtifactCurseType::FIRE_SPELL_EXTRA_DAMAGE_PERCENT:
-            artifactValue -= curse.value / 100;
+            artifactValue -= static_cast<double>( curse.value ) / 100.0;
             break;
         case fheroes2::ArtifactCurseType::NO_JOINING_ARMIES:
         case fheroes2::ArtifactCurseType::UNDEAD_MORALE_PENALTY:
             artifactValue -= 1;
             break;
         default:
-            artifactValue -= curse.value;
+            // Did you add a new artifact ? Add your logic here.
+            assert( 0 );
             break;
         }
-    } 
+    }
 
     return artifactValue;
 }
@@ -789,9 +792,9 @@ u32 BagArtifacts::CountArtifacts( void ) const
     return static_cast<uint32_t>( std::count_if( begin(), end(), []( const Artifact & art ) { return art.isValid(); } ) );
 }
 
-int BagArtifacts::getArtifactValue() const
+double BagArtifacts::getArtifactValue() const
 {
-    int result = 0;
+    double result = 0;
     for ( const Artifact & art : *this ) {
         if ( art.isValid() )
             result += art.getArtifactValue();
