@@ -102,6 +102,7 @@ public:
         SETFGUARDIAN,
         SETWGUARDIAN,
 
+        // The spells below should not be present in the real game.
         RANDOM,
         RANDOM1,
         RANDOM2,
@@ -109,14 +110,14 @@ public:
         RANDOM4,
         RANDOM5,
 
-        STONE,
+        PETRIFY,
 
         // IMPORTANT! Put all new spells above this line.
         SPELL_COUNT
     };
 
-    Spell( const int s = NONE )
-        : id( s > STONE ? NONE : s )
+    Spell( const int spellId = NONE )
+        : id( spellId >= SPELL_COUNT ? NONE : spellId )
     {
         // Do nothing.
     }

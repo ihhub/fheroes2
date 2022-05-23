@@ -116,7 +116,7 @@ Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, 
     std::vector<Spell> v;
     v.reserve( 15 );
 
-    for ( int sp = Spell::NONE; sp < Spell::STONE; ++sp ) {
+    for ( int sp = Spell::NONE; sp < Spell::PETRIFY; ++sp ) {
         const Spell spell( sp );
 
         if ( spells.isPresentSpell( spell ) )

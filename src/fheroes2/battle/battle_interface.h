@@ -267,7 +267,7 @@ namespace Battle
         void RedrawActionSpellCastPart1( const Spell & spell, s32 dst, const HeroBase * caster, const TargetsInfo & targets );
         void RedrawActionSpellCastPart2( const Spell & spell, const TargetsInfo & targets );
         void RedrawActionResistSpell( const Unit & target, bool playSound );
-        void RedrawActionMonsterSpellCastStatus( const Unit &, const TargetInfo & );
+        void RedrawActionMonsterSpellCastStatus( const Spell & spell, const Unit & attacker, const TargetInfo & target );
         void RedrawActionMove( Unit &, const Indexes & );
         void RedrawActionFly( Unit &, const Position & );
         void RedrawActionMorale( Unit &, bool );

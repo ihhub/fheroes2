@@ -422,7 +422,7 @@ Spell Spell::Rand( int lvl, bool adv )
     std::vector<Spell> v;
     v.reserve( 15 );
 
-    for ( u32 sp = NONE; sp < STONE; ++sp ) {
+    for ( int32_t sp = NONE; sp < PETRIFY; ++sp ) {
         const Spell spell( sp );
         if ( ( ( adv && !spell.isCombat() ) || ( !adv && spell.isCombat() ) ) && lvl == spell.Level() )
             v.push_back( spell );

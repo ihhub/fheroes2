@@ -218,7 +218,7 @@ Heroes::Heroes( int heroid, int rc )
         magic_point = 120;
 
         // all spell in magic book
-        for ( u32 spell = Spell::FIREBALL; spell < Spell::STONE; ++spell )
+        for ( u32 spell = Spell::FIREBALL; spell < Spell::PETRIFY; ++spell )
             AppendSpellToBook( Spell( spell ), true );
         break;
 
