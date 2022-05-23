@@ -5067,8 +5067,10 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
         if ( hero ) {
             if ( hero->HaveSpellBook() ) {
                 std::string msg;
-                if ( arena.isDisableCastSpell( Spell::NONE, &msg ) )
+
+                if ( arena.isDisableCastSpell( Spell::NONE, &msg ) ) {
                     Dialog::Message( "", msg, Font::BIG, Dialog::OK );
+                }
                 else {
                     std::function<void( const std::string & )> statusCallback = [this]( const std::string & statusStr ) {
                         status.SetMessage( statusStr );
@@ -5077,21 +5079,29 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
 
                     const Spell spell = hero->OpenSpellBook( SpellBook::Filter::CMBT, true, &statusCallback );
                     if ( spell.isValid() ) {
-                        std::string error;
+                        assert( spell.isCombat() );
 
-                        if ( arena.isDisableCastSpell( spell, &msg ) )
+                        if ( arena.isDisableCastSpell( spell, &msg ) ) {
                             Dialog::Message( "", msg, Font::BIG, Dialog::OK );
-                        else if ( hero->CanCastSpell( spell, &error ) ) {
-                            if ( spell.isApplyWithoutFocusObject() ) {
-                                a.emplace_back( CommandType::MSG_BATTLE_CAST, spell.GetID(), -1 );
-                                humanturn_redraw = true;
-                                humanturn_exit = true;
-                            }
-                            else
-                                humanturn_spell = spell;
                         }
-                        else if ( !error.empty() )
-                            Dialog::Message( _( "Error" ), error, Font::BIG, Dialog::OK );
+                        else {
+                            std::string error;
+
+                            if ( hero->CanCastSpell( spell, &error ) ) {
+                                if ( spell.isApplyWithoutFocusObject() ) {
+                                    a.emplace_back( CommandType::MSG_BATTLE_CAST, spell.GetID(), -1 );
+
+                                    humanturn_redraw = true;
+                                    humanturn_exit = true;
+                                }
+                                else {
+                                    humanturn_spell = spell;
+                                }
+                            }
+                            else {
+                                Dialog::Message( _( "Error" ), error, Font::BIG, Dialog::OK );
+                            }
+                        }
                     }
                 }
             }

@@ -250,7 +250,7 @@ void Battle::Arena::ApplyActionSpellCast( Command & cmd )
 
     HeroBase * commander = GetCurrentForce().GetCommander();
 
-    if ( commander && commander->HaveSpellBook() && !commander->Modes( Heroes::SPELLCASTED ) && commander->CanCastSpell( spell ) && spell.isCombat() ) {
+    if ( spell.isCombat() && !isDisableCastSpell( spell ) && commander && commander->CanCastSpell( spell ) ) {
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, commander->GetName() << ", color: " << Color::String( commander->GetColor() ) << ", spell: " << spell.GetName() )
 
         // uniq spells action

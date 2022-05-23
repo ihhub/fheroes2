@@ -144,7 +144,7 @@ namespace Battle
         void TargetsApplySpell( const HeroBase *, const Spell &, TargetsInfo & ) const;
 
         bool isSpellcastDisabled() const;
-        bool isDisableCastSpell( const Spell &, std::string * msg );
+        bool isDisableCastSpell( const Spell &, std::string * msg = nullptr );
 
         bool GraveyardAllowResurrect( s32, const Spell & ) const;
         const Unit * GraveyardLastTroop( s32 ) const;

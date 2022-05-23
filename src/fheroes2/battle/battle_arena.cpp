@@ -980,61 +980,71 @@ bool Battle::Arena::isSpellcastDisabled() const
     return false;
 }
 
-bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg )
+bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /* = nullptr */ )
 {
-    const HeroBase * current_commander = GetCurrentCommander();
-
     // check sphere negation (only for heroes)
     if ( isSpellcastDisabled() ) {
-        if ( msg )
+        if ( msg ) {
             *msg = _( "The Sphere of Negation artifact is in effect for this battle, disabling all combat spells." );
+        }
         return true;
     }
+
+    const HeroBase * current_commander = GetCurrentCommander();
 
     // check casted
     if ( current_commander ) {
         if ( current_commander->Modes( Heroes::SPELLCASTED ) ) {
-            if ( msg )
+            if ( msg ) {
                 *msg = _( "You have already cast a spell this round." );
+            }
             return true;
         }
 
         if ( spell == Spell::EARTHQUAKE && !castle ) {
-            *msg = _( "That spell will affect no one!" );
+            if ( msg ) {
+                *msg = _( "That spell will affect no one!" );
+            }
             return true;
         }
         else if ( spell.isSummon() ) {
             const Unit * elem = GetCurrentForce().FindMode( CAP_SUMMONELEM );
-            bool affect = true;
+            bool canSummon = true;
 
-            if ( elem )
+            if ( elem ) {
                 switch ( spell.GetID() ) {
                 case Spell::SUMMONEELEMENT:
                     if ( elem->GetID() != Monster::EARTH_ELEMENT )
-                        affect = false;
+                        canSummon = false;
                     break;
                 case Spell::SUMMONAELEMENT:
                     if ( elem->GetID() != Monster::AIR_ELEMENT )
-                        affect = false;
+                        canSummon = false;
                     break;
                 case Spell::SUMMONFELEMENT:
                     if ( elem->GetID() != Monster::FIRE_ELEMENT )
-                        affect = false;
+                        canSummon = false;
                     break;
                 case Spell::SUMMONWELEMENT:
                     if ( elem->GetID() != Monster::WATER_ELEMENT )
-                        affect = false;
+                        canSummon = false;
                     break;
                 default:
                     break;
                 }
-            if ( !affect ) {
-                *msg = _( "You may only summon one type of elemental per combat." );
+            }
+
+            if ( !canSummon ) {
+                if ( msg ) {
+                    *msg = _( "You may only summon one type of elemental per combat." );
+                }
                 return true;
             }
 
             if ( 0 > GetFreePositionNearHero( current_color ) ) {
-                *msg = _( "There is no open space adjacent to your hero to summon an Elemental to." );
+                if ( msg ) {
+                    *msg = _( "There is no open space adjacent to your hero to summon an Elemental to." );
+                }
                 return true;
             }
         }
@@ -1044,22 +1054,24 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg )
                 const Battle::Unit * b = ( *it ).GetUnit();
 
                 if ( b ) {
-                    if ( b->AllowApplySpell( spell, current_commander, nullptr ) )
+                    if ( b->AllowApplySpell( spell, current_commander, nullptr ) ) {
                         return false;
+                    }
                 }
-                else
+                else {
                     // check graveyard
-                    if ( GraveyardAllowResurrect( ( *it ).GetIndex(), spell ) )
-                    return false;
+                    if ( GraveyardAllowResurrect( ( *it ).GetIndex(), spell ) ) {
+                        return false;
+                    }
+                }
             }
-            *msg = _( "That spell will affect no one!" );
+
+            if ( msg ) {
+                *msg = _( "That spell will affect no one!" );
+            }
             return true;
         }
     }
-
-    // may be check other..
-    /*
-     */
 
     return false;
 }
@@ -1235,53 +1247,16 @@ const HeroBase * Battle::Arena::GetCurrentCommander( void ) const
 
 Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
 {
+    assert( !isDisableCastSpell( spell ) );
+
     const HeroBase * hero = GetCurrentCommander();
+    assert( hero != nullptr );
+
     const int32_t idx = GetFreePositionNearHero( current_color );
-
-    if ( idx < 0 || !hero ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" )
-        return nullptr;
-    }
-
-    Force & army = GetCurrentForce();
-    Unit * elem = army.FindMode( CAP_SUMMONELEM );
-    bool affect = true;
-
-    if ( elem )
-        switch ( spell.GetID() ) {
-        case Spell::SUMMONEELEMENT:
-            if ( elem->GetID() != Monster::EARTH_ELEMENT )
-                affect = false;
-            break;
-        case Spell::SUMMONAELEMENT:
-            if ( elem->GetID() != Monster::AIR_ELEMENT )
-                affect = false;
-            break;
-        case Spell::SUMMONFELEMENT:
-            if ( elem->GetID() != Monster::FIRE_ELEMENT )
-                affect = false;
-            break;
-        case Spell::SUMMONWELEMENT:
-            if ( elem->GetID() != Monster::WATER_ELEMENT )
-                affect = false;
-            break;
-        default:
-            break;
-        }
-
-    if ( !affect ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "other elemental summon" )
-        return nullptr;
-    }
+    assert( idx >= 0 );
 
     Monster mons( spell );
-
-    if ( !mons.isValid() ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unknown id" )
-        return nullptr;
-    }
-
-    assert( !mons.isWide() );
+    assert( mons.isValid() && !mons.isWide() );
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << idx )
 
@@ -1294,12 +1269,12 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     // An elemental could not be a wide unit
     assert( pos.GetHead() != nullptr && pos.GetTail() == nullptr );
 
-    elem = new Unit( Troop( mons, count ), pos, reflect, _randomGenerator, _uidGenerator.GetUnique() );
+    Unit * elem = new Unit( Troop( mons, count ), pos, reflect, _randomGenerator, _uidGenerator.GetUnique() );
 
     elem->SetModes( CAP_SUMMONELEM );
     elem->SetArmy( hero->GetArmy() );
 
-    army.push_back( elem );
+    GetCurrentForce().push_back( elem );
 
     return elem;
 }

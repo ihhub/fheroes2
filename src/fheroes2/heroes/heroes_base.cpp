@@ -442,9 +442,6 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         }
     }
 
-    if ( res ) {
-        res->clear();
-    }
     return true;
 }
 

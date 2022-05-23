@@ -83,8 +83,9 @@ namespace AI
         };
 
         for ( const Spell & spell : allSpells ) {
-            if ( !_commander->HaveSpellPoints( spell ) || !spell.isCombat() || ( !spell.isDamage() && retreating ) )
+            if ( !spell.isCombat() || arena.isDisableCastSpell( spell ) || !_commander->CanCastSpell( spell ) || ( !spell.isDamage() && retreating ) ) {
                 continue;
+            }
 
             if ( spell.isDamage() ) {
                 checkSelectBestSpell( spell, spellDamageValue( spell, arena, currentUnit, friendly, enemies, retreating ) );

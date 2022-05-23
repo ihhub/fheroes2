@@ -278,6 +278,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
                 if ( spell < displayedSpells.end() ) {
                     if ( canCastSpell ) {
                         std::string str;
+
                         if ( hero.CanCastSpell( *spell, &str ) ) {
                             curspell = *spell;
                             break;
