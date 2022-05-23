@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 17:09+0200\n"
+"POT-Creation-Date: 2022-05-23 23:59+0000\n"
 "PO-Revision-Date: 2022-05-19 19:00+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -3253,6 +3253,14 @@ msgstr "Nieznany bohater"
 
 msgid "Your Name"
 msgstr "Twoje imię"
+
+#, fuzzy
+msgid "Standard"
+msgstr "Gra standardowa"
+
+#, fuzzy
+msgid "View High Scores for Standard Maps."
+msgstr "Obejrzyj najlepsze wyniki kampanii"
 
 msgid "Campaign"
 msgstr "Kampania"
