@@ -1129,7 +1129,7 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
             assert( mirrorUnit != nullptr );
 
             const Position pos = Position::GetPosition( *mirrorUnit, *it );
-            assert( pos.GetHead() != nullptr && ( !unit->isWide() || pos.GetTail() != nullptr ) );
+            assert( pos.GetHead() != nullptr && ( !mirrorUnit->isWide() || pos.GetTail() != nullptr ) );
 
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "set position: " << pos.GetHead()->GetIndex() )
 
