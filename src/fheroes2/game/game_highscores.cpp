@@ -144,7 +144,14 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 {
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() && world.CountDay() ) {
-        std::string msg = std::string( "Developer mode, not save! \n \n Your result: " ) + std::to_string( Campaign::CampaignSaveData::Get().getDaysPassed() );
+        std::string msg;
+        if ( isCampaign ) {
+            msg = std::string( "Developer mode, not save! \n \n Your result: " ) + std::to_string( Campaign::CampaignSaveData::Get().getDaysPassed() );
+        }
+        else {
+            msg = std::string( "Developer mode, not save! \n \n Your result: " ) + std::to_string( GetGameOverScores() );
+        }
+
         Dialog::Message( "High Scores", msg, Font::BIG, Dialog::OK );
         return fheroes2::GameMode::MAIN_MENU;
     }
