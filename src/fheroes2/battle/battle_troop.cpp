@@ -1113,7 +1113,7 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
             break;
         case Spell::CURSE:
             attackerThreat += defendersDamage * foundAbility->percentage / 100.0 / 10.0
-                              * ( 100 - defender.GetMagicResist( foundAbility->value, DEFAULT_SPELL_DURATION, nullptr ) ) / 100.0
+                              * ( 100 - defender.GetMagicResist( foundAbility->value, DEFAULT_SPELL_DURATION, nullptr ) ) / 100.0;
             break;
         default:
             // Did you add a new spell casting ability? Add the logic above!
