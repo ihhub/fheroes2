@@ -1247,6 +1247,7 @@ const HeroBase * Battle::Arena::GetCurrentCommander( void ) const
 
 Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
 {
+    // TODO: this assertion is here to thoroughly check all the complex limitations of the Summon Elemental spell
     assert( !isDisableCastSpell( spell ) );
 
     const HeroBase * hero = GetCurrentCommander();
