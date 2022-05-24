@@ -574,7 +574,6 @@ namespace
 
                     for ( size_t j = 0; j < heroes.size(); ++j ) {
                         if ( heroes[j]->GetID() == awards[i]._subType ) {
-                            heroes[j]->SetKillerColor( humanKingdom.GetColor() );
                             heroes[j]->SetFreeman( Battle::RESULT_LOSS );
                             break;
                         }

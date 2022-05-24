@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <cassert>
+#include <utility>
 
 #include "agg.h"
 #include "ai_normal.h"
@@ -27,17 +28,11 @@
 #include "ground.h"
 #include "logging.h"
 #include "mus.h"
-#include "settings.h"
 #include "world.h"
 
 namespace
 {
     const double fighterStrengthMultiplier = 3;
-
-    bool isHeroLossCondition()
-    {
-        return ( Settings::Get().ConditionWins() & GameOver::WINS_HERO ) != 0;
-    }
 
     void setHeroRoles( KingdomHeroes & heroes )
     {
@@ -46,11 +41,11 @@ namespace
             return;
         }
 
-        const Heroes * heroToLose = isHeroLossCondition() ? world.GetHeroesCondWins() : nullptr;
+        const Heroes * valuableHero = world.GetHeroesCondWins();
 
         if ( heroes.size() == 1 ) {
-            if ( heroToLose != nullptr && heroToLose == heroes[0] ) {
-                // TODO: a hero to be lost must be marked as a champion.
+            if ( valuableHero != nullptr && valuableHero == heroes[0] ) {
+                // TODO: a valuable hero must be marked as a champion.
                 heroes[0]->setAIRole( Heroes::Role::FIGHTER );
             }
             else {
@@ -73,8 +68,8 @@ namespace
         const double medianStrength = heroStrength[heroStrength.size() / 2].first;
 
         for ( std::pair<double, Heroes *> & hero : heroStrength ) {
-            // TODO: a hero to be lost must be marked as a champion.
-            if ( heroToLose != nullptr && hero.second == heroToLose ) {
+            // TODO: a valuable hero must be marked as a champion.
+            if ( valuableHero != nullptr && hero.second == valuableHero ) {
                 hero.second->setAIRole( Heroes::Role::FIGHTER );
                 continue;
             }
@@ -95,14 +90,35 @@ namespace AI
     {
         Kingdom & kingdom = castle.GetKingdom();
         const Recruits & rec = kingdom.GetRecruits();
+
         Heroes * recruit = nullptr;
+
+        // Re-hiring a hero related to any of the WINS_HERO or LOSS_HERO conditions is not allowed
+        const auto heroesToIgnore = std::make_pair( world.GetHeroesCondWins(), world.GetHeroesCondLoss() );
+
         Heroes * firstRecruit = rec.GetHero1();
-        Heroes * secondRecruit = rec.GetHero2();
-        if ( firstRecruit && secondRecruit && secondRecruit->getRecruitValue() > firstRecruit->getRecruitValue() ) {
-            recruit = castle.RecruitHero( secondRecruit );
+        if ( firstRecruit == heroesToIgnore.first || firstRecruit == heroesToIgnore.second ) {
+            firstRecruit = nullptr;
         }
-        else {
+
+        Heroes * secondRecruit = rec.GetHero2();
+        if ( secondRecruit == heroesToIgnore.first || secondRecruit == heroesToIgnore.second ) {
+            secondRecruit = nullptr;
+        }
+
+        if ( firstRecruit && secondRecruit ) {
+            if ( secondRecruit->getRecruitValue() > firstRecruit->getRecruitValue() ) {
+                recruit = castle.RecruitHero( secondRecruit );
+            }
+            else {
+                recruit = castle.RecruitHero( firstRecruit );
+            }
+        }
+        else if ( firstRecruit ) {
             recruit = castle.RecruitHero( firstRecruit );
+        }
+        else if ( secondRecruit ) {
+            recruit = castle.RecruitHero( secondRecruit );
         }
 
         if ( recruit && buyArmy ) {

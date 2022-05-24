@@ -51,6 +51,7 @@
 #include "mp2.h"
 #include "payment.h"
 #include "race.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "speed.h"
@@ -344,8 +345,6 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
 
 void Heroes::PostLoad( void )
 {
-    killer_color.SetColor( Color::NONE );
-
     // save general object
     save_maps_object = MP2::OBJ_ZERO;
 
@@ -685,7 +684,6 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
     ResetModes( JAIL );
 
     SetColor( col );
-    killer_color.SetColor( Color::NONE );
 
     SetCenter( pt );
     setDirection( Direction::RIGHT );
@@ -1534,16 +1532,6 @@ void Heroes::SetFreeman( int reason )
     }
 }
 
-void Heroes::SetKillerColor( int col )
-{
-    killer_color.SetColor( col );
-}
-
-int Heroes::GetKillerColor( void ) const
-{
-    return killer_color.GetColor();
-}
-
 int Heroes::GetControl( void ) const
 {
     return GetKingdom().GetControl();
@@ -2067,11 +2055,12 @@ StreamBase & operator<<( StreamBase & msg, const Heroes & hero )
     const HeroBase & base = hero;
     const ColorBase & col = hero;
 
+    // HeroBase
     msg << base;
 
-    // heroes
-    msg << hero.name << col << hero.killer_color << hero.experience << hero.move_point_scale << hero.secondary_skills << hero.army << hero.hid << hero.portrait
-        << hero._race << hero.save_maps_object << hero.path << hero.direction << hero.sprite_index;
+    // Heroes
+    msg << hero.name << col << hero.experience << hero.move_point_scale << hero.secondary_skills << hero.army << hero.hid << hero.portrait << hero._race
+        << hero.save_maps_object << hero.path << hero.direction << hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
     const int16_t patrolX = static_cast<int16_t>( hero.patrol_center.x );
@@ -2087,8 +2076,21 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     HeroBase & base = hero;
     ColorBase & col = hero;
 
-    msg >> base >> hero.name >> col >> hero.killer_color >> hero.experience >> hero.move_point_scale >> hero.secondary_skills >> hero.army >> hero.hid >> hero.portrait
-        >> hero._race >> hero.save_maps_object >> hero.path >> hero.direction >> hero.sprite_index;
+    // HeroBase
+    msg >> base;
+
+    // Heroes
+    msg >> hero.name >> col;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0916_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_0916_RELEASE ) {
+        ColorBase dummyColor;
+
+        msg >> dummyColor;
+    }
+
+    msg >> hero.experience >> hero.move_point_scale >> hero.secondary_skills >> hero.army >> hero.hid >> hero.portrait >> hero._race >> hero.save_maps_object >> hero.path
+        >> hero.direction >> hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
     int16_t patrolX = 0;

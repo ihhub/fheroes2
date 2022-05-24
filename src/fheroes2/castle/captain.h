@@ -31,6 +31,9 @@ class Captain : public HeroBase
 {
 public:
     explicit Captain( Castle & );
+    Captain( const Captain & ) = delete;
+
+    Captain & operator=( const Captain & ) = delete;
 
     bool isValid() const override;
     int GetAttack() const override;

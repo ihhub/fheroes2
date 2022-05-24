@@ -218,6 +218,9 @@ public:
     Heroes();
     Heroes( int heroid, int rc );
     Heroes( int heroID, int race, int initialLevel );
+    Heroes( const Heroes & ) = delete;
+
+    Heroes & operator=( const Heroes & ) = delete;
 
     bool isValid() const override;
     bool isFreeman( void ) const;
@@ -235,9 +238,6 @@ public:
     int GetColor() const override;
     int GetType() const override;
     int GetControl() const override;
-
-    int GetKillerColor( void ) const;
-    void SetKillerColor( int );
 
     const Army & GetArmy() const override;
     Army & GetArmy() override;
@@ -442,7 +442,6 @@ private:
     };
 
     std::string name;
-    ColorBase killer_color;
     u32 experience;
     s32 move_point_scale;
 

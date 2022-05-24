@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 
 #include "artifact.h"
 #include "campaign_data.h"
@@ -692,8 +693,9 @@ void World::ProcessNewMap()
     }
     if ( GameOver::LOSS_HERO & conf.ConditionLoss() ) {
         Heroes * hero = GetHeroes( conf.LossMapsPositionObject() );
+        heroes_cond_loss = hero ? hero->GetID() : Heroes::UNKNOWN;
+
         if ( hero ) {
-            heroes_cond_loss = hero->GetID();
             hero->SetModes( Heroes::NOTDISMISS | Heroes::NOTDEFAULTS );
         }
     }
@@ -749,7 +751,7 @@ void World::ProcessNewMap()
             const fheroes2::Point & cp = castle->GetCenter();
             Heroes * hero = vec_heroes.Get( Heroes::DEBUG_HERO );
 
-            if ( hero && !world.GetTiles( cp.x, cp.y + 1 ).GetHeroes() ) {
+            if ( hero && !GetTiles( cp.x, cp.y + 1 ).GetHeroes() ) {
                 hero->Recruit( castle->GetColor(), { cp.x, cp.y + 1 } );
             }
         }
