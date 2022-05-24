@@ -714,7 +714,7 @@ bool AGG::AGGInitializer::init()
     }
 
     if ( heroes2AggFilePath.empty() ) {
-        // The main game resource file is not found.
+        // The main game resource file was not found.
         return false;
     }
 

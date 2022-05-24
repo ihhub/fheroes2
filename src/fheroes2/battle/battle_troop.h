@@ -76,10 +76,8 @@ namespace Battle
     class Unit : public ArmyTroop, public BitModes, public Control
     {
     public:
-        Unit( const Troop &, int32_t pos, bool reflect, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid );
+        Unit( const Troop & t, const Position & pos, const bool ref, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid );
         Unit( const Unit & ) = delete;
-
-        ~Unit() override;
 
         Unit & operator=( const Unit & ) = delete;
 
@@ -152,8 +150,8 @@ namespace Battle
             return position;
         }
 
-        void SetPosition( s32 );
-        void SetPosition( const Position & );
+        void SetPosition( const int32_t idx );
+        void SetPosition( const Position & pos );
         void SetReflection( bool );
 
         u32 GetAttack() const override;

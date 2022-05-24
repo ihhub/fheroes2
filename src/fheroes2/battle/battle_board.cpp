@@ -453,9 +453,9 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
 
     if ( debug && result.empty() ) {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   "Path is not found for " << unit.String() << ", destination: "
-                                            << "(head cell ID: " << destination.GetHead()->GetIndex()
-                                            << ", tail cell ID: " << ( isWideUnit ? destination.GetTail()->GetIndex() : -1 ) << ")" )
+                   "Path was not found for " << unit.String() << ", destination: "
+                                             << "(head cell ID: " << destination.GetHead()->GetIndex()
+                                             << ", tail cell ID: " << ( isWideUnit ? destination.GetTail()->GetIndex() : -1 ) << ")" )
     }
 
     return result;
@@ -1100,22 +1100,22 @@ Battle::Indexes Battle::Board::GetDistanceIndexes( s32 center, u32 radius )
     return result;
 }
 
-bool Battle::Board::isValidMirrorImageIndex( s32 index, const Unit * troop )
+bool Battle::Board::isValidMirrorImageIndex( const int32_t index, const Unit * unit )
 {
-    if ( troop == nullptr ) {
+    if ( unit == nullptr ) {
         return false;
     }
 
-    const Cell * cell = GetCell( index );
-    if ( cell == nullptr ) {
+    const Position mirrorPos = Position::GetPosition( *unit, index );
+
+    if ( mirrorPos.GetHead() == nullptr || ( unit->isWide() && mirrorPos.GetTail() == nullptr ) ) {
         return false;
     }
 
-    if ( index == troop->GetHeadIndex() || ( troop->isWide() && index == troop->GetTailIndex() ) ) {
+    if ( unit->GetPosition().contains( mirrorPos.GetHead()->GetIndex() ) ) {
         return false;
     }
-
-    if ( !cell->isPassableForUnit( *troop ) ) {
+    if ( unit->isWide() && unit->GetPosition().contains( mirrorPos.GetTail()->GetIndex() ) ) {
         return false;
     }
 
