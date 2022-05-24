@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-23 23:59+0000\n"
+"POT-Creation-Date: 2022-05-24 15:21+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -139,6 +139,10 @@ msgid "View %{name}"
 msgstr "Ver %{name}"
 
 #, fuzzy
+msgid "Move the %{name} "
+msgstr "Ver %{name}"
+
+#, fuzzy
 msgid "Move or right click to redistribute %{name}"
 msgstr "Mova e clica com o botao direito para redistribuir %{name}"
 
@@ -154,6 +158,10 @@ msgstr "Selecione %{name}"
 #, fuzzy
 msgid "Cannot move last troop"
 msgstr "Não é possível mover o último exército à fortaleza"
+
+#, fuzzy
+msgid "Move the %{name}"
+msgstr "Ver %{name}"
 
 msgid "Set Count"
 msgstr ""
@@ -8815,7 +8823,7 @@ msgstr ""
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr ""
 
-msgid "heroes: remember move points for retreat/surrender result"
+msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"

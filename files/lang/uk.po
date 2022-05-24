@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-23 23:59+0000\n"
+"POT-Creation-Date: 2022-05-24 15:21+0000\n"
 "PO-Revision-Date: 2022-05-10 16:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -151,6 +151,10 @@ msgstr ""
 msgid "View %{name}"
 msgstr "Дивитися %{name}"
 
+#, fuzzy
+msgid "Move the %{name} "
+msgstr "Найняти: %{name}"
+
 msgid "Move or right click to redistribute %{name}"
 msgstr ""
 
@@ -166,6 +170,10 @@ msgstr ""
 
 msgid "Cannot move last troop"
 msgstr ""
+
+#, fuzzy
+msgid "Move the %{name}"
+msgstr "Найняти: %{name}"
 
 msgid "Set Count"
 msgstr ""
@@ -8466,7 +8474,7 @@ msgstr "замок: дозволити захистників"
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "герої: дозволити придбати книгу чарів з Святинь"
 
-msgid "heroes: remember move points for retreat/surrender result"
+msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-23 23:59+0000\n"
+"POT-Creation-Date: 2022-05-24 15:21+0000\n"
 "PO-Revision-Date: 2022-05-19 19:00+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -139,6 +139,10 @@ msgstr "Nieumarli w armii -1"
 msgid "View %{name}"
 msgstr "Obejrzyj jednostkę (%{name})"
 
+#, fuzzy
+msgid "Move the %{name} "
+msgstr "Przenieś %{name}"
+
 msgid "Move or right click to redistribute %{name}"
 msgstr "Przenieś lub kliknij prawym aby rozdzielić %{name}"
 
@@ -153,6 +157,10 @@ msgstr "Wybierz jednostkę (%{name})"
 
 msgid "Cannot move last troop"
 msgstr "Nie można przenieść ostatniej jednostki"
+
+#, fuzzy
+msgid "Move the %{name}"
+msgstr "Przenieś %{name}"
 
 msgid "Set Count"
 msgstr "Podaj liczbę"
@@ -9151,7 +9159,8 @@ msgstr "zamek: zezwól na strażników"
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "bohaterowie: pozwól kupować księgę zaklęć w kaplicach"
 
-msgid "heroes: remember move points for retreat/surrender result"
+#, fuzzy
+msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
 "bohaterowie: zapamiętaj punkty ruchu przy obliczaniu rezultatu ucieczki/"
 "kapitulacji"

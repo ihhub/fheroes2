@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-23 23:59+0000\n"
+"POT-Creation-Date: 2022-05-24 15:21+0000\n"
 "PO-Revision-Date: 2022-05-12 17:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -136,6 +136,10 @@ msgstr "Morts-vivants parmi les troupes -1"
 msgid "View %{name}"
 msgstr "Voir %{name}"
 
+#, fuzzy
+msgid "Move the %{name} "
+msgstr "Déplacer %{name}"
+
 msgid "Move or right click to redistribute %{name}"
 msgstr "Déplacer ou faire un clic droit pour répartir les %{name}"
 
@@ -150,6 +154,10 @@ msgstr "Sélectionner %{name}"
 
 msgid "Cannot move last troop"
 msgstr "Impossible de déplacer la dernière armée dans la garnison"
+
+#, fuzzy
+msgid "Move the %{name}"
+msgstr "Déplacer %{name}"
 
 msgid "Set Count"
 msgstr "Régler le nombre"
@@ -9551,7 +9559,8 @@ msgstr "château : les Héros peuvent remplacer le Capitaine"
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "héros : permettre l'achat d'un Grimoire dans les Sanctuaires"
 
-msgid "heroes: remember move points for retreat/surrender result"
+#, fuzzy
+msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
 "héros : les points de mouvement sont mémorisés après la retraite/reddition"
 

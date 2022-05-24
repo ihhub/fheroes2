@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-23 23:59+0000\n"
+"POT-Creation-Date: 2022-05-24 15:21+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -135,6 +135,10 @@ msgstr "Vandøde blant styrkene -1"
 msgid "View %{name}"
 msgstr "Vis %{name}"
 
+#, fuzzy
+msgid "Move the %{name} "
+msgstr "Flytt %{name}"
+
 msgid "Move or right click to redistribute %{name}"
 msgstr "Flytt eller høyreklikk for å omfordele %{name}"
 
@@ -149,6 +153,10 @@ msgstr "Velg %{name}"
 
 msgid "Cannot move last troop"
 msgstr "Kan ikke flytte siste styrke i garnisonen"
+
+#, fuzzy
+msgid "Move the %{name}"
+msgstr "Flytt %{name}"
 
 msgid "Set Count"
 msgstr "Velg antall"
@@ -9705,7 +9713,8 @@ msgstr "Borg: Tillat helt som vokter"
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "Helter: Tillat å kjøpe tryllebok fra magitempel"
 
-msgid "heroes: remember move points for retreat/surrender result"
+#, fuzzy
+msgid "heroes: remember movement points when retreating or surrendering"
 msgstr "Helter: Husk skrittene for tilbaketrekkings-/overgivelsesresultatet"
 
 msgid "heroes: allow to choose any primary skill in Arena"
