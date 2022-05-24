@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-20 02:21+0000\n"
+"POT-Creation-Date: 2022-05-23 23:59+0000\n"
 "PO-Revision-Date: 2022-05-14 22:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -3424,6 +3424,14 @@ msgstr ""
 
 msgid "Your Name"
 msgstr ""
+
+#, fuzzy
+msgid "Standard"
+msgstr "Juego estandar"
+
+#, fuzzy
+msgid "View High Scores for Standard Maps."
+msgstr "Ver la pantalla de puntuaciones más altas"
 
 msgid "Campaign"
 msgstr "Partida de Campaña"
