@@ -83,7 +83,7 @@ namespace AI
         };
 
         for ( const Spell & spell : allSpells ) {
-            if ( !spell.isCombat() || arena.isDisableCastSpell( spell ) || !_commander->CanCastSpell( spell ) || ( !spell.isDamage() && retreating ) ) {
+            if ( !spell.isCombat() || arena.isDisableCastSpell( spell ) || !_commander->CanCastSpell( spell ) || ( retreating && !spell.isDamage() ) ) {
                 continue;
             }
 
