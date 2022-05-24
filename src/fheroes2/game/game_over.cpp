@@ -333,14 +333,14 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     // before displaying the high score.
                     AGG::PlayMusic( MUS::VICTORY, true, true );
 
-                    res = fheroes2::GameMode::HIGHSCORES;
+                    res = fheroes2::GameMode::HIGHSCORES_STANDARD;
 
                     if ( conf.ExtGameContinueAfterVictory() && myKingdom.isPlay() ) {
                         if ( Dialog::YES == Dialog::Message( "", _( "Do you wish to continue the game?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
                             continueAfterVictory = true;
 
                             // Game::HighScores() calls ResetResult()
-                            Game::HighScores();
+                            Game::DisplayHighScores( false );
 
                             Interface::Basic & I = Interface::Basic::Get();
 
