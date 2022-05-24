@@ -190,7 +190,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
 
                 if ( interface ) {
                     interface->RedrawActionSpellCastPart2( spell, targets );
-                    interface->RedrawActionMonsterSpellCastStatus( attacker, targets.front() );
+                    interface->RedrawActionMonsterSpellCastStatus( spell, attacker, targets.front() );
                 }
             }
         }

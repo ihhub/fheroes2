@@ -101,7 +101,7 @@ namespace
         case Battle::SP_PARALYZE:
             return Spell::PARALYZE;
         case Battle::SP_STONE:
-            return Spell::STONE;
+            return Spell::PETRIFY;
         default:
             // Did you add another mode? Please add a corresponding spell.
             assert( 0 );

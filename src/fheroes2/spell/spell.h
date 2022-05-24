@@ -102,6 +102,7 @@ public:
         SETFGUARDIAN,
         SETWGUARDIAN,
 
+        // These constants are placeholders for a random spell of the corresponding level and should not be added to the spell book.
         RANDOM,
         RANDOM1,
         RANDOM2,
@@ -109,14 +110,15 @@ public:
         RANDOM4,
         RANDOM5,
 
-        STONE,
+        // This spell is exclusively a built-in monster spell and should not be added to the spell book.
+        PETRIFY,
 
         // IMPORTANT! Put all new spells above this line.
         SPELL_COUNT
     };
 
-    Spell( const int s = NONE )
-        : id( s > STONE ? NONE : s )
+    Spell( const int32_t spellId = NONE )
+        : id( ( spellId < 0 || spellId >= SPELL_COUNT ) ? NONE : spellId )
     {
         // Do nothing.
     }

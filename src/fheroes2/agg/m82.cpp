@@ -191,7 +191,7 @@ int M82::FromSpell( int spell )
         return ERTHQUAK;
     case Spell::HAUNT:
         return H2MINE;
-    case Spell::STONE:
+    case Spell::PETRIFY:
         return PARALIZE;
     default:
         break;
