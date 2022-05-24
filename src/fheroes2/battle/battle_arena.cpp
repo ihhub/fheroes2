@@ -42,6 +42,7 @@
 #include "ground.h"
 #include "icn.h"
 #include "logging.h"
+#include "monster.h"
 #include "race.h"
 #include "settings.h"
 #include "speed.h"
@@ -1008,33 +1009,11 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /
             return true;
         }
         else if ( spell.isSummon() ) {
+            const Monster mons( spell );
+            assert( mons.isValid() && mons.isElemental() );
+
             const Unit * elem = GetCurrentForce().FindMode( CAP_SUMMONELEM );
-            bool canSummon = true;
-
-            if ( elem ) {
-                switch ( spell.GetID() ) {
-                case Spell::SUMMONEELEMENT:
-                    if ( elem->GetID() != Monster::EARTH_ELEMENT )
-                        canSummon = false;
-                    break;
-                case Spell::SUMMONAELEMENT:
-                    if ( elem->GetID() != Monster::AIR_ELEMENT )
-                        canSummon = false;
-                    break;
-                case Spell::SUMMONFELEMENT:
-                    if ( elem->GetID() != Monster::FIRE_ELEMENT )
-                        canSummon = false;
-                    break;
-                case Spell::SUMMONWELEMENT:
-                    if ( elem->GetID() != Monster::WATER_ELEMENT )
-                        canSummon = false;
-                    break;
-                default:
-                    break;
-                }
-            }
-
-            if ( !canSummon ) {
+            if ( elem && elem->GetID() != mons.GetID() ) {
                 if ( msg ) {
                     *msg = _( "You may only summon one type of elemental per combat." );
                 }
@@ -1256,8 +1235,8 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
     const int32_t idx = GetFreePositionNearHero( current_color );
     assert( Board::isValidIndex( idx ) );
 
-    Monster mons( spell );
-    assert( mons.isValid() && !mons.isWide() );
+    const Monster mons( spell );
+    assert( mons.isValid() && mons.isElemental() && !mons.isWide() );
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << idx )
 
