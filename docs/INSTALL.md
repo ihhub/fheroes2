@@ -196,17 +196,22 @@ be missing depending on the version of the original game) from the original game
 <a name="flatpak-linux"></a>
 ### Flatpak
 
-If you are using [**Flatpak**](https://flatpak.org) and [**Flathub**](https://flathub.org), you can install the game by running the following command:
+If you are using [**Flatpak**](https://flatpak.org) and [**Flathub**](https://flathub.org), you can install the game by running the
+following command:
 
-```flatpak install flathub io.github.ihhub.Fheroes2```
+```sh
+flatpak install flathub io.github.ihhub.Fheroes2
+```
 
 And launch from the start menu or the console:
 
-```flatpak run io.github.ihhub.Fheroes2```
+```sh
+flatpak run io.github.ihhub.Fheroes2
+```
 
 Alternatively, you can use an application manager like Discover, which is also available on Steam Deck.
 
-You have to copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` from the original game or demo directory to the `~/.var/app/io.github.ihhub.Fheroes2/data/fheroes2` directory after the first launch. 
+You have to copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` from the original game or demo directory to the `~/.var/app/io.github.ihhub.Fheroes2/data/fheroes2` directory (created after the first launch). 
 
 <a name="linux-zip-archive"></a>
 ### Linux ZIP archive
