@@ -771,8 +771,12 @@ std::string BagArtifacts::String( void ) const
 {
     std::string output;
 
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        output += it->GetName();
+    for ( const Artifact & art : *this ) {
+        if ( !art.isValid() ) {
+            continue;
+        }
+
+        output += art.GetName();
         output += ", ";
     }
 
