@@ -8764,7 +8764,8 @@ msgstr "Plassholder 4"
 msgid "Spell Scroll"
 msgstr "Trolldomsrull"
 
-msgid "This %{name} gives your hero the ability to cast the %{spell} spell."
+#, fuzzy
+msgid "This %{name} gives your hero the ability to cast the %{spell} spell if your hero has a Magic Book."
 msgstr "Denne %{name}en gir helten din evnen til å bruke trolldommen %{spell}."
 
 msgid ""
@@ -9620,6 +9621,10 @@ msgid ""
 msgstr ""
 "Forvandler den påvirkede skapningen til stein. En forsteinet skapning tar "
 "halv skade fra direkte angrep."
+
+#, fuzzy
+msgid "You have no Magic Book, so you cannot cast a spell."
+msgstr ""
 
 # Used on adventure map. Plural is right for norwegian.
 msgid "No spell to cast."

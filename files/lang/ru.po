@@ -8368,7 +8368,8 @@ msgstr "Мумия"
 msgid "Spell Scroll"
 msgstr "Свиток Заклинания"
 
-msgid "This %{name} gives your hero the ability to cast the %{spell} spell."
+#, fuzzy
+msgid "This %{name} gives your hero the ability to cast the %{spell} spell if your hero has a Magic Book."
 msgstr "%{name} позволяет Вашему герою произносить заклинание %{spell}."
 
 msgid ""
@@ -9182,6 +9183,10 @@ msgid ""
 msgstr ""
 "Превращает поражённое существо в камень. Окаменевшее существо получает "
 "половину урона от прямой атаки."
+
+#, fuzzy
+msgid "You have no Magic Book, so you cannot cast a spell."
+msgstr ""
 
 msgid "No spell to cast."
 msgstr "Нет заклинаний для применения."

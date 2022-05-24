@@ -8467,8 +8467,9 @@ msgstr "Momia"
 msgid "Spell Scroll"
 msgstr "Pegamino del Hechizo"
 
-msgid "This %{name} gives your hero the ability to cast the %{spell} spell."
-msgstr ""
+#, fuzzy
+msgid "This %{name} gives your hero the ability to cast the %{spell} spell if your hero has a Magic Book."
+msgstr "Este %{name} le da a tu héroe la habilidad de lanzar el hechizo %{spell} si tu héroe tiene un Libro de Hechizos"
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
@@ -9279,6 +9280,9 @@ msgid ""
 "Turns the affected creature into stone.  A petrified creature receives half "
 "damage from a direct attack."
 msgstr ""
+
+msgid "You have no Magic Book, so you cannot cast a spell."
+msgstr "No tienes un Libro de Hechizos, por lo que no puedes lanzar un hechizo."
 
 msgid "No spell to cast."
 msgstr "No hay hechizo que lanzar."

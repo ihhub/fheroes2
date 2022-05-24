@@ -8621,8 +8621,8 @@ msgstr "Emplacement 4"
 msgid "Spell Scroll"
 msgstr "Parchemin magique"
 
-msgid "This %{name} gives your hero the ability to cast the %{spell} spell."
-msgstr "Ce %{name} donne à votre héros la capacité de lancer le sort %{spell}."
+msgid "This %{name} gives your hero the ability to cast the %{spell} spell if your hero has a Magic Book."
+msgstr "Ce %{name} donne à votre héros la capacité de lancer le sort %{spell} si celui-ci possède un grimoire."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
@@ -9465,6 +9465,9 @@ msgid ""
 msgstr ""
 "Transforme en pierre la créature affectée.  Une créature pétrifiée reçoit la "
 "moitié des dégâts d'une attaque directe."
+
+msgid "You have no Magic Book, so you cannot cast a spell."
+msgstr "Vous n'avez pas de grimoire, vous ne pouvez donc pas lancer un sort."
 
 msgid "No spell to cast."
 msgstr "Aucun sort à lancer."

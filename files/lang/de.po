@@ -8777,7 +8777,8 @@ msgstr "Dummy 4"
 msgid "Spell Scroll"
 msgstr "Zauberspruchrolle"
 
-msgid "This %{name} gives your hero the ability to cast the %{spell} spell."
+#, fuzzy
+msgid "This %{name} gives your hero the ability to cast the %{spell} spell if your hero has a Magic Book."
 msgstr ""
 "Diese %{name} verleiht Ihrem Helden die Fähigkeit, den %{spell} Zauber zu "
 "wirken."
@@ -9628,6 +9629,10 @@ msgid ""
 msgstr ""
 "Verwandelt die betroffene Kreatur in Stein.  Eine versteinerte Kreatur "
 "erleidet bei einem direkten Angriff die Hälfte des Schadens."
+
+#, fuzzy
+msgid "You have no Magic Book, so you cannot cast a spell."
+msgstr ""
 
 msgid "No spell to cast."
 msgstr "Kein Zauber zu wirken."

@@ -7798,7 +7798,7 @@ msgstr "Mummia"
 msgid "Spell Scroll"
 msgstr ""
 
-msgid "This %{name} gives your hero the ability to cast the %{spell} spell."
+msgid "This %{name} gives your hero the ability to cast the %{spell} spell if your hero has a Magic Book."
 msgstr ""
 
 msgid ""
@@ -8541,6 +8541,10 @@ msgid ""
 msgstr ""
 "Trasforma la creatura colpita in pietra. Una creatura impietrita subisce "
 "metà dei danni da un attacco diretto."
+
+#, fuzzy
+msgid "You have no Magic Book, so you cannot cast a spell."
+msgstr ""
 
 msgid "No spell to cast."
 msgstr "Nessuna magia disponibile."

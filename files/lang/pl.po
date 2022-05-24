@@ -8240,7 +8240,8 @@ msgstr "Mumia"
 msgid "Spell Scroll"
 msgstr "Zwój z zaklęciem"
 
-msgid "This %{name} gives your hero the ability to cast the %{spell} spell."
+#, fuzzy
+msgid "This %{name} gives your hero the ability to cast the %{spell} spell if your hero has a Magic Book."
 msgstr "%{name} daje twojemu bohaterowi mozliwość rzucania czaru %{spell}"
 
 msgid ""
@@ -9066,6 +9067,10 @@ msgid ""
 msgstr ""
 "Zmienia dotknięte stworzenie w kamień. Skamieniała jednostka otrzymuje "
 "połowę obrażeń z ataku wręcz."
+
+#, fuzzy
+msgid "You have no Magic Book, so you cannot cast a spell."
+msgstr ""
 
 msgid "No spell to cast."
 msgstr "Brak zaklęć."
