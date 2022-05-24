@@ -43,7 +43,6 @@
 #include "settings.h"
 #include "system.h"
 #include "text.h"
-#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_window.h"
@@ -145,12 +144,12 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 {
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() && world.CountDay() ) {
-        std::string msg = "Developer mode is active, the result will not be saved! \n \n Your result: %{result}";
+        std::string msg = "Developer mode is active, the result will not be saved! \n \n Your result: ";
         if ( isCampaign ) {
-            StringReplace( msg, "%{result}", std::to_string( Campaign::CampaignSaveData::Get().getDaysPassed() ) );
+            msg += std::to_string( Campaign::CampaignSaveData::Get().getDaysPassed() );
         }
         else {
-            StringReplace( msg, "%{result}", std::to_string( GetGameOverScores() ) );
+            msg += std::to_string( GetGameOverScores() );
         }
 
         Dialog::Message( "High Scores", msg, Font::BIG, Dialog::OK );
