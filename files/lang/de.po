@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-23 23:59+0000\n"
+"POT-Creation-Date: 2022-05-24 14:58+0000\n"
 "PO-Revision-Date: 2022-05-12 17:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -135,6 +135,10 @@ msgstr "Einige Untote in der Gruppe -1"
 msgid "View %{name}"
 msgstr "%{name} ansehen"
 
+#, fuzzy
+msgid "Move the %{name} "
+msgstr "%{name} umstellen"
+
 msgid "Move or right click to redistribute %{name}"
 msgstr "%{name} verteilen: ziehen oder mit der rechten Maustaste tippen"
 
@@ -149,6 +153,10 @@ msgstr "%{name} wählen"
 
 msgid "Cannot move last troop"
 msgstr "Letzte Truppe kann nicht umgestellt werden"
+
+#, fuzzy
+msgid "Move the %{name}"
+msgstr "%{name} umstellen"
 
 msgid "Set Count"
 msgstr "Anzahl festlegen"

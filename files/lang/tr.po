@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-23 23:59+0000\n"
+"POT-Creation-Date: 2022-05-24 14:58+0000\n"
 "PO-Revision-Date: 2022-05-10 16:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
@@ -118,6 +118,9 @@ msgstr ""
 msgid "View %{name}"
 msgstr ""
 
+msgid "Move the %{name} "
+msgstr ""
+
 msgid "Move or right click to redistribute %{name}"
 msgstr ""
 
@@ -131,6 +134,9 @@ msgid "Select %{name}"
 msgstr ""
 
 msgid "Cannot move last troop"
+msgstr ""
+
+msgid "Move the %{name}"
 msgstr ""
 
 msgid "Set Count"
