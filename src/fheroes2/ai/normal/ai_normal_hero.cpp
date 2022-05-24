@@ -529,16 +529,11 @@ namespace
         if ( hero->Modes( Heroes::PATROL ) ) {
             if ( hero->GetSquarePatrol() == 0 ) {
                 DEBUG_LOG( DBG_AI, DBG_TRACE, hero->GetName() << " standing still. Skip turn." )
-                hero->SetModes( Heroes::MOVED );
                 return;
             }
         }
 
-        hero->ResetModes( Heroes::MOVED );
-        if ( !hero->MayStillMove( false, false ) ) {
-            hero->SetModes( Heroes::MOVED );
-        }
-        else {
+        if ( hero->MayStillMove( false, false ) ) {
             availableHeroes.emplace_back();
             AI::HeroToMove & heroInfo = availableHeroes.back();
             heroInfo.hero = hero;
@@ -1471,7 +1466,6 @@ namespace AI
 
             for ( size_t i = 0; i < availableHeroes.size(); ) {
                 if ( !availableHeroes[i].hero->MayStillMove( false, false ) ) {
-                    availableHeroes[i].hero->SetModes( Heroes::MOVED );
                     availableHeroes.erase( availableHeroes.begin() + i );
                     continue;
                 }
@@ -1484,12 +1478,6 @@ namespace AI
         }
 
         const bool allHeroesMoved = availableHeroes.empty();
-
-        for ( HeroToMove & heroInfo : availableHeroes ) {
-            if ( !heroInfo.hero->MayStillMove( false, false ) ) {
-                heroInfo.hero->SetModes( Heroes::MOVED );
-            }
-        }
 
         _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
         _pathfinder.setSpellPointReserve( 0.5 );

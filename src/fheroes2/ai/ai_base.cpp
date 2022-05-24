@@ -128,11 +128,6 @@ namespace AI
         return false;
     }
 
-    bool Base::HeroesCanMove( const Heroes & hero )
-    {
-        return hero.MayStillMove( false, false ) && !hero.Modes( Heroes::MOVED );
-    }
-
     StreamBase & operator<<( StreamBase & msg, const AI::Base & instance )
     {
         return msg << instance._personality;

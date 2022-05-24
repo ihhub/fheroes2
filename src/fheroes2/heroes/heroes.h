@@ -174,12 +174,7 @@ public:
 
         // UNUSED = 0x00010000,
 
-        CUSTOMSKILLS = 0x00020000,
-
-        // UNUSED = 0x00040000,
-        // UNUSED = 0x00080000,
-
-        MOVED = 0x00100000
+        CUSTOMSKILLS = 0x00020000
     };
 
     // Types of heroes. Used only for AI as humans are smart enough to manage heroes by themselves.
