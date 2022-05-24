@@ -52,12 +52,8 @@ namespace AI
         return false;
     }
 
-    uint32_t GetResourceMultiplier( const Castle & castle, uint32_t min, uint32_t max )
+    uint32_t GetResourceMultiplier( uint32_t min, uint32_t max )
     {
-        if ( castle.isCapital() ) {
-            return 1;
-        }
-
         return Rand::Get( min, max );
     }
 

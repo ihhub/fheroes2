@@ -103,9 +103,7 @@ public:
     {
         ALLOWCASTLE = 0x0002,
         CUSTOMARMY = 0x0004,
-        ALLOWBUILD = 0x0008,
-        // UNUSED = 0x0010,
-        CAPITAL = 0x0020
+        ALLOWBUILD = 0x0008
     };
 
     enum class CastleDialogReturnValue : int
@@ -140,11 +138,6 @@ public:
     bool isCastle() const
     {
         return ( building & BUILD_CASTLE ) != 0;
-    }
-
-    bool isCapital() const
-    {
-        return Modes( CAPITAL );
     }
 
     bool HaveNearlySea( void ) const;
