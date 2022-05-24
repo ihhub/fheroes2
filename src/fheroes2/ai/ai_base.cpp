@@ -121,13 +121,6 @@ namespace AI
         // Do nothing.
     }
 
-    bool Base::HeroesGetTask( Heroes & hero )
-    {
-        // stop hero
-        hero.GetPath().Reset();
-        return false;
-    }
-
     StreamBase & operator<<( StreamBase & msg, const AI::Base & instance )
     {
         return msg << instance._personality;
