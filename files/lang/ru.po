@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-23 23:59+0000\n"
+"POT-Creation-Date: 2022-05-24 15:38+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -139,6 +139,10 @@ msgstr "Нежить в армии -1"
 msgid "View %{name}"
 msgstr "Просмотреть %{name}"
 
+#, fuzzy
+msgid "Move the %{name} "
+msgstr "Переместить %{name}"
+
 msgid "Move or right click to redistribute %{name}"
 msgstr "Перемеcтить отряд или разделить (правой кнопкой)"
 
@@ -153,6 +157,10 @@ msgstr "Выбрать %{name}"
 
 msgid "Cannot move last troop"
 msgstr "Невозможно переместить последний отряд"
+
+#, fuzzy
+msgid "Move the %{name}"
+msgstr "Переместить %{name}"
 
 msgid "Set Count"
 msgstr "Количество"
@@ -565,20 +573,29 @@ msgstr ""
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "Заклинание \"%{spell}\" наносит %{damage} урона всем живым существам."
 
-msgid "The Unicorns' attack blinds the %{name}!"
+#, fuzzy
+msgid "The %{attacker}' attack blinds the %{target}!"
 msgstr "%{name} ослеплены единорогами!"
 
-msgid "The Medusas' gaze turns the %{name} to stone!"
+#, fuzzy
+msgid "The %{attacker}' gaze turns the %{target} to stone!"
 msgstr "%{name} обращены в камень взглядом медузы!"
 
-msgid "The Mummies' curse falls upon the %{name}!"
+#, fuzzy
+msgid "The %{attacker}' curse falls upon the %{target}!"
 msgstr "%{name} прокляты мумиями!"
 
-msgid "The %{name} are paralyzed by the Cyclopes!"
+#, fuzzy
+msgid "The %{target} are paralyzed by the %{attacker}!"
 msgstr "%{name} парализованы циклопами!"
 
-msgid "The Archmagi dispel all good spells on your %{name}!"
+#, fuzzy
+msgid "The %{attacker} dispel all good spells on your %{target}!"
 msgstr "Архимаги рассеяли хорошую магию с отряда %{name}!"
+
+#, fuzzy
+msgid "The %{attacker} cast %{spell} on %{target}!"
+msgstr "%{name} применяет \"%{spell}\" (цель: %{troop})."
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "Удача отвернулась от %{attacker}."
@@ -8369,7 +8386,9 @@ msgid "Spell Scroll"
 msgstr "Свиток Заклинания"
 
 #, fuzzy
-msgid "This %{name} gives your hero the ability to cast the %{spell} spell if your hero has a Magic Book."
+msgid ""
+"This %{name} gives your hero the ability to cast the %{spell} spell if your "
+"hero has a Magic Book."
 msgstr "%{name} позволяет Вашему герою произносить заклинание %{spell}."
 
 msgid ""
@@ -9184,7 +9203,6 @@ msgstr ""
 "Превращает поражённое существо в камень. Окаменевшее существо получает "
 "половину урона от прямой атаки."
 
-#, fuzzy
 msgid "You have no Magic Book, so you cannot cast a spell."
 msgstr ""
 
@@ -9274,7 +9292,8 @@ msgstr "замок: разрешить защитников (как в H3)"
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "герои: разрешить покупку магической книги в святилищах"
 
-msgid "heroes: remember move points for retreat/surrender result"
+#, fuzzy
+msgid "heroes: remember movement points when retreating or surrendering"
 msgstr "герои: при бегстве запомнить MP/SP для текущего дня"
 
 msgid "heroes: allow to choose any primary skill in Arena"

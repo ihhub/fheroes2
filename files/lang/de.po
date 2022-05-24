@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-23 23:59+0000\n"
+"POT-Creation-Date: 2022-05-24 15:38+0000\n"
 "PO-Revision-Date: 2022-05-12 17:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -135,6 +135,10 @@ msgstr "Einige Untote in der Gruppe -1"
 msgid "View %{name}"
 msgstr "%{name} ansehen"
 
+#, fuzzy
+msgid "Move the %{name} "
+msgstr "%{name} umstellen"
+
 msgid "Move or right click to redistribute %{name}"
 msgstr "%{name} verteilen: ziehen oder mit der rechten Maustaste tippen"
 
@@ -149,6 +153,10 @@ msgstr "%{name} wählen"
 
 msgid "Cannot move last troop"
 msgstr "Letzte Truppe kann nicht umgestellt werden"
+
+#, fuzzy
+msgid "Move the %{name}"
+msgstr "%{name} umstellen"
 
 msgid "Set Count"
 msgstr "Anzahl festlegen"
@@ -564,20 +572,29 @@ msgstr "Der %{spell} fügt einer lebenden Kreatur %{damage} Schaden zu."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "Der %{spell} verursacht %{damage} Schaden an allen lebenden Kreaturen."
 
-msgid "The Unicorns' attack blinds the %{name}!"
+#, fuzzy
+msgid "The %{attacker}' attack blinds the %{target}!"
 msgstr "Der Angriff der Einhörner blendet die %{name}!"
 
-msgid "The Medusas' gaze turns the %{name} to stone!"
+#, fuzzy
+msgid "The %{attacker}' gaze turns the %{target} to stone!"
 msgstr "Der Blick des Medusen verwandelt den %{name} in Stein!"
 
-msgid "The Mummies' curse falls upon the %{name}!"
+#, fuzzy
+msgid "The %{attacker}' curse falls upon the %{target}!"
 msgstr "Der Fluch der Mumien fällt auf den %{name}!"
 
-msgid "The %{name} are paralyzed by the Cyclopes!"
+#, fuzzy
+msgid "The %{target} are paralyzed by the %{attacker}!"
 msgstr "Die %{name} sind von den Zyklopen gelähmt!"
 
-msgid "The Archmagi dispel all good spells on your %{name}!"
+#, fuzzy
+msgid "The %{attacker} dispel all good spells on your %{target}!"
 msgstr "Die Erzmagier vertreiben alle guten Zauber auf Ihrem %{name}!"
+
+#, fuzzy
+msgid "The %{attacker} cast %{spell} on %{target}!"
+msgstr "%{name} zaubert %{spell} auf die %{troop}."
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "Der %{attacker} wird vom Pech verfolgt."
@@ -8778,7 +8795,9 @@ msgid "Spell Scroll"
 msgstr "Zauberspruchrolle"
 
 #, fuzzy
-msgid "This %{name} gives your hero the ability to cast the %{spell} spell if your hero has a Magic Book."
+msgid ""
+"This %{name} gives your hero the ability to cast the %{spell} spell if your "
+"hero has a Magic Book."
 msgstr ""
 "Diese %{name} verleiht Ihrem Helden die Fähigkeit, den %{spell} Zauber zu "
 "wirken."
@@ -9630,7 +9649,6 @@ msgstr ""
 "Verwandelt die betroffene Kreatur in Stein.  Eine versteinerte Kreatur "
 "erleidet bei einem direkten Angriff die Hälfte des Schadens."
 
-#, fuzzy
 msgid "You have no Magic Book, so you cannot cast a spell."
 msgstr ""
 
@@ -9717,7 +9735,8 @@ msgstr "Burg: Wächter zulassen"
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "Helden: Kauf eines Zauberbuchs bei Schreinen erlauben"
 
-msgid "heroes: remember move points for retreat/surrender result"
+#, fuzzy
+msgid "heroes: remember movement points when retreating or surrendering"
 msgstr "Helden: Bewegungspunkte sind nach Rückzug/Aufgabe gespeihert"
 
 msgid "heroes: allow to choose any primary skill in Arena"
