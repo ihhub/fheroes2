@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-23 23:59+0000\n"
+"POT-Creation-Date: 2022-05-24 15:38+0000\n"
 "PO-Revision-Date: 2022-05-10 16:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -138,6 +138,10 @@ msgstr "Några odöda i grupper -1"
 msgid "View %{name}"
 msgstr "Visa %{name}"
 
+#, fuzzy
+msgid "Move the %{name} "
+msgstr "Förlora hjälten: %{name}."
+
 msgid "Move or right click to redistribute %{name}"
 msgstr ""
 
@@ -152,6 +156,10 @@ msgstr "Välj %{name}"
 
 msgid "Cannot move last troop"
 msgstr ""
+
+#, fuzzy
+msgid "Move the %{name}"
+msgstr "Förlora hjälten: %{name}."
 
 msgid "Set Count"
 msgstr ""
@@ -558,20 +566,28 @@ msgstr "Besvärjelsen %{spell} tar %{damage} skada på alla levande varelser."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "Besvärjelsen %{spell} tar %{damage} skada på alla levande varelser."
 
-msgid "The Unicorns' attack blinds the %{name}!"
+#, fuzzy
+msgid "The %{attacker}' attack blinds the %{target}!"
 msgstr "Enhörningarna attackerar %{name} i blindo!"
 
-msgid "The Medusas' gaze turns the %{name} to stone!"
+#, fuzzy
+msgid "The %{attacker}' gaze turns the %{target} to stone!"
 msgstr "Medusas blick förvandlar %{name} till sten!"
 
-msgid "The Mummies' curse falls upon the %{name}!"
+#, fuzzy
+msgid "The %{attacker}' curse falls upon the %{target}!"
 msgstr "Mumiens förbannelse har drabbat %{name}!"
 
-msgid "The %{name} are paralyzed by the Cyclopes!"
+#, fuzzy
+msgid "The %{target} are paralyzed by the %{attacker}!"
 msgstr "%{name} blev paralyserad av Cykloperna!"
 
-msgid "The Archmagi dispel all good spells on your %{name}!"
+msgid "The %{attacker} dispel all good spells on your %{target}!"
 msgstr ""
+
+#, fuzzy
+msgid "The %{attacker} cast %{spell} on %{target}!"
+msgstr "%{name} kastar %{spell} på %{troop}."
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "Dålig lycka stiger ned på %{attacker}."
@@ -8288,7 +8304,9 @@ msgstr "Mumie"
 msgid "Spell Scroll"
 msgstr "Besvärjelserulle"
 
-msgid "This %{name} gives your hero the ability to cast the %{spell} spell if your hero has a Magic Book."
+msgid ""
+"This %{name} gives your hero the ability to cast the %{spell} spell if your "
+"hero has a Magic Book."
 msgstr ""
 
 msgid ""
@@ -9014,7 +9032,6 @@ msgid ""
 "damage from a direct attack."
 msgstr ""
 
-#, fuzzy
 msgid "You have no Magic Book, so you cannot cast a spell."
 msgstr ""
 
@@ -9106,7 +9123,7 @@ msgstr "slott: tillåt väktare"
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr ""
 
-msgid "heroes: remember move points for retreat/surrender result"
+msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"

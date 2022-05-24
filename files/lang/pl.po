@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-23 23:59+0000\n"
+"POT-Creation-Date: 2022-05-24 15:38+0000\n"
 "PO-Revision-Date: 2022-05-19 19:00+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -139,6 +139,10 @@ msgstr "Nieumarli w armii -1"
 msgid "View %{name}"
 msgstr "Obejrzyj jednostkę (%{name})"
 
+#, fuzzy
+msgid "Move the %{name} "
+msgstr "Przenieś %{name}"
+
 msgid "Move or right click to redistribute %{name}"
 msgstr "Przenieś lub kliknij prawym aby rozdzielić %{name}"
 
@@ -153,6 +157,10 @@ msgstr "Wybierz jednostkę (%{name})"
 
 msgid "Cannot move last troop"
 msgstr "Nie można przenieść ostatniej jednostki"
+
+#, fuzzy
+msgid "Move the %{name}"
+msgstr "Przenieś %{name}"
 
 msgid "Set Count"
 msgstr "Podaj liczbę"
@@ -566,22 +574,31 @@ msgstr "%{spell} zadaje %{damage} pkt. obrażeń żywej istocie."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} zadaje %{damage} pkt. obrażeń każdej żywej istocie."
 
-msgid "The Unicorns' attack blinds the %{name}!"
+#, fuzzy
+msgid "The %{attacker}' attack blinds the %{target}!"
 msgstr "Atak jednorożców oślepia jednostkę (%{name})!"
 
-msgid "The Medusas' gaze turns the %{name} to stone!"
+#, fuzzy
+msgid "The %{attacker}' gaze turns the %{target} to stone!"
 msgstr "Spojrzenie meduz zamienia jednostkę (%{name}) w kamień!"
 
-msgid "The Mummies' curse falls upon the %{name}!"
+#, fuzzy
+msgid "The %{attacker}' curse falls upon the %{target}!"
 msgstr "Ta jednostka (%{name}) zostaje dotknięta klątwą mumii!"
 
-msgid "The %{name} are paralyzed by the Cyclopes!"
+#, fuzzy
+msgid "The %{target} are paralyzed by the %{attacker}!"
 msgstr "Atak cyklopów paraliżuje jednostkę (%{name})!"
 
-msgid "The Archmagi dispel all good spells on your %{name}!"
+#, fuzzy
+msgid "The %{attacker} dispel all good spells on your %{target}!"
 msgstr ""
 "Arcymagowie rozpraszają wszystkie korzystne zaklęcia u tej jednostki "
 "(%{name})!"
+
+#, fuzzy
+msgid "The %{attacker} cast %{spell} on %{target}!"
+msgstr "%{name} rzuca zaklęcie '%{spell}' na: %{troop}."
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "Tej jednostce (%{attacker}) nie sprzyja los."
@@ -8241,7 +8258,9 @@ msgid "Spell Scroll"
 msgstr "Zwój z zaklęciem"
 
 #, fuzzy
-msgid "This %{name} gives your hero the ability to cast the %{spell} spell if your hero has a Magic Book."
+msgid ""
+"This %{name} gives your hero the ability to cast the %{spell} spell if your "
+"hero has a Magic Book."
 msgstr "%{name} daje twojemu bohaterowi mozliwość rzucania czaru %{spell}"
 
 msgid ""
@@ -9068,7 +9087,6 @@ msgstr ""
 "Zmienia dotknięte stworzenie w kamień. Skamieniała jednostka otrzymuje "
 "połowę obrażeń z ataku wręcz."
 
-#, fuzzy
 msgid "You have no Magic Book, so you cannot cast a spell."
 msgstr ""
 
@@ -9156,7 +9174,8 @@ msgstr "zamek: zezwól na strażników"
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "bohaterowie: pozwól kupować księgę zaklęć w kaplicach"
 
-msgid "heroes: remember move points for retreat/surrender result"
+#, fuzzy
+msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
 "bohaterowie: zapamiętaj punkty ruchu przy obliczaniu rezultatu ucieczki/"
 "kapitulacji"
