@@ -233,7 +233,7 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
     StreamFile fs;
 
     if ( !fs.open( filename, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "File is not found " << filename )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "File was not found " << filename )
         return false;
     }
 

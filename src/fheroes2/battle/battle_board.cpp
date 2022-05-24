@@ -453,9 +453,9 @@ Battle::Indexes Battle::Board::GetPath( const Unit & unit, const Position & dest
 
     if ( debug && result.empty() ) {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                   "Path is not found for " << unit.String() << ", destination: "
-                                            << "(head cell ID: " << destination.GetHead()->GetIndex()
-                                            << ", tail cell ID: " << ( isWideUnit ? destination.GetTail()->GetIndex() : -1 ) << ")" )
+                   "Path was not found for " << unit.String() << ", destination: "
+                                             << "(head cell ID: " << destination.GetHead()->GetIndex()
+                                             << ", tail cell ID: " << ( isWideUnit ? destination.GetTail()->GetIndex() : -1 ) << ")" )
     }
 
     return result;
