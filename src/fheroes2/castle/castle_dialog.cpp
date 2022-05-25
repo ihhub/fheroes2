@@ -436,7 +436,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
             else if ( le.MousePressRight( buttonPrevCastle.area() ) ) {
                 Dialog::Message( _( "Show previous town" ), _( "Click to show previous town." ), Font::BIG );
             }
-
+            ArmyTroop * pressedBottomBar = bottomArmyBar.GetItem( le.GetMousePressLeft() );
+            ArmyTroop * pressedTopBar = topArmyBar.GetItem( le.GetMousePressLeft() );
             if ( heroes.Guest() && !conf.ExtCastleAllowGuardians() ) {
                 if ( le.MouseClickLeft( rectSign1 ) || HotKeyPressEvent( Game::HotKeyEvent::SWAP_ARMIES ) ) {
                     Army::swapArmyTroops( GetArmy(), heroes.Guest()->GetArmy() );
@@ -448,7 +449,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
 
                     need_redraw = true;
                 }
-                else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
+                else if ( pressedTopBar && le.MouseReleaseLeft( rectSign2 )|| HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
                     heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), true );
 
                     if ( topArmyBar.isSelected() )
@@ -458,7 +459,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
 
                     need_redraw = true;
                 }
-                else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
+                else if ( pressedBottomBar && le.MouseReleaseLeft( rectSign1 ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
                     GetArmy().MoveTroops( heroes.Guest()->GetArmy().getTroops() );
 
                     if ( topArmyBar.isSelected() )
