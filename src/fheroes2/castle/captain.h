@@ -27,7 +27,7 @@
 
 class Castle;
 
-class Captain : public HeroBase
+class Captain final : public HeroBase
 {
 public:
     explicit Captain( Castle & );

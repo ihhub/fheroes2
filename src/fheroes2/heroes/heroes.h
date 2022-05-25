@@ -55,7 +55,7 @@ struct HeroSeedsForLevelUp
     uint32_t seedSecondaySkillRandomChoose = 0;
 };
 
-class Heroes : public HeroBase, public ColorBase
+class Heroes final : public HeroBase, public ColorBase
 {
 public:
     enum
@@ -268,8 +268,8 @@ public:
     void SetCenterPatrol( const fheroes2::Point & );
     int GetSquarePatrol( void ) const;
 
-    u32 GetMaxSpellPoints() const override;
-    u32 GetMaxMovePoints() const;
+    uint32_t GetMaxSpellPoints() const override;
+    uint32_t GetMaxMovePoints() const;
 
     u32 GetMovePoints( void ) const;
     void IncreaseMovePoints( u32 );

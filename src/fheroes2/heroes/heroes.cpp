@@ -532,12 +532,12 @@ u32 Heroes::GetMovePoints( void ) const
     return move_point;
 }
 
-u32 Heroes::GetMaxSpellPoints( void ) const
+uint32_t Heroes::GetMaxSpellPoints() const
 {
     return 10 * GetKnowledge();
 }
 
-u32 Heroes::GetMaxMovePoints( void ) const
+uint32_t Heroes::GetMaxMovePoints() const
 {
     uint32_t point = 0;
 
