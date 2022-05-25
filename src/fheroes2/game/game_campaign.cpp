@@ -1048,7 +1048,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
 
         if ( le.MouseClickLeft( buttonCancel.area() ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) ) {
-            if ( !allowToRestart) {
+            if ( !allowToRestart ) {
                 // Make sure to reset a state of the game if a user does not want to load it.
                 GameOver::Result::Get().Reset();
             }
