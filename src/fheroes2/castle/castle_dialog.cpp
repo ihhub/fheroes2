@@ -437,6 +437,21 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 Dialog::Message( _( "Show previous town" ), _( "Click to show previous town." ), Font::BIG );
             }
 
+            if ( heroes.Guest() && !conf.ExtCastleAllowGuardians() ) {
+                if ( le.MouseClickLeft( rectSign1 )|| HotKeyPressEvent( Game::HotKeyEvent::SWAP_ARMIES ) ) {
+
+                    Army::swapArmyTroops( GetArmy(), heroes.Guest()->GetArmy() );
+
+                    if ( topArmyBar.isSelected() )
+                        topArmyBar.ResetSelected();
+                    if ( bottomArmyBar.isValid() && bottomArmyBar.isSelected() )
+                        bottomArmyBar.ResetSelected();
+
+                    need_redraw = true;
+                }
+            }
+            
+
             // selector troops event
             if ( ( bottomArmyBar.isValid()
                    && ( ( le.MouseCursor( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( bottomArmyBar, &statusMessage ) )

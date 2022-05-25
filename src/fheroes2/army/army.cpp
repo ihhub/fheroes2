@@ -410,6 +410,19 @@ void Troops::MoveTroops( const Troops & from )
     }
 }
 
+void Army::swapArmyTroops( Army & army1, Army & army2 ) {
+
+    // Hero armies cannot end up with zero troops.
+    if ( army1.GetCount() == 0 || army2.GetCount() == 0 ) {
+        return;
+    }
+
+    // Either army can have 5 stacks so iterate through max possible.
+    for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
+        std::swap( *army1.GetTroop( slot ), *army2.GetTroop( slot ) );
+    }
+}
+
 // Return true when all valid troops have the same ID, or when there are no troops
 bool Troops::AllTroopsAreTheSame( void ) const
 {
