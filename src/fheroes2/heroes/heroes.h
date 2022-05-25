@@ -215,6 +215,8 @@ public:
     Heroes( int heroID, int race, int initialLevel );
     Heroes( const Heroes & ) = delete;
 
+    ~Heroes() override = default;
+
     Heroes & operator=( const Heroes & ) = delete;
 
     bool isValid() const override;
