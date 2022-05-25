@@ -44,7 +44,8 @@ public:
         , area( rt )
         , ok( false )
     {
-        RedrawBackground( rt.getPosition() );
+        SelectEnum::RedrawBackground( rt.getPosition() );
+
         SetScrollButtonUp( ICN::LISTBOX, 3, 4, { rt.x + rt.width - 25, rt.y + 25 } );
         SetScrollButtonDn( ICN::LISTBOX, 5, 6, { rt.x + rt.width - 25, rt.y + rt.height - 55 } );
 
@@ -166,6 +167,7 @@ public:
             text.draw( dstx + 50, dsty + 5, fheroes2::Display::instance() );
         }
     }
+
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
         fheroes2::Text text( _( "Select Hero:" ), fheroes2::FontType::normalYellow() );
