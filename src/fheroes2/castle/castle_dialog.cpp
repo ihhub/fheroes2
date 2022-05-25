@@ -449,7 +449,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
 
                     need_redraw = true;
                 }
-                else if ( pressedTopBar && le.MouseReleaseLeft( rectSign2 )|| HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
+                else if ( pressedTopBar && le.MouseReleaseLeft( rectSign2 ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
                     heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), true );
 
                     if ( topArmyBar.isSelected() )
