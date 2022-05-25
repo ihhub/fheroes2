@@ -46,7 +46,7 @@ void Interface::ButtonsArea::SetRedraw( void ) const
     interface.SetRedraw( REDRAW_BUTTONS );
 }
 
-void Interface::ButtonsArea::SetPos( s32 ox, s32 oy )
+void Interface::ButtonsArea::SetPos( int32_t ox, int32_t oy )
 {
     BorderWindow::SetPosition( ox, oy );
 

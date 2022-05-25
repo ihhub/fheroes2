@@ -62,7 +62,7 @@ namespace
     bool updateSoundsOnFocusUpdate = true;
     std::atomic<int> currentMusic{ MUS::UNKNOWN };
 
-    u32 maps_animation_frame = 0;
+    uint32_t maps_animation_frame = 0;
 
     std::vector<int> reserved_vols( LOOPXX_COUNT, 0 );
 
@@ -332,7 +332,7 @@ const Game::ObjectFadeAnimation::FadeTask & Game::ObjectFadeAnimation::GetFadeTa
     return fadeTask;
 }
 
-u32 & Game::MapsAnimationFrame( void )
+uint32_t & Game::MapsAnimationFrame( void )
 {
     return maps_animation_frame;
 }
@@ -426,10 +426,10 @@ void Game::restoreSoundsForCurrentFocus()
     }
 }
 
-u32 Game::GetRating( void )
+uint32_t Game::GetRating( void )
 {
     const Settings & conf = Settings::Get();
-    u32 rating = 50;
+    uint32_t rating = 50;
 
     switch ( conf.MapsDifficulty() ) {
     case Difficulty::NORMAL:
@@ -466,7 +466,7 @@ u32 Game::GetRating( void )
     return rating;
 }
 
-u32 Game::GetGameOverScores( void )
+uint32_t Game::GetGameOverScores( void )
 {
     const Settings & conf = Settings::Get();
 
@@ -512,12 +512,12 @@ u32 Game::GetGameOverScores( void )
     return GetRating() * ( 200 - daysScore ) / 100;
 }
 
-u32 Game::GetLostTownDays( void )
+uint32_t Game::GetLostTownDays( void )
 {
     return GameStatic::GetGameOverLostDays();
 }
 
-u32 Game::GetWhirlpoolPercent( void )
+uint32_t Game::GetWhirlpoolPercent( void )
 {
     return GameStatic::GetLostOnWhirlpoolPercent();
 }

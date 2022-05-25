@@ -32,7 +32,7 @@ Troop::Troop()
     , count( 0 )
 {}
 
-Troop::Troop( const Monster & m, u32 c )
+Troop::Troop( const Monster & m, uint32_t c )
     : Monster( m )
     , count( c )
 {}
@@ -58,7 +58,7 @@ void Troop::Set( const Troop & t )
     SetCount( t.GetCount() );
 }
 
-void Troop::Set( const Monster & m, u32 c )
+void Troop::Set( const Monster & m, uint32_t c )
 {
     Set( Troop( m, c ) );
 }
@@ -68,7 +68,7 @@ void Troop::SetMonster( const Monster & m )
     id = m.GetID();
 }
 
-void Troop::SetCount( u32 c )
+void Troop::SetCount( uint32_t c )
 {
     count = c;
 }
@@ -84,22 +84,22 @@ const char * Troop::GetName( void ) const
     return Monster::GetPluralName( count );
 }
 
-u32 Troop::GetCount( void ) const
+uint32_t Troop::GetCount( void ) const
 {
     return count;
 }
 
-u32 Troop::GetHitPoints( void ) const
+uint32_t Troop::GetHitPoints( void ) const
 {
     return Monster::GetHitPoints() * count;
 }
 
-u32 Troop::GetDamageMin( void ) const
+uint32_t Troop::GetDamageMin( void ) const
 {
     return Monster::GetDamageMin() * count;
 }
 
-u32 Troop::GetDamageMax( void ) const
+uint32_t Troop::GetDamageMax( void ) const
 {
     return Monster::GetDamageMax() * count;
 }
@@ -139,7 +139,7 @@ bool Troop::isBattle( void ) const
     return false;
 }
 
-bool Troop::isModes( u32 ) const
+bool Troop::isModes( uint32_t ) const
 {
     return false;
 }
@@ -164,17 +164,17 @@ std::string Troop::GetSpeedString( void ) const
     return Speed::String( GetSpeed() );
 }
 
-u32 Troop::GetHitPointsLeft( void ) const
+uint32_t Troop::GetHitPointsLeft( void ) const
 {
     return 0;
 }
 
-u32 Troop::GetSpeed( void ) const
+uint32_t Troop::GetSpeed( void ) const
 {
     return Monster::GetSpeed();
 }
 
-u32 Troop::GetAffectedDuration( u32 ) const
+uint32_t Troop::GetAffectedDuration( uint32_t ) const
 {
     return 0;
 }
@@ -189,12 +189,12 @@ ArmyTroop::ArmyTroop( const Army * a, const Troop & t )
     , army( a )
 {}
 
-u32 ArmyTroop::GetAttack( void ) const
+uint32_t ArmyTroop::GetAttack( void ) const
 {
     return Troop::GetAttack() + ( army && army->GetCommander() ? army->GetCommander()->GetAttack() : 0 );
 }
 
-u32 ArmyTroop::GetDefense( void ) const
+uint32_t ArmyTroop::GetDefense( void ) const
 {
     return Troop::GetDefense() + ( army && army->GetCommander() ? army->GetCommander()->GetDefense() : 0 );
 }

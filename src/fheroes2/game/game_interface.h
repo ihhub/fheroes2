@@ -189,9 +189,9 @@ namespace Interface
         fheroes2::GameMode StartGame();
 
         void MouseCursorAreaClickLeft( const int32_t index_maps );
-        void MouseCursorAreaPressRight( s32 ) const;
+        void MouseCursorAreaPressRight( int32_t ) const;
 
-        static int GetCursorTileIndex( s32 );
+        static int GetCursorTileIndex( int32_t );
         static int GetCursorFocusCastle( const Castle &, const Maps::Tiles & );
         static int GetCursorFocusHeroes( const Heroes &, const Maps::Tiles & );
         static int GetCursorFocusShipmaster( const Heroes &, const Maps::Tiles & );
@@ -201,7 +201,7 @@ namespace Interface
 
     private:
         Basic();
-        void ShowPathOrStartMoveHero( Heroes *, s32 );
+        void ShowPathOrStartMoveHero( Heroes *, int32_t );
         void MoveHeroFromArrowKeys( Heroes & hero, int direct );
         fheroes2::GameMode HumanTurn( bool );
 

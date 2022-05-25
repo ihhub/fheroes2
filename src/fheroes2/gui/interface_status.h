@@ -46,7 +46,7 @@ namespace Interface
     public:
         explicit StatusWindow( Basic & basic );
 
-        void SetPos( s32, s32 ) override;
+        void SetPos( int32_t, int32_t ) override;
         void SavePosition() override;
         void SetRedraw() const;
 
@@ -56,8 +56,8 @@ namespace Interface
         void NextState();
 
         void SetState( const StatusType status );
-        void SetResource( int, u32 );
-        void RedrawTurnProgress( u32 );
+        void SetResource( int, uint32_t );
+        void RedrawTurnProgress( uint32_t );
         void QueueEventProcessing();
 
         static void ResetTimer();
@@ -69,7 +69,7 @@ namespace Interface
         void DrawResourceInfo( int oh = 0 ) const;
         void DrawBackground() const;
         void DrawAITurns() const;
-        static u32 ResetResourceStatus( u32, void * );
+        static uint32_t ResetResourceStatus( uint32_t, void * );
 
         Basic & interface;
 

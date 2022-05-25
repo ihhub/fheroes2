@@ -242,10 +242,10 @@ public:
     bool isFirstGameRun() const;
     void resetFirstGameRun();
 
-    bool CanChangeInGame( u32 ) const;
-    bool ExtModes( u32 ) const;
-    void ExtSetModes( u32 );
-    void ExtResetModes( u32 );
+    bool CanChangeInGame( uint32_t ) const;
+    bool ExtModes( uint32_t ) const;
+    void ExtSetModes( uint32_t );
+    void ExtResetModes( uint32_t );
     static std::string ExtName( const uint32_t settingId );
 
     bool ExtHeroBuySpellBookFromShrine() const
@@ -530,7 +530,7 @@ public:
         return current_maps_file.LossMapsPositionObject();
     }
 
-    u32 LossCountDays() const
+    uint32_t LossCountDays() const
     {
         return current_maps_file.LossCountDays();
     }

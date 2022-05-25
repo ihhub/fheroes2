@@ -37,7 +37,7 @@ int main( int argc, char ** argv )
         return EXIT_SUCCESS;
     }
 
-    std::vector<u8> buf = LoadFileToMem( argv[1] );
+    std::vector<uint8_t> buf = LoadFileToMem( argv[1] );
 
     if ( !buf.empty() ) {
         buf = Music::Xmi2Mid( buf );

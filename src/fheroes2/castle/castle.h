@@ -117,7 +117,7 @@ public:
     };
 
     Castle();
-    Castle( s32, s32, int rs );
+    Castle( int32_t, int32_t, int rs );
     Castle( const Castle & ) = delete;
     ~Castle() override = default;
 
@@ -146,7 +146,7 @@ public:
     bool isPosition( const fheroes2::Point & pt ) const override;
     bool isNecromancyShrineBuild( void ) const;
 
-    u32 CountBuildings( void ) const;
+    uint32_t CountBuildings( void ) const;
 
     Heroes * RecruitHero( Heroes * );
     CastleHeroes GetHeroes( void ) const;
@@ -184,7 +184,7 @@ public:
     const Army & GetActualArmy( void ) const;
     Army & GetActualArmy( void );
     double GetGarrisonStrength( const Heroes * attackingHero ) const;
-    u32 getMonstersInDwelling( u32 ) const;
+    uint32_t getMonstersInDwelling( uint32_t ) const;
 
     // Returns the correct dwelling type available in the castle. BUILD_NOTHING is returned if this is not a dwelling.
     uint32_t GetActualDwelling( const uint32_t buildId ) const;
@@ -222,41 +222,41 @@ public:
     int GetMoraleModificator( std::string * ) const;
     int GetLuckModificator( std::string * ) const;
 
-    bool AllowBuyBuilding( u32 ) const;
+    bool AllowBuyBuilding( uint32_t ) const;
 
-    bool isBuild( u32 bd ) const
+    bool isBuild( uint32_t bd ) const
     {
         return ( building & bd ) != 0;
     }
 
-    bool BuyBuilding( u32 );
+    bool BuyBuilding( uint32_t );
     bool AllowBuyBoat( void ) const;
     bool BuyBoat( void ) const;
-    u32 GetBuildingRequirement( u32 ) const;
+    uint32_t GetBuildingRequirement( uint32_t ) const;
 
     int CheckBuyBuilding( const uint32_t build ) const;
     static int GetAllBuildingStatus( const Castle & );
 
     void Scoute( void ) const;
 
-    std::string GetStringBuilding( u32 ) const;
-    std::string GetDescriptionBuilding( u32 ) const;
+    std::string GetStringBuilding( uint32_t ) const;
+    std::string GetDescriptionBuilding( uint32_t ) const;
 
-    static const char * GetStringBuilding( u32, int race );
-    static const char * GetDescriptionBuilding( u32, int race );
+    static const char * GetStringBuilding( uint32_t, int race );
+    static const char * GetDescriptionBuilding( uint32_t, int race );
 
-    static int GetICNBuilding( u32, int race );
+    static int GetICNBuilding( uint32_t, int race );
     static int GetICNBoat( int race );
-    u32 GetUpgradeBuilding( u32 ) const;
+    uint32_t GetUpgradeBuilding( uint32_t ) const;
 
     static bool PredicateIsCastle( const Castle * );
     static bool PredicateIsTown( const Castle * );
     static bool PredicateIsBuildBuilding( const Castle * castle, const uint32_t building );
 
-    static u32 GetGrownWell( void );
-    static u32 GetGrownWel2( void );
-    static u32 GetGrownWeekOf();
-    static u32 GetGrownMonthOf( void );
+    static uint32_t GetGrownWell( void );
+    static uint32_t GetGrownWel2( void );
+    static uint32_t GetGrownWeekOf();
+    static uint32_t GetGrownMonthOf( void );
 
     std::string String( void ) const;
 
@@ -275,7 +275,7 @@ private:
         RecruitHero // Recruit a hero.
     };
 
-    u32 * GetDwelling( u32 dw );
+    uint32_t * GetDwelling( uint32_t dw );
     void EducateHeroes( void );
 
     ConstructionDialogResult openConstructionDialog( uint32_t & dwellingTobuild );
@@ -292,13 +292,13 @@ private:
     friend StreamBase & operator>>( StreamBase &, Castle & );
 
     int race;
-    u32 building;
+    uint32_t building;
     Captain captain;
 
     std::string name;
 
     MageGuild mageguild;
-    u32 dwelling[CASTLEMAXMONSTER];
+    uint32_t dwelling[CASTLEMAXMONSTER];
     Army army;
 };
 
@@ -346,7 +346,7 @@ namespace CastleDialog
             , coord( r )
         {}
 
-        bool operator==( u32 b ) const
+        bool operator==( uint32_t b ) const
         {
             return b == static_cast<uint32_t>( id );
         }
@@ -363,8 +363,8 @@ namespace CastleDialog
     void RedrawAllBuilding( const Castle & castle, const fheroes2::Point & dst_pt, const CacheBuildings & orders, const CastleDialog::FadeBuilding & alphaBuilding,
                             const uint32_t animationIndex );
 
-    void CastleRedrawBuilding( const Castle &, const fheroes2::Point &, u32 build, u32 frame, uint8_t alpha = 255 );
-    void CastleRedrawBuildingExtended( const Castle &, const fheroes2::Point &, u32 build, u32 frame, uint8_t alpha = 255 );
+    void CastleRedrawBuilding( const Castle &, const fheroes2::Point &, uint32_t build, uint32_t frame, uint8_t alpha = 255 );
+    void CastleRedrawBuildingExtended( const Castle &, const fheroes2::Point &, uint32_t build, uint32_t frame, uint8_t alpha = 255 );
 }
 
 struct VecCastles : public std::vector<Castle *>

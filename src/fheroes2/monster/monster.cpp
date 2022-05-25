@@ -125,18 +125,18 @@ Monster::Monster( const Spell & sp )
     }
 }
 
-Monster::Monster( int race, u32 dw )
+Monster::Monster( int race, uint32_t dw )
     : id( UNKNOWN )
 {
     id = FromDwelling( race, dw ).id;
 }
 
-u32 Monster::GetAttack() const
+uint32_t Monster::GetAttack() const
 {
     return fheroes2::getMonsterData( id ).battleStats.attack;
 }
 
-u32 Monster::GetDefense() const
+uint32_t Monster::GetDefense() const
 {
     return fheroes2::getMonsterData( id ).battleStats.defense;
 }
@@ -182,7 +182,7 @@ double Monster::GetMonsterStrength( int attack, int defense ) const
     return attackDefense * fheroes2::getMonsterData( id ).battleStats.monsterBaseStrength;
 }
 
-u32 Monster::GetRNDSize( bool skip_factor ) const
+uint32_t Monster::GetRNDSize( bool skip_factor ) const
 {
     if ( !isValid() )
         return 0;
@@ -383,7 +383,7 @@ Monster Monster::GetUpgrade( void ) const
     return Monster( id );
 }
 
-Monster Monster::FromDwelling( int race, u32 dwelling )
+Monster Monster::FromDwelling( int race, uint32_t dwelling )
 {
     switch ( dwelling ) {
     case DWELLING_MONSTER1:
@@ -737,7 +737,7 @@ Monster::LevelType Monster::GetRandomUnitLevel() const
     return LevelType::LEVEL_ANY;
 }
 
-u32 Monster::GetDwelling( void ) const
+uint32_t Monster::GetDwelling( void ) const
 {
     switch ( id ) {
     case PEASANT:
@@ -838,7 +838,7 @@ const char * Monster::GetMultiName( void ) const
     return _( fheroes2::getMonsterData( id ).generalStats.pluralName );
 }
 
-const char * Monster::GetPluralName( u32 count ) const
+const char * Monster::GetPluralName( uint32_t count ) const
 {
     const fheroes2::MonsterGeneralStats & generalStats = fheroes2::getMonsterData( id ).generalStats;
     return count == 1 ? _( generalStats.name ) : _( generalStats.pluralName );
@@ -857,11 +857,11 @@ payment_t Monster::GetUpgradeCost() const
     return pay;
 }
 
-u32 Monster::GetCountFromHitPoints( const Monster & mons, u32 hp )
+uint32_t Monster::GetCountFromHitPoints( const Monster & mons, uint32_t hp )
 {
     if ( hp ) {
-        const u32 hp1 = mons.GetHitPoints();
-        const u32 count = hp / hp1;
+        const uint32_t hp1 = mons.GetHitPoints();
+        const uint32_t count = hp / hp1;
         return ( count * hp1 ) < hp ? count + 1 : count;
     }
 

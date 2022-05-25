@@ -180,7 +180,6 @@
     <ClInclude Include="..\engine\math_base.h" />
     <ClInclude Include="..\engine\rect.h" />
     <ClInclude Include="..\engine\serialize.h" />
-    <ClInclude Include="..\engine\types.h" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

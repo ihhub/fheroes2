@@ -24,7 +24,7 @@
 #ifndef H2BATTLE_BRIDGE_H
 #define H2BATTLE_BRIDGE_H
 
-#include "types.h"
+#include <cstdint>
 
 namespace Battle
 {
@@ -38,14 +38,14 @@ namespace Battle
 
         Bridge & operator=( const Bridge & ) = delete;
 
-        void Action( const Unit &, s32 );
+        void Action( const Unit &, int32_t );
 
         void SetDestroy( void );
         void SetDown( bool );
         void SetPassable( const Unit & ) const;
 
         bool AllowUp( void ) const;
-        bool NeedDown( const Unit &, s32 ) const;
+        bool NeedDown( const Unit &, int32_t ) const;
         bool isPassable( const Unit & ) const;
         bool isValid( void ) const;
         bool isDestroy( void ) const;

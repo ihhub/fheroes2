@@ -45,12 +45,12 @@ public:
         return type;
     }
 
-    u32 GetUID() const
+    uint32_t GetUID() const
     {
         return uid;
     }
 
-    void SetUID( u32 v )
+    void SetUID( uint32_t v )
     {
         uid = v;
     }
@@ -59,7 +59,7 @@ protected:
     friend StreamBase & operator<<( StreamBase &, const MapObjectSimple & );
     friend StreamBase & operator>>( StreamBase &, MapObjectSimple & );
 
-    u32 uid;
+    uint32_t uid;
     int type;
 };
 
@@ -70,7 +70,7 @@ struct MapEvent : public MapObjectSimple
 {
     MapEvent();
 
-    void LoadFromMP2( s32 index, StreamBuf );
+    void LoadFromMP2( int32_t index, StreamBuf );
 
     bool isAllow( int color ) const;
     void SetVisited( int color );
@@ -92,7 +92,7 @@ struct MapSphinx : public MapObjectSimple
 {
     MapSphinx();
 
-    void LoadFromMP2( s32 index, StreamBuf );
+    void LoadFromMP2( int32_t index, StreamBuf );
 
     bool AnswerCorrect( const std::string & answer );
     void SetQuiet( void );
@@ -111,7 +111,7 @@ struct MapSign : public MapObjectSimple
 {
     MapSign();
 
-    void LoadFromMP2( s32 index, StreamBuf );
+    void LoadFromMP2( int32_t index, StreamBuf );
 
     std::string message;
 };

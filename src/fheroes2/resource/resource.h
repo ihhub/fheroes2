@@ -23,22 +23,22 @@
 #ifndef H2RESOURCE_H
 #define H2RESOURCE_H
 
+#include <cstdint>
 #include <string>
 
 #include "math_base.h"
-#include "types.h"
 
 class StreamBase;
 
 struct cost_t
 {
-    u16 gold;
-    u8 wood;
-    u8 mercury;
-    u8 ore;
-    u8 sulfur;
-    u8 crystal;
-    u8 gems;
+    uint16_t gold;
+    uint8_t wood;
+    uint8_t mercury;
+    uint8_t ore;
+    uint8_t sulfur;
+    uint8_t crystal;
+    uint8_t gems;
 };
 
 #define COST_NONE                                                                                                                                                        \
@@ -68,40 +68,40 @@ class Funds
 {
 public:
     Funds();
-    Funds( s32 _ore, s32 _wood, s32 _mercury, s32 _sulfur, s32 _crystal, s32 _gems, s32 _gold );
-    Funds( int rs, u32 count );
+    Funds( int32_t _ore, int32_t _wood, int32_t _mercury, int32_t _sulfur, int32_t _crystal, int32_t _gems, int32_t _gold );
+    Funds( int rs, uint32_t count );
     explicit Funds( const cost_t & );
     explicit Funds( const ResourceCount & );
 
     Funds operator+( const Funds & ) const;
-    Funds operator*( u32 mul ) const;
+    Funds operator*( uint32_t mul ) const;
     Funds operator-( const Funds & ) const;
     Funds & operator+=( const Funds & );
-    Funds & operator*=( u32 mul );
+    Funds & operator*=( uint32_t mul );
     Funds & operator-=( const Funds & );
     Funds & operator=( const cost_t & );
 
-    s32 Get( int rs ) const;
-    s32 * GetPtr( int rs );
+    int32_t Get( int rs ) const;
+    int32_t * GetPtr( int rs );
 
     bool operator>=( const Funds & ) const;
 
     int getLowestQuotient( const Funds & ) const;
     int GetValidItems( void ) const;
-    u32 GetValidItemsCount( void ) const;
+    uint32_t GetValidItemsCount( void ) const;
 
     void Trim( void ); // set all values to be >= 0
 
     void Reset( void );
     std::string String( void ) const;
 
-    s32 wood;
-    s32 mercury;
-    s32 ore;
-    s32 sulfur;
-    s32 crystal;
-    s32 gems;
-    s32 gold;
+    int32_t wood;
+    int32_t mercury;
+    int32_t ore;
+    int32_t sulfur;
+    int32_t crystal;
+    int32_t gems;
+    int32_t gold;
 };
 
 StreamBase & operator<<( StreamBase &, const Funds & );
@@ -116,8 +116,8 @@ namespace Resource
     int Rand( const bool includeGold );
 
     /* return index sprite objnrsrc.icn */
-    u32 GetIndexSprite( int resource );
-    int FromIndexSprite( u32 index );
+    uint32_t GetIndexSprite( int resource );
+    int FromIndexSprite( uint32_t index );
 
     // Return index sprite from resource.icn.
     uint32_t getIconIcnIndex( const int resourceType );
@@ -130,7 +130,7 @@ namespace Resource
         BoxSprite( const Funds &, int32_t );
 
         const fheroes2::Rect & GetArea( void ) const;
-        void SetPos( s32, s32 );
+        void SetPos( int32_t, int32_t );
         void Redraw( void ) const;
 
         const Funds rs;

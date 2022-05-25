@@ -68,8 +68,8 @@ namespace
 
 struct buildstats_t
 {
-    u32 id2;
-    u8 race;
+    uint32_t id2;
+    uint8_t race;
     cost_t cost;
 };
 
@@ -175,7 +175,7 @@ buildstats_t _builds[] = {
     { BUILD_NOTHING, Race::NONE, { 0, 0, 0, 0, 0, 0, 0 } },
 };
 
-payment_t BuildingInfo::GetCost( u32 build, int race )
+payment_t BuildingInfo::GetCost( uint32_t build, int race )
 {
     payment_t payment;
     const buildstats_t * ptr = &_builds[0];
@@ -196,7 +196,7 @@ payment_t BuildingInfo::GetCost( u32 build, int race )
     return payment;
 }
 
-int GetIndexBuildingSprite( u32 build )
+int GetIndexBuildingSprite( uint32_t build )
 {
     switch ( build ) {
     case DWELLING_MONSTER1:
@@ -319,7 +319,7 @@ BuildingInfo::BuildingInfo( const Castle & c, const building_t b )
     }
 }
 
-void BuildingInfo::SetPos( s32 x, s32 y )
+void BuildingInfo::SetPos( int32_t x, int32_t y )
 {
     area.x = x;
     area.y = y;
@@ -488,10 +488,10 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
 
     // prepare requirement build string
     std::string str;
-    const u32 requirement = castle.GetBuildingRequirement( building );
+    const uint32_t requirement = castle.GetBuildingRequirement( building );
     const std::string sep = "\n";
 
-    for ( u32 itr = 0x00000001; itr; itr <<= 1 )
+    for ( uint32_t itr = 0x00000001; itr; itr <<= 1 )
         if ( requirement & itr ) {
             str.append( Castle::GetStringBuilding( itr, castle.GetRace() ) );
             str.append( sep );
@@ -669,7 +669,7 @@ void BuildingInfo::SetStatusMessage( StatusBar & bar ) const
     }
 }
 
-DwellingItem::DwellingItem( const Castle & castle, u32 dw )
+DwellingItem::DwellingItem( const Castle & castle, uint32_t dw )
 {
     type = castle.GetActualDwelling( dw );
     mons = Monster( castle.GetRace(), type );
@@ -681,7 +681,7 @@ DwellingsBar::DwellingsBar( Castle & cstl, const fheroes2::Size & sz )
 {
     backsf.reset();
 
-    for ( u32 dw = DWELLING_MONSTER1; dw <= DWELLING_MONSTER6; dw <<= 1 )
+    for ( uint32_t dw = DWELLING_MONSTER1; dw <= DWELLING_MONSTER6; dw <<= 1 )
         content.emplace_back( castle, dw );
 
     SetContent( content );
@@ -705,7 +705,7 @@ void DwellingsBar::RedrawItem( DwellingItem & dwl, const fheroes2::Rect & pos, f
         Text text( std::to_string( castle.getMonstersInDwelling( dwl.type ) ), Font::SMALL );
         text.Blit( pos.x + pos.width - text.w() - 3, pos.y + pos.height - text.h() - 1 );
 
-        u32 grown = dwl.mons.GetGrown();
+        uint32_t grown = dwl.mons.GetGrown();
         if ( castle.isBuild( BUILD_WELL ) )
             grown += Castle::GetGrownWell();
         if ( castle.isBuild( BUILD_WEL2 ) && DWELLING_MONSTER1 == dwl.type )

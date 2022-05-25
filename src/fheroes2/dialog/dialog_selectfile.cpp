@@ -96,7 +96,7 @@ public:
         , _isDoubleClicked( false )
     {}
 
-    void RedrawItem( const Maps::FileInfo &, s32, s32, bool ) override;
+    void RedrawItem( const Maps::FileInfo &, int32_t, int32_t, bool ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
     void ActionCurrentUp() override;
@@ -133,7 +133,7 @@ private:
 
 #define ARRAY_COUNT( A ) sizeof( A ) / sizeof( A[0] )
 
-void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dsty, bool current )
+void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current )
 {
     char shortDate[20];
     char shortHours[20];

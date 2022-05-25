@@ -74,7 +74,7 @@ namespace Battle
     class Arena
     {
     public:
-        Arena( Army & army1, Army & army2, s32 index, bool local, Rand::DeterministicRandomGenerator & randomGenerator );
+        Arena( Army & army1, Army & army2, int32_t index, bool local, Rand::DeterministicRandomGenerator & randomGenerator );
         Arena( const Arena & ) = delete;
         Arena( Arena && ) = delete;
 
@@ -89,7 +89,7 @@ namespace Battle
         bool AutoBattleInProgress() const;
         bool CanToggleAutoBattle() const;
 
-        u32 GetCurrentTurn( void ) const;
+        uint32_t GetCurrentTurn( void ) const;
         Result & GetResult( void );
 
         const HeroBase * getCommander( const int color ) const;
@@ -109,11 +109,11 @@ namespace Battle
         int GetCurrentColor( void ) const;
         int GetOppositeColor( int ) const;
 
-        Unit * GetTroopBoard( s32 );
-        const Unit * GetTroopBoard( s32 ) const;
+        Unit * GetTroopBoard( int32_t );
+        const Unit * GetTroopBoard( int32_t ) const;
 
-        Unit * GetTroopUID( u32 );
-        const Unit * GetTroopUID( u32 ) const;
+        Unit * GetTroopUID( uint32_t );
+        const Unit * GetTroopUID( uint32_t ) const;
 
         const SpellStorage & GetUsageSpells( void ) const;
 
@@ -146,8 +146,8 @@ namespace Battle
         bool isSpellcastDisabled() const;
         bool isDisableCastSpell( const Spell &, std::string * msg = nullptr );
 
-        bool GraveyardAllowResurrect( s32, const Spell & ) const;
-        const Unit * GraveyardLastTroop( s32 ) const;
+        bool GraveyardAllowResurrect( int32_t, const Spell & ) const;
+        const Unit * GraveyardLastTroop( int32_t ) const;
         std::vector<const Unit *> GetGraveyardTroops( const int32_t hexIndex ) const;
         Indexes GraveyardClosedCells( void ) const;
 
@@ -163,7 +163,7 @@ namespace Battle
         bool IsShootingPenalty( const Unit &, const Unit & ) const;
         int GetICNCovr( void ) const;
 
-        u32 GetCastleTargetValue( int ) const;
+        uint32_t GetCastleTargetValue( int ) const;
 
         int32_t GetFreePositionNearHero( const int heroColor ) const;
 
@@ -199,7 +199,7 @@ namespace Battle
         void TurnTroop( Unit * troop, const Units & orderHistory );
         void TowerAction( const Tower & );
 
-        void SetCastleTargetValue( int, u32 );
+        void SetCastleTargetValue( int, uint32_t );
         void CatapultAction( void );
 
         static TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir );
@@ -256,7 +256,7 @@ namespace Battle
         AIBattlePathfinder _globalAIPathfinder;
         int icn_covr;
 
-        u32 current_turn;
+        uint32_t current_turn;
         int auto_battle;
 
         bool end_turn;

@@ -24,10 +24,10 @@
 #ifndef H2BATTLE_CELL_H
 #define H2BATTLE_CELL_H
 
+#include <cstdint>
 #include <utility>
 
 #include "math_base.h"
-#include "types.h"
 
 #define CELLW 44
 #define CELLH 52
@@ -65,7 +65,7 @@ namespace Battle
         void resetReachability();
 
         void SetObject( int );
-        void SetQuality( u32 );
+        void SetQuality( uint32_t );
 
         void setReachableForHead();
         void setReachableForTail();
@@ -84,10 +84,10 @@ namespace Battle
 
         bool isPositionIncludePoint( const fheroes2::Point & ) const;
 
-        s32 GetIndex( void ) const;
+        int32_t GetIndex( void ) const;
         const fheroes2::Rect & GetPos( void ) const;
         int GetObject( void ) const;
-        s32 GetQuality( void ) const;
+        int32_t GetQuality( void ) const;
         direction_t GetTriangleDirection( const fheroes2::Point & ) const;
 
         const Unit * GetUnit( void ) const;
@@ -95,12 +95,12 @@ namespace Battle
         void SetUnit( Unit * );
 
     private:
-        s32 index;
+        int32_t index;
         fheroes2::Rect pos;
         int object;
         bool _reachableForHead;
         bool _reachableForTail;
-        s32 quality;
+        int32_t quality;
         Unit * troop;
         fheroes2::Point coord[7];
     };

@@ -308,28 +308,28 @@ void Kingdom::RemoveCastle( const Castle * castle )
         LossPostActions();
 }
 
-u32 Kingdom::GetCountCastle( void ) const
+uint32_t Kingdom::GetCountCastle( void ) const
 {
     return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), Castle::PredicateIsCastle ) );
 }
 
-u32 Kingdom::GetCountTown( void ) const
+uint32_t Kingdom::GetCountTown( void ) const
 {
     return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), Castle::PredicateIsTown ) );
 }
 
-u32 Kingdom::GetCountMarketplace( void ) const
+uint32_t Kingdom::GetCountMarketplace( void ) const
 {
     return static_cast<uint32_t>(
         std::count_if( castles.begin(), castles.end(), []( const Castle * castle ) { return Castle::PredicateIsBuildBuilding( castle, BUILD_MARKETPLACE ); } ) );
 }
 
-u32 Kingdom::GetCountNecromancyShrineBuild( void ) const
+uint32_t Kingdom::GetCountNecromancyShrineBuild( void ) const
 {
     return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), []( const Castle * castle ) { return castle->isNecromancyShrineBuild(); } ) );
 }
 
-u32 Kingdom::GetCountBuilding( u32 build ) const
+uint32_t Kingdom::GetCountBuilding( uint32_t build ) const
 {
     return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), [build]( const Castle * castle ) { return castle->isBuild( build ); } ) );
 }
@@ -362,7 +362,7 @@ bool Kingdom::isVisited( const Maps::Tiles & tile ) const
     return isVisited( tile.GetIndex(), tile.GetObject( false ) );
 }
 
-bool Kingdom::isVisited( s32 index, const MP2::MapObjectType objectType ) const
+bool Kingdom::isVisited( int32_t index, const MP2::MapObjectType objectType ) const
 {
     std::list<IndexObject>::const_iterator it = std::find_if( visit_object.begin(), visit_object.end(), [index]( const IndexObject & v ) { return v.isIndex( index ); } );
     return visit_object.end() != it && ( *it ).isObject( objectType );
@@ -381,7 +381,7 @@ uint32_t Kingdom::CountVisitedObjects( const MP2::MapObjectType objectType ) con
 }
 
 /* set visited cell */
-void Kingdom::SetVisited( s32 index, const MP2::MapObjectType objectType = MP2::OBJ_ZERO )
+void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType = MP2::OBJ_ZERO )
 {
     if ( !isVisited( index, objectType ) && objectType != MP2::OBJ_ZERO )
         visit_object.push_front( IndexObject( index, objectType ) );
@@ -437,7 +437,7 @@ void Kingdom::OddFundsResource( const Funds & funds )
     resource.Trim();
 }
 
-u32 Kingdom::GetLostTownDays( void ) const
+uint32_t Kingdom::GetLostTownDays( void ) const
 {
     return lost_town_days;
 }
@@ -557,7 +557,7 @@ void Kingdom::ApplyPlayWithStartingHero( void )
     }
 }
 
-u32 Kingdom::GetMaxHeroes( void )
+uint32_t Kingdom::GetMaxHeroes( void )
 {
     return GameStatic::GetKingdomMaxHeroes();
 }
@@ -571,7 +571,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
         const int resources[8]
             = { Resource::WOOD, Resource::ORE, Resource::MERCURY, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD, Resource::UNKNOWN };
 
-        for ( u32 index = 0; resources[index] != Resource::UNKNOWN; ++index )
+        for ( uint32_t index = 0; resources[index] != Resource::UNKNOWN; ++index )
             totalIncome += ProfitConditions::FromMine( resources[index] ) * world.CountCapturedMines( resources[index], GetColor() );
     }
 
@@ -951,11 +951,11 @@ StreamBase & operator<<( StreamBase & msg, const Kingdoms & obj )
 
 StreamBase & operator>>( StreamBase & msg, Kingdoms & obj )
 {
-    u32 kingdomscount = 0;
+    uint32_t kingdomscount = 0;
     msg >> kingdomscount;
 
     if ( kingdomscount <= Kingdoms::_size ) {
-        for ( u32 i = 0; i < kingdomscount; ++i )
+        for ( uint32_t i = 0; i < kingdomscount; ++i )
             msg >> obj.kingdoms[i];
     }
 

@@ -24,6 +24,7 @@
 #define H2TOOLS_H
 
 #include <bitset>
+#include <cstdint>
 #include <iomanip>
 #include <list>
 #include <sstream>
@@ -32,7 +33,6 @@
 #include <vector>
 
 #include "math_base.h"
-#include "types.h"
 
 std::string GetStringShort( int );
 
@@ -59,12 +59,12 @@ std::vector<std::string> StringSplit( const std::string &, const std::string & )
 void StringReplace( std::string &, const char *, const std::string & );
 void StringReplace( std::string &, const char *, int );
 
-int CountBits( u32 );
+int CountBits( uint32_t );
 
 std::string InsertString( const std::string &, size_t, const char * );
 
-bool SaveMemToFile( const std::vector<u8> & data, const std::string & path );
-std::vector<u8> LoadFileToMem( const std::string & path );
+bool SaveMemToFile( const std::vector<uint8_t> & data, const std::string & path );
+std::vector<uint8_t> LoadFileToMem( const std::string & path );
 
 // std::clamp replacement until we can use C++17
 template <typename T>

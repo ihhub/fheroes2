@@ -60,7 +60,7 @@ PrimarySkillsBar::PrimarySkillsBar( const Heroes * hero, bool mini )
     SetContent( content );
 }
 
-void PrimarySkillsBar::SetTextOff( s32 ox, s32 oy )
+void PrimarySkillsBar::SetTextOff( int32_t ox, int32_t oy )
 {
     toff = fheroes2::Point( ox, oy );
 }

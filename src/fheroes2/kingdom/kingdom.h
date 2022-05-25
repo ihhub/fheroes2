@@ -102,12 +102,12 @@ public:
         return castles.empty();
     }
 
-    u32 GetCountCastle( void ) const;
-    u32 GetCountTown( void ) const;
-    u32 GetCountMarketplace( void ) const;
-    u32 GetLostTownDays( void ) const;
-    u32 GetCountNecromancyShrineBuild( void ) const;
-    u32 GetCountBuilding( u32 ) const;
+    uint32_t GetCountCastle( void ) const;
+    uint32_t GetCountTown( void ) const;
+    uint32_t GetCountMarketplace( void ) const;
+    uint32_t GetLostTownDays( void ) const;
+    uint32_t GetCountNecromancyShrineBuild( void ) const;
+    uint32_t GetCountBuilding( uint32_t ) const;
     uint32_t GetCountThievesGuild() const;
 
     uint32_t GetCountArtifacts() const;
@@ -149,11 +149,11 @@ public:
     void ActionNewWeek( void );
     void ActionNewMonth( void );
 
-    void SetVisited( s32 index, const MP2::MapObjectType objectType );
+    void SetVisited( int32_t index, const MP2::MapObjectType objectType );
     uint32_t CountVisitedObjects( const MP2::MapObjectType objectType ) const;
     bool isVisited( const MP2::MapObjectType objectType ) const;
     bool isVisited( const Maps::Tiles & ) const;
-    bool isVisited( s32, const MP2::MapObjectType objectType ) const;
+    bool isVisited( int32_t, const MP2::MapObjectType objectType ) const;
 
     bool isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const;
 
@@ -168,7 +168,7 @@ public:
 
     bool IsTileVisibleFromCrystalBall( const int32_t dest ) const;
 
-    static u32 GetMaxHeroes( void );
+    static uint32_t GetMaxHeroes( void );
 
 private:
     cost_t _getKingdomStartingResources( const int difficulty ) const;
@@ -180,7 +180,7 @@ private:
     int _lastBattleWinHeroID;
     Funds resource;
 
-    u32 lost_town_days;
+    uint32_t lost_town_days;
 
     KingdomCastles castles;
     KingdomHeroes heroes;
@@ -190,7 +190,7 @@ private:
     std::list<IndexObject> visit_object;
 
     Puzzle puzzle_maps;
-    u32 visited_tents_colors;
+    uint32_t visited_tents_colors;
 
     KingdomHeroes heroes_cond_loss;
 

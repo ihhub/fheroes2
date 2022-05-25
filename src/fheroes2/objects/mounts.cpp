@@ -43,7 +43,7 @@ namespace
 
 int ObjMnts1::GetPassable( int icn, const uint8_t index )
 {
-    const u8 disabled2[] = {6, 7, 8, 9, 14, 15, 16, 28, 29, 30, 31, 33, 34, 35, 47, 48, 56, 57, 64, 67, 68, 69, 82};
+    const uint8_t disabled2[] = { 6, 7, 8, 9, 14, 15, 16, 28, 29, 30, 31, 33, 34, 35, 47, 48, 56, 57, 64, 67, 68, 69, 82 };
 
     if ( isShadow( index ) )
         return DIRECTION_ALL;
@@ -57,7 +57,7 @@ int ObjMnts1::GetPassable( int icn, const uint8_t index )
 
 int ObjMnts2::GetPassable( int icn, const uint8_t index )
 {
-    const u8 disabled1[] = {6, 7, 8, 9, 14, 15, 16, 28, 29, 30, 31, 33, 34, 35, 50, 51, 52, 65, 77, 78, 87, 94, 99, 112};
+    const uint8_t disabled1[] = { 6, 7, 8, 9, 14, 15, 16, 28, 29, 30, 31, 33, 34, 35, 50, 51, 52, 65, 77, 78, 87, 94, 99, 112 };
 
     if ( isShadow( index ) )
         return DIRECTION_ALL;
@@ -68,22 +68,22 @@ int ObjMnts2::GetPassable( int icn, const uint8_t index )
     return std::end( disabled1 ) != std::find( disabled1, std::end( disabled1 ), index ) ? 0 : DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
 }
 
-bool ObjMnts1::isAction( u32 index )
+bool ObjMnts1::isAction( uint32_t index )
 {
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
 
-bool ObjMnts2::isAction( u32 index )
+bool ObjMnts2::isAction( uint32_t index )
 {
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
 
-MP2::MapObjectType ObjMnts1::GetActionObject( u32 )
+MP2::MapObjectType ObjMnts1::GetActionObject( uint32_t )
 {
     return MP2::OBJ_ZERO;
 }
 
-MP2::MapObjectType ObjMnts2::GetActionObject( u32 )
+MP2::MapObjectType ObjMnts2::GetActionObject( uint32_t )
 {
     return MP2::OBJ_ZERO;
 }

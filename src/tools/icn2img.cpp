@@ -85,10 +85,10 @@ int main( int argc, char ** argv )
     for ( int ii = 0; ii < count_sprite; ++ii ) {
         const fheroes2::ICNHeader & head = headers[ii];
 
-        u32 data_size = ( ii + 1 != count_sprite ? headers[ii + 1].offsetData - head.offsetData : total_size - head.offsetData );
+        uint32_t data_size = ( ii + 1 != count_sprite ? headers[ii + 1].offsetData - head.offsetData : total_size - head.offsetData );
         sf.seek( save_pos + head.offsetData );
         std::cerr << data_size << std::endl;
-        std::vector<u8> buf = sf.getRaw( data_size );
+        std::vector<uint8_t> buf = sf.getRaw( data_size );
 
         if ( !buf.empty() ) {
             const fheroes2::Sprite image = fheroes2::decodeICNSprite( &buf[0], data_size, head.width, head.height, head.offsetX, head.offsetY );

@@ -58,7 +58,7 @@ namespace Battle
     struct TargetsInfo;
 
     void DialogBattleSettings( void );
-    bool DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & kingdom );
+    bool DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdom & kingdom );
 
     enum HeroAnimation : uint32_t
     {
@@ -149,7 +149,7 @@ namespace Battle
 
         Status & operator=( const Status & ) = delete;
 
-        void SetPosition( s32, s32 );
+        void SetPosition( int32_t, int32_t );
         void SetLogs( StatusListBox * logs )
         {
             listlog = logs;
@@ -234,7 +234,7 @@ namespace Battle
     class Interface
     {
     public:
-        Interface( Arena &, s32 );
+        Interface( Arena &, int32_t );
         Interface( const Interface & ) = delete;
 
         ~Interface();
@@ -264,7 +264,7 @@ namespace Battle
         void RedrawActionAttackPart1( Unit &, Unit &, const TargetsInfo & );
         void RedrawActionAttackPart2( Unit & attacker, const TargetsInfo & targets );
         void RedrawActionSpellCastStatus( const Spell & spell, int32_t dst, const std::string & name, const TargetsInfo & targets );
-        void RedrawActionSpellCastPart1( const Spell & spell, s32 dst, const HeroBase * caster, const TargetsInfo & targets );
+        void RedrawActionSpellCastPart1( const Spell & spell, int32_t dst, const HeroBase * caster, const TargetsInfo & targets );
         void RedrawActionSpellCastPart2( const Spell & spell, const TargetsInfo & targets );
         void RedrawActionResistSpell( const Unit & target, bool playSound );
         void RedrawActionMonsterSpellCastStatus( const Spell & spell, const Unit & attacker, const TargetInfo & target );
@@ -275,7 +275,7 @@ namespace Battle
         void RedrawActionTowerPart1( const Tower &, const Unit & );
         void RedrawActionTowerPart2( const Tower &, const TargetInfo & );
         void RedrawActionCatapult( int target, bool hit );
-        void RedrawActionTeleportSpell( Unit &, s32 );
+        void RedrawActionTeleportSpell( Unit &, int32_t );
         void RedrawActionEarthQuakeSpell( const std::vector<int> & );
         void RedrawActionSummonElementalSpell( Unit & target );
         void RedrawActionMirrorImageSpell( const Unit &, const Position & );
@@ -297,8 +297,8 @@ namespace Battle
 
         void RedrawCover( void );
         void RedrawCoverStatic( const Settings & conf, const Board & board );
-        void RedrawLowObjects( s32 );
-        void RedrawHighObjects( s32 );
+        void RedrawLowObjects( int32_t );
+        void RedrawHighObjects( int32_t );
         void RedrawCastle( const Castle &, int32_t );
         void RedrawCastleMainTower( const Castle & );
         void RedrawKilled( void );
@@ -318,7 +318,7 @@ namespace Battle
         void RedrawActionDisruptingRaySpell( const Unit & );
         void RedrawActionBloodLustSpell( const Unit & );
         void RedrawActionStoneSpell( const Unit & target );
-        void RedrawActionColdRingSpell( s32, const TargetsInfo & );
+        void RedrawActionColdRingSpell( int32_t, const TargetsInfo & );
         void RedrawActionElementalStormSpell( const TargetsInfo & );
         void RedrawActionArmageddonSpell();
         void RedrawActionHolyShoutSpell( const TargetsInfo & targets, int strength );
@@ -380,7 +380,7 @@ namespace Battle
         Spell humanturn_spell;
         bool humanturn_exit;
         bool humanturn_redraw;
-        u32 animation_flags_frame;
+        uint32_t animation_flags_frame;
         int catapult_frame;
 
         int _breakAutoBattleForColor;
@@ -396,8 +396,8 @@ namespace Battle
         fheroes2::Point _movingPos;
         fheroes2::Point _flyingPos;
 
-        s32 index_pos;
-        s32 teleport_src;
+        int32_t index_pos;
+        int32_t teleport_src;
         fheroes2::Rect main_tower;
 
         StatusListBox * listlog;

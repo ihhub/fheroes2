@@ -283,7 +283,7 @@ void ShowNewWeekDialog( void )
 
     if ( week.GetType() == WeekName::MONSTERS ) {
         const Monster monster( week.GetMonster() );
-        const u32 count = world.BeginMonth() ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
+        const uint32_t count = world.BeginMonth() ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
 
         if ( monster.isValid() && count ) {
             if ( world.BeginMonth() )
@@ -525,7 +525,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
     return Cursor::POINTER;
 }
 
-int Interface::Basic::GetCursorTileIndex( s32 dst_index )
+int Interface::Basic::GetCursorTileIndex( int32_t dst_index )
 {
     if ( dst_index < 0 || dst_index >= world.w() * world.h() )
         return Cursor::POINTER;
@@ -1099,7 +1099,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
         // slow maps objects animation
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            u32 & frame = Game::MapsAnimationFrame();
+            uint32_t & frame = Game::MapsAnimationFrame();
             ++frame;
             gameArea.SetRedraw();
         }
@@ -1207,7 +1207,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
     }
 }
 
-void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps ) const
+void Interface::Basic::MouseCursorAreaPressRight( int32_t index_maps ) const
 {
     Heroes * hero = GetFocusHeroes();
 

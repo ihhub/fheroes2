@@ -45,11 +45,11 @@ namespace Battle
 {
     struct TargetInfo;
 
-    struct ModeDuration : public std::pair<u32, u32>
+    struct ModeDuration : public std::pair<uint32_t, uint32_t>
     {
-        ModeDuration( u32, u32 );
+        ModeDuration( uint32_t, uint32_t );
 
-        bool isMode( u32 ) const;
+        bool isMode( uint32_t ) const;
         bool isZeroDuration( void ) const;
         void DecreaseDuration( void );
     };
@@ -58,12 +58,12 @@ namespace Battle
     {
         ModesAffected();
 
-        u32 GetMode( u32 ) const;
-        void AddMode( u32, u32 );
-        void RemoveMode( u32 );
+        uint32_t GetMode( uint32_t ) const;
+        void AddMode( uint32_t, uint32_t );
+        void RemoveMode( uint32_t );
         void DecreaseDuration( void );
 
-        u32 FindZeroDuration( void ) const;
+        uint32_t FindZeroDuration( void ) const;
     };
 
     enum
@@ -81,14 +81,14 @@ namespace Battle
 
         Unit & operator=( const Unit & ) = delete;
 
-        bool isModes( u32 ) const override;
+        bool isModes( uint32_t ) const override;
         bool isBattle() const override;
         std::string GetShotString() const override;
         std::string GetSpeedString() const override;
-        u32 GetHitPointsLeft() const override;
+        uint32_t GetHitPointsLeft() const override;
         virtual uint32_t GetMissingHitPoints() const;
-        u32 GetAffectedDuration( u32 ) const override;
-        u32 GetSpeed() const override;
+        uint32_t GetAffectedDuration( uint32_t ) const override;
+        uint32_t GetSpeed() const override;
         int GetMorale() const override;
 
         Unit * GetMirror()
@@ -132,18 +132,18 @@ namespace Battle
 
         std::string String( bool more = false ) const;
 
-        u32 GetUID() const
+        uint32_t GetUID() const
         {
             return _uid;
         }
 
-        bool isUID( u32 v ) const
+        bool isUID( uint32_t v ) const
         {
             return _uid == v;
         }
 
-        s32 GetHeadIndex( void ) const;
-        s32 GetTailIndex( void ) const;
+        int32_t GetHeadIndex( void ) const;
+        int32_t GetTailIndex( void ) const;
 
         const Position & GetPosition() const
         {
@@ -154,8 +154,8 @@ namespace Battle
         void SetPosition( const Position & pos );
         void SetReflection( bool );
 
-        u32 GetAttack() const override;
-        u32 GetDefense() const override;
+        uint32_t GetAttack() const override;
+        uint32_t GetDefense() const override;
 
         int GetArmyColor() const
         {
@@ -167,13 +167,13 @@ namespace Battle
         int GetCurrentOrArmyColor() const; // current unit color (if valid), color of the unit's army otherwise
         int GetCurrentControl() const;
         uint32_t GetMoveRange() const;
-        u32 GetSpeed( bool skipStandingCheck, bool skipMovedCheck ) const;
+        uint32_t GetSpeed( bool skipStandingCheck, bool skipMovedCheck ) const;
         int GetControl() const override;
-        u32 GetDamage( const Unit & ) const;
-        s32 GetScoreQuality( const Unit & ) const;
+        uint32_t GetDamage( const Unit & ) const;
+        int32_t GetScoreQuality( const Unit & ) const;
         uint32_t GetInitialCount() const;
-        u32 GetDead( void ) const;
-        u32 GetHitPoints( void ) const;
+        uint32_t GetDead( void ) const;
+        uint32_t GetHitPoints( void ) const;
         payment_t GetSurrenderCost() const;
 
         uint32_t GetShots() const override
@@ -181,12 +181,12 @@ namespace Battle
             return shots;
         }
 
-        u32 ApplyDamage( Unit &, u32 );
-        u32 ApplyDamage( u32 );
+        uint32_t ApplyDamage( Unit &, uint32_t );
+        uint32_t ApplyDamage( uint32_t );
         uint32_t CalculateRetaliationDamage( uint32_t damageTaken ) const;
-        u32 CalculateMinDamage( const Unit & ) const;
-        u32 CalculateMaxDamage( const Unit & ) const;
-        u32 CalculateDamageUnit( const Unit & enemy, double dmg ) const;
+        uint32_t CalculateMinDamage( const Unit & ) const;
+        uint32_t CalculateMaxDamage( const Unit & ) const;
+        uint32_t CalculateDamageUnit( const Unit & enemy, double dmg ) const;
         bool ApplySpell( const Spell &, const HeroBase * hero, TargetInfo & );
         bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = nullptr, bool forceApplyToAlly = false ) const;
         bool isUnderSpellEffect( const Spell & spell ) const;
@@ -194,10 +194,10 @@ namespace Battle
         void PostAttackAction();
         void ResetBlind( void );
         void SetBlindAnswer( bool value );
-        void SpellModesAction( const Spell &, u32, const HeroBase * );
-        void SpellApplyDamage( const Spell &, u32, const HeroBase *, TargetInfo & );
-        void SpellRestoreAction( const Spell &, u32, const HeroBase * );
-        u32 Resurrect( u32, bool, bool );
+        void SpellModesAction( const Spell &, uint32_t, const HeroBase * );
+        void SpellApplyDamage( const Spell &, uint32_t, const HeroBase *, TargetInfo & );
+        void SpellRestoreAction( const Spell &, uint32_t, const HeroBase * );
+        uint32_t Resurrect( uint32_t, bool, bool );
 
         bool SwitchAnimation( int rule, bool reverse = false );
         bool SwitchAnimation( const std::vector<int> & animationList, bool reverse = false );
@@ -245,14 +245,14 @@ namespace Battle
             return position.GetRect();
         }
 
-        u32 HowManyWillKilled( u32 ) const;
+        uint32_t HowManyWillKilled( uint32_t ) const;
 
         void SetResponse( void );
         void UpdateDirection( void );
         bool UpdateDirection( const fheroes2::Rect & );
         void PostKilledAction( void );
 
-        u32 GetMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const;
+        uint32_t GetMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const;
         int GetSpellMagic() const;
 
         const HeroBase * GetCommander( void ) const;
@@ -278,11 +278,11 @@ namespace Battle
 
     private:
         const uint32_t _uid;
-        u32 hp;
-        u32 count0;
-        u32 dead;
-        u32 shots;
-        u32 disruptingray;
+        uint32_t hp;
+        uint32_t count0;
+        uint32_t dead;
+        uint32_t shots;
+        uint32_t disruptingray;
         bool reflect;
 
         Position position;

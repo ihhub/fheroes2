@@ -69,7 +69,7 @@ bool Battle::Bridge::isBridgeOccupied( void ) const
            || graveyard->GetLastTroopUID( GATES_CELL );
 }
 
-bool Battle::Bridge::NeedDown( const Unit & b, s32 dstPos ) const
+bool Battle::Bridge::NeedDown( const Unit & b, int32_t dstPos ) const
 {
     // no if bridge is destroyed or already lowered or unit does not belong to the castle or there are any troops (alive or dead) on or under the bridge
     if ( !isValid() || isDown() || b.GetColor() != Arena::GetCastle()->GetColor() || isBridgeOccupied() )
@@ -115,7 +115,7 @@ void Battle::Bridge::SetPassable( const Unit & b ) const
     }
 }
 
-void Battle::Bridge::Action( const Unit & b, s32 dst )
+void Battle::Bridge::Action( const Unit & b, int32_t dst )
 {
     bool action_down = false;
 

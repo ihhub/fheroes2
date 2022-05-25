@@ -123,10 +123,10 @@ namespace Skill
 namespace GameStatic
 {
     // world
-    u32 uniq = 0;
+    uint32_t uniq = 0;
 }
 
-u32 GameStatic::GetLostOnWhirlpoolPercent()
+uint32_t GameStatic::GetLostOnWhirlpoolPercent()
 {
     return 50;
 }
@@ -149,42 +149,42 @@ uint32_t GameStatic::getFogDiscoveryDistance( const FogDiscoveryType type )
     return 0;
 }
 
-u32 GameStatic::GetGameOverLostDays()
+uint32_t GameStatic::GetGameOverLostDays()
 {
     return 7;
 }
 
-u32 GameStatic::GetHeroesRestoreSpellPointsPerDay()
+uint32_t GameStatic::GetHeroesRestoreSpellPointsPerDay()
 {
     return 1;
 }
 
-u32 GameStatic::GetKingdomMaxHeroes()
+uint32_t GameStatic::GetKingdomMaxHeroes()
 {
     return 8;
 }
 
-u32 GameStatic::GetCastleGrownWell()
+uint32_t GameStatic::GetCastleGrownWell()
 {
     return 2;
 }
 
-u32 GameStatic::GetCastleGrownWel2()
+uint32_t GameStatic::GetCastleGrownWel2()
 {
     return 8;
 }
 
-u32 GameStatic::GetCastleGrownWeekOf()
+uint32_t GameStatic::GetCastleGrownWeekOf()
 {
     return 5;
 }
 
-u32 GameStatic::GetCastleGrownMonthOf()
+uint32_t GameStatic::GetCastleGrownMonthOf()
 {
     return 100;
 }
 
-s32 GameStatic::ObjectVisitedModifiers( const MP2::MapObjectType objectType )
+int32_t GameStatic::ObjectVisitedModifiers( const MP2::MapObjectType objectType )
 {
     switch ( objectType ) {
     case MP2::OBJ_BUOY:

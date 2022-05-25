@@ -41,8 +41,8 @@ namespace
 
 int ObjGras::GetPassable( const uint8_t index )
 {
-    const u8 disabled[] = {54, 55, 56, 57, 58, 65, 66, 67, 68};
-    const u8 restricted[] = {
+    const uint8_t disabled[] = { 54, 55, 56, 57, 58, 65, 66, 67, 68 };
+    const uint8_t restricted[] = {
         5,   7,   31,  33,  34,  37,  38,  40,  41,  43,  45,  47,  49,  59,  60,  61,  62,  63,  69,  70,  71,  72,  73,
         74,  75,  77,  78,  83,  84,  85,  89,  90,  93,  95,  96,  97,  99,  100, 101, 103, 104, 106, 107, 109, 110, 112,
         114, 115, 116, 121, 122, 123, 125, 126, 127, 129, 130, 131, 135, 136, 139, 140, 142, 144, 146, 148, 149, 150,
@@ -56,7 +56,7 @@ int ObjGras::GetPassable( const uint8_t index )
     return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
 }
 
-bool ObjGras::isAction( u32 index )
+bool ObjGras::isAction( uint32_t index )
 {
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
@@ -68,7 +68,7 @@ bool ObjGras::isShadow( const uint8_t index )
 
 int ObjGra2::GetPassable( const uint8_t index )
 {
-    const u8 restricted[] = {2, 3, 6, 8, 22, 59};
+    const uint8_t restricted[] = { 2, 3, 6, 8, 22, 59 };
     if ( isShadow( index ) )
         return DIRECTION_ALL;
     else if ( isAction( index ) )
@@ -77,7 +77,7 @@ int ObjGra2::GetPassable( const uint8_t index )
     return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
 }
 
-bool ObjGra2::isAction( u32 index )
+bool ObjGra2::isAction( uint32_t index )
 {
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
@@ -87,7 +87,7 @@ bool ObjGra2::isShadow( const uint8_t index )
     return objGra2ShadowBitset[index];
 }
 
-int ObjGras::GetActionObject( u32 index )
+int ObjGras::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 6:
@@ -101,7 +101,7 @@ int ObjGras::GetActionObject( u32 index )
     return MP2::OBJ_ZERO;
 }
 
-int ObjGra2::GetActionObject( u32 index )
+int ObjGra2::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 4:

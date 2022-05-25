@@ -347,7 +347,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
     const Cell * cell = Board::GetCell( dst );
 
     if ( unit && unit->isValid() && cell && cell->isPassableForUnit( *unit ) ) {
-        const s32 head = unit->GetHeadIndex();
+        const int32_t head = unit->GetHeadIndex();
 
         Position pos = Position::GetPosition( *unit, dst );
         assert( pos.GetHead() != nullptr && ( !unit->isWide() || pos.GetTail() != nullptr ) );
@@ -427,8 +427,8 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
             }
 
             if ( unit->isWide() ) {
-                const s32 dst1 = path.back();
-                const s32 dst2 = 1 < path.size() ? path[path.size() - 2] : head;
+                const int32_t dst1 = path.back();
+                const int32_t dst2 = 1 < path.size() ? path[path.size() - 2] : head;
 
                 finalPos.Set( dst1, unit->isWide(), ( RIGHT_SIDE & Board::GetDirection( dst1, dst2 ) ) != 0 );
             }
@@ -927,7 +927,7 @@ void Battle::Arena::ApplyActionTower( Command & cmd )
 void Battle::Arena::ApplyActionCatapult( Command & cmd )
 {
     if ( catapult ) {
-        u32 shots = cmd.GetValue();
+        uint32_t shots = cmd.GetValue();
 
         while ( shots-- ) {
             const int target = cmd.GetValue();

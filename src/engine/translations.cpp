@@ -157,13 +157,13 @@ namespace
         }
     };
 
-    u32 crc32b( const char * msg )
+    uint32_t crc32b( const char * msg )
     {
-        u32 crc = 0xFFFFFFFF;
-        u32 index = 0;
+        uint32_t crc = 0xFFFFFFFF;
+        uint32_t index = 0;
 
         while ( msg[index] ) {
-            crc ^= static_cast<u32>( msg[index] );
+            crc ^= static_cast<uint32_t>( msg[index] );
 
             for ( int bit = 0; bit < 8; ++bit ) {
                 const uint32_t poly = ( crc & 1 ) ? 0xEDB88320 : 0x0;
@@ -204,7 +204,7 @@ namespace
         uint32_t hash_offset;
         LocaleType locale;
         StreamBuf buf;
-        std::map<u32, chunk> hash_offsets;
+        std::map<uint32_t, chunk> hash_offsets;
         std::string domain;
         std::string encoding;
         std::string plural_forms;
@@ -224,12 +224,12 @@ namespace
 
         const char * ngettext( const char * str, size_t plural )
         {
-            std::map<u32, chunk>::const_iterator it = hash_offsets.find( crc32b( str ) );
+            std::map<uint32_t, chunk>::const_iterator it = hash_offsets.find( crc32b( str ) );
             if ( it == hash_offsets.end() )
                 return stripContext( str );
 
             buf.seek( ( *it ).second.offset );
-            const u8 * ptr = buf.data();
+            const uint8_t * ptr = buf.data();
 
             while ( plural > 0 ) {
                 while ( *ptr )
@@ -250,7 +250,7 @@ namespace
 
             {
                 const size_t size = sf.size();
-                u32 id = 0;
+                uint32_t id = 0;
                 sf >> id;
 
                 if ( 0x950412de != id ) {
@@ -279,8 +279,8 @@ namespace
             // parse encoding and plural forms
             if ( count > 0 ) {
                 buf.seek( offset_strings2 );
-                u32 length2 = buf.get32();
-                u32 offset2 = buf.get32();
+                uint32_t length2 = buf.get32();
+                uint32_t offset2 = buf.get32();
 
                 buf.seek( offset2 );
                 std::vector<std::string> tags = StringSplit( buf.toString( length2 ), "\n" );
@@ -323,7 +323,7 @@ namespace
 
                 const uint32_t offset2 = buf.get32();
 
-                std::map<u32, chunk>::const_iterator it = hash_offsets.find( crc );
+                std::map<uint32_t, chunk>::const_iterator it = hash_offsets.find( crc );
                 if ( it == hash_offsets.end() )
                     hash_offsets[crc] = chunk( offset2, length2 );
                 else {

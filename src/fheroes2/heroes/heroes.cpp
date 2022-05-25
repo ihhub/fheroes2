@@ -232,7 +232,7 @@ Heroes::Heroes( int heroid, int rc )
     move_point = GetMaxMovePoints();
 }
 
-void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
+void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
 {
     // reset modes
     modes = 0;
@@ -517,27 +517,27 @@ void Heroes::IncreasePrimarySkill( int skill )
     }
 }
 
-u32 Heroes::GetExperience( void ) const
+uint32_t Heroes::GetExperience( void ) const
 {
     return experience;
 }
 
-void Heroes::IncreaseMovePoints( u32 point )
+void Heroes::IncreaseMovePoints( uint32_t point )
 {
     move_point += point;
 }
 
-u32 Heroes::GetMovePoints( void ) const
+uint32_t Heroes::GetMovePoints( void ) const
 {
     return move_point;
 }
 
-u32 Heroes::GetMaxSpellPoints( void ) const
+uint32_t Heroes::GetMaxSpellPoints( void ) const
 {
     return 10 * GetKnowledge();
 }
 
-u32 Heroes::GetMaxMovePoints( void ) const
+uint32_t Heroes::GetMaxMovePoints( void ) const
 {
     uint32_t point = 0;
 
@@ -854,7 +854,7 @@ bool Heroes::isObjectTypeVisited( const MP2::MapObjectType objectType, Visit::ty
     return std::any_of( visit_object.begin(), visit_object.end(), [objectType]( const IndexObject & v ) { return v.isObject( objectType ); } );
 }
 
-void Heroes::SetVisited( s32 index, Visit::type_t type )
+void Heroes::SetVisited( int32_t index, Visit::type_t type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
     const MP2::MapObjectType objectType = tile.GetObject( false );
@@ -879,7 +879,7 @@ void Heroes::setVisitedForAllies( const int32_t tileIndex ) const
     }
 }
 
-void Heroes::SetVisitedWideTile( s32 index, const MP2::MapObjectType objectType, Visit::type_t type )
+void Heroes::SetVisitedWideTile( int32_t index, const MP2::MapObjectType objectType, Visit::type_t type )
 {
     const Maps::Tiles & tile = world.GetTiles( index );
     const uint32_t uid = tile.GetObjectUID();
@@ -900,7 +900,7 @@ void Heroes::SetVisitedWideTile( s32 index, const MP2::MapObjectType objectType,
     }
 
     if ( tile.GetObject( false ) == objectType && wide ) {
-        for ( s32 ii = tile.GetIndex() - ( wide - 1 ); ii <= tile.GetIndex() + ( wide - 1 ); ++ii )
+        for ( int32_t ii = tile.GetIndex() - ( wide - 1 ); ii <= tile.GetIndex() + ( wide - 1 ); ++ii )
             if ( Maps::isValidAbsIndex( ii ) && world.GetTiles( ii ).GetObjectUID() == uid )
                 SetVisited( ii, type );
     }
@@ -960,7 +960,7 @@ void Heroes::ResetAction( void )
     ResetModes( ACTION );
 }
 
-u32 Heroes::GetCountArtifacts( void ) const
+uint32_t Heroes::GetCountArtifacts( void ) const
 {
     return bag_artifacts.CountArtifacts();
 }
@@ -1038,7 +1038,7 @@ void Heroes::IncreaseExperience( const uint32_t amount, const bool autoselect )
 }
 
 /* calc level from exp */
-int Heroes::GetLevelFromExperience( u32 exp )
+int Heroes::GetLevelFromExperience( uint32_t exp )
 {
     for ( int lvl = 1; lvl < 255; ++lvl )
         if ( exp < GetExperienceFromLevel( lvl ) )
@@ -1048,7 +1048,7 @@ int Heroes::GetLevelFromExperience( u32 exp )
 }
 
 /* calc exp from level */
-u32 Heroes::GetExperienceFromLevel( int lvl )
+uint32_t Heroes::GetExperienceFromLevel( int lvl )
 {
     switch ( lvl ) {
     case 0:
@@ -1136,8 +1136,8 @@ u32 Heroes::GetExperienceFromLevel( int lvl )
         break;
     }
 
-    const u32 l1 = GetExperienceFromLevel( lvl - 1 );
-    return ( l1 + static_cast<u32>( round( ( l1 - GetExperienceFromLevel( lvl - 2 ) ) * 1.2 / 100 ) * 100 ) );
+    const uint32_t l1 = GetExperienceFromLevel( lvl - 1 );
+    return ( l1 + static_cast<uint32_t>( round( ( l1 - GetExperienceFromLevel( lvl - 2 ) ) * 1.2 / 100 ) * 100 ) );
 }
 
 /* buy book */
@@ -1268,7 +1268,7 @@ bool Heroes::HasSecondarySkill( int skill ) const
     return Skill::Level::NONE != secondary_skills.GetLevel( skill );
 }
 
-u32 Heroes::GetSecondaryValues( int skill ) const
+uint32_t Heroes::GetSecondaryValues( int skill ) const
 {
     return secondary_skills.GetValues( skill );
 }
@@ -1318,7 +1318,7 @@ uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skil
     return movePoints + skillValue * movePoints / 100;
 }
 
-u32 Heroes::GetVisionsDistance( void ) const
+uint32_t Heroes::GetVisionsDistance( void ) const
 {
     return 8;
 }
@@ -1789,27 +1789,27 @@ void AllHeroes::Init( void )
         AllHeroes::clear();
 
     // knight: LORDKILBURN, SIRGALLANTH, ECTOR, GVENNETH, TYRO, AMBROSE, RUBY, MAXIMUS, DIMITRY
-    for ( u32 hid = Heroes::LORDKILBURN; hid <= Heroes::DIMITRY; ++hid )
+    for ( uint32_t hid = Heroes::LORDKILBURN; hid <= Heroes::DIMITRY; ++hid )
         push_back( new Heroes( hid, Race::KNGT ) );
 
     // barbarian: THUNDAX, FINEOUS, JOJOSH, CRAGHACK, JEZEBEL, JACLYN, ERGON, TSABU, ATLAS
-    for ( u32 hid = Heroes::THUNDAX; hid <= Heroes::ATLAS; ++hid )
+    for ( uint32_t hid = Heroes::THUNDAX; hid <= Heroes::ATLAS; ++hid )
         push_back( new Heroes( hid, Race::BARB ) );
 
     // sorceress: ASTRA, NATASHA, TROYAN, VATAWNA, REBECCA, GEM, ARIEL, CARLAWN, LUNA
-    for ( u32 hid = Heroes::ASTRA; hid <= Heroes::LUNA; ++hid )
+    for ( uint32_t hid = Heroes::ASTRA; hid <= Heroes::LUNA; ++hid )
         push_back( new Heroes( hid, Race::SORC ) );
 
     // warlock: ARIE, ALAMAR, VESPER, CRODO, BAROK, KASTORE, AGAR, FALAGAR, WRATHMONT
-    for ( u32 hid = Heroes::ARIE; hid <= Heroes::WRATHMONT; ++hid )
+    for ( uint32_t hid = Heroes::ARIE; hid <= Heroes::WRATHMONT; ++hid )
         push_back( new Heroes( hid, Race::WRLK ) );
 
     // wizard: MYRA, FLINT, DAWN, HALON, MYRINI, WILFREY, SARAKIN, KALINDRA, MANDIGAL
-    for ( u32 hid = Heroes::MYRA; hid <= Heroes::MANDIGAL; ++hid )
+    for ( uint32_t hid = Heroes::MYRA; hid <= Heroes::MANDIGAL; ++hid )
         push_back( new Heroes( hid, Race::WZRD ) );
 
     // necromancer: ZOM, DARLANA, ZAM, RANLOO, CHARITY, RIALDO, ROXANA, SANDRO, CELIA
-    for ( u32 hid = Heroes::ZOM; hid <= Heroes::CELIA; ++hid )
+    for ( uint32_t hid = Heroes::ZOM; hid <= Heroes::CELIA; ++hid )
         push_back( new Heroes( hid, Race::NECR ) );
 
     // from campain
@@ -1985,7 +1985,7 @@ void AllHeroes::Scoute( int colors ) const
             ( *it )->Scoute( ( *it )->GetIndex() );
 }
 
-Heroes * AllHeroes::FromJail( s32 index ) const
+Heroes * AllHeroes::FromJail( int32_t index ) const
 {
     const_iterator it = std::find_if( begin(), end(), [index]( const Heroes * hero ) { return hero->Modes( Heroes::JAIL ) && index == hero->GetIndex(); } );
     return end() != it ? *it : nullptr;
@@ -2026,7 +2026,7 @@ HeroSeedsForLevelUp Heroes::GetSeedsForLevelUp() const
 
 StreamBase & operator<<( StreamBase & msg, const VecHeroes & heroes )
 {
-    msg << static_cast<u32>( heroes.size() );
+    msg << static_cast<uint32_t>( heroes.size() );
 
     for ( AllHeroes::const_iterator it = heroes.begin(); it != heroes.end(); ++it )
         msg << ( *it ? ( *it )->GetID() : Heroes::UNKNOWN );
@@ -2036,13 +2036,13 @@ StreamBase & operator<<( StreamBase & msg, const VecHeroes & heroes )
 
 StreamBase & operator>>( StreamBase & msg, VecHeroes & heroes )
 {
-    u32 size;
+    uint32_t size;
     msg >> size;
 
     heroes.resize( size, nullptr );
 
     for ( AllHeroes::iterator it = heroes.begin(); it != heroes.end(); ++it ) {
-        u32 hid;
+        uint32_t hid;
         msg >> hid;
         *it = ( hid != Heroes::UNKNOWN ? world.GetHeroes( hid ) : nullptr );
     }
@@ -2107,7 +2107,7 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
 
 StreamBase & operator<<( StreamBase & msg, const AllHeroes & heroes )
 {
-    msg << static_cast<u32>( heroes.size() );
+    msg << static_cast<uint32_t>( heroes.size() );
 
     for ( AllHeroes::const_iterator it = heroes.begin(); it != heroes.end(); ++it )
         msg << **it;
@@ -2117,7 +2117,7 @@ StreamBase & operator<<( StreamBase & msg, const AllHeroes & heroes )
 
 StreamBase & operator>>( StreamBase & msg, AllHeroes & heroes )
 {
-    u32 size;
+    uint32_t size;
     msg >> size;
 
     heroes.clear();

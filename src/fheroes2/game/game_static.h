@@ -24,8 +24,9 @@
 #ifndef H2GAMESTATIC_H
 #define H2GAMESTATIC_H
 
+#include <cstdint>
+
 #include "mp2.h"
-#include "types.h"
 
 class StreamBase;
 
@@ -46,20 +47,20 @@ namespace GameStatic
         MAGI_EYES
     };
 
-    u32 GetLostOnWhirlpoolPercent( void );
-    u32 GetGameOverLostDays( void );
+    uint32_t GetLostOnWhirlpoolPercent( void );
+    uint32_t GetGameOverLostDays( void );
     uint32_t getFogDiscoveryDistance( const FogDiscoveryType type );
 
-    u32 GetKingdomMaxHeroes( void );
+    uint32_t GetKingdomMaxHeroes( void );
 
-    u32 GetCastleGrownWell( void );
-    u32 GetCastleGrownWel2( void );
-    u32 GetCastleGrownWeekOf( void );
-    u32 GetCastleGrownMonthOf( void );
+    uint32_t GetCastleGrownWell( void );
+    uint32_t GetCastleGrownWel2( void );
+    uint32_t GetCastleGrownWeekOf( void );
+    uint32_t GetCastleGrownMonthOf( void );
 
-    u32 GetHeroesRestoreSpellPointsPerDay( void );
+    uint32_t GetHeroesRestoreSpellPointsPerDay( void );
 
-    s32 ObjectVisitedModifiers( const MP2::MapObjectType objectType );
+    int32_t ObjectVisitedModifiers( const MP2::MapObjectType objectType );
 
     int GetBattleMoatReduceDefense( void );
 

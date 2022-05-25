@@ -239,8 +239,8 @@ void Interface::PlayersInfo::RedrawInfo( bool show_play_info ) const /* show_pla
     fheroes2::Display & display = fheroes2::Display::instance();
     const Maps::FileInfo & fi = conf.CurrentFileInfo();
 
-    const u32 humans_colors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
-    u32 index = 0;
+    const uint32_t humans_colors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+    uint32_t index = 0;
 
     for ( const_iterator it = begin(); it != end(); ++it ) {
         const Player & player = *( ( *it ).player );

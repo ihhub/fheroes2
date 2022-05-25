@@ -62,7 +62,7 @@ int Castle::DialogBuyHero( const Heroes * hero ) const
 
     TextBox recruitHeroText( _( "Recruit Hero" ), Font::YELLOW_BIG, BOXAREA_WIDTH );
 
-    u32 count = hero->GetCountArtifacts();
+    uint32_t count = hero->GetCountArtifacts();
     if ( hero->hasArtifact( Artifact::MAGIC_BOOK ) )
         --count;
 

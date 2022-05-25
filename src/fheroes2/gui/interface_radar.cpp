@@ -145,7 +145,7 @@ void Interface::Radar::SavePosition( void )
     Settings::Get().SetPosRadar( GetRect().getPosition() );
 }
 
-void Interface::Radar::SetPos( s32 ox, s32 oy )
+void Interface::Radar::SetPos( int32_t ox, int32_t oy )
 {
     BorderWindow::SetPosition( ox, oy );
 }

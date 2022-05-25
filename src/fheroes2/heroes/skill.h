@@ -24,10 +24,9 @@
 #ifndef H2SKILL_H
 #define H2SKILL_H
 
+#include <cstdint>
 #include <string>
 #include <vector>
-
-#include "types.h"
 
 void StringAppendModifiers( std::string &, int );
 
@@ -110,7 +109,7 @@ namespace Skill
         std::string GetName( void ) const;
         std::string GetNameWithBonus( const Heroes & hero ) const;
         std::string GetDescription( const Heroes & hero ) const;
-        u32 GetValues( void ) const;
+        uint32_t GetValues( void ) const;
 
         /* index sprite from SECSKILL */
         int GetIndexSprite1( void ) const;
@@ -130,7 +129,7 @@ namespace Skill
         explicit SecSkills( int race );
 
         int GetLevel( int skill ) const;
-        u32 GetValues( int skill ) const;
+        uint32_t GetValues( int skill ) const;
         void AddSkill( const Skill::Secondary & );
         void FindSkillsForLevelUp( int race, uint32_t seedSkill1, uint32_t seedSkill2, Secondary &, Secondary & ) const;
         void FillMax( const Skill::Secondary & );

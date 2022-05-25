@@ -153,11 +153,11 @@ public:
     // Returns the minimum number of movement points required to cast this spell
     uint32_t minMovePoints() const;
     int Level( void ) const;
-    u32 Damage( void ) const;
-    u32 Restore( void ) const;
-    u32 Resurrect( void ) const;
+    uint32_t Damage( void ) const;
+    uint32_t Restore( void ) const;
+    uint32_t Resurrect( void ) const;
 
-    u32 ExtraValue( void ) const;
+    uint32_t ExtraValue( void ) const;
 
     bool isValid() const
     {
@@ -218,7 +218,7 @@ public:
     bool isGuardianType() const;
 
     /* return index sprite spells.icn */
-    u32 IndexSprite( void ) const;
+    uint32_t IndexSprite( void ) const;
 
     static Spell RandCombat( int lvl );
     static Spell RandAdventure( int lvl );

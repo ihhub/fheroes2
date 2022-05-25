@@ -52,12 +52,12 @@ public:
         return type;
     }
 
-    u32 GetUID() const
+    uint32_t GetUID() const
     {
         return uid;
     }
 
-    void SetUID( u32 v )
+    void SetUID( uint32_t v )
     {
         uid = v;
     }
@@ -66,7 +66,7 @@ protected:
     friend StreamBase & operator<<( StreamBase &, const ActionSimple & );
     friend StreamBase & operator>>( StreamBase &, ActionSimple & );
 
-    u32 uid;
+    uint32_t uid;
     int type;
 };
 
@@ -108,7 +108,7 @@ struct ActionAccess : public ActionSimple
         , allowComputer( true )
         , cancelAfterFirstVisit( false )
     {}
-    static bool Action( const ActionAccess *, s32, Heroes & );
+    static bool Action( const ActionAccess *, int32_t, Heroes & );
 };
 
 struct ActionArtifact : public ActionSimple

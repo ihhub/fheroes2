@@ -210,19 +210,19 @@ public:
     int getArtifactValue() const;
 
     // return index of the sprite from objnarti.icn
-    u32 IndexSprite() const
+    uint32_t IndexSprite() const
     {
         return id < UNKNOWN ? id * 2 + 1 : 0;
     }
 
     // artfx.icn
-    u32 IndexSprite32() const
+    uint32_t IndexSprite32() const
     {
         return id;
     }
 
     // return index from artifact.icn
-    u32 IndexSprite64() const
+    uint32_t IndexSprite64() const
     {
         return id + 1;
     }
@@ -238,7 +238,7 @@ public:
     }
 
     static int Rand( level_t );
-    static Artifact FromMP2IndexSprite( u32 );
+    static Artifact FromMP2IndexSprite( uint32_t );
     static const char * getDiscoveryDescription( const Artifact & );
 
 private:
@@ -252,7 +252,7 @@ private:
 StreamBase & operator<<( StreamBase &, const Artifact & );
 StreamBase & operator>>( StreamBase &, Artifact & );
 
-u32 GoldInsteadArtifact( const MP2::MapObjectType objectType );
+uint32_t GoldInsteadArtifact( const MP2::MapObjectType objectType );
 
 namespace fheroes2
 {
@@ -306,8 +306,8 @@ public:
     void exchangeArtifacts( BagArtifacts & giftBag );
 
     int getArtifactValue() const;
-    u32 CountArtifacts( void ) const;
-    u32 Count( const Artifact & ) const;
+    uint32_t CountArtifacts( void ) const;
+    uint32_t Count( const Artifact & ) const;
 
     std::set<ArtifactSetData> assembleArtifactSetIfPossible();
 

@@ -34,24 +34,24 @@ class Troop : public Monster
 {
 public:
     Troop();
-    Troop( const Monster &, u32 );
+    Troop( const Monster &, uint32_t );
 
     bool operator==( const Monster & ) const;
 
     void Set( const Troop & );
-    void Set( const Monster &, u32 );
+    void Set( const Monster &, uint32_t );
     void SetMonster( const Monster & );
-    void SetCount( u32 );
+    void SetCount( uint32_t );
     void Reset( void );
 
     bool isMonster( int ) const;
     const char * GetName( void ) const;
-    virtual u32 GetCount( void ) const;
-    u32 GetHitPoints( void ) const;
+    virtual uint32_t GetCount( void ) const;
+    uint32_t GetHitPoints( void ) const;
     Monster GetMonster( void ) const;
 
-    u32 GetDamageMin( void ) const;
-    u32 GetDamageMax( void ) const;
+    uint32_t GetDamageMin( void ) const;
+    uint32_t GetDamageMax( void ) const;
 
     payment_t GetTotalCost() const;
     payment_t GetTotalUpgradeCost() const;
@@ -59,14 +59,14 @@ public:
     virtual bool isValid( void ) const;
     virtual bool isEmpty( void ) const;
     virtual bool isBattle( void ) const;
-    virtual bool isModes( u32 ) const;
+    virtual bool isModes( uint32_t ) const;
     virtual std::string GetAttackString( void ) const;
     virtual std::string GetDefenseString( void ) const;
     virtual std::string GetShotString( void ) const;
     virtual std::string GetSpeedString( void ) const;
-    virtual u32 GetHitPointsLeft( void ) const;
-    virtual u32 GetSpeed( void ) const;
-    virtual u32 GetAffectedDuration( u32 ) const;
+    virtual uint32_t GetHitPointsLeft( void ) const;
+    virtual uint32_t GetSpeed( void ) const;
+    virtual uint32_t GetAffectedDuration( uint32_t ) const;
     virtual double GetStrength() const;
     virtual double GetStrengthWithBonus( int bonusAttack, int bonusDefense ) const;
 
@@ -74,7 +74,7 @@ protected:
     friend StreamBase & operator<<( StreamBase &, const Troop & );
     friend StreamBase & operator>>( StreamBase &, Troop & );
 
-    u32 count;
+    uint32_t count;
 };
 
 StreamBase & operator<<( StreamBase &, const Troop & );
@@ -88,8 +88,8 @@ public:
 
     ArmyTroop & operator=( const Troop & ) = delete;
 
-    u32 GetAttack( void ) const override;
-    u32 GetDefense( void ) const override;
+    uint32_t GetAttack( void ) const override;
+    uint32_t GetDefense( void ) const override;
     int GetColor( void ) const override;
     int GetMorale( void ) const override;
     int GetLuck( void ) const override;

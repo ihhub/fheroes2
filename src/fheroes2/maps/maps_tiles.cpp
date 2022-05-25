@@ -693,17 +693,17 @@ std::pair<int, int> Maps::Tiles::ColorRaceFromHeroSprite( const uint32_t heroSpr
 }
 
 /* Maps::Addons */
-void Maps::Addons::Remove( u32 uniq )
+void Maps::Addons::Remove( uint32_t uniq )
 {
     remove_if( [uniq]( const TilesAddon & v ) { return v.isUniq( uniq ); } );
 }
 
-u32 PackTileSpriteIndex( u32 index, u32 shape ) /* index max: 0x3FFF, shape value: 0, 1, 2, 3 */
+uint32_t PackTileSpriteIndex( uint32_t index, uint32_t shape ) /* index max: 0x3FFF, shape value: 0, 1, 2, 3 */
 {
     return ( shape << 14 ) | ( 0x3FFF & index );
 }
 
-void Maps::Tiles::Init( s32 index, const MP2::mp2tile_t & mp2 )
+void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
 {
     tilePassable = DIRECTION_ALL;
 
@@ -860,7 +860,7 @@ void Maps::Tiles::resetObjectSprite()
     objectIndex = 255;
 }
 
-void Maps::Tiles::SetTile( u32 sprite_index, u32 shape )
+void Maps::Tiles::SetTile( uint32_t sprite_index, uint32_t shape )
 {
     pack_sprite_index = PackTileSpriteIndex( sprite_index, shape );
 }
@@ -1049,7 +1049,7 @@ void Maps::Tiles::UpdateRegion( uint32_t newRegionID )
     }
 }
 
-u32 Maps::Tiles::GetObjectUID() const
+uint32_t Maps::Tiles::GetObjectUID() const
 {
     return uniq;
 }
@@ -1155,7 +1155,7 @@ void Maps::Tiles::AddonsSort()
 
 int Maps::Tiles::GetGround( void ) const
 {
-    const u32 index = TileSpriteIndex();
+    const uint32_t index = TileSpriteIndex();
 
     // list grounds from GROUND32.TIL
     if ( 30 > index )
@@ -1224,7 +1224,7 @@ void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, cons
         return;
 
     for ( Addons::const_iterator it = addon.begin(); it != addon.end(); ++it ) {
-        const u8 index = ( *it ).index;
+        const uint8_t index = ( *it ).index;
         const int icn = MP2::GetICNObject( ( *it ).object );
 
         if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( it->object, index ) ) ) {
@@ -1473,14 +1473,14 @@ void Maps::Tiles::RedrawTop4Hero( fheroes2::Image & dst, const fheroes2::Rect & 
     }
 }
 
-Maps::TilesAddon * Maps::Tiles::FindAddonLevel1( u32 uniq1 )
+Maps::TilesAddon * Maps::Tiles::FindAddonLevel1( uint32_t uniq1 )
 {
     Addons::iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), [uniq1]( const TilesAddon & v ) { return v.isUniq( uniq1 ); } );
 
     return it != addons_level1.end() ? &( *it ) : nullptr;
 }
 
-Maps::TilesAddon * Maps::Tiles::FindAddonLevel2( u32 uniq2 )
+Maps::TilesAddon * Maps::Tiles::FindAddonLevel2( uint32_t uniq2 )
 {
     Addons::iterator it = std::find_if( addons_level2.begin(), addons_level2.end(), [uniq2]( const TilesAddon & v ) { return v.isUniq( uniq2 ); } );
 
@@ -1920,7 +1920,7 @@ bool Maps::Tiles::isCaptureObjectProtected() const
     return false;
 }
 
-void Maps::Tiles::Remove( u32 uniqID )
+void Maps::Tiles::Remove( uint32_t uniqID )
 {
     if ( !addons_level1.empty() )
         addons_level1.Remove( uniqID );
@@ -2019,7 +2019,7 @@ void Maps::Tiles::RemoveJailSprite( void )
 {
     // remove left sprite
     if ( Maps::isValidDirection( _index, Direction::LEFT ) ) {
-        const s32 left = Maps::GetDirectionIndex( _index, Direction::LEFT );
+        const int32_t left = Maps::GetDirectionIndex( _index, Direction::LEFT );
         world.GetTiles( left ).Remove( uniq );
 
         // remove left left sprite
@@ -2029,7 +2029,7 @@ void Maps::Tiles::RemoveJailSprite( void )
 
     // remove top sprite
     if ( Maps::isValidDirection( _index, Direction::TOP ) ) {
-        const s32 top = Maps::GetDirectionIndex( _index, Direction::TOP );
+        const int32_t top = Maps::GetDirectionIndex( _index, Direction::TOP );
         Maps::Tiles & topTile = world.GetTiles( top );
         topTile.Remove( uniq );
 
@@ -2266,7 +2266,7 @@ void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface:
         area.DrawTile( dst, sf, mp );
     }
     else {
-        u32 index = 0;
+        uint32_t index = 0;
         bool revert = false;
 
         if ( ( around & Direction::CENTER ) && !( around & ( Direction::TOP | Direction::BOTTOM | Direction::LEFT | Direction::RIGHT ) ) ) {

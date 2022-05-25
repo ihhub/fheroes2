@@ -72,8 +72,8 @@ namespace Battle
 
         bool isValid( const bool considerBattlefieldArmy = true ) const;
         bool HasMonster( const Monster & ) const;
-        u32 GetDeadHitPoints( void ) const;
-        u32 GetDeadCounts( void ) const;
+        uint32_t GetDeadHitPoints( void ) const;
+        uint32_t GetDeadCounts( void ) const;
         int GetColor( void ) const;
         int GetControl( void ) const;
         uint32_t GetSurrenderCost() const;
@@ -86,7 +86,7 @@ namespace Battle
 
     private:
         Army & army;
-        std::vector<u32> uids;
+        std::vector<uint32_t> uids;
     };
 }
 

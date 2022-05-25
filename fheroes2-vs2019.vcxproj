@@ -412,7 +412,6 @@
     <ClInclude Include="src\engine\tinyconfig.h" />
     <ClInclude Include="src\engine\tools.h" />
     <ClInclude Include="src\engine\translations.h" />
-    <ClInclude Include="src\engine\types.h" />
     <ClInclude Include="src\engine\zzlib.h" />
     <ClInclude Include="src\fheroes2\agg\agg.h" />
     <ClInclude Include="src\fheroes2\agg\agg_image.h" />

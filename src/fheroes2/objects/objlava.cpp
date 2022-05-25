@@ -55,7 +55,7 @@ int ObjLav2::GetPassable( const uint8_t index )
     return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
 }
 
-bool ObjLav2::isAction( u32 index )
+bool ObjLav2::isAction( uint32_t index )
 {
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
@@ -75,7 +75,7 @@ int ObjLav3::GetPassable( const uint8_t index )
     return DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW;
 }
 
-bool ObjLav3::isAction( u32 index )
+bool ObjLav3::isAction( uint32_t index )
 {
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
@@ -87,10 +87,10 @@ bool ObjLav3::isShadow( const uint8_t index )
 
 int ObjLava::GetPassable( const uint8_t index )
 {
-    const u8 disabled[] = {2, 3, 4, 5, 12, 13, 14, 15, 18, 27, 28, 29, 30, 31, 32, 39, 40, 41, 46, 47, 48, 53, 54, 57, 60, 61, 64, 65, 69, 70, 120, 121};
+    const uint8_t disabled[] = { 2, 3, 4, 5, 12, 13, 14, 15, 18, 27, 28, 29, 30, 31, 32, 39, 40, 41, 46, 47, 48, 53, 54, 57, 60, 61, 64, 65, 69, 70, 120, 121 };
 
-    const u8 restricted[]
-        = {6, 7, 8, 9, 16, 17, 19, 20, 33, 34, 35, 36, 37, 38, 42, 43, 44, 50, 51, 52, 55, 56, 58, 59, 62, 66, 67, 68, 72, 73, 76, 77, 88, 98, 114, 122, 123, 125};
+    const uint8_t restricted[]
+        = { 6, 7, 8, 9, 16, 17, 19, 20, 33, 34, 35, 36, 37, 38, 42, 43, 44, 50, 51, 52, 55, 56, 58, 59, 62, 66, 67, 68, 72, 73, 76, 77, 88, 98, 114, 122, 123, 125 };
 
     if ( isAction( index ) || std::end( disabled ) != std::find( disabled, std::end( disabled ), index ) )
         return 0;
@@ -98,7 +98,7 @@ int ObjLava::GetPassable( const uint8_t index )
     return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
 }
 
-bool ObjLava::isAction( u32 index )
+bool ObjLava::isAction( uint32_t index )
 {
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
@@ -108,17 +108,17 @@ bool ObjLava::isShadow( const uint8_t index )
     return objLavaShadowBitset[index];
 }
 
-int ObjLav2::GetActionObject( u32 )
+int ObjLav2::GetActionObject( uint32_t )
 {
     return MP2::OBJ_ZERO;
 }
 
-int ObjLav3::GetActionObject( u32 )
+int ObjLav3::GetActionObject( uint32_t )
 {
     return MP2::OBJ_ZERO;
 }
 
-int ObjLava::GetActionObject( u32 index )
+int ObjLava::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 110:

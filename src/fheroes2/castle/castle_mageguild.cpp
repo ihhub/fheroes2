@@ -126,7 +126,7 @@ bool RowSpells::QueueEventProcessing( void )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    const s32 index = GetRectIndex( coords, le.GetMouseCursor() );
+    const int32_t index = GetRectIndex( coords, le.GetMouseCursor() );
 
     if ( 0 <= index && ( le.MouseClickLeft() || le.MousePressRight() ) ) {
         const Spell & spell = spells[index];

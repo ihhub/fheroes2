@@ -45,7 +45,7 @@ namespace Skill
            Secondary::WISDOM,      Secondary::MYSTICISM, Secondary::LUCK,      Secondary::BALLISTICS, Secondary::EAGLEEYE,  Secondary::NECROMANCY, Secondary::ESTATES};
 }
 
-u32 Skill::Secondary::GetValues( void ) const
+uint32_t Skill::Secondary::GetValues( void ) const
 {
     const values_t * val = GameStatic::GetSkillValues( Skill() );
 
@@ -408,7 +408,7 @@ std::string Skill::Secondary::GetNameWithBonus( const Heroes & hero ) const
 
 std::string Skill::Secondary::GetDescription( const Heroes & hero ) const
 {
-    u32 count = GetValues();
+    uint32_t count = GetValues();
     std::string name = GetName();
     std::string str = "unknown";
 
@@ -587,7 +587,7 @@ int Skill::SecSkills::GetLevel( int skill ) const
     return it == end() ? Level::NONE : ( *it ).Level();
 }
 
-u32 Skill::SecSkills::GetValues( int skill ) const
+uint32_t Skill::SecSkills::GetValues( int skill ) const
 {
     const_iterator it = std::find_if( begin(), end(), [skill]( const Secondary & v ) { return v.isSkill( skill ); } );
 

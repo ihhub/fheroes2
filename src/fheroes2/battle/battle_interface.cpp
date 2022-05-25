@@ -206,7 +206,7 @@ namespace Battle
 {
     int GetIndexIndicator( const Unit & );
     int GetSwordCursorDirection( int );
-    int GetDirectionFromCursorSword( u32 );
+    int GetDirectionFromCursorSword( uint32_t );
     int GetCursorFromSpell( int );
 
     struct CursorPosition
@@ -230,7 +230,7 @@ namespace Battle
             : openlog( false )
         {}
 
-        void SetPosition( u32 px, u32 py )
+        void SetPosition( uint32_t px, uint32_t py )
         {
             const int32_t mx = 6;
             const int32_t sw = fheroes2::Display::DEFAULT_WIDTH;
@@ -417,7 +417,7 @@ namespace Battle
     }
 }
 
-bool CursorAttack( u32 theme )
+bool CursorAttack( uint32_t theme )
 {
     switch ( theme ) {
     case Cursor::WAR_ARROW:
@@ -596,7 +596,7 @@ int Battle::GetSwordCursorDirection( int dir )
     return 0;
 }
 
-int Battle::GetDirectionFromCursorSword( u32 sword )
+int Battle::GetDirectionFromCursorSword( uint32_t sword )
 {
     switch ( sword ) {
     case Cursor::SWORD_TOPLEFT:
@@ -771,7 +771,7 @@ Battle::Status::Status()
     bar2.Set( Font::BIG );
 }
 
-void Battle::Status::SetPosition( s32 cx, s32 cy )
+void Battle::Status::SetPosition( int32_t cx, int32_t cy )
 {
     fheroes2::Rect::x = cx;
     fheroes2::Rect::y = cy;
@@ -963,7 +963,7 @@ void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUni
     }
 }
 
-Battle::Interface::Interface( Arena & a, s32 center )
+Battle::Interface::Interface( Arena & a, int32_t center )
     : arena( a )
     , _surfaceInnerArea( 0, 0, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
     , _mainSurface( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT )
@@ -1568,7 +1568,7 @@ fheroes2::Point Battle::Interface::drawTroopSprite( const Unit & unit, const fhe
         // TODO: verify if it's the correct way as we have issues for monster movement animation.
         const int monsterIcnId = unit.GetMonsterSprite();
         const fheroes2::Sprite & firstMonsterFrame = fheroes2::AGG::GetICN( monsterIcnId, _movingUnit->animation.firstFrame() );
-        const s32 ox = troopSprite.x() - firstMonsterFrame.x();
+        const int32_t ox = troopSprite.x() - firstMonsterFrame.x();
 
         if ( _movingUnit->animation.animationLength() ) {
             const int32_t cx = _movingPos.x - rt.x;
@@ -1609,8 +1609,8 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
     const int tileInFront = Board::GetIndexDirection( monsterIndex, isReflected ? Battle::LEFT : Battle::RIGHT );
     const bool isValidFrontMonster = ( monsterIndex / ARENAW ) == ( tileInFront == ARENAW );
 
-    s32 sx = rt.x + ( isReflected ? -7 : rt.width - 13 );
-    const s32 sy = rt.y + rt.height - bar.height() - ( isReflected ? 21 : 9 );
+    int32_t sx = rt.x + ( isReflected ? -7 : rt.width - 13 );
+    const int32_t sy = rt.y + rt.height - bar.height() - ( isReflected ? 21 : 9 );
 
     int xOffset = unit.animation.getTroopCountOffset( isReflected );
     // check if has unit standing in front
@@ -1994,7 +1994,7 @@ void Battle::Interface::RedrawCastleMainTower( const Castle & castle )
     fheroes2::Blit( sprite, _mainSurface, sprite.x(), sprite.y() );
 }
 
-void Battle::Interface::RedrawLowObjects( s32 cell_index )
+void Battle::Interface::RedrawLowObjects( int32_t cell_index )
 {
     const Cell * cell = Board::GetCell( cell_index );
     if ( cell == nullptr )
@@ -2033,7 +2033,7 @@ void Battle::Interface::RedrawLowObjects( s32 cell_index )
     fheroes2::Blit( objectSprite, _mainSurface, pt.x + pt.width / 2 + objectSprite.x(), pt.y + pt.height + objectSprite.y() + cellYOffset );
 }
 
-void Battle::Interface::RedrawHighObjects( s32 cell_index )
+void Battle::Interface::RedrawHighObjects( int32_t cell_index )
 {
     const Cell * cell = Board::GetCell( cell_index );
     if ( cell == nullptr )
@@ -3072,8 +3072,8 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsI
         StringReplace( msg, "%{attacker}", attacker.GetName() );
 
         if ( 1 < targets.size() ) {
-            u32 killed = 0;
-            u32 damage = 0;
+            uint32_t killed = 0;
+            uint32_t damage = 0;
 
             for ( TargetsInfo::const_iterator it = targets.begin(); it != targets.end(); ++it ) {
                 if ( !it->defender->isModes( CAP_MIRRORIMAGE ) ) {
@@ -3465,7 +3465,7 @@ void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_
     }
 }
 
-void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst, const HeroBase * caster, const TargetsInfo & targets )
+void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t dst, const HeroBase * caster, const TargetsInfo & targets )
 {
     Unit * target = !targets.empty() ? targets.front().defender : nullptr;
 
@@ -3994,7 +3994,7 @@ void Battle::Interface::RedrawActionArrowSpell( const Unit & target )
     }
 }
 
-void Battle::Interface::RedrawActionTeleportSpell( Unit & target, s32 dst )
+void Battle::Interface::RedrawActionTeleportSpell( Unit & target, int32_t dst )
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -4451,7 +4451,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets,
     RedrawTargetsWithFrameAnimation( targets, ICN::REDDEATH, M82::UNKNOWN, true );
 }
 
-void Battle::Interface::RedrawActionColdRingSpell( s32 dst, const TargetsInfo & targets )
+void Battle::Interface::RedrawActionColdRingSpell( int32_t dst, const TargetsInfo & targets )
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -4613,7 +4613,7 @@ void Battle::Interface::RedrawActionArmageddonSpell()
 
     _currentUnit = nullptr;
     AGG::PlaySound( M82::ARMGEDN );
-    u32 alpha = 10;
+    uint32_t alpha = 10;
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
@@ -5133,7 +5133,7 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
             const HeroBase * enemy = arena.getEnemyCommander( arena.GetCurrentColor() );
 
             if ( enemy ) {
-                const s32 cost = arena.GetCurrentForce().GetSurrenderCost();
+                const int32_t cost = arena.GetCurrentForce().GetSurrenderCost();
                 Kingdom & kingdom = world.GetKingdom( arena.GetCurrentColor() );
 
                 if ( DialogBattleSurrender( *enemy, cost, kingdom ) ) {

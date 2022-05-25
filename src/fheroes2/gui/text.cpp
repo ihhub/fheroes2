@@ -277,12 +277,12 @@ void Text::Blit( const fheroes2::Point & dst_pt, fheroes2::Image & dst ) const
     return message->blit( dst_pt.x, dst_pt.y, 0, dst );
 }
 
-void Text::Blit( s32 ax, s32 ay, fheroes2::Image & dst ) const
+void Text::Blit( int32_t ax, int32_t ay, fheroes2::Image & dst ) const
 {
     return message->blit( ax, ay, 0, dst );
 }
 
-void Text::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst ) const
+void Text::Blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst ) const
 {
     return message->blit( ax, ay, maxw, dst );
 }
@@ -350,7 +350,7 @@ void TextBox::Set( const std::string & msg, int ft, uint32_t width_ )
     }
 }
 
-void TextBox::Append( const std::string & msg, int ft, u32 width_ )
+void TextBox::Append( const std::string & msg, int ft, uint32_t width_ )
 {
     uint32_t www = 0;
     fheroes2::Rect::width = width_;
@@ -407,7 +407,7 @@ void TextBox::Append( const std::string & msg, int ft, u32 width_ )
     }
 }
 
-void TextBox::Blit( s32 ax, s32 ay, fheroes2::Image & sf )
+void TextBox::Blit( int32_t ax, int32_t ay, fheroes2::Image & sf )
 {
     fheroes2::Rect::x = ax;
     fheroes2::Rect::y = ay;
@@ -437,7 +437,7 @@ TextSprite::TextSprite()
     , hide( true )
 {}
 
-TextSprite::TextSprite( const std::string & msg, int ft, s32 ax, s32 ay )
+TextSprite::TextSprite( const std::string & msg, int ft, int32_t ax, int32_t ay )
     : Text( msg, ft )
     , _restorer( fheroes2::Display::instance(), ax, ay, gw, gh + 5 )
     , hide( true )
@@ -477,7 +477,7 @@ void TextSprite::SetFont( int ft )
     _restorer.update( _restorer.x(), _restorer.y(), gw, gh + 5 );
 }
 
-void TextSprite::SetPos( s32 ax, s32 ay )
+void TextSprite::SetPos( int32_t ax, int32_t ay )
 {
     _restorer.update( ax, ay, gw, gh + 5 );
 }

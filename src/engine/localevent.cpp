@@ -691,7 +691,7 @@ namespace fheroes2
 #endif
     }
 
-    bool PressIntKey( u32 max, u32 & result )
+    bool PressIntKey( uint32_t max, uint32_t & result )
     {
         const LocalEvent & le = LocalEvent::Get();
 

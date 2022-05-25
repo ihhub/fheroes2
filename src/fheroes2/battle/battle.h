@@ -45,11 +45,11 @@ namespace Battle
 
     struct Result
     {
-        u32 army1;
-        u32 army2;
-        u32 exp1;
-        u32 exp2;
-        u32 killed;
+        uint32_t army1;
+        uint32_t army2;
+        uint32_t exp1;
+        uint32_t exp2;
+        uint32_t killed;
 
         Result()
             : army1( 0 )
@@ -61,19 +61,19 @@ namespace Battle
 
         bool AttackerWins( void ) const;
         bool DefenderWins( void ) const;
-        u32 AttackerResult( void ) const;
-        u32 DefenderResult( void ) const;
-        u32 GetExperienceAttacker( void ) const;
-        u32 GetExperienceDefender( void ) const;
+        uint32_t AttackerResult( void ) const;
+        uint32_t DefenderResult( void ) const;
+        uint32_t GetExperienceAttacker( void ) const;
+        uint32_t GetExperienceDefender( void ) const;
     };
 
-    Result Loader( Army &, Army &, s32 );
+    Result Loader( Army &, Army &, int32_t );
 
     struct TargetInfo
     {
         Unit * defender;
-        u32 damage;
-        u32 killed;
+        uint32_t damage;
+        uint32_t killed;
         bool resist;
 
         TargetInfo()

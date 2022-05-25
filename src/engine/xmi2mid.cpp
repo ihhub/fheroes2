@@ -52,16 +52,16 @@ namespace
 }
 
 // Pair: time and length
-struct XMI_Time : public std::pair<u32, u32>
+struct XMI_Time : public std::pair<uint32_t, uint32_t>
 {
     XMI_Time()
-        : std::pair<u32, u32>( 0, 0 )
+        : std::pair<uint32_t, uint32_t>( 0, 0 )
     {}
 };
 
 XMI_Time readXMITime( const uint8_t * data )
 {
-    const u8 * p = data;
+    const uint8_t * p = data;
     XMI_Time res;
 
     while ( *p & 0x80 ) {
@@ -81,14 +81,14 @@ XMI_Time readXMITime( const uint8_t * data )
     return res;
 }
 
-std::vector<u8> packToMIDITime( u32 delta )
+std::vector<uint8_t> packToMIDITime( uint32_t delta )
 {
     const uint8_t c1 = delta & 0x0000007F;
     const uint8_t c2 = ( ( delta & 0x00003F80 ) >> 7 ) & 0xFF;
     const uint8_t c3 = ( ( delta & 0x001FC000 ) >> 14 ) & 0xFF;
     const uint8_t c4 = ( ( delta & 0x0FE00000 ) >> 21 ) & 0xFF;
 
-    std::vector<u8> res;
+    std::vector<uint8_t> res;
     res.reserve( 4 );
 
     if ( c4 ) {
@@ -114,10 +114,10 @@ std::vector<u8> packToMIDITime( u32 delta )
 
 struct IFFChunkHeader
 {
-    u32 ID; // 4 upper case ASCII chars, padded with 0x20 (space)
-    u32 length; // big-endian
+    uint32_t ID; // 4 upper case ASCII chars, padded with 0x20 (space)
+    uint32_t length; // big-endian
 
-    IFFChunkHeader( u32 id, u32 sz )
+    IFFChunkHeader( uint32_t id, uint32_t sz )
         : ID( id )
         , length( sz )
     {}
@@ -143,9 +143,9 @@ StreamBuf & operator<<( StreamBuf & sb, const IFFChunkHeader & st )
 
 struct GroupChunkHeader
 {
-    u32 ID; // 4 byte ASCII string, either 'FORM', 'CAT ' or 'LIST'
-    u32 length;
-    u32 type; // 4 byte ASCII string
+    uint32_t ID; // 4 byte ASCII string, either 'FORM', 'CAT ' or 'LIST'
+    uint32_t length;
+    uint32_t type; // 4 byte ASCII string
 
     GroupChunkHeader()
         : ID( 0 )
@@ -164,8 +164,8 @@ StreamBuf & operator>>( StreamBuf & sb, GroupChunkHeader & st )
 
 struct XMITrack
 {
-    std::vector<u8> timb;
-    std::vector<u8> evnt;
+    std::vector<uint8_t> timb;
+    std::vector<uint8_t> evnt;
 };
 
 struct XMITracks : std::list<XMITrack>
@@ -175,7 +175,7 @@ struct XMIData
 {
     XMITracks tracks;
 
-    explicit XMIData( const std::vector<u8> & buf )
+    explicit XMIData( const std::vector<uint8_t> & buf )
     {
         StreamBuf sb( buf );
 
@@ -196,8 +196,8 @@ struct XMIData
                     for ( int track = 0; track < numTracks; ++track ) {
                         tracks.emplace_back();
 
-                        std::vector<u8> & timb = tracks.back().timb;
-                        std::vector<u8> & evnt = tracks.back().evnt;
+                        std::vector<uint8_t> & timb = tracks.back().timb;
+                        std::vector<uint8_t> & evnt = tracks.back().evnt;
 
                         sb >> group;
                         // FORM XMID
@@ -307,10 +307,10 @@ static bool operator<( const MidiChunk & left, const MidiChunk & right )
 
 StreamBuf & operator<<( StreamBuf & sb, const MidiChunk & event )
 {
-    for ( std::vector<u8>::const_iterator it = event._binaryTime.begin(); it != event._binaryTime.end(); ++it )
+    for ( std::vector<uint8_t>::const_iterator it = event._binaryTime.begin(); it != event._binaryTime.end(); ++it )
         sb << *it;
     sb << event._type;
-    for ( std::vector<u8>::const_iterator it = event._data.begin(); it != event._data.end(); ++it )
+    for ( std::vector<uint8_t>::const_iterator it = event._data.begin(); it != event._data.end(); ++it )
         sb << *it;
     return sb;
 }
@@ -335,10 +335,10 @@ struct MidiEvents : public std::vector<MidiChunk>
     MidiEvents() = default;
     explicit MidiEvents( const XMITrack & t )
     {
-        const u8 * ptr = &t.evnt[0];
-        const u8 * end = ptr + t.evnt.size();
+        const uint8_t * ptr = &t.evnt[0];
+        const uint8_t * end = ptr + t.evnt.size();
 
-        u32 delta = 0;
+        uint32_t delta = 0;
 
         while ( ptr && ptr < end ) {
             // XMI delay is 7 bit values summed together
@@ -527,5 +527,5 @@ std::vector<uint8_t> Music::Xmi2Mid( const std::vector<uint8_t> & buf )
         sb << mid;
     }
 
-    return std::vector<u8>( sb.data(), sb.data() + sb.size() );
+    return std::vector<uint8_t>( sb.data(), sb.data() + sb.size() );
 }

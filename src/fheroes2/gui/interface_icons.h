@@ -81,8 +81,8 @@ namespace Interface
         bool show;
     };
 
-    void RedrawHeroesIcon( const Heroes &, s32, s32 );
-    void RedrawCastleIcon( const Castle &, s32, s32 );
+    void RedrawHeroesIcon( const Heroes &, int32_t, int32_t );
+    void RedrawCastleIcon( const Castle &, int32_t, int32_t );
 
     class HeroesIcons : public Interface::ListBox<HEROES>, public IconsBar
     {
@@ -91,7 +91,7 @@ namespace Interface
             : IconsBar( count, sf )
         {}
 
-        void SetPos( s32, s32 );
+        void SetPos( int32_t, int32_t );
         void SetShow( bool );
 
     protected:
@@ -104,7 +104,7 @@ namespace Interface
         void ActionListDoubleClick( HEROES & ) override;
         void ActionListSingleClick( HEROES & ) override;
         void ActionListPressRight( HEROES & ) override;
-        void RedrawItem( const HEROES &, s32 ox, s32 oy, bool current ) override;
+        void RedrawItem( const HEROES &, int32_t ox, int32_t oy, bool current ) override;
         void RedrawBackground( const fheroes2::Point & ) override;
 
     private:
@@ -118,7 +118,7 @@ namespace Interface
             : IconsBar( count, sf )
         {}
 
-        void SetPos( s32, s32 );
+        void SetPos( int32_t, int32_t );
         void SetShow( bool );
 
     protected:
@@ -131,7 +131,7 @@ namespace Interface
         void ActionListDoubleClick( CASTLE & ) override;
         void ActionListSingleClick( CASTLE & ) override;
         void ActionListPressRight( CASTLE & ) override;
-        void RedrawItem( const CASTLE &, s32 ox, s32 oy, bool current ) override;
+        void RedrawItem( const CASTLE &, int32_t ox, int32_t oy, bool current ) override;
         void RedrawBackground( const fheroes2::Point & ) override;
 
     private:
@@ -143,7 +143,7 @@ namespace Interface
     public:
         explicit IconsPanel( Basic & basic );
 
-        void SetPos( s32, s32 ) override;
+        void SetPos( int32_t, int32_t ) override;
         void SavePosition( void ) override;
         void SetRedraw( void ) const;
         void SetRedraw( const icons_t type ) const;

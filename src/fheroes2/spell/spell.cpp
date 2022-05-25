@@ -336,7 +336,7 @@ bool Spell::isGuardianType() const
     return false;
 }
 
-u32 Spell::Damage( void ) const
+uint32_t Spell::Damage( void ) const
 {
     switch ( id ) {
     case ARROW:
@@ -378,12 +378,12 @@ bool Spell::isMindInfluence( void ) const
     return false;
 }
 
-u32 Spell::IndexSprite( void ) const
+uint32_t Spell::IndexSprite( void ) const
 {
     return spells[id].imageId;
 }
 
-u32 Spell::Restore( void ) const
+uint32_t Spell::Restore( void ) const
 {
     switch ( id ) {
     case Spell::CURE:
@@ -397,7 +397,7 @@ u32 Spell::Restore( void ) const
     return Resurrect();
 }
 
-u32 Spell::Resurrect( void ) const
+uint32_t Spell::Resurrect( void ) const
 {
     switch ( id ) {
     case Spell::ANIMATEDEAD:
@@ -412,7 +412,7 @@ u32 Spell::Resurrect( void ) const
     return 0;
 }
 
-u32 Spell::ExtraValue( void ) const
+uint32_t Spell::ExtraValue( void ) const
 {
     return spells[id].extraValue;
 }

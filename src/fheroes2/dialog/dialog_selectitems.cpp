@@ -73,7 +73,7 @@ public:
         ok = true;
     }
 
-    void RedrawItem( const int &, s32, s32, bool ) override
+    void RedrawItem( const int &, int32_t, int32_t, bool ) override
     {
         // Do nothing.
     }
@@ -111,7 +111,7 @@ public:
         : SelectEnum( rt )
     {}
 
-    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         Monster mons( index );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
@@ -150,7 +150,7 @@ public:
         SetAreaMaxItems( 6 );
     }
 
-    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         const fheroes2::Sprite & port = Heroes::GetPortrait( index, PORT_SMALL );
 
@@ -182,7 +182,7 @@ public:
         : SelectEnum( rt )
     {}
 
-    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -219,7 +219,7 @@ public:
         SetAreaMaxItems( 4 );
     }
 
-    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         Spell spell( index );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
@@ -252,7 +252,7 @@ public:
         SetAreaMaxItems( 5 );
     }
 
-    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         Skill::Secondary skill( 1 + index / 3, 1 + ( index % 3 ) );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );

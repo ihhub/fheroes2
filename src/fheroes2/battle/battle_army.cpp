@@ -287,9 +287,9 @@ bool Battle::Force::HasMonster( const Monster & mons ) const
     return std::any_of( begin(), end(), [&mons]( const Unit * unit ) { return unit->isMonster( mons.GetID() ); } );
 }
 
-u32 Battle::Force::GetDeadCounts( void ) const
+uint32_t Battle::Force::GetDeadCounts( void ) const
 {
-    u32 res = 0;
+    uint32_t res = 0;
 
     for ( const_iterator it = begin(); it != end(); ++it )
         res += ( *it )->GetDead();
@@ -297,9 +297,9 @@ u32 Battle::Force::GetDeadCounts( void ) const
     return res;
 }
 
-u32 Battle::Force::GetDeadHitPoints( void ) const
+uint32_t Battle::Force::GetDeadHitPoints( void ) const
 {
-    u32 res = 0;
+    uint32_t res = 0;
 
     for ( const_iterator it = begin(); it != end(); ++it ) {
         res += static_cast<Monster *>( *it )->GetHitPoints() * ( *it )->GetDead();
@@ -310,7 +310,7 @@ u32 Battle::Force::GetDeadHitPoints( void ) const
 
 void Battle::Force::SyncArmyCount()
 {
-    for ( u32 index = 0; index < army.Size(); ++index ) {
+    for ( uint32_t index = 0; index < army.Size(); ++index ) {
         Troop * troop = army.GetTroop( index );
 
         if ( troop && troop->isValid() ) {

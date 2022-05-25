@@ -24,13 +24,13 @@
 #ifndef H2GAME_H
 #define H2GAME_H
 
+#include <cstdint>
 #include <string>
 
 #include "agg.h"
 #include "game_mode.h"
 #include "mp2.h"
 #include "mus.h"
-#include "types.h"
 
 class Players;
 class Heroes;
@@ -98,12 +98,12 @@ namespace Game
     void DialogPlayers( int color, std::string );
     void SetCurrentMusic( const int mus );
     int CurrentMusic();
-    u32 & MapsAnimationFrame( void );
-    u32 GetRating( void );
-    u32 GetGameOverScores( void );
-    u32 GetLostTownDays( void );
-    u32 GetWhirlpoolPercent( void );
-    u32 SelectCountPlayers( void );
+    uint32_t & MapsAnimationFrame( void );
+    uint32_t GetRating( void );
+    uint32_t GetGameOverScores( void );
+    uint32_t GetLostTownDays( void );
+    uint32_t GetWhirlpoolPercent( void );
+    uint32_t SelectCountPlayers( void );
     void PlayPickupSound( void );
     bool UpdateSoundsOnFocusUpdate();
     void SetUpdateSoundsOnFocusUpdate( bool update );

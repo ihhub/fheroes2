@@ -185,7 +185,7 @@ void ArmyBar::SetArmy( Army * ptr )
     items.clear();
 
     if ( ptr ) {
-        for ( u32 ii = 0; ii < ptr->Size(); ++ii ) {
+        for ( uint32_t ii = 0; ii < ptr->Size(); ++ii ) {
             ArmyTroop * troop = dynamic_cast<ArmyTroop *>( ptr->GetTroop( ii ) );
             assert( troop != nullptr );
 
@@ -434,7 +434,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
             const Monster mons = Dialog::SelectMonster( cur );
 
             if ( mons.isValid() ) {
-                u32 count = 1;
+                uint32_t count = 1;
 
                 if ( Dialog::SelectCount( _( "Set Count" ), 1, 500000, count ) )
                     troop.Set( mons, count );

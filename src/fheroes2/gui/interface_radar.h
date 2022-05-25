@@ -42,7 +42,7 @@ namespace Interface
 
         Radar & operator=( const Radar & ) = delete;
 
-        void SetPos( s32, s32 ) override;
+        void SetPos( int32_t, int32_t ) override;
         void SetRedraw( void ) const;
         void Build( void );
         void Redraw();

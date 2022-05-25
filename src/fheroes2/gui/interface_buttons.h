@@ -36,7 +36,7 @@ namespace Interface
     public:
         explicit ButtonsArea( Basic & );
 
-        void SetPos( s32, s32 ) override;
+        void SetPos( int32_t, int32_t ) override;
         void SavePosition( void ) override;
         void SetRedraw( void ) const;
 

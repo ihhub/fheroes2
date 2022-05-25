@@ -97,7 +97,7 @@ namespace Maps
 
     struct Addons : public std::list<TilesAddon>
     {
-        void Remove( u32 uniq );
+        void Remove( uint32_t uniq );
     };
 
     class Tiles
@@ -105,7 +105,7 @@ namespace Maps
     public:
         Tiles() = default;
 
-        void Init( s32, const MP2::mp2tile_t & );
+        void Init( int32_t, const MP2::mp2tile_t & );
 
         int32_t GetIndex() const
         {
@@ -118,7 +118,7 @@ namespace Maps
 
         uint8_t GetObjectSpriteIndex() const;
 
-        u32 GetObjectUID() const;
+        uint32_t GetObjectUID() const;
 
         // Get Tile metadata field #1 (used for things like monster count or resource amount)
         uint8_t GetQuantity1() const
@@ -169,10 +169,10 @@ namespace Maps
         bool isShadow() const;
         bool GoodForUltimateArtifact() const;
 
-        TilesAddon * FindAddonLevel1( u32 uniq1 );
-        TilesAddon * FindAddonLevel2( u32 uniq2 );
+        TilesAddon * FindAddonLevel1( uint32_t uniq1 );
+        TilesAddon * FindAddonLevel2( uint32_t uniq2 );
 
-        void SetTile( u32 sprite_index, u32 shape /* 0: none, 1 : vert, 2: horz, 3: both */ );
+        void SetTile( uint32_t sprite_index, uint32_t shape /* 0: none, 1 : vert, 2: horz, 3: both */ );
         void SetObject( const MP2::MapObjectType objectType );
 
         void SetIndex( const uint32_t index )
@@ -240,7 +240,7 @@ namespace Maps
         }
 
         void AddonsSort( void );
-        void Remove( u32 uniqID );
+        void Remove( uint32_t uniqID );
         void RemoveObjectSprite( void );
         void UpdateObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8_t newTileset, int indexChange );
         void ReplaceObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8_t newTileset, uint8_t indexToReplace, uint8_t newIndex );
@@ -263,8 +263,8 @@ namespace Maps
         void MonsterSetJoinCondition( int );
         void MonsterSetFixedCount( void );
         bool MonsterFixedCount( void ) const;
-        void MonsterSetCount( u32 count );
-        u32 MonsterCount( void ) const;
+        void MonsterSetCount( uint32_t count );
+        uint32_t MonsterCount( void ) const;
 
         // Checks whether the object to be captured is guarded by its own forces
         // (castle has a hero or garrison, dwelling has creatures, etc)
@@ -278,7 +278,7 @@ namespace Maps
         int QuantityVariant( void ) const;
         int QuantityExt( void ) const;
         int QuantityColor( void ) const;
-        u32 QuantityGold( void ) const;
+        uint32_t QuantityGold( void ) const;
         Spell QuantitySpell( void ) const;
         Skill::Secondary QuantitySkill( void ) const;
         Artifact QuantityArtifact( void ) const;
@@ -339,7 +339,7 @@ namespace Maps
         void QuantitySetSkill( int );
         void QuantitySetSpell( int );
         void QuantitySetArtifact( int );
-        void QuantitySetResource( int, u32 );
+        void QuantitySetResource( int, uint32_t );
 
         bool isTallObject() const;
 

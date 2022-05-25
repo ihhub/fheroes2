@@ -133,7 +133,7 @@ namespace
 
 namespace GameStatic
 {
-    extern u32 uniq;
+    extern uint32_t uniq;
 }
 
 ListActions::~ListActions()
@@ -157,20 +157,20 @@ void MapObjects::clear( void )
 {
     for ( iterator it = begin(); it != end(); ++it )
         delete ( *it ).second;
-    std::map<u32, MapObjectSimple *>::clear();
+    std::map<uint32_t, MapObjectSimple *>::clear();
 }
 
 void MapObjects::add( MapObjectSimple * obj )
 {
     if ( obj ) {
-        std::map<u32, MapObjectSimple *> & currentMap = *this;
+        std::map<uint32_t, MapObjectSimple *> & currentMap = *this;
         if ( currentMap[obj->GetUID()] )
             delete currentMap[obj->GetUID()];
         currentMap[obj->GetUID()] = obj;
     }
 }
 
-MapObjectSimple * MapObjects::get( u32 uid )
+MapObjectSimple * MapObjects::get( uint32_t uid )
 {
     iterator it = find( uid );
     return it != end() ? ( *it ).second : nullptr;
@@ -185,7 +185,7 @@ std::list<MapObjectSimple *> MapObjects::get( const fheroes2::Point & pos )
     return res;
 }
 
-void MapObjects::remove( u32 uid )
+void MapObjects::remove( uint32_t uid )
 {
     iterator it = find( uid );
     if ( it != end() )
@@ -193,18 +193,18 @@ void MapObjects::remove( u32 uid )
     erase( it );
 }
 
-CapturedObject & CapturedObjects::Get( s32 index )
+CapturedObject & CapturedObjects::Get( int32_t index )
 {
-    std::map<s32, CapturedObject> & my = *this;
+    std::map<int32_t, CapturedObject> & my = *this;
     return my[index];
 }
 
-void CapturedObjects::SetColor( s32 index, int col )
+void CapturedObjects::SetColor( int32_t index, int col )
 {
     Get( index ).SetColor( col );
 }
 
-void CapturedObjects::Set( s32 index, int obj, int col )
+void CapturedObjects::Set( int32_t index, int obj, int col )
 {
     CapturedObject & co = Get( index );
 
@@ -214,9 +214,9 @@ void CapturedObjects::Set( s32 index, int obj, int col )
     co.Set( obj, col );
 }
 
-u32 CapturedObjects::GetCount( int obj, int col ) const
+uint32_t CapturedObjects::GetCount( int obj, int col ) const
 {
-    u32 result = 0;
+    uint32_t result = 0;
 
     const ObjectColor objcol( obj, col );
 
@@ -228,9 +228,9 @@ u32 CapturedObjects::GetCount( int obj, int col ) const
     return result;
 }
 
-u32 CapturedObjects::GetCountMines( int type, int col ) const
+uint32_t CapturedObjects::GetCountMines( int type, int col ) const
 {
-    u32 result = 0;
+    uint32_t result = 0;
 
     const ObjectColor objcol1( MP2::OBJ_MINES, col );
     const ObjectColor objcol2( MP2::OBJ_HEROES, col );
@@ -259,7 +259,7 @@ u32 CapturedObjects::GetCountMines( int type, int col ) const
     return result;
 }
 
-int CapturedObjects::GetColor( s32 index ) const
+int CapturedObjects::GetColor( int32_t index ) const
 {
     const_iterator it = find( index );
     return it != end() ? ( *it ).second.GetColor() : Color::NONE;
@@ -538,7 +538,7 @@ Heroes * World::GetFreemanHeroes( const int race, const int heroIDToIgnore /* = 
     return vec_heroes.GetFreeman( race, heroIDToIgnore );
 }
 
-Heroes * World::FromJailHeroes( s32 index )
+Heroes * World::FromJailHeroes( int32_t index )
 {
     return vec_heroes.FromJail( index );
 }
@@ -944,13 +944,13 @@ int32_t World::NextWhirlpool( const int32_t index ) const
 }
 
 /* return count captured object */
-u32 World::CountCapturedObject( int obj, int col ) const
+uint32_t World::CountCapturedObject( int obj, int col ) const
 {
     return map_captureobj.GetCount( obj, col );
 }
 
 /* return count captured mines */
-u32 World::CountCapturedMines( int type, int color ) const
+uint32_t World::CountCapturedMines( int type, int color ) const
 {
     switch ( type ) {
     case Resource::WOOD:
@@ -965,7 +965,7 @@ u32 World::CountCapturedMines( int type, int color ) const
 }
 
 /* capture object */
-void World::CaptureObject( s32 index, int color )
+void World::CaptureObject( int32_t index, int color )
 {
     const MP2::MapObjectType objectType = GetTiles( index ).GetObject( false );
     map_captureobj.Set( index, objectType, color );
@@ -979,18 +979,18 @@ void World::CaptureObject( s32 index, int color )
 }
 
 /* return color captured object */
-int World::ColorCapturedObject( s32 index ) const
+int World::ColorCapturedObject( int32_t index ) const
 {
     return map_captureobj.GetColor( index );
 }
 
-ListActions * World::GetListActions( s32 index )
+ListActions * World::GetListActions( int32_t index )
 {
     MapActions::iterator it = map_actions.find( index );
     return it != map_actions.end() ? &( *it ).second : nullptr;
 }
 
-CapturedObject & World::GetCapturedObject( s32 index )
+CapturedObject & World::GetCapturedObject( int32_t index )
 {
     return map_captureobj.Get( index );
 }
@@ -1088,7 +1088,7 @@ std::string World::DateString( void ) const
     return output;
 }
 
-u32 World::CountObeliskOnMaps( void )
+uint32_t World::CountObeliskOnMaps( void )
 {
     const size_t res = std::count_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return MP2::OBJ_OBELISK == tile.GetObject( false ); } );
     return res > 0 ? static_cast<uint32_t>( res ) : 6;
@@ -1111,7 +1111,7 @@ MapEvent * World::GetMapEvent( const fheroes2::Point & pos )
     return !res.empty() ? static_cast<MapEvent *>( res.front() ) : nullptr;
 }
 
-MapObjectSimple * World::GetMapObject( u32 uid )
+MapObjectSimple * World::GetMapObject( uint32_t uid )
 {
     return uid ? map_objects.get( uid ) : nullptr;
 }
@@ -1185,7 +1185,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 
     case GameOver::WINS_GOLD:
         return ( ( kingdom.isControlHuman() || conf.WinsCompAlsoWins() ) && 0 < kingdom.GetFunds().Get( Resource::GOLD )
-                 && static_cast<u32>( kingdom.GetFunds().Get( Resource::GOLD ) ) >= conf.getWinningGoldAccumulationValue() );
+                 && static_cast<uint32_t>( kingdom.GetFunds().Get( Resource::GOLD ) ) >= conf.getWinningGoldAccumulationValue() );
 
     default:
         break;
@@ -1314,7 +1314,7 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
     return GameOver::COND_NONE;
 }
 
-u32 World::GetUniq( void )
+uint32_t World::GetUniq( void )
 {
     return ++GameStatic::uniq;
 }
@@ -1408,7 +1408,7 @@ StreamBase & operator>>( StreamBase & msg, CapturedObject & obj )
 
 StreamBase & operator<<( StreamBase & msg, const MapObjects & objs )
 {
-    msg << static_cast<u32>( objs.size() );
+    msg << static_cast<uint32_t>( objs.size() );
     for ( MapObjects::const_iterator it = objs.begin(); it != objs.end(); ++it )
         if ( ( *it ).second ) {
             const MapObjectSimple & obj = *( *it ).second;
@@ -1438,13 +1438,13 @@ StreamBase & operator<<( StreamBase & msg, const MapObjects & objs )
 
 StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
 {
-    u32 size = 0;
+    uint32_t size = 0;
     msg >> size;
 
     objs.clear();
 
-    for ( u32 ii = 0; ii < size; ++ii ) {
-        s32 index;
+    for ( uint32_t ii = 0; ii < size; ++ii ) {
+        int32_t index;
         int type;
         msg >> index >> type;
 
@@ -1576,12 +1576,12 @@ void EventDate::LoadFromMP2( StreamBuf st )
     }
 }
 
-bool EventDate::isDeprecated( u32 date ) const
+bool EventDate::isDeprecated( uint32_t date ) const
 {
     return 0 == subsequent && first < date;
 }
 
-bool EventDate::isAllow( int col, u32 date ) const
+bool EventDate::isAllow( int col, uint32_t date ) const
 {
     return ( ( first == date || ( subsequent && ( first < date && 0 == ( ( date - first ) % subsequent ) ) ) ) && ( col & colors ) );
 }

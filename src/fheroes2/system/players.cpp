@@ -197,7 +197,7 @@ StreamBase & operator<<( StreamBase & msg, const Focus & focus )
         msg << static_cast<Castle *>( focus.second )->GetIndex();
         break;
     default:
-        msg << static_cast<s32>( -1 );
+        msg << static_cast<int32_t>( -1 );
         break;
     }
 
@@ -206,7 +206,7 @@ StreamBase & operator<<( StreamBase & msg, const Focus & focus )
 
 StreamBase & operator>>( StreamBase & msg, Focus & focus )
 {
-    s32 index;
+    int32_t index;
     msg >> focus.first >> index;
 
     switch ( focus.first ) {
@@ -263,7 +263,7 @@ void Players::clear( void )
 
     std::vector<Player *>::clear();
 
-    for ( u32 ii = 0; ii < KINGDOMMAX + 1; ++ii )
+    for ( uint32_t ii = 0; ii < KINGDOMMAX + 1; ++ii )
         _players[ii] = nullptr;
 
     current_color = 0;
@@ -518,7 +518,7 @@ StreamBase & operator>>( StreamBase & msg, Players & players )
     players.current_color = current;
     const Colors vcolors( colors );
 
-    for ( u32 ii = 0; ii < vcolors.size(); ++ii ) {
+    for ( uint32_t ii = 0; ii < vcolors.size(); ++ii ) {
         Player * player = new Player();
         msg >> *player;
         Players::Set( Color::GetIndex( player->GetColor() ), player );

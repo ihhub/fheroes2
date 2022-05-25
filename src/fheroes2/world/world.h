@@ -54,7 +54,7 @@ struct ListActions : public std::list<ActionSimple *>
     void clear( void );
 };
 
-struct MapObjects : public std::map<u32, MapObjectSimple *>
+struct MapObjects : public std::map<uint32_t, MapObjectSimple *>
 {
     MapObjects() = default;
     MapObjects( const MapObjects & other ) = delete;
@@ -68,11 +68,11 @@ struct MapObjects : public std::map<u32, MapObjectSimple *>
     void clear( void );
     void add( MapObjectSimple * );
     std::list<MapObjectSimple *> get( const fheroes2::Point & );
-    MapObjectSimple * get( u32 uid );
-    void remove( u32 uid );
+    MapObjectSimple * get( uint32_t uid );
+    void remove( uint32_t uid );
 };
 
-using MapActions = std::map<s32, ListActions>;
+using MapActions = std::map<int32_t, ListActions>;
 
 struct CapturedObject
 {
@@ -111,20 +111,20 @@ struct CapturedObject
     }
 };
 
-struct CapturedObjects : std::map<s32, CapturedObject>
+struct CapturedObjects : std::map<int32_t, CapturedObject>
 {
-    void Set( s32, int, int );
-    void SetColor( s32, int );
+    void Set( int32_t, int, int );
+    void SetColor( int32_t, int );
     void ClearFog( int );
     void ResetColor( int );
 
-    CapturedObject & Get( s32 );
+    CapturedObject & Get( int32_t );
 
     void tributeCapturedObjects( const int playerColorId, const int objectType, Funds & funds, int & objectCount );
 
-    u32 GetCount( int, int ) const;
-    u32 GetCountMines( int, int ) const;
-    int GetColor( s32 ) const;
+    uint32_t GetCount( int, int ) const;
+    uint32_t GetCountMines( int, int ) const;
+    int GetColor( int32_t ) const;
 };
 
 struct EventDate
@@ -138,12 +138,12 @@ struct EventDate
 
     void LoadFromMP2( StreamBuf );
 
-    bool isAllow( int color, u32 date ) const;
-    bool isDeprecated( u32 date ) const;
+    bool isAllow( int color, uint32_t date ) const;
+    bool isDeprecated( uint32_t date ) const;
 
     Funds resource;
-    u32 first;
-    u32 subsequent;
+    uint32_t first;
+    uint32_t subsequent;
     int colors;
     bool computer;
     std::string message;
@@ -218,7 +218,7 @@ public:
     const Heroes * GetHeroes( const fheroes2::Point & ) const;
     Heroes * GetHeroes( const fheroes2::Point & );
 
-    Heroes * FromJailHeroes( s32 );
+    Heroes * FromJailHeroes( int32_t );
     Heroes * GetFreemanHeroes( const int race, const int heroIDToIgnore = Heroes::UNKNOWN ) const;
 
     const Heroes * GetHeroesCondWins() const;
@@ -239,12 +239,12 @@ public:
         return month;
     }
 
-    u32 CountDay() const
+    uint32_t CountDay() const
     {
         return day;
     }
 
-    u32 CountWeek() const
+    uint32_t CountWeek() const
     {
         return week;
     }
@@ -269,14 +269,14 @@ public:
     int32_t NextWhirlpool( const int32_t index ) const;
     MapsIndexes GetWhirlpoolEndPoints( const int32_t index ) const;
 
-    void CaptureObject( s32, int col );
-    u32 CountCapturedObject( int obj, int col ) const;
-    u32 CountCapturedMines( int type, int col ) const;
-    u32 CountObeliskOnMaps( void );
-    int ColorCapturedObject( s32 ) const;
+    void CaptureObject( int32_t, int col );
+    uint32_t CountCapturedObject( int obj, int col ) const;
+    uint32_t CountCapturedMines( int type, int col ) const;
+    uint32_t CountObeliskOnMaps( void );
+    int ColorCapturedObject( int32_t ) const;
     void ResetCapturedObjects( int );
-    CapturedObject & GetCapturedObject( s32 );
-    ListActions * GetListActions( s32 );
+    CapturedObject & GetCapturedObject( int32_t );
+    ListActions * GetListActions( int32_t );
 
     void ActionForMagellanMaps( int color );
     void ClearFog( int color );
@@ -291,7 +291,7 @@ public:
     EventsDate GetEventsDate( int color ) const;
 
     MapEvent * GetMapEvent( const fheroes2::Point & );
-    MapObjectSimple * GetMapObject( u32 uid );
+    MapObjectSimple * GetMapObject( uint32_t uid );
     void RemoveMapObject( const MapObjectSimple * );
     const MapRegion & getRegion( size_t id ) const;
     size_t getRegionCount() const;
@@ -301,7 +301,7 @@ public:
     void resetPathfinder();
 
     void ComputeStaticAnalysis();
-    static u32 GetUniq( void );
+    static uint32_t GetUniq( void );
 
     uint32_t GetMapSeed() const;
     uint32_t GetWeekSeed() const;

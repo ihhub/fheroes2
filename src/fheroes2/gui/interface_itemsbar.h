@@ -372,7 +372,7 @@ namespace Interface
             return &curItemPos.second;
         }
 
-        s32 GetSelectedIndex()
+        int32_t GetSelectedIndex()
         {
             return std::distance( ItemsBar<Item>::GetBeginItemIter(), GetCurItemIter() );
         }

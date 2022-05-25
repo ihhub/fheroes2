@@ -122,7 +122,7 @@ public:
 
     bool Refresh( KingdomHeroes & heroes );
 
-    void RedrawItem( const HeroRow &, s32, s32, bool ) override;
+    void RedrawItem( const HeroRow &, int32_t, int32_t, bool ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
     void ActionCurrentUp() override
@@ -150,9 +150,9 @@ public:
         // Do nothing.
     }
 
-    void ActionListSingleClick( HeroRow &, const fheroes2::Point &, s32, s32 ) override;
-    void ActionListDoubleClick( HeroRow &, const fheroes2::Point &, s32, s32 ) override;
-    void ActionListPressRight( HeroRow &, const fheroes2::Point &, s32, s32 ) override;
+    void ActionListSingleClick( HeroRow &, const fheroes2::Point &, int32_t, int32_t ) override;
+    void ActionListDoubleClick( HeroRow &, const fheroes2::Point &, int32_t, int32_t ) override;
+    void ActionListPressRight( HeroRow &, const fheroes2::Point &, int32_t, int32_t ) override;
     bool ActionListCursor( HeroRow &, const fheroes2::Point & ) override;
 
 private:
@@ -219,18 +219,18 @@ bool StatsHeroesList::Refresh( KingdomHeroes & heroes )
     return false;
 }
 
-void StatsHeroesList::ActionListDoubleClick( HeroRow & row, const fheroes2::Point & cursor, s32 ox, s32 oy )
+void StatsHeroesList::ActionListDoubleClick( HeroRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy )
 {
     ActionListSingleClick( row, cursor, ox, oy );
 }
 
-void StatsHeroesList::ActionListSingleClick( HeroRow & row, const fheroes2::Point & cursor, s32 ox, s32 oy )
+void StatsHeroesList::ActionListSingleClick( HeroRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy )
 {
     if ( row.hero && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) )
         Game::OpenHeroesDialog( *row.hero, false, false );
 }
 
-void StatsHeroesList::ActionListPressRight( HeroRow & row, const fheroes2::Point & cursor, s32 ox, s32 oy )
+void StatsHeroesList::ActionListPressRight( HeroRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy )
 {
     if ( row.hero && ( fheroes2::Rect( ox + 5, oy + 4, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor ) )
         Dialog::QuickInfo( *row.hero, _area );
@@ -260,7 +260,7 @@ bool StatsHeroesList::ActionListCursor( HeroRow & row, const fheroes2::Point & c
     return false;
 }
 
-void StatsHeroesList::RedrawItem( const HeroRow & row, s32 dstx, s32 dsty, bool current )
+void StatsHeroesList::RedrawItem( const HeroRow & row, int32_t dstx, int32_t dsty, bool current )
 {
     (void)current;
 
@@ -380,7 +380,7 @@ class StatsCastlesList : public Interface::ListBox<CstlRow>
 public:
     StatsCastlesList( const fheroes2::Rect & area, const fheroes2::Point & offset, const KingdomCastles & );
 
-    void RedrawItem( const CstlRow &, s32, s32, bool ) override;
+    void RedrawItem( const CstlRow &, int32_t, int32_t, bool ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
     void ActionCurrentUp( void ) override
@@ -408,9 +408,9 @@ public:
         // Do nothing.
     }
 
-    void ActionListSingleClick( CstlRow &, const fheroes2::Point &, s32, s32 ) override;
-    void ActionListDoubleClick( CstlRow &, const fheroes2::Point &, s32, s32 ) override;
-    void ActionListPressRight( CstlRow &, const fheroes2::Point &, s32, s32 ) override;
+    void ActionListSingleClick( CstlRow &, const fheroes2::Point &, int32_t, int32_t ) override;
+    void ActionListDoubleClick( CstlRow &, const fheroes2::Point &, int32_t, int32_t ) override;
+    void ActionListPressRight( CstlRow &, const fheroes2::Point &, int32_t, int32_t ) override;
     bool ActionListCursor( CstlRow &, const fheroes2::Point & ) override;
 
 private:
@@ -447,12 +447,12 @@ StatsCastlesList::StatsCastlesList( const fheroes2::Rect & area, const fheroes2:
     SetListContent( content );
 }
 
-void StatsCastlesList::ActionListDoubleClick( CstlRow & row, const fheroes2::Point & cursor, s32 ox, s32 oy )
+void StatsCastlesList::ActionListDoubleClick( CstlRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy )
 {
     ActionListSingleClick( row, cursor, ox, oy );
 }
 
-void StatsCastlesList::ActionListSingleClick( CstlRow & row, const fheroes2::Point & cursor, s32 ox, s32 oy )
+void StatsCastlesList::ActionListSingleClick( CstlRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy )
 {
     if ( row.castle ) {
         // click castle icon
@@ -472,7 +472,7 @@ void StatsCastlesList::ActionListSingleClick( CstlRow & row, const fheroes2::Poi
     }
 }
 
-void StatsCastlesList::ActionListPressRight( CstlRow & row, const fheroes2::Point & cursor, s32 ox, s32 oy )
+void StatsCastlesList::ActionListPressRight( CstlRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy )
 {
     if ( row.castle ) {
         if ( fheroes2::Rect( ox + 17, oy + 19, Interface::IconsBar::GetItemWidth(), Interface::IconsBar::GetItemHeight() ) & cursor )
@@ -516,7 +516,7 @@ bool StatsCastlesList::ActionListCursor( CstlRow & row, const fheroes2::Point & 
     return false;
 }
 
-void StatsCastlesList::RedrawItem( const CstlRow & row, s32 dstx, s32 dsty, bool current )
+void StatsCastlesList::RedrawItem( const CstlRow & row, int32_t dstx, int32_t dsty, bool current )
 {
     (void)current;
 

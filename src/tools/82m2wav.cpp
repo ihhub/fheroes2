@@ -43,7 +43,7 @@ int main( int argc, char ** argv )
     }
 
     fd_data.seekg( 0, std::ios_base::end );
-    u32 size = fd_data.tellg();
+    uint32_t size = fd_data.tellg();
     fd_data.seekg( 0, std::ios_base::beg );
     char * body = new char[size];
     fd_data.read( body, size );

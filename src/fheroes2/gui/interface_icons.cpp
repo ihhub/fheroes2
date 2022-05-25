@@ -64,7 +64,7 @@ void Interface::RedrawCastleIcon( const Castle & castle, int32_t sx, int32_t sy 
     fheroes2::drawCastleIcon( castle, fheroes2::Display::instance(), { sx, sy } );
 }
 
-void Interface::RedrawHeroesIcon( const Heroes & hero, s32 sx, s32 sy )
+void Interface::RedrawHeroesIcon( const Heroes & hero, int32_t sx, int32_t sy )
 {
     hero.PortraitRedraw( sx, sy, PORT_SMALL, fheroes2::Display::instance() );
 }
@@ -100,7 +100,7 @@ void Interface::IconsBar::redrawBackground( fheroes2::Image & output, const fher
     }
 }
 
-void Interface::CastleIcons::RedrawItem( const CASTLE & item, s32 ox, s32 oy, bool current )
+void Interface::CastleIcons::RedrawItem( const CASTLE & item, int32_t ox, int32_t oy, bool current )
 {
     if ( item && show ) {
         RedrawCastleIcon( *item, ox + 5, oy + 5 );
@@ -162,7 +162,7 @@ void Interface::CastleIcons::SetShow( bool f )
     }
 }
 
-void Interface::CastleIcons::SetPos( s32 px, s32 py )
+void Interface::CastleIcons::SetPos( int32_t px, int32_t py )
 {
     const int icnscroll = Settings::Get().ExtGameEvilInterface() ? ICN::SCROLLE : ICN::SCROLL;
 
@@ -188,7 +188,7 @@ void Interface::CastleIcons::SetPos( s32 px, s32 py )
     Reset();
 }
 
-void Interface::HeroesIcons::RedrawItem( const HEROES & item, s32 ox, s32 oy, bool current )
+void Interface::HeroesIcons::RedrawItem( const HEROES & item, int32_t ox, int32_t oy, bool current )
 {
     if ( item && show ) {
         RedrawHeroesIcon( *item, ox + 5, oy + 5 );
@@ -257,7 +257,7 @@ void Interface::HeroesIcons::SetShow( bool f )
     }
 }
 
-void Interface::HeroesIcons::SetPos( s32 px, s32 py )
+void Interface::HeroesIcons::SetPos( int32_t px, int32_t py )
 {
     const int icnscroll = Settings::Get().ExtGameEvilInterface() ? ICN::SCROLLE : ICN::SCROLL;
 
@@ -323,7 +323,7 @@ void Interface::IconsPanel::SetRedraw( void ) const
     SetRedraw( ICON_ANY );
 }
 
-void Interface::IconsPanel::SetPos( s32 ox, s32 oy )
+void Interface::IconsPanel::SetPos( int32_t ox, int32_t oy )
 {
     int32_t iconsCount = 0;
 

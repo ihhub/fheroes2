@@ -51,7 +51,7 @@ public:
     void Assign( const Troop *, const Troop * );
     void Assign( const Troops & );
     void Insert( const Troops & );
-    void PushBack( const Monster &, u32 );
+    void PushBack( const Monster &, uint32_t );
     void PopBack( void );
 
     size_t Size() const
@@ -63,11 +63,11 @@ public:
     const Troop * GetTroop( size_t ) const;
 
     void UpgradeMonsters( const Monster & );
-    u32 GetCountMonsters( const Monster & ) const;
+    uint32_t GetCountMonsters( const Monster & ) const;
 
     double getReinforcementValue( const Troops & reinforcement ) const;
 
-    u32 GetCount( void ) const;
+    uint32_t GetCount( void ) const;
     bool isValid( void ) const;
     bool HasMonster( const Monster & ) const;
 
@@ -132,7 +132,7 @@ struct NeutralMonsterJoiningCondition
 class Army : public Troops, public Control
 {
 public:
-    static std::string SizeString( u32 );
+    static std::string SizeString( uint32_t );
     static std::string TroopSizeString( const Troop & );
 
     // compare
@@ -144,7 +144,7 @@ public:
 
     static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
 
-    static void drawMiniMonsLine( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first = 0, u32 count = 0 );
+    static void drawMiniMonsLine( const Troops & troops, int32_t cx, int32_t cy, uint32_t width, uint32_t first = 0, uint32_t count = 0 );
     static void DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawType, bool compact = true,
                                   bool isScouteView = true );
 

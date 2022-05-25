@@ -66,7 +66,7 @@ enum armysize_t
     ARMY_LEGION = 1000
 };
 
-armysize_t ArmyGetSize( u32 count )
+armysize_t ArmyGetSize( uint32_t count )
 {
     if ( ARMY_LEGION <= count )
         return ARMY_LEGION;
@@ -130,7 +130,7 @@ std::string Army::TroopSizeString( const Troop & troop )
     return str;
 }
 
-std::string Army::SizeString( u32 size )
+std::string Army::SizeString( uint32_t size )
 {
     switch ( ArmyGetSize( size ) ) {
     case ARMY_FEW:
@@ -215,7 +215,7 @@ void Troops::Insert( const Troops & troops )
         push_back( new Troop( **it ) );
 }
 
-void Troops::PushBack( const Monster & mons, u32 count )
+void Troops::PushBack( const Monster & mons, uint32_t count )
 {
     push_back( new Troop( mons, count ) );
 }
@@ -247,9 +247,9 @@ void Troops::UpgradeMonsters( const Monster & m )
     }
 }
 
-u32 Troops::GetCountMonsters( const Monster & m ) const
+uint32_t Troops::GetCountMonsters( const Monster & m ) const
 {
-    u32 c = 0;
+    uint32_t c = 0;
 
     for ( const_iterator it = begin(); it != end(); ++it )
         if ( ( *it )->isValid() && **it == m )
@@ -285,7 +285,7 @@ bool Troops::isValid( void ) const
     return false;
 }
 
-u32 Troops::GetCount( void ) const
+uint32_t Troops::GetCount( void ) const
 {
     uint32_t total = 0;
     for ( const_iterator it = begin(); it != end(); ++it ) {
@@ -558,12 +558,12 @@ void Troops::ArrangeForBattle( bool upgrade )
 
     if ( priority.size() == 1 ) {
         const Monster & m = *priority.back();
-        const u32 count = priority.back()->GetCount();
+        const uint32_t count = priority.back()->GetCount();
 
         Clean();
 
         if ( 49 < count ) {
-            const u32 c = count / 5;
+            const uint32_t c = count / 5;
             at( 0 )->Set( m, c );
             at( 1 )->Set( m, c );
             at( 2 )->Set( m, c + count - ( c * 5 ) );
@@ -574,7 +574,7 @@ void Troops::ArrangeForBattle( bool upgrade )
                 at( 2 )->Upgrade();
         }
         else if ( 20 < count ) {
-            const u32 c = count / 3;
+            const uint32_t c = count / 3;
             at( 1 )->Set( m, c );
             at( 2 )->Set( m, c + count - ( c * 3 ) );
             at( 3 )->Set( m, c );
@@ -797,7 +797,7 @@ Army::Army( HeroBase * s )
     , color( Color::NONE )
 {
     reserve( ARMYMAXTROOPS );
-    for ( u32 ii = 0; ii < ARMYMAXTROOPS; ++ii )
+    for ( uint32_t ii = 0; ii < ARMYMAXTROOPS; ++ii )
         push_back( new ArmyTroop( this ) );
 }
 
@@ -807,7 +807,7 @@ Army::Army( const Maps::Tiles & t )
     , color( Color::NONE )
 {
     reserve( ARMYMAXTROOPS );
-    for ( u32 ii = 0; ii < ARMYMAXTROOPS; ++ii )
+    for ( uint32_t ii = 0; ii < ARMYMAXTROOPS; ++ii )
         push_back( new ArmyTroop( this ) );
 
     setFromTile( t );
@@ -1266,7 +1266,7 @@ bool Army::isMeleeDominantArmy() const
 }
 
 // draw MONS32 sprite in line, first valid = 0, count = 0
-void Army::drawMiniMonsLine( const Troops & troops, s32 cx, s32 cy, u32 width, u32 first, u32 count )
+void Army::drawMiniMonsLine( const Troops & troops, int32_t cx, int32_t cy, uint32_t width, uint32_t first, uint32_t count )
 {
     fheroes2::drawMiniMonsters( troops, cx, cy, width, first, count, Skill::Level::EXPERT, false, true, fheroes2::Display::instance() );
 }
@@ -1414,7 +1414,7 @@ void Army::resetInvalidMonsters() const
 
 StreamBase & operator<<( StreamBase & msg, const Army & army )
 {
-    msg << static_cast<u32>( army.size() );
+    msg << static_cast<uint32_t>( army.size() );
 
     // Army: fixed size
     for ( Army::const_iterator it = army.begin(); it != army.end(); ++it )
@@ -1425,7 +1425,7 @@ StreamBase & operator<<( StreamBase & msg, const Army & army )
 
 StreamBase & operator>>( StreamBase & msg, Army & army )
 {
-    u32 armysz;
+    uint32_t armysz;
     msg >> armysz;
 
     for ( Army::iterator it = army.begin(); it != army.end(); ++it )

@@ -77,7 +77,7 @@ namespace Interface
         }
         ~ListBox() override = default;
 
-        virtual void RedrawItem( const Item &, s32 ox, s32 oy, bool current ) = 0;
+        virtual void RedrawItem( const Item &, int32_t ox, int32_t oy, bool current ) = 0;
         virtual void RedrawBackground( const fheroes2::Point & ) = 0;
 
         virtual void ActionCurrentUp() = 0;
@@ -112,13 +112,13 @@ namespace Interface
             ptRedraw = tl;
         }
 
-        void SetScrollButtonUp( int icn, u32 index1, u32 index2, const fheroes2::Point & pos )
+        void SetScrollButtonUp( int icn, uint32_t index1, uint32_t index2, const fheroes2::Point & pos )
         {
             buttonPgUp.setICNInfo( icn, index1, index2 );
             buttonPgUp.setPosition( pos.x, pos.y );
         }
 
-        void SetScrollButtonDn( int icn, u32 index1, u32 index2, const fheroes2::Point & pos )
+        void SetScrollButtonDn( int icn, uint32_t index1, uint32_t index2, const fheroes2::Point & pos )
         {
             buttonPgDn.setICNInfo( icn, index1, index2 );
             buttonPgDn.setPosition( pos.x, pos.y );

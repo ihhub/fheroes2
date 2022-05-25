@@ -264,12 +264,12 @@ bool Battle::Cell::isPositionIncludePoint( const fheroes2::Point & pt ) const
     return UNKNOWN != GetTriangleDirection( pt );
 }
 
-s32 Battle::Cell::GetIndex( void ) const
+int32_t Battle::Cell::GetIndex( void ) const
 {
     return index;
 }
 
-s32 Battle::Cell::GetQuality( void ) const
+int32_t Battle::Cell::GetQuality( void ) const
 {
     return quality;
 }
@@ -289,7 +289,7 @@ void Battle::Cell::setReachableForTail()
     _reachableForTail = true;
 }
 
-void Battle::Cell::SetQuality( u32 val )
+void Battle::Cell::SetQuality( uint32_t val )
 {
     quality = val;
 }

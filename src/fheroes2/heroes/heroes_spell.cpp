@@ -62,12 +62,12 @@ bool ActionSpellTownPortal( Heroes & hero );
 bool ActionSpellVisions( Heroes & hero );
 bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell );
 
-class CastleIndexListBox : public Interface::ListBox<s32>
+class CastleIndexListBox : public Interface::ListBox<int32_t>
 {
 public:
-    using Interface::ListBox<s32>::ActionListDoubleClick;
-    using Interface::ListBox<s32>::ActionListSingleClick;
-    using Interface::ListBox<s32>::ActionListPressRight;
+    using Interface::ListBox<int32_t>::ActionListDoubleClick;
+    using Interface::ListBox<int32_t>::ActionListSingleClick;
+    using Interface::ListBox<int32_t>::ActionListPressRight;
 
     CastleIndexListBox( const fheroes2::Rect & area, const fheroes2::Point & offset, int & res, const int townFrameIcnId, const int listBoxIcnId )
         : Interface::ListBox<int32_t>( offset )
@@ -77,7 +77,7 @@ public:
         , _area( area )
     {}
 
-    void RedrawItem( const s32 &, s32, s32, bool ) override;
+    void RedrawItem( const int32_t &, int32_t, int32_t, bool ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
     void ActionCurrentUp() override
@@ -90,12 +90,12 @@ public:
         // Do nothing.
     }
 
-    void ActionListDoubleClick( s32 & ) override
+    void ActionListDoubleClick( int32_t & ) override
     {
         result = Dialog::OK;
     }
 
-    void ActionListSingleClick( s32 & ) override
+    void ActionListSingleClick( int32_t & ) override
     {
         // Do nothing.
     }
@@ -117,7 +117,7 @@ private:
     const fheroes2::Rect _area;
 };
 
-void CastleIndexListBox::RedrawItem( const s32 & index, s32 dstx, s32 dsty, bool current )
+void CastleIndexListBox::RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current )
 {
     const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
 
@@ -258,8 +258,8 @@ bool HeroesTownGate( Heroes & hero, const Castle * castle )
     if ( castle ) {
         Interface::Basic & I = Interface::Basic::Get();
 
-        const s32 src = hero.GetIndex();
-        const s32 dst = castle->GetIndex();
+        const int32_t src = hero.GetIndex();
+        const int32_t dst = castle->GetIndex();
 
         if ( !Maps::isValidAbsIndex( src ) || !Maps::isValidAbsIndex( dst ) )
             return false;
@@ -422,9 +422,9 @@ bool ActionSpellDimensionDoor( Heroes & hero )
     I.RedrawFocus();
     I.Redraw();
 
-    const s32 src = hero.GetIndex();
+    const int32_t src = hero.GetIndex();
     // get destination
-    const s32 dst = I.GetDimensionDoorDestination( src, Spell::CalculateDimensionDoorDistance(), hero.isShipMaster() );
+    const int32_t dst = I.GetDimensionDoorDestination( src, Spell::CalculateDimensionDoorDistance(), hero.isShipMaster() );
 
     if ( Maps::isValidAbsIndex( src ) && Maps::isValidAbsIndex( dst ) ) {
         AGG::PlaySound( M82::KILLFADE );
@@ -481,7 +481,7 @@ bool ActionSpellTownGate( Heroes & hero )
 bool ActionSpellTownPortal( Heroes & hero )
 {
     const Kingdom & kingdom = hero.GetKingdom();
-    std::vector<s32> castles;
+    std::vector<int32_t> castles;
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -576,7 +576,7 @@ bool ActionSpellTownPortal( Heroes & hero )
 
 bool ActionSpellVisions( Heroes & hero )
 {
-    const u32 dist = hero.GetVisionsDistance();
+    const uint32_t dist = hero.GetVisionsDistance();
     MapsIndexes monsters = Maps::ScanAroundObjectWithDistance( hero.GetIndex(), dist, MP2::OBJ_MONSTER );
 
     const int32_t heroColor = hero.GetColor();
@@ -647,7 +647,7 @@ bool ActionSpellSetGuardian( Heroes & hero, const Spell & spell )
         return false;
     }
 
-    const u32 count = fheroes2::getGuardianMonsterCount( spell, hero.GetPower(), &hero );
+    const uint32_t count = fheroes2::getGuardianMonsterCount( spell, hero.GetPower(), &hero );
 
     if ( count ) {
         assert( spell.GetID() >= 0 && spell.GetID() <= 255 );

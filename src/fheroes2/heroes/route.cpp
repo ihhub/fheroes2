@@ -48,7 +48,7 @@ int Route::Path::GetFrontDirection( void ) const
     return front().GetDirection();
 }
 
-u32 Route::Path::GetFrontPenalty( void ) const
+uint32_t Route::Path::GetFrontPenalty( void ) const
 {
     return empty() ? 0 : front().GetPenalty();
 }
