@@ -444,7 +444,27 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
 
                     if ( topArmyBar.isSelected() )
                         topArmyBar.ResetSelected();
-                    if ( bottomArmyBar.isValid() && bottomArmyBar.isSelected() )
+                    if ( bottomArmyBar.isSelected() )
+                        bottomArmyBar.ResetSelected();
+
+                    need_redraw = true;
+                }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
+                    heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), true );
+
+                    if ( topArmyBar.isSelected() )
+                        topArmyBar.ResetSelected();
+                    if ( bottomArmyBar.isSelected() )
+                        bottomArmyBar.ResetSelected();
+
+                    need_redraw = true;
+                }
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
+                    GetArmy().MoveTroops( heroes.Guest()->GetArmy().getTroops() );
+
+                    if ( topArmyBar.isSelected() )
+                        topArmyBar.ResetSelected();
+                    if ( bottomArmyBar.isSelected() )
                         bottomArmyBar.ResetSelected();
 
                     need_redraw = true;

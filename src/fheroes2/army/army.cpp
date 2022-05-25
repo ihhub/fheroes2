@@ -382,7 +382,7 @@ void Troops::JoinTroops( Troops & troops2 )
         }
 }
 
-void Troops::MoveTroops( const Troops & from )
+void Troops::MoveTroops( const Troops & from, bool moveAll )
 {
     if ( this == &from )
         return;
@@ -396,7 +396,7 @@ void Troops::MoveTroops( const Troops & from )
 
     for ( Troop * troop : from ) {
         if ( troop && troop->isValid() ) {
-            if ( validTroops == 1 ) {
+            if ( validTroops == 1 && !moveAll ) {
                 if ( JoinTroop( troop->GetMonster(), troop->GetCount() - 1 ) ) {
                     troop->SetCount( 1 );
                     break;
