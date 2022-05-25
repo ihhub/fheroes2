@@ -8725,6 +8725,3 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Quit out of fheroes2."
-#~ msgstr "Esci da fheroes2."

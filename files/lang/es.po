@@ -9477,18 +9477,3 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid ""
-#~ "The enemy has captured the hero %{name}!\n"
-#~ "Your quest is a failure."
-#~ msgstr ""
-#~ "El enemigo ha encontrado %{name}.\n"
-#~ "Tu búsqueda ha fallado."
-
-#~ msgid ""
-#~ "The enemy has found the %{name}.\n"
-#~ "Your quest is a failure."
-#~ msgstr ""
-#~ "El enemigo ha encontrado %{name}.\n"
-#~ "Tu búsqueda ha fallado."
