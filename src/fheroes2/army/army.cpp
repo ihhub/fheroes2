@@ -410,8 +410,8 @@ void Troops::MoveTroops( const Troops & from, bool moveAll )
     }
 }
 
-void Army::swapArmyTroops( Army & army1, Army & army2 ) {
-
+void Army::swapArmyTroops( Army & army1, Army & army2 )
+{
     // Hero armies cannot end up with zero troops.
     if ( army1.GetCount() == 0 || army2.GetCount() == 0 ) {
         return;
