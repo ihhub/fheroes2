@@ -109,8 +109,8 @@ namespace
     {
         for ( int x = outputRoi.x; x < outputRoi.x + outputRoi.width; ++x ) {
             for ( int y = outputRoi.y; y < outputRoi.y + outputRoi.height; ++y ) {
-                const fheroes2::Point pixelLocation( Rand::GetWithGen( originalRoi.x, originalRoi.x + originalRoi.width - 1, seededGen ),
-                                                     Rand::GetWithGen( originalRoi.y, originalRoi.y + originalRoi.height - 1, seededGen ) );
+                const fheroes2::Point pixelLocation{ static_cast<int32_t>( Rand::GetWithGen( originalRoi.x, originalRoi.x + originalRoi.width - 1, seededGen ) ),
+                                                     static_cast<int32_t>( Rand::GetWithGen( originalRoi.y, originalRoi.y + originalRoi.height - 1, seededGen ) ) };
 
                 fheroes2::Copy( original, pixelLocation.x, pixelLocation.y, output, x, y, 1, 1 );
             }
