@@ -34,6 +34,8 @@ def main():
     generic_hdr_re = re.compile("^/\\*.*?\\*/", re.DOTALL)
 
     for file_name in sys.argv[3:]:
+        if not os.path.exists(file_name):
+            continue
         with open(file_name, "r", encoding="latin_1") as src_file:
             src = src_file.read()
 
