@@ -70,7 +70,7 @@ namespace
         if ( iter != entries.end() ) {
             // This is the same game completion. Just replace the entry.
             *iter = std::move( data );
-            return iter - entries.begin();
+            return static_cast<int32_t>( iter - entries.begin() );
         }
 
         entries.emplace_back( data );
@@ -89,7 +89,7 @@ namespace
 
         iter = std::find( entries.begin(), entries.end(), data );
         if ( iter != entries.end() ) {
-            return iter - entries.begin();
+            return static_cast<int32_t>( iter - entries.begin() );
         }
 
         return -1;

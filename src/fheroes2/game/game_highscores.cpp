@@ -221,8 +221,8 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         else {
             const uint32_t rating = GetGameOverScores();
             const uint32_t days = world.CountDay();
-            selectedEntryIndex = highScoreDataContainer.registerScoreStandard(
-                { player, Settings::Get().CurrentFileInfo().name, completionTime, days, rating, world.GetMapSeed() } );
+            selectedEntryIndex
+                = highScoreDataContainer.registerScoreStandard( { player, Settings::Get().CurrentFileInfo().name, completionTime, days, rating, world.GetMapSeed() } );
         }
 
         highScoreDataContainer.save( highScoreDataPath );
@@ -255,11 +255,11 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         else if ( le.MousePressRight( buttonOtherHighScore.area() ) ) {
             if ( isCampaign ) {
                 fheroes2::showMessage( fheroes2::Text( _( "Standard" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "View High Scores for Standard Maps." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                                       fheroes2::Text( _( "View High Scores for Standard Maps." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
             }
             else {
                 fheroes2::showMessage( fheroes2::Text( _( "Campaign" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "View High Scores for Campaigns." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                                       fheroes2::Text( _( "View High Scores for Campaigns." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
             }
         }
 
