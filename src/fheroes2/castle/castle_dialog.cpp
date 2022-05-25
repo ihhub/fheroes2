@@ -470,7 +470,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     need_redraw = true;
                 }
             }
-            
 
             // selector troops event
             if ( ( bottomArmyBar.isValid()
