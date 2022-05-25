@@ -183,9 +183,7 @@ namespace AI
         Normal();
 
         void KingdomTurn( Kingdom & kingdom ) override;
-        void CastleTurn( Castle & castle, bool defensive ) override;
         void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions ) override;
-        bool HeroesTurn( VecHeroes & heroes ) override;
 
         void revealFog( const Maps::Tiles & tile ) override;
 
@@ -216,6 +214,9 @@ namespace AI
         // Monster strength is constant over the same turn for AI but its calculation is a heavy operation.
         // In order to avoid extra computations during AI turn it is important to keep cache of monster strength but update it when an action on a monster is taken.
         std::map<int32_t, double> _neutralMonsterStrengthCache;
+
+        void CastleTurn( Castle & castle, bool defensive );
+        bool HeroesTurn( VecHeroes & heroes );
 
         double getHunterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         double getFighterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;

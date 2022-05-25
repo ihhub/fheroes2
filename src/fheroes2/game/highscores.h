@@ -46,7 +46,7 @@ namespace fheroes2
             // Do nothing.
         }
 
-        HighscoreData( HighscoreData & ) = default;
+        HighscoreData( const HighscoreData & ) = default;
         HighscoreData( HighscoreData && ) = default;
 
         ~HighscoreData() = default;

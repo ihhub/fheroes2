@@ -71,9 +71,7 @@ namespace AI
     {
     public:
         virtual void KingdomTurn( Kingdom & kingdom ) = 0;
-        virtual void CastleTurn( Castle & castle, bool defensive ) = 0;
         virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & unit, Battle::Actions & actions ) = 0;
-        virtual bool HeroesTurn( VecHeroes & heroes ) = 0;
 
         virtual void revealFog( const Maps::Tiles & tile ) = 0;
 
@@ -82,8 +80,6 @@ namespace AI
         virtual void HeroesPreBattle( HeroBase & hero, bool isAttacking );
         virtual void HeroesAfterBattle( HeroBase & hero, bool wasAttacking );
         virtual void HeroesPostLoad( Heroes & hero );
-        virtual bool HeroesCanMove( const Heroes & hero );
-        virtual bool HeroesGetTask( Heroes & hero );
         virtual void HeroesActionComplete( Heroes & hero, const MP2::MapObjectType objectType );
         virtual void HeroesActionNewPosition( Heroes & hero );
         virtual void HeroesClearTask( const Heroes & hero );
