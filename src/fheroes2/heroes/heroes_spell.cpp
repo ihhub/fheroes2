@@ -77,7 +77,7 @@ public:
         , _area( area )
     {}
 
-    void RedrawItem( const int32_t &, int32_t, int32_t, bool ) override;
+    void RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
     void ActionCurrentUp() override
@@ -90,12 +90,12 @@ public:
         // Do nothing.
     }
 
-    void ActionListDoubleClick( int32_t & ) override
+    void ActionListDoubleClick( int32_t & /* unused */ ) override
     {
         result = Dialog::OK;
     }
 
-    void ActionListSingleClick( int32_t & ) override
+    void ActionListSingleClick( int32_t & /* unused */ ) override
     {
         // Do nothing.
     }

@@ -73,7 +73,7 @@ public:
         ok = true;
     }
 
-    void RedrawItem( const int &, int32_t, int32_t, bool ) override
+    void RedrawItem( const int & /* unused */, int32_t /* ox */, int32_t /* oy */, bool /* current */ ) override
     {
         // Do nothing.
     }

@@ -246,15 +246,15 @@ public:
     uint32_t getBE32() override;
     uint32_t getLE32() override;
 
-    void putBE32( uint32_t ) override;
-    void putLE32( uint32_t ) override;
-    void putBE16( uint16_t ) override;
-    void putLE16( uint16_t ) override;
+    void putBE32( uint32_t v ) override;
+    void putLE32( uint32_t v ) override;
+    void putBE16( uint16_t v ) override;
+    void putLE16( uint16_t v ) override;
 
-    std::vector<uint8_t> getRaw( size_t = 0 /* all data */ ) override;
-    void putRaw( const char *, size_t ) override;
+    std::vector<uint8_t> getRaw( size_t sz = 0 /* all data */ ) override;
+    void putRaw( const char * ptr, size_t sz ) override;
 
-    std::string toString( size_t = 0 /* all data */ );
+    std::string toString( size_t sz = 0 /* all data */ );
 
 protected:
     void reset();

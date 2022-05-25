@@ -206,7 +206,7 @@ namespace Battle
 {
     int GetIndexIndicator( const Unit & );
     int GetSwordCursorDirection( int );
-    int GetDirectionFromCursorSword( uint32_t );
+    int GetDirectionFromCursorSword( uint32_t sword );
     int GetCursorFromSpell( int );
 
     struct CursorPosition

@@ -51,7 +51,7 @@ bool ObjTree::isShadow( const uint8_t index )
     return objTreeShadowBitset[index];
 }
 
-int ObjTree::GetActionObject( uint32_t )
+int ObjTree::GetActionObject( uint32_t /* unused */ )
 {
     return MP2::OBJ_ZERO;
 }

@@ -139,7 +139,7 @@ bool Troop::isBattle() const
     return false;
 }
 
-bool Troop::isModes( uint32_t ) const
+bool Troop::isModes( uint32_t /* unused */ ) const
 {
     return false;
 }
@@ -174,12 +174,11 @@ uint32_t Troop::GetSpeed() const
     return Monster::GetSpeed();
 }
 
-uint32_t Troop::GetAffectedDuration( uint32_t ) const
+uint32_t Troop::GetAffectedDuration( uint32_t /* unused */ ) const
 {
     return 0;
 }
 
-/* ArmyTroop */
 ArmyTroop::ArmyTroop( const Army * a )
     : army( a )
 {}

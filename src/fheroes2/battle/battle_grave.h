@@ -48,6 +48,8 @@ namespace Battle
         Graveyard() = default;
         Graveyard( const Graveyard & ) = delete;
 
+        ~Graveyard() = default;
+
         Graveyard & operator=( const Graveyard & ) = delete;
 
         Indexes GetClosedCells() const;

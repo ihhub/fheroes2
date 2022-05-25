@@ -50,7 +50,7 @@ public:
         , _restorer( fheroes2::Display::instance() )
     {}
 
-    void RedrawItem( const uint32_t &, int32_t, int32_t, bool ) override;
+    void RedrawItem( const uint32_t & item, int32_t ox, int32_t oy, bool current ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
     void ActionCurrentUp() override
@@ -63,11 +63,11 @@ public:
         // Do nothing.
     }
 
-    void ActionListDoubleClick( uint32_t & ) override;
+    void ActionListDoubleClick( uint32_t & item ) override;
 
-    void ActionListSingleClick( uint32_t & ) override;
+    void ActionListSingleClick( uint32_t & item ) override;
 
-    void ActionListPressRight( uint32_t & ) override
+    void ActionListPressRight( uint32_t & /* unused */ ) override
     {
         // Do nothing.
     }

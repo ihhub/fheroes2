@@ -160,8 +160,8 @@ namespace AGG
     const std::vector<uint8_t> & GetWAV( int m82 );
     const std::vector<uint8_t> & GetMID( int xmi );
 
-    void LoadWAV( int m82, std::vector<uint8_t> & );
-    void LoadMID( int xmi, std::vector<uint8_t> & );
+    void LoadWAV( int m82, std::vector<uint8_t> & v );
+    void LoadMID( int xmi, std::vector<uint8_t> & v );
 
     std::vector<uint8_t> ReadMusicChunk( const std::string & key, const bool ignoreExpansion = false );
 

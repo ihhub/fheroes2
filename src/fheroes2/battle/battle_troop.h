@@ -81,13 +81,13 @@ namespace Battle
 
         Unit & operator=( const Unit & ) = delete;
 
-        bool isModes( uint32_t ) const override;
+        bool isModes( uint32_t v ) const override;
         bool isBattle() const override;
         std::string GetShotString() const override;
         std::string GetSpeedString() const override;
         uint32_t GetHitPointsLeft() const override;
         virtual uint32_t GetMissingHitPoints() const;
-        uint32_t GetAffectedDuration( uint32_t ) const override;
+        uint32_t GetAffectedDuration( uint32_t mod ) const override;
         uint32_t GetSpeed() const override;
         int GetMorale() const override;
 

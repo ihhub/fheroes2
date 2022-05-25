@@ -81,9 +81,9 @@ public:
         return static_cast<int>( gh );
     }
 
-    void Blit( int32_t, int32_t, fheroes2::Image & sf = fheroes2::Display::instance() ) const;
-    void Blit( int32_t, int32_t, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) const;
-    void Blit( const fheroes2::Point &, fheroes2::Image & sf = fheroes2::Display::instance() ) const;
+    void Blit( int32_t ax, int32_t ay, fheroes2::Image & dst = fheroes2::Display::instance() ) const;
+    void Blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst = fheroes2::Display::instance() ) const;
+    void Blit( const fheroes2::Point & dst_pt, fheroes2::Image & dst = fheroes2::Display::instance() ) const;
 
     static int32_t getCharacterWidth( const uint8_t character, const int fontType );
 

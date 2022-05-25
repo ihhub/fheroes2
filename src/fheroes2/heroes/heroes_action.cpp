@@ -138,8 +138,8 @@ void ActionToGoodMoraleObject( Heroes & hero, const MP2::MapObjectType objectTyp
 void ActionToExperienceObject( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
 void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
 void ActionToAncientLamp( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
-void ActionToTeleports( Heroes & hero, int32_t dst_index );
-void ActionToWhirlpools( Heroes & hero, int32_t dst_index );
+void ActionToTeleports( Heroes & hero, int32_t index_from );
+void ActionToWhirlpools( Heroes & hero, int32_t index_from );
 void ActionToObservationTower( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
 void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );
 void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index );

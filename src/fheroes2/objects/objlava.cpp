@@ -108,12 +108,12 @@ bool ObjLava::isShadow( const uint8_t index )
     return objLavaShadowBitset[index];
 }
 
-int ObjLav2::GetActionObject( uint32_t )
+int ObjLav2::GetActionObject( uint32_t /* unused */ )
 {
     return MP2::OBJ_ZERO;
 }
 
-int ObjLav3::GetActionObject( uint32_t )
+int ObjLav3::GetActionObject( uint32_t /* unused */ )
 {
     return MP2::OBJ_ZERO;
 }

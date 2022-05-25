@@ -122,7 +122,7 @@ public:
 
     bool Refresh( KingdomHeroes & heroes );
 
-    void RedrawItem( const HeroRow &, int32_t, int32_t, bool ) override;
+    void RedrawItem( const HeroRow & row, int32_t dstx, int32_t dsty, bool current ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
     void ActionCurrentUp() override
@@ -150,10 +150,10 @@ public:
         // Do nothing.
     }
 
-    void ActionListSingleClick( HeroRow &, const fheroes2::Point &, int32_t, int32_t ) override;
-    void ActionListDoubleClick( HeroRow &, const fheroes2::Point &, int32_t, int32_t ) override;
-    void ActionListPressRight( HeroRow &, const fheroes2::Point &, int32_t, int32_t ) override;
-    bool ActionListCursor( HeroRow &, const fheroes2::Point & ) override;
+    void ActionListSingleClick( HeroRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy ) override;
+    void ActionListDoubleClick( HeroRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy ) override;
+    void ActionListPressRight( HeroRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy ) override;
+    bool ActionListCursor( HeroRow & row, const fheroes2::Point & cursor ) override;
 
 private:
     std::vector<HeroRow> content;
@@ -380,7 +380,7 @@ class StatsCastlesList : public Interface::ListBox<CstlRow>
 public:
     StatsCastlesList( const fheroes2::Rect & area, const fheroes2::Point & offset, const KingdomCastles & );
 
-    void RedrawItem( const CstlRow &, int32_t, int32_t, bool ) override;
+    void RedrawItem( const CstlRow & row, int32_t dstx, int32_t dsty, bool current ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
     void ActionCurrentUp() override
@@ -408,9 +408,9 @@ public:
         // Do nothing.
     }
 
-    void ActionListSingleClick( CstlRow &, const fheroes2::Point &, int32_t, int32_t ) override;
-    void ActionListDoubleClick( CstlRow &, const fheroes2::Point &, int32_t, int32_t ) override;
-    void ActionListPressRight( CstlRow &, const fheroes2::Point &, int32_t, int32_t ) override;
+    void ActionListSingleClick( CstlRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy ) override;
+    void ActionListDoubleClick( CstlRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy ) override;
+    void ActionListPressRight( CstlRow & row, const fheroes2::Point & cursor, int32_t ox, int32_t oy ) override;
     bool ActionListCursor( CstlRow &, const fheroes2::Point & ) override;
 
 private:

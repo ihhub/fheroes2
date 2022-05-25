@@ -45,7 +45,7 @@ bool ClosedTilesExists( const Puzzle &, const std::vector<uint8_t> & );
 void ZoneOpenFirstTiles( Puzzle &, size_t &, const std::vector<uint8_t> & );
 void ShowStandardDialog( const Puzzle &, const fheroes2::Image & );
 void ShowExtendedDialog( const Puzzle &, const fheroes2::Image & );
-void PuzzlesDraw( const Puzzle &, const fheroes2::Image &, int32_t, int32_t );
+void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, int32_t dstx, int32_t dsty );
 
 Puzzle::Puzzle()
 {

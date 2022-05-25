@@ -99,7 +99,7 @@ int ObjTown::GetActionObject( uint32_t index )
     return MP2::OBJ_ZERO;
 }
 
-int ObjTwba::GetActionObject( uint32_t )
+int ObjTwba::GetActionObject( uint32_t /* unused */ )
 {
     return MP2::OBJ_ZERO;
 }

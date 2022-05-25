@@ -117,7 +117,7 @@ public:
     };
 
     Castle();
-    Castle( int32_t, int32_t, int rs );
+    Castle( int32_t cx, int32_t cy, int rc );
     Castle( const Castle & ) = delete;
     ~Castle() override = default;
 

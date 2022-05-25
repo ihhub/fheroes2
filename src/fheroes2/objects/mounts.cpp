@@ -78,12 +78,12 @@ bool ObjMnts2::isAction( uint32_t index )
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
 
-MP2::MapObjectType ObjMnts1::GetActionObject( uint32_t )
+MP2::MapObjectType ObjMnts1::GetActionObject( uint32_t /* unused */ )
 {
     return MP2::OBJ_ZERO;
 }
 
-MP2::MapObjectType ObjMnts2::GetActionObject( uint32_t )
+MP2::MapObjectType ObjMnts2::GetActionObject( uint32_t /* unused */ )
 {
     return MP2::OBJ_ZERO;
 }

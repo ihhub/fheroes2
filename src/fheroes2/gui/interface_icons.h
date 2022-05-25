@@ -91,7 +91,7 @@ namespace Interface
             : IconsBar( count, sf )
         {}
 
-        void SetPos( int32_t, int32_t );
+        void SetPos( int32_t px, int32_t py );
         void SetShow( bool );
 
     protected:
@@ -104,7 +104,7 @@ namespace Interface
         void ActionListDoubleClick( HEROES & ) override;
         void ActionListSingleClick( HEROES & ) override;
         void ActionListPressRight( HEROES & ) override;
-        void RedrawItem( const HEROES &, int32_t ox, int32_t oy, bool current ) override;
+        void RedrawItem( const HEROES & item, int32_t ox, int32_t oy, bool current ) override;
         void RedrawBackground( const fheroes2::Point & ) override;
 
     private:
@@ -118,7 +118,7 @@ namespace Interface
             : IconsBar( count, sf )
         {}
 
-        void SetPos( int32_t, int32_t );
+        void SetPos( int32_t px, int32_t py );
         void SetShow( bool );
 
     protected:
@@ -131,7 +131,7 @@ namespace Interface
         void ActionListDoubleClick( CASTLE & ) override;
         void ActionListSingleClick( CASTLE & ) override;
         void ActionListPressRight( CASTLE & ) override;
-        void RedrawItem( const CASTLE &, int32_t ox, int32_t oy, bool current ) override;
+        void RedrawItem( const CASTLE & item, int32_t ox, int32_t oy, bool current ) override;
         void RedrawBackground( const fheroes2::Point & ) override;
 
     private:
@@ -143,7 +143,7 @@ namespace Interface
     public:
         explicit IconsPanel( Basic & basic );
 
-        void SetPos( int32_t, int32_t ) override;
+        void SetPos( int32_t ox, int32_t oy ) override;
         void SavePosition() override;
         void SetRedraw() const;
         void SetRedraw( const icons_t type ) const;
