@@ -110,6 +110,8 @@ namespace Game
         UPGRADE_TROOP,
         DISMISS_TROOP,
 
+        SWAP_ARMIES,
+
         TOWN_DWELLING_LEVEL_1,
         TOWN_DWELLING_LEVEL_2,
         TOWN_DWELLING_LEVEL_3,
