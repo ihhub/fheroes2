@@ -52,7 +52,7 @@ public:
     void Assign( const Troops & );
     void Insert( const Troops & );
     void PushBack( const Monster &, uint32_t );
-    void PopBack( void );
+    void PopBack();
 
     size_t Size() const
     {
@@ -67,12 +67,12 @@ public:
 
     double getReinforcementValue( const Troops & reinforcement ) const;
 
-    uint32_t GetCount( void ) const;
-    bool isValid( void ) const;
+    uint32_t GetCount() const;
+    bool isValid() const;
     bool HasMonster( const Monster & ) const;
 
-    bool AllTroopsAreUndead( void ) const;
-    bool AllTroopsAreTheSame( void ) const;
+    bool AllTroopsAreUndead() const;
+    bool AllTroopsAreTheSame() const;
 
     bool JoinTroop( const Troop & );
     bool JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst = false );
@@ -85,14 +85,14 @@ public:
     void MoveTroops( const Troops & from );
 
     void MergeTroops();
-    Troops GetOptimized( void ) const;
+    Troops GetOptimized() const;
 
     virtual double GetStrength() const;
 
-    void Clean( void );
+    void Clean();
     void UpgradeTroops( const Castle & );
 
-    Troop * GetFirstValid( void );
+    Troop * GetFirstValid();
     Troop * GetWeakestTroop() const;
     const Troop * GetSlowestTroop() const;
 
@@ -162,8 +162,8 @@ public:
     void Reset( const bool soft = false );
     void setFromTile( const Maps::Tiles & tile );
 
-    int GetColor( void ) const;
-    int GetControl( void ) const override;
+    int GetColor() const;
+    int GetControl() const override;
     uint32_t getTotalCount() const;
 
     double GetStrength() const override;
@@ -175,23 +175,23 @@ public:
         color = cl;
     }
 
-    int GetMorale( void ) const;
-    int GetLuck( void ) const;
+    int GetMorale() const;
+    int GetLuck() const;
     int GetMoraleModificator( std::string * strs ) const;
     int GetLuckModificator( std::string * strs ) const;
     uint32_t ActionToSirens() const;
 
-    const HeroBase * GetCommander( void ) const;
-    HeroBase * GetCommander( void );
+    const HeroBase * GetCommander() const;
+    HeroBase * GetCommander();
 
     void SetCommander( HeroBase * c )
     {
         commander = c;
     }
 
-    const Castle * inCastle( void ) const;
+    const Castle * inCastle() const;
 
-    std::string String( void ) const;
+    std::string String() const;
 
     void JoinStrongestFromArmy( Army & );
 
@@ -210,7 +210,7 @@ public:
         return GetCount() == size();
     }
 
-    bool SaveLastTroop( void ) const;
+    bool SaveLastTroop() const;
 
     Monster GetStrongestMonster() const;
 

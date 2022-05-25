@@ -75,7 +75,7 @@ void Rand::Queue::Push( int32_t value, uint32_t percent )
         emplace_back( value, percent );
 }
 
-size_t Rand::Queue::Size( void ) const
+size_t Rand::Queue::Size() const
 {
     return size();
 }

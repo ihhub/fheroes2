@@ -260,14 +260,14 @@ void Text::Set( int ft )
     gh = message->h();
 }
 
-void Text::Clear( void )
+void Text::Clear()
 {
     message->clear();
     gw = 0;
     gh = 0;
 }
 
-size_t Text::Size( void ) const
+size_t Text::Size() const
 {
     return message->size();
 }
@@ -443,13 +443,13 @@ TextSprite::TextSprite( const std::string & msg, int ft, int32_t ax, int32_t ay 
     , hide( true )
 {}
 
-void TextSprite::Show( void )
+void TextSprite::Show()
 {
     Blit( _restorer.x(), _restorer.y() );
     hide = false;
 }
 
-void TextSprite::Hide( void )
+void TextSprite::Hide()
 {
     if ( !hide )
         _restorer.restore();
@@ -482,7 +482,7 @@ void TextSprite::SetPos( int32_t ax, int32_t ay )
     _restorer.update( ax, ay, gw, gh + 5 );
 }
 
-fheroes2::Rect TextSprite::GetRect( void ) const
+fheroes2::Rect TextSprite::GetRect() const
 {
     return { _restorer.x(), _restorer.y(), _restorer.width(), _restorer.height() };
 }

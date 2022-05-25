@@ -284,7 +284,7 @@ void Castle::LoadFromMP2( const std::vector<uint8_t> & data )
     PostLoad();
 }
 
-void Castle::PostLoad( void )
+void Castle::PostLoad()
 {
     // dwelling pack
     if ( building & DWELLING_MONSTER1 )
@@ -369,7 +369,7 @@ void Castle::PostLoad( void )
                ( building & BUILD_CASTLE ? "castle" : "town" ) << ": " << name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( race ) )
 }
 
-uint32_t Castle::CountBuildings( void ) const
+uint32_t Castle::CountBuildings() const
 {
     const uint32_t tavern = ( race == Race::NECR ? ( Settings::Get().isCurrentMapPriceOfLoyalty() ? BUILD_SHRINE : BUILD_NOTHING ) : BUILD_TAVERN );
 
@@ -393,7 +393,7 @@ bool Castle::isPosition( const fheroes2::Point & pt ) const
     return ( ( pt.x >= mp.x - 1 && pt.x <= mp.x + 1 && ( pt.y == mp.y - 1 || pt.y == mp.y ) ) || ( ( pt.x == mp.x - 2 || pt.x == mp.x + 2 ) && pt.y == mp.y ) );
 }
 
-void Castle::EducateHeroes( void )
+void Castle::EducateHeroes()
 {
     // for learns new spells need 1 day
     if ( GetLevelMageGuild() ) {
@@ -641,7 +641,7 @@ void Castle::ChangeColor( int cl )
     army.SetColor( cl );
 }
 
-int Castle::GetLevelMageGuild( void ) const
+int Castle::GetLevelMageGuild() const
 {
     if ( building & BUILD_MAGEGUILD5 )
         return 5;
@@ -657,12 +657,12 @@ int Castle::GetLevelMageGuild( void ) const
     return 0;
 }
 
-bool Castle::HaveLibraryCapability( void ) const
+bool Castle::HaveLibraryCapability() const
 {
     return race == Race::WZRD;
 }
 
-bool Castle::isLibraryBuild( void ) const
+bool Castle::isLibraryBuild() const
 {
     return race == Race::WZRD && isBuild( BUILD_SPEC );
 }
@@ -1859,12 +1859,12 @@ int Castle::GetICNBuilding( uint32_t build, int race )
     return ICN::UNKNOWN;
 }
 
-CastleHeroes Castle::GetHeroes( void ) const
+CastleHeroes Castle::GetHeroes() const
 {
     return world.GetHeroes( *this );
 }
 
-bool Castle::HaveNearlySea( void ) const
+bool Castle::HaveNearlySea() const
 {
     // check nearest ocean
     if ( Maps::isValidAbsPoint( center.x, center.y + 2 ) ) {
@@ -1883,7 +1883,7 @@ bool TilePresentBoat( const Maps::Tiles & tile )
     return tile.isWater() && ( tile.GetObject() == MP2::OBJ_BOAT || tile.GetObject() == MP2::OBJ_HEROES );
 }
 
-bool Castle::PresentBoat( void ) const
+bool Castle::PresentBoat() const
 {
     // 2 cell down
     if ( Maps::isValidAbsPoint( center.x, center.y + 2 ) ) {
@@ -2043,7 +2043,7 @@ bool Castle::PredicateIsBuildBuilding( const Castle * castle, const uint32_t bui
     return castle && castle->isBuild( building );
 }
 
-std::string Castle::String( void ) const
+std::string Castle::String() const
 {
     std::ostringstream os;
     const CastleHeroes heroes = GetHeroes();
@@ -2158,26 +2158,26 @@ int Castle::GetLuckModificator( std::string * strs ) const
     return result;
 }
 
-const Army & Castle::GetArmy( void ) const
+const Army & Castle::GetArmy() const
 {
     const CastleHeroes heroes = world.GetHeroes( *this );
     return heroes.Guard() ? heroes.Guard()->GetArmy() : army;
 }
 
-Army & Castle::GetArmy( void )
+Army & Castle::GetArmy()
 {
     CastleHeroes heroes = world.GetHeroes( *this );
     return heroes.Guard() ? heroes.Guard()->GetArmy() : army;
 }
 
-const Army & Castle::GetActualArmy( void ) const
+const Army & Castle::GetActualArmy() const
 {
     CastleHeroes heroes = world.GetHeroes( *this );
     const Heroes * hero = heroes.GuardFirst();
     return hero ? hero->GetArmy() : army;
 }
 
-Army & Castle::GetActualArmy( void )
+Army & Castle::GetActualArmy()
 {
     CastleHeroes heroes = world.GetHeroes( *this );
     Heroes * hero = heroes.GuardFirst();
@@ -2223,13 +2223,13 @@ double Castle::GetGarrisonStrength( const Heroes * attackingHero ) const
     return totalStrength;
 }
 
-bool Castle::AllowBuyBoat( void ) const
+bool Castle::AllowBuyBoat() const
 {
     // check payment and present other boat
     return ( HaveNearlySea() && isBuild( BUILD_SHIPYARD ) && GetKingdom().AllowPayment( PaymentConditions::BuyBoat() ) && !PresentBoat() );
 }
 
-bool Castle::BuyBoat( void ) const
+bool Castle::BuyBoat() const
 {
     if ( !AllowBuyBoat() )
         return false;
@@ -2284,23 +2284,23 @@ void Castle::setName( const std::set<std::string> & usedNames )
     assert( 0 );
 }
 
-int Castle::GetControl( void ) const
+int Castle::GetControl() const
 {
     /* gray towns: ai control */
     return GetColor() & Color::ALL ? GetKingdom().GetControl() : CONTROL_AI;
 }
 
-bool Castle::isNecromancyShrineBuild( void ) const
+bool Castle::isNecromancyShrineBuild() const
 {
     return race == Race::NECR && ( BUILD_SHRINE & building );
 }
 
-uint32_t Castle::GetGrownWell( void )
+uint32_t Castle::GetGrownWell()
 {
     return GameStatic::GetCastleGrownWell();
 }
 
-uint32_t Castle::GetGrownWel2( void )
+uint32_t Castle::GetGrownWel2()
 {
     return GameStatic::GetCastleGrownWel2();
 }
@@ -2310,17 +2310,17 @@ uint32_t Castle::GetGrownWeekOf()
     return GameStatic::GetCastleGrownWeekOf();
 }
 
-uint32_t Castle::GetGrownMonthOf( void )
+uint32_t Castle::GetGrownMonthOf()
 {
     return GameStatic::GetCastleGrownMonthOf();
 }
 
-void Castle::Scoute( void ) const
+void Castle::Scoute() const
 {
     Maps::ClearFog( GetIndex(), GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::CASTLE ), GetColor() );
 }
 
-void Castle::JoinRNDArmy( void )
+void Castle::JoinRNDArmy()
 {
     const uint32_t timeModifier = world.CountDay() / 10;
     const uint32_t reinforcementQuality = Rand::Get( 1, 15 ) + timeModifier;
@@ -2351,7 +2351,7 @@ void Castle::JoinRNDArmy( void )
     army.JoinTroop( Monster( race, dwellingType ), count );
 }
 
-void Castle::ActionPreBattle( void )
+void Castle::ActionPreBattle()
 {
     CastleHeroes heroes = world.GetHeroes( *this );
     Heroes * hero = heroes.GuardFirst();
@@ -2373,7 +2373,7 @@ void Castle::ActionAfterBattle( bool attacker_wins )
         AI::Get().CastleAfterBattle( *this, attacker_wins );
 }
 
-Castle * VecCastles::GetFirstCastle( void ) const
+Castle * VecCastles::GetFirstCastle() const
 {
     const_iterator it = std::find_if( begin(), end(), []( const Castle * castle ) { return castle->isCastle(); } );
     return end() != it ? *it : nullptr;
@@ -2397,12 +2397,12 @@ AllCastles::~AllCastles()
     Clear();
 }
 
-void AllCastles::Init( void )
+void AllCastles::Init()
 {
     Clear();
 }
 
-void AllCastles::Clear( void )
+void AllCastles::Clear()
 {
     for ( auto it = begin(); it != end(); ++it )
         delete *it;

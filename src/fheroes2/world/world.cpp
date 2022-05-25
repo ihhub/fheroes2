@@ -141,7 +141,7 @@ ListActions::~ListActions()
     clear();
 }
 
-void ListActions::clear( void )
+void ListActions::clear()
 {
     for ( iterator it = begin(); it != end(); ++it )
         delete *it;
@@ -153,7 +153,7 @@ MapObjects::~MapObjects()
     clear();
 }
 
-void MapObjects::clear( void )
+void MapObjects::clear()
 {
     for ( iterator it = begin(); it != end(); ++it )
         delete ( *it ).second;
@@ -325,14 +325,14 @@ void CapturedObjects::tributeCapturedObjects( const int playerColorId, const int
 
 World & world = World::Get();
 
-World & World::Get( void )
+World & World::Get()
 {
     static World insideWorld;
 
     return insideWorld;
 }
 
-void World::Defaults( void )
+void World::Defaults()
 {
     // playing kingdom
     vec_kingdoms.Init();
@@ -347,7 +347,7 @@ void World::Defaults( void )
     vec_castles.Init();
 }
 
-void World::Reset( void )
+void World::Reset()
 {
     width = 0;
     height = 0;
@@ -433,7 +433,7 @@ void World::NewMaps( int32_t sw, int32_t sh )
     }
 }
 
-void World::InitKingdoms( void )
+void World::InitKingdoms()
 {
     vec_kingdoms.Init();
 }
@@ -548,27 +548,27 @@ CastleHeroes World::GetHeroes( const Castle & castle ) const
     return CastleHeroes( vec_heroes.GetGuest( castle ), vec_heroes.GetGuard( castle ) );
 }
 
-int World::GetDay( void ) const
+int World::GetDay() const
 {
     return LastDay() ? DAYOFWEEK : day % DAYOFWEEK;
 }
 
-int World::GetWeek( void ) const
+int World::GetWeek() const
 {
     return LastWeek() ? WEEKOFMONTH : week % WEEKOFMONTH;
 }
 
-bool World::BeginWeek( void ) const
+bool World::BeginWeek() const
 {
     return 1 == ( day % DAYOFWEEK );
 }
 
-bool World::BeginMonth( void ) const
+bool World::BeginMonth() const
 {
     return 1 == ( week % WEEKOFMONTH ) && BeginWeek();
 }
 
-bool World::LastDay( void ) const
+bool World::LastDay() const
 {
     return ( 0 == ( day % DAYOFWEEK ) );
 }
@@ -598,7 +598,7 @@ const Week & World::GetWeekType() const
     return cachedWeek;
 }
 
-void World::NewDay( void )
+void World::NewDay()
 {
     ++day;
 
@@ -639,7 +639,7 @@ void World::NewDay( void )
     vec_eventsday.remove_if( [this]( const EventDate & v ) { return v.isDeprecated( day - 1 ); } );
 }
 
-void World::NewWeek( void )
+void World::NewWeek()
 {
     // update objects
     if ( week > 1 ) {
@@ -671,7 +671,7 @@ void World::NewWeek( void )
     }
 }
 
-void World::NewMonth( void )
+void World::NewMonth()
 {
     if ( month > 1 && GetWeekType().GetType() == WeekName::MONSTERS ) {
         MonthOfMonstersAction( Monster( GetWeekType().GetMonster() ) );
@@ -1013,7 +1013,7 @@ void World::ClearFog( int colors )
     map_captureobj.ClearFog( colors );
 }
 
-const UltimateArtifact & World::GetUltimateArtifact( void ) const
+const UltimateArtifact & World::GetUltimateArtifact() const
 {
     return ultimate_artifact;
 }
@@ -1076,7 +1076,7 @@ EventsDate World::GetEventsDate( int color ) const
     return res;
 }
 
-std::string World::DateString( void ) const
+std::string World::DateString() const
 {
     std::string output( "month: " );
     output += std::to_string( GetMonth() );
@@ -1088,7 +1088,7 @@ std::string World::DateString( void ) const
     return output;
 }
 
-uint32_t World::CountObeliskOnMaps( void )
+uint32_t World::CountObeliskOnMaps()
 {
     const size_t res = std::count_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return MP2::OBJ_OBELISK == tile.GetObject( false ); } );
     return res > 0 ? static_cast<uint32_t>( res ) : 6;
@@ -1314,7 +1314,7 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
     return GameOver::COND_NONE;
 }
 
-uint32_t World::GetUniq( void )
+uint32_t World::GetUniq()
 {
     return ++GameStatic::uniq;
 }

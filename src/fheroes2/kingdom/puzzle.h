@@ -39,7 +39,7 @@ public:
     Puzzle & operator=( const char * );
 
     void Update( uint32_t open, uint32_t total );
-    void ShowMapsDialog( void ) const;
+    void ShowMapsDialog() const;
 
     std::vector<uint8_t> zone1_order;
     std::vector<uint8_t> zone2_order;

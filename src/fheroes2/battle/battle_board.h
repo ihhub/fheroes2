@@ -58,7 +58,7 @@ namespace Battle
 
         Board & operator=( const Board & ) = delete;
 
-        void Reset( void );
+        void Reset();
 
         void SetArea( const fheroes2::Rect & );
 
@@ -73,7 +73,7 @@ namespace Battle
         void SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen );
         void SetCovrObjects( int icn );
 
-        static std::string GetMoatInfo( void );
+        static std::string GetMoatInfo();
 
         static Cell * GetCell( int32_t position, int dir = CENTER );
         static bool isNearIndexes( int32_t, int32_t );

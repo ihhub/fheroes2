@@ -325,7 +325,7 @@ void BuildingInfo::SetPos( int32_t x, int32_t y )
     area.y = y;
 }
 
-bool BuildingInfo::IsDwelling( void ) const
+bool BuildingInfo::IsDwelling() const
 {
     switch ( building ) {
     case DWELLING_MONSTER1:
@@ -347,7 +347,7 @@ bool BuildingInfo::IsDwelling( void ) const
     return false;
 }
 
-void BuildingInfo::RedrawCaptain( void ) const
+void BuildingInfo::RedrawCaptain() const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     if ( bcond == ALREADY_BUILT ) {
@@ -379,7 +379,7 @@ void BuildingInfo::RedrawCaptain( void ) const
     }
 }
 
-void BuildingInfo::Redraw( void ) const
+void BuildingInfo::Redraw() const
 {
     if ( BUILD_CAPTAIN == building ) {
         RedrawCaptain();
@@ -440,7 +440,7 @@ void BuildingInfo::Redraw( void ) const
     }
 }
 
-const char * BuildingInfo::GetName( void ) const
+const char * BuildingInfo::GetName() const
 {
     return Castle::GetStringBuilding( building, castle.GetRace() );
 }
@@ -601,7 +601,7 @@ const char * GetBuildConditionDescription( int bcond )
     return nullptr;
 }
 
-std::string BuildingInfo::GetConditionDescription( void ) const
+std::string BuildingInfo::GetConditionDescription() const
 {
     std::string res;
 

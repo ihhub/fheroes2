@@ -252,7 +252,7 @@ struct XMIData
                        << "form xdir" )
     }
 
-    bool isvalid( void ) const
+    bool isvalid() const
     {
         return !tracks.empty();
     }
@@ -294,7 +294,7 @@ struct MidiChunk
         }
     }
 
-    size_t size( void ) const
+    size_t size() const
     {
         return _binaryTime.size() + 1 + _data.size();
     }
@@ -319,12 +319,12 @@ struct MidiEvents : public std::vector<MidiChunk>
 {
     uint32_t trackTempo = 0;
 
-    size_t count( void ) const
+    size_t count() const
     {
         return std::vector<MidiChunk>::size();
     }
 
-    size_t size( void ) const
+    size_t size() const
     {
         size_t res = 0;
         for ( const_iterator it = begin(); it != end(); ++it )
@@ -441,7 +441,7 @@ struct MidTrack
         mtrk.length = static_cast<uint32_t>( events.size() );
     }
 
-    size_t size( void ) const
+    size_t size() const
     {
         return sizeof( mtrk ) + events.size();
     }
@@ -456,12 +456,12 @@ StreamBuf & operator<<( StreamBuf & sb, const MidTrack & st )
 
 struct MidTracks : std::list<MidTrack>
 {
-    size_t count( void ) const
+    size_t count() const
     {
         return std::list<MidTrack>::size();
     }
 
-    size_t size( void ) const
+    size_t size() const
     {
         size_t res = 0;
         for ( const_iterator it = begin(); it != end(); ++it )

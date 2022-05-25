@@ -262,7 +262,7 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const fheroes2::Rect & pos, bool se
     }
 }
 
-void ArmyBar::ResetSelected( void )
+void ArmyBar::ResetSelected()
 {
     spcursor.hide();
     Interface::ItemsActionBar<ArmyTroop>::ResetSelected();

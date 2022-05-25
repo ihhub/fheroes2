@@ -270,12 +270,12 @@ const Skill::values_t * GameStatic::GetSkillValues( int type )
     return nullptr;
 }
 
-const Skill::secondary_t * GameStatic::GetSkillForWitchsHut( void )
+const Skill::secondary_t * GameStatic::GetSkillForWitchsHut()
 {
     return &Skill::_from_witchs_hut;
 }
 
-int GameStatic::GetBattleMoatReduceDefense( void )
+int GameStatic::GetBattleMoatReduceDefense()
 {
     return 3;
 }

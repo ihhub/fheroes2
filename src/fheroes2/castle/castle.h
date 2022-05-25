@@ -140,16 +140,16 @@ public:
         return ( building & BUILD_CASTLE ) != 0;
     }
 
-    bool HaveNearlySea( void ) const;
-    bool PresentBoat( void ) const;
+    bool HaveNearlySea() const;
+    bool PresentBoat() const;
     bool AllowBuyHero( std::string * = nullptr ) const;
     bool isPosition( const fheroes2::Point & pt ) const override;
-    bool isNecromancyShrineBuild( void ) const;
+    bool isNecromancyShrineBuild() const;
 
-    uint32_t CountBuildings( void ) const;
+    uint32_t CountBuildings() const;
 
     Heroes * RecruitHero( Heroes * );
-    CastleHeroes GetHeroes( void ) const;
+    CastleHeroes GetHeroes() const;
 
     int GetRace() const
     {
@@ -164,25 +164,25 @@ public:
     // This method must be called only at the time of map loading and only for castles with empty names.
     void setName( const std::set<std::string> & usedNames );
 
-    int GetControl( void ) const override;
+    int GetControl() const override;
 
-    int GetLevelMageGuild( void ) const;
+    int GetLevelMageGuild() const;
 
     const MageGuild & GetMageGuild() const
     {
         return mageguild;
     }
 
-    bool HaveLibraryCapability( void ) const;
-    bool isLibraryBuild( void ) const;
+    bool HaveLibraryCapability() const;
+    bool isLibraryBuild() const;
     void MageGuildEducateHero( HeroBase & ) const;
 
     bool isFortificationBuild() const;
 
-    const Army & GetArmy( void ) const;
-    Army & GetArmy( void );
-    const Army & GetActualArmy( void ) const;
-    Army & GetActualArmy( void );
+    const Army & GetArmy() const;
+    Army & GetArmy();
+    const Army & GetActualArmy() const;
+    Army & GetActualArmy();
     double GetGarrisonStrength( const Heroes * attackingHero ) const;
     uint32_t getMonstersInDwelling( uint32_t ) const;
 
@@ -208,7 +208,7 @@ public:
     void ActionNewWeek();
     void ActionNewMonth() const;
 
-    void ActionPreBattle( void );
+    void ActionPreBattle();
     void ActionAfterBattle( bool attacker_wins );
 
     void DrawImageCastle( const fheroes2::Point & pt ) const;
@@ -230,14 +230,14 @@ public:
     }
 
     bool BuyBuilding( uint32_t );
-    bool AllowBuyBoat( void ) const;
-    bool BuyBoat( void ) const;
+    bool AllowBuyBoat() const;
+    bool BuyBoat() const;
     uint32_t GetBuildingRequirement( uint32_t ) const;
 
     int CheckBuyBuilding( const uint32_t build ) const;
     static int GetAllBuildingStatus( const Castle & );
 
-    void Scoute( void ) const;
+    void Scoute() const;
 
     std::string GetStringBuilding( uint32_t ) const;
     std::string GetDescriptionBuilding( uint32_t ) const;
@@ -253,12 +253,12 @@ public:
     static bool PredicateIsTown( const Castle * );
     static bool PredicateIsBuildBuilding( const Castle * castle, const uint32_t building );
 
-    static uint32_t GetGrownWell( void );
-    static uint32_t GetGrownWel2( void );
+    static uint32_t GetGrownWell();
+    static uint32_t GetGrownWel2();
     static uint32_t GetGrownWeekOf();
-    static uint32_t GetGrownMonthOf( void );
+    static uint32_t GetGrownMonthOf();
 
-    std::string String( void ) const;
+    std::string String() const;
 
     int DialogBuyHero( const Heroes * ) const;
     int DialogBuyCastle( bool fixed = true ) const;
@@ -276,17 +276,17 @@ private:
     };
 
     uint32_t * GetDwelling( uint32_t dw );
-    void EducateHeroes( void );
+    void EducateHeroes();
 
     ConstructionDialogResult openConstructionDialog( uint32_t & dwellingTobuild );
 
-    void OpenTavern( void ) const;
-    void OpenWell( void );
+    void OpenTavern() const;
+    void OpenWell();
     void OpenMageGuild( const CastleHeroes & heroes ) const;
     void WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<fheroes2::RandomMonsterAnimation> & monsterAnimInfo ) const;
     Troops getAvailableArmy( Funds potentialBudget ) const;
-    void JoinRNDArmy( void );
-    void PostLoad( void );
+    void JoinRNDArmy();
+    void PostLoad();
 
     friend StreamBase & operator<<( StreamBase &, const Castle & );
     friend StreamBase & operator>>( StreamBase &, Castle & );
@@ -369,7 +369,7 @@ namespace CastleDialog
 
 struct VecCastles : public std::vector<Castle *>
 {
-    Castle * GetFirstCastle( void ) const;
+    Castle * GetFirstCastle() const;
 
     void ChangeColors( int, int );
 };
@@ -384,8 +384,8 @@ public:
 
     AllCastles & operator=( const AllCastles & ) = delete;
 
-    void Init( void );
-    void Clear( void );
+    void Init();
+    void Clear();
 
     void AddCastle( Castle * castle );
 

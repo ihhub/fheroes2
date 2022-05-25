@@ -78,12 +78,12 @@ uint32_t Interface::StatusWindow::ResetResourceStatus( uint32_t /*tick*/, void *
     return 0;
 }
 
-void Interface::StatusWindow::SavePosition( void )
+void Interface::StatusWindow::SavePosition()
 {
     Settings::Get().SetPosStatus( GetRect().getPosition() );
 }
 
-void Interface::StatusWindow::SetRedraw( void ) const
+void Interface::StatusWindow::SetRedraw() const
 {
     interface.SetRedraw( REDRAW_STATUS );
 }
@@ -106,7 +106,7 @@ void Interface::StatusWindow::SetState( const StatusType status )
         _state = status;
 }
 
-void Interface::StatusWindow::Redraw( void ) const
+void Interface::StatusWindow::Redraw() const
 {
     const Settings & conf = Settings::Get();
     if ( conf.ExtGameHideInterface() && !conf.ShowStatus() ) {
@@ -189,7 +189,7 @@ void Interface::StatusWindow::Redraw( void ) const
     }
 }
 
-void Interface::StatusWindow::NextState( void )
+void Interface::StatusWindow::NextState()
 {
     const int32_t areaHeight = GetArea().height;
     const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
@@ -299,7 +299,7 @@ void Interface::StatusWindow::SetResource( int res, uint32_t count )
     timerShowLastResource.run( resourceWindowExpireTime, ResetResourceStatus, this );
 }
 
-void Interface::StatusWindow::ResetTimer( void )
+void Interface::StatusWindow::ResetTimer()
 {
     StatusWindow & window = Interface::Basic::Get().GetStatusWindow();
 
@@ -340,7 +340,7 @@ void Interface::StatusWindow::DrawArmyInfo( int oh ) const
     }
 }
 
-void Interface::StatusWindow::DrawAITurns( void ) const
+void Interface::StatusWindow::DrawAITurns() const
 {
     // restore background
     DrawBackground();
@@ -396,7 +396,7 @@ void Interface::StatusWindow::DrawAITurns( void ) const
     fheroes2::Blit( sand, display, dst_x, dst_y );
 }
 
-void Interface::StatusWindow::DrawBackground( void ) const
+void Interface::StatusWindow::DrawBackground() const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Sprite & icnston = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
@@ -428,7 +428,7 @@ void Interface::StatusWindow::DrawBackground( void ) const
     }
 }
 
-void Interface::StatusWindow::QueueEventProcessing( void )
+void Interface::StatusWindow::QueueEventProcessing()
 {
     if ( Settings::Get().ShowStatus() && BorderWindow::QueueEventProcessing() ) {
         return;

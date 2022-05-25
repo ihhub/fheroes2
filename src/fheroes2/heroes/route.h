@@ -87,8 +87,8 @@ namespace Route
         // this may not be the case if AIWorldPathfinder was used - due to the peculiarities of laying the path through
         // heroes, neutral armies, teleports or water.
         int32_t GetDestinationIndex( const bool returnLastStep = false ) const;
-        int GetFrontDirection( void ) const;
-        uint32_t GetFrontPenalty( void ) const;
+        int GetFrontDirection() const;
+        uint32_t GetFrontPenalty() const;
         void setPath( const std::list<Step> & path, int32_t destIndex );
 
         void Show()
@@ -102,20 +102,20 @@ namespace Route
         }
 
         void Reset();
-        void PopFront( void );
+        void PopFront();
 
-        bool isValid( void ) const;
+        bool isValid() const;
 
-        bool isShow( void ) const
+        bool isShow() const
         {
             return !hide;
         }
 
         bool hasAllowedSteps() const;
 
-        std::string String( void ) const;
+        std::string String() const;
 
-        int GetAllowedSteps( void ) const;
+        int GetAllowedSteps() const;
         static int GetIndexSprite( int from, int to, int mod );
 
     private:

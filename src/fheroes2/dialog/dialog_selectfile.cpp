@@ -197,7 +197,7 @@ void FileInfoListBox::ActionListSingleClick( Maps::FileInfo & /*unused*/ )
     // Do nothing.
 }
 
-MapsFileInfoList GetSortedMapsFileInfoList( void )
+MapsFileInfoList GetSortedMapsFileInfoList()
 {
     ListFiles list1;
     list1.ReadDir( Game::GetSaveDir(), Game::GetSaveFileExtension(), false );
@@ -224,7 +224,7 @@ std::string Dialog::SelectFileSave()
     return SelectFileListSimple( _( "File to Save:" ), os.str(), true );
 }
 
-std::string Dialog::SelectFileLoad( void )
+std::string Dialog::SelectFileLoad()
 {
     const std::string & lastfile = Game::GetLastSavename();
     return SelectFileListSimple( _( "File to Load:" ), ( !lastfile.empty() ? lastfile : "" ), false );

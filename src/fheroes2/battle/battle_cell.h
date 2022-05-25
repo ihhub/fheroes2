@@ -61,7 +61,7 @@ namespace Battle
         Cell & operator=( const Cell & ) = delete;
         Cell & operator=( Cell && ) = delete;
 
-        void ResetQuality( void );
+        void ResetQuality();
         void resetReachability();
 
         void SetObject( int );
@@ -84,14 +84,14 @@ namespace Battle
 
         bool isPositionIncludePoint( const fheroes2::Point & ) const;
 
-        int32_t GetIndex( void ) const;
-        const fheroes2::Rect & GetPos( void ) const;
-        int GetObject( void ) const;
-        int32_t GetQuality( void ) const;
+        int32_t GetIndex() const;
+        const fheroes2::Rect & GetPos() const;
+        int GetObject() const;
+        int32_t GetQuality() const;
         direction_t GetTriangleDirection( const fheroes2::Point & ) const;
 
-        const Unit * GetUnit( void ) const;
-        Unit * GetUnit( void );
+        const Unit * GetUnit() const;
+        Unit * GetUnit();
         void SetUnit( Unit * );
 
     private:
@@ -113,8 +113,8 @@ namespace Battle
         {}
 
         void Set( const int32_t head, const bool wide, const bool reflect );
-        void Swap( void );
-        bool isReflect( void ) const;
+        void Swap();
+        bool isReflect() const;
         bool contains( int cellIndex ) const;
 
         // Returns the position that the given unit would occupy after moving to the
@@ -127,11 +127,11 @@ namespace Battle
         // an empty Position object if the given index is unreachable
         static Position GetReachable( const Unit & currentUnit, const int32_t dst, const bool tryHeadFirst = true );
 
-        fheroes2::Rect GetRect( void ) const;
-        Cell * GetHead( void );
-        const Cell * GetHead( void ) const;
-        Cell * GetTail( void );
-        const Cell * GetTail( void ) const;
+        fheroes2::Rect GetRect() const;
+        Cell * GetHead();
+        const Cell * GetHead() const;
+        Cell * GetTail();
+        const Cell * GetTail() const;
     };
 }
 

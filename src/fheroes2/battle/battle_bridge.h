@@ -40,17 +40,17 @@ namespace Battle
 
         void Action( const Unit &, int32_t );
 
-        void SetDestroy( void );
+        void SetDestroy();
         void SetDown( bool );
         void SetPassable( const Unit & ) const;
 
-        bool AllowUp( void ) const;
+        bool AllowUp() const;
         bool NeedDown( const Unit &, int32_t ) const;
         bool isPassable( const Unit & ) const;
-        bool isValid( void ) const;
-        bool isDestroy( void ) const;
-        bool isDown( void ) const;
-        bool isBridgeOccupied( void ) const;
+        bool isValid() const;
+        bool isDestroy() const;
+        bool isDown() const;
+        bool isBridgeOccupied() const;
 
     private:
         bool destroy;

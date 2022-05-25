@@ -83,20 +83,20 @@ namespace Battle
         Arena & operator=( const Arena & ) = delete;
         Arena & operator=( Arena && ) = delete;
 
-        void Turns( void );
-        bool BattleValid( void ) const;
+        void Turns();
+        bool BattleValid() const;
 
         bool AutoBattleInProgress() const;
         bool CanToggleAutoBattle() const;
 
-        uint32_t GetCurrentTurn( void ) const;
-        Result & GetResult( void );
+        uint32_t GetCurrentTurn() const;
+        Result & GetResult();
 
         const HeroBase * getCommander( const int color ) const;
         const HeroBase * getEnemyCommander( const int color ) const;
-        const HeroBase * GetCommander1( void ) const;
-        const HeroBase * GetCommander2( void ) const;
-        const HeroBase * GetCurrentCommander( void ) const;
+        const HeroBase * GetCommander1() const;
+        const HeroBase * GetCommander2() const;
+        const HeroBase * GetCurrentCommander() const;
 
         Force & GetForce1() const;
         Force & GetForce2() const;
@@ -104,9 +104,9 @@ namespace Battle
         Force & getEnemyForce( const int color ) const;
         Force & GetCurrentForce() const;
 
-        int GetArmyColor1( void ) const;
-        int GetArmyColor2( void ) const;
-        int GetCurrentColor( void ) const;
+        int GetArmyColor1() const;
+        int GetArmyColor2() const;
+        int GetCurrentColor() const;
         int GetOppositeColor( int ) const;
 
         Unit * GetTroopBoard( int32_t );
@@ -115,7 +115,7 @@ namespace Battle
         Unit * GetTroopUID( uint32_t );
         const Unit * GetTroopUID( uint32_t ) const;
 
-        const SpellStorage & GetUsageSpells( void ) const;
+        const SpellStorage & GetUsageSpells() const;
 
         bool DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, bool allowToCancel ) const;
         int DialogBattleHero( const HeroBase & hero, const bool buttons, Status & status ) const;
@@ -149,7 +149,7 @@ namespace Battle
         bool GraveyardAllowResurrect( int32_t, const Spell & ) const;
         const Unit * GraveyardLastTroop( int32_t ) const;
         std::vector<const Unit *> GetGraveyardTroops( const int32_t hexIndex ) const;
-        Indexes GraveyardClosedCells( void ) const;
+        Indexes GraveyardClosedCells() const;
 
         bool CanSurrenderOpponent( int color ) const;
         bool CanRetreatOpponent( int color ) const;
@@ -161,7 +161,7 @@ namespace Battle
         void ApplyActionSpellDefaults( Command &, const Spell & );
 
         bool IsShootingPenalty( const Unit &, const Unit & ) const;
-        int GetICNCovr( void ) const;
+        int GetICNCovr() const;
 
         uint32_t GetCastleTargetValue( int ) const;
 
@@ -169,12 +169,12 @@ namespace Battle
 
         const Rand::DeterministicRandomGenerator & GetRandomGenerator() const;
 
-        static Board * GetBoard( void );
+        static Board * GetBoard();
         static Tower * GetTower( int );
-        static Bridge * GetBridge( void );
-        static const Castle * GetCastle( void );
-        static Interface * GetInterface( void );
-        static Graveyard * GetGraveyard( void );
+        static Bridge * GetBridge();
+        static const Castle * GetCastle();
+        static Interface * GetInterface();
+        static Graveyard * GetGraveyard();
 
         static bool isAnyTowerPresent();
 
@@ -200,11 +200,11 @@ namespace Battle
         void TowerAction( const Tower & );
 
         void SetCastleTargetValue( int, uint32_t );
-        void CatapultAction( void );
+        void CatapultAction();
 
         static TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir );
 
-        std::vector<int> GetCastleTargets( void ) const;
+        std::vector<int> GetCastleTargets() const;
         TargetsInfo TargetsForChainLightning( const HeroBase * hero, int32_t attackedTroopIndex );
         std::vector<Unit *> FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit );
 
@@ -271,7 +271,7 @@ namespace Battle
         };
     };
 
-    Arena * GetArena( void );
+    Arena * GetArena();
 }
 
 #endif

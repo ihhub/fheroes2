@@ -175,7 +175,7 @@ bool MapSphinx::AnswerCorrect( const std::string & answer )
     return std::any_of( answers.begin(), answers.end(), checkAnswer );
 }
 
-void MapSphinx::SetQuiet( void )
+void MapSphinx::SetQuiet()
 {
     valid = false;
     artifact = Artifact::UNKNOWN;

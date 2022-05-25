@@ -605,7 +605,7 @@ fheroes2::GameMode Game::NewMulti()
     return fheroes2::GameMode::QUIT_GAME;
 }
 
-uint32_t Game::SelectCountPlayers( void )
+uint32_t Game::SelectCountPlayers()
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );

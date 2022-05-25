@@ -51,7 +51,7 @@ struct ListActions : public std::list<ActionSimple *>
     ListActions & operator=( const ListActions & other ) = delete;
     ListActions & operator=( ListActions && other ) = delete;
 
-    void clear( void );
+    void clear();
 };
 
 struct MapObjects : public std::map<uint32_t, MapObjectSimple *>
@@ -65,7 +65,7 @@ struct MapObjects : public std::map<uint32_t, MapObjectSimple *>
     MapObjects & operator=( const MapObjects & other ) = delete;
     MapObjects & operator=( MapObjects && other ) = delete;
 
-    void clear( void );
+    void clear();
     void add( MapObjectSimple * );
     std::list<MapObjectSimple *> get( const fheroes2::Point & );
     MapObjectSimple * get( uint32_t uid );
@@ -84,15 +84,15 @@ struct CapturedObject
         : split( 1 )
     {}
 
-    int GetSplit( void ) const
+    int GetSplit() const
     {
         return split;
     }
-    int GetColor( void ) const
+    int GetColor() const
     {
         return objcol.second;
     }
-    Troop & GetTroop( void )
+    Troop & GetTroop()
     {
         return guardians;
     }
@@ -175,7 +175,7 @@ public:
 
     void NewMaps( int32_t, int32_t );
 
-    static World & Get( void );
+    static World & Get();
 
     int32_t w() const
     {
@@ -192,7 +192,7 @@ public:
     const Maps::Tiles & GetTiles( const int32_t tileId ) const;
     Maps::Tiles & GetTiles( const int32_t tileId );
 
-    void InitKingdoms( void );
+    void InitKingdoms();
 
     Kingdom & GetKingdom( int color )
     {
@@ -226,13 +226,13 @@ public:
 
     CastleHeroes GetHeroes( const Castle & ) const;
 
-    const UltimateArtifact & GetUltimateArtifact( void ) const;
+    const UltimateArtifact & GetUltimateArtifact() const;
     bool DiggingForUltimateArtifact( const fheroes2::Point & );
 
     // overall number of cells of the world map: width * height
     size_t getSize() const;
-    int GetDay( void ) const;
-    int GetWeek( void ) const;
+    int GetDay() const;
+    int GetWeek() const;
 
     uint32_t GetMonth() const
     {
@@ -249,17 +249,17 @@ public:
         return week;
     }
 
-    bool BeginWeek( void ) const;
-    bool BeginMonth( void ) const;
-    bool LastDay( void ) const;
+    bool BeginWeek() const;
+    bool BeginMonth() const;
+    bool LastDay() const;
     bool FirstWeek() const;
     bool LastWeek() const;
     const Week & GetWeekType() const;
-    std::string DateString( void ) const;
+    std::string DateString() const;
 
-    void NewDay( void );
-    void NewWeek( void );
-    void NewMonth( void );
+    void NewDay();
+    void NewWeek();
+    void NewMonth();
 
     std::string getCurrentRumor() const;
 
@@ -272,7 +272,7 @@ public:
     void CaptureObject( int32_t, int col );
     uint32_t CountCapturedObject( int obj, int col ) const;
     uint32_t CountCapturedMines( int type, int col ) const;
-    uint32_t CountObeliskOnMaps( void );
+    uint32_t CountObeliskOnMaps();
     int ColorCapturedObject( int32_t ) const;
     void ResetCapturedObjects( int );
     CapturedObject & GetCapturedObject( int32_t );
@@ -301,7 +301,7 @@ public:
     void resetPathfinder();
 
     void ComputeStaticAnalysis();
-    static uint32_t GetUniq( void );
+    static uint32_t GetUniq();
 
     uint32_t GetMapSeed() const;
     uint32_t GetWeekSeed() const;
@@ -311,8 +311,8 @@ public:
 private:
     World() = default;
 
-    void Defaults( void );
-    void Reset( void );
+    void Defaults();
+    void Reset();
     void MonthOfMonstersAction( const Monster & );
     void ProcessNewMap();
     void PostLoad( const bool setTilePassabilities );

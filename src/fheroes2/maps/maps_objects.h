@@ -95,7 +95,7 @@ struct MapSphinx : public MapObjectSimple
     void LoadFromMP2( int32_t index, StreamBuf );
 
     bool AnswerCorrect( const std::string & answer );
-    void SetQuiet( void );
+    void SetQuiet();
 
     Funds resources;
     Artifact artifact;

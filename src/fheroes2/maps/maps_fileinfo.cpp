@@ -190,7 +190,7 @@ Maps::FileInfo & Maps::FileInfo::operator=( const FileInfo & f )
     return *this;
 }
 
-void Maps::FileInfo::Reset( void )
+void Maps::FileInfo::Reset()
 {
     file.clear();
     name.clear();
@@ -489,12 +489,12 @@ uint32_t Maps::FileInfo::ConditionLoss() const
     return GameOver::COND_NONE;
 }
 
-bool Maps::FileInfo::WinsCompAlsoWins( void ) const
+bool Maps::FileInfo::WinsCompAlsoWins() const
 {
     return comp_also_wins && ( ( GameOver::WINS_TOWN | GameOver::WINS_GOLD ) & ConditionWins() );
 }
 
-int Maps::FileInfo::WinsFindArtifactID( void ) const
+int Maps::FileInfo::WinsFindArtifactID() const
 {
     return wins1 ? wins1 - 1 : Artifact::UNKNOWN;
 }
@@ -512,7 +512,7 @@ bool Maps::FileInfo::isMultiPlayerMap() const
     return Color::Count( HumanOnlyColors() ) > 1;
 }
 
-std::string Maps::FileInfo::String( void ) const
+std::string Maps::FileInfo::String() const
 {
     std::ostringstream os;
 

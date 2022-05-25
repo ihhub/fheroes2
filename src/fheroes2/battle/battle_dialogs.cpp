@@ -205,7 +205,7 @@ void Battle::RedrawOnOffSetting( const fheroes2::Rect & area, const std::string 
     lowerText.Blit( area.x + ( area.width - lowerText.w() ) / 2, area.y + area.height + textOffset );
 }
 
-void Battle::DialogBattleSettings( void )
+void Battle::DialogBattleSettings()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();

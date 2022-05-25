@@ -220,7 +220,7 @@ void Troops::PushBack( const Monster & mons, uint32_t count )
     push_back( new Troop( mons, count ) );
 }
 
-void Troops::PopBack( void )
+void Troops::PopBack()
 {
     if ( !empty() ) {
         delete back();
@@ -276,7 +276,7 @@ double Troops::getReinforcementValue( const Troops & reinforcement ) const
     return combined.GetStrength() - initialValue;
 }
 
-bool Troops::isValid( void ) const
+bool Troops::isValid() const
 {
     for ( const_iterator it = begin(); it != end(); ++it ) {
         if ( ( *it )->isValid() )
@@ -285,7 +285,7 @@ bool Troops::isValid( void ) const
     return false;
 }
 
-uint32_t Troops::GetCount( void ) const
+uint32_t Troops::GetCount() const
 {
     uint32_t total = 0;
     for ( const_iterator it = begin(); it != end(); ++it ) {
@@ -411,7 +411,7 @@ void Troops::MoveTroops( const Troops & from )
 }
 
 // Return true when all valid troops have the same ID, or when there are no troops
-bool Troops::AllTroopsAreTheSame( void ) const
+bool Troops::AllTroopsAreTheSame() const
 {
     int firstMonsterId = Monster::UNKNOWN;
     for ( const Troop * troop : *this ) {
@@ -437,7 +437,7 @@ double Troops::GetStrength() const
     return strength;
 }
 
-void Troops::Clean( void )
+void Troops::Clean()
 {
     std::for_each( begin(), end(), []( Troop * troop ) { troop->Reset(); } );
 }
@@ -456,7 +456,7 @@ void Troops::UpgradeTroops( const Castle & castle )
         }
 }
 
-Troop * Troops::GetFirstValid( void )
+Troop * Troops::GetFirstValid()
 {
     iterator it = std::find_if( begin(), end(), []( const Troop * troop ) { return troop->isValid(); } );
     return it == end() ? nullptr : *it;
@@ -527,7 +527,7 @@ void Troops::MergeTroops()
     }
 }
 
-Troops Troops::GetOptimized( void ) const
+Troops Troops::GetOptimized() const
 {
     Troops result;
     result.reserve( size() );
@@ -973,13 +973,13 @@ void Army::setFromTile( const Maps::Tiles & tile )
     }
 }
 
-int Army::GetColor( void ) const
+int Army::GetColor() const
 {
     const HeroBase * currentCommander = GetCommander();
     return currentCommander != nullptr ? currentCommander->GetColor() : color;
 }
 
-int Army::GetLuck( void ) const
+int Army::GetLuck() const
 {
     const HeroBase * currentCommander = GetCommander();
     return currentCommander != nullptr ? currentCommander->GetLuck() : GetLuckModificator( nullptr );
@@ -999,7 +999,7 @@ int Army::GetLuckModificator( std::string * strs ) const
     return result;
 }
 
-int Army::GetMorale( void ) const
+int Army::GetMorale() const
 {
     const HeroBase * currentCommander = GetCommander();
     return currentCommander != nullptr ? currentCommander->GetMorale() : GetMoraleModificator( nullptr );
@@ -1154,22 +1154,22 @@ void Army::Reset( const bool soft /* = false */ )
     }
 }
 
-HeroBase * Army::GetCommander( void )
+HeroBase * Army::GetCommander()
 {
     return ( !commander || ( commander->isCaptain() && !commander->isValid() ) ) ? nullptr : commander;
 }
 
-const Castle * Army::inCastle( void ) const
+const Castle * Army::inCastle() const
 {
     return commander ? commander->inCastle() : nullptr;
 }
 
-const HeroBase * Army::GetCommander( void ) const
+const HeroBase * Army::GetCommander() const
 {
     return ( !commander || ( commander->isCaptain() && !commander->isValid() ) ) ? nullptr : commander;
 }
 
-int Army::GetControl( void ) const
+int Army::GetControl() const
 {
     return commander ? commander->GetControl() : ( color == Color::NONE ? CONTROL_AI : Players::GetPlayerControl( color ) );
 }
@@ -1179,7 +1179,7 @@ uint32_t Army::getTotalCount() const
     return std::accumulate( begin(), end(), 0u, []( const uint32_t count, const Troop * troop ) { return troop->isValid() ? count + troop->GetCount() : count; } );
 }
 
-std::string Army::String( void ) const
+std::string Army::String() const
 {
     std::ostringstream os;
 
@@ -1387,7 +1387,7 @@ void Army::SwapTroops( Troop & t1, Troop & t2 )
     std::swap( t1, t2 );
 }
 
-bool Army::SaveLastTroop( void ) const
+bool Army::SaveLastTroop() const
 {
     return commander && commander->isHeroes() && 1 == GetCount();
 }

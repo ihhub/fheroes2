@@ -35,7 +35,7 @@ Route::Path::Path( const Heroes & h )
     , hide( true )
 {}
 
-int Route::Path::GetFrontDirection( void ) const
+int Route::Path::GetFrontDirection() const
 {
     if ( empty() ) {
         if ( Maps::isValidAbsIndex( dst ) ) {
@@ -48,12 +48,12 @@ int Route::Path::GetFrontDirection( void ) const
     return front().GetDirection();
 }
 
-uint32_t Route::Path::GetFrontPenalty( void ) const
+uint32_t Route::Path::GetFrontPenalty() const
 {
     return empty() ? 0 : front().GetPenalty();
 }
 
-void Route::Path::PopFront( void )
+void Route::Path::PopFront()
 {
     if ( !empty() )
         pop_front();
@@ -86,7 +86,7 @@ void Route::Path::Reset()
     }
 }
 
-bool Route::Path::isValid( void ) const
+bool Route::Path::isValid() const
 {
     return !empty() && front().GetDirection() != Direction::UNKNOWN;
 }
@@ -371,7 +371,7 @@ bool Route::Path::hasAllowedSteps() const
     return hero->GetMovePoints() >= front().GetPenalty();
 }
 
-int Route::Path::GetAllowedSteps( void ) const
+int Route::Path::GetAllowedSteps() const
 {
     int green = 0;
     uint32_t movePoints = hero->GetMovePoints();
@@ -391,7 +391,7 @@ int Route::Path::GetAllowedSteps( void ) const
     return green;
 }
 
-std::string Route::Path::String( void ) const
+std::string Route::Path::String() const
 {
     std::string output( "from: " );
     output += std::to_string( hero->GetIndex() );

@@ -104,7 +104,7 @@ namespace Rand
         explicit Queue( uint32_t size = 0 );
 
         void Push( int32_t value, uint32_t percent );
-        size_t Size( void ) const;
+        size_t Size() const;
         int32_t Get();
         int32_t GetWithSeed( uint32_t seed );
 

@@ -79,7 +79,7 @@ void Kingdom::Init( int clr )
     }
 }
 
-void Kingdom::clear( void )
+void Kingdom::clear()
 {
     modes = 0;
 
@@ -97,32 +97,32 @@ void Kingdom::clear( void )
     puzzle_maps.reset();
 }
 
-int Kingdom::GetControl( void ) const
+int Kingdom::GetControl() const
 {
     return Players::GetPlayerControl( color );
 }
 
-int Kingdom::GetColor( void ) const
+int Kingdom::GetColor() const
 {
     return color;
 }
 
-int Kingdom::GetRace( void ) const
+int Kingdom::GetRace() const
 {
     return Players::GetPlayerRace( GetColor() );
 }
 
-bool Kingdom::isLoss( void ) const
+bool Kingdom::isLoss() const
 {
     return castles.empty() && heroes.empty();
 }
 
-bool Kingdom::isPlay( void ) const
+bool Kingdom::isPlay() const
 {
     return Players::GetPlayerInGame( color );
 }
 
-void Kingdom::LossPostActions( void )
+void Kingdom::LossPostActions()
 {
     if ( isPlay() ) {
         Players::SetPlayerInGame( color, false );
@@ -158,7 +158,7 @@ void Kingdom::ActionBeforeTurn()
     }
 }
 
-void Kingdom::ActionNewDay( void )
+void Kingdom::ActionNewDay()
 {
     // countdown of days since the loss of the last town, first day isn't counted
     if ( world.CountDay() > 1 && castles.empty() && lost_town_days > 0 ) {
@@ -201,7 +201,7 @@ void Kingdom::ActionNewDay( void )
     visit_object.remove_if( Visit::isDayLife );
 }
 
-void Kingdom::ActionNewWeek( void )
+void Kingdom::ActionNewWeek()
 {
     // skip the first week
     if ( world.CountWeek() > 1 ) {
@@ -220,7 +220,7 @@ void Kingdom::ActionNewWeek( void )
     GetRecruits();
 }
 
-void Kingdom::ActionNewMonth( void )
+void Kingdom::ActionNewMonth()
 {
     // remove month visit object
     visit_object.remove_if( Visit::isMonthLife );
@@ -308,23 +308,23 @@ void Kingdom::RemoveCastle( const Castle * castle )
         LossPostActions();
 }
 
-uint32_t Kingdom::GetCountCastle( void ) const
+uint32_t Kingdom::GetCountCastle() const
 {
     return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), Castle::PredicateIsCastle ) );
 }
 
-uint32_t Kingdom::GetCountTown( void ) const
+uint32_t Kingdom::GetCountTown() const
 {
     return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), Castle::PredicateIsTown ) );
 }
 
-uint32_t Kingdom::GetCountMarketplace( void ) const
+uint32_t Kingdom::GetCountMarketplace() const
 {
     return static_cast<uint32_t>(
         std::count_if( castles.begin(), castles.end(), []( const Castle * castle ) { return Castle::PredicateIsBuildBuilding( castle, BUILD_MARKETPLACE ); } ) );
 }
 
-uint32_t Kingdom::GetCountNecromancyShrineBuild( void ) const
+uint32_t Kingdom::GetCountNecromancyShrineBuild() const
 {
     return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), []( const Castle * castle ) { return castle->isNecromancyShrineBuild(); } ) );
 }
@@ -420,7 +420,7 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObje
     return true;
 }
 
-bool Kingdom::HeroesMayStillMove( void ) const
+bool Kingdom::HeroesMayStillMove() const
 {
     return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->MayStillMove( false, false ); } );
 }
@@ -437,7 +437,7 @@ void Kingdom::OddFundsResource( const Funds & funds )
     resource.Trim();
 }
 
-uint32_t Kingdom::GetLostTownDays( void ) const
+uint32_t Kingdom::GetLostTownDays() const
 {
     return lost_town_days;
 }
@@ -488,7 +488,7 @@ Recruits & Kingdom::GetCurrentRecruits()
     return recruits;
 }
 
-Puzzle & Kingdom::PuzzleMaps( void )
+Puzzle & Kingdom::PuzzleMaps()
 {
     return puzzle_maps;
 }
@@ -510,7 +510,7 @@ bool Kingdom::AllowRecruitHero( bool check_payment ) const
     return ( heroes.size() < GetMaxHeroes() ) && ( !check_payment || AllowPayment( PaymentConditions::RecruitHero() ) );
 }
 
-void Kingdom::ApplyPlayWithStartingHero( void )
+void Kingdom::ApplyPlayWithStartingHero()
 {
     if ( !isPlay() || castles.empty() )
         return;
@@ -557,7 +557,7 @@ void Kingdom::ApplyPlayWithStartingHero( void )
     }
 }
 
-uint32_t Kingdom::GetMaxHeroes( void )
+uint32_t Kingdom::GetMaxHeroes()
 {
     return GameStatic::GetKingdomMaxHeroes();
 }
@@ -649,7 +649,7 @@ Monster Kingdom::GetStrongestMonster() const
     return monster;
 }
 
-double Kingdom::GetArmiesStrength( void ) const
+double Kingdom::GetArmiesStrength() const
 {
     double res = 0;
 
@@ -662,7 +662,7 @@ double Kingdom::GetArmiesStrength( void ) const
     return res;
 }
 
-void Kingdoms::Init( void )
+void Kingdoms::Init()
 {
     const Colors colors( Settings::Get().GetPlayers().GetColors() );
 
@@ -672,13 +672,13 @@ void Kingdoms::Init( void )
         GetKingdom( *it ).Init( *it );
 }
 
-void Kingdoms::clear( void )
+void Kingdoms::clear()
 {
     for ( Kingdom & kingdom : kingdoms )
         kingdom.clear();
 }
 
-void Kingdoms::ApplyPlayWithStartingHero( void )
+void Kingdoms::ApplyPlayWithStartingHero()
 {
     for ( Kingdom & kingdom : kingdoms )
         if ( kingdom.isPlay() )
@@ -744,28 +744,28 @@ void Kingdom::appendSurrenderedHero( Heroes & hero )
     recruits.appendSurrenderedHero( hero, world.CountDay() );
 }
 
-void Kingdoms::NewDay( void )
+void Kingdoms::NewDay()
 {
     for ( Kingdom & kingdom : kingdoms )
         if ( kingdom.isPlay() )
             kingdom.ActionNewDay();
 }
 
-void Kingdoms::NewWeek( void )
+void Kingdoms::NewWeek()
 {
     for ( Kingdom & kingdom : kingdoms )
         if ( kingdom.isPlay() )
             kingdom.ActionNewWeek();
 }
 
-void Kingdoms::NewMonth( void )
+void Kingdoms::NewMonth()
 {
     for ( Kingdom & kingdom : kingdoms )
         if ( kingdom.isPlay() )
             kingdom.ActionNewMonth();
 }
 
-int Kingdoms::GetNotLossColors( void ) const
+int Kingdoms::GetNotLossColors() const
 {
     int result = 0;
     for ( const Kingdom & kingdom : kingdoms )

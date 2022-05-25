@@ -43,13 +43,13 @@ namespace Interface
         Radar & operator=( const Radar & ) = delete;
 
         void SetPos( int32_t, int32_t ) override;
-        void SetRedraw( void ) const;
-        void Build( void );
+        void SetRedraw() const;
+        void Build();
         void Redraw();
         void RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, ViewWorldMode mode );
         void RedrawCursor( const fheroes2::Rect * roiRectangle = nullptr );
         void SetHide( bool );
-        void QueueEventProcessing( void );
+        void QueueEventProcessing();
         bool QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & roi ) const;
 
         static Radar MakeRadarViewWorld( const Radar & radar );
@@ -61,8 +61,8 @@ namespace Interface
             ViewWorld
         };
 
-        void SavePosition( void ) override;
-        void Generate( void );
+        void SavePosition() override;
+        void Generate();
         void RedrawObjects( int color, ViewWorldMode flags ) const;
 
         void ChangeAreaSize( const fheroes2::Size & );

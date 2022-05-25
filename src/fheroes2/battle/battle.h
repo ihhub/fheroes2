@@ -59,12 +59,12 @@ namespace Battle
             , killed( 0 )
         {}
 
-        bool AttackerWins( void ) const;
-        bool DefenderWins( void ) const;
-        uint32_t AttackerResult( void ) const;
-        uint32_t DefenderResult( void ) const;
-        uint32_t GetExperienceAttacker( void ) const;
-        uint32_t GetExperienceDefender( void ) const;
+        bool AttackerWins() const;
+        bool DefenderWins() const;
+        uint32_t AttackerResult() const;
+        uint32_t DefenderResult() const;
+        uint32_t GetExperienceAttacker() const;
+        uint32_t GetExperienceDefender() const;
     };
 
     Result Loader( Army &, Army &, int32_t );

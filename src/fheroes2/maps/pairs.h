@@ -87,7 +87,7 @@ public:
         : std::pair<int, uint32_t>( res, count )
     {}
 
-    bool isValid( void ) const
+    bool isValid() const
     {
         return ( first & Resource::ALL ) && second;
     }

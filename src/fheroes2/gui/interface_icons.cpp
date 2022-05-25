@@ -43,7 +43,7 @@ namespace
     };
 }
 
-bool Interface::IconsBar::IsVisible( void )
+bool Interface::IconsBar::IsVisible()
 {
     const Settings & conf = Settings::Get();
     return !conf.ExtGameHideInterface() || conf.ShowIcons();
@@ -203,12 +203,12 @@ void Interface::HeroesIcons::RedrawBackground( const fheroes2::Point & pos )
     redrawBackground( fheroes2::Display::instance(), pos, show ? _size() : 0 );
 }
 
-void Interface::HeroesIcons::ActionCurrentUp( void )
+void Interface::HeroesIcons::ActionCurrentUp()
 {
     Interface::Basic::Get().SetFocus( GetCurrent() );
 }
 
-void Interface::HeroesIcons::ActionCurrentDn( void )
+void Interface::HeroesIcons::ActionCurrentDn()
 {
     Interface::Basic::Get().SetFocus( GetCurrent() );
 }
@@ -294,7 +294,7 @@ Interface::IconsPanel::IconsPanel( Basic & basic )
     fheroes2::DrawBorder( sfMarker, fheroes2::GetColorId( 0xA0, 0xE0, 0xE0 ) );
 }
 
-void Interface::IconsPanel::SavePosition( void )
+void Interface::IconsPanel::SavePosition()
 {
     Settings::Get().SetPosIcons( GetRect().getPosition() );
 }
@@ -318,7 +318,7 @@ void Interface::IconsPanel::SetRedraw( const icons_t type ) const
     }
 }
 
-void Interface::IconsPanel::SetRedraw( void ) const
+void Interface::IconsPanel::SetRedraw() const
 {
     SetRedraw( ICON_ANY );
 }
@@ -346,7 +346,7 @@ void Interface::IconsPanel::SetPos( int32_t ox, int32_t oy )
     castleIcons.SetPos( rect.x + 72, rect.y );
 }
 
-void Interface::IconsPanel::Redraw( void )
+void Interface::IconsPanel::Redraw()
 {
     // is visible
     if ( IconsBar::IsVisible() ) {
@@ -359,7 +359,7 @@ void Interface::IconsPanel::Redraw( void )
     }
 }
 
-void Interface::IconsPanel::QueueEventProcessing( void )
+void Interface::IconsPanel::QueueEventProcessing()
 {
     if ( Settings::Get().ShowIcons() &&
          // move border window
@@ -442,7 +442,7 @@ void Interface::IconsPanel::ShowIcons( const icons_t type )
         castleIcons.SetShow( true );
 }
 
-void Interface::IconsPanel::SetCurrentVisible( void )
+void Interface::IconsPanel::SetCurrentVisible()
 {
     if ( heroesIcons.isSelected() ) {
         heroesIcons.SetCurrentVisible();

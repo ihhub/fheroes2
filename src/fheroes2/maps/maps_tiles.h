@@ -112,7 +112,7 @@ namespace Maps
             return _index;
         }
 
-        fheroes2::Point GetCenter( void ) const;
+        fheroes2::Point GetCenter() const;
         MP2::MapObjectType GetObject( bool ignoreObjectUnderHero = true ) const;
         uint8_t GetObjectTileset() const;
 
@@ -156,7 +156,7 @@ namespace Maps
             return pack_sprite_index >> 14;
         }
 
-        const fheroes2::Image & GetTileSurface( void ) const;
+        const fheroes2::Image & GetTileSurface() const;
 
         bool isObject( const MP2::MapObjectType objectType ) const;
         bool hasSpriteAnimation() const;
@@ -165,7 +165,7 @@ namespace Maps
         // Checks whether it is possible to exit this tile in the specified direction
         bool isPassableTo( const int direction ) const;
         bool isRoad() const;
-        bool isStream( void ) const;
+        bool isStream() const;
         bool isShadow() const;
         bool GoodForUltimateArtifact() const;
 
@@ -184,7 +184,7 @@ namespace Maps
         int getBoatDirection() const;
         void resetObjectSprite();
 
-        void FixObject( void );
+        void FixObject();
 
         uint32_t GetRegion() const;
         void UpdateRegion( uint32_t newRegionID );
@@ -239,13 +239,13 @@ namespace Maps
             return addons_level2;
         }
 
-        void AddonsSort( void );
+        void AddonsSort();
         void Remove( uint32_t uniqID );
-        void RemoveObjectSprite( void );
+        void RemoveObjectSprite();
         void UpdateObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8_t newTileset, int indexChange );
         void ReplaceObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8_t newTileset, uint8_t indexToReplace, uint8_t newIndex );
 
-        std::string String( void ) const;
+        std::string String() const;
 
         bool isFog( const int colors ) const
         {
@@ -257,14 +257,14 @@ namespace Maps
         void ClearFog( int color );
 
         /* monster operation */
-        bool MonsterJoinConditionSkip( void ) const;
-        bool MonsterJoinConditionFree( void ) const;
-        int MonsterJoinCondition( void ) const;
+        bool MonsterJoinConditionSkip() const;
+        bool MonsterJoinConditionFree() const;
+        int MonsterJoinCondition() const;
         void MonsterSetJoinCondition( int );
-        void MonsterSetFixedCount( void );
-        bool MonsterFixedCount( void ) const;
+        void MonsterSetFixedCount();
+        bool MonsterFixedCount() const;
         void MonsterSetCount( uint32_t count );
-        uint32_t MonsterCount( void ) const;
+        uint32_t MonsterCount() const;
 
         // Checks whether the object to be captured is guarded by its own forces
         // (castle has a hero or garrison, dwelling has creatures, etc)
@@ -272,20 +272,20 @@ namespace Maps
 
         /* object quantity operation */
         void QuantityUpdate( bool isFirstLoad = true );
-        void QuantityReset( void );
-        bool QuantityIsValid( void ) const;
+        void QuantityReset();
+        bool QuantityIsValid() const;
         void QuantitySetColor( int );
-        int QuantityVariant( void ) const;
-        int QuantityExt( void ) const;
-        int QuantityColor( void ) const;
-        uint32_t QuantityGold( void ) const;
-        Spell QuantitySpell( void ) const;
-        Skill::Secondary QuantitySkill( void ) const;
-        Artifact QuantityArtifact( void ) const;
-        ResourceCount QuantityResourceCount( void ) const;
-        Funds QuantityFunds( void ) const;
-        Monster QuantityMonster( void ) const;
-        Troop QuantityTroop( void ) const;
+        int QuantityVariant() const;
+        int QuantityExt() const;
+        int QuantityColor() const;
+        uint32_t QuantityGold() const;
+        Spell QuantitySpell() const;
+        Skill::Secondary QuantitySkill() const;
+        Artifact QuantityArtifact() const;
+        ResourceCount QuantityResourceCount() const;
+        Funds QuantityFunds() const;
+        Monster QuantityMonster() const;
+        Troop QuantityTroop() const;
 
         void SetObjectPassable( bool );
 
@@ -295,7 +295,7 @@ namespace Maps
             quantity3 = value;
         }
 
-        Heroes * GetHeroes( void ) const;
+        Heroes * GetHeroes() const;
         void SetHeroes( Heroes * );
 
         // If tile is empty (MP2::OBJ_ZERO) then verify whether it is a coast and update the tile if needed.
@@ -328,11 +328,11 @@ namespace Maps
         static int32_t getIndexOfMainTile( const Maps::Tiles & tile );
 
     private:
-        TilesAddon * FindFlags( void );
+        TilesAddon * FindFlags();
 
         // correct flags, ICN::FLAGS32 vesion
         void CorrectFlags32( const int col, const uint8_t index, const bool up );
-        void RemoveJailSprite( void );
+        void RemoveJailSprite();
 
         void QuantitySetVariant( int );
         void QuantitySetExt( int );

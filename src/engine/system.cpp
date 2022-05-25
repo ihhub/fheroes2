@@ -239,7 +239,7 @@ int System::GetCommandOptions( int argc, char * const argv[], const char * optst
 #endif
 }
 
-char * System::GetOptionsArgument( void )
+char * System::GetOptionsArgument()
 {
 #if defined( _MSC_VER )
     return nullptr;

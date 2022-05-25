@@ -68,15 +68,15 @@ public:
     void Set( const std::string & );
     void Set( int );
 
-    void Clear( void );
+    void Clear();
 
     size_t Size() const;
 
-    int w( void ) const
+    int w() const
     {
         return static_cast<int>( gw );
     }
-    int h( void ) const
+    int h() const
     {
         return static_cast<int>( gh );
     }
@@ -107,8 +107,8 @@ public:
     void SetText( const std::string &, int );
     void SetFont( int );
 
-    void Show( void );
-    void Hide( void );
+    void Show();
+    void Hide();
 
     bool isShow() const
     {
@@ -125,7 +125,7 @@ public:
         return gh + 5;
     }
 
-    fheroes2::Rect GetRect( void ) const;
+    fheroes2::Rect GetRect() const;
 
 private:
     fheroes2::ImageRestorer _restorer;

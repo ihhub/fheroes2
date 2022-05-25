@@ -38,9 +38,9 @@ class Castle;
 
 namespace Game
 {
-    void Init( void );
+    void Init();
 
-    const std::string & GetLastSavename( void );
+    const std::string & GetLastSavename();
     void SetLastSavename( const std::string & );
     void SetLoadVersion( uint16_t ver );
     uint16_t GetLoadVersion();
@@ -93,18 +93,18 @@ namespace Game
 
     void EnvironmentSoundMixer();
     void restoreSoundsForCurrentFocus();
-    int GetKingdomColors( void );
-    int GetActualKingdomColors( void );
+    int GetKingdomColors();
+    int GetActualKingdomColors();
     void DialogPlayers( int color, std::string );
     void SetCurrentMusic( const int mus );
     int CurrentMusic();
-    uint32_t & MapsAnimationFrame( void );
-    uint32_t GetRating( void );
-    uint32_t GetGameOverScores( void );
-    uint32_t GetLostTownDays( void );
-    uint32_t GetWhirlpoolPercent( void );
-    uint32_t SelectCountPlayers( void );
-    void PlayPickupSound( void );
+    uint32_t & MapsAnimationFrame();
+    uint32_t GetRating();
+    uint32_t GetGameOverScores();
+    uint32_t GetLostTownDays();
+    uint32_t GetWhirlpoolPercent();
+    uint32_t SelectCountPlayers();
+    void PlayPickupSound();
     bool UpdateSoundsOnFocusUpdate();
     void SetUpdateSoundsOnFocusUpdate( bool update );
     void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss = false );

@@ -89,7 +89,7 @@ void Battle::Board::SetArea( const fheroes2::Rect & area )
         ( *it ).SetArea( area );
 }
 
-void Battle::Board::Reset( void )
+void Battle::Board::Reset()
 {
     for ( iterator it = begin(); it != end(); ++it ) {
         Unit * unit = it->GetUnit();
@@ -1239,7 +1239,7 @@ Battle::Indexes Battle::Board::GetAdjacentEnemies( const Unit & unit )
     return result;
 }
 
-std::string Battle::Board::GetMoatInfo( void )
+std::string Battle::Board::GetMoatInfo()
 {
     std::string msg = _( "The Moat reduces by -%{count} the defense skill of any unit and slows to half movement rate." );
     StringReplace( msg, "%{count}", GameStatic::GetBattleMoatReduceDefense() );

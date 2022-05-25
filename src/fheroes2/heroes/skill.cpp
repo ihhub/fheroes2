@@ -45,7 +45,7 @@ namespace Skill
            Secondary::WISDOM,      Secondary::MYSTICISM, Secondary::LUCK,      Secondary::BALLISTICS, Secondary::EAGLEEYE,  Secondary::NECROMANCY, Secondary::ESTATES};
 }
 
-uint32_t Skill::Secondary::GetValues( void ) const
+uint32_t Skill::Secondary::GetValues() const
 {
     const values_t * val = GameStatic::GetSkillValues( Skill() );
 
@@ -245,7 +245,7 @@ Skill::Secondary::Secondary( int skill, int level )
     SetLevel( level );
 }
 
-void Skill::Secondary::Reset( void )
+void Skill::Secondary::Reset()
 {
     first = UNKNOWN;
     second = Level::NONE;
@@ -267,7 +267,7 @@ void Skill::Secondary::SetLevel( int level )
     second = level <= Level::EXPERT ? level : Level::NONE;
 }
 
-void Skill::Secondary::NextLevel( void )
+void Skill::Secondary::NextLevel()
 {
     switch ( second ) {
     case Level::NONE:
@@ -284,12 +284,12 @@ void Skill::Secondary::NextLevel( void )
     }
 }
 
-bool Skill::Secondary::isValid( void ) const
+bool Skill::Secondary::isValid() const
 {
     return Skill() != UNKNOWN && Level() != Level::NONE;
 }
 
-int Skill::Secondary::RandForWitchsHut( void )
+int Skill::Secondary::RandForWitchsHut()
 {
     const Skill::secondary_t * sec = GameStatic::GetSkillForWitchsHut();
     std::vector<int> v;
@@ -331,13 +331,13 @@ int Skill::Secondary::RandForWitchsHut( void )
 }
 
 /* index sprite from SECSKILL */
-int Skill::Secondary::GetIndexSprite1( void ) const
+int Skill::Secondary::GetIndexSprite1() const
 {
     return Skill() <= ESTATES ? Skill() : 0;
 }
 
 /* index sprite from MINISS */
-int Skill::Secondary::GetIndexSprite2( void ) const
+int Skill::Secondary::GetIndexSprite2() const
 {
     return Skill() <= ESTATES ? Skill() - 1 : 0xFF;
 }
@@ -382,7 +382,7 @@ const char * Skill::Secondary::String( int skill )
     return "Unknown";
 }
 
-std::string Skill::Secondary::GetName( void ) const
+std::string Skill::Secondary::GetName() const
 {
     const char * name_skill[]
         = {_( "Basic Pathfinding" ),  _( "Advanced Pathfinding" ), _( "Expert Pathfinding" ),  _( "Basic Archery" ),      _( "Advanced Archery" ),
@@ -594,7 +594,7 @@ uint32_t Skill::SecSkills::GetValues( int skill ) const
     return it == end() ? 0 : ( *it ).GetValues();
 }
 
-int Skill::SecSkills::Count( void ) const
+int Skill::SecSkills::Count() const
 {
     return static_cast<int>( std::count_if( begin(), end(), []( const Secondary & v ) { return v.isValid(); } ) ); // it's safe to cast as number is small
 }
@@ -633,13 +633,13 @@ Skill::Secondary * Skill::SecSkills::FindSkill( int skill )
     return it != end() ? &( *it ) : nullptr;
 }
 
-std::vector<Skill::Secondary> & Skill::SecSkills::ToVector( void )
+std::vector<Skill::Secondary> & Skill::SecSkills::ToVector()
 {
     std::vector<Secondary> & v = *this;
     return v;
 }
 
-std::string Skill::SecSkills::String( void ) const
+std::string Skill::SecSkills::String() const
 {
     std::string output;
 

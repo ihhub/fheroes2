@@ -47,26 +47,26 @@ namespace GameStatic
         MAGI_EYES
     };
 
-    uint32_t GetLostOnWhirlpoolPercent( void );
-    uint32_t GetGameOverLostDays( void );
+    uint32_t GetLostOnWhirlpoolPercent();
+    uint32_t GetGameOverLostDays();
     uint32_t getFogDiscoveryDistance( const FogDiscoveryType type );
 
-    uint32_t GetKingdomMaxHeroes( void );
+    uint32_t GetKingdomMaxHeroes();
 
-    uint32_t GetCastleGrownWell( void );
-    uint32_t GetCastleGrownWel2( void );
-    uint32_t GetCastleGrownWeekOf( void );
-    uint32_t GetCastleGrownMonthOf( void );
+    uint32_t GetCastleGrownWell();
+    uint32_t GetCastleGrownWel2();
+    uint32_t GetCastleGrownWeekOf();
+    uint32_t GetCastleGrownMonthOf();
 
-    uint32_t GetHeroesRestoreSpellPointsPerDay( void );
+    uint32_t GetHeroesRestoreSpellPointsPerDay();
 
     int32_t ObjectVisitedModifiers( const MP2::MapObjectType objectType );
 
-    int GetBattleMoatReduceDefense( void );
+    int GetBattleMoatReduceDefense();
 
     const Skill::stats_t * GetSkillStats( int race );
     const Skill::values_t * GetSkillValues( int skill );
-    const Skill::secondary_t * GetSkillForWitchsHut( void );
+    const Skill::secondary_t * GetSkillForWitchsHut();
 }
 
 #endif

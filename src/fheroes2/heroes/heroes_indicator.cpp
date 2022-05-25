@@ -59,7 +59,7 @@ HeroesIndicator::HeroesIndicator( const Heroes * h )
     descriptions.reserve( 256 );
 }
 
-const fheroes2::Rect & HeroesIndicator::GetArea( void ) const
+const fheroes2::Rect & HeroesIndicator::GetArea() const
 {
     return area;
 }
@@ -84,7 +84,7 @@ LuckIndicator::LuckIndicator( const Heroes * h )
     area.height = 26;
 }
 
-void LuckIndicator::Redraw( void )
+void LuckIndicator::Redraw()
 {
     if ( !hero )
         return;
@@ -135,7 +135,7 @@ MoraleIndicator::MoraleIndicator( const Heroes * h )
     area.height = 26;
 }
 
-void MoraleIndicator::Redraw( void )
+void MoraleIndicator::Redraw()
 {
     if ( !hero )
         return;
@@ -197,7 +197,7 @@ ExperienceIndicator::ExperienceIndicator( const Heroes * h )
     }
 }
 
-void ExperienceIndicator::Redraw( void ) const
+void ExperienceIndicator::Redraw() const
 {
     if ( !hero )
         return;
@@ -209,7 +209,7 @@ void ExperienceIndicator::Redraw( void ) const
     text.Blit( area.x + 17 - text.w() / 2, area.y + 23 );
 }
 
-void ExperienceIndicator::QueueEventProcessing( void ) const
+void ExperienceIndicator::QueueEventProcessing() const
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -235,7 +235,7 @@ SpellPointsIndicator::SpellPointsIndicator( const Heroes * h )
     }
 }
 
-void SpellPointsIndicator::Redraw( void ) const
+void SpellPointsIndicator::Redraw() const
 {
     if ( !hero )
         return;
@@ -247,7 +247,7 @@ void SpellPointsIndicator::Redraw( void ) const
     text.Blit( area.x + sprite3.width() / 2 - text.w() / 2, area.y + 21 );
 }
 
-void SpellPointsIndicator::QueueEventProcessing( void ) const
+void SpellPointsIndicator::QueueEventProcessing() const
 {
     LocalEvent & le = LocalEvent::Get();
 

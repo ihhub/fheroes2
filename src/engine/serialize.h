@@ -234,9 +234,9 @@ public:
     StreamBuf & operator=( const StreamBuf & st ) = delete;
     StreamBuf & operator=( StreamBuf && st ) noexcept;
 
-    const uint8_t * data( void ) const;
-    size_t size( void ) const;
-    size_t capacity( void ) const;
+    const uint8_t * data() const;
+    size_t size() const;
+    size_t capacity() const;
 
     void seek( size_t );
     void skip( size_t ) override;
@@ -257,12 +257,12 @@ public:
     std::string toString( size_t = 0 /* all data */ );
 
 protected:
-    void reset( void );
+    void reset();
 
-    size_t tellg( void ) const override;
-    size_t tellp( void ) const override;
-    size_t sizeg( void ) const override;
-    size_t sizep( void ) const override;
+    size_t tellg() const override;
+    size_t tellp() const override;
+    size_t sizeg() const override;
+    size_t sizep() const override;
 
     void reallocbuf( size_t );
 
@@ -289,11 +289,11 @@ public:
 
     ~StreamFile() override;
 
-    size_t size( void ) const;
-    size_t tell( void ) const;
+    size_t size() const;
+    size_t tell() const;
 
     bool open( const std::string &, const std::string & mode );
-    void close( void );
+    void close();
 
     StreamBuf toStreamBuf( size_t = 0 /* all data */ );
 
@@ -316,10 +316,10 @@ public:
     std::string toString( size_t = 0 /* all data */ );
 
 protected:
-    size_t sizeg( void ) const override;
-    size_t sizep( void ) const override;
-    size_t tellg( void ) const override;
-    size_t tellp( void ) const override;
+    size_t sizeg() const override;
+    size_t sizep() const override;
+    size_t tellg() const override;
+    size_t tellp() const override;
 
     uint8_t get8() override;
     void put8( const uint8_t v ) override;

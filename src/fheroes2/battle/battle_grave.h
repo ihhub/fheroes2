@@ -50,7 +50,7 @@ namespace Battle
 
         Graveyard & operator=( const Graveyard & ) = delete;
 
-        Indexes GetClosedCells( void ) const;
+        Indexes GetClosedCells() const;
         void AddTroop( const Unit & );
         void RemoveTroop( const Unit & );
         uint32_t GetLastTroopUID( int32_t ) const;

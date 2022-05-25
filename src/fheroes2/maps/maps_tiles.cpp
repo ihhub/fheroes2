@@ -735,7 +735,7 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
     AddonsPushLevel2( mp2 );
 }
 
-Heroes * Maps::Tiles::GetHeroes( void ) const
+Heroes * Maps::Tiles::GetHeroes() const
 {
     return MP2::OBJ_HEROES == mp2_object && heroID ? world.GetHeroes( heroID - 1 ) : nullptr;
 }
@@ -762,7 +762,7 @@ void Maps::Tiles::SetHeroes( Heroes * hero )
     }
 }
 
-fheroes2::Point Maps::Tiles::GetCenter( void ) const
+fheroes2::Point Maps::Tiles::GetCenter() const
 {
     return Maps::GetPoint( _index );
 }
@@ -865,7 +865,7 @@ void Maps::Tiles::SetTile( uint32_t sprite_index, uint32_t shape )
     pack_sprite_index = PackTileSpriteIndex( sprite_index, shape );
 }
 
-const fheroes2::Image & Maps::Tiles::GetTileSurface( void ) const
+const fheroes2::Image & Maps::Tiles::GetTileSurface() const
 {
     return fheroes2::AGG::GetTIL( TIL::GROUND32, TileSpriteIndex(), TileSpriteShape() );
 }
@@ -1153,7 +1153,7 @@ void Maps::Tiles::AddonsSort()
     // Level 2 objects don't have any rendering priorities so they should be rendered first in queue first to render.
 }
 
-int Maps::Tiles::GetGround( void ) const
+int Maps::Tiles::GetGround() const
 {
     const uint32_t index = TileSpriteIndex();
 
@@ -1487,7 +1487,7 @@ Maps::TilesAddon * Maps::Tiles::FindAddonLevel2( uint32_t uniq2 )
     return it != addons_level2.end() ? &( *it ) : nullptr;
 }
 
-std::string Maps::Tiles::String( void ) const
+std::string Maps::Tiles::String() const
 {
     std::ostringstream os;
 
@@ -1581,7 +1581,7 @@ std::string Maps::Tiles::String( void ) const
     return os.str();
 }
 
-void Maps::Tiles::FixObject( void )
+void Maps::Tiles::FixObject()
 {
     if ( MP2::OBJ_ZERO == mp2_object ) {
         if ( std::any_of( addons_level1.begin(), addons_level1.end(), TilesAddon::isArtifact ) )
@@ -1651,7 +1651,7 @@ bool Maps::Tiles::isRoad() const
     return tileIsRoad || mp2_object == MP2::OBJ_CASTLE;
 }
 
-bool Maps::Tiles::isStream( void ) const
+bool Maps::Tiles::isStream() const
 {
     for ( auto it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
         const int icn = MP2::GetICNObject( it->object );
@@ -1688,7 +1688,7 @@ uint8_t Maps::Tiles::GetObjectSpriteIndex() const
     return objectIndex;
 }
 
-Maps::TilesAddon * Maps::Tiles::FindFlags( void )
+Maps::TilesAddon * Maps::Tiles::FindFlags()
 {
     Addons::iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isFlag32 );
 
@@ -1975,7 +1975,7 @@ void Maps::Tiles::UpdateObjectSprite( uint32_t uniqID, uint8_t rawTileset, uint8
     }
 }
 
-void Maps::Tiles::RemoveObjectSprite( void )
+void Maps::Tiles::RemoveObjectSprite()
 {
     switch ( GetObject() ) {
     case MP2::OBJ_MONSTER:
@@ -2015,7 +2015,7 @@ void Maps::Tiles::RemoveObjectSprite( void )
     }
 }
 
-void Maps::Tiles::RemoveJailSprite( void )
+void Maps::Tiles::RemoveJailSprite()
 {
     // remove left sprite
     if ( Maps::isValidDirection( _index, Direction::LEFT ) ) {

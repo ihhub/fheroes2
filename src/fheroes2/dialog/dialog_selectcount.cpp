@@ -98,7 +98,7 @@ public:
         btnDn.setPosition( pt.x + 70, pt.y + 16 );
     }
 
-    uint32_t getCur( void ) const
+    uint32_t getCur() const
     {
         return vcur;
     }
@@ -116,7 +116,7 @@ public:
         btnDn.draw();
     }
 
-    bool QueueEventProcessing( void )
+    bool QueueEventProcessing()
     {
         LocalEvent & le = LocalEvent::Get();
 

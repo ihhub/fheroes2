@@ -87,13 +87,13 @@ public:
     bool operator>=( const Funds & ) const;
 
     int getLowestQuotient( const Funds & ) const;
-    int GetValidItems( void ) const;
-    uint32_t GetValidItemsCount( void ) const;
+    int GetValidItems() const;
+    uint32_t GetValidItemsCount() const;
 
-    void Trim( void ); // set all values to be >= 0
+    void Trim(); // set all values to be >= 0
 
-    void Reset( void );
-    std::string String( void ) const;
+    void Reset();
+    std::string String() const;
 
     int32_t wood;
     int32_t mercury;
@@ -129,9 +129,9 @@ namespace Resource
     public:
         BoxSprite( const Funds &, int32_t );
 
-        const fheroes2::Rect & GetArea( void ) const;
+        const fheroes2::Rect & GetArea() const;
         void SetPos( int32_t, int32_t );
-        void Redraw( void ) const;
+        void Redraw() const;
 
         const Funds rs;
     };

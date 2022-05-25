@@ -63,7 +63,7 @@ namespace
     }
 }
 
-fheroes2::GameMode Game::StartBattleOnly( void )
+fheroes2::GameMode Game::StartBattleOnly()
 {
     Battle::Only main;
 
@@ -267,7 +267,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
     I.RedrawFocus();
 }
 
-void ShowNewWeekDialog( void )
+void ShowNewWeekDialog()
 {
     // restore the original music on exit
     const Game::MusicRestorer musicRestorer;
@@ -306,7 +306,7 @@ void ShowNewWeekDialog( void )
     Dialog::Message( "", message, Font::BIG, Dialog::OK );
 }
 
-void ShowEventDayDialog( void )
+void ShowEventDayDialog()
 {
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     const EventsDate events = world.GetEventsDate( myKingdom.GetColor() );

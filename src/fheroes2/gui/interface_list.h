@@ -45,7 +45,7 @@ namespace Interface
         virtual ~ListBasic() = default;
         virtual bool IsNeedRedraw() const = 0;
         virtual void Redraw() = 0;
-        virtual bool QueueEventProcessing( void ) = 0;
+        virtual bool QueueEventProcessing() = 0;
 
         int getTopId() const
         {
@@ -214,7 +214,7 @@ namespace Interface
             return needRedraw;
         }
 
-        Item & GetCurrent( void ) // always call this function only after IsValid()!
+        Item & GetCurrent() // always call this function only after IsValid()!
         {
             return ( *content )[_currentId];
         }
@@ -246,7 +246,7 @@ namespace Interface
             SetCurrentVisible();
         }
 
-        void SetCurrentVisible( void )
+        void SetCurrentVisible()
         {
             Verify();
 
@@ -295,25 +295,25 @@ namespace Interface
             SetCurrentVisible();
         }
 
-        void RemoveSelected( void )
+        void RemoveSelected()
         {
             if ( content != nullptr && _currentId >= 0 && _currentId < _size() )
                 content->erase( content->begin() + _currentId );
         }
 
-        bool isSelected( void ) const
+        bool isSelected() const
         {
             return IsValid() && _currentId >= 0;
         }
 
-        void Unselect( void )
+        void Unselect()
         {
             Verify();
             if ( IsValid() )
                 _currentId = -1;
         }
 
-        bool QueueEventProcessing( void ) override
+        bool QueueEventProcessing() override
         {
             LocalEvent & le = LocalEvent::Get();
 

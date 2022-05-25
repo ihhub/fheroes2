@@ -50,8 +50,8 @@ namespace Battle
         ModeDuration( uint32_t, uint32_t );
 
         bool isMode( uint32_t ) const;
-        bool isZeroDuration( void ) const;
-        void DecreaseDuration( void );
+        bool isZeroDuration() const;
+        void DecreaseDuration();
     };
 
     struct ModesAffected : public std::vector<ModeDuration>
@@ -61,9 +61,9 @@ namespace Battle
         uint32_t GetMode( uint32_t ) const;
         void AddMode( uint32_t, uint32_t );
         void RemoveMode( uint32_t );
-        void DecreaseDuration( void );
+        void DecreaseDuration();
 
-        uint32_t FindZeroDuration( void ) const;
+        uint32_t FindZeroDuration() const;
     };
 
     enum
@@ -101,16 +101,16 @@ namespace Battle
             mirror = ptr;
         }
 
-        void SetRandomMorale( void );
-        void SetRandomLuck( void );
-        void NewTurn( void );
+        void SetRandomMorale();
+        void SetRandomLuck();
+        void NewTurn();
 
         bool isValid() const override;
-        bool isArchers( void ) const;
-        bool isFlying( void ) const;
+        bool isArchers() const;
+        bool isFlying() const;
         bool isDoubleAttack() const;
 
-        bool AllowResponse( void ) const;
+        bool AllowResponse() const;
         // Checks whether this unit is forced to fight in melee (there is an enemy unit nearby)
         bool isHandFighting() const;
 
@@ -119,14 +119,14 @@ namespace Battle
             return reflect;
         }
 
-        bool isHaveDamage( void ) const;
+        bool isHaveDamage() const;
 
         bool isMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const
         {
             return 100 <= GetMagicResist( spell, attackingArmySpellPower, attackingHero );
         }
 
-        bool OutOfWalls( void ) const;
+        bool OutOfWalls() const;
         bool canReach( int index ) const;
         bool canReach( const Unit & unit ) const;
 
@@ -142,8 +142,8 @@ namespace Battle
             return _uid == v;
         }
 
-        int32_t GetHeadIndex( void ) const;
-        int32_t GetTailIndex( void ) const;
+        int32_t GetHeadIndex() const;
+        int32_t GetTailIndex() const;
 
         const Position & GetPosition() const
         {
@@ -172,8 +172,8 @@ namespace Battle
         uint32_t GetDamage( const Unit & ) const;
         int32_t GetScoreQuality( const Unit & ) const;
         uint32_t GetInitialCount() const;
-        uint32_t GetDead( void ) const;
-        uint32_t GetHitPoints( void ) const;
+        uint32_t GetDead() const;
+        uint32_t GetHitPoints() const;
         payment_t GetSurrenderCost() const;
 
         uint32_t GetShots() const override
@@ -192,7 +192,7 @@ namespace Battle
         bool isUnderSpellEffect( const Spell & spell ) const;
         std::vector<Spell> getCurrentSpellEffects() const;
         void PostAttackAction();
-        void ResetBlind( void );
+        void ResetBlind();
         void SetBlindAnswer( bool value );
         void SpellModesAction( const Spell &, uint32_t, const HeroBase * );
         void SpellApplyDamage( const Spell &, uint32_t, const HeroBase *, TargetInfo & );
@@ -229,15 +229,15 @@ namespace Battle
 
         fheroes2::Point GetStartMissileOffset( size_t ) const;
 
-        int M82Attk( void ) const;
-        int M82Kill( void ) const;
-        int M82Move( void ) const;
-        int M82Wnce( void ) const;
-        int M82Expl( void ) const;
+        int M82Attk() const;
+        int M82Kill() const;
+        int M82Move() const;
+        int M82Wnce() const;
+        int M82Expl() const;
         int M82Tkof() const;
         int M82Land() const;
 
-        fheroes2::Point GetBackPoint( void ) const;
+        fheroes2::Point GetBackPoint() const;
         fheroes2::Point GetCenterPoint() const;
 
         fheroes2::Rect GetRectPosition() const
@@ -247,15 +247,15 @@ namespace Battle
 
         uint32_t HowManyWillKilled( uint32_t ) const;
 
-        void SetResponse( void );
-        void UpdateDirection( void );
+        void SetResponse();
+        void UpdateDirection();
         bool UpdateDirection( const fheroes2::Rect & );
-        void PostKilledAction( void );
+        void PostKilledAction();
 
         uint32_t GetMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const;
         int GetSpellMagic() const;
 
-        const HeroBase * GetCommander( void ) const;
+        const HeroBase * GetCommander() const;
         const HeroBase * GetCurrentOrArmyCommander() const; // commander of the army with the current unit color (if valid), commander of the unit's army otherwise
 
         // Checks whether the attacker will fight the defender in melee

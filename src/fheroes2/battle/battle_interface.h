@@ -57,7 +57,7 @@ namespace Battle
     struct TargetInfo;
     struct TargetsInfo;
 
-    void DialogBattleSettings( void );
+    void DialogBattleSettings();
     bool DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdom & kingdom );
 
     enum HeroAnimation : uint32_t
@@ -156,7 +156,7 @@ namespace Battle
         }
 
         void SetMessage( const std::string & message, bool top = false );
-        void Redraw( void ) const;
+        void Redraw() const;
 
         const std::string & GetMessage() const
         {
@@ -295,17 +295,17 @@ namespace Battle
         void HumanBattleTurn( const Unit &, Actions &, std::string & );
         void HumanCastSpellTurn( const Unit &, Actions &, std::string & );
 
-        void RedrawCover( void );
+        void RedrawCover();
         void RedrawCoverStatic( const Settings & conf, const Board & board );
         void RedrawLowObjects( int32_t );
         void RedrawHighObjects( int32_t );
         void RedrawCastle( const Castle &, int32_t );
         void RedrawCastleMainTower( const Castle & );
-        void RedrawKilled( void );
-        void RedrawInterface( void );
-        void RedrawOpponents( void );
-        void RedrawOpponentsFlags( void );
-        void RedrawArmies( void );
+        void RedrawKilled();
+        void RedrawInterface();
+        void RedrawOpponents();
+        void RedrawOpponentsFlags();
+        void RedrawArmies();
         void RedrawTroopSprite( const Unit & unit );
 
         fheroes2::Point drawTroopSprite( const Unit & unit, const fheroes2::Sprite & troopSprite );
@@ -344,9 +344,9 @@ namespace Battle
         void ProcessingHeroDialogResult( int, Actions & );
 
         void EventAutoSwitch( const Unit &, Actions & );
-        void EventShowOptions( void );
+        void EventShowOptions();
         void ButtonAutoAction( const Unit &, Actions & );
-        void ButtonSettingsAction( void );
+        void ButtonSettingsAction();
         void ButtonSkipAction( Actions & );
         void ButtonWaitAction( Actions & );
         void MouseLeftClickBoardAction( int themes, const Cell & cell, Actions & a );

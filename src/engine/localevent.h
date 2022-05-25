@@ -165,7 +165,7 @@ namespace fheroes2
 class LocalEvent
 {
 public:
-    static LocalEvent & Get( void );
+    static LocalEvent & Get();
     static LocalEvent & GetClean(); // reset all previous event statuses and return a reference for events
 
     void SetGlobalFilterMouseEvents( void ( *pf )( int32_t, int32_t ) )
@@ -178,7 +178,7 @@ public:
         keyboard_filter_func = pf;
     }
 
-    static void SetStateDefaults( void );
+    static void SetStateDefaults();
 
     bool HandleEvents( bool delay = true, bool allowExit = false );
 

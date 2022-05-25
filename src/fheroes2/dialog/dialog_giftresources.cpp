@@ -84,12 +84,12 @@ struct SelectRecipientsColors
         }
     }
 
-    int32_t GetIndexClick( void ) const
+    int32_t GetIndexClick() const
     {
         return GetIndexClickRects( positions );
     }
 
-    void Redraw( void ) const
+    void Redraw() const
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -102,7 +102,7 @@ struct SelectRecipientsColors
         }
     }
 
-    bool QueueEventProcessing( void )
+    bool QueueEventProcessing()
     {
         const int32_t index = GetIndexClick();
 
@@ -161,7 +161,7 @@ struct ResourceBar
         }
     }
 
-    int32_t GetIndexClick( void ) const
+    int32_t GetIndexClick() const
     {
         return GetIndexClickRects( positions );
     }

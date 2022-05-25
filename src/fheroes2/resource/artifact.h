@@ -186,7 +186,7 @@ public:
         return id;
     }
 
-    bool isUltimate( void ) const;
+    bool isUltimate() const;
 
     bool containsCurses() const
     {
@@ -204,8 +204,8 @@ public:
         ext = 0;
     }
 
-    int Level( void ) const;
-    int LoyaltyLevel( void ) const;
+    int Level() const;
+    int LoyaltyLevel() const;
 
     int getArtifactValue() const;
 
@@ -230,7 +230,7 @@ public:
     void SetSpell( const int v );
     int32_t getSpellId() const;
 
-    const char * GetName( void ) const;
+    const char * GetName() const;
 
     std::string GetDescription() const
     {
@@ -300,18 +300,18 @@ public:
 
     void RemoveArtifact( const Artifact & art );
 
-    bool isFull( void ) const;
-    bool ContainUltimateArtifact( void ) const;
+    bool isFull() const;
+    bool ContainUltimateArtifact() const;
 
     void exchangeArtifacts( BagArtifacts & giftBag );
 
     int getArtifactValue() const;
-    uint32_t CountArtifacts( void ) const;
+    uint32_t CountArtifacts() const;
     uint32_t Count( const Artifact & ) const;
 
     std::set<ArtifactSetData> assembleArtifactSetIfPossible();
 
-    std::string String( void ) const;
+    std::string String() const;
 };
 
 class ArtifactsBar : public Interface::ItemsActionBar<Artifact>
@@ -325,7 +325,7 @@ public:
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
     void RedrawItem( Artifact &, const fheroes2::Rect &, bool, fheroes2::Image & ) override;
 
-    void ResetSelected( void );
+    void ResetSelected();
     void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
 
     bool ActionBarLeftMouseSingleClick( Artifact & artifact ) override;

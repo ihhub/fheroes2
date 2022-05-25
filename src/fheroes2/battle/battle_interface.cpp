@@ -687,7 +687,7 @@ void Battle::OpponentSprite::SetAnimation( int rule )
     _currentAnim = getHeroAnimation( base, rule );
 }
 
-fheroes2::Point Battle::OpponentSprite::GetCastPosition( void ) const
+fheroes2::Point Battle::OpponentSprite::GetCastPosition() const
 {
     const bool isCaptain = base->isCaptain();
     fheroes2::Point offset;
@@ -790,7 +790,7 @@ void Battle::Status::SetMessage( const std::string & str, bool top )
     }
 }
 
-void Battle::Status::Redraw( void ) const
+void Battle::Status::Redraw() const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::Blit( back1, display, x, y );
@@ -1156,7 +1156,7 @@ void Battle::Interface::fullRedraw()
     Redraw();
 }
 
-void Battle::Interface::Redraw( void )
+void Battle::Interface::Redraw()
 {
     RedrawPartialStart();
     RedrawPartialFinish();
@@ -1194,7 +1194,7 @@ void Battle::Interface::RedrawPartialFinish()
     display.render();
 }
 
-void Battle::Interface::RedrawInterface( void )
+void Battle::Interface::RedrawInterface()
 {
     const Settings & conf = Settings::Get();
 
@@ -1403,7 +1403,7 @@ void Battle::Interface::RedrawArmies()
     }
 }
 
-void Battle::Interface::RedrawOpponents( void )
+void Battle::Interface::RedrawOpponents()
 {
     if ( opponent1 )
         opponent1->Redraw( _mainSurface );
@@ -1413,7 +1413,7 @@ void Battle::Interface::RedrawOpponents( void )
     RedrawOpponentsFlags();
 }
 
-void Battle::Interface::RedrawOpponentsFlags( void )
+void Battle::Interface::RedrawOpponentsFlags()
 {
     if ( opponent1 ) {
         int icn = ICN::UNKNOWN;
@@ -2694,7 +2694,7 @@ int Battle::GetIndexIndicator( const Unit & b )
     return 10;
 }
 
-void Battle::Interface::EventShowOptions( void )
+void Battle::Interface::EventShowOptions()
 {
     btn_settings.drawOnPress();
     DialogBattleSettings();
@@ -2722,7 +2722,7 @@ void Battle::Interface::ButtonAutoAction( const Unit & b, Actions & a )
         EventAutoSwitch( b, a );
 }
 
-void Battle::Interface::ButtonSettingsAction( void )
+void Battle::Interface::ButtonSettingsAction()
 {
     LocalEvent & le = LocalEvent::Get();
 

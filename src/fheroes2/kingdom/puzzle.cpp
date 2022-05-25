@@ -90,7 +90,7 @@ void Puzzle::Update( uint32_t open_obelisk, uint32_t total_obelisk )
         ZoneOpenFirstTiles( *this, need_puzzle, zone4_order );
 }
 
-void Puzzle::ShowMapsDialog( void ) const
+void Puzzle::ShowMapsDialog() const
 {
     const fheroes2::Image & sf = world.GetUltimateArtifact().GetPuzzleMapSurface();
     if ( sf.empty() )

@@ -73,7 +73,7 @@ namespace Interface
 
         static int32_t GetItemWidth();
         static int32_t GetItemHeight();
-        static bool IsVisible( void );
+        static bool IsVisible();
 
     protected:
         const fheroes2::Image & marker;
@@ -99,8 +99,8 @@ namespace Interface
         using Interface::ListBox<HEROES>::ActionListSingleClick;
         using Interface::ListBox<HEROES>::ActionListPressRight;
 
-        void ActionCurrentUp( void ) override;
-        void ActionCurrentDn( void ) override;
+        void ActionCurrentUp() override;
+        void ActionCurrentDn() override;
         void ActionListDoubleClick( HEROES & ) override;
         void ActionListSingleClick( HEROES & ) override;
         void ActionListPressRight( HEROES & ) override;
@@ -126,8 +126,8 @@ namespace Interface
         using Interface::ListBox<CASTLE>::ActionListSingleClick;
         using Interface::ListBox<CASTLE>::ActionListPressRight;
 
-        void ActionCurrentUp( void ) override;
-        void ActionCurrentDn( void ) override;
+        void ActionCurrentUp() override;
+        void ActionCurrentDn() override;
         void ActionListDoubleClick( CASTLE & ) override;
         void ActionListSingleClick( CASTLE & ) override;
         void ActionListPressRight( CASTLE & ) override;
@@ -144,12 +144,12 @@ namespace Interface
         explicit IconsPanel( Basic & basic );
 
         void SetPos( int32_t, int32_t ) override;
-        void SavePosition( void ) override;
-        void SetRedraw( void ) const;
+        void SavePosition() override;
+        void SetRedraw() const;
         void SetRedraw( const icons_t type ) const;
 
-        void Redraw( void );
-        void QueueEventProcessing( void );
+        void Redraw();
+        void QueueEventProcessing();
 
         void Select( Heroes * const );
         void Select( Castle * const );
@@ -159,7 +159,7 @@ namespace Interface
         void HideIcons( const icons_t type );
         void ShowIcons( const icons_t type );
         void RedrawIcons( const icons_t type );
-        void SetCurrentVisible( void );
+        void SetCurrentVisible();
 
     private:
         Basic & interface;

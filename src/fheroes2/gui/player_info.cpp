@@ -341,7 +341,7 @@ void Interface::PlayersInfo::resetSelection()
     currentSelectedPlayer = nullptr;
 }
 
-bool Interface::PlayersInfo::QueueEventProcessing( void )
+bool Interface::PlayersInfo::QueueEventProcessing()
 {
     Settings & conf = Settings::Get();
     const LocalEvent & le = LocalEvent::Get();

@@ -60,7 +60,7 @@ namespace Maps
         static bool FileSorting( const FileInfo &, const FileInfo & );
 
         bool isAllowCountPlayers( int playerCount ) const;
-        bool isMultiPlayerMap( void ) const;
+        bool isMultiPlayerMap() const;
 
         int AllowCompHumanColors() const
         {
@@ -86,8 +86,8 @@ namespace Maps
 
         uint32_t ConditionWins() const;
         uint32_t ConditionLoss() const;
-        bool WinsCompAlsoWins( void ) const;
-        int WinsFindArtifactID( void ) const;
+        bool WinsCompAlsoWins() const;
+        int WinsFindArtifactID() const;
 
         bool WinsFindUltimateArtifact() const
         {
@@ -114,8 +114,8 @@ namespace Maps
             return loss1;
         }
 
-        std::string String( void ) const;
-        void Reset( void );
+        std::string String() const;
+        void Reset();
 
         std::string file;
         std::string name;

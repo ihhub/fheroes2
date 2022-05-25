@@ -330,7 +330,7 @@ Monster Monster::GetDowngrade() const
     return Monster( id );
 }
 
-Monster Monster::GetUpgrade( void ) const
+Monster Monster::GetUpgrade() const
 {
     switch ( id ) {
     case ARCHER:
@@ -737,7 +737,7 @@ Monster::LevelType Monster::GetRandomUnitLevel() const
     return LevelType::LEVEL_ANY;
 }
 
-uint32_t Monster::GetDwelling( void ) const
+uint32_t Monster::GetDwelling() const
 {
     switch ( id ) {
     case PEASANT:
@@ -828,12 +828,12 @@ uint32_t Monster::GetDwelling( void ) const
     return 0;
 }
 
-const char * Monster::GetName( void ) const
+const char * Monster::GetName() const
 {
     return _( fheroes2::getMonsterData( id ).generalStats.name );
 }
 
-const char * Monster::GetMultiName( void ) const
+const char * Monster::GetMultiName() const
 {
     return _( fheroes2::getMonsterData( id ).generalStats.pluralName );
 }

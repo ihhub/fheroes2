@@ -68,10 +68,10 @@ namespace Interface
         REDRAW_ALL = 0xFF
     };
 
-    Castle * GetFocusCastle( void );
-    Heroes * GetFocusHeroes( void );
-    int GetFocusType( void );
-    fheroes2::Point GetFocusCenter( void );
+    Castle * GetFocusCastle();
+    Heroes * GetFocusHeroes();
+    int GetFocusType();
+    fheroes2::Point GetFocusCenter();
 
     class Basic
     {
@@ -154,33 +154,33 @@ namespace Interface
         void SetFocus( Heroes * );
         void SetFocus( Castle * );
         void ResetFocus( int );
-        void RedrawFocus( void );
+        void RedrawFocus();
 
         void SetHideInterface( bool );
 
-        void EventSwitchHeroSleeping( void );
+        void EventSwitchHeroSleeping();
         fheroes2::GameMode EventDefaultAction( const fheroes2::GameMode gameMode );
-        void EventOpenFocus( void ) const;
+        void EventOpenFocus() const;
         fheroes2::GameMode EventSaveGame() const;
-        void EventPuzzleMaps( void ) const;
+        void EventPuzzleMaps() const;
         static fheroes2::GameMode EventScenarioInformation();
         void EventSystemDialog() const;
-        void EventNextHero( void );
-        void EventNextTown( void );
-        void EventContinueMovement( void ) const;
-        void EventKingdomInfo( void ) const;
-        void EventCastSpell( void );
-        void EventSwitchShowRadar( void ) const;
-        void EventSwitchShowStatus( void ) const;
-        void EventSwitchShowButtons( void ) const;
-        void EventSwitchShowIcons( void );
-        void EventSwitchShowControlPanel( void ) const;
+        void EventNextHero();
+        void EventNextTown();
+        void EventContinueMovement() const;
+        void EventKingdomInfo() const;
+        void EventCastSpell();
+        void EventSwitchShowRadar() const;
+        void EventSwitchShowStatus() const;
+        void EventSwitchShowButtons() const;
+        void EventSwitchShowIcons();
+        void EventSwitchShowControlPanel() const;
 
         fheroes2::GameMode EventNewGame() const;
         fheroes2::GameMode EventLoadGame() const;
         fheroes2::GameMode EventAdventureDialog();
         void EventViewWorld();
-        fheroes2::GameMode EventFileDialog( void ) const;
+        fheroes2::GameMode EventFileDialog() const;
         fheroes2::GameMode EventEndTurn() const;
         static fheroes2::GameMode EventExit();
         fheroes2::GameMode EventDigArtifact();

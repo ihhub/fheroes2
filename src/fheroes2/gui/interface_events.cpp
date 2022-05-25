@@ -124,7 +124,7 @@ void Interface::Basic::MoveHeroFromArrowKeys( Heroes & hero, int direct )
     }
 }
 
-void Interface::Basic::EventNextHero( void )
+void Interface::Basic::EventNextHero()
 {
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     const KingdomHeroes & myHeroes = myKingdom.GetHeroes();
@@ -158,7 +158,7 @@ void Interface::Basic::EventNextHero( void )
     RedrawFocus();
 }
 
-void Interface::Basic::EventContinueMovement( void ) const
+void Interface::Basic::EventContinueMovement() const
 {
     Heroes * hero = GetFocusHeroes();
 
@@ -167,7 +167,7 @@ void Interface::Basic::EventContinueMovement( void ) const
     }
 }
 
-void Interface::Basic::EventKingdomInfo( void ) const
+void Interface::Basic::EventKingdomInfo() const
 {
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     myKingdom.openOverviewDialog();
@@ -175,7 +175,7 @@ void Interface::Basic::EventKingdomInfo( void ) const
     iconsPanel.SetRedraw();
 }
 
-void Interface::Basic::EventCastSpell( void )
+void Interface::Basic::EventCastSpell()
 {
     Heroes * hero = GetFocusHeroes();
 
@@ -254,7 +254,7 @@ fheroes2::GameMode Interface::Basic::EventExit()
     return fheroes2::GameMode::CANCEL;
 }
 
-void Interface::Basic::EventNextTown( void )
+void Interface::Basic::EventNextTown()
 {
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     KingdomCastles & myCastles = myKingdom.GetCastles();
@@ -313,7 +313,7 @@ fheroes2::GameMode Interface::Basic::EventLoadGame() const
                : fheroes2::GameMode::CANCEL;
 }
 
-void Interface::Basic::EventPuzzleMaps( void ) const
+void Interface::Basic::EventPuzzleMaps() const
 {
     world.GetKingdom( Settings::Get().CurrentColor() ).PuzzleMaps().ShowMapsDialog();
 }
@@ -343,7 +343,7 @@ fheroes2::GameMode Interface::Basic::EventScenarioInformation()
     return fheroes2::GameMode::CANCEL;
 }
 
-void Interface::Basic::EventSwitchHeroSleeping( void )
+void Interface::Basic::EventSwitchHeroSleeping()
 {
     Heroes * hero = GetFocusHeroes();
 
@@ -429,7 +429,7 @@ fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMod
     return gameMode;
 }
 
-void Interface::Basic::EventOpenFocus( void ) const
+void Interface::Basic::EventOpenFocus() const
 {
     if ( GetFocusHeroes() )
         Game::OpenHeroesDialog( *GetFocusHeroes(), true, true );
@@ -437,7 +437,7 @@ void Interface::Basic::EventOpenFocus( void ) const
         Game::OpenCastleDialog( *GetFocusCastle() );
 }
 
-void Interface::Basic::EventSwitchShowRadar( void ) const
+void Interface::Basic::EventSwitchShowRadar() const
 {
     Settings & conf = Settings::Get();
 
@@ -453,7 +453,7 @@ void Interface::Basic::EventSwitchShowRadar( void ) const
     }
 }
 
-void Interface::Basic::EventSwitchShowButtons( void ) const
+void Interface::Basic::EventSwitchShowButtons() const
 {
     Settings & conf = Settings::Get();
 
@@ -469,7 +469,7 @@ void Interface::Basic::EventSwitchShowButtons( void ) const
     }
 }
 
-void Interface::Basic::EventSwitchShowStatus( void ) const
+void Interface::Basic::EventSwitchShowStatus() const
 {
     Settings & conf = Settings::Get();
 
@@ -485,7 +485,7 @@ void Interface::Basic::EventSwitchShowStatus( void ) const
     }
 }
 
-void Interface::Basic::EventSwitchShowIcons( void )
+void Interface::Basic::EventSwitchShowIcons()
 {
     Settings & conf = Settings::Get();
 
@@ -502,7 +502,7 @@ void Interface::Basic::EventSwitchShowIcons( void )
     }
 }
 
-void Interface::Basic::EventSwitchShowControlPanel( void ) const
+void Interface::Basic::EventSwitchShowControlPanel() const
 {
     Settings & conf = Settings::Get();
 

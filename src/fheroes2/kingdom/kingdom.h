@@ -64,12 +64,12 @@ public:
     ~Kingdom() override = default;
 
     void Init( int color );
-    void clear( void );
+    void clear();
 
     void openOverviewDialog();
 
-    bool isPlay( void ) const;
-    bool isLoss( void ) const;
+    bool isPlay() const;
+    bool isLoss() const;
     bool AllowPayment( const Funds & ) const;
     bool AllowRecruitHero( bool check_payment ) const;
 
@@ -82,17 +82,17 @@ public:
 
     Monster GetStrongestMonster() const;
 
-    int GetControl( void ) const override;
-    int GetColor( void ) const;
-    int GetRace( void ) const;
+    int GetControl() const override;
+    int GetColor() const;
+    int GetRace() const;
 
-    const Funds & GetFunds( void ) const
+    const Funds & GetFunds() const
     {
         return resource;
     }
     Funds GetIncome( int = INCOME_ALL ) const;
 
-    double GetArmiesStrength( void ) const;
+    double GetArmiesStrength() const;
 
     void AddFundsResource( const Funds & );
     void OddFundsResource( const Funds & );
@@ -102,11 +102,11 @@ public:
         return castles.empty();
     }
 
-    uint32_t GetCountCastle( void ) const;
-    uint32_t GetCountTown( void ) const;
-    uint32_t GetCountMarketplace( void ) const;
-    uint32_t GetLostTownDays( void ) const;
-    uint32_t GetCountNecromancyShrineBuild( void ) const;
+    uint32_t GetCountCastle() const;
+    uint32_t GetCountTown() const;
+    uint32_t GetCountMarketplace() const;
+    uint32_t GetLostTownDays() const;
+    uint32_t GetCountNecromancyShrineBuild() const;
     uint32_t GetCountBuilding( uint32_t ) const;
     uint32_t GetCountThievesGuild() const;
 
@@ -119,35 +119,35 @@ public:
     // without making any changes in it
     Recruits & GetCurrentRecruits();
 
-    const KingdomHeroes & GetHeroes( void ) const
+    const KingdomHeroes & GetHeroes() const
     {
         return heroes;
     }
-    const KingdomCastles & GetCastles( void ) const
+    const KingdomCastles & GetCastles() const
     {
         return castles;
     }
 
-    KingdomHeroes & GetHeroes( void )
+    KingdomHeroes & GetHeroes()
     {
         return heroes;
     }
-    KingdomCastles & GetCastles( void )
+    KingdomCastles & GetCastles()
     {
         return castles;
     }
 
     void AddHeroes( Heroes * );
     void RemoveHeroes( const Heroes * );
-    void ApplyPlayWithStartingHero( void );
+    void ApplyPlayWithStartingHero();
 
     void AddCastle( const Castle * );
     void RemoveCastle( const Castle * );
 
     void ActionBeforeTurn();
-    void ActionNewDay( void );
-    void ActionNewWeek( void );
-    void ActionNewMonth( void );
+    void ActionNewDay();
+    void ActionNewWeek();
+    void ActionNewMonth();
 
     void SetVisited( int32_t index, const MP2::MapObjectType objectType );
     uint32_t CountVisitedObjects( const MP2::MapObjectType objectType ) const;
@@ -157,18 +157,18 @@ public:
 
     bool isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const;
 
-    bool HeroesMayStillMove( void ) const;
+    bool HeroesMayStillMove() const;
 
-    Puzzle & PuzzleMaps( void );
+    Puzzle & PuzzleMaps();
 
     void SetVisitTravelersTent( int color );
     bool IsVisitTravelersTent( int ) const;
 
-    void LossPostActions( void );
+    void LossPostActions();
 
     bool IsTileVisibleFromCrystalBall( const int32_t dest ) const;
 
-    static uint32_t GetMaxHeroes( void );
+    static uint32_t GetMaxHeroes();
 
 private:
     cost_t _getKingdomStartingResources( const int difficulty ) const;
@@ -203,19 +203,19 @@ class Kingdoms
 public:
     Kingdoms() = default;
 
-    void Init( void );
-    void clear( void );
+    void Init();
+    void clear();
 
-    void ApplyPlayWithStartingHero( void );
+    void ApplyPlayWithStartingHero();
 
-    void NewDay( void );
-    void NewWeek( void );
-    void NewMonth( void );
+    void NewDay();
+    void NewWeek();
+    void NewMonth();
 
     Kingdom & GetKingdom( int color );
     const Kingdom & GetKingdom( int color ) const;
 
-    int GetNotLossColors( void ) const;
+    int GetNotLossColors() const;
     int FindWins( int ) const;
 
     void AddHeroes( const AllHeroes & );

@@ -277,7 +277,7 @@ public:
     }
 };
 
-Skill::Secondary Dialog::SelectSecondarySkill( void )
+Skill::Secondary Dialog::SelectSecondarySkill()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();

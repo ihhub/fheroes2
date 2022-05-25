@@ -312,7 +312,7 @@ bool Funds::operator>=( const Funds & pm ) const
     return wood >= pm.wood && mercury >= pm.mercury && ore >= pm.ore && sulfur >= pm.sulfur && crystal >= pm.crystal && gems >= pm.gems && gold >= pm.gold;
 }
 
-std::string Funds::String( void ) const
+std::string Funds::String() const
 {
     std::ostringstream os;
     os << "ore: " << ore << ", wood: " << wood << ", mercury: " << mercury << ", sulfur: " << sulfur << ", crystal: " << crystal << ", gems: " << gems
@@ -454,7 +454,7 @@ int Resource::getResourceTypeFromIconIndex( const uint32_t index )
     return UNKNOWN;
 }
 
-int Funds::GetValidItems( void ) const
+int Funds::GetValidItems() const
 {
     int rs = 0;
 
@@ -476,7 +476,7 @@ int Funds::GetValidItems( void ) const
     return rs;
 }
 
-uint32_t Funds::GetValidItemsCount( void ) const
+uint32_t Funds::GetValidItemsCount() const
 {
     uint32_t result = 0;
 
@@ -498,7 +498,7 @@ uint32_t Funds::GetValidItemsCount( void ) const
     return result;
 }
 
-void Funds::Trim( void )
+void Funds::Trim()
 {
     if ( wood < 0 )
         wood = 0;
@@ -516,7 +516,7 @@ void Funds::Trim( void )
         gold = 0;
 }
 
-void Funds::Reset( void )
+void Funds::Reset()
 {
     wood = 0;
     ore = 0;
@@ -535,7 +535,7 @@ Resource::BoxSprite::BoxSprite( const Funds & f, int32_t width_ )
     height = 4 > count ? 45 : ( 7 > count ? 90 : 135 );
 }
 
-const fheroes2::Rect & Resource::BoxSprite::GetArea( void ) const
+const fheroes2::Rect & Resource::BoxSprite::GetArea() const
 {
     return *this;
 }
@@ -555,7 +555,7 @@ void RedrawResourceSprite( const fheroes2::Image & sf, const fheroes2::Point & p
     text.Blit( dst_pt.x - text.w() / 2, dst_pt.y + 2 );
 }
 
-void Resource::BoxSprite::Redraw( void ) const
+void Resource::BoxSprite::Redraw() const
 {
     std::vector<std::pair<int32_t, uint32_t> > valueVsSprite;
 

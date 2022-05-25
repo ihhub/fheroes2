@@ -46,18 +46,18 @@ public:
         return area;
     }
 
-    const char * GetName( void ) const;
+    const char * GetName() const;
     void SetStatusMessage( StatusBar & ) const;
-    bool IsDwelling( void ) const;
-    void Redraw( void ) const;
+    bool IsDwelling() const;
+    void Redraw() const;
     bool QueueEventProcessing( fheroes2::ButtonBase & exitButton ) const;
     bool DialogBuyBuilding( bool buttons ) const;
 
     static payment_t GetCost( uint32_t, int );
 
 private:
-    void RedrawCaptain( void ) const;
-    std::string GetConditionDescription( void ) const;
+    void RedrawCaptain() const;
+    std::string GetConditionDescription() const;
 
     const Castle & castle;
     uint32_t building;

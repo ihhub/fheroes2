@@ -45,16 +45,16 @@ namespace Battle
 
         Tower & operator=( const Tower & ) = delete;
 
-        bool isValid( void ) const override;
-        int GetColor( void ) const override;
-        uint32_t GetType( void ) const;
-        uint32_t GetBonus( void ) const;
-        uint32_t GetAttack( void ) const override;
+        bool isValid() const override;
+        int GetColor() const override;
+        uint32_t GetType() const;
+        uint32_t GetBonus() const;
+        uint32_t GetAttack() const override;
 
-        const char * GetName( void ) const;
+        const char * GetName() const;
 
-        void SetDestroy( void );
-        fheroes2::Point GetPortPosition( void ) const;
+        void SetDestroy();
+        fheroes2::Point GetPortPosition() const;
 
         static std::string GetInfo( const Castle & );
 

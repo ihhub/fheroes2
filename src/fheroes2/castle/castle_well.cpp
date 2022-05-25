@@ -172,7 +172,7 @@ void Castle::recruitCastleMax( const Troops & currentCastleArmy, const std::vect
     }
 }
 
-void Castle::OpenWell( void )
+void Castle::OpenWell()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 

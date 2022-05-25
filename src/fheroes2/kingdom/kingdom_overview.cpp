@@ -383,12 +383,12 @@ public:
     void RedrawItem( const CstlRow &, int32_t, int32_t, bool ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
-    void ActionCurrentUp( void ) override
+    void ActionCurrentUp() override
     {
         // Do nothing.
     }
 
-    void ActionCurrentDn( void ) override
+    void ActionCurrentDn() override
     {
         // Do nothing.
     }

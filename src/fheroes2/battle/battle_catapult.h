@@ -59,7 +59,7 @@ namespace Battle
 
         static fheroes2::Point GetTargetPosition( int target, bool hit );
 
-        uint32_t GetShots( void ) const
+        uint32_t GetShots() const
         {
             return catShots;
         }

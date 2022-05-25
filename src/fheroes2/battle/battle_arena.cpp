@@ -238,32 +238,32 @@ namespace
     }
 }
 
-Battle::Arena * Battle::GetArena( void )
+Battle::Arena * Battle::GetArena()
 {
     return arena;
 }
 
-const Castle * Battle::Arena::GetCastle( void )
+const Castle * Battle::Arena::GetCastle()
 {
     return arena->castle;
 }
 
-Battle::Bridge * Battle::Arena::GetBridge( void )
+Battle::Bridge * Battle::Arena::GetBridge()
 {
     return arena->bridge;
 }
 
-Battle::Board * Battle::Arena::GetBoard( void )
+Battle::Board * Battle::Arena::GetBoard()
 {
     return &arena->board;
 }
 
-Battle::Graveyard * Battle::Arena::GetGraveyard( void )
+Battle::Graveyard * Battle::Arena::GetGraveyard()
 {
     return &arena->graveyard;
 }
 
-Battle::Interface * Battle::Arena::GetInterface( void )
+Battle::Interface * Battle::Arena::GetInterface()
 {
     return arena->interface;
 }
@@ -517,12 +517,12 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
     }
 }
 
-bool Battle::Arena::BattleValid( void ) const
+bool Battle::Arena::BattleValid() const
 {
     return army1->isValid() && army2->isValid() && 0 == result_game.army1 && 0 == result_game.army2;
 }
 
-void Battle::Arena::Turns( void )
+void Battle::Arena::Turns()
 {
     ++current_turn;
 
@@ -723,7 +723,7 @@ void Battle::Arena::TowerAction( const Tower & twr )
     ApplyAction( cmd );
 }
 
-void Battle::Arena::CatapultAction( void )
+void Battle::Arena::CatapultAction()
 {
     if ( catapult ) {
         uint32_t shots = catapult->GetShots();
@@ -860,27 +860,27 @@ const Battle::Unit * Battle::Arena::GetTroopBoard( int32_t index ) const
     return Board::isValidIndex( index ) ? board[index].GetUnit() : nullptr;
 }
 
-const HeroBase * Battle::Arena::GetCommander1( void ) const
+const HeroBase * Battle::Arena::GetCommander1() const
 {
     return army1->GetCommander();
 }
 
-const HeroBase * Battle::Arena::GetCommander2( void ) const
+const HeroBase * Battle::Arena::GetCommander2() const
 {
     return army2->GetCommander();
 }
 
-int Battle::Arena::GetArmyColor1( void ) const
+int Battle::Arena::GetArmyColor1() const
 {
     return army1->GetColor();
 }
 
-int Battle::Arena::GetArmyColor2( void ) const
+int Battle::Arena::GetArmyColor2() const
 {
     return army2->GetColor();
 }
 
-int Battle::Arena::GetCurrentColor( void ) const
+int Battle::Arena::GetCurrentColor() const
 {
     return current_color;
 }
@@ -920,7 +920,7 @@ void Battle::Arena::FadeArena( bool clearMessageLog ) const
         interface->FadeArena( clearMessageLog );
 }
 
-const SpellStorage & Battle::Arena::GetUsageSpells( void ) const
+const SpellStorage & Battle::Arena::GetUsageSpells() const
 {
     return usage_spells;
 }
@@ -1104,7 +1104,7 @@ std::vector<const Battle::Unit *> Battle::Arena::GetGraveyardTroops( const int32
     return units;
 }
 
-Battle::Indexes Battle::Arena::GraveyardClosedCells( void ) const
+Battle::Indexes Battle::Arena::GraveyardClosedCells() const
 {
     return graveyard.GetClosedCells();
 }
@@ -1185,7 +1185,7 @@ uint32_t Battle::Arena::GetCastleTargetValue( int target ) const
     return 0;
 }
 
-std::vector<int> Battle::Arena::GetCastleTargets( void ) const
+std::vector<int> Battle::Arena::GetCastleTargets() const
 {
     std::vector<int> targets;
     targets.reserve( 8 );
@@ -1219,7 +1219,7 @@ const HeroBase * Battle::Arena::getEnemyCommander( const int color ) const
     return ( army1->GetColor() == color ) ? army2->GetCommander() : army1->GetCommander();
 }
 
-const HeroBase * Battle::Arena::GetCurrentCommander( void ) const
+const HeroBase * Battle::Arena::GetCurrentCommander() const
 {
     return getCommander( current_color );
 }
@@ -1347,17 +1347,17 @@ Battle::Force & Battle::Arena::GetCurrentForce() const
     return getForce( current_color );
 }
 
-int Battle::Arena::GetICNCovr( void ) const
+int Battle::Arena::GetICNCovr() const
 {
     return icn_covr;
 }
 
-uint32_t Battle::Arena::GetCurrentTurn( void ) const
+uint32_t Battle::Arena::GetCurrentTurn() const
 {
     return current_turn;
 }
 
-Battle::Result & Battle::Arena::GetResult( void )
+Battle::Result & Battle::Arena::GetResult()
 {
     return result_game;
 }

@@ -265,43 +265,43 @@ StreamBuf & StreamBuf::operator=( StreamBuf && st ) noexcept
     return *this;
 }
 
-size_t StreamBuf::capacity( void ) const
+size_t StreamBuf::capacity() const
 {
     return itend - itbeg;
 }
 
-const uint8_t * StreamBuf::data( void ) const
+const uint8_t * StreamBuf::data() const
 {
     return itget;
 }
 
-size_t StreamBuf::size( void ) const
+size_t StreamBuf::size() const
 {
     return sizeg();
 }
 
-void StreamBuf::reset( void )
+void StreamBuf::reset()
 {
     itput = itbeg;
     itget = itbeg;
 }
 
-size_t StreamBuf::tellg( void ) const
+size_t StreamBuf::tellg() const
 {
     return itget - itbeg;
 }
 
-size_t StreamBuf::tellp( void ) const
+size_t StreamBuf::tellp() const
 {
     return itput - itbeg;
 }
 
-size_t StreamBuf::sizeg( void ) const
+size_t StreamBuf::sizeg() const
 {
     return itput - itget;
 }
 
-size_t StreamBuf::sizep( void ) const
+size_t StreamBuf::sizep() const
 {
     return itend - itput;
 }
@@ -492,7 +492,7 @@ bool StreamFile::open( const std::string & fn, const std::string & mode )
     return _file != nullptr;
 }
 
-void StreamFile::close( void )
+void StreamFile::close()
 {
     if ( _file ) {
         std::fclose( _file );
@@ -500,7 +500,7 @@ void StreamFile::close( void )
     }
 }
 
-size_t StreamFile::size( void ) const
+size_t StreamFile::size() const
 {
     if ( !_file )
         return 0;
@@ -511,7 +511,7 @@ size_t StreamFile::size( void ) const
     return static_cast<size_t>( len );
 }
 
-size_t StreamFile::tell( void ) const
+size_t StreamFile::tell() const
 {
     return tellg();
 }
@@ -522,7 +522,7 @@ void StreamFile::seek( size_t pos )
         std::fseek( _file, static_cast<long>( pos ), SEEK_SET );
 }
 
-size_t StreamFile::sizeg( void ) const
+size_t StreamFile::sizeg() const
 {
     if ( !_file )
         return 0;
@@ -533,17 +533,17 @@ size_t StreamFile::sizeg( void ) const
     return static_cast<size_t>( len - pos );
 }
 
-size_t StreamFile::tellg( void ) const
+size_t StreamFile::tellg() const
 {
     return _file ? static_cast<size_t>( std::ftell( _file ) ) : 0;
 }
 
-size_t StreamFile::sizep( void ) const
+size_t StreamFile::sizep() const
 {
     return sizeg();
 }
 
-size_t StreamFile::tellp( void ) const
+size_t StreamFile::tellp() const
 {
     return tellg();
 }

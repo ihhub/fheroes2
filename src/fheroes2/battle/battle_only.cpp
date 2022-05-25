@@ -47,7 +47,7 @@ namespace
     const uint32_t primaryMaxValue = 20;
 }
 
-void Battle::ControlInfo::Redraw( void ) const
+void Battle::ControlInfo::Redraw() const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
