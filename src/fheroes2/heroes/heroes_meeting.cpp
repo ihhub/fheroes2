@@ -579,8 +579,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             display.render();
         }
-        else if ( HotKeyPressEvent( Game::HotKeyEvent::SWAP_ARMIES ) )
-        {
+        else if ( HotKeyPressEvent( Game::HotKeyEvent::SWAP_ARMIES ) ) {
             Army::swapArmyTroops( GetArmy(), otherHero.GetArmy() );
 
             armyCountBackgroundRestorerLeft.restore();
