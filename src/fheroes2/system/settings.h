@@ -84,7 +84,7 @@ public:
         // UNUSED = 0x20040000,
         CASTLE_ALLOW_GUARDIANS = 0x20080000,
         // UNUSED = 0x20800000,
-        HEROES_REMEMBER_POINTS_RETREAT = 0x21000000,
+        HEROES_REMEMBER_MP_WHEN_RETREATING = 0x21000000,
 
         // UNUSED = 0x30000001,
         // UNUSED = 0x30000008,
@@ -253,9 +253,9 @@ public:
         return ExtModes( HEROES_BUY_BOOK_FROM_SHRINES );
     }
 
-    bool ExtHeroRememberPointsForRetreating() const
+    bool ExtHeroRememberMovementPointsWhenRetreating() const
     {
-        return ExtModes( HEROES_REMEMBER_POINTS_RETREAT );
+        return ExtModes( HEROES_REMEMBER_MP_WHEN_RETREATING );
     }
 
     bool ExtHeroArenaCanChoiseAnySkills() const
@@ -515,9 +515,9 @@ public:
         return current_maps_file.WinsFindUltimateArtifact();
     }
 
-    u32 WinsAccumulateGold() const
+    uint32_t getWinningGoldAccumulationValue() const
     {
-        return current_maps_file.WinsAccumulateGold();
+        return current_maps_file.getWinningGoldAccumulationValue();
     }
 
     fheroes2::Point WinsMapsPositionObject() const

@@ -31,7 +31,7 @@
 #include "translations.h"
 
 Battle::Tower::Tower( const Castle & castle, int twr, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid )
-    : Unit( Troop( Monster::ARCHER, 0 ), -1, false, randomGenerator, uid )
+    : Unit( Troop( Monster::ARCHER, 0 ), {}, false, randomGenerator, uid )
     , type( twr )
     , color( castle.GetColor() )
     , bonus( 0 )

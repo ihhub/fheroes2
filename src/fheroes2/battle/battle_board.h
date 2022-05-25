@@ -98,7 +98,7 @@ namespace Battle
         static Indexes GetAroundIndexes( const Unit & unit );
         static Indexes GetAroundIndexes( const Position & position );
         static Indexes GetMoveWideIndexes( s32, bool reflect );
-        static bool isValidMirrorImageIndex( s32, const Unit * );
+        static bool isValidMirrorImageIndex( const int32_t index, const Unit * unit );
 
         // Checks that the current unit (to which the current passability information relates) is able (in principle)
         // to attack from the cell with the given index

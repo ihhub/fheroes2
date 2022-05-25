@@ -43,7 +43,7 @@ namespace
         return std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( abilityType ) ) != abilities.end();
     }
 
-    double getMonsterBaseStrength( const int monsterId, const fheroes2::MonsterData & data )
+    double getMonsterBaseStrength( const fheroes2::MonsterData & data )
     {
         const fheroes2::MonsterBattleStats & battleStats = data.battleStats;
         const std::vector<fheroes2::MonsterAbility> & abilities = battleStats.abilities;
@@ -97,15 +97,26 @@ namespace
             monsterSpecial += 0.3;
         }
 
-        switch ( monsterId ) {
-        case Monster::UNICORN:
-        case Monster::CYCLOPS:
-        case Monster::MEDUSA:
-            // 20% to Blind, Paralyze and Petrify
-            monsterSpecial += 0.2;
-            break;
-        default:
-            break;
+        auto foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SPELL_CASTER ) );
+
+        if ( foundAbility != abilities.end() ) {
+            // This is a tricky evaluation. Spell casting ability depends on a type of spell and chance to inflict the spell.
+            switch ( foundAbility->value ) {
+            case Spell::PARALYZE:
+            case Spell::BLIND:
+            case Spell::PETRIFY:
+                monsterSpecial += foundAbility->percentage / 100.0;
+                break;
+            case Spell::DISPEL:
+            case Spell::CURSE:
+                // These spell are very weak and do not impact much during battle.
+                monsterSpecial += foundAbility->percentage / 100.0 / 10.0;
+                break;
+            default:
+                // Did you add a new spell casting ability? Add the logic above!
+                assert( 0 );
+                break;
+            }
         }
 
         // Higher speed gives initiative advantage/first attack. Remap speed value to -0.2...+0.15, AVERAGE is 0
@@ -508,7 +519,7 @@ namespace
         monsterData[Monster::GENIE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
 
         monsterData[Monster::MEDUSA].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
-        monsterData[Monster::MEDUSA].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::SPELL_CASTER, 20, Spell::STONE );
+        monsterData[Monster::MEDUSA].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::SPELL_CASTER, 20, Spell::PETRIFY );
 
         monsterData[Monster::NOMAD].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
 
@@ -537,8 +548,8 @@ namespace
         monsterData[Monster::WATER_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_FIRE_SPELL );
 
         // Calculate base value of monster strength.
-        for ( int i = 0; i < Monster::MONSTER_COUNT; ++i ) {
-            monsterData[i].battleStats.monsterBaseStrength = getMonsterBaseStrength( i, monsterData[i] );
+        for ( fheroes2::MonsterData & data : monsterData ) {
+            data.battleStats.monsterBaseStrength = getMonsterBaseStrength( data );
         }
 
         // TODO: verify that no duplicates of abilities and weaknesses exist.
@@ -625,7 +636,7 @@ namespace fheroes2
             else if ( ability.value == Spell::PARALYZE ) {
                 return std::to_string( ability.percentage ) + _( "% chance to Paralyze" );
             }
-            else if ( ability.value == Spell::STONE ) {
+            else if ( ability.value == Spell::PETRIFY ) {
                 return std::to_string( ability.percentage ) + _( "% chance to Petrify" );
             }
             else if ( ability.value == Spell::BLIND ) {

@@ -934,15 +934,8 @@ StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
         }
     }
 
-    msg >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom.heroes_cond_loss >> kingdom._lastBattleWinHeroID;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_097_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_097_RELEASE ) {
-        msg >> kingdom._topItemInKingdomView;
-    }
-    else {
-        kingdom._topItemInKingdomView = -1;
-    }
+    msg >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom.heroes_cond_loss >> kingdom._lastBattleWinHeroID
+        >> kingdom._topItemInKingdomView;
 
     return msg;
 }

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-20 02:21+0000\n"
+"POT-Creation-Date: 2022-05-24 17:13+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -139,6 +139,10 @@ msgstr "Нежить в армии -1"
 msgid "View %{name}"
 msgstr "Просмотреть %{name}"
 
+#, fuzzy
+msgid "Move the %{name} "
+msgstr "Переместить %{name}"
+
 msgid "Move or right click to redistribute %{name}"
 msgstr "Перемеcтить отряд или разделить (правой кнопкой)"
 
@@ -153,6 +157,10 @@ msgstr "Выбрать %{name}"
 
 msgid "Cannot move last troop"
 msgstr "Невозможно переместить последний отряд"
+
+#, fuzzy
+msgid "Move the %{name}"
+msgstr "Переместить %{name}"
 
 msgid "Set Count"
 msgstr "Количество"
@@ -565,20 +573,29 @@ msgstr ""
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "Заклинание \"%{spell}\" наносит %{damage} урона всем живым существам."
 
-msgid "The Unicorns' attack blinds the %{name}!"
+#, fuzzy
+msgid "The %{attacker}' attack blinds the %{target}!"
 msgstr "%{name} ослеплены единорогами!"
 
-msgid "The Medusas' gaze turns the %{name} to stone!"
+#, fuzzy
+msgid "The %{attacker}' gaze turns the %{target} to stone!"
 msgstr "%{name} обращены в камень взглядом медузы!"
 
-msgid "The Mummies' curse falls upon the %{name}!"
+#, fuzzy
+msgid "The %{attacker}' curse falls upon the %{target}!"
 msgstr "%{name} прокляты мумиями!"
 
-msgid "The %{name} are paralyzed by the Cyclopes!"
+#, fuzzy
+msgid "The %{target} are paralyzed by the %{attacker}!"
 msgstr "%{name} парализованы циклопами!"
 
-msgid "The Archmagi dispel all good spells on your %{name}!"
+#, fuzzy
+msgid "The %{attacker} dispel all good spells on your %{target}!"
 msgstr "Архимаги рассеяли хорошую магию с отряда %{name}!"
+
+#, fuzzy
+msgid "The %{attacker} cast %{spell} on %{target}!"
+msgstr "%{name} применяет \"%{spell}\" (цель: %{troop})."
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "Удача отвернулась от %{attacker}."
@@ -3413,6 +3430,14 @@ msgstr "Неизвестный герой"
 msgid "Your Name"
 msgstr "Ваше имя"
 
+#, fuzzy
+msgid "Standard"
+msgstr "Стандартная игра"
+
+#, fuzzy
+msgid "View High Scores for Standard Maps."
+msgstr "Посмотреть очки рейтинга за кампании."
+
 msgid "Campaign"
 msgstr "Кампания"
 
@@ -3676,20 +3701,6 @@ msgid ""
 msgstr ""
 "Враг захватил %{name}!\n"
 "Вы проиграли."
-
-msgid ""
-"The enemy has captured the hero %{name}!\n"
-"Your quest is a failure."
-msgstr ""
-"Враг захватил героя %{name}!\n"
-"Ваше задание провалено."
-
-msgid ""
-"The enemy has found the %{name}.\n"
-"Your quest is a failure."
-msgstr ""
-"Враг нашёл %{name}.\n"
-"Ваше задание провалено."
 
 msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
@@ -5683,7 +5694,8 @@ msgid ""
 "cast the spell."
 msgstr "Заклинание требует %{mana} очков магии. У Вас только %{point}."
 
-msgid "The spell is not found."
+#, fuzzy
+msgid "The spell was not found."
 msgstr "Заклинание не найдено."
 
 msgid "Only heroes can cast this spell."
@@ -8360,7 +8372,10 @@ msgstr "Мумия"
 msgid "Spell Scroll"
 msgstr "Свиток Заклинания"
 
-msgid "This %{name} gives your hero the ability to cast the %{spell} spell."
+#, fuzzy
+msgid ""
+"This %{name} gives your hero the ability to cast the %{spell} spell if your "
+"hero has a Magic Book."
 msgstr "%{name} позволяет Вашему герою произносить заклинание %{spell}."
 
 msgid ""
@@ -9175,6 +9190,9 @@ msgstr ""
 "Превращает поражённое существо в камень. Окаменевшее существо получает "
 "половину урона от прямой атаки."
 
+msgid "You have no Magic Book, so you cannot cast a spell."
+msgstr ""
+
 msgid "No spell to cast."
 msgstr "Нет заклинаний для применения."
 
@@ -9261,7 +9279,8 @@ msgstr "замок: разрешить защитников (как в H3)"
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "герои: разрешить покупку магической книги в святилищах"
 
-msgid "heroes: remember move points for retreat/surrender result"
+#, fuzzy
+msgid "heroes: remember movement points when retreating or surrendering"
 msgstr "герои: при бегстве запомнить MP/SP для текущего дня"
 
 msgid "heroes: allow to choose any primary skill in Arena"
@@ -9350,6 +9369,3 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Quit out of fheroes2."
-#~ msgstr "Выйти из fheroes2."

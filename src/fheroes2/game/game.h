@@ -66,7 +66,6 @@ namespace Game
     fheroes2::GameMode MainMenu( bool isFirstGameRun );
     fheroes2::GameMode NewGame();
     fheroes2::GameMode LoadGame();
-    fheroes2::GameMode HighScores();
     fheroes2::GameMode Credits();
     fheroes2::GameMode NewStandard();
     fheroes2::GameMode CampaignSelection();
@@ -87,6 +86,7 @@ namespace Game
     fheroes2::GameMode StartBattleOnly();
     fheroes2::GameMode DisplayLoadGameDialog();
     fheroes2::GameMode CompleteCampaignScenario( const bool isLoadingSaveFile );
+    fheroes2::GameMode DisplayHighScores( const bool isCampaign );
 
     bool isSuccessionWarsCampaignPresent();
     bool isPriceOfLoyaltyCampaignPresent();

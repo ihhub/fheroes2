@@ -23,14 +23,33 @@
 #include <set>
 #include <tuple>
 
+#include "game_over.h"
 #include "ground.h"
 #include "logging.h"
 #include "rand.h"
+#include "settings.h"
 #include "world.h"
 #include "world_pathfinding.h"
 
 namespace
 {
+    bool isFindArtifactVictoryConditionForHuman( const Artifact & art )
+    {
+        assert( art.isValid() );
+
+        const Settings & conf = Settings::Get();
+
+        if ( ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) == 0 ) {
+            return false;
+        }
+
+        if ( conf.WinsFindUltimateArtifact() ) {
+            return art.isUltimate();
+        }
+
+        return ( art.GetID() == conf.WinsFindArtifactID() );
+    }
+
     bool isTileBlocked( int tileIndex, bool fromWater )
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
@@ -57,19 +76,34 @@ namespace
         // Special cases: check if we can defeat the Hero/Monster and pass through
         if ( objectType == MP2::OBJ_HEROES ) {
             const Heroes * otherHero = tile.GetHeroes();
-            if ( otherHero ) {
-                if ( otherHero->isFriends( color ) ) {
-                    return true;
-                }
+            assert( otherHero != nullptr );
 
-                return otherHero->GetArmy().GetStrength() > armyStrength;
+            if ( otherHero->isFriends( color ) ) {
+                return true;
+            }
+
+            // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
+            if ( otherHero == world.GetHeroesCondWins() ) {
+                return true;
+            }
+
+            return otherHero->GetArmy().GetStrength() > armyStrength;
+        }
+
+        // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
+        if ( MP2::isArtifactObject( objectType ) ) {
+            const Artifact art = tile.QuantityArtifact();
+
+            if ( art.isValid() && isFindArtifactVictoryConditionForHuman( art ) ) {
+                return true;
             }
         }
 
+        // Monster or artifact guarded by a monster
         if ( objectType == MP2::OBJ_MONSTER || ( objectType == MP2::OBJ_ARTIFACT && tile.QuantityVariant() > 5 ) )
             return Army( tile ).GetStrength() > armyStrength;
 
-        // check if AI has the key for the barrier
+        // Check if AI has the key for the barrier
         if ( objectType == MP2::OBJ_BARRIER && world.GetKingdom( color ).IsVisitTravelersTent( tile.QuantityColor() ) )
             return false;
 
@@ -77,7 +111,7 @@ namespace
         if ( objectType == MP2::OBJ_BOAT )
             return false;
 
-        // if none of the special cases apply, check if tile can be moved on
+        // If none of the special cases apply, check if tile can be moved on
         return MP2::isNeedStayFront( objectType );
     }
 

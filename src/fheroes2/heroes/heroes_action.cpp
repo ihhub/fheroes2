@@ -166,13 +166,12 @@ void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, s32 dst
 void ActionToBarrier( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 void ActionToTravellersTent( const Heroes & hero, const MP2::MapObjectType objectType, s32 dst_index );
 
-void BattleLose( Heroes & hero, const Battle::Result & res, bool attacker, int color = Color::NONE )
+void BattleLose( Heroes & hero, const Battle::Result & res, bool attacker )
 {
     const uint32_t reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
     AGG::PlaySound( M82::KILLFADE );
     hero.FadeOut();
-    hero.SetKillerColor( color );
     hero.SetFreeman( reason );
 
     Interface::Basic & I = Interface::Basic::Get();
@@ -723,11 +722,11 @@ void ActionToHeroes( Heroes & hero, s32 dst_index )
 
         // loss defender
         if ( !res.DefenderWins() )
-            BattleLose( *other_hero, res, false, hero.GetColor() );
+            BattleLose( *other_hero, res, false );
 
         // loss attacker
         if ( !res.AttackerWins() )
-            BattleLose( hero, res, true, other_hero->GetColor() );
+            BattleLose( hero, res, true );
 
         // wins attacker
         if ( res.AttackerWins() ) {
@@ -780,11 +779,11 @@ void ActionToCastle( Heroes & hero, s32 dst_index )
 
             // loss defender
             if ( !res.DefenderWins() && defender )
-                BattleLose( *defender, res, false, hero.GetColor() );
+                BattleLose( *defender, res, false );
 
             // loss attacker
             if ( !res.AttackerWins() )
-                BattleLose( hero, res, true, castle->GetColor() );
+                BattleLose( hero, res, true );
 
             // wins attacker
             if ( res.AttackerWins() ) {

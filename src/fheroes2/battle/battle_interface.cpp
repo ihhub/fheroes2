@@ -3612,7 +3612,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, s32 dst
             case Spell::BLOODLUST:
                 RedrawActionBloodLustSpell( *target );
                 break;
-            case Spell::STONE:
+            case Spell::PETRIFY:
                 RedrawActionStoneSpell( *target );
                 break;
             default:
@@ -3737,38 +3737,39 @@ void Battle::Interface::RedrawActionSpellCastPart2( const Spell & spell, const T
     _movingUnit = nullptr;
 }
 
-void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Unit & attacker, const TargetInfo & target )
+void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Spell & spell, const Unit & attacker, const TargetInfo & target )
 {
-    const char * msg = nullptr;
+    std::string msg;
 
-    switch ( attacker.GetID() ) {
-    case Monster::UNICORN:
-        msg = _( "The Unicorns' attack blinds the %{name}!" );
+    switch ( spell.GetID() ) {
+    case Spell::BLIND:
+        msg = _( "The %{attacker}' attack blinds the %{target}!" );
         break;
-    case Monster::MEDUSA:
-        msg = _( "The Medusas' gaze turns the %{name} to stone!" );
+    case Spell::PETRIFY:
+        msg = _( "The %{attacker}' gaze turns the %{target} to stone!" );
         break;
-    case Monster::ROYAL_MUMMY:
-    case Monster::MUMMY:
-        msg = _( "The Mummies' curse falls upon the %{name}!" );
+    case Spell::CURSE:
+        msg = _( "The %{attacker}' curse falls upon the %{target}!" );
         break;
-    case Monster::CYCLOPS:
-        msg = _( "The %{name} are paralyzed by the Cyclopes!" );
+    case Spell::PARALYZE:
+        msg = _( "The %{target} are paralyzed by the %{attacker}!" );
         break;
-    case Monster::ARCHMAGE:
-        msg = _( "The Archmagi dispel all good spells on your %{name}!" );
+    case Spell::DISPEL:
+        msg = _( "The %{attacker} dispel all good spells on your %{target}!" );
         break;
     default:
+        // Did you add a new monster spell casting ability? Add the logic above!
+        assert( 0 );
+        msg = _( "The %{attacker} cast %{spell} on %{target}!" );
+        StringReplace( msg, "%{spell}", spell.GetName() );
         break;
     }
 
-    if ( msg ) {
-        std::string str( msg );
-        StringReplace( str, "%{name}", target.defender->GetName() );
+    StringReplace( msg, "%{attacker}", attacker.GetMultiName() );
+    StringReplace( msg, "%{target}", target.defender->GetName() );
 
-        status.SetMessage( str, true );
-        status.SetMessage( "", false );
-    }
+    status.SetMessage( msg, true );
+    status.SetMessage( "", false );
 }
 
 void Battle::Interface::RedrawActionLuck( const Unit & unit )
@@ -5067,8 +5068,10 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
         if ( hero ) {
             if ( hero->HaveSpellBook() ) {
                 std::string msg;
-                if ( arena.isDisableCastSpell( Spell::NONE, &msg ) )
+
+                if ( arena.isDisableCastSpell( Spell::NONE, &msg ) ) {
                     Dialog::Message( "", msg, Font::BIG, Dialog::OK );
+                }
                 else {
                     std::function<void( const std::string & )> statusCallback = [this]( const std::string & statusStr ) {
                         status.SetMessage( statusStr );
@@ -5077,21 +5080,29 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
 
                     const Spell spell = hero->OpenSpellBook( SpellBook::Filter::CMBT, true, &statusCallback );
                     if ( spell.isValid() ) {
-                        std::string error;
+                        assert( spell.isCombat() );
 
-                        if ( arena.isDisableCastSpell( spell, &msg ) )
+                        if ( arena.isDisableCastSpell( spell, &msg ) ) {
                             Dialog::Message( "", msg, Font::BIG, Dialog::OK );
-                        else if ( hero->CanCastSpell( spell, &error ) ) {
-                            if ( spell.isApplyWithoutFocusObject() ) {
-                                a.emplace_back( CommandType::MSG_BATTLE_CAST, spell.GetID(), -1 );
-                                humanturn_redraw = true;
-                                humanturn_exit = true;
-                            }
-                            else
-                                humanturn_spell = spell;
                         }
-                        else if ( !error.empty() )
-                            Dialog::Message( _( "Error" ), error, Font::BIG, Dialog::OK );
+                        else {
+                            std::string error;
+
+                            if ( hero->CanCastSpell( spell, &error ) ) {
+                                if ( spell.isApplyWithoutFocusObject() ) {
+                                    a.emplace_back( CommandType::MSG_BATTLE_CAST, spell.GetID(), -1 );
+
+                                    humanturn_redraw = true;
+                                    humanturn_exit = true;
+                                }
+                                else {
+                                    humanturn_spell = spell;
+                                }
+                            }
+                            else {
+                                Dialog::Message( _( "Error" ), error, Font::BIG, Dialog::OK );
+                            }
+                        }
                     }
                 }
             }

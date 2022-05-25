@@ -44,7 +44,7 @@ namespace
     const int32_t infl = 12;
 }
 
-void Battle::Position::Set( s32 head, bool wide, bool reflect )
+void Battle::Position::Set( const int32_t head, const bool wide, const bool reflect )
 {
     first = Board::GetCell( head );
 

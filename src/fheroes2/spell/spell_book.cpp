@@ -167,7 +167,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
                        const std::function<void( const std::string & )> * statusCallback /*= nullptr*/ ) const
 {
     if ( !hero.HaveSpellBook() ) {
-        Dialog::Message( "", _( "No spell to cast." ), Font::BIG, Dialog::OK );
+        Dialog::Message( "", _( "You have no Magic Book, so you cannot cast a spell." ), Font::BIG, Dialog::OK );
         return Spell::NONE;
     }
 
@@ -278,6 +278,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
                 if ( spell < displayedSpells.end() ) {
                     if ( canCastSpell ) {
                         std::string str;
+
                         if ( hero.CanCastSpell( *spell, &str ) ) {
                             curspell = *spell;
                             break;

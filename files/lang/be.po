@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-20 02:21+0000\n"
+"POT-Creation-Date: 2022-05-24 17:13+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -118,6 +118,9 @@ msgstr ""
 msgid "View %{name}"
 msgstr ""
 
+msgid "Move the %{name} "
+msgstr ""
+
 msgid "Move or right click to redistribute %{name}"
 msgstr ""
 
@@ -131,6 +134,9 @@ msgid "Select %{name}"
 msgstr ""
 
 msgid "Cannot move last troop"
+msgstr ""
+
+msgid "Move the %{name}"
 msgstr ""
 
 msgid "Set Count"
@@ -511,19 +517,22 @@ msgstr ""
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr ""
 
-msgid "The Unicorns' attack blinds the %{name}!"
+msgid "The %{attacker}' attack blinds the %{target}!"
 msgstr ""
 
-msgid "The Medusas' gaze turns the %{name} to stone!"
+msgid "The %{attacker}' gaze turns the %{target} to stone!"
 msgstr ""
 
-msgid "The Mummies' curse falls upon the %{name}!"
+msgid "The %{attacker}' curse falls upon the %{target}!"
 msgstr ""
 
-msgid "The %{name} are paralyzed by the Cyclopes!"
+msgid "The %{target} are paralyzed by the %{attacker}!"
 msgstr ""
 
-msgid "The Archmagi dispel all good spells on your %{name}!"
+msgid "The %{attacker} dispel all good spells on your %{target}!"
+msgstr ""
+
+msgid "The %{attacker} cast %{spell} on %{target}!"
 msgstr ""
 
 msgid "Bad luck descends on the %{attacker}."
@@ -3080,6 +3089,12 @@ msgstr ""
 msgid "Your Name"
 msgstr ""
 
+msgid "Standard"
+msgstr ""
+
+msgid "View High Scores for Standard Maps."
+msgstr ""
+
 msgid "Campaign"
 msgstr ""
 
@@ -3310,16 +3325,6 @@ msgstr ""
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
-msgstr ""
-
-msgid ""
-"The enemy has captured the hero %{name}!\n"
-"Your quest is a failure."
-msgstr ""
-
-msgid ""
-"The enemy has found the %{name}.\n"
-"Your quest is a failure."
 msgstr ""
 
 msgid ""
@@ -4900,7 +4905,7 @@ msgid ""
 "cast the spell."
 msgstr ""
 
-msgid "The spell is not found."
+msgid "The spell was not found."
 msgstr ""
 
 msgid "Only heroes can cast this spell."
@@ -7509,7 +7514,9 @@ msgstr ""
 msgid "Spell Scroll"
 msgstr ""
 
-msgid "This %{name} gives your hero the ability to cast the %{spell} spell."
+msgid ""
+"This %{name} gives your hero the ability to cast the %{spell} spell if your "
+"hero has a Magic Book."
 msgstr ""
 
 msgid ""
@@ -8192,6 +8199,9 @@ msgid ""
 "damage from a direct attack."
 msgstr ""
 
+msgid "You have no Magic Book, so you cannot cast a spell."
+msgstr ""
+
 msgid "No spell to cast."
 msgstr ""
 
@@ -8271,7 +8281,7 @@ msgstr ""
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr ""
 
-msgid "heroes: remember move points for retreat/surrender result"
+msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"

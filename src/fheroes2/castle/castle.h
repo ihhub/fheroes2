@@ -103,9 +103,7 @@ public:
     {
         ALLOWCASTLE = 0x0002,
         CUSTOMARMY = 0x0004,
-        ALLOWBUILD = 0x0008,
-        // UNUSED = 0x0010,
-        CAPITAL = 0x0020
+        ALLOWBUILD = 0x0008
     };
 
     enum class CastleDialogReturnValue : int
@@ -137,8 +135,11 @@ public:
         return captain;
     }
 
-    bool isCastle( void ) const;
-    bool isCapital( void ) const;
+    bool isCastle() const
+    {
+        return ( building & BUILD_CASTLE ) != 0;
+    }
+
     bool HaveNearlySea( void ) const;
     bool PresentBoat( void ) const;
     bool AllowBuyHero( std::string * = nullptr ) const;

@@ -127,7 +127,7 @@ namespace AI
                     return true;
             }
             else {
-                if ( BuildIfEnoughResources( castle, it->building, GetResourceMultiplier( castle, priority, priority + 1 ) ) )
+                if ( BuildIfEnoughResources( castle, it->building, GetResourceMultiplier( priority, priority + 1 ) ) )
                     return true;
             }
         }

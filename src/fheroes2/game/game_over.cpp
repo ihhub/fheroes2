@@ -88,7 +88,7 @@ namespace
                 break;
             case GameOver::WINS_GOLD: {
                 body = _( "You have built up over %{count} gold in your treasury.\nAll enemies bow before your wealth and power." );
-                StringReplace( body, "%{count}", conf.WinsAccumulateGold() );
+                StringReplace( body, "%{count}", conf.getWinningGoldAccumulationValue() );
                 break;
             }
             default:
@@ -116,24 +116,9 @@ namespace
             break;
         }
 
-        case GameOver::LOSS_ENEMY_WINS_HERO: {
-            body = _( "The enemy has captured the hero %{name}!\nYour quest is a failure." );
-            const Heroes * hero = world.GetHeroesCondWins();
-            if ( hero )
-                StringReplace( body, "%{name}", hero->GetName() );
-            break;
-        }
-
-        case GameOver::LOSS_ENEMY_WINS_ARTIFACT: {
-            body = _( "The enemy has found the %{name}.\nYour quest is a failure." );
-            const Artifact art = conf.WinsFindArtifactID();
-            StringReplace( body, "%{name}", art.GetName() );
-            break;
-        }
-
         case GameOver::LOSS_ENEMY_WINS_GOLD: {
             body = _( "The enemy has built up over %{count} gold in his treasury.\nYou must bow done in defeat before his wealth and power." );
-            StringReplace( body, "%{count}", conf.WinsAccumulateGold() );
+            StringReplace( body, "%{count}", conf.getWinningGoldAccumulationValue() );
             break;
         }
 
@@ -236,7 +221,7 @@ std::string GameOver::GetActualDescription( uint32_t cond )
     }
     else if ( WINS_GOLD & cond ) {
         msg = _( "Accumulate %{count} gold." );
-        StringReplace( msg, "%{count}", conf.WinsAccumulateGold() );
+        StringReplace( msg, "%{count}", conf.getWinningGoldAccumulationValue() );
     }
 
     if ( WINS_ALL != cond && ( WINS_ALL & cond ) )
@@ -348,14 +333,14 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     // before displaying the high score.
                     AGG::PlayMusic( MUS::VICTORY, true, true );
 
-                    res = fheroes2::GameMode::HIGHSCORES;
+                    res = fheroes2::GameMode::HIGHSCORES_STANDARD;
 
                     if ( conf.ExtGameContinueAfterVictory() && myKingdom.isPlay() ) {
                         if ( Dialog::YES == Dialog::Message( "", _( "Do you wish to continue the game?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
                             continueAfterVictory = true;
 
                             // Game::HighScores() calls ResetResult()
-                            Game::HighScores();
+                            Game::DisplayHighScores( false );
 
                             Interface::Basic & I = Interface::Basic::Get();
 

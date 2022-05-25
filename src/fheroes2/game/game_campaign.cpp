@@ -574,7 +574,6 @@ namespace
 
                     for ( size_t j = 0; j < heroes.size(); ++j ) {
                         if ( heroes[j]->GetID() == awards[i]._subType ) {
-                            heroes[j]->SetKillerColor( humanKingdom.GetColor() );
                             heroes[j]->SetFreeman( Battle::RESULT_LOSS );
                             break;
                         }
@@ -857,7 +856,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         // and a dialog for name entry. AGG:PlayMusic is run here in order to start
         // playing before displaying the high score.
         AGG::PlayMusic( MUS::VICTORY, true, true );
-        return fheroes2::GameMode::HIGHSCORES;
+        return fheroes2::GameMode::HIGHSCORES_CAMPAIGN;
     }
 
     const Campaign::ScenarioInfoId firstNextMap = Campaign::CampaignData::getScenariosAfter( lastCompletedScenarioInfo ).front();

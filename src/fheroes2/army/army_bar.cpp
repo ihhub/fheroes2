@@ -291,7 +291,13 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
         }
         else if ( !troop.isValid() ) {
             if ( !read_only ) {
-                msg = _( "Move or right click to redistribute %{name}" );
+                if ( troop2->GetCount() == 1 ) {
+                    msg = _( "Move the %{name} " );
+                }
+                else {
+                    msg = _( "Move or right click to redistribute %{name}" );
+                }
+
                 StringReplace( msg, "%{name}", troop2->GetName() );
             }
         }
@@ -335,7 +341,13 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & destTroop, ArmyTroop & selectedTroop 
     else if ( save_last_troop )
         msg = _( "Cannot move last troop" );
     else {
-        msg = _( "Move or right click to redistribute %{name}" );
+        if ( selectedTroop.GetCount() == 1 ) {
+            msg = _( "Move the %{name}" );
+        }
+        else {
+            msg = _( "Move or right click to redistribute %{name}" );
+        }
+
         StringReplace( msg, "%{name}", selectedTroop.GetName() );
     }
 

@@ -369,16 +369,6 @@ void Castle::PostLoad( void )
                ( building & BUILD_CASTLE ? "castle" : "town" ) << ": " << name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( race ) )
 }
 
-bool Castle::isCastle( void ) const
-{
-    return ( building & BUILD_CASTLE ) != 0;
-}
-
-bool Castle::isCapital( void ) const
-{
-    return Modes( CAPITAL );
-}
-
 u32 Castle::CountBuildings( void ) const
 {
     const u32 tavern = ( race == Race::NECR ? ( Settings::Get().isCurrentMapPriceOfLoyalty() ? BUILD_SHRINE : BUILD_NOTHING ) : BUILD_TAVERN );

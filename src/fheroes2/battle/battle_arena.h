@@ -144,7 +144,7 @@ namespace Battle
         void TargetsApplySpell( const HeroBase *, const Spell &, TargetsInfo & ) const;
 
         bool isSpellcastDisabled() const;
-        bool isDisableCastSpell( const Spell &, std::string * msg );
+        bool isDisableCastSpell( const Spell &, std::string * msg = nullptr );
 
         bool GraveyardAllowResurrect( s32, const Spell & ) const;
         const Unit * GraveyardLastTroop( s32 ) const;
@@ -227,8 +227,10 @@ namespace Battle
         // automatically. When an attack is made by firing a shot, the dir should be UNKNOWN (zero).
         void BattleProcess( Unit & attacker, Unit & defender, int32_t dst = -1, int dir = -1 );
 
-        Unit * CreateElemental( const Spell & );
-        Unit * CreateMirrorImage( Unit &, s32 );
+        Unit * CreateElemental( const Spell & spell );
+        // Creates and returns a mirror image of the given unit. The returned mirror image will have an invalid
+        // position, which should be updated separately.
+        Unit * CreateMirrorImage( Unit & unit );
 
         Force * army1;
         Force * army2;

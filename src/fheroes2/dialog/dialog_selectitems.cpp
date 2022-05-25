@@ -335,7 +335,7 @@ Spell Dialog::SelectSpell( int cur )
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    std::vector<int> spells( static_cast<int>( Spell::STONE - 1 ), Spell::NONE );
+    std::vector<int> spells( static_cast<int>( Spell::RANDOM - 1 ), Spell::NONE );
 
     for ( size_t i = 0; i < spells.size(); ++i )
         spells[i] = static_cast<int>( i + 1 ); // safe to do this as the number of spells can't be more than 2 billion

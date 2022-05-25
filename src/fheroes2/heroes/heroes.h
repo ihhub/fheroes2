@@ -150,26 +150,31 @@ public:
     enum flags_t : uint32_t
     {
         SHIPMASTER = 0x00000001,
+
         // UNUSED = 0x00000002,
+
         SPELLCASTED = 0x00000004,
         ENABLEMOVE = 0x00000008,
+
         // UNUSED = 0x00000010,
         // UNUSED = 0x00000020,
-        RECRUIT = 0x00000040, // Hero is available for recruitment in any kingdom
+
+        // Hero is available for recruitment in any kingdom
+        RECRUIT = 0x00000040,
         JAIL = 0x00000080,
         ACTION = 0x00000100,
-        SAVE_MP_POINTS = 0x00000200,
+        // Hero should remember his movement points when retreating or surrendering, related to Settings::HEROES_REMEMBER_MP_WHEN_RETREATING
+        SAVEMP = 0x00000200,
         SLEEPER = 0x00000400,
         GUARDIAN = 0x00000800,
         NOTDEFAULTS = 0x00001000,
         NOTDISMISS = 0x00002000,
         VISIONS = 0x00004000,
         PATROL = 0x00008000,
-        CUSTOMARMY = 0x00010000,
-        CUSTOMSKILLS = 0x00020000,
-        SKIPPED_TURN = 0x00040000,
-        WAITING = 0x00080000,
-        MOVED = 0x00100000
+
+        // UNUSED = 0x00010000,
+
+        CUSTOMSKILLS = 0x00020000
     };
 
     // Types of heroes. Used only for AI as humans are smart enough to manage heroes by themselves.
@@ -208,6 +213,9 @@ public:
     Heroes();
     Heroes( int heroid, int rc );
     Heroes( int heroID, int race, int initialLevel );
+    Heroes( const Heroes & ) = delete;
+
+    Heroes & operator=( const Heroes & ) = delete;
 
     bool isValid() const override;
     bool isFreeman( void ) const;
@@ -225,9 +233,6 @@ public:
     int GetColor() const override;
     int GetType() const override;
     int GetControl() const override;
-
-    int GetKillerColor( void ) const;
-    void SetKillerColor( int );
 
     const Army & GetArmy() const override;
     Army & GetArmy() override;
@@ -432,7 +437,6 @@ private:
     };
 
     std::string name;
-    ColorBase killer_color;
     u32 experience;
     s32 move_point_scale;
 

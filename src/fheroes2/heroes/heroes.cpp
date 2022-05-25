@@ -51,6 +51,7 @@
 #include "mp2.h"
 #include "payment.h"
 #include "race.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "speed.h"
@@ -218,7 +219,7 @@ Heroes::Heroes( int heroid, int rc )
         magic_point = 120;
 
         // all spell in magic book
-        for ( u32 spell = Spell::FIREBALL; spell < Spell::STONE; ++spell )
+        for ( int32_t spell = Spell::FIREBALL; spell < Spell::RANDOM; ++spell )
             AppendSpellToBook( Spell( spell ), true );
         break;
 
@@ -259,7 +260,7 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
     else
         st.skip( 15 );
 
-    // custom portrate
+    // custom portrait
     bool custom_portrait = ( st.get() != 0 );
 
     if ( custom_portrait ) {
@@ -344,16 +345,13 @@ void Heroes::LoadFromMP2( s32 map_index, int cl, int rc, StreamBuf st )
 
 void Heroes::PostLoad( void )
 {
-    killer_color.SetColor( Color::NONE );
-
     // save general object
     save_maps_object = MP2::OBJ_ZERO;
 
     // fix zero army
-    if ( !army.isValid() )
+    if ( !army.isValid() ) {
         army.Reset( false );
-    else
-        SetModes( CUSTOMARMY );
+    }
 
     // level up
     int level = GetLevel();
@@ -686,12 +684,11 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
     ResetModes( JAIL );
 
     SetColor( col );
-    killer_color.SetColor( Color::NONE );
 
     SetCenter( pt );
     setDirection( Direction::RIGHT );
 
-    if ( !Modes( SAVE_MP_POINTS ) ) {
+    if ( !Modes( SAVEMP ) ) {
         move_point = GetMaxMovePoints();
     }
     MovePointsScaleFixed();
@@ -738,7 +735,7 @@ void Heroes::ActionNewDay( void )
     visit_object.remove_if( Visit::isDayLife );
 
     // new day, new capacities
-    ResetModes( SAVE_MP_POINTS );
+    ResetModes( SAVEMP );
 }
 
 void Heroes::ActionNewWeek( void )
@@ -1524,8 +1521,8 @@ void Heroes::SetFreeman( int reason )
         SetModes( ACTION );
 
         if ( ( Battle::RESULT_RETREAT | Battle::RESULT_SURRENDER ) & reason ) {
-            if ( Settings::Get().ExtHeroRememberPointsForRetreating() ) {
-                SetModes( SAVE_MP_POINTS );
+            if ( Settings::Get().ExtHeroRememberMovementPointsWhenRetreating() ) {
+                SetModes( SAVEMP );
             }
 
             if ( heroColor != Color::NONE ) {
@@ -1533,16 +1530,6 @@ void Heroes::SetFreeman( int reason )
             }
         }
     }
-}
-
-void Heroes::SetKillerColor( int col )
-{
-    killer_color.SetColor( col );
-}
-
-int Heroes::GetKillerColor( void ) const
-{
-    return killer_color.GetColor();
 }
 
 int Heroes::GetControl( void ) const
@@ -1690,26 +1677,22 @@ void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitT
             mp.x = port.width() - 10;
         }
         else if ( PORT_SMALL == type ) {
+            const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::PORTXTRA, 0 );
             const fheroes2::Sprite & mobility = fheroes2::AGG::GetICN( ICN::MOBILITY, GetMobilityIndexSprite() );
             const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, GetManaIndexSprite() );
 
-            const int iconsw = Interface::IconsBar::GetItemWidth();
-            const int iconsh = Interface::IconsBar::GetItemHeight();
             const int barw = 7;
 
-            // background
-            fheroes2::Fill( dstsf, px, py, iconsw, iconsh, 0 );
+            // Draw background.
+            fheroes2::Blit( background, dstsf, px, py );
 
-            // mobility
-            const uint8_t blueColor = fheroes2::GetColorId( 15, 30, 120 );
-            fheroes2::Fill( dstsf, px, py, barw, iconsh, blueColor );
+            // Draw mobility.
             fheroes2::Blit( mobility, dstsf, px, py + mobility.y() );
 
-            // portrait
+            // Draw hero's portrait.
             fheroes2::Blit( port, dstsf, px + barw + 1, py );
 
-            // mana
-            fheroes2::Fill( dstsf, px + barw + port.width() + 2, py, barw, iconsh, blueColor );
+            // Draw mana.
             fheroes2::Blit( mana, dstsf, px + barw + port.width() + 2, py + mana.y() );
 
             mp.x = 35;
@@ -1975,7 +1958,7 @@ Heroes * AllHeroes::GetFreeman( const int race, const int heroIDToIgnore ) const
 
     // All the heroes are busy
     if ( freeman_heroes.empty() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "freeman is not found, all the heroes are busy." )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "freeman not found, all the heroes are busy." )
         return nullptr;
     }
 
@@ -2072,11 +2055,12 @@ StreamBase & operator<<( StreamBase & msg, const Heroes & hero )
     const HeroBase & base = hero;
     const ColorBase & col = hero;
 
+    // HeroBase
     msg << base;
 
-    // heroes
-    msg << hero.name << col << hero.killer_color << hero.experience << hero.move_point_scale << hero.secondary_skills << hero.army << hero.hid << hero.portrait
-        << hero._race << hero.save_maps_object << hero.path << hero.direction << hero.sprite_index;
+    // Heroes
+    msg << hero.name << col << hero.experience << hero.move_point_scale << hero.secondary_skills << hero.army << hero.hid << hero.portrait << hero._race
+        << hero.save_maps_object << hero.path << hero.direction << hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
     const int16_t patrolX = static_cast<int16_t>( hero.patrol_center.x );
@@ -2092,8 +2076,21 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     HeroBase & base = hero;
     ColorBase & col = hero;
 
-    msg >> base >> hero.name >> col >> hero.killer_color >> hero.experience >> hero.move_point_scale >> hero.secondary_skills >> hero.army >> hero.hid >> hero.portrait
-        >> hero._race >> hero.save_maps_object >> hero.path >> hero.direction >> hero.sprite_index;
+    // HeroBase
+    msg >> base;
+
+    // Heroes
+    msg >> hero.name >> col;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0916_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_0916_RELEASE ) {
+        ColorBase dummyColor;
+
+        msg >> dummyColor;
+    }
+
+    msg >> hero.experience >> hero.move_point_scale >> hero.secondary_skills >> hero.army >> hero.hid >> hero.portrait >> hero._race >> hero.save_maps_object >> hero.path
+        >> hero.direction >> hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
     int16_t patrolX = 0;

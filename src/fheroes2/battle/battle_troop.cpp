@@ -105,7 +105,7 @@ u32 Battle::ModesAffected::FindZeroDuration( void ) const
     return it == end() ? 0 : ( *it ).first;
 }
 
-Battle::Unit::Unit( const Troop & t, int32_t pos, bool ref, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid )
+Battle::Unit::Unit( const Troop & t, const Position & pos, const bool ref, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid )
     : ArmyTroop( nullptr, t )
     , animation( id )
     , _uid( uid )
@@ -121,55 +121,47 @@ Battle::Unit::Unit( const Troop & t, int32_t pos, bool ref, const Rand::Determin
     , customAlphaMask( 255 )
     , _randomGenerator( randomGenerator )
 {
-    // set position
-    if ( Board::isValidIndex( pos ) ) {
-        if ( t.isWide() )
-            pos += ( reflect ? -1 : 1 );
-        SetPosition( pos );
-    }
-    else {
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Invalid position " << pos << " for board" )
-    }
+    SetPosition( pos );
 }
 
-Battle::Unit::~Unit()
+void Battle::Unit::SetPosition( const int32_t idx )
 {
-    // reset summon elemental and mirror image
-    if ( Modes( CAP_SUMMONELEM ) || Modes( CAP_MIRRORIMAGE ) ) {
-        SetCount( 0 );
-    }
-}
-
-void Battle::Unit::SetPosition( s32 pos )
-{
-    if ( position.GetHead() )
+    if ( position.GetHead() ) {
         position.GetHead()->SetUnit( nullptr );
-    if ( position.GetTail() )
+    }
+    if ( position.GetTail() ) {
         position.GetTail()->SetUnit( nullptr );
+    }
 
-    position.Set( pos, isWide(), reflect );
+    position.Set( idx, isWide(), reflect );
 
-    if ( position.GetHead() )
+    if ( position.GetHead() ) {
         position.GetHead()->SetUnit( this );
-    if ( position.GetTail() )
+    }
+    if ( position.GetTail() ) {
         position.GetTail()->SetUnit( this );
+    }
 }
 
 void Battle::Unit::SetPosition( const Position & pos )
 {
-    if ( position.GetHead() )
+    if ( position.GetHead() ) {
         position.GetHead()->SetUnit( nullptr );
-    if ( position.GetTail() )
+    }
+    if ( position.GetTail() ) {
         position.GetTail()->SetUnit( nullptr );
+    }
 
     position = pos;
 
-    if ( position.GetHead() )
+    if ( position.GetHead() ) {
         position.GetHead()->SetUnit( this );
-    if ( position.GetTail() )
+    }
+    if ( position.GetTail() ) {
         position.GetTail()->SetUnit( this );
+    }
 
-    if ( isWide() ) {
+    if ( isWide() && position.GetHead() && position.GetTail() ) {
         reflect = GetHeadIndex() < GetTailIndex();
     }
 }
@@ -583,9 +575,9 @@ u32 Battle::Unit::GetDamage( const Unit & enemy ) const
         res = _randomGenerator.Get( CalculateMinDamage( enemy ), CalculateMaxDamage( enemy ) );
 
     if ( Modes( LUCK_GOOD ) )
-        res <<= 1; // mul 2
+        res = res * 2;
     else if ( Modes( LUCK_BAD ) )
-        res >>= 1; // div 2
+        res = res / 2;
 
     return res;
 }
@@ -834,7 +826,7 @@ bool Battle::Unit::isUnderSpellEffect( const Spell & spell ) const
 
     case Spell::BLIND:
     case Spell::PARALYZE:
-    case Spell::STONE:
+    case Spell::PETRIFY:
         return Modes( SP_BLIND | SP_PARALYZE | SP_STONE );
 
     case Spell::DRAGONSLAYER:
@@ -919,7 +911,7 @@ std::vector<Spell> Battle::Unit::getCurrentSpellEffects() const
         spellList.emplace_back( Spell::PARALYZE );
     }
     if ( Modes( SP_STONE ) ) {
-        spellList.emplace_back( Spell::STONE );
+        spellList.emplace_back( Spell::PETRIFY );
     }
     if ( Modes( SP_DRAGONSLAYER ) ) {
         spellList.emplace_back( Spell::DRAGONSLAYER );
@@ -1070,8 +1062,11 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
         attackerThreat /= 2;
     }
 
+    const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( id ).battleStats.abilities;
+
     // Monster special abilities
-    if ( isDoubleAttack() ) {
+    auto foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK ) );
+    if ( foundAbility != abilities.end() ) {
         if ( attackerIsArchers || ignoreRetaliation() || defender.Modes( TR_RESPONSED ) ) {
             attackerThreat *= 2;
         }
@@ -1081,30 +1076,42 @@ s32 Battle::Unit::GetScoreQuality( const Unit & defender ) const
         }
     }
 
-    switch ( id ) {
-    case Monster::UNICORN:
-        attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::BLIND, DEFAULT_SPELL_DURATION, nullptr ) ) / 100.0;
-        break;
-    case Monster::CYCLOPS:
-        attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::PARALYZE, DEFAULT_SPELL_DURATION, nullptr ) ) / 100.0;
-        break;
-    case Monster::MEDUSA:
-        attackerThreat += defendersDamage * 0.2 * ( 100 - defender.GetMagicResist( Spell::STONE, DEFAULT_SPELL_DURATION, nullptr ) ) / 100.0;
-        break;
-    case Monster::VAMPIRE_LORD:
-        // Lifesteal
-        attackerThreat *= 1.3;
-        break;
-    case Monster::GENIE:
-        // Genie's ability to half enemy troops
+    foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::ENEMY_HALFING ) );
+    if ( foundAbility != abilities.end() ) {
         attackerThreat *= 2;
-        break;
-    case Monster::GHOST:
-        // Ghost's ability to increase the numbers
+    }
+
+    foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SOUL_EATER ) );
+    if ( foundAbility != abilities.end() ) {
         attackerThreat *= 3;
-        break;
-    default:
-        break;
+    }
+
+    foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::HP_DRAIN ) );
+    if ( foundAbility != abilities.end() ) {
+        attackerThreat *= 1.3;
+    }
+
+    foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SPELL_CASTER ) );
+    if ( foundAbility != abilities.end() ) {
+        switch ( foundAbility->value ) {
+        case Spell::BLIND:
+        case Spell::PARALYZE:
+        case Spell::PETRIFY:
+            attackerThreat
+                += defendersDamage * foundAbility->percentage / 100.0 * ( 100 - defender.GetMagicResist( foundAbility->value, DEFAULT_SPELL_DURATION, nullptr ) ) / 100.0;
+            break;
+        case Spell::DISPEL:
+            // TODO: add the logic to evaluate this spell value.
+            break;
+        case Spell::CURSE:
+            attackerThreat += defendersDamage * foundAbility->percentage / 100.0 / 10.0
+                              * ( 100 - defender.GetMagicResist( foundAbility->value, DEFAULT_SPELL_DURATION, nullptr ) ) / 100.0;
+            break;
+        default:
+            // Did you add a new spell casting ability? Add the logic above!
+            assert( 0 );
+            break;
+        }
     }
 
     // force big priority on mirror images as they get destroyed in 1 hit
@@ -1273,7 +1280,7 @@ void Battle::Unit::SpellModesAction( const Spell & spell, u32 duration, const He
         break;
     }
 
-    case Spell::STONE:
+    case Spell::PETRIFY:
         SetModes( SP_STONE );
         affected.AddMode( SP_STONE, duration );
         break;
