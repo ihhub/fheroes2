@@ -92,7 +92,9 @@ namespace
         const fheroes2::Display & display = fheroes2::Display::instance();
         const std::string resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() );
 
-        drawOption( optionRoi, _( "Resolution" ), resolutionName.c_str(), ICN::SPANEL, 16 );
+        const Settings & configuration = Settings::Get();
+
+        drawOption( optionRoi, _( "Resolution" ), resolutionName.c_str(), ICN::SPANEL, configuration.ExtGameEvilInterface() ? 17 : 16 );
     }
 
     void drawExperimentalOptions( const fheroes2::Rect & optionRoi )
