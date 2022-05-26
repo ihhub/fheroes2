@@ -153,15 +153,15 @@ namespace AGG
     fheroes2::AGGFile heroes2_agg;
     fheroes2::AGGFile heroes2x_agg;
 
-    std::map<int, std::vector<u8>> wav_cache;
-    std::map<int, std::vector<u8>> mid_cache;
+    std::map<int, std::vector<uint8_t>> wav_cache;
+    std::map<int, std::vector<uint8_t>> mid_cache;
     std::vector<loop_sound_t> loop_sounds;
 
-    const std::vector<u8> & GetWAV( int m82 );
-    const std::vector<u8> & GetMID( int xmi );
+    const std::vector<uint8_t> & GetWAV( int m82 );
+    const std::vector<uint8_t> & GetMID( int xmi );
 
-    void LoadWAV( int m82, std::vector<u8> & );
-    void LoadMID( int xmi, std::vector<u8> & );
+    void LoadWAV( int m82, std::vector<uint8_t> & v );
+    void LoadMID( int xmi, std::vector<uint8_t> & v );
 
     std::vector<uint8_t> ReadMusicChunk( const std::string & key, const bool ignoreExpansion = false );
 
@@ -410,10 +410,10 @@ std::vector<uint8_t> AGG::ReadMusicChunk( const std::string & key, const bool ig
     return g_midiHeroes2AGG.read( key );
 }
 
-void AGG::LoadWAV( int m82, std::vector<u8> & v )
+void AGG::LoadWAV( int m82, std::vector<uint8_t> & v )
 {
     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) )
-    const std::vector<u8> & body = ReadMusicChunk( M82::GetString( m82 ) );
+    const std::vector<uint8_t> & body = ReadMusicChunk( M82::GetString( m82 ) );
 
     if ( !body.empty() ) {
         // create WAV format
@@ -438,7 +438,7 @@ void AGG::LoadWAV( int m82, std::vector<u8> & v )
     }
 }
 
-void AGG::LoadMID( int xmi, std::vector<u8> & v )
+void AGG::LoadMID( int xmi, std::vector<uint8_t> & v )
 {
     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) )
     const std::vector<uint8_t> & body = ReadMusicChunk( XMI::GetString( xmi ), xmi >= XMI::MIDI_ORIGINAL_KNIGHT );
@@ -448,17 +448,17 @@ void AGG::LoadMID( int xmi, std::vector<u8> & v )
     }
 }
 
-const std::vector<u8> & AGG::GetWAV( int m82 )
+const std::vector<uint8_t> & AGG::GetWAV( int m82 )
 {
-    std::vector<u8> & v = wav_cache[m82];
+    std::vector<uint8_t> & v = wav_cache[m82];
     if ( Audio::isValid() && v.empty() )
         LoadWAV( m82, v );
     return v;
 }
 
-const std::vector<u8> & AGG::GetMID( int xmi )
+const std::vector<uint8_t> & AGG::GetMID( int xmi )
 {
-    std::vector<u8> & v = mid_cache[xmi];
+    std::vector<uint8_t> & v = mid_cache[xmi];
     if ( Audio::isValid() && v.empty() )
         LoadMID( xmi, v );
     return v;
@@ -517,7 +517,7 @@ void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols, const int s
         else
             // new sound
             if ( 0 != vol ) {
-            const std::vector<u8> & v = GetWAV( m82 );
+            const std::vector<uint8_t> & v = GetWAV( m82 );
             const int ch = Mixer::Play( &v[0], static_cast<uint32_t>( v.size() ), -1, true );
 
             if ( 0 <= ch ) {
@@ -566,7 +566,7 @@ void AGG::PlaySoundInternally( const int m82, const int soundVolume )
 
     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) )
 
-    const std::vector<u8> & v = AGG::GetWAV( m82 );
+    const std::vector<uint8_t> & v = AGG::GetWAV( m82 );
     const int ch = Mixer::Play( &v[0], static_cast<uint32_t>( v.size() ), -1, false );
 
     if ( ch >= 0 ) {
@@ -648,7 +648,7 @@ void AGG::PlayMusicInternally( const int mus, const MusicSource musicType, const
     }
 
     if ( XMI::UNKNOWN != xmi ) {
-        const std::vector<u8> & v = GetMID( xmi );
+        const std::vector<uint8_t> & v = GetMID( xmi );
         if ( !v.empty() ) {
             Music::Play( v, loop );
 

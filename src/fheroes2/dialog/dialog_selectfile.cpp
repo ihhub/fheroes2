@@ -96,7 +96,7 @@ public:
         , _isDoubleClicked( false )
     {}
 
-    void RedrawItem( const Maps::FileInfo &, s32, s32, bool ) override;
+    void RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
     void ActionCurrentUp() override;
@@ -133,7 +133,7 @@ private:
 
 #define ARRAY_COUNT( A ) sizeof( A ) / sizeof( A[0] )
 
-void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, s32 dstx, s32 dsty, bool current )
+void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current )
 {
     char shortDate[20];
     char shortHours[20];
@@ -197,7 +197,7 @@ void FileInfoListBox::ActionListSingleClick( Maps::FileInfo & /*unused*/ )
     // Do nothing.
 }
 
-MapsFileInfoList GetSortedMapsFileInfoList( void )
+MapsFileInfoList GetSortedMapsFileInfoList()
 {
     ListFiles list1;
     list1.ReadDir( Game::GetSaveDir(), Game::GetSaveFileExtension(), false );
@@ -224,7 +224,7 @@ std::string Dialog::SelectFileSave()
     return SelectFileListSimple( _( "File to Save:" ), os.str(), true );
 }
 
-std::string Dialog::SelectFileLoad( void )
+std::string Dialog::SelectFileLoad()
 {
     const std::string & lastfile = Game::GetLastSavename();
     return SelectFileListSimple( _( "File to Load:" ), ( !lastfile.empty() ? lastfile : "" ), false );

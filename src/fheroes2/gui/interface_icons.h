@@ -73,7 +73,7 @@ namespace Interface
 
         static int32_t GetItemWidth();
         static int32_t GetItemHeight();
-        static bool IsVisible( void );
+        static bool IsVisible();
 
     protected:
         const fheroes2::Image & marker;
@@ -81,8 +81,8 @@ namespace Interface
         bool show;
     };
 
-    void RedrawHeroesIcon( const Heroes &, s32, s32 );
-    void RedrawCastleIcon( const Castle &, s32, s32 );
+    void RedrawHeroesIcon( const Heroes &, int32_t, int32_t );
+    void RedrawCastleIcon( const Castle &, int32_t, int32_t );
 
     class HeroesIcons : public Interface::ListBox<HEROES>, public IconsBar
     {
@@ -91,7 +91,7 @@ namespace Interface
             : IconsBar( count, sf )
         {}
 
-        void SetPos( s32, s32 );
+        void SetPos( int32_t px, int32_t py );
         void SetShow( bool );
 
     protected:
@@ -99,12 +99,12 @@ namespace Interface
         using Interface::ListBox<HEROES>::ActionListSingleClick;
         using Interface::ListBox<HEROES>::ActionListPressRight;
 
-        void ActionCurrentUp( void ) override;
-        void ActionCurrentDn( void ) override;
+        void ActionCurrentUp() override;
+        void ActionCurrentDn() override;
         void ActionListDoubleClick( HEROES & ) override;
         void ActionListSingleClick( HEROES & ) override;
         void ActionListPressRight( HEROES & ) override;
-        void RedrawItem( const HEROES &, s32 ox, s32 oy, bool current ) override;
+        void RedrawItem( const HEROES & item, int32_t ox, int32_t oy, bool current ) override;
         void RedrawBackground( const fheroes2::Point & ) override;
 
     private:
@@ -118,7 +118,7 @@ namespace Interface
             : IconsBar( count, sf )
         {}
 
-        void SetPos( s32, s32 );
+        void SetPos( int32_t px, int32_t py );
         void SetShow( bool );
 
     protected:
@@ -126,12 +126,12 @@ namespace Interface
         using Interface::ListBox<CASTLE>::ActionListSingleClick;
         using Interface::ListBox<CASTLE>::ActionListPressRight;
 
-        void ActionCurrentUp( void ) override;
-        void ActionCurrentDn( void ) override;
+        void ActionCurrentUp() override;
+        void ActionCurrentDn() override;
         void ActionListDoubleClick( CASTLE & ) override;
         void ActionListSingleClick( CASTLE & ) override;
         void ActionListPressRight( CASTLE & ) override;
-        void RedrawItem( const CASTLE &, s32 ox, s32 oy, bool current ) override;
+        void RedrawItem( const CASTLE & item, int32_t ox, int32_t oy, bool current ) override;
         void RedrawBackground( const fheroes2::Point & ) override;
 
     private:
@@ -143,13 +143,13 @@ namespace Interface
     public:
         explicit IconsPanel( Basic & basic );
 
-        void SetPos( s32, s32 ) override;
-        void SavePosition( void ) override;
-        void SetRedraw( void ) const;
+        void SetPos( int32_t ox, int32_t oy ) override;
+        void SavePosition() override;
+        void SetRedraw() const;
         void SetRedraw( const icons_t type ) const;
 
-        void Redraw( void );
-        void QueueEventProcessing( void );
+        void Redraw();
+        void QueueEventProcessing();
 
         void Select( Heroes * const );
         void Select( Castle * const );
@@ -159,7 +159,7 @@ namespace Interface
         void HideIcons( const icons_t type );
         void ShowIcons( const icons_t type );
         void RedrawIcons( const icons_t type );
-        void SetCurrentVisible( void );
+        void SetCurrentVisible();
 
     private:
         Basic & interface;

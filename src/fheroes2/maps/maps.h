@@ -23,11 +23,11 @@
 #ifndef H2MAPS_H
 #define H2MAPS_H
 
+#include <cstdint>
 #include <vector>
 
 #include "math_base.h"
 #include "mp2.h"
-#include "types.h"
 
 #define TILEWIDTH 32
 

@@ -48,7 +48,7 @@ namespace Battle
 
         ControlInfo & operator=( const ControlInfo & ) = delete;
 
-        void Redraw( void ) const;
+        void Redraw() const;
 
         int result;
 

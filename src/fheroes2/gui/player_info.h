@@ -55,7 +55,7 @@ namespace Interface
 
         void RedrawInfo( bool show_play_info = false ) const;
         void resetSelection();
-        bool QueueEventProcessing( void );
+        bool QueueEventProcessing();
 
         bool show_name;
         bool show_race;

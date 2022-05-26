@@ -38,7 +38,7 @@ Cursor::Cursor()
     // Do nothing.
 }
 
-Cursor & Cursor::Get( void )
+Cursor & Cursor::Get()
 {
     static Cursor _cursor;
     return _cursor;

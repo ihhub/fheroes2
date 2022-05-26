@@ -212,7 +212,7 @@ int Direction::Reflect( int direct )
     return UNKNOWN;
 }
 
-const Directions & Direction::All( void )
+const Directions & Direction::All()
 {
     static const Directions allDirections = Directions( {TOP_LEFT, TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT} );
     return allDirections;

@@ -216,7 +216,6 @@
     <ClInclude Include="..\engine\tinyconfig.h" />
     <ClInclude Include="..\engine\tools.h" />
     <ClInclude Include="..\engine\translations.h" />
-    <ClInclude Include="..\engine\types.h" />
     <ClInclude Include="..\engine\zzlib.h" />
     <ClInclude Include="..\thirdparty\libsmacker\smacker.h" />
     <ClInclude Include="..\thirdparty\libsmacker\smk_malloc.h" />

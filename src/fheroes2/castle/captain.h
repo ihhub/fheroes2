@@ -27,11 +27,13 @@
 
 class Castle;
 
-class Captain : public HeroBase
+class Captain final : public HeroBase
 {
 public:
     explicit Captain( Castle & );
     Captain( const Captain & ) = delete;
+
+    ~Captain() override = default;
 
     Captain & operator=( const Captain & ) = delete;
 

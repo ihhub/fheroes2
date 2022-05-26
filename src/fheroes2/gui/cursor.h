@@ -169,7 +169,7 @@ public:
 
     Cursor & operator=( const Cursor & ) = delete;
 
-    static Cursor & Get( void );
+    static Cursor & Get();
 
     static void Redraw( int32_t, int32_t );
     static int DistanceThemes( const int theme, uint32_t distance );

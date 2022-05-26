@@ -24,7 +24,7 @@
 #include "statusbar.h"
 #include "screen.h"
 
-void StatusBar::SetCenter( s32 cx, s32 cy )
+void StatusBar::SetCenter( int32_t cx, int32_t cy )
 {
     center.x = cx;
     center.y = cy;

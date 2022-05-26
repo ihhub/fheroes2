@@ -853,14 +853,14 @@ void Settings::SetShowStatus( bool f )
     f ? opt_global.SetModes( GLOBAL_SHOWSTATUS ) : opt_global.ResetModes( GLOBAL_SHOWSTATUS );
 }
 
-bool Settings::CanChangeInGame( u32 f ) const
+bool Settings::CanChangeInGame( uint32_t f ) const
 {
     return ( f >> 28 ) == 0x01; // GAME_
 }
 
-bool Settings::ExtModes( u32 f ) const
+bool Settings::ExtModes( uint32_t f ) const
 {
-    const u32 mask = 0x0FFFFFFF;
+    const uint32_t mask = 0x0FFFFFFF;
     switch ( f >> 28 ) {
     case 0x01:
         return opt_game.Modes( f & mask );
@@ -924,9 +924,9 @@ std::string Settings::ExtName( const uint32_t settingId )
     return std::string();
 }
 
-void Settings::ExtSetModes( u32 f )
+void Settings::ExtSetModes( uint32_t f )
 {
-    const u32 mask = 0x0FFFFFFF;
+    const uint32_t mask = 0x0FFFFFFF;
     switch ( f >> 28 ) {
     case 0x01:
         opt_game.SetModes( f & mask );
@@ -945,9 +945,9 @@ void Settings::ExtSetModes( u32 f )
     }
 }
 
-void Settings::ExtResetModes( u32 f )
+void Settings::ExtResetModes( uint32_t f )
 {
-    const u32 mask = 0x0FFFFFFF;
+    const uint32_t mask = 0x0FFFFFFF;
     switch ( f >> 28 ) {
     case 0x01:
         opt_game.ResetModes( f & mask );
@@ -974,7 +974,7 @@ void Settings::BinarySave() const
     fs.setbigendian( true );
 
     if ( fs.open( fname, "wb" ) ) {
-        fs << static_cast<u16>( CURRENT_FORMAT_VERSION ) << opt_game << opt_world << opt_battle << opt_addons << pos_radr << pos_bttn << pos_icon << pos_stat;
+        fs << static_cast<uint16_t>( CURRENT_FORMAT_VERSION ) << opt_game << opt_world << opt_battle << opt_addons << pos_radr << pos_bttn << pos_icon << pos_stat;
     }
 }
 
@@ -989,7 +989,7 @@ void Settings::BinaryLoad()
     fs.setbigendian( true );
 
     if ( fs.open( fname, "rb" ) ) {
-        u16 version = 0;
+        uint16_t version = 0;
 
         fs >> version >> opt_game >> opt_world >> opt_battle >> opt_addons >> pos_radr >> pos_bttn >> pos_icon >> pos_stat;
     }
@@ -1033,7 +1033,7 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
     msg >> conf._loadedFileLanguage;
 
     int debug;
-    u32 opt_game = 0; // skip: settings
+    uint32_t opt_game = 0; // skip: settings
 
     // map file
     msg >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> opt_game >> conf.opt_world >> conf.opt_battle

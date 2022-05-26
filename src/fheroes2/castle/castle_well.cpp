@@ -172,7 +172,7 @@ void Castle::recruitCastleMax( const Troops & currentCastleArmy, const std::vect
     }
 }
 
-void Castle::OpenWell( void )
+void Castle::OpenWell()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -303,14 +303,14 @@ void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vect
     fheroes2::Point dst_pt( cur_pt.x + 315 - text.width() / 2, cur_pt.y + 464 );
     text.draw( dst_pt.x, dst_pt.y, display );
 
-    u32 dw = DWELLING_MONSTER1;
+    uint32_t dw = DWELLING_MONSTER1;
     size_t monsterId = 0u;
 
     while ( dw <= DWELLING_MONSTER6 ) {
         bool present = false;
-        u32 dw_orig = DWELLING_MONSTER1;
-        u32 icnindex = 0;
-        u32 available = 0;
+        uint32_t dw_orig = DWELLING_MONSTER1;
+        uint32_t icnindex = 0;
+        uint32_t available = 0;
 
         switch ( dw ) {
         case DWELLING_MONSTER1:

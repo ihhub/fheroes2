@@ -32,6 +32,7 @@
 #include "image.h"
 #include "image_tool.h"
 #include "pal.h"
+#include "rand.h"
 #include "screen.h"
 #include "text.h"
 #include "til.h"
@@ -100,6 +101,19 @@ namespace
         if ( image.transform()[position] != 0 ) {
             image.transform()[position] = 0;
             image.image()[position] = value;
+        }
+    }
+
+    void fillRandomPixelsFromImage( const fheroes2::Image & original, const fheroes2::Rect & originalRoi, fheroes2::Image & output, const fheroes2::Rect & outputRoi,
+                                    std::mt19937 & seededGen )
+    {
+        for ( int x = outputRoi.x; x < outputRoi.x + outputRoi.width; ++x ) {
+            for ( int y = outputRoi.y; y < outputRoi.y + outputRoi.height; ++y ) {
+                const fheroes2::Point pixelLocation{ static_cast<int32_t>( Rand::GetWithGen( originalRoi.x, originalRoi.x + originalRoi.width - 1, seededGen ) ),
+                                                     static_cast<int32_t>( Rand::GetWithGen( originalRoi.y, originalRoi.y + originalRoi.height - 1, seededGen ) ) };
+
+                fheroes2::Copy( original, pixelLocation.x, pixelLocation.y, output, x, y, 1, 1 );
+            }
         }
     }
 
@@ -1942,6 +1956,76 @@ namespace fheroes2
                     FillTransform( image, 62, 67, 1, windowBottom - 67, 1 );
                     FillTransform( image, 63, 69, 1, windowBottom - 69, 1 );
                     FillTransform( image, 64, 72, 1, windowBottom - 72, 1 );
+
+                    // The lower part of the tower is truncated and blocked by partial castle's sprite. The fix is done in multiple stages.
+                    // Fix right red part of the building by copying a piece of the same wall.
+                    Copy( image, 67, 135, image, 67, 119, 1, 1 );
+                    Copy( image, 67, 144, image, 67, 120, 2, 2 );
+                    Copy( image, 67, 134, image, 67, 122, 3, 2 );
+                    Copy( image, 67, 148, image, 67, 125, 1, 4 );
+
+                    // Remove a part of the castle at the bottom left part of the image.
+                    FillTransform( image, 62, 157, 3, 8, 1 );
+
+                    // Top part of the castle's tower touches Red Tower level separation part.
+                    Copy( image, 61, 101, image, 57, 101, 2, 1 );
+                    Copy( image, 52, 100, image, 57, 100, 2, 1 );
+
+                    // Generate programmatically the left part of the building.
+                    std::mt19937 seededGen( 751 ); // 751 is and ID of this sprite. To keep the changes constant we need to hardcode this value.
+
+                    fillRandomPixelsFromImage( image, { 33, 105, 4, 7 }, image, { 33, 117, 4, 39 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 41, 105, 5, 9 }, image, { 41, 121, 5, 36 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 46, 104, 4, 13 }, image, { 46, 118, 4, 39 }, seededGen );
+
+                    Copy( image, 37, 113, image, 37, 115, 1, 2 );
+                    Copy( image, 37, 104, image, 37, 117, 1, 2 );
+                    Copy( image, 38, 104, image, 38, 118, 2, 1 );
+                    Copy( image, 37, 113, image, 38, 117, 1, 1 );
+
+                    // Create a temporary image to be a holder of pixels.
+                    Sprite temp( 4 * 2, 8 );
+                    Copy( image, 33, 105, temp, 0, 0, 4, 8 );
+                    Copy( image, 41, 105, temp, 4, 0, 4, 8 );
+                    fillRandomPixelsFromImage( temp, { 0, 0, temp.width(), temp.height() }, image, { 37, 119, 4, 37 }, seededGen );
+
+                    Copy( image, 35, 131, image, 35, 113, 2, 4 );
+
+                    Copy( image, 43, 133, image, 43, 115, 3, 6 );
+
+                    // Fix the main arc.
+                    Copy( image, 61, 102, image, 56, 102, 3, 1 );
+
+                    // TODO: the distribution of light inside Red Tower is actually not uniform and follows the window on from th left.
+                    // However, generating such complex image requires a lot of code so we simply make the rest of the arc uniformed filled.
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 50, 110, 12, 47 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 52, 107, 9, 3 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 62, 111, 1, 46 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 63, 113, 1, 20 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 63, 141, 1, 16 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 64, 115, 1, 17 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 64, 152, 1, 5 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 65, 116, 1, 15 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 66, 118, 1, 12 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 51, 108, 1, 2 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 55, 103, 5, 4 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 61, 109, 1, 1 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 52, 106, 1, 1 }, seededGen );
+                }
+                return true;
+            case ICN::SCENIBKG:
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() && _icnVsSprite[id][0].width() == 436 && _icnVsSprite[id][0].height() == 476 ) {
+                    const Sprite & helper = GetICN( ICN::CSPANBKE, 1 );
+                    if ( !helper.empty() ) {
+                        Sprite & original = _icnVsSprite[id][0];
+                        Sprite temp( original.width(), original.height() + 12 );
+                        temp.reset();
+                        Copy( original, 0, 0, temp, 0, 0, original.width(), original.height() );
+                        Copy( helper, 0, helper.height() - 12, temp, 0, temp.height() - 12, 300, 12 );
+                        Copy( helper, helper.width() - ( temp.width() - 300 ), helper.height() - 12, temp, 300 - 16, temp.height() - 12, temp.width() - 300, 12 );
+                        original = std::move( temp );
+                    }
                 }
                 return true;
             default:

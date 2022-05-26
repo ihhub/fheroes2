@@ -218,7 +218,7 @@ const char * ICN::GetString( int icn )
     return UNKNOWN <= icn && icn < LAST_VALID_FILE_ICN ? icnmap[icn].string : "CUSTOM";
 }
 
-u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
+uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool quantity )
 {
     switch ( icn ) {
     case TWNBBOAT:
@@ -874,7 +874,7 @@ int ICN::PORTxxxx( int heroId )
     return ICN::UNKNOWN;
 }
 
-bool ICN::HighlyObjectSprite( int icn, u32 index )
+bool ICN::HighlyObjectSprite( int icn, uint32_t index )
 {
     switch ( icn ) {
     case OBJNDIRT:

@@ -186,7 +186,7 @@ public:
         return id;
     }
 
-    bool isUltimate( void ) const;
+    bool isUltimate() const;
 
     bool containsCurses() const
     {
@@ -204,25 +204,25 @@ public:
         ext = 0;
     }
 
-    int Level( void ) const;
-    int LoyaltyLevel( void ) const;
+    int Level() const;
+    int LoyaltyLevel() const;
 
     int getArtifactValue() const;
 
     // return index of the sprite from objnarti.icn
-    u32 IndexSprite() const
+    uint32_t IndexSprite() const
     {
         return id < UNKNOWN ? id * 2 + 1 : 0;
     }
 
     // artfx.icn
-    u32 IndexSprite32() const
+    uint32_t IndexSprite32() const
     {
         return id;
     }
 
     // return index from artifact.icn
-    u32 IndexSprite64() const
+    uint32_t IndexSprite64() const
     {
         return id + 1;
     }
@@ -230,7 +230,7 @@ public:
     void SetSpell( const int v );
     int32_t getSpellId() const;
 
-    const char * GetName( void ) const;
+    const char * GetName() const;
 
     std::string GetDescription() const
     {
@@ -238,7 +238,7 @@ public:
     }
 
     static int Rand( level_t );
-    static Artifact FromMP2IndexSprite( u32 );
+    static Artifact FromMP2IndexSprite( uint32_t );
     static const char * getDiscoveryDescription( const Artifact & );
 
 private:
@@ -252,7 +252,7 @@ private:
 StreamBase & operator<<( StreamBase &, const Artifact & );
 StreamBase & operator>>( StreamBase &, Artifact & );
 
-u32 GoldInsteadArtifact( const MP2::MapObjectType objectType );
+uint32_t GoldInsteadArtifact( const MP2::MapObjectType objectType );
 
 namespace fheroes2
 {
@@ -300,18 +300,18 @@ public:
 
     void RemoveArtifact( const Artifact & art );
 
-    bool isFull( void ) const;
-    bool ContainUltimateArtifact( void ) const;
+    bool isFull() const;
+    bool ContainUltimateArtifact() const;
 
     void exchangeArtifacts( BagArtifacts & giftBag );
 
     int getArtifactValue() const;
-    u32 CountArtifacts( void ) const;
-    u32 Count( const Artifact & ) const;
+    uint32_t CountArtifacts() const;
+    uint32_t Count( const Artifact & ) const;
 
     std::set<ArtifactSetData> assembleArtifactSetIfPossible();
 
-    std::string String( void ) const;
+    std::string String() const;
 };
 
 class ArtifactsBar : public Interface::ItemsActionBar<Artifact>
@@ -325,7 +325,7 @@ public:
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
     void RedrawItem( Artifact &, const fheroes2::Rect &, bool, fheroes2::Image & ) override;
 
-    void ResetSelected( void );
+    void ResetSelected();
     void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
 
     bool ActionBarLeftMouseSingleClick( Artifact & artifact ) override;

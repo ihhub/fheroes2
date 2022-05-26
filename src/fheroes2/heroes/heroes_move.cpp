@@ -664,7 +664,7 @@ const Heroes::RedrawIndex & Heroes::GetRedrawIndex() const
     return _redrawIndex;
 }
 
-void Heroes::MoveStep( Heroes & hero, s32 indexTo, bool newpos )
+void Heroes::MoveStep( Heroes & hero, int32_t indexTo, bool newpos )
 {
     Route::Path & path = hero.GetPath();
     hero.ApplyPenaltyMovement( path.GetFrontPenalty() );

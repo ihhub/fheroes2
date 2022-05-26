@@ -91,9 +91,9 @@ public:
     bool isFriends( int ) const;
     void SetColor( int );
 
-    Kingdom & GetKingdom( void ) const;
+    Kingdom & GetKingdom() const;
 
-    int GetColor( void ) const
+    int GetColor() const
     {
         return color;
     }

@@ -64,13 +64,13 @@ namespace
                                                                    Monster::GREEN_DRAGON,  Monster::RED_DRAGON,
                                                                    Monster::TITAN,         Monster::BLACK_DRAGON };
 
-    void saveHighscoreEntry( fheroes2::HighscoreData && data, std::vector<fheroes2::HighscoreData> & entries )
+    int32_t saveHighscoreEntry( fheroes2::HighscoreData && data, std::vector<fheroes2::HighscoreData> & entries )
     {
         auto iter = std::find( entries.begin(), entries.end(), data );
         if ( iter != entries.end() ) {
             // This is the same game completion. Just replace the entry.
             *iter = std::move( data );
-            return;
+            return static_cast<int32_t>( iter - entries.begin() );
         }
 
         entries.emplace_back( data );
@@ -86,6 +86,13 @@ namespace
         if ( entries.size() > highscoreMaximumEntries ) {
             entries.resize( highscoreMaximumEntries );
         }
+
+        iter = std::find( entries.begin(), entries.end(), data );
+        if ( iter != entries.end() ) {
+            return static_cast<int32_t>( iter - entries.begin() );
+        }
+
+        return -1;
     }
 }
 
@@ -137,14 +144,14 @@ namespace fheroes2
         return !hdata.fail() && hdata.write( fileName );
     }
 
-    void HighScoreDataContainer::registerScoreStandard( HighscoreData && data )
+    int32_t HighScoreDataContainer::registerScoreStandard( HighscoreData && data )
     {
-        saveHighscoreEntry( std::move( data ), _highScoresStandard );
+        return saveHighscoreEntry( std::move( data ), _highScoresStandard );
     }
 
-    void HighScoreDataContainer::registerScoreCampaign( HighscoreData && data )
+    int32_t HighScoreDataContainer::registerScoreCampaign( HighscoreData && data )
     {
-        saveHighscoreEntry( std::move( data ), _highScoresCampaign );
+        return saveHighscoreEntry( std::move( data ), _highScoresCampaign );
     }
 
     Monster HighScoreDataContainer::getMonsterByRating( const size_t rating )

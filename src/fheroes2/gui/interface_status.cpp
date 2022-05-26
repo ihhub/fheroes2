@@ -62,7 +62,7 @@ void Interface::StatusWindow::Reset()
     ResetTimer();
 }
 
-u32 Interface::StatusWindow::ResetResourceStatus( u32 /*tick*/, void * ptr )
+uint32_t Interface::StatusWindow::ResetResourceStatus( uint32_t /*tick*/, void * ptr )
 {
     if ( ptr ) {
         Interface::StatusWindow * status = static_cast<Interface::StatusWindow *>( ptr );
@@ -78,20 +78,20 @@ u32 Interface::StatusWindow::ResetResourceStatus( u32 /*tick*/, void * ptr )
     return 0;
 }
 
-void Interface::StatusWindow::SavePosition( void )
+void Interface::StatusWindow::SavePosition()
 {
     Settings::Get().SetPosStatus( GetRect().getPosition() );
 }
 
-void Interface::StatusWindow::SetRedraw( void ) const
+void Interface::StatusWindow::SetRedraw() const
 {
     interface.SetRedraw( REDRAW_STATUS );
 }
 
-void Interface::StatusWindow::SetPos( s32 ox, s32 oy )
+void Interface::StatusWindow::SetPos( int32_t ox, int32_t oy )
 {
-    u32 ow = 144;
-    u32 oh = 72;
+    uint32_t ow = 144;
+    uint32_t oh = 72;
 
     if ( !Settings::Get().ExtGameHideInterface() ) {
         oh = fheroes2::Display::instance().height() - oy - BORDERWIDTH;
@@ -106,7 +106,7 @@ void Interface::StatusWindow::SetState( const StatusType status )
         _state = status;
 }
 
-void Interface::StatusWindow::Redraw( void ) const
+void Interface::StatusWindow::Redraw() const
 {
     const Settings & conf = Settings::Get();
     if ( conf.ExtGameHideInterface() && !conf.ShowStatus() ) {
@@ -189,7 +189,7 @@ void Interface::StatusWindow::Redraw( void ) const
     }
 }
 
-void Interface::StatusWindow::NextState( void )
+void Interface::StatusWindow::NextState()
 {
     const int32_t areaHeight = GetArea().height;
     const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
@@ -285,7 +285,7 @@ void Interface::StatusWindow::DrawDayInfo( int oh ) const
     text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + 46 + oh );
 }
 
-void Interface::StatusWindow::SetResource( int res, u32 count )
+void Interface::StatusWindow::SetResource( int res, uint32_t count )
 {
     lastResource = res;
     countLastResource = count;
@@ -299,7 +299,7 @@ void Interface::StatusWindow::SetResource( int res, u32 count )
     timerShowLastResource.run( resourceWindowExpireTime, ResetResourceStatus, this );
 }
 
-void Interface::StatusWindow::ResetTimer( void )
+void Interface::StatusWindow::ResetTimer()
 {
     StatusWindow & window = Interface::Basic::Get().GetStatusWindow();
 
@@ -340,7 +340,7 @@ void Interface::StatusWindow::DrawArmyInfo( int oh ) const
     }
 }
 
-void Interface::StatusWindow::DrawAITurns( void ) const
+void Interface::StatusWindow::DrawAITurns() const
 {
     // restore background
     DrawBackground();
@@ -350,8 +350,8 @@ void Interface::StatusWindow::DrawAITurns( void ) const
     const fheroes2::Sprite & glass = fheroes2::AGG::GetICN( ICN::HOURGLAS, 0 );
     const fheroes2::Rect & pos = GetArea();
 
-    s32 dst_x = pos.x + ( pos.width - glass.width() ) / 2;
-    s32 dst_y = pos.y + ( pos.height - glass.height() ) / 2;
+    int32_t dst_x = pos.x + ( pos.width - glass.width() ) / 2;
+    int32_t dst_y = pos.y + ( pos.height - glass.height() ) / 2;
 
     fheroes2::Blit( glass, display, dst_x, dst_y );
 
@@ -396,7 +396,7 @@ void Interface::StatusWindow::DrawAITurns( void ) const
     fheroes2::Blit( sand, display, dst_x, dst_y );
 }
 
-void Interface::StatusWindow::DrawBackground( void ) const
+void Interface::StatusWindow::DrawBackground() const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Sprite & icnston = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
@@ -428,7 +428,7 @@ void Interface::StatusWindow::DrawBackground( void ) const
     }
 }
 
-void Interface::StatusWindow::QueueEventProcessing( void )
+void Interface::StatusWindow::QueueEventProcessing()
 {
     if ( Settings::Get().ShowStatus() && BorderWindow::QueueEventProcessing() ) {
         return;
@@ -458,7 +458,7 @@ void Interface::StatusWindow::QueueEventProcessing( void )
     }
 }
 
-void Interface::StatusWindow::RedrawTurnProgress( u32 v )
+void Interface::StatusWindow::RedrawTurnProgress( uint32_t v )
 {
     turn_progress = v;
     SetRedraw();

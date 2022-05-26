@@ -59,7 +59,7 @@ namespace
     }
 }
 
-void RedrawCurrentInfo( const fheroes2::Point & pos, u32 result, const payment_t & paymentMonster, const payment_t & paymentCosts, const Funds & funds,
+void RedrawCurrentInfo( const fheroes2::Point & pos, uint32_t result, const payment_t & paymentMonster, const payment_t & paymentCosts, const Funds & funds,
                         const std::string & label )
 {
     Text text;
@@ -85,7 +85,7 @@ void RedrawCurrentInfo( const fheroes2::Point & pos, u32 result, const payment_t
     text.Blit( pos.x + 167 - text.w() / 2, pos.y + 180 );
 }
 
-void RedrawResourceInfo( const fheroes2::Image & sres, const fheroes2::Point & pos, s32 value, s32 px1, s32 py1, s32 px2, s32 py2 )
+void RedrawResourceInfo( const fheroes2::Image & sres, const fheroes2::Point & pos, int32_t value, int32_t px1, int32_t py1, int32_t px2, int32_t py2 )
 {
     fheroes2::Point dst_pt( pos.x + px1, pos.y + py1 );
     fheroes2::Blit( sres, fheroes2::Display::instance(), dst_pt.x, dst_pt.y );
@@ -96,7 +96,7 @@ void RedrawResourceInfo( const fheroes2::Image & sres, const fheroes2::Point & p
     text.Blit( dst_pt.x, dst_pt.y );
 }
 
-void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32 available, bool showTotalSum )
+void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, uint32_t available, bool showTotalSum )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const payment_t paymentMonster = monster.GetCost();
@@ -195,7 +195,7 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, u32
     text.Blit( pos.x + 80 - text.w() / 2, pos.y + 135 );
 }
 
-void RedrawStaticInfo( const fheroes2::Rect & pos, const Monster & monster, u32 available )
+void RedrawStaticInfo( const fheroes2::Rect & pos, const Monster & monster, uint32_t available )
 {
     drawRecruitWindow( fheroes2::Display::instance(), { pos.x, pos.y }, ICN::RECRBKG );
 
@@ -225,16 +225,16 @@ const char * SwitchMaxMinButtons( fheroes2::ButtonBase & btnMax, fheroes2::Butto
     return "";
 }
 
-u32 CalculateMax( const Monster & monster, const Kingdom & kingdom, u32 available )
+uint32_t CalculateMax( const Monster & monster, const Kingdom & kingdom, uint32_t available )
 {
-    u32 max = 0;
+    uint32_t max = 0;
     while ( kingdom.AllowPayment( monster.GetCost() * ( max + 1 ) ) && ( max + 1 ) <= available )
         ++max;
 
     return max;
 }
 
-Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, const bool allowDowngradedMonster, const int32_t windowOffsetY )
+Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, const bool allowDowngradedMonster, const int32_t windowOffsetY )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -247,8 +247,8 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, const boo
     payment_t paymentMonster = monster.GetCost();
     const Kingdom & kingdom = world.GetKingdom( Settings::Get().CurrentColor() );
 
-    u32 max = CalculateMax( monster, kingdom, available );
-    u32 result = max;
+    uint32_t max = CalculateMax( monster, kingdom, available );
+    uint32_t result = max;
 
     payment_t paymentCosts( paymentMonster * result );
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::RECRBKG, 0 );
@@ -512,7 +512,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, u32 available, const boo
     return Troop( monster, result );
 }
 
-void Dialog::DwellingInfo( const Monster & monster, u32 available )
+void Dialog::DwellingInfo( const Monster & monster, uint32_t available )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 

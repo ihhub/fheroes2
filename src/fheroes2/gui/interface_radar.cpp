@@ -140,25 +140,25 @@ Interface::Radar::Radar( const Radar & radar )
     , hide( radar.hide )
 {}
 
-void Interface::Radar::SavePosition( void )
+void Interface::Radar::SavePosition()
 {
     Settings::Get().SetPosRadar( GetRect().getPosition() );
 }
 
-void Interface::Radar::SetPos( s32 ox, s32 oy )
+void Interface::Radar::SetPos( int32_t ox, int32_t oy )
 {
     BorderWindow::SetPosition( ox, oy );
 }
 
 /* construct gui */
-void Interface::Radar::Build( void )
+void Interface::Radar::Build()
 {
     Generate();
     RedrawCursor();
 }
 
 /* generate mini maps */
-void Interface::Radar::Generate( void )
+void Interface::Radar::Generate()
 {
     const int32_t worldWidth = world.w();
     const int32_t worldHeight = world.h();
@@ -216,7 +216,7 @@ void Interface::Radar::SetHide( bool f )
     hide = f;
 }
 
-void Interface::Radar::SetRedraw( void ) const
+void Interface::Radar::SetRedraw() const
 {
     interface.SetRedraw( REDRAW_RADAR );
 }
@@ -417,7 +417,7 @@ void Interface::Radar::RedrawCursor( const fheroes2::Rect * roiRectangle /* =nul
     }
 }
 
-void Interface::Radar::QueueEventProcessing( void )
+void Interface::Radar::QueueEventProcessing()
 {
     GameArea & gamearea = interface.GetGameArea();
     const Settings & conf = Settings::Get();

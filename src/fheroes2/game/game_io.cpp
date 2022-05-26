@@ -107,7 +107,7 @@ bool Game::Save( const std::string & fn )
         return false;
     }
 
-    u16 loadver = GetLoadVersion();
+    uint16_t loadver = GetLoadVersion();
     if ( !autosave )
         Game::SetLastSavename( fn );
 
@@ -145,7 +145,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     char major;
     char minor;
     fs >> major >> minor;
-    const u16 savid = ( static_cast<u16>( major ) << 8 ) | static_cast<u16>( minor );
+    const uint16_t savid = ( static_cast<uint16_t>( major ) << 8 ) | static_cast<uint16_t>( minor );
 
     // check version sav file
     if ( savid != SAV2ID2 && savid != SAV2ID3 ) {
@@ -154,7 +154,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     }
 
     std::string strver;
-    u16 binver = 0;
+    uint16_t binver = 0;
 
     // read raw info
     fs >> strver >> binver;
@@ -277,7 +277,7 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
     char major;
     char minor;
     fs >> major >> minor;
-    const u16 savid = ( static_cast<u16>( major ) << 8 ) | static_cast<u16>( minor );
+    const uint16_t savid = ( static_cast<uint16_t>( major ) << 8 ) | static_cast<uint16_t>( minor );
 
     // check version sav file
     if ( savid != SAV2ID2 && savid != SAV2ID3 ) {
@@ -286,7 +286,7 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
     }
 
     std::string strver;
-    u16 binver = 0;
+    uint16_t binver = 0;
 
     // read raw info
     fs >> strver >> binver;

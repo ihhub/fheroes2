@@ -39,7 +39,7 @@ public:
         , selectOk( false )
     {}
 
-    void RedrawItem( const Maps::FileInfo &, s32, s32, bool ) override;
+    void RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
     void ActionCurrentUp() override
