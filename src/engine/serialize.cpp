@@ -358,7 +358,7 @@ uint8_t StreamBuf::get8()
 
 uint16_t StreamBuf::getBE16()
 {
-    uint16_t result = ( get8() << 8 );
+    uint16_t result = ( static_cast<uint16_t>( get8() ) << 8 );
     result |= get8();
 
     return result;
@@ -367,16 +367,16 @@ uint16_t StreamBuf::getBE16()
 uint16_t StreamBuf::getLE16()
 {
     uint16_t result = get8();
-    result |= ( get8() << 8 );
+    result |= ( static_cast<uint16_t>( get8() ) << 8 );
 
     return result;
 }
 
 uint32_t StreamBuf::getBE32()
 {
-    uint32_t result = ( get8() << 24 );
-    result |= ( get8() << 16 );
-    result |= ( get8() << 8 );
+    uint32_t result = ( static_cast<uint32_t>( get8() ) << 24 );
+    result |= ( static_cast<uint32_t>( get8() ) << 16 );
+    result |= ( static_cast<uint32_t>( get8() ) << 8 );
     result |= get8();
 
     return result;
@@ -385,9 +385,9 @@ uint32_t StreamBuf::getBE32()
 uint32_t StreamBuf::getLE32()
 {
     uint32_t result = get8();
-    result |= ( get8() << 8 );
-    result |= ( get8() << 16 );
-    result |= ( get8() << 24 );
+    result |= ( static_cast<uint32_t>( get8() ) << 8 );
+    result |= ( static_cast<uint32_t>( get8() ) << 16 );
+    result |= ( static_cast<uint32_t>( get8() ) << 24 );
 
     return result;
 }
