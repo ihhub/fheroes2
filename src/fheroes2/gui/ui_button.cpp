@@ -192,7 +192,6 @@ namespace fheroes2
         return { _offsetX, _offsetY, sprite.width() + sprite2.width(), sprite.height() + sprite2.height() };
     }
 
-
     const Sprite & ButtonBase::_getDisabled() const
     {
         const Sprite & sprite = _getReleased();
