@@ -538,11 +538,14 @@ bool Maps::TilesAddon::isRoad() const
 
     // castle or town gate
     case ICN::OBJNTOWN:
-    case ICN::OBJNTWRD:
         if ( 13 == index || 29 == index || 45 == index || 61 == index || 77 == index || 93 == index || 109 == index || 125 == index || 141 == index || 157 == index
              || 173 == index || 189 == index )
             return true;
         break;
+
+    // Random castle or town gate.
+    case ICN::OBJNTWRD:
+        return ( index == 13 || index == 29 );
 
     default:
         break;
