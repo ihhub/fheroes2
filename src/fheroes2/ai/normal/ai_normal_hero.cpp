@@ -727,7 +727,7 @@ namespace AI
                     // The other hero has a lower role. Do not waste time for meeting. Let him to come.
                     return valueToIgnore;
                 }
-                else if ( hero.getAIRole() == otherHero->getAIRole() && hero.getStatsValue() + 2 > otherHero->getStatsValue() ) {
+                if ( hero.getAIRole() == otherHero->getAIRole() && hero.getStatsValue() + 2 > otherHero->getStatsValue() ) {
                     // Two heroes are almost identical. No reason to meet.
                     return valueToIgnore;
                 }
@@ -1006,7 +1006,7 @@ namespace AI
                     // The other hero has a lower role. Do not waste time for meeting. Let him to come.
                     return valueToIgnore;
                 }
-                else if ( hero.getAIRole() == otherHero->getAIRole() && hero.getStatsValue() + 3 > otherHero->getStatsValue() ) {
+                if ( hero.getAIRole() == otherHero->getAIRole() && hero.getStatsValue() + 3 > otherHero->getStatsValue() ) {
                     // Two heroes are almost identical. No reason to meet.
                     return valueToIgnore;
                 }
