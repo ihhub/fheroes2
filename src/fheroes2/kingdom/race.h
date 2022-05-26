@@ -42,7 +42,7 @@ namespace Race
     };
 
     std::string String( int );
-    int Rand( void );
+    int Rand();
 }
 
 #endif

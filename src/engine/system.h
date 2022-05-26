@@ -42,7 +42,7 @@ namespace System
     std::string GetBasename( const std::string & );
 
     int GetCommandOptions( int argc, char * const argv[], const char * optstring );
-    char * GetOptionsArgument( void );
+    char * GetOptionsArgument();
 
     bool IsFile( const std::string & name, bool writable = false );
     bool IsDirectory( const std::string & name, bool writable = false );

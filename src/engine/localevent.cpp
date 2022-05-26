@@ -691,7 +691,7 @@ namespace fheroes2
 #endif
     }
 
-    bool PressIntKey( u32 max, u32 & result )
+    bool PressIntKey( uint32_t max, uint32_t & result )
     {
         const LocalEvent & le = LocalEvent::Get();
 
@@ -1066,7 +1066,7 @@ namespace
     }
 }
 
-LocalEvent & LocalEvent::Get( void )
+LocalEvent & LocalEvent::Get()
 {
     static LocalEvent le;
 
@@ -1511,22 +1511,22 @@ void LocalEvent::ProcessControllerAxisMotion()
 }
 #endif
 
-bool LocalEvent::MousePressLeft( void ) const
+bool LocalEvent::MousePressLeft() const
 {
     return ( modes & MOUSE_PRESSED ) && SDL_BUTTON_LEFT == mouse_button;
 }
 
-bool LocalEvent::MouseReleaseLeft( void ) const
+bool LocalEvent::MouseReleaseLeft() const
 {
     return ( modes & MOUSE_RELEASED ) && SDL_BUTTON_LEFT == mouse_button;
 }
 
-bool LocalEvent::MousePressRight( void ) const
+bool LocalEvent::MousePressRight() const
 {
     return ( modes & MOUSE_PRESSED ) && SDL_BUTTON_RIGHT == mouse_button;
 }
 
-bool LocalEvent::MouseReleaseRight( void ) const
+bool LocalEvent::MouseReleaseRight() const
 {
     return ( modes & MOUSE_RELEASED ) && SDL_BUTTON_RIGHT == mouse_button;
 }
@@ -1638,7 +1638,7 @@ void LocalEvent::HandleMouseWheelEvent( const SDL_MouseWheelEvent & wheel )
 }
 #endif
 
-bool LocalEvent::MouseClickLeft( void )
+bool LocalEvent::MouseClickLeft()
 {
     if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_LEFT == mouse_button ) {
         ResetModes( MOUSE_RELEASED );
@@ -1662,7 +1662,7 @@ bool LocalEvent::MouseClickLeft( const fheroes2::Rect & rt )
     return false;
 }
 
-bool LocalEvent::MouseClickMiddle( void )
+bool LocalEvent::MouseClickMiddle()
 {
     if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_MIDDLE == mouse_button ) {
         ResetModes( MOUSE_RELEASED );
@@ -1674,7 +1674,7 @@ bool LocalEvent::MouseClickMiddle( void )
     return false;
 }
 
-bool LocalEvent::MouseClickRight( void )
+bool LocalEvent::MouseClickRight()
 {
     if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_RIGHT == mouse_button ) {
         ResetModes( MOUSE_RELEASED );
@@ -1698,7 +1698,7 @@ bool LocalEvent::MouseClickRight( const fheroes2::Rect & rt )
     return false;
 }
 
-bool LocalEvent::MouseWheelUp( void ) const
+bool LocalEvent::MouseWheelUp() const
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     return ( modes & MOUSE_WHEEL ) && mouse_wm.y > 0;
@@ -1707,7 +1707,7 @@ bool LocalEvent::MouseWheelUp( void ) const
 #endif
 }
 
-bool LocalEvent::MouseWheelDn( void ) const
+bool LocalEvent::MouseWheelDn() const
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     return ( modes & MOUSE_WHEEL ) && mouse_wm.y < 0;
@@ -1716,7 +1716,7 @@ bool LocalEvent::MouseWheelDn( void ) const
 #endif
 }
 
-int LocalEvent::KeyMod( void ) const
+int LocalEvent::KeyMod() const
 {
     return SDL_GetModState();
 }
@@ -1755,7 +1755,7 @@ void LocalEvent::SetState( const uint32_t type, const bool enable )
 #endif
 }
 
-void LocalEvent::SetStateDefaults( void )
+void LocalEvent::SetStateDefaults()
 {
     SetState( SDL_USEREVENT, true );
     SetState( SDL_KEYDOWN, true );

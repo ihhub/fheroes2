@@ -24,10 +24,9 @@
 #ifndef H2SKILL_H
 #define H2SKILL_H
 
+#include <cstdint>
 #include <string>
 #include <vector>
-
-#include "types.h"
 
 void StringAppendModifiers( std::string &, int );
 
@@ -84,11 +83,11 @@ namespace Skill
         Secondary();
         Secondary( int skill, int level );
 
-        void Reset( void );
+        void Reset();
         void Set( const Secondary & );
         void SetSkill( int );
         void SetLevel( int );
-        void NextLevel( void );
+        void NextLevel();
 
         int Level() const
         {
@@ -105,19 +104,19 @@ namespace Skill
             return skill == first;
         }
 
-        bool isValid( void ) const;
+        bool isValid() const;
 
-        std::string GetName( void ) const;
+        std::string GetName() const;
         std::string GetNameWithBonus( const Heroes & hero ) const;
         std::string GetDescription( const Heroes & hero ) const;
-        u32 GetValues( void ) const;
+        uint32_t GetValues() const;
 
         /* index sprite from SECSKILL */
-        int GetIndexSprite1( void ) const;
+        int GetIndexSprite1() const;
         /* index sprite from MINISS */
-        int GetIndexSprite2( void ) const;
+        int GetIndexSprite2() const;
 
-        static int RandForWitchsHut( void );
+        static int RandForWitchsHut();
         static const char * String( int );
     };
 
@@ -130,15 +129,15 @@ namespace Skill
         explicit SecSkills( int race );
 
         int GetLevel( int skill ) const;
-        u32 GetValues( int skill ) const;
+        uint32_t GetValues( int skill ) const;
         void AddSkill( const Skill::Secondary & );
         void FindSkillsForLevelUp( int race, uint32_t seedSkill1, uint32_t seedSkill2, Secondary &, Secondary & ) const;
         void FillMax( const Skill::Secondary & );
         Secondary * FindSkill( int );
-        std::string String( void ) const;
-        int Count( void ) const;
+        std::string String() const;
+        int Count() const;
         int GetTotalLevel() const;
-        std::vector<Secondary> & ToVector( void );
+        std::vector<Secondary> & ToVector();
 
     protected:
         friend StreamBase & operator<<( StreamBase &, const SecSkills & );
@@ -163,13 +162,13 @@ namespace Skill
             KNOWLEDGE = 4
         };
 
-        virtual int GetAttack( void ) const = 0;
-        virtual int GetDefense( void ) const = 0;
-        virtual int GetPower( void ) const = 0;
-        virtual int GetKnowledge( void ) const = 0;
-        virtual int GetMorale( void ) const = 0;
-        virtual int GetLuck( void ) const = 0;
-        virtual int GetRace( void ) const = 0;
+        virtual int GetAttack() const = 0;
+        virtual int GetDefense() const = 0;
+        virtual int GetPower() const = 0;
+        virtual int GetKnowledge() const = 0;
+        virtual int GetMorale() const = 0;
+        virtual int GetLuck() const = 0;
+        virtual int GetRace() const = 0;
 
         int LevelUp( int race, int level, uint32_t seed );
 

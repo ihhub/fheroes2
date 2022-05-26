@@ -262,7 +262,7 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_marketplace.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_message.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_quickinfo.cpp" />
-    <ClCompile Include="src\fheroes2\dialog\dialog_recrut.cpp" />
+    <ClCompile Include="src\fheroes2\dialog\dialog_recruit.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_resolution.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_selectcount.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_selectfile.cpp" />
@@ -412,7 +412,6 @@
     <ClInclude Include="src\engine\tinyconfig.h" />
     <ClInclude Include="src\engine\tools.h" />
     <ClInclude Include="src\engine\translations.h" />
-    <ClInclude Include="src\engine\types.h" />
     <ClInclude Include="src\engine\zzlib.h" />
     <ClInclude Include="src\fheroes2\agg\agg.h" />
     <ClInclude Include="src\fheroes2\agg\agg_image.h" />

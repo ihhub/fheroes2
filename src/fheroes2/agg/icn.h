@@ -24,7 +24,7 @@
 #ifndef H2ICN_H
 #define H2ICN_H
 
-#include "types.h"
+#include <cstdint>
 
 namespace ICN
 {
@@ -973,8 +973,8 @@ namespace ICN
     };
 
     const char * GetString( int );
-    u32 AnimationFrame( int icn, u32 start, u32 ticket, bool quantity = false );
-    bool HighlyObjectSprite( int icn, u32 );
+    uint32_t AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool quantity = false );
+    bool HighlyObjectSprite( int icn, uint32_t );
     int PORTxxxx( int heroId );
 
     int Get4Captain( int race );

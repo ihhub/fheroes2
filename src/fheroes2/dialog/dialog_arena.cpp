@@ -39,7 +39,7 @@ void InfoSkillSelect( int, const fheroes2::Rect &, const fheroes2::Rect &, const
 int InfoSkillNext( int );
 int InfoSkillPrev( int );
 
-int Dialog::SelectSkillFromArena( void )
+int Dialog::SelectSkillFromArena()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;

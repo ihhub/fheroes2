@@ -63,7 +63,7 @@ namespace
     }
 }
 
-fheroes2::GameMode Game::StartBattleOnly( void )
+fheroes2::GameMode Game::StartBattleOnly()
 {
     Battle::Only main;
 
@@ -267,7 +267,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
     I.RedrawFocus();
 }
 
-void ShowNewWeekDialog( void )
+void ShowNewWeekDialog()
 {
     // restore the original music on exit
     const Game::MusicRestorer musicRestorer;
@@ -283,7 +283,7 @@ void ShowNewWeekDialog( void )
 
     if ( week.GetType() == WeekName::MONSTERS ) {
         const Monster monster( week.GetMonster() );
-        const u32 count = world.BeginMonth() ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
+        const uint32_t count = world.BeginMonth() ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
 
         if ( monster.isValid() && count ) {
             if ( world.BeginMonth() )
@@ -306,7 +306,7 @@ void ShowNewWeekDialog( void )
     Dialog::Message( "", message, Font::BIG, Dialog::OK );
 }
 
-void ShowEventDayDialog( void )
+void ShowEventDayDialog()
 {
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     const EventsDate events = world.GetEventsDate( myKingdom.GetColor() );
@@ -525,7 +525,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
     return Cursor::POINTER;
 }
 
-int Interface::Basic::GetCursorTileIndex( s32 dst_index )
+int Interface::Basic::GetCursorTileIndex( int32_t dst_index )
 {
     if ( dst_index < 0 || dst_index >= world.w() * world.h() )
         return Cursor::POINTER;
@@ -1099,7 +1099,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
         // slow maps objects animation
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            u32 & frame = Game::MapsAnimationFrame();
+            uint32_t & frame = Game::MapsAnimationFrame();
             ++frame;
             gameArea.SetRedraw();
         }
@@ -1207,7 +1207,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
     }
 }
 
-void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps ) const
+void Interface::Basic::MouseCursorAreaPressRight( int32_t index_maps ) const
 {
     Heroes * hero = GetFocusHeroes();
 

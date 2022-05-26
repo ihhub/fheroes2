@@ -190,7 +190,7 @@ Maps::FileInfo & Maps::FileInfo::operator=( const FileInfo & f )
     return *this;
 }
 
-void Maps::FileInfo::Reset( void )
+void Maps::FileInfo::Reset()
 {
     file.clear();
     name.clear();
@@ -489,12 +489,12 @@ uint32_t Maps::FileInfo::ConditionLoss() const
     return GameOver::COND_NONE;
 }
 
-bool Maps::FileInfo::WinsCompAlsoWins( void ) const
+bool Maps::FileInfo::WinsCompAlsoWins() const
 {
     return comp_also_wins && ( ( GameOver::WINS_TOWN | GameOver::WINS_GOLD ) & ConditionWins() );
 }
 
-int Maps::FileInfo::WinsFindArtifactID( void ) const
+int Maps::FileInfo::WinsFindArtifactID() const
 {
     return wins1 ? wins1 - 1 : Artifact::UNKNOWN;
 }
@@ -512,7 +512,7 @@ bool Maps::FileInfo::isMultiPlayerMap() const
     return Color::Count( HumanOnlyColors() ) > 1;
 }
 
-std::string Maps::FileInfo::String( void ) const
+std::string Maps::FileInfo::String() const
 {
     std::ostringstream os;
 
@@ -537,9 +537,9 @@ std::string Maps::FileInfo::String( void ) const
 StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )
 {
     // Only the basename of map filename (fi.file) is saved
-    msg << System::GetBasename( fi.file ) << fi.name << fi.description << fi.size_w << fi.size_h << fi.difficulty << static_cast<u8>( KINGDOMMAX );
+    msg << System::GetBasename( fi.file ) << fi.name << fi.description << fi.size_w << fi.size_h << fi.difficulty << static_cast<uint8_t>( KINGDOMMAX );
 
-    for ( u32 ii = 0; ii < KINGDOMMAX; ++ii )
+    for ( uint32_t ii = 0; ii < KINGDOMMAX; ++ii )
         msg << fi.races[ii] << fi.unions[ii];
 
     msg << fi.kingdom_colors << fi.allow_human_colors << fi.allow_comp_colors << fi.rnd_races << fi.conditions_wins << fi.comp_also_wins << fi.allow_normal_victory
@@ -552,12 +552,12 @@ StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )
 
 StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
 {
-    u8 kingdommax;
+    uint8_t kingdommax;
 
     // Only the basename of map filename (fi.file) is loaded
     msg >> fi.file >> fi.name >> fi.description >> fi.size_w >> fi.size_h >> fi.difficulty >> kingdommax;
 
-    for ( u32 ii = 0; ii < kingdommax; ++ii )
+    for ( uint32_t ii = 0; ii < kingdommax; ++ii )
         msg >> fi.races[ii] >> fi.unions[ii];
 
     msg >> fi.kingdom_colors >> fi.allow_human_colors >> fi.allow_comp_colors >> fi.rnd_races >> fi.conditions_wins >> fi.comp_also_wins >> fi.allow_normal_victory

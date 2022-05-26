@@ -24,13 +24,13 @@
 #ifndef H2LOCALEVENT_H
 #define H2LOCALEVENT_H
 
+#include <cstdint>
 #include <map>
 #include <set>
 #include <string>
 
 #include "math_base.h"
 #include "timing.h"
-#include "types.h"
 
 #include <SDL.h>
 
@@ -155,7 +155,7 @@ namespace fheroes2
 
     const char * KeySymGetName( const Key key );
 
-    bool PressIntKey( u32 max, u32 & result );
+    bool PressIntKey( uint32_t max, uint32_t & result );
 
     size_t InsertKeySym( std::string & res, size_t pos, const Key key, const int32_t mod );
 
@@ -165,10 +165,10 @@ namespace fheroes2
 class LocalEvent
 {
 public:
-    static LocalEvent & Get( void );
+    static LocalEvent & Get();
     static LocalEvent & GetClean(); // reset all previous event statuses and return a reference for events
 
-    void SetGlobalFilterMouseEvents( void ( *pf )( s32, s32 ) )
+    void SetGlobalFilterMouseEvents( void ( *pf )( int32_t, int32_t ) )
     {
         redraw_cursor_func = pf;
     }
@@ -178,7 +178,7 @@ public:
         keyboard_filter_func = pf;
     }
 
-    static void SetStateDefaults( void );
+    static void SetStateDefaults();
 
     bool HandleEvents( bool delay = true, bool allowExit = false );
 
@@ -366,7 +366,7 @@ private:
 
     fheroes2::Point mouse_wm; // wheel movement
 
-    void ( *redraw_cursor_func )( s32, s32 );
+    void ( *redraw_cursor_func )( int32_t, int32_t );
     void ( *keyboard_filter_func )( int, int );
 
     uint32_t loop_delay;

@@ -44,11 +44,11 @@ namespace Interface
         explicit ControlPanel( Basic & );
 
         void SetPos( int32_t, int32_t );
-        void Redraw( void ) const;
-        void ResetTheme( void );
+        void Redraw() const;
+        void ResetTheme();
         fheroes2::GameMode QueueEventProcessing();
 
-        const fheroes2::Rect & GetArea( void ) const;
+        const fheroes2::Rect & GetArea() const;
 
     private:
         Basic & interface;

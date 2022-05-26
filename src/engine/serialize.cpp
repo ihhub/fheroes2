@@ -58,12 +58,12 @@ void StreamBase::setfail( bool f )
         flags &= ~0x00000001;
 }
 
-u16 StreamBase::get16()
+uint16_t StreamBase::get16()
 {
     return bigendian() ? getBE16() : getLE16();
 }
 
-u32 StreamBase::get32()
+uint32_t StreamBase::get32()
 {
     return bigendian() ? getBE32() : getLE32();
 }
@@ -80,13 +80,13 @@ StreamBase & StreamBase::operator>>( char & v )
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( u8 & v )
+StreamBase & StreamBase::operator>>( uint8_t & v )
 {
     v = get8();
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( u16 & v )
+StreamBase & StreamBase::operator>>( uint16_t & v )
 {
     v = get16();
     return *this;
@@ -98,13 +98,13 @@ StreamBase & StreamBase::operator>>( int16_t & v )
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( u32 & v )
+StreamBase & StreamBase::operator>>( uint32_t & v )
 {
     v = get32();
     return *this;
 }
 
-StreamBase & StreamBase::operator>>( s32 & v )
+StreamBase & StreamBase::operator>>( int32_t & v )
 {
     v = get32();
     return *this;
@@ -112,7 +112,7 @@ StreamBase & StreamBase::operator>>( s32 & v )
 
 StreamBase & StreamBase::operator>>( std::string & v )
 {
-    u32 size = get32();
+    uint32_t size = get32();
     v.resize( size );
 
     for ( std::string::iterator it = v.begin(); it != v.end(); ++it )
@@ -126,12 +126,12 @@ StreamBase & StreamBase::operator>>( fheroes2::Point & point_ )
     return *this >> point_.x >> point_.y;
 }
 
-void StreamBase::put16( u16 v )
+void StreamBase::put16( uint16_t v )
 {
     bigendian() ? putBE16( v ) : putLE16( v );
 }
 
-void StreamBase::put32( u32 v )
+void StreamBase::put32( uint32_t v )
 {
     bigendian() ? putBE32( v ) : putLE32( v );
 }
@@ -148,13 +148,13 @@ StreamBase & StreamBase::operator<<( const char v )
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const u8 v )
+StreamBase & StreamBase::operator<<( const uint8_t v )
 {
     put8( v );
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const u16 v )
+StreamBase & StreamBase::operator<<( const uint16_t v )
 {
     put16( v );
     return *this;
@@ -166,13 +166,13 @@ StreamBase & StreamBase::operator<<( const int16_t v )
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const s32 v )
+StreamBase & StreamBase::operator<<( const int32_t v )
 {
     put32( v );
     return *this;
 }
 
-StreamBase & StreamBase::operator<<( const u32 v )
+StreamBase & StreamBase::operator<<( const uint32_t v )
 {
     put32( v );
     return *this;
@@ -223,13 +223,13 @@ StreamBuf::StreamBuf( StreamBuf && st ) noexcept
     std::swap( itend, st.itend );
 }
 
-StreamBuf::StreamBuf( const std::vector<u8> & buf )
+StreamBuf::StreamBuf( const std::vector<uint8_t> & buf )
     : itbeg( nullptr )
     , itget( nullptr )
     , itput( nullptr )
     , itend( nullptr )
 {
-    itbeg = const_cast<u8 *>( &buf[0] );
+    itbeg = const_cast<uint8_t *>( &buf[0] );
     itend = itbeg + buf.size();
     itget = itbeg;
     itput = itend;
@@ -237,13 +237,13 @@ StreamBuf::StreamBuf( const std::vector<u8> & buf )
     setbigendian( IS_BIGENDIAN ); /* default: hardware endian */
 }
 
-StreamBuf::StreamBuf( const u8 * buf, size_t bufsz )
+StreamBuf::StreamBuf( const uint8_t * buf, size_t bufsz )
     : itbeg( nullptr )
     , itget( nullptr )
     , itput( nullptr )
     , itend( nullptr )
 {
-    itbeg = const_cast<u8 *>( buf );
+    itbeg = const_cast<uint8_t *>( buf );
     itend = itbeg + bufsz;
     itget = itbeg;
     itput = itend;
@@ -265,43 +265,43 @@ StreamBuf & StreamBuf::operator=( StreamBuf && st ) noexcept
     return *this;
 }
 
-size_t StreamBuf::capacity( void ) const
+size_t StreamBuf::capacity() const
 {
     return itend - itbeg;
 }
 
-const u8 * StreamBuf::data( void ) const
+const uint8_t * StreamBuf::data() const
 {
     return itget;
 }
 
-size_t StreamBuf::size( void ) const
+size_t StreamBuf::size() const
 {
     return sizeg();
 }
 
-void StreamBuf::reset( void )
+void StreamBuf::reset()
 {
     itput = itbeg;
     itget = itbeg;
 }
 
-size_t StreamBuf::tellg( void ) const
+size_t StreamBuf::tellg() const
 {
     return itget - itbeg;
 }
 
-size_t StreamBuf::tellp( void ) const
+size_t StreamBuf::tellp() const
 {
     return itput - itbeg;
 }
 
-size_t StreamBuf::sizeg( void ) const
+size_t StreamBuf::sizeg() const
 {
     return itput - itget;
 }
 
-size_t StreamBuf::sizep( void ) const
+size_t StreamBuf::sizep() const
 {
     return itend - itput;
 }
@@ -314,7 +314,7 @@ void StreamBuf::reallocbuf( size_t sz )
         if ( sz < minBufferCapacity )
             sz = minBufferCapacity;
 
-        itbeg = new u8[sz];
+        itbeg = new uint8_t[sz];
         itend = itbeg + sz;
         std::fill( itbeg, itend, static_cast<uint8_t>( 0 ) );
 
@@ -324,7 +324,7 @@ void StreamBuf::reallocbuf( size_t sz )
         if ( sz < minBufferCapacity )
             sz = minBufferCapacity;
 
-        u8 * ptr = new u8[sz];
+        uint8_t * ptr = new uint8_t[sz];
 
         std::fill( ptr, ptr + sz, static_cast<uint8_t>( 0 ) );
         std::copy( itbeg, itput, ptr );
@@ -348,7 +348,7 @@ void StreamBuf::put8( const uint8_t v )
         *itput++ = v;
 }
 
-u8 StreamBuf::get8()
+uint8_t StreamBuf::get8()
 {
     if ( sizeg() )
         return *itget++;
@@ -356,25 +356,25 @@ u8 StreamBuf::get8()
         return 0u;
 }
 
-u16 StreamBuf::getBE16()
+uint16_t StreamBuf::getBE16()
 {
-    u16 result = ( get8() << 8 );
+    uint16_t result = ( get8() << 8 );
     result |= get8();
 
     return result;
 }
 
-u16 StreamBuf::getLE16()
+uint16_t StreamBuf::getLE16()
 {
-    u16 result = get8();
+    uint16_t result = get8();
     result |= ( get8() << 8 );
 
     return result;
 }
 
-u32 StreamBuf::getBE32()
+uint32_t StreamBuf::getBE32()
 {
-    u32 result = ( get8() << 24 );
+    uint32_t result = ( get8() << 24 );
     result |= ( get8() << 16 );
     result |= ( get8() << 8 );
     result |= get8();
@@ -382,9 +382,9 @@ u32 StreamBuf::getBE32()
     return result;
 }
 
-u32 StreamBuf::getLE32()
+uint32_t StreamBuf::getLE32()
 {
-    u32 result = get8();
+    uint32_t result = get8();
     result |= ( get8() << 8 );
     result |= ( get8() << 16 );
     result |= ( get8() << 24 );
@@ -392,19 +392,19 @@ u32 StreamBuf::getLE32()
     return result;
 }
 
-void StreamBuf::putBE16( u16 v )
+void StreamBuf::putBE16( uint16_t v )
 {
     put8( v >> 8 );
     put8( v & 0xFF );
 }
 
-void StreamBuf::putLE16( u16 v )
+void StreamBuf::putLE16( uint16_t v )
 {
     put8( v & 0xFF );
     put8( v >> 8 );
 }
 
-void StreamBuf::putBE32( u32 v )
+void StreamBuf::putBE32( uint32_t v )
 {
     put8( v >> 24 );
     put8( ( v >> 16 ) & 0xFF );
@@ -412,7 +412,7 @@ void StreamBuf::putBE32( u32 v )
     put8( v & 0xFF );
 }
 
-void StreamBuf::putLE32( u32 v )
+void StreamBuf::putLE32( uint32_t v )
 {
     put8( v & 0xFF );
     put8( ( v >> 8 ) & 0xFF );
@@ -420,7 +420,7 @@ void StreamBuf::putLE32( u32 v )
     put8( v >> 24 );
 }
 
-std::vector<u8> StreamBuf::getRaw( size_t sz )
+std::vector<uint8_t> StreamBuf::getRaw( size_t sz )
 {
     const size_t remainSize = sizeg();
     const size_t dataSize = sz > 0 ? sz : remainSize;
@@ -458,8 +458,8 @@ void StreamBuf::putRaw( const char * ptr, size_t sz )
 
 std::string StreamBuf::toString( size_t sz )
 {
-    u8 * it1 = itget;
-    u8 * it2 = itget + ( sz ? sz : sizeg() );
+    uint8_t * it1 = itget;
+    uint8_t * it2 = itget + ( sz ? sz : sizeg() );
     it2 = std::find( it1, it2, 0 );
     itget = it1 + ( sz ? sz : sizeg() );
     return std::string( it1, it2 );
@@ -492,7 +492,7 @@ bool StreamFile::open( const std::string & fn, const std::string & mode )
     return _file != nullptr;
 }
 
-void StreamFile::close( void )
+void StreamFile::close()
 {
     if ( _file ) {
         std::fclose( _file );
@@ -500,7 +500,7 @@ void StreamFile::close( void )
     }
 }
 
-size_t StreamFile::size( void ) const
+size_t StreamFile::size() const
 {
     if ( !_file )
         return 0;
@@ -511,7 +511,7 @@ size_t StreamFile::size( void ) const
     return static_cast<size_t>( len );
 }
 
-size_t StreamFile::tell( void ) const
+size_t StreamFile::tell() const
 {
     return tellg();
 }
@@ -522,7 +522,7 @@ void StreamFile::seek( size_t pos )
         std::fseek( _file, static_cast<long>( pos ), SEEK_SET );
 }
 
-size_t StreamFile::sizeg( void ) const
+size_t StreamFile::sizeg() const
 {
     if ( !_file )
         return 0;
@@ -533,17 +533,17 @@ size_t StreamFile::sizeg( void ) const
     return static_cast<size_t>( len - pos );
 }
 
-size_t StreamFile::tellg( void ) const
+size_t StreamFile::tellg() const
 {
     return _file ? static_cast<size_t>( std::ftell( _file ) ) : 0;
 }
 
-size_t StreamFile::sizep( void ) const
+size_t StreamFile::sizep() const
 {
     return sizeg();
 }
 
-size_t StreamFile::tellp( void ) const
+size_t StreamFile::tellp() const
 {
     return tellg();
 }
@@ -554,7 +554,7 @@ void StreamFile::skip( size_t pos )
         std::fseek( _file, static_cast<long int>( pos ), SEEK_CUR );
 }
 
-u8 StreamFile::get8()
+uint8_t StreamFile::get8()
 {
     return getUint<uint8_t>();
 }

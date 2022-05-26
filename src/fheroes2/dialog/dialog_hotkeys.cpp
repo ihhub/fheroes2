@@ -67,7 +67,7 @@ namespace
             // Do nothing.
         }
 
-        void RedrawItem( const Game::HotKeyEvent & hotKeyEvent, s32 offsetX, s32 offsetY, bool /*current*/ ) override
+        void RedrawItem( const Game::HotKeyEvent & hotKeyEvent, int32_t offsetX, int32_t offsetY, bool /*current*/ ) override
         {
             fheroes2::Display & display = fheroes2::Display::instance();
 

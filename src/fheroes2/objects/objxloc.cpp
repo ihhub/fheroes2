@@ -44,8 +44,8 @@ namespace
 
 int ObjXlc1::GetPassable( const uint8_t index )
 {
-    const u8 disabled[] = {40, 49, 50};
-    const u8 restricted[] = {69, 71, 75, 76, 85, 103, 117, 119, 126, 128, 134, 136};
+    const uint8_t disabled[] = { 40, 49, 50 };
+    const uint8_t restricted[] = { 69, 71, 75, 76, 85, 103, 117, 119, 126, 128, 134, 136 };
 
     if ( isShadow( index ) )
         return DIRECTION_ALL;
@@ -55,7 +55,7 @@ int ObjXlc1::GetPassable( const uint8_t index )
     return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
 }
 
-bool ObjXlc1::isAction( u32 index )
+bool ObjXlc1::isAction( uint32_t index )
 {
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
@@ -67,7 +67,7 @@ bool ObjXlc1::isShadow( const uint8_t index )
 
 int ObjXlc2::GetPassable( const uint8_t index )
 {
-    const u8 restricted[] = {3, 8, 28, 46, 92, 102};
+    const uint8_t restricted[] = { 3, 8, 28, 46, 92, 102 };
 
     if ( isShadow( index ) )
         return DIRECTION_ALL;
@@ -77,7 +77,7 @@ int ObjXlc2::GetPassable( const uint8_t index )
     return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
 }
 
-bool ObjXlc2::isAction( u32 index )
+bool ObjXlc2::isAction( uint32_t index )
 {
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
@@ -97,7 +97,7 @@ int ObjXlc3::GetPassable( const uint8_t index )
     return DIRECTION_ALL;
 }
 
-bool ObjXlc3::isAction( u32 index )
+bool ObjXlc3::isAction( uint32_t index )
 {
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
@@ -107,7 +107,7 @@ bool ObjXlc3::isShadow( const uint8_t index )
     return objXlc3ShadowBitset[index];
 }
 
-int ObjXlc1::GetActionObject( u32 index )
+int ObjXlc1::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 3:
@@ -131,7 +131,7 @@ int ObjXlc1::GetActionObject( u32 index )
     return MP2::OBJ_ZERO;
 }
 
-int ObjXlc2::GetActionObject( u32 index )
+int ObjXlc2::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 4:
@@ -154,7 +154,7 @@ bool ObjXlc2::isReefs( const uint8_t index )
     return index >= 111 && index <= 135;
 }
 
-int ObjXlc3::GetActionObject( u32 index )
+int ObjXlc3::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 30:

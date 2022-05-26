@@ -392,7 +392,7 @@ void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
     text.Blit( dst_pt.x, dst_pt.y );
 }
 
-fheroes2::Sprite GetModesSprite( u32 mod )
+fheroes2::Sprite GetModesSprite( uint32_t mod )
 {
     switch ( mod ) {
     case Battle::SP_BLOODLUST:
@@ -688,7 +688,7 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     return result;
 }
 
-int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & hero )
+int Dialog::ArmyJoinWithCost( const Troop & troop, uint32_t join, uint32_t gold, Heroes & hero )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();

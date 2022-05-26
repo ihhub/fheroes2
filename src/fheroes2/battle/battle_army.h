@@ -65,28 +65,28 @@ namespace Battle
 
         Force & operator=( const Force & ) = delete;
 
-        HeroBase * GetCommander( void );
-        const HeroBase * GetCommander( void ) const;
+        HeroBase * GetCommander();
+        const HeroBase * GetCommander() const;
 
         const Units & getUnits() const;
 
         bool isValid( const bool considerBattlefieldArmy = true ) const;
         bool HasMonster( const Monster & ) const;
-        u32 GetDeadHitPoints( void ) const;
-        u32 GetDeadCounts( void ) const;
-        int GetColor( void ) const;
-        int GetControl( void ) const;
+        uint32_t GetDeadHitPoints() const;
+        uint32_t GetDeadCounts() const;
+        int GetColor() const;
+        int GetControl() const;
         uint32_t GetSurrenderCost() const;
-        Troops GetKilledTroops( void ) const;
+        Troops GetKilledTroops() const;
         bool animateIdleUnits();
         void resetIdleAnimation();
 
-        void NewTurn( void );
+        void NewTurn();
         void SyncArmyCount();
 
     private:
         Army & army;
-        std::vector<u32> uids;
+        std::vector<uint32_t> uids;
     };
 }
 

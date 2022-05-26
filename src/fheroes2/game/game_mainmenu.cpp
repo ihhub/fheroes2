@@ -50,7 +50,7 @@ namespace
 {
     struct ButtonInfo
     {
-        u32 frame;
+        uint32_t frame;
         fheroes2::Button & button;
         bool isOver;
         bool wasOver;
@@ -239,7 +239,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     const fheroes2::Rect settingsArea( static_cast<int32_t>( 63 * scaleX ), static_cast<int32_t>( 202 * scaleY ), static_cast<int32_t>( 90 * scaleX ),
                                        static_cast<int32_t>( 160 * scaleY ) );
 
-    u32 lantern_frame = 0;
+    uint32_t lantern_frame = 0;
 
     std::vector<ButtonInfo> buttons{ { NEWGAME_DEFAULT, buttonNewGame, false, false },
                                      { LOADGAME_DEFAULT, buttonLoadGame, false, false },
@@ -283,7 +283,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             buttons[i].isOver = le.MouseCursor( buttons[i].button.area() );
 
             if ( buttons[i].isOver != buttons[i].wasOver ) {
-                u32 frame = buttons[i].frame;
+                uint32_t frame = buttons[i].frame;
 
                 if ( buttons[i].isOver && !buttons[i].wasOver )
                     ++frame;

@@ -56,7 +56,7 @@ namespace
             , _isDoubleClicked( false )
         {}
 
-        void RedrawItem( const fheroes2::Size & resolution, s32 offsetX, s32 offsetY, bool current ) override
+        void RedrawItem( const fheroes2::Size & resolution, int32_t offsetX, int32_t offsetY, bool current ) override
         {
             const Text text( GetResolutionString( resolution ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
             text.Blit( ( editBoxLength - text.w() ) / 2 + offsetX, offsetY, editBoxLength );

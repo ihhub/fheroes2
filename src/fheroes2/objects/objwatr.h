@@ -24,22 +24,22 @@
 #ifndef H2OBJWATR_H
 #define H2OBJWATR_H
 
-#include "types.h"
+#include <cstdint>
 
 namespace ObjWatr
 {
     bool isShadow( const uint8_t index );
-    bool isAction( u32 index );
+    bool isAction( uint32_t index );
     int GetPassable( const uint8_t index );
-    int GetActionObject( u32 index );
+    int GetActionObject( uint32_t index );
 }
 
 namespace ObjWat2
 {
     bool isShadow( const uint8_t index );
-    bool isAction( u32 index );
+    bool isAction( uint32_t index );
     int GetPassable( const uint8_t index );
-    int GetActionObject( u32 index );
+    int GetActionObject( uint32_t index );
 }
 
 #endif

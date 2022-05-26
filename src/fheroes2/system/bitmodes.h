@@ -24,7 +24,7 @@
 #ifndef H2BITMODES_H
 #define H2BITMODES_H
 
-#include "types.h"
+#include <cstdint>
 
 class StreamBase;
 
@@ -35,17 +35,17 @@ public:
         : modes( 0 )
     {}
 
-    void SetModes( u32 f )
+    void SetModes( uint32_t f )
     {
         modes |= f;
     }
 
-    void ResetModes( u32 f )
+    void ResetModes( uint32_t f )
     {
         modes &= ~f;
     }
 
-    bool Modes( u32 f ) const
+    bool Modes( uint32_t f ) const
     {
         return ( modes & f ) != 0;
     }
@@ -54,7 +54,7 @@ protected:
     friend StreamBase & operator<<( StreamBase &, const BitModes & );
     friend StreamBase & operator>>( StreamBase &, BitModes & );
 
-    u32 modes;
+    uint32_t modes;
 };
 
 StreamBase & operator<<( StreamBase &, const BitModes & );

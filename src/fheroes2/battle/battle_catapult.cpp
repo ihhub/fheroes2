@@ -59,7 +59,7 @@ Battle::Catapult::Catapult( const HeroBase & hero, const Rand::DeterministicRand
     catShots += hero.GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::EXTRA_CATAPULT_SHOTS );
 }
 
-u32 Battle::Catapult::GetDamage() const
+uint32_t Battle::Catapult::GetDamage() const
 {
     if ( doubleDamageChance == 100 || doubleDamageChance >= _randomGenerator.Get( 1, 100 ) ) {
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Catapult dealt double damage! (" << doubleDamageChance << "% chance)" )
@@ -95,9 +95,9 @@ fheroes2::Point Battle::Catapult::GetTargetPosition( int target, bool hit )
     return fheroes2::Point();
 }
 
-int Battle::Catapult::GetTarget( const std::vector<u32> & values ) const
+int Battle::Catapult::GetTarget( const std::vector<uint32_t> & values ) const
 {
-    std::vector<u32> targets;
+    std::vector<uint32_t> targets;
     targets.reserve( 4 );
 
     // check walls

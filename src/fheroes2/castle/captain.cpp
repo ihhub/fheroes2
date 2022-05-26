@@ -82,33 +82,33 @@ Captain::Captain( Castle & cstl )
     SetCenter( home.GetCenter() );
 }
 
-bool Captain::isValid( void ) const
+bool Captain::isValid() const
 {
     return home.isBuild( BUILD_CAPTAIN );
 }
 
-int Captain::GetAttack( void ) const
+int Captain::GetAttack() const
 {
     return attack + GetAttackModificator( nullptr );
 }
 
-int Captain::GetDefense( void ) const
+int Captain::GetDefense() const
 {
     return defense + GetDefenseModificator( nullptr );
 }
 
-int Captain::GetPower( void ) const
+int Captain::GetPower() const
 {
     const int finalPower = power + GetPowerModificator( nullptr );
     return finalPower < 1 ? 1 : ( finalPower > 255 ? 255 : finalPower );
 }
 
-int Captain::GetKnowledge( void ) const
+int Captain::GetKnowledge() const
 {
     return knowledge + GetKnowledgeModificator( nullptr );
 }
 
-int Captain::GetMorale( void ) const
+int Captain::GetMorale() const
 {
     int result = Morale::NORMAL;
 
@@ -124,7 +124,7 @@ int Captain::GetMorale( void ) const
     return Morale::Normalize( result );
 }
 
-int Captain::GetLuck( void ) const
+int Captain::GetLuck() const
 {
     int result = Luck::NORMAL;
 
@@ -140,52 +140,52 @@ int Captain::GetLuck( void ) const
     return Luck::Normalize( result );
 }
 
-int Captain::GetRace( void ) const
+int Captain::GetRace() const
 {
     return home.GetRace();
 }
 
-int Captain::GetColor( void ) const
+int Captain::GetColor() const
 {
     return home.GetColor();
 }
 
-const std::string & Captain::GetName( void ) const
+const std::string & Captain::GetName() const
 {
     return home.GetName();
 }
 
-int Captain::GetType( void ) const
+int Captain::GetType() const
 {
     return HeroBase::CAPTAIN;
 }
 
-const Army & Captain::GetArmy( void ) const
+const Army & Captain::GetArmy() const
 {
     return home.GetArmy();
 }
 
-Army & Captain::GetArmy( void )
+Army & Captain::GetArmy()
 {
     return home.GetArmy();
 }
 
-int Captain::GetControl( void ) const
+int Captain::GetControl() const
 {
     return home.GetControl();
 }
 
-void Captain::ActionAfterBattle( void )
+void Captain::ActionAfterBattle()
 {
     SetSpellPoints( GetMaxSpellPoints() );
 }
 
-void Captain::ActionPreBattle( void )
+void Captain::ActionPreBattle()
 {
     SetSpellPoints( GetMaxSpellPoints() );
 }
 
-const Castle * Captain::inCastle( void ) const
+const Castle * Captain::inCastle() const
 {
     return &home;
 }
