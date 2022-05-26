@@ -36,11 +36,11 @@ namespace Interface
     public:
         explicit ButtonsArea( Basic & );
 
-        void SetPos( s32, s32 ) override;
-        void SavePosition( void ) override;
-        void SetRedraw( void ) const;
+        void SetPos( int32_t ox, int32_t oy ) override;
+        void SavePosition() override;
+        void SetRedraw() const;
 
-        void Redraw( void );
+        void Redraw();
         fheroes2::GameMode QueueEventProcessing();
         void ResetButtons();
 

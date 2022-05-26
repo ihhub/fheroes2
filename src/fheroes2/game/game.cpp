@@ -62,7 +62,7 @@ namespace
     bool updateSoundsOnFocusUpdate = true;
     std::atomic<int> currentMusic{ MUS::UNKNOWN };
 
-    u32 maps_animation_frame = 0;
+    uint32_t maps_animation_frame = 0;
 
     std::vector<int> reserved_vols( LOOPXX_COUNT, 0 );
 
@@ -79,7 +79,7 @@ namespace
 
 namespace Game
 {
-    void AnimateDelaysInitialize( void );
+    void AnimateDelaysInitialize();
 
     namespace ObjectFadeAnimation
     {
@@ -175,7 +175,7 @@ uint16_t Game::GetLoadVersion()
     return save_version;
 }
 
-const std::string & Game::GetLastSavename( void )
+const std::string & Game::GetLastSavename()
 {
     return last_name;
 }
@@ -202,7 +202,7 @@ void Game::SetUpdateSoundsOnFocusUpdate( bool update )
     updateSoundsOnFocusUpdate = update;
 }
 
-void Game::Init( void )
+void Game::Init()
 {
     // default events
     LocalEvent::SetStateDefaults();
@@ -332,7 +332,7 @@ const Game::ObjectFadeAnimation::FadeTask & Game::ObjectFadeAnimation::GetFadeTa
     return fadeTask;
 }
 
-u32 & Game::MapsAnimationFrame( void )
+uint32_t & Game::MapsAnimationFrame()
 {
     return maps_animation_frame;
 }
@@ -426,10 +426,10 @@ void Game::restoreSoundsForCurrentFocus()
     }
 }
 
-u32 Game::GetRating( void )
+uint32_t Game::GetRating()
 {
     const Settings & conf = Settings::Get();
-    u32 rating = 50;
+    uint32_t rating = 50;
 
     switch ( conf.MapsDifficulty() ) {
     case Difficulty::NORMAL:
@@ -466,7 +466,7 @@ u32 Game::GetRating( void )
     return rating;
 }
 
-u32 Game::GetGameOverScores( void )
+uint32_t Game::GetGameOverScores()
 {
     const Settings & conf = Settings::Get();
 
@@ -512,22 +512,22 @@ u32 Game::GetGameOverScores( void )
     return GetRating() * ( 200 - daysScore ) / 100;
 }
 
-u32 Game::GetLostTownDays( void )
+uint32_t Game::GetLostTownDays()
 {
     return GameStatic::GetGameOverLostDays();
 }
 
-u32 Game::GetWhirlpoolPercent( void )
+uint32_t Game::GetWhirlpoolPercent()
 {
     return GameStatic::GetLostOnWhirlpoolPercent();
 }
 
-int Game::GetKingdomColors( void )
+int Game::GetKingdomColors()
 {
     return Settings::Get().GetPlayers().GetColors();
 }
 
-int Game::GetActualKingdomColors( void )
+int Game::GetActualKingdomColors()
 {
     return Settings::Get().GetPlayers().GetActualColors();
 }
@@ -582,7 +582,7 @@ std::string Game::CountThievesGuild( uint32_t monsterCount, int guildCount )
     return guildCount == 1 ? "???" : Army::SizeString( monsterCount );
 }
 
-void Game::PlayPickupSound( void )
+void Game::PlayPickupSound()
 {
     int wav = M82::UNKNOWN;
 

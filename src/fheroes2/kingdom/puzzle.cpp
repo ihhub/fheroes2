@@ -45,7 +45,7 @@ bool ClosedTilesExists( const Puzzle &, const std::vector<uint8_t> & );
 void ZoneOpenFirstTiles( Puzzle &, size_t &, const std::vector<uint8_t> & );
 void ShowStandardDialog( const Puzzle &, const fheroes2::Image & );
 void ShowExtendedDialog( const Puzzle &, const fheroes2::Image & );
-void PuzzlesDraw( const Puzzle &, const fheroes2::Image &, s32, s32 );
+void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, int32_t dstx, int32_t dsty );
 
 Puzzle::Puzzle()
 {
@@ -72,7 +72,7 @@ Puzzle & Puzzle::operator=( const char * str )
     return *this;
 }
 
-void Puzzle::Update( u32 open_obelisk, u32 total_obelisk )
+void Puzzle::Update( uint32_t open_obelisk, uint32_t total_obelisk )
 {
     const uint32_t open_puzzle = open_obelisk * PUZZLETILES / total_obelisk;
     size_t need_puzzle = open_puzzle > count() ? open_puzzle - count() : 0;
@@ -90,7 +90,7 @@ void Puzzle::Update( u32 open_obelisk, u32 total_obelisk )
         ZoneOpenFirstTiles( *this, need_puzzle, zone4_order );
 }
 
-void Puzzle::ShowMapsDialog( void ) const
+void Puzzle::ShowMapsDialog() const
 {
     const fheroes2::Image & sf = world.GetUltimateArtifact().GetPuzzleMapSurface();
     if ( sf.empty() )
@@ -215,7 +215,7 @@ void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
     radar.SetRedraw();
 }
 
-void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, s32 dstx, s32 dsty )
+void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, int32_t dstx, int32_t dsty )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 

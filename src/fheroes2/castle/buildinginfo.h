@@ -39,28 +39,28 @@ public:
         return building;
     }
 
-    void SetPos( s32, s32 );
+    void SetPos( int32_t, int32_t );
 
     const fheroes2::Rect & GetArea() const
     {
         return area;
     }
 
-    const char * GetName( void ) const;
+    const char * GetName() const;
     void SetStatusMessage( StatusBar & ) const;
-    bool IsDwelling( void ) const;
-    void Redraw( void ) const;
+    bool IsDwelling() const;
+    void Redraw() const;
     bool QueueEventProcessing( fheroes2::ButtonBase & exitButton ) const;
     bool DialogBuyBuilding( bool buttons ) const;
 
-    static payment_t GetCost( u32, int );
+    static payment_t GetCost( uint32_t, int );
 
 private:
-    void RedrawCaptain( void ) const;
-    std::string GetConditionDescription( void ) const;
+    void RedrawCaptain() const;
+    std::string GetConditionDescription() const;
 
     const Castle & castle;
-    u32 building;
+    uint32_t building;
     std::string description;
     fheroes2::Rect area;
     int bcond;
@@ -68,9 +68,9 @@ private:
 
 struct DwellingItem
 {
-    DwellingItem( const Castle &, u32 dw );
+    DwellingItem( const Castle &, uint32_t dw );
 
-    u32 type;
+    uint32_t type;
     Monster mons;
 };
 

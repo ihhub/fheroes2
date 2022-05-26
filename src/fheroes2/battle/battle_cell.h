@@ -24,10 +24,10 @@
 #ifndef H2BATTLE_CELL_H
 #define H2BATTLE_CELL_H
 
+#include <cstdint>
 #include <utility>
 
 #include "math_base.h"
-#include "types.h"
 
 #define CELLW 44
 #define CELLH 52
@@ -61,11 +61,11 @@ namespace Battle
         Cell & operator=( const Cell & ) = delete;
         Cell & operator=( Cell && ) = delete;
 
-        void ResetQuality( void );
+        void ResetQuality();
         void resetReachability();
 
         void SetObject( int );
-        void SetQuality( u32 );
+        void SetQuality( uint32_t );
 
         void setReachableForHead();
         void setReachableForTail();
@@ -84,23 +84,23 @@ namespace Battle
 
         bool isPositionIncludePoint( const fheroes2::Point & ) const;
 
-        s32 GetIndex( void ) const;
-        const fheroes2::Rect & GetPos( void ) const;
-        int GetObject( void ) const;
-        s32 GetQuality( void ) const;
+        int32_t GetIndex() const;
+        const fheroes2::Rect & GetPos() const;
+        int GetObject() const;
+        int32_t GetQuality() const;
         direction_t GetTriangleDirection( const fheroes2::Point & ) const;
 
-        const Unit * GetUnit( void ) const;
-        Unit * GetUnit( void );
+        const Unit * GetUnit() const;
+        Unit * GetUnit();
         void SetUnit( Unit * );
 
     private:
-        s32 index;
+        int32_t index;
         fheroes2::Rect pos;
         int object;
         bool _reachableForHead;
         bool _reachableForTail;
-        s32 quality;
+        int32_t quality;
         Unit * troop;
         fheroes2::Point coord[7];
     };
@@ -113,8 +113,8 @@ namespace Battle
         {}
 
         void Set( const int32_t head, const bool wide, const bool reflect );
-        void Swap( void );
-        bool isReflect( void ) const;
+        void Swap();
+        bool isReflect() const;
         bool contains( int cellIndex ) const;
 
         // Returns the position that the given unit would occupy after moving to the
@@ -127,11 +127,11 @@ namespace Battle
         // an empty Position object if the given index is unreachable
         static Position GetReachable( const Unit & currentUnit, const int32_t dst, const bool tryHeadFirst = true );
 
-        fheroes2::Rect GetRect( void ) const;
-        Cell * GetHead( void );
-        const Cell * GetHead( void ) const;
-        Cell * GetTail( void );
-        const Cell * GetTail( void ) const;
+        fheroes2::Rect GetRect() const;
+        Cell * GetHead();
+        const Cell * GetHead() const;
+        Cell * GetTail();
+        const Cell * GetTail() const;
     };
 }
 

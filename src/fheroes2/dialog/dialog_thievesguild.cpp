@@ -219,7 +219,7 @@ void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & 
     if ( !v.empty() ) {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        for ( u32 ii = 0; ii < v.size(); ++ii ) {
+        for ( uint32_t ii = 0; ii < v.size(); ++ii ) {
             const Heroes * hero = world.GetHeroes( v[ii].first );
             if ( hero ) {
                 int32_t px = pos.x + ii * step;

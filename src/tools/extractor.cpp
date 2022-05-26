@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2022                                                    *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -36,9 +36,9 @@
 
 struct aggfat_t
 {
-    u32 crc;
-    u32 offset;
-    u32 size;
+    uint32_t crc;
+    uint32_t offset;
+    uint32_t size;
 };
 
 int main( int argc, char ** argv )
@@ -81,7 +81,7 @@ int main( int argc, char ** argv )
         const aggfat_t & fat = ( *it ).second;
         const std::string & fn = System::ConcatePath( argv[2], ( *it ).first );
         sf1.seek( fat.offset );
-        std::vector<u8> buf = sf1.getRaw( fat.size );
+        std::vector<uint8_t> buf = sf1.getRaw( fat.size );
 
         if ( !buf.empty() && sf2.open( fn, "wb" ) ) {
             sf2.putRaw( reinterpret_cast<char *>( &buf[0] ), buf.size() );

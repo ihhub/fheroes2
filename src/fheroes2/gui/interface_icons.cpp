@@ -43,7 +43,7 @@ namespace
     };
 }
 
-bool Interface::IconsBar::IsVisible( void )
+bool Interface::IconsBar::IsVisible()
 {
     const Settings & conf = Settings::Get();
     return !conf.ExtGameHideInterface() || conf.ShowIcons();
@@ -64,7 +64,7 @@ void Interface::RedrawCastleIcon( const Castle & castle, int32_t sx, int32_t sy 
     fheroes2::drawCastleIcon( castle, fheroes2::Display::instance(), { sx, sy } );
 }
 
-void Interface::RedrawHeroesIcon( const Heroes & hero, s32 sx, s32 sy )
+void Interface::RedrawHeroesIcon( const Heroes & hero, int32_t sx, int32_t sy )
 {
     hero.PortraitRedraw( sx, sy, PORT_SMALL, fheroes2::Display::instance() );
 }
@@ -100,7 +100,7 @@ void Interface::IconsBar::redrawBackground( fheroes2::Image & output, const fher
     }
 }
 
-void Interface::CastleIcons::RedrawItem( const CASTLE & item, s32 ox, s32 oy, bool current )
+void Interface::CastleIcons::RedrawItem( const CASTLE & item, int32_t ox, int32_t oy, bool current )
 {
     if ( item && show ) {
         RedrawCastleIcon( *item, ox + 5, oy + 5 );
@@ -162,7 +162,7 @@ void Interface::CastleIcons::SetShow( bool f )
     }
 }
 
-void Interface::CastleIcons::SetPos( s32 px, s32 py )
+void Interface::CastleIcons::SetPos( int32_t px, int32_t py )
 {
     const int icnscroll = Settings::Get().ExtGameEvilInterface() ? ICN::SCROLLE : ICN::SCROLL;
 
@@ -188,7 +188,7 @@ void Interface::CastleIcons::SetPos( s32 px, s32 py )
     Reset();
 }
 
-void Interface::HeroesIcons::RedrawItem( const HEROES & item, s32 ox, s32 oy, bool current )
+void Interface::HeroesIcons::RedrawItem( const HEROES & item, int32_t ox, int32_t oy, bool current )
 {
     if ( item && show ) {
         RedrawHeroesIcon( *item, ox + 5, oy + 5 );
@@ -203,12 +203,12 @@ void Interface::HeroesIcons::RedrawBackground( const fheroes2::Point & pos )
     redrawBackground( fheroes2::Display::instance(), pos, show ? _size() : 0 );
 }
 
-void Interface::HeroesIcons::ActionCurrentUp( void )
+void Interface::HeroesIcons::ActionCurrentUp()
 {
     Interface::Basic::Get().SetFocus( GetCurrent() );
 }
 
-void Interface::HeroesIcons::ActionCurrentDn( void )
+void Interface::HeroesIcons::ActionCurrentDn()
 {
     Interface::Basic::Get().SetFocus( GetCurrent() );
 }
@@ -257,7 +257,7 @@ void Interface::HeroesIcons::SetShow( bool f )
     }
 }
 
-void Interface::HeroesIcons::SetPos( s32 px, s32 py )
+void Interface::HeroesIcons::SetPos( int32_t px, int32_t py )
 {
     const int icnscroll = Settings::Get().ExtGameEvilInterface() ? ICN::SCROLLE : ICN::SCROLL;
 
@@ -294,7 +294,7 @@ Interface::IconsPanel::IconsPanel( Basic & basic )
     fheroes2::DrawBorder( sfMarker, fheroes2::GetColorId( 0xA0, 0xE0, 0xE0 ) );
 }
 
-void Interface::IconsPanel::SavePosition( void )
+void Interface::IconsPanel::SavePosition()
 {
     Settings::Get().SetPosIcons( GetRect().getPosition() );
 }
@@ -318,12 +318,12 @@ void Interface::IconsPanel::SetRedraw( const icons_t type ) const
     }
 }
 
-void Interface::IconsPanel::SetRedraw( void ) const
+void Interface::IconsPanel::SetRedraw() const
 {
     SetRedraw( ICON_ANY );
 }
 
-void Interface::IconsPanel::SetPos( s32 ox, s32 oy )
+void Interface::IconsPanel::SetPos( int32_t ox, int32_t oy )
 {
     int32_t iconsCount = 0;
 
@@ -346,7 +346,7 @@ void Interface::IconsPanel::SetPos( s32 ox, s32 oy )
     castleIcons.SetPos( rect.x + 72, rect.y );
 }
 
-void Interface::IconsPanel::Redraw( void )
+void Interface::IconsPanel::Redraw()
 {
     // is visible
     if ( IconsBar::IsVisible() ) {
@@ -359,7 +359,7 @@ void Interface::IconsPanel::Redraw( void )
     }
 }
 
-void Interface::IconsPanel::QueueEventProcessing( void )
+void Interface::IconsPanel::QueueEventProcessing()
 {
     if ( Settings::Get().ShowIcons() &&
          // move border window
@@ -442,7 +442,7 @@ void Interface::IconsPanel::ShowIcons( const icons_t type )
         castleIcons.SetShow( true );
 }
 
-void Interface::IconsPanel::SetCurrentVisible( void )
+void Interface::IconsPanel::SetCurrentVisible()
 {
     if ( heroesIcons.isSelected() ) {
         heroesIcons.SetCurrentVisible();

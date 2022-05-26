@@ -23,6 +23,7 @@
 #ifndef H2DIALOG_H
 #define H2DIALOG_H
 
+#include <cstdint>
 #include <list>
 #include <memory>
 #include <string>
@@ -31,7 +32,6 @@
 #include "game_mode.h"
 #include "gamedefs.h"
 #include "image.h"
-#include "types.h"
 
 #define SHADOWWIDTH 16
 #define BOXAREA_WIDTH 244
@@ -82,7 +82,7 @@ namespace Dialog
 
     int AdventureOptions( bool enabledig );
     fheroes2::GameMode FileOptions();
-    std::string SelectFileLoad( void );
+    std::string SelectFileLoad();
     std::string SelectFileSave();
     // show info cell maps
     void QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile = false );
@@ -91,22 +91,22 @@ namespace Dialog
     int Message( const std::string &, const std::string &, int ft, int buttons = 0 /* buttons: OK : CANCEL : OK|CANCEL : YES|NO */ );
     void ExtSettings( bool );
     int LevelUpSelectSkill( const std::string & name, const int primarySkillType, const Skill::Secondary & sec1, const Skill::Secondary & sec2, Heroes & hero );
-    bool SelectGoldOrExp( const std::string &, const std::string &, u32 gold, u32 expr, const Heroes & );
-    int SelectSkillFromArena( void );
-    bool SelectCount( const std::string &, u32 min, u32 max, u32 & res, int step = 1 );
+    bool SelectGoldOrExp( const std::string &, const std::string &, uint32_t gold, uint32_t expr, const Heroes & );
+    int SelectSkillFromArena();
+    bool SelectCount( const std::string & header, uint32_t min, uint32_t max, uint32_t & cur, int step = 1 );
     bool InputString( const std::string & header, std::string & result, const std::string & title = std::string(), const size_t charLimit = 0 );
-    Troop RecruitMonster( const Monster & monster0, u32 available, const bool allowDowngradedMonster, const int32_t windowOffsetY );
-    void DwellingInfo( const Monster &, u32 available );
+    Troop RecruitMonster( const Monster & monster0, uint32_t available, const bool allowDowngradedMonster, const int32_t windowOffsetY );
+    void DwellingInfo( const Monster &, uint32_t available );
     bool SetGuardian( Heroes &, Troop &, CapturedObject &, bool readonly );
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false );
     int ArmyJoinFree( const Troop &, Heroes & );
-    int ArmyJoinWithCost( const Troop &, u32 join, u32 gold, Heroes & );
+    int ArmyJoinWithCost( const Troop &, uint32_t join, uint32_t gold, Heroes & );
     int ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit );
     void Marketplace( Kingdom & kingdom, bool fromTradingPost );
     void MakeGiftResource( Kingdom & kingdom );
     int BuyBoat( bool enable );
     void ThievesGuild( bool oracle );
-    void GameInfo( void );
+    void GameInfo();
 
     class NonFixedFrameBox
     {

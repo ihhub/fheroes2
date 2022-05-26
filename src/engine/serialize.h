@@ -25,6 +25,7 @@
 #define H2SERIALIZE_H
 
 #include <algorithm>
+#include <cstdint>
 #include <cstdio>
 #include <list>
 #include <map>
@@ -34,7 +35,6 @@
 
 #include "endian_h2.h"
 #include "math_base.h"
-#include "types.h"
 
 class StreamBase
 {
@@ -81,24 +81,24 @@ public:
 
     virtual void skip( size_t ) = 0;
 
-    virtual u16 getBE16() = 0;
-    virtual u16 getLE16() = 0;
-    virtual u32 getBE32() = 0;
-    virtual u32 getLE32() = 0;
+    virtual uint16_t getBE16() = 0;
+    virtual uint16_t getLE16() = 0;
+    virtual uint32_t getBE32() = 0;
+    virtual uint32_t getLE32() = 0;
 
-    virtual void putBE32( u32 ) = 0;
-    virtual void putLE32( u32 ) = 0;
-    virtual void putBE16( u16 ) = 0;
-    virtual void putLE16( u16 ) = 0;
+    virtual void putBE32( uint32_t ) = 0;
+    virtual void putLE32( uint32_t ) = 0;
+    virtual void putBE16( uint16_t ) = 0;
+    virtual void putLE16( uint16_t ) = 0;
 
-    virtual std::vector<u8> getRaw( size_t = 0 /* all data */ ) = 0;
+    virtual std::vector<uint8_t> getRaw( size_t = 0 /* all data */ ) = 0;
     virtual void putRaw( const char *, size_t ) = 0;
 
-    u16 get16();
-    u32 get32();
+    uint16_t get16();
+    uint32_t get32();
 
-    void put16( u16 );
-    void put32( u32 );
+    void put16( uint16_t );
+    void put32( uint32_t );
 
     uint8_t get()
     {
@@ -112,22 +112,22 @@ public:
 
     StreamBase & operator>>( bool & );
     StreamBase & operator>>( char & );
-    StreamBase & operator>>( u8 & );
-    StreamBase & operator>>( u16 & );
+    StreamBase & operator>>( uint8_t & );
+    StreamBase & operator>>( uint16_t & );
     StreamBase & operator>>( int16_t & );
-    StreamBase & operator>>( u32 & );
-    StreamBase & operator>>( s32 & );
+    StreamBase & operator>>( uint32_t & );
+    StreamBase & operator>>( int32_t & );
     StreamBase & operator>>( std::string & );
 
     StreamBase & operator>>( fheroes2::Point & point_ );
 
     StreamBase & operator<<( const bool );
     StreamBase & operator<<( const char );
-    StreamBase & operator<<( const u8 );
-    StreamBase & operator<<( const u16 );
+    StreamBase & operator<<( const uint8_t );
+    StreamBase & operator<<( const uint16_t );
     StreamBase & operator<<( const int16_t );
-    StreamBase & operator<<( const u32 );
-    StreamBase & operator<<( const s32 );
+    StreamBase & operator<<( const uint32_t );
+    StreamBase & operator<<( const int32_t );
     StreamBase & operator<<( const std::string & );
 
     StreamBase & operator<<( const fheroes2::Point & point_ );
@@ -141,7 +141,7 @@ public:
     template <class Type>
     StreamBase & operator>>( std::vector<Type> & v )
     {
-        const u32 size = get32();
+        const uint32_t size = get32();
         v.resize( size );
         for ( typename std::vector<Type>::iterator it = v.begin(); it != v.end(); ++it )
             *this >> *it;
@@ -151,7 +151,7 @@ public:
     template <class Type>
     StreamBase & operator>>( std::list<Type> & v )
     {
-        const u32 size = get32();
+        const uint32_t size = get32();
         v.resize( size );
         for ( typename std::list<Type>::iterator it = v.begin(); it != v.end(); ++it )
             *this >> *it;
@@ -161,9 +161,9 @@ public:
     template <class Type1, class Type2>
     StreamBase & operator>>( std::map<Type1, Type2> & v )
     {
-        const u32 size = get32();
+        const uint32_t size = get32();
         v.clear();
-        for ( u32 ii = 0; ii < size; ++ii ) {
+        for ( uint32_t ii = 0; ii < size; ++ii ) {
             std::pair<Type1, Type2> pr;
             *this >> pr;
             v.emplace( std::move( pr ) );
@@ -180,7 +180,7 @@ public:
     template <class Type>
     StreamBase & operator<<( const std::vector<Type> & v )
     {
-        put32( static_cast<u32>( v.size() ) );
+        put32( static_cast<uint32_t>( v.size() ) );
         for ( typename std::vector<Type>::const_iterator it = v.begin(); it != v.end(); ++it )
             *this << *it;
         return *this;
@@ -189,7 +189,7 @@ public:
     template <class Type>
     StreamBase & operator<<( const std::list<Type> & v )
     {
-        put32( static_cast<u32>( v.size() ) );
+        put32( static_cast<uint32_t>( v.size() ) );
         for ( typename std::list<Type>::const_iterator it = v.begin(); it != v.end(); ++it )
             *this << *it;
         return *this;
@@ -198,7 +198,7 @@ public:
     template <class Type1, class Type2>
     StreamBase & operator<<( const std::map<Type1, Type2> & v )
     {
-        put32( static_cast<u32>( v.size() ) );
+        put32( static_cast<uint32_t>( v.size() ) );
         for ( typename std::map<Type1, Type2>::const_iterator it = v.begin(); it != v.end(); ++it )
             *this << *it;
         return *this;
@@ -207,7 +207,7 @@ public:
 protected:
     size_t flags;
 
-    virtual u8 get8() = 0;
+    virtual uint8_t get8() = 0;
     virtual void put8( const uint8_t ) = 0;
 
     virtual size_t sizeg() const = 0;
@@ -226,55 +226,55 @@ public:
     StreamBuf( const StreamBuf & st ) = delete;
     StreamBuf( StreamBuf && st ) noexcept;
 
-    explicit StreamBuf( const std::vector<u8> & );
-    StreamBuf( const u8 *, size_t );
+    explicit StreamBuf( const std::vector<uint8_t> & );
+    StreamBuf( const uint8_t *, size_t );
 
     ~StreamBuf() override;
 
     StreamBuf & operator=( const StreamBuf & st ) = delete;
     StreamBuf & operator=( StreamBuf && st ) noexcept;
 
-    const u8 * data( void ) const;
-    size_t size( void ) const;
-    size_t capacity( void ) const;
+    const uint8_t * data() const;
+    size_t size() const;
+    size_t capacity() const;
 
     void seek( size_t );
     void skip( size_t ) override;
 
-    u16 getBE16() override;
-    u16 getLE16() override;
-    u32 getBE32() override;
-    u32 getLE32() override;
+    uint16_t getBE16() override;
+    uint16_t getLE16() override;
+    uint32_t getBE32() override;
+    uint32_t getLE32() override;
 
-    void putBE32( u32 ) override;
-    void putLE32( u32 ) override;
-    void putBE16( u16 ) override;
-    void putLE16( u16 ) override;
+    void putBE32( uint32_t v ) override;
+    void putLE32( uint32_t v ) override;
+    void putBE16( uint16_t v ) override;
+    void putLE16( uint16_t v ) override;
 
-    std::vector<u8> getRaw( size_t = 0 /* all data */ ) override;
-    void putRaw( const char *, size_t ) override;
+    std::vector<uint8_t> getRaw( size_t sz = 0 /* all data */ ) override;
+    void putRaw( const char * ptr, size_t sz ) override;
 
-    std::string toString( size_t = 0 /* all data */ );
+    std::string toString( size_t sz = 0 /* all data */ );
 
 protected:
-    void reset( void );
+    void reset();
 
-    size_t tellg( void ) const override;
-    size_t tellp( void ) const override;
-    size_t sizeg( void ) const override;
-    size_t sizep( void ) const override;
+    size_t tellg() const override;
+    size_t tellp() const override;
+    size_t sizeg() const override;
+    size_t sizep() const override;
 
     void reallocbuf( size_t );
 
-    u8 get8() override;
+    uint8_t get8() override;
     void put8( const uint8_t v ) override;
 
     friend class ZStreamBuf;
 
-    u8 * itbeg;
-    u8 * itget;
-    u8 * itput;
-    u8 * itend;
+    uint8_t * itbeg;
+    uint8_t * itget;
+    uint8_t * itput;
+    uint8_t * itend;
 };
 
 class StreamFile : public StreamBase
@@ -289,11 +289,11 @@ public:
 
     ~StreamFile() override;
 
-    size_t size( void ) const;
-    size_t tell( void ) const;
+    size_t size() const;
+    size_t tell() const;
 
     bool open( const std::string &, const std::string & mode );
-    void close( void );
+    void close();
 
     StreamBuf toStreamBuf( size_t = 0 /* all data */ );
 
@@ -316,12 +316,12 @@ public:
     std::string toString( size_t = 0 /* all data */ );
 
 protected:
-    size_t sizeg( void ) const override;
-    size_t sizep( void ) const override;
-    size_t tellg( void ) const override;
-    size_t tellp( void ) const override;
+    size_t sizeg() const override;
+    size_t sizep() const override;
+    size_t tellg() const override;
+    size_t tellp() const override;
 
-    u8 get8() override;
+    uint8_t get8() override;
     void put8( const uint8_t v ) override;
 
 private:

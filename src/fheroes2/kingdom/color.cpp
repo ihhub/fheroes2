@@ -195,7 +195,7 @@ void ColorBase::SetColor( int col )
     color = Color::FromInt( col );
 }
 
-Kingdom & ColorBase::GetKingdom( void ) const
+Kingdom & ColorBase::GetKingdom() const
 {
     return world.GetKingdom( color );
 }

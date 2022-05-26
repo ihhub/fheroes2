@@ -157,7 +157,7 @@ namespace Interface
             }
         }
 
-        bool QueueEventProcessing( void )
+        bool QueueEventProcessing()
         {
             const fheroes2::Point & cursor = LocalEvent::Get().GetMouseCursor();
 
@@ -252,7 +252,7 @@ namespace Interface
         }
 
     private:
-        void RescanSize( void )
+        void RescanSize()
         {
             barsz.width = colrows.width ? colrows.width * itemsz.width + ( colrows.width - 1 ) * hspace : 0;
             barsz.height = colrows.height ? colrows.height * itemsz.height + ( colrows.height - 1 ) * vspace : 0;
@@ -372,7 +372,7 @@ namespace Interface
             return &curItemPos.second;
         }
 
-        s32 GetSelectedIndex()
+        int32_t GetSelectedIndex()
         {
             return std::distance( ItemsBar<Item>::GetBeginItemIter(), GetCurItemIter() );
         }

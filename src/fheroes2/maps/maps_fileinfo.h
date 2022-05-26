@@ -23,12 +23,12 @@
 #ifndef H2MAPSFILEINFO_H
 #define H2MAPSFILEINFO_H
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
 #include "gamedefs.h"
 #include "math_base.h"
-#include "types.h"
 
 class StreamBase;
 
@@ -60,7 +60,7 @@ namespace Maps
         static bool FileSorting( const FileInfo &, const FileInfo & );
 
         bool isAllowCountPlayers( int playerCount ) const;
-        bool isMultiPlayerMap( void ) const;
+        bool isMultiPlayerMap() const;
 
         int AllowCompHumanColors() const
         {
@@ -86,8 +86,8 @@ namespace Maps
 
         uint32_t ConditionWins() const;
         uint32_t ConditionLoss() const;
-        bool WinsCompAlsoWins( void ) const;
-        int WinsFindArtifactID( void ) const;
+        bool WinsCompAlsoWins() const;
+        int WinsFindArtifactID() const;
 
         bool WinsFindUltimateArtifact() const
         {
@@ -114,23 +114,23 @@ namespace Maps
             return loss1;
         }
 
-        std::string String( void ) const;
-        void Reset( void );
+        std::string String() const;
+        void Reset();
 
         std::string file;
         std::string name;
         std::string description;
 
-        u16 size_w;
-        u16 size_h;
-        u8 difficulty;
-        u8 races[KINGDOMMAX];
-        u8 unions[KINGDOMMAX];
+        uint16_t size_w;
+        uint16_t size_h;
+        uint8_t difficulty;
+        uint8_t races[KINGDOMMAX];
+        uint8_t unions[KINGDOMMAX];
 
-        u8 kingdom_colors;
-        u8 allow_human_colors;
-        u8 allow_comp_colors;
-        u8 rnd_races;
+        uint8_t kingdom_colors;
+        uint8_t allow_human_colors;
+        uint8_t allow_comp_colors;
+        uint8_t rnd_races;
 
         enum VictoryCondition : uint8_t
         {
@@ -153,13 +153,13 @@ namespace Maps
         uint8_t conditions_wins; // refer to VictoryCondition
         bool comp_also_wins;
         bool allow_normal_victory;
-        u16 wins1;
-        u16 wins2;
+        uint16_t wins1;
+        uint16_t wins2;
         uint8_t conditions_loss; // refer to LossCondition
-        u16 loss1;
-        u16 loss2;
+        uint16_t loss1;
+        uint16_t loss2;
 
-        u32 localtime;
+        uint32_t localtime;
 
         bool startWithHeroInEachCastle;
 

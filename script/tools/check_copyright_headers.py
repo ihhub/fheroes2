@@ -34,6 +34,8 @@ def main():
     generic_hdr_re = re.compile("^/\\*.*?\\*/", re.DOTALL)
 
     for file_name in sys.argv[3:]:
+        if not os.path.exists(file_name):
+            continue
         with open(file_name, "r", encoding="latin_1") as src_file:
             src = src_file.read()
 
@@ -63,7 +65,7 @@ def main():
                 else:
                     src = copyright_hdr_full + "\n\n" + src.lstrip()
 
-                with open(file_name + ".tmp", "w", encoding="latin_1") as tmp_file:
+                with open(file_name + ".tmp", "x", encoding="latin_1") as tmp_file:
                     tmp_file.write(src)
 
                 with subprocess.Popen(["diff", "-u", file_name, file_name + ".tmp"]) as diff_proc:

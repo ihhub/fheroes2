@@ -24,10 +24,10 @@
 #ifndef H2BATTLE_CATAPULT_H
 #define H2BATTLE_CATAPULT_H
 
+#include <cstdint>
 #include <vector>
 
 #include "math_base.h"
-#include "types.h"
 
 class HeroBase;
 namespace Rand
@@ -59,18 +59,18 @@ namespace Battle
 
         static fheroes2::Point GetTargetPosition( int target, bool hit );
 
-        u32 GetShots( void ) const
+        uint32_t GetShots() const
         {
             return catShots;
         }
 
-        int GetTarget( const std::vector<u32> & ) const;
-        u32 GetDamage() const;
+        int GetTarget( const std::vector<uint32_t> & ) const;
+        uint32_t GetDamage() const;
         bool IsNextShotHit() const;
 
     private:
-        u32 catShots;
-        u32 doubleDamageChance;
+        uint32_t catShots;
+        uint32_t doubleDamageChance;
         bool canMiss;
         const Rand::DeterministicRandomGenerator & _randomGenerator;
     };

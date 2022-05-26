@@ -91,11 +91,11 @@ std::string GetStringShort( int value )
     return std::to_string( value );
 }
 
-int CountBits( u32 val )
+int CountBits( uint32_t val )
 {
     int res = 0;
 
-    for ( u32 itr = 0x00000001; itr; itr <<= 1 )
+    for ( uint32_t itr = 0x00000001; itr; itr <<= 1 )
         if ( val & itr )
             ++res;
 
@@ -201,7 +201,7 @@ int Sign( int s )
     return ( s < 0 ? -1 : ( s > 0 ? 1 : 0 ) );
 }
 
-bool SaveMemToFile( const std::vector<u8> & data, const std::string & path )
+bool SaveMemToFile( const std::vector<uint8_t> & data, const std::string & path )
 {
     std::fstream file;
     file.open( path, std::fstream::out | std::fstream::trunc | std::fstream::binary );
@@ -216,7 +216,7 @@ bool SaveMemToFile( const std::vector<u8> & data, const std::string & path )
     return true;
 }
 
-std::vector<u8> LoadFileToMem( const std::string & path )
+std::vector<uint8_t> LoadFileToMem( const std::string & path )
 {
     std::fstream file;
     file.open( path, std::fstream::in | std::fstream::binary );

@@ -65,7 +65,7 @@ namespace Bin_Info
         return fheroes2::getMonsterData( monsterId ).binFileName;
     }
 
-    MonsterAnimInfo::MonsterAnimInfo( int monsterID, const std::vector<u8> & bytes )
+    MonsterAnimInfo::MonsterAnimInfo( int monsterID, const std::vector<uint8_t> & bytes )
         : moveSpeed( 450 )
         , shootSpeed( 0 )
         , flightSpeed( 0 )

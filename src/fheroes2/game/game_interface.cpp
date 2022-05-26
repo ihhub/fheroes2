@@ -57,7 +57,7 @@ void Interface::Basic::SetHideInterface( bool f )
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get();
-    const u32 px = display.width() - BORDERWIDTH - RADARWIDTH;
+    const uint32_t px = display.width() - BORDERWIDTH - RADARWIDTH;
 
     conf.SetHideInterface( f );
 

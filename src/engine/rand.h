@@ -25,14 +25,13 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdint>
 #include <cstdlib>
 #include <functional>
 #include <list>
 #include <random>
 #include <utility>
 #include <vector>
-
-#include "types.h"
 
 namespace Rand
 {
@@ -102,10 +101,10 @@ namespace Rand
     class Queue : private std::vector<ValuePercent>
     {
     public:
-        explicit Queue( u32 size = 0 );
+        explicit Queue( uint32_t size = 0 );
 
-        void Push( s32 value, u32 percent );
-        size_t Size( void ) const;
+        void Push( int32_t value, uint32_t percent );
+        size_t Size() const;
         int32_t Get();
         int32_t GetWithSeed( uint32_t seed );
 

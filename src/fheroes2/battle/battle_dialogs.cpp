@@ -205,7 +205,7 @@ void Battle::RedrawOnOffSetting( const fheroes2::Rect & area, const std::string 
     lowerText.Blit( area.x + ( area.width - lowerText.w() ) / 2, area.y + area.height + textOffset );
 }
 
-void Battle::DialogBattleSettings( void )
+void Battle::DialogBattleSettings()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -914,7 +914,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
     return result;
 }
 
-bool Battle::DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & kingdom )
+bool Battle::DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdom & kingdom )
 {
     if ( kingdom.GetColor() == hero.GetColor() ) // this is weird. You're surrending to yourself!
         return false;

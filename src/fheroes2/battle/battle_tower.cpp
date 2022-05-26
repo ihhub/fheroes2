@@ -50,7 +50,7 @@ Battle::Tower::Tower( const Castle & castle, int twr, const Rand::DeterministicR
     SetModes( CAP_TOWER );
 }
 
-const char * Battle::Tower::GetName( void ) const
+const char * Battle::Tower::GetName() const
 {
     switch ( type ) {
     case TWR_LEFT:
@@ -68,32 +68,32 @@ const char * Battle::Tower::GetName( void ) const
     return nullptr;
 }
 
-bool Battle::Tower::isValid( void ) const
+bool Battle::Tower::isValid() const
 {
     return valid;
 }
 
-u32 Battle::Tower::GetType( void ) const
+uint32_t Battle::Tower::GetType() const
 {
     return type;
 }
 
-u32 Battle::Tower::GetBonus( void ) const
+uint32_t Battle::Tower::GetBonus() const
 {
     return bonus;
 }
 
-u32 Battle::Tower::GetAttack( void ) const
+uint32_t Battle::Tower::GetAttack() const
 {
     return Unit::GetAttack() + bonus;
 }
 
-int Battle::Tower::GetColor( void ) const
+int Battle::Tower::GetColor() const
 {
     return color;
 }
 
-fheroes2::Point Battle::Tower::GetPortPosition( void ) const
+fheroes2::Point Battle::Tower::GetPortPosition() const
 {
     switch ( type ) {
     case TWR_LEFT:
@@ -110,7 +110,7 @@ fheroes2::Point Battle::Tower::GetPortPosition( void ) const
     return {};
 }
 
-void Battle::Tower::SetDestroy( void )
+void Battle::Tower::SetDestroy()
 {
     switch ( type ) {
     case TWR_LEFT:

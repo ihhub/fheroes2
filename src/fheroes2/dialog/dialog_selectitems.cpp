@@ -44,7 +44,8 @@ public:
         , area( rt )
         , ok( false )
     {
-        RedrawBackground( rt.getPosition() );
+        SelectEnum::RedrawBackground( rt.getPosition() );
+
         SetScrollButtonUp( ICN::LISTBOX, 3, 4, { rt.x + rt.width - 25, rt.y + 25 } );
         SetScrollButtonDn( ICN::LISTBOX, 5, 6, { rt.x + rt.width - 25, rt.y + rt.height - 55 } );
 
@@ -73,7 +74,7 @@ public:
         ok = true;
     }
 
-    void RedrawItem( const int &, s32, s32, bool ) override
+    void RedrawItem( const int & /* unused */, int32_t /* ox */, int32_t /* oy */, bool /* current */ ) override
     {
         // Do nothing.
     }
@@ -111,7 +112,7 @@ public:
         : SelectEnum( rt )
     {}
 
-    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         Monster mons( index );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
@@ -150,7 +151,7 @@ public:
         SetAreaMaxItems( 6 );
     }
 
-    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         const fheroes2::Sprite & port = Heroes::GetPortrait( index, PORT_SMALL );
 
@@ -166,6 +167,7 @@ public:
             text.draw( dstx + 50, dsty + 5, fheroes2::Display::instance() );
         }
     }
+
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
         fheroes2::Text text( _( "Select Hero:" ), fheroes2::FontType::normalYellow() );
@@ -182,7 +184,7 @@ public:
         : SelectEnum( rt )
     {}
 
-    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -219,7 +221,7 @@ public:
         SetAreaMaxItems( 4 );
     }
 
-    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         Spell spell( index );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
@@ -252,7 +254,7 @@ public:
         SetAreaMaxItems( 5 );
     }
 
-    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         Skill::Secondary skill( 1 + index / 3, 1 + ( index % 3 ) );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
@@ -277,7 +279,7 @@ public:
     }
 };
 
-Skill::Secondary Dialog::SelectSecondarySkill( void )
+Skill::Secondary Dialog::SelectSecondarySkill()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();

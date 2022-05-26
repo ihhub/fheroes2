@@ -50,7 +50,7 @@ Interface::GameArea::GameArea( Basic & basic )
     , updateCursor( false )
 {}
 
-fheroes2::Rect Interface::GameArea::GetVisibleTileROI( void ) const
+fheroes2::Rect Interface::GameArea::GetVisibleTileROI() const
 {
     return { _getStartTileId(), _visibleTileCount };
 }
@@ -513,7 +513,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     }
 }
 
-void Interface::GameArea::Scroll( void )
+void Interface::GameArea::Scroll()
 {
     const int32_t shift = 2 << Settings::Get().ScrollSpeed();
     fheroes2::Point offset;
@@ -537,7 +537,7 @@ void Interface::GameArea::Scroll( void )
     scrollDirection = 0;
 }
 
-void Interface::GameArea::SetRedraw( void ) const
+void Interface::GameArea::SetRedraw() const
 {
     interface.SetRedraw( REDRAW_GAMEAREA );
 }
@@ -581,7 +581,7 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const 
     return result;
 }
 
-int Interface::GameArea::GetScrollCursor( void ) const
+int Interface::GameArea::GetScrollCursor() const
 {
     switch ( scrollDirection ) {
     case SCROLL_LEFT | SCROLL_TOP:
@@ -638,7 +638,7 @@ void Interface::GameArea::SetScroll( int direct )
     scrollTime.reset();
 }
 
-void Interface::GameArea::QueueEventProcessing( void )
+void Interface::GameArea::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Point & mp = le.GetMouseCursor();

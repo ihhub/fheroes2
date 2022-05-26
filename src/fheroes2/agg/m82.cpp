@@ -200,7 +200,7 @@ int M82::FromSpell( int spell )
     return UNKNOWN;
 }
 
-u32 M82::GetIndexLOOP00XXFromObject( const MP2::MapObjectType objectType )
+uint32_t M82::GetIndexLOOP00XXFromObject( const MP2::MapObjectType objectType )
 {
     switch ( objectType ) {
     case MP2::OBJ_BUOY:

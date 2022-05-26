@@ -37,7 +37,7 @@
 #include "ui_button.h"
 #include "ui_text.h"
 
-void Dialog::GameInfo( void )
+void Dialog::GameInfo()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get();
