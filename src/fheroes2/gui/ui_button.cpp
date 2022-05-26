@@ -189,7 +189,7 @@ namespace fheroes2
     {
         const Sprite & sprite = isPressed() ? _getPressed() : _getReleased();
         const Sprite & sprite2 = button2.isPressed() ? button2._getPressed() : button2._getReleased();
-        return Rect( _offsetX,  _offsetY,  sprite.width() + sprite2.width(), sprite.height() + sprite2.height() );
+        return { _offsetX, _offsetY, sprite.width() + sprite2.width(), sprite.height() + sprite2.height() };
     }
 
 
