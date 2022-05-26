@@ -59,6 +59,8 @@ public:
     HeroBase( const int type, const int race );
     HeroBase();
 
+    ~HeroBase() override = default;
+
     enum
     {
         UNDEFINED,

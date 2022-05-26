@@ -55,7 +55,7 @@ struct HeroSeedsForLevelUp
     uint32_t seedSecondaySkillRandomChoose = 0;
 };
 
-class Heroes : public HeroBase, public ColorBase
+class Heroes final : public HeroBase, public ColorBase
 {
 public:
     enum
@@ -214,6 +214,8 @@ public:
     Heroes( int heroid, int rc );
     Heroes( int heroID, int race, int initialLevel );
     Heroes( const Heroes & ) = delete;
+
+    ~Heroes() override = default;
 
     Heroes & operator=( const Heroes & ) = delete;
 

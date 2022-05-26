@@ -425,7 +425,7 @@ namespace fheroes2
         , _height( 0 )
         , _singleLayer( false )
     {
-        resize( width_, height_ );
+        Image::resize( width_, height_ );
     }
 
     Image::Image( const Image & image_ )

@@ -492,7 +492,7 @@ namespace
 namespace
 {
 #if defined( TARGET_PS_VITA )
-    class RenderEngine : public fheroes2::BaseRenderEngine
+    class RenderEngine final : public fheroes2::BaseRenderEngine
     {
     public:
         RenderEngine( const RenderEngine & ) = delete;
@@ -686,7 +686,7 @@ namespace
         }
     };
 #elif SDL_VERSION_ATLEAST( 2, 0, 0 )
-    class RenderEngine : public fheroes2::BaseRenderEngine, public BaseSDLRenderer
+    class RenderEngine final : public fheroes2::BaseRenderEngine, public BaseSDLRenderer
     {
     public:
         RenderEngine( const RenderEngine & ) = delete;
@@ -1062,7 +1062,7 @@ namespace
         }
     };
 #else
-    class RenderEngine : public fheroes2::BaseRenderEngine, public BaseSDLRenderer
+    class RenderEngine final : public fheroes2::BaseRenderEngine, public BaseSDLRenderer
     {
     public:
         RenderEngine( const RenderEngine & ) = delete;
