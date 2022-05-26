@@ -100,7 +100,7 @@ namespace
 
 namespace GameStatic
 {
-    extern u32 uniq;
+    extern uint32_t uniq;
 }
 
 bool World::LoadMapMP2( const std::string & filename )
@@ -363,10 +363,10 @@ bool World::LoadMapMP2( const std::string & filename )
     fs.skip( 1 );
 
     // count final mp2 blocks
-    u32 countblock = 0;
+    uint32_t countblock = 0;
     while ( true ) {
-        const u32 l = fs.get();
-        const u32 h = fs.get();
+        const uint32_t l = fs.get();
+        const uint32_t h = fs.get();
 
         if ( 0 == h && 0 == l )
             break;
@@ -376,18 +376,18 @@ bool World::LoadMapMP2( const std::string & filename )
     }
 
     // castle or heroes or (events, rumors, etc)
-    for ( u32 ii = 0; ii < countblock; ++ii ) {
-        s32 findobject = -1;
+    for ( uint32_t ii = 0; ii < countblock; ++ii ) {
+        int32_t findobject = -1;
 
         // read block
         size_t sizeblock = fs.getLE16();
-        std::vector<u8> pblock = fs.getRaw( sizeblock );
+        std::vector<uint8_t> pblock = fs.getRaw( sizeblock );
 
         for ( MapsIndexes::const_iterator it_index = vec_object.begin(); it_index != vec_object.end() && findobject < 0; ++it_index ) {
             const Maps::Tiles & tile = vec_tiles[*it_index];
 
             // orders(quantity2, quantity1)
-            u32 orders = ( tile.GetQuantity2() ? tile.GetQuantity2() : 0 );
+            uint32_t orders = ( tile.GetQuantity2() ? tile.GetQuantity2() : 0 );
             orders <<= 8;
             orders |= tile.GetQuantity1();
 

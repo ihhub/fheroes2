@@ -64,12 +64,12 @@ public:
     ~Kingdom() override = default;
 
     void Init( int color );
-    void clear( void );
+    void clear();
 
     void openOverviewDialog();
 
-    bool isPlay( void ) const;
-    bool isLoss( void ) const;
+    bool isPlay() const;
+    bool isLoss() const;
     bool AllowPayment( const Funds & ) const;
     bool AllowRecruitHero( bool check_payment ) const;
 
@@ -82,17 +82,17 @@ public:
 
     Monster GetStrongestMonster() const;
 
-    int GetControl( void ) const override;
-    int GetColor( void ) const;
-    int GetRace( void ) const;
+    int GetControl() const override;
+    int GetColor() const;
+    int GetRace() const;
 
-    const Funds & GetFunds( void ) const
+    const Funds & GetFunds() const
     {
         return resource;
     }
     Funds GetIncome( int = INCOME_ALL ) const;
 
-    double GetArmiesStrength( void ) const;
+    double GetArmiesStrength() const;
 
     void AddFundsResource( const Funds & );
     void OddFundsResource( const Funds & );
@@ -102,12 +102,12 @@ public:
         return castles.empty();
     }
 
-    u32 GetCountCastle( void ) const;
-    u32 GetCountTown( void ) const;
-    u32 GetCountMarketplace( void ) const;
-    u32 GetLostTownDays( void ) const;
-    u32 GetCountNecromancyShrineBuild( void ) const;
-    u32 GetCountBuilding( u32 ) const;
+    uint32_t GetCountCastle() const;
+    uint32_t GetCountTown() const;
+    uint32_t GetCountMarketplace() const;
+    uint32_t GetLostTownDays() const;
+    uint32_t GetCountNecromancyShrineBuild() const;
+    uint32_t GetCountBuilding( uint32_t ) const;
     uint32_t GetCountThievesGuild() const;
 
     uint32_t GetCountArtifacts() const;
@@ -119,56 +119,56 @@ public:
     // without making any changes in it
     Recruits & GetCurrentRecruits();
 
-    const KingdomHeroes & GetHeroes( void ) const
+    const KingdomHeroes & GetHeroes() const
     {
         return heroes;
     }
-    const KingdomCastles & GetCastles( void ) const
+    const KingdomCastles & GetCastles() const
     {
         return castles;
     }
 
-    KingdomHeroes & GetHeroes( void )
+    KingdomHeroes & GetHeroes()
     {
         return heroes;
     }
-    KingdomCastles & GetCastles( void )
+    KingdomCastles & GetCastles()
     {
         return castles;
     }
 
     void AddHeroes( Heroes * );
     void RemoveHeroes( const Heroes * );
-    void ApplyPlayWithStartingHero( void );
+    void ApplyPlayWithStartingHero();
 
     void AddCastle( const Castle * );
     void RemoveCastle( const Castle * );
 
     void ActionBeforeTurn();
-    void ActionNewDay( void );
-    void ActionNewWeek( void );
-    void ActionNewMonth( void );
+    void ActionNewDay();
+    void ActionNewWeek();
+    void ActionNewMonth();
 
-    void SetVisited( s32 index, const MP2::MapObjectType objectType );
+    void SetVisited( int32_t index, const MP2::MapObjectType objectType );
     uint32_t CountVisitedObjects( const MP2::MapObjectType objectType ) const;
     bool isVisited( const MP2::MapObjectType objectType ) const;
     bool isVisited( const Maps::Tiles & ) const;
-    bool isVisited( s32, const MP2::MapObjectType objectType ) const;
+    bool isVisited( int32_t, const MP2::MapObjectType objectType ) const;
 
     bool isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObjectType objectType ) const;
 
-    bool HeroesMayStillMove( void ) const;
+    bool HeroesMayStillMove() const;
 
-    Puzzle & PuzzleMaps( void );
+    Puzzle & PuzzleMaps();
 
     void SetVisitTravelersTent( int color );
     bool IsVisitTravelersTent( int ) const;
 
-    void LossPostActions( void );
+    void LossPostActions();
 
     bool IsTileVisibleFromCrystalBall( const int32_t dest ) const;
 
-    static u32 GetMaxHeroes( void );
+    static uint32_t GetMaxHeroes();
 
 private:
     cost_t _getKingdomStartingResources( const int difficulty ) const;
@@ -180,7 +180,7 @@ private:
     int _lastBattleWinHeroID;
     Funds resource;
 
-    u32 lost_town_days;
+    uint32_t lost_town_days;
 
     KingdomCastles castles;
     KingdomHeroes heroes;
@@ -190,7 +190,7 @@ private:
     std::list<IndexObject> visit_object;
 
     Puzzle puzzle_maps;
-    u32 visited_tents_colors;
+    uint32_t visited_tents_colors;
 
     KingdomHeroes heroes_cond_loss;
 
@@ -203,19 +203,19 @@ class Kingdoms
 public:
     Kingdoms() = default;
 
-    void Init( void );
-    void clear( void );
+    void Init();
+    void clear();
 
-    void ApplyPlayWithStartingHero( void );
+    void ApplyPlayWithStartingHero();
 
-    void NewDay( void );
-    void NewWeek( void );
-    void NewMonth( void );
+    void NewDay();
+    void NewWeek();
+    void NewMonth();
 
     Kingdom & GetKingdom( int color );
     const Kingdom & GetKingdom( int color ) const;
 
-    int GetNotLossColors( void ) const;
+    int GetNotLossColors() const;
     int FindWins( int ) const;
 
     void AddHeroes( const AllHeroes & );

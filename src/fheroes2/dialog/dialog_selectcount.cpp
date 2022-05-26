@@ -60,7 +60,7 @@ namespace
 class SelectValue : public fheroes2::Rect
 {
 public:
-    SelectValue( u32 min, u32 max, u32 cur, u32 st )
+    SelectValue( uint32_t min, uint32_t max, uint32_t cur, uint32_t st )
         : vmin( min )
         , vmax( max )
         , vcur( cur )
@@ -84,7 +84,7 @@ public:
         pos.height = 30;
     }
 
-    void SetCur( u32 v )
+    void SetCur( uint32_t v )
     {
         vcur = v;
     }
@@ -98,7 +98,7 @@ public:
         btnDn.setPosition( pt.x + 70, pt.y + 16 );
     }
 
-    uint32_t getCur( void ) const
+    uint32_t getCur() const
     {
         return vcur;
     }
@@ -116,7 +116,7 @@ public:
         btnDn.draw();
     }
 
-    bool QueueEventProcessing( void )
+    bool QueueEventProcessing()
     {
         LocalEvent & le = LocalEvent::Get();
 
@@ -138,10 +138,10 @@ public:
     }
 
 protected:
-    u32 vmin;
-    u32 vmax;
-    u32 vcur;
-    u32 step;
+    uint32_t vmin;
+    uint32_t vmax;
+    uint32_t vcur;
+    uint32_t step;
 
     fheroes2::Rect pos;
 
@@ -152,7 +152,7 @@ protected:
     fheroes2::TimedEventValidator timedBtnDn;
 };
 
-bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cur, int step )
+bool Dialog::SelectCount( const std::string & header, uint32_t min, uint32_t max, uint32_t & cur, int step )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -327,7 +327,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const u32 min = std::min( 1U, redistributeMax );
+    const uint32_t min = std::min( 1U, redistributeMax );
     const int spacer = 10;
 
     const int defaultYPosition = 160;

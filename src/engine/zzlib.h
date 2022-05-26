@@ -24,11 +24,11 @@
 #ifndef H2ZLIB_H
 #define H2ZLIB_H
 
+#include <cstdint>
 #include <vector>
 
 #include "image.h"
 #include "serialize.h"
-#include "types.h"
 
 class ZStreamFile : public StreamBuf
 {

@@ -164,7 +164,7 @@ fheroes2::GameMode Game::NewHotSeat()
     }
     else {
         conf.SetGameType( Game::TYPE_HOTSEAT );
-        const u32 select = SelectCountPlayers();
+        const uint32_t select = SelectCountPlayers();
         if ( select ) {
             conf.SetPreferablyCountPlayers( select );
             return fheroes2::GameMode::SELECT_SCENARIO;
@@ -605,7 +605,7 @@ fheroes2::GameMode Game::NewMulti()
     return fheroes2::GameMode::QUIT_GAME;
 }
 
-u32 Game::SelectCountPlayers( void )
+uint32_t Game::SelectCountPlayers()
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );

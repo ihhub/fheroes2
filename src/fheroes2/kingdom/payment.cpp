@@ -25,12 +25,12 @@
 #include "payment.h"
 #include "settings.h"
 
-payment_t PaymentConditions::BuyBuilding( int race, u32 build )
+payment_t PaymentConditions::BuyBuilding( int race, uint32_t build )
 {
     return BuildingInfo::GetCost( build, race );
 }
 
-payment_t PaymentConditions::BuyBoat( void )
+payment_t PaymentConditions::BuyBoat()
 {
     return payment_t( cost_t{ 1000, 10, 0, 0, 0, 0, 0 } );
 }

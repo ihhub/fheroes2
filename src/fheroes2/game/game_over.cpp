@@ -257,7 +257,7 @@ std::string GameOver::GetActualDescription( uint32_t cond )
     return msg;
 }
 
-GameOver::Result & GameOver::Result::Get( void )
+GameOver::Result & GameOver::Result::Get()
 {
     static Result gresult;
     return gresult;

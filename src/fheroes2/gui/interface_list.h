@@ -45,7 +45,7 @@ namespace Interface
         virtual ~ListBasic() = default;
         virtual bool IsNeedRedraw() const = 0;
         virtual void Redraw() = 0;
-        virtual bool QueueEventProcessing( void ) = 0;
+        virtual bool QueueEventProcessing() = 0;
 
         int getTopId() const
         {
@@ -77,7 +77,7 @@ namespace Interface
         }
         ~ListBox() override = default;
 
-        virtual void RedrawItem( const Item &, s32 ox, s32 oy, bool current ) = 0;
+        virtual void RedrawItem( const Item &, int32_t ox, int32_t oy, bool current ) = 0;
         virtual void RedrawBackground( const fheroes2::Point & ) = 0;
 
         virtual void ActionCurrentUp() = 0;
@@ -112,13 +112,13 @@ namespace Interface
             ptRedraw = tl;
         }
 
-        void SetScrollButtonUp( int icn, u32 index1, u32 index2, const fheroes2::Point & pos )
+        void SetScrollButtonUp( int icn, uint32_t index1, uint32_t index2, const fheroes2::Point & pos )
         {
             buttonPgUp.setICNInfo( icn, index1, index2 );
             buttonPgUp.setPosition( pos.x, pos.y );
         }
 
-        void SetScrollButtonDn( int icn, u32 index1, u32 index2, const fheroes2::Point & pos )
+        void SetScrollButtonDn( int icn, uint32_t index1, uint32_t index2, const fheroes2::Point & pos )
         {
             buttonPgDn.setICNInfo( icn, index1, index2 );
             buttonPgDn.setPosition( pos.x, pos.y );
@@ -214,7 +214,7 @@ namespace Interface
             return needRedraw;
         }
 
-        Item & GetCurrent( void ) // always call this function only after IsValid()!
+        Item & GetCurrent() // always call this function only after IsValid()!
         {
             return ( *content )[_currentId];
         }
@@ -246,7 +246,7 @@ namespace Interface
             SetCurrentVisible();
         }
 
-        void SetCurrentVisible( void )
+        void SetCurrentVisible()
         {
             Verify();
 
@@ -295,25 +295,25 @@ namespace Interface
             SetCurrentVisible();
         }
 
-        void RemoveSelected( void )
+        void RemoveSelected()
         {
             if ( content != nullptr && _currentId >= 0 && _currentId < _size() )
                 content->erase( content->begin() + _currentId );
         }
 
-        bool isSelected( void ) const
+        bool isSelected() const
         {
             return IsValid() && _currentId >= 0;
         }
 
-        void Unselect( void )
+        void Unselect()
         {
             Verify();
             if ( IsValid() )
                 _currentId = -1;
         }
 
-        bool QueueEventProcessing( void ) override
+        bool QueueEventProcessing() override
         {
             LocalEvent & le = LocalEvent::Get();
 

@@ -74,10 +74,10 @@ public:
     virtual const Army & GetArmy() const = 0;
     virtual Army & GetArmy() = 0;
 
-    virtual u32 GetMaxSpellPoints() const = 0;
+    virtual uint32_t GetMaxSpellPoints() const = 0;
 
     virtual int GetLevelSkill( int skill ) const = 0;
-    virtual u32 GetSecondaryValues( int skill ) const = 0;
+    virtual uint32_t GetSecondaryValues( int skill ) const = 0;
 
     virtual void ActionAfterBattle() = 0;
     virtual void ActionPreBattle() = 0;

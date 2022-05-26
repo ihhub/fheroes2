@@ -65,18 +65,18 @@ namespace Interface
         }
 
         // Do NOT use this method directly in heavy computation loops
-        fheroes2::Rect GetVisibleTileROI( void ) const;
+        fheroes2::Rect GetVisibleTileROI() const;
 
         void ShiftCenter( const fheroes2::Point & offset ); // in pixels
 
-        int GetScrollCursor( void ) const;
+        int GetScrollCursor() const;
 
         bool NeedScroll() const
         {
             return scrollDirection != 0;
         }
 
-        void Scroll( void );
+        void Scroll();
         void SetScroll( int );
 
         void SetCenter( const fheroes2::Point & point );
@@ -84,7 +84,7 @@ namespace Interface
         // Do not call this method unless it's needed for manual setup of the position
         void SetCenterInPixels( const fheroes2::Point & point );
 
-        void SetRedraw( void ) const;
+        void SetRedraw() const;
 
         void Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw = false ) const;
 
@@ -95,12 +95,12 @@ namespace Interface
         // Use this method to draw TIL images
         void DrawTile( fheroes2::Image & src, const fheroes2::Image & dst, const fheroes2::Point & mp ) const;
 
-        void SetUpdateCursor( void )
+        void SetUpdateCursor()
         {
             updateCursor = true;
         }
 
-        void QueueEventProcessing( void );
+        void QueueEventProcessing();
 
         fheroes2::Rect RectFixed( fheroes2::Point & dst, int rw, int rh ) const;
 

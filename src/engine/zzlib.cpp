@@ -59,9 +59,9 @@ namespace
         return res;
     }
 
-    std::vector<u8> zlibCompress( const u8 * src, size_t srcsz )
+    std::vector<uint8_t> zlibCompress( const uint8_t * src, size_t srcsz )
     {
-        std::vector<u8> res;
+        std::vector<uint8_t> res;
 
         if ( src && srcsz ) {
             res.resize( compressBound( static_cast<uLong>( srcsz ) ) );
@@ -90,11 +90,11 @@ bool ZStreamFile::read( const std::string & fn, size_t offset )
     if ( sf.open( fn, "rb" ) ) {
         if ( offset )
             sf.seek( offset );
-        const u32 size0 = sf.get32(); // raw size
+        const uint32_t size0 = sf.get32(); // raw size
         if ( size0 == 0 ) {
             return false;
         }
-        const u32 size1 = sf.get32(); // zip size
+        const uint32_t size1 = sf.get32(); // zip size
         if ( size1 == 0 ) {
             return false;
         }

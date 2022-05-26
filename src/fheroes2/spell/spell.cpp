@@ -134,12 +134,12 @@ spellstats_t spells[] = {
       gettext_noop( "Turns the affected creature into stone.  A petrified creature receives half damage from a direct attack." ) },
 };
 
-const char * Spell::GetName( void ) const
+const char * Spell::GetName() const
 {
     return _( spells[id].name );
 }
 
-const char * Spell::GetDescription( void ) const
+const char * Spell::GetDescription() const
 {
     return _( spells[id].description );
 }
@@ -202,7 +202,7 @@ uint32_t Spell::spellPoints( const HeroBase * hero ) const
     return static_cast<uint32_t>( spellCost );
 }
 
-int Spell::Level( void ) const
+int Spell::Level() const
 {
     switch ( id ) {
     case BLESS:
@@ -292,7 +292,7 @@ int Spell::Level( void ) const
     return 0;
 }
 
-bool Spell::isCombat( void ) const
+bool Spell::isCombat() const
 {
     switch ( id ) {
     case NONE:
@@ -336,7 +336,7 @@ bool Spell::isGuardianType() const
     return false;
 }
 
-u32 Spell::Damage( void ) const
+uint32_t Spell::Damage() const
 {
     switch ( id ) {
     case ARROW:
@@ -362,7 +362,7 @@ u32 Spell::Damage( void ) const
     return 0;
 }
 
-bool Spell::isMindInfluence( void ) const
+bool Spell::isMindInfluence() const
 {
     switch ( id ) {
     case BLIND:
@@ -378,12 +378,12 @@ bool Spell::isMindInfluence( void ) const
     return false;
 }
 
-u32 Spell::IndexSprite( void ) const
+uint32_t Spell::IndexSprite() const
 {
     return spells[id].imageId;
 }
 
-u32 Spell::Restore( void ) const
+uint32_t Spell::Restore() const
 {
     switch ( id ) {
     case Spell::CURE:
@@ -397,7 +397,7 @@ u32 Spell::Restore( void ) const
     return Resurrect();
 }
 
-u32 Spell::Resurrect( void ) const
+uint32_t Spell::Resurrect() const
 {
     switch ( id ) {
     case Spell::ANIMATEDEAD:
@@ -412,7 +412,7 @@ u32 Spell::Resurrect( void ) const
     return 0;
 }
 
-u32 Spell::ExtraValue( void ) const
+uint32_t Spell::ExtraValue() const
 {
     return spells[id].extraValue;
 }
@@ -441,7 +441,7 @@ Spell Spell::RandAdventure( int lvl )
     return res.isValid() ? res : RandCombat( lvl );
 }
 
-bool Spell::isUndeadOnly( void ) const
+bool Spell::isUndeadOnly() const
 {
     switch ( id ) {
     case ANIMATEDEAD:
@@ -456,7 +456,7 @@ bool Spell::isUndeadOnly( void ) const
     return false;
 }
 
-bool Spell::isALiveOnly( void ) const
+bool Spell::isALiveOnly() const
 {
     switch ( id ) {
     case BLESS:
@@ -513,7 +513,7 @@ bool Spell::isSingleTarget() const
     return false;
 }
 
-bool Spell::isApplyWithoutFocusObject( void ) const
+bool Spell::isApplyWithoutFocusObject() const
 {
     if ( isMassActions() || isSummon() )
         return true;
@@ -535,7 +535,7 @@ bool Spell::isApplyWithoutFocusObject( void ) const
     return false;
 }
 
-bool Spell::isSummon( void ) const
+bool Spell::isSummon() const
 {
     switch ( id ) {
     case SUMMONEELEMENT:
@@ -567,7 +567,7 @@ bool Spell::isEffectDispel() const
     return false;
 }
 
-bool Spell::isApplyToAnyTroops( void ) const
+bool Spell::isApplyToAnyTroops() const
 {
     switch ( id ) {
     case DISPEL:
@@ -581,7 +581,7 @@ bool Spell::isApplyToAnyTroops( void ) const
     return false;
 }
 
-bool Spell::isApplyToFriends( void ) const
+bool Spell::isApplyToFriends() const
 {
     switch ( id ) {
     case BLESS:
@@ -612,7 +612,7 @@ bool Spell::isApplyToFriends( void ) const
     return false;
 }
 
-bool Spell::isMassActions( void ) const
+bool Spell::isMassActions() const
 {
     switch ( id ) {
     case MASSCURE:
@@ -631,7 +631,7 @@ bool Spell::isMassActions( void ) const
     return false;
 }
 
-bool Spell::isApplyToEnemies( void ) const
+bool Spell::isApplyToEnemies() const
 {
     switch ( id ) {
     case MASSSLOW:

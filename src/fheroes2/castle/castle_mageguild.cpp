@@ -46,8 +46,8 @@ namespace
     {
     public:
         RowSpells( const fheroes2::Point & pos, const Castle & castle, const int lvl );
-        void Redraw( void );
-        bool QueueEventProcessing( void );
+        void Redraw();
+        bool QueueEventProcessing();
 
     private:
         std::vector<fheroes2::Rect> coords;
@@ -95,7 +95,7 @@ RowSpells::RowSpells( const fheroes2::Point & pos, const Castle & castle, const 
     spells.resize( coords.size(), Spell::NONE );
 }
 
-void RowSpells::Redraw( void )
+void RowSpells::Redraw()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Sprite & roll_show = fheroes2::AGG::GetICN( ICN::TOWNWIND, 0 );
@@ -122,11 +122,11 @@ void RowSpells::Redraw( void )
     }
 }
 
-bool RowSpells::QueueEventProcessing( void )
+bool RowSpells::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
 
-    const s32 index = GetRectIndex( coords, le.GetMouseCursor() );
+    const int32_t index = GetRectIndex( coords, le.GetMouseCursor() );
 
     if ( 0 <= index && ( le.MouseClickLeft() || le.MousePressRight() ) ) {
         const Spell & spell = spells[index];

@@ -63,7 +63,7 @@ void Battle::Units::SortFastest()
     std::stable_sort( begin(), end(), Army::FastestTroop );
 }
 
-void Battle::Units::SortArchers( void )
+void Battle::Units::SortArchers()
 {
     std::sort( begin(), end(), []( const Troop * t1, const Troop * t2 ) { return t1->isArchers() && !t2->isArchers(); } );
 }
@@ -123,12 +123,12 @@ Battle::Force::~Force()
         delete *it;
 }
 
-const HeroBase * Battle::Force::GetCommander( void ) const
+const HeroBase * Battle::Force::GetCommander() const
 {
     return army.GetCommander();
 }
 
-HeroBase * Battle::Force::GetCommander( void )
+HeroBase * Battle::Force::GetCommander()
 {
     return army.GetCommander();
 }
@@ -138,12 +138,12 @@ const Battle::Units & Battle::Force::getUnits() const
     return *this;
 }
 
-int Battle::Force::GetColor( void ) const
+int Battle::Force::GetColor() const
 {
     return army.GetColor();
 }
 
-int Battle::Force::GetControl( void ) const
+int Battle::Force::GetControl() const
 {
     return army.GetControl();
 }
@@ -222,7 +222,7 @@ uint32_t Battle::Force::GetSurrenderCost() const
     return res >= 1 ? static_cast<uint32_t>( res + 0.5 ) : 1;
 }
 
-void Battle::Force::NewTurn( void )
+void Battle::Force::NewTurn()
 {
     if ( GetCommander() )
         GetCommander()->ResetModes( Heroes::SPELLCASTED );
@@ -230,7 +230,7 @@ void Battle::Force::NewTurn( void )
     std::for_each( begin(), end(), []( Unit * unit ) { unit->NewTurn(); } );
 }
 
-Troops Battle::Force::GetKilledTroops( void ) const
+Troops Battle::Force::GetKilledTroops() const
 {
     Troops killed;
 
@@ -287,9 +287,9 @@ bool Battle::Force::HasMonster( const Monster & mons ) const
     return std::any_of( begin(), end(), [&mons]( const Unit * unit ) { return unit->isMonster( mons.GetID() ); } );
 }
 
-u32 Battle::Force::GetDeadCounts( void ) const
+uint32_t Battle::Force::GetDeadCounts() const
 {
-    u32 res = 0;
+    uint32_t res = 0;
 
     for ( const_iterator it = begin(); it != end(); ++it )
         res += ( *it )->GetDead();
@@ -297,9 +297,9 @@ u32 Battle::Force::GetDeadCounts( void ) const
     return res;
 }
 
-u32 Battle::Force::GetDeadHitPoints( void ) const
+uint32_t Battle::Force::GetDeadHitPoints() const
 {
-    u32 res = 0;
+    uint32_t res = 0;
 
     for ( const_iterator it = begin(); it != end(); ++it ) {
         res += static_cast<Monster *>( *it )->GetHitPoints() * ( *it )->GetDead();
@@ -310,7 +310,7 @@ u32 Battle::Force::GetDeadHitPoints( void ) const
 
 void Battle::Force::SyncArmyCount()
 {
-    for ( u32 index = 0; index < army.Size(); ++index ) {
+    for ( uint32_t index = 0; index < army.Size(); ++index ) {
         Troop * troop = army.GetTroop( index );
 
         if ( troop && troop->isValid() ) {

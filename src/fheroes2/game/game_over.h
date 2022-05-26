@@ -63,7 +63,7 @@ namespace GameOver
     class Result
     {
     public:
-        static Result & Get( void );
+        static Result & Get();
 
         void Reset(); // Resets everything
         void ResetResult(); // Resets just the result

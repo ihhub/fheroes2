@@ -26,7 +26,7 @@
 #include "battle_grave.h"
 #include "battle_troop.h"
 
-Battle::Indexes Battle::Graveyard::GetClosedCells( void ) const
+Battle::Indexes Battle::Graveyard::GetClosedCells() const
 {
     Indexes res;
     res.reserve( size() );
@@ -65,7 +65,7 @@ void Battle::Graveyard::RemoveTroop( const Unit & b )
     }
 }
 
-u32 Battle::Graveyard::GetLastTroopUID( s32 index ) const
+uint32_t Battle::Graveyard::GetLastTroopUID( int32_t index ) const
 {
     for ( const_iterator it = begin(); it != end(); ++it )
         if ( index == ( *it ).first && !( *it ).second.empty() )

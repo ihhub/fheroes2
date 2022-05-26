@@ -72,7 +72,7 @@ bool SpellStorage::hasAdventureSpell( const int lvl ) const
     return false;
 }
 
-std::string SpellStorage::String( void ) const
+std::string SpellStorage::String() const
 {
     std::string output;
 
