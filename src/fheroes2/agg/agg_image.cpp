@@ -2013,6 +2013,21 @@ namespace fheroes2
                     fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 52, 106, 1, 1 }, seededGen );
                 }
                 return true;
+            case ICN::SCENIBKG:
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() && _icnVsSprite[id][0].width() == 436 && _icnVsSprite[id][0].height() == 476 ) {
+                    const Sprite & helper = GetICN( ICN::CSPANBKE, 1 );
+                    if ( !helper.empty() ) {
+                        Sprite & original = _icnVsSprite[id][0];
+                        Sprite temp( original.width(), original.height() + 12 );
+                        temp.reset();
+                        Copy( original, 0, 0, temp, 0, 0, original.width(), original.height() );
+                        Copy( helper, 0, helper.height() - 12, temp, 0, temp.height() - 12, 300, 12 );
+                        Copy( helper, helper.width() - ( temp.width() - 300 ), helper.height() - 12, temp, 300 - 16, temp.height() - 12, temp.width() - 300, 12 );
+                        original = std::move( temp );
+                    }
+                }
+                return true;
             default:
                 break;
             }
