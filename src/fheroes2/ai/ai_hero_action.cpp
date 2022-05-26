@@ -1570,17 +1570,21 @@ namespace AI
         left.markHeroMeeting( right.GetID() );
         right.markHeroMeeting( left.GetID() );
 
-        const bool rightToLeft = right.getStatsValue() < left.getStatsValue();
+        // A hero with a higher role must receive an army and artifacts from another hero.
+        // In case of the same roles a more powerful hero will receive all benefits.
+        bool rightToLeft = true;
+        if ( left.getAIRole() < right.getAIRole() ) {
+            rightToLeft = false;
+        }
+        else if ( left.getAIRole() == right.getAIRole() ) {
+            rightToLeft = right.getStatsValue() < left.getStatsValue();
+        }
 
-        if ( rightToLeft )
-            left.GetArmy().JoinStrongestFromArmy( right.GetArmy() );
-        else
-            right.GetArmy().JoinStrongestFromArmy( left.GetArmy() );
+        Heroes & giver = rightToLeft ? right : left;
+        Heroes & taker = rightToLeft ? left : right;
 
-        if ( rightToLeft )
-            left.GetBagArtifacts().exchangeArtifacts( right.GetBagArtifacts() );
-        else
-            right.GetBagArtifacts().exchangeArtifacts( left.GetBagArtifacts() );
+        taker.GetArmy().JoinStrongestFromArmy( giver.GetArmy() );
+        taker.GetBagArtifacts().exchangeArtifacts( giver.GetBagArtifacts() );
     }
 
     void HeroesMove( Heroes & hero )

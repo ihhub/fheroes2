@@ -177,17 +177,10 @@ public:
         CUSTOMSKILLS = 0x00020000
     };
 
-    // Types of heroes. Used only for AI as humans are smart enough to manage heroes by themselves.
+    // Types of hero roles. They are only for AI as humans are smart enough to manage heroes by themselves.
+    // The order of roles is important as it is used to identify more values heroes among others.
     enum class Role : int
     {
-        // The most ordinary hero's role with no any specialization. This type does eveything what a hero can do:
-        // collecting resources, fighting (mostly weak) monsters, claiming towns and mines and expanding the visible territory.
-        HUNTER,
-
-        // The type of hero with a skew towards fights. His main priority is to kill monsters and enemies, capture castles and guarded mines.
-        // This type still can capture valuable mines or dwellings if they're on the way to something better.
-        FIGHTER,
-
         // The main goal for Scout is to discover new areas so he should run towards the fog of war to expand the visible territory.
         // These heroes usually appear when either no tasks exist on the map or when AI has too many heroes.
         SCOUT,
@@ -196,8 +189,17 @@ public:
         // dwellings, castles or from one hero to another.
         COURIER,
 
+        // The most ordinary hero's role with no any specialization. This type does everything what a hero can do:
+        // collecting resources, fighting (mostly weak) monsters, claiming towns and mines and expanding the visible territory.
+        HUNTER,
+
+        // The type of hero with a skew towards fights. His main priority is to kill monsters and enemies, capture castles and guarded mines.
+        // This type still can capture valuable mines or dwellings if they're on the way to something better.
+        FIGHTER,
+
         // The mightiest hero among others. The main purpose of this type is to run over the enemy's territory and defeat all heroes there while
         // capturing all castles and towns. This type of hero is set when one (or few) heroes are too strong in comparison to others.
+        // A hero to be defeated as a winning condition for human must be marked as this type of role.
         CHAMPION
     };
 
