@@ -259,8 +259,6 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     while ( true ) {
         if ( !le.HandleEvents( true, true ) ) {
             if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
-                // if ( Settings::ExtGameUseFade() )
-                //    display.Fade();
                 break;
             }
             else {
@@ -318,8 +316,6 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
         if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonQuit.area() ) ) {
             if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
-                // if ( Settings::ExtGameUseFade() )
-                //     display.Fade();
                 return fheroes2::GameMode::QUIT_GAME;
             }
         }
