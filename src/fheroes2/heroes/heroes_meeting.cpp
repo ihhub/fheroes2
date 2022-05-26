@@ -400,13 +400,17 @@ void Heroes::MeetingDialog( Heroes & otherHero )
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MousePressLeft( moveArmyToHero2.area() ) ) {
+        if ( le.MousePressLeft( moveArmyToHero2.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::MOVE_RIGHT ) ) {
             moveArmyToHero2.drawOnPress();
             moveArmyToHero1.drawOnRelease();
         }
-        else if ( le.MousePressLeft( moveArmyToHero1.area() ) ) {
+        else if ( le.MousePressLeft( moveArmyToHero1.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::MOVE_LEFT ) ) {
             moveArmyToHero1.drawOnPress();
             moveArmyToHero2.drawOnRelease();
+        }
+        else if ( le.MousePressRight( moveArmyToHero2.combinedArea( moveArmyToHero1 ) ) || HotKeyHoldEvent( Game::HotKeyEvent::SWAP_ARMIES ) ) {
+            moveArmyToHero1.drawOnPress();
+            moveArmyToHero2.drawOnPress();
         }
         else {
             moveArmyToHero1.drawOnRelease();
@@ -504,7 +508,6 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         else if ( le.MouseCursor( luckIndicator2.GetArea() ) ) {
             LuckIndicator::QueueEventProcessing( luckIndicator2 );
         }
-
         if ( le.MouseClickLeft( hero1Area ) ) {
             Game::OpenHeroesDialog( *this, false, false, true );
 
@@ -579,7 +582,8 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             display.render();
         }
-        else if ( HotKeyPressEvent( Game::HotKeyEvent::SWAP_ARMIES ) ) {
+        // TODO: Use something like HotKeyReleaseEvent when added to avoid continuous repeated swapping if the hotkey is held down for a while.
+        else if ( le.MouseClickRight( moveArmyToHero2.combinedArea( moveArmyToHero1 ) ) || HotKeyPressEvent( Game::HotKeyEvent::SWAP_ARMIES ) ) {
             Army::swapArmyTroops( GetArmy(), otherHero.GetArmy() );
 
             armyCountBackgroundRestorerLeft.restore();

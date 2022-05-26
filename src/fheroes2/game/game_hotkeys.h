@@ -132,6 +132,7 @@ namespace Game
         NO_EVENT,
     };
 
+    // TODO: Implement HotKeyReleaseEvent.
     bool HotKeyPressEvent( const HotKeyEvent eventID );
     bool HotKeyHoldEvent( const HotKeyEvent eventID );
 
