@@ -139,9 +139,9 @@ namespace Battle
 
         void ApplyAction( Command & );
 
-        void TargetsApplyDamage( Unit &, const Unit &, TargetsInfo & ) const;
+        void TargetsApplyDamage( Unit & attacker, TargetsInfo & targets ) const;
         TargetsInfo GetTargetsForSpells( const HeroBase * hero, const Spell & spell, int32_t dest, bool * playResistSound = nullptr );
-        void TargetsApplySpell( const HeroBase *, const Spell &, TargetsInfo & ) const;
+        void TargetsApplySpell( const HeroBase * hero, const Spell & spell, TargetsInfo & targets ) const;
 
         bool isSpellcastDisabled() const;
         bool isDisableCastSpell( const Spell &, std::string * msg = nullptr );
