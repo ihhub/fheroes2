@@ -48,7 +48,7 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // fade
-    if ( fade && Settings::Get().ExtGameUseFade() )
+    if ( fade && Settings::ExtGameUseFade() )
         fheroes2::FadeDisplay();
 
     const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );

@@ -106,11 +106,9 @@ public:
 class SelectEnumMonster : public SelectEnum
 {
 public:
-    using SelectEnum::ActionListPressRight;
+    using SelectEnum::SelectEnum;
 
-    explicit SelectEnumMonster( const fheroes2::Rect & rt )
-        : SelectEnum( rt )
-    {}
+    using SelectEnum::ActionListPressRight;
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
@@ -180,9 +178,7 @@ public:
 class SelectEnumArtifact : public SelectEnum
 {
 public:
-    explicit SelectEnumArtifact( const fheroes2::Rect & rt )
-        : SelectEnum( rt )
-    {}
+    using SelectEnum::SelectEnum;
 
     void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
