@@ -450,7 +450,7 @@ void Troops::MoveTroops( const Troops & from, bool moveAll )
         }
 
         // As a last resort try to merge troops to make free slots.
-        const uint32_t troopCountPreMerge = GetCount(); 
+        const uint32_t troopCountPreMerge = GetCount();
         MergeTroops( from.GetCount() );
         const uint32_t troopCountPostMerge = GetCount();
         if ( troopCountPreMerge == troopCountPostMerge ) {
