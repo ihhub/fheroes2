@@ -8,6 +8,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)..\src\engine;$(MSBuildThisFileDirectory)..\src\fheroes2\gui;$(MSBuildThisFileDirectory)..\src\fheroes2\maps;$(MSBuildThisFileDirectory)..\src\fheroes2\kingdom;$(MSBuildThisFileDirectory)..\src\fheroes2\campaign;$(MSBuildThisFileDirectory)..\src\fheroes2\game;$(MSBuildThisFileDirectory)..\src\fheroes2\dialog;$(MSBuildThisFileDirectory)..\src\fheroes2\system;$(MSBuildThisFileDirectory)..\src\fheroes2\spell;$(MSBuildThisFileDirectory)..\src\fheroes2\monster;$(MSBuildThisFileDirectory)..\src\fheroes2\castle;$(MSBuildThisFileDirectory)..\src\fheroes2\agg;$(MSBuildThisFileDirectory)..\src\fheroes2\heroes;$(MSBuildThisFileDirectory)..\src\fheroes2\resource;$(MSBuildThisFileDirectory)..\src\fheroes2\ai;$(MSBuildThisFileDirectory)..\src\fheroes2\army;$(MSBuildThisFileDirectory)..\src\fheroes2\battle;$(MSBuildThisFileDirectory)..\src\fheroes2\h2d;$(MSBuildThisFileDirectory)..\src\fheroes2\objects;$(MSBuildThisFileDirectory)..\src\fheroes2\world;$(MSBuildThisFileDirectory)..\src\fheroes2\image;$(MSBuildThisFileDirectory)..\src\thirdparty\libsmacker;$(MSBuildThisFileDirectory)packages\installed\zlib\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
