@@ -394,10 +394,11 @@ void Troops::MoveTroops( const Troops & from, bool moveAll )
         return;
     }
 
-    // TODO: Sort pointers to troops from highest to lowest tier and put selected troop at end if that troop was selected before moving.
+    // TODO: Sort pointers to troops from highest to lowest dwelling level and put selected troop at end if that troop was selected before moving.
     // Use something like std::sort( from.begin(), from.end(), functionToSortAccordingToDwellingLevel() );
 
-    while ( from.GetCount() > 0 ) {
+    // from army might have more than 0 if it's a hero army with one troop left.
+    while ( from.GetCount() > 0 || (!moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
         // Attempt to move troops directly to the same slot in the receiving army.
         for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
             Troop * troop = from.at( slot );
