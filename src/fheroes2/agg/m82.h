@@ -355,8 +355,6 @@ namespace M82
     int FromSpell( int );
 
     SoundType getAdventureMapObjectSound( const MP2::MapObjectType objectType );
-
-    int GetLOOP00XX( const size_t index );
 }
 
 #endif

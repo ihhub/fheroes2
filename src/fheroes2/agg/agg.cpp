@@ -138,8 +138,8 @@ namespace AGG
     {
         ChannelAudioLoopEffectInfo() = default;
 
-        ChannelAudioLoopEffectInfo( AudioLoopEffectInfo info, const int channelId_ )
-            : AudioLoopEffectInfo( std::move( info ) )
+        ChannelAudioLoopEffectInfo( const AudioLoopEffectInfo & info, const int channelId_ )
+            : AudioLoopEffectInfo( info )
             , channelId( channelId_ )
         {
             // Do nothing.
@@ -525,7 +525,7 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
             existingEffects.pop_back();
 
             ChannelAudioLoopEffectInfo & currenInfo = currentAudioLoopEffects[soundType].back();
-            currenInfo = { std::move( effects.back() ), currenInfo.channelId };
+            currenInfo = { effects.back(), currenInfo.channelId };
             effects.pop_back();
 
             if ( Mixer::isPlaying( currenInfo.channelId ) ) {
@@ -588,7 +588,7 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
             Mixer::Volume( channelId, Mixer::MaxVolume() * soundVolume / 10 );
             Mixer::Resume( channelId );
 
-            currentAudioLoopEffects[soundType].emplace_back( ChannelAudioLoopEffectInfo( std::move( info ), channelId ) );
+            currentAudioLoopEffects[soundType].emplace_back( ChannelAudioLoopEffectInfo( info, channelId ) );
 
             DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Playing sound " << M82::GetString( soundType ) )
         }
