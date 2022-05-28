@@ -60,7 +60,7 @@ namespace
             return { 1, 3 };
         }
 
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "damage_range: unexpected spellPower value: " << spellPower << " for commander " << commander )
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "unexpected spellPower value: " << spellPower << " for commander " << commander )
         return { 0, 0 };
     }
 }
