@@ -176,6 +176,7 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
         assert( spell.isSingleTarget() || spell.GetID() == Spell::PETRIFY );
 
         TargetsInfo spellTargets;
+        spellTargets.reserve( attackTargets.size() );
 
         // Filter out invalid targets and targets to which the spell cannot be applied
         for ( const TargetInfo & attackTarget : attackTargets ) {
@@ -188,21 +189,17 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
                 continue;
             }
 
-            TargetInfo spellTarget;
-
-            spellTarget.defender = attackTarget.defender;
-
-            spellTargets.push_back( spellTarget );
+            spellTargets.emplace_back( attackTarget.defender );
         }
 
         if ( !spellTargets.empty() ) {
             // The built-in spell can only be applied to one target. If there are multiple
             // targets eligible for this spell, then we should randomly select only one.
             if ( spellTargets.size() > 1 ) {
-                const TargetInfo spellTarget = _randomGenerator.Get( spellTargets );
+                const Unit * selectedUnit = _randomGenerator.Get( spellTargets ).defender;
 
                 spellTargets.erase( std::remove_if( spellTargets.begin(), spellTargets.end(),
-                                                    [&spellTarget]( const TargetInfo & v ) { return v.defender != spellTarget.defender; } ),
+                                                    [selectedUnit]( const TargetInfo & v ) { return v.defender != selectedUnit; } ),
                                     spellTargets.end() );
             }
 
