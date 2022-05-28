@@ -441,6 +441,8 @@ double Heroes::getRecruitValue() const
 
 double Heroes::getMeetingValue( const Heroes & recievingHero ) const
 {
+    // TODO: add logic to check artifacts with curses and those which are invaluable for a hero.
+
     // Magic Book is not transferable.
     const uint32_t artCount = bag_artifacts.CountArtifacts() - bag_artifacts.Count( Artifact::MAGIC_BOOK );
     const uint32_t canFit = HEROESMAXARTIFACT - recievingHero.bag_artifacts.CountArtifacts();
@@ -450,6 +452,7 @@ double Heroes::getMeetingValue( const Heroes & recievingHero ) const
         artifactValue = canFit * ( artifactValue / artCount );
     }
 
+    // TODO: leaving only one monster in an army is very risky. Add logic to find out which part of the army would be useful to get.
     return recievingHero.army.getReinforcementValue( army ) + artifactValue * SKILL_VALUE;
 }
 
