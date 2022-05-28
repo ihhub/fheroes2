@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <cassert>
+#include <tuple>
 #include <utility>
 
 #include "agg.h"
@@ -96,15 +97,16 @@ namespace AI
         // Re-hiring a hero related to any of the WINS_HERO or LOSS_HERO conditions is not allowed
         const auto heroesToIgnore = std::make_pair( world.GetHeroesCondWins(), world.GetHeroesCondLoss() );
 
-        Heroes * firstRecruit = rec.GetHero1();
-        if ( firstRecruit == heroesToIgnore.first || firstRecruit == heroesToIgnore.second ) {
-            firstRecruit = nullptr;
-        }
+        auto useIfPossible = [&heroesToIgnore]( Heroes * hero ) -> Heroes * {
+            if ( std::apply( [hero]( auto... heroToIgnore ) { return ( ( hero == heroToIgnore ) || ... ); }, heroesToIgnore ) ) {
+                return nullptr;
+            }
 
-        Heroes * secondRecruit = rec.GetHero2();
-        if ( secondRecruit == heroesToIgnore.first || secondRecruit == heroesToIgnore.second ) {
-            secondRecruit = nullptr;
-        }
+            return hero;
+        };
+
+        Heroes * firstRecruit = useIfPossible( rec.GetHero1() );
+        Heroes * secondRecruit = useIfPossible( rec.GetHero2() );
 
         if ( firstRecruit && secondRecruit ) {
             if ( secondRecruit->getRecruitValue() > firstRecruit->getRecruitValue() ) {
