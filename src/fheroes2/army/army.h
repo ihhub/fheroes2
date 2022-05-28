@@ -94,7 +94,7 @@ public:
     void UpgradeTroops( const Castle & );
 
     Troop * GetFirstValid();
-    const Troop * Troops::GetFirstValid() const;
+    const Troop * GetFirstValid() const;
     Troop * GetWeakestTroop() const;
     const Troop * GetSlowestTroop() const;
 
