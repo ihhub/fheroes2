@@ -398,7 +398,7 @@ void Troops::MoveTroops( const Troops & from, bool moveAll )
     // Use something like std::sort( from.begin(), from.end(), functionToSortAccordingToDwellingLevel() );
 
     // from army might have more than 0 if it's a hero army with one troop left.
-    while ( from.GetCount() > 0 || (!moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
+    while ( from.GetCount() > 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
         // Attempt to move troops directly to the same slot in the receiving army.
         for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
             Troop * troop = from.at( slot );
