@@ -153,8 +153,10 @@ namespace
 
 fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 {
+    GameOver::Result & gameResult = GameOver::Result::Get();
+
 #ifdef WITH_DEBUG
-    if ( IS_DEVEL() && world.CountDay() ) {
+    if ( IS_DEVEL() && ( gameResult.GetResult() & GameOver::WINS ) ) {
         std::string msg = "Developer mode is active, the result will not be saved! \n \n Your result: ";
         if ( isCampaign ) {
             msg += std::to_string( Campaign::CampaignSaveData::Get().getDaysPassed() );
@@ -165,6 +167,9 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
         fheroes2::showMessage( fheroes2::Text( "High Scores", fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
                                Dialog::OK );
+
+        gameResult.ResetResult();
+
         return fheroes2::GameMode::MAIN_MENU;
     }
 #endif
@@ -204,7 +209,6 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     display.render();
 
-    GameOver::Result & gameResult = GameOver::Result::Get();
     if ( gameResult.GetResult() & GameOver::WINS ) {
         std::string player( _( "Unknown Hero" ) );
         Dialog::InputString( _( "Your Name" ), player, std::string(), 15 );
@@ -235,6 +239,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         buttonOtherHighScore.draw();
         buttonExit.draw();
         display.render();
+
         gameResult.ResetResult();
     }
 

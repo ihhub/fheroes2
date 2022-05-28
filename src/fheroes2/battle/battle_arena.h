@@ -227,6 +227,9 @@ namespace Battle
         // automatically. When an attack is made by firing a shot, the dir should be UNKNOWN (zero).
         void BattleProcess( Unit & attacker, Unit & defender, int32_t dst = -1, int dir = -1 );
 
+        // Creates and returns a fully combat-ready elemental, which will be already placed on the board. It's
+        // the caller's responsibility to make sure that this elemental can be created using the given spell
+        // before calling this method.
         Unit * CreateElemental( const Spell & spell );
         // Creates and returns a mirror image of the given unit. The returned mirror image will have an invalid
         // position, which should be updated separately.
