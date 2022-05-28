@@ -215,6 +215,11 @@ public:
         return id == COLDRAY || id == COLDRING;
     }
 
+    bool isBuiltinOnly() const
+    {
+        return id == PETRIFY;
+    }
+
     bool isGuardianType() const;
 
     /* return index sprite spells.icn */

@@ -172,8 +172,8 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
     const Spell spell = attacker.GetSpellMagic();
 
     if ( spell.isValid() ) {
-        // Only single target spells and special Medusa's Petrify spell are allowed as built-in spells
-        assert( spell.isSingleTarget() || spell.GetID() == Spell::PETRIFY );
+        // Only single target spells and special built-in only spells are allowed
+        assert( spell.isSingleTarget() || spell.isBuiltinOnly() );
 
         TargetsInfo spellTargets;
         spellTargets.reserve( attackTargets.size() );
