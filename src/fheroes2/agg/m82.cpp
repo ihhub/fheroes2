@@ -200,75 +200,70 @@ int M82::FromSpell( int spell )
     return UNKNOWN;
 }
 
-uint32_t M82::GetIndexLOOP00XXFromObject( const MP2::MapObjectType objectType )
+M82::SoundType M82::getAdventureMapObjectSound( const MP2::MapObjectType objectType )
 {
     switch ( objectType ) {
     case MP2::OBJ_BUOY:
-        return 0;
+        return LOOP0000;
     case MP2::OBJ_SHIPWRECK:
     case MP2::OBJ_DERELICTSHIP:
-        return 1;
+        return LOOP0001;
     case MP2::OBJ_COAST:
-        return 2;
+        return LOOP0002;
     case MP2::OBJ_ORACLE:
-        return 3;
+        return LOOP0003;
     case MP2::OBJ_STONELITHS:
-        return 4;
+        return LOOP0004;
     case MP2::OBJ_LAVAPOOL:
-        return 5;
+        return LOOP0005;
     case MP2::OBJ_ALCHEMYLAB:
-        return 6;
+        return LOOP0006;
     case MP2::OBJ_WATERWHEEL:
-        return 9;
+        return LOOP0009;
     case MP2::OBJ_CAMPFIRE:
-        return 10;
+        return LOOP0010;
     case MP2::OBJ_WINDMILL:
-        return 11;
+        return LOOP0011;
     case MP2::OBJ_ARTESIANSPRING:
     case MP2::OBJ_FOUNTAIN:
-        return 12;
+        return LOOP0012;
     case MP2::OBJ_WATERLAKE:
     case MP2::OBJ_WATERINGHOLE:
-        return 13;
+        return LOOP0013;
     case MP2::OBJ_MINES:
-        return 15;
+        return LOOP0015;
     case MP2::OBJ_SAWMILL:
-        return 16;
+        return LOOP0016;
     case MP2::OBJ_DAEMONCAVE:
-        return 17;
+        return LOOP0017;
     case MP2::OBJ_SHRINE1:
     case MP2::OBJ_SHRINE2:
     case MP2::OBJ_SHRINE3:
-        return 18;
+        return LOOP0018;
     case MP2::OBJ_TARPIT:
-        return 21;
+        return LOOP0021;
     case MP2::OBJ_TRADINGPOST:
-        return 22;
+        return LOOP0022;
     case MP2::OBJ_RUINS:
-        return 24;
+        return LOOP0024;
     case MP2::OBJ_PEASANTHUT:
     case MP2::OBJ_DWARFCOTT:
     case MP2::OBJ_ARCHERHOUSE:
-        return 25;
+        return LOOP0025;
     case MP2::OBJ_VOLCANO:
-        return 27;
-
+        return LOOP0027;
     default:
         break;
     }
 
-    return 0xFF;
+    return UNKNOWN;
 }
 
 int M82::GetLOOP00XX( const size_t index )
 {
     switch ( index ) {
-    case 0:
-        return LOOP0000;
-    case 1:
-        return LOOP0001;
     case 2:
-        return LOOP0002;
+        
     case 3:
         return LOOP0003;
     case 4:

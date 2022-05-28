@@ -45,8 +45,11 @@ namespace Mixer
 
     size_t getChannelCount();
 
-    int Play( const std::string & file, const int channel = -1, const bool loop = false );
-    int Play( const uint8_t * ptr, const uint32_t size, const int channel = -1, const bool loop = false );
+    // To play the audio in a new channel set its value to -1. Returns channel ID. A negative value (-1) in case of failure.
+    int Play( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop );
+    int PlayFromDistance( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const int16_t angle, uint8_t volumePercentage );
+
+    int applySoundEffect( const int channelId, const int16_t angle, uint8_t volumePercentage );
 
     int MaxVolume();
     int Volume( const int channel, int vol );

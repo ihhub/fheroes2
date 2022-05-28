@@ -50,6 +50,8 @@
 #include "translations.h"
 #include "world.h"
 
+#include "logging.h"
+
 namespace
 {
     std::string lastMapFileName;
@@ -64,16 +66,14 @@ namespace
 
     uint32_t maps_animation_frame = 0;
 
-    std::vector<int> reserved_vols( LOOPXX_COUNT, 0 );
-
-    uint32_t GetMixerChannelFromObject( const Maps::Tiles & tile )
+    M82::SoundType getSoundTypeFromTile( const Maps::Tiles & tile )
     {
         // check stream first
         if ( tile.isStream() ) {
-            return 13;
+            return M82::LOOP0013;
         }
 
-        return M82::GetIndexLOOP00XXFromObject( tile.GetObject( false ) );
+        return M82::getAdventureMapObjectSound( tile.GetObject( false ) );
     }
 }
 
@@ -341,12 +341,16 @@ uint32_t & Game::MapsAnimationFrame()
 void Game::EnvironmentSoundMixer()
 {
     size_t availableChannels = Mixer::getChannelCount();
-    if ( availableChannels == 0 ) {
+    if ( availableChannels <= 2 ) {
+        // 2 channels are left for hero's movement.
         return;
     }
 
-    const fheroes2::Point abs_pt( Interface::GetFocusCenter() );
-    std::fill( reserved_vols.begin(), reserved_vols.end(), 0 );
+    availableChannels -= 2;
+
+    const fheroes2::Point center( Interface::GetFocusCenter() );
+
+    std::map<M82::SoundType, std::vector<AGG::AudioLoopEffectInfo>> soundEffects;
 
     const int32_t maxOffset = 3;
 
@@ -354,7 +358,7 @@ void Game::EnvironmentSoundMixer()
     std::vector<fheroes2::Point> positions;
     for ( int32_t y = -maxOffset; y <= maxOffset; ++y ) {
         for ( int32_t x = -maxOffset; x <= maxOffset; ++x ) {
-            if ( Maps::isValidAbsPoint( x + abs_pt.x, y + abs_pt.y ) ) {
+            if ( Maps::isValidAbsPoint( x + center.x, y + center.y ) ) {
                 positions.emplace_back( x, y );
             }
         }
@@ -365,33 +369,43 @@ void Game::EnvironmentSoundMixer()
                       []( const fheroes2::Point & p1, const fheroes2::Point & p2 ) { return p1.x * p1.x + p1.y * p1.y < p2.x * p2.x + p2.y * p2.y; } );
 
     const double maxDistance = std::sqrt( maxOffset * maxOffset + maxOffset * maxOffset );
-    double maxVolume = Mixer::MaxVolume();
-    double minVolumeOnMaxDistance = maxVolume * 0.1; // 10% from maximum volume
-
-    maxVolume -= minVolumeOnMaxDistance; // need to remove these 10% from max value as we're going to add it later
-    minVolumeOnMaxDistance += 0.5; // this is done to make casting faster. We know that the value is always positive.
 
     for ( const fheroes2::Point & pos : positions ) {
-        const uint32_t channel = GetMixerChannelFromObject( world.GetTiles( pos.x + abs_pt.x, pos.y + abs_pt.y ) );
-        if ( channel < reserved_vols.size() ) {
-            const double distance = std::sqrt( pos.x * pos.x + pos.y * pos.y );
-            const int32_t volume = static_cast<int32_t>( ( ( maxDistance - distance ) / maxDistance ) * maxVolume + minVolumeOnMaxDistance );
+        const M82::SoundType soundType = getSoundTypeFromTile( world.GetTiles( pos.x + center.x, pos.y + center.y ) );
+        if ( soundType == M82::UNKNOWN ) {
+            continue;
+        }
 
-            if ( reserved_vols[channel] == 0 ) {
-                if ( availableChannels == 0 ) {
-                    // No new channel can be added.
-                    continue;
-                }
-                --availableChannels;
-            }
+        const double distance = std::sqrt( pos.x * pos.x + pos.y * pos.y );
+        const uint8_t volumePercentage = static_cast<uint8_t>( ( maxDistance - distance ) * 100 / maxDistance );
+        if ( volumePercentage < 10 ) {
+            continue;
+        }
 
-            if ( volume > reserved_vols[channel] ) {
-                reserved_vols[channel] = volume;
-            }
+        // This is a schema how the direction of sound looks like:
+        // |      0     |
+        // | 270     90 |
+        // |     180    |
+        // so the direction to an object the top is 0 degrees, on the right side - 90, bottom - 180 and left side - 270 degrees.
+
+        // We need to swap X and Y axes and invert Y axis as Y axis on screen goes from top to bottom.
+        int16_t angle = static_cast<int16_t>( std::atan2( pos.x, -pos.y ) * 180 / M_PI );
+        // It is exteremely important to normalize the angle.
+        if ( angle < 0 ) {
+            angle = 360 + angle;
+        }
+
+        soundEffects[soundType].emplace_back( AGG::AudioLoopEffectInfo{ angle, volumePercentage } );
+
+        --availableChannels;
+        if ( availableChannels == 0 ) {
+            break;
         }
     }
 
-    AGG::LoadLOOPXXSounds( reserved_vols, true );
+    // TODO: sort all effects and remove duplicates.
+
+    AGG::LoadLOOPXXSounds( std::move( soundEffects ), true );
 }
 
 void Game::restoreSoundsForCurrentFocus()

@@ -44,7 +44,7 @@ namespace
 
         for ( const std::vector<uint8_t> & audio : audioChannels ) {
             if ( !audio.empty() ) {
-                Mixer::Play( &audio[0], static_cast<uint32_t>( audio.size() ) );
+                Mixer::Play( &audio[0], static_cast<uint32_t>( audio.size() ), -1, false );
             }
         }
     }

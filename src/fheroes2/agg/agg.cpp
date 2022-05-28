@@ -134,28 +134,27 @@ namespace
 
 namespace AGG
 {
-    struct loop_sound_t
+    struct ChannelAudioLoopEffectInfo : public AudioLoopEffectInfo
     {
-        loop_sound_t( int w, int c )
-            : sound( w )
-            , channel( c )
-        {}
+        ChannelAudioLoopEffectInfo() = default;
 
-        bool operator==( int m82 ) const
+        ChannelAudioLoopEffectInfo( AudioLoopEffectInfo info, const int channelId_ )
+            : AudioLoopEffectInfo( std::move( info ) )
+            , channelId( channelId_ )
         {
-            return m82 == sound;
+            // Do nothing.
         }
 
-        int sound;
-        int channel;
+        int channelId{ -1 };
     };
+
+    std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> currentAudioLoopEffects;
 
     fheroes2::AGGFile heroes2_agg;
     fheroes2::AGGFile heroes2x_agg;
 
     std::map<int, std::vector<uint8_t>> wav_cache;
     std::map<int, std::vector<uint8_t>> mid_cache;
-    std::vector<loop_sound_t> loop_sounds;
 
     const std::vector<uint8_t> & GetWAV( int m82 );
     const std::vector<uint8_t> & GetMID( int xmi );
@@ -167,7 +166,7 @@ namespace AGG
 
     void PlayMusicInternally( const int mus, const MusicSource musicType, const bool loop );
     void PlaySoundInternally( const int m82, const int soundVolume );
-    void LoadLOOPXXSoundsInternally( const std::vector<int> & vols, const int soundVolume );
+    void LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> vols, const int soundVolume );
 
     fheroes2::AGGFile g_midiHeroes2AGG;
     fheroes2::AGGFile g_midiHeroes2xAGG;
@@ -229,7 +228,7 @@ namespace AGG
             _workerNotification.notify_all();
         }
 
-        void pushLoopSound( const std::vector<int> & vols, const int soundVolume )
+        void pushLoopSound( const std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> & vols, const int soundVolume )
         {
             _createThreadIfNeeded();
 
@@ -290,12 +289,12 @@ namespace AGG
 
         struct LoopSoundTask
         {
-            LoopSoundTask( std::vector<int> vols_, const int soundVolume_ )
-                : vols( std::move( vols_ ) )
+            LoopSoundTask( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> effects, const int soundVolume_ )
+                : soundEffects( std::move( effects ) )
                 , soundVolume( soundVolume_ )
             {}
 
-            std::vector<int> vols;
+            std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects;
             int soundVolume;
         };
 
@@ -354,12 +353,12 @@ namespace AGG
                     PlaySoundInternally( soundTask.m82Sound, soundTask.soundVolume );
                 }
                 else if ( !manager->_loopSoundTasks.empty() ) {
-                    const LoopSoundTask loopSoundTask = manager->_loopSoundTasks.back();
+                    LoopSoundTask loopSoundTask = manager->_loopSoundTasks.back();
                     manager->_loopSoundTasks.pop();
 
                     manager->_mutex.unlock();
 
-                    LoadLOOPXXSoundsInternally( loopSoundTask.vols, loopSoundTask.soundVolume );
+                    LoadLOOPXXSoundsInternally( std::move( loopSoundTask.soundEffects ), loopSoundTask.soundVolume );
                 }
                 else if ( !manager->_musicTasks.empty() ) {
                     const MusicTask musicTask = manager->_musicTasks.back();
@@ -464,79 +463,135 @@ const std::vector<uint8_t> & AGG::GetMID( int xmi )
     return v;
 }
 
-void AGG::LoadLOOPXXSounds( const std::vector<int> & vols, bool asyncronizedCall )
+void AGG::LoadLOOPXXSounds( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, bool asyncronizedCall )
 {
-    if ( vols.empty() ) {
-        return;
-    }
-
     if ( asyncronizedCall ) {
-        g_asyncSoundManager.pushLoopSound( vols, Settings::Get().SoundVolume() );
+        g_asyncSoundManager.pushLoopSound( std::move( soundEffects ), Settings::Get().SoundVolume() );
     }
     else {
         g_asyncSoundManager.sync();
-        LoadLOOPXXSoundsInternally( vols, Settings::Get().SoundVolume() );
+        LoadLOOPXXSoundsInternally( std::move( soundEffects ), Settings::Get().SoundVolume() );
     }
 }
 
-void AGG::LoadLOOPXXSoundsInternally( const std::vector<int> & vols, const int soundVolume )
+void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, const int soundVolume )
 {
     if ( !Audio::isValid() ) {
         return;
     }
 
-    std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
+    if ( soundVolume == 0 ) {
+        // The volume is 0. Remove all sound effects.
+        for ( auto iter = currentAudioLoopEffects.begin(); iter != currentAudioLoopEffects.end(); ++iter ) {
+            std::vector<ChannelAudioLoopEffectInfo> & existingEffects = iter->second;
 
-    // set volume loop sounds
-    for ( size_t i = 0; i < vols.size(); ++i ) {
-        int vol = vols[i];
-        int m82 = M82::GetLOOP00XX( i );
-        if ( M82::UNKNOWN == m82 )
-            continue;
-
-        // find loops
-        std::vector<loop_sound_t>::iterator itl = std::find( loop_sounds.begin(), loop_sounds.end(), m82 );
-
-        if ( itl != loop_sounds.end() ) {
-            // unused, stop
-            if ( 0 == vol || soundVolume == 0 ) {
-                if ( Mixer::isPlaying( ( *itl ).channel ) ) {
-                    Mixer::Pause( ( *itl ).channel );
-                    Mixer::Volume( ( *itl ).channel, Mixer::MaxVolume() * soundVolume / 10 );
-                    Mixer::Stop( ( *itl ).channel );
+            for ( const ChannelAudioLoopEffectInfo & info : existingEffects ) {
+                if ( Mixer::isPlaying( info.channelId ) ) {
+                    Mixer::Pause( info.channelId );
+                    Mixer::Volume( info.channelId, Mixer::MaxVolume() * soundVolume / 10 );
+                    Mixer::Stop( info.channelId );
                 }
-                ( *itl ).sound = M82::UNKNOWN;
-            }
-            // used, update volume
-            else if ( Mixer::isPlaying( ( *itl ).channel ) ) {
-                Mixer::Pause( ( *itl ).channel );
-                Mixer::Volume( ( *itl ).channel, vol * soundVolume / 10 );
-                Mixer::Resume( ( *itl ).channel );
             }
         }
-        else
-            // new sound
-            if ( 0 != vol ) {
-            const std::vector<uint8_t> & v = GetWAV( m82 );
-            const int ch = Mixer::Play( &v[0], static_cast<uint32_t>( v.size() ), -1, true );
 
-            if ( 0 <= ch ) {
-                Mixer::Pause( ch );
-                Mixer::Volume( ch, vol * soundVolume / 10 );
-                Mixer::Resume( ch );
+        return;
+    }
 
-                // find unused
-                itl = std::find( loop_sounds.begin(), loop_sounds.end(), static_cast<int>( M82::UNKNOWN ) );
+    std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
 
-                if ( itl != loop_sounds.end() ) {
-                    ( *itl ).sound = m82;
-                    ( *itl ).channel = ch;
-                }
-                else
-                    loop_sounds.emplace_back( m82, ch );
+    std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> temp;
+    std::swap( temp, currentAudioLoopEffects );
 
-                DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) )
+    // First find channels with existing sounds and just update them.
+    for ( auto iter = soundEffects.begin(); iter != soundEffects.end(); ) {
+        const M82::SoundType soundType = iter->first;
+        std::vector<AudioLoopEffectInfo> & effects = iter->second;
+        assert( !effects.empty() );
+
+        auto foundSoundTypeIter = temp.find( soundType );
+        if ( foundSoundTypeIter == temp.end() ) {
+            // This sound type does not exist.
+            ++iter;
+            continue;
+        }
+
+        std::vector<ChannelAudioLoopEffectInfo> & existingEffects = foundSoundTypeIter->second;
+
+        size_t elementSize = std::min( effects.size(), existingEffects.size() );
+        while ( elementSize > 0 ) {
+            --elementSize;
+
+            currentAudioLoopEffects[soundType].emplace_back( std::move( existingEffects.back() ) );
+            existingEffects.pop_back();
+
+            ChannelAudioLoopEffectInfo & currenInfo = currentAudioLoopEffects[soundType].back();
+            currenInfo = { std::move( effects.back() ), currenInfo.channelId };
+            effects.pop_back();
+
+            if ( Mixer::isPlaying( currenInfo.channelId ) ) {
+                Mixer::Pause( currenInfo.channelId );
+                Mixer::applySoundEffect( currenInfo.channelId, currenInfo.angle, currenInfo.volumePercentage );
+                Mixer::Volume( currenInfo.channelId, Mixer::MaxVolume() * soundVolume / 10 );
+                Mixer::Resume( currenInfo.channelId );
             }
+        }
+
+        if ( existingEffects.empty() ) {
+            temp.erase( foundSoundTypeIter );
+        }
+
+        auto currentIter = iter;
+        ++iter;
+
+        if ( effects.empty() ) {
+            soundEffects.erase( currentIter );
+        }
+    }
+
+    // Stop all running sound effects.
+    for ( auto iter = temp.begin(); iter != temp.end(); ++iter ) {
+        std::vector<ChannelAudioLoopEffectInfo> & existingEffects = iter->second;
+
+        for ( const ChannelAudioLoopEffectInfo & info : existingEffects ) {
+            if ( Mixer::isPlaying( info.channelId ) ) {
+                Mixer::Pause( info.channelId );
+                Mixer::Volume( info.channelId, Mixer::MaxVolume() * soundVolume / 10 );
+                Mixer::Stop( info.channelId );
+            }
+        }
+    }
+
+    temp.clear();
+
+    // Add new sound effects.
+    for ( auto iter = soundEffects.begin(); iter != soundEffects.end(); ++iter ) {
+        const M82::SoundType soundType = iter->first;
+        std::vector<AudioLoopEffectInfo> & effects = iter->second;
+        assert( !effects.empty() );
+
+        for ( const AudioLoopEffectInfo & info : effects ) {
+            // It is a new sound effect. Register and play it.
+            const std::vector<uint8_t> & audioData = GetWAV( soundType );
+            if ( audioData.empty() ) {
+                // Looks like nothing to play. Ignore it.
+                continue;
+            }
+
+            const int channelId = Mixer::PlayFromDistance( &audioData[0], static_cast<uint32_t>( audioData.size() ), -1, true, info.angle,
+                                                           info.volumePercentage );
+            if ( channelId < 0 ) {
+                // Unable to play this audio. It is probably an invalid audio sample.
+                continue;
+            }
+
+            // Adjust channel based on given parameters.
+            Mixer::Pause( channelId );
+            Mixer::Volume( channelId, Mixer::MaxVolume() * soundVolume / 10 );
+            Mixer::Resume( channelId );
+
+            currentAudioLoopEffects[soundType].emplace_back( ChannelAudioLoopEffectInfo( std::move( info ), channelId ) );
+
+            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Playing sound " << M82::GetString( soundType ) )
         }
     }
 }
@@ -667,8 +722,7 @@ void AGG::ResetAudio()
     Music::Stop();
     Mixer::Stop();
 
-    loop_sounds.clear();
-    loop_sounds.reserve( 7 );
+    currentAudioLoopEffects.clear();
 }
 
 AGG::AGGInitializer::AGGInitializer()
@@ -684,7 +738,7 @@ AGG::AGGInitializer::~AGGInitializer()
 {
     wav_cache.clear();
     mid_cache.clear();
-    loop_sounds.clear();
+    currentAudioLoopEffects.clear();
 }
 
 bool AGG::AGGInitializer::init()

@@ -33,7 +33,7 @@
 
 namespace M82
 {
-    enum
+    enum SoundType : int
     {
         AELMATTK,
         AELMKILL,
@@ -162,6 +162,8 @@ namespace M82
         LICHSHOT,
         LICHWNCE,
         LIGHTBLT,
+
+        // These sounds are used for objects on Adventure Map.
         LOOP0000,
         LOOP0001,
         LOOP0002,
@@ -190,6 +192,7 @@ namespace M82
         LOOP0025,
         LOOP0026,
         LOOP0027,
+
         MAGCAROW,
         MAGEATTK,
         MAGEKILL,
@@ -350,7 +353,9 @@ namespace M82
 
     const char * GetString( int );
     int FromSpell( int );
-    uint32_t GetIndexLOOP00XXFromObject( const MP2::MapObjectType objectType );
+
+    SoundType getAdventureMapObjectSound( const MP2::MapObjectType objectType );
+
     int GetLOOP00XX( const size_t index );
 }
 
