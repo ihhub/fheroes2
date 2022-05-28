@@ -397,60 +397,8 @@ void Troops::MoveTroops( const Troops & from, bool moveAll )
     // TODO: Sort pointers to troops from highest to lowest tier and put selected troop at end if that troop was selected before moving.
     // Use something like std::sort( from.begin(), from.end(), functionToSortAccordingToDwellingLevel() );
 
-    // Attempt to move troops directly to the same slot in the receiving army.
-    for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
-        Troop * troop = from.at( slot );
-        if ( troop->isValid() ) {
-            // If there is only one troop of a hero, leave one unit.
-            if ( from.GetCount() == 1 && !moveAll ) {
-                if ( troop->GetCount() > 1 ) {
-                    if ( !( *at( slot ) ).isValid() || at( slot )->GetID() == troop->GetID() ) {
-                        at( slot )->Set( *troop );
-                        at( slot )->SetCount( troop->GetCount() - 1 );
-                        troop->SetCount( 1 );
-                    }
-                }
-                break;
-            }
-            // An empty slot in the receiving army
-            if ( !( *at( slot ) ).isValid() ) {
-                at( slot )->Set( *troop );
-                troop->Reset();
-            }
-            // Same troop in receiving and giving army
-            else if ( at( slot )->GetID() == troop->GetID() ) {
-                at( slot )->SetCount( at( slot )->GetCount() + troop->GetCount() );
-                troop->Reset();
-            }
-        }
-    }
-
-    if ( noTroopsToMove ) {
-        return;
-    }
-
-    // Move to remaining free slots or same troop ID elsewhere in army
-    for ( Troop * troop : from ) {
-        if ( troop && troop->isValid() ) {
-            if ( from.GetCount() == 1 && !moveAll ) {
-                if ( JoinTroop( troop->GetMonster(), troop->GetCount() - 1 ) ) {
-                    troop->SetCount( 1 );
-                    return;
-                }
-            }
-            else if ( JoinTroop( *troop ) ) {
-                troop->Reset();
-            }
-        }
-    }
-
-    if ( noTroopsToMove ) {
-        return;
-    }
-
-    // Try to merge troops to make free slots.
-    if ( from.GetCount() > 0 ) {
-        MergeTroops( from.GetCount() );
+    while ( from.GetCount() > 0 ) {
+        // Attempt to move troops directly to the same slot in the receiving army.
         for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
             Troop * troop = from.at( slot );
             if ( troop->isValid() ) {
@@ -477,9 +425,12 @@ void Troops::MoveTroops( const Troops & from, bool moveAll )
                 }
             }
         }
+
         if ( noTroopsToMove ) {
             return;
         }
+
+        // Move to remaining free slots or same troop ID elsewhere in army
         for ( Troop * troop : from ) {
             if ( troop && troop->isValid() ) {
                 if ( from.GetCount() == 1 && !moveAll ) {
@@ -492,6 +443,18 @@ void Troops::MoveTroops( const Troops & from, bool moveAll )
                     troop->Reset();
                 }
             }
+        }
+
+        if ( noTroopsToMove ) {
+            return;
+        }
+
+        // As a last resort try to merge troops to make free slots.
+        const uint32_t troopCountPreMerge = GetCount(); 
+        MergeTroops( from.GetCount() );
+        const uint32_t troopCountPostMerge = GetCount();
+        if ( troopCountPreMerge == troopCountPostMerge ) {
+            return;
         }
     }
 }
