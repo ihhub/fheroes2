@@ -396,7 +396,7 @@ void Troops::MoveTroops( const Troops & from, bool moveAll )
 
     // TODO: Sort pointers to troops from highest to lowest tier and put selected troop at end if that troop was selected before moving.
     // Use something like std::sort( from.begin(), from.end(), functionToSortAccordingToDwellingLevel() );
-    
+
     // Attempt to move troops directly to the same slot in the receiving army.
     for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
         Troop * troop = from.at( slot );
@@ -442,11 +442,10 @@ void Troops::MoveTroops( const Troops & from, bool moveAll )
                 troop->Reset();
             }
         }
-
     }
 
     if ( noTroopsToMove ) {
-    return;
+        return;
     }
 
     // Try to merge troops to make free slots.
@@ -624,17 +623,17 @@ void Troops::MergeTroops( const uint32_t troopMerges )
         }
         uint32_t mergesRemaining = troopMerges;
         const int id = troop->GetID();
-            for ( size_t secondary = slot + 1; secondary < size(); ++secondary ) {
-                if ( mergesRemaining == 0 ) {
-                    return;
-                }
-                Troop * secondaryTroop = at( secondary );
-                if ( secondaryTroop && secondaryTroop->isValid() && id == secondaryTroop->GetID() ) {
-                    troop->SetCount( troop->GetCount() + secondaryTroop->GetCount() );
-                    secondaryTroop->Reset();
-                    --mergesRemaining;
-                }
+        for ( size_t secondary = slot + 1; secondary < size(); ++secondary ) {
+            if ( mergesRemaining == 0 ) {
+                return;
             }
+            Troop * secondaryTroop = at( secondary );
+            if ( secondaryTroop && secondaryTroop->isValid() && id == secondaryTroop->GetID() ) {
+                troop->SetCount( troop->GetCount() + secondaryTroop->GetCount() );
+                secondaryTroop->Reset();
+                --mergesRemaining;
+            }
+        }
     }
 }
 
