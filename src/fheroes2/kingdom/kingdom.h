@@ -192,8 +192,6 @@ private:
     Puzzle puzzle_maps;
     uint32_t visited_tents_colors;
 
-    KingdomHeroes heroes_cond_loss;
-
     // Used to remember which item was selected in Kingdom View dialog.
     int _topItemInKingdomView;
 };
