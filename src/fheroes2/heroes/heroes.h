@@ -178,7 +178,7 @@ public:
     };
 
     // Types of hero roles. They are only for AI as humans are smart enough to manage heroes by themselves.
-    // The order of roles is important as it is used to identify more values heroes among others.
+    // The order of roles is important as it is used to identify more valuable heroes among others.
     enum class Role : int
     {
         // The main goal for Scout is to discover new areas so he should run towards the fog of war to expand the visible territory.
