@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+
 #include "morale.h"
 #include "tools.h"
 #include "translations.h"
@@ -71,5 +73,5 @@ std::string Morale::Description( int morale )
 
 int Morale::Normalize( const int morale )
 {
-    return clamp( morale, static_cast<int>( Morale::TREASON ), static_cast<int>( Morale::BLOOD ) );
+    return std::clamp( morale, static_cast<int>( Morale::TREASON ), static_cast<int>( Morale::BLOOD ) );
 }

@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+
 #include "luck.h"
 #include "tools.h"
 #include "translations.h"
@@ -71,5 +73,5 @@ std::string Luck::Description( int luck )
 
 int Luck::Normalize( const int luck )
 {
-    return clamp( luck, static_cast<int>( Luck::CURSED ), static_cast<int>( Luck::IRISH ) );
+    return std::clamp( luck, static_cast<int>( Luck::CURSED ), static_cast<int>( Luck::IRISH ) );
 }
