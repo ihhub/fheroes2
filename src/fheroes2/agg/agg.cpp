@@ -166,7 +166,7 @@ namespace AGG
 
     void PlayMusicInternally( const int mus, const MusicSource musicType, const bool loop );
     void PlaySoundInternally( const int m82, const int soundVolume );
-    void LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> vols, const int soundVolume );
+    void LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, const int soundVolume );
 
     fheroes2::AGGFile g_midiHeroes2AGG;
     fheroes2::AGGFile g_midiHeroes2xAGG;
@@ -228,13 +228,13 @@ namespace AGG
             _workerNotification.notify_all();
         }
 
-        void pushLoopSound( const std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> & vols, const int soundVolume )
+        void pushLoopSound( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> vols, const int soundVolume )
         {
             _createThreadIfNeeded();
 
             std::lock_guard<std::mutex> mutexLock( _mutex );
 
-            _loopSoundTasks.emplace( vols, soundVolume );
+            _loopSoundTasks.emplace( std::move( vols ), soundVolume );
             _runFlag = 1;
             _workerNotification.notify_all();
         }
