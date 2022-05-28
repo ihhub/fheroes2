@@ -96,7 +96,7 @@ CXXFLAGS_TP := $(CXXFLAGS)
 # *FLAGS_FH2 can be passed from platform-specific Makefiles
 CCFLAGS := $(CCFLAGS) $(CCFLAGS_FH2)
 CFLAGS := $(CFLAGS) $(CFLAGS_FH2)
-CXXFLAGS := $(CXXFLAGS) $(CXXFLAGS_FH2) -std=c++11
+CXXFLAGS := $(CXXFLAGS) $(CXXFLAGS_FH2) -std=c++17
 
 LIBS := $(LIBS) -lz
 

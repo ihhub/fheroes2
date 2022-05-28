@@ -25,7 +25,7 @@ file(STRINGS ${CMAKE_SOURCE_DIR}/version.txt FHEROES2_VERSION LIMIT_COUNT 1 REGE
 
 project(fheroes2 VERSION ${FHEROES2_VERSION} LANGUAGES C CXX)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 include(CMakeDependentOption)
 include(GNUInstallDirs)
