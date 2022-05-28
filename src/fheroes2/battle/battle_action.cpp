@@ -618,7 +618,7 @@ void Battle::Arena::ApplyActionSurrender( const Command & /*cmd*/ )
     }
 }
 
-void Battle::Arena::TargetsApplyDamage( Unit & attacker, TargetsInfo & targets ) const
+void Battle::Arena::TargetsApplyDamage( Unit & attacker, TargetsInfo & targets )
 {
     for ( TargetInfo & target : targets ) {
         assert( target.defender != nullptr && target.defender->isValid() );
@@ -708,7 +708,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
     return targets;
 }
 
-void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spell, TargetsInfo & targets ) const
+void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spell, TargetsInfo & targets )
 {
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "targets: " << targets.size() )
 
