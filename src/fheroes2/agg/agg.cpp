@@ -577,8 +577,7 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
                 continue;
             }
 
-            const int channelId = Mixer::PlayFromDistance( &audioData[0], static_cast<uint32_t>( audioData.size() ), -1, true, info.angle,
-                                                           info.volumePercentage );
+            const int channelId = Mixer::PlayFromDistance( &audioData[0], static_cast<uint32_t>( audioData.size() ), -1, true, info.angle, info.volumePercentage );
             if ( channelId < 0 ) {
                 // Unable to play this audio. It is probably an invalid audio sample.
                 continue;
