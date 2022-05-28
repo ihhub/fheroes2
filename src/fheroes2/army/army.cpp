@@ -394,8 +394,8 @@ void Troops::MoveTroops( const Troops & from, bool moveAll )
         return;
     }
 
-    // Sort from highest to lowest tier and put selected troop at end if a troop was selected before moving.
-    //std::sort( from.begin(), from.end(), );
+    // TODO: Sort pointers to troops from highest to lowest tier and put selected troop at end if that troop was selected before moving.
+    // Use something like std::sort( from.begin(), from.end(), functionToSortAccordingToDwellingLevel() );
     
     // Attempt to move troops directly to the same slot in the receiving army.
     for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
