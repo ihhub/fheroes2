@@ -384,18 +384,27 @@ void Troops::JoinTroops( Troops & troops2 )
 
 void Troops::MoveTroops( const Troops & from, bool moveAll )
 {
-    if ( this == &from || from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
+    if ( this == &from ) {
+        // You are moving an army into itself. Check your logic.
+        assert( 0 );
+    }
+
+    const bool noTroopsToMove = from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 );
+    if ( noTroopsToMove ) {
         return;
     }
 
+    // Sort from highest to lowest tier and put selected troop at end if a troop was selected before moving.
+    //std::sort( from.begin(), from.end(), );
+    
     // Attempt to move troops directly to the same slot in the receiving army.
     for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
         Troop * troop = from.at( slot );
         if ( troop->isValid() ) {
-            // If this is the last troop of a hero, leave one unit.
+            // If there is only one troop of a hero, leave one unit.
             if ( from.GetCount() == 1 && !moveAll ) {
                 if ( troop->GetCount() > 1 ) {
-                    if ( !( *GetTroop( slot ) ).isValid() || GetTroop( slot )->GetID() == troop->GetID() ) {
+                    if ( !( *at( slot ) ).isValid() || at( slot )->GetID() == troop->GetID() ) {
                         at( slot )->Set( *troop );
                         at( slot )->SetCount( troop->GetCount() - 1 );
                         troop->SetCount( 1 );
@@ -404,21 +413,22 @@ void Troops::MoveTroops( const Troops & from, bool moveAll )
                 break;
             }
             // An empty slot in the receiving army
-            if ( !( *GetTroop( slot ) ).isValid() ) {
+            if ( !( *at( slot ) ).isValid() ) {
                 at( slot )->Set( *troop );
                 troop->Reset();
             }
             // Same troop in receiving and giving army
-            else if ( GetTroop( slot )->GetID() == troop->GetID() ) {
-                at( slot )->SetCount( GetTroop( slot )->GetCount() + troop->GetCount() );
+            else if ( at( slot )->GetID() == troop->GetID() ) {
+                at( slot )->SetCount( at( slot )->GetCount() + troop->GetCount() );
                 troop->Reset();
             }
         }
     }
 
-    if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
+    if ( noTroopsToMove ) {
         return;
     }
+
     // Move to remaining free slots or same troop ID elsewhere in army
     for ( Troop * troop : from ) {
         if ( troop && troop->isValid() ) {
@@ -435,38 +445,40 @@ void Troops::MoveTroops( const Troops & from, bool moveAll )
 
     }
 
-    if ( from.GetCount() == 0 || ( from.GetCount() == 1 && !moveAll ) ) {
+    if ( noTroopsToMove ) {
     return;
     }
+
     // Try to merge troops to make free slots.
     if ( from.GetCount() > 0 ) {
-        MergeTroops();
+        MergeTroops( from.GetCount() );
         for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
             Troop * troop = from.at( slot );
             if ( troop->isValid() ) {
-                // Empty slot in receiving army
+                // If there is only one troop of a hero, leave one unit.
                 if ( from.GetCount() == 1 && !moveAll ) {
                     if ( troop->GetCount() > 1 ) {
-                        if ( !( *GetTroop( slot ) ).isValid() || GetTroop( slot )->GetID() == troop->GetID() ) {
-                            at( slot )->SetMonster( troop->GetID() );
+                        if ( !( *at( slot ) ).isValid() || at( slot )->GetID() == troop->GetID() ) {
+                            at( slot )->Set( *troop );
                             at( slot )->SetCount( troop->GetCount() - 1 );
                             troop->SetCount( 1 );
                         }
                     }
-
                     break;
                 }
-                if ( !( *GetTroop( slot ) ).isValid() ) {
-                    std::swap( *troop, ( *GetTroop( slot ) ) );
+                // An empty slot in the receiving army
+                if ( !( *at( slot ) ).isValid() ) {
+                    at( slot )->Set( *troop );
+                    troop->Reset();
                 }
                 // Same troop in receiving and giving army
-                else if ( GetTroop( slot )->GetID() == troop->GetID() ) {
-                    GetTroop( slot )->SetCount( GetTroop( slot )->GetCount() + troop->GetCount() );
+                else if ( at( slot )->GetID() == troop->GetID() ) {
+                    at( slot )->SetCount( at( slot )->GetCount() + troop->GetCount() );
                     troop->Reset();
                 }
             }
         }
-        if ( from.GetCount() == 0 || ( from.GetCount() == 1 && !moveAll ) ) {
+        if ( noTroopsToMove ) {
             return;
         }
         for ( Troop * troop : from ) {
@@ -603,21 +615,26 @@ const Troop * Troops::GetSlowestTroop() const
     return *lowest;
 }
 
-void Troops::MergeTroops()
+void Troops::MergeTroops( const uint32_t troopMerges )
 {
     for ( size_t slot = 0; slot < size(); ++slot ) {
         Troop * troop = at( slot );
-        if ( !troop || !troop->isValid() )
+        if ( !troop || !troop->isValid() ) {
             continue;
-
-        const int id = troop->GetID();
-        for ( size_t secondary = slot + 1; secondary < size(); ++secondary ) {
-            Troop * secondaryTroop = at( secondary );
-            if ( secondaryTroop && secondaryTroop->isValid() && id == secondaryTroop->GetID() ) {
-                troop->SetCount( troop->GetCount() + secondaryTroop->GetCount() );
-                secondaryTroop->Reset();
-            }
         }
+        uint32_t mergesRemaining = troopMerges;
+        const int id = troop->GetID();
+            for ( size_t secondary = slot + 1; secondary < size(); ++secondary ) {
+                if ( mergesRemaining == 0 ) {
+                    return;
+                }
+                Troop * secondaryTroop = at( secondary );
+                if ( secondaryTroop && secondaryTroop->isValid() && id == secondaryTroop->GetID() ) {
+                    troop->SetCount( troop->GetCount() + secondaryTroop->GetCount() );
+                    secondaryTroop->Reset();
+                    --mergesRemaining;
+                }
+            }
     }
 }
 
