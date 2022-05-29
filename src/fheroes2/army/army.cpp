@@ -429,13 +429,13 @@ void Troops::MoveTroops( const Troops & from, const bool moveAll )
         }
 
         // Will change later if receiving army troops get merged. This avoids unnecessary merges.
-        bool joinEmptySlot = false;
+        bool preferEmptySlot = false;
 
         // Move to remaining free slots or same troop ID elsewhere in army.
         for ( Troop * troop : from ) {
             if ( troop && troop->isValid() ) {
                 if ( from.GetCount() == 1 && !moveAll ) {
-                    if ( JoinTroop( troop->GetMonster(), troop->GetCount() - 1, joinEmptySlot ) ) {
+                    if ( JoinTroop( troop->GetMonster(), troop->GetCount() - 1, preferEmptySlot ) ) {
                         troop->SetCount( 1 );
                         return;
                     }
@@ -462,7 +462,7 @@ void Troops::MoveTroops( const Troops & from, const bool moveAll )
         if ( troopCountPreMerge == troopCountPostMerge ) {
             return;
         }
-        joinEmptySlot = true;
+        preferEmptySlot = true;
     }
 }
 
