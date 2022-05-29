@@ -50,8 +50,6 @@
 #include "translations.h"
 #include "world.h"
 
-#include "logging.h"
-
 namespace
 {
     std::string lastMapFileName;

@@ -334,6 +334,15 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
+    if ( config.Exists( "3d audio" ) ) {
+        if ( config.StrParams( "3d audio" ) == "on" ) {
+            opt_global.SetModes( GLOBAL_3D_AUDIO );
+        }
+        else {
+            opt_global.ResetModes( GLOBAL_3D_AUDIO );
+        }
+    }
+
     BinaryLoad();
 
     return true;
@@ -448,6 +457,9 @@ std::string Settings::String() const
 
     os << std::endl << "# enable monochrome (black and white) cursors in the game" << std::endl;
     os << "monochrome cursor = " << ( opt_global.Modes( GLOBAL_MONOCHROME_CURSOR ) ? "on" : "off" ) << std::endl;
+
+    os << std::endl << "# enable 3D audio for objects on Adventure Map" << std::endl;
+    os << "3d audio = " << ( opt_global.Modes( GLOBAL_3D_AUDIO ) ? "on" : "off" ) << std::endl;
 
     return os.str();
 }
