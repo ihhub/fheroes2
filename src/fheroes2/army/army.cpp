@@ -451,7 +451,7 @@ void Troops::MoveTroops( const Troops & from, const bool moveAll )
         }
 
         // Attempt to merge troops to make free slots.
-        const uint32_t troopCountPreMerge = GetCount();       
+        const uint32_t troopCountPreMerge = GetCount();
         uint32_t neededMerges = from.GetCount();
         // Do one less merge when hero's last troop has one unit.
         if ( !moveAll && from.getLastValid()->GetCount() == 1 ) {
@@ -537,8 +537,8 @@ const Troop * Troops::GetFirstValid() const
     return it == end() ? nullptr : *it;
 }
 
-const Troop* Troops::getLastValid() const {
-
+const Troop* Troops::getLastValid() const
+{
     const_reverse_iterator it = std::find_if( rbegin(), rend(), []( const Troop * troop ) { return troop->isValid(); } );
     return it == rend() ? nullptr : *it;
 }
