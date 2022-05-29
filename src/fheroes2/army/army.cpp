@@ -462,7 +462,9 @@ void Troops::MoveTroops( const Troops & from, const bool moveAll )
         if ( troopCountPreMerge == troopCountPostMerge ) {
             return;
         }
-        preferEmptySlot = true;
+        else {
+            preferEmptySlot = true;
+        }
     }
 }
 
