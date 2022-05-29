@@ -384,10 +384,8 @@ void Troops::JoinTroops( Troops & troops2 )
 
 void Troops::MoveTroops( const Troops & from, const bool moveAll )
 {
-    if ( this == &from ) {
-        // You are moving an army into itself. Check your logic.
-        assert( 0 );
-    }
+    // You are attempting to move an army into itself. Check your logic.
+    assert( !( this == &from ) );
 
     if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
         return;
@@ -430,7 +428,7 @@ void Troops::MoveTroops( const Troops & from, const bool moveAll )
             return;
         }
 
-        // Will change later if troops get merged. This avoids unnecessary merges.
+        // Will change later if receiving army troops get merged. This avoids unnecessary merges.
         bool joinEmptySlot = false;
 
         // Move to remaining free slots or same troop ID elsewhere in army.
@@ -454,8 +452,8 @@ void Troops::MoveTroops( const Troops & from, const bool moveAll )
 
         // Attempt to merge troops to make free slots.
         const uint32_t troopCountPreMerge = GetCount();
-        // TODO: If the last troop to be moved from a hero army has a single unit then: from.GetCount() - 1.
-        // Note a hero army could have more than 1 troops at this point.
+        // TODO: If the last troop to be moved from a hero army has a single unit then: mergeCount = from.GetCount() - 1.
+        // Note: A hero army could have more than 1 troops at this point.
         uint32_t mergeCount = from.GetCount();
         MergeTroops( mergeCount );
         const uint32_t troopCountPostMerge = GetCount();
@@ -586,10 +584,8 @@ const Troop * Troops::GetSlowestTroop() const
 
 void Troops::MergeTroops( const uint32_t troopMerges )
 {
-    if ( troopMerges <= 0 ) {
-        // You are requesting to merge 0 or less troops.
-        assert( 0 );
-    }
+    // You are requesting to merge 0 or less troops.
+    assert( !troopMerges <= 0 );
 
     for ( size_t slot = 0; slot < size(); ++slot ) {
         Troop * troop = at( slot );
