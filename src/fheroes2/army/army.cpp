@@ -537,7 +537,7 @@ const Troop * Troops::GetFirstValid() const
     return it == end() ? nullptr : *it;
 }
 
-const Troop* Troops::getLastValid() const
+const Troop * Troops::getLastValid() const
 {
     const_reverse_iterator it = std::find_if( rbegin(), rend(), []( const Troop * troop ) { return troop->isValid(); } );
     return it == rend() ? nullptr : *it;
