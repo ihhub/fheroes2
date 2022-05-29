@@ -353,7 +353,7 @@ void Game::EnvironmentSoundMixer()
     if ( player != nullptr ) {
         Focus & focus = player->GetFocus();
 
-        Heroes * hero = focus.GetHeroes();
+        const Heroes * hero = focus.GetHeroes();
         if ( hero != nullptr ) {
             center = hero->GetCenter();
             tilePixelOffset = hero->getCurrentPixelOffset();

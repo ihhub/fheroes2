@@ -176,7 +176,8 @@ namespace
 
         Music::Stop();
 
-        const int returnCode = musicFadeIn ? Mix_FadeInMusic( mix, loop ? -1 : 0, musicFadeIn ) : Mix_PlayMusic( mix, loop ? -1 : 0 );
+        const int loopCount = loop ? -1 : 0;
+        const int returnCode = musicFadeIn ? Mix_FadeInMusic( mix, loopCount, musicFadeIn ) : Mix_PlayMusic( mix, loopCount );
         if ( returnCode != 0 ) {
             ERROR_LOG( Mix_GetError() )
             return;

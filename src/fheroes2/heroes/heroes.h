@@ -448,11 +448,6 @@ public:
     bool isShipMaster() const;
     void SetShipMaster( bool );
 
-    uint32_t lastGroundRegion() const
-    {
-        return _lastGroundRegion;
-    }
-
     void setLastGroundRegion( const uint32_t regionID )
     {
         _lastGroundRegion = regionID;

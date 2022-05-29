@@ -480,6 +480,8 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
         return;
     }
 
+    std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
+
     if ( soundVolume == 0 ) {
         // The volume is 0. Remove all existing sound effects.
         for ( auto iter = currentAudioLoopEffects.begin(); iter != currentAudioLoopEffects.end(); ++iter ) {
@@ -488,7 +490,7 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
             for ( const ChannelAudioLoopEffectInfo & info : existingEffects ) {
                 if ( Mixer::isPlaying( info.channelId ) ) {
                     Mixer::Pause( info.channelId );
-                    Mixer::Volume( info.channelId, Mixer::MaxVolume() * soundVolume / 10 );
+                    Mixer::Volume( info.channelId, 0 );
                     Mixer::Stop( info.channelId );
                 }
             }
@@ -499,11 +501,10 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
     }
 
     const bool is3DAudioEnabled = Settings::Get().is3DAudioEnabled();
+    const int32_t maxMixerValue = Mixer::MaxVolume();
 
-    std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
-
-    std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> temp;
-    std::swap( temp, currentAudioLoopEffects );
+    std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> tempAudioLoopEffects;
+    std::swap( tempAudioLoopEffects, currentAudioLoopEffects );
 
     // First find channels with existing sounds and just update them.
     for ( auto iter = soundEffects.begin(); iter != soundEffects.end(); ) {
@@ -511,8 +512,8 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
         std::vector<AudioLoopEffectInfo> & effects = iter->second;
         assert( !effects.empty() );
 
-        auto foundSoundTypeIter = temp.find( soundType );
-        if ( foundSoundTypeIter == temp.end() ) {
+        auto foundSoundTypeIter = tempAudioLoopEffects.find( soundType );
+        if ( foundSoundTypeIter == tempAudioLoopEffects.end() ) {
             // This sound type does not exist.
             ++iter;
             continue;
@@ -536,10 +537,10 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
 
                 if ( is3DAudioEnabled ) {
                     Mixer::applySoundEffect( currenInfo.channelId, currenInfo.angle, currenInfo.volumePercentage );
-                    Mixer::Volume( currenInfo.channelId, Mixer::MaxVolume() * soundVolume / 10 );
+                    Mixer::Volume( currenInfo.channelId, maxMixerValue * soundVolume / 10 );
                 }
                 else {
-                    Mixer::Volume( currenInfo.channelId, Mixer::MaxVolume() * currenInfo.volumePercentage / 100 * soundVolume / 10 );
+                    Mixer::Volume( currenInfo.channelId, maxMixerValue * currenInfo.volumePercentage / 100 * soundVolume / 10 );
                 }
 
                 Mixer::Resume( currenInfo.channelId );
@@ -547,7 +548,7 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
         }
 
         if ( existingEffects.empty() ) {
-            temp.erase( foundSoundTypeIter );
+            tempAudioLoopEffects.erase( foundSoundTypeIter );
         }
 
         if ( effects.empty() ) {
@@ -558,20 +559,20 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
         }
     }
 
-    // Stop all running sound effects.
-    for ( auto iter = temp.begin(); iter != temp.end(); ++iter ) {
+    // Stop the rest of running sound effects.
+    for ( auto iter = tempAudioLoopEffects.begin(); iter != tempAudioLoopEffects.end(); ++iter ) {
         const std::vector<ChannelAudioLoopEffectInfo> & existingEffects = iter->second;
 
         for ( const ChannelAudioLoopEffectInfo & info : existingEffects ) {
             if ( Mixer::isPlaying( info.channelId ) ) {
                 Mixer::Pause( info.channelId );
-                Mixer::Volume( info.channelId, Mixer::MaxVolume() * soundVolume / 10 );
+                Mixer::Volume( info.channelId, maxMixerValue * soundVolume / 10 );
                 Mixer::Stop( info.channelId );
             }
         }
     }
 
-    temp.clear();
+    tempAudioLoopEffects.clear();
 
     // Add new sound effects.
     for ( auto iter = soundEffects.begin(); iter != soundEffects.end(); ++iter ) {
@@ -604,15 +605,15 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
             Mixer::Pause( channelId );
 
             if ( is3DAudioEnabled ) {
-                Mixer::Volume( channelId, Mixer::MaxVolume() * soundVolume / 10 );
+                Mixer::Volume( channelId, maxMixerValue * soundVolume / 10 );
             }
             else {
-                Mixer::Volume( channelId, Mixer::MaxVolume() * info.volumePercentage / 100 * soundVolume / 10 );
+                Mixer::Volume( channelId, maxMixerValue * info.volumePercentage / 100 * soundVolume / 10 );
             }
 
             Mixer::Resume( channelId );
 
-            currentAudioLoopEffects[soundType].emplace_back( ChannelAudioLoopEffectInfo( info, channelId ) );
+            currentAudioLoopEffects[soundType].emplace_back( info, channelId );
 
             DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Playing sound " << M82::GetString( soundType ) )
         }
