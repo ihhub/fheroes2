@@ -77,18 +77,7 @@ add_subdirectory(src)
 #
 if(NOT WIN32)
 	find_program(MAKE_EXECUTABLE make)
-	find_program(SED_EXECUTABLE sed)
-	find_program(XGETTEXT_EXECUTABLE xgettext)
 
-	file(GLOB_RECURSE ALL_SOURCES CONFIGURE_DEPENDS src/*.cpp)
-
-	add_custom_target(
-		${PROJECT_NAME}.pot
-		COMMAND ${XGETTEXT_EXECUTABLE} -d ${PROJECT_NAME} -C -F -k_ -k_n:1,2 -o ${PROJECT_NAME}.pot ${ALL_SOURCES}
-		COMMAND ${SED_EXECUTABLE} -i~ -e "s/, c-format//" ${PROJECT_NAME}.pot
-		DEPENDS fheroes2
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src/dist
-		)
 	add_custom_target(
 		translations
 		ALL
