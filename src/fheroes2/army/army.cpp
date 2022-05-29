@@ -393,7 +393,7 @@ void Troops::MoveTroops( const Troops & from, const bool moveAll )
 
     // TODO: Put selected troop at end of troops to be moved if such a troop was selected/highlighted before calling MoveTroops.
 
-    // Will change later if receiving army troops get merged. This avoids unnecessary merges.
+    // Will be changed later on if the receiving army's troops get merged. This avoids unnecessary merges.
     bool preferEmptySlot = false;
 
     // from army might have more than 0 if it is a hero army with one troop left.
@@ -402,7 +402,7 @@ void Troops::MoveTroops( const Troops & from, const bool moveAll )
         for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
             Troop * troop = from.at( slot );
             if ( troop->isValid() ) {
-                // If there is only one troop of a hero, leave one unit.
+                // If there is only one troop on a hero, leave one unit.
                 if ( from.GetCount() == 1 && !moveAll ) {
                     if ( troop->GetCount() > 1 ) {
                         if ( !( *at( slot ) ).isValid() || at( slot )->GetID() == troop->GetID() ) {
@@ -450,10 +450,10 @@ void Troops::MoveTroops( const Troops & from, const bool moveAll )
             return;
         }
 
-        // Attempt to merge troops to make free slots.
+        // Attempt to merge troops in receiving army to make free slots.
         const uint32_t troopCountPreMerge = GetCount();
         uint32_t neededMerges = from.GetCount();
-        // Do one less merge when hero's last troop has one unit.
+        // Do one less merge if a hero's last troop only has one unit.
         if ( !moveAll && from.getLastValid()->GetCount() == 1 ) {
             --neededMerges;
         }
