@@ -9405,7 +9405,7 @@ msgstr "juego: usar interfaz maligna"
 msgid "game: hide interface"
 msgstr "juego: ocultar interfaz"
 
-msgid "game: offer to continue the game afer victory condition"
+msgid "game: offer to continue the game after victory condition"
 msgstr ""
 
 #, fuzzy

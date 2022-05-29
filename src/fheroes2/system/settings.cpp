@@ -916,7 +916,7 @@ std::string Settings::ExtName( const uint32_t settingId )
     case Settings::GAME_HIDE_INTERFACE:
         return _( "game: hide interface" );
     case Settings::GAME_CONTINUE_AFTER_VICTORY:
-        return _( "game: offer to continue the game afer victory condition" );
+        return _( "game: offer to continue the game after victory condition" );
     default:
         break;
     }
