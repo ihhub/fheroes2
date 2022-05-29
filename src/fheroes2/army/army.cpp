@@ -392,7 +392,7 @@ void Troops::MoveTroops( const Troops & from, const bool moveAll )
     }
 
     // TODO: Put selected troop at end of moved troops if such a troop was selected/highlighted before calling move.
-    
+
     // Will change later if receiving army troops get merged. This avoids unnecessary merges.
     bool preferEmptySlot = false;
 
