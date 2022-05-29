@@ -51,11 +51,18 @@ namespace AGG
 
     struct AudioLoopEffectInfo
     {
+        AudioLoopEffectInfo( const int16_t angle_, const uint8_t volumePercentage_ )
+            : angle( angle_ )
+            , volumePercentage( volumePercentage_ )
+        {
+            // Do nothing.
+        }
+
         int16_t angle{ 0 };
         uint8_t volumePercentage{ 0 };
     };
 
-    void LoadLOOPXXSounds( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, bool asyncronizedCall = false );
+    void LoadLOOPXXSounds( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, bool asyncronizedCall );
     void PlaySound( int m82, bool asyncronizedCall = false );
     void PlayMusic( int mus, bool loop = true, bool asyncronizedCall = false );
     void ResetAudio();
