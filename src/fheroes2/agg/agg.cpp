@@ -481,9 +481,9 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
     }
 
     if ( soundVolume == 0 ) {
-        // The volume is 0. Remove all sound effects.
+        // The volume is 0. Remove all existing sound effects.
         for ( auto iter = currentAudioLoopEffects.begin(); iter != currentAudioLoopEffects.end(); ++iter ) {
-            std::vector<ChannelAudioLoopEffectInfo> & existingEffects = iter->second;
+            const std::vector<ChannelAudioLoopEffectInfo> & existingEffects = iter->second;
 
             for ( const ChannelAudioLoopEffectInfo & info : existingEffects ) {
                 if ( Mixer::isPlaying( info.channelId ) ) {
@@ -494,6 +494,7 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
             }
         }
 
+        currentAudioLoopEffects.clear();
         return;
     }
 
@@ -550,7 +551,7 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
 
     // Stop all running sound effects.
     for ( auto iter = temp.begin(); iter != temp.end(); ++iter ) {
-        std::vector<ChannelAudioLoopEffectInfo> & existingEffects = iter->second;
+        const std::vector<ChannelAudioLoopEffectInfo> & existingEffects = iter->second;
 
         for ( const ChannelAudioLoopEffectInfo & info : existingEffects ) {
             if ( Mixer::isPlaying( info.channelId ) ) {
@@ -566,7 +567,7 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
     // Add new sound effects.
     for ( auto iter = soundEffects.begin(); iter != soundEffects.end(); ++iter ) {
         const M82::SoundType soundType = iter->first;
-        std::vector<AudioLoopEffectInfo> & effects = iter->second;
+        const std::vector<AudioLoopEffectInfo> & effects = iter->second;
         assert( !effects.empty() );
 
         for ( const AudioLoopEffectInfo & info : effects ) {

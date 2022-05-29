@@ -46,7 +46,7 @@ namespace
         {
             freq = 22050;
             format = AUDIO_S16;
-            channels = 2; // stereo audio;
+            channels = 2; // Support tereo audio.
             silence = 0;
             samples = 2048;
             size = 0;
