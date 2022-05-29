@@ -64,7 +64,7 @@ namespace AGG
         uint8_t volumePercentage{ 0 };
     };
 
-    void LoadLOOPXXSounds( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, bool asyncronizedCall );
+    void playLoopSounds( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, bool asyncronizedCall );
     void PlaySound( int m82, bool asyncronizedCall = false );
     void PlayMusic( int mus, bool loop = true, bool asyncronizedCall = false );
     void ResetAudio();

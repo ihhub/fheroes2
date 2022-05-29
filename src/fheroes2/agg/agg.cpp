@@ -166,7 +166,7 @@ namespace AGG
 
     void PlayMusicInternally( const int mus, const MusicSource musicType, const bool loop );
     void PlaySoundInternally( const int m82, const int soundVolume );
-    void LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, const int soundVolume );
+    void playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, const int soundVolume );
 
     fheroes2::AGGFile g_midiHeroes2AGG;
     fheroes2::AGGFile g_midiHeroes2xAGG;
@@ -358,7 +358,7 @@ namespace AGG
 
                     manager->_mutex.unlock();
 
-                    LoadLOOPXXSoundsInternally( std::move( loopSoundTask.soundEffects ), loopSoundTask.soundVolume );
+                    playLoopSoundsInternally( std::move( loopSoundTask.soundEffects ), loopSoundTask.soundVolume );
                 }
                 else if ( !manager->_musicTasks.empty() ) {
                     const MusicTask musicTask = manager->_musicTasks.back();
@@ -463,18 +463,18 @@ const std::vector<uint8_t> & AGG::GetMID( int xmi )
     return v;
 }
 
-void AGG::LoadLOOPXXSounds( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, bool asyncronizedCall )
+void AGG::playLoopSounds( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, bool asyncronizedCall )
 {
     if ( asyncronizedCall ) {
         g_asyncSoundManager.pushLoopSound( std::move( soundEffects ), Settings::Get().SoundVolume() );
     }
     else {
         g_asyncSoundManager.sync();
-        LoadLOOPXXSoundsInternally( std::move( soundEffects ), Settings::Get().SoundVolume() );
+        playLoopSoundsInternally( std::move( soundEffects ), Settings::Get().SoundVolume() );
     }
 }
 
-void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, const int soundVolume )
+void AGG::playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, const int soundVolume )
 {
     if ( !Audio::isValid() ) {
         return;
@@ -489,6 +489,7 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
 
             for ( const ChannelAudioLoopEffectInfo & info : existingEffects ) {
                 if ( Mixer::isPlaying( info.channelId ) ) {
+                    // TODO: check if we need to call Pause() function at all.
                     Mixer::Pause( info.channelId );
                     Mixer::Volume( info.channelId, 0 );
                     Mixer::Stop( info.channelId );
@@ -525,7 +526,7 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
         while ( elementSize > 0 ) {
             --elementSize;
 
-            currentAudioLoopEffects[soundType].emplace_back( std::move( existingEffects.back() ) );
+            currentAudioLoopEffects[soundType].emplace_back( existingEffects.back() );
             existingEffects.pop_back();
 
             ChannelAudioLoopEffectInfo & currenInfo = currentAudioLoopEffects[soundType].back();
@@ -565,6 +566,7 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
 
         for ( const ChannelAudioLoopEffectInfo & info : existingEffects ) {
             if ( Mixer::isPlaying( info.channelId ) ) {
+                // TODO: check if we need to call Pause() function at all.
                 Mixer::Pause( info.channelId );
                 Mixer::Volume( info.channelId, maxMixerValue * soundVolume / 10 );
                 Mixer::Stop( info.channelId );

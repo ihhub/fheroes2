@@ -430,9 +430,9 @@ void Game::EnvironmentSoundMixer()
             // |      0     |
             // | 270     90 |
             // |     180    |
-            // so the direction to an object the top is 0 degrees, on the right side - 90, bottom - 180 and left side - 270 degrees.
+            // so the direction to an object on the top is 0 degrees, on the right side - 90, bottom - 180 and left side - 270 degrees.
 
-            // We need to swap X and Y axes and invert Y axis as Y axis on screen goes from top to bottom.
+            // We need to swap X and Y axes and invert Y axis as on screen Y axis goes from top to bottom.
             angle = static_cast<int16_t>( std::atan2( actualPosition.x, -actualPosition.y ) * 180 / M_PI );
             // It is exteremely important to normalize the angle.
             if ( angle < 0 ) {
@@ -462,7 +462,7 @@ void Game::EnvironmentSoundMixer()
         }
     }
 
-    AGG::LoadLOOPXXSounds( std::move( soundEffects ), true );
+    AGG::playLoopSounds( std::move( soundEffects ), true );
 }
 
 void Game::restoreSoundsForCurrentFocus()
