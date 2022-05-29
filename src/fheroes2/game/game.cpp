@@ -395,7 +395,7 @@ void Game::EnvironmentSoundMixer()
             angle = 360 + angle;
         }
 
-        soundEffects[soundType].emplace_back( AGG::AudioLoopEffectInfo{ angle, volumePercentage } );
+        soundEffects[soundType].emplace_back( angle, volumePercentage );
 
         --availableChannels;
         if ( availableChannels == 0 ) {
