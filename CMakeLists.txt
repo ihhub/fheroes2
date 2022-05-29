@@ -93,7 +93,6 @@ if(NOT WIN32)
 		translations
 		ALL
 		COMMAND ${MAKE_EXECUTABLE}
-		DEPENDS ${PROJECT_NAME}.pot
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/files/lang
 		)
 endif(NOT WIN32)

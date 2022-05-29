@@ -21,7 +21,7 @@ make pot
 Once the POT file has been created, go to `/files/lang` and run the following command to update translatable strings in the PO files:
 
 ```bash
-make *.po clean
+make merge
 ```
 
 ## Editing translations
