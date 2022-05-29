@@ -405,12 +405,16 @@ void Troops::MoveTroops( const Troops & from, const bool moveAll )
                 // If there is only one troop on a hero, leave one unit.
                 if ( from.GetCount() == 1 && !moveAll ) {
                     if ( troop->GetCount() > 1 ) {
-                        if ( !( *at( slot ) ).isValid() || at( slot )->GetID() == troop->GetID() ) {
+                        if ( !( *at( slot ) ).isValid() ) {
                             at( slot )->Set( *troop );
                             at( slot )->SetCount( troop->GetCount() - 1 );
-                            troop->SetCount( 1 );
-                            return;
                         }
+                        else if ( at( slot )->GetID() == troop->GetID() ) {
+                            at( slot )->SetCount( at( slot )->GetCount() + troop->GetCount() - 1 );
+                        }
+                        troop->SetCount( 1 );
+                        return;
+                        
                     }
                     break;
                 }
