@@ -78,8 +78,8 @@ namespace Battle
 
         TargetInfo() = default;
 
-        TargetInfo( Unit * unit )
-            : defender( unit )
+        TargetInfo( Unit * defender_ )
+            : defender( defender_ )
         {}
 
         static bool isFinishAnimFrame( const TargetInfo & info );
