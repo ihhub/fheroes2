@@ -585,7 +585,7 @@ const Troop * Troops::GetSlowestTroop() const
 void Troops::MergeTroops( const uint32_t troopMerges )
 {
     // You are requesting to merge 0 or less troops.
-    assert( !troopMerges <= 0 );
+    assert( ( !troopMerges <= 0 ) );
 
     for ( size_t slot = 0; slot < size(); ++slot ) {
         Troop * troop = at( slot );
