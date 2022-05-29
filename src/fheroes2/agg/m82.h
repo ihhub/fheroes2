@@ -178,7 +178,7 @@ namespace M82
         LOOP0011,
         LOOP0012,
         LOOP0013,
-        LOOP0014, // unused?
+        LOOP0014,
         LOOP0015,
         LOOP0016,
         LOOP0017,

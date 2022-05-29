@@ -70,7 +70,7 @@ namespace
     {
         // check stream first
         if ( tile.isStream() ) {
-            return M82::LOOP0013;
+            return M82::LOOP0014;
         }
 
         return M82::getAdventureMapObjectSound( tile.GetObject( false ) );
