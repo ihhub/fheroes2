@@ -414,7 +414,6 @@ void Troops::MoveTroops( const Troops & from, const bool moveAll )
                         }
                         troop->SetCount( 1 );
                         return;
-                        
                     }
                     break;
                 }
