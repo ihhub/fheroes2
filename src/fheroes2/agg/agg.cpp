@@ -551,10 +551,10 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
         }
 
         if ( effects.empty() ) {
-          iter = soundEffects.erase( iter );
+            iter = soundEffects.erase( iter );
         }
         else {
-          ++iter;
+            ++iter;
         }
     }
 
