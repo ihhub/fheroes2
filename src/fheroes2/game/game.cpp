@@ -370,6 +370,8 @@ void Game::EnvironmentSoundMixer()
 
     const double maxDistance = std::sqrt( maxOffset * maxOffset + maxOffset * maxOffset );
 
+    const bool is3DAudioEnabled = Settings::Get().is3DAudioEnabled();
+
     for ( const fheroes2::Point & pos : positions ) {
         const M82::SoundType soundType = getSoundTypeFromTile( world.GetTiles( pos.x + center.x, pos.y + center.y ) );
         if ( soundType == M82::UNKNOWN ) {
@@ -382,28 +384,44 @@ void Game::EnvironmentSoundMixer()
             continue;
         }
 
-        // This is a schema how the direction of sound looks like:
-        // |      0     |
-        // | 270     90 |
-        // |     180    |
-        // so the direction to an object the top is 0 degrees, on the right side - 90, bottom - 180 and left side - 270 degrees.
+        int16_t angle = 0;
 
-        // We need to swap X and Y axes and invert Y axis as Y axis on screen goes from top to bottom.
-        int16_t angle = static_cast<int16_t>( std::atan2( pos.x, -pos.y ) * 180 / M_PI );
-        // It is exteremely important to normalize the angle.
-        if ( angle < 0 ) {
-            angle = 360 + angle;
+        if ( is3DAudioEnabled ) {
+            // This is a schema how the direction of sound looks like:
+            // |      0     |
+            // | 270     90 |
+            // |     180    |
+            // so the direction to an object the top is 0 degrees, on the right side - 90, bottom - 180 and left side - 270 degrees.
+
+            // We need to swap X and Y axes and invert Y axis as Y axis on screen goes from top to bottom.
+            angle = static_cast<int16_t>( std::atan2( pos.x, -pos.y ) * 180 / M_PI );
+            // It is exteremely important to normalize the angle.
+            if ( angle < 0 ) {
+                angle = 360 + angle;
+            }
         }
 
-        soundEffects[soundType].emplace_back( angle, volumePercentage );
+        std::vector<AGG::AudioLoopEffectInfo> & effects = soundEffects[soundType];
+        bool doesEffectExist = false;
+        for ( AGG::AudioLoopEffectInfo & info : effects ) {
+            if ( info.angle == angle ) {
+                info.volumePercentage = std::max( volumePercentage, info.volumePercentage );
+                doesEffectExist = true;
+                break;
+            }
+        }
+
+        if ( doesEffectExist ) {
+            continue;
+        }
+
+        effects.emplace_back( angle, volumePercentage );
 
         --availableChannels;
         if ( availableChannels == 0 ) {
             break;
         }
     }
-
-    // TODO: sort all effects and remove duplicates.
 
     AGG::LoadLOOPXXSounds( std::move( soundEffects ), true );
 }

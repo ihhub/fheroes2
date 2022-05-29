@@ -171,26 +171,26 @@ namespace M82
         LOOP0004,
         LOOP0005,
         LOOP0006,
-        LOOP0007,
-        LOOP0008,
+        LOOP0007, // unused?
+        LOOP0008, // unused?
         LOOP0009,
         LOOP0010,
         LOOP0011,
         LOOP0012,
         LOOP0013,
-        LOOP0014,
+        LOOP0014, // unused?
         LOOP0015,
         LOOP0016,
         LOOP0017,
         LOOP0018,
-        LOOP0019,
-        LOOP0020,
+        LOOP0019, // unused?
+        LOOP0020, // unused?
         LOOP0021,
         LOOP0022,
-        LOOP0023,
+        LOOP0023, // unused?
         LOOP0024,
         LOOP0025,
-        LOOP0026,
+        LOOP0026, // unused?
         LOOP0027,
 
         MAGCAROW,

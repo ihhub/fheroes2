@@ -54,27 +54,21 @@ namespace
         GLOBAL_FIRST_RUN = 0x00000001,
         GLOBAL_SHOW_INTRO = 0x00000002,
         GLOBAL_PRICELOYALTY = 0x00000004,
-
         GLOBAL_RENDER_VSYNC = 0x00000008,
         GLOBAL_TEXT_SUPPORT_MODE = 0x00000010,
-
         GLOBAL_MONOCHROME_CURSOR = 0x00000020,
-
         GLOBAL_SHOWCPANEL = 0x00000040,
         GLOBAL_SHOWRADAR = 0x00000080,
         GLOBAL_SHOWICONS = 0x00000100,
         GLOBAL_SHOWBUTTONS = 0x00000200,
         GLOBAL_SHOWSTATUS = 0x00000400,
-
         GLOBAL_FULLSCREEN = 0x00008000,
-
-        // UNUSED = 0x00010000,
+        GLOBAL_3D_AUDIO = 0x00010000,
         // UNUSED = 0x00020000,
         // UNUSED = 0x00040000,
         // UNUSED = 0x00080000,
         // UNUSED = 0x00100000,
         // UNUSED = 0x00200000,
-
         GLOBAL_BATTLE_SHOW_ARMY_ORDER = 0x00400000,
         GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
         GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
@@ -686,6 +680,16 @@ void Settings::setTextSupportMode( const bool enable )
     }
 }
 
+void Settings::set3DAudio( const bool enable )
+{
+    if ( enable ) {
+        opt_global.SetModes( GLOBAL_3D_AUDIO );
+    }
+    else {
+        opt_global.ResetModes( GLOBAL_3D_AUDIO );
+    }
+}
+
 /* set scroll speed: 1 - 4 */
 void Settings::SetScrollSpeed( int speed )
 {
@@ -705,6 +709,11 @@ bool Settings::isMonochromeCursorEnabled() const
 bool Settings::isTextSupportModeEnabled() const
 {
     return opt_global.Modes( GLOBAL_TEXT_SUPPORT_MODE );
+}
+
+bool Settings::is3DAudioEnabled() const
+{
+    return opt_global.Modes( GLOBAL_3D_AUDIO );
 }
 
 bool Settings::ShowControlPanel() const

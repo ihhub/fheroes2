@@ -498,6 +498,8 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
         return;
     }
 
+    const bool is3DAudioEnabled = Settings::Get().is3DAudioEnabled();
+
     std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
 
     std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> temp;
@@ -531,8 +533,15 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
 
             if ( Mixer::isPlaying( currenInfo.channelId ) ) {
                 Mixer::Pause( currenInfo.channelId );
-                Mixer::applySoundEffect( currenInfo.channelId, currenInfo.angle, currenInfo.volumePercentage );
-                Mixer::Volume( currenInfo.channelId, Mixer::MaxVolume() * soundVolume / 10 );
+
+                if ( is3DAudioEnabled ) {
+                    Mixer::applySoundEffect( currenInfo.channelId, currenInfo.angle, currenInfo.volumePercentage );
+                    Mixer::Volume( currenInfo.channelId, Mixer::MaxVolume() * soundVolume / 10 );
+                }
+                else {
+                    Mixer::Volume( currenInfo.channelId, Mixer::MaxVolume() * currenInfo.volumePercentage / 100 * soundVolume / 10 );
+                }
+
                 Mixer::Resume( currenInfo.channelId );
             }
         }
@@ -578,7 +587,14 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
                 continue;
             }
 
-            const int channelId = Mixer::PlayFromDistance( &audioData[0], static_cast<uint32_t>( audioData.size() ), -1, true, info.angle, info.volumePercentage );
+            int channelId = -1;
+            if ( is3DAudioEnabled ) {
+                channelId = Mixer::PlayFromDistance( &audioData[0], static_cast<uint32_t>( audioData.size() ), -1, true, info.angle, info.volumePercentage );
+            }
+            else {
+                channelId = Mixer::Play( &audioData[0], static_cast<uint32_t>( audioData.size() ), -1, true );
+            }
+
             if ( channelId < 0 ) {
                 // Unable to play this audio. It is probably an invalid audio sample.
                 continue;
@@ -586,7 +602,14 @@ void AGG::LoadLOOPXXSoundsInternally( std::map<M82::SoundType, std::vector<Audio
 
             // Adjust channel based on given parameters.
             Mixer::Pause( channelId );
-            Mixer::Volume( channelId, Mixer::MaxVolume() * soundVolume / 10 );
+
+            if ( is3DAudioEnabled ) {
+                Mixer::Volume( channelId, Mixer::MaxVolume() * soundVolume / 10 );
+            }
+            else {
+                Mixer::Volume( channelId, Mixer::MaxVolume() * info.volumePercentage / 100 * soundVolume / 10 );
+            }
+
             Mixer::Resume( channelId );
 
             currentAudioLoopEffects[soundType].emplace_back( ChannelAudioLoopEffectInfo( info, channelId ) );

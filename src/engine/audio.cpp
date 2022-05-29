@@ -387,7 +387,7 @@ int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, 
     return PlayChunk( sample, channelId, loop );
 }
 
-int Mixer::PlayFromDistance( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const int16_t angle, uint8_t distanceInPercent )
+int Mixer::PlayFromDistance( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const int16_t angle, uint8_t volumePercentage )
 {
     if ( ptr == nullptr ) {
         // You are trying to play an empty file. Check your logic!
@@ -406,7 +406,7 @@ int Mixer::PlayFromDistance( const uint8_t * ptr, const uint32_t size, const int
     }
 
     Mix_ChannelFinished( FreeChannel );
-    return PlayChunkFromDistance( sample, channelId, loop, angle, distanceInPercent );
+    return PlayChunkFromDistance( sample, channelId, loop, angle, volumePercentage );
 }
 
 int Mixer::applySoundEffect( const int channelId, const int16_t angle, uint8_t volumePercentage )
