@@ -29,8 +29,6 @@
 
 #include "mp2.h"
 
-#define LOOPXX_COUNT 28
-
 namespace M82
 {
     enum SoundType : int
@@ -171,7 +169,7 @@ namespace M82
         LOOP0004,
         LOOP0005,
         LOOP0006,
-        LOOP0007, // unused?
+        LOOP0007,
         LOOP0008, // unused?
         LOOP0009,
         LOOP0010,
@@ -183,11 +181,11 @@ namespace M82
         LOOP0016,
         LOOP0017,
         LOOP0018,
-        LOOP0019, // unused?
-        LOOP0020, // unused?
+        LOOP0019, // unused? A sound with seagulls.
+        LOOP0020, // unused? Waves on a beach.
         LOOP0021,
         LOOP0022,
-        LOOP0023, // unused?
+        LOOP0023, // unused? A mechanical wooden structure.
         LOOP0024,
         LOOP0025,
         LOOP0026, // unused?
@@ -322,6 +320,8 @@ namespace M82
         WOLFKILL,
         WOLFMOVE,
         WOLFWNCE,
+
+        // Hero's movement sounds.
         WSND00,
         WSND01,
         WSND02,
@@ -343,11 +343,13 @@ namespace M82
         WSND24,
         WSND25,
         WSND26,
+
         ZOMBATTK,
         ZOMBKILL,
         ZOMBMOVE,
         ZOMBWNCE,
 
+        // Put all new sounds before this line.
         UNKNOWN
     };
 

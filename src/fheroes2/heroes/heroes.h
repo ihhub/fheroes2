@@ -239,7 +239,10 @@ public:
     const Army & GetArmy() const override;
     Army & GetArmy() override;
 
-    int GetID() const;
+    int GetID() const
+    {
+        return hid;
+    }
 
     double getMeetingValue( const Heroes & otherHero ) const;
     double getRecruitValue() const;
@@ -261,23 +264,54 @@ public:
     int GetLuck() const override;
     int GetMoraleWithModificators( std::string * str = nullptr ) const;
     int GetLuckWithModificators( std::string * str = nullptr ) const;
-    int GetLevel() const;
+
+    int GetLevel() const
+    {
+        return GetLevelFromExperience( experience );
+    }
 
     MP2::MapObjectType GetMapsObject() const;
     void SetMapsObject( const MP2::MapObjectType objectType );
 
-    const fheroes2::Point & GetCenterPatrol() const;
-    void SetCenterPatrol( const fheroes2::Point & );
-    int GetSquarePatrol() const;
+    const fheroes2::Point & GetCenterPatrol() const
+    {
+        return patrol_center;
+    }
+
+    void SetCenterPatrol( const fheroes2::Point & pos )
+    {
+        patrol_center = pos;
+    }
+
+    int GetSquarePatrol() const
+    {
+        return patrol_square;
+    }
 
     uint32_t GetMaxSpellPoints() const override;
     uint32_t GetMaxMovePoints() const;
 
-    uint32_t GetMovePoints() const;
-    void IncreaseMovePoints( uint32_t );
+    uint32_t GetMovePoints() const
+    {
+        return move_point;
+    }
+
+    void IncreaseMovePoints( const uint32_t point )
+    {
+        move_point += point;
+    }
+
     bool MayStillMove( const bool ignorePath, const bool ignoreSleeper ) const;
-    void ResetMovePoints();
-    void MovePointsScaleFixed();
+
+    void ResetMovePoints()
+    {
+        move_point = 0;
+    }
+
+    void MovePointsScaleFixed()
+    {
+        move_point_scale = move_point * 1000 / GetMaxMovePoints();
+    }
 
     bool HasSecondarySkill( int ) const;
     bool HasMaxSecondarySkill() const;
@@ -310,20 +344,42 @@ public:
 
     bool BuySpellBook( const Castle *, int shrine = 0 );
 
-    const Route::Path & GetPath() const;
-    Route::Path & GetPath();
+    const Route::Path & GetPath() const
+    {
+        return path;
+    }
+
+    Route::Path & GetPath()
+    {
+        return path;
+    }
+
     // Returns the number of travel days to the tile with the dstIdx index using the pathfinder from the World global
     // object, or zero if the destination tile is unreachable. The number of days returned is limited, see the source
     // of this method.
     int getNumOfTravelDays( int32_t dstIdx ) const;
-    void ShowPath( bool );
+
+    void ShowPath( const bool show )
+    {
+        show ? path.Show() : path.Hide();
+    }
+
     // Calculates the hero's path to the tile with the dstIdx index using the pathfinder from the World global object.
     // Recalculates the existing path if dstIdx is negative. Not applicable if you want to use a pathfinder other than
     // PlayerWorldPathfinder.
     void calculatePath( int32_t dstIdx );
 
-    int GetDirection() const;
-    void setDirection( int directionToSet );
+    int GetDirection() const
+    {
+        return direction;
+    }
+
+    void setDirection( const int directionToSet )
+    {
+        if ( directionToSet != Direction::UNKNOWN ) {
+            direction = directionToSet;
+        }
+    }
 
     // set visited cell
     void SetVisited( int32_t, Visit::type_t = Visit::LOCAL );
@@ -364,11 +420,24 @@ public:
     void RedrawShadow( fheroes2::Image & dst, const int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
 
     void PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const override;
-    int GetSpriteIndex() const;
+
+    int GetSpriteIndex() const
+    {
+        return sprite_index;
+    }
 
     // These 2 methods must be used only for hero's animation. Please never use them anywhere else!
-    void SetSpriteIndex( int index );
-    void SetOffset( const fheroes2::Point & offset );
+    void SetSpriteIndex( const int index )
+    {
+        sprite_index = index;
+    }
+
+    void SetOffset( const fheroes2::Point & offset )
+    {
+        _offset = offset;
+    }
+
+    fheroes2::Point getCurrentPixelOffset() const;
 
     void FadeOut( const fheroes2::Point & offset = fheroes2::Point() ) const;
     void FadeIn( const fheroes2::Point & offset = fheroes2::Point() ) const;
@@ -378,22 +447,45 @@ public:
 
     bool isShipMaster() const;
     void SetShipMaster( bool );
-    uint32_t lastGroundRegion() const;
-    void setLastGroundRegion( uint32_t regionID );
 
-    uint32_t GetExperience() const;
+    uint32_t lastGroundRegion() const
+    {
+        return _lastGroundRegion;
+    }
+
+    void setLastGroundRegion( const uint32_t regionID )
+    {
+        _lastGroundRegion = regionID;
+    }
+
+    uint32_t GetExperience() const
+    {
+        return experience;
+    }
+
     void IncreaseExperience( const uint32_t amount, const bool autoselect = false );
 
     std::string String() const;
-    const fheroes2::Sprite & GetPortrait( int type ) const;
+
+    const fheroes2::Sprite & GetPortrait( const int type ) const
+    {
+        return Heroes::GetPortrait( portrait, type );
+    }
 
     static int GetLevelFromExperience( uint32_t );
     static uint32_t GetExperienceFromLevel( int );
 
     fheroes2::Point MovementDirection() const;
 
-    int GetAttackedMonsterTileIndex() const;
-    void SetAttackedMonsterTileIndex( int idx );
+    int GetAttackedMonsterTileIndex() const
+    {
+        return _attackedMonsterTileIndex;
+    }
+
+    void SetAttackedMonsterTileIndex( const int idx )
+    {
+        _attackedMonsterTileIndex = idx;
+    }
 
     void setAIRole( const Role role )
     {

@@ -1005,9 +1005,16 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             if ( hero ) {
                 bool resetHeroSprite = false;
                 if ( heroAnimationFrameCount > 0 ) {
-                    gameArea.ShiftCenter( { heroAnimationOffset.x * Game::HumanHeroAnimSkip(), heroAnimationOffset.y * Game::HumanHeroAnimSkip() } );
+                    const int32_t heroMovementSkipValue = Game::HumanHeroAnimSkip();
+
+                    gameArea.ShiftCenter( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
                     gameArea.SetRedraw();
-                    heroAnimationFrameCount -= Game::HumanHeroAnimSkip();
+
+                    if ( heroAnimationOffset != fheroes2::Point() ) {
+                        Game::EnvironmentSoundMixer();
+                    }
+
+                    heroAnimationFrameCount -= heroMovementSkipValue;
                     if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4
                         hero->SetSpriteIndex( heroAnimationSpriteId );
 
@@ -1017,7 +1024,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                             ++heroAnimationSpriteId;
                     }
                     const int offsetStep = ( ( 4 - ( heroAnimationFrameCount & 0x3 ) ) & 0x3 ); // % 4
-                    hero->SetOffset( fheroes2::Point( heroAnimationOffset.x * offsetStep, heroAnimationOffset.y * offsetStep ) );
+                    hero->SetOffset( { heroAnimationOffset.x * offsetStep, heroAnimationOffset.y * offsetStep } );
                 }
 
                 if ( heroAnimationFrameCount == 0 ) {
@@ -1037,17 +1044,21 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                             }
                         }
                         else {
-                            fheroes2::Point movement( hero->MovementDirection() );
+                            const fheroes2::Point movement( hero->MovementDirection() );
                             if ( movement != fheroes2::Point() ) { // don't waste resources for no movement
+                                const int32_t heroMovementSkipValue = Game::HumanHeroAnimSkip();
+
                                 heroAnimationOffset = movement;
                                 gameArea.ShiftCenter( movement );
+
+                                Game::SetUpdateSoundsOnFocusUpdate( false );
                                 ResetFocus( GameFocus::HEROES );
-                                heroAnimationFrameCount = 32 - Game::HumanHeroAnimSkip();
+                                Game::SetUpdateSoundsOnFocusUpdate( true );
+                                heroAnimationFrameCount = 32 - heroMovementSkipValue;
                                 heroAnimationSpriteId = hero->GetSpriteIndex();
-                                if ( Game::HumanHeroAnimSkip() < 4 ) {
+                                if ( heroMovementSkipValue < 4 ) {
                                     hero->SetSpriteIndex( heroAnimationSpriteId - 1 );
-                                    hero->SetOffset(
-                                        fheroes2::Point( heroAnimationOffset.x * Game::HumanHeroAnimSkip(), heroAnimationOffset.y * Game::HumanHeroAnimSkip() ) );
+                                    hero->SetOffset( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
                                 }
                                 else {
                                     ++heroAnimationSpriteId;

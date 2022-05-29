@@ -215,9 +215,9 @@ M82::SoundType M82::getAdventureMapObjectSound( const MP2::MapObjectType objectT
     case MP2::OBJ_STONELITHS:
         return LOOP0004;
     case MP2::OBJ_LAVAPOOL:
-        return LOOP0005;
-    case MP2::OBJ_ALCHEMYLAB:
         return LOOP0006;
+    case MP2::OBJ_ALCHEMYLAB:
+        return LOOP0007;
     case MP2::OBJ_WATERWHEEL:
         return LOOP0009;
     case MP2::OBJ_CAMPFIRE:
@@ -251,6 +251,7 @@ M82::SoundType M82::getAdventureMapObjectSound( const MP2::MapObjectType objectT
     case MP2::OBJ_ARCHERHOUSE:
         return LOOP0025;
     case MP2::OBJ_VOLCANO:
+        // TODO: LOOP0005 is for all volcanos in the original game while LOOP0027 is used only for tall volcanos. Figure our how to use 2 sounds together.
         return LOOP0027;
     default:
         break;
