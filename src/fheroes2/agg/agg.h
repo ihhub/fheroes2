@@ -51,6 +51,8 @@ namespace AGG
 
     struct AudioLoopEffectInfo
     {
+        AudioLoopEffectInfo() = default;
+
         AudioLoopEffectInfo( const int16_t angle_, const uint8_t volumePercentage_ )
             : angle( angle_ )
             , volumePercentage( volumePercentage_ )

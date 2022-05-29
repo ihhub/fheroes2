@@ -166,6 +166,14 @@ namespace
 
     void PlayMusic( Mix_Music * mix, const bool loop )
     {
+        // TODO: According to SDL documentation (https://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html) we could have a playback of a song from a particular
+        //       position:
+        //       - Mix_HookMusicFinished() is a hook function which is called at the end of a song. Please note that this function will not be called for looped music.
+        //       - Mix_SetMusicPosition() accepts position in seconds for MP3 and OGG formats
+        //       - Mix_GetMusicType() returns the type of music
+        //       How a possible implementation should work: detect the type of music. If it is MP3 or OGG add a hook function and play the music track once. After the
+        //       completion of the track the function will be called. Within the function inform a separate thread about this which will restart the music track again.
+
         Music::Stop();
 
         const int returnCode = musicFadeIn ? Mix_FadeInMusic( mix, loop ? -1 : 0, musicFadeIn ) : Mix_PlayMusic( mix, loop ? -1 : 0 );
