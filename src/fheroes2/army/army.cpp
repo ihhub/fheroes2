@@ -382,22 +382,20 @@ void Troops::JoinTroops( Troops & troops2 )
         }
 }
 
-void Troops::MoveTroops( const Troops & from, bool moveAll )
+void Troops::MoveTroops( const Troops & from, const bool moveAll )
 {
     if ( this == &from ) {
         // You are moving an army into itself. Check your logic.
         assert( 0 );
     }
 
-    const bool noTroopsToMove = from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 );
-    if ( noTroopsToMove ) {
+    if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
         return;
     }
 
-    // TODO: Sort pointers to troops from highest to lowest dwelling level and put selected troop at end if that troop was selected before moving.
-    // Use something like std::sort( from.begin(), from.end(), functionToSortAccordingToDwellingLevel() );
+    // TODO: Put selected troop at end of moved troops if such a troop was selected/highlighted before calling move.
 
-    // from army might have more than 0 if it's a hero army with one troop left.
+    // from army might have more than 0 if it is a hero army with one troop left.
     while ( from.GetCount() > 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
         // Attempt to move troops directly to the same slot in the receiving army.
         for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
@@ -410,6 +408,7 @@ void Troops::MoveTroops( const Troops & from, bool moveAll )
                             at( slot )->Set( *troop );
                             at( slot )->SetCount( troop->GetCount() - 1 );
                             troop->SetCount( 1 );
+                            return;
                         }
                     }
                     break;
@@ -427,15 +426,18 @@ void Troops::MoveTroops( const Troops & from, bool moveAll )
             }
         }
 
-        if ( noTroopsToMove ) {
+        if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
             return;
         }
 
-        // Move to remaining free slots or same troop ID elsewhere in army
+        // Will change later if troops get merged. This avoids unnecessary merges.
+        bool joinEmptySlot = false;
+
+        // Move to remaining free slots or same troop ID elsewhere in army.
         for ( Troop * troop : from ) {
             if ( troop && troop->isValid() ) {
                 if ( from.GetCount() == 1 && !moveAll ) {
-                    if ( JoinTroop( troop->GetMonster(), troop->GetCount() - 1 ) ) {
+                    if ( JoinTroop( troop->GetMonster(), troop->GetCount() - 1, joinEmptySlot ) ) {
                         troop->SetCount( 1 );
                         return;
                     }
@@ -446,17 +448,21 @@ void Troops::MoveTroops( const Troops & from, bool moveAll )
             }
         }
 
-        if ( noTroopsToMove ) {
+        if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
             return;
         }
 
-        // As a last resort try to merge troops to make free slots.
+        // Attempt to merge troops to make free slots.
         const uint32_t troopCountPreMerge = GetCount();
-        MergeTroops( from.GetCount() );
+        // TODO: If the last troop to be moved from a hero army has a single unit then: from.GetCount() - 1.
+        // Note a hero army could have more than 1 troops at this point.
+        uint32_t mergeCount = from.GetCount();
+        MergeTroops( mergeCount );
         const uint32_t troopCountPostMerge = GetCount();
         if ( troopCountPreMerge == troopCountPostMerge ) {
             return;
         }
+        joinEmptySlot = true;
     }
 }
 
@@ -580,6 +586,11 @@ const Troop * Troops::GetSlowestTroop() const
 
 void Troops::MergeTroops( const uint32_t troopMerges )
 {
+    if ( troopMerges <= 0 ) {
+        // You are requesting to merge 0 or less troops.
+        assert( 0 );
+    }
+
     for ( size_t slot = 0; slot < size(); ++slot ) {
         Troop * troop = at( slot );
         if ( !troop || !troop->isValid() ) {
@@ -588,14 +599,14 @@ void Troops::MergeTroops( const uint32_t troopMerges )
         uint32_t mergesRemaining = troopMerges;
         const int id = troop->GetID();
         for ( size_t secondary = slot + 1; secondary < size(); ++secondary ) {
-            if ( mergesRemaining == 0 ) {
-                return;
-            }
             Troop * secondaryTroop = at( secondary );
             if ( secondaryTroop && secondaryTroop->isValid() && id == secondaryTroop->GetID() ) {
                 troop->SetCount( troop->GetCount() + secondaryTroop->GetCount() );
                 secondaryTroop->Reset();
                 --mergesRemaining;
+            }
+            if ( mergesRemaining == 0 ) {
+                return;
             }
         }
     }
