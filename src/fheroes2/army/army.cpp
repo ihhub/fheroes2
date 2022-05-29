@@ -392,6 +392,9 @@ void Troops::MoveTroops( const Troops & from, const bool moveAll )
     }
 
     // TODO: Put selected troop at end of moved troops if such a troop was selected/highlighted before calling move.
+    
+    // Will change later if receiving army troops get merged. This avoids unnecessary merges.
+    bool preferEmptySlot = false;
 
     // from army might have more than 0 if it is a hero army with one troop left.
     while ( from.GetCount() > 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
@@ -428,9 +431,6 @@ void Troops::MoveTroops( const Troops & from, const bool moveAll )
             return;
         }
 
-        // Will change later if receiving army troops get merged. This avoids unnecessary merges.
-        bool preferEmptySlot = false;
-
         // Move to remaining free slots or same troop ID elsewhere in army.
         for ( Troop * troop : from ) {
             if ( troop && troop->isValid() ) {
@@ -462,9 +462,7 @@ void Troops::MoveTroops( const Troops & from, const bool moveAll )
         if ( troopCountPreMerge == troopCountPostMerge ) {
             return;
         }
-        else {
-            preferEmptySlot = true;
-        }
+        preferEmptySlot = true;
     }
 }
 
