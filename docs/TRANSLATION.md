@@ -13,7 +13,7 @@ _( "Are you sure you want to quit?" )
 ## Adding new translations/localizations
 
 If you want to add a new language localization, you will first need to add this language in the source code as a supported language. Afterwards, a new PO file for that language will need to be added. It will have to be named according to the ISO standard's two-character language abbreviations.
-To have font support for your language, you will have to specify what font encoding/charset your language uses by adding it to the font generation code found in `src/fheroes2/gui/ui_font.cpp`. If a font supporting your language has not currently been implemented then code for that will need to be added.
+To have font support for your language, you will have to specify what font encoding/charset your language uses by adding it to the font generation code found in `/src/fheroes2/gui/ui_font.cpp`. If a font supporting your language has not currently been implemented then code for that will need to be added.
 
 ## Editing translations
 
