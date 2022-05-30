@@ -9747,7 +9747,7 @@ msgstr "Spiel: Böse Schnittstelle benutzen"
 msgid "game: hide interface"
 msgstr "Spiel: Schnittstelle verstecken"
 
-msgid "game: offer to continue the game afer victory condition"
+msgid "game: offer to continue the game after victory condition"
 msgstr "Spiel: weiteres Spiel nach der Siegbedingung anbieten"
 
 msgid "The ultimate artifact is really the %{name}."

@@ -9740,7 +9740,7 @@ msgstr "Parti: Bruk ondt grensesnitt"
 msgid "game: hide interface"
 msgstr "Parti: Skjul grensesnitt"
 
-msgid "game: offer to continue the game afer victory condition"
+msgid "game: offer to continue the game after victory condition"
 msgstr "Parti: Tilby å fortsette partiet etter å ha vunnet"
 
 msgid "The ultimate artifact is really the %{name}."
