@@ -382,16 +382,35 @@ void Troops::JoinTroops( Troops & troops2 )
         }
 }
 
-void Troops::MoveTroops( const Troops & from, const bool moveAll )
+void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, const bool moveAll )
 {
     // You are attempting to move an army into itself. Check your logic.
     assert( !( this == &from ) );
+
+    // You have selected a troop outside the possible range of troops. Check your logic.
+    assert( !( selectedTroopIndex > 4 ) );
 
     if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
         return;
     }
 
-    // TODO: Put selected troop at end of troops to be moved if such a troop was selected/highlighted before calling MoveTroops.
+    // Put the potentially selected/highlighted troop at the end of the list of troops to move.
+    std::vector<Troop *> troopFromOrder;
+    int troopPointerIndex = 0;
+    if ( selectedTroopIndex != 4 ) {
+        for ( Troop * troop : from ) {
+            if ( selectedTroopIndex == troopPointerIndex ) {
+                ++troopPointerIndex;
+                continue;
+            }
+            troopFromOrder.emplace_back( troop );
+            ++troopPointerIndex;
+        }
+            troopFromOrder.emplace_back( from.at( selectedTroopIndex ) );
+    }
+    else {
+        troopFromOrder = from;
+    }
 
     // Will be changed later on if the receiving army's troops get merged. This avoids unnecessary merges.
     bool preferEmptySlot = false;
@@ -400,17 +419,27 @@ void Troops::MoveTroops( const Troops & from, const bool moveAll )
     while ( from.GetCount() > 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
         // Attempt to move troops directly to the same slot in the receiving army.
         for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
-            Troop * troop = from.at( slot );
+            Troop * troop = troopFromOrder.at( slot );
+            // Set the correct slot according to current troop.
+            size_t assignmentSlot = slot;
+            if ( slot >= selectedTroopIndex && !( slot == 4 ) ) {
+                assignmentSlot = slot + 1;
+            }
+            else if ( slot == 4 ) {
+                assignmentSlot = selectedTroopIndex;
+            }
             if ( troop->isValid() ) {
                 // If there is only one troop on a hero, leave one unit.
                 if ( from.GetCount() == 1 && !moveAll ) {
+                    /*if ( true )
+                        return;*/
                     if ( troop->GetCount() > 1 ) {
-                        if ( !( *at( slot ) ).isValid() ) {
-                            at( slot )->Set( *troop );
-                            at( slot )->SetCount( troop->GetCount() - 1 );
+                        if ( !( *at( assignmentSlot ) ).isValid() ) {
+                            at( assignmentSlot )->Set( *troop );
+                            at( assignmentSlot )->SetCount( troop->GetCount() - 1 );
                         }
-                        else if ( at( slot )->GetID() == troop->GetID() ) {
-                            at( slot )->SetCount( at( slot )->GetCount() + troop->GetCount() - 1 );
+                        else if ( at( assignmentSlot )->GetID() == troop->GetID() ) {
+                            at( assignmentSlot )->SetCount( at( assignmentSlot )->GetCount() + troop->GetCount() - 1 );
                         }
                         troop->SetCount( 1 );
                         return;
@@ -418,13 +447,13 @@ void Troops::MoveTroops( const Troops & from, const bool moveAll )
                     break;
                 }
                 // An empty slot in the receiving army
-                if ( !( *at( slot ) ).isValid() ) {
-                    at( slot )->Set( *troop );
+                if ( !( *at( assignmentSlot ) ).isValid() ) {
+                    at( assignmentSlot )->Set( *troop );
                     troop->Reset();
                 }
                 // Same troop in receiving and giving army
-                else if ( at( slot )->GetID() == troop->GetID() ) {
-                    at( slot )->SetCount( at( slot )->GetCount() + troop->GetCount() );
+                else if ( at( assignmentSlot )->GetID() == troop->GetID() ) {
+                    at( assignmentSlot )->SetCount( at( assignmentSlot )->GetCount() + troop->GetCount() );
                     troop->Reset();
                 }
             }
