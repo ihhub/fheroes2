@@ -389,7 +389,7 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
 
     // You have selected a troop outside the possible range of troops. Check your logic.
     assert( !( selectedTroopIndex > 4 ) );
-
+    // Check if there are troops to move.
     if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
         return;
     }
@@ -432,7 +432,7 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
                 assignmentSlot = selectedTroopIndex;
             }
             if ( troop->isValid() ) {
-                // If there is only one troop on a hero, leave one unit.
+                // If there is only one troop on a hero and if possible to move, then leave one unit in hero army.
                 if ( from.GetCount() == 1 && !moveAll ) {
                     if ( troop->GetCount() > 1 ) {
                         if ( !( *at( assignmentSlot ) ).isValid() ) {
@@ -460,7 +460,7 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
                 }
             }
         }
-
+        // Check if there are troops to move.
         if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
             return;
         }
@@ -479,7 +479,7 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
                 }
             }
         }
-
+        //Check if there are troops to move.
         if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
             return;
         }
