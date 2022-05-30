@@ -33,7 +33,7 @@ make de.mo
 
 For Windows users that use POEdit or similar, they can compile with that program. However, note that the program will need to be set to compile the MO file in the font encoding/Charset that the language that you are translating to has been set to.
 
-For example, for German you will have to set font encoding to CP1252, and for Russian this would be CP1250. Later when submitting a PR with your changes, you will have to save the PO file in UTF-8 encoding, because this is what Github supports.
+For example, for German you will have to set font encoding to CP1252, while for Russian this would be CP1250. Later when submitting a PR with your changes, you will have to save the PO file in UTF-8 encoding because this is what Github supports.
 
 ## Updating PO templates and translatable strings in PO files
 
