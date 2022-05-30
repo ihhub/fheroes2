@@ -2,8 +2,8 @@ Source: fheroes2
 Section: contrib/games
 Priority: optional
 Maintainer: fheroes2 team <fhomm2@gmail.com>
-Build-Depends: debhelper (>= 9), libsdl2-dev, libsdl2-mixer-dev, libz-dev
-Standards-Version: 3.9.8
+Build-Depends: debhelper-compat (=12), libsdl2-dev, libsdl2-mixer-dev, libz-dev
+Standards-Version: 4.5.0
 Homepage: https://ihhub.github.io/fheroes2/
 Vcs-Git: https://github.com/ihhub/fheroes2.git
 Vcs-Browser: https://github.com/ihhub/fheroes2

@@ -1,5 +1,5 @@
 fheroes2 usr/games
-files/data/*.h2d /usr/share/games/fheroes2/files/data
-files/lang/*.mo /usr/share/games/fheroes2/files/lang
+files/data/*.h2d usr/share/games/fheroes2/files/data
+files/lang/*.mo usr/share/games/fheroes2/files/lang
 script/packaging/common/fheroes2.desktop usr/share/applications
 src/resources/fheroes2.png usr/share/pixmaps
