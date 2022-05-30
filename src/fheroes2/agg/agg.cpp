@@ -166,7 +166,7 @@ namespace AGG
 
     void PlayMusicInternally( const int mus, const MusicSource musicType, const bool loop );
     void PlaySoundInternally( const int m82, const int soundVolume );
-    void playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, const int soundVolume );
+    void playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, const int soundVolume, const bool is3DAudioEnabled );
 
     fheroes2::AGGFile g_midiHeroes2AGG;
     fheroes2::AGGFile g_midiHeroes2xAGG;
@@ -228,13 +228,13 @@ namespace AGG
             _workerNotification.notify_all();
         }
 
-        void pushLoopSound( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> vols, const int soundVolume )
+        void pushLoopSound( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> vols, const int soundVolume, const bool is3DAudioEnabled )
         {
             _createThreadIfNeeded();
 
             std::lock_guard<std::mutex> mutexLock( _mutex );
 
-            _loopSoundTasks.emplace( std::move( vols ), soundVolume );
+            _loopSoundTasks.emplace( std::move( vols ), soundVolume, is3DAudioEnabled );
             _runFlag = 1;
             _workerNotification.notify_all();
         }
@@ -289,13 +289,17 @@ namespace AGG
 
         struct LoopSoundTask
         {
-            LoopSoundTask( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> effects, const int soundVolume_ )
+            LoopSoundTask( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> effects, const int soundVolume_, const bool is3DAudioOn )
                 : soundEffects( std::move( effects ) )
                 , soundVolume( soundVolume_ )
-            {}
+                , is3DAudioEnabled( is3DAudioOn )
+            {
+                // Do nothing.
+            }
 
             std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects;
             int soundVolume;
+            bool is3DAudioEnabled;
         };
 
         std::unique_ptr<std::thread> _worker;
@@ -358,7 +362,7 @@ namespace AGG
 
                     manager->_mutex.unlock();
 
-                    playLoopSoundsInternally( std::move( loopSoundTask.soundEffects ), loopSoundTask.soundVolume );
+                    playLoopSoundsInternally( std::move( loopSoundTask.soundEffects ), loopSoundTask.soundVolume, loopSoundTask.is3DAudioEnabled );
                 }
                 else if ( !manager->_musicTasks.empty() ) {
                     const MusicTask musicTask = manager->_musicTasks.back();
@@ -465,17 +469,21 @@ const std::vector<uint8_t> & AGG::GetMID( int xmi )
 
 void AGG::playLoopSounds( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, bool asyncronizedCall )
 {
+    const Settings & conf = Settings::Get();
+
     if ( asyncronizedCall ) {
-        g_asyncSoundManager.pushLoopSound( std::move( soundEffects ), Settings::Get().SoundVolume() );
+        g_asyncSoundManager.pushLoopSound( std::move( soundEffects ), conf.SoundVolume(), conf.is3DAudioEnabled() );
     }
     else {
         g_asyncSoundManager.sync();
-        playLoopSoundsInternally( std::move( soundEffects ), Settings::Get().SoundVolume() );
+        playLoopSoundsInternally( std::move( soundEffects ), conf.SoundVolume(), conf.is3DAudioEnabled() );
     }
 }
 
-void AGG::playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, const int soundVolume )
+void AGG::playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, const int soundVolume, const bool is3DAudioEnabled )
 {
+    // TODO: this check must be done in the parent function. This is applied for all functions within this code. There is no need to even send any data to be played if
+    //       an audio device is not initialized.
     if ( !Audio::isValid() ) {
         return;
     }
@@ -484,14 +492,14 @@ void AGG::playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioLo
 
     if ( soundVolume == 0 ) {
         // The volume is 0. Remove all existing sound effects.
-        for ( auto iter = currentAudioLoopEffects.begin(); iter != currentAudioLoopEffects.end(); ++iter ) {
-            const std::vector<ChannelAudioLoopEffectInfo> & existingEffects = iter->second;
+        for ( const auto & audioEffectPair : currentAudioLoopEffects ) {
+            const std::vector<ChannelAudioLoopEffectInfo> & existingEffects = audioEffectPair.second;
 
             for ( const ChannelAudioLoopEffectInfo & info : existingEffects ) {
                 if ( Mixer::isPlaying( info.channelId ) ) {
-                    // TODO: check if we need to call Pause() function at all.
+                    // TODO: check if we need to call Pause() function at all. Also verify whether we need to set volume or just stop the channel.
                     Mixer::Pause( info.channelId );
-                    Mixer::Volume( info.channelId, 0 );
+                    Mixer::setVolume( info.channelId, 0 );
                     Mixer::Stop( info.channelId );
                 }
             }
@@ -500,9 +508,6 @@ void AGG::playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioLo
         currentAudioLoopEffects.clear();
         return;
     }
-
-    const bool is3DAudioEnabled = Settings::Get().is3DAudioEnabled();
-    const int32_t maxMixerValue = Mixer::MaxVolume();
 
     std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> tempAudioLoopEffects;
     std::swap( tempAudioLoopEffects, currentAudioLoopEffects );
@@ -529,22 +534,21 @@ void AGG::playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioLo
             currentAudioLoopEffects[soundType].emplace_back( existingEffects.back() );
             existingEffects.pop_back();
 
-            ChannelAudioLoopEffectInfo & currenInfo = currentAudioLoopEffects[soundType].back();
-            currenInfo = { effects.back(), currenInfo.channelId };
+            ChannelAudioLoopEffectInfo & currentInfo = currentAudioLoopEffects[soundType].back();
+            currentInfo = { effects.back(), currentInfo.channelId };
             effects.pop_back();
 
-            if ( Mixer::isPlaying( currenInfo.channelId ) ) {
-                Mixer::Pause( currenInfo.channelId );
+            if ( Mixer::isPlaying( currentInfo.channelId ) ) {
+                // TODO: do we really need to pause and resume while setting the effects and volume? Can SDL mixer handle this on the fly?
+                Mixer::Pause( currentInfo.channelId );
 
                 if ( is3DAudioEnabled ) {
-                    Mixer::applySoundEffect( currenInfo.channelId, currenInfo.angle, currenInfo.volumePercentage );
-                    Mixer::Volume( currenInfo.channelId, maxMixerValue * soundVolume / 10 );
-                }
-                else {
-                    Mixer::Volume( currenInfo.channelId, maxMixerValue * currenInfo.volumePercentage / 100 * soundVolume / 10 );
+                    Mixer::applySoundEffect( currentInfo.channelId, currentInfo.angle, currentInfo.volumePercentage );
                 }
 
-                Mixer::Resume( currenInfo.channelId );
+                Mixer::setVolume( currentInfo.channelId, currentInfo.volumePercentage * soundVolume / 10 );
+
+                Mixer::Resume( currentInfo.channelId );
             }
         }
 
@@ -560,15 +564,16 @@ void AGG::playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioLo
         }
     }
 
+    // TODO: instead of stopping existing sounds replace them with new sounds.
     // Stop the rest of running sound effects.
-    for ( auto iter = tempAudioLoopEffects.begin(); iter != tempAudioLoopEffects.end(); ++iter ) {
-        const std::vector<ChannelAudioLoopEffectInfo> & existingEffects = iter->second;
+    for ( const auto & audioEffectPair : tempAudioLoopEffects ) {
+        const std::vector<ChannelAudioLoopEffectInfo> & existingEffects = audioEffectPair.second;
 
         for ( const ChannelAudioLoopEffectInfo & info : existingEffects ) {
             if ( Mixer::isPlaying( info.channelId ) ) {
-                // TODO: check if we need to call Pause() function at all.
+                // TODO: check if we need to call Pause() function at all. Also verify whether we need to set volume or just stop the channel.
                 Mixer::Pause( info.channelId );
-                Mixer::Volume( info.channelId, maxMixerValue * soundVolume / 10 );
+                Mixer::setVolume( info.channelId, 0 );
                 Mixer::Stop( info.channelId );
             }
         }
@@ -577,9 +582,9 @@ void AGG::playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioLo
     tempAudioLoopEffects.clear();
 
     // Add new sound effects.
-    for ( auto iter = soundEffects.begin(); iter != soundEffects.end(); ++iter ) {
-        const M82::SoundType soundType = iter->first;
-        const std::vector<AudioLoopEffectInfo> & effects = iter->second;
+    for ( const auto & audioEffectPair : soundEffects ) {
+        const M82::SoundType soundType = audioEffectPair.first;
+        const std::vector<AudioLoopEffectInfo> & effects = audioEffectPair.second;
         assert( !effects.empty() );
 
         for ( const AudioLoopEffectInfo & info : effects ) {
@@ -604,15 +609,13 @@ void AGG::playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioLo
             }
 
             // Adjust channel based on given parameters.
+
+            // TODO: this is very hacky way. We should not do this. For example in 3D audio mode when a hero moves alongside beach it is noticeable that ocean sounds are
+            //       'jumping' in volume. Instead of such approach we need to get free channel ID which will be used for playback. Set volume for it and then start
+            //       playing. Such logic must be implemented within Audio related code.
+            //       As an alternative solution: we can use channel IDs which we freed in the previous step. However, be careful with synchronization for audio access.
             Mixer::Pause( channelId );
-
-            if ( is3DAudioEnabled ) {
-                Mixer::Volume( channelId, maxMixerValue * soundVolume / 10 );
-            }
-            else {
-                Mixer::Volume( channelId, maxMixerValue * info.volumePercentage / 100 * soundVolume / 10 );
-            }
-
+            Mixer::setVolume( channelId, info.volumePercentage * soundVolume / 10 );
             Mixer::Resume( channelId );
 
             currentAudioLoopEffects[soundType].emplace_back( info, channelId );
@@ -648,11 +651,15 @@ void AGG::PlaySoundInternally( const int m82, const int soundVolume )
     DEBUG_LOG( DBG_ENGINE, DBG_TRACE, M82::GetString( m82 ) )
 
     const std::vector<uint8_t> & v = AGG::GetWAV( m82 );
+    if ( v.empty() ) {
+        return;
+    }
+
     const int ch = Mixer::Play( &v[0], static_cast<uint32_t>( v.size() ), -1, false );
 
     if ( ch >= 0 ) {
         Mixer::Pause( ch );
-        Mixer::Volume( ch, Mixer::MaxVolume() * soundVolume / 10 );
+        Mixer::setVolume( ch, 100 * soundVolume / 10 );
         Mixer::Resume( ch );
     }
 }
@@ -674,6 +681,9 @@ void AGG::PlayMusic( int mus, bool loop, bool asyncronizedCall )
 
 void AGG::PlayMusicInternally( const int mus, const MusicSource musicType, const bool loop )
 {
+    // Make sure that the music track is valid.
+    assert( mus != MUS::UNUSED );
+
     if ( !Audio::isValid() ) {
         return;
     }

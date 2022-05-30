@@ -40,7 +40,7 @@ namespace
 
     void playAudio( const std::vector<std::vector<uint8_t>> & audioChannels )
     {
-        Mixer::Volume( -1, Mixer::MaxVolume() * Settings::Get().SoundVolume() / 10 );
+        Mixer::setVolume( -1, 100 * Settings::Get().SoundVolume() / 10 );
 
         for ( const std::vector<uint8_t> & audio : audioChannels ) {
             if ( !audio.empty() ) {

@@ -46,7 +46,7 @@ namespace
         {
             freq = 22050;
             format = AUDIO_S16;
-            channels = 2; // Support tereo audio.
+            channels = 2; // Support stereo audio.
             silence = 0;
             samples = 2048;
             size = 0;
@@ -64,10 +64,10 @@ namespace
     std::vector<int> savedMixerVolumes;
     int savedMusicVolume = 0;
 
-    int musicFadeIn = 0;
-    int musicFadeOut = 0;
+    int musicFadeInMs = 0;
+    int musicFadeOutMs = 0;
 
-    Mix_Music * music = nullptr;
+    Mix_Music * currentMusicTrack = nullptr;
 
     struct AudioEffectState
     {
@@ -84,7 +84,7 @@ namespace
             }
 
             if ( Mix_UnregisterAllEffects( channelId ) == 0 ) {
-                ERROR_LOG( "Unable to unregister all effects from channel " << channelId )
+                ERROR_LOG( "Failed to unregister all effects from channel " << channelId << ". The error: " << Mix_GetError() )
             }
 
             channels.erase( channelId );
@@ -112,7 +112,7 @@ namespace
     {
         Mix_Chunk * sample = Mix_LoadWAV_RW( SDL_RWFromConstMem( ptr, size ), 1 );
         if ( !sample ) {
-            ERROR_LOG( "Unable to create audio chunk from memory. The error: " << Mix_GetError() )
+            ERROR_LOG( "Failed to create an audio chunk from memory. The error: " << Mix_GetError() )
         }
 
         return sample;
@@ -128,7 +128,7 @@ namespace
 
         const int channelId = Mix_PlayChannel( channel, sample, loop ? -1 : 0 );
         if ( channelId < 0 ) {
-            ERROR_LOG( Mix_GetError() )
+            ERROR_LOG( "Failed to play an audio chunk for channel " << channelId << ". The error: " << Mix_GetError() )
         }
 
         return channelId;
@@ -140,8 +140,8 @@ namespace
             volumePercentage = 100;
         }
 
-        if ( !Mix_SetPosition( channelId, angle, 255 * ( volumePercentage - 100 ) ) ) {
-            ERROR_LOG( Mix_GetError() )
+        if ( Mix_SetPosition( channelId, angle, 255 * ( volumePercentage - 100 ) ) == 0 ) {
+            ERROR_LOG( "Failed to apply sound effect for channel " << channelId << ". The error: " << Mix_GetError() )
         }
         else {
             audioEffectLedger.registerChannel( channelId );
@@ -154,8 +154,8 @@ namespace
 
         const int channelId = Mix_PlayChannel( channel, sample, loop ? -1 : 0 );
 
-        if ( channelId == -1 ) {
-            ERROR_LOG( Mix_GetError() )
+        if ( channelId < 0 ) {
+            ERROR_LOG( "Failed to play a mix chunk for original channel " << channel << ". The error: " << Mix_GetError() )
             return channelId;
         }
 
@@ -174,16 +174,40 @@ namespace
         //       How a possible implementation should work: detect the type of music. If it is MP3 or OGG add a hook function and play the music track once. After the
         //       completion of the track the function will be called. Within the function inform a separate thread about this which will restart the music track again.
 
+        // TODO: based on measurement Stop() function takes up to additional 40% execution time within this function. However, based on the documentation:
+        //       "Any previous music will be halted, or if it is fading out it will wait (blocking) for the fade to complete." we do not need to even call this function.
+        //       If it is correct we should remove the call to significantly improve MIDI playback.
         Music::Stop();
 
         const int loopCount = loop ? -1 : 0;
-        const int returnCode = musicFadeIn ? Mix_FadeInMusic( mix, loopCount, musicFadeIn ) : Mix_PlayMusic( mix, loopCount );
+        const int returnCode = ( musicFadeInMs > 0 ) ? Mix_FadeInMusic( mix, loopCount, musicFadeInMs ) : Mix_PlayMusic( mix, loopCount );
         if ( returnCode != 0 ) {
-            ERROR_LOG( Mix_GetError() )
+            ERROR_LOG( "Failed to play music mix. The error: " << Mix_GetError() )
             return;
         }
 
-        music = mix;
+        currentMusicTrack = mix;
+    }
+
+    int normalizeToSDLVolume( int volume )
+    {
+        volume = volume * MIX_MAX_VOLUME / 100;
+
+        if ( volume > MIX_MAX_VOLUME ) {
+            volume = MIX_MAX_VOLUME;
+        }
+        else if ( volume < 0 ) {
+            // Why are you passing a negative volume value?
+            assert( 0 );
+            volume = 0;
+        }
+
+        return volume;
+    }
+
+    int normalizeFromSDLVolume( const int volume )
+    {
+        return volume * 100 / MIX_MAX_VOLUME;
     }
 }
 
@@ -192,7 +216,7 @@ void Audio::Init()
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
     if ( isInitialized ) {
-        // If this assertion blows up you are trying to initialize already initialized system.
+        // If this assertion blows up you are trying to initialize an already initialized system.
         assert( 0 );
         return;
     }
@@ -228,7 +252,7 @@ void Audio::Init()
 #endif
 
     if ( Mix_OpenAudio( audioSpecs.freq, audioSpecs.format, audioSpecs.channels, audioSpecs.samples ) != 0 ) {
-        ERROR_LOG( Mix_GetError() )
+        ERROR_LOG( "Failed to initialize an audio device. The error: " << Mix_GetError() )
         return;
     }
 
@@ -237,7 +261,7 @@ void Audio::Init()
     uint16_t format = 0;
     const int deviceInitCount = Mix_QuerySpec( &frequency, &format, &channels );
     if ( deviceInitCount == 0 ) {
-        ERROR_LOG( "Failed to initialize an audio system. The error: " << Mix_GetError() )
+        ERROR_LOG( "Failed to query an audio device specs. The error: " << Mix_GetError() )
     }
 
     if ( deviceInitCount != 1 ) {
@@ -368,7 +392,7 @@ size_t Mixer::getChannelCount()
 
 int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop )
 {
-    if ( ptr == nullptr ) {
+    if ( ptr == nullptr || size == 0 ) {
         // You are trying to play an empty file. Check your logic!
         assert( 0 );
         return -1;
@@ -390,8 +414,8 @@ int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, 
 
 int Mixer::PlayFromDistance( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const int16_t angle, uint8_t volumePercentage )
 {
-    if ( ptr == nullptr ) {
-        // You are trying to play an empty file. Check your logic!
+    if ( ptr == nullptr || size == 0 ) {
+        // You are trying to play an empty sound. Check your logic!
         assert( 0 );
         return -1;
     }
@@ -422,25 +446,18 @@ int Mixer::applySoundEffect( const int channelId, const int16_t angle, uint8_t v
     return channelId;
 }
 
-int Mixer::MaxVolume()
+int Mixer::setVolume( const int channel, const int volumePercentage )
 {
-    return MIX_MAX_VOLUME;
-}
+    const int volume = normalizeToSDLVolume( volumePercentage );
 
-int Mixer::Volume( const int channel, int vol )
-{
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
     if ( !isInitialized ) {
         return 0;
     }
 
-    if ( vol > MIX_MAX_VOLUME ) {
-        vol = MIX_MAX_VOLUME;
-    }
-
     if ( !muted ) {
-        return Mix_Volume( channel, vol );
+        return normalizeFromSDLVolume( Mix_Volume( channel, volume ) );
     }
 
     if ( channel < 0 ) {
@@ -450,12 +467,9 @@ int Mixer::Volume( const int channel, int vol )
 
         // return the average volume
         const int prevVolume = std::accumulate( savedMixerVolumes.begin(), savedMixerVolumes.end(), 0 ) / static_cast<int>( savedMixerVolumes.size() );
+        std::fill( savedMixerVolumes.begin(), savedMixerVolumes.end(), volume );
 
-        if ( vol >= 0 ) {
-            std::fill( savedMixerVolumes.begin(), savedMixerVolumes.end(), vol );
-        }
-
-        return prevVolume;
+        return normalizeFromSDLVolume( prevVolume );
     }
 
     const size_t channelNum = static_cast<size_t>( channel );
@@ -465,12 +479,9 @@ int Mixer::Volume( const int channel, int vol )
     }
 
     const int prevVolume = savedMixerVolumes[channelNum];
+    savedMixerVolumes[channelNum] = volume;
 
-    if ( vol >= 0 ) {
-        savedMixerVolumes[channelNum] = vol;
-    }
-
-    return prevVolume;
+    return normalizeFromSDLVolume( prevVolume );
 }
 
 void Mixer::Pause( const int channel /* = -1 */ )
@@ -509,6 +520,10 @@ bool Mixer::isPlaying( const int channel )
 
 void Music::Play( const std::vector<uint8_t> & v, const bool loop )
 {
+    if ( v.empty() ) {
+        return;
+    }
+
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
     if ( isInitialized && !v.empty() ) {
@@ -521,7 +536,7 @@ void Music::Play( const std::vector<uint8_t> & v, const bool loop )
         SDL_FreeRW( rwops );
 
         if ( !mix ) {
-            ERROR_LOG( Mix_GetError() )
+            ERROR_LOG( "Failed to create a music mix from memory. The error: " << Mix_GetError() )
         }
         else {
             PlayMusic( mix, loop );
@@ -531,77 +546,87 @@ void Music::Play( const std::vector<uint8_t> & v, const bool loop )
 
 void Music::Play( const std::string & file, const bool loop )
 {
+    if ( file.empty() ) {
+        // Nothing to play. It is an empty file.
+        return;
+    }
+
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
     if ( !isInitialized ) {
         return;
     }
 
-    Mix_Music * mix = Mix_LoadMUS( System::FileNameToUTF8( file ).c_str() );
+    const std::string filePath = System::FileNameToUTF8( file );
+
+    Mix_Music * mix = Mix_LoadMUS( filePath.c_str() );
     if ( !mix ) {
-        ERROR_LOG( Mix_GetError() )
+        ERROR_LOG( "Failed to create a music mix from path " << filePath << ". The error: " << Mix_GetError() )
         return;
     }
 
     PlayMusic( mix, loop );
 }
 
-void Music::SetFadeIn( const int f )
+void Music::SetFadeInMs( const int timeInMs )
 {
+    if ( timeInMs < 0 ) {
+        // Why are you even setting a negative value?
+        assert( 0 );
+        return;
+    }
+
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
-    musicFadeIn = f;
+    musicFadeInMs = timeInMs;
 }
 
-int Music::Volume( int vol )
+int Music::setVolume( const int volumePercentage )
 {
+    const int volume = normalizeToSDLVolume( volumePercentage );
+
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
     if ( !isInitialized ) {
         return 0;
     }
 
-    if ( vol > MIX_MAX_VOLUME ) {
-        vol = MIX_MAX_VOLUME;
-    }
-
     if ( muted ) {
         const int prevVolume = savedMusicVolume;
 
-        if ( vol >= 0 ) {
-            savedMusicVolume = vol;
-        }
+        savedMusicVolume = volume;
 
-        return prevVolume;
+        return normalizeFromSDLVolume( prevVolume );
     }
 
-    return Mix_VolumeMusic( vol );
+    return normalizeFromSDLVolume( Mix_VolumeMusic( volume ) );
 }
 
 void Music::Stop()
 {
     const std::lock_guard<std::recursive_mutex> guard( mutex );
-    if ( music == nullptr ) {
+    if ( currentMusicTrack == nullptr ) {
         // Nothing to do.
         return;
     }
 
-    if ( musicFadeOut ) {
-        while ( !Mix_FadeOutMusic( musicFadeOut ) && Mix_PlayingMusic() ) {
+    if ( musicFadeOutMs > 0 ) {
+        while ( !Mix_FadeOutMusic( musicFadeOutMs ) && Mix_PlayingMusic() ) {
             SDL_Delay( 50 );
         }
     }
     else {
+        // According to the documentation (https://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html#SEC67) this function always returns 0.
         Mix_HaltMusic();
     }
 
-    Mix_FreeMusic( music );
-    music = nullptr;
+    Mix_FreeMusic( currentMusicTrack );
+    currentMusicTrack = nullptr;
 }
 
 bool Music::isPlaying()
 {
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
-    return music && Mix_PlayingMusic();
+    return currentMusicTrack && Mix_PlayingMusic();
 }
