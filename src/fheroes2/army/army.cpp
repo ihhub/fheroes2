@@ -395,8 +395,9 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
     }
 
     // Put the potentially selected/highlighted troop at the end of the list of troops to move.
+    // Other priorities for what order to use, like speed attribute, can be addressed here in the future.
     std::vector<Troop *> troopFromOrder;
-    int troopPointerIndex = 0;
+    size_t troopPointerIndex = 0;
     if ( selectedTroopIndex != 4 ) {
         for ( Troop * troop : from ) {
             if ( selectedTroopIndex == troopPointerIndex ) {
@@ -409,7 +410,10 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
         troopFromOrder.emplace_back( from.at( selectedTroopIndex ) );
     }
     else {
-        troopFromOrder = from;
+        // TODO: Might be able to solve this without using vectors and just Troops type.
+        for ( Troop * troop : from ) {
+            troopFromOrder.emplace_back( troop );
+        }
     }
 
     // Will be changed later on if the receiving army's troops get merged. This avoids unnecessary merges.
