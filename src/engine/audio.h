@@ -51,7 +51,7 @@ namespace Mixer
 
     int applySoundEffect( const int channelId, const int16_t angle, uint8_t volumePercentage );
 
-    // Returns previous volume value.
+    // Returns the previous volume percentage value.
     int setVolume( const int channel, const int volumePercentage );
 
     void Pause( const int channel = -1 );
@@ -66,7 +66,7 @@ namespace Music
     void Play( const std::vector<uint8_t> & v, const bool loop );
     void Play( const std::string & file, const bool loop );
 
-    // Returns previous volume value.
+    // Returns the previous volume percentage value.
     int setVolume( const int volumePercentage );
 
     void SetFadeInMs( const int timeInMs );

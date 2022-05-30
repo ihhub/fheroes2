@@ -189,20 +189,19 @@ namespace
         currentMusicTrack = mix;
     }
 
-    int normalizeToSDLVolume( int volume )
+    int normalizeToSDLVolume( const int volumePercentage )
     {
-        volume = volume * MIX_MAX_VOLUME / 100;
-
-        if ( volume > MIX_MAX_VOLUME ) {
-            volume = MIX_MAX_VOLUME;
-        }
-        else if ( volume < 0 ) {
+        if ( volumePercentage < 0 ) {
             // Why are you passing a negative volume value?
             assert( 0 );
-            volume = 0;
+            return 0;
         }
 
-        return volume;
+        if ( volumePercentage >= 100 ) {
+            return MIX_MAX_VOLUME;
+        }
+
+        return volumePercentage * MIX_MAX_VOLUME / 100;
     }
 
     int normalizeFromSDLVolume( const int volume )
@@ -393,7 +392,7 @@ size_t Mixer::getChannelCount()
 int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop )
 {
     if ( ptr == nullptr || size == 0 ) {
-        // You are trying to play an empty file. Check your logic!
+        // You are trying to play an empty sound. Check your logic!
         assert( 0 );
         return -1;
     }

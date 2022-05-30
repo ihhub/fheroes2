@@ -682,7 +682,7 @@ void AGG::PlayMusic( int mus, bool loop, bool asyncronizedCall )
 void AGG::PlayMusicInternally( const int mus, const MusicSource musicType, const bool loop )
 {
     // Make sure that the music track is valid.
-    assert( mus != MUS::UNUSED );
+    assert( mus != MUS::UNUSED && mus != MUS::UNKNOWN );
 
     if ( !Audio::isValid() ) {
         return;
