@@ -410,7 +410,6 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
         troopFromOrder.emplace_back( from.at( selectedTroopIndex ) );
     }
     else {
-        // TODO: Might be able to solve this without using vectors and just Troops type.
         for ( Troop * troop : from ) {
             troopFromOrder.emplace_back( troop );
         }
@@ -435,17 +434,16 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
             if ( troop->isValid() ) {
                 // If there is only one troop on a hero, leave one unit.
                 if ( from.GetCount() == 1 && !moveAll ) {
-                    /*if ( true )
-                        return;*/
                     if ( troop->GetCount() > 1 ) {
                         if ( !( *at( assignmentSlot ) ).isValid() ) {
                             at( assignmentSlot )->Set( *troop );
                             at( assignmentSlot )->SetCount( troop->GetCount() - 1 );
+                            troop->SetCount( 1 );
                         }
                         else if ( at( assignmentSlot )->GetID() == troop->GetID() ) {
                             at( assignmentSlot )->SetCount( at( assignmentSlot )->GetCount() + troop->GetCount() - 1 );
+                            troop->SetCount( 1 );
                         }
-                        troop->SetCount( 1 );
                         return;
                     }
                     break;
