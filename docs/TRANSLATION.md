@@ -22,6 +22,7 @@ We encourage you to use [**poedit**](https://poedit.net/) or [**gtranslator**](h
 Currently all implemented languages, except French, adhere to a standardized font encoding/charset.
 
 NB: The fheroes2 team has set a limit of 1000 lines of added lines for any PR for translations. This is because every PR needs to be reviewed and adding too many lines at once will only slow this process down. In addition, Github becomes hard to navigate once too many changes, comments etc. are present within a PR page, further slowing down the process of reviewing it.
+Preferrably a PR should contain a small amount of changes, like 100, all focused on translating a few parts of the game like creature names or castle buildings.
 
 ## Build binary translation files
 
