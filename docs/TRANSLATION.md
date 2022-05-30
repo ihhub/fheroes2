@@ -13,7 +13,7 @@ _( "Are you sure you want to quit?" )
 ## Adding new translations/localizations
 
 If you want to add a new language localization, you will first need to add this language in the source code as a supported language. Afterwards, a new PO file for that language will need to be added. It will have to be named according to the ISO standard's two-character language abbreviations.
-To have font support for your language, you will have to specify what font encoding/charset your language uses by adding it to the font generation code found in `/src/fheroes2/gui/ui_font.cpp`. If a font supporting your language has not currently been implemented then code for that will need to be added.
+To have font support for your language, you will have to specify what font encoding/charset your language uses by adding it to the font generation code found in `/src/fheroes2/gui/ui_font.cpp`. If a font supporting your language has not currently been implemented, then code for that will need to be added.
 
 ## Editing translations
 
@@ -23,13 +23,15 @@ Currently all implemented languages, except French, adhere to a standardized fon
 
 ## Build binary translation files
 
-Once the translation files have been modified, for Linux/MacOS run the `make` command below in `/files/lang` to create machine object (MO) binary files which can be used by fheroes2 engine.
+Once the translation files have been modified, for Linux/MacOS run the `make` command below in `/files/lang` to create machine object (MO) binary files which can be used by the fheroes2 engine.
 
 For the German de.po, this would be the command:
 
 ```bash
 make de.mo
 ```
+
+This MO file should then be put in the `/files/lang` folder used by the fheroes2 executable, in other words not the one located in the source directory.
 
 For Windows users that use POEdit or similar, they can compile with that program. However, note that the program will need to be set to compile the MO file in the font encoding/Charset that the language that you are translating to has been set to.
 
