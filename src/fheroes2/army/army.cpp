@@ -406,7 +406,7 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
             troopFromOrder.emplace_back( troop );
             ++troopPointerIndex;
         }
-            troopFromOrder.emplace_back( from.at( selectedTroopIndex ) );
+        troopFromOrder.emplace_back( from.at( selectedTroopIndex ) );
     }
     else {
         troopFromOrder = from;
