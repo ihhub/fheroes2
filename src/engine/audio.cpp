@@ -369,7 +369,7 @@ void Mixer::SetChannels( const int num )
 
     const int channelsCount = Mix_AllocateChannels( num );
     if ( num != channelsCount ) {
-        ERROR_LOG( "Failed to the required amount of channels for sound. Required " << num << " but received " << channelsCount )
+        ERROR_LOG( "Failed to allocate the required amount of channels for sound. The required number of channels " << num << " but allocated only " << channelsCount )
     }
 
     if ( channelsCount > 0 ) {
