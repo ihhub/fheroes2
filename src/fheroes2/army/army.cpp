@@ -418,7 +418,7 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
     // Will be changed later on if the receiving army's troops get merged. This avoids unnecessary merges.
     bool preferEmptySlot = false;
 
-    // from army might have more than 0 if it is a hero army with one troop left.
+    // 'from' army might have more than 0 if it is a hero army with one troop left.
     while ( from.GetCount() > 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
         // Attempt to move troops directly to the same slot in the receiving army.
         for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {

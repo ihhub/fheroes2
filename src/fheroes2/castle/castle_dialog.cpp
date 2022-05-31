@@ -436,8 +436,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
             else if ( le.MousePressRight( buttonPrevCastle.area() ) ) {
                 Dialog::Message( _( "Show previous town" ), _( "Click to show previous town." ), Font::BIG );
             }
-            ArmyTroop * pressedBottomBar = bottomArmyBar.GetItem( le.GetMousePressLeft() );
-            ArmyTroop * pressedTopBar = topArmyBar.GetItem( le.GetMousePressLeft() );
+            const ArmyTroop * pressedBottomBar = bottomArmyBar.GetItem( le.GetMousePressLeft() );
+            const ArmyTroop * pressedTopBar = topArmyBar.GetItem( le.GetMousePressLeft() );
             size_t index = 4;
             if ( heroes.Guest() && !conf.ExtCastleAllowGuardians() ) {
                 if ( le.MouseClickLeft( rectSign1 ) || HotKeyPressEvent( Game::HotKeyEvent::SWAP_ARMIES ) ) {
@@ -450,8 +450,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     need_redraw = true;
                 }
                 else if ( ( pressedTopBar && le.MouseReleaseLeft( rectSign2 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
-                    if ( bottomArmyBar.isSelected() ) {
-                        index = Troops::getTroopIndex( pressedTopBar->GetArmy()->getTroops(), pressedTopBar );
+                    
+                    if ( topArmyBar.isSelected() ) {
+                        index = Troops::getTroopIndex( pressedTopBar->GetArmy()->getTroops(), topArmyBar.GetSelectedItem() );
                     }
                     heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), index, true );
 
@@ -463,8 +464,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     need_redraw = true;
                 }
                 else if ( ( pressedBottomBar && le.MouseReleaseLeft( rectSign1 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
+                    
                     if ( bottomArmyBar.isSelected() ) {
-                        index = Troops::getTroopIndex( pressedBottomBar->GetArmy()->getTroops(), pressedBottomBar );
+                        index = Troops::getTroopIndex( pressedBottomBar->GetArmy()->getTroops(), bottomArmyBar.GetSelectedItem() );
                     }
                     GetArmy().MoveTroops( heroes.Guest()->GetArmy().getTroops(), index );
 
