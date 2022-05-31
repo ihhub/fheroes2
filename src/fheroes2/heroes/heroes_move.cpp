@@ -429,29 +429,9 @@ void Heroes::RedrawShadow( fheroes2::Image & dst, const int32_t dx, int32_t dy, 
     fheroes2::Point dstFroth( dx + ( reflect ? TILEWIDTH - spriteFroth.x() - spriteFroth.width() : spriteFroth.x() ), dy + spriteFroth.y() + TILEWIDTH );
 
     // apply offset
-    if ( sprite_index < 45 ) {
-        int frame = ( sprite_index % 9 );
-        if ( frame > 0 )
-            --frame;
-
-        int32_t offsetX = _offset.x;
-        if ( direction & DIRECTION_LEFT_COL )
-            offsetX -= HERO_MOVE_STEP * frame;
-        else if ( direction & DIRECTION_RIGHT_COL )
-            offsetX += HERO_MOVE_STEP * frame;
-
-        dstShad.x += offsetX;
-        dstFroth.x += offsetX;
-
-        int32_t offsetY = _offset.y;
-        if ( direction & DIRECTION_TOP_ROW )
-            offsetY -= HERO_MOVE_STEP * frame;
-        else if ( direction & DIRECTION_BOTTOM_ROW )
-            offsetY += HERO_MOVE_STEP * frame;
-
-        dstShad.y += offsetY;
-        dstFroth.y += offsetY;
-    }
+    const fheroes2::Point realOffset = getCurrentPixelOffset();
+    dstShad += realOffset;
+    dstFroth += realOffset;
 
     assert( _alphaValue >= 0 && _alphaValue <= 255 );
 
@@ -491,30 +471,9 @@ void Heroes::Redraw( fheroes2::Image & dst, const int32_t dx, int32_t dy, const 
                              dy + spriteFlag.y() + flagOffset.y + TILEWIDTH );
 
     // apply offset
-    if ( sprite_index < 45 ) {
-        fheroes2::Point offset;
-        int frame = ( sprite_index % 9 );
-        if ( frame > 0 )
-            --frame;
-
-        int32_t offsetX = _offset.x;
-        if ( direction & DIRECTION_LEFT_COL )
-            offsetX -= HERO_MOVE_STEP * frame;
-        else if ( direction & DIRECTION_RIGHT_COL )
-            offsetX += HERO_MOVE_STEP * frame;
-
-        dstHero.x += offsetX;
-        dstFlag.x += offsetX;
-
-        int32_t offsetY = _offset.y;
-        if ( direction & DIRECTION_TOP_ROW )
-            offsetY -= HERO_MOVE_STEP * frame;
-        else if ( direction & DIRECTION_BOTTOM_ROW )
-            offsetY += HERO_MOVE_STEP * frame;
-
-        dstHero.y += offsetY;
-        dstFlag.y += offsetY;
-    }
+    const fheroes2::Point realOffset = getCurrentPixelOffset();
+    dstHero += realOffset;
+    dstFlag += realOffset;
 
     // redraw sprites hero and flag
     assert( _alphaValue >= 0 && _alphaValue <= 255 );
@@ -898,6 +857,39 @@ void Heroes::AngleStep( int to_direct )
     }
 }
 
+fheroes2::Point Heroes::getCurrentPixelOffset() const
+{
+    if ( sprite_index >= 45 ) {
+        return {};
+    }
+
+    int frame = ( sprite_index % 9 );
+    if ( frame > 0 )
+        --frame;
+
+    if ( frame == 0 ) {
+        return _offset;
+    }
+
+    fheroes2::Point realOffset{ _offset };
+
+    if ( direction & DIRECTION_LEFT_COL ) {
+        realOffset.x -= HERO_MOVE_STEP * frame;
+    }
+    else if ( direction & DIRECTION_RIGHT_COL ) {
+        realOffset.x += HERO_MOVE_STEP * frame;
+    }
+
+    if ( direction & DIRECTION_TOP_ROW ) {
+        realOffset.y -= HERO_MOVE_STEP * frame;
+    }
+    else if ( direction & DIRECTION_BOTTOM_ROW ) {
+        realOffset.y += HERO_MOVE_STEP * frame;
+    }
+
+    return realOffset;
+}
+
 void Heroes::FadeOut( const fheroes2::Point & offset ) const
 {
     if ( !isInVisibleMapArea() )
@@ -1007,9 +999,14 @@ bool Heroes::Move( bool fast )
 fheroes2::Point Heroes::MovementDirection() const
 {
     const int32_t from = GetIndex();
+    if ( from == -1 ) {
+        return {};
+    }
+
     const int32_t to = Maps::GetDirectionIndex( from, path.GetFrontDirection() );
-    if ( from == -1 || to == -1 )
-        return fheroes2::Point();
+    if ( to == -1 ) {
+        return {};
+    }
 
     if ( direction == Direction::TOP ) {
         if ( sprite_index > 1 && sprite_index < 9 ) {

@@ -9133,7 +9133,7 @@ msgstr "spel: Använd ondskefullt gränssnitt"
 msgid "game: hide interface"
 msgstr "spel: Göm gränssnitt"
 
-msgid "game: offer to continue the game afer victory condition"
+msgid "game: offer to continue the game after victory condition"
 msgstr "spel: erbjud att fortsätta spelet efter att spelaren har segrat"
 
 #, fuzzy

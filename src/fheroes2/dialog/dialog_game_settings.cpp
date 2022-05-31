@@ -302,7 +302,7 @@ namespace
                     saveMusicVolume = true;
                 }
                 if ( saveMusicVolume ) {
-                    Music::Volume( static_cast<int16_t>( Mixer::MaxVolume() * conf.MusicVolume() / 10 ) );
+                    Music::setVolume( 100 * conf.MusicVolume() / 10 );
                     return SelectedWindow::UpdateSettings;
                 }
 
