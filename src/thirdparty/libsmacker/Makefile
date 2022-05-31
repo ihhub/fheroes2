@@ -28,7 +28,7 @@ $(TARGET).a: smacker.o
 	$(AR) crvs $@ $^
 
 smacker.o: smacker.c
-	$(CC) -c -MD $< $(CCFLAGS) $(CFLAGS) $(CPPFLAGS)
+	$(CC) -c -MD $< $(CCFLAGS) $(CFLAGS)
 
 include $(wildcard *.d)
 
