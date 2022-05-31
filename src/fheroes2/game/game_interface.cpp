@@ -55,30 +55,36 @@ void Interface::Basic::Reset()
 
 void Interface::Basic::SetHideInterface( bool f )
 {
-    const fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get();
-    const uint32_t px = display.width() - BORDERWIDTH - RADARWIDTH;
 
     conf.SetHideInterface( f );
 
+    const fheroes2::Display & display = fheroes2::Display::instance();
+    const int32_t px = display.width() - BORDERWIDTH - RADARWIDTH;
+
     if ( f ) {
         conf.SetShowPanel( true );
+
+        controlPanel.SetPos( display.width() - controlPanel.GetArea().width - BORDERWIDTH, 0 );
 
         fheroes2::Point pos_radr = conf.PosRadar();
         fheroes2::Point pos_bttn = conf.PosButtons();
         fheroes2::Point pos_icon = conf.PosIcons();
         fheroes2::Point pos_stat = conf.PosStatus();
 
-        if ( 0 == pos_radr.x && 0 == pos_radr.y )
+        if ( pos_radr.x < 0 || pos_radr.y < 0 ) {
             pos_radr = fheroes2::Point( BORDERWIDTH, BORDERWIDTH );
-        if ( 0 == pos_icon.x && 0 == pos_icon.y )
+        }
+        if ( pos_icon.x < 0 || pos_icon.y < 0 ) {
             pos_icon = fheroes2::Point( px - BORDERWIDTH, radar.GetArea().y + radar.GetArea().height );
-        if ( 0 == pos_bttn.x && 0 == pos_bttn.y )
+        }
+        if ( pos_bttn.x < 0 || pos_bttn.y < 0 ) {
             pos_bttn = fheroes2::Point( px - BORDERWIDTH, iconsPanel.GetArea().y + iconsPanel.GetArea().height );
-        if ( 0 == pos_stat.x && 0 == pos_stat.y )
+        }
+        if ( pos_stat.x < 0 || pos_stat.y < 0 ) {
             pos_stat = fheroes2::Point( px - BORDERWIDTH, buttonsArea.GetArea().y + buttonsArea.GetArea().height );
+        }
 
-        controlPanel.SetPos( display.width() - controlPanel.GetArea().width - BORDERWIDTH, 0 );
         radar.SetPos( pos_radr.x, pos_radr.y );
         iconsPanel.SetPos( pos_icon.x, pos_icon.y );
         buttonsArea.SetPos( pos_bttn.x, pos_bttn.y );
@@ -87,7 +93,6 @@ void Interface::Basic::SetHideInterface( bool f )
     else {
         radar.SetPos( px, BORDERWIDTH );
         iconsPanel.SetPos( px, radar.GetArea().y + radar.GetArea().height + BORDERWIDTH );
-
         buttonsArea.SetPos( px, iconsPanel.GetArea().y + iconsPanel.GetArea().height + BORDERWIDTH );
         statusWindow.SetPos( px, buttonsArea.GetArea().y + buttonsArea.GetArea().height );
     }
