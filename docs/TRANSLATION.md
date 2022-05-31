@@ -59,7 +59,7 @@ a PR with your changes, you will have to save the PO file in UTF-8 encoding beca
 Currently all PO files are automatically updated with new strings after each commit that brings changes to the ingame text.
 Should you still need to update strings locally, this can be acheived by running the command below in `/src/dist` to generate
 a new portable object template (POT) file. Windows users will need to setup an environment that lets them run `make`, like
-Windows Subsystem for Linux (WSL) or [Cygwin](https://www.cygwin.com/).
+Windows Subsystem for Linux (WSL) or [Cygwin](https://www.cygwin.com/)/[MSYS2](https://www.msys2.org/).
 
 ```bash
 make pot
