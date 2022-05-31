@@ -444,7 +444,7 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
                             at( assignmentSlot )->SetCount( at( assignmentSlot )->GetCount() + troop->GetCount() - 1 );
                             troop->SetCount( 1 );
                         }
-                        return;
+                        break;
                     }
                     break;
                 }
