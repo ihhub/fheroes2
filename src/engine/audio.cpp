@@ -174,9 +174,6 @@ namespace
         //       How a possible implementation should work: detect the type of music. If it is MP3 or OGG add a hook function and play the music track once. After the
         //       completion of the track the function will be called. Within the function inform a separate thread about this which will restart the music track again.
 
-        // TODO: based on measurement Stop() function takes up to additional 40% execution time within this function. However, based on the documentation:
-        //       "Any previous music will be halted, or if it is fading out it will wait (blocking) for the fade to complete." we do not need to even call this function.
-        //       If it is correct we should remove the call to significantly improve MIDI playback.
         Music::Stop();
 
         const int loopCount = loop ? -1 : 0;
@@ -365,14 +362,22 @@ void Mixer::SetChannels( const int num )
         return;
     }
 
-    const size_t channelsCount = static_cast<size_t>( Mix_AllocateChannels( num ) );
+    if ( !savedMixerVolumes.empty() ) {
+        // Why are you allocating channels again?
+        assert( 0 );
+    }
+
+    const int channelsCount = Mix_AllocateChannels( num );
+    if ( num != channelsCount ) {
+        ERROR_LOG( "Failed to the required amount of channels for sound. Required " << num << " but received " << channelsCount )
+    }
 
     if ( channelsCount > 0 ) {
         Mix_ReserveChannels( 1 );
     }
 
     if ( muted ) {
-        savedMixerVolumes.resize( channelsCount, MIX_MAX_VOLUME );
+        savedMixerVolumes.resize( static_cast<size_t>( channelsCount ), 0 );
 
         Mix_Volume( -1, 0 );
     }
