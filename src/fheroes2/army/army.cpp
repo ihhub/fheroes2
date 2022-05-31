@@ -948,6 +948,21 @@ const Troops & Army::getTroops() const
     return *this;
 }
 
+const size_t Troops::getSelectedTroopIndex( const Troops & troopsArmy, Troop * troopForIndex)
+{
+    auto it = std::find( troopsArmy.begin(), troopsArmy.end(), troopForIndex );
+
+    size_t index;
+    if ( it != troopsArmy.end() ) {
+        index = it - troopsArmy.begin();
+    }
+    else {
+        // Troop is not in the selected Army.
+        assert( 0 );
+    }
+    return index;
+}
+
 void Army::setFromTile( const Maps::Tiles & tile )
 {
     Reset();

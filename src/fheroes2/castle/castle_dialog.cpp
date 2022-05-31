@@ -438,10 +438,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
             }
             ArmyTroop * pressedBottomBar = bottomArmyBar.GetItem( le.GetMousePressLeft() );
             ArmyTroop * pressedTopBar = topArmyBar.GetItem( le.GetMousePressLeft() );
+            size_t index = 4;
             if ( heroes.Guest() && !conf.ExtCastleAllowGuardians() ) {
                 if ( le.MouseClickLeft( rectSign1 ) || HotKeyPressEvent( Game::HotKeyEvent::SWAP_ARMIES ) ) {
                     Army::swapArmyTroops( GetArmy(), heroes.Guest()->GetArmy() );
-
                     if ( topArmyBar.isSelected() )
                         topArmyBar.ResetSelected();
                     if ( bottomArmyBar.isSelected() )
@@ -450,7 +450,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     need_redraw = true;
                 }
                 else if ( ( pressedTopBar && le.MouseReleaseLeft( rectSign2 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
-                    heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), 4, true );
+                    if ( bottomArmyBar.isSelected() ) {
+                        index = Troops::getSelectedTroopIndex( pressedTopBar->GetArmy()->getTroops(), pressedTopBar );
+                    }
+                    heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), index, true );
 
                     if ( topArmyBar.isSelected() )
                         topArmyBar.ResetSelected();
@@ -460,7 +463,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     need_redraw = true;
                 }
                 else if ( ( pressedBottomBar && le.MouseReleaseLeft( rectSign1 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
-                    GetArmy().MoveTroops( heroes.Guest()->GetArmy().getTroops() );
+                    if ( bottomArmyBar.isSelected() ) {
+                        index = Troops::getSelectedTroopIndex( pressedBottomBar->GetArmy()->getTroops(), pressedBottomBar );
+                    }
+                    GetArmy().MoveTroops( heroes.Guest()->GetArmy().getTroops(), index );
 
                     if ( topArmyBar.isSelected() )
                         topArmyBar.ResetSelected();
