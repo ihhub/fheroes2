@@ -466,7 +466,7 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
         }
 
         // Move to remaining free slots or same troop ID elsewhere in army.
-        for ( Troop * troop : from ) {
+        for ( Troop * troop : troopFromOrder ) {
             if ( troop && troop->isValid() ) {
                 if ( from.GetCount() == 1 && !moveAll ) {
                     if ( JoinTroop( troop->GetMonster(), troop->GetCount() - 1, preferEmptySlot ) ) {
@@ -958,7 +958,7 @@ size_t Troops::getTroopIndex( const Troops & troopsArmy, const Troop * troopForI
         index = it - troopsArmy.begin();
     }
     else {
-        // The troop is not in troopsArmy or is outside the possible range of indexes. Check your logic.
+        // The troop is not in troopsArmy or it is outside the range of possible indexes. Check your logic.
         assert( 0 );
     }
     return index;
