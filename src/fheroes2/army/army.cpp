@@ -948,7 +948,7 @@ const Troops & Army::getTroops() const
     return *this;
 }
 
-const size_t Troops::getSelectedTroopIndex( const Troops & troopsArmy, Troop * troopForIndex )
+size_t Troops::getSelectedTroopIndex( const Troops & troopsArmy, Troop * troopForIndex )
 {
     auto it = std::find( troopsArmy.begin(), troopsArmy.end(), troopForIndex );
 
