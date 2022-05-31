@@ -222,6 +222,7 @@ public:
     bool isPriceOfLoyaltySupported() const;
     bool isMonochromeCursorEnabled() const;
     bool isTextSupportModeEnabled() const;
+    bool is3DAudioEnabled() const;
 
     bool LoadedGameVersion() const
     {
@@ -383,6 +384,7 @@ public:
     void setFullScreen( const bool enable );
     void setMonochromeCursor( const bool enable );
     void setTextSupportMode( const bool enable );
+    void set3DAudio( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
