@@ -27,11 +27,11 @@ TARGET := fheroes2
 # Common flags for both C and C++ compilers
 CCFLAGS := -fsigned-char -pthread
 # Flags for the C compiler
-CFLAGS :=
+CFLAGS := $(CFLAGS)
 # Flags for the C++ compiler
-CXXFLAGS :=
+CXXFLAGS := $(CXXFLAGS)
 # Flags for the linker
-LDFLAGS := -pthread
+LDFLAGS := $(LDFLAGS) -pthread
 
 ifdef FHEROES2_WITH_DEBUG
 CCFLAGS := $(CCFLAGS) -O0 -g
