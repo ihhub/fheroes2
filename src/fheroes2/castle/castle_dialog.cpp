@@ -450,7 +450,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     need_redraw = true;
                 }
                 else if ( ( pressedTopBar && le.MouseReleaseLeft( rectSign2 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
-                    
                     if ( topArmyBar.isSelected() ) {
                         index = topArmyBar.GetSelectedIndex();
                     }
@@ -464,7 +463,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     need_redraw = true;
                 }
                 else if ( ( pressedBottomBar && le.MouseReleaseLeft( rectSign1 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
-                    
                     if ( bottomArmyBar.isSelected() ) {
                         index = bottomArmyBar.GetSelectedIndex();
                     }
