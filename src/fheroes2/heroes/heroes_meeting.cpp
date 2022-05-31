@@ -551,11 +551,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             display.render();
         }
         else if ( le.MouseClickLeft( moveArmyToHero2.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) ) {
-            size_t index = 4;
-            if ( selectArmy1.isSelected() ) {
-                index = selectArmy1.GetSelectedIndex();
-            }
-            otherHero.GetArmy().MoveTroops( GetArmy().getTroops(), index );
+            otherHero.GetArmy().MoveTroops( GetArmy().getTroops(), selectArmy1.isSelected() ? selectArmy1.GetSelectedIndex() : 4 );
 
             armyCountBackgroundRestorerLeft.restore();
             armyCountBackgroundRestorerRight.restore();
@@ -571,12 +567,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             display.render();
         }
         else if ( le.MouseClickLeft( moveArmyToHero1.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) ) {
-            size_t index = 4;
-            if ( selectArmy2.isSelected() ) {
-                index = selectArmy2.GetSelectedIndex();
-            }
-
-            GetArmy().MoveTroops( otherHero.GetArmy().getTroops(), index );
+            GetArmy().MoveTroops( otherHero.GetArmy().getTroops(), selectArmy2.isSelected() ? selectArmy2.GetSelectedIndex() : 4 );
 
             armyCountBackgroundRestorerLeft.restore();
             armyCountBackgroundRestorerRight.restore();

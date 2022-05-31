@@ -436,9 +436,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
             else if ( le.MousePressRight( buttonPrevCastle.area() ) ) {
                 Dialog::Message( _( "Show previous town" ), _( "Click to show previous town." ), Font::BIG );
             }
-            const ArmyTroop * pressedBottomBar = bottomArmyBar.GetItem( le.GetMousePressLeft() );
-            const ArmyTroop * pressedTopBar = topArmyBar.GetItem( le.GetMousePressLeft() );
-            size_t index = 4;
             if ( heroes.Guest() && !conf.ExtCastleAllowGuardians() ) {
                 if ( le.MouseClickLeft( rectSign1 ) || HotKeyPressEvent( Game::HotKeyEvent::SWAP_ARMIES ) ) {
                     Army::swapArmyTroops( GetArmy(), heroes.Guest()->GetArmy() );
@@ -449,11 +446,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
 
                     need_redraw = true;
                 }
-                else if ( ( pressedTopBar && le.MouseReleaseLeft( rectSign2 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
-                    if ( topArmyBar.isSelected() ) {
-                        index = topArmyBar.GetSelectedIndex();
-                    }
-                    heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), index, true );
+                else if ( ( topArmyBar.GetItem( le.GetMousePressLeft() ) && le.MouseReleaseLeft( rectSign2 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
+                    heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), topArmyBar.isSelected() ? topArmyBar.GetSelectedIndex() : 4, true );
 
                     if ( topArmyBar.isSelected() )
                         topArmyBar.ResetSelected();
@@ -462,11 +456,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
 
                     need_redraw = true;
                 }
-                else if ( ( pressedBottomBar && le.MouseReleaseLeft( rectSign1 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
-                    if ( bottomArmyBar.isSelected() ) {
-                        index = bottomArmyBar.GetSelectedIndex();
-                    }
-                    GetArmy().MoveTroops( heroes.Guest()->GetArmy().getTroops(), index );
+                else if ( ( bottomArmyBar.GetItem( le.GetMousePressLeft() ) && le.MouseReleaseLeft( rectSign1 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
+                    GetArmy().MoveTroops( heroes.Guest()->GetArmy().getTroops(), bottomArmyBar.isSelected() ? bottomArmyBar.GetSelectedIndex() : 4 );
 
                     if ( topArmyBar.isSelected() )
                         topArmyBar.ResetSelected();
