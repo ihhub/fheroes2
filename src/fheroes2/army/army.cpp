@@ -952,7 +952,7 @@ size_t Troops::getSelectedTroopIndex( const Troops & troopsArmy, Troop * troopFo
 {
     auto it = std::find( troopsArmy.begin(), troopsArmy.end(), troopForIndex );
 
-    size_t index;
+    size_t index = 4;
     if ( it != troopsArmy.end() ) {
         index = it - troopsArmy.begin();
     }
