@@ -479,7 +479,7 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
                 }
             }
         }
-        //Check if there are troops to move.
+        // Check if there are troops to move.
         if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
             return;
         }
@@ -948,7 +948,7 @@ const Troops & Army::getTroops() const
     return *this;
 }
 
-const size_t Troops::getSelectedTroopIndex( const Troops & troopsArmy, Troop * troopForIndex)
+const size_t Troops::getSelectedTroopIndex( const Troops & troopsArmy, Troop * troopForIndex )
 {
     auto it = std::find( troopsArmy.begin(), troopsArmy.end(), troopForIndex );
 
