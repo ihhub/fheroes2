@@ -15,11 +15,11 @@ _( "Are you sure you want to quit?" )
 
 ## Adding new translations/localizations
 
-If you want to add a new language localization, you will first need to add this language in the source code as a supported
-language. Afterwards, a new PO file for that language will need to be added. It will have to be named according to the ISO
-standard's two-character language abbreviations. To have font support for your language, you will have to specify what font
-encoding/charset your language uses by adding it to the font generation code found in `/src/fheroes2/gui/ui_font.cpp`.
-If a font supporting your language has not currently been implemented, then code for that will need to be added.
+If you want to add a new localization, you will first need to add it to the `SupportedLanguage` list/enumeration in the source code.
+Afterwards, a new PO file for it will need to be added. It will have to be named according to the ISO standard's two-character
+language abbreviations. Then to have font support, you will have to specify what font encoding/charset is compatible by adding
+the language to the font generation code found in `/src/fheroes2/gui/ui_font.cpp`. If a compatible font encoding has not currently
+been implemented, then code for that will need to be written.
 
 ## Editing translations
 
@@ -28,29 +28,28 @@ edit translations.
 
 Currently all implemented languages, except French, adhere to a standardized font encoding/charset.
 
-NB: The fheroes2 team has set a limit of 1000 lines of added lines for any PR for translations. This is because every PR needs
-to be reviewed and adding too many lines at once will only slow this process down. In addition, Github becomes hard to navigate
-once too many changes, comments etc. are present within a PR page, further slowing down the process of reviewing it.
+NOTE: The fheroes2 team has set a limit of 1000 added or modified lines for any Pull Request(PR) for translations. This is because
+every PR needs to be reviewed and adding too many lines at once will only slow this process down. In addition, GitHub becomes hard
+to navigate once too many changes, comments and so on are present within the same PR page, further slowing down the process of reviewing it.
 
-Preferrably a PR should contain a small amount of changes, like 100, all focused on translating a few parts of the game like
-creature names or castle buildings.
+Preferrably a PR should contain a small amount of changes, about 100 lines, all focused on translating a few parts of the game - for
+example creature names or castle buildings.
 
 ## Build binary translation files
 
 Once the translation files have been modified, for Linux/MacOS run the `make` command below in `/files/lang` to create
 machine object (MO) binary files which can be used by the fheroes2 engine.
 
-For the German de.po, this would be the command:
-
+For exmaple, for the German PO file, `de.po`, the following would be the command:
 ```bash
 make de.mo
 ```
 
-This MO file should then be put in the `/files/lang` folder used by the fheroes2 executable, in other words not the one located in
-the source directory.
+To have this MO file used by the engine, it should then be placed in the `/files/lang` folder used by the fheroes2 executable, in other
+words not the one where you find the PO files.
 
-For Windows users that use POEdit or similar, they can compile with that program. However, note that the program will need to be set
-to compile the MO file in the font encoding/Charset that the language that you are translating to has been set to.
+For Windows users that use POEdit or a similar application, they can compile with that program. However, note that the program will
+need to be set to compile the MO file in the font encoding/Charset that the language that you are translating to has been set to.
 
 For example, for German you will have to set font encoding to CP1252, while for Russian this would be CP1251. Later when submitting
 a PR with your changes, you will have to save the PO file in UTF-8 encoding because this is what Github supports.
