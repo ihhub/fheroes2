@@ -582,29 +582,31 @@ MapsFileInfoList Maps::PrepareMapsFileInfoList( const bool multi )
     for ( const std::string & mapFile : maps ) {
         Maps::FileInfo fi;
 
-        if ( fi.ReadMP2( mapFile ) ) {
-            if ( multi ) {
-                assert( prefNumOfPlayers > 1 );
-
-                if ( !fi.isAllowCountPlayers( prefNumOfPlayers ) ) {
-                    continue;
-                }
-            }
-            else {
-                const int humanOnlyColorsCount = Color::Count( fi.HumanOnlyColors() );
-
-                // Map has more than one human-only color, it is not suitable for single player mode
-                if ( humanOnlyColorsCount > 1 ) {
-                    continue;
-                }
-                // Map has the human-only color, only this color can be selected by a human player
-                if ( humanOnlyColorsCount == 1 ) {
-                    fi.removeHumanColors( fi.AllowCompHumanColors() );
-                }
-            }
-
-            uniqueMaps[System::GetBasename( mapFile )] = fi;
+        if ( !fi.ReadMP2( mapFile ) ) {
+            continue;
         }
+
+        if ( multi ) {
+            assert( prefNumOfPlayers > 1 );
+
+            if ( !fi.isAllowCountPlayers( prefNumOfPlayers ) ) {
+                continue;
+            }
+        }
+        else {
+            const int humanOnlyColorsCount = Color::Count( fi.HumanOnlyColors() );
+
+            // Map has more than one human-only color, it is not suitable for single player mode
+            if ( humanOnlyColorsCount > 1 ) {
+                continue;
+            }
+            // Map has the human-only color, only this color can be selected by a human player
+            if ( humanOnlyColorsCount == 1 ) {
+                fi.removeHumanColors( fi.AllowCompHumanColors() );
+            }
+        }
+
+        uniqueMaps[System::GetBasename( mapFile )] = fi;
     }
 
     MapsFileInfoList result;
