@@ -25,6 +25,7 @@
 #include <locale>
 #endif
 #include <algorithm>
+#include <cassert>
 #include <cstring>
 #include <map>
 
@@ -507,11 +508,6 @@ bool Maps::FileInfo::isAllowCountPlayers( int playerCount ) const
     return humanOnly <= playerCount && playerCount <= humanOnly + compHuman;
 }
 
-bool Maps::FileInfo::isMultiPlayerMap() const
-{
-    return Color::Count( HumanOnlyColors() ) > 1;
-}
-
 std::string Maps::FileInfo::String() const
 {
     std::ostringstream os;
@@ -587,9 +583,27 @@ MapsFileInfoList Maps::PrepareMapsFileInfoList( const bool multi )
         Maps::FileInfo fi;
 
         if ( fi.ReadMP2( mapFile ) ) {
-            if ( ( !multi && !fi.isMultiPlayerMap() ) || ( multi && prefNumOfPlayers > 1 && fi.isAllowCountPlayers( prefNumOfPlayers ) ) ) {
-                uniqueMaps[System::GetBasename( mapFile )] = fi;
+            if ( multi ) {
+                assert( prefNumOfPlayers > 1 );
+
+                if ( !fi.isAllowCountPlayers( prefNumOfPlayers ) ) {
+                    continue;
+                }
             }
+            else {
+                const int humanOnlyColorsCount = Color::Count( fi.HumanOnlyColors() );
+
+                // Map has more than one human-only color, it is not suitable for single player mode
+                if ( humanOnlyColorsCount > 1 ) {
+                    continue;
+                }
+                // Map has the human-only color, only this color can be selected by a human player
+                if ( humanOnlyColorsCount == 1 ) {
+                    fi.removeHumanColors( fi.AllowCompHumanColors() );
+                }
+            }
+
+            uniqueMaps[System::GetBasename( mapFile )] = fi;
         }
     }
 
