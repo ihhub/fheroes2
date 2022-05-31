@@ -30,7 +30,7 @@ $(TARGET).a: $(patsubst %.cpp, %.o, $(wildcard *.cpp))
 	$(AR) crvs $@ $^
 
 %.o: %.cpp
-	$(CXX) -c -MD $< $(CCFLAGS) $(CXXFLAGS)
+	$(CXX) -c -MD $< $(CCFLAGS) $(CXXFLAGS) $(CPPFLAGS)
 
 include $(wildcard *.d)
 
