@@ -948,22 +948,6 @@ const Troops & Army::getTroops() const
     return *this;
 }
 
-size_t Troops::getTroopIndex( const Troops & troopsArmy, const Troop * troopForIndex )
-{
-    auto it = std::find( troopsArmy.begin(), troopsArmy.end(), troopForIndex );
-
-    // Max index is 4 in an army. This is just set to initialize it. The logic should probably change here.
-    size_t index = 4;
-    if ( it != troopsArmy.end() ) {
-        index = it - troopsArmy.begin();
-    }
-    else {
-        // The troop is not in troopsArmy or it is outside the range of possible indexes. Check your logic.
-        assert( 0 );
-    }
-    return index;
-}
-
 void Army::setFromTile( const Maps::Tiles & tile )
 {
     Reset();

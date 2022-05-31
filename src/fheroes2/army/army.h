@@ -93,8 +93,6 @@ public:
     void Clean();
     void UpgradeTroops( const Castle & );
 
-    static size_t getTroopIndex( const Troops & troopsArmy, const Troop * troopForIndex );
-
     Troop * GetFirstValid();
     const Troop * GetFirstValid() const;
     const Troop * getLastValid() const;
