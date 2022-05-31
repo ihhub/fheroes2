@@ -553,7 +553,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         else if ( le.MouseClickLeft( moveArmyToHero2.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) ) {
             size_t index = 4;
             if ( selectArmy1.isSelected() ) {
-                index = Troops::getTroopIndex( GetArmy().getTroops(), selectArmy1.GetSelectedItem() );
+                index = selectArmy1.GetSelectedIndex();
             }
             otherHero.GetArmy().MoveTroops( GetArmy().getTroops(), index );
 
@@ -573,7 +573,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         else if ( le.MouseClickLeft( moveArmyToHero1.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) ) {
             size_t index = 4;
             if ( selectArmy2.isSelected() ) {
-                index = Troops::getTroopIndex( otherHero.GetArmy().getTroops(), selectArmy2.GetSelectedItem() );
+                index = selectArmy2.GetSelectedIndex();
             }
 
             GetArmy().MoveTroops( otherHero.GetArmy().getTroops(), index );

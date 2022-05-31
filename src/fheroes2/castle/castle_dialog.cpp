@@ -452,7 +452,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 else if ( ( pressedTopBar && le.MouseReleaseLeft( rectSign2 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
                     
                     if ( topArmyBar.isSelected() ) {
-                        index = Troops::getTroopIndex( pressedTopBar->GetArmy()->getTroops(), topArmyBar.GetSelectedItem() );
+                        index = topArmyBar.GetSelectedIndex();
                     }
                     heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), index, true );
 
@@ -466,7 +466,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 else if ( ( pressedBottomBar && le.MouseReleaseLeft( rectSign1 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
                     
                     if ( bottomArmyBar.isSelected() ) {
-                        index = Troops::getTroopIndex( pressedBottomBar->GetArmy()->getTroops(), bottomArmyBar.GetSelectedItem() );
+                        index = bottomArmyBar.GetSelectedIndex();
                     }
                     GetArmy().MoveTroops( heroes.Guest()->GetArmy().getTroops(), index );
 
