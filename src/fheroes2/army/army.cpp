@@ -948,16 +948,17 @@ const Troops & Army::getTroops() const
     return *this;
 }
 
-size_t Troops::getSelectedTroopIndex( const Troops & troopsArmy, const Troop * troopForIndex )
+size_t Troops::getTroopIndex( const Troops & troopsArmy, const Troop * troopForIndex )
 {
     auto it = std::find( troopsArmy.begin(), troopsArmy.end(), troopForIndex );
 
+    // Max index is 4 in an army. This is just set to initialize it. The logic should probably change here.
     size_t index = 4;
     if ( it != troopsArmy.end() ) {
         index = it - troopsArmy.begin();
     }
     else {
-        // Troop is not in the selected Army.
+        // The troop is not in troopsArmy or is outside the possible range of indexes. Check your logic.
         assert( 0 );
     }
     return index;
