@@ -9189,7 +9189,7 @@ msgstr "gra: użyj mrocznego interfejsu"
 msgid "game: hide interface"
 msgstr "gra: ukryj interfejs"
 
-msgid "game: offer to continue the game afer victory condition"
+msgid "game: offer to continue the game after victory condition"
 msgstr ""
 "gra: zaproponuj kontynuację rozgrywki po spełnieniu warunków zwycięstwa"
 

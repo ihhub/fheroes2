@@ -379,11 +379,6 @@ void Heroes::PostLoad()
     DEBUG_LOG( DBG_GAME, DBG_INFO, name << ", color: " << Color::String( GetColor() ) << ", race: " << Race::String( _race ) )
 }
 
-int Heroes::GetID() const
-{
-    return hid;
-}
-
 int Heroes::GetRace() const
 {
     return _race;
@@ -441,6 +436,8 @@ double Heroes::getRecruitValue() const
 
 double Heroes::getMeetingValue( const Heroes & recievingHero ) const
 {
+    // TODO: add logic to check artifacts with curses and those which are invaluable for a hero.
+
     // Magic Book is not transferable.
     const uint32_t artCount = bag_artifacts.CountArtifacts() - bag_artifacts.Count( Artifact::MAGIC_BOOK );
     const uint32_t canFit = HEROESMAXARTIFACT - recievingHero.bag_artifacts.CountArtifacts();
@@ -450,6 +447,7 @@ double Heroes::getMeetingValue( const Heroes & recievingHero ) const
         artifactValue = canFit * ( artifactValue / artCount );
     }
 
+    // TODO: leaving only one monster in an army is very risky. Add logic to find out which part of the army would be useful to get.
     return recievingHero.army.getReinforcementValue( army ) + artifactValue * SKILL_VALUE;
 }
 
@@ -515,21 +513,6 @@ void Heroes::IncreasePrimarySkill( int skill )
     default:
         break;
     }
-}
-
-uint32_t Heroes::GetExperience() const
-{
-    return experience;
-}
-
-void Heroes::IncreaseMovePoints( uint32_t point )
-{
-    move_point += point;
-}
-
-uint32_t Heroes::GetMovePoints() const
-{
-    return move_point;
 }
 
 uint32_t Heroes::GetMaxSpellPoints() const
@@ -935,21 +918,6 @@ bool Heroes::isLosingGame() const
     return GetKingdom().isLosingGame();
 }
 
-int Heroes::GetSpriteIndex() const
-{
-    return sprite_index;
-}
-
-void Heroes::SetSpriteIndex( int index )
-{
-    sprite_index = index;
-}
-
-void Heroes::SetOffset( const fheroes2::Point & offset )
-{
-    _offset = offset;
-}
-
 bool Heroes::isAction() const
 {
     return Modes( ACTION );
@@ -1003,27 +971,6 @@ bool Heroes::PickupArtifact( const Artifact & art )
     }
 
     return true;
-}
-
-/* return level hero */
-int Heroes::GetLevel() const
-{
-    return GetLevelFromExperience( experience );
-}
-
-const Route::Path & Heroes::GetPath() const
-{
-    return path;
-}
-
-Route::Path & Heroes::GetPath()
-{
-    return path;
-}
-
-void Heroes::ShowPath( bool f )
-{
-    f ? path.Show() : path.Hide();
 }
 
 void Heroes::IncreaseExperience( const uint32_t amount, const bool autoselect )
@@ -1248,16 +1195,6 @@ void Heroes::SetShipMaster( bool f )
     f ? SetModes( SHIPMASTER ) : ResetModes( SHIPMASTER );
 }
 
-uint32_t Heroes::lastGroundRegion() const
-{
-    return _lastGroundRegion;
-}
-
-void Heroes::setLastGroundRegion( uint32_t regionID )
-{
-    _lastGroundRegion = regionID;
-}
-
 Skill::SecSkills & Heroes::GetSecondarySkills()
 {
     return secondary_skills;
@@ -1321,17 +1258,6 @@ uint32_t Heroes::UpdateMovementPoints( const uint32_t movePoints, const int skil
 uint32_t Heroes::GetVisionsDistance() const
 {
     return 8;
-}
-
-int Heroes::GetDirection() const
-{
-    return direction;
-}
-
-void Heroes::setDirection( int directionToSet )
-{
-    if ( directionToSet != Direction::UNKNOWN )
-        direction = directionToSet;
 }
 
 int Heroes::getNumOfTravelDays( int32_t dstIdx ) const
@@ -1453,11 +1379,6 @@ void Heroes::ApplyPenaltyMovement( uint32_t penalty )
         move_point -= penalty;
     else
         move_point = 0;
-}
-
-void Heroes::ResetMovePoints()
-{
-    move_point = 0;
 }
 
 bool Heroes::MayStillMove( const bool ignorePath, const bool ignoreSleeper ) const
@@ -1595,26 +1516,6 @@ void Heroes::ActionNewPosition( const bool allowMonsterAttack )
     ResetModes( VISIONS );
 }
 
-void Heroes::SetCenterPatrol( const fheroes2::Point & pt )
-{
-    patrol_center = pt;
-}
-
-const fheroes2::Point & Heroes::GetCenterPatrol() const
-{
-    return patrol_center;
-}
-
-int Heroes::GetSquarePatrol() const
-{
-    return patrol_square;
-}
-
-void Heroes::MovePointsScaleFixed()
-{
-    move_point_scale = move_point * 1000 / GetMaxMovePoints();
-}
-
 // Move hero to a new position. This function applies no action and no penalty
 void Heroes::Move2Dest( const int32_t dstIndex )
 {
@@ -1654,11 +1555,6 @@ const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
         }
 
     return fheroes2::AGG::GetICN( -1, 0 );
-}
-
-const fheroes2::Sprite & Heroes::GetPortrait( int type ) const
-{
-    return Heroes::GetPortrait( portrait, type );
 }
 
 void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const
@@ -1761,16 +1657,6 @@ std::string Heroes::String() const
     }
 
     return os.str();
-}
-
-int Heroes::GetAttackedMonsterTileIndex() const
-{
-    return _attackedMonsterTileIndex;
-}
-
-void Heroes::SetAttackedMonsterTileIndex( int idx )
-{
-    _attackedMonsterTileIndex = idx;
 }
 
 AllHeroes::AllHeroes()

@@ -9590,7 +9590,7 @@ msgstr "jeu : utiliser l'interface maléfique"
 msgid "game: hide interface"
 msgstr "jeu : cacher l'interface"
 
-msgid "game: offer to continue the game afer victory condition"
+msgid "game: offer to continue the game after victory condition"
 msgstr "jeu : offre de continuer le jeu après la victoire"
 
 msgid "The ultimate artifact is really the %{name}."

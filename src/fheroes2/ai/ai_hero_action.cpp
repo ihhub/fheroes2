@@ -1570,17 +1570,25 @@ namespace AI
         left.markHeroMeeting( right.GetID() );
         right.markHeroMeeting( left.GetID() );
 
-        const bool rightToLeft = right.getStatsValue() < left.getStatsValue();
+        // A hero with a higher role must receive an army and artifacts from another hero.
+        // In case of the same roles a more powerful hero will receive all benefits.
+        bool rightToLeft = true;
+        if ( left.getAIRole() < right.getAIRole() ) {
+            rightToLeft = false;
+        }
+        else if ( left.getAIRole() == right.getAIRole() ) {
+            rightToLeft = right.getStatsValue() < left.getStatsValue();
+        }
 
-        if ( rightToLeft )
-            left.GetArmy().JoinStrongestFromArmy( right.GetArmy() );
-        else
-            right.GetArmy().JoinStrongestFromArmy( left.GetArmy() );
+        Heroes & giver = rightToLeft ? right : left;
+        Heroes & taker = rightToLeft ? left : right;
 
-        if ( rightToLeft )
-            left.GetBagArtifacts().exchangeArtifacts( right.GetBagArtifacts() );
-        else
-            right.GetBagArtifacts().exchangeArtifacts( left.GetBagArtifacts() );
+        // TODO: do not transfer the whole army from one hero to another. Add logic to leave a fast unit for Scout and Courier. Also 3-5 monsters are better than
+        // having 1 Peasant in one stack which leads to an instant death if the hero is attacked by an opponent.
+        taker.GetArmy().JoinStrongestFromArmy( giver.GetArmy() );
+
+        // TODO: pass heroes instances into this method to identify which artifacts are useful: some might be curses, others could be duplicates with no effects.
+        taker.GetBagArtifacts().exchangeArtifacts( giver.GetBagArtifacts() );
     }
 
     void HeroesMove( Heroes & hero )
@@ -1625,9 +1633,11 @@ namespace AI
 
                     bool resetHeroSprite = false;
                     if ( heroAnimationFrameCount > 0 ) {
-                        gameArea.ShiftCenter( { heroAnimationOffset.x * Game::AIHeroAnimSkip(), heroAnimationOffset.y * Game::AIHeroAnimSkip() } );
+                        const int32_t heroMovementSkipValue = Game::AIHeroAnimSkip();
+
+                        gameArea.ShiftCenter( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
                         gameArea.SetRedraw();
-                        heroAnimationFrameCount -= Game::AIHeroAnimSkip();
+                        heroAnimationFrameCount -= heroMovementSkipValue;
                         if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4
                             hero.SetSpriteIndex( heroAnimationSpriteId );
 
@@ -1651,15 +1661,17 @@ namespace AI
                             }
                         }
                         else {
-                            fheroes2::Point movement( hero.MovementDirection() );
+                            const fheroes2::Point movement( hero.MovementDirection() );
                             if ( movement != fheroes2::Point() ) { // don't waste resources for no movement
+                                const int32_t heroMovementSkipValue = Game::AIHeroAnimSkip();
+
                                 heroAnimationOffset = movement;
                                 gameArea.ShiftCenter( movement );
-                                heroAnimationFrameCount = 32 - Game::AIHeroAnimSkip();
+                                heroAnimationFrameCount = 32 - heroMovementSkipValue;
                                 heroAnimationSpriteId = hero.GetSpriteIndex();
-                                if ( Game::AIHeroAnimSkip() < 4 ) {
+                                if ( heroMovementSkipValue < 4 ) {
                                     hero.SetSpriteIndex( heroAnimationSpriteId - 1 );
-                                    hero.SetOffset( { heroAnimationOffset.x * Game::AIHeroAnimSkip(), heroAnimationOffset.y * Game::AIHeroAnimSkip() } );
+                                    hero.SetOffset( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
                                 }
                                 else {
                                     ++heroAnimationSpriteId;

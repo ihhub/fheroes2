@@ -25,8 +25,14 @@
 #define H2AGG_H
 
 #include <cstdint>
+#include <map>
 #include <string>
 #include <vector>
+
+namespace M82
+{
+    enum SoundType : int;
+}
 
 namespace AGG
 {
@@ -43,7 +49,22 @@ namespace AGG
         static bool init();
     };
 
-    void LoadLOOPXXSounds( const std::vector<int> & vols, bool asyncronizedCall = false );
+    struct AudioLoopEffectInfo
+    {
+        AudioLoopEffectInfo() = default;
+
+        AudioLoopEffectInfo( const int16_t angle_, const uint8_t volumePercentage_ )
+            : angle( angle_ )
+            , volumePercentage( volumePercentage_ )
+        {
+            // Do nothing.
+        }
+
+        int16_t angle{ 0 };
+        uint8_t volumePercentage{ 0 };
+    };
+
+    void playLoopSounds( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, bool asyncronizedCall );
     void PlaySound( int m82, bool asyncronizedCall = false );
     void PlayMusic( int mus, bool loop = true, bool asyncronizedCall = false );
     void ResetAudio();

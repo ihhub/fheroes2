@@ -1070,6 +1070,8 @@ bool Maps::Tiles::isClearGround() const
     case MP2::OBJ_ZERO:
     case MP2::OBJ_COAST:
         return true;
+    case MP2::OBJ_BOAT:
+        return false;
 
     default:
         break;

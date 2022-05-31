@@ -9208,7 +9208,7 @@ msgstr ""
 msgid "game: hide interface"
 msgstr ""
 
-msgid "game: offer to continue the game afer victory condition"
+msgid "game: offer to continue the game after victory condition"
 msgstr ""
 
 #, fuzzy

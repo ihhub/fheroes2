@@ -238,10 +238,10 @@ int main( int argc, char ** argv )
 
         if ( Audio::isValid() ) {
             Mixer::SetChannels( 32 );
-            Mixer::Volume( -1, Mixer::MaxVolume() * conf.SoundVolume() / 10 );
+            Mixer::setVolume( -1, 100 * conf.SoundVolume() / 10 );
 
-            Music::Volume( Mixer::MaxVolume() * conf.MusicVolume() / 10 );
-            Music::SetFadeIn( 900 );
+            Music::setVolume( 100 * conf.MusicVolume() / 10 );
+            Music::SetFadeInMs( 900 );
         }
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() )
@@ -274,7 +274,7 @@ int main( int argc, char ** argv )
         Game::mainGameLoop( conf.isFirstGameRun() );
     }
     catch ( const std::exception & ex ) {
-        ERROR_LOG( "Exception '" << ex.what() << "' occured during application runtime." )
+        ERROR_LOG( "Exception '" << ex.what() << "' occurred during application runtime." )
         return EXIT_FAILURE;
     }
 

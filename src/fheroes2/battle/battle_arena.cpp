@@ -446,7 +446,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
         }
 
         if ( !actions.empty() ) {
-            // Pending actions from the user interface (such as toggling auto battle) have "already occured" and
+            // Pending actions from the user interface (such as toggling auto battle) have "already occurred" and
             // therefore should be handled first, before any other actions. Just skip the rest of the branches.
         }
         else if ( !troop->isValid() ) {
