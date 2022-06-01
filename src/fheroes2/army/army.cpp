@@ -389,6 +389,7 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
 
     // You have selected a troop outside the possible range of troops. Check your logic.
     assert( !( selectedTroopIndex > 4 ) );
+
     // Check if there are troops to move.
     if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
         return;
@@ -490,9 +491,9 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
         // Step 3: Attempt to merge troops in receiving army to make free slots.
         const uint32_t troopCountPreMerge = GetCount();
         uint32_t neededMerges = from.GetCount();
-        // Do one less merge if a hero's last troop only has one unit.
-        // TODO: This needs to check the last troop in troopFromOrder, not 'from' army.
-        if ( !moveAll && from.getLastValid()->GetCount() == 1 ) {
+        // Do one less merge if a hero's last troop to be moved only has one unit.
+        const_reverse_iterator it = std::find_if( troopFromOrder.rbegin(), troopFromOrder.rend(), []( const Troop * troop ) { return troop->isValid(); } );
+        if ( !moveAll && (*it)->GetCount() == 1 ) {
             --neededMerges;
         }
         MergeTroops( neededMerges );
