@@ -362,11 +362,6 @@ void Mixer::SetChannels( const int num )
         return;
     }
 
-    if ( !savedMixerVolumes.empty() ) {
-        // Why are you allocating channels again?
-        assert( 0 );
-    }
-
     const int channelsCount = Mix_AllocateChannels( num );
     if ( num != channelsCount ) {
         ERROR_LOG( "Failed to allocate the required amount of channels for sound. The required number of channels " << num << " but allocated only " << channelsCount )
