@@ -382,7 +382,7 @@ void Troops::JoinTroops( Troops & troops2 )
         }
 }
 
-void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, const bool moveAll )
+void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, const bool isSelected, const bool moveAll )
 {
     // You are attempting to move an army into itself. Check your logic.
     assert( !( this == &from ) );
@@ -425,7 +425,7 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
         for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
             Troop * troop = troopFromOrder.at( slot );
             // Make sure the selected troop is not moved before troops that could not be moved in Step 1.
-            if ( slot == 4 && GetCount() > 1 ) {
+            if ( slot == 4 && GetCount() > 1 && isSelected ) {
                 break;
             }
             // Set the correct slot according to the current troop.
