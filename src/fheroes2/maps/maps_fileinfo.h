@@ -60,7 +60,6 @@ namespace Maps
         static bool FileSorting( const FileInfo &, const FileInfo & );
 
         bool isAllowCountPlayers( int playerCount ) const;
-        bool isMultiPlayerMap() const;
 
         int AllowCompHumanColors() const
         {
@@ -112,6 +111,11 @@ namespace Maps
         uint32_t LossCountDays() const
         {
             return loss1;
+        }
+
+        void removeHumanColors( const int colors )
+        {
+            allow_human_colors &= ~colors;
         }
 
         std::string String() const;
