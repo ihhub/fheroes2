@@ -48,7 +48,7 @@ void Interface::Basic::SetFocus( Heroes * hero )
         hero->ShowPath( true );
         focus.Set( hero );
 
-        GetButtonsArea().Redraw();
+        Redraw( REDRAW_BUTTONS );
 
         iconsPanel.Select( hero );
         gameArea.SetCenter( hero->GetCenter() );
@@ -76,7 +76,7 @@ void Interface::Basic::SetFocus( Castle * castle )
 
         focus.Set( castle );
 
-        GetButtonsArea().Redraw();
+        Redraw( REDRAW_BUTTONS );
 
         iconsPanel.Select( castle );
         gameArea.SetCenter( castle->GetCenter() );

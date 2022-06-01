@@ -150,14 +150,12 @@ void Interface::Radar::SetPos( int32_t ox, int32_t oy )
     BorderWindow::SetPosition( ox, oy );
 }
 
-/* construct gui */
 void Interface::Radar::Build()
 {
     Generate();
-    RedrawCursor();
+    SetRedraw();
 }
 
-/* generate mini maps */
 void Interface::Radar::Generate()
 {
     const int32_t worldWidth = world.w();
@@ -426,7 +424,7 @@ void Interface::Radar::QueueEventProcessing()
 
     // move border
     if ( conf.ShowRadar() && BorderWindow::QueueEventProcessing() ) {
-        RedrawCursor();
+        SetRedraw();
     }
     // move cursor
     else if ( le.MouseCursor( rect ) ) {
@@ -439,7 +437,7 @@ void Interface::Radar::QueueEventProcessing()
                 gamearea.SetCenter( { ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height } );
                 visibleROI = gamearea.GetVisibleTileROI();
                 if ( prev.x != visibleROI.x || prev.y != visibleROI.y ) {
-                    RedrawCursor();
+                    SetRedraw();
                     gamearea.SetRedraw();
                 }
             }
@@ -503,7 +501,7 @@ void Interface::Radar::ChangeAreaSize( const fheroes2::Size & newSize )
         const fheroes2::Rect & rect = GetRect();
         SetPosition( rect.x < 0 ? 0 : rect.x, rect.y < 0 ? 0 : rect.y, newSize.width, newSize.height );
         Generate();
-        RedrawCursor();
+        SetRedraw();
         interface.GetGameArea().SetRedraw();
     }
 }

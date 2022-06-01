@@ -138,7 +138,7 @@ namespace Interface
         fheroes2::Point _topLeftCorner;
     };
 
-    class IconsPanel : public BorderWindow
+    class IconsPanel final : public BorderWindow
     {
     public:
         explicit IconsPanel( Basic & basic );
@@ -148,7 +148,6 @@ namespace Interface
         void SetRedraw() const;
         void SetRedraw( const icons_t type ) const;
 
-        void Redraw();
         void QueueEventProcessing();
 
         void Select( Heroes * const );
@@ -158,10 +157,16 @@ namespace Interface
         void ResetIcons( const icons_t type );
         void HideIcons( const icons_t type );
         void ShowIcons( const icons_t type );
-        void RedrawIcons( const icons_t type );
         void SetCurrentVisible();
 
     private:
+        friend Basic;
+
+        // Do not call these methods directly, use Interface::Basic::Redraw() instead
+        // to avoid issues in the "no interface" mode
+        void Redraw();
+        void RedrawIcons( const icons_t type );
+
         Basic & interface;
 
         fheroes2::Image sfMarker;

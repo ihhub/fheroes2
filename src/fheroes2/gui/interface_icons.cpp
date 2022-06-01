@@ -446,11 +446,9 @@ void Interface::IconsPanel::SetCurrentVisible()
 {
     if ( heroesIcons.isSelected() ) {
         heroesIcons.SetCurrentVisible();
-        heroesIcons.Redraw();
     }
     else if ( castleIcons.isSelected() ) {
         castleIcons.SetCurrentVisible();
-        castleIcons.Redraw();
     }
 }
 

@@ -38,19 +38,24 @@ namespace Interface
 {
     class Basic;
 
-    class ControlPanel : protected fheroes2::Rect
+    class ControlPanel final : protected fheroes2::Rect
     {
     public:
         explicit ControlPanel( Basic & );
 
         void SetPos( int32_t, int32_t );
-        void Redraw() const;
         void ResetTheme();
         fheroes2::GameMode QueueEventProcessing();
 
         const fheroes2::Rect & GetArea() const;
 
     private:
+        friend Basic;
+
+        // Do not call this method directly, use Interface::Basic::Redraw() instead
+        // to avoid issues in the "no interface" mode
+        void Redraw() const;
+
         Basic & interface;
 
         // We do not want to make a copy of images but to store just references to them.

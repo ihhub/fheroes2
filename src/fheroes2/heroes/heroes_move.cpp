@@ -895,7 +895,8 @@ void Heroes::FadeOut( const fheroes2::Point & offset ) const
     if ( !isInVisibleMapArea() )
         return;
 
-    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
+    Interface::Basic & iface = Interface::Basic::Get();
+    Interface::GameArea & gamearea = iface.GetGameArea();
 
     int multiplier = std::max( offset.x < 0 ? -offset.x : offset.x, offset.y < 0 ? -offset.y : offset.y );
     if ( multiplier < 1 )
@@ -914,7 +915,7 @@ void Heroes::FadeOut( const fheroes2::Point & offset ) const
                 gamearea.ShiftCenter( offset );
             }
 
-            gamearea.Redraw( display, Interface::LEVEL_ALL );
+            iface.Redraw( Interface::REDRAW_GAMEAREA );
 
             display.render();
             _alphaValue -= 8 * multiplier;
@@ -929,7 +930,8 @@ void Heroes::FadeIn( const fheroes2::Point & offset ) const
     if ( !isInVisibleMapArea() )
         return;
 
-    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
+    Interface::Basic & iface = Interface::Basic::Get();
+    Interface::GameArea & gamearea = iface.GetGameArea();
 
     int multiplier = std::max( offset.x < 0 ? -offset.x : offset.x, offset.y < 0 ? -offset.y : offset.y );
     if ( multiplier < 1 )
@@ -948,7 +950,7 @@ void Heroes::FadeIn( const fheroes2::Point & offset ) const
                 gamearea.ShiftCenter( offset );
             }
 
-            gamearea.Redraw( display, Interface::LEVEL_ALL );
+            iface.Redraw( Interface::REDRAW_GAMEAREA );
 
             display.render();
             _alphaValue += 8 * multiplier;

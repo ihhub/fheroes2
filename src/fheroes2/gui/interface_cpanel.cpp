@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
+
 #include "interface_cpanel.h"
 #include "agg_image.h"
 #include "game_interface.h"
@@ -80,17 +82,15 @@ void Interface::ControlPanel::SetPos( int32_t ox, int32_t oy )
 
 void Interface::ControlPanel::Redraw() const
 {
+    assert( _buttons );
+
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const uint8_t alpha = 128;
-
-    if ( _buttons.get() != nullptr ) {
-        fheroes2::AlphaBlit( _buttons->radar, display, x, y, alpha );
-        fheroes2::AlphaBlit( _buttons->icon, display, x + 36, y, alpha );
-        fheroes2::AlphaBlit( _buttons->button, display, x + 72, y, alpha );
-        fheroes2::AlphaBlit( _buttons->stats, display, x + 108, y, alpha );
-        fheroes2::AlphaBlit( _buttons->quit, display, x + 144, y, alpha );
-    }
+    fheroes2::Blit( _buttons->radar, display, x, y );
+    fheroes2::Blit( _buttons->icon, display, x + 36, y );
+    fheroes2::Blit( _buttons->button, display, x + 72, y );
+    fheroes2::Blit( _buttons->stats, display, x + 108, y );
+    fheroes2::Blit( _buttons->quit, display, x + 144, y );
 }
 
 fheroes2::GameMode Interface::ControlPanel::QueueEventProcessing()

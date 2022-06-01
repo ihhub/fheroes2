@@ -113,30 +113,39 @@ void Interface::Basic::Redraw( int force )
     const int combinedRedraw = redraw | force;
     const bool hideInterface = conf.ExtGameHideInterface();
 
-    if ( combinedRedraw & REDRAW_GAMEAREA )
+    if ( combinedRedraw & REDRAW_GAMEAREA ) {
         gameArea.Redraw( fheroes2::Display::instance(), LEVEL_ALL );
+    }
 
-    if ( ( hideInterface && conf.ShowRadar() ) || ( combinedRedraw & REDRAW_RADAR ) )
+    if ( ( hideInterface && conf.ShowRadar() ) || ( combinedRedraw & REDRAW_RADAR ) ) {
         radar.Redraw();
+    }
 
-    if ( ( hideInterface && conf.ShowIcons() ) || ( combinedRedraw & REDRAW_ICONS ) )
+    if ( ( hideInterface && conf.ShowIcons() ) || ( combinedRedraw & REDRAW_ICONS ) ) {
         iconsPanel.Redraw();
-    else if ( combinedRedraw & REDRAW_HEROES )
+    }
+    else if ( combinedRedraw & REDRAW_HEROES ) {
         iconsPanel.RedrawIcons( ICON_HEROES );
-    else if ( combinedRedraw & REDRAW_CASTLES )
+    }
+    else if ( combinedRedraw & REDRAW_CASTLES ) {
         iconsPanel.RedrawIcons( ICON_CASTLES );
+    }
 
-    if ( ( hideInterface && conf.ShowButtons() ) || ( combinedRedraw & REDRAW_BUTTONS ) )
+    if ( ( hideInterface && conf.ShowButtons() ) || ( combinedRedraw & REDRAW_BUTTONS ) ) {
         buttonsArea.Redraw();
+    }
 
-    if ( ( hideInterface && conf.ShowStatus() ) || ( combinedRedraw & REDRAW_STATUS ) )
+    if ( ( hideInterface && conf.ShowStatus() ) || ( combinedRedraw & REDRAW_STATUS ) ) {
         statusWindow.Redraw();
+    }
 
-    if ( hideInterface && conf.ShowControlPanel() && ( redraw & REDRAW_GAMEAREA ) )
+    if ( hideInterface && conf.ShowControlPanel() ) {
         controlPanel.Redraw();
+    }
 
-    if ( combinedRedraw & REDRAW_BORDER )
+    if ( combinedRedraw & REDRAW_BORDER ) {
         GameBorderRedraw( false );
+    }
 
     redraw = 0;
 }
