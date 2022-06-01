@@ -180,7 +180,6 @@ namespace Interface
         void ResetIcons( const icons_t type );
         void HideIcons( const icons_t type );
         void ShowIcons( const icons_t type );
-        void SetCurrentVisible();
 
     private:
         friend Basic;

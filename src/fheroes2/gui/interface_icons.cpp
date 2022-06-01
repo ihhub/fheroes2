@@ -442,16 +442,6 @@ void Interface::IconsPanel::ShowIcons( const icons_t type )
         castleIcons.SetShow( true );
 }
 
-void Interface::IconsPanel::SetCurrentVisible()
-{
-    if ( heroesIcons.isSelected() ) {
-        heroesIcons.SetCurrentVisible();
-    }
-    else if ( castleIcons.isSelected() ) {
-        castleIcons.SetCurrentVisible();
-    }
-}
-
 void Interface::IconsPanel::RedrawIcons( const icons_t type )
 {
     if ( type & ICON_HEROES )

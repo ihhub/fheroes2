@@ -495,7 +495,6 @@ void Interface::Basic::EventSwitchShowIcons()
         }
         else {
             conf.SetShowIcons( true );
-            iconsPanel.SetCurrentVisible();
             iconsPanel.SetRedraw();
         }
     }
