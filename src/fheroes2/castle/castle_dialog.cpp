@@ -492,7 +492,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     }
                     else if ( ( topArmyBar.GetItem( le.GetMousePressLeft() ) && le.MouseReleaseLeft( rectSign2 ) )
                               || HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
-                        heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), topArmyBar.isSelected() ? topArmyBar.GetSelectedIndex() : 4, topArmyBar.isSelected() );
+                        heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), topArmyBar.isSelected() ? topArmyBar.GetSelectedIndex() : 4,
+                                                              topArmyBar.isSelected() );
 
                         if ( topArmyBar.isSelected() )
                             topArmyBar.ResetSelected();
@@ -503,7 +504,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     }
                     else if ( ( bottomArmyBar.GetItem( le.GetMousePressLeft() ) && le.MouseReleaseLeft( rectSign1 ) )
                               || HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
-                        GetArmy().MoveTroops( heroes.Guest()->GetArmy().getTroops(), bottomArmyBar.isSelected() ? bottomArmyBar.GetSelectedIndex() : 4, bottomArmyBar.isSelected() );
+                        GetArmy().MoveTroops( heroes.Guest()->GetArmy().getTroops(), bottomArmyBar.isSelected() ? bottomArmyBar.GetSelectedIndex() : 4,
+                                              bottomArmyBar.isSelected() );
 
                         if ( topArmyBar.isSelected() )
                             topArmyBar.ResetSelected();
@@ -537,7 +539,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     }
                     else if ( ( topArmyBar.GetItem( le.GetMousePressLeft() ) && le.MouseReleaseLeft( rectSign2 ) )
                               || HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
-                        heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), topArmyBar.isSelected() ? topArmyBar.GetSelectedIndex() : 4, false, true );
+                        heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), topArmyBar.isSelected() ? topArmyBar.GetSelectedIndex() : 4, topArmyBar.isSelected(),
+                                                              true );
 
                         if ( topArmyBar.isSelected() )
                             topArmyBar.ResetSelected();
@@ -548,7 +551,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     }
                     else if ( ( bottomArmyBar.GetItem( le.GetMousePressLeft() ) && le.MouseReleaseLeft( rectSign1 ) )
                               || HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
-                        GetArmy().MoveTroops( heroes.Guest()->GetArmy().getTroops(), bottomArmyBar.isSelected() ? bottomArmyBar.GetSelectedIndex() : 4 );
+                        GetArmy().MoveTroops( heroes.Guest()->GetArmy().getTroops(), bottomArmyBar.isSelected() ? bottomArmyBar.GetSelectedIndex() : 4,
+                                              bottomArmyBar.isSelected() );
 
                         if ( topArmyBar.isSelected() )
                             topArmyBar.ResetSelected();
