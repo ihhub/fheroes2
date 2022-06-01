@@ -1218,8 +1218,22 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
         const Heroes * hero = GetHeroesCondLoss();
         assert( hero != nullptr );
 
-        // The hero in question should be either a freeman or be hired by an AI-controlled kingdom
-        return ( hero->isFreeman() || GetKingdom( hero->GetColor() ).isControlAI() );
+        // The hero in question should be either a freeman...
+        if ( hero->isFreeman() ) {
+            return true;
+        }
+
+        // .. or be hired by an AI-controlled kingdom
+        if ( GetKingdom( hero->GetColor() ).isControlAI() ) {
+            // Exception for campaign: hero is not considered lost if he is hired by a friendly AI-controlled kingdom
+            if ( conf.isCampaignGameType() && Players::isFriends( kingdom.GetColor(), hero->GetColor() ) ) {
+                return false;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     case GameOver::LOSS_TIME:
