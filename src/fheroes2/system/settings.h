@@ -598,10 +598,10 @@ private:
     int game_type;
     int preferably_count_players;
 
-    fheroes2::Point pos_radr;
-    fheroes2::Point pos_bttn;
-    fheroes2::Point pos_icon;
-    fheroes2::Point pos_stat;
+    fheroes2::Point pos_radr{ -1, -1 };
+    fheroes2::Point pos_bttn{ -1, -1 };
+    fheroes2::Point pos_icon{ -1, -1 };
+    fheroes2::Point pos_stat{ -1, -1 };
 
     Players players;
 };

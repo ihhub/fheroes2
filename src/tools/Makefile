@@ -1,5 +1,5 @@
 ###########################################################################
-#   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
+#   fheroes2: https://github.com/ihhub/fheroes2                           #
 #   Copyright (C) 2021 - 2022                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
@@ -28,7 +28,7 @@ CCFLAGS := $(CCFLAGS) -I../engine
 all: $(TARGETS)
 
 $(TARGETS): $(addsuffix .cpp, $(TARGETS)) $(LIBENGINE)
-	$(CXX) $(CCFLAGS) $(CXXFLAGS) -c $@.cpp
+	$(CXX) $(CCFLAGS) $(CXXFLAGS) $(CPPFLAGS) -c $@.cpp
 	$(CXX) $(LDFLAGS) $@.o $(LIBENGINE) $(LIBS) -o $@
 
 clean:

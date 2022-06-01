@@ -238,7 +238,8 @@ int main( int argc, char ** argv )
 
         if ( Audio::isValid() ) {
             Mixer::SetChannels( 32 );
-            Mixer::setVolume( -1, 100 * conf.SoundVolume() / 10 );
+            // Set the volume for all channels to 0. This is required to avoid random volume spikes at the beginning of the game.
+            Mixer::setVolume( -1, 0 );
 
             Music::setVolume( 100 * conf.MusicVolume() / 10 );
             Music::SetFadeInMs( 900 );

@@ -32,6 +32,7 @@ namespace MUS
     enum : int
     {
         UNUSED,
+
         DATATRACK,
         BATTLE1,
         BATTLE2,
