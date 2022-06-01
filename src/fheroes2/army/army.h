@@ -144,7 +144,7 @@ public:
     static bool SlowestTroop( const Troop *, const Troop * );
     static bool FastestTroop( const Troop *, const Troop * );
     static void SwapTroops( Troop &, Troop & );
-    static void swapArmyTroops( Army & army1, Army & army2 );
+    static void swapArmies( Army & army1, Army & army2 );
 
     static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
 

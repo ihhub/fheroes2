@@ -584,7 +584,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         }
         // TODO: Use something like HotKeyReleaseEvent when added to avoid continuous repeated swapping if the hotkey is held down for a while.
         else if ( le.MouseClickRight( moveArmyToHero2.combinedArea( moveArmyToHero1 ) ) || HotKeyPressEvent( Game::HotKeyEvent::SWAP_ARMIES ) ) {
-            Army::swapArmyTroops( GetArmy(), otherHero.GetArmy() );
+            Army::swapArmies( GetArmy(), otherHero.GetArmy() );
 
             armyCountBackgroundRestorerLeft.restore();
             armyCountBackgroundRestorerRight.restore();
