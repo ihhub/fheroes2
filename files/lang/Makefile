@@ -22,8 +22,8 @@
 
 all: $(patsubst %.po, %.mo, $(wildcard *.po))
 
-merge:
-	for i in $(wildcard *.po); do msgmerge -U --no-location $$i ../../src/dist/fheroes2.pot; done
+merge: ../../src/dist/fheroes2.pot
+	for i in $(wildcard *.po); do msgmerge -U --no-location $$i $<; done
 
 # Spanish uses CP1252
 es.mo: es.po
