@@ -95,7 +95,6 @@ public:
 
     Troop * GetFirstValid();
     const Troop * GetFirstValid() const;
-    const Troop * getLastValid() const;
     Troop * GetWeakestTroop() const;
     const Troop * GetSlowestTroop() const;
 
