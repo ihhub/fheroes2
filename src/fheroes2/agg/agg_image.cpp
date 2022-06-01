@@ -2033,7 +2033,7 @@ namespace fheroes2
                 if ( !_icnVsSprite[id].empty() && _icnVsSprite[id][0].width() == 84 && _icnVsSprite[id][0].height() == 81 ) {
                     const Sprite & castle = GetICN( ICN::TWNSCSTL, 0 );
                     if ( !castle.empty() ) {
-                        Blit( castle, 238 - 33 + 1, 172 - 67 + 1, _icnVsSprite[id][0], 2, 2, 33, 67 );
+                        Blit( castle, 206, 106, _icnVsSprite[id][0], 2, 2, 33, 67 );
                     }
                 }
                 return true;
