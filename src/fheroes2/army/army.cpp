@@ -473,12 +473,14 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
         for ( Troop * troop : troopFromOrder ) {
             if ( troop && troop->isValid() ) {
                 if ( from.GetCount() == 1 && !moveAll ) {
-                    if ( JoinTroop( troop->GetMonster(), troop->GetCount() - 1, preferEmptySlot ) ) {
+                    if ( CanJoinTroop( troop->GetMonster() ) ) {
+                        JoinTroop( troop->GetMonster(), troop->GetCount() - 1, preferEmptySlot );
                         troop->SetCount( 1 );
                         return;
                     }
                 }
-                else if ( JoinTroop( *troop ) ) {
+                else if ( CanJoinTroop( troop->GetMonster() ) ) {
+                    JoinTroop( troop->GetMonster(), troop->GetCount(), preferEmptySlot );
                     troop->Reset();
                 }
             }
