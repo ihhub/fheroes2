@@ -27,11 +27,13 @@ TARGET := fheroes2
 # Common flags for both C and C++ compilers
 CCFLAGS := -fsigned-char -pthread
 # Flags for the C compiler
-CFLAGS :=
+CFLAGS := $(CFLAGS)
 # Flags for the C++ compiler
-CXXFLAGS :=
+CXXFLAGS := $(CXXFLAGS)
+# Flags for the preprocessor
+CPPFLAGS := $(CPPFLAGS)
 # Flags for the linker
-LDFLAGS := -pthread
+LDFLAGS := $(LDFLAGS) -pthread
 
 ifdef FHEROES2_WITH_DEBUG
 CCFLAGS := $(CCFLAGS) -O0 -g
@@ -88,6 +90,7 @@ include Makefile.$(PLATFORM)
 CCFLAGS_TP := $(CCFLAGS)
 CFLAGS_TP := $(CFLAGS)
 CXXFLAGS_TP := $(CXXFLAGS)
+CPPFLAGS_TP := $(CPPFLAGS)
 
 #
 # Build options for fheroes2
@@ -97,6 +100,7 @@ CXXFLAGS_TP := $(CXXFLAGS)
 CCFLAGS := $(CCFLAGS) $(CCFLAGS_FH2)
 CFLAGS := $(CFLAGS) $(CFLAGS_FH2)
 CXXFLAGS := $(CXXFLAGS) $(CXXFLAGS_FH2) -std=c++17
+CPPFLAGS := $(CPPFLAGS) $(CPPFLAGS_FH2)
 
 LIBS := $(LIBS) -lz
 
@@ -162,12 +166,12 @@ endif
 CCFLAGS := $(CCFLAGS) $(SDL_FLAGS)
 LIBS := $(SDL_LIBS) $(LIBS)
 
-export CC CXX AR WINDRES CCFLAGS CFLAGS CXXFLAGS LDFLAGS LIBS PLATFORM
+export CC CXX AR WINDRES CCFLAGS CFLAGS CXXFLAGS CPPFLAGS LDFLAGS LIBS PLATFORM
 
 .PHONY: all clean
 
 all:
-	$(MAKE) -C thirdparty/libsmacker CCFLAGS="$(CCFLAGS_TP)" CFLAGS="$(CFLAGS_TP)" CXXFLAGS="$(CXXFLAGS_TP)"
+	$(MAKE) -C thirdparty/libsmacker CCFLAGS="$(CCFLAGS_TP)" CFLAGS="$(CFLAGS_TP)" CXXFLAGS="$(CXXFLAGS_TP)" CPPFLAGS="$(CPPFLAGS_TP)"
 	$(MAKE) -C engine
 	$(MAKE) -C dist
 ifdef FHEROES2_WITH_TOOLS

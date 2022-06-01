@@ -60,7 +60,7 @@ namespace
             return { 1, 3 };
         }
 
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "damage_range: unexpected spellPower value: " << spellPower << " for commander " << commander )
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "unexpected spellPower value: " << spellPower << " for commander " << commander )
         return { 0, 0 };
     }
 }
@@ -152,45 +152,80 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
         attacker.UpdateDirection( board[dst].GetPos() );
     }
 
-    // check luck right before the attack
+    // Update the attacker's luck right before the attack
     attacker.SetRandomLuck();
 
-    TargetsInfo targets = GetTargetsForDamage( attacker, defender, dst, dir );
+    // Do damage first
+    TargetsInfo attackTargets = GetTargetsForDamage( attacker, defender, dst, dir );
 
-    if ( interface )
-        interface->RedrawActionAttackPart1( attacker, defender, targets );
+    if ( interface ) {
+        interface->RedrawActionAttackPart1( attacker, defender, attackTargets );
+    }
 
-    TargetsApplyDamage( attacker, defender, targets );
-    if ( interface )
-        interface->RedrawActionAttackPart2( attacker, targets );
+    TargetsApplyDamage( attacker, attackTargets );
 
-    if ( defender.isValid() ) {
-        const Spell spell = attacker.GetSpellMagic();
+    if ( interface ) {
+        interface->RedrawActionAttackPart2( attacker, attackTargets );
+    }
 
-        // magic attack
-        if ( spell.isValid() ) {
-            targets = GetTargetsForSpells( attacker.GetCommander(), spell, defender.GetHeadIndex() );
+    // Then apply the attacker's built-in spell
+    const Spell spell = attacker.GetSpellMagic();
 
-            // The built-in dispel should only remove beneficial spells from the target
-            if ( !targets.empty() && ( spell.GetID() != Spell::DISPEL || defender.Modes( IS_GOOD_MAGIC ) ) ) {
+    if ( spell.isValid() ) {
+        // Only single target spells and special built-in only spells are allowed
+        assert( spell.isSingleTarget() || spell.isBuiltinOnly() );
+
+        TargetsInfo spellTargets;
+        spellTargets.reserve( attackTargets.size() );
+
+        // Filter out invalid targets and targets to which the spell cannot be applied
+        for ( const TargetInfo & attackTarget : attackTargets ) {
+            assert( attackTarget.defender != nullptr );
+
+            if ( !attackTarget.defender->isValid() ) {
+                continue;
+            }
+            if ( !attackTarget.defender->AllowApplySpell( spell, attackTarget.defender->GetCommander(), nullptr, true ) ) {
+                continue;
+            }
+
+            spellTargets.emplace_back( attackTarget.defender );
+        }
+
+        if ( !spellTargets.empty() ) {
+            // The built-in spell can only be applied to one target. If there are multiple
+            // targets eligible for this spell, then we should randomly select only one.
+            if ( spellTargets.size() > 1 ) {
+                const Unit * selectedUnit = _randomGenerator.Get( spellTargets ).defender;
+
+                spellTargets.erase( std::remove_if( spellTargets.begin(), spellTargets.end(),
+                                                    [selectedUnit]( const TargetInfo & v ) { return v.defender != selectedUnit; } ),
+                                    spellTargets.end() );
+            }
+
+            assert( spellTargets.size() == 1 );
+
+            Unit * spellTargetUnit = spellTargets.front().defender;
+            assert( spellTargetUnit != nullptr );
+
+            // The built-in dispel should only remove beneficial spells from the target unit
+            if ( spell.GetID() != Spell::DISPEL || spellTargetUnit->Modes( IS_GOOD_MAGIC ) ) {
                 if ( interface ) {
-                    interface->RedrawActionSpellCastStatus( spell, defender.GetHeadIndex(), attacker.GetName(), targets );
-                    interface->RedrawActionSpellCastPart1( spell, defender.GetHeadIndex(), nullptr, targets );
+                    interface->RedrawActionSpellCastStatus( spell, spellTargetUnit->GetHeadIndex(), attacker.GetName(), spellTargets );
+                    interface->RedrawActionSpellCastPart1( spell, spellTargetUnit->GetHeadIndex(), nullptr, spellTargets );
                 }
 
                 if ( spell.GetID() == Spell::DISPEL ) {
-                    assert( targets.size() == 1 );
-
-                    defender.ResetModes( IS_GOOD_MAGIC );
+                    spellTargetUnit->ResetModes( IS_GOOD_MAGIC );
                 }
                 else {
-                    // The unit's built-in magic attack does not depend on the hero's skills
-                    TargetsApplySpell( nullptr, spell, targets );
+                    // The unit's built-in spell efficiency does not depend on its commanding hero's skills
+                    TargetsApplySpell( nullptr, spell, spellTargets );
                 }
 
                 if ( interface ) {
-                    interface->RedrawActionSpellCastPart2( spell, targets );
-                    interface->RedrawActionMonsterSpellCastStatus( spell, attacker, targets.front() );
+                    interface->RedrawActionSpellCastPart2( spell, spellTargets );
+                    interface->RedrawActionMonsterSpellCastStatus( spell, attacker, spellTargets.front() );
                 }
             }
         }
@@ -583,12 +618,12 @@ void Battle::Arena::ApplyActionSurrender( const Command & /*cmd*/ )
     }
 }
 
-void Battle::Arena::TargetsApplyDamage( Unit & attacker, const Unit & /*defender*/, TargetsInfo & targets ) const
+void Battle::Arena::TargetsApplyDamage( Unit & attacker, TargetsInfo & targets )
 {
-    for ( TargetsInfo::iterator it = targets.begin(); it != targets.end(); ++it ) {
-        TargetInfo & target = *it;
-        if ( target.defender )
-            target.killed = target.defender->ApplyDamage( attacker, target.damage );
+    for ( TargetInfo & target : targets ) {
+        assert( target.defender != nullptr && target.defender->isValid() );
+
+        target.killed = target.defender->ApplyDamage( attacker, target.damage );
     }
 }
 
@@ -673,16 +708,14 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
     return targets;
 }
 
-void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spell, TargetsInfo & targets ) const
+void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spell, TargetsInfo & targets )
 {
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "targets: " << targets.size() )
 
-    TargetsInfo::iterator it = targets.begin();
+    for ( TargetInfo & target : targets ) {
+        assert( target.defender != nullptr );
 
-    for ( ; it != targets.end(); ++it ) {
-        TargetInfo & target = *it;
-        if ( target.defender )
-            target.defender->ApplySpell( spell, hero, target );
+        target.defender->ApplySpell( spell, hero, target );
     }
 }
 
@@ -883,7 +916,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForSpells( const HeroBase * hero, c
     }
 
     if ( !ignoreMagicResistance ) {
-        // Mark magically resistant troops (should be ignored in case of built-in creature spells)
+        // Mark magically resistant troops
         for ( auto & tgt : targets ) {
             const uint32_t resist = tgt.defender->GetMagicResist( spell, hero ? hero->GetPower() : 0, hero );
 

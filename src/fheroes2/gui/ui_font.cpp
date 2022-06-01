@@ -2091,7 +2091,6 @@ namespace fheroes2
     {
         switch ( language ) {
         case SupportedLanguage::Polish:
-        case SupportedLanguage::Romanian:
             generateCP1250Alphabet( icnVsSprite );
             break;
         case SupportedLanguage::French:
@@ -2111,7 +2110,6 @@ namespace fheroes2
         case SupportedLanguage::Swedish:
             generateCP1252Alphabet( icnVsSprite );
             break;
-
         default:
             // Add new language generation code!
             assert( 0 );
@@ -2140,7 +2138,6 @@ namespace fheroes2
         case SupportedLanguage::Spanish:
         case SupportedLanguage::Swedish:
         case SupportedLanguage::Ukrainian:
-        case SupportedLanguage::Romanian:
             return true;
         default:
             break;

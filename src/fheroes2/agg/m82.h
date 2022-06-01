@@ -29,11 +29,9 @@
 
 #include "mp2.h"
 
-#define LOOPXX_COUNT 28
-
 namespace M82
 {
-    enum
+    enum SoundType : int
     {
         AELMATTK,
         AELMKILL,
@@ -162,6 +160,8 @@ namespace M82
         LICHSHOT,
         LICHWNCE,
         LIGHTBLT,
+
+        // These sounds are used for objects on Adventure Map.
         LOOP0000,
         LOOP0001,
         LOOP0002,
@@ -170,7 +170,7 @@ namespace M82
         LOOP0005,
         LOOP0006,
         LOOP0007,
-        LOOP0008,
+        LOOP0008, // unused?
         LOOP0009,
         LOOP0010,
         LOOP0011,
@@ -181,15 +181,16 @@ namespace M82
         LOOP0016,
         LOOP0017,
         LOOP0018,
-        LOOP0019,
-        LOOP0020,
+        LOOP0019, // unused? A sound with seagulls.
+        LOOP0020, // unused? Waves on a beach.
         LOOP0021,
         LOOP0022,
-        LOOP0023,
+        LOOP0023, // unused? A mechanical wooden structure.
         LOOP0024,
         LOOP0025,
-        LOOP0026,
+        LOOP0026, // unused?
         LOOP0027,
+
         MAGCAROW,
         MAGEATTK,
         MAGEKILL,
@@ -319,6 +320,8 @@ namespace M82
         WOLFKILL,
         WOLFMOVE,
         WOLFWNCE,
+
+        // Hero's movement sounds.
         WSND00,
         WSND01,
         WSND02,
@@ -340,18 +343,20 @@ namespace M82
         WSND24,
         WSND25,
         WSND26,
+
         ZOMBATTK,
         ZOMBKILL,
         ZOMBMOVE,
         ZOMBWNCE,
 
+        // Put all new sounds before this line.
         UNKNOWN
     };
 
     const char * GetString( int );
     int FromSpell( int );
-    uint32_t GetIndexLOOP00XXFromObject( const MP2::MapObjectType objectType );
-    int GetLOOP00XX( const size_t index );
+
+    SoundType getAdventureMapObjectSound( const MP2::MapObjectType objectType );
 }
 
 #endif

@@ -9304,7 +9304,7 @@ msgstr "игра: использовать серую тему интерфей�
 msgid "game: hide interface"
 msgstr "игра: выключить интерфейс (весь экран игровое поле)"
 
-msgid "game: offer to continue the game afer victory condition"
+msgid "game: offer to continue the game after victory condition"
 msgstr "игра: после победы возможно продолжить игру"
 
 msgid "The ultimate artifact is really the %{name}."

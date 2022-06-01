@@ -222,6 +222,7 @@ public:
     bool isPriceOfLoyaltySupported() const;
     bool isMonochromeCursorEnabled() const;
     bool isTextSupportModeEnabled() const;
+    bool is3DAudioEnabled() const;
 
     bool LoadedGameVersion() const
     {
@@ -383,6 +384,7 @@ public:
     void setFullScreen( const bool enable );
     void setMonochromeCursor( const bool enable );
     void setTextSupportMode( const bool enable );
+    void set3DAudio( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
@@ -596,10 +598,10 @@ private:
     int game_type;
     int preferably_count_players;
 
-    fheroes2::Point pos_radr;
-    fheroes2::Point pos_bttn;
-    fheroes2::Point pos_icon;
-    fheroes2::Point pos_stat;
+    fheroes2::Point pos_radr{ -1, -1 };
+    fheroes2::Point pos_bttn{ -1, -1 };
+    fheroes2::Point pos_icon{ -1, -1 };
+    fheroes2::Point pos_stat{ -1, -1 };
 
     Players players;
 };

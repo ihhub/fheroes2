@@ -71,16 +71,15 @@ namespace Battle
 
     struct TargetInfo
     {
-        Unit * defender;
-        uint32_t damage;
-        uint32_t killed;
-        bool resist;
+        Unit * defender = nullptr;
+        uint32_t damage = 0;
+        uint32_t killed = 0;
+        bool resist = false;
 
-        TargetInfo()
-            : defender( nullptr )
-            , damage( 0 )
-            , killed( 0 )
-            , resist( false )
+        TargetInfo() = default;
+
+        TargetInfo( Unit * defender_ )
+            : defender( defender_ )
         {}
 
         static bool isFinishAnimFrame( const TargetInfo & info );

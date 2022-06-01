@@ -8521,7 +8521,7 @@ msgstr ""
 msgid "game: hide interface"
 msgstr ""
 
-msgid "game: offer to continue the game afer victory condition"
+msgid "game: offer to continue the game after victory condition"
 msgstr ""
 
 msgid "The ultimate artifact is really the %{name}."
