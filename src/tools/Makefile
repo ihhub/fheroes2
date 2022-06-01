@@ -28,7 +28,7 @@ CCFLAGS := $(CCFLAGS) -I../engine
 all: $(TARGETS)
 
 $(TARGETS): $(addsuffix .cpp, $(TARGETS)) $(LIBENGINE)
-	$(CXX) $(CCFLAGS) $(CXXFLAGS) -c $@.cpp
+	$(CXX) $(CCFLAGS) $(CXXFLAGS) $(CPPFLAGS) -c $@.cpp
 	$(CXX) $(LDFLAGS) $@.o $(LIBENGINE) $(LIBS) -o $@
 
 clean:
