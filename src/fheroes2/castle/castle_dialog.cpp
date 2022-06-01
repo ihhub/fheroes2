@@ -438,7 +438,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
             }
             if ( heroes.Guest() && !conf.ExtCastleAllowGuardians() ) {
                 if ( le.MouseClickLeft( rectSign1 ) || HotKeyPressEvent( Game::HotKeyEvent::SWAP_ARMIES ) ) {
-                    Army::swapArmies( GetArmy(), heroes.Guest()->GetArmy());
+                    Army::swapArmies( GetArmy(), heroes.Guest()->GetArmy() );
                     if ( topArmyBar.isSelected() )
                         topArmyBar.ResetSelected();
                     if ( bottomArmyBar.isSelected() )

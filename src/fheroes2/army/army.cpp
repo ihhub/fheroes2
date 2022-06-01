@@ -493,7 +493,7 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
         uint32_t neededMerges = from.GetCount();
         // Do one less merge if a hero's last troop to be moved only has one unit.
         const_reverse_iterator it = std::find_if( troopFromOrder.rbegin(), troopFromOrder.rend(), []( const Troop * troop ) { return troop->isValid(); } );
-        if ( !moveAll && (*it)->GetCount() == 1 ) {
+        if ( !moveAll && ( *it )->GetCount() == 1 ) {
             --neededMerges;
         }
         MergeTroops( neededMerges );
