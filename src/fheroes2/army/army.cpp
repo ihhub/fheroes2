@@ -388,7 +388,7 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
     assert( !( this == &from ) );
 
     // You have selected a troop outside the possible range of troops. Check your logic.
-    assert( !( selectedTroopIndex > 4 ) );
+    assert( !( selectedTroopIndex > 4 || selectedTroopIndex < 0 ) );
 
     // Check if there are troops to move.
     if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
