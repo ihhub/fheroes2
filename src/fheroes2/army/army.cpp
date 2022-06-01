@@ -420,10 +420,14 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
 
     // 'from' army might have more than 0 if it is a hero army with one troop left.
     while ( from.GetCount() > 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
-        // Attempt to move troops directly to the same slot in the receiving army.
+        // Step 1: Attempt to move troops directly to the same slot in the receiving army to preserve formation.
         for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
             Troop * troop = troopFromOrder.at( slot );
-            // Set the correct slot according to current troop.
+            // Make sure the selected troop is not moved before troops that could not be moved in Step 1.
+            if ( slot == 4 && GetCount() > 1 ) {
+                break;
+            }
+            // Set the correct slot according to the current troop.
             size_t assignmentSlot = slot;
             if ( slot >= selectedTroopIndex && !( slot == 4 ) ) {
                 assignmentSlot = slot + 1;
@@ -444,16 +448,15 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
                             at( assignmentSlot )->SetCount( at( assignmentSlot )->GetCount() + troop->GetCount() - 1 );
                             troop->SetCount( 1 );
                         }
-                        break;
                     }
                     break;
                 }
-                // An empty slot in the receiving army
+                // An empty slot in the receiving army.
                 if ( !( *at( assignmentSlot ) ).isValid() ) {
                     at( assignmentSlot )->Set( *troop );
                     troop->Reset();
                 }
-                // Same troop in receiving and giving army
+                // Same troop in receiving and giving army.
                 else if ( at( assignmentSlot )->GetID() == troop->GetID() ) {
                     at( assignmentSlot )->SetCount( at( assignmentSlot )->GetCount() + troop->GetCount() );
                     troop->Reset();
@@ -465,7 +468,7 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
             return;
         }
 
-        // Move to remaining free slots or same troop ID elsewhere in army.
+        // Step 2: Attempt to move to remaining free slots or same troop ID elsewhere in army.
         for ( Troop * troop : troopFromOrder ) {
             if ( troop && troop->isValid() ) {
                 if ( from.GetCount() == 1 && !moveAll ) {
@@ -484,10 +487,11 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
             return;
         }
 
-        // Attempt to merge troops in receiving army to make free slots.
+        // Step 3: Attempt to merge troops in receiving army to make free slots.
         const uint32_t troopCountPreMerge = GetCount();
         uint32_t neededMerges = from.GetCount();
         // Do one less merge if a hero's last troop only has one unit.
+        // TODO: This needs to check the last troop in troopFromOrder, not 'from' army.
         if ( !moveAll && from.getLastValid()->GetCount() == 1 ) {
             --neededMerges;
         }
@@ -500,7 +504,7 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
     }
 }
 
-void Army::swapArmyTroops( Army & army1, Army & army2 )
+void Army::swapArmies( Army & army1, Army & army2 )
 {
     // Hero armies cannot end up with zero troops.
     if ( army1.GetCount() == 0 || army2.GetCount() == 0 ) {
