@@ -132,12 +132,12 @@ Interface::Radar::Radar( Basic & basic )
     , hide( true )
 {}
 
-Interface::Radar::Radar( const Radar & radar )
-    : BorderWindow( radar.area )
-    , radarType( radar.radarType )
+Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display )
+    : BorderWindow( { display.width() - BORDERWIDTH - RADARWIDTH, BORDERWIDTH, RADARWIDTH, RADARWIDTH } )
+    , radarType( RadarType::ViewWorld )
     , interface( radar.interface )
     , spriteArea( radar.spriteArea )
-    , hide( radar.hide )
+    , hide( false )
 {}
 
 void Interface::Radar::SavePosition()
@@ -504,16 +504,4 @@ void Interface::Radar::ChangeAreaSize( const fheroes2::Size & newSize )
         SetRedraw();
         interface.GetGameArea().SetRedraw();
     }
-}
-
-// New Radar but copy mini-map data
-Interface::Radar Interface::Radar::MakeRadarViewWorld( const Interface::Radar & radar )
-{
-    Radar newRadar( radar );
-    newRadar.hide = false;
-    newRadar.radarType = RadarType::ViewWorld;
-    const fheroes2::Display & display = fheroes2::Display::instance();
-    newRadar.area.x = display.width() - BORDERWIDTH - RADARWIDTH;
-    newRadar.area.y = BORDERWIDTH;
-    return newRadar;
 }

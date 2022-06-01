@@ -34,7 +34,11 @@ namespace Interface
     {
     public:
         explicit BorderWindow( const fheroes2::Rect & );
+        BorderWindow( const BorderWindow & ) = delete;
+
         virtual ~BorderWindow() = default;
+
+        BorderWindow & operator=( const BorderWindow & ) = delete;
 
         virtual void SetPos( int32_t, int32_t ) = 0;
         virtual void SavePosition() = 0;

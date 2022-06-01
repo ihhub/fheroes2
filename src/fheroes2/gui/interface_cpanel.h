@@ -42,6 +42,11 @@ namespace Interface
     {
     public:
         explicit ControlPanel( Basic & );
+        ControlPanel( const ControlPanel & ) = delete;
+
+        ~ControlPanel() = default;
+
+        ControlPanel & operator=( const ControlPanel & ) = delete;
 
         void SetPos( int32_t, int32_t );
         void ResetTheme();

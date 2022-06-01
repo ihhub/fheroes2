@@ -56,6 +56,13 @@ namespace Interface
     {
     public:
         explicit GameArea( Basic & );
+        GameArea( const GameArea & ) = default;
+        GameArea( GameArea && ) = delete;
+
+        ~GameArea() = default;
+
+        GameArea & operator=( const GameArea & ) = delete;
+        GameArea & operator=( GameArea && ) = delete;
 
         void generate( const fheroes2::Size & screenSize, const bool withoutBorders );
 
@@ -121,6 +128,10 @@ namespace Interface
         fheroes2::Point getCurrentCenterInPixels() const;
 
     private:
+        fheroes2::Point _middlePoint() const; // returns middle point of window ROI
+        fheroes2::Point _getStartTileId() const;
+        void _setCenterToTile( const fheroes2::Point & tile ); // set center to the middle of tile (input is tile ID)
+
         Basic & interface;
 
         fheroes2::Rect _windowROI; // visible to draw area of World Map in pixels
@@ -139,10 +150,6 @@ namespace Interface
         bool updateCursor;
 
         fheroes2::Time scrollTime;
-
-        fheroes2::Point _middlePoint() const; // returns middle point of window ROI
-        fheroes2::Point _getStartTileId() const;
-        void _setCenterToTile( const fheroes2::Point & tile ); // set center to the middle of tile (input is tile ID)
     };
 }
 

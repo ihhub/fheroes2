@@ -35,6 +35,11 @@ namespace Interface
     {
     public:
         explicit ButtonsArea( Basic & );
+        ButtonsArea( const ButtonsArea & ) = delete;
+
+        ~ButtonsArea() override = default;
+
+        ButtonsArea & operator=( const ButtonsArea & ) = delete;
 
         void SetPos( int32_t ox, int32_t oy ) override;
         void SavePosition() override;

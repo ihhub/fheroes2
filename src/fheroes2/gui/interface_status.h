@@ -45,6 +45,11 @@ namespace Interface
     {
     public:
         explicit StatusWindow( Basic & basic );
+        StatusWindow( const StatusWindow & ) = delete;
+
+        ~StatusWindow() override = default;
+
+        StatusWindow & operator=( const StatusWindow & ) = delete;
 
         void SetPos( int32_t ox, int32_t oy ) override;
         void SavePosition() override;

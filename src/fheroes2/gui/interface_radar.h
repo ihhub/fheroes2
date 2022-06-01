@@ -25,6 +25,7 @@
 #define H2INTERFACE_RADAR_H
 
 #include "interface_border.h"
+#include "screen.h"
 #include "ui_tool.h"
 #include "view_world.h"
 
@@ -36,7 +37,10 @@ namespace Interface
     {
     public:
         explicit Radar( Basic & );
-        Radar( const Radar & radar );
+        // Creates a radar with a fixed position at the top right of the screen,
+        // based on an existing radar and suitable for the View World window
+        Radar( const Radar & radar, const fheroes2::Display & display );
+        Radar( const Radar & ) = delete;
 
         ~Radar() override = default;
 
@@ -49,8 +53,6 @@ namespace Interface
         void SetHide( bool );
         void QueueEventProcessing();
         bool QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & roi ) const;
-
-        static Radar MakeRadarViewWorld( const Radar & radar );
 
     private:
         friend Basic;
