@@ -473,7 +473,6 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
                         JoinTroop( troop->GetMonster(), troop->GetCount() - 1, preferEmptySlot );
                         troop->SetCount( 1 );
                     }
-                    break;
                 }
                 else if ( CanJoinTroop( troop->GetMonster() ) ) {
                     JoinTroop( troop->GetMonster(), troop->GetCount(), preferEmptySlot );
