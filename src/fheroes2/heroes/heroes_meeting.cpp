@@ -508,6 +508,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
         else if ( le.MouseCursor( luckIndicator2.GetArea() ) ) {
             LuckIndicator::QueueEventProcessing( luckIndicator2 );
         }
+
         if ( le.MouseClickLeft( hero1Area ) ) {
             Game::OpenHeroesDialog( *this, false, false, true );
 
