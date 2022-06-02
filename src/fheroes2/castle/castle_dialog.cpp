@@ -472,8 +472,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 else if ( conf.ExtCastleAllowGuardians() ) {
                     if ( heroes.Guard() ) {
                         // Swap guard and guest hero together with their armies.
-                        if ( ( rectSign1 & dragStartPoint && le.MouseReleaseLeft( rectSign2 ) ) || ( rectSign2 & dragStartPoint && le.MouseReleaseLeft( rectSign1 ) )
-                             || ( le.MouseClickRight( rectSign1 ) || le.MouseClickRight( rectSign2 ) ) ) {
+                        if ( ( rectSign1 & dragStartPoint && le.MouseReleaseLeft( rectSign2 ) ) || ( rectSign2 & dragStartPoint && le.MouseReleaseLeft( rectSign1 ) ) ) {
                             SwapCastleHeroes( heroes );
                             army1 = &heroes.Guard()->GetArmy();
                             army2 = &heroes.Guest()->GetArmy();
