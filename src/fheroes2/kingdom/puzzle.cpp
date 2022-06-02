@@ -22,11 +22,14 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
+#include <functional>
 #include <vector>
 
 #include "agg.h"
 #include "agg_image.h"
 #include "cursor.h"
+#include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
@@ -41,11 +44,171 @@
 #include "ui_window.h"
 #include "world.h"
 
-bool ClosedTilesExists( const Puzzle &, const std::vector<uint8_t> & );
-void ZoneOpenFirstTiles( Puzzle &, size_t &, const std::vector<uint8_t> & );
-void ShowStandardDialog( const Puzzle &, const fheroes2::Image & );
-void ShowExtendedDialog( const Puzzle &, const fheroes2::Image & );
-void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, int32_t dstx, int32_t dsty );
+namespace
+{
+    bool ClosedTilesExists( const Puzzle & pzl, const std::vector<uint8_t> & zone )
+    {
+        for ( const uint8_t tile : zone ) {
+            if ( !pzl.test( tile ) )
+                return true;
+        }
+        return false;
+    }
+
+    void ZoneOpenFirstTiles( Puzzle & pzl, size_t & opens, const std::vector<uint8_t> & zone )
+    {
+        while ( opens ) {
+            std::vector<uint8_t>::const_iterator it = zone.begin();
+            while ( it != zone.end() && pzl.test( *it ) )
+                ++it;
+
+            if ( it != zone.end() ) {
+                pzl.set( *it );
+                --opens;
+            }
+            else
+                break;
+        }
+    }
+
+    void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, int32_t dstx, int32_t dsty, const std::function<fheroes2::Rect()> * drawControlPanel = nullptr )
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        // show all for debug
+        if ( IS_DEVEL() )
+            return;
+
+        int alpha = 250;
+        LocalEvent & le = LocalEvent::Get();
+
+        const std::vector<Game::DelayType> delayTypes = { Game::PUZZLE_FADE_DELAY };
+        Game::passAnimationDelay( Game::PUZZLE_FADE_DELAY );
+
+        while ( alpha >= 0 && le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) ) {
+            if ( Game::validateAnimationDelay( Game::PUZZLE_FADE_DELAY ) ) {
+                fheroes2::Blit( sf, display, dstx, dsty );
+
+                for ( size_t i = 0; i < pzl.size(); ++i ) {
+                    const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, static_cast<uint32_t>( i ) );
+
+                    uint8_t pieceAlpha = 255;
+                    if ( pzl.test( i ) )
+                        pieceAlpha = static_cast<uint8_t>( alpha );
+
+                    fheroes2::AlphaBlit( piece, display, dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH, pieceAlpha );
+                }
+
+                if ( drawControlPanel ) {
+                    display.render( ( *drawControlPanel )() );
+                }
+
+                display.render( { dstx, dsty, sf.width(), sf.height() } );
+
+                if ( alpha <= 0 ) {
+                    break;
+                }
+
+                alpha -= 10;
+                assert( alpha >= 0 );
+            }
+        }
+    }
+
+    void ShowStandardDialog( const Puzzle & pzl, const fheroes2::Image & sf )
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+
+        const Interface::Radar & radar = Interface::Basic::Get().GetRadar();
+        const fheroes2::Rect & radarArea = radar.GetArea();
+
+        fheroes2::ImageRestorer back( display, BORDERWIDTH, BORDERWIDTH, sf.width(), sf.height() );
+
+        fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), display, radarArea.x, radarArea.y );
+        fheroes2::Blit( sf, display, BORDERWIDTH, BORDERWIDTH );
+
+        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
+        buttonExit.draw();
+
+        PuzzlesDraw( pzl, sf, BORDERWIDTH, BORDERWIDTH );
+
+        display.render();
+
+        LocalEvent & le = LocalEvent::Get();
+
+        while ( le.HandleEvents() ) {
+            le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+                break;
+        }
+
+        radar.SetRedraw();
+    }
+
+    void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
+    {
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        const fheroes2::Rect & gameArea = Interface::Basic::Get().GetGameArea().GetROI();
+
+        const fheroes2::StandardWindow border( gameArea.x + ( gameArea.width - sf.width() - BORDERWIDTH * 2 ) / 2,
+                                               gameArea.y + ( gameArea.height - sf.height() - BORDERWIDTH * 2 ) / 2, sf.width(), sf.height() );
+
+        fheroes2::Rect blitArea = border.activeArea();
+
+        fheroes2::Image background( blitArea.width, blitArea.height );
+
+        const Settings & conf = Settings::Get();
+        const bool isEvilInterface = conf.ExtGameEvilInterface();
+        const bool isHideInterface = conf.ExtGameHideInterface();
+
+        if ( isEvilInterface ) {
+            background.fill( fheroes2::GetColorId( 80, 80, 80 ) );
+        }
+        else {
+            background.fill( fheroes2::GetColorId( 128, 64, 32 ) );
+        }
+
+        fheroes2::Blit( background, display, blitArea.x, blitArea.y );
+        fheroes2::Blit( sf, display, blitArea.x, blitArea.y );
+
+        const Interface::Radar & radar = Interface::Basic::Get().GetRadar();
+        const fheroes2::Rect & radarRect = radar.GetRect();
+        const fheroes2::Rect & radarArea = radar.GetArea();
+
+        fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
+
+        std::function<fheroes2::Rect()> drawControlPanel = [&display, isHideInterface, isEvilInterface, &radarRect, &radarArea, &buttonExit]() {
+            if ( isHideInterface ) {
+                Dialog::FrameBorder::RenderRegular( radarRect );
+            }
+
+            fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), display, radarArea.x, radarArea.y );
+
+            buttonExit.draw();
+
+            return radarRect;
+        };
+
+        drawControlPanel();
+
+        PuzzlesDraw( pzl, sf, blitArea.x, blitArea.y, isHideInterface ? &drawControlPanel : nullptr );
+
+        display.render();
+
+        LocalEvent & le = LocalEvent::Get();
+
+        while ( le.HandleEvents() ) {
+            le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+                break;
+        }
+
+        radar.SetRedraw();
+    }
+}
 
 Puzzle::Puzzle()
 {
@@ -110,147 +273,6 @@ void Puzzle::ShowMapsDialog() const
         ShowStandardDialog( *this, sf );
     else
         ShowExtendedDialog( *this, sf );
-}
-
-bool ClosedTilesExists( const Puzzle & pzl, const std::vector<uint8_t> & zone )
-{
-    for ( const uint8_t tile : zone ) {
-        if ( !pzl.test( tile ) )
-            return true;
-    }
-    return false;
-}
-
-void ZoneOpenFirstTiles( Puzzle & pzl, size_t & opens, const std::vector<uint8_t> & zone )
-{
-    while ( opens ) {
-        std::vector<uint8_t>::const_iterator it = zone.begin();
-        while ( it != zone.end() && pzl.test( *it ) )
-            ++it;
-
-        if ( it != zone.end() ) {
-            pzl.set( *it );
-            --opens;
-        }
-        else
-            break;
-    }
-}
-
-void ShowStandardDialog( const Puzzle & pzl, const fheroes2::Image & sf )
-{
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    const Interface::Radar & radar = Interface::Basic::Get().GetRadar();
-    const fheroes2::Rect & radarPos = radar.GetArea();
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
-
-    fheroes2::ImageRestorer back( display, BORDERWIDTH, BORDERWIDTH, sf.width(), sf.height() );
-
-    fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), display, radarPos.x, radarPos.y );
-    fheroes2::Blit( sf, display, BORDERWIDTH, BORDERWIDTH );
-
-    fheroes2::Point dst_pt( radarPos.x + 32, radarPos.y + radarPos.height - 37 );
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
-
-    buttonExit.draw();
-    PuzzlesDraw( pzl, sf, BORDERWIDTH, BORDERWIDTH );
-
-    display.render();
-
-    LocalEvent & le = LocalEvent::Get();
-
-    while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
-            break;
-    }
-
-    radar.SetRedraw();
-}
-
-void ShowExtendedDialog( const Puzzle & pzl, const fheroes2::Image & sf )
-{
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    const fheroes2::Rect & gameArea = Interface::Basic::Get().GetGameArea().GetROI();
-
-    const fheroes2::StandardWindow border( gameArea.x + ( gameArea.width - sf.width() - BORDERWIDTH * 2 ) / 2,
-                                           gameArea.y + ( gameArea.height - sf.height() - BORDERWIDTH * 2 ) / 2, sf.width(), sf.height() );
-
-    fheroes2::Rect blitArea = border.activeArea();
-
-    fheroes2::Image background( blitArea.width, blitArea.height );
-
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
-    if ( isEvilInterface )
-        background.fill( fheroes2::GetColorId( 80, 80, 80 ) );
-    else
-        background.fill( fheroes2::GetColorId( 128, 64, 32 ) );
-
-    fheroes2::Blit( background, display, blitArea.x, blitArea.y );
-    fheroes2::Blit( sf, display, blitArea.x, blitArea.y );
-
-    const Interface::Radar & radar = Interface::Basic::Get().GetRadar();
-    const fheroes2::Rect & radarPos = radar.GetArea();
-
-    fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWPUZL : ICN::VIEWPUZL ), 0 ), display, radarPos.x, radarPos.y );
-
-    fheroes2::Point dst_pt( radarPos.x + 32, radarPos.y + radarPos.height - 37 );
-    fheroes2::Button buttonExit( dst_pt.x, dst_pt.y, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
-
-    buttonExit.draw();
-    PuzzlesDraw( pzl, sf, blitArea.x, blitArea.y );
-
-    display.render();
-
-    LocalEvent & le = LocalEvent::Get();
-
-    while ( le.HandleEvents() ) {
-        le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
-            break;
-    }
-
-    radar.SetRedraw();
-}
-
-void PuzzlesDraw( const Puzzle & pzl, const fheroes2::Image & sf, int32_t dstx, int32_t dsty )
-{
-    fheroes2::Display & display = fheroes2::Display::instance();
-
-    // show all for debug
-    if ( IS_DEVEL() )
-        return;
-
-    int alpha = 250;
-    LocalEvent & le = LocalEvent::Get();
-
-    const std::vector<Game::DelayType> delayTypes = { Game::PUZZLE_FADE_DELAY };
-    Game::passAnimationDelay( Game::PUZZLE_FADE_DELAY );
-
-    while ( alpha >= 0 && le.HandleEvents( Game::isDelayNeeded( delayTypes ) ) ) {
-        if ( Game::validateAnimationDelay( Game::PUZZLE_FADE_DELAY ) ) {
-            fheroes2::Blit( sf, display, dstx, dsty );
-            for ( size_t i = 0; i < pzl.size(); ++i ) {
-                const fheroes2::Sprite & piece = fheroes2::AGG::GetICN( ICN::PUZZLE, static_cast<uint32_t>( i ) );
-
-                uint8_t pieceAlpha = 255;
-                if ( pzl.test( i ) )
-                    pieceAlpha = static_cast<uint8_t>( alpha );
-
-                fheroes2::AlphaBlit( piece, display, dstx + piece.x() - BORDERWIDTH, dsty + piece.y() - BORDERWIDTH, pieceAlpha );
-            }
-            display.render( { dstx, dsty, sf.width(), sf.height() } );
-
-            if ( alpha <= 0 ) {
-                break;
-            }
-
-            alpha -= 10;
-            assert( alpha >= 0 );
-        }
-    }
 }
 
 StreamBase & operator<<( StreamBase & msg, const Puzzle & pzl )
