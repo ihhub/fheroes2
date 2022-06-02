@@ -65,7 +65,7 @@ namespace fheroes2
 
         Rect area() const;
 
-        Rect combinedArea( ButtonBase & button2 ) const;
+        Rect combinedArea( const ButtonBase & button2 ) const;
 
     protected:
         void _swap( ButtonBase & button );
