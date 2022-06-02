@@ -445,9 +445,9 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                  || ( !bottomArmyBar.isValid() && le.MouseCursor( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( &statusMessage ) ) ) {
                 need_redraw = true;
             }
-            // TODO: These Army pointers can be removed when old SetArmy method is replaced.
             Army * army1 = nullptr;
             Army * army2 = nullptr;
+            // This point is used to pick the hero for guest-guardian swapping.
             const fheroes2::Point selectedPortrait = le.GetMousePressLeft();
             if ( heroes.Guest() ) {
                 // Move troops down.
@@ -468,10 +468,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     Army::swapArmies( GetArmy(), heroes.Guest()->GetArmy() );
                     redrawAfterArmyAction = true;
                 }
-                // Extra actions for experimental castle guardian option.
+                // Extra actions when using experimental castle guardian option.
                 else if ( conf.ExtCastleAllowGuardians() ) {
                     if ( heroes.Guard() ) {
-                        // Swap guard and guest hero along with their armies.
+                        // Swap guard and guest hero together with their armies.
                         if ( ( rectSign1.operator&( selectedPortrait ) && le.MouseReleaseLeft( rectSign2 ) )
                              || ( rectSign2.operator&( selectedPortrait ) && le.MouseReleaseLeft( rectSign1 ) )
                              || ( le.MouseClickRight( rectSign1 ) || le.MouseClickRight( rectSign2 ) ) ) {
