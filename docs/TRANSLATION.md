@@ -45,8 +45,10 @@ For exmaple, for the German PO file, `de.po`, the following would be the command
 make de.mo
 ```
 
-To have this MO file used by the engine, it should then be placed in the `/files/lang` folder used by the fheroes2 executable, in other
-words not the one where you find the PO files.
+To have this MO file used by the engine, it should then be placed in the `/files/lang` folder used by the fheroes2 executable.
+The exact location of this folder depends on the operating system. On Windows, it is usually located in the app installation
+directory. On Linux, it is usually located in the `/usr/share/fheroes2` or `/usr/local/share/fheroes2`. Currently for MacOS
+users this location is dependent on what third-party package manager is used to install fheroes2.
 
 For Windows users that use POEdit or a similar application, they can compile with that program. However, note that the program will
 need to be set to compile the MO file in the font encoding/Charset that the language that you are translating to has been set to.
