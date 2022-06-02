@@ -60,37 +60,36 @@ void Interface::Basic::SetHideInterface( bool f )
     conf.SetHideInterface( f );
 
     const fheroes2::Display & display = fheroes2::Display::instance();
-    const int32_t px = display.width() - BORDERWIDTH - RADARWIDTH;
 
     if ( f ) {
         conf.SetShowPanel( true );
 
         controlPanel.SetPos( display.width() - controlPanel.GetArea().width - BORDERWIDTH, 0 );
 
-        fheroes2::Point pos_radr = conf.PosRadar();
-        fheroes2::Point pos_bttn = conf.PosButtons();
-        fheroes2::Point pos_icon = conf.PosIcons();
-        fheroes2::Point pos_stat = conf.PosStatus();
+        fheroes2::Point radrPos = conf.PosRadar();
+        fheroes2::Point bttnPos = conf.PosButtons();
+        fheroes2::Point iconPos = conf.PosIcons();
+        fheroes2::Point statPos = conf.PosStatus();
 
-        if ( pos_radr.x < 0 || pos_radr.y < 0 ) {
-            pos_radr = fheroes2::Point( BORDERWIDTH, BORDERWIDTH );
-        }
-        if ( pos_icon.x < 0 || pos_icon.y < 0 ) {
-            pos_icon = fheroes2::Point( px - BORDERWIDTH, radar.GetArea().y + radar.GetArea().height );
-        }
-        if ( pos_bttn.x < 0 || pos_bttn.y < 0 ) {
-            pos_bttn = fheroes2::Point( px - BORDERWIDTH, iconsPanel.GetArea().y + iconsPanel.GetArea().height );
-        }
-        if ( pos_stat.x < 0 || pos_stat.y < 0 ) {
-            pos_stat = fheroes2::Point( px - BORDERWIDTH, buttonsArea.GetArea().y + buttonsArea.GetArea().height );
-        }
+        auto isPosValid = []( const fheroes2::Point & pos ) { return pos.x >= 0 && pos.y >= 0; };
 
-        radar.SetPos( pos_radr.x, pos_radr.y );
-        iconsPanel.SetPos( pos_icon.x, pos_icon.y );
-        buttonsArea.SetPos( pos_bttn.x, pos_bttn.y );
-        statusWindow.SetPos( pos_stat.x, pos_stat.y );
+        if ( isPosValid( radrPos ) && isPosValid( bttnPos ) && isPosValid( iconPos ) && isPosValid( statPos ) ) {
+            radar.SetPos( radrPos.x, radrPos.y );
+            iconsPanel.SetPos( iconPos.x, iconPos.y );
+            buttonsArea.SetPos( bttnPos.x, bttnPos.y );
+            statusWindow.SetPos( statPos.x, statPos.y );
+        }
+        else {
+            radar.SetPos( 0, 0 );
+            // It's OK to use display.width() for the X coordinate here, panel will be docked to the right edge
+            iconsPanel.SetPos( display.width(), radar.GetArea().y + radar.GetArea().height + BORDERWIDTH );
+            buttonsArea.SetPos( display.width(), iconsPanel.GetArea().y + iconsPanel.GetArea().height + BORDERWIDTH );
+            statusWindow.SetPos( display.width(), buttonsArea.GetArea().y + buttonsArea.GetArea().height );
+        }
     }
     else {
+        const int32_t px = display.width() - BORDERWIDTH - RADARWIDTH;
+
         radar.SetPos( px, BORDERWIDTH );
         iconsPanel.SetPos( px, radar.GetArea().y + radar.GetArea().height + BORDERWIDTH );
         buttonsArea.SetPos( px, iconsPanel.GetArea().y + iconsPanel.GetArea().height + BORDERWIDTH );
