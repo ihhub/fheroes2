@@ -394,7 +394,6 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
     if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
         return;
     }
-
     // Modify the order in which to move the troops.
     std::vector<Troop *> troopFromOrder;
     size_t troopPointerIndex = 0;
@@ -414,7 +413,6 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
             troopFromOrder.emplace_back( troop );
         }
     }
-
     // Will be changed later on if the receiving army's troops get merged. This avoids unnecessary merges.
     bool preferEmptySlot = false;
 
@@ -467,16 +465,15 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
         if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
             return;
         }
-
         // Step 2: Attempt to move to remaining free slots or same troop ID elsewhere in army.
         for ( Troop * troop : troopFromOrder ) {
             if ( troop && troop->isValid() ) {
-                if ( from.GetCount() == 1 && !moveAll ) {
+                if ( from.GetCount() == 1 && troop->GetCount() > 1 && !moveAll ) {
                     if ( CanJoinTroop( troop->GetMonster() ) ) {
                         JoinTroop( troop->GetMonster(), troop->GetCount() - 1, preferEmptySlot );
                         troop->SetCount( 1 );
-                        return;
                     }
+                    break;
                 }
                 else if ( CanJoinTroop( troop->GetMonster() ) ) {
                     JoinTroop( troop->GetMonster(), troop->GetCount(), preferEmptySlot );
@@ -488,7 +485,6 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
         if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
             return;
         }
-
         // Step 3: Attempt to merge troops in receiving army to make free slots.
         const uint32_t troopCountPreMerge = GetCount();
         uint32_t neededMerges = from.GetCount();
