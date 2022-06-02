@@ -185,13 +185,6 @@ namespace fheroes2
         return Rect( _offsetX + sprite.x(), _offsetY + sprite.y(), sprite.width(), sprite.height() );
     }
 
-    Rect ButtonBase::combinedArea( const ButtonBase & button2 ) const
-    {
-        const Sprite & sprite = isPressed() ? _getPressed() : _getReleased();
-        const Sprite & sprite2 = button2.isPressed() ? button2._getPressed() : button2._getReleased();
-        return { _offsetX, _offsetY, sprite.width() + sprite2.width(), sprite.height() + sprite2.height() };
-    }
-
     const Sprite & ButtonBase::_getDisabled() const
     {
         const Sprite & sprite = _getReleased();

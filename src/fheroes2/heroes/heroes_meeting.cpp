@@ -408,7 +408,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             moveArmyToHero1.drawOnPress();
             moveArmyToHero2.drawOnRelease();
         }
-        else if ( le.MousePressRight( moveArmyToHero2.combinedArea( moveArmyToHero1 ) ) || HotKeyHoldEvent( Game::HotKeyEvent::SWAP_ARMIES ) ) {
+        else if ( le.MousePressRight( moveArmyToHero2.area() ) || le.MousePressRight( moveArmyToHero1.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::SWAP_ARMIES ) ) {
             moveArmyToHero1.drawOnPress();
             moveArmyToHero2.drawOnPress();
         }
@@ -584,7 +584,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             display.render();
         }
         // TODO: Avoid swap happening repeatedly if the hotkey is held down for a while.
-        else if ( le.MouseClickRight( moveArmyToHero2.combinedArea( moveArmyToHero1 ) ) || HotKeyPressEvent( Game::HotKeyEvent::SWAP_ARMIES ) ) {
+        else if ( le.MouseClickRight( moveArmyToHero2.area() ) || le.MouseClickRight ( moveArmyToHero1.area() ) || HotKeyPressEvent( Game::HotKeyEvent::SWAP_ARMIES ) ) {
             Army::swapArmies( GetArmy(), otherHero.GetArmy() );
 
             armyCountBackgroundRestorerLeft.restore();
