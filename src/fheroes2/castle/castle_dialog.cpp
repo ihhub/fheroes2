@@ -505,7 +505,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 SwapCastleHeroes( heroes );
                 army2 = &heroes.Guest()->GetArmy();
             }
-
             // Redraw and reset if any action modifying armies has been made.
             if ( redrawAfterArmyAction ) {
                 if ( topArmyBar.isSelected() )
@@ -516,7 +515,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 need_redraw = true;
                 redrawAfterArmyAction = false;
             }
-
             // Old method for setting armies if a hero became a guard or a guest. TODO: Replace with MoveTroops and swapArmies.
             if ( conf.ExtCastleAllowGuardians() && !readOnly ) {
                 if ( army1 || army2 ) {
