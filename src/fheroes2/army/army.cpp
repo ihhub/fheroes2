@@ -382,7 +382,7 @@ void Troops::JoinTroops( Troops & troops2 )
         }
 }
 
-void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, const bool isSelected, const bool moveAll )
+void Troops::MoveTroops( const Troops & from, const uint32_t selectedTroopIndex, const bool isSelected, const bool moveAll )
 {
     // You are attempting to move an army into itself. Check your logic.
     assert( !( this == &from ) );
@@ -396,7 +396,7 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
     }
     // Modify the order in which to move the troops.
     std::vector<Troop *> troopFromOrder;
-    size_t troopPointerIndex = 0;
+    uint32_t troopPointerIndex = 0;
     if ( selectedTroopIndex != 4 ) {
         for ( Troop * troop : from ) {
             if ( selectedTroopIndex == troopPointerIndex ) {
@@ -419,14 +419,14 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
     // 'from' army might have more than 0 if it is a hero army with one troop left.
     while ( from.GetCount() > 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
         // Step 1: Attempt to move troops directly to the same slot in the receiving army to preserve formation.
-        for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
+        for ( uint32_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
             Troop * troop = troopFromOrder.at( slot );
             // Make sure the selected troop is not moved before troops that could not be moved in Step 1.
             if ( slot == 4 && GetCount() > 1 && isSelected ) {
                 break;
             }
             // Set the correct slot according to the current troop.
-            size_t assignmentSlot = slot;
+            uint32_t assignmentSlot = slot;
             if ( slot >= selectedTroopIndex && !( slot == 4 ) ) {
                 assignmentSlot = slot + 1;
             }
@@ -493,8 +493,7 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
             --neededMerges;
         }
         MergeTroops( neededMerges );
-        const uint32_t troopCountPostMerge = GetCount();
-        if ( troopCountPreMerge == troopCountPostMerge ) {
+        if ( troopCountPreMerge == GetCount() ) {
             return;
         }
         preferEmptySlot = true;
@@ -619,17 +618,17 @@ const Troop * Troops::GetSlowestTroop() const
     return *lowest;
 }
 
-void Troops::MergeTroops( const uint32_t troopMerges )
+void Troops::MergeTroops( const uint32_t mergeNumber )
 {
     // You are requesting to merge 0 or less troops.
-    assert( !( troopMerges <= 0 ) );
+    assert( !( mergeNumber <= 0 ) );
 
     for ( size_t slot = 0; slot < size(); ++slot ) {
         Troop * troop = at( slot );
         if ( !troop || !troop->isValid() ) {
             continue;
         }
-        uint32_t mergesRemaining = troopMerges;
+        uint32_t mergesRemaining = mergeNumber;
         const int id = troop->GetID();
         for ( size_t secondary = slot + 1; secondary < size(); ++secondary ) {
             Troop * secondaryTroop = at( secondary );
