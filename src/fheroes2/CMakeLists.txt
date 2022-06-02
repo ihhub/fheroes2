@@ -84,6 +84,7 @@ target_include_directories(
 	agg
 	ai
 	army
+	audio
 	battle
 	campaign
 	castle
