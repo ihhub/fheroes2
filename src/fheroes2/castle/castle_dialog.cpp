@@ -436,39 +436,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
             else if ( le.MousePressRight( buttonPrevCastle.area() ) ) {
                 Dialog::Message( _( "Show previous town" ), _( "Click to show previous town." ), Font::BIG );
             }
-            if ( heroes.Guest() && !conf.ExtCastleAllowGuardians() ) {
-                if ( le.MouseClickLeft( rectSign1 ) || HotKeyPressEvent( Game::HotKeyEvent::SWAP_ARMIES ) ) {
-                    Army::swapArmies( GetArmy(), heroes.Guest()->GetArmy() );
-                    if ( topArmyBar.isSelected() )
-                        topArmyBar.ResetSelected();
-                    if ( bottomArmyBar.isSelected() )
-                        bottomArmyBar.ResetSelected();
-
-                    need_redraw = true;
-                }
-                else if ( ( topArmyBar.GetItem( le.GetMousePressLeft() ) && le.MouseReleaseLeft( rectSign2 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
-                    heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), topArmyBar.isSelected() ? topArmyBar.GetSelectedIndex() : 4, topArmyBar.isSelected(),
-                                                          true );
-
-                    if ( topArmyBar.isSelected() )
-                        topArmyBar.ResetSelected();
-                    if ( bottomArmyBar.isSelected() )
-                        bottomArmyBar.ResetSelected();
-
-                    need_redraw = true;
-                }
-                else if ( ( bottomArmyBar.GetItem( le.GetMousePressLeft() ) && le.MouseReleaseLeft( rectSign1 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
-                    GetArmy().MoveTroops( heroes.Guest()->GetArmy().getTroops(), bottomArmyBar.isSelected() ? bottomArmyBar.GetSelectedIndex() : 4,
-                                          bottomArmyBar.isSelected() );
-
-                    if ( topArmyBar.isSelected() )
-                        topArmyBar.ResetSelected();
-                    if ( bottomArmyBar.isSelected() )
-                        bottomArmyBar.ResetSelected();
-
-                    need_redraw = true;
-                }
-            }
 
             // selector troops event
             if ( ( bottomArmyBar.isValid()
@@ -477,99 +444,81 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                  || ( !bottomArmyBar.isValid() && le.MouseCursor( topArmyBar.GetArea() ) && topArmyBar.QueueEventProcessing( &statusMessage ) ) ) {
                 need_redraw = true;
             }
+            // TODO: These Army pointers can be removed when old SetArmy method is replaced.
+            Army * army1 = nullptr;
+            Army * army2 = nullptr;
 
-            if ( conf.ExtCastleAllowGuardians() && !readOnly ) {
-                Army * army1 = nullptr;
-                Army * army2 = nullptr;
+            bool redrawAfterArmyAction = false;
 
-                // swap guest <-> guardian
-                if ( heroes.Guest() && heroes.Guard() ) {
-                    if ( le.MouseClickLeft( buttonSwap.area() ) ) {
-                        Army::swapArmies( heroes.Guard()->GetArmy(), heroes.Guest()->GetArmy() );
-                        need_redraw = true;
-                    }
-                    else if ( le.MouseClickLeft( buttonMeeting.area() ) ) {
-                        heroes.Guest()->MeetingDialog( *heroes.Guard() );
-                        need_redraw = true;
-                    }
-                    else if ( ( topArmyBar.GetItem( le.GetMousePressLeft() ) && le.MouseReleaseLeft( rectSign2 ) )
-                              || HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
-                        heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), topArmyBar.isSelected() ? topArmyBar.GetSelectedIndex() : 4,
-                                                              topArmyBar.isSelected() );
-
-                        if ( topArmyBar.isSelected() )
-                            topArmyBar.ResetSelected();
-                        if ( bottomArmyBar.isSelected() )
-                            bottomArmyBar.ResetSelected();
-
-                        need_redraw = true;
-                    }
-                    else if ( ( bottomArmyBar.GetItem( le.GetMousePressLeft() ) && le.MouseReleaseLeft( rectSign1 ) )
-                              || HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
-                        GetArmy().MoveTroops( heroes.Guest()->GetArmy().getTroops(), bottomArmyBar.isSelected() ? bottomArmyBar.GetSelectedIndex() : 4,
-                                              bottomArmyBar.isSelected() );
-
-                        if ( topArmyBar.isSelected() )
-                            topArmyBar.ResetSelected();
-                        if ( bottomArmyBar.isSelected() )
-                            bottomArmyBar.ResetSelected();
-
-                        need_redraw = true;
-                    }
-                    else if ( le.MouseClickRight( rectSign2 ) || le.MouseClickRight( rectSign1 ) ) {
-                        SwapCastleHeroes( heroes );
-                        army1 = &heroes.Guard()->GetArmy();
-                        army2 = &heroes.Guest()->GetArmy();
-                    }
+            if ( heroes.Guest() ) {
+                // Move troops down.
+                if ( ( topArmyBar.GetItem( le.GetMousePressLeft() ) && le.MouseReleaseLeft( rectSign2 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
+                    heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), topArmyBar.isSelected() ? topArmyBar.GetSelectedIndex() : 4, topArmyBar.isSelected(),
+                                                          !heroes.Guard() );
+                    redrawAfterArmyAction = true;
                 }
-                else if ( heroes.Guest() && !heroes.Guard() ) {
-                    if ( le.MouseClickLeft( rectSign1 ) ) {
-                        Army::swapArmies( GetArmy(), heroes.Guest()->GetArmy() );
-                        need_redraw = true;
+                // Move troops up.
+                else if ( ( bottomArmyBar.GetItem( le.GetMousePressLeft() ) && le.MouseReleaseLeft( rectSign1 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
+                    GetArmy().MoveTroops( heroes.Guest()->GetArmy().getTroops(), bottomArmyBar.isSelected() ? bottomArmyBar.GetSelectedIndex() : 4,
+                                          bottomArmyBar.isSelected() );
+                    redrawAfterArmyAction = true;
+                }
+                // Swap troops.
+                else if ( HotKeyPressEvent( Game::HotKeyEvent::SWAP_ARMIES ) || !heroes.Guard() && le.MouseClickLeft( rectSign1 )
+                          || heroes.Guard() && le.MouseClickLeft( buttonSwap.area() ) ) {
+                    Army::swapArmies( GetArmy(), heroes.Guest()->GetArmy() );
+                    redrawAfterArmyAction = true;
+                }
+                // Extra actions for experimental castle guardian functionality.
+                else if ( conf.ExtCastleAllowGuardians() ) {
+                    if ( heroes.Guard() ) {
+                        // Swap guard and guest hero along with their armies. TODO: Drag and drop of portraits.
+                        if ( le.MouseClickRight( rectSign1 ) || le.MouseClickRight( rectSign2 ) ) {
+                            // TODO: Replace old SetArmy method with swapArmies.
+                            SwapCastleHeroes( heroes );
+                            army1 = &heroes.Guard()->GetArmy();
+                            army2 = &heroes.Guest()->GetArmy();
+                        }
+                        // Heroes meeting dialog.
+                        else if ( le.MouseClickLeft( buttonMeeting.area() ) ) {
+                            heroes.Guest()->MeetingDialog( *heroes.Guard() );
+                            need_redraw = true;
+                        }
                     }
+                    // Move hero from guest to guard. TODO: Drag and drop of portrait.
                     else if ( le.MouseClickRight( rectSign1 ) ) {
-                        // Move hero to top army.
                         if ( !heroes.Guest()->GetArmy().CanJoinTroops( army ) ) {
                             Dialog::Message( _( "Army joining" ),
                                              _( "Unable to merge two armies together. Rearrange monsters manually before moving the hero to the garrison." ), Font::BIG,
                                              Dialog::OK );
                         }
                         else {
+                            // TODO: Replace old SetArmy method with moveTroops.
                             SwapCastleHeroes( heroes );
                             army1 = &heroes.Guard()->GetArmy();
                         }
                     }
-                    else if ( ( topArmyBar.GetItem( le.GetMousePressLeft() ) && le.MouseReleaseLeft( rectSign2 ) )
-                              || HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
-                        heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), topArmyBar.isSelected() ? topArmyBar.GetSelectedIndex() : 4, topArmyBar.isSelected(),
-                                                              true );
-
-                        if ( topArmyBar.isSelected() )
-                            topArmyBar.ResetSelected();
-                        if ( bottomArmyBar.isSelected() )
-                            bottomArmyBar.ResetSelected();
-
-                        need_redraw = true;
-                    }
-                    else if ( ( bottomArmyBar.GetItem( le.GetMousePressLeft() ) && le.MouseReleaseLeft( rectSign1 ) )
-                              || HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
-                        GetArmy().MoveTroops( heroes.Guest()->GetArmy().getTroops(), bottomArmyBar.isSelected() ? bottomArmyBar.GetSelectedIndex() : 4,
-                                              bottomArmyBar.isSelected() );
-
-                        if ( topArmyBar.isSelected() )
-                            topArmyBar.ResetSelected();
-                        if ( bottomArmyBar.isSelected() )
-                            bottomArmyBar.ResetSelected();
-
-                        need_redraw = true;
-                    }
                 }
-                else if ( !heroes.Guest() && heroes.Guard() && le.MouseClickRight( rectSign2 ) ) {
-                    // Move hero to bottom army.
-                    SwapCastleHeroes( heroes );
-                    army2 = &heroes.Guest()->GetArmy();
-                }
+            }
+            // Move hero from guard to guest. TODO: Drag and drop of portrait.
+            else if ( heroes.Guard() && le.MouseClickRight( rectSign2 ) ) {
+                // TODO: Replace old SetArmy method with MoveTroops.
+                SwapCastleHeroes( heroes );
+                army2 = &heroes.Guest()->GetArmy();
+            }
 
+            // Redraw and reset if any action modifying armies has been made.
+            if ( redrawAfterArmyAction ) {
+                if ( topArmyBar.isSelected() )
+                    topArmyBar.ResetSelected();
+                if ( bottomArmyBar.isSelected() )
+                    bottomArmyBar.ResetSelected();
+
+                need_redraw = true;
+            }
+
+            // Old method for setting armies if a hero became a guard or a guest. TODO: Replace with MoveTroops and swapArmies.
+            if ( conf.ExtCastleAllowGuardians() && !readOnly ) {
                 if ( army1 || army2 ) {
                     if ( topArmyBar.isSelected() )
                         topArmyBar.ResetSelected();
