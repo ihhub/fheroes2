@@ -1730,10 +1730,6 @@ namespace fheroes2
                         FillTransform( original, 9, 112, 51, 2, 1 );
                         FillTransform( original, 35, 110, 47, 2, 1 );
                         FillTransform( original, 57, 108, 51, 2, 1 );
-
-                        // Remove a shadow on the castle from the tree.
-                        FillTransform( original, 16, 44, 14, 55, 1 );
-                        FillTransform( original, 30, 44, 5, 25, 1 );
                     }
                 }
                 return true;
