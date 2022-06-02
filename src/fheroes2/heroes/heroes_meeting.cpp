@@ -583,7 +583,7 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             display.render();
         }
-        // TODO: Use something like HotKeyReleaseEvent when added to avoid continuous repeated swapping if the hotkey is held down for a while.
+        // TODO: Avoid swap happening repeatedly if the hotkey is held down for a while.
         else if ( le.MouseClickRight( moveArmyToHero2.combinedArea( moveArmyToHero1 ) ) || HotKeyPressEvent( Game::HotKeyEvent::SWAP_ARMIES ) ) {
             Army::swapArmies( GetArmy(), otherHero.GetArmy() );
 
