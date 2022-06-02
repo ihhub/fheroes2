@@ -25,9 +25,9 @@
 #include <vector>
 
 #include "agg_image.h"
-#include "audio_manager.h"
 #include "ai.h"
 #include "audio.h"
+#include "audio_manager.h"
 #include "battle_only.h"
 #include "castle.h"
 #include "cursor.h"
