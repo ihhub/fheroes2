@@ -383,6 +383,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
 
     CastleDialogReturnValue result = CastleDialogReturnValue::DoNothing;
     bool need_redraw = false;
+    bool redrawAfterArmyAction = false;
 
     // dialog menu loop
     Game::passAnimationDelay( Game::CASTLE_AROUND_DELAY );
@@ -448,8 +449,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
             Army * army1 = nullptr;
             Army * army2 = nullptr;
 
-            bool redrawAfterArmyAction = false;
-
             if ( heroes.Guest() ) {
                 // Move troops down.
                 if ( ( topArmyBar.GetItem( le.GetMousePressLeft() ) && le.MouseReleaseLeft( rectSign2 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
@@ -469,7 +468,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     Army::swapArmies( GetArmy(), heroes.Guest()->GetArmy() );
                     redrawAfterArmyAction = true;
                 }
-                // Extra actions for experimental castle guardian functionality.
+                // Extra actions for experimental castle guardian option.
                 else if ( conf.ExtCastleAllowGuardians() ) {
                     if ( heroes.Guard() ) {
                         // Swap guard and guest hero along with their armies. TODO: Drag and drop of portraits.
@@ -515,6 +514,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     bottomArmyBar.ResetSelected();
 
                 need_redraw = true;
+                redrawAfterArmyAction = false;
             }
 
             // Old method for setting armies if a hero became a guard or a guest. TODO: Replace with MoveTroops and swapArmies.
