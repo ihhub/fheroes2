@@ -24,9 +24,9 @@
 #include <cassert>
 #include <queue>
 
-#include "audio_manager.h"
 #include "agg_image.h"
 #include "army.h"
+#include "audio_manager.h"
 #include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"

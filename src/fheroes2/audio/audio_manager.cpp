@@ -205,8 +205,8 @@ namespace
 
     void PlaySoundInternally( const int m82, const int soundVolume );
     void PlayMusicInternally( const int mus, const MusicSource musicType, const bool loop );
-    void playLoopSoundsInternally(
-        std::map<M82::SoundType, std::vector<fheroes2::AudioLoopEffectInfo>> soundEffects, const int soundVolume, const bool is3DAudioEnabled );
+    void playLoopSoundsInternally( std::map<M82::SoundType, std::vector<fheroes2::AudioLoopEffectInfo>> soundEffects, const int soundVolume,
+                                   const bool is3DAudioEnabled );
 
     // SDL MIDI player is a single threaded library which requires a lot of time to start playing some long midi compositions.
     // This leads to a situation of a short application freeze while a hero crosses terrains or ending a battle.

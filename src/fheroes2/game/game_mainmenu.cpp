@@ -22,8 +22,8 @@
  ***************************************************************************/
 
 #include "agg_image.h"
-#include "audio_manager.h"
 #include "audio.h"
+#include "audio_manager.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_game_settings.h"

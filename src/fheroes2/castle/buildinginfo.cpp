@@ -24,8 +24,8 @@
 #include <cassert>
 
 #include "agg_image.h"
-#include "audio_manager.h"
 #include "army_troop.h"
+#include "audio_manager.h"
 #include "buildinginfo.h"
 #include "cursor.h"
 #include "dialog.h"

@@ -21,8 +21,8 @@
 #include <cassert>
 #include <utility>
 
-#include "audio_manager.h"
 #include "ai_normal.h"
+#include "audio_manager.h"
 #include "game_interface.h"
 #include "game_over.h"
 #include "ground.h"

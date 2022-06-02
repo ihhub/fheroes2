@@ -25,8 +25,8 @@
 #include <string>
 
 #include "agg_image.h"
-#include "audio_manager.h"
 #include "army_bar.h"
+#include "audio_manager.h"
 #include "castle.h"
 #include "castle_building_info.h"
 #include "cursor.h"
