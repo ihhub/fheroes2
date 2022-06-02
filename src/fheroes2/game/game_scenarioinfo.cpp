@@ -26,8 +26,8 @@
 #include <string>
 #include <vector>
 
-#include "agg.h"
 #include "agg_image.h"
+#include "audio_manager.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectscenario.h"
@@ -399,7 +399,7 @@ fheroes2::GameMode Game::SelectScenario()
 
 fheroes2::GameMode Game::ScenarioInfo()
 {
-    AGG::PlayMusic( MUS::MAINMENU, true, true );
+    fheroes2::PlayMusic( MUS::MAINMENU, true, true );
 
     const MapsFileInfoList lists = Maps::PrepareMapsFileInfoList( Settings::Get().IsGameType( Game::TYPE_MULTI ) );
     if ( lists.empty() ) {

@@ -24,9 +24,9 @@
 #include <algorithm>
 #include <cassert>
 
-#include "agg.h"
 #include "ai.h"
 #include "army.h"
+#include "audio_manager.h"
 #include "battle.h"
 #include "castle.h"
 #include "game.h"
@@ -228,7 +228,7 @@ namespace AI
             }
 
             if ( playSound ) {
-                AGG::PlaySound( M82::KILLFADE );
+                fheroes2::PlaySound( M82::KILLFADE );
             }
             hero.FadeOut();
         }

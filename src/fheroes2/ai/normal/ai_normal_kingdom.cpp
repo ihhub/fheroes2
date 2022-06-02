@@ -21,7 +21,7 @@
 #include <cassert>
 #include <utility>
 
-#include "agg.h"
+#include "audio_manager.h"
 #include "ai_normal.h"
 #include "game_interface.h"
 #include "game_over.h"
@@ -270,7 +270,7 @@ namespace AI
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
         status.RedrawTurnProgress( 0 );
 
-        AGG::PlayMusic( MUS::COMPUTER_TURN, true, true );
+        fheroes2::PlayMusic( MUS::COMPUTER_TURN, true, true );
 
         KingdomHeroes & heroes = kingdom.GetHeroes();
         const KingdomCastles & castles = kingdom.GetCastles();

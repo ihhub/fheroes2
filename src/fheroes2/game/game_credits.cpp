@@ -19,8 +19,8 @@
  ***************************************************************************/
 
 #include "game_credits.h"
-#include "agg.h"
 #include "agg_image.h"
+#include "audio_manager.h"
 #include "cursor.h"
 #include "game_delays.h"
 #include "icn.h"
@@ -597,7 +597,7 @@ void Game::ShowCredits()
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    AGG::PlayMusic( MUS::VICTORY, true, true );
+    fheroes2::PlayMusic( MUS::VICTORY, true, true );
 
     fheroes2::Image blackScreen( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
     blackScreen.fill( 0 );

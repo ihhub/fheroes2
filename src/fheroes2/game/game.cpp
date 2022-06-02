@@ -26,8 +26,8 @@
 #include <cassert>
 #include <cmath>
 
-#include "agg.h"
 #include "audio.h"
+#include "audio_manager.h"
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
@@ -369,7 +369,7 @@ void Game::EnvironmentSoundMixer()
         center = { world.w() / 2, world.h() / 2 };
     }
 
-    std::map<M82::SoundType, std::vector<AGG::AudioLoopEffectInfo>> soundEffects;
+    std::map<M82::SoundType, std::vector<fheroes2::AudioLoopEffectInfo>> soundEffects;
 
     const int32_t maxOffset = 3;
 
@@ -440,9 +440,9 @@ void Game::EnvironmentSoundMixer()
             }
         }
 
-        std::vector<AGG::AudioLoopEffectInfo> & effects = soundEffects[soundType];
+        std::vector<fheroes2::AudioLoopEffectInfo> & effects = soundEffects[soundType];
         bool doesEffectExist = false;
-        for ( AGG::AudioLoopEffectInfo & info : effects ) {
+        for ( fheroes2::AudioLoopEffectInfo & info : effects ) {
             if ( info.angle == angle ) {
                 info.volumePercentage = std::max( volumePercentage, info.volumePercentage );
                 doesEffectExist = true;
@@ -462,13 +462,13 @@ void Game::EnvironmentSoundMixer()
         }
     }
 
-    AGG::playLoopSounds( std::move( soundEffects ), true );
+    fheroes2::playLoopSounds( std::move( soundEffects ), true );
 }
 
 void Game::restoreSoundsForCurrentFocus()
 {
     Game::SetCurrentMusic( MUS::UNKNOWN );
-    AGG::ResetAudio();
+    fheroes2::ResetAudio();
 
     switch ( Interface::GetFocusType() ) {
     case GameFocus::HEROES: {
@@ -478,7 +478,7 @@ void Game::restoreSoundsForCurrentFocus()
         const int heroIndexPos = focusedHero->GetIndex();
         if ( heroIndexPos >= 0 ) {
             Game::EnvironmentSoundMixer();
-            AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
+            fheroes2::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
         }
         break;
     }
@@ -488,7 +488,7 @@ void Game::restoreSoundsForCurrentFocus()
         assert( focusedCastle != nullptr );
 
         Game::EnvironmentSoundMixer();
-        AGG::PlayMusic( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ), true, true );
+        fheroes2::PlayMusic( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ), true, true );
         break;
     }
 
@@ -684,5 +684,5 @@ void Game::PlayPickupSound()
         return;
     }
 
-    AGG::PlaySound( wav );
+    fheroes2::PlaySound( wav );
 }

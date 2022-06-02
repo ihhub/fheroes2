@@ -120,7 +120,7 @@ namespace
     // BMP files within AGG are not Bitmap files.
     fheroes2::Sprite loadBMPFile( const std::string & path )
     {
-        const std::vector<uint8_t> & data = AGG::ReadChunk( path );
+        const std::vector<uint8_t> & data = AGG::getDataFromAggFile( path );
         if ( data.size() < 6 ) {
             // It is an invalid BMP file.
             return {};
@@ -245,7 +245,7 @@ namespace fheroes2
     {
         void LoadOriginalICN( int id )
         {
-            const std::vector<uint8_t> & body = ::AGG::ReadChunk( ICN::GetString( id ) );
+            const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
 
             if ( body.empty() ) {
                 return;
@@ -772,7 +772,7 @@ namespace fheroes2
 
                 if ( id == ICN::SMALFONT ) {
                     // Small font in official Polish GoG version has all letters to be shifted by 1 pixel lower.
-                    const std::vector<uint8_t> & body = ::AGG::ReadChunk( ICN::GetString( id ) );
+                    const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
                     const uint32_t crc32 = fheroes2::calculateCRC32( body.data(), body.size() );
                     if ( crc32 == 0xE9EC7A63 ) {
                         for ( Sprite & letter : imageArray ) {
@@ -1730,6 +1730,10 @@ namespace fheroes2
                         FillTransform( original, 9, 112, 51, 2, 1 );
                         FillTransform( original, 35, 110, 47, 2, 1 );
                         FillTransform( original, 57, 108, 51, 2, 1 );
+
+                        // Remove a shadow on the castle from the tree.
+                        FillTransform( original, 16, 44, 14, 55, 1 );
+                        FillTransform( original, 30, 44, 5, 25, 1 );
                     }
                 }
                 return true;
@@ -2058,7 +2062,7 @@ namespace fheroes2
             if ( _tilVsImage[id].empty() ) {
                 _tilVsImage[id].resize( 4 ); // 4 possible sides
 
-                const std::vector<uint8_t> & data = ::AGG::ReadChunk( tilFileName[id] );
+                const std::vector<uint8_t> & data = ::AGG::getDataFromAggFile( tilFileName[id] );
                 if ( data.size() < headerSize ) {
                     // The important resource is absent! Make sure that you are using the correct version of the game.
                     assert( 0 );

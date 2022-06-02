@@ -25,9 +25,9 @@
 #include <cassert>
 #include <cstdlib>
 
-#include "agg.h"
 #include "agg_image.h"
 #include "audio.h"
+#include "audio_manager.h"
 #include "battle_arena.h"
 #include "battle_army.h"
 #include "battle_bridge.h"
@@ -87,7 +87,7 @@ namespace
         const double sinValue = sin( angle );
         const double cosValue = cos( angle );
 
-        return fheroes2::Point( static_cast<int32_t>( point.x * cosValue - point.y * sinValue ), static_cast<int32_t>( point.x * sinValue + point.y * cosValue ) );
+        return { static_cast<int32_t>( point.x * cosValue - point.y * sinValue ), static_cast<int32_t>( point.x * sinValue + point.y * cosValue ) };
     }
 
     double getAngle( const fheroes2::Point & start, const fheroes2::Point & end )
@@ -992,8 +992,8 @@ Battle::Interface::Interface( Arena & a, int32_t center )
     // border
     const fheroes2::Display & display = fheroes2::Display::instance();
 
-    _interfacePosition = fheroes2::Rect( ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2,
-                                         _surfaceInnerArea.width, _surfaceInnerArea.height );
+    _interfacePosition = { ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2,
+                           _surfaceInnerArea.width, _surfaceInnerArea.height };
     border.SetPosition( _interfacePosition.x - BORDERWIDTH, _interfacePosition.y - BORDERWIDTH, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
     // damage info popup
@@ -1064,7 +1064,7 @@ Battle::Interface::Interface( Arena & a, int32_t center )
     opponent2 = arena.GetCommander2() ? new OpponentSprite( _surfaceInnerArea, arena.GetCommander2(), true ) : nullptr;
 
     if ( Arena::GetCastle() )
-        main_tower = fheroes2::Rect( 570, 145, 70, 160 );
+        main_tower = { 570, 145, 70, 160 };
 
     const fheroes2::Rect & area = border.GetArea();
 
@@ -1095,13 +1095,13 @@ Battle::Interface::Interface( Arena & a, int32_t center )
         listlog->SetPosition( area.x, area.y + area.height - status.height );
     status.SetLogs( listlog );
 
-    AGG::ResetAudio();
-    AGG::PlaySound( M82::PREBATTL );
+    fheroes2::ResetAudio();
+    fheroes2::PlaySound( M82::PREBATTL );
 }
 
 Battle::Interface::~Interface()
 {
-    AGG::ResetAudio();
+    fheroes2::ResetAudio();
 
     if ( listlog )
         delete listlog;
@@ -2658,7 +2658,7 @@ void Battle::Interface::HumanCastSpellTurn( const Unit & /*b*/, Actions & a, std
 
 void Battle::Interface::FadeArena( bool clearMessageLog )
 {
-    AGG::ResetAudio();
+    fheroes2::ResetAudio();
 
     if ( clearMessageLog ) {
         status.clear();
@@ -2958,7 +2958,7 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
 void Battle::Interface::RedrawActionNewTurn() const
 {
     if ( !Music::isPlaying() ) {
-        AGG::PlayMusic( MUS::GetBattleRandom(), true, true );
+        fheroes2::PlayMusic( MUS::GetBattleRandom(), true, true );
     }
 
     if ( listlog == nullptr ) {
@@ -2990,7 +2990,7 @@ void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defende
     if ( attacker.Modes( LUCK_GOOD | LUCK_BAD ) )
         RedrawActionLuck( attacker );
 
-    AGG::PlaySound( attacker.M82Attk() );
+    fheroes2::PlaySound( attacker.M82Attk() );
 
     // long distance attack animation
     if ( archer ) {
@@ -3136,7 +3136,7 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
                 mirrorImages.push_back( defender->GetMirror() );
 
             defender->SwitchAnimation( Monster_Info::KILL );
-            AGG::PlaySound( defender->M82Kill() );
+            fheroes2::PlaySound( defender->M82Kill() );
             ++finish;
 
             deathColor = defender->GetArmyColor();
@@ -3144,13 +3144,13 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
         else if ( it->damage ) {
             // wince animation
             defender->SwitchAnimation( Monster_Info::WNCE );
-            AGG::PlaySound( defender->M82Wnce() );
+            fheroes2::PlaySound( defender->M82Wnce() );
             ++finish;
         }
         else {
             // have immunity
             resistantTarget.insert( it->defender );
-            AGG::PlaySound( M82::RSBRYFZL );
+            fheroes2::PlaySound( M82::RSBRYFZL );
         }
     }
 
@@ -3292,7 +3292,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
         }
 
         if ( show_anim ) {
-            AGG::PlaySound( unit.M82Move() );
+            fheroes2::PlaySound( unit.M82Move() );
             unit.SwitchAnimation( Monster_Info::MOVING );
             AnimateUnitWithDelay( unit, frameDelay );
             unit.SetPosition( *dst );
@@ -3383,7 +3383,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 
     unit.SwitchAnimation( Monster_Info::FLY_UP );
     // Take off animation is 30% length on average (original value)
-    AGG::PlaySound( unit.M82Tkof() );
+    fheroes2::PlaySound( unit.M82Tkof() );
     AnimateUnitWithDelay( unit, frameDelay * 3 / 10 );
 
     _movingUnit = nullptr;
@@ -3397,7 +3397,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     while ( currentPoint != points.end() ) {
         _movingPos = *currentPoint;
 
-        AGG::PlaySound( unit.M82Move() );
+        fheroes2::PlaySound( unit.M82Move() );
         unit.animation.restartAnimation();
         AnimateUnitWithDelay( unit, frameDelay );
 
@@ -3416,7 +3416,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
     landAnim.push_back( Monster_Info::FLY_LAND );
     landAnim.push_back( Monster_Info::STATIC );
     unit.SwitchAnimation( landAnim );
-    AGG::PlaySound( unit.M82Land() );
+    fheroes2::PlaySound( unit.M82Land() );
     AnimateUnitWithDelay( unit, frameDelay );
 
     // restore
@@ -3434,7 +3434,7 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
 void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playSound )
 {
     if ( playSound ) {
-        AGG::PlaySound( M82::RSBRYFZL );
+        fheroes2::PlaySound( M82::RSBRYFZL );
     }
     std::string str( _( "The %{name} resist the spell!" ) );
     StringReplace( str, "%{name}", target.GetName() );
@@ -3795,7 +3795,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         if ( y < 0 )
             y = 0;
 
-        AGG::PlaySound( M82::GOODLUCK );
+        fheroes2::PlaySound( M82::GOODLUCK );
 
         while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
             CheckGlobalEvents( le );
@@ -3822,7 +3822,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
         if ( y - maxHeight < 0 )
             y = maxHeight;
 
-        AGG::PlaySound( M82::BADLUCK );
+        fheroes2::PlaySound( M82::BADLUCK );
 
         int frameId = 0;
         while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
@@ -3869,7 +3869,7 @@ void Battle::Interface::RedrawActionTowerPart1( const Tower & tower, const Unit 
     const fheroes2::Point targetPos = defender.GetCenterPoint();
     const double angle = GetAngle( missileStart, targetPos );
 
-    AGG::PlaySound( M82::KEEPSHOT );
+    fheroes2::PlaySound( M82::KEEPSHOT );
 
     // Keep missile == Orc missile
     RedrawMissileAnimation( missileStart, targetPos, angle, Monster::ORC );
@@ -3910,7 +3910,7 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     const fheroes2::Sprite & missile = fheroes2::AGG::GetICN( ICN::BOULDER, 0 );
     const fheroes2::Rect & area = GetArea();
 
-    AGG::PlaySound( M82::CATSND00 );
+    fheroes2::PlaySound( M82::CATSND00 );
 
     // catapult animation
     while ( le.HandleEvents( false ) && catapult_frame < 6 ) {
@@ -3955,7 +3955,7 @@ void Battle::Interface::RedrawActionCatapult( int target, bool hit )
     const int icn = hit ? ICN::LICHCLOD : ICN::SMALCLOD;
     uint32_t frame = 0;
 
-    AGG::PlaySound( M82::CATSND02 );
+    fheroes2::PlaySound( M82::CATSND02 );
 
     while ( le.HandleEvents() && frame < fheroes2::AGG::GetICNCount( icn ) ) {
         CheckGlobalEvents( le );
@@ -3987,7 +3987,7 @@ void Battle::Interface::RedrawActionArrowSpell( const Unit & target )
         const double angle = GetAngle( missileStart, targetPos );
 
         Cursor::Get().SetThemes( Cursor::WAR_POINTER );
-        AGG::PlaySound( M82::MAGCAROW );
+        fheroes2::PlaySound( M82::MAGCAROW );
 
         // Magic arrow == Archer missile
         RedrawMissileAnimation( missileStart, targetPos, angle, Monster::ARCHER );
@@ -4002,7 +4002,7 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, int32_t dst )
 
     uint32_t currentAlpha = target.GetCustomAlpha();
 
-    AGG::PlaySound( M82::TELPTOUT );
+    fheroes2::PlaySound( M82::TELPTOUT );
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
@@ -4020,7 +4020,7 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, int32_t dst )
     Redraw();
 
     target.SetPosition( dst );
-    AGG::PlaySound( M82::TELPTIN );
+    fheroes2::PlaySound( M82::TELPTIN );
 
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
@@ -4043,7 +4043,7 @@ void Battle::Interface::RedrawActionSummonElementalSpell( Unit & target )
 
     uint32_t currentAlpha = 0;
 
-    AGG::PlaySound( M82::SUMNELM );
+    fheroes2::PlaySound( M82::SUMNELM );
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
@@ -4074,7 +4074,7 @@ void Battle::Interface::RedrawActionMirrorImageSpell( const Unit & target, const
     std::vector<fheroes2::Point>::const_iterator pnt = points.begin();
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
-    AGG::PlaySound( M82::MIRRORIM );
+    fheroes2::PlaySound( M82::MIRRORIM );
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
@@ -4106,7 +4106,7 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Po
     Cursor & cursor = Cursor::Get();
     cursor.SetThemes( Cursor::WAR_POINTER );
 
-    AGG::PlaySound( points.size() > 2 ? M82::CHAINLTE : M82::LIGHTBLT );
+    fheroes2::PlaySound( points.size() > 2 ? M82::CHAINLTE : M82::LIGHTBLT );
 
     for ( size_t i = 1; i < points.size(); ++i ) {
         const fheroes2::Point & startingPos = points[i - 1];
@@ -4273,7 +4273,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( const Unit & target )
 
     const uint32_t bloodlustDelay = 1800 / 20;
     // duration is 1900ms
-    AGG::PlaySound( M82::BLOODLUS );
+    fheroes2::PlaySound( M82::BLOODLUS );
 
     uint32_t alpha = 0;
     uint32_t frame = 0;
@@ -4310,7 +4310,7 @@ void Battle::Interface::RedrawActionStoneSpell( const Unit & target )
     _currentUnit = &target;
     b_current_sprite = &mixSprite;
 
-    AGG::PlaySound( M82::PARALIZE );
+    fheroes2::PlaySound( M82::PARALIZE );
 
     uint32_t alpha = 0;
     uint32_t frame = 0;
@@ -4348,7 +4348,7 @@ void Battle::Interface::RedrawActionResurrectSpell( Unit & target, const Spell &
         }
     }
 
-    AGG::PlaySound( M82::FromSpell( spell.GetID() ) );
+    fheroes2::PlaySound( M82::FromSpell( spell.GetID() ) );
 
     RedrawTroopWithFrameAnimation( target, ICN::YINYANG, M82::UNKNOWN, target.GetHitPoints() == 0 ? RESURRECT : NONE );
 }
@@ -4372,7 +4372,7 @@ void Battle::Interface::RedrawRaySpell( const Unit & target, int spellICN, int s
     const uint32_t spriteCount = fheroes2::AGG::GetICNCount( spellICN );
 
     cursor.SetThemes( Cursor::WAR_POINTER );
-    AGG::PlaySound( spellSound );
+    fheroes2::PlaySound( spellSound );
 
     size_t i = 0;
     while ( le.HandleEvents() && i < path.size() ) {
@@ -4400,7 +4400,7 @@ void Battle::Interface::RedrawActionDisruptingRaySpell( const Unit & target )
 
     const Unit * old_current = _currentUnit;
     _currentUnit = &target;
-    _movingPos = fheroes2::Point( 0, 0 );
+    _movingPos = { 0, 0 };
 
     uint32_t frame = 0;
     while ( le.HandleEvents() && frame < 60 ) {
@@ -4434,7 +4434,7 @@ void Battle::Interface::RedrawActionDeathWaveSpell( const TargetsInfo & targets,
     const fheroes2::Sprite & copy = fheroes2::Crop( _mainSurface, area.x, area.y, area.width, area.height );
     const int waveLength = strength * 2 + 10;
 
-    AGG::PlaySound( M82::MNRDEATH );
+    fheroes2::PlaySound( M82::MNRDEATH );
 
     int position = 10;
     while ( le.HandleEvents() && position < area.width + waveLength ) {
@@ -4468,8 +4468,7 @@ void Battle::Interface::RedrawActionColdRingSpell( int32_t dst, const TargetsInf
         if ( ( *it ).defender && ( *it ).damage )
             ( *it ).defender->SwitchAnimation( Monster_Info::WNCE );
 
-    if ( M82::UNKNOWN != m82 )
-        AGG::PlaySound( m82 );
+    fheroes2::PlaySound( m82 );
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
@@ -4510,7 +4509,7 @@ void Battle::Interface::RedrawActionHolyShoutSpell( const TargetsInfo & targets,
     const fheroes2::Image blurred = fheroes2::CreateBlurredImage( _mainSurface, strength );
 
     _currentUnit = nullptr;
-    AGG::PlaySound( M82::MASSCURS );
+    fheroes2::PlaySound( M82::MASSCURS );
 
     const uint32_t spellcastDelay = Game::ApplyBattleSpeed( 3000 ) / 20;
     uint32_t frame = 0;
@@ -4557,8 +4556,7 @@ void Battle::Interface::RedrawActionElementalStormSpell( const TargetsInfo & tar
         if ( ( *it ).defender && ( *it ).damage )
             ( *it ).defender->SwitchAnimation( Monster_Info::WNCE );
 
-    if ( M82::UNKNOWN != m82 )
-        AGG::PlaySound( m82 );
+    fheroes2::PlaySound( m82 );
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
@@ -4612,7 +4610,7 @@ void Battle::Interface::RedrawActionArmageddonSpell()
     cursor.SetThemes( Cursor::WAR_POINTER );
 
     _currentUnit = nullptr;
-    AGG::PlaySound( M82::ARMGEDN );
+    fheroes2::PlaySound( M82::ARMGEDN );
     uint32_t alpha = 10;
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
@@ -4678,7 +4676,7 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     fheroes2::Copy( _mainSurface, area.x, area.y, sprite, 0, 0, area.width, area.height );
 
     _currentUnit = nullptr;
-    AGG::PlaySound( M82::ERTHQUAK );
+    fheroes2::PlaySound( M82::ERTHQUAK );
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
@@ -4719,7 +4717,7 @@ void Battle::Interface::RedrawActionEarthQuakeSpell( const std::vector<int> & ta
     const int icn = ICN::LICHCLOD;
     frame = 0;
 
-    AGG::PlaySound( M82::CATSND02 );
+    fheroes2::PlaySound( M82::CATSND02 );
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
@@ -4786,8 +4784,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( int32_t dst, const Targ
         if ( ( *it ).defender && ( *it ).damage )
             ( *it ).defender->SwitchAnimation( Monster_Info::WNCE );
 
-    if ( M82::UNKNOWN != m82 )
-        AGG::PlaySound( m82 );
+    fheroes2::PlaySound( m82 );
 
     uint32_t frameCount = fheroes2::AGG::GetICNCount( icn );
 
@@ -4883,8 +4880,7 @@ void Battle::Interface::RedrawTargetsWithFrameAnimation( const TargetsInfo & tar
             if ( ( *it ).defender && ( *it ).damage )
                 ( *it ).defender->SwitchAnimation( Monster_Info::WNCE );
 
-    if ( M82::UNKNOWN != m82 )
-        AGG::PlaySound( m82 );
+    fheroes2::PlaySound( m82 );
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
@@ -4937,8 +4933,7 @@ void Battle::Interface::RedrawTroopWithFrameAnimation( Unit & b, int icn, int m8
         b.SwitchAnimation( Monster_Info::KILL, true );
     }
 
-    if ( M82::UNKNOWN != m82 )
-        AGG::PlaySound( m82 );
+    fheroes2::PlaySound( m82 );
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
@@ -4979,7 +4974,7 @@ void Battle::Interface::RedrawBridgeAnimation( const bool bridgeDownAnimation )
     _bridgeAnimation.currentFrameId = bridgeDownAnimation ? BridgeMovementAnimation::UP_POSITION : BridgeMovementAnimation::DOWN_POSITION;
 
     if ( bridgeDownAnimation )
-        AGG::PlaySound( M82::DRAWBRG );
+        fheroes2::PlaySound( M82::DRAWBRG );
 
     while ( le.HandleEvents() ) {
         if ( bridgeDownAnimation ) {
@@ -5006,7 +5001,7 @@ void Battle::Interface::RedrawBridgeAnimation( const bool bridgeDownAnimation )
     _bridgeAnimation.animationIsRequired = false;
 
     if ( !bridgeDownAnimation )
-        AGG::PlaySound( M82::DRAWBRG );
+        fheroes2::PlaySound( M82::DRAWBRG );
 }
 
 bool Battle::Interface::IdleTroopsAnimation() const

@@ -213,6 +213,7 @@
     <ClCompile Include="src\fheroes2\army\army_bar.cpp" />
     <ClCompile Include="src\fheroes2\army\army_troop.cpp" />
     <ClCompile Include="src\fheroes2\army\army_ui_helper.cpp" />
+    <ClCompile Include="src\fheroes2\audio\audio_manager.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_action.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_animation.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_arena.cpp" />
@@ -427,6 +428,7 @@
     <ClInclude Include="src\fheroes2\army\army_bar.h" />
     <ClInclude Include="src\fheroes2\army\army_troop.h" />
     <ClInclude Include="src\fheroes2\army\army_ui_helper.h" />
+    <ClInclude Include="src\fheroes2\audio\audio_manager.h" />
     <ClInclude Include="src\fheroes2\battle\battle.h" />
     <ClInclude Include="src\fheroes2\battle\battle_animation.h" />
     <ClInclude Include="src\fheroes2\battle\battle_arena.h" />

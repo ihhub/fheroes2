@@ -24,8 +24,8 @@
 #include <algorithm>
 #include <vector>
 
-#include "agg.h"
 #include "agg_image.h"
+#include "audio_manager.h"
 #include "ai.h"
 #include "audio.h"
 #include "battle_only.h"
@@ -233,7 +233,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
             break;
 
         case Dialog::DISMISS:
-            AGG::PlaySound( M82::KILLFADE );
+            fheroes2::PlaySound( M82::KILLFADE );
 
             ( *it )->GetPath().Hide();
             gameArea.SetRedraw();
@@ -272,7 +272,7 @@ void ShowNewWeekDialog()
     // restore the original music on exit
     const Game::MusicRestorer musicRestorer;
 
-    AGG::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, false );
+    fheroes2::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, false );
 
     const Week & week = world.GetWeekType();
 
@@ -618,7 +618,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                 case CONTROL_HUMAN:
                     // reset environment sounds and music theme at the beginning of the human turn
                     Game::SetCurrentMusic( MUS::UNKNOWN );
-                    AGG::ResetAudio();
+                    fheroes2::ResetAudio();
 
                     if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
                         // we need to hide the world map in hot seat mode
@@ -633,7 +633,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                         // reset the music after closing the dialog
                         const Game::MusicRestorer musicRestorer;
 
-                        AGG::PlayMusic( MUS::NEW_MONTH, false );
+                        fheroes2::PlayMusic( MUS::NEW_MONTH, false );
 
                         Game::DialogPlayers( player->GetColor(), _( "%{color} player's turn." ) );
                     }
@@ -656,7 +656,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     // Reset environment sounds and music theme at the end of the human turn.
                     Game::SetCurrentMusic( MUS::UNKNOWN );
-                    AGG::ResetAudio();
+                    fheroes2::ResetAudio();
 
                     break;
 

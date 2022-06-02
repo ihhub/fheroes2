@@ -26,7 +26,7 @@
 #include <string>
 
 #include "agg.h"
-#include "audio.h"
+#include "audio_manager.h"
 #include "bin_info.h"
 #include "core.h"
 #include "cursor.h"
@@ -183,6 +183,16 @@ namespace
         DataInitializer & operator=( const DataInitializer & ) = delete;
         ~DataInitializer() = default;
 
+        const std::string & getOriginalAGGFilePath() const
+        {
+            return _aggInitializer->getOriginalAGGFilePath();
+        }
+
+        const std::string & getExpansionAGGFilePath() const
+        {
+            return _aggInitializer->getExpansionAGGFilePath();
+        }
+
     private:
         std::unique_ptr<AGG::AGGInitializer> _aggInitializer;
         std::unique_ptr<fheroes2::h2d::H2DInitializer> _h2dInitializer;
@@ -236,23 +246,16 @@ int main( int argc, char ** argv )
 
         const fheroes2::CoreInitializer coreInitializer( coreComponents );
 
-        if ( Audio::isValid() ) {
-            Mixer::SetChannels( 32 );
-            // Set the volume for all channels to 0. This is required to avoid random volume spikes at the beginning of the game.
-            Mixer::setVolume( -1, 0 );
-
-            Music::setVolume( 100 * conf.MusicVolume() / 10 );
-            Music::SetFadeInMs( 900 );
-        }
-
         DEBUG_LOG( DBG_GAME, DBG_INFO, conf.String() )
 
         const DisplayInitializer displayInitializer;
 
         const DataInitializer dataInitializer;
 
+        const fheroes2::AudioInitializer audioInitializer( dataInitializer.getOriginalAGGFilePath(), dataInitializer.getExpansionAGGFilePath() );
+
         // Load palette.
-        fheroes2::setGamePalette( AGG::ReadChunk( "KB.PAL" ) );
+        fheroes2::setGamePalette( AGG::getDataFromAggFile( "KB.PAL" ) );
         fheroes2::Display::instance().changePalette( nullptr, true );
 
         // load BIN data

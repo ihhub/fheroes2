@@ -22,8 +22,8 @@
  ***************************************************************************/
 
 #include "game.h"
-#include "agg.h"
 #include "agg_image.h"
+#include "audio_manager.h"
 #include "audio.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -138,7 +138,7 @@ fheroes2::GameMode Game::LoadGame()
     // Stop all sounds, but not the music
     Mixer::Stop();
 
-    AGG::PlayMusic( MUS::MAINMENU, true, true );
+    fheroes2::PlayMusic( MUS::MAINMENU, true, true );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -237,7 +237,7 @@ fheroes2::GameMode Game::DisplayLoadGameDialog()
     // Stop all sounds, but not the music
     Mixer::Stop();
 
-    AGG::PlayMusic( MUS::MAINMENU, true, true );
+    fheroes2::PlayMusic( MUS::MAINMENU, true, true );
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );

@@ -23,10 +23,10 @@
 
 #include <cassert>
 
-#include "agg.h"
 #include "agg_image.h"
 #include "ai.h"
 #include "audio.h"
+#include "audio_manager.h"
 #include "battle.h"
 #include "castle.h"
 #include "game.h"
@@ -170,7 +170,7 @@ void BattleLose( Heroes & hero, const Battle::Result & res, bool attacker )
 {
     const uint32_t reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
-    AGG::PlaySound( M82::KILLFADE );
+    fheroes2::PlaySound( M82::KILLFADE );
     hero.FadeOut();
     hero.SetFreeman( reason );
 
@@ -256,7 +256,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
     const MP2::MapObjectType objectType = tile.GetObject( tileIndex != GetIndex() );
 
     if ( MUS::FromMapObject( objectType ) != MUS::UNKNOWN )
-        AGG::PlayMusic( MUS::FromMapObject( objectType ), false );
+        fheroes2::PlayMusic( MUS::FromMapObject( objectType ), false );
 
     if ( MP2::isActionObject( objectType, isShipMaster() ) ) {
         Interface::StatusWindow::ResetTimer();
@@ -679,7 +679,7 @@ void ActionToMonster( Heroes & hero, int32_t dst_index )
     }
 
     if ( destroy ) {
-        AGG::PlaySound( M82::KILLFADE );
+        fheroes2::PlaySound( M82::KILLFADE );
 
         Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
 
@@ -831,7 +831,7 @@ void ActionToBoat( Heroes & hero, int32_t dst_index )
     const Maps::Tiles & from = world.GetTiles( dst_index );
     const int boatDirection = from.getBoatDirection();
 
-    AGG::PlaySound( M82::KILLFADE );
+    fheroes2::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
     hero.FadeOut( offset );
     hero.ResetMovePoints();
@@ -861,7 +861,7 @@ void ActionToCoast( Heroes & hero, int32_t dst_index )
     hero.Move2Dest( dst_index );
     from.setBoat( Maps::GetDirection( fromIndex, dst_index ) );
     hero.SetShipMaster( false );
-    AGG::PlaySound( M82::KILLFADE );
+    fheroes2::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
     hero.FadeIn( fheroes2::Point( offset.x * Game::HumanHeroAnimSkip(), offset.y * Game::HumanHeroAnimSkip() ) );
     hero.GetPath().Reset();
@@ -956,14 +956,14 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
     if ( rc.isValid() ) {
         // The Magic Garden has a special sound
         if ( !Settings::Get().MusicMIDI() && objectType == MP2::OBJ_MAGICGARDEN ) {
-            AGG::PlayMusic( MUS::TREEHOUSE, false );
+            fheroes2::PlayMusic( MUS::TREEHOUSE, false );
         }
         // The Lean-To has a special sound
         else if ( objectType == MP2::OBJ_LEANTO ) {
-            AGG::PlaySound( M82::EXPERNCE );
+            fheroes2::PlaySound( M82::EXPERNCE );
         }
         else {
-            AGG::PlaySound( M82::TREASURE );
+            fheroes2::PlaySound( M82::TREASURE );
         }
 
         const Funds funds( rc );
@@ -1001,7 +1001,7 @@ void ActionToSkeleton( Heroes & hero, const MP2::MapObjectType objectType, int32
         if ( hero.IsFullBagArtifacts() ) {
             uint32_t gold = GoldInsteadArtifact( objectType );
             const Funds funds( Resource::GOLD, gold );
-            AGG::PlaySound( M82::EXPERNCE );
+            fheroes2::PlaySound( M82::EXPERNCE );
 
             fheroes2::showResourceMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ),
                                            fheroes2::Text( _( "Treasure" ), fheroes2::FontType::normalWhite() ), Dialog::OK, funds );
@@ -1013,7 +1013,7 @@ void ActionToSkeleton( Heroes & hero, const MP2::MapObjectType objectType, int32
             message += '\n';
             message.append( _( "Searching through the tattered clothing, you find the %{artifact}." ) );
             StringReplace( message, "%{artifact}", art.GetName() );
-            AGG::PlaySound( M82::TREASURE );
+            fheroes2::PlaySound( M82::TREASURE );
 
             const fheroes2::ArtifactDialogElement artifactUI( art );
 
@@ -1055,7 +1055,7 @@ void ActionToWagon( Heroes & hero, int32_t dst_index )
                 message += '\n';
                 message.append( _( "Searching inside, you find the %{artifact}." ) );
                 StringReplace( message, "%{artifact}", art.GetName() );
-                AGG::PlaySound( M82::TREASURE );
+                fheroes2::PlaySound( M82::TREASURE );
 
                 const fheroes2::ArtifactDialogElement artifactUI( art );
 
@@ -1067,7 +1067,7 @@ void ActionToWagon( Heroes & hero, int32_t dst_index )
         }
         else {
             const Funds & funds = tile.QuantityFunds();
-            AGG::PlaySound( M82::EXPERNCE );
+            fheroes2::PlaySound( M82::EXPERNCE );
             message += '\n';
             message.append( _( "Inside, you find some of the wagon's cargo still intact." ) );
 
@@ -1177,7 +1177,7 @@ void ActionToShrine( Heroes & hero, int32_t dst_index )
             Dialog::Message( head, body, Font::BIG, Dialog::OK );
         }
         else {
-            AGG::PlaySound( M82::TREASURE );
+            fheroes2::PlaySound( M82::TREASURE );
             hero.AppendSpellToBook( spell.GetID() );
 
             const fheroes2::SpellDialogElement spellUI( spell, &hero );
@@ -1272,7 +1272,7 @@ void ActionToGoodLuckObject( Heroes & hero, const MP2::MapObjectType objectType,
     else {
         // modify luck
         hero.SetVisited( dst_index );
-        AGG::PlaySound( M82::GOODLUCK );
+        fheroes2::PlaySound( M82::GOODLUCK );
 
         const fheroes2::LuckDialogElement luckUI( true );
         fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
@@ -1340,7 +1340,7 @@ void ActionToPyramid( Heroes & hero, const MP2::MapObjectType objectType, int32_
         }
         else {
             // modify luck
-            AGG::PlaySound( M82::BADLUCK );
+            fheroes2::PlaySound( M82::BADLUCK );
             const std::string msg = _( "You come upon the pyramid of a great and ancient king.\nRoutine exploration reveals that the pyramid is completely empty." );
 
             const fheroes2::LuckDialogElement luckUI( false );
@@ -1538,7 +1538,7 @@ void ActionToPoorMoraleObject( Heroes & hero, const MP2::MapObjectType objectTyp
             // modify morale
             hero.SetVisited( dst_index, Visit::LOCAL );
             hero.SetVisited( dst_index, Visit::GLOBAL );
-            AGG::PlaySound( M82::BADMRLE );
+            fheroes2::PlaySound( M82::BADMRLE );
 
             const fheroes2::MoraleDialogElement moraleUI( false );
             fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
@@ -1591,7 +1591,7 @@ void ActionToGoodMoraleObject( Heroes & hero, const MP2::MapObjectType objectTyp
     else {
         // modify morale
         hero.SetVisited( dst_index );
-        AGG::PlaySound( M82::GOODMRLE );
+        fheroes2::PlaySound( M82::GOODMRLE );
 
         const fheroes2::MoraleDialogElement moraleUI( true );
         std::vector<const fheroes2::DialogElement *> elementUI{ &moraleUI };
@@ -1640,10 +1640,10 @@ void ActionToExperienceObject( Heroes & hero, const MP2::MapObjectType objectTyp
     }
     else {
         if ( Settings::Get().MusicMIDI() ) {
-            AGG::PlaySound( M82::EXPERNCE );
+            fheroes2::PlaySound( M82::EXPERNCE );
         }
         else {
-            AGG::PlayMusic( MUS::EXPERIENCE, false );
+            fheroes2::PlayMusic( MUS::EXPERIENCE, false );
         }
 
         const fheroes2::ExperienceDialogElement experienceUI( exp );
@@ -1682,7 +1682,7 @@ void ActionToShipwreckSurvivor( Heroes & hero, const MP2::MapObjectType objectTy
         std::string str = _(
             "You've pulled a shipwreck survivor from certain death in an unforgiving ocean. Grateful, he rewards you for your act of kindness by giving you the %{art}." );
         StringReplace( str, "%{art}", art.GetName() );
-        AGG::PlaySound( M82::TREASURE );
+        fheroes2::PlaySound( M82::TREASURE );
 
         const fheroes2::ArtifactDialogElement artifactUI( art );
 
@@ -1738,7 +1738,7 @@ void ActionToArtifact( Heroes & hero, int32_t dst_index )
             msg += '\n';
             msg.append( _( "Do you wish to buy this artifact?" ) );
 
-            AGG::PlaySound( M82::EXPERNCE );
+            fheroes2::PlaySound( M82::EXPERNCE );
 
             const fheroes2::ArtifactDialogElement artifactUI( art );
             const fheroes2::Text titleText( title, fheroes2::FontType::normalYellow() );
@@ -1773,7 +1773,7 @@ void ActionToArtifact( Heroes & hero, int32_t dst_index )
                     msg += '\n';
                     msg.append( art.GetName() );
                 }
-                AGG::PlaySound( M82::TREASURE );
+                fheroes2::PlaySound( M82::TREASURE );
 
                 const fheroes2::ArtifactDialogElement artifactUI( art );
 
@@ -1830,7 +1830,7 @@ void ActionToArtifact( Heroes & hero, int32_t dst_index )
                     result = true;
                     msg = _( "Victorious, you take your prize, the %{art}." );
                     StringReplace( msg, "%{art}", art.GetName() );
-                    AGG::PlaySound( M82::TREASURE );
+                    fheroes2::PlaySound( M82::TREASURE );
 
                     const fheroes2::ArtifactDialogElement artifactUI( art );
 
@@ -1855,7 +1855,7 @@ void ActionToArtifact( Heroes & hero, int32_t dst_index )
                 msg += '\n';
                 msg.append( art.GetName() );
             }
-            AGG::PlaySound( M82::TREASURE );
+            fheroes2::PlaySound( M82::TREASURE );
 
             const fheroes2::ArtifactDialogElement artifactUI( art );
             fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK,
@@ -1957,7 +1957,7 @@ void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, 
             else {
                 msg = _( "After scouring the area, you fall upon a hidden chest, containing the ancient artifact %{art}." );
                 StringReplace( msg, "%{art}", art.GetName() );
-                AGG::PlaySound( M82::TREASURE );
+                fheroes2::PlaySound( M82::TREASURE );
 
                 const fheroes2::ArtifactDialogElement artifactUI( art );
 
@@ -2007,14 +2007,14 @@ void ActionToTeleports( Heroes & hero, int32_t index_from )
     int32_t index_to = world.NextTeleport( index_from );
 
     if ( index_from == index_to ) {
-        AGG::PlaySound( M82::RSBRYFZL );
+        fheroes2::PlaySound( M82::RSBRYFZL );
         DEBUG_LOG( DBG_GAME, DBG_WARN, "action unsuccessfully..." )
         return;
     }
 
     assert( world.GetTiles( index_to ).GetObject() != MP2::OBJ_HEROES );
 
-    AGG::PlaySound( M82::KILLFADE );
+    fheroes2::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
     hero.FadeOut();
 
@@ -2025,7 +2025,7 @@ void ActionToTeleports( Heroes & hero, int32_t index_from )
     I.RedrawFocus();
     I.Redraw();
 
-    AGG::PlaySound( M82::KILLFADE );
+    fheroes2::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
     hero.FadeIn();
 
@@ -2041,12 +2041,12 @@ void ActionToWhirlpools( Heroes & hero, int32_t index_from )
     const int32_t index_to = world.NextWhirlpool( index_from );
 
     if ( index_from == index_to ) {
-        AGG::PlaySound( M82::RSBRYFZL );
+        fheroes2::PlaySound( M82::RSBRYFZL );
         DEBUG_LOG( DBG_GAME, DBG_WARN, "action unsuccessfully..." )
         return;
     }
 
-    AGG::PlaySound( M82::KILLFADE );
+    fheroes2::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
     hero.FadeOut();
 
@@ -2057,7 +2057,7 @@ void ActionToWhirlpools( Heroes & hero, int32_t index_from )
     I.RedrawFocus();
     I.Redraw();
 
-    AGG::PlaySound( M82::KILLFADE );
+    fheroes2::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
     hero.FadeIn();
 
@@ -2212,7 +2212,7 @@ void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType object
         std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you. Do you accept?" );
         StringReplace( message, "%{monster}", troop.GetMultiName() );
 
-        AGG::PlaySound( M82::EXPERNCE );
+        fheroes2::PlaySound( M82::EXPERNCE );
 
         if ( Dialog::YES == Dialog::Message( title, message, Font::BIG, Dialog::YES | Dialog::NO ) ) {
             if ( !hero.GetArmy().CanJoinTroop( troop ) )
@@ -2407,10 +2407,10 @@ void ActionToArtesianSpring( Heroes & hero, const MP2::MapObjectType objectType,
     }
     else {
         if ( Settings::Get().MusicMIDI() ) {
-            AGG::PlaySound( M82::EXPERNCE );
+            fheroes2::PlaySound( M82::EXPERNCE );
         }
         else {
-            AGG::PlayMusic( MUS::WATERSPRING, false );
+            fheroes2::PlayMusic( MUS::WATERSPRING, false );
         }
         hero.SetSpellPoints( max * 2 );
         Dialog::Message( name, _( "A drink from the spring fills your blood with magic! You have twice your normal spell points in reserve." ), Font::BIG, Dialog::OK );
@@ -2591,7 +2591,7 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
 
         // The Hill Fort has a special sound
         if ( objectType == MP2::OBJ_HILLFORT ) {
-            AGG::PlayMusic( MUS::HILLFORT, false );
+            fheroes2::PlayMusic( MUS::HILLFORT, false );
         }
 
         const fheroes2::CustomImageDialogElement imageUI( std::move( surface ) );
@@ -2659,7 +2659,7 @@ void ActionToEvent( Heroes & hero, int32_t dst_index )
         if ( art.isValid() ) {
             if ( hero.PickupArtifact( art ) ) {
                 artifactUI.reset( new fheroes2::ArtifactDialogElement( art ) );
-                AGG::PlaySound( M82::TREASURE );
+                fheroes2::PlaySound( M82::TREASURE );
             }
         }
 
@@ -2694,7 +2694,7 @@ void ActionToObelisk( Heroes & hero, const MP2::MapObjectType objectType, int32_
     if ( !hero.isVisited( world.GetTiles( dst_index ), Visit::GLOBAL ) ) {
         hero.SetVisited( dst_index, Visit::GLOBAL );
         kingdom.PuzzleMaps().Update( kingdom.CountVisitedObjects( MP2::OBJ_OBELISK ), world.CountObeliskOnMaps() );
-        AGG::PlaySound( M82::EXPERNCE );
+        fheroes2::PlaySound( M82::EXPERNCE );
         Dialog::Message(
             title,
             _( "You come upon an obelisk made from a type of stone you have never seen before. Staring at it intensely, the smooth surface suddenly changes to an inscription. The inscription is a piece of a lost ancient map. Quickly you copy down the piece and the inscription vanishes as abruptly as it appeared." ),
@@ -2933,7 +2933,7 @@ void ActionToAlchemistsTower( Heroes & hero )
             StringReplace( msg, "%{gold}", payment.gold );
 
             if ( Dialog::YES == Dialog::Message( title, msg, Font::BIG, Dialog::YES | Dialog::NO ) ) {
-                AGG::PlaySound( M82::GOODLUCK );
+                fheroes2::PlaySound( M82::GOODLUCK );
                 hero.GetKingdom().OddFundsResource( payment );
 
                 for ( Artifact & artifact : bag ) {
@@ -2986,7 +2986,7 @@ void ActionToStables( Heroes & hero, const MP2::MapObjectType objectType, int32_
     // check if already visited
     if ( !visited ) {
         hero.SetVisited( dst_index );
-        AGG::PlaySound( M82::EXPERNCE );
+        fheroes2::PlaySound( M82::EXPERNCE );
         hero.IncreaseMovePoints( 400 );
     }
 
@@ -3007,7 +3007,7 @@ void ActionToArena( Heroes & hero, const MP2::MapObjectType objectType, int32_t 
     }
     else {
         hero.SetVisited( dst_index );
-        AGG::PlaySound( M82::EXPERNCE );
+        fheroes2::PlaySound( M82::EXPERNCE );
         hero.IncreasePrimarySkill( Dialog::SelectSkillFromArena() );
     }
 
@@ -3035,7 +3035,7 @@ void ActionToSirens( Heroes & hero, const MP2::MapObjectType objectType, int32_t
                 "An eerie wailing song emanates from the sirens perched upon the rocks. Many of your crew fall under its spell, and dive into the water where they drown. You are now wiser for the visit, and gain %{exp} experience." );
             StringReplace( str, "%{exp}", experience );
 
-            AGG::PlaySound( M82::EXPERNCE );
+            fheroes2::PlaySound( M82::EXPERNCE );
 
             fheroes2::showMessage( fheroes2::Text( title, fheroes2::FontType::normalYellow() ), fheroes2::Text( str, fheroes2::FontType::normalWhite() ), Dialog::OK,
                                    { &experienceUI } );
@@ -3056,7 +3056,7 @@ void ActionToJail( const Heroes & hero, const MP2::MapObjectType objectType, int
 
     if ( kingdom.AllowRecruitHero( false ) ) {
         Maps::Tiles & tile = world.GetTiles( dst_index );
-        AGG::PlaySound( M82::EXPERNCE );
+        fheroes2::PlaySound( M82::EXPERNCE );
         Dialog::Message(
             title,
             _( "In a dazzling display of daring, you break into the local jail and free the hero imprisoned there, who, in return, pledges loyalty to your cause." ),
@@ -3168,7 +3168,7 @@ void ActionToSphinx( Heroes & hero, const MP2::MapObjectType objectType, int32_t
                                            Dialog::OK, uiElements );
                 }
                 else if ( art.isValid() ) {
-                    AGG::PlaySound( M82::TREASURE );
+                    fheroes2::PlaySound( M82::TREASURE );
 
                     const fheroes2::ArtifactDialogElement artifactUI( art );
 
@@ -3224,7 +3224,7 @@ void ActionToBarrier( const Heroes & hero, const MP2::MapObjectType objectType, 
         tile.RemoveObjectSprite();
         tile.setAsEmpty();
 
-        AGG::PlaySound( M82::KILLFADE );
+        fheroes2::PlaySound( M82::KILLFADE );
         Game::ObjectFadeAnimation::PerformFadeTask();
     }
     else {
@@ -3239,7 +3239,7 @@ void ActionToBarrier( const Heroes & hero, const MP2::MapObjectType objectType, 
 
 void ActionToTravellersTent( const Heroes & hero, const MP2::MapObjectType objectType, int32_t dst_index )
 {
-    AGG::PlaySound( M82::EXPERNCE );
+    fheroes2::PlaySound( M82::EXPERNCE );
     Dialog::Message(
         MP2::StringObject( objectType ),
         _( "You enter the tent and see an old woman gazing into a magic gem. She looks up and says,\n\"In my travels, I have learned much in the way of arcane magic. A great oracle taught me his skill. I have the answer you seek.\"" ),

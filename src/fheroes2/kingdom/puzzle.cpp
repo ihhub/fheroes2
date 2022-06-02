@@ -24,8 +24,8 @@
 #include <algorithm>
 #include <vector>
 
-#include "agg.h"
 #include "agg_image.h"
+#include "audio_manager.h"
 #include "cursor.h"
 #include "game.h"
 #include "game_delays.h"
@@ -104,7 +104,7 @@ void Puzzle::ShowMapsDialog() const
     // restore the original music on exit
     const Game::MusicRestorer musicRestorer;
 
-    AGG::PlayMusic( MUS::PUZZLE, false );
+    fheroes2::PlayMusic( MUS::PUZZLE, false );
 
     if ( display.isDefaultSize() && !Settings::Get().ExtGameHideInterface() )
         ShowStandardDialog( *this, sf );

@@ -27,10 +27,10 @@
 #include <cmath>
 #include <functional>
 
-#include "agg.h"
 #include "agg_image.h"
 #include "ai.h"
 #include "artifact.h"
+#include "audio_manager.h"
 #include "battle.h"
 #include "castle.h"
 #include "dialog.h"
@@ -1347,7 +1347,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
         }
     }
     else {
-        AGG::PlaySound( M82::NWHEROLV );
+        fheroes2::PlaySound( M82::NWHEROLV );
         const int result = Dialog::LevelUpSelectSkill( name, primary, sec1, sec2, *this );
 
         if ( Skill::Secondary::UNKNOWN != result ) {

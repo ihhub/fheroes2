@@ -27,7 +27,7 @@
 #include <cstdint>
 #include <string>
 
-#include "agg.h"
+#include "audio_manager.h"
 #include "game_mode.h"
 #include "mp2.h"
 #include "mus.h"
@@ -145,7 +145,7 @@ namespace Game
                 SetCurrentMusic( MUS::UNKNOWN );
             }
 
-            AGG::PlayMusic( _music, true, true );
+            fheroes2::PlayMusic( _music, true, true );
         }
 
         MusicRestorer & operator=( const MusicRestorer & ) = delete;
