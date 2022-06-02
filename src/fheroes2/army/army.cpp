@@ -395,8 +395,7 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
         return;
     }
 
-    // Put the potentially selected/highlighted troop at the end of the list of troops to move.
-    // Other priorities for what order to use, like speed attribute, can be addressed here in the future.
+    // Modify the order in which to move the troops.
     std::vector<Troop *> troopFromOrder;
     size_t troopPointerIndex = 0;
     if ( selectedTroopIndex != 4 ) {
