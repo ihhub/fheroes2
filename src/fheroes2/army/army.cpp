@@ -500,16 +500,16 @@ void Troops::MoveTroops( const Troops & from, const uint32_t selectedTroopIndex,
     }
 }
 
-void Army::swapArmies( Army & army1, Army & army2 )
+void Army::swapArmies( Army & swapArmy )
 {
     // Hero armies cannot end up with zero troops.
-    if ( army1.GetCount() == 0 || army2.GetCount() == 0 ) {
+    if ( GetCount() == 0 || swapArmy.GetCount() == 0 ) {
         return;
     }
 
     // Either army can have 5 stacks so iterate through max possible.
     for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
-        std::swap( *army1.GetTroop( slot ), *army2.GetTroop( slot ) );
+        std::swap( *GetTroop( slot ), *swapArmy.GetTroop( slot ) );
     }
 }
 

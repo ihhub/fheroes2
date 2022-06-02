@@ -465,7 +465,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 // Swap troops.
                 else if ( HotKeyPressEvent( Game::HotKeyEvent::SWAP_ARMIES ) || ( !heroes.Guard() && le.MouseClickLeft( rectSign1 ) )
                           || ( heroes.Guard() && le.MouseClickLeft( buttonSwap.area() ) ) ) {
-                    Army::swapArmies( GetArmy(), heroes.Guest()->GetArmy() );
+                    GetArmy().swapArmies( heroes.Guest()->GetArmy() );
                     redrawAfterArmyAction = true;
                 }
                 // Extra actions when using experimental castle guardian option.
