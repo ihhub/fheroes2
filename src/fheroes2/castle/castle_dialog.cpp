@@ -448,7 +448,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
             // TODO: These Army pointers can be removed when old SetArmy method is replaced.
             Army * army1 = nullptr;
             Army * army2 = nullptr;
-
+            const fheroes2::Point selectedPortrait = le.GetMousePressLeft();
             if ( heroes.Guest() ) {
                 // Move troops down.
                 if ( ( topArmyBar.GetItem( le.GetMousePressLeft() ) && le.MouseReleaseLeft( rectSign2 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
@@ -471,9 +471,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 // Extra actions for experimental castle guardian option.
                 else if ( conf.ExtCastleAllowGuardians() ) {
                     if ( heroes.Guard() ) {
-                        // Swap guard and guest hero along with their armies. TODO: Drag and drop of portraits.
-                        if ( le.MouseClickRight( rectSign1 ) || le.MouseClickRight( rectSign2 ) ) {
-                            // TODO: Replace old SetArmy method with swapArmies.
+                        // Swap guard and guest hero along with their armies.
+                        if ( ( rectSign1.operator&( selectedPortrait ) && le.MouseReleaseLeft( rectSign2 ) )
+                             || ( rectSign2.operator&( selectedPortrait ) && le.MouseReleaseLeft( rectSign1 ) )
+                             || ( le.MouseClickRight( rectSign1 ) || le.MouseClickRight( rectSign2 ) ) ) {
                             SwapCastleHeroes( heroes );
                             army1 = &heroes.Guard()->GetArmy();
                             army2 = &heroes.Guest()->GetArmy();
@@ -484,24 +485,22 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                             need_redraw = true;
                         }
                     }
-                    // Move hero from guest to guard. TODO: Drag and drop of portrait.
-                    else if ( le.MouseClickRight( rectSign1 ) ) {
+                    // Move hero from guest to guard.
+                    else if ( rectSign2.operator&( selectedPortrait ) && le.MouseReleaseLeft( rectSign1 ) ) {
                         if ( !heroes.Guest()->GetArmy().CanJoinTroops( army ) ) {
                             Dialog::Message( _( "Army joining" ),
                                              _( "Unable to merge two armies together. Rearrange monsters manually before moving the hero to the garrison." ), Font::BIG,
                                              Dialog::OK );
                         }
                         else {
-                            // TODO: Replace old SetArmy method with moveTroops.
                             SwapCastleHeroes( heroes );
                             army1 = &heroes.Guard()->GetArmy();
                         }
                     }
                 }
             }
-            // Move hero from guard to guest. TODO: Drag and drop of portrait.
-            else if ( heroes.Guard() && le.MouseClickRight( rectSign2 ) ) {
-                // TODO: Replace old SetArmy method with MoveTroops.
+            // Move hero from guard to guest.
+            else if ( heroes.Guard() && rectSign1.operator&( selectedPortrait ) && le.MouseReleaseLeft( rectSign2 ) ) {
                 SwapCastleHeroes( heroes );
                 army2 = &heroes.Guest()->GetArmy();
             }
