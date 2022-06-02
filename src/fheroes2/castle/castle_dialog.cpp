@@ -447,17 +447,18 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
             }
             Army * army1 = nullptr;
             Army * army2 = nullptr;
-            // This point is used to pick the hero for guest-guardian swapping.
-            const fheroes2::Point selectedPortrait = le.GetMousePressLeft();
+            // This point is used to pick the start point for drag and drop.
+            const fheroes2::Point dragStartPoint = le.GetMousePressLeft();
             if ( heroes.Guest() ) {
                 // Move troops down.
-                if ( ( topArmyBar.GetItem( le.GetMousePressLeft() ) && le.MouseReleaseLeft( rectSign2 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
+                if ( ( topArmyBar.GetArea() & dragStartPoint && le.MouseReleaseLeft( rectSign2 ) )
+                     || HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
                     heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), topArmyBar.isSelected() ? topArmyBar.GetSelectedIndex() : 4, topArmyBar.isSelected(),
                                                           !heroes.Guard() );
                     redrawAfterArmyAction = true;
                 }
                 // Move troops up.
-                else if ( ( bottomArmyBar.GetItem( le.GetMousePressLeft() ) && le.MouseReleaseLeft( rectSign1 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
+                else if ( ( bottomArmyBar.GetArea() & dragStartPoint && le.MouseReleaseLeft( rectSign1 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_TOP ) ) {
                     GetArmy().MoveTroops( heroes.Guest()->GetArmy().getTroops(), bottomArmyBar.isSelected() ? bottomArmyBar.GetSelectedIndex() : 4,
                                           bottomArmyBar.isSelected() );
                     redrawAfterArmyAction = true;
@@ -472,8 +473,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 else if ( conf.ExtCastleAllowGuardians() ) {
                     if ( heroes.Guard() ) {
                         // Swap guard and guest hero together with their armies.
-                        if ( ( rectSign1.operator&( selectedPortrait ) && le.MouseReleaseLeft( rectSign2 ) )
-                             || ( rectSign2.operator&( selectedPortrait ) && le.MouseReleaseLeft( rectSign1 ) )
+                        if ( ( rectSign1 & dragStartPoint && le.MouseReleaseLeft( rectSign2 ) )
+                             || ( rectSign2 & dragStartPoint && le.MouseReleaseLeft( rectSign1 ) )
                              || ( le.MouseClickRight( rectSign1 ) || le.MouseClickRight( rectSign2 ) ) ) {
                             SwapCastleHeroes( heroes );
                             army1 = &heroes.Guard()->GetArmy();
@@ -486,7 +487,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                         }
                     }
                     // Move hero from guest to guard.
-                    else if ( rectSign2.operator&( selectedPortrait ) && le.MouseReleaseLeft( rectSign1 ) ) {
+                    else if ( rectSign2 & dragStartPoint && le.MouseReleaseLeft( rectSign1 ) ) {
                         if ( !heroes.Guest()->GetArmy().CanJoinTroops( army ) ) {
                             Dialog::Message( _( "Army joining" ),
                                              _( "Unable to merge two armies together. Rearrange monsters manually before moving the hero to the garrison." ), Font::BIG,
@@ -500,7 +501,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 }
             }
             // Move hero from guard to guest.
-            else if ( heroes.Guard() && rectSign1.operator&( selectedPortrait ) && le.MouseReleaseLeft( rectSign2 ) ) {
+            else if ( heroes.Guard() && rectSign1 & dragStartPoint && le.MouseReleaseLeft( rectSign2 ) ) {
                 SwapCastleHeroes( heroes );
                 army2 = &heroes.Guest()->GetArmy();
             }
