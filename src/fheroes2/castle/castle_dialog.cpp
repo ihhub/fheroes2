@@ -449,7 +449,8 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
             Army * army2 = nullptr;
             // This point is used to pick the start point for drag and drop.
             const fheroes2::Point dragStartPoint = le.GetMousePressLeft();
-            if ( heroes.Guest() ) {
+            // Actions with hero armies.
+            if ( heroes.Guest() && !readOnly ) {
                 // Move troops down.
                 if ( ( topArmyBar.GetArea() & dragStartPoint && le.MouseReleaseLeft( rectSign2 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
                     heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), topArmyBar.isSelected() ? topArmyBar.GetSelectedIndex() : 4, topArmyBar.isSelected(),
@@ -498,7 +499,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 }
             }
             // Move hero from guard to guest.
-            else if ( heroes.Guard() && rectSign1 & dragStartPoint && le.MouseReleaseLeft( rectSign2 ) ) {
+            else if ( heroes.Guard() && rectSign1 & dragStartPoint && le.MouseReleaseLeft( rectSign2 ) && !readOnly ) {
                 SwapCastleHeroes( heroes );
                 army2 = &heroes.Guest()->GetArmy();
             }
