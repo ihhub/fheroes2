@@ -451,8 +451,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
             const fheroes2::Point dragStartPoint = le.GetMousePressLeft();
             if ( heroes.Guest() ) {
                 // Move troops down.
-                if ( ( topArmyBar.GetArea() & dragStartPoint && le.MouseReleaseLeft( rectSign2 ) )
-                     || HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
+                if ( ( topArmyBar.GetArea() & dragStartPoint && le.MouseReleaseLeft( rectSign2 ) ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM ) ) {
                     heroes.Guest()->GetArmy().MoveTroops( GetArmy().getTroops(), topArmyBar.isSelected() ? topArmyBar.GetSelectedIndex() : 4, topArmyBar.isSelected(),
                                                           !heroes.Guard() );
                     redrawAfterArmyAction = true;
@@ -473,8 +472,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 else if ( conf.ExtCastleAllowGuardians() ) {
                     if ( heroes.Guard() ) {
                         // Swap guard and guest hero together with their armies.
-                        if ( ( rectSign1 & dragStartPoint && le.MouseReleaseLeft( rectSign2 ) )
-                             || ( rectSign2 & dragStartPoint && le.MouseReleaseLeft( rectSign1 ) )
+                        if ( ( rectSign1 & dragStartPoint && le.MouseReleaseLeft( rectSign2 ) ) || ( rectSign2 & dragStartPoint && le.MouseReleaseLeft( rectSign1 ) )
                              || ( le.MouseClickRight( rectSign1 ) || le.MouseClickRight( rectSign2 ) ) ) {
                             SwapCastleHeroes( heroes );
                             army1 = &heroes.Guard()->GetArmy();
