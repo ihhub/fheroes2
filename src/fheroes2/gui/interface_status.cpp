@@ -124,6 +124,11 @@ void Interface::StatusWindow::Redraw() const
         DrawBackground();
     }
 
+    // Do not draw anything if the game hasn't really started yet
+    if ( world.CountDay() == 0 ) {
+        return;
+    }
+
     // draw info: Day and Funds and Army
     const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( conf.ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
     const int32_t stonHeight = ston.height();
@@ -266,8 +271,10 @@ void Interface::StatusWindow::DrawDayInfo( int oh ) const
     const int weekOfMonth = world.GetWeek();
     const uint32_t month = world.GetMonth();
     const int icnType = Settings::Get().ExtGameEvilInterface() ? ICN::SUNMOONE : ICN::SUNMOON;
+
     uint32_t icnId = dayOfWeek > 1 ? 0 : ( ( weekOfMonth - 1 ) % 4 ) + 1;
-    if ( dayOfWeek == 1 && weekOfMonth == 1 && month == 1 ) { // special case
+    // Special case
+    if ( dayOfWeek == 1 && weekOfMonth == 1 && month == 1 ) {
         icnId = 0;
     }
 
