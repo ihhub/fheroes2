@@ -132,7 +132,7 @@ namespace Game
         NO_EVENT,
     };
 
-    // TODO: Implement HotKeyReleaseEvent.
+    // TODO: Implement HotKeyReleaseEvent to avoid repeated presses of the hotkey when held down for a while
     bool HotKeyPressEvent( const HotKeyEvent eventID );
     bool HotKeyHoldEvent( const HotKeyEvent eventID );
 
