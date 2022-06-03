@@ -18,6 +18,7 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
+recode = sed -e 's/UTF-8/$(1)/' $< | iconv -f utf-8 -t $(1) | msgfmt - -o $@
 .PHONY: all clean merge
 
 all: $(patsubst %.po, %.mo, $(wildcard *.po))
@@ -25,100 +26,34 @@ all: $(patsubst %.po, %.mo, $(wildcard *.po))
 merge: ../../src/dist/fheroes2.pot
 	for i in $(wildcard *.po); do msgmerge -U --no-location $$i $<; done
 
-# Spanish uses CP1252
-es.mo: es.po
-	iconv -f utf-8 -t CP1252 $< > $<.tmp
-	LANG=es.CP1252 LC_ALL=es.CP1252 LC_CTYPE=es.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp
-	msgfmt $<.2.tmp -o $@
 
 # In French, accented characters are mapped to unused ASCII characters
 # Non-mapped characters are replaced by their non-accented equivalents
 fr.mo: fr.po
-	sed -e 'y/àâçéèêîïôùûüÉÊÀ/@*^~`|><#&$$uEEA/' $< > $<.tmp
-	sed -i~ -e 's/œ/oe/g' $<.tmp
-	msgfmt $<.tmp -o $@
-	
-# Portuguese uses CP1252	
-pt.mo: pt.po
-	iconv -f utf-8 -t CP1252 $< > $<.tmp
-	LANG=pt.CP1252 LC_ALL=pt.CP1252 LC_CTYPE=pt.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp
-	msgfmt $<.2.tmp -o $@
+	sed -e 'y/àâçéèêîïôùûüÉÊÀ/@*^~`|><#&$$uEEA/' $< | sed -e 's/œ/oe/g' | msgfmt - -o $@
 
-# Polish version uses CP1250
-pl.mo: pl.po
-	iconv -f utf-8 -t CP1250 $< > $<.tmp
-	LANG=pl.CP1250 LC_ALL=pl.CP1250 LC_CTYPE=pl.CP1250 sed -e 's/UTF-8/CP1250/' $<.tmp > $<.2.tmp
-	msgfmt $<.2.tmp -o $@
+# Polish, Czech versions use CP1250
+cs.mo pl.mo: %.mo: %.po
+	$(call recode,CP1250)
 
-# Czech version uses CP1250	
-cs.mo: cs.po
-	iconv -f utf-8 -t CP1250 $< > $<.tmp
-	LANG=cs.CP1250 LC_ALL=cs.CP1250 LC_CTYPE=cs.CP1250 sed -e 's/UTF-8/CP1250/' $<.tmp > $<.2.tmp
-	msgfmt $<.2.tmp -o $@
-
+# Belarusian, Bulgarian, Ukrainian versions use CP1251
 # Russian versions from "Buka" and "XXI vek" use CP1251 encoding (supported)
 # Russian version from "Fargus" uses Russian keyboard layout as encoding (not supported)
-# Russian alphabet can be transliterated on Debian with `konwert UTF8-ascii/1 -o $<.tmp $<`
-ru.mo: ru.po
-	iconv -f utf-8 -t CP1251 $< > $<.tmp
-	LANG=ru_RU.CP1251 LC_ALL=ru_RU.CP1251 LC_CTYPE=ru_RU.CP1251 sed -e 's/UTF-8/CP1251/' $<.tmp > $<.2.tmp
-	msgfmt $<.2.tmp -o $@
+be.mo bg.mo ru.mo uk.mo: %.mo: %.po
+	$(call recode,CP1251)
 
-# Belarusian language uses CP1251.
-be.mo: be.po
-	iconv -f utf-8 -t CP1251 $< > $<.tmp
-	LANG=be_BE.CP1251 LC_ALL=be_BE.CP1251 LC_CTYPE=be_BE.CP1251 sed -e 's/UTF-8/CP1251/' $<.tmp > $<.2.tmp
-	msgfmt $<.2.tmp -o $@
+# German, Italian, Norwegian, Portuguese, Spanish, Swedish versions use CP1252
+de.mo es.mo it.mo nb.mo pt.mo sv.mo: %.mo: %.po
+	$(call recode,CP1252)
 
-# Bulgarian language uses CP1251.
-bg.mo: bg.po
-	iconv -f utf-8 -t CP1251 $< > $<.tmp
-	LANG=bg_BG.CP1251 LC_ALL=bg_BG.CP1251 LC_CTYPE=bg_BG.CP1251 sed -e 's/UTF-8/CP1251/' $<.tmp > $<.2.tmp
-	msgfmt $<.2.tmp -o $@
-
-# Ukrainian language uses CP1251.
-uk.mo: uk.po
-	iconv -f utf-8 -t CP1251 $< > $<.tmp
-	LANG=uk_UK.CP1251 LC_ALL=uk_UK.CP1251 LC_CTYPE=uk_UK.CP1251 sed -e 's/UTF-8/CP1251/' $<.tmp > $<.2.tmp
-	# use fuzzy translations for testing
-	msgfmt -f $<.2.tmp -o $@
-
-# German version uses CP1252
-de.mo: de.po
-	iconv -f utf-8 -t CP1252 $< > $<.tmp
-	LANG=de.CP1252 LC_ALL=de.CP1252 LC_CTYPE=de.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp
-	msgfmt $<.2.tmp -o $@
-
-# Norwegian uses CP1252 in the code currently
-nb.mo: nb.po
-	iconv -f utf-8 -t CP1252 $< > $<.tmp
-	LANG=nb.CP1252 LC_ALL=nb.CP1252 LC_CTYPE=nb.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp
-	msgfmt $<.2.tmp -o $@
-	
-# Swedish uses CP1252
-sv.mo: sv.po
-	iconv -f utf-8 -t CP1252 $< > $<.tmp
-	LANG=sv.CP1252 LC_ALL=sv.CP1252 LC_CTYPE=sv.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp
-	msgfmt $<.2.tmp -o $@
-
-# Italian
-it.mo: it.po
-	iconv -f utf-8 -t CP1252 $< > $<.tmp
-	LANG=it.CP1252 LC_ALL=it.CP1252 LC_CTYPE=it.CP1252 sed -e 's/UTF-8/CP1252/' $<.tmp > $<.2.tmp
-	msgfmt $<.2.tmp -o $@
-	
 # Romanian uses ISO-8859-16
 ro.mo: ro.po
-	iconv -f utf-8 -t ISO-8859-16 $< > $<.tmp
-	LANG=ro.ISO-8859-16 LC_ALL=ro.ISO-8859-16 LC_CTYPE=ro.ISO-8859-16 sed -e 's/UTF-8/ISO-8859-16/' $<.tmp > $<.2.tmp
-	msgfmt $<.2.tmp -o $@
+	$(call recode,ISO-8859-16)
 
 # All other languages: drop accents transliterated with `"` (which breaks translation file format)
 # and transliterate the rest with default iconv rules
 %.mo: %.po
-	sed -e 'y/äëïöőüűÄËÏŐÖÜŰ/aeioouuAEIOOUU/' $< > $<.tmp
-	iconv -f utf-8 -t ascii//TRANSLIT $<.tmp > $<.2.tmp
-	msgfmt $<.2.tmp -o $@
+	sed -e 'y/äëïöőüűÄËÏŐÖÜŰ/aeioouuAEIOOUU/' $< | iconv -f utf-8 -t ascii//TRANSLIT | msgfmt - -o $@
 
 clean:
-	rm -f *.mo *.po~ *.tmp *.tmp~
+	rm -f *.mo
