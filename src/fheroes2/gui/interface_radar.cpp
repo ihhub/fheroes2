@@ -424,6 +424,7 @@ void Interface::Radar::QueueEventProcessing()
 
     // move border
     if ( conf.ShowRadar() && BorderWindow::QueueEventProcessing() ) {
+        cursorArea.hide();
         SetRedraw();
     }
     // move cursor
@@ -499,9 +500,12 @@ void Interface::Radar::ChangeAreaSize( const fheroes2::Size & newSize )
 {
     if ( newSize.width != area.width || newSize.height != area.height ) {
         const fheroes2::Rect & rect = GetRect();
-        SetPosition( rect.x < 0 ? 0 : rect.x, rect.y < 0 ? 0 : rect.y, newSize.width, newSize.height );
+
+        SetPosition( rect.x, rect.y, newSize.width, newSize.height );
+
         Generate();
-        SetRedraw();
-        interface.GetGameArea().SetRedraw();
+
+        cursorArea.hide();
+        interface.SetRedraw( REDRAW_RADAR | REDRAW_GAMEAREA );
     }
 }
