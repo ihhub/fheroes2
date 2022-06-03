@@ -26,10 +26,10 @@ msgid "Builder"
 msgstr "Будівник"
 
 msgid "Explorer"
-msgstr "Мандрівник"
+msgstr "Розвідник"
 
 msgid "None"
-msgstr ""
+msgstr "Відсутні"
 
 #, fuzzy
 msgid ""
@@ -87,10 +87,13 @@ msgstr ""
 "Юрба\n"
 "%{monster}"
 
+#, fuzzy
 msgid ""
 "Zounds of\n"
 "%{monster}"
 msgstr ""
+"Тьма\n"
+"%{monster}"
 
 #, fuzzy
 msgid ""
@@ -128,24 +131,28 @@ msgstr "Натовп"
 msgid "army|Swarm"
 msgstr "Юрба"
 
+#, fuzzy
 msgid "army|Zounds"
-msgstr ""
+msgstr "Тьма"
 
 #, fuzzy
 msgid "army|Legion"
 msgstr "Легіон"
 
+#, fuzzy
 msgid "All %{race} troops +1"
-msgstr ""
+msgstr "Усі війська фракції %{race} +1"
 
+#, fuzzy
 msgid "Multiple"
-msgstr ""
+msgstr "Різноманітні"
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr ""
 
+#, fuzzy
 msgid "Some undead in group -1"
-msgstr ""
+msgstr "Деяка нежить в армії -1"
 
 #, fuzzy
 msgid "View %{name}"
@@ -155,9 +162,11 @@ msgstr "Дивитися %{name}"
 msgid "Move the %{name} "
 msgstr "Найняти: %{name}"
 
+#, fuzzy
 msgid "Move or right click to redistribute %{name}"
-msgstr ""
+msgstr "Пересуньте %{name} щоб розділити (або правий клік)"
 
+#, fuzzy
 msgid "Combine %{name} armies"
 msgstr ""
 
@@ -165,55 +174,65 @@ msgstr ""
 msgid "Exchange %{name2} with %{name}"
 msgstr "Обміняти %{name2} на %{name}"
 
+#, fuzzy
 msgid "Select %{name}"
-msgstr ""
+msgstr "Вибрати %{name}"
 
+#, fuzzy
 msgid "Cannot move last troop"
-msgstr ""
+msgstr "Не вдалось перемістити останній загін"
 
 #, fuzzy
 msgid "Move the %{name}"
 msgstr "Найняти: %{name}"
 
+#, fuzzy
 msgid "Set Count"
-msgstr ""
+msgstr "Кількість"
 
 msgid "%{name} destroy half the enemy troops!"
-msgstr ""
+msgstr "%{name} знищує половину ворожого загону!"
 
 #, fuzzy
 msgid "%{name} has turned off the auto battle"
-msgstr "%{name} вимкнув авто-битву"
+msgstr "%{name} вимкнув автобій"
 
 #, fuzzy
 msgid "%{name} has turned on the auto battle"
-msgstr "%{name} ввімкнув авто-битву"
+msgstr "%{name} увімкнув автобій"
 
 #, fuzzy
 msgid "Spell failed!"
-msgstr "Чари не вдалися!"
+msgstr "Чари не спрацювали!"
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
 "combat spells."
 msgstr ""
 
+#, fuzzy
 msgid "You have already cast a spell this round."
-msgstr ""
+msgstr "Ви вже чарували протягом цього ходу."
 
+#, fuzzy
 msgid "That spell will affect no one!"
-msgstr ""
+msgstr "Ці чари не подіють ні на кого!"
 
+#, fuzzy
 msgid "You may only summon one type of elemental per combat."
-msgstr ""
+msgstr "Ви можете викликати елементалів тільки одного типу в цій битві."
 
+#, fuzzy
 msgid "There is no open space adjacent to your hero to summon an Elemental to."
-msgstr ""
+msgstr "Недостатньо місця поряд з вашим героєм для виклику Елементаля."
 
+#, fuzzy
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
 "half movement rate."
 msgstr ""
+"Рів зменшує захисну здатність будь-якого підрозділу на -%{count} і "
+"сповільнює його вдвічі."
 
 #, fuzzy
 msgid "Speed"
@@ -223,58 +242,73 @@ msgstr "Швидкість"
 msgid "Speed: %{speed}"
 msgstr "Швидкість: %{speed}"
 
+#, fuzzy
 msgid "Army Order"
-msgstr ""
+msgstr "Черговість армій"
 
 #, fuzzy
 msgid "Auto Spell Casting"
-msgstr "Автоматичне накладання чар"
+msgstr "Автоматичне чаклування"
 
 #, fuzzy
 msgid "Grid"
 msgstr "Сітка"
 
+#, fuzzy
 msgid "Shadow Movement"
-msgstr ""
+msgstr "Тінь під час руху"
 
+#, fuzzy
 msgid "Shadow Cursor"
-msgstr ""
+msgstr "Тінь курсора"
 
+#, fuzzy
 msgid "Off"
-msgstr ""
+msgstr "Вимк."
 
+#, fuzzy
 msgid "On"
-msgstr ""
+msgstr "Увімк."
 
 #, fuzzy
 msgid "Set the speed of combat actions and animations."
 msgstr "Встановити швидкість бойових дій та анімації."
 
+#, fuzzy
 msgid "Toggle to display army order during the battle."
-msgstr ""
+msgstr "Чи показувати черговість армій під час битви."
 
+#, fuzzy
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
 "is on. (Note: This does not affect spell casting for computer players in any "
 "way, nor does it affect quick combat.)"
 msgstr ""
+"Чи буде комп'ютер використовувати чари коли увімкнений автобій. (Пам'ятка: "
+"Це ніяк не впливає на виклик чар гравцем-комп'ютером чи режим автобою)"
 
+#, fuzzy
 msgid ""
 "Toggle the hex grid on or off. The hex grid always underlies movement, even "
 "if turned off. This switch only determines if the grid is visible."
 msgstr ""
+"Чи показувати шестигранну сітка. Ця сітка завжди визначає можливості руху, "
+"навіть коли вимкнена. Перемикач лише робить її видимою."
 
+#, fuzzy
 msgid ""
 "Toggle on or off shadows showing where your creatures can move and attack."
-msgstr ""
+msgstr "Чи підсвічувати зони, в яких істоти можуть рухатись або атакувати."
 
+#, fuzzy
 msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
-msgstr ""
+msgstr "Чи підсвічувати клітину, над якою знаходиться курсор миші."
 
+#, fuzzy
 msgid "The enemy has surrendered!"
-msgstr ""
+msgstr "Ворог здався!"
 
 #, fuzzy
 msgid "The enemy has fled!"
@@ -284,8 +318,9 @@ msgstr "Ворог втік!"
 msgid "A glorious victory!"
 msgstr "Славетна перемога!"
 
+#, fuzzy
 msgid "For valor in combat, %{name} receives %{exp} experience."
-msgstr ""
+msgstr "За доблесть у бою, %{name} отримує %{exp} досвіду."
 
 #, fuzzy
 msgid "The cowardly %{name} flees from battle."
@@ -295,11 +330,13 @@ msgstr "Боягузливий %{name} тікає від бою."
 msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} здається ворогові й відходить з ганьбою."
 
+#, fuzzy
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
-msgstr ""
+msgstr "Ваше військо зазнає значної поразки і %{name} полишає Вас."
 
+#, fuzzy
 msgid "Your force suffer a bitter defeat."
-msgstr ""
+msgstr "Ваше військо зазнає поразки."
 
 #, fuzzy
 msgid "Battlefield Casualties"
@@ -311,27 +348,35 @@ msgstr "Нападник"
 
 #, fuzzy
 msgid "Defender"
-msgstr "Захистник"
+msgstr "Захисник"
 
+#, fuzzy
 msgid "As you reach for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "Коли Ви досягли %{name}, воно загадково зникло."
 
+#, fuzzy
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "Коли Ваш ворог досягл %{name}, воно загадково зникло."
 
+#, fuzzy
 msgid "You have captured an enemy artifact!"
-msgstr ""
+msgstr "Ви заволоділи артефактом ворога!"
 
+#, fuzzy
 msgid "Necromancy!"
-msgstr ""
+msgstr "Некромантія!"
 
+#, fuzzy
 msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
 msgstr ""
+"Практикуючи темне мистецтво некромантії, Ви підняли %{count} мертвих "
+"ворогів, які тепер будуть слугувати Вам як %{monster}."
 
+#, fuzzy
 msgid "%{name} the %{race}"
-msgstr ""
+msgstr "%{name} %{race}"
 
 #, fuzzy
 msgid "Captain of %{name}"
@@ -347,7 +392,7 @@ msgstr "Захист"
 
 #, fuzzy
 msgid "Spell Power"
-msgstr "Сила Чарів"
+msgstr "Сила Магії"
 
 #, fuzzy
 msgid "Knowledge"
@@ -361,11 +406,13 @@ msgstr "Мораль"
 msgid "Luck"
 msgstr "Вдача"
 
+#, fuzzy
 msgid "Spell Points"
-msgstr "Одиниці Чар"
+msgstr "Мана"
 
+#, fuzzy
 msgid "Hero's Options"
-msgstr ""
+msgstr "Вміння героя"
 
 #, fuzzy
 msgid "Cast Spell"
@@ -405,8 +452,9 @@ msgstr ""
 msgid "Open Hero Screen to view full information about the hero."
 msgstr ""
 
+#, fuzzy
 msgid "Return to the battle."
-msgstr ""
+msgstr "Повернутися до битви."
 
 #, fuzzy
 msgid "Not enough gold (%{gold})"
@@ -418,10 +466,13 @@ msgstr ""
 msgid "Captain of %{name} states:"
 msgstr ""
 
+#, fuzzy
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
 msgstr ""
+"\"Я прийму твою капітуляцію і дам безпечний прохід твоїм військам за "
+"%{price} золота.\""
 
 #, fuzzy
 msgid "View %{monster} info"
@@ -456,20 +507,24 @@ msgstr ""
 msgid "Teleport here"
 msgstr "Телепортуватися сюди"
 
+#, fuzzy
 msgid "Invalid teleport destination"
-msgstr ""
+msgstr "Телепортація сюди неможлива"
 
+#, fuzzy
 msgid "Cast %{spell} on %{monster}"
-msgstr ""
+msgstr "Накласти %{spell} на %{monster}"
 
+#, fuzzy
 msgid "Cast %{spell}"
-msgstr ""
+msgstr "Накласти %{spell}"
 
 msgid "Select spell target"
 msgstr ""
 
+#, fuzzy
 msgid "View Ballista info"
-msgstr ""
+msgstr "Дані по Балісті"
 
 #, fuzzy
 msgid "Ballista"
@@ -477,15 +532,15 @@ msgstr "Баліста"
 
 #, fuzzy
 msgid "Enable auto combat"
-msgstr "Увімкнути автоматичний бій"
+msgstr "Увімкнути автобій"
 
 #, fuzzy
 msgid "Allows the computer to fight out the battle for you."
-msgstr "Дозволяє комп’ютеру вести битву за вас."
+msgstr "Дозволяє комп'ютеру вести битву за вас."
 
 #, fuzzy
 msgid "Auto Combat"
-msgstr "Автоматичний бій"
+msgstr "Автобій"
 
 #, fuzzy
 msgid "Customize system options"
@@ -499,29 +554,37 @@ msgstr "Дозволяє налаштувати екран бою."
 msgid "System Options"
 msgstr "Параметри Системи"
 
+#, fuzzy
 msgid "Wait this unit"
-msgstr ""
+msgstr "Чекати інших"
 
 #, fuzzy
 msgid "Wait"
 msgstr "Чекати"
 
+#, fuzzy
 msgid ""
 "Waits the current creature. The current creature delays its turn until after "
 "all other creatures have had their turn."
 msgstr ""
+"Очікування для цієї істоти. Ця істота не буде ходити доки не походять всі "
+"інші істоти."
 
+#, fuzzy
 msgid "Skip this unit"
-msgstr ""
+msgstr "Пропустити чергу"
 
 #, fuzzy
 msgid "Skip"
 msgstr "Пропустити"
 
+#, fuzzy
 msgid ""
 "Skips the current creature. The current creature ends its turn and does not "
 "get to go again until the next round."
 msgstr ""
+"Пропустити хід остоти. Поточна істота закінчить її хід і не отримає новий до "
+"наступного раунду."
 
 msgid "View Hero's options"
 msgstr ""
@@ -529,8 +592,9 @@ msgstr ""
 msgid "View opposing Hero"
 msgstr ""
 
+#, fuzzy
 msgid "Hide logs"
-msgstr ""
+msgstr "Сховати журнал"
 
 #, fuzzy
 msgid "Show logs"
@@ -554,17 +618,19 @@ msgstr "%{name} чекає на свою чергу."
 msgid "%{attacker} do %{damage} damage."
 msgstr "%{attacker} завдає %{damage} шкоди."
 
+#, fuzzy
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 істота загинула."
+msgstr[1] "%{count} істоти загинули."
+msgstr[2] "%{count} істот загинуло."
 
+#, fuzzy
 msgid "1 %{defender} perishes."
 msgid_plural "%{count} %{defender} perish."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 %{defender} загинув."
+msgstr[1] "%{count} %{defender} загинули."
+msgstr[2] "%{count} %{defender} загинуло."
 
 msgid "Moved %{monster}: %{src}, %{dst}"
 msgstr ""
@@ -572,107 +638,132 @@ msgstr ""
 msgid "Moved %{monster}"
 msgstr ""
 
+#, fuzzy
 msgid "The %{name} resist the spell!"
-msgstr ""
+msgstr "%{name} чинять опір чарам!"
 
+#, fuzzy
 msgid "%{name} casts %{spell} on the %{troop}."
-msgstr ""
+msgstr "%{name} чаклує %{spell} на %{troop}."
 
+#, fuzzy
 msgid "%{name} casts %{spell}."
-msgstr ""
+msgstr "%{name} чаклує %{spell}."
 
+#, fuzzy
 msgid "The %{spell} does %{damage} damage to one undead creature."
-msgstr ""
+msgstr "%{spell} завдає %{damage} шкоди одній немертвій істоті."
 
+#, fuzzy
 msgid "The %{spell} does %{damage} damage to all undead creatures."
-msgstr ""
+msgstr "%{spell} завдає %{damage} шкоди усім немертвим істотам."
 
+#, fuzzy
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
-msgstr ""
+msgstr "%{spell} завдає %{damage} шкоди, %{count} чинять опір."
 
+#, fuzzy
 msgid "The %{spell} does %{damage} damage."
-msgstr ""
+msgstr "%{spell} завдає %{damage} шкоди."
 
+#, fuzzy
 msgid "The %{spell} does %{damage} damage to one living creature."
-msgstr ""
+msgstr "%{spell} завдає %{damage} шкоди одній живій істоті."
 
+#, fuzzy
 msgid "The %{spell} does %{damage} damage to all living creatures."
-msgstr ""
+msgstr "%{spell} завдає %{damage} шкоди усім живим істотам."
 
+#, fuzzy
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr ""
+msgstr "Атака %{attacker} осліплює %{target}!"
 
+#, fuzzy
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr ""
+msgstr "Погляд %{attacker} перетворює %{name} в камінь!"
 
+#, fuzzy
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr ""
+msgstr "%{attacker} проклинає %{target}!"
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr ""
+msgstr "%{attacker} паралізує %{target}!"
 
+#, fuzzy
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr ""
+msgstr "%{attacker} розвіює всі добрі чари з загону %{target}!"
 
-msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr ""
-
+#, fuzzy
 msgid "Bad luck descends on the %{attacker}."
-msgstr ""
+msgstr "Вдача відвернулась від %{attacker}."
 
+#, fuzzy
 msgid "Good luck shines on the %{attacker}."
-msgstr ""
+msgstr "Вдача посміхнулась %{attacker}."
 
+#, fuzzy
 msgid "High morale enables the %{monster} to attack again."
-msgstr ""
+msgstr "Завдяки високій моралі %{monster} атакує знову."
 
+#, fuzzy
 msgid "Low morale causes the %{monster} to freeze in panic."
-msgstr ""
+msgstr "Через низьку мораль %{monster} завмер у паніці."
 
+#, fuzzy
 msgid "%{tower} does %{damage} damage."
-msgstr ""
+msgstr "%{tower} спричиняє %{damage} шкоди."
 
 msgid "The mirror image is created."
 msgstr ""
 
+#, fuzzy
 msgid "The mirror image is destroyed!"
-msgstr ""
+msgstr "Фантомний загін знищений!"
 
+#, fuzzy
 msgid "Break auto battle?"
-msgstr ""
+msgstr "Зупинити автобій?"
 
 #, fuzzy
 msgid "Error"
 msgstr "Помилка"
 
+#, fuzzy
 msgid "No spells to cast."
-msgstr ""
+msgstr "Нема чар для використання."
 
+#, fuzzy
 msgid "Are you sure you want to retreat?"
-msgstr ""
+msgstr "Ви впевнені, що хочете відступити?"
 
+#, fuzzy
 msgid "Retreat disabled"
-msgstr ""
+msgstr "Відступ неможливий"
 
 msgid "Surrender disabled"
 msgstr ""
 
+#, fuzzy
 msgid "Damage: %{max}"
-msgstr ""
+msgstr "Шкода: %{max}"
 
+#, fuzzy
 msgid "Damage: %{min} - %{max}"
-msgstr ""
+msgstr "Шкода: %{min} - %{max}"
 
+#, fuzzy
 msgid "Perish: %{max}"
-msgstr ""
+msgstr "Загинуло: %{max}"
 
+#, fuzzy
 msgid "Perish: %{min} - %{max}"
-msgstr ""
+msgstr "Загинуло: %{min} - %{max}"
 
+#, fuzzy
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
-msgstr ""
+msgstr "Завдяки орлиному зору %{name} зміг вивчити магічні чари %{spell}."
 
 #, fuzzy
 msgid "Human"
@@ -680,10 +771,11 @@ msgstr "Людина"
 
 #, fuzzy
 msgid "AI"
-msgstr "AI"
+msgstr "Комп'ютер"
 
+#, fuzzy
 msgid "Please select another hero."
-msgstr ""
+msgstr "Будь ласка виберіть іншого героя."
 
 msgid "Set Attack Skill"
 msgstr ""
@@ -697,61 +789,79 @@ msgstr ""
 msgid "Set Knowledge Skill"
 msgstr ""
 
+#, fuzzy
 msgid "%{race1} %{name1}"
-msgstr ""
+msgstr "%{race1} %{name1}"
 
+#, fuzzy
 msgid "vs"
-msgstr ""
+msgstr "проти"
 
+#, fuzzy
 msgid "%{race2} %{name2}"
-msgstr ""
+msgstr "%{race2} %{name2}"
 
+#, fuzzy
 msgid "Monsters"
-msgstr ""
+msgstr "Потвори"
 
+#, fuzzy
 msgid "N/A"
-msgstr ""
+msgstr "Н/Д"
 
+#, fuzzy
 msgid "Left Turret"
-msgstr ""
+msgstr "Ліва турель"
 
+#, fuzzy
 msgid "Right Turret"
-msgstr ""
+msgstr "Права турель"
 
+#, fuzzy
 msgid "The %{name} fires with the strength of %{count} Archers"
-msgstr ""
+msgstr "%{name} б'є із силою %{count} Стрільців"
 
+#, fuzzy
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr ""
+msgstr "кожен з бонусом +%{attack} до його вміння Атаки."
 
+#, fuzzy
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
 "spell."
-msgstr ""
+msgstr "Артефакт %{artifact} впливає на цю битву і відключає чари %{spell}."
 
+#, fuzzy
 msgid "%{count} %{name} rise(s) from the dead!"
-msgstr ""
+msgstr "%{count} %{name} піднялось з мертвих!"
 
+#, fuzzy
 msgid "Dwarven Alliance"
-msgstr ""
+msgstr "Альянс гномів"
 
+#, fuzzy
 msgid "Sorceress Guild"
-msgstr ""
+msgstr "Гільдія чаклунів"
 
+#, fuzzy
 msgid "Necromancer Guild"
-msgstr ""
+msgstr "Гільдія Некромантів"
 
+#, fuzzy
 msgid "Ogre Alliance"
-msgstr ""
+msgstr "Альянс Огрів"
 
+#, fuzzy
 msgid "Dwarfbane"
-msgstr ""
+msgstr "Гноможер"
 
+#, fuzzy
 msgid "Dragon Alliance"
-msgstr ""
+msgstr "Альянс Драконів"
 
+#, fuzzy
 msgid "Elven Alliance"
-msgstr ""
+msgstr "Ельфійський альянс"
 
 msgid "Kraeger defeated"
 msgstr ""
@@ -1186,8 +1296,9 @@ msgstr ""
 msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr ""
 
+#, fuzzy
 msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
-msgstr ""
+msgstr "Огри впізнають у Вас Гноможера та біжуть приєднуватися до Вас."
 
 msgid ""
 "The dragons, snarling and growling, agree to join forces with you, their "
@@ -1222,8 +1333,9 @@ msgid ""
 "yours.\""
 msgstr ""
 
+#, fuzzy
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
-msgstr ""
+msgstr "\"Гноможер!!!!, рятуйтесь хто може.\""
 
 #, fuzzy
 msgid "campaignBonus|Ballista"
@@ -1519,39 +1631,50 @@ msgstr "Клич Землі"
 msgid "campaignBonus|View Heroes"
 msgstr "Показ героїв"
 
+#, fuzzy
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
 "scenario."
-msgstr ""
+msgstr "У головного героя буде артефакт \"%{artifact}\" на початку сценарію."
 
+#, fuzzy
 msgid ""
 "The kingdom will receive %{amount} additional %{resource} at the start of "
 "the scenario."
 msgstr ""
+"Королівство буде мати додатково %{amount} %{resource} на початку сценарію."
 
+#, fuzzy
 msgid ""
 "The kingdom will have %{amount} less %{resource} at the start of the "
 "scenario."
 msgstr ""
+"Королівство буде мати на %{amount} менше %{resource} на початку сценарію."
 
+#, fuzzy
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
-msgstr ""
+msgstr "Головний герой буде мати %{count} %{monster} на початку сценарію."
 
+#, fuzzy
 msgid ""
 "The main hero will have \"%{spell}\" spell at the start of the scenario."
-msgstr ""
+msgstr "Головний герой буде знати чари \"%{spell}\" на початку сценарію."
 
+#, fuzzy
 msgid "The starting race of the scenario will be %{race}."
-msgstr ""
+msgstr "Початковою расою сценарію буде %{race}."
 
+#, fuzzy
 msgid ""
 "The main hero will have additional %{count} %{skill} at the start of the "
 "scenario."
 msgstr ""
+"Головний герой буде мати додатково %{count} %{skill} на початку сценарію."
 
+#, fuzzy
 msgid "The main hero will have %{skill} at the start of the scenario."
-msgstr ""
+msgstr "Головний герой буде мати %{skill} на початку сценарію."
 
 #, fuzzy
 msgid "Roland"
@@ -1561,32 +1684,41 @@ msgstr "Роланд"
 msgid "Archibald"
 msgstr "Арчібальд"
 
+#, fuzzy
 msgid "The Price of Loyalty"
-msgstr ""
+msgstr "Ціна вірності"
 
+#, fuzzy
 msgid "Voyage Home"
-msgstr ""
+msgstr "Подорож додому"
 
+#, fuzzy
 msgid "Wizard's Isle"
-msgstr ""
+msgstr "Острів Чаклуна"
 
+#, fuzzy
 msgid "Descendants"
-msgstr ""
+msgstr "Селяни"
 
+#, fuzzy
 msgid "The %{building} produces %{monster}."
-msgstr ""
+msgstr "У %{building} можна придбати %{monster}."
 
+#, fuzzy
 msgid "Requires:"
-msgstr ""
+msgstr "Потрібно:"
 
+#, fuzzy
 msgid "Cannot build. You have already built here today."
-msgstr ""
+msgstr "Неможливо будувати. Ви вже будували сьогодні."
 
+#, fuzzy
 msgid "For this action it is necessary to build a castle first."
-msgstr ""
+msgstr "Для цієї дії треба спочатку побудувати замок."
 
+#, fuzzy
 msgid "Cannot build %{name} because castle is too far from water."
-msgstr ""
+msgstr "Неможливо побудувати %{name}, бо замок далеко від води."
 
 msgid "disable build."
 msgstr ""
