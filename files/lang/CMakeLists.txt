@@ -19,11 +19,9 @@
 ###########################################################################
 
 file(GLOB_RECURSE ALL_SOURCES CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/src/*.cpp)
-file(GLOB_RECURSE PO_EXTERNAL CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/files/lang/*.po)
-list(APPEND PO_FILES ${PO_EXTERNAL})
-list(TRANSFORM PO_FILES REPLACE ".*\/" "")
+file(GLOB PO_FILES RELATIVE ${CMAKE_CURRENT_LIST_DIR} *.po)
 list(APPEND MO_FILES ${PO_FILES})
-list(TRANSFORM MO_FILES REPLACE "\.po" "\.mo")
+list(TRANSFORM MO_FILES REPLACE ".po" ".mo")
 list(APPEND CP1250 cs.po pl.po)
 list(APPEND CP1251 be.po bg.po ru.po uk.po)
 list(APPEND CP1252 de.po nb.po sv.po it.po es.po pt.po)
@@ -51,21 +49,22 @@ foreach(PO MO IN ZIP_LISTS PO_FILES MO_FILES)
 		set(CHARSET "CP1251")
 	elseif(${PO} IN_LIST CP1252)
 		set(CHARSET "CP1252")
+	elseif(${PO} STREQUAL "ro.po")
+		set(CHARSET "ISO-8859-16")
 	else()
 		set(CHARSET "UTF-8")
 	endif()
 
-	file(STRINGS ${CMAKE_SOURCE_DIR}/files/lang/${PO} LANGUAGE LIMIT_COUNT 1 REGEX "translation")
-	string(REGEX REPLACE "# " "" LANGUAGE "${LANGUAGE}")
-	string(REGEX REPLACE "(.*)( translation.*)" "\\1 Translation Update" LANGUAGE "${LANGUAGE}")
+	file(STRINGS ${CMAKE_CURRENT_LIST_DIR}/${PO} LANGUAGE LIMIT_COUNT 1 REGEX "translation")
+	string(REGEX REPLACE "# (.*) translation.*" "\\1 Translation Update" LANGUAGE "${LANGUAGE}")
 
 	set_source_files_properties(${LANGUAGE} PROPERTIES SYMBOLIC TRUE)
 
     add_custom_command(
-	COMMAND msgmerge -o ${CMAKE_BINARY_DIR}/files/lang/${PO} --no-location ${CMAKE_SOURCE_DIR}/files/lang/${PO} ${CMAKE_BINARY_DIR}/files/lang/${PROJECT_NAME}.pot
+	COMMAND msgmerge -o ${PO} --no-location ${CMAKE_CURRENT_LIST_DIR}/${PO} ${PROJECT_NAME}.pot
 	DEPENDS ${PROJECT_NAME}.pot
 	OUTPUT ${LANGUAGE}
-	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/files/lang
+	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/files/lang
 	)
 
 	if(${CHARSET} STREQUAL "UTF-8")
@@ -108,6 +107,7 @@ endforeach()
 install(
 	DIRECTORY ${CMAKE_BINARY_DIR}/files/lang/
 	DESTINATION ${FHEROES2_DATA}/lang
+	COMPONENT translations
 	FILES_MATCHING
 	PATTERN *.mo
 	PATTERN CMakeFiles EXCLUDE
