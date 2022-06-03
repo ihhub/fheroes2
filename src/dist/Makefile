@@ -44,7 +44,7 @@ endif
 
 SOURCEROOT := ../fheroes2
 SOURCEDIR  := $(filter %/, $(wildcard $(SOURCEROOT)/*/)) $(filter %/, $(wildcard $(SOURCEROOT)/*/*/))
-POT        := $(TARGET).pot
+POT        := ../../files/lang/$(TARGET).pot
 
 SEARCH     := $(wildcard $(SOURCEROOT)/*/*.cpp) $(wildcard $(SOURCEROOT)/*/*/*.cpp)
 
@@ -73,5 +73,5 @@ VPATH := $(SOURCEDIR)
 include $(wildcard *.d)
 
 clean:
-	rm -f *.pot *.pot~ *.o *.d *.exe $(TARGET) $(RES)
+	rm -f *.o *.d *.exe $(TARGET) $(RES)
 	rm -rf *.app
