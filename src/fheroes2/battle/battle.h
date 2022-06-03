@@ -78,7 +78,7 @@ namespace Battle
 
         TargetInfo() = default;
 
-        TargetInfo( Unit * defender_ )
+        explicit TargetInfo( Unit * defender_ )
             : defender( defender_ )
         {}
 

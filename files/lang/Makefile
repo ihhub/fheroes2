@@ -80,7 +80,8 @@ bg.mo: bg.po
 uk.mo: uk.po
 	iconv -f utf-8 -t CP1251 $< > $<.tmp
 	LANG=uk_UK.CP1251 LC_ALL=uk_UK.CP1251 LC_CTYPE=uk_UK.CP1251 sed -e 's/UTF-8/CP1251/' $<.tmp > $<.2.tmp
-	msgfmt $<.2.tmp -o $@
+	# use fuzzy translations for testing
+	msgfmt -f $<.2.tmp -o $@
 
 # German version uses CP1252
 de.mo: de.po

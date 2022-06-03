@@ -310,6 +310,8 @@ namespace Maps
 
         bool containsTileSet( const std::vector<uint8_t> & tileSets ) const;
 
+        bool containsSprite( uint8_t tileSetId, const uint32_t objectIdx ) const;
+
         static int ColorFromBarrierSprite( const uint8_t tileset, const uint8_t icnIndex );
         static int ColorFromTravellerTentSprite( const uint8_t tileset, const uint8_t icnIndex );
         static MP2::MapObjectType GetLoyaltyObject( const uint8_t tileset, const uint8_t icnIndex );
