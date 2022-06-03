@@ -447,10 +447,9 @@ void Troops::MoveTroops( const Troops & from, const uint32_t selectedTroopIndex,
                             troop->SetCount( 1 );
                         }
                     }
-                    break;
                 }
                 // An empty slot in the receiving army.
-                if ( !( *at( assignmentSlot ) ).isValid() ) {
+                else if ( !( *at( assignmentSlot ) ).isValid() ) {
                     at( assignmentSlot )->Set( *troop );
                     troop->Reset();
                 }
