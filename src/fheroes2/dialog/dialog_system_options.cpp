@@ -183,7 +183,8 @@ namespace
 
         // Interface show/hide state.
         const bool isHiddenInterface = conf.ExtGameHideInterface();
-        const fheroes2::Sprite & interfaceStateIcon = isHiddenInterface ? fheroes2::AGG::GetICN( ICN::ESPANEL, 4 ) : fheroes2::AGG::GetICN( ICN::SPANEL, 16 );
+        const fheroes2::Sprite & interfaceStateIcon
+            = isHiddenInterface ? fheroes2::AGG::GetICN( ICN::ESPANEL, 4 ) : fheroes2::AGG::GetICN( ICN::SPANEL, isEvilInterface ? 17 : 16 );
         if ( isHiddenInterface ) {
             value = _( "Hide" );
         }
