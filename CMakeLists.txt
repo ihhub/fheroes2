@@ -47,7 +47,13 @@ cmake_dependent_option(MACOS_APP_BUNDLE "Create a Mac app bundle" OFF "APPLE" OF
 cmake_dependent_option(GET_HOMM2_DEMO "Fetch and install the HoMM II demo data" OFF "NOT MACOS_APP_BUNDLE" OFF)
 
 set(USE_SDL_VERSION SDL2 CACHE STRING "Version of the SDL library used")
-set(FHEROES2_DATA ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME} CACHE STRING "Path to the fheroes2 data directory (relative to CMAKE_INSTALL_PREFIX)")
+if(WIN32)
+	set(FHEROES2_DATA ${CMAKE_INSTALL_PREFIX})
+	set(CMAKE_INSTALL_BINDIR ${CMAKE_INSTALL_PREFIX})
+	set(CMAKE_INSTALL_DOCDIR ${CMAKE_INSTALL_PREFIX})
+else(WIN32)
+	set(FHEROES2_DATA ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME} CACHE STRING "Path to the fheroes2 data directory (relative to CMAKE_INSTALL_PREFIX)")
+endif(WIN32)
 
 # For ComboBox in CMake GUI
 set_property(CACHE USE_SDL_VERSION PROPERTY STRINGS SDL SDL2)
@@ -59,6 +65,11 @@ find_package(${USE_SDL_VERSION} REQUIRED)
 find_package(${USE_SDL_VERSION}_mixer REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(Threads)
+find_program(ICONV_EXECUTABLE iconv)
+find_program(SED_EXECUTABLE sed)
+find_program(XGETTEXT_EXECUTABLE xgettext)
+
+cmake_dependent_option(BUILD_TRANSLATIONS "Build translations" ON "ICONV_EXECUTABLE;SED_EXECUTABLE;XGETTEXT_EXECUTABLE" OFF)
 
 if(ENABLE_IMAGE)
 	find_package(${USE_SDL_VERSION}_image REQUIRED)
@@ -75,16 +86,9 @@ add_subdirectory(src)
 #
 # Translation files
 #
-if(NOT WIN32)
-	find_program(MAKE_EXECUTABLE make)
-
-	add_custom_target(
-		translations
-		ALL
-		COMMAND ${MAKE_EXECUTABLE}
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/files/lang
-		)
-endif(NOT WIN32)
+if(BUILD_TRANSLATIONS)
+	add_subdirectory(files/lang)
+endif(BUILD_TRANSLATIONS)
 
 #
 # macOS app bundle
@@ -113,15 +117,14 @@ if(MACOS_APP_BUNDLE)
 		DEPENDS fheroes2 app_bundle_h2d_files app_bundle_translations
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 		)
-endif(MACOS_APP_BUNDLE)
+else(MACOS_APP_BUNDLE)
 
 #
 # Installation of auxiliary files
 #
-if(NOT MACOS_APP_BUNDLE)
 	install(
 		DIRECTORY files/data/
-		DESTINATION ${FHEROES2_DATA}/files/data
+		DESTINATION ${FHEROES2_DATA}/data
 		FILES_MATCHING
 		PATTERN *.h2d
 		)
@@ -129,10 +132,14 @@ if(NOT MACOS_APP_BUNDLE)
 		FILES docs/README.txt LICENSE changelog.txt
 		DESTINATION ${CMAKE_INSTALL_DOCDIR}
 		)
+	install(
+		PROGRAMS $<$<PLATFORM_ID:Windows>:${CMAKE_SOURCE_DIR}/script/homm2/extract_homm2_resources.bat>
+		script/homm2/extract_homm2_resources$<IF:$<PLATFORM_ID:Windows>,.ps1,.sh>
+		DESTINATION ${CMAKE_INSTALL_DOCDIR}$<$<NOT:$<PLATFORM_ID:Windows>>:/homm2>
+		)
 
 	if(GET_HOMM2_DEMO)
 		include(FetchContent)
-
 		set(FETCHCONTENT_QUIET OFF)
 
 		FetchContent_Declare(
@@ -157,38 +164,20 @@ if(NOT MACOS_APP_BUNDLE)
 			FILES_MATCHING
 			PATTERN *.*
 			)
+	else(GET_HOMM2_DEMO)
+		install(
+			PROGRAMS $<$<PLATFORM_ID:Windows>:${CMAKE_SOURCE_DIR}/script/demo/download_demo_version.bat>
+			script/demo/download_demo_version$<IF:$<PLATFORM_ID:Windows>,.ps1,.sh>
+			DESTINATION ${CMAKE_INSTALL_DOCDIR}$<$<NOT:$<PLATFORM_ID:Windows>>:/demo>
+			)
 	endif(GET_HOMM2_DEMO)
 
 	if(WIN32)
 		install(
-			FILES script/demo/download_demo_version.bat script/demo/download_demo_version.ps1
-			DESTINATION ${CMAKE_INSTALL_DOCDIR}/demo
-			)
-		install(
-			FILES script/homm2/extract_homm2_resources.bat script/homm2/extract_homm2_resources.ps1
-			DESTINATION ${CMAKE_INSTALL_DOCDIR}/homm2
-			)
-		install(
 			FILES script/homm2/resource_extraction_toolset.bat script/homm2/resource_extraction_toolset.ps1
-			DESTINATION ${CMAKE_INSTALL_DOCDIR}/homm2
+			DESTINATION ${CMAKE_INSTALL_PREFIX}
 			)
 	else(WIN32)
-		install(
-			DIRECTORY files/lang/
-			DESTINATION ${FHEROES2_DATA}/files/lang
-			FILES_MATCHING
-			PATTERN *.mo
-			)
-		install(
-			FILES script/demo/download_demo_version.sh
-			PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
-			DESTINATION ${CMAKE_INSTALL_DOCDIR}/demo
-			)
-		install(
-			FILES script/homm2/extract_homm2_resources.sh
-			PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
-			DESTINATION ${CMAKE_INSTALL_DOCDIR}/homm2
-			)
 		install(
 			FILES script/packaging/common/fheroes2.appdata.xml
 			DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/metainfo
@@ -202,4 +191,4 @@ if(NOT MACOS_APP_BUNDLE)
 			DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications
 			)
 	endif(WIN32)
-endif(NOT MACOS_APP_BUNDLE)
+endif(MACOS_APP_BUNDLE)

@@ -29,10 +29,6 @@ if(ENABLE_STRICT_COMPILATION)
 	add_compile_options($<$<OR:$<COMPILE_LANG_AND_ID:C,MSVC>,$<COMPILE_LANG_AND_ID:CXX,MSVC>>:/WX>)
 endif(ENABLE_STRICT_COMPILATION)
 
-if(MINGW)
-	set(MINGW_LIBRARIES mingw32 winmm)
-endif(MINGW)
-
 if(MACOS_APP_BUNDLE)
 	set(FHEROES2_ICON ${CMAKE_CURRENT_SOURCE_DIR}/../resources/fheroes2.icns)
 	set_source_files_properties(${FHEROES2_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
@@ -64,7 +60,11 @@ else(MACOS_APP_BUNDLE)
 		OUTPUT_VARIABLE FHEROES2_DATA_ABSOLUTE
 		)
 
-	add_executable(fheroes2 ${FHEROES2_SOURCES})
+	if(WIN32)
+		set(FHEROES2_ICON ${CMAKE_CURRENT_SOURCE_DIR}/../resources/fheroes2.rc)
+	endif(WIN32)
+
+	add_executable(fheroes2 ${FHEROES2_ICON} ${FHEROES2_SOURCES})
 
 	target_compile_definitions(
 		fheroes2
@@ -72,7 +72,7 @@ else(MACOS_APP_BUNDLE)
 		# MSVC: suppress deprecation warnings
 		$<$<OR:$<COMPILE_LANG_AND_ID:C,MSVC>,$<COMPILE_LANG_AND_ID:CXX,MSVC>>:_CRT_SECURE_NO_WARNINGS>
 		$<$<CONFIG:Debug>:WITH_DEBUG>
-		FHEROES2_DATA=${FHEROES2_DATA_ABSOLUTE}
+		$<$<NOT:$<PLATFORM_ID:Windows>>:FHEROES2_DATA=${FHEROES2_DATA_ABSOLUTE}>
 		)
 
 	install(TARGETS fheroes2 DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -107,7 +107,7 @@ target_include_directories(
 
 target_link_libraries(
 	fheroes2
-	${MINGW_LIBRARIES}  # Be sure define it first. Beware WinMain@16 error!!
+	${MINGW32_LIBRARY}
 	${SDL_MIXER_LIBRARIES}
 	engine
 	Threads::Threads

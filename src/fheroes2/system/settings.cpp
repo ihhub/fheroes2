@@ -490,7 +490,7 @@ bool Settings::setGameLanguage( const std::string & language )
 #if defined( MACOS_APP_BUNDLE )
     const ListFiles translations = Settings::FindFiles( "translations", fileName, false );
 #else
-    const ListFiles translations = Settings::FindFiles( System::ConcatePath( "files", "lang" ), fileName, false );
+    const ListFiles translations = Settings::FindFiles( "lang", fileName, false );
 #endif
 
     if ( !translations.empty() ) {
@@ -514,7 +514,7 @@ const std::vector<std::string> & Settings::GetRootDirs()
         return dirs;
     }
 
-#ifdef FHEROES2_DATA
+#if !defined _WIN32 && defined FHEROES2_DATA
     // Macro-defined path.
     dirs.emplace_back( EXPANDDEF( FHEROES2_DATA ) );
 #endif
