@@ -415,10 +415,9 @@ void Interface::IconsPanel::ResetIcons( const icons_t type )
         const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( icnscroll, 4 );
 
         if ( type & ICON_HEROES ) {
-            const fheroes2::Image scrollbarSlider
-                = fheroes2::generateScrollbarSlider( originalSlider, false, ICONS_CURSOR_HEIGHT * heroesIcons.getIconsCount() - 38, heroesIcons.getIconsCount(),
-                                                     static_cast<int32_t>( kingdom.GetHeroes().size() ),
-                                                     { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
+            const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, ICONS_CURSOR_HEIGHT * heroesIcons.getIconsCount() - 38,
+                                                                                       heroesIcons.getIconsCount(), static_cast<int32_t>( kingdom.GetHeroes().size() ),
+                                                                                       { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
             heroesIcons.setScrollBarImage( scrollbarSlider );
 
             heroesIcons.SetListContent( kingdom.GetHeroes() );
@@ -426,10 +425,9 @@ void Interface::IconsPanel::ResetIcons( const icons_t type )
         }
 
         if ( type & ICON_CASTLES ) {
-            const fheroes2::Image scrollbarSlider
-                = fheroes2::generateScrollbarSlider( originalSlider, false, ICONS_CURSOR_HEIGHT * castleIcons.getIconsCount() - 38, castleIcons.getIconsCount(),
-                                                     static_cast<int32_t>( kingdom.GetCastles().size() ),
-                                                     { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
+            const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, ICONS_CURSOR_HEIGHT * castleIcons.getIconsCount() - 38,
+                                                                                       castleIcons.getIconsCount(), static_cast<int32_t>( kingdom.GetCastles().size() ),
+                                                                                       { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
             castleIcons.setScrollBarImage( scrollbarSlider );
 
             castleIcons.SetListContent( kingdom.GetCastles() );
