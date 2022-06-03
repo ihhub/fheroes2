@@ -53,15 +53,12 @@ void Interface::Basic::Reset()
     SetHideInterface( conf.ExtGameHideInterface() );
 }
 
-void Interface::Basic::SetHideInterface( bool f )
+void Interface::Basic::SetHideInterface( const bool hide )
 {
     Settings & conf = Settings::Get();
-
-    conf.SetHideInterface( f );
-
     const fheroes2::Display & display = fheroes2::Display::instance();
 
-    if ( f ) {
+    if ( hide ) {
         conf.SetShowPanel( true );
 
         controlPanel.SetPos( display.width() - controlPanel.GetArea().width - BORDERWIDTH, 0 );
@@ -96,7 +93,15 @@ void Interface::Basic::SetHideInterface( bool f )
         statusWindow.SetPos( px, buttonsArea.GetArea().y + buttonsArea.GetArea().height );
     }
 
+    const fheroes2::Point prevCenter = gameArea.getCurrentCenterInPixels();
+    const fheroes2::Rect prevRoi = gameArea.GetROI();
+
     gameArea.generate( { display.width(), display.height() }, conf.ExtGameHideInterface() );
+
+    const fheroes2::Rect newRoi = gameArea.GetROI();
+
+    gameArea.SetCenterInPixels( prevCenter + fheroes2::Point( newRoi.x + newRoi.width / 2, newRoi.y + newRoi.height / 2 )
+                                - fheroes2::Point( prevRoi.x + prevRoi.width / 2, prevRoi.y + prevRoi.height / 2 ) );
 }
 
 Interface::Basic & Interface::Basic::Get()

@@ -521,18 +521,7 @@ namespace fheroes2
                 saveConfiguration = true;
 
                 Interface::Basic & basicInterface = Interface::Basic::Get();
-                Interface::GameArea & gamearea = basicInterface.GetGameArea();
-                const fheroes2::Point prevCenter = gamearea.getCurrentCenterInPixels();
-                const fheroes2::Rect prevRoi = gamearea.GetROI();
-
-                basicInterface.SetHideInterface( conf.ExtGameHideInterface() );
-
                 basicInterface.Reset();
-
-                const fheroes2::Rect newRoi = gamearea.GetROI();
-
-                gamearea.SetCenterInPixels( prevCenter + fheroes2::Point( newRoi.x + newRoi.width / 2, newRoi.y + newRoi.height / 2 )
-                                            - fheroes2::Point( prevRoi.x + prevRoi.width / 2, prevRoi.y + prevRoi.height / 2 ) );
 
                 // We need to redraw radar first due to the nature of restorers. Only then we can redraw everything.
                 basicInterface.Redraw( Interface::REDRAW_RADAR );

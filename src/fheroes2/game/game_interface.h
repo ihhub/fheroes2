@@ -156,7 +156,7 @@ namespace Interface
         void ResetFocus( int );
         void RedrawFocus();
 
-        void SetHideInterface( bool );
+        void SetHideInterface( const bool hide );
 
         void EventSwitchHeroSleeping();
         fheroes2::GameMode EventDefaultAction( const fheroes2::GameMode gameMode );

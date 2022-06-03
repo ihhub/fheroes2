@@ -72,7 +72,7 @@ namespace Interface
             iconsCount = c;
         }
 
-        int32_t getIconCount() const
+        int32_t getIconsCount() const
         {
             return iconsCount;
         }

@@ -525,33 +525,19 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     const bool isEvilInterface = conf.ExtGameEvilInterface();
     const bool isHideInterface = conf.ExtGameHideInterface();
 
-    auto toggleInterface = [&interface, &conf]( const bool hide ) {
-        conf.SetHideInterface( hide );
-
-        Interface::GameArea & gamearea = interface.GetGameArea();
-        const fheroes2::Point prevCenter = gamearea.getCurrentCenterInPixels();
-        const fheroes2::Rect prevRoi = gamearea.GetROI();
-
-        interface.SetHideInterface( conf.ExtGameHideInterface() );
-        interface.Reset();
-
-        const fheroes2::Rect newRoi = gamearea.GetROI();
-
-        gamearea.SetCenterInPixels( prevCenter + fheroes2::Point( newRoi.x + newRoi.width / 2, newRoi.y + newRoi.height / 2 )
-                                    - fheroes2::Point( prevRoi.x + prevRoi.width / 2, prevRoi.y + prevRoi.height / 2 ) );
-    };
-
     // If the interface is currently hidden, we have to temporarily bring it back, because
     // the map generation in the World View mode heavily depends on the existing game area
     if ( isHideInterface ) {
-        toggleInterface( false );
+        conf.SetHideInterface( false );
+        interface.Reset();
     }
 
     // Creates fixed radar on top-right, suitable for the View World window
     Interface::Radar radar( interface.GetRadar(), fheroes2::Display::instance() );
 
-    const fheroes2::Rect worldMapROI = interface.GetGameArea().GetVisibleTileROI();
-    const fheroes2::Rect & visibleScreenInPixels = interface.GetGameArea().GetROI();
+    Interface::GameArea & gameArea = interface.GetGameArea();
+    const fheroes2::Rect worldMapROI = gameArea.GetVisibleTileROI();
+    const fheroes2::Rect & visibleScreenInPixels = gameArea.GetROI();
 
     // Initial view is centered on where the player is centered
     fheroes2::Point viewCenterInPixels( worldMapROI.x * TILEWIDTH + visibleScreenInPixels.width / 2, worldMapROI.y * TILEWIDTH + visibleScreenInPixels.height / 2 );
@@ -648,7 +634,8 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
 
     // Don't forget to reset the interface settings back if necessary
     if ( isHideInterface ) {
-        toggleInterface( true );
+        conf.SetHideInterface( true );
+        interface.Reset();
     }
 
     le.ResumeCycling();

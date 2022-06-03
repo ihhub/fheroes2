@@ -553,8 +553,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
     Settings & conf = Settings::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // draw interface
-    gameArea.generate( { display.width(), display.height() }, conf.ExtGameHideInterface() );
+    Reset();
 
     radar.Build();
     radar.SetHide( true );
@@ -565,9 +564,6 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
     iconsPanel.HideIcons( ICON_ANY );
     statusWindow.Reset();
-
-    if ( conf.ExtGameHideInterface() )
-        SetHideInterface( true );
 
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
