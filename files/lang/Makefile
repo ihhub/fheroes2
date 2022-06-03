@@ -18,7 +18,7 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-recode = sed -e 's/UTF-8/$(1)/' $< | iconv -f utf-8 -t $(1) | msgfmt - -o $@
+recode = sed -e '1,20 s/UTF-8/$(1)/' $< | iconv -f utf-8 -t $(1) | msgfmt - -o $@
 .PHONY: all clean merge
 
 all: $(patsubst %.po, %.mo, $(wildcard *.po))
@@ -30,7 +30,7 @@ merge: ../../src/dist/fheroes2.pot
 # In French, accented characters are mapped to unused ASCII characters
 # Non-mapped characters are replaced by their non-accented equivalents
 fr.mo: fr.po
-	sed -e 'y/àâçéèêîïôùûüÉÊÀ/@*^~`|><#&$$uEEA/' $< | sed -e 's/œ/oe/g' | msgfmt - -o $@
+	sed -e 'y/àâçéèêîïôùûüÉÊÀ/@*^~`|><#&$$uEEA/' -e 's/œ/oe/g' $< | msgfmt - -o $@
 
 # Polish, Czech versions use CP1250
 cs.mo pl.mo: %.mo: %.po
