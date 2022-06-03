@@ -422,7 +422,7 @@ void Interface::Radar::QueueEventProcessing()
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Rect & rect = GetArea();
 
-    // move border
+    // Move border window
     if ( conf.ShowRadar() && BorderWindow::QueueEventProcessing() ) {
         cursorArea.hide();
         SetRedraw();

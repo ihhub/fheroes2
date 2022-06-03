@@ -361,9 +361,8 @@ void Interface::IconsPanel::Redraw()
 
 void Interface::IconsPanel::QueueEventProcessing()
 {
-    if ( Settings::Get().ShowIcons() &&
-         // move border window
-         BorderWindow::QueueEventProcessing() ) {
+    // Move border window
+    if ( Settings::Get().ShowIcons() && BorderWindow::QueueEventProcessing() ) {
         interface.RedrawFocus();
         SetRedraw();
     }
