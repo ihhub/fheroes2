@@ -391,7 +391,7 @@ void Troops::MoveTroops( const Troops & from, const uint32_t selectedTroopIndex,
     assert( !( selectedTroopIndex > 4 ) );
 
     // Check if there are troops to move.
-    if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
+    if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetFirstValid()->GetCount() == 1 ) ) {
         return;
     }
     // Modify the order in which to move the troops.
@@ -417,7 +417,7 @@ void Troops::MoveTroops( const Troops & from, const uint32_t selectedTroopIndex,
     bool preferEmptySlot = false;
 
     // 'from' army might have more than 0 if it is a hero army with one troop left.
-    while ( from.GetCount() > 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
+    while ( from.GetCount() > 0 || ( !moveAll && from.GetCount() == 1 && from.GetFirstValid()->GetCount() == 1 ) ) {
         // Step 1: Attempt to move troops directly to the same slot in the receiving army to preserve formation.
         for ( uint32_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
             Troop * troop = troopFromOrder.at( slot );
@@ -462,7 +462,7 @@ void Troops::MoveTroops( const Troops & from, const uint32_t selectedTroopIndex,
             }
         }
         // Check if there are troops to move.
-        if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
+        if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetFirstValid()->GetCount() == 1 ) ) {
             return;
         }
         // Step 2: Attempt to move to remaining free slots or same troop ID elsewhere in army.
@@ -481,7 +481,7 @@ void Troops::MoveTroops( const Troops & from, const uint32_t selectedTroopIndex,
             }
         }
         // Check if there are troops to move.
-        if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetCountMonsters( from.GetFirstValid()->GetID() ) == 1 ) ) {
+        if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetFirstValid()->GetCount() == 1 ) ) {
             return;
         }
         // Step 3: Attempt to merge troops in receiving army to make free slots.
