@@ -427,8 +427,8 @@ void Interface::Radar::QueueEventProcessing()
         cursorArea.hide();
         SetRedraw();
     }
-    // move cursor
     else if ( le.MouseCursor( rect ) ) {
+        // move cursor
         if ( le.MouseClickLeft() || le.MousePressLeft() ) {
             const fheroes2::Point & pt = le.GetMouseCursor();
 
@@ -443,21 +443,8 @@ void Interface::Radar::QueueEventProcessing()
                 }
             }
         }
-        else if ( le.MousePressRight( GetRect() ) )
+        else if ( le.MousePressRight( GetRect() ) ) {
             Dialog::Message( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Font::BIG );
-        else if ( conf.ExtGameHideInterface() ) {
-            fheroes2::Size newSize( rect.width, rect.height );
-
-            if ( le.MouseWheelUp() ) {
-                if ( rect.width != world.w() || rect.height != world.h() )
-                    newSize = { world.w(), world.h() };
-            }
-            else if ( le.MouseWheelDn() ) {
-                if ( rect.width != RADARWIDTH || rect.height != RADARWIDTH )
-                    newSize = { RADARWIDTH, RADARWIDTH };
-            }
-
-            ChangeAreaSize( newSize );
         }
     }
 }
@@ -494,18 +481,4 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
         }
     }
     return false;
-}
-
-void Interface::Radar::ChangeAreaSize( const fheroes2::Size & newSize )
-{
-    if ( newSize.width != area.width || newSize.height != area.height ) {
-        const fheroes2::Rect & rect = GetRect();
-
-        SetPosition( rect.x, rect.y, newSize.width, newSize.height );
-
-        Generate();
-
-        cursorArea.hide();
-        interface.SetRedraw( REDRAW_RADAR | REDRAW_GAMEAREA );
-    }
 }

@@ -72,8 +72,6 @@ namespace Interface
         void RedrawObjects( int color, ViewWorldMode flags ) const;
         void RedrawCursor( const fheroes2::Rect * roiRectangle = nullptr );
 
-        void ChangeAreaSize( const fheroes2::Size & );
-
         RadarType radarType;
         Basic & interface;
 
