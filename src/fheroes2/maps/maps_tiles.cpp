@@ -2575,6 +2575,29 @@ bool Maps::Tiles::containsTileSet( const std::vector<uint8_t> & tileSets ) const
     return false;
 }
 
+bool Maps::Tiles::containsSprite( uint8_t tileSetId, const uint32_t objectIdx ) const
+{
+    tileSetId = tileSetId >> 2;
+
+    if ( ( objectTileset >> 2 ) == tileSetId && objectIdx == objectIndex ) {
+        return true;
+    }
+
+    for ( const TilesAddon & addon : addons_level1 ) {
+        if ( ( addon.object >> 2 ) == tileSetId && objectIdx == objectIndex ) {
+            return true;
+        }
+    }
+
+    for ( const TilesAddon & addon : addons_level2 ) {
+        if ( ( addon.object >> 2 ) == tileSetId && objectIdx == objectIndex ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool Maps::Tiles::isTallObject() const
 {
     // TODO: possibly cache the output of the method as right now it's in average twice.
