@@ -35,7 +35,7 @@ CCFLAGS := $(CCFLAGS) -I$(PREFIX)/include
 endif
 
 ifeq ($(PLATFORM), mingw)
-RES := $(TARGET).res
+RES := ../resources/$(TARGET).res
 RC  := ../resources/fheroes2.rc
 ifdef FHEROES2_WITH_DEBUG
 DEBUGFLAG := -DWITH_DEBUG
@@ -48,7 +48,7 @@ POT        := ../../files/lang/$(TARGET).pot
 
 SEARCH     := $(wildcard $(SOURCEROOT)/*/*.cpp) $(wildcard $(SOURCEROOT)/*/*/*.cpp)
 
-.PHONY: all clean translations
+.PHONY: all clean pot
 
 all: $(TARGET)
 
@@ -56,14 +56,10 @@ $(TARGET): $(notdir $(patsubst %.cpp, %.o, $(SEARCH))) $(LIBENGINE) $(RES)
 	@echo "lnk: $@"
 	$(CXX) $(LDFLAGS) $^ $(LIBS) -o $@
 
-translations: $(wildcard $(SEARCH))
-	@echo "gen: $(TARGET).pot"
-	@xgettext -d $(TARGET) -C -F -k_ -k_n:1,2 -o - $(sort $(wildcard $(SEARCH))) | sed -e '/#, c-format/d' > $(POT)
-ifeq ($(GITHUB_ACTION),"po-update")
-	$(MAKE) -C ../../files/lang merge
-else
-	$(MAKE) -C ../../files/lang
-endif
+pot: $(wildcard $(SEARCH))
+	@echo "gen: $(POT)"
+	@xgettext -d $(TARGET) -C -F -k_ -k_n:1,2 -o $(POT) $(sort $(wildcard $(SEARCH)))
+	@sed -i~ -e 's/, c-format//' $(POT)
 
 $(RES): $(RC)
 	@echo "gen: $@"
@@ -77,5 +73,5 @@ VPATH := $(SOURCEDIR)
 include $(wildcard *.d)
 
 clean:
-	@rm -f *.o *.d *.exe $(TARGET) $(RES)
-	@rm -rf *.app
+	rm -f *.o *.d *.exe $(TARGET) $(RES)
+	rm -rf *.app
