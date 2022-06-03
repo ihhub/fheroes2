@@ -180,7 +180,7 @@ namespace
 
         fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
 
-        std::function<fheroes2::Rect()> drawControlPanel = [&display, isHideInterface, isEvilInterface, &radarRect, &radarArea, &buttonExit]() {
+        std::function<fheroes2::Rect()> drawControlPanel = [&display, isEvilInterface, isHideInterface, &radarRect, &radarArea, &buttonExit]() {
             if ( isHideInterface ) {
                 Dialog::FrameBorder::RenderRegular( radarRect );
             }

@@ -153,15 +153,24 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const fheroes2::Rect & radarArea = Interface::Basic::Get().GetRadar().GetArea();
     const Settings & conf = Settings::Get();
     const bool isEvilInterface = conf.ExtGameEvilInterface();
-    const bool isNoInterface = conf.ExtGameHideInterface();
+    const bool isHideInterface = conf.ExtGameHideInterface();
 
-    fheroes2::ImageRestorer back( display, radarArea.x, radarArea.y, radarArea.width, radarArea.height );
+    const fheroes2::Rect & radarRect = radar.GetRect();
+    const fheroes2::Rect & radarArea = radar.GetArea();
 
-    const fheroes2::Sprite & viewDoor = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 );
-    fheroes2::Blit( viewDoor, 0, 0, display, radarArea.x, radarArea.y, radarArea.width, radarArea.height );
+    fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
+
+    auto drawControlPanel = [&display, isEvilInterface, isHideInterface, &radarRect, &radarArea, &buttonExit]() {
+        if ( isHideInterface ) {
+            Dialog::FrameBorder::RenderRegular( radarRect );
+        }
+
+        fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 ), display, radarArea.x, radarArea.y );
+
+        buttonExit.draw();
+    };
 
     const fheroes2::Rect & visibleArea = gameArea.GetROI();
     const bool isFadingEnabled = ( gameArea.GetROI().width > TILEWIDTH * distance ) || ( gameArea.GetROI().height > TILEWIDTH * distance );
@@ -172,8 +181,22 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
     const fheroes2::Rect spellROI( heroPosOffset.x, heroPosOffset.y, TILEWIDTH * ( distance + 1 ), TILEWIDTH * ( distance + 1 ) );
 
     if ( isFadingEnabled ) {
-        fheroes2::InvertedFadeWithPalette( display, visibleArea, spellROI, 5, 300, 9 );
+        if ( isHideInterface ) {
+            InvertedShadow( display, visibleArea, spellROI, 5, 9 );
+
+            drawControlPanel();
+        }
+        else {
+            drawControlPanel();
+
+            fheroes2::InvertedFadeWithPalette( display, visibleArea, spellROI, 5, 300, 9 );
+        }
     }
+    else {
+        drawControlPanel();
+    }
+
+    display.render();
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -182,19 +205,16 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
     LocalEvent & le = LocalEvent::Get();
     int32_t returnValue = -1;
 
-    const fheroes2::Point exitButtonPos( radarArea.x + 32, radarArea.y + radarArea.height - 37 );
-    fheroes2::Button buttonExit( exitButtonPos.x, exitButtonPos.y, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
-    buttonExit.draw();
-
     while ( le.HandleEvents() ) {
         const fheroes2::Point & mp = le.GetMouseCursor();
 
-        if ( radarArea & mp ) {
+        if ( radarRect & mp ) {
             cursor.SetThemes( Cursor::POINTER );
 
             le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
+            }
         }
         else if ( visibleArea & mp ) {
             const int32_t dst = gameArea.GetValidTileIdFromPoint( mp );
@@ -224,15 +244,14 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
             uint32_t & frame = Game::MapsAnimationFrame();
             ++frame;
-            gameArea.SetRedraw();
-            Redraw();
+
+            Redraw( REDRAW_GAMEAREA );
 
             if ( isFadingEnabled ) {
                 InvertedShadow( display, visibleArea, spellROI, 5, 9 );
 
-                if ( isNoInterface ) {
-                    fheroes2::Blit( viewDoor, 0, 0, display, radarArea.x, radarArea.y, radarArea.width, radarArea.height );
-                    buttonExit.draw();
+                if ( isHideInterface ) {
+                    drawControlPanel();
                 }
             }
 
@@ -242,11 +261,9 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
 
     if ( isFadingEnabled ) {
         gameArea.SetRedraw();
-        Redraw();
-        display.render();
     }
 
-    back.restore();
+    Redraw( REDRAW_RADAR );
     display.render();
 
     return returnValue;
