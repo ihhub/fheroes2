@@ -96,7 +96,7 @@ foreach(PO MO IN ZIP_LISTS PO_FILES MO_FILES)
 		add_custom_command(
 		COMMAND ${ICONV_EXECUTABLE} -f UTF-8 -t ${CHARSET} ${PO} > ${PO}.new
 		COMMAND ${CMAKE_COMMAND} -E rename ${PO}.new ${PO}
-		COMMAND ${SED_EXECUTABLE} -i -e \'s/UTF-8/${CHARSET}/\' ${PO}
+		COMMAND LC_ALL=C ${SED_EXECUTABLE} -i -e \'s/UTF-8/${CHARSET}/\' ${PO}
 		DEPENDS ${LANGUAGE}
 		OUTPUT ${CMAKE_BINARY_DIR}/files/lang/${PO}
 		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/files/lang
