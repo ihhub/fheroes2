@@ -226,7 +226,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     Settings::Get().SetGameType( Game::TYPE_CAMPAIGN );
 
     // Reset all sound and music before playing videos
-    fheroes2::ResetAudio();
+    AudioManager::ResetAudio();
 
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point roiOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
@@ -255,7 +255,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
 
     outputNewSuccessionWarsCampaignInTextSupportMode();
 
-    fheroes2::ResetAudio();
+    AudioManager::ResetAudio();
     Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::IGNORE_VIDEO );
 
     const fheroes2::ScreenPaletteRestorer screenRestorer;
@@ -479,7 +479,7 @@ fheroes2::GameMode Game::NewGame()
     // Stop all sounds, but not the music
     Mixer::Stop();
 
-    fheroes2::PlayMusic( MUS::MAINMENU, true, true );
+    AudioManager::PlayMusic( MUS::MAINMENU, true, true );
 
     // reset last save name
     Game::SetLastSavename( "" );

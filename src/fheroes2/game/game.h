@@ -145,7 +145,7 @@ namespace Game
                 SetCurrentMusic( MUS::UNKNOWN );
             }
 
-            fheroes2::PlayMusic( _music, true, true );
+            AudioManager::PlayMusic( _music, true, true );
         }
 
         MusicRestorer & operator=( const MusicRestorer & ) = delete;

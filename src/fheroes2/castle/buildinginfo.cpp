@@ -730,7 +730,7 @@ bool DwellingsBar::ActionBarLeftMouseSingleClick( DwellingItem & dwl )
         BuildingInfo dwelling( castle, static_cast<building_t>( dwl.type ) );
 
         if ( dwelling.DialogBuyBuilding( true ) ) {
-            fheroes2::PlaySound( M82::BUILDTWN );
+            AudioManager::PlaySound( M82::BUILDTWN );
             castle.BuyBuilding( dwl.type );
         }
     }

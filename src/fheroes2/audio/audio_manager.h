@@ -30,7 +30,7 @@ namespace M82
     enum SoundType : int;
 }
 
-namespace fheroes2
+namespace AudioManager
 {
     class AudioInitializer
     {

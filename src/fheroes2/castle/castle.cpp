@@ -2234,7 +2234,7 @@ bool Castle::BuyBoat() const
     if ( !AllowBuyBoat() )
         return false;
     if ( isControlHuman() )
-        fheroes2::PlaySound( M82::BUILDTWN );
+        AudioManager::PlaySound( M82::BUILDTWN );
 
     if ( !Maps::isValidAbsPoint( center.x, center.y + 2 ) )
         return false;

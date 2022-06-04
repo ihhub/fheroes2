@@ -399,7 +399,7 @@ fheroes2::GameMode Game::SelectScenario()
 
 fheroes2::GameMode Game::ScenarioInfo()
 {
-    fheroes2::PlayMusic( MUS::MAINMENU, true, true );
+    AudioManager::PlayMusic( MUS::MAINMENU, true, true );
 
     const MapsFileInfoList lists = Maps::PrepareMapsFileInfoList( Settings::Get().IsGameType( Game::TYPE_MULTI ) );
     if ( lists.empty() ) {

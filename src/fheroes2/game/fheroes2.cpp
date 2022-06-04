@@ -252,7 +252,7 @@ int main( int argc, char ** argv )
 
         const DataInitializer dataInitializer;
 
-        const fheroes2::AudioInitializer audioInitializer( dataInitializer.getOriginalAGGFilePath(), dataInitializer.getExpansionAGGFilePath() );
+        const AudioManager::AudioInitializer audioInitializer( dataInitializer.getOriginalAGGFilePath(), dataInitializer.getExpansionAGGFilePath() );
 
         // Load palette.
         fheroes2::setGamePalette( AGG::getDataFromAggFile( "KB.PAL" ) );

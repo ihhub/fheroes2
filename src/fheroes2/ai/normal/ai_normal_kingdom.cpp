@@ -270,7 +270,7 @@ namespace AI
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
         status.RedrawTurnProgress( 0 );
 
-        fheroes2::PlayMusic( MUS::COMPUTER_TURN, true, true );
+        AudioManager::PlayMusic( MUS::COMPUTER_TURN, true, true );
 
         KingdomHeroes & heroes = kingdom.GetHeroes();
         const KingdomCastles & castles = kingdom.GetCastles();

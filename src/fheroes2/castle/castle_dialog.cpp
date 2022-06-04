@@ -258,7 +258,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
 
     const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
-    fheroes2::PlayMusic( MUS::FromRace( race ), true, true );
+    AudioManager::PlayMusic( MUS::FromRace( race ), true, true );
 
     int alphaHero = 255;
     CastleDialog::FadeBuilding fadeBuilding;
@@ -279,7 +279,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
         }
 
         if ( build != BUILD_NOTHING ) {
-            fheroes2::PlaySound( M82::BUILDTWN );
+            AudioManager::PlaySound( M82::BUILDTWN );
             fadeBuilding.StartFadeBuilding( build );
         }
 
@@ -288,7 +288,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
 
             generateHeroImage( surfaceHero, heroes );
 
-            fheroes2::PlaySound( M82::BUILDTWN );
+            AudioManager::PlaySound( M82::BUILDTWN );
             alphaHero = 0;
         }
     }
@@ -621,7 +621,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                                 Dialog::Message( _( "Town" ), _( "This town may not be upgraded to a castle." ), Font::BIG, Dialog::OK );
                             }
                             else if ( Dialog::OK == DialogBuyCastle( true ) ) {
-                                fheroes2::PlaySound( M82::BUILDTWN );
+                                AudioManager::PlaySound( M82::BUILDTWN );
                                 fadeBuilding.StartFadeBuilding( BUILD_CASTLE );
                             }
                             break;
@@ -643,7 +643,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                             }
 
                             if ( build != BUILD_NOTHING ) {
-                                fheroes2::PlaySound( M82::BUILDTWN );
+                                AudioManager::PlaySound( M82::BUILDTWN );
                                 fadeBuilding.StartFadeBuilding( build );
                             }
 
@@ -657,7 +657,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                                     topArmyBar.Redraw();
                                     RedrawIcons( *this, CastleHeroes( nullptr, heroes.Guard() ), cur_pt );
                                 }
-                                fheroes2::PlaySound( M82::BUILDTWN );
+                                AudioManager::PlaySound( M82::BUILDTWN );
 
                                 bottomArmyBar.SetArmy( &heroes.Guest()->GetArmy() );
                                 generateHeroImage( surfaceHero, heroes );

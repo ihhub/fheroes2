@@ -228,7 +228,7 @@ namespace AI
             }
 
             if ( playSound ) {
-                fheroes2::PlaySound( M82::KILLFADE );
+                AudioManager::PlaySound( M82::KILLFADE );
             }
             hero.FadeOut();
         }

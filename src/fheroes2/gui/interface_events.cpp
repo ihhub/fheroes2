@@ -324,7 +324,7 @@ fheroes2::GameMode Interface::Basic::EventScenarioInformation()
         fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::ImageRestorer saver( display, 0, 0, display.width(), display.height() );
 
-        fheroes2::ResetAudio();
+        AudioManager::ResetAudio();
 
         const fheroes2::GameMode returnMode = Game::SelectCampaignScenario( fheroes2::GameMode::CANCEL, true );
         if ( returnMode == fheroes2::GameMode::CANCEL ) {
@@ -364,12 +364,12 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
             Dialog::Message( "", _( "Try looking on land!!!" ), Font::BIG, Dialog::OK );
         else if ( hero->GetMaxMovePoints() <= hero->GetMovePoints() ) {
             if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() ) {
-                fheroes2::PlaySound( M82::DIGSOUND );
+                AudioManager::PlaySound( M82::DIGSOUND );
 
                 hero->ResetMovePoints();
 
                 if ( world.DiggingForUltimateArtifact( hero->GetCenter() ) ) {
-                    fheroes2::PlaySound( M82::TREASURE );
+                    AudioManager::PlaySound( M82::TREASURE );
                     const Artifact & ultimate = world.GetUltimateArtifact().GetArtifact();
                     hero->PickupArtifact( ultimate );
                     std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );

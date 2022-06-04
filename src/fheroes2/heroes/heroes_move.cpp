@@ -81,7 +81,7 @@ void PlayWalkSound( int ground )
         break;
     }
 
-    fheroes2::PlaySound( wav, true );
+    AudioManager::PlaySound( wav, true );
 }
 
 bool ReflectSprite( int from )
