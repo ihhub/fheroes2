@@ -243,17 +243,14 @@ double Artifact::getArtifactValue() const
 
     for ( const fheroes2::ArtifactBonus & bonus : bonuses ) {
         switch ( bonus.type ) {
-        case fheroes2::ArtifactBonusType::ADD_SPELL:
-            artifactValue += Spell( bonus.value ).Level();
-            break;
         case fheroes2::ArtifactBonusType::GOLD_INCOME:
-            artifactValue += static_cast<double>( bonus.value ) / 1000.0;
+            artifactValue += static_cast<double>( bonus.value ) / 800.0;
             break;
         case fheroes2::ArtifactBonusType::SEA_MOBILITY:
             artifactValue += static_cast<double>( bonus.value ) / 500.0;
             break;
         case fheroes2::ArtifactBonusType::LAND_MOBILITY:
-            artifactValue += static_cast<double>( bonus.value ) / 300.0;
+            artifactValue += static_cast<double>( bonus.value ) / 200.0;
             break;
         case fheroes2::ArtifactBonusType::CURSE_SPELL_COST_REDUCTION_PERCENT:
         case fheroes2::ArtifactBonusType::BLESS_SPELL_COST_REDUCTION_PERCENT:
@@ -289,6 +286,7 @@ double Artifact::getArtifactValue() const
         case fheroes2::ArtifactBonusType::ENDLESS_AMMUNITION:
         case fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY:
         case fheroes2::ArtifactBonusType::VIEW_MONSTER_INFORMATION:
+        case fheroes2::ArtifactBonusType::ADD_SPELL:
             artifactValue += 1;
             break;
         case fheroes2::ArtifactBonusType::MAXIMUM_MORALE:
@@ -306,7 +304,7 @@ double Artifact::getArtifactValue() const
     for ( const fheroes2::ArtifactCurse & curse : curses ) {
         switch ( curse.type ) {
         case fheroes2::ArtifactCurseType::GOLD_PENALTY:
-            artifactValue -= static_cast<double>( curse.value ) / 250.0;
+            artifactValue -= static_cast<double>( curse.value ) / 200.0;
             break;
         case fheroes2::ArtifactCurseType::COLD_SPELL_EXTRA_DAMAGE_PERCENT:
         case fheroes2::ArtifactCurseType::FIRE_SPELL_EXTRA_DAMAGE_PERCENT:
