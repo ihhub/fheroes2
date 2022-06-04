@@ -506,11 +506,7 @@ namespace fheroes2
                 saveConfiguration = true;
 
                 Interface::Basic & basicInterface = Interface::Basic::Get();
-                Interface::GameArea & gamearea = basicInterface.GetGameArea();
-                const fheroes2::Point prevCenter = gamearea.getCurrentCenterInPixels();
-
                 basicInterface.Reset();
-                gamearea.SetCenterInPixels( prevCenter );
                 basicInterface.Redraw( Interface::REDRAW_ALL );
 
                 action = openSystemOptionsDialog();
