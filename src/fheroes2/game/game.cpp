@@ -26,8 +26,8 @@
 #include <cassert>
 #include <cmath>
 
-#include "agg.h"
 #include "audio.h"
+#include "audio_manager.h"
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
@@ -62,24 +62,29 @@ namespace
     bool updateSoundsOnFocusUpdate = true;
     std::atomic<int> currentMusic{ MUS::UNKNOWN };
 
-    u32 maps_animation_frame = 0;
+    uint32_t maps_animation_frame = 0;
 
-    std::vector<int> reserved_vols( LOOPXX_COUNT, 0 );
-
-    uint32_t GetMixerChannelFromObject( const Maps::Tiles & tile )
+    M82::SoundType getSoundTypeFromTile( const Maps::Tiles & tile )
     {
         // check stream first
         if ( tile.isStream() ) {
-            return 13;
+            return M82::LOOP0014;
         }
 
-        return M82::GetIndexLOOP00XXFromObject( tile.GetObject( false ) );
+        const MP2::MapObjectType objectType = tile.GetObject( false );
+
+        // This is a horrible hack but we want to play sounds only for a particular sprite belonging to Stones.
+        if ( objectType == MP2::OBJ_STONES && tile.containsSprite( 200, 183 ) ) {
+            return M82::LOOP0019;
+        }
+
+        return M82::getAdventureMapObjectSound( objectType );
     }
 }
 
 namespace Game
 {
-    void AnimateDelaysInitialize( void );
+    void AnimateDelaysInitialize();
 
     namespace ObjectFadeAnimation
     {
@@ -175,7 +180,7 @@ uint16_t Game::GetLoadVersion()
     return save_version;
 }
 
-const std::string & Game::GetLastSavename( void )
+const std::string & Game::GetLastSavename()
 {
     return last_name;
 }
@@ -202,7 +207,7 @@ void Game::SetUpdateSoundsOnFocusUpdate( bool update )
     updateSoundsOnFocusUpdate = update;
 }
 
-void Game::Init( void )
+void Game::Init()
 {
     // default events
     LocalEvent::SetStateDefaults();
@@ -332,7 +337,7 @@ const Game::ObjectFadeAnimation::FadeTask & Game::ObjectFadeAnimation::GetFadeTa
     return fadeTask;
 }
 
-u32 & Game::MapsAnimationFrame( void )
+uint32_t & Game::MapsAnimationFrame()
 {
     return maps_animation_frame;
 }
@@ -341,20 +346,53 @@ u32 & Game::MapsAnimationFrame( void )
 void Game::EnvironmentSoundMixer()
 {
     size_t availableChannels = Mixer::getChannelCount();
-    if ( availableChannels == 0 ) {
+    if ( availableChannels <= 2 ) {
+        // 2 channels are left for hero's movement.
         return;
     }
 
-    const fheroes2::Point abs_pt( Interface::GetFocusCenter() );
-    std::fill( reserved_vols.begin(), reserved_vols.end(), 0 );
+    availableChannels -= 2;
+
+    fheroes2::Point center;
+    fheroes2::Point tilePixelOffset;
+
+    Player * player = Settings::Get().GetPlayers().GetCurrent();
+    if ( player != nullptr ) {
+        Focus & focus = player->GetFocus();
+
+        const Heroes * hero = focus.GetHeroes();
+        if ( hero != nullptr ) {
+            center = hero->GetCenter();
+            tilePixelOffset = hero->getCurrentPixelOffset();
+        }
+        else if ( focus.GetCastle() ) {
+            center = focus.GetCastle()->GetCenter();
+        }
+        else {
+            center = { world.w() / 2, world.h() / 2 };
+        }
+    }
+    else {
+        center = { world.w() / 2, world.h() / 2 };
+    }
+
+    std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects;
 
     const int32_t maxOffset = 3;
 
-    // Get all valid positions within 7 x 7 area.
+    // Usual area of getting object sounds around a center is 7 x 7 pixel. However, in case of a moving hero we need to expand the area to make sound transition smooth.
+    int32_t scanningOffset = maxOffset;
+    if ( tilePixelOffset != fheroes2::Point() ) {
+        ++scanningOffset;
+    }
+
     std::vector<fheroes2::Point> positions;
-    for ( int32_t y = -maxOffset; y <= maxOffset; ++y ) {
-        for ( int32_t x = -maxOffset; x <= maxOffset; ++x ) {
-            if ( Maps::isValidAbsPoint( x + abs_pt.x, y + abs_pt.y ) ) {
+    positions.reserve( 2 * 2 * scanningOffset * scanningOffset );
+
+    for ( int32_t y = -scanningOffset; y <= scanningOffset; ++y ) {
+        const int32_t posY = y + center.y;
+        for ( int32_t x = -scanningOffset; x <= scanningOffset; ++x ) {
+            if ( Maps::isValidAbsPoint( x + center.x, posY ) ) {
                 positions.emplace_back( x, y );
             }
         }
@@ -364,40 +402,80 @@ void Game::EnvironmentSoundMixer()
     std::stable_sort( positions.begin(), positions.end(),
                       []( const fheroes2::Point & p1, const fheroes2::Point & p2 ) { return p1.x * p1.x + p1.y * p1.y < p2.x * p2.x + p2.y * p2.y; } );
 
-    const double maxDistance = std::sqrt( maxOffset * maxOffset + maxOffset * maxOffset );
-    double maxVolume = Mixer::MaxVolume();
-    double minVolumeOnMaxDistance = maxVolume * 0.1; // 10% from maximum volume
+    const double maxDistance = std::sqrt( ( maxOffset * maxOffset + maxOffset * maxOffset ) * TILEWIDTH * TILEWIDTH );
 
-    maxVolume -= minVolumeOnMaxDistance; // need to remove these 10% from max value as we're going to add it later
-    minVolumeOnMaxDistance += 0.5; // this is done to make casting faster. We know that the value is always positive.
+    const bool is3DAudioEnabled = Settings::Get().is3DAudioEnabled();
 
     for ( const fheroes2::Point & pos : positions ) {
-        const uint32_t channel = GetMixerChannelFromObject( world.GetTiles( pos.x + abs_pt.x, pos.y + abs_pt.y ) );
-        if ( channel < reserved_vols.size() ) {
-            const double distance = std::sqrt( pos.x * pos.x + pos.y * pos.y );
-            const int32_t volume = static_cast<int32_t>( ( ( maxDistance - distance ) / maxDistance ) * maxVolume + minVolumeOnMaxDistance );
+        const M82::SoundType soundType = getSoundTypeFromTile( world.GetTiles( pos.x + center.x, pos.y + center.y ) );
+        if ( soundType == M82::UNKNOWN ) {
+            continue;
+        }
 
-            if ( reserved_vols[channel] == 0 ) {
-                if ( availableChannels == 0 ) {
-                    // No new channel can be added.
-                    continue;
-                }
-                --availableChannels;
-            }
+        fheroes2::Point actualPosition = pos;
+        actualPosition.x *= TILEWIDTH;
+        actualPosition.y *= TILEWIDTH;
 
-            if ( volume > reserved_vols[channel] ) {
-                reserved_vols[channel] = volume;
+        actualPosition -= tilePixelOffset;
+
+        const double distance = std::sqrt( actualPosition.x * actualPosition.x + actualPosition.y * actualPosition.y );
+        if ( distance >= maxDistance ) {
+            continue;
+        }
+
+        const uint8_t volumePercentage = static_cast<uint8_t>( ( maxDistance - distance ) * 100 / maxDistance );
+
+        assert( volumePercentage <= 100 );
+        if ( volumePercentage == 0 ) {
+            continue;
+        }
+
+        int16_t angle = 0;
+
+        if ( is3DAudioEnabled ) {
+            // This is a schema how the direction of sound looks like:
+            // |      0     |
+            // | 270     90 |
+            // |     180    |
+            // so the direction to an object on the top is 0 degrees, on the right side - 90, bottom - 180 and left side - 270 degrees.
+
+            // We need to swap X and Y axes and invert Y axis as on screen Y axis goes from top to bottom.
+            angle = static_cast<int16_t>( std::atan2( actualPosition.x, -actualPosition.y ) * 180 / M_PI );
+            // It is exteremely important to normalize the angle.
+            if ( angle < 0 ) {
+                angle = 360 + angle;
             }
+        }
+
+        std::vector<AudioManager::AudioLoopEffectInfo> & effects = soundEffects[soundType];
+        bool doesEffectExist = false;
+        for ( AudioManager::AudioLoopEffectInfo & info : effects ) {
+            if ( info.angle == angle ) {
+                info.volumePercentage = std::max( volumePercentage, info.volumePercentage );
+                doesEffectExist = true;
+                break;
+            }
+        }
+
+        if ( doesEffectExist ) {
+            continue;
+        }
+
+        effects.emplace_back( angle, volumePercentage );
+
+        --availableChannels;
+        if ( availableChannels == 0 ) {
+            break;
         }
     }
 
-    AGG::LoadLOOPXXSounds( reserved_vols, true );
+    AudioManager::playLoopSounds( std::move( soundEffects ), true );
 }
 
 void Game::restoreSoundsForCurrentFocus()
 {
     Game::SetCurrentMusic( MUS::UNKNOWN );
-    AGG::ResetAudio();
+    AudioManager::ResetAudio();
 
     switch ( Interface::GetFocusType() ) {
     case GameFocus::HEROES: {
@@ -407,7 +485,7 @@ void Game::restoreSoundsForCurrentFocus()
         const int heroIndexPos = focusedHero->GetIndex();
         if ( heroIndexPos >= 0 ) {
             Game::EnvironmentSoundMixer();
-            AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
+            AudioManager::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
         }
         break;
     }
@@ -417,7 +495,7 @@ void Game::restoreSoundsForCurrentFocus()
         assert( focusedCastle != nullptr );
 
         Game::EnvironmentSoundMixer();
-        AGG::PlayMusic( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ), true, true );
+        AudioManager::PlayMusic( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ), true, true );
         break;
     }
 
@@ -426,10 +504,10 @@ void Game::restoreSoundsForCurrentFocus()
     }
 }
 
-u32 Game::GetRating( void )
+uint32_t Game::GetRating()
 {
     const Settings & conf = Settings::Get();
-    u32 rating = 50;
+    uint32_t rating = 50;
 
     switch ( conf.MapsDifficulty() ) {
     case Difficulty::NORMAL:
@@ -466,7 +544,7 @@ u32 Game::GetRating( void )
     return rating;
 }
 
-u32 Game::GetGameOverScores( void )
+uint32_t Game::GetGameOverScores()
 {
     const Settings & conf = Settings::Get();
 
@@ -512,22 +590,22 @@ u32 Game::GetGameOverScores( void )
     return GetRating() * ( 200 - daysScore ) / 100;
 }
 
-u32 Game::GetLostTownDays( void )
+uint32_t Game::GetLostTownDays()
 {
     return GameStatic::GetGameOverLostDays();
 }
 
-u32 Game::GetWhirlpoolPercent( void )
+uint32_t Game::GetWhirlpoolPercent()
 {
     return GameStatic::GetLostOnWhirlpoolPercent();
 }
 
-int Game::GetKingdomColors( void )
+int Game::GetKingdomColors()
 {
     return Settings::Get().GetPlayers().GetColors();
 }
 
-int Game::GetActualKingdomColors( void )
+int Game::GetActualKingdomColors()
 {
     return Settings::Get().GetPlayers().GetActualColors();
 }
@@ -582,7 +660,7 @@ std::string Game::CountThievesGuild( uint32_t monsterCount, int guildCount )
     return guildCount == 1 ? "???" : Army::SizeString( monsterCount );
 }
 
-void Game::PlayPickupSound( void )
+void Game::PlayPickupSound()
 {
     int wav = M82::UNKNOWN;
 
@@ -613,5 +691,5 @@ void Game::PlayPickupSound( void )
         return;
     }
 
-    AGG::PlaySound( wav );
+    AudioManager::PlaySound( wav );
 }

@@ -133,7 +133,7 @@ public:
 
     Monster( const int m = UNKNOWN );
     explicit Monster( const Spell & );
-    Monster( int race, u32 dw );
+    Monster( int race, uint32_t dw );
     virtual ~Monster() = default;
 
     bool operator==( const Monster & m ) const
@@ -146,7 +146,7 @@ public:
         return id != m.id;
     }
 
-    int GetID( void ) const
+    int GetID() const
     {
         return id;
     }
@@ -156,15 +156,15 @@ public:
         id = GetUpgrade().id;
     }
 
-    Monster GetUpgrade( void ) const;
-    Monster GetDowngrade( void ) const;
+    Monster GetUpgrade() const;
+    Monster GetDowngrade() const;
 
-    virtual u32 GetAttack( void ) const;
-    virtual u32 GetDefense( void ) const;
-    virtual int GetColor( void ) const;
-    virtual int GetMorale( void ) const;
-    virtual int GetLuck( void ) const;
-    virtual int GetRace( void ) const;
+    virtual uint32_t GetAttack() const;
+    virtual uint32_t GetDefense() const;
+    virtual int GetColor() const;
+    virtual int GetMorale() const;
+    virtual int GetLuck() const;
+    virtual int GetRace() const;
 
     uint32_t GetDamageMin() const
     {
@@ -199,11 +199,11 @@ public:
     }
 
     LevelType GetRandomUnitLevel() const;
-    u32 GetRNDSize( bool skip ) const;
+    uint32_t GetRNDSize( bool skip ) const;
 
-    const char * GetName( void ) const;
-    const char * GetMultiName( void ) const;
-    const char * GetPluralName( u32 ) const;
+    const char * GetName() const;
+    const char * GetMultiName() const;
+    const char * GetPluralName( uint32_t ) const;
 
     bool isValid() const
     {
@@ -293,7 +293,7 @@ public:
     }
 
     payment_t GetUpgradeCost() const;
-    u32 GetDwelling( void ) const;
+    uint32_t GetDwelling() const;
 
     int GetMonsterSprite() const
     {
@@ -302,12 +302,12 @@ public:
 
     static Monster Rand( const LevelType type );
 
-    static u32 GetCountFromHitPoints( const Monster &, u32 );
+    static uint32_t GetCountFromHitPoints( const Monster &, uint32_t );
 
     static uint32_t GetMissileICN( uint32_t monsterID );
 
 protected:
-    static Monster FromDwelling( int race, u32 dw );
+    static Monster FromDwelling( int race, uint32_t dw );
 
     int id;
 };

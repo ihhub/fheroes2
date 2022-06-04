@@ -23,7 +23,7 @@
 
 #include <algorithm>
 
-#include "agg.h"
+#include "audio_manager.h"
 #include "castle.h"
 #include "game.h"
 #include "game_interface.h"
@@ -57,7 +57,7 @@ void Interface::Basic::SetFocus( Heroes * hero )
         const int heroIndexPos = hero->GetIndex();
         if ( Game::UpdateSoundsOnFocusUpdate() && heroIndexPos >= 0 ) {
             Game::EnvironmentSoundMixer();
-            AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
+            AudioManager::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
         }
     }
 }
@@ -84,7 +84,7 @@ void Interface::Basic::SetFocus( Castle * castle )
 
         if ( Game::UpdateSoundsOnFocusUpdate() ) {
             Game::EnvironmentSoundMixer();
-            AGG::PlayMusic( MUS::FromGround( world.GetTiles( castle->GetIndex() ).GetGround() ), true, true );
+            AudioManager::PlayMusic( MUS::FromGround( world.GetTiles( castle->GetIndex() ).GetGround() ), true, true );
         }
     }
 }
@@ -145,7 +145,7 @@ void Interface::Basic::ResetFocus( int priority )
     }
 }
 
-int Interface::GetFocusType( void )
+int Interface::GetFocusType()
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
 
@@ -161,21 +161,21 @@ int Interface::GetFocusType( void )
     return GameFocus::UNSEL;
 }
 
-Castle * Interface::GetFocusCastle( void )
+Castle * Interface::GetFocusCastle()
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
 
     return player ? player->GetFocus().GetCastle() : nullptr;
 }
 
-Heroes * Interface::GetFocusHeroes( void )
+Heroes * Interface::GetFocusHeroes()
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
 
     return player ? player->GetFocus().GetHeroes() : nullptr;
 }
 
-fheroes2::Point Interface::GetFocusCenter( void )
+fheroes2::Point Interface::GetFocusCenter()
 {
     Player * player = Settings::Get().GetPlayers().GetCurrent();
 
@@ -191,7 +191,7 @@ fheroes2::Point Interface::GetFocusCenter( void )
     return fheroes2::Point( world.w() / 2, world.h() / 2 );
 }
 
-void Interface::Basic::RedrawFocus( void )
+void Interface::Basic::RedrawFocus()
 {
     int type = GetFocusType();
 

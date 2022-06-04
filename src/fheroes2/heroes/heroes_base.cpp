@@ -371,6 +371,8 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
 {
     if ( !HaveSpellBook() ) {
         if ( res ) {
+            // This should not happen for a human-controlled hero (for which this method is usually called with the non-null res)
+            assert( 0 );
             *res = _( "Spell book is not present." );
         }
         return false;
@@ -385,7 +387,9 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
 
     if ( !HaveSpell( spell ) ) {
         if ( res ) {
-            *res = _( "The spell is not found." );
+            // This should not happen for a human-controlled hero (for which this method is usually called with the non-null res)
+            assert( 0 );
+            *res = _( "The spell was not found." );
         }
         return false;
     }
@@ -442,9 +446,6 @@ bool HeroBase::CanCastSpell( const Spell & spell, std::string * res /* = nullptr
         }
     }
 
-    if ( res ) {
-        res->clear();
-    }
     return true;
 }
 

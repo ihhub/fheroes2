@@ -214,7 +214,7 @@ namespace
     }
 }
 
-const char * Week::GetName( void ) const
+const char * Week::GetName() const
 {
     switch ( _week ) {
     case WeekName::PLAGUE:

@@ -102,6 +102,7 @@ public:
         SETFGUARDIAN,
         SETWGUARDIAN,
 
+        // These constants are placeholders for a random spell of the corresponding level and should not be added to the spell book.
         RANDOM,
         RANDOM1,
         RANDOM2,
@@ -109,14 +110,15 @@ public:
         RANDOM4,
         RANDOM5,
 
-        STONE,
+        // This spell is exclusively a built-in monster spell and should not be added to the spell book.
+        PETRIFY,
 
         // IMPORTANT! Put all new spells above this line.
         SPELL_COUNT
     };
 
-    Spell( const int s = NONE )
-        : id( s > STONE ? NONE : s )
+    Spell( const int32_t spellId = NONE )
+        : id( ( spellId < 0 || spellId >= SPELL_COUNT ) ? NONE : spellId )
     {
         // Do nothing.
     }
@@ -141,8 +143,8 @@ public:
         return id;
     }
 
-    const char * GetName( void ) const;
-    const char * GetDescription( void ) const;
+    const char * GetName() const;
+    const char * GetDescription() const;
 
     // Returns the number of spell points consumed/required by this spell
     uint32_t spellPoints( const HeroBase * hero = nullptr ) const;
@@ -150,12 +152,12 @@ public:
     uint32_t movePoints() const;
     // Returns the minimum number of movement points required to cast this spell
     uint32_t minMovePoints() const;
-    int Level( void ) const;
-    u32 Damage( void ) const;
-    u32 Restore( void ) const;
-    u32 Resurrect( void ) const;
+    int Level() const;
+    uint32_t Damage() const;
+    uint32_t Restore() const;
+    uint32_t Resurrect() const;
 
-    u32 ExtraValue( void ) const;
+    uint32_t ExtraValue() const;
 
     bool isValid() const
     {
@@ -167,7 +169,7 @@ public:
         return Level() == lvl;
     }
 
-    bool isCombat( void ) const;
+    bool isCombat() const;
 
     bool isAdventure() const
     {
@@ -191,16 +193,16 @@ public:
         return Resurrect() != 0;
     }
 
-    bool isMindInfluence( void ) const;
-    bool isUndeadOnly( void ) const;
-    bool isALiveOnly( void ) const;
-    bool isSummon( void ) const;
+    bool isMindInfluence() const;
+    bool isUndeadOnly() const;
+    bool isALiveOnly() const;
+    bool isSummon() const;
     bool isEffectDispel() const;
-    bool isApplyWithoutFocusObject( void ) const;
-    bool isApplyToAnyTroops( void ) const;
-    bool isApplyToFriends( void ) const;
-    bool isApplyToEnemies( void ) const;
-    bool isMassActions( void ) const;
+    bool isApplyWithoutFocusObject() const;
+    bool isApplyToAnyTroops() const;
+    bool isApplyToFriends() const;
+    bool isApplyToEnemies() const;
+    bool isMassActions() const;
     bool isRaceCompatible( int race ) const;
 
     bool isFire() const
@@ -213,10 +215,15 @@ public:
         return id == COLDRAY || id == COLDRING;
     }
 
+    bool isBuiltinOnly() const
+    {
+        return id == PETRIFY;
+    }
+
     bool isGuardianType() const;
 
     /* return index sprite spells.icn */
-    u32 IndexSprite( void ) const;
+    uint32_t IndexSprite() const;
 
     static Spell RandCombat( int lvl );
     static Spell RandAdventure( int lvl );

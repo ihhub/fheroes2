@@ -278,7 +278,7 @@ void CastleRedrawCurrentBuilding( const Castle & castle, const fheroes2::Point &
     }
 }
 
-void CastleDialog::CastleRedrawBuilding( const Castle & castle, const fheroes2::Point & dst_pt, u32 build, u32 frame, uint8_t alpha )
+void CastleDialog::CastleRedrawBuilding( const Castle & castle, const fheroes2::Point & dst_pt, uint32_t build, uint32_t frame, uint8_t alpha )
 {
     if ( build == BUILD_TENT ) // we don't need to draw a tent as it's on the background image
         return;
@@ -301,7 +301,7 @@ void CastleDialog::CastleRedrawBuilding( const Castle & castle, const fheroes2::
 
     const int race = castle.GetRace();
     const int icn = Castle::GetICNBuilding( build, race );
-    u32 index = 0;
+    uint32_t index = 0;
 
     // correct index (mage guild)
     switch ( build ) {
@@ -344,7 +344,7 @@ void CastleDialog::CastleRedrawBuilding( const Castle & castle, const fheroes2::
         }
 
         // second anime sprite
-        if ( const u32 index2 = ICN::AnimationFrame( icn, index, frame ) ) {
+        if ( const uint32_t index2 = ICN::AnimationFrame( icn, index, frame ) ) {
             fheroes2::drawCastleDialogBuilding( icn, index2, castle, dst_pt, max, alpha );
         }
 
@@ -359,7 +359,7 @@ void CastleDialog::CastleRedrawBuilding( const Castle & castle, const fheroes2::
     }
 }
 
-void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const fheroes2::Point & dst_pt, u32 build, u32 frame, uint8_t alpha )
+void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const fheroes2::Point & dst_pt, uint32_t build, uint32_t frame, uint8_t alpha )
 {
     if ( build == BUILD_TENT ) // we don't need to draw a tent as it's on the background image
         return;
@@ -375,12 +375,12 @@ void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const fh
 
             fheroes2::drawCastleDialogBuilding( icn2, 0, castle, dst_pt, max, alpha );
 
-            if ( const u32 index2 = ICN::AnimationFrame( icn2, 0, frame ) ) {
+            if ( const uint32_t index2 = ICN::AnimationFrame( icn2, 0, frame ) ) {
                 fheroes2::drawCastleDialogBuilding( icn2, index2, castle, dst_pt, max, alpha );
             }
         }
         else {
-            if ( const u32 index2 = ICN::AnimationFrame( icn, 0, frame ) ) {
+            if ( const uint32_t index2 = ICN::AnimationFrame( icn, 0, frame ) ) {
                 fheroes2::drawCastleDialogBuilding( icn, index2, castle, dst_pt, max, alpha );
             }
         }
@@ -390,7 +390,7 @@ void CastleDialog::CastleRedrawBuildingExtended( const Castle & castle, const fh
 
         fheroes2::drawCastleDialogBuilding( icn2, 0, castle, dst_pt, max, alpha );
 
-        if ( const u32 index2 = ICN::AnimationFrame( icn2, 0, frame ) ) {
+        if ( const uint32_t index2 = ICN::AnimationFrame( icn2, 0, frame ) ) {
             fheroes2::drawCastleDialogBuilding( icn2, index2, castle, dst_pt, max, alpha );
         }
     }

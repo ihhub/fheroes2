@@ -54,27 +54,21 @@ namespace
         GLOBAL_FIRST_RUN = 0x00000001,
         GLOBAL_SHOW_INTRO = 0x00000002,
         GLOBAL_PRICELOYALTY = 0x00000004,
-
         GLOBAL_RENDER_VSYNC = 0x00000008,
         GLOBAL_TEXT_SUPPORT_MODE = 0x00000010,
-
         GLOBAL_MONOCHROME_CURSOR = 0x00000020,
-
         GLOBAL_SHOWCPANEL = 0x00000040,
         GLOBAL_SHOWRADAR = 0x00000080,
         GLOBAL_SHOWICONS = 0x00000100,
         GLOBAL_SHOWBUTTONS = 0x00000200,
         GLOBAL_SHOWSTATUS = 0x00000400,
-
         GLOBAL_FULLSCREEN = 0x00008000,
-
-        // UNUSED = 0x00010000,
+        GLOBAL_3D_AUDIO = 0x00010000,
         // UNUSED = 0x00020000,
         // UNUSED = 0x00040000,
         // UNUSED = 0x00080000,
         // UNUSED = 0x00100000,
         // UNUSED = 0x00200000,
-
         GLOBAL_BATTLE_SHOW_ARMY_ORDER = 0x00400000,
         GLOBAL_BATTLE_SHOW_GRID = 0x00800000,
         GLOBAL_BATTLE_SHOW_MOUSE_SHADOW = 0x01000000,
@@ -340,6 +334,15 @@ bool Settings::Read( const std::string & filename )
         }
     }
 
+    if ( config.Exists( "3d audio" ) ) {
+        if ( config.StrParams( "3d audio" ) == "on" ) {
+            opt_global.SetModes( GLOBAL_3D_AUDIO );
+        }
+        else {
+            opt_global.ResetModes( GLOBAL_3D_AUDIO );
+        }
+    }
+
     BinaryLoad();
 
     return true;
@@ -455,6 +458,9 @@ std::string Settings::String() const
     os << std::endl << "# enable monochrome (black and white) cursors in the game" << std::endl;
     os << "monochrome cursor = " << ( opt_global.Modes( GLOBAL_MONOCHROME_CURSOR ) ? "on" : "off" ) << std::endl;
 
+    os << std::endl << "# enable 3D audio for objects on Adventure Map" << std::endl;
+    os << "3d audio = " << ( opt_global.Modes( GLOBAL_3D_AUDIO ) ? "on" : "off" ) << std::endl;
+
     return os.str();
 }
 
@@ -490,7 +496,7 @@ bool Settings::setGameLanguage( const std::string & language )
         return Translation::bindDomain( language.c_str(), translations.back().c_str() );
     }
 
-    ERROR_LOG( "Translation file " << fileName << " is not found." )
+    ERROR_LOG( "Translation file " << fileName << " was not found." )
     return false;
 }
 
@@ -686,6 +692,16 @@ void Settings::setTextSupportMode( const bool enable )
     }
 }
 
+void Settings::set3DAudio( const bool enable )
+{
+    if ( enable ) {
+        opt_global.SetModes( GLOBAL_3D_AUDIO );
+    }
+    else {
+        opt_global.ResetModes( GLOBAL_3D_AUDIO );
+    }
+}
+
 /* set scroll speed: 1 - 4 */
 void Settings::SetScrollSpeed( int speed )
 {
@@ -705,6 +721,11 @@ bool Settings::isMonochromeCursorEnabled() const
 bool Settings::isTextSupportModeEnabled() const
 {
     return opt_global.Modes( GLOBAL_TEXT_SUPPORT_MODE );
+}
+
+bool Settings::is3DAudioEnabled() const
+{
+    return opt_global.Modes( GLOBAL_3D_AUDIO );
 }
 
 bool Settings::ShowControlPanel() const
@@ -853,14 +874,14 @@ void Settings::SetShowStatus( bool f )
     f ? opt_global.SetModes( GLOBAL_SHOWSTATUS ) : opt_global.ResetModes( GLOBAL_SHOWSTATUS );
 }
 
-bool Settings::CanChangeInGame( u32 f ) const
+bool Settings::CanChangeInGame( uint32_t f ) const
 {
     return ( f >> 28 ) == 0x01; // GAME_
 }
 
-bool Settings::ExtModes( u32 f ) const
+bool Settings::ExtModes( uint32_t f ) const
 {
-    const u32 mask = 0x0FFFFFFF;
+    const uint32_t mask = 0x0FFFFFFF;
     switch ( f >> 28 ) {
     case 0x01:
         return opt_game.Modes( f & mask );
@@ -899,8 +920,8 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "castle: allow guardians" );
     case Settings::HEROES_BUY_BOOK_FROM_SHRINES:
         return _( "heroes: allow buy a spellbook from Shrines" );
-    case Settings::HEROES_REMEMBER_POINTS_RETREAT:
-        return _( "heroes: remember move points for retreat/surrender result" );
+    case Settings::HEROES_REMEMBER_MP_WHEN_RETREATING:
+        return _( "heroes: remember movement points when retreating or surrendering" );
     case Settings::HEROES_ARENA_ANY_SKILLS:
         return _( "heroes: allow to choose any primary skill in Arena" );
     case Settings::BATTLE_SOFT_WAITING:
@@ -916,7 +937,7 @@ std::string Settings::ExtName( const uint32_t settingId )
     case Settings::GAME_HIDE_INTERFACE:
         return _( "game: hide interface" );
     case Settings::GAME_CONTINUE_AFTER_VICTORY:
-        return _( "game: offer to continue the game afer victory condition" );
+        return _( "game: offer to continue the game after victory condition" );
     default:
         break;
     }
@@ -924,9 +945,9 @@ std::string Settings::ExtName( const uint32_t settingId )
     return std::string();
 }
 
-void Settings::ExtSetModes( u32 f )
+void Settings::ExtSetModes( uint32_t f )
 {
-    const u32 mask = 0x0FFFFFFF;
+    const uint32_t mask = 0x0FFFFFFF;
     switch ( f >> 28 ) {
     case 0x01:
         opt_game.SetModes( f & mask );
@@ -945,9 +966,9 @@ void Settings::ExtSetModes( u32 f )
     }
 }
 
-void Settings::ExtResetModes( u32 f )
+void Settings::ExtResetModes( uint32_t f )
 {
-    const u32 mask = 0x0FFFFFFF;
+    const uint32_t mask = 0x0FFFFFFF;
     switch ( f >> 28 ) {
     case 0x01:
         opt_game.ResetModes( f & mask );
@@ -974,7 +995,7 @@ void Settings::BinarySave() const
     fs.setbigendian( true );
 
     if ( fs.open( fname, "wb" ) ) {
-        fs << static_cast<u16>( CURRENT_FORMAT_VERSION ) << opt_game << opt_world << opt_battle << opt_addons << pos_radr << pos_bttn << pos_icon << pos_stat;
+        fs << static_cast<uint16_t>( CURRENT_FORMAT_VERSION ) << opt_game << opt_world << opt_battle << opt_addons << pos_radr << pos_bttn << pos_icon << pos_stat;
     }
 }
 
@@ -989,7 +1010,7 @@ void Settings::BinaryLoad()
     fs.setbigendian( true );
 
     if ( fs.open( fname, "rb" ) ) {
-        u16 version = 0;
+        uint16_t version = 0;
 
         fs >> version >> opt_game >> opt_world >> opt_battle >> opt_addons >> pos_radr >> pos_bttn >> pos_icon >> pos_stat;
     }
@@ -1033,7 +1054,7 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
     msg >> conf._loadedFileLanguage;
 
     int debug;
-    u32 opt_game = 0; // skip: settings
+    uint32_t opt_game = 0; // skip: settings
 
     // map file
     msg >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> opt_game >> conf.opt_world >> conf.opt_battle

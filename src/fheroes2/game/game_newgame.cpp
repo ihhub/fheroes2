@@ -22,9 +22,9 @@
  ***************************************************************************/
 
 #include "game.h"
-#include "agg.h"
 #include "agg_image.h"
 #include "audio.h"
+#include "audio_manager.h"
 #include "campaign_savedata.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -164,7 +164,7 @@ fheroes2::GameMode Game::NewHotSeat()
     }
     else {
         conf.SetGameType( Game::TYPE_HOTSEAT );
-        const u32 select = SelectCountPlayers();
+        const uint32_t select = SelectCountPlayers();
         if ( select ) {
             conf.SetPreferablyCountPlayers( select );
             return fheroes2::GameMode::SELECT_SCENARIO;
@@ -226,7 +226,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
     Settings::Get().SetGameType( Game::TYPE_CAMPAIGN );
 
     // Reset all sound and music before playing videos
-    AGG::ResetAudio();
+    AudioManager::ResetAudio();
 
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Point roiOffset( ( display.width() - display.DEFAULT_WIDTH ) / 2, ( display.height() - display.DEFAULT_HEIGHT ) / 2 );
@@ -255,7 +255,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
 
     outputNewSuccessionWarsCampaignInTextSupportMode();
 
-    AGG::ResetAudio();
+    AudioManager::ResetAudio();
     Video::ShowVideo( "CHOOSEW.SMK", Video::VideoAction::IGNORE_VIDEO );
 
     const fheroes2::ScreenPaletteRestorer screenRestorer;
@@ -479,7 +479,7 @@ fheroes2::GameMode Game::NewGame()
     // Stop all sounds, but not the music
     Mixer::Stop();
 
-    AGG::PlayMusic( MUS::MAINMENU, true, true );
+    AudioManager::PlayMusic( MUS::MAINMENU, true, true );
 
     // reset last save name
     Game::SetLastSavename( "" );
@@ -605,7 +605,7 @@ fheroes2::GameMode Game::NewMulti()
     return fheroes2::GameMode::QUIT_GAME;
 }
 
-u32 Game::SelectCountPlayers( void )
+uint32_t Game::SelectCountPlayers()
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );

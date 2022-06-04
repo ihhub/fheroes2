@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2022                                                    *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -37,7 +37,7 @@ int main( int argc, char ** argv )
         return EXIT_SUCCESS;
     }
 
-    std::vector<u8> buf = LoadFileToMem( argv[1] );
+    std::vector<uint8_t> buf = LoadFileToMem( argv[1] );
 
     if ( !buf.empty() ) {
         buf = Music::Xmi2Mid( buf );

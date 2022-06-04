@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 
 #include "ai_normal.h"
 #include "game.h"
@@ -36,6 +37,40 @@
 
 namespace
 {
+    bool isHeroWhoseDefeatIsVictoryConditionForHumanInCastle( const Castle * castle )
+    {
+        assert( castle != nullptr );
+
+        const Heroes * castleGuest = castle->GetHeroes().Guest();
+        if ( castleGuest && castleGuest == world.GetHeroesCondWins() ) {
+            return true;
+        }
+
+        const Heroes * castleGuard = castle->GetHeroes().Guard();
+        if ( castleGuard && castleGuard == world.GetHeroesCondWins() ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    bool isFindArtifactVictoryConditionForHuman( const Artifact & art )
+    {
+        assert( art.isValid() );
+
+        const Settings & conf = Settings::Get();
+
+        if ( ( conf.ConditionWins() & GameOver::WINS_ARTIFACT ) == 0 ) {
+            return false;
+        }
+
+        if ( conf.WinsFindUltimateArtifact() ) {
+            return art.isUltimate();
+        }
+
+        return ( art.GetID() == conf.WinsFindArtifactID() );
+    }
+
     bool isCastleLossConditionForHuman( const Castle * castle )
     {
         assert( castle != nullptr );
@@ -67,12 +102,18 @@ namespace
             return castle->GetHeroes().Guest() == nullptr;
         }
 
-        if ( !hero.isFriends( castle->GetColor() ) ) {
-            const double advantage = hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_MEDIUM;
-            return heroArmyStrength > castle->GetGarrisonStrength( &hero ) * advantage;
+        if ( hero.isFriends( castle->GetColor() ) ) {
+            return false;
         }
 
-        return false;
+        // WINS_HERO victory condition does not apply to AI-controlled players, we have to ignore the castle with this hero
+        // to keep him alive for the human player
+        if ( isHeroWhoseDefeatIsVictoryConditionForHumanInCastle( castle ) ) {
+            return false;
+        }
+
+        const double advantage = hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_MEDIUM;
+        return heroArmyStrength > castle->GetGarrisonStrength( &hero ) * advantage;
     }
 
     bool isHeroStrongerThan( const Maps::Tiles & tile, const MP2::MapObjectType objectType, AI::Normal & ai, const double heroArmyStrength,
@@ -88,6 +129,15 @@ namespace
 
         if ( !MP2::isActionObject( objectType ) ) {
             return false;
+        }
+
+        // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
+        if ( MP2::isArtifactObject( objectType ) ) {
+            const Artifact art = tile.QuantityArtifact();
+
+            if ( art.isValid() && isFindArtifactVictoryConditionForHuman( art ) ) {
+                return false;
+            }
         }
 
         const Army & army = hero.GetArmy();
@@ -409,19 +459,28 @@ namespace
             return false;
 
         case MP2::OBJ_HEROES: {
-            const Heroes * hero2 = tile.GetHeroes();
-            if ( hero2 ) {
-                const bool otherHeroInCastle = ( hero2->inCastle() != nullptr );
+            const Heroes * otherHero = tile.GetHeroes();
+            assert( otherHero != nullptr );
 
-                if ( hero.GetColor() == hero2->GetColor() && !hero.hasMetWithHero( hero2->GetID() ) )
-                    return !otherHeroInCastle;
-                else if ( hero.isFriends( hero2->GetColor() ) )
-                    return false;
-                else if ( otherHeroInCastle )
-                    return AIShouldVisitCastle( hero, index, heroArmyStrength );
-                else if ( army.isStrongerThan( hero2->GetArmy(), hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_SMALL ) )
-                    return true;
+            const bool otherHeroInCastle = ( otherHero->inCastle() != nullptr );
+
+            if ( hero.GetColor() == otherHero->GetColor() && !hero.hasMetWithHero( otherHero->GetID() ) ) {
+                return !otherHeroInCastle;
             }
+            if ( hero.isFriends( otherHero->GetColor() ) ) {
+                return false;
+            }
+            // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
+            if ( otherHero == world.GetHeroesCondWins() ) {
+                return false;
+            }
+            if ( otherHeroInCastle ) {
+                return AIShouldVisitCastle( hero, index, heroArmyStrength );
+            }
+            if ( army.isStrongerThan( otherHero->GetArmy(), hero.isLosingGame() ? AI::ARMY_ADVANTAGE_DESPERATE : AI::ARMY_ADVANTAGE_SMALL ) ) {
+                return true;
+            }
+
             break;
         }
 
@@ -470,16 +529,11 @@ namespace
         if ( hero->Modes( Heroes::PATROL ) ) {
             if ( hero->GetSquarePatrol() == 0 ) {
                 DEBUG_LOG( DBG_AI, DBG_TRACE, hero->GetName() << " standing still. Skip turn." )
-                hero->SetModes( Heroes::MOVED );
                 return;
             }
         }
 
-        hero->ResetModes( Heroes::WAITING | Heroes::MOVED | Heroes::SKIPPED_TURN );
-        if ( !hero->MayStillMove( false, false ) ) {
-            hero->SetModes( Heroes::MOVED );
-        }
-        else {
+        if ( hero->MayStillMove( false, false ) ) {
             availableHeroes.emplace_back();
             AI::HeroToMove & heroInfo = availableHeroes.back();
             heroInfo.hero = hero;
@@ -634,20 +688,32 @@ namespace AI
 
                 return value;
             }
-            else {
-                double value = castle->getBuildingValue() * 150.0 + 3000;
-                if ( hero.isLosingGame() )
-                    value += 15000;
-                // If the castle is defenseless
-                if ( !castle->GetActualArmy().isValid() )
-                    value *= 1.25;
 
-                if ( isCastleLossConditionForHuman( castle ) ) {
-                    value += 20000;
-                }
-
-                return value;
+            // Hero should never visit castles belonging to friendly kingdoms
+            if ( hero.isFriends( castle->GetColor() ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
             }
+
+            // WINS_HERO victory condition does not apply to AI-controlled players, we have to ignore the castle with this hero
+            // to keep him alive for the human player
+            if ( isHeroWhoseDefeatIsVictoryConditionForHumanInCastle( castle ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            double value = castle->getBuildingValue() * 150.0 + 3000;
+            if ( hero.isLosingGame() )
+                value += 15000;
+            // If the castle is defenseless
+            if ( !castle->GetActualArmy().isValid() )
+                value *= 1.25;
+
+            if ( isCastleLossConditionForHuman( castle ) ) {
+                value += 20000;
+            }
+
+            return value;
         }
         else if ( objectType == MP2::OBJ_HEROES ) {
             const Heroes * otherHero = tile.GetHeroes();
@@ -657,13 +723,32 @@ namespace AI
             }
 
             if ( hero.GetColor() == otherHero->GetColor() ) {
-                if ( hero.getStatsValue() + 2 > otherHero->getStatsValue() )
+                if ( hero.getAIRole() > otherHero->getAIRole() ) {
+                    // The other hero has a lower role. Do not waste time for meeting. Let him to come.
                     return valueToIgnore;
+                }
+                if ( hero.getAIRole() == otherHero->getAIRole() && hero.getStatsValue() + 2 > otherHero->getStatsValue() ) {
+                    // Two heroes are almost identical. No reason to meet.
+                    return valueToIgnore;
+                }
 
                 const double value = hero.getMeetingValue( *otherHero );
                 // limit the max value of friendly hero meeting to 30 tiles
                 return ( value < 250 ) ? valueToIgnore : std::min( value, 10000.0 );
             }
+
+            // Hero should never meet heroes from friendly kingdoms
+            if ( hero.isFriends( otherHero->GetColor() ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
+            if ( otherHero == world.GetHeroesCondWins() ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
             return 5000.0;
         }
         else if ( objectType == MP2::OBJ_MONSTER ) {
@@ -682,7 +767,15 @@ namespace AI
             return 3000.0;
         }
         else if ( MP2::isArtifactObject( objectType ) && tile.QuantityArtifact().isValid() ) {
-            return 1000.0 * tile.QuantityArtifact().getArtifactValue();
+            const Artifact art = tile.QuantityArtifact();
+
+            // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
+            if ( isFindArtifactVictoryConditionForHuman( art ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            return 1000.0 * art.getArtifactValue();
         }
         else if ( MP2::isPickupObject( objectType ) ) {
             return 850.0;
@@ -874,20 +967,32 @@ namespace AI
 
                 return value / 2;
             }
-            else {
-                double value = castle->getBuildingValue() * 500.0 + 15000;
-                if ( hero.isLosingGame() )
-                    value += 15000;
-                // If the castle is defenseless
-                if ( !castle->GetActualArmy().isValid() )
-                    value *= 2.5;
 
-                if ( isCastleLossConditionForHuman( castle ) ) {
-                    value += 20000;
-                }
-
-                return value;
+            // Hero should never visit castles belonging to friendly kingdoms
+            if ( hero.isFriends( castle->GetColor() ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
             }
+
+            // WINS_HERO victory condition does not apply to AI-controlled players, we have to ignore the castle with this hero
+            // to keep him alive for the human player
+            if ( isHeroWhoseDefeatIsVictoryConditionForHumanInCastle( castle ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            double value = castle->getBuildingValue() * 500.0 + 15000;
+            if ( hero.isLosingGame() )
+                value += 15000;
+            // If the castle is defenseless
+            if ( !castle->GetActualArmy().isValid() )
+                value *= 2.5;
+
+            if ( isCastleLossConditionForHuman( castle ) ) {
+                value += 20000;
+            }
+
+            return value;
         }
         else if ( objectType == MP2::OBJ_HEROES ) {
             const Heroes * otherHero = tile.GetHeroes();
@@ -897,13 +1002,32 @@ namespace AI
             }
 
             if ( hero.GetColor() == otherHero->GetColor() ) {
-                if ( hero.getStatsValue() + 2 > otherHero->getStatsValue() )
+                if ( hero.getAIRole() > otherHero->getAIRole() ) {
+                    // The other hero has a lower role. Do not waste time for meeting. Let him to come.
                     return valueToIgnore;
+                }
+                if ( hero.getAIRole() == otherHero->getAIRole() && hero.getStatsValue() + 3 > otherHero->getStatsValue() ) {
+                    // Two heroes are almost identical. No reason to meet.
+                    return valueToIgnore;
+                }
 
                 const double value = hero.getMeetingValue( *otherHero );
                 // limit the max value of friendly hero meeting to 30 tiles
                 return ( value < 250 ) ? valueToIgnore : std::min( value, 5000.0 );
             }
+
+            // Hero should never meet heroes from friendly kingdoms
+            if ( hero.isFriends( otherHero->GetColor() ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
+            if ( otherHero == world.GetHeroesCondWins() ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
             return 12000.0;
         }
         else if ( objectType == MP2::OBJ_MONSTER ) {
@@ -922,7 +1046,15 @@ namespace AI
             return 5000.0;
         }
         else if ( MP2::isArtifactObject( objectType ) && tile.QuantityArtifact().isValid() ) {
-            return 1500.0 * tile.QuantityArtifact().getArtifactValue();
+            const Artifact art = tile.QuantityArtifact();
+
+            // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
+            if ( isFindArtifactVictoryConditionForHuman( art ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            return 1500.0 * art.getArtifactValue();
         }
         else if ( objectType == MP2::OBJ_TREASURECHEST ) {
             // Treasure chest without the artifact
@@ -1346,7 +1478,6 @@ namespace AI
 
             for ( size_t i = 0; i < availableHeroes.size(); ) {
                 if ( !availableHeroes[i].hero->MayStillMove( false, false ) ) {
-                    availableHeroes[i].hero->SetModes( Heroes::MOVED );
                     availableHeroes.erase( availableHeroes.begin() + i );
                     continue;
                 }
@@ -1359,12 +1490,6 @@ namespace AI
         }
 
         const bool allHeroesMoved = availableHeroes.empty();
-
-        for ( HeroToMove & heroInfo : availableHeroes ) {
-            if ( !heroInfo.hero->MayStillMove( false, false ) ) {
-                heroInfo.hero->SetModes( Heroes::MOVED );
-            }
-        }
 
         _pathfinder.setArmyStrengthMultiplier( originalMonsterStrengthMultiplier );
         _pathfinder.setSpellPointReserve( 0.5 );

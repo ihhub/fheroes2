@@ -43,7 +43,7 @@ Battle::Command & Battle::Command::operator>>( int & val )
     return *this;
 }
 
-int Battle::Command::GetValue( void )
+int Battle::Command::GetValue()
 {
     int val = 0;
     *this >> val;

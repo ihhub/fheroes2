@@ -34,39 +34,39 @@ class Troop : public Monster
 {
 public:
     Troop();
-    Troop( const Monster &, u32 );
+    Troop( const Monster &, uint32_t );
 
     bool operator==( const Monster & ) const;
 
     void Set( const Troop & );
-    void Set( const Monster &, u32 );
+    void Set( const Monster &, uint32_t );
     void SetMonster( const Monster & );
-    void SetCount( u32 );
-    void Reset( void );
+    void SetCount( uint32_t );
+    void Reset();
 
     bool isMonster( int ) const;
-    const char * GetName( void ) const;
-    virtual u32 GetCount( void ) const;
-    u32 GetHitPoints( void ) const;
-    Monster GetMonster( void ) const;
+    const char * GetName() const;
+    virtual uint32_t GetCount() const;
+    uint32_t GetHitPoints() const;
+    Monster GetMonster() const;
 
-    u32 GetDamageMin( void ) const;
-    u32 GetDamageMax( void ) const;
+    uint32_t GetDamageMin() const;
+    uint32_t GetDamageMax() const;
 
     payment_t GetTotalCost() const;
     payment_t GetTotalUpgradeCost() const;
 
-    virtual bool isValid( void ) const;
-    virtual bool isEmpty( void ) const;
-    virtual bool isBattle( void ) const;
-    virtual bool isModes( u32 ) const;
-    virtual std::string GetAttackString( void ) const;
-    virtual std::string GetDefenseString( void ) const;
-    virtual std::string GetShotString( void ) const;
-    virtual std::string GetSpeedString( void ) const;
-    virtual u32 GetHitPointsLeft( void ) const;
-    virtual u32 GetSpeed( void ) const;
-    virtual u32 GetAffectedDuration( u32 ) const;
+    virtual bool isValid() const;
+    virtual bool isEmpty() const;
+    virtual bool isBattle() const;
+    virtual bool isModes( uint32_t ) const;
+    virtual std::string GetAttackString() const;
+    virtual std::string GetDefenseString() const;
+    virtual std::string GetShotString() const;
+    virtual std::string GetSpeedString() const;
+    virtual uint32_t GetHitPointsLeft() const;
+    virtual uint32_t GetSpeed() const;
+    virtual uint32_t GetAffectedDuration( uint32_t ) const;
     virtual double GetStrength() const;
     virtual double GetStrengthWithBonus( int bonusAttack, int bonusDefense ) const;
 
@@ -74,7 +74,7 @@ protected:
     friend StreamBase & operator<<( StreamBase &, const Troop & );
     friend StreamBase & operator>>( StreamBase &, Troop & );
 
-    u32 count;
+    uint32_t count;
 };
 
 StreamBase & operator<<( StreamBase &, const Troop & );
@@ -88,17 +88,17 @@ public:
 
     ArmyTroop & operator=( const Troop & ) = delete;
 
-    u32 GetAttack( void ) const override;
-    u32 GetDefense( void ) const override;
-    int GetColor( void ) const override;
-    int GetMorale( void ) const override;
-    int GetLuck( void ) const override;
+    uint32_t GetAttack() const override;
+    uint32_t GetDefense() const override;
+    int GetColor() const override;
+    int GetMorale() const override;
+    int GetLuck() const override;
 
     void SetArmy( const Army & );
-    const Army * GetArmy( void ) const;
+    const Army * GetArmy() const;
 
-    std::string GetAttackString( void ) const override;
-    std::string GetDefenseString( void ) const override;
+    std::string GetAttackString() const override;
+    std::string GetDefenseString() const override;
 
 protected:
     const Army * army;

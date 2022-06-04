@@ -84,12 +84,12 @@ struct SelectRecipientsColors
         }
     }
 
-    s32 GetIndexClick( void ) const
+    int32_t GetIndexClick() const
     {
         return GetIndexClickRects( positions );
     }
 
-    void Redraw( void ) const
+    void Redraw() const
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -102,9 +102,9 @@ struct SelectRecipientsColors
         }
     }
 
-    bool QueueEventProcessing( void )
+    bool QueueEventProcessing()
     {
-        const s32 index = GetIndexClick();
+        const int32_t index = GetIndexClick();
 
         if ( index >= 0 ) {
             const int cols = colors[index];
@@ -126,7 +126,7 @@ struct ResourceBar
     Funds & resource;
     std::vector<fheroes2::Rect> positions;
 
-    ResourceBar( Funds & funds, s32 posx, s32 posy )
+    ResourceBar( Funds & funds, int32_t posx, int32_t posy )
         : resource( funds )
     {
         positions.reserve( 7 );
@@ -141,7 +141,7 @@ struct ResourceBar
         positions.emplace_back( posx + 240, posy, sprite.width(), sprite.height() );
     }
 
-    static void RedrawResource( int type, s32 count, s32 posx, s32 posy )
+    static void RedrawResource( int type, int32_t count, int32_t posx, int32_t posy )
     {
         fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::Text text( std::to_string( count ), fheroes2::FontType::smallWhite() );
@@ -161,22 +161,22 @@ struct ResourceBar
         }
     }
 
-    s32 GetIndexClick( void ) const
+    int32_t GetIndexClick() const
     {
         return GetIndexClickRects( positions );
     }
 
-    bool QueueEventProcessing( Funds & funds, u32 mul )
+    bool QueueEventProcessing( Funds & funds, uint32_t mul )
     {
-        const s32 index = GetIndexClick();
+        const int32_t index = GetIndexClick();
 
         if ( index >= 0 ) {
             int rs = Resource::getResourceTypeFromIconIndex( index );
-            u32 step = rs == Resource::GOLD ? 100 : 1;
+            uint32_t step = rs == Resource::GOLD ? 100 : 1;
 
-            u32 cur = resource.Get( rs );
-            u32 sel = cur;
-            u32 max = mul > 1 ? ( funds.Get( rs ) + resource.Get( rs ) ) / mul : funds.Get( rs ) + resource.Get( rs );
+            uint32_t cur = resource.Get( rs );
+            uint32_t sel = cur;
+            uint32_t max = mul > 1 ? ( funds.Get( rs ) + resource.Get( rs ) ) / mul : funds.Get( rs ) + resource.Get( rs );
             if ( 0 == mul ) {
                 fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "First select recipients!" ), fheroes2::FontType::normalWhite() ), Dialog::OK );
             }
@@ -190,11 +190,11 @@ struct ResourceBar
                 StringReplace( msg, "%{resource}", Resource::String( rs ) );
 
                 if ( Dialog::SelectCount( msg, 0, max, sel, step ) && cur != sel ) {
-                    s32 * from = funds.GetPtr( rs );
-                    s32 * to = resource.GetPtr( rs );
+                    int32_t * from = funds.GetPtr( rs );
+                    int32_t * to = resource.GetPtr( rs );
 
                     if ( from && to ) {
-                        s32 count = sel - cur;
+                        int32_t count = sel - cur;
 
                         *from -= mul > 1 ? count * mul : count;
                         *to += count;
@@ -263,7 +263,7 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
 
     display.render();
 
-    u32 count = Color::Count( selector.recipients );
+    uint32_t count = Color::Count( selector.recipients );
 
     // message loop
     int result = Dialog::ZERO;
@@ -271,7 +271,7 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
         result = btnGroup.processEvents();
 
         if ( selector.QueueEventProcessing() ) {
-            u32 new_count = Color::Count( selector.recipients );
+            uint32_t new_count = Color::Count( selector.recipients );
 
             if ( 0 == new_count || 0 == funds2.GetValidItemsCount() )
                 btnGroup.button( 0 ).disable();

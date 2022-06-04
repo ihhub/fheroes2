@@ -92,7 +92,9 @@ namespace
         const fheroes2::Display & display = fheroes2::Display::instance();
         const std::string resolutionName = std::to_string( display.width() ) + 'x' + std::to_string( display.height() );
 
-        drawOption( optionRoi, _( "Resolution" ), resolutionName.c_str(), ICN::SPANEL, 16 );
+        const Settings & configuration = Settings::Get();
+
+        drawOption( optionRoi, _( "Resolution" ), resolutionName.c_str(), ICN::SPANEL, configuration.ExtGameEvilInterface() ? 17 : 16 );
     }
 
     void drawExperimentalOptions( const fheroes2::Rect & optionRoi )
@@ -300,7 +302,7 @@ namespace
                     saveMusicVolume = true;
                 }
                 if ( saveMusicVolume ) {
-                    Music::Volume( static_cast<int16_t>( Mixer::MaxVolume() * conf.MusicVolume() / 10 ) );
+                    Music::setVolume( 100 * conf.MusicVolume() / 10 );
                     return SelectedWindow::UpdateSettings;
                 }
 

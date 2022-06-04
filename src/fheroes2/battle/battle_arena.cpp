@@ -42,6 +42,7 @@
 #include "ground.h"
 #include "icn.h"
 #include "logging.h"
+#include "monster.h"
 #include "race.h"
 #include "settings.h"
 #include "speed.h"
@@ -237,32 +238,32 @@ namespace
     }
 }
 
-Battle::Arena * Battle::GetArena( void )
+Battle::Arena * Battle::GetArena()
 {
     return arena;
 }
 
-const Castle * Battle::Arena::GetCastle( void )
+const Castle * Battle::Arena::GetCastle()
 {
     return arena->castle;
 }
 
-Battle::Bridge * Battle::Arena::GetBridge( void )
+Battle::Bridge * Battle::Arena::GetBridge()
 {
     return arena->bridge;
 }
 
-Battle::Board * Battle::Arena::GetBoard( void )
+Battle::Board * Battle::Arena::GetBoard()
 {
     return &arena->board;
 }
 
-Battle::Graveyard * Battle::Arena::GetGraveyard( void )
+Battle::Graveyard * Battle::Arena::GetGraveyard()
 {
     return &arena->graveyard;
 }
 
-Battle::Interface * Battle::Arena::GetInterface( void )
+Battle::Interface * Battle::Arena::GetInterface()
 {
     return arena->interface;
 }
@@ -290,7 +291,7 @@ bool Battle::Arena::isAnyTowerPresent()
            || ( arena->towers[2] != nullptr && arena->towers[2]->isValid() );
 }
 
-Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::DeterministicRandomGenerator & randomGenerator )
+Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::DeterministicRandomGenerator & randomGenerator )
     : army1( nullptr )
     , army2( nullptr )
     , armies_order( nullptr )
@@ -445,7 +446,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
         }
 
         if ( !actions.empty() ) {
-            // Pending actions from the user interface (such as toggling auto battle) have "already occured" and
+            // Pending actions from the user interface (such as toggling auto battle) have "already occurred" and
             // therefore should be handled first, before any other actions. Just skip the rest of the branches.
         }
         else if ( !troop->isValid() ) {
@@ -516,12 +517,12 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
     }
 }
 
-bool Battle::Arena::BattleValid( void ) const
+bool Battle::Arena::BattleValid() const
 {
     return army1->isValid() && army2->isValid() && 0 == result_game.army1 && 0 == result_game.army2;
 }
 
-void Battle::Arena::Turns( void )
+void Battle::Arena::Turns()
 {
     ++current_turn;
 
@@ -722,11 +723,11 @@ void Battle::Arena::TowerAction( const Tower & twr )
     ApplyAction( cmd );
 }
 
-void Battle::Arena::CatapultAction( void )
+void Battle::Arena::CatapultAction()
 {
     if ( catapult ) {
-        u32 shots = catapult->GetShots();
-        std::vector<u32> values( CAT_CENTRAL_TOWER + 1, 0 );
+        uint32_t shots = catapult->GetShots();
+        std::vector<uint32_t> values( CAT_CENTRAL_TOWER + 1, 0 );
 
         values[CAT_WALL1] = GetCastleTargetValue( CAT_WALL1 );
         values[CAT_WALL2] = GetCastleTargetValue( CAT_WALL2 );
@@ -766,7 +767,7 @@ Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst ) c
 
     if ( !result.empty() && IS_DEBUG( DBG_BATTLE, DBG_TRACE ) ) {
         std::stringstream ss;
-        for ( u32 ii = 0; ii < result.size(); ++ii )
+        for ( uint32_t ii = 0; ii < result.size(); ++ii )
             ss << result[ii] << ", ";
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, ss.str() )
     }
@@ -849,37 +850,37 @@ int32_t Battle::Arena::GetNearestReachableCell( const Unit & currentUnit, const 
     return -1;
 }
 
-Battle::Unit * Battle::Arena::GetTroopBoard( s32 index )
+Battle::Unit * Battle::Arena::GetTroopBoard( int32_t index )
 {
     return Board::isValidIndex( index ) ? board[index].GetUnit() : nullptr;
 }
 
-const Battle::Unit * Battle::Arena::GetTroopBoard( s32 index ) const
+const Battle::Unit * Battle::Arena::GetTroopBoard( int32_t index ) const
 {
     return Board::isValidIndex( index ) ? board[index].GetUnit() : nullptr;
 }
 
-const HeroBase * Battle::Arena::GetCommander1( void ) const
+const HeroBase * Battle::Arena::GetCommander1() const
 {
     return army1->GetCommander();
 }
 
-const HeroBase * Battle::Arena::GetCommander2( void ) const
+const HeroBase * Battle::Arena::GetCommander2() const
 {
     return army2->GetCommander();
 }
 
-int Battle::Arena::GetArmyColor1( void ) const
+int Battle::Arena::GetArmyColor1() const
 {
     return army1->GetColor();
 }
 
-int Battle::Arena::GetArmyColor2( void ) const
+int Battle::Arena::GetArmyColor2() const
 {
     return army2->GetColor();
 }
 
-int Battle::Arena::GetCurrentColor( void ) const
+int Battle::Arena::GetCurrentColor() const
 {
     return current_color;
 }
@@ -889,7 +890,7 @@ int Battle::Arena::GetOppositeColor( int col ) const
     return col == GetArmyColor1() ? GetArmyColor2() : GetArmyColor1();
 }
 
-Battle::Unit * Battle::Arena::GetTroopUID( u32 uid )
+Battle::Unit * Battle::Arena::GetTroopUID( uint32_t uid )
 {
     Units::iterator it = std::find_if( army1->begin(), army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
 
@@ -901,7 +902,7 @@ Battle::Unit * Battle::Arena::GetTroopUID( u32 uid )
     return it != army2->end() ? *it : nullptr;
 }
 
-const Battle::Unit * Battle::Arena::GetTroopUID( u32 uid ) const
+const Battle::Unit * Battle::Arena::GetTroopUID( uint32_t uid ) const
 {
     Units::const_iterator it = std::find_if( army1->begin(), army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
 
@@ -919,7 +920,7 @@ void Battle::Arena::FadeArena( bool clearMessageLog ) const
         interface->FadeArena( clearMessageLog );
 }
 
-const SpellStorage & Battle::Arena::GetUsageSpells( void ) const
+const SpellStorage & Battle::Arena::GetUsageSpells() const
 {
     return usage_spells;
 }
@@ -980,61 +981,49 @@ bool Battle::Arena::isSpellcastDisabled() const
     return false;
 }
 
-bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg )
+bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /* = nullptr */ )
 {
-    const HeroBase * current_commander = GetCurrentCommander();
-
     // check sphere negation (only for heroes)
     if ( isSpellcastDisabled() ) {
-        if ( msg )
+        if ( msg ) {
             *msg = _( "The Sphere of Negation artifact is in effect for this battle, disabling all combat spells." );
+        }
         return true;
     }
+
+    const HeroBase * current_commander = GetCurrentCommander();
 
     // check casted
     if ( current_commander ) {
         if ( current_commander->Modes( Heroes::SPELLCASTED ) ) {
-            if ( msg )
+            if ( msg ) {
                 *msg = _( "You have already cast a spell this round." );
+            }
             return true;
         }
 
         if ( spell == Spell::EARTHQUAKE && !castle ) {
-            *msg = _( "That spell will affect no one!" );
+            if ( msg ) {
+                *msg = _( "That spell will affect no one!" );
+            }
             return true;
         }
         else if ( spell.isSummon() ) {
-            const Unit * elem = GetCurrentForce().FindMode( CAP_SUMMONELEM );
-            bool affect = true;
+            const Monster mons( spell );
+            assert( mons.isValid() && mons.isElemental() );
 
-            if ( elem )
-                switch ( spell.GetID() ) {
-                case Spell::SUMMONEELEMENT:
-                    if ( elem->GetID() != Monster::EARTH_ELEMENT )
-                        affect = false;
-                    break;
-                case Spell::SUMMONAELEMENT:
-                    if ( elem->GetID() != Monster::AIR_ELEMENT )
-                        affect = false;
-                    break;
-                case Spell::SUMMONFELEMENT:
-                    if ( elem->GetID() != Monster::FIRE_ELEMENT )
-                        affect = false;
-                    break;
-                case Spell::SUMMONWELEMENT:
-                    if ( elem->GetID() != Monster::WATER_ELEMENT )
-                        affect = false;
-                    break;
-                default:
-                    break;
+            const Unit * elem = GetCurrentForce().FindMode( CAP_SUMMONELEM );
+            if ( elem && elem->GetID() != mons.GetID() ) {
+                if ( msg ) {
+                    *msg = _( "You may only summon one type of elemental per combat." );
                 }
-            if ( !affect ) {
-                *msg = _( "You may only summon one type of elemental per combat." );
                 return true;
             }
 
             if ( 0 > GetFreePositionNearHero( current_color ) ) {
-                *msg = _( "There is no open space adjacent to your hero to summon an Elemental to." );
+                if ( msg ) {
+                    *msg = _( "There is no open space adjacent to your hero to summon an Elemental to." );
+                }
                 return true;
             }
         }
@@ -1044,27 +1033,29 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg )
                 const Battle::Unit * b = ( *it ).GetUnit();
 
                 if ( b ) {
-                    if ( b->AllowApplySpell( spell, current_commander, nullptr ) )
+                    if ( b->AllowApplySpell( spell, current_commander, nullptr ) ) {
                         return false;
+                    }
                 }
-                else
+                else {
                     // check graveyard
-                    if ( GraveyardAllowResurrect( ( *it ).GetIndex(), spell ) )
-                    return false;
+                    if ( GraveyardAllowResurrect( ( *it ).GetIndex(), spell ) ) {
+                        return false;
+                    }
+                }
             }
-            *msg = _( "That spell will affect no one!" );
+
+            if ( msg ) {
+                *msg = _( "That spell will affect no one!" );
+            }
             return true;
         }
     }
 
-    // may be check other..
-    /*
-     */
-
     return false;
 }
 
-bool Battle::Arena::GraveyardAllowResurrect( s32 index, const Spell & spell ) const
+bool Battle::Arena::GraveyardAllowResurrect( int32_t index, const Spell & spell ) const
 {
     if ( !spell.isResurrect() )
         return false;
@@ -1096,7 +1087,7 @@ bool Battle::Arena::GraveyardAllowResurrect( s32 index, const Spell & spell ) co
     return true;
 }
 
-const Battle::Unit * Battle::Arena::GraveyardLastTroop( s32 index ) const
+const Battle::Unit * Battle::Arena::GraveyardLastTroop( int32_t index ) const
 {
     return GetTroopUID( graveyard.GetLastTroopUID( index ) );
 }
@@ -1113,12 +1104,12 @@ std::vector<const Battle::Unit *> Battle::Arena::GetGraveyardTroops( const int32
     return units;
 }
 
-Battle::Indexes Battle::Arena::GraveyardClosedCells( void ) const
+Battle::Indexes Battle::Arena::GraveyardClosedCells() const
 {
     return graveyard.GetClosedCells();
 }
 
-void Battle::Arena::SetCastleTargetValue( int target, u32 value )
+void Battle::Arena::SetCastleTargetValue( int target, uint32_t value )
 {
     switch ( target ) {
     case CAT_WALL1:
@@ -1166,7 +1157,7 @@ void Battle::Arena::SetCastleTargetValue( int target, u32 value )
     }
 }
 
-u32 Battle::Arena::GetCastleTargetValue( int target ) const
+uint32_t Battle::Arena::GetCastleTargetValue( int target ) const
 {
     switch ( target ) {
     case CAT_WALL1:
@@ -1194,7 +1185,7 @@ u32 Battle::Arena::GetCastleTargetValue( int target ) const
     return 0;
 }
 
-std::vector<int> Battle::Arena::GetCastleTargets( void ) const
+std::vector<int> Battle::Arena::GetCastleTargets() const
 {
     std::vector<int> targets;
     targets.reserve( 8 );
@@ -1228,94 +1219,60 @@ const HeroBase * Battle::Arena::getEnemyCommander( const int color ) const
     return ( army1->GetColor() == color ) ? army2->GetCommander() : army1->GetCommander();
 }
 
-const HeroBase * Battle::Arena::GetCurrentCommander( void ) const
+const HeroBase * Battle::Arena::GetCurrentCommander() const
 {
     return getCommander( current_color );
 }
 
 Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
 {
+    // TODO: this assertion is here to thoroughly check all the complex limitations of the Summon Elemental spell
+    assert( !isDisableCastSpell( spell ) );
+
     const HeroBase * hero = GetCurrentCommander();
-    const int32_t pos = GetFreePositionNearHero( current_color );
+    assert( hero != nullptr );
 
-    if ( pos < 0 || !hero ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" )
-        return nullptr;
-    }
+    const int32_t idx = GetFreePositionNearHero( current_color );
+    assert( Board::isValidIndex( idx ) );
 
-    Force & army = GetCurrentForce();
-    Unit * elem = army.FindMode( CAP_SUMMONELEM );
-    bool affect = true;
+    const Monster mons( spell );
+    assert( mons.isValid() && mons.isElemental() && !mons.isWide() );
 
-    if ( elem )
-        switch ( spell.GetID() ) {
-        case Spell::SUMMONEELEMENT:
-            if ( elem->GetID() != Monster::EARTH_ELEMENT )
-                affect = false;
-            break;
-        case Spell::SUMMONAELEMENT:
-            if ( elem->GetID() != Monster::AIR_ELEMENT )
-                affect = false;
-            break;
-        case Spell::SUMMONFELEMENT:
-            if ( elem->GetID() != Monster::FIRE_ELEMENT )
-                affect = false;
-            break;
-        case Spell::SUMMONWELEMENT:
-            if ( elem->GetID() != Monster::WATER_ELEMENT )
-                affect = false;
-            break;
-        default:
-            break;
-        }
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << idx )
 
-    if ( !affect ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "other elemental summon" )
-        return nullptr;
-    }
-
-    Monster mons( spell );
-
-    if ( !mons.isValid() ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unknown id" )
-        return nullptr;
-    }
-
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << pos )
-
+    const bool reflect = ( hero == army2->GetCommander() );
     const uint32_t count = fheroes2::getSummonMonsterCount( spell, hero->GetPower(), hero );
-    elem = new Unit( Troop( mons, count ), pos, hero == army2->GetCommander(), _randomGenerator, _uidGenerator.GetUnique() );
 
-    if ( elem ) {
-        elem->SetModes( CAP_SUMMONELEM );
-        elem->SetArmy( hero->GetArmy() );
-        army.push_back( elem );
-    }
-    else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "is nullptr" )
-    }
+    Position pos;
+    pos.Set( idx, mons.isWide(), reflect );
+
+    // An elemental could not be a wide unit
+    assert( pos.GetHead() != nullptr && pos.GetTail() == nullptr );
+
+    Unit * elem = new Unit( Troop( mons, count ), pos, reflect, _randomGenerator, _uidGenerator.GetUnique() );
+
+    elem->SetModes( CAP_SUMMONELEM );
+    elem->SetArmy( hero->GetArmy() );
+
+    GetCurrentForce().push_back( elem );
 
     return elem;
 }
 
-Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & b, s32 pos )
+Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & unit )
 {
-    Unit * image = new Unit( b, pos, b.isReflect(), _randomGenerator, _uidGenerator.GetUnique() );
+    Unit * mirrorUnit = new Unit( unit, {}, unit.isReflect(), _randomGenerator, _uidGenerator.GetUnique() );
 
-    if ( image ) {
-        b.SetMirror( image );
-        image->SetArmy( *b.GetArmy() );
-        image->SetMirror( &b );
-        image->SetModes( CAP_MIRRORIMAGE );
-        b.SetModes( CAP_MIRROROWNER );
+    mirrorUnit->SetArmy( *unit.GetArmy() );
+    mirrorUnit->SetMirror( &unit );
+    mirrorUnit->SetModes( CAP_MIRRORIMAGE );
 
-        GetCurrentForce().push_back( image );
-    }
-    else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" )
-    }
+    unit.SetMirror( mirrorUnit );
+    unit.SetModes( CAP_MIRROROWNER );
 
-    return image;
+    GetCurrentForce().push_back( mirrorUnit );
+
+    return mirrorUnit;
 }
 
 bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defender ) const
@@ -1390,17 +1347,17 @@ Battle::Force & Battle::Arena::GetCurrentForce() const
     return getForce( current_color );
 }
 
-int Battle::Arena::GetICNCovr( void ) const
+int Battle::Arena::GetICNCovr() const
 {
     return icn_covr;
 }
 
-u32 Battle::Arena::GetCurrentTurn( void ) const
+uint32_t Battle::Arena::GetCurrentTurn() const
 {
     return current_turn;
 }
 
-Battle::Result & Battle::Arena::GetResult( void )
+Battle::Result & Battle::Arena::GetResult()
 {
     return result_game;
 }

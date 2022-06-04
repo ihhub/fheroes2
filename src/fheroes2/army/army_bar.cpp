@@ -185,7 +185,7 @@ void ArmyBar::SetArmy( Army * ptr )
     items.clear();
 
     if ( ptr ) {
-        for ( u32 ii = 0; ii < ptr->Size(); ++ii ) {
+        for ( uint32_t ii = 0; ii < ptr->Size(); ++ii ) {
             ArmyTroop * troop = dynamic_cast<ArmyTroop *>( ptr->GetTroop( ii ) );
             assert( troop != nullptr );
 
@@ -262,7 +262,7 @@ void ArmyBar::RedrawItem( ArmyTroop & troop, const fheroes2::Rect & pos, bool se
     }
 }
 
-void ArmyBar::ResetSelected( void )
+void ArmyBar::ResetSelected()
 {
     spcursor.hide();
     Interface::ItemsActionBar<ArmyTroop>::ResetSelected();
@@ -291,7 +291,13 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & troop )
         }
         else if ( !troop.isValid() ) {
             if ( !read_only ) {
-                msg = _( "Move or right click to redistribute %{name}" );
+                if ( troop2->GetCount() == 1 ) {
+                    msg = _( "Move the %{name} " );
+                }
+                else {
+                    msg = _( "Move or right click to redistribute %{name}" );
+                }
+
                 StringReplace( msg, "%{name}", troop2->GetName() );
             }
         }
@@ -335,7 +341,13 @@ bool ArmyBar::ActionBarCursor( ArmyTroop & destTroop, ArmyTroop & selectedTroop 
     else if ( save_last_troop )
         msg = _( "Cannot move last troop" );
     else {
-        msg = _( "Move or right click to redistribute %{name}" );
+        if ( selectedTroop.GetCount() == 1 ) {
+            msg = _( "Move the %{name}" );
+        }
+        else {
+            msg = _( "Move or right click to redistribute %{name}" );
+        }
+
         StringReplace( msg, "%{name}", selectedTroop.GetName() );
     }
 
@@ -422,7 +434,7 @@ bool ArmyBar::ActionBarLeftMouseSingleClick( ArmyTroop & troop )
             const Monster mons = Dialog::SelectMonster( cur );
 
             if ( mons.isValid() ) {
-                u32 count = 1;
+                uint32_t count = 1;
 
                 if ( Dialog::SelectCount( _( "Set Count" ), 1, 500000, count ) )
                     troop.Set( mons, count );

@@ -68,7 +68,7 @@ $(RES): $(RC)
 VPATH := $(SOURCEDIR)
 
 %.o: %.cpp
-	$(CXX) -c -MD $(addprefix -I, $(SOURCEDIR)) $< $(CCFLAGS) $(CXXFLAGS)
+	$(CXX) -c -MD $(addprefix -I, $(SOURCEDIR)) $< $(CCFLAGS) $(CXXFLAGS) $(CPPFLAGS)
 
 include $(wildcard *.d)
 

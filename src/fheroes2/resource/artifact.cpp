@@ -60,12 +60,12 @@ namespace
     };
 }
 
-const char * Artifact::GetName( void ) const
+const char * Artifact::GetName() const
 {
     return _( fheroes2::getArtifactData( id ).name );
 }
 
-bool Artifact::isUltimate( void ) const
+bool Artifact::isUltimate() const
 {
     switch ( id ) {
     case ULTIMATE_BOOK:
@@ -84,7 +84,7 @@ bool Artifact::isUltimate( void ) const
     return false;
 }
 
-int Artifact::LoyaltyLevel( void ) const
+int Artifact::LoyaltyLevel() const
 {
     switch ( id ) {
     case MASTHEAD:
@@ -117,7 +117,7 @@ int Artifact::LoyaltyLevel( void ) const
     return ART_NONE;
 }
 
-int Artifact::Level( void ) const
+int Artifact::Level() const
 {
     if ( isUltimate() ) {
         return ART_ULTIMATE;
@@ -399,7 +399,7 @@ int Artifact::Rand( level_t lvl )
     return res;
 }
 
-Artifact Artifact::FromMP2IndexSprite( u32 index )
+Artifact Artifact::FromMP2IndexSprite( uint32_t index )
 {
     if ( 0xA2 > index )
         return Artifact( ( index - 1 ) / 2 );
@@ -779,12 +779,12 @@ void BagArtifacts::RemoveArtifact( const Artifact & art )
         ( *it ).Reset();
 }
 
-bool BagArtifacts::isFull( void ) const
+bool BagArtifacts::isFull() const
 {
     return end() == std::find( begin(), end(), Artifact( Artifact::UNKNOWN ) );
 }
 
-u32 BagArtifacts::CountArtifacts( void ) const
+uint32_t BagArtifacts::CountArtifacts() const
 {
     // no way that we have more than 4 billion artifacts so static_cast is totally valid
     return static_cast<uint32_t>( std::count_if( begin(), end(), []( const Artifact & art ) { return art.isValid(); } ) );
@@ -831,29 +831,33 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag )
     }
 }
 
-bool BagArtifacts::ContainUltimateArtifact( void ) const
+bool BagArtifacts::ContainUltimateArtifact() const
 {
     return std::any_of( begin(), end(), []( const Artifact & art ) { return art.isUltimate(); } );
 }
 
-std::string BagArtifacts::String( void ) const
+std::string BagArtifacts::String() const
 {
     std::string output;
 
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        output += it->GetName();
+    for ( const Artifact & art : *this ) {
+        if ( !art.isValid() ) {
+            continue;
+        }
+
+        output += art.GetName();
         output += ", ";
     }
 
     return output;
 }
 
-u32 BagArtifacts::Count( const Artifact & art ) const
+uint32_t BagArtifacts::Count( const Artifact & art ) const
 {
     return static_cast<uint32_t>( std::count( begin(), end(), art ) ); // no way that we have more than 4 billion artifacts
 }
 
-u32 GoldInsteadArtifact( const MP2::MapObjectType objectType )
+uint32_t GoldInsteadArtifact( const MP2::MapObjectType objectType )
 {
     switch ( objectType ) {
     case MP2::OBJ_SKELETON:
@@ -922,7 +926,7 @@ ArtifactsBar::ArtifactsBar( const Heroes * hero, const bool mini, const bool ro,
     }
 }
 
-void ArtifactsBar::ResetSelected( void )
+void ArtifactsBar::ResetSelected()
 {
     spcursor.hide();
     Interface::ItemsActionBar<Artifact>::ResetSelected();

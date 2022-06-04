@@ -22,7 +22,7 @@
  ***************************************************************************/
 
 #include "game_over.h"
-#include "agg.h"
+#include "audio_manager.h"
 #include "campaign_savedata.h"
 #include "castle.h"
 #include "dialog.h"
@@ -96,7 +96,7 @@ namespace
             }
         }
 
-        AGG::PlayMusic( MUS::VICTORY, false );
+        AudioManager::PlayMusic( MUS::VICTORY, false );
 
         if ( !body.empty() )
             Dialog::Message( "", body, Font::BIG, Dialog::OK );
@@ -113,21 +113,6 @@ namespace
             const Castle * town = world.getCastleEntrance( conf.WinsMapsPositionObject() );
             if ( town )
                 StringReplace( body, "%{name}", town->GetName() );
-            break;
-        }
-
-        case GameOver::LOSS_ENEMY_WINS_HERO: {
-            body = _( "The enemy has captured the hero %{name}!\nYour quest is a failure." );
-            const Heroes * hero = world.GetHeroesCondWins();
-            if ( hero )
-                StringReplace( body, "%{name}", hero->GetName() );
-            break;
-        }
-
-        case GameOver::LOSS_ENEMY_WINS_ARTIFACT: {
-            body = _( "The enemy has found the %{name}.\nYour quest is a failure." );
-            const Artifact art = conf.WinsFindArtifactID();
-            StringReplace( body, "%{name}", art.GetName() );
             break;
         }
 
@@ -167,7 +152,7 @@ namespace
             break;
         }
 
-        AGG::PlayMusic( MUS::LOSTGAME, false );
+        AudioManager::PlayMusic( MUS::LOSTGAME, false );
 
         if ( !body.empty() )
             Dialog::Message( "", body, Font::BIG, Dialog::OK );
@@ -272,7 +257,7 @@ std::string GameOver::GetActualDescription( uint32_t cond )
     return msg;
 }
 
-GameOver::Result & GameOver::Result::Get( void )
+GameOver::Result & GameOver::Result::Get()
 {
     static Result gresult;
     return gresult;
@@ -341,21 +326,21 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     res = fheroes2::GameMode::COMPLETE_CAMPAIGN_SCENARIO;
                 }
                 else {
-                    AGG::ResetAudio();
+                    AudioManager::ResetAudio();
                     Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
                     // TODO : Implement function that displays the last frame of win.smk and
-                    // a dialog for name entry. AGG:PlayMusic is run here in order to start playing
+                    // a dialog for name entry. AudioManager::PlayMusic is run here in order to start playing
                     // before displaying the high score.
-                    AGG::PlayMusic( MUS::VICTORY, true, true );
+                    AudioManager::PlayMusic( MUS::VICTORY, true, true );
 
-                    res = fheroes2::GameMode::HIGHSCORES;
+                    res = fheroes2::GameMode::HIGHSCORES_STANDARD;
 
                     if ( conf.ExtGameContinueAfterVictory() && myKingdom.isPlay() ) {
                         if ( Dialog::YES == Dialog::Message( "", _( "Do you wish to continue the game?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
                             continueAfterVictory = true;
 
                             // Game::HighScores() calls ResetResult()
-                            Game::HighScores();
+                            Game::DisplayHighScores( false );
 
                             Interface::Basic & I = Interface::Basic::Get();
 
@@ -389,7 +374,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                         DialogLoss( result );
                     }
 
-                    AGG::ResetAudio();
+                    AudioManager::ResetAudio();
                     Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
 
                     res = fheroes2::GameMode::MAIN_MENU;
@@ -400,7 +385,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
     else {
         // There are no active human-controlled players left, game over
         if ( activeHumanColors == 0 ) {
-            AGG::ResetAudio();
+            AudioManager::ResetAudio();
             Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
 
             res = fheroes2::GameMode::MAIN_MENU;
@@ -441,7 +426,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
             if ( multiplayerResult & GameOver::WINS ) {
                 DialogWins( multiplayerResult );
 
-                AGG::ResetAudio();
+                AudioManager::ResetAudio();
                 Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
 
                 res = fheroes2::GameMode::MAIN_MENU;
@@ -449,7 +434,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
             else if ( multiplayerResult & GameOver::LOSS ) {
                 DialogLoss( multiplayerResult );
 
-                AGG::ResetAudio();
+                AudioManager::ResetAudio();
                 Video::ShowVideo( "LOSE.SMK", Video::VideoAction::LOOP_VIDEO );
 
                 res = fheroes2::GameMode::MAIN_MENU;

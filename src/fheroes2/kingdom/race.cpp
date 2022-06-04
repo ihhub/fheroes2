@@ -53,7 +53,7 @@ std::string Race::String( int race )
     return _( "race|Neutral" );
 }
 
-int Race::Rand( void )
+int Race::Rand()
 {
     switch ( Rand::Get( 1, 6 ) ) {
     case 1:

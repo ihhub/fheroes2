@@ -23,10 +23,10 @@
 #ifndef H2HEROPATH_H
 #define H2HEROPATH_H
 
+#include <cstdint>
 #include <list>
 
 #include "direction.h"
-#include "types.h"
 
 class Heroes;
 class StreamBase;
@@ -37,7 +37,7 @@ namespace Route
     {
     public:
         Step() = default;
-        Step( int index, s32 fromIndex, int dir, u32 cost )
+        Step( int index, int32_t fromIndex, int dir, uint32_t cost )
             : currentIndex( index )
             , from( fromIndex )
             , direction( dir )
@@ -87,8 +87,8 @@ namespace Route
         // this may not be the case if AIWorldPathfinder was used - due to the peculiarities of laying the path through
         // heroes, neutral armies, teleports or water.
         int32_t GetDestinationIndex( const bool returnLastStep = false ) const;
-        int GetFrontDirection( void ) const;
-        u32 GetFrontPenalty( void ) const;
+        int GetFrontDirection() const;
+        uint32_t GetFrontPenalty() const;
         void setPath( const std::list<Step> & path, int32_t destIndex );
 
         void Show()
@@ -102,20 +102,20 @@ namespace Route
         }
 
         void Reset();
-        void PopFront( void );
+        void PopFront();
 
-        bool isValid( void ) const;
+        bool isValid() const;
 
-        bool isShow( void ) const
+        bool isShow() const
         {
             return !hide;
         }
 
         bool hasAllowedSteps() const;
 
-        std::string String( void ) const;
+        std::string String() const;
 
-        int GetAllowedSteps( void ) const;
+        int GetAllowedSteps() const;
         static int GetIndexSprite( int from, int to, int mod );
 
     private:
@@ -123,7 +123,7 @@ namespace Route
         friend StreamBase & operator>>( StreamBase &, Path & );
 
         const Heroes * hero;
-        s32 dst;
+        int32_t dst;
         bool hide;
     };
 

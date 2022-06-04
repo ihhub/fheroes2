@@ -84,7 +84,7 @@ public:
         // UNUSED = 0x20040000,
         CASTLE_ALLOW_GUARDIANS = 0x20080000,
         // UNUSED = 0x20800000,
-        HEROES_REMEMBER_POINTS_RETREAT = 0x21000000,
+        HEROES_REMEMBER_MP_WHEN_RETREATING = 0x21000000,
 
         // UNUSED = 0x30000001,
         // UNUSED = 0x30000008,
@@ -222,6 +222,7 @@ public:
     bool isPriceOfLoyaltySupported() const;
     bool isMonochromeCursorEnabled() const;
     bool isTextSupportModeEnabled() const;
+    bool is3DAudioEnabled() const;
 
     bool LoadedGameVersion() const
     {
@@ -242,10 +243,10 @@ public:
     bool isFirstGameRun() const;
     void resetFirstGameRun();
 
-    bool CanChangeInGame( u32 ) const;
-    bool ExtModes( u32 ) const;
-    void ExtSetModes( u32 );
-    void ExtResetModes( u32 );
+    bool CanChangeInGame( uint32_t ) const;
+    bool ExtModes( uint32_t ) const;
+    void ExtSetModes( uint32_t );
+    void ExtResetModes( uint32_t );
     static std::string ExtName( const uint32_t settingId );
 
     bool ExtHeroBuySpellBookFromShrine() const
@@ -253,9 +254,9 @@ public:
         return ExtModes( HEROES_BUY_BOOK_FROM_SHRINES );
     }
 
-    bool ExtHeroRememberPointsForRetreating() const
+    bool ExtHeroRememberMovementPointsWhenRetreating() const
     {
-        return ExtModes( HEROES_REMEMBER_POINTS_RETREAT );
+        return ExtModes( HEROES_REMEMBER_MP_WHEN_RETREATING );
     }
 
     bool ExtHeroArenaCanChoiseAnySkills() const
@@ -383,6 +384,7 @@ public:
     void setFullScreen( const bool enable );
     void setMonochromeCursor( const bool enable );
     void setTextSupportMode( const bool enable );
+    void set3DAudio( const bool enable );
 
     void SetSoundVolume( int v );
     void SetMusicVolume( int v );
@@ -530,7 +532,7 @@ public:
         return current_maps_file.LossMapsPositionObject();
     }
 
-    u32 LossCountDays() const
+    uint32_t LossCountDays() const
     {
         return current_maps_file.LossCountDays();
     }
@@ -596,10 +598,10 @@ private:
     int game_type;
     int preferably_count_players;
 
-    fheroes2::Point pos_radr;
-    fheroes2::Point pos_bttn;
-    fheroes2::Point pos_icon;
-    fheroes2::Point pos_stat;
+    fheroes2::Point pos_radr{ -1, -1 };
+    fheroes2::Point pos_bttn{ -1, -1 };
+    fheroes2::Point pos_icon{ -1, -1 };
+    fheroes2::Point pos_stat{ -1, -1 };
 
     Players players;
 };

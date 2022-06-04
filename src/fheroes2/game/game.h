@@ -24,13 +24,13 @@
 #ifndef H2GAME_H
 #define H2GAME_H
 
+#include <cstdint>
 #include <string>
 
-#include "agg.h"
+#include "audio_manager.h"
 #include "game_mode.h"
 #include "mp2.h"
 #include "mus.h"
-#include "types.h"
 
 class Players;
 class Heroes;
@@ -38,9 +38,9 @@ class Castle;
 
 namespace Game
 {
-    void Init( void );
+    void Init();
 
-    const std::string & GetLastSavename( void );
+    const std::string & GetLastSavename();
     void SetLastSavename( const std::string & );
     void SetLoadVersion( uint16_t ver );
     uint16_t GetLoadVersion();
@@ -66,7 +66,6 @@ namespace Game
     fheroes2::GameMode MainMenu( bool isFirstGameRun );
     fheroes2::GameMode NewGame();
     fheroes2::GameMode LoadGame();
-    fheroes2::GameMode HighScores();
     fheroes2::GameMode Credits();
     fheroes2::GameMode NewStandard();
     fheroes2::GameMode CampaignSelection();
@@ -87,24 +86,25 @@ namespace Game
     fheroes2::GameMode StartBattleOnly();
     fheroes2::GameMode DisplayLoadGameDialog();
     fheroes2::GameMode CompleteCampaignScenario( const bool isLoadingSaveFile );
+    fheroes2::GameMode DisplayHighScores( const bool isCampaign );
 
     bool isSuccessionWarsCampaignPresent();
     bool isPriceOfLoyaltyCampaignPresent();
 
     void EnvironmentSoundMixer();
     void restoreSoundsForCurrentFocus();
-    int GetKingdomColors( void );
-    int GetActualKingdomColors( void );
+    int GetKingdomColors();
+    int GetActualKingdomColors();
     void DialogPlayers( int color, std::string );
     void SetCurrentMusic( const int mus );
     int CurrentMusic();
-    u32 & MapsAnimationFrame( void );
-    u32 GetRating( void );
-    u32 GetGameOverScores( void );
-    u32 GetLostTownDays( void );
-    u32 GetWhirlpoolPercent( void );
-    u32 SelectCountPlayers( void );
-    void PlayPickupSound( void );
+    uint32_t & MapsAnimationFrame();
+    uint32_t GetRating();
+    uint32_t GetGameOverScores();
+    uint32_t GetLostTownDays();
+    uint32_t GetWhirlpoolPercent();
+    uint32_t SelectCountPlayers();
+    void PlayPickupSound();
     bool UpdateSoundsOnFocusUpdate();
     void SetUpdateSoundsOnFocusUpdate( bool update );
     void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss = false );
@@ -145,7 +145,7 @@ namespace Game
                 SetCurrentMusic( MUS::UNKNOWN );
             }
 
-            AGG::PlayMusic( _music, true, true );
+            AudioManager::PlayMusic( _music, true, true );
         }
 
         MusicRestorer & operator=( const MusicRestorer & ) = delete;

@@ -211,6 +211,8 @@
     <ClCompile Include="src\fheroes2\army\army.cpp" />
     <ClCompile Include="src\fheroes2\army\army_bar.cpp" />
     <ClCompile Include="src\fheroes2\army\army_troop.cpp" />
+    <ClCompile Include="src\fheroes2\army\army_ui_helper.cpp" />
+    <ClCompile Include="src\fheroes2\audio\audio_manager.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_action.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_animation.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_arena.cpp" />
@@ -260,7 +262,7 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_marketplace.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_message.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_quickinfo.cpp" />
-    <ClCompile Include="src\fheroes2\dialog\dialog_recrut.cpp" />
+    <ClCompile Include="src\fheroes2\dialog\dialog_recruit.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_resolution.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_selectcount.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_selectfile.cpp" />
@@ -289,6 +291,7 @@
     <ClCompile Include="src\fheroes2\game\game_startgame.cpp" />
     <ClCompile Include="src\fheroes2\game\game_static.cpp" />
     <ClCompile Include="src\fheroes2\game\game_video.cpp" />
+    <ClCompile Include="src\fheroes2\game\highscores.cpp" />
     <ClCompile Include="src\fheroes2\gui\cursor.cpp" />
     <ClCompile Include="src\fheroes2\gui\interface_border.cpp" />
     <ClCompile Include="src\fheroes2\gui\interface_buttons.cpp" />
@@ -392,6 +395,7 @@
     <ClInclude Include="src\engine\audio.h" />
     <ClInclude Include="src\engine\core.h" />
     <ClInclude Include="src\engine\dir.h" />
+    <ClInclude Include="src\engine\endian_h2.h" />
     <ClInclude Include="src\engine\image.h" />
 	<ClInclude Include="src\engine\image_palette.h" />
     <ClInclude Include="src\engine\image_tool.h" />
@@ -409,7 +413,6 @@
     <ClInclude Include="src\engine\tinyconfig.h" />
     <ClInclude Include="src\engine\tools.h" />
     <ClInclude Include="src\engine\translations.h" />
-    <ClInclude Include="src\engine\types.h" />
     <ClInclude Include="src\engine\zzlib.h" />
     <ClInclude Include="src\fheroes2\agg\agg.h" />
     <ClInclude Include="src\fheroes2\agg\agg_image.h" />
@@ -424,6 +427,8 @@
     <ClInclude Include="src\fheroes2\army\army.h" />
     <ClInclude Include="src\fheroes2\army\army_bar.h" />
     <ClInclude Include="src\fheroes2\army\army_troop.h" />
+    <ClInclude Include="src\fheroes2\army\army_ui_helper.h" />
+    <ClInclude Include="src\fheroes2\audio\audio_manager.h" />
     <ClInclude Include="src\fheroes2\battle\battle.h" />
     <ClInclude Include="src\fheroes2\battle\battle_animation.h" />
     <ClInclude Include="src\fheroes2\battle\battle_arena.h" />
@@ -470,6 +475,7 @@
     <ClInclude Include="src\fheroes2\game\game_static.h" />
     <ClInclude Include="src\fheroes2\game\game_video.h" />
     <ClInclude Include="src\fheroes2\game\game_video_type.h" />
+    <ClInclude Include="src\fheroes2\game\highscores.h" />
     <ClInclude Include="src\fheroes2\gui\cursor.h" />
     <ClInclude Include="src\fheroes2\gui\interface_border.h" />
     <ClInclude Include="src\fheroes2\gui\interface_buttons.h" />

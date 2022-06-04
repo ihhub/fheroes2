@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2022                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,14 +18,49 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2TYPES_H
-#define H2TYPES_H
+#pragma once
 
 #include <cstdint>
+#include <map>
+#include <string>
+#include <vector>
 
-using u8 = uint8_t;
-using u16 = uint16_t;
-using s32 = int32_t;
-using u32 = uint32_t;
+namespace M82
+{
+    enum SoundType : int;
+}
 
-#endif
+namespace AudioManager
+{
+    class AudioInitializer
+    {
+    public:
+        AudioInitializer() = delete;
+
+        AudioInitializer( const std::string & originalAGGFilePath, const std::string & expansionAGGFilePath );
+        AudioInitializer( const AudioInitializer & ) = delete;
+        AudioInitializer & operator=( const AudioInitializer & ) = delete;
+
+        ~AudioInitializer();
+    };
+
+    struct AudioLoopEffectInfo
+    {
+        AudioLoopEffectInfo() = default;
+
+        AudioLoopEffectInfo( const int16_t angle_, const uint8_t volumePercentage_ )
+            : angle( angle_ )
+            , volumePercentage( volumePercentage_ )
+        {
+            // Do nothing.
+        }
+
+        int16_t angle{ 0 };
+        uint8_t volumePercentage{ 0 };
+    };
+
+    void playLoopSounds( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, bool asyncronizedCall );
+    void PlaySound( int m82, bool asyncronizedCall = false );
+    void PlayMusic( int mus, bool loop = true, bool asyncronizedCall = false );
+    void ResetAudio();
+}

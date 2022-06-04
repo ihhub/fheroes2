@@ -44,9 +44,9 @@ public:
     void SetBackground( const fheroes2::Size & sz, const uint8_t fillColor );
     void SetArmy( Army * );
 
-    bool isValid( void ) const;
+    bool isValid() const;
 
-    void ResetSelected( void );
+    void ResetSelected();
     void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
 
     bool ActionBarLeftMouseSingleClick( ArmyTroop & troop ) override;

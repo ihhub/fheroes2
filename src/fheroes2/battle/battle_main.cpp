@@ -156,7 +156,7 @@ namespace
     }
 }
 
-Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
+Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
 {
     Result result;
 
@@ -400,32 +400,32 @@ void Battle::NecromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsK
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "raise: " << raiseCount << mons.GetMultiName() )
 }
 
-u32 Battle::Result::AttackerResult( void ) const
+uint32_t Battle::Result::AttackerResult() const
 {
     return getBattleResult( army1 );
 }
 
-u32 Battle::Result::DefenderResult( void ) const
+uint32_t Battle::Result::DefenderResult() const
 {
     return getBattleResult( army2 );
 }
 
-u32 Battle::Result::GetExperienceAttacker( void ) const
+uint32_t Battle::Result::GetExperienceAttacker() const
 {
     return exp1;
 }
 
-u32 Battle::Result::GetExperienceDefender( void ) const
+uint32_t Battle::Result::GetExperienceDefender() const
 {
     return exp2;
 }
 
-bool Battle::Result::AttackerWins( void ) const
+bool Battle::Result::AttackerWins() const
 {
     return ( army1 & RESULT_WINS ) != 0;
 }
 
-bool Battle::Result::DefenderWins( void ) const
+bool Battle::Result::DefenderWins() const
 {
     return ( army2 & RESULT_WINS ) != 0;
 }

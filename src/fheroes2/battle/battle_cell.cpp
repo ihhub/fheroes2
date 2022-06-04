@@ -44,7 +44,7 @@ namespace
     const int32_t infl = 12;
 }
 
-void Battle::Position::Set( s32 head, bool wide, bool reflect )
+void Battle::Position::Set( const int32_t head, const bool wide, const bool reflect )
 {
     first = Board::GetCell( head );
 
@@ -52,33 +52,33 @@ void Battle::Position::Set( s32 head, bool wide, bool reflect )
         second = Board::GetCell( first->GetIndex(), reflect ? RIGHT : LEFT );
 }
 
-void Battle::Position::Swap( void )
+void Battle::Position::Swap()
 {
     if ( first && second )
         std::swap( first, second );
 }
 
-Battle::Cell * Battle::Position::GetHead( void )
+Battle::Cell * Battle::Position::GetHead()
 {
     return first;
 }
 
-Battle::Cell * Battle::Position::GetTail( void )
+Battle::Cell * Battle::Position::GetTail()
 {
     return second;
 }
 
-const Battle::Cell * Battle::Position::GetHead( void ) const
+const Battle::Cell * Battle::Position::GetHead() const
 {
     return first;
 }
 
-const Battle::Cell * Battle::Position::GetTail( void ) const
+const Battle::Cell * Battle::Position::GetTail() const
 {
     return second;
 }
 
-fheroes2::Rect Battle::Position::GetRect( void ) const
+fheroes2::Rect Battle::Position::GetRect() const
 {
     if ( first )
         return second ? getBoundaryRect( first->GetPos(), second->GetPos() ) : first->GetPos();
@@ -198,7 +198,7 @@ Battle::Position Battle::Position::GetReachable( const Unit & currentUnit, const
     return result;
 }
 
-bool Battle::Position::isReflect( void ) const
+bool Battle::Position::isReflect() const
 {
     return first && second && first->GetIndex() < second->GetIndex();
 }
@@ -264,12 +264,12 @@ bool Battle::Cell::isPositionIncludePoint( const fheroes2::Point & pt ) const
     return UNKNOWN != GetTriangleDirection( pt );
 }
 
-s32 Battle::Cell::GetIndex( void ) const
+int32_t Battle::Cell::GetIndex() const
 {
     return index;
 }
 
-s32 Battle::Cell::GetQuality( void ) const
+int32_t Battle::Cell::GetQuality() const
 {
     return quality;
 }
@@ -289,27 +289,27 @@ void Battle::Cell::setReachableForTail()
     _reachableForTail = true;
 }
 
-void Battle::Cell::SetQuality( u32 val )
+void Battle::Cell::SetQuality( uint32_t val )
 {
     quality = val;
 }
 
-int Battle::Cell::GetObject( void ) const
+int Battle::Cell::GetObject() const
 {
     return object;
 }
 
-const fheroes2::Rect & Battle::Cell::GetPos( void ) const
+const fheroes2::Rect & Battle::Cell::GetPos() const
 {
     return pos;
 }
 
-const Battle::Unit * Battle::Cell::GetUnit( void ) const
+const Battle::Unit * Battle::Cell::GetUnit() const
 {
     return troop;
 }
 
-Battle::Unit * Battle::Cell::GetUnit( void )
+Battle::Unit * Battle::Cell::GetUnit()
 {
     return troop;
 }
@@ -371,7 +371,7 @@ bool Battle::Cell::isPassable( const bool checkForUnit ) const
     return object == 0 && ( !checkForUnit || troop == nullptr );
 }
 
-void Battle::Cell::ResetQuality( void )
+void Battle::Cell::ResetQuality()
 {
     quality = 0;
 }

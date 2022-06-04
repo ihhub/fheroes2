@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-20 02:21+0000\n"
+"POT-Creation-Date: 2022-05-24 17:13+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -135,6 +135,10 @@ msgstr "Vandøde blant styrkene -1"
 msgid "View %{name}"
 msgstr "Vis %{name}"
 
+#, fuzzy
+msgid "Move the %{name} "
+msgstr "Flytt %{name}"
+
 msgid "Move or right click to redistribute %{name}"
 msgstr "Flytt eller høyreklikk for å omfordele %{name}"
 
@@ -149,6 +153,10 @@ msgstr "Velg %{name}"
 
 msgid "Cannot move last troop"
 msgstr "Kan ikke flytte siste styrke i garnisonen"
+
+#, fuzzy
+msgid "Move the %{name}"
+msgstr "Flytt %{name}"
 
 msgid "Set Count"
 msgstr "Velg antall"
@@ -561,20 +569,29 @@ msgstr "%{spell} gjør %{value} skadepoeng på én levende skapning."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} gjør %{value} skadepoeng på alle levende skapninger."
 
-msgid "The Unicorns' attack blinds the %{name}!"
+#, fuzzy
+msgid "The %{attacker}' attack blinds the %{target}!"
 msgstr "Enhjørningenes angrep gjør troppen med %{name} blind!"
 
-msgid "The Medusas' gaze turns the %{name} to stone!"
+#, fuzzy
+msgid "The %{attacker}' gaze turns the %{target} to stone!"
 msgstr "Medusaenes blikk forsteiner troppen med %{name}!"
 
-msgid "The Mummies' curse falls upon the %{name}!"
+#, fuzzy
+msgid "The %{attacker}' curse falls upon the %{target}!"
 msgstr "Mumienes forbannelse treffer troppen med %{name}!"
 
-msgid "The %{name} are paralyzed by the Cyclopes!"
+#, fuzzy
+msgid "The %{target} are paralyzed by the %{attacker}!"
 msgstr "Troppen med %{name} ble lamslått av kyklopene!"
 
-msgid "The Archmagi dispel all good spells on your %{name}!"
+#, fuzzy
+msgid "The %{attacker} dispel all good spells on your %{target}!"
 msgstr "Erkemagikerne opphever alle gode trolldommene på dine %{name}!"
+
+#, fuzzy
+msgid "The %{attacker} cast %{spell} on %{target}!"
+msgstr "%{name} bruker %{spell} på troppen med %{troop}."
 
 # Bestemtform flertall feks. Dvergene får uflaks i stedet for "dverger får uflaks"
 msgid "Bad luck descends on the %{attacker}."
@@ -3492,6 +3509,14 @@ msgstr "Ukjent helt"
 msgid "Your Name"
 msgstr "Ditt navn"
 
+#, fuzzy
+msgid "Standard"
+msgstr "Vanlig spill"
+
+#, fuzzy
+msgid "View High Scores for Standard Maps."
+msgstr "Vis rekordtavle for kampanjer."
+
 # Kampanje?
 msgid "Campaign"
 msgstr "Felttog"
@@ -3770,20 +3795,6 @@ msgid ""
 msgstr ""
 "Fienden har fanget %{name}!\n"
 "De har seiret."
-
-msgid ""
-"The enemy has captured the hero %{name}!\n"
-"Your quest is a failure."
-msgstr ""
-"Fienden har fanget helten %{name}!\n"
-"Dit oppdrag ble mislykket."
-
-msgid ""
-"The enemy has found the %{name}.\n"
-"Your quest is a failure."
-msgstr ""
-"Fienden har funnet %{name}.\n"
-"Ditt oppdrag ble mislykket."
 
 msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
@@ -5820,7 +5831,8 @@ msgstr ""
 "Denne trolldommen koster %{mana} mana. Du har kun %{point} mana, så du kan "
 "ikke bruke denne trolldommen."
 
-msgid "The spell is not found."
+#, fuzzy
+msgid "The spell was not found."
 msgstr "Trolldommen ble ikke funnet."
 
 msgid "Only heroes can cast this spell."
@@ -8756,7 +8768,10 @@ msgstr "Plassholder 4"
 msgid "Spell Scroll"
 msgstr "Trolldomsrull"
 
-msgid "This %{name} gives your hero the ability to cast the %{spell} spell."
+#, fuzzy
+msgid ""
+"This %{name} gives your hero the ability to cast the %{spell} spell if your "
+"hero has a Magic Book."
 msgstr "Denne %{name}en gir helten din evnen til å bruke trolldommen %{spell}."
 
 msgid ""
@@ -9613,6 +9628,9 @@ msgstr ""
 "Forvandler den påvirkede skapningen til stein. En forsteinet skapning tar "
 "halv skade fra direkte angrep."
 
+msgid "You have no Magic Book, so you cannot cast a spell."
+msgstr ""
+
 # Used on adventure map. Plural is right for norwegian.
 msgid "No spell to cast."
 msgstr "Ingen trolldommer tilgjengelige."
@@ -9697,7 +9715,8 @@ msgstr "Borg: Tillat helt som vokter"
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "Helter: Tillat å kjøpe tryllebok fra magitempel"
 
-msgid "heroes: remember move points for retreat/surrender result"
+#, fuzzy
+msgid "heroes: remember movement points when retreating or surrendering"
 msgstr "Helter: Husk skrittene for tilbaketrekkings-/overgivelsesresultatet"
 
 msgid "heroes: allow to choose any primary skill in Arena"
@@ -9721,7 +9740,7 @@ msgstr "Parti: Bruk ondt grensesnitt"
 msgid "game: hide interface"
 msgstr "Parti: Skjul grensesnitt"
 
-msgid "game: offer to continue the game afer victory condition"
+msgid "game: offer to continue the game after victory condition"
 msgstr "Parti: Tilby å fortsette partiet etter å ha vunnet"
 
 msgid "The ultimate artifact is really the %{name}."
@@ -9786,6 +9805,3 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Quit out of fheroes2."
-#~ msgstr "Gå ut av fheroes2."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-20 02:21+0000\n"
+"POT-Creation-Date: 2022-05-24 17:13+0000\n"
 "PO-Revision-Date: 2022-05-12 17:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -136,6 +136,10 @@ msgstr "Morts-vivants parmi les troupes -1"
 msgid "View %{name}"
 msgstr "Voir %{name}"
 
+#, fuzzy
+msgid "Move the %{name} "
+msgstr "Déplacer %{name}"
+
 msgid "Move or right click to redistribute %{name}"
 msgstr "Déplacer ou faire un clic droit pour répartir les %{name}"
 
@@ -150,6 +154,10 @@ msgstr "Sélectionner %{name}"
 
 msgid "Cannot move last troop"
 msgstr "Impossible de déplacer la dernière armée dans la garnison"
+
+#, fuzzy
+msgid "Move the %{name}"
+msgstr "Déplacer %{name}"
 
 msgid "Set Count"
 msgstr "Régler le nombre"
@@ -562,20 +570,29 @@ msgstr "%{spell} inflige %{value} dégâts à une créature vivante."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} inflige %{value} dégâts à toutes les créatures vivantes."
 
-msgid "The Unicorns' attack blinds the %{name}!"
+#, fuzzy
+msgid "The %{attacker}' attack blinds the %{target}!"
 msgstr "L'attaque des Licornes aveugle les %{name} !"
 
-msgid "The Medusas' gaze turns the %{name} to stone!"
+#, fuzzy
+msgid "The %{attacker}' gaze turns the %{target} to stone!"
 msgstr "Le regard des Méduses transforme les %{name} en pierre !"
 
-msgid "The Mummies' curse falls upon the %{name}!"
+#, fuzzy
+msgid "The %{attacker}' curse falls upon the %{target}!"
 msgstr "La malédiction des Momies s'abat sur les %{name} !"
 
-msgid "The %{name} are paralyzed by the Cyclopes!"
+#, fuzzy
+msgid "The %{target} are paralyzed by the %{attacker}!"
 msgstr "%{name} sont paralysés par les Cyclopes !"
 
-msgid "The Archmagi dispel all good spells on your %{name}!"
+#, fuzzy
+msgid "The %{attacker} dispel all good spells on your %{target}!"
 msgstr "Les Grands mages dissipent tous les bons sorts sur vos %{name} !"
+
+#, fuzzy
+msgid "The %{attacker} cast %{spell} on %{target}!"
+msgstr "%{name} lance %{spell} sur les %{troop}."
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "La malchance s'abat sur les %{attacker}."
@@ -3413,6 +3430,14 @@ msgstr "Héros Inconnu"
 msgid "Your Name"
 msgstr "Votre Nom"
 
+#, fuzzy
+msgid "Standard"
+msgstr "Jeu standard"
+
+#, fuzzy
+msgid "View High Scores for Standard Maps."
+msgstr "Voir l'écran des meilleurs scores."
+
 msgid "Campaign"
 msgstr "Campagne"
 
@@ -3695,20 +3720,6 @@ msgid ""
 msgstr ""
 "L'ennemi a capturé %{name} !\n"
 "Ce camp adverse a triomphé."
-
-msgid ""
-"The enemy has captured the hero %{name}!\n"
-"Your quest is a failure."
-msgstr ""
-"L'ennemi a capturé le héros %{name} !\n"
-"Votre quête est un échec."
-
-msgid ""
-"The enemy has found the %{name}.\n"
-"Your quest is a failure."
-msgstr ""
-"L'ennemi a trouvé la %{name}.\n"
-"Votre quête est un échec."
 
 msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
@@ -5778,7 +5789,8 @@ msgstr ""
 "Ce sort coûte %{mana} mana. Vous n'avez que %{point} mana, vous ne pouvez "
 "donc pas lancer le sort."
 
-msgid "The spell is not found."
+#, fuzzy
+msgid "The spell was not found."
 msgstr "Sort introuvable."
 
 msgid "Only heroes can cast this spell."
@@ -8613,8 +8625,12 @@ msgstr "Emplacement 4"
 msgid "Spell Scroll"
 msgstr "Parchemin magique"
 
-msgid "This %{name} gives your hero the ability to cast the %{spell} spell."
-msgstr "Ce %{name} donne à votre héros la capacité de lancer le sort %{spell}."
+msgid ""
+"This %{name} gives your hero the ability to cast the %{spell} spell if your "
+"hero has a Magic Book."
+msgstr ""
+"Ce %{name} donne à votre héros la capacité de lancer le sort %{spell} si "
+"celui-ci possède un grimoire."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
@@ -9458,6 +9474,9 @@ msgstr ""
 "Transforme en pierre la créature affectée.  Une créature pétrifiée reçoit la "
 "moitié des dégâts d'une attaque directe."
 
+msgid "You have no Magic Book, so you cannot cast a spell."
+msgstr "Vous n'avez pas de grimoire, vous ne pouvez donc pas lancer un sort."
+
 msgid "No spell to cast."
 msgstr "Aucun sort à lancer."
 
@@ -9543,7 +9562,8 @@ msgstr "château : les Héros peuvent remplacer le Capitaine"
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "héros : permettre l'achat d'un Grimoire dans les Sanctuaires"
 
-msgid "heroes: remember move points for retreat/surrender result"
+#, fuzzy
+msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
 "héros : les points de mouvement sont mémorisés après la retraite/reddition"
 
@@ -9570,7 +9590,7 @@ msgstr "jeu : utiliser l'interface maléfique"
 msgid "game: hide interface"
 msgstr "jeu : cacher l'interface"
 
-msgid "game: offer to continue the game afer victory condition"
+msgid "game: offer to continue the game after victory condition"
 msgstr "jeu : offre de continuer le jeu après la victoire"
 
 msgid "The ultimate artifact is really the %{name}."
@@ -9636,6 +9656,3 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Quit out of fheroes2."
-#~ msgstr "Quittez fheroes2."

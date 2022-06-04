@@ -24,10 +24,10 @@
 #include <algorithm>
 #include <vector>
 
-#include "agg.h"
 #include "agg_image.h"
 #include "ai.h"
 #include "audio.h"
+#include "audio_manager.h"
 #include "battle_only.h"
 #include "castle.h"
 #include "cursor.h"
@@ -63,7 +63,7 @@ namespace
     }
 }
 
-fheroes2::GameMode Game::StartBattleOnly( void )
+fheroes2::GameMode Game::StartBattleOnly()
 {
     Battle::Only main;
 
@@ -233,7 +233,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
             break;
 
         case Dialog::DISMISS:
-            AGG::PlaySound( M82::KILLFADE );
+            AudioManager::PlaySound( M82::KILLFADE );
 
             ( *it )->GetPath().Hide();
             gameArea.SetRedraw();
@@ -267,12 +267,12 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
     I.RedrawFocus();
 }
 
-void ShowNewWeekDialog( void )
+void ShowNewWeekDialog()
 {
     // restore the original music on exit
     const Game::MusicRestorer musicRestorer;
 
-    AGG::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, false );
+    AudioManager::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, false );
 
     const Week & week = world.GetWeekType();
 
@@ -283,7 +283,7 @@ void ShowNewWeekDialog( void )
 
     if ( week.GetType() == WeekName::MONSTERS ) {
         const Monster monster( week.GetMonster() );
-        const u32 count = world.BeginMonth() ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
+        const uint32_t count = world.BeginMonth() ? Castle::GetGrownMonthOf() : Castle::GetGrownWeekOf();
 
         if ( monster.isValid() && count ) {
             if ( world.BeginMonth() )
@@ -306,7 +306,7 @@ void ShowNewWeekDialog( void )
     Dialog::Message( "", message, Font::BIG, Dialog::OK );
 }
 
-void ShowEventDayDialog( void )
+void ShowEventDayDialog()
 {
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     const EventsDate events = world.GetEventsDate( myKingdom.GetColor() );
@@ -525,7 +525,7 @@ int Interface::Basic::GetCursorFocusHeroes( const Heroes & from_hero, const Maps
     return Cursor::POINTER;
 }
 
-int Interface::Basic::GetCursorTileIndex( s32 dst_index )
+int Interface::Basic::GetCursorTileIndex( int32_t dst_index )
 {
     if ( dst_index < 0 || dst_index >= world.w() * world.h() )
         return Cursor::POINTER;
@@ -559,15 +559,19 @@ fheroes2::GameMode Interface::Basic::StartGame()
     radar.Build();
     radar.SetHide( true );
 
-    iconsPanel.ResetIcons( ICON_ANY );
-    iconsPanel.HideIcons( ICON_ANY );
+    // Hide the world map at the first drawing
+    const int currentColor = conf.CurrentColor();
+    conf.SetCurrentColor( -1 );
 
+    iconsPanel.HideIcons( ICON_ANY );
     statusWindow.Reset();
 
     if ( conf.ExtGameHideInterface() )
         SetHideInterface( true );
 
-    Redraw( REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
+    Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
+
+    conf.SetCurrentColor( currentColor );
 
     bool loadedFromSave = conf.LoadedGameVersion();
     bool skipTurns = loadedFromSave;
@@ -614,7 +618,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                 case CONTROL_HUMAN:
                     // reset environment sounds and music theme at the beginning of the human turn
                     Game::SetCurrentMusic( MUS::UNKNOWN );
-                    AGG::ResetAudio();
+                    AudioManager::ResetAudio();
 
                     if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
                         // we need to hide the world map in hot seat mode
@@ -623,14 +627,13 @@ fheroes2::GameMode Interface::Basic::StartGame()
                         iconsPanel.HideIcons( ICON_ANY );
                         statusWindow.Reset();
 
-                        SetRedraw( REDRAW_GAMEAREA | REDRAW_STATUS | REDRAW_ICONS );
-                        Redraw();
+                        Redraw( REDRAW_GAMEAREA | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS );
                         display.render();
 
                         // reset the music after closing the dialog
                         const Game::MusicRestorer musicRestorer;
 
-                        AGG::PlayMusic( MUS::NEW_MONTH, false );
+                        AudioManager::PlayMusic( MUS::NEW_MONTH, false );
 
                         Game::DialogPlayers( player->GetColor(), _( "%{color} player's turn." ) );
                     }
@@ -647,13 +650,13 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     res = HumanTurn( loadedFromSave );
 
                     // Skip resetting Audio after winning scenario because MUS::VICTORY should continue playing.
-                    if ( res == fheroes2::GameMode::HIGHSCORES ) {
+                    if ( res == fheroes2::GameMode::HIGHSCORES_STANDARD ) {
                         break;
                     }
 
                     // Reset environment sounds and music theme at the end of the human turn.
                     Game::SetCurrentMusic( MUS::UNKNOWN );
-                    AGG::ResetAudio();
+                    AudioManager::ResetAudio();
 
                     break;
 
@@ -1005,9 +1008,16 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             if ( hero ) {
                 bool resetHeroSprite = false;
                 if ( heroAnimationFrameCount > 0 ) {
-                    gameArea.ShiftCenter( { heroAnimationOffset.x * Game::HumanHeroAnimSkip(), heroAnimationOffset.y * Game::HumanHeroAnimSkip() } );
+                    const int32_t heroMovementSkipValue = Game::HumanHeroAnimSkip();
+
+                    gameArea.ShiftCenter( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
                     gameArea.SetRedraw();
-                    heroAnimationFrameCount -= Game::HumanHeroAnimSkip();
+
+                    if ( heroAnimationOffset != fheroes2::Point() ) {
+                        Game::EnvironmentSoundMixer();
+                    }
+
+                    heroAnimationFrameCount -= heroMovementSkipValue;
                     if ( ( heroAnimationFrameCount & 0x3 ) == 0 ) { // % 4
                         hero->SetSpriteIndex( heroAnimationSpriteId );
 
@@ -1017,7 +1027,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                             ++heroAnimationSpriteId;
                     }
                     const int offsetStep = ( ( 4 - ( heroAnimationFrameCount & 0x3 ) ) & 0x3 ); // % 4
-                    hero->SetOffset( fheroes2::Point( heroAnimationOffset.x * offsetStep, heroAnimationOffset.y * offsetStep ) );
+                    hero->SetOffset( { heroAnimationOffset.x * offsetStep, heroAnimationOffset.y * offsetStep } );
                 }
 
                 if ( heroAnimationFrameCount == 0 ) {
@@ -1037,17 +1047,21 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                             }
                         }
                         else {
-                            fheroes2::Point movement( hero->MovementDirection() );
+                            const fheroes2::Point movement( hero->MovementDirection() );
                             if ( movement != fheroes2::Point() ) { // don't waste resources for no movement
+                                const int32_t heroMovementSkipValue = Game::HumanHeroAnimSkip();
+
                                 heroAnimationOffset = movement;
                                 gameArea.ShiftCenter( movement );
+
+                                Game::SetUpdateSoundsOnFocusUpdate( false );
                                 ResetFocus( GameFocus::HEROES );
-                                heroAnimationFrameCount = 32 - Game::HumanHeroAnimSkip();
+                                Game::SetUpdateSoundsOnFocusUpdate( true );
+                                heroAnimationFrameCount = 32 - heroMovementSkipValue;
                                 heroAnimationSpriteId = hero->GetSpriteIndex();
-                                if ( Game::HumanHeroAnimSkip() < 4 ) {
+                                if ( heroMovementSkipValue < 4 ) {
                                     hero->SetSpriteIndex( heroAnimationSpriteId - 1 );
-                                    hero->SetOffset(
-                                        fheroes2::Point( heroAnimationOffset.x * Game::HumanHeroAnimSkip(), heroAnimationOffset.y * Game::HumanHeroAnimSkip() ) );
+                                    hero->SetOffset( { heroAnimationOffset.x * heroMovementSkipValue, heroAnimationOffset.y * heroMovementSkipValue } );
                                 }
                                 else {
                                     ++heroAnimationSpriteId;
@@ -1099,7 +1113,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
 
         // slow maps objects animation
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
-            u32 & frame = Game::MapsAnimationFrame();
+            uint32_t & frame = Game::MapsAnimationFrame();
             ++frame;
             gameArea.SetRedraw();
         }
@@ -1207,7 +1221,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
     }
 }
 
-void Interface::Basic::MouseCursorAreaPressRight( s32 index_maps ) const
+void Interface::Basic::MouseCursorAreaPressRight( int32_t index_maps ) const
 {
     Heroes * hero = GetFocusHeroes();
 

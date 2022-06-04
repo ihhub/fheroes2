@@ -51,12 +51,10 @@ namespace GameOver
         LOSS_TIME = 0x00000800,
         // These loss conditions apply if the enemy player won because of the corresponding win condition
         LOSS_ENEMY_WINS_TOWN = 0x00010000,
-        LOSS_ENEMY_WINS_HERO = 0x00020000,
-        LOSS_ENEMY_WINS_ARTIFACT = 0x00040000,
-        LOSS_ENEMY_WINS_GOLD = 0x00080000,
+        LOSS_ENEMY_WINS_GOLD = 0x00020000,
 
-        LOSS = LOSS_ALL | LOSS_TOWN | LOSS_HERO | LOSS_TIME | LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_HERO | LOSS_ENEMY_WINS_ARTIFACT | LOSS_ENEMY_WINS_GOLD,
-        LOSS_ENEMY_WINS = LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_HERO | LOSS_ENEMY_WINS_ARTIFACT | LOSS_ENEMY_WINS_GOLD
+        LOSS = LOSS_ALL | LOSS_TOWN | LOSS_HERO | LOSS_TIME | LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_GOLD,
+        LOSS_ENEMY_WINS = LOSS_ENEMY_WINS_TOWN | LOSS_ENEMY_WINS_GOLD
     };
 
     const char * GetString( uint32_t cond );
@@ -65,7 +63,7 @@ namespace GameOver
     class Result
     {
     public:
-        static Result & Get( void );
+        static Result & Get();
 
         void Reset(); // Resets everything
         void ResetResult(); // Resets just the result

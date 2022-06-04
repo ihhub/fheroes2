@@ -58,11 +58,11 @@ namespace Battle
 
         Board & operator=( const Board & ) = delete;
 
-        void Reset( void );
+        void Reset();
 
         void SetArea( const fheroes2::Rect & );
 
-        s32 GetIndexAbsPosition( const fheroes2::Point & ) const;
+        int32_t GetIndexAbsPosition( const fheroes2::Point & ) const;
         std::vector<Unit *> GetNearestTroops( const Unit * startUnit, const std::vector<Unit *> & blackList );
         Indexes GetPath( const Unit & unit, const Position & destination, const bool debug = true ) const;
 
@@ -73,32 +73,32 @@ namespace Battle
         void SetCobjObjects( const Maps::Tiles & tile, std::mt19937 & gen );
         void SetCovrObjects( int icn );
 
-        static std::string GetMoatInfo( void );
+        static std::string GetMoatInfo();
 
-        static Cell * GetCell( s32 position, int dir = CENTER );
-        static bool isNearIndexes( s32, s32 );
-        static bool isValidIndex( s32 );
-        static bool isCastleIndex( s32 );
-        static bool isMoatIndex( s32 index, const Unit & b );
-        static bool isBridgeIndex( s32 index, const Unit & b );
-        static bool isOutOfWallsIndex( s32 );
+        static Cell * GetCell( int32_t position, int dir = CENTER );
+        static bool isNearIndexes( int32_t, int32_t );
+        static bool isValidIndex( int32_t );
+        static bool isCastleIndex( int32_t );
+        static bool isMoatIndex( int32_t index, const Unit & b );
+        static bool isBridgeIndex( int32_t index, const Unit & b );
+        static bool isOutOfWallsIndex( int32_t );
         static bool IsLeftDirection( const int32_t startCellId, const int32_t endCellId, const bool prevLeftDirection );
-        static bool isNegativeDistance( s32 index1, s32 index2 );
+        static bool isNegativeDistance( int32_t index1, int32_t index2 );
         static int DistanceFromOriginX( int32_t index, bool reflect );
         static int GetReflectDirection( int );
-        static int GetDirection( s32, s32 );
+        static int GetDirection( int32_t, int32_t );
         static int32_t DoubleCellAttackValue( const Unit & attacker, const Unit & target, const int32_t from, const int32_t targetCell );
         static int32_t OptimalAttackTarget( const Unit & attacker, const Unit & target, const int32_t from );
         static int32_t OptimalAttackValue( const Unit & attacker, const Unit & target, const int32_t from );
-        static uint32_t GetDistance( s32, s32 );
-        static bool isValidDirection( s32, int );
-        static s32 GetIndexDirection( s32, int );
-        static Indexes GetDistanceIndexes( s32, u32 );
-        static Indexes GetAroundIndexes( s32 center, s32 ignore = -1 );
+        static uint32_t GetDistance( int32_t, int32_t );
+        static bool isValidDirection( int32_t, int );
+        static int32_t GetIndexDirection( int32_t, int );
+        static Indexes GetDistanceIndexes( int32_t, uint32_t );
+        static Indexes GetAroundIndexes( int32_t center, int32_t ignore = -1 );
         static Indexes GetAroundIndexes( const Unit & unit );
         static Indexes GetAroundIndexes( const Position & position );
-        static Indexes GetMoveWideIndexes( s32, bool reflect );
-        static bool isValidMirrorImageIndex( s32, const Unit * );
+        static Indexes GetMoveWideIndexes( int32_t, bool reflect );
+        static bool isValidMirrorImageIndex( const int32_t index, const Unit * unit );
 
         // Checks that the current unit (to which the current passability information relates) is able (in principle)
         // to attack from the cell with the given index

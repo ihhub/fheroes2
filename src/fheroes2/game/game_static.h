@@ -24,8 +24,9 @@
 #ifndef H2GAMESTATIC_H
 #define H2GAMESTATIC_H
 
+#include <cstdint>
+
 #include "mp2.h"
-#include "types.h"
 
 class StreamBase;
 
@@ -46,26 +47,26 @@ namespace GameStatic
         MAGI_EYES
     };
 
-    u32 GetLostOnWhirlpoolPercent( void );
-    u32 GetGameOverLostDays( void );
+    uint32_t GetLostOnWhirlpoolPercent();
+    uint32_t GetGameOverLostDays();
     uint32_t getFogDiscoveryDistance( const FogDiscoveryType type );
 
-    u32 GetKingdomMaxHeroes( void );
+    uint32_t GetKingdomMaxHeroes();
 
-    u32 GetCastleGrownWell( void );
-    u32 GetCastleGrownWel2( void );
-    u32 GetCastleGrownWeekOf( void );
-    u32 GetCastleGrownMonthOf( void );
+    uint32_t GetCastleGrownWell();
+    uint32_t GetCastleGrownWel2();
+    uint32_t GetCastleGrownWeekOf();
+    uint32_t GetCastleGrownMonthOf();
 
-    u32 GetHeroesRestoreSpellPointsPerDay( void );
+    uint32_t GetHeroesRestoreSpellPointsPerDay();
 
-    s32 ObjectVisitedModifiers( const MP2::MapObjectType objectType );
+    int32_t ObjectVisitedModifiers( const MP2::MapObjectType objectType );
 
-    int GetBattleMoatReduceDefense( void );
+    int GetBattleMoatReduceDefense();
 
     const Skill::stats_t * GetSkillStats( int race );
     const Skill::values_t * GetSkillValues( int skill );
-    const Skill::secondary_t * GetSkillForWitchsHut( void );
+    const Skill::secondary_t * GetSkillForWitchsHut();
 }
 
 #endif

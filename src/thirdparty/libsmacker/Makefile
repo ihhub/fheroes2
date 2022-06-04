@@ -1,5 +1,5 @@
 ###########################################################################
-#   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
+#   fheroes2: https://github.com/ihhub/fheroes2                           #
 #   Copyright (C) 2022                                                    #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
@@ -28,7 +28,7 @@ $(TARGET).a: smacker.o
 	$(AR) crvs $@ $^
 
 smacker.o: smacker.c
-	$(CC) -c -MD $< $(CCFLAGS) $(CFLAGS)
+	$(CC) -c -MD $< $(CCFLAGS) $(CFLAGS) $(CPPFLAGS)
 
 include $(wildcard *.d)
 

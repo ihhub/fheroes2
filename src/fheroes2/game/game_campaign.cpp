@@ -21,8 +21,8 @@
 #include <array>
 #include <cassert>
 
-#include "agg.h"
 #include "agg_image.h"
+#include "audio_manager.h"
 #include "battle.h"
 #include "campaign_data.h"
 #include "campaign_savedata.h"
@@ -33,6 +33,7 @@
 #include "game_credits.h"
 #include "game_hotkeys.h"
 #include "game_io.h"
+#include "game_over.h"
 #include "game_video.h"
 #include "icn.h"
 #include "logging.h"
@@ -574,7 +575,6 @@ namespace
 
                     for ( size_t j = 0; j < heroes.size(); ++j ) {
                         if ( heroes[j]->GetID() == awards[i]._subType ) {
-                            heroes[j]->SetKillerColor( humanKingdom.GetColor() );
                             heroes[j]->SetFreeman( Battle::RESULT_LOSS );
                             break;
                         }
@@ -606,13 +606,13 @@ namespace
         const Campaign::ScenarioData & completedScenario = scenarios[lastCompletedScenarioInfoId.scenarioId];
 
         if ( !completedScenario.getEndScenarioVideoPlayback().empty() ) {
-            AGG::ResetAudio();
+            AudioManager::ResetAudio();
 
             for ( const Campaign::ScenarioIntroVideoInfo & videoInfo : completedScenario.getEndScenarioVideoPlayback() ) {
                 Video::ShowVideo( videoInfo.fileName, videoInfo.action );
             }
 
-            AGG::ResetAudio();
+            AudioManager::ResetAudio();
         }
     }
 
@@ -629,13 +629,13 @@ namespace
         const Campaign::ScenarioData & scenario = scenarios[currentScenarioInfoId.scenarioId];
 
         if ( !scenario.getStartScenarioVideoPlayback().empty() ) {
-            AGG::ResetAudio();
+            AudioManager::ResetAudio();
 
             for ( const Campaign::ScenarioIntroVideoInfo & videoInfo : scenario.getStartScenarioVideoPlayback() ) {
                 Video::ShowVideo( videoInfo.fileName, videoInfo.action );
             }
 
-            AGG::ResetAudio();
+            AudioManager::ResetAudio();
         }
     }
 
@@ -692,10 +692,10 @@ namespace
         case Campaign::DESCENDANTS_CAMPAIGN:
         case Campaign::WIZARDS_ISLE_CAMPAIGN:
         case Campaign::VOYAGE_HOME_CAMPAIGN:
-            AGG::PlayMusic( MUS::ROLAND_CAMPAIGN_SCREEN, true );
+            AudioManager::PlayMusic( MUS::ROLAND_CAMPAIGN_SCREEN, true );
             break;
         case Campaign::ARCHIBALD_CAMPAIGN:
-            AGG::PlayMusic( MUS::ARCHIBALD_CAMPAIGN_SCREEN, true );
+            AudioManager::PlayMusic( MUS::ARCHIBALD_CAMPAIGN_SCREEN, true );
             break;
         default:
             // Implementing a new campaign? Add a new case!
@@ -851,13 +851,13 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
     if ( campaignData.isLastScenario( lastCompletedScenarioInfo ) ) {
         Game::ShowCredits();
 
-        AGG::ResetAudio();
+        AudioManager::ResetAudio();
         Video::ShowVideo( "WIN.SMK", Video::VideoAction::WAIT_FOR_USER_INPUT );
         // TODO : Implement function that displays the last frame of win.smk with score
-        // and a dialog for name entry. AGG:PlayMusic is run here in order to start
+        // and a dialog for name entry. fheroes::PlayMusic is run here in order to start
         // playing before displaying the high score.
-        AGG::PlayMusic( MUS::VICTORY, true, true );
-        return fheroes2::GameMode::HIGHSCORES;
+        AudioManager::PlayMusic( MUS::VICTORY, true, true );
+        return fheroes2::GameMode::HIGHSCORES_CAMPAIGN;
     }
 
     const Campaign::ScenarioInfoId firstNextMap = Campaign::CampaignData::getScenariosAfter( lastCompletedScenarioInfo ).front();
@@ -1048,6 +1048,10 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
 
         if ( le.MouseClickLeft( buttonCancel.area() ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) ) {
+            if ( !allowToRestart ) {
+                // Make sure to reset a state of the game if a user does not want to load it.
+                GameOver::Result::Get().Reset();
+            }
             return prevMode;
         }
 
@@ -1117,7 +1121,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             return fheroes2::GameMode::START_GAME;
         }
         else if ( le.MouseClickLeft( buttonViewIntro.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_VIEW_INTRO ) ) {
-            AGG::ResetAudio();
+            AudioManager::ResetAudio();
             fheroes2::ImageRestorer restorer( display, top.x, top.y, backgroundImage.width(), backgroundImage.height() );
             playPreviosScenarioVideo();
             playCurrentScenarioVideo();

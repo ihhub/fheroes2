@@ -248,7 +248,6 @@ namespace
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::ROLAND_CAMPAIGN );
-        campaignData.setCampaignDescription( "Roland Campaign" );
         campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
@@ -351,7 +350,6 @@ namespace
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::ARCHIBALD_CAMPAIGN );
-        campaignData.setCampaignDescription( "Archibald Campaign" );
         campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
@@ -676,11 +674,6 @@ namespace Campaign
     void CampaignData::setCampaignScenarios( std::vector<ScenarioData> && scenarios )
     {
         _scenarios = std::move( scenarios );
-    }
-
-    void CampaignData::setCampaignDescription( const std::string & campaignDescription )
-    {
-        _campaignDescription = campaignDescription;
     }
 
     const CampaignData & CampaignData::getCampaignData( const int campaignID )

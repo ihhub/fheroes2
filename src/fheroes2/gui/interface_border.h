@@ -37,13 +37,13 @@ namespace Interface
         virtual ~BorderWindow() = default;
 
         virtual void SetPos( int32_t, int32_t ) = 0;
-        virtual void SavePosition( void ) = 0;
+        virtual void SavePosition() = 0;
 
         void Redraw() const;
-        bool QueueEventProcessing( void );
+        bool QueueEventProcessing();
 
-        const fheroes2::Rect & GetRect( void ) const;
-        const fheroes2::Rect & GetArea( void ) const
+        const fheroes2::Rect & GetRect() const;
+        const fheroes2::Rect & GetArea() const
         {
             return area;
         }

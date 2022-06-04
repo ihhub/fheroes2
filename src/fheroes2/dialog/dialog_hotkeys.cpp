@@ -57,17 +57,13 @@ namespace
     class HotKeyList : public Interface::ListBox<Game::HotKeyEvent>
     {
     public:
+        using Interface::ListBox<Game::HotKeyEvent>::ListBox;
+
         using Interface::ListBox<Game::HotKeyEvent>::ActionListSingleClick;
         using Interface::ListBox<Game::HotKeyEvent>::ActionListPressRight;
         using Interface::ListBox<Game::HotKeyEvent>::ActionListDoubleClick;
 
-        explicit HotKeyList( const fheroes2::Point & offset )
-            : Interface::ListBox<Game::HotKeyEvent>( offset )
-        {
-            // Do nothing.
-        }
-
-        void RedrawItem( const Game::HotKeyEvent & hotKeyEvent, s32 offsetX, s32 offsetY, bool /*current*/ ) override
+        void RedrawItem( const Game::HotKeyEvent & hotKeyEvent, int32_t offsetX, int32_t offsetY, bool /*current*/ ) override
         {
             fheroes2::Display & display = fheroes2::Display::instance();
 

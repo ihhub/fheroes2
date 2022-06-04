@@ -37,18 +37,26 @@ namespace AGG
         AGGInitializer( const AGGInitializer & ) = delete;
         AGGInitializer & operator=( const AGGInitializer & ) = delete;
 
-        ~AGGInitializer();
+        ~AGGInitializer() = default;
+
+        const std::string & getOriginalAGGFilePath() const
+        {
+            return _originalAGGFilePath;
+        }
+
+        const std::string & getExpansionAGGFilePath() const
+        {
+            return _expansionAGGFilePath;
+        }
 
     private:
-        static bool init();
+        bool init();
+
+        std::string _originalAGGFilePath;
+        std::string _expansionAGGFilePath;
     };
 
-    void LoadLOOPXXSounds( const std::vector<int> & vols, bool asyncronizedCall = false );
-    void PlaySound( int m82, bool asyncronizedCall = false );
-    void PlayMusic( int mus, bool loop = true, bool asyncronizedCall = false );
-    void ResetAudio();
-
-    std::vector<uint8_t> ReadChunk( const std::string & key );
+    std::vector<uint8_t> getDataFromAggFile( const std::string & key );
 }
 
 #endif

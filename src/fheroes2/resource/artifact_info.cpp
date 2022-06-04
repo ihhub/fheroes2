@@ -478,7 +478,7 @@ namespace
             { gettext_noop( "Dummy 4" ), gettext_noop( "The reserved artifact." ), nullptr, {}, {} },
 
             { gettext_noop( "Spell Scroll" ),
-              gettext_noop( "This %{name} gives your hero the ability to cast the %{spell} spell." ),
+              gettext_noop( "This %{name} gives your hero the ability to cast the %{spell} spell if your hero has a Magic Book." ),
               gettext_noop(
                   "You find an elaborate container which houses an old vellum scroll. The runes on the container are very old, and the artistry with which it was put together is stunning. As you pull the scroll out, you feel imbued with magical power." ),
               {},

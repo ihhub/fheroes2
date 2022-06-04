@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-20 02:21+0000\n"
+"POT-Creation-Date: 2022-05-24 17:13+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -140,6 +140,10 @@ msgstr "Élőhalottak a seregben -1"
 msgid "View %{name}"
 msgstr "%{name} mutatása"
 
+#, fuzzy
+msgid "Move the %{name} "
+msgstr "%{name} ide lép."
+
 msgid "Move or right click to redistribute %{name}"
 msgstr ""
 
@@ -155,6 +159,10 @@ msgstr "%{name} kiválasztása"
 #, fuzzy
 msgid "Cannot move last troop"
 msgstr "A sereg utolsó egységét nem lehet áthelyezni."
+
+#, fuzzy
+msgid "Move the %{name}"
+msgstr "%{name} ide lép."
 
 msgid "Set Count"
 msgstr ""
@@ -572,20 +580,29 @@ msgstr "A %{spell} varázslat %{damage} sebzést okoz valamennyi élő lénynek.
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "A %{spell} varázslat %{damage} sebzést okoz valamennyi élő lénynek.."
 
-msgid "The Unicorns' attack blinds the %{name}!"
+#, fuzzy
+msgid "The %{attacker}' attack blinds the %{target}!"
 msgstr "Az Unikornis megvakítja a(z) %{name}!"
 
-msgid "The Medusas' gaze turns the %{name} to stone!"
+#, fuzzy
+msgid "The %{attacker}' gaze turns the %{target} to stone!"
 msgstr "A Medúza szeme kővé változtatta a(z) %{name} lényt!"
 
-msgid "The Mummies' curse falls upon the %{name}!"
+#, fuzzy
+msgid "The %{attacker}' curse falls upon the %{target}!"
 msgstr "A Múmiák átka lesújt a(z) %{name}!"
 
-msgid "The %{name} are paralyzed by the Cyclopes!"
+#, fuzzy
+msgid "The %{target} are paralyzed by the %{attacker}!"
 msgstr "A Küklopsz lebénítja a(z) %{name} lényt!"
 
-msgid "The Archmagi dispel all good spells on your %{name}!"
+#, fuzzy
+msgid "The %{attacker} dispel all good spells on your %{target}!"
 msgstr "A főmágus eloszlatja az összes pozitív varázslatot a %{name} lényről!"
+
+#, fuzzy
+msgid "The %{attacker} cast %{spell} on %{target}!"
+msgstr "%{name}  %{spell} -t varázsol a %{troop} -re."
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "A %{attacker} lénynek balszerencséje van."
@@ -3433,6 +3450,14 @@ msgid "Your Name"
 msgstr ""
 
 #, fuzzy
+msgid "Standard"
+msgstr "Szimpla játék"
+
+#, fuzzy
+msgid "View High Scores for Standard Maps."
+msgstr "Dicsőségtábla megjelenítése."
+
+#, fuzzy
 msgid "Campaign"
 msgstr "Hadjárat"
 
@@ -3687,21 +3712,6 @@ msgid ""
 msgstr ""
 "Az ellenfél elfoglalta %{name}!\n"
 "Ők győztek.."
-
-#, fuzzy
-msgid ""
-"The enemy has captured the hero %{name}!\n"
-"Your quest is a failure."
-msgstr ""
-"Az ellenség megtalálta %{name}.\n"
-"A küldetésed kudarcba fulladt."
-
-msgid ""
-"The enemy has found the %{name}.\n"
-"Your quest is a failure."
-msgstr ""
-"Az ellenség megtalálta %{name}.\n"
-"A küldetésed kudarcba fulladt."
 
 msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
@@ -5506,7 +5516,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "The spell is not found."
+msgid "The spell was not found."
 msgstr "Ez a varázslat nem fog senkire se hatni!"
 
 msgid "Only heroes can cast this spell."
@@ -8382,7 +8392,9 @@ msgstr "Scummy"
 msgid "Spell Scroll"
 msgstr "Varázstekercs"
 
-msgid "This %{name} gives your hero the ability to cast the %{spell} spell."
+msgid ""
+"This %{name} gives your hero the ability to cast the %{spell} spell if your "
+"hero has a Magic Book."
 msgstr ""
 
 msgid ""
@@ -9081,6 +9093,9 @@ msgid ""
 "damage from a direct attack."
 msgstr ""
 
+msgid "You have no Magic Book, so you cannot cast a spell."
+msgstr ""
+
 msgid "No spell to cast."
 msgstr ""
 
@@ -9169,7 +9184,7 @@ msgstr ""
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr ""
 
-msgid "heroes: remember move points for retreat/surrender result"
+msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
 
 msgid "heroes: allow to choose any primary skill in Arena"
@@ -9193,7 +9208,7 @@ msgstr ""
 msgid "game: hide interface"
 msgstr ""
 
-msgid "game: offer to continue the game afer victory condition"
+msgid "game: offer to continue the game after victory condition"
 msgstr ""
 
 #, fuzzy

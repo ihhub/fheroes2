@@ -25,8 +25,8 @@
 #include <cassert>
 #include <vector>
 
-#include "agg.h"
 #include "audio.h"
+#include "audio_manager.h"
 #include "cursor.h"
 #include "dialog_system_options.h"
 #include "game.h"
@@ -78,7 +78,7 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx 
     Interface::Basic::Get().buttonsArea.Redraw();
 }
 
-void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, s32 destinationIdx )
+void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, int32_t destinationIdx )
 {
     if ( !hero || hero->Modes( Heroes::GUARDIAN ) )
         return;
@@ -102,7 +102,7 @@ void Interface::Basic::MoveHeroFromArrowKeys( Heroes & hero, int direct )
 {
     const bool fromWater = hero.isShipMaster();
     if ( Maps::isValidDirection( hero.GetIndex(), direct ) ) {
-        s32 dst = Maps::GetDirectionIndex( hero.GetIndex(), direct );
+        int32_t dst = Maps::GetDirectionIndex( hero.GetIndex(), direct );
         const Maps::Tiles & tile = world.GetTiles( dst );
         bool allow = false;
 
@@ -124,7 +124,7 @@ void Interface::Basic::MoveHeroFromArrowKeys( Heroes & hero, int direct )
     }
 }
 
-void Interface::Basic::EventNextHero( void )
+void Interface::Basic::EventNextHero()
 {
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     const KingdomHeroes & myHeroes = myKingdom.GetHeroes();
@@ -158,7 +158,7 @@ void Interface::Basic::EventNextHero( void )
     RedrawFocus();
 }
 
-void Interface::Basic::EventContinueMovement( void ) const
+void Interface::Basic::EventContinueMovement() const
 {
     Heroes * hero = GetFocusHeroes();
 
@@ -167,7 +167,7 @@ void Interface::Basic::EventContinueMovement( void ) const
     }
 }
 
-void Interface::Basic::EventKingdomInfo( void ) const
+void Interface::Basic::EventKingdomInfo() const
 {
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     myKingdom.openOverviewDialog();
@@ -175,7 +175,7 @@ void Interface::Basic::EventKingdomInfo( void ) const
     iconsPanel.SetRedraw();
 }
 
-void Interface::Basic::EventCastSpell( void )
+void Interface::Basic::EventCastSpell()
 {
     Heroes * hero = GetFocusHeroes();
 
@@ -254,7 +254,7 @@ fheroes2::GameMode Interface::Basic::EventExit()
     return fheroes2::GameMode::CANCEL;
 }
 
-void Interface::Basic::EventNextTown( void )
+void Interface::Basic::EventNextTown()
 {
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     KingdomCastles & myCastles = myKingdom.GetCastles();
@@ -313,7 +313,7 @@ fheroes2::GameMode Interface::Basic::EventLoadGame() const
                : fheroes2::GameMode::CANCEL;
 }
 
-void Interface::Basic::EventPuzzleMaps( void ) const
+void Interface::Basic::EventPuzzleMaps() const
 {
     world.GetKingdom( Settings::Get().CurrentColor() ).PuzzleMaps().ShowMapsDialog();
 }
@@ -324,7 +324,7 @@ fheroes2::GameMode Interface::Basic::EventScenarioInformation()
         fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::ImageRestorer saver( display, 0, 0, display.width(), display.height() );
 
-        AGG::ResetAudio();
+        AudioManager::ResetAudio();
 
         const fheroes2::GameMode returnMode = Game::SelectCampaignScenario( fheroes2::GameMode::CANCEL, true );
         if ( returnMode == fheroes2::GameMode::CANCEL ) {
@@ -343,7 +343,7 @@ fheroes2::GameMode Interface::Basic::EventScenarioInformation()
     return fheroes2::GameMode::CANCEL;
 }
 
-void Interface::Basic::EventSwitchHeroSleeping( void )
+void Interface::Basic::EventSwitchHeroSleeping()
 {
     Heroes * hero = GetFocusHeroes();
 
@@ -364,12 +364,12 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
             Dialog::Message( "", _( "Try looking on land!!!" ), Font::BIG, Dialog::OK );
         else if ( hero->GetMaxMovePoints() <= hero->GetMovePoints() ) {
             if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() ) {
-                AGG::PlaySound( M82::DIGSOUND );
+                AudioManager::PlaySound( M82::DIGSOUND );
 
                 hero->ResetMovePoints();
 
                 if ( world.DiggingForUltimateArtifact( hero->GetCenter() ) ) {
-                    AGG::PlaySound( M82::TREASURE );
+                    AudioManager::PlaySound( M82::TREASURE );
                     const Artifact & ultimate = world.GetUltimateArtifact().GetArtifact();
                     hero->PickupArtifact( ultimate );
                     std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );
@@ -429,7 +429,7 @@ fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMod
     return gameMode;
 }
 
-void Interface::Basic::EventOpenFocus( void ) const
+void Interface::Basic::EventOpenFocus() const
 {
     if ( GetFocusHeroes() )
         Game::OpenHeroesDialog( *GetFocusHeroes(), true, true );
@@ -437,7 +437,7 @@ void Interface::Basic::EventOpenFocus( void ) const
         Game::OpenCastleDialog( *GetFocusCastle() );
 }
 
-void Interface::Basic::EventSwitchShowRadar( void ) const
+void Interface::Basic::EventSwitchShowRadar() const
 {
     Settings & conf = Settings::Get();
 
@@ -453,7 +453,7 @@ void Interface::Basic::EventSwitchShowRadar( void ) const
     }
 }
 
-void Interface::Basic::EventSwitchShowButtons( void ) const
+void Interface::Basic::EventSwitchShowButtons() const
 {
     Settings & conf = Settings::Get();
 
@@ -469,7 +469,7 @@ void Interface::Basic::EventSwitchShowButtons( void ) const
     }
 }
 
-void Interface::Basic::EventSwitchShowStatus( void ) const
+void Interface::Basic::EventSwitchShowStatus() const
 {
     Settings & conf = Settings::Get();
 
@@ -485,7 +485,7 @@ void Interface::Basic::EventSwitchShowStatus( void ) const
     }
 }
 
-void Interface::Basic::EventSwitchShowIcons( void )
+void Interface::Basic::EventSwitchShowIcons()
 {
     Settings & conf = Settings::Get();
 
@@ -502,7 +502,7 @@ void Interface::Basic::EventSwitchShowIcons( void )
     }
 }
 
-void Interface::Basic::EventSwitchShowControlPanel( void ) const
+void Interface::Basic::EventSwitchShowControlPanel() const
 {
     Settings & conf = Settings::Get();
 
