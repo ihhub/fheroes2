@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug-SDL1|Win32">
@@ -211,6 +211,8 @@
     <ClCompile Include="src\fheroes2\army\army.cpp" />
     <ClCompile Include="src\fheroes2\army\army_bar.cpp" />
     <ClCompile Include="src\fheroes2\army\army_troop.cpp" />
+    <ClCompile Include="src\fheroes2\army\army_ui_helper.cpp" />
+    <ClCompile Include="src\fheroes2\audio\audio_manager.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_action.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_animation.cpp" />
     <ClCompile Include="src\fheroes2\battle\battle_arena.cpp" />
@@ -393,6 +395,7 @@
     <ClInclude Include="src\engine\audio.h" />
     <ClInclude Include="src\engine\core.h" />
     <ClInclude Include="src\engine\dir.h" />
+    <ClInclude Include="src\engine\endian_h2.h" />
     <ClInclude Include="src\engine\image.h" />
     <ClInclude Include="src\engine\image_palette.h" />
     <ClInclude Include="src\engine\image_tool.h" />
@@ -424,6 +427,8 @@
     <ClInclude Include="src\fheroes2\army\army.h" />
     <ClInclude Include="src\fheroes2\army\army_bar.h" />
     <ClInclude Include="src\fheroes2\army\army_troop.h" />
+    <ClInclude Include="src\fheroes2\army\army_ui_helper.h" />
+    <ClInclude Include="src\fheroes2\audio\audio_manager.h" />
     <ClInclude Include="src\fheroes2\battle\battle.h" />
     <ClInclude Include="src\fheroes2\battle\battle_animation.h" />
     <ClInclude Include="src\fheroes2\battle\battle_arena.h" />

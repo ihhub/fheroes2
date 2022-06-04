@@ -22,8 +22,8 @@
 #include <tuple>
 #include <utility>
 
-#include "agg.h"
 #include "ai_normal.h"
+#include "audio_manager.h"
 #include "game_interface.h"
 #include "game_over.h"
 #include "ground.h"
@@ -272,7 +272,7 @@ namespace AI
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
         status.RedrawTurnProgress( 0 );
 
-        AGG::PlayMusic( MUS::COMPUTER_TURN, true, true );
+        AudioManager::PlayMusic( MUS::COMPUTER_TURN, true, true );
 
         KingdomHeroes & heroes = kingdom.GetHeroes();
         const KingdomCastles & castles = kingdom.GetCastles();
