@@ -23,7 +23,7 @@
 
 #include <algorithm>
 
-#include "agg.h"
+#include "audio_manager.h"
 #include "castle.h"
 #include "game.h"
 #include "game_interface.h"
@@ -57,7 +57,7 @@ void Interface::Basic::SetFocus( Heroes * hero )
         const int heroIndexPos = hero->GetIndex();
         if ( Game::UpdateSoundsOnFocusUpdate() && heroIndexPos >= 0 ) {
             Game::EnvironmentSoundMixer();
-            AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
+            AudioManager::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
         }
     }
 }
@@ -84,7 +84,7 @@ void Interface::Basic::SetFocus( Castle * castle )
 
         if ( Game::UpdateSoundsOnFocusUpdate() ) {
             Game::EnvironmentSoundMixer();
-            AGG::PlayMusic( MUS::FromGround( world.GetTiles( castle->GetIndex() ).GetGround() ), true, true );
+            AudioManager::PlayMusic( MUS::FromGround( world.GetTiles( castle->GetIndex() ).GetGround() ), true, true );
         }
     }
 }

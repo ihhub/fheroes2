@@ -80,7 +80,7 @@ namespace Bin_Info
 
         const uint8_t * data = bytes.data();
 
-        eyePosition = fheroes2::Point( getValue<int16_t>( data, 1 ), getValue<int16_t>( data, 3 ) );
+        eyePosition = { getValue<int16_t>( data, 1 ), getValue<int16_t>( data, 3 ) };
 
         for ( size_t moveID = 0; moveID < 7; ++moveID ) {
             std::vector<int> moveOffset;
@@ -241,7 +241,7 @@ namespace Bin_Info
             return mapIterator->second;
         }
         else {
-            const MonsterAnimInfo info( monsterID, AGG::ReadChunk( Bin_Info::GetFilename( monsterID ) ) );
+            const MonsterAnimInfo info( monsterID, AGG::getDataFromAggFile( Bin_Info::GetFilename( monsterID ) ) );
             if ( info.isValid() ) {
                 _animMap[monsterID] = info;
                 return info;

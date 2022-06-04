@@ -21,9 +21,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
 #include "agg_image.h"
 #include "audio.h"
+#include "audio_manager.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_game_settings.h"
@@ -170,7 +170,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     // Stop all sounds, but not the music
     Mixer::Stop();
 
-    AGG::PlayMusic( MUS::MAINMENU, true, true );
+    AudioManager::PlayMusic( MUS::MAINMENU, true, true );
 
     Settings & conf = Settings::Get();
 
