@@ -535,7 +535,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     // Creates fixed radar on top-right, suitable for the View World window
     Interface::Radar radar( interface.GetRadar(), fheroes2::Display::instance() );
 
-    Interface::GameArea & gameArea = interface.GetGameArea();
+    const Interface::GameArea & gameArea = interface.GetGameArea();
     const fheroes2::Rect worldMapROI = gameArea.GetVisibleTileROI();
     const fheroes2::Rect & visibleScreenInPixels = gameArea.GetROI();
 
