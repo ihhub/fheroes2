@@ -1802,18 +1802,27 @@ namespace fheroes2
             }
             case ICN::NGEXTRA: {
                 LoadOriginalICN( id );
-                if ( _icnVsSprite[id].size() >= 34 ) {
+                std::vector<Sprite> &images = _icnVsSprite[id];
+
+                if ( images.size() >= 34 ) {
                     // Fix extra column at the end of AI controlled player.
                     for ( size_t i = 27; i < 34; ++i ) {
-                        if ( _icnVsSprite[id][i].width() == 62 && _icnVsSprite[id][i].height() == 58 ) {
-                            Copy( _icnVsSprite[id][i], 58, 44, _icnVsSprite[id][i], 59, 44, 1, 11 );
+                        if ( images[i].width() == 62 && images[i].height() == 58 ) {
+                            Copy( images[i], 58, 44, images[i], 59, 44, 1, 11 );
+                        }
+                    }
+
+                    for ( size_t i = 39; i < 45; ++i ) {
+                        if ( images[i].width() == 62 && images[i].height() == 58 ) {
+                            Copy( images[i], 58, 44, images[i], 59, 44, 1, 11 );
                         }
                     }
                 }
-                if ( _icnVsSprite[id].size() >= 70 ) {
+
+                if ( images.size() >= 70 ) {
                     // fix transparent corners on pressed OKAY and CANCEL buttons
-                    CopyTransformLayer( _icnVsSprite[id][66], _icnVsSprite[id][67] );
-                    CopyTransformLayer( _icnVsSprite[id][68], _icnVsSprite[id][69] );
+                    CopyTransformLayer( images[66], images[67] );
+                    CopyTransformLayer( images[68], images[69] );
                 }
                 return true;
             }
