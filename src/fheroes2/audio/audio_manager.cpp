@@ -678,7 +678,7 @@ namespace fheroes2
             VERBOSE_LOG( "Failed to open HEROES2.AGG file for audio playback." );
         }
 
-        if ( !expansionAGGFilePath.empty() && g_midiHeroes2xAGG.open( expansionAGGFilePath ) ) {
+        if ( !expansionAGGFilePath.empty() && !g_midiHeroes2xAGG.open( expansionAGGFilePath ) ) {
             VERBOSE_LOG( "Failed to open HEROES2X.AGG file for audio playback." );
         }
     }
