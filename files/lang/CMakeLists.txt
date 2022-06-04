@@ -32,7 +32,6 @@ if(MSVC OR (WIN32 AND CMAKE_GENERATOR MATCHES "Ninja"))
 	set(fr \"y/\\xC3\\xA0\\xC3\\xA2\\xC3\\xA7\\xC3\\xA9\\xC3\\xA8\\xC3\\xAA\\xC3\\xAE\\xC3\\xAF\\xC3\\xB4\\xC3\\xB9\\xC3\\xBB\\xC3\\xBC\\xC3\\x89\\xC3\\x8A\\xC3\\x80/@*^~`|><\#\&\$\$uEEA/\\\; s/\\xC5\\x93/oe/g\")
 	set(translit \"y/\\xC3\\xA4\\xC3\\xAB\\xC3\\xAF\\xC3\\xB6\\xC5\\x91\\xC3\\xBC\\xC5\\xB1\\xC3\\x84\\xC3\\x8B\\xC3\\x8F\\xC5\\x90\\xC3\\x96\\xC3\\x9C\\xC5\\xB0/aeioouuAEIOOUU/\")
 else()
-	set(SED_EXECUTABLE LC_ALL=C ${SED_EXECUTABLE})
 	set(fr \'y/àâçéèêîïôùûüÉÊÀ/@*^~`|><\#&$$uEEA/\\\; s/œ/oe/g\')
 	set(translit \'y/äëïöőüűÄËÏŐÖÜŰ/aeioouuAEIOOUU/\')
 endif()
@@ -97,7 +96,7 @@ foreach(PO MO IN ZIP_LISTS PO_FILES MO_FILES)
 		add_custom_command(
 		COMMAND ${ICONV_EXECUTABLE} -f UTF-8 -t ${CHARSET} ${PO} > ${PO}.new
 		COMMAND ${CMAKE_COMMAND} -E rename ${PO}.new ${PO}
-		COMMAND ${SED_EXECUTABLE} -i -e \'s/UTF-8/${CHARSET}/\' ${PO}
+		COMMAND ${SED_EXECUTABLE} -i -e \'1,20 s/UTF-8/${CHARSET}/\' ${PO}
 		DEPENDS ${LANGUAGE}
 		OUTPUT ${CMAKE_BINARY_DIR}/files/lang/${PO}
 		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/files/lang
