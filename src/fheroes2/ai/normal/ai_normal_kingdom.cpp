@@ -98,7 +98,7 @@ namespace AI
         const auto heroesToIgnore = std::make_pair( world.GetHeroesCondWins(), world.GetHeroesCondLoss() );
 
         auto useIfPossible = [&heroesToIgnore]( Heroes * hero ) -> Heroes * {
-            if ( std::apply( [hero]( auto... heroToIgnore ) { return ( ( hero == heroToIgnore ) || ... ); }, heroesToIgnore ) ) {
+            if ( std::apply( [hero]( const auto... heroToIgnore ) { return ( ( hero == heroToIgnore ) || ... ); }, heroesToIgnore ) ) {
                 return nullptr;
             }
 
