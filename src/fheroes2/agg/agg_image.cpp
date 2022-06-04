@@ -46,7 +46,7 @@ namespace
     const std::array<const char *, TIL::LASTTIL> tilFileName = { "UNKNOWN", "CLOF32.TIL", "GROUND32.TIL", "STON.TIL" };
 
     std::vector<std::vector<fheroes2::Sprite>> _icnVsSprite( ICN::LASTICN );
-    std::vector<std::vector<std::vector<fheroes2::Image>>> _tilVsImage( TIL::LASTTIL );
+    std::array<std::vector<std::vector<fheroes2::Image>>, TIL::LASTTIL> _tilVsImage;
     const fheroes2::Sprite errorImage;
 
     const uint32_t headerSize = 6;
@@ -2034,6 +2034,36 @@ namespace fheroes2
                     const Sprite & castle = GetICN( ICN::TWNSCSTL, 0 );
                     if ( !castle.empty() ) {
                         Blit( castle, 206, 106, _icnVsSprite[id][0], 2, 2, 33, 67 );
+                    }
+                }
+                return true;
+            case ICN::LGNDXTRA:
+                // Exit button is too huge due to 1 pixel presence at the bottom of the image.
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 6 ) {
+                    auto & original = _icnVsSprite[id];
+                    if ( original[4].height() == 142 ) {
+                        const Point offset( original[4].x(), original[4].y() );
+                        original[4] = Crop( original[4], 0, 0, original[4].width(), 25 );
+                        original[4].setPosition( offset.x, offset.y );
+                    }
+
+                    if ( original[5].height() == 142 ) {
+                        const Point offset( original[5].x(), original[5].y() );
+                        original[5] = Crop( original[5], 0, 0, original[5].width(), 25 );
+                        original[5].setPosition( offset.x, offset.y );
+                    }
+                }
+                return true;
+            case ICN::LGNDXTRE:
+                // Exit button is too huge due to 1 pixel presence at the bottom of the image.
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 6 ) {
+                    auto & original = _icnVsSprite[id];
+                    if ( original[4].height() == 142 ) {
+                        const Point offset( original[4].x(), original[4].y() );
+                        original[4] = Crop( original[4], 0, 0, original[4].width(), 25 );
+                        original[4].setPosition( offset.x, offset.y );
                     }
                 }
                 return true;
