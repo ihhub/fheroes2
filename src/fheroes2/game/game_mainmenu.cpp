@@ -322,8 +322,6 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         else if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_SETTINGS ) || le.MouseClickLeft( settingsArea ) ) {
             fheroes2::openGameSettings();
 
-            // force interface to reset area and positions
-            Interface::Basic::Get().Reset();
             return fheroes2::GameMode::MAIN_MENU;
         }
 

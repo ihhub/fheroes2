@@ -85,8 +85,6 @@ fheroes2::GameMode Game::StartGame()
     if ( !conf.LoadedGameVersion() )
         GameOver::Result::Get().Reset();
 
-    Interface::Basic::Get().Reset();
-
     return Interface::Basic::Get().StartGame();
 }
 

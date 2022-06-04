@@ -506,7 +506,6 @@ namespace fheroes2
                 saveConfiguration = true;
 
                 Interface::Basic & basicInterface = Interface::Basic::Get();
-                basicInterface.Reset();
                 basicInterface.Redraw( Interface::REDRAW_ALL );
 
                 action = openSystemOptionsDialog();
