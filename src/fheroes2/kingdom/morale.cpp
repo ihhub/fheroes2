@@ -24,7 +24,6 @@
 #include <algorithm>
 
 #include "morale.h"
-#include "tools.h"
 #include "translations.h"
 
 std::string Morale::String( int morale )

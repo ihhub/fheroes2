@@ -24,7 +24,6 @@
 #include <algorithm>
 
 #include "luck.h"
-#include "tools.h"
 #include "translations.h"
 
 std::string Luck::String( int luck )
