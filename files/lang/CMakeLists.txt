@@ -70,7 +70,7 @@ foreach(PO MO IN ZIP_LISTS PO_FILES MO_FILES)
 	if(${CHARSET} STREQUAL "UTF-8")
 		if(${PO} STREQUAL "fr.po")
 			add_custom_command(
-			COMMAND ${SED_EXECUTABLE} -i -e \'y/àâçéèêîïôùûüÉÊÀ/@*^~`|\>\<\#uuuEEA/\; s/œ/oe/g\' ${PO}
+			COMMAND ${SED_EXECUTABLE} -i -e \'y/àâçéèêîïôùûüÉÊÀ/@*^~`|><\#uuuEEA/\; s/œ/oe/g\' ${PO}
 			DEPENDS ${LANGUAGE}
 			OUTPUT ${CMAKE_BINARY_DIR}/files/lang/${PO}
 			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/files/lang
