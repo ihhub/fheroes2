@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -27,7 +27,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "difficulty.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "localevent.h"
 #include "maps.h"
@@ -78,19 +78,21 @@ namespace
         std::string msg;
 
         switch ( info.conditions_loss ) {
-        case 0:
+        case Maps::FileInfo::LOSS_EVERYTHING:
             msg = _( "Lose all your heroes and towns." );
             break;
-        case 1:
+        case Maps::FileInfo::LOSS_TOWN:
             msg = _( "Lose a specific town." );
             break;
-        case 2:
+        case Maps::FileInfo::LOSS_HERO:
             msg = _( "Lose a specific hero." );
             break;
-        case 3:
+        case Maps::FileInfo::LOSS_OUT_OF_TIME:
             msg = _( "Run out of time. Fail to win by a certain point." );
             break;
         default:
+            // This is an unknown condition. Add the logic for it above!
+            assert( 0 );
             return;
         }
         Dialog::Message( _( "Loss Condition" ), msg, Font::BIG );
@@ -101,25 +103,27 @@ namespace
         std::string msg;
 
         switch ( info.conditions_wins ) {
-        case 0:
+        case Maps::FileInfo::VICTORY_DEFEAT_EVERYONE:
             msg = _( "Defeat all enemy heroes and towns." );
             break;
-        case 1:
+        case Maps::FileInfo::VICTORY_CAPTURE_TOWN:
             msg = _( "Capture a specific town." );
             break;
-        case 2:
+        case Maps::FileInfo::VICTORY_KILL_HERO:
             msg = _( "Defeat a specific hero." );
             break;
-        case 3:
+        case Maps::FileInfo::VICTORY_OBTAIN_ARTIFACT:
             msg = _( "Find a specific artifact." );
             break;
-        case 4:
+        case Maps::FileInfo::VICTORY_DEFEAT_OTHER_SIDE:
             msg = _( "Your side defeats the opposing side." );
             break;
-        case 5:
+        case Maps::FileInfo::VICTORY_COLLECT_ENOUGH_GOLD:
             msg = _( "Accumulate a large amount of gold." );
             break;
         default:
+            // This is an unknown condition. Add the logic for it above!
+            assert( 0 );
             return;
         }
         Dialog::Message( _( "Victory Condition" ), msg, Font::BIG );
@@ -416,32 +420,29 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
     listbox.SetAreaMaxItems( 9 );
     listbox.SetAreaItems( { rt.x + 55, rt.y + 55, 270, 175 } );
 
-    size_t selectedId = 0;
-
     switch ( selectedMapSize ) {
     case Maps::SMALL:
         listbox.SetListContent( small );
-        selectedId = GetSelectedMapId( small );
+        listbox.SetCurrent( GetSelectedMapId( small ) );
         break;
     case Maps::MEDIUM:
         listbox.SetListContent( medium );
-        selectedId = GetSelectedMapId( medium );
+        listbox.SetCurrent( GetSelectedMapId( medium ) );
         break;
     case Maps::LARGE:
         listbox.SetListContent( large );
-        selectedId = GetSelectedMapId( large );
+        listbox.SetCurrent( GetSelectedMapId( large ) );
         break;
     case Maps::XLARGE:
         listbox.SetListContent( xlarge );
-        selectedId = GetSelectedMapId( xlarge );
+        listbox.SetCurrent( GetSelectedMapId( xlarge ) );
         break;
     default:
         listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
-        selectedId = GetSelectedMapId( all );
+        listbox.SetCurrent( GetSelectedMapId( all ) );
         break;
     }
 
-    listbox.SetCurrent( selectedId );
     listbox.Redraw();
 
     buttonOk.draw();
@@ -472,14 +473,16 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
         bool needRedraw = false;
 
-        if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || listbox.selectOk ) {
+        if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || listbox.selectOk ) {
             MapsFileInfoList::const_iterator it = std::find( all.begin(), all.end(), listbox.GetCurrent() );
             return ( it != all.end() ) ? &( *it ) : nullptr;
         }
-        else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
+
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
             return nullptr;
         }
-        else if ( le.MouseClickLeft( buttonSelectSmall.area() ) || le.KeyPress( KEY_s ) /*&& buttonSelectSmall.isEnabled()*/ ) {
+
+        if ( le.MouseClickLeft( buttonSelectSmall.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL ) /*&& buttonSelectSmall.isEnabled()*/ ) {
             if ( small.empty() ) {
                 Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
                 currentPressedButton->drawOnPress();
@@ -491,6 +494,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
                 listbox.setScrollBarImage( updatedScrollbarSlider );
 
                 listbox.SetListContent( small );
+                listbox.SetCurrent( GetSelectedMapId( small ) );
+
                 currentPressedButton = &buttonSelectSmall;
                 currentPressedButton->press();
                 selectedMapSize = Maps::mapsize_t::SMALL;
@@ -498,7 +503,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
             needRedraw = true;
         }
-        else if ( le.MouseClickLeft( buttonSelectMedium.area() ) || le.KeyPress( KEY_m ) /*&& buttonSelectMedium.isEnabled()*/ ) {
+        else if ( le.MouseClickLeft( buttonSelectMedium.area() )
+                  || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_MEDIUM ) /*&& buttonSelectMedium.isEnabled()*/ ) {
             if ( medium.empty() ) {
                 Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
                 currentPressedButton->drawOnPress();
@@ -510,6 +516,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
                 listbox.setScrollBarImage( updatedScrollbarSlider );
 
                 listbox.SetListContent( medium );
+                listbox.SetCurrent( GetSelectedMapId( medium ) );
+
                 currentPressedButton = &buttonSelectMedium;
                 currentPressedButton->press();
                 selectedMapSize = Maps::mapsize_t::MEDIUM;
@@ -517,7 +525,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
             needRedraw = true;
         }
-        else if ( le.MouseClickLeft( buttonSelectLarge.area() ) || le.KeyPress( KEY_l ) /*&& buttonSelectLarge.isEnabled()*/ ) {
+        else if ( le.MouseClickLeft( buttonSelectLarge.area() )
+                  || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_LARGE ) /*&& buttonSelectLarge.isEnabled()*/ ) {
             if ( large.empty() ) {
                 Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
                 currentPressedButton->drawOnPress();
@@ -529,6 +538,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
                 listbox.setScrollBarImage( updatedScrollbarSlider );
 
                 listbox.SetListContent( large );
+                listbox.SetCurrent( GetSelectedMapId( large ) );
+
                 currentPressedButton = &buttonSelectLarge;
                 currentPressedButton->press();
                 selectedMapSize = Maps::mapsize_t::LARGE;
@@ -536,7 +547,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
             needRedraw = true;
         }
-        else if ( le.MouseClickLeft( buttonSelectXLarge.area() ) || le.KeyPress( KEY_x ) /*&& buttonSelectXLarge.isEnabled()*/ ) {
+        else if ( le.MouseClickLeft( buttonSelectXLarge.area() )
+                  || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE ) /*&& buttonSelectXLarge.isEnabled()*/ ) {
             if ( xlarge.empty() ) {
                 Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
                 currentPressedButton->drawOnPress();
@@ -548,6 +560,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
                 listbox.setScrollBarImage( updatedScrollbarSlider );
 
                 listbox.SetListContent( xlarge );
+                listbox.SetCurrent( GetSelectedMapId( xlarge ) );
+
                 currentPressedButton = &buttonSelectXLarge;
                 currentPressedButton->press();
                 selectedMapSize = Maps::mapsize_t::XLARGE;
@@ -555,13 +569,15 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
             needRedraw = true;
         }
-        else if ( le.MouseClickLeft( buttonSelectAll.area() ) || le.KeyPress( KEY_a ) ) {
+        else if ( le.MouseClickLeft( buttonSelectAll.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_ALL ) ) {
             const fheroes2::Image updatedScrollbarSlider
                     = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( all.size() ), { 0, 0, originalSilder.width(), 8 },
                                                          { 0, 7, originalSilder.width(), 8 } );
                 listbox.setScrollBarImage( updatedScrollbarSlider );
 
             listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
+            listbox.SetCurrent( GetSelectedMapId( all ) );
+
             currentPressedButton = &buttonSelectAll;
             currentPressedButton->press();
             selectedMapSize = Maps::mapsize_t::ZERO;

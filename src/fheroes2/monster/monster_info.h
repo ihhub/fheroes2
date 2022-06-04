@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -133,6 +133,8 @@ namespace fheroes2
         uint32_t hp;
         uint32_t speed;
         uint32_t shots;
+
+        double monsterBaseStrength;
 
         std::vector<MonsterAbility> abilities;
         std::vector<MonsterWeakness> weaknesses;

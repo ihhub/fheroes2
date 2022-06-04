@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -219,7 +219,7 @@ fheroes2::GameMode Interface::Basic::EventAdventureDialog()
         break;
 
     case Dialog::INFO:
-        return EventGameInfo();
+        return EventScenarioInformation();
 
     case Dialog::DIG:
         return EventDigArtifact();
@@ -318,7 +318,7 @@ void Interface::Basic::EventPuzzleMaps( void ) const
     world.GetKingdom( Settings::Get().CurrentColor() ).PuzzleMaps().ShowMapsDialog();
 }
 
-fheroes2::GameMode Interface::Basic::EventGameInfo()
+fheroes2::GameMode Interface::Basic::EventScenarioInformation()
 {
     if ( Settings::Get().isCampaignGameType() ) {
         fheroes2::Display & display = fheroes2::Display::instance();

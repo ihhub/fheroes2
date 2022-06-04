@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -182,6 +182,7 @@ public:
     // Only for software emulation.
     void setVideoPlaybackCursor();
 
+    // Do not call this method directly anywhere except Settings.
     void setMonochromeCursor( const bool enable )
     {
         _monochromeCursorThemes = enable;

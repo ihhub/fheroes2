@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -202,12 +202,12 @@ void Maps::FileInfo::Reset( void )
     allow_human_colors = 0;
     allow_comp_colors = 0;
     rnd_races = 0;
-    conditions_wins = 0;
+    conditions_wins = VICTORY_DEFEAT_EVERYONE;
     comp_also_wins = false;
     allow_normal_victory = false;
     wins1 = 0;
     wins2 = 0;
-    conditions_loss = 0;
+    conditions_loss = LOSS_EVERYTHING;
     loss1 = 0;
     loss2 = 0;
     localtime = 0;
@@ -448,19 +448,21 @@ int Maps::FileInfo::KingdomRace( int color ) const
 uint32_t Maps::FileInfo::ConditionWins() const
 {
     switch ( conditions_wins ) {
-    case 0:
+    case VICTORY_DEFEAT_EVERYONE:
         return GameOver::WINS_ALL;
-    case 1:
+    case VICTORY_CAPTURE_TOWN:
         return allow_normal_victory ? GameOver::WINS_TOWN | GameOver::WINS_ALL : GameOver::WINS_TOWN;
-    case 2:
+    case VICTORY_KILL_HERO:
         return allow_normal_victory ? GameOver::WINS_HERO | GameOver::WINS_ALL : GameOver::WINS_HERO;
-    case 3:
+    case VICTORY_OBTAIN_ARTIFACT:
         return allow_normal_victory ? GameOver::WINS_ARTIFACT | GameOver::WINS_ALL : GameOver::WINS_ARTIFACT;
-    case 4:
+    case VICTORY_DEFEAT_OTHER_SIDE:
         return GameOver::WINS_SIDE;
-    case 5:
+    case VICTORY_COLLECT_ENOUGH_GOLD:
         return allow_normal_victory ? GameOver::WINS_GOLD | GameOver::WINS_ALL : GameOver::WINS_GOLD;
     default:
+        // This is an unsupported winning condition! Please add the logic to handle it.
+        assert( 0 );
         break;
     }
 
@@ -470,15 +472,17 @@ uint32_t Maps::FileInfo::ConditionWins() const
 uint32_t Maps::FileInfo::ConditionLoss() const
 {
     switch ( conditions_loss ) {
-    case 0:
+    case LOSS_EVERYTHING:
         return GameOver::LOSS_ALL;
-    case 1:
+    case LOSS_TOWN:
         return GameOver::LOSS_TOWN;
-    case 2:
+    case LOSS_HERO:
         return GameOver::LOSS_HERO;
-    case 3:
+    case LOSS_OUT_OF_TIME:
         return GameOver::LOSS_TIME;
     default:
+        // This is an unsupported loss condition! Please add the logic to handle it.
+        assert( 0 );
         break;
     }
 
@@ -495,51 +499,6 @@ int Maps::FileInfo::WinsFindArtifactID( void ) const
     return wins1 ? wins1 - 1 : Artifact::UNKNOWN;
 }
 
-bool Maps::FileInfo::WinsFindUltimateArtifact( void ) const
-{
-    return 0 == wins1;
-}
-
-u32 Maps::FileInfo::WinsAccumulateGold( void ) const
-{
-    return wins1 * 1000;
-}
-
-fheroes2::Point Maps::FileInfo::WinsMapsPositionObject( void ) const
-{
-    return fheroes2::Point( wins1, wins2 );
-}
-
-fheroes2::Point Maps::FileInfo::LossMapsPositionObject( void ) const
-{
-    return fheroes2::Point( loss1, loss2 );
-}
-
-u32 Maps::FileInfo::LossCountDays( void ) const
-{
-    return loss1;
-}
-
-int Maps::FileInfo::AllowCompHumanColors( void ) const
-{
-    return allow_human_colors & allow_comp_colors;
-}
-
-int Maps::FileInfo::AllowHumanColors( void ) const
-{
-    return allow_human_colors;
-}
-
-int Maps::FileInfo::HumanOnlyColors( void ) const
-{
-    return allow_human_colors & ~allow_comp_colors;
-}
-
-int Maps::FileInfo::ComputerOnlyColors( void ) const
-{
-    return allow_comp_colors & ~allow_human_colors;
-}
-
 bool Maps::FileInfo::isAllowCountPlayers( int playerCount ) const
 {
     const int humanOnly = Color::Count( HumanOnlyColors() );
@@ -548,9 +507,9 @@ bool Maps::FileInfo::isAllowCountPlayers( int playerCount ) const
     return humanOnly <= playerCount && playerCount <= humanOnly + compHuman;
 }
 
-bool Maps::FileInfo::isMultiPlayerMap( void ) const
+bool Maps::FileInfo::isMultiPlayerMap() const
 {
-    return 1 < Color::Count( HumanOnlyColors() );
+    return Color::Count( HumanOnlyColors() ) > 1;
 }
 
 std::string Maps::FileInfo::String( void ) const

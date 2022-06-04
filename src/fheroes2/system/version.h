@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -22,7 +22,7 @@
 
 #define MAJOR_VERSION 0
 #define MINOR_VERSION 9
-#define INTERMEDIATE_VERSION 14
+#define INTERMEDIATE_VERSION 15
 
 #ifndef BUILD_VERSION
 #define BUILD_VERSION 0

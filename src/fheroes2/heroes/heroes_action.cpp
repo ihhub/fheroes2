@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -51,6 +51,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "ui_monster.h"
 #include "ui_text.h"
 #include "world.h"
 
@@ -2556,8 +2557,8 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
 
     if ( !mons.empty() ) {
         // composite sprite
-        uint32_t offsetX = 0;
-        uint32_t offsetY = 0;
+        int32_t offsetX = 0;
+        int32_t offsetY = 0;
         const fheroes2::Sprite & border = fheroes2::AGG::GetICN( ICN::STRIP, 12 );
 
         const int32_t monsterCount = static_cast<int32_t>( mons.size() ); // safe to do as the count is no more than 3
@@ -2584,34 +2585,8 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
 
             // border
             fheroes2::Blit( border, surface, offsetX, offsetY );
-            // background scenary for each race
-            switch ( mons[i]->GetRace() ) {
-            case Race::KNGT:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 4 ), surface, offsetX + 6, offsetY + 6 );
-                break;
-            case Race::BARB:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 5 ), surface, offsetX + 6, offsetY + 6 );
-                break;
-            case Race::SORC:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 6 ), surface, offsetX + 6, offsetY + 6 );
-                break;
-            case Race::WRLK:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 7 ), surface, offsetX + 6, offsetY + 6 );
-                break;
-            case Race::WZRD:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 8 ), surface, offsetX + 6, offsetY + 6 );
-                break;
-            case Race::NECR:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 9 ), surface, offsetX + 6, offsetY + 6 );
-                break;
-            default:
-                fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 10 ), surface, offsetX + 6, offsetY + 6 );
-                break;
-            }
-            // upgraded troop
-            const fheroes2::Sprite & mon = fheroes2::AGG::GetICN( mons[i]->GetUpgrade().ICNMonh(), 0 );
+            fheroes2::renderMonsterFrame( *mons[i], surface, { 6 + offsetX, 6 + offsetY } );
 
-            fheroes2::Blit( mon, surface, offsetX + 6 + mon.x(), 6 + mon.y() + offsetY );
             offsetX += border.width() + 4;
         }
 

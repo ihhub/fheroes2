@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -23,13 +23,13 @@
 
 #include <cassert>
 
-#include "buildinginfo.h"
 #include "agg.h"
 #include "agg_image.h"
 #include "army_troop.h"
+#include "buildinginfo.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "m82.h"
 #include "monster.h"
@@ -575,10 +575,10 @@ bool BuildingInfo::DialogBuyBuilding( bool buttons ) const
         le.MousePressLeft( button1.area() ) ? button1.drawOnPress() : button1.drawOnRelease();
         le.MousePressLeft( button2.area() ) ? button2.drawOnPress() : button2.drawOnRelease();
 
-        if ( button1.isEnabled() && ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || le.MouseClickLeft( button1.area() ) ) )
+        if ( button1.isEnabled() && ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( button1.area() ) ) )
             return true;
 
-        if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( button2.area() ) )
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( button2.area() ) )
             break;
     }
 

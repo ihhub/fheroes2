@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -86,10 +86,11 @@ namespace
             std::string correctFilePath = System::ConcatePath( dir, fileName );
             correctFilePath = StringLower( correctFilePath );
 
-            for ( const std::string & path : musicFilePaths ) {
+            for ( std::string & path : musicFilePaths ) {
                 const std::string temp = StringLower( path );
                 if ( temp == correctFilePath ) {
-                    fullPath = path;
+                    // Avoid string copy.
+                    std::swap( fullPath, path );
                     return true;
                 }
             }

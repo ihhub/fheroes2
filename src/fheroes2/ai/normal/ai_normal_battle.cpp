@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -39,6 +39,7 @@
 #include <cstdint>
 #include <map>
 #include <set>
+#include <tuple>
 #include <utility>
 
 using namespace Battle;
@@ -192,6 +193,72 @@ namespace AI
         if ( currentUnit.isFlying() == target.isFlying() )
             return currentUnit.GetSpeed() > target.GetSpeed();
         return currentUnit.isFlying();
+    }
+
+    void BattlePlanner::battleBegins()
+    {
+        _currentTurnNumber = 0;
+        _numberOfRemainingTurnsWithoutDeaths = MAX_TURNS_WITHOUT_DEATHS;
+        _attackerForceNumberOfDead = 0;
+        _defenderForceNumberOfDead = 0;
+    }
+
+    bool BattlePlanner::isLimitOfTurnsExceeded( const Arena & arena, Actions & actions )
+    {
+        const int currentColor = arena.GetCurrentColor();
+
+        // Not the attacker's turn, no further checks
+        if ( currentColor != arena.GetArmyColor1() ) {
+            return false;
+        }
+
+        const uint32_t currentTurnNumber = arena.GetCurrentTurn();
+        assert( currentTurnNumber > 0 );
+
+        // This is the beginning of a new turn and we still haven't gone beyond the limit on the number of turns without deaths
+        if ( currentTurnNumber > _currentTurnNumber && _numberOfRemainingTurnsWithoutDeaths > 0 ) {
+            auto prevNumbersOfDead = std::tie( _attackerForceNumberOfDead, _defenderForceNumberOfDead );
+            const auto currNumbersOfDead = std::make_tuple( arena.GetForce1().GetDeadCounts(), arena.GetForce2().GetDeadCounts() );
+
+            // Either we don't have numbers of dead units from the previous turn, or there were changes in these numbers compared
+            // to the previous turn, reset the counter
+            if ( _currentTurnNumber == 0 || currentTurnNumber - _currentTurnNumber != 1 || prevNumbersOfDead != currNumbersOfDead ) {
+                prevNumbersOfDead = currNumbersOfDead;
+
+                _numberOfRemainingTurnsWithoutDeaths = MAX_TURNS_WITHOUT_DEATHS;
+            }
+            // No changes in numbers of dead units compared to the previous turn, decrease the counter of the remaining turns
+            else {
+                _numberOfRemainingTurnsWithoutDeaths -= 1;
+            }
+
+            _currentTurnNumber = currentTurnNumber;
+        }
+
+        // We have gone beyond the limit on the number of turns without deaths and have to stop
+        if ( _numberOfRemainingTurnsWithoutDeaths == 0 ) {
+            // If this is an auto battle (and not the instant battle, because the battle UI is present), then turn it off until the end of the battle
+            if ( arena.AutoBattleInProgress() && Arena::GetInterface() != nullptr ) {
+                assert( arena.CanToggleAutoBattle() );
+
+                actions.emplace_back( CommandType::MSG_BATTLE_AUTO, currentColor );
+
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO, Color::String( currentColor ) << " has used up the limit of turns without deaths, auto battle is turned off" )
+            }
+            // Otherwise the attacker's hero should retreat
+            else {
+                assert( arena.CanRetreatOpponent( currentColor ) && arena.GetCurrentCommander() != nullptr );
+
+                actions.emplace_back( CommandType::MSG_BATTLE_RETREAT );
+
+                DEBUG_LOG( DBG_BATTLE, DBG_INFO,
+                           Color::String( currentColor ) << " has used up the limit of turns without deaths, " << arena.GetCurrentCommander()->GetName() << " retreats" )
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     Actions BattlePlanner::planUnitTurn( Arena & arena, const Unit & currentUnit )
@@ -812,6 +879,11 @@ namespace AI
 
     void Normal::BattleTurn( Arena & arena, const Unit & currentUnit, Actions & actions )
     {
+        // Return immediately if our limit of turns has been exceeded
+        if ( _battlePlanner.isLimitOfTurnsExceeded( arena, actions ) ) {
+            return;
+        }
+
         Board * board = Arena::GetBoard();
 
         board->Reset();
@@ -824,5 +896,10 @@ namespace AI
         if ( plannedActions.size() != 1 || !plannedActions.front().isType( CommandType::MSG_BATTLE_CAST ) ) {
             actions.emplace_back( CommandType::MSG_BATTLE_END_TURN, currentUnit.GetUID() );
         }
+    }
+
+    void Normal::battleBegins()
+    {
+        _battlePlanner.battleBegins();
     }
 }

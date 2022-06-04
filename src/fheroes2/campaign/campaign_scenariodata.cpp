@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -201,7 +201,7 @@ namespace
         case 7:
             bonus.emplace_back( Campaign::ScenarioBonusData::SPELL, Spell::VIEWHEROES, 1 );
             bonus.emplace_back( Campaign::ScenarioBonusData::TROOP, Monster::MAGE, 5 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::LOGISTICS, Skill::Level::ADVANCED );
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::ESTATES, Skill::Level::ADVANCED );
             break;
         default:
             assert( 0 );
@@ -242,13 +242,14 @@ namespace
             bonus.emplace_back( Campaign::ScenarioBonusData::ARTIFACT, Artifact::SPIKED_SHIELD, 1 );
             break;
         case 5:
-            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 1000 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::WOOD, 10 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::MERCURY, 2 );
+            // These are negative values as they should be. Do NOT change them!
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, -1000 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::WOOD, -10 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::MERCURY, -2 );
             break;
         case 6:
             bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::GOLD, 1000 );
-            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::SCOUTING, 1 );
+            bonus.emplace_back( Campaign::ScenarioBonusData::SKILL_SECONDARY, Skill::Secondary::SCOUTING, Skill::Level::BASIC );
             bonus.emplace_back( Campaign::ScenarioBonusData::RESOURCES, Resource::WOOD, 20 );
             break;
         case 7:
@@ -646,7 +647,7 @@ namespace Campaign
         , _amount( 0 )
     {}
 
-    ScenarioBonusData::ScenarioBonusData( uint32_t type, uint32_t subType, uint32_t amount )
+    ScenarioBonusData::ScenarioBonusData( const int32_t type, const int32_t subType, const int32_t amount )
         : _type( type )
         , _subType( subType )
         , _amount( amount )
@@ -661,7 +662,7 @@ namespace Campaign
             objectName = getArtifactCampaignName( _subType );
             break;
         case ScenarioBonusData::RESOURCES:
-            objectName = Resource::String( _subType );
+            objectName = std::to_string( _amount ) + " " + Resource::String( _subType );
             break;
         case ScenarioBonusData::TROOP:
             objectName = Monster( _subType ).GetPluralName( _amount );
@@ -684,8 +685,7 @@ namespace Campaign
             break;
         }
 
-        const std::vector<uint32_t> useAmountTypes
-            = { ScenarioBonusData::ARTIFACT, ScenarioBonusData::RESOURCES, ScenarioBonusData::TROOP, ScenarioBonusData::SKILL_PRIMARY };
+        const std::vector<int32_t> useAmountTypes = { ScenarioBonusData::ARTIFACT, ScenarioBonusData::TROOP, ScenarioBonusData::SKILL_PRIMARY };
         const bool useAmount = std::find( useAmountTypes.begin(), useAmountTypes.end(), _type ) != useAmountTypes.end() && _amount > 1;
 
         return useAmount ? std::to_string( _amount ) + " " + objectName : objectName;
@@ -696,41 +696,42 @@ namespace Campaign
         switch ( _type ) {
         case ScenarioBonusData::ARTIFACT: {
             std::string description( _( "The main hero will have \"%{artifact}\" artifact at the start of the scenario." ) );
-            StringReplace( description, "%{artifact}", Artifact( static_cast<int>( _subType ) ).GetName() );
+            StringReplace( description, "%{artifact}", Artifact( _subType ).GetName() );
             return description;
         }
         case ScenarioBonusData::RESOURCES: {
-            std::string description( _( "The kingdom will have additional %{amount} %{resource} at the start of the scenario." ) );
-            StringReplace( description, "%{amount}", std::to_string( _amount ) );
-            StringReplace( description, "%{resource}", Resource::String( static_cast<int>( _subType ) ) );
+            std::string description( _amount > 0 ? _( "The kingdom will receive %{amount} additional %{resource} at the start of the scenario." )
+                                                 : _( "The kingdom will have %{amount} less %{resource} at the start of the scenario." ) );
+            StringReplace( description, "%{amount}", std::to_string( std::abs( _amount ) ) );
+            StringReplace( description, "%{resource}", Resource::String( _subType ) );
             return description;
         }
         case ScenarioBonusData::TROOP: {
             std::string description( _( "The main hero will have %{count} %{monster} at the start of the scenario." ) );
             StringReplace( description, "%{count}", std::to_string( _amount ) );
-            StringReplace( description, "%{monster}", Monster( static_cast<int>( _subType ) ).GetPluralName( _amount ) );
+            StringReplace( description, "%{monster}", Monster( _subType ).GetPluralName( _amount ) );
             return description;
         }
         case ScenarioBonusData::SPELL: {
             std::string description( _( "The main hero will have \"%{spell}\" spell at the start of the scenario." ) );
-            StringReplace( description, "%{spell}", Spell( static_cast<int>( _subType ) ).GetName() );
+            StringReplace( description, "%{spell}", Spell( _subType ).GetName() );
             return description;
         }
         case ScenarioBonusData::STARTING_RACE:
         case ScenarioBonusData::STARTING_RACE_AND_ARMY: {
             std::string description( _( "The starting race of the scenario will be %{race}." ) );
-            StringReplace( description, "%{race}", Race::String( static_cast<int>( _subType ) ) );
+            StringReplace( description, "%{race}", Race::String( _subType ) );
             return description;
         }
         case ScenarioBonusData::SKILL_PRIMARY: {
             std::string description( _( "The main hero will have additional %{count} %{skill} at the start of the scenario." ) );
             StringReplace( description, "%{count}", std::to_string( _amount ) );
-            StringReplace( description, "%{skill}", Skill::Primary::String( static_cast<int>( _subType ) ) );
+            StringReplace( description, "%{skill}", Skill::Primary::String( _subType ) );
             return description;
         }
         case ScenarioBonusData::SKILL_SECONDARY: {
             std::string description( _( "The main hero will have %{skill} at the start of the scenario." ) );
-            StringReplace( description, "%{skill}", Skill::Secondary( static_cast<int>( _subType ), static_cast<int>( _amount ) ).GetName() );
+            StringReplace( description, "%{skill}", Skill::Secondary( _subType, _amount ).GetName() );
             return description;
         }
         default:

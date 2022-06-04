@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -202,6 +202,22 @@ namespace fheroes2
     void ScreenPaletteRestorer::changePalette( const uint8_t * palette ) const
     {
         Display::instance().changePalette( palette );
+    }
+
+    GameInterfaceTypeRestorer::GameInterfaceTypeRestorer( const bool isEvilInterface_ )
+        : isEvilInterface( isEvilInterface_ )
+        , isOriginalEvilInterface( Settings::Get().ExtGameEvilInterface() )
+    {
+        if ( isEvilInterface != isOriginalEvilInterface ) {
+            Settings::Get().SetEvilInterface( isEvilInterface );
+        }
+    }
+
+    GameInterfaceTypeRestorer::~GameInterfaceTypeRestorer()
+    {
+        if ( isEvilInterface != isOriginalEvilInterface ) {
+            Settings::Get().SetEvilInterface( isOriginalEvilInterface );
+        }
     }
 
     Image CreateDeathWaveEffect( const Image & in, int32_t x, int32_t waveWidth, int32_t waveHeight )

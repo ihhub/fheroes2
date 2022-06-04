@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -324,7 +324,7 @@ double Artifact::getArtifactValue() const
     return artifactValue;
 }
 
-void Artifact::SetSpell( int v )
+void Artifact::SetSpell( const int v )
 {
     if ( id != SPELL_SCROLL ) {
         // This method must be called only for Spell Scroll artifact.
@@ -1013,6 +1013,10 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
             }
             else {
                 art = newArtifact;
+
+                if ( art.GetID() == Artifact::SPELL_SCROLL ) {
+                    art.SetSpell( Spell::RANDOM );
+                }
             }
         }
 

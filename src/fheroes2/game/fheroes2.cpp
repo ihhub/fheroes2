@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -51,7 +51,7 @@ namespace
 {
     std::string GetCaption()
     {
-        return std::string( "Free Heroes of Might and Magic II, version: " + Settings::GetVersion() );
+        return std::string( "fheroes2 engine, version: " + Settings::GetVersion() );
     }
 
     int PrintHelp( const char * basename )

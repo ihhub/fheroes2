@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -20,7 +20,7 @@
 
 #include "dialog_language_selection.h"
 #include "agg_image.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "localevent.h"
 #include "logging.h"
@@ -115,7 +115,7 @@ namespace
                 okayButton.drawOnRelease();
             }
 
-            if ( le.MouseClickLeft( okayButton.area() ) || HotKeyCloseWindow ) {
+            if ( le.MouseClickLeft( okayButton.area() ) || Game::HotKeyCloseWindow() ) {
                 return false;
             }
 

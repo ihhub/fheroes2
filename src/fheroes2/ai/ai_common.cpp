@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -54,7 +54,11 @@ namespace AI
 
     uint32_t GetResourceMultiplier( const Castle & castle, uint32_t min, uint32_t max )
     {
-        return castle.isCapital() ? 1 : Rand::Get( min, max );
+        if ( castle.isCapital() ) {
+            return 1;
+        }
+
+        return Rand::Get( min, max );
     }
 
     void ReinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget )

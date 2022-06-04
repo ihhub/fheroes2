@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -80,8 +80,8 @@ std::string StringUpper( std::string str )
 
 std::string GetStringShort( int value )
 {
-    if ( std::abs( value ) > 1000 ) {
-        if ( std::abs( value ) > 1000000 ) {
+    if ( std::abs( value ) >= 1000 ) {
+        if ( std::abs( value ) >= 1000000 ) {
             return std::to_string( value / 1000000 ) + 'M';
         }
 

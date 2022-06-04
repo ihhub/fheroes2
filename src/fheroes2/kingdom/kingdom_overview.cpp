@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -27,6 +27,7 @@
 #include "castle.h"
 #include "cursor.h"
 #include "game.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "heroes.h"
 #include "icn.h"
@@ -598,7 +599,7 @@ void StatsCastlesList::RedrawBackground( const fheroes2::Point & dst )
 
 void RedrawIncomeInfo( const fheroes2::Point & pt, const Kingdom & myKingdom )
 {
-    const Funds income = myKingdom.GetIncome( INCOME_ARTIFACTS | INCOME_HEROSKILLS );
+    const Funds income = myKingdom.GetIncome( Kingdom::INCOME_ARTIFACTS | Kingdom::INCOME_HERO_SKILLS | Kingdom::INCOME_CAMPAIGN_BONUS );
     Text text( "", Font::SMALL );
 
     text.Set( CapturedExtInfoString( Resource::WOOD, myKingdom.GetColor(), income ) );
@@ -754,7 +755,7 @@ void Kingdom::openOverviewDialog()
         }
 
         // Exit this dialog.
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;
 
         // switch view: heroes/castle

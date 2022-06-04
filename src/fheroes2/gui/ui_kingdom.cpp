@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2022                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -31,6 +31,6 @@ namespace fheroes2
         const Text header( _( "Kingdom Income" ), FontType::normalYellow() );
         const Text body( _( "Kingdom Income per day." ), FontType::normalWhite() );
 
-        showResourceMessage( header, body, buttons, kingdom.GetIncome( INCOME_ALL ) );
+        showResourceMessage( header, body, buttons, kingdom.GetIncome( Kingdom::INCOME_ALL ) );
     }
 }

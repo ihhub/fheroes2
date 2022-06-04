@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -23,8 +23,8 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "experience.h"
-#include "game.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "heroes_indicator.h"
 #include "icn.h"
 #include "localevent.h"
@@ -60,16 +60,16 @@ namespace
         COUT( body.text() )
 
         if ( buttonTypes & Dialog::YES ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose YES." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_OKAY ) << " to choose YES." )
         }
         if ( buttonTypes & Dialog::NO ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose NO." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to choose NO." )
         }
         if ( buttonTypes & Dialog::OK ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_READY ) << " to choose OK." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_OKAY ) << " to choose OK." )
         }
         if ( buttonTypes & Dialog::CANCEL ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to choose CANCEL." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to choose CANCEL." )
         }
     }
 }

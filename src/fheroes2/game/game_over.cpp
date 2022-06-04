@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -88,7 +88,7 @@ namespace
                 break;
             case GameOver::WINS_GOLD: {
                 body = _( "You have built up over %{count} gold in your treasury.\nAll enemies bow before your wealth and power." );
-                StringReplace( body, "%{count}", conf.WinsAccumulateGold() );
+                StringReplace( body, "%{count}", conf.getWinningGoldAccumulationValue() );
                 break;
             }
             default:
@@ -133,7 +133,7 @@ namespace
 
         case GameOver::LOSS_ENEMY_WINS_GOLD: {
             body = _( "The enemy has built up over %{count} gold in his treasury.\nYou must bow done in defeat before his wealth and power." );
-            StringReplace( body, "%{count}", conf.WinsAccumulateGold() );
+            StringReplace( body, "%{count}", conf.getWinningGoldAccumulationValue() );
             break;
         }
 
@@ -236,7 +236,7 @@ std::string GameOver::GetActualDescription( uint32_t cond )
     }
     else if ( WINS_GOLD & cond ) {
         msg = _( "Accumulate %{count} gold." );
-        StringReplace( msg, "%{count}", conf.WinsAccumulateGold() );
+        StringReplace( msg, "%{count}", conf.getWinningGoldAccumulationValue() );
     }
 
     if ( WINS_ALL != cond && ( WINS_ALL & cond ) )

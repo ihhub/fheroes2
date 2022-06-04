@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -31,6 +31,7 @@
 #include "dialog_resolution.h"
 #include "game.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "game_mainmenu_ui.h"
 #include "icn.h"
@@ -69,12 +70,12 @@ namespace
         START_TEXT_SUPPORT_MODE
         COUT( "Main Menu\n" )
 
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_NEWGAME ) << " to choose New Game." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_LOADGAME ) << " to choose Load previously saved game." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_HIGHSCORES ) << " to show High Scores." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_CREDITS ) << " to show Credits." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_SETTINGS ) << " to open Game Settings." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to Quit the game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_NEW_GAME ) << " to choose New Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) << " to choose Load previously saved game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_HIGHSCORES ) << " to show High Scores." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_CREDITS ) << " to show Credits." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_SETTINGS ) << " to open Game Settings." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to Quit the game." )
     }
 }
 
@@ -182,7 +183,8 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
     if ( isFirstGameRun ) {
         fheroes2::selectLanguage( fheroes2::getSupportedLanguages(), fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() ) );
 
-        Dialog::Message( _( "Greetings!" ), _( "Welcome to Free Heroes of Might and Magic II! Before starting the game please choose game resolution." ), Font::BIG,
+        Dialog::Message( _( "Greetings!" ),
+                         _( "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before starting the game please choose game resolution." ), Font::BIG,
                          Dialog::OK );
 
         bool isResolutionChanged = Dialog::SelectResolution();
@@ -295,22 +297,30 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
             display.render();
         }
 
-        if ( HotKeyPressEvent( EVENT_BUTTON_NEWGAME ) || le.MouseClickLeft( buttonNewGame.area() ) )
+        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_NEW_GAME ) || le.MouseClickLeft( buttonNewGame.area() ) ) {
             return fheroes2::GameMode::NEW_GAME;
-        else if ( HotKeyPressEvent( EVENT_BUTTON_LOADGAME ) || le.MouseClickLeft( buttonLoadGame.area() ) )
+        }
+
+        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_LOAD_GAME ) || le.MouseClickLeft( buttonLoadGame.area() ) ) {
             return fheroes2::GameMode::LOAD_GAME;
-        else if ( HotKeyPressEvent( EVENT_BUTTON_HIGHSCORES ) || le.MouseClickLeft( buttonHighScores.area() ) )
+        }
+
+        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_HIGHSCORES ) || le.MouseClickLeft( buttonHighScores.area() ) ) {
             return fheroes2::GameMode::HIGHSCORES;
-        else if ( HotKeyPressEvent( EVENT_BUTTON_CREDITS ) || le.MouseClickLeft( buttonCredits.area() ) )
+        }
+
+        if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_CREDITS ) || le.MouseClickLeft( buttonCredits.area() ) ) {
             return fheroes2::GameMode::CREDITS;
-        else if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonQuit.area() ) ) {
+        }
+
+        if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonQuit.area() ) ) {
             if ( Interface::Basic::EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 // if ( Settings::ExtGameUseFade() )
                 //     display.Fade();
                 return fheroes2::GameMode::QUIT_GAME;
             }
         }
-        else if ( HotKeyPressEvent( EVENT_BUTTON_SETTINGS ) || le.MouseClickLeft( settingsArea ) ) {
+        else if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_SETTINGS ) || le.MouseClickLeft( settingsArea ) ) {
             fheroes2::openGameSettings();
 
             // force interface to reset area and positions
@@ -320,7 +330,7 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 
         // right info
         if ( le.MousePressRight( buttonQuit.area() ) )
-            Dialog::Message( _( "Quit" ), _( "Quit Heroes of Might and Magic and return to the operating system." ), Font::BIG );
+            Dialog::Message( _( "Quit" ), _( "Quit Heroes of Might and Magic II and return to the operating system." ), Font::BIG );
         else if ( le.MousePressRight( buttonLoadGame.area() ) )
             Dialog::Message( _( "Load Game" ), _( "Load a previously saved game." ), Font::BIG );
         else if ( le.MousePressRight( buttonCredits.area() ) )

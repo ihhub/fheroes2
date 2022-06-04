@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -1690,26 +1690,22 @@ void Heroes::PortraitRedraw( const int32_t px, const int32_t py, const PortraitT
             mp.x = port.width() - 10;
         }
         else if ( PORT_SMALL == type ) {
+            const fheroes2::Sprite & background = fheroes2::AGG::GetICN( ICN::PORTXTRA, 0 );
             const fheroes2::Sprite & mobility = fheroes2::AGG::GetICN( ICN::MOBILITY, GetMobilityIndexSprite() );
             const fheroes2::Sprite & mana = fheroes2::AGG::GetICN( ICN::MANA, GetManaIndexSprite() );
 
-            const int iconsw = Interface::IconsBar::GetItemWidth();
-            const int iconsh = Interface::IconsBar::GetItemHeight();
             const int barw = 7;
 
-            // background
-            fheroes2::Fill( dstsf, px, py, iconsw, iconsh, 0 );
+            // Draw background.
+            fheroes2::Blit( background, dstsf, px, py );
 
-            // mobility
-            const uint8_t blueColor = fheroes2::GetColorId( 15, 30, 120 );
-            fheroes2::Fill( dstsf, px, py, barw, iconsh, blueColor );
+            // Draw mobility.
             fheroes2::Blit( mobility, dstsf, px, py + mobility.y() );
 
-            // portrait
+            // Draw hero's portrait.
             fheroes2::Blit( port, dstsf, px + barw + 1, py );
 
-            // mana
-            fheroes2::Fill( dstsf, px + barw + port.width() + 2, py, barw, iconsh, blueColor );
+            // Draw mana.
             fheroes2::Blit( mana, dstsf, px + barw + port.width() + 2, py + mana.y() );
 
             mp.x = 35;

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -360,7 +360,7 @@ namespace fheroes2
 #elif defined( BYTE_ORDER ) && defined( BIG_ENDIAN ) && BYTE_ORDER == BIG_ENDIAN
         std::reverse_copy( begin, end, reinterpret_cast<char *>( &result ) );
 #else
-        static_assert( false, "Unknown byte order" );
+#error "Unknown byte order"
 #endif
 
         return result;
