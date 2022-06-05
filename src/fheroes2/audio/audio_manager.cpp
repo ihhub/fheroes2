@@ -35,7 +35,6 @@
 #include <array>
 #include <cassert>
 #include <queue>
-#include <string>
 #include <utility>
 
 namespace
