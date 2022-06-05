@@ -268,7 +268,7 @@ namespace
 
         const Mix_MusicType musicType = Mix_GetMusicType( mix );
 
-        return ( musicType == Mix_MusicType::MUS_OGG ) || ( musicType == Mix_MusicType::MUS_MP3 );
+        return ( musicType == Mix_MusicType::MUS_OGG ) || ( musicType == Mix_MusicType::MUS_MP3 ) || ( musicType == Mix_MusicType::MUS_FLAC );
     }
 
     void replayCurrentMusic()
@@ -326,7 +326,10 @@ namespace
 
         if ( isResumeSupported && musicInfo.position > 1 ) {
             // Set music position only when at least 1 second of the music has been played.
-            Mix_SetMusicPosition( musicInfo.position );
+            Mix_RewindMusic();
+            if ( Mix_SetMusicPosition( musicInfo.position ) == -1 ) {
+                ERROR_LOG( "The codec does not support music resuming from a custom place." )
+            }
         }
 
         musicSettings.currentTrack = musicInfo;
