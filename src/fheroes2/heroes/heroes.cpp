@@ -27,10 +27,10 @@
 #include <cmath>
 #include <functional>
 
-#include "agg.h"
 #include "agg_image.h"
 #include "ai.h"
 #include "artifact.h"
+#include "audio_manager.h"
 #include "battle.h"
 #include "castle.h"
 #include "dialog.h"
@@ -1347,7 +1347,7 @@ void Heroes::LevelUpSecondarySkill( const HeroSeedsForLevelUp & seeds, int prima
         }
     }
     else {
-        AGG::PlaySound( M82::NWHEROLV );
+        AudioManager::PlaySound( M82::NWHEROLV );
         const int result = Dialog::LevelUpSelectSkill( name, primary, sec1, sec2, *this );
 
         if ( Skill::Secondary::UNKNOWN != result ) {
@@ -1968,8 +1968,8 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     // Heroes
     msg >> hero.name >> col;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0916_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_0916_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_0916_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE_0916_RELEASE ) {
         ColorBase dummyColor;
 
         msg >> dummyColor;

@@ -23,9 +23,9 @@
 
 #include <cassert>
 
-#include "agg.h"
 #include "agg_image.h"
 #include "army_troop.h"
+#include "audio_manager.h"
 #include "buildinginfo.h"
 #include "cursor.h"
 #include "dialog.h"
@@ -730,7 +730,7 @@ bool DwellingsBar::ActionBarLeftMouseSingleClick( DwellingItem & dwl )
         BuildingInfo dwelling( castle, static_cast<building_t>( dwl.type ) );
 
         if ( dwelling.DialogBuyBuilding( true ) ) {
-            AGG::PlaySound( M82::BUILDTWN );
+            AudioManager::PlaySound( M82::BUILDTWN );
             castle.BuyBuilding( dwl.type );
         }
     }
