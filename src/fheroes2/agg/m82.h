@@ -181,7 +181,7 @@ namespace M82
         LOOP0016,
         LOOP0017,
         LOOP0018,
-        LOOP0019, // unused? A sound with seagulls.
+        LOOP0019, // A sound with seagulls.
         LOOP0020, // unused? Waves on a beach.
         LOOP0021,
         LOOP0022,

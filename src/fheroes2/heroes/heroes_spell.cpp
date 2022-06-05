@@ -21,8 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
 #include "agg_image.h"
+#include "audio_manager.h"
 #include "castle.h"
 #include "cursor.h"
 #include "game.h"
@@ -264,7 +264,7 @@ bool HeroesTownGate( Heroes & hero, const Castle * castle )
         if ( !Maps::isValidAbsIndex( src ) || !Maps::isValidAbsIndex( dst ) )
             return false;
 
-        AGG::PlaySound( M82::KILLFADE );
+        AudioManager::PlaySound( M82::KILLFADE );
         hero.GetPath().Hide();
         hero.FadeOut();
 
@@ -274,7 +274,7 @@ bool HeroesTownGate( Heroes & hero, const Castle * castle )
         I.RedrawFocus();
         I.Redraw();
 
-        AGG::PlaySound( M82::KILLFADE );
+        AudioManager::PlaySound( M82::KILLFADE );
         hero.FadeIn();
         hero.GetPath().Reset();
         hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
@@ -427,7 +427,7 @@ bool ActionSpellDimensionDoor( Heroes & hero )
     const int32_t dst = I.GetDimensionDoorDestination( src, Spell::CalculateDimensionDoorDistance(), hero.isShipMaster() );
 
     if ( Maps::isValidAbsIndex( src ) && Maps::isValidAbsIndex( dst ) ) {
-        AGG::PlaySound( M82::KILLFADE );
+        AudioManager::PlaySound( M82::KILLFADE );
         hero.GetPath().Hide();
         hero.FadeOut();
 
@@ -439,7 +439,7 @@ bool ActionSpellDimensionDoor( Heroes & hero )
         I.RedrawFocus();
         I.Redraw();
 
-        AGG::PlaySound( M82::KILLFADE );
+        AudioManager::PlaySound( M82::KILLFADE );
         hero.FadeIn();
         hero.GetPath().Reset();
         hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back

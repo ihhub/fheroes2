@@ -24,9 +24,9 @@
 #include <cassert>
 #include <queue>
 
-#include "agg.h"
 #include "agg_image.h"
 #include "army.h"
+#include "audio_manager.h"
 #include "battle.h"
 #include "battle_arena.h"
 #include "battle_army.h"
@@ -418,19 +418,19 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
 
     if ( ( res.army1 & RESULT_WINS ) && ( army1->GetControl() & CONTROL_HUMAN ) ) {
         GetSummaryParams( res.army1, res.army2, army1->GetCommander(), res.exp1, sequence, title, msg );
-        AGG::PlayMusic( MUS::BATTLEWIN, false );
+        AudioManager::PlayMusic( MUS::BATTLEWIN, false );
     }
     else if ( ( res.army2 & RESULT_WINS ) && ( army2->GetControl() & CONTROL_HUMAN ) ) {
         GetSummaryParams( res.army2, res.army1, army2->GetCommander(), res.exp2, sequence, title, msg );
-        AGG::PlayMusic( MUS::BATTLEWIN, false );
+        AudioManager::PlayMusic( MUS::BATTLEWIN, false );
     }
     else if ( army1->GetControl() & CONTROL_HUMAN ) {
         GetSummaryParams( res.army1, res.army2, army1->GetCommander(), res.exp1, sequence, title, msg );
-        AGG::PlayMusic( MUS::BATTLELOSE, false );
+        AudioManager::PlayMusic( MUS::BATTLELOSE, false );
     }
     else if ( army2->GetControl() & CONTROL_HUMAN ) {
         GetSummaryParams( res.army2, res.army1, army2->GetCommander(), res.exp2, sequence, title, msg );
-        AGG::PlayMusic( MUS::BATTLELOSE, false );
+        AudioManager::PlayMusic( MUS::BATTLELOSE, false );
     }
     else {
         // AI vs AI battle, this dialog should not be shown at all

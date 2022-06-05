@@ -23,7 +23,6 @@
 
 #include <array>
 
-#include "agg.h"
 #include "agg_image.h"
 #include "campaign_data.h"
 #include "campaign_savedata.h"

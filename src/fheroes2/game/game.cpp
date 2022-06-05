@@ -26,8 +26,8 @@
 #include <cassert>
 #include <cmath>
 
-#include "agg.h"
 #include "audio.h"
+#include "audio_manager.h"
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
@@ -71,7 +71,14 @@ namespace
             return M82::LOOP0014;
         }
 
-        return M82::getAdventureMapObjectSound( tile.GetObject( false ) );
+        const MP2::MapObjectType objectType = tile.GetObject( false );
+
+        // This is a horrible hack but we want to play sounds only for a particular sprite belonging to Stones.
+        if ( objectType == MP2::OBJ_STONES && tile.containsSprite( 200, 183 ) ) {
+            return M82::LOOP0019;
+        }
+
+        return M82::getAdventureMapObjectSound( objectType );
     }
 }
 
@@ -369,7 +376,7 @@ void Game::EnvironmentSoundMixer()
         center = { world.w() / 2, world.h() / 2 };
     }
 
-    std::map<M82::SoundType, std::vector<AGG::AudioLoopEffectInfo>> soundEffects;
+    std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects;
 
     const int32_t maxOffset = 3;
 
@@ -440,9 +447,9 @@ void Game::EnvironmentSoundMixer()
             }
         }
 
-        std::vector<AGG::AudioLoopEffectInfo> & effects = soundEffects[soundType];
+        std::vector<AudioManager::AudioLoopEffectInfo> & effects = soundEffects[soundType];
         bool doesEffectExist = false;
-        for ( AGG::AudioLoopEffectInfo & info : effects ) {
+        for ( AudioManager::AudioLoopEffectInfo & info : effects ) {
             if ( info.angle == angle ) {
                 info.volumePercentage = std::max( volumePercentage, info.volumePercentage );
                 doesEffectExist = true;
@@ -462,13 +469,13 @@ void Game::EnvironmentSoundMixer()
         }
     }
 
-    AGG::playLoopSounds( std::move( soundEffects ), true );
+    AudioManager::playLoopSounds( std::move( soundEffects ), true );
 }
 
 void Game::restoreSoundsForCurrentFocus()
 {
     Game::SetCurrentMusic( MUS::UNKNOWN );
-    AGG::ResetAudio();
+    AudioManager::ResetAudio();
 
     switch ( Interface::GetFocusType() ) {
     case GameFocus::HEROES: {
@@ -478,7 +485,7 @@ void Game::restoreSoundsForCurrentFocus()
         const int heroIndexPos = focusedHero->GetIndex();
         if ( heroIndexPos >= 0 ) {
             Game::EnvironmentSoundMixer();
-            AGG::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
+            AudioManager::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
         }
         break;
     }
@@ -488,7 +495,7 @@ void Game::restoreSoundsForCurrentFocus()
         assert( focusedCastle != nullptr );
 
         Game::EnvironmentSoundMixer();
-        AGG::PlayMusic( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ), true, true );
+        AudioManager::PlayMusic( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ), true, true );
         break;
     }
 
@@ -684,5 +691,5 @@ void Game::PlayPickupSound()
         return;
     }
 
-    AGG::PlaySound( wav );
+    AudioManager::PlaySound( wav );
 }
