@@ -1004,8 +1004,12 @@ void Settings::BinaryLoad()
 {
     std::string fname = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.bin" );
 
-    if ( !System::IsFile( fname ) )
+    if ( !System::IsFile( fname ) ) {
         fname = GetLastFile( "", "fheroes2.bin" );
+    }
+    if ( !System::IsFile( fname ) ) {
+        return;
+    }
 
     StreamFile fs;
     fs.setbigendian( true );
