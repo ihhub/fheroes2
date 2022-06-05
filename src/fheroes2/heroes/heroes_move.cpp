@@ -21,8 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
 #include "agg_image.h"
+#include "audio_manager.h"
 #include "castle.h"
 #include "direction.h"
 #include "game.h"
@@ -81,8 +81,7 @@ void PlayWalkSound( int ground )
         break;
     }
 
-    if ( wav != M82::UNKNOWN )
-        AGG::PlaySound( wav, true );
+    AudioManager::PlaySound( wav, true );
 }
 
 bool ReflectSprite( int from )

@@ -46,7 +46,7 @@ namespace
     const std::array<const char *, TIL::LASTTIL> tilFileName = { "UNKNOWN", "CLOF32.TIL", "GROUND32.TIL", "STON.TIL" };
 
     std::vector<std::vector<fheroes2::Sprite>> _icnVsSprite( ICN::LASTICN );
-    std::vector<std::vector<std::vector<fheroes2::Image>>> _tilVsImage( TIL::LASTTIL );
+    std::array<std::vector<std::vector<fheroes2::Image>>, TIL::LASTTIL> _tilVsImage;
     const fheroes2::Sprite errorImage;
 
     const uint32_t headerSize = 6;
@@ -120,7 +120,7 @@ namespace
     // BMP files within AGG are not Bitmap files.
     fheroes2::Sprite loadBMPFile( const std::string & path )
     {
-        const std::vector<uint8_t> & data = AGG::ReadChunk( path );
+        const std::vector<uint8_t> & data = AGG::getDataFromAggFile( path );
         if ( data.size() < 6 ) {
             // It is an invalid BMP file.
             return {};
@@ -245,7 +245,7 @@ namespace fheroes2
     {
         void LoadOriginalICN( int id )
         {
-            const std::vector<uint8_t> & body = ::AGG::ReadChunk( ICN::GetString( id ) );
+            const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
 
             if ( body.empty() ) {
                 return;
@@ -772,7 +772,7 @@ namespace fheroes2
 
                 if ( id == ICN::SMALFONT ) {
                     // Small font in official Polish GoG version has all letters to be shifted by 1 pixel lower.
-                    const std::vector<uint8_t> & body = ::AGG::ReadChunk( ICN::GetString( id ) );
+                    const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
                     const uint32_t crc32 = fheroes2::calculateCRC32( body.data(), body.size() );
                     if ( crc32 == 0xE9EC7A63 ) {
                         for ( Sprite & letter : imageArray ) {
@@ -2037,6 +2037,36 @@ namespace fheroes2
                     }
                 }
                 return true;
+            case ICN::LGNDXTRA:
+                // Exit button is too huge due to 1 pixel presence at the bottom of the image.
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 6 ) {
+                    auto & original = _icnVsSprite[id];
+                    if ( original[4].height() == 142 ) {
+                        const Point offset( original[4].x(), original[4].y() );
+                        original[4] = Crop( original[4], 0, 0, original[4].width(), 25 );
+                        original[4].setPosition( offset.x, offset.y );
+                    }
+
+                    if ( original[5].height() == 142 ) {
+                        const Point offset( original[5].x(), original[5].y() );
+                        original[5] = Crop( original[5], 0, 0, original[5].width(), 25 );
+                        original[5].setPosition( offset.x, offset.y );
+                    }
+                }
+                return true;
+            case ICN::LGNDXTRE:
+                // Exit button is too huge due to 1 pixel presence at the bottom of the image.
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 6 ) {
+                    auto & original = _icnVsSprite[id];
+                    if ( original[4].height() == 142 ) {
+                        const Point offset( original[4].x(), original[4].y() );
+                        original[4] = Crop( original[4], 0, 0, original[4].width(), 25 );
+                        original[4].setPosition( offset.x, offset.y );
+                    }
+                }
+                return true;
             default:
                 break;
             }
@@ -2058,7 +2088,7 @@ namespace fheroes2
             if ( _tilVsImage[id].empty() ) {
                 _tilVsImage[id].resize( 4 ); // 4 possible sides
 
-                const std::vector<uint8_t> & data = ::AGG::ReadChunk( tilFileName[id] );
+                const std::vector<uint8_t> & data = ::AGG::getDataFromAggFile( tilFileName[id] );
                 if ( data.size() < headerSize ) {
                     // The important resource is absent! Make sure that you are using the correct version of the game.
                     assert( 0 );

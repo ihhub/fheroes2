@@ -66,13 +66,6 @@ std::string InsertString( const std::string &, size_t, const char * );
 bool SaveMemToFile( const std::vector<uint8_t> & data, const std::string & path );
 std::vector<uint8_t> LoadFileToMem( const std::string & path );
 
-// std::clamp replacement until we can use C++17
-template <typename T>
-T clamp( const T & value, const T & min, const T & max )
-{
-    return ( value < min ) ? min : ( max < value ) ? max : value;
-}
-
 namespace fheroes2
 {
     double GetAngle( const Point & start, const Point & target );

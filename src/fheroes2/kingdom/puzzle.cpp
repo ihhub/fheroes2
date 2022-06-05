@@ -26,8 +26,8 @@
 #include <functional>
 #include <vector>
 
-#include "agg.h"
 #include "agg_image.h"
+#include "audio_manager.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
@@ -267,7 +267,7 @@ void Puzzle::ShowMapsDialog() const
     // restore the original music on exit
     const Game::MusicRestorer musicRestorer;
 
-    AGG::PlayMusic( MUS::PUZZLE, false );
+    AudioManager::PlayMusic( MUS::PUZZLE, false );
 
     if ( display.isDefaultSize() && !Settings::Get().ExtGameHideInterface() )
         ShowStandardDialog( *this, sf );

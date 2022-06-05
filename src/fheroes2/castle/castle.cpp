@@ -25,9 +25,9 @@
 #include <array>
 #include <cassert>
 
-#include "agg.h"
 #include "agg_image.h"
 #include "ai.h"
+#include "audio_manager.h"
 #include "battle_board.h"
 #include "battle_tower.h"
 #include "castle.h"
@@ -2234,7 +2234,7 @@ bool Castle::BuyBoat() const
     if ( !AllowBuyBoat() )
         return false;
     if ( isControlHuman() )
-        AGG::PlaySound( M82::BUILDTWN );
+        AudioManager::PlaySound( M82::BUILDTWN );
 
     if ( !Maps::isValidAbsPoint( center.x, center.y + 2 ) )
         return false;

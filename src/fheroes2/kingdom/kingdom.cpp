@@ -61,7 +61,7 @@ Kingdom::Kingdom()
     , visited_tents_colors( 0 )
     , _topItemInKingdomView( -1 )
 {
-    heroes_cond_loss.reserve( 4 );
+    // Do nothing.
 }
 
 void Kingdom::Init( int clr )
@@ -93,7 +93,6 @@ void Kingdom::clear()
 
     recruits.Reset();
 
-    heroes_cond_loss.clear();
     puzzle_maps.reset();
 }
 
@@ -914,8 +913,7 @@ cost_t Kingdom::_getKingdomStartingResources( const int difficulty ) const
 StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
 {
     return msg << kingdom.modes << kingdom.color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
-               << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom.heroes_cond_loss << kingdom._lastBattleWinHeroID
-               << kingdom._topItemInKingdomView;
+               << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom._lastBattleWinHeroID << kingdom._topItemInKingdomView;
 }
 
 StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
@@ -934,8 +932,16 @@ StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
         }
     }
 
-    msg >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom.heroes_cond_loss >> kingdom._lastBattleWinHeroID
-        >> kingdom._topItemInKingdomView;
+    msg >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0916_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_0916_RELEASE ) {
+        KingdomHeroes temp;
+
+        msg >> temp;
+    }
+
+    msg >> kingdom._lastBattleWinHeroID >> kingdom._topItemInKingdomView;
 
     return msg;
 }

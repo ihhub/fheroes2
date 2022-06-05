@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cassert>
 #include <cstdlib>
 
 #include "agg_image.h"
@@ -42,8 +44,6 @@
 #include "ui_castle.h"
 #include "ui_text.h"
 #include "world.h"
-
-#include <cassert>
 
 namespace
 {
@@ -449,8 +449,9 @@ namespace
         int32_t ypos = my + TILEWIDTH - ( imageBox.height() / 2 );
 
         // clamp box to edges of adventure screen game area
-        xpos = clamp( xpos, BORDERWIDTH, ( ar.width - imageBox.width() ) + BORDERWIDTH );
-        ypos = clamp( ypos, BORDERWIDTH, ( ar.height - imageBox.height() ) + BORDERWIDTH );
+        assert( ar.width >= imageBox.width() && ar.height >= imageBox.height() );
+        xpos = std::clamp( xpos, BORDERWIDTH, ( ar.width - imageBox.width() ) + BORDERWIDTH );
+        ypos = std::clamp( ypos, BORDERWIDTH, ( ar.height - imageBox.height() ) + BORDERWIDTH );
 
         return { xpos, ypos, imageBox.width(), imageBox.height() };
     }
