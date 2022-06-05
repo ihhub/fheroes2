@@ -223,7 +223,7 @@ namespace
 
     void replayCurrentMusic();
 
-    class AsyncMusicManager : fheroes2::AsyncManager
+    class AsyncMusicManager : public fheroes2::AsyncManager
     {
     public:
         void restartPlayback()
