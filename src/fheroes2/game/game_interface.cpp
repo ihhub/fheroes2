@@ -116,6 +116,10 @@ void Interface::Basic::Redraw( int force )
         gameArea.Redraw( fheroes2::Display::instance(), LEVEL_ALL );
     }
 
+    if ( hideInterface && conf.ShowControlPanel() ) {
+        controlPanel.Redraw();
+    }
+
     if ( ( hideInterface && conf.ShowRadar() ) || ( combinedRedraw & REDRAW_RADAR ) ) {
         radar.Redraw();
     }
@@ -136,10 +140,6 @@ void Interface::Basic::Redraw( int force )
 
     if ( ( hideInterface && conf.ShowStatus() ) || ( combinedRedraw & REDRAW_STATUS ) ) {
         statusWindow.Redraw();
-    }
-
-    if ( hideInterface && conf.ShowControlPanel() ) {
-        controlPanel.Redraw();
     }
 
     if ( combinedRedraw & REDRAW_BORDER ) {
