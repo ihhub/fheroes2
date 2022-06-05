@@ -35,8 +35,8 @@
 #include "core.h"
 #include "logging.h"
 #include "system.h"
-#include "timing.h"
 #include "thread.h"
+#include "timing.h"
 
 namespace
 {

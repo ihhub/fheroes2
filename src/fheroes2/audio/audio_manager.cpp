@@ -27,8 +27,8 @@
 #include "mus.h"
 #include "settings.h"
 #include "system.h"
-#include "tools.h"
 #include "thread.h"
+#include "tools.h"
 #include "xmi.h"
 
 #include <algorithm>
