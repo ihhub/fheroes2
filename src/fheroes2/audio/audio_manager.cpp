@@ -587,7 +587,7 @@ namespace
             return;
         }
 
-        // TODO: use another containers for sound effects to support more efficient sort and find operations based on the code below.
+        // TODO: use another container for sound effects to support more efficient sort and find operations based on the code below.
 
         std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> tempAudioLoopEffects;
         std::swap( tempAudioLoopEffects, currentAudioLoopEffects );
@@ -626,7 +626,7 @@ namespace
             while ( effectsToReplaceCount > 0 ) {
                 --effectsToReplaceCount;
 
-                // Find the most closest angles to those which are going to be added.
+                // Find the closest angles to those which are going to be added.
                 size_t soundToAddId = 0;
                 size_t soundToReplaceId = 0;
                 getClosestSoundIdPairByAngle( effectsToAdd, effectsToReplace, soundToAddId, soundToReplaceId );
