@@ -20,8 +20,6 @@
 
 #include "timing.h"
 
-#include <cassert>
-#include <memory>
 #include <thread>
 
 #include <SDL.h>
@@ -129,63 +127,6 @@ namespace fheroes2
     void Timer::remove()
     {
         _timer->remove();
-    }
-
-    AsyncManager::~AsyncManager()
-    {
-        if ( _worker ) {
-            {
-                std::lock_guard<std::mutex> guard( _mutex );
-
-                _exitFlag = 1;
-                _runFlag = 1;
-                _workerNotification.notify_all();
-            }
-
-            _worker->join();
-            _worker.reset();
-        }
-    }
-
-    void AsyncManager::_createThreadIfNeeded()
-    {
-        if ( !_worker ) {
-            _runFlag = 1;
-            _worker = std::make_unique<std::thread>( AsyncManager::_workerThread, this );
-
-            std::unique_lock<std::mutex> mutexLock( _mutex );
-            _masterNotification.wait( mutexLock, [this] { return _runFlag == 0; } );
-        }
-    }
-
-    void AsyncManager::_workerThread( AsyncManager * manager )
-    {
-        assert( manager != nullptr );
-
-        {
-            std::lock_guard<std::mutex> guard( manager->_mutex );
-            manager->_runFlag = 0;
-            manager->_masterNotification.notify_one();
-        }
-
-        while ( manager->_exitFlag == 0 ) {
-            std::unique_lock<std::mutex> mutexLock( manager->_mutex );
-            manager->_workerNotification.wait( mutexLock, [manager] { return manager->_runFlag == 1; } );
-            mutexLock.unlock();
-
-            if ( manager->_exitFlag )
-                break;
-
-            manager->_mutex.lock();
-
-            manager->doStuff();
-        }
-    }
-
-    void AsyncManager::notifyThread()
-    {
-        _runFlag = 1;
-        _workerNotification.notify_all();
     }
 
     void delayforMs( const uint32_t delayMs )

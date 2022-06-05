@@ -27,8 +27,8 @@
 #include "mus.h"
 #include "settings.h"
 #include "system.h"
-#include "timing.h"
 #include "tools.h"
+#include "thread.h"
 #include "xmi.h"
 
 #include <algorithm>
@@ -210,7 +210,7 @@ namespace
     // SDL MIDI player is a single threaded library which requires a lot of time to start playing some long midi compositions.
     // This leads to a situation of a short application freeze while a hero crosses terrains or ending a battle.
     // The only way to avoid this is to fire MIDI requests asynchronously and synchronize them if needed.
-    class AsyncSoundManager : public fheroes2::AsyncManager
+    class AsyncSoundManager : public MultiThreading::AsyncManager
     {
     public:
         void pushMusic( const int musicId, const MusicSource musicType, const bool isLooped )

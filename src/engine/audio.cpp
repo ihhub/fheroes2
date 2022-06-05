@@ -36,6 +36,7 @@
 #include "logging.h"
 #include "system.h"
 #include "timing.h"
+#include "thread.h"
 
 namespace
 {
@@ -167,7 +168,7 @@ namespace
         double position{ 0 };
     };
 
-    class MusicResumeManager
+    class MusicTrackManager
     {
     public:
         MusicInfo getMusicInfoByUID( const uint64_t musicUID ) const
@@ -219,11 +220,11 @@ namespace
         fheroes2::Time _currentTrackTimer;
     };
 
-    void PlayMusic( const uint64_t musicUID, bool loop, const bool stopExistingMusic = true );
+    void PlayMusic( const uint64_t musicUID, bool loop );
 
     void replayCurrentMusic();
 
-    class AsyncMusicManager : public fheroes2::AsyncManager
+    class AsyncMusicManager : public MultiThreading::AsyncManager
     {
     public:
         void restartPlayback()
@@ -254,7 +255,7 @@ namespace
         int fadeInMs{ 0 };
         int fadeOutMs{ 0 };
 
-        MusicResumeManager resumeManager;
+        MusicTrackManager trackManager;
 
         AsyncMusicManager asyncManager;
     };
@@ -279,23 +280,24 @@ namespace
             return;
         }
 
-        musicSettings.resumeManager.resetTimer();
+        musicSettings.trackManager.resetTimer();
 
         musicSettings.currentTrack.position = 0;
+        musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack.mix, 0 );
 
-        PlayMusic( musicSettings.currentTrackUID, true, false );
+        PlayMusic( musicSettings.currentTrackUID, true );
     }
 
-    void PlayMusic( const uint64_t musicUID, bool loop, const bool stopExistingMusic )
+    void PlayMusic( const uint64_t musicUID, bool loop )
     {
-        MusicInfo musicInfo = musicSettings.resumeManager.getMusicInfoByUID( musicUID );
+        MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
         if ( musicInfo.mix == nullptr ) {
             // How is it even possible! Check your logic!
             assert( 0 );
             return;
         }
 
-        if ( stopExistingMusic ) {
+        if ( musicUID != musicSettings.currentTrackUID ) {
             Music::Stop();
         }
 
@@ -304,13 +306,15 @@ namespace
             loop = false;
             musicSettings.asyncTrackUID = musicUID;
 
+            // Mix_HookMusicFinished() function does not allow any SDL calls to be done within the assigned function. In this case the only to trigger restart of the
+            // current song it using multithreading.
             Mix_HookMusicFinished( []() { musicSettings.asyncManager.restartPlayback(); } );
         }
         else {
             musicSettings.asyncTrackUID = 0;
         }
 
-        musicSettings.resumeManager.resetTimer();
+        musicSettings.trackManager.resetTimer();
 
         const int loopCount = loop ? -1 : 0;
         const int returnCode
@@ -444,7 +448,7 @@ void Audio::Quit()
     Music::Stop();
     Mixer::Stop();
 
-    musicSettings.resumeManager.clear();
+    musicSettings.trackManager.clear();
 
     Mix_CloseAudio();
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -674,7 +678,12 @@ void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const
         return;
     }
 
-    const MusicInfo musicInfo = musicSettings.resumeManager.getMusicInfoByUID( musicUID );
+    if ( musicSettings.currentTrackUID == musicUID ) {
+        // We are playing the same track. No need to do anything.
+        return;
+    }
+
+    const MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
     if ( musicInfo.mix != nullptr ) {
         PlayMusic( musicUID, loop );
         return;
@@ -693,7 +702,7 @@ void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const
         return;
     }
 
-    musicSettings.resumeManager.update( musicUID, mix, 0 );
+    musicSettings.trackManager.update( musicUID, mix, 0 );
     PlayMusic( musicUID, loop );
 }
 
@@ -710,7 +719,12 @@ void Music::Play( const uint64_t musicUID, const std::string & file, const bool 
         return;
     }
 
-    const MusicInfo musicInfo = musicSettings.resumeManager.getMusicInfoByUID( musicUID );
+    if ( musicSettings.currentTrackUID == musicUID ) {
+        // We are playing the same track. No need to do anything.
+        return;
+    }
+
+    const MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
     if ( musicInfo.mix != nullptr ) {
         PlayMusic( musicUID, loop );
         return;
@@ -724,7 +738,7 @@ void Music::Play( const uint64_t musicUID, const std::string & file, const bool 
         return;
     }
 
-    musicSettings.resumeManager.update( musicUID, mix, 0 );
+    musicSettings.trackManager.update( musicUID, mix, 0 );
     PlayMusic( musicUID, loop );
 }
 
@@ -781,10 +795,10 @@ void Music::Stop()
     }
 
     if ( musicSettings.currentTrackUID == musicSettings.asyncTrackUID ) {
-        const double position = musicSettings.resumeManager.getCurrentTrackPosition();
+        const double position = musicSettings.trackManager.getCurrentTrackPosition();
         musicSettings.currentTrack.position += position;
 
-        musicSettings.resumeManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack.mix, musicSettings.currentTrack.position );
+        musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack.mix, musicSettings.currentTrack.position );
     }
 
     musicSettings.currentTrack = {};
