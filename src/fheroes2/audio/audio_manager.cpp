@@ -550,7 +550,7 @@ namespace
                 const int angleDiff = std::abs( soundToAdd[soundToAddId].angle - soundToReplace[soundToReplaceId].angle );
                 const int volumeDiff
                     = std::abs( static_cast<int>( soundToAdd[soundToAddId].volumePercentage ) - static_cast<int>( soundToReplace[soundToReplaceId].volumePercentage ) );
-                if ( bestAngleDiff > angleDiff ) {
+                if ( bestAngleDiff >= angleDiff ) {
                     if ( bestAngleDiff == angleDiff && volumeDiff > bestVolumeDiff ) {
                         // The existing best pair has lower volume difference.
                         continue;
