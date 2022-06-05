@@ -276,14 +276,12 @@ namespace
         const std::lock_guard<std::recursive_mutex> guard( mutex );
 
         if ( musicSettings.asyncTrackUID != musicSettings.currentTrackUID ) {
-            // Looks like the track was changed.
+            // Looks like the track has changed.
             return;
         }
 
-        musicSettings.trackManager.resetTimer();
-
         musicSettings.currentTrack.position = 0;
-        musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack.mix, 0 );
+        musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack.mix, musicSettings.currentTrack.position );
 
         PlayMusic( musicSettings.currentTrackUID, true );
     }
