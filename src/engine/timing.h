@@ -99,7 +99,7 @@ namespace fheroes2
         AsyncManager( const AsyncManager & ) = delete;
         AsyncManager( AsyncManager && ) = delete;
 
-        ~AsyncManager();
+        ~AsyncManager() virtual;
 
         AsyncManager & operator=( const AsyncManager & ) = delete;
         AsyncManager & operator=( AsyncManager && ) = delete;

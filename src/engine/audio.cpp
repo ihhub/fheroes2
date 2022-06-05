@@ -180,23 +180,13 @@ namespace
             return iter->second;
         }
 
-        void setMusicPosition( const uint64_t musicUID, const double position )
-        {
-            auto iter = _musicCache.find( musicUID );
-            if ( iter == _musicCache.end() ) {
-                return;
-            }
-
-            iter->second.position = position;
-        }
-
         void update( const uint64_t musicUID, Mix_Music * mix, const double position )
         {
             assert( mix != nullptr );
 
             auto iter = _musicCache.find( musicUID );
             if ( iter == _musicCache.end() ) {
-                _musicCache.emplace( musicUID, MusicInfo{ mix, position } );
+                _musicCache.try_emplace( musicUID, MusicInfo{ mix, position } );
                 return;
             }
 
