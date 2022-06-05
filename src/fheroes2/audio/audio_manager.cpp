@@ -396,7 +396,8 @@ namespace
 
     uint64_t getMusicUID( const int trackId, const MusicSource musicType )
     {
-        assert( trackId != MUS::UNUSED && trackId != MUS::UNKNOWN && trackId >= 0 );
+        static_assert( MUS::UNUSED == 0, "Why are you changing this value?" );
+        assert( trackId != MUS::UNUSED && trackId != MUS::UNKNOWN );
 
         return ( static_cast<uint64_t>( musicType ) << 32 ) + static_cast<uint64_t>( trackId );
     }
