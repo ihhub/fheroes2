@@ -21,6 +21,7 @@
 #include "timing.h"
 
 #include <cassert>
+#include <memory>
 #include <thread>
 
 #include <SDL.h>
@@ -150,7 +151,7 @@ namespace fheroes2
     {
         if ( !_worker ) {
             _runFlag = 1;
-            _worker.reset( new std::thread( AsyncManager::_workerThread, this ) );
+            _worker = std::make_unique<std::thread>( AsyncManager::_workerThread, this );
 
             std::unique_lock<std::mutex> mutexLock( _mutex );
             _masterNotification.wait( mutexLock, [this] { return _runFlag == 0; } );
