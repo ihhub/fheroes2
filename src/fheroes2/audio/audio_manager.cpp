@@ -557,6 +557,7 @@ namespace
                     }
 
                     bestAngleDiff = angleDiff;
+                    bestVolumeDiff = volumeDiff;
 
                     bestSoundToAddId = soundToAddId;
                     bestSoundToReplaceId = soundToReplaceId;
