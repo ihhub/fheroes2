@@ -707,7 +707,7 @@ void Troops::ArrangeForWhirlpool()
 {
     // Make an "optimized" version first (each unit type occupies just one slot)
     const Troops optimizedTroops = GetOptimized();
-    assert( optimizedTroops.size() > 0 && optimizedTroops.size() <= TROOP_STACKS_PER_ARMY );
+    assert( optimizedTroops.empty() && optimizedTroops.size() <= TROOP_STACKS_PER_ARMY );
 
     // Already a full house, there is no room for further optimization
     if ( optimizedTroops.size() == TROOP_STACKS_PER_ARMY ) {

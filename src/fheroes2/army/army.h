@@ -86,7 +86,7 @@ public:
     void swapArmies( Troops & swapArmy );
 
     // Defaults to 4 since the 5th troop is being merged into.
-    void MergeTroops( const size_t mergeNumber = 4 );
+    void MergeTroops( const size_t requiredMerges = 4 );
     Troops GetOptimized() const;
 
     virtual double GetStrength() const;
