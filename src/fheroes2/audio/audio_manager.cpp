@@ -618,8 +618,6 @@ namespace
 
             std::vector<ChannelAudioLoopEffectInfo> & effectsToReplace = foundSoundTypeIter->second;
 
-            size_t effectsToReplaceCount = std::min( effectsToAdd.size(), effectsToReplace.size() );
-
             // Search for an existing sound which has the exact volume and angle.
             for ( auto soundToAddIter = effectsToAdd.begin(); soundToAddIter != effectsToAdd.end(); ) {
                 auto exactSoundEffect = std::find( effectsToReplace.begin(), effectsToReplace.end(), *soundToAddIter );
@@ -628,14 +626,13 @@ namespace
                     effectsToReplace.erase( exactSoundEffect );
 
                     soundToAddIter = effectsToAdd.erase( soundToAddIter );
-
-                    --effectsToReplaceCount;
-
                     continue;
                 }
 
                 ++soundToAddIter;
             }
+
+            size_t effectsToReplaceCount = std::min( effectsToAdd.size(), effectsToReplace.size() );
 
             while ( effectsToReplaceCount > 0 ) {
                 --effectsToReplaceCount;
