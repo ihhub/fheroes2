@@ -499,17 +499,14 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
     }
 }
 
-void Army::swapArmies( Army & swapArmy )
+void Troops::swapArmies( Troops & swapArmy )
 {
     // Hero armies cannot end up with zero troops.
     if ( GetCount() == 0 || swapArmy.GetCount() == 0 ) {
         return;
     }
 
-    // Either army can have 5 stacks so iterate through max possible.
-    for ( size_t slot = 0; slot < TROOP_STACKS_PER_ARMY; ++slot ) {
-        std::swap( *GetTroop( slot ), *swapArmy.GetTroop( slot ) );
-    }
+    std::swap( *this, swapArmy );
 }
 
 // Return true when all valid troops have the same ID, or when there are no troops

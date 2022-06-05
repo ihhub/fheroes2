@@ -83,6 +83,7 @@ public:
 
     // Used only for moving full army in hero's meeting dialog.
     void MoveTroops( const Troops & from, const size_t selectedTroopIndex = 4, const bool isSelected = false, const bool moveAll = false );
+    void swapArmies( Troops & swapArmy );
 
     // Defaults to 4 since the 5th troop is being merged into.
     void MergeTroops( const size_t mergeNumber = 4 );
@@ -143,7 +144,6 @@ public:
     static bool SlowestTroop( const Troop *, const Troop * );
     static bool FastestTroop( const Troop *, const Troop * );
     static void SwapTroops( Troop &, Troop & );
-    void swapArmies( Army & swapArmy );
 
     static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
 
