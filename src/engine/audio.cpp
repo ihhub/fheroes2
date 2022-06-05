@@ -309,11 +309,8 @@ namespace
             Music::Stop();
         }
 
-        bool loopAsynchronously = false;
         const bool isResumeSupported = loop && isMusicResumeSupported( musicInfo.mix );
-
         if ( isResumeSupported ) {
-            loopAsynchronously = true;
             loop = false;
             musicSettings.asyncTrackUID = musicUID;
 
