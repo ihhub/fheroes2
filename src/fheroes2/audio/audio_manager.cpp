@@ -587,18 +587,7 @@ namespace
             return;
         }
 
-        // Sort all sounds by angle. This will help with search methods below.
-        for ( auto & audioEffectPair : currentAudioLoopEffects ) {
-            std::vector<ChannelAudioLoopEffectInfo> & effects = audioEffectPair.second;
-            std::sort( effects.begin(), effects.end(),
-                       []( const ChannelAudioLoopEffectInfo & first, const ChannelAudioLoopEffectInfo & second ) { return first.angle < second.angle; } );
-        }
-
-        for ( auto & audioEffectPair : soundEffects ) {
-            std::vector<AudioManager::AudioLoopEffectInfo> & effects = audioEffectPair.second;
-            std::sort( effects.begin(), effects.end(),
-                       []( const AudioManager::AudioLoopEffectInfo & first, const AudioManager::AudioLoopEffectInfo & second ) { return first.angle < second.angle; } );
-        }
+        // TODO: use another containers for sound effects to support more efficient sort and find operations based on the code below.
 
         std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> tempAudioLoopEffects;
         std::swap( tempAudioLoopEffects, currentAudioLoopEffects );
