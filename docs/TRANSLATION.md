@@ -1,6 +1,7 @@
 # [**fheroes2**](README.md) translation guide
 
-This project uses portable object (PO) files to handle localization in various languages. The PO files are located in `/files/lang`.
+This project uses portable object (PO) files to handle localization in various languages. The PO files are located in the `files/lang`
+subdirectory of the project source tree.
 The current instruction is designed for Linux, MacOS and Windows users.
 
 ## Finding translatable strings in the codebase
@@ -18,7 +19,7 @@ _( "Are you sure you want to quit?" )
 If you want to add a new localization, you will first need to add it to the `SupportedLanguage` list/enumeration in the source code.
 Afterwards, a new PO file for it will need to be added. It will have to be named according to the ISO standard's two-character
 language abbreviations. Then to have font support, you will have to specify what font encoding/charset is compatible by adding
-the language to the font generation code found in `/src/fheroes2/gui/ui_font.cpp`. If a compatible font encoding has not currently
+the language to the font generation code found in `src/fheroes2/gui/ui_font.cpp`. If a compatible font encoding has not currently
 been implemented, then code for that will need to be written.
 
 ## Editing translations
@@ -38,7 +39,7 @@ example creature names or castle buildings.
 
 ## Build binary translation files
 
-Once the translation files have been modified, for Linux/MacOS run the `make` command below in `/files/lang` to create
+Once the translation files have been modified, for Linux/MacOS run the `make` command below in the `files/lang` subdirectory to create
 machine object (MO) binary files which can be used by the fheroes2 engine.
 
 For exmaple, for the German PO file, `de.po`, the following would be the command:
@@ -46,7 +47,7 @@ For exmaple, for the German PO file, `de.po`, the following would be the command
 make de.mo
 ```
 
-To have this MO file used by the engine, it should then be placed in the `/files/lang` folder used by the fheroes2 executable.
+To have this MO file used by the engine, it should then be placed in the `files/lang` folder used by the fheroes2 executable.
 The exact location of this folder depends on the operating system. On Windows, it is usually located in the app installation
 directory. On Linux, it is usually located in the `/usr/share/fheroes2` or `/usr/local/share/fheroes2`. Currently for MacOS
 users this location is dependent on what third-party package manager is used to install fheroes2.
@@ -61,7 +62,7 @@ a PR with your changes, you will have to save the PO file in UTF-8 encoding beca
 ## Updating PO templates and translatable strings in PO files
 
 Currently all PO files are automatically updated with new strings after each commit that brings changes to the ingame text.
-If for whatever reason you still need to update strings locally, this can be achieved by running the command below in `/src/dist` to generate
+If for whatever reason you still need to update strings locally, this can be achieved by running the command below in `src/dist` to generate
 
 a new portable object template (POT) file. Windows users will need to setup an environment that lets them run `make`, like
 Windows Subsystem for Linux (WSL) or [Cygwin](https://www.cygwin.com/)/[MSYS2](https://www.msys2.org/).
@@ -70,7 +71,7 @@ Windows Subsystem for Linux (WSL) or [Cygwin](https://www.cygwin.com/)/[MSYS2](h
 make pot
 ```
 
-Once the POT file has been created, go to `/files/lang` and run the command below to update translatable strings in the PO files.
+Once the POT file has been created, go to the `files/lang` folder and run the command below to update translatable strings in the PO files.
 If you are using programs mentioned above like POEdit, then they have options to merge new strings from a POT file.
 
 ```bash
