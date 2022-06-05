@@ -55,6 +55,11 @@ namespace AudioManager
             // Do nothing.
         }
 
+        bool operator==( const AudioLoopEffectInfo & other ) const
+        {
+            return other.angle == angle && other.volumePercentage == volumePercentage;
+        }
+
         int16_t angle{ 0 };
         uint8_t volumePercentage{ 0 };
     };
