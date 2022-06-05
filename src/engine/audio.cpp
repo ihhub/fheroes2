@@ -306,8 +306,8 @@ namespace
             loop = false;
             musicSettings.asyncTrackUID = musicUID;
 
-            // Mix_HookMusicFinished() function does not allow any SDL calls to be done within the assigned function. In this case the only to trigger restart of the
-            // current song it using multithreading.
+            // Mix_HookMusicFinished() function does not allow any SDL calls to be done within the assigned function. In this case the only way to trigger the restart of
+            // the current song is to use a multithreading approach.
             Mix_HookMusicFinished( []() { musicSettings.asyncManager.restartPlayback(); } );
         }
         else {
@@ -325,7 +325,7 @@ namespace
         }
 
         if ( isResumeSupported && musicInfo.position > 1 ) {
-            // Set music position only when at least 1 second of the music has been played.
+            // Set music position only when at least 1 second of the track has been played.
             Mix_RewindMusic();
             if ( Mix_SetMusicPosition( musicInfo.position ) == -1 ) {
                 ERROR_LOG( "The codec does not support music resuming from a custom place." )
