@@ -317,10 +317,7 @@ namespace
             loop = false;
             musicSettings.asyncTrackUID = musicUID;
 
-            Mix_HookMusicFinished(
-                []() {
-                    musicSettings.asyncManager.restartPlayback();
-                } );
+            Mix_HookMusicFinished( []() { musicSettings.asyncManager.restartPlayback(); } );
         }
         else {
             musicSettings.asyncTrackUID = 0;
@@ -329,8 +326,8 @@ namespace
         musicSettings.resumeManager.resetTimer();
 
         const int loopCount = loop ? -1 : 0;
-        const int returnCode = ( musicSettings.fadeInMs > 0 ) ? Mix_FadeInMusic( musicInfo.mix, loopCount, musicSettings.fadeInMs )
-                                                              : Mix_PlayMusic( musicInfo.mix, loopCount );
+        const int returnCode
+            = ( musicSettings.fadeInMs > 0 ) ? Mix_FadeInMusic( musicInfo.mix, loopCount, musicSettings.fadeInMs ) : Mix_PlayMusic( musicInfo.mix, loopCount );
         if ( returnCode != 0 ) {
             ERROR_LOG( "Failed to play music mix. The error: " << Mix_GetError() )
             return;
