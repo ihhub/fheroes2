@@ -211,7 +211,7 @@ flatpak run io.github.ihhub.Fheroes2
 
 Alternatively, you can use an application manager like Discover, which is also available on Steam Deck.
 
-You have to copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` from the original game or demo directory to the `~/.var/app/io.github.ihhub.Fheroes2/data/fheroes2` directory (created after the first launch). 
+You have to copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` from the original game or demo directory to the `~/.var/app/io.github.ihhub.Fheroes2/data/fheroes2` directory. You will be asked when you start the application.
 
 <a name="linux-zip-archive"></a>
 ### Linux ZIP archive
