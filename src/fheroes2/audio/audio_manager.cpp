@@ -548,8 +548,8 @@ namespace
         for ( size_t soundToAddId = 0; soundToAddId < soundToAdd.size(); ++soundToAddId ) {
             for ( size_t soundToReplaceId = 0; soundToReplaceId < soundToReplace.size(); ++soundToReplaceId ) {
                 const int angleDiff = std::abs( soundToAdd[soundToAddId].angle - soundToReplace[soundToReplaceId].angle );
-                const int volumeDiff = std::abs( static_cast<int>( soundToAdd[soundToAddId].volumePercentage )
-                                                 - static_cast<int>( soundToReplace[soundToReplaceId].volumePercentage ) );
+                const int volumeDiff
+                    = std::abs( static_cast<int>( soundToAdd[soundToAddId].volumePercentage ) - static_cast<int>( soundToReplace[soundToReplaceId].volumePercentage ) );
                 if ( bestAngleDiff > angleDiff ) {
                     if ( bestAngleDiff == angleDiff && volumeDiff > bestVolumeDiff ) {
                         // The existing best pair has lower volume difference.
@@ -590,16 +590,14 @@ namespace
         // Sort all sounds by angle. This will help with search methods below.
         for ( auto & audioEffectPair : currentAudioLoopEffects ) {
             std::vector<ChannelAudioLoopEffectInfo> & effects = audioEffectPair.second;
-            std::sort( effects.begin(), effects.end(), []( const ChannelAudioLoopEffectInfo & first, const ChannelAudioLoopEffectInfo & second ) {
-                    return first.angle < second.angle;
-                } );
+            std::sort( effects.begin(), effects.end(),
+                       []( const ChannelAudioLoopEffectInfo & first, const ChannelAudioLoopEffectInfo & second ) { return first.angle < second.angle; } );
         }
 
         for ( auto & audioEffectPair : soundEffects ) {
             std::vector<AudioManager::AudioLoopEffectInfo> & effects = audioEffectPair.second;
-            std::sort( effects.begin(), effects.end(), []( const AudioManager::AudioLoopEffectInfo & first, const AudioManager::AudioLoopEffectInfo & second ) {
-                    return first.angle < second.angle;
-                } );
+            std::sort( effects.begin(), effects.end(),
+                       []( const AudioManager::AudioLoopEffectInfo & first, const AudioManager::AudioLoopEffectInfo & second ) { return first.angle < second.angle; } );
         }
 
         std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> tempAudioLoopEffects;
@@ -623,7 +621,7 @@ namespace
             size_t effectsToReplaceCount = std::min( effectsToAdd.size(), effectsToReplace.size() );
 
             // Search for an existing sound which has the exact volume and angle.
-            for ( auto soundToAddIter = effectsToAdd.begin(); soundToAddIter != effectsToAdd.end();  ) {
+            for ( auto soundToAddIter = effectsToAdd.begin(); soundToAddIter != effectsToAdd.end(); ) {
                 auto exactSoundEffect = std::find( effectsToReplace.begin(), effectsToReplace.end(), *soundToAddIter );
                 if ( exactSoundEffect != effectsToReplace.end() ) {
                     currentAudioLoopEffects[soundType].emplace_back( *exactSoundEffect );
