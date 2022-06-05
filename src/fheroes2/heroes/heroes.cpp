@@ -1968,8 +1968,8 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     // Heroes
     msg >> hero.name >> col;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0916_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_0916_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_0916_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE_0916_RELEASE ) {
         ColorBase dummyColor;
 
         msg >> dummyColor;
