@@ -109,7 +109,6 @@ namespace Game
         JOIN_STACKS,
         UPGRADE_TROOP,
         DISMISS_TROOP,
-
         SWAP_ARMIES,
 
         TOWN_DWELLING_LEVEL_1,

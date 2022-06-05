@@ -46,8 +46,7 @@ namespace
         WORLD_MAP,
         BATTLE,
         CASTLE,
-        MONSTER,
-        ARMY
+        MONSTER
     };
 
     const char * getHotKeyCategoryName( const HotKeyCategory category )
@@ -65,8 +64,6 @@ namespace
             return "Castle";
         case HotKeyCategory::MONSTER:
             return "Monster";
-        case HotKeyCategory::ARMY:
-            return "Army";
         default:
             // Did you add a new category? Add the logic above!
             assert( 0 );
@@ -199,8 +196,7 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::JOIN_STACKS )] = { HotKeyCategory::MONSTER, "join stacks", fheroes2::Key::KEY_ALT };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::UPGRADE_TROOP )] = { HotKeyCategory::MONSTER, "upgrade troop", fheroes2::Key::KEY_U };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DISMISS_TROOP )] = { HotKeyCategory::MONSTER, "dismiss troop", fheroes2::Key::KEY_D };
-
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SWAP_ARMIES )] = { HotKeyCategory::ARMY, "swap one army with another", fheroes2::Key::KEY_SPACE };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SWAP_ARMIES )] = { HotKeyCategory::MONSTER, "swap troops", fheroes2::Key::KEY_SPACE };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_1 )] = { HotKeyCategory::CASTLE, "town dwelling level 1", fheroes2::Key::KEY_1 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_2 )] = { HotKeyCategory::CASTLE, "town dwelling level 2", fheroes2::Key::KEY_2 };
