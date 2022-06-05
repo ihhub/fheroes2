@@ -1023,13 +1023,15 @@ void Settings::BinaryLoad()
         if ( version < FORMAT_VERSION_0916_RELEASE ) {
             // In previous versions, the default values for panel coordinates were {0, 0}, so if all read coordinates
             // are {0, 0}, then they most likely need to be replaced with the new default coordinates {-1, -1}
-            std::apply( []( auto & ...pos ) {
-                const fheroes2::Point nullPoint{0, 0};
+            std::apply(
+                []( auto &... pos ) {
+                    const fheroes2::Point nullPoint{ 0, 0 };
 
-                if ( ( ( pos == nullPoint ) && ... ) ) {
-                    ( ( pos = { -1, -1 } ), ... );
-                }
-            }, std::tie( pos_radr, pos_bttn, pos_icon, pos_stat ) );
+                    if ( ( ( pos == nullPoint ) && ... ) ) {
+                        ( ( pos = { -1, -1 } ), ... );
+                    }
+                },
+                std::tie( pos_radr, pos_bttn, pos_icon, pos_stat ) );
         }
     }
 }
