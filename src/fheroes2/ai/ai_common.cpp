@@ -84,7 +84,7 @@ namespace AI
         std::vector<Troop> others;
 
         // Validate and pick the troops
-        for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
+        for ( size_t slot = 0; slot < TROOP_STACKS_PER_ARMY; ++slot ) {
             const Troop * troop = army.GetTroop( slot );
             if ( troop && troop->isValid() ) {
                 if ( troop->isArchers() ) {

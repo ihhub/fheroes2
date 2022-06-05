@@ -269,7 +269,7 @@ double Troops::getReinforcementValue( const Troops & reinforcement ) const
     combined.MergeTroops();
     combined.SortStrongest();
 
-    while ( combined.Size() > ARMYMAXTROOPS ) {
+    while ( combined.Size() > TROOP_STACKS_PER_ARMY ) {
         combined.PopBack();
     }
 
@@ -387,8 +387,8 @@ void Troops::MoveTroops( const Troops & from, const uint32_t selectedTroopIndex,
     // You are attempting to move an army into itself. Check your logic.
     assert( !( this == &from ) );
 
-    // You have selected a troop outside the possible range of troops. Check your logic.
-    assert( !( selectedTroopIndex > 4 ) );
+    // You have selected a troop outside the possible range of troops ( 0 - 4 ). Check your logic.
+    assert( !( selectedTroopIndex > TROOP_STACKS_PER_ARMY - 1 ) );
 
     // Check if there are troops to move.
     if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetFirstValid()->GetCount() == 1 ) ) {
@@ -397,7 +397,7 @@ void Troops::MoveTroops( const Troops & from, const uint32_t selectedTroopIndex,
     // Modify the order in which to move the troops.
     std::vector<Troop *> troopFromOrder;
     uint32_t troopPointerIndex = 0;
-    if ( selectedTroopIndex != 4 ) {
+    if ( selectedTroopIndex != TROOP_STACKS_PER_ARMY - 1 ) {
         for ( Troop * troop : from ) {
             if ( selectedTroopIndex == troopPointerIndex ) {
                 ++troopPointerIndex;
@@ -419,18 +419,18 @@ void Troops::MoveTroops( const Troops & from, const uint32_t selectedTroopIndex,
     // 'from' army might have more than 0 if it is a hero army with one troop left.
     while ( from.GetCount() > 0 || ( !moveAll && from.GetCount() == 1 && from.GetFirstValid()->GetCount() == 1 ) ) {
         // Step 1: Attempt to move troops directly to the same slot in the receiving army to preserve formation.
-        for ( uint32_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
+        for ( uint32_t slot = 0; slot < TROOP_STACKS_PER_ARMY; ++slot ) {
             Troop * troop = troopFromOrder.at( slot );
             // Make sure the selected troop is not moved before troops that could not be moved in Step 1.
-            if ( slot == 4 && GetCount() > 1 && isSelected ) {
+            if ( slot == TROOP_STACKS_PER_ARMY - 1 && GetCount() > 1 && isSelected ) {
                 break;
             }
             // Set the correct slot according to the current troop.
             uint32_t assignmentSlot = slot;
-            if ( slot >= selectedTroopIndex && !( slot == 4 ) ) {
+            if ( slot >= selectedTroopIndex && !( slot == TROOP_STACKS_PER_ARMY - 1 ) ) {
                 assignmentSlot = slot + 1;
             }
-            else if ( slot == 4 ) {
+            else if ( slot == TROOP_STACKS_PER_ARMY - 1 ) {
                 assignmentSlot = selectedTroopIndex;
             }
             if ( troop->isValid() ) {
@@ -507,7 +507,7 @@ void Army::swapArmies( Army & swapArmy )
     }
 
     // Either army can have 5 stacks so iterate through max possible.
-    for ( size_t slot = 0; slot < ARMYMAXTROOPS; ++slot ) {
+    for ( size_t slot = 0; slot < TROOP_STACKS_PER_ARMY; ++slot ) {
         std::swap( *GetTroop( slot ), *swapArmy.GetTroop( slot ) );
     }
 }
@@ -710,10 +710,10 @@ void Troops::ArrangeForWhirlpool()
 {
     // Make an "optimized" version first (each unit type occupies just one slot)
     const Troops optimizedTroops = GetOptimized();
-    assert( optimizedTroops.size() > 0 && optimizedTroops.size() <= ARMYMAXTROOPS );
+    assert( optimizedTroops.size() > 0 && optimizedTroops.size() <= TROOP_STACKS_PER_ARMY );
 
     // Already a full house, there is no room for further optimization
-    if ( optimizedTroops.size() == ARMYMAXTROOPS ) {
+    if ( optimizedTroops.size() == TROOP_STACKS_PER_ARMY ) {
         return;
     }
 
@@ -799,7 +799,7 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
 
         // 2. Fill empty slots with best troops (if there are any)
         uint32_t count = GetCount();
-        while ( count < ARMYMAXTROOPS && !rightPriority.empty() ) {
+        while ( count < TROOP_STACKS_PER_ARMY && !rightPriority.empty() ) {
             JoinTroop( *rightPriority.back() );
             rightPriority.PopBack();
             ++count;
@@ -912,8 +912,8 @@ Army::Army( HeroBase * s )
     , combat_format( true )
     , color( Color::NONE )
 {
-    reserve( ARMYMAXTROOPS );
-    for ( uint32_t ii = 0; ii < ARMYMAXTROOPS; ++ii )
+    reserve( TROOP_STACKS_PER_ARMY );
+    for ( uint32_t ii = 0; ii < TROOP_STACKS_PER_ARMY; ++ii )
         push_back( new ArmyTroop( this ) );
 }
 
@@ -922,8 +922,8 @@ Army::Army( const Maps::Tiles & t )
     , combat_format( true )
     , color( Color::NONE )
 {
-    reserve( ARMYMAXTROOPS );
-    for ( uint32_t ii = 0; ii < ARMYMAXTROOPS; ++ii )
+    reserve( TROOP_STACKS_PER_ARMY );
+    for ( uint32_t ii = 0; ii < TROOP_STACKS_PER_ARMY; ++ii )
         push_back( new ArmyTroop( this ) );
 
     setFromTile( t );
