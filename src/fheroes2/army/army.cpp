@@ -617,17 +617,17 @@ const Troop * Troops::GetSlowestTroop() const
     return *lowest;
 }
 
-void Troops::MergeTroops( const size_t mergeNumber )
+void Troops::MergeTroops( const size_t requiredMerges )
 {
     // You are requesting to merge 0 or less troops.
-    assert( !( mergeNumber <= 0 ) );
+    assert( requiredMerges > 0 );
 
     for ( size_t slot = 0; slot < size(); ++slot ) {
         Troop * troop = at( slot );
         if ( !troop || !troop->isValid() ) {
             continue;
         }
-        size_t mergesRemaining = mergeNumber;
+        size_t mergesRemaining = requiredMerges;
         const int id = troop->GetID();
         for ( size_t secondary = slot + 1; secondary < size(); ++secondary ) {
             Troop * secondaryTroop = at( secondary );
