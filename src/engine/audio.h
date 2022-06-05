@@ -63,8 +63,9 @@ namespace Mixer
 
 namespace Music
 {
-    void Play( const std::vector<uint8_t> & v, const bool loop );
-    void Play( const std::string & file, const bool loop );
+    // Music UID is used to cache existing songs.
+    void Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const bool loop );
+    void Play( const uint64_t musicUID, const std::string & file, const bool loop );
 
     // Returns the previous volume percentage value.
     int setVolume( const int volumePercentage );

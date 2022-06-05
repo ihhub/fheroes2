@@ -27,16 +27,15 @@
 #include "mus.h"
 #include "settings.h"
 #include "system.h"
+#include "timing.h"
 #include "tools.h"
 #include "xmi.h"
 
 #include <algorithm>
 #include <array>
 #include <cassert>
-#include <condition_variable>
 #include <queue>
 #include <string>
-#include <thread>
 #include <utility>
 
 namespace
@@ -211,34 +210,9 @@ namespace
     // SDL MIDI player is a single threaded library which requires a lot of time to start playing some long midi compositions.
     // This leads to a situation of a short application freeze while a hero crosses terrains or ending a battle.
     // The only way to avoid this is to fire MIDI requests asynchronously and synchronize them if needed.
-    class AsyncSoundManager
+    class AsyncSoundManager : public fheroes2::AsyncManager
     {
     public:
-        AsyncSoundManager()
-            : _exitFlag( 0 )
-            , _runFlag( 1 )
-        {}
-
-        AsyncSoundManager( const AsyncSoundManager & ) = delete;
-
-        ~AsyncSoundManager()
-        {
-            if ( _worker ) {
-                {
-                    std::lock_guard<std::mutex> guard( _mutex );
-
-                    _exitFlag = 1;
-                    _runFlag = 1;
-                    _workerNotification.notify_all();
-                }
-
-                _worker->join();
-                _worker.reset();
-            }
-        }
-
-        AsyncSoundManager & operator=( const AsyncSoundManager & ) = delete;
-
         void pushMusic( const int musicId, const MusicSource musicType, const bool isLooped )
         {
             _createThreadIfNeeded();
@@ -250,8 +224,7 @@ namespace
             }
 
             _musicTasks.emplace( musicId, musicType, isLooped );
-            _runFlag = 1;
-            _workerNotification.notify_all();
+            notifyThread();
         }
 
         void pushSound( const int m82Sound, const int soundVolume )
@@ -261,8 +234,7 @@ namespace
             std::lock_guard<std::mutex> mutexLock( _mutex );
 
             _soundTasks.emplace( m82Sound, soundVolume );
-            _runFlag = 1;
-            _workerNotification.notify_all();
+            notifyThread();
         }
 
         void pushLoopSound( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> vols, const int soundVolume, const bool is3DAudioEnabled )
@@ -272,8 +244,7 @@ namespace
             std::lock_guard<std::mutex> mutexLock( _mutex );
 
             _loopSoundTasks.emplace( std::move( vols ), soundVolume, is3DAudioEnabled );
-            _runFlag = 1;
-            _workerNotification.notify_all();
+            notifyThread();
         }
 
         void sync()
@@ -339,84 +310,45 @@ namespace
             bool is3DAudioEnabled;
         };
 
-        std::unique_ptr<std::thread> _worker;
-        std::mutex _mutex;
-
-        std::condition_variable _workerNotification;
-        std::condition_variable _masterNotification;
-
         std::queue<MusicTask> _musicTasks;
         std::queue<SoundTask> _soundTasks;
         std::queue<LoopSoundTask> _loopSoundTasks;
 
-        uint8_t _exitFlag;
-        uint8_t _runFlag;
-
         std::mutex _resourceMutex;
 
-        void _createThreadIfNeeded()
+        void doStuff() override
         {
-            if ( !_worker ) {
-                _runFlag = 1;
-                _worker.reset( new std::thread( AsyncSoundManager::_workerThread, this ) );
+            if ( !_soundTasks.empty() ) {
+                const SoundTask soundTask = _soundTasks.back();
+                _soundTasks.pop();
 
-                std::unique_lock<std::mutex> mutexLock( _mutex );
-                _masterNotification.wait( mutexLock, [this] { return _runFlag == 0; } );
+                _mutex.unlock();
+
+                PlaySoundInternally( soundTask.m82Sound, soundTask.soundVolume );
             }
-        }
+            else if ( !_loopSoundTasks.empty() ) {
+                LoopSoundTask loopSoundTask = _loopSoundTasks.back();
+                _loopSoundTasks.pop();
 
-        static void _workerThread( AsyncSoundManager * manager )
-        {
-            assert( manager != nullptr );
+                _mutex.unlock();
 
-            {
-                std::lock_guard<std::mutex> guard( manager->_mutex );
-                manager->_runFlag = 0;
-                manager->_masterNotification.notify_one();
+                playLoopSoundsInternally( std::move( loopSoundTask.soundEffects ), loopSoundTask.soundVolume, loopSoundTask.is3DAudioEnabled );
             }
+            else if ( !_musicTasks.empty() ) {
+                const MusicTask musicTask = _musicTasks.back();
 
-            while ( manager->_exitFlag == 0 ) {
-                std::unique_lock<std::mutex> mutexLock( manager->_mutex );
-                manager->_workerNotification.wait( mutexLock, [manager] { return manager->_runFlag == 1; } );
-                mutexLock.unlock();
-
-                if ( manager->_exitFlag )
-                    break;
-
-                manager->_mutex.lock();
-
-                if ( !manager->_soundTasks.empty() ) {
-                    const SoundTask soundTask = manager->_soundTasks.back();
-                    manager->_soundTasks.pop();
-
-                    manager->_mutex.unlock();
-
-                    PlaySoundInternally( soundTask.m82Sound, soundTask.soundVolume );
+                while ( !_musicTasks.empty() ) {
+                    _musicTasks.pop();
                 }
-                else if ( !manager->_loopSoundTasks.empty() ) {
-                    LoopSoundTask loopSoundTask = manager->_loopSoundTasks.back();
-                    manager->_loopSoundTasks.pop();
 
-                    manager->_mutex.unlock();
+                _mutex.unlock();
 
-                    playLoopSoundsInternally( std::move( loopSoundTask.soundEffects ), loopSoundTask.soundVolume, loopSoundTask.is3DAudioEnabled );
-                }
-                else if ( !manager->_musicTasks.empty() ) {
-                    const MusicTask musicTask = manager->_musicTasks.back();
+                PlayMusicInternally( musicTask.musicId, musicTask.musicType, musicTask.isLooped );
+            }
+            else {
+                _runFlag = 0;
 
-                    while ( !manager->_musicTasks.empty() ) {
-                        manager->_musicTasks.pop();
-                    }
-
-                    manager->_mutex.unlock();
-
-                    PlayMusicInternally( musicTask.musicId, musicTask.musicType, musicTask.isLooped );
-                }
-                else {
-                    manager->_runFlag = 0;
-
-                    manager->_mutex.unlock();
-                }
+                _mutex.unlock();
             }
         }
     };
@@ -463,6 +395,13 @@ namespace
         Mixer::Resume( channelId );
     }
 
+    uint64_t getMusicUID( const int trackId, const MusicSource musicType )
+    {
+        assert( trackId != MUS::UNUSED && trackId != MUS::UNKNOWN && trackId >= 0 );
+
+        return ( static_cast<uint64_t>( musicType ) << 32 ) + static_cast<uint64_t>( trackId );
+    }
+
     void PlayMusicInternally( const int mus, const MusicSource musicType, const bool loop )
     {
         // Make sure that the music track is valid.
@@ -499,7 +438,7 @@ namespace
                 DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Cannot find a file for " << mus << " track." )
             }
             else {
-                Music::Play( filename, loop );
+                Music::Play( getMusicUID( mus, musicType ), filename, loop );
 
                 Game::SetCurrentMusic( mus );
 
@@ -522,7 +461,7 @@ namespace
         if ( XMI::UNKNOWN != xmi ) {
             const std::vector<uint8_t> & v = GetMID( xmi );
             if ( !v.empty() ) {
-                Music::Play( v, loop );
+                Music::Play( getMusicUID( mus, musicType ), v, loop );
 
                 Game::SetCurrentMusic( mus );
             }

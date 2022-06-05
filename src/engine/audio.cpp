@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <atomic>
 #include <cassert>
-#include <mutex>
+#include <map>
 #include <numeric>
 #include <set>
 
@@ -35,6 +35,7 @@
 #include "core.h"
 #include "logging.h"
 #include "system.h"
+#include "timing.h"
 
 namespace
 {
@@ -63,11 +64,6 @@ namespace
 
     std::vector<int> savedMixerVolumes;
     int savedMusicVolume = 0;
-
-    int musicFadeInMs = 0;
-    int musicFadeOutMs = 0;
-
-    Mix_Music * currentMusicTrack = nullptr;
 
     struct AudioEffectState
     {
@@ -164,26 +160,189 @@ namespace
         return channelId;
     }
 
-    void PlayMusic( Mix_Music * mix, const bool loop )
+    struct MusicInfo
     {
-        // TODO: According to SDL documentation (https://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html) we could have a playback of a song from a particular
-        //       position:
-        //       - Mix_HookMusicFinished() is a hook function which is called at the end of a song. Please note that this function will not be called for looped music.
-        //       - Mix_SetMusicPosition() accepts position in seconds for MP3 and OGG formats
-        //       - Mix_GetMusicType() returns the type of music
-        //       How a possible implementation should work: detect the type of music. If it is MP3 or OGG add a hook function and play the music track once. After the
-        //       completion of the track the function will be called. Within the function inform a separate thread about this which will restart the music track again.
+        Mix_Music * mix{ nullptr };
 
-        Music::Stop();
+        double position{ 0 };
+    };
+
+    class MusicResumeManager
+    {
+    public:
+        MusicInfo getMusicInfoByUID( const uint64_t musicUID ) const
+        {
+            auto iter = _musicCache.find( musicUID );
+            if ( iter == _musicCache.end() ) {
+                return {};
+            }
+
+            return iter->second;
+        }
+
+        void setMusicPosition( const uint64_t musicUID, const double position )
+        {
+            auto iter = _musicCache.find( musicUID );
+            if ( iter == _musicCache.end() ) {
+                return;
+            }
+
+            iter->second.position = position;
+        }
+
+        void update( const uint64_t musicUID, Mix_Music * mix, const double position )
+        {
+            assert( mix != nullptr );
+
+            auto iter = _musicCache.find( musicUID );
+            if ( iter == _musicCache.end() ) {
+                _musicCache.emplace( musicUID, MusicInfo{ mix, position } );
+                return;
+            }
+
+            iter->second.mix = mix;
+            iter->second.position = position;
+        }
+
+        void clear()
+        {
+            for ( auto & musicInfoPair : _musicCache ) {
+                Mix_FreeMusic( musicInfoPair.second.mix );
+            }
+
+            _musicCache.clear();
+        }
+
+        double getCurrentTrackPosition() const
+        {
+            return _currentTrackTimer.get();
+        }
+
+        void resetTimer()
+        {
+            _currentTrackTimer.reset();
+        }
+
+    private:
+        std::map<uint64_t, MusicInfo> _musicCache;
+
+        fheroes2::Time _currentTrackTimer;
+    };
+
+    void PlayMusic( const uint64_t musicUID, bool loop, const bool stopExistingMusic = true );
+
+    void replayCurrentMusic();
+
+    class AsyncMusicManager : fheroes2::AsyncManager
+    {
+    public:
+        void restartPlayback()
+        {
+            _createThreadIfNeeded();
+
+            std::lock_guard<std::mutex> mutexLock( _mutex );
+
+            notifyThread();
+        }
+
+    protected:
+        void doStuff() override
+        {
+            replayCurrentMusic();
+
+            _runFlag = 0;
+            _mutex.unlock();
+        }
+    };
+
+    struct MusicSettings
+    {
+        MusicInfo currentTrack;
+        uint64_t currentTrackUID{ 0 };
+        uint64_t asyncTrackUID{ 0 };
+
+        int fadeInMs{ 0 };
+        int fadeOutMs{ 0 };
+
+        MusicResumeManager resumeManager;
+
+        AsyncMusicManager asyncManager;
+    };
+
+    MusicSettings musicSettings;
+
+    bool isMusicResumeSupported( const Mix_Music * mix )
+    {
+        assert( mix != nullptr );
+
+        const Mix_MusicType musicType = Mix_GetMusicType( mix );
+
+        return ( musicType == Mix_MusicType::MUS_OGG ) || ( musicType == Mix_MusicType::MUS_MP3 );
+    }
+
+    void replayCurrentMusic()
+    {
+        const std::lock_guard<std::recursive_mutex> guard( mutex );
+
+        if ( musicSettings.asyncTrackUID != musicSettings.currentTrackUID ) {
+            // Looks like the track was changed.
+            return;
+        }
+
+        musicSettings.resumeManager.resetTimer();
+
+        musicSettings.currentTrack.position = 0;
+
+        PlayMusic( musicSettings.currentTrackUID, true, false );
+    }
+
+    void PlayMusic( const uint64_t musicUID, bool loop, const bool stopExistingMusic )
+    {
+        MusicInfo musicInfo = musicSettings.resumeManager.getMusicInfoByUID( musicUID );
+        if ( musicInfo.mix == nullptr ) {
+            // How is it even possible! Check your logic!
+            assert( 0 );
+            return;
+        }
+
+        if ( stopExistingMusic ) {
+            Music::Stop();
+        }
+
+        bool loopAsynchronously = false;
+        const bool isResumeSupported = loop && isMusicResumeSupported( musicInfo.mix );
+
+        if ( isResumeSupported ) {
+            loopAsynchronously = true;
+            loop = false;
+            musicSettings.asyncTrackUID = musicUID;
+
+            Mix_HookMusicFinished(
+                []() {
+                    musicSettings.asyncManager.restartPlayback();
+                } );
+        }
+        else {
+            musicSettings.asyncTrackUID = 0;
+        }
+
+        musicSettings.resumeManager.resetTimer();
 
         const int loopCount = loop ? -1 : 0;
-        const int returnCode = ( musicFadeInMs > 0 ) ? Mix_FadeInMusic( mix, loopCount, musicFadeInMs ) : Mix_PlayMusic( mix, loopCount );
+        const int returnCode = ( musicSettings.fadeInMs > 0 ) ? Mix_FadeInMusic( musicInfo.mix, loopCount, musicSettings.fadeInMs )
+                                                              : Mix_PlayMusic( musicInfo.mix, loopCount );
         if ( returnCode != 0 ) {
             ERROR_LOG( "Failed to play music mix. The error: " << Mix_GetError() )
             return;
         }
 
-        currentMusicTrack = mix;
+        if ( isResumeSupported && musicInfo.position > 1 ) {
+            // Set music position only when at least 1 second of the music has been played.
+            Mix_SetMusicPosition( musicInfo.position );
+        }
+
+        musicSettings.currentTrack = musicInfo;
+        musicSettings.currentTrackUID = musicUID;
     }
 
     int normalizeToSDLVolume( const int volumePercentage )
@@ -300,6 +459,8 @@ void Audio::Quit()
 
     Music::Stop();
     Mixer::Stop();
+
+    musicSettings.resumeManager.clear();
 
     Mix_CloseAudio();
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -517,7 +678,7 @@ bool Mixer::isPlaying( const int channel )
     return isInitialized && Mix_Playing( channel ) > 0;
 }
 
-void Music::Play( const std::vector<uint8_t> & v, const bool loop )
+void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const bool loop )
 {
     if ( v.empty() ) {
         return;
@@ -525,25 +686,34 @@ void Music::Play( const std::vector<uint8_t> & v, const bool loop )
 
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
-    if ( isInitialized && !v.empty() ) {
-        SDL_RWops * rwops = SDL_RWFromConstMem( &v[0], static_cast<int>( v.size() ) );
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-        Mix_Music * mix = Mix_LoadMUS_RW( rwops, 0 );
-#else
-        Mix_Music * mix = Mix_LoadMUS_RW( rwops );
-#endif
-        SDL_FreeRW( rwops );
-
-        if ( !mix ) {
-            ERROR_LOG( "Failed to create a music mix from memory. The error: " << Mix_GetError() )
-        }
-        else {
-            PlayMusic( mix, loop );
-        }
+    if ( !isInitialized ) {
+        return;
     }
+
+    const MusicInfo musicInfo = musicSettings.resumeManager.getMusicInfoByUID( musicUID );
+    if ( musicInfo.mix != nullptr ) {
+        PlayMusic( musicUID, loop );
+        return;
+    }
+
+    SDL_RWops * rwops = SDL_RWFromConstMem( &v[0], static_cast<int>( v.size() ) );
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+    Mix_Music * mix = Mix_LoadMUS_RW( rwops, 0 );
+#else
+    Mix_Music * mix = Mix_LoadMUS_RW( rwops );
+#endif
+    SDL_FreeRW( rwops );
+
+    if ( !mix ) {
+        ERROR_LOG( "Failed to create a music mix from memory. The error: " << Mix_GetError() )
+        return;
+    }
+
+    musicSettings.resumeManager.update( musicUID, mix, 0 );
+    PlayMusic( musicUID, loop );
 }
 
-void Music::Play( const std::string & file, const bool loop )
+void Music::Play( const uint64_t musicUID, const std::string & file, const bool loop )
 {
     if ( file.empty() ) {
         // Nothing to play. It is an empty file.
@@ -556,6 +726,12 @@ void Music::Play( const std::string & file, const bool loop )
         return;
     }
 
+    const MusicInfo musicInfo = musicSettings.resumeManager.getMusicInfoByUID( musicUID );
+    if ( musicInfo.mix != nullptr ) {
+        PlayMusic( musicUID, loop );
+        return;
+    }
+
     const std::string filePath = System::FileNameToUTF8( file );
 
     Mix_Music * mix = Mix_LoadMUS( filePath.c_str() );
@@ -564,7 +740,8 @@ void Music::Play( const std::string & file, const bool loop )
         return;
     }
 
-    PlayMusic( mix, loop );
+    musicSettings.resumeManager.update( musicUID, mix, 0 );
+    PlayMusic( musicUID, loop );
 }
 
 void Music::SetFadeInMs( const int timeInMs )
@@ -577,7 +754,7 @@ void Music::SetFadeInMs( const int timeInMs )
 
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
-    musicFadeInMs = timeInMs;
+    musicSettings.fadeInMs = timeInMs;
 }
 
 int Music::setVolume( const int volumePercentage )
@@ -604,13 +781,13 @@ int Music::setVolume( const int volumePercentage )
 void Music::Stop()
 {
     const std::lock_guard<std::recursive_mutex> guard( mutex );
-    if ( currentMusicTrack == nullptr ) {
+    if ( musicSettings.currentTrack.mix == nullptr ) {
         // Nothing to do.
         return;
     }
 
-    if ( musicFadeOutMs > 0 ) {
-        while ( !Mix_FadeOutMusic( musicFadeOutMs ) && Mix_PlayingMusic() ) {
+    if ( musicSettings.fadeOutMs > 0 ) {
+        while ( !Mix_FadeOutMusic( musicSettings.fadeOutMs ) && Mix_PlayingMusic() ) {
             SDL_Delay( 50 );
         }
     }
@@ -619,13 +796,19 @@ void Music::Stop()
         Mix_HaltMusic();
     }
 
-    Mix_FreeMusic( currentMusicTrack );
-    currentMusicTrack = nullptr;
+    if ( musicSettings.currentTrackUID == musicSettings.asyncTrackUID ) {
+        const double position = musicSettings.resumeManager.getCurrentTrackPosition();
+        musicSettings.currentTrack.position += position;
+
+        musicSettings.resumeManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack.mix, musicSettings.currentTrack.position );
+    }
+
+    musicSettings.currentTrack = {};
 }
 
 bool Music::isPlaying()
 {
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
-    return currentMusicTrack && Mix_PlayingMusic();
+    return ( musicSettings.currentTrack.mix != nullptr ) && Mix_PlayingMusic();
 }

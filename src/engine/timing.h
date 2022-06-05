@@ -21,7 +21,10 @@
 #pragma once
 
 #include <chrono>
+#include <condition_variable>
 #include <cstdint>
+#include <mutex>
+#include <thread>
 
 namespace fheroes2
 {
@@ -86,6 +89,41 @@ namespace fheroes2
 
     private:
         TimerImp * _timer;
+    };
+
+    class AsyncManager
+    {
+    public:
+        AsyncManager() = default;
+
+        AsyncManager( const AsyncManager & ) = delete;
+        AsyncManager( AsyncManager && ) = delete;
+
+        ~AsyncManager();
+
+        AsyncManager & operator=( const AsyncManager & ) = delete;
+        AsyncManager & operator=( AsyncManager && ) = delete;
+
+    protected:
+        std::mutex _mutex;
+        uint8_t _runFlag{ 1 };
+
+        void _createThreadIfNeeded();
+
+        void notifyThread();
+
+        // This is derived class responsibility to handle _runFlag variable and calling unlock() method!
+        virtual void doStuff() = 0;
+
+    private:
+        std::unique_ptr<std::thread> _worker;
+
+        std::condition_variable _masterNotification;
+        std::condition_variable _workerNotification;
+
+        uint8_t _exitFlag{ 0 };
+
+        static void _workerThread( AsyncManager * manager );
     };
 
     void delayforMs( const uint32_t delayMs );
