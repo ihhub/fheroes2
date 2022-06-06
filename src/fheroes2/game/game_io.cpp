@@ -311,7 +311,7 @@ bool Game::LoadSAV2FileInfo( const std::string & fn, Maps::FileInfo & finfo )
 
 std::string Game::GetSaveDir()
 {
-    return System::ConcatePath( System::ConcatePath( System::GetDataDirectory( "fheroes2" ), "files" ), "save" );
+    return System::ConcatePath( System::GetDataDirectory( "fheroes2" ), "save" );
 }
 
 std::string Game::GetSaveFileBaseName()

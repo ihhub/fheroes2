@@ -35,7 +35,7 @@ namespace
         return Settings::findFile( "h2d", fileName, path );
         const std::string internalDirectory( "h2d" );
 #else
-        return Settings::findFile( System::ConcatePath( "files", "data" ), fileName, path );
+        return Settings::findFile( "data", fileName, path );
 #endif
     }
 }

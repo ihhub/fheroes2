@@ -95,17 +95,13 @@ namespace
         if ( dataDir.empty() )
             return;
 
-        const std::string dataFiles = System::ConcatePath( dataDir, "files" );
-        const std::string dataFilesSave = System::ConcatePath( dataFiles, "save" );
+        const std::string dataDirSave = System::ConcatePath( dataDir, "save" );
 
         if ( !System::IsDirectory( dataDir ) )
             System::MakeDirectory( dataDir );
 
-        if ( System::IsDirectory( dataDir, true ) && !System::IsDirectory( dataFiles ) )
-            System::MakeDirectory( dataFiles );
-
-        if ( System::IsDirectory( dataFiles, true ) && !System::IsDirectory( dataFilesSave ) )
-            System::MakeDirectory( dataFilesSave );
+        if ( System::IsDirectory( dataDir, true ) && !System::IsDirectory( dataDirSave ) )
+            System::MakeDirectory( dataDirSave );
     }
 
     class DisplayInitializer
