@@ -16,17 +16,20 @@ numerous fixes and UI improvements).
 To play the game, original resources from a demo or full version are needed.
 .SH GAME DATA PATHS 
 The following directories are searched as data root:
+#_SG
 .TP
-.B /usr/share/games/fheroes2
+.B @FHEROES2_DATA@
 The system-wide location that can be accessed by all users.
+#_EG
 .TP
 .B FHEROES2_DATA
 This environment variable can contain a path to a directory with game files.
 .TP
 .B Current working directory
 .TP
-.B $HOME/.local/share/fheroes2
-Per-user data directory. This path can be overridden by the XDG_DATA_HOME environment variable.
+.B @data@
+Per-user data directory.
+This path can be overriden by XDG_DATA_HOME environment variable.
 .PP
 The game resources which searched in these directories:
 .TP
@@ -56,7 +59,7 @@ Video files.
 See the section \fBGAME DATA PATHS\fR above.
 .SH FILES
 .TP
-.B $HOME/.config/fheroes2
+.B @config@
 This directory contains per-user configuration files.
 \fBfheroes2.cfg\fR is for game options and \fBfheroes2.key\fR is for hotkeys.
 This path can be overridden by the XDG_CONFIG_HOME environment variable.
