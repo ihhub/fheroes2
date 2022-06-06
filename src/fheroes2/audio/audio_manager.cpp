@@ -202,7 +202,7 @@ namespace
     }
 
     void PlaySoundInternally( const int m82, const int soundVolume );
-    void PlayMusicInternally( const int trackId, const MusicSource musicType, const bool loop, const bool rewindToStart );
+    void PlayMusicInternally( const int trackId, const MusicSource musicType, const AudioManager::MusicPlaybackMode playbackMode );
     void playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume,
                                    const bool is3DAudioEnabled );
 
@@ -212,7 +212,7 @@ namespace
     class AsyncSoundManager : public MultiThreading::AsyncManager
     {
     public:
-        void pushMusic( const int musicId, const MusicSource musicType, const bool isLooped, const bool rewindToStart )
+        void pushMusic( const int musicId, const MusicSource musicType, const AudioManager::MusicPlaybackMode playbackMode )
         {
             _createThreadIfNeeded();
 
@@ -222,7 +222,7 @@ namespace
                 _musicTasks.pop();
             }
 
-            _musicTasks.emplace( musicId, musicType, isLooped, rewindToStart );
+            _musicTasks.emplace( musicId, musicType, playbackMode );
 
             notifyThread();
         }
@@ -285,19 +285,17 @@ namespace
         {
             MusicTask() = default;
 
-            MusicTask( const int musicId_, const MusicSource musicType_, const bool isLooped_, const bool rewindToStart_ )
+            MusicTask( const int musicId_, const MusicSource musicType_, const AudioManager::MusicPlaybackMode playbackMode_ )
                 : musicId( musicId_ )
                 , musicType( musicType_ )
-                , isLooped( isLooped_ )
-                , rewindToStart( rewindToStart_ )
+                , playbackMode( playbackMode_ )
             {
                 // Do nothing.
             }
 
             int musicId{ 0 };
             MusicSource musicType{ MUSIC_MIDI_ORIGINAL };
-            bool isLooped{ false };
-            bool rewindToStart{ false };
+            AudioManager::MusicPlaybackMode playbackMode { AudioManager::MusicPlaybackMode::PLAY_ONCE };
         };
 
         struct SoundTask
@@ -388,7 +386,7 @@ namespace
                 // Nothing to do.
                 return;
             case TaskType::PlayMusic:
-                PlayMusicInternally( _currentMusicTask.musicId, _currentMusicTask.musicType, _currentMusicTask.isLooped, _currentMusicTask.rewindToStart );
+                PlayMusicInternally( _currentMusicTask.musicId, _currentMusicTask.musicType, _currentMusicTask.playbackMode );
                 return;
             case TaskType::PlaySound:
                 PlaySoundInternally( _currentSoundTask.m82Sound, _currentSoundTask.soundVolume );
@@ -454,7 +452,7 @@ namespace
         return ( static_cast<uint64_t>( musicType ) << 32 ) + static_cast<uint64_t>( trackId );
     }
 
-    void PlayMusicInternally( const int trackId, const MusicSource musicType, const bool loop, const bool rewindToStart )
+    void PlayMusicInternally( const int trackId, const MusicSource musicType, const AudioManager::MusicPlaybackMode playbackMode )
     {
         // Make sure that the music track is valid.
         assert( trackId != MUS::UNUSED && trackId != MUS::UNKNOWN );
@@ -466,6 +464,11 @@ namespace
         if ( Game::CurrentMusicTrackId() == trackId && Music::isPlaying() ) {
             return;
         }
+
+        const bool loop = ( playbackMode == AudioManager::MusicPlaybackMode::CONTINUE_TO_PLAY_INFINITE ) ||
+                          ( playbackMode == AudioManager::MusicPlaybackMode::REWIND_AND_PLAY_INFINITE );
+
+        const bool rewindToStart = ( playbackMode == AudioManager::MusicPlaybackMode::REWIND_AND_PLAY_INFINITE );
 
         // Check if the music track is cached.
         if ( Music::Play( musicUID, loop, rewindToStart ) ) {
@@ -729,7 +732,7 @@ namespace AudioManager
         }
     }
 
-    void PlayMusic( const int trackId, const bool loop, bool rewindToStart )
+    void PlayMusic( const int trackId, const MusicPlaybackMode playbackMode )
     {
         if ( MUS::UNUSED == trackId || MUS::UNKNOWN == trackId ) {
             return;
@@ -737,18 +740,13 @@ namespace AudioManager
 
         if ( !Audio::isValid() ) {
             return;
-        }
-
-        if ( !loop ) {
-            // For non looping music always start from the beginning.
-            rewindToStart = true;
         }
 
         g_asyncSoundManager.sync();
-        PlayMusicInternally( trackId, Settings::Get().MusicType(), loop, rewindToStart );
+        PlayMusicInternally( trackId, Settings::Get().MusicType(), playbackMode );
     }
 
-    void PlayMusicAsync( const int trackId, const bool loop, bool rewindToStart )
+    void PlayMusicAsync( const int trackId, const MusicPlaybackMode playbackMode )
     {
         if ( MUS::UNUSED == trackId || MUS::UNKNOWN == trackId ) {
             return;
@@ -758,12 +756,7 @@ namespace AudioManager
             return;
         }
 
-        if ( !loop ) {
-            // For non looping music always start from the beginning.
-            rewindToStart = true;
-        }
-
-        g_asyncSoundManager.pushMusic( trackId, Settings::Get().MusicType(), loop, rewindToStart );
+        g_asyncSoundManager.pushMusic( trackId, Settings::Get().MusicType(), playbackMode );
     }
 
     void ResetAudio()

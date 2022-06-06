@@ -485,7 +485,7 @@ void Game::restoreSoundsForCurrentFocus()
         const int heroIndexPos = focusedHero->GetIndex();
         if ( heroIndexPos >= 0 ) {
             Game::EnvironmentSoundMixer();
-            AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true );
+            AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), AudioManager::MusicPlaybackMode::CONTINUE_TO_PLAY_INFINITE );
         }
         break;
     }
@@ -495,7 +495,8 @@ void Game::restoreSoundsForCurrentFocus()
         assert( focusedCastle != nullptr );
 
         Game::EnvironmentSoundMixer();
-        AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ), true );
+        AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ),
+                                      AudioManager::MusicPlaybackMode::CONTINUE_TO_PLAY_INFINITE );
         break;
     }
 

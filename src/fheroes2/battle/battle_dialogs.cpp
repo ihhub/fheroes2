@@ -418,19 +418,19 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
 
     if ( ( res.army1 & RESULT_WINS ) && ( army1->GetControl() & CONTROL_HUMAN ) ) {
         GetSummaryParams( res.army1, res.army2, army1->GetCommander(), res.exp1, sequence, title, msg );
-        AudioManager::PlayMusic( MUS::BATTLEWIN, false );
+        AudioManager::PlayMusic( MUS::BATTLEWIN, AudioManager::MusicPlaybackMode::REWIND_AND_PLAY_INFINITE );
     }
     else if ( ( res.army2 & RESULT_WINS ) && ( army2->GetControl() & CONTROL_HUMAN ) ) {
         GetSummaryParams( res.army2, res.army1, army2->GetCommander(), res.exp2, sequence, title, msg );
-        AudioManager::PlayMusic( MUS::BATTLEWIN, false );
+        AudioManager::PlayMusic( MUS::BATTLEWIN, AudioManager::MusicPlaybackMode::REWIND_AND_PLAY_INFINITE );
     }
     else if ( army1->GetControl() & CONTROL_HUMAN ) {
         GetSummaryParams( res.army1, res.army2, army1->GetCommander(), res.exp1, sequence, title, msg );
-        AudioManager::PlayMusic( MUS::BATTLELOSE, false );
+        AudioManager::PlayMusic( MUS::BATTLELOSE, AudioManager::MusicPlaybackMode::REWIND_AND_PLAY_INFINITE );
     }
     else if ( army2->GetControl() & CONTROL_HUMAN ) {
         GetSummaryParams( res.army2, res.army1, army2->GetCommander(), res.exp2, sequence, title, msg );
-        AudioManager::PlayMusic( MUS::BATTLELOSE, false );
+        AudioManager::PlayMusic( MUS::BATTLELOSE, AudioManager::MusicPlaybackMode::REWIND_AND_PLAY_INFINITE );
     }
     else {
         // AI vs AI battle, this dialog should not be shown at all

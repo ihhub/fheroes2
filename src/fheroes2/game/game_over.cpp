@@ -96,7 +96,7 @@ namespace
             }
         }
 
-        AudioManager::PlayMusic( MUS::VICTORY, false );
+        AudioManager::PlayMusic( MUS::VICTORY, AudioManager::MusicPlaybackMode::PLAY_ONCE );
 
         if ( !body.empty() )
             Dialog::Message( "", body, Font::BIG, Dialog::OK );
@@ -152,7 +152,7 @@ namespace
             break;
         }
 
-        AudioManager::PlayMusic( MUS::LOSTGAME, false );
+        AudioManager::PlayMusic( MUS::LOSTGAME, AudioManager::MusicPlaybackMode::PLAY_ONCE );
 
         if ( !body.empty() )
             Dialog::Message( "", body, Font::BIG, Dialog::OK );
@@ -331,7 +331,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     // TODO : Implement function that displays the last frame of win.smk and
                     // a dialog for name entry. AudioManager::PlayMusic is run here in order to start playing
                     // before displaying the high score.
-                    AudioManager::PlayMusicAsync( MUS::VICTORY, true, true );
+                    AudioManager::PlayMusicAsync( MUS::VICTORY, AudioManager::MusicPlaybackMode::REWIND_AND_PLAY_INFINITE );
 
                     res = fheroes2::GameMode::HIGHSCORES_STANDARD;
 

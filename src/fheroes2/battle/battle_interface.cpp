@@ -2958,7 +2958,7 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
 void Battle::Interface::RedrawActionNewTurn() const
 {
     if ( !Music::isPlaying() ) {
-        AudioManager::PlayMusicAsync( MUS::GetBattleRandom(), true, true );
+        AudioManager::PlayMusicAsync( MUS::GetBattleRandom(), AudioManager::MusicPlaybackMode::REWIND_AND_PLAY_INFINITE );
     }
 
     if ( listlog == nullptr ) {

@@ -146,7 +146,7 @@ namespace Game
             }
 
             // It is assumed that the previous track was looped and does not require to be played from the beginning.
-            AudioManager::PlayMusicAsync( _music, true );
+            AudioManager::PlayMusicAsync( _music, AudioManager::MusicPlaybackMode::CONTINUE_TO_PLAY_INFINITE );
         }
 
         MusicRestorer & operator=( const MusicRestorer & ) = delete;

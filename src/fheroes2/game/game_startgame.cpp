@@ -272,7 +272,7 @@ void ShowNewWeekDialog()
     // restore the original music on exit
     const Game::MusicRestorer musicRestorer;
 
-    AudioManager::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, false );
+    AudioManager::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, AudioManager::MusicPlaybackMode::PLAY_ONCE );
 
     const Week & week = world.GetWeekType();
 
@@ -633,7 +633,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                         // reset the music after closing the dialog
                         const Game::MusicRestorer musicRestorer;
 
-                        AudioManager::PlayMusic( MUS::NEW_MONTH, false );
+                        AudioManager::PlayMusic( MUS::NEW_MONTH, AudioManager::MusicPlaybackMode::PLAY_ONCE );
 
                         Game::DialogPlayers( player->GetColor(), _( "%{color} player's turn." ) );
                     }
