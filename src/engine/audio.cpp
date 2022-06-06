@@ -817,6 +817,11 @@ void Music::Stop()
         return;
     }
 
+    if ( musicSettings.currentTrackUID == musicSettings.asyncTrackUID ) {
+        // SDL2 calls the callback function when the current song is halted. Do not initiate a restart of the current song.
+        Mix_HookMusicFinished( nullptr );
+    }
+
     if ( musicSettings.fadeOutMs > 0 ) {
         while ( !Mix_FadeOutMusic( musicSettings.fadeOutMs ) && Mix_PlayingMusic() ) {
             SDL_Delay( 50 );
