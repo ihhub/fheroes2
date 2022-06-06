@@ -16,6 +16,7 @@ Checks: >-
   -misc-non-private-member-variables-in-classes,
   modernize-*,
   -modernize-use-auto,
+  -modernize-use-nodiscard,
   -modernize-use-trailing-return-type,
   performance-*,
   readability-*,
