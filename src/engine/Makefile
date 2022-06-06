@@ -35,4 +35,4 @@ $(TARGET).a: $(patsubst %.cpp, %.o, $(wildcard *.cpp))
 include $(wildcard *.d)
 
 clean:
-	rm -f *.a *.so *.d *.o
+	@rm -f *.a *.so *.d *.o

@@ -55,6 +55,9 @@ ifdef FHEROES2_MACOS_APP_BUNDLE
 	@cp -R "src/dist/$(TARGET).app" .
 endif
 
+translations:
+	$(MAKE) -C src/dist translations
+
 clean:
 	$(MAKE) -C src clean
 	@rm -f ./$(TARGET)

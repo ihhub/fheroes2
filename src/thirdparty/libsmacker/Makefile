@@ -33,4 +33,4 @@ smacker.o: smacker.c
 include $(wildcard *.d)
 
 clean:
-	rm -f *.a *.so *.d *.o
+	@rm -f *.a *.so *.d *.o

@@ -32,4 +32,4 @@ $(TARGETS): $(addsuffix .cpp, $(TARGETS)) $(LIBENGINE)
 	$(CXX) $(LDFLAGS) $@.o $(LIBENGINE) $(LIBS) -o $@
 
 clean:
-	rm -f *.o *.exe $(TARGETS)
+	@rm -f *.o *.exe $(TARGETS)

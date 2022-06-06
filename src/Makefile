@@ -177,10 +177,11 @@ all:
 ifdef FHEROES2_WITH_TOOLS
 	$(MAKE) -C tools
 endif
-	$(MAKE) -C dist pot
+	$(MAKE) -C dist translations
 
 clean:
 	$(MAKE) -C thirdparty/libsmacker clean
 	$(MAKE) -C tools clean
 	$(MAKE) -C dist clean
 	$(MAKE) -C engine clean
+	$(MAKE) -C ../files/lang clean
