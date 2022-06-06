@@ -63,16 +63,24 @@ namespace MultiThreading
         }
 
         while ( manager->_exitFlag == 0 ) {
-            std::unique_lock<std::mutex> mutexLock( manager->_mutex );
-            manager->_workerNotification.wait( mutexLock, [manager] { return manager->_runFlag == 1; } );
-            mutexLock.unlock();
+            {
+                std::unique_lock<std::mutex> mutexLock( manager->_mutex );
+                manager->_workerNotification.wait( mutexLock, [manager] { return manager->_runFlag == 1; } );
+            }
 
             if ( manager->_exitFlag )
                 break;
 
-            manager->_mutex.lock();
+            {
+                std::lock_guard<std::mutex> guard( manager->_mutex );
 
-            manager->doStuff();
+                const bool moreTasks = manager->prepareTask();
+                if ( !moreTasks ) {
+                    manager->_runFlag = 0;
+                }
+            }
+
+            manager->executeTask();
         }
     }
 

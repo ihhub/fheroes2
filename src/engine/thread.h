@@ -42,14 +42,16 @@ namespace MultiThreading
 
     protected:
         std::mutex _mutex;
-        uint8_t _runFlag{ 1 };
 
         void _createThreadIfNeeded();
 
         void notifyThread();
 
-        // This is derived class responsibility to handle _runFlag variable and calling unlock() method!
-        virtual void doStuff() = 0;
+        // Prepare a task which requires mutex lock. Returns true if more tasks are available.
+        virtual bool prepareTask() = 0;
+
+        // Task execution is done in non-thread safe mode! No mutex lock for any means of synchronizations are done for this call.
+        virtual void executeTask() = 0;
 
     private:
         std::unique_ptr<std::thread> _worker;
@@ -58,6 +60,7 @@ namespace MultiThreading
         std::condition_variable _workerNotification;
 
         uint8_t _exitFlag{ 0 };
+        uint8_t _runFlag{ 1 };
 
         static void _workerThread( AsyncManager * manager );
     };

@@ -223,6 +223,7 @@ namespace
             }
 
             _musicTasks.emplace( musicId, musicType, isLooped );
+
             notifyThread();
         }
 
@@ -233,6 +234,7 @@ namespace
             std::lock_guard<std::mutex> mutexLock( _mutex );
 
             _soundTasks.emplace( m82Sound, soundVolume );
+
             notifyThread();
         }
 
@@ -243,6 +245,7 @@ namespace
             std::lock_guard<std::mutex> mutexLock( _mutex );
 
             _loopSoundTasks.emplace( std::move( vols ), soundVolume, is3DAudioEnabled );
+
             notifyThread();
         }
 
@@ -270,32 +273,50 @@ namespace
         }
 
     private:
+        enum class TaskType : int
+        {
+            None,
+            PlayMusic,
+            PlaySound,
+            PlayLoopSound
+        };
+
         struct MusicTask
         {
+            MusicTask() = default;
+
             MusicTask( const int musicId_, const MusicSource musicType_, const bool isLooped_ )
                 : musicId( musicId_ )
                 , musicType( musicType_ )
                 , isLooped( isLooped_ )
-            {}
+            {
+                // Do nothing.
+            }
 
-            int musicId;
-            MusicSource musicType;
-            bool isLooped;
+            int musicId{ 0 };
+            MusicSource musicType{ MUSIC_MIDI_ORIGINAL };
+            bool isLooped{ false };
         };
 
         struct SoundTask
         {
+            SoundTask() = default;
+
             SoundTask( const int m82Sound_, const int soundVolume_ )
                 : m82Sound( m82Sound_ )
                 , soundVolume( soundVolume_ )
-            {}
+            {
+                // Do nothing.
+            }
 
-            int m82Sound;
-            int soundVolume;
+            int m82Sound{ 0 };
+            int soundVolume{ 0 };
         };
 
         struct LoopSoundTask
         {
+            LoopSoundTask() = default;
+
             LoopSoundTask( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> effects, const int soundVolume_, const bool is3DAudioOn )
                 : soundEffects( std::move( effects ) )
                 , soundVolume( soundVolume_ )
@@ -305,49 +326,78 @@ namespace
             }
 
             std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects;
-            int soundVolume;
-            bool is3DAudioEnabled;
+            int soundVolume{ 0 };
+            bool is3DAudioEnabled{ false };
         };
 
         std::queue<MusicTask> _musicTasks;
         std::queue<SoundTask> _soundTasks;
         std::queue<LoopSoundTask> _loopSoundTasks;
 
+        MusicTask _currentMusicTask;
+        SoundTask _currentSoundTask;
+        LoopSoundTask _currentLoopSoundTask;
+
+        TaskType _taskToExecute{ TaskType::None };
+
         std::mutex _resourceMutex;
 
-        void doStuff() override
+        bool prepareTask() override
         {
-            if ( !_soundTasks.empty() ) {
-                const SoundTask soundTask = _soundTasks.back();
-                _soundTasks.pop();
-
-                _mutex.unlock();
-
-                PlaySoundInternally( soundTask.m82Sound, soundTask.soundVolume );
-            }
-            else if ( !_loopSoundTasks.empty() ) {
-                LoopSoundTask loopSoundTask = _loopSoundTasks.back();
-                _loopSoundTasks.pop();
-
-                _mutex.unlock();
-
-                playLoopSoundsInternally( std::move( loopSoundTask.soundEffects ), loopSoundTask.soundVolume, loopSoundTask.is3DAudioEnabled );
-            }
-            else if ( !_musicTasks.empty() ) {
-                const MusicTask musicTask = _musicTasks.back();
+            if ( !_musicTasks.empty() ) {
+                // Pick only the latest music track and discard the rest.
+                std::swap( _currentMusicTask, _musicTasks.back() );
 
                 while ( !_musicTasks.empty() ) {
                     _musicTasks.pop();
                 }
 
-                _mutex.unlock();
+                _taskToExecute = TaskType::PlayMusic;
 
-                PlayMusicInternally( musicTask.musicId, musicTask.musicType, musicTask.isLooped );
+                return true;
             }
-            else {
-                _runFlag = 0;
 
-                _mutex.unlock();
+            if ( !_soundTasks.empty() ) {
+                std::swap( _currentSoundTask, _soundTasks.back() );
+                _soundTasks.pop();
+
+                _taskToExecute = TaskType::PlaySound;
+
+                return true;
+            }
+
+            if ( !_loopSoundTasks.empty() ) {
+                std::swap( _currentLoopSoundTask, _loopSoundTasks.back() );
+                _loopSoundTasks.pop();
+
+                _taskToExecute = TaskType::PlayLoopSound;
+
+                return true;
+            }
+
+            _taskToExecute = TaskType::None;
+            return false;
+        }
+
+        void executeTask() override
+        {
+            switch ( _taskToExecute ) {
+            case TaskType::None:
+                // Nothing to do.
+                return;
+            case TaskType::PlayMusic:
+                PlayMusicInternally( _currentMusicTask.musicId, _currentMusicTask.musicType, _currentMusicTask.isLooped );
+                return;
+            case TaskType::PlaySound:
+                PlaySoundInternally( _currentSoundTask.m82Sound, _currentSoundTask.soundVolume );
+                return;
+            case TaskType::PlayLoopSound:
+                playLoopSoundsInternally( std::move( _currentLoopSoundTask.soundEffects ), _currentLoopSoundTask.soundVolume, _currentLoopSoundTask.is3DAudioEnabled );
+                return;
+            default:
+                // How is it even possible? Did you add a new task?
+                assert( 0 );
+                break;
             }
         }
     };

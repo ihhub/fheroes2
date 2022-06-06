@@ -191,8 +191,7 @@ namespace
                 return;
             }
 
-            iter->second.mix = mix;
-            iter->second.position = position;
+            iter->second = { mix, position };
         }
 
         void clear()
@@ -237,12 +236,15 @@ namespace
         }
 
     protected:
-        void doStuff() override
+        bool prepareTask() override
+        {
+            // Nothing to prepare and there is no queue.
+            return false;
+        }
+
+        void executeTask() override
         {
             replayCurrentMusic();
-
-            _runFlag = 0;
-            _mutex.unlock();
         }
     };
 
