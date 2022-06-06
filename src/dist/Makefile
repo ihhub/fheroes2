@@ -35,7 +35,7 @@ CCFLAGS := $(CCFLAGS) -I$(PREFIX)/include
 endif
 
 ifeq ($(PLATFORM), mingw)
-RES := ../resources/$(TARGET).res
+RES := $(TARGET).res
 RC  := ../resources/fheroes2.rc
 ifdef FHEROES2_WITH_DEBUG
 DEBUGFLAG := -DWITH_DEBUG
@@ -56,10 +56,10 @@ $(TARGET): $(notdir $(patsubst %.cpp, %.o, $(SEARCH))) $(LIBENGINE) $(RES)
 	@echo "lnk: $@"
 	$(CXX) $(LDFLAGS) $^ $(LIBS) -o $@
 
-pot: $(wildcard $(SEARCH))
-	@echo "gen: $(POT)"
-	@xgettext -d $(TARGET) -C -F -k_ -k_n:1,2 -o $(POT) $(sort $(wildcard $(SEARCH)))
-	@sed -i~ -e 's/, c-format//' $(POT)
+translations: $(wildcard $(SEARCH))
+	@echo "gen: $(TARGET).pot"
+	@xgettext -d $(TARGET) -C -F -k_ -k_n:1,2 -o - $(sort $(wildcard $(SEARCH))) | sed -e '/#, c-format/d' > $(POT)
+	$(MAKE) -C ../../files/lang
 
 $(RES): $(RC)
 	@echo "gen: $@"
@@ -73,5 +73,5 @@ VPATH := $(SOURCEDIR)
 include $(wildcard *.d)
 
 clean:
-	rm -f *.o *.d *.exe $(TARGET) $(RES)
-	rm -rf *.app
+	@rm -f *.o *.d *.exe $(TARGET) $(RES)
+	@rm -rf *.app
