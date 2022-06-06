@@ -87,7 +87,7 @@ add_subdirectory(src)
 # Translation files
 #
 if(BUILD_TRANSLATIONS)
-	add_subdirectory(files/lang)
+	add_subdirectory(files/lang lang)
 endif(BUILD_TRANSLATIONS)
 
 #
@@ -108,7 +108,7 @@ if(MACOS_APP_BUNDLE)
 		COMMAND mkdir -p ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/translations
 		COMMAND cp *.mo ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}.app/Contents/Resources/translations
 		DEPENDS translations
-		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/files/lang
+		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/lang
 		)
 	add_custom_target(
 		run_dylibbundler
