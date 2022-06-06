@@ -219,7 +219,7 @@ namespace
         fheroes2::Time _currentTrackTimer;
     };
 
-    void PlayMusic( const uint64_t musicUID, bool loop, const bool rewindToStart );
+    void PlayMusic( const uint64_t musicUID, const Music::PlaybackMode playbackMode );
 
     void replayCurrentMusic();
 
@@ -285,10 +285,10 @@ namespace
         musicSettings.currentTrack.position = 0;
         musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack.mix, musicSettings.currentTrack.position );
 
-        PlayMusic( musicSettings.currentTrackUID, true, false );
+        PlayMusic( musicSettings.currentTrackUID, Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE );
     }
 
-    void PlayMusic( const uint64_t musicUID, bool loop, const bool rewindToStart )
+    void PlayMusic( const uint64_t musicUID, const Music::PlaybackMode playbackMode )
     {
         MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
         if ( musicInfo.mix == nullptr ) {
@@ -300,6 +300,9 @@ namespace
         if ( musicUID != musicSettings.currentTrackUID ) {
             Music::Stop();
         }
+
+        bool loop = ( playbackMode == Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE ) || ( playbackMode == Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
+        const bool rewindToStart = ( playbackMode == Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
 
         const bool isResumeSupported = loop && !rewindToStart && isMusicResumeSupported( musicInfo.mix );
         if ( isResumeSupported ) {
@@ -669,7 +672,7 @@ bool Mixer::isPlaying( const int channel )
     return isInitialized && Mix_Playing( channel ) > 0;
 }
 
-bool Music::Play( const uint64_t musicUID, const bool loop, const bool rewindToStart )
+bool Music::Play( const uint64_t musicUID, const PlaybackMode playbackMode )
 {
     const std::lock_guard<std::recursive_mutex> guard( mutex );
 
@@ -684,14 +687,14 @@ bool Music::Play( const uint64_t musicUID, const bool loop, const bool rewindToS
 
     const MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
     if ( musicInfo.mix != nullptr ) {
-        PlayMusic( musicUID, loop, rewindToStart );
+        PlayMusic( musicUID, playbackMode );
         return true;
     }
 
     return false;
 }
 
-void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const bool loop, const bool rewindToStart )
+void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const PlaybackMode playbackMode )
 {
     if ( v.empty() ) {
         return;
@@ -710,7 +713,7 @@ void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const
 
     const MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
     if ( musicInfo.mix != nullptr ) {
-        PlayMusic( musicUID, loop, rewindToStart );
+        PlayMusic( musicUID, playbackMode );
         return;
     }
 
@@ -728,10 +731,10 @@ void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const
     }
 
     musicSettings.trackManager.update( musicUID, mix, 0 );
-    PlayMusic( musicUID, loop, rewindToStart );
+    PlayMusic( musicUID, playbackMode );
 }
 
-void Music::Play( const uint64_t musicUID, const std::string & file, const bool loop, const bool rewindToStart )
+void Music::Play( const uint64_t musicUID, const std::string & file, const PlaybackMode playbackMode )
 {
     if ( file.empty() ) {
         // Nothing to play. It is an empty file.
@@ -751,7 +754,7 @@ void Music::Play( const uint64_t musicUID, const std::string & file, const bool 
 
     const MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
     if ( musicInfo.mix != nullptr ) {
-        PlayMusic( musicUID, loop, rewindToStart );
+        PlayMusic( musicUID, playbackMode );
         return;
     }
 
@@ -764,7 +767,7 @@ void Music::Play( const uint64_t musicUID, const std::string & file, const bool 
     }
 
     musicSettings.trackManager.update( musicUID, mix, 0 );
-    PlayMusic( musicUID, loop, rewindToStart );
+    PlayMusic( musicUID, playbackMode );
 }
 
 void Music::SetFadeInMs( const int timeInMs )

@@ -63,16 +63,22 @@ namespace Mixer
 
 namespace Music
 {
-    // Music UID is used to cache existing songs. It is caller's responsibility to generate them.
+    enum class PlaybackMode : uint8_t
+    {
+        PLAY_ONCE,
+        CONTINUE_TO_PLAY_INFINITE,
+        REWIND_AND_PLAY_INFINITE
+    };
 
+    // Music UID is used to cache existing songs. It is caller's responsibility to generate them.
     // This function return true in case of music track for corresponding Music UID is cached.
-    bool Play( const uint64_t musicUID, const bool loop, const bool rewindToStart );
+    bool Play( const uint64_t musicUID, const PlaybackMode playbackMode );
 
     // Load a music track from memory and play it.
-    void Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const bool loop, const bool rewindToStart );
+    void Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const PlaybackMode playbackMode );
 
     // Load a music track from a file system location and play it.
-    void Play( const uint64_t musicUID, const std::string & file, const bool loop, const bool rewindToStart );
+    void Play( const uint64_t musicUID, const std::string & file, const PlaybackMode playbackMode );
 
     // Returns the previous volume percentage value.
     int setVolume( const int volumePercentage );

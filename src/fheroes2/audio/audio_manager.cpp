@@ -207,7 +207,7 @@ namespace
     }
 
     void PlaySoundInternally( const int m82, const int soundVolume );
-    void PlayMusicInternally( const int trackId, const MusicSource musicType, const AudioManager::MusicPlaybackMode playbackMode );
+    void PlayMusicInternally( const int trackId, const MusicSource musicType, const Music::PlaybackMode playbackMode );
     void playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume,
                                    const bool is3DAudioEnabled );
 
@@ -217,7 +217,7 @@ namespace
     class AsyncSoundManager : public MultiThreading::AsyncManager
     {
     public:
-        void pushMusic( const int musicId, const MusicSource musicType, const AudioManager::MusicPlaybackMode playbackMode )
+        void pushMusic( const int musicId, const MusicSource musicType, const Music::PlaybackMode playbackMode )
         {
             _createThreadIfNeeded();
 
@@ -290,7 +290,7 @@ namespace
         {
             MusicTask() = default;
 
-            MusicTask( const int musicId_, const MusicSource musicType_, const AudioManager::MusicPlaybackMode playbackMode_ )
+            MusicTask( const int musicId_, const MusicSource musicType_, const Music::PlaybackMode playbackMode_ )
                 : musicId( musicId_ )
                 , musicType( musicType_ )
                 , playbackMode( playbackMode_ )
@@ -300,7 +300,7 @@ namespace
 
             int musicId{ 0 };
             MusicSource musicType{ MUSIC_MIDI_ORIGINAL };
-            AudioManager::MusicPlaybackMode playbackMode{ AudioManager::MusicPlaybackMode::PLAY_ONCE };
+            Music::PlaybackMode playbackMode{ Music::PlaybackMode::PLAY_ONCE };
         };
 
         struct SoundTask
@@ -457,7 +457,7 @@ namespace
         return ( static_cast<uint64_t>( musicType ) << 32 ) + static_cast<uint64_t>( trackId );
     }
 
-    void PlayMusicInternally( const int trackId, const MusicSource musicType, const AudioManager::MusicPlaybackMode playbackMode )
+    void PlayMusicInternally( const int trackId, const MusicSource musicType, const Music::PlaybackMode playbackMode )
     {
         // Make sure that the music track is valid.
         assert( trackId != MUS::UNUSED && trackId != MUS::UNKNOWN );
@@ -470,13 +470,8 @@ namespace
             return;
         }
 
-        const bool loop = ( playbackMode == AudioManager::MusicPlaybackMode::CONTINUE_TO_PLAY_INFINITE )
-                          || ( playbackMode == AudioManager::MusicPlaybackMode::REWIND_AND_PLAY_INFINITE );
-
-        const bool rewindToStart = ( playbackMode == AudioManager::MusicPlaybackMode::REWIND_AND_PLAY_INFINITE );
-
         // Check if the music track is cached.
-        if ( Music::Play( musicUID, loop, rewindToStart ) ) {
+        if ( Music::Play( musicUID, playbackMode ) ) {
             DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play cached music track " << trackId )
             Game::SetCurrentMusicTrack( trackId );
             return;
@@ -507,7 +502,7 @@ namespace
                 DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Cannot find a file for " << trackId << " track." )
             }
             else {
-                Music::Play( musicUID, filename, loop, rewindToStart );
+                Music::Play( musicUID, filename, playbackMode );
 
                 Game::SetCurrentMusicTrack( trackId );
 
@@ -530,7 +525,7 @@ namespace
         if ( XMI::UNKNOWN != xmi ) {
             const std::vector<uint8_t> & v = GetMID( xmi );
             if ( !v.empty() ) {
-                Music::Play( musicUID, v, loop, rewindToStart );
+                Music::Play( musicUID, v, playbackMode );
 
                 Game::SetCurrentMusicTrack( trackId );
             }
@@ -790,7 +785,7 @@ namespace AudioManager
         }
     }
 
-    void PlayMusic( const int trackId, const MusicPlaybackMode playbackMode )
+    void PlayMusic( const int trackId, const Music::PlaybackMode playbackMode )
     {
         if ( MUS::UNUSED == trackId || MUS::UNKNOWN == trackId ) {
             return;
@@ -804,7 +799,7 @@ namespace AudioManager
         PlayMusicInternally( trackId, Settings::Get().MusicType(), playbackMode );
     }
 
-    void PlayMusicAsync( const int trackId, const MusicPlaybackMode playbackMode )
+    void PlayMusicAsync( const int trackId, const Music::PlaybackMode playbackMode )
     {
         if ( MUS::UNUSED == trackId || MUS::UNKNOWN == trackId ) {
             return;
