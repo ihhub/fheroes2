@@ -610,7 +610,7 @@ void DrawMonster( fheroes2::RandomMonsterAnimation & monsterAnimation, const Tro
         monsterAnimation.increment();
 }
 
-int Dialog::ArmyJoinFree( std::string dialog_title, std::string message, const Troop & troop, Heroes & hero )
+int Dialog::ArmyJoinFree( const std::string& dialog_title, const std::string& message, const Troop & troop, Heroes & hero )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
