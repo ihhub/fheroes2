@@ -96,8 +96,8 @@ namespace Game
     int GetKingdomColors();
     int GetActualKingdomColors();
     void DialogPlayers( int color, std::string );
-    void SetCurrentMusic( const int mus );
-    int CurrentMusic();
+    void SetCurrentMusicTrack( const int trackId );
+    int CurrentMusicTrackId();
     uint32_t & MapsAnimationFrame();
     uint32_t GetRating();
     uint32_t GetGameOverScores();
@@ -125,7 +125,7 @@ namespace Game
     {
     public:
         MusicRestorer()
-            : _music( CurrentMusic() )
+            : _music( CurrentMusicTrackId() )
         {}
 
         MusicRestorer( const MusicRestorer & ) = delete;
@@ -133,7 +133,7 @@ namespace Game
         ~MusicRestorer()
         {
             if ( _music == MUS::UNUSED || _music == MUS::UNKNOWN ) {
-                SetCurrentMusic( _music );
+                SetCurrentMusicTrack( _music );
 
                 return;
             }
@@ -141,11 +141,12 @@ namespace Game
             // Set current music to MUS::UNKNOWN to prevent attempts to play the old music
             // by new instances of MusicRestorer while the music being currently restored
             // is starting in the background
-            if ( _music != CurrentMusic() ) {
-                SetCurrentMusic( MUS::UNKNOWN );
+            if ( _music != CurrentMusicTrackId() ) {
+                SetCurrentMusicTrack( MUS::UNKNOWN );
             }
 
-            AudioManager::PlayMusic( _music, true, true );
+            // It is assumed that the previous track was looped and does not require to be played from the beginning.
+            AudioManager::PlayMusicAsync( _music, true );
         }
 
         MusicRestorer & operator=( const MusicRestorer & ) = delete;

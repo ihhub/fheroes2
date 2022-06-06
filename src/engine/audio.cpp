@@ -219,7 +219,7 @@ namespace
         fheroes2::Time _currentTrackTimer;
     };
 
-    void PlayMusic( const uint64_t musicUID, bool loop );
+    void PlayMusic( const uint64_t musicUID, bool loop, const bool rewindToStart );
 
     void replayCurrentMusic();
 
@@ -285,10 +285,10 @@ namespace
         musicSettings.currentTrack.position = 0;
         musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack.mix, musicSettings.currentTrack.position );
 
-        PlayMusic( musicSettings.currentTrackUID, true );
+        PlayMusic( musicSettings.currentTrackUID, true, false );
     }
 
-    void PlayMusic( const uint64_t musicUID, bool loop )
+    void PlayMusic( const uint64_t musicUID, bool loop, const bool rewindToStart )
     {
         MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
         if ( musicInfo.mix == nullptr ) {
@@ -301,7 +301,7 @@ namespace
             Music::Stop();
         }
 
-        const bool isResumeSupported = loop && isMusicResumeSupported( musicInfo.mix );
+        const bool isResumeSupported = loop && !rewindToStart && isMusicResumeSupported( musicInfo.mix );
         if ( isResumeSupported ) {
             loop = false;
             musicSettings.asyncTrackUID = musicUID;
@@ -669,7 +669,29 @@ bool Mixer::isPlaying( const int channel )
     return isInitialized && Mix_Playing( channel ) > 0;
 }
 
-void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const bool loop )
+bool Music::Play( const uint64_t musicUID, const bool loop, const bool rewindToStart )
+{
+    const std::lock_guard<std::recursive_mutex> guard( mutex );
+
+    if ( !isInitialized ) {
+        return false;
+    }
+
+    if ( musicSettings.currentTrackUID == musicUID ) {
+        // We are playing the same track. No need to do anything.
+        return true;
+    }
+
+    const MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
+    if ( musicInfo.mix != nullptr ) {
+        PlayMusic( musicUID, loop, rewindToStart );
+        return true;
+    }
+
+    return false;
+}
+
+void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const bool loop, const bool rewindToStart )
 {
     if ( v.empty() ) {
         return;
@@ -688,7 +710,7 @@ void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const
 
     const MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
     if ( musicInfo.mix != nullptr ) {
-        PlayMusic( musicUID, loop );
+        PlayMusic( musicUID, loop, rewindToStart );
         return;
     }
 
@@ -706,10 +728,10 @@ void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const
     }
 
     musicSettings.trackManager.update( musicUID, mix, 0 );
-    PlayMusic( musicUID, loop );
+    PlayMusic( musicUID, loop, rewindToStart );
 }
 
-void Music::Play( const uint64_t musicUID, const std::string & file, const bool loop )
+void Music::Play( const uint64_t musicUID, const std::string & file, const bool loop, const bool rewindToStart )
 {
     if ( file.empty() ) {
         // Nothing to play. It is an empty file.
@@ -729,7 +751,7 @@ void Music::Play( const uint64_t musicUID, const std::string & file, const bool 
 
     const MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
     if ( musicInfo.mix != nullptr ) {
-        PlayMusic( musicUID, loop );
+        PlayMusic( musicUID, loop, rewindToStart );
         return;
     }
 
@@ -742,7 +764,7 @@ void Music::Play( const uint64_t musicUID, const std::string & file, const bool 
     }
 
     musicSettings.trackManager.update( musicUID, mix, 0 );
-    PlayMusic( musicUID, loop );
+    PlayMusic( musicUID, loop, rewindToStart );
 }
 
 void Music::SetFadeInMs( const int timeInMs )

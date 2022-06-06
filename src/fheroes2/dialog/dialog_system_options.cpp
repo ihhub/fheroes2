@@ -319,7 +319,7 @@ namespace
 
                 conf.SetMusicType( type > MUSIC_EXTERNAL ? 0 : type );
 
-                Game::SetCurrentMusic( MUS::UNKNOWN );
+                Game::SetCurrentMusicTrack( MUS::UNKNOWN );
 
                 saveMusicType = true;
             }

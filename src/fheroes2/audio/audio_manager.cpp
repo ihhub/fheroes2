@@ -202,7 +202,7 @@ namespace
     }
 
     void PlaySoundInternally( const int m82, const int soundVolume );
-    void PlayMusicInternally( const int mus, const MusicSource musicType, const bool loop );
+    void PlayMusicInternally( const int trackId, const MusicSource musicType, const bool loop, const bool rewindToStart );
     void playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume,
                                    const bool is3DAudioEnabled );
 
@@ -212,7 +212,7 @@ namespace
     class AsyncSoundManager : public MultiThreading::AsyncManager
     {
     public:
-        void pushMusic( const int musicId, const MusicSource musicType, const bool isLooped )
+        void pushMusic( const int musicId, const MusicSource musicType, const bool isLooped, const bool rewindToStart )
         {
             _createThreadIfNeeded();
 
@@ -222,7 +222,7 @@ namespace
                 _musicTasks.pop();
             }
 
-            _musicTasks.emplace( musicId, musicType, isLooped );
+            _musicTasks.emplace( musicId, musicType, isLooped, rewindToStart );
 
             notifyThread();
         }
@@ -285,10 +285,11 @@ namespace
         {
             MusicTask() = default;
 
-            MusicTask( const int musicId_, const MusicSource musicType_, const bool isLooped_ )
+            MusicTask( const int musicId_, const MusicSource musicType_, const bool isLooped_, const bool rewindToStart_ )
                 : musicId( musicId_ )
                 , musicType( musicType_ )
                 , isLooped( isLooped_ )
+                , rewindToStart( rewindToStart_ )
             {
                 // Do nothing.
             }
@@ -296,6 +297,7 @@ namespace
             int musicId{ 0 };
             MusicSource musicType{ MUSIC_MIDI_ORIGINAL };
             bool isLooped{ false };
+            bool rewindToStart{ false };
         };
 
         struct SoundTask
@@ -386,7 +388,7 @@ namespace
                 // Nothing to do.
                 return;
             case TaskType::PlayMusic:
-                PlayMusicInternally( _currentMusicTask.musicId, _currentMusicTask.musicType, _currentMusicTask.isLooped );
+                PlayMusicInternally( _currentMusicTask.musicId, _currentMusicTask.musicType, _currentMusicTask.isLooped, _currentMusicTask.rewindToStart );
                 return;
             case TaskType::PlaySound:
                 PlaySoundInternally( _currentSoundTask.m82Sound, _currentSoundTask.soundVolume );
@@ -452,14 +454,23 @@ namespace
         return ( static_cast<uint64_t>( musicType ) << 32 ) + static_cast<uint64_t>( trackId );
     }
 
-    void PlayMusicInternally( const int mus, const MusicSource musicType, const bool loop )
+    void PlayMusicInternally( const int trackId, const MusicSource musicType, const bool loop, const bool rewindToStart )
     {
         // Make sure that the music track is valid.
-        assert( mus != MUS::UNUSED && mus != MUS::UNKNOWN );
+        assert( trackId != MUS::UNUSED && trackId != MUS::UNKNOWN );
+
+        const uint64_t musicUID = getMusicUID( trackId, musicType );
 
         std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
 
-        if ( Game::CurrentMusic() == mus && Music::isPlaying() ) {
+        if ( Game::CurrentMusicTrackId() == trackId && Music::isPlaying() ) {
+            return;
+        }
+
+        // Check if the music track is cached.
+        if ( Music::Play( musicUID, loop, rewindToStart ) ) {
+            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play cached music track " << trackId )
+            Game::SetCurrentMusicTrack( trackId );
             return;
         }
 
@@ -474,7 +485,7 @@ namespace
             std::string filename;
 
             for ( size_t i = 0; i < musicFileTypes.size(); ++i ) {
-                filename = getExternalMusicFile( mus, musicDirectories, musicFileTypes[i] );
+                filename = getExternalMusicFile( trackId, musicDirectories, musicFileTypes[i] );
                 if ( !filename.empty() ) {
                     if ( i > 0 ) {
                         // Swap music types to improve cache hit.
@@ -485,14 +496,14 @@ namespace
             }
 
             if ( filename.empty() ) {
-                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Cannot find a file for " << mus << " track." )
+                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Cannot find a file for " << trackId << " track." )
             }
             else {
-                Music::Play( getMusicUID( mus, musicType ), filename, loop );
+                Music::Play( musicUID, filename, loop, rewindToStart );
 
-                Game::SetCurrentMusic( mus );
+                Game::SetCurrentMusicTrack( trackId );
 
-                DEBUG_LOG( DBG_ENGINE, DBG_TRACE, MUS::getFileName( mus, MUS::EXTERNAL_MUSIC_TYPE::MAPPED, " " ) )
+                DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play music track " << MUS::getFileName( trackId, MUS::EXTERNAL_MUSIC_TYPE::MAPPED, " " ) )
 
                 return;
             }
@@ -501,22 +512,22 @@ namespace
         // Check if music needs to be pulled from HEROES2X
         int xmi = XMI::UNKNOWN;
         if ( musicType == MUSIC_MIDI_EXPANSION ) {
-            xmi = XMI::FromMUS( mus, g_midiHeroes2xAGG.isGood() );
+            xmi = XMI::FromMUS( trackId, g_midiHeroes2xAGG.isGood() );
         }
 
         if ( XMI::UNKNOWN == xmi ) {
-            xmi = XMI::FromMUS( mus, false );
+            xmi = XMI::FromMUS( trackId, false );
         }
 
         if ( XMI::UNKNOWN != xmi ) {
             const std::vector<uint8_t> & v = GetMID( xmi );
             if ( !v.empty() ) {
-                Music::Play( getMusicUID( mus, musicType ), v, loop );
+                Music::Play( musicUID, v, loop, rewindToStart );
 
-                Game::SetCurrentMusic( mus );
+                Game::SetCurrentMusicTrack( trackId );
             }
         }
-        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, XMI::GetString( xmi ) )
+        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play MIDI music track " << XMI::GetString( xmi ) )
     }
 
     void playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume,
@@ -718,9 +729,9 @@ namespace AudioManager
         }
     }
 
-    void PlayMusic( int mus, bool loop, bool asyncronizedCall )
+    void PlayMusic( const int trackId, const bool loop, bool rewindToStart )
     {
-        if ( MUS::UNUSED == mus || MUS::UNKNOWN == mus ) {
+        if ( MUS::UNUSED == trackId || MUS::UNKNOWN == trackId ) {
             return;
         }
 
@@ -728,13 +739,31 @@ namespace AudioManager
             return;
         }
 
-        if ( asyncronizedCall ) {
-            g_asyncSoundManager.pushMusic( mus, Settings::Get().MusicType(), loop );
+        if ( !loop ) {
+            // For non looping music always start from the beginning.
+            rewindToStart = true;
         }
-        else {
-            g_asyncSoundManager.sync();
-            PlayMusicInternally( mus, Settings::Get().MusicType(), loop );
+
+        g_asyncSoundManager.sync();
+        PlayMusicInternally( trackId, Settings::Get().MusicType(), loop, rewindToStart );
+    }
+
+    void PlayMusicAsync( const int trackId, const bool loop, bool rewindToStart )
+    {
+        if ( MUS::UNUSED == trackId || MUS::UNKNOWN == trackId ) {
+            return;
         }
+
+        if ( !Audio::isValid() ) {
+            return;
+        }
+
+        if ( !loop ) {
+            // For non looping music always start from the beginning.
+            rewindToStart = true;
+        }
+
+        g_asyncSoundManager.pushMusic( trackId, Settings::Get().MusicType(), loop, rewindToStart );
     }
 
     void ResetAudio()

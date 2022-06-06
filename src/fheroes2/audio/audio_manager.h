@@ -61,6 +61,9 @@ namespace AudioManager
 
     void playLoopSounds( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, bool asyncronizedCall );
     void PlaySound( int m82, bool asyncronizedCall = false );
-    void PlayMusic( int mus, bool loop = true, bool asyncronizedCall = false );
+
+    void PlayMusic( const int trackId, const bool loop, bool rewindToStart = false );
+    void PlayMusicAsync( const int trackId, const bool loop, bool rewindToStart = false );
+
     void ResetAudio();
 }

@@ -617,7 +617,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
                     // reset environment sounds and music theme at the beginning of the human turn
-                    Game::SetCurrentMusic( MUS::UNKNOWN );
+                    Game::SetCurrentMusicTrack( MUS::UNKNOWN );
                     AudioManager::ResetAudio();
 
                     if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
@@ -655,7 +655,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     }
 
                     // Reset environment sounds and music theme at the end of the human turn.
-                    Game::SetCurrentMusic( MUS::UNKNOWN );
+                    Game::SetCurrentMusicTrack( MUS::UNKNOWN );
                     AudioManager::ResetAudio();
 
                     break;

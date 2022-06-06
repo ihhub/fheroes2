@@ -331,7 +331,7 @@ fheroes2::GameMode GameOver::Result::LocalCheckGameOver()
                     // TODO : Implement function that displays the last frame of win.smk and
                     // a dialog for name entry. AudioManager::PlayMusic is run here in order to start playing
                     // before displaying the high score.
-                    AudioManager::PlayMusic( MUS::VICTORY, true, true );
+                    AudioManager::PlayMusicAsync( MUS::VICTORY, true, true );
 
                     res = fheroes2::GameMode::HIGHSCORES_STANDARD;
 
