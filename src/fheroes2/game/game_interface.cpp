@@ -114,10 +114,10 @@ void Interface::Basic::Redraw( int force )
 
     if ( combinedRedraw & REDRAW_GAMEAREA ) {
         gameArea.Redraw( fheroes2::Display::instance(), LEVEL_ALL );
-    }
 
-    if ( hideInterface && conf.ShowControlPanel() ) {
-        controlPanel.Redraw();
+        if ( hideInterface && conf.ShowControlPanel() ) {
+            controlPanel.Redraw();
+        }
     }
 
     if ( ( hideInterface && conf.ShowRadar() ) || ( combinedRedraw & REDRAW_RADAR ) ) {

@@ -86,11 +86,13 @@ void Interface::ControlPanel::Redraw() const
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    fheroes2::Blit( _buttons->radar, display, x, y );
-    fheroes2::Blit( _buttons->icon, display, x + 36, y );
-    fheroes2::Blit( _buttons->button, display, x + 72, y );
-    fheroes2::Blit( _buttons->stats, display, x + 108, y );
-    fheroes2::Blit( _buttons->quit, display, x + 144, y );
+    const uint8_t alpha = 128;
+
+    fheroes2::AlphaBlit( _buttons->radar, display, x, y, alpha );
+    fheroes2::AlphaBlit( _buttons->icon, display, x + 36, y, alpha );
+    fheroes2::AlphaBlit( _buttons->button, display, x + 72, y, alpha );
+    fheroes2::AlphaBlit( _buttons->stats, display, x + 108, y, alpha );
+    fheroes2::AlphaBlit( _buttons->quit, display, x + 144, y, alpha );
 }
 
 fheroes2::GameMode Interface::ControlPanel::QueueEventProcessing()
