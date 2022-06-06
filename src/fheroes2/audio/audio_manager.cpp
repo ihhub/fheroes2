@@ -295,7 +295,7 @@ namespace
 
             int musicId{ 0 };
             MusicSource musicType{ MUSIC_MIDI_ORIGINAL };
-            AudioManager::MusicPlaybackMode playbackMode { AudioManager::MusicPlaybackMode::PLAY_ONCE };
+            AudioManager::MusicPlaybackMode playbackMode{ AudioManager::MusicPlaybackMode::PLAY_ONCE };
         };
 
         struct SoundTask
@@ -465,8 +465,8 @@ namespace
             return;
         }
 
-        const bool loop = ( playbackMode == AudioManager::MusicPlaybackMode::CONTINUE_TO_PLAY_INFINITE ) ||
-                          ( playbackMode == AudioManager::MusicPlaybackMode::REWIND_AND_PLAY_INFINITE );
+        const bool loop = ( playbackMode == AudioManager::MusicPlaybackMode::CONTINUE_TO_PLAY_INFINITE )
+                          || ( playbackMode == AudioManager::MusicPlaybackMode::REWIND_AND_PLAY_INFINITE );
 
         const bool rewindToStart = ( playbackMode == AudioManager::MusicPlaybackMode::REWIND_AND_PLAY_INFINITE );
 
