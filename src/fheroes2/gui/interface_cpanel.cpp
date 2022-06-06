@@ -36,16 +36,16 @@ Interface::ControlPanel::ControlPanel( Basic & basic )
     width = 180;
     height = 36;
 
-    rt_radr.width = 36;
-    rt_radr.height = 36;
-    rt_icon.width = 36;
-    rt_icon.height = 36;
-    rt_bttn.width = 36;
-    rt_bttn.height = 36;
-    rt_stat.width = 36;
-    rt_stat.height = 36;
-    rt_quit.width = 36;
-    rt_quit.height = 36;
+    rt_radar.width = 36;
+    rt_radar.height = 36;
+    rt_icons.width = 36;
+    rt_icons.height = 36;
+    rt_buttons.width = 36;
+    rt_buttons.height = 36;
+    rt_status.width = 36;
+    rt_status.height = 36;
+    rt_end.width = 36;
+    rt_end.height = 36;
 
     ResetTheme();
 }
@@ -68,16 +68,16 @@ void Interface::ControlPanel::SetPos( int32_t ox, int32_t oy )
     x = ox;
     y = oy;
 
-    rt_radr.x = x;
-    rt_radr.y = y;
-    rt_icon.x = x + 36;
-    rt_icon.y = y;
-    rt_bttn.x = x + 72;
-    rt_bttn.y = y;
-    rt_stat.x = x + 108;
-    rt_stat.y = y;
-    rt_quit.x = x + 144;
-    rt_quit.y = y;
+    rt_radar.x = x;
+    rt_radar.y = y;
+    rt_icons.x = x + 36;
+    rt_icons.y = y;
+    rt_buttons.x = x + 72;
+    rt_buttons.y = y;
+    rt_status.x = x + 108;
+    rt_status.y = y;
+    rt_end.x = x + 144;
+    rt_end.y = y;
 }
 
 void Interface::ControlPanel::Redraw() const
@@ -88,26 +88,26 @@ void Interface::ControlPanel::Redraw() const
 
     const uint8_t alpha = 128;
 
-    fheroes2::AlphaBlit( _buttons->radar, display, x, y, alpha );
-    fheroes2::AlphaBlit( _buttons->icon, display, x + 36, y, alpha );
-    fheroes2::AlphaBlit( _buttons->button, display, x + 72, y, alpha );
-    fheroes2::AlphaBlit( _buttons->stats, display, x + 108, y, alpha );
-    fheroes2::AlphaBlit( _buttons->quit, display, x + 144, y, alpha );
+    fheroes2::AlphaBlit( _buttons->radar, display, rt_radar.x, rt_radar.y, alpha );
+    fheroes2::AlphaBlit( _buttons->icons, display, rt_icons.x, rt_icons.y, alpha );
+    fheroes2::AlphaBlit( _buttons->buttons, display, rt_buttons.x, rt_buttons.y, alpha );
+    fheroes2::AlphaBlit( _buttons->status, display, rt_status.x, rt_status.y, alpha );
+    fheroes2::AlphaBlit( _buttons->end, display, rt_end.x, rt_end.y, alpha );
 }
 
 fheroes2::GameMode Interface::ControlPanel::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
 
-    if ( le.MouseClickLeft( rt_radr ) )
+    if ( le.MouseClickLeft( rt_radar ) )
         interface.EventSwitchShowRadar();
-    else if ( le.MouseClickLeft( rt_icon ) )
+    else if ( le.MouseClickLeft( rt_icons ) )
         interface.EventSwitchShowIcons();
-    else if ( le.MouseClickLeft( rt_bttn ) )
+    else if ( le.MouseClickLeft( rt_buttons ) )
         interface.EventSwitchShowButtons();
-    else if ( le.MouseClickLeft( rt_stat ) )
+    else if ( le.MouseClickLeft( rt_status ) )
         interface.EventSwitchShowStatus();
-    else if ( le.MouseClickLeft( rt_quit ) )
+    else if ( le.MouseClickLeft( rt_end ) )
         return interface.EventEndTurn();
 
     return fheroes2::GameMode::CANCEL;
