@@ -135,6 +135,11 @@ namespace
             // Do nothing.
         }
 
+        bool operator==( const AudioManager::AudioLoopEffectInfo & other ) const
+        {
+            return AudioManager::AudioLoopEffectInfo::operator==( other );
+        }
+
         int channelId{ -1 };
     };
 
@@ -533,6 +538,37 @@ namespace
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play MIDI music track " << XMI::GetString( xmi ) )
     }
 
+    void getClosestSoundIdPairByAngle( const std::vector<AudioManager::AudioLoopEffectInfo> & soundToAdd, const std::vector<ChannelAudioLoopEffectInfo> & soundToReplace,
+                                       size_t & bestSoundToAddId, size_t & bestSoundToReplaceId )
+    {
+        assert( !soundToAdd.empty() && !soundToReplace.empty() );
+
+        bestSoundToAddId = 0;
+        bestSoundToReplaceId = 0;
+        int bestAngleDiff = 360;
+        int bestVolumeDiff = 100;
+
+        for ( size_t soundToAddId = 0; soundToAddId < soundToAdd.size(); ++soundToAddId ) {
+            for ( size_t soundToReplaceId = 0; soundToReplaceId < soundToReplace.size(); ++soundToReplaceId ) {
+                const int angleDiff = std::abs( soundToAdd[soundToAddId].angle - soundToReplace[soundToReplaceId].angle );
+                const int volumeDiff
+                    = std::abs( static_cast<int>( soundToAdd[soundToAddId].volumePercentage ) - static_cast<int>( soundToReplace[soundToReplaceId].volumePercentage ) );
+                if ( bestAngleDiff >= angleDiff ) {
+                    if ( bestAngleDiff == angleDiff && volumeDiff > bestVolumeDiff ) {
+                        // The existing best pair has lower volume difference.
+                        continue;
+                    }
+
+                    bestAngleDiff = angleDiff;
+                    bestVolumeDiff = volumeDiff;
+
+                    bestSoundToAddId = soundToAddId;
+                    bestSoundToReplaceId = soundToReplaceId;
+                }
+            }
+        }
+    }
+
     void playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume,
                                    const bool is3DAudioEnabled )
     {
@@ -555,14 +591,16 @@ namespace
             return;
         }
 
+        // TODO: use another container for sound effects to support more efficient sort and find operations based on the code below.
+
         std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> tempAudioLoopEffects;
         std::swap( tempAudioLoopEffects, currentAudioLoopEffects );
 
         // First find channels with existing sounds and just update them.
         for ( auto iter = soundEffects.begin(); iter != soundEffects.end(); ) {
             const M82::SoundType soundType = iter->first;
-            std::vector<AudioManager::AudioLoopEffectInfo> & effects = iter->second;
-            assert( !effects.empty() );
+            std::vector<AudioManager::AudioLoopEffectInfo> & effectsToAdd = iter->second;
+            assert( !effectsToAdd.empty() );
 
             auto foundSoundTypeIter = tempAudioLoopEffects.find( soundType );
             if ( foundSoundTypeIter == tempAudioLoopEffects.end() ) {
@@ -571,18 +609,38 @@ namespace
                 continue;
             }
 
-            std::vector<ChannelAudioLoopEffectInfo> & existingEffects = foundSoundTypeIter->second;
+            std::vector<ChannelAudioLoopEffectInfo> & effectsToReplace = foundSoundTypeIter->second;
 
-            size_t elementSize = std::min( effects.size(), existingEffects.size() );
-            while ( elementSize > 0 ) {
-                --elementSize;
+            // Search for an existing sound which has the exact volume and angle.
+            for ( auto soundToAddIter = effectsToAdd.begin(); soundToAddIter != effectsToAdd.end(); ) {
+                auto exactSoundEffect = std::find( effectsToReplace.begin(), effectsToReplace.end(), *soundToAddIter );
+                if ( exactSoundEffect != effectsToReplace.end() ) {
+                    currentAudioLoopEffects[soundType].emplace_back( *exactSoundEffect );
+                    effectsToReplace.erase( exactSoundEffect );
 
-                currentAudioLoopEffects[soundType].emplace_back( existingEffects.back() );
-                existingEffects.pop_back();
+                    soundToAddIter = effectsToAdd.erase( soundToAddIter );
+                    continue;
+                }
+
+                ++soundToAddIter;
+            }
+
+            size_t effectsToReplaceCount = std::min( effectsToAdd.size(), effectsToReplace.size() );
+
+            while ( effectsToReplaceCount > 0 ) {
+                --effectsToReplaceCount;
+
+                // Find the closest angles to those which are going to be added.
+                size_t soundToAddId = 0;
+                size_t soundToReplaceId = 0;
+                getClosestSoundIdPairByAngle( effectsToAdd, effectsToReplace, soundToAddId, soundToReplaceId );
+
+                currentAudioLoopEffects[soundType].emplace_back( effectsToReplace[soundToReplaceId] );
+                effectsToReplace.erase( effectsToReplace.begin() + static_cast<ptrdiff_t>( soundToReplaceId ) );
 
                 ChannelAudioLoopEffectInfo & currentInfo = currentAudioLoopEffects[soundType].back();
-                currentInfo = { effects.back(), currentInfo.channelId };
-                effects.pop_back();
+                currentInfo = { effectsToAdd[soundToAddId], currentInfo.channelId };
+                effectsToAdd.erase( effectsToAdd.begin() + static_cast<ptrdiff_t>( soundToAddId ) );
 
                 if ( Mixer::isPlaying( currentInfo.channelId ) ) {
                     Mixer::setVolume( currentInfo.channelId, currentInfo.volumePercentage * soundVolume / 10 );
@@ -593,11 +651,11 @@ namespace
                 }
             }
 
-            if ( existingEffects.empty() ) {
+            if ( effectsToReplace.empty() ) {
                 tempAudioLoopEffects.erase( foundSoundTypeIter );
             }
 
-            if ( effects.empty() ) {
+            if ( effectsToAdd.empty() ) {
                 iter = soundEffects.erase( iter );
             }
             else {
