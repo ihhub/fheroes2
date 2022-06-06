@@ -2101,13 +2101,13 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
 
     case MP2::OBJ_ABANDONEDMINE:
     case MP2::OBJ_MINES: {
+        resource = tile.QuantityResourceCount().first;
+        header = Maps::GetMinesName( resource );
+
         if ( objectType == MP2::OBJ_ABANDONEDMINE && tile.GetQuantity3() != Spell::HAUNT ) {
             body = _( "You beat the Ghosts and are able to restore the mine to production." );
             break;
         }
-
-        resource = tile.QuantityResourceCount().first;
-        header = Maps::GetMinesName( resource );
 
         switch ( resource ) {
         case Resource::ORE:
@@ -2169,16 +2169,17 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
         }
 
         if ( capture ) {
-            if ( resource == Resource::UNKNOWN )
-                Dialog::Message( header, body, Font::BIG, Dialog::OK );
-            else
-                DialogCaptureResourceObject( header, body, resource );
-
             // restore the abandoned mine
             if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
                 Maps::Tiles::UpdateAbandonedMineSprite( tile );
                 hero.SetMapsObject( MP2::OBJ_MINES );
+                Interface::Basic::Get().Redraw( Interface::REDRAW_GAMEAREA );
             }
+
+            if ( resource == Resource::UNKNOWN )
+                Dialog::Message( header, body, Font::BIG, Dialog::OK );
+            else
+                DialogCaptureResourceObject( header, body, resource );
 
             tile.QuantitySetColor( hero.GetColor() );
         }
