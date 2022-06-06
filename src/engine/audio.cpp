@@ -282,6 +282,11 @@ namespace
             return;
         }
 
+        if ( musicSettings.currentTrack.mix == nullptr ) {
+            // This can happen only if track UID is 0 and we reset everything while a separate thread was calling this function.
+            return;
+        }
+
         musicSettings.currentTrack.position = 0;
         musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack.mix, musicSettings.currentTrack.position );
 
@@ -830,6 +835,7 @@ void Music::Stop()
     }
 
     musicSettings.currentTrack = {};
+    musicSettings.currentTrackUID = 0;
 }
 
 bool Music::isPlaying()
