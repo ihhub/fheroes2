@@ -52,13 +52,13 @@ namespace Mixer
     int applySoundEffect( const int channelId, const int16_t angle, uint8_t volumePercentage );
 
     // Returns the previous volume percentage value.
-    int setVolume( const int channel, const int volumePercentage );
+    int setVolume( const int channelId, const int volumePercentage );
 
-    void Pause( const int channel = -1 );
-    void Resume( const int channel = -1 );
-    void Stop( const int channel = -1 );
+    void Pause( const int channelId = -1 );
+    void Resume( const int channelId = -1 );
+    void Stop( const int channelId = -1 );
 
-    bool isPlaying( const int channel );
+    bool isPlaying( const int channelId );
 }
 
 namespace Music

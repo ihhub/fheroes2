@@ -97,15 +97,18 @@ namespace
     // This mutex protects all operations with audio
     std::recursive_mutex audioMutex;
 
-    void FreeChannel( const int channel )
+    // This is the callback function set by Mix_ChannelFinished()
+    void freeChannel( const int channelId )
     {
-        Mix_Chunk * sample = Mix_GetChunk( channel );
+        const std::lock_guard<std::recursive_mutex> audioGuard( audioMutex );
+
+        Mix_Chunk * sample = Mix_GetChunk( channelId );
 
         if ( sample ) {
             Mix_FreeChunk( sample );
         }
 
-        audioEffectLedger.unregisterChannel( channel );
+        audioEffectLedger.unregisterChannel( channelId );
     }
 
     Mix_Chunk * LoadWAV( const uint8_t * ptr, const uint32_t size )
@@ -118,20 +121,20 @@ namespace
         return sample;
     }
 
-    int PlayChunk( Mix_Chunk * sample, const int channel, const bool loop )
+    int PlayChunk( Mix_Chunk * sample, const int channelId, const bool loop )
     {
         assert( sample != nullptr );
 
-        if ( channel >= 0 ) {
-            audioEffectLedger.unregisterChannel( channel );
+        if ( channelId >= 0 ) {
+            audioEffectLedger.unregisterChannel( channelId );
         }
 
-        const int channelId = Mix_PlayChannel( channel, sample, loop ? -1 : 0 );
-        if ( channelId < 0 ) {
-            ERROR_LOG( "Failed to play an audio chunk for channel " << channelId << ". The error: " << Mix_GetError() )
+        const int channel = Mix_PlayChannel( channelId, sample, loop ? -1 : 0 );
+        if ( channel < 0 ) {
+            ERROR_LOG( "Failed to play an audio chunk for channel " << channel << ". The error: " << Mix_GetError() )
         }
 
-        return channelId;
+        return channel;
     }
 
     void addSoundEffect( const int channelId, const int16_t angle, uint8_t volumePercentage )
@@ -148,20 +151,20 @@ namespace
         }
     }
 
-    int PlayChunkFromDistance( Mix_Chunk * sample, const int channel, const bool loop, const int16_t angle, uint8_t volumePercentage )
+    int PlayChunkFromDistance( Mix_Chunk * sample, const int channelId, const bool loop, const int16_t angle, uint8_t volumePercentage )
     {
         assert( sample != nullptr );
 
-        const int channelId = Mix_PlayChannel( channel, sample, loop ? -1 : 0 );
+        const int channel = Mix_PlayChannel( channelId, sample, loop ? -1 : 0 );
 
-        if ( channelId < 0 ) {
-            ERROR_LOG( "Failed to play a mix chunk for original channel " << channel << ". The error: " << Mix_GetError() )
-            return channelId;
+        if ( channel < 0 ) {
+            ERROR_LOG( "Failed to play an audio chunk for channel " << channel << ". The error: " << Mix_GetError() )
+            return channel;
         }
 
-        addSoundEffect( channelId, angle, volumePercentage );
+        addSoundEffect( channel, angle, volumePercentage );
 
-        return channelId;
+        return channel;
     }
 
     struct MusicInfo
@@ -247,6 +250,7 @@ namespace
 
     void PlayMusic( const uint64_t musicUID, const Music::PlaybackMode playbackMode );
 
+    // This is the callback function set by Mix_HookMusicFinished()
     void replayCurrentMusic()
     {
         const std::lock_guard<std::mutex> musicLooperGuard( musicLooperMutex );
@@ -443,13 +447,16 @@ void Audio::Init()
         isInitialized = true;
     }
 
-    // This function holds its own mutex, and we can't call it while holding our own mutexes
+    // These functions hold their own mutexes under the hood while waiting for the corresponding callback
+    // function to finish, so we can't call them while holding our own mutexes because of a possible deadlock
     Mix_HookMusicFinished( replayCurrentMusic );
+    Mix_ChannelFinished( freeChannel );
 }
 
 void Audio::Quit()
 {
-    // This function holds its own mutex, and we can't call it while holding our own mutexes
+    // This function holds its own mutex under the hood while waiting for the corresponding callback function
+    // to finish, so we can't call it while holding our own mutexes because of a possible deadlock
     Mix_HookMusicFinished( nullptr );
 
     const std::lock_guard<std::mutex> musicLooperGuard( musicLooperMutex );
@@ -576,6 +583,7 @@ int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, 
     }
 
     const std::lock_guard<std::recursive_mutex> audioGuard( audioMutex );
+
     if ( !isInitialized ) {
         return -1;
     }
@@ -585,7 +593,6 @@ int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, 
         return -1;
     }
 
-    Mix_ChannelFinished( FreeChannel );
     return PlayChunk( sample, channelId, loop );
 }
 
@@ -598,6 +605,7 @@ int Mixer::PlayFromDistance( const uint8_t * ptr, const uint32_t size, const int
     }
 
     const std::lock_guard<std::recursive_mutex> audioGuard( audioMutex );
+
     if ( !isInitialized ) {
         return -1;
     }
@@ -607,13 +615,13 @@ int Mixer::PlayFromDistance( const uint8_t * ptr, const uint32_t size, const int
         return -1;
     }
 
-    Mix_ChannelFinished( FreeChannel );
     return PlayChunkFromDistance( sample, channelId, loop, angle, volumePercentage );
 }
 
 int Mixer::applySoundEffect( const int channelId, const int16_t angle, uint8_t volumePercentage )
 {
     const std::lock_guard<std::recursive_mutex> audioGuard( audioMutex );
+
     if ( !isInitialized ) {
         return -1;
     }
@@ -623,7 +631,7 @@ int Mixer::applySoundEffect( const int channelId, const int16_t angle, uint8_t v
     return channelId;
 }
 
-int Mixer::setVolume( const int channel, const int volumePercentage )
+int Mixer::setVolume( const int channelId, const int volumePercentage )
 {
     const int volume = normalizeToSDLVolume( volumePercentage );
 
@@ -634,10 +642,10 @@ int Mixer::setVolume( const int channel, const int volumePercentage )
     }
 
     if ( !isMuted ) {
-        return normalizeFromSDLVolume( Mix_Volume( channel, volume ) );
+        return normalizeFromSDLVolume( Mix_Volume( channelId, volume ) );
     }
 
-    if ( channel < 0 ) {
+    if ( channelId < 0 ) {
         if ( savedMixerVolumes.empty() ) {
             return 0;
         }
@@ -649,7 +657,7 @@ int Mixer::setVolume( const int channel, const int volumePercentage )
         return normalizeFromSDLVolume( prevVolume );
     }
 
-    const size_t channelNum = static_cast<size_t>( channel );
+    const size_t channelNum = static_cast<size_t>( channelId );
 
     if ( channelNum >= savedMixerVolumes.size() ) {
         return 0;
@@ -661,38 +669,38 @@ int Mixer::setVolume( const int channel, const int volumePercentage )
     return normalizeFromSDLVolume( prevVolume );
 }
 
-void Mixer::Pause( const int channel /* = -1 */ )
+void Mixer::Pause( const int channelId /* = -1 */ )
 {
     const std::lock_guard<std::recursive_mutex> audioGuard( audioMutex );
 
     if ( isInitialized ) {
-        Mix_Pause( channel );
+        Mix_Pause( channelId );
     }
 }
 
-void Mixer::Resume( const int channel /* = -1 */ )
+void Mixer::Resume( const int channelId /* = -1 */ )
 {
     const std::lock_guard<std::recursive_mutex> audioGuard( audioMutex );
 
     if ( isInitialized ) {
-        Mix_Resume( channel );
+        Mix_Resume( channelId );
     }
 }
 
-void Mixer::Stop( const int channel /* = -1 */ )
+void Mixer::Stop( const int channelId /* = -1 */ )
 {
     const std::lock_guard<std::recursive_mutex> audioGuard( audioMutex );
 
     if ( isInitialized ) {
-        Mix_HaltChannel( channel );
+        Mix_HaltChannel( channelId );
     }
 }
 
-bool Mixer::isPlaying( const int channel )
+bool Mixer::isPlaying( const int channelId )
 {
     const std::lock_guard<std::recursive_mutex> audioGuard( audioMutex );
 
-    return isInitialized && Mix_Playing( channel ) > 0;
+    return isInitialized && Mix_Playing( channelId ) > 0;
 }
 
 bool Music::Play( const uint64_t musicUID, const PlaybackMode playbackMode )
