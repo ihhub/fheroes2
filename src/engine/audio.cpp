@@ -227,7 +227,9 @@ namespace
         MusicInfo currentTrack;
 
         uint64_t currentTrackUID{ 0 };
-        // This counter should be incremented every time the currentTrackUID is changed
+        Music::PlaybackMode currentTrackPlaybackMode{ Music::PlaybackMode::PLAY_ONCE };
+        // This counter should be incremented every time the currentTrackUID or
+        // currentTrackPlaybackMode are changed
         uint64_t currentTrackChangeCounter{ 0 };
 
         int fadeInMs{ 0 };
@@ -277,12 +279,17 @@ namespace
                     return;
                 }
 
+                // All other cases should be handled by the Mix_PlayMisic() itself
+                if ( musicSettings.currentTrackPlaybackMode != Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE ) {
+                    return;
+                }
+
                 assert( musicSettings.currentTrack.mix != nullptr );
 
                 musicSettings.currentTrack.position = 0;
                 musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack.mix, musicSettings.currentTrack.position );
 
-                PlayMusic( musicSettings.currentTrackUID, Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE );
+                PlayMusic( musicSettings.currentTrackUID, musicSettings.currentTrackPlaybackMode );
             },
             musicSettings.currentTrackChangeCounter );
     }
@@ -309,22 +316,13 @@ namespace
             Music::Stop();
         }
 
-        bool loop = ( playbackMode == Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE ) || ( playbackMode == Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
-        const bool rewindToStart = ( playbackMode == Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
-
-        const bool isResumeSupported = loop && !rewindToStart && isMusicResumeSupported( musicInfo.mix );
-        if ( isResumeSupported ) {
-            loop = false;
-
-            Mix_HookMusicFinished( replayCurrentMusic );
-        }
-        else {
-            Mix_HookMusicFinished( nullptr );
-        }
+        const bool resumePlayback = ( playbackMode == Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE && isMusicResumeSupported( musicInfo.mix ) );
+        const bool autoLoop
+            = ( playbackMode == Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE && !resumePlayback ) || ( playbackMode == Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
 
         musicSettings.trackManager.resetTimer();
 
-        const int loopCount = loop ? -1 : 0;
+        const int loopCount = autoLoop ? -1 : 0;
         const int returnCode
             = ( musicSettings.fadeInMs > 0 ) ? Mix_FadeInMusic( musicInfo.mix, loopCount, musicSettings.fadeInMs ) : Mix_PlayMusic( musicInfo.mix, loopCount );
         if ( returnCode != 0 ) {
@@ -332,16 +330,17 @@ namespace
             return;
         }
 
-        if ( isResumeSupported && musicInfo.position > 1 ) {
+        if ( resumePlayback && musicInfo.position > 1 ) {
             // Set music position only when at least 1 second of the track has been played.
             Mix_RewindMusic();
             if ( Mix_SetMusicPosition( musicInfo.position ) == -1 ) {
-                ERROR_LOG( "The codec does not support music resuming from a custom place." )
+                ERROR_LOG( "The codec does not support the resuming of playback from an arbitrary position." )
             }
         }
 
         musicSettings.currentTrack = musicInfo;
         musicSettings.currentTrackUID = musicUID;
+        musicSettings.currentTrackPlaybackMode = playbackMode;
         musicSettings.currentTrackChangeCounter += 1;
     }
 
@@ -368,83 +367,91 @@ namespace
 
 void Audio::Init()
 {
-    const std::lock_guard<std::recursive_mutex> audioGuard( audioMutex );
+    {
+        const std::lock_guard<std::recursive_mutex> audioGuard( audioMutex );
 
-    if ( isInitialized ) {
-        // If this assertion blows up you are trying to initialize an already initialized system.
-        assert( 0 );
-        return;
-    }
+        if ( isInitialized ) {
+            // If this assertion blows up you are trying to initialize an already initialized system.
+            assert( 0 );
+            return;
+        }
 
-    if ( !fheroes2::isComponentInitialized( fheroes2::SystemInitializationComponent::Audio ) ) {
-        ERROR_LOG( "The audio subsystem was not initialized." )
-        return;
-    }
+        if ( !fheroes2::isComponentInitialized( fheroes2::SystemInitializationComponent::Audio ) ) {
+            ERROR_LOG( "The audio subsystem was not initialized." )
+            return;
+        }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    const int initializationFlags = MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG;
-    const int initializedFlags = Mix_Init( initializationFlags );
-    if ( ( initializedFlags & initializationFlags ) != initializationFlags ) {
-        DEBUG_LOG( DBG_ENGINE, DBG_WARN,
-                   "Expected music initialization flags as " << initializationFlags << " but received " << ( initializedFlags & initializationFlags ) )
+        const int initializationFlags = MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG;
+        const int initializedFlags = Mix_Init( initializationFlags );
+        if ( ( initializedFlags & initializationFlags ) != initializationFlags ) {
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN,
+                       "Expected music initialization flags as " << initializationFlags << " but received " << ( initializedFlags & initializationFlags ) )
 
-        if ( ( initializedFlags & MIX_INIT_FLAC ) == 0 ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Flac module failed to be initialized" )
-        }
+            if ( ( initializedFlags & MIX_INIT_FLAC ) == 0 ) {
+                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Flac module failed to be initialized" )
+            }
 
-        if ( ( initializedFlags & MIX_INIT_MOD ) == 0 ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Mod module failed to be initialized" )
-        }
+            if ( ( initializedFlags & MIX_INIT_MOD ) == 0 ) {
+                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Mod module failed to be initialized" )
+            }
 
-        if ( ( initializedFlags & MIX_INIT_MP3 ) == 0 ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Mp3 module failed to be initialized" )
-        }
+            if ( ( initializedFlags & MIX_INIT_MP3 ) == 0 ) {
+                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Mp3 module failed to be initialized" )
+            }
 
-        if ( ( initializedFlags & MIX_INIT_OGG ) == 0 ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Ogg module failed to be initialized" )
+            if ( ( initializedFlags & MIX_INIT_OGG ) == 0 ) {
+                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Ogg module failed to be initialized" )
+            }
         }
-    }
 #endif
 
-    if ( Mix_OpenAudio( audioSpecs.freq, audioSpecs.format, audioSpecs.channels, audioSpecs.samples ) != 0 ) {
-        ERROR_LOG( "Failed to initialize an audio device. The error: " << Mix_GetError() )
-        return;
+        if ( Mix_OpenAudio( audioSpecs.freq, audioSpecs.format, audioSpecs.channels, audioSpecs.samples ) != 0 ) {
+            ERROR_LOG( "Failed to initialize an audio device. The error: " << Mix_GetError() )
+            return;
+        }
+
+        int channels = 0;
+        int frequency = 0;
+        uint16_t format = 0;
+        const int deviceInitCount = Mix_QuerySpec( &frequency, &format, &channels );
+        if ( deviceInitCount == 0 ) {
+            ERROR_LOG( "Failed to query an audio device specs. The error: " << Mix_GetError() )
+        }
+
+        if ( deviceInitCount != 1 ) {
+            // The device must be opened only once.
+            assert( 0 );
+            ERROR_LOG( "Trying to initialize an audio system that has been already initialized." )
+        }
+
+        if ( audioSpecs.freq != frequency ) {
+            ERROR_LOG( "Audio frequency is initialized as " << frequency << " instead of " << audioSpecs.freq )
+        }
+
+        if ( audioSpecs.format != format ) {
+            ERROR_LOG( "Audio format is initialized as " << format << " instead of " << audioSpecs.format )
+        }
+
+        // If this assertion blows up it means that SDL doesn't work properly.
+        assert( channels >= 0 && channels < 256 );
+
+        audioSpecs.freq = frequency;
+        audioSpecs.format = format;
+        audioSpecs.channels = static_cast<uint8_t>( channels );
+
+        isInitialized = true;
     }
 
-    int channels = 0;
-    int frequency = 0;
-    uint16_t format = 0;
-    const int deviceInitCount = Mix_QuerySpec( &frequency, &format, &channels );
-    if ( deviceInitCount == 0 ) {
-        ERROR_LOG( "Failed to query an audio device specs. The error: " << Mix_GetError() )
-    }
-
-    if ( deviceInitCount != 1 ) {
-        // The device must be opened only once.
-        assert( 0 );
-        ERROR_LOG( "Trying to initialize an audio system that has been already initialized." )
-    }
-
-    if ( audioSpecs.freq != frequency ) {
-        ERROR_LOG( "Audio frequency is initialized as " << frequency << " instead of " << audioSpecs.freq )
-    }
-
-    if ( audioSpecs.format != format ) {
-        ERROR_LOG( "Audio format is initialized as " << format << " instead of " << audioSpecs.format )
-    }
-
-    // If this assertion blows up it means that SDL doesn't work properly.
-    assert( channels >= 0 && channels < 256 );
-
-    audioSpecs.freq = frequency;
-    audioSpecs.format = format;
-    audioSpecs.channels = static_cast<uint8_t>( channels );
-
-    isInitialized = true;
+    // This function holds its own mutex, and we can't call it while holding our own mutexes
+    Mix_HookMusicFinished( replayCurrentMusic );
 }
 
 void Audio::Quit()
 {
+    // This function holds its own mutex, and we can't call it while holding our own mutexes
+    Mix_HookMusicFinished( nullptr );
+
     const std::lock_guard<std::mutex> musicLooperGuard( musicLooperMutex );
 
     if ( musicLooperThread ) {
@@ -829,8 +836,13 @@ void Music::Stop()
         return;
     }
 
-    // SDL2 calls the callback function when the current song is halted. Do not initiate a restart of the current song.
-    Mix_HookMusicFinished( nullptr );
+    musicSettings.currentTrack.position += musicSettings.trackManager.getCurrentTrackPosition();
+    musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack.mix, musicSettings.currentTrack.position );
+
+    musicSettings.currentTrack = {};
+    musicSettings.currentTrackUID = 0;
+    musicSettings.currentTrackPlaybackMode = PlaybackMode::PLAY_ONCE;
+    musicSettings.currentTrackChangeCounter += 1;
 
     if ( musicSettings.fadeOutMs > 0 ) {
         while ( !Mix_FadeOutMusic( musicSettings.fadeOutMs ) && Mix_PlayingMusic() ) {
@@ -841,13 +853,6 @@ void Music::Stop()
         // According to the documentation (https://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html#SEC67) this function always returns 0.
         Mix_HaltMusic();
     }
-
-    musicSettings.currentTrack.position += musicSettings.trackManager.getCurrentTrackPosition();
-    musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack.mix, musicSettings.currentTrack.position );
-
-    musicSettings.currentTrack = {};
-    musicSettings.currentTrackUID = 0;
-    musicSettings.currentTrackChangeCounter += 1;
 }
 
 bool Music::isPlaying()
