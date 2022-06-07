@@ -24,36 +24,42 @@ MSGFMT = sed -e '1,20 s/UTF-8/$(1)/' $< | iconv -f utf-8 -t $(1) | msgfmt - -o $
 
 all: $(patsubst %.po, %.mo, $(wildcard *.po))
 
-merge: ../../src/dist/fheroes2.pot
+merge: fheroes2.pot
 	for i in $(wildcard *.po); do msgmerge -U --no-location $$i $<; done
-
-# In French, accented characters are mapped to unused ASCII characters
-# Non-mapped characters are replaced by their non-accented equivalents
-fr.mo: fr.po
-	sed -e 'y/àâçéèêîïôùûüÇÉÊÀ/@*^~`|><#&$$uCEEA/; s/œ/oe/g' $< | msgfmt - -o $@
 
 # Czech, Polish versions use CP1250
 cs.mo pl.mo: %.mo: %.po
-	$(call MSGFMT,CP1250)
+	@echo "gen: $@"
+	@$(call MSGFMT,CP1250)
 
 # Belarusian, Bulgarian, Ukrainian versions use CP1251
 # Russian versions from "Buka" and "XXI vek" use CP1251 encoding (supported)
 # Russian version from "Fargus" uses Russian keyboard layout as encoding (not supported)
 be.mo bg.mo ru.mo uk.mo: %.mo: %.po
-	$(call MSGFMT,CP1251)
+	@echo "gen: $@"
+	@$(call MSGFMT,CP1251)
 
 # German, Italian, Norwegian, Portuguese, Spanish, Swedish versions use CP1252
 de.mo es.mo it.mo nb.mo pt.mo sv.mo: %.mo: %.po
-	$(call MSGFMT,CP1252)
+	@echo "gen: $@"
+	@$(call MSGFMT,CP1252)
 
 # Romanian uses ISO-8859-16
 ro.mo: ro.po
-	$(call MSGFMT,ISO-8859-16)
+	@echo "gen: $@"
+	@$(call MSGFMT,ISO-8859-16)
+
+# In French, accented characters are mapped to unused ASCII characters
+# Non-mapped characters are replaced by their non-accented equivalents
+fr.mo: fr.po
+	@echo "gen: $@"
+	@sed -e 'y/àâçéèêîïôùûüÇÉÊÀ/@*^~`|><#&$$uCEEA/; s/œ/oe/g' $< | msgfmt - -o $@
 
 # All other languages: drop accents transliterated with `"` (which breaks translation file format)
 # and transliterate the rest with default iconv rules
 %.mo: %.po
-	sed -e 'y/äëïöőüűÄËÏŐÖÜŰ/aeioouuAEIOOUU/' $< | iconv -f utf-8 -t ascii//TRANSLIT | msgfmt - -o $@
+	@echo "gen: $@"
+	@sed -e 'y/äëïöőüűÄËÏŐÖÜŰ/aeioouuAEIOOUU/' $< | iconv -f utf-8 -t ascii//TRANSLIT | msgfmt - -o $@
 
 clean:
-	rm -f *.mo *.po~
+	@rm -f *.mo *.po~ *.pot
