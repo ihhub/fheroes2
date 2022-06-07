@@ -253,12 +253,14 @@ namespace
             assert( musicLooperThread->joinable() );
 
             musicLooperThread->join();
+            musicLooperThread.reset();
         }
 
         const std::lock_guard<std::recursive_mutex> audioGuard( audioMutex );
 
-        // If audio is not initialized, then this callback function should not be called at all
-        assert( isInitialized );
+        if ( !isInitialized ) {
+            return;
+        }
 
         // Mix_HookMusicFinished() function does not allow any SDL calls to be done within the assigned function.
         // In this case the only way to trigger the restart of the current song is to use a multithreading approach.
