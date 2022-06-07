@@ -54,10 +54,9 @@ add_custom_target(
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	)
 
-execute_process(
-	COMMAND ${XGETTEXT_EXE} -d ${PROJECT_NAME} -C -F -k_ -k_n:1,2 -o - ${ALL_SOURCES}
-	COMMAND ${SED_EXE} -e \'/\#, c-format/d\'
-	OUTPUT_FILE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pot
+add_custom_command(
+	COMMAND ${XGETTEXT_EXE} -d ${PROJECT_NAME} -C -F -k_ -k_n:1,2 -o - ${ALL_SOURCES} \| ${SED_EXE} -e \'/\#, c-format/d\' > ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pot
+	OUTPUT ${PROJECT_NAME}_pot
 	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src/fheroes2
 	)
 
@@ -86,16 +85,13 @@ foreach(PO MO IN ZIP_LISTS PO_FILES MO_FILES)
 	string(REGEX REPLACE "# (.* translation).*" "\\1" LANGUAGE "${LANGUAGE}")
 
     add_custom_command(
-	COMMAND ${MSGMERGE_EXE} -q -o ${PO} --no-location ${CMAKE_CURRENT_LIST_DIR}/${PO} ${PROJECT_NAME}.pot
-	COMMAND ${SED_EXE} -i -f ${SCRIPT} ${PO}
-	COMMAND ${ICONV_EXE} -f UTF-8 -t ${CHARSET} ${PO} > ${PO}.new
-	COMMAND ${CMAKE_COMMAND} -E rename ${PO}.new ${PO}
-	COMMAND ${MSGFMT_EXE} ${PO} -o ${MO}
-	DEPENDS ${PROJECT_NAME}.pot ${CMAKE_CURRENT_LIST_DIR}/${PO}
-	COMMENT "Generating ${LANGUAGE}"
-	OUTPUT ${MO}
-	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-	)
+		COMMAND ${MSGMERGE_EXE} -q -o - --no-location ${CMAKE_CURRENT_LIST_DIR}/${PO} ${PROJECT_NAME}.pot \| ${SED_EXE} -f ${SCRIPT} \| ${ICONV_EXE} -f UTF-8 -t ${CHARSET} > ${PO}
+		COMMAND ${MSGFMT_EXE} ${PO} -o ${MO}
+		DEPENDS ${PROJECT_NAME}_pot ${CMAKE_CURRENT_LIST_DIR}/${PO}
+		COMMENT "Generating ${LANGUAGE}"
+		OUTPUT ${MO}
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+		)
 endforeach()
 
 install(
