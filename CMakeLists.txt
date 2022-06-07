@@ -69,7 +69,7 @@ find_program(ICONV_EXECUTABLE iconv)
 find_program(SED_EXECUTABLE sed)
 find_program(XGETTEXT_EXECUTABLE xgettext)
 
-cmake_dependent_option(BUILD_TRANSLATIONS "Build translations" ON "NOT MSVC;ICONV_EXECUTABLE;SED_EXECUTABLE;XGETTEXT_EXECUTABLE" OFF)
+cmake_dependent_option(BUILD_TRANSLATIONS "Build translations" ON "ICONV_EXECUTABLE;SED_EXECUTABLE;XGETTEXT_EXECUTABLE" OFF)
 
 if(ENABLE_IMAGE)
 	find_package(${USE_SDL_VERSION}_image REQUIRED)
