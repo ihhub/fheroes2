@@ -331,8 +331,7 @@ namespace
         }
 
         const bool resumePlayback = ( playbackMode == Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE && isMusicResumeSupported( musicInfo.mix ) );
-        const bool autoLoop
-            = ( playbackMode == Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE && !resumePlayback ) || ( playbackMode == Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
+        const bool autoLoop = ( playbackMode != Music::PlaybackMode::PLAY_ONCE && !resumePlayback );
 
         const int loopCount = autoLoop ? -1 : 0;
 
