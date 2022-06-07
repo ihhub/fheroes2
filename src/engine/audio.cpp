@@ -144,7 +144,7 @@ namespace
         }
 
         if ( Mix_SetPosition( channelId, angle, 255 * ( volumePercentage - 100 ) ) == 0 ) {
-            ERROR_LOG( "Failed to apply sound effect for channel " << channelId << ". The error: " << Mix_GetError() )
+            ERROR_LOG( "Failed to apply a sound effect for channel " << channelId << ". The error: " << Mix_GetError() )
         }
         else {
             audioEffectLedger.registerChannel( channelId );
@@ -334,23 +334,41 @@ namespace
         const bool autoLoop
             = ( playbackMode == Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE && !resumePlayback ) || ( playbackMode == Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
 
-        musicSettings.trackManager.resetTimer();
-
         const int loopCount = autoLoop ? -1 : 0;
-        const int returnCode
-            = ( musicSettings.fadeInMs > 0 ) ? Mix_FadeInMusic( musicInfo.mix, loopCount, musicSettings.fadeInMs ) : Mix_PlayMusic( musicInfo.mix, loopCount );
-        if ( returnCode != 0 ) {
-            ERROR_LOG( "Failed to play music mix. The error: " << Mix_GetError() )
-            return;
-        }
 
-        if ( resumePlayback && musicInfo.position > 1 ) {
-            // Set music position only when at least 1 second of the track has been played.
-            Mix_RewindMusic();
-            if ( Mix_SetMusicPosition( musicInfo.position ) == -1 ) {
-                ERROR_LOG( "The codec does not support the resuming of playback from an arbitrary position." )
+        if ( musicSettings.fadeInMs > 0 ) {
+            int returnCode = -1;
+
+            // Resume the music only if at least 1 second of the track has been played.
+            if ( resumePlayback && musicInfo.position > 1 ) {
+                returnCode = Mix_FadeInMusicPos( musicInfo.mix, loopCount, musicSettings.fadeInMs, musicInfo.position );
+
+                if ( returnCode != 0 ) {
+                    ERROR_LOG( "Failed to resume a music mix. The error: " << Mix_GetError() )
+                }
+            }
+
+            // Either there is no need to resume music playback, or the resumption failed. Let's start the playback from the beginning.
+            if ( returnCode != 0 ) {
+                returnCode = Mix_FadeInMusic( musicInfo.mix, loopCount, musicSettings.fadeInMs );
+
+                if ( returnCode != 0 ) {
+                    ERROR_LOG( "Failed to play a music mix. The error: " << Mix_GetError() )
+                }
             }
         }
+        else {
+            if ( Mix_PlayMusic( musicInfo.mix, loopCount ) != 0 ) {
+                ERROR_LOG( "Failed to play a music mix. The error: " << Mix_GetError() )
+            }
+            // Resume the music only if at least 1 second of the track has been played.
+            else if ( resumePlayback && musicInfo.position > 1 && Mix_SetMusicPosition( musicInfo.position ) != 0 ) {
+                ERROR_LOG( "Failed to set the position for a music mix. The error: " << Mix_GetError() )
+            }
+        }
+
+        // For better accuracy reset the timer only when actual playback is already started
+        musicSettings.trackManager.resetTimer();
 
         musicSettings.currentTrack = musicInfo;
         musicSettings.currentTrackUID = musicUID;
