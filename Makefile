@@ -33,7 +33,7 @@
 TARGET := fheroes2
 PROJECT_VERSION := $(file < version.txt)
 
-.PHONY: all bundle clean
+.PHONY: all bundle clean translations
 
 all:
 	$(MAKE) -C src

@@ -81,7 +81,7 @@ foreach(PO MO IN ZIP_LISTS PO_FILES MO_FILES)
 		set(SCRIPT translit.sed)
 	endif()
 
-	file(STRINGS ${CMAKE_CURRENT_LIST_DIR}/${PO} LANGUAGE LIMIT_COUNT 1 REGEX "translation")
+	file(STRINGS ${PO} LANGUAGE LIMIT_COUNT 1 REGEX "translation")
 	string(REGEX REPLACE "# (.* translation).*" "\\1" LANGUAGE "${LANGUAGE}")
 
     add_custom_command(
