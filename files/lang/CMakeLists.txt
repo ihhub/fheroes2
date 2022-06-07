@@ -26,16 +26,26 @@ list(APPEND CP1250 cs.po pl.po)
 list(APPEND CP1251 be.po bg.po ru.po uk.po)
 list(APPEND CP1252 de.po es.po it.po nb.po pt.po sv.po)
 
-# Ninja on Windows is ANSI?
-if(WIN32 AND CMAKE_GENERATOR MATCHES "Ninja")
-	cmake_path(NATIVE_PATH SED_EXECUTABLE SED_EXECUTABLE)
-	cmake_path(NATIVE_PATH ICONV_EXECUTABLE ICONV_EXECUTABLE)
-	set(FR \"y/\\xC3\\xA0\\xC3\\xA2\\xC3\\xA7\\xC3\\xA9\\xC3\\xA8\\xC3\\xAA\\xC3\\xAE\\xC3\\xAF\\xC3\\xB4\\xC3\\xB9\\xC3\\xBB\\xC3\\xBC\\xC3\\x89\\xC3\\x8A\\xC3\\x80/@*^~`|><\#\&\$\$uEEA/\\\\\; s/\\xC5\\x93/oe/g\")
-	set(TRANSLIT \"y/\\xC3\\xA4\\xC3\\xAB\\xC3\\xAF\\xC3\\xB6\\xC5\\x91\\xC3\\xBC\\xC5\\xB1\\xC3\\x84\\xC3\\x8B\\xC3\\x8F\\xC5\\x90\\xC3\\x96\\xC3\\x9C\\xC5\\xB0/aeioouuAEIOOUU/\")
-else()
-	set(FR 'y/àâçéèêîïôùûüÉÊÀ/@*^~`|><\#&$$uEEA/\\\\\; s/œ/oe/g')
-	set(TRANSLIT 'y/äëïöőüűÄËÏŐÖÜŰ/aeioouuAEIOOUU/')
+if(MSVC OR CMAKE_GENERATOR MATCHES "Ninja")
+	foreach(name SED_EXE ICONV_EXE XGETTEXT_EXE MSGMERGE_EXE MSGFMT_EXE)
+		cmake_path(NATIVE_PATH ${name} ${name})
+	endforeach()
 endif()
+
+file(GENERATE OUTPUT fr.sed
+     CONTENT "y/àâçéèêîïôùûüÉÊÀ/@*^~`|><#&$uEEA/\ns/œ/oe/g"
+     NEWLINE_STYLE UNIX)
+
+file(GENERATE OUTPUT translit.sed
+     CONTENT "y/äëïöőüűÄËÏŐÖÜŰ/aeioouuAEIOOUU/"
+     NEWLINE_STYLE UNIX)
+
+foreach(charset CP1250 CP1251 CP1252 ISO-8859-16)
+	file(CONFIGURE OUTPUT ${charset}.sed
+		CONTENT "1,20 s/UTF-8/@charset@/"
+		@ONLY
+		NEWLINE_STYLE UNIX)
+endforeach()
 
 add_custom_target(
 	translations
@@ -44,41 +54,44 @@ add_custom_target(
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	)
 
-add_custom_command(
-	COMMAND ${XGETTEXT_EXECUTABLE} -d ${PROJECT_NAME} -C -F -k_ -k_n:1,2 -o - ${ALL_SOURCES} \| ${SED_EXECUTABLE} -e \'/\#, c-format/d\' > ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pot
-	COMMENT "Searching for updated strings"
-	OUTPUT ${PROJECT_NAME}_pot
+execute_process(
+	COMMAND ${XGETTEXT_EXE} -d ${PROJECT_NAME} -C -F -k_ -k_n:1,2 -o - ${ALL_SOURCES}
+	COMMAND ${SED_EXE} -e \'/\#, c-format/d\'
+	OUTPUT_FILE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pot
 	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src/fheroes2
 	)
 
 foreach(PO MO IN ZIP_LISTS PO_FILES MO_FILES)
 	if(${PO} IN_LIST CP1250)
 		set(CHARSET "CP1250")
-		set(SCRIPT '1,20 s/UTF-8/${CHARSET}/')
+		set(SCRIPT ${CHARSET}.sed)
 	elseif(${PO} IN_LIST CP1251)
 		set(CHARSET "CP1251")
-		set(SCRIPT '1,20 s/UTF-8/${CHARSET}/')
+		set(SCRIPT ${CHARSET}.sed)
 	elseif(${PO} IN_LIST CP1252)
 		set(CHARSET "CP1252")
-		set(SCRIPT '1,20 s/UTF-8/${CHARSET}/')
+		set(SCRIPT ${CHARSET}.sed)
 	elseif(${PO} STREQUAL "ro.po")
 		set(CHARSET "ISO-8859-16")
-		set(SCRIPT '1,20 s/UTF-8/${CHARSET}/')
+		set(SCRIPT ${CHARSET}.sed)
 	elseif(${PO} STREQUAL "fr.po")
 		set(CHARSET "UTF-8")
-		set(SCRIPT ${FR})
+		set(SCRIPT fr.sed)
 	else()
 		set(CHARSET "ascii//TRANSLIT")
-		set(SCRIPT ${TRANSLIT})
+		set(SCRIPT translit.sed)
 	endif()
 
 	file(STRINGS ${CMAKE_CURRENT_LIST_DIR}/${PO} LANGUAGE LIMIT_COUNT 1 REGEX "translation")
 	string(REGEX REPLACE "# (.* translation).*" "\\1" LANGUAGE "${LANGUAGE}")
 
     add_custom_command(
-	COMMAND msgmerge -q -o - --no-location ${CMAKE_CURRENT_LIST_DIR}/${PO} ${PROJECT_NAME}.pot \| ${SED_EXECUTABLE} -e ${SCRIPT} \| ${ICONV_EXECUTABLE} -f UTF-8 -t ${CHARSET} > ${PO}
-	COMMAND msgfmt ${PO} -o ${MO}
-	DEPENDS ${PROJECT_NAME}_pot
+	COMMAND ${MSGMERGE_EXE} -q -o ${PO} --no-location ${CMAKE_CURRENT_LIST_DIR}/${PO} ${PROJECT_NAME}.pot
+	COMMAND ${SED_EXE} -i -f ${SCRIPT} ${PO}
+	COMMAND ${ICONV_EXE} -f UTF-8 -t ${CHARSET} ${PO} > ${PO}.new
+	COMMAND ${CMAKE_COMMAND} -E rename ${PO}.new ${PO}
+	COMMAND ${MSGFMT_EXE} ${PO} -o ${MO}
+	DEPENDS ${PROJECT_NAME}.pot ${CMAKE_CURRENT_LIST_DIR}/${PO}
 	COMMENT "Generating ${LANGUAGE}"
 	OUTPUT ${MO}
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
