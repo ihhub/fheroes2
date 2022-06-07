@@ -48,7 +48,7 @@ POT        := ../../files/lang/$(TARGET).pot
 
 SEARCH     := $(wildcard $(SOURCEROOT)/*/*.cpp) $(wildcard $(SOURCEROOT)/*/*/*.cpp)
 
-.PHONY: all clean pot
+.PHONY: all clean translations
 
 all: $(TARGET)
 
