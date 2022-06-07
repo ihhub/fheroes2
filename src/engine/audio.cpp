@@ -268,6 +268,16 @@ namespace
             return;
         }
 
+        // Nothing to play
+        if ( musicSettings.currentTrack.mix == nullptr ) {
+            return;
+        }
+
+        // All other cases should be handled by the Mix_PlayMisic() itself
+        if ( musicSettings.currentTrackPlaybackMode != Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE ) {
+            return;
+        }
+
         // Mix_HookMusicFinished() function does not allow any SDL calls to be done within the assigned function.
         // In this case the only way to trigger the restart of the current song is to use a multithreading approach.
         musicLooperThread = std::make_unique<std::thread>(
