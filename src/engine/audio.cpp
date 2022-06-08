@@ -306,7 +306,7 @@ namespace
         // Mix_HookMusicFinished() function does not allow any SDL calls to be done within the assigned function.
         // In this case the only way to trigger the restart of the current music is to use a multithreading approach.
         musicLooperThread = std::make_unique<std::thread>(
-            []( uint64_t currentTrackChangeCounter ) {
+            []( const uint64_t trackChangeCounter ) {
                 const std::lock_guard<std::recursive_mutex> musicLooperAudioGuard( audioMutex );
 
                 if ( !isInitialized ) {
@@ -314,7 +314,7 @@ namespace
                 }
 
                 // The current track managed to change during the start of this thread
-                if ( currentTrackChangeCounter != musicSettings.currentTrackChangeCounter ) {
+                if ( trackChangeCounter != musicSettings.currentTrackChangeCounter ) {
                     return;
                 }
 
@@ -345,6 +345,16 @@ namespace
             // How is it even possible! Check your logic!
             assert( 0 );
             return;
+        }
+
+        // The only way to play a track that is already current is to replay it, which is
+        // supported only in the RESUME_AND_PLAY_INFINITE mode
+        if ( musicSettings.currentTrackUID == musicUID ) {
+            assert( playbackMode == Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+        }
+        // If we are going to play a different track, we should stop the current track first
+        else {
+            Music::Stop();
         }
 
         bool resumePlayback = false;
@@ -765,17 +775,14 @@ bool Music::Play( const uint64_t musicUID, const PlaybackMode playbackMode )
         return false;
     }
 
-    if ( musicSettings.currentTrackUID == musicUID && musicSettings.currentTrackPlaybackMode == playbackMode ) {
-        // We are playing the same track in the same mode. No need to do anything.
+    if ( musicSettings.currentTrackUID == musicUID ) {
+        // We are playing the same track. No need to do anything.
         return true;
     }
 
     const MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
     if ( musicInfo.mix != nullptr ) {
-        Music::Stop();
-
         PlayMusic( musicUID, playbackMode );
-
         return true;
     }
 
@@ -794,17 +801,14 @@ void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const
         return;
     }
 
-    if ( musicSettings.currentTrackUID == musicUID && musicSettings.currentTrackPlaybackMode == playbackMode ) {
-        // We are playing the same track in the same mode. No need to do anything.
+    if ( musicSettings.currentTrackUID == musicUID ) {
+        // We are playing the same track. No need to do anything.
         return;
     }
 
     const MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
     if ( musicInfo.mix != nullptr ) {
-        Music::Stop();
-
         PlayMusic( musicUID, playbackMode );
-
         return;
     }
 
@@ -820,8 +824,6 @@ void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const
         ERROR_LOG( "Failed to create a music mix from memory. The error: " << Mix_GetError() )
         return;
     }
-
-    Music::Stop();
 
     musicSettings.trackManager.update( musicUID, { mix, 0 } );
 
@@ -841,17 +843,14 @@ void Music::Play( const uint64_t musicUID, const std::string & file, const Playb
         return;
     }
 
-    if ( musicSettings.currentTrackUID == musicUID && musicSettings.currentTrackPlaybackMode == playbackMode ) {
-        // We are playing the same track in the same mode. No need to do anything.
+    if ( musicSettings.currentTrackUID == musicUID ) {
+        // We are playing the same track. No need to do anything.
         return;
     }
 
     const MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
     if ( musicInfo.mix != nullptr ) {
-        Music::Stop();
-
         PlayMusic( musicUID, playbackMode );
-
         return;
     }
 
@@ -862,8 +861,6 @@ void Music::Play( const uint64_t musicUID, const std::string & file, const Playb
         ERROR_LOG( "Failed to create a music mix from path " << filePath << ". The error: " << Mix_GetError() )
         return;
     }
-
-    Music::Stop();
 
     musicSettings.trackManager.update( musicUID, { mix, 0 } );
 
@@ -907,6 +904,10 @@ int Music::setVolume( const int volumePercentage )
 void Music::Stop()
 {
     const std::lock_guard<std::recursive_mutex> audioGuard( audioMutex );
+
+    if ( !isInitialized ) {
+        return;
+    }
 
     if ( musicSettings.currentTrack.mix == nullptr ) {
         // Nothing to do.
