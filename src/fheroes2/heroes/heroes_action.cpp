@@ -2315,7 +2315,6 @@ void ActionToDwellingRecruitMonster( Heroes & hero, const MP2::MapObjectType obj
         if ( Dialog::YES == Dialog::ArmyJoinFree( header, body, troop, hero ) )
             RecruitMonsterFromTile( hero, tile, title, troop, false );
     }
-        
 
     hero.SetVisited( dst_index, Visit::GLOBAL );
 
