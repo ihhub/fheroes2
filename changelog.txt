@@ -1,3 +1,55 @@
+version 0.9.16 (09 June 2022)
+- make the "no interface" mode more usable
+- add music resume ability for MP3, OGG and FLAC formats
+- update translation guide
+- replace "C with cedilla" with "latin C" in the French translation
+- do not auto-save at the end of a turn if the player has been vanquished on that turn
+- fix Puzzle window exit button rendering
+- add sound for rocks in water with seagulls
+- fix Sorceress captain purchase building rendering
+- fix issues with Romanian translation
+- properly deal with human-only colors in single player mode
+- fix the invalid behavior of "no interface" mode
+- introduce 3D audio option
+- change adventure map environment sounds for every step hero moves
+- fix boats being considered as free tiles
+- if attacker is able to attack multiple targets at once and has a built-in spell, then this spell should be applied to any (but only one) of the targets
+- fix some typos in translation texts
+- take into account AI hero's role during meeting
+- fix false highscore entry while cancelling to continue a campaign
+- highlight latest highscore after completion scenario/campaign
+- show evil resolution icon for Evil interface
+- add truncated shadow to Scenario Information window
+- generate missing parts of Red Tower sprite
+- fix incorrect tiles being marked as road
+- fix multiple cases while using Mirror Image and Summon Elemental spells
+- fix the victory/defeat verification logic
+- update error message if hero tries to open a spell book and does not have one
+- improve status text if only one troop is selected
+- fix inability to add new entries with similar high scores
+- add Campaign high scores
+- fix dwelling popup window on adventure map
+- make AI to be aware about map conditions
+- fix incorrect hero icon in adventure interface
+- do not show languages with empty translations
+- add Swedish language option and font support
+- update Ukrainian translation
+- well MAX buy: add condition for not enough room, make recruitment happen in guest hero's army too, more text flexibility
+- add Portuguese language option and initial font generation
+- speed up AI turn
+- impose a limit of turns for an attacking AI-controlled hero
+- cache AI hero's and neutral monsters' strength during AI turn
+- add initial Spanish language support
+- make castle's flags for Knight and Wizard factions appear in a correct color
+- add window header for campaign awards and bonuses
+- update German translation
+- fix plural forms translation for some languages
+- fix character filtering when generating the save file name
+- update Polish translation
+- fix Red Tower rendering with Rainbow
+- expand Hotkey usage on adventure map
+- fix German font support
+
 version 0.9.15 (07 May 2022)
 - add HotKey window and expand the list of system options
 - do not allow higher-level Mage Guilds to be built if the previous-level Mage Guild has not been built yet
