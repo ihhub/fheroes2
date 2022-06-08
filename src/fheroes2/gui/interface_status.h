@@ -41,10 +41,15 @@ namespace Interface
         STATUS_AITURN
     };
 
-    class StatusWindow : public BorderWindow
+    class StatusWindow final : public BorderWindow
     {
     public:
         explicit StatusWindow( Basic & basic );
+        StatusWindow( const StatusWindow & ) = delete;
+
+        ~StatusWindow() override = default;
+
+        StatusWindow & operator=( const StatusWindow & ) = delete;
 
         void SetPos( int32_t ox, int32_t oy ) override;
         void SavePosition() override;
@@ -52,7 +57,6 @@ namespace Interface
 
         void Reset();
 
-        void Redraw() const;
         void NextState();
 
         void SetState( const StatusType status );
@@ -63,6 +67,11 @@ namespace Interface
         static void ResetTimer();
 
     private:
+        friend Basic;
+
+        // Do not call this method directly, use Interface::Basic::Redraw() instead
+        // to avoid issues in the "no interface" mode
+        void Redraw() const;
         void DrawKingdomInfo( int oh = 0 ) const;
         void DrawDayInfo( int oh = 0 ) const;
         void DrawArmyInfo( int oh = 0 ) const;

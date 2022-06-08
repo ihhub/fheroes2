@@ -34,12 +34,15 @@ namespace Interface
     {
     public:
         explicit BorderWindow( const fheroes2::Rect & );
+        BorderWindow( const BorderWindow & ) = delete;
+
         virtual ~BorderWindow() = default;
+
+        BorderWindow & operator=( const BorderWindow & ) = delete;
 
         virtual void SetPos( int32_t, int32_t ) = 0;
         virtual void SavePosition() = 0;
 
-        void Redraw() const;
         bool QueueEventProcessing();
 
         const fheroes2::Rect & GetRect() const;
@@ -49,6 +52,8 @@ namespace Interface
         }
 
     protected:
+        void Redraw() const;
+
         void SetPosition( int32_t, int32_t, uint32_t, uint32_t );
         void SetPosition( int32_t, int32_t );
 

@@ -409,14 +409,11 @@ namespace fheroes2
             case SelectedWindow::Resolution:
                 if ( Dialog::SelectResolution() ) {
                     conf.Save( Settings::configFileName );
-                    // force interface to reset area and positions
-                    Interface::Basic::Get().Reset();
                 }
                 drawMainMenuScreen();
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::Language: {
-
                 const std::vector<SupportedLanguage> supportedLanguages = getSupportedLanguages();
 
                 if ( supportedLanguages.size() > 1 ) {

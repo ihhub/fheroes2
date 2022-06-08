@@ -68,14 +68,13 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx 
     DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() )
 
     gameArea.SetRedraw();
+    buttonsArea.SetRedraw();
 
     const fheroes2::Point & mousePos = LocalEvent::Get().GetMouseCursor();
     if ( gameArea.GetROI() & mousePos ) {
         const int32_t cursorIndex = gameArea.GetValidTileIdFromPoint( mousePos );
         Cursor::Get().SetThemes( GetCursorTileIndex( cursorIndex ) );
     }
-
-    Interface::Basic::Get().buttonsArea.Redraw();
 }
 
 void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, int32_t destinationIdx )
@@ -382,7 +381,7 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
                 else
                     Dialog::Message( "", _( "Nothing here. Where could it be?" ), Font::BIG, Dialog::OK );
 
-                iconsPanel.RedrawIcons( ICON_HEROES );
+                Redraw( REDRAW_HEROES );
                 fheroes2::Display::instance().render();
 
                 // check if the game is over due to conditions related to the ultimate artifact
@@ -496,7 +495,6 @@ void Interface::Basic::EventSwitchShowIcons()
         }
         else {
             conf.SetShowIcons( true );
-            iconsPanel.SetCurrentVisible();
             iconsPanel.SetRedraw();
         }
     }
