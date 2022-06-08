@@ -612,7 +612,7 @@ namespace
             for ( auto soundToAddIter = effectsToAdd.begin(); soundToAddIter != effectsToAdd.end(); ) {
                 auto exactSoundEffect = std::find( effectsToReplace.begin(), effectsToReplace.end(), *soundToAddIter );
                 if ( exactSoundEffect != effectsToReplace.end() ) {
-                    // Even when no angle and sound effect volume have not changed the overall volume might have. Set the volume.
+                    // Even when no angle and sound effect volume have been changed the overall sound volume might have. Set the volume.
                     if ( Mixer::isPlaying( exactSoundEffect->channelId ) ) {
                         Mixer::setVolume( exactSoundEffect->channelId, exactSoundEffect->volumePercentage * soundVolume / 10 );
                     }
