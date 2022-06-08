@@ -397,6 +397,7 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
     // Modify the order in which to move the troops.
     std::vector<Troop *> troopFromOrder;
     size_t troopPointerIndex = 0;
+    // If the selected troop is in the fourth and rightmost slot, keep the same order from leftmost to rightmost troop.
     if ( selectedTroopIndex != TROOP_STACKS_PER_ARMY - 1 ) {
         for ( Troop * troop : from ) {
             if ( selectedTroopIndex == troopPointerIndex ) {
