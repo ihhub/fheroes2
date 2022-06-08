@@ -610,7 +610,7 @@ void DrawMonster( fheroes2::RandomMonsterAnimation & monsterAnimation, const Tro
         monsterAnimation.increment();
 }
 
-int Dialog::ArmyJoinFree( const std::string & dialog_title, const std::string & message, const Troop & troop, Heroes & hero )
+int Dialog::ArmyJoinFree( const fheroes2::Text & dialog_title, const fheroes2::Text & message, const Troop & troop, Heroes & hero )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
@@ -618,9 +618,9 @@ int Dialog::ArmyJoinFree( const std::string & dialog_title, const std::string & 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const Text title( dialog_title, Font::YELLOW_BIG );
+    const Text title( dialog_title.text(), Font::YELLOW_BIG );
 
-    TextBox textbox( message, Font::BIG, BOXAREA_WIDTH );
+    TextBox textbox( message.text(), Font::BIG, BOXAREA_WIDTH );
     const int buttons = Dialog::YES | Dialog::NO;
     int posy = 0;
 
