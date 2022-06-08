@@ -247,7 +247,7 @@ namespace
     // This mutex protects the musicLooperThread
     std::mutex musicLooperMutex;
 
-    void PlayMusic( const uint64_t musicUID, const Music::PlaybackMode playbackMode );
+    void PlayMusic( const uint64_t musicUID, Music::PlaybackMode playbackMode );
 
     // This is the callback function set by Mix_HookMusicFinished()
     void replayCurrentMusic()
