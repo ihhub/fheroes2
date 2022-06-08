@@ -317,7 +317,7 @@ namespace
         return ( musicType == Mix_MusicType::MUS_OGG ) || ( musicType == Mix_MusicType::MUS_MP3 ) || ( musicType == Mix_MusicType::MUS_FLAC );
     }
 
-    void PlayMusic( const uint64_t musicUID, const Music::PlaybackMode playbackMode )
+    void PlayMusic( const uint64_t musicUID, Music::PlaybackMode playbackMode )
     {
         MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
         if ( musicInfo.mix == nullptr ) {
@@ -330,8 +330,21 @@ namespace
             Music::Stop();
         }
 
-        const bool resumePlayback = ( playbackMode == Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE && isMusicResumeSupported( musicInfo.mix ) );
-        const bool autoLoop = ( playbackMode != Music::PlaybackMode::PLAY_ONCE && !resumePlayback );
+        bool resumePlayback = false;
+        bool autoLoop = false;
+
+        if ( playbackMode == Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE ) {
+            if ( isMusicResumeSupported( musicInfo.mix ) ) {
+                resumePlayback = true;
+            }
+            else {
+                playbackMode = Music::PlaybackMode::REWIND_AND_PLAY_INFINITE;
+                autoLoop = true;
+            }
+        }
+        else if ( playbackMode == Music::PlaybackMode::REWIND_AND_PLAY_INFINITE ) {
+            autoLoop = true;
+        }
 
         const int loopCount = autoLoop ? -1 : 0;
 
