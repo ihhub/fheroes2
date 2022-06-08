@@ -102,6 +102,9 @@ namespace
     {
         const std::lock_guard<std::recursive_mutex> audioGuard( audioMutex );
 
+        // This callback function should not be called if audio is not initialized
+        assert( isInitialized );
+
         Mix_Chunk * sample = Mix_GetChunk( channelId );
 
         if ( sample ) {
@@ -281,9 +284,8 @@ namespace
 
         const std::lock_guard<std::recursive_mutex> audioGuard( audioMutex );
 
-        if ( !isInitialized ) {
-            return;
-        }
+        // This callback function should not be called if audio is not initialized
+        assert( isInitialized );
 
         // We are here because of the Music::Stop() call
         if ( musicSettings.currentTrack.mix == nullptr ) {
@@ -296,6 +298,7 @@ namespace
             // RESUME_AND_PLAY_INFINITE mode if necessary, so reset its position to zero
             musicSettings.currentTrack.position = 0;
             musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack );
+            // We should be able to restart this track right away if necessary
             musicSettings.resetCurrentTrack();
 
             return;
@@ -550,7 +553,6 @@ void Audio::Quit()
     Mixer::Stop();
 
     musicSettings.trackManager.clear();
-    musicSettings.resetCurrentTrack();
 
     Mix_CloseAudio();
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
