@@ -236,7 +236,6 @@ namespace
         uint64_t currentTrackChangeCounter{ 0 };
 
         int fadeInMs{ 0 };
-        int fadeOutMs{ 0 };
 
         MusicTrackManager trackManager;
     };
@@ -892,15 +891,8 @@ void Music::Stop()
     musicSettings.currentTrackPlaybackMode = PlaybackMode::PLAY_ONCE;
     musicSettings.currentTrackChangeCounter += 1;
 
-    if ( musicSettings.fadeOutMs > 0 ) {
-        while ( !Mix_FadeOutMusic( musicSettings.fadeOutMs ) && Mix_PlayingMusic() ) {
-            SDL_Delay( 50 );
-        }
-    }
-    else {
-        // According to the documentation (https://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html#SEC67) this function always returns 0.
-        Mix_HaltMusic();
-    }
+    // According to the documentation (https://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html#SEC67) this function always returns 0.
+    Mix_HaltMusic();
 }
 
 bool Music::isPlaying()
