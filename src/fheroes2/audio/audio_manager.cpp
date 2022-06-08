@@ -590,7 +590,7 @@ namespace
         std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> tempAudioLoopEffects;
         std::swap( tempAudioLoopEffects, currentAudioLoopEffects );
 
-        // TODO: do not allow to call Audio::Stop() function anywhere. Audio manager should handle these cases.
+        // TODO: do not allow to call Mixer::Stop() function anywhere. Audio manager should handle these cases.
 
         // Remove all sounds which aren't currently played anymore. This might be the case when Audio::Stop() function is called.
         for ( auto iter = tempAudioLoopEffects.begin(); iter != tempAudioLoopEffects.end(); ) {
