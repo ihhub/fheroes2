@@ -227,6 +227,24 @@ namespace
 
     struct MusicSettings
     {
+        void resetCurrentTrack()
+        {
+            currentTrack = {};
+
+            currentTrackUID = 0;
+            currentTrackPlaybackMode = Music::PlaybackMode::PLAY_ONCE;
+            currentTrackChangeCounter += 1;
+        }
+
+        void updateCurrentTrack( const MusicInfo & track, const uint64_t trackUID, const Music::PlaybackMode trackPlaybackMode )
+        {
+            currentTrack = track;
+
+            currentTrackUID = trackUID;
+            currentTrackPlaybackMode = trackPlaybackMode;
+            currentTrackChangeCounter += 1;
+        }
+
         MusicInfo currentTrack;
 
         uint64_t currentTrackUID{ 0 };
@@ -267,15 +285,19 @@ namespace
             return;
         }
 
-        // Nothing to play
+        // We are here because of the Music::Stop() call
         if ( musicSettings.currentTrack.mix == nullptr ) {
             return;
         }
 
-        // All other cases should be handled by the Mix_PlayMisic() itself
-        if ( musicSettings.currentTrackPlaybackMode != Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE ) {
+        // We are here because a track in the PLAY_ONCE mode has ended playing
+        if ( musicSettings.currentTrackPlaybackMode == Music::PlaybackMode::PLAY_ONCE ) {
+            musicSettings.resetCurrentTrack();
             return;
         }
+
+        // REWIND_AND_PLAY_INFINITE should be handled by the Mix_PlayMusic() itself
+        assert( musicSettings.currentTrackPlaybackMode == Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE );
 
         // Mix_HookMusicFinished() function does not allow any SDL calls to be done within the assigned function.
         // In this case the only way to trigger the restart of the current song is to use a multithreading approach.
@@ -292,11 +314,7 @@ namespace
                     return;
                 }
 
-                // All other cases should be handled by the Mix_PlayMisic() itself
-                if ( musicSettings.currentTrackPlaybackMode != Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE ) {
-                    return;
-                }
-
+                assert( musicSettings.currentTrackPlaybackMode == Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE );
                 assert( musicSettings.currentTrack.mix != nullptr );
 
                 musicSettings.currentTrack.position = 0;
@@ -323,10 +341,6 @@ namespace
             // How is it even possible! Check your logic!
             assert( 0 );
             return;
-        }
-
-        if ( musicUID != musicSettings.currentTrackUID ) {
-            Music::Stop();
         }
 
         bool resumePlayback = false;
@@ -380,11 +394,7 @@ namespace
 
         // For better accuracy reset the timer only when actual playback is already started
         musicSettings.trackManager.resetTimer();
-
-        musicSettings.currentTrack = musicInfo;
-        musicSettings.currentTrackUID = musicUID;
-        musicSettings.currentTrackPlaybackMode = playbackMode;
-        musicSettings.currentTrackChangeCounter += 1;
+        musicSettings.updateCurrentTrack( musicInfo, musicUID, playbackMode );
     }
 
     int normalizeToSDLVolume( const int volumePercentage )
@@ -524,6 +534,7 @@ void Audio::Quit()
     Mixer::Stop();
 
     musicSettings.trackManager.clear();
+    musicSettings.resetCurrentTrack();
 
     Mix_CloseAudio();
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -750,14 +761,17 @@ bool Music::Play( const uint64_t musicUID, const PlaybackMode playbackMode )
         return false;
     }
 
-    if ( musicSettings.currentTrackUID == musicUID ) {
-        // We are playing the same track. No need to do anything.
+    if ( musicSettings.currentTrackUID == musicUID && musicSettings.currentTrackPlaybackMode == playbackMode ) {
+        // We are playing the same track in the same mode. No need to do anything.
         return true;
     }
 
     const MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
     if ( musicInfo.mix != nullptr ) {
+        Music::Stop();
+
         PlayMusic( musicUID, playbackMode );
+
         return true;
     }
 
@@ -776,14 +790,17 @@ void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const
         return;
     }
 
-    if ( musicSettings.currentTrackUID == musicUID ) {
-        // We are playing the same track. No need to do anything.
+    if ( musicSettings.currentTrackUID == musicUID && musicSettings.currentTrackPlaybackMode == playbackMode ) {
+        // We are playing the same track in the same mode. No need to do anything.
         return;
     }
 
     const MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
     if ( musicInfo.mix != nullptr ) {
+        Music::Stop();
+
         PlayMusic( musicUID, playbackMode );
+
         return;
     }
 
@@ -800,7 +817,10 @@ void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const
         return;
     }
 
+    Music::Stop();
+
     musicSettings.trackManager.update( musicUID, mix, 0 );
+
     PlayMusic( musicUID, playbackMode );
 }
 
@@ -817,14 +837,17 @@ void Music::Play( const uint64_t musicUID, const std::string & file, const Playb
         return;
     }
 
-    if ( musicSettings.currentTrackUID == musicUID ) {
-        // We are playing the same track. No need to do anything.
+    if ( musicSettings.currentTrackUID == musicUID && musicSettings.currentTrackPlaybackMode == playbackMode ) {
+        // We are playing the same track in the same mode. No need to do anything.
         return;
     }
 
     const MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
     if ( musicInfo.mix != nullptr ) {
+        Music::Stop();
+
         PlayMusic( musicUID, playbackMode );
+
         return;
     }
 
@@ -836,7 +859,10 @@ void Music::Play( const uint64_t musicUID, const std::string & file, const Playb
         return;
     }
 
+    Music::Stop();
+
     musicSettings.trackManager.update( musicUID, mix, 0 );
+
     PlayMusic( musicUID, playbackMode );
 }
 
@@ -885,11 +911,7 @@ void Music::Stop()
 
     musicSettings.currentTrack.position += musicSettings.trackManager.getCurrentTrackPosition();
     musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack.mix, musicSettings.currentTrack.position );
-
-    musicSettings.currentTrack = {};
-    musicSettings.currentTrackUID = 0;
-    musicSettings.currentTrackPlaybackMode = PlaybackMode::PLAY_ONCE;
-    musicSettings.currentTrackChangeCounter += 1;
+    musicSettings.resetCurrentTrack();
 
     // According to the documentation (https://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html#SEC67) this function always returns 0.
     Mix_HaltMusic();
