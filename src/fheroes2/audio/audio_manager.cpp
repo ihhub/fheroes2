@@ -590,6 +590,29 @@ namespace
         std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> tempAudioLoopEffects;
         std::swap( tempAudioLoopEffects, currentAudioLoopEffects );
 
+        // TODO: do not allow to call Audio::Stop() function anywhere. Audio manager should handle these cases.
+
+        // Remove all sounds which aren't currently played anymore. This might be the case when Audio::Stop() function is called.
+        for ( auto iter = tempAudioLoopEffects.begin(); iter != tempAudioLoopEffects.end(); ) {
+            std::vector<ChannelAudioLoopEffectInfo> & existingEffects = iter->second;
+
+            for ( auto effectIter = existingEffects.begin(); effectIter != existingEffects.end(); ) {
+                if ( !Mixer::isPlaying( effectIter->channelId ) ) {
+                    effectIter = existingEffects.erase( effectIter );
+                }
+                else {
+                    ++effectIter;
+                }
+            }
+
+            if ( existingEffects.empty() ) {
+                iter = tempAudioLoopEffects.erase( iter );
+            }
+            else {
+                ++iter;
+            }
+        }
+
         // First find channels with existing sounds and just update them.
         for ( auto iter = soundEffects.begin(); iter != soundEffects.end(); ) {
             const M82::SoundType soundType = iter->first;
@@ -610,9 +633,7 @@ namespace
                 auto exactSoundEffect = std::find( effectsToReplace.begin(), effectsToReplace.end(), *soundToAddIter );
                 if ( exactSoundEffect != effectsToReplace.end() ) {
                     // Even when no angle and sound effect volume have been changed the overall sound volume might have. Set the volume.
-                    if ( Mixer::isPlaying( exactSoundEffect->channelId ) ) {
-                        Mixer::setVolume( exactSoundEffect->channelId, exactSoundEffect->volumePercentage * soundVolume / 10 );
-                    }
+                    Mixer::setVolume( exactSoundEffect->channelId, exactSoundEffect->volumePercentage * soundVolume / 10 );
 
                     currentAudioLoopEffects[soundType].emplace_back( *exactSoundEffect );
                     effectsToReplace.erase( exactSoundEffect );
@@ -641,12 +662,10 @@ namespace
                 currentInfo = { effectsToAdd[soundToAddId], currentInfo.channelId };
                 effectsToAdd.erase( effectsToAdd.begin() + static_cast<ptrdiff_t>( soundToAddId ) );
 
-                if ( Mixer::isPlaying( currentInfo.channelId ) ) {
-                    Mixer::setVolume( currentInfo.channelId, currentInfo.volumePercentage * soundVolume / 10 );
+                Mixer::setVolume( currentInfo.channelId, currentInfo.volumePercentage * soundVolume / 10 );
 
-                    if ( is3DAudioEnabled ) {
-                        Mixer::applySoundEffect( currentInfo.channelId, currentInfo.angle, currentInfo.volumePercentage );
-                    }
+                if ( is3DAudioEnabled ) {
+                    Mixer::applySoundEffect( currentInfo.channelId, currentInfo.angle, currentInfo.volumePercentage );
                 }
             }
 
@@ -666,10 +685,8 @@ namespace
             const std::vector<ChannelAudioLoopEffectInfo> & existingEffects = audioEffectPair.second;
 
             for ( const ChannelAudioLoopEffectInfo & info : existingEffects ) {
-                if ( Mixer::isPlaying( info.channelId ) ) {
-                    Mixer::setVolume( info.channelId, 0 );
-                    Mixer::Stop( info.channelId );
-                }
+                Mixer::setVolume( info.channelId, 0 );
+                Mixer::Stop( info.channelId );
             }
         }
 
