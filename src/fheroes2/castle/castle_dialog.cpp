@@ -447,7 +447,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
             }
             Army * army1 = nullptr;
             Army * army2 = nullptr;
-            // This point is used to pick the start point for drag and drop.
+            // This point is used to pick the starting point for drag and drop.
             const fheroes2::Point dragStartPoint = le.GetMousePressLeft();
             // Actions with hero armies.
             if ( heroes.Guest() && !readOnly ) {
