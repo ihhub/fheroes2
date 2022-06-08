@@ -292,7 +292,8 @@ namespace
 
         // We are here because a track in the PLAY_ONCE mode has finished playing
         if ( musicSettings.currentTrackPlaybackMode == Music::PlaybackMode::PLAY_ONCE ) {
-            // Since this track has finished playing, we will not be able to resume it with all our desire
+            // We cannot resume this track, but in future we should be able to play it in the
+            // RESUME_AND_PLAY_INFINITE mode if necessary, so reset its position to zero
             musicSettings.currentTrack.position = 0;
             musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack );
             musicSettings.resetCurrentTrack();
@@ -365,6 +366,7 @@ namespace
                 resumePlayback = true;
             }
             else {
+                // It is impossible to resume this track, let's reflect it by changing the playback mode
                 playbackMode = Music::PlaybackMode::REWIND_AND_PLAY_INFINITE;
                 autoLoop = true;
             }
@@ -914,21 +916,14 @@ void Music::Stop()
         return;
     }
 
-    // We can resume this track in the RESUME_AND_PLAY_INFINITE mode if desired
-    if ( musicSettings.currentTrackPlaybackMode == PlaybackMode::PLAY_ONCE ) {
-        musicSettings.currentTrack.position = musicSettings.trackManager.getCurrentTrackPosition();
-    }
-    // We can resume this track as well - that's what it's designed for
-    else if ( musicSettings.currentTrackPlaybackMode == PlaybackMode::RESUME_AND_PLAY_INFINITE ) {
+    // We can resume this track, so let's remember the current position
+    if ( musicSettings.currentTrackPlaybackMode == PlaybackMode::RESUME_AND_PLAY_INFINITE ) {
         musicSettings.currentTrack.position += musicSettings.trackManager.getCurrentTrackPosition();
     }
-    // We cannot reliably resume this track
-    else if ( musicSettings.currentTrackPlaybackMode == PlaybackMode::REWIND_AND_PLAY_INFINITE ) {
-        musicSettings.currentTrack.position = 0;
-    }
-    // Unknown playback mode
+    // We cannot resume this track, but in future we should be able to play it in the
+    // RESUME_AND_PLAY_INFINITE mode if necessary, so reset its position to zero
     else {
-        assert( 0 );
+        musicSettings.currentTrack.position = 0;
     }
 
     musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack );
