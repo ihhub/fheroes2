@@ -82,11 +82,11 @@ public:
     bool CanJoinTroops( const Troops & ) const;
 
     // Used only for moving full army in hero's meeting dialog.
-    void MoveTroops( const Troops & from, const size_t selectedTroopIndex = 4, const bool isSelected = false, const bool moveAll = false );
+    void MoveTroops( const Troops & from, const size_t selectedTroopIndex, const bool isSelected = false, const bool moveAll = false );
     void swapArmies( Troops & swapArmy );
 
     // Defaults to 4 since the 5th troop is being merged into.
-    void MergeTroops( const size_t requiredMerges = 4 );
+    void MergeTroops( const size_t requestedTroopMerges );
     Troops GetOptimized() const;
 
     virtual double GetStrength() const;

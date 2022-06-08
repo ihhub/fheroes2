@@ -266,7 +266,7 @@ double Troops::getReinforcementValue( const Troops & reinforcement ) const
     const double initialValue = combined.GetStrength();
 
     combined.Insert( reinforcement.GetOptimized() );
-    combined.MergeTroops();
+    combined.MergeTroops( TROOP_STACKS_PER_ARMY - 1 );
     combined.SortStrongest();
 
     while ( combined.Size() > TROOP_STACKS_PER_ARMY ) {
@@ -614,17 +614,17 @@ const Troop * Troops::GetSlowestTroop() const
     return *lowest;
 }
 
-void Troops::MergeTroops( const size_t requiredMerges )
+void Troops::MergeTroops( const size_t requestedTroopMerges )
 {
     // You are requesting to merge 0 or less troops.
-    assert( requiredMerges > 0 );
+    assert( requestedTroopMerges > 0 );
 
     for ( size_t slot = 0; slot < size(); ++slot ) {
         Troop * troop = at( slot );
         if ( !troop || !troop->isValid() ) {
             continue;
         }
-        size_t mergesRemaining = requiredMerges;
+        size_t mergesRemaining = requestedTroopMerges;
         const int id = troop->GetID();
         for ( size_t secondary = slot + 1; secondary < size(); ++secondary ) {
             Troop * secondaryTroop = at( secondary );
@@ -792,7 +792,7 @@ void Troops::JoinStrongest( Troops & troops2, bool saveLast )
         std::sort( rightPriority.begin(), rightPriority.end(), Army::WeakestTroop );
 
         // 1. Merge any remaining stacks to free some space
-        MergeTroops();
+        MergeTroops( TROOP_STACKS_PER_ARMY - 1 );
 
         // 2. Fill empty slots with best troops (if there are any)
         uint32_t count = GetCount();
