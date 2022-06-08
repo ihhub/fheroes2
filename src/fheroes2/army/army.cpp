@@ -414,7 +414,7 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
             troopMoveOrder.emplace_back( troop );
         }
     }
-    // Will be changed later on if the receiving army's troops get merged. This avoids unnecessary merges.
+    // Will be changed later on if the receiving army's troops get merged. This hinders JoinTroops() from unnecessarily merging troops of the giving army.
     bool preferEmptySlot = false;
 
     while ( from.GetCount() > 0 || ( !moveAll && from.GetCount() == 1 && from.GetFirstValid()->GetCount() == 1 ) ) {
@@ -478,16 +478,15 @@ void Troops::MoveTroops( const Troops & from, const size_t selectedTroopIndex, c
         if ( from.GetCount() == 0 || ( !moveAll && from.GetCount() == 1 && from.GetFirstValid()->GetCount() == 1 ) ) {
             return;
         }
-        // Step 3: Attempt to merge troops in receiving army to make free slots.
+        // Step 3: Attempt to merge troops in the receiving army to make free slots.
         const size_t troopCountPreMerge = GetCount();
         size_t neededMerges = from.GetCount();
-        // Do one less merge if a giving hero army's last troop to be moved only has one unit, since it will not be moved.
+        // Do one less merge if a giving hero's army's last troop in the order only has one unit, since it will not be moved.
         const_reverse_iterator it = std::find_if( troopMoveOrder.rbegin(), troopMoveOrder.rend(), []( const Troop * troop ) { return troop->isValid(); } );
         if ( !moveAll && ( *it )->GetCount() == 1 ) {
             --neededMerges;
         }
         MergeTroops( neededMerges );
-        // No merges happened.
         if ( troopCountPreMerge == GetCount() ) {
             return;
         }
