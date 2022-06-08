@@ -297,7 +297,7 @@ namespace
         }
 
         // REWIND_AND_PLAY_INFINITE should be handled by the Mix_PlayMusic() itself
-        assert( musicSettings.currentTrackPlaybackMode == Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE );
+        assert( musicSettings.currentTrackPlaybackMode == Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
         // Mix_HookMusicFinished() function does not allow any SDL calls to be done within the assigned function.
         // In this case the only way to trigger the restart of the current song is to use a multithreading approach.
@@ -314,7 +314,7 @@ namespace
                     return;
                 }
 
-                assert( musicSettings.currentTrackPlaybackMode == Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE );
+                assert( musicSettings.currentTrackPlaybackMode == Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
                 assert( musicSettings.currentTrack.mix != nullptr );
 
                 musicSettings.currentTrack.position = 0;
@@ -346,7 +346,7 @@ namespace
         bool resumePlayback = false;
         bool autoLoop = false;
 
-        if ( playbackMode == Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE ) {
+        if ( playbackMode == Music::PlaybackMode::RESUME_AND_PLAY_INFINITE ) {
             if ( isMusicResumeSupported( musicInfo.mix ) ) {
                 resumePlayback = true;
             }
