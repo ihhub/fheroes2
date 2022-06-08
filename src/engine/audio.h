@@ -52,19 +52,33 @@ namespace Mixer
     int applySoundEffect( const int channelId, const int16_t angle, uint8_t volumePercentage );
 
     // Returns the previous volume percentage value.
-    int setVolume( const int channel, const int volumePercentage );
+    int setVolume( const int channelId, const int volumePercentage );
 
-    void Pause( const int channel = -1 );
-    void Resume( const int channel = -1 );
-    void Stop( const int channel = -1 );
+    void Pause( const int channelId = -1 );
+    void Resume( const int channelId = -1 );
+    void Stop( const int channelId = -1 );
 
-    bool isPlaying( const int channel );
+    bool isPlaying( const int channelId );
 }
 
 namespace Music
 {
-    void Play( const std::vector<uint8_t> & v, const bool loop );
-    void Play( const std::string & file, const bool loop );
+    enum class PlaybackMode : uint8_t
+    {
+        PLAY_ONCE,
+        CONTINUE_TO_PLAY_INFINITE,
+        REWIND_AND_PLAY_INFINITE
+    };
+
+    // Music UID is used to cache existing songs. It is caller's responsibility to generate them.
+    // This function return true in case of music track for corresponding Music UID is cached.
+    bool Play( const uint64_t musicUID, const PlaybackMode playbackMode );
+
+    // Load a music track from memory and play it.
+    void Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const PlaybackMode playbackMode );
+
+    // Load a music track from a file system location and play it.
+    void Play( const uint64_t musicUID, const std::string & file, const PlaybackMode playbackMode );
 
     // Returns the previous volume percentage value.
     int setVolume( const int volumePercentage );

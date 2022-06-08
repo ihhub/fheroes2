@@ -272,7 +272,7 @@ void ShowNewWeekDialog()
     // restore the original music on exit
     const Game::MusicRestorer musicRestorer;
 
-    AudioManager::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, false );
+    AudioManager::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, Music::PlaybackMode::PLAY_ONCE );
 
     const Week & week = world.GetWeekType();
 
@@ -617,7 +617,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
                     // reset environment sounds and music theme at the beginning of the human turn
-                    Game::SetCurrentMusic( MUS::UNKNOWN );
+                    Game::SetCurrentMusicTrack( MUS::UNKNOWN );
                     AudioManager::ResetAudio();
 
                     if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
@@ -633,7 +633,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                         // reset the music after closing the dialog
                         const Game::MusicRestorer musicRestorer;
 
-                        AudioManager::PlayMusic( MUS::NEW_MONTH, false );
+                        AudioManager::PlayMusic( MUS::NEW_MONTH, Music::PlaybackMode::PLAY_ONCE );
 
                         Game::DialogPlayers( player->GetColor(), _( "%{color} player's turn." ) );
                     }
@@ -655,7 +655,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     }
 
                     // Reset environment sounds and music theme at the end of the human turn.
-                    Game::SetCurrentMusic( MUS::UNKNOWN );
+                    Game::SetCurrentMusicTrack( MUS::UNKNOWN );
                     AudioManager::ResetAudio();
 
                     break;

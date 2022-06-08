@@ -20,57 +20,48 @@
 
 #pragma once
 
+#include <condition_variable>
 #include <cstdint>
-#include <map>
-#include <string>
-#include <vector>
+#include <mutex>
+#include <thread>
 
-#include "audio.h"
-
-namespace M82
+namespace MultiThreading
 {
-    enum SoundType : int;
-}
-
-namespace AudioManager
-{
-    class AudioInitializer
+    class AsyncManager
     {
     public:
-        AudioInitializer() = delete;
+        AsyncManager() = default;
 
-        AudioInitializer( const std::string & originalAGGFilePath, const std::string & expansionAGGFilePath );
-        AudioInitializer( const AudioInitializer & ) = delete;
-        AudioInitializer & operator=( const AudioInitializer & ) = delete;
+        AsyncManager( const AsyncManager & ) = delete;
+        AsyncManager( AsyncManager && ) = delete;
 
-        ~AudioInitializer();
+        virtual ~AsyncManager();
+
+        AsyncManager & operator=( const AsyncManager & ) = delete;
+        AsyncManager & operator=( AsyncManager && ) = delete;
+
+    protected:
+        std::mutex _mutex;
+
+        void _createThreadIfNeeded();
+
+        void notifyThread();
+
+        // Prepare a task which requires mutex lock. Returns true if more tasks are available.
+        virtual bool prepareTask() = 0;
+
+        // Task execution is done in non-thread safe mode! No mutex lock for any means of synchronizations are done for this call.
+        virtual void executeTask() = 0;
+
+    private:
+        std::unique_ptr<std::thread> _worker;
+
+        std::condition_variable _masterNotification;
+        std::condition_variable _workerNotification;
+
+        uint8_t _exitFlag{ 0 };
+        uint8_t _runFlag{ 1 };
+
+        static void _workerThread( AsyncManager * manager );
     };
-
-    struct AudioLoopEffectInfo
-    {
-        AudioLoopEffectInfo() = default;
-
-        AudioLoopEffectInfo( const int16_t angle_, const uint8_t volumePercentage_ )
-            : angle( angle_ )
-            , volumePercentage( volumePercentage_ )
-        {
-            // Do nothing.
-        }
-
-        bool operator==( const AudioLoopEffectInfo & other ) const
-        {
-            return other.angle == angle && other.volumePercentage == volumePercentage;
-        }
-
-        int16_t angle{ 0 };
-        uint8_t volumePercentage{ 0 };
-    };
-
-    void playLoopSounds( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, bool asyncronizedCall );
-    void PlaySound( int m82, bool asyncronizedCall = false );
-
-    void PlayMusic( const int trackId, const Music::PlaybackMode playbackMode );
-    void PlayMusicAsync( const int trackId, const Music::PlaybackMode playbackMode );
-
-    void ResetAudio();
 }

@@ -104,7 +104,7 @@ void Puzzle::ShowMapsDialog() const
     // restore the original music on exit
     const Game::MusicRestorer musicRestorer;
 
-    AudioManager::PlayMusic( MUS::PUZZLE, false );
+    AudioManager::PlayMusic( MUS::PUZZLE, Music::PlaybackMode::PLAY_ONCE );
 
     if ( display.isDefaultSize() && !Settings::Get().ExtGameHideInterface() )
         ShowStandardDialog( *this, sf );

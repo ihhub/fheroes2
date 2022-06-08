@@ -256,7 +256,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
     const MP2::MapObjectType objectType = tile.GetObject( tileIndex != GetIndex() );
 
     if ( MUS::FromMapObject( objectType ) != MUS::UNKNOWN )
-        AudioManager::PlayMusic( MUS::FromMapObject( objectType ), false );
+        AudioManager::PlayMusic( MUS::FromMapObject( objectType ), Music::PlaybackMode::PLAY_ONCE );
 
     if ( MP2::isActionObject( objectType, isShipMaster() ) ) {
         Interface::StatusWindow::ResetTimer();
@@ -956,7 +956,7 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
     if ( rc.isValid() ) {
         // The Magic Garden has a special sound
         if ( !Settings::Get().MusicMIDI() && objectType == MP2::OBJ_MAGICGARDEN ) {
-            AudioManager::PlayMusic( MUS::TREEHOUSE, false );
+            AudioManager::PlayMusic( MUS::TREEHOUSE, Music::PlaybackMode::PLAY_ONCE );
         }
         // The Lean-To has a special sound
         else if ( objectType == MP2::OBJ_LEANTO ) {
@@ -1643,7 +1643,7 @@ void ActionToExperienceObject( Heroes & hero, const MP2::MapObjectType objectTyp
             AudioManager::PlaySound( M82::EXPERNCE );
         }
         else {
-            AudioManager::PlayMusic( MUS::EXPERIENCE, false );
+            AudioManager::PlayMusic( MUS::EXPERIENCE, Music::PlaybackMode::PLAY_ONCE );
         }
 
         const fheroes2::ExperienceDialogElement experienceUI( exp );
@@ -2410,7 +2410,7 @@ void ActionToArtesianSpring( Heroes & hero, const MP2::MapObjectType objectType,
             AudioManager::PlaySound( M82::EXPERNCE );
         }
         else {
-            AudioManager::PlayMusic( MUS::WATERSPRING, false );
+            AudioManager::PlayMusic( MUS::WATERSPRING, Music::PlaybackMode::PLAY_ONCE );
         }
         hero.SetSpellPoints( max * 2 );
         Dialog::Message( name, _( "A drink from the spring fills your blood with magic! You have twice your normal spell points in reserve." ), Font::BIG, Dialog::OK );
@@ -2591,7 +2591,7 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
 
         // The Hill Fort has a special sound
         if ( objectType == MP2::OBJ_HILLFORT ) {
-            AudioManager::PlayMusic( MUS::HILLFORT, false );
+            AudioManager::PlayMusic( MUS::HILLFORT, Music::PlaybackMode::PLAY_ONCE );
         }
 
         const fheroes2::CustomImageDialogElement imageUI( std::move( surface ) );

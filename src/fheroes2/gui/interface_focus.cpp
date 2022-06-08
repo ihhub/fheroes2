@@ -57,7 +57,7 @@ void Interface::Basic::SetFocus( Heroes * hero )
         const int heroIndexPos = hero->GetIndex();
         if ( Game::UpdateSoundsOnFocusUpdate() && heroIndexPos >= 0 ) {
             Game::EnvironmentSoundMixer();
-            AudioManager::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
+            AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE );
         }
     }
 }
@@ -84,7 +84,7 @@ void Interface::Basic::SetFocus( Castle * castle )
 
         if ( Game::UpdateSoundsOnFocusUpdate() ) {
             Game::EnvironmentSoundMixer();
-            AudioManager::PlayMusic( MUS::FromGround( world.GetTiles( castle->GetIndex() ).GetGround() ), true, true );
+            AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( castle->GetIndex() ).GetGround() ), Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE );
         }
     }
 }
