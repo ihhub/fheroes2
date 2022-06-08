@@ -323,7 +323,6 @@ namespace
                 }
 
                 assert( musicSettings.currentTrackPlaybackMode == Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
-                assert( musicSettings.currentTrack.mix != nullptr );
 
                 musicSettings.currentTrack.position = 0;
                 musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack );
