@@ -64,8 +64,9 @@ jobs:
         cmake --build build -j2
     - name: Install
       run: |
-        cmake --build build --target package
+        echo we are in $PWD
+        cmake --install build --config Debug --prefix ./${{ matrix.config.name }}
     - uses: actions/upload-artifact@v3
       with:
-        name: cmake-artifacts-test
-        path: ${{ github.workspace }}/build/fheroes2-*.zip
+        name: cmake-artifacts-test-${{ matrix.config.os }}
+        path: ./${{ matrix.config.name }}
