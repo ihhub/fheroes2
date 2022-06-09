@@ -66,7 +66,7 @@ namespace Music
     enum class PlaybackMode : uint8_t
     {
         PLAY_ONCE,
-        CONTINUE_TO_PLAY_INFINITE,
+        RESUME_AND_PLAY_INFINITE,
         REWIND_AND_PLAY_INFINITE
     };
 
