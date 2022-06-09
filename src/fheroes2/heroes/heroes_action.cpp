@@ -617,7 +617,7 @@ void ActionToMonster( Heroes & hero, int32_t dst_index )
         StringReplace( message, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
         const fheroes2::Text body( message, fheroes2::FontType::normalWhite() );
 
-        if ( Dialog::YES == Dialog::ArmyJoinFree( header, body, troop, hero ) ) {
+        if ( Dialog::YES == Dialog::ArmyJoinFree( header.text(), body.text(), troop, hero ) ) {
             hero.GetArmy().JoinTroop( troop );
 
             I.GetStatusWindow().SetRedraw();
@@ -2308,13 +2308,8 @@ void ActionToDwellingRecruitMonster( Heroes & hero, const MP2::MapObjectType obj
 
     if ( !troop.isValid() )
         Dialog::Message( title, msg_void, Font::BIG, Dialog::OK );
-    else {
-        fheroes2::Text header = fheroes2::Text( title, fheroes2::FontType::normalYellow() );
-        fheroes2::Text body = fheroes2::Text( msg_full, fheroes2::FontType::normalWhite() );
-
-        if ( Dialog::YES == Dialog::ArmyJoinFree( header, body, troop, hero ) )
+    else if ( Dialog::YES == Dialog::ArmyJoinFree( title, msg_full, troop, hero ) )
             RecruitMonsterFromTile( hero, tile, title, troop, false );
-    }
 
     hero.SetVisited( dst_index, Visit::GLOBAL );
 

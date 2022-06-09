@@ -610,7 +610,7 @@ void DrawMonster( fheroes2::RandomMonsterAnimation & monsterAnimation, const Tro
         monsterAnimation.increment();
 }
 
-int Dialog::ArmyJoinFree( const fheroes2::Text & dialog_title, const fheroes2::Text & message, const Troop & troop, Heroes & hero )
+int Dialog::ArmyJoinFree( const std::string & dialogTitle, const std::string & message, const Troop & troop, Heroes & hero )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
@@ -618,18 +618,18 @@ int Dialog::ArmyJoinFree( const fheroes2::Text & dialog_title, const fheroes2::T
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const Text title( dialog_title.text(), Font::YELLOW_BIG );
+    const fheroes2::Text title( dialogTitle, fheroes2::FontType::normalYellow() );
 
-    TextBox textbox( message.text(), Font::BIG, BOXAREA_WIDTH );
+    TextBox textbox( message, Font::BIG, BOXAREA_WIDTH );
     const int buttons = Dialog::YES | Dialog::NO;
     int posy = 0;
 
-    FrameBox box( 10 + 2 * title.h() + textbox.h() + 10, true );
+    FrameBox box( 10 + 2 * title.height() + textbox.h() + 10, true );
     const fheroes2::Rect & pos = box.GetArea();
 
-    title.Blit( pos.x + ( pos.width - title.w() ) / 2, pos.y );
+    title.draw( pos.x + ( pos.width - title.width() ) / 2, pos.y, display );
 
-    posy = pos.y + 2 * title.h() - 3;
+    posy = pos.y + 2 * title.height() - 3;
     textbox.Blit( pos.x, posy );
 
     fheroes2::ButtonGroup btnGroup( pos, buttons );

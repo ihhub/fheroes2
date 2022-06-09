@@ -32,7 +32,6 @@
 #include "game_mode.h"
 #include "gamedefs.h"
 #include "image.h"
-#include "ui_text.h"
 
 #define SHADOWWIDTH 16
 #define BOXAREA_WIDTH 244
@@ -100,7 +99,7 @@ namespace Dialog
     void DwellingInfo( const Monster &, uint32_t available );
     bool SetGuardian( Heroes &, Troop &, CapturedObject &, bool readonly );
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false );
-    int ArmyJoinFree( const fheroes2::Text &, const fheroes2::Text &, const Troop &, Heroes & );
+    int ArmyJoinFree( const std::string &, const std::string &, const Troop &, Heroes & );
     int ArmyJoinWithCost( const Troop &, uint32_t join, uint32_t gold, Heroes & );
     int ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit );
     void Marketplace( Kingdom & kingdom, bool fromTradingPost );
