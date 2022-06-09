@@ -218,9 +218,9 @@ namespace
     public:
         void pushMusic( const int musicId, const MusicSource musicType, const Music::PlaybackMode playbackMode )
         {
-            _createThreadIfNeeded();
+            createThreadIfNeeded();
 
-            std::lock_guard<std::mutex> mutexLock( _mutex );
+            std::scoped_lock<std::mutex> lock( _mutex );
 
             while ( !_musicTasks.empty() ) {
                 _musicTasks.pop();
@@ -233,9 +233,9 @@ namespace
 
         void pushSound( const int m82Sound, const int soundVolume )
         {
-            _createThreadIfNeeded();
+            createThreadIfNeeded();
 
-            std::lock_guard<std::mutex> mutexLock( _mutex );
+            std::scoped_lock<std::mutex> lock( _mutex );
 
             _soundTasks.emplace( m82Sound, soundVolume );
 
@@ -244,9 +244,9 @@ namespace
 
         void pushLoopSound( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> vols, const int soundVolume, const bool is3DAudioEnabled )
         {
-            _createThreadIfNeeded();
+            createThreadIfNeeded();
 
-            std::lock_guard<std::mutex> mutexLock( _mutex );
+            std::scoped_lock<std::mutex> lock( _mutex );
 
             _loopSoundTasks.emplace( std::move( vols ), soundVolume, is3DAudioEnabled );
 
@@ -255,7 +255,7 @@ namespace
 
         void sync()
         {
-            std::lock_guard<std::mutex> mutexLock( _mutex );
+            std::scoped_lock<std::mutex> lock( _mutex );
 
             while ( !_musicTasks.empty() ) {
                 _musicTasks.pop();
@@ -428,7 +428,7 @@ namespace
 
     void PlaySoundInternally( const int m82, const int soundVolume )
     {
-        std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
+        std::scoped_lock<std::mutex> lock( g_asyncSoundManager.resourceMutex() );
 
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Try to play sound " << M82::GetString( m82 ) )
 
@@ -463,7 +463,7 @@ namespace
 
         const uint64_t musicUID = getMusicUID( trackId, musicType );
 
-        std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
+        std::scoped_lock<std::mutex> lock( g_asyncSoundManager.resourceMutex() );
 
         if ( Game::CurrentMusicTrackId() == trackId && Music::isPlaying() ) {
             return;
@@ -566,7 +566,7 @@ namespace
     void playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume,
                                    const bool is3DAudioEnabled )
     {
-        std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
+        std::scoped_lock<std::mutex> lock( g_asyncSoundManager.resourceMutex() );
 
         if ( soundVolume == 0 ) {
             // The volume is 0. Remove all existing sound effects.
@@ -842,7 +842,7 @@ namespace AudioManager
 
         g_asyncSoundManager.sync();
 
-        std::lock_guard<std::mutex> mutexLock( g_asyncSoundManager.resourceMutex() );
+        std::scoped_lock<std::mutex> lock( g_asyncSoundManager.resourceMutex() );
 
         Music::Stop();
         Mixer::Stop();

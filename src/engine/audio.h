@@ -47,9 +47,9 @@ namespace Mixer
 
     // To play the audio in a new channel set its value to -1. Returns channel ID. A negative value (-1) in case of failure.
     int Play( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop );
-    int PlayFromDistance( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const int16_t angle, uint8_t volumePercentage );
+    int PlayFromDistance( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const int16_t angle, const uint8_t volumePercentage );
 
-    int applySoundEffect( const int channelId, const int16_t angle, uint8_t volumePercentage );
+    int applySoundEffect( const int channelId, const int16_t angle, const uint8_t volumePercentage );
 
     // Returns the previous volume percentage value.
     int setVolume( const int channelId, const int volumePercentage );
@@ -83,7 +83,7 @@ namespace Music
     // Returns the previous volume percentage value.
     int setVolume( const int volumePercentage );
 
-    void SetFadeInMs( const int timeInMs );
+    void SetFadeInMs( const int timeMs );
 
     void Stop();
 
