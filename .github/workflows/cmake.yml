@@ -32,9 +32,16 @@ jobs:
           os: macos-latest
           dependencies: sdl2 sdl2_mixer sdl2_image dylibbundler
           options: -DUSE_SDL_VERSION=SDL2 -DMACOS_APP_BUNDLE=ON
+        - name: Windows SDL2
+          os: windows-latest
+          dependencies: sdl2 sdl2-mixer sdl2-image zlib
+          options: -DUSE_SDL_VERSION=SDL2 -DCMAKE_TOOLCHAIN_FILE="C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows
     name: CMake (${{ matrix.config.name }})
     runs-on: ${{ matrix.config.os }}
     timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies (Linux)
@@ -47,30 +54,18 @@ jobs:
       run: |
         brew update
         brew install ${{ matrix.config.dependencies }}
+    - name: Install dependencies (Windows)
+      if: ${{ matrix.config.os == 'windows-latest' }}
+      run: |
+        C:/vcpkg/vcpkg --triplet x64-windows install ${{ matrix.config.dependencies }}
     - name: Build
       run: |
         cmake -B build -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON ${{ matrix.config.options }}
         cmake --build build -j2
     - name: Install
       run: |
-        sudo cmake --install build
-  build-windows:
-    name: CMake (Windows SDL2)
-    runs-on: windows-latest
-    timeout-minutes: 30
-    defaults:
-      run:
-        shell: bash
-    steps:
-    - uses: actions/checkout@v2
-    - name: Install dependencies
-      run: |
-        C:/vcpkg/vcpkg --triplet x64-windows install sdl2 sdl2-mixer sdl2-image zlib
-    - name: Build
-      run: |
-        cmake -B build -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON -DUSE_SDL_VERSION=SDL2 \
-                       -DCMAKE_TOOLCHAIN_FILE="C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows
-        cmake --build build --config Debug -j2
-    - name: Install
-      run: |
-        cmake --install build --config Debug
+        cmake --build build --target package
+    - uses: actions/upload-artifact@v3
+      with:
+        name: cmake-artifacts-test
+        path: ${{ github.workspace }}/build/fheroes2-*.zip

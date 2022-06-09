@@ -75,9 +75,6 @@ jobs:
       run: |
         make -j 2
       env: ${{ matrix.config.env }}
-    - name: Generate translations
-      run: |
-        make -C files/lang -j 2
     - name: Create app bundle
       if: ${{ matrix.config.os == 'macos-10.15' }}
       run: |
@@ -194,9 +191,6 @@ jobs:
       env:
         FHEROES2_STRICT_COMPILATION: ON
         DEVKITPRO: /opt/devkitpro
-    - name: Generate translations
-      run: |
-        make -C files/lang -j 2
     - name: Create package
       run: |
         cp docs/README.txt docs/README_switch.md .

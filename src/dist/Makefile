@@ -59,7 +59,11 @@ $(TARGET): $(notdir $(patsubst %.cpp, %.o, $(SEARCH))) $(LIBENGINE) $(RES)
 translations: $(wildcard $(SEARCH))
 	@echo "gen: $(TARGET).pot"
 	@xgettext -d $(TARGET) -C -F -k_ -k_n:1,2 -o - $(sort $(wildcard $(SEARCH))) | sed -e '/#, c-format/d' > $(POT)
+ifeq ($(GITHUB_ACTION),"po-update")
+	$(MAKE) -C ../../files/lang merge
+else
 	$(MAKE) -C ../../files/lang
+endif
 
 $(RES): $(RC)
 	@echo "gen: $@"
