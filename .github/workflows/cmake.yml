@@ -64,9 +64,12 @@ jobs:
         cmake --build build -j2
     - name: Install
       run: |
-        echo we are in $PWD
         cmake --install build --config Debug --prefix "./${{ matrix.config.name }}"
     - uses: actions/upload-artifact@v3
       with:
+        if: !contains(matrix.config.name, 'Bundle')
         name: cmake-artifacts-test-${{ matrix.config.os }}
         path: ./${{ matrix.config.name }}
+        if: contains(matrix.config.name, 'Bundle')
+        name: cmake-artifacts-test-${{ matrix.config.os }}-bundle
+        path: ./build/fheroes2.app
