@@ -48,9 +48,9 @@ cmake_dependent_option(GET_HOMM2_DEMO "Fetch and install the HoMM II demo data" 
 
 set(USE_SDL_VERSION SDL2 CACHE STRING "Version of the SDL library used")
 if(WIN32)
-	set(FHEROES2_DATA ${CMAKE_INSTALL_PREFIX})
-	set(CMAKE_INSTALL_BINDIR ${CMAKE_INSTALL_PREFIX})
-	set(CMAKE_INSTALL_DOCDIR ${CMAKE_INSTALL_PREFIX})
+	set(FHEROES2_DATA ".")
+	set(CMAKE_INSTALL_BINDIR ".")
+	set(CMAKE_INSTALL_DOCDIR ".")
 else(WIN32)
 	set(FHEROES2_DATA ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME} CACHE STRING "Path to the fheroes2 data directory (relative to CMAKE_INSTALL_PREFIX)")
 endif(WIN32)
@@ -187,7 +187,7 @@ else(MACOS_APP_BUNDLE)
 	if(WIN32)
 		install(
 			FILES script/homm2/resource_extraction_toolset.bat script/homm2/resource_extraction_toolset.ps1
-			DESTINATION ${CMAKE_INSTALL_PREFIX}
+			DESTINATION ${CMAKE_INSTALL_DOCDIR}
 			)
 	else(WIN32)
 		install(
@@ -203,4 +203,13 @@ else(MACOS_APP_BUNDLE)
 			DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications
 			)
 	endif(WIN32)
+
+	set(CPACK_GENERATOR "ZIP")
+	set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/ihhub/fheroes2/releases")
+	set(CPACK_STRIP_FILES ${PROJECT_NAME})
+	set(CPACK_SOURCE_GENERATOR "TXZ")
+	set(CPACK_THREADS -2)
+	include(CPack)
+	set(CPACK_PACKAGE_FILE_NAME "${CPACK_PROJECT_NAME}-${CPACK_PROJECT_VERSION}-${CPACK_SYSTEM_NAME}-${USE_SDL_VERSION}")
+	set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CPACK_PROJECT_NAME}-${CPACK_PROJECT_VERSION}")
 endif(MACOS_APP_BUNDLE)
