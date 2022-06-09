@@ -318,9 +318,13 @@ namespace
         std::string contributors( "William Hoskinson\n"
                                   "Aleksei Mazur\n"
                                   "Connor Townsend\n"
-                                  "Brandon Wright\n" );
+                                  "Brandon Wright\n"
+                                  "Aimi Lindschouw\n" );
 
         name.Set( contributors, Font::BIG, output.width() - textInitialOffsetX );
+
+        const int32_t contributorsHeight = name.h();
+
         name.Blit( textInitialOffsetX + ( ( output.width() - textInitialOffsetX ) / 2 - name.w() ) / 2, offsetY, output );
 
         contributors = "Kiril Lipatov\n"
@@ -331,7 +335,7 @@ namespace
         name.Set( contributors, Font::BIG, output.width() - textInitialOffsetX );
         name.Blit( textInitialOffsetX + ( 3 * ( output.width() - textInitialOffsetX ) / 2 - name.w() ) / 2, offsetY, output );
 
-        offsetY += name.h();
+        offsetY += contributorsHeight;
 
         name.Set( _( "and many-many other supporters!" ), Font::BIG, output.width() - columnStep );
         name.Blit( textInitialOffsetX + ( output.width() - textInitialOffsetX - name.w() ) / 2, offsetY, output );
