@@ -272,7 +272,7 @@ namespace AI
         Interface::StatusWindow & status = Interface::Basic::Get().GetStatusWindow();
         status.RedrawTurnProgress( 0 );
 
-        AudioManager::PlayMusic( MUS::COMPUTER_TURN, true, true );
+        AudioManager::PlayMusicAsync( MUS::COMPUTER_TURN, Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE );
 
         KingdomHeroes & heroes = kingdom.GetHeroes();
         const KingdomCastles & castles = kingdom.GetCastles();

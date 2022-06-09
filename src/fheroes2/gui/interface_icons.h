@@ -54,6 +54,12 @@ namespace Interface
             assert( count >= 0 );
         }
 
+        IconsBar( const IconsBar & ) = delete;
+
+        virtual ~IconsBar() = default;
+
+        IconsBar & operator=( const IconsBar & ) = delete;
+
         void SetShow( bool f )
         {
             show = f;
@@ -66,7 +72,7 @@ namespace Interface
             iconsCount = c;
         }
 
-        int32_t getIconCount() const
+        int32_t getIconsCount() const
         {
             return iconsCount;
         }
@@ -84,12 +90,18 @@ namespace Interface
     void RedrawHeroesIcon( const Heroes &, int32_t, int32_t );
     void RedrawCastleIcon( const Castle &, int32_t, int32_t );
 
-    class HeroesIcons : public Interface::ListBox<HEROES>, public IconsBar
+    class HeroesIcons final : public Interface::ListBox<HEROES>, public IconsBar
     {
     public:
         HeroesIcons( const int32_t count, const fheroes2::Image & sf )
             : IconsBar( count, sf )
         {}
+
+        HeroesIcons( const HeroesIcons & ) = delete;
+
+        ~HeroesIcons() override = default;
+
+        HeroesIcons & operator=( const HeroesIcons & ) = delete;
 
         void SetPos( int32_t px, int32_t py );
         void SetShow( bool );
@@ -111,12 +123,18 @@ namespace Interface
         fheroes2::Point _topLeftCorner;
     };
 
-    class CastleIcons : public Interface::ListBox<CASTLE>, public IconsBar
+    class CastleIcons final : public Interface::ListBox<CASTLE>, public IconsBar
     {
     public:
         CastleIcons( const int32_t count, const fheroes2::Image & sf )
             : IconsBar( count, sf )
         {}
+
+        CastleIcons( const CastleIcons & ) = delete;
+
+        ~CastleIcons() override = default;
+
+        CastleIcons & operator=( const CastleIcons & ) = delete;
 
         void SetPos( int32_t px, int32_t py );
         void SetShow( bool );
@@ -138,17 +156,21 @@ namespace Interface
         fheroes2::Point _topLeftCorner;
     };
 
-    class IconsPanel : public BorderWindow
+    class IconsPanel final : public BorderWindow
     {
     public:
         explicit IconsPanel( Basic & basic );
+        IconsPanel( const IconsPanel & ) = delete;
+
+        ~IconsPanel() override = default;
+
+        IconsPanel & operator=( const IconsPanel & ) = delete;
 
         void SetPos( int32_t ox, int32_t oy ) override;
         void SavePosition() override;
         void SetRedraw() const;
         void SetRedraw( const icons_t type ) const;
 
-        void Redraw();
         void QueueEventProcessing();
 
         void Select( Heroes * const );
@@ -158,10 +180,15 @@ namespace Interface
         void ResetIcons( const icons_t type );
         void HideIcons( const icons_t type );
         void ShowIcons( const icons_t type );
-        void RedrawIcons( const icons_t type );
-        void SetCurrentVisible();
 
     private:
+        friend Basic;
+
+        // Do not call these methods directly, use Interface::Basic::Redraw() instead
+        // to avoid issues in the "no interface" mode
+        void Redraw();
+        void RedrawIcons( const icons_t type );
+
         Basic & interface;
 
         fheroes2::Image sfMarker;

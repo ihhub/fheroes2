@@ -56,6 +56,13 @@ namespace Interface
     {
     public:
         explicit GameArea( Basic & );
+        GameArea( const GameArea & ) = default;
+        GameArea( GameArea && ) = delete;
+
+        ~GameArea() = default;
+
+        GameArea & operator=( const GameArea & ) = delete;
+        GameArea & operator=( GameArea && ) = delete;
 
         void generate( const fheroes2::Size & screenSize, const bool withoutBorders );
 
@@ -86,6 +93,8 @@ namespace Interface
 
         void SetRedraw() const;
 
+        // Do not call this method directly if the rendering takes place on the screen, use
+        // Interface::Basic::Redraw() instead to avoid issues in the "no interface" mode
         void Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw = false ) const;
 
         void BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const fheroes2::Point & mp, bool flip = false,
@@ -119,6 +128,10 @@ namespace Interface
         fheroes2::Point getCurrentCenterInPixels() const;
 
     private:
+        fheroes2::Point _middlePoint() const; // returns middle point of window ROI
+        fheroes2::Point _getStartTileId() const;
+        void _setCenterToTile( const fheroes2::Point & tile ); // set center to the middle of tile (input is tile ID)
+
         Basic & interface;
 
         fheroes2::Rect _windowROI; // visible to draw area of World Map in pixels
@@ -137,10 +150,6 @@ namespace Interface
         bool updateCursor;
 
         fheroes2::Time scrollTime;
-
-        fheroes2::Point _middlePoint() const; // returns middle point of window ROI
-        fheroes2::Point _getStartTileId() const;
-        void _setCenterToTile( const fheroes2::Point & tile ); // set center to the middle of tile (input is tile ID)
     };
 }
 

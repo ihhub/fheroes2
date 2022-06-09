@@ -156,8 +156,6 @@ namespace Interface
         void ResetFocus( int );
         void RedrawFocus();
 
-        void SetHideInterface( bool );
-
         void EventSwitchHeroSleeping();
         fheroes2::GameMode EventDefaultAction( const fheroes2::GameMode gameMode );
         void EventOpenFocus() const;
@@ -197,7 +195,8 @@ namespace Interface
         static int GetCursorFocusShipmaster( const Heroes &, const Maps::Tiles & );
         void CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const;
 
-        void Reset(); // call this function only when changing the resolution
+        // Regenerates the game area and updates the panel positions depending on the UI settings
+        void Reset();
 
     private:
         Basic();

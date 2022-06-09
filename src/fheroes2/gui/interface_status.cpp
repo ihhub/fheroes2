@@ -437,7 +437,9 @@ void Interface::StatusWindow::DrawBackground() const
 
 void Interface::StatusWindow::QueueEventProcessing()
 {
+    // Move border window
     if ( Settings::Get().ShowStatus() && BorderWindow::QueueEventProcessing() ) {
+        SetRedraw();
         return;
     }
 
@@ -446,8 +448,7 @@ void Interface::StatusWindow::QueueEventProcessing()
 
     if ( le.MouseClickLeft( drawnArea ) ) {
         NextState();
-        Redraw();
-        fheroes2::Display::instance().render();
+        SetRedraw();
     }
     if ( le.MousePressRight( GetRect() ) ) {
         const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
@@ -468,8 +469,7 @@ void Interface::StatusWindow::QueueEventProcessing()
 void Interface::StatusWindow::RedrawTurnProgress( uint32_t v )
 {
     turn_progress = v;
-    SetRedraw();
 
-    Redraw();
+    interface.Redraw( REDRAW_STATUS );
     fheroes2::Display::instance().render( GetArea() );
 }

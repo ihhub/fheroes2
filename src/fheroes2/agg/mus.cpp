@@ -140,9 +140,9 @@ namespace MUS
     }
 }
 
-int MUS::FromGround( int ground )
+int MUS::FromGround( const int groundType )
 {
-    switch ( ground ) {
+    switch ( groundType ) {
     case Maps::Ground::DESERT:
         return DESERT;
     case Maps::Ground::SNOW:
@@ -168,7 +168,7 @@ int MUS::FromGround( int ground )
     return UNKNOWN;
 }
 
-int MUS::FromRace( int race )
+int MUS::FromRace( const int race )
 {
     switch ( race ) {
     case Race::KNGT:

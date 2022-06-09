@@ -597,7 +597,7 @@ void Game::ShowCredits()
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    AudioManager::PlayMusic( MUS::VICTORY, true, true );
+    AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
 
     fheroes2::Image blackScreen( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
     blackScreen.fill( 0 );

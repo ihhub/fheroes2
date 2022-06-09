@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2022                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,45 +18,50 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2INTERFACE_BORDER_H
-#define H2INTERFACE_BORDER_H
+#pragma once
 
-#include "dialog.h"
+#include <condition_variable>
+#include <cstdint>
+#include <mutex>
+#include <thread>
 
-namespace Interface
+namespace MultiThreading
 {
-    void GameBorderRedraw( const bool viewWorldMode );
-
-    class BorderWindow
+    class AsyncManager
     {
     public:
-        explicit BorderWindow( const fheroes2::Rect & );
-        BorderWindow( const BorderWindow & ) = delete;
+        AsyncManager() = default;
 
-        virtual ~BorderWindow() = default;
+        AsyncManager( const AsyncManager & ) = delete;
+        AsyncManager( AsyncManager && ) = delete;
 
-        BorderWindow & operator=( const BorderWindow & ) = delete;
+        virtual ~AsyncManager();
 
-        virtual void SetPos( int32_t, int32_t ) = 0;
-        virtual void SavePosition() = 0;
-
-        bool QueueEventProcessing();
-
-        const fheroes2::Rect & GetRect() const;
-        const fheroes2::Rect & GetArea() const
-        {
-            return area;
-        }
+        AsyncManager & operator=( const AsyncManager & ) = delete;
+        AsyncManager & operator=( AsyncManager && ) = delete;
 
     protected:
-        void Redraw() const;
+        std::mutex _mutex;
 
-        void SetPosition( int32_t, int32_t, uint32_t, uint32_t );
-        void SetPosition( int32_t, int32_t );
+        void _createThreadIfNeeded();
 
-        fheroes2::Rect area;
-        Dialog::FrameBorder border;
+        void notifyThread();
+
+        // Prepare a task which requires mutex lock. Returns true if more tasks are available.
+        virtual bool prepareTask() = 0;
+
+        // Task execution is done in non-thread safe mode! No mutex lock for any means of synchronizations are done for this call.
+        virtual void executeTask() = 0;
+
+    private:
+        std::unique_ptr<std::thread> _worker;
+
+        std::condition_variable _masterNotification;
+        std::condition_variable _workerNotification;
+
+        uint8_t _exitFlag{ 0 };
+        uint8_t _runFlag{ 1 };
+
+        static void _workerThread( AsyncManager * manager );
     };
 }
-
-#endif

@@ -183,7 +183,8 @@ namespace
 
         // Interface show/hide state.
         const bool isHiddenInterface = conf.ExtGameHideInterface();
-        const fheroes2::Sprite & interfaceStateIcon = isHiddenInterface ? fheroes2::AGG::GetICN( ICN::ESPANEL, 4 ) : fheroes2::AGG::GetICN( ICN::SPANEL, 16 );
+        const fheroes2::Sprite & interfaceStateIcon
+            = isHiddenInterface ? fheroes2::AGG::GetICN( ICN::ESPANEL, 4 ) : fheroes2::AGG::GetICN( ICN::SPANEL, isEvilInterface ? 17 : 16 );
         if ( isHiddenInterface ) {
             value = _( "Hide" );
         }
@@ -319,7 +320,7 @@ namespace
 
                 conf.SetMusicType( type > MUSIC_EXTERNAL ? 0 : type );
 
-                Game::SetCurrentMusic( MUS::UNKNOWN );
+                Game::SetCurrentMusicTrack( MUS::UNKNOWN );
 
                 saveMusicType = true;
             }
@@ -505,11 +506,6 @@ namespace fheroes2
                 saveConfiguration = true;
 
                 Interface::Basic & basicInterface = Interface::Basic::Get();
-                Interface::GameArea & gamearea = basicInterface.GetGameArea();
-                const fheroes2::Point prevCenter = gamearea.getCurrentCenterInPixels();
-
-                basicInterface.Reset();
-                gamearea.SetCenterInPixels( prevCenter );
                 basicInterface.Redraw( Interface::REDRAW_ALL );
 
                 action = openSystemOptionsDialog();
@@ -521,18 +517,7 @@ namespace fheroes2
                 saveConfiguration = true;
 
                 Interface::Basic & basicInterface = Interface::Basic::Get();
-                Interface::GameArea & gamearea = basicInterface.GetGameArea();
-                const fheroes2::Point prevCenter = gamearea.getCurrentCenterInPixels();
-                const fheroes2::Rect prevRoi = gamearea.GetROI();
-
-                basicInterface.SetHideInterface( conf.ExtGameHideInterface() );
-
                 basicInterface.Reset();
-
-                const fheroes2::Rect newRoi = gamearea.GetROI();
-
-                gamearea.SetCenterInPixels( prevCenter + fheroes2::Point( newRoi.x + newRoi.width / 2, newRoi.y + newRoi.height / 2 )
-                                            - fheroes2::Point( prevRoi.x + prevRoi.width / 2, prevRoi.y + prevRoi.height / 2 ) );
 
                 // We need to redraw radar first due to the nature of restorers. Only then we can redraw everything.
                 basicInterface.Redraw( Interface::REDRAW_RADAR );
