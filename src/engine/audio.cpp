@@ -102,6 +102,9 @@ namespace
     {
         const std::lock_guard<std::recursive_mutex> audioGuard( audioMutex );
 
+        // This callback function should not be called if audio is not initialized
+        assert( isInitialized );
+
         Mix_Chunk * sample = Mix_GetChunk( channelId );
 
         if ( sample ) {
@@ -187,17 +190,17 @@ namespace
             return iter->second;
         }
 
-        void update( const uint64_t musicUID, Mix_Music * mix, const double position )
+        void update( const uint64_t musicUID, const MusicInfo & info )
         {
-            assert( mix != nullptr );
+            assert( info.mix != nullptr );
 
             auto iter = _musicCache.find( musicUID );
             if ( iter == _musicCache.end() ) {
-                _musicCache.try_emplace( musicUID, MusicInfo{ mix, position } );
+                _musicCache.try_emplace( musicUID, info );
                 return;
             }
 
-            iter->second = { mix, position };
+            iter->second = info;
         }
 
         void clear()
@@ -227,6 +230,24 @@ namespace
 
     struct MusicSettings
     {
+        void resetCurrentTrack()
+        {
+            currentTrack = {};
+
+            currentTrackUID = 0;
+            currentTrackPlaybackMode = Music::PlaybackMode::PLAY_ONCE;
+            currentTrackChangeCounter += 1;
+        }
+
+        void updateCurrentTrack( const MusicInfo & track, const uint64_t trackUID, const Music::PlaybackMode trackPlaybackMode )
+        {
+            currentTrack = track;
+
+            currentTrackUID = trackUID;
+            currentTrackPlaybackMode = trackPlaybackMode;
+            currentTrackChangeCounter += 1;
+        }
+
         MusicInfo currentTrack;
 
         uint64_t currentTrackUID{ 0 };
@@ -236,7 +257,6 @@ namespace
         uint64_t currentTrackChangeCounter{ 0 };
 
         int fadeInMs{ 0 };
-        int fadeOutMs{ 0 };
 
         MusicTrackManager trackManager;
     };
@@ -248,7 +268,7 @@ namespace
     // This mutex protects the musicLooperThread
     std::mutex musicLooperMutex;
 
-    void PlayMusic( const uint64_t musicUID, const Music::PlaybackMode playbackMode );
+    void PlayMusic( const uint64_t musicUID, Music::PlaybackMode playbackMode );
 
     // This is the callback function set by Mix_HookMusicFinished()
     void replayCurrentMusic()
@@ -264,24 +284,33 @@ namespace
 
         const std::lock_guard<std::recursive_mutex> audioGuard( audioMutex );
 
-        if ( !isInitialized ) {
-            return;
-        }
+        // This callback function should not be called if audio is not initialized
+        assert( isInitialized );
 
-        // Nothing to play
+        // We are here because of the Music::Stop() call
         if ( musicSettings.currentTrack.mix == nullptr ) {
             return;
         }
 
-        // All other cases should be handled by the Mix_PlayMisic() itself
-        if ( musicSettings.currentTrackPlaybackMode != Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE ) {
+        // We are here because a track in the PLAY_ONCE mode has finished playing
+        if ( musicSettings.currentTrackPlaybackMode == Music::PlaybackMode::PLAY_ONCE ) {
+            // We cannot resume this track, but in future we should be able to play it in the
+            // RESUME_AND_PLAY_INFINITE mode if necessary, so reset its position to zero
+            musicSettings.currentTrack.position = 0;
+            musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack );
+            // We should be able to restart this track right away if necessary
+            musicSettings.resetCurrentTrack();
+
             return;
         }
 
+        // REWIND_AND_PLAY_INFINITE should be handled by the Mix_PlayMusic() itself
+        assert( musicSettings.currentTrackPlaybackMode == Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+
         // Mix_HookMusicFinished() function does not allow any SDL calls to be done within the assigned function.
-        // In this case the only way to trigger the restart of the current song is to use a multithreading approach.
+        // In this case the only way to trigger the restart of the current music is to use a multithreading approach.
         musicLooperThread = std::make_unique<std::thread>(
-            []( uint64_t currentTrackChangeCounter ) {
+            []( const uint64_t trackChangeCounter ) {
                 const std::lock_guard<std::recursive_mutex> musicLooperAudioGuard( audioMutex );
 
                 if ( !isInitialized ) {
@@ -289,19 +318,14 @@ namespace
                 }
 
                 // The current track managed to change during the start of this thread
-                if ( currentTrackChangeCounter != musicSettings.currentTrackChangeCounter ) {
+                if ( trackChangeCounter != musicSettings.currentTrackChangeCounter ) {
                     return;
                 }
 
-                // All other cases should be handled by the Mix_PlayMisic() itself
-                if ( musicSettings.currentTrackPlaybackMode != Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE ) {
-                    return;
-                }
-
-                assert( musicSettings.currentTrack.mix != nullptr );
+                assert( musicSettings.currentTrackPlaybackMode == Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
                 musicSettings.currentTrack.position = 0;
-                musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack.mix, musicSettings.currentTrack.position );
+                musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack );
 
                 PlayMusic( musicSettings.currentTrackUID, musicSettings.currentTrackPlaybackMode );
             },
@@ -317,7 +341,7 @@ namespace
         return ( musicType == Mix_MusicType::MUS_OGG ) || ( musicType == Mix_MusicType::MUS_MP3 ) || ( musicType == Mix_MusicType::MUS_FLAC );
     }
 
-    void PlayMusic( const uint64_t musicUID, const Music::PlaybackMode playbackMode )
+    void PlayMusic( const uint64_t musicUID, Music::PlaybackMode playbackMode )
     {
         MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
         if ( musicInfo.mix == nullptr ) {
@@ -326,12 +350,32 @@ namespace
             return;
         }
 
-        if ( musicUID != musicSettings.currentTrackUID ) {
+        // The only way to play a track that is already current is to replay it, which is
+        // supported only in the RESUME_AND_PLAY_INFINITE mode
+        if ( musicSettings.currentTrackUID == musicUID ) {
+            assert( playbackMode == Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+        }
+        // If we are going to play a different track, we should stop the current track first
+        else {
             Music::Stop();
         }
 
-        const bool resumePlayback = ( playbackMode == Music::PlaybackMode::CONTINUE_TO_PLAY_INFINITE && isMusicResumeSupported( musicInfo.mix ) );
-        const bool autoLoop = ( playbackMode != Music::PlaybackMode::PLAY_ONCE && !resumePlayback );
+        bool resumePlayback = false;
+        bool autoLoop = false;
+
+        if ( playbackMode == Music::PlaybackMode::RESUME_AND_PLAY_INFINITE ) {
+            if ( isMusicResumeSupported( musicInfo.mix ) ) {
+                resumePlayback = true;
+            }
+            else {
+                // It is impossible to resume this track, let's reflect it by changing the playback mode
+                playbackMode = Music::PlaybackMode::REWIND_AND_PLAY_INFINITE;
+                autoLoop = true;
+            }
+        }
+        else if ( playbackMode == Music::PlaybackMode::REWIND_AND_PLAY_INFINITE ) {
+            autoLoop = true;
+        }
 
         const int loopCount = autoLoop ? -1 : 0;
 
@@ -368,11 +412,7 @@ namespace
 
         // For better accuracy reset the timer only when actual playback is already started
         musicSettings.trackManager.resetTimer();
-
-        musicSettings.currentTrack = musicInfo;
-        musicSettings.currentTrackUID = musicUID;
-        musicSettings.currentTrackPlaybackMode = playbackMode;
-        musicSettings.currentTrackChangeCounter += 1;
+        musicSettings.updateCurrentTrack( musicInfo, musicUID, playbackMode );
     }
 
     int normalizeToSDLVolume( const int volumePercentage )
@@ -788,7 +828,8 @@ void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const
         return;
     }
 
-    musicSettings.trackManager.update( musicUID, mix, 0 );
+    musicSettings.trackManager.update( musicUID, { mix, 0 } );
+
     PlayMusic( musicUID, playbackMode );
 }
 
@@ -824,7 +865,8 @@ void Music::Play( const uint64_t musicUID, const std::string & file, const Playb
         return;
     }
 
-    musicSettings.trackManager.update( musicUID, mix, 0 );
+    musicSettings.trackManager.update( musicUID, { mix, 0 } );
+
     PlayMusic( musicUID, playbackMode );
 }
 
@@ -866,28 +908,30 @@ void Music::Stop()
 {
     const std::lock_guard<std::recursive_mutex> audioGuard( audioMutex );
 
+    if ( !isInitialized ) {
+        return;
+    }
+
     if ( musicSettings.currentTrack.mix == nullptr ) {
         // Nothing to do.
         return;
     }
 
-    musicSettings.currentTrack.position += musicSettings.trackManager.getCurrentTrackPosition();
-    musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack.mix, musicSettings.currentTrack.position );
-
-    musicSettings.currentTrack = {};
-    musicSettings.currentTrackUID = 0;
-    musicSettings.currentTrackPlaybackMode = PlaybackMode::PLAY_ONCE;
-    musicSettings.currentTrackChangeCounter += 1;
-
-    if ( musicSettings.fadeOutMs > 0 ) {
-        while ( !Mix_FadeOutMusic( musicSettings.fadeOutMs ) && Mix_PlayingMusic() ) {
-            SDL_Delay( 50 );
-        }
+    // We can resume this track, so let's remember the current position
+    if ( musicSettings.currentTrackPlaybackMode == PlaybackMode::RESUME_AND_PLAY_INFINITE ) {
+        musicSettings.currentTrack.position += musicSettings.trackManager.getCurrentTrackPosition();
     }
+    // We cannot resume this track, but in future we should be able to play it in the
+    // RESUME_AND_PLAY_INFINITE mode if necessary, so reset its position to zero
     else {
-        // According to the documentation (https://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html#SEC67) this function always returns 0.
-        Mix_HaltMusic();
+        musicSettings.currentTrack.position = 0;
     }
+
+    musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack );
+    musicSettings.resetCurrentTrack();
+
+    // According to the documentation (https://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html#SEC67) this function always returns 0.
+    Mix_HaltMusic();
 }
 
 bool Music::isPlaying()
