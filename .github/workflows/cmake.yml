@@ -65,7 +65,7 @@ jobs:
     - name: Install
       run: |
         echo we are in $PWD
-        cmake --install build --config Debug --prefix ./${{ matrix.config.name }}
+        cmake --install build --config Debug --prefix "./${{ matrix.config.name }}"
     - uses: actions/upload-artifact@v3
       with:
         name: cmake-artifacts-test-${{ matrix.config.os }}
