@@ -258,8 +258,8 @@ namespace
 
     void playMusic( const uint64_t musicUID, Music::PlaybackMode playbackMode )
     {
-        // Unregister this callback to ensure that it will not be called while we are
-        // modifying the current track information
+        // Unregister this callback to ensure that it will not be called while we are modifying the
+        // current track information
         Mix_HookMusicFinished( nullptr );
 
         MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
@@ -289,7 +289,8 @@ namespace
         // Should be updated before the callback set by Mix_HookMusicFinished() will get a chance to be called
         musicSettings.updateCurrentTrack( musicInfo, musicUID, playbackMode );
 
-        // Once we are done with the current track information, let's register this callback back if needed
+        // Once we are done with the current track information, let's register this callback back. We need this
+        // callback only when resuming the music track, because there is no other way to loop such a track.
         if ( playbackMode == Music::PlaybackMode::RESUME_AND_PLAY_INFINITE ) {
             Mix_HookMusicFinished( musicFinished );
         }
@@ -813,12 +814,11 @@ void Music::Stop()
         return;
     }
 
+    // Unregister this callback - there is no need to repeat this track anymore
+    Mix_HookMusicFinished( nullptr );
+
     // Always returns 0
     Mix_HaltMusic();
-
-    // Unregister this callback to ensure that it will not be called while we are
-    // modifying the current track information
-    Mix_HookMusicFinished( nullptr );
 
     // We can resume this track, so let's remember the current position
     if ( musicSettings.currentTrackPlaybackMode == PlaybackMode::RESUME_AND_PLAY_INFINITE ) {
