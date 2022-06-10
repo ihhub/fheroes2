@@ -451,7 +451,6 @@ void Audio::Quit()
     Mixer::Stop();
 
     Mix_ChannelFinished( nullptr );
-    Mix_HookMusicFinished( nullptr );
 
     musicSettings.trackManager.clear();
 
