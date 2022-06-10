@@ -262,7 +262,7 @@ namespace
         // current track information
         Mix_HookMusicFinished( nullptr );
 
-        MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
+        const MusicInfo musicInfo = musicSettings.trackManager.getMusicInfoByUID( musicUID );
         if ( musicInfo.mix == nullptr ) {
             // How is it even possible! Check your logic!
             assert( 0 );
