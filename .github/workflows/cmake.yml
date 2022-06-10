@@ -62,17 +62,18 @@ jobs:
       run: |
         cmake -B build -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Debug -DENABLE_STRICT_COMPILATION=ON -DENABLE_IMAGE=ON -DENABLE_TOOLS=ON ${{ matrix.config.options }}
         cmake --build build -j2
-    - name: Install
-      if: ${{ !contains(matrix.config.name, 'Bundle') }}
-      run: |
-        cmake --install build --config Debug --prefix "./${{ matrix.config.name }}"
+    # - name: Install
+      # if: ${{ !contains(matrix.config.name, 'Bundle') }}
+      # run: |
+        # cmake --install build --config Debug --prefix "./build/${{ matrix.config.name }}"
     - uses: actions/upload-artifact@v3
-      if: ${{ !contains(matrix.config.name, 'Bundle') }}
+      # if: ${{ !contains(matrix.config.name, 'Bundle') }}
       with:
-        name: cmake-artifacts-test-${{ matrix.config.os }}
-        path: ./${{ matrix.config.name }}
-    - uses: actions/upload-artifact@v3
-      if: contains(matrix.config.name, 'Bundle')
-      with:
-        name: cmake-artifacts-test-${{ matrix.config.os }}-bundle
-        path: ./build/fheroes2.app/
+        name: "CMake artifacts test ${{ matrix.config.name }}"
+        path: ./build/
+        # path: ./${{ matrix.config.name }}
+    # - uses: actions/upload-artifact@v3
+      # if: contains(matrix.config.name, 'Bundle')
+      # with:
+        # name: "CMake artifacts test ${{ matrix.config.name }}"
+        # path: ./build/fheroes2.app/
