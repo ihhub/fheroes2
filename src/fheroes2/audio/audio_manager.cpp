@@ -270,7 +270,7 @@ namespace
             }
         }
 
-        // This mutex is used to avoid access to global objects and classes related to SDL Mixer.
+        // This mutex protects operations with AudioManager's resources, such as AGG files, data caches, etc
         std::mutex & resourceMutex()
         {
             return _resourceMutex;
