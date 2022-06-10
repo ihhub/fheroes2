@@ -2219,7 +2219,7 @@ void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType object
 
         AudioManager::PlaySound( M82::EXPERNCE );
 
-        if ( Dialog::YES == Dialog::ArmyJoinFree( title, message, troop, hero ) ) {
+        if ( Dialog::YES == Dialog::Message( title, message, Font::BIG, Dialog::YES | Dialog::NO ) ) {
             if ( !hero.GetArmy().CanJoinTroop( troop ) )
                 Dialog::Message( troop.GetName(), _( "You are unable to recruit at this time, your ranks are full." ), Font::BIG, Dialog::OK );
             else {
