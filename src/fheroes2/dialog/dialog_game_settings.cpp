@@ -183,7 +183,7 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        Settings & conf = Settings::Get();
+        const Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.ExtGameEvilInterface();
         const int dialogIcnId = isEvilInterface ? ICN::SPANBKGE : ICN::SPANBKG;
         const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( dialogIcnId, 0 );
