@@ -2067,6 +2067,23 @@ namespace fheroes2
                     }
                 }
                 return true;
+            case ICN::ESPANBKG_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const Rect roi{ 28, 28, 265, 206 };
+
+                Sprite & output = _icnVsSprite[id][0];
+                _icnVsSprite[id][0] = GetICN( ICN::CSPANBKE, 0 );
+                Copy( GetICN( ICN::ESPANBKG, 0 ), roi.x, roi.y, output, roi.x, roi.y, roi.width, roi.height );
+
+                const std::vector<uint8_t> transformTable
+                    = getTransformTable( GetICN( ICN::CSPANBKG, 0 ), GetICN( ICN::CSPANBKE, 0 ), roi.x, roi.y, roi.width, roi.height );
+                ApplyPalette( output, roi.x, roi.y, output, roi.x, roi.y, roi.width, roi.height, transformTable );
+
+                _icnVsSprite[id][1] =  GetICN( ICN::ESPANBKG, 1 );
+
+                return true;
+            }
             default:
                 break;
             }
