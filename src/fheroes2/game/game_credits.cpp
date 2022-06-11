@@ -167,8 +167,6 @@ namespace
         name.Blit( ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
         offsetY += title.h() + name.h() + 10;
 
-        const int32_t dragonOffsetY = offsetY;
-
         const fheroes2::Sprite & blackDragon = fheroes2::AGG::GetICN( ICN::DRAGBLAK, 5 );
         fheroes2::Blit( blackDragon, output, ( columnStep - blackDragon.width() ) / 2, offsetY );
         offsetY += blackDragon.height();
