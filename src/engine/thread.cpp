@@ -25,6 +25,20 @@
 
 namespace MultiThreading
 {
+    void AsyncManager::createWorker()
+    {
+        if ( !_worker ) {
+            _runFlag = true;
+            _worker = std::make_unique<std::thread>( AsyncManager::_workerThread, this );
+
+            {
+                std::unique_lock<std::mutex> lock( _mutex );
+
+                _masterNotification.wait( lock, [this] { return !_runFlag; } );
+            }
+        }
+    }
+
     void AsyncManager::stopWorker()
     {
         if ( _worker ) {
@@ -42,18 +56,11 @@ namespace MultiThreading
         }
     }
 
-    void AsyncManager::createWorker()
+    void AsyncManager::notifyWorker()
     {
-        if ( !_worker ) {
-            _runFlag = true;
-            _worker = std::make_unique<std::thread>( AsyncManager::_workerThread, this );
+        _runFlag = true;
 
-            {
-                std::unique_lock<std::mutex> lock( _mutex );
-
-                _masterNotification.wait( lock, [this] { return !_runFlag; } );
-            }
-        }
+        _workerNotification.notify_all();
     }
 
     void AsyncManager::_workerThread( AsyncManager * manager )
@@ -90,12 +97,5 @@ namespace MultiThreading
 
             manager->executeTask();
         }
-    }
-
-    void AsyncManager::notifyWorker()
-    {
-        _runFlag = true;
-
-        _workerNotification.notify_all();
     }
 }

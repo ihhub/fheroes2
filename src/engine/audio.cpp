@@ -222,8 +222,6 @@ namespace
     public:
         void restartCurrentMusicTrack()
         {
-            createWorker();
-
             std::scoped_lock<std::mutex> lock( _mutex );
 
             _trackChangeCounter = musicSettings.currentTrackChangeCounter;
@@ -462,6 +460,8 @@ void Audio::Init()
     audioSpecs.freq = frequency;
     audioSpecs.format = format;
     audioSpecs.channels = static_cast<uint8_t>( channels );
+
+    musicRestartManager.createWorker();
 
     Mix_ChannelFinished( channelFinished );
 

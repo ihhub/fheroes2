@@ -38,6 +38,10 @@ namespace MultiThreading
 
         AsyncManager & operator=( const AsyncManager & ) = delete;
 
+        // Create the worker thread if it doesn't exist yet. Both createWorker() and stopWorker() are not
+        // designed to be executed concurrently.
+        void createWorker();
+
         // Stop and join the worker thread. This cannot be done in the destructor (directly or indirectly) due
         // to the potential race on the vptr since this class has virtual methods that could be called from the
         // worker thread.
@@ -45,9 +49,6 @@ namespace MultiThreading
 
     protected:
         std::mutex _mutex;
-
-        // Create the worker thread if it doesn't exist yet.
-        void createWorker();
 
         // Notify the worker thread about a new task. The _mutex should be acquired while calling this method.
         void notifyWorker();
