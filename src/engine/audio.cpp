@@ -66,17 +66,19 @@ namespace
     std::vector<int> savedMixerVolumes;
     int savedMusicVolume = 0;
 
-    // This mutex protects all operations with audio. In order to avoid deadlocks, it
-    // shouldn't be acquired in any callback functions that can be called by SDL_Mixer.
+    // This mutex protects all operations with audio. In order to avoid deadlocks, it shouldn't
+    // be acquired in any callback functions that can be called by SDL_Mixer.
     std::recursive_mutex audioMutex;
 
-    // This is the callback function set by Mix_ChannelFinished().
-    // TODO: according to SDL_Mixer manual, calls of any SDL_Mixer functions are not
-    // allowed in callbacks. The current code works, but it would be good to find a
-    // reliable way to perform channel cleanup without calling these functions.
+    // This is the callback function set by Mix_ChannelFinished(). As a rule, it is called from
+    // a SDL_Mixer internal thread.
+    //
+    // TODO: according to SDL_Mixer manual, calls of any SDL_Mixer functions are not allowed in
+    // callbacks. The current code works, but it would be good to find a reliable way to perform
+    // channel cleanup without calling these functions.
     void channelFinished( const int channelId )
     {
-        // This callback function should not be called if audio is not initialized
+        // This callback function should never be called if audio is not initialized
         assert( isInitialized );
 
         Mix_Chunk * sample = Mix_GetChunk( channelId );
@@ -271,11 +273,11 @@ namespace
 
     MusicRestartManager musicRestartManager;
 
-    // This is the callback function set by Mix_HookMusicFinished(). Calls of any SDL_Mixer
-    // functions are not allowed in callbacks.
+    // This is the callback function set by Mix_HookMusicFinished(). As a rule, it is called from
+    // a SDL_Mixer internal thread. Calls of any SDL_Mixer functions are not allowed in callbacks.
     void musicFinished()
     {
-        // This callback function should not be called if audio is not initialized
+        // This callback function should never be called if audio is not initialized
         assert( isInitialized );
 
         musicRestartManager.restartCurrentMusicTrack();
@@ -499,7 +501,7 @@ void Audio::Quit()
 
     // We can't hold the audioMutex here because if MusicRestartManager's working
     // thread is already waiting on it, then there will be a deadlock while waiting
-    // for its join. The Mix_HookMusicFinished()'s callback can no longer be called
+    // for it to join. The Mix_HookMusicFinished()'s callback can no longer be called
     // at the moment because it has been already unregistered by the Music::Stop().
     musicRestartManager.stopWorker();
 }
