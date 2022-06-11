@@ -208,7 +208,7 @@ namespace
         name.Set( "Oleg Derevenetz", Font::BIG, textWidth );
         title.Blit( columnStep + ( columnStep - title.w() ) / 2, offsetY, output );
         name.Blit( columnStep + ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
-        
+
         offsetY += title.h() + name.h() + 10;
 
         const fheroes2::Sprite & mage = fheroes2::AGG::GetICN( ICN::MAGE1, 24 );

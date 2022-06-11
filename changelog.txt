@@ -1,4 +1,7 @@
-version 0.9.16 (09 June 2022)
+version 0.9.16 (11 June 2022)
+- add Flatpak support
+- add Belarusian translation
+- swap spell icons for Death Wave and Death Ripple
 - make the "no interface" mode more usable
 - add music resume ability for MP3, OGG and FLAC formats
 - update translation guide
