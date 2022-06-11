@@ -78,7 +78,7 @@ namespace
 
         // Audio settings.
         const fheroes2::Sprite & audioSettingsIcon = fheroes2::AGG::GetICN( ICN::SPANEL, 1 );
-        drawOption( rects[0], audioSettingsIcon, _( "Music" ), _( "settings" ) );
+        drawOption( rects[0], audioSettingsIcon, _( "Audio" ), _( "settings" ) );
 
         // Hot keys.
         const fheroes2::Sprite & hotkeysIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, 5 );
