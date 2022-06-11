@@ -43,7 +43,7 @@ namespace MultiThreading
     protected:
         std::mutex _mutex;
 
-        void _createThreadIfNeeded();
+        void createThreadIfNeeded();
 
         void notifyThread();
 
