@@ -35,73 +35,91 @@ msgid ""
 "A few\n"
 "%{monster}"
 msgstr ""
+"Трохі\n"
+"%{monster}"
 
 msgid ""
 "Several\n"
 "%{monster}"
 msgstr ""
+"Некалькі\n"
+"%{monster}"
 
 msgid ""
 "A pack of\n"
 "%{monster}"
 msgstr ""
+"Крыху\n"
+"%{monster}"
 
 msgid ""
 "Lots of\n"
 "%{monster}"
 msgstr ""
+"Шмат\n"
+"%{monster}"
 
 msgid ""
 "A horde of\n"
 "%{monster}"
 msgstr ""
+"Арда\n"
+"%{monster}"
 
 msgid ""
 "A throng of\n"
 "%{monster}"
 msgstr ""
+"Натоўп\n"
+"%{monster}"
 
 msgid ""
 "A swarm of\n"
 "%{monster}"
 msgstr ""
+"Рой\n"
+"%{monster}"
 
 msgid ""
 "Zounds of\n"
 "%{monster}"
 msgstr ""
+"Безліч\n"
+"%{monster}"
 
 msgid ""
 "A legion of\n"
 "%{monster}"
 msgstr ""
+"Легіён\n"
+"%{monster}"
 
 msgid "army|Few"
-msgstr ""
+msgstr "Трохі"
 
 msgid "army|Several"
-msgstr ""
+msgstr "Некалькі"
 
 msgid "army|Pack"
-msgstr ""
+msgstr "Крыху"
 
 msgid "army|Lots"
-msgstr ""
+msgstr "Шмат"
 
 msgid "army|Horde"
-msgstr ""
+msgstr "Арда"
 
 msgid "army|Throng"
-msgstr ""
+msgstr "Натоўп"
 
 msgid "army|Swarm"
-msgstr ""
+msgstr "Рой"
 
 msgid "army|Zounds"
-msgstr ""
+msgstr "Безліч"
 
 msgid "army|Legion"
-msgstr ""
+msgstr "Легіён"
 
 msgid "All %{race} troops +1"
 msgstr ""
@@ -177,10 +195,10 @@ msgid ""
 msgstr ""
 
 msgid "Speed"
-msgstr ""
+msgstr "Скорасць"
 
 msgid "Speed: %{speed}"
-msgstr ""
+msgstr "Скорасць: %{speed}"
 
 msgid "Army Order"
 msgstr ""
@@ -230,28 +248,28 @@ msgid ""
 msgstr ""
 
 msgid "The enemy has surrendered!"
-msgstr ""
+msgstr "Праціўнік здаўся!"
 
 msgid "The enemy has fled!"
-msgstr ""
+msgstr "Праціўнік уцёк!"
 
 msgid "A glorious victory!"
-msgstr ""
+msgstr "Выдатная перамога!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
-msgstr ""
+msgstr "За мужнасць у баі %{name} атрымлівае %{exp} вопыту."
 
 msgid "The cowardly %{name} flees from battle."
-msgstr ""
+msgstr "%{name} баязліва ўцякае з поля бітвы."
 
 msgid "%{name} surrenders to the enemy, and departs in shame."
-msgstr ""
+msgstr "%{name} здаўся праціўніку і пакінуў з ганьбай."
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
-msgstr ""
+msgstr "Вашы войскі былі знішчаны і %{name} пакідае вас."
 
 msgid "Your force suffer a bitter defeat."
-msgstr ""
+msgstr "Вашы войскі былі знішчаны."
 
 msgid "Battlefield Casualties"
 msgstr ""
@@ -286,25 +304,25 @@ msgid "Captain of %{name}"
 msgstr ""
 
 msgid "Attack"
-msgstr ""
+msgstr "Атака"
 
 msgid "Defense"
-msgstr ""
+msgstr "Абарона"
 
 msgid "Spell Power"
-msgstr ""
+msgstr "Магічная моц"
 
 msgid "Knowledge"
-msgstr ""
+msgstr "Веды"
 
 msgid "Morale"
-msgstr ""
+msgstr "Мараль"
 
 msgid "Luck"
-msgstr ""
+msgstr "Удача"
 
 msgid "Spell Points"
-msgstr ""
+msgstr "Адзінкі магіі"
 
 msgid "Hero's Options"
 msgstr ""
@@ -575,10 +593,10 @@ msgid "Surrender disabled"
 msgstr ""
 
 msgid "Damage: %{max}"
-msgstr ""
+msgstr "Урон: %{max}"
 
 msgid "Damage: %{min} - %{max}"
-msgstr ""
+msgstr "Урон: %{min} - %{max}"
 
 msgid "Perish: %{max}"
 msgstr ""
@@ -2216,25 +2234,25 @@ msgid "Are you sure you want to dismiss this army?"
 msgstr ""
 
 msgid "Attack Skill"
-msgstr ""
+msgstr "Атака"
 
 msgid "Defense Skill"
-msgstr ""
+msgstr "Абарона"
 
 msgid "Shots"
-msgstr ""
+msgstr "Стрэлы"
 
 msgid "Shots Left"
-msgstr ""
+msgstr "Астатак стрэлаў"
 
 msgid "Damage"
-msgstr ""
+msgstr "Урон"
 
 msgid "Hit Points"
-msgstr ""
+msgstr "Здароўе"
 
 msgid "Hit Points Left"
-msgstr ""
+msgstr "Астатак здароўя"
 
 msgid "Followers"
 msgstr ""
@@ -3658,7 +3676,7 @@ msgid "Norwegian"
 msgstr ""
 
 msgid "Belarusian"
-msgstr ""
+msgstr "Беларускі"
 
 msgid "Bulgarian"
 msgstr ""
@@ -5454,25 +5472,25 @@ msgid "View Towns and Castles."
 msgstr ""
 
 msgid "luck|Cursed"
-msgstr ""
+msgstr "Праклятая"
 
 msgid "luck|Awful"
-msgstr ""
+msgstr "Няздольная"
 
 msgid "luck|Bad"
-msgstr ""
+msgstr "Дрэнная"
 
 msgid "luck|Normal"
-msgstr ""
+msgstr "Звычайная"
 
 msgid "luck|Good"
-msgstr ""
+msgstr "Добрая"
 
 msgid "luck|Great"
-msgstr ""
+msgstr "Выдатная"
 
 msgid "luck|Irish"
-msgstr ""
+msgstr "Багатая"
 
 msgid ""
 "Bad luck sometimes falls on your armies in combat, causing their attacks to "
@@ -5490,25 +5508,25 @@ msgid ""
 msgstr ""
 
 msgid "morale|Treason"
-msgstr ""
+msgstr "Здрадная"
 
 msgid "morale|Awful"
-msgstr ""
+msgstr "Няздольная"
 
 msgid "morale|Poor"
-msgstr ""
+msgstr "Кепская"
 
 msgid "morale|Normal"
-msgstr ""
+msgstr "Звычайная"
 
 msgid "morale|Good"
-msgstr ""
+msgstr "Добрая"
 
 msgid "morale|Great"
-msgstr ""
+msgstr "Выдатная"
 
 msgid "morale|Blood!"
-msgstr ""
+msgstr "Лютая"
 
 msgid "Bad morale may cause your armies to freeze in combat."
 msgstr ""
@@ -5522,22 +5540,22 @@ msgid "Good morale may give your armies extra attacks in combat."
 msgstr ""
 
 msgid "Knight"
-msgstr ""
+msgstr "Рыцар"
 
 msgid "Barbarian"
-msgstr ""
+msgstr "Варвар"
 
 msgid "Sorceress"
-msgstr ""
+msgstr "Чараўніца"
 
 msgid "Warlock"
-msgstr ""
+msgstr "Вядзьмак"
 
 msgid "Wizard"
-msgstr ""
+msgstr "Чарадзей"
 
 msgid "Necromancer"
-msgstr ""
+msgstr "Некрамант"
 
 msgid "Multi"
 msgstr ""
@@ -5549,34 +5567,34 @@ msgid "race|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
-msgstr ""
+msgstr "На месцы"
 
 msgid "speed|Crawling"
-msgstr ""
+msgstr "Ледзь поўзае"
 
 msgid "speed|Very Slow"
-msgstr ""
+msgstr "Марудная"
 
 msgid "speed|Slow"
-msgstr ""
+msgstr "Няспешная"
 
 msgid "speed|Average"
-msgstr ""
+msgstr "Ніштаватая"
 
 msgid "speed|Fast"
-msgstr ""
+msgstr "Хуткая"
 
 msgid "speed|Very Fast"
-msgstr ""
+msgstr "Шпаркая"
 
 msgid "speed|Ultra Fast"
-msgstr ""
+msgstr "Імклівая"
 
 msgid "speed|Blazing"
-msgstr ""
+msgstr "Нястрымная"
 
 msgid "speed|Instant"
-msgstr ""
+msgstr "Імгненная"
 
 msgid "week|PLAGUE"
 msgstr ""
@@ -5924,7 +5942,7 @@ msgid "Buoy"
 msgstr ""
 
 msgid "Skeleton"
-msgstr ""
+msgstr "Шкілет"
 
 msgid "Treasure Chest"
 msgstr ""
@@ -6083,397 +6101,397 @@ msgid "Unknown Monsters"
 msgstr ""
 
 msgid "Peasant"
-msgstr ""
+msgstr "Селянін"
 
 msgid "Peasants"
-msgstr ""
+msgstr "Сяляне"
 
 msgid "Archer"
-msgstr ""
+msgstr "Лучнік"
 
 msgid "Archers"
-msgstr ""
+msgstr "Лучнікі"
 
 msgid "Ranger"
-msgstr ""
+msgstr "Стралок"
 
 msgid "Rangers"
-msgstr ""
+msgstr "Стралкі"
 
 msgid "Pikeman"
-msgstr ""
+msgstr "Кап'ёўшчык"
 
 msgid "Pikemen"
-msgstr ""
+msgstr "Кап'ёўшчыкі"
 
 msgid "Veteran Pikeman"
-msgstr ""
+msgstr "Бывалы кап'ёўшчык"
 
 msgid "Veteran Pikemen"
-msgstr ""
+msgstr "Бывалыя кап'ёўшчыкі"
 
 msgid "Swordsman"
-msgstr ""
+msgstr "Мечнік"
 
 msgid "Swordsmen"
-msgstr ""
+msgstr "Мечнікі"
 
 msgid "Master Swordsman"
-msgstr ""
+msgstr "Майстар мечнік"
 
 msgid "Master Swordsmen"
-msgstr ""
+msgstr "Майстры мечнікі"
 
 msgid "Cavalries"
-msgstr ""
+msgstr "Коннік"
 
 msgid "Cavalry"
-msgstr ""
+msgstr "Коннікі"
 
 msgid "Champion"
-msgstr ""
+msgstr "Чэмпіён"
 
 msgid "Champions"
-msgstr ""
+msgstr "Чэмпіёны"
 
 msgid "Paladin"
-msgstr ""
+msgstr "Паладзін"
 
 msgid "Paladins"
-msgstr ""
+msgstr "Паладзіны"
 
 msgid "Crusader"
-msgstr ""
+msgstr "Крыжак"
 
 msgid "Crusaders"
-msgstr ""
+msgstr "Крыжакі"
 
 msgid "Goblin"
-msgstr ""
+msgstr "Гоблін"
 
 msgid "Goblins"
-msgstr ""
+msgstr "Гобліны"
 
 msgid "Orc"
-msgstr ""
+msgstr "Орк"
 
 msgid "Orcs"
-msgstr ""
+msgstr "Оркі"
 
 msgid "Orc Chief"
-msgstr ""
+msgstr "Орк правадыр"
 
 msgid "Orc Chiefs"
-msgstr ""
+msgstr "Оркі правадыры"
 
 msgid "Wolf"
-msgstr ""
+msgstr "Воўк"
 
 msgid "Wolves"
-msgstr ""
+msgstr "Ваўкі"
 
 msgid "Ogre"
-msgstr ""
+msgstr "Волат"
 
 msgid "Ogres"
-msgstr ""
+msgstr "Волаты"
 
 msgid "Ogre Lord"
-msgstr ""
+msgstr "Волат уладар"
 
 msgid "Ogre Lords"
-msgstr ""
+msgstr "Волаты ўладары"
 
 msgid "Troll"
-msgstr ""
+msgstr "Троль"
 
 msgid "Trolls"
-msgstr ""
+msgstr "Тролі"
 
 msgid "War Troll"
-msgstr ""
+msgstr "Ваяўнічы троль"
 
 msgid "War Trolls"
-msgstr ""
+msgstr "Ваяўнічыя тролі"
 
 msgid "Cyclopes"
-msgstr ""
+msgstr "Цыклопы"
 
 msgid "Cyclops"
-msgstr ""
+msgstr "Цыклоп"
 
 msgid "Sprite"
-msgstr ""
+msgstr "Фея"
 
 msgid "Sprites"
-msgstr ""
+msgstr "Феі"
 
 msgid "Dwarf"
-msgstr ""
+msgstr "Гном"
 
 msgid "Dwarves"
-msgstr ""
+msgstr "Гномы"
 
 msgid "Battle Dwarf"
-msgstr ""
+msgstr "Гном ваяўнік"
 
 msgid "Battle Dwarves"
-msgstr ""
+msgstr "Гномы ваяўнікі"
 
 msgid "Elf"
-msgstr ""
+msgstr "Эльф"
 
 msgid "Elves"
-msgstr ""
+msgstr "Эльфы"
 
 msgid "Grand Elf"
-msgstr ""
+msgstr "Шляхетны эльф"
 
 msgid "Grand Elves"
-msgstr ""
+msgstr "Шлфхетныя эльфы"
 
 msgid "Druid"
-msgstr ""
+msgstr "Друід"
 
 msgid "Druids"
-msgstr ""
+msgstr "Друіды"
 
 msgid "Greater Druid"
-msgstr ""
+msgstr "Старшы друід"
 
 msgid "Greater Druids"
-msgstr ""
+msgstr "Старшыя друіды"
 
 msgid "Unicorn"
-msgstr ""
+msgstr "Аднарог"
 
 msgid "Unicorns"
-msgstr ""
+msgstr "Аднарогі"
 
 msgid "Phoenix"
-msgstr ""
+msgstr "Фенікс"
 
 msgid "Phoenixes"
-msgstr ""
+msgstr "Феніксы"
 
 msgid "Centaur"
-msgstr ""
+msgstr "Кентаўр"
 
 msgid "Centaurs"
-msgstr ""
+msgstr "Кентаўры"
 
 msgid "Gargoyle"
-msgstr ""
+msgstr "Гаргулля"
 
 msgid "Gargoyles"
-msgstr ""
+msgstr "Гаргуллі"
 
 msgid "Griffin"
-msgstr ""
+msgstr "Грыфон"
 
 msgid "Griffins"
-msgstr ""
+msgstr "Грыфоны"
 
 msgid "Minotaur"
-msgstr ""
+msgstr "Мінатаўр"
 
 msgid "Minotaurs"
-msgstr ""
+msgstr "Мінатаўры"
 
 msgid "Minotaur King"
-msgstr ""
+msgstr "Мінатаўр кароль"
 
 msgid "Minotaur Kings"
-msgstr ""
+msgstr "Мінатаўры каралі"
 
 msgid "Hydra"
-msgstr ""
+msgstr "Гідра"
 
 msgid "Hydras"
-msgstr ""
+msgstr "Гідры"
 
 msgid "Green Dragon"
-msgstr ""
+msgstr "Зялёны цмок"
 
 msgid "Green Dragons"
-msgstr ""
+msgstr "Зялёныя цмокі"
 
 msgid "Red Dragon"
-msgstr ""
+msgstr "Чырвоны цмок"
 
 msgid "Red Dragons"
-msgstr ""
+msgstr "Чырвоныя цмокі"
 
 msgid "Black Dragon"
-msgstr ""
+msgstr "Чорны цмок"
 
 msgid "Black Dragons"
-msgstr ""
+msgstr "Чорныя цмокі"
 
 msgid "Halfling"
-msgstr ""
+msgstr "Хобіт"
 
 msgid "Halflings"
-msgstr ""
+msgstr "Хобіты"
 
 msgid "Boar"
-msgstr ""
+msgstr "Дзік"
 
 msgid "Boars"
-msgstr ""
+msgstr "Дзікі"
 
 msgid "Iron Golem"
-msgstr ""
+msgstr "Жалезны голем"
 
 msgid "Iron Golems"
-msgstr ""
+msgstr "Жалезныя големы"
 
 msgid "Steel Golem"
-msgstr ""
+msgstr "Сталёвы голем"
 
 msgid "Steel Golems"
-msgstr ""
+msgstr "Сталёвыя големы"
 
 msgid "Roc"
-msgstr ""
+msgstr "Птушка Рух"
 
 msgid "Rocs"
-msgstr ""
+msgstr "Птушкі Рух"
 
 msgid "Mage"
-msgstr ""
+msgstr "Маг"
 
 msgid "Magi"
-msgstr ""
+msgstr "Магі"
 
 msgid "Archmage"
-msgstr ""
+msgstr "Архімаг"
 
 msgid "Archmagi"
-msgstr ""
+msgstr "Архімагі"
 
 msgid "Giant"
-msgstr ""
+msgstr "Гігант"
 
 msgid "Giants"
-msgstr ""
+msgstr "Гіганты"
 
 msgid "Titan"
-msgstr ""
+msgstr "Тытан"
 
 msgid "Titans"
-msgstr ""
+msgstr "Тытаны"
 
 msgid "Skeletons"
-msgstr ""
+msgstr "Шкілеты"
 
 msgid "Zombie"
-msgstr ""
+msgstr "Мярцвяк"
 
 msgid "Zombies"
-msgstr ""
+msgstr "Мярцвякі"
 
 msgid "Mutant Zombie"
-msgstr ""
+msgstr "Хваравіты мярцвяк"
 
 msgid "Mutant Zombies"
-msgstr ""
+msgstr "Хваравітыя мярцвякі"
 
 msgid "Mummies"
-msgstr ""
+msgstr "Муміі"
 
 msgid "Mummy"
-msgstr ""
+msgstr "Мумія"
 
 msgid "Royal Mummies"
-msgstr ""
+msgstr "Каралеўскія муміі"
 
 msgid "Royal Mummy"
-msgstr ""
+msgstr "Каралеўская мумія"
 
 msgid "Vampire"
-msgstr ""
+msgstr "Вампір"
 
 msgid "Vampires"
-msgstr ""
+msgstr "Вампіры"
 
 msgid "Vampire Lord"
-msgstr ""
+msgstr "Лорд вампір"
 
 msgid "Vampire Lords"
-msgstr ""
+msgstr "Лорды вампіры"
 
 msgid "Lich"
-msgstr ""
+msgstr "Кашчэй"
 
 msgid "Liches"
-msgstr ""
+msgstr "Кашчэі"
 
 msgid "Power Lich"
-msgstr ""
+msgstr "Магутны кашчэй"
 
 msgid "Power Liches"
-msgstr ""
+msgstr "Магутныя кашчэі"
 
 msgid "Bone Dragon"
-msgstr ""
+msgstr "Касцяны цмок"
 
 msgid "Bone Dragons"
-msgstr ""
+msgstr "Касцяныя цмокі"
 
 msgid "Rogue"
-msgstr ""
+msgstr "Ліхадзей"
 
 msgid "Rogues"
-msgstr ""
+msgstr "Ліхадзеі"
 
 msgid "Nomad"
-msgstr ""
+msgstr "Качэўнік"
 
 msgid "Nomads"
-msgstr ""
+msgstr "Качэўнікі"
 
 msgid "Ghost"
-msgstr ""
+msgstr "Здань"
 
 msgid "Ghosts"
-msgstr ""
+msgstr "Здані"
 
 msgid "Genie"
-msgstr ""
+msgstr "Джын"
 
 msgid "Genies"
-msgstr ""
+msgstr "Джыны"
 
 msgid "Medusa"
-msgstr ""
+msgstr "Медуза"
 
 msgid "Medusas"
-msgstr ""
+msgstr "Медузы"
 
 msgid "Earth Elemental"
-msgstr ""
+msgstr "Земляны элементаль"
 
 msgid "Earth Elementals"
-msgstr ""
+msgstr "Земляныя элементалі"
 
 msgid "Air Elemental"
-msgstr ""
+msgstr "Паветраны элементаль"
 
 msgid "Air Elementals"
-msgstr ""
+msgstr "Паветраныя элементалі"
 
 msgid "Fire Elemental"
-msgstr ""
+msgstr "Вогненны элементаль"
 
 msgid "Fire Elementals"
-msgstr ""
+msgstr "Вогненныя элементалі"
 
 msgid "Water Elemental"
-msgstr ""
+msgstr "Вадзяны элементаль"
 
 msgid "Water Elementals"
-msgstr ""
+msgstr "Вадзяныя элементалі"
 
 msgid "Random Monsters"
 msgstr ""
