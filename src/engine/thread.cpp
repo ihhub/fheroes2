@@ -25,30 +25,34 @@
 
 namespace MultiThreading
 {
-    AsyncManager::~AsyncManager()
+    void AsyncManager::stopWorker()
     {
         if ( _worker ) {
             {
                 std::scoped_lock<std::mutex> lock( _mutex );
 
-                _exitFlag = 1;
-                _runFlag = 1;
-                _workerNotification.notify_all();
+                _exitFlag = true;
+                _runFlag = true;
             }
+
+            _workerNotification.notify_all();
 
             _worker->join();
             _worker.reset();
         }
     }
 
-    void AsyncManager::createThreadIfNeeded()
+    void AsyncManager::createWorker()
     {
         if ( !_worker ) {
-            _runFlag = 1;
+            _runFlag = true;
             _worker = std::make_unique<std::thread>( AsyncManager::_workerThread, this );
 
-            std::unique_lock<std::mutex> lock( _mutex );
-            _masterNotification.wait( lock, [this] { return _runFlag == 0; } );
+            {
+                std::unique_lock<std::mutex> lock( _mutex );
+
+                _masterNotification.wait( lock, [this] { return !_runFlag; } );
+            }
         }
     }
 
@@ -58,25 +62,29 @@ namespace MultiThreading
 
         {
             std::scoped_lock<std::mutex> lock( manager->_mutex );
-            manager->_runFlag = 0;
-            manager->_masterNotification.notify_one();
+
+            manager->_runFlag = false;
         }
 
-        while ( manager->_exitFlag == 0 ) {
+        manager->_masterNotification.notify_one();
+
+        while ( !manager->_exitFlag ) {
             {
                 std::unique_lock<std::mutex> lock( manager->_mutex );
-                manager->_workerNotification.wait( lock, [manager] { return manager->_runFlag == 1; } );
+
+                manager->_workerNotification.wait( lock, [manager] { return manager->_runFlag; } );
             }
 
-            if ( manager->_exitFlag )
+            if ( manager->_exitFlag ) {
                 break;
+            }
 
             {
                 std::scoped_lock<std::mutex> lock( manager->_mutex );
 
                 const bool moreTasks = manager->prepareTask();
                 if ( !moreTasks ) {
-                    manager->_runFlag = 0;
+                    manager->_runFlag = false;
                 }
             }
 
@@ -84,9 +92,10 @@ namespace MultiThreading
         }
     }
 
-    void AsyncManager::notifyThread()
+    void AsyncManager::notifyWorker()
     {
-        _runFlag = 1;
+        _runFlag = true;
+
         _workerNotification.notify_all();
     }
 }

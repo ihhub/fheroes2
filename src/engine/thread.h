@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <atomic>
 #include <condition_variable>
 #include <cstdint>
 #include <mutex>
@@ -31,26 +32,31 @@ namespace MultiThreading
     {
     public:
         AsyncManager() = default;
-
         AsyncManager( const AsyncManager & ) = delete;
-        AsyncManager( AsyncManager && ) = delete;
 
-        virtual ~AsyncManager();
+        virtual ~AsyncManager() = default;
 
         AsyncManager & operator=( const AsyncManager & ) = delete;
-        AsyncManager & operator=( AsyncManager && ) = delete;
+
+        // Stop and join the worker thread. This cannot be done in the destructor (directly or indirectly) due
+        // to the potential race on the vptr since this class has virtual methods that could be called from the
+        // worker thread.
+        void stopWorker();
 
     protected:
         std::mutex _mutex;
 
-        void createThreadIfNeeded();
+        // Create the worker thread if it doesn't exist yet.
+        void createWorker();
 
-        void notifyThread();
+        // Notify the worker thread about a new task. The _mutex should be acquired while calling this method.
+        void notifyWorker();
 
         // Prepare a task which requires mutex lock. Returns true if more tasks are available.
         virtual bool prepareTask() = 0;
 
-        // Task execution is done in non-thread safe mode! No mutex lock for any means of synchronizations are done for this call.
+        // Task execution is done in non-thread safe mode! No mutex lock for any means of synchronizations are
+        // done for this call.
         virtual void executeTask() = 0;
 
     private:
@@ -59,8 +65,8 @@ namespace MultiThreading
         std::condition_variable _masterNotification;
         std::condition_variable _workerNotification;
 
-        uint8_t _exitFlag{ 0 };
-        uint8_t _runFlag{ 1 };
+        std::atomic<bool> _exitFlag{ false };
+        bool _runFlag{ false };
 
         static void _workerThread( AsyncManager * manager );
     };
