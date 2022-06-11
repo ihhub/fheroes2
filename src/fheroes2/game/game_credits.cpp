@@ -198,7 +198,7 @@ namespace
         const int32_t bottomOffset = offsetY;
 
         const fheroes2::Sprite & goblin = fheroes2::AGG::GetICN( ICN::GOBLIN, 27 );
-        fheroes2::Blit( goblin, output, columnStep + ( columnStep ) / 2 - 15, secondAuthorLayerY - goblin.height() - 15, true );
+        fheroes2::Blit( goblin, output, columnStep + columnStep / 2 - 15, secondAuthorLayerY - goblin.height() - 15, true );
 
         offsetY = secondAuthorLayerY;
 
