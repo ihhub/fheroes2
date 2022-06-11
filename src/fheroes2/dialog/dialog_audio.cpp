@@ -20,10 +20,10 @@
 
 #include <cassert>
 
-#include "dialog_audio.h"
-#include "audio.h"
 #include "agg_image.h"
+#include "audio.h"
 #include "cursor.h"
+#include "dialog_audio.h"
 #include "game.h"
 #include "game_hotkeys.h"
 #include "icn.h"
@@ -100,8 +100,7 @@ namespace
 
         // 3D Audio.
         const bool is3DAudioEnabled = conf.is3DAudioEnabled();
-        const fheroes2::Sprite & interfaceStateIcon
-            = is3DAudioEnabled ? fheroes2::AGG::GetICN( ICN::SPANEL, 11 ) : fheroes2::AGG::GetICN( ICN::SPANEL, 10 );
+        const fheroes2::Sprite & interfaceStateIcon = is3DAudioEnabled ? fheroes2::AGG::GetICN( ICN::SPANEL, 11 ) : fheroes2::AGG::GetICN( ICN::SPANEL, 10 );
         if ( is3DAudioEnabled ) {
             value = _( "On" );
         }

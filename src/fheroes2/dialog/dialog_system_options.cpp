@@ -20,7 +20,6 @@
 
 #include "dialog_system_options.h"
 #include "agg_image.h"
-#include "audio.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_audio.h"

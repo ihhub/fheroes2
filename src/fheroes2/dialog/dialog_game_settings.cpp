@@ -59,8 +59,7 @@ namespace
     const fheroes2::Rect optionsRoi{ optionOffset.x, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
     const fheroes2::Rect battleResolveRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize,
                                            optionWindowSize };
-    const fheroes2::Rect hotKeyRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y + offsetBetweenOptions.height, optionWindowSize,
-                                    optionWindowSize };
+    const fheroes2::Rect hotKeyRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
     const fheroes2::Rect interfaceTypeRoi{ optionOffset.x, optionOffset.y + 2 * offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
     const fheroes2::Rect cursorTypeRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + 2 * offsetBetweenOptions.height, optionWindowSize,
                                         optionWindowSize };

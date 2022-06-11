@@ -2080,7 +2080,7 @@ namespace fheroes2
                     = getTransformTable( GetICN( ICN::CSPANBKG, 0 ), GetICN( ICN::CSPANBKE, 0 ), roi.x, roi.y, roi.width, roi.height );
                 ApplyPalette( output, roi.x, roi.y, output, roi.x, roi.y, roi.width, roi.height, transformTable );
 
-                _icnVsSprite[id][1] =  GetICN( ICN::ESPANBKG, 1 );
+                _icnVsSprite[id][1] = GetICN( ICN::ESPANBKG, 1 );
 
                 return true;
             }
