@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-12 02:21+0000\n"
+"POT-Creation-Date: 2022-06-12 08:18+0000\n"
 "PO-Revision-Date: 2022-06-05 20:16+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -3318,6 +3318,10 @@ msgstr "QA i wsparcie"
 
 msgid "Development"
 msgstr "Development"
+
+#, fuzzy
+msgid "Dev and Support"
+msgstr "QA i wsparcie"
 
 msgid "Visit us at "
 msgstr "Odwiedź nas "
