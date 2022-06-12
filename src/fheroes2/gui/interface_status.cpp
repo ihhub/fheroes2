@@ -297,7 +297,7 @@ void Interface::StatusWindow::DrawDayInfo( int oh ) const
 
 void Interface::StatusWindow::SetResource( int res, uint32_t count )
 {
-    // Ensure that there will be no timer events until we run the timer again at the end of this function
+    // Ensure that there will be no timer events until we set the timer again at the end of this function
     timerShowLastResource.remove();
 
     lastResource = res;
