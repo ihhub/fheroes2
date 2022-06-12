@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 17:13+0000\n"
+"POT-Creation-Date: 2022-06-12 02:21+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2637,6 +2637,46 @@ msgstr "Ingen plass i"
 msgid "the garrison"
 msgstr "hæren"
 
+msgid "off"
+msgstr "av"
+
+msgid "Music"
+msgstr "Musikk"
+
+msgid "Effects"
+msgstr "Lydeffekter"
+
+msgid "MIDI"
+msgstr "MIDI"
+
+msgid "MIDI Expansion"
+msgstr "MIDI Expansion"
+
+msgid "External"
+msgstr "Ekstern"
+
+msgid "Music Type"
+msgstr "Musikktype"
+
+msgid "3D Audio"
+msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr "Juster volumet til musikken."
+
+msgid "Toggle foreground sounds level."
+msgstr "Juster volumet til lydeffekter og videosnutter."
+
+msgid "Change the type of music."
+msgstr "Skift typen musikk."
+
+#, fuzzy
+msgid "Toggle 3D effects of foreground sounds."
+msgstr "Juster volumet til lydeffekter og videosnutter."
+
+msgid "Okay"
+msgstr "Okay"
+
 msgid "Build a new ship:"
 msgstr "Bygg et nytt skip:"
 
@@ -2686,26 +2726,12 @@ msgstr "Eksperimentelle"
 msgid "Settings"
 msgstr "Innstillinger"
 
-msgid "off"
-msgstr "av"
+msgid "Audio"
+msgstr ""
 
-msgid "Music"
-msgstr "Musikk"
-
-msgid "Effects"
-msgstr "Lydeffekter"
-
-msgid "MIDI"
-msgstr "MIDI"
-
-msgid "MIDI Expansion"
-msgstr "MIDI Expansion"
-
-msgid "External"
-msgstr "Ekstern"
-
-msgid "Music Type"
-msgstr "Musikktype"
+#, fuzzy
+msgid "settings"
+msgstr "Innstillinger"
 
 #, fuzzy
 msgid "Hot Keys"
@@ -2731,6 +2757,29 @@ msgstr ""
 msgid "Text Support"
 msgstr "Kvalitetssikring og støtte"
 
+msgid "Evil"
+msgstr "Ond"
+
+msgid "Good"
+msgstr "God"
+
+msgid "Interface Type"
+msgstr ""
+"Grensesnitts\n"
+"-type"
+
+msgid "Auto Resolve"
+msgstr "Datastyrt"
+
+msgid "Auto, No Spells"
+msgstr "Data, ingen magi"
+
+msgid "Manual"
+msgstr "Manuell"
+
+msgid "Battles"
+msgstr "Kampstyring"
+
 msgid "Select Game Language"
 msgstr "Velg spillspråk"
 
@@ -2743,20 +2792,21 @@ msgstr "Velg spilloppløsning"
 msgid "Change resolution of the game."
 msgstr "Endre oppløsningen til spillet."
 
+#, fuzzy
+msgid "Change audio settings of the game."
+msgstr "Endre språket, oppløsningen og innstillingene til spillet."
+
 msgid "Experimental game settings."
 msgstr "Innstillinger for utprøvningsvalg."
 
-msgid "Toggle ambient music level."
-msgstr "Juster volumet til musikken."
-
-msgid "Toggle foreground sounds level."
-msgstr "Juster volumet til lydeffekter og videosnutter."
-
-msgid "Change the type of music."
-msgstr "Skift typen musikk."
+msgid "Toggle instant battle mode."
+msgstr "Skift modus for hurtigkamp."
 
 msgid "Check all Hot Keys used in the game."
 msgstr ""
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Velg den typen grensesnitt du ønsker."
 
 msgid ""
 "Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
@@ -2767,9 +2817,6 @@ msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
-
-msgid "Okay"
-msgstr "Okay"
 
 msgid "Attention"
 msgstr "Advarsel"
@@ -3237,17 +3284,6 @@ msgstr "Fiendefart"
 msgid "Scroll Speed"
 msgstr "Panorerings-fart"
 
-msgid "Evil"
-msgstr "Ond"
-
-msgid "Good"
-msgstr "God"
-
-msgid "Interface Type"
-msgstr ""
-"Grensesnitts\n"
-"-type"
-
 msgid "Hide"
 msgstr "Løs"
 
@@ -3256,18 +3292,6 @@ msgstr "Bundet"
 
 msgid "Interface"
 msgstr "Grensesnitt"
-
-msgid "Auto Resolve"
-msgstr "Datastyrt"
-
-msgid "Auto, No Spells"
-msgstr "Data, ingen magi"
-
-msgid "Battles"
-msgstr "Kampstyring"
-
-msgid "Manual"
-msgstr "Manuell"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr "Skift hastigheten heltene dine flytter seg på brettet."
@@ -3282,14 +3306,8 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr "Setter farten du panorerer rundt brettet på."
 
-msgid "Toggle the type of interface you want to use."
-msgstr "Velg den typen grensesnitt du ønsker."
-
 msgid "Toggle interface visibility."
 msgstr "Skift synlighet for grensesnittet."
-
-msgid "Toggle instant battle mode."
-msgstr "Skift modus for hurtigkamp."
 
 msgid "Att."
 msgstr "Ang."

@@ -20,9 +20,10 @@
 
 #include "dialog_system_options.h"
 #include "agg_image.h"
-#include "audio.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_audio.h"
+#include "dialog_hotkeys.h"
 #include "game.h"
 #include "game_delays.h"
 #include "game_hotkeys.h"
@@ -46,6 +47,9 @@ namespace
         ChangeInterfaceTheme,
         UpdateInterface,
         SaveConfiguration,
+        AudioSettings,
+        HotKeys,
+        CursorType,
         Close
     };
 
@@ -72,43 +76,18 @@ namespace
 
         const Settings & conf = Settings::Get();
 
-        // Music volume.
-        const fheroes2::Sprite & musicVolumeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, Audio::isValid() ? 1 : 0 );
-        std::string value;
-        if ( Audio::isValid() && conf.MusicVolume() ) {
-            value = std::to_string( conf.MusicVolume() );
-        }
-        else {
-            value = _( "off" );
-        }
+        // Audio settings.
+        const fheroes2::Sprite & audioSettingsIcon = fheroes2::AGG::GetICN( ICN::SPANEL, 1 );
+        drawOption( rects[0], audioSettingsIcon, _( "Audio" ), _( "settings" ) );
 
-        drawOption( rects[0], musicVolumeIcon, _( "Music" ), value );
+        // Hot keys.
+        const fheroes2::Sprite & hotkeysIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, 5 );
+        drawOption( rects[1], hotkeysIcon, _( "Hot Keys" ), _( "In-game" ) );
 
-        // Sound volume.
-        const fheroes2::Sprite & soundVolumeOption = fheroes2::AGG::GetICN( ICN::SPANEL, Audio::isValid() ? 3 : 2 );
-        if ( Audio::isValid() && conf.SoundVolume() ) {
-            value = std::to_string( conf.SoundVolume() );
-        }
-        else {
-            value = _( "off" );
-        }
-
-        drawOption( rects[1], soundVolumeOption, _( "Effects" ), value );
-
-        // Music Type.
-        const MusicSource musicType = conf.MusicType();
-        const fheroes2::Sprite & musicTypeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, musicType == MUSIC_EXTERNAL ? 11 : 10 );
-        if ( musicType == MUSIC_MIDI_ORIGINAL ) {
-            value = _( "MIDI" );
-        }
-        else if ( musicType == MUSIC_MIDI_EXPANSION ) {
-            value = _( "MIDI Expansion" );
-        }
-        else if ( musicType == MUSIC_EXTERNAL ) {
-            value = _( "External" );
-        }
-
-        drawOption( rects[2], musicTypeIcon, _( "Music Type" ), value );
+        // Cursor Type.
+        const bool isMonoCursor = Settings::Get().isMonochromeCursorEnabled();
+        const fheroes2::Sprite & cursorTypeIcon = fheroes2::AGG::GetICN( ICN::SPANEL, isMonoCursor ? 20 : 21 );
+        drawOption( rects[2], cursorTypeIcon, _( "Mouse Cursor" ), isMonoCursor ? _( "Black & White" ) : _( "Color" ) );
 
         // Hero's movement speed.
         const int heroSpeed = conf.HeroesMoveSpeed();
@@ -121,6 +100,7 @@ namespace
         }
 
         const fheroes2::Sprite & heroSpeedIcon = fheroes2::AGG::GetICN( ICN::SPANEL, heroSpeedIconId );
+        std::string value;
         if ( heroSpeed == 10 ) {
             value = _( "Jump" );
         }
@@ -242,9 +222,9 @@ namespace
             }
         }
 
-        const fheroes2::Rect & musicVolumeRoi = roi[0];
-        const fheroes2::Rect & soundVolumeRoi = roi[1];
-        const fheroes2::Rect & musicTypeRoi = roi[2];
+        const fheroes2::Rect & audioSettingsRoi = roi[0];
+        const fheroes2::Rect & hotkeysRoi = roi[1];
+        const fheroes2::Rect & cursorTypeRoi = roi[2];
         const fheroes2::Rect & heroSpeedRoi = roi[3];
         const fheroes2::Rect & aiSpeedRoi = roi[4];
         const fheroes2::Rect & scrollSpeedRoi = roi[5];
@@ -271,58 +251,19 @@ namespace
                 break;
             }
 
-            // set music or sound volume
-            bool saveMusicVolume = false;
-            bool saveSoundVolume = false;
-            if ( Audio::isValid() ) {
-                if ( le.MouseClickLeft( musicVolumeRoi ) ) {
-                    conf.SetMusicVolume( ( conf.MusicVolume() + 1 ) % 11 );
-                    saveMusicVolume = true;
-                }
-                else if ( le.MouseWheelUp( musicVolumeRoi ) ) {
-                    conf.SetMusicVolume( conf.MusicVolume() + 1 );
-                    saveMusicVolume = true;
-                }
-                else if ( le.MouseWheelDn( musicVolumeRoi ) ) {
-                    conf.SetMusicVolume( conf.MusicVolume() - 1 );
-                    saveMusicVolume = true;
-                }
-                if ( saveMusicVolume ) {
-                    Music::setVolume( 100 * conf.MusicVolume() / 10 );
-                }
-
-                if ( le.MouseClickLeft( soundVolumeRoi ) ) {
-                    conf.SetSoundVolume( ( conf.SoundVolume() + 1 ) % 11 );
-                    saveSoundVolume = true;
-                }
-                else if ( le.MouseWheelUp( soundVolumeRoi ) ) {
-                    conf.SetSoundVolume( conf.SoundVolume() + 1 );
-                    saveSoundVolume = true;
-                }
-                else if ( le.MouseWheelDn( soundVolumeRoi ) ) {
-                    conf.SetSoundVolume( conf.SoundVolume() - 1 );
-                    saveSoundVolume = true;
-                }
-                if ( saveSoundVolume ) {
-                    Game::EnvironmentSoundMixer();
-                }
+            // Open audio settings window.
+            if ( le.MouseClickLeft( audioSettingsRoi ) ) {
+                return DialogAction::AudioSettings;
             }
 
-            // set music type
-            bool saveMusicType = false;
-            if ( le.MouseClickLeft( musicTypeRoi ) ) {
-                int type = conf.MusicType() + 1;
-                // If there's no expansion files we skip this option
-                if ( type == MUSIC_MIDI_EXPANSION && !conf.isPriceOfLoyaltySupported() )
-                    ++type;
+            // Open Hotkeys window.
+            if ( le.MouseClickLeft( hotkeysRoi ) ) {
+                return DialogAction::HotKeys;
+            }
 
-                const Game::MusicRestorer musicRestorer;
-
-                conf.SetMusicType( type > MUSIC_EXTERNAL ? 0 : type );
-
-                Game::SetCurrentMusicTrack( MUS::UNKNOWN );
-
-                saveMusicType = true;
+            // Change Cursor Type.
+            if ( le.MouseClickLeft( cursorTypeRoi ) ) {
+                return DialogAction::CursorType;
             }
 
             // set hero speed
@@ -405,22 +346,23 @@ namespace
             const fheroes2::FontType normalYellow = fheroes2::FontType::normalYellow();
             const fheroes2::FontType normalWhite = fheroes2::FontType::normalWhite();
 
-            if ( le.MousePressRight( musicVolumeRoi ) ) {
-                fheroes2::Text header( _( "Music" ), normalYellow );
-                fheroes2::Text body( _( "Toggle ambient music level." ), normalWhite );
+            if ( le.MousePressRight( audioSettingsRoi ) ) {
+                fheroes2::Text header( _( "Audio" ), normalYellow );
+                fheroes2::Text body( _( "Change audio settings of the game." ), normalWhite );
 
                 fheroes2::showMessage( header, body, 0 );
             }
 
-            else if ( le.MousePressRight( soundVolumeRoi ) ) {
-                fheroes2::Text header( _( "Effects" ), normalYellow );
-                fheroes2::Text body( _( "Toggle foreground sounds level." ), normalWhite );
+            else if ( le.MousePressRight( hotkeysRoi ) ) {
+                fheroes2::Text header( _( "Hot Keys" ), normalYellow );
+                fheroes2::Text body( _( "Check all Hot Keys used in the game." ), normalWhite );
 
                 fheroes2::showMessage( header, body, 0 );
             }
-            else if ( le.MousePressRight( musicTypeRoi ) ) {
-                fheroes2::Text header( _( "Music Type" ), normalYellow );
-                fheroes2::Text body( _( "Change the type of music." ), normalWhite );
+            else if ( le.MousePressRight( cursorTypeRoi ) ) {
+                fheroes2::Text header( _( "Mouse Cursor" ), normalYellow );
+                fheroes2::Text body( _( "Toggle color cursors on/off. Color cursors look nicer, but sometimes don't move as smoothly as black and white ones." ),
+                                     normalWhite );
 
                 fheroes2::showMessage( header, body, 0 );
             }
@@ -467,7 +409,7 @@ namespace
                 fheroes2::showMessage( header, body, 0 );
             }
 
-            if ( saveMusicVolume || saveSoundVolume || saveMusicType || saveHeroSpeed || saveAISpeed || saveScrollSpeed || saveAutoBattle ) {
+            if ( saveHeroSpeed || saveAISpeed || saveScrollSpeed || saveAutoBattle ) {
                 // redraw
                 fheroes2::Blit( dialog, display, dialogArea.x, dialogArea.y );
                 drawDialog( roi );
@@ -530,6 +472,21 @@ namespace fheroes2
             case DialogAction::SaveConfiguration:
                 Settings::Get().Save( Settings::configFileName );
                 return;
+            case DialogAction::AudioSettings:
+                Dialog::openAudioSettingsDialog();
+                action = DialogAction::Open;
+                break;
+            case DialogAction::HotKeys:
+                fheroes2::openHotkeysDialog();
+                action = DialogAction::Open;
+                break;
+            case DialogAction::CursorType: {
+                Settings & conf = Settings::Get();
+                conf.setMonochromeCursor( !conf.isMonochromeCursorEnabled() );
+                saveConfiguration = true;
+                action = DialogAction::Open;
+                break;
+            }
             default:
                 break;
             }

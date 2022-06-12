@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 17:13+0000\n"
+"POT-Creation-Date: 2022-06-12 02:21+0000\n"
 "PO-Revision-Date: 2022-05-14 22:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -2561,6 +2561,46 @@ msgstr ""
 msgid "the garrison"
 msgstr "las escaleras"
 
+msgid "off"
+msgstr "apagado"
+
+msgid "Music"
+msgstr "Música"
+
+msgid "Effects"
+msgstr ""
+
+msgid "MIDI"
+msgstr ""
+
+#, fuzzy
+msgid "MIDI Expansion"
+msgstr "Mansión"
+
+msgid "External"
+msgstr ""
+
+msgid "Music Type"
+msgstr ""
+
+msgid "3D Audio"
+msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr ""
+
+msgid "Toggle foreground sounds level."
+msgstr ""
+
+msgid "Change the type of music."
+msgstr ""
+
+msgid "Toggle 3D effects of foreground sounds."
+msgstr ""
+
+msgid "Okay"
+msgstr "OK"
+
 msgid "Build a new ship:"
 msgstr "Construir un nuevo barco:"
 
@@ -2614,27 +2654,12 @@ msgstr "Elemental del Aire"
 msgid "Settings"
 msgstr "Ajustes"
 
-msgid "off"
-msgstr "apagado"
-
-msgid "Music"
-msgstr "Música"
-
-msgid "Effects"
-msgstr ""
-
-msgid "MIDI"
+msgid "Audio"
 msgstr ""
 
 #, fuzzy
-msgid "MIDI Expansion"
-msgstr "Mansión"
-
-msgid "External"
-msgstr ""
-
-msgid "Music Type"
-msgstr ""
+msgid "settings"
+msgstr "Ajustes"
 
 #, fuzzy
 msgid "Hot Keys"
@@ -2658,6 +2683,29 @@ msgstr ""
 msgid "Text Support"
 msgstr "Teletransporte"
 
+msgid "Evil"
+msgstr "Mal"
+
+msgid "Good"
+msgstr "Bien"
+
+#, fuzzy
+msgid "Interface Type"
+msgstr "Interfaz"
+
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+#, fuzzy
+msgid "Battles"
+msgstr "Botella"
+
 #, fuzzy
 msgid "Select Game Language"
 msgstr "Descripción seleccionada"
@@ -2672,20 +2720,20 @@ msgstr "Descripción seleccionada"
 msgid "Change resolution of the game."
 msgstr ""
 
+msgid "Change audio settings of the game."
+msgstr ""
+
 #, fuzzy
 msgid "Experimental game settings."
 msgstr "Configuración del juego FHeroes2"
 
-msgid "Toggle ambient music level."
-msgstr ""
-
-msgid "Toggle foreground sounds level."
-msgstr ""
-
-msgid "Change the type of music."
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Check all Hot Keys used in the game."
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid ""
@@ -2697,9 +2745,6 @@ msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
-
-msgid "Okay"
-msgstr "OK"
 
 #, fuzzy
 msgid "Attention"
@@ -3168,16 +3213,6 @@ msgstr "Velocidad"
 msgid "Scroll Speed"
 msgstr "Velocidad de desplazamiento"
 
-msgid "Evil"
-msgstr "Mal"
-
-msgid "Good"
-msgstr "Bien"
-
-#, fuzzy
-msgid "Interface Type"
-msgstr "Interfaz"
-
 msgid "Hide"
 msgstr ""
 
@@ -3186,19 +3221,6 @@ msgstr ""
 
 msgid "Interface"
 msgstr "Interfaz"
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-#, fuzzy
-msgid "Battles"
-msgstr "Botella"
-
-msgid "Manual"
-msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3211,13 +3233,7 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
 msgid "Toggle interface visibility."
-msgstr ""
-
-msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."

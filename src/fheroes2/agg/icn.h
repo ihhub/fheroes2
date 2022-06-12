@@ -968,6 +968,8 @@ namespace ICN
         MONO_CURSOR_SPELBW,
         MONO_CURSOR_CMSSBW,
 
+        ESPANBKG_EVIL,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };
