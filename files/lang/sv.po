@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 17:13+0000\n"
+"POT-Creation-Date: 2022-06-12 02:21+0000\n"
 "PO-Revision-Date: 2022-05-10 16:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -2518,6 +2518,46 @@ msgstr ""
 msgid "the garrison"
 msgstr "trapporna"
 
+msgid "off"
+msgstr "av"
+
+msgid "Music"
+msgstr "Musik"
+
+msgid "Effects"
+msgstr ""
+
+msgid "MIDI"
+msgstr ""
+
+#, fuzzy
+msgid "MIDI Expansion"
+msgstr "Herrgård"
+
+msgid "External"
+msgstr ""
+
+msgid "Music Type"
+msgstr ""
+
+msgid "3D Audio"
+msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr ""
+
+msgid "Toggle foreground sounds level."
+msgstr ""
+
+msgid "Change the type of music."
+msgstr ""
+
+msgid "Toggle 3D effects of foreground sounds."
+msgstr ""
+
+msgid "Okay"
+msgstr "OK"
+
 msgid "Build a new ship:"
 msgstr "Bygg ett nytt skepp:"
 
@@ -2570,27 +2610,12 @@ msgstr "Luftelement"
 msgid "Settings"
 msgstr "Inställningar"
 
-msgid "off"
-msgstr "av"
-
-msgid "Music"
-msgstr "Musik"
-
-msgid "Effects"
-msgstr ""
-
-msgid "MIDI"
+msgid "Audio"
 msgstr ""
 
 #, fuzzy
-msgid "MIDI Expansion"
-msgstr "Herrgård"
-
-msgid "External"
-msgstr ""
-
-msgid "Music Type"
-msgstr ""
+msgid "settings"
+msgstr "Inställningar"
 
 #, fuzzy
 msgid "Hot Keys"
@@ -2613,6 +2638,29 @@ msgstr ""
 msgid "Text Support"
 msgstr "Teleportera"
 
+msgid "Evil"
+msgstr "Ond"
+
+msgid "Good"
+msgstr "God"
+
+#, fuzzy
+msgid "Interface Type"
+msgstr "Gränssnitt"
+
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+#, fuzzy
+msgid "Battles"
+msgstr "Flaska"
+
 #, fuzzy
 msgid "Select Game Language"
 msgstr "Vald beskrivning"
@@ -2627,20 +2675,20 @@ msgstr "Vald beskrivning"
 msgid "Change resolution of the game."
 msgstr ""
 
+msgid "Change audio settings of the game."
+msgstr ""
+
 #, fuzzy
 msgid "Experimental game settings."
 msgstr "Spelinställningar för FHeroes2."
 
-msgid "Toggle ambient music level."
-msgstr ""
-
-msgid "Toggle foreground sounds level."
-msgstr ""
-
-msgid "Change the type of music."
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Check all Hot Keys used in the game."
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid ""
@@ -2652,9 +2700,6 @@ msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
-
-msgid "Okay"
-msgstr "OK"
 
 #, fuzzy
 msgid "Attention"
@@ -3124,16 +3169,6 @@ msgstr "Hastighet"
 msgid "Scroll Speed"
 msgstr "Hastighet för skrollning"
 
-msgid "Evil"
-msgstr "Ond"
-
-msgid "Good"
-msgstr "God"
-
-#, fuzzy
-msgid "Interface Type"
-msgstr "Gränssnitt"
-
 msgid "Hide"
 msgstr ""
 
@@ -3142,19 +3177,6 @@ msgstr ""
 
 msgid "Interface"
 msgstr "Gränssnitt"
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-#, fuzzy
-msgid "Battles"
-msgstr "Flaska"
-
-msgid "Manual"
-msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3167,13 +3189,7 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
 msgid "Toggle interface visibility."
-msgstr ""
-
-msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
