@@ -86,8 +86,6 @@ foreach(PO MO IN ZIP_LISTS PO_FILES MO_FILES)
 
     add_custom_command(
 		COMMAND ${MSGMERGE_EXE} -q -o - --no-location ${CMAKE_CURRENT_LIST_DIR}/${PO} ${PROJECT_NAME}.pot \| ${SED_EXE} -f ${SCRIPT} \| ${ICONV_EXE} -f UTF-8 -t ${CHARSET} > ${PO}
-		USES_TERMINAL
-		VERBATIM
 		COMMAND ${MSGFMT_EXE} ${PO} -o ${MO}
 		DEPENDS ${PROJECT_NAME}_pot ${CMAKE_CURRENT_LIST_DIR}/${PO}
 		COMMENT "Generating ${LANGUAGE}"
