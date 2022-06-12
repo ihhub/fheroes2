@@ -407,6 +407,7 @@ namespace
     };
 
     std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> currentAudioLoopEffects;
+    bool is3DAudioLoopEffectsEnabled{ false };
 
     fheroes2::AGGFile g_midiHeroes2AGG;
     fheroes2::AGGFile g_midiHeroes2xAGG;
@@ -563,6 +564,22 @@ namespace
         }
     }
 
+    void clearAllAudioLoopEffects()
+    {
+        for ( const auto & audioEffectPair : currentAudioLoopEffects ) {
+            const std::vector<ChannelAudioLoopEffectInfo> & existingEffects = audioEffectPair.second;
+
+            for ( const ChannelAudioLoopEffectInfo & info : existingEffects ) {
+                if ( Mixer::isPlaying( info.channelId ) ) {
+                    Mixer::setVolume( info.channelId, 0 );
+                    Mixer::Stop( info.channelId );
+                }
+            }
+        }
+
+        currentAudioLoopEffects.clear();
+    }
+
     void playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume,
                                    const bool is3DAudioEnabled )
     {
@@ -570,19 +587,13 @@ namespace
 
         if ( soundVolume == 0 ) {
             // The volume is 0. Remove all existing sound effects.
-            for ( const auto & audioEffectPair : currentAudioLoopEffects ) {
-                const std::vector<ChannelAudioLoopEffectInfo> & existingEffects = audioEffectPair.second;
-
-                for ( const ChannelAudioLoopEffectInfo & info : existingEffects ) {
-                    if ( Mixer::isPlaying( info.channelId ) ) {
-                        Mixer::setVolume( info.channelId, 0 );
-                        Mixer::Stop( info.channelId );
-                    }
-                }
-            }
-
-            currentAudioLoopEffects.clear();
+            clearAllAudioLoopEffects();
             return;
+        }
+
+        if ( is3DAudioLoopEffectsEnabled != is3DAudioEnabled ) {
+            is3DAudioLoopEffectsEnabled = is3DAudioEnabled;
+            clearAllAudioLoopEffects();
         }
 
         // TODO: use another container for sound effects to support more efficient sort and find operations based on the code below.
@@ -844,9 +855,9 @@ namespace AudioManager
 
         std::scoped_lock<std::mutex> lock( g_asyncSoundManager.resourceMutex() );
 
+        clearAllAudioLoopEffects();
+
         Music::Stop();
         Mixer::Stop();
-
-        currentAudioLoopEffects.clear();
     }
 }
