@@ -22,8 +22,8 @@
 
 #include <SDL.h>
 
-#include "timing.h"
 #include "logging.h"
+#include "timing.h"
 
 namespace fheroes2
 {
