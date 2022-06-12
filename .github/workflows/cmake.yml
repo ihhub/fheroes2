@@ -67,7 +67,7 @@ jobs:
         cmake --install build --config Debug --prefix "./${{ matrix.config.name }}"
     - uses: actions/upload-artifact@v3
       with:
-        if: ${{ !contains(matrix.config.name, 'Bundle') }}
+        if: !contains(matrix.config.name, 'Bundle')
         name: cmake-artifacts-test-${{ matrix.config.os }}
         path: ./${{ matrix.config.name }}
         if: contains(matrix.config.name, 'Bundle')
