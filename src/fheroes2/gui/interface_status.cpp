@@ -47,7 +47,6 @@ Interface::StatusWindow::StatusWindow( Basic & basic )
     : BorderWindow( { 0, 0, 144, 72 } )
     , interface( basic )
     , _state( StatusType::STATUS_UNKNOWN )
-    , _oldState( StatusType::STATUS_UNKNOWN )
     , lastResource( Resource::UNKNOWN )
     , countLastResource( 0 )
     , turn_progress( 0 )
@@ -66,7 +65,6 @@ void Interface::StatusWindow::Reset()
     timerShowLastResource.remove();
 
     _state = StatusType::STATUS_DAY;
-    _oldState = StatusType::STATUS_UNKNOWN;
     lastResource = Resource::UNKNOWN;
     countLastResource = 0;
     resetStatusResource = false;
@@ -304,12 +302,7 @@ void Interface::StatusWindow::SetResource( int res, uint32_t count )
 
     lastResource = res;
     countLastResource = count;
-
-    if ( _state != StatusType::STATUS_RESOURCE ) {
-        _oldState = _state;
-        _state = StatusType::STATUS_RESOURCE;
-    }
-
+    _state = StatusType::STATUS_RESOURCE;
     resetStatusResource = false;
 
     timerShowLastResource.run( resourceWindowExpireTime, timerShowLastResourceFired, this );
@@ -467,13 +460,23 @@ void Interface::StatusWindow::QueueEventProcessing()
 
 void Interface::StatusWindow::TimerEventProcessing()
 {
-    if ( resetStatusResource.exchange( false ) ) {
-        if ( _state == StatusType::STATUS_RESOURCE ) {
-            _state = _oldState;
-
-            SetRedraw();
-        }
+    if ( !resetStatusResource.exchange( false ) || _state != StatusType::STATUS_RESOURCE ) {
+        return;
     }
+
+    switch ( Interface::GetFocusType() ) {
+    case GameFocus::HEROES:
+        _state = StatusType::STATUS_ARMY;
+        break;
+    case GameFocus::CASTLE:
+        _state = StatusType::STATUS_FUNDS;
+        break;
+    default:
+        _state = StatusType::STATUS_DAY;
+        break;
+    }
+
+    SetRedraw();
 }
 
 void Interface::StatusWindow::RedrawTurnProgress( uint32_t v )

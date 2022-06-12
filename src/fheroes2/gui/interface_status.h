@@ -87,7 +87,6 @@ namespace Interface
         Basic & interface;
 
         StatusType _state;
-        StatusType _oldState;
         int lastResource;
         uint32_t countLastResource;
         uint32_t turn_progress;
