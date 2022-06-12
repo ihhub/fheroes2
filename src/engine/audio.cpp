@@ -27,7 +27,6 @@
 #include <map>
 #include <mutex>
 #include <numeric>
-#include <thread>
 
 #include <SDL.h>
 #include <SDL_mixer.h>
@@ -36,6 +35,7 @@
 #include "core.h"
 #include "logging.h"
 #include "system.h"
+#include "thread.h"
 #include "timing.h"
 
 namespace
@@ -66,17 +66,19 @@ namespace
     std::vector<int> savedMixerVolumes;
     int savedMusicVolume = 0;
 
-    // This mutex protects all operations with audio. In order to avoid deadlocks, it
-    // shouldn't be acquired in any callback functions that can be called by SDL_Mixer.
+    // This mutex protects all operations with audio. In order to avoid deadlocks, it shouldn't
+    // be acquired in any callback functions that can be called by SDL_Mixer.
     std::recursive_mutex audioMutex;
 
-    // This is the callback function set by Mix_ChannelFinished().
-    // TODO: according to SDL_Mixer manual, calls of any SDL_Mixer functions are not
-    // allowed in callbacks. The current code works, but it would be good to find a
-    // reliable way to perform channel cleanup without calling these functions.
+    // This is the callback function set by Mix_ChannelFinished(). As a rule, it is called from
+    // a SDL_Mixer internal thread.
+    //
+    // TODO: according to SDL_Mixer manual, calls of any SDL_Mixer functions are not allowed in
+    // callbacks. The current code works, but it would be good to find a reliable way to perform
+    // channel cleanup without calling these functions.
     void channelFinished( const int channelId )
     {
-        // This callback function should not be called if audio is not initialized
+        // This callback function should never be called if audio is not initialized
         assert( isInitialized );
 
         Mix_Chunk * sample = Mix_GetChunk( channelId );
@@ -215,36 +217,68 @@ namespace
 
     void playMusic( const uint64_t musicUID, Music::PlaybackMode playbackMode );
 
-    // This is the callback function set by Mix_HookMusicFinished(). Calls of any SDL_Mixer
-    // functions are not allowed in callbacks.
+    class MusicRestartManager final : public MultiThreading::AsyncManager
+    {
+    public:
+        void restartCurrentMusicTrack()
+        {
+            std::scoped_lock<std::mutex> lock( _mutex );
+
+            _trackChangeCounter = musicSettings.currentTrackChangeCounter;
+
+            notifyWorker();
+        }
+
+    private:
+        // This function is called by the worker thread and is protected by _mutex
+        bool prepareTask() override
+        {
+            // Make a copy for the worker thread to ensure that this counter will
+            // not be changed by another thread in the middle of executeTask()
+            _taskTrackChangeCounter = _trackChangeCounter;
+
+            return false;
+        }
+
+        // This function is called by the worker thread, but is not protected by _mutex
+        void executeTask() override
+        {
+            const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
+
+            if ( !isInitialized ) {
+                return;
+            }
+
+            // The current track managed to change during the start of this task
+            if ( _taskTrackChangeCounter != musicSettings.currentTrackChangeCounter ) {
+                return;
+            }
+
+            // REWIND_AND_PLAY_INFINITE should be handled by the Mix_PlayMusic() itself
+            assert( musicSettings.currentTrackPlaybackMode == Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+
+            musicSettings.currentTrack.position = 0;
+            musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack );
+
+            playMusic( musicSettings.currentTrackUID, musicSettings.currentTrackPlaybackMode );
+        }
+
+        // This variable can be accessed by multiple threads and it is protected by _mutex
+        uint64_t _trackChangeCounter{ 0 };
+        // This variable can be accessed only by the worker thread
+        uint64_t _taskTrackChangeCounter{ 0 };
+    };
+
+    MusicRestartManager musicRestartManager;
+
+    // This is the callback function set by Mix_HookMusicFinished(). As a rule, it is called from
+    // a SDL_Mixer internal thread. Calls of any SDL_Mixer functions are not allowed in callbacks.
     void musicFinished()
     {
-        // This callback function should not be called if audio is not initialized
+        // This callback function should never be called if audio is not initialized
         assert( isInitialized );
 
-        std::thread(
-            []( const uint64_t trackChangeCounter ) {
-                const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
-
-                if ( !isInitialized ) {
-                    return;
-                }
-
-                // The current track managed to change during the start of this thread
-                if ( trackChangeCounter != musicSettings.currentTrackChangeCounter ) {
-                    return;
-                }
-
-                // REWIND_AND_PLAY_INFINITE should be handled by the Mix_PlayMusic() itself
-                assert( musicSettings.currentTrackPlaybackMode == Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
-
-                musicSettings.currentTrack.position = 0;
-                musicSettings.trackManager.update( musicSettings.currentTrackUID, musicSettings.currentTrack );
-
-                playMusic( musicSettings.currentTrackUID, musicSettings.currentTrackPlaybackMode );
-            },
-            musicSettings.currentTrackChangeCounter.load() )
-            .detach();
+        musicRestartManager.restartCurrentMusicTrack();
     }
 
     bool isMusicResumeSupported( const Mix_Music * mix )
@@ -427,6 +461,8 @@ void Audio::Init()
     audioSpecs.format = format;
     audioSpecs.channels = static_cast<uint8_t>( channels );
 
+    musicRestartManager.createWorker();
+
     Mix_ChannelFinished( channelFinished );
 
     isInitialized = true;
@@ -434,32 +470,40 @@ void Audio::Init()
 
 void Audio::Quit()
 {
-    const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
+    {
+        const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
-    if ( !isInitialized ) {
-        // Nothing to do.
-        return;
-    }
+        if ( !isInitialized ) {
+            // Nothing to do.
+            return;
+        }
 
-    if ( !fheroes2::isComponentInitialized( fheroes2::SystemInitializationComponent::Audio ) ) {
-        // Something wrong with the logic! The component must be initialized.
-        assert( 0 );
-        return;
-    }
+        if ( !fheroes2::isComponentInitialized( fheroes2::SystemInitializationComponent::Audio ) ) {
+            // Something wrong with the logic! The component must be initialized.
+            assert( 0 );
+            return;
+        }
 
-    Music::Stop();
-    Mixer::Stop();
+        Music::Stop();
+        Mixer::Stop();
 
-    Mix_ChannelFinished( nullptr );
+        Mix_ChannelFinished( nullptr );
 
-    musicSettings.trackManager.clear();
+        musicSettings.trackManager.clear();
 
-    Mix_CloseAudio();
+        Mix_CloseAudio();
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    Mix_Quit();
+        Mix_Quit();
 #endif
 
-    isInitialized = false;
+        isInitialized = false;
+    }
+
+    // We can't hold the audioMutex here because if MusicRestartManager's working
+    // thread is already waiting on it, then there will be a deadlock while waiting
+    // for it to join. The Mix_HookMusicFinished()'s callback can no longer be called
+    // at the moment because it has been already unregistered by the Music::Stop().
+    musicRestartManager.stopWorker();
 }
 
 void Audio::Mute()
