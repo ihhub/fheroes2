@@ -213,12 +213,12 @@ namespace
     // SDL MIDI player is a single threaded library which requires a lot of time to start playing some long midi compositions.
     // This leads to a situation of a short application freeze while a hero crosses terrains or ending a battle.
     // The only way to avoid this is to fire MIDI requests asynchronously and synchronize them if needed.
-    class AsyncSoundManager : public MultiThreading::AsyncManager
+    class AsyncSoundManager final : public MultiThreading::AsyncManager
     {
     public:
         void pushMusic( const int musicId, const MusicSource musicType, const Music::PlaybackMode playbackMode )
         {
-            createThreadIfNeeded();
+            createWorker();
 
             std::scoped_lock<std::mutex> lock( _mutex );
 
@@ -228,29 +228,29 @@ namespace
 
             _musicTasks.emplace( musicId, musicType, playbackMode );
 
-            notifyThread();
+            notifyWorker();
         }
 
         void pushSound( const int m82Sound, const int soundVolume )
         {
-            createThreadIfNeeded();
+            createWorker();
 
             std::scoped_lock<std::mutex> lock( _mutex );
 
             _soundTasks.emplace( m82Sound, soundVolume );
 
-            notifyThread();
+            notifyWorker();
         }
 
         void pushLoopSound( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> vols, const int soundVolume, const bool is3DAudioEnabled )
         {
-            createThreadIfNeeded();
+            createWorker();
 
             std::scoped_lock<std::mutex> lock( _mutex );
 
             _loopSoundTasks.emplace( std::move( vols ), soundVolume, is3DAudioEnabled );
 
-            notifyThread();
+            notifyWorker();
         }
 
         void sync()
@@ -775,6 +775,7 @@ namespace AudioManager
     AudioInitializer::~AudioInitializer()
     {
         g_asyncSoundManager.sync();
+        g_asyncSoundManager.stopWorker();
 
         wavDataCache.clear();
         MIDDataCache.clear();
