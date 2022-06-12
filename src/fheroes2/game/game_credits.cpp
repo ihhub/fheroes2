@@ -171,6 +171,8 @@ namespace
         fheroes2::Blit( blackDragon, output, ( columnStep - blackDragon.width() ) / 2, offsetY );
         offsetY += blackDragon.height();
 
+        const int32_t secondAuthorLayerY = offsetY;
+
         title.Set( _( "QA and Support" ), Font::YELLOW_BIG, textWidth );
         name.Set( "Igor Tsivilko", Font::BIG, textWidth );
         title.Blit( ( columnStep - title.w() ) / 2, offsetY, output );
@@ -180,6 +182,8 @@ namespace
         const fheroes2::Sprite & cyclop = fheroes2::AGG::GetICN( ICN::CYCLOPS, 38 );
         fheroes2::Blit( cyclop, output, ( columnStep - cyclop.width() ) / 2, offsetY );
         offsetY += cyclop.height();
+
+        const int32_t thirdAuthorLayerY = offsetY;
 
         title.Set( _( "Development" ), Font::YELLOW_BIG, textWidth );
         name.Set( "Ivan Shibanov", Font::BIG, textWidth );
@@ -193,15 +197,31 @@ namespace
 
         const int32_t bottomOffset = offsetY;
 
+        const fheroes2::Sprite & goblin = fheroes2::AGG::GetICN( ICN::GOBLIN, 27 );
+        fheroes2::Blit( goblin, output, columnStep + columnStep / 2 - 15, secondAuthorLayerY - goblin.height() - 15, true );
+
+        offsetY = secondAuthorLayerY;
+
+        title.Set( _( "Development" ), Font::YELLOW_BIG, textWidth );
+        name.Set( "Oleg Derevenetz", Font::BIG, textWidth );
+        title.Blit( columnStep + ( columnStep - title.w() ) / 2, offsetY, output );
+        name.Blit( columnStep + ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
+
+        offsetY += title.h() + name.h() + 10;
+
         const fheroes2::Sprite & mage = fheroes2::AGG::GetICN( ICN::MAGE1, 24 );
-        offsetY -= crusader.height();
         fheroes2::Blit( mage, output, columnStep + ( columnStep - mage.width() ) / 2, offsetY );
 
-        name.Set( "Oleg Derevenetz", Font::BIG, textWidth );
-        offsetY -= 10 + name.h();
-        name.Blit( columnStep + ( columnStep - name.w() ) / 2, offsetY, output );
-        offsetY -= title.h();
-        title.Blit( columnStep + ( columnStep - title.w() ) / 2, offsetY, output );
+        offsetY = thirdAuthorLayerY;
+
+        title.Set( _( "Dev and Support" ), Font::YELLOW_BIG, textWidth );
+        name.Set( "Zense", Font::BIG, textWidth );
+        title.Blit( columnStep + ( columnStep - name.w() ) / 2, offsetY, output );
+        name.Blit( columnStep + ( columnStep - name.w() ) / 2, offsetY + title.h(), output );
+        offsetY += title.h() + name.h() + 10;
+
+        const fheroes2::Sprite & phoenix = fheroes2::AGG::GetICN( ICN::PHOENIX, 4 );
+        fheroes2::Blit( phoenix, output, columnStep + ( columnStep - phoenix.width() ) / 2, offsetY - 10 );
 
         offsetY = bottomOffset + 10;
 
@@ -226,14 +246,14 @@ namespace
                                         "Arkadiy Illarionov\n"
                                         "shprotru\n"
                                         "vincent-grosbois\n"
-                                        "Zense\n"
                                         "eos428\n"
                                         "a1exsh\n"
                                         "Vasilenko Alexey\n"
                                         "Andrii Kurdiumov\n"
-                                        "dimag0g\n"
                                         "felix642\n"
-                                        "Arthusppp\n" );
+                                        "dimag0g\n"
+                                        "Arthusppp\n"
+                                        "tau3\n" );
 
         name.Set( contributors + _( "and many other contributors!" ), Font::BIG, textWidth );
         name.Blit( 2 * columnStep + ( columnStep - name.w() ) / 2, offsetY, output );
@@ -241,9 +261,6 @@ namespace
 
         const fheroes2::Sprite & hydra = fheroes2::AGG::GetICN( ICN::HYDRA, 11 );
         fheroes2::Blit( hydra, output, 2 * columnStep + ( columnStep - hydra.width() ) / 2, offsetY );
-
-        const fheroes2::Sprite & goblin = fheroes2::AGG::GetICN( ICN::GOBLIN, 27 );
-        fheroes2::Blit( goblin, output, ( output.width() - goblin.width() ) / 2, ( output.height() - goblin.height() ) / 2 );
 
         return output;
     }
@@ -299,9 +316,13 @@ namespace
         std::string contributors( "William Hoskinson\n"
                                   "Aleksei Mazur\n"
                                   "Connor Townsend\n"
-                                  "Brandon Wright\n" );
+                                  "Brandon Wright\n"
+                                  "Aimi Lindschouw\n" );
 
         name.Set( contributors, Font::BIG, output.width() - textInitialOffsetX );
+
+        const int32_t contributorsHeight = name.h();
+
         name.Blit( textInitialOffsetX + ( ( output.width() - textInitialOffsetX ) / 2 - name.w() ) / 2, offsetY, output );
 
         contributors = "Kiril Lipatov\n"
@@ -312,7 +333,7 @@ namespace
         name.Set( contributors, Font::BIG, output.width() - textInitialOffsetX );
         name.Blit( textInitialOffsetX + ( 3 * ( output.width() - textInitialOffsetX ) / 2 - name.w() ) / 2, offsetY, output );
 
-        offsetY += name.h();
+        offsetY += contributorsHeight;
 
         name.Set( _( "and many-many other supporters!" ), Font::BIG, output.width() - columnStep );
         name.Blit( textInitialOffsetX + ( output.width() - textInitialOffsetX - name.w() ) / 2, offsetY, output );
