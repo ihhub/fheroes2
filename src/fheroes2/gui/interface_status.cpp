@@ -51,29 +51,34 @@ Interface::StatusWindow::StatusWindow( Basic & basic )
     , lastResource( Resource::UNKNOWN )
     , countLastResource( 0 )
     , turn_progress( 0 )
+    , resetStatusResource( false )
 {}
+
+Interface::StatusWindow::~StatusWindow()
+{
+    // Ensure that there will be no timer events during the destruction of other class members
+    timerShowLastResource.remove();
+}
 
 void Interface::StatusWindow::Reset()
 {
+    // Ensure that there will be no timer events until the end of this function
+    timerShowLastResource.remove();
+
     _state = StatusType::STATUS_DAY;
     _oldState = StatusType::STATUS_UNKNOWN;
     lastResource = Resource::UNKNOWN;
     countLastResource = 0;
-    ResetTimer();
+    resetStatusResource = false;
 }
 
-uint32_t Interface::StatusWindow::ResetResourceStatus( uint32_t /*tick*/, void * ptr )
+// This is the callback function set by fheroes2::Timer::run(). As a rule, it is called from
+// a timer's internal thread.
+uint32_t Interface::StatusWindow::timerShowLastResourceFired( uint32_t /* tick */, void * ptr )
 {
-    if ( ptr ) {
-        Interface::StatusWindow * status = static_cast<Interface::StatusWindow *>( ptr );
-        if ( StatusType::STATUS_RESOURCE == status->_state ) {
-            status->_state = status->_oldState;
-            Interface::Basic::Get().SetRedraw( REDRAW_STATUS );
-        }
-        else {
-            status->timerShowLastResource.remove();
-        }
-    }
+    assert( ptr != nullptr );
+
+    static_cast<StatusWindow *>( ptr )->resetStatusResource = true;
 
     return 0;
 }
@@ -294,26 +299,20 @@ void Interface::StatusWindow::DrawDayInfo( int oh ) const
 
 void Interface::StatusWindow::SetResource( int res, uint32_t count )
 {
+    // Ensure that there will be no timer events until we run the timer again at the end of this function
+    timerShowLastResource.remove();
+
     lastResource = res;
     countLastResource = count;
 
-    if ( timerShowLastResource.valid() )
-        timerShowLastResource.remove();
-    else
+    if ( _state != StatusType::STATUS_RESOURCE ) {
         _oldState = _state;
-
-    _state = StatusType::STATUS_RESOURCE;
-    timerShowLastResource.run( resourceWindowExpireTime, ResetResourceStatus, this );
-}
-
-void Interface::StatusWindow::ResetTimer()
-{
-    StatusWindow & window = Interface::Basic::Get().GetStatusWindow();
-
-    if ( window.timerShowLastResource.valid() ) {
-        window.timerShowLastResource.remove();
-        ResetResourceStatus( 0, &window );
+        _state = StatusType::STATUS_RESOURCE;
     }
+
+    resetStatusResource = false;
+
+    timerShowLastResource.run( resourceWindowExpireTime, timerShowLastResourceFired, this );
 }
 
 void Interface::StatusWindow::DrawResourceInfo( int oh ) const
@@ -462,6 +461,17 @@ void Interface::StatusWindow::QueueEventProcessing()
                 _( "Status Window" ),
                 _( "This window provides information on the status of your hero or kingdom, and shows the date. Left click here to cycle through these windows." ),
                 Font::BIG );
+        }
+    }
+}
+
+void Interface::StatusWindow::TimerEventProcessing()
+{
+    if ( resetStatusResource.exchange( false ) ) {
+        if ( _state == StatusType::STATUS_RESOURCE ) {
+            _state = _oldState;
+
+            SetRedraw();
         }
     }
 }

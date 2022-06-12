@@ -24,6 +24,8 @@
 #ifndef H2INTERFACE_STATUS_H
 #define H2INTERFACE_STATUS_H
 
+#include <atomic>
+
 #include "interface_border.h"
 #include "timing.h"
 
@@ -47,7 +49,7 @@ namespace Interface
         explicit StatusWindow( Basic & basic );
         StatusWindow( const StatusWindow & ) = delete;
 
-        ~StatusWindow() override = default;
+        ~StatusWindow() override;
 
         StatusWindow & operator=( const StatusWindow & ) = delete;
 
@@ -63,8 +65,7 @@ namespace Interface
         void SetResource( int, uint32_t );
         void RedrawTurnProgress( uint32_t );
         void QueueEventProcessing();
-
-        static void ResetTimer();
+        void TimerEventProcessing();
 
     private:
         friend Basic;
@@ -78,7 +79,10 @@ namespace Interface
         void DrawResourceInfo( int oh = 0 ) const;
         void DrawBackground() const;
         void DrawAITurns() const;
-        static uint32_t ResetResourceStatus( uint32_t, void * );
+
+        // This is the callback function set by fheroes2::Timer::run(). As a rule, it
+        // is called from a timer's internal thread.
+        static uint32_t timerShowLastResourceFired( uint32_t tick, void * ptr );
 
         Basic & interface;
 
@@ -88,6 +92,7 @@ namespace Interface
         uint32_t countLastResource;
         uint32_t turn_progress;
 
+        std::atomic<bool> resetStatusResource;
         fheroes2::Timer timerShowLastResource;
     };
 }

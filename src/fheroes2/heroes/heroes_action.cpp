@@ -259,7 +259,6 @@ void Heroes::Action( int tileIndex, bool isDestination )
         AudioManager::PlayMusic( MUS::FromMapObject( objectType ), Music::PlaybackMode::PLAY_ONCE );
 
     if ( MP2::isActionObject( objectType, isShipMaster() ) ) {
-        Interface::StatusWindow::ResetTimer();
         SetModes( ACTION );
     }
 

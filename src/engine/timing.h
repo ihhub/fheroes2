@@ -22,6 +22,7 @@
 
 #include <chrono>
 #include <cstdint>
+#include <memory>
 
 namespace fheroes2
 {
@@ -81,11 +82,13 @@ namespace fheroes2
 
         bool valid() const;
 
+        // NOTE WELL: The callback function set by this method will be called from some internal SDL thread.
+        // The inter-thread synchronization is advised.
         void run( uint32_t interval, uint32_t ( *fn )( uint32_t, void * ), void * param = nullptr );
         void remove();
 
     private:
-        TimerImp * _timer;
+        std::unique_ptr<TimerImp> _timer;
     };
 
     void delayforMs( const uint32_t delayMs );

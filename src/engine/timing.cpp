@@ -18,11 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "timing.h"
-
 #include <thread>
 
 #include <SDL.h>
+
+#include "timing.h"
+#include "logging.h"
 
 namespace fheroes2
 {
@@ -40,12 +41,16 @@ namespace fheroes2
             remove();
 
             id = SDL_AddTimer( interval, fn, param );
+            if ( id == 0 ) {
+                ERROR_LOG( "Failed to add timer. The error: " << SDL_GetError() )
+            }
         }
 
         void remove()
         {
             if ( valid() ) {
                 SDL_RemoveTimer( id );
+
                 id = 0;
             }
         }
@@ -104,14 +109,14 @@ namespace fheroes2
     }
 
     Timer::Timer()
-        : _timer( new TimerImp )
+        : _timer( std::make_unique<TimerImp>() )
     {
         // Do nothing.
     }
 
     Timer::~Timer()
     {
-        delete _timer;
+        _timer->remove();
     }
 
     bool Timer::valid() const
