@@ -66,6 +66,8 @@ namespace
     std::vector<int> savedMixerVolumes;
     int savedMusicVolume = 0;
 
+    std::atomic<int> audioChannelCount{ 0 };
+
     // This mutex protects all operations with audio. In order to avoid deadlocks, it shouldn't
     // be acquired in any callback functions that can be called by SDL_Mixer.
     std::recursive_mutex audioMutex;
@@ -496,6 +498,8 @@ void Audio::Quit()
         Mix_Quit();
 #endif
 
+        audioChannelCount = 0;
+
         isInitialized = false;
     }
 
@@ -551,33 +555,36 @@ bool Audio::isValid()
     return isInitialized;
 }
 
-int Mixer::SetChannels( const int num )
+void Mixer::SetChannels( const int num )
 {
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
     if ( !isInitialized ) {
-        return 0;
+        return;
     }
 
-    const int channelsCount = Mix_AllocateChannels( num );
-    if ( num != channelsCount ) {
-        ERROR_LOG( "Failed to allocate the required amount of channels for sound. The required number of channels " << num << " but allocated only " << channelsCount )
+    audioChannelCount = Mix_AllocateChannels( num );
+    if ( num != audioChannelCount ) {
+        ERROR_LOG( "Failed to allocate the required amount of channels for sound. The required number of channels " << num << " but allocated only " << audioChannelCount )
     }
 
-    if ( channelsCount > 0 ) {
+    if ( audioChannelCount > 0 ) {
         Mix_ReserveChannels( 1 );
     }
 
     if ( isMuted ) {
-        savedMixerVolumes.resize( static_cast<size_t>( channelsCount ), 0 );
+        savedMixerVolumes.resize( static_cast<size_t>( audioChannelCount ), 0 );
 
         Mix_Volume( -1, 0 );
     }
 
     // Just to verify that we are synced with SDL.
-    assert( Mix_AllocateChannels( -1 ) == channelsCount );
+    assert( Mix_AllocateChannels( -1 ) == audioChannelCount );
+}
 
-    return channelsCount;
+int Mixer::getChannelCount()
+{
+    return audioChannelCount;
 }
 
 int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop )

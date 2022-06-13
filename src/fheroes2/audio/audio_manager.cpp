@@ -409,9 +409,6 @@ namespace
     std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> currentAudioLoopEffects;
     bool is3DAudioLoopEffectsEnabled{ false };
 
-    // This variable is changed only within AudioInitializer() constructor. If you intend to call Mixer::SetChannels() also update this variable.
-    int audioChannelCount = 0;
-
     fheroes2::AGGFile g_midiHeroes2AGG;
     fheroes2::AGGFile g_midiHeroes2xAGG;
 
@@ -757,7 +754,7 @@ namespace AudioManager
     AudioInitializer::AudioInitializer( const std::string & originalAGGFilePath, const std::string & expansionAGGFilePath )
     {
         if ( Audio::isValid() ) {
-            audioChannelCount = Mixer::SetChannels( 32 );
+            Mixer::SetChannels( 32 );
             // Set the volume for all channels to 0. This is required to avoid random volume spikes at the beginning of the game.
             Mixer::setVolume( -1, 0 );
 
@@ -783,8 +780,6 @@ namespace AudioManager
         wavDataCache.clear();
         MIDDataCache.clear();
         currentAudioLoopEffects.clear();
-
-        audioChannelCount = 0;
     }
 
     void playLoopSounds( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, bool asyncronizedCall )
@@ -865,10 +860,5 @@ namespace AudioManager
 
         Music::Stop();
         Mixer::Stop();
-    }
-
-    int getAudioChannelCount()
-    {
-        return audioChannelCount;
     }
 }
