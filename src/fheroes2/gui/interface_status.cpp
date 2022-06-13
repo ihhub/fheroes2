@@ -58,8 +58,6 @@ void Interface::StatusWindow::Reset()
     _state = StatusType::STATUS_DAY;
     lastResource = Resource::UNKNOWN;
     countLastResource = 0;
-
-    showLastResourceDelay.pass();
 }
 
 void Interface::StatusWindow::SavePosition()
@@ -437,11 +435,11 @@ void Interface::StatusWindow::QueueEventProcessing()
 
 void Interface::StatusWindow::TimerEventProcessing()
 {
-    if ( !showLastResourceDelay.isPassed() || _state != StatusType::STATUS_RESOURCE ) {
+    if ( _state != StatusType::STATUS_RESOURCE || !showLastResourceDelay.isPassed() ) {
         return;
     }
 
-    switch ( Interface::GetFocusType() ) {
+    switch ( GetFocusType() ) {
     case GameFocus::HEROES:
         _state = StatusType::STATUS_ARMY;
         break;
