@@ -84,8 +84,12 @@ void Interface::StatusWindow::SetPos( int32_t ox, int32_t oy )
 
 void Interface::StatusWindow::SetState( const StatusType status )
 {
-    if ( StatusType::STATUS_RESOURCE != _state )
+    // SetResource() should be used to set this status
+    assert( status != StatusType::STATUS_RESOURCE );
+
+    if ( _state != StatusType::STATUS_RESOURCE ) {
         _state = status;
+    }
 }
 
 void Interface::StatusWindow::Redraw() const
