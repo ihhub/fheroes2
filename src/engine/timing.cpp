@@ -20,7 +20,6 @@
 
 #include <thread>
 
-#include "logging.h"
 #include "timing.h"
 
 namespace fheroes2
