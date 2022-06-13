@@ -341,7 +341,7 @@ uint32_t & Game::MapsAnimationFrame()
 // play environment sounds from the game area in focus
 void Game::EnvironmentSoundMixer()
 {
-    int availableChannels = AudioManager::getAudioChannelCount();
+    int availableChannels = Mixer::getChannelCount();
     if ( availableChannels <= 2 ) {
         // 2 channels are left for hero's movement.
         return;
