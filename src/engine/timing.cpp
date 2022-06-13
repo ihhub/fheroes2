@@ -20,42 +20,11 @@
 
 #include <thread>
 
-#include <SDL.h>
-
 #include "logging.h"
 #include "timing.h"
 
 namespace fheroes2
 {
-    struct TimerImp
-    {
-        SDL_TimerID id = 0;
-
-        bool valid() const
-        {
-            return id != 0;
-        }
-
-        void run( uint32_t interval, uint32_t ( *fn )( uint32_t, void * ), void * param )
-        {
-            remove();
-
-            id = SDL_AddTimer( interval, fn, param );
-            if ( id == 0 ) {
-                ERROR_LOG( "Failed to add timer. The error: " << SDL_GetError() )
-            }
-        }
-
-        void remove()
-        {
-            if ( valid() ) {
-                SDL_RemoveTimer( id );
-
-                id = 0;
-            }
-        }
-    };
-
     Time::Time()
         : _startTime( std::chrono::steady_clock::now() )
     {}
@@ -106,32 +75,6 @@ namespace fheroes2
     void TimeDelay::pass()
     {
         _prevTime = std::chrono::steady_clock::now() - std::chrono::milliseconds( 2 * _delayMs );
-    }
-
-    Timer::Timer()
-        : _timer( std::make_unique<TimerImp>() )
-    {
-        // Do nothing.
-    }
-
-    Timer::~Timer()
-    {
-        _timer->remove();
-    }
-
-    bool Timer::valid() const
-    {
-        return _timer->valid();
-    }
-
-    void Timer::run( uint32_t interval, uint32_t ( *fn )( uint32_t, void * ), void * param )
-    {
-        _timer->run( interval, fn, param );
-    }
-
-    void Timer::remove()
-    {
-        _timer->remove();
     }
 
     void delayforMs( const uint32_t delayMs )

@@ -50,35 +50,16 @@ Interface::StatusWindow::StatusWindow( Basic & basic )
     , lastResource( Resource::UNKNOWN )
     , countLastResource( 0 )
     , turn_progress( 0 )
-    , resetStatusResource( false )
+    , showLastResourceDelay( resourceWindowExpireTime )
 {}
-
-Interface::StatusWindow::~StatusWindow()
-{
-    // Ensure that there will be no timer events during the destruction of other class members
-    timerShowLastResource.remove();
-}
 
 void Interface::StatusWindow::Reset()
 {
-    // Ensure that there will be no timer events until the end of this function
-    timerShowLastResource.remove();
-
     _state = StatusType::STATUS_DAY;
     lastResource = Resource::UNKNOWN;
     countLastResource = 0;
-    resetStatusResource = false;
-}
 
-// This is the callback function set by fheroes2::Timer::run(). As a rule, it is called from
-// a timer's internal thread.
-uint32_t Interface::StatusWindow::timerShowLastResourceFired( uint32_t /* tick */, void * ptr )
-{
-    assert( ptr != nullptr );
-
-    static_cast<StatusWindow *>( ptr )->resetStatusResource = true;
-
-    return 0;
+    showLastResourceDelay.pass();
 }
 
 void Interface::StatusWindow::SavePosition()
@@ -297,15 +278,11 @@ void Interface::StatusWindow::DrawDayInfo( int oh ) const
 
 void Interface::StatusWindow::SetResource( int res, uint32_t count )
 {
-    // Ensure that there will be no timer events until we set the timer again at the end of this function
-    timerShowLastResource.remove();
-
     lastResource = res;
     countLastResource = count;
     _state = StatusType::STATUS_RESOURCE;
-    resetStatusResource = false;
 
-    timerShowLastResource.run( resourceWindowExpireTime, timerShowLastResourceFired, this );
+    showLastResourceDelay.reset();
 }
 
 void Interface::StatusWindow::DrawResourceInfo( int oh ) const
@@ -460,7 +437,7 @@ void Interface::StatusWindow::QueueEventProcessing()
 
 void Interface::StatusWindow::TimerEventProcessing()
 {
-    if ( !resetStatusResource.exchange( false ) || _state != StatusType::STATUS_RESOURCE ) {
+    if ( !showLastResourceDelay.isPassed() || _state != StatusType::STATUS_RESOURCE ) {
         return;
     }
 
