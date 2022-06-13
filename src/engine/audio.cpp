@@ -551,12 +551,12 @@ bool Audio::isValid()
     return isInitialized;
 }
 
-void Mixer::SetChannels( const int num )
+int Mixer::SetChannels( const int num )
 {
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
     if ( !isInitialized ) {
-        return;
+        return 0;
     }
 
     const int channelsCount = Mix_AllocateChannels( num );
@@ -573,17 +573,11 @@ void Mixer::SetChannels( const int num )
 
         Mix_Volume( -1, 0 );
     }
-}
 
-size_t Mixer::getChannelCount()
-{
-    const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
+    // Just to verify that we are synced with SDL.
+    assert( Mix_AllocateChannels( -1 ) == channelsCount );
 
-    if ( !isInitialized ) {
-        return 0;
-    }
-
-    return static_cast<size_t>( Mix_AllocateChannels( -1 ) );
+    return channelsCount;
 }
 
 int Mixer::Play( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop )

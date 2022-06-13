@@ -73,4 +73,7 @@ namespace AudioManager
     void PlayMusicAsync( const int trackId, const Music::PlaybackMode playbackMode );
 
     void ResetAudio();
+
+    // This function does not obtain any mutexes as the number of channels cannot be changed over time, unless we set explicitly.
+    int getAudioChannelCount();
 }
