@@ -17,5 +17,5 @@ override_dh_auto_build:
 	make -C docs
 
 override_dh_auto_clean:
-	dh_auto_clean
 	make -C docs clean
+	dh_auto_clean
