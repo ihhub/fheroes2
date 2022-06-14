@@ -71,9 +71,8 @@ namespace
         {
             if ( _updatedPosition != _prevPosition ) {
                 Interface::Basic & iface = Interface::Basic::Get();
-                Interface::Radar & radar = iface.GetRadar();
 
-                const fheroes2::Rect commonArea = mainArea ^ radar.GetRect();
+                const fheroes2::Rect commonArea = mainArea ^ iface.GetRadar().GetRect();
                 _restorer.update( commonArea.x, commonArea.y, commonArea.width, commonArea.height );
 
                 iface.GetGameArea().SetCenter( updatedPosition );
