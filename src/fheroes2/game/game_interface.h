@@ -171,7 +171,7 @@ namespace Interface
         void EventSwitchShowRadar() const;
         void EventSwitchShowStatus() const;
         void EventSwitchShowButtons() const;
-        void EventSwitchShowIcons();
+        void EventSwitchShowIcons() const;
         void EventSwitchShowControlPanel() const;
 
         fheroes2::GameMode EventNewGame() const;
