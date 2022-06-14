@@ -137,7 +137,6 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
     KingdomCastles::const_iterator it = std::find( myCastles.begin(), myCastles.end(), &castle );
-    Interface::StatusWindow::ResetTimer();
 
     const size_t heroCountBefore = myKingdom.GetHeroes().size();
 
@@ -199,8 +198,6 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-    Interface::StatusWindow::ResetTimer();
 
     bool needFade = Settings::ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
 
@@ -799,6 +796,9 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             }
             continue;
         }
+
+        // pending timer events
+        statusWindow.TimerEventProcessing();
 
         // hotkeys
         if ( le.KeyPress() ) {

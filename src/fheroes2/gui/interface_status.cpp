@@ -47,35 +47,17 @@ Interface::StatusWindow::StatusWindow( Basic & basic )
     : BorderWindow( { 0, 0, 144, 72 } )
     , interface( basic )
     , _state( StatusType::STATUS_UNKNOWN )
-    , _oldState( StatusType::STATUS_UNKNOWN )
     , lastResource( Resource::UNKNOWN )
     , countLastResource( 0 )
     , turn_progress( 0 )
+    , showLastResourceDelay( resourceWindowExpireTime )
 {}
 
 void Interface::StatusWindow::Reset()
 {
     _state = StatusType::STATUS_DAY;
-    _oldState = StatusType::STATUS_UNKNOWN;
     lastResource = Resource::UNKNOWN;
     countLastResource = 0;
-    ResetTimer();
-}
-
-uint32_t Interface::StatusWindow::ResetResourceStatus( uint32_t /*tick*/, void * ptr )
-{
-    if ( ptr ) {
-        Interface::StatusWindow * status = static_cast<Interface::StatusWindow *>( ptr );
-        if ( StatusType::STATUS_RESOURCE == status->_state ) {
-            status->_state = status->_oldState;
-            Interface::Basic::Get().SetRedraw( REDRAW_STATUS );
-        }
-        else {
-            status->timerShowLastResource.remove();
-        }
-    }
-
-    return 0;
 }
 
 void Interface::StatusWindow::SavePosition()
@@ -102,8 +84,12 @@ void Interface::StatusWindow::SetPos( int32_t ox, int32_t oy )
 
 void Interface::StatusWindow::SetState( const StatusType status )
 {
-    if ( StatusType::STATUS_RESOURCE != _state )
+    // SetResource() should be used to set this status
+    assert( status != StatusType::STATUS_RESOURCE );
+
+    if ( _state != StatusType::STATUS_RESOURCE ) {
         _state = status;
+    }
 }
 
 void Interface::StatusWindow::Redraw() const
@@ -296,24 +282,9 @@ void Interface::StatusWindow::SetResource( int res, uint32_t count )
 {
     lastResource = res;
     countLastResource = count;
-
-    if ( timerShowLastResource.valid() )
-        timerShowLastResource.remove();
-    else
-        _oldState = _state;
-
     _state = StatusType::STATUS_RESOURCE;
-    timerShowLastResource.run( resourceWindowExpireTime, ResetResourceStatus, this );
-}
 
-void Interface::StatusWindow::ResetTimer()
-{
-    StatusWindow & window = Interface::Basic::Get().GetStatusWindow();
-
-    if ( window.timerShowLastResource.valid() ) {
-        window.timerShowLastResource.remove();
-        ResetResourceStatus( 0, &window );
-    }
+    showLastResourceDelay.reset();
 }
 
 void Interface::StatusWindow::DrawResourceInfo( int oh ) const
@@ -464,6 +435,27 @@ void Interface::StatusWindow::QueueEventProcessing()
                 Font::BIG );
         }
     }
+}
+
+void Interface::StatusWindow::TimerEventProcessing()
+{
+    if ( _state != StatusType::STATUS_RESOURCE || !showLastResourceDelay.isPassed() ) {
+        return;
+    }
+
+    switch ( GetFocusType() ) {
+    case GameFocus::HEROES:
+        _state = StatusType::STATUS_ARMY;
+        break;
+    case GameFocus::CASTLE:
+        _state = StatusType::STATUS_FUNDS;
+        break;
+    default:
+        _state = StatusType::STATUS_DAY;
+        break;
+    }
+
+    SetRedraw();
 }
 
 void Interface::StatusWindow::RedrawTurnProgress( uint32_t v )
