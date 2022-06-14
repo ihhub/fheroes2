@@ -71,7 +71,6 @@ namespace Interface
     Castle * GetFocusCastle();
     Heroes * GetFocusHeroes();
     int GetFocusType();
-    fheroes2::Point GetFocusCenter();
 
     class Basic
     {
@@ -134,11 +133,6 @@ namespace Interface
         IconsPanel & GetIconsPanel()
         {
             return iconsPanel;
-        }
-
-        ButtonsArea & GetButtonsArea()
-        {
-            return buttonsArea;
         }
 
         StatusWindow & GetStatusWindow()

@@ -175,22 +175,6 @@ Heroes * Interface::GetFocusHeroes()
     return player ? player->GetFocus().GetHeroes() : nullptr;
 }
 
-fheroes2::Point Interface::GetFocusCenter()
-{
-    Player * player = Settings::Get().GetPlayers().GetCurrent();
-
-    if ( player ) {
-        Focus & focus = player->GetFocus();
-
-        if ( focus.GetHeroes() )
-            return focus.GetHeroes()->GetCenter();
-        else if ( focus.GetCastle() )
-            return focus.GetCastle()->GetCenter();
-    }
-
-    return fheroes2::Point( world.w() / 2, world.h() / 2 );
-}
-
 void Interface::Basic::RedrawFocus()
 {
     int type = GetFocusType();
