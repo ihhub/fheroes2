@@ -125,8 +125,6 @@ namespace
 
     struct ChannelAudioLoopEffectInfo : public AudioManager::AudioLoopEffectInfo
     {
-        ChannelAudioLoopEffectInfo() = default;
-
         ChannelAudioLoopEffectInfo( const AudioLoopEffectInfo & info, const int channelId_ )
             : AudioLoopEffectInfo( info )
             , channelId( channelId_ )
