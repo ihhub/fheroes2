@@ -434,6 +434,9 @@ void Audio::Init()
         return;
     }
 
+    // By default this value should be MIX_CHANNELS.
+    audioChannelCount = Mix_AllocateChannels( -1 );
+
     int channels = 0;
     int frequency = 0;
     uint16_t format = 0;
