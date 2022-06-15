@@ -118,7 +118,7 @@ struct HeroRow
 class StatsHeroesList : public Interface::ListBox<HeroRow>
 {
 public:
-    StatsHeroesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const KingdomHeroes & );
+    StatsHeroesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const KingdomHeroes & heroes );
 
     bool Refresh( KingdomHeroes & heroes );
 
@@ -378,7 +378,7 @@ struct CstlRow
 class StatsCastlesList : public Interface::ListBox<CstlRow>
 {
 public:
-    StatsCastlesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const KingdomCastles & );
+    StatsCastlesList( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, const KingdomCastles & castles );
 
     void RedrawItem( const CstlRow & row, int32_t dstx, int32_t dsty, bool current ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
