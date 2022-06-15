@@ -368,7 +368,15 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
                 hero->ResetMovePoints();
 
                 if ( world.DiggingForUltimateArtifact( hero->GetCenter() ) ) {
-                    AudioManager::PlaySound( M82::TREASURE );
+                    const Game::MusicRestorer musicRestorer;
+
+                    if ( Settings::Get().MusicMIDI() ) {
+                        AudioManager::PlaySound( M82::TREASURE );
+                    }
+                    else {
+                        AudioManager::PlayMusic( MUS::ULTIMATE_ARTIFACT, Music::PlaybackMode::PLAY_ONCE );
+                    }
+
                     const Artifact & ultimate = world.GetUltimateArtifact().GetArtifact();
                     hero->PickupArtifact( ultimate );
                     std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );
