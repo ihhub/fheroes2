@@ -33,6 +33,7 @@ else
 SEDEX := $(SEDEX); /@data@/,/^This path/ {s:@data@:$(UNIX_DATA):; /^This path/d}
 SEDEX := $(SEDEX); /@config@/,/^This path/ {s:@config@:$(UNIX_DATA):; /^This path/d}
 endif
+
 .PHONY: all clean
 
 all:
