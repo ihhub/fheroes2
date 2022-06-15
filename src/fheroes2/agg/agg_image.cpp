@@ -2076,9 +2076,7 @@ namespace fheroes2
                 _icnVsSprite[id][0] = GetICN( ICN::CSPANBKE, 0 );
                 Copy( GetICN( ICN::ESPANBKG, 0 ), roi.x, roi.y, output, roi.x, roi.y, roi.width, roi.height );
 
-                const std::vector<uint8_t> transformTable
-                    = getTransformTable( GetICN( ICN::CSPANBKG, 0 ), GetICN( ICN::CSPANBKE, 0 ), roi.x, roi.y, roi.width, roi.height );
-                ApplyPalette( output, roi.x, roi.y, output, roi.x, roi.y, roi.width, roi.height, transformTable );
+                ApplyPalette( output, roi.x, roi.y, output, roi.x, roi.y, roi.width, roi.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
 
                 _icnVsSprite[id][1] = GetICN( ICN::ESPANBKG, 1 );
 
