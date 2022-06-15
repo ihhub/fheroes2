@@ -229,8 +229,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
                                     : static_cast<int>( Cursor::WAR_NONE ) );
 
             if ( dst >= 0 && le.MousePressRight() ) {
-                const Maps::Tiles & tile = world.GetTiles( dst );
-                Dialog::QuickInfo( tile );
+                Dialog::QuickInfo( world.GetTiles( dst ) );
             }
             else if ( le.MouseClickLeft() && valid ) {
                 returnValue = dst;
