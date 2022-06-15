@@ -105,7 +105,7 @@ Interface::Basic & Interface::Basic::Get()
     return basic;
 }
 
-void Interface::Basic::Redraw( uint32_t force )
+void Interface::Basic::Redraw( const uint32_t force /* = 0 */ )
 {
     const Settings & conf = Settings::Get();
 

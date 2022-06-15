@@ -81,9 +81,9 @@ namespace Interface
             return redraw != 0;
         }
 
-        void SetRedraw( uint32_t f )
+        void SetRedraw( const uint32_t r )
         {
-            redraw |= f;
+            redraw |= r;
         }
 
         uint32_t GetRedrawMask() const
@@ -91,7 +91,7 @@ namespace Interface
             return redraw;
         }
 
-        void Redraw( uint32_t f = 0 );
+        void Redraw( const uint32_t force = 0 );
 
         static bool isScrollLeft( const fheroes2::Point & cursorPos )
         {
