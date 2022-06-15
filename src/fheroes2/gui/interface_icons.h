@@ -106,7 +106,7 @@ namespace Interface
         void SetPos( int32_t px, int32_t py );
         void SetShow( bool );
 
-    protected:
+    private:
         using Interface::ListBox<HEROES>::ActionListDoubleClick;
         using Interface::ListBox<HEROES>::ActionListSingleClick;
         using Interface::ListBox<HEROES>::ActionListPressRight;
@@ -119,7 +119,6 @@ namespace Interface
         void RedrawItem( const HEROES & item, int32_t ox, int32_t oy, bool current ) override;
         void RedrawBackground( const fheroes2::Point & ) override;
 
-    private:
         fheroes2::Point _topLeftCorner;
     };
 
@@ -139,7 +138,7 @@ namespace Interface
         void SetPos( int32_t px, int32_t py );
         void SetShow( bool );
 
-    protected:
+    private:
         using Interface::ListBox<CASTLE>::ActionListDoubleClick;
         using Interface::ListBox<CASTLE>::ActionListSingleClick;
         using Interface::ListBox<CASTLE>::ActionListPressRight;
@@ -152,7 +151,6 @@ namespace Interface
         void RedrawItem( const CASTLE & item, int32_t ox, int32_t oy, bool current ) override;
         void RedrawBackground( const fheroes2::Point & ) override;
 
-    private:
         fheroes2::Point _topLeftCorner;
     };
 

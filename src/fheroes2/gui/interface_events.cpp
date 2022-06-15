@@ -484,7 +484,7 @@ void Interface::Basic::EventSwitchShowStatus() const
     }
 }
 
-void Interface::Basic::EventSwitchShowIcons()
+void Interface::Basic::EventSwitchShowIcons() const
 {
     Settings & conf = Settings::Get();
 

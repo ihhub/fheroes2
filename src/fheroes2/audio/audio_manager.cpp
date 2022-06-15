@@ -125,8 +125,6 @@ namespace
 
     struct ChannelAudioLoopEffectInfo : public AudioManager::AudioLoopEffectInfo
     {
-        ChannelAudioLoopEffectInfo() = default;
-
         ChannelAudioLoopEffectInfo( const AudioLoopEffectInfo & info, const int channelId_ )
             : AudioLoopEffectInfo( info )
             , channelId( channelId_ )
@@ -764,11 +762,11 @@ namespace AudioManager
 
         assert( !originalAGGFilePath.empty() );
         if ( !g_midiHeroes2AGG.open( originalAGGFilePath ) ) {
-            VERBOSE_LOG( "Failed to open HEROES2.AGG file for audio playback." );
+            VERBOSE_LOG( "Failed to open HEROES2.AGG file for audio playback." )
         }
 
         if ( !expansionAGGFilePath.empty() && !g_midiHeroes2xAGG.open( expansionAGGFilePath ) ) {
-            VERBOSE_LOG( "Failed to open HEROES2X.AGG file for audio playback." );
+            VERBOSE_LOG( "Failed to open HEROES2X.AGG file for audio playback." )
         }
     }
 
