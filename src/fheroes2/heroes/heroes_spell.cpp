@@ -501,7 +501,7 @@ bool ActionSpellTownPortal( Heroes & hero )
         return false;
     }
 
-    std::unique_ptr<fheroes2::StandardWindow> frameborder( new fheroes2::StandardWindow( 290, 252 ) );
+    std::unique_ptr<fheroes2::StandardWindow> frameborder = std::make_unique<fheroes2::StandardWindow>( 290, 252 );
     const fheroes2::Rect & area = frameborder->activeArea();
 
     int result = Dialog::ZERO;

@@ -294,7 +294,7 @@ void Game::HotKeysLoad( std::string filename )
             std::map<std::string, fheroes2::Key> nameToKey;
             for ( int32_t i = static_cast<int32_t>( fheroes2::Key::NONE ); i < static_cast<int32_t>( fheroes2::Key::LAST_KEY ); ++i ) {
                 const fheroes2::Key key = static_cast<fheroes2::Key>( i );
-                nameToKey.emplace( StringUpper( KeySymGetName( key ) ), key );
+                nameToKey.try_emplace( StringUpper( KeySymGetName( key ) ), key );
             }
 
             for ( int eventId = hotKeyEventToInt( HotKeyEvent::NONE ) + 1; eventId < hotKeyEventToInt( HotKeyEvent::NO_EVENT ); ++eventId ) {
