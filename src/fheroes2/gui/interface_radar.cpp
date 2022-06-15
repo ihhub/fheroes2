@@ -132,12 +132,12 @@ Interface::Radar::Radar( Basic & basic )
     , hide( true )
 {}
 
-Interface::Radar::Radar( const Radar & radar )
-    : BorderWindow( radar.area )
-    , radarType( radar.radarType )
+Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display )
+    : BorderWindow( { display.width() - BORDERWIDTH - RADARWIDTH, BORDERWIDTH, RADARWIDTH, RADARWIDTH } )
+    , radarType( RadarType::ViewWorld )
     , interface( radar.interface )
     , spriteArea( radar.spriteArea )
-    , hide( radar.hide )
+    , hide( false )
 {}
 
 void Interface::Radar::SavePosition()
@@ -150,14 +150,12 @@ void Interface::Radar::SetPos( int32_t ox, int32_t oy )
     BorderWindow::SetPosition( ox, oy );
 }
 
-/* construct gui */
 void Interface::Radar::Build()
 {
     Generate();
-    RedrawCursor();
+    SetRedraw();
 }
 
-/* generate mini maps */
 void Interface::Radar::Generate()
 {
     const int32_t worldWidth = world.w();
@@ -424,12 +422,13 @@ void Interface::Radar::QueueEventProcessing()
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Rect & rect = GetArea();
 
-    // move border
+    // Move border window
     if ( conf.ShowRadar() && BorderWindow::QueueEventProcessing() ) {
-        RedrawCursor();
+        cursorArea.hide();
+        SetRedraw();
     }
-    // move cursor
     else if ( le.MouseCursor( rect ) ) {
+        // move cursor
         if ( le.MouseClickLeft() || le.MousePressLeft() ) {
             const fheroes2::Point & pt = le.GetMouseCursor();
 
@@ -439,26 +438,13 @@ void Interface::Radar::QueueEventProcessing()
                 gamearea.SetCenter( { ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height } );
                 visibleROI = gamearea.GetVisibleTileROI();
                 if ( prev.x != visibleROI.x || prev.y != visibleROI.y ) {
-                    RedrawCursor();
+                    SetRedraw();
                     gamearea.SetRedraw();
                 }
             }
         }
-        else if ( le.MousePressRight( GetRect() ) )
+        else if ( le.MousePressRight( GetRect() ) ) {
             Dialog::Message( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Font::BIG );
-        else if ( conf.ExtGameHideInterface() ) {
-            fheroes2::Size newSize( rect.width, rect.height );
-
-            if ( le.MouseWheelUp() ) {
-                if ( rect.width != world.w() || rect.height != world.h() )
-                    newSize = { world.w(), world.h() };
-            }
-            else if ( le.MouseWheelDn() ) {
-                if ( rect.width != RADARWIDTH || rect.height != RADARWIDTH )
-                    newSize = { RADARWIDTH, RADARWIDTH };
-            }
-
-            ChangeAreaSize( newSize );
         }
     }
 }
@@ -495,27 +481,4 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
         }
     }
     return false;
-}
-
-void Interface::Radar::ChangeAreaSize( const fheroes2::Size & newSize )
-{
-    if ( newSize.width != area.width || newSize.height != area.height ) {
-        const fheroes2::Rect & rect = GetRect();
-        SetPosition( rect.x < 0 ? 0 : rect.x, rect.y < 0 ? 0 : rect.y, newSize.width, newSize.height );
-        Generate();
-        RedrawCursor();
-        interface.GetGameArea().SetRedraw();
-    }
-}
-
-// New Radar but copy mini-map data
-Interface::Radar Interface::Radar::MakeRadarViewWorld( const Interface::Radar & radar )
-{
-    Radar newRadar( radar );
-    newRadar.hide = false;
-    newRadar.radarType = RadarType::ViewWorld;
-    const fheroes2::Display & display = fheroes2::Display::instance();
-    newRadar.area.x = display.width() - BORDERWIDTH - RADARWIDTH;
-    newRadar.area.y = BORDERWIDTH;
-    return newRadar;
 }

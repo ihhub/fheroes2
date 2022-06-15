@@ -71,7 +71,6 @@ namespace Interface
     Castle * GetFocusCastle();
     Heroes * GetFocusHeroes();
     int GetFocusType();
-    fheroes2::Point GetFocusCenter();
 
     class Basic
     {
@@ -136,11 +135,6 @@ namespace Interface
             return iconsPanel;
         }
 
-        ButtonsArea & GetButtonsArea()
-        {
-            return buttonsArea;
-        }
-
         StatusWindow & GetStatusWindow()
         {
             return statusWindow;
@@ -155,8 +149,6 @@ namespace Interface
         void SetFocus( Castle * );
         void ResetFocus( int );
         void RedrawFocus();
-
-        void SetHideInterface( bool );
 
         void EventSwitchHeroSleeping();
         fheroes2::GameMode EventDefaultAction( const fheroes2::GameMode gameMode );
@@ -173,7 +165,7 @@ namespace Interface
         void EventSwitchShowRadar() const;
         void EventSwitchShowStatus() const;
         void EventSwitchShowButtons() const;
-        void EventSwitchShowIcons();
+        void EventSwitchShowIcons() const;
         void EventSwitchShowControlPanel() const;
 
         fheroes2::GameMode EventNewGame() const;
@@ -197,7 +189,8 @@ namespace Interface
         static int GetCursorFocusShipmaster( const Heroes &, const Maps::Tiles & );
         void CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const;
 
-        void Reset(); // call this function only when changing the resolution
+        // Regenerates the game area and updates the panel positions depending on the UI settings
+        void Reset();
 
     private:
         Basic();

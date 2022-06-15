@@ -1096,7 +1096,11 @@ Battle::Interface::Interface( Arena & a, int32_t center )
     status.SetLogs( listlog );
 
     AudioManager::ResetAudio();
-    AudioManager::PlaySound( M82::PREBATTL );
+
+    // Don't waste time playing the pre-battle sound if the game sounds are turned off
+    if ( conf.SoundVolume() > 0 ) {
+        AudioManager::PlaySound( M82::PREBATTL );
+    }
 }
 
 Battle::Interface::~Interface()
@@ -2958,7 +2962,7 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
 void Battle::Interface::RedrawActionNewTurn() const
 {
     if ( !Music::isPlaying() ) {
-        AudioManager::PlayMusic( MUS::GetBattleRandom(), true, true );
+        AudioManager::PlayMusicAsync( MUS::GetBattleRandom(), Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
     }
 
     if ( listlog == nullptr ) {

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 17:13+0000\n"
+"POT-Creation-Date: 2022-06-12 08:18+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -2472,6 +2472,47 @@ msgstr ""
 msgid "the garrison"
 msgstr ""
 
+msgid "off"
+msgstr "off"
+
+#, fuzzy
+msgid "Music"
+msgstr "música"
+
+msgid "Effects"
+msgstr ""
+
+msgid "MIDI"
+msgstr ""
+
+#, fuzzy
+msgid "MIDI Expansion"
+msgstr "Mansão"
+
+msgid "External"
+msgstr ""
+
+msgid "Music Type"
+msgstr ""
+
+msgid "3D Audio"
+msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr ""
+
+msgid "Toggle foreground sounds level."
+msgstr ""
+
+msgid "Change the type of music."
+msgstr ""
+
+msgid "Toggle 3D effects of foreground sounds."
+msgstr ""
+
+msgid "Okay"
+msgstr "OK"
+
 msgid "Build a new ship:"
 msgstr "Construir um novo banrco:"
 
@@ -2522,28 +2563,12 @@ msgstr "Experimental"
 msgid "Settings"
 msgstr "Configurações"
 
-msgid "off"
-msgstr "off"
-
-#, fuzzy
-msgid "Music"
-msgstr "música"
-
-msgid "Effects"
-msgstr ""
-
-msgid "MIDI"
+msgid "Audio"
 msgstr ""
 
 #, fuzzy
-msgid "MIDI Expansion"
-msgstr "Mansão"
-
-msgid "External"
-msgstr ""
-
-msgid "Music Type"
-msgstr ""
+msgid "settings"
+msgstr "Configurações"
 
 #, fuzzy
 msgid "Hot Keys"
@@ -2566,6 +2591,28 @@ msgstr ""
 msgid "Text Support"
 msgstr ""
 
+msgid "Evil"
+msgstr "Mal"
+
+msgid "Good"
+msgstr "Bom"
+
+#, fuzzy
+msgid "Interface Type"
+msgstr "Aparência"
+
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Battles"
+msgstr ""
+
 msgid "Select Game Language"
 msgstr "Selecione o idioma do jogo"
 
@@ -2578,19 +2625,20 @@ msgstr "Selecione a resolução do jogo"
 msgid "Change resolution of the game."
 msgstr "Mudar a resolução do jogo."
 
+#, fuzzy
+msgid "Change audio settings of the game."
+msgstr "Mudar a resolução do jogo."
+
 msgid "Experimental game settings."
 msgstr "Configurações experimentais do jogo."
 
-msgid "Toggle ambient music level."
-msgstr ""
-
-msgid "Toggle foreground sounds level."
-msgstr ""
-
-msgid "Change the type of music."
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Check all Hot Keys used in the game."
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid ""
@@ -2602,9 +2650,6 @@ msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
-
-msgid "Okay"
-msgstr "OK"
 
 #, fuzzy
 msgid "Attention"
@@ -3084,16 +3129,6 @@ msgstr "Veloc."
 msgid "Scroll Speed"
 msgstr ""
 
-msgid "Evil"
-msgstr "Mal"
-
-msgid "Good"
-msgstr "Bom"
-
-#, fuzzy
-msgid "Interface Type"
-msgstr "Aparência"
-
 #, fuzzy
 msgid "Hide"
 msgstr "Ponte"
@@ -3104,18 +3139,6 @@ msgstr "Neve"
 
 msgid "Interface"
 msgstr "Aparência"
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-msgid "Battles"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3128,13 +3151,7 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
 msgid "Toggle interface visibility."
-msgstr ""
-
-msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -3271,6 +3288,9 @@ msgid "QA and Support"
 msgstr ""
 
 msgid "Development"
+msgstr ""
+
+msgid "Dev and Support"
 msgstr ""
 
 msgid "Visit us at "

@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <fstream>
+#include <tuple>
 
 #if defined( MACOS_APP_BUNDLE )
 #include <CoreFoundation/CoreFoundation.h>
@@ -1003,8 +1004,12 @@ void Settings::BinaryLoad()
 {
     std::string fname = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.bin" );
 
-    if ( !System::IsFile( fname ) )
+    if ( !System::IsFile( fname ) ) {
         fname = GetLastFile( "", "fheroes2.bin" );
+    }
+    if ( !System::IsFile( fname ) ) {
+        return;
+    }
 
     StreamFile fs;
     fs.setbigendian( true );
@@ -1013,6 +1018,21 @@ void Settings::BinaryLoad()
         uint16_t version = 0;
 
         fs >> version >> opt_game >> opt_world >> opt_battle >> opt_addons >> pos_radr >> pos_bttn >> pos_icon >> pos_stat;
+
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0916_RELEASE, "Remove the following code." );
+        if ( version < FORMAT_VERSION_0916_RELEASE ) {
+            // In previous versions, the default values for panel coordinates were {0, 0}, so if all read coordinates
+            // are {0, 0}, then they most likely need to be replaced with the new default coordinates {-1, -1}
+            std::apply(
+                []( auto &... pos ) {
+                    const fheroes2::Point nullPoint{ 0, 0 };
+
+                    if ( ( ( pos == nullPoint ) && ... ) ) {
+                        ( ( pos = { -1, -1 } ), ... );
+                    }
+                },
+                std::tie( pos_radr, pos_bttn, pos_icon, pos_stat ) );
+        }
     }
 }
 

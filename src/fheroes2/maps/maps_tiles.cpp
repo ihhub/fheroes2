@@ -340,7 +340,7 @@ namespace
             }
         }
 
-        return imageMap.emplace( passable, std::move( sf ) ).first->second;
+        return imageMap.try_emplace( passable, std::move( sf ) ).first->second;
     }
 #endif
 

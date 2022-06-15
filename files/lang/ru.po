@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 17:13+0000\n"
+"POT-Creation-Date: 2022-06-12 08:18+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -2566,6 +2566,46 @@ msgstr "Нет места"
 msgid "the garrison"
 msgstr "в отряде"
 
+msgid "off"
+msgstr "выкл."
+
+msgid "Music"
+msgstr "Музыка"
+
+msgid "Effects"
+msgstr "Эффекты"
+
+msgid "MIDI"
+msgstr "MIDI"
+
+msgid "MIDI Expansion"
+msgstr "Расширение MIDI"
+
+msgid "External"
+msgstr "Внешний"
+
+msgid "Music Type"
+msgstr "Тип музыки"
+
+msgid "3D Audio"
+msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr "Уровень музыки."
+
+msgid "Toggle foreground sounds level."
+msgstr "Уровень звуков."
+
+msgid "Change the type of music."
+msgstr "Изменить тип музыки."
+
+#, fuzzy
+msgid "Toggle 3D effects of foreground sounds."
+msgstr "Уровень звуков."
+
+msgid "Okay"
+msgstr "Принять"
+
 msgid "Build a new ship:"
 msgstr "Построить новый корабль:"
 
@@ -2615,26 +2655,12 @@ msgstr "Расширенные"
 msgid "Settings"
 msgstr "Настройки"
 
-msgid "off"
-msgstr "выкл."
+msgid "Audio"
+msgstr ""
 
-msgid "Music"
-msgstr "Музыка"
-
-msgid "Effects"
-msgstr "Эффекты"
-
-msgid "MIDI"
-msgstr "MIDI"
-
-msgid "MIDI Expansion"
-msgstr "Расширение MIDI"
-
-msgid "External"
-msgstr "Внешний"
-
-msgid "Music Type"
-msgstr "Тип музыки"
+#, fuzzy
+msgid "settings"
+msgstr "Настройки"
 
 #, fuzzy
 msgid "Hot Keys"
@@ -2658,6 +2684,27 @@ msgstr ""
 msgid "Text Support"
 msgstr "Контроль качества и поддержка"
 
+msgid "Evil"
+msgstr "Злой"
+
+msgid "Good"
+msgstr "Добрый"
+
+msgid "Interface Type"
+msgstr "Интерфейс"
+
+msgid "Auto Resolve"
+msgstr "Авто, с магией"
+
+msgid "Auto, No Spells"
+msgstr "Авто, без магии"
+
+msgid "Manual"
+msgstr "Вручную"
+
+msgid "Battles"
+msgstr "Битвы"
+
 msgid "Select Game Language"
 msgstr "Выберите язык игры:"
 
@@ -2670,20 +2717,21 @@ msgstr "Выбор разрешения экрана"
 msgid "Change resolution of the game."
 msgstr "Изменить разрешение экрана."
 
+#, fuzzy
+msgid "Change audio settings of the game."
+msgstr "Сменить язык, разрешение и настройки игры."
+
 msgid "Experimental game settings."
 msgstr "Вы можете настроить игру по своему усмотрению."
 
-msgid "Toggle ambient music level."
-msgstr "Уровень музыки."
-
-msgid "Toggle foreground sounds level."
-msgstr "Уровень звуков."
-
-msgid "Change the type of music."
-msgstr "Изменить тип музыки."
+msgid "Toggle instant battle mode."
+msgstr "Режим мгновенного боя."
 
 msgid "Check all Hot Keys used in the game."
 msgstr ""
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Переключить тип интерфейса, который Вы хотите использовать."
 
 msgid ""
 "Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
@@ -2694,9 +2742,6 @@ msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
-
-msgid "Okay"
-msgstr "Принять"
 
 msgid "Attention"
 msgstr "Внимание"
@@ -3161,15 +3206,6 @@ msgstr "Скор. врагов"
 msgid "Scroll Speed"
 msgstr "Скор. просмотра"
 
-msgid "Evil"
-msgstr "Злой"
-
-msgid "Good"
-msgstr "Добрый"
-
-msgid "Interface Type"
-msgstr "Интерфейс"
-
 msgid "Hide"
 msgstr "Скрыть"
 
@@ -3178,18 +3214,6 @@ msgstr "Показать"
 
 msgid "Interface"
 msgstr "Интерфейс"
-
-msgid "Auto Resolve"
-msgstr "Авто, с магией"
-
-msgid "Auto, No Spells"
-msgstr "Авто, без магии"
-
-msgid "Battles"
-msgstr "Битвы"
-
-msgid "Manual"
-msgstr "Вручную"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3205,14 +3229,8 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr "Устанавливает скорость прокрутки в окне."
 
-msgid "Toggle the type of interface you want to use."
-msgstr "Переключить тип интерфейса, который Вы хотите использовать."
-
 msgid "Toggle interface visibility."
 msgstr "Показать/скрыть интерфейс."
-
-msgid "Toggle instant battle mode."
-msgstr "Режим мгновенного боя."
 
 msgid "Att."
 msgstr "Атк."
@@ -3344,6 +3362,10 @@ msgstr "Контроль качества и поддержка"
 
 msgid "Development"
 msgstr "Разработчик"
+
+#, fuzzy
+msgid "Dev and Support"
+msgstr "Контроль качества и поддержка"
 
 msgid "Visit us at "
 msgstr "Посетите нас"

@@ -486,7 +486,6 @@ bool Interface::BorderWindow::QueueEventProcessing()
         }
 
         SetPos( mp.x - ox, mp.y - oy );
-        Interface::Basic::Get().SetRedraw( REDRAW_GAMEAREA );
 
         return true;
     }

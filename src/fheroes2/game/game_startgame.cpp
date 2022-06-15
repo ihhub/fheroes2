@@ -85,8 +85,6 @@ fheroes2::GameMode Game::StartGame()
     if ( !conf.LoadedGameVersion() )
         GameOver::Result::Get().Reset();
 
-    Interface::Basic::Get().Reset();
-
     return Interface::Basic::Get().StartGame();
 }
 
@@ -139,7 +137,6 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
     KingdomCastles::const_iterator it = std::find( myCastles.begin(), myCastles.end(), &castle );
-    Interface::StatusWindow::ResetTimer();
 
     const size_t heroCountBefore = myKingdom.GetHeroes().size();
 
@@ -201,8 +198,6 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
 {
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
-    Interface::StatusWindow::ResetTimer();
 
     bool needFade = Settings::ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
 
@@ -272,7 +267,7 @@ void ShowNewWeekDialog()
     // restore the original music on exit
     const Game::MusicRestorer musicRestorer;
 
-    AudioManager::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, false );
+    AudioManager::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, Music::PlaybackMode::PLAY_ONCE );
 
     const Week & week = world.GetWeekType();
 
@@ -553,8 +548,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
     Settings & conf = Settings::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // draw interface
-    gameArea.generate( { display.width(), display.height() }, conf.ExtGameHideInterface() );
+    Reset();
 
     radar.Build();
     radar.SetHide( true );
@@ -565,9 +559,6 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
     iconsPanel.HideIcons( ICON_ANY );
     statusWindow.Reset();
-
-    if ( conf.ExtGameHideInterface() )
-        SetHideInterface( true );
 
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
@@ -617,7 +608,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
                     // reset environment sounds and music theme at the beginning of the human turn
-                    Game::SetCurrentMusic( MUS::UNKNOWN );
+                    Game::SetCurrentMusicTrack( MUS::UNKNOWN );
                     AudioManager::ResetAudio();
 
                     if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
@@ -633,7 +624,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                         // reset the music after closing the dialog
                         const Game::MusicRestorer musicRestorer;
 
-                        AudioManager::PlayMusic( MUS::NEW_MONTH, false );
+                        AudioManager::PlayMusic( MUS::NEW_MONTH, Music::PlaybackMode::PLAY_ONCE );
 
                         Game::DialogPlayers( player->GetColor(), _( "%{color} player's turn." ) );
                     }
@@ -655,7 +646,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     }
 
                     // Reset environment sounds and music theme at the end of the human turn.
-                    Game::SetCurrentMusic( MUS::UNKNOWN );
+                    Game::SetCurrentMusicTrack( MUS::UNKNOWN );
                     AudioManager::ResetAudio();
 
                     break;
@@ -805,6 +796,9 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             }
             continue;
         }
+
+        // pending timer events
+        statusWindow.TimerEventProcessing();
 
         // hotkeys
         if ( le.KeyPress() ) {

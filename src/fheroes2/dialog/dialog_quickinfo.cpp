@@ -70,13 +70,13 @@ namespace
             , _restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
         {
             if ( _updatedPosition != _prevPosition ) {
-                Interface::Radar & radar = Interface::Basic::Get().GetRadar();
+                Interface::Basic & iface = Interface::Basic::Get();
 
-                const fheroes2::Rect commonArea = mainArea ^ radar.GetRect();
+                const fheroes2::Rect commonArea = mainArea ^ iface.GetRadar().GetRect();
                 _restorer.update( commonArea.x, commonArea.y, commonArea.width, commonArea.height );
 
-                Interface::Basic::Get().GetGameArea().SetCenter( updatedPosition );
-                radar.Redraw();
+                iface.GetGameArea().SetCenter( updatedPosition );
+                iface.Redraw( Interface::REDRAW_RADAR );
 
                 _restorer.restore();
             }
@@ -85,8 +85,10 @@ namespace
         void restore()
         {
             if ( _updatedPosition != _prevPosition ) {
-                Interface::Basic::Get().GetGameArea().SetCenterInPixels( _prevPosition );
-                Interface::Basic::Get().GetRadar().Redraw();
+                Interface::Basic & iface = Interface::Basic::Get();
+
+                iface.GetGameArea().SetCenterInPixels( _prevPosition );
+                iface.Redraw( Interface::REDRAW_RADAR );
 
                 _restorer.restore();
             }

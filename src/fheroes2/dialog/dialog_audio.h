@@ -1,9 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2019 - 2022                                             *
- *                                                                         *
- *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   Copyright (C) 2022                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,46 +17,9 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#pragma once
 
-#ifndef H2INTERFACE_BORDER_H
-#define H2INTERFACE_BORDER_H
-
-#include "dialog.h"
-
-namespace Interface
+namespace Dialog
 {
-    void GameBorderRedraw( const bool viewWorldMode );
-
-    class BorderWindow
-    {
-    public:
-        explicit BorderWindow( const fheroes2::Rect & );
-        BorderWindow( const BorderWindow & ) = delete;
-
-        virtual ~BorderWindow() = default;
-
-        BorderWindow & operator=( const BorderWindow & ) = delete;
-
-        virtual void SetPos( int32_t, int32_t ) = 0;
-        virtual void SavePosition() = 0;
-
-        bool QueueEventProcessing();
-
-        const fheroes2::Rect & GetRect() const;
-        const fheroes2::Rect & GetArea() const
-        {
-            return area;
-        }
-
-    protected:
-        void Redraw() const;
-
-        void SetPosition( int32_t, int32_t, uint32_t, uint32_t );
-        void SetPosition( int32_t, int32_t );
-
-        fheroes2::Rect area;
-        Dialog::FrameBorder border;
-    };
+    void openAudioSettingsDialog();
 }
-
-#endif

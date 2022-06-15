@@ -60,7 +60,7 @@ namespace
     std::string last_name;
 
     bool updateSoundsOnFocusUpdate = true;
-    std::atomic<int> currentMusic{ MUS::UNKNOWN };
+    std::atomic<int> currentMusicTrackId{ MUS::UNKNOWN };
 
     uint32_t maps_animation_frame = 0;
 
@@ -222,14 +222,14 @@ void Game::Init()
     Game::HotKeysLoad( Settings::GetLastFile( "", "fheroes2.key" ) );
 }
 
-int Game::CurrentMusic()
+int Game::CurrentMusicTrackId()
 {
-    return currentMusic;
+    return currentMusicTrackId;
 }
 
-void Game::SetCurrentMusic( const int mus )
+void Game::SetCurrentMusicTrack( const int trackId )
 {
-    currentMusic = mus;
+    currentMusicTrackId = trackId;
 }
 
 void Game::ObjectFadeAnimation::PrepareFadeTask( const MP2::MapObjectType objectType, int32_t fromIndex, int32_t toIndex, bool fadeOut, bool fadeIn )
@@ -274,12 +274,8 @@ void Game::ObjectFadeAnimation::PerformFadeTask()
         }
     };
     auto redrawGameArea = []() {
-        fheroes2::Display & display = fheroes2::Display::instance();
-        const Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
-
-        gameArea.Redraw( display, Interface::LEVEL_ALL );
-
-        display.render();
+        Interface::Basic::Get().Redraw( Interface::REDRAW_GAMEAREA );
+        fheroes2::Display::instance().render();
     };
 
     LocalEvent & le = LocalEvent::Get();
@@ -345,7 +341,7 @@ uint32_t & Game::MapsAnimationFrame()
 // play environment sounds from the game area in focus
 void Game::EnvironmentSoundMixer()
 {
-    size_t availableChannels = Mixer::getChannelCount();
+    int availableChannels = Mixer::getChannelCount();
     if ( availableChannels <= 2 ) {
         // 2 channels are left for hero's movement.
         return;
@@ -474,7 +470,7 @@ void Game::EnvironmentSoundMixer()
 
 void Game::restoreSoundsForCurrentFocus()
 {
-    Game::SetCurrentMusic( MUS::UNKNOWN );
+    Game::SetCurrentMusicTrack( MUS::UNKNOWN );
     AudioManager::ResetAudio();
 
     switch ( Interface::GetFocusType() ) {
@@ -485,7 +481,7 @@ void Game::restoreSoundsForCurrentFocus()
         const int heroIndexPos = focusedHero->GetIndex();
         if ( heroIndexPos >= 0 ) {
             Game::EnvironmentSoundMixer();
-            AudioManager::PlayMusic( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), true, true );
+            AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
         }
         break;
     }
@@ -495,7 +491,7 @@ void Game::restoreSoundsForCurrentFocus()
         assert( focusedCastle != nullptr );
 
         Game::EnvironmentSoundMixer();
-        AudioManager::PlayMusic( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ), true, true );
+        AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( focusedCastle->GetIndex() ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
         break;
     }
 
