@@ -146,7 +146,7 @@ void Interface::CastleIcons::ActionListPressRight( CASTLE & castle )
 {
     if ( castle ) {
         const fheroes2::Point p( _topLeftCorner.x - 1, _topLeftCorner.y );
-        Dialog::QuickInfo( *castle, fheroes2::Rect(), p );
+        Dialog::QuickInfo( *castle, p, true );
     }
 }
 
@@ -247,7 +247,7 @@ void Interface::HeroesIcons::ActionListPressRight( HEROES & item )
 {
     if ( item ) {
         const fheroes2::Point p( _topLeftCorner.x - 1, _topLeftCorner.y );
-        Dialog::QuickInfo( *item, fheroes2::Rect(), p );
+        Dialog::QuickInfo( *item, p, true );
     }
 }
 

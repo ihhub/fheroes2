@@ -105,11 +105,11 @@ Interface::Basic & Interface::Basic::Get()
     return basic;
 }
 
-void Interface::Basic::Redraw( int force )
+void Interface::Basic::Redraw( uint32_t force )
 {
     const Settings & conf = Settings::Get();
 
-    const int combinedRedraw = redraw | force;
+    const uint32_t combinedRedraw = redraw | force;
     const bool hideInterface = conf.ExtGameHideInterface();
 
     if ( combinedRedraw & REDRAW_GAMEAREA ) {

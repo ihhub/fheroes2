@@ -1232,17 +1232,20 @@ void Interface::Basic::MouseCursorAreaPressRight( int32_t index_maps ) const
             case MP2::OBJN_CASTLE:
             case MP2::OBJ_CASTLE: {
                 const Castle * castle = world.getCastle( tile.GetCenter() );
-                if ( castle )
-                    Dialog::QuickInfo( *castle, fheroes2::Rect() );
-                else
+                if ( castle ) {
+                    Dialog::QuickInfo( *castle );
+                }
+                else {
                     Dialog::QuickInfo( tile );
+                }
                 break;
             }
 
             case MP2::OBJ_HEROES: {
                 const Heroes * heroes = tile.GetHeroes();
-                if ( heroes )
-                    Dialog::QuickInfo( *heroes, fheroes2::Rect() );
+                if ( heroes ) {
+                    Dialog::QuickInfo( *heroes );
+                }
                 break;
             }
 

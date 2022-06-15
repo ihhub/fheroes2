@@ -69,12 +69,12 @@ public:
     using Interface::ListBox<int32_t>::ActionListSingleClick;
     using Interface::ListBox<int32_t>::ActionListPressRight;
 
-    CastleIndexListBox( const fheroes2::Rect & area, const fheroes2::Point & offset, int & res, const int townFrameIcnId, const int listBoxIcnId )
+    CastleIndexListBox( const fheroes2::Rect & windowArea, const fheroes2::Point & offset, int & res, const int townFrameIcnId, const int listBoxIcnId )
         : Interface::ListBox<int32_t>( offset )
         , result( res )
         , _townFrameIcnId( townFrameIcnId )
         , _listBoxIcnId( listBoxIcnId )
-        , _area( area )
+        , _windowArea( windowArea )
     {}
 
     void RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current ) override;
@@ -105,7 +105,7 @@ public:
         const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
 
         if ( castle != nullptr ) {
-            Dialog::QuickInfo( *castle, _area );
+            Dialog::QuickInfo( *castle, {}, true, _windowArea );
         }
     }
 
@@ -114,7 +114,7 @@ public:
 private:
     int _townFrameIcnId;
     int _listBoxIcnId;
-    const fheroes2::Rect _area;
+    const fheroes2::Rect _windowArea;
 };
 
 void CastleIndexListBox::RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current )
@@ -502,17 +502,18 @@ bool ActionSpellTownPortal( Heroes & hero )
     }
 
     std::unique_ptr<fheroes2::StandardWindow> frameborder = std::make_unique<fheroes2::StandardWindow>( 290, 252 );
-    const fheroes2::Rect & area = frameborder->activeArea();
+    const fheroes2::Rect & windowArea = frameborder->windowArea();
+    const fheroes2::Rect & activeArea = frameborder->activeArea();
 
     int result = Dialog::ZERO;
 
     const int townIcnId = isEvilInterface ? ICN::ADVBORDE : ICN::ADVBORD;
     const int listIcnId = isEvilInterface ? ICN::LISTBOX_EVIL : ICN::LISTBOX;
-    CastleIndexListBox listbox( area, area.getPosition(), result, townIcnId, listIcnId );
+    CastleIndexListBox listbox( windowArea, activeArea.getPosition(), result, townIcnId, listIcnId );
 
-    listbox.SetScrollButtonUp( listIcnId, 3, 4, { area.x + 262, area.y + 45 } );
-    listbox.SetScrollButtonDn( listIcnId, 5, 6, { area.x + 262, area.y + 190 } );
-    listbox.setScrollBarArea( { area.x + 266, area.y + 68, 14, 119 } );
+    listbox.SetScrollButtonUp( listIcnId, 3, 4, { activeArea.x + 262, activeArea.y + 45 } );
+    listbox.SetScrollButtonDn( listIcnId, 5, 6, { activeArea.x + 262, activeArea.y + 190 } );
+    listbox.setScrollBarArea( { activeArea.x + 266, activeArea.y + 68, 14, 119 } );
 
     const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( listIcnId, 10 );
     const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSilder, false, 119, 5, static_cast<int32_t>( castles.size() ),
@@ -520,10 +521,10 @@ bool ActionSpellTownPortal( Heroes & hero )
 
     listbox.setScrollBarImage( scrollbarSlider );
     listbox.SetAreaMaxItems( 5 );
-    listbox.SetAreaItems( { area.x + 11, area.y + 49, 250, 160 } );
+    listbox.SetAreaItems( { activeArea.x + 11, activeArea.y + 49, 250, 160 } );
     listbox.SetListContent( castles );
     listbox.Unselect();
-    listbox.RedrawBackground( area.getPosition() );
+    listbox.RedrawBackground( activeArea.getPosition() );
     listbox.Redraw();
 
     const int okIcnId = isEvilInterface ? ICN::NON_UNIFORM_EVIL_OKAY_BUTTON : ICN::NON_UNIFORM_GOOD_OKAY_BUTTON;
@@ -533,14 +534,14 @@ bool ActionSpellTownPortal( Heroes & hero )
 
     const int32_t border = 10;
     fheroes2::ButtonGroup btnGroup;
-    btnGroup.addButton( fheroes2::makeButtonWithShadow( area.x + border, area.y + area.height - border - buttonOkSprite.height(), buttonOkSprite,
+    btnGroup.addButton( fheroes2::makeButtonWithShadow( activeArea.x + border, activeArea.y + activeArea.height - border - buttonOkSprite.height(), buttonOkSprite,
                                                         fheroes2::AGG::GetICN( okIcnId, 1 ), display ),
                         Dialog::OK );
 
     btnGroup.button( 0 ).disable();
 
-    btnGroup.addButton( fheroes2::makeButtonWithShadow( area.x + area.width - border - buttonCancelSprite.width(),
-                                                        area.y + area.height - border - buttonCancelSprite.height(), buttonCancelSprite,
+    btnGroup.addButton( fheroes2::makeButtonWithShadow( activeArea.x + activeArea.width - border - buttonCancelSprite.width(),
+                                                        activeArea.y + activeArea.height - border - buttonCancelSprite.height(), buttonCancelSprite,
                                                         fheroes2::AGG::GetICN( cancelIcnId, 1 ), display ),
                         Dialog::CANCEL );
     btnGroup.draw();

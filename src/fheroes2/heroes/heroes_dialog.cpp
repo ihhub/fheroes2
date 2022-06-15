@@ -327,12 +327,15 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
         }
 
         // right info
-        if ( !readonly && le.MousePressRight( portPos ) )
-            Dialog::QuickInfo( *this, { 0, 0, display.width(), display.height() } );
-        else if ( le.MousePressRight( rectSpreadArmyFormat ) )
+        if ( !readonly && le.MousePressRight( portPos ) ) {
+            Dialog::QuickInfo( *this );
+        }
+        else if ( le.MousePressRight( rectSpreadArmyFormat ) ) {
             Dialog::Message( _( "Spread Formation" ), descriptionSpreadArmyFormat, Font::BIG );
-        else if ( le.MousePressRight( rectGroupedArmyFormat ) )
+        }
+        else if ( le.MousePressRight( rectGroupedArmyFormat ) ) {
             Dialog::Message( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Font::BIG );
+        }
 
         // status message
         if ( le.MouseCursor( moraleIndicator.GetArea() ) ) {
