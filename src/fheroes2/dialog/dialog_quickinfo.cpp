@@ -844,7 +844,7 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position 
     // restore background
     back.restore();
 
-    // Restore radar view.
+    // Restore radar view
     radarUpdater.restore();
 
     display.render();
@@ -1059,7 +1059,7 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position 
     // restore background
     restorer.restore();
 
-    // Restore radar view.
+    // Restore radar view
     radarUpdater.restore();
 
     display.render();
