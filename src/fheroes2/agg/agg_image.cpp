@@ -253,7 +253,7 @@ namespace
 
         // Top-left corner.
         fheroes2::Copy( original, 0, 0, image, roi.x, roi.y, 17, 43 );
-        fheroes2::Copy( original, 17, 0, image, roi.x + 17, roi.y, 26, 14);
+        fheroes2::Copy( original, 17, 0, image, roi.x + 17, roi.y, 26, 14 );
 
         // Top-right corner.
         fheroes2::Copy( original, original.width() - 43, 0, image, roi.x + roi.width - 43, roi.y, 43, 14 );
