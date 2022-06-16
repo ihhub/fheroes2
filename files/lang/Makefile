@@ -18,7 +18,8 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-MSGFMT = sed -e '1,20 s/UTF-8/$(1)/' $< | iconv -f utf-8 -t $(1) | msgfmt - -o $@
+SED = LC_ALL=en_US.UTF8 sed -e
+MSGFMT = $(SED) '1,20 s/UTF-8/$(1)/' $< | iconv -f utf-8 -t $(1) | msgfmt - -o $@
 
 .PHONY: all clean merge
 
@@ -30,7 +31,7 @@ merge: ../../src/dist/fheroes2.pot
 # In French, accented characters are mapped to unused ASCII characters
 # Non-mapped characters are replaced by their non-accented equivalents
 fr.mo: fr.po
-	sed -e 'y/àâçéèêîïôùûüÇÉÊÀ/@*^~`|><#&$$uCEEA/; s/œ/oe/g' $< | msgfmt - -o $@
+	$(SED) 'y/àâçéèêîïôùûüÇÉÊÀ/@*^~`|><#&$$uCEEA/; s/œ/oe/g' $< | msgfmt - -o $@
 
 # Czech, Polish versions use CP1250
 cs.mo pl.mo: %.mo: %.po
@@ -53,7 +54,7 @@ ro.mo: ro.po
 # All other languages: drop accents transliterated with `"` (which breaks translation file format)
 # and transliterate the rest with default iconv rules
 %.mo: %.po
-	sed -e 'y/äëïöőüűÄËÏŐÖÜŰ/aeioouuAEIOOUU/' $< | iconv -f utf-8 -t ascii//TRANSLIT | msgfmt - -o $@
+	$(SED) 'y/äëïöőüűÄËÏŐÖÜŰ/aeioouuAEIOOUU/' $< | iconv -f utf-8 -t ascii//TRANSLIT | msgfmt - -o $@
 
 clean:
 	rm -f *.mo *.po~
