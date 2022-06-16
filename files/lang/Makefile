@@ -18,7 +18,7 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-SED = LC_ALL=en_US.UTF8 sed -e
+SED = LANG=en_US.UTF8 LC_ALL=en_US.UTF8 LC_CTYPE=en_US.UTF8 sed -e
 MSGFMT = $(SED) '1,20 s/UTF-8/$(1)/' $< | iconv -f utf-8 -t $(1) | msgfmt - -o $@
 
 .PHONY: all clean merge
