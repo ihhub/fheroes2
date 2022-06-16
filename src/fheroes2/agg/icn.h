@@ -975,6 +975,7 @@ namespace ICN
         CASLWIND_EVIL,
         CASLXTRA_EVIL,
         RECRBKG_EVIL,
+        STRIP_BACKGROUND_EVIL,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN

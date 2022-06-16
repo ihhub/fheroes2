@@ -2176,6 +2176,15 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::STRIP_BACKGROUND_EVIL: {
+                _icnVsSprite[id].resize( 1 );
+                _icnVsSprite[id][0] = GetICN( ICN::STRIP, 11 );
+
+                const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() - 7 );
+                convertToEvilInterface( _icnVsSprite[id][0], roi );
+
+                return true;
+            }
             default:
                 break;
             }
