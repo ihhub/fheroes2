@@ -46,7 +46,7 @@ namespace fheroes2
             fileEntries.getLE32(); // skip CRC (?) part
             const uint32_t fileOffset = fileEntries.getLE32();
             const uint32_t fileSize = fileEntries.getLE32();
-            _files.emplace( std::move( name ), std::make_pair( fileSize, fileOffset ) );
+            _files.try_emplace( std::move( name ), std::make_pair( fileSize, fileOffset ) );
         }
         if ( _files.size() != count ) {
             _files.clear();

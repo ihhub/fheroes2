@@ -78,7 +78,7 @@ namespace
             return nullptr;
         }
 
-        std::unique_ptr<SMKVideoSequence> video( new SMKVideoSequence( videoPath ) );
+        std::unique_ptr<SMKVideoSequence> video = std::make_unique<SMKVideoSequence>( videoPath );
         if ( video->frameCount() < 1 ) {
             return nullptr;
         }

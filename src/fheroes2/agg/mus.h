@@ -73,7 +73,7 @@ namespace MUS
         SKILL,
         WATCHTOWER,
         XANADU,
-        ULTIMATE_ARTIFACT, // not in use
+        ULTIMATE_ARTIFACT,
         MAINMENU,
         VICTORY,
 

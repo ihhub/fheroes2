@@ -71,7 +71,6 @@ namespace Interface
     Castle * GetFocusCastle();
     Heroes * GetFocusHeroes();
     int GetFocusType();
-    fheroes2::Point GetFocusCenter();
 
     class Basic
     {
@@ -136,11 +135,6 @@ namespace Interface
             return iconsPanel;
         }
 
-        ButtonsArea & GetButtonsArea()
-        {
-            return buttonsArea;
-        }
-
         StatusWindow & GetStatusWindow()
         {
             return statusWindow;
@@ -171,7 +165,7 @@ namespace Interface
         void EventSwitchShowRadar() const;
         void EventSwitchShowStatus() const;
         void EventSwitchShowButtons() const;
-        void EventSwitchShowIcons();
+        void EventSwitchShowIcons() const;
         void EventSwitchShowControlPanel() const;
 
         fheroes2::GameMode EventNewGame() const;
