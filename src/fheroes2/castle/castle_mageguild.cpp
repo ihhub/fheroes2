@@ -32,6 +32,7 @@
 #include "icn.h"
 #include "mageguild.h"
 #include "race.h"
+#include "settings.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
@@ -154,7 +155,9 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
     const fheroes2::Point cur_pt( restorer.x(), restorer.y() );
     fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STONEBAK, 0 ), display, cur_pt.x, cur_pt.y );
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+
+    fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 ), display, cur_pt.x, cur_pt.y );
 
     // The original ICN::WELLEXTRA image does not have a yellow outer frame.
     const int32_t allowedBottomBarWidth = exitButtonOffsetX;
