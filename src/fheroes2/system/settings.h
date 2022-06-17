@@ -594,7 +594,7 @@ private:
     std::string path_program;
 
     std::string _gameLanguage;
-    // Not saved in the binary config file or savefile
+    // Not saved in the config file or savefile
     std::string _loadedFileLanguage;
 
     Maps::FileInfo current_maps_file;
