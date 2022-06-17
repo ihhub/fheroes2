@@ -246,7 +246,6 @@ static void WhirlpoolTroopLoseEffect( Heroes & hero )
 // action to next cell
 void Heroes::Action( int tileIndex, bool isDestination )
 {
-
     if ( GetKingdom().isControlAI() ) {
         // Restore the original music after the action is completed.
         const Game::MusicRestorer musicRestorer;
