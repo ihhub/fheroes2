@@ -64,7 +64,7 @@ namespace
         {}
 
         void RedrawItem( const int32_t & index, int32_t dstx, int32_t dsty, bool current ) override;
-        void RedrawBackground( const fheroes2::Point & ) override;
+        void RedrawBackground( const fheroes2::Point & dst ) override;
 
         void ActionCurrentUp() override
         {
@@ -218,37 +218,37 @@ namespace
         castle->MageGuildEducateHero( hero );
     }
 
-    bool ActionSpellViewMines( const Heroes & )
+    bool ActionSpellViewMines()
     {
         ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewMines, Interface::Basic::Get() );
         return true;
     }
 
-    bool ActionSpellViewResources( const Heroes & )
+    bool ActionSpellViewResources()
     {
         ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewResources, Interface::Basic::Get() );
         return true;
     }
 
-    bool ActionSpellViewArtifacts( const Heroes & )
+    bool ActionSpellViewArtifacts()
     {
         ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewArtifacts, Interface::Basic::Get() );
         return true;
     }
 
-    bool ActionSpellViewTowns( const Heroes & )
+    bool ActionSpellViewTowns()
     {
         ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewTowns, Interface::Basic::Get() );
         return true;
     }
 
-    bool ActionSpellViewHeroes( const Heroes & )
+    bool ActionSpellViewHeroes()
     {
         ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewHeroes, Interface::Basic::Get() );
         return true;
     }
 
-    bool ActionSpellViewAll( const Heroes & )
+    bool ActionSpellViewAll()
     {
         ViewWorld::ViewWorldWindow( Settings::Get().CurrentColor(), ViewWorldMode::ViewAll, Interface::Basic::Get() );
         return true;
@@ -317,16 +317,15 @@ namespace
             return false;
         }
 
-        const MapsIndexes & boats = Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false );
-        for ( auto it = boats.cbegin(); it != boats.cend(); ++it ) {
-            if ( Maps::isValidAbsIndex( *it ) ) {
-                const uint32_t distance = Maps::GetApproximateDistance( *it, hero.GetIndex() );
-                if ( distance > 1 ) {
-                    Game::ObjectFadeAnimation::PrepareFadeTask( MP2::OBJ_BOAT, *it, boatDestination, true, true );
-                    Game::ObjectFadeAnimation::PerformFadeTask();
+        for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
+            assert( Maps::isValidAbsIndex( boatSource ) );
 
-                    return true;
-                }
+            const uint32_t distance = Maps::GetApproximateDistance( boatSource, hero.GetIndex() );
+            if ( distance > 1 ) {
+                Game::ObjectFadeAnimation::PrepareFadeTask( MP2::OBJ_BOAT, boatSource, boatDestination, true, true );
+                Game::ObjectFadeAnimation::PerformFadeTask();
+
+                return true;
             }
         }
 
@@ -407,9 +406,13 @@ namespace
         const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
         LocalEvent & le = LocalEvent::Get();
 
-        for ( KingdomCastles::const_iterator it = kingdom.GetCastles().begin(); it != kingdom.GetCastles().end(); ++it )
-            if ( *it && !( *it )->GetHeroes().Guest() )
-                castles.push_back( ( **it ).GetIndex() );
+        for ( const Castle * castle : kingdom.GetCastles() ) {
+            assert( castle != nullptr );
+
+            if ( !castle->GetHeroes().Guest() ) {
+                castles.push_back( castle->GetIndex() );
+            }
+        }
 
         if ( castles.empty() ) {
             // This should never happen. The logic behind this must not allow to call this function.
@@ -509,8 +512,8 @@ namespace
             return false;
         }
 
-        for ( MapsIndexes::const_iterator it = monsters.begin(); it != monsters.end(); ++it ) {
-            const Maps::Tiles & tile = world.GetTiles( *it );
+        for ( const int32_t monsterIndex : monsters ) {
+            const Maps::Tiles & tile = world.GetTiles( monsterIndex );
 
             Troop troop = tile.QuantityTroop();
             const NeutralMonsterJoiningCondition join = Army::GetJoinSolution( hero, tile, troop );
@@ -594,22 +597,22 @@ void Heroes::ActionSpellCast( const Spell & spell )
 
     switch ( spell.GetID() ) {
     case Spell::VIEWMINES:
-        apply = ActionSpellViewMines( *this );
+        apply = ActionSpellViewMines();
         break;
     case Spell::VIEWRESOURCES:
-        apply = ActionSpellViewResources( *this );
+        apply = ActionSpellViewResources();
         break;
     case Spell::VIEWARTIFACTS:
-        apply = ActionSpellViewArtifacts( *this );
+        apply = ActionSpellViewArtifacts();
         break;
     case Spell::VIEWTOWNS:
-        apply = ActionSpellViewTowns( *this );
+        apply = ActionSpellViewTowns();
         break;
     case Spell::VIEWHEROES:
-        apply = ActionSpellViewHeroes( *this );
+        apply = ActionSpellViewHeroes();
         break;
     case Spell::VIEWALL:
-        apply = ActionSpellViewAll( *this );
+        apply = ActionSpellViewAll();
         break;
     case Spell::IDENTIFYHERO:
         apply = ActionSpellIdentifyHero( *this );
