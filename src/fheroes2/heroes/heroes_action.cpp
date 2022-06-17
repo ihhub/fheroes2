@@ -246,17 +246,31 @@ static void WhirlpoolTroopLoseEffect( Heroes & hero )
 // action to next cell
 void Heroes::Action( int tileIndex, bool isDestination )
 {
-    // restore the original music after the action is completed
+    if ( GetKingdom().isControlAI() ) {
+        // Restore the original music after the action is completed.
+        const Game::MusicRestorer musicRestorer;
+        return AI::HeroesAction( *this, tileIndex );
+    }
+
+    // Update environment sounds and music before doing the action. Interface::Basic::SetFocus() function is responsible for update them after the action.
+    const int32_t heroPosIndex = GetIndex();
+    assert( heroPosIndex >= 0 );
+    if ( Game::UpdateSoundsOnFocusUpdate() ) {
+        Game::EnvironmentSoundMixer();
+        AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroPosIndex ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+    }
+
+    // Restore the original music after the action is completed.
     const Game::MusicRestorer musicRestorer;
 
-    if ( GetKingdom().isControlAI() )
-        return AI::HeroesAction( *this, tileIndex );
-
     Maps::Tiles & tile = world.GetTiles( tileIndex );
-    const MP2::MapObjectType objectType = tile.GetObject( tileIndex != GetIndex() );
+    const MP2::MapObjectType objectType = tile.GetObject( tileIndex != heroPosIndex );
 
-    if ( MUS::FromMapObject( objectType ) != MUS::UNKNOWN )
-        AudioManager::PlayMusic( MUS::FromMapObject( objectType ), Music::PlaybackMode::PLAY_ONCE );
+    const int objectMusicTrack = MUS::FromMapObject( objectType );
+    if ( objectMusicTrack != MUS::UNKNOWN ) {
+        // Since it is a synchronous call all previous music tracks will be removed from a queue for an asynchronous playback.
+        AudioManager::PlayMusic( objectMusicTrack, Music::PlaybackMode::PLAY_ONCE );
+    }
 
     if ( MP2::isActionObject( objectType, isShipMaster() ) ) {
         SetModes( ACTION );

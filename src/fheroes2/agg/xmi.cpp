@@ -73,18 +73,18 @@ int XMI::FromMUS( int track, bool expansion )
         return MIDI0003;
     case MUS::BATTLE3:
         return MIDI0004;
-    case MUS::SORCERESS:
+    case MUS::SORCERESS_CASTLE:
         // Sorceress didn't have own XMI file in original release unfortunately
         return MIDI0005;
-    case MUS::WARLOCK:
+    case MUS::WARLOCK_CASTLE:
         return expansion ? MIDI0006 : MIDI_ORIGINAL_WARLOCK;
-    case MUS::NECROMANCER:
+    case MUS::NECROMANCER_CASTLE:
         return expansion ? MIDI0007 : MIDI_ORIGINAL_NECROMANCER;
-    case MUS::KNIGHT:
+    case MUS::KNIGHT_CASTLE:
         return expansion ? MIDI0008 : MIDI_ORIGINAL_KNIGHT;
-    case MUS::BARBARIAN:
+    case MUS::BARBARIAN_CASTLE:
         return expansion ? MIDI0009 : MIDI_ORIGINAL_BARBARIAN;
-    case MUS::WIZARD:
+    case MUS::WIZARD_CASTLE:
         return expansion ? MIDI0010 : MIDI_ORIGINAL_WIZARD;
     case MUS::LAVA:
         return MIDI0011;
