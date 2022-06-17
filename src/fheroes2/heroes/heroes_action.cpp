@@ -254,7 +254,8 @@ void Heroes::Action( int tileIndex, bool isDestination )
 
     // Update environment sounds and music before doing the action. Interface::Basic::SetFocus() function is responsible for update them after the action.
     const int32_t heroPosIndex = GetIndex();
-    if ( Game::UpdateSoundsOnFocusUpdate() && heroPosIndex >= 0 ) {
+    assert( heroPosIndex >= 0 );
+    if ( Game::UpdateSoundsOnFocusUpdate() ) {
         Game::EnvironmentSoundMixer();
         AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroPosIndex ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
