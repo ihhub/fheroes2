@@ -69,34 +69,30 @@ namespace
             , _prevPosition( Interface::Basic::Get().GetGameArea().getCurrentCenterInPixels() )
             , _restorer( fheroes2::Display::instance(), areaToRestore.x, areaToRestore.y, areaToRestore.width, areaToRestore.height )
         {
-            if ( !_performUpdate ) {
+            if ( !_performUpdate || _updatedPosition == _prevPosition ) {
                 return;
             }
 
-            if ( _updatedPosition != _prevPosition ) {
-                Interface::Basic & iface = Interface::Basic::Get();
+            Interface::Basic & iface = Interface::Basic::Get();
 
-                iface.GetGameArea().SetCenter( updatedPosition );
-                iface.Redraw( Interface::REDRAW_RADAR );
+            iface.GetGameArea().SetCenter( updatedPosition );
+            iface.Redraw( Interface::REDRAW_RADAR );
 
-                _restorer.restore();
-            }
+            _restorer.restore();
         }
 
         void restore()
         {
-            if ( !_performUpdate ) {
+            if ( !_performUpdate || _updatedPosition == _prevPosition ) {
                 return;
             }
 
-            if ( _updatedPosition != _prevPosition ) {
-                Interface::Basic & iface = Interface::Basic::Get();
+            Interface::Basic & iface = Interface::Basic::Get();
 
-                iface.GetGameArea().SetCenterInPixels( _prevPosition );
-                iface.Redraw( Interface::REDRAW_RADAR );
+            iface.GetGameArea().SetCenterInPixels( _prevPosition );
+            iface.Redraw( Interface::REDRAW_RADAR );
 
-                _restorer.restore();
-            }
+            _restorer.restore();
         }
 
     private:
