@@ -177,18 +177,14 @@ void Interface::Basic::EventKingdomInfo() const
 void Interface::Basic::EventCastSpell()
 {
     Heroes * hero = GetFocusHeroes();
+    if ( hero == nullptr ) {
+        return;
+    }
 
-    if ( hero ) {
-        SetRedraw( REDRAW_ALL );
-        ResetFocus( GameFocus::HEROES );
-        Redraw();
-
-        const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, nullptr );
-        // apply cast spell
-        if ( spell.isValid() ) {
-            hero->ActionSpellCast( spell );
-            iconsPanel.SetRedraw();
-        }
+    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, nullptr );
+    if ( spell.isValid() ) {
+        hero->ActionSpellCast( spell );
+        iconsPanel.SetRedraw();
     }
 }
 
