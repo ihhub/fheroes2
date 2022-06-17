@@ -38,6 +38,7 @@ namespace PAL
         NO_CYCLE,
         MIRROR_IMAGE,
         DARKENING, // for disabled buttons
+        GOOD_TO_EVIL_INTERFACE, // a custom palette for converting Good Interface images into Evil Interface images.
         CUSTOM
     };
 

@@ -237,6 +237,38 @@ namespace
         }
         return isReleasedState ? fheroes2::GetColorId( 180, 180, 180 ) : fheroes2::GetColorId( 144, 144, 144 );
     }
+
+    void convertToEvilInterface( fheroes2::Sprite & image, const fheroes2::Rect & roi )
+    {
+        fheroes2::ApplyPalette( image, roi.x, roi.y, image, roi.x, roi.y, roi.width, roi.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+    }
+
+    void copyEvilInterfaceElements( fheroes2::Sprite & image, const fheroes2::Rect & roi )
+    {
+        // Evil interface has special elements at each corner of the window.
+        const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::CSPANBKE, 0 );
+
+        // If this assertion blows up you are using some modded resources. Good luck!
+        assert( original.width() == 321 && original.height() == 304 );
+
+        // Top-left corner.
+        fheroes2::Copy( original, 0, 0, image, roi.x, roi.y, 17, 43 );
+        fheroes2::Copy( original, 17, 0, image, roi.x + 17, roi.y, 26, 14 );
+
+        // Top-right corner.
+        fheroes2::Copy( original, original.width() - 43, 0, image, roi.x + roi.width - 43, roi.y, 43, 14 );
+        fheroes2::Copy( original, original.width() - 17, 14, image, roi.x + roi.width - 17, roi.y + 14, 17, 29 );
+
+        // Bottom-right corner.
+        fheroes2::Copy( original, original.width() - 13, original.height() - 43, image, roi.x + roi.width - 13, roi.y + roi.height - 43, 13, 27 );
+        fheroes2::Copy( original, original.width() - 16, original.height() - 16, image, roi.x + roi.width - 16, roi.y + roi.height - 16, 16, 16 );
+        fheroes2::Copy( original, original.width() - 43, original.height() - 13, image, roi.x + roi.width - 43, roi.y + roi.height - 13, 27, 13 );
+
+        // Bottom-left corner.
+        fheroes2::Copy( original, 0, original.height() - 43, image, roi.x, roi.y + roi.height - 43, 13, 27 );
+        fheroes2::Copy( original, 0, original.height() - 16, image, roi.x, roi.y + roi.height - 16, 16, 16 );
+        fheroes2::Copy( original, 16, original.height() - 13, image, roi.x + 16, roi.y + roi.height - 13, 27, 13 );
+    }
 }
 
 namespace fheroes2
@@ -2076,11 +2108,80 @@ namespace fheroes2
                 _icnVsSprite[id][0] = GetICN( ICN::CSPANBKE, 0 );
                 Copy( GetICN( ICN::ESPANBKG, 0 ), roi.x, roi.y, output, roi.x, roi.y, roi.width, roi.height );
 
-                const std::vector<uint8_t> transformTable
-                    = getTransformTable( GetICN( ICN::CSPANBKG, 0 ), GetICN( ICN::CSPANBKE, 0 ), roi.x, roi.y, roi.width, roi.height );
-                ApplyPalette( output, roi.x, roi.y, output, roi.x, roi.y, roi.width, roi.height, transformTable );
+                convertToEvilInterface( output, roi );
 
                 _icnVsSprite[id][1] = GetICN( ICN::ESPANBKG, 1 );
+
+                return true;
+            }
+            case ICN::RECR2BKG_EVIL: {
+                GetICN( ICN::RECR2BKG, 0 );
+                _icnVsSprite[id] = _icnVsSprite[ICN::RECR2BKG];
+                if ( !_icnVsSprite[id].empty() ) {
+                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                    convertToEvilInterface( _icnVsSprite[id][0], roi );
+                    copyEvilInterfaceElements( _icnVsSprite[id][0], roi );
+                }
+
+                return true;
+            }
+            case ICN::RECRBKG_EVIL: {
+                GetICN( ICN::RECRBKG, 0 );
+                _icnVsSprite[id] = _icnVsSprite[ICN::RECRBKG];
+                if ( !_icnVsSprite[id].empty() ) {
+                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                    convertToEvilInterface( _icnVsSprite[id][0], roi );
+                    copyEvilInterfaceElements( _icnVsSprite[id][0], roi );
+                }
+
+                return true;
+            }
+            case ICN::STONEBAK_EVIL: {
+                GetICN( ICN::STONEBAK, 0 );
+                _icnVsSprite[id] = _icnVsSprite[ICN::STONEBAK];
+                if ( !_icnVsSprite[id].empty() ) {
+                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                    convertToEvilInterface( _icnVsSprite[id][0], roi );
+                }
+
+                return true;
+            }
+            case ICN::WELLBKG_EVIL: {
+                GetICN( ICN::WELLBKG, 0 );
+                _icnVsSprite[id] = _icnVsSprite[ICN::WELLBKG];
+                if ( !_icnVsSprite[id].empty() ) {
+                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() - 19 );
+                    convertToEvilInterface( _icnVsSprite[id][0], roi );
+                }
+
+                return true;
+            }
+            case ICN::CASLWIND_EVIL: {
+                GetICN( ICN::CASLWIND, 0 );
+                _icnVsSprite[id] = _icnVsSprite[ICN::CASLWIND];
+                if ( !_icnVsSprite[id].empty() ) {
+                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                    convertToEvilInterface( _icnVsSprite[id][0], roi );
+                }
+
+                return true;
+            }
+            case ICN::CASLXTRA_EVIL: {
+                GetICN( ICN::CASLXTRA, 0 );
+                _icnVsSprite[id] = _icnVsSprite[ICN::CASLXTRA];
+                if ( !_icnVsSprite[id].empty() ) {
+                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                    convertToEvilInterface( _icnVsSprite[id][0], roi );
+                }
+
+                return true;
+            }
+            case ICN::STRIP_BACKGROUND_EVIL: {
+                _icnVsSprite[id].resize( 1 );
+                _icnVsSprite[id][0] = GetICN( ICN::STRIP, 11 );
+
+                const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() - 7 );
+                convertToEvilInterface( _icnVsSprite[id][0], roi );
 
                 return true;
             }

@@ -969,6 +969,13 @@ namespace ICN
         MONO_CURSOR_CMSSBW,
 
         ESPANBKG_EVIL,
+        RECR2BKG_EVIL,
+        STONEBAK_EVIL,
+        WELLBKG_EVIL,
+        CASLWIND_EVIL,
+        CASLXTRA_EVIL,
+        RECRBKG_EVIL,
+        STRIP_BACKGROUND_EVIL,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN

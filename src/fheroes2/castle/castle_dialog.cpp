@@ -165,8 +165,12 @@ namespace
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 3 ), display, pt.x + 5, pt.y + 361 );
         }
 
-        if ( !hero2 )
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 11 ), display, pt.x + 112, pt.y + 361 );
+        if ( !hero2 ) {
+            const bool isEvilInterace = Settings::Get().ExtGameEvilInterface();
+            const fheroes2::Sprite & backgroundImage = isEvilInterace ? fheroes2::AGG::GetICN( ICN::STRIP_BACKGROUND_EVIL, 0 ) : fheroes2::AGG::GetICN( ICN::STRIP, 11 );
+
+            fheroes2::Blit( backgroundImage, display, pt.x + 112, pt.y + 361 );
+        }
     }
 
     std::string getDateString()
