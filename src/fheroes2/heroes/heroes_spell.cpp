@@ -189,9 +189,9 @@ namespace
 
         Interface::Basic & I = Interface::Basic::Get();
 
+        // Before casting the spell, make sure that the game area is centered on the hero
         I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.RedrawFocus();
-        I.Redraw();
+        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         const int32_t src = hero.GetIndex();
         const int32_t dst = castle->GetIndex();
@@ -205,15 +205,13 @@ namespace
         hero.Move2Dest( dst );
 
         I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.RedrawFocus();
-        I.Redraw();
+        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.FadeIn();
         hero.GetPath().Reset();
-        hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
-
-        I.SetFocus( &hero );
+        // Path::Reset() puts the hero's path into the hidden mode, we have to make it visible again
+        hero.GetPath().Show();
 
         castle->MageGuildEducateHero( hero );
     }
@@ -337,39 +335,37 @@ namespace
     {
         Interface::Basic & I = Interface::Basic::Get();
 
-        // center hero
+        // Before casting the spell, make sure that the game area is centered on the hero
         I.GetGameArea().SetCenter( hero.GetCenter() );
-        I.RedrawFocus();
-        I.Redraw();
+        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
         const int32_t src = hero.GetIndex();
-        // get destination
+        assert( Maps::isValidAbsIndex( src ) );
+
         const int32_t dst = I.GetDimensionDoorDestination( src, Spell::CalculateDimensionDoorDistance(), hero.isShipMaster() );
-
-        if ( Maps::isValidAbsIndex( src ) && Maps::isValidAbsIndex( dst ) ) {
-            AudioManager::PlaySound( M82::KILLFADE );
-            hero.GetPath().Hide();
-            hero.FadeOut();
-
-            hero.SpellCasted( Spell::DIMENSIONDOOR );
-
-            hero.Move2Dest( dst );
-
-            I.GetGameArea().SetCenter( hero.GetCenter() );
-            I.RedrawFocus();
-            I.Redraw();
-
-            AudioManager::PlaySound( M82::KILLFADE );
-            hero.FadeIn();
-            hero.GetPath().Reset();
-            hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
-            hero.ActionNewPosition( false );
-
-            I.ResetFocus( GameFocus::HEROES );
-
-            return false; /* SpellCasted apply */
+        if ( !Maps::isValidAbsIndex( dst ) ) {
+            return false;
         }
 
+        AudioManager::PlaySound( M82::KILLFADE );
+        hero.GetPath().Hide();
+        hero.FadeOut();
+
+        hero.SpellCasted( Spell::DIMENSIONDOOR );
+
+        hero.Move2Dest( dst );
+
+        I.GetGameArea().SetCenter( hero.GetCenter() );
+        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+
+        AudioManager::PlaySound( M82::KILLFADE );
+        hero.FadeIn();
+        hero.GetPath().Reset();
+        // Path::Reset() puts the hero's path into the hidden mode, we have to make it visible again
+        hero.GetPath().Show();
+        hero.ActionNewPosition( false );
+
+        // SpellCasted() has already been called, we should not call it once again
         return false;
     }
 

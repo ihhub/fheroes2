@@ -1117,7 +1117,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     if ( res == fheroes2::GameMode::END_TURN ) {
         if ( GetFocusHeroes() ) {
             GetFocusHeroes()->ShowPath( false );
-            RedrawFocus();
+
+            SetRedraw( REDRAW_GAMEAREA );
         }
 
         if ( myKingdom.isPlay() ) {

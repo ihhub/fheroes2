@@ -181,6 +181,10 @@ void Interface::Basic::EventCastSpell()
         return;
     }
 
+    // Center on the hero before opening the spell book
+    gameArea.SetCenter( hero->GetCenter() );
+    Redraw( REDRAW_GAMEAREA | REDRAW_RADAR );
+
     const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, nullptr );
     if ( spell.isValid() ) {
         hero->ActionSpellCast( spell );
