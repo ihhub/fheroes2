@@ -139,9 +139,8 @@ msgstr "Nieumarli w armii -1"
 msgid "View %{name}"
 msgstr "Obejrzyj jednostkę (%{name})"
 
-#, fuzzy
 msgid "Move the %{name} "
-msgstr "Przenieś %{name}"
+msgstr "Przenieś %{name} "
 
 msgid "Move or right click to redistribute %{name}"
 msgstr "Przenieś lub kliknij prawym aby rozdzielić %{name}"
@@ -158,7 +157,6 @@ msgstr "Wybierz jednostkę (%{name})"
 msgid "Cannot move last troop"
 msgstr "Nie można przenieść ostatniej jednostki"
 
-#, fuzzy
 msgid "Move the %{name}"
 msgstr "Przenieś %{name}"
 
@@ -574,31 +572,23 @@ msgstr "%{spell} zadaje %{damage} pkt. obrażeń żywej istocie."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} zadaje %{damage} pkt. obrażeń każdej żywej istocie."
 
-#, fuzzy
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr "Atak jednorożców oślepia jednostkę (%{name})!"
+msgstr "Atak %{attacker} oślepia %{name}!"
 
-#, fuzzy
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr "Spojrzenie meduz zamienia jednostkę (%{name}) w kamień!"
+msgstr "Spojrzenie %{attacker} zamienia %{name} w kamień!"
 
-#, fuzzy
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr "Ta jednostka (%{name}) zostaje dotknięta klątwą mumii!"
+msgstr "%{attacker} przeklina %{name}!"
 
-#, fuzzy
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr "Atak cyklopów paraliżuje jednostkę (%{name})!"
+msgstr "Atak %{attacker} paraliżuje %{name}!"
 
-#, fuzzy
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr ""
-"Arcymagowie rozpraszają wszystkie korzystne zaklęcia u tej jednostki "
-"(%{name})!"
+msgstr "%{attacker} rozpraszają wszystkie korzystne zaklęcia u %{name}!"
 
-#, fuzzy
 msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr "%{name} rzuca zaklęcie '%{spell}' na: %{troop}."
+msgstr "%{attacker} rzuca zaklęcie %{spell} na %{target}!"
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "Tej jednostce (%{attacker}) nie sprzyja los."
@@ -2381,7 +2371,6 @@ msgstr "Wyjście z zamku"
 msgid "Castle Options"
 msgstr "Opcje zamku"
 
-#, fuzzy
 msgid "Not enough resources to recruit creatures."
 msgstr "Brak zasobów aby kupić stworzenia."
 
@@ -2391,9 +2380,8 @@ msgstr "Nie możesz teraz rekrutować, w twojej armii nie ma już miejsca."
 msgid "No creatures available for purchase."
 msgstr "Brak stworzeń do zakupienia."
 
-#, fuzzy
 msgid "Recruit Creatures"
-msgstr "Zakup stworzeń"
+msgstr "Rekrutuj stworzenia"
 
 msgid "Town Population Information and Statistics"
 msgstr "Statystyki populacji miasta"
@@ -2565,20 +2553,19 @@ msgid "Music Type"
 msgstr "Rodzaj muzyki"
 
 msgid "3D Audio"
-msgstr ""
+msgstr "Dźwięk 3D"
 
 msgid "Toggle ambient music level."
-msgstr "Zmiana poziomu głośności muzyki."
+msgstr "Zmień poziom głośności muzyki."
 
 msgid "Toggle foreground sounds level."
-msgstr "Zmiana poziomu głośności efektów."
+msgstr "Zmień poziom głośności efektów."
 
 msgid "Change the type of music."
-msgstr "Zmienia rodzaj muzyki."
+msgstr "Zmień rodzaj muzyki."
 
-#, fuzzy
 msgid "Toggle 3D effects of foreground sounds."
-msgstr "Zmiana poziomu głośności efektów."
+msgstr "Zmień efekt 3D dla pierwszoplanowych dźwięków."
 
 msgid "Okay"
 msgstr "Ok"
@@ -2616,9 +2603,8 @@ msgstr "Zapisz bieżącą grę."
 msgid "Quit"
 msgstr "Wyjście"
 
-#, fuzzy
 msgid "Quit out of Heroes of Might and Magic II."
-msgstr "Oryginał Heroes of Might and Magic II przygotowali"
+msgstr "Zakończenie gry Heroes of Might and Magic II."
 
 msgid "Language"
 msgstr "Język"
@@ -2635,7 +2621,6 @@ msgstr "Ustawienia"
 msgid "Audio"
 msgstr ""
 
-#, fuzzy
 msgid "settings"
 msgstr "Ustawienia"
 
@@ -2646,7 +2631,7 @@ msgid "In-game"
 msgstr "W grze"
 
 msgid "Black & White"
-msgstr "Czarny i biały"
+msgstr "Czarno-biały"
 
 msgid "Mouse Cursor"
 msgstr "Kursor myszki"
@@ -2654,9 +2639,8 @@ msgstr "Kursor myszki"
 msgid "Color"
 msgstr "Kolor"
 
-#, fuzzy
 msgid "Text Support"
-msgstr "QA i wsparcie"
+msgstr "Dodatkowe informacje"
 
 msgid "Evil"
 msgstr "Zły"
@@ -2691,36 +2675,37 @@ msgstr "Wybierz rozdzielczość gry:"
 msgid "Change resolution of the game."
 msgstr "Zmień rozdzielczość gry."
 
-#, fuzzy
 msgid "Change audio settings of the game."
-msgstr "Wybierz język, rozdzielczość i ustawienia gry."
+msgstr "Zmień ustawienia audio gry."
 
 msgid "Experimental game settings."
-msgstr "Eksperymentalne ustawienia gry."
+msgstr "Zmień eksperymentalne ustawienia gry."
 
 msgid "Toggle instant battle mode."
-msgstr "Zmienia tryb błyskawicznej walki."
+msgstr "Zmień tryb błyskawicznej walki."
 
 msgid "Check all Hot Keys used in the game."
-msgstr ""
+msgstr "Zobacz wszystkie skróty klawiszowe gry."
 
 msgid "Toggle the type of interface you want to use."
-msgstr "Zmienia typ interfejsu."
+msgstr "Zmień typ interfejsu."
 
 msgid ""
 "Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
 "move as smoothly as black and white ones."
 msgstr ""
+"Zmień kursor na kolorowy lub czarno-biały. Kolorowy kursor wygląda ładniej, "
+"ale czasem nie jest tak płynny jak czarno-biały."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
+"Włącza lub wyłącza dodatkowe informacje w oknach lub o zdarzeniach w grze."
 
 msgid "Attention"
 msgstr "Uwaga"
 
-#, fuzzy
 msgid ""
 "Your version of Heroes of Might and Magic II does not support any other "
 "languages than English."
@@ -3175,20 +3160,20 @@ msgid "Interface"
 msgstr "Intefejs"
 
 msgid "Change the speed at which your heroes move on the main screen."
-msgstr "Zmienia szybkość, z jaką poruszają się Twoi bohaterowie na ekranie."
+msgstr "Zmień szybkość, z jaką poruszają się Twoi bohaterowie na ekranie."
 
 msgid ""
 "Sets the speed that A.I. heroes move at.  You can also elect not to view A."
 "I. movement at all."
 msgstr ""
-"Zmienia szybkość, z jaką poruszają się bohaterowie sterowani przez A.I."
+"Zmień szybkość, z jaką poruszają się bohaterowie sterowani przez A.I. "
 "Możesz również wyłączyć podgląd ruchów A.I."
 
 msgid "Sets the speed at which you scroll the window."
-msgstr "Zmienia prędkość przewijania okna."
+msgstr "Zmień prędkość przewijania okna."
 
 msgid "Toggle interface visibility."
-msgstr "Zmienia widoczność interfejsu."
+msgstr "Zmień widoczność interfejsu."
 
 msgid "Att."
 msgstr "Atk."
@@ -3319,9 +3304,8 @@ msgstr "QA i wsparcie"
 msgid "Development"
 msgstr "Development"
 
-#, fuzzy
 msgid "Dev and Support"
-msgstr "QA i wsparcie"
+msgstr "Development i wsparcie"
 
 msgid "Visit us at "
 msgstr "Odwiedź nas "
@@ -3347,9 +3331,8 @@ msgstr "i wielu, wielu innym!"
 msgid "Original project before 0.7"
 msgstr "Przed wersją 0.7"
 
-#, fuzzy
 msgid "Original Heroes of Might and Magic II team"
-msgstr "Oryginał Heroes of Might and Magic II przygotowali"
+msgstr "Zespół który przygotował oryginalną grę Heroes of Might and Magic II"
 
 msgid "Designed and Directed"
 msgstr "Projekt i kierownictwo projektu"
@@ -3408,19 +3391,17 @@ msgstr "Nieznany bohater"
 msgid "Your Name"
 msgstr "Twoje imię"
 
-#, fuzzy
 msgid "Standard"
-msgstr "Gra standardowa"
+msgstr "Standard"
 
-#, fuzzy
 msgid "View High Scores for Standard Maps."
-msgstr "Obejrzyj najlepsze wyniki kampanii"
+msgstr "Obejrzyj najlepsze wyniki dla pojedynczych scenariuszy."
 
 msgid "Campaign"
 msgstr "Kampania"
 
 msgid "View High Scores for Campaigns."
-msgstr "Obejrzyj najlepsze wyniki kampanii"
+msgstr "Obejrzyj najlepsze wyniki dla kampanii."
 
 msgid ""
 "Invalid file game type. Please ensure that you are running the latest type "
@@ -3493,11 +3474,11 @@ msgstr "fheroes2 Resurrection Team prezentuje"
 msgid "Greetings!"
 msgstr "Witaj!"
 
-#, fuzzy
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
 "starting the game please choose game resolution."
-msgstr "fheroes2 wita! Przed rozpoczęciem gry wybierz rozdzielczość gry."
+msgstr "Witamy w grze Heroes of Might and Magic II na silniku fheroes2! "
+"Przed rozpoczęciem gry wybierz rozdzielczość gry."
 
 msgid "Please Remember"
 msgstr "Pamiętaj"
@@ -3534,9 +3515,8 @@ msgstr ""
 "\n"
 "Przyjemnej zabawy!"
 
-#, fuzzy
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
-msgstr "Zakończenie gry fheroes2 i powrót do systemu operacyjnego."
+msgstr "Zakończ grę Heroes of Might and Magic II i przejdź do systemu operacyjnego."
 
 msgid "Credits"
 msgstr "Autorzy"
@@ -4079,14 +4059,13 @@ msgid "Romanian"
 msgstr "Rumuński"
 
 msgid "Spanish"
-msgstr ""
+msgstr "Hiszpański"
 
 msgid "Swedish"
-msgstr ""
+msgstr "Szwedzki"
 
-#, fuzzy
 msgid "Portuguese"
-msgstr "Rozbójnicy"
+msgstr "Portugalski"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -5676,7 +5655,6 @@ msgstr ""
 "To zaklęcie kosztuje %{mana} pkt. magii. Masz tylko %{point}, więc nie "
 "możesz go rzucić."
 
-#, fuzzy
 msgid "The spell was not found."
 msgstr "Zaklęcie nie zostało znalezione."
 
@@ -8381,11 +8359,11 @@ msgstr "Mumia"
 msgid "Spell Scroll"
 msgstr "Zwój z zaklęciem"
 
-#, fuzzy
 msgid ""
 "This %{name} gives your hero the ability to cast the %{spell} spell if your "
 "hero has a Magic Book."
-msgstr "%{name} daje twojemu bohaterowi mozliwość rzucania czaru %{spell}"
+msgstr "Ten %{name} daje twojemu bohaterowi mozliwość rzucania czaru %{spell} "
+"nawet jeśli bohater nie ma księgi zaklęć."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
@@ -9298,10 +9276,9 @@ msgstr "zamek: zezwól na strażników"
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "bohaterowie: pozwól kupować księgę zaklęć w kaplicach"
 
-#, fuzzy
 msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
-"bohaterowie: zapamiętaj punkty ruchu przy obliczaniu rezultatu ucieczki/"
+"bohaterowie: zapamiętaj punkty ruchu przy obliczaniu rezultatu ucieczki oraz "
 "kapitulacji"
 
 msgid "heroes: allow to choose any primary skill in Arena"
