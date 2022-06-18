@@ -177,9 +177,8 @@ void Dialog::ExtSettings( bool readonly )
     listbox.SetScrollButtonDn( ICN::ESCROLL, 6, 7, { area.x + 295, area.y + ah + 5 } );
 
     const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
-    const fheroes2::Image scrollbarSlider
-        = fheroes2::generateScrollbarSlider( originalSlider, false, ah - 42, ah / 40, static_cast<int32_t>( states.size() ), { 0, 0, originalSlider.width(), 8 },
-                                             { 0, 7, originalSlider.width(), 8 } );
+    const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, ah - 42, ah / 40, static_cast<int32_t>( states.size() ),
+                                                                               { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
 
     listbox.setScrollBarArea( { area.x + 298, area.y + 44, 10, ah - 42 } );
     listbox.setScrollBarImage( scrollbarSlider );
