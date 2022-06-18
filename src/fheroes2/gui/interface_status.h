@@ -63,8 +63,7 @@ namespace Interface
         void SetResource( int, uint32_t );
         void RedrawTurnProgress( uint32_t );
         void QueueEventProcessing();
-
-        static void ResetTimer();
+        void TimerEventProcessing();
 
     private:
         friend Basic;
@@ -78,17 +77,15 @@ namespace Interface
         void DrawResourceInfo( int oh = 0 ) const;
         void DrawBackground() const;
         void DrawAITurns() const;
-        static uint32_t ResetResourceStatus( uint32_t, void * );
 
         Basic & interface;
 
         StatusType _state;
-        StatusType _oldState;
         int lastResource;
         uint32_t countLastResource;
         uint32_t turn_progress;
 
-        fheroes2::Timer timerShowLastResource;
+        fheroes2::TimeDelay showLastResourceDelay;
     };
 }
 

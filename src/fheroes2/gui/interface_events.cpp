@@ -177,18 +177,18 @@ void Interface::Basic::EventKingdomInfo() const
 void Interface::Basic::EventCastSpell()
 {
     Heroes * hero = GetFocusHeroes();
+    if ( hero == nullptr ) {
+        return;
+    }
 
-    if ( hero ) {
-        SetRedraw( REDRAW_ALL );
-        ResetFocus( GameFocus::HEROES );
-        Redraw();
+    // Center on the hero before opening the spell book
+    gameArea.SetCenter( hero->GetCenter() );
+    Redraw( REDRAW_GAMEAREA | REDRAW_RADAR );
 
-        const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, nullptr );
-        // apply cast spell
-        if ( spell.isValid() ) {
-            hero->ActionSpellCast( spell );
-            iconsPanel.SetRedraw();
-        }
+    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, nullptr );
+    if ( spell.isValid() ) {
+        hero->ActionSpellCast( spell );
+        iconsPanel.SetRedraw();
     }
 }
 
@@ -368,7 +368,15 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
                 hero->ResetMovePoints();
 
                 if ( world.DiggingForUltimateArtifact( hero->GetCenter() ) ) {
-                    AudioManager::PlaySound( M82::TREASURE );
+                    const Game::MusicRestorer musicRestorer;
+
+                    if ( Settings::Get().MusicMIDI() ) {
+                        AudioManager::PlaySound( M82::TREASURE );
+                    }
+                    else {
+                        AudioManager::PlayMusic( MUS::ULTIMATE_ARTIFACT, Music::PlaybackMode::PLAY_ONCE );
+                    }
+
                     const Artifact & ultimate = world.GetUltimateArtifact().GetArtifact();
                     hero->PickupArtifact( ultimate );
                     std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );
@@ -484,7 +492,7 @@ void Interface::Basic::EventSwitchShowStatus() const
     }
 }
 
-void Interface::Basic::EventSwitchShowIcons()
+void Interface::Basic::EventSwitchShowIcons() const
 {
     Settings & conf = Settings::Get();
 

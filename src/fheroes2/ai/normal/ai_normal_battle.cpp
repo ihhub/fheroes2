@@ -806,7 +806,7 @@ namespace AI
         for ( const Unit * nearbyUnit : nearestUnits ) {
             assert( nearbyUnit != nullptr );
 
-            const auto cacheItemIter = aroundIndexesCache.emplace( nearbyUnit, Board::GetAroundIndexes( *nearbyUnit ) ).first;
+            const auto cacheItemIter = aroundIndexesCache.try_emplace( nearbyUnit, Board::GetAroundIndexes( *nearbyUnit ) ).first;
             assert( cacheItemIter != aroundIndexesCache.end() );
 
             for ( const int cell : cacheItemIter->second ) {

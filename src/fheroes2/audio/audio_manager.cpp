@@ -125,8 +125,6 @@ namespace
 
     struct ChannelAudioLoopEffectInfo : public AudioManager::AudioLoopEffectInfo
     {
-        ChannelAudioLoopEffectInfo() = default;
-
         ChannelAudioLoopEffectInfo( const AudioLoopEffectInfo & info, const int channelId_ )
             : AudioLoopEffectInfo( info )
             , channelId( channelId_ )
@@ -213,12 +211,12 @@ namespace
     // SDL MIDI player is a single threaded library which requires a lot of time to start playing some long midi compositions.
     // This leads to a situation of a short application freeze while a hero crosses terrains or ending a battle.
     // The only way to avoid this is to fire MIDI requests asynchronously and synchronize them if needed.
-    class AsyncSoundManager : public MultiThreading::AsyncManager
+    class AsyncSoundManager final : public MultiThreading::AsyncManager
     {
     public:
         void pushMusic( const int musicId, const MusicSource musicType, const Music::PlaybackMode playbackMode )
         {
-            createThreadIfNeeded();
+            createWorker();
 
             std::scoped_lock<std::mutex> lock( _mutex );
 
@@ -228,29 +226,29 @@ namespace
 
             _musicTasks.emplace( musicId, musicType, playbackMode );
 
-            notifyThread();
+            notifyWorker();
         }
 
         void pushSound( const int m82Sound, const int soundVolume )
         {
-            createThreadIfNeeded();
+            createWorker();
 
             std::scoped_lock<std::mutex> lock( _mutex );
 
             _soundTasks.emplace( m82Sound, soundVolume );
 
-            notifyThread();
+            notifyWorker();
         }
 
         void pushLoopSound( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> vols, const int soundVolume, const bool is3DAudioEnabled )
         {
-            createThreadIfNeeded();
+            createWorker();
 
             std::scoped_lock<std::mutex> lock( _mutex );
 
             _loopSoundTasks.emplace( std::move( vols ), soundVolume, is3DAudioEnabled );
 
-            notifyThread();
+            notifyWorker();
         }
 
         void sync()
@@ -407,6 +405,7 @@ namespace
     };
 
     std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> currentAudioLoopEffects;
+    bool is3DAudioLoopEffectsEnabled{ false };
 
     fheroes2::AGGFile g_midiHeroes2AGG;
     fheroes2::AGGFile g_midiHeroes2xAGG;
@@ -563,6 +562,22 @@ namespace
         }
     }
 
+    void clearAllAudioLoopEffects()
+    {
+        for ( const auto & audioEffectPair : currentAudioLoopEffects ) {
+            const std::vector<ChannelAudioLoopEffectInfo> & existingEffects = audioEffectPair.second;
+
+            for ( const ChannelAudioLoopEffectInfo & info : existingEffects ) {
+                if ( Mixer::isPlaying( info.channelId ) ) {
+                    Mixer::setVolume( info.channelId, 0 );
+                    Mixer::Stop( info.channelId );
+                }
+            }
+        }
+
+        currentAudioLoopEffects.clear();
+    }
+
     void playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume,
                                    const bool is3DAudioEnabled )
     {
@@ -570,19 +585,13 @@ namespace
 
         if ( soundVolume == 0 ) {
             // The volume is 0. Remove all existing sound effects.
-            for ( const auto & audioEffectPair : currentAudioLoopEffects ) {
-                const std::vector<ChannelAudioLoopEffectInfo> & existingEffects = audioEffectPair.second;
-
-                for ( const ChannelAudioLoopEffectInfo & info : existingEffects ) {
-                    if ( Mixer::isPlaying( info.channelId ) ) {
-                        Mixer::setVolume( info.channelId, 0 );
-                        Mixer::Stop( info.channelId );
-                    }
-                }
-            }
-
-            currentAudioLoopEffects.clear();
+            clearAllAudioLoopEffects();
             return;
+        }
+
+        if ( is3DAudioLoopEffectsEnabled != is3DAudioEnabled ) {
+            is3DAudioLoopEffectsEnabled = is3DAudioEnabled;
+            clearAllAudioLoopEffects();
         }
 
         // TODO: use another container for sound effects to support more efficient sort and find operations based on the code below.
@@ -753,17 +762,18 @@ namespace AudioManager
 
         assert( !originalAGGFilePath.empty() );
         if ( !g_midiHeroes2AGG.open( originalAGGFilePath ) ) {
-            VERBOSE_LOG( "Failed to open HEROES2.AGG file for audio playback." );
+            VERBOSE_LOG( "Failed to open HEROES2.AGG file for audio playback." )
         }
 
         if ( !expansionAGGFilePath.empty() && !g_midiHeroes2xAGG.open( expansionAGGFilePath ) ) {
-            VERBOSE_LOG( "Failed to open HEROES2X.AGG file for audio playback." );
+            VERBOSE_LOG( "Failed to open HEROES2X.AGG file for audio playback." )
         }
     }
 
     AudioInitializer::~AudioInitializer()
     {
         g_asyncSoundManager.sync();
+        g_asyncSoundManager.stopWorker();
 
         wavDataCache.clear();
         MIDDataCache.clear();
@@ -844,9 +854,9 @@ namespace AudioManager
 
         std::scoped_lock<std::mutex> lock( g_asyncSoundManager.resourceMutex() );
 
+        clearAllAudioLoopEffects();
+
         Music::Stop();
         Mixer::Stop();
-
-        currentAudioLoopEffects.clear();
     }
 }

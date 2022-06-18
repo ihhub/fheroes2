@@ -95,7 +95,7 @@ void Interface::ControlPanel::Redraw() const
     fheroes2::AlphaBlit( _buttons->end, display, rt_end.x, rt_end.y, alpha );
 }
 
-fheroes2::GameMode Interface::ControlPanel::QueueEventProcessing()
+fheroes2::GameMode Interface::ControlPanel::QueueEventProcessing() const
 {
     LocalEvent & le = LocalEvent::Get();
 

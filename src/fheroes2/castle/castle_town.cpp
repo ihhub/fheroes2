@@ -168,7 +168,9 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
     const fheroes2::Point cur_pt( restorer.x(), restorer.y() );
     fheroes2::Point dst_pt( cur_pt );
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CASLWIND, 0 ), display, dst_pt.x, dst_pt.y );
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+
+    fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::CASLWIND_EVIL : ICN::CASLWIND, 0 ), display, dst_pt.x, dst_pt.y );
 
     // hide captain options
     if ( !( building & BUILD_CAPTAIN ) ) {
@@ -178,7 +180,8 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
         dst_pt.x += cur_pt.x;
         dst_pt.y += cur_pt.y;
 
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STONEBAK, 0 ), rect.x, rect.y, display, dst_pt.x, dst_pt.y, rect.width, rect.height );
+        const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 );
+        fheroes2::Blit( backgroundImage, rect.x, rect.y, display, dst_pt.x, dst_pt.y, rect.width, rect.height );
     }
 
     // draw castle sprite

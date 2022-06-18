@@ -63,40 +63,40 @@ namespace
     class RadarUpdater
     {
     public:
-        RadarUpdater( const fheroes2::Rect & mainArea, const fheroes2::Point & updatedPosition )
-            : _mainArea( mainArea )
+        RadarUpdater( const bool performUpdate, const fheroes2::Point & updatedPosition, const fheroes2::Rect & areaToRestore )
+            : _performUpdate( performUpdate )
             , _updatedPosition( updatedPosition )
             , _prevPosition( Interface::Basic::Get().GetGameArea().getCurrentCenterInPixels() )
-            , _restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
+            , _restorer( fheroes2::Display::instance(), areaToRestore.x, areaToRestore.y, areaToRestore.width, areaToRestore.height )
         {
-            if ( _updatedPosition != _prevPosition ) {
-                Interface::Basic & iface = Interface::Basic::Get();
-                Interface::Radar & radar = iface.GetRadar();
-
-                const fheroes2::Rect commonArea = mainArea ^ radar.GetRect();
-                _restorer.update( commonArea.x, commonArea.y, commonArea.width, commonArea.height );
-
-                iface.GetGameArea().SetCenter( updatedPosition );
-                iface.Redraw( Interface::REDRAW_RADAR );
-
-                _restorer.restore();
+            if ( !_performUpdate || _updatedPosition == _prevPosition ) {
+                return;
             }
+
+            Interface::Basic & iface = Interface::Basic::Get();
+
+            iface.GetGameArea().SetCenter( updatedPosition );
+            iface.Redraw( Interface::REDRAW_RADAR );
+
+            _restorer.restore();
         }
 
         void restore()
         {
-            if ( _updatedPosition != _prevPosition ) {
-                Interface::Basic & iface = Interface::Basic::Get();
-
-                iface.GetGameArea().SetCenterInPixels( _prevPosition );
-                iface.Redraw( Interface::REDRAW_RADAR );
-
-                _restorer.restore();
+            if ( !_performUpdate || _updatedPosition == _prevPosition ) {
+                return;
             }
+
+            Interface::Basic & iface = Interface::Basic::Get();
+
+            iface.GetGameArea().SetCenterInPixels( _prevPosition );
+            iface.Redraw( Interface::REDRAW_RADAR );
+
+            _restorer.restore();
         }
 
     private:
-        const fheroes2::Rect _mainArea;
+        const bool _performUpdate;
         const fheroes2::Point _updatedPosition;
         const fheroes2::Point _prevPosition;
         fheroes2::ImageRestorer _restorer;
@@ -694,12 +694,13 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
     display.render();
 }
 
-void Dialog::QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea, const fheroes2::Point & position /*= fheroes2::Point()*/ )
+void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position /* = {} */, const bool showOnRadar /* = false */,
+                        const fheroes2::Rect & areaToRestore /* = {} */ )
 {
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
 
-    // Update radar.
-    RadarUpdater radarUpdater( activeArea, castle.GetCenter() );
+    // Update radar if needed
+    RadarUpdater radarUpdater( showOnRadar, castle.GetCenter(), areaToRestore );
 
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::QWIKTOWN, 0 );
@@ -839,21 +840,19 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea
     // restore background
     back.restore();
 
-    // Restore radar view.
+    // Restore radar view
     radarUpdater.restore();
 
     display.render();
 }
 
-void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Rect & activeArea, const fheroes2::Point & position /*= fheroes2::Point()*/ )
+void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position /* = {} */, const bool showOnRadar /* = false */,
+                        const fheroes2::Rect & areaToRestore /* = {} */ )
 {
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const Settings & conf = Settings::Get();
-
-    // Update radar.
-    RadarUpdater radarUpdater( activeArea, hero.GetCenter() );
+    // Update radar if needed
+    RadarUpdater radarUpdater( showOnRadar, hero.GetCenter(), areaToRestore );
 
     const int qwikhero = ICN::QWIKHERO;
 
@@ -863,12 +862,14 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Rect & activeArea
     LocalEvent & le = LocalEvent::Get();
     fheroes2::Rect cur_rt = MakeRectQuickInfo( le, box, position );
 
+    fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::ImageRestorer restorer( display, cur_rt.x, cur_rt.y, cur_rt.width, cur_rt.height );
     fheroes2::Blit( box, display, cur_rt.x, cur_rt.y );
 
     cur_rt = fheroes2::Rect( restorer.x() + 28, restorer.y() + 10, 146, 144 );
     fheroes2::Point dst_pt;
 
+    const Settings & conf = Settings::Get();
     const Kingdom & kingdom = world.GetKingdom( conf.CurrentColor() );
     const bool isFriend = ColorBase( hero.GetColor() ).isFriends( conf.CurrentColor() );
     const bool isUnderIdentifyHeroSpell = kingdom.Modes( Kingdom::IDENTIFYHERO );
@@ -1054,7 +1055,7 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Rect & activeArea
     // restore background
     restorer.restore();
 
-    // Restore radar view.
+    // Restore radar view
     radarUpdater.restore();
 
     display.render();

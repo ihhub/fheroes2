@@ -77,7 +77,7 @@ namespace fheroes2
                 continue;
             }
 
-            _fileNameAndOffset.emplace( std::move( name ), std::make_pair( offset, size ) );
+            _fileNameAndOffset.try_emplace( std::move( name ), std::make_pair( offset, size ) );
         }
 
         return true;
@@ -152,7 +152,7 @@ namespace fheroes2
             return false;
         }
 
-        const auto result = _fileData.emplace( name, data );
+        const auto result = _fileData.try_emplace( name, data );
         return result.second;
     }
 

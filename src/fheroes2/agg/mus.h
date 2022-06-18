@@ -29,7 +29,7 @@
 
 namespace MUS
 {
-    enum : int
+    enum MusicTrack : int
     {
         UNUSED,
 
@@ -37,12 +37,12 @@ namespace MUS
         BATTLE1,
         BATTLE2,
         BATTLE3,
-        SORCERESS,
-        WARLOCK,
-        NECROMANCER,
-        KNIGHT,
-        BARBARIAN,
-        WIZARD,
+        SORCERESS_CASTLE,
+        WARLOCK_CASTLE,
+        NECROMANCER_CASTLE,
+        KNIGHT_CASTLE,
+        BARBARIAN_CASTLE,
+        WIZARD_CASTLE,
         LAVA,
         WASTELAND,
         DESERT,
@@ -73,7 +73,7 @@ namespace MUS
         SKILL,
         WATCHTOWER,
         XANADU,
-        ULTIMATE_ARTIFACT, // not in use
+        ULTIMATE_ARTIFACT,
         MAINMENU,
         VICTORY,
 

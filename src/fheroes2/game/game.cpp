@@ -64,6 +64,9 @@ namespace
 
     uint32_t maps_animation_frame = 0;
 
+    // TODO: this function returns a sound track based on a provided tile. It works fine for most of objects as they have only one "main" tile.
+    // However, some objects like Oracle or Volcano can be bigger than 1 tile leading to multiple sounds coming from the same object and these
+    // sounds might not be synchronized. This is mostly noticeable with 3D Audio mode on.
     M82::SoundType getSoundTypeFromTile( const Maps::Tiles & tile )
     {
         // check stream first
@@ -341,7 +344,7 @@ uint32_t & Game::MapsAnimationFrame()
 // play environment sounds from the game area in focus
 void Game::EnvironmentSoundMixer()
 {
-    size_t availableChannels = Mixer::getChannelCount();
+    int availableChannels = Mixer::getChannelCount();
     if ( availableChannels <= 2 ) {
         // 2 channels are left for hero's movement.
         return;

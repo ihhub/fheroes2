@@ -249,10 +249,10 @@ namespace Battle
 
             setScrollBarArea( { ax + 5 + 8, buttonPgUp.area().y + buttonPgUp.area().height + 3, 12, scrollbarSliderAreaLength} );
 
-            const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
+            const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
             const fheroes2::Image scrollbarSlider
-                    = fheroes2::generateScrollbarSlider( originalSilder, false, scrollbarSliderAreaLength, VisibleItemCount(), static_cast<int32_t>( messages.size() ),
-                                                         { 0, 0, originalSilder.width(), 4 }, { 0, 4, originalSilder.width(), 8 } );
+                = fheroes2::generateScrollbarSlider( originalSlider, false, scrollbarSliderAreaLength, VisibleItemCount(), static_cast<int32_t>( messages.size() ),
+                                                     { 0, 0, originalSlider.width(), 4 }, { 0, 4, originalSlider.width(), 8 } );
 
             setScrollBarImage( scrollbarSlider );
             _scrollbar.hide();
@@ -276,10 +276,10 @@ namespace Battle
             }
 
             const int32_t scrollbarSliderAreaLength = buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 7;
-            const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
+            const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
             const fheroes2::Image scrollbarSlider
-                    = fheroes2::generateScrollbarSlider( originalSilder, false, scrollbarSliderAreaLength, VisibleItemCount(), static_cast<int32_t>( messages.size() ),
-                                                         { 0, 0, originalSilder.width(), 4 }, { 0, 4, originalSilder.width(), 8 } );
+                = fheroes2::generateScrollbarSlider( originalSlider, false, scrollbarSliderAreaLength, VisibleItemCount(), static_cast<int32_t>( messages.size() ),
+                                                     { 0, 0, originalSlider.width(), 4 }, { 0, 4, originalSlider.width(), 8 } );
             setScrollBarImage( scrollbarSlider );
             SetCurrentVisible();
         }
@@ -1096,7 +1096,11 @@ Battle::Interface::Interface( Arena & a, int32_t center )
     status.SetLogs( listlog );
 
     AudioManager::ResetAudio();
-    AudioManager::PlaySound( M82::PREBATTL );
+
+    // Don't waste time playing the pre-battle sound if the game sounds are turned off
+    if ( conf.SoundVolume() > 0 ) {
+        AudioManager::PlaySound( M82::PREBATTL );
+    }
 }
 
 Battle::Interface::~Interface()

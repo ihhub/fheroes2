@@ -31,7 +31,7 @@ namespace fheroes2
 
         ~Scrollbar() override = default;
 
-        // The original resources do not support proper scrollbar silder scaling. Use generateScrollbarSlider() function to generate needed image.
+        // The original resources do not support proper scrollbar slider scaling. Use generateScrollbarSlider() function to generate needed image.
         void setImage( const Image & image );
 
         void setArea( const Rect & area );

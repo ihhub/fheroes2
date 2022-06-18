@@ -50,7 +50,7 @@ namespace Interface
 
         void SetPos( int32_t, int32_t );
         void ResetTheme();
-        fheroes2::GameMode QueueEventProcessing();
+        fheroes2::GameMode QueueEventProcessing() const;
 
         const fheroes2::Rect & GetArea() const;
 
