@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <fstream>
 #include <iomanip>
@@ -34,8 +35,104 @@
 #include "serialize.h"
 #include "tools.h"
 
+// The original MIDI files are stored in XMI format which is not readable by SDL. You can read about this format here: https://moddingwiki.shikadi.net/wiki/XMI_Format
+// A conversion from XMI to MID files is required before playing files.
+// MIDI format is described here: http://www.music.mcgill.ca/~ich/classes/mumt306/StandardMIDIfileformat.html and here:
+// https://en.wikipedia.org/wiki/General_MIDI
+
 namespace
 {
+    const std::array<const char *, 128> instrumentDescription = {
+        "Acoustic Grand Piano", "Soprano Sax", "Bright Acoustic Piano", "Alto Sax",
+        "Electric Grand Piano", "Tenor Sax",
+        "Honky-tonk Piano", "Baritone Sax",
+        "Electric Piano 1 (Rhodes Piano)", "Oboe",
+        "Electric Piano 2 (Chorused Piano)", "English Horn",
+        "Harpsichord", "Bassoon",
+        "Clavinet", "Clarinet",
+        "Celesta", "Piccolo",
+        "Glockenspiel", "Flute",
+        "Music Box", "Recorder",
+        "Vibraphone", "Pan Flute",
+        "Marimba", "Blown Bottle",
+        "Xylophone", "Shakuhachi",
+        "Tubular Bells", "Whistle",
+        "Dulcimer (Santur)", "Ocarina",
+        "Drawbar Organ (Hammond)", "Lead 1 (square wave)",
+        "Percussive Organ", "Lead 2 (sawtooth wave)",
+        "Rock Organ", "Lead 3 (calliope)",
+        "Church Organ", "Lead 4 (chiffer)",
+        "Reed Organ", "Lead 5 (charang)",
+        "Accordion (French)", "Lead 6 (voice solo)",
+        "Harmonica", "Lead 7 (fifths)",
+        "Tango Accordion (Band neon)", "Lead 8 (bass + lead)",
+        "Acoustic Guitar (nylon)", "Pad 1 (new age Fantasia)",
+        "Acoustic Guitar (steel)", "Pad 2 (warm)",
+        "Electric Guitar (jazz)", "Pad 3 (polysynth)",
+        "Electric Guitar (clean)", "Pad 4 (choir space voice)",
+        "Electric Guitar (muted)", "Pad 5 (bowed glass)",
+        "Overdriven Guitar", "Pad 6 (metallic pro)",
+        "Distortion Guitar", "Pad 7 (halo)",
+        "Guitar harmonics", "Pad 8 (sweep)",
+        "Acoustic Bass", "FX 1 (rain)",
+        "Electric Bass (fingered)", "FX 2 (soundtrack)",
+        "Electric Bass (picked)", "FX 3 (crystal)",
+        "Fretless Bass", "FX 4 (atmosphere)",
+        "Slap Bass 1", "FX 5 (brightness)",
+        "Slap Bass 2", "FX 6 (goblins)",
+        "Synth Bass 1", "FX 7 (echoes, drops)",
+        "Synth Bass 2", "FX 8 (sci-fi, star theme)",
+        "Violin", "Sitar",
+        "Viola", "Banjo",
+        "Cello", "Shamisen",
+        "Contrabass", "Koto",
+        "Tremolo Strings", "Kalimba",
+        "Pizzicato Strings", "Bag pipe",
+        "Orchestral Harp", "Fiddle",
+        "Timpani", "Shanai",
+        "String Ensemble 1 (strings)", "Tinkle Bell",
+        "String Ensemble 2 (slow strings)", "Agogo",
+        "SynthStrings 1", "Steel Drums",
+        "SynthStrings 2", "Woodblock",
+        "Choir Aahs", "Taiko Drum",
+        "Voice Oohs", "Melodic Tom",
+        "Synth Voice", "Synth Drum",
+        "Orchestra Hit", "Reverse Cymbal",
+        "Trumpet", "Guitar Fret Noise",
+        "Trombone", "Breath Noise",
+        "Tuba", "Seashore",
+        "Muted Trumpet", "Bird Tweet",
+        "French Horn", "Telephone Ring",
+        "Brass Section", "Helicopter",
+        "SynthBrass 1", "Applause",
+        "SynthBrass 2", "Gunshot",
+    };
+
+    const std::array<const char *, 47> drumSoundDescription = { "B1 Acoustic Bass Drum", "B3 Ride Cymbal 2",
+        "C2 Bass Drum 1", "C4 Hi Bongo",
+        "C#2 Side Stick", "C#4 Low Bongo",
+        "D2 Acoustic Snare", "D4 Mute Hi Conga",
+        "D#2 Hand Clap", "D#4 Open Hi Conga",
+        "E2 Electric Snare", "E4 Low Conga",
+        "F2 Low Floor Tom", "F4 High Timbale",
+        "F#2 Closed Hi Hat", "F#4 Low Timbale",
+        "G2 High Floor Tom", "G4 High Agogo",
+        "G#2 Pedal Hi-Hat", "G#4 Low Agogo",
+        "A2 Low Tom", "A4 Cabasa",
+        "A#2 Open Hi-Hat", "A#4 Maracas",
+        "B2 Low-Mid Tom", "B4 Short Whistle",
+        "C3 Hi Mid Tom", "C5 Long Whistle",
+        "C#3 Crash Cymbal 1", "C#5 Short Guiro",
+        "D3 High Tom", "D5 Long Guiro",
+        "D#3 Ride Cymbal 1", "D#5 Claves",
+        "E3 Chinese Cymbal", "E5 Hi Wood Block",
+        "F3 Ride Bell", "F5 Low Wood Block",
+        "F#3 Tambourine", "F#5 Mute Cuica",
+        "G3 Splash Cymbal", "G5 Open Cuica",
+        "G#3 Cowbell", "G#5 Mute Triangle",
+        "A3 Crash Cymbal 2", "A5 Open Triangle",
+        "A#3 Vibraslap" };
+
     enum
     {
         TAG_FORM = 0x464F524D,
@@ -49,67 +146,69 @@ namespace
         TAG_MTHD = 0x4D546864,
         TAG_MTRK = 0x4D54726B
     };
-}
 
-// Pair: time and length
-struct XMI_Time : public std::pair<uint32_t, uint32_t>
-{
-    XMI_Time()
-        : std::pair<uint32_t, uint32_t>( 0, 0 )
-    {}
-};
+    // Some numbers in MIDI Files are represented in a form called VARIABLE-LENGTH QUANTITY.
+    struct VariableLengthQuantity
+    {
+        uint32_t value{ 0 };
+        uint32_t lengthInBytes{ 0 };
+    };
 
-XMI_Time readXMITime( const uint8_t * data )
-{
-    const uint8_t * p = data;
-    XMI_Time res;
+    bool readVariableLengthQuantity( const uint8_t * data, VariableLengthQuantity & quantity )
+    {
+        quantity = {};
 
-    while ( *p & 0x80 ) {
-        if ( 4 <= p - data ) {
-            ERROR_LOG( "Can't read XMI time: field bigger than 4 bytes" )
-            break;
+        const uint8_t * p = data;
+
+        while ( *p & 0x80 ) {
+            if ( 4 <= p - data ) {
+                // The largest number to read is 4 bytes.
+                ERROR_LOG( "XMI format: the field is bigger than 4 bytes." )
+                return false;
+            }
+
+            quantity.value |= 0x0000007F & *p;
+            quantity.value <<= 7;
+            ++p;
         }
 
-        res.first |= 0x0000007F & *p;
-        res.first <<= 7;
-        ++p;
+        quantity.value += *p;
+        quantity.lengthInBytes = static_cast<uint32_t>( p - data ) + 1; // it's safe to cast since p is always bigger or equal to data
+
+        return true;
     }
 
-    res.first += *p;
-    res.second = static_cast<uint32_t>( p - data ) + 1; // it's safe to cast since p is always bigger or equal to data
+    std::vector<uint8_t> packVariableLengthQuantity( const uint32_t delta )
+    {
+        const uint8_t c1 = delta & 0x0000007F;
+        const uint8_t c2 = ( ( delta & 0x00003F80 ) >> 7 ) & 0xFF;
+        const uint8_t c3 = ( ( delta & 0x001FC000 ) >> 14 ) & 0xFF;
+        const uint8_t c4 = ( ( delta & 0x0FE00000 ) >> 21 ) & 0xFF;
 
-    return res;
-}
+        std::vector<uint8_t> res;
+        res.reserve( 4 );
 
-std::vector<uint8_t> packToMIDITime( uint32_t delta )
-{
-    const uint8_t c1 = delta & 0x0000007F;
-    const uint8_t c2 = ( ( delta & 0x00003F80 ) >> 7 ) & 0xFF;
-    const uint8_t c3 = ( ( delta & 0x001FC000 ) >> 14 ) & 0xFF;
-    const uint8_t c4 = ( ( delta & 0x0FE00000 ) >> 21 ) & 0xFF;
+        if ( c4 ) {
+            res.push_back( c4 | 0x80 );
+            res.push_back( c3 | 0x80 );
+            res.push_back( c2 | 0x80 );
+            res.push_back( c1 );
+        }
+        else if ( c3 ) {
+            res.push_back( c3 | 0x80 );
+            res.push_back( c2 | 0x80 );
+            res.push_back( c1 );
+        }
+        else if ( c2 ) {
+            res.push_back( c2 | 0x80 );
+            res.push_back( c1 );
+        }
+        else {
+            res.push_back( c1 );
+        }
 
-    std::vector<uint8_t> res;
-    res.reserve( 4 );
-
-    if ( c4 ) {
-        res.push_back( c4 | 0x80 );
-        res.push_back( c3 | 0x80 );
-        res.push_back( c2 | 0x80 );
-        res.push_back( c1 );
+        return res;
     }
-    else if ( c3 ) {
-        res.push_back( c3 | 0x80 );
-        res.push_back( c2 | 0x80 );
-        res.push_back( c1 );
-    }
-    else if ( c2 ) {
-        res.push_back( c2 | 0x80 );
-        res.push_back( c1 );
-    }
-    else
-        res.push_back( c1 );
-
-    return res;
 }
 
 struct IFFChunkHeader
@@ -168,8 +267,7 @@ struct XMITrack
     std::vector<uint8_t> evnt;
 };
 
-struct XMITracks : std::list<XMITrack>
-{};
+using XMITracks = std::list<XMITrack>;
 
 struct XMIData
 {
@@ -177,79 +275,84 @@ struct XMIData
 
     explicit XMIData( const std::vector<uint8_t> & buf )
     {
+        // Please to https://moddingwiki.shikadi.net/wiki/XMI_Format#File_format
         StreamBuf sb( buf );
 
         GroupChunkHeader group;
-        IFFChunkHeader iff;
-
-        // FORM XDIR
         sb >> group;
-        if ( group.ID == TAG_FORM && group.type == TAG_XDIR ) {
-            // INFO
-            sb >> iff;
-            if ( iff.ID == TAG_INFO && iff.length == 2 ) {
-                int numTracks = sb.getLE16();
 
-                // CAT XMID
-                sb >> group;
-                if ( group.ID == TAG_CAT0 && group.type == TAG_XMID ) {
-                    for ( int track = 0; track < numTracks; ++track ) {
-                        tracks.emplace_back();
-
-                        std::vector<uint8_t> & timb = tracks.back().timb;
-                        std::vector<uint8_t> & evnt = tracks.back().evnt;
-
-                        sb >> group;
-                        // FORM XMID
-                        if ( group.ID == TAG_FORM && group.type == TAG_XMID ) {
-                            sb >> iff;
-                            // [TIMB]
-                            if ( iff.ID == TAG_TIMB ) {
-                                timb = sb.getRaw( iff.length );
-                                if ( timb.size() != iff.length ) {
-                                    ERROR_LOG( "parse error: "
-                                               << "out of range" )
-                                    break;
-                                }
-                                sb >> iff;
-                            }
-
-                            // [RBRN]
-                            if ( iff.ID == TAG_RBRN ) {
-                                sb.skip( iff.length );
-                                sb >> iff;
-                            }
-
-                            // EVNT
-                            if ( iff.ID != TAG_EVNT ) {
-                                ERROR_LOG( "parse error: "
-                                           << "evnt" )
-                                break;
-                            }
-
-                            evnt = sb.getRaw( iff.length );
-
-                            if ( evnt.size() != iff.length ) {
-                                ERROR_LOG( "parse error: "
-                                           << "out of range" )
-                                break;
-                            }
-                        }
-                        else
-                            ERROR_LOG( "unknown tag: " << group.ID << " (expected FORM), " << group.type << " (expected XMID)" )
-                    }
-                }
-                else
-                    ERROR_LOG( "parse error: "
-                               << "cat xmid" )
-            }
-            else
-                ERROR_LOG( "parse error: "
-                           << "info" )
+        if ( group.ID != TAG_FORM || group.type != TAG_XDIR ) {
+            ERROR_LOG( "XMI parsing: invalid IFF root chunk 1 (FORM:XDIR)" )
+            return;
         }
-        else
-            ERROR_LOG( "parse error: "
-                       << "form xdir" )
+
+        IFFChunkHeader iff;
+        sb >> iff;
+        if ( iff.ID != TAG_INFO || iff.length != 2 ) {
+            ERROR_LOG( "XMI parsing: expected TAG_INFO of length 2" )
+            return;
+        }
+
+        const int numTracks = sb.getLE16();
+        if ( numTracks <= 0 ) {
+            ERROR_LOG( "XMI parsing: the number of sequences cannot be less than 1" )
+            return;
+        }
+
+        // CAT XMID
+        sb >> group;
+        if ( group.ID != TAG_CAT0 || group.type != TAG_XMID ) {
+            ERROR_LOG( "XMI parsing: invalid IFF root chunk 2 (CAT :XMID)" )
+            return;
+        }
+
+        for ( int track = 0; track < numTracks; ++track ) {
+            tracks.emplace_back();
+
+            std::vector<uint8_t> & timb = tracks.back().timb;
+            std::vector<uint8_t> & evnt = tracks.back().evnt;
+
+            sb >> group;
+            // FORM XMID
+            if ( group.ID != TAG_FORM || group.type != TAG_XMID ) {
+                ERROR_LOG( "XMI parsing: invalid form type (FORM:XMID)" )
+                return;
+            }
+
+            sb >> iff;
+
+            // Read TIMB cbhunk.
+            if ( iff.ID == TAG_TIMB ) {
+                timb = sb.getRaw( iff.length );
+                if ( timb.size() != iff.length ) {
+                    ERROR_LOG( "parse error: "
+                               << "out of range" )
+                    break;
+                }
+                sb >> iff;
+            }
+
+            // [RBRN]
+            if ( iff.ID == TAG_RBRN ) {
+                sb.skip( iff.length );
+                sb >> iff;
+            }
+
+            // EVNT
+            if ( iff.ID != TAG_EVNT ) {
+                ERROR_LOG( "parse error: "
+                           << "evnt" )
+                break;
+            }
+
+            evnt = sb.getRaw( iff.length );
+
+            if ( evnt.size() != iff.length ) {
+                ERROR_LOG( "parse error: "
+                           << "out of range" )
+                break;
+            }
+        }
     }
 
     bool isvalid() const
@@ -269,7 +372,7 @@ struct MidiChunk
     {
         _time = time;
         _type = type;
-        _binaryTime = packToMIDITime( time );
+        _binaryTime = packVariableLengthQuantity( time );
         _data.push_back( data1 );
     }
 
@@ -277,7 +380,7 @@ struct MidiChunk
     {
         _time = time;
         _type = type;
-        _binaryTime = packToMIDITime( time );
+        _binaryTime = packVariableLengthQuantity( time );
         _data.push_back( data1 );
         _data.push_back( data2 );
     }
@@ -286,7 +389,7 @@ struct MidiChunk
     {
         _time = time;
         _type = meta;
-        _binaryTime = packToMIDITime( time );
+        _binaryTime = packVariableLengthQuantity( time );
         _data.push_back( subType );
         _data.push_back( metaLength );
         for ( uint8_t i = 0; i < metaLength; ++i ) {
@@ -333,6 +436,7 @@ struct MidiEvents : public std::vector<MidiChunk>
     }
 
     MidiEvents() = default;
+
     explicit MidiEvents( const XMITrack & t )
     {
         const uint8_t * ptr = &t.evnt[0];
@@ -357,17 +461,19 @@ struct MidiEvents : public std::vector<MidiChunk>
                 }
 
                 switch ( *ptr >> 4 ) {
-                // metadata
                 case 0x0F: {
+                    // Meta-Event, always starts from 0xFF.
                     ++ptr; // skip 0xFF
                     const uint8_t metaType = *( ptr++ );
                     const uint8_t metaLength = *( ptr++ );
+
                     emplace_back( delta, static_cast<uint8_t>( 0xFF ), metaType, ptr, metaLength );
                     // Tempo switch
                     if ( metaType == 0x51 && metaLength == 3 ) {
                         // 24bit big endian
                         trackTempo = ( ( ( *ptr << 8 ) | *( ptr + 1 ) ) << 8 ) | *( ptr + 2 );
                     }
+
                     ptr += metaLength;
                     break;
                 }
@@ -382,19 +488,48 @@ struct MidiEvents : public std::vector<MidiChunk>
                     ptr += 3;
                     break;
 
-                // XMI events doesn't have note off events
+                // XMI events do not have note off events.
                 // note on
                 case 0x09: {
                     emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
-                    const XMI_Time duration = readXMITime( ptr + 3 );
+                    VariableLengthQuantity quantity;
+                    if ( !readVariableLengthQuantity( ptr + 3, quantity ) ) {
+                        break;
+                    }
+
                     // note off
-                    emplace_back( delta + duration.first, *ptr - 0x10, *( ptr + 1 ), 0x7F );
-                    ptr += 3 + duration.second;
+                    emplace_back( delta + quantity.value, *ptr - 0x10, *( ptr + 1 ), 0x7F );
+                    ptr += 3 + quantity.lengthInBytes;
                     break;
                 }
 
-                // program change
+                // Program Change: in other words which instrument is going to be played.
                 case 0x0C:
+                    emplace_back( delta, *ptr, *( ptr + 1 ) );
+
+                    if ( *ptr == 0xCA ) {
+                        // It is a drum.
+                        const int drumSoundType = *( ptr + 1 );
+                        if ( drumSoundType >= 35 && drumSoundType - 35 < drumSoundDescription.size() ) {
+                            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MID: drum sound used in the track: " << drumSoundDescription[drumSoundType - 35] )
+                        }
+                        else {
+                            ERROR_LOG("MID: Unknown drum sound " << drumSoundType )
+                        }
+                    }
+                    else {
+                        const int instrumentType = *( ptr + 1 );
+                        if ( instrumentType < instrumentDescription.size() ) {
+                            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MID: instrument used in the track: " << instrumentDescription[*( ptr + 1 )] )
+                        }
+                        else {
+                            ERROR_LOG("MID: Unknown instrument type " << instrumentType )
+                        }
+                    }
+
+                    ptr += 2;
+                    break;
+
                 // channel aftertouch
                 case 0x0D:
                     emplace_back( delta, *ptr, *( ptr + 1 ) );
@@ -415,7 +550,7 @@ struct MidiEvents : public std::vector<MidiChunk>
         // update duration
         delta = 0;
         for ( iterator it = this->begin(); it != this->end(); ++it ) {
-            it->_binaryTime = packToMIDITime( it->_time - delta );
+            it->_binaryTime = packVariableLengthQuantity( it->_time - delta );
             delta = it->_time;
         }
     }
@@ -470,6 +605,7 @@ struct MidTracks : std::list<MidTrack>
     }
 
     MidTracks() = default;
+
     explicit MidTracks( const XMITracks & tracks )
     {
         for ( XMITracks::const_iterator it = tracks.begin(); it != tracks.end(); ++it )
