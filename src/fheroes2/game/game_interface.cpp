@@ -105,11 +105,11 @@ Interface::Basic & Interface::Basic::Get()
     return basic;
 }
 
-void Interface::Basic::Redraw( int force )
+void Interface::Basic::Redraw( const uint32_t force /* = 0 */ )
 {
     const Settings & conf = Settings::Get();
 
-    const int combinedRedraw = redraw | force;
+    const uint32_t combinedRedraw = redraw | force;
     const bool hideInterface = conf.ExtGameHideInterface();
 
     if ( combinedRedraw & REDRAW_GAMEAREA ) {
@@ -229,8 +229,7 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
                                     : static_cast<int>( Cursor::WAR_NONE ) );
 
             if ( dst >= 0 && le.MousePressRight() ) {
-                const Maps::Tiles & tile = world.GetTiles( dst );
-                Dialog::QuickInfo( tile );
+                Dialog::QuickInfo( world.GetTiles( dst ) );
             }
             else if ( le.MouseClickLeft() && valid ) {
                 returnValue = dst;

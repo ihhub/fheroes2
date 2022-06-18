@@ -84,10 +84,14 @@ namespace Dialog
     fheroes2::GameMode FileOptions();
     std::string SelectFileLoad();
     std::string SelectFileSave();
-    // show info cell maps
+
     void QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile = false );
-    void QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea, const fheroes2::Point & position = fheroes2::Point() );
-    void QuickInfo( const HeroBase & hero, const fheroes2::Rect & activeArea, const fheroes2::Point & position = fheroes2::Point() );
+
+    // These functions are able to show the location of an object on the radar. If the location should be shown on the radar, then an
+    // additional area, the contents of which should be restored when the radar is redrawn (areaToRestore), can be optionally specified.
+    void QuickInfo( const Castle & castle, const fheroes2::Point & position = {}, const bool showOnRadar = false, const fheroes2::Rect & areaToRestore = {} );
+    void QuickInfo( const HeroBase & hero, const fheroes2::Point & position = {}, const bool showOnRadar = false, const fheroes2::Rect & areaToRestore = {} );
+
     int Message( const std::string &, const std::string &, int ft, int buttons = 0 /* buttons: OK : CANCEL : OK|CANCEL : YES|NO */ );
     void ExtSettings( bool );
     int LevelUpSelectSkill( const std::string & name, const int primarySkillType, const Skill::Secondary & sec1, const Skill::Secondary & sec2, Heroes & hero );

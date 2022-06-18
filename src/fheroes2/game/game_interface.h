@@ -53,7 +53,7 @@ namespace GameFocus
 
 namespace Interface
 {
-    enum redraw_t
+    enum redraw_t : uint32_t
     {
         REDRAW_RADAR = 0x01,
         REDRAW_HEROES = 0x02,
@@ -62,7 +62,6 @@ namespace Interface
         REDRAW_STATUS = 0x10,
         REDRAW_BORDER = 0x20,
         REDRAW_GAMEAREA = 0x40,
-        REDRAW_CURSOR = 0x80,
 
         REDRAW_ICONS = REDRAW_HEROES | REDRAW_CASTLES,
         REDRAW_ALL = 0xFF
@@ -82,17 +81,17 @@ namespace Interface
             return redraw != 0;
         }
 
-        void SetRedraw( int f )
+        void SetRedraw( const uint32_t r )
         {
-            redraw |= f;
+            redraw |= r;
         }
 
-        int GetRedrawMask() const
+        uint32_t GetRedrawMask() const
         {
             return redraw;
         }
 
-        void Redraw( int f = 0 );
+        void Redraw( const uint32_t force = 0 );
 
         static bool isScrollLeft( const fheroes2::Point & cursorPos )
         {
@@ -205,7 +204,7 @@ namespace Interface
         StatusWindow statusWindow;
         ControlPanel controlPanel;
 
-        int redraw;
+        uint32_t redraw;
     };
 }
 

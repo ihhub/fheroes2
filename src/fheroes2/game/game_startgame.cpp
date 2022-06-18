@@ -185,13 +185,13 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
         else {
             basicInterface.ResetFocus( GameFocus::HEROES );
         }
+
+        basicInterface.RedrawFocus();
     }
     else {
         // If we don't update focus, we still have to restore environment sounds and terrain music theme
         restoreSoundsForCurrentFocus();
     }
-
-    basicInterface.RedrawFocus();
 }
 
 void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss /* = false */ )
@@ -201,8 +201,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
 
     bool needFade = Settings::ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
 
-    Interface::Basic & I = Interface::Basic::Get();
-    const Interface::GameArea & gameArea = I.GetGameArea();
+    Interface::Basic & basicInterface = Interface::Basic::Get();
 
     const KingdomHeroes & myHeroes = hero.GetKingdom().GetHeroes();
     KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
@@ -231,7 +230,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
             AudioManager::PlaySound( M82::KILLFADE );
 
             ( *it )->GetPath().Hide();
-            gameArea.SetRedraw();
+            basicInterface.SetRedraw( Interface::REDRAW_GAMEAREA );
 
             if ( windowIsGameWorld ) {
                 ( *it )->FadeOut();
@@ -252,14 +251,14 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
 
     if ( updateFocus ) {
         if ( it != myHeroes.end() ) {
-            I.SetFocus( *it );
+            basicInterface.SetFocus( *it );
         }
         else {
-            I.ResetFocus( GameFocus::HEROES );
+            basicInterface.ResetFocus( GameFocus::HEROES );
         }
-    }
 
-    I.RedrawFocus();
+        basicInterface.RedrawFocus();
+    }
 }
 
 void ShowNewWeekDialog()
@@ -1118,7 +1117,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     if ( res == fheroes2::GameMode::END_TURN ) {
         if ( GetFocusHeroes() ) {
             GetFocusHeroes()->ShowPath( false );
-            RedrawFocus();
+
+            SetRedraw( REDRAW_GAMEAREA );
         }
 
         if ( myKingdom.isPlay() ) {
@@ -1232,17 +1232,20 @@ void Interface::Basic::MouseCursorAreaPressRight( int32_t index_maps ) const
             case MP2::OBJN_CASTLE:
             case MP2::OBJ_CASTLE: {
                 const Castle * castle = world.getCastle( tile.GetCenter() );
-                if ( castle )
-                    Dialog::QuickInfo( *castle, fheroes2::Rect() );
-                else
+                if ( castle ) {
+                    Dialog::QuickInfo( *castle );
+                }
+                else {
                     Dialog::QuickInfo( tile );
+                }
                 break;
             }
 
             case MP2::OBJ_HEROES: {
                 const Heroes * heroes = tile.GetHeroes();
-                if ( heroes )
-                    Dialog::QuickInfo( *heroes, fheroes2::Rect() );
+                if ( heroes ) {
+                    Dialog::QuickInfo( *heroes );
+                }
                 break;
             }
 
