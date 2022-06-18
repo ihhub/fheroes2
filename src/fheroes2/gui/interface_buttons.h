@@ -31,20 +31,31 @@ namespace Interface
 {
     class Basic;
 
-    class ButtonsArea : public BorderWindow
+    class ButtonsArea final : public BorderWindow
     {
     public:
         explicit ButtonsArea( Basic & );
+        ButtonsArea( const ButtonsArea & ) = delete;
+
+        ~ButtonsArea() override = default;
+
+        ButtonsArea & operator=( const ButtonsArea & ) = delete;
 
         void SetPos( int32_t ox, int32_t oy ) override;
         void SavePosition() override;
         void SetRedraw() const;
 
-        void Redraw();
         fheroes2::GameMode QueueEventProcessing();
         void ResetButtons();
 
     private:
+        friend Basic;
+
+        // Do not call this method directly, use Interface::Basic::Redraw() instead
+        // to avoid issues in the "no interface" mode
+        void Redraw();
+        void SetButtonStatus();
+
         Basic & interface;
 
         fheroes2::Button buttonNextHero;
@@ -64,8 +75,6 @@ namespace Interface
         fheroes2::Rect adventureRect;
         fheroes2::Rect fileRect;
         fheroes2::Rect systemRect;
-
-        void SetButtonStatus();
     };
 }
 

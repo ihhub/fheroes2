@@ -25,6 +25,7 @@
 #define H2INTERFACE_RADAR_H
 
 #include "interface_border.h"
+#include "screen.h"
 #include "ui_tool.h"
 #include "view_world.h"
 
@@ -32,11 +33,14 @@ namespace Interface
 {
     class Basic;
 
-    class Radar : public BorderWindow
+    class Radar final : public BorderWindow
     {
     public:
         explicit Radar( Basic & );
-        Radar( const Radar & radar );
+        // Creates a radar with a fixed position at the top right of the screen,
+        // based on an existing radar and suitable for the View World window
+        Radar( const Radar & radar, const fheroes2::Display & display );
+        Radar( const Radar & ) = delete;
 
         ~Radar() override = default;
 
@@ -45,16 +49,14 @@ namespace Interface
         void SetPos( int32_t ox, int32_t oy ) override;
         void SetRedraw() const;
         void Build();
-        void Redraw();
         void RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, ViewWorldMode mode );
-        void RedrawCursor( const fheroes2::Rect * roiRectangle = nullptr );
         void SetHide( bool );
         void QueueEventProcessing();
         bool QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & roi ) const;
 
-        static Radar MakeRadarViewWorld( const Radar & radar );
-
     private:
+        friend Basic;
+
         enum class RadarType : char
         {
             WorldMap,
@@ -63,9 +65,12 @@ namespace Interface
 
         void SavePosition() override;
         void Generate();
-        void RedrawObjects( int color, ViewWorldMode flags ) const;
 
-        void ChangeAreaSize( const fheroes2::Size & );
+        // Do not call this method directly, use Interface::Basic::Redraw() instead
+        // to avoid issues in the "no interface" mode
+        void Redraw();
+        void RedrawObjects( int color, ViewWorldMode flags ) const;
+        void RedrawCursor( const fheroes2::Rect * roiRectangle = nullptr );
 
         RadarType radarType;
         Basic & interface;

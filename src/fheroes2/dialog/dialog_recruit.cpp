@@ -195,9 +195,9 @@ void RedrawMonsterInfo( const fheroes2::Rect & pos, const Monster & monster, uin
     text.Blit( pos.x + 80 - text.w() / 2, pos.y + 135 );
 }
 
-void RedrawStaticInfo( const fheroes2::Rect & pos, const Monster & monster, uint32_t available )
+void RedrawStaticInfo( const fheroes2::Rect & pos, const Monster & monster, uint32_t available, const int windowIcnId )
 {
-    drawRecruitWindow( fheroes2::Display::instance(), { pos.x, pos.y }, ICN::RECRBKG );
+    drawRecruitWindow( fheroes2::Display::instance(), { pos.x, pos.y }, windowIcnId );
 
     RedrawMonsterInfo( pos, monster, available, true );
 
@@ -251,8 +251,11 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
     uint32_t result = max;
 
     payment_t paymentCosts( paymentMonster * result );
-    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::RECRBKG, 0 );
-    const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( ICN::RECRBKG, 1 );
+
+    const int windowIcnId = ICN::RECRBKG;
+
+    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( windowIcnId, 0 );
+    const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( windowIcnId, 1 );
 
     const fheroes2::Point dialogOffset( ( display.width() - box.width() ) / 2, ( display.height() - box.height() ) / 2 + windowOffsetY );
     const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
@@ -262,9 +265,9 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
 
     fheroes2::Blit( boxShadow, display, pos.x - BORDERWIDTH, pos.y + BORDERWIDTH );
 
-    drawRecruitWindow( display, { pos.x, pos.y }, ICN::RECRBKG );
+    drawRecruitWindow( display, { pos.x, pos.y }, windowIcnId );
 
-    RedrawStaticInfo( pos, monster, available );
+    RedrawStaticInfo( pos, monster, available, windowIcnId );
 
     // buttons
     fheroes2::Point dst_pt;
@@ -474,7 +477,7 @@ Troop Dialog::RecruitMonster( const Monster & monster0, uint32_t available, cons
         }
 
         if ( redraw ) {
-            RedrawStaticInfo( pos, monster, available );
+            RedrawStaticInfo( pos, monster, available, windowIcnId );
             RedrawCurrentInfo( pos.getPosition(), result, paymentMonster, paymentCosts, funds, maxmin );
 
             if ( 0 == result ) {
@@ -519,8 +522,11 @@ void Dialog::DwellingInfo( const Monster & monster, uint32_t available )
     // setup cursor
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
 
-    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::RECR2BKG, 0 );
-    const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( ICN::RECR2BKG, 1 );
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+    const int icnId = isEvilInterface ? ICN::RECR2BKG_EVIL : ICN::RECR2BKG;
+
+    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( icnId, 0 );
+    const fheroes2::Sprite & boxShadow = fheroes2::AGG::GetICN( icnId, 1 );
 
     const fheroes2::Point dialogOffset( ( display.width() - box.width() ) / 2, display.height() / 2 - display.DEFAULT_HEIGHT / 2 + BORDERWIDTH );
     const fheroes2::Point shadowOffset( dialogOffset.x - BORDERWIDTH, dialogOffset.y );
@@ -530,7 +536,7 @@ void Dialog::DwellingInfo( const Monster & monster, uint32_t available )
 
     fheroes2::Blit( boxShadow, display, pos.x - BORDERWIDTH, pos.y + BORDERWIDTH );
 
-    drawRecruitWindow( display, { pos.x, pos.y }, ICN::RECR2BKG );
+    drawRecruitWindow( display, { pos.x, pos.y }, icnId );
 
     LocalEvent & le = LocalEvent::Get();
 

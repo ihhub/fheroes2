@@ -409,10 +409,9 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
     listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, { rt.x + 327, rt.y + 55 } );
     listbox.SetScrollButtonDn( ICN::REQUESTS, 7, 8, { rt.x + 327, rt.y + 217 } );
 
-    const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
-    const fheroes2::Image scrollbarSlider
-        = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( all.size() ), { 0, 0, originalSilder.width(), 8 },
-                                             { 0, 7, originalSilder.width(), 8 } );
+    const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
+    const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, 140, 9, static_cast<int32_t>( all.size() ),
+                                                                               { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
 
     listbox.setScrollBarArea( { rt.x + 328, rt.y + 73, 12, 140 } );
 
@@ -489,8 +488,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
             }
             else {
                 const fheroes2::Image updatedScrollbarSlider
-                    = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( small.size() ), { 0, 0, originalSilder.width(), 8 },
-                                                         { 0, 7, originalSilder.width(), 8 } );
+                    = fheroes2::generateScrollbarSlider( originalSlider, false, 140, 9, static_cast<int32_t>( small.size() ), { 0, 0, originalSlider.width(), 8 },
+                                                         { 0, 7, originalSlider.width(), 8 } );
                 listbox.setScrollBarImage( updatedScrollbarSlider );
 
                 listbox.SetListContent( small );
@@ -511,8 +510,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
             }
             else {
                 const fheroes2::Image updatedScrollbarSlider
-                    = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( medium.size() ), { 0, 0, originalSilder.width(), 8 },
-                                                         { 0, 7, originalSilder.width(), 8 } );
+                    = fheroes2::generateScrollbarSlider( originalSlider, false, 140, 9, static_cast<int32_t>( medium.size() ), { 0, 0, originalSlider.width(), 8 },
+                                                         { 0, 7, originalSlider.width(), 8 } );
                 listbox.setScrollBarImage( updatedScrollbarSlider );
 
                 listbox.SetListContent( medium );
@@ -533,8 +532,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
             }
             else {
                 const fheroes2::Image updatedScrollbarSlider
-                    = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( large.size() ), { 0, 0, originalSilder.width(), 8 },
-                                                         { 0, 7, originalSilder.width(), 8 } );
+                    = fheroes2::generateScrollbarSlider( originalSlider, false, 140, 9, static_cast<int32_t>( large.size() ), { 0, 0, originalSlider.width(), 8 },
+                                                         { 0, 7, originalSlider.width(), 8 } );
                 listbox.setScrollBarImage( updatedScrollbarSlider );
 
                 listbox.SetListContent( large );
@@ -555,8 +554,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
             }
             else {
                 const fheroes2::Image updatedScrollbarSlider
-                    = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( xlarge.size() ), { 0, 0, originalSilder.width(), 8 },
-                                                         { 0, 7, originalSilder.width(), 8 } );
+                    = fheroes2::generateScrollbarSlider( originalSlider, false, 140, 9, static_cast<int32_t>( xlarge.size() ), { 0, 0, originalSlider.width(), 8 },
+                                                         { 0, 7, originalSlider.width(), 8 } );
                 listbox.setScrollBarImage( updatedScrollbarSlider );
 
                 listbox.SetListContent( xlarge );
@@ -570,10 +569,9 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
             needRedraw = true;
         }
         else if ( le.MouseClickLeft( buttonSelectAll.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_ALL ) ) {
-            const fheroes2::Image updatedScrollbarSlider
-                    = fheroes2::generateScrollbarSlider( originalSilder, false, 140, 9, static_cast<int32_t>( all.size() ), { 0, 0, originalSilder.width(), 8 },
-                                                         { 0, 7, originalSilder.width(), 8 } );
-                listbox.setScrollBarImage( updatedScrollbarSlider );
+            const fheroes2::Image updatedScrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, 140, 9, static_cast<int32_t>( all.size() ),
+                                                                                              { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
+            listbox.setScrollBarImage( updatedScrollbarSlider );
 
             listbox.SetListContent( const_cast<MapsFileInfoList &>( all ) );
             listbox.SetCurrent( GetSelectedMapId( all ) );

@@ -25,6 +25,8 @@
 #include <string>
 #include <vector>
 
+#include "audio.h"
+
 namespace M82
 {
     enum SoundType : int;
@@ -55,12 +57,20 @@ namespace AudioManager
             // Do nothing.
         }
 
+        bool operator==( const AudioLoopEffectInfo & other ) const
+        {
+            return other.angle == angle && other.volumePercentage == volumePercentage;
+        }
+
         int16_t angle{ 0 };
         uint8_t volumePercentage{ 0 };
     };
 
     void playLoopSounds( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, bool asyncronizedCall );
     void PlaySound( int m82, bool asyncronizedCall = false );
-    void PlayMusic( int mus, bool loop = true, bool asyncronizedCall = false );
+
+    void PlayMusic( const int trackId, const Music::PlaybackMode playbackMode );
+    void PlayMusicAsync( const int trackId, const Music::PlaybackMode playbackMode );
+
     void ResetAudio();
 }

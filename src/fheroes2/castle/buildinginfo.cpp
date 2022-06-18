@@ -400,7 +400,8 @@ void BuildingInfo::Redraw() const
 
         // build image
         if ( BUILD_NOTHING == building ) {
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::CASLXTRA, 0 ), display, area.x, area.y );
+            const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+            fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::CASLXTRA_EVIL : ICN::CASLXTRA, 0 ), display, area.x, area.y );
             return;
         }
 

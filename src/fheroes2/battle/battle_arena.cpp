@@ -406,7 +406,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::Det
         interface->fullRedraw();
         display.render();
 
-        // pause for play M82::PREBATTL
+        // Wait for the end of M82::PREBATTL playback
         while ( LocalEvent::Get().HandleEvents() && Mixer::isPlaying( -1 ) )
             ;
     }

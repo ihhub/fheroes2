@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 17:13+0000\n"
+"POT-Creation-Date: 2022-06-12 08:18+0000\n"
 "PO-Revision-Date: 2022-05-12 17:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2582,6 +2582,46 @@ msgstr "Kein Platz in"
 msgid "the garrison"
 msgstr "der Garnison"
 
+msgid "off"
+msgstr "Aus"
+
+msgid "Music"
+msgstr "Musik"
+
+msgid "Effects"
+msgstr "Effekte"
+
+msgid "MIDI"
+msgstr "MIDI"
+
+msgid "MIDI Expansion"
+msgstr "MIDI Expansion"
+
+msgid "External"
+msgstr "Extern"
+
+msgid "Music Type"
+msgstr "Klangtyp"
+
+msgid "3D Audio"
+msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr "Lautstärke der Umgebungsmusik umschalten."
+
+msgid "Toggle foreground sounds level."
+msgstr "Lautstärke des Vordergrunds umschalten."
+
+msgid "Change the type of music."
+msgstr "Klangtyp ändern."
+
+#, fuzzy
+msgid "Toggle 3D effects of foreground sounds."
+msgstr "Lautstärke des Vordergrunds umschalten."
+
+msgid "Okay"
+msgstr "Okay"
+
 msgid "Build a new ship:"
 msgstr "Ein neues Boot bauen:"
 
@@ -2630,26 +2670,12 @@ msgstr "Experimentelle"
 msgid "Settings"
 msgstr "Einstellungen"
 
-msgid "off"
-msgstr "Aus"
+msgid "Audio"
+msgstr ""
 
-msgid "Music"
-msgstr "Musik"
-
-msgid "Effects"
-msgstr "Effekte"
-
-msgid "MIDI"
-msgstr "MIDI"
-
-msgid "MIDI Expansion"
-msgstr "MIDI Expansion"
-
-msgid "External"
-msgstr "Extern"
-
-msgid "Music Type"
-msgstr "Klangtyp"
+#, fuzzy
+msgid "settings"
+msgstr "Einstellungen"
 
 msgid "Hot Keys"
 msgstr "Hotkeys"
@@ -2669,6 +2695,27 @@ msgstr "Farbe"
 msgid "Text Support"
 msgstr "Text-Unterst."
 
+msgid "Evil"
+msgstr "Böse"
+
+msgid "Good"
+msgstr "Gut"
+
+msgid "Interface Type"
+msgstr "Interface"
+
+msgid "Auto Resolve"
+msgstr "Auto-Auflösen"
+
+msgid "Auto, No Spells"
+msgstr "Auto, ohne Zauber"
+
+msgid "Manual"
+msgstr "Manuell"
+
+msgid "Battles"
+msgstr "Schlachten"
+
 msgid "Select Game Language"
 msgstr "Spielsprache auswählen"
 
@@ -2681,20 +2728,21 @@ msgstr "Spielauflösung wählen"
 msgid "Change resolution of the game."
 msgstr "Auflösung des Spiels ändern."
 
+#, fuzzy
+msgid "Change audio settings of the game."
+msgstr "Sprache, Auflösung und Einstellungen des Spiels ändern."
+
 msgid "Experimental game settings."
 msgstr "Experimentelle Spieleinstellungen."
 
-msgid "Toggle ambient music level."
-msgstr "Lautstärke der Umgebungsmusik umschalten."
-
-msgid "Toggle foreground sounds level."
-msgstr "Lautstärke des Vordergrunds umschalten."
-
-msgid "Change the type of music."
-msgstr "Klangtyp ändern."
+msgid "Toggle instant battle mode."
+msgstr "Sofortigen Kampfmodus umschalten."
 
 msgid "Check all Hot Keys used in the game."
 msgstr "Überprüfen Sie alle im Spiel verwendeten Hotkeys."
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Schaltet die Art der Schnittstelle um, die Sie verwenden möchten."
 
 msgid ""
 "Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
@@ -2709,9 +2757,6 @@ msgid ""
 msgstr ""
 "Schaltet den Textunterstützungsmodus um, um zusätzliche Informationen über "
 "Fenster und Ereignisse im Spiel auszugeben."
-
-msgid "Okay"
-msgstr "Okay"
 
 msgid "Attention"
 msgstr "Achtung"
@@ -3169,15 +3214,6 @@ msgstr "Feindgeschw."
 msgid "Scroll Speed"
 msgstr "Scrollgeschw."
 
-msgid "Evil"
-msgstr "Böse"
-
-msgid "Good"
-msgstr "Gut"
-
-msgid "Interface Type"
-msgstr "Interface"
-
 msgid "Hide"
 msgstr "Ausblenden"
 
@@ -3186,18 +3222,6 @@ msgstr "Einblenden"
 
 msgid "Interface"
 msgstr "Interface"
-
-msgid "Auto Resolve"
-msgstr "Auto-Auflösen"
-
-msgid "Auto, No Spells"
-msgstr "Auto, ohne Zauber"
-
-msgid "Battles"
-msgstr "Schlachten"
-
-msgid "Manual"
-msgstr "Manuell"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3214,14 +3238,8 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr "Legt die Geschwindigkeit fest, mit der Sie das Fenster verschieben."
 
-msgid "Toggle the type of interface you want to use."
-msgstr "Schaltet die Art der Schnittstelle um, die Sie verwenden möchten."
-
 msgid "Toggle interface visibility."
 msgstr "Sichtbarkeit der Interface ändern."
-
-msgid "Toggle instant battle mode."
-msgstr "Sofortigen Kampfmodus umschalten."
 
 msgid "Att."
 msgstr "Angr."
@@ -3352,6 +3370,10 @@ msgstr "QA und Unterstützung"
 
 msgid "Development"
 msgstr "Entwicklung"
+
+#, fuzzy
+msgid "Dev and Support"
+msgstr "QA und Unterstützung"
 
 msgid "Visit us at "
 msgstr "Besuchen Sie uns bei "

@@ -523,11 +523,23 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     LocalEvent & le = LocalEvent::Get();
     le.PauseCycling();
 
-    // Creates fixed radar on top-right, even if hidden interface
-    Interface::Radar radar = Interface::Radar::MakeRadarViewWorld( interface.GetRadar() );
+    Settings & conf = Settings::Get();
+    const bool isEvilInterface = conf.ExtGameEvilInterface();
+    const bool isHideInterface = conf.ExtGameHideInterface();
 
-    const fheroes2::Rect worldMapROI = interface.GetGameArea().GetVisibleTileROI();
-    const fheroes2::Rect & visibleScreenInPixels = interface.GetGameArea().GetROI();
+    // If the interface is currently hidden, we have to temporarily bring it back, because
+    // the map generation in the World View mode heavily depends on the existing game area
+    if ( isHideInterface ) {
+        conf.SetHideInterface( false );
+        interface.Reset();
+    }
+
+    // Creates fixed radar on top-right, suitable for the View World window
+    Interface::Radar radar( interface.GetRadar(), fheroes2::Display::instance() );
+
+    const Interface::GameArea & gameArea = interface.GetGameArea();
+    const fheroes2::Rect worldMapROI = gameArea.GetVisibleTileROI();
+    const fheroes2::Rect & visibleScreenInPixels = gameArea.GetROI();
 
     // Initial view is centered on where the player is centered
     fheroes2::Point viewCenterInPixels( worldMapROI.x * TILEWIDTH + visibleScreenInPixels.width / 2, worldMapROI.y * TILEWIDTH + visibleScreenInPixels.height / 2 );
@@ -551,7 +563,6 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     radar.RedrawForViewWorld( currentROI, mode );
 
     // "View world" sprite
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
     const fheroes2::Sprite & viewWorldSprite = fheroes2::AGG::GetICN( GetSpriteResource( mode, isEvilInterface ), 0 );
     drawViewWorldSprite( viewWorldSprite, display, isEvilInterface );
 
@@ -621,6 +632,12 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
             drawViewWorldSprite( viewWorldSprite, display, isEvilInterface );
             display.render();
         }
+    }
+
+    // Don't forget to reset the interface settings back if necessary
+    if ( isHideInterface ) {
+        conf.SetHideInterface( true );
+        interface.Reset();
     }
 
     le.ResumeCycling();
