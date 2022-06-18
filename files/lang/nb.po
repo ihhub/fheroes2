@@ -575,10 +575,10 @@ msgstr "Blikket til troppen med %{attacker} forsteiner troppen med %{target}!"
 
 msgid "The %{attacker}' curse falls upon the %{target}!"
 msgstr ""
-"Forbannelsen til troppen med %{attacker} treffer troppen med %{target}!"
+"Forbannelsen til troppen med %{attacker} legger seg over troppen med %{target}!"
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr "Troppen med %{target} blir lamslått av troppen med %{attacker}!"
+msgstr "Troppen med %{target} blir lammet av troppen med %{attacker}!"
 
 msgid "The %{attacker} dispel all good spells on your %{target}!"
 msgstr ""
