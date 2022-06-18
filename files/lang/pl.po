@@ -573,19 +573,19 @@ msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} zadaje %{damage} pkt. obrażeń każdej żywej istocie."
 
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr "Atak %{attacker} oślepia %{name}!"
+msgstr "Atak %{attacker} oślepia %{target}!"
 
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr "Spojrzenie %{attacker} zamienia %{name} w kamień!"
+msgstr "Spojrzenie %{attacker} zamienia %{target} w kamień!"
 
 msgid "The %{attacker}' curse falls upon the %{target}!"
 msgstr "%{attacker} przeklina %{name}!"
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr "Atak %{attacker} paraliżuje %{name}!"
+msgstr "%{target} został sparaliżowany przez %{attacker}!"
 
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr "%{attacker} rozpraszają wszystkie korzystne zaklęcia u %{name}!"
+msgstr "%{attacker} rozpraszają pozytywne zaklęcia u %{target}!"
 
 msgid "The %{attacker} cast %{spell} on %{target}!"
 msgstr "%{attacker} rzuca zaklęcie %{spell} na %{target}!"
@@ -2565,7 +2565,7 @@ msgid "Change the type of music."
 msgstr "Zmień rodzaj muzyki."
 
 msgid "Toggle 3D effects of foreground sounds."
-msgstr "Zmień efekt 3D dla pierwszoplanowych dźwięków."
+msgstr "Włącz lub wyłącz efekty dźwiękowe 3D."
 
 msgid "Okay"
 msgstr "Ok"
@@ -2676,7 +2676,7 @@ msgid "Change resolution of the game."
 msgstr "Zmień rozdzielczość gry."
 
 msgid "Change audio settings of the game."
-msgstr "Zmień ustawienia audio gry."
+msgstr "Zmień ustawienia dźwiękowe gry."
 
 msgid "Experimental game settings."
 msgstr "Zmień eksperymentalne ustawienia gry."
@@ -2701,7 +2701,7 @@ msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
-"Włącza lub wyłącza dodatkowe informacje w oknach lub o zdarzeniach w grze."
+"Włącza lub wyłącza dodatkowe informacje o oknach i zdarzeniach w grze."
 
 msgid "Attention"
 msgstr "Uwaga"
@@ -3160,7 +3160,7 @@ msgid "Interface"
 msgstr "Intefejs"
 
 msgid "Change the speed at which your heroes move on the main screen."
-msgstr "Zmień szybkość, z jaką poruszają się Twoi bohaterowie na ekranie."
+msgstr "Zmień szybkość z jaką poruszają się twoi bohaterowie na ekranie."
 
 msgid ""
 "Sets the speed that A.I. heroes move at.  You can also elect not to view A."
@@ -3478,7 +3478,7 @@ msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
 "starting the game please choose game resolution."
 msgstr "Witamy w grze Heroes of Might and Magic II na silniku fheroes2! "
-"Przed rozpoczęciem gry wybierz rozdzielczość gry."
+"Przed rozpoczęciem gry wybierz rozdzielczość ekranu."
 
 msgid "Please Remember"
 msgstr "Pamiętaj"
@@ -8363,7 +8363,7 @@ msgid ""
 "This %{name} gives your hero the ability to cast the %{spell} spell if your "
 "hero has a Magic Book."
 msgstr "Ten %{name} daje twojemu bohaterowi mozliwość rzucania czaru %{spell} "
-"nawet jeśli bohater nie ma księgi zaklęć."
+"jeśli bohater posiada księgę zaklęć."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
