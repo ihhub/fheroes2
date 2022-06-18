@@ -430,9 +430,9 @@ namespace
         listbox.SetScrollButtonDn( listIcnId, 5, 6, { activeArea.x + 262, activeArea.y + 190 } );
         listbox.setScrollBarArea( { activeArea.x + 266, activeArea.y + 68, 14, 119 } );
 
-        const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( listIcnId, 10 );
-        const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSilder, false, 119, 5, static_cast<int32_t>( castles.size() ),
-                                                                                   { 0, 0, originalSilder.width(), 4 }, { 0, 4, originalSilder.width(), 8 } );
+        const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( listIcnId, 10 );
+        const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, 119, 5, static_cast<int32_t>( castles.size() ),
+                                                                                   { 0, 0, originalSlider.width(), 4 }, { 0, 4, originalSlider.width(), 8 } );
 
         listbox.setScrollBarImage( scrollbarSlider );
         listbox.SetAreaMaxItems( 5 );
