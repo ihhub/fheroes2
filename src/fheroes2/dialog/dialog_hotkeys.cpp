@@ -145,10 +145,10 @@ namespace fheroes2
         resList.SetScrollButtonUp( ICN::REQUESTS, 5, 6, { roi.x + 327, roi.y + 55 } );
         resList.SetScrollButtonDn( ICN::REQUESTS, 7, 8, { roi.x + 327, roi.y + 257 + windowExtensionHeight } );
 
-        const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
+        const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
         const fheroes2::Image scrollbarSlider
-            = fheroes2::generateScrollbarSlider( originalSilder, false, 180 + windowExtensionHeight, 11, static_cast<int32_t>( events.size() ),
-                                                 { 0, 0, originalSilder.width(), 8 }, { 0, 7, originalSilder.width(), 8 } );
+            = fheroes2::generateScrollbarSlider( originalSlider, false, 180 + windowExtensionHeight, 11, static_cast<int32_t>( events.size() ),
+                                                 { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
         resList.setScrollBarArea( { roi.x + 328, roi.y + 73, 12, 180 + windowExtensionHeight } );
         resList.setScrollBarImage( scrollbarSlider );
         resList.SetAreaMaxItems( 13 );

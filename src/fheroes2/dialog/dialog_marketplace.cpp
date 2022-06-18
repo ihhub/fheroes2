@@ -232,10 +232,9 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
 
         const uint32_t maximumValue = ( Resource::GOLD == resourceTo ) ? max_sell : max_buy;
 
-        const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( tradpostIcnId, 2 );
-        const fheroes2::Image scrollbarSlider
-            = fheroes2::generateScrollbarSlider( originalSilder, true, 187, 1, static_cast<int32_t>( maximumValue + 1 ), { 0, 0, 2, originalSilder.height() },
-                                                 { 2, 0, 8, originalSilder.height() } );
+        const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( tradpostIcnId, 2 );
+        const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, true, 187, 1, static_cast<int32_t>( maximumValue + 1 ),
+                                                                                   { 0, 0, 2, originalSlider.height() }, { 2, 0, 8, originalSlider.height() } );
         _scrollbar.setImage( scrollbarSlider );
 
         _scrollbar.setRange( 0, maximumValue );
