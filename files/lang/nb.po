@@ -154,7 +154,7 @@ msgid "Cannot move last troop"
 msgstr "Kan ikke flytte siste styrke i garnisonen"
 
 msgid "Move the %{name}"
-msgstr "Flytt %{name} "
+msgstr "Flytt %{name}"
 
 msgid "Set Count"
 msgstr "Velg antall"
