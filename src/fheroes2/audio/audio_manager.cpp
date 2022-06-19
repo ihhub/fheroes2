@@ -378,8 +378,12 @@ namespace
             }
 
             if ( !_loopSoundTasks.empty() ) {
-                std::swap( _currentLoopSoundTask, _loopSoundTasks.front() );
-                _loopSoundTasks.pop();
+                // Pick only the latest loop sound set and discard the rest.
+                std::swap( _currentLoopSoundTask, _loopSoundTasks.back() );
+
+                while ( !_loopSoundTasks.empty() ) {
+                    _loopSoundTasks.pop();
+                }
 
                 _taskToExecute = TaskType::PlayLoopSound;
 
