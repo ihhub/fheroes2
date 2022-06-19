@@ -263,14 +263,9 @@ namespace
                 _loopSoundTasks.pop();
             }
 
-            switch ( _taskToExecute ) {
-            case TaskType::PlaySound:
-            case TaskType::PlayLoopSound:
-                _taskToExecute = TaskType::None;
-                break;
-            default:
-                break;
-            }
+            // TODO: there is a chance that at the time of clearing all tasks executeTask() method would be executing by the worker thread.
+            // The worker thread will proceed with the execution producing incorrect results such as environment sounds being played in castle's windows.
+            // It is not wise to update the type of the task without synchronization.
         }
 
         void sync()
@@ -289,7 +284,9 @@ namespace
                 _loopSoundTasks.pop();
             }
 
-            _taskToExecute = TaskType::None;
+            // TODO: there is a chance that at the time of clearing all tasks executeTask() method would be executing by the worker thread.
+            // The worker thread will proceed with the execution producing incorrect results such as environment sounds being played in castle's windows.
+            // It is not wise to update the type of the task without synchronization.
         }
 
         // This mutex protects operations with AudioManager's resources, such as AGG files, data caches, etc
