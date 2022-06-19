@@ -251,6 +251,23 @@ namespace
             notifyWorker();
         }
 
+        void removeSounds()
+        {
+            std::scoped_lock<std::mutex> lock( _mutex );
+
+            while ( !_soundTasks.empty() ) {
+                _soundTasks.pop();
+            }
+
+            while ( !_loopSoundTasks.empty() ) {
+                _loopSoundTasks.pop();
+            }
+
+            // TODO: there is a chance that at the time of clearing all tasks executeTask() method would be executing by the worker thread.
+            // The worker thread will proceed with the execution producing incorrect results such as environment sounds being played in castle's windows.
+            // It is not wise to update the type of the task without synchronization.
+        }
+
         void sync()
         {
             std::scoped_lock<std::mutex> lock( _mutex );
@@ -266,6 +283,10 @@ namespace
             while ( !_loopSoundTasks.empty() ) {
                 _loopSoundTasks.pop();
             }
+
+            // TODO: there is a chance that at the time of clearing all tasks executeTask() method would be executing by the worker thread.
+            // The worker thread will proceed with the execution producing incorrect results such as environment sounds being played in castle's windows.
+            // It is not wise to update the type of the task without synchronization.
         }
 
         // This mutex protects operations with AudioManager's resources, such as AGG files, data caches, etc
@@ -360,7 +381,7 @@ namespace
             }
 
             if ( !_soundTasks.empty() ) {
-                std::swap( _currentSoundTask, _soundTasks.back() );
+                std::swap( _currentSoundTask, _soundTasks.front() );
                 _soundTasks.pop();
 
                 _taskToExecute = TaskType::PlaySound;
@@ -369,8 +390,12 @@ namespace
             }
 
             if ( !_loopSoundTasks.empty() ) {
+                // Pick only the latest loop sound set and discard the rest.
                 std::swap( _currentLoopSoundTask, _loopSoundTasks.back() );
-                _loopSoundTasks.pop();
+
+                while ( !_loopSoundTasks.empty() ) {
+                    _loopSoundTasks.pop();
+                }
 
                 _taskToExecute = TaskType::PlayLoopSound;
 
@@ -598,8 +623,6 @@ namespace
 
         std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> tempAudioLoopEffects;
         std::swap( tempAudioLoopEffects, currentAudioLoopEffects );
-
-        // TODO: do not allow to call Mixer::Stop() function anywhere. Audio manager should handle these cases.
 
         // Remove all sounds which aren't currently played anymore. This might be the case when Audio::Stop() function is called.
         for ( auto iter = tempAudioLoopEffects.begin(); iter != tempAudioLoopEffects.end(); ) {
@@ -841,6 +864,21 @@ namespace AudioManager
         }
 
         g_asyncSoundManager.pushMusic( trackId, Settings::Get().MusicType(), playbackMode );
+    }
+
+    void stopSounds()
+    {
+        if ( !Audio::isValid() ) {
+            return;
+        }
+
+        g_asyncSoundManager.removeSounds();
+
+        std::scoped_lock<std::mutex> lock( g_asyncSoundManager.resourceMutex() );
+
+        clearAllAudioLoopEffects();
+
+        Mixer::Stop();
     }
 
     void ResetAudio()
