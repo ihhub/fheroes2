@@ -51,6 +51,9 @@ public:
 
     enum : uint32_t
     {
+        // The following extended options do not affect the overall
+        // game balance and are saved in the binary config file
+        //
         GAME_AUTOSAVE_BEGIN_DAY = 0x10000010,
         GAME_REMEMBER_LAST_FOCUS = 0x10000020,
         GAME_SAVE_REWRITE_CONFIRM = 0x10000040,
@@ -64,7 +67,11 @@ public:
         GAME_BATTLE_SHOW_DAMAGE = 0x10100000,
         GAME_CONTINUE_AFTER_VICTORY = 0x10200000,
 
-        /* influence on game balance: save to savefile */
+        // The following extended options affect the overall game balance and
+        // are saved both in the binary config file and in the savefile
+        //
+        // TODO: combine them all into one bitset
+        //
         // UNUSED = 0x20000001,
         // UNUSED = 0x20000002,
         WORLD_ALLOW_SET_GUARDIAN = 0x20000008,
@@ -569,11 +576,16 @@ private:
     void BinarySave() const;
     void BinaryLoad();
 
-    BitModes opt_global;
-    BitModes opt_game;
-    BitModes opt_battle;
-    BitModes opt_world;
-    BitModes opt_addons;
+    // Global game options (GLOBAL_), they are saved in the text config file
+    BitModes _optGlobal;
+    // Extended options that do not affect the overall game balance (GAME_),
+    // they are saved in the binary config file
+    BitModes _optExtGame;
+    // Extended options that affect the overall game balance, they are saved
+    // both in the binary config file and in the savefile
+    BitModes _optExtBalance2; // Options with codes starting with 0x2
+    BitModes _optExtBalance3; // Options with codes starting with 0x3
+    BitModes _optExtBalance4; // Options with codes starting with 0x4
 
     int debug;
     fheroes2::Size video_mode;
@@ -582,7 +594,8 @@ private:
     std::string path_program;
 
     std::string _gameLanguage;
-    std::string _loadedFileLanguage; // not a part of save or configuration file
+    // Not saved in the config file or savefile
+    std::string _loadedFileLanguage;
 
     Maps::FileInfo current_maps_file;
 
