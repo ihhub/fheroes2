@@ -240,6 +240,17 @@ namespace
             notifyWorker();
         }
 
+        void pushLoopSound( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> vols, const int soundVolume, const bool is3DAudioEnabled )
+        {
+            createWorker();
+
+            std::scoped_lock<std::mutex> lock( _mutex );
+
+            _loopSoundTasks.emplace( std::move( vols ), soundVolume, is3DAudioEnabled );
+
+            notifyWorker();
+        }
+
         void removeSounds()
         {
             std::scoped_lock<std::mutex> lock( _mutex );
@@ -251,17 +262,15 @@ namespace
             while ( !_loopSoundTasks.empty() ) {
                 _loopSoundTasks.pop();
             }
-        }
 
-        void pushLoopSound( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> vols, const int soundVolume, const bool is3DAudioEnabled )
-        {
-            createWorker();
-
-            std::scoped_lock<std::mutex> lock( _mutex );
-
-            _loopSoundTasks.emplace( std::move( vols ), soundVolume, is3DAudioEnabled );
-
-            notifyWorker();
+            switch ( _taskToExecute ) {
+            case TaskType::PlaySound:
+            case TaskType::PlayLoopSound:
+                _taskToExecute = TaskType::None;
+                break;
+            default:
+                break;
+            }
         }
 
         void sync()
@@ -279,6 +288,8 @@ namespace
             while ( !_loopSoundTasks.empty() ) {
                 _loopSoundTasks.pop();
             }
+
+            _taskToExecute = TaskType::None;
         }
 
         // This mutex protects operations with AudioManager's resources, such as AGG files, data caches, etc
@@ -860,6 +871,10 @@ namespace AudioManager
 
     void stopSounds()
     {
+        if ( !Audio::isValid() ) {
+            return;
+        }
+
         g_asyncSoundManager.removeSounds();
 
         std::scoped_lock<std::mutex> lock( g_asyncSoundManager.resourceMutex() );

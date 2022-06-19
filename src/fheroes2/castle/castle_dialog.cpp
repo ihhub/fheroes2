@@ -262,8 +262,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
 
     const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
-    AudioManager::stopSounds();
-
     AudioManager::PlayMusicAsync( MUS::FromRace( race ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
     int alphaHero = 255;
