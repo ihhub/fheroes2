@@ -369,7 +369,7 @@ namespace
             }
 
             if ( !_soundTasks.empty() ) {
-                std::swap( _currentSoundTask, _soundTasks.back() );
+                std::swap( _currentSoundTask, _soundTasks.front() );
                 _soundTasks.pop();
 
                 _taskToExecute = TaskType::PlaySound;
@@ -378,7 +378,7 @@ namespace
             }
 
             if ( !_loopSoundTasks.empty() ) {
-                std::swap( _currentLoopSoundTask, _loopSoundTasks.back() );
+                std::swap( _currentLoopSoundTask, _loopSoundTasks.front() );
                 _loopSoundTasks.pop();
 
                 _taskToExecute = TaskType::PlayLoopSound;
