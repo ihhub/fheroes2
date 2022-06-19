@@ -72,5 +72,7 @@ namespace AudioManager
     void PlayMusic( const int trackId, const Music::PlaybackMode playbackMode );
     void PlayMusicAsync( const int trackId, const Music::PlaybackMode playbackMode );
 
+    void stopSounds();
+
     void ResetAudio();
 }

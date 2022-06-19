@@ -240,6 +240,15 @@ namespace
             notifyWorker();
         }
 
+        void removeSounds()
+        {
+            std::scoped_lock<std::mutex> lock( _mutex );
+
+            while ( !_soundTasks.empty() ) {
+                _soundTasks.pop();
+            }
+        }
+
         void pushLoopSound( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> vols, const int soundVolume, const bool is3DAudioEnabled )
         {
             createWorker();
@@ -599,8 +608,6 @@ namespace
         std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> tempAudioLoopEffects;
         std::swap( tempAudioLoopEffects, currentAudioLoopEffects );
 
-        // TODO: do not allow to call Mixer::Stop() function anywhere. Audio manager should handle these cases.
-
         // Remove all sounds which aren't currently played anymore. This might be the case when Audio::Stop() function is called.
         for ( auto iter = tempAudioLoopEffects.begin(); iter != tempAudioLoopEffects.end(); ) {
             std::vector<ChannelAudioLoopEffectInfo> & existingEffects = iter->second;
@@ -841,6 +848,17 @@ namespace AudioManager
         }
 
         g_asyncSoundManager.pushMusic( trackId, Settings::Get().MusicType(), playbackMode );
+    }
+
+    void stopSounds()
+    {
+        g_asyncSoundManager.removeSounds();
+
+        std::scoped_lock<std::mutex> lock( g_asyncSoundManager.resourceMutex() );
+
+        clearAllAudioLoopEffects();
+
+        Mixer::Stop();
     }
 
     void ResetAudio()

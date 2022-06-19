@@ -131,7 +131,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // Stop all sounds, but not the music - it will be replaced by the music of the castle
-    Mixer::Stop();
+    AudioManager::stopSounds();
 
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
