@@ -30,6 +30,8 @@
 
 namespace Audio
 {
+    // Audio initialization and deinitialization functions are not designed to be called
+    // concurrently from different threads. They should be called from the main thread only.
     void Init();
     void Quit();
 
