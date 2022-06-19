@@ -247,6 +247,10 @@ namespace
             while ( !_soundTasks.empty() ) {
                 _soundTasks.pop();
             }
+
+            while ( !_loopSoundTasks.empty() ) {
+                _loopSoundTasks.pop();
+            }
         }
 
         void pushLoopSound( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> vols, const int soundVolume, const bool is3DAudioEnabled )
