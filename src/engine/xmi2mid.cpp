@@ -323,7 +323,7 @@ struct XMIData
 
     explicit XMIData( const std::vector<uint8_t> & buf )
     {
-        // Please to https://moddingwiki.shikadi.net/wiki/XMI_Format#File_format
+        // Please refer to https://moddingwiki.shikadi.net/wiki/XMI_Format#File_format
         StreamBuf sb( buf );
 
         GroupChunkHeader group;
@@ -497,99 +497,105 @@ struct MidiEvents : public std::vector<MidiChunk>
             if ( *ptr < 128 ) {
                 delta += *ptr;
                 ++ptr;
+                continue;
             }
-            else
-            // MIDI commands start from 0x80
-            {
-                // track end
-                if ( 0xFF == *ptr && 0x2F == *( ptr + 1 ) ) {
-                    emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
-                    // stop parsing
-                    break;
+
+            if ( *ptr == 0xFF ) {
+                if ( end - ptr < 3 ) {
+                    emplace_back( 0, static_cast<uint8_t>( 0xFF ), static_cast<uint8_t>( 0x2F ), static_cast<uint8_t>( 0x00 ) );
+                    ERROR_LOG( "MIDI track: the data is truncated." )
+                    return;
                 }
 
-                switch ( *ptr >> 4 ) {
-                case 0x0F: {
-                    // Meta-Event, always starts from 0xFF.
-                    ++ptr; // skip 0xFF
-                    const uint8_t metaType = *( ptr++ );
-                    const uint8_t metaLength = *( ptr++ );
-
-                    emplace_back( delta, static_cast<uint8_t>( 0xFF ), metaType, ptr, metaLength );
-                    // Tempo switch
-                    if ( metaType == 0x51 && metaLength == 3 ) {
-                        // 24bit big endian
-                        trackTempo = ( ( ( *ptr << 8 ) | *( ptr + 1 ) ) << 8 ) | *( ptr + 2 );
+                if ( *( ptr + 1 ) == 0x2F ) {
+                    if ( *( ptr + 2 ) != 0x00 ) {
+                        ERROR_LOG( "MIDI track: End of Track sequence is incorrect." )
                     }
 
-                    ptr += metaLength;
+                    emplace_back( delta, *ptr, *( ptr + 1 ), static_cast<uint8_t>( 0x00 ) );
                     break;
                 }
 
-                // key pressure
-                case 0x0A:
-                // control change
-                case 0x0B:
-                // pitch bend
-                case 0x0E:
-                    emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
-                    ptr += 3;
-                    break;
+                // Meta-Event, always starts from 0xFF.
+                ++ptr; // skip 0xFF
+                const uint8_t metaType = *( ptr++ );
+                const uint8_t metaLength = *( ptr++ );
 
-                // XMI events do not have note off events.
-                // note on
-                case 0x09: {
-                    emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
-                    VariableLengthQuantity quantity;
-                    if ( !readVariableLengthQuantity( ptr + 3, quantity ) ) {
-                        break;
-                    }
+                emplace_back( delta, static_cast<uint8_t>( 0xFF ), metaType, ptr, metaLength );
+                // Tempo switch
+                if ( metaType == 0x51 && metaLength == 3 ) {
+                    // 24-bit big endian
+                    trackTempo = ( ( ( *ptr << 8 ) | *( ptr + 1 ) ) << 8 ) | *( ptr + 2 );
+                }
 
-                    // note off
-                    emplace_back( delta + quantity.value, *ptr - 0x10, *( ptr + 1 ), 0x7F );
-                    ptr += 3 + quantity.lengthInBytes;
+                ptr += metaLength;
+                continue;
+            }
+
+            switch ( *ptr >> 4 ) {
+            // key pressure
+            case 0x0A:
+            // control change
+            case 0x0B:
+            // pitch bend
+            case 0x0E:
+                emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
+                ptr += 3;
+                break;
+
+            // XMI events do not have note off events.
+            // note on
+            case 0x09: {
+                emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
+                VariableLengthQuantity quantity;
+                if ( !readVariableLengthQuantity( ptr + 3, quantity ) ) {
                     break;
                 }
 
-                // Program Change: in other words which instrument is going to be played.
-                case 0x0C:
-                    emplace_back( delta, *ptr, *( ptr + 1 ) );
+                // note off
+                emplace_back( delta + quantity.value, static_cast<uint8_t>( *ptr - 0x10 ), *( ptr + 1 ), static_cast<uint8_t>( 0x7F ) );
+                ptr += 3 + quantity.lengthInBytes;
+                break;
+            }
 
-                    if ( *ptr == 0xCA ) {
-                        // It is a drum.
-                        const uint32_t drumSoundType = *( ptr + 1 );
-                        if ( drumSoundType >= 35 && drumSoundType - 35 < drumSoundDescription.size() ) {
-                            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MID: drum sound used in the track: " << drumSoundDescription[drumSoundType - 35] )
-                        }
-                        else {
-                            ERROR_LOG( "MID: Unknown drum sound " << drumSoundType )
-                        }
+            // Program Change: in other words which instrument is going to be played.
+            case 0x0C:
+                emplace_back( delta, *ptr, *( ptr + 1 ) );
+
+                if ( *ptr == 0xCA ) {
+                    // It is a drum.
+                    const uint32_t drumSoundType = *( ptr + 1 );
+                    if ( drumSoundType >= 35 && drumSoundType - 35 < drumSoundDescription.size() ) {
+                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MID: drum sound used in the track: " << drumSoundDescription[drumSoundType - 35] )
                     }
                     else {
-                        const uint32_t instrumentType = *( ptr + 1 );
-                        if ( instrumentType < instrumentDescription.size() ) {
-                            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MID: instrument used in the track: " << instrumentDescription[*( ptr + 1 )] )
-                        }
-                        else {
-                            ERROR_LOG( "MID: Unknown instrument type " << instrumentType )
-                        }
+                        ERROR_LOG( "MID: Unknown drum sound " << drumSoundType )
                     }
-
-                    ptr += 2;
-                    break;
-
-                // channel aftertouch
-                case 0x0D:
-                    emplace_back( delta, *ptr, *( ptr + 1 ) );
-                    ptr += 2;
-                    break;
-
-                // unused command
-                default:
-                    emplace_back( 0, 0xFF, 0x2F, 0 );
-                    ERROR_LOG( "unknown st: " << GetHexString( static_cast<int>( *ptr ), 2 ) << ", ln: " << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) )
-                    break;
                 }
+                else {
+                    const uint32_t instrumentType = *( ptr + 1 );
+                    if ( instrumentType < instrumentDescription.size() ) {
+                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MID: instrument used in the track: " << instrumentDescription[*( ptr + 1 )] )
+                    }
+                    else {
+                        ERROR_LOG( "MID: Unknown instrument type " << instrumentType )
+                    }
+                }
+
+                ptr += 2;
+                break;
+
+            // channel aftertouch
+            case 0x0D:
+                emplace_back( delta, *ptr, *( ptr + 1 ) );
+                ptr += 2;
+                break;
+
+            // unused command
+            default:
+                emplace_back( 0, static_cast<uint8_t>( 0xFF ), static_cast<uint8_t>( 0x2F ), static_cast<uint8_t>( 0x00 ) );
+                ERROR_LOG( "unknown st: " << GetHexString( static_cast<int>( *ptr ), 2 ) << ", ln: " << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) )
+                break;
             }
         }
 
@@ -694,9 +700,9 @@ struct MidData
 StreamBuf & operator<<( StreamBuf & sb, const MidData & st )
 {
     sb << st.mthd;
-    sb.putBE16( st.format );
+    sb.putBE16( static_cast<uint16_t>( st.format ) );
     sb.putBE16( static_cast<uint16_t>( st.tracks.count() ) );
-    sb.putBE16( st.ppqn );
+    sb.putBE16( static_cast<uint16_t>( st.ppqn ) );
     sb << st.tracks;
     return sb;
 }
