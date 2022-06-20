@@ -372,7 +372,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
 
 void SpellBook::Edit( const HeroBase & hero )
 {
-    // Editing spells does not affect on memorizing an open spell book page.
+    // Editing spells in a spell book does not require memorizing last open page.
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
