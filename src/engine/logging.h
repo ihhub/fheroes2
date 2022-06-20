@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -82,40 +82,39 @@ namespace Logging
     bool isTextSupportModeEnabled();
 }
 
-#if defined( ANDROID ) // Android has a specific logging function
-#include <android/log.h>
-namespace std
-{
-    static const char * android_endl = "\n";
-}
-#define endl android_endl
-#define COUT( x )                                                                                                                                                        \
-    {                                                                                                                                                                    \
-        std::ostringstream osss;                                                                                                                                         \
-        osss << x;                                                                                                                                                       \
-        __android_log_print( ANDROID_LOG_INFO, "FHeroes2", "%s", osss.str().c_str() );                                                                                   \
-    }
-
-#elif defined( __SWITCH__ ) // Platforms which log to file
+#if defined( TARGET_NINTENDO_SWITCH )
 #include <fstream>
+#include <mutex>
 
 namespace Logging
 {
     extern std::ofstream logFile;
+    // This mutex protects operations with logFile
+    extern std::mutex logMutex;
 }
 
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \
+        const std::scoped_lock<std::mutex> _logfile_lock( Logging::logMutex ); /* The name was chosen on purpose to avoid name collisions with outer code blocks. */     \
+                                                                                                                                                                         \
         Logging::logFile << x << std::endl;                                                                                                                              \
         Logging::logFile.flush();                                                                                                                                        \
     }
-#elif defined( FHEROES2_VITA )
+#elif defined( TARGET_PS_VITA )
 #include <psp2/kernel/clib.h>
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \
         std::ostringstream osss;                                                                                                                                         \
         osss << x << std::endl;                                                                                                                                          \
         sceClibPrintf( osss.str().c_str() );                                                                                                                             \
+    }
+#elif defined( MACOS_APP_BUNDLE )
+#include <syslog.h>
+#define COUT( x )                                                                                                                                                        \
+    {                                                                                                                                                                    \
+        std::ostringstream logMessage;                                                                                                                                   \
+        logMessage << x;                                                                                                                                                 \
+        syslog( LOG_WARNING, "fheroes2_log: %s", logMessage.str().c_str() );                                                                                             \
     }
 #else // Default: log to STDERR
 #define COUT( x )                                                                                                                                                        \
@@ -169,10 +168,10 @@ namespace Logging
 }
 
 // Put this macro at the beginning of code block (eg. function) which is responsible for text support mode output.
-#define START_TEXT_SUPPORT_MODE                                                                                                                                         \
-    if ( !Logging::isTextSupportModeEnabled() ) {                                                                                                                       \
-        return;                                                                                                                                                         \
-    }                                                                                                                                                                   \
-    const Logging::TextSupportLogger _temp_logger; // The name is written on purpose to avoid name clashing within a code block.
+#define START_TEXT_SUPPORT_MODE                                                                                                                                          \
+    if ( !Logging::isTextSupportModeEnabled() ) {                                                                                                                        \
+        return;                                                                                                                                                          \
+    }                                                                                                                                                                    \
+    const Logging::TextSupportLogger _temp_logger; // The name was chosen on purpose to avoid collisions with other variable names within a code block.
 
 #endif // H2LOGGING_H

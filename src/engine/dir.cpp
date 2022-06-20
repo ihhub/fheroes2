@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -22,7 +22,7 @@
  ***************************************************************************/
 #if defined( _MSC_VER ) || defined( __MINGW32__ )
 #include <windows.h>
-#elif defined( FHEROES2_VITA )
+#elif defined( TARGET_PS_VITA )
 #include <psp2/io/dirent.h>
 #else
 #include <dirent.h>
@@ -30,12 +30,12 @@
 
 #include "dir.h"
 #include "system.h"
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
 #include "tools.h"
 #endif
 
 #include <cstring>
-#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
 #include <strings.h> // for strcasecmp
 #endif
 
@@ -90,7 +90,7 @@ namespace
         } while ( FindNextFile( hFind, &data ) != 0 );
 
         FindClose( hFind );
-#elif defined( FHEROES2_VITA )
+#elif defined( TARGET_PS_VITA )
         // open the directory
         const int uid = sceIoDopen( path.c_str() );
         if ( uid <= 0 )
@@ -167,9 +167,4 @@ bool ListFiles::IsEmpty( const std::string & path, const std::string & filter, b
     ListFiles list;
     list.ReadDir( path, filter, sensitive );
     return list.empty();
-}
-
-void ListDirs::Append( const std::list<std::string> & dirs )
-{
-    insert( end(), dirs.begin(), dirs.end() );
 }

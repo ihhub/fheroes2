@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -33,6 +33,9 @@ class ArmyTroop;
 class ArmyBar : public Interface::ItemsActionBar<ArmyTroop>
 {
 public:
+    using Interface::ItemsActionBar<ArmyTroop>::RedrawItem;
+    using Interface::ItemsActionBar<ArmyTroop>::ActionBarRightMouseHold;
+
     ArmyBar( Army *, bool mini, bool ro, bool change = false );
 
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
@@ -41,9 +44,9 @@ public:
     void SetBackground( const fheroes2::Size & sz, const uint8_t fillColor );
     void SetArmy( Army * );
 
-    bool isValid( void ) const;
+    bool isValid() const;
 
-    void ResetSelected( void );
+    void ResetSelected();
     void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
 
     bool ActionBarLeftMouseSingleClick( ArmyTroop & troop ) override;

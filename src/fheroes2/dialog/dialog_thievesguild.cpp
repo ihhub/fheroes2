@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -29,6 +29,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "kingdom.h"
 #include "monster.h"
@@ -218,7 +219,7 @@ void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & 
     if ( !v.empty() ) {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        for ( u32 ii = 0; ii < v.size(); ++ii ) {
+        for ( uint32_t ii = 0; ii < v.size(); ++ii ) {
             const Heroes * hero = world.GetHeroes( v[ii].first );
             if ( hero ) {
                 int32_t px = pos.x + ii * step;
@@ -511,7 +512,7 @@ void Dialog::ThievesGuild( bool oracle )
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;
     }
 }

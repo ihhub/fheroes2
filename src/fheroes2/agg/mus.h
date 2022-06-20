@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -29,19 +29,20 @@
 
 namespace MUS
 {
-    enum
+    enum MusicTrack : int
     {
         UNUSED,
-        DATATRACK,
+
+        DATATRACK, // not in use
         BATTLE1,
         BATTLE2,
         BATTLE3,
-        SORCERESS,
-        WARLOCK,
-        NECROMANCER,
-        KNIGHT,
-        BARBARIAN,
-        WIZARD,
+        SORCERESS_CASTLE,
+        WARLOCK_CASTLE,
+        NECROMANCER_CASTLE,
+        KNIGHT_CASTLE,
+        BARBARIAN_CASTLE,
+        WIZARD_CASTLE,
         LAVA,
         WASTELAND,
         DESERT,
@@ -56,9 +57,9 @@ namespace MUS
         ARCHIBALD_CAMPAIGN_SCREEN,
         PUZZLE,
         ROLAND_CAMPAIGN_SCREEN,
-        CARAVANS,
-        CARAVANS_2,
-        CARAVANS_3,
+        CARAVANS, // not in use
+        CARAVANS_2, // not in use
+        CARAVANS_3, // not in use
         COMPUTER_TURN,
         BATTLEWIN,
         BATTLELOSE,
@@ -76,23 +77,24 @@ namespace MUS
         MAINMENU,
         VICTORY,
 
+        // IMPORTANT!!! Put all new entries above this line.
         UNKNOWN
     };
 
-    enum class OGG_MUSIC_TYPE : int
+    enum class EXTERNAL_MUSIC_TYPE : int
     {
         MAPPED,
         DOS_VERSION,
         WIN_VERSION
     };
 
-    std::string GetString( int musicTrack, OGG_MUSIC_TYPE musicType );
+    std::string getFileName( const int musicTrackId, const EXTERNAL_MUSIC_TYPE musicType, const char * fileExtension );
 
-    int FromGround( int );
-    int FromRace( int );
+    int FromGround( const int groundType );
+    int FromRace( const int race );
     int FromMapObject( const MP2::MapObjectType objectType );
 
-    int GetBattleRandom( void );
+    int GetBattleRandom();
 }
 
 #endif

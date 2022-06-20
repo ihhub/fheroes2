@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -21,8 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "agg.h"
 #include "agg_image.h"
+#include "audio_manager.h"
 #include "castle.h"
 #include "direction.h"
 #include "game.h"
@@ -81,8 +81,7 @@ void PlayWalkSound( int ground )
         break;
     }
 
-    if ( wav != M82::UNKNOWN )
-        AGG::PlaySound( wav, true );
+    AudioManager::PlaySound( wav, true );
 }
 
 bool ReflectSprite( int from )
@@ -129,7 +128,7 @@ const fheroes2::Sprite & SpriteHero( const Heroes & hero, int index, bool rotate
             break;
 
         default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown race" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown race" )
             break;
         }
 
@@ -163,7 +162,7 @@ const fheroes2::Sprite & SpriteHero( const Heroes & hero, int index, bool rotate
             break;
 
         default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" )
             break;
         }
 
@@ -196,7 +195,7 @@ const fheroes2::Sprite & SpriteFlag( const Heroes & hero, int index, bool rotate
         break;
 
     default:
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown color" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown color" )
         break;
     }
 
@@ -230,41 +229,28 @@ const fheroes2::Sprite & SpriteFlag( const Heroes & hero, int index, bool rotate
             break;
 
         default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" )
             break;
         }
 
     const int frameId = index % heroFrameCount;
     const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn_flag, index_sprite + frameId );
     if ( !hero.isMoveEnabled() ) {
-        static const fheroes2::Point offsetTop[heroFrameCount]
-            = { fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 2 ), fheroes2::Point( 0, 3 ), fheroes2::Point( 0, 2 ), fheroes2::Point( 0, 0 ),
-                fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 3 ), fheroes2::Point( 0, 2 ), fheroes2::Point( 0, 1 ) };
-        static const fheroes2::Point offsetBottom[heroFrameCount]
-            = { fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, -1 ), fheroes2::Point( 0, -2 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 0, -1 ),
-                fheroes2::Point( 0, -2 ), fheroes2::Point( 0, -3 ), fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, -1 ) };
-        static const fheroes2::Point offsetSideways[heroFrameCount]
-            = { fheroes2::Point( 0, 0 ),  fheroes2::Point( -1, 0 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 1, 0 ), fheroes2::Point( 1, -1 ),
-                fheroes2::Point( 2, -1 ), fheroes2::Point( 1, 0 ),  fheroes2::Point( 0, 0 ), fheroes2::Point( 1, 0 ) };
+        static const fheroes2::Point offsetTop[heroFrameCount] = { { 0, 0 }, { 0, 2 }, { 0, 3 }, { 0, 2 }, { 0, 0 }, { 0, 1 }, { 0, 3 }, { 0, 2 }, { 0, 1 } };
+        static const fheroes2::Point offsetBottom[heroFrameCount] = { { 0, 0 }, { 0, -1 }, { 0, -2 }, { 0, 0 }, { 0, -1 }, { 0, -2 }, { 0, -3 }, { 0, 0 }, { 0, -1 } };
+        static const fheroes2::Point offsetSideways[heroFrameCount] = { { 0, 0 }, { -1, 0 }, { 0, 0 }, { 1, 0 }, { 1, -1 }, { 2, -1 }, { 1, 0 }, { 0, 0 }, { 1, 0 } };
         static const fheroes2::Point offsetTopSideways[heroFrameCount]
-            = { fheroes2::Point( 0, 0 ),  fheroes2::Point( -1, 0 ), fheroes2::Point( 0, 0 ), fheroes2::Point( -1, -1 ), fheroes2::Point( -2, -1 ),
-                fheroes2::Point( -2, 0 ), fheroes2::Point( -1, 0 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 1, 0 ) };
+            = { { 0, 0 }, { -1, 0 }, { 0, 0 }, { -1, -1 }, { -2, -1 }, { -2, 0 }, { -1, 0 }, { 0, 0 }, { 1, 0 } };
         static const fheroes2::Point offsetBottomSideways[heroFrameCount]
-            = { fheroes2::Point( 0, 0 ),   fheroes2::Point( -1, 0 ),  fheroes2::Point( 0, -1 ),  fheroes2::Point( 2, -2 ), fheroes2::Point( 0, -2 ),
-                fheroes2::Point( -1, -3 ), fheroes2::Point( -1, -2 ), fheroes2::Point( -1, -1 ), fheroes2::Point( 1, 0 ) };
+            = { { 0, 0 }, { -1, 0 }, { 0, -1 }, { 2, -2 }, { 0, -2 }, { -1, -3 }, { -1, -2 }, { -1, -1 }, { 1, 0 } };
 
-        static const fheroes2::Point offsetShipTopBottom[heroFrameCount]
-            = { fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 1 ),
-                fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 1 ) };
+        static const fheroes2::Point offsetShipTopBottom[heroFrameCount] = { { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 1 }, { 0, 1 }, { 0, 0 }, { 0, 1 }, { 0, 1 }, { 0, 1 } };
         static const fheroes2::Point offsetShipSideways[heroFrameCount]
-            = { fheroes2::Point( 0, -2 ), fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 0 ),
-                fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 1 ) };
+            = { { 0, -2 }, { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 0 }, { 0, -1 }, { 0, 0 }, { 0, -1 }, { 0, 1 } };
         static const fheroes2::Point offsetShipTopSideways[heroFrameCount]
-            = { fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, 1 ), fheroes2::Point( 0, 0 ),
-                fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, -1 ), fheroes2::Point( 0, 1 ) };
+            = { { 0, 0 }, { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 0 }, { 0, -1 }, { 0, 0 }, { 0, -1 }, { 0, 1 } };
         static const fheroes2::Point offsetShipBottomSideways[heroFrameCount]
-            = { fheroes2::Point( 0, -2 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 0 ),
-                fheroes2::Point( 0, 0 ),  fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 0 ), fheroes2::Point( 0, 0 ) };
+            = { { 0, -2 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
 
         switch ( hero.GetDirection() ) {
         case Direction::TOP:
@@ -284,6 +270,10 @@ const fheroes2::Sprite & SpriteFlag( const Heroes & hero, int index, bool rotate
         case Direction::BOTTOM_RIGHT:
         case Direction::BOTTOM_LEFT:
             offset = hero.isShipMaster() ? offsetShipBottomSideways[frameId] : offsetBottomSideways[frameId];
+            break;
+
+        default:
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" )
             break;
         }
     }
@@ -321,7 +311,7 @@ const fheroes2::Sprite & SpriteShad( const Heroes & hero, int index )
             indexSprite = 63;
             break;
         default:
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" )
             break;
         }
 
@@ -378,7 +368,7 @@ const fheroes2::Sprite & SpriteFroth( const Heroes & hero, int index )
         break;
 
     default:
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown direction" )
         break;
     }
 
@@ -438,29 +428,9 @@ void Heroes::RedrawShadow( fheroes2::Image & dst, const int32_t dx, int32_t dy, 
     fheroes2::Point dstFroth( dx + ( reflect ? TILEWIDTH - spriteFroth.x() - spriteFroth.width() : spriteFroth.x() ), dy + spriteFroth.y() + TILEWIDTH );
 
     // apply offset
-    if ( sprite_index < 45 ) {
-        int frame = ( sprite_index % 9 );
-        if ( frame > 0 )
-            --frame;
-
-        int32_t offsetX = _offset.x;
-        if ( direction & DIRECTION_LEFT_COL )
-            offsetX -= HERO_MOVE_STEP * frame;
-        else if ( direction & DIRECTION_RIGHT_COL )
-            offsetX += HERO_MOVE_STEP * frame;
-
-        dstShad.x += offsetX;
-        dstFroth.x += offsetX;
-
-        int32_t offsetY = _offset.y;
-        if ( direction & DIRECTION_TOP_ROW )
-            offsetY -= HERO_MOVE_STEP * frame;
-        else if ( direction & DIRECTION_BOTTOM_ROW )
-            offsetY += HERO_MOVE_STEP * frame;
-
-        dstShad.y += offsetY;
-        dstFroth.y += offsetY;
-    }
+    const fheroes2::Point realOffset = getCurrentPixelOffset();
+    dstShad += realOffset;
+    dstFroth += realOffset;
 
     assert( _alphaValue >= 0 && _alphaValue <= 255 );
 
@@ -500,30 +470,9 @@ void Heroes::Redraw( fheroes2::Image & dst, const int32_t dx, int32_t dy, const 
                              dy + spriteFlag.y() + flagOffset.y + TILEWIDTH );
 
     // apply offset
-    if ( sprite_index < 45 ) {
-        fheroes2::Point offset;
-        int frame = ( sprite_index % 9 );
-        if ( frame > 0 )
-            --frame;
-
-        int32_t offsetX = _offset.x;
-        if ( direction & DIRECTION_LEFT_COL )
-            offsetX -= HERO_MOVE_STEP * frame;
-        else if ( direction & DIRECTION_RIGHT_COL )
-            offsetX += HERO_MOVE_STEP * frame;
-
-        dstHero.x += offsetX;
-        dstFlag.x += offsetX;
-
-        int32_t offsetY = _offset.y;
-        if ( direction & DIRECTION_TOP_ROW )
-            offsetY -= HERO_MOVE_STEP * frame;
-        else if ( direction & DIRECTION_BOTTOM_ROW )
-            offsetY += HERO_MOVE_STEP * frame;
-
-        dstHero.y += offsetY;
-        dstFlag.y += offsetY;
-    }
+    const fheroes2::Point realOffset = getCurrentPixelOffset();
+    dstHero += realOffset;
+    dstFlag += realOffset;
 
     // redraw sprites hero and flag
     assert( _alphaValue >= 0 && _alphaValue <= 255 );
@@ -673,7 +622,7 @@ const Heroes::RedrawIndex & Heroes::GetRedrawIndex() const
     return _redrawIndex;
 }
 
-void Heroes::MoveStep( Heroes & hero, s32 indexTo, bool newpos )
+void Heroes::MoveStep( Heroes & hero, int32_t indexTo, bool newpos )
 {
     Route::Path & path = hero.GetPath();
     hero.ApplyPenaltyMovement( path.GetFrontPenalty() );
@@ -907,12 +856,46 @@ void Heroes::AngleStep( int to_direct )
     }
 }
 
+fheroes2::Point Heroes::getCurrentPixelOffset() const
+{
+    if ( sprite_index >= 45 ) {
+        return {};
+    }
+
+    int frame = ( sprite_index % 9 );
+    if ( frame > 0 )
+        --frame;
+
+    if ( frame == 0 ) {
+        return _offset;
+    }
+
+    fheroes2::Point realOffset{ _offset };
+
+    if ( direction & DIRECTION_LEFT_COL ) {
+        realOffset.x -= HERO_MOVE_STEP * frame;
+    }
+    else if ( direction & DIRECTION_RIGHT_COL ) {
+        realOffset.x += HERO_MOVE_STEP * frame;
+    }
+
+    if ( direction & DIRECTION_TOP_ROW ) {
+        realOffset.y -= HERO_MOVE_STEP * frame;
+    }
+    else if ( direction & DIRECTION_BOTTOM_ROW ) {
+        realOffset.y += HERO_MOVE_STEP * frame;
+    }
+
+    return realOffset;
+}
+
 void Heroes::FadeOut( const fheroes2::Point & offset ) const
 {
     if ( !isInVisibleMapArea() )
         return;
 
-    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
+    Interface::Basic & iface = Interface::Basic::Get();
+    Interface::GameArea & gamearea = iface.GetGameArea();
 
     int multiplier = std::max( offset.x < 0 ? -offset.x : offset.x, offset.y < 0 ? -offset.y : offset.y );
     if ( multiplier < 1 )
@@ -931,7 +914,7 @@ void Heroes::FadeOut( const fheroes2::Point & offset ) const
                 gamearea.ShiftCenter( offset );
             }
 
-            gamearea.Redraw( display, Interface::LEVEL_ALL );
+            iface.Redraw( Interface::REDRAW_GAMEAREA );
 
             display.render();
             _alphaValue -= 8 * multiplier;
@@ -946,7 +929,8 @@ void Heroes::FadeIn( const fheroes2::Point & offset ) const
     if ( !isInVisibleMapArea() )
         return;
 
-    Interface::GameArea & gamearea = Interface::Basic::Get().GetGameArea();
+    Interface::Basic & iface = Interface::Basic::Get();
+    Interface::GameArea & gamearea = iface.GetGameArea();
 
     int multiplier = std::max( offset.x < 0 ? -offset.x : offset.x, offset.y < 0 ? -offset.y : offset.y );
     if ( multiplier < 1 )
@@ -965,7 +949,7 @@ void Heroes::FadeIn( const fheroes2::Point & offset ) const
                 gamearea.ShiftCenter( offset );
             }
 
-            gamearea.Redraw( display, Interface::LEVEL_ALL );
+            iface.Redraw( Interface::REDRAW_GAMEAREA );
 
             display.render();
             _alphaValue += 8 * multiplier;
@@ -1016,37 +1000,42 @@ bool Heroes::Move( bool fast )
 fheroes2::Point Heroes::MovementDirection() const
 {
     const int32_t from = GetIndex();
+    if ( from == -1 ) {
+        return {};
+    }
+
     const int32_t to = Maps::GetDirectionIndex( from, path.GetFrontDirection() );
-    if ( from == -1 || to == -1 )
-        return fheroes2::Point();
+    if ( to == -1 ) {
+        return {};
+    }
 
     if ( direction == Direction::TOP ) {
         if ( sprite_index > 1 && sprite_index < 9 ) {
-            return fheroes2::Point( 0, -1 );
+            return { 0, -1 };
         }
     }
     else if ( direction == Direction::TOP_RIGHT || direction == Direction::TOP_LEFT ) {
         if ( sprite_index > 9 + 1 && sprite_index < 18 ) {
-            return fheroes2::Point( direction == Direction::TOP_RIGHT ? 1 : -1, -1 );
+            return { direction == Direction::TOP_RIGHT ? 1 : -1, -1 };
         }
     }
     else if ( direction == Direction::RIGHT || direction == Direction::LEFT ) {
         if ( sprite_index > 18 + 1 && sprite_index < 27 ) {
-            return fheroes2::Point( direction == Direction::RIGHT ? 1 : -1, 0 );
+            return { direction == Direction::RIGHT ? 1 : -1, 0 };
         }
     }
     else if ( direction == Direction::BOTTOM_RIGHT || direction == Direction::BOTTOM_LEFT ) {
         if ( sprite_index > 27 + 1 && sprite_index < 36 ) {
-            return fheroes2::Point( direction == Direction::BOTTOM_RIGHT ? 1 : -1, 1 );
+            return { direction == Direction::BOTTOM_RIGHT ? 1 : -1, 1 };
         }
     }
     else if ( direction == Direction::BOTTOM ) {
         if ( sprite_index > 36 + 1 && sprite_index < 45 ) {
-            return fheroes2::Point( 0, 1 );
+            return { 0, 1 };
         }
     }
 
-    return fheroes2::Point();
+    return {};
 }
 
 void Heroes::SetValidDirectionSprite()

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -65,12 +65,13 @@ namespace
         COLOR_ROAD = 0x7A,
 
         COLOR_BLUE = 0x47,
-        COLOR_GREEN = 0x67,
+        COLOR_GREEN = 0x69,
         COLOR_RED = 0xbd,
         COLOR_YELLOW = 0x70,
         COLOR_ORANGE = 0xcd,
         COLOR_PURPLE = 0x87,
-        COLOR_GRAY = 0x10
+        COLOR_GRAY = 0x10,
+        COLOR_WHITE = 0x0a
     };
 }
 
@@ -121,7 +122,7 @@ uint8_t GetPaletteIndexFromColor( int color )
         break;
     }
 
-    return COLOR_GRAY;
+    return COLOR_WHITE;
 }
 
 Interface::Radar::Radar( Basic & basic )
@@ -131,33 +132,31 @@ Interface::Radar::Radar( Basic & basic )
     , hide( true )
 {}
 
-Interface::Radar::Radar( const Radar & radar )
-    : BorderWindow( radar.area )
-    , radarType( radar.radarType )
+Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display )
+    : BorderWindow( { display.width() - BORDERWIDTH - RADARWIDTH, BORDERWIDTH, RADARWIDTH, RADARWIDTH } )
+    , radarType( RadarType::ViewWorld )
     , interface( radar.interface )
     , spriteArea( radar.spriteArea )
-    , hide( radar.hide )
+    , hide( false )
 {}
 
-void Interface::Radar::SavePosition( void )
+void Interface::Radar::SavePosition()
 {
     Settings::Get().SetPosRadar( GetRect().getPosition() );
 }
 
-void Interface::Radar::SetPos( s32 ox, s32 oy )
+void Interface::Radar::SetPos( int32_t ox, int32_t oy )
 {
     BorderWindow::SetPosition( ox, oy );
 }
 
-/* construct gui */
-void Interface::Radar::Build( void )
+void Interface::Radar::Build()
 {
     Generate();
-    RedrawCursor();
+    SetRedraw();
 }
 
-/* generate mini maps */
-void Interface::Radar::Generate( void )
+void Interface::Radar::Generate()
 {
     const int32_t worldWidth = world.w();
     const int32_t worldHeight = world.h();
@@ -215,7 +214,7 @@ void Interface::Radar::SetHide( bool f )
     hide = f;
 }
 
-void Interface::Radar::SetRedraw( void ) const
+void Interface::Radar::SetRedraw() const
 {
     interface.SetRedraw( REDRAW_RADAR );
 }
@@ -314,7 +313,6 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                 }
                 break;
             }
-
             case MP2::OBJ_CASTLE:
             case MP2::OBJN_CASTLE: {
                 if ( visibleTile || revealTowns ) {
@@ -324,7 +322,6 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                 }
                 break;
             }
-
             case MP2::OBJ_DRAGONCITY:
             case MP2::OBJ_LIGHTHOUSE:
             case MP2::OBJ_ALCHEMYLAB:
@@ -334,19 +331,28 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                     fillColor = GetPaletteIndexFromColor( tile.QuantityColor() );
                 }
                 break;
-
+            case MP2::OBJN_DRAGONCITY:
+            case MP2::OBJN_LIGHTHOUSE:
+            case MP2::OBJN_ALCHEMYLAB:
+            case MP2::OBJN_MINES:
+            case MP2::OBJN_SAWMILL:
+                if ( visibleTile || revealMines ) {
+                    const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
+                    if ( mainTileIndex >= 0 ) {
+                        fillColor = GetPaletteIndexFromColor( world.GetTiles( mainTileIndex ).QuantityColor() );
+                    }
+                }
+                break;
             case MP2::OBJ_ARTIFACT:
                 if ( visibleTile || revealArtifacts ) {
                     fillColor = COLOR_GRAY;
                 }
                 break;
-
             case MP2::OBJ_RESOURCE:
                 if ( visibleTile || revealResources ) {
                     fillColor = COLOR_GRAY;
                 }
                 break;
-
             default:
                 if ( visibleTile ) {
                     continue;
@@ -409,19 +415,20 @@ void Interface::Radar::RedrawCursor( const fheroes2::Rect * roiRectangle /* =nul
     }
 }
 
-void Interface::Radar::QueueEventProcessing( void )
+void Interface::Radar::QueueEventProcessing()
 {
     GameArea & gamearea = interface.GetGameArea();
     const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Rect & rect = GetArea();
 
-    // move border
+    // Move border window
     if ( conf.ShowRadar() && BorderWindow::QueueEventProcessing() ) {
-        RedrawCursor();
+        cursorArea.hide();
+        SetRedraw();
     }
-    // move cursor
     else if ( le.MouseCursor( rect ) ) {
+        // move cursor
         if ( le.MouseClickLeft() || le.MousePressLeft() ) {
             const fheroes2::Point & pt = le.GetMouseCursor();
 
@@ -431,26 +438,13 @@ void Interface::Radar::QueueEventProcessing( void )
                 gamearea.SetCenter( { ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height } );
                 visibleROI = gamearea.GetVisibleTileROI();
                 if ( prev.x != visibleROI.x || prev.y != visibleROI.y ) {
-                    RedrawCursor();
+                    SetRedraw();
                     gamearea.SetRedraw();
                 }
             }
         }
-        else if ( le.MousePressRight( GetRect() ) )
+        else if ( le.MousePressRight( GetRect() ) ) {
             Dialog::Message( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Font::BIG );
-        else if ( conf.ExtGameHideInterface() ) {
-            fheroes2::Size newSize( rect.width, rect.height );
-
-            if ( le.MouseWheelUp() ) {
-                if ( rect.width != world.w() || rect.height != world.h() )
-                    newSize = fheroes2::Size( world.w(), world.h() );
-            }
-            else if ( le.MouseWheelDn() ) {
-                if ( rect.width != RADARWIDTH || rect.height != RADARWIDTH )
-                    newSize = fheroes2::Size( RADARWIDTH, RADARWIDTH );
-            }
-
-            ChangeAreaSize( newSize );
         }
     }
 }
@@ -487,27 +481,4 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
         }
     }
     return false;
-}
-
-void Interface::Radar::ChangeAreaSize( const fheroes2::Size & newSize )
-{
-    if ( newSize.width != area.width || newSize.height != area.height ) {
-        const fheroes2::Rect & rect = GetRect();
-        SetPosition( rect.x < 0 ? 0 : rect.x, rect.y < 0 ? 0 : rect.y, newSize.width, newSize.height );
-        Generate();
-        RedrawCursor();
-        interface.GetGameArea().SetRedraw();
-    }
-}
-
-// New Radar but copy mini-map data
-Interface::Radar Interface::Radar::MakeRadarViewWorld( const Interface::Radar & radar )
-{
-    Radar newRadar( radar );
-    newRadar.hide = false;
-    newRadar.radarType = RadarType::ViewWorld;
-    const fheroes2::Display & display = fheroes2::Display::instance();
-    newRadar.area.x = display.width() - BORDERWIDTH - RADARWIDTH;
-    newRadar.area.y = BORDERWIDTH;
-    return newRadar;
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -35,12 +35,17 @@
 class SelectEnum : public Interface::ListBox<int>
 {
 public:
+    using Interface::ListBox<int>::ActionListDoubleClick;
+    using Interface::ListBox<int>::ActionListSingleClick;
+    using Interface::ListBox<int>::ActionListPressRight;
+
     explicit SelectEnum( const fheroes2::Rect & rt )
         : Interface::ListBox<int>( rt.getPosition() )
         , area( rt )
         , ok( false )
     {
-        RedrawBackground( rt.getPosition() );
+        SelectEnum::RedrawBackground( rt.getPosition() );
+
         SetScrollButtonUp( ICN::LISTBOX, 3, 4, { rt.x + rt.width - 25, rt.y + 25 } );
         SetScrollButtonDn( ICN::LISTBOX, 5, 6, { rt.x + rt.width - 25, rt.y + rt.height - 55 } );
 
@@ -69,7 +74,7 @@ public:
         ok = true;
     }
 
-    void RedrawItem( const int &, s32, s32, bool ) override
+    void RedrawItem( const int & /* unused */, int32_t /* ox */, int32_t /* oy */, bool /* current */ ) override
     {
         // Do nothing.
     }
@@ -101,11 +106,11 @@ public:
 class SelectEnumMonster : public SelectEnum
 {
 public:
-    explicit SelectEnumMonster( const fheroes2::Rect & rt )
-        : SelectEnum( rt )
-    {}
+    using SelectEnum::SelectEnum;
 
-    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    using SelectEnum::ActionListPressRight;
+
+    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         Monster mons( index );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MONS32, mons.GetSpriteIndex() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
@@ -144,7 +149,7 @@ public:
         SetAreaMaxItems( 6 );
     }
 
-    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         const fheroes2::Sprite & port = Heroes::GetPortrait( index, PORT_SMALL );
 
@@ -160,6 +165,7 @@ public:
             text.draw( dstx + 50, dsty + 5, fheroes2::Display::instance() );
         }
     }
+
     void RedrawBackground( const fheroes2::Point & dst ) override
     {
         fheroes2::Text text( _( "Select Hero:" ), fheroes2::FontType::normalYellow() );
@@ -172,22 +178,24 @@ public:
 class SelectEnumArtifact : public SelectEnum
 {
 public:
-    explicit SelectEnumArtifact( const fheroes2::Rect & rt )
-        : SelectEnum( rt )
-    {}
+    using SelectEnum::SelectEnum;
 
-    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
-        Artifact art( index );
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
+        fheroes2::Display & display = fheroes2::Display::instance();
+
+        const Artifact art( index );
+
+        const fheroes2::Sprite & artifactSprite = fheroes2::AGG::GetICN( ICN::ARTFX, art.IndexSprite32() );
+        fheroes2::Blit( artifactSprite, display, dstx + 5, dsty + 3 );
 
         if ( current ) {
             fheroes2::Text text( art.GetName(), fheroes2::FontType::normalYellow() );
-            text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
+            text.draw( dstx + 50, dsty + 10, display );
         }
         else {
             fheroes2::Text text( art.GetName(), fheroes2::FontType() );
-            text.draw( dstx + 50, dsty + 10, fheroes2::Display::instance() );
+            text.draw( dstx + 50, dsty + 10, display );
         }
     }
 
@@ -209,7 +217,7 @@ public:
         SetAreaMaxItems( 4 );
     }
 
-    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         Spell spell( index );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
@@ -242,7 +250,7 @@ public:
         SetAreaMaxItems( 5 );
     }
 
-    void RedrawItem( const int & index, s32 dstx, s32 dsty, bool current ) override
+    void RedrawItem( const int & index, int32_t dstx, int32_t dsty, bool current ) override
     {
         Skill::Secondary skill( 1 + index / 3, 1 + ( index % 3 ) );
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::MINISS, skill.GetIndexSprite2() ), fheroes2::Display::instance(), dstx + 5, dsty + 3 );
@@ -267,7 +275,7 @@ public:
     }
 };
 
-Skill::Secondary Dialog::SelectSecondarySkill( void )
+Skill::Secondary Dialog::SelectSecondarySkill()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -325,7 +333,7 @@ Spell Dialog::SelectSpell( int cur )
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    std::vector<int> spells( static_cast<int>( Spell::STONE - 1 ), Spell::NONE );
+    std::vector<int> spells( static_cast<int>( Spell::RANDOM - 1 ), Spell::NONE );
 
     for ( size_t i = 0; i < spells.size(); ++i )
         spells[i] = static_cast<int>( i + 1 ); // safe to do this as the number of spells can't be more than 2 billion

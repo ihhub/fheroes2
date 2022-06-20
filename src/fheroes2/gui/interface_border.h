@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -34,21 +34,26 @@ namespace Interface
     {
     public:
         explicit BorderWindow( const fheroes2::Rect & );
+        BorderWindow( const BorderWindow & ) = delete;
+
         virtual ~BorderWindow() = default;
 
+        BorderWindow & operator=( const BorderWindow & ) = delete;
+
         virtual void SetPos( int32_t, int32_t ) = 0;
-        virtual void SavePosition( void ) = 0;
+        virtual void SavePosition() = 0;
 
-        void Redraw() const;
-        bool QueueEventProcessing( void );
+        bool QueueEventProcessing();
 
-        const fheroes2::Rect & GetRect( void ) const;
-        const fheroes2::Rect & GetArea( void ) const
+        const fheroes2::Rect & GetRect() const;
+        const fheroes2::Rect & GetArea() const
         {
             return area;
         }
 
     protected:
+        void Redraw() const;
+
         void SetPosition( int32_t, int32_t, uint32_t, uint32_t );
         void SetPosition( int32_t, int32_t );
 

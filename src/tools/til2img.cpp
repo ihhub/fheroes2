@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2022                                                    *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -81,11 +81,13 @@ int main( int argc, char ** argv )
             stream << std::setw( 3 ) << std::setfill( '0' ) << cur;
             std::string dstfile = System::ConcatePath( prefix, stream.str() );
 
-#ifndef FHEROES2_IMAGE_SUPPORT
-            dstfile += ".bmp";
-#else
-            dstfile += ".png";
-#endif
+            if ( fheroes2::isPNGFormatSupported() ) {
+                dstfile += ".png";
+            }
+            else {
+                dstfile += ".bmp";
+            }
+
             if ( debugMode ) {
                 std::cout << "Saving " << dstfile << std::endl;
             }

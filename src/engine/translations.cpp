@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -101,6 +101,7 @@ namespace
         LOCALE_EN,
         LOCALE_AF,
         LOCALE_AR,
+        LOCALE_BE,
         LOCALE_BG,
         LOCALE_CA,
         LOCALE_CS,
@@ -126,12 +127,14 @@ namespace
         LOCALE_NL,
         LOCALE_PL,
         LOCALE_PT,
+        LOCALE_RO,
         LOCALE_RU,
         LOCALE_SK,
         LOCALE_SL,
         LOCALE_SR,
         LOCALE_SV,
-        LOCALE_TR
+        LOCALE_TR,
+        LOCALE_UK
     };
 
     struct chunk
@@ -154,13 +157,13 @@ namespace
         }
     };
 
-    u32 crc32b( const char * msg )
+    uint32_t crc32b( const char * msg )
     {
-        u32 crc = 0xFFFFFFFF;
-        u32 index = 0;
+        uint32_t crc = 0xFFFFFFFF;
+        uint32_t index = 0;
 
         while ( msg[index] ) {
-            crc ^= static_cast<u32>( msg[index] );
+            crc ^= static_cast<uint32_t>( msg[index] );
 
             for ( int bit = 0; bit < 8; ++bit ) {
                 const uint32_t poly = ( crc & 1 ) ? 0xEDB88320 : 0x0;
@@ -201,7 +204,7 @@ namespace
         uint32_t hash_offset;
         LocaleType locale;
         StreamBuf buf;
-        std::map<u32, chunk> hash_offsets;
+        std::map<uint32_t, chunk> hash_offsets;
         std::string domain;
         std::string encoding;
         std::string plural_forms;
@@ -221,12 +224,12 @@ namespace
 
         const char * ngettext( const char * str, size_t plural )
         {
-            std::map<u32, chunk>::const_iterator it = hash_offsets.find( crc32b( str ) );
+            std::map<uint32_t, chunk>::const_iterator it = hash_offsets.find( crc32b( str ) );
             if ( it == hash_offsets.end() )
                 return stripContext( str );
 
             buf.seek( ( *it ).second.offset );
-            const u8 * ptr = buf.data();
+            const uint8_t * ptr = buf.data();
 
             while ( plural > 0 ) {
                 while ( *ptr )
@@ -241,17 +244,17 @@ namespace
         bool open( const std::string & file )
         {
             StreamFile sf;
-
-            if ( !sf.open( file, "rb" ) )
+            if ( !sf.open( file, "rb" ) ) {
                 return false;
+            }
 
             {
-                size_t size = sf.size();
-                u32 id = 0;
+                const size_t size = sf.size();
+                uint32_t id = 0;
                 sf >> id;
 
                 if ( 0x950412de != id ) {
-                    ERROR_LOG( "incorrect mo id: " << GetHexString( id ) );
+                    ERROR_LOG( "Incorrect mo file ID: " << GetHexString( id ) )
                     return false;
                 }
                 else {
@@ -260,7 +263,7 @@ namespace
                     sf >> major >> minor;
 
                     if ( 0 != major ) {
-                        ERROR_LOG( "incorrect major version: " << GetHexString( major, 4 ) );
+                        ERROR_LOG( "incorrect major version: " << GetHexString( major, 4 ) )
                         return false;
                     }
                     else {
@@ -274,48 +277,61 @@ namespace
             }
 
             // parse encoding and plural forms
-            if ( count ) {
+            if ( count > 0 ) {
                 buf.seek( offset_strings2 );
-                u32 length2 = buf.get32();
-                u32 offset2 = buf.get32();
-
-                const std::string tag1( "Content-Type" );
-                const std::string sep1( "charset=" );
-                const std::string tag2( "Plural-Forms" );
-                const std::string sep2( ": " );
+                uint32_t length2 = buf.get32();
+                uint32_t offset2 = buf.get32();
 
                 buf.seek( offset2 );
                 std::vector<std::string> tags = StringSplit( buf.toString( length2 ), "\n" );
 
                 for ( std::vector<std::string>::const_iterator it = tags.begin(); it != tags.end(); ++it ) {
                     if ( encoding.empty() )
-                        encoding = getTag( *it, tag1, sep1 );
+                        encoding = getTag( *it, "Content-Type", "charset=" );
 
                     if ( plural_forms.empty() )
-                        plural_forms = getTag( *it, tag2, sep2 );
+                        plural_forms = getTag( *it, "Plural-Forms", ": " );
                 }
             }
 
+            uint32_t totalTranslationStrings = count;
+
             // generate hash table
-            for ( u32 index = 0; index < count; ++index ) {
+            for ( uint32_t index = 0; index < count; ++index ) {
                 buf.seek( offset_strings1 + index * 8 /* length, offset */ );
-                u32 length1 = buf.get32();
-                u32 offset1 = buf.get32();
+
+                const uint32_t length1 = buf.get32();
+                if ( length1 == 0 ) {
+                    // This is an empty translation. Skip it.
+                    --totalTranslationStrings;
+                    continue;
+                }
+
+                const uint32_t offset1 = buf.get32();
                 buf.seek( offset1 );
                 const std::string msg1 = buf.toString( length1 );
-                u32 crc = crc32b( msg1.c_str() );
+
+                const uint32_t crc = crc32b( msg1.c_str() );
                 buf.seek( offset_strings2 + index * 8 /* length, offset */ );
-                u32 length2 = buf.get32();
-                u32 offset2 = buf.get32();
-                std::map<u32, chunk>::const_iterator it = hash_offsets.find( crc );
+
+                const uint32_t length2 = buf.get32();
+                if ( length2 == 0 ) {
+                    // This is an empty translation. Skip it.
+                    --totalTranslationStrings;
+                    continue;
+                }
+
+                const uint32_t offset2 = buf.get32();
+
+                std::map<uint32_t, chunk>::const_iterator it = hash_offsets.find( crc );
                 if ( it == hash_offsets.end() )
                     hash_offsets[crc] = chunk( offset2, length2 );
                 else {
-                    ERROR_LOG( "incorrect hash for: " << msg1 );
+                    ERROR_LOG( "Incorrect hash value for: " << msg1 )
                 }
             }
 
-            return true;
+            return ( totalTranslationStrings > 0 );
         }
     };
 
@@ -346,6 +362,8 @@ namespace Translation
             current->locale = LocaleType::LOCALE_AF;
         else if ( str == "ar" || str == "arabic" )
             current->locale = LocaleType::LOCALE_AR;
+        else if ( str == "be" || str == "belarusian" )
+            current->locale = LocaleType::LOCALE_BE;
         else if ( str == "bg" || str == "bulgarian" )
             current->locale = LocaleType::LOCALE_BG;
         else if ( str == "ca" || str == "catalan" )
@@ -394,6 +412,8 @@ namespace Translation
             current->locale = LocaleType::LOCALE_PL;
         else if ( str == "pt" || str == "portuguese" )
             current->locale = LocaleType::LOCALE_PT;
+        else if ( str == "ro" || str == "romanian" )
+            current->locale = LocaleType::LOCALE_RO;
         else if ( str == "ru" || str == "russian" )
             current->locale = LocaleType::LOCALE_RU;
         else if ( str == "sk" || str == "slovak" )
@@ -406,7 +426,8 @@ namespace Translation
             current->locale = LocaleType::LOCALE_SV;
         else if ( str == "tr" || str == "turkish" )
             current->locale = LocaleType::LOCALE_TR;
-
+        else if ( str == "uk" || str == "ukrainian" )
+            current->locale = LocaleType::LOCALE_UK;
         return true;
     }
 
@@ -431,26 +452,31 @@ namespace Translation
         if ( current )
             switch ( current->locale ) {
             case LocaleType::LOCALE_AF:
-            case LocaleType::LOCALE_EU:
-            case LocaleType::LOCALE_ID:
-            case LocaleType::LOCALE_LA:
-            case LocaleType::LOCALE_TR:
-                return current->ngettext( str, 0 );
-            case LocaleType::LOCALE_AR:
-                return current->ngettext( str, ( n == 0 ? 0 : n == 1 ? 1 : n == 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 && n % 100 <= 99 ? 4 : 5 ) );
             case LocaleType::LOCALE_BG:
             case LocaleType::LOCALE_DA:
             case LocaleType::LOCALE_DE:
             case LocaleType::LOCALE_ES:
             case LocaleType::LOCALE_ET:
+            case LocaleType::LOCALE_EU:
             case LocaleType::LOCALE_FI:
             case LocaleType::LOCALE_GL:
             case LocaleType::LOCALE_HE:
+            case LocaleType::LOCALE_ID:
             case LocaleType::LOCALE_IT:
-                return current->ngettext( str, 0 );
+            case LocaleType::LOCALE_LA:
+            case LocaleType::LOCALE_NB:
             case LocaleType::LOCALE_NL:
             case LocaleType::LOCALE_SV:
+            case LocaleType::LOCALE_TR:
                 return current->ngettext( str, ( n != 1 ) );
+            case LocaleType::LOCALE_EL:
+            case LocaleType::LOCALE_FR:
+            case LocaleType::LOCALE_PT:
+                return current->ngettext( str, ( n > 1 ) );
+            case LocaleType::LOCALE_AR:
+                return current->ngettext( str, ( n == 0 ? 0 : n == 1 ? 1 : n == 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 && n % 100 <= 99 ? 4 : 5 ) );
+            case LocaleType::LOCALE_RO:
+                return current->ngettext( str, ( n == 1 ? 0 : n == 0 || ( n != 1 && n % 100 >= 1 && n % 100 <= 19 ) ? 1 : 2 ) );
             case LocaleType::LOCALE_SK:
                 return current->ngettext( str, ( ( n == 1 ) ? 1 : ( n >= 2 && n <= 4 ) ? 2 : 0 ) );
             case LocaleType::LOCALE_SL:
@@ -462,21 +488,19 @@ namespace Translation
                                                                                                                    : 2 ) );
             case LocaleType::LOCALE_CS:
                 return current->ngettext( str, ( ( n == 1 ) ? 0 : ( n >= 2 && n <= 4 ) ? 1 : 2 ) );
-            case LocaleType::LOCALE_EL:
-            case LocaleType::LOCALE_FR:
-            case LocaleType::LOCALE_PT:
-                return current->ngettext( str, ( n > 1 ) );
             case LocaleType::LOCALE_HR:
-            case LocaleType::LOCALE_RU:
-            case LocaleType::LOCALE_LT:
             case LocaleType::LOCALE_LV:
+            case LocaleType::LOCALE_RU:
                 return current->ngettext( str, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
+            case LocaleType::LOCALE_LT:
+                return current->ngettext( str, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
             case LocaleType::LOCALE_MK:
                 return current->ngettext( str, ( n == 1 || n % 10 == 1 ? 0 : 1 ) );
-            case LocaleType::LOCALE_NB:
-                return current->ngettext( str, ( n != 1 ) );
             case LocaleType::LOCALE_PL:
                 return current->ngettext( str, ( n == 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2 ) );
+            case LocaleType::LOCALE_BE:
+            case LocaleType::LOCALE_UK:
+                return current->ngettext( str, ( n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 12 || n % 100 > 14 ) ? 1 : 2 ) );
             default:
                 break;
             }

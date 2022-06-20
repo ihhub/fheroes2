@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -125,38 +125,18 @@ Monster::Monster( const Spell & sp )
     }
 }
 
-Monster::Monster( int race, u32 dw )
+Monster::Monster( int race, uint32_t dw )
     : id( UNKNOWN )
 {
     id = FromDwelling( race, dw ).id;
 }
 
-bool Monster::isValid( void ) const
-{
-    return id != UNKNOWN;
-}
-
-bool Monster::operator==( const Monster & m ) const
-{
-    return id == m.id;
-}
-
-bool Monster::operator!=( const Monster & m ) const
-{
-    return id != m.id;
-}
-
-void Monster::Upgrade( void )
-{
-    id = GetUpgrade().id;
-}
-
-u32 Monster::GetAttack() const
+uint32_t Monster::GetAttack() const
 {
     return fheroes2::getMonsterData( id ).battleStats.attack;
 }
 
-u32 Monster::GetDefense() const
+uint32_t Monster::GetDefense() const
 {
     return fheroes2::getMonsterData( id ).battleStats.defense;
 }
@@ -181,42 +161,15 @@ int Monster::GetRace() const
     return fheroes2::getMonsterData( id ).generalStats.race;
 }
 
-u32 Monster::GetDamageMin() const
-{
-    return fheroes2::getMonsterData( id ).battleStats.damageMin;
-}
-
-u32 Monster::GetDamageMax() const
-{
-    return fheroes2::getMonsterData( id ).battleStats.damageMax;
-}
-
-u32 Monster::GetShots() const
+uint32_t Monster::GetShots() const
 {
     return fheroes2::getMonsterData( id ).battleStats.shots;
-}
-
-u32 Monster::GetHitPoints() const
-{
-    return fheroes2::getMonsterData( id ).battleStats.hp;
-}
-
-u32 Monster::GetSpeed() const
-{
-    return fheroes2::getMonsterData( id ).battleStats.speed;
-}
-
-u32 Monster::GetGrown() const
-{
-    return fheroes2::getMonsterData( id ).generalStats.baseGrowth;
 }
 
 // Get universal heuristic of Monster type regardless of context; both combat and strategic value
 // Doesn't account for situational special bonuses such as spell immunity
 double Monster::GetMonsterStrength( int attack, int defense ) const
 {
-    const fheroes2::MonsterBattleStats & battleStats = fheroes2::getMonsterData( id ).battleStats;
-
     // If no modified values were provided then re-calculate
     // GetAttack and GetDefense will call overloaded versions accounting for Hero bonuses
     if ( attack == -1 )
@@ -226,62 +179,10 @@ double Monster::GetMonsterStrength( int attack, int defense ) const
         defense = GetDefense();
 
     const double attackDefense = 1.0 + attack * 0.1 + defense * 0.05;
-    const double effectiveHP = battleStats.hp * ( ignoreRetaliation() ? 1.4 : 1 );
-
-    double damagePotential = ( battleStats.damageMin + battleStats.damageMax ) / 2.0;
-
-    if ( isTwiceAttack() ) {
-        // Melee attacker will lose potential on second attack after retaliation
-        damagePotential *= ( isArchers() || ignoreRetaliation() ) ? 2 : 1.75;
-    }
-    if ( isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD ) )
-        damagePotential *= 1.15; // 15% of all Monsters are Undead, deals double dmg
-    if ( isDoubleCellAttack() )
-        damagePotential *= 1.2;
-    if ( isAbilityPresent( fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) )
-        damagePotential *= 1.25;
-    if ( isAbilityPresent( fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK ) || isAbilityPresent( fheroes2::MonsterAbilityType::AREA_SHOT ) )
-        damagePotential *= 1.3;
-
-    double monsterSpecial = 1.0;
-    if ( isArchers() ) {
-        monsterSpecial += isAbilityPresent( fheroes2::MonsterAbilityType::NO_MELEE_PENALTY ) ? 0.5 : 0.4;
-    }
-    if ( isFlying() ) {
-        monsterSpecial += 0.3;
-    }
-
-    switch ( id ) {
-    case Monster::UNICORN:
-    case Monster::CYCLOPS:
-    case Monster::MEDUSA:
-        // 20% to Blind, Paralyze and Petrify
-        monsterSpecial += 0.2;
-        break;
-    case Monster::VAMPIRE_LORD:
-        // Lifesteal
-        monsterSpecial += 0.3;
-        break;
-    case Monster::GENIE:
-        // Genie's ability to half enemy troops
-        monsterSpecial += 1;
-        break;
-    case Monster::GHOST:
-        // Ghost's ability to increase the numbers
-        monsterSpecial += 2;
-        break;
-    }
-
-    // Higher speed gives initiative advantage/first attack. Remap speed value to -0.2...+0.15, AVERAGE is 0
-    // Punish slow speeds more as unit won't participate in first rounds and slows down strategic army
-    const int speedDiff = battleStats.speed - Speed::AVERAGE;
-    monsterSpecial += ( speedDiff < 0 ) ? speedDiff * 0.1 : speedDiff * 0.05;
-
-    // Additonal HP and Damage effectiveness diminishes with every combat round; strictly x4 HP == x2 unit count
-    return sqrt( damagePotential * effectiveHP ) * attackDefense * monsterSpecial;
+    return attackDefense * fheroes2::getMonsterData( id ).battleStats.monsterBaseStrength;
 }
 
-u32 Monster::GetRNDSize( bool skip_factor ) const
+uint32_t Monster::GetRNDSize( bool skip_factor ) const
 {
     if ( !isValid() )
         return 0;
@@ -369,76 +270,11 @@ u32 Monster::GetRNDSize( bool skip_factor ) const
     return ( result > 1 ) ? Rand::Get( result / 2, result ) : 1;
 }
 
-bool Monster::isElemental() const
-{
-    return isAbilityPresent( fheroes2::MonsterAbilityType::ELEMENTAL );
-}
-
-bool Monster::isUndead() const
-{
-    return isAbilityPresent( fheroes2::MonsterAbilityType::UNDEAD );
-}
-
 bool Monster::isAbilityPresent( const fheroes2::MonsterAbilityType abilityType ) const
 {
     const std::vector<fheroes2::MonsterAbility> & abilities = fheroes2::getMonsterData( id ).battleStats.abilities;
 
     return std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( abilityType ) ) != abilities.end();
-}
-
-bool Monster::isFlying() const
-{
-    return isAbilityPresent( fheroes2::MonsterAbilityType::FLYING );
-}
-
-bool Monster::isWide() const
-{
-    return isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
-}
-
-bool Monster::isArchers() const
-{
-    return GetShots() > 0;
-}
-
-bool Monster::isAllowUpgrade() const
-{
-    return id != GetUpgrade().id;
-}
-
-bool Monster::ignoreRetaliation() const
-{
-    return isAbilityPresent( fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION );
-}
-
-bool Monster::isDragons() const
-{
-    return isAbilityPresent( fheroes2::MonsterAbilityType::DRAGON );
-}
-
-bool Monster::isTwiceAttack() const
-{
-    return isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK ) || isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_SHOOTING );
-}
-
-bool Monster::isRegenerating() const
-{
-    return isAbilityPresent( fheroes2::MonsterAbilityType::HP_REGENERATION );
-}
-
-bool Monster::isDoubleCellAttack() const
-{
-    return isAbilityPresent( fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK );
-}
-
-bool Monster::isAllAdjacentCellsAttack() const
-{
-    return isAbilityPresent( fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK );
-}
-
-bool Monster::isAffectedByMorale() const
-{
-    return !( isUndead() || isElemental() );
 }
 
 Monster Monster::GetDowngrade() const
@@ -494,7 +330,7 @@ Monster Monster::GetDowngrade() const
     return Monster( id );
 }
 
-Monster Monster::GetUpgrade( void ) const
+Monster Monster::GetUpgrade() const
 {
     switch ( id ) {
     case ARCHER:
@@ -547,7 +383,7 @@ Monster Monster::GetUpgrade( void ) const
     return Monster( id );
 }
 
-Monster Monster::FromDwelling( int race, u32 dwelling )
+Monster Monster::FromDwelling( int race, uint32_t dwelling )
 {
     switch ( dwelling ) {
     case DWELLING_MONSTER1:
@@ -800,11 +636,6 @@ Monster Monster::Rand( const LevelType type )
     return Rand::Get( monstersVec[static_cast<int>( type ) - 1] );
 }
 
-int Monster::GetMonsterLevel() const
-{
-    return fheroes2::getMonsterData( id ).generalStats.level;
-}
-
 Monster::LevelType Monster::GetRandomUnitLevel() const
 {
     switch ( id ) {
@@ -906,7 +737,7 @@ Monster::LevelType Monster::GetRandomUnitLevel() const
     return LevelType::LEVEL_ANY;
 }
 
-u32 Monster::GetDwelling( void ) const
+uint32_t Monster::GetDwelling() const
 {
     switch ( id ) {
     case PEASANT:
@@ -997,38 +828,28 @@ u32 Monster::GetDwelling( void ) const
     return 0;
 }
 
-const char * Monster::GetName( void ) const
+const char * Monster::GetName() const
 {
     return _( fheroes2::getMonsterData( id ).generalStats.name );
 }
 
-const char * Monster::GetMultiName( void ) const
+const char * Monster::GetMultiName() const
 {
     return _( fheroes2::getMonsterData( id ).generalStats.pluralName );
 }
 
-const char * Monster::GetPluralName( u32 count ) const
+const char * Monster::GetPluralName( uint32_t count ) const
 {
     const fheroes2::MonsterGeneralStats & generalStats = fheroes2::getMonsterData( id ).generalStats;
     return count == 1 ? _( generalStats.name ) : _( generalStats.pluralName );
 }
 
-u32 Monster::GetSpriteIndex( void ) const
-{
-    return UNKNOWN < id ? id - 1 : 0;
-}
-
-int Monster::ICNMonh( void ) const
+int Monster::ICNMonh() const
 {
     return id >= PEASANT && id <= WATER_ELEMENT ? ICN::MONH0000 + id - PEASANT : ICN::UNKNOWN;
 }
 
-payment_t Monster::GetCost( void ) const
-{
-    return payment_t( fheroes2::getMonsterData( id ).generalStats.cost );
-}
-
-payment_t Monster::GetUpgradeCost( void ) const
+payment_t Monster::GetUpgradeCost() const
 {
     const Monster upgr = GetUpgrade();
     const payment_t pay = id != upgr.id ? upgr.GetCost() - GetCost() : GetCost();
@@ -1036,18 +857,13 @@ payment_t Monster::GetUpgradeCost( void ) const
     return pay;
 }
 
-u32 Monster::GetCountFromHitPoints( const Monster & mons, u32 hp )
+uint32_t Monster::GetCountFromHitPoints( const Monster & mons, uint32_t hp )
 {
     if ( hp ) {
-        const u32 hp1 = mons.GetHitPoints();
-        const u32 count = hp / hp1;
+        const uint32_t hp1 = mons.GetHitPoints();
+        const uint32_t count = hp / hp1;
         return ( count * hp1 ) < hp ? count + 1 : count;
     }
 
     return 0;
-}
-
-int Monster::GetMonsterSprite() const
-{
-    return fheroes2::getMonsterData( id ).icnId;
 }

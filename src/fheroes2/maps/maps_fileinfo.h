@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -23,12 +23,12 @@
 #ifndef H2MAPSFILEINFO_H
 #define H2MAPSFILEINFO_H
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
 #include "gamedefs.h"
 #include "math_base.h"
-#include "types.h"
 
 class StreamBase;
 
@@ -60,41 +60,81 @@ namespace Maps
         static bool FileSorting( const FileInfo &, const FileInfo & );
 
         bool isAllowCountPlayers( int playerCount ) const;
-        bool isMultiPlayerMap( void ) const;
-        int AllowCompHumanColors( void ) const;
-        int AllowHumanColors( void ) const;
-        int HumanOnlyColors( void ) const;
-        int ComputerOnlyColors( void ) const;
+
+        int AllowCompHumanColors() const
+        {
+            return allow_human_colors & allow_comp_colors;
+        }
+
+        int AllowHumanColors() const
+        {
+            return allow_human_colors;
+        }
+
+        int HumanOnlyColors() const
+        {
+            return allow_human_colors & ~allow_comp_colors;
+        }
+
+        int ComputerOnlyColors() const
+        {
+            return allow_comp_colors & ~allow_human_colors;
+        }
 
         int KingdomRace( int color ) const;
 
         uint32_t ConditionWins() const;
         uint32_t ConditionLoss() const;
-        bool WinsCompAlsoWins( void ) const;
-        int WinsFindArtifactID( void ) const;
-        bool WinsFindUltimateArtifact( void ) const;
-        u32 WinsAccumulateGold( void ) const;
-        fheroes2::Point WinsMapsPositionObject( void ) const;
-        fheroes2::Point LossMapsPositionObject( void ) const;
-        u32 LossCountDays( void ) const;
+        bool WinsCompAlsoWins() const;
+        int WinsFindArtifactID() const;
 
-        std::string String( void ) const;
-        void Reset( void );
+        bool WinsFindUltimateArtifact() const
+        {
+            return 0 == wins1;
+        }
+
+        uint32_t getWinningGoldAccumulationValue() const
+        {
+            return wins1 * 1000;
+        }
+
+        fheroes2::Point WinsMapsPositionObject() const
+        {
+            return { wins1, wins2 };
+        }
+
+        fheroes2::Point LossMapsPositionObject() const
+        {
+            return { loss1, loss2 };
+        }
+
+        uint32_t LossCountDays() const
+        {
+            return loss1;
+        }
+
+        void removeHumanColors( const int colors )
+        {
+            allow_human_colors &= ~colors;
+        }
+
+        std::string String() const;
+        void Reset();
 
         std::string file;
         std::string name;
         std::string description;
 
-        u16 size_w;
-        u16 size_h;
-        u8 difficulty;
-        u8 races[KINGDOMMAX];
-        u8 unions[KINGDOMMAX];
+        uint16_t size_w;
+        uint16_t size_h;
+        uint8_t difficulty;
+        uint8_t races[KINGDOMMAX];
+        uint8_t unions[KINGDOMMAX];
 
-        u8 kingdom_colors;
-        u8 allow_human_colors;
-        u8 allow_comp_colors;
-        u8 rnd_races;
+        uint8_t kingdom_colors;
+        uint8_t allow_human_colors;
+        uint8_t allow_comp_colors;
+        uint8_t rnd_races;
 
         enum VictoryCondition : uint8_t
         {
@@ -108,7 +148,7 @@ namespace Maps
 
         enum LossCondition : uint8_t
         {
-            LOSS_DEFAULT = 0,
+            LOSS_EVERYTHING = 0,
             LOSS_TOWN = 1,
             LOSS_HERO = 2,
             LOSS_OUT_OF_TIME = 3
@@ -117,13 +157,13 @@ namespace Maps
         uint8_t conditions_wins; // refer to VictoryCondition
         bool comp_also_wins;
         bool allow_normal_victory;
-        u16 wins1;
-        u16 wins2;
+        uint16_t wins1;
+        uint16_t wins2;
         uint8_t conditions_loss; // refer to LossCondition
-        u16 loss1;
-        u16 loss2;
+        uint16_t loss1;
+        uint16_t loss2;
 
-        u32 localtime;
+        uint32_t localtime;
 
         bool startWithHeroInEachCastle;
 

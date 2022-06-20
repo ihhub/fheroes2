@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,7 +28,7 @@
 #include "localevent.h"
 #include "logging.h"
 
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
 #include <psp2/kernel/processmgr.h>
 #include <psp2/power.h>
 
@@ -38,7 +38,7 @@ int _newlib_heap_size_user = 192 * 1024 * 1024;
 
 namespace
 {
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
     void initHardwareInternally()
     {
         scePowerSetArmClockFrequency( 444 );
@@ -102,7 +102,7 @@ namespace
         const uint32_t sdlFlags = getSDLInitFlags( components ) | SDL_INIT_TIMER;
 
         if ( SDL_Init( sdlFlags ) < 0 ) {
-            ERROR_LOG( SDL_GetError() );
+            ERROR_LOG( SDL_GetError() )
             return false;
         }
 

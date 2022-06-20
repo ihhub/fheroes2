@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -50,9 +50,9 @@ Interface::GameArea::GameArea( Basic & basic )
     , updateCursor( false )
 {}
 
-fheroes2::Rect Interface::GameArea::GetVisibleTileROI( void ) const
+fheroes2::Rect Interface::GameArea::GetVisibleTileROI() const
 {
-    return fheroes2::Rect( _getStartTileId(), _visibleTileCount );
+    return { _getStartTileId(), _visibleTileCount };
 }
 
 void Interface::GameArea::ShiftCenter( const fheroes2::Point & offset )
@@ -77,7 +77,7 @@ void Interface::GameArea::generate( const fheroes2::Size & screenSize, const boo
 
 void Interface::GameArea::SetAreaPosition( int32_t x, int32_t y, int32_t w, int32_t h )
 {
-    _windowROI = fheroes2::Rect( x, y, w, h );
+    _windowROI = { x, y, w, h };
     const fheroes2::Size worldSize( world.w() * TILEWIDTH, world.h() * TILEWIDTH );
 
     if ( worldSize.width > w ) {
@@ -99,7 +99,7 @@ void Interface::GameArea::SetAreaPosition( int32_t x, int32_t y, int32_t w, int3
     }
 
     // adding 1 extra tile for both axes in case of drawing tiles partially near sides
-    _visibleTileCount = fheroes2::Size( ( w + TILEWIDTH - 1 ) / TILEWIDTH + 1, ( h + TILEWIDTH - 1 ) / TILEWIDTH + 1 );
+    _visibleTileCount = { ( w + TILEWIDTH - 1 ) / TILEWIDTH + 1, ( h + TILEWIDTH - 1 ) / TILEWIDTH + 1 };
 
     _setCenterToTile( fheroes2::Point( world.w() / 2, world.h() / 2 ) );
 }
@@ -513,7 +513,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     }
 }
 
-void Interface::GameArea::Scroll( void )
+void Interface::GameArea::Scroll()
 {
     const int32_t shift = 2 << Settings::Get().ScrollSpeed();
     fheroes2::Point offset;
@@ -537,12 +537,11 @@ void Interface::GameArea::Scroll( void )
     scrollDirection = 0;
 }
 
-void Interface::GameArea::SetRedraw( void ) const
+void Interface::GameArea::SetRedraw() const
 {
     interface.SetRedraw( REDRAW_GAMEAREA );
 }
 
-/* scroll area to center point maps */
 void Interface::GameArea::SetCenter( const fheroes2::Point & pt )
 {
     _setCenterToTile( pt );
@@ -553,7 +552,7 @@ void Interface::GameArea::SetCenter( const fheroes2::Point & pt )
 fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset )
 {
     if ( !Maps::isValidAbsIndex( index ) ) {
-        DEBUG_LOG( DBG_ENGINE, DBG_WARN, "artifact not found" );
+        DEBUG_LOG( DBG_ENGINE, DBG_WARN, "artifact not found" )
         return fheroes2::Image();
     }
 
@@ -581,7 +580,7 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const 
     return result;
 }
 
-int Interface::GameArea::GetScrollCursor( void ) const
+int Interface::GameArea::GetScrollCursor() const
 {
     switch ( scrollDirection ) {
     case SCROLL_LEFT | SCROLL_TOP:
@@ -638,7 +637,7 @@ void Interface::GameArea::SetScroll( int direct )
     scrollTime.reset();
 }
 
-void Interface::GameArea::QueueEventProcessing( void )
+void Interface::GameArea::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Point & mp = le.GetMouseCursor();
@@ -674,7 +673,7 @@ void Interface::GameArea::QueueEventProcessing( void )
 
 fheroes2::Point Interface::GameArea::_middlePoint() const
 {
-    return fheroes2::Point( _windowROI.width / 2, _windowROI.height / 2 );
+    return { _windowROI.width / 2, _windowROI.height / 2 };
 }
 
 fheroes2::Point Interface::GameArea::_getStartTileId() const
@@ -682,12 +681,12 @@ fheroes2::Point Interface::GameArea::_getStartTileId() const
     const int32_t x = ( _topLeftTileOffset.x < 0 ? ( _topLeftTileOffset.x - TILEWIDTH - 1 ) / TILEWIDTH : _topLeftTileOffset.x / TILEWIDTH );
     const int32_t y = ( _topLeftTileOffset.y < 0 ? ( _topLeftTileOffset.y - TILEWIDTH - 1 ) / TILEWIDTH : _topLeftTileOffset.y / TILEWIDTH );
 
-    return fheroes2::Point( x, y );
+    return { x, y };
 }
 
 void Interface::GameArea::_setCenterToTile( const fheroes2::Point & tile )
 {
-    SetCenterInPixels( fheroes2::Point( tile.x * TILEWIDTH + TILEWIDTH / 2, tile.y * TILEWIDTH + TILEWIDTH / 2 ) );
+    SetCenterInPixels( { tile.x * TILEWIDTH + TILEWIDTH / 2, tile.y * TILEWIDTH + TILEWIDTH / 2 } );
 }
 
 void Interface::GameArea::SetCenterInPixels( const fheroes2::Point & point )

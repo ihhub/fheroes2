@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -29,7 +29,7 @@ MapPosition::MapPosition( const fheroes2::Point & pt )
     : center( pt )
 {}
 
-s32 MapPosition::GetIndex( void ) const
+int32_t MapPosition::GetIndex() const
 {
     return Maps::GetIndexFromAbsPoint( center );
 }

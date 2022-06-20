@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -37,9 +37,9 @@ namespace
 
 int ObjDsrt::GetPassable( const uint8_t index )
 {
-    const u8 disabled[] = {61, 89, 90, 91, 92, 93, 125, 126};
-    const u8 restricted[] = {3,  6,  9,  12, 14, 15, 17, 18, 20, 21, 22, 24, 26, 28,  30,  31,  32,  34,  36,  39,  40,  42, 45,
-                             48, 49, 51, 53, 72, 76, 81, 83, 94, 95, 97, 98, 99, 100, 110, 111, 112, 116, 121, 127, 128, 130};
+    const uint8_t disabled[] = { 61, 89, 90, 91, 92, 93, 125, 126 };
+    const uint8_t restricted[] = { 3,  6,  9,  12, 14, 15, 17, 18, 20, 21, 22, 24, 26, 28,  30,  31,  32,  34,  36,  39,  40,  42, 45,
+                                   48, 49, 51, 53, 72, 76, 81, 83, 94, 95, 97, 98, 99, 100, 110, 111, 112, 116, 121, 127, 128, 130 };
 
     if ( isShadow( index ) )
         return DIRECTION_ALL;
@@ -49,7 +49,7 @@ int ObjDsrt::GetPassable( const uint8_t index )
     return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
 }
 
-bool ObjDsrt::isAction( u32 index )
+bool ObjDsrt::isAction( uint32_t index )
 {
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
@@ -59,7 +59,7 @@ bool ObjDsrt::isShadow( const uint8_t index )
     return objDsrtShadowBitset[index];
 }
 
-int ObjDsrt::GetActionObject( u32 index )
+int ObjDsrt::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 73:

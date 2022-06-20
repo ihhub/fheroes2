@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,15 +46,18 @@ namespace Campaign
         bool isAllCampaignMapsPresent() const;
         bool isLastScenario( const Campaign::ScenarioInfoId & scenarioInfoId ) const;
 
-        void setCampaignID( const int campaignID );
-        void setCampaignDescription( const std::string & campaignDescription );
+        void setCampaignID( const int campaignID )
+        {
+            _campaignID = campaignID;
+        }
+
         void setCampaignScenarios( std::vector<ScenarioData> && scenarios );
 
         static const CampaignData & getCampaignData( const int campaignID );
 
     private:
         int _campaignID;
-        std::string _campaignDescription;
+        std::string _campaignName;
         std::vector<ScenarioData> _scenarios;
 
         bool isStartingScenario( const ScenarioInfoId & scenarioInfo ) const;
@@ -63,7 +66,7 @@ namespace Campaign
     struct CampaignAwardData
     {
     public:
-        enum AwardType : int
+        enum AwardType : int32_t
         {
             TYPE_CREATURE_CURSE, // eg: dwarf bane
             TYPE_CREATURE_ALLIANCE, // eg: dwarf alliance
@@ -78,19 +81,22 @@ namespace Campaign
         // NOTE: Carry over forces shouldn't use these other than id, type and startScenarioID
         // IDs are here so that we just have to store an int instead of the entire award data in a campaign save data
         // also usable when we have to remove specific awards when completing a mission (PoL campaign)
-        int _id;
-        uint32_t _type;
-        uint32_t _subType;
-        uint32_t _amount;
-        uint32_t _startScenarioID;
+        int32_t _id;
+        int32_t _type;
+        int32_t _subType;
+        int32_t _amount;
+        int32_t _startScenarioID;
         std::string _customName;
 
-        CampaignAwardData( int id, uint32_t type, uint32_t subType );
-        CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount );
-        CampaignAwardData( int id, uint32_t type, uint32_t subType, const std::string & customName );
-        CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, const std::string & customName = std::string() );
+        CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType );
+        CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType, const int32_t amount );
+        CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType, std::string customName );
+        CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType, const int32_t amount, const int32_t startScenarioID,
+                           std::string customName = std::string() );
 
-        std::string ToString() const;
+        std::string getName() const;
+
+        std::string getDescription() const;
 
         static std::vector<Campaign::CampaignAwardData> getCampaignAwardData( const ScenarioInfoId & scenarioInfo );
         static std::vector<Campaign::CampaignAwardData> getExtraCampaignAwardData( const int campaignID );

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -24,17 +24,17 @@
 #ifndef H2BATTLE_GRAVEYARD_H
 #define H2BATTLE_GRAVEYARD_H
 
+#include <cstdint>
 #include <map>
 #include <vector>
 
 #include "battle_board.h"
-#include "types.h"
 
 namespace Battle
 {
     class Unit;
 
-    struct TroopUIDs : public std::vector<u32>
+    struct TroopUIDs : public std::vector<uint32_t>
     {
         TroopUIDs()
         {
@@ -42,15 +42,20 @@ namespace Battle
         }
     };
 
-    class Graveyard : public std::map<s32, TroopUIDs>
+    class Graveyard : public std::map<int32_t, TroopUIDs>
     {
     public:
         Graveyard() = default;
+        Graveyard( const Graveyard & ) = delete;
 
-        Indexes GetClosedCells( void ) const;
+        ~Graveyard() = default;
+
+        Graveyard & operator=( const Graveyard & ) = delete;
+
+        Indexes GetClosedCells() const;
         void AddTroop( const Unit & );
         void RemoveTroop( const Unit & );
-        u32 GetLastTroopUID( s32 ) const;
+        uint32_t GetLastTroopUID( int32_t ) const;
         TroopUIDs GetTroopUIDs( const int32_t hexIndex ) const;
     };
 }

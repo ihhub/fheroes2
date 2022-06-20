@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -22,12 +22,12 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cctype>
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
-#include <iomanip>
 
 #include "logging.h"
 #include "tools.h"
@@ -35,42 +35,53 @@
 /* trim left right space */
 std::string StringTrim( std::string str )
 {
-    if ( str.empty() )
+    if ( str.empty() ) {
         return str;
-
-    std::string::iterator iter;
+    }
 
     // left
-    iter = str.begin();
-    while ( iter != str.end() && std::isspace( static_cast<unsigned char>( *iter ) ) )
+    std::string::iterator iter = str.begin();
+    while ( iter != str.end() && std::isspace( static_cast<unsigned char>( *iter ) ) ) {
         ++iter;
+    }
+
+    if ( iter == str.end() ) {
+        // Do not erase anything if we reached the end of the string. Just immediately return an empty string.
+        return {};
+    }
+
     if ( iter != str.begin() )
         str.erase( str.begin(), iter );
 
-    if ( str.empty() )
-        return str;
-
     // right
     iter = str.end() - 1;
-    while ( iter != str.begin() && std::isspace( static_cast<unsigned char>( *iter ) ) )
+    while ( iter != str.begin() && std::isspace( static_cast<unsigned char>( *iter ) ) ) {
         --iter;
-    if ( iter != str.end() - 1 )
+    }
+
+    if ( iter != str.end() - 1 ) {
         str.erase( iter + 1, str.end() );
+    }
 
     return str;
 }
 
-/* convert to lower case */
 std::string StringLower( std::string str )
 {
     std::transform( str.begin(), str.end(), str.begin(), []( const unsigned char c ) { return std::tolower( c ); } );
     return str;
 }
 
+std::string StringUpper( std::string str )
+{
+    std::transform( str.begin(), str.end(), str.begin(), []( const unsigned char c ) { return std::toupper( c ); } );
+    return str;
+}
+
 std::string GetStringShort( int value )
 {
-    if ( std::abs( value ) > 1000 ) {
-        if ( std::abs( value ) > 1000000 ) {
+    if ( std::abs( value ) >= 1000 ) {
+        if ( std::abs( value ) >= 1000000 ) {
             return std::to_string( value / 1000000 ) + 'M';
         }
 
@@ -80,18 +91,11 @@ std::string GetStringShort( int value )
     return std::to_string( value );
 }
 
-std::string GetHexString( int value, int width )
-{
-    std::ostringstream stream;
-    stream << "0x" << std::setw( width ) << std::setfill( '0' ) << std::hex << value;
-    return stream.str();
-}
-
-int CountBits( u32 val )
+int CountBits( uint32_t val )
 {
     int res = 0;
 
-    for ( u32 itr = 0x00000001; itr; itr <<= 1 )
+    for ( uint32_t itr = 0x00000001; itr; itr <<= 1 )
         if ( val & itr )
             ++res;
 
@@ -197,13 +201,13 @@ int Sign( int s )
     return ( s < 0 ? -1 : ( s > 0 ? 1 : 0 ) );
 }
 
-bool SaveMemToFile( const std::vector<u8> & data, const std::string & path )
+bool SaveMemToFile( const std::vector<uint8_t> & data, const std::string & path )
 {
     std::fstream file;
     file.open( path, std::fstream::out | std::fstream::trunc | std::fstream::binary );
 
     if ( !file ) {
-        ERROR_LOG( "Unable to open file for writing: " << path );
+        ERROR_LOG( "Unable to open file for writing: " << path )
         return false;
     }
 
@@ -212,7 +216,7 @@ bool SaveMemToFile( const std::vector<u8> & data, const std::string & path )
     return true;
 }
 
-std::vector<u8> LoadFileToMem( const std::string & path )
+std::vector<uint8_t> LoadFileToMem( const std::string & path )
 {
     std::fstream file;
     file.open( path, std::fstream::in | std::fstream::binary );
@@ -282,12 +286,12 @@ namespace fheroes2
     std::vector<Point> GetLinePoints( const Point & pt1, const Point & pt2, const int32_t step )
     {
         std::vector<Point> res;
-        res.reserve( 10 );
 
         const int32_t dx = std::abs( pt2.x - pt1.x );
         const int32_t dy = std::abs( pt2.y - pt1.y );
 
-        int32_t ns = std::div( ( dx > dy ? dx : dy ), 2 ).quot;
+        int32_t ns = ( dx > dy ? dx : dy ) / 2;
+
         Point pt( pt1 );
 
         for ( int32_t i = 0; i <= ( dx > dy ? dx : dy ); ++i ) {
@@ -322,25 +326,19 @@ namespace fheroes2
     {
         std::vector<Point> res;
 
-        Point pt1( from );
-        Point pt2( from.x + std::abs( max.x - from.x ) / 2, from.y - std::abs( max.y - from.y ) * 3 / 4 );
-        const std::vector<Point> & pts1 = GetLinePoints( pt1, pt2, step );
-        res.insert( res.end(), pts1.begin(), pts1.end() );
+        Point tempPoint( from.x + std::abs( max.x - from.x ) / 2, from.y - std::abs( max.y - from.y ) * 3 / 4 );
+        std::vector<Point> points = GetLinePoints( from, tempPoint, step );
+        res.insert( res.end(), points.begin(), points.end() );
 
-        pt1 = pt2;
-        pt2 = max;
-        const std::vector<Point> & pts2 = GetLinePoints( pt1, pt2, step );
-        res.insert( res.end(), pts2.begin(), pts2.end() );
+        points = GetLinePoints( tempPoint, max, step );
+        res.insert( res.end(), points.begin(), points.end() );
 
-        pt1 = max;
-        pt2 = Point( max.x + std::abs( to.x - max.x ) / 2, to.y - std::abs( to.y - max.y ) * 3 / 4 );
-        const std::vector<Point> & pts3 = GetLinePoints( pt1, pt2, step );
-        res.insert( res.end(), pts3.begin(), pts3.end() );
+        tempPoint = { max.x + std::abs( to.x - max.x ) / 2, to.y - std::abs( to.y - max.y ) * 3 / 4 };
+        points = GetLinePoints( max, tempPoint, step );
+        res.insert( res.end(), points.begin(), points.end() );
 
-        pt1 = pt2;
-        pt2 = to;
-        const std::vector<Point> & pts4 = GetLinePoints( pt1, pt2, step );
-        res.insert( res.end(), pts4.begin(), pts4.end() );
+        points = GetLinePoints( tempPoint, to, step );
+        res.insert( res.end(), points.begin(), points.end() );
 
         return res;
     }
@@ -357,47 +355,47 @@ namespace fheroes2
 
     std::pair<Rect, Point> Fixed4Blit( const Rect & srcrt, const Rect & dstrt )
     {
+        if ( srcrt.width <= 0 || srcrt.height <= 0 || srcrt.x + srcrt.width <= dstrt.x || srcrt.y + srcrt.height <= dstrt.y || srcrt.x >= dstrt.x + dstrt.width
+             || srcrt.y >= dstrt.y + dstrt.height ) {
+            return {};
+        }
+
         std::pair<Rect, Point> res;
         Rect & srcrtfix = res.first;
         Point & dstptfix = res.second;
 
-        if ( srcrt.width && srcrt.height && srcrt.x + srcrt.width > dstrt.x && srcrt.y + srcrt.height > dstrt.y && srcrt.x < dstrt.x + dstrt.width
-             && srcrt.y < dstrt.y + dstrt.height ) {
-            srcrtfix.width = srcrt.width;
-            srcrtfix.height = srcrt.height;
-            dstptfix.x = srcrt.x;
-            dstptfix.y = srcrt.y;
+        srcrtfix.width = srcrt.width;
+        srcrtfix.height = srcrt.height;
+        dstptfix.x = srcrt.x;
+        dstptfix.y = srcrt.y;
 
-            if ( srcrt.x < dstrt.x ) {
-                srcrtfix.x = dstrt.x - srcrt.x;
-                dstptfix.x = dstrt.x;
-            }
-
-            if ( srcrt.y < dstrt.y ) {
-                srcrtfix.y = dstrt.y - srcrt.y;
-                dstptfix.y = dstrt.y;
-            }
-
-            if ( dstptfix.x + srcrtfix.width > dstrt.x + dstrt.width )
-                srcrtfix.width = dstrt.x + dstrt.width - dstptfix.x;
-
-            if ( dstptfix.y + srcrtfix.height > dstrt.y + dstrt.height )
-                srcrtfix.height = dstrt.y + dstrt.height - dstptfix.y;
+        if ( srcrt.x < dstrt.x ) {
+            srcrtfix.x = dstrt.x - srcrt.x;
+            dstptfix.x = dstrt.x;
         }
+
+        if ( srcrt.y < dstrt.y ) {
+            srcrtfix.y = dstrt.y - srcrt.y;
+            dstptfix.y = dstrt.y;
+        }
+
+        if ( dstptfix.x + srcrtfix.width > dstrt.x + dstrt.width )
+            srcrtfix.width = dstrt.x + dstrt.width - dstptfix.x;
+
+        if ( dstptfix.y + srcrtfix.height > dstrt.y + dstrt.height )
+            srcrtfix.height = dstrt.y + dstrt.height - dstptfix.y;
 
         return res;
     }
 
     Rect getBoundaryRect( const Rect & rt1, const Rect & rt2 )
     {
-        Rect rt3;
+        const int32_t x = std::min( rt1.x, rt2.x );
+        const int32_t y = std::min( rt1.y, rt2.y );
+        const int32_t width = std::max( rt1.x + rt1.width, rt2.x + rt2.width ) - x;
+        const int32_t height = std::max( rt1.y + rt1.height, rt2.y + rt2.height ) - y;
 
-        rt3.x = std::min( rt1.x, rt2.x );
-        rt3.y = std::min( rt1.y, rt2.y );
-        rt3.width = std::max( rt1.x + rt1.width, rt2.x + rt2.width ) - rt3.x;
-        rt3.height = std::max( rt1.y + rt1.height, rt2.y + rt2.height ) - rt3.y;
-
-        return rt3;
+        return { x, y, width, height };
     }
 
     uint32_t calculateCRC32( const uint8_t * data, const size_t length )
@@ -413,5 +411,24 @@ namespace fheroes2
         }
 
         return ~crc;
+    }
+
+    void replaceStringEnding( std::string & output, const char * originalEnding, const char * correctedEnding )
+    {
+        assert( originalEnding != nullptr && correctedEnding != nullptr );
+
+        const size_t originalEndingSize = strlen( originalEnding );
+        const size_t correctedEndingSize = strlen( correctedEnding );
+        if ( output.size() < originalEndingSize ) {
+            // The original string is smaller than the ending.
+            return;
+        }
+
+        if ( memcmp( output.data() + output.size() - originalEndingSize, originalEnding, originalEndingSize ) != 0 ) {
+            // The string does not have the required ending.
+            return;
+        }
+
+        output.replace( output.size() - originalEndingSize, originalEndingSize, correctedEnding, correctedEndingSize );
     }
 }

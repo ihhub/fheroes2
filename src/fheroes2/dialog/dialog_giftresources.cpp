@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -27,11 +27,17 @@
 #include "game.h"
 #include "icn.h"
 #include "settings.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "ui_window.h"
 #include "world.h"
+
+namespace
+{
+    const fheroes2::Size giftDialogSize( 320, 234 );
+}
 
 int32_t GetIndexClickRects( const std::vector<fheroes2::Rect> & rects )
 {
@@ -54,6 +60,7 @@ int32_t GetIndexClickRects( const std::vector<fheroes2::Rect> & rects )
 
 struct SelectRecipientsColors
 {
+    static constexpr int recipientSpacing = 22;
     const Colors colors;
     int recipients;
     std::vector<fheroes2::Rect> positions;
@@ -63,22 +70,26 @@ struct SelectRecipientsColors
         , recipients( 0 )
     {
         positions.reserve( colors.size() );
+        const fheroes2::Display & display = fheroes2::Display::instance();
+        const fheroes2::Rect box( ( display.width() - giftDialogSize.width ) / 2, ( display.height() - giftDialogSize.height ) / 2, giftDialogSize.width,
+                                  giftDialogSize.height );
 
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
         const int32_t colorCount = static_cast<int32_t>( colors.size() ); // safe to cast as the number of players <= 8.
-
+        const int32_t playerContainerWidth = colorCount * sprite.width() + ( colorCount - 1 ) * recipientSpacing;
+        const int32_t startX = box.x + ( giftDialogSize.width - playerContainerWidth ) / 2;
         for ( int32_t i = 0; i < colorCount; ++i ) {
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::CELLWIN, 43 );
-
-            positions.emplace_back( pos.x + Game::GetStep4Player( i, sprite.width() + 15, colorCount ), pos.y, sprite.width(), sprite.height() );
+            const int32_t posX = startX + i * ( recipientSpacing + sprite.width() );
+            positions.emplace_back( posX, pos.y, sprite.width(), sprite.height() );
         }
     }
 
-    s32 GetIndexClick( void ) const
+    int32_t GetIndexClick() const
     {
         return GetIndexClickRects( positions );
     }
 
-    void Redraw( void ) const
+    void Redraw() const
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -91,9 +102,9 @@ struct SelectRecipientsColors
         }
     }
 
-    bool QueueEventProcessing( void )
+    bool QueueEventProcessing()
     {
-        const s32 index = GetIndexClick();
+        const int32_t index = GetIndexClick();
 
         if ( index >= 0 ) {
             const int cols = colors[index];
@@ -115,7 +126,7 @@ struct ResourceBar
     Funds & resource;
     std::vector<fheroes2::Rect> positions;
 
-    ResourceBar( Funds & funds, s32 posx, s32 posy )
+    ResourceBar( Funds & funds, int32_t posx, int32_t posy )
         : resource( funds )
     {
         positions.reserve( 7 );
@@ -130,12 +141,13 @@ struct ResourceBar
         positions.emplace_back( posx + 240, posy, sprite.width(), sprite.height() );
     }
 
-    static void RedrawResource( int type, s32 count, s32 posx, s32 posy )
+    static void RedrawResource( int type, int32_t count, int32_t posx, int32_t posy )
     {
-        Text text( std::to_string( count ), Font::SMALL );
+        fheroes2::Display & display = fheroes2::Display::instance();
+        fheroes2::Text text( std::to_string( count ), fheroes2::FontType::smallWhite() );
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 + Resource::getIconIcnIndex( type ) );
-        fheroes2::Blit( sprite, fheroes2::Display::instance(), posx, posy );
-        text.Blit( posx + ( sprite.width() - text.w() ) / 2, posy + sprite.height() - 12 );
+        fheroes2::Blit( sprite, display, posx, posy );
+        text.draw( posx + ( sprite.width() - text.width() ) / 2, posy + sprite.height() - 10, display );
     }
 
     void Redraw( const Funds * res = nullptr ) const
@@ -149,41 +161,40 @@ struct ResourceBar
         }
     }
 
-    s32 GetIndexClick( void ) const
+    int32_t GetIndexClick() const
     {
         return GetIndexClickRects( positions );
     }
 
-    bool QueueEventProcessing( Funds & funds, u32 mul )
+    bool QueueEventProcessing( Funds & funds, uint32_t mul )
     {
-        const s32 index = GetIndexClick();
+        const int32_t index = GetIndexClick();
 
         if ( index >= 0 ) {
             int rs = Resource::getResourceTypeFromIconIndex( index );
-            u32 step = rs == Resource::GOLD ? 100 : 1;
+            uint32_t step = rs == Resource::GOLD ? 100 : 1;
 
-            u32 cur = resource.Get( rs );
-            u32 sel = cur;
-            u32 max = mul > 1 ? ( funds.Get( rs ) + resource.Get( rs ) ) / mul : funds.Get( rs ) + resource.Get( rs );
-
+            uint32_t cur = resource.Get( rs );
+            uint32_t sel = cur;
+            uint32_t max = mul > 1 ? ( funds.Get( rs ) + resource.Get( rs ) ) / mul : funds.Get( rs ) + resource.Get( rs );
             if ( 0 == mul ) {
-                Dialog::Message( "", _( "First select recipients!" ), Font::BIG, Dialog::OK );
+                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( _( "First select recipients!" ), fheroes2::FontType::normalWhite() ), Dialog::OK );
             }
             else if ( 0 == max ) {
                 std::string msg = _( "You cannot select %{resource}!" );
                 StringReplace( msg, "%{resource}", Resource::String( rs ) );
-                Dialog::Message( "", msg, Font::BIG, Dialog::OK );
+                fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK );
             }
             else {
                 std::string msg = _( "Select count %{resource}:" );
                 StringReplace( msg, "%{resource}", Resource::String( rs ) );
 
                 if ( Dialog::SelectCount( msg, 0, max, sel, step ) && cur != sel ) {
-                    s32 * from = funds.GetPtr( rs );
-                    s32 * to = resource.GetPtr( rs );
+                    int32_t * from = funds.GetPtr( rs );
+                    int32_t * to = resource.GetPtr( rs );
 
                     if ( from && to ) {
-                        s32 count = sel - cur;
+                        int32_t count = sel - cur;
 
                         *from -= mul > 1 ? count * mul : count;
                         *to += count;
@@ -211,24 +222,24 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
 
     Funds funds1( kingdom.GetFunds() );
     Funds funds2;
-    Text text;
 
-    text.Set( _( "Select Recipients" ) );
-    text.Blit( box.x + ( box.width - text.w() ) / 2, box.y + 5 );
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::TRADPOST, 7 );
+    const int32_t posX = box.x + ( giftDialogSize.width - ( sprite.width() + 240 ) ) / 2;
 
+    const fheroes2::FontType normalWhite = fheroes2::FontType::normalWhite();
+    fheroes2::Text text( _( "Select Recipients" ), normalWhite );
+    text.draw( box.x + ( box.width - text.width() ) / 2, box.y + 7, display );
     SelectRecipientsColors selector( fheroes2::Point( box.x + 65, box.y + 28 ), kingdom.GetColor() );
     selector.Redraw();
 
-    text.Set( _( "Your Funds" ) );
-    text.Blit( box.x + ( box.width - text.w() ) / 2, box.y + 55 );
-
-    ResourceBar info1( funds1, box.x + 25, box.y + 80 );
+    text.set( _( "Your Funds" ), normalWhite );
+    text.draw( box.x + ( box.width - text.width() ) / 2, box.y + 57, display );
+    ResourceBar info1( funds1, posX, box.y + 80 );
     info1.Redraw();
 
-    text.Set( _( "Planned Gift" ) );
-    text.Blit( box.x + ( box.width - text.w() ) / 2, box.y + 125 );
-
-    ResourceBar info2( funds2, box.x + 25, box.y + 150 );
+    text.set( _( "Planned Gift" ), normalWhite );
+    text.draw( box.x + ( box.width - text.width() ) / 2, box.y + 127, display );
+    ResourceBar info2( funds2, posX, box.y + 150 );
     info2.Redraw();
 
     const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
@@ -252,7 +263,7 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
 
     display.render();
 
-    u32 count = Color::Count( selector.recipients );
+    uint32_t count = Color::Count( selector.recipients );
 
     // message loop
     int result = Dialog::ZERO;
@@ -260,7 +271,7 @@ void Dialog::MakeGiftResource( Kingdom & kingdom )
         result = btnGroup.processEvents();
 
         if ( selector.QueueEventProcessing() ) {
-            u32 new_count = Color::Count( selector.recipients );
+            uint32_t new_count = Color::Count( selector.recipients );
 
             if ( 0 == new_count || 0 == funds2.GetValidItemsCount() )
                 btnGroup.button( 0 ).disable();

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-17 08:59+0100\n"
-"PO-Revision-Date: 2022-01-22 22:10+0100\n"
+"POT-Creation-Date: 2022-06-12 08:18+0000\n"
+"PO-Revision-Date: 2022-05-12 17:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -17,16 +17,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 msgid "Warrior"
 msgstr "Guerrier"
 
 msgid "Builder"
-msgstr "Constructeur"
+msgstr "Bâtisseur"
 
 msgid "Explorer"
-msgstr "Explorateur"
+msgstr "Voyageur"
+
+msgid "None"
+msgstr "Aucune"
 
 msgid ""
 "A few\n"
@@ -91,32 +94,32 @@ msgstr ""
 "Une légion de\n"
 "%{monster}"
 
+msgid "army|Few"
+msgstr "1-4"
+
 msgid "army|Several"
-msgstr "Plusieurs"
+msgstr "5-9"
 
 msgid "army|Pack"
-msgstr "Groupe"
+msgstr "10-19"
 
 msgid "army|Lots"
-msgstr "Troupe"
+msgstr "20-49"
 
 msgid "army|Horde"
-msgstr "Horde"
+msgstr "50-99"
 
 msgid "army|Throng"
-msgstr "Foule"
+msgstr "100-249"
 
 msgid "army|Swarm"
-msgstr "Colonie"
+msgstr "250-499"
 
 msgid "army|Zounds"
-msgstr "Armée"
+msgstr "500-999"
 
 msgid "army|Legion"
-msgstr "Légion"
-
-msgid "army|Few"
-msgstr "Peu"
+msgstr "1000+"
 
 msgid "All %{race} troops +1"
 msgstr "+1 pour toutes les troupes %{race}"
@@ -133,8 +136,12 @@ msgstr "Morts-vivants parmi les troupes -1"
 msgid "View %{name}"
 msgstr "Voir %{name}"
 
+#, fuzzy
+msgid "Move the %{name} "
+msgstr "Déplacer %{name}"
+
 msgid "Move or right click to redistribute %{name}"
-msgstr "Déplacez ou faites un clic droit pour redistribuer %{name}"
+msgstr "Déplacer ou faire un clic droit pour répartir les %{name}"
 
 msgid "Combine %{name} armies"
 msgstr "Fusionner les armées de %{name}"
@@ -148,14 +155,24 @@ msgstr "Sélectionner %{name}"
 msgid "Cannot move last troop"
 msgstr "Impossible de déplacer la dernière armée dans la garnison"
 
+#, fuzzy
+msgid "Move the %{name}"
+msgstr "Déplacer %{name}"
+
 msgid "Set Count"
 msgstr "Régler le nombre"
 
 msgid "%{name} half the enemy troops!"
 msgstr "%{name} décime la troupe ennemie !"
 
-msgid "spell failed!"
-msgstr "sort échoué !"
+msgid "%{name} has turned off the auto battle"
+msgstr "%{name} a désactivé le combat auto"
+
+msgid "%{name} has turned on the auto battle"
+msgstr "%{name} a activé le combat auto"
+
+msgid "Spell failed!"
+msgstr "Sort échoué !"
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
@@ -279,9 +296,6 @@ msgstr "Pertes sur le champ de bataille"
 msgid "Attacker"
 msgstr "Attaquant"
 
-msgid "None"
-msgstr "Aucune"
-
 msgid "Defender"
 msgstr "Défenseur"
 
@@ -385,12 +399,15 @@ msgstr "Pas assez d'or (%{gold})"
 msgid "%{name} states:"
 msgstr "%{name} déclare :"
 
+msgid "Captain of %{name} states:"
+msgstr "Capitaine de %{name} :"
+
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
 msgstr ""
 "\" J'accepterai votre reddition et vous accorderai, à vous et à vos troupes, "
-"un passage sûr pour le prix de %{price} pièces 'or. \""
+"un passage sûr pour le prix de %{price} pièces d'or. \""
 
 msgid "View %{monster} info"
 msgstr "Voir les infos de %{monster}"
@@ -491,8 +508,12 @@ msgstr "Cacher le journal"
 msgid "Show logs"
 msgstr "Afficher le journal"
 
-msgid "%{color} casts a spell: %{spell}"
-msgstr "%{color} lance un sort : %{spell}"
+msgid "Message Bar"
+msgstr "Barre d'informations"
+
+msgid "Shows the results of individual monster's actions."
+msgstr ""
+"Affiche le déroulement du combat et indique toutes les actions individuelles."
 
 msgid "%{name} skip their turn."
 msgstr "%{name} passent le tour."
@@ -549,20 +570,29 @@ msgstr "%{spell} inflige %{value} dégâts à une créature vivante."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} inflige %{value} dégâts à toutes les créatures vivantes."
 
-msgid "The Unicorns' attack blinds the %{name}!"
+#, fuzzy
+msgid "The %{attacker}' attack blinds the %{target}!"
 msgstr "L'attaque des Licornes aveugle les %{name} !"
 
-msgid "The Medusas' gaze turns the %{name} to stone!"
+#, fuzzy
+msgid "The %{attacker}' gaze turns the %{target} to stone!"
 msgstr "Le regard des Méduses transforme les %{name} en pierre !"
 
-msgid "The Mummies' curse falls upon the %{name}!"
+#, fuzzy
+msgid "The %{attacker}' curse falls upon the %{target}!"
 msgstr "La malédiction des Momies s'abat sur les %{name} !"
 
-msgid "The %{name} are paralyzed by the Cyclopes!"
+#, fuzzy
+msgid "The %{target} are paralyzed by the %{attacker}!"
 msgstr "%{name} sont paralysés par les Cyclopes !"
 
-msgid "The Archmagi dispel all good spells on your %{name}!"
+#, fuzzy
+msgid "The %{attacker} dispel all good spells on your %{target}!"
 msgstr "Les Grands mages dissipent tous les bons sorts sur vos %{name} !"
+
+#, fuzzy
+msgid "The %{attacker} cast %{spell} on %{target}!"
+msgstr "%{name} lance %{spell} sur les %{troop}."
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "La malchance s'abat sur les %{attacker}."
@@ -595,7 +625,7 @@ msgid "No spells to cast."
 msgstr "Aucun sort disponible."
 
 msgid "Are you sure you want to retreat?"
-msgstr "Êtes vous sur de vouloir sonner la retraite ?"
+msgstr "Êtes vous sûr de vouloir sonner la retraite ?"
 
 msgid "Retreat disabled"
 msgstr "Retraite impossible"
@@ -687,7 +717,13 @@ msgid "Sorceress Guild"
 msgstr "Guilde de Sorcières"
 
 msgid "Necromancer Guild"
-msgstr "Guilde de Nécromanciens"
+msgstr "Guilde Nécromante"
+
+msgid "Ogre Alliance"
+msgstr "Alliance des Ogres"
+
+msgid "Dwarfbane"
+msgstr "Fléau des Nains"
 
 msgid "Dragon Alliance"
 msgstr "Alliance des Dragons"
@@ -725,6 +761,9 @@ msgstr "Le gantelet"
 msgid "Turning Point"
 msgstr "Moment Décisif"
 
+msgid "Betrayal"
+msgstr "Trahison"
+
 msgid "Corlagon's Defense"
 msgstr "Défense de Corlagon"
 
@@ -738,17 +777,16 @@ msgid ""
 "when you have defeated all of their castles and heroes."
 msgstr ""
 "Roland a besoin de vous pour vaincre les seigneurs près de son château afin "
-"de commencer sa guerre de rébellion contre son frère.  Ils ne sont pas "
-"alliés entre eux, ils passeront donc la plupart de leur temps à se battre "
-"les uns contre les autres.  La victoire vous reviendra lorsque vous aurez "
-"vaincu tous leurs châteaux et leurs héros."
+"de commencer sa guerre de rébellion contre son frère. Ces seigneurs ne sont "
+"pas alliés entre eux, et ils s'affronteront donc. La victoire vous reviendra "
+"lorsque vous aurez vaincu tous les châteaux et héros ennemis."
 
 msgid ""
 "The local lords refuse to swear allegiance to Roland, and must be subdued. "
 "They are wealthy and powerful, so be prepared for a tough fight. Capture all "
 "enemy castles to win."
 msgstr ""
-"Les seigneurs locaux refusent de prêter allégeance à Roland et doivent être "
+"Les seigneurs locaux refusent de prêter allégeance à Roland et doivent être\n"
 "soumis. Ils sont riches et puissants, alors préparez-vous à un combat "
 "difficile. Capturez tous les châteaux ennemis pour gagner."
 
@@ -759,8 +797,8 @@ msgid ""
 msgstr ""
 "Votre tâche est de défendre les Nains contre les forces d'Archibald. "
 "Capturez tous les villages et tous les châteaux ennemis pour gagner, et "
-"veillez à ne pas perdre toutes les villes naines d'un coup, ou l'ennemi aura "
-"gagné."
+"veillez à ne pas perdre toutes les villages nains d'un coup, ou l'ennemi "
+"aura gagné."
 
 msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
@@ -796,9 +834,9 @@ msgid ""
 "to the enemy castle. Any troops you have in your army at the end of this "
 "scenario will be with you in the final battle."
 msgstr ""
-"Rassemblez une armée aussi nombreuse que possible et capturez le château "
-"ennemi en 8 semaines. Vous n'êtes confronté qu'à un seul ennemi, mais vous "
-"devez parcourir un long chemin pour atteindre le château ennemi. Toutes les "
+"Rassemblez une armée aussi grande que possible et capturez le château ennemi "
+"en 8 semaines. Vous n'êtes confronté qu'à un seul ennemi, mais vous devez "
+"parcourir un long chemin pour atteindre le château ennemi. Toutes les "
 "troupes que vous avez dans votre armée à la fin de ce scénario seront avec "
 "vous lors de la bataille finale."
 
@@ -827,6 +865,15 @@ msgstr ""
 "C'est la bataille finale. Vous et votre ennemi êtes armés jusqu'aux dents, "
 "et tous sont alliés contre vous. Capturez Archibald pour mettre fin à la "
 "guerre !"
+
+msgid ""
+"Switching sides leaves you with three castles against the enemy's one.  This "
+"battle will be the easiest one you will face for the rest of the war..."
+"traitor."
+msgstr ""
+"Changer de camp vous laisse avec trois châteaux contre un seul pour l'ennemi."
+"Cette bataille sera la plus facile que vous aurez à mener jusqu'à la fin de "
+"la guerre...traitre."
 
 msgid "Barbarian Wars"
 msgstr "Guerres Barbares"
@@ -885,11 +932,11 @@ msgid ""
 "have no castle and must take one within 7 days, or lose this battle. (Hint: "
 "The nearest castle is to the southeast.)"
 msgstr ""
-"Des sorciers bienfaisants ont pris le château des Nécromanciens. Vous devez "
-"le reprendre pour remporter la victoire. Rappelez-vous que si vous commencez "
-"avec une puissante armée, vous n'avez pas de château et devez en prendre un "
-"dans les 7 jours, ou vous perdrez cette bataille. (Indice : le château le "
-"plus proche est au sud-est)."
+"Des sorciers bienfaisants ont pris le Château des Nécromanciens. Reprenez-le "
+"pour remporter la victoire. Rappelez-vous que si vous commencez avec une "
+"puissante armée, vous n'avez pas de château et devez en prendre un dans les "
+"7 jours, ou vous perdrez cette bataille. (Indice : le château le plus proche "
+"est au sud-est)."
 
 msgid ""
 "The dwarves need conquering before they can interfere in King Archibald's "
@@ -898,9 +945,9 @@ msgid ""
 "enemy towns and castles to claim victory."
 msgstr ""
 "Les nains doivent être conquis avant de pouvoir interférer dans les plans du "
-"roi Archibald. Les forces de Roland ont plus d'un héros et de nombreuses "
-"villes au départ, alors soyez prêt à être attaqué de plusieurs directions. "
-"Vous devez capturer toutes les villes et tous les châteaux ennemis pour "
+"roi Archibald. Les forces de Roland ont plus d'un héros et de nombreux "
+"villages au départ, alors soyez prêt à être attaqué de plusieurs directions. "
+"Vous devez capturer tous les villages et tous les châteaux ennemis pour "
 "remporter la victoire."
 
 msgid ""
@@ -1037,7 +1084,7 @@ msgstr ""
 "héros pour l'éternité."
 
 msgid "Border Towns"
-msgstr "Villes Lointaines"
+msgstr "Villes frontalières"
 
 msgid "Conquer and Unify"
 msgstr "Conquérir et unifier"
@@ -1071,7 +1118,7 @@ msgid ""
 "Your rival, the Kingdom of Harondale, is attacking weak towns on your "
 "border! Recover from their first strike and crush them completely!"
 msgstr ""
-"Votre rival, le Royaume d'Harondale, attaque des villes faibles à votre "
+"Votre rival, le Royaume d'Harondale, attaque des villages faibles à votre "
 "frontière ! Récupérez leur première frappe et écrasez-les complètement !"
 
 msgid ""
@@ -1096,7 +1143,7 @@ msgid ""
 "Leave no enemy standing."
 msgstr ""
 "Détruisez les barbares qui attaquent la frontière sud de votre royaume ! "
-"Récupérez vos villes perdues, puis envahissez le royaume de la jungle. Ne "
+"Récupérez vos villages perdus, puis envahissez le royaume de la jungle. Ne "
 "laissez aucun ennemi debout."
 
 msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
@@ -1146,7 +1193,7 @@ msgid ""
 "way to it, and reclaim the city of Chronos in which it lies."
 msgstr ""
 "L'emplacement de la grande bibliothèque a été découverte ! Vous devez vous y "
-"rendre, et récupérer la ville de Chronos dans laquelle elle se trouve."
+"rendre, et récupérer le village de Chronos dans lequel elle se trouve."
 
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
@@ -1182,7 +1229,7 @@ msgid ""
 "Capture the town on the island off the southeast shore in order to construct "
 "a boat and travel back towards the mainland. Do not lose the hero Gallavant."
 msgstr ""
-"Capturez la ville sur l'île au large de la côte sud-est afin de construire "
+"Capturez le village sur l'île au large de la côte sud-est afin de construire "
 "un bateau et de retourner vers le continent. Ne perdez pas le héros "
 "Gallavant."
 
@@ -1222,12 +1269,41 @@ msgstr " bonus"
 msgid " defeated"
 msgstr " vaincu"
 
+msgid " will always run away from your army."
+msgstr " fuiront toujours face à votre armée."
+
+msgid " will be willing to join your army."
+msgstr " vondront toujours se joindre à votre armée."
+
+msgid "\"%{artifact}\" artifact will be carried over the scenario."
+msgstr "L'artefact \"%{artifact}\" sera conservé dans le scénario suivant."
+
+msgid "The army will be carried over the scenario."
+msgstr "L'armée sera conservée dans le scénario suivant."
+
+#, fuzzy
+msgid "The kingdom will have +%{count} %{resource} each day."
+msgstr ""
+"Le royaume obtiendra des ressources supplémentaires en %{resource} au début "
+"du scénario."
+
+msgid "\"%{spell}\" spell will be carried over the scenario."
+msgstr "Le sort \"%{spell}\" sera conservé dans le scénario suivant."
+
+msgid "%{hero} can be hired in the scenario."
+msgstr "Le héros %{hero} peut être recruté dans ce scénario."
+
+msgid ""
+"%{hero} has been defeated and will not appear in the subsequent scenarios."
+msgstr "Le héros vaincu %{hero} n'apparaîtra pas dans les scénarios suivants."
+
 msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr ""
 "Les nains reconnaissent leurs alliés et se joignent volontiers à vos forces."
 
 msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
-msgstr "Les ogres vous reconnaissent comme le Dwarfbane et vous rallient."
+msgstr ""
+"Les ogres vous reconnaissent comme le Fléau des Nains et vous rallient."
 
 msgid ""
 "The dragons, snarling and growling, agree to join forces with you, their "
@@ -1279,98 +1355,203 @@ msgstr ""
 "que la victoire soit vôtre.\""
 
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
-msgstr "\"Le Dwarfbane !!!!, sauve qui peut.\""
+msgstr "\"Le Fléau des Nains !!!!, sauve qui peut.\""
 
 msgid "campaignBonus|Ballista"
 msgstr "Baliste"
 
-#, fuzzy
 msgid "campaignBonus|Black Pearl"
 msgstr "Perle noire"
 
-#, fuzzy
 msgid "campaignBonus|Caster's Bracelet"
 msgstr "Bracelet magique"
 
-#, fuzzy
 msgid "campaignBonus|Defender Helm"
-msgstr "Casque de Protection"
+msgstr "Casque défenseur"
 
-#, fuzzy
 msgid "campaignBonus|Breastplate"
-msgstr "Plastron Divin"
+msgstr "Plastron divin"
 
-#, fuzzy
 msgid "campaignBonus|Dragon Sword"
-msgstr "L'épée du Dragon"
+msgstr "Épée du dragon"
 
-#, fuzzy
 msgid "campaignBonus|Fizbin Medal"
-msgstr "Fizbin"
+msgstr "Médaille Fizbin"
 
-#, fuzzy
 msgid "campaignBonus|Foremost Scroll"
 msgstr "Parchemin ultime"
 
-#, fuzzy
 msgid "campaignBonus|Hideous Mask"
 msgstr "Masque sinistre"
 
-#, fuzzy
 msgid "campaignBonus|Mage's Ring"
-msgstr "Anneau de Magicien"
+msgstr "Anneau magicien"
 
-#, fuzzy
 msgid "campaignBonus|Major Scroll"
 msgstr "Parchemin majeur"
 
-#, fuzzy
 msgid "campaignBonus|Medal of Honor"
 msgstr "Médaille d'honneur"
 
-#, fuzzy
 msgid "campaignBonus|Medal of Valor"
-msgstr "Médaille de la bravoure"
+msgstr "Médaille bravoure"
 
-#, fuzzy
 msgid "campaignBonus|Minor Scroll"
-msgstr "Parchemin Mineur"
+msgstr "Parchemin mineur"
 
-#, fuzzy
 msgid "campaignBonus|Nomad Boots"
-msgstr "Bottes de Nomade"
+msgstr "Bottes de nomade"
 
 msgid "campaignBonus|Power Axe"
-msgstr "Puissante Hache"
+msgstr "Puissante hache"
 
-#, fuzzy
 msgid "campaignBonus|Spiked Shield"
 msgstr "Bouclier à pointes"
 
-#, fuzzy
 msgid "campaignBonus|Stealth Shield"
 msgstr "Bouclier furtif"
 
 msgid "campaignBonus|Tax Lien"
 msgstr "Privilège fiscal"
 
-#, fuzzy
 msgid "campaignBonus|Thunder Mace"
-msgstr "Massue du Tonnerre"
+msgstr "Massue domination"
 
-#, fuzzy
 msgid "campaignBonus|Traveler's Boots"
-msgstr "Bottes magiques"
+msgstr "Bottes de sept lieues"
 
-#, fuzzy
 msgid "campaignBonus|White Pearl"
 msgstr "Perle blanche"
 
-#, fuzzy
+msgid "campaignBonus|Basic Archery"
+msgstr "Principes d'Archerie"
+
+msgid "campaignBonus|Advanced Archery"
+msgstr "Archerie avancée"
+
+msgid "campaignBonus|Expert Archery"
+msgstr "Experte en Archerie"
+
+msgid "campaignBonus|Basic Ballistics"
+msgstr "Principes de Balistique"
+
+msgid "campaignBonus|Advanced Ballistics"
+msgstr "Balistique avancée"
+
+msgid "campaignBonus|Expert Ballistics"
+msgstr "Expert en Balistique"
+
+msgid "campaignBonus|Basic Diplomacy"
+msgstr "Principes de Diplomatie"
+
+msgid "campaignBonus|Advanced Diplomacy"
+msgstr "Diplomatie avancée"
+
+msgid "campaignBonus|Expert Diplomacy"
+msgstr "Expert en Diplomatie"
+
+msgid "campaignBonus|Basic Eagle Eye"
+msgstr "Principes d'Oeil d'aigle"
+
+msgid "campaignBonus|Advanced Eagle Eye"
+msgstr "Oeil d'aigle avancé"
+
+msgid "campaignBonus|Expert Eagle Eye"
+msgstr "Expert en Oeil d'aigle"
+
+msgid "campaignBonus|Basic Estates"
+msgstr "Principes de Finances"
+
+msgid "campaignBonus|Advanced Estates"
+msgstr "Finances avancées"
+
+msgid "campaignBonus|Expert Estates"
+msgstr "Expert en Finances"
+
+msgid "campaignBonus|Basic Leadership"
+msgstr "Principes de Charisme"
+
+msgid "campaignBonus|Advanced Leadership"
+msgstr "Charisme avancée"
+
+msgid "campaignBonus|Expert Leadership"
+msgstr "Expert en Charisme"
+
+msgid "campaignBonus|Basic Logistics"
+msgstr "Principes de Logistique"
+
+msgid "campaignBonus|Advanced Logistics"
+msgstr "Logistique avancée"
+
+msgid "campaignBonus|Expert Logistics"
+msgstr "Expert en Logistique"
+
+msgid "campaignBonus|Basic Luck"
+msgstr "Principes de Chance"
+
+msgid "campaignBonus|Advanced Luck"
+msgstr "Chance avancée"
+
+msgid "campaignBonus|Expert Luck"
+msgstr "Expert en Chance"
+
+msgid "campaignBonus|Basic Mysticism"
+msgstr "Principes de Mysticisme"
+
+msgid "campaignBonus|Advanced Mysticism"
+msgstr "Mysticisme avancé"
+
+msgid "campaignBonus|Expert Mysticism"
+msgstr "Expert en Mysticisme"
+
+msgid "campaignBonus|Basic Navigation"
+msgstr "Principes de Navigation"
+
+msgid "campaignBonus|Advanced Navigation"
+msgstr "Navigation avancée"
+
+msgid "campaignBonus|Expert Navigation"
+msgstr "Expert en Navigation"
+
+msgid "campaignBonus|Basic Necromancy"
+msgstr "Principes de Nécromancie"
+
+msgid "campaignBonus|Advanced Necromancy"
+msgstr "Nécromancie avancée"
+
+msgid "campaignBonus|Expert Necromancy"
+msgstr "Expert en Nécromancie"
+
+msgid "campaignBonus|Basic Pathfinding"
+msgstr "Principes d'Orientation"
+
+msgid "campaignBonus|Advanced Pathfinding"
+msgstr "Orientation avancée"
+
+msgid "campaignBonus|Expert Pathfinding"
+msgstr "Expert en Orientation"
+
+msgid "campaignBonus|Basic Scouting"
+msgstr "Principes de Reconnaissance"
+
+msgid "campaignBonus|Advanced Scouting"
+msgstr "Reconnaissance avancée"
+
+msgid "campaignBonus|Expert Scouting"
+msgstr "Expert en Reconnaissance"
+
+msgid "campaignBonus|Basic Wisdom"
+msgstr "Principes de Sagesse"
+
+msgid "campaignBonus|Advanced Wisdom"
+msgstr "Sagesse avancée"
+
+msgid "campaignBonus|Expert Wisdom"
+msgstr "Expert en Sagesse"
+
 msgid "campaignBonus|Animate Dead"
 msgstr "Mort-vivant"
 
-#, fuzzy
 msgid "campaignBonus|Chain Lightning"
 msgstr "Foudre"
 
@@ -1387,19 +1568,76 @@ msgid "campaignBonus|Mirror Image"
 msgstr "Miroir"
 
 msgid "campaignBonus|Resurrect"
-msgstr "Mort-vivant"
+msgstr "Résurrection"
 
-#, fuzzy
 msgid "campaignBonus|Steelskin"
 msgstr "Chair d'acier"
 
-#, fuzzy
 msgid "campaignBonus|Summon Earth"
 msgstr "Invoquer Terre"
 
-#, fuzzy
 msgid "campaignBonus|View Heroes"
 msgstr "Voir Héros"
+
+msgid ""
+"The main hero will have \"%{artifact}\" artifact at the start of the "
+"scenario."
+msgstr ""
+"Le héros principal recevra l'artefact \"%{artifact}\" au début du scénario."
+
+msgid ""
+"The kingdom will receive %{amount} additional %{resource} at the start of "
+"the scenario."
+msgstr ""
+"Le royaume bénéficiera de %{amount} %{resource} supplémentaire(s) au début "
+"du scénario."
+
+#, fuzzy
+msgid ""
+"The kingdom will have %{amount} less %{resource} at the start of the "
+"scenario."
+msgstr ""
+"Le royaume obtiendra des ressources supplémentaires en %{resource} au début "
+"du scénario."
+
+msgid ""
+"The main hero will have %{count} %{monster} at the start of the scenario."
+msgstr "Le héros principal recevra %{count} %{monster} au début du scénario."
+
+msgid ""
+"The main hero will have \"%{spell}\" spell at the start of the scenario."
+msgstr "Le héros principal recevra le sort \"%{spell}\" au début du scénario."
+
+msgid "The starting race of the scenario will be %{race}."
+msgstr "La faction de départ sur ce scenario sera %{race}."
+
+msgid ""
+"The main hero will have additional %{count} %{skill} at the start of the "
+"scenario."
+msgstr ""
+"Le héros principal recevra %{count} %{skill} supplémentaire(s) au début du "
+"scénario."
+
+msgid "The main hero will have %{skill} at the start of the scenario."
+msgstr "Le héros principal recevra %{skill} au début du scénario."
+
+msgid "Roland"
+msgstr "Roland"
+
+msgid "Archibald"
+msgstr "Archibald"
+
+msgid "The Price of Loyalty"
+msgstr "The Price of Loyalty"
+
+msgid "Voyage Home"
+msgstr "Le voyage de retour"
+
+msgid "Wizard's Isle"
+msgstr "L'île du sorcier"
+
+msgid "Descendants"
+msgstr "Descendants"
 
 msgid "The %{building} produces %{monster}."
 msgstr "Le %{building} produit des %{monster}."
@@ -1408,15 +1646,13 @@ msgid "Requires:"
 msgstr "Nécessite :"
 
 msgid "Cannot build. You have already built here today."
-msgstr ""
-"Construction impossible. Une construction a déjà eu lieu ici aujourd'hui."
+msgstr "Construction impossible. Une construction a déjà eu lieu aujourd'hui."
 
 msgid "For this action it is necessary to build a castle first."
 msgstr "Pour effectuer cette action il faut d'abord construire un château."
 
 msgid "Cannot build %{name} because castle is too far from water."
-msgstr ""
-"Impossible de construire %{name} parce que le château est trop loin de l'eau."
+msgstr "Impossible de construire %{name} - le château est trop loin de l'eau."
 
 msgid "disable build."
 msgstr "désactiver la construction."
@@ -1860,7 +2096,7 @@ msgid "Laboratory"
 msgstr "Laboratoire"
 
 msgid "Shrine"
-msgstr "Mausolée"
+msgstr "Autel des ténèbres"
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
@@ -1966,8 +2202,8 @@ msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
 "percent."
 msgstr ""
-"Le Mausolée augmente la puissance de nécromancie de tous les nécromanciens "
-"de 10 pour cents."
+"L'Autel des ténèbres augmente la puissance de nécromancie de tous les "
+"nécromanciens de 10 pour cents."
 
 msgid ""
 "The Thieves' Guild provides information on enemy players. Thieves' Guilds "
@@ -1975,7 +2211,7 @@ msgid ""
 "provide more information."
 msgstr ""
 "La Guilde des voleurs fournit des informations sur les joueurs ennemis. Les "
-"guildes de voleurs vous informent également sur les villes ennemies en vue. "
+"guildes de voleurs vous informent également sur les villages ennemis en vue. "
 "Plus de guildes donnent des informations plus précises."
 
 msgid "The Tavern increases morale for troops defending the castle."
@@ -2060,9 +2296,6 @@ msgstr ""
 "Vous devez acheter un Grimoire pour utiliser la Guilde des Magiciens, mais "
 "vous n'avez actuellement pas de place pour un Grimoire. Essayez de donner un "
 "de vos artéfacts à un autre héros."
-
-msgid "Kingdom Income"
-msgstr "Revenu"
 
 msgid "Exit"
 msgstr "Quitter"
@@ -2154,12 +2387,6 @@ msgstr ""
 "La formation de combat 'Groupé' regroupe votre armée au centre du champ de "
 "bataille, de votre coté."
 
-msgid "Attack Skill"
-msgstr "Attaque"
-
-msgid "Defense Skill"
-msgstr "Défense"
-
 msgid "Spread Formation"
 msgstr "Formation Dispersée"
 
@@ -2181,17 +2408,23 @@ msgstr "Quitter les options du château"
 msgid "Castle Options"
 msgstr "Options du château"
 
-msgid "Not enough resources to buy creatures."
+#, fuzzy
+msgid "Not enough resources to recruit creatures."
 msgstr "Pas assez de ressources pour recruter des créatures."
+
+msgid "You are unable to recruit at this time, your ranks are full."
+msgstr ""
+"Vous n'êtes pas en mesure de recruter pour le moment. Vos rangs sont pleins."
 
 msgid "No creatures available for purchase."
 msgstr "Pas de créatures disponibles à l'achat."
 
-msgid "Buy Creatures"
+#, fuzzy
+msgid "Recruit Creatures"
 msgstr "Acheter des créatures"
 
 msgid "Town Population Information and Statistics"
-msgstr "Informations et statistiques sur la population de la ville"
+msgstr "Informations et statistiques sur la population du village"
 
 msgid "Damg"
 msgstr "Dégâts"
@@ -2245,11 +2478,11 @@ msgid ""
 msgstr ""
 "Vous entrez dans l'arène et vous vous retrouvez face à un groupe de lions "
 "féroces. Vous vous débarrassez facilement d'eux, sous les applaudissement de "
-"la foule. Impressionné par votre talent, l’entraîneur des gladiateurs vous "
-"propose d’entraîner le talent de votre choix."
+"la foule. Impressionné par votre talent, l'entraîneur des gladiateurs vous "
+"propose d'entraîner le talent de votre choix."
 
 msgid "You can't afford to upgrade your troops!"
-msgstr "Vous n'avez pas les moyens d’améliorer vos troupes !"
+msgstr "Vous n'avez pas les moyens d'améliorer vos troupes !"
 
 msgid ""
 "Your troops can be upgraded, but it will cost you dearly. Do you wish to "
@@ -2259,7 +2492,13 @@ msgstr ""
 "vous les améliorer ?"
 
 msgid "Are you sure you want to dismiss this army?"
-msgstr "Êtes vous sur de vouloir renvoyer cette troupe ?"
+msgstr "Êtes vous sûr de vouloir renvoyer cette troupe ?"
+
+msgid "Attack Skill"
+msgstr "Attaque"
+
+msgid "Defense Skill"
+msgstr "Défense"
 
 msgid "Shots"
 msgstr "Tirs"
@@ -2330,10 +2569,50 @@ msgid "Total: "
 msgstr "Total : "
 
 msgid "No room in"
-msgstr "Pas de place dans"
+msgstr "Pas de place"
 
 msgid "the garrison"
-msgstr "la garnison"
+msgstr "dans l'armée"
+
+msgid "off"
+msgstr "coupé"
+
+msgid "Music"
+msgstr "Musique"
+
+msgid "Effects"
+msgstr "Effets"
+
+msgid "MIDI"
+msgstr "MIDI"
+
+msgid "MIDI Expansion"
+msgstr "MIDI Expansion"
+
+msgid "External"
+msgstr "Externe"
+
+msgid "Music Type"
+msgstr "Musique"
+
+msgid "3D Audio"
+msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr "Change le volume de la musique."
+
+msgid "Toggle foreground sounds level."
+msgstr "Change le volume des effets sonores."
+
+msgid "Change the type of music."
+msgstr "Change de type de musique."
+
+#, fuzzy
+msgid "Toggle 3D effects of foreground sounds."
+msgstr "Change le volume des effets sonores."
+
+msgid "Okay"
+msgstr "OK"
 
 msgid "Build a new ship:"
 msgstr "Construire un nouveau navire :"
@@ -2368,8 +2647,8 @@ msgstr "Enregistrer le jeu en cours."
 msgid "Quit"
 msgstr "Quitter"
 
-msgid "Quit out of Free Heroes of Might and Magic II."
-msgstr "Quittez le jeu Free Heroes of Might and Magic II."
+msgid "Quit out of Heroes of Might and Magic II."
+msgstr "Quittez Heroes of Might and Magic II."
 
 msgid "Language"
 msgstr "Langue"
@@ -2378,10 +2657,60 @@ msgid "Resolution"
 msgstr "Résolution"
 
 msgid "Experimental"
-msgstr "Expérimental"
+msgstr "Expérimentaux"
 
 msgid "Settings"
 msgstr "Paramètres"
+
+msgid "Audio"
+msgstr ""
+
+#, fuzzy
+msgid "settings"
+msgstr "Paramètres"
+
+#, fuzzy
+msgid "Hot Keys"
+msgstr "Hot Seat"
+
+msgid "In-game"
+msgstr ""
+
+#, fuzzy
+msgid "Black & White"
+msgstr "Blackridge"
+
+#, fuzzy
+msgid "Mouse Cursor"
+msgstr "Ombre du curseur"
+
+msgid "Color"
+msgstr ""
+
+#, fuzzy
+msgid "Text Support"
+msgstr "AQ et support"
+
+msgid "Evil"
+msgstr "Mal"
+
+msgid "Good"
+msgstr "Bien"
+
+msgid "Interface Type"
+msgstr "Type d'interface"
+
+msgid "Auto Resolve"
+msgstr "Combat auto"
+
+msgid "Auto, No Spells"
+msgstr "Auto sans magie"
+
+msgid "Manual"
+msgstr "Manuel"
+
+msgid "Battles"
+msgstr "Batailles"
 
 msgid "Select Game Language"
 msgstr "Choix de la langue"
@@ -2395,35 +2724,56 @@ msgstr "Choisir la résolution d'écran"
 msgid "Change resolution of the game."
 msgstr "Changer la résolution du jeu."
 
+#, fuzzy
+msgid "Change audio settings of the game."
+msgstr "Changer la langue, la résolution et les paramètres du jeu."
+
 msgid "Experimental game settings."
 msgstr "Paramètres de jeu expérimentaux."
 
-msgid "OK"
-msgstr "OK"
+msgid "Toggle instant battle mode."
+msgstr "Change les modes de combat instantané."
+
+msgid "Check all Hot Keys used in the game."
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Bascule le type d'interface que vous voulez utiliser."
+
+msgid ""
+"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
+"move as smoothly as black and white ones."
+msgstr ""
+
+msgid ""
+"Toggle text support mode to output extra information about windows and "
+"events in the game."
+msgstr ""
 
 msgid "Attention"
 msgstr "Attention"
 
+#, fuzzy
 msgid ""
-"Your version of Heroes of Might and Magic II does not support any languages "
-"except English."
+"Your version of Heroes of Might and Magic II does not support any other "
+"languages than English."
 msgstr ""
 "Votre version de Heroes of Might and Magic II ne prend en charge aucune "
-"langue autre que l’anglais."
+"langue autre que l'anglais."
 
 msgid ""
 "Map\n"
 "Difficulty"
 msgstr ""
-"Carte\n"
-"Difficulté"
+"Difficulté\n"
+"de la carte"
 
 msgid ""
 "Game\n"
 "Difficulty"
 msgstr ""
-"Jeu\n"
-"Difficulté"
+"Difficulté\n"
+"du jeu"
 
 msgid "Rating"
 msgstr "Taux"
@@ -2483,7 +2833,10 @@ msgstr "Assigner Gardien"
 msgid "Your army too big!"
 msgstr "Votre armée est trop grande !"
 
-msgid "Choose game language:"
+msgid "Hot Keys:"
+msgstr ""
+
+msgid "Select Game Language:"
 msgstr "Choix de la langue :"
 
 msgid "%{name} has gained a level."
@@ -2602,8 +2955,23 @@ msgstr "Inconnu"
 msgid "%{name} (Level %{level})"
 msgstr "%{name} (niveau %{level})"
 
-msgid "Move Points"
-msgstr "Mouvement"
+msgid "Attack:"
+msgstr "Attaque :"
+
+msgid "Defense:"
+msgstr "Défense :"
+
+msgid "Spell Power:"
+msgstr "Puissance :"
+
+msgid "Knowledge:"
+msgstr "Connaissance :"
+
+msgid "Spell Points:"
+msgstr "Mana :"
+
+msgid "Move Points:"
+msgstr "Mouvement :"
 
 msgid "Cost per troop:"
 msgstr "Coût par troupe :"
@@ -2614,14 +2982,17 @@ msgstr "Disponible : %{count}"
 msgid "Number to buy:"
 msgstr "Recruter :"
 
+msgid "Click to apply the selected resolution."
+msgstr "Cliquez pour valider la résolution choisie."
+
 msgid "MAX"
 msgstr "MAX"
 
 msgid "How many troops to move?"
-msgstr "Combien de troupes à déplacer ?"
+msgstr "Troupes à déplacer :"
 
 msgid "Fast separation into slots:"
-msgstr "Séparation rapide des troupes :"
+msgstr "Répartition rapide :"
 
 msgid "Map: "
 msgstr "Carte : "
@@ -2682,9 +3053,6 @@ msgstr ""
 
 msgid "The Succession Wars"
 msgstr "The Succession Wars"
-
-msgid "The Price of Loyalty"
-msgstr "The Price of Loyalty"
 
 msgid "Lose all your heroes and towns."
 msgstr "Perdre tous les héros et tous les villages."
@@ -2822,38 +3190,8 @@ msgstr "La description de la carte actuellement sélectionnée."
 msgid "Accept the choice made."
 msgstr "Confirmez le choix."
 
-msgid "Okay"
-msgstr "OK"
-
 msgid "Experimental Game Settings"
 msgstr "Paramètres de jeu expérimentaux"
-
-msgid "one"
-msgstr "1"
-
-msgid "two"
-msgstr "2"
-
-msgid "off"
-msgstr "coupé"
-
-msgid "Music"
-msgstr "Musique"
-
-msgid "Effects"
-msgstr "Effets"
-
-msgid "MIDI"
-msgstr "MIDI"
-
-msgid "MIDI Expansion"
-msgstr "MIDI Expansion"
-
-msgid "External"
-msgstr "Externe"
-
-msgid "Music Type"
-msgstr "Musique"
 
 msgid "Jump"
 msgstr "Immédiat"
@@ -2870,15 +3208,6 @@ msgstr "Vitesse IA"
 msgid "Scroll Speed"
 msgstr "Défilement"
 
-msgid "Evil"
-msgstr "Mal"
-
-msgid "Good"
-msgstr "Bien"
-
-msgid "Interface Type"
-msgstr "Type d'interface"
-
 msgid "Hide"
 msgstr "Libre"
 
@@ -2887,27 +3216,6 @@ msgstr "Attachée"
 
 msgid "Interface"
 msgstr "Interface"
-
-msgid "Auto Resolve"
-msgstr "Combat auto"
-
-msgid "Auto, No Spells"
-msgstr "Auto sans magie"
-
-msgid "Battles"
-msgstr "Batailles"
-
-msgid "Manual"
-msgstr "Manuel"
-
-msgid "Toggle ambient music level."
-msgstr "Change le volume de la musique."
-
-msgid "Toggle foreground sounds level."
-msgstr "Change le volume des effets sonores."
-
-msgid "Change the type of music."
-msgstr "Change de type de musique."
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -2923,14 +3231,8 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr "Définit la vitesse à laquelle vous faites défiler la fenêtre."
 
-msgid "Toggle the type of interface you want to use."
-msgstr "Bascule le type d'interface que vous voulez utiliser."
-
 msgid "Toggle interface visibility."
 msgstr "Visibilité d'Interface."
-
-msgid "Toggle instant battle mode."
-msgstr "Change les modes de combat instantané."
 
 msgid "Att."
 msgstr "Att."
@@ -2984,7 +3286,7 @@ msgid "Wood & Ore:"
 msgstr "Bois et Fer :"
 
 msgid "Gems, Cr, Slf & Mer:"
-msgstr "Rubis, Cr, Sfr & Mer :"
+msgstr "Rubis, Cr, Sfr et Mer :"
 
 msgid "Obelisks Found:"
 msgstr "Obélisques trouvés :"
@@ -3025,11 +3327,26 @@ msgstr "Expert"
 msgid "difficulty|Impossible"
 msgstr "Impossible"
 
-msgid "Map is loading..."
-msgstr "Chargement de la carte..."
-
 msgid "and more..."
 msgstr "et plus encore..."
+
+msgid "Start the selected scenario."
+msgstr "Démarrer le scénario sélectionné."
+
+msgid "View Intro"
+msgstr "Voir l'intro"
+
+msgid "View Intro videos for the current state of the campaign."
+msgstr "Voir la vidéo d'introduction du scénario actuel."
+
+msgid "Restart"
+msgstr "Recommencer"
+
+msgid "Restart the current scenario."
+msgstr "Recommencer le scénario actuel."
+
+msgid "Are you sure you want to restart this scenario?"
+msgstr "Êtes vous sûr de vouloir recommencer ce scénario ?"
 
 msgid "Campaign Scenario loading failure"
 msgstr "Échec du chargement du scénario de campagne"
@@ -3046,17 +3363,18 @@ msgstr "AQ et support"
 msgid "Development"
 msgstr "Développement"
 
+#, fuzzy
+msgid "Dev and Support"
+msgstr "AQ et support"
+
 msgid "Visit us at "
-msgstr "Rendez-vous sur"
+msgstr "Rendez-vous sur "
 
 msgid "Special Thanks to"
 msgstr "Merci spécial à"
 
 msgid "and many other contributors!"
 msgstr "et aux nombreux autres contributeurs !"
-
-msgid "Original project before 0.7"
-msgstr "Projet original avant 0.7"
 
 msgid "Support us at"
 msgstr "Soutenez-nous sur"
@@ -3065,11 +3383,15 @@ msgid "Connect with us at"
 msgstr "Prenez contact avec nous sur"
 
 msgid "Need help with the game?"
-msgstr "Besoin d’aide avec le jeu ?"
+msgstr "Besoin d'aide avec le jeu ?"
 
 msgid "and many-many other supporters!"
-msgstr "et beaucoup, beaucoup d’autres supporteurs !"
+msgstr "et beaucoup, beaucoup d'autres supporteurs !"
 
+msgid "Original project before 0.7"
+msgstr "Projet original avant 0.7"
+
+#, fuzzy
 msgid "Original Heroes of Might and Magic II team"
 msgstr "L'équipe originale de Heroes of Might and Magic II"
 
@@ -3129,6 +3451,14 @@ msgstr "Héros Inconnu"
 
 msgid "Your Name"
 msgstr "Votre Nom"
+
+#, fuzzy
+msgid "Standard"
+msgstr "Jeu standard"
+
+#, fuzzy
+msgid "View High Scores for Standard Maps."
+msgstr "Voir l'écran des meilleurs scores."
 
 msgid "Campaign"
 msgstr "Campagne"
@@ -3209,18 +3539,22 @@ msgstr "L'équipe fheroes2 Resurrection présente"
 msgid "Greetings!"
 msgstr "Salutations !"
 
+#, fuzzy
 msgid ""
-"Welcome to Free Heroes of Might and Magic II! Before starting the game "
-"please choose game resolution."
+"Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
+"starting the game please choose game resolution."
 msgstr ""
-"Bienvenue à Free Heroes of Might and Magic II ! Avant de commencer le jeu "
-"choisissez la résolution du jeu."
+"Bienvenue à fheroes2 ! Avant de commencer le jeu choisissez la résolution du "
+"jeu."
 
 msgid "Please Remember"
 msgstr "N'oubliez pas"
 
+# Needs extra whitespace to avoid yellow word splitting
 msgid "You can always change game resolution by clicking on the "
-msgstr "Vous pouvez toujours changer la résolution en cliquant sur la "
+msgstr ""
+"Vous pouvez toujours changer la résolution en cliquant sur la\n"
+" "
 
 msgid "door"
 msgstr "porte"
@@ -3248,9 +3582,9 @@ msgstr ""
 "\n"
 "Profitez du jeu !"
 
-msgid "Quit Heroes of Might and Magic and return to the operating system."
-msgstr ""
-"Quitter Heroes of Might and Magic et retourner au système d'exploitation."
+#, fuzzy
+msgid "Quit Heroes of Might and Magic II and return to the operating system."
+msgstr "Quitter fheroes2 et retourner au système d'exploitation."
 
 msgid "Credits"
 msgstr "Crédits"
@@ -3270,6 +3604,7 @@ msgstr "Changer la langue, la résolution et les paramètres du jeu."
 msgid "Game Settings"
 msgstr "Paramètres du jeu"
 
+#, fuzzy
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
 "and Magic II."
@@ -3409,20 +3744,6 @@ msgstr ""
 "Ce camp adverse a triomphé."
 
 msgid ""
-"The enemy has captured the hero %{name}!\n"
-"Your quest is a failure."
-msgstr ""
-"L'ennemi a capturé le héros %{name} !\n"
-"Votre quête est un échec."
-
-msgid ""
-"The enemy has found the %{name}.\n"
-"Your quest is a failure."
-msgstr ""
-"L'ennemi a trouvé la %{name}.\n"
-"Votre quête est un échec."
-
-msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
 "You must bow done in defeat before his wealth and power."
 msgstr ""
@@ -3549,10 +3870,10 @@ msgstr "Cliquez pour revenir au menu principal."
 msgid "No maps available!"
 msgstr "Aucune carte disponible !"
 
-msgid "Astrologers proclaim Month of the %{name}."
+msgid "Astrologers proclaim the Month of the %{name}."
 msgstr "Les astrologues proclament le Mois %{name}."
 
-msgid "Astrologers proclaim Week of the %{name}."
+msgid "Astrologers proclaim the Week of the %{name}."
 msgstr "Les astrologues proclament la Semaine %{name}."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
@@ -3572,7 +3893,7 @@ msgstr[1] ""
 "Après une croissance régulière, la population de %{monster} augmente de "
 "%{count} pour cent !"
 
-msgid "%{monster} population increases by +%{count}."
+msgid "%{monster} growth +%{count}."
 msgstr "La population de %{monster} augmente de +%{count}."
 
 msgid " All populations are halved."
@@ -3585,7 +3906,7 @@ msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
 "banished from this land."
 msgstr ""
-"%{color}, c'est votre dernier jour pour capturer une ville, ou vous serez "
+"%{color}, c'est votre dernier jour pour capturer un village, ou vous serez "
 "banni de cette terre."
 
 msgid ""
@@ -3682,11 +4003,12 @@ msgstr "Sauvegarde réussie."
 msgid "There was an issue during saving."
 msgstr "Il y a eu un problème lors de la sauvegarde."
 
+# Needs line break to have insectile space but keep partie and ? together.
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
 msgstr ""
-"Êtes-vous sûr de vouloir charger une nouvelle partie ? (Votre partie en "
-"cours sera perdue)"
+"Êtes-vous sûr de vouloir charger une nouvelle\n"
+"partie ? (Votre partie en cours sera perdue)"
 
 msgid "Try looking on land!!!"
 msgstr "Essayez de chercher sur la terre ferme !!!"
@@ -3779,6 +4101,12 @@ msgstr "Joueur %{color}"
 msgid "View %{skill} Info"
 msgstr "Voir les infos de %{skill}"
 
+msgid "Kingdom Income"
+msgstr "Revenu du royaume"
+
+msgid "Kingdom Income per day."
+msgstr "Revenu du royaume par jour."
+
 msgid "English"
 msgstr "Anglais"
 
@@ -3795,7 +4123,35 @@ msgid "Russian"
 msgstr "Russe"
 
 msgid "Italian"
-msgstr " Italien"
+msgstr "Italien"
+
+msgid "Czech"
+msgstr "Tchèque"
+
+msgid "Norwegian"
+msgstr "Norvégien"
+
+msgid "Belarusian"
+msgstr "Biélorusse"
+
+msgid "Bulgarian"
+msgstr "Bulgare"
+
+msgid "Ukrainian"
+msgstr "Ukrainien"
+
+msgid "Romanian"
+msgstr ""
+
+msgid "Spanish"
+msgstr ""
+
+msgid "Swedish"
+msgstr ""
+
+#, fuzzy
+msgid "Portuguese"
+msgstr "Pillards"
 
 msgid ", FPS: "
 msgstr ", FPS : "
@@ -3806,12 +4162,6 @@ msgstr "%{object} cambriolé"
 msgid "%{object} raided"
 msgstr "%{object} pillé"
 
-msgid "Ambrose"
-msgstr "Ambrose"
-
-msgid "Dimitry"
-msgstr "Dimitry"
-
 msgid "Ector"
 msgstr "Ector"
 
@@ -3821,32 +4171,29 @@ msgstr "Gwenneth"
 msgid "Lord Kilburn"
 msgstr "Lord Kilburn"
 
-msgid "Maximus"
-msgstr "Maximus"
-
-msgid "Ruby"
-msgstr "Ruby"
-
 msgid "Sir Gallant"
 msgstr "Sir Gallant"
 
 msgid "Tyro"
 msgstr "Tyro"
 
-msgid "Atlas"
-msgstr "Atlas"
+msgid "Ambrose"
+msgstr "Ambrose"
+
+msgid "Dimitry"
+msgstr "Dimitry"
+
+msgid "Maximus"
+msgstr "Maximus"
+
+msgid "Ruby"
+msgstr "Ruby"
 
 msgid "Crag Hack"
 msgstr "Crag Hack"
 
-msgid "Ergon"
-msgstr "Ergon"
-
 msgid "Fineous"
 msgstr "Fineous"
-
-msgid "Jaclyn"
-msgstr "Jaclyn"
 
 msgid "Jezebel"
 msgstr "Jezebel"
@@ -3857,23 +4204,23 @@ msgstr "Jojosh"
 msgid "Thundax"
 msgstr "Thundax"
 
+msgid "Atlas"
+msgstr "Atlas"
+
+msgid "Ergon"
+msgstr "Ergon"
+
+msgid "Jaclyn"
+msgstr "Jaclyn"
+
 msgid "Tsabu"
 msgstr "Tsabu"
-
-msgid "Ariel"
-msgstr "Ariel"
 
 msgid "Astra"
 msgstr "Astra"
 
-msgid "Carlawn"
-msgstr "Carlawn"
-
 msgid "Gem"
 msgstr "Gem"
-
-msgid "Luna"
-msgstr "Luna"
 
 msgid "Natasha"
 msgstr "Natasha"
@@ -3887,8 +4234,14 @@ msgstr "Troyan"
 msgid "Vatawna"
 msgstr "Vatawna"
 
-msgid "Agar"
-msgstr "Agar"
+msgid "Ariel"
+msgstr "Ariel"
+
+msgid "Carlawn"
+msgstr "Carlawn"
+
+msgid "Luna"
+msgstr "Luna"
 
 msgid "Arie"
 msgstr "Arie"
@@ -3899,14 +4252,17 @@ msgstr "Barok"
 msgid "Crodo"
 msgstr "Crodo"
 
-msgid "Falagar"
-msgstr "Falagar"
-
 msgid "Kastore"
 msgstr "Kastore"
 
 msgid "Vesper"
 msgstr "Vesper"
+
+msgid "Agar"
+msgstr "Agar"
+
+msgid "Falagar"
+msgstr "Falagar"
 
 msgid "Wrathmont"
 msgstr "Wrathmont"
@@ -3920,23 +4276,20 @@ msgstr "Flint"
 msgid "Halon"
 msgstr "Halon"
 
-msgid "Mandigal"
-msgstr "Mandigal"
-
 msgid "Myra"
 msgstr "Myra"
 
 msgid "Myrini"
 msgstr "Myrini"
 
-msgid "Sarakin"
-msgstr "Sarakin"
-
 msgid "Wilfrey"
 msgstr "Wilfrey"
 
-msgid "Celia"
-msgstr "Celia"
+msgid "Mandigal"
+msgstr "Mandigal"
+
+msgid "Sarakin"
+msgstr "Sarakin"
 
 msgid "Charity"
 msgstr "Charity"
@@ -3950,23 +4303,20 @@ msgstr "Ranloo"
 msgid "Rialdo"
 msgstr "Rialdo"
 
-msgid "Roxana"
-msgstr "Roxana"
-
-msgid "Sandro"
-msgstr "Sandro"
-
 msgid "Zam"
 msgstr "Zam"
 
 msgid "Zom"
 msgstr "Zom"
 
-msgid "Archibald"
-msgstr "Archibald"
+msgid "Celia"
+msgstr "Celia"
 
-msgid "Brother Brax"
-msgstr "Frère Brax"
+msgid "Roxana"
+msgstr "Roxana"
+
+msgid "Sandro"
+msgstr "Sandro"
 
 msgid "Lord Corlagon"
 msgstr "Lord Corlagon"
@@ -3974,26 +4324,14 @@ msgstr "Lord Corlagon"
 msgid "Lord Halton"
 msgstr "Lord Halton"
 
-msgid "Roland"
-msgstr "Roland"
-
 msgid "Sister Eliza"
 msgstr "Soeur Eliza"
 
-msgid "Ceallach"
-msgstr "Ceallach"
+msgid "Brother Brax"
+msgstr "Frère Brax"
 
 msgid "Dainwin"
 msgstr "Dainwin"
-
-msgid "Drakonia"
-msgstr "Drakonia"
-
-msgid "Elderian"
-msgstr "Elderian"
-
-msgid "Gallavant"
-msgstr "Gallavant"
 
 msgid "Joseph"
 msgstr "Joseph"
@@ -4004,11 +4342,29 @@ msgstr "Mog"
 msgid "Solmyr"
 msgstr "Solmyr"
 
+msgid "Ceallach"
+msgstr "Ceallach"
+
+msgid "Drakonia"
+msgstr "Drakonia"
+
+msgid "Elderian"
+msgstr "Elderian"
+
+msgid "Gallavant"
+msgstr "Gallavant"
+
 msgid "Jarkonas"
 msgstr "Jarkonas"
 
 msgid "Martine"
 msgstr "Martine"
+
+msgid " gives you maximum morale"
+msgstr " augmente votre moral à son maximum"
+
+msgid " gives you maximum luck"
+msgstr " augmente votre chance à son maximum"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Vous ne pouvez pas ramasser cet artéfact, vous êtes déjà surchargé !"
@@ -4028,9 +4384,11 @@ msgstr "Voulez-vous en acheter un ?"
 msgid "%{count} / day"
 msgstr "%{count} / jour"
 
-msgid "You are unable to recruit at this time, your ranks are full."
-msgstr ""
-"Vous n'êtes pas en mesure de recruter pour le moment. Vos rangs sont pleins."
+msgid "one"
+msgstr "1"
+
+msgid "two"
+msgstr "2"
 
 msgid "A whirlpool engulfs your ship."
 msgstr "Un tourbillon engloutit votre vaisseau."
@@ -4308,8 +4666,8 @@ msgid ""
 msgstr ""
 "La beauté magique et apaisante des sirènes vous atteint, vous et votre "
 "équipage.\n"
-"Pendant un court instant, vous oubliez vos soucis et savourez la beauté "
-"du moment.\n"
+"Pendant un court instant, vous oubliez vos soucis et savourez la beauté du "
+"moment.\n"
 "Les charmes des sirènes vous bénissent avec une chance accrue pour votre "
 "prochain combat."
 
@@ -4567,9 +4925,6 @@ msgstr ""
 msgid "Do you wish to buy this artifact?"
 msgstr "Souhaitez-vous acheter cet artéfact ?"
 
-msgid "Artifact"
-msgstr "Artéfact"
-
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
 "leprechaun stamps his foot and ignores you."
@@ -4609,7 +4964,7 @@ msgid ""
 "you that he is willing to give %{art} if you have %{skill}."
 msgstr ""
 "Vous avez rencontré une personne étrange avec un chapeau et un hibou dessus. "
-"Il vous dit qu’il est prêt à vous donner %{art} si vous avez %{skill}."
+"Il vous dit qu'il est prêt à vous donner %{art} si vous avez %{skill}."
 
 msgid ""
 "You come upon an ancient artifact. As you reach for it, a pack of Rogues "
@@ -4699,8 +5054,8 @@ msgid ""
 "You have taken control of the local Alchemist shop. It will provide you with "
 "%{count} unit of Mercury per day."
 msgstr ""
-"Vous avez pris le contrôle du laboratoire de l'alchimiste local. Il vous fournira "
-"%{count} fiole de mercure par jour."
+"Vous avez pris le contrôle du laboratoire de l'alchimiste local. Il vous "
+"fournira %{count} fiole de mercure par jour."
 
 msgid ""
 "You gain control of a sawmill. It will provide you with %{count} units of "
@@ -4870,8 +5225,8 @@ msgid ""
 "services. Would you like to recruit Fire Elementals?"
 msgstr ""
 "Dans une mare ardente de lave en fusion, des élémentaires de feu se "
-"déplacent. Certains d'entre eux s'approchent de vous et vous proposent "
-"leurs services. Voulez-vous recruter des élémentaires de feu ?"
+"déplacent. Certains d'entre eux s'approchent de vous et vous proposent leurs "
+"services. Voulez-vous recruter des élémentaires de feu ?"
 
 msgid "A face forms in the water for a moment, and then is gone."
 msgstr "Un visage se forme dans l'eau pendant un instant, puis disparaît."
@@ -4978,7 +5333,7 @@ msgid ""
 "Having defeated the Dragon champions, the city's leaders agree to supply "
 "some Dragons to your army for a price. Do you wish to recruit Dragons?"
 msgstr ""
-"Après avoir vaincu les champions dragons, les dirigeants de la ville "
+"Après avoir vaincu les champions dragons, les dirigeants du village "
 "acceptent de fournir quelques Dragons à votre armée contre un certain prix. "
 "Souhaitez-vous recruter des Dragons ?"
 
@@ -5088,9 +5443,6 @@ msgid ""
 msgstr ""
 "Le capitaine soupire. \"Tu n'as pas assez d'argent, hein ? Vous ne pouvez "
 "pas attendre de moi que je donne mes cartes gratuitement !\""
-
-msgid "You find %{artifact}."
-msgstr "Vous avez trouvé l'artéfact '%{artifact}'."
 
 msgid ""
 "You come upon an obelisk made from a type of stone you have never seen "
@@ -5225,7 +5577,7 @@ msgid ""
 "As you enter the Alchemist's Tower, a hobbled, graying man in a brown cloak "
 "makes his way towards you."
 msgstr ""
-"Lorsque vous entrez dans la Tour de l’Alchimiste, un homme boiteux et "
+"Lorsque vous entrez dans la Tour de l'Alchimiste, un homme boiteux et "
 "grisonnant portant un manteau brun se dirige vers vous."
 
 msgid "He checks your pack, and sees that you have 1 cursed item."
@@ -5250,10 +5602,10 @@ msgid_plural ""
 "After you consent to pay the requested amount of gold, the alchemist grabs "
 "all cursed artifacts and throws them into his magical cauldron."
 msgstr[0] ""
-"Après avoir consenti à payer la quantité d’or demandée, l’alchimiste prends "
-"l’artéfact maudit et le jette dans son chaudron magique."
+"Après avoir consenti à payer la quantité d'or demandée, l'alchimiste prends "
+"l'artéfact maudit et le jette dans son chaudron magique."
 msgstr[1] ""
-"Après avoir consenti à payer la quantité d’or demandée, l’alchimiste prends "
+"Après avoir consenti à payer la quantité d'or demandée, l'alchimiste prends "
 "les artéfacts maudits et les jette dans son chaudron magique."
 
 msgid ""
@@ -5321,6 +5673,14 @@ msgid "The Arena guards turn you away."
 msgstr "Les gardes de l'arène vous repoussent."
 
 msgid ""
+"You have your crew stop up their ears with wax before the sirens' eerie song "
+"has any chance of luring them to a watery grave."
+msgstr ""
+"Vous demandez à votre équipage de se boucher les oreilles avec de la cire "
+"avant que le chant sinistre des sirènes n'ait la moindre chance de les "
+"attirer vers une mort certaine."
+
+msgid ""
 "As the sirens sing their eerie song, your small, determined army manages to "
 "overcome the urge to dive headlong into the sea."
 msgstr ""
@@ -5328,18 +5688,14 @@ msgstr ""
 "déterminée parvient à surmonter l'envie de plonger tête baissée dans la mer."
 
 msgid ""
-"You have your crew stop up their ears with wax before the sirens' eerie song "
-"has any chance of luring them to a watery grave. An eerie wailing song "
-"emanates from the sirens perched upon the rocks. Many of your crew fall "
-"under its spell, and dive into the water where they drown. You are now wiser "
-"for the visit, and gain %{exp} experience."
+"An eerie wailing song emanates from the sirens perched upon the rocks. Many "
+"of your crew fall under its spell, and dive into the water where they drown. "
+"You are now wiser for the visit, and gain %{exp} experience."
 msgstr ""
-"Vous demandez à votre équipage de se boucher les oreilles avec de la cire "
-"avant que le chant sinistre des sirènes n'ait la moindre chance de les "
-"attirer vers une tombe aquatique. Un chant sinistre et plaintif émane des "
-"sirènes perchées sur les rochers. Plusieurs membres de votre équipage "
-"tombent sous son charme et plongent dans l'eau où ils se noient. Vous êtes "
-"maintenant plus sage pour cette visite, et gagnez %{exp} d'expérience."
+"Un chant sinistre et plaintif émane des sirènes perchées sur les rochers. "
+"Plusieurs membres de votre équipage tombent sous son charme et plongent dans "
+"l'eau où ils se noient. Vous êtes maintenant plus sage pour cette visite, et "
+"gagnez %{exp} d'expérience."
 
 msgid ""
 "In a dazzling display of daring, you break into the local jail and free the "
@@ -5448,9 +5804,6 @@ msgstr ""
 msgid "Spell book is not present."
 msgstr "Le grimoire n'est pas présent."
 
-msgid "The spell is not found."
-msgstr "Sort introuvable."
-
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
 "cast the spell."
@@ -5458,8 +5811,35 @@ msgstr ""
 "Ce sort coûte %{mana} mana. Vous n'avez que %{point} mana, vous ne pouvez "
 "donc pas lancer le sort."
 
-msgid "Not enough move points."
-msgstr "Pas assez de points de mouvement."
+#, fuzzy
+msgid "The spell was not found."
+msgstr "Sort introuvable."
+
+msgid "Only heroes can cast this spell."
+msgstr "Seuls les héros peuvent lancer ce sort."
+
+msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
+msgstr ""
+"Votre héros est trop fatigué pour lancer ce sort aujourd'hui. Essayez à "
+"nouveau demain."
+
+msgid ""
+"You do not currently own any town or castle, so you can't cast the spell."
+msgstr ""
+"Vous ne possédez actuellement aucun village ou château, vous ne pouvez donc "
+"pas lancer le sort."
+
+msgid "This hero is already in a town, so you can't cast the spell."
+msgstr "Ce héros est déjà dans un village, vous ne pouvez pas lancer le sort."
+
+msgid ""
+"The nearest town is %{town}.\n"
+" \n"
+"This town is occupied by your hero %{hero}."
+msgstr ""
+"Le village le plus proche est %{town}.\n"
+"\n"
+"Ce village est occupé par votre héros %{hero}."
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{name} le %{race} (niveau %{level})"
@@ -5548,41 +5928,11 @@ msgstr ""
 msgid "%{name1} meets %{name2}"
 msgstr "Échanger %{name1} avec %{name2}"
 
-msgid ""
-"%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
-"%{spells1} from %{learner}, and teaches %{spells2} to %{learner}."
-msgstr ""
-"%{teacher}, dont le %{niveau} %{scholar} connaît de nombreux secrets "
-"magiques, apprend %{spells1} de %{learner}, et enseigne %{spells2} à "
-"%{learner}."
-
-msgid ""
-"%{teacher}, whose %{level} %{scholar} knows many magical secrets, learns "
-"%{spells1} from %{learner}."
-msgstr ""
-"%{teacher}, dont le %{niveau} %{scholar} connaît de nombreux secrets "
-"magiques, apprend %{spells1} de %{learner}."
-
-msgid ""
-"%{teacher}, whose %{level} %{scholar} knows many magical secrets, teaches "
-"%{spells2} to %{learner}."
-msgstr ""
-"%{teacher}, dont le %{niveau} %{scholar} connaît de nombreux secrets "
-"magiques, enseigne %{spells2} à %{learner}."
-
-msgid "Scholar Ability"
-msgstr "Capacité d'érudition"
-
 msgid "Town Portal"
 msgstr "Portes du village"
 
 msgid "Select town to port to."
 msgstr "Sélectionnez la destination."
-
-msgid "Your hero is too tired to cast this spell today. Try again tomorrow."
-msgstr ""
-"Votre héros est trop fatigué pour lancer ce sort aujourd'hui. Essayez à "
-"nouveau demain."
 
 msgid "%{spell} failed!!!"
 msgstr "%{spell} a échoué !"
@@ -5598,20 +5948,6 @@ msgstr "Ce sort ne peut pas être jeté en mer."
 
 msgid "This spell can be casted only nearby water."
 msgstr "Ce sort ne peut être lancé qu'à proximité de l'eau."
-
-msgid ""
-"No available towns.\n"
-"Spell Failed!!!"
-msgstr ""
-"Pas de villages disponibles.\n"
-"Le sort a échoué !"
-
-msgid ""
-"Nearest town occupied.\n"
-"Spell Failed!!!"
-msgstr ""
-"Le village le plus proche est occupé.\n"
-"Le sort a échoué !!!"
 
 msgid ""
 "You must be within %{count} spaces of a monster for the Visions spell to "
@@ -5685,29 +6021,32 @@ msgstr "Avancé"
 msgid "skill|Expert"
 msgstr "Expert"
 
+msgid "Pathfinding"
+msgstr "Orientation"
+
 msgid "Archery"
-msgstr "Tir à l'arc"
-
-msgid "Diplomacy"
-msgstr "Diplomatie"
-
-msgid "Leadership"
-msgstr "Charisme"
+msgstr "Archerie"
 
 msgid "Logistics"
 msgstr "Logistique"
 
-msgid "Navigation"
-msgstr "Navigation"
-
-msgid "Pathfinding"
-msgstr "Orientation"
-
 msgid "Scouting"
 msgstr "Reconnaiss."
 
+msgid "Diplomacy"
+msgstr "Diplomatie"
+
+msgid "Navigation"
+msgstr "Navigation"
+
+msgid "Leadership"
+msgstr "Charisme"
+
 msgid "Wisdom"
 msgstr "Sagesse"
+
+msgid "Mysticism"
+msgstr "Mysticisme"
 
 msgid "Ballistics"
 msgstr "Balistique"
@@ -5715,23 +6054,20 @@ msgstr "Balistique"
 msgid "Eagle Eye"
 msgstr "Oeil d'aigle"
 
-msgid "Estates"
-msgstr "Finances"
-
-msgid "Mysticism"
-msgstr "Mysticisme"
-
 msgid "Necromancy"
 msgstr "Nécromancie"
 
+msgid "Estates"
+msgstr "Finances"
+
 msgid "Advanced Archery"
-msgstr "Tir à l'arc avancé"
+msgstr "Archerie avancée"
 
 msgid "Advanced Pathfinding"
 msgstr "Orientation avancée"
 
 msgid "Basic Archery"
-msgstr "Principes de Tir à l'arc"
+msgstr "Principes d'Archerie"
 
 msgid "Basic Pathfinding"
 msgstr "Principes d'Orientation"
@@ -5749,7 +6085,7 @@ msgid "Basic Scouting"
 msgstr "Principes de Reconnaissance"
 
 msgid "Expert Archery"
-msgstr "Expert en Tir à l'arc"
+msgstr "Expert en Archerie"
 
 msgid "Expert Logistics"
 msgstr "Expert en Logistique"
@@ -6045,6 +6381,16 @@ msgstr "violette"
 msgid "tent|Red"
 msgstr "rouge"
 
+msgid "Experience"
+msgstr "Expérience"
+
+msgid ""
+"Experience allows your heroes to go up levels, increasing their primary and "
+"secondary skills."
+msgstr ""
+"L'expérience permet à vos héros de monter de niveau, d'améliorer leurs "
+"capacités primaires et secondaires."
+
 msgid "Hero/Stats"
 msgstr "Héros/Stats"
 
@@ -6174,7 +6520,7 @@ msgid "Multi"
 msgstr "Multi"
 
 msgid "race|Random"
-msgstr "Hasard"
+msgstr "Aléatoire"
 
 msgid "race|Neutral"
 msgstr "Neutre"
@@ -6318,7 +6664,7 @@ msgid "maps|Extra Large"
 msgstr "Très grande"
 
 msgid "maps|Custom Size"
-msgstr "Voir toutes les cartes, sans tenir compte de leur taille."
+msgstr "Taille Personnalisée"
 
 msgid "Ore Mine"
 msgstr "Mine de fer"
@@ -6582,6 +6928,9 @@ msgstr "Ressource"
 msgid "Whirlpool"
 msgstr "Tourbillon"
 
+msgid "Artifact"
+msgstr "Artéfact"
+
 msgid "Boat"
 msgstr "Navire"
 
@@ -6613,7 +6962,7 @@ msgid "Random Monster"
 msgstr "Monstre Aléatoire"
 
 msgid "Random Ultimate Artifact"
-msgstr "Ultime artéfact aléatoire."
+msgstr "Ultime artéfact aléatoire"
 
 msgid "Idol"
 msgstr "Idole"
@@ -7250,6 +7599,21 @@ msgstr "% de dégâts de "
 msgid "The three Anduran artifacts magically combine into one."
 msgstr "Les trois artéfacts d'Anduran se combinent magiquement en un seul."
 
+msgid "View Spells"
+msgstr "Voir les sorts"
+
+msgid "View %{name} Info"
+msgstr "Voir les infos de %{name}"
+
+msgid "Move %{name}"
+msgstr "Déplacer %{name}"
+
+msgid "Cannot move the Spellbook"
+msgstr "Impossible de déplacer le Grimoire"
+
+msgid "This item can't be traded."
+msgstr "Cet objet ne peut pas être échangé."
+
 msgid "The %{name} increases your knowledge by %{count}."
 msgstr "L'%{name} augmente votre connaissance de %{count}."
 
@@ -7306,14 +7670,46 @@ msgstr "La %{name} apporte un revenu de %{count} pièces d'or par jour."
 msgid "Arcane Necklace of Magic"
 msgstr "Obscur collier magique"
 
+msgid ""
+"After rescuing a Sorceress from a cursed tomb, she rewards your heroism with "
+"an exquisite jeweled necklace."
+msgstr ""
+"Après avoir sauvé une sorcière d'une tombe maudite, elle récompense votre "
+"héroïsme avec un superbe collier de joyaux."
+
 msgid "Caster's Bracelet of Magic"
 msgstr "Bracelet magique du jeteur de sorts"
 
+msgid ""
+"While searching through the rubble of a caved-in mine, you free a group of "
+"trapped Dwarves. Grateful, the leader gives you a golden bracelet."
+msgstr ""
+"En fouillant dans les décombres d'une mine effondrée, vous libérez un groupe "
+"de nains piégés. Reconnaissant, le chef vous donne un bracelet en or."
+
 msgid "Mage's Ring of Power"
-msgstr "Anneau de puissance du Magicien"
+msgstr "Anneau de puissance du magicien"
+
+msgid ""
+"A cry of pain leads you to a Centaur, caught in a trap. Upon setting the "
+"creature free, he hands you a small pouch. Emptying the contents, you find a "
+"dazzling jeweled ring."
+msgstr ""
+"Un cri de douleur vous conduit à un Centaure, pris dans un piège. Après "
+"avoir libéré la créature, elle vous tend une petite pochette. En vidant son "
+"contenu, vous trouvez un anneau éblouissant orné de pierres précieuses."
 
 msgid "Witch's Broach of Magic"
-msgstr "Broche magique de la Sorcière"
+msgstr "Broche magique de la sorcière"
+
+msgid ""
+"Alongside the remains of a burnt witch lies a beautiful broach, intricately "
+"designed. Approaching the corpse with caution, you add the broach to your "
+"inventory."
+msgstr ""
+"A côté des restes d'une sorcière brûlée se trouve une belle broche, finement "
+"conçue. Approchant le cadavre avec précaution, vous ajoutez la broche à "
+"votre inventaire."
 
 msgid "Medal of Valor"
 msgstr "Médaille de la bravoure"
@@ -7321,14 +7717,43 @@ msgstr "Médaille de la bravoure"
 msgid "The %{name} increases your morale."
 msgstr "La %{name} augmente votre moral."
 
+msgid ""
+"Freeing a virtuous maiden from the clutches of an evil overlord, you are "
+"granted a Medal of Valor by the King's herald."
+msgstr ""
+"En libérant une jeune femme vertueuse des griffes d'un seigneur maléfique, "
+"vous êtes récompensé de la médaille de bravoure par le hérault du roi."
+
 msgid "Medal of Courage"
 msgstr "Médaille du courage"
+
+msgid ""
+"After saving a young boy from a vicious pack of Wolves, you return him to "
+"his father's manor. The grateful nobleman awards you with a Medal of Courage."
+msgstr ""
+"Après avoir sauvé un jeune garçon d'une dangereuse meute de loups, vous le "
+"ramenez au manoir de son père. Reconnaissant, le noble vous remet la "
+"médaille du courage."
 
 msgid "Medal of Honor"
 msgstr "Médaille d'honneur"
 
+msgid ""
+"After freeing a princess of a neighboring kingdom from the evil clutches of "
+"despicable slavers, she awards you with a Medal of Honor."
+msgstr ""
+"Après avoir libéré la princesse d'un royaume voisin des griffes d'ignobles "
+"esclavagistes, elle vous décerne la médaille d'honneur."
+
 msgid "Medal of Distinction"
 msgstr "Médaille de distinction"
+
+msgid ""
+"Ridding the countryside of the hideous Minotaur who made a sport of eating "
+"noblemen's Knights, you are honored with the Medal of Distinction."
+msgstr ""
+"Après avoir débarrassé ces terres de l'affreux Minotaure qui adorait dévorer "
+"les nobles chevaliers, on vous décerne la médaille de la distinction."
 
 msgid "Fizbin of Misfortune"
 msgstr "Fizbin de l'infortune"
@@ -7336,8 +7761,25 @@ msgstr "Fizbin de l'infortune"
 msgid "The %{name} greatly decreases your morale by %{count}."
 msgstr "Le %{name} diminue fortement votre moral de %{count}."
 
+msgid ""
+"You stumble upon a medal lying alongside the empty road. Adding the medal to "
+"your inventory, you become aware that you have acquired the undesirable "
+"Fizbin of Misfortune, greatly decreasing your army's morale."
+msgstr ""
+"Vous tombez sur une médaille gisant sur le bord d'une route déserte. En "
+"ajoutant la médaille à votre inventaire, vous vous rendez compte que vous "
+"avez acquis l'indésirable Fizbin de l'infortune, diminuant considérablement "
+"le moral de votre armée."
+
 msgid "Thunder Mace of Dominion"
 msgstr "Massue de domination"
+
+msgid ""
+"During a sudden storm, a bolt of lightning strikes a tree, splitting it. "
+"Inside the tree you find a mysterious mace."
+msgstr ""
+"En pleine tempête, un éclair frappe un arbre, le fendant. A l'intérieur de "
+"l'arbre, vous trouvez une mystérieuse masse d'armes."
 
 msgid "Armored Gauntlets of Protection"
 msgstr "Gantelets de protection"
@@ -7345,11 +7787,35 @@ msgstr "Gantelets de protection"
 msgid "The %{name} increase your defense skill by %{count}."
 msgstr "Les %{name} augmente votre compétence de défense de %{count}."
 
+msgid ""
+"You encounter the infamous Black Knight!  After a grueling duel ending in a "
+"draw, the Knight, out of respect, offers you a pair of armored gauntlets."
+msgstr ""
+"Vous rencontrez le tristement célèbre Chevalier Noir ! Après un duel "
+"éreintant suivi d'un match nul, le Chevalier, par respect, vous offre une "
+"paire de gantelets renforcés."
+
 msgid "Defender Helm of Protection"
 msgstr "Casque de protection du défenseur"
 
+msgid ""
+"A glint of golden light catches your eye. Upon further investigation, you "
+"find a golden helm hidden under a bush."
+msgstr ""
+"Un éclat de lumière attire votre attention. En y regardant de plus près, "
+"vous trouvez un casque en or caché dans un buisson."
+
 msgid "Giant Flail of Dominion"
 msgstr "Fléau géant de domination"
+
+msgid ""
+"A clumsy Giant has killed himself with his own flail. Knowing your superior "
+"skill with this weapon, you confidently remove the spectacular flail from "
+"the fallen Giant."
+msgstr ""
+"Un Géant maladroit s'est tué avec son propre fléau. Vous sachant plus habile "
+"avec cette arme, vous retirez avec confiance le spectaculaire fléau de la "
+"dépouille du Géant."
 
 msgid "Ballista of Quickness"
 msgstr "Baliste de rapidité"
@@ -7358,29 +7824,104 @@ msgid "The %{name} lets your catapult fire twice per combat round."
 msgstr ""
 "La %{name} permet à votre catapulte de tirer deux fois par round de combat."
 
+msgid ""
+"Walking through the ruins of an ancient walled city, you find the instrument "
+"of the city's destruction, an elaborately crafted ballista."
+msgstr ""
+"En marchant dans les ruines d'une ancienne ville fortifiée, vous trouvez "
+"l'instrument de sa destruction, une baliste artisanale minutieusement "
+"confectionnée."
+
 msgid "Stealth Shield of Protection"
 msgstr "Bouclier furtif de protection"
 
+msgid ""
+"A stone statue of a warrior holds a silver shield. As you remove the shield, "
+"the statue crumbles into dust."
+msgstr ""
+"Une statue de pierre représente un guerrier tenant un bouclier en argent. Au "
+"moment où vous retirez le bouclier, la statue tombe en poussière."
+
 msgid "Dragon Sword of Dominion"
-msgstr "Épée de domination du Dragon"
+msgstr "Épée de domination du dragon"
+
+msgid ""
+"As you are walking along a narrow path, a nearby bush suddenly bursts into "
+"flames. Before your eyes the flames become the image of a beautiful woman. "
+"She holds out a magnificent sword to you."
+msgstr ""
+"Alors que vous marchez sur un chemin étroit, un buisson s'enflamme "
+"soudainement. Devant vos yeux, les flammes se transforment et dessinent la "
+"silhouette d'une belle femme. Elle vous tend une magnifique épée."
 
 msgid "Power Axe of Dominion"
 msgstr "Puissante hache de domination"
 
+msgid ""
+"You see a silver axe embedded deeply in the ground. After several "
+"unsuccessful attempts by your army to remove the axe, you tightly grip the "
+"handle of the axe and effortlessly pull it free."
+msgstr ""
+"Vous voyez une hache en argent profondément enfoncée dans le sol. Après "
+"plusieurs tentatives infructueuses de vos troupes pour retirer la hache, "
+"vous en saisissez fermement le manche et la libérez sans effort."
+
 msgid "Divine Breastplate of Protection"
 msgstr "Plastron divin de protection"
+
+msgid ""
+"A gang of Rogues is sifting through the possessions of dead warriors. "
+"Scaring off the scavengers, you note the Rogues had overlooked a beautiful "
+"breastplate."
+msgstr ""
+"Une bande de voleurs pille les dépouilles de guerriers. En effrayant les "
+"charognards, vous remarquez qu'ils ont oublié un beau plastron."
 
 msgid "Minor Scroll of Knowledge"
 msgstr "Parchemin mineur"
 
+msgid ""
+"Before you appears a levitating glass case with a scroll, perched upon a bed "
+"of crimson velvet. At your touch, the lid opens and the scroll floats into "
+"your awaiting hands."
+msgstr ""
+"Devant vous apparaît un coffre en verre contenant un parchemin, juché sur un "
+"lit de velours cramoisi. A votre contact, le couvercle s'ouvre et le "
+"parchemin flotte jusqu'à vos mains impatientes."
+
 msgid "Major Scroll of Knowledge"
 msgstr "Parchemin majeur"
+
+msgid ""
+"Visiting a local wiseman, you explain the intent of your journey. He reaches "
+"into a sack and withdraws a yellowed scroll and hands it to you."
+msgstr ""
+"Rendant visite à un sage des alentours, vous expliquez l'intention de votre "
+"voyage. Il fouille dans un sac et en retire un parchemin jauni qu'il vous "
+"remet."
 
 msgid "Superior Scroll of Knowledge"
 msgstr "Parchemin supérieur"
 
+msgid ""
+"You come across the remains of an ancient Druid. Bones, yellowed with age, "
+"peer from the ragged folds of her robe. Searching the robe, you discover a "
+"scroll hidden in the folds."
+msgstr ""
+"Vous tombez sur les restes d'un ancien druide. Des os, jaunis par l'âge, "
+"émergent des plis de sa robe. En la fouillant, vous découvrez un parchemin "
+"caché."
+
 msgid "Foremost Scroll of Knowledge"
 msgstr "Parchemin ultime"
+
+msgid ""
+"Mangled bones, yellowed with age, peer from the ragged folds of a dead "
+"Druid's robe. Searching the robe, you discover a scroll hidden within."
+msgstr ""
+"Des ossements abîmés, jaunis par l'âge, émergent des plis de la robe en "
+"lambeaux d'un druide mort. En fouillant la robe, vous découvrez un parchemin "
+"caché."
 
 msgid "Endless Sack of Gold"
 msgstr "Besace d'or sans fin"
@@ -7388,21 +7929,69 @@ msgstr "Besace d'or sans fin"
 msgid "The %{name} provides you with %{count} gold per day."
 msgstr "Le %{name} vous fournit %{count} pièces d'or par jour."
 
+msgid ""
+"A little leprechaun dances gleefully around a magic sack. Seeing you "
+"approach, he stops in mid-stride. The little man screams and stamps his foot "
+"ferociously, vanishing into thin air. Remembering the old leprechaun saying "
+"'Finders Keepers', you grab the sack and leave."
+msgstr ""
+"Un petit lutin danse gaiement autour d'un sac magique. En vous voyant "
+"approcher, il s'arrête soudainement. Le petit homme crie et tape du pied "
+"férocement, puis disparaît magiquement. Vous vous souvenez alors du vieux "
+"dicton des lutins 'Qui trouve, garde !'. Vous prenez le sac et vous partez."
+
 msgid "Endless Bag of Gold"
 msgstr "Sac d'or sans fin"
+
+msgid ""
+"A noblewoman, separated from her traveling companions, asks for your help. "
+"After escorting her home, she rewards you with a bag filled with gold."
+msgstr ""
+"Une noble séparée de ses compagnons de voyage, demande votre aide. Après "
+"l'avoir raccompagnée chez elle, elle vous récompense en vous donnant un sac "
+"rempli d'or."
 
 msgid "Endless Purse of Gold"
 msgstr "Bourse d'or sans fin"
 
+msgid ""
+"In your travels, you find a leather purse filled with gold that once "
+"belonged to a great warrior king who had the ability to transform any "
+"inanimate object into gold."
+msgstr ""
+"Au cours de votre voyage, vous trouvez une bourse en cuir remplie d'or qui "
+"appartenait autrefois à un grand roi guerrier qui avait la capacité de "
+"transformer tout objet inanimé en or."
+
 msgid "Nomad Boots of Mobility"
-msgstr "Brodequins de nomade"
+msgstr "Bottes de nomade"
 
 msgid "The %{name} increase your movement on land."
 msgstr ""
 "Les %{name} augmentent le potentiel de déplacement d'un héros sur terre."
 
+msgid ""
+"A Nomad trader seeks protection from a tribe of Goblins. For your "
+"assistance, he gives you a finely crafted pair of boots made from the "
+"softest leather. Looking closely, you see fascinating ancient carvings "
+"engraved on the leather."
+msgstr ""
+"Un commerçant nomade cherche à se protéger d'une tribu de Gobelins. Pour "
+"avoir offert votre aide, il vous donne une paire de bottes finement "
+"confectionnées en cuir très souple. En regardant de plus près, vous "
+"remarquez de fascinantes gravures creusées à même le cuir."
+
 msgid "Traveler's Boots of Mobility"
 msgstr "Bottes de sept lieues"
+
+msgid ""
+"Discovering a pair of beautifully beaded boots made from the finest and "
+"softest leather, you thank the anonymous donor and add the boots to your "
+"inventory."
+msgstr ""
+"En découvrant une paire de bottes ornées de perles et fabriquées dans un "
+"cuir de grande qualité, vous remerciez le donateur anonyme et ajoutez les "
+"bottes à votre inventaire."
 
 msgid "Lucky Rabbit's Foot"
 msgstr "Patte de lapin porte-bonheur"
@@ -7410,28 +7999,75 @@ msgstr "Patte de lapin porte-bonheur"
 msgid "The %{name} increases your luck in combat."
 msgstr "%{name} augmente votre chance en combat."
 
+msgid ""
+"A traveling merchant offers you a rabbit's foot, made of gleaming silver "
+"fur, for safe passage. The merchant explains the charm will increase your "
+"luck in combat."
+msgstr ""
+"Un marchand ambulant vous offre une patte de lapin en fourrure d'argent "
+"étincelante en échange d'un passage sûr. Le marchand vous explique que ce "
+"charme augmentera votre chance au combat."
+
 msgid "Golden Horseshoe"
 msgstr "Fer à cheval en or"
+
+msgid ""
+"An ensnared Unicorn whinnies in fright. Murmuring soothing words, you set "
+"her free. Snorting and stamping her front hoof once, she gallops off. "
+"Looking down you see a golden horseshoe."
+msgstr ""
+"Une licorne effrayée est prisonnière. Vous lui murmurez des mots apaisants "
+"tout en la libérant. Elle hennit soudainement, frappe du sabot devant elle, "
+"puis part au galop. En regardant au sol, vous trouvez un fer à cheval doré."
 
 msgid "Gambler's Lucky Coin"
 msgstr "Pièce porte-bonheur"
 
+msgid ""
+"You have captured a mischievous imp who has been terrorizing the region. In "
+"exchange for his release, he rewards you with a magical coin."
+msgstr ""
+"Vous avez capturé un diablotin espiègle qui terrorisait la région. En "
+"échange de sa libération, il vous récompense avec une pièce magique."
+
 msgid "Four-Leaf Clover"
 msgstr "Trèfle à quatre feuilles"
+
+msgid ""
+"In the middle of a patch of dead and dry vegetation, to your surprise you "
+"find a healthy green four-leaf clover."
+msgstr ""
+"Au milieu d'une parcelle de végétation morte et sèche, vous êtes surpris de "
+"trouver un trèfle à quatre feuilles vert en très bon état."
+
+msgid "True Compass of Mobility"
+msgstr "Boussole de mobilité"
 
 msgid "The %{name} increases your movement on land and sea."
 msgstr ""
 "La %{name} augmente le potentiel de déplacement d'un héros sur terre et en "
 "mer."
 
-msgid "True Compass of Mobility"
-msgstr "Boussole de mobilité"
+msgid ""
+"An old man claiming to be an inventor asks you to try his latest invention. "
+"He then hands you a compass."
+msgstr ""
+"Un vieil homme prétendant être un inventeur vous demande d'essayer sa "
+"dernière invention. Il vous tend alors une boussole."
 
 msgid "Sailor's Astrolabe of Mobility"
 msgstr "Sextant du marin"
 
 msgid "The %{name} increases your movement on sea."
 msgstr "Le %{name} augmente le potentiel de déplacement d'un héros en mer."
+
+msgid ""
+"An old sea captain is being tortured by Ogres. You save him, and in return "
+"he rewards you with a wondrous instrument to measure the distance of a star."
+msgstr ""
+"Un vieux capitaine marin est torturé par des Ogres. Vous le sauvez, et en "
+"retour il vous récompense avec un merveilleux instrument pour mesurer la "
+"distance d'une étoile."
 
 msgid "Evil Eye"
 msgstr "Oeil du diable"
@@ -7440,17 +8076,44 @@ msgid "The %{name} reduces the casting cost of curse spells by half."
 msgstr ""
 "Le %{name} réduit de moitié le coût d'incantation des sorts de malédiction."
 
+msgid ""
+"While venturing into a decrepit hut you find the Skeleton of a long dead "
+"witch. Investigation of the remains reveals a glass eye rolling around "
+"inside an empty skull."
+msgstr ""
+"En vous aventurant dans une cabane décrépite, vous trouvez le squelette "
+"d'une sorcière morte depuis longtemps. Une recherche sur la dépouille révèle "
+"un œil de verre roulant à l'intérieur d'un crâne vide."
+
 msgid "Enchanted Hourglass"
 msgstr "Sablier magique"
 
 msgid "The %{name} extends the duration of all your spells by %{count} turns."
 msgstr "La %{name} prolonge la durée de tous vos sorts de %{count} tours."
 
+msgid ""
+"A surprise turn in the landscape finds you in the midst of a grisly scene:  "
+"Vultures picking at the aftermath of a terrible battle. Your cursory search "
+"of the remains turns up an enchanted hourglass."
+msgstr ""
+"Vous vous retrouvez au milieu d'une scène macabre : Des vautours picorant "
+"les restes d'une terrible bataille. Votre recherche rapide des corps révèle "
+"un sablier enchanté."
+
 msgid "Gold Watch"
 msgstr "Montre en or"
 
 msgid "The %{name} doubles the effectiveness of your hypnotize spells."
 msgstr "La %{name} double l'efficacité de vos sorts d'hypnose."
+
+msgid ""
+"In reward for helping his cart out of a ditch, a traveling potion salesman "
+"gives you a \"magic\" gold watch. Unbeknownst to him, the watch really is "
+"magical."
+msgstr ""
+"En récompense de l'avoir aidé à sortir son chariot du fossé, un vendeur de "
+"potions ambulant vous offre une montre en or 'magique'. Sans qu'il le sache, "
+"il se trouve que la montre est vraiment magique."
 
 msgid "Skullcap"
 msgstr "Calotte"
@@ -7459,12 +8122,29 @@ msgid "The %{name} halves the casting cost of all mind influencing spells."
 msgstr ""
 "La %{name} réduit de moitié le coût de tous les sorts influençant l'esprit."
 
+msgid ""
+"A brief stop at an improbable rural inn yields an exchange of money, tales, "
+"and accidentally, luggage. You find a magical skullcap in your new backpack."
+msgstr ""
+"Un bref arrêt dans une improbable auberge donne lieu à un échange d'argent, "
+"de contes et accidentellement de bagages. Vous trouvez une calotte magique "
+"dans votre nouveau sac de voyage."
+
 msgid "Ice Cloak"
 msgstr "Voile de glace"
 
 msgid "The %{name} halves all damage your troops take from cold spells."
 msgstr ""
 "La %{name} réduit de moitié tous les dégâts de froid subis par vos troupes."
+
+msgid ""
+"Responding to the panicked cries of a damsel in distress, you discover a "
+"young woman fleeing from a hungry bear. You slay the beast in the nick of "
+"time, and the grateful Sorceress weaves a magic cloak from the bear's hide."
+msgstr ""
+"Répondant aux cris paniqués d'une demoiselle en détresse, vous découvrez une "
+"jeune femme fuyant un ours affamé. Vous tuez la bête à temps, et la sorcière "
+"reconnaissante tisse une cape magique à partir de la peau de l'ours."
 
 msgid "Fire Cloak"
 msgstr "Voile de feu"
@@ -7473,12 +8153,29 @@ msgid "The %{name} halves all damage your troops take from fire spells."
 msgstr ""
 "La %{name} réduit de moitié tous les dégâts de feu subis par vos troupes."
 
+msgid ""
+"You've come upon a fight between a Necromancer and a Paladin. The "
+"Necromancer blasts the Paladin with a fire bolt, bringing him to his knees. "
+"Acting quickly, you slay the evil one before the final blow. The grateful "
+"Paladin gives you the fire cloak that saved him."
+msgstr ""
+"Vous tombez sur un combat entre un nécromancien et un paladin. Le "
+"Nécromancien frappe le Paladin avec un éclair de feu, le mettant à genoux. "
+"Agissant rapidement, vous tuez le nécromancien juste avant le coup fatal. "
+"Reconnaissant, le paladin vous donne la cape de feu qui l'a sauvé."
+
 msgid "Lightning Helm"
 msgstr "Casque paratonnerre"
 
 msgid "The %{name} halves all damage your troops take from lightning spells."
 msgstr ""
 "Le %{name} réduit de moitié tous les dégâts de foudre subis par vos troupes."
+
+msgid ""
+"A traveling tinker in need of supplies offers you a helm with a thunderbolt "
+"design on its top in exchange for food and water. Curious, you accept, and "
+"later find out that the helm is magical."
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Evercold Icicle"
 msgstr "Glaçon très froid"
@@ -7490,6 +8187,12 @@ msgstr ""
 "Le %{name} permet à vos sorts de froid d'infliger %{count} pour cent de "
 "dégâts supplémentaires aux troupes ennemies."
 
+msgid ""
+"An icicle withstanding the full heat of the noonday sun attracts your "
+"attention. Intrigued, you break it off, and find that it does not melt in "
+"your hand."
+msgstr "Vous êtes tombé sur un artéfact !"
+
 msgid "Everhot Lava Rock"
 msgstr "Caillou de lave très chaude"
 
@@ -7499,6 +8202,13 @@ msgid ""
 msgstr ""
 "Le %{name} permet à vos sorts de feu d'infliger %{count} pour cent de dégâts "
 "supplémentaires aux troupes ennemies."
+
+msgid ""
+"Your wanderings bring you into contact with a tribe of ape-like beings using "
+"a magical lava rock that never cools to light their fires. You take pity on "
+"them and teach them to make fire with sticks. Believing you to be a god, the "
+"apes give you their rock."
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Lightning Rod"
 msgstr "Baguette éclair"
@@ -7510,11 +8220,25 @@ msgstr ""
 "La %{name} permet à vos sorts de foudre d'infliger %{count} pour cent de "
 "dégâts supplémentaires aux troupes ennemies."
 
+msgid ""
+"While waiting out a storm, a lighting bolt strikes a nearby cottage's "
+"lightning rod, which melts and falls to the ground. The tip of the rod, "
+"however, survives intact and makes your hair stand on end when you touch it. "
+"Hmm..."
+msgstr "Vous êtes tombé sur un artéfact !"
+
 msgid "Snake-Ring"
 msgstr "Anneau du serpent"
 
 msgid "The %{name} halves the casting cost of all your bless spells."
 msgstr "L'%{name} réduit de moitié le coût de tous les sorts de bénédiction."
+
+msgid ""
+"You've found an oddly shaped ring on the finger of a long dead traveler. The "
+"ring looks like a snake biting its own tail."
+msgstr ""
+"Vous avez trouvé une bague étrange sur le doigt d'un voyageur mort depuis "
+"bien longtemps. L'anneau ressemble à un serpent qui se mord la queue."
 
 msgid "Ankh"
 msgstr "Croix egyptienne"
@@ -7526,11 +8250,23 @@ msgstr ""
 "La %{name} double l'efficacité de tous vos sorts de résurrection et de "
 "réanimation."
 
+msgid ""
+"A fierce windstorm reveals the entrance to a buried tomb. Your investigation "
+"reveals that the tomb has already been looted, but the thieves overlooked an "
+"ankh on a silver chain in the dark."
+msgstr "Vous êtes tombé sur un artéfact !"
+
 msgid "Book of Elements"
 msgstr "Livre des éléments"
 
 msgid "The %{name} doubles the effectiveness of all your summoning spells."
 msgstr "Le %{name} double l'efficacité de vos sorts d'invocation."
+
+msgid ""
+"You come across a conjurer who begs to accompany you and your army awhile "
+"for safety. You agree, and he offers as payment a copy of the book of the "
+"elements."
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Elemental Ring"
 msgstr "Anneau élémentaire"
@@ -7538,11 +8274,23 @@ msgstr "Anneau élémentaire"
 msgid "The %{name} halves the casting cost of all summoning spells."
 msgstr "L'%{name} réduit de moitié le coût de vos sorts d'invocation."
 
+msgid ""
+"While pausing to rest, you notice a bobcat climbing a short tree to get at a "
+"crow's nest. On impulse, you climb the tree yourself and scare off the cat. "
+"When you look in the nest, you find a collection of shiny stones and a ring."
+msgstr "Vous êtes tombé sur un artéfact !"
+
 msgid "Holy Pendant"
 msgstr "Pendentif sacré"
 
 msgid "The %{name} makes all your troops immune to curse spells."
 msgstr "Le %{name} immunise vos troupes contre les sorts de malédiction."
+
+msgid ""
+"In your wanderings you come across a hermit living in a small, tidy hut. "
+"Impressed with your mission, he takes time out from his meditations to bless "
+"and give you a charm against curses."
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Pendant of Free Will"
 msgstr "Pendentif du libre arbitre"
@@ -7550,11 +8298,24 @@ msgstr "Pendentif du libre arbitre"
 msgid "The %{name} makes all your troops immune to hypnotize spells."
 msgstr "Le %{name} immunise vos troupes contre les sorts d'hypnose."
 
+msgid ""
+"Responding to cries for help, you find river Sprites making a sport of "
+"dunking an old man. Feeling vengeful, you rescue the man and drag a Sprite "
+"onto dry land for awhile. The Sprite, uncomfortable in the air, gives you a "
+"magic pendant to let him go."
+msgstr "Vous êtes tombé sur un artéfact !"
+
 msgid "Pendant of Life"
 msgstr "Pendentif de la vie"
 
 msgid "The %{name} makes all your troops immune to death spells."
 msgstr "Le %{name} immunise vos troupes contre les sorts de la mort."
+
+msgid ""
+"A brief roadside encounter with a small caravan and a game of knucklebones "
+"wins a magic pendant. Its former owner says that it protects from "
+"Necromancers' death spells."
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Serenity Pendant"
 msgstr "Pendentif de la sérénité"
@@ -7562,11 +8323,25 @@ msgstr "Pendentif de la sérénité"
 msgid "The %{name} makes all your troops immune to berserk spells."
 msgstr "Le %{name} immunise vos troupes contre le sort furie."
 
+msgid ""
+"The sounds of combat draw you to the scene of a fight between an old "
+"Barbarian and an eight-headed Hydra. Your timely intervention swings the "
+"battle in favor of the man, and he rewards you with a pendant he used to use "
+"to calm his mind for battle."
+msgstr "Vous êtes tombé sur un artéfact !"
+
 msgid "Seeing-eye Pendant"
 msgstr "Pendentif du chien d'aveugle"
 
 msgid "The %{name} makes all your troops immune to blindness spells."
 msgstr "Le %{name} immunise vos troupes contre les sorts de cécité."
+
+msgid ""
+"You come upon a very old woman, long blind from cataracts and dying alone. "
+"You tend to her final needs and promise a proper burial. Grateful, she gives "
+"you a magic pendant emblazoned with a stylized eye. It lets you see with "
+"your eyes closed."
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Kinetic Pendant"
 msgstr "Pendentif cinétique"
@@ -7574,17 +8349,35 @@ msgstr "Pendentif cinétique"
 msgid "The %{name} makes all your troops immune to paralyze spells."
 msgstr "Le %{name} immunise vos troupes contre les sorts de paralysie."
 
+msgid ""
+"You come across a golem wearing a glowing pendant and blocking your way. "
+"Acting on a hunch, you cut the pendant from its neck. Deprived of its power "
+"source, the golem breaks down, leaving you with the magical pendant."
+msgstr "Vous êtes tombé sur un artéfact !"
+
 msgid "Pendant of Death"
 msgstr "Pendentif de la mort"
 
 msgid "The %{name} makes all your troops immune to holy spells."
 msgstr "Le %{name} immunise vos troupes contre les sorts saints."
 
-msgid "The %{name} protects your troops from the Dispel Magic spell."
-msgstr "Le %{name} protège vos troupes des sorts de dissipation."
+msgid ""
+"A quick and deadly battle with a Necromancer wins you his magical pendant. "
+"Later, a Wizard tells you that the pendant protects undead under your "
+"control from holy word spells."
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Wand of Negation"
 msgstr "Baguette de la négation"
+
+msgid "The %{name} protects your troops from the Dispel Magic spell."
+msgstr "Le %{name} protège vos troupes des sorts de dissipation."
+
+msgid ""
+"You meet an old Wizard friend of yours traveling in the opposite direction. "
+"He presents  you with a gift:  A wand that prevents the use of the dispel "
+"magic spell on your allies."
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Golden Bow"
 msgstr "Arc doré"
@@ -7596,6 +8389,14 @@ msgstr ""
 "L'%{name} élimine la pénalité de %{count} pourcent pour vos troupes qui "
 "tirent au-delà des obstacles (par exemple, les murs d'un château)."
 
+msgid ""
+"A chance meeting with a famous Archer finds you in a game of knucklebones "
+"pitting his bow against your horse. You win."
+msgstr ""
+"Une rencontre fortuite avec un célèbre archer vous entraîne dans un jeu "
+"d'osselets. Il vous propose de parier son arc contre votre cheval. Par "
+"chance, vous gagnez."
+
 msgid "Telescope"
 msgstr "Télescope"
 
@@ -7606,8 +8407,21 @@ msgstr ""
 "Le %{name} augmente la quantité de terrain que votre héros révèle lorsqu'il "
 "part à l'aventure de %{count} carré supplémentaire."
 
+msgid ""
+"A merchant from far away lands trades you a new invention of his people for "
+"traveling supplies. It makes distant objects appear closer, and he calls "
+"it...\n"
+"\n"
+"a telescope."
+msgstr ""
+"Un marchand venu d'un pays lointain vous échange une nouvelle invention de "
+"son peuple contre des fournitures de voyage. Étrangement, les objets "
+"éloignés vous semblent plus proches, il appelle ça...\n"
+"\n"
+"un télescope."
+
 msgid "Statesman's Quill"
-msgstr "Plume de l'homme d'État"
+msgstr "Plume de l'homme d'état"
 
 msgid ""
 "The %{name} reduces the cost of surrender to %{count} percent of the total "
@@ -7616,11 +8430,24 @@ msgstr ""
 "La %{name} réduit le coût de la reddition à %{count} pour cent du coût total "
 "des troupes que vous avez dans votre armée."
 
-msgid "The %{name} increases the duration of your spells by %{count} turns."
-msgstr "Le %{name} augmente la durée de vos sorts de %{count} tours."
+msgid ""
+"You pause to help a diplomat with a broken axle fix his problem. In "
+"gratitude, he gives you a writing quill with magical properties which he "
+"says will \"help people see things your way\"."
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Wizard's Hat"
 msgstr "Chapeau du sorcier"
+
+msgid "The %{name} increases the duration of your spells by %{count} turns."
+msgstr "Le %{name} augmente la durée de vos sorts de %{count} tours."
+
+msgid ""
+"You see a Wizard fleeing from a Griffin and riding like the wind. The Wizard "
+"opens a portal and rides through, getting his hat knocked off by the edge of "
+"the gate. The Griffin follows; the gate closes. You pick the hat up, dust it "
+"off, and put it on."
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Power Ring"
 msgstr "Anneau de puissance"
@@ -7630,6 +8457,13 @@ msgstr ""
 "L'%{name} restaure %{count} points de magie supplémentaires par jour à votre "
 "héros."
 
+msgid ""
+"You find a small tree that closely resembles the great Warlock Carnauth with "
+"a ring around one of its twigs. Scraps of clothing and rotting leather lead "
+"you to suspect that it IS Carnauth, transformed. Since you can't help him, "
+"you take the magic ring."
+msgstr "Vous êtes tombé sur un artéfact !"
+
 msgid "Ammo Cart"
 msgstr "Cartouche de munition"
 
@@ -7638,11 +8472,23 @@ msgstr ""
 "La %{name} fournit des munitions illimités pour toutes vos troupes qui "
 "tirent."
 
+msgid ""
+"An ammunition cart in the middle of an old battlefield catches your eye. "
+"Inspection shows it to be in good working order, so  you take it along."
+msgstr "Vous êtes tombé sur un artéfact !"
+
 msgid "Tax Lien"
 msgstr "Privilège fiscal"
 
 msgid "The %{name} costs you %{count} gold pieces per day."
 msgstr "Le %{name} vous coûte %{count} pièces d'or par jour."
+
+msgid ""
+"Your big spending habits have earned you a massive tax bill that you can't "
+"hope to pay. The tax man takes pity and agrees to only take 250 gold a day "
+"from your account for life. Check here if you want one dollar to go to the "
+"presidential campaign election fund."
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Hideous Mask"
 msgstr "Masque sinistre"
@@ -7651,11 +8497,24 @@ msgid "The %{name} prevents all 'wandering' armies from joining your hero."
 msgstr ""
 "Le %{name} empêche toutes les armées 'errantes' de rallier votre héros."
 
+msgid ""
+"Your looting of the grave of Sinfilas Gardolad, the famous shapeshifting "
+"Warlock, unearths his fabled mask. Trembling, you put it on and it twists "
+"your visage into an awful grimace!  Oh no!  It's actually the hideous mask "
+"of Gromluck Greene, and you are stuck with it."
+msgstr "Vous êtes tombé sur un artéfact !"
+
 msgid "Endless Pouch of Sulfur"
 msgstr "Sac de souffre sans fin"
 
 msgid "The %{name} provides %{count} unit of sulfur per day."
 msgstr "Le %{name} fournit %{count} morceau de soufre par jour."
+
+msgid ""
+"You visit an alchemist who, upon seeing your army, is swayed by the "
+"righteousness of your cause. The newly loyal subject gives you his endless "
+"pouch of sulfur to help with the war effort."
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Endless Vial of Mercury"
 msgstr "Fiole de mercure sans fin"
@@ -7663,11 +8522,24 @@ msgstr "Fiole de mercure sans fin"
 msgid "The %{name} provides %{count} unit of mercury per day."
 msgstr "La %{name} fournit %{count} fiole de mercure par jour."
 
+msgid ""
+"A brief stop at a hastily abandoned Wizard's tower turns up a magical vial "
+"of mercury that always has a little left on the bottom. Recognizing a "
+"treasure when you see one, you cap it and slip it in your pocket."
+msgstr "Vous êtes tombé sur un artéfact !"
+
 msgid "Endless Pouch of Gems"
 msgstr "Bourse de rubis sans fin"
 
 msgid "The %{name} provides %{count} unit of gems per day."
 msgstr "La %{name} fournit %{count} rubis par jour."
+
+msgid ""
+"A short rainstorm brings forth a rainbow...and you can see the end of it. "
+"Riding quickly, you seize the pot of gold you find there. The leprechaun who "
+"owns it, unable to stop you from taking it, offers an endless pouch of gems "
+"for the return of his gold. You accept."
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Endless Cord of Wood"
 msgstr "Tas de bois sans fin"
@@ -7675,11 +8547,24 @@ msgstr "Tas de bois sans fin"
 msgid "The %{name} provides %{count} unit of wood per day."
 msgstr "Le %{name} fournit %{count} bûche de bois par jour."
 
+msgid ""
+"Pausing to rest and light a cook fire, you pull wood out of a nearby pile of "
+"dead wood. As you keep pulling wood from the pile, you notice that it "
+"doesn't shrink. You realize to your delight that the wood is enchanted, so "
+"you take it along."
+msgstr "Vous êtes tombé sur un artéfact !"
+
 msgid "Endless Cart of Ore"
 msgstr "Charrette de fer sans fin"
 
 msgid "The %{name} provides %{count} unit of ore per day."
 msgstr "La %{name} fournit %{count} morceau de fer par jour."
+
+msgid ""
+"You've found a Goblin weapon smithy making weapons for use against humans. "
+"With a tremendous yell you and your army descend upon their camp and drive "
+"them away. A search finds a magic ore cart that never runs out of iron."
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Endless Pouch of Crystal"
 msgstr "Bourse de cristal sans fin"
@@ -7687,17 +8572,56 @@ msgstr "Bourse de cristal sans fin"
 msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr "La %{name} fournit %{count} cristal par jour."
 
+msgid ""
+"Taking shelter from a storm in a small cave,  you notice a small patch of "
+"crystal in one corner. Curious, you break a piece off and notice that the "
+"original crystal grows the lost piece back. You decide to stuff the entire "
+"patch into a pouch and take it with you."
+msgstr "Vous êtes tombé sur un artéfact !"
+
 msgid "Spiked Helm"
 msgstr "Casque à pointes"
+
+msgid ""
+"Your army is ambushed by a small tribe of wild (and none too bright) Orcs. "
+"You fend them off easily and the survivors flee in all directions. One of "
+"the Orcs was wearing a polished spiked helm. Figuring it will make a good "
+"souvenir, you take it."
+msgstr "Vous êtes tombé sur un artéfact !"
 
 msgid "Spiked Shield"
 msgstr "Bouclier à pointes"
 
+msgid ""
+"You come upon a bridge spanning a dry gully. Before you can cross, a Troll "
+"steps out from under the bridge and demands payment before it will permit "
+"you to pass. You refuse, and the Troll charges, forcing you to slay it. You "
+"take its spiked shield as a trophy."
+msgstr "Vous êtes tombé sur un artéfact !"
+
 msgid "White Pearl"
 msgstr "Perle blanche"
 
+msgid ""
+"A walk across a dry saltwater lake bed yields an unlikely prize:  A white "
+"pearl amidst shattered shells and debris."
+msgstr ""
+"Une promenade dans le bassin d'un lac salé asséché vous a permis de trouver "
+"un objet improbable : Une perle blanche parmi des coquillages brisés et des "
+"débris."
+
 msgid "Black Pearl"
 msgstr "Perle noire"
+
+msgid ""
+"Rumors of a Griffin of unusual size preying upon the countryside lead you to "
+"its cave lair. A quick, brutal fight dispatches the beast, and a search of "
+"its foul nest turns up a huge black pearl."
+msgstr ""
+"Les rumeurs à propos d'un Griffon de taille inhabituelle s'attaquant à ces "
+"terres vous conduisent à son repaire. Un combat rapide et brutal permet de "
+"vous débarrasser de la bête, et une fouille de son nid fétide vous permet de "
+"trouver une énorme perle noire."
 
 msgid "Magic Book"
 msgstr "Grimoire"
@@ -7705,127 +8629,30 @@ msgstr "Grimoire"
 msgid "The %{name} enables you to cast spells."
 msgstr "Le %{name} vous permet de lancer des sorts."
 
+msgid "Dummy 1"
+msgstr "Emplacement 1"
+
+msgid "The reserved artifact."
+msgstr "L'artefact réservé."
+
+msgid "Dummy 2"
+msgstr "Emplacement 2"
+
+msgid "Dummy 3"
+msgstr "Emplacement 3"
+
+msgid "Dummy 4"
+msgstr "Emplacement 4"
+
 msgid "Spell Scroll"
 msgstr "Parchemin magique"
 
-msgid "This %{name} gives your hero the ability to cast the %{spell} spell."
-msgstr "Ce %{name} donne à votre héros la capacité de lancer le sort %{spell}."
-
-msgid "Arm of the Martyr"
-msgstr "Bras du martyre"
-
 msgid ""
-"The %{name} increases your spell power by %{count} but adds the undead "
-"morale penalty."
+"This %{name} gives your hero the ability to cast the %{spell} spell if your "
+"hero has a Magic Book."
 msgstr ""
-"Le %{name} augmente votre Magie de %{count} mais ajoute la pénalité de moral "
-"des morts-vivants."
-
-msgid "Breastplate of Anduran"
-msgstr "Plastron d'Anduran"
-
-msgid "The %{name} increases your defense by %{count}."
-msgstr "Le %{name} augmente votre Défense de %{count}."
-
-msgid "Broach of Shielding"
-msgstr "Broche-bouclier"
-
-msgid ""
-"The %{name} provides %{count} percent protection from Armageddon and "
-"Elemental Storm, but decreases spell power by 2."
-msgstr ""
-"La %{name} fournit %{count} pour cent de protection contre Armageddon et "
-"Orage, mais diminue la puissance des sorts de 2."
-
-msgid "Battle Garb of Anduran"
-msgstr "Cuirasse d'Anduran"
-
-msgid ""
-"The %{name} combines the powers of the three Anduran artifacts.  It provides "
-"maximum luck and morale for your troops and gives you the Town Portal spell."
-msgstr ""
-"La %{name} combine les pouvoirs des trois artéfacts d'Anduran.  Il offre un "
-"maximum de chance et de moral à vos troupes et vous donne le sort Portes du "
-"village."
-
-msgid "Crystal Ball"
-msgstr "Boule de cristal"
-
-msgid ""
-"The %{name} lets you get more specific information about monsters, enemy "
-"heroes, and castles nearby the hero who holds it."
-msgstr ""
-"La %{name} vous permet d'obtenir des informations plus spécifiques sur les "
-"monstres, les héros ennemis et les châteaux à proximité du héros qui le "
-"détient."
-
-msgid "Heart of Fire"
-msgstr "Coeur de feu"
-
-msgid ""
-"The %{name} provides %{count} percent protection from fire, but doubles the "
-"damage taken from cold."
-msgstr ""
-"Le %{name} offre une protection de %{count} pour cent contre le feu, mais "
-"double les dégâts de froid infligés à vos troupes."
-
-msgid "Heart of Ice"
-msgstr "Coeur de glace"
-
-msgid ""
-"The %{name} provides %{count} percent protection from cold, but doubles the "
-"damage taken from fire."
-msgstr ""
-"Le %{name} offre une protection de %{count} pour cent contre le froid, mais "
-"double les dégâts de feu infligés à vos troupes."
-
-msgid "Helmet of Anduran"
-msgstr "Casque d'Anduran"
-
-msgid "Holy Hammer"
-msgstr "Marteau Saint"
-
-msgid "Legendary Scepter"
-msgstr "Sceptre légendaire"
-
-msgid "The %{name} adds %{count} points to all attributes."
-msgstr "Le %{name} ajoute %{count} points à tous les attributs."
-
-msgid "Masthead"
-msgstr "Tête de mât"
-
-msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
-msgstr ""
-"La %{name} augmente votre chance et votre moral de %{count} points chacun "
-"dans les combats en mer."
-
-msgid "Sphere of Negation"
-msgstr "Sphère de négation"
-
-msgid "The %{name} disables all spell casting, for both sides, in combat."
-msgstr ""
-"La %{name} désactive tout lancer de sorts, pour chaque camp, au combat."
-
-msgid "Staff of Wizardry"
-msgstr "Bâton de la sorcellerie"
-
-msgid "The %{name} boosts your spell power by %{count}."
-msgstr "Le %{name} augmente la puissance de vos sorts de %{count}."
-
-msgid "Sword Breaker"
-msgstr "Briseur d'épée"
-
-msgid "The %{name} increases your defense by %{count} and attack by 1."
-msgstr "Le %{name} augmente votre attaque et votre défense de 1."
-
-msgid "Sword of Anduran"
-msgstr "Épée d'Anduran"
-
-msgid "Spade of Necromancy"
-msgstr "Pelle du fossoyeur"
-
-msgid "The %{name} gives you increased necromancy skill."
-msgstr "La %{name} améliore votre compétence de nécromancie."
+"Ce %{name} donne à votre héros la capacité de lancer le sort %{spell} si "
+"celui-ci possède un grimoire."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
@@ -7837,6 +8664,16 @@ msgstr ""
 "Les runes sur le récipient sont très anciennes, et l'art avec lequel il a "
 "été assemblé est stupéfiant. Lorsque vous sortez le parchemin, vous vous "
 "sentez imprégné d'un pouvoir magique."
+
+msgid "Arm of the Martyr"
+msgstr "Bras du martyre"
+
+msgid ""
+"The %{name} increases your spell power by %{count} but adds the undead "
+"morale penalty."
+msgstr ""
+"Le %{name} augmente votre Magie de %{count} mais ajoute la pénalité de moral "
+"des morts-vivants."
 
 msgid ""
 "One of the less intelligent members of your party picks up an arm off of the "
@@ -7851,6 +8688,12 @@ msgstr ""
 "le laisser tomber : il semble détenir une sorte de pouvoir magique qui "
 "influence votre prise de décision."
 
+msgid "Breastplate of Anduran"
+msgstr "Plastron d'Anduran"
+
+msgid "The %{name} increases your defense by %{count}."
+msgstr "Le %{name} augmente votre Défense de %{count}."
+
 msgid ""
 "You come upon a sign. It reads: \"Here lies the body of Anduran. Bow and "
 "swear fealty, and you shall be rewarded.\" You decide to do as it says. As "
@@ -7863,6 +8706,16 @@ msgstr ""
 "froideur contre votre peau. En regardant vers le bas, vous constatez que "
 "vous portez soudainement une cuirasse étincelante et ornée."
 
+msgid "Broach of Shielding"
+msgstr "Broche-bouclier"
+
+msgid ""
+"The %{name} provides %{count} percent protection from Armageddon and "
+"Elemental Storm, but decreases spell power by 2."
+msgstr ""
+"La %{name} fournit %{count} pour cent de protection contre Armageddon et "
+"Orage, mais diminue la puissance des sorts de 2."
+
 msgid ""
 "A kindly Sorceress thinks that your army's defenses could use a magical "
 "boost. She offers to enchant the Broach that you wear on your cloak, and you "
@@ -7871,6 +8724,17 @@ msgstr ""
 "Une sorcière bienveillante pense que les défenses de votre armée pourraient "
 "utiliser un coup de pouce magique. Elle propose d'enchanter la broche que "
 "vous portez sur votre manteau, et vous acceptez."
+
+msgid "Battle Garb of Anduran"
+msgstr "Cuirasse d'Anduran"
+
+msgid ""
+"The %{name} combines the powers of the three Anduran artifacts.  It provides "
+"maximum luck and morale for your troops and gives you the Town Portal spell."
+msgstr ""
+"La %{name} combine les pouvoirs des trois artéfacts d'Anduran.  Il offre un "
+"maximum de chance et de moral à vos troupes et vous donne le sort Portes du "
+"village."
 
 msgid ""
 "Out of pity for a poor peasant, you purchase a chest of old junk they are "
@@ -7881,6 +8745,17 @@ msgstr ""
 "vieilles ordures qu'il colporte. Plus tard, en fouillant dedans, vous "
 "constatez qu'il contient les 3 pièces du légendaire costume de bataille "
 "d'Anduran !"
+
+msgid "Crystal Ball"
+msgstr "Boule de cristal"
+
+msgid ""
+"The %{name} lets you get more specific information about monsters, enemy "
+"heroes, and castles nearby the hero who holds it."
+msgstr ""
+"La %{name} vous permet d'obtenir des informations plus spécifiques sur les "
+"monstres, les héros ennemis et les châteaux à proximité du héros qui le "
+"détient."
 
 msgid ""
 "You come upon a caravan of gypsies who are feasting and fortifying their "
@@ -7895,6 +8770,16 @@ msgstr ""
 "\" Vous ne le savez pas, mais essayez quand même. Ils rient hystériquement, "
 "mais admirent votre bravoure, vous donnant une boule de cristal."
 
+msgid "Heart of Fire"
+msgstr "Coeur de feu"
+
+msgid ""
+"The %{name} provides %{count} percent protection from fire, but doubles the "
+"damage taken from cold."
+msgstr ""
+"Le %{name} offre une protection de %{count} pour cent contre le feu, mais "
+"double les dégâts de froid infligés à vos troupes."
+
 msgid ""
 "You enter a recently burned glade and come upon a Fire Elemental sitting "
 "atop a rock. It looks up, its flaming face contorted in a look of severe "
@@ -7906,6 +8791,16 @@ msgstr ""
 "flamboyant tordu montre un regard de douleur intense. Il vous lance alors un "
 "objet lumineux. Vous levez les mains pour le bloquer, mais il passe à "
 "travers elles et se loge dans votre poitrine."
+
+msgid "Heart of Ice"
+msgstr "Coeur de glace"
+
+msgid ""
+"The %{name} provides %{count} percent protection from cold, but doubles the "
+"damage taken from fire."
+msgstr ""
+"Le %{name} offre une protection de %{count} pour cent contre le froid, mais "
+"double les dégâts de feu infligés à vos troupes."
 
 msgid ""
 "Suddenly, a biting coldness engulfs your body. You seize up, falling from "
@@ -7920,6 +8815,9 @@ msgstr ""
 "entendez rire de bon coeur. Vous vous retournez juste à temps pour voir un "
 "Géant de glace s'enfuir et disparaître dans les bois."
 
+msgid "Helmet of Anduran"
+msgstr "Casque d'Anduran"
+
 msgid ""
 "You spy a gleaming object poking up out of the ground. You send a member of "
 "your party over to investigate. He comes back with a golden helmet in his "
@@ -7930,6 +8828,9 @@ msgstr ""
 "votre groupe pour enquêter. Il revient avec un casque d'or à la main. Vous "
 "vous rendez compte que ce doit être le casque du légendaire d'Anduran, le "
 "seul homme qui était connu pour porter une armure en or massif."
+
+msgid "Holy Hammer"
+msgstr "Marteau saint"
 
 msgid ""
 "You come upon a battle where a Paladin has been mortally wounded by a group "
@@ -7942,6 +8843,12 @@ msgstr ""
 "qu'il a commencé.  Lorsque vous le ramassez, un bourdonnement s'entend, puis "
 "tout devient flou. Les Zombies gisent sur le sol, le marteau dégouline de "
 "sang. Vous l'attachez à votre ceinture."
+
+msgid "Legendary Scepter"
+msgstr "Sceptre légendaire"
+
+msgid "The %{name} adds %{count} points to all attributes."
+msgstr "Le %{name} ajoute %{count} points à tous les attributs."
 
 msgid ""
 "Upon cresting a small hill, you come upon a ridiculous looking sight. A "
@@ -7956,6 +8863,14 @@ msgstr ""
 "répond : \"Vous pensez que c'est drôle ? Bien. Vous pouvez le prendre. Je "
 "préfère voler de toute façon.\""
 
+msgid "Masthead"
+msgstr "Tête de mât"
+
+msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
+msgstr ""
+"La %{name} augmente votre chance et votre moral de %{count} points chacun "
+"dans les combats en mer."
+
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
 "youth to rally his crew during times of trouble. He then hands you a faded "
@@ -7968,6 +8883,13 @@ msgstr ""
 "cachée. Après beaucoup d'exploration, vous le trouvez planqué sous un quai à "
 "proximité."
 
+msgid "Sphere of Negation"
+msgstr "Sphère de négation"
+
+msgid "The %{name} disables all spell casting, for both sides, in combat."
+msgstr ""
+"La %{name} désactive tout lancer de sorts, pour chaque camp, au combat."
+
 msgid ""
 "You stop to help a Peasant catch a runaway mare. To show his gratitude, he "
 "hands you a tiny sphere. As soon as you grasp it, you feel the magical "
@@ -7976,6 +8898,12 @@ msgstr ""
 "Vous vous arrêtez pour aider un paysan à attraper une jument fugueuse. Pour "
 "montrer sa gratitude, il vous tend une minuscule sphère. Dès que vous la "
 "saisissez, vous sentez l'énergie magique s'écouler de vos membres..."
+
+msgid "Staff of Wizardry"
+msgstr "Bâton de la sorcellerie"
+
+msgid "The %{name} boosts your spell power by %{count}."
+msgstr "Le %{name} augmente la puissance de vos sorts de %{count}."
 
 msgid ""
 "While out scaring up game, your troops find a mysterious staff levitating "
@@ -7987,6 +8915,12 @@ msgstr ""
 "du sol. Ils vous le remettent et vous remarquez une inscription. On peut y "
 "lire : \"La magie demeure plus puissante que tout autre chose. Faîtes vôtres "
 "ces paroles, et vous gagnerez tous les combats.\""
+
+msgid "Sword Breaker"
+msgstr "Briseur d'épée"
+
+msgid "The %{name} increases your defense by %{count} and attack by 1."
+msgstr "Le %{name} augmente votre attaque et votre défense de 1."
 
 msgid ""
 "A former Captain of the Guard admires your quest and gives you the enchanted "
@@ -8008,6 +8942,15 @@ msgstr ""
 "vous remerciez que les Trolls à demi-esprit ont tendance à saisir le mauvais "
 "bout des objets tranchants."
 
+msgid "Sword of Anduran"
+msgstr "Épée d'Anduran"
+
+msgid "Spade of Necromancy"
+msgstr "Pelle du fossoyeur"
+
+msgid "The %{name} gives you increased necromancy skill."
+msgstr "La %{name} améliore votre compétence de nécromancie."
+
 msgid ""
 "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, "
 "you discover it to be the enchanted shovel of the Gravediggers, long thought "
@@ -8017,37 +8960,8 @@ msgstr ""
 "enquête, vous découvrez qu'il s'agit de la pelle enchantée du fossoyeur, "
 "longtemps pensée perdue par les mortels."
 
-msgid ""
-"Do you want to use your knowledge of magical secrets to transcribe the "
-"%{spell} Scroll into your Magic Book?\n"
-"The Spell Scroll will be consumed.\n"
-" Cost in spell points: %{sp}"
-msgstr ""
-"Voulez-vous utiliser votre connaissance des secrets magiques pour transcrire "
-"le parchemin %{spell} dans votre grimoire ?\n"
-"Le parchemin de sort sera consommé.\n"
-" Coût en points de magie : %{sp}"
-
-msgid "Move points: %{mp}"
-msgstr "Mouvement : %{mp}"
-
-msgid "Transcribe Spell Scroll"
-msgstr "Transcrire le Parchemin de sort"
-
-msgid "View Spells"
-msgstr "Voir les sorts"
-
-msgid "View %{name} Info"
-msgstr "Voir les infos de %{name}"
-
-msgid "Move %{name}"
-msgstr "Déplacer %{name}"
-
-msgid "Cannot move the Spellbook"
-msgstr "Impossible de déplacer le Grimoire"
-
-msgid "This item can't be traded."
-msgstr "Cet objet ne peut pas être échangé."
+msgid "Invalid Artifact"
+msgstr "Artefact non valide"
 
 msgid "Wood"
 msgstr "Bois"
@@ -8069,6 +8983,20 @@ msgstr "Rubis"
 
 msgid "Gold"
 msgstr "Or"
+
+msgid ""
+"There are seven resources in Heroes 2, used to build and improves castles, "
+"purchase troops and recruit heroes. Gold is the most common, required for "
+"virtually everything. Wood and ore are used for most buildings. Gems, "
+"Mercury, Sulfur and Crystal are rare magical resources used for the most "
+"powerful creatures and buildings."
+msgstr ""
+"Il existe sept ressources différentes dans Heroes 2, utiles pour construire "
+"et améliorer les châteaux, acheter des troupes et recruter des héros. L'or "
+"est la ressource la plus courante, nécessaire pour pratiquement tout. Le "
+"bois et le fer sont utilisés pour la plupart des bâtiments. Les gemmes, le "
+"mercure, le soufre et le cristal sont des ressources magiques rares "
+"utilisées pour les créatures et les bâtiments les plus puissants."
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
@@ -8406,7 +9334,8 @@ msgid "Summon Earth Elemental"
 msgstr "Invoquer Elémentaire de la Terre"
 
 msgid "Summons Earth Elementals to fight for your army."
-msgstr "Invoque des Elémentaires de la Terre pour qu'ils se battent à vos côtés."
+msgstr ""
+"Invoque des Elémentaires de la Terre pour qu'ils se battent à vos côtés."
 
 msgid "Summon Air Elemental"
 msgstr "Invoquer Elémentaire de l'Air"
@@ -8565,7 +9494,10 @@ msgid ""
 "damage from a direct attack."
 msgstr ""
 "Transforme en pierre la créature affectée.  Une créature pétrifiée reçoit la "
-"moitié des dégâts d’une attaque directe."
+"moitié des dégâts d'une attaque directe."
+
+msgid "You have no Magic Book, so you cannot cast a spell."
+msgstr "Vous n'avez pas de grimoire, vous ne pouvez donc pas lancer un sort."
 
 msgid "No spell to cast."
 msgstr "Aucun sort à lancer."
@@ -8608,13 +9540,16 @@ msgid "This spell summons %{count} %{monster} to guard the mine."
 msgstr "Ce sort invoque %{count} %{monster} pour garder la mine."
 
 msgid "The nearest town is %{town}."
-msgstr "La ville la plus proche est %{town}."
+msgstr "Le village le plus proche est %{town}."
+
+msgid "This town is occupied by your hero %{hero}."
+msgstr "Ce village est occupé par votre héros %{hero}."
 
 msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
 msgstr ""
-"Ce sort contrôle jusqu’à\n"
+"Ce sort contrôle jusqu'à\n"
 "%{hp} PV."
 
 msgid "game: always confirm for rewrite savefile"
@@ -8630,60 +9565,29 @@ msgid "world: show terrain penalty"
 msgstr "monde : afficher la pénalité de terrain"
 
 msgid "world: Scouting skill shows extended content info"
-msgstr "monde : Reconnaissance аffiche des infos supplémentaires"
+msgstr "monde : Reconnaissance affiche des infos supplémentaires"
 
 msgid "world: allow to set guardian to objects"
 msgstr "monde : autoriser le placement de gardiens pour certains lieux"
-
-msgid "world: Eagle Eye also works like Scholar in H3."
-msgstr "monde : Oeil d'Aigle fonctionne aussi comme Érudition dans Heroes 3"
-
-msgid "world: Crystal Ball gives Identify Hero and Visions spells"
-msgstr ""
-"monde : La Boule de Cristal donne les sorts Identifier Héros et Visions"
 
 msgid "world: Neutral armies scale with game difficulty"
 msgstr ""
 "monde : la puissance des armées neutres augmente avec la difficulté du jeu"
 
-msgid "world: use unique artifacts providing resources"
-msgstr "monde : utiliser des artéfacts uniques pour les ressources"
-
-msgid "world: use unique artifacts affecting primary skills"
-msgstr "monde : utiliser des artéfacts uniques pour les compétences primaires"
-
-msgid "world: use unique artifacts affecting secondary skills"
-msgstr ""
-"monde : utiliser des artéfacts uniques pour les compétences secondaires"
-
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
 "monde : Moulins, Roues Hydrauliques et Jardins Magiques peuvent être capturés"
 
-msgid "world: disable Barrow Mounds"
-msgstr "monde : désactiver les Tumulus"
-
 msgid "castle: allow guardians"
 msgstr "château : les Héros peuvent remplacer le Capitaine"
-
-msgid ""
-"castle: higher mage guilds regenerate more spell points/turn "
-"(20/40/60/80/100%)"
-msgstr ""
-"château : les guildes de magiciens régénèrent 20% de mana/tour par niveau"
 
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "héros : permettre l'achat d'un Grimoire dans les Sanctuaires"
 
-msgid "heroes: recruit cost depends on hero level"
-msgstr "héros : le coût de recrutement dépend du niveau du héros"
-
-msgid "heroes: remember move points for retreat/surrender result"
+#, fuzzy
+msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
 "héros : les points de mouvement sont mémorisés après la retraite/reddition"
-
-msgid "heroes: allow transcribing scrolls (needs: Eye Eagle skill)"
-msgstr "héros : permettre la transcription des parchemins (avec Oeil d'Aigle)"
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr ""
@@ -8692,10 +9596,6 @@ msgstr ""
 
 msgid "battle: allow soft wait for troops"
 msgstr "combat : permettre aux créatures d'attendre au cours du combat"
-
-msgid "battle: reverse wait order (fast, average, slow)"
-msgstr ""
-"combat : inverser l'ordre des créatures qui ont attendu (rapide, moyen, lent)"
 
 msgid "battle: deterministic events"
 msgstr "bataille : événements déterministes"
@@ -8706,16 +9606,13 @@ msgstr "jeu : afficher les informations système"
 msgid "game: autosave will be made at the beginning of the day"
 msgstr "jeu : sauvegarde auto en début de journée"
 
-msgid "game: use fade"
-msgstr "jeu : utiliser \"fade\""
-
 msgid "game: use evil interface"
 msgstr "jeu : utiliser l'interface maléfique"
 
 msgid "game: hide interface"
 msgstr "jeu : cacher l'interface"
 
-msgid "game: offer to continue the game afer victory condition"
+msgid "game: offer to continue the game after victory condition"
 msgstr "jeu : offre de continuer le jeu après la victoire"
 
 msgid "The ultimate artifact is really the %{name}."
@@ -8770,7 +9667,7 @@ msgstr "Un Dragon Noir éliminera un Titan n'importe quel jour de la semaine."
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
 msgstr "Il lui a dit : Yada yada yada... et elle a répondu : Bla, bla, bla..."
 
-msgid "An unknown force is being ressurected..."
+msgid "An unknown force is being resurrected..."
 msgstr "Une force inconnue est ressuscitée..."
 
 msgid ""
@@ -8781,70 +9678,3 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Power Axe"
-#~ msgstr "Puissante Hache"
-
-#~ msgid "battle: show army order"
-#~ msgstr "combat : afficher l'ordre de jeu des créatures"
-
-#~ msgid "Buy Monsters"
-#~ msgstr "Acheter créatures"
-
-#~ msgid "The %{name} provides %{count} unit of crystal/day."
-#~ msgstr "La %{name} fournit %{count} cristal par jour."
-
-#~ msgid ""
-#~ "The %{name} extends the duration of all your spells by %{count} turn."
-#~ msgid_plural ""
-#~ "The %{name} extends the duration of all your spells by %{count} turns."
-#~ msgstr[0] "Le %{name} prolonge la durée de tous vos sorts de %{count} tour."
-#~ msgstr[1] ""
-#~ "Le %{name} prolonge la durée de tous vos sorts de %{count} tours."
-
-#~ msgid "The %{name} increases the duration of your spells by %{count} turn."
-#~ msgid_plural ""
-#~ "The %{name} increases the duration of your spells by %{count} turns."
-#~ msgstr[0] "Le %{name} augmente la durée de vos sorts de %{count} tour."
-#~ msgstr[1] "Le %{name} augmente la durée de vos sorts de %{count} tours."
-
-#~ msgid "The %{name} returns %{count} extra power point/turn to your hero."
-#~ msgid_plural ""
-#~ "The %{name} returns %{count} extra power points/turn to your hero."
-#~ msgstr[0] ""
-#~ "L'%{name} rend %{count} point de magie supplémentaires chaque tour à "
-#~ "votre héros."
-#~ msgstr[1] ""
-#~ "L'%{name} rend %{count} points de magie supplémentaires chaque tour à "
-#~ "votre héros."
-
-#~ msgid "Cannot move artifact"
-#~ msgstr "Impossible de déplacer l'artéfact"
-
-#~ msgid "game: autosave on"
-#~ msgstr "jeu : activer sauvegarde auto"
-
-#~ msgid "Monster Info"
-#~ msgstr "Informations sur la créature"
-
-#~ msgid ""
-#~ "Toggle the monster info window, which shows information on the active and "
-#~ "targeted monsters."
-#~ msgstr ""
-#~ "Afficher les fenêtres d'information concernant les créatures actives et "
-#~ "les créatures choisies."
-
-#~ msgid "Army is full"
-#~ msgstr "Le peloton a atteint sa taille maximale"
-
-#~ msgid "Join Error"
-#~ msgstr "Erreur pour rejoindre"
-
-#~ msgid "View Stats"
-#~ msgstr "Voir Stats"
-
-#~ msgid "unions: allow meeting heroes"
-#~ msgstr "alliances : rencontres des héros"
-
-#~ msgid "unions: allow castle visiting"
-#~ msgstr "alliances : visites des châteaux"

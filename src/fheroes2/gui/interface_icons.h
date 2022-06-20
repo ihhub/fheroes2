@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -54,26 +54,32 @@ namespace Interface
             assert( count >= 0 );
         }
 
+        IconsBar( const IconsBar & ) = delete;
+
+        virtual ~IconsBar() = default;
+
+        IconsBar & operator=( const IconsBar & ) = delete;
+
         void SetShow( bool f )
         {
             show = f;
         }
 
-        void RedrawBackground( const fheroes2::Point & ) const;
+        void redrawBackground( fheroes2::Image & output, const fheroes2::Point & offset, const int32_t validItemCount ) const;
 
         void SetIconsCount( const int32_t c )
         {
             iconsCount = c;
         }
 
-        int32_t getIconCount() const
+        int32_t getIconsCount() const
         {
             return iconsCount;
         }
 
         static int32_t GetItemWidth();
         static int32_t GetItemHeight();
-        static bool IsVisible( void );
+        static bool IsVisible();
 
     protected:
         const fheroes2::Image & marker;
@@ -81,67 +87,89 @@ namespace Interface
         bool show;
     };
 
-    void RedrawHeroesIcon( const Heroes &, s32, s32 );
-    void RedrawCastleIcon( const Castle &, s32, s32 );
+    void RedrawHeroesIcon( const Heroes &, int32_t, int32_t );
+    void RedrawCastleIcon( const Castle &, int32_t, int32_t );
 
-    class HeroesIcons : public Interface::ListBox<HEROES>, public IconsBar
+    class HeroesIcons final : public Interface::ListBox<HEROES>, public IconsBar
     {
     public:
         HeroesIcons( const int32_t count, const fheroes2::Image & sf )
             : IconsBar( count, sf )
         {}
 
-        void SetPos( s32, s32 );
+        HeroesIcons( const HeroesIcons & ) = delete;
+
+        ~HeroesIcons() override = default;
+
+        HeroesIcons & operator=( const HeroesIcons & ) = delete;
+
+        void SetPos( int32_t px, int32_t py );
         void SetShow( bool );
 
-    protected:
-        void ActionCurrentUp( void ) override;
-        void ActionCurrentDn( void ) override;
+    private:
+        using Interface::ListBox<HEROES>::ActionListDoubleClick;
+        using Interface::ListBox<HEROES>::ActionListSingleClick;
+        using Interface::ListBox<HEROES>::ActionListPressRight;
+
+        void ActionCurrentUp() override;
+        void ActionCurrentDn() override;
         void ActionListDoubleClick( HEROES & ) override;
         void ActionListSingleClick( HEROES & ) override;
         void ActionListPressRight( HEROES & ) override;
-        void RedrawItem( const HEROES &, s32 ox, s32 oy, bool current ) override;
+        void RedrawItem( const HEROES & item, int32_t ox, int32_t oy, bool current ) override;
         void RedrawBackground( const fheroes2::Point & ) override;
 
-    private:
         fheroes2::Point _topLeftCorner;
     };
 
-    class CastleIcons : public Interface::ListBox<CASTLE>, public IconsBar
+    class CastleIcons final : public Interface::ListBox<CASTLE>, public IconsBar
     {
     public:
         CastleIcons( const int32_t count, const fheroes2::Image & sf )
             : IconsBar( count, sf )
         {}
 
-        void SetPos( s32, s32 );
+        CastleIcons( const CastleIcons & ) = delete;
+
+        ~CastleIcons() override = default;
+
+        CastleIcons & operator=( const CastleIcons & ) = delete;
+
+        void SetPos( int32_t px, int32_t py );
         void SetShow( bool );
 
-    protected:
-        void ActionCurrentUp( void ) override;
-        void ActionCurrentDn( void ) override;
+    private:
+        using Interface::ListBox<CASTLE>::ActionListDoubleClick;
+        using Interface::ListBox<CASTLE>::ActionListSingleClick;
+        using Interface::ListBox<CASTLE>::ActionListPressRight;
+
+        void ActionCurrentUp() override;
+        void ActionCurrentDn() override;
         void ActionListDoubleClick( CASTLE & ) override;
         void ActionListSingleClick( CASTLE & ) override;
         void ActionListPressRight( CASTLE & ) override;
-        void RedrawItem( const CASTLE &, s32 ox, s32 oy, bool current ) override;
+        void RedrawItem( const CASTLE & item, int32_t ox, int32_t oy, bool current ) override;
         void RedrawBackground( const fheroes2::Point & ) override;
 
-    private:
         fheroes2::Point _topLeftCorner;
     };
 
-    class IconsPanel : public BorderWindow
+    class IconsPanel final : public BorderWindow
     {
     public:
         explicit IconsPanel( Basic & basic );
+        IconsPanel( const IconsPanel & ) = delete;
 
-        void SetPos( s32, s32 ) override;
-        void SavePosition( void ) override;
-        void SetRedraw( void ) const;
+        ~IconsPanel() override = default;
+
+        IconsPanel & operator=( const IconsPanel & ) = delete;
+
+        void SetPos( int32_t ox, int32_t oy ) override;
+        void SavePosition() override;
+        void SetRedraw() const;
         void SetRedraw( const icons_t type ) const;
 
-        void Redraw( void );
-        void QueueEventProcessing( void );
+        void QueueEventProcessing();
 
         void Select( Heroes * const );
         void Select( Castle * const );
@@ -150,10 +178,15 @@ namespace Interface
         void ResetIcons( const icons_t type );
         void HideIcons( const icons_t type );
         void ShowIcons( const icons_t type );
-        void RedrawIcons( const icons_t type );
-        void SetCurrentVisible( void );
 
     private:
+        friend Basic;
+
+        // Do not call these methods directly, use Interface::Basic::Redraw() instead
+        // to avoid issues in the "no interface" mode
+        void Redraw();
+        void RedrawIcons( const icons_t type );
+
         Basic & interface;
 
         fheroes2::Image sfMarker;

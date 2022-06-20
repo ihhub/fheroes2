@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -24,11 +24,11 @@
 #ifndef H2TEXT_H
 #define H2TEXT_H
 
+#include <cstdint>
 #include <list>
 #include <string>
 
 #include "screen.h"
-#include "types.h"
 
 namespace Font
 {
@@ -39,8 +39,7 @@ namespace Font
         YELLOW_BIG = 0x04,
         YELLOW_SMALL = 0x08,
         GRAY_BIG = 0x10,
-        GRAY_SMALL = 0x20,
-        WHITE_LARGE = 0x40
+        GRAY_SMALL = 0x20
     };
 }
 enum
@@ -69,21 +68,22 @@ public:
     void Set( const std::string & );
     void Set( int );
 
-    void Clear( void );
-    size_t Size( void ) const;
+    void Clear();
 
-    int w( void ) const
+    size_t Size() const;
+
+    int w() const
     {
         return static_cast<int>( gw );
     }
-    int h( void ) const
+    int h() const
     {
         return static_cast<int>( gh );
     }
 
-    void Blit( s32, s32, fheroes2::Image & sf = fheroes2::Display::instance() ) const;
-    void Blit( s32, s32, int maxw, fheroes2::Image & sf = fheroes2::Display::instance() ) const;
-    void Blit( const fheroes2::Point &, fheroes2::Image & sf = fheroes2::Display::instance() ) const;
+    void Blit( int32_t ax, int32_t ay, fheroes2::Image & dst = fheroes2::Display::instance() ) const;
+    void Blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst = fheroes2::Display::instance() ) const;
+    void Blit( const fheroes2::Point & dst_pt, fheroes2::Image & dst = fheroes2::Display::instance() ) const;
 
     static int32_t getCharacterWidth( const uint8_t character, const int fontType );
 
@@ -92,30 +92,40 @@ public:
 
 protected:
     TextAscii * message;
-    u32 gw;
-    u32 gh;
+    uint32_t gw;
+    uint32_t gh;
 };
 
 class TextSprite : protected Text
 {
 public:
     TextSprite();
-    TextSprite( const std::string &, int ft, s32, s32 );
+    TextSprite( const std::string &, int ft, int32_t, int32_t );
 
-    void SetPos( s32, s32 );
+    void SetPos( int32_t, int32_t );
     void SetText( const std::string & );
     void SetText( const std::string &, int );
     void SetFont( int );
 
-    void Show( void );
-    void Hide( void );
+    void Show();
+    void Hide();
 
-    bool isShow( void ) const;
+    bool isShow() const
+    {
+        return !hide;
+    }
 
-    int w() const;
-    int h() const;
+    int w() const
+    {
+        return gw;
+    }
 
-    fheroes2::Rect GetRect( void ) const;
+    int h() const
+    {
+        return gh + 5;
+    }
+
+    fheroes2::Rect GetRect() const;
 
 private:
     fheroes2::ImageRestorer _restorer;
@@ -125,12 +135,15 @@ private:
 class TextBox : protected fheroes2::Rect
 {
 public:
-    TextBox();
     TextBox( const std::string &, int, uint32_t width_ );
     TextBox( const std::string &, int, const fheroes2::Rect & );
 
     void Set( const std::string &, int, uint32_t width_ );
-    void SetAlign( int type );
+
+    void SetAlign( int type )
+    {
+        align = type;
+    }
 
     int32_t w() const
     {
@@ -147,10 +160,10 @@ public:
         return messages.size();
     }
 
-    void Blit( s32, s32, fheroes2::Image & sf = fheroes2::Display::instance() );
+    void Blit( int32_t, int32_t, fheroes2::Image & sf = fheroes2::Display::instance() );
 
 private:
-    void Append( const std::string &, int, u32 );
+    void Append( const std::string &, int, uint32_t );
 
     std::list<Text> messages;
     int align;

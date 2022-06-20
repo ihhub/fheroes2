@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -32,7 +32,7 @@ Troop::Troop()
     , count( 0 )
 {}
 
-Troop::Troop( const Monster & m, u32 c )
+Troop::Troop( const Monster & m, uint32_t c )
     : Monster( m )
     , count( c )
 {}
@@ -47,7 +47,7 @@ bool Troop::isMonster( int mons ) const
     return GetID() == mons;
 }
 
-Monster Troop::GetMonster( void ) const
+Monster Troop::GetMonster() const
 {
     return Monster( id );
 }
@@ -58,7 +58,7 @@ void Troop::Set( const Troop & t )
     SetCount( t.GetCount() );
 }
 
-void Troop::Set( const Monster & m, u32 c )
+void Troop::Set( const Monster & m, uint32_t c )
 {
     Set( Troop( m, c ) );
 }
@@ -68,38 +68,38 @@ void Troop::SetMonster( const Monster & m )
     id = m.GetID();
 }
 
-void Troop::SetCount( u32 c )
+void Troop::SetCount( uint32_t c )
 {
     count = c;
 }
 
-void Troop::Reset( void )
+void Troop::Reset()
 {
     id = Monster::UNKNOWN;
     count = 0;
 }
 
-const char * Troop::GetName( void ) const
+const char * Troop::GetName() const
 {
     return Monster::GetPluralName( count );
 }
 
-u32 Troop::GetCount( void ) const
+uint32_t Troop::GetCount() const
 {
     return count;
 }
 
-u32 Troop::GetHitPoints( void ) const
+uint32_t Troop::GetHitPoints() const
 {
     return Monster::GetHitPoints() * count;
 }
 
-u32 Troop::GetDamageMin( void ) const
+uint32_t Troop::GetDamageMin() const
 {
     return Monster::GetDamageMin() * count;
 }
 
-u32 Troop::GetDamageMax( void ) const
+uint32_t Troop::GetDamageMax() const
 {
     return Monster::GetDamageMax() * count;
 }
@@ -114,72 +114,71 @@ double Troop::GetStrengthWithBonus( int bonusAttack, int bonusDefense ) const
     return Monster::GetMonsterStrength( Monster::GetAttack() + bonusAttack, Monster::GetDefense() + bonusDefense ) * count;
 }
 
-bool Troop::isValid( void ) const
+bool Troop::isValid() const
 {
     return Monster::isValid() && count;
 }
 
-bool Troop::isEmpty( void ) const
+bool Troop::isEmpty() const
 {
     return !isValid();
 }
 
-payment_t Troop::GetCost( void ) const
+payment_t Troop::GetTotalCost() const
 {
-    return Monster::GetCost() * count;
+    return GetCost() * count;
 }
 
-payment_t Troop::GetUpgradeCost( void ) const
+payment_t Troop::GetTotalUpgradeCost() const
 {
-    return Monster::GetUpgradeCost() * count;
+    return GetUpgradeCost() * count;
 }
 
-bool Troop::isBattle( void ) const
-{
-    return false;
-}
-
-bool Troop::isModes( u32 ) const
+bool Troop::isBattle() const
 {
     return false;
 }
 
-std::string Troop::GetAttackString( void ) const
+bool Troop::isModes( uint32_t /* unused */ ) const
+{
+    return false;
+}
+
+std::string Troop::GetAttackString() const
 {
     return std::to_string( GetAttack() );
 }
 
-std::string Troop::GetDefenseString( void ) const
+std::string Troop::GetDefenseString() const
 {
     return std::to_string( GetDefense() );
 }
 
-std::string Troop::GetShotString( void ) const
+std::string Troop::GetShotString() const
 {
     return std::to_string( GetShots() );
 }
 
-std::string Troop::GetSpeedString( void ) const
+std::string Troop::GetSpeedString() const
 {
     return Speed::String( GetSpeed() );
 }
 
-u32 Troop::GetHitPointsLeft( void ) const
+uint32_t Troop::GetHitPointsLeft() const
 {
     return 0;
 }
 
-u32 Troop::GetSpeed( void ) const
+uint32_t Troop::GetSpeed() const
 {
     return Monster::GetSpeed();
 }
 
-u32 Troop::GetAffectedDuration( u32 ) const
+uint32_t Troop::GetAffectedDuration( uint32_t /* unused */ ) const
 {
     return 0;
 }
 
-/* ArmyTroop */
 ArmyTroop::ArmyTroop( const Army * a )
     : army( a )
 {}
@@ -189,27 +188,27 @@ ArmyTroop::ArmyTroop( const Army * a, const Troop & t )
     , army( a )
 {}
 
-u32 ArmyTroop::GetAttack( void ) const
+uint32_t ArmyTroop::GetAttack() const
 {
     return Troop::GetAttack() + ( army && army->GetCommander() ? army->GetCommander()->GetAttack() : 0 );
 }
 
-u32 ArmyTroop::GetDefense( void ) const
+uint32_t ArmyTroop::GetDefense() const
 {
     return Troop::GetDefense() + ( army && army->GetCommander() ? army->GetCommander()->GetDefense() : 0 );
 }
 
-int ArmyTroop::GetColor( void ) const
+int ArmyTroop::GetColor() const
 {
     return army ? army->GetColor() : Color::NONE;
 }
 
-int ArmyTroop::GetMorale( void ) const
+int ArmyTroop::GetMorale() const
 {
     return army && isAffectedByMorale() ? army->GetMorale() : Troop::GetMorale();
 }
 
-int ArmyTroop::GetLuck( void ) const
+int ArmyTroop::GetLuck() const
 {
     return army ? army->GetLuck() : Troop::GetLuck();
 }
@@ -219,12 +218,12 @@ void ArmyTroop::SetArmy( const Army & a )
     army = &a;
 }
 
-const Army * ArmyTroop::GetArmy( void ) const
+const Army * ArmyTroop::GetArmy() const
 {
     return army;
 }
 
-std::string ArmyTroop::GetAttackString( void ) const
+std::string ArmyTroop::GetAttackString() const
 {
     if ( Troop::GetAttack() == GetAttack() )
         return std::to_string( Troop::GetAttack() );
@@ -237,7 +236,7 @@ std::string ArmyTroop::GetAttackString( void ) const
     return output;
 }
 
-std::string ArmyTroop::GetDefenseString( void ) const
+std::string ArmyTroop::GetDefenseString() const
 {
     if ( Troop::GetDefense() == GetDefense() )
         return std::to_string( Troop::GetDefense() );

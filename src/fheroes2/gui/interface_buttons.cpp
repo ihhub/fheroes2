@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -36,17 +36,17 @@ Interface::ButtonsArea::ButtonsArea( Basic & basic )
     , interface( basic )
 {}
 
-void Interface::ButtonsArea::SavePosition( void )
+void Interface::ButtonsArea::SavePosition()
 {
     Settings::Get().SetPosButtons( GetRect().getPosition() );
 }
 
-void Interface::ButtonsArea::SetRedraw( void ) const
+void Interface::ButtonsArea::SetRedraw() const
 {
     interface.SetRedraw( REDRAW_BUTTONS );
 }
 
-void Interface::ButtonsArea::SetPos( s32 ox, s32 oy )
+void Interface::ButtonsArea::SetPos( int32_t ox, int32_t oy )
 {
     BorderWindow::SetPosition( ox, oy );
 
@@ -95,7 +95,7 @@ void Interface::ButtonsArea::SetPos( s32 ox, s32 oy )
     systemRect = buttonSystem.area();
 }
 
-void Interface::ButtonsArea::Redraw( void )
+void Interface::ButtonsArea::Redraw()
 {
     const Settings & conf = Settings::Get();
 
@@ -116,7 +116,7 @@ void Interface::ButtonsArea::Redraw( void )
     }
 }
 
-void Interface::ButtonsArea::ResetButtons( void )
+void Interface::ButtonsArea::ResetButtons()
 {
     if ( buttonNextHero.isEnabled() ) {
         buttonNextHero.drawOnRelease();
@@ -137,7 +137,7 @@ void Interface::ButtonsArea::ResetButtons( void )
     LocalEvent::Get().ResetPressLeft();
 }
 
-fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing( void )
+fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
     fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
@@ -153,8 +153,9 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing( void )
     le.MousePressLeft( fileRect ) ? buttonFile.drawOnPress() : buttonFile.drawOnRelease();
     le.MousePressLeft( systemRect ) ? buttonSystem.drawOnPress() : buttonSystem.drawOnRelease();
 
+    // Move border window
     if ( Settings::Get().ShowButtons() && BorderWindow::QueueEventProcessing() ) {
-        // Move border window. No other action is required.
+        SetRedraw();
     }
     else if ( buttonNextHero.isEnabled() && le.MouseClickLeft( nextHeroRect ) ) {
         interface.EventNextHero();

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -52,16 +52,16 @@ namespace
                 res.clear();
                 std::string errorDesc( "zlib error: " );
                 errorDesc += std::to_string( ret );
-                ERROR_LOG( errorDesc.c_str() );
+                ERROR_LOG( errorDesc.c_str() )
             }
         }
 
         return res;
     }
 
-    std::vector<u8> zlibCompress( const u8 * src, size_t srcsz )
+    std::vector<uint8_t> zlibCompress( const uint8_t * src, size_t srcsz )
     {
-        std::vector<u8> res;
+        std::vector<uint8_t> res;
 
         if ( src && srcsz ) {
             res.resize( compressBound( static_cast<uLong>( srcsz ) ) );
@@ -74,7 +74,7 @@ namespace
                 res.clear();
                 std::string errorDesc( "zlib error: " );
                 errorDesc += std::to_string( ret );
-                ERROR_LOG( errorDesc.c_str() );
+                ERROR_LOG( errorDesc.c_str() )
             }
         }
 
@@ -90,11 +90,11 @@ bool ZStreamFile::read( const std::string & fn, size_t offset )
     if ( sf.open( fn, "rb" ) ) {
         if ( offset )
             sf.seek( offset );
-        const u32 size0 = sf.get32(); // raw size
+        const uint32_t size0 = sf.get32(); // raw size
         if ( size0 == 0 ) {
             return false;
         }
-        const u32 size1 = sf.get32(); // zip size
+        const uint32_t size1 = sf.get32(); // zip size
         if ( size1 == 0 ) {
             return false;
         }
@@ -149,7 +149,7 @@ fheroes2::Image CreateImageFromZlib( int32_t width, int32_t height, const uint8_
         std::memcpy( out.transform(), uncompressedData.data() + uncompressedSize, uncompressedSize );
     }
     else {
-        std::fill( out.transform(), out.transform() + uncompressedSize, 0 );
+        std::fill( out.transform(), out.transform() + uncompressedSize, static_cast<uint8_t>( 0 ) );
     }
     return out;
 }

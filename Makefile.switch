@@ -1,6 +1,6 @@
 ###########################################################################
-#   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
-#   Copyright (C) 2021                                                    #
+#   fheroes2: https://github.com/ihhub/fheroes2                           #
+#   Copyright (C) 2021 - 2022                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -18,12 +18,19 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-TARGET	:= fheroes2
-MAKE	:= make
+# Options:
+#
+# FHEROES2_STRICT_COMPILATION: build in strict compilation mode (turns warnings into errors)
+# FHEROES2_WITH_DEBUG: build in debug mode
+# FHEROES2_WITH_IMAGE: build with SDL2 Image support (requires libpng, libjpeg and libwebp)
+# FHEROES2_DATA: set the built-in path to the fheroes2 data directory (e.g. /usr/share/fheroes2)
+
+TARGET := fheroes2
+MAKE := make
 
 PROJECT_TITLE := fheroes2
 PROJECT_AUTHOR := fheroes2 resurrection team
-PROJECT_VERSION := 0.9.12
+PROJECT_VERSION := $(file < version.txt)
 
 PATH := $(PATH):/opt/devkitpro/portlibs/switch/bin/:/opt/devkitpro/tools/bin/
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -47,15 +47,17 @@ public:
     {}
     virtual ~ActionSimple() = default;
 
-    int GetType( void ) const
+    int GetType() const
     {
         return type;
     }
-    u32 GetUID( void ) const
+
+    uint32_t GetUID() const
     {
         return uid;
     }
-    void SetUID( u32 v )
+
+    void SetUID( uint32_t v )
     {
         uid = v;
     }
@@ -64,7 +66,7 @@ protected:
     friend StreamBase & operator<<( StreamBase &, const ActionSimple & );
     friend StreamBase & operator>>( StreamBase &, ActionSimple & );
 
-    u32 uid;
+    uint32_t uid;
     int type;
 };
 
@@ -106,7 +108,7 @@ struct ActionAccess : public ActionSimple
         , allowComputer( true )
         , cancelAfterFirstVisit( false )
     {}
-    static bool Action( const ActionAccess *, s32, Heroes & );
+    static bool Action( const ActionAccess *, int32_t, Heroes & );
 };
 
 struct ActionArtifact : public ActionSimple

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -41,7 +41,7 @@ int ObjTree::GetPassable( const uint8_t index )
     return ( 5 == index || 15 == index || 22 == index || 27 == index ? 0 : DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW );
 }
 
-bool ObjTree::isAction( u32 index )
+bool ObjTree::isAction( uint32_t index )
 {
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
@@ -51,7 +51,7 @@ bool ObjTree::isShadow( const uint8_t index )
     return objTreeShadowBitset[index];
 }
 
-int ObjTree::GetActionObject( u32 )
+int ObjTree::GetActionObject( uint32_t /* unused */ )
 {
     return MP2::OBJ_ZERO;
 }

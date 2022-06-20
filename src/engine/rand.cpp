@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -64,18 +64,18 @@ uint32_t Rand::GetWithGen( uint32_t from, uint32_t to, std::mt19937 & gen )
     return distrib( gen );
 }
 
-Rand::Queue::Queue( u32 size )
+Rand::Queue::Queue( uint32_t size )
 {
     reserve( size );
 }
 
-void Rand::Queue::Push( s32 value, u32 percent )
+void Rand::Queue::Push( int32_t value, uint32_t percent )
 {
     if ( percent > 0 )
         emplace_back( value, percent );
 }
 
-size_t Rand::Queue::Size( void ) const
+size_t Rand::Queue::Size() const
 {
     return size();
 }
@@ -86,7 +86,7 @@ int32_t Rand::Queue::Get( const std::function<uint32_t( uint32_t )> & randomFunc
 
     // get max
     it = begin();
-    u32 max = 0;
+    uint32_t max = 0;
     for ( ; it != end(); ++it )
         max += ( *it ).second;
 
@@ -113,7 +113,7 @@ int32_t Rand::Queue::Get( const std::function<uint32_t( uint32_t )> & randomFunc
             return ( *it ).first;
     }
 
-    ERROR_LOG( "weight not found, return 0" );
+    ERROR_LOG( "weight not found, return 0" )
     return 0;
 }
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -34,17 +34,17 @@ Battle::Bridge::Bridge()
     , down( false )
 {}
 
-bool Battle::Bridge::isValid( void ) const
+bool Battle::Bridge::isValid() const
 {
     return !isDestroy();
 }
 
-bool Battle::Bridge::isDestroy( void ) const
+bool Battle::Bridge::isDestroy() const
 {
     return destroy;
 }
 
-bool Battle::Bridge::isDown( void ) const
+bool Battle::Bridge::isDown() const
 {
     return down || isDestroy();
 }
@@ -54,13 +54,13 @@ void Battle::Bridge::SetDown( bool f )
     down = f;
 }
 
-bool Battle::Bridge::AllowUp( void ) const
+bool Battle::Bridge::AllowUp() const
 {
     // yes if not destroyed and lowered and there are no any troops (alive or dead) on or under the bridge
     return isValid() && isDown() && !isBridgeOccupied();
 }
 
-bool Battle::Bridge::isBridgeOccupied( void ) const
+bool Battle::Bridge::isBridgeOccupied() const
 {
     const Battle::Graveyard * graveyard = Arena::GetGraveyard();
 
@@ -69,7 +69,7 @@ bool Battle::Bridge::isBridgeOccupied( void ) const
            || graveyard->GetLastTroopUID( GATES_CELL );
 }
 
-bool Battle::Bridge::NeedDown( const Unit & b, s32 dstPos ) const
+bool Battle::Bridge::NeedDown( const Unit & b, int32_t dstPos ) const
 {
     // no if bridge is destroyed or already lowered or unit does not belong to the castle or there are any troops (alive or dead) on or under the bridge
     if ( !isValid() || isDown() || b.GetColor() != Arena::GetCastle()->GetColor() || isBridgeOccupied() )
@@ -98,7 +98,7 @@ bool Battle::Bridge::isPassable( const Unit & b ) const
     return isDown() || ( b.GetColor() == Arena::GetCastle()->GetColor() && !isBridgeOccupied() );
 }
 
-void Battle::Bridge::SetDestroy( void )
+void Battle::Bridge::SetDestroy()
 {
     destroy = true;
 
@@ -115,7 +115,7 @@ void Battle::Bridge::SetPassable( const Unit & b ) const
     }
 }
 
-void Battle::Bridge::Action( const Unit & b, s32 dst )
+void Battle::Bridge::Action( const Unit & b, int32_t dst )
 {
     bool action_down = false;
 

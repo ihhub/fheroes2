@@ -37,6 +37,8 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A5447356-473D-44F0-B269-01CEF05E0ACF}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
+    <RootNamespace>extractor</RootNamespace>
+    <TargetName>extractor</TargetName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL1|Win32'" Label="Configuration">
@@ -184,6 +186,7 @@
     <ClCompile Include="..\engine\serialize.cpp" />
     <ClCompile Include="..\engine\smk_decoder.cpp" />
     <ClCompile Include="..\engine\system.cpp" />
+    <ClCompile Include="..\engine\thread.cpp" />
     <ClCompile Include="..\engine\timing.cpp" />
     <ClCompile Include="..\engine\tinyconfig.cpp" />
     <ClCompile Include="..\engine\tools.cpp" />
@@ -192,8 +195,6 @@
     <ClCompile Include="..\engine\zzlib.cpp" />
     <ClCompile Include="extractor.cpp" />
     <ClCompile Include="..\thirdparty\libsmacker\smacker.c" />
-    <ClCompile Include="..\thirdparty\libsmacker\smk_bitstream.c" />
-    <ClCompile Include="..\thirdparty\libsmacker\smk_hufftree.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\engine\agg_file.h" />
@@ -214,15 +215,13 @@
     <ClInclude Include="..\engine\serialize.h" />
     <ClInclude Include="..\engine\smk_decoder.h" />
     <ClInclude Include="..\engine\system.h" />
+    <ClInclude Include="..\engine\thread.h" />
     <ClInclude Include="..\engine\timing.h" />
     <ClInclude Include="..\engine\tinyconfig.h" />
     <ClInclude Include="..\engine\tools.h" />
     <ClInclude Include="..\engine\translations.h" />
-    <ClInclude Include="..\engine\types.h" />
     <ClInclude Include="..\engine\zzlib.h" />
     <ClInclude Include="..\thirdparty\libsmacker\smacker.h" />
-    <ClInclude Include="..\thirdparty\libsmacker\smk_bitstream.h" />
-    <ClInclude Include="..\thirdparty\libsmacker\smk_hufftree.h" />
     <ClInclude Include="..\thirdparty\libsmacker\smk_malloc.h" />
   </ItemGroup>
   <ItemDefinitionGroup />

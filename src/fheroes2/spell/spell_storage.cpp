@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -72,7 +72,7 @@ bool SpellStorage::hasAdventureSpell( const int lvl ) const
     return false;
 }
 
-std::string SpellStorage::String( void ) const
+std::string SpellStorage::String() const
 {
     std::string output;
 
@@ -92,23 +92,5 @@ void SpellStorage::Append( const BagArtifacts & bag )
 
 void SpellStorage::Append( const Artifact & art )
 {
-    switch ( art.GetID() ) {
-    case Artifact::SPELL_SCROLL:
-        Append( Spell( art.GetSpell() ) );
-        break;
-
-    case Artifact::CRYSTAL_BALL:
-        if ( Settings::Get().ExtWorldArtifactCrystalBall() ) {
-            Append( Spell( Spell::IDENTIFYHERO ) );
-            Append( Spell( Spell::VISIONS ) );
-        }
-        break;
-
-    case Artifact::BATTLE_GARB:
-        Append( Spell( Spell::TOWNPORTAL ) );
-        break;
-
-    default:
-        break;
-    }
+    Append( Spell( art.getSpellId() ) );
 }

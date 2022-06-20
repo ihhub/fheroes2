@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -27,10 +27,15 @@
 
 class Castle;
 
-class Captain : public HeroBase
+class Captain final : public HeroBase
 {
 public:
     explicit Captain( Castle & );
+    Captain( const Captain & ) = delete;
+
+    ~Captain() override = default;
+
+    Captain & operator=( const Captain & ) = delete;
 
     bool isValid() const override;
     int GetAttack() const override;

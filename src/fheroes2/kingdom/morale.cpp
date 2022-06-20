@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -21,8 +21,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+
 #include "morale.h"
-#include "tools.h"
 #include "translations.h"
 
 std::string Morale::String( int morale )
@@ -71,5 +72,5 @@ std::string Morale::Description( int morale )
 
 int Morale::Normalize( const int morale )
 {
-    return clamp( morale, static_cast<int>( Morale::TREASON ), static_cast<int>( Morale::BLOOD ) );
+    return std::clamp( morale, static_cast<int>( Morale::TREASON ), static_cast<int>( Morale::BLOOD ) );
 }

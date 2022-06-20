@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -27,6 +27,7 @@
 #include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "maps.h"
 #include "settings.h"
@@ -48,56 +49,54 @@ Interface::Basic::Basic()
 void Interface::Basic::Reset()
 {
     const fheroes2::Display & display = fheroes2::Display::instance();
-    const Settings & conf = Settings::Get();
 
-    SetHideInterface( conf.ExtGameHideInterface() );
-
-    scrollLeft = fheroes2::Rect( 0, 0, BORDERWIDTH, display.height() );
-    scrollRight = fheroes2::Rect( display.width() - BORDERWIDTH, 0, BORDERWIDTH, display.height() );
-    scrollTop = fheroes2::Rect( 0, 0, display.width(), BORDERWIDTH );
-    scrollBottom = fheroes2::Rect( 0, display.height() - BORDERWIDTH, display.width(), BORDERWIDTH );
-}
-
-void Interface::Basic::SetHideInterface( bool f )
-{
-    const fheroes2::Display & display = fheroes2::Display::instance();
     Settings & conf = Settings::Get();
-    const u32 px = display.width() - BORDERWIDTH - RADARWIDTH;
+    const bool isHideInterface = conf.ExtGameHideInterface();
 
-    conf.SetHideInterface( f );
-
-    if ( f ) {
+    if ( isHideInterface ) {
         conf.SetShowPanel( true );
 
-        fheroes2::Point pos_radr = conf.PosRadar();
-        fheroes2::Point pos_bttn = conf.PosButtons();
-        fheroes2::Point pos_icon = conf.PosIcons();
-        fheroes2::Point pos_stat = conf.PosStatus();
-
-        if ( 0 == pos_radr.x && 0 == pos_radr.y )
-            pos_radr = fheroes2::Point( BORDERWIDTH, BORDERWIDTH );
-        if ( 0 == pos_icon.x && 0 == pos_icon.y )
-            pos_icon = fheroes2::Point( px - BORDERWIDTH, radar.GetArea().y + radar.GetArea().height );
-        if ( 0 == pos_bttn.x && 0 == pos_bttn.y )
-            pos_bttn = fheroes2::Point( px - BORDERWIDTH, iconsPanel.GetArea().y + iconsPanel.GetArea().height );
-        if ( 0 == pos_stat.x && 0 == pos_stat.y )
-            pos_stat = fheroes2::Point( px - BORDERWIDTH, buttonsArea.GetArea().y + buttonsArea.GetArea().height );
-
         controlPanel.SetPos( display.width() - controlPanel.GetArea().width - BORDERWIDTH, 0 );
-        radar.SetPos( pos_radr.x, pos_radr.y );
-        iconsPanel.SetPos( pos_icon.x, pos_icon.y );
-        buttonsArea.SetPos( pos_bttn.x, pos_bttn.y );
-        statusWindow.SetPos( pos_stat.x, pos_stat.y );
+
+        fheroes2::Point radrPos = conf.PosRadar();
+        fheroes2::Point bttnPos = conf.PosButtons();
+        fheroes2::Point iconPos = conf.PosIcons();
+        fheroes2::Point statPos = conf.PosStatus();
+
+        auto isPosValid = []( const fheroes2::Point & pos ) { return pos.x >= 0 && pos.y >= 0; };
+
+        if ( isPosValid( radrPos ) && isPosValid( bttnPos ) && isPosValid( iconPos ) && isPosValid( statPos ) ) {
+            radar.SetPos( radrPos.x, radrPos.y );
+            iconsPanel.SetPos( iconPos.x, iconPos.y );
+            buttonsArea.SetPos( bttnPos.x, bttnPos.y );
+            statusWindow.SetPos( statPos.x, statPos.y );
+        }
+        else {
+            radar.SetPos( 0, 0 );
+            // It's OK to use display.width() for the X coordinate here, panel will be docked to the right edge
+            iconsPanel.SetPos( display.width(), radar.GetArea().y + radar.GetArea().height + BORDERWIDTH );
+            buttonsArea.SetPos( display.width(), iconsPanel.GetArea().y + iconsPanel.GetArea().height + BORDERWIDTH );
+            statusWindow.SetPos( display.width(), buttonsArea.GetArea().y + buttonsArea.GetArea().height );
+        }
     }
     else {
+        const int32_t px = display.width() - BORDERWIDTH - RADARWIDTH;
+
         radar.SetPos( px, BORDERWIDTH );
         iconsPanel.SetPos( px, radar.GetArea().y + radar.GetArea().height + BORDERWIDTH );
-
         buttonsArea.SetPos( px, iconsPanel.GetArea().y + iconsPanel.GetArea().height + BORDERWIDTH );
         statusWindow.SetPos( px, buttonsArea.GetArea().y + buttonsArea.GetArea().height );
     }
 
-    gameArea.generate( { display.width(), display.height() }, conf.ExtGameHideInterface() );
+    const fheroes2::Point prevCenter = gameArea.getCurrentCenterInPixels();
+    const fheroes2::Rect prevRoi = gameArea.GetROI();
+
+    gameArea.generate( { display.width(), display.height() }, isHideInterface );
+
+    const fheroes2::Rect newRoi = gameArea.GetROI();
+
+    gameArea.SetCenterInPixels( prevCenter + fheroes2::Point( newRoi.x + newRoi.width / 2, newRoi.y + newRoi.height / 2 )
+                                - fheroes2::Point( prevRoi.x + prevRoi.width / 2, prevRoi.y + prevRoi.height / 2 ) );
 }
 
 Interface::Basic & Interface::Basic::Get()
@@ -106,37 +105,46 @@ Interface::Basic & Interface::Basic::Get()
     return basic;
 }
 
-void Interface::Basic::Redraw( int force )
+void Interface::Basic::Redraw( const uint32_t force /* = 0 */ )
 {
     const Settings & conf = Settings::Get();
 
-    const int combinedRedraw = redraw | force;
+    const uint32_t combinedRedraw = redraw | force;
     const bool hideInterface = conf.ExtGameHideInterface();
 
-    if ( combinedRedraw & REDRAW_GAMEAREA )
+    if ( combinedRedraw & REDRAW_GAMEAREA ) {
         gameArea.Redraw( fheroes2::Display::instance(), LEVEL_ALL );
 
-    if ( ( hideInterface && conf.ShowRadar() ) || ( combinedRedraw & REDRAW_RADAR ) )
+        if ( hideInterface && conf.ShowControlPanel() ) {
+            controlPanel.Redraw();
+        }
+    }
+
+    if ( ( hideInterface && conf.ShowRadar() ) || ( combinedRedraw & REDRAW_RADAR ) ) {
         radar.Redraw();
+    }
 
-    if ( ( hideInterface && conf.ShowIcons() ) || ( combinedRedraw & REDRAW_ICONS ) )
+    if ( ( hideInterface && conf.ShowIcons() ) || ( combinedRedraw & REDRAW_ICONS ) ) {
         iconsPanel.Redraw();
-    else if ( combinedRedraw & REDRAW_HEROES )
+    }
+    else if ( combinedRedraw & REDRAW_HEROES ) {
         iconsPanel.RedrawIcons( ICON_HEROES );
-    else if ( combinedRedraw & REDRAW_CASTLES )
+    }
+    else if ( combinedRedraw & REDRAW_CASTLES ) {
         iconsPanel.RedrawIcons( ICON_CASTLES );
+    }
 
-    if ( ( hideInterface && conf.ShowButtons() ) || ( combinedRedraw & REDRAW_BUTTONS ) )
+    if ( ( hideInterface && conf.ShowButtons() ) || ( combinedRedraw & REDRAW_BUTTONS ) ) {
         buttonsArea.Redraw();
+    }
 
-    if ( ( hideInterface && conf.ShowStatus() ) || ( combinedRedraw & REDRAW_STATUS ) )
+    if ( ( hideInterface && conf.ShowStatus() ) || ( combinedRedraw & REDRAW_STATUS ) ) {
         statusWindow.Redraw();
+    }
 
-    if ( hideInterface && conf.ShowControlPanel() && ( redraw & REDRAW_GAMEAREA ) )
-        controlPanel.Redraw();
-
-    if ( combinedRedraw & REDRAW_BORDER )
+    if ( combinedRedraw & REDRAW_BORDER ) {
         GameBorderRedraw( false );
+    }
 
     redraw = 0;
 }
@@ -145,15 +153,24 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    const fheroes2::Rect & radarArea = Interface::Basic::Get().GetRadar().GetArea();
     const Settings & conf = Settings::Get();
     const bool isEvilInterface = conf.ExtGameEvilInterface();
-    const bool isNoInterface = conf.ExtGameHideInterface();
+    const bool isHideInterface = conf.ExtGameHideInterface();
 
-    fheroes2::ImageRestorer back( display, radarArea.x, radarArea.y, radarArea.width, radarArea.height );
+    const fheroes2::Rect & radarRect = radar.GetRect();
+    const fheroes2::Rect & radarArea = radar.GetArea();
 
-    const fheroes2::Sprite & viewDoor = fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 );
-    fheroes2::Blit( viewDoor, 0, 0, display, radarArea.x, radarArea.y, radarArea.width, radarArea.height );
+    fheroes2::Button buttonExit( radarArea.x + 32, radarArea.y + radarArea.height - 37, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
+
+    auto drawControlPanel = [&display, isEvilInterface, isHideInterface, &radarRect, &radarArea, &buttonExit]() {
+        if ( isHideInterface ) {
+            Dialog::FrameBorder::RenderRegular( radarRect );
+        }
+
+        fheroes2::Blit( fheroes2::AGG::GetICN( ( isEvilInterface ? ICN::EVIWDDOR : ICN::VIEWDDOR ), 0 ), display, radarArea.x, radarArea.y );
+
+        buttonExit.draw();
+    };
 
     const fheroes2::Rect & visibleArea = gameArea.GetROI();
     const bool isFadingEnabled = ( gameArea.GetROI().width > TILEWIDTH * distance ) || ( gameArea.GetROI().height > TILEWIDTH * distance );
@@ -164,8 +181,22 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
     const fheroes2::Rect spellROI( heroPosOffset.x, heroPosOffset.y, TILEWIDTH * ( distance + 1 ), TILEWIDTH * ( distance + 1 ) );
 
     if ( isFadingEnabled ) {
-        fheroes2::InvertedFadeWithPalette( display, visibleArea, spellROI, 5, 300, 9 );
+        if ( isHideInterface ) {
+            InvertedShadow( display, visibleArea, spellROI, 5, 9 );
+
+            drawControlPanel();
+        }
+        else {
+            drawControlPanel();
+
+            fheroes2::InvertedFadeWithPalette( display, visibleArea, spellROI, 5, 300, 9 );
+        }
     }
+    else {
+        drawControlPanel();
+    }
+
+    display.render();
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -174,19 +205,16 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
     LocalEvent & le = LocalEvent::Get();
     int32_t returnValue = -1;
 
-    const fheroes2::Point exitButtonPos( radarArea.x + 32, radarArea.y + radarArea.height - 37 );
-    fheroes2::Button buttonExit( exitButtonPos.x, exitButtonPos.y, ( isEvilInterface ? ICN::LGNDXTRE : ICN::LGNDXTRA ), 4, 5 );
-    buttonExit.draw();
-
     while ( le.HandleEvents() ) {
         const fheroes2::Point & mp = le.GetMouseCursor();
 
-        if ( radarArea & mp ) {
+        if ( radarRect & mp ) {
             cursor.SetThemes( Cursor::POINTER );
 
             le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
-            if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 break;
+            }
         }
         else if ( visibleArea & mp ) {
             const int32_t dst = gameArea.GetValidTileIdFromPoint( mp );
@@ -194,20 +222,14 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
             bool valid = ( dst >= 0 );
 
             if ( valid ) {
-                const Maps::Tiles & tile = world.GetTiles( dst );
-
-                const MP2::MapObjectType objectType = tile.GetObject( true );
-                const bool isActionObject = MP2::isActionObject( objectType );
-
-                valid = ( ( spellROI & mp ) && !isActionObject && ( tile.GetPassable() & Direction::CENTER ) != 0 && water == tile.isWater() );
+                valid = ( spellROI & mp ) && Maps::isValidForDimensionDoor( dst, water );
             }
 
             cursor.SetThemes( valid ? ( water ? static_cast<int>( Cursor::CURSOR_HERO_BOAT ) : static_cast<int>( Cursor::CURSOR_HERO_MOVE ) )
                                     : static_cast<int>( Cursor::WAR_NONE ) );
 
             if ( dst >= 0 && le.MousePressRight() ) {
-                const Maps::Tiles & tile = world.GetTiles( dst );
-                Dialog::QuickInfo( tile );
+                Dialog::QuickInfo( world.GetTiles( dst ) );
             }
             else if ( le.MouseClickLeft() && valid ) {
                 returnValue = dst;
@@ -221,15 +243,14 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
             uint32_t & frame = Game::MapsAnimationFrame();
             ++frame;
-            gameArea.SetRedraw();
-            Redraw();
+
+            Redraw( REDRAW_GAMEAREA );
 
             if ( isFadingEnabled ) {
                 InvertedShadow( display, visibleArea, spellROI, 5, 9 );
 
-                if ( isNoInterface ) {
-                    fheroes2::Blit( viewDoor, 0, 0, display, radarArea.x, radarArea.y, radarArea.width, radarArea.height );
-                    buttonExit.draw();
+                if ( isHideInterface ) {
+                    drawControlPanel();
                 }
             }
 
@@ -239,11 +260,9 @@ int32_t Interface::Basic::GetDimensionDoorDestination( const int32_t from, const
 
     if ( isFadingEnabled ) {
         gameArea.SetRedraw();
-        Redraw();
-        display.render();
     }
 
-    back.restore();
+    Redraw( REDRAW_RADAR );
     display.render();
 
     return returnValue;

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -169,7 +169,7 @@ public:
 
     Cursor & operator=( const Cursor & ) = delete;
 
-    static Cursor & Get( void );
+    static Cursor & Get();
 
     static void Redraw( int32_t, int32_t );
     static int DistanceThemes( const int theme, uint32_t distance );
@@ -182,6 +182,12 @@ public:
     // Only for software emulation.
     void setVideoPlaybackCursor();
 
+    // Do not call this method directly anywhere except Settings.
+    void setMonochromeCursor( const bool enable )
+    {
+        _monochromeCursorThemes = enable;
+    }
+
 private:
     Cursor();
     ~Cursor() = default;
@@ -192,6 +198,8 @@ private:
     int theme;
     int32_t offset_x;
     int32_t offset_y;
+
+    bool _monochromeCursorThemes;
 };
 
 class CursorRestorer

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -42,7 +42,7 @@ Funds::Funds()
     , gold( 0 )
 {}
 
-Funds::Funds( s32 _ore, s32 _wood, s32 _mercury, s32 _sulfur, s32 _crystal, s32 _gems, s32 _gold )
+Funds::Funds( int32_t _ore, int32_t _wood, int32_t _mercury, int32_t _sulfur, int32_t _crystal, int32_t _gems, int32_t _gold )
     : wood( _wood )
     , mercury( _mercury )
     , ore( _ore )
@@ -52,7 +52,7 @@ Funds::Funds( s32 _ore, s32 _wood, s32 _mercury, s32 _sulfur, s32 _crystal, s32 
     , gold( _gold )
 {}
 
-Funds::Funds( int rs, u32 count )
+Funds::Funds( int rs, uint32_t count )
     : wood( 0 )
     , mercury( 0 )
     , ore( 0 )
@@ -85,7 +85,7 @@ Funds::Funds( int rs, u32 count )
         break;
 
     default:
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" )
         break;
     }
 }
@@ -109,7 +109,7 @@ Funds::Funds( const ResourceCount & rs )
     , gems( 0 )
     , gold( 0 )
 {
-    s32 * ptr = GetPtr( rs.first );
+    int32_t * ptr = GetPtr( rs.first );
     if ( ptr )
         *ptr = rs.second;
 }
@@ -138,7 +138,7 @@ int Resource::Rand( const bool includeGold )
     return Resource::UNKNOWN;
 }
 
-s32 * Funds::GetPtr( int rs )
+int32_t * Funds::GetPtr( int rs )
 {
     switch ( rs ) {
     case Resource::ORE:
@@ -161,7 +161,7 @@ s32 * Funds::GetPtr( int rs )
     return nullptr;
 }
 
-s32 Funds::Get( int rs ) const
+int32_t Funds::Get( int rs ) const
 {
     switch ( rs ) {
     case Resource::ORE:
@@ -278,7 +278,7 @@ int Funds::getLowestQuotient( const Funds & divisor ) const
 }
 
 // operator Funds *
-Funds Funds::operator*( u32 mul ) const
+Funds Funds::operator*( uint32_t mul ) const
 {
     Funds res;
 
@@ -293,7 +293,7 @@ Funds Funds::operator*( u32 mul ) const
     return res;
 }
 
-Funds & Funds::operator*=( u32 mul )
+Funds & Funds::operator*=( uint32_t mul )
 {
     wood *= mul;
     mercury *= mul;
@@ -312,7 +312,7 @@ bool Funds::operator>=( const Funds & pm ) const
     return wood >= pm.wood && mercury >= pm.mercury && ore >= pm.ore && sulfur >= pm.sulfur && crystal >= pm.crystal && gems >= pm.gems && gold >= pm.gold;
 }
 
-std::string Funds::String( void ) const
+std::string Funds::String() const
 {
     std::ostringstream os;
     os << "ore: " << ore << ", wood: " << wood << ", mercury: " << mercury << ", sulfur: " << sulfur << ", crystal: " << crystal << ", gems: " << gems
@@ -351,7 +351,7 @@ const char * Resource::getDescription()
               "powerful creatures and buildings." );
 }
 
-u32 Resource::GetIndexSprite( int resource )
+uint32_t Resource::GetIndexSprite( int resource )
 {
     switch ( resource ) {
     case Resource::WOOD:
@@ -369,13 +369,14 @@ u32 Resource::GetIndexSprite( int resource )
     case Resource::GOLD:
         return 13;
     default:
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" )
+        break;
     }
 
     return 0;
 }
 
-int Resource::FromIndexSprite( u32 index )
+int Resource::FromIndexSprite( uint32_t index )
 {
     switch ( index ) {
     case 1:
@@ -420,7 +421,8 @@ uint32_t Resource::getIconIcnIndex( const int resourceType )
     default:
         // You are passing not a single resource type or an invalid one. Fix it!
         assert( 0 );
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown resource" )
+        break;
     }
 
     return 0;
@@ -452,7 +454,7 @@ int Resource::getResourceTypeFromIconIndex( const uint32_t index )
     return UNKNOWN;
 }
 
-int Funds::GetValidItems( void ) const
+int Funds::GetValidItems() const
 {
     int rs = 0;
 
@@ -474,9 +476,9 @@ int Funds::GetValidItems( void ) const
     return rs;
 }
 
-u32 Funds::GetValidItemsCount( void ) const
+uint32_t Funds::GetValidItemsCount() const
 {
-    u32 result = 0;
+    uint32_t result = 0;
 
     if ( wood )
         ++result;
@@ -496,7 +498,7 @@ u32 Funds::GetValidItemsCount( void ) const
     return result;
 }
 
-void Funds::Trim( void )
+void Funds::Trim()
 {
     if ( wood < 0 )
         wood = 0;
@@ -514,7 +516,7 @@ void Funds::Trim( void )
         gold = 0;
 }
 
-void Funds::Reset( void )
+void Funds::Reset()
 {
     wood = 0;
     ore = 0;
@@ -529,16 +531,16 @@ Resource::BoxSprite::BoxSprite( const Funds & f, int32_t width_ )
     : fheroes2::Rect( 0, 0, width_, 0 )
     , rs( f )
 {
-    const u32 count = rs.GetValidItemsCount();
+    const uint32_t count = rs.GetValidItemsCount();
     height = 4 > count ? 45 : ( 7 > count ? 90 : 135 );
 }
 
-const fheroes2::Rect & Resource::BoxSprite::GetArea( void ) const
+const fheroes2::Rect & Resource::BoxSprite::GetArea() const
 {
     return *this;
 }
 
-void Resource::BoxSprite::SetPos( s32 px, s32 py )
+void Resource::BoxSprite::SetPos( int32_t px, int32_t py )
 {
     x = px;
     y = py;
@@ -553,7 +555,7 @@ void RedrawResourceSprite( const fheroes2::Image & sf, const fheroes2::Point & p
     text.Blit( dst_pt.x - text.w() / 2, dst_pt.y + 2 );
 }
 
-void Resource::BoxSprite::Redraw( void ) const
+void Resource::BoxSprite::Redraw() const
 {
     std::vector<std::pair<int32_t, uint32_t> > valueVsSprite;
 

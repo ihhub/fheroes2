@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -89,7 +89,7 @@ void Dialog::FrameBorder::SetPosition( int32_t posx, int32_t posy, int32_t encw,
     area.x = posx + border;
     area.y = posy + border;
 
-    top = fheroes2::Rect( posx, posy, area.width, border );
+    top = fheroes2::Rect( rect.x, rect.y, rect.width, border );
 }
 
 const fheroes2::Rect & Dialog::FrameBorder::GetTop() const

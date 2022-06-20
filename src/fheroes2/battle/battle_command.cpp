@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -43,7 +43,7 @@ Battle::Command & Battle::Command::operator>>( int & val )
     return *this;
 }
 
-int Battle::Command::GetValue( void )
+int Battle::Command::GetValue()
 {
     int val = 0;
     *this >> val;

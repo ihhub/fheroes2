@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -116,7 +116,7 @@ Spell GetUniqueSpellCompatibility( const SpellStorage & spells, const int race, 
     std::vector<Spell> v;
     v.reserve( 15 );
 
-    for ( int sp = Spell::NONE; sp < Spell::STONE; ++sp ) {
+    for ( int sp = Spell::NONE; sp < Spell::PETRIFY; ++sp ) {
         const Spell spell( sp );
 
         if ( spells.isPresentSpell( spell ) )

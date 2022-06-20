@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -52,13 +53,19 @@ namespace fheroes2
         virtual void processEvents( const Point & offset ) const = 0;
 
         // Return the size of the element.
-        Size area() const
+        const Size & area() const
         {
             return _area;
         }
 
         // Display a popup window with no buttons and standard description of the element. It is usually used for a right mouse click event.
         virtual void showPopup( const int buttons ) const = 0;
+
+        // Update the content of UI elements. By default it does nothing.
+        virtual bool update( Image & /*output*/, const Point & /*offset*/ ) const
+        {
+            return false;
+        }
 
     protected:
         // This element must be cached to avoid heavy calculations.
@@ -68,6 +75,24 @@ namespace fheroes2
     // IMPORTANT!
     // It is essential to store members by values rather than by references.
     // This leads to more memory consumption but at the same time prevents any memory related issues.
+
+    class TextDialogElement : public DialogElement
+    {
+    public:
+        explicit TextDialogElement( const std::shared_ptr<TextBase> & text );
+
+        ~TextDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void processEvents( const Point & offset ) const override;
+
+        // Never call this method as a custom image has nothing to popup.
+        void showPopup( const int buttons ) const override;
+
+    private:
+        const std::shared_ptr<TextBase> _text;
+    };
 
     class CustomImageDialogElement : public DialogElement
     {
@@ -111,6 +136,8 @@ namespace fheroes2
     public:
         ResourceDialogElement( const int32_t resourceType, const std::string & text );
 
+        ResourceDialogElement( const int32_t resourceType, std::string && text );
+
         ~ResourceDialogElement() override = default;
 
         void draw( Image & output, const Point & offset ) const override;
@@ -123,6 +150,8 @@ namespace fheroes2
         const int32_t _resourceType = 0;
         const uint32_t _icnIndex = 0;
         const std::string _text;
+
+        void init();
     };
 
     std::vector<ResourceDialogElement> getResourceDialogElements( const Funds & funds );
@@ -132,7 +161,7 @@ namespace fheroes2
     class SpellDialogElement : public DialogElement
     {
     public:
-        explicit SpellDialogElement( const Spell & spell, const HeroBase * hero );
+        SpellDialogElement( const Spell & spell, const HeroBase * hero );
 
         ~SpellDialogElement() override = default;
 
@@ -201,7 +230,9 @@ namespace fheroes2
     class PrimarySkillDialogElement : public DialogElement
     {
     public:
-        explicit PrimarySkillDialogElement( const int32_t skillType, const std::string & text );
+        PrimarySkillDialogElement( const int32_t skillType, const std::string & text );
+
+        PrimarySkillDialogElement( const int32_t skillType, std::string && text );
 
         ~PrimarySkillDialogElement() override = default;
 
@@ -214,12 +245,14 @@ namespace fheroes2
     private:
         const int32_t _skillType;
         const std::string _text;
+
+        void init();
     };
 
     class SecondarySkillDialogElement : public DialogElement
     {
     public:
-        explicit SecondarySkillDialogElement( const Skill::Secondary & skill, const Heroes & hero );
+        SecondarySkillDialogElement( const Skill::Secondary & skill, const Heroes & hero );
 
         ~SecondarySkillDialogElement() override = default;
 
@@ -232,5 +265,33 @@ namespace fheroes2
     private:
         const Skill::Secondary _skill;
         const Heroes & _hero;
+    };
+
+    class DynamicImageDialogElement : public DialogElement
+    {
+    public:
+        explicit DynamicImageDialogElement( const int icnId, const std::vector<uint32_t> & backgroundIndices, const uint64_t delay );
+
+        ~DynamicImageDialogElement() override = default;
+
+        void draw( Image & output, const Point & offset ) const override;
+
+        void processEvents( const Point & offset ) const override;
+
+        // Never call this method as a dynamic image has nothing to popup.
+        void showPopup( const int buttons ) const override;
+
+        bool update( Image & output, const Point & offset ) const override;
+
+    private:
+        const int _icnId;
+
+        const std::vector<uint32_t> _backgroundIndices;
+
+        const uint64_t _delay;
+
+        mutable uint32_t _currentIndex;
+
+        Point _internalOffset;
     };
 }

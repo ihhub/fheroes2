@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -49,7 +49,5 @@ namespace fheroes2
 
         // This function must be called only at the type of setting up a new language.
         void updateAlphabet( const SupportedLanguage language, const bool loadOriginalAlphabet );
-
-        bool isAlphabetSupported( const SupportedLanguage language );
     }
 }

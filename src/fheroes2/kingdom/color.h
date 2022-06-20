@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -91,9 +91,9 @@ public:
     bool isFriends( int ) const;
     void SetColor( int );
 
-    Kingdom & GetKingdom( void ) const;
+    Kingdom & GetKingdom() const;
 
-    int GetColor( void ) const
+    int GetColor() const
     {
         return color;
     }

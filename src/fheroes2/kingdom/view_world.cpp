@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,11 +18,14 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cassert>
+
 #include "view_world.h"
 #include "agg_image.h"
 #include "color.h"
 #include "cursor.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "icn.h"
 #include "image.h"
@@ -31,8 +34,6 @@
 #include "settings.h"
 #include "tools.h"
 #include "world.h"
-
-#include <cassert>
 
 // #define VIEWWORLD_DEBUG_ZOOM_LEVEL // Activate this when you want to debug this window. It will provide an extra zoom level at 1:1 scale
 
@@ -67,7 +68,7 @@ namespace
         const int x = centerInPixel.x - pixelsW / 2;
         const int y = centerInPixel.y - pixelsH / 2;
 
-        return fheroes2::Rect( x, y, pixelsW, pixelsH );
+        return { x, y, pixelsW, pixelsH };
     }
 
     ViewWorld::ZoomLevel GetNextZoomLevel( const ViewWorld::ZoomLevel level, const bool cycle )
@@ -261,10 +262,11 @@ namespace
         const int32_t marginForRightSide = ( 2 * BORDERWIDTH + RADARWIDTH ) / tileSize + 1;
 
         // add a margin of 2 tiles because icons outside of view can still show on the view
-        const int32_t minTileX = clamp( roiTiles.x - 2, 0, worldWidth );
-        const int32_t maxTileX = clamp( roiTiles.x + roiTiles.width + marginForRightSide + 2, 0, worldWidth );
-        const int32_t minTileY = clamp( roiTiles.y - 2, 0, worldHeight );
-        const int32_t maxTileY = clamp( roiTiles.y + roiTiles.height + 2, 0, worldHeight );
+        assert( worldWidth >= 0 && worldHeight >= 0 );
+        const int32_t minTileX = std::clamp( roiTiles.x - 2, 0, worldWidth );
+        const int32_t maxTileX = std::clamp( roiTiles.x + roiTiles.width + marginForRightSide + 2, 0, worldWidth );
+        const int32_t minTileY = std::clamp( roiTiles.y - 2, 0, worldHeight );
+        const int32_t maxTileY = std::clamp( roiTiles.y + roiTiles.height + 2, 0, worldHeight );
 
         for ( int32_t posY = minTileY; posY < maxTileY; ++posY ) {
             const int dsty = posY * tileSize - offsetY + BORDERWIDTH;
@@ -456,14 +458,14 @@ bool ViewWorld::ZoomROIs::ChangeCenter( const fheroes2::Point & centerInPixels )
         newCenter.x = worldSize.width / 2;
     }
     else {
-        newCenter.x = clamp( centerInPixels.x, currentRect.width / 2, worldSize.width - currentRect.width / 2 );
+        newCenter.x = std::clamp( centerInPixels.x, currentRect.width / 2, worldSize.width - currentRect.width / 2 );
     }
 
     if ( worldSize.height <= currentRect.height ) {
         newCenter.y = worldSize.height / 2;
     }
     else {
-        newCenter.y = clamp( centerInPixels.y, currentRect.height / 2, worldSize.height - currentRect.height / 2 );
+        newCenter.y = std::clamp( centerInPixels.y, currentRect.height / 2, worldSize.height - currentRect.height / 2 );
     }
 
     if ( newCenter == _center ) {
@@ -521,11 +523,23 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     LocalEvent & le = LocalEvent::Get();
     le.PauseCycling();
 
-    // Creates fixed radar on top-right, even if hidden interface
-    Interface::Radar radar = Interface::Radar::MakeRadarViewWorld( interface.GetRadar() );
+    Settings & conf = Settings::Get();
+    const bool isEvilInterface = conf.ExtGameEvilInterface();
+    const bool isHideInterface = conf.ExtGameHideInterface();
 
-    const fheroes2::Rect worldMapROI = interface.GetGameArea().GetVisibleTileROI();
-    const fheroes2::Rect & visibleScreenInPixels = interface.GetGameArea().GetROI();
+    // If the interface is currently hidden, we have to temporarily bring it back, because
+    // the map generation in the World View mode heavily depends on the existing game area
+    if ( isHideInterface ) {
+        conf.SetHideInterface( false );
+        interface.Reset();
+    }
+
+    // Creates fixed radar on top-right, suitable for the View World window
+    Interface::Radar radar( interface.GetRadar(), fheroes2::Display::instance() );
+
+    const Interface::GameArea & gameArea = interface.GetGameArea();
+    const fheroes2::Rect worldMapROI = gameArea.GetVisibleTileROI();
+    const fheroes2::Rect & visibleScreenInPixels = gameArea.GetROI();
 
     // Initial view is centered on where the player is centered
     fheroes2::Point viewCenterInPixels( worldMapROI.x * TILEWIDTH + visibleScreenInPixels.width / 2, worldMapROI.y * TILEWIDTH + visibleScreenInPixels.height / 2 );
@@ -549,7 +563,6 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     radar.RedrawForViewWorld( currentROI, mode );
 
     // "View world" sprite
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
     const fheroes2::Sprite & viewWorldSprite = fheroes2::AGG::GetICN( GetSpriteResource( mode, isEvilInterface ), 0 );
     drawViewWorldSprite( viewWorldSprite, display, isEvilInterface );
 
@@ -577,7 +590,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
 
         bool changed = false;
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow ) {
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
             break;
         }
         else if ( le.MouseClickLeft( buttonZoom.area() ) ) {
@@ -619,6 +632,12 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
             drawViewWorldSprite( viewWorldSprite, display, isEvilInterface );
             display.render();
         }
+    }
+
+    // Don't forget to reset the interface settings back if necessary
+    if ( isHideInterface ) {
+        conf.SetHideInterface( true );
+        interface.Reset();
     }
 
     le.ResumeCycling();

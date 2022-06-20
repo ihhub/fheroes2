@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -30,6 +30,8 @@
 
 namespace Audio
 {
+    // Audio initialization and deinitialization functions are not designed to be called
+    // concurrently from different threads. They should be called from the main thread only.
     void Init();
     void Quit();
 
@@ -43,29 +45,47 @@ namespace Mixer
 {
     void SetChannels( const int num );
 
-    size_t getChannelCount();
+    int getChannelCount();
 
-    int Play( const std::string & file, const int channel = -1, const bool loop = false );
-    int Play( const uint8_t * ptr, const uint32_t size, const int channel = -1, const bool loop = false );
+    // To play the audio in a new channel set its value to -1. Returns channel ID. A negative value (-1) in case of failure.
+    int Play( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop );
+    int PlayFromDistance( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop, const int16_t angle, const uint8_t volumePercentage );
 
-    int MaxVolume();
-    int Volume( const int channel, int vol );
+    int applySoundEffect( const int channelId, const int16_t angle, const uint8_t volumePercentage );
 
-    void Pause( const int channel = -1 );
-    void Resume( const int channel = -1 );
-    void Stop( const int channel = -1 );
+    // Returns the previous volume percentage value.
+    int setVolume( const int channelId, const int volumePercentage );
 
-    bool isPlaying( const int channel );
+    void Pause( const int channelId = -1 );
+    void Resume( const int channelId = -1 );
+    void Stop( const int channelId = -1 );
+
+    bool isPlaying( const int channelId );
 }
 
 namespace Music
 {
-    void Play( const std::vector<uint8_t> & v, const bool loop );
-    void Play( const std::string & file, const bool loop );
+    enum class PlaybackMode : uint8_t
+    {
+        PLAY_ONCE,
+        RESUME_AND_PLAY_INFINITE,
+        REWIND_AND_PLAY_INFINITE
+    };
 
-    int Volume( int vol );
+    // Music UID is used to cache existing songs. It is caller's responsibility to generate them.
+    // This function return true in case of music track for corresponding Music UID is cached.
+    bool Play( const uint64_t musicUID, const PlaybackMode playbackMode );
 
-    void SetFadeIn( const int f );
+    // Load a music track from memory and play it.
+    void Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const PlaybackMode playbackMode );
+
+    // Load a music track from a file system location and play it.
+    void Play( const uint64_t musicUID, const std::string & file, const PlaybackMode playbackMode );
+
+    // Returns the previous volume percentage value.
+    int setVolume( const int volumePercentage );
+
+    void SetFadeInMs( const int timeMs );
 
     void Stop();
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -24,14 +24,14 @@
 #ifndef H2OBJSNOW_H
 #define H2OBJSNOW_H
 
-#include "types.h"
+#include <cstdint>
 
 namespace ObjSnow
 {
     bool isShadow( const uint8_t index );
-    bool isAction( u32 index );
+    bool isAction( uint32_t index );
     int GetPassable( const uint8_t index );
-    int GetActionObject( u32 index );
+    int GetActionObject( uint32_t index );
 }
 
 #endif

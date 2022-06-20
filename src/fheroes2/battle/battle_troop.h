@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -45,25 +45,25 @@ namespace Battle
 {
     struct TargetInfo;
 
-    struct ModeDuration : public std::pair<u32, u32>
+    struct ModeDuration : public std::pair<uint32_t, uint32_t>
     {
-        ModeDuration( u32, u32 );
+        ModeDuration( uint32_t, uint32_t );
 
-        bool isMode( u32 ) const;
-        bool isZeroDuration( void ) const;
-        void DecreaseDuration( void );
+        bool isMode( uint32_t ) const;
+        bool isZeroDuration() const;
+        void DecreaseDuration();
     };
 
     struct ModesAffected : public std::vector<ModeDuration>
     {
         ModesAffected();
 
-        u32 GetMode( u32 ) const;
-        void AddMode( u32, u32 );
-        void RemoveMode( u32 );
-        void DecreaseDuration( void );
+        uint32_t GetMode( uint32_t ) const;
+        void AddMode( uint32_t, uint32_t );
+        void RemoveMode( uint32_t );
+        void DecreaseDuration();
 
-        u32 FindZeroDuration( void ) const;
+        uint32_t FindZeroDuration() const;
     };
 
     enum
@@ -76,140 +76,213 @@ namespace Battle
     class Unit : public ArmyTroop, public BitModes, public Control
     {
     public:
-        Unit( const Troop &, int32_t pos, bool reflect, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid );
+        Unit( const Troop & t, const Position & pos, const bool ref, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid );
         Unit( const Unit & ) = delete;
-
-        ~Unit() override;
 
         Unit & operator=( const Unit & ) = delete;
 
-        bool isModes( u32 ) const override;
+        bool isModes( uint32_t v ) const override;
         bool isBattle() const override;
         std::string GetShotString() const override;
         std::string GetSpeedString() const override;
-        u32 GetHitPointsLeft() const override;
+        uint32_t GetHitPointsLeft() const override;
         virtual uint32_t GetMissingHitPoints() const;
-        u32 GetAffectedDuration( u32 ) const override;
-        u32 GetSpeed() const override;
+        uint32_t GetAffectedDuration( uint32_t mod ) const override;
+        uint32_t GetSpeed() const override;
         int GetMorale() const override;
 
-        Unit * GetMirror();
-        void SetMirror( Unit * );
-        void SetRandomMorale( void );
-        void SetRandomLuck( void );
-        void NewTurn( void );
+        Unit * GetMirror()
+        {
+            return mirror;
+        }
+
+        void SetMirror( Unit * ptr )
+        {
+            mirror = ptr;
+        }
+
+        void SetRandomMorale();
+        void SetRandomLuck();
+        void NewTurn();
 
         bool isValid() const override;
-        bool isArchers( void ) const;
-        bool isFlying( void ) const;
-        bool isTwiceAttack( void ) const;
+        bool isArchers() const;
+        bool isFlying() const;
+        bool isDoubleAttack() const;
 
-        bool AllowResponse( void ) const;
+        bool AllowResponse() const;
+        // Checks whether this unit is forced to fight in melee (there is an enemy unit nearby)
         bool isHandFighting() const;
-        bool isReflect( void ) const;
-        bool isHaveDamage( void ) const;
-        bool isMagicResist( const Spell &, u32 ) const;
-        bool OutOfWalls( void ) const;
+
+        bool isReflect() const
+        {
+            return reflect;
+        }
+
+        bool isHaveDamage() const;
+
+        bool isMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const
+        {
+            return 100 <= GetMagicResist( spell, attackingArmySpellPower, attackingHero );
+        }
+
+        bool OutOfWalls() const;
         bool canReach( int index ) const;
         bool canReach( const Unit & unit ) const;
 
         std::string String( bool more = false ) const;
 
-        u32 GetUID( void ) const;
-        bool isUID( u32 ) const;
+        uint32_t GetUID() const
+        {
+            return _uid;
+        }
 
-        s32 GetHeadIndex( void ) const;
-        s32 GetTailIndex( void ) const;
-        const Position & GetPosition( void ) const;
-        void SetPosition( s32 );
-        void SetPosition( const Position & );
+        bool isUID( uint32_t v ) const
+        {
+            return _uid == v;
+        }
+
+        int32_t GetHeadIndex() const;
+        int32_t GetTailIndex() const;
+
+        const Position & GetPosition() const
+        {
+            return position;
+        }
+
+        void SetPosition( const int32_t idx );
+        void SetPosition( const Position & pos );
         void SetReflection( bool );
 
-        u32 GetAttack() const override;
-        u32 GetDefense() const override;
-        int GetArmyColor( void ) const;
+        uint32_t GetAttack() const override;
+        uint32_t GetDefense() const override;
+
+        int GetArmyColor() const
+        {
+            return ArmyTroop::GetColor();
+        }
+
         int GetColor() const override;
         int GetCurrentColor() const; // the unit can be under spell what changes its affiliation
         int GetCurrentOrArmyColor() const; // current unit color (if valid), color of the unit's army otherwise
         int GetCurrentControl() const;
         uint32_t GetMoveRange() const;
-        u32 GetSpeed( bool skipStandingCheck, bool skipMovedCheck ) const;
+        uint32_t GetSpeed( bool skipStandingCheck, bool skipMovedCheck ) const;
         int GetControl() const override;
-        u32 GetDamage( const Unit & ) const;
-        s32 GetScoreQuality( const Unit & ) const;
+        uint32_t GetDamage( const Unit & ) const;
+        int32_t GetScoreQuality( const Unit & ) const;
         uint32_t GetInitialCount() const;
-        u32 GetDead( void ) const;
-        u32 GetHitPoints( void ) const;
-        u32 GetShots( void ) const;
-        u32 ApplyDamage( Unit &, u32 );
-        u32 ApplyDamage( u32 );
+        uint32_t GetDead() const;
+        uint32_t GetHitPoints() const;
+        payment_t GetSurrenderCost() const;
+
+        uint32_t GetShots() const override
+        {
+            return shots;
+        }
+
+        uint32_t ApplyDamage( Unit &, uint32_t );
+        uint32_t ApplyDamage( uint32_t );
         uint32_t CalculateRetaliationDamage( uint32_t damageTaken ) const;
-        u32 CalculateMinDamage( const Unit & ) const;
-        u32 CalculateMaxDamage( const Unit & ) const;
-        u32 CalculateDamageUnit( const Unit & enemy, double dmg ) const;
+        uint32_t CalculateMinDamage( const Unit & ) const;
+        uint32_t CalculateMaxDamage( const Unit & ) const;
+        uint32_t CalculateDamageUnit( const Unit & enemy, double dmg ) const;
         bool ApplySpell( const Spell &, const HeroBase * hero, TargetInfo & );
         bool AllowApplySpell( const Spell &, const HeroBase * hero, std::string * msg = nullptr, bool forceApplyToAlly = false ) const;
         bool isUnderSpellEffect( const Spell & spell ) const;
         std::vector<Spell> getCurrentSpellEffects() const;
         void PostAttackAction();
-        void ResetBlind( void );
+        void ResetBlind();
         void SetBlindAnswer( bool value );
-        void SpellModesAction( const Spell &, u32, const HeroBase * );
-        void SpellApplyDamage( const Spell &, u32, const HeroBase *, TargetInfo & );
-        void SpellRestoreAction( const Spell &, u32, const HeroBase * );
-        u32 Resurrect( u32, bool, bool );
+        void SpellModesAction( const Spell &, uint32_t, const HeroBase * );
+        void SpellApplyDamage( const Spell &, uint32_t, const HeroBase *, TargetInfo & );
+        void SpellRestoreAction( const Spell &, uint32_t, const HeroBase * );
+        uint32_t Resurrect( uint32_t, bool, bool );
 
         bool SwitchAnimation( int rule, bool reverse = false );
         bool SwitchAnimation( const std::vector<int> & animationList, bool reverse = false );
-        void IncreaseAnimFrame( bool loop = false );
-        bool isFinishAnimFrame( void ) const;
-        int GetFrame( void ) const;
-        uint32_t GetCustomAlpha() const;
-        void SetCustomAlpha( uint32_t alpha );
+
+        void IncreaseAnimFrame( bool loop = false )
+        {
+            animation.playAnimation( loop );
+        }
+
+        bool isFinishAnimFrame() const
+        {
+            return animation.isLastFrame();
+        }
+
+        int GetFrame() const
+        {
+            return animation.getFrame();
+        }
+
+        uint32_t GetCustomAlpha() const
+        {
+            return customAlphaMask;
+        }
+
+        void SetCustomAlpha( uint32_t alpha )
+        {
+            customAlphaMask = alpha;
+        }
 
         fheroes2::Point GetStartMissileOffset( size_t ) const;
 
-        int M82Attk( void ) const;
-        int M82Kill( void ) const;
-        int M82Move( void ) const;
-        int M82Wnce( void ) const;
-        int M82Expl( void ) const;
+        int M82Attk() const;
+        int M82Kill() const;
+        int M82Move() const;
+        int M82Wnce() const;
+        int M82Expl() const;
         int M82Tkof() const;
         int M82Land() const;
 
-        fheroes2::Point GetBackPoint( void ) const;
+        fheroes2::Point GetBackPoint() const;
         fheroes2::Point GetCenterPoint() const;
-        fheroes2::Rect GetRectPosition( void ) const;
 
-        u32 HowManyWillKilled( u32 ) const;
+        fheroes2::Rect GetRectPosition() const
+        {
+            return position.GetRect();
+        }
 
-        void SetResponse( void );
-        void UpdateDirection( void );
+        uint32_t HowManyWillKilled( uint32_t ) const;
+
+        void SetResponse();
+        void UpdateDirection();
         bool UpdateDirection( const fheroes2::Rect & );
-        void PostKilledAction( void );
+        void PostKilledAction();
 
-        u32 GetMagicResist( const Spell &, u32 ) const;
+        uint32_t GetMagicResist( const Spell & spell, const uint32_t attackingArmySpellPower, const HeroBase * attackingHero ) const;
         int GetSpellMagic() const;
 
-        const HeroBase * GetCommander( void ) const;
+        const HeroBase * GetCommander() const;
         const HeroBase * GetCurrentOrArmyCommander() const; // commander of the army with the current unit color (if valid), commander of the unit's army otherwise
 
-        static bool isHandFighting( const Unit &, const Unit & );
+        // Checks whether the attacker will fight the defender in melee
+        static bool isHandFighting( const Unit & attacker, const Unit & defender );
 
-        int GetAnimationState() const;
+        int GetAnimationState() const
+        {
+            return animation.getCurrentState();
+        }
+
         bool isIdling() const;
-        bool checkIdleDelay();
 
-        // Find a better way to expose it without a million getters/setters
+        bool checkIdleDelay()
+        {
+            return idleTimer.checkDelay();
+        }
+
+        // TODO: find a better way to expose it without a million getters/setters
         AnimationState animation;
 
     private:
         const uint32_t _uid;
-        u32 hp;
-        u32 count0;
-        u32 dead;
-        u32 shots;
-        u32 disruptingray;
+        uint32_t hp;
+        uint32_t count0;
+        uint32_t dead;
+        uint32_t shots;
+        uint32_t disruptingray;
         bool reflect;
 
         Position position;

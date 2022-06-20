@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -156,7 +156,7 @@ namespace
     }
 }
 
-Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
+Battle::Result Battle::Loader( Army & army1, Army & army2, int32_t mapsindex )
 {
     Result result;
 
@@ -165,11 +165,11 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         // Check second army first so attacker would win by default
         if ( !army2.isValid() ) {
             result.army1 = RESULT_WINS;
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid battle detected! Index " << mapsindex << ", Army: " << army2.String() );
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid battle detected! Index " << mapsindex << ", Army: " << army2.String() )
         }
         else {
             result.army2 = RESULT_WINS;
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid battle detected! Index " << mapsindex << ", Army: " << army1.String() );
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "Invalid battle detected! Index " << mapsindex << ", Army: " << army1.String() )
         }
         return result;
     }
@@ -218,8 +218,8 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         Rand::DeterministicRandomGenerator randomGenerator( battleSeed );
         Arena arena( army1, army2, mapsindex, showBattle, randomGenerator );
 
-        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
-        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() );
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() )
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() )
 
         while ( arena.BattleValid() ) {
             arena.Turns();
@@ -241,19 +241,21 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
             arena.FadeArena( clearMessageLog );
         }
 
-        if ( isHumanBattle ) {
-            if ( arena.DialogBattleSummary( result, artifactsToTransfer, !showBattle ) ) {
-                // If dialog returns true we will restart battle in manual mode
-                showBattle = true;
+        if ( isHumanBattle && arena.DialogBattleSummary( result, artifactsToTransfer, !showBattle ) ) {
+            // If dialog returns true we will restart battle in manual mode
+            showBattle = true;
 
-                // Reset army commander state
-                if ( commander1 )
-                    commander1->SetSpellPoints( initialSpellPoints1 );
-                if ( commander2 )
-                    commander2->SetSpellPoints( initialSpellPoints2 );
-                continue;
+            // Reset army commander state
+            if ( commander1 ) {
+                commander1->SetSpellPoints( initialSpellPoints1 );
             }
+            if ( commander2 ) {
+                commander2->SetSpellPoints( initialSpellPoints2 );
+            }
+
+            continue;
         }
+
         isBattleOver = true;
 
         if ( loserHero != nullptr && loserAbandoned ) {
@@ -304,26 +306,21 @@ Battle::Result Battle::Loader( Army & army1, Army & army2, s32 mapsindex )
         }
     }
 
-    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() );
-    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() );
+    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1 " << army1.String() )
+    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army2 " << army2.String() )
 
-    // update army
-    if ( commander1 && commander1->isHeroes() ) {
-        army1.resetInvalidMonsters();
-        // hard reset army
-        if ( !army1.isValid() || ( result.army1 & RESULT_RETREAT ) )
-            army1.Reset( false );
+    army1.resetInvalidMonsters();
+    army2.resetInvalidMonsters();
+
+    // reset the hero's army to the minimum army if the hero retreated or was defeated
+    if ( commander1 && commander1->isHeroes() && ( !army1.isValid() || ( result.army1 & RESULT_RETREAT ) ) ) {
+        army1.Reset( false );
+    }
+    if ( commander2 && commander2->isHeroes() && ( !army2.isValid() || ( result.army2 & RESULT_RETREAT ) ) ) {
+        army2.Reset( false );
     }
 
-    // update army
-    if ( commander2 && commander2->isHeroes() ) {
-        army2.resetInvalidMonsters();
-        // hard reset army
-        if ( !army2.isValid() || ( result.army2 & RESULT_RETREAT ) )
-            army2.Reset( false );
-    }
-
-    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1: " << ( result.army1 & RESULT_WINS ? "wins" : "loss" ) << ", army2: " << ( result.army2 & RESULT_WINS ? "wins" : "loss" ) );
+    DEBUG_LOG( DBG_BATTLE, DBG_INFO, "army1: " << ( result.army1 & RESULT_WINS ? "wins" : "loss" ) << ", army2: " << ( result.army2 & RESULT_WINS ? "wins" : "loss" ) )
 
     return result;
 }
@@ -400,35 +397,35 @@ void Battle::NecromancySkillAction( HeroBase & hero, const uint32_t enemyTroopsK
     if ( isControlHuman )
         arena.DialogBattleNecromancy( raiseCount, raisedMonsterType );
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "raise: " << raiseCount << mons.GetMultiName() );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "raise: " << raiseCount << mons.GetMultiName() )
 }
 
-u32 Battle::Result::AttackerResult( void ) const
+uint32_t Battle::Result::AttackerResult() const
 {
     return getBattleResult( army1 );
 }
 
-u32 Battle::Result::DefenderResult( void ) const
+uint32_t Battle::Result::DefenderResult() const
 {
     return getBattleResult( army2 );
 }
 
-u32 Battle::Result::GetExperienceAttacker( void ) const
+uint32_t Battle::Result::GetExperienceAttacker() const
 {
     return exp1;
 }
 
-u32 Battle::Result::GetExperienceDefender( void ) const
+uint32_t Battle::Result::GetExperienceDefender() const
 {
     return exp2;
 }
 
-bool Battle::Result::AttackerWins( void ) const
+bool Battle::Result::AttackerWins() const
 {
     return ( army1 & RESULT_WINS ) != 0;
 }
 
-bool Battle::Result::DefenderWins( void ) const
+bool Battle::Result::DefenderWins() const
 {
     return ( army2 & RESULT_WINS ) != 0;
 }

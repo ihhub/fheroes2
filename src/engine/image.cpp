@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -376,19 +376,34 @@ namespace
         const int32_t widthOut = out.width();
 
         const uint8_t * imageInY = in.image() + inY * widthIn + inX;
-        const uint8_t * transformInY = in.transform() + inY * widthIn + inX;
         uint8_t * imageOutY = out.image() + outY * widthOut + outX;
         const uint8_t * imageInYEnd = imageInY + height * widthIn;
 
-        for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut ) {
-            const uint8_t * imageInX = imageInY;
-            const uint8_t * transformInX = transformInY;
-            uint8_t * imageOutX = imageOutY;
-            const uint8_t * imageInXEnd = imageInX + width;
+        if ( in.singleLayer() ) {
+            // All pixels in a single layer image do not have any transform values so there is no need to check for them.
+            for ( ; imageInY != imageInYEnd; imageInY += widthIn, imageOutY += widthOut ) {
+                const uint8_t * imageInX = imageInY;
+                uint8_t * imageOutX = imageOutY;
+                const uint8_t * imageInXEnd = imageInX + width;
 
-            for ( ; imageInX != imageInXEnd; ++imageInX, ++imageOutX, ++transformInX ) {
-                if ( *transformInX == 0 ) { // only modify pixels with data
+                for ( ; imageInX != imageInXEnd; ++imageInX, ++imageOutX ) {
                     *imageOutX = palette[*imageInX];
+                }
+            }
+        }
+        else {
+            const uint8_t * transformInY = in.transform() + inY * widthIn + inX;
+
+            for ( ; imageInY != imageInYEnd; imageInY += widthIn, transformInY += widthIn, imageOutY += widthOut ) {
+                const uint8_t * imageInX = imageInY;
+                const uint8_t * transformInX = transformInY;
+                uint8_t * imageOutX = imageOutY;
+                const uint8_t * imageInXEnd = imageInX + width;
+
+                for ( ; imageInX != imageInXEnd; ++imageInX, ++imageOutX, ++transformInX ) {
+                    if ( *transformInX == 0 ) { // only modify pixels with data
+                        *imageOutX = palette[*imageInX];
+                    }
                 }
             }
         }
@@ -401,14 +416,16 @@ namespace fheroes2
         : _width( 0 )
         , _height( 0 )
         , _singleLayer( false )
-    {}
+    {
+        // Do nothing.
+    }
 
     Image::Image( int32_t width_, int32_t height_ )
         : _width( 0 )
         , _height( 0 )
         , _singleLayer( false )
     {
-        resize( width_, height_ );
+        Image::resize( width_, height_ );
     }
 
     Image::Image( const Image & image_ )
@@ -536,25 +553,33 @@ namespace fheroes2
         : Image( 0, 0 )
         , _x( 0 )
         , _y( 0 )
-    {}
+    {
+        // Do nothing.
+    }
 
     Sprite::Sprite( int32_t width_, int32_t height_, int32_t x_, int32_t y_ )
         : Image( width_, height_ )
         , _x( x_ )
         , _y( y_ )
-    {}
+    {
+        // Do nothing.
+    }
 
     Sprite::Sprite( const Image & image, int32_t x_, int32_t y_ )
         : Image( image )
         , _x( x_ )
         , _y( y_ )
-    {}
+    {
+        // Do nothing.
+    }
 
     Sprite::Sprite( const Sprite & sprite )
         : Image( sprite )
         , _x( sprite._x )
         , _y( sprite._y )
-    {}
+    {
+        // Do nothing.
+    }
 
     Sprite::Sprite( Sprite && sprite ) noexcept
         : Image( std::move( sprite ) )
@@ -1117,7 +1142,7 @@ namespace fheroes2
 
             for ( ; imageOutY != imageOutYEnd; imageInY += widthIn, imageOutY += widthOut, transformOutY += widthOut ) {
                 memcpy( imageOutY, imageInY, static_cast<size_t>( width ) );
-                std::fill( transformOutY, transformOutY + width, 0 );
+                std::fill( transformOutY, transformOutY + width, static_cast<uint8_t>( 0 ) );
             }
         }
         else {
@@ -1156,7 +1181,7 @@ namespace fheroes2
             blurRadius = height;
 
         Image out( width, height );
-        std::fill( out.transform(), out.transform() + width * height, 0 );
+        std::fill( out.transform(), out.transform() + width * height, static_cast<uint8_t>( 0 ) );
 
         uint8_t * imageOutY = out.image();
         const uint8_t * imageIn = in.image();
@@ -1434,8 +1459,8 @@ namespace fheroes2
 
         const bool isValidRoi = roi.width > 0 && roi.height > 0;
 
-        const int32_t minX = isValidRoi ? roi.x : 0;
-        const int32_t minY = isValidRoi ? roi.y : 0;
+        const int32_t minX = isValidRoi ? std::max( roi.x, 0 ) : 0;
+        const int32_t minY = isValidRoi ? std::max( roi.y, 0 ) : 0;
         int32_t maxX = isValidRoi ? roi.x + roi.width : width;
         int32_t maxY = isValidRoi ? roi.y + roi.height : height;
 
@@ -1452,7 +1477,7 @@ namespace fheroes2
         uint8_t * transform = image.transform();
 
         if ( dx > dy ) {
-            int32_t ns = std::div( dx, 2 ).quot;
+            int32_t ns = dx / 2;
 
             for ( int32_t i = 0; i <= dx; ++i ) {
                 if ( x1 >= minX && x1 < maxX && y1 >= minY && y1 < maxY ) {
@@ -1469,7 +1494,7 @@ namespace fheroes2
             }
         }
         else {
-            int32_t ns = std::div( dy, 2 ).quot;
+            int32_t ns = dy / 2;
 
             for ( int32_t i = 0; i <= dy; ++i ) {
                 if ( x1 >= minX && x1 < maxX && y1 >= minY && y1 < maxY ) {
@@ -1577,7 +1602,7 @@ namespace fheroes2
 
         for ( ; imageY != imageYEnd; imageY += imageWidth, transformY += imageWidth ) {
             std::fill( imageY, imageY + width, colorId );
-            std::fill( transformY, transformY + width, 0 );
+            std::fill( transformY, transformY + width, static_cast<uint8_t>( 0 ) );
         }
     }
 
@@ -1593,7 +1618,7 @@ namespace fheroes2
         const uint8_t * imageYEnd = imageY + height * imageWidth;
 
         for ( ; imageY != imageYEnd; imageY += imageWidth, transformY += imageWidth ) {
-            std::fill( imageY, imageY + width, 0 );
+            std::fill( imageY, imageY + width, static_cast<uint8_t>( 0 ) );
             std::fill( transformY, transformY + width, tranformId );
         }
     }
@@ -1806,6 +1831,54 @@ namespace fheroes2
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue )
     {
         return GetPALColorId( red / 4, green / 4, blue / 4 );
+    }
+
+    std::vector<uint8_t> getTransformTable( const fheroes2::Image & in, const fheroes2::Image & out, int32_t x, int32_t y, int32_t width, int32_t height )
+    {
+        std::vector<uint8_t> table( 256 );
+        for ( size_t i = 0; i < table.size(); ++i ) {
+            table[i] = static_cast<uint8_t>( i );
+        }
+
+        if ( !Verify( in, x, y, width, height ) ) {
+            return table;
+        }
+
+        if ( in.width() != out.width() || in.height() != out.height() ) {
+            return table;
+        }
+
+        const int32_t imageWidth = in.width();
+
+        const int32_t offset = y * imageWidth + x;
+
+        const uint8_t * imageInY = in.image() + offset;
+        const uint8_t * imageInYEnd = imageInY + height * imageWidth;
+        const uint8_t * imageOutY = out.image() + offset;
+        const uint8_t * transformInY = in.transform() + offset;
+        const uint8_t * transformOutY = out.transform() + offset;
+
+        for ( ; imageInY != imageInYEnd; imageInY += imageWidth, transformInY += imageWidth, imageOutY += imageWidth, transformOutY += imageWidth ) {
+            const uint8_t * imageInX = imageInY;
+            const uint8_t * transformInX = transformInY;
+            const uint8_t * imageOutX = imageOutY;
+            const uint8_t * transformOutX = transformOutY;
+            const uint8_t * imageInXEnd = imageInX + width;
+
+            for ( ; imageInX != imageInXEnd; ++imageInX, ++transformInX, ++imageOutX, ++transformOutX ) {
+                if ( *transformInX != *transformOutX ) {
+                    continue;
+                }
+
+                if ( *transformInX != 0 ) {
+                    continue;
+                }
+
+                table[*imageInX] = *imageOutX;
+            }
+        }
+
+        return table;
     }
 
     Sprite makeShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId )

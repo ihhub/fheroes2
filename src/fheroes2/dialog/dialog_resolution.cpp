@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,7 +22,7 @@
 #include "agg_image.h"
 #include "cursor.h"
 #include "embedded_image.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "gamedefs.h"
 #include "icn.h"
 #include "interface_list.h"
@@ -47,12 +47,16 @@ namespace
     class ResolutionList : public Interface::ListBox<fheroes2::Size>
     {
     public:
+        using Interface::ListBox<fheroes2::Size>::ActionListSingleClick;
+        using Interface::ListBox<fheroes2::Size>::ActionListPressRight;
+        using Interface::ListBox<fheroes2::Size>::ActionListDoubleClick;
+
         explicit ResolutionList( const fheroes2::Point & offset )
             : Interface::ListBox<fheroes2::Size>( offset )
             , _isDoubleClicked( false )
         {}
 
-        void RedrawItem( const fheroes2::Size & resolution, s32 offsetX, s32 offsetY, bool current ) override
+        void RedrawItem( const fheroes2::Size & resolution, int32_t offsetX, int32_t offsetY, bool current ) override
         {
             const Text text( GetResolutionString( resolution ), ( current ? Font::YELLOW_BIG : Font::BIG ) );
             text.Blit( ( editBoxLength - text.w() ) / 2 + offsetX, offsetY, editBoxLength );
@@ -143,14 +147,13 @@ namespace Dialog
         resList.SetScrollButtonUp( ICN::REQUESTS, 5, 6, { roi.x + 327, roi.y + 55 } );
         resList.SetScrollButtonDn( ICN::REQUESTS, 7, 8, { roi.x + 327, roi.y + 257 } );
 
-        const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
-        const fheroes2::Image scrollbarSlider
-            = fheroes2::generateScrollbarSlider( originalSilder, false, 180, 11, static_cast<int32_t>( resolutions.size() ), { 0, 0, originalSilder.width(), 8 },
-                                                 { 0, 7, originalSilder.width(), 8 } );
+        const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
+        const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, 180, 11, static_cast<int32_t>( resolutions.size() ),
+                                                                                   { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
         resList.setScrollBarArea( { roi.x + 328, roi.y + 73, 12, 180 } );
         resList.setScrollBarImage( scrollbarSlider );
         resList.SetAreaMaxItems( 11 );
-        resList.SetAreaItems( fheroes2::Rect( roi.x + 41, roi.y + 55 + 3, editBoxLength, 215 ) );
+        resList.SetAreaItems( { roi.x + 41, roi.y + 55 + 3, editBoxLength, 215 } );
 
         resList.SetListContent( resolutions );
 
@@ -181,13 +184,14 @@ namespace Dialog
 
             resList.QueueEventProcessing();
 
-            if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || resList.isDoubleClicked() ) {
+            if ( ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY )
+                 || resList.isDoubleClicked() ) {
                 if ( resList.isSelected() ) {
                     break;
                 }
             }
-            else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) ) {
-                selectedResolution = fheroes2::Size( 0, 0 );
+            else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) ) {
+                selectedResolution = { 0, 0 };
                 break;
             }
             else if ( le.MousePressRight( buttonCancel.area() ) ) {
@@ -220,8 +224,10 @@ namespace Dialog
              && ( selectedResolution.width != currentResolution.width || selectedResolution.height != currentResolution.height ) ) {
             display.resize( selectedResolution.width, selectedResolution.height );
 
+#if !defined( MACOS_APP_BUNDLE )
             const fheroes2::Image & appIcon = CreateImageFromZlib( 32, 32, iconImage, sizeof( iconImage ), true );
             fheroes2::engine().setIcon( appIcon );
+#endif
 
             return true;
         }

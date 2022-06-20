@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -41,45 +41,51 @@ namespace Interface
         STATUS_AITURN
     };
 
-    class StatusWindow : public BorderWindow
+    class StatusWindow final : public BorderWindow
     {
     public:
         explicit StatusWindow( Basic & basic );
+        StatusWindow( const StatusWindow & ) = delete;
 
-        void SetPos( s32, s32 ) override;
+        ~StatusWindow() override = default;
+
+        StatusWindow & operator=( const StatusWindow & ) = delete;
+
+        void SetPos( int32_t ox, int32_t oy ) override;
         void SavePosition() override;
         void SetRedraw() const;
 
         void Reset();
 
-        void Redraw() const;
         void NextState();
 
         void SetState( const StatusType status );
-        void SetResource( int, u32 );
-        void RedrawTurnProgress( u32 );
+        void SetResource( int, uint32_t );
+        void RedrawTurnProgress( uint32_t );
         void QueueEventProcessing();
-
-        static void ResetTimer();
+        void TimerEventProcessing();
 
     private:
+        friend Basic;
+
+        // Do not call this method directly, use Interface::Basic::Redraw() instead
+        // to avoid issues in the "no interface" mode
+        void Redraw() const;
         void DrawKingdomInfo( int oh = 0 ) const;
         void DrawDayInfo( int oh = 0 ) const;
         void DrawArmyInfo( int oh = 0 ) const;
         void DrawResourceInfo( int oh = 0 ) const;
         void DrawBackground() const;
         void DrawAITurns() const;
-        static u32 ResetResourceStatus( u32, void * );
 
         Basic & interface;
 
         StatusType _state;
-        StatusType _oldState;
         int lastResource;
         uint32_t countLastResource;
         uint32_t turn_progress;
 
-        fheroes2::Timer timerShowLastResource;
+        fheroes2::TimeDelay showLastResourceDelay;
     };
 }
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -32,8 +32,22 @@ public:
     UltimateArtifact();
 
     bool isPosition( const int32_t position ) const;
-    bool isFound() const;
-    void markAsFound();
+
+    int32_t getPosition() const
+    {
+        return _index;
+    }
+
+    bool isFound() const
+    {
+        return _isFound;
+    }
+
+    void markAsFound()
+    {
+        _isFound = true;
+    }
+
     void Set( const int32_t position, const Artifact & );
     void Reset();
 

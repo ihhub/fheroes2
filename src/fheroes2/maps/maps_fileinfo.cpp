@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -21,10 +21,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#if defined( ANDROID ) || defined( _MSC_VER )
+#if defined( _MSC_VER )
 #include <locale>
 #endif
 #include <algorithm>
+#include <cassert>
 #include <cstring>
 #include <map>
 
@@ -190,7 +191,7 @@ Maps::FileInfo & Maps::FileInfo::operator=( const FileInfo & f )
     return *this;
 }
 
-void Maps::FileInfo::Reset( void )
+void Maps::FileInfo::Reset()
 {
     file.clear();
     name.clear();
@@ -202,12 +203,12 @@ void Maps::FileInfo::Reset( void )
     allow_human_colors = 0;
     allow_comp_colors = 0;
     rnd_races = 0;
-    conditions_wins = 0;
+    conditions_wins = VICTORY_DEFEAT_EVERYONE;
     comp_also_wins = false;
     allow_normal_victory = false;
     wins1 = 0;
     wins2 = 0;
-    conditions_loss = 0;
+    conditions_loss = LOSS_EVERYTHING;
     loss1 = 0;
     loss2 = 0;
     localtime = 0;
@@ -233,22 +234,17 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
     StreamFile fs;
 
     if ( !fs.open( filename, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "file not found " << filename );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "File was not found " << filename )
+        return false;
+    }
+
+    // magic byte
+    if ( fs.getBE32() != 0x5C000000 ) {
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Not a valid map file " << filename )
         return false;
     }
 
     file = filename;
-    kingdom_colors = 0;
-    allow_human_colors = 0;
-    allow_comp_colors = 0;
-    rnd_races = 0;
-    localtime = 0;
-
-    // magic byte
-    if ( fs.getBE32() != 0x5C000000 ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "incorrect maps file " << filename );
-        return false;
-    }
 
     // level
     switch ( fs.getLE16() ) {
@@ -374,13 +370,13 @@ bool Maps::FileInfo::ReadMP2( const std::string & filename )
 
         const Colors availableColors( kingdom_colors );
         if ( availableColors.empty() ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid list of kingdom colors during map load " << filename );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid list of kingdom colors during map load " << filename )
             return false;
         }
 
         const int numPlayersSide1 = wins1;
         if ( ( numPlayersSide1 <= 0 ) || ( numPlayersSide1 >= static_cast<int>( availableColors.size() ) ) ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid win condition parameter 1 during map load " << filename );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "Invalid win condition parameter 1 during map load " << filename )
             return false;
         }
 
@@ -453,19 +449,21 @@ int Maps::FileInfo::KingdomRace( int color ) const
 uint32_t Maps::FileInfo::ConditionWins() const
 {
     switch ( conditions_wins ) {
-    case 0:
+    case VICTORY_DEFEAT_EVERYONE:
         return GameOver::WINS_ALL;
-    case 1:
+    case VICTORY_CAPTURE_TOWN:
         return allow_normal_victory ? GameOver::WINS_TOWN | GameOver::WINS_ALL : GameOver::WINS_TOWN;
-    case 2:
+    case VICTORY_KILL_HERO:
         return allow_normal_victory ? GameOver::WINS_HERO | GameOver::WINS_ALL : GameOver::WINS_HERO;
-    case 3:
+    case VICTORY_OBTAIN_ARTIFACT:
         return allow_normal_victory ? GameOver::WINS_ARTIFACT | GameOver::WINS_ALL : GameOver::WINS_ARTIFACT;
-    case 4:
+    case VICTORY_DEFEAT_OTHER_SIDE:
         return GameOver::WINS_SIDE;
-    case 5:
+    case VICTORY_COLLECT_ENOUGH_GOLD:
         return allow_normal_victory ? GameOver::WINS_GOLD | GameOver::WINS_ALL : GameOver::WINS_GOLD;
     default:
+        // This is an unsupported winning condition! Please add the logic to handle it.
+        assert( 0 );
         break;
     }
 
@@ -475,74 +473,31 @@ uint32_t Maps::FileInfo::ConditionWins() const
 uint32_t Maps::FileInfo::ConditionLoss() const
 {
     switch ( conditions_loss ) {
-    case 0:
+    case LOSS_EVERYTHING:
         return GameOver::LOSS_ALL;
-    case 1:
+    case LOSS_TOWN:
         return GameOver::LOSS_TOWN;
-    case 2:
+    case LOSS_HERO:
         return GameOver::LOSS_HERO;
-    case 3:
+    case LOSS_OUT_OF_TIME:
         return GameOver::LOSS_TIME;
     default:
+        // This is an unsupported loss condition! Please add the logic to handle it.
+        assert( 0 );
         break;
     }
 
     return GameOver::COND_NONE;
 }
 
-bool Maps::FileInfo::WinsCompAlsoWins( void ) const
+bool Maps::FileInfo::WinsCompAlsoWins() const
 {
     return comp_also_wins && ( ( GameOver::WINS_TOWN | GameOver::WINS_GOLD ) & ConditionWins() );
 }
 
-int Maps::FileInfo::WinsFindArtifactID( void ) const
+int Maps::FileInfo::WinsFindArtifactID() const
 {
     return wins1 ? wins1 - 1 : Artifact::UNKNOWN;
-}
-
-bool Maps::FileInfo::WinsFindUltimateArtifact( void ) const
-{
-    return 0 == wins1;
-}
-
-u32 Maps::FileInfo::WinsAccumulateGold( void ) const
-{
-    return wins1 * 1000;
-}
-
-fheroes2::Point Maps::FileInfo::WinsMapsPositionObject( void ) const
-{
-    return fheroes2::Point( wins1, wins2 );
-}
-
-fheroes2::Point Maps::FileInfo::LossMapsPositionObject( void ) const
-{
-    return fheroes2::Point( loss1, loss2 );
-}
-
-u32 Maps::FileInfo::LossCountDays( void ) const
-{
-    return loss1;
-}
-
-int Maps::FileInfo::AllowCompHumanColors( void ) const
-{
-    return allow_human_colors & allow_comp_colors;
-}
-
-int Maps::FileInfo::AllowHumanColors( void ) const
-{
-    return allow_human_colors;
-}
-
-int Maps::FileInfo::HumanOnlyColors( void ) const
-{
-    return allow_human_colors & ~allow_comp_colors;
-}
-
-int Maps::FileInfo::ComputerOnlyColors( void ) const
-{
-    return allow_comp_colors & ~allow_human_colors;
 }
 
 bool Maps::FileInfo::isAllowCountPlayers( int playerCount ) const
@@ -553,12 +508,7 @@ bool Maps::FileInfo::isAllowCountPlayers( int playerCount ) const
     return humanOnly <= playerCount && playerCount <= humanOnly + compHuman;
 }
 
-bool Maps::FileInfo::isMultiPlayerMap( void ) const
-{
-    return 1 < Color::Count( HumanOnlyColors() );
-}
-
-std::string Maps::FileInfo::String( void ) const
+std::string Maps::FileInfo::String() const
 {
     std::ostringstream os;
 
@@ -583,9 +533,9 @@ std::string Maps::FileInfo::String( void ) const
 StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )
 {
     // Only the basename of map filename (fi.file) is saved
-    msg << System::GetBasename( fi.file ) << fi.name << fi.description << fi.size_w << fi.size_h << fi.difficulty << static_cast<u8>( KINGDOMMAX );
+    msg << System::GetBasename( fi.file ) << fi.name << fi.description << fi.size_w << fi.size_h << fi.difficulty << static_cast<uint8_t>( KINGDOMMAX );
 
-    for ( u32 ii = 0; ii < KINGDOMMAX; ++ii )
+    for ( uint32_t ii = 0; ii < KINGDOMMAX; ++ii )
         msg << fi.races[ii] << fi.unions[ii];
 
     msg << fi.kingdom_colors << fi.allow_human_colors << fi.allow_comp_colors << fi.rnd_races << fi.conditions_wins << fi.comp_also_wins << fi.allow_normal_victory
@@ -598,12 +548,12 @@ StreamBase & Maps::operator<<( StreamBase & msg, const FileInfo & fi )
 
 StreamBase & Maps::operator>>( StreamBase & msg, FileInfo & fi )
 {
-    u8 kingdommax;
+    uint8_t kingdommax;
 
     // Only the basename of map filename (fi.file) is loaded
     msg >> fi.file >> fi.name >> fi.description >> fi.size_w >> fi.size_h >> fi.difficulty >> kingdommax;
 
-    for ( u32 ii = 0; ii < kingdommax; ++ii )
+    for ( uint32_t ii = 0; ii < kingdommax; ++ii )
         msg >> fi.races[ii] >> fi.unions[ii];
 
     msg >> fi.kingdom_colors >> fi.allow_human_colors >> fi.allow_comp_colors >> fi.rnd_races >> fi.conditions_wins >> fi.comp_also_wins >> fi.allow_normal_victory
@@ -632,11 +582,31 @@ MapsFileInfoList Maps::PrepareMapsFileInfoList( const bool multi )
     for ( const std::string & mapFile : maps ) {
         Maps::FileInfo fi;
 
-        if ( fi.ReadMP2( mapFile ) ) {
-            if ( ( !multi && !fi.isMultiPlayerMap() ) || ( multi && prefNumOfPlayers > 1 && fi.isAllowCountPlayers( prefNumOfPlayers ) ) ) {
-                uniqueMaps[System::GetBasename( mapFile )] = fi;
+        if ( !fi.ReadMP2( mapFile ) ) {
+            continue;
+        }
+
+        if ( multi ) {
+            assert( prefNumOfPlayers > 1 );
+
+            if ( !fi.isAllowCountPlayers( prefNumOfPlayers ) ) {
+                continue;
             }
         }
+        else {
+            const int humanOnlyColorsCount = Color::Count( fi.HumanOnlyColors() );
+
+            // Map has more than one human-only color, it is not suitable for single player mode
+            if ( humanOnlyColorsCount > 1 ) {
+                continue;
+            }
+            // Map has the human-only color, only this color can be selected by a human player
+            if ( humanOnlyColorsCount == 1 ) {
+                fi.removeHumanColors( fi.AllowCompHumanColors() );
+            }
+        }
+
+        uniqueMaps[System::GetBasename( mapFile )] = fi;
     }
 
     MapsFileInfoList result;

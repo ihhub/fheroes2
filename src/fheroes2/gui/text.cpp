@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -32,11 +32,6 @@ namespace
     bool isSmallFont( int font )
     {
         return font == Font::SMALL || font == Font::YELLOW_SMALL || font == Font::GRAY_SMALL;
-    }
-
-    bool isLargeFont( int font )
-    {
-        return font == Font::WHITE_LARGE;
     }
 }
 
@@ -96,8 +91,6 @@ int TextAscii::charWidth( const uint8_t character, const int ft )
     if ( character < 0x21 || character > fheroes2::AGG::ASCIILastSupportedCharacter( ft ) ) {
         if ( isSmallFont( ft ) )
             return 4;
-        else if ( isLargeFont( ft ) )
-            return 12;
         else
             return 6;
     }
@@ -110,8 +103,6 @@ int TextAscii::fontHeight( const int f )
 {
     if ( isSmallFont( f ) )
         return 8 + 2 + 1;
-    else if ( isLargeFont( f ) )
-        return 26 + 6 + 1;
     else
         return 13 + 3 + 1;
 }
@@ -269,14 +260,14 @@ void Text::Set( int ft )
     gh = message->h();
 }
 
-void Text::Clear( void )
+void Text::Clear()
 {
     message->clear();
     gw = 0;
     gh = 0;
 }
 
-size_t Text::Size( void ) const
+size_t Text::Size() const
 {
     return message->size();
 }
@@ -286,12 +277,12 @@ void Text::Blit( const fheroes2::Point & dst_pt, fheroes2::Image & dst ) const
     return message->blit( dst_pt.x, dst_pt.y, 0, dst );
 }
 
-void Text::Blit( s32 ax, s32 ay, fheroes2::Image & dst ) const
+void Text::Blit( int32_t ax, int32_t ay, fheroes2::Image & dst ) const
 {
     return message->blit( ax, ay, 0, dst );
 }
 
-void Text::Blit( s32 ax, s32 ay, int maxw, fheroes2::Image & dst ) const
+void Text::Blit( int32_t ax, int32_t ay, int maxw, fheroes2::Image & dst ) const
 {
     return message->blit( ax, ay, maxw, dst );
 }
@@ -322,10 +313,6 @@ int32_t Text::getFitWidth( const std::string & text, const int fontId, const int
 
     return fitWidth;
 }
-
-TextBox::TextBox()
-    : align( ALIGN_CENTER )
-{}
 
 TextBox::TextBox( const std::string & msg, int ft, uint32_t width_ )
     : align( ALIGN_CENTER )
@@ -363,12 +350,7 @@ void TextBox::Set( const std::string & msg, int ft, uint32_t width_ )
     }
 }
 
-void TextBox::SetAlign( int f )
-{
-    align = f;
-}
-
-void TextBox::Append( const std::string & msg, int ft, u32 width_ )
+void TextBox::Append( const std::string & msg, int ft, uint32_t width_ )
 {
     uint32_t www = 0;
     fheroes2::Rect::width = width_;
@@ -425,7 +407,7 @@ void TextBox::Append( const std::string & msg, int ft, u32 width_ )
     }
 }
 
-void TextBox::Blit( s32 ax, s32 ay, fheroes2::Image & sf )
+void TextBox::Blit( int32_t ax, int32_t ay, fheroes2::Image & sf )
 {
     fheroes2::Rect::x = ax;
     fheroes2::Rect::y = ay;
@@ -455,19 +437,19 @@ TextSprite::TextSprite()
     , hide( true )
 {}
 
-TextSprite::TextSprite( const std::string & msg, int ft, s32 ax, s32 ay )
+TextSprite::TextSprite( const std::string & msg, int ft, int32_t ax, int32_t ay )
     : Text( msg, ft )
     , _restorer( fheroes2::Display::instance(), ax, ay, gw, gh + 5 )
     , hide( true )
 {}
 
-void TextSprite::Show( void )
+void TextSprite::Show()
 {
     Blit( _restorer.x(), _restorer.y() );
     hide = false;
 }
 
-void TextSprite::Hide( void )
+void TextSprite::Hide()
 {
     if ( !hide )
         _restorer.restore();
@@ -495,27 +477,12 @@ void TextSprite::SetFont( int ft )
     _restorer.update( _restorer.x(), _restorer.y(), gw, gh + 5 );
 }
 
-void TextSprite::SetPos( s32 ax, s32 ay )
+void TextSprite::SetPos( int32_t ax, int32_t ay )
 {
     _restorer.update( ax, ay, gw, gh + 5 );
 }
 
-int TextSprite::w( void ) const
+fheroes2::Rect TextSprite::GetRect() const
 {
-    return gw;
-}
-
-int TextSprite::h( void ) const
-{
-    return gh + 5;
-}
-
-bool TextSprite::isShow( void ) const
-{
-    return !hide;
-}
-
-fheroes2::Rect TextSprite::GetRect( void ) const
-{
-    return fheroes2::Rect( _restorer.x(), _restorer.y(), _restorer.width(), _restorer.height() );
+    return { _restorer.x(), _restorer.y(), _restorer.width(), _restorer.height() };
 }

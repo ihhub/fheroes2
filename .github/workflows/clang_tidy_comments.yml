@@ -1,4 +1,4 @@
-name: Clang-Tidy Comments
+name: Clang-Tidy comments
 
 on:
   workflow_run:
@@ -7,15 +7,16 @@ on:
 
 jobs:
   comment:
-    name: Clang-Tidy Comments
+    name: Clang-Tidy comments
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success' }}
+    timeout-minutes: 30
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
     - name: Download analysis results
-      uses: actions/github-script@v3
+      uses: actions/github-script@v6
       with:
         script: |
-          let artifacts = await github.actions.listWorkflowRunArtifacts({
+          let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: ${{ github.event.workflow_run.id }},
@@ -23,7 +24,7 @@ jobs:
           let matchArtifact = artifacts.data.artifacts.filter((artifact) => {
               return artifact.name == "clang-tidy-result"
           })[0];
-          let download = await github.actions.downloadArtifact({
+          let download = await github.rest.actions.downloadArtifact({
               owner: context.repo.owner,
               repo: context.repo.repo,
               artifact_id: matchArtifact.id,
@@ -35,19 +36,19 @@ jobs:
       run: |
         mkdir clang-tidy-result
         unzip clang-tidy-result.zip -d clang-tidy-result
-        echo "pr_id=$(cat clang-tidy-result/pr-id.txt)" >> "$GITHUB_ENV"
-        echo "pr_head_repo=$(cat clang-tidy-result/pr-head-repo.txt)" >> "$GITHUB_ENV"
-        echo "pr_head_ref=$(cat clang-tidy-result/pr-head-ref.txt)" >> "$GITHUB_ENV"
+        echo "PR_ID=$(cat clang-tidy-result/pr-id.txt)" >> "$GITHUB_ENV"
+        echo "PR_HEAD_REPO=$(cat clang-tidy-result/pr-head-repo.txt)" >> "$GITHUB_ENV"
+        echo "PR_HEAD_REF=$(cat clang-tidy-result/pr-head-ref.txt)" >> "$GITHUB_ENV"
     - uses: actions/checkout@v2
       with:
-        repository: ${{ env.pr_head_repo }}
-        ref: ${{ env.pr_head_ref }}
+        repository: ${{ env.PR_HEAD_REPO }}
+        ref: ${{ env.PR_HEAD_REF }}
         persist-credentials: false
     - name: Redownload analysis results
-      uses: actions/github-script@v3
+      uses: actions/github-script@v6
       with:
         script: |
-          let artifacts = await github.actions.listWorkflowRunArtifacts({
+          let artifacts = await github.rest.actions.listWorkflowRunArtifacts({
               owner: context.repo.owner,
               repo: context.repo.repo,
               run_id: ${{ github.event.workflow_run.id }},
@@ -55,7 +56,7 @@ jobs:
           let matchArtifact = artifacts.data.artifacts.filter((artifact) => {
               return artifact.name == "clang-tidy-result"
           })[0];
-          let download = await github.actions.downloadArtifact({
+          let download = await github.rest.actions.downloadArtifact({
               owner: context.repo.owner,
               repo: context.repo.repo,
               artifact_id: matchArtifact.id,
@@ -71,4 +72,4 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         clang_tidy_fixes: clang-tidy-result/fixes.yml
-        pull_request_id: ${{ env.pr_id }}
+        pull_request_id: ${{ env.PR_ID }}

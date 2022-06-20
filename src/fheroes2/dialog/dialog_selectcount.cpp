@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -24,7 +24,7 @@
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "localevent.h"
 #include "settings.h"
@@ -60,7 +60,7 @@ namespace
 class SelectValue : public fheroes2::Rect
 {
 public:
-    SelectValue( u32 min, u32 max, u32 cur, u32 st )
+    SelectValue( uint32_t min, uint32_t max, uint32_t cur, uint32_t st )
         : vmin( min )
         , vmax( max )
         , vcur( cur )
@@ -84,7 +84,7 @@ public:
         pos.height = 30;
     }
 
-    void SetCur( u32 v )
+    void SetCur( uint32_t v )
     {
         vcur = v;
     }
@@ -98,7 +98,7 @@ public:
         btnDn.setPosition( pt.x + 70, pt.y + 16 );
     }
 
-    uint32_t getCur( void ) const
+    uint32_t getCur() const
     {
         return vcur;
     }
@@ -116,7 +116,7 @@ public:
         btnDn.draw();
     }
 
-    bool QueueEventProcessing( void )
+    bool QueueEventProcessing()
     {
         LocalEvent & le = LocalEvent::Get();
 
@@ -138,10 +138,10 @@ public:
     }
 
 protected:
-    u32 vmin;
-    u32 vmax;
-    u32 vcur;
-    u32 step;
+    uint32_t vmin;
+    uint32_t vmax;
+    uint32_t vcur;
+    uint32_t step;
 
     fheroes2::Rect pos;
 
@@ -152,7 +152,7 @@ protected:
     fheroes2::TimedEventValidator timedBtnDn;
 };
 
-bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cur, int step )
+bool Dialog::SelectCount( const std::string & header, uint32_t min, uint32_t max, uint32_t & cur, int step )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -188,7 +188,7 @@ bool Dialog::SelectCount( const std::string & header, u32 min, u32 max, u32 & cu
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
         bool redraw_count = false;
 
-        if ( PressIntKey( max, cur ) ) {
+        if ( fheroes2::PressIntKey( max, cur ) ) {
             sel.SetCur( cur );
             redraw_count = true;
         }
@@ -281,14 +281,17 @@ bool Dialog::InputString( const std::string & header, std::string & res, const s
         buttonOk.isEnabled() && le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
         le.MousePressLeft( buttonCancel.area() ) ? buttonCancel.drawOnPress() : buttonCancel.drawOnRelease();
 
-        if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) )
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || ( buttonOk.isEnabled() && le.MouseClickLeft( buttonOk.area() ) ) ) {
             break;
-        else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancel.area() ) ) {
+        }
+
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancel.area() ) ) {
             res.clear();
             break;
         }
-        else if ( le.KeyPress() ) {
-            if ( charLimit == 0 || charLimit > res.size() || le.KeyValue() == KeySym::KEY_BACKSPACE )
+
+        if ( le.KeyPress() ) {
+            if ( charLimit == 0 || charLimit > res.size() || le.KeyValue() == fheroes2::Key::KEY_BACKSPACE )
                 charInsertPos = InsertKeySym( res, charInsertPos, le.KeyValue(), le.KeyMod() );
             redraw = true;
         }
@@ -324,7 +327,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    const u32 min = std::min( 1U, redistributeMax );
+    const uint32_t min = std::min( 1U, redistributeMax );
     const int spacer = 10;
 
     const int defaultYPosition = 160;
@@ -406,7 +409,7 @@ int Dialog::ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, 
         if ( buttonMin.isVisible() )
             le.MousePressLeft( buttonMin.area() ) ? buttonMin.drawOnPress() : buttonMin.drawOnRelease();
 
-        if ( PressIntKey( redistributeMax, redistributeCount ) ) {
+        if ( fheroes2::PressIntKey( redistributeMax, redistributeCount ) ) {
             sel.SetCur( redistributeCount );
             redraw_count = true;
         }

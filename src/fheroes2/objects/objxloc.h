@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -24,22 +24,22 @@
 #ifndef H2OBJXLOC_H
 #define H2OBJXLOC_H
 
-#include "types.h"
+#include <cstdint>
 
 namespace ObjXlc1
 {
     int GetPassable( const uint8_t index );
-    bool isAction( u32 index );
+    bool isAction( uint32_t index );
     bool isShadow( const uint8_t index );
-    int GetActionObject( u32 index );
+    int GetActionObject( uint32_t index );
 }
 
 namespace ObjXlc2
 {
     int GetPassable( const uint8_t index );
-    bool isAction( u32 index );
+    bool isAction( uint32_t index );
     bool isShadow( const uint8_t index );
-    int GetActionObject( u32 index );
+    int GetActionObject( uint32_t index );
 
     // Returns true if the index belongs to Reefs type of the object.
     bool isReefs( const uint8_t index );
@@ -48,9 +48,9 @@ namespace ObjXlc2
 namespace ObjXlc3
 {
     int GetPassable( const uint8_t index );
-    bool isAction( u32 index );
+    bool isAction( uint32_t index );
     bool isShadow( const uint8_t index );
-    int GetActionObject( u32 index );
+    int GetActionObject( uint32_t index );
 }
 
 #endif

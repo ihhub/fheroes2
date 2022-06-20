@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,8 +28,9 @@
 
 namespace Video
 {
-    bool isVideoFile( const std::string & fileName, std::string & path );
+    // Returns true if the file exists.
+    bool getVideoFilePath( const std::string & fileName, std::string & path );
 
-    // Returns 0 by default if roi is empty
-    int ShowVideo( const std::string & fileName, const VideoAction action, const std::vector<fheroes2::Rect> & roi = std::vector<fheroes2::Rect>() );
+    // Returns false if the video is not present or it is corrupted.
+    bool ShowVideo( const std::string & fileName, const VideoAction action );
 }

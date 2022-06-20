@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -22,11 +22,12 @@
  ***************************************************************************/
 
 #include "game.h"
-#include "agg.h"
 #include "agg_image.h"
 #include "audio.h"
+#include "audio_manager.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "game_hotkeys.h"
 #include "game_io.h"
 #include "game_mainmenu_ui.h"
 #include "icn.h"
@@ -47,10 +48,10 @@ namespace
 
         COUT( "Load Game\n" )
 
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_STANDARD ) << " to choose Standard Game." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_CAMPAIGN ) << " to choose Campaign Game." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_BUTTON_MULTI ) << " to show Multi-Player Game." )
-        COUT( "Press " << Game::getHotKeyNameByEventId( Game::EVENT_DEFAULT_EXIT ) << " to go back to Main Menu." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_STANDARD ) << " to choose Standard Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_CAMPAIGN ) << " to choose Campaign Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::MAIN_MENU_MULTI ) << " to show Multi-Player Game." )
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to go back to Main Menu." )
     }
 }
 
@@ -104,7 +105,7 @@ fheroes2::GameMode Game::LoadMulti()
         le.MousePressLeft( buttonHotSeat.area() ) ? buttonHotSeat.drawOnPress() : buttonHotSeat.drawOnRelease();
         le.MousePressLeft( buttonCancelGame.area() ) ? buttonCancelGame.drawOnPress() : buttonCancelGame.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonHotSeat.area() ) || HotKeyPressEvent( EVENT_BUTTON_HOTSEAT ) ) {
+        if ( le.MouseClickLeft( buttonHotSeat.area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_HOTSEAT ) ) {
             if ( ListFiles::IsEmpty( GetSaveDir(), GetSaveFileExtension( Game::TYPE_HOTSEAT ), false ) ) {
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
             }
@@ -112,7 +113,7 @@ fheroes2::GameMode Game::LoadMulti()
                 return fheroes2::GameMode::LOAD_HOT_SEAT;
             }
         }
-        else if ( HotKeyPressEvent( EVENT_DEFAULT_EXIT ) || le.MouseClickLeft( buttonCancelGame.area() ) ) {
+        else if ( HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || le.MouseClickLeft( buttonCancelGame.area() ) ) {
             return fheroes2::GameMode::LOAD_GAME;
         }
 
@@ -135,9 +136,9 @@ fheroes2::GameMode Game::LoadGame()
     outputLoadGameInTextSupportMode();
 
     // Stop all sounds, but not the music
-    Mixer::Stop();
+    AudioManager::stopSounds();
 
-    AGG::PlayMusic( MUS::MAINMENU, true, true );
+    AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -186,7 +187,7 @@ fheroes2::GameMode Game::LoadGame()
             le.MousePressLeft( buttons[i].area() ) ? buttons[i].drawOnPress() : buttons[i].drawOnRelease();
         }
 
-        if ( le.MouseClickLeft( buttons[0].area() ) || HotKeyPressEvent( EVENT_BUTTON_STANDARD ) ) {
+        if ( le.MouseClickLeft( buttons[0].area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_STANDARD ) ) {
             if ( ListFiles::IsEmpty( GetSaveDir(), GetSaveFileExtension( Game::TYPE_STANDARD ), false ) ) {
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
             }
@@ -194,7 +195,7 @@ fheroes2::GameMode Game::LoadGame()
                 return fheroes2::GameMode::LOAD_STANDARD;
             }
         }
-        else if ( le.MouseClickLeft( buttons[1].area() ) || HotKeyPressEvent( EVENT_BUTTON_CAMPAIGN ) ) {
+        else if ( le.MouseClickLeft( buttons[1].area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_CAMPAIGN ) ) {
             if ( ListFiles::IsEmpty( GetSaveDir(), GetSaveFileExtension( Game::TYPE_CAMPAIGN ), false ) ) {
                 Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
             }
@@ -202,10 +203,10 @@ fheroes2::GameMode Game::LoadGame()
                 return fheroes2::GameMode::LOAD_CAMPAIN;
             }
         }
-        else if ( le.MouseClickLeft( buttons[2].area() ) || HotKeyPressEvent( EVENT_BUTTON_MULTI ) ) {
+        else if ( le.MouseClickLeft( buttons[2].area() ) || HotKeyPressEvent( HotKeyEvent::MAIN_MENU_MULTI ) ) {
             return fheroes2::GameMode::LOAD_MULTI;
         }
-        else if ( le.MouseClickLeft( buttons[3].area() ) || HotKeyPressEvent( EVENT_DEFAULT_EXIT ) ) {
+        else if ( le.MouseClickLeft( buttons[3].area() ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) ) {
             return fheroes2::GameMode::MAIN_MENU;
         }
         else if ( le.MousePressRight( buttons[0].area() ) ) {
@@ -234,9 +235,9 @@ fheroes2::GameMode Game::LoadStandard()
 fheroes2::GameMode Game::DisplayLoadGameDialog()
 {
     // Stop all sounds, but not the music
-    Mixer::Stop();
+    AudioManager::stopSounds();
 
-    AGG::PlayMusic( MUS::MAINMENU, true, true );
+    AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );

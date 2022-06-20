@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -28,7 +28,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "heroes.h"
 #include "heroes_indicator.h"
 #include "icn.h"
@@ -47,7 +47,7 @@ namespace
     const uint32_t primaryMaxValue = 20;
 }
 
-void Battle::ControlInfo::Redraw( void ) const
+void Battle::ControlInfo::Redraw() const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Sprite & cell = fheroes2::AGG::GetICN( ICN::CELLWIN, 1 );
@@ -91,7 +91,7 @@ Battle::Only::Only()
     player2.SetControl( CONTROL_AI );
 }
 
-bool Battle::Only::ChangeSettings( void )
+bool Battle::Only::ChangeSettings()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
@@ -120,6 +120,7 @@ bool Battle::Only::ChangeSettings( void )
 
     hero1 = world.GetHeroes( Heroes::LORDKILBURN );
     hero1->GetSecondarySkills().FillMax( Skill::Secondary() );
+
     army1 = &hero1->GetArmy();
 
     RedrawBaseInfo( cur_pt );
@@ -180,11 +181,11 @@ bool Battle::Only::ChangeSettings( void )
     while ( !exit && le.HandleEvents() ) {
         buttonStart.isEnabled() && le.MousePressLeft( buttonStart.area() ) ? buttonStart.drawOnPress() : buttonStart.drawOnRelease();
 
-        if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStart.area() ) ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) ) {
+        if ( ( buttonStart.isEnabled() && le.MouseClickLeft( buttonStart.area() ) ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             result = true;
             exit = true;
         }
-        else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) )
             exit = true;
 
         if ( allow1 && le.MouseClickLeft( rtPortrait1 ) ) {
@@ -219,28 +220,28 @@ bool Battle::Only::ChangeSettings( void )
 
         if ( hero1 && allow1 ) {
             if ( le.MouseClickLeft( rtAttack1 ) ) {
-                u32 value = hero1->attack;
+                uint32_t value = hero1->attack;
                 if ( Dialog::SelectCount( _( "Set Attack Skill" ), 0, primaryMaxValue, value ) ) {
                     hero1->attack = value;
                     redraw = true;
                 }
             }
             else if ( le.MouseClickLeft( rtDefense1 ) ) {
-                u32 value = hero1->defense;
+                uint32_t value = hero1->defense;
                 if ( Dialog::SelectCount( _( "Set Defense Skill" ), 0, primaryMaxValue, value ) ) {
                     hero1->defense = value;
                     redraw = true;
                 }
             }
             else if ( le.MouseClickLeft( rtPower1 ) ) {
-                u32 value = hero1->power;
+                uint32_t value = hero1->power;
                 if ( Dialog::SelectCount( _( "Set Power Skill" ), 0, primaryMaxValue, value ) ) {
                     hero1->power = value;
                     redraw = true;
                 }
             }
             else if ( le.MouseClickLeft( rtKnowledge1 ) ) {
-                u32 value = hero1->knowledge;
+                uint32_t value = hero1->knowledge;
                 if ( Dialog::SelectCount( _( "Set Knowledge Skill" ), 0, primaryMaxValue, value ) ) {
                     hero1->knowledge = value;
                     hero1->SetSpellPoints( hero1->knowledge * 10 );
@@ -251,28 +252,28 @@ bool Battle::Only::ChangeSettings( void )
 
         if ( hero2 && allow2 ) {
             if ( le.MouseClickLeft( rtAttack2 ) ) {
-                u32 value = hero2->attack;
+                uint32_t value = hero2->attack;
                 if ( Dialog::SelectCount( _( "Set Attack Skill" ), 0, primaryMaxValue, value ) ) {
                     hero2->attack = value;
                     redraw = true;
                 }
             }
             else if ( le.MouseClickLeft( rtDefense2 ) ) {
-                u32 value = hero2->defense;
+                uint32_t value = hero2->defense;
                 if ( Dialog::SelectCount( _( "Set Defense Skill" ), 0, primaryMaxValue, value ) ) {
                     hero2->defense = value;
                     redraw = true;
                 }
             }
             else if ( le.MouseClickLeft( rtPower2 ) ) {
-                u32 value = hero2->power;
+                uint32_t value = hero2->power;
                 if ( Dialog::SelectCount( _( "Set Power Skill" ), 0, primaryMaxValue, value ) ) {
                     hero2->power = value;
                     redraw = true;
                 }
             }
             else if ( le.MouseClickLeft( rtKnowledge2 ) ) {
-                u32 value = hero2->knowledge;
+                uint32_t value = hero2->knowledge;
                 if ( Dialog::SelectCount( _( "Set Knowledge Skill" ), 0, primaryMaxValue, value ) ) {
                     hero2->knowledge = value;
                     hero2->SetSpellPoints( hero2->knowledge * 10 );
@@ -581,7 +582,7 @@ void Battle::Only::RedrawBaseInfo( const fheroes2::Point & top ) const
     fheroes2::RedrawPrimarySkillInfo( top, primskill_bar1.get(), primskill_bar2.get() );
 }
 
-void Battle::Only::StartBattle( void )
+void Battle::Only::StartBattle()
 {
     Settings & conf = Settings::Get();
 

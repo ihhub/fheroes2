@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2022                                                    *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -43,7 +43,7 @@ int main( int argc, char ** argv )
     }
 
     fd_data.seekg( 0, std::ios_base::end );
-    u32 size = fd_data.tellg();
+    uint32_t size = fd_data.tellg();
     fd_data.seekg( 0, std::ios_base::beg );
     char * body = new char[size];
     fd_data.read( body, size );
@@ -66,7 +66,7 @@ int main( int argc, char ** argv )
         wavHeader.putLE32( 0x61746164 ); // DATA
         wavHeader.putLE32( size ); // size
 
-        fd_body.write( (const char *)wavHeader.data(), wavHeader.size() );
+        fd_body.write( reinterpret_cast<const char *>( wavHeader.data() ), wavHeader.size() );
         fd_body.write( body, size );
         fd_body.close();
     }

@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -67,8 +67,8 @@ namespace fheroes2
             const int moveId = Rand::Get( _validMoves );
 
             if ( moveId == Monster_Info::STATIC ) {
-                const u32 counter = Rand::Get( 10, 20 );
-                for ( u32 i = 0; i < counter; ++i )
+                const uint32_t counter = Rand::Get( 10, 20 );
+                for ( uint32_t i = 0; i < counter; ++i )
                     _pushFrames( Monster_Info::STATIC );
             }
             else if ( moveId == Monster_Info::IDLE ) {
@@ -77,8 +77,8 @@ namespace fheroes2
             else if ( moveId == Monster_Info::MOVING ) {
                 _pushFrames( _isFlyer ? Monster_Info::FLY_UP : Monster_Info::MOVE_START );
 
-                const u32 counter = Rand::Get( 3, 5 );
-                for ( u32 j = 0; j < counter; ++j )
+                const uint32_t counter = Rand::Get( 3, 5 );
+                for ( uint32_t j = 0; j < counter; ++j )
                     _pushFrames( Monster_Info::MOVING );
 
                 _pushFrames( _isFlyer ? Monster_Info::FLY_LAND : Monster_Info::MOVE_END );

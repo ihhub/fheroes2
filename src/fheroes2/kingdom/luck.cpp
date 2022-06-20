@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -21,8 +21,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+
 #include "luck.h"
-#include "tools.h"
 #include "translations.h"
 
 std::string Luck::String( int luck )
@@ -62,6 +63,8 @@ std::string Luck::Description( int luck )
     case Luck::GREAT:
     case Luck::IRISH:
         return _( "Good luck sometimes lets your armies get lucky attacks (double strength) in combat." );
+    default:
+        break;
     }
 
     return "Unknown";
@@ -69,5 +72,5 @@ std::string Luck::Description( int luck )
 
 int Luck::Normalize( const int luck )
 {
-    return clamp( luck, static_cast<int>( Luck::CURSED ), static_cast<int>( Luck::IRISH ) );
+    return std::clamp( luck, static_cast<int>( Luck::CURSED ), static_cast<int>( Luck::IRISH ) );
 }

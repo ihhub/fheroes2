@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -41,7 +41,7 @@ class HeroesIndicator
 public:
     explicit HeroesIndicator( const Heroes * h = nullptr );
 
-    const fheroes2::Rect & GetArea( void ) const;
+    const fheroes2::Rect & GetArea() const;
     void SetPos( const fheroes2::Point & );
     void SetHero( const Heroes * hero );
 
@@ -57,7 +57,7 @@ class LuckIndicator : public HeroesIndicator
 public:
     explicit LuckIndicator( const Heroes * h = nullptr );
 
-    void Redraw( void );
+    void Redraw();
     static void QueueEventProcessing( const LuckIndicator & );
 
 private:
@@ -69,7 +69,7 @@ class MoraleIndicator : public HeroesIndicator
 public:
     explicit MoraleIndicator( const Heroes * h = nullptr );
 
-    void Redraw( void );
+    void Redraw();
     static void QueueEventProcessing( const MoraleIndicator & );
 
 private:
@@ -81,8 +81,8 @@ class ExperienceIndicator : public HeroesIndicator
 public:
     explicit ExperienceIndicator( const Heroes * h = nullptr );
 
-    void Redraw( void ) const;
-    void QueueEventProcessing( void ) const;
+    void Redraw() const;
+    void QueueEventProcessing() const;
 };
 
 class SpellPointsIndicator : public HeroesIndicator
@@ -90,8 +90,8 @@ class SpellPointsIndicator : public HeroesIndicator
 public:
     explicit SpellPointsIndicator( const Heroes * h = nullptr );
 
-    void Redraw( void ) const;
-    void QueueEventProcessing( void ) const;
+    void Redraw() const;
+    void QueueEventProcessing() const;
 };
 
 #endif

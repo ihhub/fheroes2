@@ -1,6 +1,6 @@
 ###########################################################################
-#   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
-#   Copyright (C) 2021                                                    #
+#   fheroes2: https://github.com/ihhub/fheroes2                           #
+#   Copyright (C) 2021 - 2022                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -18,26 +18,18 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-ifdef FHEROES2_SDL1
-SDL_LIBS := $(shell sdl-config --libs)
-SDL_FLAGS := $(shell sdl-config --cflags)
-else
-SDL_LIBS := $(shell sdl2-config --libs)
-SDL_FLAGS := $(shell sdl2-config --cflags)
-endif
-
 TARGETS := extractor 82m2wav til2img icn2img xmi2mid_cli bin2txt
+
 LIBENGINE := ../engine/libengine.a
-LIBS := $(LIBENGINE) $(SDL_LIBS) $(LIBS)
-CFLAGS := $(SDL_FLAGS) $(CFLAGS) -I../engine
+CCFLAGS := $(CCFLAGS) -I../engine
 
 .PHONY: all clean
 
 all: $(TARGETS)
 
 $(TARGETS): $(addsuffix .cpp, $(TARGETS)) $(LIBENGINE)
-	$(CXX) $(CFLAGS) -c $@.cpp
-	$(CXX) $(LDFLAGS) -o $@ $@.o $(LIBS)
+	$(CXX) $(CCFLAGS) $(CXXFLAGS) $(CPPFLAGS) -c $@.cpp
+	$(CXX) $(LDFLAGS) $@.o $(LIBENGINE) $(LIBS) -o $@
 
 clean:
 	rm -f *.o *.exe $(TARGETS)

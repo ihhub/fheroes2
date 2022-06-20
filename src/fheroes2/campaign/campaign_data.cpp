@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,6 +24,7 @@
 #include "monster.h"
 #include "resource.h"
 #include "spell.h"
+#include "tools.h"
 #include "translations.h"
 
 #include <array>
@@ -39,10 +40,10 @@ namespace
 
         switch ( scenarioID ) {
         case 2:
-            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::DWARF, _( "Dwarven Alliance" ) );
+            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::DWARF, gettext_noop( "Dwarven Alliance" ) );
             break;
         case 5:
-            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::ELIZA, 0, 0, _( "Sorceress Guild" ) );
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::ELIZA, 0, 0, gettext_noop( "Sorceress Guild" ) );
             break;
         case 6:
             obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES, 0, 0, 9 );
@@ -66,14 +67,14 @@ namespace
 
         switch ( scenarioID ) {
         case 2:
-            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::BAX, 0, 0, _( "Necromancer Guild" ) );
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::BAX, 0, 0, gettext_noop( "Necromancer Guild" ) );
             break;
         case 3:
-            obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::OGRE );
-            obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_CREATURE_CURSE, Monster::DWARF );
+            obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::OGRE, gettext_noop( "Ogre Alliance" ) );
+            obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_CREATURE_CURSE, Monster::DWARF, gettext_noop( "Dwarfbane" ) );
             break;
         case 6:
-            obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::GREEN_DRAGON, _( "Dragon Alliance" ) );
+            obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::GREEN_DRAGON, gettext_noop( "Dragon Alliance" ) );
             break;
         case 8:
             obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::ULTIMATE_CROWN );
@@ -97,7 +98,7 @@ namespace
             obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::BREASTPLATE_ANDURAN );
             break;
         case 2:
-            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::ELF, _( "Elven Alliance" ) );
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::ELF, gettext_noop( "Elven Alliance" ) );
             obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS, Resource::WOOD, 2 );
             break;
         case 5:
@@ -109,7 +110,7 @@ namespace
             obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::SWORD_ANDURAN );
 
             // seems that Kraeger is a custom name for Dainwin in this case
-            obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, Heroes::DAINWIN, _( "Kraeger defeated" ) );
+            obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, Heroes::DAINWIN, gettext_noop( "Kraeger defeated" ) );
             break;
         default:
             break;
@@ -142,16 +143,16 @@ namespace
 
         switch ( scenarioID ) {
         case 2:
-            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::JOSEPH, 0, 0, _( "Wayward Son" ) );
+            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::JOSEPH, 0, 0, gettext_noop( "Wayward Son" ) );
             break;
         case 3:
-            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::UNCLEIVAN, 0, 0, _( "Uncle Ivan" ) );
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::UNCLEIVAN, 0, 0, gettext_noop( "Uncle Ivan" ) );
             break;
         case 5:
             obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::LEGENDARY_SCEPTER );
             break;
         case 6:
-            obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::ELF, _( "Elven Alliance" ) );
+            obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::ELF, gettext_noop( "Elven Alliance" ) );
             break;
         default:
             break;
@@ -247,7 +248,6 @@ namespace
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::ROLAND_CAMPAIGN );
-        campaignData.setCampaignDescription( "Roland Campaign" );
         campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
@@ -350,7 +350,6 @@ namespace
 
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::ARCHIBALD_CAMPAIGN );
-        campaignData.setCampaignDescription( "Archibald Campaign" );
         campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
@@ -471,11 +470,10 @@ namespace
                                     scenarioDescription[4],
                                     Campaign::VideoSequence{ { "MIXDES12.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "DES12.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
-                                    emptyPlayback );
-        scenarioDatas.emplace_back( scenarioInfo[5], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[7] }, "CAMP2_06.HXC", scenarioName[5], scenarioDescription[5],
                                     Campaign::VideoSequence{ { "MIXDES13.SMK", Video::VideoAction::IGNORE_VIDEO },
-                                                             { "DES13.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
-                                    emptyPlayback );
+                                                             { "DES13.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
+        scenarioDatas.emplace_back( scenarioInfo[5], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[7] }, "CAMP2_06.HXC", scenarioName[5], scenarioDescription[5],
+                                    emptyPlayback, emptyPlayback );
         scenarioDatas.emplace_back( scenarioInfo[6], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[7] }, "CAMP2_07.HXC", scenarioName[6], scenarioDescription[6],
                                     emptyPlayback, emptyPlayback );
         scenarioDatas.emplace_back( scenarioInfo[7], std::vector<Campaign::ScenarioInfoId>{}, "CAMP2_08.HXC", scenarioName[7], scenarioDescription[7],
@@ -673,19 +671,9 @@ namespace Campaign
         return false;
     }
 
-    void CampaignData::setCampaignID( const int campaignID )
-    {
-        _campaignID = campaignID;
-    }
-
     void CampaignData::setCampaignScenarios( std::vector<ScenarioData> && scenarios )
     {
         _scenarios = std::move( scenarios );
-    }
-
-    void CampaignData::setCampaignDescription( const std::string & campaignDescription )
-    {
-        _campaignDescription = campaignDescription;
     }
 
     const CampaignData & CampaignData::getCampaignData( const int campaignID )
@@ -725,31 +713,40 @@ namespace Campaign
     }
 
     // default amount to 1 for initialized campaign award data
-    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType )
+    CampaignAwardData::CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType )
         : CampaignAwardData( id, type, subType, 1, 0 )
-    {}
+    {
+        // Do nothing.
+    }
 
-    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount )
+    CampaignAwardData::CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType, const int32_t amount )
         : CampaignAwardData( id, type, subType, amount, 0 )
-    {}
+    {
+        // Do nothing.
+    }
 
-    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType, const std::string & customName )
-        : CampaignAwardData( id, type, subType, 1, 0, customName )
-    {}
+    CampaignAwardData::CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType, std::string customName )
+        : CampaignAwardData( id, type, subType, 1, 0, std::move( customName ) )
+    {
+        // Do nothing.
+    }
 
-    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, const std::string & customName )
+    CampaignAwardData::CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType, const int32_t amount, const int32_t startScenarioID,
+                                          std::string customName )
         : _id( id )
         , _type( type )
         , _subType( subType )
         , _amount( amount )
         , _startScenarioID( startScenarioID )
-        , _customName( customName )
-    {}
+        , _customName( std::move( customName ) )
+    {
+        // Do nothing.
+    }
 
-    std::string CampaignAwardData::ToString() const
+    std::string CampaignAwardData::getName() const
     {
         if ( !_customName.empty() )
-            return _customName;
+            return _( _customName );
 
         switch ( _type ) {
         case CampaignAwardData::TYPE_CREATURE_CURSE:
@@ -769,9 +766,81 @@ namespace Campaign
         case CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO:
             return Heroes( _subType, 0 ).GetName() + std::string( _( " defeated" ) );
         default:
-            assert( 0 ); // some new/unhandled award
-            return "";
+            // Did you add a new award? Add the logic above!
+            assert( 0 );
+            break;
         }
+
+        return {};
+    }
+
+    std::string CampaignAwardData::getDescription() const
+    {
+        switch ( _type ) {
+        case CampaignAwardData::TYPE_CREATURE_CURSE: {
+            std::vector<Monster> monsters;
+            monsters.emplace_back( _subType );
+            std::string description( monsters.back().GetMultiName() );
+
+            while ( monsters.back() != monsters.back().GetUpgrade() ) {
+                monsters.emplace_back( monsters.back().GetUpgrade() );
+                description += ", ";
+                description += monsters.back().GetMultiName();
+            }
+
+            description += _( " will always run away from your army." );
+            return description;
+        }
+        case CampaignAwardData::TYPE_CREATURE_ALLIANCE: {
+            std::vector<Monster> monsters;
+            monsters.emplace_back( _subType );
+            std::string description( monsters.back().GetMultiName() );
+
+            while ( monsters.back() != monsters.back().GetUpgrade() ) {
+                monsters.emplace_back( monsters.back().GetUpgrade() );
+                description += ", ";
+                description += monsters.back().GetMultiName();
+            }
+
+            description += _( " will be willing to join your army." );
+            return description;
+        }
+        case CampaignAwardData::TYPE_GET_ARTIFACT: {
+            std::string description( _( "\"%{artifact}\" artifact will be carried over the scenario." ) );
+            StringReplace( description, "%{artifact}", Artifact( _subType ).GetName() );
+            return description;
+        }
+        case CampaignAwardData::TYPE_CARRY_OVER_FORCES: {
+            return _( "The army will be carried over the scenario." );
+        }
+        case CampaignAwardData::TYPE_RESOURCE_BONUS: {
+            std::string description( _( "The kingdom will have +%{count} %{resource} each day." ) );
+            StringReplace( description, "%{count}", std::to_string( _amount ) );
+            StringReplace( description, "%{resource}", Resource::String( _subType ) );
+            return description;
+        }
+        case CampaignAwardData::TYPE_GET_SPELL: {
+            std::string description( _( "\"%{spell}\" spell will be carried over the scenario." ) );
+            StringReplace( description, "%{spell}", Spell( _subType ).GetName() );
+            return description;
+        }
+        case CampaignAwardData::TYPE_HIREABLE_HERO: {
+            std::string description( _( "%{hero} can be hired in the scenario." ) );
+            StringReplace( description, "%{hero}", Heroes( _subType, 0 ).GetName() );
+            return description;
+        }
+        case CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO: {
+            std::string description( _( "%{hero} has been defeated and will not appear in the subsequent scenarios." ) );
+            StringReplace( description, "%{hero}", Heroes( _subType, 0 ).GetName() );
+            return description;
+        }
+        default:
+            // Did you add a new award? Add the logic above!
+            assert( 0 );
+            break;
+        }
+
+        return {};
     }
 
     std::vector<Campaign::CampaignAwardData> CampaignAwardData::getCampaignAwardData( const ScenarioInfoId & scenarioInfo )

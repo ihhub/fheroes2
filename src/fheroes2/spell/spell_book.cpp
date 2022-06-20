@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -28,7 +28,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "dialog_selectitems.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "heroes_base.h"
 #include "icn.h"
 #include "image_tool.h"
@@ -71,14 +71,12 @@ namespace
             maximumHeight = bookmarkCloseOffset.y + bookmark_clos.height();
         }
 
-        return fheroes2::Size( bookPage.width() * 2, maximumHeight );
+        return { bookPage.width() * 2, maximumHeight };
     }
 
     void SpellBookRedrawSpells( const SpellStorage & spells, std::vector<fheroes2::Rect> & coords, const size_t index, const int32_t px, const int32_t py,
                                 const HeroBase & hero, bool isRight, fheroes2::Image & output, fheroes2::Point outputOffset )
     {
-        const uint32_t heroSpellPoints = hero.GetSpellPoints();
-
         for ( int32_t i = 0; i < spellsPerPage; ++i ) {
             if ( spells.size() <= index + i )
                 return;
@@ -88,8 +86,8 @@ namespace
 
             const Spell & spell = spells[i + index];
             const std::string & spellName = spell.GetName();
-            const uint32_t spellCost = spell.SpellPoint( &hero );
-            const bool isAvailable = heroSpellPoints >= spellCost;
+            const uint32_t spellCost = spell.spellPoints( &hero );
+            const bool isAvailable = hero.CanCastSpell( spell );
 
             const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( ICN::SPELLS, spell.IndexSprite() );
             int vertOffset = 49 - icon.height();
@@ -169,7 +167,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
                        const std::function<void( const std::string & )> * statusCallback /*= nullptr*/ ) const
 {
     if ( !hero.HaveSpellBook() ) {
-        Dialog::Message( "", _( "No spell to cast." ), Font::BIG, Dialog::OK );
+        Dialog::Message( "", _( "You have no Magic Book, so you cannot cast a spell." ), Font::BIG, Dialog::OK );
         return Spell::NONE;
     }
 
@@ -229,11 +227,11 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
 
     // message loop
     while ( le.HandleEvents() ) {
-        if ( ( le.MouseClickLeft( prev_list ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) ) && _startSpellIndex > 0 ) {
+        if ( ( le.MouseClickLeft( prev_list ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) ) && _startSpellIndex > 0 ) {
             _startSpellIndex -= spellsPerPage * 2;
             redraw = true;
         }
-        else if ( ( le.MouseClickLeft( next_list ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) )
+        else if ( ( le.MouseClickLeft( next_list ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) )
                   && displayedSpells.size() > ( _startSpellIndex + ( spellsPerPage * 2 ) ) ) {
             _startSpellIndex += spellsPerPage * 2;
             redraw = true;
@@ -272,7 +270,7 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
         else if ( le.MousePressRight( next_list ) ) {
             Dialog::Message( "", _( "View next page" ), Font::BIG );
         }
-        else if ( le.MouseClickLeft( clos_rt ) || HotKeyCloseWindow )
+        else if ( le.MouseClickLeft( clos_rt ) || Game::HotKeyCloseWindow() )
             break;
         else if ( le.MouseClickLeft( pos ) ) {
             const int32_t index = GetRectIndex( coords, le.GetMouseCursor() );
@@ -283,12 +281,13 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
                 if ( spell < displayedSpells.end() ) {
                     if ( canCastSpell ) {
                         std::string str;
+
                         if ( hero.CanCastSpell( *spell, &str ) ) {
                             curspell = *spell;
                             break;
                         }
                         else {
-                            StringReplace( str, "%{mana}", ( *spell ).SpellPoint( &hero ) );
+                            StringReplace( str, "%{mana}", ( *spell ).spellPoints( &hero ) );
                             StringReplace( str, "%{point}", hero.GetSpellPoints() );
                             Dialog::Message( spell->GetName(), str, Font::BIG, Dialog::OK );
                             display.render();
@@ -417,7 +416,7 @@ void SpellBook::Edit( const HeroBase & hero )
             current_index += spellsPerPage * 2;
             redraw = true;
         }
-        else if ( le.MouseClickLeft( clos_rt ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) )
+        else if ( le.MouseClickLeft( clos_rt ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) )
             break;
         else if ( le.MouseClickLeft( pos ) ) {
             const int32_t index = GetRectIndex( coords, le.GetMouseCursor() );

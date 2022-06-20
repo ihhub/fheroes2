@@ -1,43 +1,27 @@
 #!/usr/bin/env python3
 
 import datetime
+import os
 import re
 import subprocess
 import sys
 
 CURRENT_YEAR = datetime.datetime.now().date().year
 
-COPYRIGHT_HDR_FULL = """
-/***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) {YR}                                                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- ***************************************************************************/
-""".strip().replace("{YR}", f"{CURRENT_YEAR}")
-
-COPYRIGHT_HDR_TMPL = """
-/***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) {Y1} - {Y2}                                             *
- *                                                                         *
-""".strip()
-
 def main():
-    copyright_hdr_re_tmpl = COPYRIGHT_HDR_TMPL
+    if len(sys.argv) < 4:
+        print(f"Syntax: {os.path.basename(sys.argv[0])} full_header_file" +
+                                                      " header_template_file" +
+                                                      " source_file ...",
+              file=sys.stderr)
+        return 1
+
+    with open(sys.argv[1], "r", encoding="latin_1") as full_header_file:
+        copyright_hdr_full = full_header_file.read().strip().replace("{YR}", f"{CURRENT_YEAR}")
+    with open(sys.argv[2], "r", encoding="latin_1") as header_template_file:
+        copyright_hdr_tmpl = header_template_file.read().strip()
+
+    copyright_hdr_re_tmpl = copyright_hdr_tmpl
 
     for ch_to_replace in "*()":
         copyright_hdr_re_tmpl = copyright_hdr_re_tmpl.replace(ch_to_replace, "\\" + ch_to_replace)
@@ -49,7 +33,9 @@ def main():
 
     generic_hdr_re = re.compile("^/\\*.*?\\*/", re.DOTALL)
 
-    for file_name in sys.argv[1:]:
+    for file_name in sys.argv[3:]:
+        if not os.path.exists(file_name):
+            continue
         with open(file_name, "r", encoding="latin_1") as src_file:
             src = src_file.read()
 
@@ -67,23 +53,25 @@ def main():
 
             if not src_is_ok:
                 if year_re_match:
-                    hdr = COPYRIGHT_HDR_TMPL.replace("{Y1}", f"{year_re_match.group(1)}") \
+                    hdr = copyright_hdr_tmpl.replace("{Y1}", f"{year_re_match.group(1)}") \
                                             .replace("{Y2}", f"{CURRENT_YEAR}")
                     src = copyright_hdr_year_re.sub(hdr, src)
                 elif yrng_re_match:
-                    hdr = COPYRIGHT_HDR_TMPL.replace("{Y1}", f"{yrng_re_match.group(1)}") \
+                    hdr = copyright_hdr_tmpl.replace("{Y1}", f"{yrng_re_match.group(1)}") \
                                             .replace("{Y2}", f"{CURRENT_YEAR}")
                     src = copyright_hdr_yrng_re.sub(hdr, src)
                 elif generic_hdr_re.match(src):
-                    src = generic_hdr_re.sub(COPYRIGHT_HDR_FULL, src)
+                    src = generic_hdr_re.sub(copyright_hdr_full, src)
                 else:
-                    src = COPYRIGHT_HDR_FULL + "\n\n" + src.lstrip()
+                    src = copyright_hdr_full + "\n\n" + src.lstrip()
 
-                with open(file_name + ".tmp", "w", encoding="latin_1") as tmp_file:
+                with open(file_name + ".tmp", "x", encoding="latin_1") as tmp_file:
                     tmp_file.write(src)
 
                 with subprocess.Popen(["diff", "-u", file_name, file_name + ".tmp"]) as diff_proc:
                     diff_proc.wait()
+
+                os.remove(file_name + ".tmp")
 
     return 0
 

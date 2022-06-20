@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -24,13 +24,13 @@
 #ifndef H2GAME_H
 #define H2GAME_H
 
+#include <cstdint>
 #include <string>
 
-#include "agg.h"
+#include "audio_manager.h"
 #include "game_mode.h"
 #include "mp2.h"
 #include "mus.h"
-#include "types.h"
 
 class Players;
 class Heroes;
@@ -38,9 +38,9 @@ class Castle;
 
 namespace Game
 {
-    void Init( void );
+    void Init();
 
-    const std::string & GetLastSavename( void );
+    const std::string & GetLastSavename();
     void SetLastSavename( const std::string & );
     void SetLoadVersion( uint16_t ver );
     uint16_t GetLoadVersion();
@@ -60,120 +60,12 @@ namespace Game
         TYPE_LOADFILE = 0x80,
         TYPE_MULTI = TYPE_HOTSEAT
     };
-    // distance_t
-    enum
-    {
-        // UNUSED = 0,
-        VIEW_CASTLE = 1,
-        VIEW_HEROES = 2,
-        VIEW_TELESCOPE = 3,
-        VIEW_OBSERVATION_TOWER = 4,
-        VIEW_MAGI_EYES = 5
-    };
-
-    enum : int32_t
-    {
-        EVENT_NONE,
-        EVENT_BUTTON_NEWGAME,
-        EVENT_BUTTON_LOADGAME,
-        EVENT_BUTTON_HIGHSCORES,
-        EVENT_BUTTON_CREDITS,
-        EVENT_BUTTON_STANDARD,
-        EVENT_BUTTON_CAMPAIGN,
-        EVENT_BUTTON_MULTI,
-        EVENT_BUTTON_SETTINGS,
-        EVENT_BUTTON_SELECT,
-        EVENT_BUTTON_HOTSEAT,
-        EVENT_BUTTON_HOST,
-        EVENT_BUTTON_GUEST,
-        EVENT_BUTTON_BATTLEONLY,
-        EVENT_DEFAULT_READY,
-        EVENT_DEFAULT_EXIT,
-        EVENT_DEFAULT_LEFT,
-        EVENT_DEFAULT_RIGHT,
-        EVENT_SYSTEM_FULLSCREEN,
-        EVENT_SYSTEM_SCREENSHOT,
-        EVENT_SLEEPHERO,
-        EVENT_ENDTURN,
-        EVENT_NEXTHERO,
-        EVENT_NEXTTOWN,
-        EVENT_CONTINUE,
-        EVENT_SAVEGAME,
-        EVENT_LOADGAME,
-        EVENT_FILEOPTIONS,
-        EVENT_PUZZLEMAPS,
-        EVENT_INFOGAME,
-        EVENT_DIGARTIFACT,
-        EVENT_CASTSPELL,
-        EVENT_KINGDOM_INFO,
-        EVENT_VIEW_WORLD,
-        EVENT_DEFAULTACTION,
-        EVENT_OPENFOCUS,
-        EVENT_SYSTEMOPTIONS,
-        EVENT_BATTLE_CASTSPELL,
-        EVENT_BATTLE_RETREAT,
-        EVENT_BATTLE_SURRENDER,
-        EVENT_BATTLE_AUTOSWITCH,
-        EVENT_BATTLE_OPTIONS,
-        EVENT_BATTLE_HARDSKIP,
-        EVENT_BATTLE_SOFTSKIP,
-        EVENT_MOVELEFT,
-        EVENT_MOVERIGHT,
-        EVENT_MOVETOP,
-        EVENT_MOVEBOTTOM,
-        EVENT_MOVETOPLEFT,
-        EVENT_MOVETOPRIGHT,
-        EVENT_MOVEBOTTOMLEFT,
-        EVENT_MOVEBOTTOMRIGHT,
-        EVENT_SCROLLLEFT,
-        EVENT_SCROLLRIGHT,
-        EVENT_SCROLLUP,
-        EVENT_SCROLLDOWN,
-        EVENT_CTRLPANEL,
-        EVENT_SHOWRADAR,
-        EVENT_SHOWBUTTONS,
-        EVENT_SHOWSTATUS,
-        EVENT_SHOWICONS,
-        EVENT_STACKSPLIT_SHIFT,
-        EVENT_STACKSPLIT_CTRL,
-        EVENT_JOINSTACKS,
-        EVENT_UPGRADE_TROOP,
-        EVENT_DISMISS_TROOP,
-        EVENT_TOWN_DWELLING_LEVEL_1,
-        EVENT_TOWN_DWELLING_LEVEL_2,
-        EVENT_TOWN_DWELLING_LEVEL_3,
-        EVENT_TOWN_DWELLING_LEVEL_4,
-        EVENT_TOWN_DWELLING_LEVEL_5,
-        EVENT_TOWN_DWELLING_LEVEL_6,
-        EVENT_TOWN_WELL,
-        EVENT_TOWN_MARKETPLACE,
-        EVENT_TOWN_MAGE_GUILD,
-        EVENT_TOWN_SHIPYARD,
-        EVENT_TOWN_THIEVES_GUILD,
-
-        // town screen exclusive, not applied to build screen!
-        EVENT_TOWN_TAVERN,
-        EVENT_TOWN_JUMP_TO_BUILD_SELECTION,
-
-        EVENT_WELL_BUY_ALL_CREATURES,
-
-        EVENT_NEW_CAMPAIGN_SUCCESSION_WARS,
-        EVENT_NEW_CAMPAIGN_PRICE_OF_LOYALTY,
-
-        EVENT_LAST,
-    };
-
-    bool HotKeyPressEvent( int );
-    bool HotKeyHoldEvent( const int eventID );
-
-    const char * getHotKeyNameByEventId( const int eventID );
 
     void mainGameLoop( bool isFirstGameRun );
 
     fheroes2::GameMode MainMenu( bool isFirstGameRun );
     fheroes2::GameMode NewGame();
     fheroes2::GameMode LoadGame();
-    fheroes2::GameMode HighScores();
     fheroes2::GameMode Credits();
     fheroes2::GameMode NewStandard();
     fheroes2::GameMode CampaignSelection();
@@ -194,26 +86,25 @@ namespace Game
     fheroes2::GameMode StartBattleOnly();
     fheroes2::GameMode DisplayLoadGameDialog();
     fheroes2::GameMode CompleteCampaignScenario( const bool isLoadingSaveFile );
+    fheroes2::GameMode DisplayHighScores( const bool isCampaign );
 
     bool isSuccessionWarsCampaignPresent();
     bool isPriceOfLoyaltyCampaignPresent();
 
     void EnvironmentSoundMixer();
     void restoreSoundsForCurrentFocus();
-    int GetKingdomColors( void );
-    int GetActualKingdomColors( void );
+    int GetKingdomColors();
+    int GetActualKingdomColors();
     void DialogPlayers( int color, std::string );
-    void SetCurrentMusic( const int mus );
-    int CurrentMusic();
-    u32 & MapsAnimationFrame( void );
-    u32 GetRating( void );
-    u32 GetGameOverScores( void );
-    u32 GetLostTownDays( void );
-    u32 GetViewDistance( u32 );
-    u32 GetWhirlpoolPercent( void );
-    u32 SelectCountPlayers( void );
-    void ShowMapLoadingText( void );
-    void PlayPickupSound( void );
+    void SetCurrentMusicTrack( const int trackId );
+    int CurrentMusicTrackId();
+    uint32_t & MapsAnimationFrame();
+    uint32_t GetRating();
+    uint32_t GetGameOverScores();
+    uint32_t GetLostTownDays();
+    uint32_t GetWhirlpoolPercent();
+    uint32_t SelectCountPlayers();
+    void PlayPickupSound();
     bool UpdateSoundsOnFocusUpdate();
     void SetUpdateSoundsOnFocusUpdate( bool update );
     void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss = false );
@@ -225,6 +116,7 @@ namespace Game
     void SavePlayers( const std::string & mapFileName, const Players & players );
 
     std::string GetSaveDir();
+    std::string GetSaveFileBaseName();
     std::string GetSaveFileExtension();
     std::string GetSaveFileExtension( const int gameType );
 
@@ -233,7 +125,7 @@ namespace Game
     {
     public:
         MusicRestorer()
-            : _music( CurrentMusic() )
+            : _music( CurrentMusicTrackId() )
         {}
 
         MusicRestorer( const MusicRestorer & ) = delete;
@@ -241,7 +133,7 @@ namespace Game
         ~MusicRestorer()
         {
             if ( _music == MUS::UNUSED || _music == MUS::UNKNOWN ) {
-                SetCurrentMusic( _music );
+                SetCurrentMusicTrack( _music );
 
                 return;
             }
@@ -249,11 +141,12 @@ namespace Game
             // Set current music to MUS::UNKNOWN to prevent attempts to play the old music
             // by new instances of MusicRestorer while the music being currently restored
             // is starting in the background
-            if ( _music != CurrentMusic() ) {
-                SetCurrentMusic( MUS::UNKNOWN );
+            if ( _music != CurrentMusicTrackId() ) {
+                SetCurrentMusicTrack( MUS::UNKNOWN );
             }
 
-            AGG::PlayMusic( _music, true, true );
+            // It is assumed that the previous track was looped and does not require to be played from the beginning.
+            AudioManager::PlayMusicAsync( _music, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
         }
 
         MusicRestorer & operator=( const MusicRestorer & ) = delete;
@@ -292,7 +185,5 @@ namespace Game
     std::string CountScoute( uint32_t count, int scoute, bool shorts = false );
     std::string CountThievesGuild( uint32_t monsterCount, int guildCount );
 }
-
-#define HotKeyCloseWindow ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_EXIT ) || Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) )
 
 #endif

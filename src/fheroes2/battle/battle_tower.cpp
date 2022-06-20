@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -31,7 +31,7 @@
 #include "translations.h"
 
 Battle::Tower::Tower( const Castle & castle, int twr, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t uid )
-    : Unit( Troop( Monster::ARCHER, 0 ), -1, false, randomGenerator, uid )
+    : Unit( Troop( Monster::ARCHER, 0 ), {}, false, randomGenerator, uid )
     , type( twr )
     , color( castle.GetColor() )
     , bonus( 0 )
@@ -50,64 +50,67 @@ Battle::Tower::Tower( const Castle & castle, int twr, const Rand::DeterministicR
     SetModes( CAP_TOWER );
 }
 
-const char * Battle::Tower::GetName( void ) const
+const char * Battle::Tower::GetName() const
 {
     switch ( type ) {
     case TWR_LEFT:
         return _( "Left Turret" );
     case TWR_RIGHT:
         return _( "Right Turret" );
-
+    case TWR_CENTER:
+        return _( "Ballista" );
     default:
+        // This is not a valid Tower type!
+        assert( 0 );
         break;
     }
 
-    return _( "Ballista" );
+    return nullptr;
 }
 
-bool Battle::Tower::isValid( void ) const
+bool Battle::Tower::isValid() const
 {
     return valid;
 }
 
-u32 Battle::Tower::GetType( void ) const
+uint32_t Battle::Tower::GetType() const
 {
     return type;
 }
 
-u32 Battle::Tower::GetBonus( void ) const
+uint32_t Battle::Tower::GetBonus() const
 {
     return bonus;
 }
 
-u32 Battle::Tower::GetAttack( void ) const
+uint32_t Battle::Tower::GetAttack() const
 {
     return Unit::GetAttack() + bonus;
 }
 
-int Battle::Tower::GetColor( void ) const
+int Battle::Tower::GetColor() const
 {
     return color;
 }
 
-fheroes2::Point Battle::Tower::GetPortPosition( void ) const
+fheroes2::Point Battle::Tower::GetPortPosition() const
 {
     switch ( type ) {
     case TWR_LEFT:
-        return fheroes2::Point( 410, 70 );
+        return { 410, 70 };
         break;
     case TWR_RIGHT:
-        return fheroes2::Point( 410, 320 );
+        return { 410, 320 };
     case TWR_CENTER:
-        return fheroes2::Point( 560, 170 );
+        return { 560, 170 };
     default:
         break;
     }
 
-    return fheroes2::Point();
+    return {};
 }
 
-void Battle::Tower::SetDestroy( void )
+void Battle::Tower::SetDestroy()
 {
     switch ( type ) {
     case TWR_LEFT:

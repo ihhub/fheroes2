@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -354,6 +354,11 @@ void World::ComputeStaticAnalysis()
                 // neighbours is a set that will force the uniqness
                 reg._neighbours.insert( vec_tiles[exitIndex].GetRegion() );
             }
+        }
+
+        // Fix missing references
+        for ( uint32_t adjacent : reg._neighbours ) {
+            _regions[adjacent]._neighbours.insert( reg._id );
         }
     }
 }

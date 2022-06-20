@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -24,23 +24,24 @@
 #ifndef H2MOUNTS_H
 #define H2MOUNTS_H
 
+#include <cstdint>
+
 #include "mp2.h"
-#include "types.h"
 
 namespace ObjMnts1
 {
-    bool isAction( u32 index );
+    bool isAction( uint32_t index );
     bool isShadow( const uint8_t index );
     int GetPassable( int icn, const uint8_t index );
-    MP2::MapObjectType GetActionObject( u32 index );
+    MP2::MapObjectType GetActionObject( uint32_t index );
 }
 
 namespace ObjMnts2
 {
-    bool isAction( u32 index );
+    bool isAction( uint32_t index );
     bool isShadow( const uint8_t index );
     int GetPassable( int icn, const uint8_t index );
-    MP2::MapObjectType GetActionObject( u32 index );
+    MP2::MapObjectType GetActionObject( uint32_t index );
 }
 
 #endif

@@ -1,22 +1,42 @@
-if (MSVC)
-	add_compile_options(/W4)
-else()
-	add_compile_options(-Wall -Wextra -Wpedantic -Wfloat-conversion -Wshadow -Wfloat-equal -Wredundant-decls -Wdouble-promotion -Wunused -Wuninitialized)
-endif()
+###########################################################################
+#   fheroes2: https://github.com/ihhub/fheroes2                           #
+#   Copyright (C) 2022                                                    #
+#                                                                         #
+#   This program is free software; you can redistribute it and/or modify  #
+#   it under the terms of the GNU General Public License as published by  #
+#   the Free Software Foundation; either version 2 of the License, or     #
+#   (at your option) any later version.                                   #
+#                                                                         #
+#   This program is distributed in the hope that it will be useful,       #
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of        #
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         #
+#   GNU General Public License for more details.                          #
+#                                                                         #
+#   You should have received a copy of the GNU General Public License     #
+#   along with this program; if not, write to the                         #
+#   Free Software Foundation, Inc.,                                       #
+#   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
+###########################################################################
 
-if(FHEROES2_STRICT_COMPILATION)
-	if (MSVC)
-		add_compile_options(/WX)
-	else()
-		add_compile_options(-Werror)
-	endif()
-endif()
-
-add_compile_definitions($<$<CONFIG:Debug>:WITH_DEBUG>)
+set(
+	GNU_CC_WARN_OPTS
+	-pedantic -Wall -Wextra -Wcast-align -Wextra-semi -Wfloat-conversion -Wfloat-equal
+	-Winit-self -Wredundant-decls -Wshadow -Wundef -Wuninitialized -Wunused
+	)
+set(
+	GNU_CXX_WARN_OPTS
+	${GNU_CC_WARN_OPTS} -Wctor-dtor-privacy -Woverloaded-virtual
+	)
+set(
+	MSVC_CC_WARN_OPTS
+	/W4
+	/wd4244 # Suppress C4244 - possible data loss during conversion
+	/wd4267 # Suppress C4267 - possible data loss during conversion from size_t
+	)
 
 add_subdirectory(thirdparty)
 add_subdirectory(engine)
 add_subdirectory(fheroes2)
 if(ENABLE_TOOLS)
 	add_subdirectory(tools)
-endif()
+endif(ENABLE_TOOLS)

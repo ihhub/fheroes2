@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -239,8 +239,8 @@ void Interface::PlayersInfo::RedrawInfo( bool show_play_info ) const /* show_pla
     fheroes2::Display & display = fheroes2::Display::instance();
     const Maps::FileInfo & fi = conf.CurrentFileInfo();
 
-    const u32 humans_colors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
-    u32 index = 0;
+    const uint32_t humans_colors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
+    uint32_t index = 0;
 
     for ( const_iterator it = begin(); it != end(); ++it ) {
         const Player & player = *( ( *it ).player );
@@ -341,7 +341,7 @@ void Interface::PlayersInfo::resetSelection()
     currentSelectedPlayer = nullptr;
 }
 
-bool Interface::PlayersInfo::QueueEventProcessing( void )
+bool Interface::PlayersInfo::QueueEventProcessing()
 {
     Settings & conf = Settings::Get();
     const LocalEvent & le = LocalEvent::Get();

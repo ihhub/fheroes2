@@ -1,9 +1,40 @@
+###########################################################################
+#   fheroes2: https://github.com/ihhub/fheroes2                           #
+#   Copyright (C) 2022                                                    #
+#                                                                         #
+#   This program is free software; you can redistribute it and/or modify  #
+#   it under the terms of the GNU General Public License as published by  #
+#   the Free Software Foundation; either version 2 of the License, or     #
+#   (at your option) any later version.                                   #
+#                                                                         #
+#   This program is distributed in the hope that it will be useful,       #
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of        #
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         #
+#   GNU General Public License for more details.                          #
+#                                                                         #
+#   You should have received a copy of the GNU General Public License     #
+#   along with this program; if not, write to the                         #
+#   Free Software Foundation, Inc.,                                       #
+#   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
+###########################################################################
+
 include $(DEVKITPRO)/libnx/switch_rules
 
-ARCH = -march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE
-CFLAGS := $(CFLAGS) $(ARCH) -D__SWITCH__
-CXXFLAGS := $(CXXFLAGS) $(ARCH) -D__SWITCH__
-CFLAGS_TP := $(CFLAGS_TP) $(ARCH)
-CXXFLAGS_TP := $(CXXFLAGS_TP) $(ARCH)
+# Common flags (for both C and C++ compilers) for both third-party libraries and fheroes2
+CCFLAGS := $(CCFLAGS) $(shell sdl2-config --cflags) -fPIE
+LDFLAGS := $(LDFLAGS) -specs=$(DEVKITPRO)/libnx/switch.specs
+# Common flags (for both C and C++ compilers) for fheroes2 only
+CCFLAGS_FH2 := -DTARGET_NINTENDO_SWITCH
 
-LIBS := $(LIBS) -lSDL2 -lpng16 -lbz2 -lvorbisidec -lmodplug -lmpg123 -lm -lopusfile -logg -lopus -ljpeg -lwebp -specs=$(DEVKITPRO)/libnx/switch.specs
+LIBS := $(LIBS) -lvorbisidec -lmodplug -lmpg123 -lopusfile -lopus -logg
+
+ifdef FHEROES2_WITH_IMAGE
+LIBS := $(LIBS) -ljpeg -lwebp
+endif
+
+# Prevent sdl2-config --cflags from running once again in the main Makefile
+SDL_FLAGS :=
+
+ifdef FHEROES2_WITH_IMAGE
+SDL_FLAGS := $(SDL_FLAGS) $(shell libpng-config --cflags)
+endif

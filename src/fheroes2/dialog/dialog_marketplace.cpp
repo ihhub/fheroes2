@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -27,7 +27,7 @@
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "kingdom.h"
 #include "resource.h"
@@ -126,7 +126,7 @@ namespace
 void RedrawFromResource( const fheroes2::Point &, const Funds & );
 void RedrawToResource( const fheroes2::Point & pt, bool showcost, const Kingdom & kingdom, bool tradingPost, int from_resource = 0 );
 std::string GetStringTradeCosts( const Kingdom & kingdom, int rs_from, int rs_to, bool tradingPost );
-u32 GetTradeCosts( const Kingdom & kingdom, int rs_from, int rs_to, bool tradingPost );
+uint32_t GetTradeCosts( const Kingdom & kingdom, int rs_from, int rs_to, bool tradingPost );
 
 class TradeWindowGUI
 {
@@ -175,9 +175,9 @@ public:
         _singlePlayer = playerCount == 1;
     }
 
-    void RedrawInfoBuySell( u32 count_sell, u32 count_buy, u32 max_sell, u32 orig_buy );
-    void ShowTradeArea( const Kingdom & kingdom, int resourceFrom, int resourceTo, u32 max_buy, u32 max_sell, u32 count_buy, u32 count_sell, const bool fromTradingPost,
-                        const bool firstExchange );
+    void RedrawInfoBuySell( uint32_t count_sell, uint32_t count_buy, uint32_t max_sell, uint32_t orig_buy );
+    void ShowTradeArea( const Kingdom & kingdom, int resourceFrom, int resourceTo, uint32_t max_buy, uint32_t max_sell, uint32_t count_buy, uint32_t count_sell,
+                        const bool fromTradingPost, const bool firstExchange );
 
     fheroes2::Rect buttonMax;
     fheroes2::Rect buttonMin;
@@ -197,8 +197,8 @@ private:
     bool _singlePlayer;
 };
 
-void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, int resourceTo, u32 max_buy, u32 max_sell, u32 count_buy, u32 count_sell,
-                                    const bool fromTradingPost, const bool firstExchange )
+void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, int resourceTo, uint32_t max_buy, uint32_t max_sell, uint32_t count_buy,
+                                    uint32_t count_sell, const bool fromTradingPost, const bool firstExchange )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     bool disable = kingdom.GetFunds().Get( resourceFrom ) <= 0;
@@ -232,10 +232,9 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
 
         const uint32_t maximumValue = ( Resource::GOLD == resourceTo ) ? max_sell : max_buy;
 
-        const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( tradpostIcnId, 2 );
-        const fheroes2::Image scrollbarSlider
-            = fheroes2::generateScrollbarSlider( originalSilder, true, 187, 1, static_cast<int32_t>( maximumValue + 1 ), { 0, 0, 2, originalSilder.height() },
-                                                 { 2, 0, 8, originalSilder.height() } );
+        const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( tradpostIcnId, 2 );
+        const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, true, 187, 1, static_cast<int32_t>( maximumValue + 1 ),
+                                                                                   { 0, 0, 2, originalSlider.height() }, { 2, 0, 8, originalSlider.height() } );
         _scrollbar.setImage( scrollbarSlider );
 
         _scrollbar.setRange( 0, maximumValue );
@@ -297,7 +296,7 @@ void TradeWindowGUI::ShowTradeArea( const Kingdom & kingdom, int resourceFrom, i
     display.render();
 }
 
-void TradeWindowGUI::RedrawInfoBuySell( u32 count_sell, u32 count_buy, u32 max_sell, u32 orig_buy )
+void TradeWindowGUI::RedrawInfoBuySell( uint32_t count_sell, uint32_t count_buy, uint32_t max_sell, uint32_t orig_buy )
 {
     fheroes2::Point dst_pt;
 
@@ -387,11 +386,11 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     text.Blit( dst_pt.x, dst_pt.y );
     RedrawToResource( pt2, false, kingdom, fromTradingPost );
 
-    u32 count_sell = 0;
-    u32 count_buy = 0;
+    uint32_t count_sell = 0;
+    uint32_t count_buy = 0;
 
-    u32 max_sell = 0;
-    u32 max_buy = 0;
+    uint32_t max_sell = 0;
+    uint32_t max_buy = 0;
 
     const fheroes2::Rect & buttonMax = gui.buttonMax;
     const fheroes2::Rect & buttonMin = gui.buttonMin;
@@ -435,7 +434,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
 
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;
 
         // gift resources
@@ -456,7 +455,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
         }
 
         // click from
-        for ( u32 ii = 0; ii < rectsFrom.size(); ++ii ) {
+        for ( uint32_t ii = 0; ii < rectsFrom.size(); ++ii ) {
             const fheroes2::Rect & rect_from = rectsFrom[ii];
 
             if ( le.MouseClickLeft( rect_from ) ) {
@@ -490,7 +489,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
         }
 
         // click to
-        for ( u32 ii = 0; ii < rectsTo.size(); ++ii ) {
+        for ( uint32_t ii = 0; ii < rectsTo.size(); ++ii ) {
             const fheroes2::Rect & rect_to = rectsTo[ii];
 
             if ( le.MouseClickLeft( rect_to ) ) {
@@ -603,7 +602,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
     }
 }
 
-void RedrawResourceSprite( const fheroes2::Image & sf, s32 px, s32 py, s32 value )
+void RedrawResourceSprite( const fheroes2::Image & sf, int32_t px, int32_t py, int32_t value )
 {
     Text text;
     fheroes2::Point dst_pt( px, py );
@@ -635,7 +634,7 @@ void RedrawFromResource( const fheroes2::Point & pt, const Funds & rs )
     RedrawResourceSprite( fheroes2::AGG::GetICN( tradpost, 13 ), pt.x + 37, pt.y + 74, rs.gold );
 }
 
-void RedrawResourceSprite2( const fheroes2::Image & sf, s32 px, s32 py, bool show, const Kingdom & kingdom, int from, int res, bool trading )
+void RedrawResourceSprite2( const fheroes2::Image & sf, int32_t px, int32_t py, bool show, const Kingdom & kingdom, int from, int res, bool trading )
 {
     fheroes2::Point dst_pt( px, py );
 
@@ -684,9 +683,9 @@ std::string GetStringTradeCosts( const Kingdom & kingdom, int rs_from, int rs_to
     return res;
 }
 
-u32 GetTradeCosts( const Kingdom & kingdom, int rs_from, int rs_to, bool tradingPost )
+uint32_t GetTradeCosts( const Kingdom & kingdom, int rs_from, int rs_to, bool tradingPost )
 {
-    const u32 markets = tradingPost ? 3 : kingdom.GetCountMarketplace();
+    const uint32_t markets = tradingPost ? 3 : kingdom.GetCountMarketplace();
 
     if ( rs_from == rs_to )
         return 0;
@@ -766,6 +765,9 @@ u32 GetTradeCosts( const Kingdom & kingdom, int rs_from, int rs_to, bool trading
             else if ( 8 < markets )
                 return COSTLY_COSTLY9;
             break;
+
+        default:
+            break;
         }
         break;
 
@@ -844,6 +846,9 @@ u32 GetTradeCosts( const Kingdom & kingdom, int rs_from, int rs_to, bool trading
                 return COSTLY_UNCOSTLY8;
             else if ( 8 < markets )
                 return COSTLY_UNCOSTLY9;
+            break;
+
+        default:
             break;
         }
         break;

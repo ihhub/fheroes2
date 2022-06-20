@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -59,6 +59,7 @@ namespace Battle
     public:
         TroopsUidGenerator() = default;
         TroopsUidGenerator( const TroopsUidGenerator & ) = delete;
+
         TroopsUidGenerator & operator=( const TroopsUidGenerator & ) = delete;
 
         uint32_t GetUnique()
@@ -73,42 +74,48 @@ namespace Battle
     class Arena
     {
     public:
-        Arena( Army & army1, Army & army2, s32 index, bool local, Rand::DeterministicRandomGenerator & randomGenerator );
+        Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::DeterministicRandomGenerator & randomGenerator );
+        Arena( const Arena & ) = delete;
+        Arena( Arena && ) = delete;
+
         ~Arena();
 
-        void Turns( void );
-        bool BattleValid( void ) const;
+        Arena & operator=( const Arena & ) = delete;
+        Arena & operator=( Arena && ) = delete;
+
+        void Turns();
+        bool BattleValid() const;
 
         bool AutoBattleInProgress() const;
         bool CanToggleAutoBattle() const;
 
-        u32 GetCurrentTurn( void ) const;
-        Result & GetResult( void );
+        uint32_t GetCurrentTurn() const;
+        Result & GetResult();
 
         const HeroBase * getCommander( const int color ) const;
         const HeroBase * getEnemyCommander( const int color ) const;
-        const HeroBase * GetCommander1( void ) const;
-        const HeroBase * GetCommander2( void ) const;
-        const HeroBase * GetCurrentCommander( void ) const;
+        const HeroBase * GetCommander1() const;
+        const HeroBase * GetCommander2() const;
+        const HeroBase * GetCurrentCommander() const;
 
-        Force & GetForce1( void );
-        Force & GetForce2( void );
-        Force & getForce( const int color );
-        Force & getEnemyForce( const int color );
-        Force & GetCurrentForce( void );
+        Force & GetForce1() const;
+        Force & GetForce2() const;
+        Force & getForce( const int color ) const;
+        Force & getEnemyForce( const int color ) const;
+        Force & GetCurrentForce() const;
 
-        int GetArmyColor1( void ) const;
-        int GetArmyColor2( void ) const;
-        int GetCurrentColor( void ) const;
+        int GetArmyColor1() const;
+        int GetArmyColor2() const;
+        int GetCurrentColor() const;
         int GetOppositeColor( int ) const;
 
-        Unit * GetTroopBoard( s32 );
-        const Unit * GetTroopBoard( s32 ) const;
+        Unit * GetTroopBoard( int32_t );
+        const Unit * GetTroopBoard( int32_t ) const;
 
-        Unit * GetTroopUID( u32 );
-        const Unit * GetTroopUID( u32 ) const;
+        Unit * GetTroopUID( uint32_t );
+        const Unit * GetTroopUID( uint32_t ) const;
 
-        const SpellStorage & GetUsageSpells( void ) const;
+        const SpellStorage & GetUsageSpells() const;
 
         bool DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, bool allowToCancel ) const;
         int DialogBattleHero( const HeroBase & hero, const bool buttons, Status & status ) const;
@@ -132,17 +139,15 @@ namespace Battle
 
         void ApplyAction( Command & );
 
-        void TargetsApplyDamage( Unit &, const Unit &, TargetsInfo & ) const;
         TargetsInfo GetTargetsForSpells( const HeroBase * hero, const Spell & spell, int32_t dest, bool * playResistSound = nullptr );
-        void TargetsApplySpell( const HeroBase *, const Spell &, TargetsInfo & ) const;
 
         bool isSpellcastDisabled() const;
-        bool isDisableCastSpell( const Spell &, std::string * msg );
+        bool isDisableCastSpell( const Spell &, std::string * msg = nullptr );
 
-        bool GraveyardAllowResurrect( s32, const Spell & ) const;
-        const Unit * GraveyardLastTroop( s32 ) const;
+        bool GraveyardAllowResurrect( int32_t, const Spell & ) const;
+        const Unit * GraveyardLastTroop( int32_t ) const;
         std::vector<const Unit *> GetGraveyardTroops( const int32_t hexIndex ) const;
-        Indexes GraveyardClosedCells( void ) const;
+        Indexes GraveyardClosedCells() const;
 
         bool CanSurrenderOpponent( int color ) const;
         bool CanRetreatOpponent( int color ) const;
@@ -154,20 +159,20 @@ namespace Battle
         void ApplyActionSpellDefaults( Command &, const Spell & );
 
         bool IsShootingPenalty( const Unit &, const Unit & ) const;
-        int GetICNCovr( void ) const;
+        int GetICNCovr() const;
 
-        u32 GetCastleTargetValue( int ) const;
+        uint32_t GetCastleTargetValue( int ) const;
 
         int32_t GetFreePositionNearHero( const int heroColor ) const;
 
         const Rand::DeterministicRandomGenerator & GetRandomGenerator() const;
 
-        static Board * GetBoard( void );
+        static Board * GetBoard();
         static Tower * GetTower( int );
-        static Bridge * GetBridge( void );
-        static const Castle * GetCastle( void );
-        static Interface * GetInterface( void );
-        static Graveyard * GetGraveyard( void );
+        static Bridge * GetBridge();
+        static const Castle * GetCastle();
+        static Interface * GetInterface();
+        static Graveyard * GetGraveyard();
 
         static bool isAnyTowerPresent();
 
@@ -186,24 +191,21 @@ namespace Battle
         };
 
     private:
-        Arena( const Arena & ) = delete;
-        Arena & operator=( const Arena & ) = delete;
-
-        Arena( const Arena && ) = delete;
-        Arena & operator=( const Arena && ) = delete;
-
         void RemoteTurn( const Unit &, Actions & );
         void HumanTurn( const Unit &, Actions & );
 
         void TurnTroop( Unit * troop, const Units & orderHistory );
         void TowerAction( const Tower & );
 
-        void SetCastleTargetValue( int, u32 );
-        void CatapultAction( void );
+        void SetCastleTargetValue( int, uint32_t );
+        void CatapultAction();
 
         static TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir );
 
-        std::vector<int> GetCastleTargets( void ) const;
+        static void TargetsApplyDamage( Unit & attacker, TargetsInfo & targets );
+        static void TargetsApplySpell( const HeroBase * hero, const Spell & spell, TargetsInfo & targets );
+
+        std::vector<int> GetCastleTargets() const;
         TargetsInfo TargetsForChainLightning( const HeroBase * hero, int32_t attackedTroopIndex );
         std::vector<Unit *> FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit );
 
@@ -226,8 +228,13 @@ namespace Battle
         // automatically. When an attack is made by firing a shot, the dir should be UNKNOWN (zero).
         void BattleProcess( Unit & attacker, Unit & defender, int32_t dst = -1, int dir = -1 );
 
-        Unit * CreateElemental( const Spell & );
-        Unit * CreateMirrorImage( Unit &, s32 );
+        // Creates and returns a fully combat-ready elemental, which will be already placed on the board. It's
+        // the caller's responsibility to make sure that this elemental can be created using the given spell
+        // before calling this method.
+        Unit * CreateElemental( const Spell & spell );
+        // Creates and returns a mirror image of the given unit. The returned mirror image will have an invalid
+        // position, which should be updated separately.
+        Unit * CreateMirrorImage( Unit & unit );
 
         Force * army1;
         Force * army2;
@@ -253,7 +260,7 @@ namespace Battle
         AIBattlePathfinder _globalAIPathfinder;
         int icn_covr;
 
-        u32 current_turn;
+        uint32_t current_turn;
         int auto_battle;
 
         bool end_turn;
@@ -268,7 +275,7 @@ namespace Battle
         };
     };
 
-    Arena * GetArena( void );
+    Arena * GetArena();
 }
 
 #endif

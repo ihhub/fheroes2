@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,7 @@ namespace fheroes2
 
         ~Scrollbar() override = default;
 
-        // The original resources do not support proper scrollbar silder scaling. Use generateScrollbarSlider() function to generate needed image.
+        // The original resources do not support proper scrollbar slider scaling. Use generateScrollbarSlider() function to generate needed image.
         void setImage( const Image & image );
 
         void setArea( const Rect & area );

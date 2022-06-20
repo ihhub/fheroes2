@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -53,7 +53,7 @@ std::string Race::String( int race )
     return _( "race|Neutral" );
 }
 
-int Race::Rand( void )
+int Race::Rand()
 {
     switch ( Rand::Get( 1, 6 ) ) {
     case 1:

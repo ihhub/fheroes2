@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -79,22 +79,22 @@ void PlayerFixRandomRace( Player * player, std::vector<int> & availableRaces )
     }
 }
 
-bool Control::isControlAI( void ) const
+bool Control::isControlAI() const
 {
     return ( CONTROL_AI & GetControl() ) != 0;
 }
 
-bool Control::isControlHuman( void ) const
+bool Control::isControlHuman() const
 {
     return ( CONTROL_HUMAN & GetControl() ) != 0;
 }
 
-bool Control::isControlLocal( void ) const
+bool Control::isControlLocal() const
 {
     return !isControlRemote();
 }
 
-bool Control::isControlRemote( void ) const
+bool Control::isControlRemote() const
 {
     return ( CONTROL_REMOTE & GetControl() ) != 0;
 }
@@ -122,17 +122,17 @@ std::string Player::GetName() const
     return name;
 }
 
-Focus & Player::GetFocus( void )
+Focus & Player::GetFocus()
 {
     return focus;
 }
 
-const Focus & Player::GetFocus( void ) const
+const Focus & Player::GetFocus() const
 {
     return focus;
 }
 
-int Player::GetControl( void ) const
+int Player::GetControl() const
 {
     return control;
 }
@@ -142,7 +142,7 @@ std::string Player::GetPersonalityString() const
     return _ai->GetPersonalityString();
 }
 
-bool Player::isPlay( void ) const
+bool Player::isPlay() const
 {
     return Modes( ST_INGAME );
 }
@@ -197,7 +197,7 @@ StreamBase & operator<<( StreamBase & msg, const Focus & focus )
         msg << static_cast<Castle *>( focus.second )->GetIndex();
         break;
     default:
-        msg << static_cast<s32>( -1 );
+        msg << static_cast<int32_t>( -1 );
         break;
     }
 
@@ -206,7 +206,7 @@ StreamBase & operator<<( StreamBase & msg, const Focus & focus )
 
 StreamBase & operator>>( StreamBase & msg, Focus & focus )
 {
-    s32 index;
+    int32_t index;
     msg >> focus.first >> index;
 
     switch ( focus.first ) {
@@ -256,14 +256,14 @@ Players::~Players()
     clear();
 }
 
-void Players::clear( void )
+void Players::clear()
 {
     for ( iterator it = begin(); it != end(); ++it )
         delete *it;
 
     std::vector<Player *>::clear();
 
-    for ( u32 ii = 0; ii < KINGDOMMAX + 1; ++ii )
+    for ( uint32_t ii = 0; ii < KINGDOMMAX + 1; ++ii )
         _players[ii] = nullptr;
 
     current_color = 0;
@@ -281,7 +281,7 @@ void Players::Init( int colors )
         _players[Color::GetIndex( *it )] = back();
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "Players: " << String() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "Players: " << String() )
 }
 
 void Players::Init( const Maps::FileInfo & fi )
@@ -313,12 +313,12 @@ void Players::Init( const Maps::FileInfo & fi )
         if ( first )
             first->SetControl( CONTROL_HUMAN );
 
-        DEBUG_LOG( DBG_GAME, DBG_INFO, "Players: " << String() );
+        DEBUG_LOG( DBG_GAME, DBG_INFO, "Players: " << String() )
     }
     else {
         DEBUG_LOG( DBG_GAME, DBG_INFO,
                    "Players: "
-                       << "unknown colors" );
+                       << "unknown colors" )
     }
 }
 
@@ -366,7 +366,7 @@ int Players::GetColors( int control, bool strong ) const
     return res;
 }
 
-int Players::GetActualColors( void ) const
+int Players::GetActualColors() const
 {
     int res = 0;
 
@@ -382,12 +382,12 @@ const std::vector<Player *> & Players::getVector() const
     return *this;
 }
 
-Player * Players::GetCurrent( void )
+Player * Players::GetCurrent()
 {
     return Get( current_color );
 }
 
-const Player * Players::GetCurrent( void ) const
+const Player * Players::GetCurrent() const
 {
     return Get( current_color );
 }
@@ -423,7 +423,7 @@ void Players::SetPlayerInGame( int color, bool f )
         player->SetPlay( f );
 }
 
-void Players::SetStartGame( void )
+void Players::SetStartGame()
 {
     vector<int> races = { Race::KNGT, Race::BARB, Race::SORC, Race::WRLK, Race::WZRD, Race::NECR };
     for_each( begin(), end(), []( Player * player ) { player->SetPlay( true ); } );
@@ -435,17 +435,17 @@ void Players::SetStartGame( void )
     current_color = Color::NONE;
     human_colors = Color::NONE;
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, String() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, String() )
 }
 
-int Players::HumanColors( void )
+int Players::HumanColors()
 {
     if ( 0 == human_colors )
         human_colors = Settings::Get().GetPlayers().GetColors( CONTROL_HUMAN, true );
     return human_colors;
 }
 
-int Players::FriendColors( void )
+int Players::FriendColors()
 {
     int colors = 0;
     const Players & players = Settings::Get().GetPlayers();
@@ -461,7 +461,7 @@ int Players::FriendColors( void )
     return colors;
 }
 
-std::string Players::String( void ) const
+std::string Players::String() const
 {
     std::ostringstream os;
     os << "Players: ";
@@ -518,7 +518,7 @@ StreamBase & operator>>( StreamBase & msg, Players & players )
     players.current_color = current;
     const Colors vcolors( colors );
 
-    for ( u32 ii = 0; ii < vcolors.size(); ++ii ) {
+    for ( uint32_t ii = 0; ii < vcolors.size(); ++ii ) {
         Player * player = new Player();
         msg >> *player;
         Players::Set( Color::GetIndex( player->GetColor() ), player );

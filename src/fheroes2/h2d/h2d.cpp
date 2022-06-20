@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,29 +23,20 @@
 #include "settings.h"
 #include "system.h"
 
+#include <stdexcept>
+
 namespace
 {
-    bool isInitialized = false;
     fheroes2::H2RReader reader;
 
-    void initialize()
+    bool getH2DFilePath( const std::string & fileName, std::string & path )
     {
-        if ( isInitialized ) {
-            return;
-        }
-
-        isInitialized = true;
-
-        ListFiles files = Settings::FindFiles( System::ConcatePath( "files", "data" ), ".h2d", false );
-        if ( files.empty() ) {
-            return;
-        }
-
-        for ( const std::string & fileName : files ) {
-            if ( reader.open( fileName ) ) {
-                return;
-            }
-        }
+#if defined( MACOS_APP_BUNDLE )
+        return Settings::findFile( "h2d", fileName, path );
+        const std::string internalDirectory( "h2d" );
+#else
+        return Settings::findFile( System::ConcatePath( "files", "data" ), fileName, path );
+#endif
     }
 }
 
@@ -53,11 +44,20 @@ namespace fheroes2
 {
     namespace h2d
     {
+        H2DInitializer::H2DInitializer()
+        {
+            std::string filePath;
+            if ( !getH2DFilePath( "resurrection.h2d", filePath ) ) {
+                throw std::logic_error( "No H2D data files found." );
+            }
+
+            if ( !reader.open( filePath ) ) {
+                throw std::logic_error( "Cannot open H2D file." );
+            }
+        }
+
         bool readImage( const std::string & name, Sprite & image )
         {
-            // Initialize only when it's requested.
-            initialize();
-
             return readImageFromH2D( reader, name, image );
         }
     }

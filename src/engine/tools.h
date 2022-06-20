@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
  *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
  *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
@@ -24,40 +24,47 @@
 #define H2TOOLS_H
 
 #include <bitset>
+#include <cstdint>
+#include <iomanip>
 #include <list>
+#include <sstream>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 #include "math_base.h"
-#include "types.h"
 
 std::string GetStringShort( int );
-std::string GetHexString( int value, int width = 8 );
+
+template <typename T, typename = typename std::enable_if<std::is_integral<T>::value>::type>
+std::string GetHexString( T value, int width = 8 )
+{
+    std::ostringstream stream;
+
+    stream << "0x" << std::setw( width ) << std::setfill( '0' ) << std::hex << value;
+
+    return stream.str();
+}
 
 int GetInt( const std::string & );
 int Sign( int );
 
 std::string StringTrim( std::string );
-std::string StringLower( std::string );
+
+std::string StringLower( std::string str );
+std::string StringUpper( std::string str );
 
 std::vector<std::string> StringSplit( const std::string &, const std::string & );
 
 void StringReplace( std::string &, const char *, const std::string & );
 void StringReplace( std::string &, const char *, int );
 
-int CountBits( u32 );
+int CountBits( uint32_t );
 
 std::string InsertString( const std::string &, size_t, const char * );
 
-bool SaveMemToFile( const std::vector<u8> & data, const std::string & path );
-std::vector<u8> LoadFileToMem( const std::string & path );
-
-// std::clamp replacement until we can use C++17
-template <typename T>
-T clamp( const T & value, const T & min, const T & max )
-{
-    return ( value < min ) ? min : ( max < value ) ? max : value;
-}
+bool SaveMemToFile( const std::vector<uint8_t> & data, const std::string & path );
+std::vector<uint8_t> LoadFileToMem( const std::string & path );
 
 namespace fheroes2
 {
@@ -90,6 +97,8 @@ namespace fheroes2
         }
         return result;
     }
+
+    void replaceStringEnding( std::string & output, const char * originalEnding, const char * correctedEnding );
 }
 
 #endif
