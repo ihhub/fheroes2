@@ -251,7 +251,46 @@ namespace
             notifyWorker();
         }
 
+        void removeMusicTasks()
+        {
+            std::scoped_lock<std::mutex> lock( _mutex );
+
+            while ( !_musicTasks.empty() ) {
+                _musicTasks.pop();
+            }
+
+            if ( _taskToExecute == TaskType::PlayMusic ) {
+                _taskToExecute = TaskType::None;
+            }
+        }
+
         void removeSoundTasks()
+        {
+            std::scoped_lock<std::mutex> lock( _mutex );
+
+            while ( !_soundTasks.empty() ) {
+                _soundTasks.pop();
+            }
+
+            if ( _taskToExecute == TaskType::PlaySound ) {
+                _taskToExecute = TaskType::None;
+            }
+        }
+
+        void removeLoopSoundTasks()
+        {
+            std::scoped_lock<std::mutex> lock( _mutex );
+
+            while ( !_loopSoundTasks.empty() ) {
+                _loopSoundTasks.pop();
+            }
+
+            if ( _taskToExecute == TaskType::PlayLoopSound ) {
+                _taskToExecute = TaskType::None;
+            }
+        }
+
+        void removeAllSoundTasks()
         {
             std::scoped_lock<std::mutex> lock( _mutex );
 
@@ -820,7 +859,7 @@ namespace AudioManager
             g_asyncSoundManager.pushLoopSound( std::move( soundEffects ), conf.SoundVolume(), conf.is3DAudioEnabled() );
         }
         else {
-            g_asyncSoundManager.removeAllTasks();
+            g_asyncSoundManager.removeLoopSoundTasks();
 
             playLoopSoundsInternally( std::move( soundEffects ), conf.SoundVolume(), conf.is3DAudioEnabled() );
         }
@@ -840,7 +879,7 @@ namespace AudioManager
             g_asyncSoundManager.pushSound( m82, Settings::Get().SoundVolume() );
         }
         else {
-            g_asyncSoundManager.removeAllTasks();
+            g_asyncSoundManager.removeSoundTasks();
 
             PlaySoundInternally( m82, Settings::Get().SoundVolume() );
         }
@@ -856,7 +895,7 @@ namespace AudioManager
             return;
         }
 
-        g_asyncSoundManager.removeAllTasks();
+        g_asyncSoundManager.removeMusicTasks();
 
         PlayMusicInternally( trackId, Settings::Get().MusicType(), playbackMode );
     }
@@ -880,7 +919,7 @@ namespace AudioManager
             return;
         }
 
-        g_asyncSoundManager.removeSoundTasks();
+        g_asyncSoundManager.removeAllSoundTasks();
 
         std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
