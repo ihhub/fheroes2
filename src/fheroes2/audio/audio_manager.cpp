@@ -251,7 +251,7 @@ namespace
             notifyWorker();
         }
 
-        void removeSounds()
+        void removeSoundTasks()
         {
             std::scoped_lock<std::mutex> lock( _mutex );
 
@@ -263,12 +263,17 @@ namespace
                 _loopSoundTasks.pop();
             }
 
-            // TODO: there is a chance that at the time of clearing all tasks executeTask() method would be executing by the worker thread.
-            // The worker thread will proceed with the execution producing incorrect results such as environment sounds being played in castle's windows.
-            // It is not wise to update the type of the task without synchronization.
+            switch ( _taskToExecute ) {
+            case TaskType::PlaySound:
+            case TaskType::PlayLoopSound:
+                _taskToExecute = TaskType::None;
+                break;
+            default:
+                break;
+            }
         }
 
-        void sync()
+        void removeAllTasks()
         {
             std::scoped_lock<std::mutex> lock( _mutex );
 
@@ -284,13 +289,11 @@ namespace
                 _loopSoundTasks.pop();
             }
 
-            // TODO: there is a chance that at the time of clearing all tasks executeTask() method would be executing by the worker thread.
-            // The worker thread will proceed with the execution producing incorrect results such as environment sounds being played in castle's windows.
-            // It is not wise to update the type of the task without synchronization.
+            _taskToExecute = TaskType::None;
         }
 
         // This mutex protects operations with AudioManager's resources, such as AGG files, data caches, etc
-        std::mutex & resourceMutex()
+        std::recursive_mutex & resourceMutex()
         {
             return _resourceMutex;
         }
@@ -361,9 +364,9 @@ namespace
         SoundTask _currentSoundTask;
         LoopSoundTask _currentLoopSoundTask;
 
-        TaskType _taskToExecute{ TaskType::None };
+        std::atomic<TaskType> _taskToExecute{ TaskType::None };
 
-        std::mutex _resourceMutex;
+        std::recursive_mutex _resourceMutex;
 
         bool prepareTask() override
         {
@@ -408,6 +411,8 @@ namespace
 
         void executeTask() override
         {
+            std::scoped_lock<std::recursive_mutex> lock( _resourceMutex );
+
             switch ( _taskToExecute ) {
             case TaskType::None:
                 // Nothing to do.
@@ -452,7 +457,7 @@ namespace
 
     void PlaySoundInternally( const int m82, const int soundVolume )
     {
-        std::scoped_lock<std::mutex> lock( g_asyncSoundManager.resourceMutex() );
+        std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Try to play sound " << M82::GetString( m82 ) )
 
@@ -487,7 +492,7 @@ namespace
 
         const uint64_t musicUID = getMusicUID( trackId, musicType );
 
-        std::scoped_lock<std::mutex> lock( g_asyncSoundManager.resourceMutex() );
+        std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
         if ( Game::CurrentMusicTrackId() == trackId && Music::isPlaying() ) {
             return;
@@ -606,7 +611,7 @@ namespace
     void playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume,
                                    const bool is3DAudioEnabled )
     {
-        std::scoped_lock<std::mutex> lock( g_asyncSoundManager.resourceMutex() );
+        std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
         if ( soundVolume == 0 ) {
             // The volume is 0. Remove all existing sound effects.
@@ -795,7 +800,7 @@ namespace AudioManager
 
     AudioInitializer::~AudioInitializer()
     {
-        g_asyncSoundManager.sync();
+        g_asyncSoundManager.removeAllTasks();
         g_asyncSoundManager.stopWorker();
 
         wavDataCache.clear();
@@ -815,7 +820,8 @@ namespace AudioManager
             g_asyncSoundManager.pushLoopSound( std::move( soundEffects ), conf.SoundVolume(), conf.is3DAudioEnabled() );
         }
         else {
-            g_asyncSoundManager.sync();
+            g_asyncSoundManager.removeAllTasks();
+
             playLoopSoundsInternally( std::move( soundEffects ), conf.SoundVolume(), conf.is3DAudioEnabled() );
         }
     }
@@ -834,7 +840,8 @@ namespace AudioManager
             g_asyncSoundManager.pushSound( m82, Settings::Get().SoundVolume() );
         }
         else {
-            g_asyncSoundManager.sync();
+            g_asyncSoundManager.removeAllTasks();
+
             PlaySoundInternally( m82, Settings::Get().SoundVolume() );
         }
     }
@@ -849,7 +856,8 @@ namespace AudioManager
             return;
         }
 
-        g_asyncSoundManager.sync();
+        g_asyncSoundManager.removeAllTasks();
+
         PlayMusicInternally( trackId, Settings::Get().MusicType(), playbackMode );
     }
 
@@ -872,9 +880,9 @@ namespace AudioManager
             return;
         }
 
-        g_asyncSoundManager.removeSounds();
+        g_asyncSoundManager.removeSoundTasks();
 
-        std::scoped_lock<std::mutex> lock( g_asyncSoundManager.resourceMutex() );
+        std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
         clearAllAudioLoopEffects();
 
@@ -884,13 +892,12 @@ namespace AudioManager
     void ResetAudio()
     {
         if ( !Audio::isValid() ) {
-            // Nothing to reset as an audio device is not even initialized.
             return;
         }
 
-        g_asyncSoundManager.sync();
+        g_asyncSoundManager.removeAllTasks();
 
-        std::scoped_lock<std::mutex> lock( g_asyncSoundManager.resourceMutex() );
+        std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
         clearAllAudioLoopEffects();
 
