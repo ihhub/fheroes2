@@ -407,6 +407,7 @@ namespace
 
         std::recursive_mutex _resourceMutex;
 
+        // This method is called by the worker thread and is protected by _mutex
         bool prepareTask() override
         {
             if ( !_musicTasks.empty() ) {
@@ -448,8 +449,12 @@ namespace
             return false;
         }
 
+        // This method is called by the worker thread, but is not protected by _mutex
         void executeTask() override
         {
+            // Do not allow the main thread to acquire this mutex in the interval between the
+            // _taskToExecute was checked and the task was started executing. Release it only
+            // when the task is fully completed.
             std::scoped_lock<std::recursive_mutex> lock( _resourceMutex );
 
             switch ( _taskToExecute ) {
