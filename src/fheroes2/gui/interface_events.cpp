@@ -185,7 +185,7 @@ void Interface::Basic::EventCastSpell()
     gameArea.SetCenter( hero->GetCenter() );
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR );
 
-    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, nullptr );
+    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, false, nullptr );
     if ( spell.isValid() ) {
         hero->ActionSpellCast( spell );
         iconsPanel.SetRedraw();

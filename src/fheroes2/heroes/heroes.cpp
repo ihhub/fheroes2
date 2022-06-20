@@ -1475,7 +1475,7 @@ void Heroes::SetMapsObject( const MP2::MapObjectType objectType )
 
 void Heroes::ActionPreBattle()
 {
-    // Do nothing.
+    spell_book.resetState();
 }
 
 void Heroes::ActionNewPosition( const bool allowMonsterAttack )

@@ -163,15 +163,15 @@ namespace
     }
 }
 
-Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, const bool canCastSpell,
-                       const std::function<void( const std::string & )> * statusCallback /*= nullptr*/ ) const
+Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, const bool canCastSpell, const bool restorePreviousState,
+                       const std::function<void( const std::string & )> * statusCallback ) const
 {
     if ( !hero.HaveSpellBook() ) {
         Dialog::Message( "", _( "You have no Magic Book, so you cannot cast a spell." ), Font::BIG, Dialog::OK );
         return Spell::NONE;
     }
 
-    if ( displayableSpells != Filter::ALL && _spellFilter != displayableSpells ) {
+    if ( !restorePreviousState || ( displayableSpells != Filter::ALL && _spellFilter != displayableSpells ) ) {
         _spellFilter = displayableSpells;
         _startSpellIndex = 0;
     }
@@ -461,6 +461,12 @@ void SpellBook::Edit( const HeroBase & hero )
 
     restorer.restore();
     display.render();
+}
+
+void SpellBook::resetState()
+{
+    _startSpellIndex = 0;
+    _spellFilter = Filter::ADVN;
 }
 
 SpellStorage SpellBook::SetFilter( const Filter filter, const HeroBase * hero ) const
