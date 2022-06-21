@@ -579,7 +579,7 @@ msgid "The %{attacker}' gaze turns the %{target} to stone!"
 msgstr "Spojrzenie %{attacker} zamienia %{target} w kamień!"
 
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr "%{attacker} przeklina %{name}!"
+msgstr "%{attacker} przeklina %{target}!"
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
 msgstr "%{target} został sparaliżowany przez %{attacker}!"
@@ -3478,7 +3478,7 @@ msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
 "starting the game please choose game resolution."
 msgstr "Witamy w grze Heroes of Might and Magic II na silniku fheroes2! "
-"Przed rozpoczęciem gry wybierz rozdzielczość ekranu."
+"Przed rozpoczęciem wybierz rozdzielczość gry."
 
 msgid "Please Remember"
 msgstr "Pamiętaj"
