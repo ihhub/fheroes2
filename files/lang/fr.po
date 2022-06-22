@@ -137,7 +137,7 @@ msgid "View %{name}"
 msgstr "Voir %{name}"
 
 msgid "Move the %{name} "
-msgstr "Déplacer le groupe de %{name} "
+msgstr "Déplacer la troupe de %{name} "
 
 msgid "Move or right click to redistribute %{name}"
 msgstr "Déplacer ou faire un clic droit pour répartir les %{name}"
@@ -155,7 +155,7 @@ msgid "Cannot move last troop"
 msgstr "Impossible de déplacer la dernière armée dans la garnison"
 
 msgid "Move the %{name}"
-msgstr "Déplacer le groupe de %{name}"
+msgstr "Déplacer la troupe de %{name}"
 
 msgid "Set Count"
 msgstr "Régler le nombre"
@@ -572,17 +572,17 @@ msgid "The %{attacker}' attack blinds the %{target}!"
 msgstr "L'attaque de la troupe de %{attacker} aveugle la troupe de %{target} !"
 
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr "Le regard de %{attacker} transforme les %{target} en pierre !"
+msgstr "Le regard de la troupe de %{attacker} transforme la troupe de %{target} en pierre !"
 
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr "La malédiction de groupe de %{attacker} s'abat sur les %{target} !"
+msgstr "La malédiction de la troupe de %{attacker} s'abat sur la troupe de %{target} !"
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr "%{target} sont paralysés par %{attacker} !"
+msgstr "La troupe de %{target} est paralysée par %{attacker} !"
 
 msgid "The %{attacker} dispel all good spells on your %{target}!"
 msgstr ""
-"Le groupe de %{attacker} dissipe tous les bons sorts sur vos %{target} !"
+"La troupe de %{attacker} dissipe tous les sorts bénéfiques sur vos %{target} !"
 
 msgid "The %{attacker} cast %{spell} on %{target}!"
 msgstr "Le groupe de %{attacker} lance %{spell} sur le groupe de %{target} !"
