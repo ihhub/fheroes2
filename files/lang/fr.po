@@ -585,7 +585,7 @@ msgstr ""
 "La troupe de %{attacker} dissipe tous les sorts bénéfiques sur vos %{target} !"
 
 msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr "Le groupe de %{attacker} lance %{spell} sur le groupe de %{target} !"
+msgstr "La troupe de %{attacker} lance %{spell} sur la troupe de %{target} !"
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "La malchance s'abat sur les %{attacker}."
