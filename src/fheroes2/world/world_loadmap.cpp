@@ -700,50 +700,73 @@ void World::ProcessNewMap()
         }
     }
 
-    // Set Ultimate Artifact.
-    fheroes2::Point ultimate_pos;
-    MapsTiles::iterator it = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isObject( MP2::OBJ_RNDULTIMATEARTIFACT ); } );
-    if ( vec_tiles.end() == it ) {
-        // generate position for ultimate
-        MapsIndexes pools;
-        pools.reserve( vec_tiles.size() / 2 );
+    // Settle the Ultimate Artifact
+    MapsTiles::iterator ultArtTileIter
+        = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isObject( MP2::OBJ_RNDULTIMATEARTIFACT ); } );
+
+    // There is no tile with a predefined Ultimate Artifact, pick a suitable tile randomly
+    if ( ultArtTileIter == vec_tiles.end() ) {
+        MapsIndexes pool;
+        pool.reserve( vec_tiles.size() / 2 );
 
         for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
             const Maps::Tiles & tile = vec_tiles[i];
+
             const int32_t x = tile.GetIndex() % width;
-            if ( x < ultimateArtifactOffset || x >= width - ultimateArtifactOffset )
+            if ( x < ultimateArtifactOffset || x >= width - ultimateArtifactOffset ) {
                 continue;
+            }
 
             const int32_t y = tile.GetIndex() / width;
-            if ( y < ultimateArtifactOffset || y >= height - ultimateArtifactOffset )
+            if ( y < ultimateArtifactOffset || y >= height - ultimateArtifactOffset ) {
                 continue;
+            }
 
-            if ( tile.GoodForUltimateArtifact() )
-                pools.emplace_back( tile.GetIndex() );
+            if ( tile.GoodForUltimateArtifact() ) {
+                pool.emplace_back( tile.GetIndex() );
+            }
         }
 
-        if ( !pools.empty() ) {
-            const int32_t pos = Rand::Get( pools );
+        if ( !pool.empty() ) {
+            const int32_t pos = Rand::Get( pool );
+
             ultimate_artifact.Set( pos, getUltimateArtifact() );
-            ultimate_pos = Maps::GetPoint( pos );
         }
     }
+    // There is a tile with a predefined Ultimate Artifact, pick a tile nearby in the radius specified in the artifact's properties
     else {
-        // remove ultimate artifact sprite
-        it->Remove( it->GetObjectUID() );
-        it->setAsEmpty();
-        ultimate_artifact.Set( it->GetIndex(), getUltimateArtifact() );
-        ultimate_pos = ( *it ).GetCenter();
+        const int32_t radius = ultArtTileIter->GetQuantity1() >> 3;
+
+        // Remove the existing Ultimate Artifact object
+        ultArtTileIter->Remove( ultArtTileIter->GetObjectUID() );
+        ultArtTileIter->setAsEmpty();
+
+        // Use the current Ultimate Artifact tile index as a fallback
+        int32_t pos = ultArtTileIter->GetIndex();
+
+        if ( radius > 0 ) {
+            MapsIndexes pool = Maps::getAroundIndexes( pos, radius );
+
+            // Maps::getAroundIndexes() results does not include the central index, so we will have to append it manually
+            assert( std::find( pool.begin(), pool.end(), pos ) == pool.end() );
+            pool.push_back( pos );
+
+            pool.erase( std::remove_if( pool.begin(), pool.end(), []( const int32_t idx ) { return !world.GetTiles( idx ).GoodForUltimateArtifact(); } ), pool.end() );
+
+            if ( !pool.empty() ) {
+                pos = Rand::Get( pool );
+            }
+        }
+
+        ultimate_artifact.Set( pos, getUltimateArtifact() );
     }
 
     PostLoad( true );
 
-    // play with hero
     vec_kingdoms.ApplyPlayWithStartingHero();
 
-    // play with debug hero
+    // If we are in developer mode, then add the DEBUG_HERO
     if ( IS_DEVEL() ) {
-        // get first castle position
         Kingdom & kingdom = GetKingdom( Color::GetFirst( Players::HumanColors() ) );
 
         if ( !kingdom.GetCastles().empty() ) {
