@@ -705,26 +705,32 @@ void World::ProcessNewMap()
     MapsTiles::iterator ultArtTileIter
         = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isObject( MP2::OBJ_RNDULTIMATEARTIFACT ); } );
 
+    auto checkTileForSuitabilityForUltArt = [this]( const int32_t idx ) {
+        const int32_t x = idx % width;
+        if ( x < ultimateArtifactOffset || x >= width - ultimateArtifactOffset ) {
+            return false;
+        }
+
+        const int32_t y = idx / width;
+        if ( y < ultimateArtifactOffset || y >= height - ultimateArtifactOffset ) {
+            return false;
+        }
+
+        const Maps::Tiles & tile = GetTiles( idx );
+
+        return tile.GoodForUltimateArtifact();
+    };
+
     // There is no tile with a predefined Ultimate Artifact, pick a suitable tile randomly
     if ( ultArtTileIter == vec_tiles.end() ) {
         MapsIndexes pool;
         pool.reserve( vec_tiles.size() / 2 );
 
         for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
-            const Maps::Tiles & tile = vec_tiles[i];
+            const int32_t tileIndex = vec_tiles[i].GetIndex();
 
-            const int32_t x = tile.GetIndex() % width;
-            if ( x < ultimateArtifactOffset || x >= width - ultimateArtifactOffset ) {
-                continue;
-            }
-
-            const int32_t y = tile.GetIndex() / width;
-            if ( y < ultimateArtifactOffset || y >= height - ultimateArtifactOffset ) {
-                continue;
-            }
-
-            if ( tile.GoodForUltimateArtifact() ) {
-                pool.emplace_back( tile.GetIndex() );
+            if ( checkTileForSuitabilityForUltArt( tileIndex ) ) {
+                pool.emplace_back( tileIndex );
             }
         }
 
@@ -756,7 +762,9 @@ void World::ProcessNewMap()
             assert( std::find( pool.begin(), pool.end(), pos ) == pool.end() );
             pool.push_back( pos );
 
-            pool.erase( std::remove_if( pool.begin(), pool.end(), []( const int32_t idx ) { return !world.GetTiles( idx ).GoodForUltimateArtifact(); } ), pool.end() );
+            pool.erase( std::remove_if( pool.begin(), pool.end(),
+                                        [&checkTileForSuitabilityForUltArt]( const int32_t idx ) { return !checkTileForSuitabilityForUltArt( idx ); } ),
+                        pool.end() );
 
             if ( !pool.empty() ) {
                 pos = Rand::Get( pool );
