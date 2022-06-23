@@ -726,8 +726,8 @@ void World::ProcessNewMap()
         MapsIndexes pool;
         pool.reserve( vec_tiles.size() / 2 );
 
-        for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
-            const int32_t tileIndex = vec_tiles[i].GetIndex();
+        for ( const Maps::Tiles & tile : vec_tiles ) {
+            const int32_t tileIndex = tile.GetIndex();
 
             if ( checkTileForSuitabilityForUltArt( tileIndex ) ) {
                 pool.emplace_back( tileIndex );
