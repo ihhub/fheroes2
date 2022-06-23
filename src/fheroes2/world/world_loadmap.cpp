@@ -725,10 +725,10 @@ void World::ProcessNewMap()
         pool.reserve( vec_tiles.size() / 2 );
 
         for ( const Maps::Tiles & tile : vec_tiles ) {
-            const int32_t tileIndex = tile.GetIndex();
+            const int32_t idx = tile.GetIndex();
 
-            if ( checkTileForSuitabilityForUltArt( tileIndex ) ) {
-                pool.emplace_back( tileIndex );
+            if ( checkTileForSuitabilityForUltArt( idx ) ) {
+                pool.emplace_back( idx );
             }
         }
 
