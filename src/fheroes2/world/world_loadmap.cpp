@@ -701,7 +701,7 @@ void World::ProcessNewMap()
         }
     }
 
-    // Settle the Ultimate Artifact
+    // Search for a tile with a predefined Ultimate Artifact
     MapsTiles::iterator ultArtTileIter
         = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isObject( MP2::OBJ_RNDULTIMATEARTIFACT ); } );
 
@@ -754,7 +754,7 @@ void World::ProcessNewMap()
         if ( radius > 0 ) {
             MapsIndexes pool = Maps::getAroundIndexes( pos, radius );
 
-            // Maps::getAroundIndexes() results does not include the central index, so we will have to append it manually
+            // Maps::getAroundIndexes() results does not include the central index, so we have to append it manually
             assert( std::find( pool.begin(), pool.end(), pos ) == pool.end() );
             pool.push_back( pos );
 
