@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <type_traits>
 
 #include "artifact.h"
 #include "campaign_data.h"
@@ -735,6 +736,9 @@ void World::ProcessNewMap()
     }
     // There is a tile with a predefined Ultimate Artifact, pick a tile nearby in the radius specified in the artifact's properties
     else {
+        static_assert( std::is_same_v<decltype( ultArtTileIter->GetQuantity1() ), uint8_t> && std::is_same_v<decltype( ultArtTileIter->GetQuantity2() ), uint8_t>,
+                       "The types of tile's quantities has been changed, please check the bitwise arithmetic below" );
+
         // The radius can be in the range 0 - 127, it is represented by 2 low-order bits of quantity2 and 5 high-order bits of quantity1
         const int32_t radius = ( ( ultArtTileIter->GetQuantity2() & 0x03 ) << 5 ) + ( ultArtTileIter->GetQuantity1() >> 3 );
 
