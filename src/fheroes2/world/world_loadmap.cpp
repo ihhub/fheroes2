@@ -733,9 +733,7 @@ void World::ProcessNewMap()
         }
 
         if ( !pool.empty() ) {
-            const int32_t pos = Rand::Get( pool );
-
-            ultimate_artifact.Set( pos, getUltimateArtifact() );
+            ultimate_artifact.Set( Rand::Get( pool ), getUltimateArtifact() );
         }
     }
     // There is a tile with a predefined Ultimate Artifact, pick a tile nearby in the radius specified in the artifact's properties
