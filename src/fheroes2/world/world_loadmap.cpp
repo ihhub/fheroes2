@@ -716,9 +716,7 @@ void World::ProcessNewMap()
             return false;
         }
 
-        const Maps::Tiles & tile = GetTiles( idx );
-
-        return tile.GoodForUltimateArtifact();
+        return GetTiles( idx ).GoodForUltimateArtifact();
     };
 
     // There is no tile with a predefined Ultimate Artifact, pick a suitable tile randomly
