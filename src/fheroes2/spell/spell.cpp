@@ -225,10 +225,10 @@ double Spell::getStrategicValue( double armyStrength, uint32_t currentSpellPoint
         return amountModifier * Damage() * spellPower;
     }
     // These high impact spells can turn tide of battle
-    else if ( isResurrect() || isMassActions() || id == Spell::BLIND || id == Spell::PARALYZE ) {
+    if ( isResurrect() || isMassActions() || id == Spell::BLIND || id == Spell::PARALYZE ) {
         return armyStrength * 0.1 * amountModifier;
     }
-    else if ( isSummon() ) {
+    if ( isSummon() ) {
         return Monster( id ).GetMonsterStrength() * ExtraValue() * spellPower * amountModifier;
     }
     return armyStrength * 0.04 * amountModifier;
