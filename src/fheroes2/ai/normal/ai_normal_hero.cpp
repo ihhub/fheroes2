@@ -787,14 +787,9 @@ namespace AI
         else if ( objectType == MP2::OBJ_XANADU ) {
             return 3000.0;
         }
-        else if ( objectType == MP2::OBJ_SHRINE1 ) {
-            return 100;
-        }
-        else if ( objectType == MP2::OBJ_SHRINE2 ) {
-            return 250;
-        }
-        else if ( objectType == MP2::OBJ_SHRINE3 ) {
-            return 500;
+        else if ( objectType == MP2::OBJ_SHRINE1 || objectType == MP2::OBJ_SHRINE2 || objectType == MP2::OBJ_SHRINE3 ) {
+            const Spell & spell = tile.QuantitySpell();
+            return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() );
         }
         else if ( MP2::isHeroUpgradeObject( objectType ) ) {
             return 500.0;
@@ -1070,14 +1065,9 @@ namespace AI
         else if ( objectType == MP2::OBJ_XANADU ) {
             return 3000.0;
         }
-        else if ( objectType == MP2::OBJ_SHRINE1 ) {
-            return 250;
-        }
-        else if ( objectType == MP2::OBJ_SHRINE2 ) {
-            return 500;
-        }
-        else if ( objectType == MP2::OBJ_SHRINE3 ) {
-            return 500;
+        else if ( objectType == MP2::OBJ_SHRINE1 || objectType == MP2::OBJ_SHRINE2 || objectType == MP2::OBJ_SHRINE3 ) {
+            const Spell & spell = tile.QuantitySpell();
+            return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() );
         }
         else if ( MP2::isHeroUpgradeObject( objectType ) ) {
             return 1250.0;

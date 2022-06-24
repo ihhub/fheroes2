@@ -152,6 +152,8 @@ public:
     uint32_t movePoints() const;
     // Returns the minimum number of movement points required to cast this spell
     uint32_t minMovePoints() const;
+    // Returns the value of the spell using the provided context
+    double getStrategicValue( double armyStrength, uint32_t currentSpellPoints, int spellPower ) const;
     int Level() const;
     uint32_t Damage() const;
     uint32_t Restore() const;

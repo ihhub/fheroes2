@@ -24,6 +24,7 @@
 #include "spell.h"
 #include "artifact.h"
 #include "heroes_base.h"
+#include "monster.h"
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
@@ -200,6 +201,37 @@ uint32_t Spell::spellPoints( const HeroBase * hero ) const
     }
 
     return static_cast<uint32_t>( spellCost );
+}
+
+double Spell::getStrategicValue( double armyStrength, uint32_t currentSpellPoints, int spellPower ) const
+{
+    const uint32_t spellCost = spellPoints();
+    const uint32_t casts = spellCost ? std::min( 10U, currentSpellPoints / spellCost ) : 0;
+
+    // use quadratic formula to diminish returns from subsequent spell casts, (up to x5 when spell has 10 uses)
+    const double amountModifier = ( casts == 1 ) ? 1 : casts - ( 0.05 * casts * casts );
+
+    if ( isAdventure() ) {
+        // AI uses Dimension door and View All only spells right now
+        if ( id == Spell::DIMENSIONDOOR )
+            return 500.0 * amountModifier;
+        if ( id == Spell::VIEWALL )
+            return 500.0;
+        return 0.0;
+    }
+
+    if ( isDamage() ) {
+        // Benchmark for Lightning for 20 power * 20 knowledge (maximum uses) is 2500.0
+        return amountModifier * Damage() * spellPower;
+    }
+    // These high impact spells can turn tide of battle
+    else if ( isResurrect() || isMassActions() || id == Spell::BLIND || id == Spell::PARALYZE ) {
+        return armyStrength * 0.1 * amountModifier;
+    }
+    else if ( isSummon() ) {
+        return Monster( id ).GetMonsterStrength() * ExtraValue() * spellPower * amountModifier;
+    }
+    return armyStrength * 0.04 * amountModifier;
 }
 
 int Spell::Level() const

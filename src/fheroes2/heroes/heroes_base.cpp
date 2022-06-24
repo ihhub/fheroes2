@@ -338,30 +338,8 @@ double HeroBase::GetMagicStrategicValue( const double armyStrength ) const
 
     double bestValue = 0;
     for ( const Spell & spell : spells ) {
-        if ( spell.isCombat() ) {
-            const int id = spell.GetID();
-
-            const uint32_t spellCost = spell.spellPoints();
-            const uint32_t casts = spellCost ? std::min( 10U, currentSpellPoints / spellCost ) : 0;
-
-            // use quadratic formula to diminish returns from subsequent spell casts, (up to x5 when spell has 10 uses)
-            const double amountModifier = ( casts == 1 ) ? 1 : casts - ( 0.05 * casts * casts );
-
-            if ( spell.isDamage() ) {
-                // Benchmark for Lightning for 20 power * 20 knowledge (maximum uses) is 2500.0
-                bestValue = std::max( bestValue, amountModifier * spell.Damage() * spellPower );
-            }
-            // These high impact spells can turn tide of battle
-            else if ( spell.isResurrect() || spell.isMassActions() || id == Spell::BLIND || id == Spell::PARALYZE ) {
-                bestValue = std::max( bestValue, armyStrength * 0.1 * amountModifier );
-            }
-            else if ( spell.isSummon() ) {
-                bestValue = std::max( bestValue, Monster( spell ).GetMonsterStrength() * spell.ExtraValue() * spellPower * amountModifier );
-            }
-            else {
-                bestValue = std::max( bestValue, armyStrength * 0.04 * amountModifier );
-            }
-        }
+        if ( spell.isCombat() )
+            bestValue = std::max( bestValue, spell.getStrategicValue( armyStrength, currentSpellPoints, spellPower ) );
     }
 
     return bestValue;
