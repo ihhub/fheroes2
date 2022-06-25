@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-25 05:16+0000\n"
+"POT-Creation-Date: 2022-06-25 17:40+0200\n"
 "PO-Revision-Date: 2022-06-05 20:16+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -1968,7 +1968,8 @@ msgstr "Rozb. kammienny krąg"
 msgid "Fenced Meadow"
 msgstr "Ogrodzona łąka"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Czerwona wieża"
 
 msgid "Dungeon"
@@ -1997,6 +1998,10 @@ msgstr "Bagno"
 
 msgid "Green Tower"
 msgstr "Zielona wieża"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Czerwona wieża"
 
 msgid "Black Tower"
 msgstr "Czarna wieża"

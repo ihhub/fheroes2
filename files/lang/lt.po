@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-12 08:18+0000\n"
+"POT-Creation-Date: 2022-06-25 17:40+0200\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -1860,7 +1860,8 @@ msgstr ""
 msgid "Fenced Meadow"
 msgstr "Aptverta pieva"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Raudonas bokštas"
 
 msgid "Dungeon"
@@ -1889,6 +1890,10 @@ msgstr "Pelkė"
 
 msgid "Green Tower"
 msgstr "Žalias bokštas"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Raudonas bokštas"
 
 msgid "Black Tower"
 msgstr "Juodas bokštas"

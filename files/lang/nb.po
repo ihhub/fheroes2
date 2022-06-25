@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-12 08:18+0000\n"
+"POT-Creation-Date: 2022-06-25 17:40+0200\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2063,7 +2063,8 @@ msgstr "Oppg. steinring"
 msgid "Fenced Meadow"
 msgstr "Inngjerdet slette"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Rødt tårn"
 
 msgid "Dungeon"
@@ -2092,6 +2093,10 @@ msgstr "Myr"
 
 msgid "Green Tower"
 msgstr "Grønt tårn"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Rødt tårn"
 
 msgid "Black Tower"
 msgstr "Svart tårn"

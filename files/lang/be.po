@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-12 08:18+0000\n"
+"POT-Creation-Date: 2022-06-25 17:40+0200\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -1789,7 +1789,7 @@ msgstr ""
 msgid "Fenced Meadow"
 msgstr ""
 
-msgid "Red Tower"
+msgid "sorceress|Red Tower"
 msgstr ""
 
 msgid "Dungeon"
@@ -1817,6 +1817,9 @@ msgid "Swamp"
 msgstr ""
 
 msgid "Green Tower"
+msgstr ""
+
+msgid "warlock|Red Tower"
 msgstr ""
 
 msgid "Black Tower"

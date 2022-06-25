@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-12 08:18+0000\n"
+"POT-Creation-Date: 2022-06-25 17:40+0200\n"
 "PO-Revision-Date: 2022-05-12 17:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -1996,7 +1996,8 @@ msgstr "Grand cromlech"
 msgid "Fenced Meadow"
 msgstr "Pré"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Tour rouge"
 
 msgid "Dungeon"
@@ -2025,6 +2026,10 @@ msgstr "Marais"
 
 msgid "Green Tower"
 msgstr "Tour verte"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Tour rouge"
 
 msgid "Black Tower"
 msgstr "Tour noire"
