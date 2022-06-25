@@ -338,8 +338,9 @@ double HeroBase::GetMagicStrategicValue( const double armyStrength ) const
 
     double bestValue = 0;
     for ( const Spell & spell : spells ) {
-        if ( spell.isCombat() )
+        if ( spell.isCombat() ) {
             bestValue = std::max( bestValue, spell.getStrategicValue( armyStrength, currentSpellPoints, spellPower ) );
+        }
     }
 
     return bestValue;

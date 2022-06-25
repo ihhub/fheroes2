@@ -213,10 +213,12 @@ double Spell::getStrategicValue( double armyStrength, uint32_t currentSpellPoint
 
     if ( isAdventure() ) {
         // AI uses Dimension door and View All only spells right now
-        if ( id == Spell::DIMENSIONDOOR )
+        if ( id == Spell::DIMENSIONDOOR ) {
             return 500.0 * amountModifier;
-        if ( id == Spell::VIEWALL )
+        }
+        if ( id == Spell::VIEWALL ) {
             return 500.0;
+        }
         return 0.0;
     }
 
