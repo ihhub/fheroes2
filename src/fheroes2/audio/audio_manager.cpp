@@ -802,7 +802,7 @@ namespace AudioManager
         currentAudioLoopEffects.clear();
     }
 
-    void playLoopSounds( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, bool asyncronizedCall )
+    void playLoopSoundsAsync( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects )
     {
         if ( !Audio::isValid() ) {
             return;
@@ -810,17 +810,10 @@ namespace AudioManager
 
         const Settings & conf = Settings::Get();
 
-        if ( asyncronizedCall ) {
-            g_asyncSoundManager.pushLoopSound( std::move( soundEffects ), conf.SoundVolume(), conf.is3DAudioEnabled() );
-        }
-        else {
-            g_asyncSoundManager.removeAllTasks();
-
-            playLoopSoundsInternally( std::move( soundEffects ), conf.SoundVolume(), conf.is3DAudioEnabled() );
-        }
+        g_asyncSoundManager.pushLoopSound( std::move( soundEffects ), conf.SoundVolume(), conf.is3DAudioEnabled() );
     }
 
-    void PlaySound( int m82, bool asyncronizedCall )
+    void PlaySound( const int m82 )
     {
         if ( m82 == M82::UNKNOWN ) {
             return;
@@ -830,14 +823,22 @@ namespace AudioManager
             return;
         }
 
-        if ( asyncronizedCall ) {
-            g_asyncSoundManager.pushSound( m82, Settings::Get().SoundVolume() );
-        }
-        else {
-            g_asyncSoundManager.removeAllTasks();
+        g_asyncSoundManager.removeAllTasks();
 
-            PlaySoundInternally( m82, Settings::Get().SoundVolume() );
+        PlaySoundInternally( m82, Settings::Get().SoundVolume() );
+    }
+
+    void PlaySoundAsync( const int m82 )
+    {
+        if ( m82 == M82::UNKNOWN ) {
+            return;
         }
+
+        if ( !Audio::isValid() ) {
+            return;
+        }
+
+        g_asyncSoundManager.pushSound( m82, Settings::Get().SoundVolume() );
     }
 
     void PlayMusic( const int trackId, const Music::PlaybackMode playbackMode )

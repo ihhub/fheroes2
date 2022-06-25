@@ -66,8 +66,10 @@ namespace AudioManager
         uint8_t volumePercentage{ 0 };
     };
 
-    void playLoopSounds( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, bool asyncronizedCall );
-    void PlaySound( int m82, bool asyncronizedCall = false );
+    void playLoopSoundsAsync( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects );
+
+    void PlaySound( const int m82 );
+    void PlaySoundAsync( const int m82 );
 
     void PlayMusic( const int trackId, const Music::PlaybackMode playbackMode );
     void PlayMusicAsync( const int trackId, const Music::PlaybackMode playbackMode );

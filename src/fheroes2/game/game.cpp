@@ -468,7 +468,7 @@ void Game::EnvironmentSoundMixer()
         }
     }
 
-    AudioManager::playLoopSounds( std::move( soundEffects ), true );
+    AudioManager::playLoopSoundsAsync( std::move( soundEffects ) );
 }
 
 void Game::restoreSoundsForCurrentFocus()
