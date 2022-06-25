@@ -33,8 +33,9 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <deque>
 #include <optional>
-#include <queue>
+#include <tuple>
 #include <utility>
 
 namespace
@@ -232,7 +233,12 @@ namespace
 
             std::scoped_lock<std::mutex> lock( _mutex );
 
-            _soundTasks.emplace( m82Sound, soundVolume );
+            // Do not add sound to the queue if the queue already contains exactly the same sound
+            if ( std::find( _soundTasks.begin(), _soundTasks.end(), SoundTask( m82Sound, soundVolume ) ) != _soundTasks.end() ) {
+                return;
+            }
+
+            _soundTasks.emplace_back( m82Sound, soundVolume );
 
             notifyWorker();
         }
@@ -263,9 +269,7 @@ namespace
         {
             std::scoped_lock<std::mutex> lock( _mutex );
 
-            while ( !_soundTasks.empty() ) {
-                _soundTasks.pop();
-            }
+            _soundTasks.clear();
 
             if ( _taskToExecute == TaskType::PlaySound ) {
                 _taskToExecute = TaskType::None;
@@ -287,10 +291,7 @@ namespace
         {
             std::scoped_lock<std::mutex> lock( _mutex );
 
-            while ( !_soundTasks.empty() ) {
-                _soundTasks.pop();
-            }
-
+            _soundTasks.clear();
             _loopSoundTask.reset();
 
             switch ( _taskToExecute ) {
@@ -308,11 +309,7 @@ namespace
             std::scoped_lock<std::mutex> lock( _mutex );
 
             _musicTask.reset();
-
-            while ( !_soundTasks.empty() ) {
-                _soundTasks.pop();
-            }
-
+            _soundTasks.clear();
             _loopSoundTask.reset();
 
             _taskToExecute = TaskType::None;
@@ -361,6 +358,11 @@ namespace
                 // Do nothing.
             }
 
+            bool operator==( const SoundTask & other ) const
+            {
+                return std::tie( m82Sound, soundVolume ) == std::tie( other.m82Sound, other.soundVolume );
+            }
+
             int m82Sound{ 0 };
             int soundVolume{ 0 };
         };
@@ -383,7 +385,7 @@ namespace
         };
 
         std::optional<MusicTask> _musicTask;
-        std::queue<SoundTask> _soundTasks;
+        std::deque<SoundTask> _soundTasks;
         std::optional<LoopSoundTask> _loopSoundTask;
 
         MusicTask _currentMusicTask;
@@ -409,7 +411,7 @@ namespace
 
             if ( !_soundTasks.empty() ) {
                 std::swap( _currentSoundTask, _soundTasks.front() );
-                _soundTasks.pop();
+                _soundTasks.pop_front();
 
                 _taskToExecute = TaskType::PlaySound;
 
