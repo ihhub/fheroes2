@@ -1376,7 +1376,7 @@ namespace AI
         if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HEROES ) {
             const auto it = _priorityTargets.find( tileIndex );
             if ( it != _priorityTargets.end() ) {
-                if ( it->second ) {
+                if ( it->second == PriorityTask::DEFEND ) {
                     hero.SetModes( Heroes::SLEEPER );
                 }
 

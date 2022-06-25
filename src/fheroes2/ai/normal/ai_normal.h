@@ -209,7 +209,7 @@ namespace AI
         // following data won't be saved/serialized
         double _combinedHeroStrength = 0;
         std::vector<IndexObject> _mapObjects;
-        std::map<int, bool> _priorityTargets;
+        std::map<int, PriorityTask> _priorityTargets;
         std::vector<RegionStats> _regions;
         AIWorldPathfinder _pathfinder;
         BattlePlanner _battlePlanner;
