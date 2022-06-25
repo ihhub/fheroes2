@@ -171,7 +171,11 @@ Spell SpellBook::Open( const HeroBase & hero, const Filter displayableSpells, co
         return Spell::NONE;
     }
 
-    if ( !restorePreviousState || ( displayableSpells != Filter::ALL && _spellFilter != displayableSpells ) ) {
+    if ( displayableSpells == Filter::ALL ) {
+        _spellFilter = Filter::ADVN;
+        _startSpellIndex = 0;
+    }
+    else if ( !restorePreviousState || _spellFilter != displayableSpells ) {
         _spellFilter = displayableSpells;
         _startSpellIndex = 0;
     }
