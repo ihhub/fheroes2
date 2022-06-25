@@ -248,13 +248,13 @@ namespace AI
 
                 const double attackerThreat = attackerStrength - defenders;
                 if ( attackerThreat > 0 ) {
-                    _priorityTargets[enemy.first] = attackerStrength;
+                    _priorityTargets[enemy.first] = false;
                     const uint32_t dist = _pathfinder.getDistance( enemy.first, castleIndex, myColor, attackerStrength );
                     if ( dist && dist < threatDistanceLimit ) {
                         // castle is under threat
                         castlesInDanger.insert( castleIndex );
 
-                        _priorityTargets[castleIndex] = defenders;
+                        _priorityTargets[castleIndex] = true;
                     }
                 }
             }
@@ -292,6 +292,8 @@ namespace AI
         Heroes * bestHeroToViewAll = nullptr;
 
         for ( Heroes * hero : heroes ) {
+            hero->ResetModes( Heroes::SLEEPER );
+
             const double strength = hero->GetArmy().GetStrength();
             _combinedHeroStrength += strength;
             if ( !hero->Modes( Heroes::PATROL ) )

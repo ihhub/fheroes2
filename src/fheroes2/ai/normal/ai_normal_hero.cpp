@@ -753,7 +753,7 @@ namespace AI
             }
 
             // focus on enemy hero if there's priority set (i.e. hero is threatning our castle)
-            return isCriticalTask( index ) ? 15000.0 : 5000.0;
+            return isCriticalTask( index ) ? 12000.0 : 5000.0;
         }
         else if ( objectType == MP2::OBJ_MONSTER ) {
             return 1000.0;
@@ -968,7 +968,7 @@ namespace AI
             if ( hero.GetColor() == castle->GetColor() ) {
                 double value = castle->getVisitValue( hero );
                 if ( critical )
-                    return 10000 + value;
+                    return 15000 + value;
 
                 if ( value < 500 )
                     return valueToIgnore;
@@ -1373,7 +1373,16 @@ namespace AI
         if ( isMonsterStrengthCacheable( objectType ) ) {
             _neutralMonsterStrengthCache.erase( tileIndex );
         }
-        _priorityTargets.erase( tileIndex );
+        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HEROES ) {
+            const auto it = _priorityTargets.find( tileIndex );
+            if ( it != _priorityTargets.end() ) {
+                if ( it->second ) {
+                    hero.SetModes( Heroes::SLEEPER );
+                }
+
+                _priorityTargets.erase( it );
+            }
+        }
     }
 
     bool Normal::HeroesTurn( VecHeroes & heroes )
