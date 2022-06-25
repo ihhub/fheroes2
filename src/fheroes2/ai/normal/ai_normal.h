@@ -25,6 +25,7 @@
 #include "kingdom.h"
 #include "world_pathfinding.h"
 
+#include <map>
 #include <set>
 
 struct KingdomCastles;
@@ -188,7 +189,7 @@ namespace AI
         void revealFog( const Maps::Tiles & tile ) override;
 
         void HeroesPreBattle( HeroBase & hero, bool isAttacking ) override;
-        void HeroesActionComplete( Heroes & hero, const MP2::MapObjectType objectType ) override;
+        void HeroesActionComplete( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType ) override;
 
         bool recruitHero( Castle & castle, bool buyArmy, bool underThreat );
         void evaluateRegionSafety();
@@ -197,6 +198,7 @@ namespace AI
 
         double getObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         int getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority );
+        bool isCriticalTask( const int index ) const;
         void resetPathfinder() override;
 
         void battleBegins() override;
@@ -207,6 +209,7 @@ namespace AI
         // following data won't be saved/serialized
         double _combinedHeroStrength = 0;
         std::vector<IndexObject> _mapObjects;
+        std::map<int, int> _priorityTargets;
         std::vector<RegionStats> _regions;
         AIWorldPathfinder _pathfinder;
         BattlePlanner _battlePlanner;
