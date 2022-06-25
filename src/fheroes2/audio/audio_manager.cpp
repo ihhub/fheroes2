@@ -368,7 +368,6 @@ namespace
         {
             if ( _musicTask ) {
                 std::swap( _currentMusicTask, *_musicTask );
-
                 _musicTask.reset();
 
                 _taskToExecute = TaskType::PlayMusic;
@@ -387,7 +386,6 @@ namespace
 
             if ( _loopSoundTask ) {
                 std::swap( _currentLoopSoundTask, *_loopSoundTask );
-
                 _loopSoundTask.reset();
 
                 _taskToExecute = TaskType::PlayLoopSound;
@@ -396,6 +394,7 @@ namespace
             }
 
             _taskToExecute = TaskType::None;
+
             return false;
         }
 
