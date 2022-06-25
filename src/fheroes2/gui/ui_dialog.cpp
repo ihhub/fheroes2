@@ -370,25 +370,25 @@ namespace fheroes2
     {
         std::vector<ResourceDialogElement> elements;
 
-        if ( funds.wood ) {
+        if ( funds.wood != 0 ) {
             elements.emplace_back( Resource::WOOD, std::to_string( funds.wood ) );
         }
-        if ( funds.mercury ) {
+        if ( funds.mercury != 0 ) {
             elements.emplace_back( Resource::MERCURY, std::to_string( funds.mercury ) );
         }
-        if ( funds.ore ) {
+        if ( funds.ore != 0 ) {
             elements.emplace_back( Resource::ORE, std::to_string( funds.ore ) );
         }
-        if ( funds.sulfur ) {
+        if ( funds.sulfur != 0 ) {
             elements.emplace_back( Resource::SULFUR, std::to_string( funds.sulfur ) );
         }
-        if ( funds.crystal ) {
+        if ( funds.crystal != 0 ) {
             elements.emplace_back( Resource::CRYSTAL, std::to_string( funds.crystal ) );
         }
-        if ( funds.gems ) {
+        if ( funds.gems != 0 ) {
             elements.emplace_back( Resource::GEMS, std::to_string( funds.gems ) );
         }
-        if ( funds.gold ) {
+        if ( funds.gold != 0 ) {
             elements.emplace_back( Resource::GOLD, std::to_string( funds.gold ) );
         }
 
