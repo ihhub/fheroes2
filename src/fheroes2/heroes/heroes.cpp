@@ -538,7 +538,7 @@ uint32_t Heroes::GetMaxMovePoints() const
         point += 500 * world.CountCapturedObject( MP2::OBJ_LIGHTHOUSE, GetColor() );
     }
     else {
-        const Troop * troop = army.GetSlowestTroop();
+        Troop * troop = army.GetSlowestTroop();
 
         if ( troop )
             switch ( troop->GetSpeed() ) {

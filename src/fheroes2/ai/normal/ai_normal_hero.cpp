@@ -1359,7 +1359,7 @@ namespace AI
     {
         Castle * castle = hero.inCastleMutable();
         if ( castle ) {
-            ReinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
+            reinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
         }
 
         if ( isMonsterStrengthCacheable( objectType ) ) {
