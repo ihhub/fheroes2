@@ -254,39 +254,6 @@ namespace
             notifyWorker();
         }
 
-        void removeMusicTasks()
-        {
-            std::scoped_lock<std::mutex> lock( _mutex );
-
-            _musicTask.reset();
-
-            if ( _taskToExecute == TaskType::PlayMusic ) {
-                _taskToExecute = TaskType::None;
-            }
-        }
-
-        void removeSoundTasks()
-        {
-            std::scoped_lock<std::mutex> lock( _mutex );
-
-            _soundTasks.clear();
-
-            if ( _taskToExecute == TaskType::PlaySound ) {
-                _taskToExecute = TaskType::None;
-            }
-        }
-
-        void removeLoopSoundTasks()
-        {
-            std::scoped_lock<std::mutex> lock( _mutex );
-
-            _loopSoundTask.reset();
-
-            if ( _taskToExecute == TaskType::PlayLoopSound ) {
-                _taskToExecute = TaskType::None;
-            }
-        }
-
         void removeAllSoundTasks()
         {
             std::scoped_lock<std::mutex> lock( _mutex );
@@ -847,7 +814,7 @@ namespace AudioManager
             g_asyncSoundManager.pushLoopSound( std::move( soundEffects ), conf.SoundVolume(), conf.is3DAudioEnabled() );
         }
         else {
-            g_asyncSoundManager.removeLoopSoundTasks();
+            g_asyncSoundManager.removeAllTasks();
 
             playLoopSoundsInternally( std::move( soundEffects ), conf.SoundVolume(), conf.is3DAudioEnabled() );
         }
@@ -867,7 +834,7 @@ namespace AudioManager
             g_asyncSoundManager.pushSound( m82, Settings::Get().SoundVolume() );
         }
         else {
-            g_asyncSoundManager.removeSoundTasks();
+            g_asyncSoundManager.removeAllTasks();
 
             PlaySoundInternally( m82, Settings::Get().SoundVolume() );
         }
@@ -883,7 +850,7 @@ namespace AudioManager
             return;
         }
 
-        g_asyncSoundManager.removeMusicTasks();
+        g_asyncSoundManager.removeAllTasks();
 
         PlayMusicInternally( trackId, Settings::Get().MusicType(), playbackMode );
     }
