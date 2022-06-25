@@ -136,7 +136,7 @@ namespace AI
 
     bool CastleDevelopment( Castle & castle, int safetyFactor, int spellLevel )
     {
-        if ( !castle.isBuild( BUILD_WELL ) && world.LastDay() ) {
+        if ( !castle.isBuild( BUILD_WELL ) && world.CountDay() > 6 ) {
             // return right away - if you can't buy Well you can't buy anything else
             return BuildIfAvailable( castle, BUILD_WELL );
         }
