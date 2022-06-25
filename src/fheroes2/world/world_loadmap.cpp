@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <type_traits>
 
 #include "artifact.h"
 #include "campaign_data.h"
@@ -700,50 +701,81 @@ void World::ProcessNewMap()
         }
     }
 
-    // Set Ultimate Artifact.
-    fheroes2::Point ultimate_pos;
-    MapsTiles::iterator it = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isObject( MP2::OBJ_RNDULTIMATEARTIFACT ); } );
-    if ( vec_tiles.end() == it ) {
-        // generate position for ultimate
-        MapsIndexes pools;
-        pools.reserve( vec_tiles.size() / 2 );
+    // Search for a tile with a predefined Ultimate Artifact
+    MapsTiles::iterator ultArtTileIter
+        = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isObject( MP2::OBJ_RNDULTIMATEARTIFACT ); } );
 
-        for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
-            const Maps::Tiles & tile = vec_tiles[i];
-            const int32_t x = tile.GetIndex() % width;
-            if ( x < ultimateArtifactOffset || x >= width - ultimateArtifactOffset )
-                continue;
-
-            const int32_t y = tile.GetIndex() / width;
-            if ( y < ultimateArtifactOffset || y >= height - ultimateArtifactOffset )
-                continue;
-
-            if ( tile.GoodForUltimateArtifact() )
-                pools.emplace_back( tile.GetIndex() );
+    auto checkTileForSuitabilityForUltArt = [this]( const int32_t idx ) {
+        const int32_t x = idx % width;
+        if ( x < ultimateArtifactOffset || x >= width - ultimateArtifactOffset ) {
+            return false;
         }
 
-        if ( !pools.empty() ) {
-            const int32_t pos = Rand::Get( pools );
-            ultimate_artifact.Set( pos, getUltimateArtifact() );
-            ultimate_pos = Maps::GetPoint( pos );
+        const int32_t y = idx / width;
+        if ( y < ultimateArtifactOffset || y >= height - ultimateArtifactOffset ) {
+            return false;
+        }
+
+        return GetTiles( idx ).GoodForUltimateArtifact();
+    };
+
+    // There is no tile with a predefined Ultimate Artifact, pick a suitable tile randomly
+    if ( ultArtTileIter == vec_tiles.end() ) {
+        MapsIndexes pool;
+        pool.reserve( vec_tiles.size() / 2 );
+
+        for ( const Maps::Tiles & tile : vec_tiles ) {
+            const int32_t idx = tile.GetIndex();
+
+            if ( checkTileForSuitabilityForUltArt( idx ) ) {
+                pool.push_back( idx );
+            }
+        }
+
+        if ( !pool.empty() ) {
+            ultimate_artifact.Set( Rand::Get( pool ), getUltimateArtifact() );
         }
     }
+    // There is a tile with a predefined Ultimate Artifact, pick a tile nearby in the radius specified in the artifact's properties
     else {
-        // remove ultimate artifact sprite
-        it->Remove( it->GetObjectUID() );
-        it->setAsEmpty();
-        ultimate_artifact.Set( it->GetIndex(), getUltimateArtifact() );
-        ultimate_pos = ( *it ).GetCenter();
+        static_assert( std::is_same_v<decltype( ultArtTileIter->GetQuantity1() ), uint8_t> && std::is_same_v<decltype( ultArtTileIter->GetQuantity2() ), uint8_t>,
+                       "Types of tile's quantities have been changed, check the bitwise arithmetic below" );
+
+        // The radius can be in the range 0 - 127, it is represented by 2 low-order bits of quantity2 and 5 high-order bits of quantity1
+        const int32_t radius = ( ( ultArtTileIter->GetQuantity2() & 0x03 ) << 5 ) + ( ultArtTileIter->GetQuantity1() >> 3 );
+
+        // Remove the existing Ultimate Artifact object
+        ultArtTileIter->Remove( ultArtTileIter->GetObjectUID() );
+        ultArtTileIter->setAsEmpty();
+
+        // Use the current Ultimate Artifact tile index as a fallback
+        int32_t pos = ultArtTileIter->GetIndex();
+
+        if ( radius > 0 ) {
+            MapsIndexes pool = Maps::getAroundIndexes( pos, radius );
+
+            // Maps::getAroundIndexes() results does not include the central index, so we have to append it manually
+            assert( std::find( pool.begin(), pool.end(), pos ) == pool.end() );
+            pool.push_back( pos );
+
+            pool.erase( std::remove_if( pool.begin(), pool.end(),
+                                        [&checkTileForSuitabilityForUltArt]( const int32_t idx ) { return !checkTileForSuitabilityForUltArt( idx ); } ),
+                        pool.end() );
+
+            if ( !pool.empty() ) {
+                pos = Rand::Get( pool );
+            }
+        }
+
+        ultimate_artifact.Set( pos, getUltimateArtifact() );
     }
 
     PostLoad( true );
 
-    // play with hero
     vec_kingdoms.ApplyPlayWithStartingHero();
 
-    // play with debug hero
+    // If we are in developer mode, then add the DEBUG_HERO
     if ( IS_DEVEL() ) {
-        // get first castle position
         Kingdom & kingdom = GetKingdom( Color::GetFirst( Players::HumanColors() ) );
 
         if ( !kingdom.GetCastles().empty() ) {
