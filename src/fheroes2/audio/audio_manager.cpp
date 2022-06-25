@@ -33,6 +33,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <optional>
 #include <queue>
 #include <utility>
 
@@ -220,11 +221,7 @@ namespace
 
             std::scoped_lock<std::mutex> lock( _mutex );
 
-            while ( !_musicTasks.empty() ) {
-                _musicTasks.pop();
-            }
-
-            _musicTasks.emplace( musicId, musicType, playbackMode );
+            _musicTask.emplace( musicId, musicType, playbackMode );
 
             notifyWorker();
         }
@@ -246,7 +243,7 @@ namespace
 
             std::scoped_lock<std::mutex> lock( _mutex );
 
-            _loopSoundTasks.emplace( std::move( vols ), soundVolume, is3DAudioEnabled );
+            _loopSoundTask.emplace( std::move( vols ), soundVolume, is3DAudioEnabled );
 
             notifyWorker();
         }
@@ -255,9 +252,7 @@ namespace
         {
             std::scoped_lock<std::mutex> lock( _mutex );
 
-            while ( !_musicTasks.empty() ) {
-                _musicTasks.pop();
-            }
+            _musicTask.reset();
 
             if ( _taskToExecute == TaskType::PlayMusic ) {
                 _taskToExecute = TaskType::None;
@@ -281,9 +276,7 @@ namespace
         {
             std::scoped_lock<std::mutex> lock( _mutex );
 
-            while ( !_loopSoundTasks.empty() ) {
-                _loopSoundTasks.pop();
-            }
+            _loopSoundTask.reset();
 
             if ( _taskToExecute == TaskType::PlayLoopSound ) {
                 _taskToExecute = TaskType::None;
@@ -298,9 +291,7 @@ namespace
                 _soundTasks.pop();
             }
 
-            while ( !_loopSoundTasks.empty() ) {
-                _loopSoundTasks.pop();
-            }
+            _loopSoundTask.reset();
 
             switch ( _taskToExecute ) {
             case TaskType::PlaySound:
@@ -316,17 +307,13 @@ namespace
         {
             std::scoped_lock<std::mutex> lock( _mutex );
 
-            while ( !_musicTasks.empty() ) {
-                _musicTasks.pop();
-            }
+            _musicTask.reset();
 
             while ( !_soundTasks.empty() ) {
                 _soundTasks.pop();
             }
 
-            while ( !_loopSoundTasks.empty() ) {
-                _loopSoundTasks.pop();
-            }
+            _loopSoundTask.reset();
 
             _taskToExecute = TaskType::None;
         }
@@ -395,9 +382,9 @@ namespace
             bool is3DAudioEnabled{ false };
         };
 
-        std::queue<MusicTask> _musicTasks;
+        std::optional<MusicTask> _musicTask;
         std::queue<SoundTask> _soundTasks;
-        std::queue<LoopSoundTask> _loopSoundTasks;
+        std::optional<LoopSoundTask> _loopSoundTask;
 
         MusicTask _currentMusicTask;
         SoundTask _currentSoundTask;
@@ -410,13 +397,10 @@ namespace
         // This method is called by the worker thread and is protected by _mutex
         bool prepareTask() override
         {
-            if ( !_musicTasks.empty() ) {
-                // Pick only the latest music track and discard the rest.
-                std::swap( _currentMusicTask, _musicTasks.back() );
+            if ( _musicTask ) {
+                std::swap( _currentMusicTask, *_musicTask );
 
-                while ( !_musicTasks.empty() ) {
-                    _musicTasks.pop();
-                }
+                _musicTask.reset();
 
                 _taskToExecute = TaskType::PlayMusic;
 
@@ -432,13 +416,10 @@ namespace
                 return true;
             }
 
-            if ( !_loopSoundTasks.empty() ) {
-                // Pick only the latest loop sound set and discard the rest.
-                std::swap( _currentLoopSoundTask, _loopSoundTasks.back() );
+            if ( _loopSoundTask ) {
+                std::swap( _currentLoopSoundTask, *_loopSoundTask );
 
-                while ( !_loopSoundTasks.empty() ) {
-                    _loopSoundTasks.pop();
-                }
+                _loopSoundTask.reset();
 
                 _taskToExecute = TaskType::PlayLoopSound;
 
