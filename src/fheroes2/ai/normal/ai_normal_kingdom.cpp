@@ -155,8 +155,9 @@ namespace AI
             bool onlyHalf = false;
             Troop * unitToSwap = heroArmy.GetSlowestTroop();
             if ( unitToSwap ) {
-                double significanceRatio = isFigtherHero ? 20.0 : 10.0;
                 // if it's slow and doesn't contribute much to army strength we leave it all in town
+                // 5% of total army for Figthers 10% otherwise
+                const double significanceRatio = isFigtherHero ? 20.0 : 10.0;
                 if ( unitToSwap->GetStrength() > armyStrength / significanceRatio ) {
                     Troop * weakest = heroArmy.GetWeakestTroop();
 
