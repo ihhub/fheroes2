@@ -429,6 +429,7 @@ namespace AI
             if ( !purchaseNewHeroes( sortedCastleList, castlesInDanger, availableHeroCount, moreTaskForHeroes ) ) {
                 break;
             }
+            ++availableHeroCount;
         }
 
         status.RedrawTurnProgress( 9 );
