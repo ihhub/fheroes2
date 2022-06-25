@@ -728,7 +728,7 @@ void World::ProcessNewMap()
             const int32_t idx = tile.GetIndex();
 
             if ( checkTileForSuitabilityForUltArt( idx ) ) {
-                pool.emplace_back( idx );
+                pool.push_back( idx );
             }
         }
 
