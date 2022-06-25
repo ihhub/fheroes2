@@ -822,6 +822,7 @@ namespace AudioManager
             return;
         }
 
+        // TODO: in general, we should not remove all queued tasks here, but only tasks of the same type
         g_asyncSoundManager.removeAllTasks();
 
         PlaySoundInternally( m82, Settings::Get().SoundVolume() );
@@ -850,6 +851,7 @@ namespace AudioManager
             return;
         }
 
+        // TODO: in general, we should not remove all queued tasks here, but only tasks of the same type
         g_asyncSoundManager.removeAllTasks();
 
         PlayMusicInternally( trackId, Settings::Get().MusicType(), playbackMode );
