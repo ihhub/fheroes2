@@ -248,10 +248,13 @@ namespace AI
 
                 const double attackerThreat = attackerStrength - defenders;
                 if ( attackerThreat > 0 ) {
+                    _priorityTargets[enemy.first] = PriorityTask::ATTACK;
                     const uint32_t dist = _pathfinder.getDistance( enemy.first, castleIndex, myColor, attackerStrength );
                     if ( dist && dist < threatDistanceLimit ) {
                         // castle is under threat
                         castlesInDanger.insert( castleIndex );
+
+                        _priorityTargets[castleIndex] = PriorityTask::DEFEND;
                     }
                 }
             }
@@ -289,6 +292,8 @@ namespace AI
         Heroes * bestHeroToViewAll = nullptr;
 
         for ( Heroes * hero : heroes ) {
+            hero->ResetModes( Heroes::SLEEPER );
+
             const double strength = hero->GetArmy().GetStrength();
             _combinedHeroStrength += strength;
             if ( !hero->Modes( Heroes::PATROL ) )
@@ -306,6 +311,7 @@ namespace AI
         std::vector<std::pair<int, const Army *>> enemyArmies;
 
         const int mapSize = world.w() * world.h();
+        _priorityTargets.clear();
         _mapObjects.clear();
         _regions.clear();
         _regions.resize( world.getRegionCount() );
@@ -399,7 +405,7 @@ namespace AI
             // Step 2. Do some hero stuff.
             // If a hero is standing in a castle most likely he has nothing to do so let's try to give him more army.
             for ( Heroes * hero : heroes ) {
-                HeroesActionComplete( *hero, MP2::OBJ_ZERO );
+                HeroesActionComplete( *hero, hero->GetIndex(), MP2::OBJ_ZERO );
             }
 
             // Step 3. Reassign heroes roles

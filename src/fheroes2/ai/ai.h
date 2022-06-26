@@ -62,6 +62,19 @@ namespace AI
         EXPLORER
     };
 
+    // Although AI heroes are capable to find their own tasks strategic AI should be able to focus them on most critical tasks
+    enum class PriorityTask : int
+    {
+        // AI will focus on siegeing or chasing the selected enemy castle or hero.
+        ATTACK,
+
+        // Target will usually be a friendly castle. AI will move heroes to defend and garrison it.
+        DEFEND,
+
+        // Target must be a friendly castle or hero. AI with such priority set should focus on bringing more troops to the target.
+        REINFORCE
+    };
+
     const double ARMY_ADVANTAGE_DESPERATE = 0.8;
     const double ARMY_ADVANTAGE_SMALL = 1.3;
     const double ARMY_ADVANTAGE_MEDIUM = 1.5;
@@ -80,7 +93,7 @@ namespace AI
         virtual void HeroesPreBattle( HeroBase & hero, bool isAttacking );
         virtual void HeroesAfterBattle( HeroBase & hero, bool wasAttacking );
         virtual void HeroesPostLoad( Heroes & hero );
-        virtual void HeroesActionComplete( Heroes & hero, const MP2::MapObjectType objectType );
+        virtual void HeroesActionComplete( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType );
         virtual void HeroesActionNewPosition( Heroes & hero );
         virtual void HeroesClearTask( const Heroes & hero );
         virtual void HeroesLevelUp( Heroes & hero );
