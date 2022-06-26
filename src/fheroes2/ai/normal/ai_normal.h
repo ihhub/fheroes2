@@ -198,12 +198,16 @@ namespace AI
 
         double getObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const;
         int getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority );
-        bool isCriticalTask( const int index ) const;
         void resetPathfinder() override;
 
         void battleBegins() override;
 
         double getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType );
+
+        bool isCriticalTask( const int index ) const
+        {
+            return _priorityTargets.find( index ) != _priorityTargets.end();
+        }
 
     private:
         // following data won't be saved/serialized

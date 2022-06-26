@@ -41,9 +41,4 @@ namespace AI
         if ( object != MP2::OBJ_ZERO )
             _mapObjects.emplace_back( tile.GetIndex(), object );
     }
-
-    bool Normal::isCriticalTask( const int index ) const
-    {
-        return _priorityTargets.find( index ) != _priorityTargets.end();
-    }
 }

@@ -62,7 +62,7 @@ namespace AI
         EXPLORER
     };
 
-    // Although AI heroes are capable to find their own tasks we can strategic AI should be able to focus them on most critical tasks
+    // Although AI heroes are capable to find their own tasks strategic AI should be able to focus them on most critical tasks
     enum class PriorityTask : int
     {
         // AI will focus on siegeing or chasing the selected enemy castle or hero.
