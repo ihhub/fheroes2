@@ -202,13 +202,13 @@ namespace
         uint32_t lengthInBytes{ 0 };
     };
 
-    bool readVariableLengthQuantity( const uint8_t * data, VariableLengthQuantity & quantity )
+    bool readVariableLengthQuantity( const uint8_t * data, const uint8_t * dataEnd, VariableLengthQuantity & quantity )
     {
         quantity = {};
 
         const uint8_t * p = data;
 
-        while ( *p & 0x80 ) {
+        while ( p < dataEnd && ( *p & 0x80 ) != 0 ) {
             if ( 4 <= p - data ) {
                 // The largest number to read is 4 bytes.
                 ERROR_LOG( "XMI format: the field is bigger than 4 bytes." )
@@ -220,7 +220,10 @@ namespace
             ++p;
         }
 
-        quantity.value += *p;
+        if ( p < dataEnd ) {
+            quantity.value += *p;
+        }
+
         quantity.lengthInBytes = static_cast<uint32_t>( p - data ) + 1; // it's safe to cast since p is always bigger or equal to data
 
         return true;
@@ -268,6 +271,7 @@ struct IFFChunkHeader
         : ID( id )
         , length( sz )
     {}
+
     IFFChunkHeader()
         : ID( 0 )
         , length( 0 )
@@ -290,15 +294,9 @@ StreamBuf & operator<<( StreamBuf & sb, const IFFChunkHeader & st )
 
 struct GroupChunkHeader
 {
-    uint32_t ID; // 4 byte ASCII string, either 'FORM', 'CAT ' or 'LIST'
-    uint32_t length;
-    uint32_t type; // 4 byte ASCII string
-
-    GroupChunkHeader()
-        : ID( 0 )
-        , length( 0 )
-        , type( 0 )
-    {}
+    uint32_t ID{ 0 }; // 4 byte ASCII string, either 'FORM', 'CAT ' or 'LIST'
+    uint32_t length{ 0 };
+    uint32_t type{ 0 }; // 4 byte ASCII string
 };
 
 StreamBuf & operator>>( StreamBuf & sb, GroupChunkHeader & st )
@@ -460,9 +458,12 @@ StreamBuf & operator<<( StreamBuf & sb, const MidiChunk & event )
 {
     for ( std::vector<uint8_t>::const_iterator it = event._binaryTime.begin(); it != event._binaryTime.end(); ++it )
         sb << *it;
+
     sb << event._type;
+
     for ( std::vector<uint8_t>::const_iterator it = event._data.begin(); it != event._data.end(); ++it )
         sb << *it;
+
     return sb;
 }
 
@@ -485,6 +486,18 @@ struct MidiEvents : public std::vector<MidiChunk>
 
     MidiEvents() = default;
 
+    bool checkDataPresence( const uint8_t * ptr, const uint8_t * end, const int32_t requiredLength )
+    {
+        assert( requiredLength > 0 );
+        if ( end - ptr < requiredLength ) {
+            emplace_back( 0, static_cast<uint8_t>( 0xFF ), static_cast<uint8_t>( 0x2F ), static_cast<uint8_t>( 0x00 ) );
+            ERROR_LOG( "MIDI track: the data is truncated." )
+            return false;
+        }
+
+        return true;
+    }
+
     explicit MidiEvents( const XMITrack & t )
     {
         const uint8_t * ptr = &t.evnt[0];
@@ -501,10 +514,8 @@ struct MidiEvents : public std::vector<MidiChunk>
             }
 
             if ( *ptr == 0xFF ) {
-                if ( end - ptr < 3 ) {
-                    emplace_back( 0, static_cast<uint8_t>( 0xFF ), static_cast<uint8_t>( 0x2F ), static_cast<uint8_t>( 0x00 ) );
-                    ERROR_LOG( "MIDI track: the data is truncated." )
-                    return;
+                if ( !checkDataPresence( ptr, end, 3 ) ) {
+                    break;
                 }
 
                 if ( *( ptr + 1 ) == 0x2F ) {
@@ -520,6 +531,10 @@ struct MidiEvents : public std::vector<MidiChunk>
                 ++ptr; // skip 0xFF
                 const uint8_t metaType = *( ptr++ );
                 const uint8_t metaLength = *( ptr++ );
+
+                if ( !checkDataPresence( ptr, end, metaLength ) ) {
+                    break;
+                }
 
                 emplace_back( delta, static_cast<uint8_t>( 0xFF ), metaType, ptr, metaLength );
                 // Tempo switch
@@ -539,6 +554,10 @@ struct MidiEvents : public std::vector<MidiChunk>
             case 0x0B:
             // pitch bend
             case 0x0E:
+                if ( !checkDataPresence( ptr, end, 3 ) ) {
+                    break;
+                }
+
                 emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
                 ptr += 3;
                 break;
@@ -546,9 +565,14 @@ struct MidiEvents : public std::vector<MidiChunk>
             // XMI events do not have note off events.
             // note on
             case 0x09: {
+                if ( !checkDataPresence( ptr, end, 4 ) ) {
+                    break;
+                }
+
                 emplace_back( delta, *ptr, *( ptr + 1 ), *( ptr + 2 ) );
+
                 VariableLengthQuantity quantity;
-                if ( !readVariableLengthQuantity( ptr + 3, quantity ) ) {
+                if ( !readVariableLengthQuantity( ptr + 3, end, quantity ) ) {
                     break;
                 }
 
@@ -560,6 +584,10 @@ struct MidiEvents : public std::vector<MidiChunk>
 
             // Program Change: in other words which instrument is going to be played.
             case 0x0C:
+                if ( !checkDataPresence( ptr, end, 2 ) ) {
+                    break;
+                }
+
                 emplace_back( delta, *ptr, *( ptr + 1 ) );
 
                 if ( *ptr == 0xCA ) {
@@ -569,7 +597,7 @@ struct MidiEvents : public std::vector<MidiChunk>
                         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MID: drum sound used in the track: " << drumSoundDescription[drumSoundType - 35] )
                     }
                     else {
-                        ERROR_LOG( "MID: Unknown drum sound " << drumSoundType )
+                        ERROR_LOG( "MIDI track: Unknown drum sound type " << drumSoundType )
                     }
                 }
                 else {
@@ -578,7 +606,7 @@ struct MidiEvents : public std::vector<MidiChunk>
                         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MID: instrument used in the track: " << instrumentDescription[*( ptr + 1 )] )
                     }
                     else {
-                        ERROR_LOG( "MID: Unknown instrument type " << instrumentType )
+                        ERROR_LOG( "MIDI track: Unknown instrument type " << instrumentType )
                     }
                 }
 
@@ -587,11 +615,15 @@ struct MidiEvents : public std::vector<MidiChunk>
 
             // channel aftertouch
             case 0x0D:
+                if ( !checkDataPresence( ptr, end, 2 ) ) {
+                    break;
+                }
+
                 emplace_back( delta, *ptr, *( ptr + 1 ) );
                 ptr += 2;
                 break;
 
-            // unused command
+            // Uknown command.
             default:
                 emplace_back( 0, static_cast<uint8_t>( 0xFF ), static_cast<uint8_t>( 0x2F ), static_cast<uint8_t>( 0x00 ) );
                 ERROR_LOG( "unknown st: " << GetHexString( static_cast<int>( *ptr ), 2 ) << ", ln: " << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) )
