@@ -188,7 +188,11 @@ void Interface::Basic::EventCastSpell()
     const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, nullptr );
     if ( spell.isValid() ) {
         hero->ActionSpellCast( spell );
-        iconsPanel.SetRedraw();
+
+        // The spell will consume the hero's spell points (and perhaps also movement points) and can move the
+        // hero to another location, so we may have to update the terrain music theme and environment sounds
+        ResetFocus( GameFocus::HEROES );
+        RedrawFocus();
     }
 }
 
