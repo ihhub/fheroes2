@@ -35,7 +35,6 @@
 #include <cassert>
 #include <deque>
 #include <optional>
-#include <tuple>
 #include <utility>
 
 namespace
@@ -233,11 +232,6 @@ namespace
 
             std::scoped_lock<std::mutex> lock( _mutex );
 
-            // Do not add sound to the queue if the queue already contains exactly the same sound
-            if ( std::find( _soundTasks.begin(), _soundTasks.end(), SoundTask( m82Sound, soundVolume ) ) != _soundTasks.end() ) {
-                return;
-            }
-
             _soundTasks.emplace_back( m82Sound, soundVolume );
 
             notifyWorker();
@@ -323,11 +317,6 @@ namespace
                 , soundVolume( soundVolume_ )
             {
                 // Do nothing.
-            }
-
-            bool operator==( const SoundTask & other ) const
-            {
-                return std::tie( m82Sound, soundVolume ) == std::tie( other.m82Sound, other.soundVolume );
             }
 
             int m82Sound{ 0 };
