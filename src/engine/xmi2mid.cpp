@@ -623,7 +623,7 @@ struct MidiEvents : public std::vector<MidiChunk>
                 ptr += 2;
                 break;
 
-            // Uknown command.
+            // Unknown command.
             default:
                 emplace_back( 0, static_cast<uint8_t>( 0xFF ), static_cast<uint8_t>( 0x2F ), static_cast<uint8_t>( 0x00 ) );
                 ERROR_LOG( "unknown st: " << GetHexString( static_cast<int>( *ptr ), 2 ) << ", ln: " << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) )
