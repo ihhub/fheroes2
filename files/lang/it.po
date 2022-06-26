@@ -160,7 +160,7 @@ msgstr "Sposta %{name}"
 msgid "Set Count"
 msgstr "Seleziona quanti"
 
-msgid "%{name} half the enemy troops!"
+msgid "%{name} destroy half the enemy troops!"
 msgstr "Le unità nemiche sono state dimezzate da %{name}!"
 
 #, fuzzy

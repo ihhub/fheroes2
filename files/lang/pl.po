@@ -163,7 +163,7 @@ msgstr "Przenieś %{name}"
 msgid "Set Count"
 msgstr "Podaj liczbę"
 
-msgid "%{name} half the enemy troops!"
+msgid "%{name} destroy half the enemy troops!"
 msgstr "%{name} Połowa żołnierzy wroga!"
 
 msgid "%{name} has turned off the auto battle"

@@ -141,7 +141,7 @@ msgstr ""
 msgid "Set Count"
 msgstr ""
 
-msgid "%{name} half the enemy troops!"
+msgid "%{name} destroy half the enemy troops!"
 msgstr ""
 
 msgid "%{name} has turned off the auto battle"

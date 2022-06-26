@@ -164,7 +164,7 @@ msgstr "Förlora hjälten: %{name}."
 msgid "Set Count"
 msgstr ""
 
-msgid "%{name} half the enemy troops!"
+msgid "%{name} destroy half the enemy troops!"
 msgstr "%{name} halverar fiendetrupperna!"
 
 #, fuzzy

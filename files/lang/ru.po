@@ -165,7 +165,7 @@ msgstr "Переместить %{name}"
 msgid "Set Count"
 msgstr "Количество"
 
-msgid "%{name} half the enemy troops!"
+msgid "%{name} destroy half the enemy troops!"
 msgstr "%{name} убивает половину вражеского отряда!"
 
 msgid "%{name} has turned off the auto battle"

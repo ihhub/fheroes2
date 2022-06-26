@@ -167,7 +167,7 @@ msgstr "%{name} ide lép."
 msgid "Set Count"
 msgstr ""
 
-msgid "%{name} half the enemy troops!"
+msgid "%{name} destroy half the enemy troops!"
 msgstr ""
 
 #, fuzzy
