@@ -148,6 +148,7 @@ namespace AI
 
         const uint32_t regionID = world.GetTiles( castle.GetIndex() ).GetRegion();
         // check if we should leave some troops in the garrison
+        // TODO: amount of troops left could depend on region's safetyFactor
         if ( castle.isCastle() && _regions[regionID].safetyFactor <= 100 && !garrison.isValid() ) {
             const Heroes::Role heroRole = hero.getAIRole();
             const bool isFigtherHero = ( heroRole == Heroes::Role::FIGHTER || heroRole == Heroes::Role::CHAMPION );
@@ -155,8 +156,6 @@ namespace AI
             bool onlyHalf = false;
             Troop * unitToSwap = heroArmy.GetSlowestTroop();
             if ( unitToSwap ) {
-                // if it's slow and doesn't contribute much to army strength we leave it all in town
-                // 5% of total army for Figthers 10% otherwise
                 const double significanceRatio = isFigtherHero ? 20.0 : 10.0;
                 if ( unitToSwap->GetStrength() > armyStrength / significanceRatio ) {
                     Troop * weakest = heroArmy.GetWeakestTroop();
