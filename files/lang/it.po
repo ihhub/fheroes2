@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-12 08:18+0000\n"
+"POT-Creation-Date: 2022-06-27 00:55+0000\n"
 "PO-Revision-Date: 2022-05-12 17:11+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -160,8 +160,11 @@ msgstr "Sposta %{name}"
 msgid "Set Count"
 msgstr "Seleziona quanti"
 
-msgid "%{name} destroy half the enemy troops!"
-msgstr "Le unità nemiche sono state dimezzate da %{name}!"
+#, fuzzy
+msgid "%{name} destroys half the enemy troops!"
+msgid_plural "%{name} destroy half the enemy troops!"
+msgstr[0] "Le unità nemiche sono state dimezzate da %{name}!"
+msgstr[1] "Le unità nemiche sono state dimezzate da %{name}!"
 
 #, fuzzy
 msgid "%{name} has turned off the auto battle"
@@ -501,8 +504,11 @@ msgstr "%{name} salta il suo turno."
 msgid "%{name} wait their turn."
 msgstr "%{name} rimanda il suo turno."
 
-msgid "%{attacker} do %{damage} damage."
-msgstr "%{attacker} fanno %{damage} danni."
+#, fuzzy
+msgid "%{attacker} does %{damage} damage."
+msgid_plural "%{attacker} do %{damage} damage."
+msgstr[0] "%{attacker} fanno %{damage} danni."
+msgstr[1] "%{attacker} fanno %{damage} danni."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
