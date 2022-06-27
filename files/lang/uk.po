@@ -212,11 +212,11 @@ msgstr ""
 
 #, fuzzy
 msgid "You have already cast a spell this round."
-msgstr "Ви вже чарували протягом цього ходу."
+msgstr "Ви вже використали чари протягом цього ходу."
 
 #, fuzzy
 msgid "That spell will affect no one!"
-msgstr "Ці чари не подіють ні на кого!"
+msgstr "Ці чари ні на кого не подіють!"
 
 #, fuzzy
 msgid "You may only summon one type of elemental per combat."
@@ -356,7 +356,7 @@ msgstr "Коли Ви досягли %{name}, воно загадково зни
 
 #, fuzzy
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
-msgstr "Коли Ваш ворог досягл %{name}, воно загадково зникло."
+msgstr "Коли Ваш ворог досяг %{name}, воно загадково зникло."
 
 #, fuzzy
 msgid "You have captured an enemy artifact!"
@@ -552,7 +552,7 @@ msgstr "Дозволяє налаштувати екран бою."
 
 #, fuzzy
 msgid "System Options"
-msgstr "Параметри Системи"
+msgstr "Системні Параметри"
 
 #, fuzzy
 msgid "Wait this unit"
@@ -583,14 +583,16 @@ msgid ""
 "Skips the current creature. The current creature ends its turn and does not "
 "get to go again until the next round."
 msgstr ""
-"Пропустити хід остоти. Поточна істота закінчить її хід і не отримає новий до "
+"Пропустити хід істоти. Поточна істота закінчить її хід і не отримає новий до "
 "наступного раунду."
 
+#, fuzzy
 msgid "View Hero's options"
-msgstr ""
+msgstr "Перегляд параметрів Героя"
 
+#, fuzzy
 msgid "View opposing Hero"
-msgstr ""
+msgstr "Перегляд ворожого Героя"
 
 #, fuzzy
 msgid "Hide logs"
@@ -652,11 +654,11 @@ msgstr "%{name} чаклує %{spell}."
 
 #, fuzzy
 msgid "The %{spell} does %{damage} damage to one undead creature."
-msgstr "%{spell} завдає %{damage} шкоди одній немертвій істоті."
+msgstr "%{spell} завдає %{damage} шкоди однієї істоти нежиті."
 
 #, fuzzy
 msgid "The %{spell} does %{damage} damage to all undead creatures."
-msgstr "%{spell} завдає %{damage} шкоди усім немертвим істотам."
+msgstr "%{spell} завдає %{damage} шкоди усім істотам нежиті."
 
 #, fuzzy
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
@@ -692,6 +694,9 @@ msgstr "%{attacker} паралізує %{target}!"
 #, fuzzy
 msgid "The %{attacker} dispel all good spells on your %{target}!"
 msgstr "%{attacker} розвіює всі добрі чари з загону %{target}!"
+
+msgid "The %{attacker} cast %{spell} on %{target}!"
+msgstr ""
 
 #, fuzzy
 msgid "Bad luck descends on the %{attacker}."
@@ -740,8 +745,9 @@ msgstr "Ви впевнені, що хочете відступити?"
 msgid "Retreat disabled"
 msgstr "Відступ неможливий"
 
+#, fuzzy
 msgid "Surrender disabled"
-msgstr ""
+msgstr "Здача в полон неможлива"
 
 #, fuzzy
 msgid "Damage: %{max}"
@@ -837,11 +843,11 @@ msgstr "%{count} %{name} піднялось з мертвих!"
 
 #, fuzzy
 msgid "Dwarven Alliance"
-msgstr "Альянс гномів"
+msgstr "Альянс Гномів"
 
 #, fuzzy
 msgid "Sorceress Guild"
-msgstr "Гільдія чаклунів"
+msgstr "Гільдія Чаклунів"
 
 #, fuzzy
 msgid "Necromancer Guild"
@@ -851,9 +857,8 @@ msgstr "Гільдія Некромантів"
 msgid "Ogre Alliance"
 msgstr "Альянс Огрів"
 
-#, fuzzy
 msgid "Dwarfbane"
-msgstr "Гноможер"
+msgstr ""
 
 #, fuzzy
 msgid "Dragon Alliance"
@@ -1296,9 +1301,8 @@ msgstr ""
 msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr ""
 
-#, fuzzy
 msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
-msgstr "Огри впізнають у Вас Гноможера та біжуть приєднуватися до Вас."
+msgstr ""
 
 msgid ""
 "The dragons, snarling and growling, agree to join forces with you, their "
@@ -1686,11 +1690,11 @@ msgstr "Арчібальд"
 
 #, fuzzy
 msgid "The Price of Loyalty"
-msgstr "Ціна вірності"
+msgstr "Ціна Вірності"
 
 #, fuzzy
 msgid "Voyage Home"
-msgstr "Подорож додому"
+msgstr "Подорож Додому"
 
 #, fuzzy
 msgid "Wizard's Isle"
