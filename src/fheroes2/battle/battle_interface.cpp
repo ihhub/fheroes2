@@ -5077,7 +5077,7 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
                         status.Redraw();
                     };
 
-                    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::CMBT, true, &statusCallback );
+                    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::CMBT, true, true, &statusCallback );
                     if ( spell.isValid() ) {
                         assert( spell.isCombat() );
 
