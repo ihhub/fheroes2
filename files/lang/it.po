@@ -1,7 +1,7 @@
 # Italian translation of fheroes2
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# fheroes2 team <fhomm2@gmail.com>, 2021
+# fheroes2 team <fhomm2@gmail.com>, 2021 - 2022
 #
 msgid ""
 msgstr ""
@@ -160,7 +160,7 @@ msgstr "Sposta %{name}"
 msgid "Set Count"
 msgstr "Seleziona quanti"
 
-msgid "%{name} half the enemy troops!"
+msgid "%{name} destroy half the enemy troops!"
 msgstr "Le unità nemiche sono state dimezzate da %{name}!"
 
 #, fuzzy

@@ -652,7 +652,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
         }
 
         if ( Arena::GetInterface() ) {
-            std::string str( _( "%{name} half the enemy troops!" ) );
+            std::string str( _n( "%{name} destroys half the enemy troops!", "%{name} destroy half the enemy troops!", attacker.GetCount() ) );
             StringReplace( str, "%{name}", attacker.GetName() );
             Arena::GetInterface()->SetStatus( str, true );
         }

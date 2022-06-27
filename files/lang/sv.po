@@ -1,7 +1,7 @@
 # Swedish translation for fheroes2
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
+# fheroes2 team <fhomm2@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
@@ -164,7 +164,7 @@ msgstr "Förlora hjälten: %{name}."
 msgid "Set Count"
 msgstr ""
 
-msgid "%{name} half the enemy troops!"
+msgid "%{name} destroy half the enemy troops!"
 msgstr "%{name} halverar fiendetrupperna!"
 
 #, fuzzy

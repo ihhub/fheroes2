@@ -1,7 +1,7 @@
 # Russian translation of fheroes2
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# fheroes2 team <fhomm2@gmail.com>, 2021
+# fheroes2 team <fhomm2@gmail.com>, 2021 - 2022
 # Igor Orlov <igororlov@inbox.ru>, 2009.
 # Andrey Afletdinov <afletdinov@gmail.com>, 2009.
 #
@@ -165,7 +165,7 @@ msgstr "Переместить %{name}"
 msgid "Set Count"
 msgstr "Количество"
 
-msgid "%{name} half the enemy troops!"
+msgid "%{name} destroy half the enemy troops!"
 msgstr "%{name} убивает половину вражеского отряда!"
 
 msgid "%{name} has turned off the auto battle"

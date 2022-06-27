@@ -1,7 +1,7 @@
 # French translation for fheroes2
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
-# fheroes2 team <fhomm2@gmail.com>, 2021
+# fheroes2 team <fhomm2@gmail.com>, 2021 - 2022
 #
 msgid ""
 msgstr ""
@@ -162,7 +162,7 @@ msgstr "Déplacer %{name}"
 msgid "Set Count"
 msgstr "Régler le nombre"
 
-msgid "%{name} half the enemy troops!"
+msgid "%{name} destroy half the enemy troops!"
 msgstr "%{name} décime la troupe ennemie !"
 
 msgid "%{name} has turned off the auto battle"

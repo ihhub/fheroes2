@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# fheroes2 team <fhomm2@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
@@ -161,7 +161,7 @@ msgstr "%{name} umstellen"
 msgid "Set Count"
 msgstr "Anzahl festlegen"
 
-msgid "%{name} half the enemy troops!"
+msgid "%{name} destroy half the enemy troops!"
 msgstr "%{name} halbieren die feindlichen Truppen!"
 
 msgid "%{name} has turned off the auto battle"
