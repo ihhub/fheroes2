@@ -46,6 +46,24 @@ namespace AudioManager
         ~AudioInitializer();
     };
 
+    // Useful for restoring background music after playing short-term music effects.
+    // TODO: Is subject to a (minor) race condition when created while the playback
+    // TODO: of a new music track is being started in the AsyncSoundManager's worker
+    // TODO: thread. In this case, the wrong music track may be restored.
+    class MusicRestorer
+    {
+    public:
+        MusicRestorer();
+        MusicRestorer( const MusicRestorer & ) = delete;
+
+        ~MusicRestorer();
+
+        MusicRestorer & operator=( const MusicRestorer & ) = delete;
+
+    private:
+        const int _music;
+    };
+
     struct AudioLoopEffectInfo
     {
         AudioLoopEffectInfo() = default;
@@ -73,6 +91,8 @@ namespace AudioManager
 
     void PlayMusic( const int trackId, const Music::PlaybackMode playbackMode );
     void PlayMusicAsync( const int trackId, const Music::PlaybackMode playbackMode );
+    // Assumes that the current music track is looped and should be resumed
+    void PlayCurrentMusic();
 
     void stopSounds();
 

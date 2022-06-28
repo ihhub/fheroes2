@@ -467,6 +467,8 @@ namespace
         return ( static_cast<uint64_t>( musicType ) << 32 ) + static_cast<uint64_t>( trackId );
     }
 
+    std::atomic<int> currentMusicTrackId{ MUS::UNKNOWN };
+
     void PlayMusicInternally( const int trackId, const MusicSource musicType, const Music::PlaybackMode playbackMode )
     {
         // Make sure that the music track is valid.
@@ -476,14 +478,16 @@ namespace
 
         std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
-        if ( Game::CurrentMusicTrackId() == trackId && Music::isPlaying() ) {
+        if ( currentMusicTrackId == trackId && Music::isPlaying() ) {
             return;
         }
 
         // Check if the music track is cached.
         if ( Music::Play( musicUID, playbackMode ) ) {
             DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play cached music track " << trackId )
-            Game::SetCurrentMusicTrackId( trackId );
+
+            currentMusicTrackId = trackId;
+
             return;
         }
 
@@ -514,7 +518,7 @@ namespace
             else {
                 Music::Play( musicUID, filename, playbackMode );
 
-                Game::SetCurrentMusicTrackId( trackId );
+                currentMusicTrackId = trackId;
 
                 DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play music track " << MUS::getFileName( trackId, MUS::EXTERNAL_MUSIC_TYPE::MAPPED, " " ) )
 
@@ -537,9 +541,10 @@ namespace
             if ( !v.empty() ) {
                 Music::Play( musicUID, v, playbackMode );
 
-                Game::SetCurrentMusicTrackId( trackId );
+                currentMusicTrackId = trackId;
             }
         }
+
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play MIDI music track " << XMI::GetString( xmi ) )
     }
 
@@ -790,6 +795,30 @@ namespace AudioManager
         currentAudioLoopEffects.clear();
     }
 
+    MusicRestorer::MusicRestorer()
+        : _music( currentMusicTrackId )
+    {
+        // Do nothing.
+    }
+
+    MusicRestorer::~MusicRestorer()
+    {
+        if ( _music == MUS::UNUSED || _music == MUS::UNKNOWN ) {
+            currentMusicTrackId = _music;
+
+            return;
+        }
+
+        // Set current music to MUS::UNKNOWN to prevent attempts to play the old music by new instances of
+        // MusicRestorer while the music being currently restored is starting in the background
+        if ( _music != currentMusicTrackId ) {
+            currentMusicTrackId = MUS::UNKNOWN;
+        }
+
+        // It is assumed that the previous track was looped and should be resumed
+        PlayMusicAsync( _music, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+    }
+
     void playLoopSoundsAsync( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects )
     {
         if ( !Audio::isValid() ) {
@@ -832,7 +861,7 @@ namespace AudioManager
 
     void PlayMusic( const int trackId, const Music::PlaybackMode playbackMode )
     {
-        if ( MUS::UNUSED == trackId || MUS::UNKNOWN == trackId ) {
+        if ( trackId == MUS::UNUSED || trackId == MUS::UNKNOWN ) {
             return;
         }
 
@@ -848,7 +877,7 @@ namespace AudioManager
 
     void PlayMusicAsync( const int trackId, const Music::PlaybackMode playbackMode )
     {
-        if ( MUS::UNUSED == trackId || MUS::UNKNOWN == trackId ) {
+        if ( trackId == MUS::UNUSED || trackId == MUS::UNKNOWN ) {
             return;
         }
 
@@ -857,6 +886,26 @@ namespace AudioManager
         }
 
         g_asyncSoundManager.pushMusic( trackId, Settings::Get().MusicType(), playbackMode );
+    }
+
+    void PlayCurrentMusic()
+    {
+        if ( !Audio::isValid() ) {
+            return;
+        }
+
+        // TODO: in general, we should not remove all queued tasks here, but only tasks of the same type
+        g_asyncSoundManager.removeAllTasks();
+
+        std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
+
+        if ( currentMusicTrackId == MUS::UNUSED || currentMusicTrackId == MUS::UNKNOWN ) {
+            return;
+        }
+
+        const int trackId = currentMusicTrackId.exchange( MUS::UNKNOWN );
+
+        PlayMusicInternally( trackId, Settings::Get().MusicType(), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
 
     void stopSounds()
@@ -888,5 +937,7 @@ namespace AudioManager
 
         Music::Stop();
         Mixer::Stop();
+
+        currentMusicTrackId = MUS::UNKNOWN;
     }
 }

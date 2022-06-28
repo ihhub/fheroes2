@@ -265,7 +265,7 @@ void Puzzle::ShowMapsDialog() const
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // restore the original music on exit
-    const Game::MusicRestorer musicRestorer;
+    const AudioManager::MusicRestorer musicRestorer;
 
     AudioManager::PlayMusic( MUS::PUZZLE, Music::PlaybackMode::PLAY_ONCE );
 

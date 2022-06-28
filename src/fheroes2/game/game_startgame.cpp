@@ -264,7 +264,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
 void ShowNewWeekDialog()
 {
     // restore the original music on exit
-    const Game::MusicRestorer musicRestorer;
+    const AudioManager::MusicRestorer musicRestorer;
 
     AudioManager::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, Music::PlaybackMode::PLAY_ONCE );
 
@@ -608,9 +608,6 @@ fheroes2::GameMode Interface::Basic::StartGame()
                 case CONTROL_HUMAN:
                     // Reset environment sounds and music theme at the beginning of the human turn
                     AudioManager::ResetAudio();
-                    // AsyncSoundManager's worker thread will not be able to change the current music track
-                    // after the ResetAudio() completes, so we can safely reset the current music track here
-                    Game::SetCurrentMusicTrackId( MUS::UNKNOWN );
 
                     if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
                         // we need to hide the world map in hot seat mode
@@ -623,7 +620,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                         display.render();
 
                         // reset the music after closing the dialog
-                        const Game::MusicRestorer musicRestorer;
+                        const AudioManager::MusicRestorer musicRestorer;
 
                         AudioManager::PlayMusic( MUS::NEW_MONTH, Music::PlaybackMode::PLAY_ONCE );
 
@@ -648,9 +645,6 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                     // Reset environment sounds and music theme at the end of the human turn.
                     AudioManager::ResetAudio();
-                    // AsyncSoundManager's worker thread will not be able to change the current music track
-                    // after the ResetAudio() completes, so we can safely reset the current music track here
-                    Game::SetCurrentMusicTrackId( MUS::UNKNOWN );
 
                     break;
 

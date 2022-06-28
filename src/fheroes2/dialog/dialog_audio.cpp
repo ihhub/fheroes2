@@ -225,15 +225,7 @@ namespace Dialog
 
                 conf.SetMusicType( type > MUSIC_EXTERNAL ? 0 : type );
 
-                // TODO: Is subject to a (minor) race condition when the music type is changed while the
-                // TODO: playback of a new music track is being started in the AsyncSoundManager's worker
-                // TODO: thread. In this case, the wrong music track may be played.
-                int music = Game::CurrentMusicTrackId();
-
-                Game::SetCurrentMusicTrackId( MUS::UNKNOWN );
-
-                // Use sync mode to avoid issues when the music type changes quickly several times in a row
-                AudioManager::PlayMusic( music, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+                AudioManager::PlayCurrentMusic();
 
                 saveMusicType = true;
             }

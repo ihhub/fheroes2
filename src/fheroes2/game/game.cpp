@@ -60,7 +60,6 @@ namespace
     std::string last_name;
 
     bool updateSoundsOnFocusUpdate = true;
-    std::atomic<int> currentMusicTrackId{ MUS::UNKNOWN };
 
     uint32_t maps_animation_frame = 0;
 
@@ -223,16 +222,6 @@ void Game::Init()
     Game::AnimateDelaysInitialize();
 
     Game::HotKeysLoad( Settings::GetLastFile( "", "fheroes2.key" ) );
-}
-
-int Game::CurrentMusicTrackId()
-{
-    return currentMusicTrackId;
-}
-
-void Game::SetCurrentMusicTrackId( const int trackId )
-{
-    currentMusicTrackId = trackId;
 }
 
 void Game::ObjectFadeAnimation::PrepareFadeTask( const MP2::MapObjectType objectType, int32_t fromIndex, int32_t toIndex, bool fadeOut, bool fadeIn )
@@ -474,9 +463,6 @@ void Game::EnvironmentSoundMixer()
 void Game::restoreSoundsForCurrentFocus()
 {
     AudioManager::ResetAudio();
-    // AsyncSoundManager's worker thread will not be able to change the current music track
-    // after the ResetAudio() completes, so we can safely reset the current music track here
-    Game::SetCurrentMusicTrackId( MUS::UNKNOWN );
 
     switch ( Interface::GetFocusType() ) {
     case GameFocus::HEROES: {
