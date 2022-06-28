@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-12 08:18+0000\n"
+"POT-Creation-Date: 2022-06-28 00:30+0000\n"
 "PO-Revision-Date: 2022-05-10 16:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -166,7 +166,6 @@ msgstr "Найняти: %{name}"
 msgid "Move or right click to redistribute %{name}"
 msgstr "Пересуньте %{name} щоб розділити (або правий клік)"
 
-#, fuzzy
 msgid "Combine %{name} armies"
 msgstr ""
 
@@ -190,8 +189,12 @@ msgstr "Найняти: %{name}"
 msgid "Set Count"
 msgstr "Кількість"
 
-msgid "%{name} destroy half the enemy troops!"
-msgstr "%{name} знищує половину ворожого загону!"
+#, fuzzy
+msgid "%{name} destroys half the enemy troops!"
+msgid_plural "%{name} destroy half the enemy troops!"
+msgstr[0] "%{name} знищує половину ворожого загону!"
+msgstr[1] "%{name} знищує половину ворожого загону!"
+msgstr[2] "%{name} знищує половину ворожого загону!"
 
 #, fuzzy
 msgid "%{name} has turned off the auto battle"
@@ -617,8 +620,11 @@ msgid "%{name} wait their turn."
 msgstr "%{name} чекає на свою чергу."
 
 #, fuzzy
-msgid "%{attacker} do %{damage} damage."
-msgstr "%{attacker} завдає %{damage} шкоди."
+msgid "%{attacker} does %{damage} damage."
+msgid_plural "%{attacker} do %{damage} damage."
+msgstr[0] "%{attacker} завдає %{damage} шкоди."
+msgstr[1] "%{attacker} завдає %{damage} шкоди."
+msgstr[2] "%{attacker} завдає %{damage} шкоди."
 
 #, fuzzy
 msgid "1 creature perishes."
