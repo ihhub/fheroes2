@@ -743,8 +743,6 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     gameArea.SetUpdateCursor();
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
-    Game::EnvironmentSoundMixer();
-
     fheroes2::Display & display = fheroes2::Display::instance();
 
     display.render();
