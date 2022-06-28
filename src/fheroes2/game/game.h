@@ -93,11 +93,16 @@ namespace Game
 
     void EnvironmentSoundMixer();
     void restoreSoundsForCurrentFocus();
+
+    void SetCurrentMusicTrackId( const int trackId );
+    int CurrentMusicTrackId();
+
+    bool UpdateSoundsOnFocusUpdate();
+    void SetUpdateSoundsOnFocusUpdate( const bool update );
+
     int GetKingdomColors();
     int GetActualKingdomColors();
     void DialogPlayers( int color, std::string );
-    void SetCurrentMusicTrack( const int trackId );
-    int CurrentMusicTrackId();
     uint32_t & MapsAnimationFrame();
     uint32_t GetRating();
     uint32_t GetGameOverScores();
@@ -105,8 +110,6 @@ namespace Game
     uint32_t GetWhirlpoolPercent();
     uint32_t SelectCountPlayers();
     void PlayPickupSound();
-    bool UpdateSoundsOnFocusUpdate();
-    void SetUpdateSoundsOnFocusUpdate( bool update );
     void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss = false );
     void OpenCastleDialog( Castle & castle, bool updateFocus = true );
     // Returns the difficulty level based on the type of game.
@@ -120,7 +123,10 @@ namespace Game
     std::string GetSaveFileExtension();
     std::string GetSaveFileExtension( const int gameType );
 
-    // Useful for restoring background music after playing short-term music effects
+    // Useful for restoring background music after playing short-term music effects.
+    // TODO: Is subject to a (minor) race condition when created while the playback
+    // TODO: of a new music track is being started in the AsyncSoundManager's worker
+    // TODO: thread. In this case, the wrong music track may be restored.
     class MusicRestorer
     {
     public:
@@ -133,7 +139,7 @@ namespace Game
         ~MusicRestorer()
         {
             if ( _music == MUS::UNUSED || _music == MUS::UNKNOWN ) {
-                SetCurrentMusicTrack( _music );
+                SetCurrentMusicTrackId( _music );
 
                 return;
             }
@@ -142,7 +148,7 @@ namespace Game
             // by new instances of MusicRestorer while the music being currently restored
             // is starting in the background
             if ( _music != CurrentMusicTrackId() ) {
-                SetCurrentMusicTrack( MUS::UNKNOWN );
+                SetCurrentMusicTrackId( MUS::UNKNOWN );
             }
 
             // It is assumed that the previous track was looped and does not require to be played from the beginning.

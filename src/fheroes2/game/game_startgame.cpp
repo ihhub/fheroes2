@@ -606,9 +606,11 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
-                    // reset environment sounds and music theme at the beginning of the human turn
-                    Game::SetCurrentMusicTrack( MUS::UNKNOWN );
+                    // Reset environment sounds and music theme at the beginning of the human turn
                     AudioManager::ResetAudio();
+                    // AsyncSoundManager's worker thread will not be able to change the current music track
+                    // after the ResetAudio() completes, so we can safely reset the current music track here
+                    Game::SetCurrentMusicTrackId( MUS::UNKNOWN );
 
                     if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
                         // we need to hide the world map in hot seat mode
@@ -645,8 +647,10 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     }
 
                     // Reset environment sounds and music theme at the end of the human turn.
-                    Game::SetCurrentMusicTrack( MUS::UNKNOWN );
                     AudioManager::ResetAudio();
+                    // AsyncSoundManager's worker thread will not be able to change the current music track
+                    // after the ResetAudio() completes, so we can safely reset the current music track here
+                    Game::SetCurrentMusicTrackId( MUS::UNKNOWN );
 
                     break;
 

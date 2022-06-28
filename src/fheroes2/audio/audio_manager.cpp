@@ -483,7 +483,7 @@ namespace
         // Check if the music track is cached.
         if ( Music::Play( musicUID, playbackMode ) ) {
             DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play cached music track " << trackId )
-            Game::SetCurrentMusicTrack( trackId );
+            Game::SetCurrentMusicTrackId( trackId );
             return;
         }
 
@@ -514,7 +514,7 @@ namespace
             else {
                 Music::Play( musicUID, filename, playbackMode );
 
-                Game::SetCurrentMusicTrack( trackId );
+                Game::SetCurrentMusicTrackId( trackId );
 
                 DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play music track " << MUS::getFileName( trackId, MUS::EXTERNAL_MUSIC_TYPE::MAPPED, " " ) )
 
@@ -537,7 +537,7 @@ namespace
             if ( !v.empty() ) {
                 Music::Play( musicUID, v, playbackMode );
 
-                Game::SetCurrentMusicTrack( trackId );
+                Game::SetCurrentMusicTrackId( trackId );
             }
         }
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play MIDI music track " << XMI::GetString( xmi ) )

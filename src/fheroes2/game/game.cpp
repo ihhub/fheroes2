@@ -205,7 +205,7 @@ bool Game::UpdateSoundsOnFocusUpdate()
     return updateSoundsOnFocusUpdate;
 }
 
-void Game::SetUpdateSoundsOnFocusUpdate( bool update )
+void Game::SetUpdateSoundsOnFocusUpdate( const bool update )
 {
     updateSoundsOnFocusUpdate = update;
 }
@@ -230,7 +230,7 @@ int Game::CurrentMusicTrackId()
     return currentMusicTrackId;
 }
 
-void Game::SetCurrentMusicTrack( const int trackId )
+void Game::SetCurrentMusicTrackId( const int trackId )
 {
     currentMusicTrackId = trackId;
 }
@@ -473,8 +473,10 @@ void Game::EnvironmentSoundMixer()
 
 void Game::restoreSoundsForCurrentFocus()
 {
-    Game::SetCurrentMusicTrack( MUS::UNKNOWN );
     AudioManager::ResetAudio();
+    // AsyncSoundManager's worker thread will not be able to change the current music track
+    // after the ResetAudio() completes, so we can safely reset the current music track here
+    Game::SetCurrentMusicTrackId( MUS::UNKNOWN );
 
     switch ( Interface::GetFocusType() ) {
     case GameFocus::HEROES: {
