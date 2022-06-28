@@ -114,7 +114,7 @@ namespace
 
 namespace Dialog
 {
-    void openAudioSettingsDialog()
+    void openAudioSettingsDialog( const bool fromAdventureMap )
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -209,7 +209,7 @@ namespace Dialog
                     saveSoundVolume = true;
                 }
 
-                if ( saveSoundVolume ) {
+                if ( saveSoundVolume && fromAdventureMap ) {
                     Game::EnvironmentSoundMixer();
                 }
             }
