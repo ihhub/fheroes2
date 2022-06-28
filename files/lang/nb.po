@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-12 08:18+0000\n"
-"PO-Revision-Date: 2022-05-10 16:34+0200\n"
+"PO-Revision-Date: 2022-06-18 17:48+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1\n"
 
 msgid "Warrior"
 msgstr "Kriger"
@@ -41,7 +41,7 @@ msgid ""
 "Several\n"
 "%{monster}"
 msgstr ""
-"Noen\n"
+"Flere\n"
 "%{monster}"
 
 msgid ""
@@ -97,7 +97,7 @@ msgid "army|Few"
 msgstr "Få"
 
 msgid "army|Several"
-msgstr "Noen"
+msgstr "Flere"
 
 msgid "army|Pack"
 msgstr "Bande"
@@ -135,9 +135,8 @@ msgstr "Vandøde blant styrkene -1"
 msgid "View %{name}"
 msgstr "Vis %{name}"
 
-#, fuzzy
 msgid "Move the %{name} "
-msgstr "Flytt %{name}"
+msgstr "Flytt %{name} "
 
 msgid "Move or right click to redistribute %{name}"
 msgstr "Flytt eller høyreklikk for å omfordele %{name}"
@@ -154,7 +153,6 @@ msgstr "Velg %{name}"
 msgid "Cannot move last troop"
 msgstr "Kan ikke flytte siste styrke i garnisonen"
 
-#, fuzzy
 msgid "Move the %{name}"
 msgstr "Flytt %{name}"
 
@@ -295,7 +293,7 @@ msgid "Your force suffer a bitter defeat."
 msgstr "Styrken din lider et bittert nederlag."
 
 msgid "Battlefield Casualties"
-msgstr "Slagmarksoffer"
+msgstr "Slagmarkens offer"
 
 msgid "Attacker"
 msgstr "Angripende side"
@@ -569,29 +567,26 @@ msgstr "%{spell} gjør %{value} skadepoeng på én levende skapning."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} gjør %{value} skadepoeng på alle levende skapninger."
 
-#, fuzzy
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr "Enhjørningenes angrep gjør troppen med %{name} blind!"
+msgstr "Angrepet til troppen med %{attacker} gjør troppen med %{target} blind!"
 
-#, fuzzy
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr "Medusaenes blikk forsteiner troppen med %{name}!"
+msgstr "Blikket til troppen med %{attacker} forsteiner troppen med %{target}!"
 
-#, fuzzy
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr "Mumienes forbannelse treffer troppen med %{name}!"
+msgstr ""
+"Forbannelsen til troppen med %{attacker} legger seg over troppen med "
+"%{target}!"
 
-#, fuzzy
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr "Troppen med %{name} ble lamslått av kyklopene!"
+msgstr "Troppen med %{target} blir lammet av troppen med %{attacker}!"
 
-#, fuzzy
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr "Erkemagikerne opphever alle gode trolldommene på dine %{name}!"
+msgstr ""
+"Troppen med %{attacker} opphever alle gode trolldommer på dine %{target}!"
 
-#, fuzzy
 msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr "%{name} bruker %{spell} på troppen med %{troop}."
+msgstr "Gruppen med %{attacker} bruker %{spell} på troppen med %{target}!"
 
 # Bestemtform flertall feks. Dvergene får uflaks i stedet for "dverger får uflaks"
 msgid "Bad luck descends on the %{attacker}."
@@ -604,7 +599,7 @@ msgid "High morale enables the %{monster} to attack again."
 msgstr "God kampånd gjør at troppen med %{monster} får en ny tur."
 
 msgid "Low morale causes the %{monster} to freeze in panic."
-msgstr "Dårlig kampånd gjør at troppen med %{monster} går i panikk."
+msgstr "Dårlig kampånd gjør at troppen med %{monster} stivner til av panikk."
 
 # Kan være det venstre tårnet eller Ballisten. Foreløpig best er Borgens ballist gjør...
 msgid "%{tower} does %{damage} damage."
@@ -722,13 +717,11 @@ msgstr "Trollkvinneforbundet"
 msgid "Necromancer Guild"
 msgstr "Sortekunstnerforb."
 
-#, fuzzy
 msgid "Ogre Alliance"
-msgstr "Dvergealliansen"
+msgstr "Jotnealliansen"
 
-#, fuzzy
 msgid "Dwarfbane"
-msgstr "Dverg"
+msgstr "Dvergemorder"
 
 msgid "Dragon Alliance"
 msgstr "Dragealliansen"
@@ -1278,9 +1271,10 @@ msgstr ""
 msgid "The army will be carried over the scenario."
 msgstr "Hæren din vil følge deg med videre til det neste brettet."
 
-#, fuzzy
 msgid "The kingdom will have +%{count} %{resource} each day."
-msgstr "Kongedømmet ditt vil få ekstra %{resource} ved begynnelsen av brettet."
+msgstr ""
+"Kongedømmet ditt vil få %{count} ekstra %{resource} ved oppstarten av "
+"brettet."
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
 msgstr "Trolldommen %{spell} vil bli brakt med videre til det neste brettet."
@@ -1300,8 +1294,8 @@ msgstr ""
 
 msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
 msgstr ""
-"Ogrene gjenkjenner deg som Dvergemorderen og tumler seg tungt bort for å slå "
-"seg sammen med deg."
+"Jotnene gjenkjenner deg som Dvergemorderen og tumler seg tungt bort til deg "
+"for å slå seg sammen med deg."
 
 msgid ""
 "The dragons, snarling and growling, agree to join forces with you, their "
@@ -1331,8 +1325,8 @@ msgstr ""
 msgid ""
 "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
 msgstr ""
-"Ogrene gir deg et grynt av annerkjennelse, \"Archibald sine allierte kan få "
-"slippe forbi.\"."
+"Jotnene gir fra seg et grynt av annerkjennelse, \"Archibald sine allierte "
+"kan få slippe forbi.\"."
 
 msgid ""
 "The dragons see you and call out.  \"Our alliance with Archibald compels us "
@@ -1631,11 +1625,12 @@ msgid ""
 "the scenario."
 msgstr "Kongedømmet ditt vil begynne brettet med %{amount} ekstra %{resource}."
 
-#, fuzzy
 msgid ""
 "The kingdom will have %{amount} less %{resource} at the start of the "
 "scenario."
-msgstr "Kongedømmet ditt vil få ekstra %{resource} ved begynnelsen av brettet."
+msgstr ""
+"Kongedømmet ditt vil få %{amount} mindre %{resource} ved oppstarten av "
+"brettet."
 
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
@@ -1994,10 +1989,10 @@ msgid "Upg. Armory"
 msgstr "Oppg. rustkammer"
 
 msgid "Jousting Arena"
-msgstr "Dystearena"
+msgstr "Turneringsarena"
 
 msgid "Upg. Jousting Arena"
-msgstr "Oppg. dystearena"
+msgstr "Oppg. turneringsarena"
 
 msgid "Cathedral"
 msgstr "Domkirke"
@@ -2076,7 +2071,7 @@ msgid "Cave"
 msgstr "Hule"
 
 msgid "Crypt"
-msgstr "Krypt"
+msgstr "Gravkammer"
 
 msgid "Nest"
 msgstr "Rede"
@@ -2470,9 +2465,8 @@ msgstr "Forlat borgvalg"
 msgid "Castle Options"
 msgstr "Borgvalg"
 
-#, fuzzy
 msgid "Not enough resources to recruit creatures."
-msgstr "Ikke nok råvarer til å kjøpe krigere."
+msgstr "Ikke nok råvarer til å verve krigere."
 
 msgid "You are unable to recruit at this time, your ranks are full."
 msgstr "Du kan ikke verve noen fordi hæren din har ikke plass."
@@ -2480,7 +2474,6 @@ msgstr "Du kan ikke verve noen fordi hæren din har ikke plass."
 msgid "No creatures available for purchase."
 msgstr "Ingen krigere tilgjengelige for verving."
 
-#, fuzzy
 msgid "Recruit Creatures"
 msgstr "Verv krigere"
 
@@ -2659,7 +2652,7 @@ msgid "Music Type"
 msgstr "Musikktype"
 
 msgid "3D Audio"
-msgstr ""
+msgstr "3D-lyd"
 
 msgid "Toggle ambient music level."
 msgstr "Juster volumet til musikken."
@@ -2670,9 +2663,8 @@ msgstr "Juster volumet til lydeffekter og videosnutter."
 msgid "Change the type of music."
 msgstr "Skift typen musikk."
 
-#, fuzzy
 msgid "Toggle 3D effects of foreground sounds."
-msgstr "Juster volumet til lydeffekter og videosnutter."
+msgstr "Skru 3D-effekten av bakgrunnslyder på eller av."
 
 msgid "Okay"
 msgstr "Okay"
@@ -2710,9 +2702,8 @@ msgstr "Lagre det nåværende spillet."
 msgid "Quit"
 msgstr "Avslutt"
 
-#, fuzzy
 msgid "Quit out of Heroes of Might and Magic II."
-msgstr "Det opprinnelige Heroes of Might and Magic II teamet"
+msgstr "Forlat Heroes of Might and Magic II."
 
 msgid "Language"
 msgstr "Språk"
@@ -2721,41 +2712,34 @@ msgid "Resolution"
 msgstr "Oppløsning"
 
 msgid "Experimental"
-msgstr "Eksperimentelle"
+msgstr "Utprøvning"
 
 msgid "Settings"
 msgstr "Innstillinger"
 
 msgid "Audio"
-msgstr ""
+msgstr "Lyd"
 
-#, fuzzy
 msgid "settings"
 msgstr "Innstillinger"
 
-#, fuzzy
 msgid "Hot Keys"
-msgstr "Byttespilling"
+msgstr "Hurtigtaster"
 
 msgid "In-game"
-msgstr ""
+msgstr "I spillet"
 
-#, fuzzy
 msgid "Black & White"
-msgstr "Svartfjellryggen"
+msgstr "Svart-hvit"
 
-#, fuzzy
 msgid "Mouse Cursor"
-msgstr ""
-"Skygge-\n"
-"markør"
+msgstr "Markør"
 
 msgid "Color"
-msgstr ""
+msgstr "Farget"
 
-#, fuzzy
 msgid "Text Support"
-msgstr "Kvalitetssikring og støtte"
+msgstr "Tekstmodus"
 
 msgid "Evil"
 msgstr "Ond"
@@ -2792,9 +2776,8 @@ msgstr "Velg spilloppløsning"
 msgid "Change resolution of the game."
 msgstr "Endre oppløsningen til spillet."
 
-#, fuzzy
 msgid "Change audio settings of the game."
-msgstr "Endre språket, oppløsningen og innstillingene til spillet."
+msgstr "Endre lydinnstillingene til spillet."
 
 msgid "Experimental game settings."
 msgstr "Innstillinger for utprøvningsvalg."
@@ -2803,7 +2786,7 @@ msgid "Toggle instant battle mode."
 msgstr "Skift modus for hurtigkamp."
 
 msgid "Check all Hot Keys used in the game."
-msgstr ""
+msgstr "Kontroller alle hurtigtastene til spillet."
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Velg den typen grensesnitt du ønsker."
@@ -2812,16 +2795,20 @@ msgid ""
 "Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
 "move as smoothly as black and white ones."
 msgstr ""
+"Skru farget markør av eller på. Markør med farge ser bedre ut, men den kan "
+"under visse oppsett bevege seg mindre glatt enn det en svart-hvit markør "
+"ville ha gjort."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
+"Skru på tekstmodus for å gi tekstbasert informasjon om vinduer og hendelser "
+"som skjer i spillet."
 
 msgid "Attention"
 msgstr "Advarsel"
 
-#, fuzzy
 msgid ""
 "Your version of Heroes of Might and Magic II does not support any other "
 "languages than English."
@@ -2905,7 +2892,7 @@ msgid "Your army too big!"
 msgstr "Hæren din er for stor!"
 
 msgid "Hot Keys:"
-msgstr ""
+msgstr "Hurtigtaster:"
 
 msgid "Select Game Language:"
 msgstr "Velg spillets språk:"
@@ -3025,29 +3012,23 @@ msgstr "Uvisst"
 msgid "%{name} (Level %{level})"
 msgstr "%{name} (Level %{level})"
 
-#, fuzzy
 msgid "Attack:"
-msgstr "Angrep"
+msgstr "Angrep:"
 
-#, fuzzy
 msgid "Defense:"
-msgstr "Forsvar"
+msgstr "Forsvar:"
 
-#, fuzzy
 msgid "Spell Power:"
-msgstr "Kraft"
+msgstr "Kraft:"
 
-#, fuzzy
 msgid "Knowledge:"
-msgstr "Kunnskap"
+msgstr "Kunnskap:"
 
-#, fuzzy
 msgid "Spell Points:"
-msgstr "Mana"
+msgstr "Mana:"
 
-#, fuzzy
 msgid "Move Points:"
-msgstr "Skritt"
+msgstr "Skritt:"
 
 msgid "Cost per troop:"
 msgstr "Pris per kriger:"
@@ -3282,7 +3263,9 @@ msgstr "Fiendefart"
 
 # Kan ikke deles i to for øyeblikket.
 msgid "Scroll Speed"
-msgstr "Panorerings-fart"
+msgstr ""
+"Panorerings-\n"
+"fart"
 
 msgid "Hide"
 msgstr "Løs"
@@ -3442,9 +3425,8 @@ msgstr "Kvalitetssikring og støtte"
 msgid "Development"
 msgstr "Programvareutvikling"
 
-#, fuzzy
 msgid "Dev and Support"
-msgstr "Kvalitetssikring og støtte"
+msgstr "Utvikling og støtte"
 
 msgid "Visit us at "
 msgstr "Treff oss på "
@@ -3470,9 +3452,8 @@ msgstr "og mange flere støttespillere!"
 msgid "Original project before 0.7"
 msgstr "Opprinnelig prosjekt før 0.7"
 
-#, fuzzy
 msgid "Original Heroes of Might and Magic II team"
-msgstr "Det opprinnelige Heroes of Might and Magic II teamet"
+msgstr "Det opprinnelige Heroes of Might and Magic II-teamet"
 
 msgid "Designed and Directed"
 msgstr "Utforming og ledelse"
@@ -3531,13 +3512,11 @@ msgstr "Ukjent helt"
 msgid "Your Name"
 msgstr "Ditt navn"
 
-#, fuzzy
 msgid "Standard"
-msgstr "Vanlig spill"
+msgstr "Standard"
 
-#, fuzzy
 msgid "View High Scores for Standard Maps."
-msgstr "Vis rekordtavle for kampanjer."
+msgstr "Vis rekordtavle for standard kart."
 
 # Kampanje?
 msgid "Campaign"
@@ -3619,12 +3598,12 @@ msgstr "fheroes2 Resurrection Team presenterer"
 msgid "Greetings!"
 msgstr "Heisann!"
 
-#, fuzzy
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
 "starting the game please choose game resolution."
 msgstr ""
-"Velkommen til fheroes2! Vennligst velg skjermoppløsning før du begynner."
+"Velkommen til Heroes of Might and Magic II drevet av fheroes2 spillmotoren! "
+"Vennligst velg skjermoppløsning før du begynner."
 
 msgid "Please Remember"
 msgstr "Ikke glem"
@@ -3659,9 +3638,9 @@ msgstr ""
 "\n"
 "Vi håper du nyter spillet!"
 
-#, fuzzy
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
-msgstr "Forlat fheroes2 og dra tilbake til operativsystemet."
+msgstr ""
+"Forlat Heroes of Might and Magic II og dra tilbake til operativsystemet."
 
 msgid "Credits"
 msgstr "Rulletekst"
@@ -3681,13 +3660,12 @@ msgstr "Endre språket, oppløsningen og innstillingene til spillet."
 msgid "Game Settings"
 msgstr "Spillinnstillinger"
 
-#, fuzzy
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
 "and Magic II."
 msgstr ""
-"Enten felttoget til Roland eller Archibald fra det originale Heroes of Might "
-"and Magic II."
+"Velg mellom felttoget til Roland og Archibald fra det originale Heroes of "
+"Might and Magic II."
 
 msgid "Original Campaign"
 msgstr "Originalt felttog"
@@ -4202,9 +4180,8 @@ msgstr "Norsk"
 msgid "Belarusian"
 msgstr ""
 
-#, fuzzy
 msgid "Bulgarian"
-msgstr "Barbar"
+msgstr ""
 
 msgid "Ukrainian"
 msgstr ""
@@ -4218,9 +4195,8 @@ msgstr ""
 msgid "Swedish"
 msgstr ""
 
-#, fuzzy
 msgid "Portuguese"
-msgstr "Røvere"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -5853,7 +5829,6 @@ msgstr ""
 "Denne trolldommen koster %{mana} mana. Du har kun %{point} mana, så du kan "
 "ikke bruke denne trolldommen."
 
-#, fuzzy
 msgid "The spell was not found."
 msgstr "Trolldommen ble ikke funnet."
 
@@ -6512,14 +6487,15 @@ msgid "morale|Blood!"
 msgstr "Blod!"
 
 msgid "Bad morale may cause your armies to freeze in combat."
-msgstr "Negativ kampånd kan få styrkene dine til å stoppe opp i kamp."
+msgstr ""
+"Negativ kampånd kan få styrkene dine til å stivne til av panikk i kamp."
 
 msgid ""
 "Neutral morale means your armies will never be blessed with extra attacks or "
 "freeze in combat."
 msgstr ""
 "Nøytral kampånd betyr at styrkene dine aldri verken vil bli velsignet med en "
-"ekstra tur, eller stoppe opp i kamp."
+"ekstra tur eller stivne til av panikk i kamp."
 
 msgid "Good morale may give your armies extra attacks in combat."
 msgstr "Positiv kampånd kan gi styrkene dine en ekstra tur i kamp."
@@ -7189,22 +7165,22 @@ msgid "Orc Chiefs"
 msgstr "Orkehøvdinger"
 
 msgid "Wolf"
-msgstr "Ulv"
+msgstr "Varg"
 
 msgid "Wolves"
-msgstr "Ulver"
+msgstr "Varger"
 
 msgid "Ogre"
-msgstr "Ogre"
+msgstr "Jotun"
 
 msgid "Ogres"
-msgstr "Ogrer"
+msgstr "Jotner"
 
 msgid "Ogre Lord"
-msgstr "Ogreherre"
+msgstr "Jotunherjer"
 
 msgid "Ogre Lords"
-msgstr "Ogreherrer"
+msgstr "Jotunherjere"
 
 msgid "Troll"
 msgstr "Troll"
@@ -7285,10 +7261,10 @@ msgid "Centaurs"
 msgstr "Kentaurer"
 
 msgid "Gargoyle"
-msgstr "Gargøyle"
+msgstr "Gravstatue"
 
 msgid "Gargoyles"
-msgstr "Gargøyler"
+msgstr "Gravstatuer"
 
 msgid "Griffin"
 msgstr "Griff"
@@ -7376,10 +7352,10 @@ msgid "Archmagi"
 msgstr "Erkemagikere"
 
 msgid "Giant"
-msgstr "Kjempe"
+msgstr "Koloss"
 
 msgid "Giants"
-msgstr "Kjemper"
+msgstr "Kolosser"
 
 msgid "Titan"
 msgstr "Titan"
@@ -7777,9 +7753,9 @@ msgid ""
 "After saving a young boy from a vicious pack of Wolves, you return him to "
 "his father's manor. The grateful nobleman awards you with a Medal of Courage."
 msgstr ""
-"Etter å ha unnsatt en unggutt fra en flokk med blodtørstige ulver, tar du "
-"han med tilbake til herregården til faren hans. Den takknemlige adelsmannen "
-"belønner deg med en medalje av tapperhet."
+"Etter å ha kommet en unggutt til unnsetning fra en flokk med blodtørstige "
+"varger, tar du ham med tilbake til faren hans sin herregård. Den takknemlige "
+"adelsmannen belønner deg med en medalje av tapperhet."
 
 msgid "Medal of Honor"
 msgstr "Æresmedaljen"
@@ -7859,9 +7835,9 @@ msgid ""
 "skill with this weapon, you confidently remove the spectacular flail from "
 "the fallen Giant."
 msgstr ""
-"En klønete kjempe har prestert å ta livet av seg med sin egen klubbe. I "
+"En klossete koloss har prestert å ta livet av seg med sin egen klubbe. I "
 "trygghet på dine langt bedre ferdigheter med dette våpenet, fjerner du i din "
-"selvsikkerhet den imponerende klubben fra den falne kjempen."
+"selvsikkerhet den imponerende klubben fra den falne kolossen."
 
 msgid "Ballista of Quickness"
 msgstr "Ballisten av hurtighet"
@@ -8187,7 +8163,7 @@ msgid ""
 msgstr ""
 "Du hører redselsskrikene til en dame i nød, og du oppdager en ung kvinne som "
 "rømmer fra en sulten bjørn. Du tar livet av bjørnen i grevens tid, og den "
-"takknemlige trollkvinnen vever deg en magisk kappe av bjørneskinnet."
+"takknemlige trollkvinnen vever deg en magisk kappe av skinnet til bjørnen."
 
 msgid "Fire Cloak"
 msgstr "Flammekappe"
@@ -8790,11 +8766,12 @@ msgstr "Plassholder 4"
 msgid "Spell Scroll"
 msgstr "Trolldomsrull"
 
-#, fuzzy
 msgid ""
 "This %{name} gives your hero the ability to cast the %{spell} spell if your "
 "hero has a Magic Book."
-msgstr "Denne %{name}en gir helten din evnen til å bruke trolldommen %{spell}."
+msgstr ""
+"Denne %{name}en gir helten din evnen til å bruke trolldommen %{spell}, gitt "
+"at den har en tryllebok."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
@@ -8951,8 +8928,8 @@ msgstr ""
 "Ut av intet griper en sterk kulde fatt i kroppen din. Du fryser til og "
 "faller av hesten din. Smerten går over, men det føles fortsatt ut som at "
 "brystkassa di er av is. Du tar deg selv opp fra bakken og hører en rungende "
-"latter. Du snur deg rundt akkurat i tide til å se en frostkjempe løpe av "
-"gårde inn i skogen og forsvinne."
+"latter. Du snur deg rundt akkurat i tide til å få øye på en frostkjempe som "
+"løper av gårde inn i skogen og forsvinner."
 
 msgid "Helmet of Anduran"
 msgstr "Andurans hjelm"
@@ -9197,7 +9174,7 @@ msgstr ""
 
 msgid "Mass Cure"
 msgstr ""
-"Masse-\n"
+"Vid-\n"
 "helbredning"
 
 msgid ""
@@ -9244,9 +9221,7 @@ msgid "spell|Slow"
 msgstr "Forsinkelse"
 
 msgid "Mass Slow"
-msgstr ""
-"Masse-\n"
-"forsinkelse"
+msgstr "Vid-forsinkelse"
 
 msgid "Slows all enemies to half movement rate."
 msgstr "Reduserer alle fiender ned til halvparten av skrittene deres."
@@ -9269,9 +9244,7 @@ msgid "Causes all of your units to inflict maximum damage."
 msgstr "Får alle skapningene dine til å gjøre maksimal skade."
 
 msgid "Mass Bless"
-msgstr ""
-"Masse-\n"
-"velsignelse"
+msgstr "Helligelse"
 
 msgid "Magically increases the defense skill of the selected creatures."
 msgstr "Øker på magisk vis forsvarsevnen til den utvalgte skapningen."
@@ -9299,9 +9272,7 @@ msgid "Causes all enemy troops to inflict minimum damage."
 msgstr "Får alle fiendtlige tropper til å gjøre minst mulig skade."
 
 msgid "Mass Curse"
-msgstr ""
-"Masse-\n"
-"forbannelse"
+msgstr "Besvergelse"
 
 msgid "Damages all undead in the battle."
 msgstr "Skader alle vandøde på slagmarken."
@@ -9318,7 +9289,9 @@ msgid "Holy Shout"
 msgstr "Hellig rop"
 
 msgid "Anti-Magic"
-msgstr "Antimagi"
+msgstr ""
+"Trolldoms-\n"
+"vern"
 
 # en enkelt? flere?
 msgid "Prevents harmful magic against the selected creatures."
@@ -9334,7 +9307,7 @@ msgstr "Fjerner alle trolldommer fra målet."
 
 msgid "Mass Dispel"
 msgstr ""
-"Masse-\n"
+"All-\n"
 "opphevelse"
 
 msgid "Removes all magic spells from all creatures."
@@ -9347,7 +9320,7 @@ msgid "Magic Arrow"
 msgstr "Magisk pil"
 
 msgid "Berserker"
-msgstr "Berserkgang"
+msgstr "Berserk"
 
 # nabo?
 msgid "Causes a creature to attack its nearest neighbor."
@@ -9384,8 +9357,8 @@ msgstr "Lammelse"
 
 msgid "The targeted creatures are paralyzed, unable to move or retaliate."
 msgstr ""
-"De utvalgte skapningene blir lamslåtte og får ikke til å flytte på seg eller "
-"slå tilbake."
+"De utvalgte skapningene blir lamme og får ikke til å flytte på seg eller slå "
+"tilbake."
 
 msgid "Hypnotize"
 msgstr "Hypnose"
@@ -9415,7 +9388,7 @@ msgstr ""
 
 msgid "Disrupting Ray"
 msgstr ""
-"Oppløsnings-\n"
+"Forvitrings-\n"
 "stråle"
 
 msgid "Reduces the defense rating of an enemy unit by three."
@@ -9486,7 +9459,9 @@ msgid "Halves damage received from ranged attacks for all of your units."
 msgstr "Halverer skade som fås fra skuddangrep på alle dine styrker."
 
 msgid "Mass Shield"
-msgstr "Masseskjold"
+msgstr ""
+"For-\n"
+"skansning"
 
 msgid "Summon Earth Elemental"
 msgstr "Tilkall jordånd"
@@ -9577,9 +9552,7 @@ msgstr "Transporterer helten på magisk vis til et utvalgt sted i nærheten."
 
 # Dimensjon brukes egentlig ikke slik på norsk: verdensportal, verdensdør?
 msgid "Dimension Door"
-msgstr ""
-"Dimensjons-\n"
-"dør"
+msgstr "Verdensportal"
 
 msgid "Returns the caster to any town or castle currently owned."
 msgstr ""
@@ -9606,7 +9579,7 @@ msgstr ""
 "styrke."
 
 msgid "Haunt"
-msgstr "Hjemsøk"
+msgstr "Hjemsøking"
 
 msgid ""
 "Haunts a mine you control with Ghosts.  This mine stops producing "
@@ -9651,7 +9624,7 @@ msgstr ""
 "halv skade fra direkte angrep."
 
 msgid "You have no Magic Book, so you cannot cast a spell."
-msgstr ""
+msgstr "Du har ingen tryllebok og kan derfor ikke bruke magi."
 
 # Used on adventure map. Plural is right for norwegian.
 msgid "No spell to cast."
@@ -9737,9 +9710,8 @@ msgstr "Borg: Tillat helt som vokter"
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "Helter: Tillat å kjøpe tryllebok fra magitempel"
 
-#, fuzzy
 msgid "heroes: remember movement points when retreating or surrendering"
-msgstr "Helter: Husk skrittene for tilbaketrekkings-/overgivelsesresultatet"
+msgstr "Helter: Husk skritt etter tilbaketrekking eller overgivelse."
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "Helter: I arenaen kan man velge en hvilken som helst av grunnevnene"
