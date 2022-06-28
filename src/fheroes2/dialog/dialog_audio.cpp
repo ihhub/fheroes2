@@ -219,14 +219,18 @@ namespace Dialog
             if ( le.MouseClickLeft( musicTypeRoi ) ) {
                 int type = conf.MusicType() + 1;
                 // If there's no expansion files we skip this option
-                if ( type == MUSIC_MIDI_EXPANSION && !conf.isPriceOfLoyaltySupported() )
+                if ( type == MUSIC_MIDI_EXPANSION && !conf.isPriceOfLoyaltySupported() ) {
                     ++type;
-
-                const Game::MusicRestorer musicRestorer;
+                }
 
                 conf.SetMusicType( type > MUSIC_EXTERNAL ? 0 : type );
 
+                int music = Game::CurrentMusicTrackId();
+
                 Game::SetCurrentMusicTrack( MUS::UNKNOWN );
+
+                // Use sync mode to avoid issues when the music type changes quickly several times in a row
+                AudioManager::PlayMusic( music, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
                 saveMusicType = true;
             }
