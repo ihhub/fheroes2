@@ -125,10 +125,74 @@ namespace AI
 
         if ( recruit && buyArmy ) {
             CastleTurn( castle, underThreat );
-            ReinforceHeroInCastle( *recruit, castle, kingdom.GetFunds() );
+            reinforceHeroInCastle( *recruit, castle, kingdom.GetFunds() );
         }
 
         return recruit != nullptr;
+    }
+
+    void Normal::reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget )
+    {
+        if ( !hero.HaveSpellBook() && castle.GetLevelMageGuild() > 0 && !hero.IsFullBagArtifacts() ) {
+            // this call will check if AI kingdom have enough resources to buy book
+            hero.BuySpellBook( &castle );
+        }
+
+        Army & heroArmy = hero.GetArmy();
+        Army & garrison = castle.GetArmy();
+        const double armyStrength = heroArmy.GetStrength();
+
+        heroArmy.UpgradeTroops( castle );
+        castle.recruitBestAvailable( budget );
+        heroArmy.JoinStrongestFromArmy( garrison );
+
+        const uint32_t regionID = world.GetTiles( castle.GetIndex() ).GetRegion();
+        // check if we should leave some troops in the garrison
+        // TODO: amount of troops left could depend on region's safetyFactor
+        if ( castle.isCastle() && _regions[regionID].safetyFactor <= 100 && !garrison.isValid() ) {
+            const Heroes::Role heroRole = hero.getAIRole();
+            const bool isFigtherHero = ( heroRole == Heroes::Role::FIGHTER || heroRole == Heroes::Role::CHAMPION );
+
+            bool onlyHalf = false;
+            Troop * unitToSwap = heroArmy.GetSlowestTroop();
+            if ( unitToSwap ) {
+                const double significanceRatio = isFigtherHero ? 20.0 : 10.0;
+                if ( unitToSwap->GetStrength() > armyStrength / significanceRatio ) {
+                    Troop * weakest = heroArmy.GetWeakestTroop();
+
+                    assert( weakest != nullptr );
+                    if ( weakest ) {
+                        unitToSwap = weakest;
+                        if ( weakest->GetStrength() > armyStrength / significanceRatio ) {
+                            if ( isFigtherHero ) {
+                                // if it's an important hero and all troops are significant - keep the army
+                                unitToSwap = nullptr;
+                            }
+                            else {
+                                onlyHalf = true;
+                            }
+                        }
+                    }
+                }
+            }
+            if ( unitToSwap ) {
+                const uint32_t count = unitToSwap->GetCount();
+                const uint32_t toMove = onlyHalf ? count / 2 : count;
+                if ( garrison.JoinTroop( unitToSwap->GetMonster(), toMove, true ) ) {
+                    if ( !onlyHalf ) {
+                        unitToSwap->Reset();
+                    }
+                    else {
+                        unitToSwap->SetCount( count - toMove );
+                    }
+                }
+            }
+        }
+
+        OptimizeTroopsOrder( heroArmy );
+        if ( std::fabs( armyStrength - heroArmy.GetStrength() ) > 0.001 ) {
+            hero.unmarkHeroMeeting();
+        }
     }
 
     void Normal::evaluateRegionSafety()

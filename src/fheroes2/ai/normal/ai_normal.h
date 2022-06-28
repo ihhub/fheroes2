@@ -192,6 +192,7 @@ namespace AI
         void HeroesActionComplete( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType ) override;
 
         bool recruitHero( Castle & castle, bool buyArmy, bool underThreat );
+        void reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget );
         void evaluateRegionSafety();
         std::set<int> findCastlesInDanger( const KingdomCastles & castles, const std::vector<std::pair<int, const Army *>> & enemyArmies, int myColor );
         std::vector<AICastle> getSortedCastleList( const KingdomCastles & castles, const std::set<int> & castlesInDanger );
