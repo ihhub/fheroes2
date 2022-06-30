@@ -41,10 +41,10 @@ namespace
         double strength = 0.0;
         int stats = 0;
 
-        HeroValue( Heroes * hero, double strength, int stats )
-            : hero( hero )
-            , strength( strength )
-            , stats( stats )
+        HeroValue( Heroes * inHero, double inStrength, int inStats )
+            : hero( inHero )
+            , strength( inStrength )
+            , stats( inStats )
         {}
     };
 

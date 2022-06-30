@@ -649,6 +649,7 @@ namespace
         switch ( hero.getAIRole() ) {
         case Heroes::Role::HUNTER:
             return -dangerousTaskPenalty;
+        case Heroes::Role::COURIER:
         case Heroes::Role::FIGHTER:
             return -dangerousTaskPenalty * 2;
         default:
