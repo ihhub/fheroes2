@@ -35,6 +35,19 @@ namespace
 {
     const double fighterStrengthMultiplier = 3;
 
+    struct HeroValue
+    {
+        Heroes * hero = nullptr;
+        double strength = 0.0;
+        int stats = 0;
+
+        HeroValue( Heroes * hero, double strength, int stats )
+            : hero( hero )
+            , strength( strength )
+            , stats( stats )
+        {}
+    };
+
     void setHeroRoles( KingdomHeroes & heroes )
     {
         if ( heroes.empty() ) {
@@ -58,28 +71,42 @@ namespace
         }
 
         // Set hero's roles. First calculate each hero strength and sort it in descending order.
-        std::vector<std::pair<double, Heroes *>> heroStrength;
+        std::vector<HeroValue> heroList;
         for ( Heroes * hero : heroes ) {
-            heroStrength.emplace_back( hero->GetArmy().GetStrength(), hero );
+            // AI heroes set on patrol mode can only be fighters; ignore them otherwise
+            if ( hero->Modes( Heroes::PATROL ) ) {
+                hero->setAIRole( Heroes::Role::FIGHTER );
+            }
+            else {
+                heroList.emplace_back( hero, hero->GetArmy().GetStrength(), hero->getStatsValue() );
+            }
         }
 
-        std::sort( heroStrength.begin(), heroStrength.end(),
-                   []( const std::pair<double, Heroes *> & first, const std::pair<double, Heroes *> & second ) { return first.first > second.first; } );
+        // If there's plenty of heroes we can assign special roles
+        if ( heroList.size() > 3 ) {
+            std::sort( heroList.begin(), heroList.end(), []( const HeroValue & first, const HeroValue & second ) { return first.stats > second.stats; } );
 
-        const double medianStrength = heroStrength[heroStrength.size() / 2].first;
+            // Assign the role and remove them so they aren't counted towards the median strength
+            heroList.back().hero->setAIRole( Heroes::Role::COURIER );
+            heroList.pop_back();
+        }
 
-        for ( std::pair<double, Heroes *> & hero : heroStrength ) {
+        std::sort( heroList.begin(), heroList.end(), []( const HeroValue & first, const HeroValue & second ) { return first.strength > second.strength; } );
+
+        const double medianStrength = heroList[heroList.size() / 2].strength;
+
+        for ( HeroValue & object : heroList ) {
             // TODO: a valuable hero must be marked as a champion.
-            if ( valuableHero != nullptr && hero.second == valuableHero ) {
-                hero.second->setAIRole( Heroes::Role::FIGHTER );
+            if ( valuableHero != nullptr && object.hero == valuableHero ) {
+                object.hero->setAIRole( Heroes::Role::FIGHTER );
                 continue;
             }
 
-            if ( hero.first > medianStrength * fighterStrengthMultiplier ) {
-                hero.second->setAIRole( Heroes::Role::FIGHTER );
+            if ( object.strength > medianStrength * fighterStrengthMultiplier ) {
+                object.hero->setAIRole( Heroes::Role::FIGHTER );
             }
             else {
-                hero.second->setAIRole( Heroes::Role::HUNTER );
+                object.hero->setAIRole( Heroes::Role::HUNTER );
             }
         }
     }
