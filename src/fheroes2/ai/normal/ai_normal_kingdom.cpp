@@ -290,7 +290,7 @@ namespace AI
 
     std::set<int> Normal::findCastlesInDanger( const KingdomCastles & castles, const std::vector<std::pair<int, const Army *>> & enemyArmies, int myColor )
     {
-        const uint32_t threatDistanceLimit = 2500; // 25 tiles, roughly how much maxed out hero can move in a turn
+        const uint32_t threatDistanceLimit = 3000; // 30 tiles, roughly how much maxed out hero can move in a turn
         std::set<int> castlesInDanger;
 
         for ( const std::pair<int, const Army *> & enemy : enemyArmies ) {
@@ -571,23 +571,5 @@ namespace AI
 
         // target found, buy hero
         return recruitmentCastle && recruitHero( *recruitmentCastle, !slowEarlyGame, false );
-    }
-
-    double Normal::getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType )
-    {
-        if ( !isMonsterStrengthCacheable( objectType ) ) {
-            return Army( tile ).GetStrength();
-        }
-
-        const int32_t tileId = tile.GetIndex();
-
-        auto iter = _neutralMonsterStrengthCache.find( tileId );
-        if ( iter != _neutralMonsterStrengthCache.end() ) {
-            // Cache hit.
-            return iter->second;
-        }
-
-        auto newEntry = _neutralMonsterStrengthCache.emplace( tileId, Army( tile ).GetStrength() );
-        return newEntry.first->second;
     }
 }

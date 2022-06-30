@@ -41,4 +41,22 @@ namespace AI
         if ( object != MP2::OBJ_ZERO )
             _mapObjects.emplace_back( tile.GetIndex(), object );
     }
+
+    double Normal::getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType )
+    {
+        if ( !isMonsterStrengthCacheable( objectType ) ) {
+            return Army( tile ).GetStrength();
+        }
+
+        const int32_t tileId = tile.GetIndex();
+
+        auto iter = _neutralMonsterStrengthCache.find( tileId );
+        if ( iter != _neutralMonsterStrengthCache.end() ) {
+            // Cache hit.
+            return iter->second;
+        }
+
+        auto newEntry = _neutralMonsterStrengthCache.emplace( tileId, Army( tile ).GetStrength() );
+        return newEntry.first->second;
+    }
 }
