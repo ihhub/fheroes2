@@ -746,10 +746,10 @@ namespace
                 // Adjust channel based on given parameters.
 
                 // TODO: this is very hacky way. We should not do this. For example in 3D audio mode when a hero moves alongside beach it is noticeable that ocean sounds
-                //       are 'jumping' in volume. Instead of such approach we need to get free channel ID which will be used for playback. Set volume for it and then
-                //       start playing. Such logic must be implemented within Audio related code.
-                //       As an alternative solution: we can use channel IDs which we freed in the previous step. However, be careful with synchronization for audio
-                //       access.
+                // TODO: are 'jumping' in volume. Instead of such approach we need to get free channel ID which will be used for playback. Set volume for it and then
+                // TODO: start playing. Such logic must be implemented within Audio related code.
+                // TODO: As an alternative solution: we can use channel IDs which we freed in the previous step. However, be careful with synchronization for audio
+                // TODO: access.
                 Mixer::Pause( channelId );
                 Mixer::setVolume( channelId, info.volumePercentage * soundVolume / 10 );
                 Mixer::Resume( channelId );
