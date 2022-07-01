@@ -107,6 +107,26 @@ namespace
 
         return result;
     }
+
+    std::string GetHeroRoleString( const Heroes & hero )
+    {
+        switch ( hero.getAIRole() ) {
+        case Heroes::Role::SCOUT:
+            return _( "Scout" );
+        case Heroes::Role::COURIER:
+            return _( "Courier" );
+        case Heroes::Role::HUNTER:
+            return _( "Hunter" );
+        case Heroes::Role::FIGHTER:
+            return _( "Fighter" );
+        case Heroes::Role::CHAMPION:
+            return _( "Champion" );
+        default:
+            break;
+        }
+
+        return _( "Unknown" );
+    }
 }
 
 const char * Heroes::GetName( int heroid )
@@ -1619,17 +1639,13 @@ std::string Heroes::String() const
 {
     std::ostringstream os;
 
-    os << "name            : " << name << std::endl
-       << "race            : " << Race::String( _race ) << std::endl
+    os << "name            : " << name << " (" << Race::String( _race ) << ")" << std::endl
        << "color           : " << Color::String( GetColor() ) << std::endl
        << "experience      : " << experience << std::endl
        << "level           : " << GetLevel() << std::endl
-       << "magic point     : " << GetSpellPoints() << std::endl
-       << "position x      : " << GetCenter().x << std::endl
-       << "position y      : " << GetCenter().y << std::endl
-       << "move point      : " << move_point << std::endl
-       << "max magic point : " << GetMaxSpellPoints() << std::endl
-       << "max move point  : " << GetMaxMovePoints() << std::endl
+       << "magic points    : " << GetSpellPoints() << " / " << GetMaxSpellPoints() << std::endl
+       << "position x, y   : " << GetCenter().x << ", " << GetCenter().y << std::endl
+       << "move points     : " << move_point << " / " << GetMaxMovePoints() << std::endl
        << "direction       : " << Direction::String( direction ) << std::endl
        << "index sprite    : " << sprite_index << std::endl
        << "in castle       : " << ( inCastle() ? "true" : "false" ) << std::endl
@@ -1651,7 +1667,8 @@ std::string Heroes::String() const
         os << "skills          : " << secondary_skills.String() << std::endl
            << "artifacts       : " << bag_artifacts.String() << std::endl
            << "spell book      : " << ( HaveSpellBook() ? spell_book.String() : "disabled" ) << std::endl
-           << "army dump       : " << army.String() << std::endl;
+           << "army dump       : " << army.String() << std::endl
+           << "ai role         : " << GetHeroRoleString( *this ) << std::endl;
 
         os << AI::Get().HeroesString( *this );
     }
