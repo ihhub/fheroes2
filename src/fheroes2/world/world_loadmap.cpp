@@ -168,7 +168,7 @@ bool World::LoadMapMP2( const std::string & filename )
     }
 
     if ( width == 0 || height == 0 || width != height ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "incrrect maps size" )
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "incorrect map size" )
         return false;
     }
 
@@ -733,7 +733,14 @@ void World::ProcessNewMap()
         }
 
         if ( !pool.empty() ) {
-            ultimate_artifact.Set( Rand::Get( pool ), getUltimateArtifact() );
+            const int32_t pos = Rand::Get( pool );
+
+            ultimate_artifact.Set( pos, getUltimateArtifact() );
+
+            DEBUG_LOG( DBG_GAME, DBG_INFO, "Ultimate Artifact index: " << pos )
+        }
+        else {
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "no suitable tile to place the Ultimate Artifact was found" )
         }
     }
     // There is a tile with a predefined Ultimate Artifact, pick a tile nearby in the radius specified in the artifact's properties
@@ -744,11 +751,11 @@ void World::ProcessNewMap()
         // The radius can be in the range 0 - 127, it is represented by 2 low-order bits of quantity2 and 5 high-order bits of quantity1
         const int32_t radius = ( ( ultArtTileIter->GetQuantity2() & 0x03 ) << 5 ) + ( ultArtTileIter->GetQuantity1() >> 3 );
 
-        // Remove the existing Ultimate Artifact object
+        // Remove the predefined Ultimate Artifact object
         ultArtTileIter->Remove( ultArtTileIter->GetObjectUID() );
         ultArtTileIter->setAsEmpty();
 
-        // Use the current Ultimate Artifact tile index as a fallback
+        // Use the predefined Ultimate Artifact tile index as a fallback
         int32_t pos = ultArtTileIter->GetIndex();
 
         if ( radius > 0 ) {
@@ -768,6 +775,9 @@ void World::ProcessNewMap()
         }
 
         ultimate_artifact.Set( pos, getUltimateArtifact() );
+
+        DEBUG_LOG( DBG_GAME, DBG_INFO,
+                   "predefined Ultimate Artifact index: " << ultArtTileIter->GetIndex() << ", radius: " << radius << ", Ultimate Artifact index: " << pos )
     }
 
     PostLoad( true );
