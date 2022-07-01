@@ -702,7 +702,7 @@ void World::ProcessNewMap()
     }
 
     // Search for a tile with a predefined Ultimate Artifact
-    MapsTiles::iterator ultArtTileIter
+    const MapsTiles::iterator ultArtTileIter
         = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isObject( MP2::OBJ_RNDULTIMATEARTIFACT ); } );
 
     auto checkTileForSuitabilityForUltArt = [this]( const int32_t idx ) {
