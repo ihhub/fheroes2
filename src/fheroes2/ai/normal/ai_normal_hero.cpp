@@ -1447,7 +1447,7 @@ namespace AI
         double bestTargetValue = lowestPossibleValue;
 
         for ( const Heroes * otherHero : allHeroes ) {
-            if ( !otherHero )
+            if ( !otherHero || hero.GetID() == otherHero->GetID() )
                 continue;
 
             Heroes::Role role = otherHero->getAIRole();
@@ -1481,7 +1481,7 @@ namespace AI
         bestTargetValue = lowestPossibleValue;
 
         for ( const Castle * castle : kingdom.GetCastles() ) {
-            if ( !castle )
+            if ( !castle || castle->GetHeroes().Guest() != nullptr )
                 continue;
 
             const int currentCastleIndex = castle->GetIndex();
@@ -1491,6 +1491,8 @@ namespace AI
                 continue;
 
             double value = castle->getVisitValue( hero );
+            if ( value < 250 )
+                continue;
 
             const int safetyFactor = _regions[world.GetTiles( currentCastleIndex ).GetRegion()].safetyFactor;
             if ( safetyFactor > 100 ) {
@@ -1570,6 +1572,11 @@ namespace AI
                 // Anything with positive value can override the courier's main task (i.e. castle or mine capture on the way)
                 maxPriority = 0;
                 priorityTarget = courierTarget;
+#ifdef WITH_DEBUG
+                objectType = static_cast<MP2::MapObjectType>( world.GetTiles( courierTarget ).GetObject() );
+#endif
+
+                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " courier main task is " << courierTarget )
             }
             else {
                 // If there's nothing to do as a Courier reset the role
