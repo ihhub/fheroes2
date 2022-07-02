@@ -419,6 +419,8 @@ namespace
     std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> currentAudioLoopEffects;
     bool is3DAudioLoopEffectsEnabled{ false };
 
+    std::atomic<int> currentMusicTrackId{ MUS::UNKNOWN };
+
     fheroes2::AGGFile g_midiHeroes2AGG;
     fheroes2::AGGFile g_midiHeroes2xAGG;
 
@@ -466,8 +468,6 @@ namespace
 
         return ( static_cast<uint64_t>( musicType ) << 32 ) + static_cast<uint64_t>( trackId );
     }
-
-    std::atomic<int> currentMusicTrackId{ MUS::UNKNOWN };
 
     void PlayMusicInternally( const int trackId, const MusicSource musicType, const Music::PlaybackMode playbackMode )
     {
