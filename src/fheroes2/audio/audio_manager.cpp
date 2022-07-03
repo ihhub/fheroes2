@@ -419,6 +419,8 @@ namespace
     std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> currentAudioLoopEffects;
     bool is3DAudioLoopEffectsEnabled{ false };
 
+    std::atomic<int> currentMusicTrackId{ MUS::UNKNOWN };
+
     fheroes2::AGGFile g_midiHeroes2AGG;
     fheroes2::AGGFile g_midiHeroes2xAGG;
 
@@ -476,14 +478,16 @@ namespace
 
         std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
-        if ( Game::CurrentMusicTrackId() == trackId && Music::isPlaying() ) {
+        if ( currentMusicTrackId == trackId && Music::isPlaying() ) {
             return;
         }
 
         // Check if the music track is cached.
         if ( Music::Play( musicUID, playbackMode ) ) {
             DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play cached music track " << trackId )
-            Game::SetCurrentMusicTrack( trackId );
+
+            currentMusicTrackId = trackId;
+
             return;
         }
 
@@ -514,7 +518,7 @@ namespace
             else {
                 Music::Play( musicUID, filename, playbackMode );
 
-                Game::SetCurrentMusicTrack( trackId );
+                currentMusicTrackId = trackId;
 
                 DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play music track " << MUS::getFileName( trackId, MUS::EXTERNAL_MUSIC_TYPE::MAPPED, " " ) )
 
@@ -537,9 +541,10 @@ namespace
             if ( !v.empty() ) {
                 Music::Play( musicUID, v, playbackMode );
 
-                Game::SetCurrentMusicTrack( trackId );
+                currentMusicTrackId = trackId;
             }
         }
+
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play MIDI music track " << XMI::GetString( xmi ) )
     }
 
@@ -741,10 +746,10 @@ namespace
                 // Adjust channel based on given parameters.
 
                 // TODO: this is very hacky way. We should not do this. For example in 3D audio mode when a hero moves alongside beach it is noticeable that ocean sounds
-                //       are 'jumping' in volume. Instead of such approach we need to get free channel ID which will be used for playback. Set volume for it and then
-                //       start playing. Such logic must be implemented within Audio related code.
-                //       As an alternative solution: we can use channel IDs which we freed in the previous step. However, be careful with synchronization for audio
-                //       access.
+                // TODO: are 'jumping' in volume. Instead of such approach we need to get free channel ID which will be used for playback. Set volume for it and then
+                // TODO: start playing. Such logic must be implemented within Audio related code.
+                // TODO: As an alternative solution: we can use channel IDs which we freed in the previous step. However, be careful with synchronization for audio
+                // TODO: access.
                 Mixer::Pause( channelId );
                 Mixer::setVolume( channelId, info.volumePercentage * soundVolume / 10 );
                 Mixer::Resume( channelId );
@@ -790,6 +795,30 @@ namespace AudioManager
         currentAudioLoopEffects.clear();
     }
 
+    MusicRestorer::MusicRestorer()
+        : _music( currentMusicTrackId )
+    {
+        // Do nothing.
+    }
+
+    MusicRestorer::~MusicRestorer()
+    {
+        if ( _music == MUS::UNUSED || _music == MUS::UNKNOWN ) {
+            currentMusicTrackId = _music;
+
+            return;
+        }
+
+        // Set current music to MUS::UNKNOWN to prevent attempts to play the old music by new instances of
+        // MusicRestorer while the music being currently restored is starting in the background
+        if ( _music != currentMusicTrackId ) {
+            currentMusicTrackId = MUS::UNKNOWN;
+        }
+
+        // It is assumed that the previous track was looped and should be resumed
+        PlayMusicAsync( _music, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+    }
+
     void playLoopSoundsAsync( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects )
     {
         if ( !Audio::isValid() ) {
@@ -832,7 +861,7 @@ namespace AudioManager
 
     void PlayMusic( const int trackId, const Music::PlaybackMode playbackMode )
     {
-        if ( MUS::UNUSED == trackId || MUS::UNKNOWN == trackId ) {
+        if ( trackId == MUS::UNUSED || trackId == MUS::UNKNOWN ) {
             return;
         }
 
@@ -848,7 +877,7 @@ namespace AudioManager
 
     void PlayMusicAsync( const int trackId, const Music::PlaybackMode playbackMode )
     {
-        if ( MUS::UNUSED == trackId || MUS::UNKNOWN == trackId ) {
+        if ( trackId == MUS::UNUSED || trackId == MUS::UNKNOWN ) {
             return;
         }
 
@@ -857,6 +886,26 @@ namespace AudioManager
         }
 
         g_asyncSoundManager.pushMusic( trackId, Settings::Get().MusicType(), playbackMode );
+    }
+
+    void PlayCurrentMusic()
+    {
+        if ( !Audio::isValid() ) {
+            return;
+        }
+
+        // TODO: in general, we should not remove all queued tasks here, but only tasks of the same type
+        g_asyncSoundManager.removeAllTasks();
+
+        std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
+
+        if ( currentMusicTrackId == MUS::UNUSED || currentMusicTrackId == MUS::UNKNOWN ) {
+            return;
+        }
+
+        const int trackId = currentMusicTrackId.exchange( MUS::UNKNOWN );
+
+        PlayMusicInternally( trackId, Settings::Get().MusicType(), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
 
     void stopSounds()
@@ -888,5 +937,7 @@ namespace AudioManager
 
         Music::Stop();
         Mixer::Stop();
+
+        currentMusicTrackId = MUS::UNKNOWN;
     }
 }

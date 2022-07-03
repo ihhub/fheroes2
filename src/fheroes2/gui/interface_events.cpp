@@ -372,7 +372,7 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
                 hero->ResetMovePoints();
 
                 if ( world.DiggingForUltimateArtifact( hero->GetCenter() ) ) {
-                    const Game::MusicRestorer musicRestorer;
+                    const AudioManager::MusicRestorer musicRestorer;
 
                     if ( Settings::Get().MusicMIDI() ) {
                         AudioManager::PlaySound( M82::TREASURE );

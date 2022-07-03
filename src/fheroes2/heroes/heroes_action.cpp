@@ -248,7 +248,8 @@ void Heroes::Action( int tileIndex, bool isDestination )
 {
     if ( GetKingdom().isControlAI() ) {
         // Restore the original music after the action is completed.
-        const Game::MusicRestorer musicRestorer;
+        const AudioManager::MusicRestorer musicRestorer;
+
         return AI::HeroesAction( *this, tileIndex );
     }
 
@@ -261,14 +262,13 @@ void Heroes::Action( int tileIndex, bool isDestination )
     }
 
     // Restore the original music after the action is completed.
-    const Game::MusicRestorer musicRestorer;
+    const AudioManager::MusicRestorer musicRestorer;
 
     Maps::Tiles & tile = world.GetTiles( tileIndex );
     const MP2::MapObjectType objectType = tile.GetObject( tileIndex != heroPosIndex );
 
     const int objectMusicTrack = MUS::FromMapObject( objectType );
     if ( objectMusicTrack != MUS::UNKNOWN ) {
-        // Since it is a synchronous call all previous music tracks will be removed from a queue for an asynchronous playback.
         AudioManager::PlayMusic( objectMusicTrack, Music::PlaybackMode::PLAY_ONCE );
     }
 

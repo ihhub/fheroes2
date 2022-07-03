@@ -398,7 +398,7 @@ namespace fheroes2
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::AudioSettings:
-                Dialog::openAudioSettingsDialog();
+                Dialog::openAudioSettingsDialog( false );
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::InterfaceTheme:

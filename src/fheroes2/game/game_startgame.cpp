@@ -264,7 +264,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
 void ShowNewWeekDialog()
 {
     // restore the original music on exit
-    const Game::MusicRestorer musicRestorer;
+    const AudioManager::MusicRestorer musicRestorer;
 
     AudioManager::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, Music::PlaybackMode::PLAY_ONCE );
 
@@ -606,8 +606,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
-                    // reset environment sounds and music theme at the beginning of the human turn
-                    Game::SetCurrentMusicTrack( MUS::UNKNOWN );
+                    // Reset environment sounds and music theme at the beginning of the human turn
                     AudioManager::ResetAudio();
 
                     if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
@@ -621,7 +620,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
                         display.render();
 
                         // reset the music after closing the dialog
-                        const Game::MusicRestorer musicRestorer;
+                        const AudioManager::MusicRestorer musicRestorer;
 
                         AudioManager::PlayMusic( MUS::NEW_MONTH, Music::PlaybackMode::PLAY_ONCE );
 
@@ -645,7 +644,6 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     }
 
                     // Reset environment sounds and music theme at the end of the human turn.
-                    Game::SetCurrentMusicTrack( MUS::UNKNOWN );
                     AudioManager::ResetAudio();
 
                     break;
@@ -742,8 +740,6 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     statusWindow.Reset();
     gameArea.SetUpdateCursor();
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
-
-    Game::EnvironmentSoundMixer();
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
