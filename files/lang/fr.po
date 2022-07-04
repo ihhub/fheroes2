@@ -1588,7 +1588,7 @@ msgid ""
 "The kingdom will have %{amount} less %{resource} at the start of the "
 "scenario."
 msgstr ""
-"Le royaume obtiendra %{amount} ressources de moins en %{resource} au début "
+"Le royaume aura %{amount} ressource en %{resource} de moins au début "
 "du scénario."
 
 msgid ""
