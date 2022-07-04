@@ -45,7 +45,9 @@ namespace
             : hero( inHero )
             , strength( inStrength )
             , stats( inStats )
-        {}
+        {
+            // Do nothing.
+        }
     };
 
     void setHeroRoles( KingdomHeroes & heroes )

@@ -1438,6 +1438,7 @@ namespace AI
 
     int Normal::getCourierMainTarget( const Heroes & hero, double lowestPossibleValue ) const
     {
+        assert( hero.getAIRole() == Heroes::Role::COURIER );
         int targetIndex = -1;
 
         const Kingdom & kingdom = hero.GetKingdom();
