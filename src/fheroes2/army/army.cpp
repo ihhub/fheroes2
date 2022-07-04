@@ -1186,7 +1186,7 @@ std::string Army::String() const
     os << "color(" << Color::String( commander ? commander->GetColor() : color ) << "), ";
 
     if ( GetCommander() )
-        os << "commander(" << GetCommander()->GetName() << "), ";
+        os << "commander(" << GetCommander()->GetName() << ")";
 
     os << ": ";
 

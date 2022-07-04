@@ -377,7 +377,7 @@ namespace AI
         _neutralMonsterStrengthCache.clear();
 
         DEBUG_LOG( DBG_AI, DBG_INFO, Color::String( myColor ) << " starts the turn: " << castles.size() << " castles, " << heroes.size() << " heroes" )
-        DEBUG_LOG( DBG_AI, DBG_TRACE, "Funds: " << kingdom.GetFunds().String() )
+        DEBUG_LOG( DBG_AI, DBG_INFO, "Funds: " << kingdom.GetFunds().String() )
 
         // Step 1. Scan visible map (based on game difficulty), add goals and threats
         bool underViewSpell = false;
