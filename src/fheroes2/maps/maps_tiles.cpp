@@ -1862,6 +1862,50 @@ void Maps::Tiles::fixTileObjectType( Tiles & tile )
         return;
     }
 
+    // On some maps (apparently created by some non-standard editor), the object type on tiles with random monsters does not match the index
+    // of the monster placeholder sprite. While this engine looks at the object type when placing an actual monster on a tile, the original
+    // HoMM2 apparently looks at the placeholder sprite, so we need to keep them in sync.
+    if ( originalICN == ICN::MONS32 ) {
+        MP2::MapObjectType monsterObjectType = originalObjectType;
+
+        const uint8_t originalObjectSpriteIndex = tile.GetObjectSpriteIndex();
+        switch ( originalObjectSpriteIndex ) {
+        // Random monster placeholder "MON"
+        case 66:
+            monsterObjectType = MP2::OBJ_RNDMONSTER;
+            break;
+        // Random monster placeholder "MON 1"
+        case 67:
+            monsterObjectType = MP2::OBJ_RNDMONSTER1;
+            break;
+        // Random monster placeholder "MON 2"
+        case 68:
+            monsterObjectType = MP2::OBJ_RNDMONSTER2;
+            break;
+        // Random monster placeholder "MON 3"
+        case 69:
+            monsterObjectType = MP2::OBJ_RNDMONSTER3;
+            break;
+        // Random monster placeholder "MON 4"
+        case 70:
+            monsterObjectType = MP2::OBJ_RNDMONSTER4;
+            break;
+        default:
+            break;
+        }
+
+        if ( monsterObjectType != originalObjectType ) {
+            tile.SetObject( monsterObjectType );
+
+            DEBUG_LOG( DBG_GAME, DBG_WARN,
+                       "Invalid object type index " << tile._index << ": type " << MP2::StringObject( originalObjectType ) << ", object sprite index "
+                                                    << static_cast<int>( originalObjectSpriteIndex ) << ", corrected type " << MP2::StringObject( monsterObjectType ) )
+
+            // There is no need to check the rest of things as we fixed this object.
+            return;
+        }
+    }
+
     // Fix The Price of Loyalty objects even if the map is The Succession Wars type.
     switch ( originalObjectType ) {
     case MP2::OBJ_UNKNW_79:
@@ -2698,7 +2742,7 @@ int32_t Maps::Tiles::getIndexOfMainTile( const Maps::Tiles & tile )
     }
 
     // Most likely we have a broken object put by an editor.
-    DEBUG_LOG( DBG_GAME, DBG_WARN, "Tile " << tileIndex << " of type " << MP2::StringObject( objectType ) << " has no parent tile." )
+    DEBUG_LOG( DBG_GAME, DBG_TRACE, "Tile " << tileIndex << " of type " << MP2::StringObject( objectType ) << " has no parent tile." )
     return -1;
 }
 

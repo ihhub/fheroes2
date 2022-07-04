@@ -649,6 +649,7 @@ namespace
         switch ( hero.getAIRole() ) {
         case Heroes::Role::HUNTER:
             return -dangerousTaskPenalty;
+        case Heroes::Role::COURIER:
         case Heroes::Role::FIGHTER:
             return -dangerousTaskPenalty * 2;
         default:
@@ -681,8 +682,12 @@ namespace AI
             if ( !castle )
                 return valueToIgnore;
 
+            const bool critical = isCriticalTask( index );
             if ( hero.GetColor() == castle->GetColor() ) {
                 double value = castle->getVisitValue( hero );
+                if ( critical )
+                    return 10000 + value;
+
                 if ( value < 500 )
                     return valueToIgnore;
 
@@ -703,15 +708,14 @@ namespace AI
             }
 
             double value = castle->getBuildingValue() * 150.0 + 3000;
-            if ( hero.isLosingGame() )
+            if ( critical || hero.isLosingGame() )
                 value += 15000;
             // If the castle is defenseless
             if ( !castle->GetActualArmy().isValid() )
                 value *= 1.25;
 
-            if ( isCastleLossConditionForHuman( castle ) ) {
+            if ( isCastleLossConditionForHuman( castle ) )
                 value += 20000;
-            }
 
             return value;
         }
@@ -749,7 +753,8 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            return 5000.0;
+            // focus on enemy hero if there's priority set (i.e. hero is threatning our castle)
+            return isCriticalTask( index ) ? 12000.0 : 5000.0;
         }
         else if ( objectType == MP2::OBJ_MONSTER ) {
             return 1000.0;
@@ -787,14 +792,9 @@ namespace AI
         else if ( objectType == MP2::OBJ_XANADU ) {
             return 3000.0;
         }
-        else if ( objectType == MP2::OBJ_SHRINE1 ) {
-            return 100;
-        }
-        else if ( objectType == MP2::OBJ_SHRINE2 ) {
-            return 250;
-        }
-        else if ( objectType == MP2::OBJ_SHRINE3 ) {
-            return 500;
+        else if ( objectType == MP2::OBJ_SHRINE1 || objectType == MP2::OBJ_SHRINE2 || objectType == MP2::OBJ_SHRINE3 ) {
+            const Spell & spell = tile.QuantitySpell();
+            return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() );
         }
         else if ( MP2::isHeroUpgradeObject( objectType ) ) {
             return 500.0;
@@ -960,8 +960,12 @@ namespace AI
             if ( !castle )
                 return valueToIgnore;
 
+            const bool critical = isCriticalTask( index );
             if ( hero.GetColor() == castle->GetColor() ) {
                 double value = castle->getVisitValue( hero );
+                if ( critical )
+                    return 15000 + value;
+
                 if ( value < 500 )
                     return valueToIgnore;
 
@@ -982,15 +986,15 @@ namespace AI
             }
 
             double value = castle->getBuildingValue() * 500.0 + 15000;
-            if ( hero.isLosingGame() )
+            if ( critical || hero.isLosingGame() )
                 value += 15000;
             // If the castle is defenseless
+            // This modifier shouldn't be too high to avoid players baiting AI in
             if ( !castle->GetActualArmy().isValid() )
-                value *= 2.5;
+                value *= 1.5;
 
-            if ( isCastleLossConditionForHuman( castle ) ) {
+            if ( isCastleLossConditionForHuman( castle ) )
                 value += 20000;
-            }
 
             return value;
         }
@@ -1028,7 +1032,7 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            return 12000.0;
+            return isCriticalTask( index ) ? 20000.0 : 12000.0;
         }
         else if ( objectType == MP2::OBJ_MONSTER ) {
             return anotherFriendlyHeroPresent ? 4000.0 : 1000.0;
@@ -1070,14 +1074,9 @@ namespace AI
         else if ( objectType == MP2::OBJ_XANADU ) {
             return 3000.0;
         }
-        else if ( objectType == MP2::OBJ_SHRINE1 ) {
-            return 250;
-        }
-        else if ( objectType == MP2::OBJ_SHRINE2 ) {
-            return 500;
-        }
-        else if ( objectType == MP2::OBJ_SHRINE3 ) {
-            return 500;
+        else if ( objectType == MP2::OBJ_SHRINE1 || objectType == MP2::OBJ_SHRINE2 || objectType == MP2::OBJ_SHRINE3 ) {
+            const Spell & spell = tile.QuantitySpell();
+            return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() );
         }
         else if ( MP2::isHeroUpgradeObject( objectType ) ) {
             return 1250.0;
@@ -1227,6 +1226,198 @@ namespace AI
         return 0;
     }
 
+    double Normal::getCourierObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
+    {
+        // Courier should focus on its main task and visit other objects only if it's close to the destination
+        assert( hero.getAIRole() == Heroes::Role::COURIER );
+
+        // Values (n logn) for pre-defined distances where AI courier would consider taking a detour to visit those
+        const double twoTiles = 500;
+        const double fiveTiles = 1400;
+        const double tenTiles = 3000;
+
+        const Maps::Tiles & tile = world.GetTiles( index );
+        const MP2::MapObjectType objectType = tile.GetObject();
+
+        if ( objectType == MP2::OBJ_CASTLE ) {
+            const Castle * castle = world.getCastleEntrance( Maps::GetPoint( index ) );
+            if ( !castle )
+                return valueToIgnore;
+
+            const bool critical = isCriticalTask( index );
+            if ( hero.GetColor() == castle->GetColor() ) {
+                double value = castle->getVisitValue( hero );
+                if ( critical )
+                    return 10000 + value;
+
+                if ( value < 500 )
+                    return valueToIgnore;
+
+                return value;
+            }
+
+            // Hero should never visit castles belonging to friendly kingdoms
+            if ( hero.isFriends( castle->GetColor() ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            // WINS_HERO victory condition does not apply to AI-controlled players, we have to ignore the castle with this hero
+            // to keep him alive for the human player
+            if ( isHeroWhoseDefeatIsVictoryConditionForHumanInCastle( castle ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            double value = castle->getBuildingValue() * 150.0 + 3000;
+            if ( critical || hero.isLosingGame() )
+                value += 15000;
+            // If the castle is defenseless
+            if ( !castle->GetActualArmy().isValid() )
+                value *= 1.25;
+
+            if ( isCastleLossConditionForHuman( castle ) )
+                value += 20000;
+
+            return value;
+        }
+        else if ( objectType == MP2::OBJ_HEROES ) {
+            const Heroes * otherHero = tile.GetHeroes();
+            assert( otherHero );
+            if ( !otherHero ) {
+                return valueToIgnore;
+            }
+
+            if ( hero.GetColor() == otherHero->GetColor() ) {
+                // Will be handled by the main task
+                return valueToIgnore;
+            }
+
+            // Hero should never meet heroes from friendly kingdoms
+            if ( hero.isFriends( otherHero->GetColor() ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            // WINS_HERO victory condition does not apply to AI-controlled players, we have to keep this hero alive for the human player
+            if ( otherHero == world.GetHeroesCondWins() ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            // focus on enemy hero if there's priority set (i.e. hero is threatning our castle)
+            return isCriticalTask( index ) ? 10000.0 : tenTiles;
+        }
+        else if ( objectType == MP2::OBJ_MONSTER ) {
+            return twoTiles;
+        }
+        else if ( objectType == MP2::OBJ_MINES || objectType == MP2::OBJ_SAWMILL || objectType == MP2::OBJ_ALCHEMYLAB ) {
+            if ( tile.QuantityColor() == hero.GetColor() ) {
+                return -dangerousTaskPenalty; // don't even attempt to go here
+            }
+            return ( tile.QuantityResourceCount().first == Resource::GOLD ) ? tenTiles : fiveTiles;
+        }
+        else if ( MP2::isArtifactObject( objectType ) && tile.QuantityArtifact().isValid() ) {
+            const Artifact art = tile.QuantityArtifact();
+
+            // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
+            if ( isFindArtifactVictoryConditionForHuman( art ) ) {
+                assert( 0 );
+                return -dangerousTaskPenalty;
+            }
+
+            return 1000.0 * art.getArtifactValue();
+        }
+        else if ( MP2::isPickupObject( objectType ) ) {
+            return twoTiles;
+        }
+        else if ( MP2::isCaptureObject( objectType ) && MP2::isQuantityObject( objectType ) ) {
+            // Objects like WATERWHEEL, WINDMILL and MAGICGARDEN if capture setting is enabled
+            return twoTiles;
+        }
+        else if ( objectType == MP2::OBJ_XANADU ) {
+            return fiveTiles;
+        }
+        else if ( objectType == MP2::OBJ_SHRINE1 || objectType == MP2::OBJ_SHRINE2 || objectType == MP2::OBJ_SHRINE3 ) {
+            const Spell & spell = tile.QuantitySpell();
+            return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() );
+        }
+        else if ( MP2::isHeroUpgradeObject( objectType ) ) {
+            return fiveTiles;
+        }
+        else if ( MP2::isMonsterDwelling( objectType ) ) {
+            return tile.QuantityTroop().GetStrength();
+        }
+        else if ( objectType == MP2::OBJ_OBSERVATIONTOWER ) {
+            const int fogCountToUncover
+                = Maps::getFogTileCountToBeRevealed( index, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::OBSERVATION_TOWER ), hero.GetColor() );
+            if ( fogCountToUncover <= 0 ) {
+                // Nothing to uncover.
+                return -dangerousTaskPenalty;
+            }
+            return fogCountToUncover;
+        }
+        else if ( objectType == MP2::OBJ_MAGICWELL || objectType == MP2::OBJ_ARTESIANSPRING ) {
+            if ( !hero.HaveSpellBook() || hero.GetSpellPoints() * 2 >= hero.GetMaxSpellPoints() ) {
+                return -dangerousTaskPenalty; // no reason to visit the well with no magic book or with half of points
+            }
+            return hero.isPotentSpellcaster() ? fiveTiles : 0;
+        }
+        else if ( objectType == MP2::OBJ_STABLES ) {
+            const int daysActive = DAYOFWEEK - world.GetDay() + 1;
+            double movementBonus = daysActive * 400.0 - 2.0 * distanceToObject;
+            if ( movementBonus < 0 ) {
+                // Looks like this is too far away.
+                movementBonus = 0;
+            }
+
+            const double upgradeValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::CHAMPION );
+            return movementBonus + freeMonsterUpgradeModifier * upgradeValue;
+        }
+        else if ( objectType == MP2::OBJ_FREEMANFOUNDRY ) {
+            const double upgradePikemanValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::PIKEMAN );
+            const double upgradeSwordsmanValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::SWORDSMAN );
+            const double upgradeGolemValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::IRON_GOLEM );
+
+            return freeMonsterUpgradeModifier * ( upgradePikemanValue + upgradeSwordsmanValue + upgradeGolemValue );
+        }
+        else if ( objectType == MP2::OBJ_HILLFORT ) {
+            const double upgradeDwarfValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::DWARF );
+            const double upgradeOrcValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::ORC );
+            const double upgradeOgreValue = getMonsterUpgradeValue( hero.GetArmy(), Monster::OGRE );
+
+            return freeMonsterUpgradeModifier * ( upgradeDwarfValue + upgradeOrcValue + upgradeOgreValue );
+        }
+        else if ( objectType == MP2::OBJ_TRAVELLERTENT ) {
+            // Most likely it'll lead to opening more land.
+            return 1000;
+        }
+        else if ( objectType == MP2::OBJ_OASIS ) {
+            return std::max( 800.0 - 2.0 * distanceToObject, 0.0 );
+        }
+        else if ( objectType == MP2::OBJ_WATERINGHOLE ) {
+            return std::max( 400.0 - 2.0 * distanceToObject, 0.0 );
+        }
+        else if ( objectType == MP2::OBJ_JAIL ) {
+            // A free hero is always good and it could be very powerful.
+            return fiveTiles;
+        }
+        else if ( objectType == MP2::OBJ_GAZEBO ) {
+            // Free 1000 experience. We need to calculate value of this object based on hero's experience. The higher hero's level the less valueable this object is.
+            const uint32_t heroExperience = hero.GetExperience();
+            const uint32_t nextLevelExperience = Heroes::GetExperienceFromLevel( Heroes::GetLevelFromExperience( heroExperience ) );
+            const uint32_t neededExperience = nextLevelExperience - heroExperience;
+            if ( neededExperience < 1000 ) {
+                // A new level. Have to visit.
+                return 1000;
+            }
+
+            return 1000.0 * 1000.0 / neededExperience;
+        }
+
+        return valueToIgnore;
+    }
+
     double Normal::getObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
     {
         switch ( hero.getAIRole() ) {
@@ -1234,6 +1425,8 @@ namespace AI
             return getHunterObjectValue( hero, index, valueToIgnore, distanceToObject );
         case Heroes::Role::FIGHTER:
             return getFighterObjectValue( hero, index, valueToIgnore, distanceToObject );
+        case Heroes::Role::COURIER:
+            return getCourierObjectValue( hero, index, valueToIgnore, distanceToObject );
         default:
             // If you set a new type of a hero you must add the logic here.
             assert( 0 );
@@ -1243,9 +1436,87 @@ namespace AI
         return 0;
     }
 
+    int Normal::getCourierMainTarget( const Heroes & hero, double lowestPossibleValue ) const
+    {
+        assert( hero.getAIRole() == Heroes::Role::COURIER );
+        int targetIndex = -1;
+
+        const Kingdom & kingdom = hero.GetKingdom();
+        const KingdomHeroes & allHeroes = kingdom.GetHeroes();
+
+        // Check if we have army and should bring it to friendly hero first
+        double bestTargetValue = lowestPossibleValue;
+
+        for ( const Heroes * otherHero : allHeroes ) {
+            if ( !otherHero || hero.GetID() == otherHero->GetID() )
+                continue;
+
+            Heroes::Role role = otherHero->getAIRole();
+            if ( role == Heroes::Role::COURIER || role == Heroes::Role::SCOUT )
+                continue;
+
+            const int currentHeroIndex = otherHero->GetIndex();
+            const uint32_t dist = _pathfinder.getDistance( currentHeroIndex );
+            if ( dist == 0 || hero.hasMetWithHero( otherHero->GetID() ) )
+                continue;
+
+            double value = hero.getMeetingValue( *otherHero );
+            if ( value < 500 )
+                continue;
+
+            if ( role == Heroes::Role::CHAMPION ) {
+                value *= 2.5;
+            }
+            value -= dist;
+
+            if ( value > bestTargetValue ) {
+                bestTargetValue = value;
+                targetIndex = currentHeroIndex;
+            }
+        }
+
+        if ( targetIndex != -1 )
+            return targetIndex;
+
+        // Reset the max value
+        bestTargetValue = lowestPossibleValue;
+
+        for ( const Castle * castle : kingdom.GetCastles() ) {
+            if ( !castle || castle->GetHeroes().Guest() != nullptr )
+                continue;
+
+            const int currentCastleIndex = castle->GetIndex();
+            const uint32_t dist = _pathfinder.getDistance( currentCastleIndex );
+
+            if ( dist == 0 )
+                continue;
+
+            double value = castle->getVisitValue( hero );
+            if ( value < 250 )
+                continue;
+
+            const int safetyFactor = _regions[world.GetTiles( currentCastleIndex ).GetRegion()].safetyFactor;
+            if ( safetyFactor > 100 ) {
+                value *= 2;
+            }
+            else if ( safetyFactor < 0 ) {
+                value /= 2;
+            }
+
+            // additional distance scaling is not required since Couriers are meant to travel far
+            value -= dist;
+
+            if ( value > bestTargetValue ) {
+                bestTargetValue = value;
+                targetIndex = currentCastleIndex;
+            }
+        }
+        return targetIndex;
+    }
+
     int AI::Normal::getPriorityTarget( const HeroToMove & heroInfo, double & maxPriority )
     {
-        const Heroes & hero = *heroInfo.hero;
+        Heroes & hero = *heroInfo.hero;
         const double lowestPossibleValue = -1.0 * Maps::Ground::slowestMovePenalty * world.getSize();
         const bool heroInPatrolMode = heroInfo.patrolCenter != -1;
         const double heroStrength = hero.GetArmy().GetStrength();
@@ -1294,6 +1565,25 @@ namespace AI
 
             value = ScaleWithDistance( value, distance );
         };
+
+        // Set baseline target if it's a special role
+        if ( hero.getAIRole() == Heroes::Role::COURIER ) {
+            const int courierTarget = getCourierMainTarget( hero, lowestPossibleValue );
+            if ( courierTarget != -1 ) {
+                // Anything with positive value can override the courier's main task (i.e. castle or mine capture on the way)
+                maxPriority = 0;
+                priorityTarget = courierTarget;
+#ifdef WITH_DEBUG
+                objectType = static_cast<MP2::MapObjectType>( world.GetTiles( courierTarget ).GetObject() );
+#endif
+
+                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " courier main task is " << courierTarget )
+            }
+            else {
+                // If there's nothing to do as a Courier reset the role
+                hero.setAIRole( Heroes::Role::HUNTER );
+            }
+        }
 
         for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
             const IndexObject & node = _mapObjects[idx];
@@ -1355,18 +1645,24 @@ namespace AI
         return priorityTarget;
     }
 
-    void Normal::HeroesActionComplete( Heroes & hero, const MP2::MapObjectType objectType )
+    void Normal::HeroesActionComplete( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType )
     {
         Castle * castle = hero.inCastleMutable();
         if ( castle ) {
-            ReinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
+            reinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
         }
 
         if ( isMonsterStrengthCacheable( objectType ) ) {
-            // An object can be at the same tile at the hero or on a neighbouring tile so erase all tiles around the hero including the tile where the hero is standing.
-            const int32_t heroIndex = hero.GetIndex();
-            for ( int32_t offset : { 0, 1, -1, world.w(), world.w() + 1, world.w() - 1, -world.w(), -world.w() + 1, -world.w() - 1 } ) {
-                _neutralMonsterStrengthCache.erase( heroIndex + offset );
+            _neutralMonsterStrengthCache.erase( tileIndex );
+        }
+        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HEROES ) {
+            const auto it = _priorityTargets.find( tileIndex );
+            if ( it != _priorityTargets.end() ) {
+                if ( it->second == PriorityTask::DEFEND ) {
+                    hero.SetModes( Heroes::SLEEPER );
+                }
+
+                _priorityTargets.erase( it );
             }
         }
     }

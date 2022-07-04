@@ -107,6 +107,28 @@ namespace
 
         return result;
     }
+
+    std::string GetHeroRoleString( const Heroes & hero )
+    {
+        switch ( hero.getAIRole() ) {
+        case Heroes::Role::SCOUT:
+            return "Scout";
+        case Heroes::Role::COURIER:
+            return "Courier";
+        case Heroes::Role::HUNTER:
+            return "Hunter";
+        case Heroes::Role::FIGHTER:
+            return "Fighter";
+        case Heroes::Role::CHAMPION:
+            return "Champion";
+        default:
+            // Did you add a new AI hero role? Add the appropriate logic for it!
+            assert( 0 );
+            break;
+        }
+
+        return "Unknown";
+    }
 }
 
 const char * Heroes::GetName( int heroid )
@@ -146,7 +168,6 @@ const char * Heroes::GetName( int heroid )
 
 Heroes::Heroes()
     : experience( 0 )
-    , move_point_scale( -1 )
     , army( this )
     , hid( UNKNOWN )
     , portrait( UNKNOWN )
@@ -176,7 +197,6 @@ Heroes::Heroes( int heroid, int rc )
     : HeroBase( HeroBase::HEROES, rc )
     , ColorBase( Color::NONE )
     , experience( GetStartingXp() )
-    , move_point_scale( -1 )
     , secondary_skills( rc )
     , army( this )
     , hid( heroid )
@@ -674,7 +694,6 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
     if ( !Modes( SAVEMP ) ) {
         move_point = GetMaxMovePoints();
     }
-    MovePointsScaleFixed();
 
     if ( !army.isValid() ) {
         army.Reset( false );
@@ -709,7 +728,6 @@ void Heroes::ActionNewDay()
 {
     // recovery move points
     move_point = GetMaxMovePoints();
-    MovePointsScaleFixed();
 
     // replenish spell points
     ReplenishSpellPoints();
@@ -1433,7 +1451,6 @@ void Heroes::SetFreeman( int reason )
         SetIndex( -1 );
 
         modes = 0;
-        move_point_scale = -1;
 
         path.Reset();
 
@@ -1475,7 +1492,7 @@ void Heroes::SetMapsObject( const MP2::MapObjectType objectType )
 
 void Heroes::ActionPreBattle()
 {
-    // Do nothing.
+    spell_book.resetState();
 }
 
 void Heroes::ActionNewPosition( const bool allowMonsterAttack )
@@ -1619,17 +1636,13 @@ std::string Heroes::String() const
 {
     std::ostringstream os;
 
-    os << "name            : " << name << std::endl
-       << "race            : " << Race::String( _race ) << std::endl
+    os << "name            : " << name << " (" << Race::String( _race ) << ")" << std::endl
        << "color           : " << Color::String( GetColor() ) << std::endl
        << "experience      : " << experience << std::endl
        << "level           : " << GetLevel() << std::endl
-       << "magic point     : " << GetSpellPoints() << std::endl
-       << "position x      : " << GetCenter().x << std::endl
-       << "position y      : " << GetCenter().y << std::endl
-       << "move point      : " << move_point << std::endl
-       << "max magic point : " << GetMaxSpellPoints() << std::endl
-       << "max move point  : " << GetMaxMovePoints() << std::endl
+       << "magic points    : " << GetSpellPoints() << " / " << GetMaxSpellPoints() << std::endl
+       << "position x, y   : " << GetCenter().x << ", " << GetCenter().y << std::endl
+       << "move points     : " << move_point << " / " << GetMaxMovePoints() << std::endl
        << "direction       : " << Direction::String( direction ) << std::endl
        << "index sprite    : " << sprite_index << std::endl
        << "in castle       : " << ( inCastle() ? "true" : "false" ) << std::endl
@@ -1651,7 +1664,8 @@ std::string Heroes::String() const
         os << "skills          : " << secondary_skills.String() << std::endl
            << "artifacts       : " << bag_artifacts.String() << std::endl
            << "spell book      : " << ( HaveSpellBook() ? spell_book.String() : "disabled" ) << std::endl
-           << "army dump       : " << army.String() << std::endl;
+           << "army dump       : " << army.String() << std::endl
+           << "ai role         : " << GetHeroRoleString( *this ) << std::endl;
 
         os << AI::Get().HeroesString( *this );
     }
@@ -1945,8 +1959,8 @@ StreamBase & operator<<( StreamBase & msg, const Heroes & hero )
     msg << base;
 
     // Heroes
-    msg << hero.name << col << hero.experience << hero.move_point_scale << hero.secondary_skills << hero.army << hero.hid << hero.portrait << hero._race
-        << hero.save_maps_object << hero.path << hero.direction << hero.sprite_index;
+    msg << hero.name << col << hero.experience << hero.secondary_skills << hero.army << hero.hid << hero.portrait << hero._race << hero.save_maps_object << hero.path
+        << hero.direction << hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
     const int16_t patrolX = static_cast<int16_t>( hero.patrol_center.x );
@@ -1975,8 +1989,16 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
         msg >> dummyColor;
     }
 
-    msg >> hero.experience >> hero.move_point_scale >> hero.secondary_skills >> hero.army >> hero.hid >> hero.portrait >> hero._race >> hero.save_maps_object >> hero.path
-        >> hero.direction >> hero.sprite_index;
+    msg >> hero.experience;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0917_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_0917_RELEASE ) {
+        int32_t dummy;
+
+        msg >> dummy;
+    }
+
+    msg >> hero.secondary_skills >> hero.army >> hero.hid >> hero.portrait >> hero._race >> hero.save_maps_object >> hero.path >> hero.direction >> hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
     int16_t patrolX = 0;

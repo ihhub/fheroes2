@@ -500,7 +500,7 @@ namespace AI
 
         // ignore empty tiles
         if ( isAction )
-            AI::Get().HeroesActionComplete( hero, objectType );
+            AI::Get().HeroesActionComplete( hero, dst_index, objectType );
     }
 
     void AIToHeroes( Heroes & hero, int32_t dst_index )

@@ -60,7 +60,6 @@ namespace
     std::string last_name;
 
     bool updateSoundsOnFocusUpdate = true;
-    std::atomic<int> currentMusicTrackId{ MUS::UNKNOWN };
 
     uint32_t maps_animation_frame = 0;
 
@@ -205,7 +204,7 @@ bool Game::UpdateSoundsOnFocusUpdate()
     return updateSoundsOnFocusUpdate;
 }
 
-void Game::SetUpdateSoundsOnFocusUpdate( bool update )
+void Game::SetUpdateSoundsOnFocusUpdate( const bool update )
 {
     updateSoundsOnFocusUpdate = update;
 }
@@ -223,16 +222,6 @@ void Game::Init()
     Game::AnimateDelaysInitialize();
 
     Game::HotKeysLoad( Settings::GetLastFile( "", "fheroes2.key" ) );
-}
-
-int Game::CurrentMusicTrackId()
-{
-    return currentMusicTrackId;
-}
-
-void Game::SetCurrentMusicTrack( const int trackId )
-{
-    currentMusicTrackId = trackId;
 }
 
 void Game::ObjectFadeAnimation::PrepareFadeTask( const MP2::MapObjectType objectType, int32_t fromIndex, int32_t toIndex, bool fadeOut, bool fadeIn )
@@ -468,12 +457,11 @@ void Game::EnvironmentSoundMixer()
         }
     }
 
-    AudioManager::playLoopSounds( std::move( soundEffects ), true );
+    AudioManager::playLoopSoundsAsync( std::move( soundEffects ) );
 }
 
 void Game::restoreSoundsForCurrentFocus()
 {
-    Game::SetCurrentMusicTrack( MUS::UNKNOWN );
     AudioManager::ResetAudio();
 
     switch ( Interface::GetFocusType() ) {
