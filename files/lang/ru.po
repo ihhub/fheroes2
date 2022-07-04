@@ -2021,8 +2021,8 @@ msgstr "Стоунхендж"
 msgid "Fenced Meadow"
 msgstr "Огороженная лужайка"
 
-msgid "Red Tower"
-msgstr "Красная башня"
+msgid "sorceress|Red Tower"
+msgstr "Алая башня"
 
 msgid "Dungeon"
 msgstr "Сокровищница"
@@ -2050,6 +2050,9 @@ msgstr "Болото"
 
 msgid "Green Tower"
 msgstr "Зелёная башня"
+
+msgid "warlock|Red Tower"
+msgstr "Красная башня"
 
 msgid "Black Tower"
 msgstr "Чёрная башня"

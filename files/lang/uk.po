@@ -2090,7 +2090,7 @@ msgid "Fenced Meadow"
 msgstr ""
 
 #, fuzzy
-msgid "Red Tower"
+msgid "sorceress|Red Tower"
 msgstr "Червона вежа"
 
 #, fuzzy
@@ -2128,6 +2128,10 @@ msgstr "Болото"
 #, fuzzy
 msgid "Green Tower"
 msgstr "Зелена вежа"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Червона вежа"
 
 #, fuzzy
 msgid "Black Tower"

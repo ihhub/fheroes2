@@ -2002,7 +2002,8 @@ msgstr "Grand cromlech"
 msgid "Fenced Meadow"
 msgstr "Pré"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Tour rouge"
 
 msgid "Dungeon"
@@ -2031,6 +2032,10 @@ msgstr "Marais"
 
 msgid "Green Tower"
 msgstr "Tour verte"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Tour rouge"
 
 msgid "Black Tower"
 msgstr "Tour noire"

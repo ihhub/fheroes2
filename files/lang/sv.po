@@ -1969,7 +1969,8 @@ msgstr "Uppg. Stonehenge"
 msgid "Fenced Meadow"
 msgstr "Inhägnad äng"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Rött torn"
 
 msgid "Dungeon"
@@ -1998,6 +1999,10 @@ msgstr "Träsk"
 
 msgid "Green Tower"
 msgstr "Grönt torn"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Rött torn"
 
 msgid "Black Tower"
 msgstr "Svart torn"

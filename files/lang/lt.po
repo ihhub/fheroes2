@@ -1867,7 +1867,8 @@ msgstr ""
 msgid "Fenced Meadow"
 msgstr "Aptverta pieva"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Raudonas bokštas"
 
 msgid "Dungeon"
@@ -1896,6 +1897,10 @@ msgstr "Pelkė"
 
 msgid "Green Tower"
 msgstr "Žalias bokštas"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Raudonas bokštas"
 
 msgid "Black Tower"
 msgstr "Juodas bokštas"

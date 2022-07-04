@@ -1771,7 +1771,7 @@ msgstr ""
 msgid "Fenced Meadow"
 msgstr ""
 
-msgid "Red Tower"
+msgid "sorceress|Red Tower"
 msgstr ""
 
 msgid "Dungeon"
@@ -1799,6 +1799,9 @@ msgid "Swamp"
 msgstr ""
 
 msgid "Green Tower"
+msgstr ""
+
+msgid "warlock|Red Tower"
 msgstr ""
 
 msgid "Black Tower"

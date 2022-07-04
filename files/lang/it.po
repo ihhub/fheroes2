@@ -1888,7 +1888,8 @@ msgstr "Migl. Dolmen"
 msgid "Fenced Meadow"
 msgstr "Prato Recintato"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Torre Rossa"
 
 msgid "Dungeon"
@@ -1917,6 +1918,10 @@ msgstr "Palude"
 
 msgid "Green Tower"
 msgstr "Torre Verde"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Torre Rossa"
 
 msgid "Black Tower"
 msgstr "Torre Nera"

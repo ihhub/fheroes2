@@ -1990,7 +1990,8 @@ msgstr "Fejlesztett kőkör"
 msgid "Fenced Meadow"
 msgstr "Legelő"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Vörös torony"
 
 msgid "Dungeon"
@@ -2019,6 +2020,10 @@ msgstr "Mocsár"
 
 msgid "Green Tower"
 msgstr "Zöld torony"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Vörös torony"
 
 msgid "Black Tower"
 msgstr "Fekete torony"

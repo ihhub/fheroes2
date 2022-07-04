@@ -1905,7 +1905,8 @@ msgstr "Upg. Stonehenge++"
 msgid "Fenced Meadow"
 msgstr "Campo Cercado"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Torre Vermelha"
 
 msgid "Dungeon"
@@ -1934,6 +1935,10 @@ msgstr "Pântano"
 
 msgid "Green Tower"
 msgstr "Torre Verde"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Torre Vermelha"
 
 msgid "Black Tower"
 msgstr "Torre Negra"

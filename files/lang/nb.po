@@ -2064,7 +2064,8 @@ msgstr "Oppg. steinring"
 msgid "Fenced Meadow"
 msgstr "Inngjerdet slette"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Rødt tårn"
 
 msgid "Dungeon"
@@ -2093,6 +2094,10 @@ msgstr "Myr"
 
 msgid "Green Tower"
 msgstr "Grønt tårn"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Rødt tårn"
 
 msgid "Black Tower"
 msgstr "Svart tårn"

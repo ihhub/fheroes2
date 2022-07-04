@@ -1874,7 +1874,8 @@ msgstr "Rozšířit Stonehenge"
 msgid "Fenced Meadow"
 msgstr ""
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Červená věž"
 
 msgid "Dungeon"
@@ -1903,6 +1904,10 @@ msgstr "Bažina"
 
 msgid "Green Tower"
 msgstr "Zelená věž"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Červená věž"
 
 msgid "Black Tower"
 msgstr "Černá věž"

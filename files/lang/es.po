@@ -1979,7 +1979,8 @@ msgstr "Mej. Mejorado"
 msgid "Fenced Meadow"
 msgstr "Prado Vallado"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Torre Roja"
 
 msgid "Dungeon"
@@ -2008,6 +2009,10 @@ msgstr "Ciénaga"
 
 msgid "Green Tower"
 msgstr "Torre Verde"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Torre Roja"
 
 msgid "Black Tower"
 msgstr "Torre Negra"

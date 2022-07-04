@@ -2009,7 +2009,8 @@ msgstr "Aufg. Stonehenge"
 msgid "Fenced Meadow"
 msgstr "Eingezäunte Wiese"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Roter Turm"
 
 msgid "Dungeon"
@@ -2038,6 +2039,10 @@ msgstr "Sumpf"
 
 msgid "Green Tower"
 msgstr "Grüner Turm"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Roter Turm"
 
 msgid "Black Tower"
 msgstr "Schwarzer Turm"
