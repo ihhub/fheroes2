@@ -345,7 +345,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
     bottomArmyBar.SetHSpace( 6 );
 
     if ( heroes.Guest() ) {
-        heroes.Guest()->MovePointsScaleFixed();
         bottomArmyBar.SetArmy( &heroes.Guest()->GetArmy() );
 
         if ( alphaHero != 0 ) {

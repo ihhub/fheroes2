@@ -3072,7 +3072,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsI
     const bool isMirror = targets.size() == 1 && targets.front().defender->isModes( CAP_MIRRORIMAGE );
     // draw status for first defender
     if ( !isMirror && !targets.empty() ) {
-        std::string msg = _( "%{attacker} do %{damage} damage." );
+        std::string msg( _n( "%{attacker} does %{damage} damage.", "%{attacker} do %{damage} damage.", attacker.GetCount() ) );
         StringReplace( msg, "%{attacker}", attacker.GetName() );
 
         if ( 1 < targets.size() ) {
@@ -5077,7 +5077,7 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
                         status.Redraw();
                     };
 
-                    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::CMBT, true, &statusCallback );
+                    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::CMBT, true, true, &statusCallback );
                     if ( spell.isValid() ) {
                         assert( spell.isCombat() );
 

@@ -54,10 +54,10 @@ void Interface::Basic::SetFocus( Heroes * hero )
         gameArea.SetCenter( hero->GetCenter() );
         statusWindow.SetState( StatusType::STATUS_ARMY );
 
-        const int heroIndexPos = hero->GetIndex();
-        if ( Game::UpdateSoundsOnFocusUpdate() && heroIndexPos >= 0 ) {
+        const int heroIndex = hero->GetIndex();
+        if ( Game::UpdateSoundsOnFocusUpdate() && heroIndex >= 0 ) {
             Game::EnvironmentSoundMixer();
-            AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroIndexPos ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+            AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroIndex ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
         }
     }
 }

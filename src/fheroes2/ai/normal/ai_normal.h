@@ -25,6 +25,7 @@
 #include "kingdom.h"
 #include "world_pathfinding.h"
 
+#include <map>
 #include <set>
 
 struct KingdomCastles;
@@ -188,9 +189,10 @@ namespace AI
         void revealFog( const Maps::Tiles & tile ) override;
 
         void HeroesPreBattle( HeroBase & hero, bool isAttacking ) override;
-        void HeroesActionComplete( Heroes & hero, const MP2::MapObjectType objectType ) override;
+        void HeroesActionComplete( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType ) override;
 
         bool recruitHero( Castle & castle, bool buyArmy, bool underThreat );
+        void reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget );
         void evaluateRegionSafety();
         std::set<int> findCastlesInDanger( const KingdomCastles & castles, const std::vector<std::pair<int, const Army *>> & enemyArmies, int myColor );
         std::vector<AICastle> getSortedCastleList( const KingdomCastles & castles, const std::set<int> & castlesInDanger );
@@ -203,10 +205,16 @@ namespace AI
 
         double getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType );
 
+        bool isCriticalTask( const int index ) const
+        {
+            return _priorityTargets.find( index ) != _priorityTargets.end();
+        }
+
     private:
         // following data won't be saved/serialized
         double _combinedHeroStrength = 0;
         std::vector<IndexObject> _mapObjects;
+        std::map<int, PriorityTask> _priorityTargets;
         std::vector<RegionStats> _regions;
         AIWorldPathfinder _pathfinder;
         BattlePlanner _battlePlanner;

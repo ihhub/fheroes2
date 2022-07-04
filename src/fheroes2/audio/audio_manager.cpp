@@ -33,7 +33,8 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
-#include <queue>
+#include <deque>
+#include <optional>
 #include <utility>
 
 namespace
@@ -220,11 +221,7 @@ namespace
 
             std::scoped_lock<std::mutex> lock( _mutex );
 
-            while ( !_musicTasks.empty() ) {
-                _musicTasks.pop();
-            }
-
-            _musicTasks.emplace( musicId, musicType, playbackMode );
+            _musicTask.emplace( musicId, musicType, playbackMode );
 
             notifyWorker();
         }
@@ -235,7 +232,7 @@ namespace
 
             std::scoped_lock<std::mutex> lock( _mutex );
 
-            _soundTasks.emplace( m82Sound, soundVolume );
+            _soundTasks.emplace_back( m82Sound, soundVolume );
 
             notifyWorker();
         }
@@ -246,51 +243,41 @@ namespace
 
             std::scoped_lock<std::mutex> lock( _mutex );
 
-            _loopSoundTasks.emplace( std::move( vols ), soundVolume, is3DAudioEnabled );
+            _loopSoundTask.emplace( std::move( vols ), soundVolume, is3DAudioEnabled );
 
             notifyWorker();
         }
 
-        void removeSounds()
+        void removeAllSoundTasks()
         {
             std::scoped_lock<std::mutex> lock( _mutex );
 
-            while ( !_soundTasks.empty() ) {
-                _soundTasks.pop();
-            }
+            _soundTasks.clear();
+            _loopSoundTask.reset();
 
-            while ( !_loopSoundTasks.empty() ) {
-                _loopSoundTasks.pop();
+            switch ( _taskToExecute ) {
+            case TaskType::PlaySound:
+            case TaskType::PlayLoopSound:
+                _taskToExecute = TaskType::None;
+                break;
+            default:
+                break;
             }
-
-            // TODO: there is a chance that at the time of clearing all tasks executeTask() method would be executing by the worker thread.
-            // The worker thread will proceed with the execution producing incorrect results such as environment sounds being played in castle's windows.
-            // It is not wise to update the type of the task without synchronization.
         }
 
-        void sync()
+        void removeAllTasks()
         {
             std::scoped_lock<std::mutex> lock( _mutex );
 
-            while ( !_musicTasks.empty() ) {
-                _musicTasks.pop();
-            }
+            _musicTask.reset();
+            _soundTasks.clear();
+            _loopSoundTask.reset();
 
-            while ( !_soundTasks.empty() ) {
-                _soundTasks.pop();
-            }
-
-            while ( !_loopSoundTasks.empty() ) {
-                _loopSoundTasks.pop();
-            }
-
-            // TODO: there is a chance that at the time of clearing all tasks executeTask() method would be executing by the worker thread.
-            // The worker thread will proceed with the execution producing incorrect results such as environment sounds being played in castle's windows.
-            // It is not wise to update the type of the task without synchronization.
+            _taskToExecute = TaskType::None;
         }
 
         // This mutex protects operations with AudioManager's resources, such as AGG files, data caches, etc
-        std::mutex & resourceMutex()
+        std::recursive_mutex & resourceMutex()
         {
             return _resourceMutex;
         }
@@ -353,27 +340,24 @@ namespace
             bool is3DAudioEnabled{ false };
         };
 
-        std::queue<MusicTask> _musicTasks;
-        std::queue<SoundTask> _soundTasks;
-        std::queue<LoopSoundTask> _loopSoundTasks;
+        std::optional<MusicTask> _musicTask;
+        std::deque<SoundTask> _soundTasks;
+        std::optional<LoopSoundTask> _loopSoundTask;
 
         MusicTask _currentMusicTask;
         SoundTask _currentSoundTask;
         LoopSoundTask _currentLoopSoundTask;
 
-        TaskType _taskToExecute{ TaskType::None };
+        std::atomic<TaskType> _taskToExecute{ TaskType::None };
 
-        std::mutex _resourceMutex;
+        std::recursive_mutex _resourceMutex;
 
+        // This method is called by the worker thread and is protected by _mutex
         bool prepareTask() override
         {
-            if ( !_musicTasks.empty() ) {
-                // Pick only the latest music track and discard the rest.
-                std::swap( _currentMusicTask, _musicTasks.back() );
-
-                while ( !_musicTasks.empty() ) {
-                    _musicTasks.pop();
-                }
+            if ( _musicTask ) {
+                std::swap( _currentMusicTask, *_musicTask );
+                _musicTask.reset();
 
                 _taskToExecute = TaskType::PlayMusic;
 
@@ -382,20 +366,16 @@ namespace
 
             if ( !_soundTasks.empty() ) {
                 std::swap( _currentSoundTask, _soundTasks.front() );
-                _soundTasks.pop();
+                _soundTasks.pop_front();
 
                 _taskToExecute = TaskType::PlaySound;
 
                 return true;
             }
 
-            if ( !_loopSoundTasks.empty() ) {
-                // Pick only the latest loop sound set and discard the rest.
-                std::swap( _currentLoopSoundTask, _loopSoundTasks.back() );
-
-                while ( !_loopSoundTasks.empty() ) {
-                    _loopSoundTasks.pop();
-                }
+            if ( _loopSoundTask ) {
+                std::swap( _currentLoopSoundTask, *_loopSoundTask );
+                _loopSoundTask.reset();
 
                 _taskToExecute = TaskType::PlayLoopSound;
 
@@ -403,11 +383,18 @@ namespace
             }
 
             _taskToExecute = TaskType::None;
+
             return false;
         }
 
+        // This method is called by the worker thread, but is not protected by _mutex
         void executeTask() override
         {
+            // Do not allow the main thread to acquire this mutex in the interval between the
+            // _taskToExecute was checked and the task was started executing. Release it only
+            // when the task is fully completed.
+            std::scoped_lock<std::recursive_mutex> lock( _resourceMutex );
+
             switch ( _taskToExecute ) {
             case TaskType::None:
                 // Nothing to do.
@@ -432,6 +419,8 @@ namespace
     std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> currentAudioLoopEffects;
     bool is3DAudioLoopEffectsEnabled{ false };
 
+    std::atomic<int> currentMusicTrackId{ MUS::UNKNOWN };
+
     fheroes2::AGGFile g_midiHeroes2AGG;
     fheroes2::AGGFile g_midiHeroes2xAGG;
 
@@ -452,7 +441,7 @@ namespace
 
     void PlaySoundInternally( const int m82, const int soundVolume )
     {
-        std::scoped_lock<std::mutex> lock( g_asyncSoundManager.resourceMutex() );
+        std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Try to play sound " << M82::GetString( m82 ) )
 
@@ -487,16 +476,18 @@ namespace
 
         const uint64_t musicUID = getMusicUID( trackId, musicType );
 
-        std::scoped_lock<std::mutex> lock( g_asyncSoundManager.resourceMutex() );
+        std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
-        if ( Game::CurrentMusicTrackId() == trackId && Music::isPlaying() ) {
+        if ( currentMusicTrackId == trackId && Music::isPlaying() ) {
             return;
         }
 
         // Check if the music track is cached.
         if ( Music::Play( musicUID, playbackMode ) ) {
             DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play cached music track " << trackId )
-            Game::SetCurrentMusicTrack( trackId );
+
+            currentMusicTrackId = trackId;
+
             return;
         }
 
@@ -527,7 +518,7 @@ namespace
             else {
                 Music::Play( musicUID, filename, playbackMode );
 
-                Game::SetCurrentMusicTrack( trackId );
+                currentMusicTrackId = trackId;
 
                 DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play music track " << MUS::getFileName( trackId, MUS::EXTERNAL_MUSIC_TYPE::MAPPED, " " ) )
 
@@ -550,9 +541,10 @@ namespace
             if ( !v.empty() ) {
                 Music::Play( musicUID, v, playbackMode );
 
-                Game::SetCurrentMusicTrack( trackId );
+                currentMusicTrackId = trackId;
             }
         }
+
         DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play MIDI music track " << XMI::GetString( xmi ) )
     }
 
@@ -606,7 +598,7 @@ namespace
     void playLoopSoundsInternally( std::map<M82::SoundType, std::vector<AudioManager::AudioLoopEffectInfo>> soundEffects, const int soundVolume,
                                    const bool is3DAudioEnabled )
     {
-        std::scoped_lock<std::mutex> lock( g_asyncSoundManager.resourceMutex() );
+        std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
         if ( soundVolume == 0 ) {
             // The volume is 0. Remove all existing sound effects.
@@ -754,10 +746,10 @@ namespace
                 // Adjust channel based on given parameters.
 
                 // TODO: this is very hacky way. We should not do this. For example in 3D audio mode when a hero moves alongside beach it is noticeable that ocean sounds
-                //       are 'jumping' in volume. Instead of such approach we need to get free channel ID which will be used for playback. Set volume for it and then
-                //       start playing. Such logic must be implemented within Audio related code.
-                //       As an alternative solution: we can use channel IDs which we freed in the previous step. However, be careful with synchronization for audio
-                //       access.
+                // TODO: are 'jumping' in volume. Instead of such approach we need to get free channel ID which will be used for playback. Set volume for it and then
+                // TODO: start playing. Such logic must be implemented within Audio related code.
+                // TODO: As an alternative solution: we can use channel IDs which we freed in the previous step. However, be careful with synchronization for audio
+                // TODO: access.
                 Mixer::Pause( channelId );
                 Mixer::setVolume( channelId, info.volumePercentage * soundVolume / 10 );
                 Mixer::Resume( channelId );
@@ -795,7 +787,7 @@ namespace AudioManager
 
     AudioInitializer::~AudioInitializer()
     {
-        g_asyncSoundManager.sync();
+        g_asyncSoundManager.removeAllTasks();
         g_asyncSoundManager.stopWorker();
 
         wavDataCache.clear();
@@ -803,7 +795,31 @@ namespace AudioManager
         currentAudioLoopEffects.clear();
     }
 
-    void playLoopSounds( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects, bool asyncronizedCall )
+    MusicRestorer::MusicRestorer()
+        : _music( currentMusicTrackId )
+    {
+        // Do nothing.
+    }
+
+    MusicRestorer::~MusicRestorer()
+    {
+        if ( _music == MUS::UNUSED || _music == MUS::UNKNOWN ) {
+            currentMusicTrackId = _music;
+
+            return;
+        }
+
+        // Set current music to MUS::UNKNOWN to prevent attempts to play the old music by new instances of
+        // MusicRestorer while the music being currently restored is starting in the background
+        if ( _music != currentMusicTrackId ) {
+            currentMusicTrackId = MUS::UNKNOWN;
+        }
+
+        // It is assumed that the previous track was looped and should be resumed
+        PlayMusicAsync( _music, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+    }
+
+    void playLoopSoundsAsync( std::map<M82::SoundType, std::vector<AudioLoopEffectInfo>> soundEffects )
     {
         if ( !Audio::isValid() ) {
             return;
@@ -811,16 +827,10 @@ namespace AudioManager
 
         const Settings & conf = Settings::Get();
 
-        if ( asyncronizedCall ) {
-            g_asyncSoundManager.pushLoopSound( std::move( soundEffects ), conf.SoundVolume(), conf.is3DAudioEnabled() );
-        }
-        else {
-            g_asyncSoundManager.sync();
-            playLoopSoundsInternally( std::move( soundEffects ), conf.SoundVolume(), conf.is3DAudioEnabled() );
-        }
+        g_asyncSoundManager.pushLoopSound( std::move( soundEffects ), conf.SoundVolume(), conf.is3DAudioEnabled() );
     }
 
-    void PlaySound( int m82, bool asyncronizedCall )
+    void PlaySound( const int m82 )
     {
         if ( m82 == M82::UNKNOWN ) {
             return;
@@ -830,18 +840,15 @@ namespace AudioManager
             return;
         }
 
-        if ( asyncronizedCall ) {
-            g_asyncSoundManager.pushSound( m82, Settings::Get().SoundVolume() );
-        }
-        else {
-            g_asyncSoundManager.sync();
-            PlaySoundInternally( m82, Settings::Get().SoundVolume() );
-        }
+        // TODO: in general, we should not remove all queued tasks here, but only tasks of the same type
+        g_asyncSoundManager.removeAllTasks();
+
+        PlaySoundInternally( m82, Settings::Get().SoundVolume() );
     }
 
-    void PlayMusic( const int trackId, const Music::PlaybackMode playbackMode )
+    void PlaySoundAsync( const int m82 )
     {
-        if ( MUS::UNUSED == trackId || MUS::UNKNOWN == trackId ) {
+        if ( m82 == M82::UNKNOWN ) {
             return;
         }
 
@@ -849,13 +856,28 @@ namespace AudioManager
             return;
         }
 
-        g_asyncSoundManager.sync();
+        g_asyncSoundManager.pushSound( m82, Settings::Get().SoundVolume() );
+    }
+
+    void PlayMusic( const int trackId, const Music::PlaybackMode playbackMode )
+    {
+        if ( trackId == MUS::UNUSED || trackId == MUS::UNKNOWN ) {
+            return;
+        }
+
+        if ( !Audio::isValid() ) {
+            return;
+        }
+
+        // TODO: in general, we should not remove all queued tasks here, but only tasks of the same type
+        g_asyncSoundManager.removeAllTasks();
+
         PlayMusicInternally( trackId, Settings::Get().MusicType(), playbackMode );
     }
 
     void PlayMusicAsync( const int trackId, const Music::PlaybackMode playbackMode )
     {
-        if ( MUS::UNUSED == trackId || MUS::UNKNOWN == trackId ) {
+        if ( trackId == MUS::UNUSED || trackId == MUS::UNKNOWN ) {
             return;
         }
 
@@ -866,15 +888,35 @@ namespace AudioManager
         g_asyncSoundManager.pushMusic( trackId, Settings::Get().MusicType(), playbackMode );
     }
 
+    void PlayCurrentMusic()
+    {
+        if ( !Audio::isValid() ) {
+            return;
+        }
+
+        // TODO: in general, we should not remove all queued tasks here, but only tasks of the same type
+        g_asyncSoundManager.removeAllTasks();
+
+        std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
+
+        if ( currentMusicTrackId == MUS::UNUSED || currentMusicTrackId == MUS::UNKNOWN ) {
+            return;
+        }
+
+        const int trackId = currentMusicTrackId.exchange( MUS::UNKNOWN );
+
+        PlayMusicInternally( trackId, Settings::Get().MusicType(), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+    }
+
     void stopSounds()
     {
         if ( !Audio::isValid() ) {
             return;
         }
 
-        g_asyncSoundManager.removeSounds();
+        g_asyncSoundManager.removeAllSoundTasks();
 
-        std::scoped_lock<std::mutex> lock( g_asyncSoundManager.resourceMutex() );
+        std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
         clearAllAudioLoopEffects();
 
@@ -884,17 +926,18 @@ namespace AudioManager
     void ResetAudio()
     {
         if ( !Audio::isValid() ) {
-            // Nothing to reset as an audio device is not even initialized.
             return;
         }
 
-        g_asyncSoundManager.sync();
+        g_asyncSoundManager.removeAllTasks();
 
-        std::scoped_lock<std::mutex> lock( g_asyncSoundManager.resourceMutex() );
+        std::scoped_lock<std::recursive_mutex> lock( g_asyncSoundManager.resourceMutex() );
 
         clearAllAudioLoopEffects();
 
         Music::Stop();
         Mixer::Stop();
+
+        currentMusicTrackId = MUS::UNKNOWN;
     }
 }

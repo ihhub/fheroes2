@@ -681,8 +681,12 @@ namespace AI
             if ( !castle )
                 return valueToIgnore;
 
+            const bool critical = isCriticalTask( index );
             if ( hero.GetColor() == castle->GetColor() ) {
                 double value = castle->getVisitValue( hero );
+                if ( critical )
+                    return 10000 + value;
+
                 if ( value < 500 )
                     return valueToIgnore;
 
@@ -703,15 +707,14 @@ namespace AI
             }
 
             double value = castle->getBuildingValue() * 150.0 + 3000;
-            if ( hero.isLosingGame() )
+            if ( critical || hero.isLosingGame() )
                 value += 15000;
             // If the castle is defenseless
             if ( !castle->GetActualArmy().isValid() )
                 value *= 1.25;
 
-            if ( isCastleLossConditionForHuman( castle ) ) {
+            if ( isCastleLossConditionForHuman( castle ) )
                 value += 20000;
-            }
 
             return value;
         }
@@ -749,7 +752,8 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            return 5000.0;
+            // focus on enemy hero if there's priority set (i.e. hero is threatning our castle)
+            return isCriticalTask( index ) ? 12000.0 : 5000.0;
         }
         else if ( objectType == MP2::OBJ_MONSTER ) {
             return 1000.0;
@@ -787,14 +791,9 @@ namespace AI
         else if ( objectType == MP2::OBJ_XANADU ) {
             return 3000.0;
         }
-        else if ( objectType == MP2::OBJ_SHRINE1 ) {
-            return 100;
-        }
-        else if ( objectType == MP2::OBJ_SHRINE2 ) {
-            return 250;
-        }
-        else if ( objectType == MP2::OBJ_SHRINE3 ) {
-            return 500;
+        else if ( objectType == MP2::OBJ_SHRINE1 || objectType == MP2::OBJ_SHRINE2 || objectType == MP2::OBJ_SHRINE3 ) {
+            const Spell & spell = tile.QuantitySpell();
+            return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() );
         }
         else if ( MP2::isHeroUpgradeObject( objectType ) ) {
             return 500.0;
@@ -960,8 +959,12 @@ namespace AI
             if ( !castle )
                 return valueToIgnore;
 
+            const bool critical = isCriticalTask( index );
             if ( hero.GetColor() == castle->GetColor() ) {
                 double value = castle->getVisitValue( hero );
+                if ( critical )
+                    return 15000 + value;
+
                 if ( value < 500 )
                     return valueToIgnore;
 
@@ -982,15 +985,15 @@ namespace AI
             }
 
             double value = castle->getBuildingValue() * 500.0 + 15000;
-            if ( hero.isLosingGame() )
+            if ( critical || hero.isLosingGame() )
                 value += 15000;
             // If the castle is defenseless
+            // This modifier shouldn't be too high to avoid players baiting AI in
             if ( !castle->GetActualArmy().isValid() )
-                value *= 2.5;
+                value *= 1.5;
 
-            if ( isCastleLossConditionForHuman( castle ) ) {
+            if ( isCastleLossConditionForHuman( castle ) )
                 value += 20000;
-            }
 
             return value;
         }
@@ -1028,7 +1031,7 @@ namespace AI
                 return -dangerousTaskPenalty;
             }
 
-            return 12000.0;
+            return isCriticalTask( index ) ? 20000.0 : 12000.0;
         }
         else if ( objectType == MP2::OBJ_MONSTER ) {
             return anotherFriendlyHeroPresent ? 4000.0 : 1000.0;
@@ -1070,14 +1073,9 @@ namespace AI
         else if ( objectType == MP2::OBJ_XANADU ) {
             return 3000.0;
         }
-        else if ( objectType == MP2::OBJ_SHRINE1 ) {
-            return 250;
-        }
-        else if ( objectType == MP2::OBJ_SHRINE2 ) {
-            return 500;
-        }
-        else if ( objectType == MP2::OBJ_SHRINE3 ) {
-            return 500;
+        else if ( objectType == MP2::OBJ_SHRINE1 || objectType == MP2::OBJ_SHRINE2 || objectType == MP2::OBJ_SHRINE3 ) {
+            const Spell & spell = tile.QuantitySpell();
+            return spell.getStrategicValue( hero.GetArmy().GetStrength(), hero.GetMaxSpellPoints(), hero.GetPower() );
         }
         else if ( MP2::isHeroUpgradeObject( objectType ) ) {
             return 1250.0;
@@ -1355,18 +1353,24 @@ namespace AI
         return priorityTarget;
     }
 
-    void Normal::HeroesActionComplete( Heroes & hero, const MP2::MapObjectType objectType )
+    void Normal::HeroesActionComplete( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType )
     {
         Castle * castle = hero.inCastleMutable();
         if ( castle ) {
-            ReinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
+            reinforceHeroInCastle( hero, *castle, castle->GetKingdom().GetFunds() );
         }
 
         if ( isMonsterStrengthCacheable( objectType ) ) {
-            // An object can be at the same tile at the hero or on a neighbouring tile so erase all tiles around the hero including the tile where the hero is standing.
-            const int32_t heroIndex = hero.GetIndex();
-            for ( int32_t offset : { 0, 1, -1, world.w(), world.w() + 1, world.w() - 1, -world.w(), -world.w() + 1, -world.w() - 1 } ) {
-                _neutralMonsterStrengthCache.erase( heroIndex + offset );
+            _neutralMonsterStrengthCache.erase( tileIndex );
+        }
+        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJ_HEROES ) {
+            const auto it = _priorityTargets.find( tileIndex );
+            if ( it != _priorityTargets.end() ) {
+                if ( it->second == PriorityTask::DEFEND ) {
+                    hero.SetModes( Heroes::SLEEPER );
+                }
+
+                _priorityTargets.erase( it );
             }
         }
     }

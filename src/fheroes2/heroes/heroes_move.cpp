@@ -81,7 +81,7 @@ void PlayWalkSound( int ground )
         break;
     }
 
-    AudioManager::PlaySound( wav, true );
+    AudioManager::PlaySoundAsync( wav );
 }
 
 bool ReflectSprite( int from )

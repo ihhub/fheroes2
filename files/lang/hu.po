@@ -1,13 +1,13 @@
 # Hungarian translation for fheroes2
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
+# fheroes2 team <fhomm2@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-25 17:40+0200\n"
+"POT-Creation-Date: 2022-06-28 00:30+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -167,8 +167,10 @@ msgstr "%{name} ide lép."
 msgid "Set Count"
 msgstr ""
 
-msgid "%{name} half the enemy troops!"
-msgstr ""
+msgid "%{name} destroys half the enemy troops!"
+msgid_plural "%{name} destroy half the enemy troops!"
+msgstr[0] ""
+msgstr[1] ""
 
 #, fuzzy
 msgid "%{name} has turned off the auto battle"
@@ -522,8 +524,11 @@ msgstr "%{name} kör kihagyása."
 msgid "%{name} wait their turn."
 msgstr "%{name} várakozik."
 
-msgid "%{attacker} do %{damage} damage."
-msgstr "A %{attacker} %{damage} sebzett."
+#, fuzzy
+msgid "%{attacker} does %{damage} damage."
+msgid_plural "%{attacker} do %{damage} damage."
+msgstr[0] "A %{attacker} %{damage} sebzett."
+msgstr[1] "A %{attacker} %{damage} sebzett."
 
 #, fuzzy
 msgid "1 creature perishes."
