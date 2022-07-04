@@ -1079,8 +1079,8 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
 
     msg >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0917_RELEASE, "Remove the following code." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_0917_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_0917_RELEASE, "Remove the following code." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE_0917_RELEASE ) {
         uint32_t dummy;
 
         msg >> dummy;

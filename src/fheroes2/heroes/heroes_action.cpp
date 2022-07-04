@@ -205,7 +205,6 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
             hero.GetKingdom().OddFundsResource( paymentCosts );
 
             hero.GetArmy().JoinTroop( troop.GetMonster(), recruit );
-            hero.MovePointsScaleFixed();
 
             Interface::Basic::Get().SetRedraw( Interface::REDRAW_STATUS );
         }
@@ -2221,8 +2220,6 @@ void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType object
     const std::string title( MP2::StringObject( objectType ) );
 
     if ( troop.isValid() ) {
-        hero.MovePointsScaleFixed();
-
         std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you. Do you accept?" );
         StringReplace( message, "%{monster}", troop.GetMultiName() );
 
@@ -2234,7 +2231,6 @@ void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType object
             else {
                 tile.MonsterSetCount( 0 );
                 hero.GetArmy().JoinTroop( troop );
-                hero.MovePointsScaleFixed();
 
                 Interface::Basic::Get().SetRedraw( Interface::REDRAW_STATUS );
             }
@@ -2511,9 +2507,6 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
     std::string msg2;
 
     std::vector<Monster *> mons;
-
-    hero.MovePointsScaleFixed();
-
     std::vector<Monster> monsToUpgrade;
 
     switch ( objectType ) {

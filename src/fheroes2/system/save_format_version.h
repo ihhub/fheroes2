@@ -25,7 +25,8 @@
 enum SaveFileFormat : uint16_t
 {
     // TODO: if you're adding a new version you must assign it to CURRENT_FORMAT_VERSION located at the bottom.
-    FORMAT_VERSION_0917_RELEASE = 9910,
+    FORMAT_VERSION_0917_RELEASE = 9911,
+    FORMAT_VERSION_PRE_0917_RELEASE = 9910,
     FORMAT_VERSION_0916_RELEASE = 9901,
     FORMAT_VERSION_PRE_0916_RELEASE = 9900,
     FORMAT_VERSION_0912_RELEASE = 9803,
