@@ -153,8 +153,9 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
     le.MousePressLeft( fileRect ) ? buttonFile.drawOnPress() : buttonFile.drawOnRelease();
     le.MousePressLeft( systemRect ) ? buttonSystem.drawOnPress() : buttonSystem.drawOnRelease();
 
+    // Move border window
     if ( Settings::Get().ShowButtons() && BorderWindow::QueueEventProcessing() ) {
-        // Move border window. No other action is required.
+        SetRedraw();
     }
     else if ( buttonNextHero.isEnabled() && le.MouseClickLeft( nextHeroRect ) ) {
         interface.EventNextHero();

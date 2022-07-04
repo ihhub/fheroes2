@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 17:13+0000\n"
+"POT-Creation-Date: 2022-06-12 08:18+0000\n"
 "PO-Revision-Date: 2022-05-12 17:11+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -2415,6 +2415,45 @@ msgstr "Non c'è posto"
 msgid "the garrison"
 msgstr "nella guarnigione"
 
+msgid "off"
+msgstr "Muto"
+
+msgid "Music"
+msgstr "Musica"
+
+msgid "Effects"
+msgstr "Effetti"
+
+msgid "MIDI"
+msgstr "MIDI"
+
+msgid "MIDI Expansion"
+msgstr "Espansione MIDI"
+
+msgid "External"
+msgstr "Esterna"
+
+msgid "Music Type"
+msgstr "Stile di Musica"
+
+msgid "3D Audio"
+msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr ""
+
+msgid "Toggle foreground sounds level."
+msgstr ""
+
+msgid "Change the type of music."
+msgstr ""
+
+msgid "Toggle 3D effects of foreground sounds."
+msgstr ""
+
+msgid "Okay"
+msgstr "Okay"
+
 msgid "Build a new ship:"
 msgstr "Costruisci una nave:"
 
@@ -2464,26 +2503,12 @@ msgstr "Sperimentale"
 msgid "Settings"
 msgstr "Impostazioni"
 
-msgid "off"
-msgstr "Muto"
+msgid "Audio"
+msgstr ""
 
-msgid "Music"
-msgstr "Musica"
-
-msgid "Effects"
-msgstr "Effetti"
-
-msgid "MIDI"
-msgstr "MIDI"
-
-msgid "MIDI Expansion"
-msgstr "Espansione MIDI"
-
-msgid "External"
-msgstr "Esterna"
-
-msgid "Music Type"
-msgstr "Stile di Musica"
+#, fuzzy
+msgid "settings"
+msgstr "Impostazioni"
 
 msgid "Hot Keys"
 msgstr ""
@@ -2508,6 +2533,27 @@ msgstr ""
 "Tele-\n"
 "trasporto"
 
+msgid "Evil"
+msgstr "Cattivo"
+
+msgid "Good"
+msgstr "Buono"
+
+msgid "Interface Type"
+msgstr "Stile d'Interfaccia"
+
+msgid "Auto Resolve"
+msgstr "Auto-Risolva"
+
+msgid "Auto, No Spells"
+msgstr "Auto, Senza Magie"
+
+msgid "Manual"
+msgstr "Manuali"
+
+msgid "Battles"
+msgstr "Battaglie"
+
 msgid "Select Game Language"
 msgstr "Scegli lingua del gioco"
 
@@ -2520,19 +2566,20 @@ msgstr "Scegli la risoluzione del gioco"
 msgid "Change resolution of the game."
 msgstr "Cambia la risoluzione del gioco."
 
+#, fuzzy
+msgid "Change audio settings of the game."
+msgstr "Cambia la risoluzione del gioco."
+
 msgid "Experimental game settings."
 msgstr "Impostazioni sperimentali del gioco."
 
-msgid "Toggle ambient music level."
-msgstr ""
-
-msgid "Toggle foreground sounds level."
-msgstr ""
-
-msgid "Change the type of music."
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Check all Hot Keys used in the game."
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid ""
@@ -2544,9 +2591,6 @@ msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
-
-msgid "Okay"
-msgstr "Okay"
 
 msgid "Attention"
 msgstr "Attenzione"
@@ -3009,15 +3053,6 @@ msgstr "Velocità Nemica"
 msgid "Scroll Speed"
 msgstr "Velocità dello Scorrimento"
 
-msgid "Evil"
-msgstr "Cattivo"
-
-msgid "Good"
-msgstr "Buono"
-
-msgid "Interface Type"
-msgstr "Stile d'Interfaccia"
-
 msgid "Hide"
 msgstr "Nascondi"
 
@@ -3026,18 +3061,6 @@ msgstr "Mostra"
 
 msgid "Interface"
 msgstr "Interfaccia"
-
-msgid "Auto Resolve"
-msgstr "Auto-Risolva"
-
-msgid "Auto, No Spells"
-msgstr "Auto, Senza Magie"
-
-msgid "Battles"
-msgstr "Battaglie"
-
-msgid "Manual"
-msgstr "Manuali"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3050,13 +3073,7 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
 msgid "Toggle interface visibility."
-msgstr ""
-
-msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -3189,6 +3206,12 @@ msgstr ""
 
 msgid "Development"
 msgstr ""
+
+#, fuzzy
+msgid "Dev and Support"
+msgstr ""
+"Tele-\n"
+"trasporto"
 
 msgid "Visit us at "
 msgstr ""

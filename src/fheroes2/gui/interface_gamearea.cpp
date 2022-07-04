@@ -542,7 +542,6 @@ void Interface::GameArea::SetRedraw() const
     interface.SetRedraw( REDRAW_GAMEAREA );
 }
 
-/* scroll area to center point maps */
 void Interface::GameArea::SetCenter( const fheroes2::Point & pt )
 {
     _setCenterToTile( pt );

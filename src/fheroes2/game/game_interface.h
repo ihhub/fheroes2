@@ -53,7 +53,7 @@ namespace GameFocus
 
 namespace Interface
 {
-    enum redraw_t
+    enum redraw_t : uint32_t
     {
         REDRAW_RADAR = 0x01,
         REDRAW_HEROES = 0x02,
@@ -62,7 +62,6 @@ namespace Interface
         REDRAW_STATUS = 0x10,
         REDRAW_BORDER = 0x20,
         REDRAW_GAMEAREA = 0x40,
-        REDRAW_CURSOR = 0x80,
 
         REDRAW_ICONS = REDRAW_HEROES | REDRAW_CASTLES,
         REDRAW_ALL = 0xFF
@@ -71,7 +70,6 @@ namespace Interface
     Castle * GetFocusCastle();
     Heroes * GetFocusHeroes();
     int GetFocusType();
-    fheroes2::Point GetFocusCenter();
 
     class Basic
     {
@@ -83,17 +81,17 @@ namespace Interface
             return redraw != 0;
         }
 
-        void SetRedraw( int f )
+        void SetRedraw( const uint32_t r )
         {
-            redraw |= f;
+            redraw |= r;
         }
 
-        int GetRedrawMask() const
+        uint32_t GetRedrawMask() const
         {
             return redraw;
         }
 
-        void Redraw( int f = 0 );
+        void Redraw( const uint32_t force = 0 );
 
         static bool isScrollLeft( const fheroes2::Point & cursorPos )
         {
@@ -136,11 +134,6 @@ namespace Interface
             return iconsPanel;
         }
 
-        ButtonsArea & GetButtonsArea()
-        {
-            return buttonsArea;
-        }
-
         StatusWindow & GetStatusWindow()
         {
             return statusWindow;
@@ -155,8 +148,6 @@ namespace Interface
         void SetFocus( Castle * );
         void ResetFocus( int );
         void RedrawFocus();
-
-        void SetHideInterface( bool );
 
         void EventSwitchHeroSleeping();
         fheroes2::GameMode EventDefaultAction( const fheroes2::GameMode gameMode );
@@ -173,7 +164,7 @@ namespace Interface
         void EventSwitchShowRadar() const;
         void EventSwitchShowStatus() const;
         void EventSwitchShowButtons() const;
-        void EventSwitchShowIcons();
+        void EventSwitchShowIcons() const;
         void EventSwitchShowControlPanel() const;
 
         fheroes2::GameMode EventNewGame() const;
@@ -197,7 +188,8 @@ namespace Interface
         static int GetCursorFocusShipmaster( const Heroes &, const Maps::Tiles & );
         void CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const;
 
-        void Reset(); // call this function only when changing the resolution
+        // Regenerates the game area and updates the panel positions depending on the UI settings
+        void Reset();
 
     private:
         Basic();
@@ -212,7 +204,7 @@ namespace Interface
         StatusWindow statusWindow;
         ControlPanel controlPanel;
 
-        int redraw;
+        uint32_t redraw;
     };
 }
 

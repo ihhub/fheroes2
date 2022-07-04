@@ -187,6 +187,7 @@
     <ClCompile Include="src\engine\serialize.cpp" />
     <ClCompile Include="src\engine\smk_decoder.cpp" />
     <ClCompile Include="src\engine\system.cpp" />
+    <ClCompile Include="src\engine\thread.cpp" />
     <ClCompile Include="src\engine\timing.cpp" />
     <ClCompile Include="src\engine\tinyconfig.cpp" />
     <ClCompile Include="src\engine\tools.cpp" />
@@ -248,6 +249,7 @@
     <ClCompile Include="src\fheroes2\dialog\dialog_adventure.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_arena.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_armyinfo.cpp" />
+    <ClCompile Include="src\fheroes2\dialog\dialog_audio.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_box.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_buyboat.cpp" />
     <ClCompile Include="src\fheroes2\dialog\dialog_chest.cpp" />
@@ -410,6 +412,7 @@
     <ClInclude Include="src\engine\serialize.h" />
     <ClInclude Include="src\engine\smk_decoder.h" />
     <ClInclude Include="src\engine\system.h" />
+    <ClInclude Include="src\engine\thread.h" />
     <ClInclude Include="src\engine\timing.h" />
     <ClInclude Include="src\engine\tinyconfig.h" />
     <ClInclude Include="src\engine\tools.h" />
@@ -455,6 +458,7 @@
     <ClInclude Include="src\fheroes2\castle\castle_heroes.h" />
     <ClInclude Include="src\fheroes2\castle\mageguild.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog.h" />
+    <ClInclude Include="src\fheroes2\dialog\dialog_audio.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_game_settings.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_hotkeys.h" />
     <ClInclude Include="src\fheroes2\dialog\dialog_language_selection.h" />

@@ -78,7 +78,7 @@ namespace
             return nullptr;
         }
 
-        std::unique_ptr<SMKVideoSequence> video( new SMKVideoSequence( videoPath ) );
+        std::unique_ptr<SMKVideoSequence> video = std::make_unique<SMKVideoSequence>( videoPath );
         if ( video->frameCount() < 1 ) {
             return nullptr;
         }
@@ -479,7 +479,7 @@ fheroes2::GameMode Game::NewGame()
     // Stop all sounds, but not the music
     Mixer::Stop();
 
-    AudioManager::PlayMusic( MUS::MAINMENU, true, true );
+    AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
     // reset last save name
     Game::SetLastSavename( "" );

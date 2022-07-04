@@ -207,7 +207,7 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
             hero.GetArmy().JoinTroop( troop.GetMonster(), recruit );
             hero.MovePointsScaleFixed();
 
-            Interface::Basic::Get().GetStatusWindow().SetRedraw();
+            Interface::Basic::Get().SetRedraw( Interface::REDRAW_STATUS );
         }
     }
 }
@@ -239,27 +239,40 @@ static void WhirlpoolTroopLoseEffect( Heroes & hero )
                                                                     weakestTroop->GetHitPoints() - weakestTroop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
         }
 
-        Interface::Basic::Get().GetStatusWindow().SetRedraw();
+        Interface::Basic::Get().SetRedraw( Interface::REDRAW_STATUS );
     }
 }
 
 // action to next cell
 void Heroes::Action( int tileIndex, bool isDestination )
 {
-    // restore the original music after the action is completed
+    if ( GetKingdom().isControlAI() ) {
+        // Restore the original music after the action is completed.
+        const Game::MusicRestorer musicRestorer;
+        return AI::HeroesAction( *this, tileIndex );
+    }
+
+    // Update environment sounds and music before doing the action. Interface::Basic::SetFocus() function is responsible for update them after the action.
+    const int32_t heroPosIndex = GetIndex();
+    assert( heroPosIndex >= 0 );
+    if ( Game::UpdateSoundsOnFocusUpdate() ) {
+        Game::EnvironmentSoundMixer();
+        AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroPosIndex ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+    }
+
+    // Restore the original music after the action is completed.
     const Game::MusicRestorer musicRestorer;
 
-    if ( GetKingdom().isControlAI() )
-        return AI::HeroesAction( *this, tileIndex );
-
     Maps::Tiles & tile = world.GetTiles( tileIndex );
-    const MP2::MapObjectType objectType = tile.GetObject( tileIndex != GetIndex() );
+    const MP2::MapObjectType objectType = tile.GetObject( tileIndex != heroPosIndex );
 
-    if ( MUS::FromMapObject( objectType ) != MUS::UNKNOWN )
-        AudioManager::PlayMusic( MUS::FromMapObject( objectType ), false );
+    const int objectMusicTrack = MUS::FromMapObject( objectType );
+    if ( objectMusicTrack != MUS::UNKNOWN ) {
+        // Since it is a synchronous call all previous music tracks will be removed from a queue for an asynchronous playback.
+        AudioManager::PlayMusic( objectMusicTrack, Music::PlaybackMode::PLAY_ONCE );
+    }
 
     if ( MP2::isActionObject( objectType, isShipMaster() ) ) {
-        Interface::StatusWindow::ResetTimer();
         SetModes( ACTION );
     }
 
@@ -272,9 +285,7 @@ void Heroes::Action( int tileIndex, bool isDestination )
         Interface::Basic & I = Interface::Basic::Get();
 
         I.GetGameArea().SetCenter( GetCenter() );
-
-        I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
-        I.Redraw();
+        I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
     }
 
     if ( list ) {
@@ -615,7 +626,7 @@ void ActionToMonster( Heroes & hero, int32_t dst_index )
         if ( Dialog::YES == Dialog::ArmyJoinFree( troop, hero ) ) {
             hero.GetArmy().JoinTroop( troop );
 
-            I.GetStatusWindow().SetRedraw();
+            I.SetRedraw( Interface::REDRAW_STATUS );
             destroy = true;
         }
         else {
@@ -631,7 +642,7 @@ void ActionToMonster( Heroes & hero, int32_t dst_index )
             hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount );
             hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
 
-            I.GetStatusWindow().SetRedraw();
+            I.SetRedraw( Interface::REDRAW_STATUS );
             destroy = true;
         }
         else {
@@ -654,8 +665,7 @@ void ActionToMonster( Heroes & hero, int32_t dst_index )
         // set the hero's attacked monster tile index and immediately redraw game area to show an attacking sprite for this monster
         hero.SetAttackedMonsterTileIndex( dst_index );
 
-        I.SetRedraw( Interface::REDRAW_GAMEAREA );
-        I.Redraw();
+        I.Redraw( Interface::REDRAW_GAMEAREA );
 
         Army army( tile );
 
@@ -956,7 +966,7 @@ void ActionToObjectResource( Heroes & hero, const MP2::MapObjectType objectType,
     if ( rc.isValid() ) {
         // The Magic Garden has a special sound
         if ( !Settings::Get().MusicMIDI() && objectType == MP2::OBJ_MAGICGARDEN ) {
-            AudioManager::PlayMusic( MUS::TREEHOUSE, false );
+            AudioManager::PlayMusic( MUS::TREEHOUSE, Music::PlaybackMode::PLAY_ONCE );
         }
         // The Lean-To has a special sound
         else if ( objectType == MP2::OBJ_LEANTO ) {
@@ -1643,7 +1653,7 @@ void ActionToExperienceObject( Heroes & hero, const MP2::MapObjectType objectTyp
             AudioManager::PlaySound( M82::EXPERNCE );
         }
         else {
-            AudioManager::PlayMusic( MUS::EXPERIENCE, false );
+            AudioManager::PlayMusic( MUS::EXPERIENCE, Music::PlaybackMode::PLAY_ONCE );
         }
 
         const fheroes2::ExperienceDialogElement experienceUI( exp );
@@ -2004,7 +2014,7 @@ void ActionToAncientLamp( Heroes & hero, const MP2::MapObjectType objectType, in
 
 void ActionToTeleports( Heroes & hero, int32_t index_from )
 {
-    int32_t index_to = world.NextTeleport( index_from );
+    const int32_t index_to = world.NextTeleport( index_from );
 
     if ( index_from == index_to ) {
         AudioManager::PlaySound( M82::RSBRYFZL );
@@ -2018,19 +2028,20 @@ void ActionToTeleports( Heroes & hero, int32_t index_from )
     hero.GetPath().Hide();
     hero.FadeOut();
 
-    hero.Move2Dest( index_to ); // no action and no penalty
+    // No action and no penalty
+    hero.Move2Dest( index_to );
 
     Interface::Basic & I = Interface::Basic::Get();
     I.GetGameArea().SetCenter( hero.GetCenter() );
-    I.RedrawFocus();
-    I.Redraw();
+    I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
     hero.FadeIn();
 
     hero.GetPath().Reset();
-    hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
+    // Path::Reset() puts the hero's path into the hidden mode, we have to make it visible again
+    hero.GetPath().Show();
     hero.ActionNewPosition( false );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
@@ -2050,12 +2061,12 @@ void ActionToWhirlpools( Heroes & hero, int32_t index_from )
     hero.GetPath().Hide();
     hero.FadeOut();
 
-    hero.Move2Dest( index_to ); // no action and no penalty
+    // No action and no penalty
+    hero.Move2Dest( index_to );
 
     Interface::Basic & I = Interface::Basic::Get();
     I.GetGameArea().SetCenter( hero.GetCenter() );
-    I.RedrawFocus();
-    I.Redraw();
+    I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
     AudioManager::PlaySound( M82::KILLFADE );
     hero.GetPath().Hide();
@@ -2064,7 +2075,8 @@ void ActionToWhirlpools( Heroes & hero, int32_t index_from )
     WhirlpoolTroopLoseEffect( hero );
 
     hero.GetPath().Reset();
-    hero.GetPath().Show(); // Reset method sets Hero's path to hidden mode with non empty path, we have to set it back
+    // Path::Reset() puts the hero's path into the hidden mode, we have to make it visible again
+    hero.GetPath().Show();
     hero.ActionNewPosition( false );
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
@@ -2222,7 +2234,7 @@ void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType object
                 hero.GetArmy().JoinTroop( troop );
                 hero.MovePointsScaleFixed();
 
-                Interface::Basic::Get().GetStatusWindow().SetRedraw();
+                Interface::Basic::Get().SetRedraw( Interface::REDRAW_STATUS );
             }
         }
     }
@@ -2410,7 +2422,7 @@ void ActionToArtesianSpring( Heroes & hero, const MP2::MapObjectType objectType,
             AudioManager::PlaySound( M82::EXPERNCE );
         }
         else {
-            AudioManager::PlayMusic( MUS::WATERSPRING, false );
+            AudioManager::PlayMusic( MUS::WATERSPRING, Music::PlaybackMode::PLAY_ONCE );
         }
         hero.SetSpellPoints( max * 2 );
         Dialog::Message( name, _( "A drink from the spring fills your blood with magic! You have twice your normal spell points in reserve." ), Font::BIG, Dialog::OK );
@@ -2591,7 +2603,7 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
 
         // The Hill Fort has a special sound
         if ( objectType == MP2::OBJ_HILLFORT ) {
-            AudioManager::PlayMusic( MUS::HILLFORT, false );
+            AudioManager::PlayMusic( MUS::HILLFORT, Music::PlaybackMode::PLAY_ONCE );
         }
 
         const fheroes2::CustomImageDialogElement imageUI( std::move( surface ) );
@@ -2624,13 +2636,15 @@ void ActionToMagellanMaps( Heroes & hero, const MP2::MapObjectType objectType, i
                 _( "A retired captain living on this refurbished fishing platform offers to sell you maps of the sea he made in his younger days for 1,000 gold. Do you wish to buy the maps?" ),
                 Font::BIG, Dialog::YES | Dialog::NO ) ) {
             world.ActionForMagellanMaps( hero.GetColor() );
+
             kingdom.OddFundsResource( payment );
+
             hero.SetVisited( dst_index, Visit::GLOBAL );
             hero.setVisitedForAllies( dst_index );
-        }
 
-        Interface::Basic & I = Interface::Basic::Get();
-        I.RedrawFocus();
+            Interface::Basic & I = Interface::Basic::Get();
+            I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
+        }
     }
     else {
         Dialog::Message( title, _( "The captain sighs. \"You don't have enough money, eh?  You can't expect me to give my maps away for free!\"" ), Font::BIG,
@@ -3096,11 +3110,12 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
 
         if ( !vec_eyes.empty() ) {
             Interface::Basic & I = Interface::Basic::Get();
-            for ( MapsIndexes::const_iterator it = vec_eyes.begin(); it != vec_eyes.end(); ++it ) {
-                Maps::ClearFog( *it, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ), hero.GetColor() );
-                I.GetGameArea().SetCenter( Maps::GetPoint( *it ) );
-                I.RedrawFocus();
-                I.Redraw();
+
+            for ( const int32_t eyeIndex : vec_eyes ) {
+                Maps::ClearFog( eyeIndex, GameStatic::getFogDiscoveryDistance( GameStatic::FogDiscoveryType::MAGI_EYES ), hero.GetColor() );
+
+                I.GetGameArea().SetCenter( Maps::GetPoint( eyeIndex ) );
+                I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
                 fheroes2::Display::instance().render();
 
@@ -3112,7 +3127,9 @@ void ActionToHutMagi( Heroes & hero, const MP2::MapObjectType objectType, int32_
                     }
                 }
             }
+
             I.GetGameArea().SetCenter( hero.GetCenter() );
+            I.SetRedraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
         }
     }
 

@@ -138,7 +138,7 @@ fheroes2::GameMode Game::LoadGame()
     // Stop all sounds, but not the music
     Mixer::Stop();
 
-    AudioManager::PlayMusic( MUS::MAINMENU, true, true );
+    AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
     fheroes2::Display & display = fheroes2::Display::instance();
 
@@ -237,7 +237,7 @@ fheroes2::GameMode Game::DisplayLoadGameDialog()
     // Stop all sounds, but not the music
     Mixer::Stop();
 
-    AudioManager::PlayMusic( MUS::MAINMENU, true, true );
+    AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );

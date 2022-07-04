@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 17:13+0000\n"
+"POT-Creation-Date: 2022-06-12 08:18+0000\n"
 "PO-Revision-Date: 2022-05-12 17:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -2574,6 +2574,46 @@ msgstr "Pas de place"
 msgid "the garrison"
 msgstr "dans l'armée"
 
+msgid "off"
+msgstr "coupé"
+
+msgid "Music"
+msgstr "Musique"
+
+msgid "Effects"
+msgstr "Effets"
+
+msgid "MIDI"
+msgstr "MIDI"
+
+msgid "MIDI Expansion"
+msgstr "MIDI Expansion"
+
+msgid "External"
+msgstr "Externe"
+
+msgid "Music Type"
+msgstr "Musique"
+
+msgid "3D Audio"
+msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr "Change le volume de la musique."
+
+msgid "Toggle foreground sounds level."
+msgstr "Change le volume des effets sonores."
+
+msgid "Change the type of music."
+msgstr "Change de type de musique."
+
+#, fuzzy
+msgid "Toggle 3D effects of foreground sounds."
+msgstr "Change le volume des effets sonores."
+
+msgid "Okay"
+msgstr "OK"
+
 msgid "Build a new ship:"
 msgstr "Construire un nouveau navire :"
 
@@ -2622,26 +2662,12 @@ msgstr "Expérimentaux"
 msgid "Settings"
 msgstr "Paramètres"
 
-msgid "off"
-msgstr "coupé"
+msgid "Audio"
+msgstr ""
 
-msgid "Music"
-msgstr "Musique"
-
-msgid "Effects"
-msgstr "Effets"
-
-msgid "MIDI"
-msgstr "MIDI"
-
-msgid "MIDI Expansion"
-msgstr "MIDI Expansion"
-
-msgid "External"
-msgstr "Externe"
-
-msgid "Music Type"
-msgstr "Musique"
+#, fuzzy
+msgid "settings"
+msgstr "Paramètres"
 
 #, fuzzy
 msgid "Hot Keys"
@@ -2665,6 +2691,27 @@ msgstr ""
 msgid "Text Support"
 msgstr "AQ et support"
 
+msgid "Evil"
+msgstr "Mal"
+
+msgid "Good"
+msgstr "Bien"
+
+msgid "Interface Type"
+msgstr "Type d'interface"
+
+msgid "Auto Resolve"
+msgstr "Combat auto"
+
+msgid "Auto, No Spells"
+msgstr "Auto sans magie"
+
+msgid "Manual"
+msgstr "Manuel"
+
+msgid "Battles"
+msgstr "Batailles"
+
 msgid "Select Game Language"
 msgstr "Choix de la langue"
 
@@ -2677,20 +2724,21 @@ msgstr "Choisir la résolution d'écran"
 msgid "Change resolution of the game."
 msgstr "Changer la résolution du jeu."
 
+#, fuzzy
+msgid "Change audio settings of the game."
+msgstr "Changer la langue, la résolution et les paramètres du jeu."
+
 msgid "Experimental game settings."
 msgstr "Paramètres de jeu expérimentaux."
 
-msgid "Toggle ambient music level."
-msgstr "Change le volume de la musique."
-
-msgid "Toggle foreground sounds level."
-msgstr "Change le volume des effets sonores."
-
-msgid "Change the type of music."
-msgstr "Change de type de musique."
+msgid "Toggle instant battle mode."
+msgstr "Change les modes de combat instantané."
 
 msgid "Check all Hot Keys used in the game."
 msgstr ""
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Bascule le type d'interface que vous voulez utiliser."
 
 msgid ""
 "Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
@@ -2701,9 +2749,6 @@ msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
-
-msgid "Okay"
-msgstr "OK"
 
 msgid "Attention"
 msgstr "Attention"
@@ -3163,15 +3208,6 @@ msgstr "Vitesse IA"
 msgid "Scroll Speed"
 msgstr "Défilement"
 
-msgid "Evil"
-msgstr "Mal"
-
-msgid "Good"
-msgstr "Bien"
-
-msgid "Interface Type"
-msgstr "Type d'interface"
-
 msgid "Hide"
 msgstr "Libre"
 
@@ -3180,18 +3216,6 @@ msgstr "Attachée"
 
 msgid "Interface"
 msgstr "Interface"
-
-msgid "Auto Resolve"
-msgstr "Combat auto"
-
-msgid "Auto, No Spells"
-msgstr "Auto sans magie"
-
-msgid "Battles"
-msgstr "Batailles"
-
-msgid "Manual"
-msgstr "Manuel"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3207,14 +3231,8 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr "Définit la vitesse à laquelle vous faites défiler la fenêtre."
 
-msgid "Toggle the type of interface you want to use."
-msgstr "Bascule le type d'interface que vous voulez utiliser."
-
 msgid "Toggle interface visibility."
 msgstr "Visibilité d'Interface."
-
-msgid "Toggle instant battle mode."
-msgstr "Change les modes de combat instantané."
 
 msgid "Att."
 msgstr "Att."
@@ -3344,6 +3362,10 @@ msgstr "AQ et support"
 
 msgid "Development"
 msgstr "Développement"
+
+#, fuzzy
+msgid "Dev and Support"
+msgstr "AQ et support"
 
 msgid "Visit us at "
 msgstr "Rendez-vous sur "
