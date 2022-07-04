@@ -27,7 +27,6 @@
 #include <cstdint>
 #include <string>
 
-#include "audio_manager.h"
 #include "game_mode.h"
 #include "mp2.h"
 #include "mus.h"
@@ -93,11 +92,13 @@ namespace Game
 
     void EnvironmentSoundMixer();
     void restoreSoundsForCurrentFocus();
+
+    bool UpdateSoundsOnFocusUpdate();
+    void SetUpdateSoundsOnFocusUpdate( const bool update );
+
     int GetKingdomColors();
     int GetActualKingdomColors();
     void DialogPlayers( int color, std::string );
-    void SetCurrentMusicTrack( const int trackId );
-    int CurrentMusicTrackId();
     uint32_t & MapsAnimationFrame();
     uint32_t GetRating();
     uint32_t GetGameOverScores();
@@ -105,8 +106,6 @@ namespace Game
     uint32_t GetWhirlpoolPercent();
     uint32_t SelectCountPlayers();
     void PlayPickupSound();
-    bool UpdateSoundsOnFocusUpdate();
-    void SetUpdateSoundsOnFocusUpdate( bool update );
     void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss = false );
     void OpenCastleDialog( Castle & castle, bool updateFocus = true );
     // Returns the difficulty level based on the type of game.
@@ -119,41 +118,6 @@ namespace Game
     std::string GetSaveFileBaseName();
     std::string GetSaveFileExtension();
     std::string GetSaveFileExtension( const int gameType );
-
-    // Useful for restoring background music after playing short-term music effects
-    class MusicRestorer
-    {
-    public:
-        MusicRestorer()
-            : _music( CurrentMusicTrackId() )
-        {}
-
-        MusicRestorer( const MusicRestorer & ) = delete;
-
-        ~MusicRestorer()
-        {
-            if ( _music == MUS::UNUSED || _music == MUS::UNKNOWN ) {
-                SetCurrentMusicTrack( _music );
-
-                return;
-            }
-
-            // Set current music to MUS::UNKNOWN to prevent attempts to play the old music
-            // by new instances of MusicRestorer while the music being currently restored
-            // is starting in the background
-            if ( _music != CurrentMusicTrackId() ) {
-                SetCurrentMusicTrack( MUS::UNKNOWN );
-            }
-
-            // It is assumed that the previous track was looped and does not require to be played from the beginning.
-            AudioManager::PlayMusicAsync( _music, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
-        }
-
-        MusicRestorer & operator=( const MusicRestorer & ) = delete;
-
-    private:
-        const int _music;
-    };
 
     namespace ObjectFadeAnimation
     {

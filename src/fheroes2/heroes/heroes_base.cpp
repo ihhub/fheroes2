@@ -160,9 +160,10 @@ void HeroBase::EditSpellBook()
     spell_book.Edit( *this );
 }
 
-Spell HeroBase::OpenSpellBook( const SpellBook::Filter filter, const bool canCastSpell, const std::function<void( const std::string & )> * statusCallback ) const
+Spell HeroBase::OpenSpellBook( const SpellBook::Filter filter, const bool canCastSpell, const bool restorePreviousState,
+                               const std::function<void( const std::string & )> * statusCallback ) const
 {
-    return spell_book.Open( *this, filter, canCastSpell, statusCallback );
+    return spell_book.Open( *this, filter, canCastSpell, restorePreviousState, statusCallback );
 }
 
 bool HeroBase::HaveSpellBook() const

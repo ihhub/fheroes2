@@ -35,6 +35,21 @@ namespace
 {
     const double fighterStrengthMultiplier = 3;
 
+    struct HeroValue
+    {
+        Heroes * hero = nullptr;
+        double strength = 0.0;
+        int stats = 0;
+
+        HeroValue( Heroes * inHero, double inStrength, int inStats )
+            : hero( inHero )
+            , strength( inStrength )
+            , stats( inStats )
+        {
+            // Do nothing.
+        }
+    };
+
     void setHeroRoles( KingdomHeroes & heroes )
     {
         if ( heroes.empty() ) {
@@ -58,28 +73,42 @@ namespace
         }
 
         // Set hero's roles. First calculate each hero strength and sort it in descending order.
-        std::vector<std::pair<double, Heroes *>> heroStrength;
+        std::vector<HeroValue> heroList;
         for ( Heroes * hero : heroes ) {
-            heroStrength.emplace_back( hero->GetArmy().GetStrength(), hero );
+            // AI heroes set on patrol mode can only be fighters; ignore them otherwise
+            if ( hero->Modes( Heroes::PATROL ) ) {
+                hero->setAIRole( Heroes::Role::FIGHTER );
+            }
+            else {
+                heroList.emplace_back( hero, hero->GetArmy().GetStrength(), hero->getStatsValue() );
+            }
         }
 
-        std::sort( heroStrength.begin(), heroStrength.end(),
-                   []( const std::pair<double, Heroes *> & first, const std::pair<double, Heroes *> & second ) { return first.first > second.first; } );
+        // If there's plenty of heroes we can assign special roles
+        if ( heroList.size() > 3 ) {
+            std::sort( heroList.begin(), heroList.end(), []( const HeroValue & first, const HeroValue & second ) { return first.stats > second.stats; } );
 
-        const double medianStrength = heroStrength[heroStrength.size() / 2].first;
+            // Assign the role and remove them so they aren't counted towards the median strength
+            heroList.back().hero->setAIRole( Heroes::Role::COURIER );
+            heroList.pop_back();
+        }
 
-        for ( std::pair<double, Heroes *> & hero : heroStrength ) {
+        std::sort( heroList.begin(), heroList.end(), []( const HeroValue & first, const HeroValue & second ) { return first.strength > second.strength; } );
+
+        const double medianStrength = heroList[heroList.size() / 2].strength;
+
+        for ( HeroValue & object : heroList ) {
             // TODO: a valuable hero must be marked as a champion.
-            if ( valuableHero != nullptr && hero.second == valuableHero ) {
-                hero.second->setAIRole( Heroes::Role::FIGHTER );
+            if ( valuableHero != nullptr && object.hero == valuableHero ) {
+                object.hero->setAIRole( Heroes::Role::FIGHTER );
                 continue;
             }
 
-            if ( hero.first > medianStrength * fighterStrengthMultiplier ) {
-                hero.second->setAIRole( Heroes::Role::FIGHTER );
+            if ( object.strength > medianStrength * fighterStrengthMultiplier ) {
+                object.hero->setAIRole( Heroes::Role::FIGHTER );
             }
             else {
-                hero.second->setAIRole( Heroes::Role::HUNTER );
+                object.hero->setAIRole( Heroes::Role::HUNTER );
             }
         }
     }
@@ -125,10 +154,74 @@ namespace AI
 
         if ( recruit && buyArmy ) {
             CastleTurn( castle, underThreat );
-            ReinforceHeroInCastle( *recruit, castle, kingdom.GetFunds() );
+            reinforceHeroInCastle( *recruit, castle, kingdom.GetFunds() );
         }
 
         return recruit != nullptr;
+    }
+
+    void Normal::reinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget )
+    {
+        if ( !hero.HaveSpellBook() && castle.GetLevelMageGuild() > 0 && !hero.IsFullBagArtifacts() ) {
+            // this call will check if AI kingdom have enough resources to buy book
+            hero.BuySpellBook( &castle );
+        }
+
+        Army & heroArmy = hero.GetArmy();
+        Army & garrison = castle.GetArmy();
+        const double armyStrength = heroArmy.GetStrength();
+
+        heroArmy.UpgradeTroops( castle );
+        castle.recruitBestAvailable( budget );
+        heroArmy.JoinStrongestFromArmy( garrison );
+
+        const uint32_t regionID = world.GetTiles( castle.GetIndex() ).GetRegion();
+        // check if we should leave some troops in the garrison
+        // TODO: amount of troops left could depend on region's safetyFactor
+        if ( castle.isCastle() && _regions[regionID].safetyFactor <= 100 && !garrison.isValid() ) {
+            const Heroes::Role heroRole = hero.getAIRole();
+            const bool isFigtherHero = ( heroRole == Heroes::Role::FIGHTER || heroRole == Heroes::Role::CHAMPION );
+
+            bool onlyHalf = false;
+            Troop * unitToSwap = heroArmy.GetSlowestTroop();
+            if ( unitToSwap ) {
+                const double significanceRatio = isFigtherHero ? 20.0 : 10.0;
+                if ( unitToSwap->GetStrength() > armyStrength / significanceRatio ) {
+                    Troop * weakest = heroArmy.GetWeakestTroop();
+
+                    assert( weakest != nullptr );
+                    if ( weakest ) {
+                        unitToSwap = weakest;
+                        if ( weakest->GetStrength() > armyStrength / significanceRatio ) {
+                            if ( isFigtherHero ) {
+                                // if it's an important hero and all troops are significant - keep the army
+                                unitToSwap = nullptr;
+                            }
+                            else {
+                                onlyHalf = true;
+                            }
+                        }
+                    }
+                }
+            }
+            if ( unitToSwap ) {
+                const uint32_t count = unitToSwap->GetCount();
+                const uint32_t toMove = onlyHalf ? count / 2 : count;
+                if ( garrison.JoinTroop( unitToSwap->GetMonster(), toMove, true ) ) {
+                    if ( !onlyHalf ) {
+                        unitToSwap->Reset();
+                    }
+                    else {
+                        unitToSwap->SetCount( count - toMove );
+                    }
+                }
+            }
+        }
+
+        OptimizeTroopsOrder( heroArmy );
+        if ( std::fabs( armyStrength - heroArmy.GetStrength() ) > 0.001 ) {
+            hero.unmarkHeroMeeting();
+        }
     }
 
     void Normal::evaluateRegionSafety()
@@ -226,7 +319,7 @@ namespace AI
 
     std::set<int> Normal::findCastlesInDanger( const KingdomCastles & castles, const std::vector<std::pair<int, const Army *>> & enemyArmies, int myColor )
     {
-        const uint32_t threatDistanceLimit = 2500; // 25 tiles, roughly how much maxed out hero can move in a turn
+        const uint32_t threatDistanceLimit = 3000; // 30 tiles, roughly how much maxed out hero can move in a turn
         std::set<int> castlesInDanger;
 
         for ( const std::pair<int, const Army *> & enemy : enemyArmies ) {
@@ -248,10 +341,13 @@ namespace AI
 
                 const double attackerThreat = attackerStrength - defenders;
                 if ( attackerThreat > 0 ) {
+                    _priorityTargets[enemy.first] = PriorityTask::ATTACK;
                     const uint32_t dist = _pathfinder.getDistance( enemy.first, castleIndex, myColor, attackerStrength );
                     if ( dist && dist < threatDistanceLimit ) {
                         // castle is under threat
                         castlesInDanger.insert( castleIndex );
+
+                        _priorityTargets[castleIndex] = PriorityTask::DEFEND;
                     }
                 }
             }
@@ -289,6 +385,8 @@ namespace AI
         Heroes * bestHeroToViewAll = nullptr;
 
         for ( Heroes * hero : heroes ) {
+            hero->ResetModes( Heroes::SLEEPER );
+
             const double strength = hero->GetArmy().GetStrength();
             _combinedHeroStrength += strength;
             if ( !hero->Modes( Heroes::PATROL ) )
@@ -306,6 +404,7 @@ namespace AI
         std::vector<std::pair<int, const Army *>> enemyArmies;
 
         const int mapSize = world.w() * world.h();
+        _priorityTargets.clear();
         _mapObjects.clear();
         _regions.clear();
         _regions.resize( world.getRegionCount() );
@@ -399,7 +498,7 @@ namespace AI
             // Step 2. Do some hero stuff.
             // If a hero is standing in a castle most likely he has nothing to do so let's try to give him more army.
             for ( Heroes * hero : heroes ) {
-                HeroesActionComplete( *hero, MP2::OBJ_ZERO );
+                HeroesActionComplete( *hero, hero->GetIndex(), MP2::OBJ_ZERO );
             }
 
             // Step 3. Reassign heroes roles
@@ -501,23 +600,5 @@ namespace AI
 
         // target found, buy hero
         return recruitmentCastle && recruitHero( *recruitmentCastle, !slowEarlyGame, false );
-    }
-
-    double Normal::getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType )
-    {
-        if ( !isMonsterStrengthCacheable( objectType ) ) {
-            return Army( tile ).GetStrength();
-        }
-
-        const int32_t tileId = tile.GetIndex();
-
-        auto iter = _neutralMonsterStrengthCache.find( tileId );
-        if ( iter != _neutralMonsterStrengthCache.end() ) {
-            // Cache hit.
-            return iter->second;
-        }
-
-        auto newEntry = _neutralMonsterStrengthCache.emplace( tileId, Army( tile ).GetStrength() );
-        return newEntry.first->second;
     }
 }

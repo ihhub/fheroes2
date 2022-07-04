@@ -391,9 +391,6 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
     display.render();
 
-    MovePointsScaleFixed();
-    otherHero.MovePointsScaleFixed();
-
     LocalEvent & le = LocalEvent::Get();
 
     // message loop

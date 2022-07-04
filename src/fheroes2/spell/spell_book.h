@@ -31,8 +31,9 @@
 
 class HeroBase;
 
-struct SpellBook : public SpellStorage
+class SpellBook : public SpellStorage
 {
+public:
     enum class Filter : int
     {
         ADVN = 0x01,
@@ -40,11 +41,19 @@ struct SpellBook : public SpellStorage
         ALL = ADVN | CMBT
     };
 
-    Spell Open( const HeroBase & hero, const Filter displayableSpells, const bool canselect,
-                const std::function<void( const std::string & )> * statusCallback = nullptr ) const;
+    Spell Open( const HeroBase & hero, const Filter displayableSpells, const bool canCastSpell, const bool restorePreviousState,
+                const std::function<void( const std::string & )> * statusCallback ) const;
+
     void Edit( const HeroBase & hero );
 
+    void resetState();
+
     SpellStorage SetFilter( const Filter filter, const HeroBase * hero = nullptr ) const;
+
+private:
+    mutable size_t _startSpellIndex = 0;
+
+    mutable Filter _spellFilter = Filter::ADVN;
 };
 
 #endif

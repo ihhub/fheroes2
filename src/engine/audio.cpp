@@ -76,8 +76,8 @@ namespace
     // a SDL_Mixer internal thread.
     //
     // TODO: according to SDL_Mixer manual, calls of any SDL_Mixer functions are not allowed in
-    // callbacks. The current code works, but it would be good to find a reliable way to perform
-    // channel cleanup without calling these functions.
+    // TODO: callbacks. The current code works, but it would be good to find a reliable way to
+    // TODO: perform channel cleanup without calling these functions.
     void channelFinished( const int channelId )
     {
         // This callback function should never be called if audio is not initialized
