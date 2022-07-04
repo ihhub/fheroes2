@@ -1976,7 +1976,6 @@ msgstr "Rozb. kammienny krąg"
 msgid "Fenced Meadow"
 msgstr "Ogrodzona łąka"
 
-#, fuzzy
 msgid "sorceress|Red Tower"
 msgstr "Czerwona wieża"
 
@@ -2007,7 +2006,6 @@ msgstr "Bagno"
 msgid "Green Tower"
 msgstr "Zielona wieża"
 
-#, fuzzy
 msgid "warlock|Red Tower"
 msgstr "Czerwona wieża"
 
