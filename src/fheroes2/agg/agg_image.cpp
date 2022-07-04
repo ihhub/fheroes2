@@ -1802,7 +1802,7 @@ namespace fheroes2
             }
             case ICN::NGEXTRA: {
                 LoadOriginalICN( id );
-                std::vector<Sprite> &images = _icnVsSprite[id];
+                std::vector<Sprite> & images = _icnVsSprite[id];
 
                 if ( images.size() >= 34 ) {
                     // Fix extra column at the end of AI controlled player.
