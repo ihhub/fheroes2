@@ -587,7 +587,7 @@ Troop * Troops::GetWeakestTroop() const
     return *lowest;
 }
 
-const Troop * Troops::GetSlowestTroop() const
+Troop * Troops::GetSlowestTroop() const
 {
     const_iterator first = begin();
     const_iterator last = end();
@@ -1295,7 +1295,7 @@ std::string Army::String() const
     os << "color(" << Color::String( commander ? commander->GetColor() : color ) << "), ";
 
     if ( GetCommander() )
-        os << "commander(" << GetCommander()->GetName() << "), ";
+        os << "commander(" << GetCommander()->GetName() << ")";
 
     os << ": ";
 

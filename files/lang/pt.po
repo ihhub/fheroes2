@@ -1,13 +1,13 @@
 # Brazilian Portuguese translation for fheroes2
 # Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
 # This file is distributed under the same license as the fheroes2 package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+# fheroes2 team <fhomm2@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-12 08:18+0000\n"
+"POT-Creation-Date: 2022-06-28 00:30+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -166,8 +166,11 @@ msgstr "Ver %{name}"
 msgid "Set Count"
 msgstr ""
 
-msgid "%{name} half the enemy troops!"
-msgstr "%{name} metade das tropas inimigas!"
+#, fuzzy
+msgid "%{name} destroys half the enemy troops!"
+msgid_plural "%{name} destroy half the enemy troops!"
+msgstr[0] "%{name} metade das tropas inimigas!"
+msgstr[1] "%{name} metade das tropas inimigas!"
 
 #, fuzzy
 msgid "%{name} has turned off the auto battle"
@@ -518,8 +521,11 @@ msgstr "%{name} a %{race}."
 msgid "%{name} wait their turn."
 msgstr "%{name} a %{race}."
 
-msgid "%{attacker} do %{damage} damage."
-msgstr ""
+#, fuzzy
+msgid "%{attacker} does %{damage} damage."
+msgid_plural "%{attacker} do %{damage} damage."
+msgstr[0] "%{tower} causou %{damage} damage."
+msgstr[1] "%{tower} causou %{damage} damage."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
@@ -1899,7 +1905,8 @@ msgstr "Upg. Stonehenge++"
 msgid "Fenced Meadow"
 msgstr "Campo Cercado"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Torre Vermelha"
 
 msgid "Dungeon"
@@ -1928,6 +1935,10 @@ msgstr "Pântano"
 
 msgid "Green Tower"
 msgstr "Torre Verde"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Torre Vermelha"
 
 msgid "Black Tower"
 msgstr "Torre Negra"

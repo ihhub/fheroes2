@@ -31,8 +31,7 @@
 
 #define TILEWIDTH 32
 
-class MapsIndexes : public std::vector<int32_t>
-{};
+using MapsIndexes = std::vector<int32_t>;
 
 namespace Maps
 {

@@ -1,13 +1,13 @@
 # Dutch translation for fheroes2
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
+# fheroes2 team <fhomm2@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-12 08:18+0000\n"
+"POT-Creation-Date: 2022-06-28 00:30+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -143,8 +143,10 @@ msgstr ""
 msgid "Set Count"
 msgstr ""
 
-msgid "%{name} half the enemy troops!"
-msgstr ""
+msgid "%{name} destroys half the enemy troops!"
+msgid_plural "%{name} destroy half the enemy troops!"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "%{name} has turned off the auto battle"
 msgstr ""
@@ -469,8 +471,10 @@ msgstr ""
 msgid "%{name} wait their turn."
 msgstr ""
 
-msgid "%{attacker} do %{damage} damage."
-msgstr ""
+msgid "%{attacker} does %{damage} damage."
+msgid_plural "%{attacker} do %{damage} damage."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
@@ -1769,7 +1773,7 @@ msgstr ""
 msgid "Fenced Meadow"
 msgstr ""
 
-msgid "Red Tower"
+msgid "sorceress|Red Tower"
 msgstr ""
 
 msgid "Dungeon"
@@ -1797,6 +1801,9 @@ msgid "Swamp"
 msgstr ""
 
 msgid "Green Tower"
+msgstr ""
+
+msgid "warlock|Red Tower"
 msgstr ""
 
 msgid "Black Tower"

@@ -473,7 +473,7 @@ namespace fheroes2
                 Settings::Get().Save( Settings::configFileName );
                 return;
             case DialogAction::AudioSettings:
-                Dialog::openAudioSettingsDialog();
+                Dialog::openAudioSettingsDialog( true );
                 action = DialogAction::Open;
                 break;
             case DialogAction::HotKeys:
