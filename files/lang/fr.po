@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-28 00:30+0000\n"
-"PO-Revision-Date: 2022-05-12 17:08+0200\n"
+"PO-Revision-Date: 2022-07-04 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1\n"
 
 msgid "Warrior"
 msgstr "Guerrier"
@@ -136,9 +136,8 @@ msgstr "Morts-vivants parmi les troupes -1"
 msgid "View %{name}"
 msgstr "Voir %{name}"
 
-#, fuzzy
 msgid "Move the %{name} "
-msgstr "Déplacer %{name}"
+msgstr "Déplacer la troupe de %{name} "
 
 msgid "Move or right click to redistribute %{name}"
 msgstr "Déplacer ou faire un clic droit pour répartir les %{name}"
@@ -155,9 +154,8 @@ msgstr "Sélectionner %{name}"
 msgid "Cannot move last troop"
 msgstr "Impossible de déplacer la dernière armée dans la garnison"
 
-#, fuzzy
 msgid "Move the %{name}"
-msgstr "Déplacer %{name}"
+msgstr "Déplacer la troupe de %{name}"
 
 msgid "Set Count"
 msgstr "Régler le nombre"
@@ -576,29 +574,29 @@ msgstr "%{spell} inflige %{value} dégâts à une créature vivante."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} inflige %{value} dégâts à toutes les créatures vivantes."
 
-#, fuzzy
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr "L'attaque des Licornes aveugle les %{name} !"
+msgstr "L'attaque de la troupe de %{attacker} aveugle la troupe de %{target} !"
 
-#, fuzzy
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr "Le regard des Méduses transforme les %{name} en pierre !"
+msgstr ""
+"Le regard de la troupe de %{attacker} transforme la troupe de %{target} en "
+"pierre !"
 
-#, fuzzy
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr "La malédiction des Momies s'abat sur les %{name} !"
+msgstr ""
+"La malédiction de la troupe de %{attacker} s'abat sur la troupe de "
+"%{target} !"
 
-#, fuzzy
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr "%{name} sont paralysés par les Cyclopes !"
+msgstr "La troupe de %{target} est paralysée par %{attacker} !"
 
-#, fuzzy
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr "Les Grands mages dissipent tous les bons sorts sur vos %{name} !"
+msgstr ""
+"La troupe de %{attacker} dissipe tous les sorts bénéfiques sur vos "
+"%{target} !"
 
-#, fuzzy
 msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr "%{name} lance %{spell} sur les %{troop}."
+msgstr "La troupe de %{attacker} lance %{spell} sur la troupe de %{target} !"
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "La malchance s'abat sur les %{attacker}."
@@ -1287,11 +1285,10 @@ msgstr "L'artefact \"%{artifact}\" sera conservé dans le scénario suivant."
 msgid "The army will be carried over the scenario."
 msgstr "L'armée sera conservée dans le scénario suivant."
 
-#, fuzzy
 msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr ""
-"Le royaume obtiendra des ressources supplémentaires en %{resource} au début "
-"du scénario."
+"Le royaume obtiendra +%{count} ressources supplémentaires en %{resource} "
+"chaque jour."
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
 msgstr "Le sort \"%{spell}\" sera conservé dans le scénario suivant."
@@ -1598,13 +1595,12 @@ msgstr ""
 "Le royaume bénéficiera de %{amount} %{resource} supplémentaire(s) au début "
 "du scénario."
 
-#, fuzzy
 msgid ""
 "The kingdom will have %{amount} less %{resource} at the start of the "
 "scenario."
 msgstr ""
-"Le royaume obtiendra des ressources supplémentaires en %{resource} au début "
-"du scénario."
+"Le royaume aura %{amount} ressource en %{resource} de moins au début du "
+"scénario."
 
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
@@ -2419,7 +2415,6 @@ msgstr "Quitter les options du château"
 msgid "Castle Options"
 msgstr "Options du château"
 
-#, fuzzy
 msgid "Not enough resources to recruit creatures."
 msgstr "Pas assez de ressources pour recruter des créatures."
 
@@ -2430,9 +2425,8 @@ msgstr ""
 msgid "No creatures available for purchase."
 msgstr "Pas de créatures disponibles à l'achat."
 
-#, fuzzy
 msgid "Recruit Creatures"
-msgstr "Acheter des créatures"
+msgstr "Recruter des créatures"
 
 msgid "Town Population Information and Statistics"
 msgstr "Informations et statistiques sur la population du village"
@@ -2607,7 +2601,7 @@ msgid "Music Type"
 msgstr "Musique"
 
 msgid "3D Audio"
-msgstr ""
+msgstr "Audio 3D"
 
 msgid "Toggle ambient music level."
 msgstr "Change le volume de la musique."
@@ -2618,9 +2612,8 @@ msgstr "Change le volume des effets sonores."
 msgid "Change the type of music."
 msgstr "Change de type de musique."
 
-#, fuzzy
 msgid "Toggle 3D effects of foreground sounds."
-msgstr "Change le volume des effets sonores."
+msgstr "Basculer les effets 3D des sons au premier plan"
 
 msgid "Okay"
 msgstr "OK"
@@ -2674,33 +2667,28 @@ msgid "Settings"
 msgstr "Paramètres"
 
 msgid "Audio"
-msgstr ""
+msgstr "Audio"
 
-#, fuzzy
 msgid "settings"
 msgstr "Paramètres"
 
-#, fuzzy
 msgid "Hot Keys"
-msgstr "Hot Seat"
+msgstr "Raccourcis clavier"
 
 msgid "In-game"
-msgstr ""
+msgstr "Dans le jeu"
 
-#, fuzzy
 msgid "Black & White"
-msgstr "Blackridge"
+msgstr "Noir et blanc"
 
-#, fuzzy
 msgid "Mouse Cursor"
-msgstr "Ombre du curseur"
+msgstr "Curseur de la souris"
 
 msgid "Color"
-msgstr ""
+msgstr "Coloré"
 
-#, fuzzy
 msgid "Text Support"
-msgstr "AQ et support"
+msgstr "Mode texte"
 
 msgid "Evil"
 msgstr "Mal"
@@ -2735,9 +2723,8 @@ msgstr "Choisir la résolution d'écran"
 msgid "Change resolution of the game."
 msgstr "Changer la résolution du jeu."
 
-#, fuzzy
 msgid "Change audio settings of the game."
-msgstr "Changer la langue, la résolution et les paramètres du jeu."
+msgstr "Changer les paramétres du son du jeu."
 
 msgid "Experimental game settings."
 msgstr "Paramètres de jeu expérimentaux."
@@ -2746,7 +2733,7 @@ msgid "Toggle instant battle mode."
 msgstr "Change les modes de combat instantané."
 
 msgid "Check all Hot Keys used in the game."
-msgstr ""
+msgstr "Verifier les raccourcirs clavier du jeu."
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Bascule le type d'interface que vous voulez utiliser."
@@ -2755,16 +2742,19 @@ msgid ""
 "Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
 "move as smoothly as black and white ones."
 msgstr ""
+"Basculer le curseur en couleur. Les curseurs colorés sont plus beaux, mais "
+"peuvent ne pas être aussi fluide que celui en noir et blanc."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
+"Activer le mode texte pour afficher des informations supplémentaires sur les "
+"différentes fenêtres et les événements du jeu."
 
 msgid "Attention"
 msgstr "Attention"
 
-#, fuzzy
 msgid ""
 "Your version of Heroes of Might and Magic II does not support any other "
 "languages than English."
@@ -2845,7 +2835,7 @@ msgid "Your army too big!"
 msgstr "Votre armée est trop grande !"
 
 msgid "Hot Keys:"
-msgstr ""
+msgstr "Raccourcis clavier :"
 
 msgid "Select Game Language:"
 msgstr "Choix de la langue :"
@@ -3374,9 +3364,8 @@ msgstr "AQ et support"
 msgid "Development"
 msgstr "Développement"
 
-#, fuzzy
 msgid "Dev and Support"
-msgstr "AQ et support"
+msgstr "Dév et support"
 
 msgid "Visit us at "
 msgstr "Rendez-vous sur "
@@ -3402,7 +3391,6 @@ msgstr "et beaucoup, beaucoup d'autres supporteurs !"
 msgid "Original project before 0.7"
 msgstr "Projet original avant 0.7"
 
-#, fuzzy
 msgid "Original Heroes of Might and Magic II team"
 msgstr "L'équipe originale de Heroes of Might and Magic II"
 
@@ -3463,13 +3451,11 @@ msgstr "Héros Inconnu"
 msgid "Your Name"
 msgstr "Votre Nom"
 
-#, fuzzy
 msgid "Standard"
 msgstr "Jeu standard"
 
-#, fuzzy
 msgid "View High Scores for Standard Maps."
-msgstr "Voir l'écran des meilleurs scores."
+msgstr "Voir l'écran des meilleurs scores des cartes standards."
 
 msgid "Campaign"
 msgstr "Campagne"
@@ -3550,13 +3536,12 @@ msgstr "L'équipe fheroes2 Resurrection présente"
 msgid "Greetings!"
 msgstr "Salutations !"
 
-#, fuzzy
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
 "starting the game please choose game resolution."
 msgstr ""
-"Bienvenue à fheroes2 ! Avant de commencer le jeu choisissez la résolution du "
-"jeu."
+"Bienvenue sur Heroes of Might and Magic II (amélioré par le moteur "
+"fheroes2) ! Avant de commencer le jeu choisissez la résolution du jeu."
 
 msgid "Please Remember"
 msgstr "N'oubliez pas"
@@ -3593,9 +3578,9 @@ msgstr ""
 "\n"
 "Profitez du jeu !"
 
-#, fuzzy
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
-msgstr "Quitter fheroes2 et retourner au système d'exploitation."
+msgstr ""
+"Quitter Heroes of Might and Magic II et retourner au système d'exploitation."
 
 msgid "Credits"
 msgstr "Crédits"
@@ -3615,7 +3600,6 @@ msgstr "Changer la langue, la résolution et les paramètres du jeu."
 msgid "Game Settings"
 msgstr "Paramètres du jeu"
 
-#, fuzzy
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
 "and Magic II."
@@ -4160,9 +4144,8 @@ msgstr ""
 msgid "Swedish"
 msgstr ""
 
-#, fuzzy
 msgid "Portuguese"
-msgstr "Pillards"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ", FPS : "
@@ -5822,7 +5805,6 @@ msgstr ""
 "Ce sort coûte %{mana} mana. Vous n'avez que %{point} mana, vous ne pouvez "
 "donc pas lancer le sort."
 
-#, fuzzy
 msgid "The spell was not found."
 msgstr "Sort introuvable."
 
@@ -9595,7 +9577,6 @@ msgstr "château : les Héros peuvent remplacer le Capitaine"
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "héros : permettre l'achat d'un Grimoire dans les Sanctuaires"
 
-#, fuzzy
 msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
 "héros : les points de mouvement sont mémorisés après la retraite/reddition"
