@@ -168,9 +168,11 @@ Troops::Troops( const Troops & troops )
 
 Troops & Troops::operator=( const Troops & rhs )
 {
-    reserve( rhs.size() );
-    for ( const_iterator it = rhs.begin(); it != rhs.end(); ++it )
-        push_back( new Troop( **it ) );
+    if ( this != &rhs ) {
+        reserve( rhs.size() );
+        for ( const_iterator it = rhs.begin(); it != rhs.end(); ++it )
+            push_back( new Troop( **it ) );
+    }
     return *this;
 }
 
