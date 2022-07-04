@@ -112,20 +112,22 @@ namespace
     {
         switch ( hero.getAIRole() ) {
         case Heroes::Role::SCOUT:
-            return _( "Scout" );
+            return "Scout";
         case Heroes::Role::COURIER:
-            return _( "Courier" );
+            return "Courier";
         case Heroes::Role::HUNTER:
-            return _( "Hunter" );
+            return "Hunter";
         case Heroes::Role::FIGHTER:
-            return _( "Fighter" );
+            return "Fighter";
         case Heroes::Role::CHAMPION:
-            return _( "Champion" );
+            return "Champion";
         default:
+            // Did you add a new AI hero role? Add the appropriate logic for it!
+            assert( 0 );
             break;
         }
 
-        return _( "Unknown" );
+        return "Unknown";
     }
 }
 
