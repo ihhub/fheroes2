@@ -136,7 +136,7 @@ fheroes2::GameMode Game::LoadGame()
     outputLoadGameInTextSupportMode();
 
     // Stop all sounds, but not the music
-    Mixer::Stop();
+    AudioManager::stopSounds();
 
     AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
@@ -235,7 +235,7 @@ fheroes2::GameMode Game::LoadStandard()
 fheroes2::GameMode Game::DisplayLoadGameDialog()
 {
     // Stop all sounds, but not the music
-    Mixer::Stop();
+    AudioManager::stopSounds();
 
     AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 

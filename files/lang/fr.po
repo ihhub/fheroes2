@@ -1,13 +1,13 @@
 # French translation for fheroes2
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
-# fheroes2 team <fhomm2@gmail.com>, 2021
+# fheroes2 team <fhomm2@gmail.com>, 2021 - 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-12 08:18+0000\n"
+"POT-Creation-Date: 2022-06-28 00:30+0000\n"
 "PO-Revision-Date: 2022-06-18 18:24+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -160,8 +160,11 @@ msgstr "Déplacer la troupe de %{name}"
 msgid "Set Count"
 msgstr "Régler le nombre"
 
-msgid "%{name} half the enemy troops!"
-msgstr "%{name} décime la troupe ennemie !"
+#, fuzzy
+msgid "%{name} destroys half the enemy troops!"
+msgid_plural "%{name} destroy half the enemy troops!"
+msgstr[0] "%{name} décime la troupe ennemie !"
+msgstr[1] "%{name} décime la troupe ennemie !"
 
 msgid "%{name} has turned off the auto battle"
 msgstr "%{name} a désactivé le combat auto"
@@ -521,8 +524,11 @@ msgid "%{name} wait their turn."
 msgstr "%{name} attendent."
 
 # if only 1 monster: "... attend"
-msgid "%{attacker} do %{damage} damage."
-msgstr "%{attacker} infligent %{damage} de dégâts."
+#, fuzzy
+msgid "%{attacker} does %{damage} damage."
+msgid_plural "%{attacker} do %{damage} damage."
+msgstr[0] "%{attacker} infligent %{damage} de dégâts."
+msgstr[1] "%{attacker} infligent %{damage} de dégâts."
 
 # if only 1 monster: "... inflige ..."
 msgid "1 creature perishes."
@@ -1987,7 +1993,8 @@ msgstr "Grand cromlech"
 msgid "Fenced Meadow"
 msgstr "Pré"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Tour rouge"
 
 msgid "Dungeon"
@@ -2016,6 +2023,10 @@ msgstr "Marais"
 
 msgid "Green Tower"
 msgstr "Tour verte"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Tour rouge"
 
 msgid "Black Tower"
 msgstr "Tour noire"

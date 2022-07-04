@@ -22,6 +22,7 @@
 
 #include "agg_image.h"
 #include "audio.h"
+#include "audio_manager.h"
 #include "cursor.h"
 #include "dialog_audio.h"
 #include "game.h"
@@ -114,7 +115,7 @@ namespace
 
 namespace Dialog
 {
-    void openAudioSettingsDialog()
+    void openAudioSettingsDialog( const bool fromAdventureMap )
     {
         const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -209,7 +210,7 @@ namespace Dialog
                     saveSoundVolume = true;
                 }
 
-                if ( saveSoundVolume ) {
+                if ( saveSoundVolume && fromAdventureMap ) {
                     Game::EnvironmentSoundMixer();
                 }
             }
@@ -219,14 +220,13 @@ namespace Dialog
             if ( le.MouseClickLeft( musicTypeRoi ) ) {
                 int type = conf.MusicType() + 1;
                 // If there's no expansion files we skip this option
-                if ( type == MUSIC_MIDI_EXPANSION && !conf.isPriceOfLoyaltySupported() )
+                if ( type == MUSIC_MIDI_EXPANSION && !conf.isPriceOfLoyaltySupported() ) {
                     ++type;
-
-                const Game::MusicRestorer musicRestorer;
+                }
 
                 conf.SetMusicType( type > MUSIC_EXTERNAL ? 0 : type );
 
-                Game::SetCurrentMusicTrack( MUS::UNKNOWN );
+                AudioManager::PlayCurrentMusic();
 
                 saveMusicType = true;
             }

@@ -310,11 +310,6 @@ public:
         move_point = 0;
     }
 
-    void MovePointsScaleFixed()
-    {
-        move_point_scale = move_point * 1000 / GetMaxMovePoints();
-    }
-
     bool HasSecondarySkill( int ) const;
     bool HasMaxSecondarySkill() const;
     int GetLevelSkill( int ) const override;
@@ -529,7 +524,6 @@ private:
 
     std::string name;
     uint32_t experience;
-    int32_t move_point_scale;
 
     Skill::SecSkills secondary_skills;
 
