@@ -43,13 +43,15 @@ fheroes2::GameMode Dialog::FileOptions()
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    // image box
-    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( cpanbkg, 0 );
+    // Image sprite.
+    const fheroes2::Sprite & background = fheroes2::AGG::GetICN( cpanbkg, 0 );
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Point rb( ( display.width() - box.width() - BORDERWIDTH ) / 2, ( display.height() - box.height() ) / 2 );
-    fheroes2::ImageRestorer back( display, rb.x, rb.y, box.width(), box.height() );
-    fheroes2::Blit( box, display, rb.x, rb.y );
+
+    // Since the original image contains shadow it is important to remove it from calculation of window's position.
+    const fheroes2::Point rb( ( display.width() - background.width() - BORDERWIDTH ) / 2, ( display.height() - background.height() + BORDERWIDTH ) / 2 );
+    fheroes2::ImageRestorer back( display, rb.x, rb.y, background.width(), background.height() );
+    fheroes2::Blit( background, display, rb.x, rb.y );
 
     LocalEvent & le = LocalEvent::Get();
 
