@@ -597,12 +597,12 @@ Castle::ConstructionDialogResult Castle::openConstructionDialog( uint32_t & dwel
             Dialog::Message( _( "Grouped Formation" ), descriptionGroupedArmyFormat, Font::BIG );
         else if ( hero1 && le.MousePressRight( rectHero1 ) ) {
             LocalEvent::GetClean();
-            hero1->OpenDialog( true );
+            hero1->OpenDialog( true, false, false, false );
             display.render();
         }
         else if ( hero2 && le.MousePressRight( rectHero2 ) ) {
             LocalEvent::GetClean();
-            hero2->OpenDialog( true );
+            hero2->OpenDialog( true, false, false, false );
             display.render();
         }
         else if ( le.MousePressRight( buttonNextCastle.area() ) ) {

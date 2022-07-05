@@ -327,7 +327,7 @@ public:
     // Returns the relative height of mana column near hero's portrait in heroes panel. Returned value will be in range [0; 25].
     int GetManaIndexSprite() const;
 
-    int OpenDialog( bool readonly = false, bool fade = false, bool disableDismiss = false, bool disableSwitch = false );
+    int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog = false );
     void MeetingDialog( Heroes & );
 
     bool Recruit( const int col, const fheroes2::Point & pt );

@@ -209,7 +209,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
     int result = Dialog::ZERO;
 
     while ( it != myHeroes.end() && result != Dialog::CANCEL ) {
-        result = ( *it )->OpenDialog( false, needFade, disableDismiss );
+        result = ( *it )->OpenDialog( false, needFade, disableDismiss, false, windowIsGameWorld );
         if ( needFade )
             needFade = false;
 
