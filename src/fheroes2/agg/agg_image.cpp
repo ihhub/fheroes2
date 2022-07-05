@@ -2194,6 +2194,25 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::CAMPXTRG:
+            case ICN::CAMPXTRE: {
+                LoadOriginalICN( id );
+
+                auto & image = _icnVsSprite[id];
+
+                if ( image.size() >= 8 ) {
+                    for ( size_t i = 0; i < 4; ++i ) {
+                        Sprite resized( image[2 * i].width(), image[2 * i].height() );
+                        resized.reset();
+
+                        Sprite & original = image[2 * i + 1];
+                        Copy( original, 0, 0, resized, original.x(), original.y(), original.width(), original.height() );
+                        original = std::move( resized );
+                    }
+                }
+
+                return true;
+            }
             default:
                 break;
             }
