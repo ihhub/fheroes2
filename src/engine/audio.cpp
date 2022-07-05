@@ -572,10 +572,6 @@ void Mixer::SetChannels( const int num )
                                                                                                                     << audioChannelCount )
     }
 
-    if ( audioChannelCount > 0 ) {
-        Mix_ReserveChannels( 1 );
-    }
-
     if ( isMuted ) {
         savedMixerVolumes.resize( static_cast<size_t>( audioChannelCount ), 0 );
 
