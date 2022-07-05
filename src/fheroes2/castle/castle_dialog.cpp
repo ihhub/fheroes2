@@ -166,8 +166,7 @@ namespace
         }
 
         if ( !hero2 ) {
-            const bool isEvilInterace = Settings::Get().ExtGameEvilInterface();
-            const fheroes2::Sprite & backgroundImage = isEvilInterace ? fheroes2::AGG::GetICN( ICN::STRIP_BACKGROUND_EVIL, 0 ) : fheroes2::AGG::GetICN( ICN::STRIP, 11 );
+            const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::STRIP, 11 );
 
             fheroes2::Blit( backgroundImage, display, pt.x + 112, pt.y + 361 );
         }
