@@ -1726,7 +1726,7 @@ void AllHeroes::Init()
         push_back( new Heroes( Heroes::DAINWIN, Race::WRLK, 5 ) );
         push_back( new Heroes( Heroes::MOG, Race::NECR, 5 ) );
         push_back( new Heroes( Heroes::UNCLEIVAN, Race::BARB, 5 ) );
-        push_back( new Heroes( Heroes::JOSEPH, Race::KNGT, 5 ) );
+        push_back( new Heroes( Heroes::JOSEPH, Race::WZRD, 5 ) );
         push_back( new Heroes( Heroes::GALLAVANT, Race::KNGT, 5 ) );
         push_back( new Heroes( Heroes::ELDERIAN, Race::WRLK, 5 ) );
         push_back( new Heroes( Heroes::CEALLACH, Race::KNGT, 5 ) );
