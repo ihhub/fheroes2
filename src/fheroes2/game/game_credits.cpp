@@ -625,7 +625,7 @@ namespace
         title.draw( ( output.width() - title.width() ) / 2, 10, output );
 
         title.set( _( "Cyberlore Studios" ), titleFontType );
-        title.draw( ( output.width() - title.width() ) / 2, 10  + title.height() * 2, output );
+        title.draw( ( output.width() - title.width() ) / 2, 10 + title.height() * 2, output );
 
         const int32_t textInitialOffsetY = 35 + title.height() * 4;
         const int32_t textWidth = 320;
@@ -663,7 +663,8 @@ namespace
         offsetY += title.height( textWidth );
 
         name.set( "Jesse King\n"
-                  "Kris Greenia", nameFontType );
+                  "Kris Greenia",
+                  nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
@@ -732,9 +733,9 @@ namespace
         title.draw( ( output.width() - title.width() ) / 2, 10, output );
 
         title.set( _( "New World Computing" ), titleFontType );
-        title.draw( ( output.width() - title.width() ) / 2, 10  + title.height() * 2, output );
+        title.draw( ( output.width() - title.width() ) / 2, 10 + title.height() * 2, output );
 
-        const int32_t textInitialOffsetY = 35 + title.height() * 4 ;
+        const int32_t textInitialOffsetY = 35 + title.height() * 4;
         const int32_t textWidth = 320;
         const int32_t titleOffsetY = 7;
 
@@ -762,7 +763,8 @@ namespace
         offsetY += title.height( textWidth );
 
         name.set( "Peter Ryu\n"
-                  "Deane Rettig", nameFontType );
+                  "Deane Rettig",
+                  nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
@@ -779,7 +781,8 @@ namespace
         offsetY += title.height( textWidth );
 
         name.set( "Brian Gilmer\n"
-                  "Peter Ryu", nameFontType );
+                  "Peter Ryu",
+                  nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
         offsetY += name.height( textWidth ) + titleOffsetY;
 
@@ -865,7 +868,7 @@ namespace
         title.draw( ( output.width() - title.width() ) / 2, 10, output );
 
         title.set( _( "New World Computing" ), titleFontType );
-        title.draw( ( output.width() - title.width() ) / 2, 10  + title.height() * 2, output );
+        title.draw( ( output.width() - title.width() ) / 2, 10 + title.height() * 2, output );
 
         const int32_t textInitialOffsetY = 35 + title.height() * 4;
         const int32_t textWidth = 320;
@@ -899,7 +902,8 @@ namespace
                   "Tracy Iwata\n"
                   "Clay Ratzner\n"
                   "Walter Hochbrueckner\n"
-                  "Paul Ratner", nameFontType );
+                  "Paul Ratner",
+                  nameFontType );
         name.draw( offsetX, offsetY, textWidth, output );
 
         offsetY = textInitialOffsetY;
