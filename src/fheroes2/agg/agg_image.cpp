@@ -2194,21 +2194,23 @@ namespace fheroes2
 
                 return true;
             }
-            case ICN::CAMPXTRG:
-            case ICN::CAMPXTRE: {
-                LoadOriginalICN( id );
-
+            case ICN::GOOD_CAMPAIGN_BUTTONS:
+            case ICN::EVIL_CAMPAIGN_BUTTONS: {
                 auto & image = _icnVsSprite[id];
+                image.resize( 8 );
 
-                if ( image.size() >= 8 ) {
-                    for ( size_t i = 0; i < 4; ++i ) {
-                        Sprite resized( image[2 * i].width(), image[2 * i].height() );
-                        resized.reset();
+                const int originalIcnId = ( id == ICN::GOOD_CAMPAIGN_BUTTONS ) ? ICN::CAMPXTRG : ICN::CAMPXTRE;
 
-                        Sprite & original = image[2 * i + 1];
-                        Copy( original, 0, 0, resized, original.x(), original.y(), original.width(), original.height() );
-                        original = std::move( resized );
-                    }
+                for ( int32_t i = 0; i < 4; ++i ) {
+                    image[2 * i] = GetICN( originalIcnId, 2 * i );
+
+                    const Sprite & original = GetICN( originalIcnId, 2 * i + 1 );
+
+                    Sprite & resized = image[2 * i + 1];
+                    resized.resize( image[2 * i].width(), image[2 * i].height() );
+                    resized.reset();
+
+                    Copy( original, 0, 0, resized, original.x(), original.y(), original.width(), original.height() );
                 }
 
                 return true;
