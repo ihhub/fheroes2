@@ -138,7 +138,7 @@ namespace
     {
         fheroes2::showMessage( fheroes2::Text{ _( "Warning!" ), fheroes2::FontType::normalYellow() },
                                fheroes2::Text{ _( "Required video files are missing. Please make sure that all necessary files are present in the system." ),
-                                               fheroes2::FontType::normalYellow() },
+                                               fheroes2::FontType::normalWhite() },
                                Dialog::OK );
     }
 }
