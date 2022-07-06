@@ -374,7 +374,7 @@ namespace
         return output;
     }
 
-    fheroes2::Sprite generateOriginalCreditsFirstPage()
+    fheroes2::Sprite generateSuccessionWarsCreditsFirstPage()
     {
         fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGWATR, 0 );
         fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
@@ -383,7 +383,7 @@ namespace
         const fheroes2::FontType titleFontType = fheroes2::FontType::normalYellow();
         const fheroes2::FontType nameFontType = fheroes2::FontType::normalWhite();
 
-        fheroes2::Text title( _( "Original Heroes of Might and Magic II team" ), nameFontType );
+        fheroes2::Text title( _( "Heroes of Might and Magic II: The Succession Wars team" ), nameFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10, output );
 
         const int32_t textInitialOffsetY = 35;
@@ -515,7 +515,7 @@ namespace
         return output;
     }
 
-    fheroes2::Sprite generateOriginalCreditsSecondPage()
+    fheroes2::Sprite generateSuccessionWarsCreditsSecondPage()
     {
         fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGWATR, 0 );
         fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
@@ -524,7 +524,7 @@ namespace
         const fheroes2::FontType titleFontType = fheroes2::FontType::normalYellow();
         const fheroes2::FontType nameFontType = fheroes2::FontType::normalWhite();
 
-        fheroes2::Text title( _( "Original Heroes of Might and Magic II team" ), nameFontType );
+        fheroes2::Text title( _( "Heroes of Might and Magic II: The Succession Wars team" ), nameFontType );
         title.draw( ( output.width() - title.width() ) / 2, 10, output );
 
         const int32_t textInitialOffsetY = 35;
@@ -611,6 +611,327 @@ namespace
 
         return output;
     }
+
+    fheroes2::Sprite generatePriceOfLoyaltyCreditsFirstPage()
+    {
+        fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGGRAV, 0 );
+        fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+        output._disableTransformLayer();
+
+        const fheroes2::FontType titleFontType = fheroes2::FontType::normalYellow();
+        const fheroes2::FontType nameFontType = fheroes2::FontType::normalWhite();
+
+        fheroes2::Text title( _( "Heroes of Might and Magic II: The Price of Loyalty team" ), nameFontType );
+        title.draw( ( output.width() - title.width() ) / 2, 10, output );
+
+        title.set( _( "Cyberlore Studios" ), titleFontType );
+        title.draw( ( output.width() - title.width() ) / 2, 10  + title.height() * 2, output );
+
+        const int32_t textInitialOffsetY = 35 + title.height() * 4;
+        const int32_t textWidth = 320;
+        const int32_t titleOffsetY = 7;
+
+        int32_t offsetY = textInitialOffsetY;
+        int32_t offsetX = 0;
+
+        title.set( _( "Executive Producer" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        fheroes2::Text name( "Lester Humphreys", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Producer" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Joe Minton", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Design Lead" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Jim DuBois", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Designers" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Jesse King\n"
+                  "Kris Greenia", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Programming Lead" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Mike White", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Art Director" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Seth Spaulding", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+
+        offsetY = textInitialOffsetY;
+        offsetX += textWidth;
+
+        title.set( _( "Art Lead" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Thomas Gale", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Artists" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Michael Clarke\n"
+                  "Michael Baker\n"
+                  "Julie Airoldi",
+                  nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Playtesters" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Bart Simon\n"
+                  "Fred Fredette\n"
+                  "Rendall Koski\n"
+                  "T.J. Andrzejczyk\n"
+                  "Joanne Delphia",
+                  nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+
+        return output;
+    }
+
+    fheroes2::Sprite generatePriceOfLoyaltyCreditsSecondPage()
+    {
+        fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGGRAV, 0 );
+        fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+        output._disableTransformLayer();
+
+        const fheroes2::FontType titleFontType = fheroes2::FontType::normalYellow();
+        const fheroes2::FontType nameFontType = fheroes2::FontType::normalWhite();
+
+        fheroes2::Text title( _( "Heroes of Might and Magic II: The Price of Loyalty team" ), nameFontType );
+        title.draw( ( output.width() - title.width() ) / 2, 10, output );
+
+        title.set( _( "New World Computing" ), titleFontType );
+        title.draw( ( output.width() - title.width() ) / 2, 10  + title.height() * 2, output );
+
+        const int32_t textInitialOffsetY = 35 + title.height() * 4 ;
+        const int32_t textWidth = 320;
+        const int32_t titleOffsetY = 7;
+
+        int32_t offsetY = textInitialOffsetY;
+        int32_t offsetX = 0;
+
+        title.set( _( "Designer" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        fheroes2::Text name( "Jon Van Caneghem", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Executive Producer" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Mark Caldwell", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Producers" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Peter Ryu\n"
+                  "Deane Rettig", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Musical Production" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Rob King", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "QA Managers" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Brian Gilmer\n"
+                  "Peter Ryu", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Music" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Rob King\n"
+                  "Paul Romero\n"
+                  "Steve Baca",
+                  nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+
+        offsetY = textInitialOffsetY;
+        offsetX += textWidth;
+
+        title.set( _( "Sound Design" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Rob King\n"
+                  "Steve Baca",
+                  nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Town Themes" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Paul Romero", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Alto Sax" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Brock \"Saxman\" Summers", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Harpsichord and Piano" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Paul Romero", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Basso Vocal" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Reid Bruton", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Soprano Vocal" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Karin Meshagin", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Recorded at Green Street Studios" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+
+        return output;
+    }
+
+    fheroes2::Sprite generatePriceOfLoyaltyCreditsThirdPage()
+    {
+        fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGGRAV, 0 );
+        fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
+        output._disableTransformLayer();
+
+        const fheroes2::FontType titleFontType = fheroes2::FontType::normalYellow();
+        const fheroes2::FontType nameFontType = fheroes2::FontType::normalWhite();
+
+        fheroes2::Text title( _( "Heroes of Might and Magic II: The Price of Loyalty team" ), nameFontType );
+        title.draw( ( output.width() - title.width() ) / 2, 10, output );
+
+        title.set( _( "New World Computing" ), titleFontType );
+        title.draw( ( output.width() - title.width() ) / 2, 10  + title.height() * 2, output );
+
+        const int32_t textInitialOffsetY = 35 + title.height() * 4;
+        const int32_t textWidth = 320;
+        const int32_t titleOffsetY = 7;
+
+        int32_t offsetY = textInitialOffsetY;
+        int32_t offsetX = 0;
+
+        title.set( _( "Manual" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        fheroes2::Text name( "Bryan Farina", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "German Consultant" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Dr. Brock H. Summers", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Map Designers" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Christian Vanover\n"
+                  "Ben Bent\n"
+                  "Tracy Iwata\n"
+                  "Clay Ratzner\n"
+                  "Walter Hochbrueckner\n"
+                  "Paul Ratner", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+
+        offsetY = textInitialOffsetY;
+        offsetX += textWidth;
+
+        title.set( _( "Package Design" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Rozita Tolouey", nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += name.height( textWidth ) + titleOffsetY;
+
+        title.set( _( "Playtesters" ), titleFontType );
+        title.draw( offsetX, offsetY, textWidth, output );
+        offsetY += title.height( textWidth );
+
+        name.set( "Mikeael Herauf\n"
+                  "Walter Johnson\n"
+                  "David Botan\n"
+                  "David Fernandez\n"
+                  "Kate McClelland\n"
+                  "William Nesemeier\n"
+                  "Tim Lang\n"
+                  "Pavel Vesely\n"
+                  "John Lencioni\n"
+                  "Jason Wildblood",
+                  nameFontType );
+        name.draw( offsetX, offsetY, textWidth, output );
+
+        return output;
+    }
 }
 
 void Game::ShowCredits()
@@ -633,8 +954,13 @@ void Game::ShowCredits()
     std::vector<fheroes2::Sprite> pages;
     pages.emplace_back( generateFirstPage() );
     pages.emplace_back( generateSecondPage() );
-    pages.emplace_back( generateOriginalCreditsFirstPage() );
-    pages.emplace_back( generateOriginalCreditsSecondPage() );
+    pages.emplace_back( generateSuccessionWarsCreditsFirstPage() );
+    pages.emplace_back( generateSuccessionWarsCreditsSecondPage() );
+    if ( Settings::Get().isPriceOfLoyaltySupported() ) {
+        pages.emplace_back( generatePriceOfLoyaltyCreditsFirstPage() );
+        pages.emplace_back( generatePriceOfLoyaltyCreditsSecondPage() );
+        pages.emplace_back( generatePriceOfLoyaltyCreditsThirdPage() );
+    }
 
     const fheroes2::Sprite header = generateHeader();
 
