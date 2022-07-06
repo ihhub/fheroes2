@@ -185,10 +185,14 @@ void Interface::Basic::EventCastSpell()
     gameArea.SetCenter( hero->GetCenter() );
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR );
 
-    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, nullptr );
+    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, false, nullptr );
     if ( spell.isValid() ) {
         hero->ActionSpellCast( spell );
-        iconsPanel.SetRedraw();
+
+        // The spell will consume the hero's spell points (and perhaps also movement points) and can move the
+        // hero to another location, so we may have to update the terrain music theme and environment sounds
+        ResetFocus( GameFocus::HEROES );
+        RedrawFocus();
     }
 }
 
@@ -368,7 +372,7 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
                 hero->ResetMovePoints();
 
                 if ( world.DiggingForUltimateArtifact( hero->GetCenter() ) ) {
-                    const Game::MusicRestorer musicRestorer;
+                    const AudioManager::MusicRestorer musicRestorer;
 
                     if ( Settings::Get().MusicMIDI() ) {
                         AudioManager::PlaySound( M82::TREASURE );

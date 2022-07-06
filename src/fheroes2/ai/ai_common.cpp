@@ -57,26 +57,6 @@ namespace AI
         return Rand::Get( min, max );
     }
 
-    void ReinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget )
-    {
-        if ( !hero.HaveSpellBook() && castle.GetLevelMageGuild() > 0 && !hero.IsFullBagArtifacts() ) {
-            // this call will check if AI kingdom have enough resources to buy book
-            hero.BuySpellBook( &castle );
-        }
-
-        Army & heroArmy = hero.GetArmy();
-        const double armyStrength = heroArmy.GetStrength();
-
-        heroArmy.UpgradeTroops( castle );
-        castle.recruitBestAvailable( budget );
-        heroArmy.JoinStrongestFromArmy( castle.GetArmy() );
-        OptimizeTroopsOrder( heroArmy );
-
-        if ( std::fabs( armyStrength - heroArmy.GetStrength() ) > 0.001 ) {
-            hero.unmarkHeroMeeting();
-        }
-    }
-
     void OptimizeTroopsOrder( Army & army )
     {
         // Optimize troops placement before the battle

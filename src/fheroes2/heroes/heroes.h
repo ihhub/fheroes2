@@ -310,11 +310,6 @@ public:
         move_point = 0;
     }
 
-    void MovePointsScaleFixed()
-    {
-        move_point_scale = move_point * 1000 / GetMaxMovePoints();
-    }
-
     bool HasSecondarySkill( int ) const;
     bool HasMaxSecondarySkill() const;
     int GetLevelSkill( int ) const override;
@@ -332,7 +327,7 @@ public:
     // Returns the relative height of mana column near hero's portrait in heroes panel. Returned value will be in range [0; 25].
     int GetManaIndexSprite() const;
 
-    int OpenDialog( bool readonly = false, bool fade = false, bool disableDismiss = false, bool disableSwitch = false );
+    int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog = false );
     void MeetingDialog( Heroes & );
 
     bool Recruit( const int col, const fheroes2::Point & pt );
@@ -529,7 +524,6 @@ private:
 
     std::string name;
     uint32_t experience;
-    int32_t move_point_scale;
 
     Skill::SecSkills secondary_skills;
 

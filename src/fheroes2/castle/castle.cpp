@@ -470,21 +470,18 @@ double Castle::getArmyRecruitmentValue() const
 
 double Castle::getVisitValue( const Heroes & hero ) const
 {
-    double spellValue = 0;
-    const SpellStorage & guildSpells = mageguild.GetSpells( GetLevelMageGuild(), isLibraryBuild() );
-    for ( const Spell & spell : guildSpells ) {
-        if ( spell.isAdventure() ) {
-            // AI is stupid to use Adventure spells.
-            continue;
-        }
-        if ( hero.CanLearnSpell( spell ) && !hero.HaveSpell( spell, true ) ) {
-            spellValue += spell.Level() * 50.0;
-        }
-    }
-
     const Troops & heroArmy = hero.GetArmy();
     Troops futureArmy( heroArmy );
     const double heroArmyStrength = futureArmy.GetStrength();
+
+    double spellValue = 0;
+    const int spellPower = hero.GetPower();
+    const SpellStorage & guildSpells = mageguild.GetSpells( GetLevelMageGuild(), isLibraryBuild() );
+    for ( const Spell & spell : guildSpells ) {
+        if ( hero.CanLearnSpell( spell ) && !hero.HaveSpell( spell, true ) ) {
+            spellValue += spell.getStrategicValue( heroArmyStrength, hero.GetMaxSpellPoints(), spellPower );
+        }
+    }
 
     Funds potentialFunds = GetKingdom().GetFunds();
 

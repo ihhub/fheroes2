@@ -205,7 +205,6 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
             hero.GetKingdom().OddFundsResource( paymentCosts );
 
             hero.GetArmy().JoinTroop( troop.GetMonster(), recruit );
-            hero.MovePointsScaleFixed();
 
             Interface::Basic::Get().SetRedraw( Interface::REDRAW_STATUS );
         }
@@ -248,7 +247,8 @@ void Heroes::Action( int tileIndex, bool isDestination )
 {
     if ( GetKingdom().isControlAI() ) {
         // Restore the original music after the action is completed.
-        const Game::MusicRestorer musicRestorer;
+        const AudioManager::MusicRestorer musicRestorer;
+
         return AI::HeroesAction( *this, tileIndex );
     }
 
@@ -261,14 +261,13 @@ void Heroes::Action( int tileIndex, bool isDestination )
     }
 
     // Restore the original music after the action is completed.
-    const Game::MusicRestorer musicRestorer;
+    const AudioManager::MusicRestorer musicRestorer;
 
     Maps::Tiles & tile = world.GetTiles( tileIndex );
     const MP2::MapObjectType objectType = tile.GetObject( tileIndex != heroPosIndex );
 
     const int objectMusicTrack = MUS::FromMapObject( objectType );
     if ( objectMusicTrack != MUS::UNKNOWN ) {
-        // Since it is a synchronous call all previous music tracks will be removed from a queue for an asynchronous playback.
         AudioManager::PlayMusic( objectMusicTrack, Music::PlaybackMode::PLAY_ONCE );
     }
 
@@ -2113,13 +2112,13 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
 
     case MP2::OBJ_ABANDONEDMINE:
     case MP2::OBJ_MINES: {
+        resource = tile.QuantityResourceCount().first;
+        header = Maps::GetMinesName( resource );
+
         if ( objectType == MP2::OBJ_ABANDONEDMINE && tile.GetQuantity3() != Spell::HAUNT ) {
             body = _( "You beat the Ghosts and are able to restore the mine to production." );
             break;
         }
-
-        resource = tile.QuantityResourceCount().first;
-        header = Maps::GetMinesName( resource );
 
         switch ( resource ) {
         case Resource::ORE:
@@ -2181,16 +2180,18 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
         }
 
         if ( capture ) {
-            if ( resource == Resource::UNKNOWN )
-                Dialog::Message( header, body, Font::BIG, Dialog::OK );
-            else
-                DialogCaptureResourceObject( header, body, resource );
-
             // restore the abandoned mine
             if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
                 Maps::Tiles::UpdateAbandonedMineSprite( tile );
                 hero.SetMapsObject( MP2::OBJ_MINES );
+                world.CaptureObject( dst_index, hero.GetColor() );
+                Interface::Basic::Get().Redraw( Interface::REDRAW_GAMEAREA );
             }
+
+            if ( resource == Resource::UNKNOWN )
+                Dialog::Message( header, body, Font::BIG, Dialog::OK );
+            else
+                DialogCaptureResourceObject( header, body, resource );
 
             tile.QuantitySetColor( hero.GetColor() );
         }
@@ -2219,8 +2220,6 @@ void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType object
     const std::string title( MP2::StringObject( objectType ) );
 
     if ( troop.isValid() ) {
-        hero.MovePointsScaleFixed();
-
         std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you. Do you accept?" );
         StringReplace( message, "%{monster}", troop.GetMultiName() );
 
@@ -2232,7 +2231,6 @@ void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType object
             else {
                 tile.MonsterSetCount( 0 );
                 hero.GetArmy().JoinTroop( troop );
-                hero.MovePointsScaleFixed();
 
                 Interface::Basic::Get().SetRedraw( Interface::REDRAW_STATUS );
             }
@@ -2509,9 +2507,6 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
     std::string msg2;
 
     std::vector<Monster *> mons;
-
-    hero.MovePointsScaleFixed();
-
     std::vector<Monster> monsToUpgrade;
 
     switch ( objectType ) {

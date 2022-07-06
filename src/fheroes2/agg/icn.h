@@ -977,6 +977,9 @@ namespace ICN
         RECRBKG_EVIL,
         STRIP_BACKGROUND_EVIL,
 
+        GOOD_CAMPAIGN_BUTTONS,
+        EVIL_CAMPAIGN_BUTTONS,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };

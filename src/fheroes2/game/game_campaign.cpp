@@ -643,9 +643,9 @@ namespace
     {
         switch ( campaignId ) {
         case Campaign::ROLAND_CAMPAIGN:
-            return ICN::CAMPXTRG;
+            return ICN::GOOD_CAMPAIGN_BUTTONS;
         case Campaign::ARCHIBALD_CAMPAIGN:
-            return ICN::CAMPXTRE;
+            return ICN::EVIL_CAMPAIGN_BUTTONS;
         case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
         case Campaign::DESCENDANTS_CAMPAIGN:
         case Campaign::WIZARDS_ISLE_CAMPAIGN:

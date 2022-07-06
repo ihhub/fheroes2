@@ -1,13 +1,13 @@
 # Spanish translation for fheroes2
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
+# fheroes2 team <fhomm2@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-12 08:18+0000\n"
+"POT-Creation-Date: 2022-06-28 00:30+0000\n"
 "PO-Revision-Date: 2022-05-14 22:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -164,8 +164,11 @@ msgstr "Pierdes el héroe: %{name}."
 msgid "Set Count"
 msgstr ""
 
-msgid "%{name} half the enemy troops!"
-msgstr "%{name} mitad de las tropas enemigas!"
+#, fuzzy
+msgid "%{name} destroys half the enemy troops!"
+msgid_plural "%{name} destroy half the enemy troops!"
+msgstr[0] "%{name} mitad de las tropas enemigas!"
+msgstr[1] "%{name} mitad de las tropas enemigas!"
 
 #, fuzzy
 msgid "%{name} has turned off the auto battle"
@@ -523,8 +526,11 @@ msgstr "%{name} pasa turno."
 msgid "%{name} wait their turn."
 msgstr "%{name} esperando turno."
 
-msgid "%{attacker} do %{damage} damage."
-msgstr "%{attacker} hace %{damage} de daño."
+#, fuzzy
+msgid "%{attacker} does %{damage} damage."
+msgid_plural "%{attacker} do %{damage} damage."
+msgstr[0] "%{attacker} hace %{damage} de daño."
+msgstr[1] "%{attacker} hace %{damage} de daño."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
@@ -1973,7 +1979,8 @@ msgstr "Mej. Mejorado"
 msgid "Fenced Meadow"
 msgstr "Prado Vallado"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Torre Roja"
 
 msgid "Dungeon"
@@ -2002,6 +2009,10 @@ msgstr "Ciénaga"
 
 msgid "Green Tower"
 msgstr "Torre Verde"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Torre Roja"
 
 msgid "Black Tower"
 msgstr "Torre Negra"

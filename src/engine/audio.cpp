@@ -76,8 +76,8 @@ namespace
     // a SDL_Mixer internal thread.
     //
     // TODO: according to SDL_Mixer manual, calls of any SDL_Mixer functions are not allowed in
-    // callbacks. The current code works, but it would be good to find a reliable way to perform
-    // channel cleanup without calling these functions.
+    // TODO: callbacks. The current code works, but it would be good to find a reliable way to
+    // TODO: perform channel cleanup without calling these functions.
     void channelFinished( const int channelId )
     {
         // This callback function should never be called if audio is not initialized
@@ -232,7 +232,7 @@ namespace
         }
 
     private:
-        // This function is called by the worker thread and is protected by _mutex
+        // This method is called by the worker thread and is protected by _mutex
         bool prepareTask() override
         {
             // Make a copy for the worker thread to ensure that this counter will
@@ -242,7 +242,7 @@ namespace
             return false;
         }
 
-        // This function is called by the worker thread, but is not protected by _mutex
+        // This method is called by the worker thread, but is not protected by _mutex
         void executeTask() override
         {
             const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
@@ -570,10 +570,6 @@ void Mixer::SetChannels( const int num )
     if ( num != audioChannelCount ) {
         ERROR_LOG( "Failed to allocate the required amount of channels for sound. The required number of channels " << num << " but allocated only "
                                                                                                                     << audioChannelCount )
-    }
-
-    if ( audioChannelCount > 0 ) {
-        Mix_ReserveChannels( 1 );
     }
 
     if ( isMuted ) {

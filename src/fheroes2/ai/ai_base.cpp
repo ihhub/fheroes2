@@ -106,7 +106,7 @@ namespace AI
         return std::string();
     }
 
-    void Base::HeroesActionComplete( Heroes & /*hero*/, const MP2::MapObjectType /*objectType*/ )
+    void Base::HeroesActionComplete( Heroes & /*hero*/, int32_t /* tileIndex*/, const MP2::MapObjectType /*objectType*/ )
     {
         // Do nothing.
     }
