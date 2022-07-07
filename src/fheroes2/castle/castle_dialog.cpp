@@ -43,7 +43,6 @@
 #include "resource.h"
 #include "settings.h"
 #include "statusbar.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_castle.h"
