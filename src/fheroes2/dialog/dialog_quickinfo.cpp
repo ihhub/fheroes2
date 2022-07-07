@@ -469,7 +469,7 @@ namespace
 
         // TODO check that this logic is what is really intended, it's only used for extended scouting anyway
         if ( monsterInfo ) {
-            if ( Maps::GetApproximateDistance( hero->GetIndex(), dst ) <= hero->GetVisionsDistance() ) {
+            if ( Maps::GetStraightLineDistance( hero->GetIndex(), dst ) <= hero->GetVisionsDistance() ) {
                 return scoutingLevel;
             }
             else {
@@ -481,7 +481,7 @@ namespace
             if ( hero->Modes( Heroes::VISIONS ) && dist < hero->GetVisionsDistance() )
                 dist = hero->GetVisionsDistance();
 
-            if ( Maps::GetApproximateDistance( hero->GetIndex(), dst ) <= dist )
+            if ( Maps::GetStraightLineDistance( hero->GetIndex(), dst ) <= dist )
                 return scoutingLevel;
             return Skill::Level::NONE;
         }
