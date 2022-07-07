@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-07 03:19+0000\n"
+"POT-Creation-Date: 2022-07-07 10:19+0000\n"
 "PO-Revision-Date: 2022-07-04 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -3391,7 +3391,8 @@ msgstr "et beaucoup, beaucoup d'autres supporteurs !"
 msgid "Original project before 0.7"
 msgstr "Projet original avant 0.7"
 
-msgid "Original Heroes of Might and Magic II team"
+#, fuzzy
+msgid "Heroes of Might and Magic II: The Succession Wars team"
 msgstr "L'équipe originale de Heroes of Might and Magic II"
 
 msgid "Designed and Directed"
@@ -3444,6 +3445,76 @@ msgstr "Manuel et fichier d'aide"
 
 msgid "Scenarios"
 msgstr "Scénarios"
+
+#, fuzzy
+msgid "Heroes of Might and Magic II: The Price of Loyalty team"
+msgstr "L'équipe originale de Heroes of Might and Magic II"
+
+msgid "Cyberlore Studios"
+msgstr ""
+
+msgid "Design Lead"
+msgstr ""
+
+msgid "Designers"
+msgstr ""
+
+#, fuzzy
+msgid "Programming Lead"
+msgstr "Programmation et conception"
+
+msgid "Art Lead"
+msgstr ""
+
+#, fuzzy
+msgid "Playtesters"
+msgstr "2 Joueurs"
+
+msgid "New World Computing"
+msgstr ""
+
+msgid "Designer"
+msgstr ""
+
+#, fuzzy
+msgid "Producers"
+msgstr "Producteur"
+
+#, fuzzy
+msgid "QA Managers"
+msgstr "Responsable AQ"
+
+#, fuzzy
+msgid "Sound Design"
+msgstr "Musique et conception sonore"
+
+#, fuzzy
+msgid "Town Themes"
+msgstr "Portes du village"
+
+msgid "Alto Sax"
+msgstr ""
+
+msgid "Harpsichord and Piano"
+msgstr ""
+
+msgid "Basso Vocal"
+msgstr ""
+
+msgid "Soprano Vocal"
+msgstr ""
+
+msgid "Recorded at Green Street Studios"
+msgstr ""
+
+msgid "German Consultant"
+msgstr ""
+
+msgid "Map Designers"
+msgstr ""
+
+msgid "Package Design"
+msgstr ""
 
 msgid "Unknown Hero"
 msgstr "Héros Inconnu"
