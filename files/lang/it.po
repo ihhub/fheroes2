@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-28 00:30+0000\n"
+"POT-Creation-Date: 2022-07-07 03:19+0000\n"
 "PO-Revision-Date: 2022-05-12 17:11+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -3449,6 +3449,11 @@ msgstr "Cambia la risoluzione del gioco."
 #, fuzzy
 msgid "Game Settings"
 msgstr "Impostazioni del gioco."
+
+msgid ""
+"Required video files for campaign selection window are missing. Please make "
+"sure that all necessary files are present in the system."
+msgstr ""
 
 #, fuzzy
 msgid ""
