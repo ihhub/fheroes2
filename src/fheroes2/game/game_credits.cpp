@@ -430,7 +430,7 @@ namespace
         offsetY += titleOffsetY
                    + renderText( output, offsetX, offsetY, textWidth, _( "Vocalists" ),
                                  "Grant Youngblood\n"
-                                 "Kareen Meshagan" );;
+                                 "Kareen Meshagan" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Art Director" ), "Julia Ulano" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Assistant Art Director" ), "Bonita Long-Hemsath" );
         renderText( output, offsetX, offsetY, textWidth, _( "Artists" ),
