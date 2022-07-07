@@ -150,7 +150,20 @@ namespace
         return output;
     }
 
-    fheroes2::Sprite generateFirstPage()
+    int32_t renderText( fheroes2::Image & output, const int32_t offsetX, const int32_t offsetY, const int32_t textWidth, const char * titleText, const char * bodyText )
+    {
+        fheroes2::Text title( titleText, fheroes2::FontType::normalYellow() );
+        fheroes2::Text name( bodyText, fheroes2::FontType::normalWhite() );
+
+        title.draw( offsetX, offsetY, textWidth, output );
+        const int32_t titleHeight = title.height( textWidth );
+
+        name.draw( offsetX, offsetY + titleHeight, textWidth, output );
+
+        return name.height( textWidth ) + titleHeight;
+    }
+
+    fheroes2::Sprite generateResurrectionCreditsFirstPage()
     {
         fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGLAVA, 0 );
         output._disableTransformLayer();
@@ -265,7 +278,7 @@ namespace
         return output;
     }
 
-    fheroes2::Sprite generateSecondPage()
+    fheroes2::Sprite generateResurrectionCreditsSecondPage()
     {
         fheroes2::Sprite output = fheroes2::AGG::GetICN( ICN::CBKGSWMP, 0 );
         output._disableTransformLayer();
@@ -393,124 +406,39 @@ namespace
         int32_t offsetY = textInitialOffsetY;
         int32_t offsetX = 0;
 
-        title.set( _( "Designed and Directed" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        fheroes2::Text name( "Jon Van Caneghem", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Programming and Design" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Phil Steinmeyer", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Executive Producer" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Mark Caldwell", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Producer" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Walt Hochbrueckner", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Additional Design" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Paul Rattner\n"
-                  "Debbie Van Caneghem",
-                  nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Additional Programming" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "George Ruof\n"
-                  "Todd Hendrix\n"
-                  "Mark Caldwell",
-                  nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Musical Production" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Rob King", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Music and Sound Design" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Rob King\n"
-                  "Steve Baca\n"
-                  "Paul Romero",
-                  nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Designed and Directed" ), "Jon Van Caneghem" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Programming and Design" ), "Phil Steinmeyer" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Executive Producer" ), "Mark Caldwell" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Producer" ), "Walt Hochbrueckner" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Additional Design" ), "Paul Rattner\n"
+                                                                                                             "Debbie Van Caneghem" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Additional Programming" ), "George Ruof\n"
+                                                                                                                  "Todd Hendrix\n"
+                                                                                                                  "Mark Caldwell" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Musical Production" ), "Rob King" );
+        renderText( output, offsetX, offsetY, textWidth, _( "Music and Sound Design" ), "Rob King\n"
+                                                                                        "Steve Baca\n"
+                                                                                        "Paul Romero" );
 
         offsetY = textInitialOffsetY;
         offsetX += textWidth;
 
-        title.set( _( "Vocalists" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Grant Youngblood\n"
-                  "Kareen Meshagan",
-                  nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Art Director" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Julia Ulano", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Assistant Art Director" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Bonita Long-Hemsath", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Artists" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Julie Bateman\n"
-                  "Rebecca Christel\n"
-                  "Shelly Garcia\n"
-                  "Sam Hasson\n"
-                  "Louis Henderson\n"
-                  "Tracy Iwata\n"
-                  "Steve Jasper\n"
-                  "April Lee\n"
-                  "Lieu Pham\n"
-                  "Phelan Sykes\n"
-                  "Steve Wasaff\n"
-                  "Scott White",
-                  nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Vocalists" ), "Grant Youngblood\n"
+                                                                                                     "Kareen Meshagan" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Art Director" ), "Julia Ulano" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Assistant Art Director" ), "Bonita Long-Hemsath" );
+        renderText( output, offsetX, offsetY, textWidth, _( "Artists" ), "Julie Bateman\n"
+                                                                         "Rebecca Christel\n"
+                                                                         "Shelly Garcia\n"
+                                                                         "Sam Hasson\n"
+                                                                         "Louis Henderson\n"
+                                                                         "Tracy Iwata\n"
+                                                                         "Steve Jasper\n"
+                                                                         "April Lee\n"
+                                                                         "Lieu Pham\n"
+                                                                         "Phelan Sykes\n"
+                                                                         "Steve Wasaff\n"
+                                                                         "Scott White" );
 
         return output;
     }
@@ -534,80 +462,38 @@ namespace
         int32_t offsetY = textInitialOffsetY;
         int32_t offsetX = 0;
 
-        title.set( _( "QA Manager" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        fheroes2::Text name( "Peter Ryu", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "QA" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "David Botan\n"
-                  "David Fernandez\n"
-                  "Bill Nesemeier\n"
-                  "Walter Johnson\n"
-                  "Kate McClelland\n"
-                  "Timothy Lang\n"
-                  "Bryan Farina",
-                  nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Writing" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Paul Rattner", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Manual and Helpfile" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Bryan Farina\n"
-                  "Rozita Tolouey\n"
-                  "Bruce Schlickbernd",
-                  nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "QA Manager" ), "Peter Ryu" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "QA" ), "David Botan\n"
+                                                                                              "David Fernandez\n"
+                                                                                              "Bill Nesemeier\n"
+                                                                                              "Walter Johnson\n"
+                                                                                              "Kate McClelland\n"
+                                                                                              "Timothy Lang\n"
+                                                                                              "Bryan Farina" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Writing" ), "Paul Rattner" );
+        renderText( output, offsetX, offsetY, textWidth, _( "Manual and Helpfile" ), "Bryan Farina\n"
+                                                                                     "Rozita Tolouey\n"
+                                                                                     "Bruce Schlickbernd" );
 
         offsetY = textInitialOffsetY;
         offsetX += textWidth;
 
-        title.set( _( "Scenarios" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Jon Van Caneghem\n"
-                  "Debbie Van Caneghem\n"
-                  "Clayton Retzer\n"
-                  "Christian Vanover\n"
-                  "Paul Rattner\n"
-                  "Benjamin Bent\n"
-                  "Bryan Farina\n"
-                  "Eric Heffron\n"
-                  "Mark Palczynski\n"
-                  "Walt Hochbrueckner\n"
-                  "Bruce Schlickbernd\n"
-                  "Craig Konas",
-                  nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Special Thanks to" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Scott McDaniel\n"
-                  "Dean Rettig\n"
-                  "Ted Chapman\n"
-                  "Dean Frost",
-                  nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Scenarios" ), "Jon Van Caneghem\n"
+                                                                                                     "Debbie Van Caneghem\n"
+                                                                                                     "Clayton Retzer\n"
+                                                                                                     "Christian Vanover\n"
+                                                                                                     "Paul Rattner\n"
+                                                                                                     "Benjamin Bent\n"
+                                                                                                     "Bryan Farina\n"
+                                                                                                     "Eric Heffron\n"
+                                                                                                     "Mark Palczynski\n"
+                                                                                                     "Walt Hochbrueckner\n"
+                                                                                                     "Bruce Schlickbernd\n"
+                                                                                                     "Craig Konas" );
+        renderText( output, offsetX, offsetY, textWidth, _( "Special Thanks to" ), "Scott McDaniel\n"
+                                                                                   "Dean Rettig\n"
+                                                                                   "Ted Chapman\n"
+                                                                                   "Dean Frost" );
 
         return output;
     }
@@ -634,88 +520,26 @@ namespace
         int32_t offsetY = textInitialOffsetY;
         int32_t offsetX = 0;
 
-        title.set( _( "Executive Producer" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        fheroes2::Text name( "Lester Humphreys", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Producer" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Joe Minton", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Design Lead" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Jim DuBois", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Designers" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Jesse King\n"
-                  "Kris Greenia",
-                  nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Programming Lead" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Mike White", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Art Director" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Seth Spaulding", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Executive Producer" ), "Lester Humphreys" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Producer" ), "Joe Minton" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Design Lead" ), "Jim DuBois" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Designers" ), "Jesse King\n"
+                                                                                                     "Kris Greenia" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Programming Lead" ), "Mike White" );
+        renderText( output, offsetX, offsetY, textWidth, _( "Art Director" ), "Seth Spaulding" );
 
         offsetY = textInitialOffsetY;
         offsetX += textWidth;
 
-        title.set( _( "Art Lead" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Thomas Gale", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Artists" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Michael Clarke\n"
-                  "Michael Baker\n"
-                  "Julie Airoldi",
-                  nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Playtesters" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Bart Simon\n"
-                  "Fred Fredette\n"
-                  "Rendall Koski\n"
-                  "T.J. Andrzejczyk\n"
-                  "Joanne Delphia",
-                  nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Art Lead" ), "Thomas Gale" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Artists" ), "Michael Clarke\n"
+                                                                                                   "Michael Baker\n"
+                                                                                                   "Julie Airoldi" );
+        renderText( output, offsetX, offsetY, textWidth, _( "Playtesters" ), "Bart Simon\n"
+                                                                             "Fred Fredette\n"
+                                                                             "Rendall Koski\n"
+                                                                             "T.J. Andrzejczyk\n"
+                                                                             "Joanne Delphia" );
 
         return output;
     }
@@ -742,112 +566,27 @@ namespace
         int32_t offsetY = textInitialOffsetY;
         int32_t offsetX = 0;
 
-        title.set( _( "Designer" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        fheroes2::Text name( "Jon Van Caneghem", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Executive Producer" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Mark Caldwell", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Producers" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Peter Ryu\n"
-                  "Deane Rettig",
-                  nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Musical Production" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Rob King", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "QA Managers" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Brian Gilmer\n"
-                  "Peter Ryu",
-                  nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Music" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Rob King\n"
-                  "Paul Romero\n"
-                  "Steve Baca",
-                  nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Designer" ), "Jon Van Caneghem" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Executive Producer" ), "Mark Caldwell" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Producers" ), "Peter Ryu\n"
+                                                                                                     "Deane Rettig" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Musical Production" ), "Rob King" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "QA Managers" ), "Brian Gilmer\n"
+                                                                                                       "Peter Ryu" );
+        renderText( output, offsetX, offsetY, textWidth, _( "Music" ), "Rob King\n"
+                                                                       "Paul Romero\n"
+                                                                       "Steve Baca" );
 
         offsetY = textInitialOffsetY;
         offsetX += textWidth;
 
-        title.set( _( "Sound Design" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Rob King\n"
-                  "Steve Baca",
-                  nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Town Themes" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Paul Romero", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Alto Sax" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Brock \"Saxman\" Summers", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Harpsichord and Piano" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Paul Romero", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Basso Vocal" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Reid Bruton", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Soprano Vocal" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Karin Meshagin", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Sound Design" ), "Rob King\n"
+                                                                                                        "Steve Baca" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Town Themes" ), "Paul Romero" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Alto Sax" ), "Brock \"Saxman\" Summers" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Harpsichord and Piano" ), "Paul Romero" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Basso Vocal" ), "Reid Bruton" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Soprano Vocal" ), "Karin Meshagin" );
 
         title.set( _( "Recorded at Green Street Studios" ), titleFontType );
         title.draw( offsetX, offsetY, textWidth, output );
@@ -877,51 +616,20 @@ namespace
         int32_t offsetY = textInitialOffsetY;
         int32_t offsetX = 0;
 
-        title.set( _( "Manual" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        fheroes2::Text name( "Bryan Farina", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "German Consultant" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Dr. Brock H. Summers", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Map Designers" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Christian Vanover\n"
-                  "Ben Bent\n"
-                  "Tracy Iwata\n"
-                  "Clay Ratzner\n"
-                  "Walter Hochbrueckner\n"
-                  "Paul Ratner",
-                  nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Manual" ), "Bryan Farina" );
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "German Consultant" ), "Dr. Brock H. Summers" );
+        renderText( output, offsetX, offsetY, textWidth, _( "Map Designers" ), "Christian Vanover\n"
+                                                                               "Ben Bent\n"
+                                                                               "Tracy Iwata\n"
+                                                                               "Clay Ratzner\n"
+                                                                               "Walter Hochbrueckner\n"
+                                                                               "Paul Ratner" );
 
         offsetY = textInitialOffsetY;
         offsetX += textWidth;
 
-        title.set( _( "Package Design" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Rozita Tolouey", nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
-        offsetY += name.height( textWidth ) + titleOffsetY;
-
-        title.set( _( "Playtesters" ), titleFontType );
-        title.draw( offsetX, offsetY, textWidth, output );
-        offsetY += title.height( textWidth );
-
-        name.set( "Mikeael Herauf\n"
+        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Package Design" ), "Rozita Tolouey" );
+        renderText( output, offsetX, offsetY, textWidth, _( "Playtesters" ), "Mikeael Herauf\n"
                   "Walter Johnson\n"
                   "David Botan\n"
                   "David Fernandez\n"
@@ -930,9 +638,7 @@ namespace
                   "Tim Lang\n"
                   "Pavel Vesely\n"
                   "John Lencioni\n"
-                  "Jason Wildblood",
-                  nameFontType );
-        name.draw( offsetX, offsetY, textWidth, output );
+                  "Jason Wildblood" );
 
         return output;
     }
@@ -956,15 +662,15 @@ void Game::ShowCredits()
     const uint64_t animationDelay = 50;
 
     std::vector<fheroes2::Sprite> pages;
-    pages.emplace_back( generateFirstPage() );
-    pages.emplace_back( generateSecondPage() );
-    pages.emplace_back( generateSuccessionWarsCreditsFirstPage() );
-    pages.emplace_back( generateSuccessionWarsCreditsSecondPage() );
+    pages.emplace_back( generateResurrectionCreditsFirstPage() );
+    pages.emplace_back( generateResurrectionCreditsSecondPage() );
     if ( Settings::Get().isPriceOfLoyaltySupported() ) {
         pages.emplace_back( generatePriceOfLoyaltyCreditsFirstPage() );
         pages.emplace_back( generatePriceOfLoyaltyCreditsSecondPage() );
         pages.emplace_back( generatePriceOfLoyaltyCreditsThirdPage() );
     }
+    pages.emplace_back( generateSuccessionWarsCreditsFirstPage() );
+    pages.emplace_back( generateSuccessionWarsCreditsSecondPage() );
 
     const fheroes2::Sprite header = generateHeader();
 
