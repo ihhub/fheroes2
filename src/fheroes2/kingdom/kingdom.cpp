@@ -871,17 +871,20 @@ std::set<Heroes *> Kingdoms::resetRecruits()
     return remainingRecruits;
 }
 
-// Check if tile is visible from any crystal ball of any hero
 bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
 {
     for ( const Heroes * hero : heroes ) {
+        assert( hero != nullptr );
+
         if ( hero->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::VIEW_MONSTER_INFORMATION ) ) {
             const uint32_t crystalBallDistance = hero->GetVisionsDistance();
+
             if ( Maps::GetStraightLineDistance( hero->GetIndex(), dest ) <= crystalBallDistance ) {
                 return true;
             }
         }
     }
+
     return false;
 }
 
