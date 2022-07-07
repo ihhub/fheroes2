@@ -133,7 +133,7 @@ namespace
         }
         else if ( isAbandonnedMine ) {
             const uint8_t spriteIndex = tile.GetObjectSpriteIndex();
-            if ( spriteIndex == 5 ) { // TODO: remove this hardocded value for real abandoned mine.
+            if ( spriteIndex == 5 ) { // TODO: remove this hardcoded value for real abandoned mine.
                 str = MP2::StringObject( objectType );
             }
             else {
@@ -456,33 +456,23 @@ namespace
         return { xpos, ypos, imageBox.width(), imageBox.height() };
     }
 
-    uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, uint32_t dst )
+    uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, const uint32_t dst )
     {
         if ( hero == nullptr ) {
             return Skill::Level::NONE;
         }
 
-        const uint32_t scoutingLevel = hero->GetSecondaryValues( Skill::Secondary::SCOUTING );
-        const MP2::MapObjectType objectType = world.GetTiles( dst ).GetObject( false );
-
-        const bool monsterInfo = objectType == MP2::OBJ_MONSTER;
-
-        // TODO check that this logic is what is really intended, it's only used for extended scouting anyway
-        if ( monsterInfo ) {
-            if ( Maps::GetStraightLineDistance( hero->GetIndex(), dst ) <= hero->GetVisionsDistance() ) {
-                return scoutingLevel;
-            }
-            else {
-                return Skill::Level::NONE;
-            }
-        }
-        else if ( Settings::Get().ExtWorldScouteExtended() ) {
+        if ( Settings::Get().ExtWorldScouteExtended() ) {
             uint32_t dist = static_cast<uint32_t>( hero->GetScoute() );
-            if ( hero->Modes( Heroes::VISIONS ) && dist < hero->GetVisionsDistance() )
-                dist = hero->GetVisionsDistance();
 
-            if ( Maps::GetStraightLineDistance( hero->GetIndex(), dst ) <= dist )
-                return scoutingLevel;
+            if ( hero->Modes( Heroes::VISIONS ) ) {
+                dist = std::max( dist, hero->GetVisionsDistance() );
+            }
+
+            if ( Maps::GetStraightLineDistance( hero->GetIndex(), dst ) <= dist ) {
+                return hero->GetSecondaryValues( Skill::Secondary::SCOUTING );
+            }
+
             return Skill::Level::NONE;
         }
 
