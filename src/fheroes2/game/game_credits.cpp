@@ -393,7 +393,6 @@ namespace
         fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
         output._disableTransformLayer();
 
-        const fheroes2::FontType titleFontType = fheroes2::FontType::normalYellow();
         const fheroes2::FontType nameFontType = fheroes2::FontType::normalWhite();
 
         fheroes2::Text title( _( "Heroes of Might and Magic II: The Succession Wars team" ), nameFontType );
@@ -410,35 +409,43 @@ namespace
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Programming and Design" ), "Phil Steinmeyer" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Executive Producer" ), "Mark Caldwell" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Producer" ), "Walt Hochbrueckner" );
-        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Additional Design" ), "Paul Rattner\n"
-                                                                                                             "Debbie Van Caneghem" );
-        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Additional Programming" ), "George Ruof\n"
-                                                                                                                  "Todd Hendrix\n"
-                                                                                                                  "Mark Caldwell" );
+        offsetY += titleOffsetY
+                   + renderText( output, offsetX, offsetY, textWidth, _( "Additional Design" ),
+                                 "Paul Rattner\n"
+                                 "Debbie Van Caneghem" );
+        offsetY += titleOffsetY
+                   + renderText( output, offsetX, offsetY, textWidth, _( "Additional Programming" ),
+                                 "George Ruof\n"
+                                 "Todd Hendrix\n"
+                                 "Mark Caldwell" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Musical Production" ), "Rob King" );
-        renderText( output, offsetX, offsetY, textWidth, _( "Music and Sound Design" ), "Rob King\n"
-                                                                                        "Steve Baca\n"
-                                                                                        "Paul Romero" );
+        renderText( output, offsetX, offsetY, textWidth, _( "Music and Sound Design" ),
+                    "Rob King\n"
+                    "Steve Baca\n"
+                    "Paul Romero" );
 
         offsetY = textInitialOffsetY;
         offsetX += textWidth;
 
-        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Vocalists" ), "Grant Youngblood\n"
-                                                                                                     "Kareen Meshagan" );
+        offsetY += titleOffsetY
+                   + renderText( output, offsetX, offsetY, textWidth, _( "Vocalists" ),
+                                 "Grant Youngblood\n"
+                                 "Kareen Meshagan" );;
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Art Director" ), "Julia Ulano" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Assistant Art Director" ), "Bonita Long-Hemsath" );
-        renderText( output, offsetX, offsetY, textWidth, _( "Artists" ), "Julie Bateman\n"
-                                                                         "Rebecca Christel\n"
-                                                                         "Shelly Garcia\n"
-                                                                         "Sam Hasson\n"
-                                                                         "Louis Henderson\n"
-                                                                         "Tracy Iwata\n"
-                                                                         "Steve Jasper\n"
-                                                                         "April Lee\n"
-                                                                         "Lieu Pham\n"
-                                                                         "Phelan Sykes\n"
-                                                                         "Steve Wasaff\n"
-                                                                         "Scott White" );
+        renderText( output, offsetX, offsetY, textWidth, _( "Artists" ),
+                    "Julie Bateman\n"
+                    "Rebecca Christel\n"
+                    "Shelly Garcia\n"
+                    "Sam Hasson\n"
+                    "Louis Henderson\n"
+                    "Tracy Iwata\n"
+                    "Steve Jasper\n"
+                    "April Lee\n"
+                    "Lieu Pham\n"
+                    "Phelan Sykes\n"
+                    "Steve Wasaff\n"
+                    "Scott White" );
 
         return output;
     }
@@ -449,7 +456,6 @@ namespace
         fheroes2::ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
         output._disableTransformLayer();
 
-        const fheroes2::FontType titleFontType = fheroes2::FontType::normalYellow();
         const fheroes2::FontType nameFontType = fheroes2::FontType::normalWhite();
 
         fheroes2::Text title( _( "Heroes of Might and Magic II: The Succession Wars team" ), nameFontType );
@@ -463,37 +469,43 @@ namespace
         int32_t offsetX = 0;
 
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "QA Manager" ), "Peter Ryu" );
-        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "QA" ), "David Botan\n"
-                                                                                              "David Fernandez\n"
-                                                                                              "Bill Nesemeier\n"
-                                                                                              "Walter Johnson\n"
-                                                                                              "Kate McClelland\n"
-                                                                                              "Timothy Lang\n"
-                                                                                              "Bryan Farina" );
+        offsetY += titleOffsetY
+                   + renderText( output, offsetX, offsetY, textWidth, _( "QA" ),
+                                 "David Botan\n"
+                                 "David Fernandez\n"
+                                 "Bill Nesemeier\n"
+                                 "Walter Johnson\n"
+                                 "Kate McClelland\n"
+                                 "Timothy Lang\n"
+                                 "Bryan Farina" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Writing" ), "Paul Rattner" );
-        renderText( output, offsetX, offsetY, textWidth, _( "Manual and Helpfile" ), "Bryan Farina\n"
-                                                                                     "Rozita Tolouey\n"
-                                                                                     "Bruce Schlickbernd" );
+        renderText( output, offsetX, offsetY, textWidth, _( "Manual and Helpfile" ),
+                    "Bryan Farina\n"
+                    "Rozita Tolouey\n"
+                    "Bruce Schlickbernd" );
 
         offsetY = textInitialOffsetY;
         offsetX += textWidth;
 
-        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Scenarios" ), "Jon Van Caneghem\n"
-                                                                                                     "Debbie Van Caneghem\n"
-                                                                                                     "Clayton Retzer\n"
-                                                                                                     "Christian Vanover\n"
-                                                                                                     "Paul Rattner\n"
-                                                                                                     "Benjamin Bent\n"
-                                                                                                     "Bryan Farina\n"
-                                                                                                     "Eric Heffron\n"
-                                                                                                     "Mark Palczynski\n"
-                                                                                                     "Walt Hochbrueckner\n"
-                                                                                                     "Bruce Schlickbernd\n"
-                                                                                                     "Craig Konas" );
-        renderText( output, offsetX, offsetY, textWidth, _( "Special Thanks to" ), "Scott McDaniel\n"
-                                                                                   "Dean Rettig\n"
-                                                                                   "Ted Chapman\n"
-                                                                                   "Dean Frost" );
+        offsetY += titleOffsetY
+                   + renderText( output, offsetX, offsetY, textWidth, _( "Scenarios" ),
+                                 "Jon Van Caneghem\n"
+                                 "Debbie Van Caneghem\n"
+                                 "Clayton Retzer\n"
+                                 "Christian Vanover\n"
+                                 "Paul Rattner\n"
+                                 "Benjamin Bent\n"
+                                 "Bryan Farina\n"
+                                 "Eric Heffron\n"
+                                 "Mark Palczynski\n"
+                                 "Walt Hochbrueckner\n"
+                                 "Bruce Schlickbernd\n"
+                                 "Craig Konas" );
+        renderText( output, offsetX, offsetY, textWidth, _( "Special Thanks to" ),
+                    "Scott McDaniel\n"
+                    "Dean Rettig\n"
+                    "Ted Chapman\n"
+                    "Dean Frost" );
 
         return output;
     }
@@ -523,8 +535,10 @@ namespace
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Executive Producer" ), "Lester Humphreys" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Producer" ), "Joe Minton" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Design Lead" ), "Jim DuBois" );
-        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Designers" ), "Jesse King\n"
-                                                                                                     "Kris Greenia" );
+        offsetY += titleOffsetY
+                   + renderText( output, offsetX, offsetY, textWidth, _( "Designers" ),
+                                 "Jesse King\n"
+                                 "Kris Greenia" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Programming Lead" ), "Mike White" );
         renderText( output, offsetX, offsetY, textWidth, _( "Art Director" ), "Seth Spaulding" );
 
@@ -532,14 +546,17 @@ namespace
         offsetX += textWidth;
 
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Art Lead" ), "Thomas Gale" );
-        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Artists" ), "Michael Clarke\n"
-                                                                                                   "Michael Baker\n"
-                                                                                                   "Julie Airoldi" );
-        renderText( output, offsetX, offsetY, textWidth, _( "Playtesters" ), "Bart Simon\n"
-                                                                             "Fred Fredette\n"
-                                                                             "Rendall Koski\n"
-                                                                             "T.J. Andrzejczyk\n"
-                                                                             "Joanne Delphia" );
+        offsetY += titleOffsetY
+                   + renderText( output, offsetX, offsetY, textWidth, _( "Artists" ),
+                                 "Michael Clarke\n"
+                                 "Michael Baker\n"
+                                 "Julie Airoldi" );
+        renderText( output, offsetX, offsetY, textWidth, _( "Playtesters" ),
+                    "Bart Simon\n"
+                    "Fred Fredette\n"
+                    "Rendall Koski\n"
+                    "T.J. Andrzejczyk\n"
+                    "Joanne Delphia" );
 
         return output;
     }
@@ -568,20 +585,27 @@ namespace
 
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Designer" ), "Jon Van Caneghem" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Executive Producer" ), "Mark Caldwell" );
-        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Producers" ), "Peter Ryu\n"
-                                                                                                     "Deane Rettig" );
+        offsetY += titleOffsetY
+                   + renderText( output, offsetX, offsetY, textWidth, _( "Producers" ),
+                                 "Peter Ryu\n"
+                                 "Deane Rettig" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Musical Production" ), "Rob King" );
-        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "QA Managers" ), "Brian Gilmer\n"
-                                                                                                       "Peter Ryu" );
-        renderText( output, offsetX, offsetY, textWidth, _( "Music" ), "Rob King\n"
-                                                                       "Paul Romero\n"
-                                                                       "Steve Baca" );
+        offsetY += titleOffsetY
+                   + renderText( output, offsetX, offsetY, textWidth, _( "QA Managers" ),
+                                 "Brian Gilmer\n"
+                                 "Peter Ryu" );
+        renderText( output, offsetX, offsetY, textWidth, _( "Music" ),
+                    "Rob King\n"
+                    "Paul Romero\n"
+                    "Steve Baca" );
 
         offsetY = textInitialOffsetY;
         offsetX += textWidth;
 
-        offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Sound Design" ), "Rob King\n"
-                                                                                                        "Steve Baca" );
+        offsetY += titleOffsetY
+                   + renderText( output, offsetX, offsetY, textWidth, _( "Sound Design" ),
+                                 "Rob King\n"
+                                 "Steve Baca" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Town Themes" ), "Paul Romero" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Alto Sax" ), "Brock \"Saxman\" Summers" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Harpsichord and Piano" ), "Paul Romero" );
@@ -618,27 +642,29 @@ namespace
 
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Manual" ), "Bryan Farina" );
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "German Consultant" ), "Dr. Brock H. Summers" );
-        renderText( output, offsetX, offsetY, textWidth, _( "Map Designers" ), "Christian Vanover\n"
-                                                                               "Ben Bent\n"
-                                                                               "Tracy Iwata\n"
-                                                                               "Clay Ratzner\n"
-                                                                               "Walter Hochbrueckner\n"
-                                                                               "Paul Ratner" );
+        renderText( output, offsetX, offsetY, textWidth, _( "Map Designers" ),
+                    "Christian Vanover\n"
+                    "Ben Bent\n"
+                    "Tracy Iwata\n"
+                    "Clay Ratzner\n"
+                    "Walter Hochbrueckner\n"
+                    "Paul Ratner" );
 
         offsetY = textInitialOffsetY;
         offsetX += textWidth;
 
         offsetY += titleOffsetY + renderText( output, offsetX, offsetY, textWidth, _( "Package Design" ), "Rozita Tolouey" );
-        renderText( output, offsetX, offsetY, textWidth, _( "Playtesters" ), "Mikeael Herauf\n"
-                  "Walter Johnson\n"
-                  "David Botan\n"
-                  "David Fernandez\n"
-                  "Kate McClelland\n"
-                  "William Nesemeier\n"
-                  "Tim Lang\n"
-                  "Pavel Vesely\n"
-                  "John Lencioni\n"
-                  "Jason Wildblood" );
+        renderText( output, offsetX, offsetY, textWidth, _( "Playtesters" ),
+                    "Mikeael Herauf\n"
+                    "Walter Johnson\n"
+                    "David Botan\n"
+                    "David Fernandez\n"
+                    "Kate McClelland\n"
+                    "William Nesemeier\n"
+                    "Tim Lang\n"
+                    "Pavel Vesely\n"
+                    "John Lencioni\n"
+                    "Jason Wildblood" );
 
         return output;
     }
