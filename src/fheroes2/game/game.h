@@ -146,7 +146,7 @@ namespace Game
     }
 
     int32_t GetStep4Player( const int32_t currentId, const int32_t width, const int32_t totalCount );
-    std::string CountScoute( uint32_t count, int scoute, bool shorts = false );
+    std::string CountScoute( const uint32_t count, const int scoute, const bool shorts = false );
     std::string CountThievesGuild( uint32_t monsterCount, int guildCount );
 }
 

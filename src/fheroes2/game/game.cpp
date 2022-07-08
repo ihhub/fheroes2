@@ -22,9 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
-#include <atomic>
 #include <cassert>
-#include <cmath>
 
 #include "audio.h"
 #include "audio_manager.h"
@@ -597,45 +595,36 @@ int Game::GetActualKingdomColors()
     return Settings::Get().GetPlayers().GetActualColors();
 }
 
-std::string Game::CountScoute( uint32_t count, int scoute, bool shorts )
+std::string Game::CountScoute( const uint32_t count, const int scoute, const bool shorts /* = false */ )
 {
-    double infelicity = 0;
-    std::string res;
+    uint32_t inaccuracy = 0;
 
     switch ( scoute ) {
     case Skill::Level::BASIC:
-        infelicity = count * 30 / 100.0;
+        inaccuracy = std::max( count * 30 / 100, 5U );
         break;
 
     case Skill::Level::ADVANCED:
-        infelicity = count * 15 / 100.0;
+        inaccuracy = std::max( count * 15 / 100, 3U );
         break;
 
     case Skill::Level::EXPERT:
-        res = shorts ? GetStringShort( count ) : std::to_string( count );
-        break;
+        return ( shorts ? GetStringShort( count ) : std::to_string( count ) );
 
     default:
         return Army::SizeString( count );
     }
 
-    if ( res.empty() ) {
-        uint32_t min = Rand::Get( static_cast<uint32_t>( std::floor( count - infelicity + 0.5 ) ), static_cast<uint32_t>( std::floor( count + infelicity + 0.5 ) ) );
-        uint32_t max = 0;
+    assert( inaccuracy > 0 );
 
-        if ( min > count ) {
-            max = min;
-            min = static_cast<uint32_t>( std::floor( count - infelicity + 0.5 ) );
-        }
-        else
-            max = static_cast<uint32_t>( std::floor( count + infelicity + 0.5 ) );
+    const uint32_t min = std::max( ( count / inaccuracy ) * inaccuracy, 1U );
+    const uint32_t max = ( count / inaccuracy + 1 ) * inaccuracy;
 
-        res = std::to_string( min );
+    std::string res = std::to_string( min );
 
-        if ( min != max ) {
-            res.append( "-" );
-            res.append( std::to_string( max ) );
-        }
+    if ( min != max ) {
+        res.append( "-" );
+        res.append( std::to_string( max ) );
     }
 
     return res;
