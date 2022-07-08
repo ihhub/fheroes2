@@ -146,8 +146,11 @@ namespace Game
     }
 
     int32_t GetStep4Player( const int32_t currentId, const int32_t width, const int32_t totalCount );
-    std::string CountScoute( const uint32_t count, const int scoute, const bool shorts = false );
     std::string CountThievesGuild( uint32_t monsterCount, int guildCount );
+
+    // Returns the string representation of the monster count, formatted according to the scouting level (possibly in
+    // abbreviated form), suitable for use with the WORLD_SCOUTING_EXTENDED option. See the implementation for details.
+    std::string formatMonsterCount( const uint32_t count, const int scoutingLevel, const bool abbreviateNumber = false );
 }
 
 #endif

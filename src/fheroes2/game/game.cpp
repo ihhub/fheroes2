@@ -595,39 +595,83 @@ int Game::GetActualKingdomColors()
     return Settings::Get().GetPlayers().GetActualColors();
 }
 
-std::string Game::CountScoute( const uint32_t count, const int scoute, const bool shorts /* = false */ )
+std::string Game::formatMonsterCount( const uint32_t count, const int scoutingLevel, const bool abbreviateNumber /* = false */ )
 {
-    uint32_t inaccuracy = 0;
-
-    switch ( scoute ) {
+    switch ( scoutingLevel ) {
     case Skill::Level::BASIC:
-        inaccuracy = std::max( count * 30 / 100, 5U );
-        break;
+    case Skill::Level::ADVANCED: {
+        // Always use abbreviated numbers for ranges, otherwise the string might become too long
+        auto formatString = []( uint32_t min, uint32_t max ) {
+            std::string res = fheroes2::abbreviateNumber( min );
 
-    case Skill::Level::ADVANCED:
-        inaccuracy = std::max( count * 15 / 100, 3U );
-        break;
+            if ( min != max ) {
+                res.append( "-" );
+                res.append( fheroes2::abbreviateNumber( max ) );
+            }
 
+            return res;
+        };
+
+        const auto [min, max] = Army::SizeRange( count );
+        assert( min <= max );
+
+        // Open range without upper bound
+        if ( max == UINT32_MAX ) {
+            return fheroes2::abbreviateNumber( min ) + '+';
+        }
+
+        // With basic scouting level, the range is divided in half and the part of the range into
+        // which the monster count falls is returned
+        if ( scoutingLevel == Skill::Level::BASIC ) {
+            const uint32_t half = min + ( max - min ) / 2;
+
+            if ( count < half ) {
+                return formatString( min, half );
+            }
+
+            return formatString( half, max );
+        }
+
+        // With basic scouting level, the range is divided into four parts and the part of the range
+        // into which the monster count falls is returned
+        if ( scoutingLevel == Skill::Level::ADVANCED ) {
+            const uint32_t firstQuarter = min + ( max - min ) / 4;
+
+            if ( count < firstQuarter ) {
+                return formatString( min, firstQuarter );
+            }
+
+            const uint32_t secondQuarter = min + ( max - min ) / 2;
+
+            if ( count < secondQuarter ) {
+                return formatString( firstQuarter, secondQuarter );
+            }
+
+            const uint32_t thirdQuarter = min + ( max - min ) / 2 + ( max - min ) / 4;
+
+            if ( count < thirdQuarter ) {
+                return formatString( secondQuarter, thirdQuarter );
+            }
+
+            return formatString( thirdQuarter, max );
+        }
+
+        // We shouldn't be here
+        assert( 0 );
+
+        break;
+    }
+
+    // With expert scouting level, the exact monster count is returned (possibly in abbreviated form)
     case Skill::Level::EXPERT:
-        return ( shorts ? GetStringShort( count ) : std::to_string( count ) );
+        return ( abbreviateNumber ? fheroes2::abbreviateNumber( count ) : std::to_string( count ) );
 
     default:
-        return Army::SizeString( count );
+        break;
     }
 
-    assert( inaccuracy > 0 );
-
-    const uint32_t min = std::max( ( count / inaccuracy ) * inaccuracy, 1U );
-    const uint32_t max = ( count / inaccuracy + 1 ) * inaccuracy;
-
-    std::string res = std::to_string( min );
-
-    if ( min != max ) {
-        res.append( "-" );
-        res.append( std::to_string( max ) );
-    }
-
-    return res;
+    // Otherwise we just return the approximate string representation (Few, Several, Pack, ...)
+    return Army::SizeString( count );
 }
 
 std::string Game::CountThievesGuild( uint32_t monsterCount, int guildCount )

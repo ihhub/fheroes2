@@ -34,8 +34,6 @@
 
 #include "math_base.h"
 
-std::string GetStringShort( int );
-
 template <typename T, typename = typename std::enable_if<std::is_integral<T>::value>::type>
 std::string GetHexString( T value, int width = 8 )
 {
@@ -99,6 +97,8 @@ namespace fheroes2
     }
 
     void replaceStringEnding( std::string & output, const char * originalEnding, const char * correctedEnding );
+
+    std::string abbreviateNumber( const int num );
 }
 
 #endif

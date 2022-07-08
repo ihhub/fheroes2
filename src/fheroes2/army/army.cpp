@@ -160,6 +160,45 @@ std::string Army::SizeString( uint32_t size )
     return {};
 }
 
+std::pair<uint32_t, uint32_t> Army::SizeRange( const uint32_t count )
+{
+    if ( count < ARMY_SEVERAL ) {
+        return { ARMY_FEW, ARMY_SEVERAL };
+    }
+    if ( count < ARMY_PACK ) {
+        return { ARMY_SEVERAL, ARMY_PACK };
+    }
+    if ( count < ARMY_LOTS ) {
+        return { ARMY_PACK, ARMY_LOTS };
+    }
+    if ( count < ARMY_HORDE ) {
+        return { ARMY_LOTS, ARMY_HORDE };
+    }
+    if ( count < ARMY_THRONG ) {
+        return { ARMY_HORDE, ARMY_THRONG };
+    }
+    if ( count < ARMY_SWARM ) {
+        return { ARMY_THRONG, ARMY_SWARM };
+    }
+    if ( count < ARMY_ZOUNDS ) {
+        return { ARMY_SWARM, ARMY_ZOUNDS };
+    }
+    if ( count < ARMY_LEGION ) {
+        return { ARMY_ZOUNDS, ARMY_LEGION };
+    }
+    if ( count < 10000 ) {
+        return { ARMY_LEGION, 10000 };
+    }
+    if ( count < 100000 ) {
+        return { 10000, 100000 };
+    }
+    if ( count < 1000000 ) {
+        return { 100000, 1000000 };
+    }
+
+    return { 1000000, UINT32_MAX };
+}
+
 Troops::Troops( const Troops & troops )
     : std::vector<Troop *>()
 {
