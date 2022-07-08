@@ -175,9 +175,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     Settings & conf = Settings::Get();
     if ( ( conf.GameType() & fileGameType ) == 0 ) {
         fheroes2::showMessage( fheroes2::Text( _( "Warning" ), fheroes2::FontType::normalYellow() ),
-                               fheroes2::Text( _( "This file contains a save with an invalid game type." ),
-                                               fheroes2::FontType::normalWhite() ),
-                               Dialog::OK );
+                               fheroes2::Text( _( "This file contains a save with an invalid game type." ), fheroes2::FontType::normalWhite() ), Dialog::OK );
         return fheroes2::GameMode::CANCEL;
     }
 
