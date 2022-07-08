@@ -632,8 +632,8 @@ std::string Game::formatMonsterCount( const uint32_t count, const int scoutingLe
             return formatString( half, max );
         }
 
-        // With basic scouting level, the range is divided into four parts and the part of the range
-        // into which the monster count falls is returned
+        // With advanced scouting level, the range is divided into four parts and the part of the
+        // range into which the monster count falls is returned
         if ( scoutingLevel == Skill::Level::ADVANCED ) {
             const uint32_t firstQuarter = min + ( max - min ) / 4;
 
