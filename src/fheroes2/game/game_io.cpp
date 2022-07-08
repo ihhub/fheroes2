@@ -175,7 +175,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
     Settings & conf = Settings::Get();
     if ( ( conf.GameType() & fileGameType ) == 0 ) {
         fheroes2::showMessage( fheroes2::Text( _( "Warning" ), fheroes2::FontType::normalYellow() ),
-                               fheroes2::Text( _( "Invalid file game type. Please ensure that you are running the latest type of save files." ),
+                               fheroes2::Text( _( "This file contains a save with an invalid game type." ),
                                                fheroes2::FontType::normalWhite() ),
                                Dialog::OK );
         return fheroes2::GameMode::CANCEL;
@@ -191,7 +191,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
 
     if ( ( header.status & HeaderSAV::IS_LOYALTY ) && !conf.isPriceOfLoyaltySupported() ) {
         fheroes2::showMessage( fheroes2::Text( _( "Warning" ), fheroes2::FontType::normalYellow() ),
-                               fheroes2::Text( _( "This file is saved in the \"The Price of Loyalty\" version.\nSome items may be unavailable." ),
+                               fheroes2::Text( _( "This file was saved by the \"The Price of Loyalty\" version of the game.\nSome items may not be available." ),
                                                fheroes2::FontType::normalWhite() ),
                                Dialog::OK );
     }
