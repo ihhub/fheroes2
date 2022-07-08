@@ -601,15 +601,15 @@ std::string Game::formatMonsterCount( const uint32_t count, const int scoutingLe
     case Skill::Level::BASIC:
     case Skill::Level::ADVANCED: {
         // Always use abbreviated numbers for ranges, otherwise the string might become too long
-        auto formatString = []( uint32_t min, uint32_t max ) {
-            std::string res = fheroes2::abbreviateNumber( min );
+        auto formatString = []( const uint32_t min, const uint32_t max ) {
+            const std::string minStr = fheroes2::abbreviateNumber( min );
+            const std::string maxStr = fheroes2::abbreviateNumber( max );
 
-            if ( min != max ) {
-                res.append( "-" );
-                res.append( fheroes2::abbreviateNumber( max ) );
+            if ( minStr == maxStr ) {
+                return '~' + minStr;
             }
 
-            return res;
+            return minStr + '-' + maxStr;
         };
 
         const auto [min, max] = Army::SizeRange( count );
