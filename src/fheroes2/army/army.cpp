@@ -186,17 +186,11 @@ std::pair<uint32_t, uint32_t> Army::SizeRange( const uint32_t count )
     if ( count < ARMY_LEGION ) {
         return { ARMY_ZOUNDS, ARMY_LEGION };
     }
-    if ( count < 10000 ) {
-        return { ARMY_LEGION, 10000 };
-    }
-    if ( count < 100000 ) {
-        return { 10000, 100000 };
-    }
-    if ( count < 1000000 ) {
-        return { 100000, 1000000 };
+    if ( count < 5000 ) {
+        return { ARMY_LEGION, 5000 };
     }
 
-    return { 1000000, UINT32_MAX };
+    return { 5000, UINT32_MAX };
 }
 
 Troops::Troops( const Troops & troops )
