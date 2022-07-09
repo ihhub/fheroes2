@@ -742,14 +742,14 @@ int Mixer::setVolume( const int channelId, const int volumePercentage )
         return normalizeFromSDLVolume( prevVolume );
     }
 
-    const size_t channelNum = static_cast<size_t>( channelId );
+    const size_t channel = static_cast<size_t>( channelId );
 
-    if ( channelNum >= savedMixerVolumes.size() ) {
+    if ( channel >= savedMixerVolumes.size() ) {
         return 0;
     }
 
-    const int prevVolume = savedMixerVolumes[channelNum];
-    savedMixerVolumes[channelNum] = volume;
+    const int prevVolume = savedMixerVolumes[channel];
+    savedMixerVolumes[channel] = volume;
 
     return normalizeFromSDLVolume( prevVolume );
 }
