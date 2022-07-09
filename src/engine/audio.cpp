@@ -89,13 +89,21 @@ namespace
 
         void channelStarted( const int channelId, Mix_Chunk * sample )
         {
-            const auto [iter, inserted] = _channelSamples.try_emplace( channelId, std::deque<Mix_Chunk *>{ sample } );
+            const auto iter = _channelSamples.find( channelId );
 
-            if ( inserted ) {
+            if ( iter != _channelSamples.end() ) {
+                std::deque<Mix_Chunk *> & sampleDeque = iter->second;
+
+                sampleDeque.push_back( sample );
+
                 return;
             }
 
-            iter->second.push_back( sample );
+            const auto res = _channelSamples.try_emplace( channelId, std::deque<Mix_Chunk *>{ sample } );
+
+            if ( !res.second ) {
+                assert( 0 );
+            }
         }
 
         // This is the only method that can be called from the SDL_Mixer callback (without acquiring the audioMutex)
@@ -118,14 +126,17 @@ namespace
 
             for ( const int channel : channelsToCleanup ) {
                 const auto iter = _channelSamples.find( channel );
-                assert( iter != _channelSamples.end() && !iter->second.empty() );
+                assert( iter != _channelSamples.end() );
 
-                Mix_Chunk * sample = iter->second.front();
+                std::deque<Mix_Chunk *> & sampleDeque = iter->second;
+                assert( !sampleDeque.empty() );
+
+                Mix_Chunk * sample = sampleDeque.front();
                 assert( sample != nullptr );
 
                 Mix_FreeChunk( sample );
 
-                iter->second.pop_front();
+                sampleDeque.pop_front();
             }
         }
 
