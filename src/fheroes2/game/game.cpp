@@ -45,7 +45,6 @@
 #include "save_format_version.h"
 #include "settings.h"
 #include "skill.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "world.h"

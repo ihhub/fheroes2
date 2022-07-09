@@ -60,9 +60,6 @@
 #include "serialize.h"
 #include "settings.h"
 #include "spell.h"
-#ifdef WITH_DEBUG
-#include "text.h"
-#endif
 #include "til.h"
 #include "trees.h"
 #include "world.h"
