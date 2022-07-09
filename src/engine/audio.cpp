@@ -76,6 +76,9 @@ namespace
     class SoundSampleManager
     {
     public:
+        SoundSampleManager() = default;
+        SoundSampleManager( const SoundSampleManager & ) = delete;
+
         ~SoundSampleManager()
         {
             // Make sure that all sound samples have been eventually freed
@@ -83,6 +86,8 @@ namespace
                 assert( item.second.empty() );
             }
         }
+
+        SoundSampleManager & operator=( const SoundSampleManager & ) = delete;
 
         void channelStarted( const int channelId, Mix_Chunk * sample )
         {
