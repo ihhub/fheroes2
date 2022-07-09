@@ -1575,8 +1575,7 @@ std::string Maps::Tiles::String() const
 
         os << "capture color   : " << Color::String( co.objcol.second ) << std::endl;
         if ( co.guardians.isValid() ) {
-            os << "capture guard   : " << co.guardians.GetName() << std::endl
-               << "capture count   : " << co.guardians.GetCount() << std::endl;
+            os << "capture guard   : " << co.guardians.GetName() << std::endl << "capture count   : " << co.guardians.GetCount() << std::endl;
         }
     }
 
