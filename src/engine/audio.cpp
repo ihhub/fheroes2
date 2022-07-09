@@ -82,9 +82,7 @@ namespace
         ~SoundSampleManager()
         {
             // Make sure that all sound samples have been eventually freed
-            for ( const auto & item : _channelSamples ) {
-                assert( item.second.empty() );
-            }
+            assert( std::all_of( _channelSamples.begin(), _channelSamples.end(), []( const auto & item ) { return item.second.empty(); } ) );
         }
 
         SoundSampleManager & operator=( const SoundSampleManager & ) = delete;
