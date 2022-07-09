@@ -110,8 +110,6 @@ namespace
 
         void clearFinishedSamples()
         {
-            assert( isInitialized );
-
             std::vector<int> channelsToCleanup;
 
             {
