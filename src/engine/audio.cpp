@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <atomic>
 #include <cassert>
+#include <deque>
 #include <map>
 #include <mutex>
 #include <numeric>
@@ -72,25 +73,79 @@ namespace
     // be acquired in any callback functions that can be called by SDL_Mixer.
     std::recursive_mutex audioMutex;
 
+    class SoundSampleManager
+    {
+    public:
+        ~SoundSampleManager()
+        {
+            // Make sure that all sound samples have been eventually freed
+            for ( const auto & item : _channelSamples ) {
+                assert( item.second.empty() );
+            }
+        }
+
+        void channelStarted( const int channelId, Mix_Chunk * sample )
+        {
+            const auto [iter, inserted] = _channelSamples.try_emplace( channelId, std::deque<Mix_Chunk *>{ sample } );
+
+            if ( inserted ) {
+                return;
+            }
+
+            iter->second.push_back( sample );
+        }
+
+        // This is the only method that can be called from the SDL_Mixer callback (without acquiring the audioMutex)
+        void channelFinished( const int channelId )
+        {
+            const std::scoped_lock<std::mutex> lock( _channelsToCleanupMutex );
+
+            _channelsToCleanup.push_back( channelId );
+        }
+
+        void clearFinishedSamples()
+        {
+            assert( isInitialized );
+
+            std::vector<int> channelsToCleanup;
+
+            {
+                const std::scoped_lock<std::mutex> lock( _channelsToCleanupMutex );
+
+                std::swap( channelsToCleanup, _channelsToCleanup );
+            }
+
+            for ( const int channel : channelsToCleanup ) {
+                const auto iter = _channelSamples.find( channel );
+                assert( iter != _channelSamples.end() && !iter->second.empty() );
+
+                Mix_Chunk * sample = iter->second.front();
+                assert( sample != nullptr );
+
+                Mix_FreeChunk( sample );
+
+                iter->second.pop_front();
+            }
+        }
+
+    private:
+        std::map<int, std::deque<Mix_Chunk *>> _channelSamples;
+
+        std::vector<int> _channelsToCleanup;
+        // This mutex protects operations with _channelsToCleanup
+        std::mutex _channelsToCleanupMutex;
+    };
+
+    SoundSampleManager soundSampleManager;
+
     // This is the callback function set by Mix_ChannelFinished(). As a rule, it is called from
-    // a SDL_Mixer internal thread.
-    //
-    // TODO: according to SDL_Mixer manual, calls of any SDL_Mixer functions are not allowed in
-    // TODO: callbacks. The current code works, but it would be good to find a reliable way to
-    // TODO: perform channel cleanup without calling these functions.
+    // a SDL_Mixer internal thread. Calls of any SDL_Mixer functions are not allowed in callbacks.
     void channelFinished( const int channelId )
     {
         // This callback function should never be called if audio is not initialized
         assert( isInitialized );
 
-        Mix_Chunk * sample = Mix_GetChunk( channelId );
-        assert( sample != nullptr );
-
-        Mix_FreeChunk( sample );
-
-        if ( Mix_UnregisterAllEffects( channelId ) == 0 ) {
-            ERROR_LOG( "Failed to unregister all effects from channel " << channelId << ". The error: " << Mix_GetError() )
-        }
+        soundSampleManager.channelFinished( channelId );
     }
 
     int playSound( const uint8_t * ptr, const uint32_t size, const int channelId, const bool loop )
@@ -106,7 +161,14 @@ namespace
         const int channel = Mix_PlayChannel( channelId, sample, loop ? -1 : 0 );
         if ( channel < 0 ) {
             ERROR_LOG( "Failed to play an audio chunk for channel " << channel << ". The error: " << Mix_GetError() )
+
+            Mix_FreeChunk( sample );
         }
+        else {
+            soundSampleManager.channelStarted( channel, sample );
+        }
+
+        soundSampleManager.clearFinishedSamples();
 
         return channel;
     }
@@ -494,6 +556,7 @@ void Audio::Quit()
 
         Mix_ChannelFinished( nullptr );
 
+        soundSampleManager.clearFinishedSamples();
         musicSettings.trackManager.clear();
 
         Mix_CloseAudio();
