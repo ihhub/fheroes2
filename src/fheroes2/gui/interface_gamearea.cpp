@@ -191,18 +191,18 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         return;
     }
 
-    // Each tile can contain multiple objects parts or sprites. Each object part has its own level or in other words layer of rendering.
-    // We need to use a correct order of levels to render objects. The levels are:
+    // Each tile can contain multiple object parts or sprites. Each object part has its own level or in other words layer of rendering.
+    // We need to use a correct order of levels to render objects on tiles. The levels are:
     // 0 - main and action objects like mines, forest, castle and etc.
     // 1 - background objects like lake or bushes.
     // 2 - shadows
     // 3 - roads, water flaws and cracks. Essentially everything what is a part of terrain.
     // The correct order of levels is 3 --> 1 --> 2 --> 0.
     //
-    // There are also two groups of objects: ground objects (bottom layer) and high objects (top layer). High objects are the parts of objects which are taller than
+    // There are also two groups of objects: ground objects (bottom layer) and high objects (top layer). High objects are the parts of the objects which are taller than
     // 1 tile. For example, a castle. All ground objects are drawn first.
     //
-    // However, there are some objects which appears to be more than 1 tile (32 x 32 pixels) size such as heroes, monsters and boats.
+    // However, there are some objects which appear to be more than 1 tile (32 x 32 pixels) size such as heroes, monsters and boats.
     // To render all these 'special' objects we need to create a copy of object sprite stacks for each tile, add temporary extra sprites and render them.
     //
     // TODO: to proceed with this concept we need to put an object info stored in class Tiles into either groud object stack or high object stack. For example, a tile
