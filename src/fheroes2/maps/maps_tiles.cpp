@@ -436,12 +436,12 @@ Maps::TilesAddon::TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_
 std::string Maps::TilesAddon::String( int lvl ) const
 {
     std::ostringstream os;
-    os << "----------------" << lvl << "--------" << std::endl
-       << "uniq            : " << uniq << std::endl
-       << "tileset         : " << static_cast<int>( object ) << ", (" << ICN::GetString( MP2::GetICNObject( object ) ) << ")" << std::endl
+    os << "--------- Level " << lvl << " --------" << std::endl
+       << "UID             : " << uniq << std::endl
+       << "tileset         : " << static_cast<int>( object ) << " (" << ICN::GetString( MP2::GetICNObject( object ) ) << ")" << std::endl
        << "index           : " << static_cast<int>( index ) << std::endl
-       << "level           : " << static_cast<int>( level ) << ", (" << static_cast<int>( level % 4 ) << ")" << std::endl
-       << "shadow          : " << isShadow( *this ) << std::endl;
+       << "level           : " << static_cast<int>( level ) << " (" << static_cast<int>( level % 4 ) << ")" << std::endl
+       << "shadow          : " << ( isShadow( *this ) ? "true" : "false" ) << std::endl;
     return os.str();
 }
 
@@ -1493,35 +1493,37 @@ std::string Maps::Tiles::String() const
 {
     std::ostringstream os;
 
-    os << "----------------:>>>>>>>>" << std::endl
+    const MP2::MapObjectType objectType = GetObject();
+
+    os << "******* Tile info *******" << std::endl
        << "Tile index      : " << _index << ", "
        << "point: (" << GetCenter().x << ", " << GetCenter().y << ")" << std::endl
-       << "uniq            : " << uniq << std::endl
-       << "mp2 object      : " << static_cast<int>( GetObject() ) << ", (" << MP2::StringObject( GetObject() ) << ")" << std::endl
-       << "tileset         : " << static_cast<int>( objectTileset ) << ", (" << ICN::GetString( MP2::GetICNObject( objectTileset ) ) << ")" << std::endl
-       << "object index    : " << static_cast<int>( objectIndex ) << ", (animated: " << hasSpriteAnimation() << ")" << std::endl
+       << "UID             : " << uniq << std::endl
+       << "MP2 object type : " << static_cast<int>( objectType ) << " (" << MP2::StringObject( objectType ) << ")" << std::endl
+       << "tileset         : " << static_cast<int>( objectTileset ) << " (" << ICN::GetString( MP2::GetICNObject( objectTileset ) ) << ")" << std::endl
+       << "object index    : " << static_cast<int>( objectIndex ) << " (animated: " << hasSpriteAnimation() << ")" << std::endl
        << "level           : " << static_cast<int>( _level ) << std::endl
        << "region          : " << _region << std::endl
-       << "ground          : " << Ground::String( GetGround() ) << ", (isRoad: " << tileIsRoad << ")" << std::endl
-       << "shadow          : " << isShadowSprite( objectTileset, objectIndex ) << std::endl
-       << "passable        : " << ( tilePassable ? Direction::String( tilePassable ) : "false" );
+       << "ground          : " << Ground::String( GetGround() ) << " (isRoad: " << tileIsRoad << ")" << std::endl
+       << "shadow          : " << ( isShadowSprite( objectTileset, objectIndex ) ? "true" : "false" ) << std::endl
+       << "passable from   : " << ( tilePassable ? Direction::String( tilePassable ) : "nowhere" );
 
     os << std::endl
        << "quantity 1      : " << static_cast<int>( quantity1 ) << std::endl
        << "quantity 2      : " << static_cast<int>( quantity2 ) << std::endl
        << "quantity 3      : " << static_cast<int>( quantity3 ) << std::endl;
 
-    for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it )
-        os << ( *it ).String( 1 );
+    for ( const TilesAddon & addon : addons_level1 ) {
+        os << addon.String( 1 );
+    }
 
-    for ( Addons::const_iterator it = addons_level2.begin(); it != addons_level2.end(); ++it )
-        os << ( *it ).String( 2 );
+    for ( const TilesAddon & addon : addons_level2 ) {
+        os << addon.String( 2 );
+    }
 
-    os << "----------------I--------" << std::endl;
+    os << "--- Extra information ---" << std::endl;
 
-    // extra obj info
-    switch ( GetObject() ) {
-        // dwelling
+    switch ( objectType ) {
     case MP2::OBJ_RUINS:
     case MP2::OBJ_TREECITY:
     case MP2::OBJ_WAGONCAMP:
@@ -1540,16 +1542,14 @@ std::string Maps::Tiles::String() const
     case MP2::OBJ_PEASANTHUT:
     case MP2::OBJ_THATCHEDHUT:
     case MP2::OBJ_MONSTER:
-        os << "count           : " << MonsterCount() << std::endl;
+        os << "monster count   : " << MonsterCount() << std::endl;
         break;
-
     case MP2::OBJ_HEROES: {
         const Heroes * hero = GetHeroes();
         if ( hero )
             os << hero->String();
         break;
     }
-
     case MP2::OBJN_CASTLE:
     case MP2::OBJ_CASTLE: {
         const Castle * castle = world.getCastle( GetCenter() );
@@ -1557,13 +1557,13 @@ std::string Maps::Tiles::String() const
             os << castle->String();
         break;
     }
-
     default: {
         const MapsIndexes & v = Maps::getMonstersProtectingTile( _index );
         if ( !v.empty() ) {
             os << "protection      : ";
-            for ( MapsIndexes::const_iterator it = v.begin(); it != v.end(); ++it )
-                os << *it << ", ";
+            for ( const int32_t index : v ) {
+                os << index << ", ";
+            }
             os << std::endl;
         }
         break;
@@ -1575,11 +1575,13 @@ std::string Maps::Tiles::String() const
 
         os << "capture color   : " << Color::String( co.objcol.second ) << std::endl;
         if ( co.guardians.isValid() ) {
-            os << "capture guard   : " << co.guardians.GetName() << std::endl << "capture count   : " << co.guardians.GetCount() << std::endl;
+            os << "capture guard   : " << co.guardians.GetName() << std::endl
+               << "capture count   : " << co.guardians.GetCount() << std::endl;
         }
     }
 
-    os << "----------------:<<<<<<<<" << std::endl;
+    os << "*************************" << std::endl;
+
     return os.str();
 }
 
