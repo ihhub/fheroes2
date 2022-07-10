@@ -58,8 +58,8 @@ namespace
     class HotKeyElement : public fheroes2::DialogElement
     {
     public:
-        explicit HotKeyElement( const fheroes2::Key key )
-            : _restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
+        HotKeyElement( const fheroes2::Key key, fheroes2::Image & output )
+            : _restorer( output, 0, 0, 0, 0 )
             , _key( key )
             , _keyChanged( false )
         {
@@ -172,7 +172,7 @@ namespace
 
         void ActionListDoubleClick( Game::HotKeyEvent & hotKeyEvent ) override
         {
-            HotKeyElement hotKeyUI( Game::getHotKeyForEvent( hotKeyEvent ) );
+            HotKeyElement hotKeyUI( Game::getHotKeyForEvent( hotKeyEvent ), fheroes2::Display::instance() );
 
             // Okay and Cancel events are special cases as they are used in dialogs. By default we need to disable these events to allow to be set any key for an event.
             const fheroes2::Key okayEventKey = Game::getHotKeyForEvent( Game::HotKeyEvent::DEFAULT_OKAY );
