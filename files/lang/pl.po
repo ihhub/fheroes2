@@ -9458,8 +9458,3 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid ""
-#~ "Invalid file game type. Please ensure that you are running the latest "
-#~ "type of save files."
-#~ msgstr "Ten zapis gry nie jest obsługiwany przez aktualną wersję gry."
