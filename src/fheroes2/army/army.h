@@ -25,6 +25,7 @@
 #define H2ARMY_H
 
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "monster.h"
@@ -134,6 +135,8 @@ class Army : public Troops, public Control
 public:
     static std::string SizeString( uint32_t );
     static std::string TroopSizeString( const Troop & );
+
+    static std::pair<uint32_t, uint32_t> SizeRange( const uint32_t count );
 
     // compare
     static bool WeakestTroop( const Troop *, const Troop * );

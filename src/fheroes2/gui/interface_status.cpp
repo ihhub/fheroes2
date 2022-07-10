@@ -230,22 +230,22 @@ void Interface::StatusWindow::DrawKingdomInfo( int oh ) const
     text.Set( std::to_string( myKingdom.GetFunds().Get( Resource::GOLD ) ) );
     text.Blit( pos.x + 122 - text.w() / 2, pos.y + 28 + oh );
     // count wood
-    text.Set( GetStringShort( myKingdom.GetFunds().Get( Resource::WOOD ) ) );
+    text.Set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::WOOD ) ) );
     text.Blit( pos.x + 15 - text.w() / 2, pos.y + 58 + oh );
     // count mercury
-    text.Set( GetStringShort( myKingdom.GetFunds().Get( Resource::MERCURY ) ) );
+    text.Set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::MERCURY ) ) );
     text.Blit( pos.x + 37 - text.w() / 2, pos.y + 58 + oh );
     // count ore
-    text.Set( GetStringShort( myKingdom.GetFunds().Get( Resource::ORE ) ) );
+    text.Set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::ORE ) ) );
     text.Blit( pos.x + 60 - text.w() / 2, pos.y + 58 + oh );
     // count sulfur
-    text.Set( GetStringShort( myKingdom.GetFunds().Get( Resource::SULFUR ) ) );
+    text.Set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::SULFUR ) ) );
     text.Blit( pos.x + 84 - text.w() / 2, pos.y + 58 + oh );
     // count crystal
-    text.Set( GetStringShort( myKingdom.GetFunds().Get( Resource::CRYSTAL ) ) );
+    text.Set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::CRYSTAL ) ) );
     text.Blit( pos.x + 108 - text.w() / 2, pos.y + 58 + oh );
     // count gems
-    text.Set( GetStringShort( myKingdom.GetFunds().Get( Resource::GEMS ) ) );
+    text.Set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::GEMS ) ) );
     text.Blit( pos.x + 130 - text.w() / 2, pos.y + 58 + oh );
 }
 

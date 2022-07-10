@@ -857,7 +857,7 @@ void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::
     fheroes2::Blit( mons32, output, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - ( mons32.height() + 3 < pos.height ? 3 : 0 ),
                     revert );
 
-    Text number( GetStringShort( unit.GetCount() ), Font::SMALL );
+    Text number( fheroes2::abbreviateNumber( unit.GetCount() ), Font::SMALL );
     number.Blit( pos.x + 2, pos.y + 2, output );
 
     if ( isCurrentUnit ) {
@@ -1625,7 +1625,7 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
 
     fheroes2::Blit( bar, _mainSurface, sx, sy );
 
-    Text text( GetStringShort( unit.GetCount() ), Font::SMALL );
+    Text text( fheroes2::abbreviateNumber( unit.GetCount() ), Font::SMALL );
     text.Blit( sx + ( bar.width() - text.w() ) / 2, sy, _mainSurface );
 }
 
