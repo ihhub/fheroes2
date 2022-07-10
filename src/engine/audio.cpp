@@ -93,7 +93,7 @@ namespace
 
         void channelStarted( const int channelId, Mix_Chunk * sample )
         {
-            assert( sample != nullptr );
+            assert( channelId >= 0 && sample != nullptr );
 
             const auto iter = _channelSamples.find( channelId );
 
@@ -124,6 +124,8 @@ namespace
         // This is the only method that can be called from the SDL_Mixer callback (without acquiring the audioMutex)
         void channelFinished( const int channelId )
         {
+            assert( channelId >= 0 );
+
             const std::scoped_lock<std::mutex> lock( _channelsToCleanupMutex );
 
             _channelsToCleanup.push_back( channelId );
