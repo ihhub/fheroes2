@@ -62,7 +62,7 @@ namespace fheroes2
         virtual void showPopup( const int buttons ) const = 0;
 
         // Update the content of UI elements. By default it does nothing.
-        virtual bool update( Image & /*output*/, const Point & /*offset*/ ) const
+        virtual bool update( Image & /*output*/, const Point & /*offset*/ )
         {
             return false;
         }
@@ -281,7 +281,7 @@ namespace fheroes2
         // Never call this method as a dynamic image has nothing to popup.
         void showPopup( const int buttons ) const override;
 
-        bool update( Image & output, const Point & offset ) const override;
+        bool update( Image & output, const Point & offset ) override;
 
     private:
         const int _icnId;

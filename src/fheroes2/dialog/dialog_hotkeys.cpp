@@ -94,7 +94,7 @@ namespace
             assert( 0 );
         }
 
-        bool update( fheroes2::Image & output, const fheroes2::Point & offset ) const override
+        bool update( fheroes2::Image & output, const fheroes2::Point & offset ) override
         {
             if ( _keyChanged ) {
                 _keyChanged = false;

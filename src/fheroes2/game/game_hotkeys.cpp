@@ -336,6 +336,7 @@ void Game::HotKeySave()
 
     std::fstream file( filename.data(), std::fstream::out | std::fstream::trunc );
     if ( !file ) {
+        ERROR_LOG( "Unable to open hotkey settings file " << filename )
         return;
     }
 
