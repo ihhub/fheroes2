@@ -472,8 +472,6 @@ namespace
             if ( Maps::GetStraightLineDistance( hero->GetIndex(), dst ) <= dist ) {
                 return hero->GetSecondaryValues( Skill::Secondary::SCOUTING );
             }
-
-            return Skill::Level::NONE;
         }
 
         return Skill::Level::NONE;
