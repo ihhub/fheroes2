@@ -905,18 +905,9 @@ int Maps::Tiles::MonsterJoinCondition() const
 
 void Maps::Tiles::MonsterSetJoinCondition( int cond )
 {
+    // TODO: why are we doing this? Simplify the logic.
     quantity3 &= 0xFC;
     quantity3 |= ( cond & 0x03 );
-}
-
-void Maps::Tiles::MonsterSetFixedCount()
-{
-    quantity3 |= 0x80;
-}
-
-bool Maps::Tiles::MonsterFixedCount() const
-{
-    return mp2_object == MP2::OBJ_MONSTER ? ( quantity3 & 0x80 ) != 0 : false;
 }
 
 bool Maps::Tiles::MonsterJoinConditionSkip() const
@@ -931,11 +922,13 @@ bool Maps::Tiles::MonsterJoinConditionFree() const
 
 uint32_t Maps::Tiles::MonsterCount() const
 {
+    // TODO: avoid this hacky way of storing data.
     return ( static_cast<uint32_t>( quantity1 ) << 8 ) | quantity2;
 }
 
 void Maps::Tiles::MonsterSetCount( uint32_t count )
 {
+    // TODO: avoid this hacky way of storing data.
     quantity1 = count >> 8;
     quantity2 = 0x00FF & count;
 }
@@ -954,8 +947,9 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
     tile.objectTileset = 48; // MONS32.ICN
     tile.objectIndex = mons.GetSpriteIndex();
 
-    if ( count ) {
-        tile.MonsterSetFixedCount();
+    const bool setDefinedCount = ( count > 0 );
+
+    if ( setDefinedCount ) {
         tile.MonsterSetCount( count );
     }
     else {
@@ -966,7 +960,9 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
         // Ghosts and elementals never join hero's army.
         tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_SKIP );
     }
-    else if ( tile.MonsterFixedCount() || ( world.GetWeekType().GetType() == WeekName::MONSTERS && world.GetWeekType().GetMonster() == mons.GetID() ) ) {
+    else if ( setDefinedCount || ( world.GetWeekType().GetType() == WeekName::MONSTERS && world.GetWeekType().GetMonster() == mons.GetID() ) ) {
+        // Wandering monsters with the number of units specified by the map designer are always considered as "hostile" and always join only for money.
+
         // Monsters will be willing to join for some amount of money.
         tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
     }
@@ -1106,7 +1102,7 @@ void Maps::Tiles::UpdateMonsterPopulation( Tiles & tile )
     if ( troopCount == 0 ) {
         tile.MonsterSetCount( troop.GetRNDSize( false ) );
     }
-    else if ( !tile.MonsterFixedCount() ) {
+    else {
         const uint32_t bonusUnit = ( Rand::Get( 1, 7 ) <= ( troopCount % 7 ) ) ? 1 : 0;
         tile.MonsterSetCount( troopCount * 8 / 7 + bonusUnit );
     }

@@ -259,10 +259,7 @@ namespace Maps
         /* monster operation */
         bool MonsterJoinConditionSkip() const;
         bool MonsterJoinConditionFree() const;
-        int MonsterJoinCondition() const;
         void MonsterSetJoinCondition( int );
-        void MonsterSetFixedCount();
-        bool MonsterFixedCount() const;
         void MonsterSetCount( uint32_t count );
         uint32_t MonsterCount() const;
 
@@ -347,6 +344,8 @@ namespace Maps
 
         bool isDetachedObject() const;
 
+        int MonsterJoinCondition() const;
+
         static void UpdateMonsterInfo( Tiles & );
         static void UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad );
         static void UpdateMonsterPopulation( Tiles & );
@@ -363,8 +362,8 @@ namespace Maps
             return l.GetIndex() < r.GetIndex();
         }
 
-        Addons addons_level1;
-        Addons addons_level2; // 16
+        Addons addons_level1; // bottom layer
+        Addons addons_level2; // top layer
 
         int32_t _index = 0;
         uint16_t pack_sprite_index = 0;
@@ -377,8 +376,11 @@ namespace Maps
         uint8_t fog_colors = Color::ALL;
 
         uint8_t heroID = 0;
+
+        // TODO: Combine quantity1 and quantity2 into a single 16/32-bit variable except first 2 bits of quantity1 which are used for level type of an object.
         uint8_t quantity1 = 0;
         uint8_t quantity2 = 0;
+
         uint8_t quantity3 = 0;
 
         bool tileIsRoad = false;
