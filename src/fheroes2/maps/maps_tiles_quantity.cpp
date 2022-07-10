@@ -961,7 +961,7 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
         tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_SKIP );
     }
     else if ( setDefinedCount || ( world.GetWeekType().GetType() == WeekName::MONSTERS && world.GetWeekType().GetMonster() == mons.GetID() ) ) {
-        // TODO: why there are neutral monsters whose number was set in the Editor always join for money? Check the logic in the original game.
+        // Wandering monsters with the number of units specified by the map designer are always considered as "hostile" and always join only for money.
 
         // Monsters will be willing to join for some amount of money.
         tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
