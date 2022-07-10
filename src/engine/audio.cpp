@@ -24,10 +24,10 @@
 #include <algorithm>
 #include <atomic>
 #include <cassert>
-#include <deque>
 #include <map>
 #include <mutex>
 #include <numeric>
+#include <utility>
 
 #include <SDL.h>
 #include <SDL_mixer.h>
@@ -82,24 +82,39 @@ namespace
         ~SoundSampleManager()
         {
             // Make sure that all sound samples have been eventually freed
-            assert( std::all_of( _channelSamples.begin(), _channelSamples.end(), []( const auto & item ) { return item.second.empty(); } ) );
+            assert( std::all_of( _channelSamples.begin(), _channelSamples.end(), []( const auto & item ) {
+                static const decltype( item.second ) nullQueue{ nullptr, nullptr };
+
+                return item.second == nullQueue;
+            } ) );
         }
 
         SoundSampleManager & operator=( const SoundSampleManager & ) = delete;
 
         void channelStarted( const int channelId, Mix_Chunk * sample )
         {
+            assert( sample != nullptr );
+
             const auto iter = _channelSamples.find( channelId );
 
             if ( iter != _channelSamples.end() ) {
-                std::deque<Mix_Chunk *> & sampleDeque = iter->second;
+                auto & sampleQueue = iter->second;
 
-                sampleDeque.push_back( sample );
+                if ( sampleQueue.first == nullptr ) {
+                    sampleQueue.first = sample;
+                }
+                else if ( sampleQueue.second == nullptr ) {
+                    sampleQueue.second = sample;
+                }
+                else {
+                    // The sample queue is already full, this shouldn't happen
+                    assert( 0 );
+                }
 
                 return;
             }
 
-            const auto res = _channelSamples.try_emplace( channelId, std::deque<Mix_Chunk *>{ sample } );
+            const auto res = _channelSamples.try_emplace( channelId, std::make_pair( sample, nullptr ) );
 
             if ( !res.second ) {
                 assert( 0 );
@@ -128,20 +143,19 @@ namespace
                 const auto iter = _channelSamples.find( channel );
                 assert( iter != _channelSamples.end() );
 
-                std::deque<Mix_Chunk *> & sampleDeque = iter->second;
-                assert( !sampleDeque.empty() );
+                auto & sampleQueue = iter->second;
+                assert( sampleQueue.first != nullptr );
 
-                Mix_Chunk * sample = sampleDeque.front();
-                assert( sample != nullptr );
+                Mix_FreeChunk( sampleQueue.first );
 
-                Mix_FreeChunk( sample );
-
-                sampleDeque.pop_front();
+                // "Shift" the sample queue
+                sampleQueue.first = nullptr;
+                std::swap( sampleQueue.first, sampleQueue.second );
             }
         }
 
     private:
-        std::map<int, std::deque<Mix_Chunk *>> _channelSamples;
+        std::map<int, std::pair<Mix_Chunk *, Mix_Chunk *>> _channelSamples;
 
         std::vector<int> _channelsToCleanup;
         // This mutex protects operations with _channelsToCleanup
@@ -177,6 +191,8 @@ namespace
             Mix_FreeChunk( sample );
         }
         else {
+            // There can be a maximum of two items in the sample queue for a channel:
+            // the previous sample (if it hasn't been released yet) and the current one
             soundSampleManager.channelStarted( channel, sample );
         }
 
