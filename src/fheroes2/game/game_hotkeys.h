@@ -154,7 +154,7 @@ namespace Game
 
     void KeyboardGlobalFilter( int sdlKey, int mod );
 
-    void HotKeysLoad( std::string filename );
+    void HotKeysLoad( const std::string & filename );
 
     void HotKeySave();
 }

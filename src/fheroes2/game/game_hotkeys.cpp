@@ -291,7 +291,7 @@ std::vector<Game::HotKeyEvent> Game::getAllHotKeyEvents()
     return events;
 }
 
-void Game::HotKeysLoad( std::string filename )
+void Game::HotKeysLoad( const std::string & filename )
 {
     initializeHotKeyEvents();
 
