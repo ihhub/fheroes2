@@ -722,7 +722,7 @@ namespace fheroes2
         assert( 0 );
     }
 
-    bool DynamicImageDialogElement::update( Image & output, const Point & offset )
+    bool DynamicImageDialogElement::update( Image & output, const Point & offset ) const
     {
         if ( Game::validateCustomAnimationDelay( _delay ) ) {
             draw( output, offset );
