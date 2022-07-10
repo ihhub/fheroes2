@@ -150,9 +150,9 @@ namespace
 
                 Mix_FreeChunk( sampleQueue.first );
 
-                // "Shift" the sample queue
-                sampleQueue.first = nullptr;
-                std::swap( sampleQueue.first, sampleQueue.second );
+                // Shift the sample queue
+                sampleQueue.first = sampleQueue.second;
+                sampleQueue.second = nullptr;
             }
         }
 
