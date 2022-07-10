@@ -146,7 +146,6 @@ void Dialog::ExtSettings( bool readonly )
     std::vector<uint32_t> states;
     states.reserve( 32 );
 
-    states.push_back( Settings::GAME_SAVE_REWRITE_CONFIRM );
     states.push_back( Settings::GAME_REMEMBER_LAST_FOCUS );
     states.push_back( Settings::GAME_SHOW_SYSTEM_INFO );
     states.push_back( Settings::GAME_BATTLE_SHOW_DAMAGE );
