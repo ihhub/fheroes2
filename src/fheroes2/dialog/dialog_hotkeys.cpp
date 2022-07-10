@@ -67,10 +67,7 @@ namespace
             _area = { BOXAREA_WIDTH, fheroes2::Text( StringUpper( KeySymGetName( _key ) ), fheroes2::FontType::normalYellow() ).height( BOXAREA_WIDTH ) };
         }
 
-        ~HotKeyElement() override
-        {
-            _restorer.reset();
-        }
+        ~HotKeyElement() override = default;
 
         void draw( fheroes2::Image & output, const fheroes2::Point & offset ) const override
         {
@@ -106,6 +103,11 @@ namespace
             }
 
             return false;
+        }
+
+        void reset()
+        {
+            _restorer.reset();
         }
 
         fheroes2::Key getKey() const
@@ -190,6 +192,9 @@ namespace
             Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_OKAY, okayEventKey );
             Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_CANCEL, cancelEventKey );
             Game::setHotKeyForEvent( Game::HotKeyEvent::SYSTEM_FULLSCREEN, fullscreenEventKey );
+
+            // To avoid UI issues we need to reset restorer manually.
+            hotKeyUI.reset();
 
             if ( returnValue == Dialog::CANCEL ) {
                 return;
