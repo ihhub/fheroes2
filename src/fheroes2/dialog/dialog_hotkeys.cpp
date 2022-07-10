@@ -182,6 +182,7 @@ namespace
 
             Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_OKAY, fheroes2::Key::NONE );
             Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_CANCEL, fheroes2::Key::NONE );
+            Game::setHotKeyForEvent( Game::HotKeyEvent::SYSTEM_FULLSCREEN, fheroes2::Key::NONE );
 
             const int returnValue = fheroes2::showMessage( fheroes2::Text{ Game::getHotKeyEventNameByEventId( hotKeyEvent ), fheroes2::FontType::normalWhite() },
                                                            fheroes2::Text{ "", fheroes2::FontType::normalWhite() }, Dialog::OK | Dialog::CANCEL, { &hotKeyUI } );
