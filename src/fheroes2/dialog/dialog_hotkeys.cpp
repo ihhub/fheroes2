@@ -28,6 +28,7 @@
 #include "interface_list.h"
 #include "localevent.h"
 #include "screen.h"
+#include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_dialog.h"
@@ -36,7 +37,7 @@
 namespace
 {
     const int editBoxLength = 266;
-    const int hotKeyLength = 66;
+    const int hotKeyLength = 68;
     const int windowExtensionHeight = 34;
 
     fheroes2::Sprite generateMainWindow()
@@ -54,6 +55,70 @@ namespace
         return window;
     }
 
+    class HotKeyElement : public fheroes2::DialogElement
+    {
+    public:
+        explicit HotKeyElement( const fheroes2::Key key )
+            : _restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
+            , _key( key )
+            , _keyChanged( false )
+        {
+            // Text always occupies the whole width of the dialog.
+            _area = { BOXAREA_WIDTH, fheroes2::Text( StringUpper( KeySymGetName( _key ) ), fheroes2::FontType::normalYellow() ).height( BOXAREA_WIDTH ) };
+        }
+
+        ~HotKeyElement() override
+        {
+            _restorer.reset();
+        }
+
+        void draw( fheroes2::Image & output, const fheroes2::Point & offset ) const override
+        {
+            _restorer.restore();
+
+            const fheroes2::Text text( StringUpper( KeySymGetName( _key ) ), fheroes2::FontType::normalYellow() );
+            _restorer.update( offset.x, offset.y, BOXAREA_WIDTH, text.height() );
+
+            text.draw( offset.x, offset.y, BOXAREA_WIDTH, output );
+        }
+
+        void processEvents( const fheroes2::Point & /*offset*/ ) const override
+        {
+            const LocalEvent & le = LocalEvent::Get();
+            if ( le.KeyPress() ) {
+                _key = le.KeyValue();
+                _keyChanged = true;
+            }
+        }
+
+        // Never call this method as a custom image has nothing to popup.
+        void showPopup( const int /*buttons*/ ) const override
+        {
+            assert( 0 );
+        }
+
+        bool update( fheroes2::Image & output, const fheroes2::Point & offset ) const override
+        {
+            if ( _keyChanged ) {
+                _keyChanged = false;
+                draw( output, offset );
+                return true;
+            }
+
+            return false;
+        }
+
+        fheroes2::Key getKey() const
+        {
+            return _key;
+        }
+
+    private:
+        mutable fheroes2::ImageRestorer _restorer;
+        mutable fheroes2::Key _key;
+        mutable bool _keyChanged;
+    };
+
     class HotKeyList : public Interface::ListBox<Game::HotKeyEvent>
     {
     public:
@@ -63,15 +128,17 @@ namespace
         using Interface::ListBox<Game::HotKeyEvent>::ActionListPressRight;
         using Interface::ListBox<Game::HotKeyEvent>::ActionListDoubleClick;
 
-        void RedrawItem( const Game::HotKeyEvent & hotKeyEvent, int32_t offsetX, int32_t offsetY, bool /*current*/ ) override
+        void RedrawItem( const Game::HotKeyEvent & hotKeyEvent, int32_t offsetX, int32_t offsetY, bool current ) override
         {
             fheroes2::Display & display = fheroes2::Display::instance();
 
-            fheroes2::Text name( Game::getHotKeyEventNameByEventId( hotKeyEvent ), fheroes2::FontType::normalWhite() );
-            name.fitToOneRow( editBoxLength - hotKeyLength );
-            name.draw( offsetX + 10, offsetY, display );
+            const fheroes2::FontType fontType = current ? fheroes2::FontType::normalYellow() : fheroes2::FontType::normalWhite();
 
-            fheroes2::Text hotkey( Game::getHotKeyNameByEventId( hotKeyEvent ), fheroes2::FontType::normalWhite() );
+            fheroes2::Text name( Game::getHotKeyEventNameByEventId( hotKeyEvent ), fontType );
+            name.fitToOneRow( editBoxLength - hotKeyLength );
+            name.draw( offsetX + 5, offsetY, display );
+
+            fheroes2::Text hotkey( Game::getHotKeyNameByEventId( hotKeyEvent ), fontType );
             hotkey.fitToOneRow( hotKeyLength );
             hotkey.draw( offsetX + editBoxLength - hotKeyLength, offsetY, hotKeyLength, display );
         }
@@ -97,14 +164,35 @@ namespace
             // Do nothing.
         }
 
-        void ActionListPressRight( Game::HotKeyEvent & /*unused*/ ) override
+        void ActionListPressRight( Game::HotKeyEvent & hotKeyEvent ) override
         {
-            // Do nothing.
+            fheroes2::showMessage( fheroes2::Text{ Game::getHotKeyEventNameByEventId( hotKeyEvent ), fheroes2::FontType::normalWhite() },
+                                   fheroes2::Text{ Game::getHotKeyNameByEventId( hotKeyEvent ), fheroes2::FontType::normalYellow() }, Dialog::ZERO );
         }
 
-        void ActionListDoubleClick( Game::HotKeyEvent & /*unused*/ ) override
+        void ActionListDoubleClick( Game::HotKeyEvent & hotKeyEvent ) override
         {
-            // Do nothing.
+            HotKeyElement hotKeyUI( Game::getHotKeyForEvent( hotKeyEvent ) );
+
+            // Okay and Cancel events are special cases as they are used in dialogs. By default we need to disable these events to allow to be set any key for an event.
+            const fheroes2::Key okayEventKey = Game::getHotKeyForEvent( Game::HotKeyEvent::DEFAULT_OKAY );
+            const fheroes2::Key cancelEventKey = Game::getHotKeyForEvent( Game::HotKeyEvent::DEFAULT_CANCEL );
+
+            Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_OKAY, fheroes2::Key::NONE );
+            Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_CANCEL, fheroes2::Key::NONE );
+
+            const int returnValue = fheroes2::showMessage( fheroes2::Text{ Game::getHotKeyEventNameByEventId( hotKeyEvent ), fheroes2::FontType::normalWhite() },
+                                                           fheroes2::Text{ "", fheroes2::FontType::normalWhite() }, Dialog::OK | Dialog::CANCEL, { &hotKeyUI } );
+
+            Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_OKAY, okayEventKey );
+            Game::setHotKeyForEvent( Game::HotKeyEvent::DEFAULT_CANCEL, cancelEventKey );
+
+            if ( returnValue == Dialog::CANCEL ) {
+                return;
+            }
+
+            Game::setHotKeyForEvent( hotKeyEvent, hotKeyUI.getKey() );
+            Game::HotKeySave();
         }
     };
 
