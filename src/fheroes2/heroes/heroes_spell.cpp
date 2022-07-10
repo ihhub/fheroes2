@@ -318,7 +318,7 @@ namespace
         for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
             assert( Maps::isValidAbsIndex( boatSource ) );
 
-            const uint32_t distance = Maps::GetApproximateDistance( boatSource, hero.GetIndex() );
+            const uint32_t distance = Maps::GetStraightLineDistance( boatSource, hero.GetIndex() );
             if ( distance > 1 ) {
                 Game::ObjectFadeAnimation::PrepareFadeTask( MP2::OBJ_BOAT, boatSource, boatDestination, true, true );
                 Game::ObjectFadeAnimation::PerformFadeTask();

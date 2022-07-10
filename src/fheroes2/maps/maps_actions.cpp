@@ -26,7 +26,6 @@
 #include "heroes.h"
 #include "kingdom.h"
 #include "serialize.h"
-#include "text.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
 #include "world.h"
@@ -198,8 +197,9 @@ bool ActionAccess::Action( const ActionAccess * act, int32_t index, Heroes & her
         if ( act->cancelAfterFirstVisit && hero.isVisited( world.GetTiles( index ), Visit::GLOBAL ) )
             return false;
 
-        if ( !act->message.empty() )
-            Dialog::Message( "", act->message, Font::BIG, Dialog::OK );
+        if ( !act->message.empty() ) {
+            fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( act->message, fheroes2::FontType::normalWhite() ), Dialog::OK );
+        }
 
         if ( hero.isControlAI() && !act->allowComputer )
             return false;
@@ -217,8 +217,9 @@ bool ActionAccess::Action( const ActionAccess * act, int32_t index, Heroes & her
 bool ActionDefault::Action( const ActionDefault * act )
 {
     if ( act ) {
-        if ( !act->message.empty() )
-            Dialog::Message( "", act->message, Font::BIG, Dialog::OK );
+        if ( !act->message.empty() ) {
+            fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( act->message, fheroes2::FontType::normalWhite() ), Dialog::OK );
+        }
         return act->enabled;
     }
 
@@ -255,8 +256,9 @@ bool ActionResources::Action( ActionResources * act, const Heroes & hero )
 bool ActionMessage::Action( const ActionMessage * act )
 {
     if ( act ) {
-        if ( !act->message.empty() )
-            Dialog::Message( "", act->message, Font::BIG, Dialog::OK );
+        if ( !act->message.empty() ) {
+            fheroes2::showMessage( fheroes2::Text( "", {} ), fheroes2::Text( act->message, fheroes2::FontType::normalWhite() ), Dialog::OK );
+        }
         return true;
     }
 

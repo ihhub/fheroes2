@@ -1574,7 +1574,7 @@ namespace AI
                 maxPriority = 0;
                 priorityTarget = courierTarget;
 #ifdef WITH_DEBUG
-                objectType = static_cast<MP2::MapObjectType>( world.GetTiles( courierTarget ).GetObject() );
+                objectType = world.GetTiles( courierTarget ).GetObject();
 #endif
 
                 DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " courier main task is " << courierTarget )

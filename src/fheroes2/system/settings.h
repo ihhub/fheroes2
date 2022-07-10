@@ -56,7 +56,7 @@ public:
         //
         GAME_AUTOSAVE_BEGIN_DAY = 0x10000010,
         GAME_REMEMBER_LAST_FOCUS = 0x10000020,
-        GAME_SAVE_REWRITE_CONFIRM = 0x10000040,
+        // UNUSED = 0x10000040,
         GAME_SHOW_SYSTEM_INFO = 0x10000100,
         // UNUSED = 0x10000200,
         // UNUSED = 0x10000400,
@@ -324,11 +324,6 @@ public:
     bool ExtGameContinueAfterVictory() const
     {
         return ExtModes( GAME_CONTINUE_AFTER_VICTORY );
-    }
-
-    bool ExtGameRewriteConfirm() const
-    {
-        return ExtModes( GAME_SAVE_REWRITE_CONFIRM );
     }
 
     bool ExtGameShowSystemInfo() const

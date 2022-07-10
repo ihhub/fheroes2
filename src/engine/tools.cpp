@@ -78,19 +78,6 @@ std::string StringUpper( std::string str )
     return str;
 }
 
-std::string GetStringShort( int value )
-{
-    if ( std::abs( value ) >= 1000 ) {
-        if ( std::abs( value ) >= 1000000 ) {
-            return std::to_string( value / 1000000 ) + 'M';
-        }
-
-        return std::to_string( value / 1000 ) + 'K';
-    }
-
-    return std::to_string( value );
-}
-
 int CountBits( uint32_t val )
 {
     int res = 0;
@@ -430,5 +417,18 @@ namespace fheroes2
         }
 
         output.replace( output.size() - originalEndingSize, originalEndingSize, correctedEnding, correctedEndingSize );
+    }
+
+    std::string abbreviateNumber( const int num )
+    {
+        if ( std::abs( num ) >= 1000000 ) {
+            return std::to_string( num / 1000000 ) + 'M';
+        }
+
+        if ( std::abs( num ) >= 1000 ) {
+            return std::to_string( num / 1000 ) + 'K';
+        }
+
+        return std::to_string( num );
     }
 }

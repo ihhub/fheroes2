@@ -292,9 +292,7 @@ fheroes2::GameMode Interface::Basic::EventSaveGame() const
             return fheroes2::GameMode::CANCEL;
         }
 
-        // ask overwrite?
-        const Settings & conf = Settings::Get();
-        if ( System::IsFile( filename ) && conf.ExtGameRewriteConfirm()
+        if ( System::IsFile( filename )
              && Dialog::NO == Dialog::Message( "", _( "Are you sure you want to overwrite the save with this name?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
             continue;
         }

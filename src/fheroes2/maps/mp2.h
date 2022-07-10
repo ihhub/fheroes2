@@ -41,7 +41,7 @@ namespace MP2
         SIZEOFMP2RIDDLE = 138
     };
 
-    // origin mp2 tile
+    // Tile structure from the original map format.
     struct mp2tile_t
     {
         uint16_t surfaceType; // Tile index representing a type of surface: ocean, grass, snow, swamp, lava, desert, dirt, wasteland, beach.
@@ -72,7 +72,7 @@ namespace MP2
         uint32_t level2ObjectUID;
     };
 
-    // origin mp2 addons tile
+    // Addon structure from the original map format.
     struct mp2addon_t
     {
         uint16_t nextAddonIndex; // Next add-on index. Zero value means it's the last addon chunk.

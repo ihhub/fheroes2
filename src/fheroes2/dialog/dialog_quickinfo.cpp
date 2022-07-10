@@ -133,7 +133,7 @@ namespace
         }
         else if ( isAbandonnedMine ) {
             const uint8_t spriteIndex = tile.GetObjectSpriteIndex();
-            if ( spriteIndex == 5 ) { // TODO: remove this hardocded value for real abandoned mine.
+            if ( spriteIndex == 5 ) { // TODO: remove this hardcoded value for real abandoned mine.
                 str = MP2::StringObject( objectType );
             }
             else {
@@ -153,7 +153,7 @@ namespace
             }
             else {
                 str.append( _( "guarded by %{count} %{monster}" ) );
-                StringReplace( str, "%{count}", Translation::StringLower( Game::CountScoute( troop.GetCount(), scoutingLevel ) ) );
+                StringReplace( str, "%{count}", Translation::StringLower( Game::formatMonsterCount( troop.GetCount(), scoutingLevel ) ) );
             }
             if ( troop.GetCount() == 1 && scoutingLevel == Skill::Level::EXPERT ) {
                 StringReplace( str, "%{monster}", Translation::StringLower( troop.GetName() ) );
@@ -173,7 +173,7 @@ namespace
         if ( isVisibleFromCrystalBall || ( extendedScoutingOption && basicScoutingLevel > Skill::Level::NONE ) ) {
             std::string str = "%{count} %{monster}";
             const int scoutingLevel = isVisibleFromCrystalBall ? static_cast<int>( Skill::Level::EXPERT ) : basicScoutingLevel;
-            StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), scoutingLevel ) );
+            StringReplace( str, "%{count}", Game::formatMonsterCount( troop.GetCount(), scoutingLevel ) );
             if ( troop.GetCount() == 1 && scoutingLevel == Skill::Level::EXPERT ) {
                 StringReplace( str, "%{monster}", Translation::StringLower( troop.GetName() ) );
             }
@@ -212,7 +212,7 @@ namespace
             if ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) {
                 const ResourceCount & rc = tile.QuantityResourceCount();
                 str.append( ": " );
-                str.append( Game::CountScoute( rc.second, scoutingLevel ) );
+                str.append( Game::formatMonsterCount( rc.second, scoutingLevel ) );
             }
         }
         else { // Campfire
@@ -224,14 +224,14 @@ namespace
                 str.append( Resource::String( Resource::GOLD ) );
 
                 str.append( ": " );
-                str.append( Game::CountScoute( funds.gold, scoutingLevel ) );
+                str.append( Game::formatMonsterCount( funds.gold, scoutingLevel ) );
                 str += '\n';
 
                 const ResourceCount & rc = tile.QuantityResourceCount();
                 str.append( Resource::String( rc.first ) );
 
                 str.append( ": " );
-                str.append( Game::CountScoute( rc.second, scoutingLevel ) );
+                str.append( Game::formatMonsterCount( rc.second, scoutingLevel ) );
                 str += ')';
             }
         }
@@ -248,7 +248,7 @@ namespace
             const Troop & troop = tile.QuantityTroop();
             if ( troop.isValid() ) {
                 str.append( _( "(available: %{count})" ) );
-                StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), owned ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) );
+                StringReplace( str, "%{count}", Game::formatMonsterCount( troop.GetCount(), owned ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) );
             }
             else {
                 str.append( _( "(empty)" ) );
@@ -456,34 +456,22 @@ namespace
         return { xpos, ypos, imageBox.width(), imageBox.height() };
     }
 
-    uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, uint32_t dst )
+    uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, const uint32_t dst )
     {
         if ( hero == nullptr ) {
             return Skill::Level::NONE;
         }
 
-        const uint32_t scoutingLevel = hero->GetSecondaryValues( Skill::Secondary::SCOUTING );
-        const MP2::MapObjectType objectType = world.GetTiles( dst ).GetObject( false );
-
-        const bool monsterInfo = objectType == MP2::OBJ_MONSTER;
-
-        // TODO check that this logic is what is really intended, it's only used for extended scouting anyway
-        if ( monsterInfo ) {
-            if ( Maps::GetApproximateDistance( hero->GetIndex(), dst ) <= hero->GetVisionsDistance() ) {
-                return scoutingLevel;
-            }
-            else {
-                return Skill::Level::NONE;
-            }
-        }
-        else if ( Settings::Get().ExtWorldScouteExtended() ) {
+        if ( Settings::Get().ExtWorldScouteExtended() ) {
             uint32_t dist = static_cast<uint32_t>( hero->GetScoute() );
-            if ( hero->Modes( Heroes::VISIONS ) && dist < hero->GetVisionsDistance() )
-                dist = hero->GetVisionsDistance();
 
-            if ( Maps::GetApproximateDistance( hero->GetIndex(), dst ) <= dist )
-                return scoutingLevel;
-            return Skill::Level::NONE;
+            if ( hero->Modes( Heroes::VISIONS ) ) {
+                dist = std::max( dist, hero->GetVisionsDistance() );
+            }
+
+            if ( Maps::GetStraightLineDistance( hero->GetIndex(), dst ) <= dist ) {
+                return hero->GetSecondaryValues( Skill::Secondary::SCOUTING );
+            }
         }
 
         return Skill::Level::NONE;
