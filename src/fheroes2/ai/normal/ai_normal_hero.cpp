@@ -651,6 +651,7 @@ namespace
             return -dangerousTaskPenalty;
         case Heroes::Role::COURIER:
         case Heroes::Role::FIGHTER:
+        case Heroes::Role::CHAMPION:
             return -dangerousTaskPenalty * 2;
         default:
             // If you set a new type of a hero you must add the logic here.
@@ -947,7 +948,7 @@ namespace AI
     double Normal::getFighterObjectValue( const Heroes & hero, const int index, const double valueToIgnore, const uint32_t distanceToObject ) const
     {
         // Fighters have higher priority for battles and smaller values for other objects.
-        assert( hero.getAIRole() == Heroes::Role::FIGHTER );
+        assert( hero.getAIRole() == Heroes::Role::FIGHTER || hero.getAIRole() == Heroes::Role::CHAMPION );
 
         // In the future these hardcoded values could be configured by the mod
         // 1 tile distance is 100.0 value approximately
@@ -1423,6 +1424,7 @@ namespace AI
         switch ( hero.getAIRole() ) {
         case Heroes::Role::HUNTER:
             return getHunterObjectValue( hero, index, valueToIgnore, distanceToObject );
+        case Heroes::Role::CHAMPION:
         case Heroes::Role::FIGHTER:
             return getFighterObjectValue( hero, index, valueToIgnore, distanceToObject );
         case Heroes::Role::COURIER:
