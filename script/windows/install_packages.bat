@@ -16,7 +16,7 @@ powershell -Command "(New-Object System.Net.WebClient).DownloadFile('https://www
 echo [4/6] Downloading packages
 powershell -Command "(New-Object System.Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-devel-1.2.12-VC.zip', '%tempPath%\sdl_mixer\sdl_mixer.zip')"
 echo [5/6] Downloading packages
-powershell -Command "(New-Object System.Net.WebClient).DownloadFile('https://github.com/libsdl-org/SDL_mixer/releases/download/release-2.6.0/SDL2_mixer-devel-2.6.0-VC.zip', '%tempPath%\sdl_mixer\sdl_mixer2.zip')"
+powershell -Command "(New-Object System.Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-devel-2.0.4-VC.zip', '%tempPath%\sdl_mixer\sdl_mixer2.zip')"
 echo [6/6] Downloading packages
 powershell -Command "(New-Object System.Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.5-VC.zip', '%tempPath%\sdl_image\sdl_image2.zip')"
 
