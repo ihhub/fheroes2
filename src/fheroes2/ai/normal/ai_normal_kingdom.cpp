@@ -84,6 +84,11 @@ namespace
             }
         }
 
+        if ( heroList.empty() ) {
+            // No more heroes.
+            return;
+        }
+
         // If there's plenty of heroes we can assign special roles
         if ( heroList.size() > 3 ) {
             std::sort( heroList.begin(), heroList.end(), []( const HeroValue & first, const HeroValue & second ) { return first.stats > second.stats; } );
@@ -92,6 +97,8 @@ namespace
             heroList.back().hero->setAIRole( Heroes::Role::COURIER );
             heroList.pop_back();
         }
+
+        assert( !heroList.empty() );
 
         std::sort( heroList.begin(), heroList.end(), []( const HeroValue & first, const HeroValue & second ) { return first.strength > second.strength; } );
 
