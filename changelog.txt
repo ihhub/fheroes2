@@ -1,3 +1,47 @@
+version 0.9.17 (11 July 2022)
+- always ask about rewriting an existing save file
+- allow to remap Hotkeys within the game
+- fix distance evaluation during Scouting
+- fix invalid logic when neutral monsters whose number was set in the Editor did not grow at all
+- add The Price of Loyalty team to credits
+- show a window stating about missing video files for campaigns
+- fix the class of a hero named Joseph
+- fix extra shadow being drawn for Hero Screen dialog on high resolutions
+- align File Options dialog position
+- fix Campaign Window button flickering
+- fix missing column of pixels in Map Scenario Info window
+- update French translation
+- allow different translations of "Red Tower"
+- implement AI courier hero role for better logistics
+- fix situation when MIDI music still continues to play during fast switching between music types
+- fix case when Adventure Map sounds are still being played while opening Main Menu
+- AI should keep some creatures in reserve for castle defence
+- update Ukrainian translation
+- update Norwegian translation
+- increase Genie special ability to 20% like it is done in the original game and correct log messages during battle
+- remember the last open page in Spell Book during battle
+- fix possible synchronization issues for audio playback
+- enhance AI logic towards defending its castles
+- improve usage of spell on Adventure Map by AI
+- fix displaying of negative resources in dialog
+- fix situations when AI was hiring too many heroes
+- respect the Ultimate Artifact's radius specified by the map creator
+- update Polish translation
+- fix the castle's well build logic for AI
+- align hero's button in level-up dialog
+- fix scenarios when ambient sounds from Adventure Map objects are still played while opening a castle's window
+- fix cases when Random Monsters appear from a different level due to invalid format of an object on the map
+- update Mine's sprite properly after defeating Ghosts in Abandoned Mine
+- fix multiple issues related to hero's info popup window and updating his position on a mini-map
+- update sounds and music before a hero making an action
+- add an environmental sound for Freeman's Foundry
+- add initial implementation of true "Evil" interface in the game
+- add missing Ultimate Artifact successful digging sound
+- do not play pre-battle sound if sounds are off
+- fix potential thread-access issues for Nintendo Switch
+- fix possible inter-thread race for Adventure Map Status window
+- fix a delay in game while crossing a terrain and playing MIDI music
+
 version 0.9.16 (12 June 2022)
 - add Flatpak support
 - add Belarusian translation
