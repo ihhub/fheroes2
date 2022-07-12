@@ -20,6 +20,9 @@
 
 #include "image_tool.h"
 #include "image_palette.h"
+#include "logging.h"
+
+#include <cassert>
 
 #include <SDL_version.h>
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -37,6 +40,12 @@
 
 namespace
 {
+    bool isPNGFilePath( const std::string & path )
+    {
+        const std::string pngExtension( ".png" );
+        return path.size() > pngExtension.size() && ( path.compare( path.size() - pngExtension.size(), pngExtension.size(), pngExtension ) == 0 );
+    }
+
     std::vector<uint8_t> PALPalette()
     {
         const uint8_t * gamePalette = fheroes2::getGamePalette();
@@ -49,59 +58,58 @@ namespace
         return palette;
     }
 
-    bool SaveImage( const fheroes2::Image & image, const std::string & path )
+    bool SaveImage( const fheroes2::Image & image, std::string path )
     {
         const std::vector<uint8_t> & palette = PALPalette();
         const uint8_t * currentPalette = palette.data();
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-        SDL_Surface * surface = SDL_CreateRGBSurface( 0, image.width(), image.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
+        SDL_Surface * surface = SDL_CreateRGBSurface( 0, image.width(), image.height(), 8, 0, 0, 0, 0 );
 #else
-        SDL_Surface * surface = SDL_CreateRGBSurface( SDL_SWSURFACE, image.width(), image.height(), 32, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
+        SDL_Surface * surface = SDL_CreateRGBSurface( SDL_SWSURFACE, image.width(), image.height(), 8, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
 #endif
-        if ( surface == nullptr )
+        if ( surface == nullptr ) {
+            ERROR_LOG( "Error while creating a SDL surface for an image to be saved under " << path << ". Error " << SDL_GetError() )
             return false;
+        }
+
+        assert( surface->format->BitsPerPixel == 8 );
+
+        std::vector<SDL_Color> paletteSDL;
+        paletteSDL.resize( 256 );
+        for ( int32_t i = 0; i < 256; ++i ) {
+            const uint8_t * value = currentPalette + i * 3;
+            SDL_Color & col = paletteSDL[i];
+
+            col.r = *value;
+            col.g = *( value + 1 );
+            col.b = *( value + 2 );
+        }
+
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+        SDL_SetPaletteColors( surface->format->palette, paletteSDL.data(), 0, 256 );
+#else
+        SDL_SetPalette( surface, SDL_LOGPAL | SDL_PHYSPAL, paletteSDL.data(), 0, 256 );
+#endif
 
         const uint32_t width = image.width();
         const uint32_t height = image.height();
 
-        uint32_t * out = static_cast<uint32_t *>( surface->pixels );
-        const uint32_t * outEnd = out + width * height;
-        const uint8_t * in = image.image();
-
-        if ( surface->format->Amask > 0 ) {
-            const uint8_t * transform = image.transform();
-
-            for ( ; out != outEnd; ++out, ++in, ++transform ) {
-                if ( *transform == 1 ) {
-                    *out = SDL_MapRGBA( surface->format, 0, 0, 0, 0 );
-                }
-                else if ( *transform == 2 ) {
-                    *out = SDL_MapRGBA( surface->format, 0, 0, 0, 64 );
-                }
-                else {
-                    const uint8_t * value = currentPalette + *in * 3;
-                    *out = SDL_MapRGBA( surface->format, *value, *( value + 1 ), *( value + 2 ), 255 );
-                }
-            }
-        }
-        else {
-            for ( ; out != outEnd; ++out, ++in ) {
-                const uint8_t * value = currentPalette + *in * 3;
-                *out = SDL_MapRGB( surface->format, *value, *( value + 1 ), *( value + 2 ) );
-            }
-        }
+        memcpy( surface->pixels, image.image(), width * height );
 
 #if defined( ENABLE_PNG )
         int res = 0;
-        const std::string pngExtension( ".png" );
-        if ( path.size() > pngExtension.size() && path.compare( path.size() - pngExtension.size(), pngExtension.size(), pngExtension ) == 0 ) {
+        if ( isPNGFilePath( path ) ) {
             res = IMG_SavePNG( surface, path.c_str() );
         }
         else {
             res = SDL_SaveBMP( surface, path.c_str() );
         }
 #else
+        if ( isPNGFilePath( path ) ) {
+            memcpy( path.data() + path.size() - 3, "bmp", 3 );
+        }
+
         const int res = SDL_SaveBMP( surface, path.c_str() );
 #endif
 
