@@ -7,73 +7,91 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-10 14:31+0000\n"
-"PO-Revision-Date: 2022-05-10 16:34+0200\n"
-"Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
+"POT-Creation-Date: 2022-06-12 08:18+0000\n"
+"PO-Revision-Date: 2022-06-26 14:13+0100\n"
+"Last-Translator: Effektus <effektus@live.co.uk>\n"
 "Language-Team: \n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CP1251\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
 msgid "Warrior"
-msgstr ""
+msgstr "Войн"
 
 msgid "Builder"
-msgstr ""
+msgstr "Строител"
 
 msgid "Explorer"
-msgstr ""
+msgstr "Изследовател"
 
 msgid "None"
-msgstr ""
+msgstr "Без"
 
 msgid ""
 "A few\n"
 "%{monster}"
 msgstr ""
+"Малко\n"
+"%{monster}"
 
 msgid ""
 "Several\n"
 "%{monster}"
 msgstr ""
+"Няколко\n"
+"%{monster}"
 
 msgid ""
 "A pack of\n"
 "%{monster}"
 msgstr ""
+"Глутница\n"
+"%{monster}"
 
 msgid ""
 "Lots of\n"
 "%{monster}"
 msgstr ""
+"Много\n"
+"%{monster}"
 
 msgid ""
 "A horde of\n"
 "%{monster}"
 msgstr ""
+"Орда от\n"
+"%{monster}"
 
 msgid ""
 "A throng of\n"
 "%{monster}"
 msgstr ""
+"Тълпа от \n"
+"%{monster}"
 
 msgid ""
 "A swarm of\n"
 "%{monster}"
 msgstr ""
+"Рояк от\n"
+"%{monster}"
 
 msgid ""
 "Zounds of\n"
 "%{monster}"
 msgstr ""
+"Зони от\n"
+"%{monster}"
 
 msgid ""
 "A legion of\n"
 "%{monster}"
 msgstr ""
+"Легион от\n"
+"%{monster}"
 
 msgid "army|Few"
 msgstr ""
@@ -141,10 +159,8 @@ msgstr ""
 msgid "Set Count"
 msgstr ""
 
-msgid "%{name} destroys half the enemy troops!"
-msgid_plural "%{name} destroy half the enemy troops!"
-msgstr[0] ""
-msgstr[1] ""
+msgid "%{name} half the enemy troops!"
+msgstr ""
 
 msgid "%{name} has turned off the auto battle"
 msgstr ""
@@ -199,10 +215,10 @@ msgid "Shadow Cursor"
 msgstr ""
 
 msgid "Off"
-msgstr ""
+msgstr "Изкл"
 
 msgid "On"
-msgstr ""
+msgstr "Вкл"
 
 msgid "Set the speed of combat actions and animations."
 msgstr ""
@@ -320,7 +336,7 @@ msgid "Surrender"
 msgstr ""
 
 msgid "Cancel"
-msgstr ""
+msgstr "Отменям"
 
 msgid "Hero Screen"
 msgstr ""
@@ -412,7 +428,7 @@ msgid "Allows the computer to fight out the battle for you."
 msgstr ""
 
 msgid "Auto Combat"
-msgstr ""
+msgstr "Авто Сражения"
 
 msgid "Customize system options"
 msgstr ""
@@ -469,10 +485,8 @@ msgstr ""
 msgid "%{name} wait their turn."
 msgstr ""
 
-msgid "%{attacker} does %{damage} damage."
-msgid_plural "%{attacker} do %{damage} damage."
-msgstr[0] ""
-msgstr[1] ""
+msgid "%{attacker} do %{damage} damage."
+msgstr ""
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
@@ -1771,7 +1785,7 @@ msgstr ""
 msgid "Fenced Meadow"
 msgstr ""
 
-msgid "sorceress|Red Tower"
+msgid "Red Tower"
 msgstr ""
 
 msgid "Dungeon"
@@ -1799,9 +1813,6 @@ msgid "Swamp"
 msgstr ""
 
 msgid "Green Tower"
-msgstr ""
-
-msgid "warlock|Red Tower"
 msgstr ""
 
 msgid "Black Tower"
@@ -2037,7 +2048,7 @@ msgid ""
 msgstr ""
 
 msgid "Exit"
-msgstr ""
+msgstr "Изход"
 
 msgid "Exit this menu."
 msgstr ""
@@ -2287,25 +2298,25 @@ msgid "off"
 msgstr ""
 
 msgid "Music"
-msgstr ""
+msgstr "Музика"
 
 msgid "Effects"
-msgstr ""
+msgstr "Ефекти"
 
 msgid "MIDI"
 msgstr ""
 
 msgid "MIDI Expansion"
-msgstr ""
+msgstr "MIDI Продължение"
 
 msgid "External"
-msgstr ""
+msgstr "Външна"
 
 msgid "Music Type"
-msgstr ""
+msgstr "Източник"
 
 msgid "3D Audio"
-msgstr ""
+msgstr "3D Звук"
 
 msgid "Toggle ambient music level."
 msgstr ""
@@ -2320,7 +2331,7 @@ msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
 msgid "Okay"
-msgstr ""
+msgstr "Добре"
 
 msgid "Build a new ship:"
 msgstr ""
@@ -2332,13 +2343,13 @@ msgid "Need: "
 msgstr ""
 
 msgid "Load Game"
-msgstr ""
+msgstr "Зареди Игра"
 
 msgid "No save files to load."
 msgstr ""
 
 msgid "New Game"
-msgstr ""
+msgstr "Нова Игра"
 
 msgid "Start a single or multi-player game."
 msgstr ""
@@ -2353,76 +2364,76 @@ msgid "Save the current game."
 msgstr ""
 
 msgid "Quit"
-msgstr ""
+msgstr "Напускане"
 
 msgid "Quit out of Heroes of Might and Magic II."
 msgstr ""
 
 msgid "Language"
-msgstr ""
+msgstr "Език"
 
 msgid "Resolution"
-msgstr ""
+msgstr "Резолюция"
 
 msgid "Experimental"
-msgstr ""
+msgstr "Пробни"
 
 msgid "Settings"
-msgstr ""
+msgstr "Настойки"
 
 msgid "Audio"
-msgstr ""
+msgstr "Звук"
 
 msgid "settings"
-msgstr ""
+msgstr "настройки"
 
 msgid "Hot Keys"
-msgstr ""
+msgstr "Бързи клавиши"
 
 msgid "In-game"
-msgstr ""
+msgstr "В игра"
 
 msgid "Black & White"
-msgstr ""
+msgstr "Черно и бяло"
 
 msgid "Mouse Cursor"
-msgstr ""
+msgstr "Показалец"
 
 msgid "Color"
-msgstr ""
+msgstr "Цвят"
 
 msgid "Text Support"
-msgstr ""
+msgstr "Текст"
 
 msgid "Evil"
-msgstr ""
+msgstr "Зъл"
 
 msgid "Good"
-msgstr ""
+msgstr "Добър"
 
 msgid "Interface Type"
-msgstr ""
+msgstr "Вид на интерфейс"
 
 msgid "Auto Resolve"
-msgstr ""
+msgstr "Авто разрешаване"
 
 msgid "Auto, No Spells"
-msgstr ""
+msgstr "Авто, без магий"
 
 msgid "Manual"
-msgstr ""
+msgstr "Ръчно"
 
 msgid "Battles"
-msgstr ""
+msgstr "Сражения"
 
 msgid "Select Game Language"
-msgstr ""
+msgstr "Език на играта"
 
 msgid "Change language of the game."
 msgstr ""
 
 msgid "Select Game Resolution"
-msgstr ""
+msgstr "Изберете резолюция на играта"
 
 msgid "Change resolution of the game."
 msgstr ""
@@ -2431,7 +2442,7 @@ msgid "Change audio settings of the game."
 msgstr ""
 
 msgid "Experimental game settings."
-msgstr ""
+msgstr "Експериментални настройки на играта."
 
 msgid "Toggle instant battle mode."
 msgstr ""
@@ -2474,7 +2485,7 @@ msgid "Rating"
 msgstr ""
 
 msgid "Map Size"
-msgstr ""
+msgstr "Размер на карта"
 
 msgid "Opponents"
 msgstr ""
@@ -2523,10 +2534,10 @@ msgid "Your army too big!"
 msgstr ""
 
 msgid "Hot Keys:"
-msgstr ""
+msgstr "Бързи клавиши:"
 
 msgid "Select Game Language:"
-msgstr ""
+msgstr "Език на играта:"
 
 msgid "%{name} has gained a level."
 msgstr ""
@@ -2677,7 +2688,7 @@ msgid "Fast separation into slots:"
 msgstr ""
 
 msgid "Map: "
-msgstr ""
+msgstr "Карта: "
 
 msgid ""
 "\n"
@@ -2726,6 +2737,9 @@ msgid ""
 "\n"
 "Map Type:\n"
 msgstr ""
+"\n"
+"\n"
+"Тип на карта:\n"
 
 msgid "The Succession Wars"
 msgstr ""
@@ -2767,40 +2781,40 @@ msgid "Victory Condition"
 msgstr ""
 
 msgid "Map difficulty:"
-msgstr ""
+msgstr "Трудност на карта:"
 
 msgid "No maps exist at that size"
-msgstr ""
+msgstr "Няма карти във този размер"
 
 msgid "Small Maps"
-msgstr ""
+msgstr "Малки карти"
 
 msgid "View only maps of size small (36 x 36)."
-msgstr ""
+msgstr "Преглеждайте само карти с малък размер (36 x 36)."
 
 msgid "Medium Maps"
-msgstr ""
+msgstr "Средни карти"
 
 msgid "View only maps of size medium (72 x 72)."
-msgstr ""
+msgstr "Преглеждайте само карти със среден размер (72 x 72)."
 
 msgid "Large Maps"
-msgstr ""
+msgstr "Големи карти"
 
 msgid "View only maps of size large (108 x 108)."
-msgstr ""
+msgstr "Преглеждайте само карти с голям размер (108 x 108)."
 
 msgid "Extra Large Maps"
-msgstr ""
+msgstr "Много големи карти"
 
 msgid "View only maps of size extra large (144 x 144)."
-msgstr ""
+msgstr "Преглеждайте само карти с много големи размери (144 x 144)."
 
 msgid "All Maps"
-msgstr ""
+msgstr "Всички карти"
 
 msgid "View all maps, regardless of size."
-msgstr ""
+msgstr "Вижте всички карти, независимо от размера."
 
 msgid "Players Icon"
 msgstr ""
@@ -2816,6 +2830,10 @@ msgid ""
 "(72 x 72), large (108 x 108),\n"
 "or extra large (144 x 144)."
 msgstr ""
+"Показва дали картата\n"
+"е малък (36 x 36), среден\n"
+"(72 x 72), голям (108 x 108),\n"
+"или изключително голям (144 x 144)."
 
 msgid "Size Icon"
 msgstr ""
@@ -2824,18 +2842,20 @@ msgid ""
 "Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
 "of Loyalty\" version of the game."
 msgstr ""
+"Показва дали картата е направена за версията на играта „Наследените войни“ "
+"или за „Цената на лоялността“."
 
 msgid "Map Type"
 msgstr ""
 
 msgid "Selected Name"
-msgstr ""
+msgstr "Избрано име"
 
 msgid "The name of the currently selected map."
-msgstr ""
+msgstr "Името на текущо избраната карта."
 
 msgid "Selected Map Difficulty"
-msgstr ""
+msgstr "Избрана трудност на карта"
 
 msgid ""
 "The map difficulty of the currently selected map.  The map difficulty is "
@@ -2843,18 +2863,22 @@ msgid ""
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
 msgstr ""
+"Трудността на картата на текущо избраната карта. Трудността на картата се "
+"определя от дизайнера на сценария. По-трудните карти може да включват повече "
+"или по-силни врагове, по-малко ресурси или други специални условия, които "
+"правят нещата по-трудни за играча."
 
 msgid "Selected Description"
 msgstr ""
 
 msgid "The description of the currently selected map."
-msgstr ""
+msgstr "Описание на избраната в момента карта."
 
 msgid "Accept the choice made."
 msgstr ""
 
 msgid "Experimental Game Settings"
-msgstr ""
+msgstr "Пробни настройки на играта"
 
 msgid "Jump"
 msgstr ""
@@ -2931,13 +2955,13 @@ msgid "Thieves' Guild: Player Rankings"
 msgstr ""
 
 msgid "Number of Towns:"
-msgstr ""
+msgstr "Брой на градовете:"
 
 msgid "Number of Castles:"
-msgstr ""
+msgstr "Брой на замъците:"
 
 msgid "Number of Heroes:"
-msgstr ""
+msgstr "Брой на героите:"
 
 msgid "Gold in Treasury:"
 msgstr ""
@@ -3050,7 +3074,7 @@ msgstr ""
 msgid "Original project before 0.7"
 msgstr ""
 
-msgid "Heroes of Might and Magic II: The Succession Wars team"
+msgid "Original Heroes of Might and Magic II team"
 msgstr ""
 
 msgid "Designed and Directed"
@@ -3104,69 +3128,6 @@ msgstr ""
 msgid "Scenarios"
 msgstr ""
 
-msgid "Heroes of Might and Magic II: The Price of Loyalty team"
-msgstr ""
-
-msgid "Cyberlore Studios"
-msgstr ""
-
-msgid "Design Lead"
-msgstr ""
-
-msgid "Designers"
-msgstr ""
-
-msgid "Programming Lead"
-msgstr ""
-
-msgid "Art Lead"
-msgstr ""
-
-msgid "Playtesters"
-msgstr ""
-
-msgid "New World Computing"
-msgstr ""
-
-msgid "Designer"
-msgstr ""
-
-msgid "Producers"
-msgstr ""
-
-msgid "QA Managers"
-msgstr ""
-
-msgid "Sound Design"
-msgstr ""
-
-msgid "Town Themes"
-msgstr ""
-
-msgid "Alto Sax"
-msgstr ""
-
-msgid "Harpsichord and Piano"
-msgstr ""
-
-msgid "Basso Vocal"
-msgstr ""
-
-msgid "Soprano Vocal"
-msgstr ""
-
-msgid "Recorded at Green Street Studios"
-msgstr ""
-
-msgid "German Consultant"
-msgstr ""
-
-msgid "Map Designers"
-msgstr ""
-
-msgid "Package Design"
-msgstr ""
-
 msgid "Unknown Hero"
 msgstr ""
 
@@ -3180,20 +3141,22 @@ msgid "View High Scores for Standard Maps."
 msgstr ""
 
 msgid "Campaign"
-msgstr ""
+msgstr "Кампания"
 
 msgid "View High Scores for Campaigns."
+msgstr ""
+
+msgid ""
+"Invalid file game type. Please ensure that you are running the latest type "
+"of save files."
 msgstr ""
 
 msgid "Warning"
 msgstr ""
 
-msgid "This file contains a save with an invalid game type."
-msgstr ""
-
 msgid ""
-"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
-"Some items may not be available."
+"This file is saved in the \"The Price of Loyalty\" version.\n"
+"Some items may be unavailable."
 msgstr ""
 
 msgid "Usupported save format: "
@@ -3226,13 +3189,13 @@ msgid "A single player game playing out a single map."
 msgstr ""
 
 msgid "Standard Game"
-msgstr ""
+msgstr "Стандартна Игра"
 
 msgid "A single player game playing through a series of maps."
 msgstr ""
 
 msgid "Campaign Game"
-msgstr ""
+msgstr "Campaign Game"
 
 msgid ""
 "A multi-player game, with several human players completing against each "
@@ -3240,10 +3203,10 @@ msgid ""
 msgstr ""
 
 msgid "Multi-Player Game"
-msgstr ""
+msgstr "Мултиплейър игра"
 
 msgid "fheroes2 Resurrection Team presents"
-msgstr ""
+msgstr "fheroes2 Отбор възкрасяване представя"
 
 msgid "Greetings!"
 msgstr ""
@@ -3282,13 +3245,13 @@ msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 
 msgid "Credits"
-msgstr ""
+msgstr "За играта"
 
 msgid "View the credits screen."
 msgstr ""
 
 msgid "High Scores"
-msgstr ""
+msgstr "Класиране"
 
 msgid "View the high scores screen."
 msgstr ""
@@ -3300,20 +3263,15 @@ msgid "Game Settings"
 msgstr ""
 
 msgid ""
-"Required video files for campaign selection window are missing. Please make "
-"sure that all necessary files are present in the system."
-msgstr ""
-
-msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
 "and Magic II."
 msgstr ""
 
 msgid "Original Campaign"
-msgstr ""
+msgstr "Оригинална кампания"
 
 msgid "Expansion Campaign"
-msgstr ""
+msgstr "Кампания на продължение"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr ""
@@ -3327,7 +3285,7 @@ msgid ""
 msgstr ""
 
 msgid "Guest"
-msgstr ""
+msgstr "Гост"
 
 msgid ""
 "The guest waits for the host to set up the game, then is automatically added "
@@ -3335,13 +3293,13 @@ msgid ""
 msgstr ""
 
 msgid "Battle Only"
-msgstr ""
+msgstr "Само битка"
 
 msgid "Setup and play a battle without loading any map."
 msgstr ""
 
 msgid "2 Players"
-msgstr ""
+msgstr "2 Играча"
 
 msgid ""
 "Play with 2 human players, and optionally, up to 4 additional computer "
@@ -3349,7 +3307,7 @@ msgid ""
 msgstr ""
 
 msgid "3 Players"
-msgstr ""
+msgstr "3 Играча"
 
 msgid ""
 "Play with 3 human players, and optionally, up to 3 additional computer "
@@ -3357,7 +3315,7 @@ msgid ""
 msgstr ""
 
 msgid "4 Players"
-msgstr ""
+msgstr "4 Играча"
 
 msgid ""
 "Play with 4 human players, and optionally, up to 2 additional computer "
@@ -3365,7 +3323,7 @@ msgid ""
 msgstr ""
 
 msgid "5 Players"
-msgstr ""
+msgstr "5 Играча"
 
 msgid ""
 "Play with 5 human players, and optionally, up to 1 additional computer "
@@ -3373,7 +3331,7 @@ msgid ""
 msgstr ""
 
 msgid "6 Players"
-msgstr ""
+msgstr "6 Играча"
 
 msgid "Play with 6 human players."
 msgstr ""
@@ -3625,16 +3583,17 @@ msgid ""
 msgstr ""
 
 msgid "Are you sure you want to quit?"
-msgstr ""
+msgstr "Сигурен ли си че искаш да напуснеш?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
+"Сигурен ли си че искаш да пуснеш отново? (Твоята настояща игра ще се изгуби.)"
 
 msgid "Are you sure you want to overwrite the save with this name?"
-msgstr ""
+msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
 
 msgid "Game saved successfully."
-msgstr ""
+msgstr "Играта е запазена успешно."
 
 msgid "There was an issue during saving."
 msgstr ""
@@ -3708,7 +3667,7 @@ msgid ""
 msgstr ""
 
 msgid "%{color} player"
-msgstr ""
+msgstr "%{color} играч"
 
 msgid "View %{skill} Info"
 msgstr ""
@@ -3720,49 +3679,49 @@ msgid "Kingdom Income per day."
 msgstr ""
 
 msgid "English"
-msgstr ""
+msgstr "Английски"
 
 msgid "French"
-msgstr ""
+msgstr "Френски"
 
 msgid "Polish"
-msgstr ""
+msgstr "Полски"
 
 msgid "German"
-msgstr ""
+msgstr "Немски"
 
 msgid "Russian"
-msgstr ""
+msgstr "Руски"
 
 msgid "Italian"
-msgstr ""
+msgstr "Италиански"
 
 msgid "Czech"
-msgstr ""
+msgstr "Чехски"
 
 msgid "Norwegian"
-msgstr ""
+msgstr "Норвежки"
 
 msgid "Belarusian"
-msgstr ""
+msgstr "Беларуски"
 
 msgid "Bulgarian"
-msgstr ""
+msgstr "Български"
 
 msgid "Ukrainian"
-msgstr ""
+msgstr "Украински"
 
 msgid "Romanian"
-msgstr ""
+msgstr "Румънски"
 
 msgid "Spanish"
-msgstr ""
+msgstr "Испански"
 
 msgid "Swedish"
-msgstr ""
+msgstr "Шведски"
 
 msgid "Portuguese"
-msgstr ""
+msgstr "Посртугалски"
 
 msgid ", FPS: "
 msgstr ""
@@ -8328,6 +8287,9 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
+msgid "game: always confirm for rewrite savefile"
+msgstr ""
+
 msgid "game: remember last focus"
 msgstr ""
 
@@ -8335,31 +8297,34 @@ msgid "battle: show damage info"
 msgstr ""
 
 msgid "world: show terrain penalty"
-msgstr ""
+msgstr "свят: покажи terrain penalty"
 
 msgid "world: Scouting skill shows extended content info"
-msgstr ""
+msgstr "свят: Скаутските умения показват разширена информация за съдържанието"
 
 msgid "world: allow to set guardian to objects"
-msgstr ""
+msgstr "свят: позволява да се сложи пазител на обекти"
 
 msgid "world: Neutral armies scale with game difficulty"
-msgstr ""
+msgstr "свят: Неутралните армии се увеличават с трудноста на играта"
 
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
+"свят: Вятърните мелници, водните колела и магическите градини могат да бъдат "
+"заснети"
 
 msgid "castle: allow guardians"
 msgstr ""
 
 msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
+msgstr "герои: позволява да купите книга за заклинания от светилища"
 
 msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
+"герои: запомнете точките на движение, когато се оттегляте или се предавате"
 
 msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
+msgstr "герои: позволяват да изберете всяко основно умение от Арена"
 
 msgid "battle: allow soft wait for troops"
 msgstr ""
