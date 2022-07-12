@@ -254,24 +254,23 @@ Heroes::Heroes( int heroid, int rc )
 
 void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
 {
-    // reset modes
     modes = 0;
 
     SetIndex( map_index );
     SetColor( cl );
 
-    // unknown
+    // Unknown
     st.skip( 1 );
 
-    // custom troops
+    // Custom troops
     if ( st.get() ) {
         Troop troops[5];
 
-        // set monster id
+        // Monster id
         for ( Troop & troop : troops )
             troop.SetMonster( st.get() + 1 );
 
-        // set count
+        // Count
         for ( Troop & troop : troops )
             troop.SetCount( st.getLE16() );
 
@@ -280,13 +279,13 @@ void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
     else
         st.skip( 15 );
 
-    // custom portrait
+    // Custom portrait
     bool custom_portrait = ( st.get() != 0 );
 
     if ( custom_portrait ) {
         SetModes( NOTDEFAULTS );
 
-        // index sprite portrait
+        // Portrait sprite index
         portrait = st.get();
 
         if ( UNKNOWN <= portrait ) {
@@ -294,30 +293,39 @@ void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
             portrait = hid;
         }
 
-        // fixed race for custom portrait (after level up)
+        // Hero's race may not match the custom portrait
         _race = rc;
     }
     else {
         st.skip( 1 );
     }
 
-    // 3 artifacts
-    PickupArtifact( Artifact( st.get() ) );
-    PickupArtifact( Artifact( st.get() ) );
-    PickupArtifact( Artifact( st.get() ) );
+    auto setInitialArtifact = [this]( const Artifact & art ) {
+        // Perhaps the hero already has a spell book because of his race
+        if ( art == Artifact::MAGIC_BOOK && HaveSpellBook() ) {
+            return;
+        }
 
-    // unknown byte
+        PickupArtifact( art );
+    };
+
+    // 3 artifacts
+    setInitialArtifact( Artifact( st.get() ) );
+    setInitialArtifact( Artifact( st.get() ) );
+    setInitialArtifact( Artifact( st.get() ) );
+
+    // Unknown
     st.skip( 1 );
 
-    // experience
+    // Experience
     experience = st.getLE32();
 
     if ( experience == 0 )
         experience = GetStartingXp();
 
+    // Custom secondary skills
     const bool custom_secskill = ( st.get() != 0 );
 
-    // custom skill
     if ( custom_secskill ) {
         SetModes( NOTDEFAULTS );
         SetModes( CUSTOMSKILLS );
@@ -339,10 +347,10 @@ void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
         st.skip( 16 );
     }
 
-    // unknown
+    // Unknown
     st.skip( 1 );
 
-    // custom name
+    // Custom name
     if ( st.get() ) {
         SetModes( NOTDEFAULTS );
         name = st.toString( 13 );
@@ -351,13 +359,13 @@ void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
         st.skip( 13 );
     }
 
-    // patrol
+    // Patrol
     if ( st.get() ) {
         SetModes( PATROL );
         patrol_center = GetCenter();
     }
 
-    // count square
+    // Patrol square
     patrol_square = st.get();
 
     PostLoad();
@@ -365,30 +373,28 @@ void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
 
 void Heroes::PostLoad()
 {
-    // save general object
+    // An object on which the hero currently stands
     save_maps_object = MP2::OBJ_ZERO;
 
-    // fix zero army
+    // Fix a custom hero without an army
     if ( !army.isValid() ) {
         army.Reset( false );
     }
 
-    // level up
+    // Level up if needed
     int level = GetLevel();
     while ( 1 < level-- ) {
         SetModes( NOTDEFAULTS );
         LevelUp( Modes( CUSTOMSKILLS ), true );
     }
 
-    if ( ( _race & ( Race::SORC | Race::WRLK | Race::WZRD | Race::NECR ) ) && !HaveSpellBook() ) {
-        Spell spell = Skill::Primary::GetInitialSpell( _race );
-        if ( spell.isValid() ) {
-            SpellBookActivate();
-            AppendSpellToBook( spell, true );
-        }
+    // Hero's race could be changed during load, so we may need to add an initial spell once again
+    const Spell spell = Skill::Primary::GetInitialSpell( _race );
+    if ( spell.isValid() ) {
+        SpellBookActivate();
+        AppendSpellToBook( spell, true );
     }
 
-    // other param
     SetSpellPoints( GetMaxSpellPoints() );
     move_point = GetMaxMovePoints();
 
