@@ -58,7 +58,11 @@ namespace
         return palette;
     }
 
+#if defined( ENABLE_PNG )
+    bool SaveImage( const fheroes2::Image & image, const std::string & path )
+#else
     bool SaveImage( const fheroes2::Image & image, std::string path )
+#endif
     {
         const std::vector<uint8_t> & palette = PALPalette();
         const uint8_t * currentPalette = palette.data();
