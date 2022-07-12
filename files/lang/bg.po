@@ -8,89 +8,89 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-12 08:18+0000\n"
-"PO-Revision-Date: 2022-06-26 14:13+0100\n"
+"PO-Revision-Date: 2022-07-12 11:34+0100\n"
 "Last-Translator: Effektus <effektus@live.co.uk>\n"
 "Language-Team: \n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CP1251\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
 msgid "Warrior"
-msgstr "Войн"
+msgstr "Р’РѕР№РЅ"
 
 msgid "Builder"
-msgstr "Строител"
+msgstr "РЎС‚СЂРѕРёС‚РµР»"
 
 msgid "Explorer"
-msgstr "Изследовател"
+msgstr "РР·СЃР»РµРґРѕРІР°С‚РµР»"
 
 msgid "None"
-msgstr "Без"
+msgstr "Р‘РµР·"
 
 msgid ""
 "A few\n"
 "%{monster}"
 msgstr ""
-"Малко\n"
+"РњР°Р»РєРѕ\n"
 "%{monster}"
 
 msgid ""
 "Several\n"
 "%{monster}"
 msgstr ""
-"Няколко\n"
+"РќСЏРєРѕР»РєРѕ\n"
 "%{monster}"
 
 msgid ""
 "A pack of\n"
 "%{monster}"
 msgstr ""
-"Глутница\n"
+"Р“Р»СѓС‚РЅРёС†Р°\n"
 "%{monster}"
 
 msgid ""
 "Lots of\n"
 "%{monster}"
 msgstr ""
-"Много\n"
+"РњРЅРѕРіРѕ\n"
 "%{monster}"
 
 msgid ""
 "A horde of\n"
 "%{monster}"
 msgstr ""
-"Орда от\n"
+"РћСЂРґР° РѕС‚\n"
 "%{monster}"
 
 msgid ""
 "A throng of\n"
 "%{monster}"
 msgstr ""
-"Тълпа от \n"
+"РўСЉР»РїР° РѕС‚ \n"
 "%{monster}"
 
 msgid ""
 "A swarm of\n"
 "%{monster}"
 msgstr ""
-"Рояк от\n"
+"Р РѕСЏРє РѕС‚\n"
 "%{monster}"
 
 msgid ""
 "Zounds of\n"
 "%{monster}"
 msgstr ""
-"Зони от\n"
+"Р—РѕРЅРё РѕС‚\n"
 "%{monster}"
 
 msgid ""
 "A legion of\n"
 "%{monster}"
 msgstr ""
-"Легион от\n"
+"Р›РµРіРёРѕРЅ РѕС‚\n"
 "%{monster}"
 
 msgid "army|Few"
@@ -215,10 +215,10 @@ msgid "Shadow Cursor"
 msgstr ""
 
 msgid "Off"
-msgstr "Изкл"
+msgstr "РР·РєР»"
 
 msgid "On"
-msgstr "Вкл"
+msgstr "Р’РєР»"
 
 msgid "Set the speed of combat actions and animations."
 msgstr ""
@@ -336,7 +336,7 @@ msgid "Surrender"
 msgstr ""
 
 msgid "Cancel"
-msgstr "Отменям"
+msgstr "РћС‚РјРµРЅСЏРј"
 
 msgid "Hero Screen"
 msgstr ""
@@ -428,7 +428,7 @@ msgid "Allows the computer to fight out the battle for you."
 msgstr ""
 
 msgid "Auto Combat"
-msgstr "Авто Сражения"
+msgstr "РђРІС‚Рѕ РЎСЂР°Р¶РµРЅРёСЏ"
 
 msgid "Customize system options"
 msgstr ""
@@ -2048,7 +2048,7 @@ msgid ""
 msgstr ""
 
 msgid "Exit"
-msgstr "Изход"
+msgstr "РР·С…РѕРґ"
 
 msgid "Exit this menu."
 msgstr ""
@@ -2298,25 +2298,25 @@ msgid "off"
 msgstr ""
 
 msgid "Music"
-msgstr "Музика"
+msgstr "РњСѓР·РёРєР°"
 
 msgid "Effects"
-msgstr "Ефекти"
+msgstr "Р•С„РµРєС‚Рё"
 
 msgid "MIDI"
 msgstr ""
 
 msgid "MIDI Expansion"
-msgstr "MIDI Продължение"
+msgstr "MIDI РџСЂРѕРґСЉР»Р¶РµРЅРёРµ"
 
 msgid "External"
-msgstr "Външна"
+msgstr "Р’СЉРЅС€РЅР°"
 
 msgid "Music Type"
-msgstr "Източник"
+msgstr "РР·С‚РѕС‡РЅРёРє"
 
 msgid "3D Audio"
-msgstr "3D Звук"
+msgstr "3D Р—РІСѓРє"
 
 msgid "Toggle ambient music level."
 msgstr ""
@@ -2331,7 +2331,7 @@ msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
 msgid "Okay"
-msgstr "Добре"
+msgstr "Р”РѕР±СЂРµ"
 
 msgid "Build a new ship:"
 msgstr ""
@@ -2343,13 +2343,13 @@ msgid "Need: "
 msgstr ""
 
 msgid "Load Game"
-msgstr "Зареди Игра"
+msgstr "Р—Р°СЂРµРґРё РРіСЂР°"
 
 msgid "No save files to load."
 msgstr ""
 
 msgid "New Game"
-msgstr "Нова Игра"
+msgstr "РќРѕРІР° РРіСЂР°"
 
 msgid "Start a single or multi-player game."
 msgstr ""
@@ -2364,76 +2364,76 @@ msgid "Save the current game."
 msgstr ""
 
 msgid "Quit"
-msgstr "Напускане"
+msgstr "РќР°РїСѓСЃРєР°РЅРµ"
 
 msgid "Quit out of Heroes of Might and Magic II."
 msgstr ""
 
 msgid "Language"
-msgstr "Език"
+msgstr "Р•Р·РёРє"
 
 msgid "Resolution"
-msgstr "Резолюция"
+msgstr "Р РµР·РѕР»СЋС†РёСЏ"
 
 msgid "Experimental"
-msgstr "Пробни"
+msgstr "РџСЂРѕР±РЅРё"
 
 msgid "Settings"
-msgstr "Настойки"
+msgstr "РќР°СЃС‚РѕР№РєРё"
 
 msgid "Audio"
-msgstr "Звук"
+msgstr "Р—РІСѓРє"
 
 msgid "settings"
-msgstr "настройки"
+msgstr "РЅР°СЃС‚СЂРѕР№РєРё"
 
 msgid "Hot Keys"
-msgstr "Бързи клавиши"
+msgstr "Р‘СЉСЂР·Рё РєР»Р°РІРёС€Рё"
 
 msgid "In-game"
-msgstr "В игра"
+msgstr "Р’ РёРіСЂР°"
 
 msgid "Black & White"
-msgstr "Черно и бяло"
+msgstr "Р§РµСЂРЅРѕ Рё Р±СЏР»Рѕ"
 
 msgid "Mouse Cursor"
-msgstr "Показалец"
+msgstr "РџРѕРєР°Р·Р°Р»РµС†"
 
 msgid "Color"
-msgstr "Цвят"
+msgstr "Р¦РІСЏС‚"
 
 msgid "Text Support"
-msgstr "Текст"
+msgstr "РўРµРєСЃС‚"
 
 msgid "Evil"
-msgstr "Зъл"
+msgstr "Р—СЉР»"
 
 msgid "Good"
-msgstr "Добър"
+msgstr "Р”РѕР±СЉСЂ"
 
 msgid "Interface Type"
-msgstr "Вид на интерфейс"
+msgstr "Р’РёРґ РЅР° РёРЅС‚РµСЂС„РµР№СЃ"
 
 msgid "Auto Resolve"
-msgstr "Авто разрешаване"
+msgstr "РђРІС‚Рѕ СЂР°Р·СЂРµС€Р°РІР°РЅРµ"
 
 msgid "Auto, No Spells"
-msgstr "Авто, без магий"
+msgstr "РђРІС‚Рѕ, Р±РµР· РјР°РіРёР№"
 
 msgid "Manual"
-msgstr "Ръчно"
+msgstr "Р СЉС‡РЅРѕ"
 
 msgid "Battles"
-msgstr "Сражения"
+msgstr "РЎСЂР°Р¶РµРЅРёСЏ"
 
 msgid "Select Game Language"
-msgstr "Език на играта"
+msgstr "Р•Р·РёРє РЅР° РёРіСЂР°С‚Р°"
 
 msgid "Change language of the game."
 msgstr ""
 
 msgid "Select Game Resolution"
-msgstr "Изберете резолюция на играта"
+msgstr "РР·Р±РµСЂРµС‚Рµ СЂРµР·РѕР»СЋС†РёСЏ РЅР° РёРіСЂР°С‚Р°"
 
 msgid "Change resolution of the game."
 msgstr ""
@@ -2442,7 +2442,7 @@ msgid "Change audio settings of the game."
 msgstr ""
 
 msgid "Experimental game settings."
-msgstr "Експериментални настройки на играта."
+msgstr "Р•РєСЃРїРµСЂРёРјРµРЅС‚Р°Р»РЅРё РЅР°СЃС‚СЂРѕР№РєРё РЅР° РёРіСЂР°С‚Р°."
 
 msgid "Toggle instant battle mode."
 msgstr ""
@@ -2485,7 +2485,7 @@ msgid "Rating"
 msgstr ""
 
 msgid "Map Size"
-msgstr "Размер на карта"
+msgstr "Р Р°Р·РјРµСЂ РЅР° РєР°СЂС‚Р°"
 
 msgid "Opponents"
 msgstr ""
@@ -2534,10 +2534,10 @@ msgid "Your army too big!"
 msgstr ""
 
 msgid "Hot Keys:"
-msgstr "Бързи клавиши:"
+msgstr "Р‘СЉСЂР·Рё РєР»Р°РІРёС€Рё:"
 
 msgid "Select Game Language:"
-msgstr "Език на играта:"
+msgstr "Р•Р·РёРє РЅР° РёРіСЂР°С‚Р°:"
 
 msgid "%{name} has gained a level."
 msgstr ""
@@ -2688,7 +2688,7 @@ msgid "Fast separation into slots:"
 msgstr ""
 
 msgid "Map: "
-msgstr "Карта: "
+msgstr "РљР°СЂС‚Р°: "
 
 msgid ""
 "\n"
@@ -2739,7 +2739,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Тип на карта:\n"
+"РўРёРї РЅР° РєР°СЂС‚Р°:\n"
 
 msgid "The Succession Wars"
 msgstr ""
@@ -2781,40 +2781,40 @@ msgid "Victory Condition"
 msgstr ""
 
 msgid "Map difficulty:"
-msgstr "Трудност на карта:"
+msgstr "РўСЂСѓРґРЅРѕСЃС‚ РЅР° РєР°СЂС‚Р°:"
 
 msgid "No maps exist at that size"
-msgstr "Няма карти във този размер"
+msgstr "РќСЏРјР° РєР°СЂС‚Рё РІСЉРІ С‚РѕР·Рё СЂР°Р·РјРµСЂ"
 
 msgid "Small Maps"
-msgstr "Малки карти"
+msgstr "РњР°Р»РєРё РєР°СЂС‚Рё"
 
 msgid "View only maps of size small (36 x 36)."
-msgstr "Преглеждайте само карти с малък размер (36 x 36)."
+msgstr "РџСЂРµРіР»РµР¶РґР°Р№С‚Рµ СЃР°РјРѕ РєР°СЂС‚Рё СЃ РјР°Р»СЉРє СЂР°Р·РјРµСЂ (36 x 36)."
 
 msgid "Medium Maps"
-msgstr "Средни карти"
+msgstr "РЎСЂРµРґРЅРё РєР°СЂС‚Рё"
 
 msgid "View only maps of size medium (72 x 72)."
-msgstr "Преглеждайте само карти със среден размер (72 x 72)."
+msgstr "РџСЂРµРіР»РµР¶РґР°Р№С‚Рµ СЃР°РјРѕ РєР°СЂС‚Рё СЃСЉСЃ СЃСЂРµРґРµРЅ СЂР°Р·РјРµСЂ (72 x 72)."
 
 msgid "Large Maps"
-msgstr "Големи карти"
+msgstr "Р“РѕР»РµРјРё РєР°СЂС‚Рё"
 
 msgid "View only maps of size large (108 x 108)."
-msgstr "Преглеждайте само карти с голям размер (108 x 108)."
+msgstr "РџСЂРµРіР»РµР¶РґР°Р№С‚Рµ СЃР°РјРѕ РєР°СЂС‚Рё СЃ РіРѕР»СЏРј СЂР°Р·РјРµСЂ (108 x 108)."
 
 msgid "Extra Large Maps"
-msgstr "Много големи карти"
+msgstr "РњРЅРѕРіРѕ РіРѕР»РµРјРё РєР°СЂС‚Рё"
 
 msgid "View only maps of size extra large (144 x 144)."
-msgstr "Преглеждайте само карти с много големи размери (144 x 144)."
+msgstr "РџСЂРµРіР»РµР¶РґР°Р№С‚Рµ СЃР°РјРѕ РєР°СЂС‚Рё СЃ РјРЅРѕРіРѕ РіРѕР»РµРјРё СЂР°Р·РјРµСЂРё (144 x 144)."
 
 msgid "All Maps"
-msgstr "Всички карти"
+msgstr "Р’СЃРёС‡РєРё РєР°СЂС‚Рё"
 
 msgid "View all maps, regardless of size."
-msgstr "Вижте всички карти, независимо от размера."
+msgstr "Р’РёР¶С‚Рµ РІСЃРёС‡РєРё РєР°СЂС‚Рё, РЅРµР·Р°РІРёСЃРёРјРѕ РѕС‚ СЂР°Р·РјРµСЂР°."
 
 msgid "Players Icon"
 msgstr ""
@@ -2830,10 +2830,10 @@ msgid ""
 "(72 x 72), large (108 x 108),\n"
 "or extra large (144 x 144)."
 msgstr ""
-"Показва дали картата\n"
-"е малък (36 x 36), среден\n"
-"(72 x 72), голям (108 x 108),\n"
-"или изключително голям (144 x 144)."
+"РџРѕРєР°Р·РІР° РґР°Р»Рё РєР°СЂС‚Р°С‚Р°\n"
+"Рµ РјР°Р»СЉРє (36 x 36), СЃСЂРµРґРµРЅ\n"
+"(72 x 72), РіРѕР»СЏРј (108 x 108),\n"
+"РёР»Рё РёР·РєР»СЋС‡РёС‚РµР»РЅРѕ РіРѕР»СЏРј (144 x 144)."
 
 msgid "Size Icon"
 msgstr ""
@@ -2842,20 +2842,20 @@ msgid ""
 "Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
 "of Loyalty\" version of the game."
 msgstr ""
-"Показва дали картата е направена за версията на играта „Наследените войни“ "
-"или за „Цената на лоялността“."
+"РџРѕРєР°Р·РІР° РґР°Р»Рё РєР°СЂС‚Р°С‚Р° Рµ РЅР°РїСЂР°РІРµРЅР° Р·Р° РІРµСЂСЃРёСЏС‚Р° РЅР° РёРіСЂР°С‚Р° вЂћРќР°СЃР»РµРґРµРЅРёС‚Рµ РІРѕР№РЅРёвЂњ "
+"РёР»Рё Р·Р° вЂћР¦РµРЅР°С‚Р° РЅР° Р»РѕСЏР»РЅРѕСЃС‚С‚Р°вЂњ."
 
 msgid "Map Type"
 msgstr ""
 
 msgid "Selected Name"
-msgstr "Избрано име"
+msgstr "РР·Р±СЂР°РЅРѕ РёРјРµ"
 
 msgid "The name of the currently selected map."
-msgstr "Името на текущо избраната карта."
+msgstr "РРјРµС‚Рѕ РЅР° С‚РµРєСѓС‰Рѕ РёР·Р±СЂР°РЅР°С‚Р° РєР°СЂС‚Р°."
 
 msgid "Selected Map Difficulty"
-msgstr "Избрана трудност на карта"
+msgstr "РР·Р±СЂР°РЅР° С‚СЂСѓРґРЅРѕСЃС‚ РЅР° РєР°СЂС‚Р°"
 
 msgid ""
 "The map difficulty of the currently selected map.  The map difficulty is "
@@ -2863,22 +2863,22 @@ msgid ""
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
 msgstr ""
-"Трудността на картата на текущо избраната карта. Трудността на картата се "
-"определя от дизайнера на сценария. По-трудните карти може да включват повече "
-"или по-силни врагове, по-малко ресурси или други специални условия, които "
-"правят нещата по-трудни за играча."
+"РўСЂСѓРґРЅРѕСЃС‚С‚Р° РЅР° РєР°СЂС‚Р°С‚Р° РЅР° С‚РµРєСѓС‰Рѕ РёР·Р±СЂР°РЅР°С‚Р° РєР°СЂС‚Р°. РўСЂСѓРґРЅРѕСЃС‚С‚Р° РЅР° РєР°СЂС‚Р°С‚Р° СЃРµ "
+"РѕРїСЂРµРґРµР»СЏ РѕС‚ РґРёР·Р°Р№РЅРµСЂР° РЅР° СЃС†РµРЅР°СЂРёСЏ. РџРѕ-С‚СЂСѓРґРЅРёС‚Рµ РєР°СЂС‚Рё РјРѕР¶Рµ РґР° РІРєР»СЋС‡РІР°С‚ РїРѕРІРµС‡Рµ "
+"РёР»Рё РїРѕ-СЃРёР»РЅРё РІСЂР°РіРѕРІРµ, РїРѕ-РјР°Р»РєРѕ СЂРµСЃСѓСЂСЃРё РёР»Рё РґСЂСѓРіРё СЃРїРµС†РёР°Р»РЅРё СѓСЃР»РѕРІРёСЏ, РєРѕРёС‚Рѕ "
+"РїСЂР°РІСЏС‚ РЅРµС‰Р°С‚Р° РїРѕ-С‚СЂСѓРґРЅРё Р·Р° РёРіСЂР°С‡Р°."
 
 msgid "Selected Description"
 msgstr ""
 
 msgid "The description of the currently selected map."
-msgstr "Описание на избраната в момента карта."
+msgstr "РћРїРёСЃР°РЅРёРµ РЅР° РёР·Р±СЂР°РЅР°С‚Р° РІ РјРѕРјРµРЅС‚Р° РєР°СЂС‚Р°."
 
 msgid "Accept the choice made."
 msgstr ""
 
 msgid "Experimental Game Settings"
-msgstr "Пробни настройки на играта"
+msgstr "РџСЂРѕР±РЅРё РЅР°СЃС‚СЂРѕР№РєРё РЅР° РёРіСЂР°С‚Р°"
 
 msgid "Jump"
 msgstr ""
@@ -2955,13 +2955,13 @@ msgid "Thieves' Guild: Player Rankings"
 msgstr ""
 
 msgid "Number of Towns:"
-msgstr "Брой на градовете:"
+msgstr "Р‘СЂРѕР№ РЅР° РіСЂР°РґРѕРІРµС‚Рµ:"
 
 msgid "Number of Castles:"
-msgstr "Брой на замъците:"
+msgstr "Р‘СЂРѕР№ РЅР° Р·Р°РјСЉС†РёС‚Рµ:"
 
 msgid "Number of Heroes:"
-msgstr "Брой на героите:"
+msgstr "Р‘СЂРѕР№ РЅР° РіРµСЂРѕРёС‚Рµ:"
 
 msgid "Gold in Treasury:"
 msgstr ""
@@ -3141,7 +3141,7 @@ msgid "View High Scores for Standard Maps."
 msgstr ""
 
 msgid "Campaign"
-msgstr "Кампания"
+msgstr "РљР°РјРїР°РЅРёСЏ"
 
 msgid "View High Scores for Campaigns."
 msgstr ""
@@ -3189,7 +3189,7 @@ msgid "A single player game playing out a single map."
 msgstr ""
 
 msgid "Standard Game"
-msgstr "Стандартна Игра"
+msgstr "РЎС‚Р°РЅРґР°СЂС‚РЅР° РРіСЂР°"
 
 msgid "A single player game playing through a series of maps."
 msgstr ""
@@ -3203,10 +3203,10 @@ msgid ""
 msgstr ""
 
 msgid "Multi-Player Game"
-msgstr "Мултиплейър игра"
+msgstr "РњСѓР»С‚РёРїР»РµР№СЉСЂ РёРіСЂР°"
 
 msgid "fheroes2 Resurrection Team presents"
-msgstr "fheroes2 Отбор възкрасяване представя"
+msgstr "fheroes2 РћС‚Р±РѕСЂ РІСЉР·РєСЂР°СЃСЏРІР°РЅРµ РїСЂРµРґСЃС‚Р°РІСЏ"
 
 msgid "Greetings!"
 msgstr ""
@@ -3245,13 +3245,13 @@ msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 
 msgid "Credits"
-msgstr "За играта"
+msgstr "Р—Р° РёРіСЂР°С‚Р°"
 
 msgid "View the credits screen."
 msgstr ""
 
 msgid "High Scores"
-msgstr "Класиране"
+msgstr "РљР»Р°СЃРёСЂР°РЅРµ"
 
 msgid "View the high scores screen."
 msgstr ""
@@ -3268,10 +3268,10 @@ msgid ""
 msgstr ""
 
 msgid "Original Campaign"
-msgstr "Оригинална кампания"
+msgstr "РћСЂРёРіРёРЅР°Р»РЅР° РєР°РјРїР°РЅРёСЏ"
 
 msgid "Expansion Campaign"
-msgstr "Кампания на продължение"
+msgstr "РљР°РјРїР°РЅРёСЏ РЅР° РїСЂРѕРґСЉР»Р¶РµРЅРёРµ"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr ""
@@ -3285,7 +3285,7 @@ msgid ""
 msgstr ""
 
 msgid "Guest"
-msgstr "Гост"
+msgstr "Р“РѕСЃС‚"
 
 msgid ""
 "The guest waits for the host to set up the game, then is automatically added "
@@ -3293,13 +3293,13 @@ msgid ""
 msgstr ""
 
 msgid "Battle Only"
-msgstr "Само битка"
+msgstr "РЎР°РјРѕ Р±РёС‚РєР°"
 
 msgid "Setup and play a battle without loading any map."
 msgstr ""
 
 msgid "2 Players"
-msgstr "2 Играча"
+msgstr "2 РРіСЂР°С‡Р°"
 
 msgid ""
 "Play with 2 human players, and optionally, up to 4 additional computer "
@@ -3307,7 +3307,7 @@ msgid ""
 msgstr ""
 
 msgid "3 Players"
-msgstr "3 Играча"
+msgstr "3 РРіСЂР°С‡Р°"
 
 msgid ""
 "Play with 3 human players, and optionally, up to 3 additional computer "
@@ -3315,7 +3315,7 @@ msgid ""
 msgstr ""
 
 msgid "4 Players"
-msgstr "4 Играча"
+msgstr "4 РРіСЂР°С‡Р°"
 
 msgid ""
 "Play with 4 human players, and optionally, up to 2 additional computer "
@@ -3323,7 +3323,7 @@ msgid ""
 msgstr ""
 
 msgid "5 Players"
-msgstr "5 Играча"
+msgstr "5 РРіСЂР°С‡Р°"
 
 msgid ""
 "Play with 5 human players, and optionally, up to 1 additional computer "
@@ -3331,7 +3331,7 @@ msgid ""
 msgstr ""
 
 msgid "6 Players"
-msgstr "6 Играча"
+msgstr "6 РРіСЂР°С‡Р°"
 
 msgid "Play with 6 human players."
 msgstr ""
@@ -3583,17 +3583,17 @@ msgid ""
 msgstr ""
 
 msgid "Are you sure you want to quit?"
-msgstr "Сигурен ли си че искаш да напуснеш?"
+msgstr "РЎРёРіСѓСЂРµРЅ Р»Рё СЃРё С‡Рµ РёСЃРєР°С€ РґР° РЅР°РїСѓСЃРЅРµС€?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
-"Сигурен ли си че искаш да пуснеш отново? (Твоята настояща игра ще се изгуби.)"
+"РЎРёРіСѓСЂРµРЅ Р»Рё СЃРё С‡Рµ РёСЃРєР°С€ РґР° РїСѓСЃРЅРµС€ РѕС‚РЅРѕРІРѕ? (РўРІРѕСЏС‚Р° РЅР°СЃС‚РѕСЏС‰Р° РёРіСЂР° С‰Рµ СЃРµ РёР·РіСѓР±Рё.)"
 
 msgid "Are you sure you want to overwrite the save with this name?"
-msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
+msgstr "РЎРёРіСѓСЂРµРЅ Р»Рё СЃРё С‡Рµ РёСЃРєР°С€ РґР° РїСЂРµР·Р°РїРёС€РµС€ Р·Р°РїР°Р·РµРЅР°С‚Р° РёРіСЂР° СЃ С‚РѕРІР° РёРјРµ?"
 
 msgid "Game saved successfully."
-msgstr "Играта е запазена успешно."
+msgstr "РРіСЂР°С‚Р° Рµ Р·Р°РїР°Р·РµРЅР° СѓСЃРїРµС€РЅРѕ."
 
 msgid "There was an issue during saving."
 msgstr ""
@@ -3667,7 +3667,7 @@ msgid ""
 msgstr ""
 
 msgid "%{color} player"
-msgstr "%{color} играч"
+msgstr "%{color} РёРіСЂР°С‡"
 
 msgid "View %{skill} Info"
 msgstr ""
@@ -3679,49 +3679,49 @@ msgid "Kingdom Income per day."
 msgstr ""
 
 msgid "English"
-msgstr "Английски"
+msgstr "РђРЅРіР»РёР№СЃРєРё"
 
 msgid "French"
-msgstr "Френски"
+msgstr "Р¤СЂРµРЅСЃРєРё"
 
 msgid "Polish"
-msgstr "Полски"
+msgstr "РџРѕР»СЃРєРё"
 
 msgid "German"
-msgstr "Немски"
+msgstr "РќРµРјСЃРєРё"
 
 msgid "Russian"
-msgstr "Руски"
+msgstr "Р СѓСЃРєРё"
 
 msgid "Italian"
-msgstr "Италиански"
+msgstr "РС‚Р°Р»РёР°РЅСЃРєРё"
 
 msgid "Czech"
-msgstr "Чехски"
+msgstr "Р§РµС…СЃРєРё"
 
 msgid "Norwegian"
-msgstr "Норвежки"
+msgstr "РќРѕСЂРІРµР¶РєРё"
 
 msgid "Belarusian"
-msgstr "Беларуски"
+msgstr "Р‘РµР»Р°СЂСѓСЃРєРё"
 
 msgid "Bulgarian"
-msgstr "Български"
+msgstr "Р‘СЉР»РіР°СЂСЃРєРё"
 
 msgid "Ukrainian"
-msgstr "Украински"
+msgstr "РЈРєСЂР°РёРЅСЃРєРё"
 
 msgid "Romanian"
-msgstr "Румънски"
+msgstr "Р СѓРјСЉРЅСЃРєРё"
 
 msgid "Spanish"
-msgstr "Испански"
+msgstr "РСЃРїР°РЅСЃРєРё"
 
 msgid "Swedish"
-msgstr "Шведски"
+msgstr "РЁРІРµРґСЃРєРё"
 
 msgid "Portuguese"
-msgstr "Посртугалски"
+msgstr "РџРѕСЃСЂС‚СѓРіР°Р»СЃРєРё"
 
 msgid ", FPS: "
 msgstr ""
@@ -8297,34 +8297,34 @@ msgid "battle: show damage info"
 msgstr ""
 
 msgid "world: show terrain penalty"
-msgstr "свят: покажи terrain penalty"
+msgstr "СЃРІСЏС‚: РїРѕРєР°Р¶Рё terrain penalty"
 
 msgid "world: Scouting skill shows extended content info"
-msgstr "свят: Скаутските умения показват разширена информация за съдържанието"
+msgstr "СЃРІСЏС‚: РЎРєР°СѓС‚СЃРєРёС‚Рµ СѓРјРµРЅРёСЏ РїРѕРєР°Р·РІР°С‚ СЂР°Р·С€РёСЂРµРЅР° РёРЅС„РѕСЂРјР°С†РёСЏ Р·Р° СЃСЉРґСЉСЂР¶Р°РЅРёРµС‚Рѕ"
 
 msgid "world: allow to set guardian to objects"
-msgstr "свят: позволява да се сложи пазител на обекти"
+msgstr "СЃРІСЏС‚: РїРѕР·РІРѕР»СЏРІР° РґР° СЃРµ СЃР»РѕР¶Рё РїР°Р·РёС‚РµР» РЅР° РѕР±РµРєС‚Рё"
 
 msgid "world: Neutral armies scale with game difficulty"
-msgstr "свят: Неутралните армии се увеличават с трудноста на играта"
+msgstr "СЃРІСЏС‚: РќРµСѓС‚СЂР°Р»РЅРёС‚Рµ Р°СЂРјРёРё СЃРµ СѓРІРµР»РёС‡Р°РІР°С‚ СЃ С‚СЂСѓРґРЅРѕСЃС‚Р° РЅР° РёРіСЂР°С‚Р°"
 
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
-"свят: Вятърните мелници, водните колела и магическите градини могат да бъдат "
-"заснети"
+"СЃРІСЏС‚: Р’СЏС‚СЉСЂРЅРёС‚Рµ РјРµР»РЅРёС†Рё, РІРѕРґРЅРёС‚Рµ РєРѕР»РµР»Р° Рё РјР°РіРёС‡РµСЃРєРёС‚Рµ РіСЂР°РґРёРЅРё РјРѕРіР°С‚ РґР° Р±СЉРґР°С‚ "
+"Р·Р°СЃРЅРµС‚Рё"
 
 msgid "castle: allow guardians"
 msgstr ""
 
 msgid "heroes: allow buy a spellbook from Shrines"
-msgstr "герои: позволява да купите книга за заклинания от светилища"
+msgstr "РіРµСЂРѕРё: РїРѕР·РІРѕР»СЏРІР° РґР° РєСѓРїРёС‚Рµ РєРЅРёРіР° Р·Р° Р·Р°РєР»РёРЅР°РЅРёСЏ РѕС‚ СЃРІРµС‚РёР»РёС‰Р°"
 
 msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
-"герои: запомнете точките на движение, когато се оттегляте или се предавате"
+"РіРµСЂРѕРё: Р·Р°РїРѕРјРЅРµС‚Рµ С‚РѕС‡РєРёС‚Рµ РЅР° РґРІРёР¶РµРЅРёРµ, РєРѕРіР°С‚Рѕ СЃРµ РѕС‚С‚РµРіР»СЏС‚Рµ РёР»Рё СЃРµ РїСЂРµРґР°РІР°С‚Рµ"
 
 msgid "heroes: allow to choose any primary skill in Arena"
-msgstr "герои: позволяват да изберете всяко основно умение от Арена"
+msgstr "РіРµСЂРѕРё: РїРѕР·РІРѕР»СЏРІР°С‚ РґР° РёР·Р±РµСЂРµС‚Рµ РІСЃСЏРєРѕ РѕСЃРЅРѕРІРЅРѕ СѓРјРµРЅРёРµ РѕС‚ РђСЂРµРЅР°"
 
 msgid "battle: allow soft wait for troops"
 msgstr ""
