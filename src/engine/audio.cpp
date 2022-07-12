@@ -977,3 +977,23 @@ bool Music::isPlaying()
 
     return ( musicSettings.currentTrack.mix != nullptr ) && Mix_PlayingMusic();
 }
+
+void Music::SetMidiSoundFont( const std::string & file )
+{
+    if ( file.empty() ) {
+        // No font to set.
+        return;
+    }
+
+    const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
+
+    if ( !isInitialized ) {
+        return;
+    }
+
+    const std::string filePath = System::FileNameToUTF8( file );
+
+    if ( Mix_SetSoundFonts( filePath.c_str() ) == 0 ) {
+        ERROR_LOG( "Failed to set MIDI sound font from path " << filePath << ". The error: " << Mix_GetError() )
+    }
+}

@@ -252,7 +252,16 @@ int main( int argc, char ** argv )
 
         const DataInitializer dataInitializer;
 
-        const AudioManager::AudioInitializer audioInitializer( dataInitializer.getOriginalAGGFilePath(), dataInitializer.getExpansionAGGFilePath() );
+        std::string midiSoundFont;
+
+        ListFiles soundFontFiles = Settings::FindFiles( System::ConcatePath( "files", "soundfonts" ), ".sf2", false );
+        if ( !soundFontFiles.empty() ) {
+            midiSoundFont = std::move( soundFontFiles.back() );
+
+            DEBUG_LOG( DBG_GAME, DBG_INFO, "MIDI sound font found: " << midiSoundFont )
+        }
+
+        const AudioManager::AudioInitializer audioInitializer( dataInitializer.getOriginalAGGFilePath(), dataInitializer.getExpansionAGGFilePath(), midiSoundFont );
 
         // Load palette.
         fheroes2::setGamePalette( AGG::getDataFromAggFile( "KB.PAL" ) );

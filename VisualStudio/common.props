@@ -23,10 +23,12 @@
     </ResourceCompile>
     <Link>
       <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)packages\installed\zlib\lib\$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>if exist "$(MSBuildThisFileDirectory)..\data" (
+      <Command>xcopy /Y "$(MSBuildThisFileDirectory)packages\installed\zlib\lib\$(PlatformTarget)\*.dll" "$(OutDir)"
+
+if exist "$(MSBuildThisFileDirectory)..\data" (
     if not exist "$(OutDir)data" (
         mkdir "$(OutDir)data"
         xcopy /Y /s /Q "$(MSBuildThisFileDirectory)..\data" "$(OutDir)data"

@@ -8,20 +8,6 @@ jobs:
     strategy:
       matrix:
         config:
-        - name: SDL1 x86
-          platform: x86
-          build_config: Release-SDL1
-          deploy_config: SDL1
-          package_name: fheroes2_windows_x86_SDL1
-          release_name: Windows x86 build with SDL1 support (latest commit)
-          release_tag: fheroes2-windows-x86-SDL1
-        - name: SDL1 x64
-          platform: x64
-          build_config: Release-SDL1
-          deploy_config: SDL1
-          package_name: fheroes2_windows_x64_SDL1
-          release_name: Windows x64 build with SDL1 support (latest commit)
-          release_tag: fheroes2-windows-x64-SDL1
         - name: SDL2 x86
           platform: x86
           build_config: Release-SDL2
@@ -38,16 +24,22 @@ jobs:
           release_tag: fheroes2-windows-x64-SDL2
     name: MSVC (${{ matrix.config.name }})
     runs-on: windows-2019
-    timeout-minutes: 30
+    timeout-minutes: 120
     defaults:
       run:
         shell: bash
     steps:
     - uses: actions/checkout@v2
+    - name: Prepare vcpkg cache
+      uses: actions/cache@v3
+      with:
+        path: ~/AppData/Local/vcpkg/archives
+        key: msvc-vcpkg-cache-${{ matrix.config.platform }}-${{ github.sha }}
+        restore-keys: |
+          msvc-vcpkg-cache-${{ matrix.config.platform }}
     - name: Install dependencies, cygwin and zip
       run: |
-        cd script/windows
-        ./install_packages.bat
+        script/windows/setup_vcpkg.bat C:/vcpkg ${{ matrix.config.platform }} VisualStudio/packages/installed
         choco.exe install make gettext-devel -y --source cygwin
         choco.exe install zip -y
     - uses: microsoft/setup-msbuild@v1
@@ -76,10 +68,10 @@ jobs:
         BUILD_DIR: build\${{ matrix.config.platform }}\${{ matrix.config.build_config }}
     - name: Create ZIP package
       run: |
-        zip.exe -j "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip "$BUILD_DIR"\\fheroes2.exe "$BUILD_DIR"\\SDL*.dll "$BUILD_DIR"\\lib*.dll \
-                "$BUILD_DIR"\\smpeg.dll script\\demo\\*.bat script\\demo\\*.ps1 script\\homm2\\*.bat script\\homm2\\*.ps1 LICENSE changelog.txt \
+        zip.exe -j "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip "$BUILD_DIR"\\fheroes2.exe "$BUILD_DIR"\\*.dll \
+                script\\demo\\*.bat script\\demo\\*.ps1 script\\homm2\\*.bat script\\homm2\\*.ps1 LICENSE changelog.txt \
                 docs\\README.txt
-        zip.exe "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip files\\lang\\*.mo files\\data\\*.h2d
+        zip.exe "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip files\\lang\\*.mo files\\data\\*.h2d files\\soundfonts\\*.*
       env:
         BUILD_DIR: build\${{ matrix.config.platform }}\${{ matrix.config.build_config }}
     - uses: actions/upload-artifact@v2

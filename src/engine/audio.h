@@ -91,6 +91,8 @@ namespace Music
 
     bool isPlaying();
 
+    void SetMidiSoundFont( const std::string & file );
+
     std::vector<uint8_t> Xmi2Mid( const std::vector<uint8_t> & buf );
 }
 

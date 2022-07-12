@@ -764,13 +764,14 @@ namespace
 
 namespace AudioManager
 {
-    AudioInitializer::AudioInitializer( const std::string & originalAGGFilePath, const std::string & expansionAGGFilePath )
+    AudioInitializer::AudioInitializer( const std::string & originalAGGFilePath, const std::string & expansionAGGFilePath, const std::string & midiSoundFont )
     {
         if ( Audio::isValid() ) {
             Mixer::SetChannels( 32 );
             // Set the volume for all channels to 0. This is required to avoid random volume spikes at the beginning of the game.
             Mixer::setVolume( -1, 0 );
 
+            Music::SetMidiSoundFont( midiSoundFont );
             Music::setVolume( 100 * Settings::Get().MusicVolume() / 10 );
             Music::SetFadeInMs( 900 );
         }
