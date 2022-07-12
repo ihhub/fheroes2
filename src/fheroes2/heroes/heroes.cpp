@@ -295,6 +295,11 @@ void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
 
         // Hero's race may not match the custom portrait
         _race = rc;
+
+        // Since we changed the hero's race, we have to update the initial spell as well. Let's remove the
+        // existing spell and the spell book itself for now, the new one will be added later if necessary.
+        spell_book.clear();
+        bag_artifacts.RemoveArtifact( Artifact::MAGIC_BOOK );
     }
     else {
         st.skip( 1 );
