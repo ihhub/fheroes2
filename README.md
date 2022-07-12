@@ -11,7 +11,7 @@ and UI improvements), breathing new life into one of the most addictive turn-bas
 </p>
 
 <p align="center">
-    <img src="docs/images/screenshots/screenshot_battle.png?raw=true" width="456"> <img src="docs/images/screenshots/screenshot_castle.png?raw=true" width="364">
+    <img src="docs/images/screenshots/screenshot_battle.png?raw=true" width="410"> <img src="docs/images/screenshots/screenshot_castle.png?raw=true" width="410">
 </p>
 
 ## Download and install
