@@ -305,7 +305,7 @@ void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
         st.skip( 1 );
     }
 
-    auto setInitialArtifact = [this]( const Artifact & art ) {
+    auto addInitialArtifact = [this]( const Artifact & art ) {
         // Perhaps the hero already has a spell book because of his race
         if ( art == Artifact::MAGIC_BOOK && HaveSpellBook() ) {
             return;
@@ -315,9 +315,9 @@ void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
     };
 
     // 3 artifacts
-    setInitialArtifact( Artifact( st.get() ) );
-    setInitialArtifact( Artifact( st.get() ) );
-    setInitialArtifact( Artifact( st.get() ) );
+    addInitialArtifact( Artifact( st.get() ) );
+    addInitialArtifact( Artifact( st.get() ) );
+    addInitialArtifact( Artifact( st.get() ) );
 
     // Unknown
     st.skip( 1 );
