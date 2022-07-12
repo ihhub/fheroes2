@@ -978,10 +978,10 @@ bool Music::isPlaying()
     return ( musicSettings.currentTrack.mix != nullptr ) && Mix_PlayingMusic();
 }
 
-void Music::SetMidiSoundFont( const std::string & file )
+void Music::SetMidiSoundFonts( const ListFiles & files )
 {
-    if ( file.empty() ) {
-        // No font to set.
+    if ( files.empty() ) {
+        // No fonts to set
         return;
     }
 
@@ -991,9 +991,19 @@ void Music::SetMidiSoundFont( const std::string & file )
         return;
     }
 
-    const std::string filePath = System::FileNameToUTF8( file );
+    std::string filePaths;
 
-    if ( Mix_SetSoundFonts( filePath.c_str() ) == 0 ) {
-        ERROR_LOG( "Failed to set MIDI sound font from path " << filePath << ". The error: " << Mix_GetError() )
+    for ( const std::string & file : files ) {
+        filePaths.append( System::FileNameToUTF8( file ) );
+        filePaths.push_back( ';' );
+    }
+
+    assert( !filePaths.empty() && filePaths.back() == ';' );
+
+    // Remove the last semicolon
+    filePaths.pop_back();
+
+    if ( Mix_SetSoundFonts( filePaths.c_str() ) == 0 ) {
+        ERROR_LOG( "Failed to set MIDI sound fonts from paths " << filePaths << ". The error: " << Mix_GetError() )
     }
 }

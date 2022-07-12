@@ -30,6 +30,7 @@
 #include "bin_info.h"
 #include "core.h"
 #include "cursor.h"
+#include "dir.h"
 #include "embedded_image.h"
 #include "game.h"
 #include "game_logo.h"
@@ -252,16 +253,12 @@ int main( int argc, char ** argv )
 
         const DataInitializer dataInitializer;
 
-        std::string midiSoundFont;
-
-        ListFiles soundFontFiles = Settings::FindFiles( System::ConcatePath( "files", "soundfonts" ), ".sf2", false );
-        if ( !soundFontFiles.empty() ) {
-            midiSoundFont = std::move( soundFontFiles.back() );
-
-            DEBUG_LOG( DBG_GAME, DBG_INFO, "MIDI sound font found: " << midiSoundFont )
+        const ListFiles midiSoundFonts = Settings::FindFiles( System::ConcatePath( "files", "soundfonts" ), ".sf2", false );
+        for ( const std::string & file : midiSoundFonts ) {
+            DEBUG_LOG( DBG_GAME, DBG_INFO, "MIDI sound font to load: " << file )
         }
 
-        const AudioManager::AudioInitializer audioInitializer( dataInitializer.getOriginalAGGFilePath(), dataInitializer.getExpansionAGGFilePath(), midiSoundFont );
+        const AudioManager::AudioInitializer audioInitializer( dataInitializer.getOriginalAGGFilePath(), dataInitializer.getExpansionAGGFilePath(), midiSoundFonts );
 
         // Load palette.
         fheroes2::setGamePalette( AGG::getDataFromAggFile( "KB.PAL" ) );

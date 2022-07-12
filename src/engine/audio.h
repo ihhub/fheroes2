@@ -28,6 +28,8 @@
 #include <string>
 #include <vector>
 
+#include "dir.h"
+
 namespace Audio
 {
     // Audio initialization and deinitialization functions are not designed to be called
@@ -91,7 +93,7 @@ namespace Music
 
     bool isPlaying();
 
-    void SetMidiSoundFont( const std::string & file );
+    void SetMidiSoundFonts( const ListFiles & files );
 
     std::vector<uint8_t> Xmi2Mid( const std::vector<uint8_t> & buf );
 }

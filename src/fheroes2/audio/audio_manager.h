@@ -26,6 +26,7 @@
 #include <vector>
 
 #include "audio.h"
+#include "dir.h"
 
 namespace M82
 {
@@ -39,7 +40,7 @@ namespace AudioManager
     public:
         AudioInitializer() = delete;
 
-        AudioInitializer( const std::string & originalAGGFilePath, const std::string & expansionAGGFilePath, const std::string & midiSoundFont );
+        AudioInitializer( const std::string & originalAGGFilePath, const std::string & expansionAGGFilePath, const ListFiles & midiSoundFonts );
         AudioInitializer( const AudioInitializer & ) = delete;
         AudioInitializer & operator=( const AudioInitializer & ) = delete;
 
