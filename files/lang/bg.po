@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-10 14:31+0000\n"
-"PO-Revision-Date: 2022-07-12 13:33+0100\n"
+"PO-Revision-Date: 2022-07-13 13:36+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -94,127 +94,132 @@ msgstr ""
 "%{monster}"
 
 msgid "army|Few"
-msgstr ""
+msgstr "армия|Малко"
 
 msgid "army|Several"
-msgstr ""
+msgstr "армия|Няколко"
 
 msgid "army|Pack"
-msgstr ""
+msgstr "армия|Пакет"
 
 msgid "army|Lots"
-msgstr ""
+msgstr "армия|Много"
 
 msgid "army|Horde"
-msgstr ""
+msgstr "армия|Орда"
 
 msgid "army|Throng"
-msgstr ""
+msgstr "армия|Тълпа"
 
 msgid "army|Swarm"
-msgstr ""
+msgstr "армия|Рояк"
 
 msgid "army|Zounds"
-msgstr ""
+msgstr "армия|Изненада"
 
 msgid "army|Legion"
-msgstr ""
+msgstr "армия|Legion"
 
 msgid "All %{race} troops +1"
-msgstr ""
+msgstr "Всички %{race} войски +1"
 
 msgid "Multiple"
-msgstr ""
+msgstr "Многократни"
 
 msgid "Troops of %{count} alignments -%{penalty}"
-msgstr ""
+msgstr "Войски от %{count} подравнявания -%{penalty}"
 
 msgid "Some undead in group -1"
-msgstr ""
+msgstr "Някои немъртви в група -1"
 
 msgid "View %{name}"
-msgstr ""
+msgstr "Преглед на %{name}"
 
 msgid "Move the %{name} "
-msgstr ""
+msgstr "Преместете %{name} "
 
 msgid "Move or right click to redistribute %{name}"
-msgstr ""
+msgstr "Преместете или щракнете с десния бутон, за да преразпределите %{name}"
 
 msgid "Combine %{name} armies"
-msgstr ""
+msgstr "Комбинирайте %{name} армии"
 
 msgid "Exchange %{name2} with %{name}"
-msgstr ""
+msgstr "Разменете %{name2} с %{name}"
 
 msgid "Select %{name}"
-msgstr ""
+msgstr "Изберете %{name}"
 
 msgid "Cannot move last troop"
-msgstr ""
+msgstr "Не може да премести последния отряд"
 
 msgid "Move the %{name}"
-msgstr ""
+msgstr "Преместете %{name}"
 
 msgid "Set Count"
-msgstr ""
+msgstr "Задаване на броя"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%{name} унищожава половината вражески войски!"
+msgstr[1] "%{name} унищожи половината вражески войски!"
 
 msgid "%{name} has turned off the auto battle"
-msgstr ""
+msgstr "%{name} е изключил автоматичната битка"
 
 msgid "%{name} has turned on the auto battle"
-msgstr ""
+msgstr "%{name} включи автоматичната битка"
 
 msgid "Spell failed!"
-msgstr ""
+msgstr "Заклинанието е неуспешно!"
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
 "combat spells."
 msgstr ""
+"Артефактът Сфера на отрицанието е в сила за тази битка, дезактивирайки "
+"всички бойни заклинания."
 
 msgid "You have already cast a spell this round."
-msgstr ""
+msgstr "Вече сте направили магия този рунд."
 
 msgid "That spell will affect no one!"
-msgstr ""
+msgstr "Това заклинание няма да засегне никого!"
 
 msgid "You may only summon one type of elemental per combat."
-msgstr ""
+msgstr "Можете да призовете само един тип елементал за битка."
 
 msgid "There is no open space adjacent to your hero to summon an Elemental to."
 msgstr ""
+"Няма открито пространство до вашия герой, където да призовете елементал."
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
 "half movement rate."
 msgstr ""
+"Ровът намалява с -%{count} умението за защита на всяка единица и забавя "
+"наполовина скоростта на движение."
 
 msgid "Speed"
-msgstr ""
+msgstr "Скорост"
 
 msgid "Speed: %{speed}"
-msgstr ""
+msgstr "Скорост: %{speed}"
 
 msgid "Army Order"
-msgstr ""
+msgstr "Армейска заповед"
 
 msgid "Auto Spell Casting"
-msgstr ""
+msgstr "Автоматично заклинание"
 
 msgid "Grid"
-msgstr ""
+msgstr "Решетка"
 
 msgid "Shadow Movement"
-msgstr ""
+msgstr "Движение на сенките"
 
 msgid "Shadow Cursor"
-msgstr ""
+msgstr "Курсор в сянка"
 
 msgid "Off"
 msgstr "Изкл"
@@ -223,141 +228,161 @@ msgid "On"
 msgstr "Вкл"
 
 msgid "Set the speed of combat actions and animations."
-msgstr ""
+msgstr "Задайте скоростта на бойните действия и анимациите."
 
 msgid "Toggle to display army order during the battle."
-msgstr ""
+msgstr "Превключете за показване на армейския ред по време на битката."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
 "is on. (Note: This does not affect spell casting for computer players in any "
 "way, nor does it affect quick combat.)"
 msgstr ""
+"Превключете дали компютърът да прави заклинания вместо вас, когато "
+"автоматичната битка е включена. (Забележка: Това не влияе по никакъв начин "
+"на правенето на заклинания за компютърни играчи, нито засяга бързата битка.)"
 
 msgid ""
 "Toggle the hex grid on or off. The hex grid always underlies movement, even "
 "if turned off. This switch only determines if the grid is visible."
 msgstr ""
+"Включете или изключете шестнадесетичната мрежа. Шестнадесетичната мрежа "
+"винаги е в основата на движението, дори и да е изключена. Този ключ определя "
+"само дали решетката е видима."
 
 msgid ""
 "Toggle on or off shadows showing where your creatures can move and attack."
 msgstr ""
+"Включете или изключете сенките, показващи къде вашите същества могат да се "
+"движат и атакуват."
 
 msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
+"Включете или изключете сянка, показваща текущото шестнадесетично "
+"местоположение на курсора на мишката."
 
 msgid "The enemy has surrendered!"
-msgstr ""
+msgstr "Врагът се предаде!"
 
 msgid "The enemy has fled!"
-msgstr ""
+msgstr "Врагът е избягал!"
 
 msgid "A glorious victory!"
-msgstr ""
+msgstr "Славна победа!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
-msgstr ""
+msgstr "За храброст в битка %{name} получава %{exp} опит."
 
 msgid "The cowardly %{name} flees from battle."
-msgstr ""
+msgstr "Страхливият %{name} бяга от битката."
 
 msgid "%{name} surrenders to the enemy, and departs in shame."
-msgstr ""
+msgstr "%{name} се предава на врага и си тръгва засрамен."
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
 msgstr ""
+"Вашите сили претърпяват горчиво поражение и %{name} изоставят каузата ви."
 
 msgid "Your force suffer a bitter defeat."
-msgstr ""
+msgstr "Вашите сили претърпяват горчиво поражение."
 
 msgid "Battlefield Casualties"
-msgstr ""
+msgstr "Жертви на бойното поле"
 
 msgid "Attacker"
-msgstr ""
+msgstr "Нападател"
 
 msgid "Defender"
-msgstr ""
+msgstr "Защитник"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "Когато посегнете към %{name}, той мистериозно изчезва."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "Когато врагът ви посегне към %{name}, той мистериозно изчезва."
 
 msgid "You have captured an enemy artifact!"
-msgstr ""
+msgstr "Вие сте заловили вражески артефакт!"
 
 msgid "Necromancy!"
-msgstr ""
+msgstr "Некромантия!"
 
 msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
 msgstr ""
+"Практикувайки тъмните изкуства на некромантията, можете да съберете %{count} "
+"от мъртвите на врага, за да се върнете под ваша служба като %{monster}."
 
 msgid "%{name} the %{race}"
-msgstr ""
+msgstr "%{name} %{race}"
 
 msgid "Captain of %{name}"
-msgstr ""
+msgstr "Капитан на %{name}"
 
 msgid "Attack"
-msgstr ""
+msgstr "Атака"
 
 msgid "Defense"
-msgstr ""
+msgstr "Защита"
 
 msgid "Spell Power"
-msgstr ""
+msgstr "Сила на магията"
 
 msgid "Knowledge"
-msgstr ""
+msgstr "Знание"
 
 msgid "Morale"
-msgstr ""
+msgstr "Морал"
 
 msgid "Luck"
-msgstr ""
+msgstr "Късмет"
 
 msgid "Spell Points"
-msgstr ""
+msgstr "Точки за заклинания"
 
 msgid "Hero's Options"
-msgstr ""
+msgstr "Опции на героя"
 
 msgid "Cast Spell"
-msgstr ""
+msgstr "Направете заклинание"
 
 msgid "Retreat"
-msgstr ""
+msgstr "Отстъпление"
 
 msgid "Surrender"
-msgstr ""
+msgstr "Предаване"
 
 msgid "Cancel"
 msgstr "Отменям"
 
 msgid "Hero Screen"
-msgstr ""
+msgstr "Екран на героя"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
 msgstr ""
+"Направете магическо заклинание. Можете да правите само едно заклинание на "
+"боен рунд. Рундът се нулира, когато всяко същество е имало ход."
 
 msgid ""
 "Retreat your hero, abandoning your creatures. Your hero will be available "
 "for you to recruit again, however, the hero will have only a novice hero's "
 "forces."
 msgstr ""
+"Оттеглете своя герой, изоставяйки своите създания. Вашият герой ще бъде на "
+"разположение, за да го наемете отново, но героят ще разполага само със "
+"силите на начинаещ герой."
 
 msgid ""
 "Surrendering costs gold. However if you pay the ransom, the hero and all of "
 "his or her surviving creatures will be available to recruit again."
 msgstr ""
+"Предаването ще струва злато. Ако обаче платите откупа, героят и всички "
+"негови или нейни оцелели същества ще бъдат на разположение за наемане отново."
 
 msgid "Open Hero Screen to view full information about the hero."
 msgstr ""
