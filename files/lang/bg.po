@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-10 14:31+0000\n"
-"PO-Revision-Date: 2022-07-13 13:36+0100\n"
+"PO-Revision-Date: 2022-07-13 14:04+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -94,31 +94,31 @@ msgstr ""
 "%{monster}"
 
 msgid "army|Few"
-msgstr "армия|Малко"
+msgstr "army|Малко"
 
 msgid "army|Several"
-msgstr "армия|Няколко"
+msgstr "army|Няколко"
 
 msgid "army|Pack"
-msgstr "армия|Пакет"
+msgstr "army|Пакет"
 
 msgid "army|Lots"
-msgstr "армия|Много"
+msgstr "army|Много"
 
 msgid "army|Horde"
-msgstr "армия|Орда"
+msgstr "army|Орда"
 
 msgid "army|Throng"
-msgstr "армия|Тълпа"
+msgstr "army|Тълпа"
 
 msgid "army|Swarm"
-msgstr "армия|Рояк"
+msgstr "army|Рояк"
 
 msgid "army|Zounds"
-msgstr "армия|Изненада"
+msgstr "army|Изненада"
 
 msgid "army|Legion"
-msgstr "армия|Legion"
+msgstr "army|Legion"
 
 msgid "All %{race} troops +1"
 msgstr "Всички %{race} войски +1"
@@ -385,7 +385,7 @@ msgstr ""
 "негови или нейни оцелели същества ще бъдат на разположение за наемане отново."
 
 msgid "Open Hero Screen to view full information about the hero."
-msgstr ""
+msgstr "Отворете екрана на героя, за да видите пълната информация за героя."
 
 msgid "Return to the battle."
 msgstr ""
