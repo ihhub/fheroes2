@@ -110,7 +110,57 @@ namespace
             resolutions.emplace_back( resolution );
         }
 
+        // To support wide screens without making the in-game elements too tiny there are 2 solutions.
+        // One way is to introduce an in-game scaling while another is to add lower resolutions based on existing resolutions.
+        // The in-game scaling requires more computational power while a low resolution in a full screen mode is usually supported natively by an OS.
+        // Let's go with the second option and add extra resolutions.
+        std::vector<fheroes2::Size> extraResolutions;
+
+        // Add resolutions which can be considered as integer downscaling resolutions.
+        for ( const fheroes2::Size & resolution : resolutions ) {
+            if ( ( resolution.width & 1 ) != 0 || ( resolution.height & 1 ) != 0 ) {
+                continue;
+            }
+            const int32_t smallerWidth = resolution.width / 2;
+            const int32_t smallerHeight = resolution.height / 2;
+
+            if ( smallerWidth < fheroes2::Display::DEFAULT_WIDTH || smallerHeight < fheroes2::Display::DEFAULT_HEIGHT ) {
+                continue;
+            }
+
+            if ( std::find( resolutions.begin(), resolutions.end(), fheroes2::Size( smallerWidth, smallerHeight ) ) != resolutions.end() ) {
+                continue;
+            }
+
+            extraResolutions.emplace_back( smallerWidth, smallerHeight );
+        }
+
+        resolutions.insert( resolutions.end(), extraResolutions.begin(), extraResolutions.end() );
         std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
+
+        // We can determine an aspect ratio of the screen based on the highest resolution. For now we support only 16 x N resolutions. 4 x 3 resolution is actually
+        // 16 x 12.
+        if ( ( resolutions.front().width % 16 ) == 0 ) {
+            const int32_t aspectRatio = resolutions.front().height * 16 / resolutions.front().width;
+            if ( resolutions.front().height * 16 == resolutions.front().width * aspectRatio ) {
+                extraResolutions.clear();
+
+                for ( const fheroes2::Size & resolution : resolutions ) {
+                    if ( ( resolution.width % 16 ) != 0 ) {
+                        continue;
+                    }
+
+                    int32_t newHeight = resolution.width / 16 * aspectRatio;
+                    if ( newHeight >= fheroes2::Display::DEFAULT_HEIGHT && ( newHeight % 16 ) == 0
+                         && std::find( resolutions.begin(), resolutions.end(), fheroes2::Size( resolution.width, newHeight ) ) == resolutions.end() ) {
+                        extraResolutions.emplace_back( resolution.width, newHeight );
+                    }
+                }
+
+                resolutions.insert( resolutions.end(), extraResolutions.begin(), extraResolutions.end() );
+                std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
+            }
+        }
 
         return resolutions;
     }
