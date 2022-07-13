@@ -977,3 +977,33 @@ bool Music::isPlaying()
 
     return ( musicSettings.currentTrack.mix != nullptr ) && Mix_PlayingMusic();
 }
+
+void Music::SetMidiSoundFonts( const ListFiles & files )
+{
+    if ( files.empty() ) {
+        // No fonts to set
+        return;
+    }
+
+    const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
+
+    if ( !isInitialized ) {
+        return;
+    }
+
+    std::string filePaths;
+
+    for ( const std::string & file : files ) {
+        filePaths.append( System::FileNameToUTF8( file ) );
+        filePaths.push_back( ';' );
+    }
+
+    assert( !filePaths.empty() && filePaths.back() == ';' );
+
+    // Remove the last semicolon
+    filePaths.pop_back();
+
+    if ( Mix_SetSoundFonts( filePaths.c_str() ) == 0 ) {
+        ERROR_LOG( "Failed to set MIDI sound fonts using paths " << filePaths << ". The error: " << Mix_GetError() )
+    }
+}
