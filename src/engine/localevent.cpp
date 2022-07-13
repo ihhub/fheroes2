@@ -1073,7 +1073,7 @@ LocalEvent & LocalEvent::Get()
     return le;
 }
 
-void LocalEvent::RegisterCycling( void ( *preRenderDrawing )(), void ( *postRenderDrawing )() ) const
+void LocalEvent::RegisterCycling( void ( *preRenderDrawing )(), void ( *postRenderDrawing )() )
 {
     colorCycling.registerDrawing( preRenderDrawing, postRenderDrawing );
     colorCycling.resume();
@@ -1081,7 +1081,7 @@ void LocalEvent::RegisterCycling( void ( *preRenderDrawing )(), void ( *postRend
     fheroes2::Display::instance().subscribe( ApplyCycling, ResetCycling );
 }
 
-void LocalEvent::PauseCycling() const
+void LocalEvent::PauseCycling()
 {
     colorCycling.pause();
     fheroes2::Display::instance().subscribe( nullptr, nullptr );

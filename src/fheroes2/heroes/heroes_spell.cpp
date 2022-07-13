@@ -193,10 +193,8 @@ namespace
         I.GetGameArea().SetCenter( hero.GetCenter() );
         I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
-        const int32_t src = hero.GetIndex();
         const int32_t dst = castle->GetIndex();
-
-        assert( Maps::isValidAbsIndex( src ) && Maps::isValidAbsIndex( dst ) );
+        assert( Maps::isValidAbsIndex( dst ) );
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.GetPath().Hide();

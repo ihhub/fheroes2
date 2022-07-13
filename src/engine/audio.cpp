@@ -1004,6 +1004,6 @@ void Music::SetMidiSoundFonts( const ListFiles & files )
     filePaths.pop_back();
 
     if ( Mix_SetSoundFonts( filePaths.c_str() ) == 0 ) {
-        ERROR_LOG( "Failed to set MIDI sound fonts from paths " << filePaths << ". The error: " << Mix_GetError() )
+        ERROR_LOG( "Failed to set MIDI sound fonts using paths " << filePaths << ". The error: " << Mix_GetError() )
     }
 }

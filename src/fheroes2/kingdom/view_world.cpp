@@ -520,8 +520,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    LocalEvent & le = LocalEvent::Get();
-    le.PauseCycling();
+    LocalEvent::PauseCycling();
 
     Settings & conf = Settings::Get();
     const bool isEvilInterface = conf.ExtGameEvilInterface();
@@ -584,6 +583,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
     fheroes2::Point initRoiCenter;
 
     // message loop
+    LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
         le.MousePressLeft( buttonZoom.area() ) ? buttonZoom.drawOnPress() : buttonZoom.drawOnRelease();
@@ -640,5 +640,5 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
         interface.Reset();
     }
 
-    le.ResumeCycling();
+    LocalEvent::ResumeCycling();
 }
