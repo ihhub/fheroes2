@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-10 14:31+0000\n"
-"PO-Revision-Date: 2022-07-13 14:04+0100\n"
+"PO-Revision-Date: 2022-07-13 14:48+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -94,31 +94,31 @@ msgstr ""
 "%{monster}"
 
 msgid "army|Few"
-msgstr "army|Малко"
+msgstr "Малко"
 
 msgid "army|Several"
-msgstr "army|Няколко"
+msgstr "Няколко"
 
 msgid "army|Pack"
-msgstr "army|Пакет"
+msgstr "Пакет"
 
 msgid "army|Lots"
-msgstr "army|Много"
+msgstr "Много"
 
 msgid "army|Horde"
-msgstr "army|Орда"
+msgstr "Орда"
 
 msgid "army|Throng"
-msgstr "army|Тълпа"
+msgstr "Тълпа"
 
 msgid "army|Swarm"
-msgstr "army|Рояк"
+msgstr "Рояк"
 
 msgid "army|Zounds"
-msgstr "army|Изненада"
+msgstr "Изненада"
 
 msgid "army|Legion"
-msgstr "army|Legion"
+msgstr "Legion"
 
 msgid "All %{race} troops +1"
 msgstr "Всички %{race} войски +1"
@@ -283,7 +283,7 @@ msgstr "%{name} се предава на врага и си тръгва зас�
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
 msgstr ""
-"Вашите сили претърпяват горчиво поражение и %{name} изоставят каузата ви."
+"Вашите сили претърпяват горчиво поражение и %{name} изоставя каузата ви."
 
 msgid "Your force suffer a bitter defeat."
 msgstr "Вашите сили претърпяват горчиво поражение."
