@@ -137,7 +137,6 @@ namespace
         }
 
         resolutions.insert( resolutions.end(), extraResolutions.begin(), extraResolutions.end() );
-        std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
 
         // We can determine an aspect ratio of the screen based on the highest resolution. For now we support only 16 x N resolutions. 4 x 3 resolution is actually
         // 16 x 12.
