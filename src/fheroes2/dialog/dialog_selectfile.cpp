@@ -293,6 +293,10 @@ std::string SelectFileListSimple( const std::string & header, const std::string 
             }
             listbox.Unselect();
         }
+    } else {
+        MapsFileInfoList sorted = lists;
+        std::sort(sorted.begin(), sorted.end(), []( const Maps::FileInfo& a, const Maps::FileInfo& b ) -> bool { return a.localtime > b.localtime; });
+        listbox.SetCurrent( std::distance( lists.begin(), std::find( lists.begin(), lists.end(), sorted.front() ) ) );
     }
 
     if ( !isEditing && lists.empty() )
