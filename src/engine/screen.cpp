@@ -118,7 +118,7 @@ namespace
 
         // Add resolutions which can be considered as integer downscaling resolutions.
         for ( const fheroes2::Size & resolution : resolutions ) {
-            // Normal desktop / laptop screen always have resolution divisible by 2.
+            // Normal desktop / laptop screen always have resolutions divisible by 2.
             if ( ( resolution.width % 4 ) != 0 || ( resolution.height % 4 ) != 0 ) {
                 continue;
             }
