@@ -3825,7 +3825,7 @@ msgid ""
 "You have lost the hero %{name}.\n"
 "Your quest is over."
 msgstr ""
-"Elvestítetted a %{name Hőst}.\n"
+"Elvestítetted a %{name} Hőst.\n"
 "A küldetésed elbukott.."
 
 msgid ""
