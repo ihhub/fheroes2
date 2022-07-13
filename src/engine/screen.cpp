@@ -141,27 +141,45 @@ namespace
 
         // We can determine an aspect ratio of the screen based on the highest resolution. For now we support only 16 x N resolutions. 4 x 3 resolution is actually
         // 16 x 12.
-        if ( ( resolutions.front().width % 16 ) == 0 ) {
-            const int32_t aspectRatio = resolutions.front().height * 16 / resolutions.front().width;
-            if ( resolutions.front().height * 16 == resolutions.front().width * aspectRatio ) {
-                extraResolutions.clear();
+        extraResolutions.clear();
+        std::set<int32_t> aspectRatios;
 
-                for ( const fheroes2::Size & resolution : resolutions ) {
-                    if ( ( resolution.width % 16 ) != 0 ) {
-                        continue;
-                    }
+        for ( const fheroes2::Size & resolution : resolutions ) {
+            if ( ( resolution.width % 16 ) != 0 ) {
+                continue;
+            }
 
-                    int32_t newHeight = resolution.width / 16 * aspectRatio;
-                    if ( newHeight >= fheroes2::Display::DEFAULT_HEIGHT && ( newHeight % 16 ) == 0
-                         && std::find( resolutions.begin(), resolutions.end(), fheroes2::Size( resolution.width, newHeight ) ) == resolutions.end() ) {
-                        extraResolutions.emplace_back( resolution.width, newHeight );
-                    }
+            const int32_t aspectRatio = resolution.height * 16 / resolution.width;
+            if ( resolution.height * 16 != resolution.width * aspectRatio ) {
+                continue;
+            }
+
+            if ( aspectRatios.count( aspectRatio ) > 0 ) {
+                continue;
+            }
+
+            aspectRatios.emplace( aspectRatio );
+
+            for ( const fheroes2::Size & existingResolution : resolutions ) {
+                if ( ( existingResolution.width % 16 ) != 0 ) {
+                    continue;
                 }
 
-                resolutions.insert( resolutions.end(), extraResolutions.begin(), extraResolutions.end() );
-                std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
+                int32_t newHeight = existingResolution.width / 16 * aspectRatio;
+                if ( newHeight < fheroes2::Display::DEFAULT_HEIGHT || ( newHeight % 16 ) != 0 ) {
+                    continue;
+                }
+
+                if ( std::find( resolutions.begin(), resolutions.end(), fheroes2::Size( existingResolution.width, newHeight ) ) != resolutions.end() ) {
+                    continue;
+                }
+
+                extraResolutions.emplace_back( existingResolution.width, newHeight );
             }
         }
+
+        resolutions.insert( resolutions.end(), extraResolutions.begin(), extraResolutions.end() );
+        std::sort( resolutions.begin(), resolutions.end(), SortResolutions );
 
         return resolutions;
     }
