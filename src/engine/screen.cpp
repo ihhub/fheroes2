@@ -100,7 +100,7 @@ namespace
         // Populate missing resolutions into the list.
         const std::vector<fheroes2::Size> possibleResolutions
             = { { 640, 480 },   { 800, 600 },  { 1024, 768 },  { 1152, 864 }, { 1280, 600 }, { 1280, 720 },  { 1280, 768 }, { 1280, 960 },
-                { 1280, 1024 }, { 1360, 768 }, { 1400, 1050 }, { 1440, 900 }, { 1600, 900 }, { 1680, 1050 }, { 1920, 1080 } };
+                { 1360, 768 }, { 1400, 1050 }, { 1440, 900 }, { 1600, 900 }, { 1680, 1050 }, { 1920, 1080 } };
 
         const fheroes2::Size lowestResolution = resolutions.back();
         for ( const fheroes2::Size & resolution : possibleResolutions ) {
