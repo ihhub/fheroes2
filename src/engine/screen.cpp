@@ -197,7 +197,7 @@ namespace
             if ( SDL_MUSTLOCK( surface ) ) {
                 const int returnCode = SDL_LockSurface( surface );
                 if ( returnCode < 0 ) {
-                    ERROR_LOG( "Failed to set lock surface. The error value: " << returnCode << ", description: " << SDL_GetError() )
+                    ERROR_LOG( "Failed to lock surface. The error value: " << returnCode << ", description: " << SDL_GetError() )
                 }
             }
 
