@@ -38,16 +38,14 @@ namespace Font
         BIG = 0x02,
         YELLOW_BIG = 0x04,
         YELLOW_SMALL = 0x08,
-        GRAY_BIG = 0x10,
-        GRAY_SMALL = 0x20
+        GRAY_SMALL = 0x10
     };
 }
 enum
 {
     ALIGN_NONE,
     ALIGN_LEFT,
-    ALIGN_CENTER,
-    ALIGN_RIGHT
+    ALIGN_CENTER
 };
 
 class TextAscii;

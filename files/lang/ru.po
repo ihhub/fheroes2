@@ -3978,7 +3978,7 @@ msgid ""
 "%{color} player, you only have %{day} days left to capture a town, or you "
 "will be banished from this land."
 msgstr ""
-"%{сolor} игрок, у Вас осталось %{day} суток, чтобы захватить город, иначе Вы "
+"%{color} игрок, у Вас осталось %{day} суток, чтобы захватить город, иначе Вы "
 "будете изгнаны из этих земель."
 
 msgid "%{color} player's turn."

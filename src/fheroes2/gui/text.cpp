@@ -418,10 +418,6 @@ void TextBox::Blit( int32_t ax, int32_t ay, fheroes2::Image & sf )
             ( *it ).Blit( ax, ay, sf );
             break;
 
-        case ALIGN_RIGHT:
-            ( *it ).Blit( ax + fheroes2::Rect::width - ( *it ).w(), ay, sf );
-            break;
-
         // center
         default:
             ( *it ).Blit( ax + ( fheroes2::Rect::width - ( *it ).w() ) / 2, ay, sf );
