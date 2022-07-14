@@ -1029,10 +1029,10 @@ namespace
                 ERROR_LOG( "Failed to set a linear scale hint for rendering." )
             }
 
-            returnCode = SDL_RenderSetLogicalSize( _renderer, width_ , height_ );
+            returnCode = SDL_RenderSetLogicalSize( _renderer, width_, height_ );
             if ( returnCode < 0 ) {
-                ERROR_LOG( "Failed to create logical size of " << width_ << " x " << height_ << " size. The error value: " << returnCode << ", description: "
-                           << SDL_GetError() )
+                ERROR_LOG( "Failed to create logical size of " << width_ << " x " << height_ << " size. The error value: " << returnCode
+                                                               << ", description: " << SDL_GetError() )
                 clear();
                 return false;
             }
