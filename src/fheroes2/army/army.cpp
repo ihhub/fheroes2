@@ -962,6 +962,23 @@ void Army::setFromTile( const Maps::Tiles & tile )
         at( 3 )->Set( Monster::EARTH_ELEMENT, 2 );
         break;
 
+    case MP2::OBJ_ABANDONEDMINE: {
+        const int count = world.GetCapturedObject( tile.GetIndex() ).GetTroop().GetCount();
+        const int stack_count = count / 5;
+        const int rem = count % 5;
+
+        at( 0 )->Set( Monster::GHOST, stack_count + ( rem > 0 ? 1 : 0 ) );
+        if ( stack_count > 1 )
+            at( 1 )->Set( Monster::GHOST, stack_count + ( rem > 1 ? 1 : 0 ) );
+        if ( stack_count > 2 )
+            at( 2 )->Set( Monster::GHOST, stack_count + ( rem > 2 ? 1 : 0 ) );
+        if ( stack_count > 3 )
+            at( 3 )->Set( Monster::GHOST, stack_count + ( rem > 3 ? 1 : 0 ) );
+        if ( stack_count > 4 )
+            at( 4 )->Set( Monster::GHOST, stack_count );
+        break;
+    }
+
     default:
         if ( isCaptureObject ) {
             CapturedObject & co = world.GetCapturedObject( tile.GetIndex() );
