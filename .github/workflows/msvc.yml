@@ -45,16 +45,16 @@ jobs:
     - name: Install dependencies from vcpkg
       run: |
         vcpkg/bootstrap-vcpkg.bat
-        script/windows/setup_vcpkg.bat vcpkg ${{ matrix.config.platform }} VisualStudio/packages/installed
+        script/windows/setup_sdl2.bat vcpkg ${{ matrix.config.platform }} VisualStudio/packages/installed/sdl2
     - name: Get a list of installed package files
       if: ${{ failure() }}
       run: |
-        ls -lR vcpkg/packages > vcpkg/package_files_list.txt
+        ls -lR vcpkg/installed > vcpkg/installed_files_list.txt
     - uses: actions/upload-artifact@v2
       if: ${{ failure() }}
       with:
         name: MSVC_${{ matrix.deploy_config }}_${{ matrix.platform }}
-        path: vcpkg/package_files_list.txt
+        path: vcpkg/installed_files_list.txt
     - name: Install other dependencies, cygwin and zip
       run: |
         choco.exe install make gettext-devel -y --source cygwin
