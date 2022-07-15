@@ -1063,7 +1063,7 @@ namespace AI
         }
         else if ( objectType == MP2::OBJ_TREASURECHEST ) {
             // Treasure chest without the artifact
-            return std::max( tile.QuantityGold(), 1000u );
+            return std::max( tile.QuantityGold(), 1000U );
         }
         else if ( MP2::isPickupObject( objectType ) ) {
             return anotherFriendlyHeroPresent ? 100.0 : 500.0;

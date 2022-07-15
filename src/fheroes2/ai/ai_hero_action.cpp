@@ -745,7 +745,7 @@ namespace AI
                     // If AI is extremely low on gold consider taking it
                     if ( kingdomGold < 3000 ) {
                         // Safeguard the calculation since we're working with unsigned values
-                        chance = ( std::max( experience, 500u ) - 500 ) / 15;
+                        chance = ( std::max( experience, 500U ) - 500 ) / 15;
                     }
                     else {
                         // Otherwise Champion always picks experience
