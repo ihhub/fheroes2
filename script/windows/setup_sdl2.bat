@@ -17,7 +17,23 @@ exit /B 1
 if not exist "%PACKAGES_DIR%\include"        ( mkdir "%PACKAGES_DIR%\include"        || exit /B 1 )
 if not exist "%PACKAGES_DIR%\lib\%PLATFORM%" ( mkdir "%PACKAGES_DIR%\lib\%PLATFORM%" || exit /B 1 )
 
-xcopy /Y /Q    "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\bin\*.dll" "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
-xcopy /Y /Q /S "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\include"   "%PACKAGES_DIR%\include"        && ^
-xcopy /Y /Q /S "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\lib"       "%PACKAGES_DIR%\lib\%PLATFORM%" || ^
+xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\bin\gio*.dll"           "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
+xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\bin\glib*.dll"          "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
+xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\bin\gmodule*.dll"       "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
+xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\bin\gobject*.dll"       "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
+xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\bin\gthread*.dll"       "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
+xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\bin\iconv*.dll"         "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
+xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\bin\intl*.dll"          "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
+xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\bin\libffi*.dll"        "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
+xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\bin\libfluidsynth*.dll" "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
+xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\bin\libpng*.dll"        "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
+xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\bin\pcre*.dll"          "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
+xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\bin\SDL2*.dll"          "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
+xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\bin\zlib*.dll"          "%PACKAGES_DIR%\lib\%PLATFORM%" || ^
+exit /B 1
+
+xcopy /Y /Q /S "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\include" "%PACKAGES_DIR%\include" || exit /B 1
+
+xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\lib\SDL2*.lib" "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
+xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\lib\zlib*.lib" "%PACKAGES_DIR%\lib\%PLATFORM%" || ^
 exit /B 1
