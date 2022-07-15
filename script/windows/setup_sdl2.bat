@@ -15,6 +15,7 @@ set TRIPLET=%PLATFORM%-windows
 exit /B 1
 
 if not exist "%PACKAGES_DIR%\include"        ( mkdir "%PACKAGES_DIR%\include"        || exit /B 1 )
+if not exist "%PACKAGES_DIR%\include\SDL2"   ( mkdir "%PACKAGES_DIR%\include\SDL2"   || exit /B 1 )
 if not exist "%PACKAGES_DIR%\lib\%PLATFORM%" ( mkdir "%PACKAGES_DIR%\lib\%PLATFORM%" || exit /B 1 )
 
 xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\bin\gio*.dll"           "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
@@ -32,7 +33,10 @@ xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\bin\SDL2*.dll"          "%PACK
 xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\bin\zlib*.dll"          "%PACKAGES_DIR%\lib\%PLATFORM%" || ^
 exit /B 1
 
-xcopy /Y /Q /S "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\include" "%PACKAGES_DIR%\include" || exit /B 1
+xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\include\SDL2\*.*" "%PACKAGES_DIR%\include\SDL2" && ^
+xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\include\zconf.h"  "%PACKAGES_DIR%\include"      && ^
+xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\include\zlib.h"   "%PACKAGES_DIR%\include"      || ^
+exit /B 1
 
 xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\lib\SDL2*.lib" "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
 xcopy /Y /Q "%VCPKG_ROOT_DIR%\installed\%TRIPLET%\lib\zlib*.lib" "%PACKAGES_DIR%\lib\%PLATFORM%" || ^
