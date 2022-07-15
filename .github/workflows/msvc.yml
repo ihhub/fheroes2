@@ -8,6 +8,20 @@ jobs:
     strategy:
       matrix:
         config:
+        - name: SDL1 x86
+          platform: x86
+          build_config: Release-SDL1
+          deploy_config: SDL1
+          package_name: fheroes2_windows_x86_SDL1
+          release_name: Windows x86 build with SDL1 support (latest commit)
+          release_tag: fheroes2-windows-x86-SDL1
+        - name: SDL1 x64
+          platform: x64
+          build_config: Release-SDL1
+          deploy_config: SDL1
+          package_name: fheroes2_windows_x64_SDL1
+          release_name: Windows x64 build with SDL1 support (latest commit)
+          release_tag: fheroes2-windows-x64-SDL1
         - name: SDL2 x86
           platform: x86
           build_config: Release-SDL2
@@ -31,6 +45,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Prepare vcpkg cache
+      if: ${{ matrix.config.deploy_config == 'SDL2' }}
       uses: actions/cache@v3
       with:
         path: ~/AppData/Local/vcpkg/archives
@@ -38,20 +53,26 @@ jobs:
         restore-keys: |
           msvc-vcpkg-cache-${{ matrix.config.platform }}
     - uses: actions/checkout@v3
+      if: ${{ matrix.config.deploy_config == 'SDL2' }}
       with:
         repository: oleg-derevenetz/vcpkg
         ref: sdl2-mixer-2.6.1
         path: vcpkg
-    - name: Install dependencies from vcpkg
+    - name: Install SDL1 dependencies
+      if: ${{ matrix.config.deploy_config == 'SDL1' }}
+      run: |
+        script/windows/setup_sdl1.bat VisualStudio/packages VisualStudio/packages/installed/sdl1
+    - name: Install SDL2 dependencies from vcpkg
+      if: ${{ matrix.config.deploy_config == 'SDL2' }}
       run: |
         vcpkg/bootstrap-vcpkg.bat
         script/windows/setup_sdl2.bat vcpkg ${{ matrix.config.platform }} VisualStudio/packages/installed/sdl2
-    - name: Get a list of installed package files
-      if: ${{ failure() }}
+    - name: Get a list of files installed by vcpkg
+      if: ${{ matrix.config.deploy_config == 'SDL2' && failure() }}
       run: |
         ls -lR vcpkg/installed > vcpkg/installed_files.txt
     - uses: actions/upload-artifact@v2
-      if: ${{ failure() }}
+      if: ${{ matrix.config.deploy_config == 'SDL2' && failure() }}
       with:
         name: msvc-${{ matrix.config.deploy_config }}-${{ matrix.config.platform }}-vcpkg-installed-files
         path: vcpkg/installed_files.txt
