@@ -68,11 +68,11 @@ jobs:
         vcpkg/bootstrap-vcpkg.bat
         script/windows/setup_sdl2.bat vcpkg ${{ matrix.config.platform }} VisualStudio/packages/installed/sdl2
     - name: Get a list of files installed by vcpkg
-      if: ${{ matrix.config.deploy_config == 'SDL2' && failure() }}
+      if: ${{ matrix.config.deploy_config == 'SDL2' }}
       run: |
         ls -lR vcpkg/installed > vcpkg/installed_files.txt
     - uses: actions/upload-artifact@v2
-      if: ${{ matrix.config.deploy_config == 'SDL2' && failure() }}
+      if: ${{ matrix.config.deploy_config == 'SDL2' }}
       with:
         name: msvc-${{ matrix.config.deploy_config }}-${{ matrix.config.platform }}-vcpkg-installed-files
         path: vcpkg/installed_files.txt
