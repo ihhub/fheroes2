@@ -51,7 +51,7 @@ jobs:
         path: ~/AppData/Local/vcpkg/archives
         key: msvc-vcpkg-cache-${{ matrix.config.platform }}-${{ github.sha }}
         restore-keys: |
-          msvc-vcpkg-cache-${{ matrix.config.platform }}
+          msvc-vcpkg-cache-${{ matrix.config.platform }}-
     - uses: actions/checkout@v3
       if: ${{ matrix.config.deploy_config == 'SDL2' }}
       with:
