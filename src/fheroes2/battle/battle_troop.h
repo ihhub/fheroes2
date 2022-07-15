@@ -66,12 +66,6 @@ namespace Battle
         uint32_t FindZeroDuration() const;
     };
 
-    enum
-    {
-        CONTOUR_MAIN = 0,
-        CONTOUR_REFLECT = 0x01
-    };
-
     // battle troop stats
     class Unit : public ArmyTroop, public BitModes, public Control
     {

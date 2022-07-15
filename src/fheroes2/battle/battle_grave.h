@@ -34,13 +34,7 @@ namespace Battle
 {
     class Unit;
 
-    struct TroopUIDs : public std::vector<uint32_t>
-    {
-        TroopUIDs()
-        {
-            reserve( 4 );
-        }
-    };
+    using TroopUIDs = std::vector<uint32_t>;
 
     class Graveyard : public std::map<int32_t, TroopUIDs>
     {
