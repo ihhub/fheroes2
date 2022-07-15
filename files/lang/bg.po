@@ -2874,7 +2874,7 @@ msgid ""
 "Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
 "of Loyalty\" version of the game."
 msgstr ""
-"Показва дали картата е направена за версията на играта „Наследените войни“ "
+"Показва дали картата е направена за версията на играта \"Наследените войни\" "
 "или за \"Цената на лоялността\"."
 
 msgid "Map Type"
