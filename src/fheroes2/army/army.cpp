@@ -967,13 +967,13 @@ void Army::setFromTile( const Maps::Tiles & tile )
         const int stack_count = count / 5;
         const int rem = count % 5;
 
-        at( 0 )->Set( Monster::GHOST, stack_count + ( rem > 0 ? 1 : 0 ) );
+        at( 0 )->Set( Monster::GHOST, stack_count + ( rem ? 1 : 0 ) );
         if ( stack_count || rem > 1 )
-            at( 1 )->Set( Monster::GHOST, stack_count + ( rem > 1 ? 1 : 0 ) );
+            at( 1 )->Set( Monster::GHOST, stack_count + ( rem ? 1 : 0 ) );
         if ( stack_count || rem > 2 )
-            at( 2 )->Set( Monster::GHOST, stack_count + ( rem > 2 ? 1 : 0 ) );
+            at( 2 )->Set( Monster::GHOST, stack_count + ( rem ? 1 : 0 ) );
         if ( stack_count || rem > 3 )
-            at( 3 )->Set( Monster::GHOST, stack_count + ( rem > 3 ? 1 : 0 ) );
+            at( 3 )->Set( Monster::GHOST, stack_count + ( rem ? 1 : 0 ) );
         if ( stack_count )
             at( 4 )->Set( Monster::GHOST, stack_count );
         break;
