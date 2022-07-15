@@ -49,12 +49,12 @@ jobs:
     - name: Get a list of installed package files
       if: ${{ failure() }}
       run: |
-        ls -lR vcpkg/installed > vcpkg/installed_files_list.txt
+        ls -lR vcpkg/installed > vcpkg/installed_files.txt
     - uses: actions/upload-artifact@v2
       if: ${{ failure() }}
       with:
-        name: MSVC_${{ matrix.deploy_config }}_${{ matrix.platform }}
-        path: vcpkg/installed_files_list.txt
+        name: msvc-${{ matrix.config.deploy_config }}-${{ matrix.config.platform }}-vcpkg-installed-files
+        path: vcpkg/installed_files.txt
     - name: Install other dependencies, cygwin and zip
       run: |
         choco.exe install make gettext-devel -y --source cygwin
