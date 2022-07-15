@@ -37,9 +37,26 @@ jobs:
         key: msvc-vcpkg-cache-${{ matrix.config.platform }}-${{ github.sha }}
         restore-keys: |
           msvc-vcpkg-cache-${{ matrix.config.platform }}
-    - name: Install dependencies, cygwin and zip
+    - uses: actions/checkout@v3
+      with:
+        repository: oleg-derevenetz/vcpkg
+        ref: sdl2-mixer-2.6.1
+        path: vcpkg
+    - name: Install dependencies from vcpkg
       run: |
-        script/windows/setup_vcpkg.bat C:/vcpkg ${{ matrix.config.platform }} VisualStudio/packages/installed
+        vcpkg/bootstrap-vcpkg.bat
+        script/windows/setup_vcpkg.bat vcpkg ${{ matrix.config.platform }} VisualStudio/packages/installed
+    - name: Get a list of installed package files
+      if: ${{ failure() }}
+      run: |
+        ls -lR vcpkg/packages > vcpkg/package_files_list.txt
+    - uses: actions/upload-artifact@v2
+      if: ${{ failure() }}
+      with:
+        name: MSVC_${{ matrix.deploy_config }}_${{ matrix.platform }}
+        path: vcpkg/package_files_list.txt
+    - name: Install other dependencies, cygwin and zip
+      run: |
         choco.exe install make gettext-devel -y --source cygwin
         choco.exe install zip -y
     - uses: microsoft/setup-msbuild@v1
