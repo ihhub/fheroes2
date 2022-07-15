@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-10 14:31+0000\n"
-"PO-Revision-Date: 2022-07-15 15:43+0100\n"
+"PO-Revision-Date: 2022-07-15 20:30+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -388,337 +388,347 @@ msgid "Open Hero Screen to view full information about the hero."
 msgstr "Отворете екрана на героя, за да видите пълната информация за героя."
 
 msgid "Return to the battle."
-msgstr ""
+msgstr "Върнете се в битката."
 
 msgid "Not enough gold (%{gold})"
-msgstr ""
+msgstr "Няма достатъчно злато (%{gold})"
 
 msgid "%{name} states:"
-msgstr ""
+msgstr "%{name} заявява:"
 
 msgid "Captain of %{name} states:"
-msgstr ""
+msgstr "Капитанът на %{name} заявява:"
 
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
 msgstr ""
+"\"Ще приема капитулацията ви и ще осигуря на вас и войските ви безопасно "
+"преминаване на цената на %{price} злато.\""
 
 msgid "View %{monster} info"
-msgstr ""
+msgstr "Вижте %{monster} информация"
 
 msgid "Shoot %{monster}"
-msgstr ""
+msgstr "Застреляй %{monster}"
 
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "(Остава 1 изстрел)"
+msgstr[1] "(Остават %{count} изстрела)"
 
 msgid "Attack %{monster}"
-msgstr ""
+msgstr "Нападни %{monster}"
 
 msgid "Fly %{monster} here"
-msgstr ""
+msgstr "Прелети %{monster} тук"
 
 msgid "Move %{monster} here"
-msgstr ""
+msgstr "Премести %{monster} тук"
 
 msgid "Turn %{turn}"
-msgstr ""
+msgstr "Ход %{turn}"
 
 msgid "Teleport here"
-msgstr ""
+msgstr "Телепортирай се тук"
 
 msgid "Invalid teleport destination"
-msgstr ""
+msgstr "Несъществуващо място за телепортиране"
 
 msgid "Cast %{spell} on %{monster}"
-msgstr ""
+msgstr "Направи %{spell} върху %{monster}"
 
 msgid "Cast %{spell}"
-msgstr ""
+msgstr "Направи %{spell}"
 
 msgid "Select spell target"
-msgstr ""
+msgstr "Изберете цел за заклинание"
 
 msgid "View Ballista info"
-msgstr ""
+msgstr "Вижте информация за Катапулт"
 
 msgid "Ballista"
-msgstr ""
+msgstr "Катапулт"
 
 msgid "Enable auto combat"
-msgstr ""
+msgstr "Включи на автоматична битка"
 
 msgid "Allows the computer to fight out the battle for you."
-msgstr ""
+msgstr "Позволява на компютъра да води битката вместо вас."
 
 msgid "Auto Combat"
-msgstr "Авто Сражения"
+msgstr "Авто Сражение"
 
 msgid "Customize system options"
-msgstr ""
+msgstr "Персонализирайте системните опции"
 
 msgid "Allows you to customize the combat screen."
-msgstr ""
+msgstr "Позволява ви да персонализирате бойния екран."
 
 msgid "System Options"
-msgstr ""
+msgstr "Системни настройки"
 
 msgid "Wait this unit"
-msgstr ""
+msgstr "Изчакайте тази единица"
 
 msgid "Wait"
-msgstr ""
+msgstr "Изчакай"
 
 msgid ""
 "Waits the current creature. The current creature delays its turn until after "
 "all other creatures have had their turn."
 msgstr ""
+"Изчаква текущото създание. Текущото създание отлага реда си, докато не дойде "
+"редът на всички други същества."
 
 msgid "Skip this unit"
-msgstr ""
+msgstr "Пропусни тази единица"
 
 msgid "Skip"
-msgstr ""
+msgstr "Пропусни"
 
 msgid ""
 "Skips the current creature. The current creature ends its turn and does not "
 "get to go again until the next round."
 msgstr ""
+"Пропуска текущото създание. Текущото създание завършва реда си и не може да "
+"отиде отново до следващия кръг."
 
 msgid "View Hero's options"
-msgstr ""
+msgstr "Вижте настройките на героя"
 
 msgid "View opposing Hero"
-msgstr ""
+msgstr "Вижте противниковия герой"
 
 msgid "Hide logs"
-msgstr ""
+msgstr "Скриване на регистрационни файлове"
 
 msgid "Show logs"
-msgstr ""
+msgstr "Показване на регистрационни файлове"
 
 msgid "Message Bar"
-msgstr ""
+msgstr "Лента за съобщения"
 
 msgid "Shows the results of individual monster's actions."
-msgstr ""
+msgstr "Показва резултатите от действията на отделните чудовища."
 
 msgid "%{name} skip their turn."
-msgstr ""
+msgstr "%{name} пропускат своя ред."
 
 msgid "%{name} wait their turn."
-msgstr ""
+msgstr "%{name} чакат своя ред."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%{attacker} нанася %{damage} щети."
+msgstr[1] "%{attacker} нанася %{damage} щети."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 същество загива."
+msgstr[1] "%{count} същества загиват."
 
 msgid "1 %{defender} perishes."
 msgid_plural "%{count} %{defender} perish."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 %{defender} загива."
+msgstr[1] "%{count} %{defender} загиват."
 
 msgid "Moved %{monster}: %{src}, %{dst}"
-msgstr ""
+msgstr "Преместено %{monster}: %{src}, %{dst}"
 
 msgid "Moved %{monster}"
-msgstr ""
+msgstr "Преместено %{monster}"
 
 msgid "The %{name} resist the spell!"
-msgstr ""
+msgstr "%{name} устоя на заклинанието!"
 
 msgid "%{name} casts %{spell} on the %{troop}."
-msgstr ""
+msgstr "%{name} хвърля %{spell} върху %{troop}."
 
 msgid "%{name} casts %{spell}."
-msgstr ""
+msgstr "%{name} прави %{spell}."
 
 msgid "The %{spell} does %{damage} damage to one undead creature."
-msgstr ""
+msgstr "%{spell} нанася %{damage} щети на едно немъртво същество."
 
 msgid "The %{spell} does %{damage} damage to all undead creatures."
-msgstr ""
+msgstr "%{spell} нанася %{damage} щети на всички немъртви същества."
 
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
-msgstr ""
+msgstr "%{spell} нанася %{damage} щети, %{count} същества загиват."
 
 msgid "The %{spell} does %{damage} damage."
-msgstr ""
+msgstr "%{spell} нанася %{damage} щети."
 
 msgid "The %{spell} does %{damage} damage to one living creature."
-msgstr ""
+msgstr "%{spell} нанася %{damage} щети на едно живо същество."
 
 msgid "The %{spell} does %{damage} damage to all living creatures."
-msgstr ""
+msgstr "%{spell} нанася %{damage} щети на всички живи същества."
 
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr ""
+msgstr "Нападението на %{attacker}' заслепява %{target}!"
 
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr ""
+msgstr "Погледът на %{attacker}' превръща %{target} в камък!"
 
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr ""
+msgstr "Проклятието %{attacker}' пада върху %{target}!"
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr ""
+msgstr "%{target} са парализирани от %{attacker}!"
 
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr ""
+msgstr "%{attacker} разсейва всички добри заклинания на вашия %{target}!"
 
 msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr ""
+msgstr "%{attacker} направи %{spell} на %{target}!"
 
 msgid "Bad luck descends on the %{attacker}."
-msgstr ""
+msgstr "Лошият късмет се стоварва върху %{attacker}."
 
 msgid "Good luck shines on the %{attacker}."
-msgstr ""
+msgstr "Късметът се усмихва на %{attacker}."
 
 msgid "High morale enables the %{monster} to attack again."
-msgstr ""
+msgstr "Високият морал позволява на %{monster} да атакува отново."
 
 msgid "Low morale causes the %{monster} to freeze in panic."
-msgstr ""
+msgstr "Ниският морал кара %{monster} да замръзне от паника."
 
 msgid "%{tower} does %{damage} damage."
-msgstr ""
+msgstr "%{tower} нанася %{damage} щети."
 
 msgid "The mirror image is created."
-msgstr ""
+msgstr "Създава се огледален образ."
 
 msgid "The mirror image is destroyed!"
-msgstr ""
+msgstr "Огледалният образ е унищожен!"
 
 msgid "Break auto battle?"
-msgstr ""
+msgstr "Спри автоматичната битка?"
 
 msgid "Error"
-msgstr ""
+msgstr "Грешка"
 
 msgid "No spells to cast."
-msgstr ""
+msgstr "Няма магии за правене."
 
 msgid "Are you sure you want to retreat?"
-msgstr ""
+msgstr "Сигурен ли сте, че искате да се отеглите?"
 
 msgid "Retreat disabled"
-msgstr ""
+msgstr "Отеглянето е деактивирано"
 
 msgid "Surrender disabled"
-msgstr ""
+msgstr "Предаването е деактивирано"
 
 msgid "Damage: %{max}"
-msgstr ""
+msgstr "Щети: %{max}"
 
 msgid "Damage: %{min} - %{max}"
-msgstr ""
+msgstr "Щети: %{min} - %{max}"
 
 msgid "Perish: %{max}"
-msgstr ""
+msgstr "Загиват: %{max}"
 
 msgid "Perish: %{min} - %{max}"
-msgstr ""
+msgstr "Загиват: %{min} - %{max}"
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
 msgstr ""
+"Чрез наблюдение с орлови очи, %{name} успява да научи магическото заклинание "
+"%{spell}."
 
 msgid "Human"
-msgstr ""
+msgstr "Човек"
 
 msgid "AI"
-msgstr ""
+msgstr "ИИ"
 
 msgid "Please select another hero."
-msgstr ""
+msgstr "Моля, избери друг герой."
 
 msgid "Set Attack Skill"
-msgstr ""
+msgstr "Задайте умение за нападение"
 
 msgid "Set Defense Skill"
-msgstr ""
+msgstr "Задайте умение за защита"
 
 msgid "Set Power Skill"
-msgstr ""
+msgstr "Задайте умение за сила"
 
 msgid "Set Knowledge Skill"
-msgstr ""
+msgstr "Задайте умение за знание"
 
 msgid "%{race1} %{name1}"
 msgstr ""
 
 msgid "vs"
-msgstr ""
+msgstr "срещу"
 
 msgid "%{race2} %{name2}"
 msgstr ""
 
 msgid "Monsters"
-msgstr ""
+msgstr "Чудовища"
 
 msgid "N/A"
 msgstr ""
 
 msgid "Left Turret"
-msgstr ""
+msgstr "Лява кула"
 
 msgid "Right Turret"
-msgstr ""
+msgstr "Дясна кула"
 
 msgid "The %{name} fires with the strength of %{count} Archers"
-msgstr ""
+msgstr "%{name} стреля със силата на %{count} стрелци"
 
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr ""
+msgstr "всеки с +%{attack} бонус към своето нападащо умение."
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
 "spell."
 msgstr ""
+"Артефактът %{artifact} е в сила за тази битка, дезактивирайки заклинанието "
+"%{spell}."
 
 msgid "%{count} %{name} rise(s) from the dead!"
-msgstr ""
+msgstr "%{count} %{name} възкръснаха от мъртвите!"
 
 msgid "Dwarven Alliance"
-msgstr ""
+msgstr "Съюзът на джуджетата"
 
 msgid "Sorceress Guild"
-msgstr ""
+msgstr "Гилдията на магьосниците"
 
 msgid "Necromancer Guild"
-msgstr ""
+msgstr "Гилдията на некромантите"
 
 msgid "Ogre Alliance"
-msgstr ""
+msgstr "Съюз на Огре"
 
 msgid "Dwarfbane"
 msgstr ""
 
 msgid "Dragon Alliance"
-msgstr ""
+msgstr "Драконов съюз"
 
 msgid "Elven Alliance"
-msgstr ""
+msgstr "Елфически съюз"
 
 msgid "Kraeger defeated"
-msgstr ""
+msgstr "Крегер е победен"
 
 msgid "Wayward Son"
-msgstr ""
+msgstr "Своенравен син"
 
 msgid "Uncle Ivan"
-msgstr ""
+msgstr "Чичо Иван"
 
 msgid "Annexation"
 msgstr ""
