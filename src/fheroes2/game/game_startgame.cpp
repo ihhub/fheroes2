@@ -777,6 +777,9 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     int heroAnimationSpriteId = 0;
 
     bool isCursorOverButtons = false;
+    bool isMiddleMouseDown = false;
+
+    fheroes2::Point lastCursorPosition( 0, 0 );
 
     const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_HERO_DELAY, Game::MAPS_DELAY };
 
@@ -896,6 +899,23 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 scrollPosition |= SCROLL_TOP;
             else if ( isScrollBottom( le.GetMouseCursor() ) )
                 scrollPosition |= SCROLL_BOTTOM;
+
+			// check to see if middle mouse button is pressed and cursor is inside visible game area
+            if ( le.MousePressMiddle() && !isMiddleMouseDown && ( gameArea.GetROI() & le.GetMouseCursor() ) ) {
+                isMiddleMouseDown = true;
+                lastCursorPosition = le.GetMouseCursor();
+            }
+            if ( le.MouseReleaseMiddle() )
+				isMiddleMouseDown = false;
+			
+			// if middle mouse button is down, scroll the game area
+            if ( isMiddleMouseDown ) {
+                fheroes2::Point delta = lastCursorPosition - le.GetMouseCursor();
+				fheroes2::Point newCenter = gameArea.getCurrentCenterInPixels() + delta;
+                gameArea.SetCenterInPixels( newCenter );
+                gameArea.SetRedraw();
+                lastCursorPosition = le.GetMouseCursor();
+            }
 
             if ( scrollPosition != SCROLL_NONE ) {
                 if ( Game::validateAnimationDelay( Game::SCROLL_START_DELAY ) ) {

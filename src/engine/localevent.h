@@ -240,6 +240,10 @@ public:
         return MouseReleaseRight() && ( rt & mouse_rr );
     }
 
+    bool MousePressMiddle() const;
+
+    bool MouseReleaseMiddle() const;
+
     bool MouseWheelUp( const fheroes2::Rect & rt ) const
     {
         return MouseWheelUp() && ( rt & mouse_cu );
