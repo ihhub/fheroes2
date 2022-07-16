@@ -193,10 +193,8 @@ namespace
         I.GetGameArea().SetCenter( hero.GetCenter() );
         I.Redraw( Interface::REDRAW_GAMEAREA | Interface::REDRAW_RADAR );
 
-        const int32_t src = hero.GetIndex();
         const int32_t dst = castle->GetIndex();
-
-        assert( Maps::isValidAbsIndex( src ) && Maps::isValidAbsIndex( dst ) );
+        assert( Maps::isValidAbsIndex( dst ) );
 
         AudioManager::PlaySound( M82::KILLFADE );
         hero.GetPath().Hide();
@@ -318,7 +316,7 @@ namespace
         for ( const int32_t boatSource : Maps::GetObjectPositions( center, MP2::OBJ_BOAT, false ) ) {
             assert( Maps::isValidAbsIndex( boatSource ) );
 
-            const uint32_t distance = Maps::GetApproximateDistance( boatSource, hero.GetIndex() );
+            const uint32_t distance = Maps::GetStraightLineDistance( boatSource, hero.GetIndex() );
             if ( distance > 1 ) {
                 Game::ObjectFadeAnimation::PrepareFadeTask( MP2::OBJ_BOAT, boatSource, boatDestination, true, true );
                 Game::ObjectFadeAnimation::PerformFadeTask();

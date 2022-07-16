@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-28 00:30+0000\n"
+"POT-Creation-Date: 2022-07-10 14:31+0000\n"
 "PO-Revision-Date: 2022-05-12 17:04+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -3223,8 +3223,9 @@ msgstr ""
 msgid "Original project before 0.7"
 msgstr ""
 
-msgid "Original Heroes of Might and Magic II team"
-msgstr ""
+#, fuzzy
+msgid "Heroes of Might and Magic II: The Succession Wars team"
+msgstr "Ukončí Heroes of Might and Magic II a vrátí se do operačního systému."
 
 msgid "Designed and Directed"
 msgstr ""
@@ -3280,6 +3281,71 @@ msgstr ""
 msgid "Scenarios"
 msgstr "Scénář"
 
+#, fuzzy
+msgid "Heroes of Might and Magic II: The Price of Loyalty team"
+msgstr "Ukončí Heroes of Might and Magic II a vrátí se do operačního systému."
+
+msgid "Cyberlore Studios"
+msgstr ""
+
+msgid "Design Lead"
+msgstr ""
+
+msgid "Designers"
+msgstr ""
+
+msgid "Programming Lead"
+msgstr ""
+
+msgid "Art Lead"
+msgstr ""
+
+#, fuzzy
+msgid "Playtesters"
+msgstr "2 hráči"
+
+msgid "New World Computing"
+msgstr ""
+
+msgid "Designer"
+msgstr ""
+
+msgid "Producers"
+msgstr ""
+
+msgid "QA Managers"
+msgstr ""
+
+msgid "Sound Design"
+msgstr ""
+
+msgid "Town Themes"
+msgstr ""
+
+msgid "Alto Sax"
+msgstr ""
+
+msgid "Harpsichord and Piano"
+msgstr ""
+
+msgid "Basso Vocal"
+msgstr ""
+
+msgid "Soprano Vocal"
+msgstr ""
+
+msgid "Recorded at Green Street Studios"
+msgstr ""
+
+msgid "German Consultant"
+msgstr ""
+
+msgid "Map Designers"
+msgstr ""
+
+msgid "Package Design"
+msgstr ""
+
 msgid "Unknown Hero"
 msgstr ""
 
@@ -3298,17 +3364,15 @@ msgstr ""
 msgid "View High Scores for Campaigns."
 msgstr ""
 
-msgid ""
-"Invalid file game type. Please ensure that you are running the latest type "
-"of save files."
-msgstr ""
-
 msgid "Warning"
 msgstr ""
 
+msgid "This file contains a save with an invalid game type."
+msgstr ""
+
 msgid ""
-"This file is saved in the \"The Price of Loyalty\" version.\n"
-"Some items may be unavailable."
+"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
+"Some items may not be available."
 msgstr ""
 
 msgid "Usupported save format: "
@@ -3412,6 +3476,11 @@ msgid "Change language, resolution and settings of the game."
 msgstr ""
 
 msgid "Game Settings"
+msgstr ""
+
+msgid ""
+"Required video files for campaign selection window are missing. Please make "
+"sure that all necessary files are present in the system."
 msgstr ""
 
 msgid ""
@@ -8495,9 +8564,6 @@ msgstr ""
 msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
-msgstr ""
-
-msgid "game: always confirm for rewrite savefile"
 msgstr ""
 
 msgid "game: remember last focus"

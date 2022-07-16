@@ -23,6 +23,11 @@
 #include <string>
 #include <vector>
 
+namespace fheroes2
+{
+    enum class Key : int32_t;
+}
+
 namespace Game
 {
     enum class HotKeyEvent : int32_t
@@ -133,6 +138,9 @@ namespace Game
     bool HotKeyPressEvent( const HotKeyEvent eventID );
     bool HotKeyHoldEvent( const HotKeyEvent eventID );
 
+    fheroes2::Key getHotKeyForEvent( const HotKeyEvent eventID );
+    void setHotKeyForEvent( const HotKeyEvent eventID, const fheroes2::Key key );
+
     inline bool HotKeyCloseWindow()
     {
         return HotKeyPressEvent( HotKeyEvent::DEFAULT_CANCEL ) || HotKeyPressEvent( HotKeyEvent::DEFAULT_OKAY );
@@ -146,5 +154,7 @@ namespace Game
 
     void KeyboardGlobalFilter( int sdlKey, int mod );
 
-    void HotKeysLoad( std::string filename );
+    void HotKeysLoad( const std::string & filename );
+
+    void HotKeySave();
 }

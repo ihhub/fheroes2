@@ -23,6 +23,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 
 #include "ai.h"
 #include "difficulty.h"
@@ -512,9 +513,25 @@ uint32_t Maps::GetApproximateDistance( const int32_t pos1, const int32_t pos2 )
     const fheroes2::Point point1( GetPoint( pos1 ) );
     const fheroes2::Point point2( GetPoint( pos2 ) );
 
-    const fheroes2::Size sz( std::abs( point1.x - point2.x ), std::abs( point1.y - point2.y ) );
-    // diagonal move costs 1.5 as much
-    return std::max( sz.width, sz.height ) + std::min( sz.width, sz.height ) / 2;
+    const uint32_t diffX = std::abs( point1.x - point2.x );
+    const uint32_t diffY = std::abs( point1.y - point2.y );
+
+    assert( diffX < Maps::XLARGE && diffY < Maps::XLARGE );
+
+    return std::max( diffX, diffY ) + std::min( diffX, diffY ) / 2;
+}
+
+uint32_t Maps::GetStraightLineDistance( const int32_t pos1, const int32_t pos2 )
+{
+    const fheroes2::Point point1( GetPoint( pos1 ) );
+    const fheroes2::Point point2( GetPoint( pos2 ) );
+
+    const uint32_t diffX = std::abs( point1.x - point2.x );
+    const uint32_t diffY = std::abs( point1.y - point2.y );
+
+    assert( diffX < Maps::XLARGE && diffY < Maps::XLARGE );
+
+    return static_cast<uint32_t>( std::hypot( diffX, diffY ) );
 }
 
 void Maps::ReplaceRandomCastleObjectId( const fheroes2::Point & center )

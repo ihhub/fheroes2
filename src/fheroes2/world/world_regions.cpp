@@ -69,7 +69,7 @@ namespace
     bool AppendIfFarEnough( std::vector<int> & dataSet, int value, uint32_t distance )
     {
         for ( const int current : dataSet ) {
-            if ( Maps::GetApproximateDistance( current, value ) < distance )
+            if ( Maps::GetStraightLineDistance( current, value ) < distance )
                 return false;
         }
 
