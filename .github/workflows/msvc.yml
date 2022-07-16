@@ -23,6 +23,7 @@ jobs:
           release_name: Windows x64 build with SDL1 support (latest commit)
           release_tag: fheroes2-windows-x64-SDL1
         - name: SDL2 x86
+          vcpkg_ref: sdl2-mixer-2.6.1
           platform: x86
           build_config: Release-SDL2
           deploy_config: SDL2
@@ -30,6 +31,7 @@ jobs:
           release_name: Windows x86 build with SDL2 support (latest commit)
           release_tag: fheroes2-windows-x86-SDL2
         - name: SDL2 x64
+          vcpkg_ref: sdl2-mixer-2.6.1
           platform: x64
           build_config: Release-SDL2
           deploy_config: SDL2
@@ -49,14 +51,15 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ~/AppData/Local/vcpkg/archives
-        key: msvc-vcpkg-cache-${{ matrix.config.platform }}-${{ github.sha }}
+        key: msvc-vcpkg-cache-${{ matrix.config.platform }}-${{ matrix.config.vcpkg_ref }}-${{ github.sha }}
         restore-keys: |
+          msvc-vcpkg-cache-${{ matrix.config.platform }}-${{ matrix.config.vcpkg_ref }}-
           msvc-vcpkg-cache-${{ matrix.config.platform }}-
     - uses: actions/checkout@v3
       if: ${{ matrix.config.deploy_config == 'SDL2' }}
       with:
         repository: oleg-derevenetz/vcpkg
-        ref: sdl2-mixer-2.6.1
+        ref: ${{ matrix.config.vcpkg_ref }}
         path: vcpkg
     - name: Install SDL1 dependencies
       if: ${{ matrix.config.deploy_config == 'SDL1' }}
