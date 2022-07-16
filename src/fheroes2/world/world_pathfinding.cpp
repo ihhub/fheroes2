@@ -28,6 +28,7 @@
 #include "logging.h"
 #include "rand.h"
 #include "settings.h"
+#include "spell_info.h"
 #include "world.h"
 #include "world_pathfinding.h"
 
@@ -416,13 +417,14 @@ void AIWorldPathfinder::reset()
         _maxMovePoints = 0;
 
         _armyStrength = -1;
+        _hero = nullptr;
     }
 }
 
 void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 {
-    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength );
-    const auto newSettings = std::make_tuple( hero.GetIndex(), static_cast<uint8_t>( hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) ), hero.GetColor(),
+    auto currentSettings = std::tie( _hero, _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength );
+    const auto newSettings = std::make_tuple( &hero, hero.GetIndex(), static_cast<uint8_t>( hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) ), hero.GetColor(),
                                               hero.GetMovePoints(), hero.GetMaxMovePoints(), hero.GetArmy().GetStrength() );
 
     if ( currentSettings != newSettings ) {
@@ -434,13 +436,57 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 
 void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill )
 {
-    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength );
-    const auto newSettings = std::make_tuple( start, skill, color, 0U, 0U, armyStrength );
+    auto currentSettings = std::tie( _hero, _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength );
+    const auto newSettings = std::make_tuple( nullptr, start, skill, color, 0U, 0U, armyStrength );
 
     if ( currentSettings != newSettings ) {
         currentSettings = newSettings;
 
         processWorldMap();
+    }
+}
+
+void AIWorldPathfinder::processWorldMap()
+{
+    // reset cache back to default value
+    for ( size_t idx = 0; idx < _cache.size(); ++idx ) {
+        _cache[idx].resetNode();
+    }
+    _cache[_pathStart] = WorldNode( -1, 0, MP2::MapObjectType::OBJ_ZERO, _remainingMovePoints );
+
+    std::vector<int> nodesToExplore;
+    nodesToExplore.push_back( _pathStart );
+
+    if ( _hero && !_hero->Modes( Heroes::PATROL ) ) {
+        static const Spell townGate( Spell::TOWNGATE );
+        static const Spell townPortal( Spell::TOWNPORTAL );
+        const uint32_t currentSpellPoints = _hero->GetSpellPoints();
+
+        auto tryPortalToTown = [this, &nodesToExplore]( const Spell & spell, const Castle * castle ) {
+            if ( !castle || castle->GetHeroes().Guest() )
+                return;
+
+            const int castleIndex = castle->GetIndex();
+            const uint32_t movePointCost = spell.movePoints();
+            const uint32_t movePointsAfter = ( _remainingMovePoints < movePointCost ) ? 0 : _remainingMovePoints - movePointCost;
+
+            _cache[castleIndex] = WorldNode( _pathStart, movePointCost, MP2::OBJ_CASTLE, movePointsAfter );
+            nodesToExplore.push_back( castleIndex );
+        };
+
+        if ( _hero->CanCastSpell( townGate ) && currentSpellPoints > townGate.spellPoints() + currentSpellPoints * _spellPointsReserved ) {
+            const Castle * castle = fheroes2::getNearestCastleTownGate( *_hero );
+            tryPortalToTown( townGate, castle );
+        }
+        if ( _hero->CanCastSpell( townPortal ) && currentSpellPoints > townPortal.spellPoints() + currentSpellPoints * _spellPointsReserved ) {
+            for ( const Castle * castle : _hero->GetKingdom().GetCastles() ) {
+                tryPortalToTown( townPortal, castle );
+            }
+        }
+    }
+
+    for ( size_t lastProcessedNode = 0; lastProcessedNode < nodesToExplore.size(); ++lastProcessedNode ) {
+        processCurrentNode( nodesToExplore, nodesToExplore[lastProcessedNode] );
     }
 }
 

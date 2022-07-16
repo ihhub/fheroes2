@@ -69,7 +69,7 @@ public:
     static uint32_t calculatePathPenalty( const std::list<Route::Step> & path );
 
 protected:
-    void processWorldMap();
+    virtual void processWorldMap();
     void checkAdjacentNodes( std::vector<int> & nodesToExplore, int currentNodeIdx );
 
     // This method defines pathfinding rules. This has to be implemented by the derived class.
@@ -152,6 +152,7 @@ public:
     void setSpellPointReserve( const double reserve );
 
 private:
+    void processWorldMap() override;
     void processCurrentNode( std::vector<int> & nodesToExplore, int currentNodeIdx ) override;
 
     // Adds special logic for AI-controlled heroes to encourage them to overcome water obstacles using boats.
@@ -160,6 +161,7 @@ private:
     // about the hero's remaining movement points.
     uint32_t getMovementPenalty( int src, int dst, int direction ) const override;
 
+    const Heroes * _hero = nullptr;
     double _armyStrength = -1;
     double _advantage = 1.0;
     double _spellPointsReserved = 0.5;
