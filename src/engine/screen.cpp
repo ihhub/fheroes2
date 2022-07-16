@@ -1029,6 +1029,12 @@ namespace
                 ERROR_LOG( "Failed to set a linear scale hint for rendering." )
             }
 
+            // Setting this hint prevents the window to regain focus after loosing it in fullscreen mode.
+            // It also fixes issues when SDL_UpdateTexture() calls fail because of refocusing.
+            if ( SDL_SetHint( SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0" ) == SDL_FALSE ) {
+                ERROR_LOG( "Failed to set a linear scale hint for rendering." )
+            }
+
             returnCode = SDL_RenderSetLogicalSize( _renderer, width_, height_ );
             if ( returnCode < 0 ) {
                 ERROR_LOG( "Failed to create logical size of " << width_ << " x " << height_ << " size. The error value: " << returnCode
