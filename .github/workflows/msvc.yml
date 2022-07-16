@@ -62,7 +62,7 @@ jobs:
       if: ${{ matrix.config.deploy_config == 'SDL1' }}
       run: |
         script/windows/setup_sdl1.bat VisualStudio/packages VisualStudio/packages/installed/sdl1
-    - name: Install SDL2 dependencies from vcpkg
+    - name: Install SDL2 dependencies
       if: ${{ matrix.config.deploy_config == 'SDL2' }}
       run: |
         vcpkg/bootstrap-vcpkg.bat
