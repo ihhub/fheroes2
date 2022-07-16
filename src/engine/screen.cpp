@@ -733,9 +733,9 @@ namespace
             uint32_t flags = SDL_GetWindowFlags( _window );
             if ( ( flags & SDL_WINDOW_FULLSCREEN ) == SDL_WINDOW_FULLSCREEN || ( flags & SDL_WINDOW_FULLSCREEN_DESKTOP ) == SDL_WINDOW_FULLSCREEN_DESKTOP ) {
 #if defined( __WIN32__ )
-                flags ^= SDL_WINDOW_FULLSCREEN;
+                flags &= ~SDL_WINDOW_FULLSCREEN;
 #else
-                flags ^= SDL_WINDOW_FULLSCREEN_DESKTOP;
+                flags &= ~SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
 
                 fullScreen = false;
