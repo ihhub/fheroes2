@@ -2415,7 +2415,7 @@ msgid "Language"
 msgstr "Език"
 
 msgid "Resolution"
-msgstr "Резолюция"
+msgstr "Разделителна способност"
 
 msgid "Experimental"
 msgstr "Пробни"
@@ -2424,7 +2424,7 @@ msgid "Settings"
 msgstr "Настойки"
 
 msgid "Audio"
-msgstr "Звук"
+msgstr "Звукови"
 
 msgid "settings"
 msgstr "настройки"
@@ -2436,16 +2436,16 @@ msgid "In-game"
 msgstr "В игра"
 
 msgid "Black & White"
-msgstr "Черно и бяло"
+msgstr "Черно-бял"
 
 msgid "Mouse Cursor"
 msgstr "Показалец"
 
 msgid "Color"
-msgstr "Цвят"
+msgstr "Цветен"
 
 msgid "Text Support"
-msgstr "Текст"
+msgstr "Текстова поддръжка"
 
 msgid "Evil"
 msgstr "Зъл"
@@ -3309,7 +3309,7 @@ msgid "Multi-Player Game"
 msgstr "Мултиплейър игра"
 
 msgid "fheroes2 Resurrection Team presents"
-msgstr "fheroes2 Отбор възкрасяване представя"
+msgstr "fheroes2 Отбор възкрeсяване представя"
 
 msgid "Greetings!"
 msgstr ""
