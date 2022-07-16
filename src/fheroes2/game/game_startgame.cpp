@@ -900,18 +900,18 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             else if ( isScrollBottom( le.GetMouseCursor() ) )
                 scrollPosition |= SCROLL_BOTTOM;
 
-			// check to see if middle mouse button is pressed and cursor is inside visible game area
+            // check to see if middle mouse button is pressed and cursor is inside visible game area
             if ( le.MousePressMiddle() && !isMiddleMouseDown && ( gameArea.GetROI() & le.GetMouseCursor() ) ) {
                 isMiddleMouseDown = true;
                 lastCursorPosition = le.GetMouseCursor();
             }
             if ( le.MouseReleaseMiddle() )
-				isMiddleMouseDown = false;
-			
-			// if middle mouse button is down, scroll the game area
+                isMiddleMouseDown = false;
+
+            // if middle mouse button is down, scroll the game area
             if ( isMiddleMouseDown ) {
                 fheroes2::Point delta = lastCursorPosition - le.GetMouseCursor();
-				fheroes2::Point newCenter = gameArea.getCurrentCenterInPixels() + delta;
+                fheroes2::Point newCenter = gameArea.getCurrentCenterInPixels() + delta;
                 gameArea.SetCenterInPixels( newCenter );
                 gameArea.SetRedraw();
                 lastCursorPosition = le.GetMouseCursor();
