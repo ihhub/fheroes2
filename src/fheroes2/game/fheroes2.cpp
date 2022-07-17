@@ -253,7 +253,11 @@ int main( int argc, char ** argv )
 
         const DataInitializer dataInitializer;
 
-        const ListFiles midiSoundFonts = Settings::FindFiles( System::ConcatePath( "files", "soundfonts" ), ".sf2", false );
+        ListFiles midiSoundFonts;
+
+        midiSoundFonts.Append( Settings::FindFiles( System::ConcatePath( "files", "soundfonts" ), ".sf2", false ) );
+        midiSoundFonts.Append( Settings::FindFiles( System::ConcatePath( "files", "soundfonts" ), ".sf3", false ) );
+
 #ifdef WITH_DEBUG
         for ( const std::string & file : midiSoundFonts ) {
             DEBUG_LOG( DBG_GAME, DBG_INFO, "MIDI sound font to load: " << file )

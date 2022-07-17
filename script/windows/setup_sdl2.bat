@@ -11,13 +11,14 @@ set PACKAGES_DIR=%~3
 
 set TRIPLET=%PLATFORM%-windows
 
-"%VCPKG_DIR%\vcpkg" --triplet "%TRIPLET%" install sdl2 sdl2-mixer[fluidsynth,nativemidi] sdl2-image zlib || ^
+"%VCPKG_DIR%\vcpkg" --triplet "%TRIPLET%" install fluidsynth[buildtools,sndfile] sdl2 sdl2-mixer[fluidsynth,nativemidi] sdl2-image zlib || ^
 exit /B 1
 
 if not exist "%PACKAGES_DIR%\include"        ( mkdir "%PACKAGES_DIR%\include"        || exit /B 1 )
 if not exist "%PACKAGES_DIR%\include\SDL2"   ( mkdir "%PACKAGES_DIR%\include\SDL2"   || exit /B 1 )
 if not exist "%PACKAGES_DIR%\lib\%PLATFORM%" ( mkdir "%PACKAGES_DIR%\lib\%PLATFORM%" || exit /B 1 )
 
+xcopy /Y /Q "%VCPKG_DIR%\installed\%TRIPLET%\bin\FLAC*.dll"          "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
 xcopy /Y /Q "%VCPKG_DIR%\installed\%TRIPLET%\bin\gio*.dll"           "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
 xcopy /Y /Q "%VCPKG_DIR%\installed\%TRIPLET%\bin\glib*.dll"          "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
 xcopy /Y /Q "%VCPKG_DIR%\installed\%TRIPLET%\bin\gmodule*.dll"       "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
@@ -27,9 +28,15 @@ xcopy /Y /Q "%VCPKG_DIR%\installed\%TRIPLET%\bin\iconv*.dll"         "%PACKAGES_
 xcopy /Y /Q "%VCPKG_DIR%\installed\%TRIPLET%\bin\intl*.dll"          "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
 xcopy /Y /Q "%VCPKG_DIR%\installed\%TRIPLET%\bin\libffi*.dll"        "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
 xcopy /Y /Q "%VCPKG_DIR%\installed\%TRIPLET%\bin\libfluidsynth*.dll" "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
+xcopy /Y /Q "%VCPKG_DIR%\installed\%TRIPLET%\bin\libmp3lame*.dll"    "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
 xcopy /Y /Q "%VCPKG_DIR%\installed\%TRIPLET%\bin\libpng*.dll"        "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
+xcopy /Y /Q "%VCPKG_DIR%\installed\%TRIPLET%\bin\mpg123*.dll"        "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
+xcopy /Y /Q "%VCPKG_DIR%\installed\%TRIPLET%\bin\ogg*.dll"           "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
+xcopy /Y /Q "%VCPKG_DIR%\installed\%TRIPLET%\bin\opus*.dll"          "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
 xcopy /Y /Q "%VCPKG_DIR%\installed\%TRIPLET%\bin\pcre*.dll"          "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
 xcopy /Y /Q "%VCPKG_DIR%\installed\%TRIPLET%\bin\SDL2*.dll"          "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
+xcopy /Y /Q "%VCPKG_DIR%\installed\%TRIPLET%\bin\sndfile*.dll"       "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
+xcopy /Y /Q "%VCPKG_DIR%\installed\%TRIPLET%\bin\vorbis*.dll"        "%PACKAGES_DIR%\lib\%PLATFORM%" && ^
 xcopy /Y /Q "%VCPKG_DIR%\installed\%TRIPLET%\bin\zlib*.dll"          "%PACKAGES_DIR%\lib\%PLATFORM%" || ^
 exit /B 1
 
