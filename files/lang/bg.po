@@ -469,7 +469,7 @@ msgid "System Options"
 msgstr "Системни настройки"
 
 msgid "Wait this unit"
-msgstr "Изчакайте тази единица"
+msgstr "Нека тази единица да изчака"
 
 msgid "Wait"
 msgstr "Изчакай"
@@ -567,13 +567,13 @@ msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} нанася %{damage} щети на всички живи същества."
 
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr "Нападението на %{attacker}' заслепява %{target}!"
+msgstr "Нападението на %{attacker} заслепява %{target}!"
 
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr "Погледът на %{attacker}' превръща %{target} в камък!"
+msgstr "Погледът на %{attacker} превръща %{target} в камък!"
 
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr "Проклятието %{attacker}' пада върху %{target}!"
+msgstr "Проклятието %{attacker} пада върху %{target}!"
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
 msgstr "%{target} са парализирани от %{attacker}!"
@@ -688,7 +688,7 @@ msgid "The %{name} fires with the strength of %{count} Archers"
 msgstr "%{name} стреля със силата на %{count} стрелци"
 
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr "всеки с +%{attack} бонус към своето нападащо умение."
+msgstr "всеки получава +%{attack} бонус към своето умение за нападение."
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
