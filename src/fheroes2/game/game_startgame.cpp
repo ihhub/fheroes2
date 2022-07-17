@@ -914,7 +914,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 fheroes2::Point newCenter = gameArea.getCurrentCenterInPixels() + delta;
                 gameArea.SetCenterInPixels( newCenter );
                 gameArea.SetRedraw();
-                radar.Redraw();
+                radar.SetRedraw();
                 lastCursorPosition = le.GetMouseCursor();
             }
 
