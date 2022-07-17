@@ -905,6 +905,7 @@ namespace
                 if ( _renderer != nullptr )
                     SDL_DestroyRenderer( _renderer );
 
+                // TODO: run throught all drivers and find the one which supports SDL_PIXELFORMAT_INDEX8 and use that driver ID instead of -1.
                 _renderer = SDL_CreateRenderer( _window, -1, renderFlags() );
                 if ( _renderer == nullptr ) {
                     ERROR_LOG( "Failed to create a window renderer. The error: " << SDL_GetError() )
@@ -989,13 +990,6 @@ namespace
                 return false;
             }
 
-            _renderer = SDL_CreateRenderer( _window, -1, renderFlags() );
-            if ( _renderer == nullptr ) {
-                ERROR_LOG( "Failed to create a window renderer of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
-                clear();
-                return false;
-            }
-
             bool isPaletteModeSupported = false;
 
             SDL_RendererInfo rendererInfo;
@@ -1012,6 +1006,19 @@ namespace
                 }
             }
 
+            const uint32_t renderingFlags = renderFlags();
+            if ( ( renderingFlags & rendererInfo.flags ) != renderingFlags ) {
+                ERROR_LOG( "Chosen rendering driver does not support all rendering flags" )
+            }
+
+            // TODO: run throught all drivers and find the one which supports SDL_PIXELFORMAT_INDEX8 and use that driver ID instead of -1.
+            _renderer = SDL_CreateRenderer( _window, -1, renderingFlags );
+            if ( _renderer == nullptr ) {
+                ERROR_LOG( "Failed to create a window renderer of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
+                clear();
+                return false;
+            }
+
             _surface = SDL_CreateRGBSurface( 0, width_, height_, isPaletteModeSupported ? 8 : 32, 0, 0, 0, 0 );
             if ( _surface == nullptr ) {
                 ERROR_LOG( "Failed to create a surface of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
@@ -1026,6 +1033,12 @@ namespace
 
             _createPalette();
             if ( SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "linear" ) == SDL_FALSE ) {
+                ERROR_LOG( "Failed to set a linear scale hint for rendering." )
+            }
+
+            // Setting this hint prevents the window to regain focus after loosing it in fullscreen mode.
+            // It also fixes issues when SDL_UpdateTexture() calls fail because of refocusing.
+            if ( SDL_SetHint( SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0" ) == SDL_FALSE ) {
                 ERROR_LOG( "Failed to set a linear scale hint for rendering." )
             }
 
@@ -1085,7 +1098,7 @@ namespace
 
         bool _isVSyncEnabled;
 
-        int renderFlags() const
+        uint32_t renderFlags() const
         {
             if ( _isVSyncEnabled ) {
                 return ( SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
@@ -1321,7 +1334,7 @@ namespace
         SDL_Surface * _surface;
         int _bitDepth;
 
-        int renderFlags() const
+        uint32_t renderFlags() const
         {
 #if defined( __WIN32__ )
             return SDL_HWSURFACE | SDL_HWPALETTE;
