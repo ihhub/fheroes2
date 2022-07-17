@@ -545,7 +545,7 @@ void Audio::Init()
 
     if ( audioSpecs.freq != frequency ) {
         // At least on Windows the standard frequency is 48000 Hz. Sounds in the game are 22500 Hz frequency.
-        // However, resampling is done inside SDL Mixer so this is not exactly an error.
+        // However, resampling is done inside SDL so this is not exactly an error.
         DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Audio frequency is initialized as " << frequency << " instead of " << audioSpecs.freq )
     }
 
