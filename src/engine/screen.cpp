@@ -989,13 +989,6 @@ namespace
                 return false;
             }
 
-            _renderer = SDL_CreateRenderer( _window, -1, renderFlags() );
-            if ( _renderer == nullptr ) {
-                ERROR_LOG( "Failed to create a window renderer of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
-                clear();
-                return false;
-            }
-
             bool isPaletteModeSupported = false;
 
             SDL_RendererInfo rendererInfo;
@@ -1010,6 +1003,18 @@ namespace
                         break;
                     }
                 }
+            }
+
+            const uint32_t renderingFlags = renderFlags();
+            if ( ( renderingFlags & rendererInfo.flags ) != renderingFlags ) {
+                ERROR_LOG( "Chosen rendering driver does not support all rendering flags" )
+            }
+
+            _renderer = SDL_CreateRenderer( _window, -1, renderingFlags );
+            if ( _renderer == nullptr ) {
+                ERROR_LOG( "Failed to create a window renderer of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )
+                clear();
+                return false;
             }
 
             _surface = SDL_CreateRGBSurface( 0, width_, height_, isPaletteModeSupported ? 8 : 32, 0, 0, 0, 0 );
@@ -1091,7 +1096,7 @@ namespace
 
         bool _isVSyncEnabled;
 
-        int renderFlags() const
+        uint32_t renderFlags() const
         {
             if ( _isVSyncEnabled ) {
                 return ( SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
@@ -1327,7 +1332,7 @@ namespace
         SDL_Surface * _surface;
         int _bitDepth;
 
-        int renderFlags() const
+        uint32_t renderFlags() const
         {
 #if defined( __WIN32__ )
             return SDL_HWSURFACE | SDL_HWPALETTE;
