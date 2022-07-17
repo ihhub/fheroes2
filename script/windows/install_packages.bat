@@ -17,8 +17,7 @@ echo Installation is complete
 
 )
 
-echo Press any key to exit...
-pause >nul
+pause
 
 exit /B
 
