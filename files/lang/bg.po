@@ -83,7 +83,7 @@ msgid ""
 "Zounds of\n"
 "%{monster}"
 msgstr ""
-"Дяволски много \n"
+"Стотици \n"
 "%{monster}"
 
 msgid ""
@@ -115,7 +115,7 @@ msgid "army|Swarm"
 msgstr "Рояк"
 
 msgid "army|Zounds"
-msgstr "Дяволски много"
+msgstr "Стотици"
 
 msgid "army|Legion"
 msgstr "Легион"
