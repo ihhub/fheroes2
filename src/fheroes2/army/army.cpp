@@ -1374,14 +1374,19 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
     // Neutral monsters don't care about hero's stats. Ignoring hero's stats makes hero's army strength be smaller in eyes of neutrals and they won't join so often.
     const double armyStrengthRatio = static_cast<const Troops &>( hero.GetArmy() ).GetStrength() / troop.GetStrength();
 
-    if ( armyStrengthRatio > 2 ) {
+    // The ability to accept monsters (a free slot or a stack of monsters of the same type) is a
+    // mandatory condition for their joining in accordance with the mechanics of the original game
+    if ( armyStrengthRatio > 2 && hero.GetArmy().CanJoinTroop( troop ) ) {
         if ( tile.MonsterJoinConditionFree() ) {
             return { NeutralMonsterJoiningCondition::Reason::Free, troop.GetCount(), nullptr, nullptr };
         }
 
         if ( hero.HasSecondarySkill( Skill::Secondary::DIPLOMACY ) ) {
             const uint32_t amountToJoin = Monster::GetCountFromHitPoints( troop, troop.GetHitPoints() * hero.GetSecondaryValues( Skill::Secondary::DIPLOMACY ) / 100 );
-            if ( amountToJoin > 0 ) {
+
+            // The ability to hire the entire stack of monsters is a mandatory condition for their joining
+            // due to hero's Diplomacy skill in accordance with the mechanics of the original game
+            if ( amountToJoin > 0 && hero.GetKingdom().AllowPayment( payment_t( Resource::GOLD, troop.GetTotalCost().gold ) ) ) {
                 return { NeutralMonsterJoiningCondition::Reason::ForMoney, amountToJoin, nullptr, nullptr };
             }
         }
