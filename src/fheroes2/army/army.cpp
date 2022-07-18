@@ -584,8 +584,7 @@ void Troops::SortStrongest()
     std::sort( begin(), end(), Army::StrongestTroop );
 }
 
-// Pre-battle arrangement for Monster or Neutral troops
-void Troops::ArrangeForBattle( bool upgrade )
+void Troops::ArrangeForBattle( bool upgrade /* = false */ )
 {
     const Troops & priority = GetOptimized();
 
@@ -621,6 +620,36 @@ void Troops::ArrangeForBattle( bool upgrade )
     else {
         Assign( priority );
     }
+}
+
+void Troops::ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const uint32_t stacksCount )
+{
+    assert( stacksCount > 0 && stacksCount <= size() && size() == ARMYMAXTROOPS );
+    assert( std::all_of( begin(), end(), []( const Troop * troop ) { return troop->isEmpty(); } ) );
+
+    size_t stacks;
+
+    for ( stacks = stacksCount; stacks > 0; --stacks ) {
+        if ( monstersCount / stacks > 0 ) {
+            break;
+        }
+    }
+
+    assert( stacks > 0 );
+
+    const uint32_t quotient = monstersCount / static_cast<uint32_t>( stacks );
+    const uint32_t remainder = monstersCount % static_cast<uint32_t>( stacks );
+
+    assert( quotient > 0 );
+
+    const size_t shift = ( size() - stacks ) / 2;
+
+    for ( size_t i = 0; i < stacks; ++i ) {
+        at( i + shift )->Set( monster, i < remainder ? quotient + 1 : quotient );
+    }
+
+    assert( std::accumulate( begin(), end(), 0U, []( const uint32_t count, const Troop * troop ) { return troop->isValid() ? count + troop->GetCount() : count; } )
+            == monstersCount );
 }
 
 void Troops::ArrangeForWhirlpool()
@@ -880,10 +909,14 @@ void Army::setFromTile( const Maps::Tiles & tile )
         ArrangeForBattle( false );
         break;
 
-    case MP2::OBJ_SHIPWRECK:
-        at( 0 )->Set( Monster::GHOST, tile.GetQuantity2() );
-        ArrangeForBattle( false );
+    case MP2::OBJ_SHIPWRECK: {
+        // The number of stacks is deterministically random and is always the same for a particular tile
+        std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tile.GetIndex() ) );
+
+        ArrangeForBattle( Monster::GHOST, tile.GetQuantity2(), Rand::GetWithGen( 3, 5, seededGen ) );
+
         break;
+    }
 
     case MP2::OBJ_DERELICTSHIP:
         at( 0 )->Set( Monster::SKELETON, 200 );
@@ -961,6 +994,17 @@ void Army::setFromTile( const Maps::Tiles & tile )
         at( 2 )->Set( Monster::EARTH_ELEMENT, 2 );
         at( 3 )->Set( Monster::EARTH_ELEMENT, 2 );
         break;
+
+    case MP2::OBJ_ABANDONEDMINE: {
+        const Troop & troop = world.GetCapturedObject( tile.GetIndex() ).GetTroop();
+
+        // The number of stacks is deterministically random and is always the same for a particular tile
+        std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tile.GetIndex() ) );
+
+        ArrangeForBattle( troop.GetMonster(), troop.GetCount(), Rand::GetWithGen( 3, 5, seededGen ) );
+
+        break;
+    }
 
     default:
         if ( isCaptureObject ) {
