@@ -910,10 +910,30 @@ void Army::setFromTile( const Maps::Tiles & tile )
         break;
 
     case MP2::OBJ_SHIPWRECK: {
+        uint32_t count = 0;
+
+        switch ( tile.QuantityVariant() ) {
+        case 1:
+            count = 10;
+            break;
+        case 2:
+            count = 15;
+            break;
+        case 3:
+            count = 25;
+            break;
+        case 4:
+            count = 50;
+            break;
+        default:
+            assert( 0 );
+            break;
+        }
+
         // The number of stacks is deterministically random and is always the same for a particular tile
         std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tile.GetIndex() ) );
 
-        ArrangeForBattle( Monster::GHOST, tile.GetQuantity2(), Rand::GetWithGen( 3, 5, seededGen ) );
+        ArrangeForBattle( Monster::GHOST, count, Rand::GetWithGen( 3, 5, seededGen ) );
 
         break;
     }
