@@ -8,10 +8,7 @@ Please follow the instructions below to be able to build the project from source
 ### Windows
 
 * Go to the directory `script/windows` and run the file `install_packages.bat`. This script will install all the
-  required packages to build the project using Microsoft Visual Studio. Packages related to **SDL1** will be downloaded
-  in binary form from the [**libsdl.org**](https://www.libsdl.org/) website. Packages related to **SDL2** will be installed
-  using [**vcpkg**](https://vcpkg.io/). This script assumes that the location of `vcpkg.exe` present in the `PATH`.
-
+  required packages to build the project using Microsoft Visual Studio.
 * If you have the original game, then copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` (some of them may
   be missing depending on the version of the original game) to the project root directory.
 * Alternatively, go to the directory `script/demo` and run the file `download_demo_version.bat`.

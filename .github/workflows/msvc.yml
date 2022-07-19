@@ -23,7 +23,6 @@ jobs:
           release_name: Windows x64 build with SDL1 support (latest commit)
           release_tag: fheroes2-windows-x64-SDL1
         - name: SDL2 x86
-          vcpkg_ref: sdl2-mixer-2.6.1
           platform: x86
           build_config: Release-SDL2
           deploy_config: SDL2
@@ -31,7 +30,6 @@ jobs:
           release_name: Windows x86 build with SDL2 support (latest commit)
           release_tag: fheroes2-windows-x86-SDL2
         - name: SDL2 x64
-          vcpkg_ref: sdl2-mixer-2.6.1
           platform: x64
           build_config: Release-SDL2
           deploy_config: SDL2
@@ -40,47 +38,15 @@ jobs:
           release_tag: fheroes2-windows-x64-SDL2
     name: MSVC (${{ matrix.config.name }})
     runs-on: windows-2019
-    timeout-minutes: 120
+    timeout-minutes: 30
     defaults:
       run:
         shell: bash
     steps:
     - uses: actions/checkout@v2
-    - name: Prepare vcpkg cache
-      if: ${{ matrix.config.deploy_config == 'SDL2' }}
-      uses: actions/cache@v3
-      with:
-        path: ~/AppData/Local/vcpkg/archives
-        key: msvc-vcpkg-cache-${{ matrix.config.platform }}-${{ matrix.config.vcpkg_ref }}-${{ github.sha }}
-        restore-keys: |
-          msvc-vcpkg-cache-${{ matrix.config.platform }}-${{ matrix.config.vcpkg_ref }}-
-          msvc-vcpkg-cache-${{ matrix.config.platform }}-
-    - uses: actions/checkout@v3
-      if: ${{ matrix.config.deploy_config == 'SDL2' }}
-      with:
-        repository: oleg-derevenetz/vcpkg
-        ref: ${{ matrix.config.vcpkg_ref }}
-        path: vcpkg
-    - name: Install SDL1 dependencies
-      if: ${{ matrix.config.deploy_config == 'SDL1' }}
+    - name: Install dependencies, cygwin and zip
       run: |
-        script/windows/setup_sdl1.bat VisualStudio/packages VisualStudio/packages/installed/sdl1
-    - name: Install SDL2 dependencies
-      if: ${{ matrix.config.deploy_config == 'SDL2' }}
-      run: |
-        vcpkg/bootstrap-vcpkg.bat
-        script/windows/setup_sdl2.bat vcpkg ${{ matrix.config.platform }} VisualStudio/packages/installed/sdl2
-    - name: Get a list of files installed by vcpkg
-      if: ${{ matrix.config.deploy_config == 'SDL2' }}
-      run: |
-        ls -lR vcpkg/installed > vcpkg/installed_files.txt
-    - uses: actions/upload-artifact@v2
-      if: ${{ matrix.config.deploy_config == 'SDL2' }}
-      with:
-        name: msvc-${{ matrix.config.deploy_config }}-${{ matrix.config.platform }}-vcpkg-installed-files
-        path: vcpkg/installed_files.txt
-    - name: Install other dependencies, cygwin and zip
-      run: |
+        script/windows/install_packages.bat
         choco.exe install make gettext-devel -y --source cygwin
         choco.exe install zip -y
     - uses: microsoft/setup-msbuild@v1

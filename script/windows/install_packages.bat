@@ -1,28 +1,38 @@
 @echo off
 
-call :find_path vcpkg.exe
+set DST_DIR=%~dp0\..\..\VisualStudio\packages\installed
 
-if "%VCPKG_DIR%"=="" (
+set PKG_FILE=windows.zip
+set PKG_URL=https://github.com/fheroes2/fheroes2-prebuilt-deps/releases/download/windows-deps/%PKG_FILE%
+set PKG_TLS=[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-echo vcpkg was not found in your system. Please install it, add its location to PATH and re-run this script.
+setlocal enableextensions
 
-) else (
+if not exist "%DST_DIR%" ( mkdir "%DST_DIR%" || exit /B 1 )
 
-echo Setting up SDL1... && ^
-call "%~dp0\setup_sdl1.bat" "%~dp0\..\..\VisualStudio/packages" "%~dp0\..\..\VisualStudio/packages/installed/sdl1" && ^
-echo Setting up SDL2... && ^
-call "%~dp0\setup_sdl2.bat" "%VCPKG_DIR%" x86 "%~dp0\..\..\VisualStudio/packages/installed/sdl2" && ^
-call "%~dp0\setup_sdl2.bat" "%VCPKG_DIR%" x64 "%~dp0\..\..\VisualStudio/packages/installed/sdl2" && ^
-echo Installation is complete
+endlocal
 
+echo Downloading %PKG_URL%                                                                                        && ^
+powershell -Command "%PKG_TLS%; (New-Object System.Net.WebClient).DownloadFile('%PKG_URL%', '%TEMP%\%PKG_FILE%')" || ^
+exit /B 1
+
+call :unpack_archive "%TEMP%\%PKG_FILE%" "%DST_DIR%" || ^
+exit /B 1
+
+if not "%CI%" == "true" (
+    pause
 )
-
-pause
 
 exit /B
 
-:find_path
+:unpack_archive
 
-set VCPKG_DIR=%~dp$PATH:1
+echo Unpacking %~n1%~x1
+
+if "%CI%" == "true" (
+    powershell -Command "Expand-Archive -LiteralPath '%~1' -DestinationPath '%~2' -Force" || exit /B 1
+) else (
+    powershell -Command "$shell = New-Object -ComObject 'Shell.Application'; $zip = $shell.NameSpace((Resolve-Path '%~1').Path); foreach ($item in $zip.items()) { $shell.Namespace((Resolve-Path '%~2').Path).CopyHere($item, 0x14) }" || exit /B 1
+)
 
 exit /B
