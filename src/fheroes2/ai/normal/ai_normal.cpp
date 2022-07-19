@@ -21,6 +21,7 @@
 #include "ai_normal.h"
 #include "maps_tiles.h"
 #include "pairs.h"
+#include "world.h"
 
 namespace AI
 {
@@ -35,11 +36,23 @@ namespace AI
         _pathfinder.reset();
     }
 
-    void Normal::revealFog( const Maps::Tiles & tile )
+    void Normal::revealFog( const Maps::Tiles & tile, int playerColor )
     {
         const MP2::MapObjectType object = tile.GetObject();
-        if ( object != MP2::OBJ_ZERO )
-            _mapObjects.emplace_back( tile.GetIndex(), object );
+        if ( object != MP2::OBJ_ZERO ) {
+            const int32_t tileIndex = tile.GetIndex();
+            _mapObjects.emplace_back( tileIndex, object );
+
+            if ( object == MP2::OBJN_CASTLE ) {
+                const Castle * castle = world.getCastle( tile.GetCenter() );
+                if ( castle ) {
+                    // AI should be aware of the castle if sees it partially
+                    int allied = Players::GetPlayerFriends( playerColor );
+                    allied = allied & ~Players::HumanColors(); // exclude human players since they can right click to view info
+                    world.GetTiles( castle->GetIndex() ).ClearFog( allied );
+                }
+            }
+        }
     }
 
     double Normal::getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType )

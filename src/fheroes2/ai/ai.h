@@ -86,7 +86,7 @@ namespace AI
         virtual void KingdomTurn( Kingdom & kingdom ) = 0;
         virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & unit, Battle::Actions & actions ) = 0;
 
-        virtual void revealFog( const Maps::Tiles & tile ) = 0;
+        virtual void revealFog( const Maps::Tiles & tile, int playerColor ) = 0;
 
         virtual void HeroesAdd( const Heroes & hero );
         virtual void HeroesRemove( const Heroes & hero );

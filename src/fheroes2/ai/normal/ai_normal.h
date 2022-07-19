@@ -186,7 +186,7 @@ namespace AI
         void KingdomTurn( Kingdom & kingdom ) override;
         void BattleTurn( Battle::Arena & arena, const Battle::Unit & currentUnit, Battle::Actions & actions ) override;
 
-        void revealFog( const Maps::Tiles & tile ) override;
+        void revealFog( const Maps::Tiles & tile, int playerColor ) override;
 
         void HeroesPreBattle( HeroBase & hero, bool isAttacking ) override;
         void HeroesActionComplete( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType ) override;

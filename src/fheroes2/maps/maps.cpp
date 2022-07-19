@@ -360,7 +360,7 @@ void Maps::ClearFog( const int32_t tileIndex, int scouteValue, const int playerC
             if ( revealRadiusSquared >= dx * dx + dy * dy ) {
                 Maps::Tiles & tile = world.GetTiles( x, y );
                 if ( isAIPlayer && tile.isFog( playerColor ) ) {
-                    AI::Get().revealFog( tile );
+                    AI::Get().revealFog( tile, playerColor );
                 }
 
                 tile.ClearFog( alliedColors );
