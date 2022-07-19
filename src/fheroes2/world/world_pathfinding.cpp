@@ -457,7 +457,7 @@ void AIWorldPathfinder::processWorldMap()
     std::vector<int> nodesToExplore;
     nodesToExplore.push_back( _pathStart );
 
-    if ( _hero && !_hero->Modes( Heroes::PATROL ) ) {
+    if ( _hero && !_hero->Modes( Heroes::PATROL ) && !_hero->isShipMaster() ) {
         static const Spell townGate( Spell::TOWNGATE );
         static const Spell townPortal( Spell::TOWNPORTAL );
         const uint32_t currentSpellPoints = _hero->GetSpellPoints();
