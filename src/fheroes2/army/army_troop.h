@@ -46,7 +46,7 @@ public:
 
     bool isMonster( int ) const;
     const char * GetName() const;
-    virtual uint32_t GetCount() const;
+    uint32_t GetCount() const;
     uint32_t GetHitPoints() const;
     Monster GetMonster() const;
 

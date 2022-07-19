@@ -260,6 +260,16 @@ bool Game::HotKeyHoldEvent( const HotKeyEvent eventID )
     return le.KeyHold() && le.KeyValue() == hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
 }
 
+fheroes2::Key Game::getHotKeyForEvent( const HotKeyEvent eventID )
+{
+    return hotKeyEventInfo[hotKeyEventToInt( eventID )].key;
+}
+
+void Game::setHotKeyForEvent( const HotKeyEvent eventID, const fheroes2::Key key )
+{
+    hotKeyEventInfo[hotKeyEventToInt( eventID )].key = key;
+}
+
 std::string Game::getHotKeyNameByEventId( const HotKeyEvent eventID )
 {
     return StringUpper( KeySymGetName( hotKeyEventInfo[hotKeyEventToInt( eventID )].key ) );
@@ -282,7 +292,7 @@ std::vector<Game::HotKeyEvent> Game::getAllHotKeyEvents()
     return events;
 }
 
-void Game::HotKeysLoad( std::string filename )
+void Game::HotKeysLoad( const std::string & filename )
 {
     initializeHotKeyEvents();
 
@@ -317,12 +327,19 @@ void Game::HotKeysLoad( std::string filename )
         }
     }
 
+    HotKeySave();
+}
+
+void Game::HotKeySave()
+{
     // Save the latest information into the file.
-    filename = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.key" );
-    std::fstream file;
-    file.open( filename.data(), std::fstream::out | std::fstream::trunc );
-    if ( !file )
+    const std::string filename = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.key" );
+
+    std::fstream file( filename.data(), std::fstream::out | std::fstream::trunc );
+    if ( !file ) {
+        ERROR_LOG( "Unable to open hotkey settings file " << filename )
         return;
+    }
 
     const std::string & data = getHotKeyFileContent();
     file.write( data.data(), data.size() );

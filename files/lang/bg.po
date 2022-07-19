@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-28 00:30+0000\n"
-"PO-Revision-Date: 2022-05-10 16:34+0200\n"
+"POT-Creation-Date: 2022-07-10 14:31+0000\n"
+"PO-Revision-Date: 2022-07-15 20:30+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -19,663 +19,716 @@ msgstr ""
 "X-Generator: Poedit 3.0.1\n"
 
 msgid "Warrior"
-msgstr ""
+msgstr "Войн"
 
 msgid "Builder"
-msgstr ""
+msgstr "Строител"
 
 msgid "Explorer"
-msgstr ""
+msgstr "Изследовател"
 
 msgid "None"
-msgstr ""
+msgstr "Без"
 
 msgid ""
 "A few\n"
 "%{monster}"
 msgstr ""
+"Малко\n"
+"%{monster}"
 
 msgid ""
 "Several\n"
 "%{monster}"
 msgstr ""
+"Няколко\n"
+"%{monster}"
 
 msgid ""
 "A pack of\n"
 "%{monster}"
 msgstr ""
+"Глутница\n"
+"%{monster}"
 
 msgid ""
 "Lots of\n"
 "%{monster}"
 msgstr ""
+"Много\n"
+"%{monster}"
 
 msgid ""
 "A horde of\n"
 "%{monster}"
 msgstr ""
+"Орда от\n"
+"%{monster}"
 
 msgid ""
 "A throng of\n"
 "%{monster}"
 msgstr ""
+"Тълпа от\n"
+"%{monster}"
 
 msgid ""
 "A swarm of\n"
 "%{monster}"
 msgstr ""
+"Рояк от\n"
+"%{monster}"
 
 msgid ""
 "Zounds of\n"
 "%{monster}"
 msgstr ""
+"Стотици\n"
+"%{monster}"
 
 msgid ""
 "A legion of\n"
 "%{monster}"
 msgstr ""
+"Легион от\n"
+"%{monster}"
 
 msgid "army|Few"
-msgstr ""
+msgstr "Малко"
 
 msgid "army|Several"
-msgstr ""
+msgstr "Няколко"
 
 msgid "army|Pack"
-msgstr ""
+msgstr "Глутница"
 
 msgid "army|Lots"
-msgstr ""
+msgstr "Много"
 
 msgid "army|Horde"
-msgstr ""
+msgstr "Орда"
 
 msgid "army|Throng"
-msgstr ""
+msgstr "Тълпа"
 
 msgid "army|Swarm"
-msgstr ""
+msgstr "Рояк"
 
 msgid "army|Zounds"
-msgstr ""
+msgstr "Стотици"
 
 msgid "army|Legion"
-msgstr ""
+msgstr "Легион"
 
 msgid "All %{race} troops +1"
-msgstr ""
+msgstr "Всички %{race} войски +1"
 
 msgid "Multiple"
-msgstr ""
+msgstr "Многократни"
 
 msgid "Troops of %{count} alignments -%{penalty}"
-msgstr ""
+msgstr "Войски от %{count} подравнявания -%{penalty}"
 
 msgid "Some undead in group -1"
-msgstr ""
+msgstr "Някои немъртви в група -1"
 
 msgid "View %{name}"
-msgstr ""
+msgstr "Преглед на %{name}"
 
 msgid "Move the %{name} "
-msgstr ""
+msgstr "Преместете %{name} "
 
 msgid "Move or right click to redistribute %{name}"
-msgstr ""
+msgstr "Преместете или щракнете с десния бутон, за да преразпределите %{name}"
 
 msgid "Combine %{name} armies"
-msgstr ""
+msgstr "Комбинирайте %{name} армии"
 
 msgid "Exchange %{name2} with %{name}"
-msgstr ""
+msgstr "Разменете %{name2} с %{name}"
 
 msgid "Select %{name}"
-msgstr ""
+msgstr "Изберете %{name}"
 
 msgid "Cannot move last troop"
-msgstr ""
+msgstr "Не може да премести последния отряд"
 
 msgid "Move the %{name}"
-msgstr ""
+msgstr "Преместете %{name}"
 
 msgid "Set Count"
-msgstr ""
+msgstr "Задаване на броя"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%{name} унищожава половината вражески войски!"
+msgstr[1] "%{name} унищожи половината вражески войски!"
 
 msgid "%{name} has turned off the auto battle"
-msgstr ""
+msgstr "%{name} е изключил автоматичната битка"
 
 msgid "%{name} has turned on the auto battle"
-msgstr ""
+msgstr "%{name} включи автоматичната битка"
 
 msgid "Spell failed!"
-msgstr ""
+msgstr "Заклинанието е неуспешно!"
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
 "combat spells."
 msgstr ""
+"Артефактът Сфера на отрицанието е в сила за тази битка, дезактивирайки "
+"всички бойни заклинания."
 
 msgid "You have already cast a spell this round."
-msgstr ""
+msgstr "Вече сте направили магия този рунд."
 
 msgid "That spell will affect no one!"
-msgstr ""
+msgstr "Това заклинание няма да засегне никого!"
 
 msgid "You may only summon one type of elemental per combat."
-msgstr ""
+msgstr "Можете да призовете само един тип елементал за битка."
 
 msgid "There is no open space adjacent to your hero to summon an Elemental to."
 msgstr ""
+"Няма открито пространство до вашия герой, където да призовете елементал."
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
 "half movement rate."
 msgstr ""
+"Ровът намалява с -%{count} умението за защита на всяка единица и забавя "
+"наполовина скоростта на движение."
 
 msgid "Speed"
-msgstr ""
+msgstr "Скорост"
 
 msgid "Speed: %{speed}"
-msgstr ""
+msgstr "Скорост: %{speed}"
 
 msgid "Army Order"
-msgstr ""
+msgstr "Армейска заповед"
 
 msgid "Auto Spell Casting"
-msgstr ""
+msgstr "Автоматично заклинание"
 
 msgid "Grid"
-msgstr ""
+msgstr "Решетка"
 
 msgid "Shadow Movement"
-msgstr ""
+msgstr "Движение на сенките"
 
 msgid "Shadow Cursor"
-msgstr ""
+msgstr "Курсор в сянка"
 
 msgid "Off"
-msgstr ""
+msgstr "Изкл"
 
 msgid "On"
-msgstr ""
+msgstr "Вкл"
 
 msgid "Set the speed of combat actions and animations."
-msgstr ""
+msgstr "Задайте скоростта на бойните действия и анимациите."
 
 msgid "Toggle to display army order during the battle."
-msgstr ""
+msgstr "Превключете за показване на армейския ред по време на битката."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
 "is on. (Note: This does not affect spell casting for computer players in any "
 "way, nor does it affect quick combat.)"
 msgstr ""
+"Превключете дали компютърът да прави заклинания вместо вас, когато "
+"автоматичната битка е включена. (Забележка: Това не влияе по никакъв начин "
+"на правенето на заклинания за компютърни играчи, нито засяга бързата битка.)"
 
 msgid ""
 "Toggle the hex grid on or off. The hex grid always underlies movement, even "
 "if turned off. This switch only determines if the grid is visible."
 msgstr ""
+"Включете или изключете шестнадесетичната мрежа. Шестнадесетичната мрежа "
+"винаги е в основата на движението, дори и да е изключена. Този ключ определя "
+"само дали решетката е видима."
 
 msgid ""
 "Toggle on or off shadows showing where your creatures can move and attack."
 msgstr ""
+"Включете или изключете сенките, показващи къде вашите същества могат да се "
+"движат и атакуват."
 
 msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
+"Включете или изключете сянка, показваща текущото шестнадесетично "
+"местоположение на курсора на мишката."
 
 msgid "The enemy has surrendered!"
-msgstr ""
+msgstr "Врагът се предаде!"
 
 msgid "The enemy has fled!"
-msgstr ""
+msgstr "Врагът е избягал!"
 
 msgid "A glorious victory!"
-msgstr ""
+msgstr "Славна победа!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
-msgstr ""
+msgstr "За храброст в битка %{name} получава %{exp} опит."
 
 msgid "The cowardly %{name} flees from battle."
-msgstr ""
+msgstr "Страхливият %{name} бяга от битката."
 
 msgid "%{name} surrenders to the enemy, and departs in shame."
-msgstr ""
+msgstr "%{name} се предава на врага и си тръгва засрамен."
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
 msgstr ""
+"Вашите сили претърпяват горчиво поражение и %{name} изоставя каузата ви."
 
 msgid "Your force suffer a bitter defeat."
-msgstr ""
+msgstr "Вашите сили претърпяват горчиво поражение."
 
 msgid "Battlefield Casualties"
-msgstr ""
+msgstr "Жертви на бойното поле"
 
 msgid "Attacker"
-msgstr ""
+msgstr "Нападател"
 
 msgid "Defender"
-msgstr ""
+msgstr "Защитник"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "Когато посегнете към %{name}, той мистериозно изчезва."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "Когато врагът ви посегне към %{name}, той мистериозно изчезва."
 
 msgid "You have captured an enemy artifact!"
-msgstr ""
+msgstr "Вие сте заловили вражески артефакт!"
 
 msgid "Necromancy!"
-msgstr ""
+msgstr "Некромантия!"
 
 msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
 msgstr ""
+"Практикувайки тъмните изкуства на некромантията, можете да съберете %{count} "
+"от мъртвите на врага, за да се върнете под ваша служба като %{monster}."
 
 msgid "%{name} the %{race}"
-msgstr ""
+msgstr "%{name} %{race}"
 
 msgid "Captain of %{name}"
-msgstr ""
+msgstr "Капитан на %{name}"
 
 msgid "Attack"
-msgstr ""
+msgstr "Атака"
 
 msgid "Defense"
-msgstr ""
+msgstr "Защита"
 
 msgid "Spell Power"
-msgstr ""
+msgstr "Сила на магията"
 
 msgid "Knowledge"
-msgstr ""
+msgstr "Знание"
 
 msgid "Morale"
-msgstr ""
+msgstr "Морал"
 
 msgid "Luck"
-msgstr ""
+msgstr "Късмет"
 
 msgid "Spell Points"
-msgstr ""
+msgstr "Точки за заклинания"
 
 msgid "Hero's Options"
-msgstr ""
+msgstr "Опции на героя"
 
 msgid "Cast Spell"
-msgstr ""
+msgstr "Направете заклинание"
 
 msgid "Retreat"
-msgstr ""
+msgstr "Отстъпление"
 
 msgid "Surrender"
-msgstr ""
+msgstr "Предаване"
 
 msgid "Cancel"
-msgstr ""
+msgstr "Отменям"
 
 msgid "Hero Screen"
-msgstr ""
+msgstr "Екран на героя"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
 msgstr ""
+"Направете магическо заклинание. Можете да правите само едно заклинание на "
+"боен рунд. Рундът се нулира, когато всяко същество е имало ход."
 
 msgid ""
 "Retreat your hero, abandoning your creatures. Your hero will be available "
 "for you to recruit again, however, the hero will have only a novice hero's "
 "forces."
 msgstr ""
+"Оттеглете своя герой, изоставяйки своите създания. Вашият герой ще бъде на "
+"разположение, за да го наемете отново, но героят ще разполага само със "
+"силите на начинаещ герой."
 
 msgid ""
 "Surrendering costs gold. However if you pay the ransom, the hero and all of "
 "his or her surviving creatures will be available to recruit again."
 msgstr ""
+"Предаването ще струва злато. Ако обаче платите откупа, героят и всички "
+"негови или нейни оцелели същества ще бъдат на разположение за наемане отново."
 
 msgid "Open Hero Screen to view full information about the hero."
-msgstr ""
+msgstr "Отворете екрана на героя, за да видите пълната информация за героя."
 
 msgid "Return to the battle."
-msgstr ""
+msgstr "Върнете се в битката."
 
 msgid "Not enough gold (%{gold})"
-msgstr ""
+msgstr "Няма достатъчно злато (%{gold})"
 
 msgid "%{name} states:"
-msgstr ""
+msgstr "%{name} заявява:"
 
 msgid "Captain of %{name} states:"
-msgstr ""
+msgstr "Капитанът на %{name} заявява:"
 
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
 msgstr ""
+"\"Ще приема капитулацията ви и ще осигуря на вас и войските ви безопасно "
+"преминаване на цената на %{price} злато.\""
 
 msgid "View %{monster} info"
-msgstr ""
+msgstr "Вижте %{monster} информация"
 
 msgid "Shoot %{monster}"
-msgstr ""
+msgstr "Застреляй %{monster}"
 
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "(Остава 1 изстрел)"
+msgstr[1] "(Остават %{count} изстрела)"
 
 msgid "Attack %{monster}"
-msgstr ""
+msgstr "Нападни %{monster}"
 
 msgid "Fly %{monster} here"
-msgstr ""
+msgstr "Прелети %{monster} тук"
 
 msgid "Move %{monster} here"
-msgstr ""
+msgstr "Премести %{monster} тук"
 
 msgid "Turn %{turn}"
-msgstr ""
+msgstr "Ход %{turn}"
 
 msgid "Teleport here"
-msgstr ""
+msgstr "Телепортирай се тук"
 
 msgid "Invalid teleport destination"
-msgstr ""
+msgstr "Несъществуващо място за телепортиране"
 
 msgid "Cast %{spell} on %{monster}"
-msgstr ""
+msgstr "Направи %{spell} върху %{monster}"
 
 msgid "Cast %{spell}"
-msgstr ""
+msgstr "Направи %{spell}"
 
 msgid "Select spell target"
-msgstr ""
+msgstr "Изберете цел за заклинание"
 
 msgid "View Ballista info"
-msgstr ""
+msgstr "Вижте информация за Катапулт"
 
 msgid "Ballista"
-msgstr ""
+msgstr "Катапулт"
 
 msgid "Enable auto combat"
-msgstr ""
+msgstr "Включи на автоматична битка"
 
 msgid "Allows the computer to fight out the battle for you."
-msgstr ""
+msgstr "Позволява на компютъра да води битката вместо вас."
 
 msgid "Auto Combat"
-msgstr ""
+msgstr "Авто Сражение"
 
 msgid "Customize system options"
-msgstr ""
+msgstr "Персонализирайте системните опции"
 
 msgid "Allows you to customize the combat screen."
-msgstr ""
+msgstr "Позволява ви да персонализирате бойния екран."
 
 msgid "System Options"
-msgstr ""
+msgstr "Системни настройки"
 
 msgid "Wait this unit"
-msgstr ""
+msgstr "Нека тази единица да изчака"
 
 msgid "Wait"
-msgstr ""
+msgstr "Изчакай"
 
 msgid ""
 "Waits the current creature. The current creature delays its turn until after "
 "all other creatures have had their turn."
 msgstr ""
+"Изчаква текущото създание. Текущото създание отлага реда си, докато не дойде "
+"редът на всички други същества."
 
 msgid "Skip this unit"
-msgstr ""
+msgstr "Пропусни тази единица"
 
 msgid "Skip"
-msgstr ""
+msgstr "Пропусни"
 
 msgid ""
 "Skips the current creature. The current creature ends its turn and does not "
 "get to go again until the next round."
 msgstr ""
+"Пропуска текущото създание. Текущото създание завършва реда си и не може да "
+"отиде отново до следващия кръг."
 
 msgid "View Hero's options"
-msgstr ""
+msgstr "Вижте настройките на героя"
 
 msgid "View opposing Hero"
-msgstr ""
+msgstr "Вижте противниковия герой"
 
 msgid "Hide logs"
-msgstr ""
+msgstr "Скриване на регистрационни файлове"
 
 msgid "Show logs"
-msgstr ""
+msgstr "Показване на регистрационни файлове"
 
 msgid "Message Bar"
-msgstr ""
+msgstr "Лента за съобщения"
 
 msgid "Shows the results of individual monster's actions."
-msgstr ""
+msgstr "Показва резултатите от действията на отделните чудовища."
 
 msgid "%{name} skip their turn."
-msgstr ""
+msgstr "%{name} пропускат своя ред."
 
 msgid "%{name} wait their turn."
-msgstr ""
+msgstr "%{name} чакат своя ред."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%{attacker} нанася %{damage} щети."
+msgstr[1] "%{attacker} нанася %{damage} щети."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 същество загива."
+msgstr[1] "%{count} същества загиват."
 
 msgid "1 %{defender} perishes."
 msgid_plural "%{count} %{defender} perish."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 %{defender} загива."
+msgstr[1] "%{count} %{defender} загиват."
 
 msgid "Moved %{monster}: %{src}, %{dst}"
-msgstr ""
+msgstr "Преместено %{monster}: %{src}, %{dst}"
 
 msgid "Moved %{monster}"
-msgstr ""
+msgstr "Преместено %{monster}"
 
 msgid "The %{name} resist the spell!"
-msgstr ""
+msgstr "%{name} устоя на заклинанието!"
 
 msgid "%{name} casts %{spell} on the %{troop}."
-msgstr ""
+msgstr "%{name} хвърля %{spell} върху %{troop}."
 
 msgid "%{name} casts %{spell}."
-msgstr ""
+msgstr "%{name} прави %{spell}."
 
 msgid "The %{spell} does %{damage} damage to one undead creature."
-msgstr ""
+msgstr "%{spell} нанася %{damage} щети на едно немъртво същество."
 
 msgid "The %{spell} does %{damage} damage to all undead creatures."
-msgstr ""
+msgstr "%{spell} нанася %{damage} щети на всички немъртви същества."
 
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
-msgstr ""
+msgstr "%{spell} нанася %{damage} щети, %{count} същества загиват."
 
 msgid "The %{spell} does %{damage} damage."
-msgstr ""
+msgstr "%{spell} нанася %{damage} щети."
 
 msgid "The %{spell} does %{damage} damage to one living creature."
-msgstr ""
+msgstr "%{spell} нанася %{damage} щети на едно живо същество."
 
 msgid "The %{spell} does %{damage} damage to all living creatures."
-msgstr ""
+msgstr "%{spell} нанася %{damage} щети на всички живи същества."
 
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr ""
+msgstr "Нападението на %{attacker} заслепява %{target}!"
 
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr ""
+msgstr "Погледът на %{attacker} превръща %{target} в камък!"
 
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr ""
+msgstr "Проклятието %{attacker} пада върху %{target}!"
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr ""
+msgstr "%{target} са парализирани от %{attacker}!"
 
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr ""
+msgstr "%{attacker} разсейва всички добри заклинания на вашия %{target}!"
 
 msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr ""
+msgstr "%{attacker} направи %{spell} на %{target}!"
 
 msgid "Bad luck descends on the %{attacker}."
-msgstr ""
+msgstr "Лошият късмет се стоварва върху %{attacker}."
 
 msgid "Good luck shines on the %{attacker}."
-msgstr ""
+msgstr "Късметът се усмихва на %{attacker}."
 
 msgid "High morale enables the %{monster} to attack again."
-msgstr ""
+msgstr "Високият морал позволява на %{monster} да атакува отново."
 
 msgid "Low morale causes the %{monster} to freeze in panic."
-msgstr ""
+msgstr "Ниският морал кара %{monster} да замръзне от паника."
 
 msgid "%{tower} does %{damage} damage."
-msgstr ""
+msgstr "%{tower} нанася %{damage} щети."
 
 msgid "The mirror image is created."
-msgstr ""
+msgstr "Създава се огледален образ."
 
 msgid "The mirror image is destroyed!"
-msgstr ""
+msgstr "Огледалният образ е унищожен!"
 
 msgid "Break auto battle?"
-msgstr ""
+msgstr "Спри автоматичната битка?"
 
 msgid "Error"
-msgstr ""
+msgstr "Грешка"
 
 msgid "No spells to cast."
-msgstr ""
+msgstr "Няма магии за правене."
 
 msgid "Are you sure you want to retreat?"
-msgstr ""
+msgstr "Сигурен ли сте, че искате да се отеглите?"
 
 msgid "Retreat disabled"
-msgstr ""
+msgstr "Отеглянето е деактивирано"
 
 msgid "Surrender disabled"
-msgstr ""
+msgstr "Предаването е деактивирано"
 
 msgid "Damage: %{max}"
-msgstr ""
+msgstr "Щети: %{max}"
 
 msgid "Damage: %{min} - %{max}"
-msgstr ""
+msgstr "Щети: %{min} - %{max}"
 
 msgid "Perish: %{max}"
-msgstr ""
+msgstr "Загиват: %{max}"
 
 msgid "Perish: %{min} - %{max}"
-msgstr ""
+msgstr "Загиват: %{min} - %{max}"
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
 msgstr ""
+"Чрез наблюдение с орлови очи, %{name} успява да научи магическото заклинание "
+"%{spell}."
 
 msgid "Human"
-msgstr ""
+msgstr "Човек"
 
 msgid "AI"
-msgstr ""
+msgstr "ИИ"
 
 msgid "Please select another hero."
-msgstr ""
+msgstr "Моля, избери друг герой."
 
 msgid "Set Attack Skill"
-msgstr ""
+msgstr "Задайте умение за нападение"
 
 msgid "Set Defense Skill"
-msgstr ""
+msgstr "Задайте умение за защита"
 
 msgid "Set Power Skill"
-msgstr ""
+msgstr "Задайте умение за сила"
 
 msgid "Set Knowledge Skill"
-msgstr ""
+msgstr "Задайте умение за знание"
 
 msgid "%{race1} %{name1}"
 msgstr ""
 
 msgid "vs"
-msgstr ""
+msgstr "срещу"
 
 msgid "%{race2} %{name2}"
 msgstr ""
 
 msgid "Monsters"
-msgstr ""
+msgstr "Чудовища"
 
 msgid "N/A"
 msgstr ""
 
 msgid "Left Turret"
-msgstr ""
+msgstr "Лява кула"
 
 msgid "Right Turret"
-msgstr ""
+msgstr "Дясна кула"
 
 msgid "The %{name} fires with the strength of %{count} Archers"
-msgstr ""
+msgstr "%{name} стреля със силата на %{count} стрелци"
 
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr ""
+msgstr "всеки получава +%{attack} бонус към своето умение за нападение."
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
 "spell."
 msgstr ""
+"Артефактът %{artifact} е в сила за тази битка, дезактивирайки заклинанието "
+"%{spell}."
 
 msgid "%{count} %{name} rise(s) from the dead!"
-msgstr ""
+msgstr "%{count} %{name} възкръснаха от мъртвите!"
 
 msgid "Dwarven Alliance"
-msgstr ""
+msgstr "Съюзът на джуджетата"
 
 msgid "Sorceress Guild"
-msgstr ""
+msgstr "Гилдията на магьосниците"
 
 msgid "Necromancer Guild"
-msgstr ""
+msgstr "Гилдията на некромантите"
 
 msgid "Ogre Alliance"
-msgstr ""
+msgstr "Съюз на Огре"
 
 msgid "Dwarfbane"
 msgstr ""
 
 msgid "Dragon Alliance"
-msgstr ""
+msgstr "Драконов съюз"
 
 msgid "Elven Alliance"
-msgstr ""
+msgstr "Елфически съюз"
 
 msgid "Kraeger defeated"
-msgstr ""
+msgstr "Крегер е победен"
 
 msgid "Wayward Son"
-msgstr ""
+msgstr "Своенравен син"
 
 msgid "Uncle Ivan"
-msgstr ""
+msgstr "Чичо Иван"
 
 msgid "Annexation"
 msgstr ""
@@ -2037,7 +2090,7 @@ msgid ""
 msgstr ""
 
 msgid "Exit"
-msgstr ""
+msgstr "Изход"
 
 msgid "Exit this menu."
 msgstr ""
@@ -2287,25 +2340,25 @@ msgid "off"
 msgstr ""
 
 msgid "Music"
-msgstr ""
+msgstr "Музика"
 
 msgid "Effects"
-msgstr ""
+msgstr "Ефекти"
 
 msgid "MIDI"
 msgstr ""
 
 msgid "MIDI Expansion"
-msgstr ""
+msgstr "MIDI Продължение"
 
 msgid "External"
-msgstr ""
+msgstr "Външна"
 
 msgid "Music Type"
-msgstr ""
+msgstr "Източник"
 
 msgid "3D Audio"
-msgstr ""
+msgstr "3D Звук"
 
 msgid "Toggle ambient music level."
 msgstr ""
@@ -2320,7 +2373,7 @@ msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
 msgid "Okay"
-msgstr ""
+msgstr "Добре"
 
 msgid "Build a new ship:"
 msgstr ""
@@ -2332,13 +2385,13 @@ msgid "Need: "
 msgstr ""
 
 msgid "Load Game"
-msgstr ""
+msgstr "Зареди Игра"
 
 msgid "No save files to load."
 msgstr ""
 
 msgid "New Game"
-msgstr ""
+msgstr "Нова Игра"
 
 msgid "Start a single or multi-player game."
 msgstr ""
@@ -2353,76 +2406,76 @@ msgid "Save the current game."
 msgstr ""
 
 msgid "Quit"
-msgstr ""
+msgstr "Напускане"
 
 msgid "Quit out of Heroes of Might and Magic II."
 msgstr ""
 
 msgid "Language"
-msgstr ""
+msgstr "Език"
 
 msgid "Resolution"
-msgstr ""
+msgstr "Разделителна способност"
 
 msgid "Experimental"
-msgstr ""
+msgstr "Пробни"
 
 msgid "Settings"
-msgstr ""
+msgstr "Настойки"
 
 msgid "Audio"
-msgstr ""
+msgstr "Звукови"
 
 msgid "settings"
-msgstr ""
+msgstr "настройки"
 
 msgid "Hot Keys"
-msgstr ""
+msgstr "Бързи клавиши"
 
 msgid "In-game"
-msgstr ""
+msgstr "В игра"
 
 msgid "Black & White"
-msgstr ""
+msgstr "Черно-бял"
 
 msgid "Mouse Cursor"
-msgstr ""
+msgstr "Показалец"
 
 msgid "Color"
-msgstr ""
+msgstr "Цветен"
 
 msgid "Text Support"
-msgstr ""
+msgstr "Текстова поддръжка"
 
 msgid "Evil"
-msgstr ""
+msgstr "Зъл"
 
 msgid "Good"
-msgstr ""
+msgstr "Добър"
 
 msgid "Interface Type"
-msgstr ""
+msgstr "Вид на интерфейс"
 
 msgid "Auto Resolve"
-msgstr ""
+msgstr "Авто разрешаване"
 
 msgid "Auto, No Spells"
-msgstr ""
+msgstr "Авто, без магий"
 
 msgid "Manual"
-msgstr ""
+msgstr "Ръчно"
 
 msgid "Battles"
-msgstr ""
+msgstr "Сражения"
 
 msgid "Select Game Language"
-msgstr ""
+msgstr "Език на играта"
 
 msgid "Change language of the game."
 msgstr ""
 
 msgid "Select Game Resolution"
-msgstr ""
+msgstr "Изберете резолюция на играта"
 
 msgid "Change resolution of the game."
 msgstr ""
@@ -2431,7 +2484,7 @@ msgid "Change audio settings of the game."
 msgstr ""
 
 msgid "Experimental game settings."
-msgstr ""
+msgstr "Експериментални настройки на играта."
 
 msgid "Toggle instant battle mode."
 msgstr ""
@@ -2474,7 +2527,7 @@ msgid "Rating"
 msgstr ""
 
 msgid "Map Size"
-msgstr ""
+msgstr "Размер на карта"
 
 msgid "Opponents"
 msgstr ""
@@ -2523,10 +2576,10 @@ msgid "Your army too big!"
 msgstr ""
 
 msgid "Hot Keys:"
-msgstr ""
+msgstr "Бързи клавиши:"
 
 msgid "Select Game Language:"
-msgstr ""
+msgstr "Език на играта:"
 
 msgid "%{name} has gained a level."
 msgstr ""
@@ -2677,7 +2730,7 @@ msgid "Fast separation into slots:"
 msgstr ""
 
 msgid "Map: "
-msgstr ""
+msgstr "Карта: "
 
 msgid ""
 "\n"
@@ -2726,6 +2779,9 @@ msgid ""
 "\n"
 "Map Type:\n"
 msgstr ""
+"\n"
+"\n"
+"Тип на карта:\n"
 
 msgid "The Succession Wars"
 msgstr ""
@@ -2767,40 +2823,40 @@ msgid "Victory Condition"
 msgstr ""
 
 msgid "Map difficulty:"
-msgstr ""
+msgstr "Трудност на карта:"
 
 msgid "No maps exist at that size"
-msgstr ""
+msgstr "Няма карти във този размер"
 
 msgid "Small Maps"
-msgstr ""
+msgstr "Малки карти"
 
 msgid "View only maps of size small (36 x 36)."
-msgstr ""
+msgstr "Преглеждайте само карти с малък размер (36 x 36)."
 
 msgid "Medium Maps"
-msgstr ""
+msgstr "Средни карти"
 
 msgid "View only maps of size medium (72 x 72)."
-msgstr ""
+msgstr "Преглеждайте само карти със среден размер (72 x 72)."
 
 msgid "Large Maps"
-msgstr ""
+msgstr "Големи карти"
 
 msgid "View only maps of size large (108 x 108)."
-msgstr ""
+msgstr "Преглеждайте само карти с голям размер (108 x 108)."
 
 msgid "Extra Large Maps"
-msgstr ""
+msgstr "Много големи карти"
 
 msgid "View only maps of size extra large (144 x 144)."
-msgstr ""
+msgstr "Преглеждайте само карти с много големи размери (144 x 144)."
 
 msgid "All Maps"
-msgstr ""
+msgstr "Всички карти"
 
 msgid "View all maps, regardless of size."
-msgstr ""
+msgstr "Вижте всички карти, независимо от размера."
 
 msgid "Players Icon"
 msgstr ""
@@ -2816,6 +2872,10 @@ msgid ""
 "(72 x 72), large (108 x 108),\n"
 "or extra large (144 x 144)."
 msgstr ""
+"Показва дали картата\n"
+"е малък (36 x 36), среден\n"
+"(72 x 72), голям (108 x 108),\n"
+"или изключително голям (144 x 144)."
 
 msgid "Size Icon"
 msgstr ""
@@ -2824,18 +2884,20 @@ msgid ""
 "Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
 "of Loyalty\" version of the game."
 msgstr ""
+"Показва дали картата е направена за версията на играта \"Наследените войни\" "
+"или за \"Цената на лоялността\"."
 
 msgid "Map Type"
 msgstr ""
 
 msgid "Selected Name"
-msgstr ""
+msgstr "Избрано име"
 
 msgid "The name of the currently selected map."
-msgstr ""
+msgstr "Името на текущо избраната карта."
 
 msgid "Selected Map Difficulty"
-msgstr ""
+msgstr "Избрана трудност на карта"
 
 msgid ""
 "The map difficulty of the currently selected map.  The map difficulty is "
@@ -2843,18 +2905,22 @@ msgid ""
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
 msgstr ""
+"Трудността на картата на текущо избраната карта. Трудността на картата се "
+"определя от дизайнера на сценария. По-трудните карти може да включват повече "
+"или по-силни врагове, по-малко ресурси или други специални условия, които "
+"правят нещата по-трудни за играча."
 
 msgid "Selected Description"
 msgstr ""
 
 msgid "The description of the currently selected map."
-msgstr ""
+msgstr "Описание на избраната в момента карта."
 
 msgid "Accept the choice made."
 msgstr ""
 
 msgid "Experimental Game Settings"
-msgstr ""
+msgstr "Пробни настройки на играта"
 
 msgid "Jump"
 msgstr ""
@@ -2931,13 +2997,13 @@ msgid "Thieves' Guild: Player Rankings"
 msgstr ""
 
 msgid "Number of Towns:"
-msgstr ""
+msgstr "Брой на градовете:"
 
 msgid "Number of Castles:"
-msgstr ""
+msgstr "Брой на замъците:"
 
 msgid "Number of Heroes:"
-msgstr ""
+msgstr "Брой на героите:"
 
 msgid "Gold in Treasury:"
 msgstr ""
@@ -3050,7 +3116,7 @@ msgstr ""
 msgid "Original project before 0.7"
 msgstr ""
 
-msgid "Original Heroes of Might and Magic II team"
+msgid "Heroes of Might and Magic II: The Succession Wars team"
 msgstr ""
 
 msgid "Designed and Directed"
@@ -3104,6 +3170,69 @@ msgstr ""
 msgid "Scenarios"
 msgstr ""
 
+msgid "Heroes of Might and Magic II: The Price of Loyalty team"
+msgstr ""
+
+msgid "Cyberlore Studios"
+msgstr ""
+
+msgid "Design Lead"
+msgstr ""
+
+msgid "Designers"
+msgstr ""
+
+msgid "Programming Lead"
+msgstr ""
+
+msgid "Art Lead"
+msgstr ""
+
+msgid "Playtesters"
+msgstr ""
+
+msgid "New World Computing"
+msgstr ""
+
+msgid "Designer"
+msgstr ""
+
+msgid "Producers"
+msgstr ""
+
+msgid "QA Managers"
+msgstr ""
+
+msgid "Sound Design"
+msgstr ""
+
+msgid "Town Themes"
+msgstr ""
+
+msgid "Alto Sax"
+msgstr ""
+
+msgid "Harpsichord and Piano"
+msgstr ""
+
+msgid "Basso Vocal"
+msgstr ""
+
+msgid "Soprano Vocal"
+msgstr ""
+
+msgid "Recorded at Green Street Studios"
+msgstr ""
+
+msgid "German Consultant"
+msgstr ""
+
+msgid "Map Designers"
+msgstr ""
+
+msgid "Package Design"
+msgstr ""
+
 msgid "Unknown Hero"
 msgstr ""
 
@@ -3114,25 +3243,23 @@ msgid "Standard"
 msgstr ""
 
 msgid "View High Scores for Standard Maps."
-msgstr ""
+msgstr "Вижте високите резултати за стандартни карти."
 
 msgid "Campaign"
-msgstr ""
+msgstr "Кампания"
 
 msgid "View High Scores for Campaigns."
-msgstr ""
-
-msgid ""
-"Invalid file game type. Please ensure that you are running the latest type "
-"of save files."
 msgstr ""
 
 msgid "Warning"
 msgstr ""
 
+msgid "This file contains a save with an invalid game type."
+msgstr ""
+
 msgid ""
-"This file is saved in the \"The Price of Loyalty\" version.\n"
-"Some items may be unavailable."
+"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
+"Some items may not be available."
 msgstr ""
 
 msgid "Usupported save format: "
@@ -3165,7 +3292,7 @@ msgid "A single player game playing out a single map."
 msgstr ""
 
 msgid "Standard Game"
-msgstr ""
+msgstr "Стандартна Игра"
 
 msgid "A single player game playing through a series of maps."
 msgstr ""
@@ -3179,10 +3306,10 @@ msgid ""
 msgstr ""
 
 msgid "Multi-Player Game"
-msgstr ""
+msgstr "Мултиплейър игра"
 
 msgid "fheroes2 Resurrection Team presents"
-msgstr ""
+msgstr "fheroes2 Отбор възкрeсяване представя"
 
 msgid "Greetings!"
 msgstr ""
@@ -3221,13 +3348,13 @@ msgid "Quit Heroes of Might and Magic II and return to the operating system."
 msgstr ""
 
 msgid "Credits"
-msgstr ""
+msgstr "За играта"
 
 msgid "View the credits screen."
 msgstr ""
 
 msgid "High Scores"
-msgstr ""
+msgstr "Класиране"
 
 msgid "View the high scores screen."
 msgstr ""
@@ -3239,15 +3366,20 @@ msgid "Game Settings"
 msgstr ""
 
 msgid ""
+"Required video files for campaign selection window are missing. Please make "
+"sure that all necessary files are present in the system."
+msgstr ""
+
+msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
 "and Magic II."
 msgstr ""
 
 msgid "Original Campaign"
-msgstr ""
+msgstr "Оригинална кампания"
 
 msgid "Expansion Campaign"
-msgstr ""
+msgstr "Кампания на продължение"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr ""
@@ -3261,7 +3393,7 @@ msgid ""
 msgstr ""
 
 msgid "Guest"
-msgstr ""
+msgstr "Гост"
 
 msgid ""
 "The guest waits for the host to set up the game, then is automatically added "
@@ -3269,13 +3401,13 @@ msgid ""
 msgstr ""
 
 msgid "Battle Only"
-msgstr ""
+msgstr "Само битка"
 
 msgid "Setup and play a battle without loading any map."
 msgstr ""
 
 msgid "2 Players"
-msgstr ""
+msgstr "2 Играча"
 
 msgid ""
 "Play with 2 human players, and optionally, up to 4 additional computer "
@@ -3283,7 +3415,7 @@ msgid ""
 msgstr ""
 
 msgid "3 Players"
-msgstr ""
+msgstr "3 Играча"
 
 msgid ""
 "Play with 3 human players, and optionally, up to 3 additional computer "
@@ -3291,7 +3423,7 @@ msgid ""
 msgstr ""
 
 msgid "4 Players"
-msgstr ""
+msgstr "4 Играча"
 
 msgid ""
 "Play with 4 human players, and optionally, up to 2 additional computer "
@@ -3299,7 +3431,7 @@ msgid ""
 msgstr ""
 
 msgid "5 Players"
-msgstr ""
+msgstr "5 Играча"
 
 msgid ""
 "Play with 5 human players, and optionally, up to 1 additional computer "
@@ -3307,7 +3439,7 @@ msgid ""
 msgstr ""
 
 msgid "6 Players"
-msgstr ""
+msgstr "6 Играча"
 
 msgid "Play with 6 human players."
 msgstr ""
@@ -3559,16 +3691,17 @@ msgid ""
 msgstr ""
 
 msgid "Are you sure you want to quit?"
-msgstr ""
+msgstr "Сигурен ли си че искаш да напуснеш?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
 msgstr ""
+"Сигурен ли си че искаш да пуснеш отново? (Твоята настояща игра ще се изгуби.)"
 
 msgid "Are you sure you want to overwrite the save with this name?"
-msgstr ""
+msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
 
 msgid "Game saved successfully."
-msgstr ""
+msgstr "Играта е запазена успешно."
 
 msgid "There was an issue during saving."
 msgstr ""
@@ -3642,7 +3775,7 @@ msgid ""
 msgstr ""
 
 msgid "%{color} player"
-msgstr ""
+msgstr "%{color} играч"
 
 msgid "View %{skill} Info"
 msgstr ""
@@ -3654,49 +3787,49 @@ msgid "Kingdom Income per day."
 msgstr ""
 
 msgid "English"
-msgstr ""
+msgstr "Английски"
 
 msgid "French"
-msgstr ""
+msgstr "Френски"
 
 msgid "Polish"
-msgstr ""
+msgstr "Полски"
 
 msgid "German"
-msgstr ""
+msgstr "Немски"
 
 msgid "Russian"
-msgstr ""
+msgstr "Руски"
 
 msgid "Italian"
-msgstr ""
+msgstr "Италиански"
 
 msgid "Czech"
-msgstr ""
+msgstr "Чехски"
 
 msgid "Norwegian"
-msgstr ""
+msgstr "Норвежки"
 
 msgid "Belarusian"
-msgstr ""
+msgstr "Беларуски"
 
 msgid "Bulgarian"
-msgstr ""
+msgstr "Български"
 
 msgid "Ukrainian"
-msgstr ""
+msgstr "Украински"
 
 msgid "Romanian"
-msgstr ""
+msgstr "Румънски"
 
 msgid "Spanish"
-msgstr ""
+msgstr "Испански"
 
 msgid "Swedish"
-msgstr ""
+msgstr "Шведски"
 
 msgid "Portuguese"
-msgstr ""
+msgstr "Португалски"
 
 msgid ", FPS: "
 msgstr ""
@@ -8262,9 +8395,6 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "game: always confirm for rewrite savefile"
-msgstr ""
-
 msgid "game: remember last focus"
 msgstr ""
 
@@ -8272,31 +8402,34 @@ msgid "battle: show damage info"
 msgstr ""
 
 msgid "world: show terrain penalty"
-msgstr ""
+msgstr "свят: покажи terrain penalty"
 
 msgid "world: Scouting skill shows extended content info"
-msgstr ""
+msgstr "свят: Скаутските умения показват разширена информация за съдържанието"
 
 msgid "world: allow to set guardian to objects"
-msgstr ""
+msgstr "свят: позволява да се сложи пазител на обекти"
 
 msgid "world: Neutral armies scale with game difficulty"
-msgstr ""
+msgstr "свят: Неутралните армии се увеличават с трудноста на играта"
 
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
 msgstr ""
+"свят: Вятърните мелници, водните колела и магическите градини могат да бъдат "
+"заснети"
 
 msgid "castle: allow guardians"
 msgstr ""
 
 msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
+msgstr "герои: позволява да купите книга за заклинания от светилища"
 
 msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
+"герои: запомнете точките на движение, когато се оттегляте или се предавате"
 
 msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
+msgstr "герои: позволяват да изберете всяко основно умение от Арена"
 
 msgid "battle: allow soft wait for troops"
 msgstr ""

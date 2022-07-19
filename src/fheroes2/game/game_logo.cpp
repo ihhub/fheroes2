@@ -27,8 +27,7 @@
 
 void fheroes2::showTeamInfo()
 {
-    LocalEvent & le = LocalEvent::Get();
-    le.PauseCycling();
+    LocalEvent::PauseCycling();
 
     Display & display = Display::instance();
 
@@ -50,6 +49,7 @@ void fheroes2::showTeamInfo()
     uint8_t alpha = 250;
     const uint64_t animationDelay = 40;
 
+    LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents( Game::isCustomDelayNeeded( animationDelay ) ) && alpha > 20 ) {
         if ( le.KeyPress() || le.MouseClickLeft() || le.MouseClickMiddle() || le.MouseClickRight() )
             break;
@@ -64,5 +64,5 @@ void fheroes2::showTeamInfo()
         }
     }
 
-    le.ResumeCycling();
+    LocalEvent::ResumeCycling();
 }

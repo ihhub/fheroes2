@@ -2591,7 +2591,7 @@ void ActionToUpgradeArmyObject( Heroes & hero, const MP2::MapObjectType objectTy
 
             // border
             fheroes2::Blit( border, surface, offsetX, offsetY );
-            fheroes2::renderMonsterFrame( *mons[i], surface, { 6 + offsetX, 6 + offsetY } );
+            fheroes2::renderMonsterFrame( mons[i]->GetUpgrade(), surface, { 6 + offsetX, 6 + offsetY } );
 
             offsetX += border.width() + 4;
         }

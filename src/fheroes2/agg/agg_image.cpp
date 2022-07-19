@@ -1848,18 +1848,27 @@ namespace fheroes2
             }
             case ICN::NGEXTRA: {
                 LoadOriginalICN( id );
-                if ( _icnVsSprite[id].size() >= 34 ) {
+                std::vector<Sprite> & images = _icnVsSprite[id];
+
+                if ( images.size() >= 34 ) {
                     // Fix extra column at the end of AI controlled player.
                     for ( size_t i = 27; i < 34; ++i ) {
-                        if ( _icnVsSprite[id][i].width() == 62 && _icnVsSprite[id][i].height() == 58 ) {
-                            Copy( _icnVsSprite[id][i], 58, 44, _icnVsSprite[id][i], 59, 44, 1, 11 );
+                        if ( images[i].width() == 62 && images[i].height() == 58 ) {
+                            Copy( images[i], 58, 44, images[i], 59, 44, 1, 11 );
+                        }
+                    }
+
+                    for ( size_t i = 39; i < 45; ++i ) {
+                        if ( images[i].width() == 62 && images[i].height() == 58 ) {
+                            Copy( images[i], 58, 44, images[i], 59, 44, 1, 11 );
                         }
                     }
                 }
-                if ( _icnVsSprite[id].size() >= 70 ) {
+
+                if ( images.size() >= 70 ) {
                     // fix transparent corners on pressed OKAY and CANCEL buttons
-                    CopyTransformLayer( _icnVsSprite[id][66], _icnVsSprite[id][67] );
-                    CopyTransformLayer( _icnVsSprite[id][68], _icnVsSprite[id][69] );
+                    CopyTransformLayer( images[66], images[67] );
+                    CopyTransformLayer( images[68], images[69] );
                 }
                 return true;
             }
@@ -2185,6 +2194,27 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::GOOD_CAMPAIGN_BUTTONS:
+            case ICN::EVIL_CAMPAIGN_BUTTONS: {
+                auto & image = _icnVsSprite[id];
+                image.resize( 8 );
+
+                const int originalIcnId = ( id == ICN::GOOD_CAMPAIGN_BUTTONS ) ? ICN::CAMPXTRG : ICN::CAMPXTRE;
+
+                for ( int32_t i = 0; i < 4; ++i ) {
+                    image[2 * i] = GetICN( originalIcnId, 2 * i );
+
+                    const Sprite & original = GetICN( originalIcnId, 2 * i + 1 );
+
+                    Sprite & resized = image[2 * i + 1];
+                    resized.resize( image[2 * i].width(), image[2 * i].height() );
+                    resized.reset();
+
+                    Copy( original, 0, 0, resized, original.x(), original.y(), original.width(), original.height() );
+                }
+
+                return true;
+            }
             default:
                 break;
             }
@@ -2337,8 +2367,6 @@ namespace fheroes2
 
             // TODO: correct naming and standartise the code
             switch ( fontType ) {
-            case Font::GRAY_BIG:
-                return GetICN( ICN::GRAY_FONT, character - 0x20 );
             case Font::GRAY_SMALL:
                 return GetICN( ICN::GRAY_SMALL_FONT, character - 0x20 );
             case Font::YELLOW_BIG:
@@ -2361,7 +2389,6 @@ namespace fheroes2
         {
             switch ( fontType ) {
             case Font::BIG:
-            case Font::GRAY_BIG:
             case Font::YELLOW_BIG:
                 return static_cast<uint32_t>( GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
             case Font::SMALL:

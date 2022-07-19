@@ -36,33 +36,39 @@
 #include "settings.h"
 #include "skill_bar.h"
 #include "statusbar.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
 #include "ui_tool.h"
 #include "ui_window.h"
 
-int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bool disableDismiss /* = false */, bool disableSwitch /* = false */ )
+int Heroes::OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog /*= false*/ )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // fade
     if ( fade && Settings::ExtGameUseFade() )
         fheroes2::FadeDisplay();
 
-    const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+    fheroes2::Display & display = fheroes2::Display::instance();
 
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+    fheroes2::Point cur_pt;
+    std::unique_ptr<fheroes2::StandardWindow> background;
+    std::unique_ptr<fheroes2::ImageRestorer> restorer;
+    if ( renderBackgroundDialog ) {
+        background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+        cur_pt = { background->activeArea().x, background->activeArea().y };
+    }
+    else {
+        cur_pt = { ( display.width() - fheroes2::Display::DEFAULT_WIDTH ) / 2, ( display.height() - fheroes2::Display::DEFAULT_HEIGHT ) / 2 };
+        restorer = std::make_unique<fheroes2::ImageRestorer>( display, cur_pt.x, cur_pt.y, fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+    }
 
-    const fheroes2::Point cur_pt( background.activeArea().x, background.activeArea().y );
     fheroes2::Point dst_pt( cur_pt );
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HEROBKG, 0 ), display, dst_pt.x, dst_pt.y );
     fheroes2::Blit( fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::HEROEXTE : ICN::HEROEXTG, 0 ), display, dst_pt.x, dst_pt.y );
-
-    std::string message;
 
     // portrait
     dst_pt.x = cur_pt.x + 49;
@@ -71,7 +77,7 @@ int Heroes::OpenDialog( bool readonly /* = false */, bool fade /* = false */, bo
     PortraitRedraw( dst_pt.x, dst_pt.y, PORT_BIG, display );
 
     // name
-    message = _( "%{name} the %{race} (Level %{level})" );
+    std::string message = _( "%{name} the %{race} (Level %{level})" );
     StringReplace( message, "%{name}", name );
     StringReplace( message, "%{race}", Race::String( _race ) );
     StringReplace( message, "%{level}", GetLevel() );

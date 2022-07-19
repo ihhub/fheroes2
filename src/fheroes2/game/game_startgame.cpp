@@ -185,13 +185,14 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
         else {
             basicInterface.ResetFocus( GameFocus::HEROES );
         }
-
-        basicInterface.RedrawFocus();
     }
     else {
         // If we don't update focus, we still have to restore environment sounds and terrain music theme
         restoreSoundsForCurrentFocus();
     }
+
+    // The castle garrison can change
+    basicInterface.RedrawFocus();
 }
 
 void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss /* = false */ )
@@ -209,7 +210,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
     int result = Dialog::ZERO;
 
     while ( it != myHeroes.end() && result != Dialog::CANCEL ) {
-        result = ( *it )->OpenDialog( false, needFade, disableDismiss );
+        result = ( *it )->OpenDialog( false, needFade, disableDismiss, false, windowIsGameWorld );
         if ( needFade )
             needFade = false;
 
@@ -256,9 +257,10 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
         else {
             basicInterface.ResetFocus( GameFocus::HEROES );
         }
-
-        basicInterface.RedrawFocus();
     }
+
+    // The hero's army can change
+    basicInterface.RedrawFocus();
 }
 
 void ShowNewWeekDialog()

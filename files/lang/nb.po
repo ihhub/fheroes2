@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-28 00:30+0000\n"
+"POT-Creation-Date: 2022-07-10 14:31+0000\n"
 "PO-Revision-Date: 2022-06-18 17:48+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -3463,7 +3463,8 @@ msgstr "og mange flere støttespillere!"
 msgid "Original project before 0.7"
 msgstr "Opprinnelig prosjekt før 0.7"
 
-msgid "Original Heroes of Might and Magic II team"
+#, fuzzy
+msgid "Heroes of Might and Magic II: The Succession Wars team"
 msgstr "Det opprinnelige Heroes of Might and Magic II-teamet"
 
 msgid "Designed and Directed"
@@ -3517,6 +3518,76 @@ msgstr "Håndbok og hjelpetekst"
 msgid "Scenarios"
 msgstr "Brett"
 
+#, fuzzy
+msgid "Heroes of Might and Magic II: The Price of Loyalty team"
+msgstr "Det opprinnelige Heroes of Might and Magic II-teamet"
+
+msgid "Cyberlore Studios"
+msgstr ""
+
+msgid "Design Lead"
+msgstr ""
+
+msgid "Designers"
+msgstr ""
+
+#, fuzzy
+msgid "Programming Lead"
+msgstr "Programmering og utforming"
+
+msgid "Art Lead"
+msgstr ""
+
+#, fuzzy
+msgid "Playtesters"
+msgstr "2 Spillere"
+
+msgid "New World Computing"
+msgstr ""
+
+msgid "Designer"
+msgstr ""
+
+#, fuzzy
+msgid "Producers"
+msgstr "Produsent"
+
+#, fuzzy
+msgid "QA Managers"
+msgstr "Koordinator for kvalitetssikring"
+
+#, fuzzy
+msgid "Sound Design"
+msgstr "Musikk- og lyddesign"
+
+#, fuzzy
+msgid "Town Themes"
+msgstr "Byport"
+
+msgid "Alto Sax"
+msgstr ""
+
+msgid "Harpsichord and Piano"
+msgstr ""
+
+msgid "Basso Vocal"
+msgstr ""
+
+msgid "Soprano Vocal"
+msgstr ""
+
+msgid "Recorded at Green Street Studios"
+msgstr ""
+
+msgid "German Consultant"
+msgstr ""
+
+msgid "Map Designers"
+msgstr ""
+
+msgid "Package Design"
+msgstr ""
+
 msgid "Unknown Hero"
 msgstr "Ukjent helt"
 
@@ -3536,19 +3607,16 @@ msgstr "Felttog"
 msgid "View High Scores for Campaigns."
 msgstr "Vis rekordtavle for kampanjer."
 
-msgid ""
-"Invalid file game type. Please ensure that you are running the latest type "
-"of save files."
-msgstr ""
-"Ugyldig spilltypefil. Vennligst forsikre deg om at du bruker den nyeste "
-"typen lagringsfiler."
-
 msgid "Warning"
 msgstr "Advarsel"
 
+msgid "This file contains a save with an invalid game type."
+msgstr ""
+
+#, fuzzy
 msgid ""
-"This file is saved in the \"The Price of Loyalty\" version.\n"
-"Some items may be unavailable."
+"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
+"Some items may not be available."
 msgstr ""
 "Denne filen ble lagret i spillutgaven \"Prisen for trofasthet\".\n"
 "Enkelte ting kan mangle."
@@ -3670,6 +3738,11 @@ msgstr "Endre språket, oppløsningen og innstillingene til spillet."
 
 msgid "Game Settings"
 msgstr "Spillinnstillinger"
+
+msgid ""
+"Required video files for campaign selection window are missing. Please make "
+"sure that all necessary files are present in the system."
+msgstr ""
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
@@ -9691,9 +9764,6 @@ msgstr ""
 "Denne trolldommen gir deg kontroll over\n"
 "opptil %{hp} liv."
 
-msgid "game: always confirm for rewrite savefile"
-msgstr "Parti: Alltid be om bekreftelse ved overskrivning av lagringsfil"
-
 msgid "game: remember last focus"
 msgstr "Parti: Husk hvor du var sist"
 
@@ -9810,3 +9880,6 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "game: always confirm for rewrite savefile"
+#~ msgstr "Parti: Alltid be om bekreftelse ved overskrivning av lagringsfil"

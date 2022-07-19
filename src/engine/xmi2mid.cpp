@@ -471,11 +471,6 @@ struct MidiEvents : public std::vector<MidiChunk>
 {
     uint32_t trackTempo = 0;
 
-    size_t count() const
-    {
-        return std::vector<MidiChunk>::size();
-    }
-
     size_t size() const
     {
         size_t res = 0;
@@ -680,14 +675,6 @@ struct MidTracks : std::list<MidTrack>
     size_t count() const
     {
         return std::list<MidTrack>::size();
-    }
-
-    size_t size() const
-    {
-        size_t res = 0;
-        for ( const_iterator it = begin(); it != end(); ++it )
-            res += ( *it ).size();
-        return res;
     }
 
     MidTracks() = default;

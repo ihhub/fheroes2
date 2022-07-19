@@ -61,8 +61,7 @@ namespace
 
         if ( heroes.size() == 1 ) {
             if ( valuableHero != nullptr && valuableHero == heroes[0] ) {
-                // TODO: a valuable hero must be marked as a champion.
-                heroes[0]->setAIRole( Heroes::Role::FIGHTER );
+                heroes[0]->setAIRole( Heroes::Role::CHAMPION );
             }
             else {
                 // A single hero has no roles.
@@ -84,23 +83,34 @@ namespace
             }
         }
 
+        if ( heroList.empty() ) {
+            // No more heroes.
+            return;
+        }
+
         // If there's plenty of heroes we can assign special roles
         if ( heroList.size() > 3 ) {
             std::sort( heroList.begin(), heroList.end(), []( const HeroValue & first, const HeroValue & second ) { return first.stats > second.stats; } );
+
+            if ( valuableHero == nullptr ) {
+                heroList.front().hero->setAIRole( Heroes::Role::CHAMPION );
+                heroList.erase( heroList.begin() );
+            }
 
             // Assign the role and remove them so they aren't counted towards the median strength
             heroList.back().hero->setAIRole( Heroes::Role::COURIER );
             heroList.pop_back();
         }
 
+        assert( !heroList.empty() );
+
         std::sort( heroList.begin(), heroList.end(), []( const HeroValue & first, const HeroValue & second ) { return first.strength > second.strength; } );
 
         const double medianStrength = heroList[heroList.size() / 2].strength;
 
         for ( HeroValue & object : heroList ) {
-            // TODO: a valuable hero must be marked as a champion.
             if ( valuableHero != nullptr && object.hero == valuableHero ) {
-                object.hero->setAIRole( Heroes::Role::FIGHTER );
+                object.hero->setAIRole( Heroes::Role::CHAMPION );
                 continue;
             }
 
