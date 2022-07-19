@@ -623,7 +623,7 @@ void ActionToMonster( Heroes & hero, int32_t dst_index )
         // This condition must already be met if a group of monsters wants to join
         assert( hero.GetArmy().CanJoinTroop( troop ) );
 
-        DEBUG_LOG( DBG_GAME, DBG_INFO, troop.GetName() << " want to join " << hero.GetName() << " for free" )
+        DEBUG_LOG( DBG_GAME, DBG_INFO, troop.GetName() << " want to join " << hero.GetName() )
 
         if ( Dialog::YES == Dialog::ArmyJoinFree( troop ) ) {
             hero.GetArmy().JoinTroop( troop );
