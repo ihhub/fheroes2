@@ -1,16 +1,12 @@
 @echo off
 
-set DST_DIR=%~dp0\..\..\VisualStudio\packages\installed
+set DST_DIR=%~dp0\..\..\VisualStudio\packages
 
 set PKG_FILE=windows.zip
 set PKG_URL=https://github.com/fheroes2/fheroes2-prebuilt-deps/releases/download/windows-deps/%PKG_FILE%
 set PKG_TLS=[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-setlocal enableextensions
-
 if not exist "%DST_DIR%" ( mkdir "%DST_DIR%" || exit /B 1 )
-
-endlocal
 
 echo Downloading %PKG_URL%                                                                                        && ^
 powershell -Command "%PKG_TLS%; (New-Object System.Net.WebClient).DownloadFile('%PKG_URL%', '%TEMP%\%PKG_FILE%')" || ^
