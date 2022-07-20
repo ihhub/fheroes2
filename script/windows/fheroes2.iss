@@ -31,7 +31,9 @@ Source: "..\..\changelog.txt"; DestDir: "{app}"
 Source: "..\..\LICENSE"; DestDir: "{app}"
 Source: "..\..\files\lang\*.mo"; DestDir: "{app}\files\lang"
 Source: "..\..\files\data\*.h2d"; DestDir: "{app}\files\data"
+#if DeployConfName == 'SDL2'
 Source: "..\..\files\soundfonts\*.*"; DestDir: "{app}\files\soundfonts"
+#endif
 
 [Tasks]
 Name: desktopicon; Description: "Desktop shortcut"

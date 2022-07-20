@@ -78,7 +78,10 @@ jobs:
         zip.exe -j "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip "$BUILD_DIR"\\fheroes2.exe "$BUILD_DIR"\\*.dll \
                 script\\demo\\*.bat script\\demo\\*.ps1 script\\homm2\\*.bat script\\homm2\\*.ps1 LICENSE changelog.txt \
                 docs\\README.txt
-        zip.exe "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip files\\lang\\*.mo files\\data\\*.h2d files\\soundfonts\\*.*
+        zip.exe "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip files\\lang\\*.mo files\\data\\*.h2d
+        if [[ ${{ matrix.config.deploy_config }} == SDL2 ]]; then
+            zip.exe "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip files\\soundfonts\\*.*
+        fi
       env:
         BUILD_DIR: build\${{ matrix.config.platform }}\${{ matrix.config.build_config }}
     - uses: actions/upload-artifact@v2
