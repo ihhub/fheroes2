@@ -3,8 +3,19 @@
 set DST_DIR=%~dp0\..\..\VisualStudio\packages
 
 set PKG_FILE=windows.zip
+set PKG_FILE_SHA256=189790BFD0525AF2071F93A9E1AC15EC84333B22C60DD9469B2E337E1A135691
 set PKG_URL=https://github.com/fheroes2/fheroes2-prebuilt-deps/releases/download/windows-deps/%PKG_FILE%
 set PKG_TLS=[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+call :install_packages
+
+if not "%CI%" == "true" (
+    pause
+)
+
+exit /B
+
+:install_packages
 
 if not exist "%DST_DIR%" ( mkdir "%DST_DIR%" || exit /B 1 )
 
@@ -12,12 +23,24 @@ echo Downloading %PKG_URL%                                                      
 powershell -Command "%PKG_TLS%; (New-Object System.Net.WebClient).DownloadFile('%PKG_URL%', '%TEMP%\%PKG_FILE%')" || ^
 exit /B 1
 
+set HASH_CALCULATED=false
+
+for /F "usebackq delims=" %%H in (`powershell -Command "(certutil.exe -hashfile '%TEMP%\%PKG_FILE%' sha256 | Select-String -Pattern '^[0-9A-Fa-f]{64}$').Line.ToUpper()"`) do (
+    set HASH_CALCULATED=true
+
+    if not "%%H" == "%PKG_FILE_SHA256%" (
+        echo Invalid hash for %PKG_FILE%: expected %PKG_FILE_SHA256%, got %%H
+        exit /B 1
+    )
+)
+
+if not "%HASH_CALCULATED%" == "true" (
+    echo Failed to calculate hash for %PKG_FILE%
+    exit /B 1
+)
+
 call :unpack_archive "%TEMP%\%PKG_FILE%" "%DST_DIR%" || ^
 exit /B 1
-
-if not "%CI%" == "true" (
-    pause
-)
 
 exit /B
 
