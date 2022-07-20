@@ -29,7 +29,7 @@ all: $(TARGETS)
 
 $(TARGETS): $(addsuffix .cpp, $(TARGETS)) $(LIBENGINE)
 	$(CXX) $(CCFLAGS) $(CXXFLAGS) $(CPPFLAGS) -c $@.cpp
-	$(CXX) -o $@ $@.o $(LIBENGINE) $(LIBS) $(LDFLAGS) $(LDLIBS)
+	$(CXX) -o $@ $@.o $(LIBENGINE) $(LIBS) $(LDFLAGS)
 
 clean:
 	rm -f *.o *.exe $(TARGETS)
