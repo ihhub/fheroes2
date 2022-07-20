@@ -79,7 +79,7 @@ script/demo/demo
 /demo
 
 # Installed packages for Visual Studio
-VisualStudio/packages/installed
+VisualStudio/packages
 
 # Mac magic folders
 .DS_Store
