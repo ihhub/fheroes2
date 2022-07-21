@@ -898,28 +898,6 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     }
 }
 
-int Maps::Tiles::MonsterJoinCondition() const
-{
-    return mp2_object == MP2::OBJ_MONSTER ? ( 0x03 & quantity3 ) : 0;
-}
-
-void Maps::Tiles::MonsterSetJoinCondition( int cond )
-{
-    // TODO: why are we doing this? Simplify the logic.
-    quantity3 &= 0xFC;
-    quantity3 |= ( cond & 0x03 );
-}
-
-bool Maps::Tiles::MonsterJoinConditionSkip() const
-{
-    return Monster::JOIN_CONDITION_SKIP == MonsterJoinCondition();
-}
-
-bool Maps::Tiles::MonsterJoinConditionFree() const
-{
-    return Monster::JOIN_CONDITION_FREE == MonsterJoinCondition();
-}
-
 uint32_t Maps::Tiles::MonsterCount() const
 {
     // TODO: avoid this hacky way of storing data.
@@ -958,20 +936,22 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
 
     if ( mons.GetID() == Monster::GHOST || mons.isElemental() ) {
         // Ghosts and elementals never join hero's army.
-        tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_SKIP );
+        setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_SKIP );
     }
     else if ( setDefinedCount || ( world.GetWeekType().GetType() == WeekName::MONSTERS && world.GetWeekType().GetMonster() == mons.GetID() ) ) {
         // Wandering monsters with the number of units specified by the map designer are always considered as "hostile" and always join only for money.
 
         // Monsters will be willing to join for some amount of money.
-        tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
+        setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_MONEY );
     }
     else {
         // 20% chance for join
-        if ( 3 > Rand::Get( 1, 10 ) )
-            tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_FREE );
-        else
-            tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
+        if ( 3 > Rand::Get( 1, 10 ) ) {
+            setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_FREE );
+        }
+        else {
+            setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_MONEY );
+        }
     }
 }
 
@@ -1105,5 +1085,33 @@ void Maps::Tiles::UpdateMonsterPopulation( Tiles & tile )
     else {
         const uint32_t bonusUnit = ( Rand::Get( 1, 7 ) <= ( troopCount % 7 ) ) ? 1 : 0;
         tile.MonsterSetCount( troopCount * 8 / 7 + bonusUnit );
+    }
+}
+
+namespace Maps
+{
+    void setSpellOnTile( Tiles & tile, const int32_t spellId )
+    {
+        tile.setAdditionalMetadata( spellId );
+    }
+
+    int32_t getSpellIdFromTile( const Tiles & tile )
+    {
+        return tile.getAdditionalMetadata();
+    }
+
+    void setMonsterOnTileJoinCondition( Tiles & tile, const int32_t condition )
+    {
+        tile.setAdditionalMetadata( condition );
+    }
+
+    bool isMonsterOnTileJoinConditionSkip( const Tiles & tile )
+    {
+        return tile.GetObject() == MP2::OBJ_MONSTER && tile.getAdditionalMetadata() == Monster::JOIN_CONDITION_SKIP;
+    }
+
+    bool isMonsterOnTileJoinConditionFree( const Tiles & tile )
+    {
+        return tile.GetObject() == MP2::OBJ_MONSTER && tile.getAdditionalMetadata() == Monster::JOIN_CONDITION_FREE;
     }
 }
