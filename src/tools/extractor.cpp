@@ -24,75 +24,39 @@
 #include <iostream>
 #include <vector>
 
+#include "agg_file.h"
 #include "serialize.h"
 #include "system.h"
-#include "tools.h"
-
-#define FATSIZENAME 15
-
-#if defined( _MSC_VER )
-#undef main
-#endif
-
-struct aggfat_t
-{
-    uint32_t crc;
-    uint32_t offset;
-    uint32_t size;
-};
 
 int main( int argc, char ** argv )
 {
     if ( argc != 3 ) {
-        std::cout << argv[0] << " path_heroes2.agg extract_to_dir" << std::endl;
-
-        return EXIT_SUCCESS;
+        std::cerr << argv[0] << ": wrong arguments" << std::endl <<
+            "Usage: extractor <path_to_agg> <dir_to_extract>" << std::endl <<
+            "Example: extractor heroes2.agg output_dir" << std::endl;
+        return EXIT_FAILURE;
     }
 
-    StreamFile sf1;
-    StreamFile sf2;
-
-    if ( !sf1.open( argv[1], "rb" ) ) {
-        std::cout << "error open file: " << argv[1] << std::endl;
-        return EXIT_SUCCESS;
+    fheroes2::AGGFile agg;
+    agg.open( argv[1] );
+    if ( !agg.isGood() ) {
+        std::cerr << "error open file: " << argv[1] << std::endl;
+        return EXIT_FAILURE;
     }
 
     System::MakeDirectory( argv[2] );
 
-    const size_t size = sf1.size();
     int total = 0;
-    int count_items = sf1.getLE16();
-
-    StreamBuf fats = sf1.toStreamBuf( count_items * 4 * 3 /* crc, offset, size */ );
-    sf1.seek( size - FATSIZENAME * count_items );
-    StreamBuf names = sf1.toStreamBuf( FATSIZENAME * count_items );
-
-    std::map<std::string, aggfat_t> maps;
-
-    for ( int ii = 0; ii < count_items; ++ii ) {
-        aggfat_t & f = maps[StringLower( names.toString( FATSIZENAME ) )];
-
-        f.crc = fats.getLE32();
-        f.offset = fats.getLE32();
-        f.size = fats.getLE32();
+    for(std::string name : agg.listFilenames()) {
+        StreamFile sf;
+        sf.open( System::ConcatePath( argv[2], name ), "wb" );
+        auto data = agg.read( name );
+        sf.putRaw( reinterpret_cast<char*>( &data[0] ), data.size() );
+        sf.close();
+        std::cout << "extract: " << name << std::endl;
+        total++;
     }
 
-    for ( std::map<std::string, aggfat_t>::const_iterator it = maps.begin(); it != maps.end(); ++it ) {
-        const aggfat_t & fat = ( *it ).second;
-        const std::string & fn = System::ConcatePath( argv[2], ( *it ).first );
-        sf1.seek( fat.offset );
-        std::vector<uint8_t> buf = sf1.getRaw( fat.size );
-
-        if ( !buf.empty() && sf2.open( fn, "wb" ) ) {
-            sf2.putRaw( reinterpret_cast<char *>( &buf[0] ), buf.size() );
-            sf2.close();
-
-            ++total;
-            std::cout << "extract: " << fn << std::endl;
-        }
-    }
-
-    sf1.close();
     std::cout << "total: " << total << std::endl;
     return EXIT_SUCCESS;
 }

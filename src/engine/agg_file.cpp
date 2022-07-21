@@ -68,6 +68,14 @@ namespace fheroes2
 
         return std::vector<uint8_t>();
     }
+
+    std::vector<std::string> AGGFile::listFilenames()
+    {
+        std::vector<std::string> names;
+        for( auto name : _files)
+            names.emplace_back(name.first);
+        return names;
+    }
 }
 
 StreamBase & operator>>( StreamBase & st, fheroes2::ICNHeader & icn )
