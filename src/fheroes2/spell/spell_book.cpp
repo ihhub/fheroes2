@@ -31,7 +31,6 @@
 #include "game_hotkeys.h"
 #include "heroes_base.h"
 #include "icn.h"
-#include "image_tool.h"
 #include "spell_book.h"
 #include "text.h"
 #include "tools.h"

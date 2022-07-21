@@ -1,6 +1,6 @@
 /***************************************************************************
  *   fheroes2: https://github.com/ihhub/fheroes2                           *
- *   Copyright (C) 2020 - 2022                                             *
+ *   Copyright (C) 2022                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,24 +17,14 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
-#pragma once
-
-#include <string>
+#ifndef ICN_DECODE_H
+#define ICN_DECODE_H
 
 #include "image.h"
 
 namespace fheroes2
 {
-    bool Save( const Image & image, const std::string & path );
-
-    // Save an image into file. 'background' represents palette index from the original palette. Recommended value is 23.
-    bool Save( const Image & image, const std::string & path, const uint8_t background );
-
-    bool Load( const std::string & path, Image & image );
-
     Sprite decodeICNSprite( const uint8_t * data, uint32_t sizeData, const int32_t width, const int32_t height, const int16_t offsetX, const int16_t offsetY );
-
-    // By default only Bitmap (.bmp) format is supported.
-    bool isPNGFormatSupported();
 }
+
+#endif
