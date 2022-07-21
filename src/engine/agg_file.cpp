@@ -72,8 +72,8 @@ namespace fheroes2
     std::vector<std::string> AGGFile::listFilenames()
     {
         std::vector<std::string> names;
-        for( auto name : _files)
-            names.emplace_back(name.first);
+        for ( auto name : _files )
+            names.emplace_back( name.first );
         return names;
     }
 }

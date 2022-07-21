@@ -29,8 +29,7 @@
 int main( int argc, char ** argv )
 {
     if ( argc != 3 ) {
-        std::cerr << argv[0] << ": wrong arguments" << std::endl <<
-            "Usage: " << argv[0] << " infile.82m outfile.wav" << std::endl;
+        std::cerr << argv[0] << ": wrong arguments" << std::endl << "Usage: " << argv[0] << " infile.82m outfile.wav" << std::endl;
         return EXIT_FAILURE;
     }
 

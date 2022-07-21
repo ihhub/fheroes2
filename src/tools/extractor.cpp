@@ -31,9 +31,9 @@
 int main( int argc, char ** argv )
 {
     if ( argc != 3 ) {
-        std::cerr << argv[0] << ": wrong arguments" << std::endl <<
-            "Usage: extractor <path_to_agg> <dir_to_extract>" << std::endl <<
-            "Example: extractor heroes2.agg output_dir" << std::endl;
+        std::cerr << argv[0] << ": wrong arguments" << std::endl
+                  << "Usage: extractor <path_to_agg> <dir_to_extract>" << std::endl
+                  << "Example: extractor heroes2.agg output_dir" << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -47,11 +47,11 @@ int main( int argc, char ** argv )
     System::MakeDirectory( argv[2] );
 
     int total = 0;
-    for(std::string name : agg.listFilenames()) {
+    for ( std::string name : agg.listFilenames() ) {
         StreamFile sf;
         sf.open( System::ConcatePath( argv[2], name ), "wb" );
         auto data = agg.read( name );
-        sf.putRaw( reinterpret_cast<char*>( &data[0] ), data.size() );
+        sf.putRaw( reinterpret_cast<char *>( &data[0] ), data.size() );
         sf.close();
         std::cout << "extract: " << name << std::endl;
         total++;
