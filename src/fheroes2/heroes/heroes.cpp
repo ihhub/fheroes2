@@ -1007,10 +1007,18 @@ void Heroes::IncreaseExperience( const uint32_t amount, const bool autoselect )
     int oldLevel = GetLevelFromExperience( experience );
     int newLevel = GetLevelFromExperience( experience + amount );
 
-    for ( int level = oldLevel; level < newLevel; ++level )
-        LevelUp( false, autoselect );
+    const uint32_t updatedExperience = experience + amount;
 
-    experience += amount;
+    for ( int level = oldLevel; level < newLevel - 1; ++level ) {
+        experience = GetExperienceFromLevel( level );
+        LevelUp( false, autoselect );
+    }
+
+    experience = updatedExperience;
+
+    if ( newLevel > oldLevel ) {
+        LevelUp( false, autoselect );
+    }
 }
 
 /* calc level from exp */
