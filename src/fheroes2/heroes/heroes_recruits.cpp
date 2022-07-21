@@ -125,5 +125,5 @@ StreamBase & operator<<( StreamBase & msg, const Recruit & recruit )
 
 StreamBase & operator>>( StreamBase & msg, Recruit & recruit )
 {
-    return msg >> recruit._id >>recruit._surrenderDay;
+    return msg >> recruit._id >> recruit._surrenderDay;
 }
