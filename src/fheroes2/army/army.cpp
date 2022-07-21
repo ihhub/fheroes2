@@ -913,6 +913,9 @@ void Army::setFromTile( const Maps::Tiles & tile )
         uint32_t count = 0;
 
         switch ( tile.QuantityVariant() ) {
+        case 0:
+            // Shipwreck guardians were defeated.
+            return;
         case 1:
             count = 10;
             break;
