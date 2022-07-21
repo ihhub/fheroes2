@@ -27,8 +27,8 @@
 #endif
 
 #include "image.h"
-#include "image_save.h"
 #include "image_palette.h"
+#include "image_save.h"
 #include "serialize.h"
 
 namespace
@@ -60,7 +60,6 @@ namespace
         std::vector<uint8_t> out( count * 4 );
         const uint8_t * in = image.image();
         const uint8_t * transform = image.transform();
- 
 
         for ( size_t i = 0; i < count; i++ ) {
             if ( transform[i] == 1 ) {
@@ -119,7 +118,7 @@ namespace
         sf.close();
         return true;
     }
- 
+
 #if defined( ENABLE_PNG )
     bool SavePNG( const fheroes2::Image & image, const std::string & path )
     {
@@ -151,7 +150,7 @@ namespace
     bool SaveImage( const fheroes2::Image & image, const std::string & path )
     {
 #if defined( ENABLE_PNG )
-        return ( isPNGFilePath( path ) ? SavePNG : SaveBMP )( image, path.c_str() );
+        return (isPNGFilePath( path ) ? SavePNG : SaveBMP)( image, path.c_str() );
 #else
         std::string tmp = path;
         if ( isPNGFilePath( path ) ) {
