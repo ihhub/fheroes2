@@ -29,17 +29,16 @@
 int main( int argc, char ** argv )
 {
     if ( argc != 3 ) {
-        std::cout << argv[0] << " infile.82m outfile.wav" << std::endl;
-
-        return EXIT_SUCCESS;
+        std::cerr << argv[0] << ": wrong arguments" << std::endl <<
+            "Usage: " << argv[0] << " infile.82m outfile.wav" << std::endl;
+        return EXIT_FAILURE;
     }
 
     std::fstream fd_data( argv[1], std::ios::in | std::ios::binary );
 
     if ( fd_data.fail() ) {
-        std::cout << "error open file: " << argv[1] << std::endl;
-
-        return EXIT_SUCCESS;
+        std::cerr << "error open file: " << argv[1] << std::endl;
+        return EXIT_FAILURE;
     }
 
     fd_data.seekg( 0, std::ios_base::end );
