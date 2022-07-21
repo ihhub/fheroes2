@@ -921,21 +921,8 @@ StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
 
 StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 {
-    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_0912_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE2_0912_RELEASE ) {
-        int heroId;
-        uint32_t heroSurrenderDay;
-
-        msg >> heroId >> heroSurrenderDay;
-
-        if ( heroId != Heroes::UNKNOWN && heroSurrenderDay > 0 ) {
-            kingdom.recruits.SetHero2Tmp( world.GetHeroes( heroId ), heroSurrenderDay );
-        }
-    }
-
-    msg >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors;
+    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits
+        >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0916_RELEASE, "Remove the check below." );
     if ( Game::GetLoadVersion() < FORMAT_VERSION_0916_RELEASE ) {

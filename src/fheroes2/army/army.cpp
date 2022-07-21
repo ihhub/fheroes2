@@ -1431,7 +1431,7 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
         return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
     }
 
-    if ( tile.MonsterJoinConditionSkip() || !troop.isValid() ) {
+    if ( Maps::isMonsterOnTileJoinConditionSkip( tile ) || !troop.isValid() ) {
         return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
     }
 
@@ -1439,7 +1439,7 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
     const double armyStrengthRatio = static_cast<const Troops &>( hero.GetArmy() ).GetStrength() / troop.GetStrength();
 
     if ( armyStrengthRatio > 2 ) {
-        if ( tile.MonsterJoinConditionFree() ) {
+        if ( Maps::isMonsterOnTileJoinConditionFree( tile ) ) {
             return { NeutralMonsterJoiningCondition::Reason::Free, troop.GetCount(), nullptr, nullptr };
         }
 

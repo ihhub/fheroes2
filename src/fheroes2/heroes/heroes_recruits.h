@@ -55,8 +55,6 @@ public:
         return _surrenderDay;
     }
 
-    void setSurrenderDayTmp( const uint32_t surrenderDay );
-
 private:
     int _id;
     uint32_t _surrenderDay;
@@ -83,8 +81,6 @@ public:
 
     void SetHero1( Heroes * hero );
     void SetHero2( Heroes * hero );
-
-    void SetHero2Tmp( Heroes * hero, const uint32_t heroSurrenderDay );
 
     void appendSurrenderedHero( Heroes & hero, const uint32_t heroSurrenderDay );
 };
