@@ -687,8 +687,8 @@ void ActionToMonster( Heroes & hero, int32_t dst_index )
             tile.MonsterSetCount( army.GetCountMonsters( troop.GetMonster() ) );
 
             // reset join condition
-            if ( tile.MonsterJoinConditionFree() ) {
-                tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
+            if ( Maps::isMonsterOnTileJoinConditionFree( tile ) ) {
+                Maps::setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_MONEY );
             }
         }
     }
@@ -2121,7 +2121,7 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
         resource = tile.QuantityResourceCount().first;
         header = Maps::GetMinesName( resource );
 
-        if ( objectType == MP2::OBJ_ABANDONEDMINE && tile.GetQuantity3() != Spell::HAUNT ) {
+        if ( objectType == MP2::OBJ_ABANDONEDMINE && Maps::getSpellIdFromTile( tile ) != Spell::HAUNT ) {
             body = _( "You beat the Ghosts and are able to restore the mine to production." );
             break;
         }
@@ -2173,7 +2173,8 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
 
             if ( result.AttackerWins() ) {
                 hero.IncreaseExperience( result.GetExperienceAttacker() );
-                tile.SetQuantity3( 0 );
+                // Clear any metadata related to spells.
+                tile.clearAdditionalMetadata();
             }
             else {
                 capture = false;
@@ -2209,7 +2210,7 @@ void ActionToCaptureObject( Heroes & hero, const MP2::MapObjectType objectType, 
         Troop new_troop = troop;
 
         // check if it is already guarded by a spell
-        const bool readonly = tile.GetQuantity3() != 0;
+        const bool readonly = ( Maps::getSpellIdFromTile( tile ) != Spell::NONE );
 
         if ( Dialog::SetGuardian( hero, new_troop, co, readonly ) )
             troop.Set( new_troop.GetMonster(), new_troop.GetCount() );
