@@ -21,6 +21,7 @@
 #include "image.h"
 #include "image_palette.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
