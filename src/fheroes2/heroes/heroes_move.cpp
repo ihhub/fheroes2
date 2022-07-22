@@ -275,7 +275,6 @@ namespace
 
         int icnIndex = 0;
 
-
         if ( isHeroChangingDirection ) {
             icnIndex = 45;
         }
