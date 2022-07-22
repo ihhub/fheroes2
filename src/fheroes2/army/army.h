@@ -98,7 +98,11 @@ public:
     Troop * GetSlowestTroop() const;
 
     void SortStrongest();
-    void ArrangeForBattle( bool = false );
+
+    // Performs the pre-battle arrangement for neutral troops
+    void ArrangeForBattle( bool upgrade = false );
+    // Performs the pre-battle arrangement of given monsters in a given number, dividing them into a given number of stacks if possible
+    void ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const uint32_t stacksCount );
     // Optimizes the arrangement of troops to pass through the whirlpool (moves one weakest unit
     // to a separate slot, if possible)
     void ArrangeForWhirlpool();
