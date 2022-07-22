@@ -400,7 +400,7 @@
     <ClInclude Include="src\engine\core.h" />
     <ClInclude Include="src\engine\dir.h" />
     <ClInclude Include="src\engine\endian_h2.h" />
-    <ClCompile Include="src\engine\icn_decode.h" />
+    <ClInclude Include="src\engine\icn_decode.h" />
     <ClInclude Include="src\engine\image.h" />
     <ClInclude Include="src\engine\image_palette.h" />
     <ClInclude Include="src\engine\image_save.h" />
