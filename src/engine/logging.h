@@ -119,8 +119,7 @@ namespace Logging
 #else // Default: log to STDERR
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \
-        std::ostringstream osss;                                                                                                                                         \
-        osss << x << std::endl;                                                                                                                                          \
+        std::cerr << x << std::endl;                                                                                                                                     \
     }
 #endif
 
