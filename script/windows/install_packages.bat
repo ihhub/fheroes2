@@ -6,6 +6,7 @@ if not exist "%tempPath%\zlib"      mkdir "%tempPath%\zlib"
 if not exist "%tempPath%\sdl"       mkdir "%tempPath%\sdl"
 if not exist "%tempPath%\sdl_mixer" mkdir "%tempPath%\sdl_mixer"
 if not exist "%tempPath%\sdl_image" mkdir "%tempPath%\sdl_image"
+if not exist "%tempPath%\libpng"    mkdir "%tempPath%\libpng"
 
 echo [1/6] Copying packages
 xcopy /Y /Q "..\..\VisualStudio\packages\zlib1.2.11.zip" "%tempPath%\zlib\"
@@ -19,6 +20,8 @@ echo [5/6] Downloading packages
 powershell -Command "(New-Object System.Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-devel-2.0.4-VC.zip', '%tempPath%\sdl_mixer\sdl_mixer2.zip')"
 echo [6/6] Downloading packages
 powershell -Command "(New-Object System.Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.5-VC.zip', '%tempPath%\sdl_image\sdl_image2.zip')"
+
+xcopy /Y /Q "..\..\VisualStudio\packages\libpng.zip" "%tempPath%\libpng\"
 
 xcopy /Y /S /Q "setup_packages.bat" "..\..\VisualStudio\packages\installed"
 
@@ -41,6 +44,8 @@ call :unpack_archive "sdl_mixer\sdl_mixer2.zip" "sdl_mixer"
 
 echo [6/6] Unpacking packages
 call :unpack_archive "sdl_image\sdl_image2.zip" "sdl_image"
+
+call :unpack_archive "libpng\libpng.zip" "libpng"
 
 cd ..
 

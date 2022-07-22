@@ -1,4 +1,4 @@
-@echo off
+@echo on
 
 if not exist "zlib\include" mkdir "zlib\include"
 if not exist "zlib\lib\x86" mkdir "zlib\lib\x86"
@@ -7,7 +7,6 @@ if not exist "sdl\include"  mkdir "sdl\include"
 if not exist "sdl\lib"      mkdir "sdl\lib"
 if not exist "sdl2\include" mkdir "sdl2\include"
 if not exist "sdl2\lib"     mkdir "sdl2\lib"
-if not exist "libpng\"      xcopy /Y /S /Q "..\libpng" "libpng\"
 
 xcopy /Y /S /Q "temp\sdl\SDL-1.2.15\include"  "sdl\include"
 xcopy /Y /S /Q "temp\sdl\SDL-1.2.15\lib"      "sdl\lib"
@@ -66,5 +65,7 @@ xcopy /Y /Q "temp\sdl_image\SDL2_image-2.0.5\lib\x64\zlib1.dll"       "sdl2\lib\
 xcopy /Y /S /Q "temp\zlib\include" "zlib\include"
 xcopy /Y /S /Q "temp\zlib\lib\x86" "zlib\lib\x86"
 xcopy /Y /S /Q "temp\zlib\lib\x64" "zlib\lib\x64"
+
+xcopy /Y /S /Q "temp\libpng\libpng" "libpng\"
 
 rd /S /Q temp
