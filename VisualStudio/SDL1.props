@@ -13,6 +13,7 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy /Y "$(MSBuildThisFileDirectory)packages\sdl1\lib\$(PlatformTarget)\*.dll" "$(OutDir)"
+xcopy /Y "$(MSBuildThisFileDirectory)packages\sdl1\lib\$(PlatformTarget)\*.pdb" "$(OutDir)"
 %(Command)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
