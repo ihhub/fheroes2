@@ -175,6 +175,7 @@
     <ClCompile Include="..\engine\audio.cpp" />
     <ClCompile Include="..\engine\core.cpp" />
     <ClCompile Include="..\engine\dir.cpp" />
+    <ClCompile Include="..\engine\icn_decode.cpp" />
     <ClCompile Include="..\engine\image.cpp" />
     <ClCompile Include="..\engine\image_palette.cpp" />
     <ClCompile Include="..\engine\image_save.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="..\engine\audio.h" />
     <ClInclude Include="..\engine\core.h" />
     <ClInclude Include="..\engine\dir.h" />
+    <ClInclude Include="..\engine\icn_decode.h" />
     <ClInclude Include="..\engine\image.h" />
     <ClInclude Include="..\engine\image_palette.h" />
     <ClInclude Include="..\engine\image_save.h" />
