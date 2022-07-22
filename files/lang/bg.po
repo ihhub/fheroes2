@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-10 14:31+0000\n"
-"PO-Revision-Date: 2022-07-15 20:30+0100\n"
+"PO-Revision-Date: 2022-07-22 15:09+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -676,7 +676,7 @@ msgid "Monsters"
 msgstr "Чудовища"
 
 msgid "N/A"
-msgstr ""
+msgstr "Няма"
 
 msgid "Left Turret"
 msgstr "Лява кула"
@@ -713,7 +713,7 @@ msgid "Ogre Alliance"
 msgstr "Съюз на Огре"
 
 msgid "Dwarfbane"
-msgstr ""
+msgstr "Джуджеубиец"
 
 msgid "Dragon Alliance"
 msgstr "Драконов съюз"
@@ -731,34 +731,34 @@ msgid "Uncle Ivan"
 msgstr "Чичо Иван"
 
 msgid "Annexation"
-msgstr ""
+msgstr "Анексирам"
 
 msgid "Carator Mines"
-msgstr ""
+msgstr "Мините на Уредника"
 
 msgid "Force of Arms"
-msgstr ""
+msgstr "Сила на оръжията"
 
 msgid "Save the Dwarves"
-msgstr ""
+msgstr "Спаси джуджетата"
 
 msgid "The Crown"
-msgstr ""
+msgstr "Короната"
 
 msgid "The Gauntlet"
-msgstr ""
+msgstr "Ръкавицата"
 
 msgid "Turning Point"
-msgstr ""
+msgstr "Повратна точка"
 
 msgid "Betrayal"
-msgstr ""
+msgstr "Предателство"
 
 msgid "Corlagon's Defense"
-msgstr ""
+msgstr "Защитата на Корлагон"
 
 msgid "Final Justice"
-msgstr ""
+msgstr "Последна справедливост"
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
@@ -766,6 +766,10 @@ msgid ""
 "will spend most of their time fighting with one another.  Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
+"Роланд се нуждае от вас, за да победите лордовете близо до замъка му, за да "
+"започне своята война на бунт срещу брат си. Те не са съюзници, така че през "
+"по-голямата част от времето ще са в битка един срещу друг. Победата ще е "
+"ваша, когато победите всичките им замъци и герои."
 
 msgid ""
 "The local lords refuse to swear allegiance to Roland, and must be subdued. "
@@ -828,31 +832,31 @@ msgid ""
 msgstr ""
 
 msgid "Barbarian Wars"
-msgstr ""
+msgstr "Варварски войни"
 
 msgid "First Blood"
-msgstr ""
+msgstr "Първа кръв"
 
 msgid "Necromancers"
-msgstr ""
+msgstr "Магьосници"
 
 msgid "Slay the Dwarves"
-msgstr ""
+msgstr "Убий джуджетата"
 
 msgid "Country Lords"
-msgstr ""
+msgstr "Селски господари"
 
 msgid "Dragon Master"
-msgstr ""
+msgstr "Господар на драконите"
 
 msgid "Rebellion"
-msgstr ""
+msgstr "Бунт"
 
 msgid "Apocalypse"
-msgstr ""
+msgstr "Апокалипсис"
 
 msgid "Greater Glory"
-msgstr ""
+msgstr "По-голяма слава"
 
 msgid ""
 "King Archibald requires you to defeat the three enemies in this region.  "
@@ -913,28 +917,28 @@ msgid ""
 msgstr ""
 
 msgid "Arrow's Flight"
-msgstr ""
+msgstr "Полетът на стрелата"
 
 msgid "Island of Chaos"
-msgstr ""
+msgstr "Остров на хаоса"
 
 msgid "The Abyss"
-msgstr ""
+msgstr "Бездната"
 
 msgid "Uprising"
-msgstr ""
+msgstr "Въстание"
 
 msgid "Aurora Borealis"
-msgstr ""
+msgstr "Северно Сияние"
 
 msgid "Betrayal's End"
-msgstr ""
+msgstr "Краят на предателството"
 
 msgid "Corruption's Heart"
-msgstr ""
+msgstr "Сърцето на корупцията"
 
 msgid "The Giant's Pass"
-msgstr ""
+msgstr "Проходът на великана"
 
 msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
@@ -980,28 +984,28 @@ msgid ""
 msgstr ""
 
 msgid "Border Towns"
-msgstr ""
+msgstr "Погранични градове"
 
 msgid "Conquer and Unify"
-msgstr ""
+msgstr "Покори и обедини"
 
 msgid "Crazy Uncle Ivan"
-msgstr ""
+msgstr "Лудия чичо Иван"
 
 msgid "The Wayward Son"
-msgstr ""
+msgstr "Своенравният син"
 
 msgid "Ivory Gates"
-msgstr ""
+msgstr "Портите на Айвъри"
 
 msgid "The Elven Lands"
-msgstr ""
+msgstr "Елфическите земи"
 
 msgid "The Epic Battle"
-msgstr ""
+msgstr "Епичната битка"
 
 msgid "The Southern War"
-msgstr ""
+msgstr "Южната война"
 
 msgid ""
 "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the "
@@ -1045,16 +1049,16 @@ msgid ""
 msgstr ""
 
 msgid "Fount of Wizardry"
-msgstr ""
+msgstr "Изворът на магьосничеството"
 
 msgid "Power's End"
-msgstr ""
+msgstr "Краят на властта"
 
 msgid "The Eternal Scrolls"
-msgstr ""
+msgstr "Вечните свитъци"
 
 msgid "The Shrouded Isles"
-msgstr ""
+msgstr "Забулените острови"
 
 msgid ""
 "Your mission is to vanquish the warring mages in the magical Shrouded Isles. "
@@ -1080,16 +1084,16 @@ msgid ""
 msgstr ""
 
 msgid "Blood is Thicker"
-msgstr ""
+msgstr "Кръвта е по-гъста"
 
 msgid "King and Country"
-msgstr ""
+msgstr "Крал и държава"
 
 msgid "Pirate Isles"
-msgstr ""
+msgstr "Пиратски острови"
 
 msgid "Stranded"
-msgstr ""
+msgstr "Закъсал"
 
 msgid ""
 "Capture the town on the island off the southeast shore in order to construct "
@@ -1112,55 +1116,60 @@ msgid ""
 msgstr ""
 
 msgid " bane"
-msgstr ""
+msgstr " проклятие"
 
 msgid " alliance"
-msgstr ""
+msgstr " съюз"
 
 msgid "Carry-over forces"
-msgstr ""
+msgstr "Пренасящи сили"
 
 msgid " bonus"
-msgstr ""
+msgstr " бонус"
 
 msgid " defeated"
-msgstr ""
+msgstr " победен"
 
 msgid " will always run away from your army."
-msgstr ""
+msgstr " винаги ще бяга от вашата армия."
 
 msgid " will be willing to join your army."
-msgstr ""
+msgstr " ще има желание да се присъедини към вашата армия."
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
-msgstr ""
+msgstr "Артефактът \"%{artifact}\" ще бъде пренесен в сценария."
 
 msgid "The army will be carried over the scenario."
-msgstr ""
+msgstr "Армията ще бъде пренесена по сценария."
 
 msgid "The kingdom will have +%{count} %{resource} each day."
-msgstr ""
+msgstr "Кралството ще има +%{count} %{resource} всеки ден."
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
-msgstr ""
+msgstr "Заклинанието \"%{spell}\" ще бъде пренесено в сценария."
 
 msgid "%{hero} can be hired in the scenario."
-msgstr ""
+msgstr "%{hero} може да бъде нает в сценария."
 
 msgid ""
 "%{hero} has been defeated and will not appear in the subsequent scenarios."
-msgstr ""
+msgstr "%{hero} е победен и няма да се появи в следващите сценарии."
 
 msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr ""
+"Джуджетата разпознават своите съюзници и с радост се присъединяват към "
+"вашите сили."
 
 msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
 msgstr ""
+"Огритата ви разпознават като Джуджеубиец и желаят да се присъединят към вас."
 
 msgid ""
 "The dragons, snarling and growling, agree to join forces with you, their "
 "'Ally'."
 msgstr ""
+"Драконите, ръмжащи и ръмжейки, се съгласяват да обединят сили с вас, техния "
+"\"съюзник\"."
 
 msgid ""
 "As you approach the group of elves, their leader calls them all to "
@@ -1168,69 +1177,83 @@ msgid ""
 "fearless ally of ours?\"  The group explodes with cheers as they run to join "
 "your ranks."
 msgstr ""
+"Когато се приближите до групата елфи, техният водач ги призовава всички да "
+"внимават. Той им крещи: \"Кой от вас е достатъчно смел да се присъедини към "
+"този наш безстрашен съюзник?\" Групата избухва от възгласи, докато тичат да "
+"се присъединят към вашите редици."
 
 msgid ""
 "The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may "
 "pass.\""
 msgstr ""
+"Джуджетата ви приветстват: \"Всеки приятел на Роланд е и наш приятел. Може "
+"да преминете.\""
 
 msgid ""
 "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
 msgstr ""
+"Огритата ви изсумтяват в знак на признание: \"Съюзниците на Арчибалд може да "
+"преминат.\""
 
 msgid ""
 "The dragons see you and call out.  \"Our alliance with Archibald compels us "
 "to join you.  Unfortunately you have no room.  A pity!\"  They quickly "
 "scatter."
 msgstr ""
+"Драконите ви виждат и викат. \"Съюзът ни с Арчибалд ни принуждава да се "
+"присъединим към вас. За съжаление нямате място. Жалко!\" Те бързо се "
+"разпръскват."
 
 msgid ""
 "The elves stand at attention as you approach.  Their leader calls to you and "
 "says, \"Let us not impede your progress, ally!  Move on, and may victory be "
 "yours.\""
 msgstr ""
+"Елфите стоят мирно, докато се приближавате. Техният водач ви казва: \"Нека "
+"не пречим на прогреса ти, съюзнико! Продължавай напред и нека победата бъде "
+"твоя.\""
 
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
-msgstr ""
+msgstr "\"Джуджеубиецо!!!!, бягай за да опазиш живота си.\""
 
 msgid "campaignBonus|Ballista"
-msgstr ""
+msgstr "Катапулт"
 
 msgid "campaignBonus|Black Pearl"
-msgstr ""
+msgstr "Черна перла"
 
 msgid "campaignBonus|Caster's Bracelet"
-msgstr ""
+msgstr "Гривна на Кастер"
 
 msgid "campaignBonus|Defender Helm"
-msgstr ""
+msgstr "Защитен шлем"
 
 msgid "campaignBonus|Breastplate"
-msgstr ""
+msgstr "Нагръдник"
 
 msgid "campaignBonus|Dragon Sword"
-msgstr ""
+msgstr "Драконов меч"
 
 msgid "campaignBonus|Fizbin Medal"
-msgstr ""
+msgstr "Медал Физбин"
 
 msgid "campaignBonus|Foremost Scroll"
-msgstr ""
+msgstr "Първият свитък"
 
 msgid "campaignBonus|Hideous Mask"
-msgstr ""
+msgstr "Отвратителна маска"
 
 msgid "campaignBonus|Mage's Ring"
-msgstr ""
+msgstr "Пръстенът на магьосника"
 
 msgid "campaignBonus|Major Scroll"
-msgstr ""
+msgstr "Огромен свитък"
 
 msgid "campaignBonus|Medal of Honor"
-msgstr ""
+msgstr "Медал на честта"
 
 msgid "campaignBonus|Medal of Valor"
-msgstr ""
+msgstr "Медал за доблест"
 
 msgid "campaignBonus|Minor Scroll"
 msgstr ""
@@ -2388,34 +2411,34 @@ msgid "Load Game"
 msgstr "Зареди Игра"
 
 msgid "No save files to load."
-msgstr ""
+msgstr "Няма запазени файлове за зареждане."
 
 msgid "New Game"
 msgstr "Нова Игра"
 
 msgid "Start a single or multi-player game."
-msgstr ""
+msgstr "Започнете игра за един или няколко играча."
 
 msgid "Load a previously saved game."
-msgstr ""
+msgstr "Заредете запазена игра."
 
 msgid "Save Game"
-msgstr ""
+msgstr "Запази играта"
 
 msgid "Save the current game."
-msgstr ""
+msgstr "Запазете текущата игра."
 
 msgid "Quit"
 msgstr "Напускане"
 
 msgid "Quit out of Heroes of Might and Magic II."
-msgstr ""
+msgstr "Напуснете Heroes of Might and Magic II."
 
 msgid "Language"
 msgstr "Език"
 
 msgid "Resolution"
-msgstr "Разделителна способност"
+msgstr "Резолюция"
 
 msgid "Experimental"
 msgstr "Пробни"
@@ -2445,7 +2468,7 @@ msgid "Color"
 msgstr "Цветен"
 
 msgid "Text Support"
-msgstr "Текстова поддръжка"
+msgstr "Доп. информация"
 
 msgid "Evil"
 msgstr "Зъл"
@@ -2472,59 +2495,69 @@ msgid "Select Game Language"
 msgstr "Език на играта"
 
 msgid "Change language of the game."
-msgstr ""
+msgstr "Промяна на езика на играта."
 
 msgid "Select Game Resolution"
 msgstr "Изберете резолюция на играта"
 
 msgid "Change resolution of the game."
-msgstr ""
+msgstr "Промяна на резолюцията на играта."
 
 msgid "Change audio settings of the game."
-msgstr ""
+msgstr "Променете звуковите настройки на играта."
 
 msgid "Experimental game settings."
 msgstr "Експериментални настройки на играта."
 
 msgid "Toggle instant battle mode."
-msgstr ""
+msgstr "Превключете режима на незабавна битка."
 
 msgid "Check all Hot Keys used in the game."
-msgstr ""
+msgstr "Проверете всички горещи клавиши, използвани в играта."
 
 msgid "Toggle the type of interface you want to use."
-msgstr ""
+msgstr "Превключете типа на интерфейса, който искате да използвате."
 
 msgid ""
 "Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
 "move as smoothly as black and white ones."
 msgstr ""
+"Включване/изключване на цветните курсори. Цветните курсори изглеждат по-"
+"хубави, но понякога не се движат толкова гладко, колкото черно-белите."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
+"Превключете режима на текстова поддръжка, за да изведете допълнителна "
+"информация за прозорци и събития в играта."
 
 msgid "Attention"
-msgstr ""
+msgstr "Внимание"
 
 msgid ""
 "Your version of Heroes of Might and Magic II does not support any other "
 "languages than English."
 msgstr ""
+"Твоята версия на Heroes of Might and Magic II не поддържа други езици освен "
+"английски."
 
 msgid ""
 "Map\n"
 "Difficulty"
 msgstr ""
+"Трудност\n"
+"на Карта"
 
 msgid ""
 "Game\n"
 "Difficulty"
 msgstr ""
+"Трудност\n"
+"на играта"
 
 msgid "Rating"
-msgstr ""
+msgstr "Класиране"
 
 msgid "Map Size"
 msgstr "Размер на карта"
