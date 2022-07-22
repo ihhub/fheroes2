@@ -7,6 +7,7 @@ if not exist "sdl\include"  mkdir "sdl\include"
 if not exist "sdl\lib"      mkdir "sdl\lib"
 if not exist "sdl2\include" mkdir "sdl2\include"
 if not exist "sdl2\lib"     mkdir "sdl2\lib"
+if not exist "libpng\"      xcopy /Y /S /Q "..\libpng" "libpng\"
 
 xcopy /Y /S /Q "temp\sdl\SDL-1.2.15\include"  "sdl\include"
 xcopy /Y /S /Q "temp\sdl\SDL-1.2.15\lib"      "sdl\lib"
