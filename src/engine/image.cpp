@@ -1561,8 +1561,8 @@ namespace fheroes2
                 const Rect intersection = relativeROI ^ roi;
                 assert( intersection.width > 0 && intersection.height > 0 );
 
-                Sprite cropped = Crop( original, intersection.x - spriteRelativeOffset.x, intersection.y - spriteRelativeOffset.y, intersection.width,
-                                       intersection.height );
+                Sprite cropped
+                    = Crop( original, intersection.x - spriteRelativeOffset.x, intersection.y - spriteRelativeOffset.y, intersection.width, intersection.height );
                 assert( !cropped.empty() );
                 cropped.setPosition( intersection.x, intersection.y );
 
