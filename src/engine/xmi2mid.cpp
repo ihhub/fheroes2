@@ -621,8 +621,8 @@ struct MidiEvents : public std::vector<MidiChunk>
             // Unknown command.
             default:
                 emplace_back( 0, static_cast<uint8_t>( 0xFF ), static_cast<uint8_t>( 0x2F ), static_cast<uint8_t>( 0x00 ) );
-                ERROR_LOG( "MIDI track: Unknown command: " << GetHexString( static_cast<int>( *ptr ), 2 ) << ", byte: "
-                           << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) )
+                ERROR_LOG( "MIDI track: Unknown command: " << GetHexString( static_cast<int>( *ptr ), 2 )
+                                                           << ", byte: " << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) )
                 break;
             }
         }
