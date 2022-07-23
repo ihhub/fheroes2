@@ -21,9 +21,7 @@ ArchitecturesInstallIn64BitMode=x64
 
 [Files]
 Source: "{#BuildDir}\{#AppName}.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#BuildDir}\lib*.dll"; DestDir: "{app}"
-Source: "{#BuildDir}\SDL*.dll"; DestDir: "{app}"
-Source: "{#BuildDir}\smpeg.dll"; DestDir: "{app}"; Flags: skipifsourcedoesntexist
+Source: "{#BuildDir}\*.dll"; DestDir: "{app}"
 Source: "..\..\docs\README.txt"; DestDir: "{app}"
 Source: "..\demo\*.bat"; DestDir: "{app}"
 Source: "..\demo\*.ps1"; DestDir: "{app}"
@@ -33,6 +31,9 @@ Source: "..\..\changelog.txt"; DestDir: "{app}"
 Source: "..\..\LICENSE"; DestDir: "{app}"
 Source: "..\..\files\lang\*.mo"; DestDir: "{app}\files\lang"
 Source: "..\..\files\data\*.h2d"; DestDir: "{app}\files\data"
+#if DeployConfName == 'SDL2'
+Source: "..\..\files\soundfonts\*.*"; DestDir: "{app}\files\soundfonts"
+#endif
 
 [Tasks]
 Name: desktopicon; Description: "Desktop shortcut"
