@@ -18,6 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
+#include <ctime>
 #include <thread>
 
 #include "timing.h"
@@ -79,5 +81,22 @@ namespace fheroes2
     void delayforMs( const uint32_t delayMs )
     {
         std::this_thread::sleep_for( std::chrono::milliseconds( delayMs ) );
+    }
+
+    std::tm GetTM( const std::time_t time )
+    {
+        std::tm result = {};
+#if defined( __MINGW32__ ) || defined( _MSC_VER )
+        errno_t res = localtime_s( &result, &time );
+        if ( res != 0 ) {
+            assert( 0 );
+        }
+#else
+        const std::tm * res = localtime_r( &time, &result );
+        if ( res == nullptr ) {
+            assert( 0 );
+        }
+#endif
+        return result;
     }
 }

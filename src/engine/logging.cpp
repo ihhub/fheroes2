@@ -29,7 +29,7 @@
 #endif
 
 #include "logging.h"
-#include "system.h"
+#include "timing.h"
 
 namespace
 {
@@ -99,7 +99,7 @@ namespace Logging
 
     std::string GetTimeString()
     {
-        const tm tmi = System::GetTM( std::time( nullptr ) );
+        const std::tm tmi = fheroes2::GetTM( std::time( nullptr ) );
 
         char buf[13] = {0};
         std::strftime( buf, sizeof( buf ) - 1, "%X", &tmi );

@@ -22,8 +22,8 @@
 #include "localevent.h"
 #include "screen.h"
 #include "settings.h"
-#include "system.h"
 #include "text.h"
+#include "timing.h"
 #include "translations.h"
 
 #include <chrono>
@@ -52,7 +52,7 @@ namespace
             const int32_t offsetX = 26;
             const int32_t offsetY = fheroes2::Display::instance().height() - 30;
 
-            const tm tmi = System::GetTM( std::time( nullptr ) );
+            const std::tm tmi = fheroes2::GetTM( std::time( nullptr ) );
 
             char mbstr[10] = { 0 };
             std::strftime( mbstr, sizeof( mbstr ), "%H:%M:%S", &tmi );
