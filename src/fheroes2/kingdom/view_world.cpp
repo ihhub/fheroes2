@@ -39,7 +39,7 @@
 
 #if defined( VIEWWORLD_DEBUG_ZOOM_LEVEL )
 #define SAVE_WORLD_MAP
-#include "image_save.h"
+#include "image_tool.h"
 
 namespace
 {
