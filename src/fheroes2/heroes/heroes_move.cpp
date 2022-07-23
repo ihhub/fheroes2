@@ -476,59 +476,6 @@ namespace
 
         return MP2::isNeedStayFront( next.GetObject() );
     }
-
-    void cutSpritePerTiles( const fheroes2::Point & spriteOffset, const fheroes2::Sprite & original, const int32_t tileSize,
-                            std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> & output )
-    {
-        assert( !original.empty() && tileSize > 0 );
-
-        fheroes2::Point offset;
-        if ( spriteOffset.x >= 0 ) {
-            offset.x = spriteOffset.x / tileSize;
-        }
-        else {
-            offset.x = spriteOffset.x / tileSize;
-            if ( offset.x * tileSize != spriteOffset.x ) {
-                --offset.x;
-            }
-        }
-
-        if ( spriteOffset.y >= 0 ) {
-            offset.y = spriteOffset.y / tileSize;
-        }
-        else {
-            offset.y = spriteOffset.y / tileSize;
-            if ( offset.y * tileSize != spriteOffset.y ) {
-                --offset.y;
-            }
-        }
-
-        const fheroes2::Point spriteRelativeOffset{ spriteOffset.x - offset.x * tileSize, spriteOffset.y - offset.y * tileSize };
-
-        const fheroes2::Point stepPerDirection{ ( original.width() + spriteRelativeOffset.x + tileSize - 1 ) / tileSize,
-                                                ( original.height() + spriteRelativeOffset.y + tileSize - 1 ) / tileSize };
-        assert( stepPerDirection.x > 0 && stepPerDirection.y > 0 );
-
-        const fheroes2::Rect relativeROI( spriteRelativeOffset.x, spriteRelativeOffset.y, original.width(), original.height() );
-
-        for ( int32_t y = 0; y < stepPerDirection.y; ++y ) {
-            for ( int32_t x = 0; x < stepPerDirection.x; ++x ) {
-                fheroes2::Rect roi( x * tileSize, y * tileSize, tileSize, tileSize );
-
-                fheroes2::Rect intersection = relativeROI ^ roi;
-                assert( intersection.width > 0 && intersection.height > 0 );
-
-                fheroes2::Sprite tileSprite = fheroes2::Crop( original, intersection.x - spriteRelativeOffset.x, intersection.y - spriteRelativeOffset.y,
-                                                              intersection.width, intersection.height );
-
-                tileSprite.setPosition( intersection.x, intersection.y );
-
-                assert( !tileSprite.empty() );
-
-                output.emplace_back( offset + fheroes2::Point( x, y ), std::move( tileSprite ) );
-            }
-        }
-    }
 }
 
 bool Heroes::isInVisibleMapArea() const
@@ -662,16 +609,16 @@ std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Heroes::getHeroSprites
 
     std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> output;
 
-    cutSpritePerTiles( heroSpriteOffset, spriteHero, TILEWIDTH, output );
+    fheroes2::DivideImageBySquares( heroSpriteOffset, spriteHero, TILEWIDTH, output );
 
-    cutSpritePerTiles( flagSpriteOffset, spriteFlag, TILEWIDTH, output );
+    fheroes2::DivideImageBySquares( flagSpriteOffset, spriteFlag, TILEWIDTH, output );
 
     if ( isShipMaster() && isMoveEnabled() && isInDeepOcean() ) {
         const fheroes2::Sprite & spriteFroth = getFrothSprite( *this, sprite_index );
         fheroes2::Point frothSpriteOffset( offset.x + ( reflect ? TILEWIDTH - spriteFroth.x() - spriteFroth.width() : spriteFroth.x() ),
                                            offset.y + spriteFroth.y() + TILEWIDTH );
 
-        cutSpritePerTiles( frothSpriteOffset, spriteFroth, TILEWIDTH, output );
+        fheroes2::DivideImageBySquares( frothSpriteOffset, spriteFroth, TILEWIDTH, output );
     }
 
     return output;
@@ -695,7 +642,7 @@ std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Heroes::getHeroShadowS
     const fheroes2::Point shadowSpriteOffset( offset.x + spriteShadow.x(), offset.y + spriteShadow.y() + TILEWIDTH );
 
     std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> output;
-    cutSpritePerTiles( shadowSpriteOffset, spriteShadow, TILEWIDTH, output );
+    fheroes2::DivideImageBySquares( shadowSpriteOffset, spriteShadow, TILEWIDTH, output );
 
     return output;
 }
@@ -867,7 +814,6 @@ bool Heroes::MoveStep( bool fast )
 {
     const int32_t indexTo = Maps::GetDirectionIndex( GetIndex(), path.GetFrontDirection() );
     const int32_t indexDest = path.GetDestinationIndex( true );
-    const fheroes2::Point & mp = GetCenter();
 
     if ( fast ) {
         // Unveil fog before moving the hero.
@@ -879,17 +825,19 @@ bool Heroes::MoveStep( bool fast )
 
         return true;
     }
-    else if ( ( sprite_index % heroFrameCountPerTile ) == 0 ) {
+
+    const fheroes2::Point & mp = GetCenter();
+
+    if ( ( sprite_index % heroFrameCountPerTile ) == 0 ) {
         if ( indexTo == indexDest && isNeedStayFrontObject( *this, world.GetTiles( indexTo ) ) ) {
             MoveStep( *this, indexTo, false );
 
             return true;
         }
-        else {
-            // play sound
-            if ( GetKingdom().isControlHuman() ) {
-                playHeroWalkingSound( world.GetTiles( mp.x, mp.y ).GetGround() );
-            }
+
+        // play sound
+        if ( GetKingdom().isControlHuman() ) {
+            playHeroWalkingSound( world.GetTiles( mp.x, mp.y ).GetGround() );
         }
     }
     else if ( ( sprite_index % heroFrameCountPerTile ) == 1 ) {
