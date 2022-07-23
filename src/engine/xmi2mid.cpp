@@ -592,7 +592,8 @@ struct MidiEvents : public std::vector<MidiChunk>
                     // It is a drum.
                     const uint32_t drumSoundType = *( ptr + 1 );
                     if ( drumSoundType >= 35 && drumSoundType - 35 < drumSoundDescription.size() ) {
-                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MID: channel " << channelId << ", drum sound : " << drumSoundDescription[drumSoundType - 35] )
+                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE,
+                                   "MID: channel " << channelId << ", drum sound " << drumSoundType << ": " << drumSoundDescription[drumSoundType - 35] )
                     }
                     else {
                         ERROR_LOG( "MIDI track: Unknown drum sound type " << drumSoundType )
@@ -601,8 +602,8 @@ struct MidiEvents : public std::vector<MidiChunk>
                 else {
                     const uint32_t instrumentType = *( ptr + 1 );
                     if ( instrumentType < instrumentDescription.size() ) {
-                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MID: channel " << channelId << ", instrument ID " << instrumentType << ": "
-                                                                          << instrumentDescription[instrumentType] )
+                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE,
+                                   "MID: channel " << channelId << ", instrument ID " << instrumentType << ": " << instrumentDescription[instrumentType] )
                     }
                     else {
                         ERROR_LOG( "MIDI track: Unknown instrument type " << instrumentType )
