@@ -1148,11 +1148,7 @@ bool Heroes::Move( bool fast )
             SetValidDirectionSprite(); // in case of AI hero
 
             if ( MoveStep() ) { // move
-                if ( isFreeman() ) {
-                    return false;
-                }
-
-                return true;
+                return !isFreeman();
             }
         }
     }
