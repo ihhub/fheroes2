@@ -578,19 +578,21 @@ struct MidiEvents : public std::vector<MidiChunk>
             }
 
             // Program Change: in other words which instrument is going to be played.
-            case 0x0C:
+            case 0x0C: {
                 if ( !checkDataPresence( ptr, end, 2 ) ) {
                     break;
                 }
 
+                const int32_t channelId = *ptr - 0xC0;
+
                 emplace_back( delta, *ptr, *( ptr + 1 ) );
 
                 // Drum sounds are only played in channel 9.
-                if ( *ptr == 0xC9 ) {
+                if ( channelId == 9 ) {
                     // It is a drum.
                     const uint32_t drumSoundType = *( ptr + 1 );
                     if ( drumSoundType >= 35 && drumSoundType - 35 < drumSoundDescription.size() ) {
-                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MID: drum sound used in the track: " << drumSoundDescription[drumSoundType - 35] )
+                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MID: channel " << channelId << ", drum sound : " << drumSoundDescription[drumSoundType - 35] )
                     }
                     else {
                         ERROR_LOG( "MIDI track: Unknown drum sound type " << drumSoundType )
@@ -599,7 +601,8 @@ struct MidiEvents : public std::vector<MidiChunk>
                 else {
                     const uint32_t instrumentType = *( ptr + 1 );
                     if ( instrumentType < instrumentDescription.size() ) {
-                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MID: instrument ID " << instrumentType << " used in the track: " << instrumentDescription[instrumentType] )
+                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MID: channel " << channelId << ", instrument ID " << instrumentType << ": "
+                                                                          << instrumentDescription[instrumentType] )
                     }
                     else {
                         ERROR_LOG( "MIDI track: Unknown instrument type " << instrumentType )
@@ -608,6 +611,7 @@ struct MidiEvents : public std::vector<MidiChunk>
 
                 ptr += 2;
                 break;
+            }
 
             // Channel Pressure (After-touch).
             case 0x0D:
