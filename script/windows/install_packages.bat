@@ -3,7 +3,7 @@
 set DST_DIR=%~dp0\..\..\VisualStudio\packages
 
 set PKG_FILE=windows.zip
-set PKG_FILE_SHA256=B96FFE35D39E8EA0A089B633D380D1B45230E11DA0AA7F4B3E76EB76D2EFA195
+set PKG_FILE_SHA256=86D99E621F6CACD8280682D388B53D8F9C914A16E058D0B3F470DB3C0BED48C2
 set PKG_URL=https://github.com/fheroes2/fheroes2-prebuilt-deps/releases/download/windows-deps/%PKG_FILE%
 set PKG_TLS=[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
