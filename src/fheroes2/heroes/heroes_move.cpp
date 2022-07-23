@@ -482,6 +482,8 @@ namespace
 
 bool Heroes::isInVisibleMapArea() const
 {
+    // TODO: this is not entirely correct. Consider a hero being outside the visible are but his shadow is still inside. The visible tile ROI should be extended by
+    // TODO: at least 1 tile in each direction.
     return Interface::Basic::Get().GetGameArea().GetVisibleTileROI() & GetCenter();
 }
 
@@ -610,15 +612,13 @@ std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Heroes::getHeroSprites
                                             offset.y + spriteFlag.y() + flagOffset.y + TILEWIDTH );
 
     std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> output;
-
     fheroes2::DivideImageBySquares( heroSpriteOffset, spriteHero, TILEWIDTH, output );
-
     fheroes2::DivideImageBySquares( flagSpriteOffset, spriteFlag, TILEWIDTH, output );
 
     if ( isShipMaster() && isMoveEnabled() && isInDeepOcean() ) {
         const fheroes2::Sprite & spriteFroth = getFrothSprite( *this, sprite_index );
-        fheroes2::Point frothSpriteOffset( offset.x + ( reflect ? TILEWIDTH - spriteFroth.x() - spriteFroth.width() : spriteFroth.x() ),
-                                           offset.y + spriteFroth.y() + TILEWIDTH );
+        const fheroes2::Point frothSpriteOffset( offset.x + ( reflect ? TILEWIDTH - spriteFroth.x() - spriteFroth.width() : spriteFroth.x() ),
+                                                 offset.y + spriteFroth.y() + TILEWIDTH );
 
         fheroes2::DivideImageBySquares( frothSpriteOffset, spriteFroth, TILEWIDTH, output );
     }
