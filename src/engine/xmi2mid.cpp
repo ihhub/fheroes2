@@ -585,7 +585,8 @@ struct MidiEvents : public std::vector<MidiChunk>
 
                 emplace_back( delta, *ptr, *( ptr + 1 ) );
 
-                if ( *ptr == 0xCA ) {
+                // Drum sounds are only played in channel 9.
+                if ( *ptr == 0xC9 ) {
                     // It is a drum.
                     const uint32_t drumSoundType = *( ptr + 1 );
                     if ( drumSoundType >= 35 && drumSoundType - 35 < drumSoundDescription.size() ) {
