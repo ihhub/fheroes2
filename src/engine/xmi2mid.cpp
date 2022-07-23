@@ -543,11 +543,11 @@ struct MidiEvents : public std::vector<MidiChunk>
             }
 
             switch ( *ptr >> 4 ) {
-            // key pressure
+            // Polyphonic Key Pressure (Aftertouch).
             case 0x0A:
-            // control change
+            // Control Change.
             case 0x0B:
-            // pitch bend
+            // Pitch Wheel Change.
             case 0x0E:
                 if ( !checkDataPresence( ptr, end, 3 ) ) {
                     break;
@@ -558,7 +558,7 @@ struct MidiEvents : public std::vector<MidiChunk>
                 break;
 
             // XMI events do not have note off events.
-            // note on
+            // Note On event.
             case 0x09: {
                 if ( !checkDataPresence( ptr, end, 4 ) ) {
                     break;
@@ -598,7 +598,7 @@ struct MidiEvents : public std::vector<MidiChunk>
                 else {
                     const uint32_t instrumentType = *( ptr + 1 );
                     if ( instrumentType < instrumentDescription.size() ) {
-                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MID: instrument used in the track: " << instrumentDescription[*( ptr + 1 )] )
+                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MID: instrument ID " << instrumentType << " used in the track: " << instrumentDescription[instrumentType] )
                     }
                     else {
                         ERROR_LOG( "MIDI track: Unknown instrument type " << instrumentType )
@@ -608,7 +608,7 @@ struct MidiEvents : public std::vector<MidiChunk>
                 ptr += 2;
                 break;
 
-            // channel aftertouch
+            // Channel Pressure (After-touch).
             case 0x0D:
                 if ( !checkDataPresence( ptr, end, 2 ) ) {
                     break;
@@ -621,7 +621,8 @@ struct MidiEvents : public std::vector<MidiChunk>
             // Unknown command.
             default:
                 emplace_back( 0, static_cast<uint8_t>( 0xFF ), static_cast<uint8_t>( 0x2F ), static_cast<uint8_t>( 0x00 ) );
-                ERROR_LOG( "unknown st: " << GetHexString( static_cast<int>( *ptr ), 2 ) << ", ln: " << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) )
+                ERROR_LOG( "MIDI track: Unknown command: " << GetHexString( static_cast<int>( *ptr ), 2 ) << ", byte: "
+                           << static_cast<int>( &t.evnt[0] + t.evnt.size() - ptr ) )
                 break;
             }
         }
