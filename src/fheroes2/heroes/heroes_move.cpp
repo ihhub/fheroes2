@@ -49,6 +49,8 @@ namespace
     {
         const int heroMovementSpeed = Settings::Get().HeroesMoveSpeed();
         int speed = 1;
+
+        // Speed 10 is actually Jump so essentially we have speed range from 1 to 9.
         if ( heroMovementSpeed >= 7 ) {
             speed = 3;
         }
@@ -149,12 +151,12 @@ namespace
         AudioManager::PlaySoundAsync( soundId );
     }
 
-    bool isReflectedHeroDirection( const int directionFrom )
+    bool doesHeroImageNeedToBeReflected( const int directionFrom )
     {
         switch ( directionFrom ) {
-        case Direction::BOTTOM_LEFT:
-        case Direction::LEFT:
         case Direction::TOP_LEFT:
+        case Direction::LEFT:
+        case Direction::BOTTOM_LEFT:
             return true;
 
         default:
@@ -517,7 +519,7 @@ void Heroes::RedrawShadow( fheroes2::Image & output, fheroes2::Point offset, con
     offset += getCurrentPixelOffset();
 
     if ( isShipMaster() && isMoveEnabled() && isInDeepOcean() ) {
-        const bool reflect = isReflectedHeroDirection( direction );
+        const bool reflect = doesHeroImageNeedToBeReflected( direction );
         const fheroes2::Sprite & spriteFroth = getFrothSprite( *this, sprite_index );
         fheroes2::Point dstFroth( offset.x + ( reflect ? TILEWIDTH - spriteFroth.x() - spriteFroth.width() : spriteFroth.x() ), offset.y + spriteFroth.y() + TILEWIDTH );
 
@@ -541,7 +543,7 @@ void Heroes::Redraw( fheroes2::Image & output, fheroes2::Point offset, const fhe
         return;
 
     // Reflected hero sprite should be shifted by 1 pixel to right.
-    const bool reflect = isReflectedHeroDirection( direction );
+    const bool reflect = doesHeroImageNeedToBeReflected( direction );
 
     int flagFrameID = sprite_index;
     if ( !isMoveEnabled() ) {
@@ -579,7 +581,7 @@ void Heroes::Redraw( fheroes2::Image & output, fheroes2::Point offset, const fhe
 std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Heroes::getHeroSpritesPerTile() const
 {
     // Reflected hero sprite should be shifted by 1 pixel to right.
-    const bool reflect = isReflectedHeroDirection( direction );
+    const bool reflect = doesHeroImageNeedToBeReflected( direction );
 
     int flagFrameID = sprite_index;
     if ( !isMoveEnabled() ) {
@@ -1137,20 +1139,20 @@ bool Heroes::Move( bool fast )
 
             return true;
         }
+
+        // if need change through the circle
+        if ( GetDirection() != path.GetFrontDirection() ) {
+            AngleStep( path.GetFrontDirection() );
+        }
         else {
-            // if need change through the circle
-            if ( GetDirection() != path.GetFrontDirection() ) {
-                AngleStep( path.GetFrontDirection() );
-            }
-            else {
-                SetValidDirectionSprite(); // in case of AI hero
+            SetValidDirectionSprite(); // in case of AI hero
 
-                if ( MoveStep() ) { // move
-                    if ( isFreeman() )
-                        return false;
-
-                    return true;
+            if ( MoveStep() ) { // move
+                if ( isFreeman() ) {
+                    return false;
                 }
+
+                return true;
             }
         }
     }
