@@ -1,4 +1,4 @@
-@echo on
+@echo off
 
 if not exist "zlib\include" mkdir "zlib\include"
 if not exist "zlib\lib\x86" mkdir "zlib\lib\x86"

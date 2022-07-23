@@ -176,10 +176,10 @@
     <ClCompile Include="src\engine\audio.cpp" />
     <ClCompile Include="src\engine\core.cpp" />
     <ClCompile Include="src\engine\dir.cpp" />
-    <ClCompile Include="src\engine\icn_decode.cpp" />
     <ClCompile Include="src\engine\image.cpp" />
+    <ClCompile Include="src\engine\image_load.cpp" />
     <ClCompile Include="src\engine\image_palette.cpp" />
-    <ClCompile Include="src\engine\image_save.cpp" />
+    <ClCompile Include="src\engine\image_tool.cpp" />
     <ClCompile Include="src\engine\localevent.cpp" />
     <ClCompile Include="src\engine\logging.cpp" />
     <ClCompile Include="src\engine\pal.cpp" />
@@ -400,10 +400,10 @@
     <ClInclude Include="src\engine\core.h" />
     <ClInclude Include="src\engine\dir.h" />
     <ClInclude Include="src\engine\endian_h2.h" />
-    <ClInclude Include="src\engine\icn_decode.h" />
     <ClInclude Include="src\engine\image.h" />
+    <ClInclude Include="src\engine\image_load.h" />
     <ClInclude Include="src\engine\image_palette.h" />
-    <ClInclude Include="src\engine\image_save.h" />
+    <ClInclude Include="src\engine\image_tool.h" />
     <ClInclude Include="src\engine\logging.h" />
     <ClInclude Include="src\engine\localevent.h" />
     <ClInclude Include="src\engine\math_base.h" />

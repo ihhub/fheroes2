@@ -27,9 +27,8 @@
 #include <sstream>
 
 #include "agg_file.h"
-#include "icn_decode.h"
 #include "image_palette.h"
-#include "image_save.h"
+#include "image_tool.h"
 #include "serialize.h"
 #include "system.h"
 
