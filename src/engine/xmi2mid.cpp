@@ -587,7 +587,7 @@ struct MidiEvents : public std::vector<MidiChunk>
 
                 emplace_back( delta, *ptr, *( ptr + 1 ) );
 
-                // Drum sounds are only played in channel 9.
+                // Drum sounds are only played in channel 9 if channel ID starts from 0, or 10 if channel ID starts from 1. In our case it starts from 0.
                 if ( channelId == 9 ) {
                     // It is a drum.
                     const uint32_t drumSoundType = *( ptr + 1 );
