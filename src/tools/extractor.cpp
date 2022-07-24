@@ -47,14 +47,14 @@ int main( int argc, char ** argv )
     System::MakeDirectory( argv[2] );
 
     int total = 0;
-    for ( std::string name : agg.listFilenames() ) {
+    for ( const std::string& name : agg.listFilenames() ) {
         StreamFile sf;
         sf.open( System::ConcatePath( argv[2], name ), "wb" );
         auto data = agg.read( name );
         sf.putRaw( reinterpret_cast<char *>( &data[0] ), data.size() );
         sf.close();
         std::cout << "extract: " << name << std::endl;
-        total++;
+        ++total;
     }
 
     std::cout << "total: " << total << std::endl;

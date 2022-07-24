@@ -123,17 +123,24 @@ namespace
     bool SavePNG( const fheroes2::Image & image, const std::string & path )
     {
         StreamFile sf;
-        if ( !sf.open( path, "wb" ) )
+        if ( !sf.open( path, "wb" ) ) {
             return false;
+        }
+
         const int width = image.width();
         const int height = image.height();
+
         png_structp writePtr = png_create_write_struct( PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr );
         png_infop infoPtr = png_create_info_struct( writePtr );
         png_set_IHDR( writePtr, infoPtr, width, height, 8, PNG_COLOR_TYPE_RGBA, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT );
+
         std::vector<uint8_t> pixels = getRGBAPixels( image );
         std::vector<uint8_t *> rowsPtr( height );
-        for ( int i = 0; i < height; i++ )
+
+        for ( int i = 0; i < height; i++ ) {
             rowsPtr[i] = &pixels[4 * i * width];
+        }
+
         png_set_rows( writePtr, infoPtr, &rowsPtr[0] );
         png_set_write_fn(
             writePtr, &sf,
@@ -142,6 +149,7 @@ namespace
             },
             nullptr );
         png_write_png( writePtr, infoPtr, PNG_TRANSFORM_IDENTITY, nullptr );
+
         sf.close();
         return true;
     }

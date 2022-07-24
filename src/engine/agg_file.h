@@ -44,7 +44,14 @@ namespace fheroes2
 
         bool open( const std::string & fileName );
         std::vector<uint8_t> read( const std::string & fileName );
-        std::vector<std::string> listFilenames();
+        std::vector<std::string> listFilenames() const
+        {
+            std::vector<std::string> names;
+            for ( const auto& name : _files ) {
+                names.emplace_back( name.first );
+            }
+            return names;
+        }
 
     private:
         static const size_t _maxFilenameSize = 15; // 8.3 ASCIIZ file name + 2-bytes padding
