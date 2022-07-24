@@ -1262,8 +1262,8 @@ void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & 
 #endif
 }
 
-void Maps::Tiles::RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area,
-                                const uint8_t level ) const
+void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area,
+                                            const uint8_t level ) const
 {
     assert( level <= 0x03 );
 
@@ -1288,7 +1288,7 @@ void Maps::Tiles::RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & vi
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, addon.index );
             area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
 
-            // possible animation
+            // TODO: why do we check quantity2 for this object? Verify the logic!
             const uint32_t animationIndex = ICN::AnimationFrame( icn, addon.index, Game::MapsAnimationFrame(), quantity2 != 0 );
             if ( animationIndex ) {
                 area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, animationIndex ), mp );

@@ -224,7 +224,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
             // Draw roads and cracks.
-            tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this, 3 );
+            tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, 3 );
         }
     }
 
@@ -232,7 +232,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
-            tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this, 1 );
+            tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, 1 );
         }
     }
 
@@ -240,7 +240,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
-            tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this, 2 );
+            tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, 2 );
         }
     }
 
@@ -248,7 +248,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
-            tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this, 0 );
+            tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, 0 );
         }
 
         for ( int32_t x = minX; x < maxX; ++x ) {
@@ -264,44 +264,45 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
-    // Route
-    const Heroes * hero = drawHeroes ? GetFocusHeroes() : nullptr;
+    // Draw hero's route. It should be drawn on top of everything.
+    const Heroes * currentHero = drawHeroes ? GetFocusHeroes() : nullptr;
     const bool drawRoutes = ( flag & LEVEL_ROUTES ) != 0;
 
-    if ( hero && hero->GetPath().isShow() && drawRoutes ) {
-        const Route::Path & path = hero->GetPath();
-        int green = path.GetAllowedSteps();
+    if ( drawRoutes && ( currentHero != nullptr ) && currentHero->GetPath().isShow() ) {
+        const Route::Path & path = currentHero->GetPath();
+        int greenColorSteps = path.GetAllowedSteps();
 
-        const int pathfinding = hero->GetLevelSkill( Skill::Secondary::PATHFINDING );
-        const int heroSpriteIndex = hero->GetSpriteIndex();
-        const bool skipfirst = hero->isMoveEnabled() && 45 > heroSpriteIndex && 2 < ( heroSpriteIndex % 9 );
+        const int pathfinding = currentHero->GetLevelSkill( Skill::Secondary::PATHFINDING );
 
-        Route::Path::const_iterator pathEnd = path.end();
+        // TODO: move this check to hero_move.cpp file to avoid magical numbers.
+        const int heroSpriteIndex = currentHero->GetSpriteIndex();
+        const bool skipfirst = currentHero->isMoveEnabled() && 45 > heroSpriteIndex && 2 < ( heroSpriteIndex % 9 );
+
         Route::Path::const_iterator currentStep = path.begin();
         Route::Path::const_iterator nextStep = currentStep;
 
-        for ( ; currentStep != pathEnd; ++currentStep ) {
-            const int32_t from = ( *currentStep ).GetIndex();
+        for ( ; currentStep != path.end(); ++currentStep ) {
+            const int32_t from = currentStep->GetIndex();
             const fheroes2::Point & mp = Maps::GetPoint( from );
 
             ++nextStep;
-            --green;
+            --greenColorSteps;
 
             // is visible
             if ( ( tileROI & mp ) && !( currentStep == path.begin() && skipfirst ) ) {
-                uint32_t index = 0;
-                if ( pathEnd != nextStep ) {
+                uint32_t routeSpriteIndex = 0;
+                if ( nextStep != path.end() ) {
                     const Maps::Tiles & tileTo = world.GetTiles( currentStep->GetIndex() );
                     uint32_t cost = Maps::Ground::GetPenalty( tileTo, pathfinding );
 
                     if ( world.GetTiles( currentStep->GetFrom() ).isRoad() && tileTo.isRoad() )
                         cost = Maps::Ground::roadPenalty;
 
-                    index = Route::Path::GetIndexSprite( ( *currentStep ).GetDirection(), ( *nextStep ).GetDirection(), cost );
+                    routeSpriteIndex = Route::Path::GetIndexSprite( currentStep->GetDirection(), nextStep->GetDirection(), cost );
                 }
 
-                const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( 0 > green ? ICN::ROUTERED : ICN::ROUTE, index );
-                BlitOnTile( dst, sprite, sprite.x() - 12, sprite.y() + 2, mp );
+                const fheroes2::Sprite & routeSprite = fheroes2::AGG::GetICN( ( ( greenColorSteps < 0 ) ? ICN::ROUTERED : ICN::ROUTE ), routeSpriteIndex );
+                BlitOnTile( dst, routeSprite, routeSprite.x() - 12, routeSprite.y() + 2, mp );
             }
         }
     }
