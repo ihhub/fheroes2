@@ -237,6 +237,8 @@ namespace fheroes2
 
     void DrawRect( Image & image, const Rect & roi, uint8_t value );
 
+    void DivideImageBySquares( const Point & spriteOffset, const Image & original, const int32_t squareSize, std::vector<std::pair<Point, Sprite>> & output );
+
     // Every image in the array must be the same size. Make sure that pointers aren't nullptr!
     Image ExtractCommonPattern( const std::vector<const Image *> & input );
 
@@ -257,7 +259,7 @@ namespace fheroes2
     // Returns a closest color ID from the original game's palette
     uint8_t GetColorId( uint8_t red, uint8_t green, uint8_t blue );
 
-    std::vector<uint8_t> getTransformTable( const fheroes2::Image & in, const fheroes2::Image & out, int32_t x, int32_t y, int32_t width, int32_t height );
+    std::vector<uint8_t> getTransformTable( const Image & in, const Image & out, int32_t x, int32_t y, int32_t width, int32_t height );
 
     Sprite makeShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId );
 

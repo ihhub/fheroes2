@@ -208,6 +208,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // TODO: to proceed with this concept we need to put an object info stored in class Tiles into either groud object stack or high object stack. For example, a tile
     // TODO: which contains only one top castle sprite would have data only in Tiles class but a hero could be at the same tile. To correctly render objects we need to
     // TODO: render the hero first and only then render castle's sprite. Side note: from the map format Tiles class must contain only objects from level 1.
+    //
+    // TODO: take into account that objects on the map such as monsters, heroes, boats, resources can have a fading effect so it is advisable to keep alpha value for
+    // TODO: each tile sprite.
 
     const bool drawHeroes = ( flag & LEVEL_HEROES ) == LEVEL_HEROES;
 
@@ -250,16 +253,12 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, 0 );
         }
-
-        for ( int32_t x = minX; x < maxX; ++x ) {
-            const Maps::Tiles & tile = world.GetTiles( x, y );
-            tile.RedrawTop( dst, tileROI, isPuzzleDraw, *this );
-        }
     }
 
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
+
             tile.RedrawTop( dst, tileROI, isPuzzleDraw, *this );
         }
     }
