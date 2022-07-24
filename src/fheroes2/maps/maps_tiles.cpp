@@ -1263,8 +1263,8 @@ void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & 
 }
 
 
-void Maps::Tiles::RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw,
-                               const Interface::GameArea & area, const uint8_t level ) const
+void Maps::Tiles::RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area,
+                                const uint8_t level ) const
 {
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
