@@ -1265,10 +1265,16 @@ void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & 
 void Maps::Tiles::RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area,
                                 const uint8_t level ) const
 {
-    const fheroes2::Point & mp = Maps::GetPoint( _index );
+    assert( level <= 0x03 );
 
-    if ( !( visibleTileROI & mp ) )
+    const fheroes2::Point & mp = Maps::GetPoint( _index );
+    if ( !( visibleTileROI & mp ) ) {
         return;
+    }
+
+    // Since the original game stores information about objects in a very weird way and this is how it is implemented for us we need to do the following procedure:
+    // - run through all bottom objects first which are stored in the addon stack
+    // - check the main object which is on the tile
 
     for ( const TilesAddon & addon : addons_level1 ) {
         if ( ( addon.level & 0x03 ) != level ) {
@@ -1277,6 +1283,7 @@ void Maps::Tiles::RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & vi
 
         const int icn = MP2::GetICNObject( addon.object );
 
+        // TODO: verify whether it is even possible to store ICN::MINIHERO or ICN::MONS32 in the addon section.
         if ( ICN::UNKNOWN != icn && /*ICN::MINIHERO != icn &&*/ ICN::MONS32 != icn && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( addon.object, addon.index ) ) ) {
             const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, addon.index );
             area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
@@ -1293,6 +1300,7 @@ void Maps::Tiles::RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & vi
     if ( ( _level & 0x03 ) != level ) {
         return;
     }
+
     const int icn = MP2::GetICNObject( objectTileset );
 
     if ( ICN::UNKNOWN != icn && /*ICN::MINIHERO != icn &&*/ ICN::MONS32 != icn && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( objectTileset, objectIndex ) ) ) {
