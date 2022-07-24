@@ -103,7 +103,7 @@ namespace
             const uint8_t * imageIn = image.image();
 
             for ( int32_t i = 0; i < height; ++i ) {
-                memcpy( reinterpret_cast<int8_t *>( surface->pixels ) + surface->pitch * i, imageIn + width * i, static_cast<size_t>( width ) );
+                memcpy( static_cast<uint8_t *>( surface->pixels ) + surface->pitch * i, imageIn + width * i, static_cast<size_t>( width ) );
             }
         }
         else {
