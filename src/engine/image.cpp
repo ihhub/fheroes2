@@ -1535,25 +1535,15 @@ namespace fheroes2
             return;
         }
 
-        Point offset;
-        if ( spriteOffset.x >= 0 ) {
-            offset.x = spriteOffset.x / squareSize;
-        }
-        else {
-            offset.x = spriteOffset.x / squareSize;
-            if ( offset.x * squareSize != spriteOffset.x ) {
-                --offset.x;
-            }
+        Point offset{ spriteOffset.x / squareSize, spriteOffset.y / squareSize };
+
+        // The start of a square must be before image offset so in case of negative offset we need to decrease the ID of a start square.
+        if ( ( spriteOffset.x < 0 ) && ( offset.x * squareSize != spriteOffset.x ) ) {
+            --offset.x;
         }
 
-        if ( spriteOffset.y >= 0 ) {
-            offset.y = spriteOffset.y / squareSize;
-        }
-        else {
-            offset.y = spriteOffset.y / squareSize;
-            if ( offset.y * squareSize != spriteOffset.y ) {
-                --offset.y;
-            }
+        if ( ( spriteOffset.y < 0 ) && ( offset.y * squareSize != spriteOffset.y ) ) {
+            --offset.y;
         }
 
         const Point spriteRelativeOffset{ spriteOffset.x - offset.x * squareSize, spriteOffset.y - offset.y * squareSize };
