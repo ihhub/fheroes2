@@ -51,6 +51,8 @@ namespace System
     bool GetCaseInsensitivePath( const std::string & path, std::string & correctedPath );
 
     std::string FileNameToUTF8( const std::string & str );
+
+    std::tm GetTM( const std::time_t time );
 }
 
 #endif

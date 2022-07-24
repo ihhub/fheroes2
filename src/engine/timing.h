@@ -22,7 +22,6 @@
 
 #include <chrono>
 #include <cstdint>
-#include <ctime>
 
 namespace fheroes2
 {
@@ -71,6 +70,4 @@ namespace fheroes2
     };
 
     void delayforMs( const uint32_t delayMs );
-
-    std::tm GetTM( const std::time_t time );
 }

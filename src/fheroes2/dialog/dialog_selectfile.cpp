@@ -40,7 +40,6 @@
 #include "settings.h"
 #include "system.h"
 #include "text.h"
-#include "timing.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -140,7 +139,7 @@ void FileInfoListBox::RedrawItem( const Maps::FileInfo & info, int32_t dstx, int
     char shortHours[20];
     char shortTime[20];
 
-    const std::tm tmi = fheroes2::GetTM( info.localtime );
+    const std::tm tmi = System::GetTM( info.localtime );
 
     std::fill( shortDate, std::end( shortDate ), static_cast<char>( 0 ) );
     std::fill( shortHours, std::end( shortHours ), static_cast<char>( 0 ) );
