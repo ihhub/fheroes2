@@ -25,6 +25,7 @@
 #define H2SYSTEM_DIRS_H
 
 #include <string>
+#include <vector>
 
 namespace System
 {

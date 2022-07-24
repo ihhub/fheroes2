@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <cstdlib>
+#include <string>
 #include <vector>
 
 #include "system.h"
