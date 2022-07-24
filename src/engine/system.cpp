@@ -21,9 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <algorithm>
 #include <cassert>
-#include <cstdlib>
 #include <ctime>
 #include <fstream>
 #include <map>
@@ -68,49 +66,6 @@
 #define SEPARATOR '/'
 #endif
 
-#if !defined( __LINUX__ )
-namespace
-{
-    std::string GetHomeDirectory( const std::string & prog )
-    {
-#if defined( TARGET_PS_VITA )
-        return "ux0:data/fheroes2";
-#elif defined( TARGET_NINTENDO_SWITCH )
-        return "/switch/fheroes2";
-#endif
-
-        const char * homeEnvPath = getenv( "HOME" );
-
-#if defined( MACOS_APP_BUNDLE )
-        if ( homeEnvPath != nullptr ) {
-            return System::ConcatePath( System::ConcatePath( homeEnvPath, "Library/Preferences" ), prog );
-        }
-
-        return {};
-#endif
-
-        if ( homeEnvPath != nullptr ) {
-            return System::ConcatePath( homeEnvPath, std::string( "." ).append( prog ) );
-        }
-
-        const char * dataEnvPath = getenv( "APPDATA" );
-        if ( dataEnvPath != nullptr ) {
-            return System::ConcatePath( dataEnvPath, prog );
-        }
-
-        std::string res;
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-        char * path = SDL_GetPrefPath( "", prog.c_str() );
-        if ( path ) {
-            res = path;
-            SDL_free( path );
-        }
-#endif
-        return res;
-    }
-}
-#endif
-
 int System::MakeDirectory( const std::string & path )
 {
 #if defined( __WIN32__ ) && defined( _MSC_VER )
@@ -135,63 +90,6 @@ std::string System::ConcatePath( const std::string & str1, const std::string & s
     temp += str2;
 
     return temp;
-}
-
-void System::appendOSSpecificDirectories( std::vector<std::string> & directories )
-{
-#if defined( TARGET_PS_VITA )
-    const char * path = "ux0:app/FHOMM0002";
-    if ( std::find( directories.begin(), directories.end(), path ) == directories.end() ) {
-        directories.emplace_back( path );
-    }
-#else
-    (void)directories;
-#endif
-}
-
-std::string System::GetConfigDirectory( const std::string & prog )
-{
-#if defined( __LINUX__ )
-    const char * configEnv = getenv( "XDG_CONFIG_HOME" );
-    if ( configEnv ) {
-        return System::ConcatePath( configEnv, prog );
-    }
-
-    const char * homeEnv = getenv( "HOME" );
-    if ( homeEnv ) {
-        return System::ConcatePath( System::ConcatePath( homeEnv, ".config" ), prog );
-    }
-
-    return std::string();
-#else
-    return GetHomeDirectory( prog );
-#endif
-}
-
-std::string System::GetDataDirectory( const std::string & prog )
-{
-#if defined( __LINUX__ )
-    const char * dataEnv = getenv( "XDG_DATA_HOME" );
-    if ( dataEnv ) {
-        return System::ConcatePath( dataEnv, prog );
-    }
-
-    const char * homeEnv = getenv( "HOME" );
-    if ( homeEnv ) {
-        return System::ConcatePath( System::ConcatePath( homeEnv, ".local/share" ), prog );
-    }
-
-    return {};
-#elif defined( MACOS_APP_BUNDLE )
-    const char * homeEnv = getenv( "HOME" );
-    if ( homeEnv ) {
-        return System::ConcatePath( System::ConcatePath( homeEnv, "Library/Application Support" ), prog );
-    }
-
-    return {};
-#else
-    return GetHomeDirectory( prog );
-#endif
 }
 
 std::string System::GetDirname( const std::string & str )
