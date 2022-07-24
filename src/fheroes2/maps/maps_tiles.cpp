@@ -1262,6 +1262,52 @@ void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & 
 #endif
 }
 
+
+void Maps::Tiles::RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw,
+                               const Interface::GameArea & area, const uint8_t level ) const
+{
+    const fheroes2::Point & mp = Maps::GetPoint( _index );
+
+    if ( !( visibleTileROI & mp ) )
+        return;
+
+    for ( const TilesAddon & addon : addons_level1 ) {
+        if ( ( addon.level & 0x03 ) != level ) {
+            continue;
+        }
+
+        const int icn = MP2::GetICNObject( addon.object );
+
+        if ( ICN::UNKNOWN != icn && /*ICN::MINIHERO != icn &&*/ ICN::MONS32 != icn && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( addon.object, addon.index ) ) ) {
+            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, addon.index );
+            area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
+
+            // possible animation
+            const uint32_t animationIndex = ICN::AnimationFrame( icn, addon.index, Game::MapsAnimationFrame(), quantity2 != 0 );
+            if ( animationIndex ) {
+                area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, animationIndex ), mp );
+            }
+        }
+    }
+
+    // Check the top object.
+    if ( ( _level & 0x03 ) != level ) {
+        return;
+    }
+    const int icn = MP2::GetICNObject( objectTileset );
+
+    if ( ICN::UNKNOWN != icn && /*ICN::MINIHERO != icn &&*/ ICN::MONS32 != icn && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( objectTileset, objectIndex ) ) ) {
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, objectIndex );
+        area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
+
+        // possible animation
+        const uint32_t animationIndex = ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 != 0 );
+        if ( animationIndex ) {
+            area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, animationIndex ), mp );
+        }
+    }
+}
+
 void Maps::Tiles::RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area ) const
 {
     const MP2::MapObjectType objectType = GetObject();

@@ -209,21 +209,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // TODO: which contains only one top castle sprite would have data only in Tiles class but a hero could be at the same tile. To correctly render objects we need to
     // TODO: render the hero first and only then render castle's sprite. Side note: from the map format Tiles class must contain only objects from level 1.
 
-    std::vector<const Maps::Tiles *> drawList;
-    std::vector<const Maps::Tiles *> monsterList;
-    std::vector<const Maps::Tiles *> topList;
-    std::vector<const Maps::Tiles *> objectList;
-    std::vector<const Maps::Tiles *> fogList;
-
-    const int32_t areaSize = ( maxY - minY ) * ( maxX - minX );
-    topList.reserve( areaSize );
-    objectList.reserve( areaSize );
-
-    // Bottom layer and objects.
-    const bool drawBottom = ( flag & LEVEL_BOTTOM ) == LEVEL_BOTTOM;
-    const bool drawMonstersAndBoats = ( flag & LEVEL_OBJECTS ) && !isPuzzleDraw;
     const bool drawHeroes = ( flag & LEVEL_HEROES ) == LEVEL_HEROES;
-    const bool drawTop = ( flag & LEVEL_TOP ) == LEVEL_TOP;
+
 #ifdef WITH_DEBUG
     const bool drawFog = ( ( flag & LEVEL_FOG ) == LEVEL_FOG ) && !IS_DEVEL();
 #else
@@ -236,235 +223,44 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
-            if ( drawFog && tile.isFog( friendColors ) ) {
-                // don't redraw tile if fog all around
-                fogList.emplace_back( &tile );
-                if ( tile.isFogAllAround( friendColors ) ) {
-                    continue;
-                }
-            }
-
-            const MP2::MapObjectType objectType = tile.GetObject();
-
-            switch ( objectType ) {
-            case MP2::OBJ_ZERO: {
-                if ( drawBottom ) {
-                    tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
-                    const uint8_t objectTileset = tile.GetObjectTileset();
-                    const int icn = MP2::GetICNObject( objectTileset );
-                    if ( ICN::UNKNOWN != icn && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( objectTileset, tile.GetObjectSpriteIndex() ) ) ) {
-                        objectList.emplace_back( &tile );
-                    }
-                }
-                if ( drawTop ) {
-                    topList.emplace_back( &tile );
-                }
-                break;
-            }
-            case MP2::OBJ_BOAT: {
-                if ( drawBottom ) {
-                    tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
-                }
-                if ( drawMonstersAndBoats ) {
-                    drawList.emplace_back( &tile );
-                }
-                else if ( drawTop ) {
-                    topList.emplace_back( &tile );
-                }
-                break;
-            }
-            case MP2::OBJ_MONSTER: {
-                if ( drawBottom ) {
-                    tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
-                }
-                if ( drawTop ) {
-                    topList.emplace_back( &tile );
-                }
-                if ( drawMonstersAndBoats ) {
-                    monsterList.emplace_back( &tile );
-                }
-                break;
-            }
-            case MP2::OBJ_HEROES: {
-                if ( drawBottom ) {
-                    tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
-                    if ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( tile.GetObjectTileset(), tile.GetObjectSpriteIndex() ) ) {
-                        objectList.emplace_back( &tile );
-                    }
-                }
-                if ( drawHeroes ) {
-                    drawList.emplace_back( &tile );
-                    Heroes * hero = tile.GetHeroes();
-                    if ( hero && ( drawTop || drawBottom ) ) {
-                        hero->SetRedrawIndexes();
-                    }
-                }
-                else if ( drawTop ) {
-                    topList.emplace_back( &tile );
-                }
-                break;
-            }
-            default: {
-                if ( drawBottom ) {
-                    tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this );
-                    if ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( tile.GetObjectTileset(), tile.GetObjectSpriteIndex() ) ) {
-                        objectList.emplace_back( &tile );
-                    }
-                }
-                if ( drawTop ) {
-                    topList.emplace_back( &tile );
-                }
-                break;
-            }
-            }
+            // Draw roads and cracks.
+            tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this, 3 );
         }
     }
 
-    for ( const Maps::Tiles * tile : drawList ) {
-        Heroes * hero = tile->GetHeroes();
-        if ( hero == nullptr ) {
-            continue;
-        }
-        if ( drawTop ) {
-            // looking for heroes nearby current hero
-            // check and reset index for matching tiles for which we need to be redraw top layer
-            const fheroes2::Point center = tile->GetCenter();
-            if ( center.x + 1 < world.w() ) {
-                hero->UpdateRedrawTop( world.GetTiles( center.x + 1, center.y ) );
-            }
-            if ( center.x > 0 ) {
-                hero->UpdateRedrawTop( world.GetTiles( center.x - 1, center.y ) );
-            }
-            if ( center.y + 1 < world.h() ) {
-                if ( center.x + 1 < world.w() ) {
-                    hero->UpdateRedrawTop( world.GetTiles( center.x + 1, center.y + 1 ) );
-                }
-                if ( center.x > 0 ) {
-                    hero->UpdateRedrawTop( world.GetTiles( center.x - 1, center.y + 1 ) );
-                }
-                hero->UpdateRedrawTop( world.GetTiles( center.x, center.y + 1 ) );
-            }
-            // remove a tile from topLits, if it will be drawn while drawing the hero
-            const Heroes::RedrawIndex & redrawIndex = hero->GetRedrawIndex();
-            if ( redrawIndex.topOnBottom > -1 ) {
-                topList.erase( std::remove( topList.begin(), topList.end(), &world.GetTiles( redrawIndex.topOnBottom ) ), topList.end() );
-            }
-            if ( redrawIndex.topOnDirectionBottom > -1 ) {
-                topList.erase( std::remove( topList.begin(), topList.end(), &world.GetTiles( redrawIndex.topOnDirectionBottom ) ), topList.end() );
-            }
-            if ( redrawIndex.topOnDirection > -1 ) {
-                topList.erase( std::remove( topList.begin(), topList.end(), &world.GetTiles( redrawIndex.topOnDirection ) ), topList.end() );
-            }
-        }
-        if ( drawBottom ) {
-            const fheroes2::Point center = tile->GetCenter();
-            if ( center.x + 1 < world.w() ) {
-                hero->UpdateRedrawBottom( world.GetTiles( center.x + 1, center.y ) );
-            }
-            if ( center.x > 0 ) {
-                hero->UpdateRedrawBottom( world.GetTiles( center.x - 1, center.y ) );
-            }
-            if ( center.y + 1 < world.h() ) {
-                if ( center.x + 1 < world.w() ) {
-                    hero->UpdateRedrawBottom( world.GetTiles( center.x + 1, center.y + 1 ) );
-                }
-                if ( center.x > 0 ) {
-                    hero->UpdateRedrawBottom( world.GetTiles( center.x - 1, center.y + 1 ) );
-                }
-                hero->UpdateRedrawBottom( world.GetTiles( center.x, center.y + 1 ) );
-            }
-            const Heroes::RedrawIndex & redrawIndex = hero->GetRedrawIndex();
-            if ( redrawIndex.objectsOnBottom > -1 ) {
-                objectList.erase( std::remove( objectList.begin(), objectList.end(), &world.GetTiles( redrawIndex.objectsOnBottom ) ), objectList.end() );
-            }
-            if ( redrawIndex.objectsOnDirectionBottom > -1 ) {
-                objectList.erase( std::remove( objectList.begin(), objectList.end(), &world.GetTiles( redrawIndex.objectsOnDirectionBottom ) ), objectList.end() );
-            }
+    for ( int32_t y = minY; y < maxY; ++y ) {
+        for ( int32_t x = minX; x < maxX; ++x ) {
+            const Maps::Tiles & tile = world.GetTiles( x, y );
+
+            tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this, 1 );
         }
     }
 
-    for ( const Maps::Tiles * tile : objectList ) {
-        tile->RedrawObjects( dst, isPuzzleDraw, *this );
-    }
+    for ( int32_t y = minY; y < maxY; ++y ) {
+        for ( int32_t x = minX; x < maxX; ++x ) {
+            const Maps::Tiles & tile = world.GetTiles( x, y );
 
-    for ( const Maps::Tiles * tile : drawList ) {
-        const MP2::MapObjectType objectType = tile->GetObject();
-        if ( drawHeroes && MP2::OBJ_HEROES == objectType ) {
-            const Heroes * hero = tile->GetHeroes();
-            if ( hero ) {
-                const fheroes2::Point & pos = GetRelativeTilePosition( tile->GetCenter() );
-                hero->RedrawShadow( dst, pos.x, pos.y - 1, tileROI, *this );
-            }
-        }
-        else if ( drawMonstersAndBoats && MP2::OBJ_BOAT == objectType ) {
-            tile->RedrawBoatShadow( dst, tileROI, *this );
+            tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this, 2 );
         }
     }
 
-    const auto & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
+    for ( int32_t y = minY; y < maxY; ++y ) {
+        for ( int32_t x = minX; x < maxX; ++x ) {
+            const Maps::Tiles & tile = world.GetTiles( x, y );
 
-    // fade out animation for objects only
-    if ( drawBottom && fadeTask.fadeOut && MP2::OBJ_ZERO != fadeTask.object && MP2::OBJ_BOAT != fadeTask.object && MP2::OBJ_MONSTER != fadeTask.object ) {
-        const int icn = MP2::GetICNObject( fadeTask.objectTileset );
-        const fheroes2::Point & mp = Maps::GetPoint( fadeTask.fromIndex );
+            tile.RedrawBottom( dst, tileROI, isPuzzleDraw, *this, 0 );
+        }
 
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, fadeTask.objectIndex );
-        BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, fadeTask.alpha );
-
-        // possible animation
-        if ( fadeTask.animationIndex ) {
-            const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, fadeTask.animationIndex );
-            BlitOnTile( dst, animationSprite, animationSprite.x(), animationSprite.y(), mp, false, fadeTask.alpha );
+        for ( int32_t x = minX; x < maxX; ++x ) {
+            const Maps::Tiles & tile = world.GetTiles( x, y );
+            tile.RedrawTop( dst, tileROI, isPuzzleDraw, *this );
         }
     }
 
-    // Monsters.
-    if ( drawMonstersAndBoats ) {
-        for ( const Maps::Tiles * tile : monsterList ) {
-            tile->RedrawMonster( dst, tileROI, *this );
-        }
-
-        // fade out animation for monsters only
-        if ( MP2::OBJ_MONSTER == fadeTask.object && fadeTask.fadeOut ) {
-            const fheroes2::Point & mp = Maps::GetPoint( fadeTask.fromIndex );
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, fadeTask.objectIndex );
-            BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + 30, mp, false, fadeTask.alpha );
-
-            if ( fadeTask.animationIndex ) {
-                const fheroes2::Sprite & animatedSprite = fheroes2::AGG::GetICN( ICN::MINIMON, fadeTask.animationIndex );
-                BlitOnTile( dst, animatedSprite, animatedSprite.x() + 16, animatedSprite.y() + 30, mp, false, fadeTask.alpha );
-            }
-        }
-    }
-
-    // Top layer.
-    for ( const Maps::Tiles * tile : topList ) {
-        tile->RedrawTop( dst, tileROI, isPuzzleDraw, *this );
-    }
-
-    // Heroes and boats.
-    if ( drawTop || drawBottom ) {
-        for ( const Maps::Tiles * tile : drawList ) {
-            const MP2::MapObjectType objectType = tile->GetObject();
-            if ( drawHeroes && MP2::OBJ_HEROES == objectType ) {
-                const Heroes * hero = tile->GetHeroes();
-                if ( hero ) {
-                    const fheroes2::Point & pos = GetRelativeTilePosition( tile->GetCenter() );
-                    hero->Redraw( dst, pos.x, pos.y - 1, tileROI, *this );
-                    if ( drawBottom ) {
-                        hero->RedrawBottom( dst, tileROI, *this, isPuzzleDraw );
-                    }
-                    if ( drawTop ) {
-                        hero->RedrawTop( dst, tileROI, *this );
-                    }
-                }
-            }
-            else if ( drawMonstersAndBoats && MP2::OBJ_BOAT == objectType ) {
-                tile->RedrawBoat( dst, tileROI, *this );
-                if ( drawTop ) {
-                    tile->RedrawTop( dst, tileROI, isPuzzleDraw, *this );
-                }
-            }
+    for ( int32_t y = minY; y < maxY; ++y ) {
+        for ( int32_t x = minX; x < maxX; ++x ) {
+            const Maps::Tiles & tile = world.GetTiles( x, y );
+            tile.RedrawTop( dst, tileROI, isPuzzleDraw, *this );
         }
     }
 
@@ -485,7 +281,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         Route::Path::const_iterator nextStep = currentStep;
 
         for ( ; currentStep != pathEnd; ++currentStep ) {
-            const fheroes2::Point & mp = Maps::GetPoint( currentStep->GetIndex() );
+            const int32_t from = ( *currentStep ).GetIndex();
+            const fheroes2::Point & mp = Maps::GetPoint( from );
 
             ++nextStep;
             --green;
@@ -493,15 +290,14 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             // is visible
             if ( ( tileROI & mp ) && !( currentStep == path.begin() && skipfirst ) ) {
                 uint32_t index = 0;
-
                 if ( pathEnd != nextStep ) {
-                    const Maps::Tiles & tile = world.GetTiles( currentStep->GetIndex() );
+                    const Maps::Tiles & tileTo = world.GetTiles( currentStep->GetIndex() );
+                    uint32_t cost = Maps::Ground::GetPenalty( tileTo, pathfinding );
 
-                    // Make no mistake: the cost of moving to this tile depends on the penalty of the PREVIOUS tile,
-                    // BUT the length of the route arrow on this tile depends on the penalty of THIS tile
-                    const uint32_t penalty = tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, pathfinding );
+                    if ( world.GetTiles( currentStep->GetFrom() ).isRoad() && tileTo.isRoad() )
+                        cost = Maps::Ground::roadPenalty;
 
-                    index = Route::Path::GetIndexSprite( currentStep->GetDirection(), nextStep->GetDirection(), penalty );
+                    index = Route::Path::GetIndexSprite( ( *currentStep ).GetDirection(), ( *nextStep ).GetDirection(), cost );
                 }
 
                 const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( 0 > green ? ICN::ROUTERED : ICN::ROUTE, index );
@@ -525,8 +321,15 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 #endif
         // redraw fog
         if ( drawFog ) {
-        for ( const Maps::Tiles * tile : fogList ) {
-            tile->RedrawFogs( dst, friendColors, *this );
+            for ( int32_t y = minY; y < maxY; ++y ) {
+            for ( int32_t x = minX; x < maxX; ++x ) {
+                const Maps::Tiles & tile = world.GetTiles( x, y );
+
+                const bool isFog = drawFog && tile.isFog( friendColors );
+                if ( isFog ) {
+                    tile.RedrawFogs( dst, friendColors, *this );
+                }
+            }
         }
     }
 }
