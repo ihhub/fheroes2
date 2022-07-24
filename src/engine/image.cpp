@@ -1526,7 +1526,14 @@ namespace fheroes2
 
     void DivideImageBySquares( const Point & spriteOffset, const Image & original, const int32_t squareSize, std::vector<std::pair<Point, Sprite>> & output )
     {
-        assert( !original.empty() && squareSize > 0 );
+        if ( original.empty() ) {
+            return;
+        }
+
+        if ( squareSize <= 0 ) {
+            assert( 0 );
+            return;
+        }
 
         Point offset;
         if ( spriteOffset.x >= 0 ) {
