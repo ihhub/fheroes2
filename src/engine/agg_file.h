@@ -47,7 +47,7 @@ namespace fheroes2
         std::vector<std::string> listFilenames() const
         {
             std::vector<std::string> names;
-            for ( const auto& name : _files ) {
+            for ( const auto & name : _files ) {
                 names.emplace_back( name.first );
             }
             return names;

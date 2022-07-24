@@ -47,7 +47,7 @@ int main( int argc, char ** argv )
     System::MakeDirectory( argv[2] );
 
     int total = 0;
-    for ( const std::string& name : agg.listFilenames() ) {
+    for ( const std::string & name : agg.listFilenames() ) {
         StreamFile sf;
         sf.open( System::ConcatePath( argv[2], name ), "wb" );
         auto data = agg.read( name );
