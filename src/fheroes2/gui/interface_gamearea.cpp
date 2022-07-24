@@ -208,6 +208,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // TODO: to proceed with this concept we need to put an object info stored in class Tiles into either groud object stack or high object stack. For example, a tile
     // TODO: which contains only one top castle sprite would have data only in Tiles class but a hero could be at the same tile. To correctly render objects we need to
     // TODO: render the hero first and only then render castle's sprite. Side note: from the map format Tiles class must contain only objects from level 1.
+    //
+    // TODO: take into account that objects on the map such as monsters, heroes, boats, resources can have a fading effect so it is advisable to keep alpha value for
+    // TODO: each tile sprite.
 
     std::vector<const Maps::Tiles *> drawList;
     std::vector<const Maps::Tiles *> monsterList;
@@ -392,8 +395,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         if ( drawHeroes && MP2::OBJ_HEROES == objectType ) {
             const Heroes * hero = tile->GetHeroes();
             if ( hero ) {
-                const fheroes2::Point & pos = GetRelativeTilePosition( tile->GetCenter() );
-                hero->RedrawShadow( dst, pos.x, pos.y - 1, tileROI, *this );
+                hero->RedrawShadow( dst, GetRelativeTilePosition( tile->GetCenter() ), tileROI, *this );
             }
         }
         else if ( drawMonstersAndBoats && MP2::OBJ_BOAT == objectType ) {
@@ -449,8 +451,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             if ( drawHeroes && MP2::OBJ_HEROES == objectType ) {
                 const Heroes * hero = tile->GetHeroes();
                 if ( hero ) {
-                    const fheroes2::Point & pos = GetRelativeTilePosition( tile->GetCenter() );
-                    hero->Redraw( dst, pos.x, pos.y - 1, tileROI, *this );
+                    hero->Redraw( dst, GetRelativeTilePosition( tile->GetCenter() ), tileROI, *this );
                     if ( drawBottom ) {
                         hero->RedrawBottom( dst, tileROI, *this, isPuzzleDraw );
                     }
