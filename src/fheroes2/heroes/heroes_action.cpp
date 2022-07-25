@@ -2734,7 +2734,7 @@ void ActionToTreeKnowledge( Heroes & hero, const MP2::MapObjectType objectType, 
         std::string msg;
 
         const int level = hero.GetLevel();
-        const uint32_t possibleExperience = Heroes::GetExperienceFromLevel( level + 1 ) - Heroes::GetExperienceFromLevel( level );
+        const uint32_t possibleExperience = Heroes::GetExperienceFromLevel( level ) - Heroes::GetExperienceFromLevel( level - 1 );
 
         // free
         if ( conditions ) {
