@@ -1049,7 +1049,7 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
         idx = 9;
         break; // ICN::OBJNGRA2
     }
-    tile.AddonsPushLevel1( Maps::TilesAddon( 0, GetUniq(), obj, idx ) );
+    tile.AddonsPushLevel1( Maps::TilesAddon( Maps::TERRAIN_LAYER, GetUniq(), obj, idx ) );
 
     // reset
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
