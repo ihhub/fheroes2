@@ -221,16 +221,14 @@ namespace
     class MusicInfo
     {
     public:
-        MusicInfo( std::vector<uint8_t> v, const double pos )
+        explicit MusicInfo( std::vector<uint8_t> v )
             : _source( std::move( v ) )
-            , _position( pos )
         {
             // Do nothing
         }
 
-        MusicInfo( std::string file, const double pos )
+        explicit MusicInfo( std::string file )
             : _source( std::move( file ) )
-            , _position( pos )
         {
             // Do nothing
         }
@@ -287,7 +285,7 @@ namespace
         }
 
     private:
-        std::variant<std::vector<uint8_t>, std::string> _source;
+        const std::variant<std::vector<uint8_t>, std::string> _source;
         double _position{ 0 };
     };
 
@@ -999,7 +997,7 @@ void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const
     }
 
     if ( !musicTrackManager.isTrackCached( musicUID ) ) {
-        musicTrackManager.addTrackToCache( musicUID, std::make_shared<MusicInfo>( v, 0 ) );
+        musicTrackManager.addTrackToCache( musicUID, std::make_shared<MusicInfo>( v ) );
     }
 
     Stop();
@@ -1021,7 +1019,7 @@ void Music::Play( const uint64_t musicUID, const std::string & file, const Playb
     }
 
     if ( !musicTrackManager.isTrackCached( musicUID ) ) {
-        musicTrackManager.addTrackToCache( musicUID, std::make_shared<MusicInfo>( file, 0 ) );
+        musicTrackManager.addTrackToCache( musicUID, std::make_shared<MusicInfo>( file ) );
     }
 
     Stop();
