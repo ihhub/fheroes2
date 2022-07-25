@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 # output every command that modifies files on the build system.
-#export DH_VERBOSE = 1
+export DH_VERBOSE = 1
 
 export LC_ALL = C.UTF-8
 
@@ -9,7 +9,9 @@ export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 export DEB_CFLAGS_MAINT_STRIP = -O2
 export DEB_CXXFLAGS_MAINT_STRIP = -O2
 
-export FHEROES2_DATA=/usr/share/games/fheroes2
+export FHEROES2_DATA = /usr/share/games/fheroes2
+
+export FHEROES2_WITH_IMAGE = 1
 
 %:
 	dh $@
