@@ -1281,18 +1281,40 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
             continue;
         }
 
-        const int icn = MP2::GetICNObject( addon.object );
-
         // TODO: verify whether it is even possible to store ICN::MINIHERO or ICN::MONS32 in the addon section.
-        if ( ICN::UNKNOWN != icn && /*ICN::MINIHERO != icn &&*/ ICN::MONS32 != icn && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( addon.object, addon.index ) ) ) {
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, addon.index );
-            area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
+        const int icn = MP2::GetICNObject( addon.object );
+        bool skipRendering = false;
+        switch ( icn ) {
+        case ICN::UNKNOWN:
+        case ICN::MONS32:
+        case ICN::BOAT32:
+        case ICN::MINIHERO:
+            // Either it is an invalid sprite or a sprite which needs to be divided into tiles in order to properly render it.
+            skipRendering = true;
+            break;
+        default:
+            break;
+        }
 
-            // TODO: why do we check quantity2 for this object? Verify the logic!
-            const uint32_t animationIndex = ICN::AnimationFrame( icn, addon.index, Game::MapsAnimationFrame(), quantity2 != 0 );
-            if ( animationIndex ) {
-                area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, animationIndex ), mp );
-            }
+        if ( skipRendering ) {
+            continue;
+        }
+
+        if ( isPuzzleDraw && MP2::isHiddenForPuzzle( addon.object, addon.index ) ) {
+            continue;
+        }
+
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, addon.index );
+
+        // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
+        assert( sprite.width() <= TILEWIDTH && sprite.height() <= TILEWIDTH );
+
+        area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
+
+        // TODO: why do we check quantity2 for this object stored in addon? Verify the logic!
+        const uint32_t animationIndex = ICN::AnimationFrame( icn, addon.index, Game::MapsAnimationFrame(), quantity2 != 0 );
+        if ( animationIndex ) {
+            area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, animationIndex ), mp );
         }
     }
 
@@ -1302,16 +1324,32 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
     }
 
     const int icn = MP2::GetICNObject( objectTileset );
+    switch ( icn ) {
+    case ICN::UNKNOWN:
+    case ICN::MONS32:
+    case ICN::BOAT32:
+    case ICN::MINIHERO:
+        // Either it is an invalid sprite or a sprite which needs to be divided into tiles in order to properly render it.
+        return;
+    default:
+        break;
+    }
 
-    if ( ICN::UNKNOWN != icn && /*ICN::MINIHERO != icn &&*/ ICN::MONS32 != icn && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( objectTileset, objectIndex ) ) ) {
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, objectIndex );
-        area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
+    if ( isPuzzleDraw && MP2::isHiddenForPuzzle( objectTileset, objectIndex ) ) {
+        return;
+    }
 
-        // possible animation
-        const uint32_t animationIndex = ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 != 0 );
-        if ( animationIndex ) {
-            area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, animationIndex ), mp );
-        }
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, objectIndex );
+
+    // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
+    assert( sprite.width() <= TILEWIDTH && sprite.height() <= TILEWIDTH );
+
+    area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
+
+    // possible animation
+    const uint32_t animationIndex = ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 != 0 );
+    if ( animationIndex ) {
+        area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, animationIndex ), mp );
     }
 }
 

@@ -194,8 +194,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // Each tile can contain multiple object parts or sprites. Each object part has its own level or in other words layer of rendering.
     // We need to use a correct order of levels to render objects on tiles. The levels are:
     // 0 - main and action objects like mines, forest, castle and etc.
-    // 1 - background objects like lake or bushes.
-    // 2 - shadows
+    // 1 - background objects like lakes or bushes.
+    // 2 - shadows and some special objects like castle's entrance road.
     // 3 - roads, water flaws and cracks. Essentially everything what is a part of terrain.
     // The correct order of levels is 3 --> 1 --> 2 --> 0.
     //
@@ -220,13 +220,130 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     const bool drawFog = ( flag & LEVEL_FOG ) == LEVEL_FOG;
 #endif
 
-    const int friendColors = Players::FriendColors();
+    // Get all heroes from all kingdoms and determine whether it is worth to render them.
+    std::vector<const Heroes*> allVisibleHeroes;
+    const Colors currentKingdomColors( Game::GetActualKingdomColors() );
+    for ( const int color : currentKingdomColors ) {
+        const KingdomHeroes heroes = world.GetKingdom( color ).GetHeroes();
+        for ( const Heroes * hero : heroes ) {
+            if ( hero == nullptr ) {
+                // Should we assert here?
+                continue;
+            }
+
+            const fheroes2::Point heroPos = Maps::GetPoint( hero->GetIndex() );
+            if ( heroPos.x < minX || heroPos.y < minY || heroPos.x >= maxX || heroPos.y >= maxY ) {
+                continue;
+            }
+
+            allVisibleHeroes.push_back( hero );
+        }
+    }
+
+    // Sorting heroes by index is the same as sorting them by Y axis first and the by X axis.
+    std::sort( allVisibleHeroes.begin(), allVisibleHeroes.end(), []( const Heroes * first, const Heroes * second ) { return first->GetIndex() < second->GetIndex(); } );
+
+    std::map<fheroes2::Point, std::vector<fheroes2::Sprite>> heroBottomImages;
+    std::map<fheroes2::Point, std::vector<fheroes2::Sprite>> heroBottomBackgroundImages;
+    std::map<fheroes2::Point, std::vector<fheroes2::Sprite>> heroTopImages;
+
+    std::map<fheroes2::Point, std::vector<fheroes2::Sprite>> lowPriorityHeroBottomImages;
+    std::map<fheroes2::Point, std::vector<fheroes2::Sprite>> highPriorityHeroBottomImages;
+
+    std::map<fheroes2::Point, std::vector<fheroes2::Sprite>> heroBottomShadowImages;
+    std::map<fheroes2::Point, std::vector<fheroes2::Sprite>> heroBottomBackgroundShadowImages;
+    std::map<fheroes2::Point, std::vector<fheroes2::Sprite>> heroTopShadowImages;
+
+    const Heroes * currentHero = drawHeroes ? GetFocusHeroes() : nullptr;
+
+    for ( const Heroes * hero : allVisibleHeroes ) {
+        assert ( hero != nullptr );
+
+        const fheroes2::Point heroPos = Maps::GetPoint( hero->GetIndex() );
+        fheroes2::Point nextHeroPos = heroPos;
+
+        const bool movingHero = ( currentHero == hero ) && ( hero->isMoveEnabled() );
+        if ( movingHero ) {
+            const Route::Path & path = currentHero->GetPath();
+            nextHeroPos = Maps::GetPoint( Maps::GetDirectionIndex( hero->GetIndex(), path.GetFrontDirection() ) );
+        }
+
+        // A castle's road south from a castle should actually be level 3 but it is level 2 causing a hero's horse legs to be truncated.
+        // In order to render the legs properly we need to make the bottom part of the hero's sprite to be rendered after castle's road.
+        // This happens only when a hero stands in a castle.
+        Castle * castle = world.getCastleEntrance( heroPos );
+        const bool isHeroInCastle = ( castle != nullptr && castle->GetCenter() == heroPos );
+
+        auto spriteInfo = hero->getHeroSpritesPerTile();
+        for ( auto & info : spriteInfo ) {
+            if ( movingHero && info.first.y == 0 ) {
+                if ( nextHeroPos.y > heroPos.y && nextHeroPos.x > heroPos.x && info.first.x > 0 ) {
+                    // The hero moves south-east. We need to render it over everything.
+                    highPriorityHeroBottomImages[info.first + heroPos].emplace_back( std::move( info.second ) );
+                    continue;
+                }
+
+                if ( nextHeroPos.y > heroPos.y && nextHeroPos.x < heroPos.x && info.first.x < 0 ) {
+                    // The hero moves south-west. We need to render it over everything.
+                    highPriorityHeroBottomImages[info.first + heroPos].emplace_back( std::move( info.second ) );
+                    continue;
+                }
+
+                if ( nextHeroPos.y < heroPos.y && nextHeroPos.x < heroPos.x && info.first.x < 0 ) {
+                    // The hero moves north-west. We need to render it under all other objects.
+                    lowPriorityHeroBottomImages[info.first + heroPos].emplace_back( std::move( info.second ) );
+                    continue;
+                }
+
+                if ( nextHeroPos.y < heroPos.y && nextHeroPos.x > heroPos.x && info.first.x > 0 ) {
+                    // The hero moves north-east. We need to render it under all other objects.
+                    lowPriorityHeroBottomImages[info.first + heroPos].emplace_back( std::move( info.second ) );
+                    continue;
+                }
+            }
+
+            if ( info.first.y > 0 && !isHeroInCastle ) {
+                heroBottomBackgroundImages[info.first + heroPos].emplace_back( std::move( info.second ) );
+            }
+            else if ( info.first.y == 0 || ( isHeroInCastle && info.first.y > 0 ) ) {
+                heroBottomImages[info.first + heroPos].emplace_back( std::move( info.second ) );
+            }
+            else {
+                heroTopImages[info.first + heroPos].emplace_back( std::move( info.second ) );
+            }
+        }
+
+        auto spriteShadowInfo = hero->getHeroShadowSpritesPerTile();
+        for ( auto & info : spriteShadowInfo ) {
+            if ( info.first.y > 0 && !isHeroInCastle ) {
+                heroBottomBackgroundShadowImages[info.first + heroPos].emplace_back( std::move( info.second ) );
+            }
+            else if ( info.first.y == 0 || ( isHeroInCastle && info.first.y > 0 ) ) {
+                heroBottomShadowImages[info.first + heroPos].emplace_back( std::move( info.second ) );
+            }
+            else {
+                heroTopShadowImages[info.first + heroPos].emplace_back( std::move( info.second ) );
+            }
+        }
+    }
 
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
-            // Draw roads and cracks.
+            // Find all images from heroes and draw them.
+            auto iter = heroBottomBackgroundShadowImages.find( { x, y } );
+            if ( iter != heroBottomBackgroundShadowImages.end() ) {
+                assert( !iter->second.empty() );
+
+                const fheroes2::Point & mp = Maps::GetPoint( tile.GetIndex() );
+
+                for ( const fheroes2::Sprite & image : iter->second ) {
+                    BlitOnTile( dst, image, mp );
+                }
+            }
+
+            // Draw roads, rivers and cracks.
             tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, 3 );
         }
     }
@@ -234,6 +351,18 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
+
+            // Draw the lower part of hero's sprite.
+            auto iter = heroBottomBackgroundImages.find( { x, y } );
+            if ( iter != heroBottomBackgroundImages.end() ) {
+                assert( !iter->second.empty() );
+
+                const fheroes2::Point & mp = Maps::GetPoint( tile.GetIndex() );
+
+                for ( const fheroes2::Sprite & image : iter->second ) {
+                    BlitOnTile( dst, image, mp );
+                }
+            }
 
             tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, 1 );
         }
@@ -244,6 +373,18 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
             tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, 2 );
+
+            // Draw all shadows from heroes.
+            auto iter = heroBottomShadowImages.find( { x, y } );
+            if ( iter != heroBottomShadowImages.end() ) {
+                assert( !iter->second.empty() );
+
+                const fheroes2::Point & mp = Maps::GetPoint( tile.GetIndex() );
+
+                for ( const fheroes2::Sprite & image : iter->second ) {
+                    BlitOnTile( dst, image, mp );
+                }
+            }
         }
     }
 
@@ -251,7 +392,43 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
+            // Low priority images are drawn before any other object on this tile.
+            auto iter = lowPriorityHeroBottomImages.find( { x, y } );
+            if ( iter != lowPriorityHeroBottomImages.end() ) {
+                assert( !iter->second.empty() );
+
+                const fheroes2::Point & mp = Maps::GetPoint( tile.GetIndex() );
+
+                for ( const fheroes2::Sprite & image : iter->second ) {
+                    BlitOnTile( dst, image, mp );
+                }
+            }
+
             tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, 0 );
+
+            // Draw middle part of heroes.
+            iter = heroBottomImages.find( { x, y } );
+            if ( iter != heroBottomImages.end() ) {
+                assert( !iter->second.empty() );
+
+                const fheroes2::Point & mp = Maps::GetPoint( tile.GetIndex() );
+
+                for ( const fheroes2::Sprite & image : iter->second ) {
+                    BlitOnTile( dst, image, mp );
+                }
+            }
+
+            // High priority images are drawn after any other object on this tile.
+            iter = highPriorityHeroBottomImages.find( { x, y } );
+            if ( iter != highPriorityHeroBottomImages.end() ) {
+                assert( !iter->second.empty() );
+
+                const fheroes2::Point & mp = Maps::GetPoint( tile.GetIndex() );
+
+                for ( const fheroes2::Sprite & image : iter->second ) {
+                    BlitOnTile( dst, image, mp );
+                }
+            }
         }
     }
 
@@ -260,11 +437,34 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
             tile.RedrawTop( dst, tileROI, isPuzzleDraw, *this );
+
+            // Draw upper part of hero's shadow.
+            auto iter = heroTopShadowImages.find( { x, y } );
+            if ( iter != heroTopShadowImages.end() ) {
+                assert( !iter->second.empty() );
+
+                const fheroes2::Point & mp = Maps::GetPoint( tile.GetIndex() );
+
+                for ( const fheroes2::Sprite & image : iter->second ) {
+                    BlitOnTile( dst, image, mp );
+                }
+            }
+
+            // Draw upper part of heroes.
+            iter = heroTopImages.find( { x, y } );
+            if ( iter != heroTopImages.end() ) {
+                assert( !iter->second.empty() );
+
+                const fheroes2::Point & mp = Maps::GetPoint( tile.GetIndex() );
+
+                for ( const fheroes2::Sprite & image : iter->second ) {
+                    BlitOnTile( dst, image, mp );
+                }
+            }
         }
     }
 
     // Draw hero's route. It should be drawn on top of everything.
-    const Heroes * currentHero = drawHeroes ? GetFocusHeroes() : nullptr;
     const bool drawRoutes = ( flag & LEVEL_ROUTES ) != 0;
 
     if ( drawRoutes && ( currentHero != nullptr ) && currentHero->GetPath().isShow() ) {
@@ -273,12 +473,15 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
         const int pathfinding = currentHero->GetLevelSkill( Skill::Secondary::PATHFINDING );
 
-        // TODO: move this check to hero_move.cpp file to avoid magical numbers.
-        const int heroSpriteIndex = currentHero->GetSpriteIndex();
-        const bool skipfirst = currentHero->isMoveEnabled() && 45 > heroSpriteIndex && 2 < ( heroSpriteIndex % 9 );
-
         Route::Path::const_iterator currentStep = path.begin();
         Route::Path::const_iterator nextStep = currentStep;
+
+        if ( currentHero->isMoveEnabled() ) {
+            // Do not draw the first path mark when hero / boat is moving.
+            ++currentStep;
+            ++nextStep;
+            --greenColorSteps;
+        }
 
         for ( ; currentStep != path.end(); ++currentStep ) {
             const int32_t from = currentStep->GetIndex();
@@ -287,22 +490,25 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             ++nextStep;
             --greenColorSteps;
 
-            // is visible
-            if ( ( tileROI & mp ) && !( currentStep == path.begin() && skipfirst ) ) {
-                uint32_t routeSpriteIndex = 0;
-                if ( nextStep != path.end() ) {
-                    const Maps::Tiles & tileTo = world.GetTiles( currentStep->GetIndex() );
-                    uint32_t cost = Maps::Ground::GetPenalty( tileTo, pathfinding );
+            if ( !( tileROI & mp ) ) {
+                // The mark is on a tile outside the drawing area. Just skip it.
+                continue;
+            }
 
-                    if ( world.GetTiles( currentStep->GetFrom() ).isRoad() && tileTo.isRoad() )
-                        cost = Maps::Ground::roadPenalty;
+            uint32_t routeSpriteIndex = 0;
+            if ( nextStep != path.end() ) {
+                const Maps::Tiles & tileTo = world.GetTiles( currentStep->GetIndex() );
+                uint32_t cost = Maps::Ground::GetPenalty( tileTo, pathfinding );
 
-                    routeSpriteIndex = Route::Path::GetIndexSprite( currentStep->GetDirection(), nextStep->GetDirection(), cost );
+                if ( world.GetTiles( currentStep->GetFrom() ).isRoad() && tileTo.isRoad() ) {
+                    cost = Maps::Ground::roadPenalty;
                 }
 
-                const fheroes2::Sprite & routeSprite = fheroes2::AGG::GetICN( ( ( greenColorSteps < 0 ) ? ICN::ROUTERED : ICN::ROUTE ), routeSpriteIndex );
-                BlitOnTile( dst, routeSprite, routeSprite.x() - 12, routeSprite.y() + 2, mp );
+                routeSpriteIndex = Route::Path::GetIndexSprite( currentStep->GetDirection(), nextStep->GetDirection(), cost );
             }
+
+            const fheroes2::Sprite & routeSprite = fheroes2::AGG::GetICN( ( ( greenColorSteps < 0 ) ? ICN::ROUTERED : ICN::ROUTE ), routeSpriteIndex );
+            BlitOnTile( dst, routeSprite, routeSprite.x() - 12, routeSprite.y() + 2, mp );
         }
     }
 
@@ -321,6 +527,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 #endif
         // redraw fog
         if ( drawFog ) {
+        const int friendColors = Players::FriendColors();
+
         for ( int32_t y = minY; y < maxY; ++y ) {
             for ( int32_t x = minX; x < maxX; ++x ) {
                 const Maps::Tiles & tile = world.GetTiles( x, y );
