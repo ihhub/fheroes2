@@ -398,9 +398,6 @@ public:
 
     bool MayCastAdventureSpells() const;
 
-    void Redraw( fheroes2::Image & output, fheroes2::Point offset, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
-    void RedrawShadow( fheroes2::Image & output, fheroes2::Point offset, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
-
     // Since heroes sprite are much bigger than a tile we need to 'cut' the sprite and the shadow's sprite into pieces. Each piece is for a separate tile.
     std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getHeroSpritesPerTile() const;
     std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getHeroShadowSpritesPerTile() const;
