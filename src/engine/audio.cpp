@@ -184,7 +184,13 @@ namespace
     {
         assert( ptr != nullptr && size != 0 );
 
-        Mix_Chunk * sample = Mix_LoadWAV_RW( SDL_RWFromConstMem( ptr, size ), 1 );
+        SDL_RWops * rwops = SDL_RWFromConstMem( ptr, size );
+        if ( rwops == nullptr ) {
+            ERROR_LOG( "Failed to create an audio chunk from memory. The error: " << SDL_GetError() )
+            return -1;
+        }
+
+        Mix_Chunk * sample = Mix_LoadWAV_RW( rwops, 1 );
         if ( sample == nullptr ) {
             ERROR_LOG( "Failed to create an audio chunk from memory. The error: " << Mix_GetError() )
             return -1;
@@ -247,17 +253,21 @@ namespace
                 const std::vector<uint8_t> & v = std::get<std::vector<uint8_t>>( _source );
 
                 SDL_RWops * rwops = SDL_RWFromConstMem( &v[0], static_cast<int>( v.size() ) );
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-                result = Mix_LoadMUS_RW( rwops, 0 );
-#else
-                result = Mix_LoadMUS_RW( rwops );
-#endif
-                if ( result == nullptr ) {
-                    ERROR_LOG( "Failed to create a music track from a memory chunk. The error: " << Mix_GetError() )
+                if ( rwops == nullptr ) {
+                    ERROR_LOG( "Failed to create a music track from memory. The error: " << SDL_GetError() )
                 }
+                else {
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+                    result = Mix_LoadMUS_RW( rwops, 0 );
+#else
+                    result = Mix_LoadMUS_RW( rwops );
+#endif
+                    if ( result == nullptr ) {
+                        ERROR_LOG( "Failed to create a music track from memory. The error: " << Mix_GetError() )
+                    }
 
-                SDL_FreeRW( rwops );
+                    SDL_FreeRW( rwops );
+                }
             }
             else if ( std::holds_alternative<std::string>( _source ) ) {
                 const std::string & file = std::get<std::string>( _source );
