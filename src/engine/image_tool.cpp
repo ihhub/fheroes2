@@ -67,10 +67,13 @@ namespace
         const std::vector<uint8_t> & palette = PALPalette();
         const uint8_t * currentPalette = palette.data();
 
+        const int32_t width = image.width();
+        const int32_t height = image.height();
+
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-        SDL_Surface * surface = SDL_CreateRGBSurface( 0, image.width(), image.height(), 8, 0, 0, 0, 0 );
+        SDL_Surface * surface = SDL_CreateRGBSurface( 0, width, height, 8, 0, 0, 0, 0 );
 #else
-        SDL_Surface * surface = SDL_CreateRGBSurface( SDL_SWSURFACE, image.width(), image.height(), 8, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
+        SDL_Surface * surface = SDL_CreateRGBSurface( SDL_SWSURFACE, width, height, 8, 0xFF, 0xFF00, 0xFF0000, 0xFF000000 );
 #endif
         if ( surface == nullptr ) {
             ERROR_LOG( "Error while creating a SDL surface for an image to be saved under " << path << ". Error " << SDL_GetError() )
@@ -96,10 +99,16 @@ namespace
         SDL_SetPalette( surface, SDL_LOGPAL | SDL_PHYSPAL, paletteSDL.data(), 0, 256 );
 #endif
 
-        const uint32_t width = image.width();
-        const uint32_t height = image.height();
+        if ( surface->pitch != width ) {
+            const uint8_t * imageIn = image.image();
 
-        memcpy( surface->pixels, image.image(), width * height );
+            for ( int32_t i = 0; i < height; ++i ) {
+                memcpy( static_cast<uint8_t *>( surface->pixels ) + surface->pitch * i, imageIn + width * i, static_cast<size_t>( width ) );
+            }
+        }
+        else {
+            memcpy( surface->pixels, image.image(), static_cast<size_t>( width * height ) );
+        }
 
 #if defined( ENABLE_PNG )
         int res = 0;

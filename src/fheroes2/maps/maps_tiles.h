@@ -132,12 +132,6 @@ namespace Maps
             return quantity2;
         }
 
-        // Get third field containing Tile metadata (adventure spell ID)
-        uint8_t GetQuantity3() const
-        {
-            return quantity3;
-        }
-
         uint16_t GetPassable() const;
         int GetGround() const;
 
@@ -257,9 +251,6 @@ namespace Maps
         void ClearFog( int color );
 
         /* monster operation */
-        bool MonsterJoinConditionSkip() const;
-        bool MonsterJoinConditionFree() const;
-        void MonsterSetJoinCondition( int );
         void MonsterSetCount( uint32_t count );
         uint32_t MonsterCount() const;
 
@@ -286,10 +277,21 @@ namespace Maps
 
         void SetObjectPassable( bool );
 
-        // Set Tile metadata field (used for things like adventure spell ID)
-        void SetQuantity3( const uint8_t value )
+        // Get additional metadata.
+        int32_t getAdditionalMetadata() const
         {
-            quantity3 = value;
+            return additionalMetadata;
+        }
+
+        // Set Tile additional metadata field.
+        void setAdditionalMetadata( const uint32_t value )
+        {
+            additionalMetadata = value;
+        }
+
+        void clearAdditionalMetadata()
+        {
+            additionalMetadata = 0;
         }
 
         Heroes * GetHeroes() const;
@@ -344,8 +346,6 @@ namespace Maps
 
         bool isDetachedObject() const;
 
-        int MonsterJoinCondition() const;
-
         static void UpdateMonsterInfo( Tiles & );
         static void UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad );
         static void UpdateMonsterPopulation( Tiles & );
@@ -381,7 +381,8 @@ namespace Maps
         uint8_t quantity1 = 0;
         uint8_t quantity2 = 0;
 
-        uint8_t quantity3 = 0;
+        // Additional metadata is not set from map's information but during runtime like spells or monster joining conditions.
+        int32_t additionalMetadata = 0;
 
         bool tileIsRoad = false;
 
@@ -395,6 +396,16 @@ namespace Maps
     StreamBase & operator<<( StreamBase &, const Tiles & );
     StreamBase & operator>>( StreamBase &, TilesAddon & );
     StreamBase & operator>>( StreamBase &, Tiles & );
+
+    // In order to keep class Tiles small enough these helper functions exist.
+    // If you want to add a new method to the class and this is not a genetic one you must create a function instead.
+
+    void setSpellOnTile( Tiles & tile, const int32_t spellId );
+    int32_t getSpellIdFromTile( const Tiles & tile );
+
+    void setMonsterOnTileJoinCondition( Tiles & tile, const int32_t condition );
+    bool isMonsterOnTileJoinConditionSkip( const Tiles & tile );
+    bool isMonsterOnTileJoinConditionFree( const Tiles & tile );
 }
 
 #endif

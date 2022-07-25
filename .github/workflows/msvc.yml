@@ -46,8 +46,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install dependencies, cygwin and zip
       run: |
-        cd script/windows
-        ./install_packages.bat
+        script/windows/install_packages.bat
         choco.exe install make gettext-devel -y --source cygwin
         choco.exe install zip -y
     - uses: microsoft/setup-msbuild@v1
@@ -76,10 +75,13 @@ jobs:
         BUILD_DIR: build\${{ matrix.config.platform }}\${{ matrix.config.build_config }}
     - name: Create ZIP package
       run: |
-        zip.exe -j "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip "$BUILD_DIR"\\fheroes2.exe "$BUILD_DIR"\\SDL*.dll "$BUILD_DIR"\\lib*.dll \
-                "$BUILD_DIR"\\smpeg.dll script\\demo\\*.bat script\\demo\\*.ps1 script\\homm2\\*.bat script\\homm2\\*.ps1 LICENSE changelog.txt \
+        zip.exe -j "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip "$BUILD_DIR"\\fheroes2.exe "$BUILD_DIR"\\*.dll \
+                script\\demo\\*.bat script\\demo\\*.ps1 script\\homm2\\*.bat script\\homm2\\*.ps1 LICENSE changelog.txt \
                 docs\\README.txt
         zip.exe "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip files\\lang\\*.mo files\\data\\*.h2d
+        if [[ ${{ matrix.config.deploy_config }} == SDL2 ]]; then
+            zip.exe "$BUILD_DIR"\\${{ matrix.config.package_name }}.zip files\\soundfonts\\*.*
+        fi
       env:
         BUILD_DIR: build\${{ matrix.config.platform }}\${{ matrix.config.build_config }}
     - uses: actions/upload-artifact@v2

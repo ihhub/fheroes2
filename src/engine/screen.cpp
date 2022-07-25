@@ -223,7 +223,7 @@ namespace
                         if ( imageWidth % 4 != 0 ) {
                             const int32_t screenWidth = ( imageWidth / 4 ) * 4 + 4;
                             for ( int32_t i = 0; i < imageHeight; ++i ) {
-                                memcpy( reinterpret_cast<int8_t *>( surface->pixels ) + screenWidth * i, imageIn + imageWidth * i, static_cast<size_t>( imageWidth ) );
+                                memcpy( static_cast<uint8_t *>( surface->pixels ) + screenWidth * i, imageIn + imageWidth * i, static_cast<size_t>( imageWidth ) );
                             }
                         }
                         else {
@@ -254,7 +254,7 @@ namespace
                         const int32_t screenOffset = roi.x + roi.y * screenWidth;
                         const int32_t imageOffset = roi.x + roi.y * imageWidth;
                         for ( int32_t i = 0; i < roi.height; ++i ) {
-                            memcpy( reinterpret_cast<int8_t *>( surface->pixels ) + screenWidth * i + screenOffset, imageIn + imageOffset + imageWidth * i,
+                            memcpy( static_cast<uint8_t *>( surface->pixels ) + screenWidth * i + screenOffset, imageIn + imageOffset + imageWidth * i,
                                     static_cast<size_t>( roi.width ) );
                         }
                     }

@@ -183,7 +183,7 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
 
         if ( le.MouseClickLeft( button_hero.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             LocalEvent::GetClean();
-            hero.OpenDialog( false, true, true, true );
+            hero.OpenDialog( false, true, true, true, true );
             display.render();
         }
 
