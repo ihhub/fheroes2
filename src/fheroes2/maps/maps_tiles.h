@@ -112,12 +112,23 @@ namespace Maps
         }
 
         fheroes2::Point GetCenter() const;
+
         MP2::MapObjectType GetObject( bool ignoreObjectUnderHero = true ) const;
-        uint8_t GetObjectTileset() const;
 
-        uint8_t GetObjectSpriteIndex() const;
+        uint8_t GetObjectTileset() const
+        {
+            return objectTileset;
+        }
 
-        uint32_t GetObjectUID() const;
+        uint8_t GetObjectSpriteIndex() const
+        {
+            return objectIndex;
+        }
+
+        uint32_t GetObjectUID() const
+        {
+            return uniq;
+        }
 
         // Get Tile metadata field #1 (used for things like monster count or resource amount)
         uint8_t GetQuantity1() const
@@ -131,7 +142,11 @@ namespace Maps
             return quantity2;
         }
 
-        uint16_t GetPassable() const;
+        uint16_t GetPassable() const
+        {
+            return tilePassable;
+        }
+
         int GetGround() const;
 
         bool isWater() const
@@ -151,13 +166,30 @@ namespace Maps
 
         const fheroes2::Image & GetTileSurface() const;
 
-        bool isObject( const MP2::MapObjectType objectType ) const;
-        bool hasSpriteAnimation() const;
+        bool isObject( const MP2::MapObjectType objectType ) const
+        {
+            return objectType == mp2_object;
+        }
+
+        bool hasSpriteAnimation() const
+        {
+            return objectTileset & 1;
+        }
+
         // Checks whether it is possible to move into this tile from the specified direction under the specified conditions
         bool isPassableFrom( const int direction, const bool fromWater, const bool skipFog, const int heroColor ) const;
+
         // Checks whether it is possible to exit this tile in the specified direction
-        bool isPassableTo( const int direction ) const;
-        bool isRoad() const;
+        bool isPassableTo( const int direction ) const
+        {
+            return ( direction & tilePassable ) != 0;
+        }
+
+        bool isRoad() const
+        {
+            return tileIsRoad || mp2_object == MP2::OBJ_CASTLE;
+        }
+
         bool isStream() const;
         bool isShadow() const;
         bool GoodForUltimateArtifact() const;
@@ -175,11 +207,20 @@ namespace Maps
 
         void setBoat( int direction );
         int getBoatDirection() const;
-        void resetObjectSprite();
+
+        void resetObjectSprite()
+        {
+            objectTileset = 0;
+            objectIndex = 255;
+        }
 
         void FixObject();
 
-        uint32_t GetRegion() const;
+        uint32_t GetRegion() const
+        {
+            return _region;
+        }
+
         void UpdateRegion( uint32_t newRegionID );
 
         // Set initial passability based on information read from mp2 and addon structures.
@@ -247,7 +288,11 @@ namespace Maps
         }
 
         bool isFogAllAround( const int color ) const;
-        void ClearFog( int color );
+
+        void ClearFog( int colors )
+        {
+            fog_colors &= ~colors;
+        }
 
         /* monster operation */
         void MonsterSetCount( uint32_t count );

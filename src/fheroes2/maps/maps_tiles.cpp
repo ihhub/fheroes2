@@ -870,12 +870,6 @@ int Maps::Tiles::getBoatDirection() const
     return Direction::UNKNOWN;
 }
 
-void Maps::Tiles::resetObjectSprite()
-{
-    objectTileset = 0;
-    objectIndex = 255;
-}
-
 void Maps::Tiles::SetTile( uint32_t sprite_index, uint32_t shape )
 {
     pack_sprite_index = PackTileSpriteIndex( sprite_index, shape );
@@ -1050,11 +1044,6 @@ bool Maps::Tiles::doesObjectExist( const uint32_t uid ) const
     return false;
 }
 
-uint32_t Maps::Tiles::GetRegion() const
-{
-    return _region;
-}
-
 void Maps::Tiles::UpdateRegion( uint32_t newRegionID )
 {
     if ( tilePassable ) {
@@ -1063,16 +1052,6 @@ void Maps::Tiles::UpdateRegion( uint32_t newRegionID )
     else {
         _region = REGION_NODE_BLOCKED;
     }
-}
-
-uint32_t Maps::Tiles::GetObjectUID() const
-{
-    return uniq;
-}
-
-uint16_t Maps::Tiles::GetPassable() const
-{
-    return tilePassable;
 }
 
 bool Maps::Tiles::isClearGround() const
@@ -1648,11 +1627,6 @@ bool Maps::Tiles::isPassableFrom( const int direction, const bool fromWater, con
     return ( direction & tilePassable ) != 0;
 }
 
-bool Maps::Tiles::isPassableTo( const int direction ) const
-{
-    return ( direction & tilePassable ) != 0;
-}
-
 void Maps::Tiles::SetObjectPassable( bool pass )
 {
     switch ( GetObject( false ) ) {
@@ -1666,12 +1640,6 @@ void Maps::Tiles::SetObjectPassable( bool pass )
     default:
         break;
     }
-}
-
-/* check road */
-bool Maps::Tiles::isRoad() const
-{
-    return tileIsRoad || mp2_object == MP2::OBJ_CASTLE;
 }
 
 bool Maps::Tiles::isStream() const
@@ -1689,26 +1657,6 @@ bool Maps::Tiles::isShadow() const
 {
     return isShadowSprite( objectTileset, objectIndex )
            && addons_level1.size() == static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow ) );
-}
-
-bool Maps::Tiles::hasSpriteAnimation() const
-{
-    return objectTileset & 1;
-}
-
-bool Maps::Tiles::isObject( const MP2::MapObjectType objectType ) const
-{
-    return objectType == mp2_object;
-}
-
-uint8_t Maps::Tiles::GetObjectTileset() const
-{
-    return objectTileset;
-}
-
-uint8_t Maps::Tiles::GetObjectSpriteIndex() const
-{
-    return objectIndex;
 }
 
 Maps::TilesAddon * Maps::Tiles::FindFlags()
@@ -2267,11 +2215,6 @@ std::pair<uint32_t, uint32_t> Maps::Tiles::GetMonsterSpriteIndices( const Tiles 
         spriteIndices.second = monsterIndex * 9 + 1 + monsterAnimationSequence[( Game::MapsAnimationFrame() + mp.x * mp.y ) % monsterAnimationSequence.size()];
     }
     return spriteIndices;
-}
-
-void Maps::Tiles::ClearFog( int colors )
-{
-    fog_colors &= ~colors;
 }
 
 bool Maps::Tiles::isFogAllAround( const int color ) const
