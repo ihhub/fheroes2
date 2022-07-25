@@ -1524,9 +1524,10 @@ namespace fheroes2
         DrawLine( image, { roi.x, roi.y + roi.height - 1 }, { roi.x + roi.width, roi.y + roi.height - 1 }, value, roi );
     }
 
-    void DivideImageBySquares( const Point & spriteOffset, const Image & original, const int32_t squareSize, std::vector<std::pair<Point, Sprite>> & output )
+    void DivideImageBySquares( const Point & spriteOffset, const Image & in, const int32_t squareSize, const bool flip,
+                               std::vector<std::pair<Point, Sprite>> & output )
     {
-        if ( original.empty() ) {
+        if ( in.empty() ) {
             return;
         }
 
@@ -1534,6 +1535,13 @@ namespace fheroes2
             assert( 0 );
             return;
         }
+
+        Image flipped;
+        if ( flip ) {
+            flipped = Flip( in, true, false );
+        }
+
+        const Image & original = flip ? flipped : in ;
 
         Point offset{ spriteOffset.x / squareSize, spriteOffset.y / squareSize };
 
@@ -1562,7 +1570,7 @@ namespace fheroes2
                 Sprite cropped
                     = Crop( original, intersection.x - spriteRelativeOffset.x, intersection.y - spriteRelativeOffset.y, intersection.width, intersection.height );
                 assert( !cropped.empty() );
-                cropped.setPosition( intersection.x, intersection.y );
+                cropped.setPosition( intersection.x - roi.x, intersection.y - roi.y );
 
                 output.emplace_back( offset + Point( x, y ), std::move( cropped ) );
             }

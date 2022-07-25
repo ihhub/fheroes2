@@ -612,15 +612,15 @@ std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Heroes::getHeroSprites
                                             offset.y + spriteFlag.y() + flagOffset.y + TILEWIDTH );
 
     std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> output;
-    fheroes2::DivideImageBySquares( heroSpriteOffset, spriteHero, TILEWIDTH, output );
-    fheroes2::DivideImageBySquares( flagSpriteOffset, spriteFlag, TILEWIDTH, output );
+    fheroes2::DivideImageBySquares( heroSpriteOffset, spriteHero, TILEWIDTH, reflect, output );
+    fheroes2::DivideImageBySquares( flagSpriteOffset, spriteFlag, TILEWIDTH, reflect, output );
 
     if ( isShipMaster() && isMoveEnabled() && isInDeepOcean() ) {
         const fheroes2::Sprite & spriteFroth = getFrothSprite( *this, sprite_index );
         const fheroes2::Point frothSpriteOffset( offset.x + ( reflect ? TILEWIDTH - spriteFroth.x() - spriteFroth.width() : spriteFroth.x() ),
                                                  offset.y + spriteFroth.y() + TILEWIDTH );
 
-        fheroes2::DivideImageBySquares( frothSpriteOffset, spriteFroth, TILEWIDTH, output );
+        fheroes2::DivideImageBySquares( frothSpriteOffset, spriteFroth, TILEWIDTH, reflect, output );
     }
 
     return output;
@@ -644,7 +644,7 @@ std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Heroes::getHeroShadowS
     const fheroes2::Point shadowSpriteOffset( offset.x + spriteShadow.x(), offset.y + spriteShadow.y() + TILEWIDTH );
 
     std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> output;
-    fheroes2::DivideImageBySquares( shadowSpriteOffset, spriteShadow, TILEWIDTH, output );
+    fheroes2::DivideImageBySquares( shadowSpriteOffset, spriteShadow, TILEWIDTH, false, output );
 
     return output;
 }
