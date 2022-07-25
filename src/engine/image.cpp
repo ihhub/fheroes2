@@ -1524,8 +1524,7 @@ namespace fheroes2
         DrawLine( image, { roi.x, roi.y + roi.height - 1 }, { roi.x + roi.width, roi.y + roi.height - 1 }, value, roi );
     }
 
-    void DivideImageBySquares( const Point & spriteOffset, const Image & in, const int32_t squareSize, const bool flip,
-                               std::vector<std::pair<Point, Sprite>> & output )
+    void DivideImageBySquares( const Point & spriteOffset, const Image & in, const int32_t squareSize, const bool flip, std::vector<std::pair<Point, Sprite>> & output )
     {
         if ( in.empty() ) {
             return;
@@ -1541,7 +1540,7 @@ namespace fheroes2
             flipped = Flip( in, true, false );
         }
 
-        const Image & original = flip ? flipped : in ;
+        const Image & original = flip ? flipped : in;
 
         Point offset{ spriteOffset.x / squareSize, spriteOffset.y / squareSize };
 
