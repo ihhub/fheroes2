@@ -1697,6 +1697,7 @@ void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
         break;
     }
 
+    // TODO: some flags cannot be rendered after the main object so either we find a position where it is possible to render on the same level or we render on top.
     switch ( objectType ) {
     case MP2::OBJ_WINDMILL:
         index += 42;
@@ -1758,7 +1759,7 @@ void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
     }
 }
 
-void Maps::Tiles::CorrectFlags32( const int col, const uint8_t index, const bool up )
+void Maps::Tiles::CorrectFlags32( const int col, const uint8_t index, const bool setOnUpperLayer )
 {
     if ( col == Color::NONE ) {
         removeFlags();
@@ -1773,13 +1774,11 @@ void Maps::Tiles::CorrectFlags32( const int col, const uint8_t index, const bool
         // replace flag
         taddon->index = index;
     }
-    else if ( up ) {
-        // or new flag
-        addons_level2.emplace_back( TilesAddon::UPPER, World::GetUniq(), objectType, index );
+    else if ( setOnUpperLayer ) {
+        addons_level2.emplace_back( ACTION_OBJECT_LAYER, World::GetUniq(), objectType, index );
     }
     else {
-        // or new flag
-        addons_level1.emplace_back( TilesAddon::UPPER, World::GetUniq(), objectType, index );
+        addons_level1.emplace_back( ACTION_OBJECT_LAYER, World::GetUniq(), objectType, index );
     }
 }
 

@@ -51,16 +51,16 @@ namespace Interface
 
 namespace Maps
 {
+    enum ObjectLayerType : uint8_t
+    {
+        ACTION_OBJECT_LAYER = 0, // main and action objects like mines, forest, castle and etc.
+        BACKGROUND_LAYER = 1, // background objects like lakes or bushes.
+        SHADOW_LAYER = 2, // shadows and some special objects like castle's entrance road.
+        TERRAIN_LAYER = 3 // roads, water flaws and cracks. Essentially everything what is a part of terrain.
+    };
+
     struct TilesAddon
     {
-        enum level_t : uint8_t
-        {
-            GROUND = 0,
-            DOWN = 1,
-            SHADOW = 2,
-            UPPER = 3
-        };
-
         TilesAddon();
         TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint32_t index_ );
 
@@ -376,7 +376,7 @@ namespace Maps
         TilesAddon * FindFlags();
 
         // correct flags, ICN::FLAGS32 vesion
-        void CorrectFlags32( const int col, const uint8_t index, const bool up );
+        void CorrectFlags32( const int col, const uint8_t index, const bool setOnUpperLayer );
         void RemoveJailSprite();
 
         void QuantitySetVariant( int );

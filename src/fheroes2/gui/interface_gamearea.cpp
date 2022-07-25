@@ -363,7 +363,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
 
             // Draw roads, rivers and cracks.
-            tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, 3 );
+            tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::TERRAIN_LAYER );
         }
     }
 
@@ -383,7 +383,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 }
             }
 
-            tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, 1 );
+            tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::BACKGROUND_LAYER );
         }
     }
 
@@ -391,7 +391,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
-            tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, 2 );
+            tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::SHADOW_LAYER );
 
             // Draw all shadows from heroes.
             auto iter = heroBottomShadowImages.find( { x, y } );
@@ -423,7 +423,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 }
             }
 
-            tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, 0 );
+            tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::ACTION_OBJECT_LAYER );
 
             // Draw middle part of heroes.
             iter = heroBottomImages.find( { x, y } );
