@@ -417,6 +417,11 @@ namespace
 
         return false;
     }
+
+    uint32_t PackTileSpriteIndex( uint32_t index, uint32_t shape ) /* index max: 0x3FFF, shape value: 0, 1, 2, 3 */
+    {
+        return ( shape << 14 ) | ( 0x3FFF & index );
+    }
 }
 
 Maps::TilesAddon::TilesAddon()
@@ -698,11 +703,6 @@ void Maps::Addons::Remove( uint32_t uniq )
     remove_if( [uniq]( const TilesAddon & v ) { return v.isUniq( uniq ); } );
 }
 
-uint32_t PackTileSpriteIndex( uint32_t index, uint32_t shape ) /* index max: 0x3FFF, shape value: 0, 1, 2, 3 */
-{
-    return ( shape << 14 ) | ( 0x3FFF & index );
-}
-
 void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
 {
     tilePassable = DIRECTION_ALL;
@@ -710,7 +710,7 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
     _level = mp2.quantity1 & 0x03;
     quantity1 = mp2.quantity1;
     quantity2 = mp2.quantity2;
-    quantity3 = 0;
+    additionalMetadata = 0;
     fog_colors = Color::ALL;
 
     SetTile( mp2.surfaceType, mp2.flags );
@@ -1423,7 +1423,7 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visib
         area.BlitOnTile( dst, fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 ), mp );
     }
     else if ( objectType == MP2::OBJ_MINES ) {
-        const uint8_t spellID = quantity3;
+        const int32_t spellID = Maps::getSpellIdFromTile( *this );
         if ( spellID == Spell::HAUNT ) {
             area.BlitOnTile( dst, fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 ), mp );
         }
@@ -1511,7 +1511,7 @@ std::string Maps::Tiles::String() const
     os << std::endl
        << "quantity 1      : " << static_cast<int>( quantity1 ) << std::endl
        << "quantity 2      : " << static_cast<int>( quantity2 ) << std::endl
-       << "quantity 3      : " << static_cast<int>( quantity3 ) << std::endl;
+       << "add. metadata   : " << additionalMetadata << std::endl;
 
     for ( const TilesAddon & addon : addons_level1 ) {
         os << addon.String( 1 );
@@ -2792,8 +2792,8 @@ StreamBase & Maps::operator<<( StreamBase & msg, const Tiles & tile )
     static_assert( sizeof( uint8_t ) == sizeof( MP2::MapObjectType ), "Incorrect type for writing MP2::MapObjectType object" );
 
     return msg << tile._index << tile.pack_sprite_index << tile.tilePassable << tile.uniq << tile.objectTileset << tile.objectIndex
-               << static_cast<uint8_t>( tile.mp2_object ) << tile.fog_colors << tile.quantity1 << tile.quantity2 << tile.quantity3 << tile.heroID << tile.tileIsRoad
-               << tile.addons_level1 << tile.addons_level2 << tile._level;
+               << static_cast<uint8_t>( tile.mp2_object ) << tile.fog_colors << tile.quantity1 << tile.quantity2 << tile.additionalMetadata << tile.heroID
+               << tile.tileIsRoad << tile.addons_level1 << tile.addons_level2 << tile._level;
 }
 
 StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
@@ -2805,8 +2805,20 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
     msg >> objectType;
     tile.mp2_object = static_cast<MP2::MapObjectType>( objectType );
 
-    msg >> tile.fog_colors >> tile.quantity1 >> tile.quantity2 >> tile.quantity3 >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2
-        >> tile._level;
+    msg >> tile.fog_colors >> tile.quantity1 >> tile.quantity2;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0918_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_0918_RELEASE ) {
+        // Old additional metadata was stored in uint8_t format.
+        uint8_t temp;
+        msg >> temp;
+        tile.additionalMetadata = temp;
+    }
+    else {
+        msg >> tile.additionalMetadata;
+    }
+
+    msg >> tile.heroID >> tile.tileIsRoad >> tile.addons_level1 >> tile.addons_level2 >> tile._level;
 
     return msg;
 }

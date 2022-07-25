@@ -21,6 +21,7 @@
 #include "ui_scrollbar.h"
 #include "pal.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 

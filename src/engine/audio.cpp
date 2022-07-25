@@ -544,7 +544,9 @@ void Audio::Init()
     }
 
     if ( audioSpecs.freq != frequency ) {
-        ERROR_LOG( "Audio frequency is initialized as " << frequency << " instead of " << audioSpecs.freq )
+        // At least on Windows the standard frequency is 48000 Hz. Sounds in the game are 22500 Hz frequency.
+        // However, resampling is done inside SDL so this is not exactly an error.
+        DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Audio frequency is initialized as " << frequency << " instead of " << audioSpecs.freq )
     }
 
     if ( audioSpecs.format != format ) {
@@ -980,11 +982,6 @@ bool Music::isPlaying()
 
 void Music::SetMidiSoundFonts( const ListFiles & files )
 {
-    if ( files.empty() ) {
-        // No fonts to set
-        return;
-    }
-
     const std::scoped_lock<std::recursive_mutex> lock( audioMutex );
 
     if ( !isInitialized ) {
@@ -998,12 +995,14 @@ void Music::SetMidiSoundFonts( const ListFiles & files )
         filePaths.push_back( ';' );
     }
 
-    assert( !filePaths.empty() && filePaths.back() == ';' );
-
     // Remove the last semicolon
-    filePaths.pop_back();
+    if ( !filePaths.empty() ) {
+        assert( filePaths.back() == ';' );
+
+        filePaths.pop_back();
+    }
 
     if ( Mix_SetSoundFonts( filePaths.c_str() ) == 0 ) {
-        ERROR_LOG( "Failed to set MIDI sound fonts using paths " << filePaths << ". The error: " << Mix_GetError() )
+        ERROR_LOG( "Failed to set MIDI SoundFonts using paths " << filePaths << ". The error: " << Mix_GetError() )
     }
 }

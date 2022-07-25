@@ -683,8 +683,9 @@ namespace AI
             else {
                 AIBattleLose( hero, res, true );
                 tile.MonsterSetCount( army.GetCountMonsters( troop.GetMonster() ) );
-                if ( tile.MonsterJoinConditionFree() )
-                    tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
+                if ( Maps::isMonsterOnTileJoinConditionFree( tile ) ) {
+                    Maps::setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_MONEY );
+                }
             }
         }
 
@@ -861,7 +862,8 @@ namespace AI
 
                 if ( result.AttackerWins() ) {
                     hero.IncreaseExperience( result.GetExperienceAttacker() );
-                    tile.SetQuantity3( 0 );
+                    // Clear any metadata related to spells.
+                    tile.clearAdditionalMetadata();
                 }
                 else {
                     capture = false;

@@ -33,27 +33,27 @@ jobs:
           dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_IMAGE: ON, FHEROES2_WITH_DEBUG: ON, FHEROES2_WITH_TSAN: ON }
         - name: macOS SDL1
-          os: macos-10.15
+          os: macos-11
           dependencies: sdl sdl_mixer
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON }
-          package_name: fheroes2_macos10_15_sdl1_x86-64.zip
+          package_name: fheroes2_macos11_sdl1_x86-64.zip
           package_files: fheroes2 LICENSE script/macos/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: MacOS build with SDL 1 support (latest commit)
           release_tag: fheroes2-osx-sdl1_dev
         - name: macOS SDL1 App Bundle
-          os: macos-10.15
+          os: macos-11
           dependencies: sdl sdl_mixer dylibbundler
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON, FHEROES2_MACOS_APP_BUNDLE: ON }
         - name: macOS SDL2
-          os: macos-10.15
+          os: macos-11
           dependencies: sdl2 sdl2_mixer
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON }
-          package_name: fheroes2_macos10_15_sdl2_x86-64.zip
+          package_name: fheroes2_macos11_sdl2_x86-64.zip
           package_files: fheroes2 LICENSE script/macos/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: MacOS build with SDL 2 support (latest commit)
           release_tag: fheroes2-osx-sdl2_dev
         - name: macOS SDL2 App Bundle
-          os: macos-10.15
+          os: macos-11
           dependencies: sdl2 sdl2_mixer dylibbundler
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_MACOS_APP_BUNDLE: ON }
     name: Make (${{ matrix.config.name }})
@@ -67,7 +67,7 @@ jobs:
         sudo apt-get -y update
         sudo apt-get -y install ${{ matrix.config.dependencies }}
     - name: Install dependencies (macOS)
-      if: ${{ matrix.config.os == 'macos-10.15' }}
+      if: ${{ matrix.config.os == 'macos-11' }}
       run: |
         brew update
         brew install ${{ matrix.config.dependencies }}
@@ -79,7 +79,7 @@ jobs:
       run: |
         make -C files/lang -j 2
     - name: Create app bundle
-      if: ${{ matrix.config.os == 'macos-10.15' }}
+      if: ${{ matrix.config.os == 'macos-11' }}
       run: |
         make -j 2 bundle
       env: ${{ matrix.config.env }}

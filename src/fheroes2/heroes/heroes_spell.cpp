@@ -566,8 +566,7 @@ namespace
         const uint32_t count = fheroes2::getGuardianMonsterCount( spell, hero.GetPower(), &hero );
 
         if ( count ) {
-            assert( spell.GetID() >= 0 && spell.GetID() <= 255 );
-            tile.SetQuantity3( static_cast<uint8_t>( spell.GetID() ) );
+            Maps::setSpellOnTile( tile, spell.GetID() );
 
             if ( spell == Spell::HAUNT ) {
                 world.CaptureObject( tile.GetIndex(), Color::NONE );
