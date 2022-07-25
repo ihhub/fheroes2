@@ -221,7 +221,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 #endif
 
     // Get all heroes from all kingdoms and determine whether it is worth to render them.
-    std::vector<const Heroes*> allVisibleHeroes;
+    std::vector<const Heroes *> allVisibleHeroes;
     const Colors currentKingdomColors( Game::GetActualKingdomColors() );
     for ( const int color : currentKingdomColors ) {
         const KingdomHeroes heroes = world.GetKingdom( color ).GetHeroes();
@@ -257,7 +257,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     const Heroes * currentHero = drawHeroes ? GetFocusHeroes() : nullptr;
 
     for ( const Heroes * hero : allVisibleHeroes ) {
-        assert ( hero != nullptr );
+        assert( hero != nullptr );
 
         const fheroes2::Point heroPos = Maps::GetPoint( hero->GetIndex() );
         fheroes2::Point nextHeroPos = heroPos;
