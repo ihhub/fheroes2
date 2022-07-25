@@ -318,31 +318,31 @@ namespace
 
         MusicTrackManager & operator=( const MusicTrackManager & ) = delete;
 
-        bool isTrackCached( const uint64_t musicUID ) const
+        bool isTrackInDB( const uint64_t musicUID ) const
         {
-            return ( _musicCache.find( musicUID ) != _musicCache.end() );
+            return ( _musicDB.find( musicUID ) != _musicDB.end() );
         }
 
-        std::shared_ptr<MusicInfo> getTrackFromCache( const uint64_t musicUID ) const
+        std::shared_ptr<MusicInfo> getTrackFromDB( const uint64_t musicUID ) const
         {
-            auto iter = _musicCache.find( musicUID );
-            assert( iter != _musicCache.end() );
+            auto iter = _musicDB.find( musicUID );
+            assert( iter != _musicDB.end() );
 
             return iter->second;
         }
 
-        void addTrackToCache( const uint64_t musicUID, const std::shared_ptr<MusicInfo> & info )
+        void addTrackToDB( const uint64_t musicUID, const std::shared_ptr<MusicInfo> & track )
         {
-            const auto res = _musicCache.try_emplace( musicUID, info );
+            const auto res = _musicDB.try_emplace( musicUID, track );
 
             if ( !res.second ) {
                 assert( 0 );
             }
         }
 
-        void clearMusicCache()
+        void clearMusicDB()
         {
-            _musicCache.clear();
+            _musicDB.clear();
         }
 
         std::weak_ptr<MusicInfo> getCurrentTrack() const
@@ -432,7 +432,7 @@ namespace
         }
 
     private:
-        std::map<uint64_t, std::shared_ptr<MusicInfo>> _musicCache;
+        std::map<uint64_t, std::shared_ptr<MusicInfo>> _musicDB;
 
         std::weak_ptr<MusicInfo> _currentTrack;
 
@@ -538,7 +538,7 @@ namespace
         // not be called while we are modifying the current track information.
         assert( !Music::isPlaying() );
 
-        const std::shared_ptr<MusicInfo> musicTrack = musicTrackManager.getTrackFromCache( musicUID );
+        const std::shared_ptr<MusicInfo> musicTrack = musicTrackManager.getTrackFromDB( musicUID );
         assert( musicTrack );
 
         Mix_Music * mus = musicTrack->createMusic();
@@ -755,7 +755,7 @@ void Audio::Quit()
         soundSampleManager.clearFinishedSamples();
 
         musicTrackManager.clearFinishedMusic();
-        musicTrackManager.clearMusicCache();
+        musicTrackManager.clearMusicDB();
 
         Mix_CloseAudio();
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -982,7 +982,7 @@ bool Music::Play( const uint64_t musicUID, const PlaybackMode playbackMode )
         return false;
     }
 
-    if ( musicTrackManager.isTrackCached( musicUID ) ) {
+    if ( musicTrackManager.isTrackInDB( musicUID ) ) {
         Stop();
 
         playMusic( musicUID, playbackMode );
@@ -1005,8 +1005,8 @@ void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const
         return;
     }
 
-    if ( !musicTrackManager.isTrackCached( musicUID ) ) {
-        musicTrackManager.addTrackToCache( musicUID, std::make_shared<MusicInfo>( v ) );
+    if ( !musicTrackManager.isTrackInDB( musicUID ) ) {
+        musicTrackManager.addTrackToDB( musicUID, std::make_shared<MusicInfo>( v ) );
     }
 
     Stop();
@@ -1027,8 +1027,8 @@ void Music::Play( const uint64_t musicUID, const std::string & file, const Playb
         return;
     }
 
-    if ( !musicTrackManager.isTrackCached( musicUID ) ) {
-        musicTrackManager.addTrackToCache( musicUID, std::make_shared<MusicInfo>( file ) );
+    if ( !musicTrackManager.isTrackInDB( musicUID ) ) {
+        musicTrackManager.addTrackToDB( musicUID, std::make_shared<MusicInfo>( file ) );
     }
 
     Stop();
