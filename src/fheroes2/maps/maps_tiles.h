@@ -210,7 +210,8 @@ namespace Maps
         int GetFogDirections( int color ) const;
 
         void RedrawFogs( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const;
-        void RedrawAddon( fheroes2::Image & dst, const Addons & addons, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
+        void RedrawAddon( fheroes2::Image & dst, const Addons & addons, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw,
+                          const Interface::GameArea & area ) const;
         void RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
         void redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area,
                                        const uint8_t level ) const;
