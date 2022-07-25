@@ -203,15 +203,6 @@ public:
         CHAMPION
     };
 
-    struct RedrawIndex
-    {
-        int32_t topOnBottom = -1;
-        int32_t topOnDirectionBottom = -1;
-        int32_t topOnDirection = -1;
-        int32_t objectsOnBottom = -1;
-        int32_t objectsOnDirectionBottom = -1;
-    };
-
     Heroes();
     Heroes( int heroid, int rc );
     Heroes( int heroID, int race, int initialLevel );
@@ -407,12 +398,6 @@ public:
 
     bool MayCastAdventureSpells() const;
 
-    const RedrawIndex & GetRedrawIndex() const;
-    void SetRedrawIndexes();
-    void UpdateRedrawTop( const Maps::Tiles & tile );
-    void UpdateRedrawBottom( const Maps::Tiles & tile );
-    void RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
-    void RedrawBottom( fheroes2::Image & output, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area, bool isPuzzleDraw ) const;
     void Redraw( fheroes2::Image & output, fheroes2::Point offset, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
     void RedrawShadow( fheroes2::Image & output, fheroes2::Point offset, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
 
@@ -550,7 +535,6 @@ private:
     std::list<IndexObject> visit_object;
     uint32_t _lastGroundRegion = 0;
 
-    RedrawIndex _redrawIndex;
 
     mutable int _alphaValue;
 
