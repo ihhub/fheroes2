@@ -224,10 +224,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // However, there are some objects which appear to be more than 1 tile (32 x 32 pixels) size such as heroes, monsters and boats.
     // To render all these 'special' objects we need to create a copy of object sprite stacks for each tile, add temporary extra sprites and render them.
     //
-    // TODO: to proceed with this concept we need to put an object info stored in class Tiles into either groud object stack or high object stack. For example, a tile
-    // TODO: which contains only one top castle sprite would have data only in Tiles class but a hero could be at the same tile. To correctly render objects we need to
-    // TODO: render the hero first and only then render castle's sprite. Side note: from the map format Tiles class must contain only objects from level 1.
-    //
     // TODO: take into account that objects on the map such as monsters, heroes, boats, resources can have a fading effect so it is advisable to keep alpha value for
     // TODO: each tile sprite.
 
@@ -241,21 +237,23 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     // Get all heroes from all kingdoms and determine whether it is worth to render them.
     std::vector<const Heroes *> allVisibleHeroes;
-    const Colors currentKingdomColors( Game::GetActualKingdomColors() );
-    for ( const int color : currentKingdomColors ) {
-        const KingdomHeroes heroes = world.GetKingdom( color ).GetHeroes();
-        for ( const Heroes * hero : heroes ) {
-            if ( hero == nullptr ) {
-                // Should we assert here?
-                continue;
-            }
+    if ( drawHeroes ) {
+        const Colors currentKingdomColors( Game::GetActualKingdomColors() );
+        for ( const int color : currentKingdomColors ) {
+            const KingdomHeroes heroes = world.GetKingdom( color ).GetHeroes();
+            for ( const Heroes * hero : heroes ) {
+                if ( hero == nullptr ) {
+                    // Should we assert here?
+                    continue;
+                }
 
-            const fheroes2::Point heroPos = Maps::GetPoint( hero->GetIndex() );
-            if ( heroPos.x < minX || heroPos.y < minY || heroPos.x >= maxX || heroPos.y >= maxY ) {
-                continue;
-            }
+                const fheroes2::Point heroPos = Maps::GetPoint( hero->GetIndex() );
+                if ( heroPos.x < minX || heroPos.y < minY || heroPos.x >= maxX || heroPos.y >= maxY ) {
+                    continue;
+                }
 
-            allVisibleHeroes.push_back( hero );
+                allVisibleHeroes.push_back( hero );
+            }
         }
     }
 
