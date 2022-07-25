@@ -1,67 +1,57 @@
 @echo off
 
-set tempPath="..\..\VisualStudio\packages\installed\temp"
+set DST_DIR=%~dp0\..\..\VisualStudio\packages
 
-if not exist "%tempPath%\zlib"      mkdir "%tempPath%\zlib"
-if not exist "%tempPath%\sdl"       mkdir "%tempPath%\sdl"
-if not exist "%tempPath%\sdl_mixer" mkdir "%tempPath%\sdl_mixer"
-if not exist "%tempPath%\sdl_image" mkdir "%tempPath%\sdl_image"
+set PKG_FILE=windows.zip
+set PKG_FILE_SHA256=86D99E621F6CACD8280682D388B53D8F9C914A16E058D0B3F470DB3C0BED48C2
+set PKG_URL=https://github.com/fheroes2/fheroes2-prebuilt-deps/releases/download/windows-deps/%PKG_FILE%
+set PKG_TLS=[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-echo [1/6] Copying packages
-xcopy /Y /Q "..\..\VisualStudio\packages\zlib1.2.11.zip" "%tempPath%\zlib\"
-echo [2/6] Downloading packages
-powershell -Command "(New-Object System.Net.WebClient).DownloadFile('https://www.libsdl.org/release/SDL-devel-1.2.15-VC.zip', '%tempPath%\sdl\sdl.zip')"
-echo [3/6] Downloading packages
-powershell -Command "(New-Object System.Net.WebClient).DownloadFile('https://www.libsdl.org/release/SDL2-devel-2.0.12-VC.zip', '%tempPath%\sdl\sdl2.zip')"
-echo [4/6] Downloading packages
-powershell -Command "(New-Object System.Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-devel-1.2.12-VC.zip', '%tempPath%\sdl_mixer\sdl_mixer.zip')"
-echo [5/6] Downloading packages
-powershell -Command "(New-Object System.Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-devel-2.0.4-VC.zip', '%tempPath%\sdl_mixer\sdl_mixer2.zip')"
-echo [6/6] Downloading packages
-powershell -Command "(New-Object System.Net.WebClient).DownloadFile('https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.5-VC.zip', '%tempPath%\sdl_image\sdl_image2.zip')"
-
-xcopy /Y /S /Q "setup_packages.bat" "..\..\VisualStudio\packages\installed"
-
-cd "%tempPath%"
-
-echo [1/6] Unpacking packages
-call :unpack_archive "zlib\zlib1.2.11.zip" "zlib"
-
-echo [2/6] Unpacking packages
-call :unpack_archive "sdl\sdl.zip" "sdl"
-
-echo [3/6] Unpacking packages
-call :unpack_archive "sdl\sdl2.zip" "sdl"
-
-echo [4/6] Unpacking packages
-call :unpack_archive "sdl_mixer\sdl_mixer.zip" "sdl_mixer"
-
-echo [5/6] Unpacking packages
-call :unpack_archive "sdl_mixer\sdl_mixer2.zip" "sdl_mixer"
-
-echo [6/6] Unpacking packages
-call :unpack_archive "sdl_image\sdl_image2.zip" "sdl_image"
-
-cd ..
-
-call "setup_packages.bat"
-del "setup_packages.bat"
-
-echo "SUCCESS! Installation is completed"
+call :install_packages
 
 if not "%CI%" == "true" (
-    echo Press any key to exit...
-    pause >nul
+    pause
 )
 
-exit /b
+exit /B
+
+:install_packages
+
+if not exist "%DST_DIR%" ( mkdir "%DST_DIR%" || exit /B 1 )
+
+echo Downloading %PKG_URL%                                                                                        && ^
+powershell -Command "%PKG_TLS%; (New-Object System.Net.WebClient).DownloadFile('%PKG_URL%', '%TEMP%\%PKG_FILE%')" || ^
+exit /B 1
+
+set HASH_CALCULATED=false
+
+for /F "usebackq delims=" %%H in (`powershell -Command "(certutil.exe -hashfile '%TEMP%\%PKG_FILE%' sha256 | Select-String -Pattern '^[0-9A-Fa-f]{64}$').Line.ToUpper()"`) do (
+    set HASH_CALCULATED=true
+
+    if not "%%H" == "%PKG_FILE_SHA256%" (
+        echo Invalid hash for %PKG_FILE%: expected %PKG_FILE_SHA256%, got %%H
+        exit /B 1
+    )
+)
+
+if not "%HASH_CALCULATED%" == "true" (
+    echo Failed to calculate hash for %PKG_FILE%
+    exit /B 1
+)
+
+call :unpack_archive "%TEMP%\%PKG_FILE%" "%DST_DIR%" || ^
+exit /B 1
+
+exit /B
 
 :unpack_archive
 
+echo Unpacking %~n1%~x1
+
 if "%CI%" == "true" (
-    powershell -Command "Expand-Archive -LiteralPath '%~1' -DestinationPath '%~2' -Force"
+    powershell -Command "Expand-Archive -LiteralPath '%~1' -DestinationPath '%~2' -Force" || exit /B 1
 ) else (
-    powershell -Command "$shell = New-Object -ComObject 'Shell.Application'; $zip = $shell.NameSpace((Resolve-Path '%~1').Path); foreach ($item in $zip.items()) { $shell.Namespace((Resolve-Path '%~2').Path).CopyHere($item, 0x14) }"
+    powershell -Command "$shell = New-Object -ComObject 'Shell.Application'; $zip = $shell.NameSpace((Resolve-Path '%~1').Path); foreach ($item in $zip.items()) { $shell.Namespace((Resolve-Path '%~2').Path).CopyHere($item, 0x14) }" || exit /B 1
 )
 
-exit /b
+exit /B
