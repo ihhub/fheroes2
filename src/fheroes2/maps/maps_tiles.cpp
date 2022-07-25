@@ -1242,11 +1242,6 @@ void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, cons
     }
 }
 
-void Maps::Tiles::RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const
-{
-    RedrawAddon( dst, addons_level1, visibleTileROI, isPuzzleDraw, area );
-}
-
 void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
 {
 #ifdef WITH_DEBUG
@@ -1436,71 +1431,6 @@ void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, const fheroes2::Rect & visi
     area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y() - 11, mp, ( spriteIndex > 128 ), alpha );
 }
 
-bool Interface::SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t icnIndex, const int passable )
-{
-    const int icn = MP2::GetICNObject( tileset );
-    switch ( icn ) {
-    case ICN::UNKNOWN:
-    case ICN::MINIHERO:
-    case ICN::MONS32:
-        return true;
-
-    // whirlpool
-    case ICN::OBJNWATR:
-        return ( icnIndex >= 202 && icnIndex <= 225 ) || icnIndex == 69;
-
-    // river delta
-    case ICN::OBJNMUL2:
-        return icnIndex < 14;
-
-    case ICN::OBJNTWSH:
-    case ICN::OBJNTWBA:
-    case ICN::ROAD:
-    case ICN::STREAM:
-        return true;
-
-    case ICN::OBJNCRCK:
-        return ( icnIndex == 58 || icnIndex == 59 || icnIndex == 64 || icnIndex == 65 || icnIndex == 188 || icnIndex == 189 || ( passable & DIRECTION_TOP_ROW ) );
-
-    case ICN::OBJNDIRT:
-    case ICN::OBJNDSRT:
-    case ICN::OBJNGRA2:
-    case ICN::OBJNGRAS:
-    case ICN::OBJNLAVA:
-    case ICN::OBJNSNOW:
-    case ICN::OBJNSWMP:
-        return ( passable & DIRECTION_TOP_ROW ) != 0;
-
-    default:
-        break;
-    }
-
-    return Maps::Tiles::isShadowSprite( icn, icnIndex );
-}
-
-void Maps::Tiles::RedrawBottom4Hero( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
-{
-    const fheroes2::Point & mp = Maps::GetPoint( _index );
-
-    if ( !( visibleTileROI & mp ) )
-        return;
-
-    for ( Addons::const_iterator it = addons_level1.begin(); it != addons_level1.end(); ++it ) {
-        const uint8_t object = it->object;
-        const uint8_t index = it->index;
-        if ( !Interface::SkipRedrawTileBottom4Hero( object, index, tilePassable ) ) {
-            const int icn = MP2::GetICNObject( object );
-
-            area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, index ), mp );
-
-            // possible anime
-            if ( it->object & 1 ) {
-                area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 != 0 ) ), mp );
-            }
-        }
-    }
-}
-
 void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const bool isPuzzleDraw, const Interface::GameArea & area ) const
 {
     const fheroes2::Point & mp = Maps::GetPoint( _index );
@@ -1524,46 +1454,6 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visib
     }
 
     RedrawAddon( dst, addons_level2, visibleTileROI, isPuzzleDraw, area );
-}
-
-void Maps::Tiles::RedrawTopFromBottom( fheroes2::Image & dst, const Interface::GameArea & area ) const
-{
-    if ( !Maps::isValidDirection( _index, Direction::BOTTOM ) ) {
-        return;
-    }
-    const Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::BOTTOM ) );
-    const fheroes2::Point & mp = Maps::GetPoint( tile._index );
-    for ( const Maps::TilesAddon & addon : tile.addons_level2 ) {
-        const int icn = MP2::GetICNObject( addon.object );
-        if ( icn == ICN::FLAG32 ) {
-            area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, addon.index ), mp );
-        }
-    }
-}
-
-void Maps::Tiles::RedrawTop4Hero( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool skip_ground, const Interface::GameArea & area ) const
-{
-    const fheroes2::Point & mp = Maps::GetPoint( _index );
-
-    if ( ( visibleTileROI & mp ) && !addons_level2.empty() ) {
-        for ( Addons::const_iterator it = addons_level2.begin(); it != addons_level2.end(); ++it ) {
-            if ( skip_ground && MP2::isActionObject( static_cast<MP2::MapObjectType>( ( *it ).object ) ) )
-                continue;
-
-            const uint8_t object = ( *it ).object;
-            const uint8_t index = ( *it ).index;
-            const int icn = MP2::GetICNObject( object );
-
-            if ( ICN::HighlyObjectSprite( icn, index ) ) {
-                area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, index ), mp );
-
-                // possible anime
-                if ( object & 1 ) {
-                    area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame() ) ), mp );
-                }
-            }
-        }
-    }
 }
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel1( uint32_t uniq1 )

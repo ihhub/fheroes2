@@ -271,7 +271,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         // A castle's road south from a castle should actually be level 3 but it is level 2 causing a hero's horse legs to be truncated.
         // In order to render the legs properly we need to make the bottom part of the hero's sprite to be rendered after castle's road.
         // This happens only when a hero stands in a castle.
-        Castle * castle = world.getCastleEntrance( heroPos );
+        const Castle * castle = world.getCastleEntrance( heroPos );
         const bool isHeroInCastle = ( castle != nullptr && castle->GetCenter() == heroPos );
 
         auto spriteInfo = hero->getHeroSpritesPerTile();
