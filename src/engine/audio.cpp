@@ -543,7 +543,7 @@ namespace
 
         Mix_Music * mus = track->createMusic();
         if ( mus == nullptr ) {
-            musicTrackManager.updateCurrentTrack( musicUID, playbackMode );
+            musicTrackManager.resetCurrentTrack();
 
             return;
         }
@@ -565,63 +565,47 @@ namespace
             autoLoop = true;
         }
 
+        // Update the current track information while the music playback is not yet started, so the
+        // Mix_HookMusicFinished()'s callback cannot be called
         musicTrackManager.updateCurrentTrack( musicUID, playbackMode );
 
         const int loopCount = autoLoop ? -1 : 0;
 
-        if ( musicFadeInMs > 0 ) {
-            int returnCode = -1;
+        int returnCode = -1;
 
-            // Resume the music only if at least 1 second of the track has been played.
-            if ( resumePlayback && track->getPosition() > 1 ) {
-                returnCode = Mix_FadeInMusicPos( mus, loopCount, musicFadeInMs, track->getPosition() );
-
-                if ( returnCode != 0 ) {
-                    ERROR_LOG( "Failed to resume a music track. The error: " << Mix_GetError() )
-                }
-            }
-
-            // Either there is no need to resume music playback, or the resumption failed.
-            // Let's try to start the playback from the beginning.
-            if ( returnCode != 0 ) {
-                returnCode = Mix_FadeInMusic( mus, loopCount, musicFadeInMs );
-
-                if ( returnCode != 0 ) {
-                    ERROR_LOG( "Failed to play a music track. The error: " << Mix_GetError() )
-                }
-            }
+        // Resume the music only if at least 1 second of the track has been played.
+        if ( resumePlayback && track->getPosition() > 1 ) {
+            returnCode = Mix_FadeInMusicPos( mus, loopCount, musicFadeInMs, track->getPosition() );
 
             if ( returnCode != 0 ) {
-                Mix_FreeMusic( mus );
-            }
-            else {
-                // For better accuracy reset the timer right after the actual playback starts
-                musicTrackManager.resetTimer();
-
-                // There can be a maximum of two items in the music queue: the previous music
-                // (if it hasn't been released yet) and the current one
-                musicTrackManager.musicStarted( mus );
+                ERROR_LOG( "Failed to resume a music track. The error: " << Mix_GetError() )
             }
         }
-        else {
-            if ( Mix_PlayMusic( mus, loopCount ) != 0 ) {
+
+        // Either there is no need to resume music playback, or the resumption failed. Let's try to
+        // start the playback from the beginning.
+        if ( returnCode != 0 ) {
+            returnCode = Mix_FadeInMusic( mus, loopCount, musicFadeInMs );
+
+            if ( returnCode != 0 ) {
                 ERROR_LOG( "Failed to play a music track. The error: " << Mix_GetError() )
-
-                Mix_FreeMusic( mus );
             }
-            else {
-                // Resume the music only if at least 1 second of the track has been played.
-                if ( resumePlayback && track->getPosition() > 1 && Mix_SetMusicPosition( track->getPosition() ) != 0 ) {
-                    ERROR_LOG( "Failed to set the position for a music track. The error: " << Mix_GetError() )
-                }
+        }
 
-                // For better accuracy reset the timer right after the actual playback starts
-                musicTrackManager.resetTimer();
+        if ( returnCode != 0 ) {
+            Mix_FreeMusic( mus );
 
-                // There can be a maximum of two items in the music queue: the previous music
-                // (if it hasn't been released yet) and the current one
-                musicTrackManager.musicStarted( mus );
-            }
+            // Since the music playback failed, the Mix_HookMusicFinished()'s callback cannot be called
+            // here, so we can safely reset the current track information
+            musicTrackManager.resetCurrentTrack();
+        }
+        else {
+            // For better accuracy reset the timer right after the actual playback starts
+            musicTrackManager.resetTimer();
+
+            // There can be a maximum of two items in the music queue: the previous music (if it hasn't
+            // been released yet) and the current one
+            musicTrackManager.musicStarted( mus );
         }
 
         musicTrackManager.clearFinishedMusic();
