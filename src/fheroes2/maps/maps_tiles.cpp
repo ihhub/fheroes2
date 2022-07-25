@@ -1430,12 +1430,8 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visib
     const MP2::MapObjectType objectType = GetObject( false );
     // animate objects
     if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
+        // This sprite is bigger than TILEWIDTH but rendering is correct for heroes.
         const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 );
-
-        // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-        // TODO: verify that a hero walking over an Abandoned Mine is rendered properly.
-        // assert( image.width() <= TILEWIDTH && image.height() <= TILEWIDTH );
-
         area.BlitOnTile( dst, image, mp );
     }
     else if ( objectType == MP2::OBJ_MINES ) {
@@ -1445,12 +1441,8 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visib
 
         switch ( spellID ) {
         case Spell::HAUNT: {
+            // This sprite is bigger than TILEWIDTH but rendering is correct for heroes.
             const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 );
-
-            // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-            // TODO: verify that a hero walking over an Abandoned Mine is rendered properly.
-            // assert( image.width() <= TILEWIDTH && image.height() <= TILEWIDTH );
-
             area.BlitOnTile( dst, image, mp );
             break;
         }
