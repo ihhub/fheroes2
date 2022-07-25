@@ -119,7 +119,6 @@ namespace
             }
 
             const auto res = _channelSamples.try_emplace( channelId, std::make_pair( sample, nullptr ) );
-
             if ( !res.second ) {
                 assert( 0 );
             }
@@ -334,7 +333,6 @@ namespace
         void addTrackToMusicDB( const uint64_t musicUID, const std::shared_ptr<MusicInfo> & track )
         {
             const auto res = _musicDB.try_emplace( musicUID, track );
-
             if ( !res.second ) {
                 assert( 0 );
             }
@@ -489,7 +487,7 @@ namespace
                 return;
             }
 
-            // REWIND_AND_PLAY_INFINITE should be handled by the Mix_PlayMusic() itself
+            // REWIND_AND_PLAY_INFINITE should be handled by the SDL_Mixer itself
             if ( musicTrackManager.getCurrentTrackPlaybackMode() != Music::PlaybackMode::RESUME_AND_PLAY_INFINITE ) {
                 return;
             }
