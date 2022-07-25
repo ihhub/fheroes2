@@ -475,6 +475,11 @@ public:
         return _aiRole;
     }
 
+    uint8_t getAlphaValue() const
+    {
+        return static_cast<uint8_t>( _alphaValue );
+    }
+
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
     friend StreamBase & operator>>( StreamBase &, Heroes & );

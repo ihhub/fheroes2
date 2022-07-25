@@ -422,6 +422,22 @@ namespace
     {
         return ( shape << 14 ) | ( 0x3FFF & index );
     }
+
+    bool isRenderingRestricted( const int icnId )
+    {
+        switch ( icnId ) {
+        case ICN::UNKNOWN:
+        case ICN::MONS32:
+        case ICN::BOAT32:
+        case ICN::MINIHERO:
+            // Either it is an invalid sprite or a sprite which needs to be divided into tiles in order to properly render it.
+            return true;
+        default:
+            break;
+        }
+
+        return false;
+    }
 }
 
 Maps::TilesAddon::TilesAddon()
@@ -1213,31 +1229,45 @@ void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point 
     }
 }
 
-void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addon, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw,
+void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addons, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw,
                                const Interface::GameArea & area ) const
 {
-    if ( addon.empty() ) {
+    if ( addons.empty() ) {
         return;
     }
 
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
-    if ( !( visibleTileROI & mp ) )
+    if ( !( visibleTileROI & mp ) ) {
         return;
+    }
 
-    for ( Addons::const_iterator it = addon.begin(); it != addon.end(); ++it ) {
-        const uint8_t index = ( *it ).index;
-        const int icn = MP2::GetICNObject( ( *it ).object );
+    for ( const TilesAddon & addon : addons ) {
+        const int icn = MP2::GetICNObject( addon.object );
+        if ( isRenderingRestricted( icn ) ) {
+            continue;
+        }
 
-        if ( ICN::UNKNOWN != icn && ICN::MINIHERO != icn && ICN::MONS32 != icn && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( it->object, index ) ) ) {
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, index );
-            area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
+        if ( isPuzzleDraw && MP2::isHiddenForPuzzle( addon.object, addon.index ) ) {
+            continue;
+        }
 
-            // possible animation
-            const uint32_t animationIndex = ICN::AnimationFrame( icn, index, Game::MapsAnimationFrame(), quantity2 != 0 );
-            if ( animationIndex ) {
-                area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, animationIndex ), mp );
-            }
+        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icn, addon.index );
+
+        // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
+        assert( image.width() <= TILEWIDTH && image.height() <= TILEWIDTH );
+
+        area.BlitOnTile( dst, image, image.x(), image.y(), mp );
+
+        // possible animation
+        const uint32_t animationIndex = ICN::AnimationFrame( icn, addon.index, Game::MapsAnimationFrame(), quantity2 != 0 );
+        if ( animationIndex ) {
+            const fheroes2::Sprite & animationImage = fheroes2::AGG::GetICN( icn, animationIndex );
+
+            // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
+            assert( animationImage.width() <= TILEWIDTH && animationImage.height() <= TILEWIDTH );
+
+            area.BlitOnTile( dst, animationImage, mp );
         }
     }
 }
@@ -1278,20 +1308,7 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
 
         // TODO: verify whether it is even possible to store ICN::MINIHERO or ICN::MONS32 in the addon section.
         const int icn = MP2::GetICNObject( addon.object );
-        bool skipRendering = false;
-        switch ( icn ) {
-        case ICN::UNKNOWN:
-        case ICN::MONS32:
-        case ICN::BOAT32:
-        case ICN::MINIHERO:
-            // Either it is an invalid sprite or a sprite which needs to be divided into tiles in order to properly render it.
-            skipRendering = true;
-            break;
-        default:
-            break;
-        }
-
-        if ( skipRendering ) {
+        if ( isRenderingRestricted( icn ) ) {
             continue;
         }
 
@@ -1319,15 +1336,8 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
     }
 
     const int icn = MP2::GetICNObject( objectTileset );
-    switch ( icn ) {
-    case ICN::UNKNOWN:
-    case ICN::MONS32:
-    case ICN::BOAT32:
-    case ICN::MINIHERO:
-        // Either it is an invalid sprite or a sprite which needs to be divided into tiles in order to properly render it.
+    if ( isRenderingRestricted( icn ) ) {
         return;
-    default:
-        break;
     }
 
     if ( isPuzzleDraw && MP2::isHiddenForPuzzle( objectTileset, objectIndex ) ) {
@@ -1441,15 +1451,44 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visib
     const MP2::MapObjectType objectType = GetObject( false );
     // animate objects
     if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
-        area.BlitOnTile( dst, fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 ), mp );
+        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 );
+
+        // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
+        // TODO: verify that a hero walking over an Abandoned Mine is rendered properly.
+        // assert( image.width() <= TILEWIDTH && image.height() <= TILEWIDTH );
+
+        area.BlitOnTile( dst, image, mp );
     }
     else if ( objectType == MP2::OBJ_MINES ) {
         const int32_t spellID = Maps::getSpellIdFromTile( *this );
-        if ( spellID == Spell::HAUNT ) {
-            area.BlitOnTile( dst, fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 ), mp );
+
+        static_assert( ( Spell::SETWGUARDIAN - Spell::SETEGUARDIAN ) == 3, "Why are you changing the order of spells?! Be extremely careful of what you are doing" );
+
+        switch ( spellID ) {
+        case Spell::HAUNT: {
+            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 );
+
+            // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
+            // TODO: verify that a hero walking over an Abandoned Mine is rendered properly.
+            // assert( image.width() <= TILEWIDTH && image.height() <= TILEWIDTH );
+
+            area.BlitOnTile( dst, image, mp );
+            break;
         }
-        else if ( spellID >= Spell::SETEGUARDIAN && spellID <= Spell::SETWGUARDIAN ) {
-            area.BlitOnTile( dst, fheroes2::AGG::GetICN( ICN::OBJNXTRA, spellID - Spell::SETEGUARDIAN ), TILEWIDTH, 0, mp );
+        case Spell::SETEGUARDIAN:
+        case Spell::SETAGUARDIAN:
+        case Spell::SETFGUARDIAN:
+        case Spell::SETWGUARDIAN: {
+            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNXTRA, spellID - Spell::SETEGUARDIAN );
+
+            // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
+            assert( image.width() <= TILEWIDTH && image.height() <= TILEWIDTH );
+
+            area.BlitOnTile( dst, image, TILEWIDTH, 0, mp );
+            break;
+        }
+        default:
+            break;
         }
     }
 

@@ -39,6 +39,25 @@
 
 #include <cassert>
 
+namespace
+{
+    struct RenderObjectInfo
+    {
+        RenderObjectInfo() = default;
+
+        RenderObjectInfo( fheroes2::Sprite in, const uint8_t value )
+            : image( std::move( in ) )
+            , alphaValue( value )
+        {
+            // Do nothing.
+        }
+
+        fheroes2::Sprite image;
+
+        uint8_t alphaValue{ 255 };
+    };
+}
+
 Interface::GameArea::GameArea( Basic & basic )
     : interface( basic )
     , _minLeftOffset( 0 )
@@ -243,16 +262,16 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // Sorting heroes by index is the same as sorting them by Y axis first and the by X axis.
     std::sort( allVisibleHeroes.begin(), allVisibleHeroes.end(), []( const Heroes * first, const Heroes * second ) { return first->GetIndex() < second->GetIndex(); } );
 
-    std::map<fheroes2::Point, std::vector<fheroes2::Sprite>> heroBottomImages;
-    std::map<fheroes2::Point, std::vector<fheroes2::Sprite>> heroBottomBackgroundImages;
-    std::map<fheroes2::Point, std::vector<fheroes2::Sprite>> heroTopImages;
+    std::map<fheroes2::Point, std::vector<RenderObjectInfo>> heroBottomImages;
+    std::map<fheroes2::Point, std::vector<RenderObjectInfo>> heroBottomBackgroundImages;
+    std::map<fheroes2::Point, std::vector<RenderObjectInfo>> heroTopImages;
 
-    std::map<fheroes2::Point, std::vector<fheroes2::Sprite>> lowPriorityHeroBottomImages;
-    std::map<fheroes2::Point, std::vector<fheroes2::Sprite>> highPriorityHeroBottomImages;
+    std::map<fheroes2::Point, std::vector<RenderObjectInfo>> lowPriorityHeroBottomImages;
+    std::map<fheroes2::Point, std::vector<RenderObjectInfo>> highPriorityHeroBottomImages;
 
-    std::map<fheroes2::Point, std::vector<fheroes2::Sprite>> heroBottomShadowImages;
-    std::map<fheroes2::Point, std::vector<fheroes2::Sprite>> heroBottomBackgroundShadowImages;
-    std::map<fheroes2::Point, std::vector<fheroes2::Sprite>> heroTopShadowImages;
+    std::map<fheroes2::Point, std::vector<RenderObjectInfo>> heroBottomShadowImages;
+    std::map<fheroes2::Point, std::vector<RenderObjectInfo>> heroBottomBackgroundShadowImages;
+    std::map<fheroes2::Point, std::vector<RenderObjectInfo>> heroTopShadowImages;
 
     const Heroes * currentHero = drawHeroes ? GetFocusHeroes() : nullptr;
 
@@ -274,55 +293,57 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         const Castle * castle = world.getCastleEntrance( heroPos );
         const bool isHeroInCastle = ( castle != nullptr && castle->GetCenter() == heroPos );
 
+        const uint8_t heroAlphaValue = hero->getAlphaValue();
+
         auto spriteInfo = hero->getHeroSpritesPerTile();
         for ( auto & info : spriteInfo ) {
             if ( movingHero && info.first.y == 0 ) {
                 if ( nextHeroPos.y > heroPos.y && nextHeroPos.x > heroPos.x && info.first.x > 0 ) {
                     // The hero moves south-east. We need to render it over everything.
-                    highPriorityHeroBottomImages[info.first + heroPos].emplace_back( std::move( info.second ) );
+                    highPriorityHeroBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
                     continue;
                 }
 
                 if ( nextHeroPos.y > heroPos.y && nextHeroPos.x < heroPos.x && info.first.x < 0 ) {
                     // The hero moves south-west. We need to render it over everything.
-                    highPriorityHeroBottomImages[info.first + heroPos].emplace_back( std::move( info.second ) );
+                    highPriorityHeroBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
                     continue;
                 }
 
                 if ( nextHeroPos.y < heroPos.y && nextHeroPos.x < heroPos.x && info.first.x < 0 ) {
                     // The hero moves north-west. We need to render it under all other objects.
-                    lowPriorityHeroBottomImages[info.first + heroPos].emplace_back( std::move( info.second ) );
+                    lowPriorityHeroBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
                     continue;
                 }
 
                 if ( nextHeroPos.y < heroPos.y && nextHeroPos.x > heroPos.x && info.first.x > 0 ) {
                     // The hero moves north-east. We need to render it under all other objects.
-                    lowPriorityHeroBottomImages[info.first + heroPos].emplace_back( std::move( info.second ) );
+                    lowPriorityHeroBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
                     continue;
                 }
             }
 
             if ( info.first.y > 0 && !isHeroInCastle ) {
-                heroBottomBackgroundImages[info.first + heroPos].emplace_back( std::move( info.second ) );
+                heroBottomBackgroundImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
             }
             else if ( info.first.y == 0 || ( isHeroInCastle && info.first.y > 0 ) ) {
-                heroBottomImages[info.first + heroPos].emplace_back( std::move( info.second ) );
+                heroBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
             }
             else {
-                heroTopImages[info.first + heroPos].emplace_back( std::move( info.second ) );
+                heroTopImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
             }
         }
 
         auto spriteShadowInfo = hero->getHeroShadowSpritesPerTile();
         for ( auto & info : spriteShadowInfo ) {
             if ( info.first.y > 0 && !isHeroInCastle ) {
-                heroBottomBackgroundShadowImages[info.first + heroPos].emplace_back( std::move( info.second ) );
+                heroBottomBackgroundShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
             }
             else if ( info.first.y == 0 || ( isHeroInCastle && info.first.y > 0 ) ) {
-                heroBottomShadowImages[info.first + heroPos].emplace_back( std::move( info.second ) );
+                heroBottomShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
             }
             else {
-                heroTopShadowImages[info.first + heroPos].emplace_back( std::move( info.second ) );
+                heroTopShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
             }
         }
     }
@@ -338,8 +359,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 const fheroes2::Point & mp = Maps::GetPoint( tile.GetIndex() );
 
-                for ( const fheroes2::Sprite & image : iter->second ) {
-                    BlitOnTile( dst, image, mp );
+                for ( const RenderObjectInfo & info : iter->second ) {
+                    BlitOnTile( dst, info.image, info.image.x(), info.image.y(), mp, false, info.alphaValue );
                 }
             }
 
@@ -359,8 +380,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 const fheroes2::Point & mp = Maps::GetPoint( tile.GetIndex() );
 
-                for ( const fheroes2::Sprite & image : iter->second ) {
-                    BlitOnTile( dst, image, mp );
+                for ( const RenderObjectInfo & info : iter->second ) {
+                    BlitOnTile( dst, info.image, info.image.x(), info.image.y(), mp, false, info.alphaValue );
                 }
             }
 
@@ -381,8 +402,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 const fheroes2::Point & mp = Maps::GetPoint( tile.GetIndex() );
 
-                for ( const fheroes2::Sprite & image : iter->second ) {
-                    BlitOnTile( dst, image, mp );
+                for ( const RenderObjectInfo & info : iter->second ) {
+                    BlitOnTile( dst, info.image, info.image.x(), info.image.y(), mp, false, info.alphaValue );
                 }
             }
         }
@@ -399,8 +420,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 const fheroes2::Point & mp = Maps::GetPoint( tile.GetIndex() );
 
-                for ( const fheroes2::Sprite & image : iter->second ) {
-                    BlitOnTile( dst, image, mp );
+                for ( const RenderObjectInfo & info : iter->second ) {
+                    BlitOnTile( dst, info.image, info.image.x(), info.image.y(), mp, false, info.alphaValue );
                 }
             }
 
@@ -413,8 +434,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 const fheroes2::Point & mp = Maps::GetPoint( tile.GetIndex() );
 
-                for ( const fheroes2::Sprite & image : iter->second ) {
-                    BlitOnTile( dst, image, mp );
+                for ( const RenderObjectInfo & info : iter->second ) {
+                    BlitOnTile( dst, info.image, info.image.x(), info.image.y(), mp, false, info.alphaValue );
                 }
             }
 
@@ -425,8 +446,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 const fheroes2::Point & mp = Maps::GetPoint( tile.GetIndex() );
 
-                for ( const fheroes2::Sprite & image : iter->second ) {
-                    BlitOnTile( dst, image, mp );
+                for ( const RenderObjectInfo & info : iter->second ) {
+                    BlitOnTile( dst, info.image, info.image.x(), info.image.y(), mp, false, info.alphaValue );
                 }
             }
         }
@@ -445,8 +466,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 const fheroes2::Point & mp = Maps::GetPoint( tile.GetIndex() );
 
-                for ( const fheroes2::Sprite & image : iter->second ) {
-                    BlitOnTile( dst, image, mp );
+                for ( const RenderObjectInfo & info : iter->second ) {
+                    BlitOnTile( dst, info.image, info.image.x(), info.image.y(), mp, false, info.alphaValue );
                 }
             }
 
@@ -457,8 +478,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 const fheroes2::Point & mp = Maps::GetPoint( tile.GetIndex() );
 
-                for ( const fheroes2::Sprite & image : iter->second ) {
-                    BlitOnTile( dst, image, mp );
+                for ( const RenderObjectInfo & info : iter->second ) {
+                    BlitOnTile( dst, info.image, info.image.x(), info.image.y(), mp, false, info.alphaValue );
                 }
             }
         }
