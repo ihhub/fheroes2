@@ -245,6 +245,8 @@ namespace
 
         MusicInfo & operator=( const MusicInfo & ) = delete;
 
+        // Mix_Music objects should never be cached because they store the state of the music decoder's backend,
+        // and should be passed to functions like Mix_PlayMusic() only once, otherwise weird things can happen.
         Mix_Music * createMusic() const
         {
             Mix_Music * result = nullptr;
