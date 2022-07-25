@@ -359,10 +359,8 @@ namespace
         }
 
         // This method can be called from the SDL_Mixer callback (without acquiring the audioMutex)
-        uint64_t getCurrentTrackChangeCounter()
+        uint64_t getCurrentTrackChangeCounter() const
         {
-            const std::scoped_lock<std::mutex> lock( _currentTrackChangeCounterMutex );
-
             return _currentTrackChangeCounter;
         }
 
@@ -373,8 +371,6 @@ namespace
 
         void updateCurrentTrack( const std::shared_ptr<MusicInfo> & track, const uint64_t trackUID, const Music::PlaybackMode trackPlaybackMode )
         {
-            const std::scoped_lock<std::mutex> lock( _currentTrackChangeCounterMutex );
-
             _currentTrack = track;
 
             _currentTrackUID = trackUID;
@@ -385,8 +381,6 @@ namespace
 
         void resetCurrentTrack()
         {
-            const std::scoped_lock<std::mutex> lock( _currentTrackChangeCounterMutex );
-
             _currentTrack = {};
 
             _currentTrackUID = 0;
@@ -444,9 +438,7 @@ namespace
         Music::PlaybackMode _currentTrackPlaybackMode{ Music::PlaybackMode::PLAY_ONCE };
 
         // This counter should be incremented every time the current track or its playback mode changes
-        uint64_t _currentTrackChangeCounter{ 0 };
-        // This mutex is used to ensure that the information about the current track and _currentTrackChangeCounter changes in one shot
-        std::mutex _currentTrackChangeCounterMutex;
+        std::atomic<uint64_t> _currentTrackChangeCounter{ 0 };
 
         fheroes2::Time _currentTrackTimer;
 
@@ -539,6 +531,11 @@ namespace
 
     void playMusic( const uint64_t musicUID, Music::PlaybackMode playbackMode )
     {
+        // This function should never be called if a music track is currently playing.
+        // Thus we have a guarantee that the Mix_HookMusicFinished()'s callback will
+        // not be called while we are modifying the current track information.
+        assert( !Music::isPlaying() );
+
         const std::shared_ptr<MusicInfo> musicTrack = musicTrackManager.getTrackFromCache( musicUID );
         assert( musicTrack );
 
@@ -1084,7 +1081,8 @@ void Music::Stop()
         return;
     }
 
-    // Always returns 0
+    // Always returns 0. After this call we have a guarantee that the Mix_HookMusicFinished()'s
+    // callback will not be called while we are modifying the current track information.
     Mix_HaltMusic();
 
     const std::shared_ptr<MusicInfo> currentTrack = musicTrackManager.getCurrentTrack().lock();
