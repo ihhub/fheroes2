@@ -1347,32 +1347,6 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
     }
 }
 
-void Maps::Tiles::RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area ) const
-{
-    const MP2::MapObjectType objectType = GetObject();
-
-    // monsters and boats will be drawn later, on top of everything else
-    // hero object is accepted here since it replaces what was there originally
-    if ( objectType != MP2::OBJ_BOAT && objectType != MP2::OBJ_MONSTER && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( objectTileset, objectIndex ) ) ) {
-        const int icn = MP2::GetICNObject( objectTileset );
-
-        if ( ICN::UNKNOWN != icn ) {
-            const fheroes2::Point & mp = Maps::GetPoint( _index );
-
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, objectIndex );
-            area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
-
-            // possible animation
-            const uint32_t animationIndex = ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 != 0 );
-            if ( animationIndex ) {
-                const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, animationIndex );
-
-                area.BlitOnTile( dst, animationSprite, mp );
-            }
-        }
-    }
-}
-
 void Maps::Tiles::RedrawMonster( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
 {
     const fheroes2::Point & mp = Maps::GetPoint( _index );
