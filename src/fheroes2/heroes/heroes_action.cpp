@@ -2733,6 +2733,9 @@ void ActionToTreeKnowledge( Heroes & hero, const MP2::MapObjectType objectType, 
         bool conditions = 0 == funds.GetValidItemsCount();
         std::string msg;
 
+        const int level = hero.GetLevel();
+        const uint32_t possibleExperience = Heroes::GetExperienceFromLevel( level + 1 ) - Heroes::GetExperienceFromLevel( level );
+
         // free
         if ( conditions ) {
             msg = _(
@@ -2753,8 +2756,6 @@ void ActionToTreeKnowledge( Heroes & hero, const MP2::MapObjectType objectType, 
                 msg.append( _( "(Just bury it around my roots.)" ) );
                 StringReplace( msg, "%{res}", Resource::String( rc.first ) );
                 StringReplace( msg, "%{count}", rc.second );
-
-                const uint32_t possibleExperience = Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience();
 
                 const fheroes2::ExperienceDialogElement experienceUI( static_cast<int32_t>( possibleExperience ) );
                 const fheroes2::Text titleUI( title, fheroes2::FontType::normalYellow() );
@@ -2777,7 +2778,7 @@ void ActionToTreeKnowledge( Heroes & hero, const MP2::MapObjectType objectType, 
         if ( conditions ) {
             hero.GetKingdom().OddFundsResource( funds );
             hero.SetVisited( dst_index );
-            hero.IncreaseExperience( Heroes::GetExperienceFromLevel( hero.GetLevel() ) - hero.GetExperience() );
+            hero.IncreaseExperience( possibleExperience );
         }
     }
 
