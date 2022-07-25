@@ -318,12 +318,12 @@ namespace
 
         MusicTrackManager & operator=( const MusicTrackManager & ) = delete;
 
-        bool isTrackInDB( const uint64_t musicUID ) const
+        bool isTrackInMusicDB( const uint64_t musicUID ) const
         {
             return ( _musicDB.find( musicUID ) != _musicDB.end() );
         }
 
-        std::shared_ptr<MusicInfo> getTrackFromDB( const uint64_t musicUID ) const
+        std::shared_ptr<MusicInfo> getTrackFromMusicDB( const uint64_t musicUID ) const
         {
             auto iter = _musicDB.find( musicUID );
             assert( iter != _musicDB.end() );
@@ -331,7 +331,7 @@ namespace
             return iter->second;
         }
 
-        void addTrackToDB( const uint64_t musicUID, const std::shared_ptr<MusicInfo> & track )
+        void addTrackToMusicDB( const uint64_t musicUID, const std::shared_ptr<MusicInfo> & track )
         {
             const auto res = _musicDB.try_emplace( musicUID, track );
 
@@ -373,7 +373,7 @@ namespace
 
         void updateCurrentTrack( const uint64_t musicUID, const Music::PlaybackMode trackPlaybackMode )
         {
-            _currentTrack = getTrackFromDB( musicUID );
+            _currentTrack = getTrackFromMusicDB( musicUID );
 
             _currentTrackUID = musicUID;
             _currentTrackPlaybackMode = trackPlaybackMode;
@@ -538,7 +538,7 @@ namespace
         // not be called while we are modifying the current track information.
         assert( !Music::isPlaying() );
 
-        const std::shared_ptr<MusicInfo> track = musicTrackManager.getTrackFromDB( musicUID );
+        const std::shared_ptr<MusicInfo> track = musicTrackManager.getTrackFromMusicDB( musicUID );
         assert( track );
 
         Mix_Music * mus = track->createMusic();
@@ -987,7 +987,7 @@ bool Music::Play( const uint64_t musicUID, const PlaybackMode playbackMode )
         return false;
     }
 
-    if ( musicTrackManager.isTrackInDB( musicUID ) ) {
+    if ( musicTrackManager.isTrackInMusicDB( musicUID ) ) {
         Stop();
 
         playMusic( musicUID, playbackMode );
@@ -1010,8 +1010,8 @@ void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const
         return;
     }
 
-    if ( !musicTrackManager.isTrackInDB( musicUID ) ) {
-        musicTrackManager.addTrackToDB( musicUID, std::make_shared<MusicInfo>( v ) );
+    if ( !musicTrackManager.isTrackInMusicDB( musicUID ) ) {
+        musicTrackManager.addTrackToMusicDB( musicUID, std::make_shared<MusicInfo>( v ) );
     }
 
     Stop();
@@ -1032,8 +1032,8 @@ void Music::Play( const uint64_t musicUID, const std::string & file, const Playb
         return;
     }
 
-    if ( !musicTrackManager.isTrackInDB( musicUID ) ) {
-        musicTrackManager.addTrackToDB( musicUID, std::make_shared<MusicInfo>( file ) );
+    if ( !musicTrackManager.isTrackInMusicDB( musicUID ) ) {
+        musicTrackManager.addTrackToMusicDB( musicUID, std::make_shared<MusicInfo>( file ) );
     }
 
     Stop();
