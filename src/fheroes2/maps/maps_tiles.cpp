@@ -1305,7 +1305,12 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
         // TODO: why do we check quantity2 for this object stored in addon? Verify the logic!
         const uint32_t animationIndex = ICN::AnimationFrame( icn, addon.index, Game::MapsAnimationFrame(), quantity2 != 0 );
         if ( animationIndex ) {
-            area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, animationIndex ), mp );
+            const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, animationIndex );
+
+            // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
+            assert( animationSprite.width() <= TILEWIDTH && animationSprite.height() <= TILEWIDTH );
+
+            area.BlitOnTile( dst, animationSprite, mp );
         }
     }
 
@@ -1333,7 +1338,12 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
     // possible animation
     const uint32_t animationIndex = ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 != 0 );
     if ( animationIndex ) {
-        area.BlitOnTile( dst, fheroes2::AGG::GetICN( icn, animationIndex ), mp );
+        const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, animationIndex );
+
+        // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
+        assert( animationSprite.width() <= TILEWIDTH && animationSprite.height() <= TILEWIDTH );
+
+        area.BlitOnTile( dst, animationSprite, mp );
     }
 }
 

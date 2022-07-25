@@ -223,9 +223,17 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     //
     // However, there are some objects which appear to be more than 1 tile (32 x 32 pixels) size such as heroes, monsters and boats.
     // To render all these 'special' objects we need to create a copy of object sprite stacks for each tile, add temporary extra sprites and render them.
+    // Let's call these objects as tile-unfit objects, the rest of objects will be called tile-fit objects.
     //
     // TODO: take into account that objects on the map such as monsters, heroes, boats, resources can have a fading effect so it is advisable to keep alpha value for
     // TODO: each tile sprite.
+    //
+    // TODO: monster sprites combine the sprite itself and shadow. To properly render it we need to separate both parts and render on different layers.
+
+    // Fading animation can be applied as for tile-fit and tile-unfit objects.
+    // In case of tile-fit objects we need to pass UID of the object and alpha values.
+    // In case of tile-unfit objects we need to setalpha value while creating RenderObjectInfo instances.
+    // So far only one object and multple heroes can have fading animation.
 
     const bool drawHeroes = ( flag & LEVEL_HEROES ) == LEVEL_HEROES;
 
