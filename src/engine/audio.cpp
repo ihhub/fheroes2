@@ -325,7 +325,7 @@ namespace
 
         std::shared_ptr<MusicInfo> getTrackFromMusicDB( const uint64_t musicUID ) const
         {
-            auto iter = _musicDB.find( musicUID );
+            const auto iter = _musicDB.find( musicUID );
             assert( iter != _musicDB.end() );
 
             return iter->second;
