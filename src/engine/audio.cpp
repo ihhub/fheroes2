@@ -371,11 +371,11 @@ namespace
             return _currentTrackTimer.get();
         }
 
-        void updateCurrentTrack( const std::shared_ptr<MusicInfo> & track, const uint64_t trackUID, const Music::PlaybackMode trackPlaybackMode )
+        void updateCurrentTrack( const uint64_t musicUID, const Music::PlaybackMode trackPlaybackMode )
         {
-            _currentTrack = track;
+            _currentTrack = getTrackFromDB( musicUID );
 
-            _currentTrackUID = trackUID;
+            _currentTrackUID = musicUID;
             _currentTrackPlaybackMode = trackPlaybackMode;
 
             ++_currentTrackChangeCounter;
@@ -538,11 +538,13 @@ namespace
         // not be called while we are modifying the current track information.
         assert( !Music::isPlaying() );
 
-        const std::shared_ptr<MusicInfo> musicTrack = musicTrackManager.getTrackFromDB( musicUID );
-        assert( musicTrack );
+        const std::shared_ptr<MusicInfo> track = musicTrackManager.getTrackFromDB( musicUID );
+        assert( track );
 
-        Mix_Music * mus = musicTrack->createMusic();
+        Mix_Music * mus = track->createMusic();
         if ( mus == nullptr ) {
+            musicTrackManager.updateCurrentTrack( musicUID, playbackMode );
+
             return;
         }
 
@@ -563,7 +565,7 @@ namespace
             autoLoop = true;
         }
 
-        musicTrackManager.updateCurrentTrack( musicTrack, musicUID, playbackMode );
+        musicTrackManager.updateCurrentTrack( musicUID, playbackMode );
 
         const int loopCount = autoLoop ? -1 : 0;
 
@@ -571,8 +573,8 @@ namespace
             int returnCode = -1;
 
             // Resume the music only if at least 1 second of the track has been played.
-            if ( resumePlayback && musicTrack->getPosition() > 1 ) {
-                returnCode = Mix_FadeInMusicPos( mus, loopCount, musicFadeInMs, musicTrack->getPosition() );
+            if ( resumePlayback && track->getPosition() > 1 ) {
+                returnCode = Mix_FadeInMusicPos( mus, loopCount, musicFadeInMs, track->getPosition() );
 
                 if ( returnCode != 0 ) {
                     ERROR_LOG( "Failed to resume a music track. The error: " << Mix_GetError() )
@@ -593,6 +595,9 @@ namespace
                 Mix_FreeMusic( mus );
             }
             else {
+                // For better accuracy reset the timer right after the actual playback starts
+                musicTrackManager.resetTimer();
+
                 // There can be a maximum of two items in the music queue: the previous music
                 // (if it hasn't been released yet) and the current one
                 musicTrackManager.musicStarted( mus );
@@ -605,19 +610,19 @@ namespace
                 Mix_FreeMusic( mus );
             }
             else {
+                // Resume the music only if at least 1 second of the track has been played.
+                if ( resumePlayback && track->getPosition() > 1 && Mix_SetMusicPosition( track->getPosition() ) != 0 ) {
+                    ERROR_LOG( "Failed to set the position for a music track. The error: " << Mix_GetError() )
+                }
+
+                // For better accuracy reset the timer right after the actual playback starts
+                musicTrackManager.resetTimer();
+
                 // There can be a maximum of two items in the music queue: the previous music
                 // (if it hasn't been released yet) and the current one
                 musicTrackManager.musicStarted( mus );
-
-                // Resume the music only if at least 1 second of the track has been played.
-                if ( resumePlayback && musicTrack->getPosition() > 1 && Mix_SetMusicPosition( musicTrack->getPosition() ) != 0 ) {
-                    ERROR_LOG( "Failed to set the position for a music track. The error: " << Mix_GetError() )
-                }
             }
         }
-
-        // For better accuracy reset the timer only when actual playback is already started
-        musicTrackManager.resetTimer();
 
         musicTrackManager.clearFinishedMusic();
     }
