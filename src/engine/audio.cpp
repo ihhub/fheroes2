@@ -1077,7 +1077,7 @@ void Music::Stop()
     const std::shared_ptr<MusicInfo> currentTrack = musicTrackManager.getCurrentTrack().lock();
     assert( currentTrack );
 
-    // We can reliably calculate the current playback position, let's remember it
+    // We can and should reliably calculate the current playback position, let's remember it
     if ( musicTrackManager.getCurrentTrackPlaybackMode() == PlaybackMode::RESUME_AND_PLAY_INFINITE ) {
         currentTrack->setPosition( currentTrack->getPosition() + musicTrackManager.getCurrentTrackPosition() );
     }
