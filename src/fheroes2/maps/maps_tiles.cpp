@@ -1354,7 +1354,6 @@ std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Maps::Tiles::getMonste
     std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> output;
 
     const Monster & monster = QuantityMonster();
-    ERROR_LOG("Monster " << monster.GetName() )
     const std::pair<uint32_t, uint32_t> spriteIndicies = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
 
     const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, spriteIndicies.first );
