@@ -66,9 +66,7 @@ namespace Interface
         }
 
         BaseObjectAnimationInfo( const BaseObjectAnimationInfo & ) = delete;
-        BaseObjectAnimationInfo( BaseObjectAnimationInfo && ) = delete;
         BaseObjectAnimationInfo & operator=( const BaseObjectAnimationInfo & ) = delete;
-        BaseObjectAnimationInfo & operator=( BaseObjectAnimationInfo && ) = delete;
 
         virtual ~BaseObjectAnimationInfo() = default;
 
@@ -95,7 +93,7 @@ namespace Interface
             // Do nothing.
         }
 
-        virtual ~ObjectFadingOutInfo();
+        ~ObjectFadingOutInfo() override;
 
         bool update() override
         {
@@ -128,7 +126,7 @@ namespace Interface
             alphaValue = 0;
         }
 
-        virtual ~ObjectFadingInInfo() = default;
+        ~ObjectFadingInInfo() override = default;
 
         bool update() override
         {

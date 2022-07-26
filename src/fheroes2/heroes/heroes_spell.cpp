@@ -325,7 +325,7 @@ namespace
 
                 Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
                 gameArea.addObjectAnimationInfo( animationObject );
-                gameArea.runFadingAnimation( std::move( animationObject ) );
+                Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
 
                 Maps::Tiles & tileDest = world.GetTiles( boatDestination );
                 tileDest.setBoat( Direction::RIGHT );
@@ -333,7 +333,7 @@ namespace
                 animationObject.reset( new Interface::ObjectFadingInInfo( tileDest.GetObjectUID(), boatDestination, MP2::OBJ_BOAT ) );
 
                 gameArea.addObjectAnimationInfo( animationObject );
-                gameArea.runFadingAnimation( std::move( animationObject ) );
+                Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
 
                 return true;
             }

@@ -838,7 +838,7 @@ void Maps::Tiles::setBoat( int direction )
         break;
     }
 
-    uniq = world.GetUniq();
+    uniq = World::GetUniq();
 }
 
 int Maps::Tiles::getBoatDirection() const
@@ -1116,6 +1116,7 @@ void Maps::Tiles::AddonsPushLevel2( const MP2::mp2tile_t & mt )
 void Maps::Tiles::AddonsPushLevel2( const MP2::mp2addon_t & ma )
 {
     if ( ma.objectNameN2 && ma.indexNameN2 < 0xFF ) {
+        // TODO: why do we use the same quantityN member for both level 1 and 2?
         addons_level2.emplace_back( ma.quantityN, ma.level2ObjectUID, ma.objectNameN2, ma.indexNameN2 );
     }
 }

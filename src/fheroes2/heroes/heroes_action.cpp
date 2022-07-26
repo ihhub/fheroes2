@@ -193,9 +193,8 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
                 std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
                 animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-                Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
-                gameArea.addObjectAnimationInfo( animationObject );
-                gameArea.runFadingAnimation( std::move( animationObject ) );
+                Interface::Basic::Get().GetGameArea().addObjectAnimationInfo( animationObject );
+                Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
 
                 tile.MonsterSetCount( 0 );
             }
@@ -325,9 +324,8 @@ void Heroes::Action( int tileIndex, bool isDestination )
             std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
             animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-            Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
-            gameArea.addObjectAnimationInfo( animationObject );
-            gameArea.runFadingAnimation( std::move( animationObject ) );
+            Interface::Basic::Get().GetGameArea().addObjectAnimationInfo( animationObject );
+            Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
 
             tile.QuantityReset();
         }
@@ -702,9 +700,8 @@ void ActionToMonster( Heroes & hero, int32_t dst_index )
         std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
         animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-        Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
-        gameArea.addObjectAnimationInfo( animationObject );
-        gameArea.runFadingAnimation( std::move( animationObject ) );
+        Interface::Basic::Get().GetGameArea().addObjectAnimationInfo( animationObject );
+        Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
 
         tile.MonsterSetCount( 0 );
     }
@@ -924,9 +921,8 @@ void ActionToPickupResource( const Heroes & hero, const MP2::MapObjectType objec
     std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
     animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-    Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
-    gameArea.addObjectAnimationInfo( animationObject );
-    gameArea.runFadingAnimation( std::move( animationObject ) );
+    Interface::Basic::Get().GetGameArea().addObjectAnimationInfo( animationObject );
+    Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
 
     tile.QuantityReset();
 
@@ -1140,9 +1136,8 @@ void ActionToFlotSam( const Heroes & hero, const MP2::MapObjectType objectType, 
     std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
     animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-    Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
-    gameArea.addObjectAnimationInfo( animationObject );
-    gameArea.runFadingAnimation( std::move( animationObject ) );
+    Interface::Basic::Get().GetGameArea().addObjectAnimationInfo( animationObject );
+    Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
 
     tile.QuantityReset();
 
@@ -1722,9 +1717,8 @@ void ActionToShipwreckSurvivor( Heroes & hero, const MP2::MapObjectType objectTy
     std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
     animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-    Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
-    gameArea.addObjectAnimationInfo( animationObject );
-    gameArea.runFadingAnimation( std::move( animationObject ) );
+    Interface::Basic::Get().GetGameArea().addObjectAnimationInfo( animationObject );
+    Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
 
     tile.QuantityReset();
 
@@ -1896,9 +1890,8 @@ void ActionToArtifact( Heroes & hero, int32_t dst_index )
             std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
             animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-            Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
-            gameArea.addObjectAnimationInfo( animationObject );
-            gameArea.runFadingAnimation( std::move( animationObject ) );
+            Interface::Basic::Get().GetGameArea().addObjectAnimationInfo( animationObject );
+            Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
 
             tile.QuantityReset();
         }
@@ -2006,9 +1999,8 @@ void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, 
     std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
     animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-    Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
-    gameArea.addObjectAnimationInfo( animationObject );
-    gameArea.runFadingAnimation( std::move( animationObject ) );
+    Interface::Basic::Get().GetGameArea().addObjectAnimationInfo( animationObject );
+    Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
 
     tile.QuantityReset();
 
@@ -3097,9 +3089,8 @@ void ActionToJail( const Heroes & hero, const MP2::MapObjectType objectType, int
         std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
         animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-        Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
-        gameArea.addObjectAnimationInfo( animationObject );
-        gameArea.runFadingAnimation( std::move( animationObject ) );
+        Interface::Basic::Get().GetGameArea().addObjectAnimationInfo( animationObject );
+        Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
 
         // TODO: add hero fading in animation together with jail animation.
         Heroes * prisoner = world.FromJailHeroes( dst_index );
@@ -3258,9 +3249,8 @@ void ActionToBarrier( const Heroes & hero, const MP2::MapObjectType objectType, 
         std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
         animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-        Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
-        gameArea.addObjectAnimationInfo( animationObject );
-        gameArea.runFadingAnimation( std::move( animationObject ) );
+        Interface::Basic::Get().GetGameArea().addObjectAnimationInfo( animationObject );
+        Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
 
         AudioManager::PlaySound( M82::KILLFADE );
     }
