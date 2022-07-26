@@ -523,8 +523,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 }
             }
 
-            tile.redrawTopLayerObjects( dst, tileROI, isPuzzleDraw, *this );
-
             // Draw upper part of tile-unfit sprites.
             iter = tileUnfitTopImages.find( { x, y } );
             if ( iter != tileUnfitTopImages.end() ) {
@@ -536,6 +534,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     BlitOnTile( dst, info.image, info.image.x(), info.image.y(), mp, false, info.alphaValue );
                 }
             }
+
+            tile.redrawTopLayerObjects( dst, tileROI, isPuzzleDraw, *this );
         }
     }
 
