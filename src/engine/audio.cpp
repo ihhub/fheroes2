@@ -1081,7 +1081,8 @@ void Music::Stop()
     if ( musicTrackManager.getCurrentTrackPlaybackMode() == PlaybackMode::RESUME_AND_PLAY_INFINITE ) {
         currentTrack->setPosition( currentTrack->getPosition() + musicTrackManager.getCurrentTrackPosition() );
     }
-    // We cannot reliably calculate the current playback position, let's reset it to zero
+    // We either shouldn't (PLAY_ONCE) or can't (REWIND_AND_PLAY_INFINITE) reliably calculate the
+    // current playback position, let's reset it to zero
     else {
         currentTrack->setPosition( 0 );
     }
