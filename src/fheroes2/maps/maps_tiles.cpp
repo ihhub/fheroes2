@@ -423,7 +423,7 @@ namespace
         return ( shape << 14 ) | ( 0x3FFF & index );
     }
 
-    bool isRenderingRestricted( const int icnId )
+    bool isDirectRenderingRestricted( const int icnId )
     {
         switch ( icnId ) {
         case ICN::UNKNOWN:
@@ -1223,7 +1223,7 @@ void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addons, con
 
     for ( const TilesAddon & addon : addons ) {
         const int icn = MP2::GetICNObject( addon.object );
-        if ( isRenderingRestricted( icn ) ) {
+        if ( isDirectRenderingRestricted( icn ) ) {
             continue;
         }
 
@@ -1287,7 +1287,7 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
 
         // TODO: verify whether it is even possible to store ICN::MINIHERO or ICN::MONS32 in the addon section.
         const int icn = MP2::GetICNObject( addon.object );
-        if ( isRenderingRestricted( icn ) ) {
+        if ( isDirectRenderingRestricted( icn ) ) {
             continue;
         }
 
@@ -1320,7 +1320,7 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
     }
 
     const int icn = MP2::GetICNObject( objectTileset );
-    if ( isRenderingRestricted( icn ) ) {
+    if ( isDirectRenderingRestricted( icn ) ) {
         return;
     }
 
@@ -1347,61 +1347,63 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
     }
 }
 
-void Maps::Tiles::RedrawMonster( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
+std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Maps::Tiles::getMonsterSpritesPerTile() const
 {
-    const fheroes2::Point & mp = Maps::GetPoint( _index );
+    assert( GetObject() == MP2::OBJ_MONSTER );
 
-    if ( !( visibleTileROI & mp ) )
-        return;
+    std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> output;
 
     const Monster & monster = QuantityMonster();
+    ERROR_LOG("Monster " << monster.GetName() )
     const std::pair<uint32_t, uint32_t> spriteIndicies = GetMonsterSpriteIndices( *this, monster.GetSpriteIndex() );
 
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::MINIMON, spriteIndicies.first );
-    area.BlitOnTile( dst, sprite, sprite.x() + 16, sprite.y() + 30, mp );
+    const fheroes2::Sprite & monsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, spriteIndicies.first );
+    const fheroes2::Point monsterSpriteOffset( monsterSprite.x() + 16, monsterSprite.y() + 30 );
 
-    if ( spriteIndicies.second ) {
-        const fheroes2::Sprite & animatedSprite = fheroes2::AGG::GetICN( ICN::MINIMON, spriteIndicies.second );
-        area.BlitOnTile( dst, animatedSprite, animatedSprite.x() + 16, animatedSprite.y() + 30, mp );
+    fheroes2::DivideImageBySquares( monsterSpriteOffset, monsterSprite, TILEWIDTH, false, output );
+
+    if ( spriteIndicies.second > 0 ) {
+        const fheroes2::Sprite & secondaryMonsterSprite = fheroes2::AGG::GetICN( ICN::MINIMON, spriteIndicies.second );
+        const fheroes2::Point secondaryMonsterSpriteOffset( secondaryMonsterSprite.x() + 16, secondaryMonsterSprite.y() + 30 );
+
+        fheroes2::DivideImageBySquares( secondaryMonsterSpriteOffset, secondaryMonsterSprite, TILEWIDTH, false, output );
     }
+
+    return output;
 }
 
-void Maps::Tiles::RedrawBoatShadow( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
+std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Maps::Tiles::getBoatSpritesPerTile() const
 {
-    const fheroes2::Point & mp = Maps::GetPoint( _index );
+    assert( GetObject() == MP2::OBJ_BOAT );
 
-    if ( !( visibleTileROI & mp ) )
-        return;
+    std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> output;
 
     const uint32_t spriteIndex = ( objectIndex == 255 ) ? 18 : objectIndex;
 
-    const Game::ObjectFadeAnimation::FadeTask & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
-    const uint8_t alpha
-        = ( MP2::OBJ_BOAT == fadeTask.object && ( ( fadeTask.fadeOut && fadeTask.fromIndex == _index ) || ( fadeTask.fadeIn && fadeTask.toIndex == _index ) ) )
-              ? fadeTask.alpha
-              : 255;
+    const fheroes2::Sprite & boatSprite = fheroes2::AGG::GetICN( ICN::BOAT32, spriteIndex % 128 );
+    const fheroes2::Point boatSpriteOffset( boatSprite.x(), TILEWIDTH + boatSprite.y() - 11 );
 
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOATSHAD, spriteIndex % 128 );
-    area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y() - 11, mp, ( spriteIndex > 128 ), alpha );
+    fheroes2::DivideImageBySquares( boatSpriteOffset, boatSprite, TILEWIDTH, ( spriteIndex > 128 ), output );
+
+    return output;
 }
 
-void Maps::Tiles::RedrawBoat( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
+std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Maps::Tiles::getBoatShadowSpritesPerTile() const
 {
-    const fheroes2::Point & mp = Maps::GetPoint( _index );
+    assert( GetObject() == MP2::OBJ_BOAT );
 
-    if ( !( visibleTileROI & mp ) )
-        return;
+    std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> output;
 
+    // TODO: boat shadow logic is more complex than this and it is not directly depend on spriteIndex. Find the proper logic and fix it!
     const uint32_t spriteIndex = ( objectIndex == 255 ) ? 18 : objectIndex;
 
-    const Game::ObjectFadeAnimation::FadeTask & fadeTask = Game::ObjectFadeAnimation::GetFadeTask();
-    const uint8_t alpha
-        = ( MP2::OBJ_BOAT == fadeTask.object && ( ( fadeTask.fadeOut && fadeTask.fromIndex == _index ) || ( fadeTask.fadeIn && fadeTask.toIndex == _index ) ) )
-              ? fadeTask.alpha
-              : 255;
+    const fheroes2::Sprite & boatShadowSprite = fheroes2::AGG::GetICN( ICN::BOATSHAD, spriteIndex % 128 );
+    const fheroes2::Point boatShadowSpriteOffset( boatShadowSprite.x(), TILEWIDTH + boatShadowSprite.y() - 11 );
 
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::BOAT32, spriteIndex % 128 );
-    area.BlitOnTile( dst, sprite, sprite.x(), TILEWIDTH + sprite.y() - 11, mp, ( spriteIndex > 128 ), alpha );
+    // Shadows cannot be flipped so flip flag is always false.
+    fheroes2::DivideImageBySquares( boatShadowSpriteOffset, boatShadowSprite, TILEWIDTH, false, output );
+
+    return output;
 }
 
 void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const bool isPuzzleDraw, const Interface::GameArea & area ) const
