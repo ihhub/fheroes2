@@ -321,7 +321,23 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                             continue;
                         }
 
-                        // TODO: do we need to cover more cases here?
+                        if ( nextHeroPos.y > heroPos.y && nextHeroPos.x < heroPos.x && info.first.x < 0 ) {
+                            // The hero moves south-west. We need to render it over everything.
+                            tileUnfitBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                            continue;
+                        }
+
+                        if ( nextHeroPos.y < heroPos.y && nextHeroPos.x < heroPos.x && info.first.x < 0 ) {
+                            // The hero moves north-west. We need to render it under all other objects.
+                            tileUnfitBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                            continue;
+                        }
+
+                        if ( nextHeroPos.y < heroPos.y && nextHeroPos.x > heroPos.x && info.first.x > 0 ) {
+                            // The hero moves north-east. We need to render it under all other objects.
+                            tileUnfitBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                            continue;
+                        }
                     }
 
                     if ( info.first.y > 0 && !isHeroInCastle ) {
