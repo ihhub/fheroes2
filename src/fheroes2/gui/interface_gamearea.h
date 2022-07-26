@@ -67,8 +67,8 @@ namespace Interface
 
         BaseObjectAnimationInfo( const BaseObjectAnimationInfo & ) = delete;
         BaseObjectAnimationInfo( BaseObjectAnimationInfo && ) = delete;
-        BaseObjectAnimationInfo operator=( const BaseObjectAnimationInfo & ) = delete;
-        BaseObjectAnimationInfo operator=( BaseObjectAnimationInfo && ) = delete;
+        BaseObjectAnimationInfo & operator=( const BaseObjectAnimationInfo & ) = delete;
+        BaseObjectAnimationInfo & operator=( BaseObjectAnimationInfo && ) = delete;
 
         virtual ~BaseObjectAnimationInfo() = default;
 
