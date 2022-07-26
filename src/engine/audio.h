@@ -69,12 +69,20 @@ namespace Music
 {
     enum class PlaybackMode : uint8_t
     {
+        // Play a music track once from the beginning, do not remember the position at which
+        // playback of this track was stopped (rewind it to the beginning when playback stops)
         PLAY_ONCE,
+        // Play a music track in an endless loop, starting from its previously remembered position
+        // (or from the beginning if this track is being played for the first time) and remember
+        // the position at which playback of this track was stopped
         RESUME_AND_PLAY_INFINITE,
+        // Play a music track in an endless loop, starting from the beginning, do not remember
+        // the position at which playback of this track was stopped (rewind it to the beginning
+        // when playback stops)
         REWIND_AND_PLAY_INFINITE
     };
 
-    // Music UID is used to cache existing songs. It is caller's responsibility to generate them.
+    // Music UID is used to cache existing tracks. It is caller's responsibility to generate them.
     // This function return true in case of music track for corresponding Music UID is cached.
     bool Play( const uint64_t musicUID, const PlaybackMode playbackMode );
 
