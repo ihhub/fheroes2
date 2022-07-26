@@ -25,6 +25,7 @@
 #define H2INTERFACE_GAMEAREA_H
 
 #include "image.h"
+#include "mp2.h"
 #include "timing.h"
 
 namespace Interface
@@ -50,6 +51,101 @@ namespace Interface
         LEVEL_ROUTES = 0x40,
 
         LEVEL_ALL = 0xFF
+    };
+
+    struct BaseObjectAnimationInfo
+    {
+        BaseObjectAnimationInfo() = default;
+
+        BaseObjectAnimationInfo( const uint32_t uid_, const int32_t tileId_, const MP2::MapObjectType type_ )
+            : uid( uid_ )
+            , tileId( tileId_ )
+            , type( type_ )
+        {
+            // Do nothing.
+        }
+
+        BaseObjectAnimationInfo( const BaseObjectAnimationInfo & ) = delete;
+        BaseObjectAnimationInfo( BaseObjectAnimationInfo && ) = delete;
+        BaseObjectAnimationInfo operator=( const BaseObjectAnimationInfo & ) = delete;
+        BaseObjectAnimationInfo operator=( BaseObjectAnimationInfo && ) = delete;
+
+        virtual ~BaseObjectAnimationInfo() = default;
+
+        uint32_t uid{ 0 };
+
+        int32_t tileId{ -1 };
+
+        MP2::MapObjectType type{ MP2::OBJ_ZERO };
+
+        static const uint8_t alphaStep{ 20 };
+
+        uint8_t alphaValue{ 255 };
+
+        virtual bool update() = 0;
+
+        virtual bool isAnimationCompleted() const = 0;
+    };
+
+    struct ObjectFadingOutInfo : public BaseObjectAnimationInfo
+    {
+        ObjectFadingOutInfo( const uint32_t uid_, const int32_t tileId_, const MP2::MapObjectType type_ )
+            : BaseObjectAnimationInfo( uid_, tileId_, type_ )
+        {
+            // Do nothing.
+        }
+
+        virtual ~ObjectFadingOutInfo();
+
+        bool update() override
+        {
+            if ( alphaValue >= alphaStep ) {
+                alphaValue -= alphaStep;
+            }
+            else {
+                alphaValue = 0;
+            }
+
+            return ( alphaValue == 0 );
+        }
+
+        bool isAnimationCompleted() const override
+        {
+            return ( alphaValue == 0 );
+        }
+    };
+
+    struct ObjectFadingInInfo : public BaseObjectAnimationInfo
+    {
+        ObjectFadingInInfo()
+        {
+            alphaValue = 0;
+        }
+
+        ObjectFadingInInfo( const uint32_t uid_, const int32_t tileId_, const MP2::MapObjectType type_ )
+            : BaseObjectAnimationInfo( uid_, tileId_, type_ )
+        {
+            alphaValue = 0;
+        }
+
+        virtual ~ObjectFadingInInfo() = default;
+
+        bool update() override
+        {
+            if ( 255 - alphaValue >= alphaStep ) {
+                alphaValue += alphaStep;
+            }
+            else {
+                alphaValue = 255;
+            }
+
+            return ( alphaValue == 255 );
+        }
+
+        bool isAnimationCompleted() const override
+        {
+            return ( alphaValue == 255 );
+        }
     };
 
     class GameArea
@@ -126,6 +222,19 @@ namespace Interface
 
         fheroes2::Point getCurrentCenterInPixels() const;
 
+        void addObjectAnimationInfo( std::shared_ptr<BaseObjectAnimationInfo> info );
+
+        bool isAnyObjectAnimationInfoPresent() const
+        {
+            return !_animationInfo.empty();
+        }
+
+        uint8_t getObjectAlphaValue( const int32_t tileId, const MP2::MapObjectType type ) const;
+
+        uint8_t getObjectAlphaValue( const uint32_t uid ) const;
+
+        static void runFadingAnimation( std::shared_ptr<BaseObjectAnimationInfo> info );
+
     private:
         fheroes2::Point _middlePoint() const; // returns middle point of window ROI
         fheroes2::Point _getStartTileId() const;
@@ -149,6 +258,10 @@ namespace Interface
         bool updateCursor;
 
         fheroes2::Time scrollTime;
+
+        mutable std::vector<std::shared_ptr<BaseObjectAnimationInfo>> _animationInfo;
+
+        void updateObjectAnimationInfo() const;
     };
 }
 

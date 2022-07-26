@@ -66,8 +66,6 @@
 
 namespace
 {
-    const uint8_t defaultAlphaValue = 255;
-
     bool isValidShadowSprite( const int icn, const uint8_t icnIndex )
     {
         if ( icn == 0 ) {
@@ -839,6 +837,8 @@ void Maps::Tiles::setBoat( int direction )
         objectIndex = 18;
         break;
     }
+
+    uniq = world.GetUniq();
 }
 
 int Maps::Tiles::getBoatDirection() const
@@ -1253,12 +1253,14 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
             continue;
         }
 
+        const uint8_t alphaValue = area.getObjectAlphaValue( addon.uniq );
+
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, addon.index );
 
         // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
         assert( sprite.width() <= TILEWIDTH && sprite.height() <= TILEWIDTH );
 
-        area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, defaultAlphaValue );
+        area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, alphaValue );
 
         // TODO: why do we check quantity2 for this object stored in addon? Verify the logic!
         const uint32_t animationIndex = ICN::AnimationFrame( icn, addon.index, Game::MapsAnimationFrame(), quantity2 != 0 );
@@ -1268,7 +1270,7 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
             // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
             assert( animationSprite.width() <= TILEWIDTH && animationSprite.height() <= TILEWIDTH );
 
-            area.BlitOnTile( dst, animationSprite, animationSprite.x(), animationSprite.y(), mp, false, defaultAlphaValue );
+            area.BlitOnTile( dst, animationSprite, animationSprite.x(), animationSprite.y(), mp, false, alphaValue );
         }
     }
 
@@ -1286,12 +1288,14 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
         return;
     }
 
+    const uint8_t alphaValue = area.getObjectAlphaValue( uniq );
+
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, objectIndex );
 
     // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
     assert( sprite.width() <= TILEWIDTH && sprite.height() <= TILEWIDTH );
 
-    area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, defaultAlphaValue );
+    area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, alphaValue );
 
     // possible animation
     const uint32_t animationIndex = ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 != 0 );
@@ -1301,7 +1305,7 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
         // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
         assert( animationSprite.width() <= TILEWIDTH && animationSprite.height() <= TILEWIDTH );
 
-        area.BlitOnTile( dst, animationSprite, animationSprite.x(), animationSprite.y(), mp, false, defaultAlphaValue );
+        area.BlitOnTile( dst, animationSprite, animationSprite.x(), animationSprite.y(), mp, false, alphaValue );
     }
 }
 
@@ -1375,7 +1379,10 @@ void Maps::Tiles::redrawTopLayerObjects( fheroes2::Image & dst, const fheroes2::
     if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
         // This sprite is bigger than TILEWIDTH but rendering is correct for heroes.
         const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 );
-        area.BlitOnTile( dst, image, image.x(), image.y(), mp, false, defaultAlphaValue );
+
+        const uint8_t alphaValue = area.getObjectAlphaValue( uniq );
+
+        area.BlitOnTile( dst, image, image.x(), image.y(), mp, false, alphaValue );
     }
     else if ( objectType == MP2::OBJ_MINES ) {
         const int32_t spellID = Maps::getSpellIdFromTile( *this );
@@ -1386,7 +1393,10 @@ void Maps::Tiles::redrawTopLayerObjects( fheroes2::Image & dst, const fheroes2::
         case Spell::HAUNT: {
             // This sprite is bigger than TILEWIDTH but rendering is correct for heroes.
             const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 );
-            area.BlitOnTile( dst, image, image.x(), image.y(), mp, false, defaultAlphaValue );
+
+            const uint8_t alphaValue = area.getObjectAlphaValue( uniq );
+
+            area.BlitOnTile( dst, image, image.x(), image.y(), mp, false, alphaValue );
             break;
         }
         case Spell::SETEGUARDIAN:
@@ -1398,7 +1408,9 @@ void Maps::Tiles::redrawTopLayerObjects( fheroes2::Image & dst, const fheroes2::
             // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
             assert( image.width() <= TILEWIDTH && image.height() <= TILEWIDTH );
 
-            area.BlitOnTile( dst, image, TILEWIDTH, 0, mp, false, defaultAlphaValue );
+            const uint8_t alphaValue = area.getObjectAlphaValue( uniq );
+
+            area.BlitOnTile( dst, image, TILEWIDTH, 0, mp, false, alphaValue );
             break;
         }
         default:
@@ -1416,12 +1428,14 @@ void Maps::Tiles::redrawTopLayerObjects( fheroes2::Image & dst, const fheroes2::
             continue;
         }
 
+        const uint8_t alphaValue = area.getObjectAlphaValue( addon.uniq );
+
         const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icn, addon.index );
 
         // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
         assert( image.width() <= TILEWIDTH && image.height() <= TILEWIDTH );
 
-        area.BlitOnTile( dst, image, image.x(), image.y(), mp, false, defaultAlphaValue );
+        area.BlitOnTile( dst, image, image.x(), image.y(), mp, false, alphaValue );
 
         // possible animation
         const uint32_t animationIndex = ICN::AnimationFrame( icn, addon.index, Game::MapsAnimationFrame(), quantity2 != 0 );
@@ -1431,7 +1445,7 @@ void Maps::Tiles::redrawTopLayerObjects( fheroes2::Image & dst, const fheroes2::
             // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
             assert( animationImage.width() <= TILEWIDTH && animationImage.height() <= TILEWIDTH );
 
-            area.BlitOnTile( dst, animationImage, animationImage.x(), animationImage.y(), mp, false, defaultAlphaValue );
+            area.BlitOnTile( dst, animationImage, animationImage.x(), animationImage.y(), mp, false, alphaValue );
         }
     }
 }
@@ -2456,7 +2470,7 @@ void Maps::Tiles::updateEmpty()
 void Maps::Tiles::setAsEmpty()
 {
     // If an object is removed we should validate if this tile a potential candidate to be a coast.
-    // Check if this tile is not water and it have neighbouring water tiles.
+    // Check if this tile is not water and it has neighbouring water tiles.
     if ( isWater() ) {
         SetObject( MP2::OBJ_ZERO );
         return;

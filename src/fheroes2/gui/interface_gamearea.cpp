@@ -26,6 +26,7 @@
 #include "agg_image.h"
 #include "cursor.h"
 #include "game.h"
+#include "game_delays.h"
 #include "game_interface.h"
 #include "ground.h"
 #include "icn.h"
@@ -220,9 +221,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // To render all these 'special' objects we need to create a copy of object sprite stacks for each tile, add temporary extra sprites and render them.
     // Let's call these objects as tile-unfit objects, the rest of objects will be called tile-fit objects.
     //
-    // TODO: take into account that objects on the map such as monsters, heroes, boats, resources can have a fading effect so it is advisable to keep alpha value for
-    // TODO: each tile sprite.
-    //
     // TODO: monster sprites combine the sprite itself and shadow. To properly render it we need to separate both parts and render on different layers.
 
     // Fading animation can be applied as for tile-fit and tile-unfit objects.
@@ -262,6 +260,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             switch ( objectType ) {
             case MP2::OBJ_HEROES: {
+                if ( !drawHeroes ) {
+                    continue;
+                }
+
                 const Heroes * hero = tile.GetHeroes();
                 assert( hero != nullptr );
 
@@ -341,33 +343,37 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
 
             case MP2::OBJ_MONSTER: {
+                const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_MONSTER );
+
                 auto spriteInfo = tile.getMonsterSpritesPerTile();
                 for ( auto & info : spriteInfo ) {
                     if ( info.first.y > 0 ) {
-                        tileUnfitBottomBackgroundImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), 255 );
+                        tileUnfitBottomBackgroundImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
                     }
                     else if ( info.first.y == 0 ) {
-                        tileUnfitBottomImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), 255 );
+                        tileUnfitBottomImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
                     }
                     else {
-                        tileUnfitTopImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), 255 );
+                        tileUnfitTopImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
                     }
                 }
                 break;
             }
 
             case MP2::OBJ_BOAT: {
+                const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_BOAT );
+
                 auto spriteInfo = tile.getBoatSpritesPerTile();
                 for ( auto & info : spriteInfo ) {
                     if ( info.first.y > 0 ) {
                         // TODO: fix incorrect boat sprites being too tall.
-                        tileUnfitBottomBackgroundImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), 255 );
+                        tileUnfitBottomBackgroundImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
                     }
                     else if ( info.first.y == 0 ) {
-                        tileUnfitBottomImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), 255 );
+                        tileUnfitBottomImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
                     }
                     else {
-                        tileUnfitTopImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), 255 );
+                        tileUnfitTopImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
                     }
                 }
 
@@ -376,13 +382,13 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 for ( auto & info : spriteShadowInfo ) {
                     if ( info.first.y > 0 ) {
                         // TODO: fix incorrect boat sprites being too tall.
-                        tileUnfitBottomBackgroundShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), 255 );
+                        tileUnfitBottomBackgroundShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
                     }
                     else if ( info.first.y == 0 ) {
-                        tileUnfitBottomShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), 255 );
+                        tileUnfitBottomShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
                     }
                     else {
-                        tileUnfitTopShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), 255 );
+                        tileUnfitTopShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
                     }
                 }
 
@@ -609,6 +615,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
         }
     }
+
+    updateObjectAnimationInfo();
 }
 
 void Interface::GameArea::Scroll()
@@ -650,7 +658,7 @@ void Interface::GameArea::SetCenter( const fheroes2::Point & pt )
 fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset )
 {
     if ( !Maps::isValidAbsIndex( index ) ) {
-        DEBUG_LOG( DBG_ENGINE, DBG_WARN, "artifact not found" )
+        DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Ultimate artifact is not found on index " << index )
         return fheroes2::Image();
     }
 
@@ -829,4 +837,65 @@ fheroes2::Point Interface::GameArea::GetRelativeTilePosition( const fheroes2::Po
 fheroes2::Point Interface::GameArea::getCurrentCenterInPixels() const
 {
     return _topLeftTileOffset + _middlePoint();
+}
+
+void Interface::GameArea::addObjectAnimationInfo( std::shared_ptr<BaseObjectAnimationInfo> info )
+{
+    _animationInfo.emplace_back( std::move( info ) );
+}
+
+void Interface::GameArea::updateObjectAnimationInfo() const
+{
+    for ( auto iter = _animationInfo.begin(); iter != _animationInfo.end(); ) {
+        if ( ( *iter )->update() ) {
+            iter = _animationInfo.erase( iter );
+        }
+        else {
+            ++iter;
+        }
+    }
+}
+
+uint8_t Interface::GameArea::getObjectAlphaValue( const int32_t tileId, const MP2::MapObjectType type ) const
+{
+    for ( const auto & info : _animationInfo ) {
+        if ( info->tileId == tileId && type == info->type ) {
+            return info->alphaValue;
+        }
+    }
+
+    return 255;
+}
+
+uint8_t Interface::GameArea::getObjectAlphaValue( const uint32_t uid ) const
+{
+    for ( const auto & info : _animationInfo ) {
+        if ( uid == info->uid ) {
+            return info->alphaValue;
+        }
+    }
+
+    return 255;
+}
+
+void Interface::GameArea::runFadingAnimation( std::shared_ptr<BaseObjectAnimationInfo> info )
+{
+    LocalEvent & le = LocalEvent::Get();
+
+    while ( le.HandleEvents() && !info->isAnimationCompleted() ) {
+        if ( Game::validateAnimationDelay( Game::HEROES_PICKUP_DELAY ) ) {
+            Interface::Basic::Get().Redraw( Interface::REDRAW_GAMEAREA );
+            fheroes2::Display::instance().render();
+        }
+    }
+}
+
+Interface::ObjectFadingOutInfo::~ObjectFadingOutInfo()
+{
+    Maps::Tiles & tile = world.GetTiles( tileId );
+
+    if ( tile.GetObject() == type ) {
+        tile.RemoveObjectSprite();
+        tile.setAsEmpty();
+    }
 }

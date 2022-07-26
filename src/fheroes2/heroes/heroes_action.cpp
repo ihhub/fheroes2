@@ -190,13 +190,14 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
             if ( remove && recruit == troop.GetCount() ) {
                 Game::PlayPickupSound();
 
-                Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
+                std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
+                animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
+
+                Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
+                gameArea.addObjectAnimationInfo( animationObject );
+                gameArea.runFadingAnimation( std::move( animationObject ) );
 
                 tile.MonsterSetCount( 0 );
-                tile.RemoveObjectSprite();
-                tile.setAsEmpty();
-
-                Game::ObjectFadeAnimation::PerformFadeTask();
             }
             else
                 tile.MonsterSetCount( troop.GetCount() - recruit );
@@ -321,13 +322,14 @@ void Heroes::Action( int tileIndex, bool isDestination )
     /* default actions */
     if ( cancel_default ) {
         if ( MP2::isPickupObject( objectType ) ) {
-            Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
+            std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
+            animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-            tile.RemoveObjectSprite();
+            Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
+            gameArea.addObjectAnimationInfo( animationObject );
+            gameArea.runFadingAnimation( std::move( animationObject ) );
+
             tile.QuantityReset();
-            tile.setAsEmpty();
-
-            Game::ObjectFadeAnimation::PerformFadeTask();
         }
     }
     else
@@ -678,25 +680,33 @@ void ActionToMonster( Heroes & hero, int32_t dst_index )
         else {
             BattleLose( hero, res, true );
 
-            tile.MonsterSetCount( army.GetCountMonsters( troop.GetMonster() ) );
+            const uint32_t monstersLeft = army.GetCountMonsters( troop.GetMonster() );
+            if ( monstersLeft > 0 ) {
+                tile.MonsterSetCount( monstersLeft );
 
-            // reset join condition
-            if ( Maps::isMonsterOnTileJoinConditionFree( tile ) ) {
-                Maps::setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_MONEY );
+                // reset join condition
+                if ( Maps::isMonsterOnTileJoinConditionFree( tile ) ) {
+                    Maps::setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_MONEY );
+                }
+            }
+            else {
+                // TODO: do fading animation for the hero and for the monsters at the same time.
+                destroy = true;
             }
         }
     }
 
-    if ( destroy ) {
+    if ( destroy || Army( tile ).GetCount() == 0 ) {
         AudioManager::PlaySound( M82::KILLFADE );
 
-        Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
+        std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
+        animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-        tile.RemoveObjectSprite();
+        Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
+        gameArea.addObjectAnimationInfo( animationObject );
+        gameArea.runFadingAnimation( std::move( animationObject ) );
+
         tile.MonsterSetCount( 0 );
-        tile.setAsEmpty();
-
-        Game::ObjectFadeAnimation::PerformFadeTask();
     }
 
     // clear the hero's attacked monster tile index
@@ -909,12 +919,14 @@ void ActionToPickupResource( const Heroes & hero, const MP2::MapObjectType objec
 
     Game::PlayPickupSound();
 
-    Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
+    std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
+    animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-    tile.RemoveObjectSprite();
+    Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
+    gameArea.addObjectAnimationInfo( animationObject );
+    gameArea.runFadingAnimation( std::move( animationObject ) );
+
     tile.QuantityReset();
-
-    Game::ObjectFadeAnimation::PerformFadeTask();
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 }
@@ -1123,12 +1135,14 @@ void ActionToFlotSam( const Heroes & hero, const MP2::MapObjectType objectType, 
 
     Game::PlayPickupSound();
 
-    Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
+    std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
+    animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-    tile.RemoveObjectSprite();
+    Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
+    gameArea.addObjectAnimationInfo( animationObject );
+    gameArea.runFadingAnimation( std::move( animationObject ) );
+
     tile.QuantityReset();
-
-    Game::ObjectFadeAnimation::PerformFadeTask();
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 }
@@ -1703,12 +1717,14 @@ void ActionToShipwreckSurvivor( Heroes & hero, const MP2::MapObjectType objectTy
 
     Game::PlayPickupSound();
 
-    Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
+    std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
+    animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-    tile.RemoveObjectSprite();
+    Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
+    gameArea.addObjectAnimationInfo( animationObject );
+    gameArea.runFadingAnimation( std::move( animationObject ) );
+
     tile.QuantityReset();
-
-    Game::ObjectFadeAnimation::PerformFadeTask();
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 }
@@ -1875,12 +1891,14 @@ void ActionToArtifact( Heroes & hero, int32_t dst_index )
         if ( result && hero.PickupArtifact( art ) ) {
             Game::PlayPickupSound();
 
-            Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
+            std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
+            animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-            tile.RemoveObjectSprite();
+            Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
+            gameArea.addObjectAnimationInfo( animationObject );
+            gameArea.runFadingAnimation( std::move( animationObject ) );
+
             tile.QuantityReset();
-
-            Game::ObjectFadeAnimation::PerformFadeTask();
         }
     }
 
@@ -1983,12 +2001,14 @@ void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, 
 
     Game::PlayPickupSound();
 
-    Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
+    std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
+    animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-    tile.RemoveObjectSprite();
+    Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
+    gameArea.addObjectAnimationInfo( animationObject );
+    gameArea.runFadingAnimation( std::move( animationObject ) );
+
     tile.QuantityReset();
-
-    Game::ObjectFadeAnimation::PerformFadeTask();
 
     DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() )
 }
@@ -3072,13 +3092,14 @@ void ActionToJail( const Heroes & hero, const MP2::MapObjectType objectType, int
             _( "In a dazzling display of daring, you break into the local jail and free the hero imprisoned there, who, in return, pledges loyalty to your cause." ),
             Font::BIG, Dialog::OK );
 
-        Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
+        std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
+        animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-        tile.RemoveObjectSprite();
-        tile.setAsEmpty();
+        Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
+        gameArea.addObjectAnimationInfo( animationObject );
+        gameArea.runFadingAnimation( std::move( animationObject ) );
 
-        Game::ObjectFadeAnimation::PerformFadeTask();
-
+        // TODO: add hero fading in animation together with jail animation.
         Heroes * prisoner = world.FromJailHeroes( dst_index );
 
         if ( prisoner ) {
@@ -3232,13 +3253,14 @@ void ActionToBarrier( const Heroes & hero, const MP2::MapObjectType objectType, 
             _( "A magical barrier stands tall before you, blocking your way. Runes on the arch read,\n\"Speak the key and you may pass.\"\nAs you speak the magic word, the glowing barrier dissolves into nothingness." ),
             Font::BIG, Dialog::OK );
 
-        Game::ObjectFadeAnimation::PrepareFadeTask( tile.GetObject(), tile.GetIndex(), -1, true, false );
+        std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
+        animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
-        tile.RemoveObjectSprite();
-        tile.setAsEmpty();
+        Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
+        gameArea.addObjectAnimationInfo( animationObject );
+        gameArea.runFadingAnimation( std::move( animationObject ) );
 
         AudioManager::PlaySound( M82::KILLFADE );
-        Game::ObjectFadeAnimation::PerformFadeTask();
     }
     else {
         Dialog::Message(
