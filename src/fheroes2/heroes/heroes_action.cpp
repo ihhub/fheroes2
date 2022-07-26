@@ -231,11 +231,17 @@ static void WhirlpoolTroopLoseEffect( Heroes & hero )
         Dialog::Message( _( "A whirlpool engulfs your ship." ), _( "Some of your army has fallen overboard." ), Font::BIG, Dialog::OK );
 
         if ( weakestTroop->GetCount() == 1 ) {
+            DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " lost " << weakestTroop->GetCount() << " " << weakestTroop->GetName() << " in the whirlpool" )
+
             weakestTroop->Reset();
         }
         else {
-            weakestTroop->SetCount( Monster::GetCountFromHitPoints( weakestTroop->GetID(),
-                                                                    weakestTroop->GetHitPoints() - weakestTroop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
+            const uint32_t newCount = Monster::GetCountFromHitPoints( weakestTroop->GetID(),
+                                                                      weakestTroop->GetHitPoints() - weakestTroop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 );
+
+            DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " lost " << weakestTroop->GetCount() - newCount << " " << weakestTroop->GetName() << " in the whirlpool" )
+
+            weakestTroop->SetCount( newCount );
         }
 
         Interface::Basic::Get().SetRedraw( Interface::REDRAW_STATUS );
