@@ -739,6 +739,8 @@ void ActionToHeroes( Heroes & hero, int32_t dst_index )
         // new battle
         Battle::Result res = Battle::Loader( hero.GetArmy(), other_hero->GetArmy(), dst_index );
 
+        // TODO: make fading animation of both heroes together.
+
         // loss defender
         if ( !res.DefenderWins() )
             BattleLose( *other_hero, res, false );

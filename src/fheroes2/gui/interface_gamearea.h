@@ -46,7 +46,7 @@ namespace Interface
         LEVEL_BOTTOM = 0x01,
         LEVEL_TOP = 0x02,
         LEVEL_HEROES = 0x04,
-        LEVEL_OBJECTS = 0x08,
+        UNUSED_LEVEL = 0x08,
         LEVEL_FOG = 0x20,
         LEVEL_ROUTES = 0x40,
 
@@ -259,6 +259,7 @@ namespace Interface
 
         fheroes2::Time scrollTime;
 
+        // This member needs to be mutable because it is modified during rendering.
         mutable std::vector<std::shared_ptr<BaseObjectAnimationInfo>> _animationInfo;
 
         void updateObjectAnimationInfo() const;

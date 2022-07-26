@@ -511,8 +511,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
-            tile.redrawTopLayerObjects( dst, tileROI, isPuzzleDraw, *this );
-
             // Draw upper part of tile-unit sprite's shadow.
             auto iter = tileUnfitTopShadowImages.find( { x, y } );
             if ( iter != tileUnfitTopShadowImages.end() ) {
@@ -524,6 +522,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     BlitOnTile( dst, info.image, info.image.x(), info.image.y(), mp, false, info.alphaValue );
                 }
             }
+
+            tile.redrawTopLayerObjects( dst, tileROI, isPuzzleDraw, *this );
 
             // Draw upper part of tile-unfit sprites.
             iter = tileUnfitTopImages.find( { x, y } );
