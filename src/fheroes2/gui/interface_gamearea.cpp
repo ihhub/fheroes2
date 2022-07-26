@@ -123,11 +123,6 @@ void Interface::GameArea::SetAreaPosition( int32_t x, int32_t y, int32_t w, int3
     _setCenterToTile( fheroes2::Point( world.w() / 2, world.h() / 2 ) );
 }
 
-void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Sprite & src, const fheroes2::Point & mp ) const
-{
-    BlitOnTile( dst, src, src.x(), src.y(), mp );
-}
-
 void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const fheroes2::Point & mp, bool flip,
                                       uint8_t alpha ) const
 {
@@ -510,7 +505,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
-            tile.RedrawTop( dst, tileROI, isPuzzleDraw, *this );
+            tile.redrawTopLayerObjects( dst, tileROI, isPuzzleDraw, *this );
 
             // Draw upper part of tile-unit sprite's shadow.
             auto iter = tileUnfitTopShadowImages.find( { x, y } );

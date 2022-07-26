@@ -66,6 +66,8 @@
 
 namespace
 {
+    const uint8_t defaultAlphaValue = 255;
+
     bool isValidShadowSprite( const int icn, const uint8_t icnIndex )
     {
         if ( icn == 0 ) {
@@ -1208,49 +1210,6 @@ void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point 
     }
 }
 
-void Maps::Tiles::RedrawAddon( fheroes2::Image & dst, const Addons & addons, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw,
-                               const Interface::GameArea & area ) const
-{
-    if ( addons.empty() ) {
-        return;
-    }
-
-    const fheroes2::Point & mp = Maps::GetPoint( _index );
-
-    if ( !( visibleTileROI & mp ) ) {
-        return;
-    }
-
-    for ( const TilesAddon & addon : addons ) {
-        const int icn = MP2::GetICNObject( addon.object );
-        if ( isDirectRenderingRestricted( icn ) ) {
-            continue;
-        }
-
-        if ( isPuzzleDraw && MP2::isHiddenForPuzzle( addon.object, addon.index ) ) {
-            continue;
-        }
-
-        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icn, addon.index );
-
-        // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-        assert( image.width() <= TILEWIDTH && image.height() <= TILEWIDTH );
-
-        area.BlitOnTile( dst, image, image.x(), image.y(), mp );
-
-        // possible animation
-        const uint32_t animationIndex = ICN::AnimationFrame( icn, addon.index, Game::MapsAnimationFrame(), quantity2 != 0 );
-        if ( animationIndex ) {
-            const fheroes2::Sprite & animationImage = fheroes2::AGG::GetICN( icn, animationIndex );
-
-            // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-            assert( animationImage.width() <= TILEWIDTH && animationImage.height() <= TILEWIDTH );
-
-            area.BlitOnTile( dst, animationImage, mp );
-        }
-    }
-}
-
 void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
 {
 #ifdef WITH_DEBUG
@@ -1285,7 +1244,6 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
             continue;
         }
 
-        // TODO: verify whether it is even possible to store ICN::MINIHERO or ICN::MONS32 in the addon section.
         const int icn = MP2::GetICNObject( addon.object );
         if ( isDirectRenderingRestricted( icn ) ) {
             continue;
@@ -1300,7 +1258,7 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
         // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
         assert( sprite.width() <= TILEWIDTH && sprite.height() <= TILEWIDTH );
 
-        area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
+        area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, defaultAlphaValue );
 
         // TODO: why do we check quantity2 for this object stored in addon? Verify the logic!
         const uint32_t animationIndex = ICN::AnimationFrame( icn, addon.index, Game::MapsAnimationFrame(), quantity2 != 0 );
@@ -1310,7 +1268,7 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
             // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
             assert( animationSprite.width() <= TILEWIDTH && animationSprite.height() <= TILEWIDTH );
 
-            area.BlitOnTile( dst, animationSprite, mp );
+            area.BlitOnTile( dst, animationSprite, animationSprite.x(), animationSprite.y(), mp, false, defaultAlphaValue );
         }
     }
 
@@ -1333,7 +1291,7 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
     // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
     assert( sprite.width() <= TILEWIDTH && sprite.height() <= TILEWIDTH );
 
-    area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp );
+    area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, defaultAlphaValue );
 
     // possible animation
     const uint32_t animationIndex = ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 != 0 );
@@ -1343,7 +1301,7 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
         // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
         assert( animationSprite.width() <= TILEWIDTH && animationSprite.height() <= TILEWIDTH );
 
-        area.BlitOnTile( dst, animationSprite, mp );
+        area.BlitOnTile( dst, animationSprite, animationSprite.x(), animationSprite.y(), mp, false, defaultAlphaValue );
     }
 }
 
@@ -1405,7 +1363,7 @@ std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Maps::Tiles::getBoatSh
     return output;
 }
 
-void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const bool isPuzzleDraw, const Interface::GameArea & area ) const
+void Maps::Tiles::redrawTopLayerObjects( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const bool isPuzzleDraw, const Interface::GameArea & area ) const
 {
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
@@ -1417,7 +1375,7 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visib
     if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
         // This sprite is bigger than TILEWIDTH but rendering is correct for heroes.
         const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 );
-        area.BlitOnTile( dst, image, mp );
+        area.BlitOnTile( dst, image, image.x(), image.y(), mp, false, defaultAlphaValue );
     }
     else if ( objectType == MP2::OBJ_MINES ) {
         const int32_t spellID = Maps::getSpellIdFromTile( *this );
@@ -1428,7 +1386,7 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visib
         case Spell::HAUNT: {
             // This sprite is bigger than TILEWIDTH but rendering is correct for heroes.
             const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 );
-            area.BlitOnTile( dst, image, mp );
+            area.BlitOnTile( dst, image, image.x(), image.y(), mp, false, defaultAlphaValue );
             break;
         }
         case Spell::SETEGUARDIAN:
@@ -1440,7 +1398,7 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visib
             // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
             assert( image.width() <= TILEWIDTH && image.height() <= TILEWIDTH );
 
-            area.BlitOnTile( dst, image, TILEWIDTH, 0, mp );
+            area.BlitOnTile( dst, image, TILEWIDTH, 0, mp, false, defaultAlphaValue );
             break;
         }
         default:
@@ -1448,7 +1406,34 @@ void Maps::Tiles::RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visib
         }
     }
 
-    RedrawAddon( dst, addons_level2, visibleTileROI, isPuzzleDraw, area );
+    for ( const TilesAddon & addon : addons_level2 ) {
+        const int icn = MP2::GetICNObject( addon.object );
+        if ( isDirectRenderingRestricted( icn ) ) {
+            continue;
+        }
+
+        if ( isPuzzleDraw && MP2::isHiddenForPuzzle( addon.object, addon.index ) ) {
+            continue;
+        }
+
+        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icn, addon.index );
+
+        // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
+        assert( image.width() <= TILEWIDTH && image.height() <= TILEWIDTH );
+
+        area.BlitOnTile( dst, image, image.x(), image.y(), mp, false, defaultAlphaValue );
+
+        // possible animation
+        const uint32_t animationIndex = ICN::AnimationFrame( icn, addon.index, Game::MapsAnimationFrame(), quantity2 != 0 );
+        if ( animationIndex ) {
+            const fheroes2::Sprite & animationImage = fheroes2::AGG::GetICN( icn, animationIndex );
+
+            // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
+            assert( animationImage.width() <= TILEWIDTH && animationImage.height() <= TILEWIDTH );
+
+            area.BlitOnTile( dst, animationImage, animationImage.x(), animationImage.y(), mp, false, defaultAlphaValue );
+        }
+    }
 }
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel1( uint32_t uniq1 )
