@@ -240,8 +240,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     std::map<fheroes2::Point, std::vector<RenderObjectInfo>> tileUnfitBottomBackgroundImages;
     std::map<fheroes2::Point, std::vector<RenderObjectInfo>> tileUnfitTopImages;
 
-    std::map<fheroes2::Point, std::vector<RenderObjectInfo>> tileUnfitlowPriorityBottomImages;
-    std::map<fheroes2::Point, std::vector<RenderObjectInfo>> tileUnfithighPriorityBottomImages;
+    std::map<fheroes2::Point, std::vector<RenderObjectInfo>> tileUnfitLowPriorityBottomImages;
+    std::map<fheroes2::Point, std::vector<RenderObjectInfo>> tileUnfitHighPriorityBottomImages;
 
     std::map<fheroes2::Point, std::vector<RenderObjectInfo>> tileUnfitBottomShadowImages;
     std::map<fheroes2::Point, std::vector<RenderObjectInfo>> tileUnfitBottomBackgroundShadowImages;
@@ -291,27 +291,37 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     if ( movingHero && info.first.y == 0 ) {
                         if ( nextHeroPos.y > heroPos.y && nextHeroPos.x > heroPos.x && info.first.x > 0 ) {
                             // The hero moves south-east. We need to render it over everything.
-                            tileUnfithighPriorityBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                            tileUnfitHighPriorityBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
                             continue;
                         }
 
                         if ( nextHeroPos.y > heroPos.y && nextHeroPos.x < heroPos.x && info.first.x < 0 ) {
                             // The hero moves south-west. We need to render it over everything.
-                            tileUnfithighPriorityBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                            tileUnfitHighPriorityBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
                             continue;
                         }
 
                         if ( nextHeroPos.y < heroPos.y && nextHeroPos.x < heroPos.x && info.first.x < 0 ) {
                             // The hero moves north-west. We need to render it under all other objects.
-                            tileUnfitlowPriorityBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                            tileUnfitLowPriorityBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
                             continue;
                         }
 
                         if ( nextHeroPos.y < heroPos.y && nextHeroPos.x > heroPos.x && info.first.x > 0 ) {
                             // The hero moves north-east. We need to render it under all other objects.
-                            tileUnfitlowPriorityBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                            tileUnfitLowPriorityBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
                             continue;
                         }
+                    }
+
+                    if ( movingHero && info.first.y == 1 ) {
+                        if ( nextHeroPos.y > heroPos.y && nextHeroPos.x > heroPos.x && info.first.x > 0 ) {
+                            // The hero moves south-east. We need to render it over everything.
+                            tileUnfitBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                            continue;
+                        }
+
+                        // TODO: do we need to cover more cases here?
                     }
 
                     if ( info.first.y > 0 && !isHeroInCastle ) {
@@ -468,8 +478,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
             // Low priority images are drawn before any other object on this tile.
-            auto iter = tileUnfitlowPriorityBottomImages.find( { x, y } );
-            if ( iter != tileUnfitlowPriorityBottomImages.end() ) {
+            auto iter = tileUnfitLowPriorityBottomImages.find( { x, y } );
+            if ( iter != tileUnfitLowPriorityBottomImages.end() ) {
                 assert( !iter->second.empty() );
 
                 const fheroes2::Point & mp = Maps::GetPoint( tile.GetIndex() );
@@ -494,8 +504,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
 
             // High priority images are drawn after any other object on this tile.
-            iter = tileUnfithighPriorityBottomImages.find( { x, y } );
-            if ( iter != tileUnfithighPriorityBottomImages.end() ) {
+            iter = tileUnfitHighPriorityBottomImages.find( { x, y } );
+            if ( iter != tileUnfitHighPriorityBottomImages.end() ) {
                 assert( !iter->second.empty() );
 
                 const fheroes2::Point & mp = Maps::GetPoint( tile.GetIndex() );
@@ -524,6 +534,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
 
             tile.redrawTopLayerObjects( dst, tileROI, isPuzzleDraw, *this );
+
+            // TODO: some objects like Waterwheel are taller than 2 tiles and they should be drawn with the highest priority.
+            // TODO: Consider checking levels even for the top layer.
 
             // Draw upper part of tile-unfit sprites.
             iter = tileUnfitTopImages.find( { x, y } );
