@@ -326,7 +326,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                             tileUnfitBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
                             continue;
                         }
+                    }
 
+                    if ( movingHero && info.first.y == -1 ) {
                         if ( nextHeroPos.y < heroPos.y && nextHeroPos.x < heroPos.x && info.first.x < 0 ) {
                             // The hero moves north-west. We need to render it under all other objects.
                             tileUnfitBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
