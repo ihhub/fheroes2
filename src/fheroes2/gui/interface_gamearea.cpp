@@ -257,8 +257,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     const Heroes * currentHero = drawHeroes ? GetFocusHeroes() : nullptr;
 
     // Run through all visible tiles and find all tile-unfit objects. Also cover extra tiles from right and bottom sides.
-    const int32_t roiToRenderMaxX = ( maxX < world.w() ) ? ( maxX + 2 ) : maxX;
-    const int32_t roiToRenderMaxY = ( maxY < world.h() ) ? ( maxY + 1 ) : maxY;
+    const int32_t roiToRenderMaxX = ( maxX + 2 <= world.w() ) ? ( maxX + 2 ) : maxX;
+    const int32_t roiToRenderMaxY = ( maxY + 1 <= world.h() ) ? ( maxY + 1 ) : maxY;
 
     for ( int32_t posY = minY; posY < roiToRenderMaxY; ++posY ) {
         for ( int32_t posX = minX; posX < roiToRenderMaxX; ++posX ) {
