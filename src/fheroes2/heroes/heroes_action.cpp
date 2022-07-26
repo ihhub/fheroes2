@@ -696,7 +696,7 @@ void ActionToMonster( Heroes & hero, int32_t dst_index )
         }
     }
 
-    if ( destroy || Army( tile ).GetCount() == 0 ) {
+    if ( destroy ) {
         AudioManager::PlaySound( M82::KILLFADE );
 
         std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
