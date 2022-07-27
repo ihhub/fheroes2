@@ -39,6 +39,7 @@
 #include "world.h"
 
 #include <cassert>
+#include <deque>
 
 namespace
 {
@@ -236,16 +237,16 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     const bool drawFog = ( flag & LEVEL_FOG ) == LEVEL_FOG;
 #endif
 
-    std::map<fheroes2::Point, std::vector<RenderObjectInfo>> tileUnfitBottomImages;
-    std::map<fheroes2::Point, std::vector<RenderObjectInfo>> tileUnfitBottomBackgroundImages;
-    std::map<fheroes2::Point, std::vector<RenderObjectInfo>> tileUnfitTopImages;
+    std::map<fheroes2::Point, std::deque<RenderObjectInfo>> tileUnfitBottomImages;
+    std::map<fheroes2::Point, std::deque<RenderObjectInfo>> tileUnfitBottomBackgroundImages;
+    std::map<fheroes2::Point, std::deque<RenderObjectInfo>> tileUnfitTopImages;
 
-    std::map<fheroes2::Point, std::vector<RenderObjectInfo>> tileUnfitLowPriorityBottomImages;
-    std::map<fheroes2::Point, std::vector<RenderObjectInfo>> tileUnfitHighPriorityBottomImages;
+    std::map<fheroes2::Point, std::deque<RenderObjectInfo>> tileUnfitLowPriorityBottomImages;
+    std::map<fheroes2::Point, std::deque<RenderObjectInfo>> tileUnfitHighPriorityBottomImages;
 
-    std::map<fheroes2::Point, std::vector<RenderObjectInfo>> tileUnfitBottomShadowImages;
-    std::map<fheroes2::Point, std::vector<RenderObjectInfo>> tileUnfitBottomBackgroundShadowImages;
-    std::map<fheroes2::Point, std::vector<RenderObjectInfo>> tileUnfitTopShadowImages;
+    std::map<fheroes2::Point, std::deque<RenderObjectInfo>> tileUnfitBottomShadowImages;
+    std::map<fheroes2::Point, std::deque<RenderObjectInfo>> tileUnfitBottomBackgroundShadowImages;
+    std::map<fheroes2::Point, std::deque<RenderObjectInfo>> tileUnfitTopShadowImages;
 
     const Heroes * currentHero = drawHeroes ? GetFocusHeroes() : nullptr;
 
@@ -346,13 +347,28 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     }
 
                     if ( info.first.y > 0 && !isHeroInCastle ) {
-                        tileUnfitBottomBackgroundImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                        if ( info.first.x < 0 ) {
+                            tileUnfitBottomBackgroundImages[info.first + heroPos].emplace_front( std::move( info.second ), heroAlphaValue );
+                        }
+                        else {
+                            tileUnfitBottomBackgroundImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                        }
                     }
                     else if ( info.first.y == 0 || ( isHeroInCastle && info.first.y > 0 ) ) {
-                        tileUnfitBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                        if ( info.first.x < 0 ) {
+                            tileUnfitBottomImages[info.first + heroPos].emplace_front( std::move( info.second ), heroAlphaValue );
+                        }
+                        else {
+                            tileUnfitBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                        }
                     }
                     else {
-                        tileUnfitTopImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                        if ( info.first.x < 0 ) {
+                            tileUnfitTopImages[info.first + heroPos].emplace_front( std::move( info.second ), heroAlphaValue );
+                        }
+                        else {
+                            tileUnfitTopImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                        }
                     }
                 }
 
@@ -360,13 +376,28 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 auto spriteShadowInfo = hero->getHeroShadowSpritesPerTile();
                 for ( auto & info : spriteShadowInfo ) {
                     if ( info.first.y > 0 && !isHeroInCastle ) {
-                        tileUnfitBottomBackgroundShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                        if ( info.first.x < 0 ) {
+                            tileUnfitBottomBackgroundShadowImages[info.first + heroPos].emplace_front( std::move( info.second ), heroAlphaValue );
+                        }
+                        else {
+                            tileUnfitBottomBackgroundShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                        }
                     }
                     else if ( info.first.y == 0 || ( isHeroInCastle && info.first.y > 0 ) ) {
-                        tileUnfitBottomShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                        if ( info.first.x < 0 ) {
+                            tileUnfitBottomShadowImages[info.first + heroPos].emplace_front( std::move( info.second ), heroAlphaValue );
+                        }
+                        else {
+                            tileUnfitBottomShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                        }
                     }
                     else {
-                        tileUnfitTopShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                        if ( info.first.x < 0 ) {
+                            tileUnfitTopShadowImages[info.first + heroPos].emplace_front( std::move( info.second ), heroAlphaValue );
+                        }
+                        else {
+                            tileUnfitTopShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                        }
                     }
                 }
 
@@ -379,13 +410,28 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 auto spriteInfo = tile.getMonsterSpritesPerTile();
                 for ( auto & info : spriteInfo ) {
                     if ( info.first.y > 0 ) {
-                        tileUnfitBottomBackgroundImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        if ( info.first.x < 0 ) {
+                            tileUnfitBottomBackgroundImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
+                        }
+                        else {
+                            tileUnfitBottomBackgroundImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        }
                     }
                     else if ( info.first.y == 0 ) {
-                        tileUnfitBottomImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        if ( info.first.x < 0 ) {
+                            tileUnfitBottomImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
+                        }
+                        else {
+                            tileUnfitBottomImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        }
                     }
                     else {
-                        tileUnfitTopImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        if ( info.first.x < 0 ) {
+                            tileUnfitTopImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
+                        }
+                        else {
+                            tileUnfitTopImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        }
                     }
                 }
                 break;
@@ -398,13 +444,28 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 for ( auto & info : spriteInfo ) {
                     if ( info.first.y > 0 ) {
                         // TODO: fix incorrect boat sprites being too tall.
-                        tileUnfitBottomBackgroundImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        if ( info.first.x < 0 ) {
+                            tileUnfitBottomBackgroundImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
+                        }
+                        else {
+                            tileUnfitBottomBackgroundImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        }
                     }
                     else if ( info.first.y == 0 ) {
-                        tileUnfitBottomImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        if ( info.first.x < 0 ) {
+                            tileUnfitBottomImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
+                        }
+                        else {
+                            tileUnfitBottomImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        }
                     }
                     else {
-                        tileUnfitTopImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        if ( info.first.x < 0 ) {
+                            tileUnfitTopImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
+                        }
+                        else {
+                            tileUnfitTopImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        }
                     }
                 }
 
@@ -413,13 +474,28 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 for ( auto & info : spriteShadowInfo ) {
                     if ( info.first.y > 0 ) {
                         // TODO: fix incorrect boat sprites being too tall.
-                        tileUnfitBottomBackgroundShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        if ( info.first.x < 0 ) {
+                            tileUnfitBottomBackgroundShadowImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
+                        }
+                        else {
+                            tileUnfitBottomBackgroundShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        }
                     }
                     else if ( info.first.y == 0 ) {
-                        tileUnfitBottomShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        if ( info.first.x < 0 ) {
+                            tileUnfitBottomShadowImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
+                        }
+                        else {
+                            tileUnfitBottomShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        }
                     }
                     else {
-                        tileUnfitTopShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        if ( info.first.x < 0 ) {
+                            tileUnfitTopShadowImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
+                        }
+                        else {
+                            tileUnfitTopShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        }
                     }
                 }
 

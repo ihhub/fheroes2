@@ -1266,7 +1266,7 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
 
         // TODO: why do we check quantity2 for this object stored in addon? Verify the logic!
         const uint32_t animationIndex = ICN::AnimationFrame( icn, addon.index, Game::MapsAnimationFrame(), quantity2 != 0 );
-        if ( animationIndex ) {
+        if ( animationIndex > 0 ) {
             const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, animationIndex );
 
             // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
@@ -1407,7 +1407,7 @@ void Maps::Tiles::redrawTopLayerObjects( fheroes2::Image & dst, const fheroes2::
         case Spell::SETAGUARDIAN:
         case Spell::SETFGUARDIAN:
         case Spell::SETWGUARDIAN: {
-            // TODO: are guardians considered at top layer? Verify it!
+            // TODO: move guardians to the bottom layer.
 
             const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNXTRA, spellID - Spell::SETEGUARDIAN );
 
