@@ -1406,7 +1406,7 @@ void Army::ArrangeForWhirlpool()
     troopOfWeakestUnits->SetCount( troopOfWeakestUnits->GetCount() - 1 );
 
     // To the separate slot
-    auto emptySlot = std::find_if( begin(), end(), []( const Troop * troop ) { return !troop->isValid(); } );
+    auto emptySlot = std::find_if( begin(), end(), []( const Troop * troop ) { return troop->isEmpty(); } );
     assert( emptySlot != end() );
 
     ( *emptySlot )->Set( Monster( troopOfWeakestUnits->GetID() ), 1 );
