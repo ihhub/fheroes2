@@ -1089,14 +1089,14 @@ void Maps::Tiles::AddonsPushLevel1( const MP2::mp2tile_t & mt )
     }
 
     // MP2 "objectName" is a bitfield
-    // 6 bits is ICN tileset id, 1 bit isRoad flag, 1 bit hasAnimation flag
+    // 6 bits is ICN tileset id, 1 bit is isRoad flag, 1 bit is hasAnimation flag
     if ( ( ( mt.objectName1 >> 1 ) & 1 ) && ( MP2::GetICNObject( mt.objectName1 ) == ICN::ROAD ) )
         tileIsRoad = true;
 }
 
 void Maps::Tiles::AddonsPushLevel1( const MP2::mp2addon_t & ma )
 {
-    if ( ma.objectNameN1 && ma.indexNameN1 < 0xFF ) {
+    if ( ma.objectNameN1 != 0 && ma.indexNameN1 != 0xFF ) {
         addons_level1.emplace_back( ma.quantityN, ma.level1ObjectUID, ma.objectNameN1, ma.indexNameN1 );
     }
 }
@@ -1108,14 +1108,15 @@ void Maps::Tiles::AddonsPushLevel1( const TilesAddon & ta )
 
 void Maps::Tiles::AddonsPushLevel2( const MP2::mp2tile_t & mt )
 {
-    if ( mt.objectName2 && mt.level2IcnImageIndex != 0xFF ) {
+    if ( mt.objectName2 != 0 && mt.level2IcnImageIndex != 0xFF ) {
+        // TODO: does level 2 even need level value? Verify it.
         addons_level2.emplace_back( mt.quantity1, mt.level2ObjectUID, mt.objectName2, mt.level2IcnImageIndex );
     }
 }
 
 void Maps::Tiles::AddonsPushLevel2( const MP2::mp2addon_t & ma )
 {
-    if ( ma.objectNameN2 && ma.indexNameN2 < 0xFF ) {
+    if ( ma.objectNameN2 != 0 && ma.indexNameN2 != 0xFF ) {
         // TODO: why do we use the same quantityN member for both level 1 and 2?
         addons_level2.emplace_back( ma.quantityN, ma.level2ObjectUID, ma.objectNameN2, ma.indexNameN2 );
     }

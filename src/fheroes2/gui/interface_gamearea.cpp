@@ -551,10 +551,39 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 }
             }
 
-            tile.redrawTopLayerObjects( dst, tileROI, isPuzzleDraw, *this );
+            // Since some objects are taller than 2 tiles their top layer sprites must be drawn at the very end.
+            // For now what we need to do is to run throught all level 2 objects and verify that the tile below doesn't have
+            // any other level 2 objects with the same UID.
+            //
+            // TODO: This is a very hacky way to do it since we do not take into consideration that tile-unfit objects might be taller than 2 tiles as well.
+            // TODO: Also some objects in level 2 might be drawn below tile-unfit objects.Find a better way to deal with this situation.
 
-            // TODO: some objects like Waterwheel are taller than 2 tiles and they should be drawn with the highest priority.
-            // TODO: Consider checking levels even for the top layer.
+            bool renderTileUnfitTopImagesBefore = false;
+            if ( y + 1 < world.h() ) {
+                // There is a tile below the current.
+                const Maps::Tiles & tileBelow = world.GetTiles( x, y + 1 );
+
+                const Maps::Addons & currentTileAddons = tile.getLevel2Addons();
+                const Maps::Addons & lowerTileAddons = tileBelow.getLevel2Addons();
+
+                for ( const Maps::TilesAddon & currentAddon : currentTileAddons ) {
+                    for ( const Maps::TilesAddon & lowerAddon : lowerTileAddons ) {
+                        if ( lowerAddon.uniq == currentAddon.uniq ) {
+                            // This is a tall object.
+                            renderTileUnfitTopImagesBefore = true;
+                            break;
+                        }
+                    }
+
+                    if ( renderTileUnfitTopImagesBefore ) {
+                        break;
+                    }
+                }
+            }
+
+            if ( !renderTileUnfitTopImagesBefore ) {
+                tile.redrawTopLayerObjects( dst, tileROI, isPuzzleDraw, *this );
+            }
 
             // Draw upper part of tile-unfit sprites.
             iter = tileUnfitTopImages.find( { x, y } );
@@ -566,6 +595,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 for ( const RenderObjectInfo & info : iter->second ) {
                     BlitOnTile( dst, info.image, info.image.x(), info.image.y(), mp, false, info.alphaValue );
                 }
+            }
+
+            if ( renderTileUnfitTopImagesBefore ) {
+                tile.redrawTopLayerObjects( dst, tileROI, isPuzzleDraw, *this );
             }
         }
     }

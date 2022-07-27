@@ -438,47 +438,6 @@ void World::InitKingdoms()
     vec_kingdoms.Init();
 }
 
-const Maps::Tiles & World::GetTiles( const int32_t x, const int32_t y ) const
-{
-#ifdef WITH_DEBUG
-    return vec_tiles.at( y * width + x );
-#else
-    return vec_tiles[y * width + x];
-#endif
-}
-
-Maps::Tiles & World::GetTiles( const int32_t x, const int32_t y )
-{
-#ifdef WITH_DEBUG
-    return vec_tiles.at( y * width + x );
-#else
-    return vec_tiles[y * width + x];
-#endif
-}
-
-const Maps::Tiles & World::GetTiles( const int32_t tileId ) const
-{
-#ifdef WITH_DEBUG
-    return vec_tiles.at( tileId );
-#else
-    return vec_tiles[tileId];
-#endif
-}
-
-Maps::Tiles & World::GetTiles( const int32_t tileId )
-{
-#ifdef WITH_DEBUG
-    return vec_tiles.at( tileId );
-#else
-    return vec_tiles[tileId];
-#endif
-}
-
-size_t World::getSize() const
-{
-    return vec_tiles.size();
-}
-
 Castle * World::getCastle( const fheroes2::Point & tilePosition )
 {
     return vec_castles.Get( tilePosition );
