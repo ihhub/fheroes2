@@ -1260,7 +1260,7 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, addon.index );
 
         // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-        assert( sprite.width() <= TILEWIDTH && sprite.height() <= TILEWIDTH );
+        assert( sprite.x() >= 0 && sprite.width() + sprite.x() <= TILEWIDTH && sprite.y() >= 0 && sprite.height() + sprite.y() <= TILEWIDTH );
 
         area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, alphaValue );
 
@@ -1270,7 +1270,8 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
             const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, animationIndex );
 
             // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-            assert( animationSprite.width() <= TILEWIDTH && animationSprite.height() <= TILEWIDTH );
+            assert( animationSprite.x() >= 0 && animationSprite.width() + animationSprite.x() <= TILEWIDTH &&
+                    animationSprite.y() >= 0 && animationSprite.height() + animationSprite.y() <= TILEWIDTH );
 
             area.BlitOnTile( dst, animationSprite, animationSprite.x(), animationSprite.y(), mp, false, alphaValue );
         }
@@ -1295,7 +1296,7 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, objectIndex );
 
     // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-    assert( sprite.width() <= TILEWIDTH && sprite.height() <= TILEWIDTH );
+    assert( sprite.x() >= 0 && sprite.width() + sprite.x() <= TILEWIDTH && sprite.y() >= 0 && sprite.height() + sprite.y() <= TILEWIDTH );
 
     area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, alphaValue );
 
@@ -1305,7 +1306,8 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
         const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, animationIndex );
 
         // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-        assert( animationSprite.width() <= TILEWIDTH && animationSprite.height() <= TILEWIDTH );
+        assert( animationSprite.x() >= 0 && animationSprite.width() + animationSprite.x() <= TILEWIDTH &&
+                animationSprite.y() >= 0 && animationSprite.height() + animationSprite.y() <= TILEWIDTH );
 
         area.BlitOnTile( dst, animationSprite, animationSprite.x(), animationSprite.y(), mp, false, alphaValue );
     }
@@ -1405,6 +1407,8 @@ void Maps::Tiles::redrawTopLayerObjects( fheroes2::Image & dst, const fheroes2::
         case Spell::SETAGUARDIAN:
         case Spell::SETFGUARDIAN:
         case Spell::SETWGUARDIAN: {
+            // TODO: are guardians considered at top layer? Verify it!
+
             const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNXTRA, spellID - Spell::SETEGUARDIAN );
 
             // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
@@ -1435,7 +1439,7 @@ void Maps::Tiles::redrawTopLayerObjects( fheroes2::Image & dst, const fheroes2::
         const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icn, addon.index );
 
         // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-        assert( image.width() <= TILEWIDTH && image.height() <= TILEWIDTH );
+        // assert( image.x() >= 0 && image.width() + image.x() <= TILEWIDTH && image.y() >= 0 && image.height() + image.y() <= TILEWIDTH );
 
         area.BlitOnTile( dst, image, image.x(), image.y(), mp, false, alphaValue );
 

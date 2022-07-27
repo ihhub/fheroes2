@@ -249,6 +249,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     const Heroes * currentHero = drawHeroes ? GetFocusHeroes() : nullptr;
 
+    // TODO: Dragon City with tilset 164 (OBJNMUL2.ICN) and object index 46 is a bottom layer sprite.
+    // TODO: When a hero standing besides this turns a part of the hero is visible. This can be fixed only by some hack.
+
     // Run through all visible tiles and find all tile-unfit objects. Also cover extra tiles from right and bottom sides.
     const int32_t roiToRenderMaxX = std::min( maxX + 2, world.w() );
     const int32_t roiToRenderMaxY = std::min( maxY + 1, world.h() );
@@ -942,7 +945,7 @@ uint8_t Interface::GameArea::getObjectAlphaValue( const uint32_t uid ) const
     return 255;
 }
 
-void Interface::GameArea::runFadingAnimation( std::shared_ptr<BaseObjectAnimationInfo> info )
+void Interface::GameArea::runFadingAnimation( const std::shared_ptr<BaseObjectAnimationInfo> info )
 {
     LocalEvent & le = LocalEvent::Get();
 

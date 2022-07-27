@@ -3079,7 +3079,7 @@ void ActionToJail( const Heroes & hero, const MP2::MapObjectType objectType, int
     const std::string title( MP2::StringObject( objectType ) );
 
     if ( kingdom.AllowRecruitHero( false ) ) {
-        Maps::Tiles & tile = world.GetTiles( dst_index );
+        const Maps::Tiles & tile = world.GetTiles( dst_index );
         AudioManager::PlaySound( M82::EXPERNCE );
         Dialog::Message(
             title,
@@ -3235,7 +3235,7 @@ void ActionToBarrier( const Heroes & hero, const MP2::MapObjectType objectType, 
     // A hero cannot stand on a barrier. He must stand in front of the barrier. Something wrong with logic!
     assert( hero.GetIndex() != dst_index );
 
-    Maps::Tiles & tile = world.GetTiles( dst_index );
+    const Maps::Tiles & tile = world.GetTiles( dst_index );
     const Kingdom & kingdom = hero.GetKingdom();
 
     const std::string title = MP2::StringObject( objectType );

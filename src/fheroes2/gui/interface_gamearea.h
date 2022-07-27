@@ -115,10 +115,7 @@ namespace Interface
 
     struct ObjectFadingInInfo : public BaseObjectAnimationInfo
     {
-        ObjectFadingInInfo()
-        {
-            alphaValue = 0;
-        }
+        ObjectFadingInInfo() = delete;
 
         ObjectFadingInInfo( const uint32_t uid_, const int32_t tileId_, const MP2::MapObjectType type_ )
             : BaseObjectAnimationInfo( uid_, tileId_, type_ )
@@ -222,16 +219,11 @@ namespace Interface
 
         void addObjectAnimationInfo( std::shared_ptr<BaseObjectAnimationInfo> info );
 
-        bool isAnyObjectAnimationInfoPresent() const
-        {
-            return !_animationInfo.empty();
-        }
-
         uint8_t getObjectAlphaValue( const int32_t tileId, const MP2::MapObjectType type ) const;
 
         uint8_t getObjectAlphaValue( const uint32_t uid ) const;
 
-        static void runFadingAnimation( std::shared_ptr<BaseObjectAnimationInfo> info );
+        static void runFadingAnimation( const std::shared_ptr<BaseObjectAnimationInfo> info );
 
     private:
         fheroes2::Point _middlePoint() const; // returns middle point of window ROI
