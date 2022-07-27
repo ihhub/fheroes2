@@ -358,6 +358,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                         if ( info.first.x < 0 ) {
                             tileUnfitBottomImages[info.first + heroPos].emplace_front( std::move( info.second ), heroAlphaValue );
                         }
+                        else if ( info.first.x > 0 ) {
+                            tileUnfitLowPriorityBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                        }
                         else {
                             tileUnfitBottomImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
                         }
@@ -454,6 +457,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     else if ( info.first.y == 0 ) {
                         if ( info.first.x < 0 ) {
                             tileUnfitBottomImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
+                        }
+                        else if ( info.first.x > 0 ) {
+                            tileUnfitLowPriorityBottomImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
                         }
                         else {
                             tileUnfitBottomImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
