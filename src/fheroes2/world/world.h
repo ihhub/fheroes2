@@ -190,36 +190,36 @@ public:
     const Maps::Tiles & GetTiles( const int32_t x, const int32_t y ) const
     {
 #ifdef WITH_DEBUG
-    return vec_tiles.at( y * width + x );
+        return vec_tiles.at( y * width + x );
 #else
-    return vec_tiles[y * width + x];
+        return vec_tiles[y * width + x];
 #endif
     }
 
     Maps::Tiles & GetTiles( const int32_t x, const int32_t y )
     {
 #ifdef WITH_DEBUG
-    return vec_tiles.at( y * width + x );
+        return vec_tiles.at( y * width + x );
 #else
-    return vec_tiles[y * width + x];
+        return vec_tiles[y * width + x];
 #endif
     }
 
     const Maps::Tiles & GetTiles( const int32_t tileId ) const
     {
 #ifdef WITH_DEBUG
-    return vec_tiles.at( tileId );
+        return vec_tiles.at( tileId );
 #else
-    return vec_tiles[tileId];
+        return vec_tiles[tileId];
 #endif
     }
 
     Maps::Tiles & GetTiles( const int32_t tileId )
     {
 #ifdef WITH_DEBUG
-    return vec_tiles.at( tileId );
+        return vec_tiles.at( tileId );
 #else
-    return vec_tiles[tileId];
+        return vec_tiles[tileId];
 #endif
     }
 
