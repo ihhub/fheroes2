@@ -497,7 +497,7 @@ void Audio::Init()
     }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    const int initializationFlags = MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG;
+    const int initializationFlags = MIX_INIT_FLAC | MIX_INIT_MP3 | MIX_INIT_OGG;
     const int initializedFlags = Mix_Init( initializationFlags );
     if ( ( initializedFlags & initializationFlags ) != initializationFlags ) {
         DEBUG_LOG( DBG_ENGINE, DBG_WARN,
@@ -505,10 +505,6 @@ void Audio::Init()
 
         if ( ( initializedFlags & MIX_INIT_FLAC ) == 0 ) {
             DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Flac module failed to be initialized" )
-        }
-
-        if ( ( initializedFlags & MIX_INIT_MOD ) == 0 ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Mod module failed to be initialized" )
         }
 
         if ( ( initializedFlags & MIX_INIT_MP3 ) == 0 ) {
