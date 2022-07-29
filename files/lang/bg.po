@@ -734,10 +734,10 @@ msgid "Annexation"
 msgstr "Анексирам"
 
 msgid "Carator Mines"
-msgstr "Мините на Уредника"
+msgstr "Мините на Каратор"
 
 msgid "Force of Arms"
-msgstr "Сила на оръжията"
+msgstr "Насилствено"
 
 msgid "Save the Dwarves"
 msgstr "Спаси джуджетата"
@@ -746,7 +746,7 @@ msgid "The Crown"
 msgstr "Короната"
 
 msgid "The Gauntlet"
-msgstr "Ръкавицата"
+msgstr "Под кръстосан огън"
 
 msgid "Turning Point"
 msgstr "Повратна точка"
@@ -838,7 +838,7 @@ msgid "First Blood"
 msgstr "Първа кръв"
 
 msgid "Necromancers"
-msgstr "Магьосници"
+msgstr "Некроманти"
 
 msgid "Slay the Dwarves"
 msgstr "Убий джуджетата"
@@ -1162,7 +1162,7 @@ msgstr ""
 
 msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
 msgstr ""
-"Огритата ви разпознават като Джуджеубиец и желаят да се присъединят към вас."
+"Огритата ви разпознават като Джуджеубиец и се натискат да се присъединят към вас."
 
 msgid ""
 "The dragons, snarling and growling, agree to join forces with you, their "
@@ -1177,7 +1177,7 @@ msgid ""
 "fearless ally of ours?\"  The group explodes with cheers as they run to join "
 "your ranks."
 msgstr ""
-"Когато се приближите до групата елфи, техният водач ги призовава всички да "
+"Когато се приближавате до групата елфи, техният водач ги призовава всички да "
 "внимават. Той им крещи: \"Кой от вас е достатъчно смел да се присъедини към "
 "този наш безстрашен съюзник?\" Групата избухва от възгласи, докато тичат да "
 "се присъединят към вашите редици."
@@ -1238,7 +1238,7 @@ msgid "campaignBonus|Fizbin Medal"
 msgstr "Медал Физбин"
 
 msgid "campaignBonus|Foremost Scroll"
-msgstr "Първият свитък"
+msgstr "Най-могъщият свитък"
 
 msgid "campaignBonus|Hideous Mask"
 msgstr "Отвратителна маска"
