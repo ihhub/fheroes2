@@ -584,7 +584,7 @@ namespace
 
             if ( spell == Spell::HAUNT ) {
                 world.CaptureObject( tile.GetIndex(), Color::NONE );
-                tile.removeFlags();
+                tile.removeOwnershipFlag( MP2::OBJ_MINES );
                 hero.SetMapsObject( MP2::OBJ_ABANDONEDMINE );
             }
 

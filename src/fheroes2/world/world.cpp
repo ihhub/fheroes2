@@ -300,7 +300,7 @@ void CapturedObjects::ResetColor( int color )
             const MP2::MapObjectType objectType = static_cast<MP2::MapObjectType>( objcol.first );
 
             objcol.second = objectType == MP2::OBJ_CASTLE ? Color::UNUSED : Color::NONE;
-            world.GetTiles( ( *it ).first ).CaptureFlags32( objectType, objcol.second );
+            world.GetTiles( it->first ).setOwnershipFlag( objectType, objcol.second );
         }
     }
 }
@@ -934,7 +934,7 @@ void World::CaptureObject( int32_t index, int color )
         castle->ChangeColor( color );
 
     if ( color & ( Color::ALL | Color::UNUSED ) )
-        GetTiles( index ).CaptureFlags32( objectType, color );
+        GetTiles( index ).setOwnershipFlag( objectType, color );
 }
 
 /* return color captured object */

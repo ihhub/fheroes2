@@ -601,11 +601,6 @@ int Maps::Tiles::ColorFromTravellerTentSprite( const uint8_t tileset, const uint
     return ICN::X_LOC3 == MP2::GetICNObject( tileset ) && 110 <= icnIndex && 138 >= icnIndex ? ( ( icnIndex - 110 ) / 4 ) + 1 : 0;
 }
 
-bool Maps::TilesAddon::isFlag32( const TilesAddon & ta )
-{
-    return ICN::FLAG32 == MP2::GetICNObject( ta.object );
-}
-
 bool Maps::TilesAddon::isShadow( const TilesAddon & ta )
 {
     return Tiles::isShadowSprite( ta.object, ta.index );
@@ -1241,13 +1236,11 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
     // - run through all bottom objects first which are stored in the addon stack
     // - check the main object which is on the tile
 
+    // Some addons must be rendered after the main object on the tile. This applies for flags.
+    std::vector<const TilesAddon *> postRenderingAddon;
+
     for ( const TilesAddon & addon : addons_level1 ) {
         if ( ( addon.level & 0x03 ) != level ) {
-            continue;
-        }
-
-        const int icn = MP2::GetICNObject( addon.object );
-        if ( isDirectRenderingRestricted( icn ) ) {
             continue;
         }
 
@@ -1255,61 +1248,116 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
             continue;
         }
 
-        const uint8_t alphaValue = area.getObjectAlphaValue( addon.uniq );
+        const int icn = MP2::GetICNObject( addon.object );
+        if ( icn == ICN::FLAG32 ) {
+            postRenderingAddon.emplace_back( &addon );
+            continue;
+        }
 
-        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, addon.index );
+        renderAddonObject( dst, area, mp, addon );
+    }
 
-        // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-        assert( sprite.x() >= 0 && sprite.width() + sprite.x() <= TILEWIDTH && sprite.y() >= 0 && sprite.height() + sprite.y() <= TILEWIDTH );
+    if ( ( _level & 0x03 ) == level && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( objectTileset, objectIndex ) ) ) {
+        renderMainObject( dst, area, mp );
+    }
 
-        area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, alphaValue );
+    for ( const TilesAddon * addon : postRenderingAddon ) {
+        assert( addon != nullptr );
 
-        // TODO: why do we check quantity2 for this object stored in addon? Verify the logic!
-        const uint32_t animationIndex = ICN::AnimationFrame( icn, addon.index, Game::MapsAnimationFrame(), quantity2 != 0 );
-        if ( animationIndex > 0 ) {
-            const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, animationIndex );
+        renderAddonObject( dst, area, mp, *addon );
+    }
+
+    // Some objects on the map require extra sprites to be rendered.
+    // TODO: consider adding these sprites as a part of Tile addon stack.
+    const MP2::MapObjectType objectType = GetObject( false );
+    if ( objectType == MP2::OBJ_MINES ) {
+        const int32_t spellID = Maps::getSpellIdFromTile( *this );
+
+        switch ( spellID ) {
+        case Spell::SETEGUARDIAN:
+        case Spell::SETAGUARDIAN:
+        case Spell::SETFGUARDIAN:
+        case Spell::SETWGUARDIAN: {
+            // This is a special case. Guardians should be set only after the main object.
+
+            static_assert( ( Spell::SETWGUARDIAN - Spell::SETEGUARDIAN ) == 3, "Why are you changing the order of spells?! Be extremely careful of what you are doing" );
+            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNXTRA, spellID - Spell::SETEGUARDIAN );
 
             // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-            assert( animationSprite.x() >= 0 && animationSprite.width() + animationSprite.x() <= TILEWIDTH && animationSprite.y() >= 0
-                    && animationSprite.height() + animationSprite.y() <= TILEWIDTH );
+            assert( image.width() <= TILEWIDTH && image.height() <= TILEWIDTH );
 
-            area.BlitOnTile( dst, animationSprite, animationSprite.x(), animationSprite.y(), mp, false, alphaValue );
+            const uint8_t alphaValue = area.getObjectAlphaValue( uniq );
+
+            area.BlitOnTile( dst, image, TILEWIDTH, 0, mp, false, alphaValue );
+            break;
+        }
+        default:
+            break;
         }
     }
+}
 
-    // Check the top object.
-    if ( ( _level & 0x03 ) != level ) {
-        return;
-    }
-
-    const int icn = MP2::GetICNObject( objectTileset );
+void Maps::Tiles::renderAddonObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const TilesAddon & addon )
+{
+    const int icn = MP2::GetICNObject( addon.object );
     if ( isDirectRenderingRestricted( icn ) ) {
         return;
     }
 
-    if ( isPuzzleDraw && MP2::isHiddenForPuzzle( objectTileset, objectIndex ) ) {
-        return;
+    const uint8_t alphaValue = area.getObjectAlphaValue( addon.uniq );
+
+    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, addon.index );
+
+    // Ideally we need to check that the image is within a tile area. However, flags are among those for which this rule doesn't apply.
+    if ( icn == ICN::FLAG32 ) {
+        assert( sprite.width() <= TILEWIDTH && sprite.height() <= TILEWIDTH );
+    }
+    else {
+        assert( sprite.x() >= 0 && sprite.width() + sprite.x() <= TILEWIDTH && sprite.y() >= 0 && sprite.height() + sprite.y() <= TILEWIDTH );
     }
 
-    const uint8_t alphaValue = area.getObjectAlphaValue( uniq );
+    area.BlitOnTile( output, sprite, sprite.x(), sprite.y(), offset, false, alphaValue );
 
-    const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( icn, objectIndex );
-
-    // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-    assert( sprite.x() >= 0 && sprite.width() + sprite.x() <= TILEWIDTH && sprite.y() >= 0 && sprite.height() + sprite.y() <= TILEWIDTH );
-
-    area.BlitOnTile( dst, sprite, sprite.x(), sprite.y(), mp, false, alphaValue );
-
-    // possible animation
-    const uint32_t animationIndex = ICN::AnimationFrame( icn, objectIndex, Game::MapsAnimationFrame(), quantity2 != 0 );
-    if ( animationIndex ) {
+    const uint32_t animationIndex = ICN::AnimationFrame( icn, addon.index, Game::MapsAnimationFrame() );
+    if ( animationIndex > 0 ) {
         const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( icn, animationIndex );
 
         // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
         assert( animationSprite.x() >= 0 && animationSprite.width() + animationSprite.x() <= TILEWIDTH && animationSprite.y() >= 0
                 && animationSprite.height() + animationSprite.y() <= TILEWIDTH );
 
-        area.BlitOnTile( dst, animationSprite, animationSprite.x(), animationSprite.y(), mp, false, alphaValue );
+        area.BlitOnTile( output, animationSprite, animationSprite.x(), animationSprite.y(), offset, false, alphaValue );
+    }
+}
+
+void Maps::Tiles::renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset ) const
+{
+    const int mainObjectIcn = MP2::GetICNObject( objectTileset );
+    if ( isDirectRenderingRestricted( mainObjectIcn ) ) {
+        return;
+    }
+
+    const uint8_t mainObjectAlphaValue = area.getObjectAlphaValue( uniq );
+
+    const fheroes2::Sprite & mainObjectSprite = fheroes2::AGG::GetICN( mainObjectIcn, objectIndex );
+
+    // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
+    assert( mainObjectSprite.x() >= 0 && mainObjectSprite.width() + mainObjectSprite.x() <= TILEWIDTH
+            && mainObjectSprite.y() >= 0 && mainObjectSprite.height() + mainObjectSprite.y() <= TILEWIDTH );
+
+    area.BlitOnTile( output, mainObjectSprite, mainObjectSprite.x(), mainObjectSprite.y(), offset, false, mainObjectAlphaValue );
+
+    // Render possible animation image.
+    // TODO: quantity2 is used in absolutely incorrect way! Fix all the logic for it. As of now (quantity2 != 0) expression is used only for Magic Garden.
+    const uint32_t mainObjectAnimationIndex = ICN::AnimationFrame( mainObjectIcn, objectIndex, Game::MapsAnimationFrame(), quantity2 != 0 );
+    if ( mainObjectAnimationIndex > 0 ) {
+        const fheroes2::Sprite & animationSprite = fheroes2::AGG::GetICN( mainObjectIcn, mainObjectAnimationIndex );
+
+        // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
+        assert( animationSprite.x() >= 0 && animationSprite.width() + animationSprite.x() <= TILEWIDTH && animationSprite.y() >= 0
+                && animationSprite.height() + animationSprite.y() <= TILEWIDTH );
+
+        area.BlitOnTile( output, animationSprite, animationSprite.x(), animationSprite.y(), offset, false, mainObjectAlphaValue );
     }
 }
 
@@ -1378,81 +1426,51 @@ void Maps::Tiles::redrawTopLayerObjects( fheroes2::Image & dst, const fheroes2::
     if ( !( visibleTileROI & mp ) )
         return;
 
+    // Ghost animation is unique and can be rendered in multiple cases.
+    bool renderFlyingGhosts = false;
+
     const MP2::MapObjectType objectType = GetObject( false );
-    // animate objects
     if ( objectType == MP2::OBJ_ABANDONEDMINE ) {
-        // This sprite is bigger than TILEWIDTH but rendering is correct for heroes.
+        renderFlyingGhosts = true;
+    }
+    else if ( objectType == MP2::OBJ_MINES ) {
+        const int32_t spellID = Maps::getSpellIdFromTile( *this );
+
+        switch ( spellID ) {
+        case Spell::NONE:
+            // No spell exists. Nothing we need to render.
+        case Spell::SETEGUARDIAN:
+        case Spell::SETAGUARDIAN:
+        case Spell::SETFGUARDIAN:
+        case Spell::SETWGUARDIAN:
+            // The logic for these spells is done while rending the bottom layer. Nothing should be done here.
+            break;
+        case Spell::HAUNT:
+            renderFlyingGhosts = true;
+            break;
+        default:
+            // Did you add a new spell for mines? Add the rendering for it above!
+            assert( 0 );
+            break;
+        }
+    }
+
+    if ( renderFlyingGhosts ) {
+        // This sprite is bigger than TILEWIDTH but rendering is correct for heroes and boats.
+        // TODO: consider adding this sprite as a part of an addon.
         const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 );
 
         const uint8_t alphaValue = area.getObjectAlphaValue( uniq );
 
         area.BlitOnTile( dst, image, image.x(), image.y(), mp, false, alphaValue );
     }
-    else if ( objectType == MP2::OBJ_MINES ) {
-        const int32_t spellID = Maps::getSpellIdFromTile( *this );
-
-        static_assert( ( Spell::SETWGUARDIAN - Spell::SETEGUARDIAN ) == 3, "Why are you changing the order of spells?! Be extremely careful of what you are doing" );
-
-        switch ( spellID ) {
-        case Spell::HAUNT: {
-            // This sprite is bigger than TILEWIDTH but rendering is correct for heroes.
-            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNHAUN, Game::MapsAnimationFrame() % 15 );
-
-            const uint8_t alphaValue = area.getObjectAlphaValue( uniq );
-
-            area.BlitOnTile( dst, image, image.x(), image.y(), mp, false, alphaValue );
-            break;
-        }
-        case Spell::SETEGUARDIAN:
-        case Spell::SETAGUARDIAN:
-        case Spell::SETFGUARDIAN:
-        case Spell::SETWGUARDIAN: {
-            // TODO: move guardians to the bottom layer.
-
-            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNXTRA, spellID - Spell::SETEGUARDIAN );
-
-            // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-            assert( image.width() <= TILEWIDTH && image.height() <= TILEWIDTH );
-
-            const uint8_t alphaValue = area.getObjectAlphaValue( uniq );
-
-            area.BlitOnTile( dst, image, TILEWIDTH, 0, mp, false, alphaValue );
-            break;
-        }
-        default:
-            break;
-        }
-    }
 
     for ( const TilesAddon & addon : addons_level2 ) {
-        const int icn = MP2::GetICNObject( addon.object );
-        if ( isDirectRenderingRestricted( icn ) ) {
-            continue;
-        }
-
         if ( isPuzzleDraw && MP2::isHiddenForPuzzle( addon.object, addon.index ) ) {
             continue;
         }
 
-        const uint8_t alphaValue = area.getObjectAlphaValue( addon.uniq );
-
-        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( icn, addon.index );
-
-        // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-        // assert( image.x() >= 0 && image.width() + image.x() <= TILEWIDTH && image.y() >= 0 && image.height() + image.y() <= TILEWIDTH );
-
-        area.BlitOnTile( dst, image, image.x(), image.y(), mp, false, alphaValue );
-
-        // possible animation
-        const uint32_t animationIndex = ICN::AnimationFrame( icn, addon.index, Game::MapsAnimationFrame(), quantity2 != 0 );
-        if ( animationIndex ) {
-            const fheroes2::Sprite & animationImage = fheroes2::AGG::GetICN( icn, animationIndex );
-
-            // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-            assert( animationImage.width() <= TILEWIDTH && animationImage.height() <= TILEWIDTH );
-
-            area.BlitOnTile( dst, animationImage, animationImage.x(), animationImage.y(), mp, false, alphaValue );
-        }
+        renderAddonObject( dst, area, mp, addon );
     }
 }
 
@@ -1641,105 +1659,128 @@ bool Maps::Tiles::isShadow() const
            && addons_level1.size() == static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow ) );
 }
 
-Maps::TilesAddon * Maps::Tiles::FindFlags()
+Maps::TilesAddon * Maps::Tiles::getAddonWithFlag( const uint32_t uid )
 {
-    Addons::iterator it = std::find_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isFlag32 );
+    auto isFlag = [uid]( const TilesAddon & addon ) { return addon.uniq == uid && MP2::GetICNObject( addon.object ) == ICN::FLAG32; };
 
-    if ( it == addons_level1.end() ) {
-        it = std::find_if( addons_level2.begin(), addons_level2.end(), TilesAddon::isFlag32 );
-        return addons_level2.end() != it ? &( *it ) : nullptr;
+    auto iter = std::find_if( addons_level1.begin(), addons_level1.end(), isFlag );
+    if ( iter != addons_level1.end() ) {
+        return &( *iter );
     }
 
-    return addons_level1.end() != it ? &( *it ) : nullptr;
+    iter = std::find_if( addons_level2.begin(), addons_level2.end(), isFlag );
+    if ( iter != addons_level2.end() ) {
+        return &( *iter );
+    }
+
+    return nullptr;
 }
 
-void Maps::Tiles::removeFlags()
+void Maps::Tiles::setOwnershipFlag( const MP2::MapObjectType objectType, const int color )
 {
-    addons_level1.remove_if( TilesAddon::isFlag32 );
-    addons_level2.remove_if( TilesAddon::isFlag32 );
-}
+    // All flags in FLAG32.ICN are actually the same except the fact of having different offset.
+    // 14, 21
+    uint8_t objectSpriteIndex = 0;
 
-void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
-{
-    uint8_t index = 0;
-
-    switch ( col ) {
+    switch ( color ) {
+    case Color::NONE:
+        // No flag. Just ignore it.
+        break;
     case Color::BLUE:
-        index = 0;
+        objectSpriteIndex = 0;
         break;
     case Color::GREEN:
-        index = 1;
+        objectSpriteIndex = 1;
         break;
     case Color::RED:
-        index = 2;
+        objectSpriteIndex = 2;
         break;
     case Color::YELLOW:
-        index = 3;
+        objectSpriteIndex = 3;
         break;
     case Color::ORANGE:
-        index = 4;
+        objectSpriteIndex = 4;
         break;
     case Color::PURPLE:
-        index = 5;
+        objectSpriteIndex = 5;
+        break;
+    case Color::UNUSED:
+        // Neutral / gray flag.
+        objectSpriteIndex = 6;
         break;
     default:
-        index = 6;
+        // Did you add a new color type? Add logic above!
+        assert( 0 );
         break;
     }
 
-    // TODO: some flags cannot be rendered after the main object so either we find a position where it is possible to render on the same level or we render on top.
     switch ( objectType ) {
-    case MP2::OBJ_WINDMILL:
-        index += 42;
-        CorrectFlags32( col, index, false );
-        break;
-    case MP2::OBJ_WATERWHEEL:
-        index += 14;
-        CorrectFlags32( col, index, false );
-        break;
     case MP2::OBJ_MAGICGARDEN:
-        index += 42;
-        CorrectFlags32( col, index, false );
+        objectSpriteIndex += 128 + 14;
+        updateFlag( color, objectSpriteIndex, uniq, false );
+        objectSpriteIndex += 7;
+        if ( Maps::isValidDirection( _index, Direction::RIGHT ) ) {
+            Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::RIGHT ) );
+            tile.updateFlag( color, objectSpriteIndex, uniq, false );
+        }
         break;
 
+    case MP2::OBJ_WATERWHEEL:
     case MP2::OBJ_MINES:
-        index += 14;
-        CorrectFlags32( col, index, true );
+        objectSpriteIndex += 128 + 14;
+        if ( Maps::isValidDirection( _index, Direction::TOP ) ) {
+            Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP ) );
+            tile.updateFlag( color, objectSpriteIndex, uniq, true );
+        }
+
+        objectSpriteIndex += 7;
+        if ( Maps::isValidDirection( _index, Direction::TOP_RIGHT ) ) {
+            Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP_RIGHT ) );
+            tile.updateFlag( color, objectSpriteIndex, uniq, true );
+        }
         break;
+
+    case MP2::OBJ_WINDMILL:
     case MP2::OBJ_LIGHTHOUSE:
-        index += 42;
-        CorrectFlags32( col, index, false );
+        objectSpriteIndex += 128 + 42;
+        if ( Maps::isValidDirection( _index, Direction::LEFT ) ) {
+            Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::LEFT ) );
+            tile.updateFlag( color, objectSpriteIndex, uniq, false );
+        }
+
+        objectSpriteIndex += 7;
+        updateFlag( color, objectSpriteIndex, uniq, false );
         break;
 
     case MP2::OBJ_ALCHEMYLAB: {
-        index += 21;
+        objectSpriteIndex += 21;
         if ( Maps::isValidDirection( _index, Direction::TOP ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP ) );
-            tile.CorrectFlags32( col, index, true );
+            tile.updateFlag( color, objectSpriteIndex, uniq, true );
         }
         break;
     }
 
     case MP2::OBJ_SAWMILL: {
-        index += 28;
+        objectSpriteIndex += 28;
         if ( Maps::isValidDirection( _index, Direction::TOP_RIGHT ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP_RIGHT ) );
-            tile.CorrectFlags32( col, index, true );
+            tile.updateFlag( color, objectSpriteIndex, uniq, true );
         }
         break;
     }
 
     case MP2::OBJ_CASTLE: {
-        index *= 2;
+        objectSpriteIndex *= 2;
         if ( Maps::isValidDirection( _index, Direction::LEFT ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::LEFT ) );
-            tile.CorrectFlags32( col, index, true );
+            tile.updateFlag( color, objectSpriteIndex, uniq, true );
         }
 
-        index += 1;
+        objectSpriteIndex += 1;
         if ( Maps::isValidDirection( _index, Direction::RIGHT ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::RIGHT ) );
-            tile.CorrectFlags32( col, index, true );
+            tile.updateFlag( color, objectSpriteIndex, uniq, true );
         }
         break;
     }
@@ -1749,26 +1790,33 @@ void Maps::Tiles::CaptureFlags32( const MP2::MapObjectType objectType, int col )
     }
 }
 
-void Maps::Tiles::CorrectFlags32( const int col, const uint8_t index, const bool setOnUpperLayer )
+void Maps::Tiles::removeOwnershipFlag( const MP2::MapObjectType objectType )
 {
-    if ( col == Color::NONE ) {
-        removeFlags();
+    setOwnershipFlag( objectType, Color::NONE );
+}
+
+void Maps::Tiles::updateFlag( const int color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer )
+{
+    // Flag deletion or installation must be done in relation to object UID as flag is attached to the object.
+    if ( color == Color::NONE ) {
+        auto isFlag = [uid]( const TilesAddon & addon ) { return addon.uniq == uid && MP2::GetICNObject( addon.object ) == ICN::FLAG32; };
+        addons_level1.remove_if( isFlag );
+        addons_level2.remove_if( isFlag );
         return;
     }
 
     const uint8_t objectType = 0x38;
 
-    TilesAddon * taddon = FindFlags();
-
-    if ( taddon ) {
-        // replace flag
-        taddon->index = index;
+    TilesAddon * addon = getAddonWithFlag( uid );
+    if ( addon != nullptr ) {
+        // Replace an existing flag.
+        addon->index = objectSpriteIndex;
     }
     else if ( setOnUpperLayer ) {
-        addons_level2.emplace_back( ACTION_OBJECT_LAYER, World::GetUniq(), objectType, index );
+        addons_level2.emplace_back( ACTION_OBJECT_LAYER, uid, objectType, objectSpriteIndex );
     }
     else {
-        addons_level1.emplace_back( ACTION_OBJECT_LAYER, World::GetUniq(), objectType, index );
+        addons_level1.emplace_back( ACTION_OBJECT_LAYER, uid, objectType, objectSpriteIndex );
     }
 }
 

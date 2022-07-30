@@ -82,9 +82,8 @@ namespace Maps
 
         static bool isShadow( const TilesAddon & );
 
-        static bool isResource( const TilesAddon & );
-        static bool isArtifact( const TilesAddon & );
-        static bool isFlag32( const TilesAddon & );
+        static bool isResource( const TilesAddon & ta );
+        static bool isArtifact( const TilesAddon & ta );
 
         static bool PredicateSortRules1( const TilesAddon &, const TilesAddon & );
 
@@ -235,11 +234,9 @@ namespace Maps
 
         bool doesObjectExist( const uint32_t uid ) const;
 
-        // ICN::FLAGS32 version
-        void CaptureFlags32( const MP2::MapObjectType objectType, int col );
+        void setOwnershipFlag( const MP2::MapObjectType objectType, const int color );
 
-        // Removes all ICN::FLAGS32 objects from this tile.
-        void removeFlags();
+        void removeOwnershipFlag( const MP2::MapObjectType objectType );
 
         void RedrawTile( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
         static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area );
@@ -371,10 +368,10 @@ namespace Maps
         static int32_t getIndexOfMainTile( const Maps::Tiles & tile );
 
     private:
-        TilesAddon * FindFlags();
+        TilesAddon * getAddonWithFlag( const uint32_t uid );
 
-        // correct flags, ICN::FLAGS32 vesion
-        void CorrectFlags32( const int col, const uint8_t index, const bool setOnUpperLayer );
+        // Set or remove a flag which belongs to UID of the object.
+        void updateFlag( const int color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer );
         void RemoveJailSprite();
 
         void QuantitySetVariant( int );
@@ -403,6 +400,9 @@ namespace Maps
         {
             return l.GetIndex() < r.GetIndex();
         }
+
+        static void renderAddonObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const TilesAddon & addon );
+        void renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset ) const;
 
         Addons addons_level1; // bottom layer
         Addons addons_level2; // top layer
