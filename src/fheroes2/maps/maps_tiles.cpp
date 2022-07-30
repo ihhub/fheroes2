@@ -438,6 +438,51 @@ namespace
 
         return false;
     }
+
+    const Maps::Addons::const_iterator getAddonWithAnyFlag( const Maps::Addons & addons )
+    {
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0918_RELEASE, "Remove this function." );
+        Maps::Addons::const_iterator foundAddon = addons.end();
+        for ( auto iter = addons.begin(); iter != addons.end(); ++iter ) {
+            if ( MP2::GetICNObject( iter->object ) == ICN::FLAG32 ) {
+                if ( foundAddon == addons.end() ) {
+                    foundAddon = iter;
+                }
+                else {
+                    // The stack of addons contains more than one flag. We have no idea which flag belongs to the actual object.
+                    return addons.end();
+                }
+            }
+        }
+
+        return foundAddon;
+    }
+
+    uint8_t getColorFromIndex( const int colorIndex )
+    {
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0918_RELEASE, "Remove this function." );
+        switch ( colorIndex ) {
+        case 0:
+            return Color::BLUE;
+        case 1:
+            return Color::GREEN;
+        case 2:
+            return Color::RED;
+        case 3:
+            return Color::YELLOW;
+        case 4:
+            return Color::ORANGE;
+        case 5:
+            return Color::PURPLE;
+        case 6:
+            return Color::UNUSED;
+        default:
+            assert( 0 );
+            break;
+        }
+
+        return Color::NONE;
+    }
 }
 
 Maps::TilesAddon::TilesAddon()
@@ -1752,25 +1797,23 @@ void Maps::Tiles::setOwnershipFlag( const MP2::MapObjectType objectType, const i
         updateFlag( color, objectSpriteIndex, uniq, false );
         break;
 
-    case MP2::OBJ_ALCHEMYLAB: {
+    case MP2::OBJ_ALCHEMYLAB:
         objectSpriteIndex += 21;
         if ( Maps::isValidDirection( _index, Direction::TOP ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP ) );
             tile.updateFlag( color, objectSpriteIndex, uniq, true );
         }
         break;
-    }
 
-    case MP2::OBJ_SAWMILL: {
+    case MP2::OBJ_SAWMILL:
         objectSpriteIndex += 28;
         if ( Maps::isValidDirection( _index, Direction::TOP_RIGHT ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP_RIGHT ) );
             tile.updateFlag( color, objectSpriteIndex, uniq, true );
         }
         break;
-    }
 
-    case MP2::OBJ_CASTLE: {
+    case MP2::OBJ_CASTLE:
         objectSpriteIndex *= 2;
         if ( Maps::isValidDirection( _index, Direction::LEFT ) ) {
             Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::LEFT ) );
@@ -1783,10 +1826,120 @@ void Maps::Tiles::setOwnershipFlag( const MP2::MapObjectType objectType, const i
             tile.updateFlag( color, objectSpriteIndex, uniq, true );
         }
         break;
-    }
 
     default:
         break;
+    }
+}
+
+void Maps::Tiles::correctOldSaveOwnershipFlag()
+{
+    // Old saves prior 0.9.18 release contain flags in different incorrect places. This method attempts to fix it but there is no guarantee that it will always work.
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0918_RELEASE, "Remove this method." );
+
+    int ownerColor = Color::NONE;
+
+    switch ( mp2_object ) {
+    case MP2::OBJ_LIGHTHOUSE:
+    case MP2::OBJ_WINDMILL:
+    case MP2::OBJ_MAGICGARDEN: {
+        if ( removeOldFlag( addons_level1, 42, ownerColor ) ) {
+            setOwnershipFlag( mp2_object, ownerColor );
+        }
+        break;
+    }
+
+    case MP2::OBJ_WATERWHEEL: {
+        if ( removeOldFlag( addons_level1, 14, ownerColor ) ) {
+            setOwnershipFlag( mp2_object, ownerColor );
+        }
+        break;
+    }
+    case MP2::OBJ_MINES: {
+        if ( removeOldFlag( addons_level2, 14, ownerColor ) ) {
+            setOwnershipFlag( mp2_object, ownerColor );
+        }
+        break;
+    }
+
+    case MP2::OBJ_ALCHEMYLAB: {
+        if ( Maps::isValidDirection( _index, Direction::TOP ) ) {
+            Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP ) );
+            if ( removeOldFlag( tile.addons_level2, 21, ownerColor ) ) {
+                setOwnershipFlag( mp2_object, ownerColor );
+            }
+        }
+        break;
+    }
+
+    case MP2::OBJ_SAWMILL: {
+        if ( Maps::isValidDirection( _index, Direction::TOP_RIGHT ) ) {
+            Maps::Tiles & tile = world.GetTiles( Maps::GetDirectionIndex( _index, Direction::TOP_RIGHT ) );
+            if ( removeOldFlag( tile.addons_level2, 21, ownerColor ) ) {
+                setOwnershipFlag( mp2_object, ownerColor );
+            }
+        }
+        break;
+    }
+
+    default:
+        // Castles do not need flag conversion as they come with flags from map format.
+        break;
+    }
+}
+
+bool Maps::Tiles::removeOldFlag( Addons & addons, const uint8_t startIndex, int & ownerColor )
+{
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0918_RELEASE, "Remove this method." );
+
+    const Maps::Addons::const_iterator foundAddon = getAddonWithAnyFlag( addons );
+    if ( foundAddon == addons.end() ) {
+        return false;
+    }
+
+    const int colorIndex = foundAddon->index - startIndex;
+    if ( colorIndex >= 0 && colorIndex <= 6 ) {
+        addons.erase( foundAddon );
+        ownerColor = getColorFromIndex( colorIndex );
+        return true;
+    }
+
+    return false;
+}
+
+void Maps::Tiles::correctDiggingHoles()
+{
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0918_RELEASE, "Remove this method." );
+    uint8_t obj = 0;
+    uint32_t idx = 0;
+    switch ( GetGround() ) {
+    case Maps::Ground::WASTELAND:
+        obj = 0xE4;
+        idx = 70;
+        break; // ICN::OBJNCRCK
+    case Maps::Ground::DIRT:
+        obj = 0xE0;
+        idx = 140;
+        break; // ICN::OBJNDIRT
+    case Maps::Ground::DESERT:
+        obj = 0xDC;
+        idx = 68;
+        break; // ICN::OBJNDSRT
+    case Maps::Ground::LAVA:
+        obj = 0xD8;
+        idx = 26;
+        break; // ICN::OBJNLAVA
+    case Maps::Ground::GRASS:
+    default:
+        obj = 0xC0;
+        idx = 9;
+        break; // ICN::OBJNGRA2
+    }
+
+    for ( TilesAddon & addon : addons_level1 ) {
+        if ( addon.object == obj && addon.index == idx ) {
+            addon.level = TERRAIN_LAYER;
+        }
     }
 }
 
@@ -2799,8 +2952,8 @@ StreamBase & Maps::operator>>( StreamBase & msg, Tiles & tile )
 
     msg >> tile.fog_colors >> tile.quantity1 >> tile.quantity2;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0918_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_0918_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_0918_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE_0918_RELEASE ) {
         // Old additional metadata was stored in uint8_t format.
         uint8_t temp;
         msg >> temp;
