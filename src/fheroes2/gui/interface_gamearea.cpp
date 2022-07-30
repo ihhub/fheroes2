@@ -617,6 +617,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 }
             }
 
+            // TODO: some action objects have tiles above which are still on bottom layer. These images must be drawn last.
             tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::ACTION_OBJECT_LAYER );
 
             // Draw middle part of tile-unfit sprites.
