@@ -2256,6 +2256,37 @@ namespace fheroes2
                     _icnVsSprite[id][i + 128 + 7].setPosition( 0, original.y() );
                 }
                 return true;
+            case ICN::MINI_MONSTER_IMAGE:
+            case ICN::MINI_MONSTER_SHADOW: {
+                // It doesn't matter which image is being called. We are generating both of them at the same time.
+                LoadOriginalICN( ICN::MINIMON );
+
+                // TODO: optimize image sizes.
+                _icnVsSprite[ICN::MINI_MONSTER_IMAGE] = _icnVsSprite[ICN::MINIMON];
+                _icnVsSprite[ICN::MINI_MONSTER_SHADOW]= _icnVsSprite[ICN::MINIMON];
+
+                for ( Sprite & image : _icnVsSprite[ICN::MINI_MONSTER_IMAGE] ) {
+                    uint8_t * transform = image.transform();
+                    const uint8_t * tranformEnd = transform + image.width() * image.height();
+                    for ( ; transform != tranformEnd; ++transform ) {
+                        if ( *transform > 1 ) {
+                            *transform = 1;
+                        }
+                    }
+                }
+
+                for ( Sprite & image : _icnVsSprite[ICN::MINI_MONSTER_SHADOW] ) {
+                    uint8_t * transform = image.transform();
+                    const uint8_t * tranformEnd = transform + image.width() * image.height();
+                    for ( ; transform != tranformEnd; ++transform ) {
+                        if ( *transform == 0 ) {
+                            *transform = 1;
+                        }
+                    }
+                }
+
+                return true;
+            }
             default:
                 break;
             }

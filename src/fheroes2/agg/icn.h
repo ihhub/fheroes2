@@ -980,6 +980,9 @@ namespace ICN
         GOOD_CAMPAIGN_BUTTONS,
         EVIL_CAMPAIGN_BUTTONS,
 
+        MINI_MONSTER_IMAGE,
+        MINI_MONSTER_SHADOW,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };

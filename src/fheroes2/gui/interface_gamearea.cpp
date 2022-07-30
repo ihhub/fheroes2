@@ -434,6 +434,37 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                         }
                     }
                 }
+
+                // TODO: review shadow rendering long as it jumps over the places.
+                auto spriteShadowInfo = tile.getMonsterShadowSpritesPerTile();
+                for ( auto & info : spriteShadowInfo ) {
+                    if ( info.first.y > 0 ) {
+                        // TODO: fix incorrect boat sprites being too tall.
+                        if ( info.first.x < 0 ) {
+                            tileUnfitBottomBackgroundShadowImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
+                        }
+                        else {
+                            tileUnfitBottomBackgroundShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        }
+                    }
+                    else if ( info.first.y == 0 ) {
+                        if ( info.first.x < 0 ) {
+                            tileUnfitBottomShadowImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
+                        }
+                        else {
+                            tileUnfitBottomShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        }
+                    }
+                    else {
+                        if ( info.first.x < 0 ) {
+                            tileUnfitTopShadowImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
+                        }
+                        else {
+                            tileUnfitTopShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                        }
+                    }
+                }
+
                 break;
             }
 
