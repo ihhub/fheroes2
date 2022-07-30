@@ -497,26 +497,26 @@ void Audio::Init()
     }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    const int initializationFlags = MIX_INIT_FLAC | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG;
+    const int initializationFlags = MIX_INIT_FLAC | MIX_INIT_MP3 | MIX_INIT_OGG | MIX_INIT_MID;
     const int initializedFlags = Mix_Init( initializationFlags );
     if ( ( initializedFlags & initializationFlags ) != initializationFlags ) {
         DEBUG_LOG( DBG_ENGINE, DBG_WARN,
                    "Expected music initialization flags as " << initializationFlags << " but received " << ( initializedFlags & initializationFlags ) )
 
         if ( ( initializedFlags & MIX_INIT_FLAC ) == 0 ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Flac module failed to be initialized" )
-        }
-
-        if ( ( initializedFlags & MIX_INIT_MOD ) == 0 ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Mod module failed to be initialized" )
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "FLAC module failed to be initialized" )
         }
 
         if ( ( initializedFlags & MIX_INIT_MP3 ) == 0 ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Mp3 module failed to be initialized" )
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "MP3 module failed to be initialized" )
         }
 
         if ( ( initializedFlags & MIX_INIT_OGG ) == 0 ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "Ogg module failed to be initialized" )
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "OGG module failed to be initialized" )
+        }
+
+        if ( ( initializedFlags & MIX_INIT_MID ) == 0 ) {
+            DEBUG_LOG( DBG_ENGINE, DBG_WARN, "MID module failed to be initialized" )
         }
     }
 #endif

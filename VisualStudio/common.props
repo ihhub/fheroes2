@@ -24,22 +24,19 @@
     <PostBuildEvent>
       <Command>if exist "$(MSBuildThisFileDirectory)..\data" (
     if not exist "$(OutDir)data" (
-        mkdir "$(OutDir)data"
-        xcopy /Y /s /Q "$(MSBuildThisFileDirectory)..\data" "$(OutDir)data"
+        xcopy /Y /S /Q "$(MSBuildThisFileDirectory)..\data" "$(OutDir)data\"
     )
 )
 
 if exist "$(MSBuildThisFileDirectory)..\maps" (
     if not exist "$(OutDir)maps" (
-        mkdir "$(OutDir)maps"
-        xcopy /Y /s /Q "$(MSBuildThisFileDirectory)..\maps" "$(OutDir)maps"
+        xcopy /Y /S /Q "$(MSBuildThisFileDirectory)..\maps" "$(OutDir)maps\"
     )
 )
 
-if not exist "$(OutDir)files\data" (
-    mkdir "$(OutDir)files\data"
-)
-xcopy /Y /s /Q "$(MSBuildThisFileDirectory)..\files\data" "$(OutDir)files\data"
+xcopy /Y /S /Q "$(MSBuildThisFileDirectory)..\files\data" "$(OutDir)files\data\"
+xcopy /Y /Q "$(MSBuildThisFileDirectory)..\files\lang\*.mo" "$(OutDir)files\lang\"
+xcopy /Y /S /Q "$(MSBuildThisFileDirectory)..\files\soundfonts" "$(OutDir)files\soundfonts\"
 
 %(Command)</Command>
     </PostBuildEvent>
