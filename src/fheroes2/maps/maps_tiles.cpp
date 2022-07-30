@@ -1342,8 +1342,8 @@ void Maps::Tiles::renderMainObject( fheroes2::Image & output, const Interface::G
     const fheroes2::Sprite & mainObjectSprite = fheroes2::AGG::GetICN( mainObjectIcn, objectIndex );
 
     // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-    assert( mainObjectSprite.x() >= 0 && mainObjectSprite.width() + mainObjectSprite.x() <= TILEWIDTH
-            && mainObjectSprite.y() >= 0 && mainObjectSprite.height() + mainObjectSprite.y() <= TILEWIDTH );
+    assert( mainObjectSprite.x() >= 0 && mainObjectSprite.width() + mainObjectSprite.x() <= TILEWIDTH && mainObjectSprite.y() >= 0
+            && mainObjectSprite.height() + mainObjectSprite.y() <= TILEWIDTH );
 
     area.BlitOnTile( output, mainObjectSprite, mainObjectSprite.x(), mainObjectSprite.y(), offset, false, mainObjectAlphaValue );
 
