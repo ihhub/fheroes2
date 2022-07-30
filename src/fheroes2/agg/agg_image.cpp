@@ -2263,7 +2263,7 @@ namespace fheroes2
 
                 // TODO: optimize image sizes.
                 _icnVsSprite[ICN::MINI_MONSTER_IMAGE] = _icnVsSprite[ICN::MINIMON];
-                _icnVsSprite[ICN::MINI_MONSTER_SHADOW]= _icnVsSprite[ICN::MINIMON];
+                _icnVsSprite[ICN::MINI_MONSTER_SHADOW] = _icnVsSprite[ICN::MINIMON];
 
                 for ( Sprite & image : _icnVsSprite[ICN::MINI_MONSTER_IMAGE] ) {
                     uint8_t * transform = image.transform();
