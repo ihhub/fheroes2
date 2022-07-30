@@ -439,7 +439,7 @@ namespace
         return false;
     }
 
-    const Maps::Addons::const_iterator getAddonWithAnyFlag( const Maps::Addons & addons )
+    Maps::Addons::const_iterator getAddonWithAnyFlag( const Maps::Addons & addons )
     {
         static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0918_RELEASE, "Remove this function." );
         Maps::Addons::const_iterator foundAddon = addons.end();
@@ -1892,7 +1892,7 @@ bool Maps::Tiles::removeOldFlag( Addons & addons, const uint8_t startIndex, int 
 {
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0918_RELEASE, "Remove this method." );
 
-    const Maps::Addons::const_iterator foundAddon = getAddonWithAnyFlag( addons );
+    Maps::Addons::const_iterator foundAddon = getAddonWithAnyFlag( addons );
     if ( foundAddon == addons.end() ) {
         return false;
     }

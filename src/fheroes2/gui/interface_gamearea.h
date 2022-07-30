@@ -87,11 +87,7 @@ namespace Interface
 
     struct ObjectFadingOutInfo : public BaseObjectAnimationInfo
     {
-        ObjectFadingOutInfo( const uint32_t uid_, const int32_t tileId_, const MP2::MapObjectType type_ )
-            : BaseObjectAnimationInfo( uid_, tileId_, type_ )
-        {
-            // Do nothing.
-        }
+        using BaseObjectAnimationInfo::BaseObjectAnimationInfo;
 
         ~ObjectFadingOutInfo() override;
 
