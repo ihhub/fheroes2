@@ -183,6 +183,8 @@ namespace
     {
         assert( ptr != nullptr && size != 0 );
 
+        soundSampleManager.clearFinishedSamples();
+
         SDL_RWops * rwops = SDL_RWFromConstMem( ptr, size );
         if ( rwops == nullptr ) {
             ERROR_LOG( "Failed to create an audio chunk from memory. The error: " << SDL_GetError() )
@@ -203,11 +205,9 @@ namespace
         }
         else {
             // There can be a maximum of two items in the sample queue for a channel:
-            // the previous sample (if it hasn't been released yet) and the current one
+            // the previous sample (if it hasn't been freed yet) and the current one
             soundSampleManager.channelStarted( channel, sample );
         }
-
-        soundSampleManager.clearFinishedSamples();
 
         return channel;
     }
@@ -309,10 +309,7 @@ namespace
         ~MusicTrackManager()
         {
             // Make sure that all music tracks have been eventually freed
-#ifndef NDEBUG
-            const decltype( _musicQueue ) nullQueue{ nullptr, nullptr };
-#endif
-            assert( _musicQueue == nullQueue );
+            assert( _musicQueue == nullptr );
         }
 
         MusicTrackManager & operator=( const MusicTrackManager & ) = delete;
@@ -396,16 +393,11 @@ namespace
 
         void musicStarted( Mix_Music * mus )
         {
-            if ( _musicQueue.first == nullptr ) {
-                _musicQueue.first = mus;
-            }
-            else if ( _musicQueue.second == nullptr ) {
-                _musicQueue.second = mus;
-            }
-            else {
-                // The music queue is already full, this shouldn't happen
-                assert( 0 );
-            }
+            // If the _musicQueue is not nullptr, then the music queue (consisting of only one music
+            // track) is already full, this shouldn't happen
+            assert( _musicQueue == nullptr );
+
+            _musicQueue = mus;
         }
 
         // This method can be called from the SDL_Mixer callback (without acquiring the audioMutex)
@@ -418,15 +410,16 @@ namespace
         {
             const size_t count = _musicToCleanup.exchange( 0 );
 
-            for ( size_t i = 0; i < count; ++i ) {
-                assert( _musicQueue.first != nullptr );
-
-                Mix_FreeMusic( _musicQueue.first );
-
-                // Shift the music queue
-                _musicQueue.first = _musicQueue.second;
-                _musicQueue.second = nullptr;
+            if ( count == 0 ) {
+                return;
             }
+
+            // This queue consists of only one music track
+            assert( count == 1 && _musicQueue != nullptr );
+
+            Mix_FreeMusic( _musicQueue );
+
+            _musicQueue = nullptr;
         }
 
     private:
@@ -442,7 +435,7 @@ namespace
 
         fheroes2::Time _currentTrackTimer;
 
-        std::pair<Mix_Music *, Mix_Music *> _musicQueue{ nullptr, nullptr };
+        Mix_Music * _musicQueue{ nullptr };
         std::atomic<size_t> _musicToCleanup{ 0 };
     };
 
@@ -536,6 +529,8 @@ namespace
         // not be called while we are modifying the current track information.
         assert( !Music::isPlaying() );
 
+        musicTrackManager.clearFinishedMusic();
+
         const std::shared_ptr<MusicInfo> track = musicTrackManager.getTrackFromMusicDB( musicUID );
         assert( track );
 
@@ -601,12 +596,10 @@ namespace
             // For better accuracy reset the timer right after the actual playback starts
             musicTrackManager.resetTimer();
 
-            // There can be a maximum of two items in the music queue: the previous music (if it hasn't
-            // been released yet) and the current one
+            // There can be no more than one element in the music queue - the current track, the previous
+            // one should already be freed
             musicTrackManager.musicStarted( mus );
         }
-
-        musicTrackManager.clearFinishedMusic();
     }
 
     int normalizeToSDLVolume( const int volumePercentage )
@@ -1073,6 +1066,11 @@ void Music::Stop()
     // Always returns 0. After this call we have a guarantee that the Mix_HookMusicFinished()'s
     // callback will not be called while we are modifying the current track information.
     Mix_HaltMusic();
+#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
+    // Ancient SDL_Mixer 1.x doesn't call the Mix_HookMusicFinished()'s callback on Mix_HaltMusic(),
+    // so we need to call it manually
+    musicFinished();
+#endif
 
     const std::shared_ptr<MusicInfo> currentTrack = musicTrackManager.getCurrentTrack().lock();
     assert( currentTrack );
