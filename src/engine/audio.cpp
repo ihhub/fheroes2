@@ -199,15 +199,16 @@ namespace
 
         const int channel = Mix_PlayChannel( channelId, sample, loop ? -1 : 0 );
         if ( channel < 0 ) {
-            ERROR_LOG( "Failed to play an audio chunk for channel " << channel << ". The error: " << Mix_GetError() )
+            ERROR_LOG( "Failed to play an audio chunk for channel " << channelId << ". The error: " << Mix_GetError() )
 
             Mix_FreeChunk( sample );
+
+            return channel;
         }
-        else {
-            // There can be a maximum of two items in the sample queue for a channel:
-            // the previous sample (if it hasn't been freed yet) and the current one
-            soundSampleManager.channelStarted( channel, sample );
-        }
+
+        // There can be a maximum of two items in the sample queue for a channel:
+        // the previous sample (if it hasn't been freed yet) and the current one
+        soundSampleManager.channelStarted( channel, sample );
 
         return channel;
     }
@@ -591,15 +592,16 @@ namespace
             // Since the music playback failed, the Mix_HookMusicFinished()'s callback cannot be called
             // here, so we can safely reset the current track information
             musicTrackManager.resetCurrentTrack();
-        }
-        else {
-            // For better accuracy reset the timer right after the actual playback starts
-            musicTrackManager.resetTimer();
 
-            // There can be no more than one element in the music queue - the current track, the previous
-            // one should already be freed
-            musicTrackManager.musicStarted( mus );
+            return;
         }
+
+        // For better accuracy reset the timer right after the actual playback starts
+        musicTrackManager.resetTimer();
+
+        // There can be no more than one element in the music queue - the current track, the previous
+        // one should already be freed
+        musicTrackManager.musicStarted( mus );
     }
 
     int normalizeToSDLVolume( const int volumePercentage )
