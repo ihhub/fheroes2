@@ -1069,8 +1069,8 @@ void Music::Stop()
     // callback will not be called while we are modifying the current track information.
     Mix_HaltMusic();
 #if !SDL_VERSION_ATLEAST( 2, 0, 0 )
-    // Ancient SDL_Mixer 1.x doesn't call the Mix_HookMusicFinished()'s callback on Mix_HaltMusic(),
-    // so we need to call it manually
+    // SDL_Mixer 1.x doesn't call the Mix_HookMusicFinished()'s callback on Mix_HaltMusic(), so
+    // we need to call it manually
     musicFinished();
 #endif
 
