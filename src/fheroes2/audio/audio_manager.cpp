@@ -482,9 +482,9 @@ namespace
             return;
         }
 
-        // Check if the music track is cached.
+        // Check if the music track is already available in the music database.
         if ( Music::Play( musicUID, playbackMode ) ) {
-            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play cached music track " << trackId )
+            DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "Play music track " << trackId )
 
             currentMusicTrackId = trackId;
 
@@ -526,8 +526,9 @@ namespace
             }
         }
 
-        // Check if music needs to be pulled from HEROES2X
         int xmi = XMI::UNKNOWN;
+
+        // Check if music needs to be pulled from HEROES2X
         if ( musicType == MUSIC_MIDI_EXPANSION ) {
             xmi = XMI::FromMUS( trackId, g_midiHeroes2xAGG.isGood() );
         }

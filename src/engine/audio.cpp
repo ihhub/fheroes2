@@ -974,9 +974,7 @@ void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const
         return;
     }
 
-    if ( !musicTrackManager.isTrackInMusicDB( musicUID ) ) {
-        musicTrackManager.addTrackToMusicDB( musicUID, std::make_shared<MusicInfo>( v ) );
-    }
+    musicTrackManager.addTrackToMusicDB( musicUID, std::make_shared<MusicInfo>( v ) );
 
     Stop();
 
@@ -986,7 +984,7 @@ void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const
 void Music::Play( const uint64_t musicUID, const std::string & file, const PlaybackMode playbackMode )
 {
     if ( file.empty() ) {
-        // Nothing to play. It is an empty file.
+        // Nothing to play, the file name is empty.
         return;
     }
 
@@ -996,9 +994,7 @@ void Music::Play( const uint64_t musicUID, const std::string & file, const Playb
         return;
     }
 
-    if ( !musicTrackManager.isTrackInMusicDB( musicUID ) ) {
-        musicTrackManager.addTrackToMusicDB( musicUID, std::make_shared<MusicInfo>( file ) );
-    }
+    musicTrackManager.addTrackToMusicDB( musicUID, std::make_shared<MusicInfo>( file ) );
 
     Stop();
 
