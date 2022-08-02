@@ -325,9 +325,6 @@ void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
     // Experience
     experience = st.getLE32();
 
-    if ( experience == 0 )
-        experience = GetStartingXp();
-
     // Custom secondary skills
     const bool custom_secskill = ( st.get() != 0 );
 

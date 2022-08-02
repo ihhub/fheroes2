@@ -38,6 +38,7 @@
 #include <SDL.h>
 
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
+#define WIN32_LEAN_AND_MEAN
 // clang-format off
 // shellapi.h must be included after windows.h
 #include <windows.h>
