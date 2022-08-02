@@ -124,7 +124,7 @@ namespace
             }
         }
 
-        // This is the only method that can be called from the SDL_Mixer callback (without acquiring the audioMutex)
+        // This method can be called from the SDL_Mixer callback (without acquiring the audioMutex)
         void channelFinished( const int channelId )
         {
             assert( channelId >= 0 );
@@ -401,22 +401,12 @@ namespace
             _musicQueue = mus;
         }
 
-        // This method can be called from the SDL_Mixer callback (without acquiring the audioMutex)
-        void musicFinished()
-        {
-            ++_musicToCleanup;
-        }
-
         void clearFinishedMusic()
         {
-            const size_t count = _musicToCleanup.exchange( 0 );
-
-            if ( count == 0 ) {
+            // This queue consists of only one music track
+            if ( _musicQueue == nullptr ) {
                 return;
             }
-
-            // This queue consists of only one music track
-            assert( count == 1 && _musicQueue != nullptr );
 
             Mix_FreeMusic( _musicQueue );
 
@@ -437,7 +427,6 @@ namespace
         fheroes2::Time _currentTrackTimer;
 
         Mix_Music * _musicQueue{ nullptr };
-        std::atomic<size_t> _musicToCleanup{ 0 };
     };
 
     MusicTrackManager musicTrackManager;
@@ -508,8 +497,6 @@ namespace
     {
         // This callback function should never be called if audio is not initialized
         assert( isInitialized );
-
-        musicTrackManager.musicFinished();
 
         musicRestartManager.restartCurrentMusicTrack();
     }
@@ -1068,11 +1055,6 @@ void Music::Stop()
     // Always returns 0. After this call we have a guarantee that the Mix_HookMusicFinished()'s
     // callback will not be called while we are modifying the current track information.
     Mix_HaltMusic();
-#if !SDL_VERSION_ATLEAST( 2, 0, 0 )
-    // SDL_Mixer 1.x doesn't call the Mix_HookMusicFinished()'s callback on Mix_HaltMusic(), so
-    // we need to call it manually
-    musicFinished();
-#endif
 
     const std::shared_ptr<MusicInfo> currentTrack = musicTrackManager.getCurrentTrack().lock();
     assert( currentTrack );
