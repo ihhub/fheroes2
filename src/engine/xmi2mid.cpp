@@ -42,134 +42,76 @@
 
 namespace
 {
-    const std::array<const char *, 128> instrumentDescription = { "Acoustic Grand Piano",
-                                                                  "Soprano Sax",
-                                                                  "Bright Acoustic Piano",
-                                                                  "Alto Sax",
-                                                                  "Electric Grand Piano",
-                                                                  "Tenor Sax",
-                                                                  "Honky-tonk Piano",
-                                                                  "Baritone Sax",
-                                                                  "Electric Piano 1 (Rhodes Piano)",
-                                                                  "Oboe",
-                                                                  "Electric Piano 2 (Chorused Piano)",
-                                                                  "English Horn",
-                                                                  "Harpsichord",
-                                                                  "Bassoon",
-                                                                  "Clavinet",
-                                                                  "Clarinet",
-                                                                  "Celesta",
-                                                                  "Piccolo",
-                                                                  "Glockenspiel",
-                                                                  "Flute",
-                                                                  "Music Box",
-                                                                  "Recorder",
-                                                                  "Vibraphone",
-                                                                  "Pan Flute",
-                                                                  "Marimba",
-                                                                  "Blown Bottle",
-                                                                  "Xylophone",
-                                                                  "Shakuhachi",
-                                                                  "Tubular Bells",
-                                                                  "Whistle",
-                                                                  "Dulcimer (Santur)",
-                                                                  "Ocarina",
-                                                                  "Drawbar Organ (Hammond)",
-                                                                  "Lead 1 (square wave)",
-                                                                  "Percussive Organ",
-                                                                  "Lead 2 (sawtooth wave)",
-                                                                  "Rock Organ",
-                                                                  "Lead 3 (calliope)",
-                                                                  "Church Organ",
-                                                                  "Lead 4 (chiffer)",
-                                                                  "Reed Organ",
-                                                                  "Lead 5 (charang)",
-                                                                  "Accordion (French)",
-                                                                  "Lead 6 (voice solo)",
-                                                                  "Harmonica",
-                                                                  "Lead 7 (fifths)",
-                                                                  "Tango Accordion (Band neon)",
-                                                                  "Lead 8 (bass + lead)",
-                                                                  "Acoustic Guitar (nylon)",
-                                                                  "Pad 1 (new age Fantasia)",
-                                                                  "Acoustic Guitar (steel)",
-                                                                  "Pad 2 (warm)",
-                                                                  "Electric Guitar (jazz)",
-                                                                  "Pad 3 (polysynth)",
-                                                                  "Electric Guitar (clean)",
-                                                                  "Pad 4 (choir space voice)",
-                                                                  "Electric Guitar (muted)",
-                                                                  "Pad 5 (bowed glass)",
-                                                                  "Overdriven Guitar",
-                                                                  "Pad 6 (metallic pro)",
-                                                                  "Distortion Guitar",
-                                                                  "Pad 7 (halo)",
-                                                                  "Guitar harmonics",
-                                                                  "Pad 8 (sweep)",
-                                                                  "Acoustic Bass",
-                                                                  "FX 1 (rain)",
-                                                                  "Electric Bass (fingered)",
-                                                                  "FX 2 (soundtrack)",
-                                                                  "Electric Bass (picked)",
-                                                                  "FX 3 (crystal)",
-                                                                  "Fretless Bass",
-                                                                  "FX 4 (atmosphere)",
-                                                                  "Slap Bass 1",
-                                                                  "FX 5 (brightness)",
-                                                                  "Slap Bass 2",
-                                                                  "FX 6 (goblins)",
-                                                                  "Synth Bass 1",
-                                                                  "FX 7 (echoes, drops)",
-                                                                  "Synth Bass 2",
-                                                                  "FX 8 (sci-fi, star theme)",
-                                                                  "Violin",
-                                                                  "Sitar",
-                                                                  "Viola",
-                                                                  "Banjo",
-                                                                  "Cello",
-                                                                  "Shamisen",
-                                                                  "Contrabass",
-                                                                  "Koto",
-                                                                  "Tremolo Strings",
-                                                                  "Kalimba",
-                                                                  "Pizzicato Strings",
-                                                                  "Bag pipe",
-                                                                  "Orchestral Harp",
-                                                                  "Fiddle",
-                                                                  "Timpani",
-                                                                  "Shanai",
-                                                                  "String Ensemble 1 (strings)",
-                                                                  "Tinkle Bell",
-                                                                  "String Ensemble 2 (slow strings)",
-                                                                  "Agogo",
-                                                                  "SynthStrings 1",
-                                                                  "Steel Drums",
-                                                                  "SynthStrings 2",
-                                                                  "Woodblock",
-                                                                  "Choir Aahs",
-                                                                  "Taiko Drum",
-                                                                  "Voice Oohs",
-                                                                  "Melodic Tom",
-                                                                  "Synth Voice",
-                                                                  "Synth Drum",
-                                                                  "Orchestra Hit",
-                                                                  "Reverse Cymbal",
-                                                                  "Trumpet",
-                                                                  "Guitar Fret Noise",
-                                                                  "Trombone",
-                                                                  "Breath Noise",
-                                                                  "Tuba",
-                                                                  "Seashore",
-                                                                  "Muted Trumpet",
-                                                                  "Bird Tweet",
-                                                                  "French Horn",
-                                                                  "Telephone Ring",
-                                                                  "Brass Section",
-                                                                  "Helicopter",
-                                                                  "SynthBrass 1",
-                                                                  "Applause",
-                                                                  "SynthBrass 2",
-                                                                  "Gunshot" };
+    const std::array<const char *, 128> instrumentDescription = {
+        //
+        // Piano ( 0 - 7 )
+        //
+        "Acoustic Grand Piano", "Bright Acoustic Piano", "Electric Grand Piano", "Honky-tonk Piano", "Electric Piano 1 (Rhodes Piano)",
+        "Electric Piano 2 (Chorused Piano)", "Harpsichord", "Clavinet",
+        //
+        // Chromatic Percussion ( 8 - 15 )
+        //
+        "Celesta", "Glockenspiel", "Music Box", "Vibraphone", "Marimba", "Xylophone", "Tubular Bells", "Dulcimer (Santur)",
+        //
+        // Organ ( 16 - 23 )
+        //
+        "Drawbar Organ (Hammond)", "Percussive Organ", "Rock Organ", "Church Organ", "Reed Organ", "Accordion (French)", "Harmonica", "Tango Accordion (Band neon)",
+        //
+        // Guitar ( 24 - 31 )
+        //
+        "Acoustic Guitar (nylon)", "Acoustic Guitar (steel)", "Electric Guitar (jazz)", "Electric Guitar (clean)", "Electric Guitar (muted)", "Overdriven Guitar",
+        "Distortion Guitar", "Guitar harmonics",
+        //
+        // Bass ( 32 - 39 )
+        //
+        "Acoustic Bass", "Electric Bass (fingered)", "Electric Bass (picked)", "Fretless Bass", "Slap Bass 1", "Slap Bass 2", "Synth Bass 1", "Synth Bass 2",
+        //
+        // Strings ( 40 - 47 )
+        //
+        "Violin", "Viola", "Cello", "Contrabass", "Tremolo Strings", "Pizzicato Strings", "Orchestral Harp", "Timpani",
+        //
+        // Strings ( 48 - 55 )
+        //
+        "String Ensemble 1 (strings)", "String Ensemble 2 (slow strings)", "SynthStrings 1", "SynthStrings 2", "Choir Aahs", "Voice Oohs", "Synth Voice", "Orchestra Hit",
+        //
+        // Brass ( 56 - 63 )
+        //
+        "Trumpet", "Trombone", "Tuba", "Muted Trumpet", "French Horn", "Brass Section", "SynthBrass 1", "SynthBrass 2",
+        //
+        // Reed ( 64 - 71 )
+        //
+        "Soprano Sax", "Alto Sax", "Tenor Sax", "Baritone Sax", "Oboe", "English Horn", "Bassoon", "Clarinet",
+        //
+        // Pipe ( 72 - 79 )
+        //
+        "Piccolo", "Flute", "Recorder", "Pan Flute", "Blown Bottle", "Shakuhachi", "Whistle", "Ocarina",
+        //
+        // Synth Lead ( 80 - 87 )
+        //
+        "Lead 1 (square wave)", "Lead 2 (sawtooth wave)", "Lead 3 (calliope)", "Lead 4 (chiffer)", "Lead 5 (charang)", "Lead 6 (voice solo)", "Lead 7 (fifths)",
+        "Lead 8 (bass + lead)",
+        //
+        // Synth Pad ( 88 - 95 )
+        //
+        "Pad 1 (new age Fantasia)", "Pad 2 (warm)", "Pad 3 (polysynth)", "Pad 4 (choir space voice)", "Pad 5 (bowed glass)", "Pad 6 (metallic pro)", "Pad 7 (halo)",
+        "Pad 8 (sweep)",
+        //
+        // Synth Effects ( 96 - 103 )
+        //
+        "FX 1 (rain)", "FX 2 (soundtrack)", "FX 3 (crystal)", "FX 4 (atmosphere)", "FX 5 (brightness)", "FX 6 (goblins)", "FX 7 (echoes, drops)",
+        "FX 8 (sci-fi, star theme)",
+        //
+        // Ethnic ( 104 - 111 )
+        //
+        "Sitar", "Banjo", "Shamisen", "Koto", "Kalimba", "Bag pipe", "Fiddle", "Shanai",
+        //
+        // Percussive ( 112 - 119 )
+        //
+        "Tinkle Bell", "Agogo", "Steel Drums", "Woodblock", "Taiko Drum", "Melodic Tom", "Synth Drum", "Reverse Cymbal",
+        //
+        // Sound effects ( 120 - 127 )
+        //
+        "Guitar Fret Noise", "Breath Noise", "Seashore", "Bird Tweet", "Telephone Ring", "Helicopter", "Applause", "Gunshot" };
 
     const std::array<const char *, 47> drumSoundDescription
         = { "B1 Acoustic Bass Drum", "B3 Ride Cymbal 2",  "C2 Bass Drum 1",    "C4 Hi Bongo",       "C#2 Side Stick",     "C#4 Low Bongo",
