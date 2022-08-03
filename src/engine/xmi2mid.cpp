@@ -113,15 +113,15 @@ namespace
         //
         "Guitar Fret Noise", "Breath Noise", "Seashore", "Bird Tweet", "Telephone Ring", "Helicopter", "Applause", "Gunshot" };
 
+    // MIDI keys 35 - 81
     const std::array<const char *, 47> drumSoundDescription
-        = { "B1 Acoustic Bass Drum", "B3 Ride Cymbal 2",  "C2 Bass Drum 1",    "C4 Hi Bongo",       "C#2 Side Stick",     "C#4 Low Bongo",
-            "D2 Acoustic Snare",     "D4 Mute Hi Conga",  "D#2 Hand Clap",     "D#4 Open Hi Conga", "E2 Electric Snare",  "E4 Low Conga",
-            "F2 Low Floor Tom",      "F4 High Timbale",   "F#2 Closed Hi Hat", "F#4 Low Timbale",   "G2 High Floor Tom",  "G4 High Agogo",
-            "G#2 Pedal Hi-Hat",      "G#4 Low Agogo",     "A2 Low Tom",        "A4 Cabasa",         "A#2 Open Hi-Hat",    "A#4 Maracas",
-            "B2 Low-Mid Tom",        "B4 Short Whistle",  "C3 Hi Mid Tom",     "C5 Long Whistle",   "C#3 Crash Cymbal 1", "C#5 Short Guiro",
-            "D3 High Tom",           "D5 Long Guiro",     "D#3 Ride Cymbal 1", "D#5 Claves",        "E3 Chinese Cymbal",  "E5 Hi Wood Block",
-            "F3 Ride Bell",          "F5 Low Wood Block", "F#3 Tambourine",    "F#5 Mute Cuica",    "G3 Splash Cymbal",   "G5 Open Cuica",
-            "G#3 Cowbell",           "G#5 Mute Triangle", "A3 Crash Cymbal 2", "A5 Open Triangle",  "A#3 Vibraslap" };
+        = { "B1 Acoustic Bass Drum", "C2 Bass Drum 1",    "C#2 Side Stick",    "D2 Acoustic Snare", "D#2 Hand Clap",   "E2 Electric Snare", "F2 Low Floor Tom",
+            "F#2 Closed Hi Hat",     "G2 High Floor Tom", "G#2 Pedal Hi-Hat",  "A2 Low Tom",        "A#2 Open Hi-Hat", "B2 Low-Mid Tom",    "C3 Hi Mid Tom",
+            "C#3 Crash Cymbal 1",    "D3 High Tom",       "D#3 Ride Cymbal 1", "E3 Chinese Cymbal", "F3 Ride Bell",    "F#3 Tambourine",    "G3 Splash Cymbal",
+            "G#3 Cowbell",           "A3 Crash Cymbal 2", "A#3 Vibraslap",     "B3 Ride Cymbal 2",  "C4 Hi Bongo",     "C#4 Low Bongo",     "D4 Mute Hi Conga",
+            "D#4 Open Hi Conga",     "E4 Low Conga",      "F4 High Timbale",   "F#4 Low Timbale",   "G4 High Agogo",   "G#4 Low Agogo",     "A4 Cabasa",
+            "A#4 Maracas",           "B4 Short Whistle",  "C5 Long Whistle",   "C#5 Short Guiro",   "D5 Long Guiro",   "D#5 Claves",        "E5 Hi Wood Block",
+            "F5 Low Wood Block",     "F#5 Mute Cuica",    "G5 Open Cuica",     "G#5 Mute Triangle", "A5 Open Triangle" };
 
     enum
     {
