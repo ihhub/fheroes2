@@ -27,6 +27,7 @@
 #include <fstream>
 #include <iomanip>
 #include <list>
+#include <map>
 #include <utility>
 #include <vector>
 
@@ -113,15 +114,7 @@ namespace
         //
         "Guitar Fret Noise", "Breath Noise", "Seashore", "Bird Tweet", "Telephone Ring", "Helicopter", "Applause", "Gunshot" };
 
-    // MIDI keys 35 - 81
-    const std::array<const char *, 47> drumSoundDescription
-        = { "B1 Acoustic Bass Drum", "C2 Bass Drum 1",    "C#2 Side Stick",    "D2 Acoustic Snare", "D#2 Hand Clap",   "E2 Electric Snare", "F2 Low Floor Tom",
-            "F#2 Closed Hi Hat",     "G2 High Floor Tom", "G#2 Pedal Hi-Hat",  "A2 Low Tom",        "A#2 Open Hi-Hat", "B2 Low-Mid Tom",    "C3 Hi Mid Tom",
-            "C#3 Crash Cymbal 1",    "D3 High Tom",       "D#3 Ride Cymbal 1", "E3 Chinese Cymbal", "F3 Ride Bell",    "F#3 Tambourine",    "G3 Splash Cymbal",
-            "G#3 Cowbell",           "A3 Crash Cymbal 2", "A#3 Vibraslap",     "B3 Ride Cymbal 2",  "C4 Hi Bongo",     "C#4 Low Bongo",     "D4 Mute Hi Conga",
-            "D#4 Open Hi Conga",     "E4 Low Conga",      "F4 High Timbale",   "F#4 Low Timbale",   "G4 High Agogo",   "G#4 Low Agogo",     "A4 Cabasa",
-            "A#4 Maracas",           "B4 Short Whistle",  "C5 Long Whistle",   "C#5 Short Guiro",   "D5 Long Guiro",   "D#5 Claves",        "E5 Hi Wood Block",
-            "F5 Low Wood Block",     "F#5 Mute Cuica",    "G5 Open Cuica",     "G#5 Mute Triangle", "A5 Open Triangle" };
+    const std::map<uint32_t, const char *> drumKitDescription = { { 0, "Standard" }, { 48, "Orchestral" }, { 49, "Fix Room" } };
 
     enum
     {
@@ -531,24 +524,26 @@ struct MidiEvents : public std::vector<MidiChunk>
 
                 // Drum sounds are only played in channel 9 if channel ID starts from 0, or 10 if channel ID starts from 1. In our case it starts from 0.
                 if ( channelId == 9 ) {
-                    // It is a drum.
-                    const uint32_t drumSoundType = *( ptr + 1 );
-                    if ( drumSoundType >= 35 && drumSoundType - 35 < drumSoundDescription.size() ) {
-                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE,
-                                   "MID: channel " << channelId << ", drum sound " << drumSoundType << ": " << drumSoundDescription[drumSoundType - 35] )
+                    // It is a drum kit.
+                    const uint32_t drumKitId = *( ptr + 1 );
+                    const auto drumKitIter = drumKitDescription.find( drumKitId );
+
+                    if ( drumKitIter != drumKitDescription.end() ) {
+                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MIDI channel " << channelId << ", drum kit ID " << drumKitId << ": " << drumKitIter->second )
                     }
                     else {
-                        ERROR_LOG( "MIDI track: Unknown drum sound type " << drumSoundType )
+                        DEBUG_LOG( DBG_ENGINE, DBG_TRACE, "MIDI channel " << channelId << ": unknown drum kit ID " << drumKitId )
                     }
                 }
                 else {
-                    const uint32_t instrumentType = *( ptr + 1 );
-                    if ( instrumentType < instrumentDescription.size() ) {
+                    const uint32_t instrumentId = *( ptr + 1 );
+
+                    if ( instrumentId < instrumentDescription.size() ) {
                         DEBUG_LOG( DBG_ENGINE, DBG_TRACE,
-                                   "MID: channel " << channelId << ", instrument ID " << instrumentType << ": " << instrumentDescription[instrumentType] )
+                                   "MIDI channel " << channelId << ", instrument ID " << instrumentId << ": " << instrumentDescription[instrumentId] )
                     }
                     else {
-                        ERROR_LOG( "MIDI track: Unknown instrument type " << instrumentType )
+                        ERROR_LOG( "MIDI channel " << channelId << ": unknown instrument ID " << instrumentId )
                     }
                 }
 
