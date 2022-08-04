@@ -35,8 +35,6 @@
 #include "system.h"
 #include "tools.h"
 
-#include <SDL.h>
-
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
 #define WIN32_LEAN_AND_MEAN
 // clang-format off
@@ -60,8 +58,7 @@
 
 #include <unistd.h>
 #endif
-
-#if defined( __WIN32__ )
+#if defined( _WIN32 )
 #define SEPARATOR '\\'
 #else
 #define SEPARATOR '/'
@@ -69,9 +66,9 @@
 
 int System::MakeDirectory( const std::string & path )
 {
-#if defined( __WIN32__ ) && defined( _MSC_VER )
+#if defined( _WIN32 ) && defined( _MSC_VER )
     return CreateDirectoryA( path.c_str(), nullptr );
-#elif defined( __WIN32__ ) && !defined( _MSC_VER )
+#elif defined( _WIN32 ) && !defined( _MSC_VER )
     return mkdir( path.c_str() );
 #elif defined( TARGET_PS_VITA )
     return sceIoMkdir( path.c_str(), 0777 );
