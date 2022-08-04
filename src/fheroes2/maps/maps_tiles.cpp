@@ -1314,8 +1314,7 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
 
     // Some objects on the map require extra sprites to be rendered.
     // TODO: consider adding these sprites as a part of Tile addon stack.
-    const MP2::MapObjectType objectType = GetObject( false );
-    if ( objectType == MP2::OBJ_MINES ) {
+    if ( ( _level & 0x03 ) == level && GetObject( false ) == MP2::OBJ_MINES ) {
         const int32_t spellID = Maps::getSpellIdFromTile( *this );
 
         switch ( spellID ) {
