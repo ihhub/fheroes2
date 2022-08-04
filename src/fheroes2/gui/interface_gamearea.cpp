@@ -372,23 +372,30 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     }
                 }
 
-                // TODO: review shadow rendering long as it jumps over the places.
                 auto spriteShadowInfo = hero->getHeroShadowSpritesPerTile();
                 for ( auto & info : spriteShadowInfo ) {
-                    if ( info.first.y > 0 && !isHeroInCastle ) {
-                        if ( info.first.x < 0 ) {
-                            tileUnfitBottomBackgroundShadowImages[info.first + heroPos].emplace_front( std::move( info.second ), heroAlphaValue );
-                        }
-                        else {
-                            tileUnfitBottomBackgroundShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                    if ( movingHero ) {
+                        if ( nextHeroPos.y > heroPos.y && info.first.y == 1 ) {
+                            // A hero moving down. Usually it happens only when it is possible to go so we are safe to do this trick in relation to objects.
+                            tileUnfitTopShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                            continue;
                         }
                     }
-                    else if ( info.first.y == 0 || ( isHeroInCastle && info.first.y > 0 ) ) {
+
+                    if ( info.first.y > 0 && !isHeroInCastle ) {
                         if ( info.first.x < 0 ) {
                             tileUnfitBottomShadowImages[info.first + heroPos].emplace_front( std::move( info.second ), heroAlphaValue );
                         }
                         else {
                             tileUnfitBottomShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                        }
+                    }
+                    else if ( info.first.y == 0 || ( isHeroInCastle && info.first.y > 0 ) ) {
+                        if ( info.first.x < 0 ) {
+                            tileUnfitTopShadowImages[info.first + heroPos].emplace_front( std::move( info.second ), heroAlphaValue );
+                        }
+                        else {
+                            tileUnfitTopShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
                         }
                     }
                     else {
@@ -435,34 +442,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     }
                 }
 
-                // TODO: review shadow rendering long as it jumps over the places.
+                // Monster shadows are always on the same layer.
                 auto spriteShadowInfo = tile.getMonsterShadowSpritesPerTile();
                 for ( auto & info : spriteShadowInfo ) {
-                    if ( info.first.y > 0 ) {
-                        // TODO: fix incorrect boat sprites being too tall.
-                        if ( info.first.x < 0 ) {
-                            tileUnfitBottomBackgroundShadowImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
-                        }
-                        else {
-                            tileUnfitBottomBackgroundShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
-                        }
-                    }
-                    else if ( info.first.y == 0 ) {
-                        if ( info.first.x < 0 ) {
-                            tileUnfitBottomShadowImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
-                        }
-                        else {
-                            tileUnfitBottomShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
-                        }
-                    }
-                    else {
-                        if ( info.first.x < 0 ) {
-                            tileUnfitTopShadowImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
-                        }
-                        else {
-                            tileUnfitTopShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
-                        }
-                    }
+                    tileUnfitBottomShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
                 }
 
                 break;
@@ -484,10 +467,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     }
                     else if ( info.first.y == 0 ) {
                         if ( info.first.x < 0 ) {
-                            tileUnfitBottomImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
+                            tileUnfitTopShadowImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
                         }
                         else {
-                            tileUnfitBottomImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                            tileUnfitTopShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
                         }
                     }
                     else {
@@ -500,11 +483,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     }
                 }
 
-                // TODO: review shadow rendering long as it jumps over the places.
                 auto spriteShadowInfo = tile.getBoatShadowSpritesPerTile();
                 for ( auto & info : spriteShadowInfo ) {
                     if ( info.first.y > 0 ) {
-                        // TODO: fix incorrect boat sprites being too tall.
+                        // TODO: fix some incorrect boat sprites being too tall.
                         if ( info.first.x < 0 ) {
                             tileUnfitBottomBackgroundShadowImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
                         }
@@ -553,6 +535,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
+            tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::BACKGROUND_LAYER );
+
             // Draw the lower part of tile-unfit object's sprite.
             auto iter = tileUnfitBottomBackgroundImages.find( { x, y } );
             if ( iter != tileUnfitBottomBackgroundImages.end() ) {
@@ -564,9 +548,15 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     BlitOnTile( dst, info.image, info.image.x(), info.image.y(), mp, false, info.alphaValue );
                 }
             }
+        }
+    }
+
+    for ( int32_t y = minY; y < maxY; ++y ) {
+        for ( int32_t x = minX; x < maxX; ++x ) {
+            const Maps::Tiles & tile = world.GetTiles( x, y );
 
             // Draw bottom part of tile-unfit object's shadow.
-            iter = tileUnfitBottomBackgroundShadowImages.find( { x, y } );
+            auto iter = tileUnfitBottomBackgroundShadowImages.find( { x, y } );
             if ( iter != tileUnfitBottomBackgroundShadowImages.end() ) {
                 assert( !iter->second.empty() );
 
@@ -577,18 +567,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 }
             }
 
-            tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::BACKGROUND_LAYER );
-        }
-    }
-
-    for ( int32_t y = minY; y < maxY; ++y ) {
-        for ( int32_t x = minX; x < maxX; ++x ) {
-            const Maps::Tiles & tile = world.GetTiles( x, y );
-
             tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::SHADOW_LAYER );
 
             // Draw all shadows from tile-unfit objects.
-            auto iter = tileUnfitBottomShadowImages.find( { x, y } );
+            iter = tileUnfitBottomShadowImages.find( { x, y } );
             if ( iter != tileUnfitBottomShadowImages.end() ) {
                 assert( !iter->second.empty() );
 

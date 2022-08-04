@@ -483,6 +483,26 @@ namespace
 
         return Color::NONE;
     }
+
+    const char * getObjectLayerName( const uint8_t level )
+    {
+        switch ( level )
+        {
+        case Maps::ACTION_OBJECT_LAYER:
+            return "Action Object layer";
+        case Maps::BACKGROUND_LAYER:
+            return "Background layer";
+        case Maps::SHADOW_LAYER:
+            return "Shadow layer";
+        case Maps::TERRAIN_LAYER:
+            return "Terrain layer";
+        default:
+            assert( 0 );
+            break;
+        }
+
+        return "Uknown layer";
+    }
 }
 
 Maps::TilesAddon::TilesAddon()
@@ -506,7 +526,7 @@ std::string Maps::TilesAddon::String( int lvl ) const
        << "UID             : " << uniq << std::endl
        << "tileset         : " << static_cast<int>( object ) << " (" << ICN::GetString( MP2::GetICNObject( object ) ) << ")" << std::endl
        << "index           : " << static_cast<int>( index ) << std::endl
-       << "level           : " << static_cast<int>( level ) << " (" << static_cast<int>( level % 4 ) << ")" << std::endl
+       << "level           : " << static_cast<int>( level ) << " (" << static_cast<int>( level % 4 ) << ")" << " - " << getObjectLayerName( level % 4 ) << std::endl
        << "shadow          : " << ( isShadow( *this ) ? "true" : "false" ) << std::endl;
     return os.str();
 }
@@ -1569,7 +1589,7 @@ std::string Maps::Tiles::String() const
        << "MP2 object type : " << static_cast<int>( objectType ) << " (" << MP2::StringObject( objectType ) << ")" << std::endl
        << "tileset         : " << static_cast<int>( objectTileset ) << " (" << ICN::GetString( MP2::GetICNObject( objectTileset ) ) << ")" << std::endl
        << "object index    : " << static_cast<int>( objectIndex ) << " (animated: " << hasSpriteAnimation() << ")" << std::endl
-       << "level           : " << static_cast<int>( _level ) << std::endl
+       << "level           : " << static_cast<int>( _level ) << " - " << getObjectLayerName( _level ) << std::endl
        << "region          : " << _region << std::endl
        << "ground          : " << Ground::String( GetGround() ) << " (isRoad: " << tileIsRoad << ")" << std::endl
        << "shadow          : " << ( isShadowSprite( objectTileset, objectIndex ) ? "true" : "false" ) << std::endl
