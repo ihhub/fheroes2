@@ -486,8 +486,7 @@ namespace
 
     const char * getObjectLayerName( const uint8_t level )
     {
-        switch ( level )
-        {
+        switch ( level ) {
         case Maps::ACTION_OBJECT_LAYER:
             return "Action Object layer";
         case Maps::BACKGROUND_LAYER:
@@ -526,7 +525,8 @@ std::string Maps::TilesAddon::String( int lvl ) const
        << "UID             : " << uniq << std::endl
        << "tileset         : " << static_cast<int>( object ) << " (" << ICN::GetString( MP2::GetICNObject( object ) ) << ")" << std::endl
        << "index           : " << static_cast<int>( index ) << std::endl
-       << "level           : " << static_cast<int>( level ) << " (" << static_cast<int>( level % 4 ) << ")" << " - " << getObjectLayerName( level % 4 ) << std::endl
+       << "level           : " << static_cast<int>( level ) << " (" << static_cast<int>( level % 4 ) << ")"
+       << " - " << getObjectLayerName( level % 4 ) << std::endl
        << "shadow          : " << ( isShadow( *this ) ? "true" : "false" ) << std::endl;
     return os.str();
 }
