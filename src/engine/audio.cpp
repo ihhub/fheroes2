@@ -124,7 +124,7 @@ namespace
             }
         }
 
-        // This is the only method that can be called from the SDL_Mixer callback (without acquiring the audioMutex)
+        // This method can be called from the SDL_Mixer callback (without acquiring the audioMutex)
         void channelFinished( const int channelId )
         {
             assert( channelId >= 0 );
@@ -183,6 +183,8 @@ namespace
     {
         assert( ptr != nullptr && size != 0 );
 
+        soundSampleManager.clearFinishedSamples();
+
         SDL_RWops * rwops = SDL_RWFromConstMem( ptr, size );
         if ( rwops == nullptr ) {
             ERROR_LOG( "Failed to create an audio chunk from memory. The error: " << SDL_GetError() )
@@ -197,17 +199,16 @@ namespace
 
         const int channel = Mix_PlayChannel( channelId, sample, loop ? -1 : 0 );
         if ( channel < 0 ) {
-            ERROR_LOG( "Failed to play an audio chunk for channel " << channel << ". The error: " << Mix_GetError() )
+            ERROR_LOG( "Failed to play an audio chunk for channel " << channelId << ". The error: " << Mix_GetError() )
 
             Mix_FreeChunk( sample );
-        }
-        else {
-            // There can be a maximum of two items in the sample queue for a channel:
-            // the previous sample (if it hasn't been released yet) and the current one
-            soundSampleManager.channelStarted( channel, sample );
+
+            return channel;
         }
 
-        soundSampleManager.clearFinishedSamples();
+        // There can be a maximum of two items in the sample queue for a channel:
+        // the previous sample (if it hasn't been freed yet) and the current one
+        soundSampleManager.channelStarted( channel, sample );
 
         return channel;
     }
@@ -309,10 +310,7 @@ namespace
         ~MusicTrackManager()
         {
             // Make sure that all music tracks have been eventually freed
-#ifndef NDEBUG
-            const decltype( _musicQueue ) nullQueue{ nullptr, nullptr };
-#endif
-            assert( _musicQueue == nullQueue );
+            assert( _musicQueue == nullptr );
         }
 
         MusicTrackManager & operator=( const MusicTrackManager & ) = delete;
@@ -396,37 +394,23 @@ namespace
 
         void musicStarted( Mix_Music * mus )
         {
-            if ( _musicQueue.first == nullptr ) {
-                _musicQueue.first = mus;
-            }
-            else if ( _musicQueue.second == nullptr ) {
-                _musicQueue.second = mus;
-            }
-            else {
-                // The music queue is already full, this shouldn't happen
-                assert( 0 );
-            }
-        }
+            // If the _musicQueue is not nullptr, then the music queue (consisting of only one music
+            // track) is already full, this shouldn't happen
+            assert( _musicQueue == nullptr );
 
-        // This method can be called from the SDL_Mixer callback (without acquiring the audioMutex)
-        void musicFinished()
-        {
-            ++_musicToCleanup;
+            _musicQueue = mus;
         }
 
         void clearFinishedMusic()
         {
-            const size_t count = _musicToCleanup.exchange( 0 );
-
-            for ( size_t i = 0; i < count; ++i ) {
-                assert( _musicQueue.first != nullptr );
-
-                Mix_FreeMusic( _musicQueue.first );
-
-                // Shift the music queue
-                _musicQueue.first = _musicQueue.second;
-                _musicQueue.second = nullptr;
+            // This queue consists of only one music track
+            if ( _musicQueue == nullptr ) {
+                return;
             }
+
+            Mix_FreeMusic( _musicQueue );
+
+            _musicQueue = nullptr;
         }
 
     private:
@@ -442,8 +426,7 @@ namespace
 
         fheroes2::Time _currentTrackTimer;
 
-        std::pair<Mix_Music *, Mix_Music *> _musicQueue{ nullptr, nullptr };
-        std::atomic<size_t> _musicToCleanup{ 0 };
+        Mix_Music * _musicQueue{ nullptr };
     };
 
     MusicTrackManager musicTrackManager;
@@ -515,8 +498,6 @@ namespace
         // This callback function should never be called if audio is not initialized
         assert( isInitialized );
 
-        musicTrackManager.musicFinished();
-
         musicRestartManager.restartCurrentMusicTrack();
     }
 
@@ -535,6 +516,8 @@ namespace
         // Thus we have a guarantee that the Mix_HookMusicFinished()'s callback will
         // not be called while we are modifying the current track information.
         assert( !Music::isPlaying() );
+
+        musicTrackManager.clearFinishedMusic();
 
         const std::shared_ptr<MusicInfo> track = musicTrackManager.getTrackFromMusicDB( musicUID );
         assert( track );
@@ -596,17 +579,16 @@ namespace
             // Since the music playback failed, the Mix_HookMusicFinished()'s callback cannot be called
             // here, so we can safely reset the current track information
             musicTrackManager.resetCurrentTrack();
-        }
-        else {
-            // For better accuracy reset the timer right after the actual playback starts
-            musicTrackManager.resetTimer();
 
-            // There can be a maximum of two items in the music queue: the previous music (if it hasn't
-            // been released yet) and the current one
-            musicTrackManager.musicStarted( mus );
+            return;
         }
 
-        musicTrackManager.clearFinishedMusic();
+        // For better accuracy reset the timer right after the actual playback starts
+        musicTrackManager.resetTimer();
+
+        // There can be no more than one element in the music queue - the current track, the previous
+        // one should already be freed
+        musicTrackManager.musicStarted( mus );
     }
 
     int normalizeToSDLVolume( const int volumePercentage )
@@ -992,9 +974,7 @@ void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const
         return;
     }
 
-    if ( !musicTrackManager.isTrackInMusicDB( musicUID ) ) {
-        musicTrackManager.addTrackToMusicDB( musicUID, std::make_shared<MusicInfo>( v ) );
-    }
+    musicTrackManager.addTrackToMusicDB( musicUID, std::make_shared<MusicInfo>( v ) );
 
     Stop();
 
@@ -1004,7 +984,7 @@ void Music::Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const
 void Music::Play( const uint64_t musicUID, const std::string & file, const PlaybackMode playbackMode )
 {
     if ( file.empty() ) {
-        // Nothing to play. It is an empty file.
+        // Nothing to play, the file name is empty.
         return;
     }
 
@@ -1014,9 +994,7 @@ void Music::Play( const uint64_t musicUID, const std::string & file, const Playb
         return;
     }
 
-    if ( !musicTrackManager.isTrackInMusicDB( musicUID ) ) {
-        musicTrackManager.addTrackToMusicDB( musicUID, std::make_shared<MusicInfo>( file ) );
-    }
+    musicTrackManager.addTrackToMusicDB( musicUID, std::make_shared<MusicInfo>( file ) );
 
     Stop();
 
