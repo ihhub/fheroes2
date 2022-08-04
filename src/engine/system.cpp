@@ -64,6 +64,10 @@
 #define SEPARATOR '/'
 #endif
 
+#if !( defined( _MSC_VER ) || defined( __MINGW32__ ) )
+#include <strings.h>
+#endif
+
 int System::MakeDirectory( const std::string & path )
 {
 #if defined( _WIN32 ) && defined( _MSC_VER )
