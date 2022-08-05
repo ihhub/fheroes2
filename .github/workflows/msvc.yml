@@ -11,6 +11,7 @@ jobs:
         - name: SDL1 x86
           platform: x86
           build_config: Release-SDL1
+          build_tools_config: Release
           deploy_config: SDL1
           package_name: fheroes2_windows_x86_SDL1
           release_name: Windows x86 build with SDL1 support (latest commit)
@@ -18,6 +19,7 @@ jobs:
         - name: SDL1 x64
           platform: x64
           build_config: Release-SDL1
+          build_tools_config: Release
           deploy_config: SDL1
           package_name: fheroes2_windows_x64_SDL1
           release_name: Windows x64 build with SDL1 support (latest commit)
@@ -25,6 +27,7 @@ jobs:
         - name: SDL2 x86
           platform: x86
           build_config: Release-SDL2
+          build_tools_config: Release
           deploy_config: SDL2
           package_name: fheroes2_windows_x86_SDL2
           release_name: Windows x86 build with SDL2 support (latest commit)
@@ -32,6 +35,7 @@ jobs:
         - name: SDL2 x64
           platform: x64
           build_config: Release-SDL2
+          build_tools_config: Release
           deploy_config: SDL2
           package_name: fheroes2_windows_x64_SDL2
           release_name: Windows x64 build with SDL2 support (latest commit)
@@ -58,12 +62,12 @@ jobs:
     - name: Build tools
       run: |
         cd src/tools
-        MSBuild.exe 82m2wav-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
-        MSBuild.exe bin2txt-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
-        MSBuild.exe extractor-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
-        MSBuild.exe icn2img-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
-        MSBuild.exe til2img-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
-        MSBuild.exe xmi2mid-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_config }}
+        MSBuild.exe 82m2wav-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_tools_config }}
+        MSBuild.exe bin2txt-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_tools_config }}
+        MSBuild.exe extractor-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_tools_config }}
+        MSBuild.exe icn2img-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_tools_config }}
+        MSBuild.exe til2img-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_tools_config }}
+        MSBuild.exe xmi2mid-vs2019.vcxproj /property:Platform=${{ matrix.config.platform }} /property:Configuration=${{ matrix.config.build_tools_config }}
     - name: Generate translations
       run: |
         C:\tools\cygwin\bin\bash.exe -l -c ^"cd ""$GITHUB_WORKSPACE"" ^&^& make -C files/lang -j 2^"
