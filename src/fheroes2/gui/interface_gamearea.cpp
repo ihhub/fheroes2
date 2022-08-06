@@ -98,6 +98,32 @@ namespace
             }
         }
     }
+
+    bool isTallTopLayerSprite( const int32_t x, int32_t y )
+    {
+        if ( y + 1 >= world.h() ) {
+            // There is nothing below so it's not a tall object.
+            return false;
+        }
+
+        // There is a tile below the current.
+        const Maps::Tiles & tile = world.GetTiles( x, y );
+        const Maps::Tiles & tileBelow = world.GetTiles( x, y + 1 );
+
+        const Maps::Addons & currentTileAddons = tile.getLevel2Addons();
+        const Maps::Addons & lowerTileAddons = tileBelow.getLevel2Addons();
+
+        for ( const Maps::TilesAddon & currentAddon : currentTileAddons ) {
+            for ( const Maps::TilesAddon & lowerAddon : lowerTileAddons ) {
+                if ( lowerAddon.uniq == currentAddon.uniq ) {
+                    // This is a tall object.
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }
 
 Interface::GameArea::GameArea( Basic & basic )
@@ -232,14 +258,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
-    if ( minX < 0 )
-        minX = 0;
-    if ( minY < 0 )
-        minY = 0;
-    if ( maxX > world.w() )
-        maxX = world.w();
-    if ( maxY > world.h() )
-        maxY = world.h();
+    minX = std::max( minX, 0 );
+    minY = std::max( minY, 0 );
+    maxX = std::min( maxX, world.w() );
+    maxY = std::min( maxY, world.h() );
 
     if ( minX >= maxX || minY >= maxY ) {
         // This can't be true! Please check your code changes as we shouldn't have an empty area.
@@ -568,38 +590,17 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             // TODO: This is a very hacky way to do it since we do not take into consideration that tile-unfit objects might be taller than 2 tiles as well.
             // TODO: Also some objects in level 2 might be drawn below tile-unfit objects.Find a better way to deal with this situation.
 
-            bool renderTileUnfitTopImagesBefore = false;
-            if ( y + 1 < world.h() ) {
-                // There is a tile below the current.
-                const Maps::Tiles & tileBelow = world.GetTiles( x, y + 1 );
+            if ( isTallTopLayerSprite( x, y ) ) {
+                // Draw upper part of tile-unfit sprites.
+                renderImagesOnTile( dst, tileUnfitTopImages, { x, y }, tile.GetIndex(), *this );
 
-                const Maps::Addons & currentTileAddons = tile.getLevel2Addons();
-                const Maps::Addons & lowerTileAddons = tileBelow.getLevel2Addons();
-
-                for ( const Maps::TilesAddon & currentAddon : currentTileAddons ) {
-                    for ( const Maps::TilesAddon & lowerAddon : lowerTileAddons ) {
-                        if ( lowerAddon.uniq == currentAddon.uniq ) {
-                            // This is a tall object.
-                            renderTileUnfitTopImagesBefore = true;
-                            break;
-                        }
-                    }
-
-                    if ( renderTileUnfitTopImagesBefore ) {
-                        break;
-                    }
-                }
-            }
-
-            if ( !renderTileUnfitTopImagesBefore ) {
                 tile.redrawTopLayerObjects( dst, tileROI, isPuzzleDraw, *this );
             }
-
-            // Draw upper part of tile-unfit sprites.
-            renderImagesOnTile( dst, tileUnfitTopImages, { x, y }, tile.GetIndex(), *this );
-
-            if ( renderTileUnfitTopImagesBefore ) {
+            else {
                 tile.redrawTopLayerObjects( dst, tileROI, isPuzzleDraw, *this );
+
+                // Draw upper part of tile-unfit sprites.
+                renderImagesOnTile( dst, tileUnfitTopImages, { x, y }, tile.GetIndex(), *this );
             }
         }
     }
