@@ -414,7 +414,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     }
                 }
 
-                
                 for ( auto & info : spriteShadowInfo ) {
                     if ( movingHero ) {
                         if ( nextHeroPos.y > heroPos.y && info.first.y == 1 ) {
@@ -532,7 +531,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     }
                 }
 
-                
                 for ( auto & info : spriteShadowInfo ) {
                     if ( info.first.y > 0 ) {
                         // TODO: fix some incorrect boat sprites being too tall.
