@@ -1486,8 +1486,7 @@ std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Maps::Tiles::getBoatSp
 
     const fheroes2::Sprite & boatSprite = fheroes2::AGG::GetICN( ICN::BOAT32, spriteIndex % 128 );
 
-    const fheroes2::Point boatSpriteOffset( ( isReflected ? ( TILEWIDTH + 1 - boatSprite.x() - boatSprite.width() ) : boatSprite.x() ),
-                                            boatSprite.y() + TILEWIDTH - 11 );
+    const fheroes2::Point boatSpriteOffset( ( isReflected ? ( TILEWIDTH + 1 - boatSprite.x() - boatSprite.width() ) : boatSprite.x() ), boatSprite.y() + TILEWIDTH - 11 );
 
     fheroes2::DivideImageBySquares( boatSpriteOffset, boatSprite, TILEWIDTH, isReflected, output );
 
