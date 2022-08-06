@@ -60,13 +60,12 @@ int main( int argc, char ** argv )
         return EXIT_SUCCESS;
     }
 
-    int size = sf.size();
     int count = sf.getLE16();
     int width = sf.getLE16();
     int height = sf.getLE16();
     std::vector<uint8_t> buf = sf.getRaw( width * height * count );
     if ( debugMode ) {
-        std::cout << "Size of stream " << size << "(" << buf.size() << ")" << std::endl;
+        std::cout << "Size of stream " << sf.size() << "(" << buf.size() << ")" << std::endl;
         std::cout << "Count of images " << count << "(" << width << "," << height << ")" << std::endl;
     }
 
