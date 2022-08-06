@@ -538,6 +538,7 @@ std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Heroes::getHeroSprites
     fheroes2::DivideImageBySquares( flagSpriteOffset, spriteFlag, TILEWIDTH, reflect, output );
 
     if ( isShipMaster() && isMoveEnabled() && isInDeepOcean() ) {
+        // TODO: draw froth for all boats in deep water, not only for a moving boat.
         const fheroes2::Sprite & spriteFroth = getFrothSprite( *this, sprite_index );
         const fheroes2::Point frothSpriteOffset( offset.x + ( reflect ? TILEWIDTH - spriteFroth.x() - spriteFroth.width() : spriteFroth.x() ),
                                                  offset.y + spriteFroth.y() + TILEWIDTH );

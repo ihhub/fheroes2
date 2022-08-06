@@ -283,8 +283,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     std::map<fheroes2::Point, std::deque<RenderObjectInfo>> tileUnfitHighPriorityBottomImages;
 
     std::map<fheroes2::Point, std::deque<RenderObjectInfo>> tileUnfitBottomShadowImages;
-    std::map<fheroes2::Point, std::deque<RenderObjectInfo>> tileUnfitBottomBackgroundShadowImages;
-    std::map<fheroes2::Point, std::deque<RenderObjectInfo>> tileUnfitTopShadowImages;
 
     const Heroes * currentHero = drawHeroes ? GetFocusHeroes() : nullptr;
 
@@ -414,41 +412,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 }
 
                 for ( auto & info : spriteShadowInfo ) {
-                    if ( movingHero ) {
-                        if ( nextHeroPos.y > heroPos.y && info.first.y == 1 ) {
-                            // A hero moving down. Usually it happens only when it is possible to go so we are safe to do this trick in relation to objects.
-                            tileUnfitBottomShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
-                            continue;
-                        }
-                    }
-
-                    if ( info.first.y > 0 && !isHeroInCastle ) {
-                        if ( info.first.x < 0 ) {
-                            tileUnfitBottomShadowImages[info.first + heroPos].emplace_front( std::move( info.second ), heroAlphaValue );
-                        }
-                        else {
-                            tileUnfitBottomShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
-                        }
-                    }
-                    else if ( info.first.y == 0 || ( isHeroInCastle && info.first.y > 0 ) ) {
-                        if ( info.first.x < 0 ) {
-                            tileUnfitBottomShadowImages[info.first + heroPos].emplace_front( std::move( info.second ), heroAlphaValue );
-                        }
-                        else if ( info.first.x == 0 ) {
-                            tileUnfitBottomShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
-                        }
-                        else {
-                            tileUnfitBottomShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
-                        }
-                    }
-                    else {
-                        if ( info.first.x < 0 ) {
-                            tileUnfitBottomShadowImages[info.first + heroPos].emplace_front( std::move( info.second ), heroAlphaValue );
-                        }
-                        else {
-                            tileUnfitBottomShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
-                        }
-                    }
+                    tileUnfitBottomShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
                 }
 
                 break;
@@ -530,31 +494,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 }
 
                 for ( auto & info : spriteShadowInfo ) {
-                    if ( info.first.y > 0 ) {
-                        // TODO: fix some incorrect boat sprites being too tall.
-                        if ( info.first.x < 0 ) {
-                            tileUnfitBottomBackgroundShadowImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
-                        }
-                        else {
-                            tileUnfitBottomBackgroundShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
-                        }
-                    }
-                    else if ( info.first.y == 0 ) {
-                        if ( info.first.x < 0 ) {
-                            tileUnfitBottomShadowImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
-                        }
-                        else {
-                            tileUnfitBottomShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
-                        }
-                    }
-                    else {
-                        if ( info.first.x < 0 ) {
-                            tileUnfitBottomShadowImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
-                        }
-                        else {
-                            tileUnfitBottomShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
-                        }
-                    }
+                    tileUnfitBottomShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
                 }
 
                 break;
@@ -565,8 +505,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
         }
     }
-
-    // TODO: optimize everything to be run in a single loop. We do not need multiple double loops.
 
     // Render all terrain layer objects.
     for ( int32_t y = minY; y < maxY; ++y ) {
@@ -593,9 +531,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
-
-            // Draw bottom part of tile-unfit object's shadow.
-            renderImagesOnTile( dst, tileUnfitBottomBackgroundShadowImages, { x, y }, tile.GetIndex(), *this );
 
             tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::SHADOW_LAYER );
 
@@ -625,9 +560,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
-
-            // Draw upper part of tile-unit sprite's shadow.
-            renderImagesOnTile( dst, tileUnfitTopShadowImages, { x, y }, tile.GetIndex(), *this );
 
             // Since some objects are taller than 2 tiles their top layer sprites must be drawn at the very end.
             // For now what we need to do is to run throught all level 2 objects and verify that the tile below doesn't have

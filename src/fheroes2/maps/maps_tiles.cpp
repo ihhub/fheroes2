@@ -1478,8 +1478,6 @@ std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Maps::Tiles::getBoatSp
     // TODO: combine both boat image generation for heroes and empty boats.
     assert( GetObject() == MP2::OBJ_BOAT );
 
-    std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> output;
-
     const uint32_t spriteIndex = ( objectIndex == 255 ) ? 18 : objectIndex;
 
     const bool isReflected = ( spriteIndex > 128 );
@@ -1488,6 +1486,7 @@ std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Maps::Tiles::getBoatSp
 
     const fheroes2::Point boatSpriteOffset( ( isReflected ? ( TILEWIDTH + 1 - boatSprite.x() - boatSprite.width() ) : boatSprite.x() ), boatSprite.y() + TILEWIDTH - 11 );
 
+    std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> output;
     fheroes2::DivideImageBySquares( boatSpriteOffset, boatSprite, TILEWIDTH, isReflected, output );
 
     return output;
