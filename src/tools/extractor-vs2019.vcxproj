@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{912290E1-054C-49DF-B707-197BB6095963}</ProjectGuid>
+    <ProjectGuid>{A5447356-473D-44F0-B269-01CEF05E0ACF}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>bin2txt</RootNamespace>
-    <TargetName>bin2txt</TargetName>
+    <RootNamespace>extractor</RootNamespace>
+    <TargetName>extractor</TargetName>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -62,7 +62,8 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="bin2txt.cpp" />
+    <ClCompile Include="extractor.cpp" />
+	<ClCompile Include="..\engine\agg_file.cpp" />
 	<ClCompile Include="..\engine\logging.cpp" />
 	<ClCompile Include="..\engine\serialize.cpp" />
 	<ClCompile Include="..\engine\system.cpp" />
