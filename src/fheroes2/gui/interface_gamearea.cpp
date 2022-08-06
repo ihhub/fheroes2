@@ -247,17 +247,17 @@ namespace
     }
 
     void renderImagesOnTile( fheroes2::Image & output, const std::map<fheroes2::Point, std::deque<RenderObjectInfo>> & images, const fheroes2::Point & offset,
-                             const int32_t tileIndex, const Interface::GameArea & area )
+                             const Interface::GameArea & area )
     {
         auto iter = images.find( offset );
-        if ( iter != images.end() ) {
-            assert( !iter->second.empty() );
+        if ( iter == images.end() ) {
+            return;
+        }
 
-            const fheroes2::Point & mp = Maps::GetPoint( tileIndex );
+        assert( !iter->second.empty() );
 
-            for ( const RenderObjectInfo & info : iter->second ) {
-                area.BlitOnTile( output, info.image, info.image.x(), info.image.y(), mp, false, info.alphaValue );
-            }
+        for ( const RenderObjectInfo & info : iter->second ) {
+            area.BlitOnTile( output, info.image, info.image.x(), info.image.y(), offset, false, info.alphaValue );
         }
     }
 
@@ -515,6 +515,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
+    // Tile unfit objects should be rendered over the edge of the map. We shouldn't render their shadows.
+
     // Render all terrain layer objects.
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
@@ -533,7 +535,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::BACKGROUND_LAYER );
 
             // Draw the lower part of tile-unfit object's sprite.
-            renderImagesOnTile( dst, tileUnfit.bottomBackgroundImages, { x, y }, tile.GetIndex(), *this );
+            renderImagesOnTile( dst, tileUnfit.bottomBackgroundImages, { x, y }, *this );
         }
     }
 
@@ -544,7 +546,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::SHADOW_LAYER );
 
             // Draw all shadows from tile-unfit objects.
-            renderImagesOnTile( dst, tileUnfit.bottomShadowImages, { x, y }, tile.GetIndex(), *this );
+            renderImagesOnTile( dst, tileUnfit.bottomShadowImages, { x, y }, *this );
         }
     }
 
@@ -553,16 +555,16 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
             // Low priority images are drawn before any other object on this tile.
-            renderImagesOnTile( dst, tileUnfit.lowPriorityBottomImages, { x, y }, tile.GetIndex(), *this );
+            renderImagesOnTile( dst, tileUnfit.lowPriorityBottomImages, { x, y }, *this );
 
             // TODO: some action objects have tiles above which are still on bottom layer. These images must be drawn last.
             tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::ACTION_OBJECT_LAYER );
 
             // Draw middle part of tile-unfit sprites.
-            renderImagesOnTile( dst, tileUnfit.bottomImages, { x, y }, tile.GetIndex(), *this );
+            renderImagesOnTile( dst, tileUnfit.bottomImages, { x, y }, *this );
 
             // High priority images are drawn after any other object on this tile.
-            renderImagesOnTile( dst, tileUnfit.highPriorityBottomImages, { x, y }, tile.GetIndex(), *this );
+            renderImagesOnTile( dst, tileUnfit.highPriorityBottomImages, { x, y }, *this );
         }
     }
 
@@ -579,7 +581,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             if ( isTallTopLayerSprite( x, y ) ) {
                 // Draw upper part of tile-unfit sprites.
-                renderImagesOnTile( dst, tileUnfit.topImages, { x, y }, tile.GetIndex(), *this );
+                renderImagesOnTile( dst, tileUnfit.topImages, { x, y }, *this );
 
                 tile.redrawTopLayerObjects( dst, tileROI, isPuzzleDraw, *this );
             }
@@ -587,7 +589,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 tile.redrawTopLayerObjects( dst, tileROI, isPuzzleDraw, *this );
 
                 // Draw upper part of tile-unfit sprites.
-                renderImagesOnTile( dst, tileUnfit.topImages, { x, y }, tile.GetIndex(), *this );
+                renderImagesOnTile( dst, tileUnfit.topImages, { x, y }, *this );
             }
         }
     }
