@@ -1535,13 +1535,6 @@ namespace fheroes2
             return;
         }
 
-        Image flipped;
-        if ( flip ) {
-            flipped = Flip( in, true, false );
-        }
-
-        const Image & original = flip ? flipped : in;
-
         Point offset{ spriteOffset.x / squareSize, spriteOffset.y / squareSize };
 
         // The start of a square must be before image offset so in case of negative offset we need to decrease the ID of a start square.
@@ -1554,11 +1547,11 @@ namespace fheroes2
         }
 
         const Point spriteRelativeOffset{ spriteOffset.x - offset.x * squareSize, spriteOffset.y - offset.y * squareSize };
-        const Point stepPerDirection{ ( original.width() + spriteRelativeOffset.x + squareSize - 1 ) / squareSize,
-                                      ( original.height() + spriteRelativeOffset.y + squareSize - 1 ) / squareSize };
+        const Point stepPerDirection{ ( in.width() + spriteRelativeOffset.x + squareSize - 1 ) / squareSize,
+                                      ( in.height() + spriteRelativeOffset.y + squareSize - 1 ) / squareSize };
         assert( stepPerDirection.x > 0 && stepPerDirection.y > 0 );
 
-        const Rect relativeROI( spriteRelativeOffset.x, spriteRelativeOffset.y, original.width(), original.height() );
+        const Rect relativeROI( spriteRelativeOffset.x, spriteRelativeOffset.y, in.width(), in.height() );
 
         for ( int32_t y = 0; y < stepPerDirection.y; ++y ) {
             for ( int32_t x = 0; x < stepPerDirection.x; ++x ) {
@@ -1566,12 +1559,25 @@ namespace fheroes2
                 const Rect intersection = relativeROI ^ roi;
                 assert( intersection.width > 0 && intersection.height > 0 );
 
-                Sprite cropped
-                    = Crop( original, intersection.x - spriteRelativeOffset.x, intersection.y - spriteRelativeOffset.y, intersection.width, intersection.height );
-                assert( !cropped.empty() );
-                cropped.setPosition( intersection.x - roi.x, intersection.y - roi.y );
+                if ( flip ) {
+                    Sprite cropped = Crop( in, in.width() - intersection.x + spriteRelativeOffset.x - intersection.width, intersection.y - spriteRelativeOffset.y,
+                                           intersection.width, intersection.height );
 
-                output.emplace_back( offset + Point( x, y ), std::move( cropped ) );
+                    cropped = Flip( cropped, true, false );
+
+                    assert( !cropped.empty() );
+                    cropped.setPosition( intersection.x - roi.x, intersection.y - roi.y );
+
+                    output.emplace_back( offset + Point( x, y ), std::move( cropped ) );
+                }
+                else {
+                    Sprite cropped
+                        = Crop( in, intersection.x - spriteRelativeOffset.x, intersection.y - spriteRelativeOffset.y, intersection.width, intersection.height );
+                    assert( !cropped.empty() );
+                    cropped.setPosition( intersection.x - roi.x, intersection.y - roi.y );
+
+                    output.emplace_back( offset + Point( x, y ), std::move( cropped ) );
+                }
             }
         }
     }
