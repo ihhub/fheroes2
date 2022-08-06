@@ -59,20 +59,17 @@ namespace
         uint8_t alphaValue{ 255 };
     };
 
-    void renderImagesOnTile( fheroes2::Image & output, const std::map<fheroes2::Point, std::deque<RenderObjectInfo>> & images, const fheroes2::Point & offset,
-                             const int32_t tileIndex, const Interface::GameArea & area )
+    struct TileUnfitRenderObjectInfo
     {
-        auto iter = images.find( offset );
-        if ( iter != images.end() ) {
-            assert( !iter->second.empty() );
+        std::map<fheroes2::Point, std::deque<RenderObjectInfo>> bottomImages;
+        std::map<fheroes2::Point, std::deque<RenderObjectInfo>> bottomBackgroundImages;
+        std::map<fheroes2::Point, std::deque<RenderObjectInfo>> topImages;
 
-            const fheroes2::Point & mp = Maps::GetPoint( tileIndex );
+        std::map<fheroes2::Point, std::deque<RenderObjectInfo>> lowPriorityBottomImages;
+        std::map<fheroes2::Point, std::deque<RenderObjectInfo>> highPriorityBottomImages;
 
-            for ( const RenderObjectInfo & info : iter->second ) {
-                area.BlitOnTile( output, info.image, info.image.x(), info.image.y(), mp, false, info.alphaValue );
-            }
-        }
-    }
+        std::map<fheroes2::Point, std::deque<RenderObjectInfo>> bottomShadowImages;
+    };
 
     void correctShadowSprites( std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> & shadows,
                                const std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> & images )
@@ -95,6 +92,171 @@ namespace
                     fheroes2::MaskTransformLayer( image, overlappedArea.x - imageRoi.x, overlappedArea.y - imageRoi.y, shadow, overlappedArea.x - shadowRoi.x,
                                                   overlappedArea.y - shadowRoi.y, overlappedArea.width, overlappedArea.height );
                 }
+            }
+        }
+    }
+
+    void populateStaticTileUnfitObjectInfo( TileUnfitRenderObjectInfo & tileUnfit, std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> & imageInfo,
+                                            std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> & shadowInfo, const fheroes2::Point & offset,
+                                            const uint8_t alphaValue )
+    {
+        for ( auto & [imagePos, image] : imageInfo ) {
+            if ( imagePos.y > 0 ) {
+                if ( imagePos.x < 0 ) {
+                    tileUnfit.bottomBackgroundImages[imagePos + offset].emplace_front( std::move( image ), alphaValue );
+                }
+                else {
+                    tileUnfit.bottomBackgroundImages[imagePos + offset].emplace_back( std::move( image ), alphaValue );
+                }
+            }
+            else if ( imagePos.y == 0 ) {
+                if ( imagePos.x < 0 ) {
+                    tileUnfit.bottomImages[imagePos + offset].emplace_front( std::move( image ), alphaValue );
+                }
+                else {
+                    tileUnfit.bottomImages[imagePos + offset].emplace_back( std::move( image ), alphaValue );
+                }
+            }
+            else {
+                if ( imagePos.x < 0 ) {
+                    tileUnfit.topImages[imagePos + offset].emplace_front( std::move( image ), alphaValue );
+                }
+                else {
+                    tileUnfit.topImages[imagePos + offset].emplace_back( std::move( image ), alphaValue );
+                }
+            }
+        }
+
+        // Monster shadows are always on the same layer.
+        for ( auto & [shadowPos, shadow] : shadowInfo ) {
+            tileUnfit.bottomShadowImages[shadowPos + offset].emplace_back( std::move( shadow ), alphaValue );
+        }
+    }
+
+    void populateHeroObjectInfo( TileUnfitRenderObjectInfo & tileUnfit, const Heroes * hero, const Heroes * currentHero )
+    {
+        assert( hero != nullptr );
+
+        const fheroes2::Point & heroPos = hero->GetCenter();
+        fheroes2::Point nextHeroPos = heroPos;
+
+        const bool movingHero = ( currentHero == hero ) && ( hero->isMoveEnabled() );
+        if ( movingHero ) {
+            const Route::Path & path = currentHero->GetPath();
+            assert( !path.empty() );
+
+            nextHeroPos = Maps::GetPoint( Maps::GetDirectionIndex( hero->GetIndex(), path.GetFrontDirection() ) );
+        }
+
+        // A castle's road south from a castle should actually be level 3 but it is level 2 causing a hero's horse legs to be truncated.
+        // In order to render the legs properly we need to make the bottom part of the hero's sprite to be rendered after castle's road.
+        // This happens only when a hero stands in a castle.
+        const Castle * castle = world.getCastleEntrance( heroPos );
+        const bool isHeroInCastle = ( castle != nullptr && castle->GetCenter() == heroPos );
+
+        const uint8_t heroAlphaValue = hero->getAlphaValue();
+
+        auto spriteInfo = hero->getHeroSpritesPerTile();
+        auto spriteShadowInfo = hero->getHeroShadowSpritesPerTile();
+        correctShadowSprites( spriteShadowInfo, spriteInfo );
+
+        for ( auto & [imagePos, image] : spriteInfo ) {
+            if ( movingHero && imagePos.y == 0 ) {
+                if ( nextHeroPos.y > heroPos.y && nextHeroPos.x > heroPos.x && imagePos.x > 0 ) {
+                    // The hero moves south-east. We need to render it over everything.
+                    tileUnfit.highPriorityBottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                    continue;
+                }
+
+                if ( nextHeroPos.y > heroPos.y && nextHeroPos.x < heroPos.x && imagePos.x < 0 ) {
+                    // The hero moves south-west. We need to render it over everything.
+                    tileUnfit.highPriorityBottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                    continue;
+                }
+
+                if ( nextHeroPos.y < heroPos.y && nextHeroPos.x < heroPos.x && imagePos.x < 0 ) {
+                    // The hero moves north-west. We need to render it under all other objects.
+                    tileUnfit.lowPriorityBottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                    continue;
+                }
+
+                if ( nextHeroPos.y < heroPos.y && nextHeroPos.x > heroPos.x && imagePos.x > 0 ) {
+                    // The hero moves north-east. We need to render it under all other objects.
+                    tileUnfit.lowPriorityBottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                    continue;
+                }
+            }
+
+            if ( movingHero && imagePos.y == 1 ) {
+                if ( nextHeroPos.y > heroPos.y && nextHeroPos.x > heroPos.x && imagePos.x > 0 ) {
+                    // The hero moves south-east. We need to render it over everything.
+                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                    continue;
+                }
+
+                if ( nextHeroPos.y > heroPos.y && nextHeroPos.x < heroPos.x && imagePos.x < 0 ) {
+                    // The hero moves south-west. We need to render it over everything.
+                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                    continue;
+                }
+            }
+
+            if ( movingHero && imagePos.y == -1 ) {
+                if ( nextHeroPos.y < heroPos.y && nextHeroPos.x < heroPos.x && imagePos.x < 0 ) {
+                    // The hero moves north-west. We need to render it under all other objects.
+                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                    continue;
+                }
+
+                if ( nextHeroPos.y < heroPos.y && nextHeroPos.x > heroPos.x && imagePos.x > 0 ) {
+                    // The hero moves north-east. We need to render it under all other objects.
+                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                    continue;
+                }
+            }
+
+            if ( imagePos.y > 0 && !isHeroInCastle ) {
+                if ( imagePos.x < 0 ) {
+                    tileUnfit.bottomBackgroundImages[imagePos + heroPos].emplace_front( std::move( image ), heroAlphaValue );
+                }
+                else {
+                    tileUnfit.bottomBackgroundImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                }
+            }
+            else if ( imagePos.y == 0 || ( isHeroInCastle && imagePos.y > 0 ) ) {
+                if ( imagePos.x < 0 ) {
+                    tileUnfit.bottomImages[imagePos + heroPos].emplace_front( std::move( image ), heroAlphaValue );
+                }
+                else {
+                    tileUnfit.bottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                }
+            }
+            else {
+                if ( imagePos.x < 0 ) {
+                    tileUnfit.topImages[imagePos + heroPos].emplace_front( std::move( image ), heroAlphaValue );
+                }
+                else {
+                    tileUnfit.topImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
+                }
+            }
+        }
+
+        for ( auto & [shadowPos, shadow] : spriteShadowInfo ) {
+            tileUnfit.bottomShadowImages[shadowPos + heroPos].emplace_back( std::move( shadow ), heroAlphaValue );
+        }
+    }
+
+    void renderImagesOnTile( fheroes2::Image & output, const std::map<fheroes2::Point, std::deque<RenderObjectInfo>> & images, const fheroes2::Point & offset,
+                             const int32_t tileIndex, const Interface::GameArea & area )
+    {
+        auto iter = images.find( offset );
+        if ( iter != images.end() ) {
+            assert( !iter->second.empty() );
+
+            const fheroes2::Point & mp = Maps::GetPoint( tileIndex );
+
+            for ( const RenderObjectInfo & info : iter->second ) {
+                area.BlitOnTile( output, info.image, info.image.x(), info.image.y(), mp, false, info.alphaValue );
             }
         }
     }
@@ -297,14 +459,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     const bool drawFog = ( flag & LEVEL_FOG ) == LEVEL_FOG;
 #endif
 
-    std::map<fheroes2::Point, std::deque<RenderObjectInfo>> tileUnfitBottomImages;
-    std::map<fheroes2::Point, std::deque<RenderObjectInfo>> tileUnfitBottomBackgroundImages;
-    std::map<fheroes2::Point, std::deque<RenderObjectInfo>> tileUnfitTopImages;
-
-    std::map<fheroes2::Point, std::deque<RenderObjectInfo>> tileUnfitLowPriorityBottomImages;
-    std::map<fheroes2::Point, std::deque<RenderObjectInfo>> tileUnfitHighPriorityBottomImages;
-
-    std::map<fheroes2::Point, std::deque<RenderObjectInfo>> tileUnfitBottomShadowImages;
+    TileUnfitRenderObjectInfo tileUnfit;
 
     const Heroes * currentHero = drawHeroes ? GetFocusHeroes() : nullptr;
 
@@ -326,116 +481,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     continue;
                 }
 
-                const Heroes * hero = tile.GetHeroes();
-                assert( hero != nullptr );
-
-                const fheroes2::Point & heroPos = hero->GetCenter();
-                fheroes2::Point nextHeroPos = heroPos;
-
-                const bool movingHero = ( currentHero == hero ) && ( hero->isMoveEnabled() );
-                if ( movingHero ) {
-                    const Route::Path & path = currentHero->GetPath();
-                    assert( !path.empty() );
-
-                    nextHeroPos = Maps::GetPoint( Maps::GetDirectionIndex( hero->GetIndex(), path.GetFrontDirection() ) );
-                }
-
-                // A castle's road south from a castle should actually be level 3 but it is level 2 causing a hero's horse legs to be truncated.
-                // In order to render the legs properly we need to make the bottom part of the hero's sprite to be rendered after castle's road.
-                // This happens only when a hero stands in a castle.
-                const Castle * castle = world.getCastleEntrance( heroPos );
-                const bool isHeroInCastle = ( castle != nullptr && castle->GetCenter() == heroPos );
-
-                const uint8_t heroAlphaValue = hero->getAlphaValue();
-
-                auto spriteInfo = hero->getHeroSpritesPerTile();
-                auto spriteShadowInfo = hero->getHeroShadowSpritesPerTile();
-                correctShadowSprites( spriteShadowInfo, spriteInfo );
-
-                for ( auto & [imagePos, image] : spriteInfo ) {
-                    if ( movingHero && imagePos.y == 0 ) {
-                        if ( nextHeroPos.y > heroPos.y && nextHeroPos.x > heroPos.x && imagePos.x > 0 ) {
-                            // The hero moves south-east. We need to render it over everything.
-                            tileUnfitHighPriorityBottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
-                            continue;
-                        }
-
-                        if ( nextHeroPos.y > heroPos.y && nextHeroPos.x < heroPos.x && imagePos.x < 0 ) {
-                            // The hero moves south-west. We need to render it over everything.
-                            tileUnfitHighPriorityBottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
-                            continue;
-                        }
-
-                        if ( nextHeroPos.y < heroPos.y && nextHeroPos.x < heroPos.x && imagePos.x < 0 ) {
-                            // The hero moves north-west. We need to render it under all other objects.
-                            tileUnfitLowPriorityBottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
-                            continue;
-                        }
-
-                        if ( nextHeroPos.y < heroPos.y && nextHeroPos.x > heroPos.x && imagePos.x > 0 ) {
-                            // The hero moves north-east. We need to render it under all other objects.
-                            tileUnfitLowPriorityBottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
-                            continue;
-                        }
-                    }
-
-                    if ( movingHero && imagePos.y == 1 ) {
-                        if ( nextHeroPos.y > heroPos.y && nextHeroPos.x > heroPos.x && imagePos.x > 0 ) {
-                            // The hero moves south-east. We need to render it over everything.
-                            tileUnfitBottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
-                            continue;
-                        }
-
-                        if ( nextHeroPos.y > heroPos.y && nextHeroPos.x < heroPos.x && imagePos.x < 0 ) {
-                            // The hero moves south-west. We need to render it over everything.
-                            tileUnfitBottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
-                            continue;
-                        }
-                    }
-
-                    if ( movingHero && imagePos.y == -1 ) {
-                        if ( nextHeroPos.y < heroPos.y && nextHeroPos.x < heroPos.x && imagePos.x < 0 ) {
-                            // The hero moves north-west. We need to render it under all other objects.
-                            tileUnfitBottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
-                            continue;
-                        }
-
-                        if ( nextHeroPos.y < heroPos.y && nextHeroPos.x > heroPos.x && imagePos.x > 0 ) {
-                            // The hero moves north-east. We need to render it under all other objects.
-                            tileUnfitBottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
-                            continue;
-                        }
-                    }
-
-                    if ( imagePos.y > 0 && !isHeroInCastle ) {
-                        if ( imagePos.x < 0 ) {
-                            tileUnfitBottomBackgroundImages[imagePos + heroPos].emplace_front( std::move( image ), heroAlphaValue );
-                        }
-                        else {
-                            tileUnfitBottomBackgroundImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
-                        }
-                    }
-                    else if ( imagePos.y == 0 || ( isHeroInCastle && imagePos.y > 0 ) ) {
-                        if ( imagePos.x < 0 ) {
-                            tileUnfitBottomImages[imagePos + heroPos].emplace_front( std::move( image ), heroAlphaValue );
-                        }
-                        else {
-                            tileUnfitBottomImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
-                        }
-                    }
-                    else {
-                        if ( imagePos.x < 0 ) {
-                            tileUnfitTopImages[imagePos + heroPos].emplace_front( std::move( image ), heroAlphaValue );
-                        }
-                        else {
-                            tileUnfitTopImages[imagePos + heroPos].emplace_back( std::move( image ), heroAlphaValue );
-                        }
-                    }
-                }
-
-                for ( auto & [shadowPos, shadow] : spriteShadowInfo ) {
-                    tileUnfitBottomShadowImages[shadowPos + heroPos].emplace_back( std::move( shadow ), heroAlphaValue );
-                }
+                populateHeroObjectInfo( tileUnfit, tile.GetHeroes(), currentHero );
 
                 break;
             }
@@ -444,38 +490,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_MONSTER );
 
                 auto spriteInfo = tile.getMonsterSpritesPerTile();
-                for ( auto & [imagePos, image] : spriteInfo ) {
-                    if ( imagePos.y > 0 ) {
-                        if ( imagePos.x < 0 ) {
-                            tileUnfitBottomBackgroundImages[imagePos + tile.GetCenter()].emplace_front( std::move( image ), alphaValue );
-                        }
-                        else {
-                            tileUnfitBottomBackgroundImages[imagePos + tile.GetCenter()].emplace_back( std::move( image ), alphaValue );
-                        }
-                    }
-                    else if ( imagePos.y == 0 ) {
-                        if ( imagePos.x < 0 ) {
-                            tileUnfitBottomImages[imagePos + tile.GetCenter()].emplace_front( std::move( image ), alphaValue );
-                        }
-                        else {
-                            tileUnfitBottomImages[imagePos + tile.GetCenter()].emplace_back( std::move( image ), alphaValue );
-                        }
-                    }
-                    else {
-                        if ( imagePos.x < 0 ) {
-                            tileUnfitTopImages[imagePos + tile.GetCenter()].emplace_front( std::move( image ), alphaValue );
-                        }
-                        else {
-                            tileUnfitTopImages[imagePos + tile.GetCenter()].emplace_back( std::move( image ), alphaValue );
-                        }
-                    }
-                }
-
-                // Monster shadows are always on the same layer.
                 auto spriteShadowInfo = tile.getMonsterShadowSpritesPerTile();
-                for ( auto & [shadowPos, shadow] : spriteShadowInfo ) {
-                    tileUnfitBottomShadowImages[shadowPos + tile.GetCenter()].emplace_back( std::move( shadow ), alphaValue );
-                }
+
+                populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, tile.GetCenter(), alphaValue );
 
                 break;
             }
@@ -487,37 +504,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 auto spriteShadowInfo = tile.getBoatShadowSpritesPerTile();
                 correctShadowSprites( spriteShadowInfo, spriteInfo );
 
-                for ( auto & [imagePos, image] : spriteInfo ) {
-                    if ( imagePos.y > 0 ) {
-                        // TODO: fix incorrect boat sprites being too tall.
-                        if ( imagePos.x < 0 ) {
-                            tileUnfitBottomBackgroundImages[imagePos + tile.GetCenter()].emplace_front( std::move( image ), alphaValue );
-                        }
-                        else {
-                            tileUnfitBottomBackgroundImages[imagePos + tile.GetCenter()].emplace_back( std::move( image ), alphaValue );
-                        }
-                    }
-                    else if ( imagePos.y == 0 ) {
-                        if ( imagePos.x < 0 ) {
-                            tileUnfitBottomImages[imagePos + tile.GetCenter()].emplace_front( std::move( image ), alphaValue );
-                        }
-                        else {
-                            tileUnfitBottomImages[imagePos + tile.GetCenter()].emplace_back( std::move( image ), alphaValue );
-                        }
-                    }
-                    else {
-                        if ( imagePos.x < 0 ) {
-                            tileUnfitTopImages[imagePos + tile.GetCenter()].emplace_front( std::move( image ), alphaValue );
-                        }
-                        else {
-                            tileUnfitTopImages[imagePos + tile.GetCenter()].emplace_back( std::move( image ), alphaValue );
-                        }
-                    }
-                }
-
-                for ( auto & [shadowPos, shadow] : spriteShadowInfo ) {
-                    tileUnfitBottomShadowImages[shadowPos + tile.GetCenter()].emplace_back( std::move( shadow ), alphaValue );
-                }
+                populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, tile.GetCenter(), alphaValue );
 
                 break;
             }
@@ -546,7 +533,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::BACKGROUND_LAYER );
 
             // Draw the lower part of tile-unfit object's sprite.
-            renderImagesOnTile( dst, tileUnfitBottomBackgroundImages, { x, y }, tile.GetIndex(), *this );
+            renderImagesOnTile( dst, tileUnfit.bottomBackgroundImages, { x, y }, tile.GetIndex(), *this );
         }
     }
 
@@ -557,7 +544,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::SHADOW_LAYER );
 
             // Draw all shadows from tile-unfit objects.
-            renderImagesOnTile( dst, tileUnfitBottomShadowImages, { x, y }, tile.GetIndex(), *this );
+            renderImagesOnTile( dst, tileUnfit.bottomShadowImages, { x, y }, tile.GetIndex(), *this );
         }
     }
 
@@ -566,16 +553,16 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
             // Low priority images are drawn before any other object on this tile.
-            renderImagesOnTile( dst, tileUnfitLowPriorityBottomImages, { x, y }, tile.GetIndex(), *this );
+            renderImagesOnTile( dst, tileUnfit.lowPriorityBottomImages, { x, y }, tile.GetIndex(), *this );
 
             // TODO: some action objects have tiles above which are still on bottom layer. These images must be drawn last.
             tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::ACTION_OBJECT_LAYER );
 
             // Draw middle part of tile-unfit sprites.
-            renderImagesOnTile( dst, tileUnfitBottomImages, { x, y }, tile.GetIndex(), *this );
+            renderImagesOnTile( dst, tileUnfit.bottomImages, { x, y }, tile.GetIndex(), *this );
 
             // High priority images are drawn after any other object on this tile.
-            renderImagesOnTile( dst, tileUnfitHighPriorityBottomImages, { x, y }, tile.GetIndex(), *this );
+            renderImagesOnTile( dst, tileUnfit.highPriorityBottomImages, { x, y }, tile.GetIndex(), *this );
         }
     }
 
@@ -592,7 +579,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             if ( isTallTopLayerSprite( x, y ) ) {
                 // Draw upper part of tile-unfit sprites.
-                renderImagesOnTile( dst, tileUnfitTopImages, { x, y }, tile.GetIndex(), *this );
+                renderImagesOnTile( dst, tileUnfit.topImages, { x, y }, tile.GetIndex(), *this );
 
                 tile.redrawTopLayerObjects( dst, tileROI, isPuzzleDraw, *this );
             }
@@ -600,7 +587,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 tile.redrawTopLayerObjects( dst, tileROI, isPuzzleDraw, *this );
 
                 // Draw upper part of tile-unfit sprites.
-                renderImagesOnTile( dst, tileUnfitTopImages, { x, y }, tile.GetIndex(), *this );
+                renderImagesOnTile( dst, tileUnfit.topImages, { x, y }, tile.GetIndex(), *this );
             }
         }
     }
