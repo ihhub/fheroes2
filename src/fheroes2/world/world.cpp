@@ -1019,7 +1019,7 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
     case Maps::Ground::WATER:
         // How is it possible to dig on water? Check your logic!
         assert( 0 );
-        return;
+        return false;
     default:
         // Did you add a new terrain type? Add the logic above!
         assert( 0 );
