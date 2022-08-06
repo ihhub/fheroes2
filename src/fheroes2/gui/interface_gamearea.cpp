@@ -68,7 +68,7 @@ namespace
         std::map<fheroes2::Point, std::deque<RenderObjectInfo>> lowPriorityBottomImages;
         std::map<fheroes2::Point, std::deque<RenderObjectInfo>> highPriorityBottomImages;
 
-        std::map<fheroes2::Point, std::deque<RenderObjectInfo>> bottomShadowImages;
+        std::map<fheroes2::Point, std::deque<RenderObjectInfo>> shadowImages;
     };
 
     void correctShadowSprites( std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> & shadows,
@@ -129,7 +129,7 @@ namespace
 
         // Monster shadows are always on the same layer.
         for ( auto & [shadowPos, shadow] : shadowInfo ) {
-            tileUnfit.bottomShadowImages[shadowPos + offset].emplace_back( std::move( shadow ), alphaValue );
+            tileUnfit.shadowImages[shadowPos + offset].emplace_back( std::move( shadow ), alphaValue );
         }
     }
 
@@ -242,7 +242,7 @@ namespace
         }
 
         for ( auto & [shadowPos, shadow] : spriteShadowInfo ) {
-            tileUnfit.bottomShadowImages[shadowPos + heroPos].emplace_back( std::move( shadow ), heroAlphaValue );
+            tileUnfit.shadowImages[shadowPos + heroPos].emplace_back( std::move( shadow ), heroAlphaValue );
         }
     }
 
@@ -261,7 +261,7 @@ namespace
         }
     }
 
-    void renderOutOfMapTile( TileUnfitRenderObjectInfo & tileUnfit, fheroes2::Image & output, const fheroes2::Point & offset, const Interface::GameArea & area )
+    void renderOutOfMapTile( const TileUnfitRenderObjectInfo & tileUnfit, fheroes2::Image & output, const fheroes2::Point & offset, const Interface::GameArea & area )
     {
         renderImagesOnTile( output, tileUnfit.bottomBackgroundImages, offset, area );
         renderImagesOnTile( output, tileUnfit.lowPriorityBottomImages, offset, area );
@@ -572,7 +572,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::SHADOW_LAYER );
 
             // Draw all shadows from tile-unfit objects.
-            renderImagesOnTile( dst, tileUnfit.bottomShadowImages, { x, y }, *this );
+            renderImagesOnTile( dst, tileUnfit.shadowImages, { x, y }, *this );
         }
     }
 
