@@ -208,8 +208,6 @@ namespace Interface
 
         void QueueEventProcessing();
 
-        fheroes2::Rect RectFixed( fheroes2::Point & dst, int rw, int rh ) const;
-
         static fheroes2::Image GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset );
 
         int32_t GetValidTileIdFromPoint( const fheroes2::Point & point ) const; // returns -1 in case of invalid index (out of World Map)

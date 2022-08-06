@@ -1537,7 +1537,7 @@ namespace fheroes2
 
         Point offset{ spriteOffset.x / squareSize, spriteOffset.y / squareSize };
 
-        // The start of a square must be before image offset so in case of negative offset we need to decrease the ID of a start square.
+        // The start of a square must be before image offset so in case of negative offset we need to decrease the ID of the start square.
         if ( ( spriteOffset.x < 0 ) && ( offset.x * squareSize != spriteOffset.x ) ) {
             --offset.x;
         }

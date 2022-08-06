@@ -310,13 +310,6 @@ Interface::GameArea::GameArea( Basic & basic )
     // Do nothing.
 }
 
-fheroes2::Rect Interface::GameArea::RectFixed( fheroes2::Point & dst, int rw, int rh ) const
-{
-    std::pair<fheroes2::Rect, fheroes2::Point> res = Fixed4Blit( { dst.x, dst.y, rw, rh }, GetROI() );
-    dst = res.second;
-    return res.first;
-}
-
 void Interface::GameArea::generate( const fheroes2::Size & screenSize, const bool withoutBorders )
 {
     if ( withoutBorders )
@@ -357,38 +350,23 @@ void Interface::GameArea::SetAreaPosition( int32_t x, int32_t y, int32_t w, int3
 void Interface::GameArea::BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const fheroes2::Point & mp, bool flip,
                                       uint8_t alpha ) const
 {
-    fheroes2::Point dstpt = GetRelativeTilePosition( mp ) + fheroes2::Point( ox, oy );
+    const fheroes2::Point tileOffset = GetRelativeTilePosition( mp );
 
-    const int32_t width = src.width();
-    const int32_t height = src.height();
+    const fheroes2::Rect imageRoi{ tileOffset.x + ox, tileOffset.y + oy, src.width(), src.height() };
+    const fheroes2::Rect overlappedRoi = _windowROI ^ imageRoi;
 
-    // In most of cases objects locate within window ROI so we don't need to calculate truncated ROI
-    if ( dstpt.x >= _windowROI.x && dstpt.y >= _windowROI.y && dstpt.x + width <= _windowROI.x + _windowROI.width
-         && dstpt.y + height <= _windowROI.y + _windowROI.height ) {
-        fheroes2::AlphaBlit( src, 0, 0, dst, dstpt.x, dstpt.y, width, height, alpha, flip );
-    }
-    else if ( _windowROI & fheroes2::Rect( dstpt.x, dstpt.y, width, height ) ) {
-        const fheroes2::Rect & fixedRect = RectFixed( dstpt, width, height );
-        fheroes2::AlphaBlit( src, fixedRect.x, fixedRect.y, dst, dstpt.x, dstpt.y, fixedRect.width, fixedRect.height, alpha, flip );
-    }
+    fheroes2::AlphaBlit( src, overlappedRoi.x - imageRoi.x, overlappedRoi.y - imageRoi.y, dst, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width,
+                         overlappedRoi.height, alpha, flip );
 }
 
 void Interface::GameArea::DrawTile( fheroes2::Image & dst, const fheroes2::Image & src, const fheroes2::Point & mp ) const
 {
-    fheroes2::Point dstpt = GetRelativeTilePosition( mp );
+    const fheroes2::Point tileOffset = GetRelativeTilePosition( mp );
 
-    const int32_t width = src.width();
-    const int32_t height = src.height();
+    const fheroes2::Rect imageRoi{ tileOffset.x, tileOffset.y, src.width(), src.height() };
+    const fheroes2::Rect overlappedRoi = _windowROI ^ imageRoi;
 
-    // In most of cases objects locate within window ROI so we don't need to calculate truncated ROI
-    if ( dstpt.x >= _windowROI.x && dstpt.y >= _windowROI.y && dstpt.x + width <= _windowROI.x + _windowROI.width
-         && dstpt.y + height <= _windowROI.y + _windowROI.height ) {
-        fheroes2::Copy( src, 0, 0, dst, dstpt.x, dstpt.y, width, height );
-    }
-    else if ( _windowROI & fheroes2::Rect( dstpt.x, dstpt.y, width, height ) ) {
-        const fheroes2::Rect & fixedRect = RectFixed( dstpt, width, height );
-        fheroes2::Copy( src, fixedRect.x, fixedRect.y, dst, dstpt.x, dstpt.y, fixedRect.width, fixedRect.height );
-    }
+    fheroes2::Copy( src, overlappedRoi.x - imageRoi.x, overlappedRoi.y - imageRoi.y, dst, overlappedRoi.x, overlappedRoi.y, overlappedRoi.width, overlappedRoi.height );
 }
 
 void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw ) const
