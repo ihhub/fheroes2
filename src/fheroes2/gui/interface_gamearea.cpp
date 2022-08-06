@@ -496,6 +496,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // Tile unfit objects should be rendered over the edge of the map, except the bottom. We shouldn't render their shadows.
     if ( minY == 0 ) {
         for ( int32_t x = minX - 1; x < maxX + 1; ++x ) {
+            // Boat is taller than 2 tiles.
+            renderOutOfMapTile( tileUnfit, dst, { x, minY - 2 }, *this );
             renderOutOfMapTile( tileUnfit, dst, { x, minY - 1 }, *this );
         }
     }
