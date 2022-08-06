@@ -1012,16 +1012,20 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
         break;
     case Maps::Ground::BEACH:
     case Maps::Ground::GRASS:
-    case Maps::Ground::WATER:
-        // Logically, water doesn't have any digging holes but let's assume it has.
+        // Beach doesn't have its digging hole so we use it from Grass terrain.
         obj = 0xC0; // ICN::OBJNGRA2
         idx = 9;
         break;
+    case Maps::Ground::WATER:
+        // How is it possible to dig on water? Check your logic!
+        assert( 0 );
+        return;
     default:
         // Did you add a new terrain type? Add the logic above!
         assert( 0 );
         break;
     }
+
     tile.AddonsPushLevel1( Maps::TilesAddon( Maps::TERRAIN_LAYER, GetUniq(), obj, idx ) );
 
     // reset
