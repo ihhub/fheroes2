@@ -62,7 +62,6 @@ namespace
     void renderImagesOnTile( fheroes2::Image & output, const std::map<fheroes2::Point, std::deque<RenderObjectInfo>> & images, const fheroes2::Point & offset,
                              const int32_t tileIndex, const Interface::GameArea & area )
     {
-        // Draw the lower part of tile-unfit object's sprite.
         auto iter = images.find( offset );
         if ( iter != images.end() ) {
             assert( !iter->second.empty() );
@@ -71,6 +70,31 @@ namespace
 
             for ( const RenderObjectInfo & info : iter->second ) {
                 area.BlitOnTile( output, info.image, info.image.x(), info.image.y(), mp, false, info.alphaValue );
+            }
+        }
+    }
+
+    void correctShadowSprites( std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> & shadows,
+                               const std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> & images )
+    {
+        for ( auto & shadowInfo : shadows ) {
+            const fheroes2::Rect shadowRoi{ shadowInfo.second.x(), shadowInfo.second.y(), shadowInfo.second.width(), shadowInfo.second.height() };
+            assert( shadowRoi.x >= 0 && shadowRoi.y >= 0 && shadowRoi.x + shadowRoi.width <= TILEWIDTH && shadowRoi.y + shadowRoi.height <= TILEWIDTH );
+
+            for ( const auto & imageInfo : images ) {
+                if ( shadowInfo.first == imageInfo.first ) {
+                    // These are overlapping images. Remove overlapping area.
+                    const fheroes2::Rect imageRoi{ imageInfo.second.x(), imageInfo.second.y(), imageInfo.second.width(), imageInfo.second.height() };
+                    assert( imageRoi.x >= 0 && imageRoi.y >= 0 && imageRoi.x + imageRoi.width <= TILEWIDTH && imageRoi.y + imageRoi.height <= TILEWIDTH );
+
+                    const fheroes2::Rect overlappedArea = shadowRoi ^ imageRoi;
+                    if ( overlappedArea.width <= 0 || overlappedArea.height <= 0 ) {
+                        continue;
+                    }
+
+                    fheroes2::MaskTransformLayer( imageInfo.second, overlappedArea.x - imageRoi.x, overlappedArea.y - imageRoi.y, shadowInfo.second,
+                                                  overlappedArea.x - shadowRoi.x, overlappedArea.y - shadowRoi.y, overlappedArea.width, overlappedArea.height );
+                }
             }
         }
     }
@@ -237,8 +261,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // However, there are some objects which appear to be more than 1 tile (32 x 32 pixels) size such as heroes, monsters and boats.
     // To render all these 'special' objects we need to create a copy of object sprite stacks for each tile, add temporary extra sprites and render them.
     // Let's call these objects as tile-unfit objects, the rest of objects will be called tile-fit objects.
-    //
-    // TODO: monster sprites combine the sprite itself and shadow. To properly render it we need to separate both parts and render on different layers.
 
     // Fading animation can be applied as for tile-fit and tile-unfit objects.
     // In case of tile-fit objects we need to pass UID of the object and alpha values.
@@ -307,6 +329,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 const uint8_t heroAlphaValue = hero->getAlphaValue();
 
                 auto spriteInfo = hero->getHeroSpritesPerTile();
+                auto spriteShadowInfo = hero->getHeroShadowSpritesPerTile();
+
+                correctShadowSprites( spriteShadowInfo, spriteInfo );
+
                 for ( auto & info : spriteInfo ) {
                     if ( movingHero && info.first.y == 0 ) {
                         if ( nextHeroPos.y > heroPos.y && nextHeroPos.x > heroPos.x && info.first.x > 0 ) {
@@ -388,12 +414,12 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     }
                 }
 
-                auto spriteShadowInfo = hero->getHeroShadowSpritesPerTile();
+                
                 for ( auto & info : spriteShadowInfo ) {
                     if ( movingHero ) {
-                        if ( nextHeroPos.y > heroPos.y && info.first.y == 1 && info.first.x != 0 ) {
+                        if ( nextHeroPos.y > heroPos.y && info.first.y == 1 ) {
                             // A hero moving down. Usually it happens only when it is possible to go so we are safe to do this trick in relation to objects.
-                            tileUnfitTopShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                            tileUnfitBottomShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
                             continue;
                         }
                     }
@@ -408,21 +434,21 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     }
                     else if ( info.first.y == 0 || ( isHeroInCastle && info.first.y > 0 ) ) {
                         if ( info.first.x < 0 ) {
-                            tileUnfitTopShadowImages[info.first + heroPos].emplace_front( std::move( info.second ), heroAlphaValue );
+                            tileUnfitBottomShadowImages[info.first + heroPos].emplace_front( std::move( info.second ), heroAlphaValue );
                         }
                         else if ( info.first.x == 0 ) {
                             tileUnfitBottomShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
                         }
                         else {
-                            tileUnfitTopShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                            tileUnfitBottomShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
                         }
                     }
                     else {
                         if ( info.first.x < 0 ) {
-                            tileUnfitTopShadowImages[info.first + heroPos].emplace_front( std::move( info.second ), heroAlphaValue );
+                            tileUnfitBottomShadowImages[info.first + heroPos].emplace_front( std::move( info.second ), heroAlphaValue );
                         }
                         else {
-                            tileUnfitTopShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
+                            tileUnfitBottomShadowImages[info.first + heroPos].emplace_back( std::move( info.second ), heroAlphaValue );
                         }
                     }
                 }
@@ -474,6 +500,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_BOAT );
 
                 auto spriteInfo = tile.getBoatSpritesPerTile();
+                auto spriteShadowInfo = tile.getBoatShadowSpritesPerTile();
+
+                correctShadowSprites( spriteShadowInfo, spriteInfo );
+
                 for ( auto & info : spriteInfo ) {
                     if ( info.first.y > 0 ) {
                         // TODO: fix incorrect boat sprites being too tall.
@@ -502,7 +532,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     }
                 }
 
-                auto spriteShadowInfo = tile.getBoatShadowSpritesPerTile();
+                
                 for ( auto & info : spriteShadowInfo ) {
                     if ( info.first.y > 0 ) {
                         // TODO: fix some incorrect boat sprites being too tall.
@@ -523,10 +553,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     }
                     else {
                         if ( info.first.x < 0 ) {
-                            tileUnfitTopShadowImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
+                            tileUnfitBottomShadowImages[info.first + tile.GetCenter()].emplace_front( std::move( info.second ), alphaValue );
                         }
                         else {
-                            tileUnfitTopShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
+                            tileUnfitBottomShadowImages[info.first + tile.GetCenter()].emplace_back( std::move( info.second ), alphaValue );
                         }
                     }
                 }

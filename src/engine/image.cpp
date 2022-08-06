@@ -1969,6 +1969,32 @@ namespace fheroes2
         return out;
     }
 
+    void MaskTransformLayer( const Image & mask, int32_t maskX, int32_t maskY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height )
+    {
+        if ( !Verify( mask, maskX, maskY, out, outX, outY, width, height ) ) {
+            return;
+        }
+
+        const int32_t widthMask = mask.width();
+        const int32_t widthOut = out.width();
+
+        const uint8_t * imageMaskY = mask.transform() + maskY * widthMask + maskX;
+        uint8_t * imageOutY = out.transform() + outY * widthOut + outX;
+        const uint8_t * imageMaskYEnd = imageMaskY + height * widthMask;
+
+        for ( ; imageMaskY != imageMaskYEnd; imageMaskY += widthMask, imageOutY += widthOut ) {
+            const uint8_t * imageMaskX = imageMaskY;
+            uint8_t * imageOutX = imageOutY;
+            const uint8_t * imageMaskXEnd = imageMaskX + width;
+
+            for ( ; imageMaskX != imageMaskXEnd; ++imageMaskX, ++imageOutX ) {
+                if ( *imageMaskX == 0 ) {
+                    *imageOutX = 1;
+                }
+            }
+        }
+    }
+
     void ReplaceColorId( Image & image, uint8_t oldColorId, uint8_t newColorId )
     {
         if ( image.empty() )

@@ -263,6 +263,8 @@ namespace fheroes2
 
     Sprite makeShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId );
 
+    void MaskTransformLayer( const Image & mask, int32_t maskX, int32_t maskY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height );
+
     // This function does NOT check transform layer. If you intent to replace few colors at the same image please use ApplyPalette to be more efficient.
     void ReplaceColorId( Image & image, uint8_t oldColorId, uint8_t newColorId );
 
