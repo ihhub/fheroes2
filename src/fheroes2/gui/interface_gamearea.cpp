@@ -330,7 +330,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 auto spriteInfo = hero->getHeroSpritesPerTile();
                 auto spriteShadowInfo = hero->getHeroShadowSpritesPerTile();
-
                 correctShadowSprites( spriteShadowInfo, spriteInfo );
 
                 for ( auto & info : spriteInfo ) {
@@ -500,7 +499,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 auto spriteInfo = tile.getBoatSpritesPerTile();
                 auto spriteShadowInfo = tile.getBoatShadowSpritesPerTile();
-
                 correctShadowSprites( spriteShadowInfo, spriteInfo );
 
                 for ( auto & info : spriteInfo ) {

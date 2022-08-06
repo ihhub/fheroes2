@@ -989,7 +989,6 @@ namespace ICN
 
     const char * GetString( int );
     uint32_t AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool quantity = false );
-    bool HighlyObjectSprite( int icn, uint32_t );
     int PORTxxxx( int heroId );
 
     int Get4Captain( int race );
