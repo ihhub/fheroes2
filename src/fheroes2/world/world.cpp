@@ -986,27 +986,41 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
     uint32_t idx = 0;
 
     switch ( tile.GetGround() ) {
-    case Maps::Ground::WASTELAND:
-        obj = 0xE4;
-        idx = 70;
-        break; // ICN::OBJNCRCK
-    case Maps::Ground::DIRT:
-        obj = 0xE0;
-        idx = 140;
-        break; // ICN::OBJNDIRT
     case Maps::Ground::DESERT:
-        obj = 0xDC;
+        obj = 0xDC; // ICN::OBJNDSRT
         idx = 68;
-        break; // ICN::OBJNDSRT
+        break;
+    case Maps::Ground::SNOW:
+        obj = 208; // ICN::OBJNSNOW
+        idx = 11;
+        break;
+    case Maps::Ground::SWAMP:
+        obj = 212; // ICN::OBJNSWMP
+        idx = 86;
+        break;
+    case Maps::Ground::WASTELAND:
+        obj = 0xE4; // ICN::OBJNCRCK
+        idx = 70;
+        break;
     case Maps::Ground::LAVA:
-        obj = 0xD8;
+        obj = 0xD8; // ICN::OBJNLAVA
         idx = 26;
-        break; // ICN::OBJNLAVA
+        break;
+    case Maps::Ground::DIRT:
+        obj = 0xE0; // ICN::OBJNDIRT
+        idx = 140;
+        break;
+    case Maps::Ground::BEACH:
     case Maps::Ground::GRASS:
-    default:
-        obj = 0xC0;
+    case Maps::Ground::WATER:
+        // Logically, water doesn't have any digging holes but let's assume it has.
+        obj = 0xC0; // ICN::OBJNGRA2
         idx = 9;
-        break; // ICN::OBJNGRA2
+        break;
+    default:
+        // Did you add a new terrain type? Add the logic above!
+        assert( 0 );
+        break;
     }
     tile.AddonsPushLevel1( Maps::TilesAddon( Maps::TERRAIN_LAYER, GetUniq(), obj, idx ) );
 

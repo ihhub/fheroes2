@@ -1960,26 +1960,26 @@ void Maps::Tiles::correctDiggingHoles()
     uint32_t idx = 0;
     switch ( GetGround() ) {
     case Maps::Ground::WASTELAND:
-        obj = 0xE4;
+        obj = 0xE4; // ICN::OBJNCRCK
         idx = 70;
-        break; // ICN::OBJNCRCK
+        break;
     case Maps::Ground::DIRT:
-        obj = 0xE0;
+        obj = 0xE0; // ICN::OBJNDIRT
         idx = 140;
-        break; // ICN::OBJNDIRT
+        break;
     case Maps::Ground::DESERT:
-        obj = 0xDC;
+        obj = 0xDC; // ICN::OBJNDSRT
         idx = 68;
-        break; // ICN::OBJNDSRT
+        break;
     case Maps::Ground::LAVA:
-        obj = 0xD8;
+        obj = 0xD8; // ICN::OBJNLAVA
         idx = 26;
-        break; // ICN::OBJNLAVA
-    case Maps::Ground::GRASS:
+        break;
     default:
-        obj = 0xC0;
+        // Previous implementation was using incorrect digging holes for my terrains. We aren't going to fix it for old saves.
+        obj = 0xC0; // ICN::OBJNGRA2
         idx = 9;
-        break; // ICN::OBJNGRA2
+        break;
     }
 
     for ( TilesAddon & addon : addons_level1 ) {
