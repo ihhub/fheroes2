@@ -261,6 +261,15 @@ namespace
         }
     }
 
+    void renderOutOfMapTile( TileUnfitRenderObjectInfo & tileUnfit, fheroes2::Image & output, const fheroes2::Point & offset, const Interface::GameArea & area )
+    {
+        renderImagesOnTile( output, tileUnfit.bottomBackgroundImages, offset, area );
+        renderImagesOnTile( output, tileUnfit.lowPriorityBottomImages, offset, area );
+        renderImagesOnTile( output, tileUnfit.bottomImages, offset, area );
+        renderImagesOnTile( output, tileUnfit.highPriorityBottomImages, offset, area );
+        renderImagesOnTile( output, tileUnfit.topImages, offset, area );
+    }
+
     bool isTallTopLayerSprite( const int32_t x, int32_t y )
     {
         if ( y + 1 >= world.h() ) {
@@ -515,7 +524,24 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
-    // Tile unfit objects should be rendered over the edge of the map. We shouldn't render their shadows.
+    // Tile unfit objects should be rendered over the edge of the map, except the bottom. We shouldn't render their shadows.
+    if ( minY == 0 ) {
+        for ( int32_t x = minX - 1; x < maxX + 1; ++x ) {
+            renderOutOfMapTile( tileUnfit, dst, { x, minY - 1 }, *this );
+        }
+    }
+
+    if ( minX == 0 ) {
+        for ( int32_t y = minY; y < maxY; ++y ) {
+            renderOutOfMapTile( tileUnfit, dst, { minX - 1, y }, *this );
+        }
+    }
+
+    if ( maxX == world.w() ) {
+        for ( int32_t y = minY; y < maxY; ++y ) {
+            renderOutOfMapTile( tileUnfit, dst, { maxX + 1, y }, *this );
+        }
+    }
 
     // Render all terrain layer objects.
     for ( int32_t y = minY; y < maxY; ++y ) {
