@@ -306,21 +306,13 @@ Interface::GameArea::GameArea( Basic & basic )
     , _prevIndexPos( 0 )
     , scrollDirection( 0 )
     , updateCursor( false )
-{}
-
-fheroes2::Rect Interface::GameArea::GetVisibleTileROI() const
 {
-    return { _getStartTileId(), _visibleTileCount };
-}
-
-void Interface::GameArea::ShiftCenter( const fheroes2::Point & offset )
-{
-    SetCenterInPixels( _topLeftTileOffset + _middlePoint() + offset );
+    // Do nothing.
 }
 
 fheroes2::Rect Interface::GameArea::RectFixed( fheroes2::Point & dst, int rw, int rh ) const
 {
-    std::pair<fheroes2::Rect, fheroes2::Point> res = Fixed4Blit( fheroes2::Rect( dst.x, dst.y, rw, rh ), GetROI() );
+    std::pair<fheroes2::Rect, fheroes2::Point> res = Fixed4Blit( { dst.x, dst.y, rw, rh }, GetROI() );
     dst = res.second;
     return res.first;
 }
@@ -664,7 +656,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
 
             const fheroes2::Sprite & routeSprite = fheroes2::AGG::GetICN( ( ( greenColorSteps < 0 ) ? ICN::ROUTERED : ICN::ROUTE ), routeSpriteIndex );
-            BlitOnTile( dst, routeSprite, routeSprite.x() - 12, routeSprite.y() + 2, mp );
+            BlitOnTile( dst, routeSprite, routeSprite.x() - 12, routeSprite.y() + 2, mp, false, 255 );
         }
     }
 
@@ -727,13 +719,6 @@ void Interface::GameArea::Scroll()
 void Interface::GameArea::SetRedraw() const
 {
     interface.SetRedraw( REDRAW_GAMEAREA );
-}
-
-void Interface::GameArea::SetCenter( const fheroes2::Point & pt )
-{
-    _setCenterToTile( pt );
-
-    scrollDirection = 0;
 }
 
 fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset )
@@ -858,11 +843,6 @@ void Interface::GameArea::QueueEventProcessing()
         interface.MouseCursorAreaPressRight( index );
 }
 
-fheroes2::Point Interface::GameArea::_middlePoint() const
-{
-    return { _windowROI.width / 2, _windowROI.height / 2 };
-}
-
 fheroes2::Point Interface::GameArea::_getStartTileId() const
 {
     const int32_t x = ( _topLeftTileOffset.x < 0 ? ( _topLeftTileOffset.x - TILEWIDTH - 1 ) / TILEWIDTH : _topLeftTileOffset.x / TILEWIDTH );
@@ -912,17 +892,7 @@ int32_t Interface::GameArea::GetValidTileIdFromPoint( const fheroes2::Point & po
 
 fheroes2::Point Interface::GameArea::GetRelativeTilePosition( const fheroes2::Point & tileId ) const
 {
-    return fheroes2::Point( tileId.x * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x, tileId.y * TILEWIDTH - _topLeftTileOffset.y + _windowROI.y );
-}
-
-fheroes2::Point Interface::GameArea::getCurrentCenterInPixels() const
-{
-    return _topLeftTileOffset + _middlePoint();
-}
-
-void Interface::GameArea::addObjectAnimationInfo( std::shared_ptr<BaseObjectAnimationInfo> info )
-{
-    _animationInfo.emplace_back( std::move( info ) );
+    return { tileId.x * TILEWIDTH - _topLeftTileOffset.x + _windowROI.x, tileId.y * TILEWIDTH - _topLeftTileOffset.y + _windowROI.y };
 }
 
 void Interface::GameArea::updateObjectAnimationInfo() const

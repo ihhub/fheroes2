@@ -142,7 +142,7 @@ namespace Interface
     class GameArea
     {
     public:
-        explicit GameArea( Basic & );
+        explicit GameArea( Basic & basic );
         GameArea( const GameArea & ) = default;
         GameArea( GameArea && ) = delete;
 
@@ -159,9 +159,16 @@ namespace Interface
         }
 
         // Do NOT use this method directly in heavy computation loops
-        fheroes2::Rect GetVisibleTileROI() const;
+        fheroes2::Rect GetVisibleTileROI() const
+        {
+            return { _getStartTileId(), _visibleTileCount };
+        }
 
-        void ShiftCenter( const fheroes2::Point & offset ); // in pixels
+        // Shift center in pixels.
+        void ShiftCenter( const fheroes2::Point & offset )
+        {
+            SetCenterInPixels( _topLeftTileOffset + _middlePoint() + offset );
+        }
 
         int GetScrollCursor() const;
 
@@ -173,7 +180,12 @@ namespace Interface
         void Scroll();
         void SetScroll( int );
 
-        void SetCenter( const fheroes2::Point & point );
+        void SetCenter( const fheroes2::Point & point )
+        {
+            _setCenterToTile( point );
+
+            scrollDirection = 0;
+        }
 
         // Do not call this method unless it's needed for manual setup of the position
         void SetCenterInPixels( const fheroes2::Point & point );
@@ -184,8 +196,7 @@ namespace Interface
         // Interface::Basic::Redraw() instead to avoid issues in the "no interface" mode
         void Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw = false ) const;
 
-        void BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const fheroes2::Point & mp, bool flip = false,
-                         uint8_t alpha = 255 ) const;
+        void BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const fheroes2::Point & mp, bool flip, uint8_t alpha ) const;
 
         // Use this method to draw TIL images
         void DrawTile( fheroes2::Image & src, const fheroes2::Image & dst, const fheroes2::Point & mp ) const;
@@ -211,9 +222,15 @@ namespace Interface
 
         void SetAreaPosition( int32_t, int32_t, int32_t, int32_t );
 
-        fheroes2::Point getCurrentCenterInPixels() const;
+        fheroes2::Point getCurrentCenterInPixels() const
+        {
+            return _topLeftTileOffset + _middlePoint();
+        }
 
-        void addObjectAnimationInfo( std::shared_ptr<BaseObjectAnimationInfo> info );
+        void addObjectAnimationInfo( std::shared_ptr<BaseObjectAnimationInfo> info )
+        {
+            _animationInfo.emplace_back( std::move( info ) );
+        }
 
         uint8_t getObjectAlphaValue( const int32_t tileId, const MP2::MapObjectType type ) const;
 
@@ -222,10 +239,6 @@ namespace Interface
         static void runFadingAnimation( const std::shared_ptr<BaseObjectAnimationInfo> info );
 
     private:
-        fheroes2::Point _middlePoint() const; // returns middle point of window ROI
-        fheroes2::Point _getStartTileId() const;
-        void _setCenterToTile( const fheroes2::Point & tile ); // set center to the middle of tile (input is tile ID)
-
         Basic & interface;
 
         fheroes2::Rect _windowROI; // visible to draw area of World Map in pixels
@@ -247,6 +260,16 @@ namespace Interface
 
         // This member needs to be mutable because it is modified during rendering.
         mutable std::vector<std::shared_ptr<BaseObjectAnimationInfo>> _animationInfo;
+
+        // Returns middle point of window ROI.
+        fheroes2::Point _middlePoint() const
+        {
+            return { _windowROI.width / 2, _windowROI.height / 2 };
+        }
+
+        fheroes2::Point _getStartTileId() const;
+
+        void _setCenterToTile( const fheroes2::Point & tile ); // set center to the middle of tile (input is tile ID)
 
         void updateObjectAnimationInfo() const;
     };
