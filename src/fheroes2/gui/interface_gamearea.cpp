@@ -426,8 +426,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     // Fading animation can be applied as for tile-fit and tile-unfit objects.
     // In case of tile-fit objects we need to pass UID of the object and alpha values.
-    // In case of tile-unfit objects we need to setalpha value while creating RenderObjectInfo instances.
-    // So far only one object and multple heroes can have fading animation.
+    // In case of tile-unfit objects we need to pass tile ID and set alpha value while creating RenderObjectInfo instances.
 
     const bool drawHeroes = ( flag & LEVEL_HEROES ) == LEVEL_HEROES;
 
@@ -444,9 +443,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     // TODO: Dragon City with tilset 164 (OBJNMUL2.ICN) and object index 46 is a bottom layer sprite.
     // TODO: When a hero standing besides this turns a part of the hero is visible. This can be fixed only by some hack.
 
-    // Run through all visible tiles and find all tile-unfit objects. Also cover extra tiles from right and bottom sides.
+    // Run through all visible tiles and find all tile-unfit objects.
+    // Also cover extra tiles from right and bottom sides because these objects are usually bigger than 1x1 tiles.
     const int32_t roiToRenderMaxX = std::min( maxX + 2, world.w() );
-    const int32_t roiToRenderMaxY = std::min( maxY + 1, world.h() );
+    const int32_t roiToRenderMaxY = std::min( maxY + 2, world.h() );
 
     for ( int32_t posY = minY; posY < roiToRenderMaxY; ++posY ) {
         for ( int32_t posX = minX; posX < roiToRenderMaxX; ++posX ) {
