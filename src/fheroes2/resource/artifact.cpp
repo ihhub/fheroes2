@@ -273,6 +273,7 @@ double Artifact::getArtifactValue() const
             artifactValue += static_cast<double>( bonus.value ) / 10.0;
             break;
         case fheroes2::ArtifactBonusType::EVERY_COMBAT_SPELL_DURATION:
+        case fheroes2::ArtifactBonusType::SPELL_POINTS_DAILY_GENERATION:
             artifactValue += static_cast<double>( bonus.value ) / 2.0;
             break;
         case fheroes2::ArtifactBonusType::CURSE_SPELL_IMMUNITY:
@@ -287,12 +288,32 @@ double Artifact::getArtifactValue() const
         case fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY:
         case fheroes2::ArtifactBonusType::VIEW_MONSTER_INFORMATION:
         case fheroes2::ArtifactBonusType::ADD_SPELL:
+        case fheroes2::ArtifactBonusType::EXTRA_CATAPULT_SHOTS:
             artifactValue += 1;
             break;
         case fheroes2::ArtifactBonusType::MAXIMUM_MORALE:
         case fheroes2::ArtifactBonusType::DISABLE_ALL_SPELL_COMBAT_CASTING:
         case fheroes2::ArtifactBonusType::MAXIMUM_LUCK:
             artifactValue += 3;
+            break;
+        case fheroes2::ArtifactBonusType::KNOWLEDGE_SKILL:
+        case fheroes2::ArtifactBonusType::ATTACK_SKILL:
+        case fheroes2::ArtifactBonusType::DEFENCE_SKILL:
+        case fheroes2::ArtifactBonusType::SPELL_POWER_SKILL:
+        case fheroes2::ArtifactBonusType::MORALE:
+        case fheroes2::ArtifactBonusType::LUCK:
+        case fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE:
+        case fheroes2::ArtifactBonusType::CRYSTAL_INCOME:
+        case fheroes2::ArtifactBonusType::MERCURY_INCOME:
+        case fheroes2::ArtifactBonusType::ORE_INCOME:
+        case fheroes2::ArtifactBonusType::GEMS_INCOME:
+        case fheroes2::ArtifactBonusType::WOOD_INCOME:
+        case fheroes2::ArtifactBonusType::SULFUR_INCOME:
+        case fheroes2::ArtifactBonusType::SEA_BATTLE_LUCK_BOOST:
+        case fheroes2::ArtifactBonusType::SEA_BATTLE_MORALE_BOOST:
+            artifactValue += bonus.value;
+            break;
+        case fheroes2::ArtifactBonusType::NONE:
             break;
         default:
             // Did you add a new artifact ? Add your logic here.
@@ -313,6 +334,10 @@ double Artifact::getArtifactValue() const
         case fheroes2::ArtifactCurseType::NO_JOINING_ARMIES:
         case fheroes2::ArtifactCurseType::UNDEAD_MORALE_PENALTY:
             artifactValue -= 1;
+            break;
+        case fheroes2::ArtifactCurseType::MORALE:
+        case fheroes2::ArtifactCurseType::SPELL_POWER_SKILL:
+            artifactValue -= curse.value;
             break;
         default:
             // Did you add a new artifact ? Add your logic here.
