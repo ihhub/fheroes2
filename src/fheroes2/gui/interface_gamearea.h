@@ -46,7 +46,7 @@ namespace Interface
         LEVEL_BOTTOM = 0x01,
         LEVEL_TOP = 0x02,
         LEVEL_HEROES = 0x04,
-        UNUSED_LEVEL = 0x08,
+        // UNUSED = 0x08,
         LEVEL_FOG = 0x20,
         LEVEL_ROUTES = 0x40,
 
@@ -75,8 +75,6 @@ namespace Interface
         int32_t tileId{ -1 };
 
         MP2::MapObjectType type{ MP2::OBJ_ZERO };
-
-        static const uint8_t alphaStep{ 20 };
 
         uint8_t alphaValue{ 255 };
 
@@ -107,6 +105,8 @@ namespace Interface
         {
             return ( alphaValue == 0 );
         }
+
+        static const uint8_t alphaStep{ 20 };
     };
 
     struct ObjectFadingInInfo : public BaseObjectAnimationInfo
@@ -137,6 +137,8 @@ namespace Interface
         {
             return ( alphaValue == 255 );
         }
+
+        static const uint8_t alphaStep{ 20 };
     };
 
     class GameArea
@@ -234,7 +236,8 @@ namespace Interface
 
         uint8_t getObjectAlphaValue( const uint32_t uid ) const;
 
-        static void runFadingAnimation( const std::shared_ptr<BaseObjectAnimationInfo> info );
+        // Make sure you do not have a copy of this object after the execution of the method to avoid incorrect object removal in some cases.
+        void runSingleObjectAnimation( std::shared_ptr<BaseObjectAnimationInfo> info );
 
     private:
         Basic & interface;

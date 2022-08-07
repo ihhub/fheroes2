@@ -624,11 +624,15 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
             uint32_t routeSpriteIndex = 0;
             if ( nextStep != path.end() ) {
-                const Maps::Tiles & tileTo = world.GetTiles( currentStep->GetIndex() );
-                uint32_t cost = Maps::Ground::GetPenalty( tileTo, pathfinding );
+                const Maps::Tiles & tileFrom = world.GetTiles( from );
+                const Maps::Tiles & tileTo = world.GetTiles( nextStep->GetIndex() );
+                uint32_t cost = 0;
 
-                if ( world.GetTiles( currentStep->GetFrom() ).isRoad() && tileTo.isRoad() ) {
+                if ( tileFrom.isRoad() && tileTo.isRoad() ) {
                     cost = Maps::Ground::roadPenalty;
+                }
+                else {
+                    cost = Maps::Ground::GetPenalty( tileTo, pathfinding );
                 }
 
                 routeSpriteIndex = Route::Path::GetIndexSprite( currentStep->GetDirection(), nextStep->GetDirection(), cost );
@@ -660,8 +664,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             for ( int32_t x = minX; x < maxX; ++x ) {
                 const Maps::Tiles & tile = world.GetTiles( x, y );
 
-                const bool isFog = drawFog && tile.isFog( friendColors );
-                if ( isFog ) {
+                if ( tile.isFog( friendColors ) ) {
                     tile.RedrawFogs( dst, friendColors, *this );
                 }
             }
@@ -908,8 +911,15 @@ uint8_t Interface::GameArea::getObjectAlphaValue( const uint32_t uid ) const
     return 255;
 }
 
-void Interface::GameArea::runFadingAnimation( const std::shared_ptr<BaseObjectAnimationInfo> info )
+void Interface::GameArea::runSingleObjectAnimation( std::shared_ptr<BaseObjectAnimationInfo> info )
 {
+    if ( !info ) {
+        assert( 0 );
+        return;
+    }
+
+    addObjectAnimationInfo( info );
+
     LocalEvent & le = LocalEvent::Get();
 
     while ( le.HandleEvents() && !info->isAnimationCompleted() ) {

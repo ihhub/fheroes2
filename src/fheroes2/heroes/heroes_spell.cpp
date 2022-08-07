@@ -318,22 +318,15 @@ namespace
 
             const uint32_t distance = Maps::GetStraightLineDistance( boatSource, hero.GetIndex() );
             if ( distance > 1 ) {
-                std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
-
                 const Maps::Tiles & tileSource = world.GetTiles( boatSource );
-                animationObject.reset( new Interface::ObjectFadingOutInfo( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
 
                 Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
-                gameArea.addObjectAnimationInfo( animationObject );
-                Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
+                gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
 
                 Maps::Tiles & tileDest = world.GetTiles( boatDestination );
                 tileDest.setBoat( Direction::RIGHT );
 
-                animationObject.reset( new Interface::ObjectFadingInInfo( tileDest.GetObjectUID(), boatDestination, MP2::OBJ_BOAT ) );
-
-                gameArea.addObjectAnimationInfo( animationObject );
-                Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
+                gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestination, MP2::OBJ_BOAT ) );
 
                 return true;
             }

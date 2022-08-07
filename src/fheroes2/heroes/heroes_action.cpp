@@ -190,11 +190,8 @@ void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::strin
             if ( remove && recruit == troop.GetCount() ) {
                 Game::PlayPickupSound();
 
-                std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
-                animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
-
-                Interface::Basic::Get().GetGameArea().addObjectAnimationInfo( animationObject );
-                Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
+                Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
+                    std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
                 tile.MonsterSetCount( 0 );
             }
@@ -321,11 +318,8 @@ void Heroes::Action( int tileIndex, bool isDestination )
     /* default actions */
     if ( cancel_default ) {
         if ( MP2::isPickupObject( objectType ) ) {
-            std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
-            animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
-
-            Interface::Basic::Get().GetGameArea().addObjectAnimationInfo( animationObject );
-            Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
+            Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
+                std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
             tile.QuantityReset();
         }
@@ -697,11 +691,8 @@ void ActionToMonster( Heroes & hero, int32_t dst_index )
     if ( destroy ) {
         AudioManager::PlaySound( M82::KILLFADE );
 
-        std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
-        animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
-
-        Interface::Basic::Get().GetGameArea().addObjectAnimationInfo( animationObject );
-        Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
+        Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
+            std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
         tile.MonsterSetCount( 0 );
     }
@@ -918,11 +909,8 @@ void ActionToPickupResource( const Heroes & hero, const MP2::MapObjectType objec
 
     Game::PlayPickupSound();
 
-    std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
-    animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
-
-    Interface::Basic::Get().GetGameArea().addObjectAnimationInfo( animationObject );
-    Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
+    Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
+        std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
     tile.QuantityReset();
 
@@ -1133,11 +1121,8 @@ void ActionToFlotSam( const Heroes & hero, const MP2::MapObjectType objectType, 
 
     Game::PlayPickupSound();
 
-    std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
-    animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
-
-    Interface::Basic::Get().GetGameArea().addObjectAnimationInfo( animationObject );
-    Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
+    Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
+        std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
     tile.QuantityReset();
 
@@ -1714,11 +1699,8 @@ void ActionToShipwreckSurvivor( Heroes & hero, const MP2::MapObjectType objectTy
 
     Game::PlayPickupSound();
 
-    std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
-    animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
-
-    Interface::Basic::Get().GetGameArea().addObjectAnimationInfo( animationObject );
-    Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
+    Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
+        std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
     tile.QuantityReset();
 
@@ -1887,11 +1869,8 @@ void ActionToArtifact( Heroes & hero, int32_t dst_index )
         if ( result && hero.PickupArtifact( art ) ) {
             Game::PlayPickupSound();
 
-            std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
-            animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
-
-            Interface::Basic::Get().GetGameArea().addObjectAnimationInfo( animationObject );
-            Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
+            Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
+                std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
             tile.QuantityReset();
         }
@@ -1996,11 +1975,8 @@ void ActionToTreasureChest( Heroes & hero, const MP2::MapObjectType objectType, 
 
     Game::PlayPickupSound();
 
-    std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
-    animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
-
-    Interface::Basic::Get().GetGameArea().addObjectAnimationInfo( animationObject );
-    Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
+    Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
+        std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
     tile.QuantityReset();
 
@@ -3086,11 +3062,8 @@ void ActionToJail( const Heroes & hero, const MP2::MapObjectType objectType, int
             _( "In a dazzling display of daring, you break into the local jail and free the hero imprisoned there, who, in return, pledges loyalty to your cause." ),
             Font::BIG, Dialog::OK );
 
-        std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
-        animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
-
-        Interface::Basic::Get().GetGameArea().addObjectAnimationInfo( animationObject );
-        Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
+        Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
+            std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
         // TODO: add hero fading in animation together with jail animation.
         Heroes * prisoner = world.FromJailHeroes( dst_index );
@@ -3246,11 +3219,8 @@ void ActionToBarrier( const Heroes & hero, const MP2::MapObjectType objectType, 
             _( "A magical barrier stands tall before you, blocking your way. Runes on the arch read,\n\"Speak the key and you may pass.\"\nAs you speak the magic word, the glowing barrier dissolves into nothingness." ),
             Font::BIG, Dialog::OK );
 
-        std::shared_ptr<Interface::BaseObjectAnimationInfo> animationObject;
-        animationObject.reset( new Interface::ObjectFadingOutInfo( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
-
-        Interface::Basic::Get().GetGameArea().addObjectAnimationInfo( animationObject );
-        Interface::GameArea::runFadingAnimation( std::move( animationObject ) );
+        Interface::Basic::Get().GetGameArea().runSingleObjectAnimation(
+            std::make_shared<Interface::ObjectFadingOutInfo>( tile.GetObjectUID(), tile.GetIndex(), tile.GetObject() ) );
 
         AudioManager::PlaySound( M82::KILLFADE );
     }
