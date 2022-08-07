@@ -1984,7 +1984,7 @@ void Maps::Tiles::correctDiggingHoles()
 
     for ( TilesAddon & addon : addons_level1 ) {
         if ( addon.object == obj && addon.index == idx ) {
-            addon.level = TERRAIN_LAYER;
+            addon.level = BACKGROUND_LAYER;
         }
     }
 }

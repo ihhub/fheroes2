@@ -1026,7 +1026,7 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
         break;
     }
 
-    tile.AddonsPushLevel1( Maps::TilesAddon( Maps::TERRAIN_LAYER, GetUniq(), obj, idx ) );
+    tile.AddonsPushLevel1( Maps::TilesAddon( Maps::BACKGROUND_LAYER, GetUniq(), obj, idx ) );
 
     // reset
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
