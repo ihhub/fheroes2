@@ -79,7 +79,6 @@ namespace
 
             for ( const auto & [imagePos, image] : images ) {
                 if ( shadowPos == imagePos ) {
-                    // These are overlapping images. Remove overlapping area.
                     const fheroes2::Rect imageRoi{ image.x(), image.y(), image.width(), image.height() };
                     assert( imageRoi.x >= 0 && imageRoi.y >= 0 && imageRoi.x + imageRoi.width <= TILEWIDTH && imageRoi.y + imageRoi.height <= TILEWIDTH );
 
@@ -88,6 +87,7 @@ namespace
                         continue;
                     }
 
+                    // These are overlapping images. Mask overlapping area.
                     fheroes2::MaskTransformLayer( image, overlappedArea.x - imageRoi.x, overlappedArea.y - imageRoi.y, shadow, overlappedArea.x - shadowRoi.x,
                                                   overlappedArea.y - shadowRoi.y, overlappedArea.width, overlappedArea.height );
                 }
@@ -126,7 +126,7 @@ namespace
             }
         }
 
-        // Monster shadows are always on the same layer.
+        // Static object's shadows are always on the same layer.
         for ( auto & [shadowPos, shadow] : shadowInfo ) {
             tileUnfit.shadowImages[shadowPos + offset].emplace_back( std::move( shadow ), alphaValue );
         }
@@ -555,7 +555,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             renderImagesOnTile( dst, tileUnfit.lowPriorityBottomImages, { x, y }, *this );
 
             // TODO: some action objects have tiles above which are still on bottom layer. These images must be drawn last.
-            tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::ACTION_OBJECT_LAYER );
+            tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::OBJECT_LAYER );
 
             // Draw middle part of tile-unfit sprites.
             renderImagesOnTile( dst, tileUnfit.bottomImages, { x, y }, *this );

@@ -53,7 +53,7 @@ namespace Maps
 {
     enum ObjectLayerType : uint8_t
     {
-        ACTION_OBJECT_LAYER = 0, // main and action objects like mines, forest, mountains, castles and etc.
+        OBJECT_LAYER = 0, // main and action objects like mines, forest, mountains, castles and etc.
         BACKGROUND_LAYER = 1, // background objects like lakes or bushes.
         SHADOW_LAYER = 2, // shadows and some special objects like castle's entrance road.
         TERRAIN_LAYER = 3 // roads, water flaws and cracks. Essentially everything what is a part of terrain.

@@ -487,8 +487,8 @@ namespace
     const char * getObjectLayerName( const uint8_t level )
     {
         switch ( level ) {
-        case Maps::ACTION_OBJECT_LAYER:
-            return "Action Object layer";
+        case Maps::OBJECT_LAYER:
+            return "Object layer";
         case Maps::BACKGROUND_LAYER:
             return "Background layer";
         case Maps::SHADOW_LAYER:
@@ -862,7 +862,7 @@ void Maps::Tiles::SetObject( const MP2::MapObjectType objectType )
 void Maps::Tiles::setBoat( int direction )
 {
     if ( objectTileset != 0 && objectIndex != 255 ) {
-        AddonsPushLevel1( TilesAddon( ACTION_OBJECT_LAYER, uniq, objectTileset, objectIndex ) );
+        AddonsPushLevel1( TilesAddon( OBJECT_LAYER, uniq, objectTileset, objectIndex ) );
     }
     SetObject( MP2::OBJ_BOAT );
     objectTileset = ICN::BOAT32;
@@ -2012,10 +2012,10 @@ void Maps::Tiles::updateFlag( const int color, const uint8_t objectSpriteIndex, 
         addon->index = objectSpriteIndex;
     }
     else if ( setOnUpperLayer ) {
-        addons_level2.emplace_back( ACTION_OBJECT_LAYER, uid, objectType, objectSpriteIndex );
+        addons_level2.emplace_back( OBJECT_LAYER, uid, objectType, objectSpriteIndex );
     }
     else {
-        addons_level1.emplace_back( ACTION_OBJECT_LAYER, uid, objectType, objectSpriteIndex );
+        addons_level1.emplace_back( OBJECT_LAYER, uid, objectType, objectSpriteIndex );
     }
 }
 
