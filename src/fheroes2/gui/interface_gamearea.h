@@ -237,7 +237,7 @@ namespace Interface
         uint8_t getObjectAlphaValue( const uint32_t uid ) const;
 
         // Make sure you do not have a copy of this object after the execution of the method to avoid incorrect object removal in some cases.
-        void runSingleObjectAnimation( std::shared_ptr<BaseObjectAnimationInfo> info );
+        void runSingleObjectAnimation( const std::shared_ptr<BaseObjectAnimationInfo> & info );
 
     private:
         Basic & interface;

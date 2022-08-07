@@ -911,7 +911,7 @@ uint8_t Interface::GameArea::getObjectAlphaValue( const uint32_t uid ) const
     return 255;
 }
 
-void Interface::GameArea::runSingleObjectAnimation( std::shared_ptr<BaseObjectAnimationInfo> info )
+void Interface::GameArea::runSingleObjectAnimation( const std::shared_ptr<BaseObjectAnimationInfo> & info )
 {
     if ( !info ) {
         assert( 0 );
