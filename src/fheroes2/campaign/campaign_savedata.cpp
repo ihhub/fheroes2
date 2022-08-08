@@ -132,23 +132,6 @@ namespace Campaign
                >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops;
     }
 
-    void CampaignSaveData::loadOldSaveSata( StreamBase & msg, CampaignSaveData & data )
-    {
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0912_RELEASE, "Remove this method." );
-
-        msg >> data._currentScenarioInfoId.scenarioId >> data._currentScenarioBonus;
-
-        std::vector<int> finishedMaps;
-        msg >> finishedMaps;
-
-        msg >> data._currentScenarioInfoId.campaignId >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops;
-
-        data._finishedMaps.clear();
-        for ( const int mapId : finishedMaps ) {
-            data._finishedMaps.emplace_back( data._currentScenarioInfoId.campaignId, mapId );
-        }
-    }
-
     ScenarioVictoryCondition getCurrentScenarioVictoryCondition()
     {
         const CampaignSaveData & campaignData = CampaignSaveData::Get();
