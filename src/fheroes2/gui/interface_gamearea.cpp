@@ -447,11 +447,13 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     // Run through all visible tiles and find all tile-unfit objects.
     // Also cover extra tiles from right and bottom sides because these objects are usually bigger than 1x1 tiles.
+    const int32_t roiToRenderMinX = std::max( minX - 1, 0 );
+    const int32_t roiToRenderMinY = std::max( minY - 1, 0 );
     const int32_t roiToRenderMaxX = std::min( maxX + 2, world.w() );
     const int32_t roiToRenderMaxY = std::min( maxY + 2, world.h() );
 
-    for ( int32_t posY = minY; posY < roiToRenderMaxY; ++posY ) {
-        for ( int32_t posX = minX; posX < roiToRenderMaxX; ++posX ) {
+    for ( int32_t posY = roiToRenderMinY; posY < roiToRenderMaxY; ++posY ) {
+        for ( int32_t posX = roiToRenderMinX; posX < roiToRenderMaxX; ++posX ) {
             const Maps::Tiles & tile = world.GetTiles( posX, posY );
             const MP2::MapObjectType objectType = tile.GetObject();
 
