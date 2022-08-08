@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-10 14:31+0000\n"
+"POT-Creation-Date: 2022-08-08 11:57+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -2559,16 +2559,6 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "(elérhető: %{count})"
 
-msgid "Total: "
-msgstr ""
-
-msgid "No room in"
-msgstr ""
-
-#, fuzzy
-msgid "the garrison"
-msgstr "Helyőrség"
-
 msgid "off"
 msgstr "ki"
 
@@ -2615,6 +2605,9 @@ msgstr "Új hajó építése:"
 
 msgid "Resource cost:"
 msgstr "Fejlesztési költség:"
+
+msgid "Total: "
+msgstr ""
 
 msgid "Need: "
 msgstr ""
@@ -9377,3 +9370,7 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "the garrison"
+#~ msgstr "Helyőrség"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-10 14:31+0000\n"
+"POT-Creation-Date: 2022-08-08 11:57+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -2568,15 +2568,6 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "%{percent}% от всех существ"
 
-msgid "Total: "
-msgstr "В казне: "
-
-msgid "No room in"
-msgstr "Нет места"
-
-msgid "the garrison"
-msgstr "в отряде"
-
 msgid "off"
 msgstr "выкл."
 
@@ -2622,6 +2613,9 @@ msgstr "Построить новый корабль:"
 
 msgid "Resource cost:"
 msgstr "Стоимость:"
+
+msgid "Total: "
+msgstr "В казне: "
 
 msgid "Need: "
 msgstr "Необходимо: "
@@ -9471,6 +9465,12 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "No room in"
+#~ msgstr "Нет места"
+
+#~ msgid "the garrison"
+#~ msgstr "в отряде"
 
 #~ msgid "game: always confirm for rewrite savefile"
 #~ msgstr "игра: всегда делать запрос на перезапись игры"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-10 14:31+0000\n"
+"POT-Creation-Date: 2022-08-08 11:57+0000\n"
 "PO-Revision-Date: 2022-05-10 16:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2698,16 +2698,6 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr ""
 
-#, fuzzy
-msgid "Total: "
-msgstr "Загалом: "
-
-msgid "No room in"
-msgstr ""
-
-msgid "the garrison"
-msgstr ""
-
 msgid "off"
 msgstr ""
 
@@ -2757,6 +2747,10 @@ msgstr "Побудувати новий корабель:"
 
 msgid "Resource cost:"
 msgstr ""
+
+#, fuzzy
+msgid "Total: "
+msgstr "Загалом: "
 
 msgid "Need: "
 msgstr ""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-10 14:31+0000\n"
+"POT-Creation-Date: 2022-08-08 11:57+0000\n"
 "PO-Revision-Date: 2022-05-12 17:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2584,15 +2584,6 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "(Grad: %{percent})"
 
-msgid "Total: "
-msgstr "Insgesamt: "
-
-msgid "No room in"
-msgstr "Kein Platz in"
-
-msgid "the garrison"
-msgstr "der Garnison"
-
 msgid "off"
 msgstr "Aus"
 
@@ -2638,6 +2629,9 @@ msgstr "Ein neues Boot bauen:"
 
 msgid "Resource cost:"
 msgstr "Ressourcenkosten:"
+
+msgid "Total: "
+msgstr "Insgesamt: "
 
 msgid "Need: "
 msgstr "Bedarf: "
@@ -9914,6 +9908,12 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "No room in"
+#~ msgstr "Kein Platz in"
+
+#~ msgid "the garrison"
+#~ msgstr "der Garnison"
 
 #~ msgid "game: always confirm for rewrite savefile"
 #~ msgstr "Spiel: immer bestätigen bevor eine Speicherdatei überschrieben ist"
