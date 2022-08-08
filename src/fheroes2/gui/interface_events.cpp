@@ -364,7 +364,8 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
         if ( hero->isShipMaster() )
             Dialog::Message( "", _( "Try looking on land!!!" ), Font::BIG, Dialog::OK );
         else if ( hero->GetMaxMovePoints() <= hero->GetMovePoints() ) {
-            if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() ) {
+            // Original Editor allows to put an Ultimate Artifact on an invalid tile. So checking tile index solves this issue.
+            if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() || world.GetUltimateArtifact().getPosition() == hero->GetIndex() ) {
                 AudioManager::PlaySound( M82::DIGSOUND );
 
                 hero->ResetMovePoints();

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-11 23:18+0000\n"
+"POT-Creation-Date: 2022-08-08 11:28+0000\n"
 "PO-Revision-Date: 2022-06-05 20:16+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -2530,15 +2530,6 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "(Przyłącza się %{percent}% oddziału)"
 
-msgid "Total: "
-msgstr "Masz: "
-
-msgid "No room in"
-msgstr "Brak wolnych "
-
-msgid "the garrison"
-msgstr "slotów"
-
 msgid "off"
 msgstr "wyłączone"
 
@@ -2583,6 +2574,9 @@ msgstr "Zbuduj nowy statek:"
 
 msgid "Resource cost:"
 msgstr "Koszt:"
+
+msgid "Total: "
+msgstr "Masz: "
 
 msgid "Need: "
 msgstr "Potrzeba: "
@@ -9447,6 +9441,12 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "No room in"
+#~ msgstr "Brak wolnych "
+
+#~ msgid "the garrison"
+#~ msgstr "slotów"
 
 #~ msgid "game: always confirm for rewrite savefile"
 #~ msgstr "gra: zawsze potwierdzaj nadpisanie zapisu stanu gry"

@@ -300,7 +300,7 @@ void CapturedObjects::ResetColor( int color )
             const MP2::MapObjectType objectType = static_cast<MP2::MapObjectType>( objcol.first );
 
             objcol.second = objectType == MP2::OBJ_CASTLE ? Color::UNUSED : Color::NONE;
-            world.GetTiles( ( *it ).first ).CaptureFlags32( objectType, objcol.second );
+            world.GetTiles( it->first ).setOwnershipFlag( objectType, objcol.second );
         }
     }
 }
@@ -436,47 +436,6 @@ void World::NewMaps( int32_t sw, int32_t sh )
 void World::InitKingdoms()
 {
     vec_kingdoms.Init();
-}
-
-const Maps::Tiles & World::GetTiles( const int32_t x, const int32_t y ) const
-{
-#ifdef WITH_DEBUG
-    return vec_tiles.at( y * width + x );
-#else
-    return vec_tiles[y * width + x];
-#endif
-}
-
-Maps::Tiles & World::GetTiles( const int32_t x, const int32_t y )
-{
-#ifdef WITH_DEBUG
-    return vec_tiles.at( y * width + x );
-#else
-    return vec_tiles[y * width + x];
-#endif
-}
-
-const Maps::Tiles & World::GetTiles( const int32_t tileId ) const
-{
-#ifdef WITH_DEBUG
-    return vec_tiles.at( tileId );
-#else
-    return vec_tiles[tileId];
-#endif
-}
-
-Maps::Tiles & World::GetTiles( const int32_t tileId )
-{
-#ifdef WITH_DEBUG
-    return vec_tiles.at( tileId );
-#else
-    return vec_tiles[tileId];
-#endif
-}
-
-size_t World::getSize() const
-{
-    return vec_tiles.size();
 }
 
 Castle * World::getCastle( const fheroes2::Point & tilePosition )
@@ -975,7 +934,7 @@ void World::CaptureObject( int32_t index, int color )
         castle->ChangeColor( color );
 
     if ( color & ( Color::ALL | Color::UNUSED ) )
-        GetTiles( index ).CaptureFlags32( objectType, color );
+        GetTiles( index ).setOwnershipFlag( objectType, color );
 }
 
 /* return color captured object */
@@ -1027,29 +986,47 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
     uint32_t idx = 0;
 
     switch ( tile.GetGround() ) {
-    case Maps::Ground::WASTELAND:
-        obj = 0xE4;
-        idx = 70;
-        break; // ICN::OBJNCRCK
-    case Maps::Ground::DIRT:
-        obj = 0xE0;
-        idx = 140;
-        break; // ICN::OBJNDIRT
     case Maps::Ground::DESERT:
-        obj = 0xDC;
+        obj = 0xDC; // ICN::OBJNDSRT
         idx = 68;
-        break; // ICN::OBJNDSRT
+        break;
+    case Maps::Ground::SNOW:
+        obj = 208; // ICN::OBJNSNOW
+        idx = 11;
+        break;
+    case Maps::Ground::SWAMP:
+        obj = 212; // ICN::OBJNSWMP
+        idx = 86;
+        break;
+    case Maps::Ground::WASTELAND:
+        obj = 0xE4; // ICN::OBJNCRCK
+        idx = 70;
+        break;
     case Maps::Ground::LAVA:
-        obj = 0xD8;
+        obj = 0xD8; // ICN::OBJNLAVA
         idx = 26;
-        break; // ICN::OBJNLAVA
+        break;
+    case Maps::Ground::DIRT:
+        obj = 0xE0; // ICN::OBJNDIRT
+        idx = 140;
+        break;
+    case Maps::Ground::BEACH:
     case Maps::Ground::GRASS:
-    default:
-        obj = 0xC0;
+        // Beach doesn't have its digging hole so we use it from Grass terrain.
+        obj = 0xC0; // ICN::OBJNGRA2
         idx = 9;
-        break; // ICN::OBJNGRA2
+        break;
+    case Maps::Ground::WATER:
+        // How is it possible to dig on water? Check your logic!
+        assert( 0 );
+        return false;
+    default:
+        // Did you add a new terrain type? Add the logic above!
+        assert( 0 );
+        break;
     }
-    tile.AddonsPushLevel1( Maps::TilesAddon( 0, GetUniq(), obj, idx ) );
+
+    tile.AddonsPushLevel1( Maps::TilesAddon( Maps::BACKGROUND_LAYER, GetUniq(), obj, idx ) );
 
     // reset
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
@@ -1517,18 +1494,17 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     w.height = height;
 
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_0912_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE3_0912_RELEASE ) {
-        Week dummyWeek;
-
-        msg >> dummyWeek >> dummyWeek;
-    }
-
-    msg >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
+        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
 
     w.PostLoad( false );
+
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_0918_RELEASE ) {
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0918_RELEASE, "Remove the code in this block." );
+        for ( Maps::Tiles & tile : world.vec_tiles ) {
+            tile.correctOldSaveOwnershipFlag();
+            tile.correctDiggingHoles();
+        }
+    }
 
     return msg;
 }
