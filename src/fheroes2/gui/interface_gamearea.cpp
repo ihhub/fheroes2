@@ -436,6 +436,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     const bool drawFog = ( flag & LEVEL_FOG ) == LEVEL_FOG;
 #endif
 
+    const int friendColors = Players::FriendColors();
+
     TileUnfitRenderObjectInfo tileUnfit;
 
     const Heroes * currentHero = drawHeroes ? GetFocusHeroes() : nullptr;
@@ -493,9 +495,14 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
-    // Tile unfit objects should be rendered over the edge of the map, except the bottom. We shouldn't render their shadows.
+    // Tile unfit objects should be rendered over the edge of the map, except the bottom. We also shouldn't render their shadows over the edge.
+    // If a tile contains fog we shouldn't draw anything over the edge.
     if ( minY == 0 ) {
         for ( int32_t x = minX - 1; x < maxX + 1; ++x ) {
+            if ( drawFog && world.GetTiles( std::clamp( x, 0, maxX - 1 ), minY ).isFog( friendColors ) ) {
+                continue;
+            }
+
             // Boat is taller than 2 tiles.
             renderOutOfMapTile( tileUnfit, dst, { x, minY - 2 }, *this );
             renderOutOfMapTile( tileUnfit, dst, { x, minY - 1 }, *this );
@@ -504,12 +511,20 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
     if ( minX == 0 ) {
         for ( int32_t y = minY; y < maxY; ++y ) {
+            if ( drawFog && world.GetTiles( minX, y ).isFog( friendColors ) ) {
+                continue;
+            }
+
             renderOutOfMapTile( tileUnfit, dst, { minX - 1, y }, *this );
         }
     }
 
     if ( maxX == world.w() ) {
         for ( int32_t y = minY; y < maxY; ++y ) {
+            if ( drawFog && world.GetTiles( maxX - 1, y ).isFog( friendColors ) ) {
+                continue;
+            }
+
             renderOutOfMapTile( tileUnfit, dst, { maxX + 1, y }, *this );
         }
     }
@@ -658,8 +673,6 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 #endif
         // redraw fog
         if ( drawFog ) {
-        const int friendColors = Players::FriendColors();
-
         for ( int32_t y = minY; y < maxY; ++y ) {
             for ( int32_t x = minX; x < maxX; ++x ) {
                 const Maps::Tiles & tile = world.GetTiles( x, y );
