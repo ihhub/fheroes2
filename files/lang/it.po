@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-10 14:31+0000\n"
+"POT-Creation-Date: 2022-08-08 11:28+0000\n"
 "PO-Revision-Date: 2022-05-12 17:11+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -2417,15 +2417,6 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "(Grado: %{percent})"
 
-msgid "Total: "
-msgstr "Totale: "
-
-msgid "No room in"
-msgstr "Non c'è posto"
-
-msgid "the garrison"
-msgstr "nella guarnigione"
-
 msgid "off"
 msgstr "Muto"
 
@@ -2470,6 +2461,9 @@ msgstr "Costruisci una nave:"
 
 msgid "Resource cost:"
 msgstr "Costo Risorse:"
+
+msgid "Total: "
+msgstr "Totale: "
 
 msgid "Need: "
 msgstr "Servono: "
@@ -8826,3 +8820,9 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "No room in"
+#~ msgstr "Non c'è posto"
+
+#~ msgid "the garrison"
+#~ msgstr "nella guarnigione"

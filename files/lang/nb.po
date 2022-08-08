@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-10 14:31+0000\n"
+"POT-Creation-Date: 2022-08-08 11:28+0000\n"
 "PO-Revision-Date: 2022-06-18 17:48+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2632,15 +2632,6 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "(Grad: %{percent})"
 
-msgid "Total: "
-msgstr "Totalt: "
-
-msgid "No room in"
-msgstr "Ingen plass i"
-
-msgid "the garrison"
-msgstr "hæren"
-
 msgid "off"
 msgstr "av"
 
@@ -2685,6 +2676,9 @@ msgstr "Bygg et nytt skip:"
 
 msgid "Resource cost:"
 msgstr "Pris i råvarer:"
+
+msgid "Total: "
+msgstr "Totalt: "
 
 msgid "Need: "
 msgstr "Trenger: "
@@ -9880,6 +9874,12 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "No room in"
+#~ msgstr "Ingen plass i"
+
+#~ msgid "the garrison"
+#~ msgstr "hæren"
 
 #~ msgid "game: always confirm for rewrite savefile"
 #~ msgstr "Parti: Alltid be om bekreftelse ved overskrivning av lagringsfil"
