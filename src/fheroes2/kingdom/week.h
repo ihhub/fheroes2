@@ -79,14 +79,9 @@ struct Week
 
     static Week RandomWeek( const World & world, const bool isNewMonth, const uint32_t weekSeed );
 
-    friend StreamBase & operator>>( StreamBase & stream, Week & week );
-
 private:
     WeekName _week;
     Monster::monster_t _monster;
 };
-
-StreamBase & operator>>( StreamBase & stream, Week & week );
-StreamBase & operator<<( StreamBase & stream, const Week & week );
 
 #endif
