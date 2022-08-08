@@ -1309,7 +1309,7 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
             continue;
         }
 
-        if ( isPuzzleDraw && MP2::isHiddenForPuzzle( addon.object, addon.index ) ) {
+        if ( isPuzzleDraw && MP2::isHiddenForPuzzle( GetGround(), addon.object, addon.index ) ) {
             continue;
         }
 
@@ -1322,7 +1322,7 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes
         renderAddonObject( dst, area, mp, addon );
     }
 
-    if ( ( _level & 0x03 ) == level && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( objectTileset, objectIndex ) ) ) {
+    if ( ( _level & 0x03 ) == level && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( GetGround(), objectTileset, objectIndex ) ) ) {
         renderMainObject( dst, area, mp );
     }
 
@@ -1557,7 +1557,7 @@ void Maps::Tiles::redrawTopLayerObjects( fheroes2::Image & dst, const fheroes2::
     }
 
     for ( const TilesAddon & addon : addons_level2 ) {
-        if ( isPuzzleDraw && MP2::isHiddenForPuzzle( addon.object, addon.index ) ) {
+        if ( isPuzzleDraw && MP2::isHiddenForPuzzle( GetGround(), addon.object, addon.index ) ) {
             continue;
         }
 
