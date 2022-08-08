@@ -620,9 +620,12 @@ void ActionToMonster( Heroes & hero, int32_t dst_index )
         destroy = true;
     }
     else if ( join.reason == NeutralMonsterJoiningCondition::Reason::Free ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " join monster " << troop.GetName() )
+        // This condition must already be met if a group of monsters wants to join
+        assert( hero.GetArmy().CanJoinTroop( troop ) );
 
-        if ( Dialog::YES == Dialog::ArmyJoinFree( troop, hero ) ) {
+        DEBUG_LOG( DBG_GAME, DBG_INFO, troop.GetName() << " want to join " << hero.GetName() )
+
+        if ( Dialog::YES == Dialog::ArmyJoinFree( troop ) ) {
             hero.GetArmy().JoinTroop( troop );
 
             I.SetRedraw( Interface::REDRAW_STATUS );
@@ -635,9 +638,12 @@ void ActionToMonster( Heroes & hero, int32_t dst_index )
     else if ( join.reason == NeutralMonsterJoiningCondition::Reason::ForMoney ) {
         const int32_t joiningCost = troop.GetTotalCost().gold;
 
-        if ( Dialog::YES == Dialog::ArmyJoinWithCost( troop, join.monsterCount, joiningCost, hero ) ) {
-            DEBUG_LOG( DBG_GAME, DBG_INFO, join.monsterCount << " " << troop.GetName() << " join " << hero.GetName() << " for " << joiningCost << " gold." )
+        // These conditions must already be met if a group of monsters wants to join
+        assert( hero.GetArmy().CanJoinTroop( troop ) && hero.GetKingdom().AllowPayment( payment_t( Resource::GOLD, joiningCost ) ) );
 
+        DEBUG_LOG( DBG_GAME, DBG_INFO, join.monsterCount << " " << troop.GetName() << " want to join " << hero.GetName() << " for " << joiningCost << " gold" )
+
+        if ( Dialog::YES == Dialog::ArmyJoinWithCost( troop, join.monsterCount, joiningCost ) ) {
             hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount );
             hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
 

@@ -610,10 +610,9 @@ void DrawMonster( fheroes2::RandomMonsterAnimation & monsterAnimation, const Tro
         monsterAnimation.increment();
 }
 
-int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
+int Dialog::ArmyJoinFree( const Troop & troop )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -636,22 +635,8 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     textbox.Blit( pos.x, posy );
 
     fheroes2::ButtonGroup btnGroup( pos, buttons );
-
-    const int armyButtonIcn = isEvilInterface ? ICN::EVIL_ARMY_BUTTON : ICN::GOOD_ARMY_BUTTON;
-    const fheroes2::Sprite & armyButtonReleased = fheroes2::AGG::GetICN( armyButtonIcn, 0 );
-    const fheroes2::Sprite & armyButtonPressed = fheroes2::AGG::GetICN( armyButtonIcn, 1 );
-
-    fheroes2::ButtonSprite btnHeroes = fheroes2::makeButtonWithBackground( pos.x + pos.width / 2 - armyButtonReleased.width() / 2, pos.y + pos.height - 35,
-                                                                           armyButtonReleased, armyButtonPressed, display );
-
-    if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() || hero.GetArmy().HasMonster( troop ) )
-        btnHeroes.disable();
-    else {
-        btnHeroes.draw();
-        btnGroup.button( 0 ).disable();
-    }
-
     btnGroup.draw();
+
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -660,38 +645,15 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     int result = Dialog::ZERO;
 
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        if ( btnHeroes.isEnabled() )
-            le.MousePressLeft( btnHeroes.area() ) ? btnHeroes.drawOnPress() : btnHeroes.drawOnRelease();
-
         result = btnGroup.processEvents();
-
-        if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroes.area() ) ) {
-            LocalEvent::GetClean();
-            hero.OpenDialog( false, false, true, true );
-
-            if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() ) {
-                btnGroup.button( 0 ).enable();
-            }
-            else {
-                btnGroup.button( 0 ).disable();
-            }
-
-            btnGroup.draw();
-
-            display.render();
-        }
-        else if ( le.MousePressRight( btnHeroes.area() ) ) {
-            Dialog::Message( "", _( "View Hero" ), Font::BIG );
-        }
     }
 
     return result;
 }
 
-int Dialog::ArmyJoinWithCost( const Troop & troop, uint32_t join, uint32_t gold, Heroes & hero )
+int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const uint32_t gold )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -737,65 +699,9 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, uint32_t join, uint32_t gold,
     posy += text.h() + 40;
     fheroes2::Blit( sprite, display, pos.x + ( pos.width - sprite.width() ) / 2, posy );
 
-    TextSprite tsTotal( std::to_string( gold ) + " (" + _( "Total: " ) + std::to_string( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")",
-                        Font::SMALL, pos.x + ( pos.width - text.w() ) / 2, posy + sprite.height() + 5 );
-    tsTotal.Show();
-
     fheroes2::ButtonGroup btnGroup( pos, buttons );
-
-    const int icnMarket = isEvilInterface ? ICN::EVIL_MARKET_BUTTON : ICN::GOOD_MARKET_BUTTON;
-    const int icnHeroes = isEvilInterface ? ICN::EVIL_ARMY_BUTTON : ICN::GOOD_ARMY_BUTTON;
-
-    fheroes2::ButtonSprite btnMarket = fheroes2::makeButtonWithBackground( pos.x + pos.width / 2 - 60 - 36, posy, fheroes2::AGG::GetICN( icnMarket, 0 ),
-                                                                           fheroes2::AGG::GetICN( icnMarket, 1 ), display );
-
-    fheroes2::ButtonSprite btnHeroes
-        = fheroes2::makeButtonWithBackground( pos.x + pos.width / 2 + 60, posy, fheroes2::AGG::GetICN( icnHeroes, 0 ), fheroes2::AGG::GetICN( icnHeroes, 1 ), display );
-
-    Kingdom & kingdom = hero.GetKingdom();
-
-    fheroes2::Rect btnMarketArea = btnMarket.area();
-    fheroes2::Rect btnHeroesArea = btnHeroes.area();
-
-    if ( !kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) ) )
-        btnGroup.button( 0 ).disable();
-
-    TextSprite tsNotEnoughGold;
-    tsNotEnoughGold.SetPos( btnMarketArea.x - 25, btnMarketArea.y - 17 );
-
-    fheroes2::ImageRestorer marketButtonRestorer( display, btnMarket.area().x, btnMarket.area().y, btnMarket.area().width, btnMarket.area().height );
-
-    if ( kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) ) || kingdom.GetCountMarketplace() == 0 ) {
-        tsNotEnoughGold.Hide();
-        btnMarket.disable();
-        btnMarket.hide();
-    }
-    else {
-        std::string msg = _( "Not enough gold (%{gold})" );
-        StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
-        tsNotEnoughGold.SetText( msg, Font::SMALL );
-        tsNotEnoughGold.Show();
-        btnMarket.enable();
-        btnMarket.draw();
-    }
-
-    TextSprite noRoom1;
-    noRoom1.SetText( _( "No room in" ), Font::SMALL );
-    noRoom1.SetPos( btnHeroesArea.x - 16, btnHeroesArea.y - 30 );
-    TextSprite noRoom2;
-    noRoom2.SetText( _( "the garrison" ), Font::SMALL );
-    noRoom2.SetPos( btnHeroesArea.x - 23, btnHeroesArea.y - 15 );
-
-    if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() || hero.GetArmy().HasMonster( troop ) )
-        btnHeroes.disable();
-    else {
-        noRoom1.Show();
-        noRoom2.Show();
-        btnHeroes.draw();
-        btnGroup.button( 0 ).disable();
-    }
-
     btnGroup.draw();
+
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -804,75 +710,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, uint32_t join, uint32_t gold,
     int result = Dialog::ZERO;
 
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        if ( btnMarket.isEnabled() )
-            le.MousePressLeft( btnMarketArea ) ? btnMarket.drawOnPress() : btnMarket.drawOnRelease();
-
-        if ( btnHeroes.isEnabled() )
-            le.MousePressLeft( btnHeroesArea ) ? btnHeroes.drawOnPress() : btnHeroes.drawOnRelease();
-
         result = btnGroup.processEvents();
-
-        bool needRedraw = false;
-
-        if ( btnMarket.isEnabled() && le.MouseClickLeft( btnMarketArea ) ) {
-            Marketplace( kingdom, false );
-
-            needRedraw = true;
-        }
-        else if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroesArea ) ) {
-            LocalEvent::GetClean();
-            hero.OpenDialog( false, false, true, true );
-
-            needRedraw = true;
-        }
-
-        if ( !needRedraw ) {
-            continue;
-        }
-
-        tsTotal.Hide();
-        tsTotal.SetText( std::to_string( gold ) + " (total: " + std::to_string( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")" );
-        tsTotal.Show();
-
-        const bool allowPayment = kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) );
-        const bool enoughRoom = hero.GetArmy().GetCount() < hero.GetArmy().Size() || hero.GetArmy().HasMonster( troop );
-
-        if ( allowPayment && enoughRoom ) {
-            btnGroup.button( 0 ).enable();
-        }
-        else {
-            btnGroup.button( 0 ).disable();
-        }
-
-        btnGroup.draw();
-
-        if ( allowPayment || kingdom.GetCountMarketplace() == 0 ) {
-            tsNotEnoughGold.Hide();
-            btnMarket.disable();
-            btnMarket.hide();
-            marketButtonRestorer.restore();
-        }
-        else {
-            std::string msg = _( "Not enough gold (%{gold})" );
-            StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
-            tsNotEnoughGold.SetText( msg, Font::SMALL );
-            tsNotEnoughGold.Show();
-            btnMarket.enable();
-            btnMarket.show();
-        }
-
-        btnMarket.draw();
-
-        if ( enoughRoom ) {
-            noRoom1.Hide();
-            noRoom2.Hide();
-        }
-        else {
-            noRoom1.Show();
-            noRoom2.Show();
-        }
-
-        display.render();
     }
 
     return result;
