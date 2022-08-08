@@ -298,6 +298,7 @@ namespace fheroes2
     void drawCastleDialogBuilding( const int32_t icnId, const uint32_t icnIndex, const Castle & castle, const Point & offset, const Rect & renderArea,
                                    const uint8_t alpha )
     {
+        // TODO: remove Fixed4Blit function usage. Use ^ operator for fheroes2::Rect objects.
         const fheroes2::Sprite & image
             = isImagePlayerColorDependent( icnId ) ? getModifiedByColorImage( icnId, icnIndex, castle.GetColor() ) : AGG::GetICN( icnId, icnIndex );
 
