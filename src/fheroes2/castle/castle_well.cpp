@@ -35,6 +35,7 @@
 #include "kingdom.h"
 #include "monster_anim.h"
 #include "resource.h"
+#include "settings.h"
 #include "speed.h"
 #include "translations.h"
 #include "ui_dialog.h"
@@ -281,7 +282,9 @@ void Castle::OpenWell()
 void Castle::WellRedrawInfoArea( const fheroes2::Point & cur_pt, const std::vector<fheroes2::RandomMonsterAnimation> & monsterAnimInfo ) const
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLBKG, 0 ), display, cur_pt.x, cur_pt.y );
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+
+    fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::WELLBKG_EVIL : ICN::WELLBKG, 0 ), display, cur_pt.x, cur_pt.y );
 
     fheroes2::Point pt;
 

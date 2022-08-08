@@ -277,12 +277,12 @@ public:
 
     int KeyMod() const;
 
-    void RegisterCycling( void ( *preRenderDrawing )() = nullptr, void ( *postRenderDrawing )() = nullptr ) const;
+    static void RegisterCycling( void ( *preRenderDrawing )() = nullptr, void ( *postRenderDrawing )() = nullptr );
 
     // These two methods are useful for video playback
-    void PauseCycling() const;
+    static void PauseCycling();
 
-    void ResumeCycling() const
+    static void ResumeCycling()
     {
         RegisterCycling();
     }

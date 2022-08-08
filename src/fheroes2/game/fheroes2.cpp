@@ -30,6 +30,7 @@
 #include "bin_info.h"
 #include "core.h"
 #include "cursor.h"
+#include "dir.h"
 #include "embedded_image.h"
 #include "game.h"
 #include "game_logo.h"
@@ -129,7 +130,7 @@ namespace
             SDL_ShowCursor( SDL_DISABLE ); // hide system cursor
 
             // Initialize local event processing.
-            LocalEvent::Get().RegisterCycling( fheroes2::PreRenderSystemInfo, fheroes2::PostRenderSystemInfo );
+            LocalEvent::RegisterCycling( fheroes2::PreRenderSystemInfo, fheroes2::PostRenderSystemInfo );
 
             // Update mouse cursor when switching between software emulation and OS mouse modes.
             fheroes2::cursor().registerUpdater( Cursor::Refresh );
@@ -252,7 +253,18 @@ int main( int argc, char ** argv )
 
         const DataInitializer dataInitializer;
 
-        const AudioManager::AudioInitializer audioInitializer( dataInitializer.getOriginalAGGFilePath(), dataInitializer.getExpansionAGGFilePath() );
+        ListFiles midiSoundFonts;
+
+        midiSoundFonts.Append( Settings::FindFiles( System::ConcatePath( "files", "soundfonts" ), ".sf2", false ) );
+        midiSoundFonts.Append( Settings::FindFiles( System::ConcatePath( "files", "soundfonts" ), ".sf3", false ) );
+
+#ifdef WITH_DEBUG
+        for ( const std::string & file : midiSoundFonts ) {
+            DEBUG_LOG( DBG_GAME, DBG_INFO, "MIDI SoundFont to load: " << file )
+        }
+#endif
+
+        const AudioManager::AudioInitializer audioInitializer( dataInitializer.getOriginalAGGFilePath(), dataInitializer.getExpansionAGGFilePath(), midiSoundFonts );
 
         // Load palette.
         fheroes2::setGamePalette( AGG::getDataFromAggFile( "KB.PAL" ) );

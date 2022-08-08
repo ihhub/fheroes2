@@ -1,13 +1,13 @@
 # Swedish translation for fheroes2
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
+# fheroes2 team <fhomm2@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 17:13+0000\n"
+"POT-Creation-Date: 2022-08-08 11:28+0000\n"
 "PO-Revision-Date: 2022-05-10 16:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -164,8 +164,11 @@ msgstr "Förlora hjälten: %{name}."
 msgid "Set Count"
 msgstr ""
 
-msgid "%{name} half the enemy troops!"
-msgstr "%{name} halverar fiendetrupperna!"
+#, fuzzy
+msgid "%{name} destroys half the enemy troops!"
+msgid_plural "%{name} destroy half the enemy troops!"
+msgstr[0] "%{name} halverar fiendetrupperna!"
+msgstr[1] "%{name} halverar fiendetrupperna!"
 
 #, fuzzy
 msgid "%{name} has turned off the auto battle"
@@ -517,8 +520,11 @@ msgstr "%{name} hoppar över rundan."
 msgid "%{name} wait their turn."
 msgstr "%{name} inväntar runda."
 
-msgid "%{attacker} do %{damage} damage."
-msgstr "%{attacker} tar %{damage} skada."
+#, fuzzy
+msgid "%{attacker} does %{damage} damage."
+msgid_plural "%{attacker} do %{damage} damage."
+msgstr[0] "%{attacker} tar %{damage} skada."
+msgstr[1] "%{attacker} tar %{damage} skada."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
@@ -1963,7 +1969,8 @@ msgstr "Uppg. Stonehenge"
 msgid "Fenced Meadow"
 msgstr "Inhägnad äng"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Rött torn"
 
 msgid "Dungeon"
@@ -1992,6 +1999,10 @@ msgstr "Träsk"
 
 msgid "Green Tower"
 msgstr "Grönt torn"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Rött torn"
 
 msgid "Black Tower"
 msgstr "Svart torn"
@@ -2508,21 +2519,54 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr ""
 
-msgid "Total: "
+msgid "off"
+msgstr "av"
+
+msgid "Music"
+msgstr "Musik"
+
+msgid "Effects"
 msgstr ""
 
-msgid "No room in"
+msgid "MIDI"
 msgstr ""
 
 #, fuzzy
-msgid "the garrison"
-msgstr "trapporna"
+msgid "MIDI Expansion"
+msgstr "Herrgård"
+
+msgid "External"
+msgstr ""
+
+msgid "Music Type"
+msgstr ""
+
+msgid "3D Audio"
+msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr ""
+
+msgid "Toggle foreground sounds level."
+msgstr ""
+
+msgid "Change the type of music."
+msgstr ""
+
+msgid "Toggle 3D effects of foreground sounds."
+msgstr ""
+
+msgid "Okay"
+msgstr "OK"
 
 msgid "Build a new ship:"
 msgstr "Bygg ett nytt skepp:"
 
 msgid "Resource cost:"
 msgstr "Resurskostnad:"
+
+msgid "Total: "
+msgstr ""
 
 msgid "Need: "
 msgstr ""
@@ -2570,27 +2614,12 @@ msgstr "Luftelement"
 msgid "Settings"
 msgstr "Inställningar"
 
-msgid "off"
-msgstr "av"
-
-msgid "Music"
-msgstr "Musik"
-
-msgid "Effects"
-msgstr ""
-
-msgid "MIDI"
+msgid "Audio"
 msgstr ""
 
 #, fuzzy
-msgid "MIDI Expansion"
-msgstr "Herrgård"
-
-msgid "External"
-msgstr ""
-
-msgid "Music Type"
-msgstr ""
+msgid "settings"
+msgstr "Inställningar"
 
 #, fuzzy
 msgid "Hot Keys"
@@ -2613,6 +2642,29 @@ msgstr ""
 msgid "Text Support"
 msgstr "Teleportera"
 
+msgid "Evil"
+msgstr "Ond"
+
+msgid "Good"
+msgstr "God"
+
+#, fuzzy
+msgid "Interface Type"
+msgstr "Gränssnitt"
+
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+#, fuzzy
+msgid "Battles"
+msgstr "Flaska"
+
 #, fuzzy
 msgid "Select Game Language"
 msgstr "Vald beskrivning"
@@ -2627,20 +2679,20 @@ msgstr "Vald beskrivning"
 msgid "Change resolution of the game."
 msgstr ""
 
+msgid "Change audio settings of the game."
+msgstr ""
+
 #, fuzzy
 msgid "Experimental game settings."
 msgstr "Spelinställningar för FHeroes2."
 
-msgid "Toggle ambient music level."
-msgstr ""
-
-msgid "Toggle foreground sounds level."
-msgstr ""
-
-msgid "Change the type of music."
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Check all Hot Keys used in the game."
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid ""
@@ -2652,9 +2704,6 @@ msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
-
-msgid "Okay"
-msgstr "OK"
 
 #, fuzzy
 msgid "Attention"
@@ -3124,16 +3173,6 @@ msgstr "Hastighet"
 msgid "Scroll Speed"
 msgstr "Hastighet för skrollning"
 
-msgid "Evil"
-msgstr "Ond"
-
-msgid "Good"
-msgstr "God"
-
-#, fuzzy
-msgid "Interface Type"
-msgstr "Gränssnitt"
-
 msgid "Hide"
 msgstr ""
 
@@ -3142,19 +3181,6 @@ msgstr ""
 
 msgid "Interface"
 msgstr "Gränssnitt"
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-#, fuzzy
-msgid "Battles"
-msgstr "Flaska"
-
-msgid "Manual"
-msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3167,13 +3193,7 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
 msgid "Toggle interface visibility."
-msgstr ""
-
-msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -3310,6 +3330,10 @@ msgstr ""
 msgid "Development"
 msgstr ""
 
+#, fuzzy
+msgid "Dev and Support"
+msgstr "Teleportera"
+
 msgid "Visit us at "
 msgstr ""
 
@@ -3334,8 +3358,9 @@ msgstr ""
 msgid "Original project before 0.7"
 msgstr ""
 
-msgid "Original Heroes of Might and Magic II team"
-msgstr ""
+#, fuzzy
+msgid "Heroes of Might and Magic II: The Succession Wars team"
+msgstr "Avsluta fheroes2 och återgå till operativsystemet."
 
 msgid "Designed and Directed"
 msgstr ""
@@ -3392,6 +3417,73 @@ msgstr ""
 msgid "Scenarios"
 msgstr "Scenario"
 
+#, fuzzy
+msgid "Heroes of Might and Magic II: The Price of Loyalty team"
+msgstr "Avsluta fheroes2 och återgå till operativsystemet."
+
+msgid "Cyberlore Studios"
+msgstr ""
+
+msgid "Design Lead"
+msgstr ""
+
+msgid "Designers"
+msgstr ""
+
+msgid "Programming Lead"
+msgstr ""
+
+msgid "Art Lead"
+msgstr ""
+
+#, fuzzy
+msgid "Playtesters"
+msgstr "2 Spelare"
+
+msgid "New World Computing"
+msgstr ""
+
+msgid "Designer"
+msgstr ""
+
+msgid "Producers"
+msgstr ""
+
+#, fuzzy
+msgid "QA Managers"
+msgstr "Vandringsmän"
+
+msgid "Sound Design"
+msgstr ""
+
+#, fuzzy
+msgid "Town Themes"
+msgstr "Stadsport"
+
+msgid "Alto Sax"
+msgstr ""
+
+msgid "Harpsichord and Piano"
+msgstr ""
+
+msgid "Basso Vocal"
+msgstr ""
+
+msgid "Soprano Vocal"
+msgstr ""
+
+msgid "Recorded at Green Street Studios"
+msgstr ""
+
+msgid "German Consultant"
+msgstr ""
+
+msgid "Map Designers"
+msgstr ""
+
+msgid "Package Design"
+msgstr ""
+
 msgid "Unknown Hero"
 msgstr ""
 
@@ -3414,17 +3506,15 @@ msgstr "Kampanjspel"
 msgid "View High Scores for Campaigns."
 msgstr "Visa Poänglistan."
 
-msgid ""
-"Invalid file game type. Please ensure that you are running the latest type "
-"of save files."
-msgstr ""
-
 msgid "Warning"
 msgstr "Varning"
 
+msgid "This file contains a save with an invalid game type."
+msgstr ""
+
 msgid ""
-"This file is saved in the \"The Price of Loyalty\" version.\n"
-"Some items may be unavailable."
+"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
+"Some items may not be available."
 msgstr ""
 
 msgid "Usupported save format: "
@@ -3537,6 +3627,11 @@ msgstr ""
 #, fuzzy
 msgid "Game Settings"
 msgstr "Inställningar"
+
+msgid ""
+"Required video files for campaign selection window are missing. Please make "
+"sure that all necessary files are present in the system."
+msgstr ""
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
@@ -9078,9 +9173,6 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "game: always confirm for rewrite savefile"
-msgstr "spel: Tillåt alltid överskrivning av sparfil"
-
 msgid "game: remember last focus"
 msgstr "spel: Kom ihåg senast fokus"
 
@@ -9205,3 +9297,10 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "the garrison"
+#~ msgstr "trapporna"
+
+#~ msgid "game: always confirm for rewrite savefile"
+#~ msgstr "spel: Tillåt alltid överskrivning av sparfil"

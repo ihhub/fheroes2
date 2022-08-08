@@ -84,14 +84,19 @@ namespace Logging
 
 #if defined( TARGET_NINTENDO_SWITCH )
 #include <fstream>
+#include <mutex>
 
 namespace Logging
 {
     extern std::ofstream logFile;
+    // This mutex protects operations with logFile
+    extern std::mutex logMutex;
 }
 
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \
+        const std::scoped_lock<std::mutex> _logfile_lock( Logging::logMutex ); /* The name was chosen on purpose to avoid name collisions with outer code blocks. */     \
+                                                                                                                                                                         \
         Logging::logFile << x << std::endl;                                                                                                                              \
         Logging::logFile.flush();                                                                                                                                        \
     }
@@ -163,10 +168,10 @@ namespace Logging
 }
 
 // Put this macro at the beginning of code block (eg. function) which is responsible for text support mode output.
-#define START_TEXT_SUPPORT_MODE                                                                                                                                         \
-    if ( !Logging::isTextSupportModeEnabled() ) {                                                                                                                       \
-        return;                                                                                                                                                         \
-    }                                                                                                                                                                   \
-    const Logging::TextSupportLogger _temp_logger; // The name is written on purpose to avoid name clashing within a code block.
+#define START_TEXT_SUPPORT_MODE                                                                                                                                          \
+    if ( !Logging::isTextSupportModeEnabled() ) {                                                                                                                        \
+        return;                                                                                                                                                          \
+    }                                                                                                                                                                    \
+    const Logging::TextSupportLogger _temp_logger; // The name was chosen on purpose to avoid collisions with other variable names within a code block.
 
 #endif // H2LOGGING_H

@@ -47,35 +47,17 @@ Interface::StatusWindow::StatusWindow( Basic & basic )
     : BorderWindow( { 0, 0, 144, 72 } )
     , interface( basic )
     , _state( StatusType::STATUS_UNKNOWN )
-    , _oldState( StatusType::STATUS_UNKNOWN )
     , lastResource( Resource::UNKNOWN )
     , countLastResource( 0 )
     , turn_progress( 0 )
+    , showLastResourceDelay( resourceWindowExpireTime )
 {}
 
 void Interface::StatusWindow::Reset()
 {
     _state = StatusType::STATUS_DAY;
-    _oldState = StatusType::STATUS_UNKNOWN;
     lastResource = Resource::UNKNOWN;
     countLastResource = 0;
-    ResetTimer();
-}
-
-uint32_t Interface::StatusWindow::ResetResourceStatus( uint32_t /*tick*/, void * ptr )
-{
-    if ( ptr ) {
-        Interface::StatusWindow * status = static_cast<Interface::StatusWindow *>( ptr );
-        if ( StatusType::STATUS_RESOURCE == status->_state ) {
-            status->_state = status->_oldState;
-            Interface::Basic::Get().SetRedraw( REDRAW_STATUS );
-        }
-        else {
-            status->timerShowLastResource.remove();
-        }
-    }
-
-    return 0;
 }
 
 void Interface::StatusWindow::SavePosition()
@@ -102,8 +84,12 @@ void Interface::StatusWindow::SetPos( int32_t ox, int32_t oy )
 
 void Interface::StatusWindow::SetState( const StatusType status )
 {
-    if ( StatusType::STATUS_RESOURCE != _state )
+    // SetResource() should be used to set this status
+    assert( status != StatusType::STATUS_RESOURCE );
+
+    if ( _state != StatusType::STATUS_RESOURCE ) {
         _state = status;
+    }
 }
 
 void Interface::StatusWindow::Redraw() const
@@ -244,22 +230,22 @@ void Interface::StatusWindow::DrawKingdomInfo( int oh ) const
     text.Set( std::to_string( myKingdom.GetFunds().Get( Resource::GOLD ) ) );
     text.Blit( pos.x + 122 - text.w() / 2, pos.y + 28 + oh );
     // count wood
-    text.Set( GetStringShort( myKingdom.GetFunds().Get( Resource::WOOD ) ) );
+    text.Set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::WOOD ) ) );
     text.Blit( pos.x + 15 - text.w() / 2, pos.y + 58 + oh );
     // count mercury
-    text.Set( GetStringShort( myKingdom.GetFunds().Get( Resource::MERCURY ) ) );
+    text.Set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::MERCURY ) ) );
     text.Blit( pos.x + 37 - text.w() / 2, pos.y + 58 + oh );
     // count ore
-    text.Set( GetStringShort( myKingdom.GetFunds().Get( Resource::ORE ) ) );
+    text.Set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::ORE ) ) );
     text.Blit( pos.x + 60 - text.w() / 2, pos.y + 58 + oh );
     // count sulfur
-    text.Set( GetStringShort( myKingdom.GetFunds().Get( Resource::SULFUR ) ) );
+    text.Set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::SULFUR ) ) );
     text.Blit( pos.x + 84 - text.w() / 2, pos.y + 58 + oh );
     // count crystal
-    text.Set( GetStringShort( myKingdom.GetFunds().Get( Resource::CRYSTAL ) ) );
+    text.Set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::CRYSTAL ) ) );
     text.Blit( pos.x + 108 - text.w() / 2, pos.y + 58 + oh );
     // count gems
-    text.Set( GetStringShort( myKingdom.GetFunds().Get( Resource::GEMS ) ) );
+    text.Set( fheroes2::abbreviateNumber( myKingdom.GetFunds().Get( Resource::GEMS ) ) );
     text.Blit( pos.x + 130 - text.w() / 2, pos.y + 58 + oh );
 }
 
@@ -296,24 +282,9 @@ void Interface::StatusWindow::SetResource( int res, uint32_t count )
 {
     lastResource = res;
     countLastResource = count;
-
-    if ( timerShowLastResource.valid() )
-        timerShowLastResource.remove();
-    else
-        _oldState = _state;
-
     _state = StatusType::STATUS_RESOURCE;
-    timerShowLastResource.run( resourceWindowExpireTime, ResetResourceStatus, this );
-}
 
-void Interface::StatusWindow::ResetTimer()
-{
-    StatusWindow & window = Interface::Basic::Get().GetStatusWindow();
-
-    if ( window.timerShowLastResource.valid() ) {
-        window.timerShowLastResource.remove();
-        ResetResourceStatus( 0, &window );
-    }
+    showLastResourceDelay.reset();
 }
 
 void Interface::StatusWindow::DrawResourceInfo( int oh ) const
@@ -437,7 +408,9 @@ void Interface::StatusWindow::DrawBackground() const
 
 void Interface::StatusWindow::QueueEventProcessing()
 {
+    // Move border window
     if ( Settings::Get().ShowStatus() && BorderWindow::QueueEventProcessing() ) {
+        SetRedraw();
         return;
     }
 
@@ -446,8 +419,7 @@ void Interface::StatusWindow::QueueEventProcessing()
 
     if ( le.MouseClickLeft( drawnArea ) ) {
         NextState();
-        Redraw();
-        fheroes2::Display::instance().render();
+        SetRedraw();
     }
     if ( le.MousePressRight( GetRect() ) ) {
         const fheroes2::Sprite & ston = fheroes2::AGG::GetICN( Settings::Get().ExtGameEvilInterface() ? ICN::STONBAKE : ICN::STONBACK, 0 );
@@ -465,11 +437,31 @@ void Interface::StatusWindow::QueueEventProcessing()
     }
 }
 
+void Interface::StatusWindow::TimerEventProcessing()
+{
+    if ( _state != StatusType::STATUS_RESOURCE || !showLastResourceDelay.isPassed() ) {
+        return;
+    }
+
+    switch ( GetFocusType() ) {
+    case GameFocus::HEROES:
+        _state = StatusType::STATUS_ARMY;
+        break;
+    case GameFocus::CASTLE:
+        _state = StatusType::STATUS_FUNDS;
+        break;
+    default:
+        _state = StatusType::STATUS_DAY;
+        break;
+    }
+
+    SetRedraw();
+}
+
 void Interface::StatusWindow::RedrawTurnProgress( uint32_t v )
 {
     turn_progress = v;
-    SetRedraw();
 
-    Redraw();
+    interface.Redraw( REDRAW_STATUS );
     fheroes2::Display::instance().render( GetArea() );
 }

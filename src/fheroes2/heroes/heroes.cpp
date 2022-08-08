@@ -107,6 +107,28 @@ namespace
 
         return result;
     }
+
+    std::string GetHeroRoleString( const Heroes & hero )
+    {
+        switch ( hero.getAIRole() ) {
+        case Heroes::Role::SCOUT:
+            return "Scout";
+        case Heroes::Role::COURIER:
+            return "Courier";
+        case Heroes::Role::HUNTER:
+            return "Hunter";
+        case Heroes::Role::FIGHTER:
+            return "Fighter";
+        case Heroes::Role::CHAMPION:
+            return "Champion";
+        default:
+            // Did you add a new AI hero role? Add the appropriate logic for it!
+            assert( 0 );
+            break;
+        }
+
+        return "Unknown";
+    }
 }
 
 const char * Heroes::GetName( int heroid )
@@ -146,7 +168,6 @@ const char * Heroes::GetName( int heroid )
 
 Heroes::Heroes()
     : experience( 0 )
-    , move_point_scale( -1 )
     , army( this )
     , hid( UNKNOWN )
     , portrait( UNKNOWN )
@@ -176,7 +197,6 @@ Heroes::Heroes( int heroid, int rc )
     : HeroBase( HeroBase::HEROES, rc )
     , ColorBase( Color::NONE )
     , experience( GetStartingXp() )
-    , move_point_scale( -1 )
     , secondary_skills( rc )
     , army( this )
     , hid( heroid )
@@ -234,24 +254,23 @@ Heroes::Heroes( int heroid, int rc )
 
 void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
 {
-    // reset modes
     modes = 0;
 
     SetIndex( map_index );
     SetColor( cl );
 
-    // unknown
+    // Unknown
     st.skip( 1 );
 
-    // custom troops
+    // Custom troops
     if ( st.get() ) {
         Troop troops[5];
 
-        // set monster id
+        // Monster id
         for ( Troop & troop : troops )
             troop.SetMonster( st.get() + 1 );
 
-        // set count
+        // Count
         for ( Troop & troop : troops )
             troop.SetCount( st.getLE16() );
 
@@ -260,13 +279,13 @@ void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
     else
         st.skip( 15 );
 
-    // custom portrait
+    // Custom portrait
     bool custom_portrait = ( st.get() != 0 );
 
     if ( custom_portrait ) {
         SetModes( NOTDEFAULTS );
 
-        // index sprite portrait
+        // Portrait sprite index
         portrait = st.get();
 
         if ( UNKNOWN <= portrait ) {
@@ -274,30 +293,41 @@ void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
             portrait = hid;
         }
 
-        // fixed race for custom portrait (after level up)
+        // Hero's race may not match the custom portrait
         _race = rc;
+
+        // Since we changed the hero's race, we have to update the initial spell as well. Let's remove the
+        // existing spell and the spell book itself for now, the new one will be added later if necessary.
+        spell_book.clear();
+        bag_artifacts.RemoveArtifact( Artifact::MAGIC_BOOK );
     }
     else {
         st.skip( 1 );
     }
 
-    // 3 artifacts
-    PickupArtifact( Artifact( st.get() ) );
-    PickupArtifact( Artifact( st.get() ) );
-    PickupArtifact( Artifact( st.get() ) );
+    auto addInitialArtifact = [this]( const Artifact & art ) {
+        // Perhaps the hero already has a spell book because of his race
+        if ( art == Artifact::MAGIC_BOOK && HaveSpellBook() ) {
+            return;
+        }
 
-    // unknown byte
+        PickupArtifact( art );
+    };
+
+    // 3 artifacts
+    addInitialArtifact( Artifact( st.get() ) );
+    addInitialArtifact( Artifact( st.get() ) );
+    addInitialArtifact( Artifact( st.get() ) );
+
+    // Unknown
     st.skip( 1 );
 
-    // experience
+    // Experience
     experience = st.getLE32();
 
-    if ( experience == 0 )
-        experience = GetStartingXp();
-
+    // Custom secondary skills
     const bool custom_secskill = ( st.get() != 0 );
 
-    // custom skill
     if ( custom_secskill ) {
         SetModes( NOTDEFAULTS );
         SetModes( CUSTOMSKILLS );
@@ -319,10 +349,10 @@ void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
         st.skip( 16 );
     }
 
-    // unknown
+    // Unknown
     st.skip( 1 );
 
-    // custom name
+    // Custom name
     if ( st.get() ) {
         SetModes( NOTDEFAULTS );
         name = st.toString( 13 );
@@ -331,13 +361,13 @@ void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
         st.skip( 13 );
     }
 
-    // patrol
+    // Patrol
     if ( st.get() ) {
         SetModes( PATROL );
         patrol_center = GetCenter();
     }
 
-    // count square
+    // Patrol square
     patrol_square = st.get();
 
     PostLoad();
@@ -345,30 +375,28 @@ void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
 
 void Heroes::PostLoad()
 {
-    // save general object
+    // An object on which the hero currently stands
     save_maps_object = MP2::OBJ_ZERO;
 
-    // fix zero army
+    // Fix a custom hero without an army
     if ( !army.isValid() ) {
         army.Reset( false );
     }
 
-    // level up
+    // Level up if needed
     int level = GetLevel();
     while ( 1 < level-- ) {
         SetModes( NOTDEFAULTS );
         LevelUp( Modes( CUSTOMSKILLS ), true );
     }
 
-    if ( ( _race & ( Race::SORC | Race::WRLK | Race::WZRD | Race::NECR ) ) && !HaveSpellBook() ) {
-        Spell spell = Skill::Primary::GetInitialSpell( _race );
-        if ( spell.isValid() ) {
-            SpellBookActivate();
-            AppendSpellToBook( spell, true );
-        }
+    // Hero's race could be changed during load, so we may need to add an initial spell once again
+    const Spell spell = Skill::Primary::GetInitialSpell( _race );
+    if ( spell.isValid() ) {
+        SpellBookActivate();
+        AppendSpellToBook( spell, true );
     }
 
-    // other param
     SetSpellPoints( GetMaxSpellPoints() );
     move_point = GetMaxMovePoints();
 
@@ -674,7 +702,6 @@ bool Heroes::Recruit( const int col, const fheroes2::Point & pt )
     if ( !Modes( SAVEMP ) ) {
         move_point = GetMaxMovePoints();
     }
-    MovePointsScaleFixed();
 
     if ( !army.isValid() ) {
         army.Reset( false );
@@ -709,7 +736,6 @@ void Heroes::ActionNewDay()
 {
     // recovery move points
     move_point = GetMaxMovePoints();
-    MovePointsScaleFixed();
 
     // replenish spell points
     ReplenishSpellPoints();
@@ -978,10 +1004,18 @@ void Heroes::IncreaseExperience( const uint32_t amount, const bool autoselect )
     int oldLevel = GetLevelFromExperience( experience );
     int newLevel = GetLevelFromExperience( experience + amount );
 
-    for ( int level = oldLevel; level < newLevel; ++level )
-        LevelUp( false, autoselect );
+    const uint32_t updatedExperience = experience + amount;
 
-    experience += amount;
+    for ( int level = oldLevel; level < newLevel - 1; ++level ) {
+        experience = GetExperienceFromLevel( level );
+        LevelUp( false, autoselect );
+    }
+
+    experience = updatedExperience;
+
+    if ( newLevel > oldLevel ) {
+        LevelUp( false, autoselect );
+    }
 }
 
 /* calc level from exp */
@@ -1433,7 +1467,6 @@ void Heroes::SetFreeman( int reason )
         SetIndex( -1 );
 
         modes = 0;
-        move_point_scale = -1;
 
         path.Reset();
 
@@ -1475,7 +1508,7 @@ void Heroes::SetMapsObject( const MP2::MapObjectType objectType )
 
 void Heroes::ActionPreBattle()
 {
-    // Do nothing.
+    spell_book.resetState();
 }
 
 void Heroes::ActionNewPosition( const bool allowMonsterAttack )
@@ -1536,9 +1569,9 @@ const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
         case PORT_MEDIUM: {
             // Original ICN::PORTMEDI sprites are badly rendered. Instead of them we're getting high quality ICN:PORT00xx file and resize it to a smaller image.
             // TODO: find a better way to store these images, ideally in agg_image.cpp file.
-            static std::map<int, fheroes2::Sprite> mediumSizePortait;
-            auto iter = mediumSizePortait.find( id );
-            if ( iter != mediumSizePortait.end() ) {
+            static std::map<int, fheroes2::Sprite> mediumSizePortrait;
+            auto iter = mediumSizePortrait.find( id );
+            if ( iter != mediumSizePortrait.end() ) {
                 return iter->second;
             }
 
@@ -1546,7 +1579,7 @@ const fheroes2::Sprite & Heroes::GetPortrait( int id, int type )
             fheroes2::Sprite output( 50, 47 );
             fheroes2::Resize( original, output );
 
-            return mediumSizePortait.emplace( id, std::move( output ) ).first->second;
+            return mediumSizePortrait.try_emplace( id, std::move( output ) ).first->second;
         }
         case PORT_SMALL:
             return Heroes::DEBUG_HERO > id ? fheroes2::AGG::GetICN( ICN::MINIPORT, id ) : fheroes2::AGG::GetICN( ICN::MINIPORT, BAX );
@@ -1619,17 +1652,13 @@ std::string Heroes::String() const
 {
     std::ostringstream os;
 
-    os << "name            : " << name << std::endl
-       << "race            : " << Race::String( _race ) << std::endl
+    os << "name            : " << name << " (" << Race::String( _race ) << ")" << std::endl
        << "color           : " << Color::String( GetColor() ) << std::endl
        << "experience      : " << experience << std::endl
        << "level           : " << GetLevel() << std::endl
-       << "magic point     : " << GetSpellPoints() << std::endl
-       << "position x      : " << GetCenter().x << std::endl
-       << "position y      : " << GetCenter().y << std::endl
-       << "move point      : " << move_point << std::endl
-       << "max magic point : " << GetMaxSpellPoints() << std::endl
-       << "max move point  : " << GetMaxMovePoints() << std::endl
+       << "magic points    : " << GetSpellPoints() << " / " << GetMaxSpellPoints() << std::endl
+       << "position x, y   : " << GetCenter().x << ", " << GetCenter().y << std::endl
+       << "move points     : " << move_point << " / " << GetMaxMovePoints() << std::endl
        << "direction       : " << Direction::String( direction ) << std::endl
        << "index sprite    : " << sprite_index << std::endl
        << "in castle       : " << ( inCastle() ? "true" : "false" ) << std::endl
@@ -1651,7 +1680,8 @@ std::string Heroes::String() const
         os << "skills          : " << secondary_skills.String() << std::endl
            << "artifacts       : " << bag_artifacts.String() << std::endl
            << "spell book      : " << ( HaveSpellBook() ? spell_book.String() : "disabled" ) << std::endl
-           << "army dump       : " << army.String() << std::endl;
+           << "army dump       : " << army.String() << std::endl
+           << "ai role         : " << GetHeroRoleString( *this ) << std::endl;
 
         os << AI::Get().HeroesString( *this );
     }
@@ -1712,7 +1742,7 @@ void AllHeroes::Init()
         push_back( new Heroes( Heroes::DAINWIN, Race::WRLK, 5 ) );
         push_back( new Heroes( Heroes::MOG, Race::NECR, 5 ) );
         push_back( new Heroes( Heroes::UNCLEIVAN, Race::BARB, 5 ) );
-        push_back( new Heroes( Heroes::JOSEPH, Race::KNGT, 5 ) );
+        push_back( new Heroes( Heroes::JOSEPH, Race::WZRD, 5 ) );
         push_back( new Heroes( Heroes::GALLAVANT, Race::KNGT, 5 ) );
         push_back( new Heroes( Heroes::ELDERIAN, Race::WRLK, 5 ) );
         push_back( new Heroes( Heroes::CEALLACH, Race::KNGT, 5 ) );
@@ -1945,8 +1975,8 @@ StreamBase & operator<<( StreamBase & msg, const Heroes & hero )
     msg << base;
 
     // Heroes
-    msg << hero.name << col << hero.experience << hero.move_point_scale << hero.secondary_skills << hero.army << hero.hid << hero.portrait << hero._race
-        << hero.save_maps_object << hero.path << hero.direction << hero.sprite_index;
+    msg << hero.name << col << hero.experience << hero.secondary_skills << hero.army << hero.hid << hero.portrait << hero._race << hero.save_maps_object << hero.path
+        << hero.direction << hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
     const int16_t patrolX = static_cast<int16_t>( hero.patrol_center.x );
@@ -1968,15 +1998,23 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     // Heroes
     msg >> hero.name >> col;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0916_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_0916_RELEASE ) {
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_0916_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE_0916_RELEASE ) {
         ColorBase dummyColor;
 
         msg >> dummyColor;
     }
 
-    msg >> hero.experience >> hero.move_point_scale >> hero.secondary_skills >> hero.army >> hero.hid >> hero.portrait >> hero._race >> hero.save_maps_object >> hero.path
-        >> hero.direction >> hero.sprite_index;
+    msg >> hero.experience;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0917_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_0917_RELEASE ) {
+        int32_t dummy;
+
+        msg >> dummy;
+    }
+
+    msg >> hero.secondary_skills >> hero.army >> hero.hid >> hero.portrait >> hero._race >> hero.save_maps_object >> hero.path >> hero.direction >> hero.sprite_index;
 
     // TODO: before 0.9.4 Point was int16_t type
     int16_t patrolX = 0;

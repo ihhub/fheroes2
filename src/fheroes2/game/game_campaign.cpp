@@ -643,9 +643,9 @@ namespace
     {
         switch ( campaignId ) {
         case Campaign::ROLAND_CAMPAIGN:
-            return ICN::CAMPXTRG;
+            return ICN::GOOD_CAMPAIGN_BUTTONS;
         case Campaign::ARCHIBALD_CAMPAIGN:
-            return ICN::CAMPXTRE;
+            return ICN::EVIL_CAMPAIGN_BUTTONS;
         case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
         case Campaign::DESCENDANTS_CAMPAIGN:
         case Campaign::WIZARDS_ISLE_CAMPAIGN:
@@ -692,10 +692,10 @@ namespace
         case Campaign::DESCENDANTS_CAMPAIGN:
         case Campaign::WIZARDS_ISLE_CAMPAIGN:
         case Campaign::VOYAGE_HOME_CAMPAIGN:
-            AudioManager::PlayMusic( MUS::ROLAND_CAMPAIGN_SCREEN, true );
+            AudioManager::PlayMusicAsync( MUS::ROLAND_CAMPAIGN_SCREEN, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
             break;
         case Campaign::ARCHIBALD_CAMPAIGN:
-            AudioManager::PlayMusic( MUS::ARCHIBALD_CAMPAIGN_SCREEN, true );
+            AudioManager::PlayMusicAsync( MUS::ARCHIBALD_CAMPAIGN_SCREEN, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
             break;
         default:
             // Implementing a new campaign? Add a new case!
@@ -856,7 +856,7 @@ fheroes2::GameMode Game::CompleteCampaignScenario( const bool isLoadingSaveFile 
         // TODO : Implement function that displays the last frame of win.smk with score
         // and a dialog for name entry. fheroes::PlayMusic is run here in order to start
         // playing before displaying the high score.
-        AudioManager::PlayMusic( MUS::VICTORY, true, true );
+        AudioManager::PlayMusicAsync( MUS::VICTORY, Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
         return fheroes2::GameMode::HIGHSCORES_CAMPAIGN;
     }
 

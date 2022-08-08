@@ -1,13 +1,13 @@
 # Dutch translation for fheroes2
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
+# fheroes2 team <fhomm2@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 17:13+0000\n"
+"POT-Creation-Date: 2022-08-08 11:28+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -143,8 +143,10 @@ msgstr ""
 msgid "Set Count"
 msgstr ""
 
-msgid "%{name} half the enemy troops!"
-msgstr ""
+msgid "%{name} destroys half the enemy troops!"
+msgid_plural "%{name} destroy half the enemy troops!"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "%{name} has turned off the auto battle"
 msgstr ""
@@ -469,8 +471,10 @@ msgstr ""
 msgid "%{name} wait their turn."
 msgstr ""
 
-msgid "%{attacker} do %{damage} damage."
-msgstr ""
+msgid "%{attacker} does %{damage} damage."
+msgid_plural "%{attacker} do %{damage} damage."
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
@@ -1769,7 +1773,7 @@ msgstr ""
 msgid "Fenced Meadow"
 msgstr ""
 
-msgid "Red Tower"
+msgid "sorceress|Red Tower"
 msgstr ""
 
 msgid "Dungeon"
@@ -1797,6 +1801,9 @@ msgid "Swamp"
 msgstr ""
 
 msgid "Green Tower"
+msgstr ""
+
+msgid "warlock|Red Tower"
 msgstr ""
 
 msgid "Black Tower"
@@ -2269,19 +2276,52 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr ""
 
-msgid "Total: "
+msgid "off"
 msgstr ""
 
-msgid "No room in"
+msgid "Music"
 msgstr ""
 
-msgid "the garrison"
+msgid "Effects"
+msgstr ""
+
+msgid "MIDI"
+msgstr ""
+
+msgid "MIDI Expansion"
+msgstr ""
+
+msgid "External"
+msgstr ""
+
+msgid "Music Type"
+msgstr ""
+
+msgid "3D Audio"
+msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr ""
+
+msgid "Toggle foreground sounds level."
+msgstr ""
+
+msgid "Change the type of music."
+msgstr ""
+
+msgid "Toggle 3D effects of foreground sounds."
+msgstr ""
+
+msgid "Okay"
 msgstr ""
 
 msgid "Build a new ship:"
 msgstr ""
 
 msgid "Resource cost:"
+msgstr ""
+
+msgid "Total: "
 msgstr ""
 
 msgid "Need: "
@@ -2326,25 +2366,10 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-msgid "off"
+msgid "Audio"
 msgstr ""
 
-msgid "Music"
-msgstr ""
-
-msgid "Effects"
-msgstr ""
-
-msgid "MIDI"
-msgstr ""
-
-msgid "MIDI Expansion"
-msgstr ""
-
-msgid "External"
-msgstr ""
-
-msgid "Music Type"
+msgid "settings"
 msgstr ""
 
 msgid "Hot Keys"
@@ -2365,6 +2390,27 @@ msgstr ""
 msgid "Text Support"
 msgstr ""
 
+msgid "Evil"
+msgstr ""
+
+msgid "Good"
+msgstr ""
+
+msgid "Interface Type"
+msgstr ""
+
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Battles"
+msgstr ""
+
 msgid "Select Game Language"
 msgstr ""
 
@@ -2377,19 +2423,19 @@ msgstr ""
 msgid "Change resolution of the game."
 msgstr ""
 
+msgid "Change audio settings of the game."
+msgstr ""
+
 msgid "Experimental game settings."
 msgstr ""
 
-msgid "Toggle ambient music level."
-msgstr ""
-
-msgid "Toggle foreground sounds level."
-msgstr ""
-
-msgid "Change the type of music."
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Check all Hot Keys used in the game."
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid ""
@@ -2400,9 +2446,6 @@ msgstr ""
 msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
-msgstr ""
-
-msgid "Okay"
 msgstr ""
 
 msgid "Attention"
@@ -2824,15 +2867,6 @@ msgstr ""
 msgid "Scroll Speed"
 msgstr ""
 
-msgid "Evil"
-msgstr ""
-
-msgid "Good"
-msgstr ""
-
-msgid "Interface Type"
-msgstr ""
-
 #, fuzzy
 msgid "Hide"
 msgstr "Horde"
@@ -2841,18 +2875,6 @@ msgid "Show"
 msgstr ""
 
 msgid "Interface"
-msgstr ""
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-msgid "Battles"
-msgstr ""
-
-msgid "Manual"
 msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
@@ -2866,13 +2888,7 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
 msgid "Toggle interface visibility."
-msgstr ""
-
-msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -3004,6 +3020,9 @@ msgstr ""
 msgid "Development"
 msgstr ""
 
+msgid "Dev and Support"
+msgstr ""
+
 msgid "Visit us at "
 msgstr ""
 
@@ -3028,7 +3047,7 @@ msgstr ""
 msgid "Original project before 0.7"
 msgstr ""
 
-msgid "Original Heroes of Might and Magic II team"
+msgid "Heroes of Might and Magic II: The Succession Wars team"
 msgstr ""
 
 msgid "Designed and Directed"
@@ -3082,6 +3101,69 @@ msgstr ""
 msgid "Scenarios"
 msgstr ""
 
+msgid "Heroes of Might and Magic II: The Price of Loyalty team"
+msgstr ""
+
+msgid "Cyberlore Studios"
+msgstr ""
+
+msgid "Design Lead"
+msgstr ""
+
+msgid "Designers"
+msgstr ""
+
+msgid "Programming Lead"
+msgstr ""
+
+msgid "Art Lead"
+msgstr ""
+
+msgid "Playtesters"
+msgstr ""
+
+msgid "New World Computing"
+msgstr ""
+
+msgid "Designer"
+msgstr ""
+
+msgid "Producers"
+msgstr ""
+
+msgid "QA Managers"
+msgstr ""
+
+msgid "Sound Design"
+msgstr ""
+
+msgid "Town Themes"
+msgstr ""
+
+msgid "Alto Sax"
+msgstr ""
+
+msgid "Harpsichord and Piano"
+msgstr ""
+
+msgid "Basso Vocal"
+msgstr ""
+
+msgid "Soprano Vocal"
+msgstr ""
+
+msgid "Recorded at Green Street Studios"
+msgstr ""
+
+msgid "German Consultant"
+msgstr ""
+
+msgid "Map Designers"
+msgstr ""
+
+msgid "Package Design"
+msgstr ""
+
 msgid "Unknown Hero"
 msgstr ""
 
@@ -3100,17 +3182,15 @@ msgstr ""
 msgid "View High Scores for Campaigns."
 msgstr ""
 
-msgid ""
-"Invalid file game type. Please ensure that you are running the latest type "
-"of save files."
-msgstr ""
-
 msgid "Warning"
 msgstr ""
 
+msgid "This file contains a save with an invalid game type."
+msgstr ""
+
 msgid ""
-"This file is saved in the \"The Price of Loyalty\" version.\n"
-"Some items may be unavailable."
+"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
+"Some items may not be available."
 msgstr ""
 
 msgid "Usupported save format: "
@@ -3214,6 +3294,11 @@ msgid "Change language, resolution and settings of the game."
 msgstr ""
 
 msgid "Game Settings"
+msgstr ""
+
+msgid ""
+"Required video files for campaign selection window are missing. Please make "
+"sure that all necessary files are present in the system."
 msgstr ""
 
 msgid ""
@@ -8238,9 +8323,6 @@ msgstr ""
 msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
-msgstr ""
-
-msgid "game: always confirm for rewrite savefile"
 msgstr ""
 
 msgid "game: remember last focus"

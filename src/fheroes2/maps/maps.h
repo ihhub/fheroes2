@@ -31,8 +31,7 @@
 
 #define TILEWIDTH 32
 
-class MapsIndexes : public std::vector<int32_t>
-{};
+using MapsIndexes = std::vector<int32_t>;
 
 namespace Maps
 {
@@ -83,8 +82,28 @@ namespace Maps
 
     int32_t getFogTileCountToBeRevealed( const int32_t tileIndex, int scouteValue, const int playerColor );
 
-    // This method should be avoided unless high precision is not important.
+    // Returns the approximate distance between two tiles with given indexes. This distance is calculated as the number of
+    // tiles (truncated to the nearest smaller integer value) that would need to be traversed in a straight direction to
+    // overcome the distance that corresponds to the distance that the hero would have to cover when moving between tiles
+    // with given indexes using the usual rules and penalties.
+    //
+    // For example, in order to navigate to a tile B, which is located seven tiles below and five to the right of tile A,
+    // the hero should move two tiles down and five tiles right down diagonally (diagonal movement costs 50% more), which
+    // corresponds to 2 + 5 * 1.5 = 9.5 (9 after truncation) tiles traversed in the straight direction.
+    //
+    // This function should be avoided unless high precision is not important.
     uint32_t GetApproximateDistance( const int32_t pos1, const int32_t pos2 );
+
+    // Returns the straight line distance between two tiles with given indexes. This distance is calculated as the number
+    // of tiles (truncated to the nearest smaller integer value) that would need to be traversed in a straight direction
+    // to overcome the distance that corresponds to the straight line distance between the tiles with given indexes.
+    //
+    // For example, in order to navigate to a tile B, which is located seven tiles below and five to the right of tile A,
+    // a straight line distance should be covered, which corresponds to sqrt( 5^2 + 7^2 ) = 8.6 (8 after truncation) tiles
+    // traversed in the straight direction.
+    //
+    // This function is not suitable for accurate calculation of the distance expressed in movement points.
+    uint32_t GetStraightLineDistance( const int32_t pos1, const int32_t pos2 );
 
     void UpdateCastleSprite( const fheroes2::Point & center, int race, bool isCastle = false, bool isRandom = false );
     void ReplaceRandomCastleObjectId( const fheroes2::Point & );

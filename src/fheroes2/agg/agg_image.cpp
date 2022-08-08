@@ -237,6 +237,38 @@ namespace
         }
         return isReleasedState ? fheroes2::GetColorId( 180, 180, 180 ) : fheroes2::GetColorId( 144, 144, 144 );
     }
+
+    void convertToEvilInterface( fheroes2::Sprite & image, const fheroes2::Rect & roi )
+    {
+        fheroes2::ApplyPalette( image, roi.x, roi.y, image, roi.x, roi.y, roi.width, roi.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+    }
+
+    void copyEvilInterfaceElements( fheroes2::Sprite & image, const fheroes2::Rect & roi )
+    {
+        // Evil interface has special elements at each corner of the window.
+        const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::CSPANBKE, 0 );
+
+        // If this assertion blows up you are using some modded resources. Good luck!
+        assert( original.width() == 321 && original.height() == 304 );
+
+        // Top-left corner.
+        fheroes2::Copy( original, 0, 0, image, roi.x, roi.y, 17, 43 );
+        fheroes2::Copy( original, 17, 0, image, roi.x + 17, roi.y, 26, 14 );
+
+        // Top-right corner.
+        fheroes2::Copy( original, original.width() - 43, 0, image, roi.x + roi.width - 43, roi.y, 43, 14 );
+        fheroes2::Copy( original, original.width() - 17, 14, image, roi.x + roi.width - 17, roi.y + 14, 17, 29 );
+
+        // Bottom-right corner.
+        fheroes2::Copy( original, original.width() - 13, original.height() - 43, image, roi.x + roi.width - 13, roi.y + roi.height - 43, 13, 27 );
+        fheroes2::Copy( original, original.width() - 16, original.height() - 16, image, roi.x + roi.width - 16, roi.y + roi.height - 16, 16, 16 );
+        fheroes2::Copy( original, original.width() - 43, original.height() - 13, image, roi.x + roi.width - 43, roi.y + roi.height - 13, 27, 13 );
+
+        // Bottom-left corner.
+        fheroes2::Copy( original, 0, original.height() - 43, image, roi.x, roi.y + roi.height - 43, 13, 27 );
+        fheroes2::Copy( original, 0, original.height() - 16, image, roi.x, roi.y + roi.height - 16, 16, 16 );
+        fheroes2::Copy( original, 16, original.height() - 13, image, roi.x + 16, roi.y + roi.height - 13, 27, 13 );
+    }
 }
 
 namespace fheroes2
@@ -1816,18 +1848,27 @@ namespace fheroes2
             }
             case ICN::NGEXTRA: {
                 LoadOriginalICN( id );
-                if ( _icnVsSprite[id].size() >= 34 ) {
+                std::vector<Sprite> & images = _icnVsSprite[id];
+
+                if ( images.size() >= 34 ) {
                     // Fix extra column at the end of AI controlled player.
                     for ( size_t i = 27; i < 34; ++i ) {
-                        if ( _icnVsSprite[id][i].width() == 62 && _icnVsSprite[id][i].height() == 58 ) {
-                            Copy( _icnVsSprite[id][i], 58, 44, _icnVsSprite[id][i], 59, 44, 1, 11 );
+                        if ( images[i].width() == 62 && images[i].height() == 58 ) {
+                            Copy( images[i], 58, 44, images[i], 59, 44, 1, 11 );
+                        }
+                    }
+
+                    for ( size_t i = 39; i < 45; ++i ) {
+                        if ( images[i].width() == 62 && images[i].height() == 58 ) {
+                            Copy( images[i], 58, 44, images[i], 59, 44, 1, 11 );
                         }
                     }
                 }
-                if ( _icnVsSprite[id].size() >= 70 ) {
+
+                if ( images.size() >= 70 ) {
                     // fix transparent corners on pressed OKAY and CANCEL buttons
-                    CopyTransformLayer( _icnVsSprite[id][66], _icnVsSprite[id][67] );
-                    CopyTransformLayer( _icnVsSprite[id][68], _icnVsSprite[id][69] );
+                    CopyTransformLayer( images[66], images[67] );
+                    CopyTransformLayer( images[68], images[69] );
                 }
                 return true;
             }
@@ -2067,6 +2108,185 @@ namespace fheroes2
                     }
                 }
                 return true;
+            case ICN::ESPANBKG_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const Rect roi{ 28, 28, 265, 206 };
+
+                Sprite & output = _icnVsSprite[id][0];
+                _icnVsSprite[id][0] = GetICN( ICN::CSPANBKE, 0 );
+                Copy( GetICN( ICN::ESPANBKG, 0 ), roi.x, roi.y, output, roi.x, roi.y, roi.width, roi.height );
+
+                convertToEvilInterface( output, roi );
+
+                _icnVsSprite[id][1] = GetICN( ICN::ESPANBKG, 1 );
+
+                return true;
+            }
+            case ICN::RECR2BKG_EVIL: {
+                GetICN( ICN::RECR2BKG, 0 );
+                _icnVsSprite[id] = _icnVsSprite[ICN::RECR2BKG];
+                if ( !_icnVsSprite[id].empty() ) {
+                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                    convertToEvilInterface( _icnVsSprite[id][0], roi );
+                    copyEvilInterfaceElements( _icnVsSprite[id][0], roi );
+                }
+
+                return true;
+            }
+            case ICN::RECRBKG_EVIL: {
+                GetICN( ICN::RECRBKG, 0 );
+                _icnVsSprite[id] = _icnVsSprite[ICN::RECRBKG];
+                if ( !_icnVsSprite[id].empty() ) {
+                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                    convertToEvilInterface( _icnVsSprite[id][0], roi );
+                    copyEvilInterfaceElements( _icnVsSprite[id][0], roi );
+                }
+
+                return true;
+            }
+            case ICN::STONEBAK_EVIL: {
+                GetICN( ICN::STONEBAK, 0 );
+                _icnVsSprite[id] = _icnVsSprite[ICN::STONEBAK];
+                if ( !_icnVsSprite[id].empty() ) {
+                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                    convertToEvilInterface( _icnVsSprite[id][0], roi );
+                }
+
+                return true;
+            }
+            case ICN::WELLBKG_EVIL: {
+                GetICN( ICN::WELLBKG, 0 );
+                _icnVsSprite[id] = _icnVsSprite[ICN::WELLBKG];
+                if ( !_icnVsSprite[id].empty() ) {
+                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() - 19 );
+                    convertToEvilInterface( _icnVsSprite[id][0], roi );
+                }
+
+                return true;
+            }
+            case ICN::CASLWIND_EVIL: {
+                GetICN( ICN::CASLWIND, 0 );
+                _icnVsSprite[id] = _icnVsSprite[ICN::CASLWIND];
+                if ( !_icnVsSprite[id].empty() ) {
+                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                    convertToEvilInterface( _icnVsSprite[id][0], roi );
+                }
+
+                return true;
+            }
+            case ICN::CASLXTRA_EVIL: {
+                GetICN( ICN::CASLXTRA, 0 );
+                _icnVsSprite[id] = _icnVsSprite[ICN::CASLXTRA];
+                if ( !_icnVsSprite[id].empty() ) {
+                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                    convertToEvilInterface( _icnVsSprite[id][0], roi );
+                }
+
+                return true;
+            }
+            case ICN::STRIP_BACKGROUND_EVIL: {
+                _icnVsSprite[id].resize( 1 );
+                _icnVsSprite[id][0] = GetICN( ICN::STRIP, 11 );
+
+                const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() - 7 );
+                convertToEvilInterface( _icnVsSprite[id][0], roi );
+
+                return true;
+            }
+            case ICN::GOOD_CAMPAIGN_BUTTONS:
+            case ICN::EVIL_CAMPAIGN_BUTTONS: {
+                auto & image = _icnVsSprite[id];
+                image.resize( 8 );
+
+                const int originalIcnId = ( id == ICN::GOOD_CAMPAIGN_BUTTONS ) ? ICN::CAMPXTRG : ICN::CAMPXTRE;
+
+                for ( int32_t i = 0; i < 4; ++i ) {
+                    image[2 * i] = GetICN( originalIcnId, 2 * i );
+
+                    const Sprite & original = GetICN( originalIcnId, 2 * i + 1 );
+
+                    Sprite & resized = image[2 * i + 1];
+                    resized.resize( image[2 * i].width(), image[2 * i].height() );
+                    resized.reset();
+
+                    Copy( original, 0, 0, resized, original.x(), original.y(), original.width(), original.height() );
+                }
+
+                return true;
+            }
+            case ICN::B_BFLG32:
+            case ICN::G_BFLG32:
+            case ICN::R_BFLG32:
+            case ICN::Y_BFLG32:
+            case ICN::O_BFLG32:
+            case ICN::P_BFLG32:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 31 && _icnVsSprite[id][31].height() == 248 ) {
+                    Sprite & original = _icnVsSprite[id][31];
+                    Sprite temp = Crop( original, 0, 0, original.width(), 4 );
+                    temp.setPosition( original.x(), original.y() );
+
+                    original = std::move( temp );
+                }
+                return true;
+            case ICN::FLAG32:
+                LoadOriginalICN( id );
+                // Only first 14 images are properly aligned within an Adventure Map tile. The rest of images should be rendered on multiple tiles.
+                // To keep proper rendering logic we are creating new images by diving existing ones into 2 parts and setting up new sprite offsets.
+                // This helps to solve the problem with rendering order.
+                _icnVsSprite[id].resize( 128 + _icnVsSprite[id].size() * 2 );
+                for ( int32_t i = 14; i < 14 + 7; ++i ) {
+                    const Sprite & original = _icnVsSprite[id][i];
+
+                    _icnVsSprite[id][i + 128] = Crop( original, 0, 0, 32 - original.x(), original.height() );
+                    _icnVsSprite[id][i + 128].setPosition( original.x(), 32 + original.y() );
+
+                    _icnVsSprite[id][i + 128 + 7] = Crop( original, 32 - original.x(), 0, original.width(), original.height() );
+                    _icnVsSprite[id][i + 128 + 7].setPosition( 0, 32 + original.y() );
+                }
+
+                for ( int32_t i = 42; i < 42 + 7; ++i ) {
+                    const Sprite & original = _icnVsSprite[id][i];
+
+                    _icnVsSprite[id][i + 128] = Crop( original, 0, 0, -original.x(), original.height() );
+                    _icnVsSprite[id][i + 128].setPosition( 32 + original.x(), original.y() );
+
+                    _icnVsSprite[id][i + 128 + 7] = Crop( original, -original.x(), 0, original.width(), original.height() );
+                    _icnVsSprite[id][i + 128 + 7].setPosition( 0, original.y() );
+                }
+                return true;
+            case ICN::MINI_MONSTER_IMAGE:
+            case ICN::MINI_MONSTER_SHADOW: {
+                // It doesn't matter which image is being called. We are generating both of them at the same time.
+                LoadOriginalICN( ICN::MINIMON );
+
+                // TODO: optimize image sizes.
+                _icnVsSprite[ICN::MINI_MONSTER_IMAGE] = _icnVsSprite[ICN::MINIMON];
+                _icnVsSprite[ICN::MINI_MONSTER_SHADOW] = _icnVsSprite[ICN::MINIMON];
+
+                for ( Sprite & image : _icnVsSprite[ICN::MINI_MONSTER_IMAGE] ) {
+                    uint8_t * transform = image.transform();
+                    const uint8_t * tranformEnd = transform + image.width() * image.height();
+                    for ( ; transform != tranformEnd; ++transform ) {
+                        if ( *transform > 1 ) {
+                            *transform = 1;
+                        }
+                    }
+                }
+
+                for ( Sprite & image : _icnVsSprite[ICN::MINI_MONSTER_SHADOW] ) {
+                    uint8_t * transform = image.transform();
+                    const uint8_t * tranformEnd = transform + image.width() * image.height();
+                    for ( ; transform != tranformEnd; ++transform ) {
+                        if ( *transform == 0 ) {
+                            *transform = 1;
+                        }
+                    }
+                }
+
+                return true;
+            }
             default:
                 break;
             }
@@ -2219,8 +2439,6 @@ namespace fheroes2
 
             // TODO: correct naming and standartise the code
             switch ( fontType ) {
-            case Font::GRAY_BIG:
-                return GetICN( ICN::GRAY_FONT, character - 0x20 );
             case Font::GRAY_SMALL:
                 return GetICN( ICN::GRAY_SMALL_FONT, character - 0x20 );
             case Font::YELLOW_BIG:
@@ -2243,7 +2461,6 @@ namespace fheroes2
         {
             switch ( fontType ) {
             case Font::BIG:
-            case Font::GRAY_BIG:
             case Font::YELLOW_BIG:
                 return static_cast<uint32_t>( GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
             case Font::SMALL:

@@ -1,13 +1,13 @@
 # Brazilian Portuguese translation for fheroes2
 # Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
 # This file is distributed under the same license as the fheroes2 package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+# fheroes2 team <fhomm2@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 17:13+0000\n"
+"POT-Creation-Date: 2022-08-08 11:28+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -166,8 +166,11 @@ msgstr "Ver %{name}"
 msgid "Set Count"
 msgstr ""
 
-msgid "%{name} half the enemy troops!"
-msgstr "%{name} metade das tropas inimigas!"
+#, fuzzy
+msgid "%{name} destroys half the enemy troops!"
+msgid_plural "%{name} destroy half the enemy troops!"
+msgstr[0] "%{name} metade das tropas inimigas!"
+msgstr[1] "%{name} metade das tropas inimigas!"
 
 #, fuzzy
 msgid "%{name} has turned off the auto battle"
@@ -518,8 +521,11 @@ msgstr "%{name} a %{race}."
 msgid "%{name} wait their turn."
 msgstr "%{name} a %{race}."
 
-msgid "%{attacker} do %{damage} damage."
-msgstr ""
+#, fuzzy
+msgid "%{attacker} does %{damage} damage."
+msgid_plural "%{attacker} do %{damage} damage."
+msgstr[0] "%{tower} causou %{damage} damage."
+msgstr[1] "%{tower} causou %{damage} damage."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
@@ -1899,7 +1905,8 @@ msgstr "Upg. Stonehenge++"
 msgid "Fenced Meadow"
 msgstr "Campo Cercado"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Torre Vermelha"
 
 msgid "Dungeon"
@@ -1928,6 +1935,10 @@ msgstr "Pântano"
 
 msgid "Green Tower"
 msgstr "Torre Verde"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Torre Vermelha"
 
 msgid "Black Tower"
 msgstr "Torre Negra"
@@ -2463,20 +2474,55 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr ""
 
-msgid "Total: "
+msgid "off"
+msgstr "off"
+
+#, fuzzy
+msgid "Music"
+msgstr "música"
+
+msgid "Effects"
 msgstr ""
 
-msgid "No room in"
+msgid "MIDI"
 msgstr ""
 
-msgid "the garrison"
+#, fuzzy
+msgid "MIDI Expansion"
+msgstr "Mansão"
+
+msgid "External"
 msgstr ""
+
+msgid "Music Type"
+msgstr ""
+
+msgid "3D Audio"
+msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr ""
+
+msgid "Toggle foreground sounds level."
+msgstr ""
+
+msgid "Change the type of music."
+msgstr ""
+
+msgid "Toggle 3D effects of foreground sounds."
+msgstr ""
+
+msgid "Okay"
+msgstr "OK"
 
 msgid "Build a new ship:"
 msgstr "Construir um novo banrco:"
 
 msgid "Resource cost:"
 msgstr "Custo de recursos:"
+
+msgid "Total: "
+msgstr ""
 
 msgid "Need: "
 msgstr ""
@@ -2522,28 +2568,12 @@ msgstr "Experimental"
 msgid "Settings"
 msgstr "Configurações"
 
-msgid "off"
-msgstr "off"
-
-#, fuzzy
-msgid "Music"
-msgstr "música"
-
-msgid "Effects"
-msgstr ""
-
-msgid "MIDI"
+msgid "Audio"
 msgstr ""
 
 #, fuzzy
-msgid "MIDI Expansion"
-msgstr "Mansão"
-
-msgid "External"
-msgstr ""
-
-msgid "Music Type"
-msgstr ""
+msgid "settings"
+msgstr "Configurações"
 
 #, fuzzy
 msgid "Hot Keys"
@@ -2566,6 +2596,28 @@ msgstr ""
 msgid "Text Support"
 msgstr ""
 
+msgid "Evil"
+msgstr "Mal"
+
+msgid "Good"
+msgstr "Bom"
+
+#, fuzzy
+msgid "Interface Type"
+msgstr "Aparência"
+
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Battles"
+msgstr ""
+
 msgid "Select Game Language"
 msgstr "Selecione o idioma do jogo"
 
@@ -2578,19 +2630,20 @@ msgstr "Selecione a resolução do jogo"
 msgid "Change resolution of the game."
 msgstr "Mudar a resolução do jogo."
 
+#, fuzzy
+msgid "Change audio settings of the game."
+msgstr "Mudar a resolução do jogo."
+
 msgid "Experimental game settings."
 msgstr "Configurações experimentais do jogo."
 
-msgid "Toggle ambient music level."
-msgstr ""
-
-msgid "Toggle foreground sounds level."
-msgstr ""
-
-msgid "Change the type of music."
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Check all Hot Keys used in the game."
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid ""
@@ -2602,9 +2655,6 @@ msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
-
-msgid "Okay"
-msgstr "OK"
 
 #, fuzzy
 msgid "Attention"
@@ -3084,16 +3134,6 @@ msgstr "Veloc."
 msgid "Scroll Speed"
 msgstr ""
 
-msgid "Evil"
-msgstr "Mal"
-
-msgid "Good"
-msgstr "Bom"
-
-#, fuzzy
-msgid "Interface Type"
-msgstr "Aparência"
-
 #, fuzzy
 msgid "Hide"
 msgstr "Ponte"
@@ -3104,18 +3144,6 @@ msgstr "Neve"
 
 msgid "Interface"
 msgstr "Aparência"
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-msgid "Battles"
-msgstr ""
-
-msgid "Manual"
-msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3128,13 +3156,7 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
 msgid "Toggle interface visibility."
-msgstr ""
-
-msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -3273,6 +3295,9 @@ msgstr ""
 msgid "Development"
 msgstr ""
 
+msgid "Dev and Support"
+msgstr ""
+
 msgid "Visit us at "
 msgstr ""
 
@@ -3298,7 +3323,7 @@ msgid "Original project before 0.7"
 msgstr ""
 
 #, fuzzy
-msgid "Original Heroes of Might and Magic II team"
+msgid "Heroes of Might and Magic II: The Succession Wars team"
 msgstr "Sair do Jogo & retornar ao sistema operacional."
 
 msgid "Designed and Directed"
@@ -3355,6 +3380,71 @@ msgstr ""
 msgid "Scenarios"
 msgstr "Cenário"
 
+#, fuzzy
+msgid "Heroes of Might and Magic II: The Price of Loyalty team"
+msgstr "Sair do Jogo & retornar ao sistema operacional."
+
+msgid "Cyberlore Studios"
+msgstr ""
+
+msgid "Design Lead"
+msgstr ""
+
+msgid "Designers"
+msgstr ""
+
+msgid "Programming Lead"
+msgstr ""
+
+msgid "Art Lead"
+msgstr ""
+
+#, fuzzy
+msgid "Playtesters"
+msgstr "2 Jogadores"
+
+msgid "New World Computing"
+msgstr ""
+
+msgid "Designer"
+msgstr ""
+
+msgid "Producers"
+msgstr ""
+
+msgid "QA Managers"
+msgstr ""
+
+msgid "Sound Design"
+msgstr ""
+
+msgid "Town Themes"
+msgstr ""
+
+msgid "Alto Sax"
+msgstr ""
+
+msgid "Harpsichord and Piano"
+msgstr ""
+
+msgid "Basso Vocal"
+msgstr ""
+
+msgid "Soprano Vocal"
+msgstr ""
+
+msgid "Recorded at Green Street Studios"
+msgstr ""
+
+msgid "German Consultant"
+msgstr ""
+
+msgid "Map Designers"
+msgstr ""
+
+msgid "Package Design"
+msgstr ""
+
 msgid "Unknown Hero"
 msgstr ""
 
@@ -3377,17 +3467,15 @@ msgstr "Campanha"
 msgid "View High Scores for Campaigns."
 msgstr "Ver a tela de Records."
 
-msgid ""
-"Invalid file game type. Please ensure that you are running the latest type "
-"of save files."
-msgstr ""
-
 msgid "Warning"
 msgstr "Atenção"
 
+msgid "This file contains a save with an invalid game type."
+msgstr ""
+
 msgid ""
-"This file is saved in the \"The Price of Loyalty\" version.\n"
-"Some items may be unavailable."
+"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
+"Some items may not be available."
 msgstr ""
 
 msgid "Usupported save format: "
@@ -3497,6 +3585,11 @@ msgstr "Mudar a resolução do jogo."
 #, fuzzy
 msgid "Game Settings"
 msgstr "Configurações"
+
+msgid ""
+"Required video files for campaign selection window are missing. Please make "
+"sure that all necessary files are present in the system."
+msgstr ""
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
@@ -8785,9 +8878,6 @@ msgstr ""
 msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
-msgstr ""
-
-msgid "game: always confirm for rewrite savefile"
 msgstr ""
 
 msgid "game: remember last focus"

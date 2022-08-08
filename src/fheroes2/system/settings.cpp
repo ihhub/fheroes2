@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <fstream>
+#include <tuple>
 
 #if defined( MACOS_APP_BUNDLE )
 #include <CoreFoundation/CoreFoundation.h>
@@ -98,18 +99,18 @@ Settings::Settings()
     , game_type( 0 )
     , preferably_count_players( 0 )
 {
-    opt_global.SetModes( GLOBAL_FIRST_RUN );
-    opt_global.SetModes( GLOBAL_SHOW_INTRO );
+    _optGlobal.SetModes( GLOBAL_FIRST_RUN );
+    _optGlobal.SetModes( GLOBAL_SHOW_INTRO );
 
-    opt_global.SetModes( GLOBAL_SHOWRADAR );
-    opt_global.SetModes( GLOBAL_SHOWICONS );
-    opt_global.SetModes( GLOBAL_SHOWBUTTONS );
-    opt_global.SetModes( GLOBAL_SHOWSTATUS );
+    _optGlobal.SetModes( GLOBAL_SHOWRADAR );
+    _optGlobal.SetModes( GLOBAL_SHOWICONS );
+    _optGlobal.SetModes( GLOBAL_SHOWBUTTONS );
+    _optGlobal.SetModes( GLOBAL_SHOWSTATUS );
 
-    opt_global.SetModes( GLOBAL_BATTLE_SHOW_GRID );
-    opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
-    opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
-    opt_global.SetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
+    _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_GRID );
+    _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
+    _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
+    _optGlobal.SetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
 
     // The Price of Loyalty is not supported by default.
     EnablePriceOfLoyaltySupport( false );
@@ -289,7 +290,7 @@ bool Settings::Read( const std::string & filename )
     }
 
     if ( config.Exists( "controller pointer speed" ) ) {
-        _controllerPointerSpeed = clamp( config.IntParams( "controller pointer speed" ), 0, 100 );
+        _controllerPointerSpeed = std::clamp( config.IntParams( "controller pointer speed" ), 0, 100 );
     }
 
     if ( config.Exists( "first time game run" ) && config.StrParams( "first time game run" ) == "off" ) {
@@ -298,48 +299,48 @@ bool Settings::Read( const std::string & filename )
 
     if ( config.Exists( "show game intro" ) ) {
         if ( config.StrParams( "show game intro" ) == "on" ) {
-            opt_global.SetModes( GLOBAL_SHOW_INTRO );
+            _optGlobal.SetModes( GLOBAL_SHOW_INTRO );
         }
         else {
-            opt_global.ResetModes( GLOBAL_SHOW_INTRO );
+            _optGlobal.ResetModes( GLOBAL_SHOW_INTRO );
         }
     }
 
     if ( config.Exists( "v-sync" ) ) {
         if ( config.StrParams( "v-sync" ) == "on" ) {
-            opt_global.SetModes( GLOBAL_RENDER_VSYNC );
+            _optGlobal.SetModes( GLOBAL_RENDER_VSYNC );
         }
         else {
-            opt_global.ResetModes( GLOBAL_RENDER_VSYNC );
+            _optGlobal.ResetModes( GLOBAL_RENDER_VSYNC );
         }
     }
 
     if ( config.Exists( "text support mode" ) ) {
         if ( config.StrParams( "text support mode" ) == "on" ) {
-            opt_global.SetModes( GLOBAL_TEXT_SUPPORT_MODE );
+            _optGlobal.SetModes( GLOBAL_TEXT_SUPPORT_MODE );
             Logging::setTextSupportMode( true );
         }
         else {
-            opt_global.ResetModes( GLOBAL_TEXT_SUPPORT_MODE );
+            _optGlobal.ResetModes( GLOBAL_TEXT_SUPPORT_MODE );
         }
     }
 
     if ( config.Exists( "monochrome cursor" ) ) {
         if ( config.StrParams( "monochrome cursor" ) == "on" ) {
-            opt_global.SetModes( GLOBAL_MONOCHROME_CURSOR );
+            _optGlobal.SetModes( GLOBAL_MONOCHROME_CURSOR );
             Cursor::Get().setMonochromeCursor( true );
         }
         else {
-            opt_global.ResetModes( GLOBAL_MONOCHROME_CURSOR );
+            _optGlobal.ResetModes( GLOBAL_MONOCHROME_CURSOR );
         }
     }
 
     if ( config.Exists( "3d audio" ) ) {
         if ( config.StrParams( "3d audio" ) == "on" ) {
-            opt_global.SetModes( GLOBAL_3D_AUDIO );
+            _optGlobal.SetModes( GLOBAL_3D_AUDIO );
         }
         else {
-            opt_global.ResetModes( GLOBAL_3D_AUDIO );
+            _optGlobal.ResetModes( GLOBAL_3D_AUDIO );
         }
     }
 
@@ -402,7 +403,7 @@ std::string Settings::String() const
     os << "music volume = " << music_volume << std::endl;
 
     os << std::endl << "# run in fullscreen mode: on/off (use F4 key to switch between modes)" << std::endl;
-    os << "fullscreen = " << ( opt_global.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
+    os << "fullscreen = " << ( _optGlobal.Modes( GLOBAL_FULLSCREEN ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# print debug messages (only for development, see src/engine/logging.h for possible values)" << std::endl;
     os << "debug = " << debug << std::endl;
@@ -420,22 +421,22 @@ std::string Settings::String() const
     os << "scroll speed = " << scroll_speed << std::endl;
 
     os << std::endl << "# show battle grid: on/off" << std::endl;
-    os << "battle grid = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID ) ? "on" : "off" ) << std::endl;
+    os << "battle grid = " << ( _optGlobal.Modes( GLOBAL_BATTLE_SHOW_GRID ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# show battle shadow movement: on/off" << std::endl;
-    os << "battle shadow movement = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW ) ? "on" : "off" ) << std::endl;
+    os << "battle shadow movement = " << ( _optGlobal.Modes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# show battle shadow cursor: on/off" << std::endl;
-    os << "battle shadow cursor = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) ? "on" : "off" ) << std::endl;
+    os << "battle shadow cursor = " << ( _optGlobal.Modes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# auto resolve battles: on/off" << std::endl;
-    os << "auto resolve battles = " << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_RESOLVE ) ? "on" : "off" ) << std::endl;
+    os << "auto resolve battles = " << ( _optGlobal.Modes( GLOBAL_BATTLE_AUTO_RESOLVE ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# auto combat spell casting: on/off" << std::endl;
-    os << "auto spell casting = " << ( opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
+    os << "auto spell casting = " << ( _optGlobal.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# show army order during battle: on/off" << std::endl;
-    os << "battle army order = " << ( opt_global.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER ) ? "on" : "off" ) << std::endl;
+    os << "battle army order = " << ( _optGlobal.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# game language (an empty value means English)" << std::endl;
     os << "lang = " << _gameLanguage << std::endl;
@@ -444,22 +445,22 @@ std::string Settings::String() const
     os << "controller pointer speed = " << _controllerPointerSpeed << std::endl;
 
     os << std::endl << "# first time game run (show additional hints): on/off" << std::endl;
-    os << "first time game run = " << ( opt_global.Modes( GLOBAL_FIRST_RUN ) ? "on" : "off" ) << std::endl;
+    os << "first time game run = " << ( _optGlobal.Modes( GLOBAL_FIRST_RUN ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# show game intro (splash screen and video): on/off" << std::endl;
-    os << "show game intro = " << ( opt_global.Modes( GLOBAL_SHOW_INTRO ) ? "on" : "off" ) << std::endl;
+    os << "show game intro = " << ( _optGlobal.Modes( GLOBAL_SHOW_INTRO ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# enable V-Sync (Vertical Synchronization) for rendering" << std::endl;
-    os << "v-sync = " << ( opt_global.Modes( GLOBAL_RENDER_VSYNC ) ? "on" : "off" ) << std::endl;
+    os << "v-sync = " << ( _optGlobal.Modes( GLOBAL_RENDER_VSYNC ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# enable text support mode to output extra information in console window" << std::endl;
-    os << "text support mode = " << ( opt_global.Modes( GLOBAL_TEXT_SUPPORT_MODE ) ? "on" : "off" ) << std::endl;
+    os << "text support mode = " << ( _optGlobal.Modes( GLOBAL_TEXT_SUPPORT_MODE ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# enable monochrome (black and white) cursors in the game" << std::endl;
-    os << "monochrome cursor = " << ( opt_global.Modes( GLOBAL_MONOCHROME_CURSOR ) ? "on" : "off" ) << std::endl;
+    os << "monochrome cursor = " << ( _optGlobal.Modes( GLOBAL_MONOCHROME_CURSOR ) ? "on" : "off" ) << std::endl;
 
     os << std::endl << "# enable 3D audio for objects on Adventure Map" << std::endl;
-    os << "3d audio = " << ( opt_global.Modes( GLOBAL_3D_AUDIO ) ? "on" : "off" ) << std::endl;
+    os << "3d audio = " << ( _optGlobal.Modes( GLOBAL_3D_AUDIO ) ? "on" : "off" ) << std::endl;
 
     return os.str();
 }
@@ -611,69 +612,69 @@ std::string Settings::GetLastFile( const std::string & prefix, const std::string
 /* set ai speed: 0 (don't show) - 10 */
 void Settings::SetAIMoveSpeed( int speed )
 {
-    ai_speed = clamp( speed, 0, 10 );
+    ai_speed = std::clamp( speed, 0, 10 );
 }
 
 /* set hero speed: 1 - 10 */
 void Settings::SetHeroesMoveSpeed( int speed )
 {
-    heroes_speed = clamp( speed, 1, 10 );
+    heroes_speed = std::clamp( speed, 1, 10 );
 }
 
 /* set battle speed: 1 - 10 */
 void Settings::SetBattleSpeed( int speed )
 {
-    battle_speed = clamp( speed, 1, 10 );
+    battle_speed = std::clamp( speed, 1, 10 );
 }
 
 void Settings::setBattleAutoResolve( bool enable )
 {
     if ( enable ) {
-        opt_global.SetModes( GLOBAL_BATTLE_AUTO_RESOLVE );
+        _optGlobal.SetModes( GLOBAL_BATTLE_AUTO_RESOLVE );
     }
     else {
-        opt_global.ResetModes( GLOBAL_BATTLE_AUTO_RESOLVE );
+        _optGlobal.ResetModes( GLOBAL_BATTLE_AUTO_RESOLVE );
     }
 }
 
 void Settings::setBattleAutoSpellcast( bool enable )
 {
     if ( enable ) {
-        opt_global.SetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
+        _optGlobal.SetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
     }
     else {
-        opt_global.ResetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
+        _optGlobal.ResetModes( GLOBAL_BATTLE_AUTO_SPELLCAST );
     }
 }
 
 void Settings::setBattleShowArmyOrder( const bool enable )
 {
     if ( enable ) {
-        opt_global.SetModes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
+        _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
     }
     else {
-        opt_global.ResetModes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
+        _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
     }
 }
 
 void Settings::setFullScreen( const bool enable )
 {
     if ( enable ) {
-        opt_global.SetModes( GLOBAL_FULLSCREEN );
+        _optGlobal.SetModes( GLOBAL_FULLSCREEN );
     }
     else {
-        opt_global.ResetModes( GLOBAL_FULLSCREEN );
+        _optGlobal.ResetModes( GLOBAL_FULLSCREEN );
     }
 }
 
 void Settings::setMonochromeCursor( const bool enable )
 {
     if ( enable ) {
-        opt_global.SetModes( GLOBAL_MONOCHROME_CURSOR );
+        _optGlobal.SetModes( GLOBAL_MONOCHROME_CURSOR );
         Cursor::Get().setMonochromeCursor( true );
     }
     else {
-        opt_global.ResetModes( GLOBAL_MONOCHROME_CURSOR );
+        _optGlobal.ResetModes( GLOBAL_MONOCHROME_CURSOR );
         Cursor::Get().setMonochromeCursor( false );
     }
 
@@ -683,11 +684,11 @@ void Settings::setMonochromeCursor( const bool enable )
 void Settings::setTextSupportMode( const bool enable )
 {
     if ( enable ) {
-        opt_global.SetModes( GLOBAL_TEXT_SUPPORT_MODE );
+        _optGlobal.SetModes( GLOBAL_TEXT_SUPPORT_MODE );
         Logging::setTextSupportMode( true );
     }
     else {
-        opt_global.ResetModes( GLOBAL_TEXT_SUPPORT_MODE );
+        _optGlobal.ResetModes( GLOBAL_TEXT_SUPPORT_MODE );
         Logging::setTextSupportMode( false );
     }
 }
@@ -695,111 +696,108 @@ void Settings::setTextSupportMode( const bool enable )
 void Settings::set3DAudio( const bool enable )
 {
     if ( enable ) {
-        opt_global.SetModes( GLOBAL_3D_AUDIO );
+        _optGlobal.SetModes( GLOBAL_3D_AUDIO );
     }
     else {
-        opt_global.ResetModes( GLOBAL_3D_AUDIO );
+        _optGlobal.ResetModes( GLOBAL_3D_AUDIO );
     }
 }
 
 /* set scroll speed: 1 - 4 */
 void Settings::SetScrollSpeed( int speed )
 {
-    scroll_speed = clamp( speed, static_cast<int>( SCROLL_SLOW ), static_cast<int>( SCROLL_FAST2 ) );
+    scroll_speed = std::clamp( speed, static_cast<int>( SCROLL_SLOW ), static_cast<int>( SCROLL_FAST2 ) );
 }
 
 bool Settings::isPriceOfLoyaltySupported() const
 {
-    return opt_global.Modes( GLOBAL_PRICELOYALTY );
+    return _optGlobal.Modes( GLOBAL_PRICELOYALTY );
 }
 
 bool Settings::isMonochromeCursorEnabled() const
 {
-    return opt_global.Modes( GLOBAL_MONOCHROME_CURSOR );
+    return _optGlobal.Modes( GLOBAL_MONOCHROME_CURSOR );
 }
 
 bool Settings::isTextSupportModeEnabled() const
 {
-    return opt_global.Modes( GLOBAL_TEXT_SUPPORT_MODE );
+    return _optGlobal.Modes( GLOBAL_TEXT_SUPPORT_MODE );
 }
 
 bool Settings::is3DAudioEnabled() const
 {
-    return opt_global.Modes( GLOBAL_3D_AUDIO );
+    return _optGlobal.Modes( GLOBAL_3D_AUDIO );
 }
 
 bool Settings::ShowControlPanel() const
 {
-    return opt_global.Modes( GLOBAL_SHOWCPANEL );
+    return _optGlobal.Modes( GLOBAL_SHOWCPANEL );
 }
 
 bool Settings::ShowRadar() const
 {
-    return opt_global.Modes( GLOBAL_SHOWRADAR );
+    return _optGlobal.Modes( GLOBAL_SHOWRADAR );
 }
 
 bool Settings::ShowIcons() const
 {
-    return opt_global.Modes( GLOBAL_SHOWICONS );
+    return _optGlobal.Modes( GLOBAL_SHOWICONS );
 }
 
 bool Settings::ShowButtons() const
 {
-    return opt_global.Modes( GLOBAL_SHOWBUTTONS );
+    return _optGlobal.Modes( GLOBAL_SHOWBUTTONS );
 }
 
 bool Settings::ShowStatus() const
 {
-    return opt_global.Modes( GLOBAL_SHOWSTATUS );
+    return _optGlobal.Modes( GLOBAL_SHOWSTATUS );
 }
 
 bool Settings::BattleShowGrid() const
 {
-    return opt_global.Modes( GLOBAL_BATTLE_SHOW_GRID );
+    return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_GRID );
 }
 
 bool Settings::BattleShowMouseShadow() const
 {
-    return opt_global.Modes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
+    return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
 }
 
 bool Settings::BattleShowMoveShadow() const
 {
-    return opt_global.Modes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
+    return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
 }
 
 bool Settings::BattleAutoResolve() const
 {
-    return opt_global.Modes( GLOBAL_BATTLE_AUTO_RESOLVE );
+    return _optGlobal.Modes( GLOBAL_BATTLE_AUTO_RESOLVE );
 }
 
 bool Settings::BattleAutoSpellcast() const
 {
-    return opt_global.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST );
+    return _optGlobal.Modes( GLOBAL_BATTLE_AUTO_SPELLCAST );
 }
 
 bool Settings::BattleShowArmyOrder() const
 {
-    return opt_global.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
+    return _optGlobal.Modes( GLOBAL_BATTLE_SHOW_ARMY_ORDER );
 }
 
-/* set level debug */
 void Settings::SetDebug( int d )
 {
     debug = d;
     Logging::SetDebugLevel( debug );
 }
 
-/* sound volume: 0 - 10 */
 void Settings::SetSoundVolume( int v )
 {
-    sound_volume = clamp( v, 0, 10 );
+    sound_volume = std::clamp( v, 0, 10 );
 }
 
-/* music volume: 0 - 10 */
 void Settings::SetMusicVolume( int v )
 {
-    music_volume = clamp( v, 0, 10 );
+    music_volume = std::clamp( v, 0, 10 );
 }
 
 void Settings::SetPreferablyCountPlayers( int c )
@@ -815,10 +813,10 @@ bool Settings::isCampaignGameType() const
 void Settings::EnablePriceOfLoyaltySupport( const bool set )
 {
     if ( set ) {
-        opt_global.SetModes( GLOBAL_PRICELOYALTY );
+        _optGlobal.SetModes( GLOBAL_PRICELOYALTY );
     }
     else {
-        opt_global.ResetModes( GLOBAL_PRICELOYALTY );
+        _optGlobal.ResetModes( GLOBAL_PRICELOYALTY );
         if ( _musicType == MUSIC_MIDI_EXPANSION )
             _musicType = MUSIC_MIDI_ORIGINAL;
     }
@@ -836,72 +834,72 @@ void Settings::SetHideInterface( bool f )
 
 void Settings::SetBattleGrid( bool f )
 {
-    f ? opt_global.SetModes( GLOBAL_BATTLE_SHOW_GRID ) : opt_global.ResetModes( GLOBAL_BATTLE_SHOW_GRID );
+    f ? _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_GRID ) : _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_GRID );
 }
 
 void Settings::SetBattleMovementShaded( bool f )
 {
-    f ? opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW ) : opt_global.ResetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
+    f ? _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW ) : _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_MOVE_SHADOW );
 }
 
 void Settings::SetBattleMouseShaded( bool f )
 {
-    f ? opt_global.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) : opt_global.ResetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
+    f ? _optGlobal.SetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW ) : _optGlobal.ResetModes( GLOBAL_BATTLE_SHOW_MOUSE_SHADOW );
 }
 
 void Settings::SetShowPanel( bool f )
 {
-    f ? opt_global.SetModes( GLOBAL_SHOWCPANEL ) : opt_global.ResetModes( GLOBAL_SHOWCPANEL );
+    f ? _optGlobal.SetModes( GLOBAL_SHOWCPANEL ) : _optGlobal.ResetModes( GLOBAL_SHOWCPANEL );
 }
 
 void Settings::SetShowRadar( bool f )
 {
-    f ? opt_global.SetModes( GLOBAL_SHOWRADAR ) : opt_global.ResetModes( GLOBAL_SHOWRADAR );
+    f ? _optGlobal.SetModes( GLOBAL_SHOWRADAR ) : _optGlobal.ResetModes( GLOBAL_SHOWRADAR );
 }
 
 void Settings::SetShowIcons( bool f )
 {
-    f ? opt_global.SetModes( GLOBAL_SHOWICONS ) : opt_global.ResetModes( GLOBAL_SHOWICONS );
+    f ? _optGlobal.SetModes( GLOBAL_SHOWICONS ) : _optGlobal.ResetModes( GLOBAL_SHOWICONS );
 }
 
 void Settings::SetShowButtons( bool f )
 {
-    f ? opt_global.SetModes( GLOBAL_SHOWBUTTONS ) : opt_global.ResetModes( GLOBAL_SHOWBUTTONS );
+    f ? _optGlobal.SetModes( GLOBAL_SHOWBUTTONS ) : _optGlobal.ResetModes( GLOBAL_SHOWBUTTONS );
 }
 
 void Settings::SetShowStatus( bool f )
 {
-    f ? opt_global.SetModes( GLOBAL_SHOWSTATUS ) : opt_global.ResetModes( GLOBAL_SHOWSTATUS );
+    f ? _optGlobal.SetModes( GLOBAL_SHOWSTATUS ) : _optGlobal.ResetModes( GLOBAL_SHOWSTATUS );
 }
 
 bool Settings::CanChangeInGame( uint32_t f ) const
 {
-    return ( f >> 28 ) == 0x01; // GAME_
+    return ( f >> 28 ) == 0x01;
 }
 
 bool Settings::ExtModes( uint32_t f ) const
 {
     const uint32_t mask = 0x0FFFFFFF;
+
     switch ( f >> 28 ) {
     case 0x01:
-        return opt_game.Modes( f & mask );
+        return _optExtGame.Modes( f & mask );
     case 0x02:
-        return opt_world.Modes( f & mask );
+        return _optExtBalance2.Modes( f & mask );
     case 0x03:
-        return opt_addons.Modes( f & mask );
+        return _optExtBalance3.Modes( f & mask );
     case 0x04:
-        return opt_battle.Modes( f & mask );
+        return _optExtBalance4.Modes( f & mask );
     default:
         break;
     }
+
     return false;
 }
 
 std::string Settings::ExtName( const uint32_t settingId )
 {
     switch ( settingId ) {
-    case Settings::GAME_SAVE_REWRITE_CONFIRM:
-        return _( "game: always confirm for rewrite savefile" );
     case Settings::GAME_REMEMBER_LAST_FOCUS:
         return _( "game: remember last focus" );
     case Settings::GAME_BATTLE_SHOW_DAMAGE:
@@ -948,18 +946,19 @@ std::string Settings::ExtName( const uint32_t settingId )
 void Settings::ExtSetModes( uint32_t f )
 {
     const uint32_t mask = 0x0FFFFFFF;
+
     switch ( f >> 28 ) {
     case 0x01:
-        opt_game.SetModes( f & mask );
+        _optExtGame.SetModes( f & mask );
         break;
     case 0x02:
-        opt_world.SetModes( f & mask );
+        _optExtBalance2.SetModes( f & mask );
         break;
     case 0x03:
-        opt_addons.SetModes( f & mask );
+        _optExtBalance3.SetModes( f & mask );
         break;
     case 0x04:
-        opt_battle.SetModes( f & mask );
+        _optExtBalance4.SetModes( f & mask );
         break;
     default:
         break;
@@ -969,18 +968,19 @@ void Settings::ExtSetModes( uint32_t f )
 void Settings::ExtResetModes( uint32_t f )
 {
     const uint32_t mask = 0x0FFFFFFF;
+
     switch ( f >> 28 ) {
     case 0x01:
-        opt_game.ResetModes( f & mask );
+        _optExtGame.ResetModes( f & mask );
         break;
     case 0x02:
-        opt_world.ResetModes( f & mask );
+        _optExtBalance2.ResetModes( f & mask );
         break;
     case 0x03:
-        opt_addons.ResetModes( f & mask );
+        _optExtBalance3.ResetModes( f & mask );
         break;
     case 0x04:
-        opt_battle.ResetModes( f & mask );
+        _optExtBalance4.ResetModes( f & mask );
         break;
     default:
         break;
@@ -995,7 +995,8 @@ void Settings::BinarySave() const
     fs.setbigendian( true );
 
     if ( fs.open( fname, "wb" ) ) {
-        fs << static_cast<uint16_t>( CURRENT_FORMAT_VERSION ) << opt_game << opt_world << opt_battle << opt_addons << pos_radr << pos_bttn << pos_icon << pos_stat;
+        fs << static_cast<uint16_t>( CURRENT_FORMAT_VERSION ) << _optExtGame << _optExtBalance2 << _optExtBalance4 << _optExtBalance3 << pos_radr << pos_bttn << pos_icon
+           << pos_stat;
     }
 }
 
@@ -1003,8 +1004,12 @@ void Settings::BinaryLoad()
 {
     std::string fname = System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.bin" );
 
-    if ( !System::IsFile( fname ) )
+    if ( !System::IsFile( fname ) ) {
         fname = GetLastFile( "", "fheroes2.bin" );
+    }
+    if ( !System::IsFile( fname ) ) {
+        return;
+    }
 
     StreamFile fs;
     fs.setbigendian( true );
@@ -1012,39 +1017,54 @@ void Settings::BinaryLoad()
     if ( fs.open( fname, "rb" ) ) {
         uint16_t version = 0;
 
-        fs >> version >> opt_game >> opt_world >> opt_battle >> opt_addons >> pos_radr >> pos_bttn >> pos_icon >> pos_stat;
+        fs >> version >> _optExtGame >> _optExtBalance2 >> _optExtBalance4 >> _optExtBalance3 >> pos_radr >> pos_bttn >> pos_icon >> pos_stat;
+
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0916_RELEASE, "Remove the following code." );
+        if ( version < FORMAT_VERSION_0916_RELEASE ) {
+            // In previous versions, the default values for panel coordinates were {0, 0}, so if all read coordinates
+            // are {0, 0}, then they most likely need to be replaced with the new default coordinates {-1, -1}
+            std::apply(
+                []( auto &... pos ) {
+                    const fheroes2::Point nullPoint{ 0, 0 };
+
+                    if ( ( ( pos == nullPoint ) && ... ) ) {
+                        ( ( pos = { -1, -1 } ), ... );
+                    }
+                },
+                std::tie( pos_radr, pos_bttn, pos_icon, pos_stat ) );
+        }
     }
 }
 
 bool Settings::FullScreen() const
 {
-    return opt_global.Modes( GLOBAL_FULLSCREEN );
+    return _optGlobal.Modes( GLOBAL_FULLSCREEN );
 }
 
 bool Settings::isVSyncEnabled() const
 {
-    return opt_global.Modes( GLOBAL_RENDER_VSYNC );
+    return _optGlobal.Modes( GLOBAL_RENDER_VSYNC );
 }
 
 bool Settings::isFirstGameRun() const
 {
-    return opt_global.Modes( GLOBAL_FIRST_RUN );
+    return _optGlobal.Modes( GLOBAL_FIRST_RUN );
 }
 
 bool Settings::isShowIntro() const
 {
-    return opt_global.Modes( GLOBAL_SHOW_INTRO );
+    return _optGlobal.Modes( GLOBAL_SHOW_INTRO );
 }
 
 void Settings::resetFirstGameRun()
 {
-    opt_global.ResetModes( GLOBAL_FIRST_RUN );
+    _optGlobal.ResetModes( GLOBAL_FIRST_RUN );
 }
 
 StreamBase & operator<<( StreamBase & msg, const Settings & conf )
 {
-    msg << conf._gameLanguage << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.debug << conf.opt_game
-        << conf.opt_world << conf.opt_battle << conf.opt_addons << conf.players;
+    msg << conf._gameLanguage << conf.current_maps_file << conf.game_difficulty << conf.game_type << conf.preferably_count_players << conf.debug << conf._optExtBalance2
+        << conf._optExtBalance4 << conf._optExtBalance3 << conf.players;
 
     return msg;
 }
@@ -1054,11 +1074,17 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
     msg >> conf._loadedFileLanguage;
 
     int debug;
-    uint32_t opt_game = 0; // skip: settings
 
-    // map file
-    msg >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> opt_game >> conf.opt_world >> conf.opt_battle
-        >> conf.opt_addons >> conf.players;
+    msg >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug;
+
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_0917_RELEASE, "Remove the following code." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE_0917_RELEASE ) {
+        uint32_t dummy;
+
+        msg >> dummy;
+    }
+
+    msg >> conf._optExtBalance2 >> conf._optExtBalance4 >> conf._optExtBalance3 >> conf.players;
 
 #ifndef WITH_DEBUG
     conf.debug = debug;

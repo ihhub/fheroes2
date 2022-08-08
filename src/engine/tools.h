@@ -34,8 +34,6 @@
 
 #include "math_base.h"
 
-std::string GetStringShort( int );
-
 template <typename T, typename = typename std::enable_if<std::is_integral<T>::value>::type>
 std::string GetHexString( T value, int width = 8 )
 {
@@ -65,13 +63,6 @@ std::string InsertString( const std::string &, size_t, const char * );
 
 bool SaveMemToFile( const std::vector<uint8_t> & data, const std::string & path );
 std::vector<uint8_t> LoadFileToMem( const std::string & path );
-
-// std::clamp replacement until we can use C++17
-template <typename T>
-T clamp( const T & value, const T & min, const T & max )
-{
-    return ( value < min ) ? min : ( max < value ) ? max : value;
-}
 
 namespace fheroes2
 {
@@ -106,6 +97,8 @@ namespace fheroes2
     }
 
     void replaceStringEnding( std::string & output, const char * originalEnding, const char * correctedEnding );
+
+    std::string abbreviateNumber( const int num );
 }
 
 #endif

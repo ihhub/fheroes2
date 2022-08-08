@@ -168,9 +168,9 @@ void Game::mainGameLoop( bool isFirstGameRun )
 fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
 {
     // Stop all sounds, but not the music
-    Mixer::Stop();
+    AudioManager::stopSounds();
 
-    AudioManager::PlayMusic( MUS::MAINMENU, true, true );
+    AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
     Settings & conf = Settings::Get();
 
@@ -322,8 +322,6 @@ fheroes2::GameMode Game::MainMenu( bool isFirstGameRun )
         else if ( HotKeyPressEvent( HotKeyEvent::MAIN_MENU_SETTINGS ) || le.MouseClickLeft( settingsArea ) ) {
             fheroes2::openGameSettings();
 
-            // force interface to reset area and positions
-            Interface::Basic::Get().Reset();
             return fheroes2::GameMode::MAIN_MENU;
         }
 

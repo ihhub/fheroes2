@@ -43,7 +43,6 @@
 #include "resource.h"
 #include "settings.h"
 #include "statusbar.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_castle.h"
@@ -165,8 +164,11 @@ namespace
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 3 ), display, pt.x + 5, pt.y + 361 );
         }
 
-        if ( !hero2 )
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 11 ), display, pt.x + 112, pt.y + 361 );
+        if ( !hero2 ) {
+            const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::STRIP, 11 );
+
+            fheroes2::Blit( backgroundImage, display, pt.x + 112, pt.y + 361 );
+        }
     }
 
     std::string getDateString()
@@ -258,7 +260,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
 
     const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
-    AudioManager::PlayMusic( MUS::FromRace( race ), true, true );
+    AudioManager::PlayMusicAsync( MUS::FromRace( race ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
     int alphaHero = 255;
     CastleDialog::FadeBuilding fadeBuilding;
@@ -341,7 +343,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
     bottomArmyBar.SetHSpace( 6 );
 
     if ( heroes.Guest() ) {
-        heroes.Guest()->MovePointsScaleFixed();
         bottomArmyBar.SetArmy( &heroes.Guest()->GetArmy() );
 
         if ( alphaHero != 0 ) {

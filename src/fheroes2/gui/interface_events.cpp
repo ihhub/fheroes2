@@ -68,14 +68,13 @@ void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx 
     DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() )
 
     gameArea.SetRedraw();
+    buttonsArea.SetRedraw();
 
     const fheroes2::Point & mousePos = LocalEvent::Get().GetMouseCursor();
     if ( gameArea.GetROI() & mousePos ) {
         const int32_t cursorIndex = gameArea.GetValidTileIdFromPoint( mousePos );
         Cursor::Get().SetThemes( GetCursorTileIndex( cursorIndex ) );
     }
-
-    Interface::Basic::Get().buttonsArea.Redraw();
 }
 
 void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, int32_t destinationIdx )
@@ -178,18 +177,22 @@ void Interface::Basic::EventKingdomInfo() const
 void Interface::Basic::EventCastSpell()
 {
     Heroes * hero = GetFocusHeroes();
+    if ( hero == nullptr ) {
+        return;
+    }
 
-    if ( hero ) {
-        SetRedraw( REDRAW_ALL );
+    // Center on the hero before opening the spell book
+    gameArea.SetCenter( hero->GetCenter() );
+    Redraw( REDRAW_GAMEAREA | REDRAW_RADAR );
+
+    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, false, nullptr );
+    if ( spell.isValid() ) {
+        hero->ActionSpellCast( spell );
+
+        // The spell will consume the hero's spell points (and perhaps also movement points) and can move the
+        // hero to another location, so we may have to update the terrain music theme and environment sounds
         ResetFocus( GameFocus::HEROES );
-        Redraw();
-
-        const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, nullptr );
-        // apply cast spell
-        if ( spell.isValid() ) {
-            hero->ActionSpellCast( spell );
-            iconsPanel.SetRedraw();
-        }
+        RedrawFocus();
     }
 }
 
@@ -289,9 +292,7 @@ fheroes2::GameMode Interface::Basic::EventSaveGame() const
             return fheroes2::GameMode::CANCEL;
         }
 
-        // ask overwrite?
-        const Settings & conf = Settings::Get();
-        if ( System::IsFile( filename ) && conf.ExtGameRewriteConfirm()
+        if ( System::IsFile( filename )
              && Dialog::NO == Dialog::Message( "", _( "Are you sure you want to overwrite the save with this name?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
             continue;
         }
@@ -363,13 +364,22 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
         if ( hero->isShipMaster() )
             Dialog::Message( "", _( "Try looking on land!!!" ), Font::BIG, Dialog::OK );
         else if ( hero->GetMaxMovePoints() <= hero->GetMovePoints() ) {
-            if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() ) {
+            // Original Editor allows to put an Ultimate Artifact on an invalid tile. So checking tile index solves this issue.
+            if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() || world.GetUltimateArtifact().getPosition() == hero->GetIndex() ) {
                 AudioManager::PlaySound( M82::DIGSOUND );
 
                 hero->ResetMovePoints();
 
                 if ( world.DiggingForUltimateArtifact( hero->GetCenter() ) ) {
-                    AudioManager::PlaySound( M82::TREASURE );
+                    const AudioManager::MusicRestorer musicRestorer;
+
+                    if ( Settings::Get().MusicMIDI() ) {
+                        AudioManager::PlaySound( M82::TREASURE );
+                    }
+                    else {
+                        AudioManager::PlayMusic( MUS::ULTIMATE_ARTIFACT, Music::PlaybackMode::PLAY_ONCE );
+                    }
+
                     const Artifact & ultimate = world.GetUltimateArtifact().GetArtifact();
                     hero->PickupArtifact( ultimate );
                     std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );
@@ -382,7 +392,7 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
                 else
                     Dialog::Message( "", _( "Nothing here. Where could it be?" ), Font::BIG, Dialog::OK );
 
-                iconsPanel.RedrawIcons( ICON_HEROES );
+                Redraw( REDRAW_HEROES );
                 fheroes2::Display::instance().render();
 
                 // check if the game is over due to conditions related to the ultimate artifact
@@ -485,7 +495,7 @@ void Interface::Basic::EventSwitchShowStatus() const
     }
 }
 
-void Interface::Basic::EventSwitchShowIcons()
+void Interface::Basic::EventSwitchShowIcons() const
 {
     Settings & conf = Settings::Get();
 
@@ -496,7 +506,6 @@ void Interface::Basic::EventSwitchShowIcons()
         }
         else {
             conf.SetShowIcons( true );
-            iconsPanel.SetCurrentVisible();
             iconsPanel.SetRedraw();
         }
     }

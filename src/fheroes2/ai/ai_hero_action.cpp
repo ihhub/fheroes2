@@ -500,7 +500,7 @@ namespace AI
 
         // ignore empty tiles
         if ( isAction )
-            AI::Get().HeroesActionComplete( hero, objectType );
+            AI::Get().HeroesActionComplete( hero, dst_index, objectType );
     }
 
     void AIToHeroes( Heroes & hero, int32_t dst_index )
@@ -649,20 +649,23 @@ namespace AI
             destroy = true;
         }
         else if ( join.reason == NeutralMonsterJoiningCondition::Reason::Free ) {
-            if ( hero.GetArmy().CanJoinTroop( troop ) ) {
-                DEBUG_LOG( DBG_AI, DBG_INFO, troop.GetName() << " join " << hero.GetName() << "." )
-                hero.GetArmy().JoinTroop( troop );
-                destroy = true;
-            }
+            // This condition must already be met if a group of monsters wants to join
+            assert( hero.GetArmy().CanJoinTroop( troop ) );
+
+            DEBUG_LOG( DBG_AI, DBG_INFO, troop.GetName() << " join " << hero.GetName() << "." )
+            hero.GetArmy().JoinTroop( troop );
+            destroy = true;
         }
         else if ( join.reason == NeutralMonsterJoiningCondition::Reason::ForMoney ) {
             const int32_t joiningCost = troop.GetTotalCost().gold;
-            if ( hero.GetKingdom().AllowPayment( payment_t( Resource::GOLD, joiningCost ) ) && hero.GetArmy().CanJoinTroop( troop ) ) {
-                DEBUG_LOG( DBG_AI, DBG_INFO, join.monsterCount << " " << troop.GetName() << " join " << hero.GetName() << " for " << joiningCost << " gold." )
-                hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount );
-                hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
-                destroy = true;
-            }
+
+            // These conditions must already be met if a group of monsters wants to join
+            assert( hero.GetArmy().CanJoinTroop( troop ) && hero.GetKingdom().AllowPayment( payment_t( Resource::GOLD, joiningCost ) ) );
+
+            DEBUG_LOG( DBG_AI, DBG_INFO, join.monsterCount << " " << troop.GetName() << " join " << hero.GetName() << " for " << joiningCost << " gold." )
+            hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount );
+            hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
+            destroy = true;
         }
         else if ( join.reason == NeutralMonsterJoiningCondition::Reason::RunAway ) {
             // TODO: AI should still chase monsters which it can defeat without losses to get extra experience.
@@ -683,8 +686,9 @@ namespace AI
             else {
                 AIBattleLose( hero, res, true );
                 tile.MonsterSetCount( army.GetCountMonsters( troop.GetMonster() ) );
-                if ( tile.MonsterJoinConditionFree() )
-                    tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
+                if ( Maps::isMonsterOnTileJoinConditionFree( tile ) ) {
+                    Maps::setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_MONEY );
+                }
             }
         }
 
@@ -716,6 +720,8 @@ namespace AI
         Maps::Tiles & tile = world.GetTiles( dst_index );
         uint32_t gold = tile.QuantityGold();
 
+        Kingdom & kingdom = hero.GetKingdom();
+
         if ( tile.isWater() ) {
             if ( gold ) {
                 const Artifact & art = tile.QuantityArtifact();
@@ -728,27 +734,55 @@ namespace AI
             const Artifact & art = tile.QuantityArtifact();
 
             if ( gold ) {
-                const uint32_t expr = gold > 500 ? gold - 500 : 500;
+                const uint32_t experience = gold > 500 ? gold - 500 : 500;
+                const Heroes::Role role = hero.getAIRole();
+                const int32_t kingdomGold = kingdom.GetFunds().gold;
 
-                if ( hero.getAIRole() == Heroes::Role::HUNTER ) {
-                    // Only 10% chance of choosing experience. Make AI rich!
-                    if ( Rand::Get( 1, 10 ) == 1 ) {
-                        gold = 0;
-                        hero.IncreaseExperience( expr );
+                uint32_t chance = 0;
+                if ( role == Heroes::Role::SCOUT || role == Heroes::Role::COURIER ) {
+                    // These roles usually don't choose experience. Make AI rich!
+                    if ( kingdomGold > 10000 && experience >= 1500 ) {
+                        chance = 10;
                     }
                 }
-                else if ( Rand::Get( 1, 2 ) == 1 ) {
-                    // 50/50 chance.
-                    gold = 0;
-                    hero.IncreaseExperience( expr );
+                else if ( role == Heroes::Role::CHAMPION ) {
+                    // If AI is extremely low on gold consider taking it
+                    if ( kingdomGold < 3000 ) {
+                        // Safeguard the calculation since we're working with unsigned values
+                        chance = ( std::max( experience, 500U ) - 500 ) / 15;
+                    }
+                    else {
+                        // Otherwise Champion always picks experience
+                        chance = 100;
+                    }
+                }
+                else if ( kingdomGold < 3000 ) {
+                    chance = ( role == Heroes::Role::FIGHTER && experience >= 1500 ) ? 10 : 0;
+                }
+                else {
+                    uint32_t value = ( experience > 500 ) ? experience - 500 : 0;
+                    if ( role == Heroes::Role::FIGHTER ) {
+                        value += 500;
+                    }
+                    chance = value / 15; // 33% for every 500 experience
+                }
+
+                if ( chance ) {
+                    const uint32_t randomRoll = Rand::Get( 1, 100 );
+                    if ( randomRoll <= chance ) {
+                        gold = 0;
+                        hero.IncreaseExperience( experience );
+                    }
                 }
             }
-            else if ( art.isValid() && !hero.PickupArtifact( art ) )
+            else if ( art.isValid() && !hero.PickupArtifact( art ) ) {
                 gold = GoldInsteadArtifact( objectType );
+            }
         }
 
-        if ( gold )
-            hero.GetKingdom().AddFundsResource( Funds( Resource::GOLD, gold ) );
+        if ( gold ) {
+            kingdom.AddFundsResource( Funds( Resource::GOLD, gold ) );
+        }
 
         tile.RemoveObjectSprite();
         tile.QuantityReset();
@@ -831,7 +865,8 @@ namespace AI
 
                 if ( result.AttackerWins() ) {
                     hero.IncreaseExperience( result.GetExperienceAttacker() );
-                    tile.SetQuantity3( 0 );
+                    // Clear any metadata related to spells.
+                    tile.clearAdditionalMetadata();
                 }
                 else {
                     capture = false;
@@ -1752,11 +1787,17 @@ namespace AI
 
         if ( 1 == Rand::Get( 1, 3 ) ) {
             if ( weakestTroop->GetCount() == 1 ) {
+                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " lost " << weakestTroop->GetCount() << " " << weakestTroop->GetName() << " in the whirlpool" )
+
                 weakestTroop->Reset();
             }
             else {
-                weakestTroop->SetCount( Monster::GetCountFromHitPoints( weakestTroop->GetID(), weakestTroop->GetHitPoints()
-                                                                                                   - weakestTroop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
+                const uint32_t newCount = Monster::GetCountFromHitPoints( weakestTroop->GetID(), weakestTroop->GetHitPoints()
+                                                                                                     - weakestTroop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 );
+
+                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " lost " << weakestTroop->GetCount() - newCount << " " << weakestTroop->GetName() << " in the whirlpool" )
+
+                weakestTroop->SetCount( newCount );
             }
         }
     }
@@ -1810,7 +1851,7 @@ namespace AI
             }
         }
 
-        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " visited Alchemist Tower to remove " << cursed << " artifacts." )
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " visited Alchemist Tower to remove " << cursed << " artifacts." )
     }
 
     void AIToSirens( Heroes & hero, const MP2::MapObjectType objectType, const int32_t objectIndex )
@@ -1824,6 +1865,6 @@ namespace AI
 
         hero.SetVisited( objectIndex );
 
-        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " visited Sirens and got " << experience << " experience." )
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " visited Sirens and got " << experience << " experience." )
     }
 }

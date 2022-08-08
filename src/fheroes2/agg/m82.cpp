@@ -100,9 +100,9 @@ const char * M82::GetString( int m82 )
     return AELMATTK <= m82 && UNKNOWN > m82 ? m82map[m82].string : m82map[UNKNOWN].string;
 }
 
-int M82::FromSpell( int spell )
+int M82::FromSpell( const int spellID )
 {
-    switch ( spell ) {
+    switch ( spellID ) {
     case Spell::FIREBALL:
     case Spell::FIREBLAST:
         return FIREBALL;
@@ -250,6 +250,8 @@ M82::SoundType M82::getAdventureMapObjectSound( const MP2::MapObjectType objectT
     case MP2::OBJ_DWARFCOTT:
     case MP2::OBJ_ARCHERHOUSE:
         return LOOP0025;
+    case MP2::OBJ_FREEMANFOUNDRY:
+        return LOOP0026;
     case MP2::OBJ_VOLCANO:
         // TODO: LOOP0005 is for all volcanos in the original game while LOOP0027 is used only for tall volcanos. Figure our how to use 2 sounds together.
         return LOOP0027;

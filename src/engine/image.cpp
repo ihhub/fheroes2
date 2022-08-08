@@ -21,6 +21,7 @@
 #include "image.h"
 #include "image_palette.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
@@ -785,7 +786,7 @@ namespace fheroes2
 
         const uint8_t behindValue = 255 - alphaValue;
 
-        const uint8_t * gamePalette = fheroes2::getGamePalette();
+        const uint8_t * gamePalette = getGamePalette();
 
         if ( flip ) {
             const int32_t offsetInY = inY * widthIn + widthIn - 1 - inX;
@@ -914,7 +915,7 @@ namespace fheroes2
     {
         std::vector<uint8_t> palette( 256 );
 
-        const uint8_t * value = fheroes2::getGamePalette();
+        const uint8_t * value = getGamePalette();
 
         for ( uint32_t i = 0; i < 256; ++i ) {
             const uint32_t red = static_cast<uint32_t>( *value ) * alpha / 255;
@@ -1186,7 +1187,7 @@ namespace fheroes2
         uint8_t * imageOutY = out.image();
         const uint8_t * imageIn = in.image();
 
-        const uint8_t * gamePalette = fheroes2::getGamePalette();
+        const uint8_t * gamePalette = getGamePalette();
 
         for ( int32_t y = 0; y < height; ++y, imageOutY += width ) {
             uint8_t * imageOutX = imageOutY;
@@ -1523,6 +1524,65 @@ namespace fheroes2
         DrawLine( image, { roi.x, roi.y + roi.height - 1 }, { roi.x + roi.width, roi.y + roi.height - 1 }, value, roi );
     }
 
+    void DivideImageBySquares( const Point & spriteOffset, const Image & original, const int32_t squareSize, const bool flip,
+                               std::vector<std::pair<Point, Sprite>> & output )
+    {
+        if ( original.empty() ) {
+            return;
+        }
+
+        if ( squareSize <= 0 ) {
+            assert( 0 );
+            return;
+        }
+
+        Point offset{ spriteOffset.x / squareSize, spriteOffset.y / squareSize };
+
+        // The start of a square must be before image offset so in case of negative offset we need to decrease the ID of the start square.
+        if ( ( spriteOffset.x < 0 ) && ( offset.x * squareSize != spriteOffset.x ) ) {
+            --offset.x;
+        }
+
+        if ( ( spriteOffset.y < 0 ) && ( offset.y * squareSize != spriteOffset.y ) ) {
+            --offset.y;
+        }
+
+        const Point spriteRelativeOffset{ spriteOffset.x - offset.x * squareSize, spriteOffset.y - offset.y * squareSize };
+        const Point stepPerDirection{ ( original.width() + spriteRelativeOffset.x + squareSize - 1 ) / squareSize,
+                                      ( original.height() + spriteRelativeOffset.y + squareSize - 1 ) / squareSize };
+        assert( stepPerDirection.x > 0 && stepPerDirection.y > 0 );
+
+        const Rect relativeROI( spriteRelativeOffset.x, spriteRelativeOffset.y, original.width(), original.height() );
+
+        for ( int32_t y = 0; y < stepPerDirection.y; ++y ) {
+            for ( int32_t x = 0; x < stepPerDirection.x; ++x ) {
+                const Rect roi( x * squareSize, y * squareSize, squareSize, squareSize );
+                const Rect intersection = relativeROI ^ roi;
+                assert( intersection.width > 0 && intersection.height > 0 );
+
+                if ( flip ) {
+                    Sprite cropped = Crop( original, original.width() - intersection.x + spriteRelativeOffset.x - intersection.width,
+                                           intersection.y - spriteRelativeOffset.y, intersection.width, intersection.height );
+
+                    cropped = Flip( cropped, true, false );
+
+                    assert( !cropped.empty() );
+                    cropped.setPosition( intersection.x - roi.x, intersection.y - roi.y );
+
+                    output.emplace_back( offset + Point( x, y ), std::move( cropped ) );
+                }
+                else {
+                    Sprite cropped
+                        = Crop( original, intersection.x - spriteRelativeOffset.x, intersection.y - spriteRelativeOffset.y, intersection.width, intersection.height );
+                    assert( !cropped.empty() );
+                    cropped.setPosition( intersection.x - roi.x, intersection.y - roi.y );
+
+                    output.emplace_back( offset + Point( x, y ), std::move( cropped ) );
+                }
+            }
+        }
+    }
+
     Image ExtractCommonPattern( const std::vector<const Image *> & input )
     {
         if ( input.empty() )
@@ -1833,6 +1893,54 @@ namespace fheroes2
         return GetPALColorId( red / 4, green / 4, blue / 4 );
     }
 
+    std::vector<uint8_t> getTransformTable( const Image & in, const Image & out, int32_t x, int32_t y, int32_t width, int32_t height )
+    {
+        std::vector<uint8_t> table( 256 );
+        for ( size_t i = 0; i < table.size(); ++i ) {
+            table[i] = static_cast<uint8_t>( i );
+        }
+
+        if ( !Verify( in, x, y, width, height ) ) {
+            return table;
+        }
+
+        if ( in.width() != out.width() || in.height() != out.height() ) {
+            return table;
+        }
+
+        const int32_t imageWidth = in.width();
+
+        const int32_t offset = y * imageWidth + x;
+
+        const uint8_t * imageInY = in.image() + offset;
+        const uint8_t * imageInYEnd = imageInY + height * imageWidth;
+        const uint8_t * imageOutY = out.image() + offset;
+        const uint8_t * transformInY = in.transform() + offset;
+        const uint8_t * transformOutY = out.transform() + offset;
+
+        for ( ; imageInY != imageInYEnd; imageInY += imageWidth, transformInY += imageWidth, imageOutY += imageWidth, transformOutY += imageWidth ) {
+            const uint8_t * imageInX = imageInY;
+            const uint8_t * transformInX = transformInY;
+            const uint8_t * imageOutX = imageOutY;
+            const uint8_t * transformOutX = transformOutY;
+            const uint8_t * imageInXEnd = imageInX + width;
+
+            for ( ; imageInX != imageInXEnd; ++imageInX, ++transformInX, ++imageOutX, ++transformOutX ) {
+                if ( *transformInX != *transformOutX ) {
+                    continue;
+                }
+
+                if ( *transformInX != 0 ) {
+                    continue;
+                }
+
+                table[*imageInX] = *imageOutX;
+            }
+        }
+
+        return table;
+    }
+
     Sprite makeShadow( const Sprite & in, const Point & shadowOffset, const uint8_t transformId )
     {
         if ( in.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 )
@@ -1866,6 +1974,32 @@ namespace fheroes2
         }
 
         return out;
+    }
+
+    void MaskTransformLayer( const Image & mask, int32_t maskX, int32_t maskY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height )
+    {
+        if ( !Verify( mask, maskX, maskY, out, outX, outY, width, height ) ) {
+            return;
+        }
+
+        const int32_t widthMask = mask.width();
+        const int32_t widthOut = out.width();
+
+        const uint8_t * imageMaskY = mask.transform() + maskY * widthMask + maskX;
+        uint8_t * imageOutY = out.transform() + outY * widthOut + outX;
+        const uint8_t * imageMaskYEnd = imageMaskY + height * widthMask;
+
+        for ( ; imageMaskY != imageMaskYEnd; imageMaskY += widthMask, imageOutY += widthOut ) {
+            const uint8_t * imageMaskX = imageMaskY;
+            uint8_t * imageOutX = imageOutY;
+            const uint8_t * imageMaskXEnd = imageMaskX + width;
+
+            for ( ; imageMaskX != imageMaskXEnd; ++imageMaskX, ++imageOutX ) {
+                if ( *imageMaskX == 0 ) {
+                    *imageOutX = 1;
+                }
+            }
+        }
     }
 
     void ReplaceColorId( Image & image, uint8_t oldColorId, uint8_t newColorId )
@@ -1938,7 +2072,7 @@ namespace fheroes2
             for ( int32_t y = 0; y < heightRoiOut; ++y )
                 positionY[y] = static_cast<double>( y * heightRoiIn ) / heightRoiOut;
 
-            const uint8_t * gamePalette = fheroes2::getGamePalette();
+            const uint8_t * gamePalette = getGamePalette();
 
             if ( in.singleLayer() && out.singleLayer() ) {
                 for ( int32_t y = 0; y < heightRoiOut; ++y, imageOutY += widthOut ) {

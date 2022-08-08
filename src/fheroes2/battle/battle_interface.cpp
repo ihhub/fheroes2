@@ -249,10 +249,10 @@ namespace Battle
 
             setScrollBarArea( { ax + 5 + 8, buttonPgUp.area().y + buttonPgUp.area().height + 3, 12, scrollbarSliderAreaLength} );
 
-            const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
+            const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
             const fheroes2::Image scrollbarSlider
-                    = fheroes2::generateScrollbarSlider( originalSilder, false, scrollbarSliderAreaLength, VisibleItemCount(), static_cast<int32_t>( messages.size() ),
-                                                         { 0, 0, originalSilder.width(), 4 }, { 0, 4, originalSilder.width(), 8 } );
+                = fheroes2::generateScrollbarSlider( originalSlider, false, scrollbarSliderAreaLength, VisibleItemCount(), static_cast<int32_t>( messages.size() ),
+                                                     { 0, 0, originalSlider.width(), 4 }, { 0, 4, originalSlider.width(), 8 } );
 
             setScrollBarImage( scrollbarSlider );
             _scrollbar.hide();
@@ -276,10 +276,10 @@ namespace Battle
             }
 
             const int32_t scrollbarSliderAreaLength = buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 7;
-            const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
+            const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
             const fheroes2::Image scrollbarSlider
-                    = fheroes2::generateScrollbarSlider( originalSilder, false, scrollbarSliderAreaLength, VisibleItemCount(), static_cast<int32_t>( messages.size() ),
-                                                         { 0, 0, originalSilder.width(), 4 }, { 0, 4, originalSilder.width(), 8 } );
+                = fheroes2::generateScrollbarSlider( originalSlider, false, scrollbarSliderAreaLength, VisibleItemCount(), static_cast<int32_t>( messages.size() ),
+                                                     { 0, 0, originalSlider.width(), 4 }, { 0, 4, originalSlider.width(), 8 } );
             setScrollBarImage( scrollbarSlider );
             SetCurrentVisible();
         }
@@ -857,7 +857,7 @@ void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::
     fheroes2::Blit( mons32, output, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - ( mons32.height() + 3 < pos.height ? 3 : 0 ),
                     revert );
 
-    Text number( GetStringShort( unit.GetCount() ), Font::SMALL );
+    Text number( fheroes2::abbreviateNumber( unit.GetCount() ), Font::SMALL );
     number.Blit( pos.x + 2, pos.y + 2, output );
 
     if ( isCurrentUnit ) {
@@ -1096,7 +1096,11 @@ Battle::Interface::Interface( Arena & a, int32_t center )
     status.SetLogs( listlog );
 
     AudioManager::ResetAudio();
-    AudioManager::PlaySound( M82::PREBATTL );
+
+    // Don't waste time playing the pre-battle sound if the game sounds are turned off
+    if ( conf.SoundVolume() > 0 ) {
+        AudioManager::PlaySound( M82::PREBATTL );
+    }
 }
 
 Battle::Interface::~Interface()
@@ -1621,7 +1625,7 @@ void Battle::Interface::RedrawTroopCount( const Unit & unit )
 
     fheroes2::Blit( bar, _mainSurface, sx, sy );
 
-    Text text( GetStringShort( unit.GetCount() ), Font::SMALL );
+    Text text( fheroes2::abbreviateNumber( unit.GetCount() ), Font::SMALL );
     text.Blit( sx + ( bar.width() - text.w() ) / 2, sy, _mainSurface );
 }
 
@@ -2958,7 +2962,7 @@ void Battle::Interface::RedrawMissileAnimation( const fheroes2::Point & startPos
 void Battle::Interface::RedrawActionNewTurn() const
 {
     if ( !Music::isPlaying() ) {
-        AudioManager::PlayMusic( MUS::GetBattleRandom(), true, true );
+        AudioManager::PlayMusicAsync( MUS::GetBattleRandom(), Music::PlaybackMode::REWIND_AND_PLAY_INFINITE );
     }
 
     if ( listlog == nullptr ) {
@@ -3068,7 +3072,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsI
     const bool isMirror = targets.size() == 1 && targets.front().defender->isModes( CAP_MIRRORIMAGE );
     // draw status for first defender
     if ( !isMirror && !targets.empty() ) {
-        std::string msg = _( "%{attacker} do %{damage} damage." );
+        std::string msg( _n( "%{attacker} does %{damage} damage.", "%{attacker} do %{damage} damage.", attacker.GetCount() ) );
         StringReplace( msg, "%{attacker}", attacker.GetName() );
 
         if ( 1 < targets.size() ) {
@@ -3170,10 +3174,15 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
     // targets damage animation loop
     bool finishedAnimation = false;
-    while ( le.HandleEvents() && !finishedAnimation ) {
+    while ( le.HandleEvents() ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_FRAME_DELAY ) ) {
+            if ( finishedAnimation ) {
+                // All frames are rendered.
+                break;
+            }
+
             bool redrawBattleField = false;
 
             if ( attacker != nullptr ) {
@@ -5073,7 +5082,7 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
                         status.Redraw();
                     };
 
-                    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::CMBT, true, &statusCallback );
+                    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::CMBT, true, true, &statusCallback );
                     if ( spell.isValid() ) {
                         assert( spell.isCombat() );
 

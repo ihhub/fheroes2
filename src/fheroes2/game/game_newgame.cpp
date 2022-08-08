@@ -41,6 +41,8 @@
 #include "text.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "ui_tool.h"
 #include "world.h"
 
@@ -78,7 +80,7 @@ namespace
             return nullptr;
         }
 
-        std::unique_ptr<SMKVideoSequence> video( new SMKVideoSequence( videoPath ) );
+        std::unique_ptr<SMKVideoSequence> video = std::make_unique<SMKVideoSequence>( videoPath );
         if ( video->frameCount() < 1 ) {
             return nullptr;
         }
@@ -130,6 +132,15 @@ namespace
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::NEW_VOYAGE_HOME_CAMPAIGN ) << " to choose Voyage Home Campaign." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::NEW_WIZARDS_ISLE_CAMPAIGN ) << " to choose Wizard's Isle Campaign." )
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::NEW_DESCENDANTS_CAMPAIGN ) << " to choose Descendants Campaign." )
+    }
+
+    void showMissingVideoFilesWindow()
+    {
+        fheroes2::showMessage( fheroes2::Text{ _( "Warning!" ), fheroes2::FontType::normalYellow() },
+                               fheroes2::Text{ _( "Required video files for campaign selection window are missing. "
+                                                  "Please make sure that all necessary files are present in the system." ),
+                                               fheroes2::FontType::normalWhite() },
+                               Dialog::OK );
     }
 }
 
@@ -244,6 +255,7 @@ fheroes2::GameMode Game::NewSuccessionWarsCampaign()
 
     std::unique_ptr<SMKVideoSequence> video = getVideo( "CHOOSE.SMK" );
     if ( !video ) {
+        showMissingVideoFilesWindow();
         campaignSaveData.setCurrentScenarioInfoId( { Campaign::ROLAND_CAMPAIGN, 0 } );
         return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
     }
@@ -323,6 +335,7 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
 
     if ( !videos[0] ) {
         // File doesn't exist. Fallback to PoL campaign.
+        showMissingVideoFilesWindow();
         return fheroes2::GameMode::SELECT_CAMPAIGN_SCENARIO;
     }
 
@@ -477,9 +490,9 @@ fheroes2::GameMode Game::NewGame()
     outputNewMenuInTextSupportMode();
 
     // Stop all sounds, but not the music
-    Mixer::Stop();
+    AudioManager::stopSounds();
 
-    AudioManager::PlayMusic( MUS::MAINMENU, true, true );
+    AudioManager::PlayMusicAsync( MUS::MAINMENU, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
     // reset last save name
     Game::SetLastSavename( "" );

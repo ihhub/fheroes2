@@ -898,44 +898,15 @@ void Maps::Tiles::QuantityUpdate( bool isFirstLoad )
     }
 }
 
-int Maps::Tiles::MonsterJoinCondition() const
-{
-    return mp2_object == MP2::OBJ_MONSTER ? ( 0x03 & quantity3 ) : 0;
-}
-
-void Maps::Tiles::MonsterSetJoinCondition( int cond )
-{
-    quantity3 &= 0xFC;
-    quantity3 |= ( cond & 0x03 );
-}
-
-void Maps::Tiles::MonsterSetFixedCount()
-{
-    quantity3 |= 0x80;
-}
-
-bool Maps::Tiles::MonsterFixedCount() const
-{
-    return mp2_object == MP2::OBJ_MONSTER ? ( quantity3 & 0x80 ) != 0 : false;
-}
-
-bool Maps::Tiles::MonsterJoinConditionSkip() const
-{
-    return Monster::JOIN_CONDITION_SKIP == MonsterJoinCondition();
-}
-
-bool Maps::Tiles::MonsterJoinConditionFree() const
-{
-    return Monster::JOIN_CONDITION_FREE == MonsterJoinCondition();
-}
-
 uint32_t Maps::Tiles::MonsterCount() const
 {
+    // TODO: avoid this hacky way of storing data.
     return ( static_cast<uint32_t>( quantity1 ) << 8 ) | quantity2;
 }
 
 void Maps::Tiles::MonsterSetCount( uint32_t count )
 {
+    // TODO: avoid this hacky way of storing data.
     quantity1 = count >> 8;
     quantity2 = 0x00FF & count;
 }
@@ -947,15 +918,16 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
     // if there was another sprite here (shadow for example) push it down to Addons,
     // except when there is already MONS32.ICN here (a random monster for example)
     if ( tile.objectTileset != 0 && tile.objectTileset != 48 && tile.objectIndex != 255 ) {
-        tile.AddonsPushLevel1( TilesAddon( 0, tile.uniq, tile.objectTileset, tile.objectIndex ) );
+        tile.AddonsPushLevel1( TilesAddon( OBJECT_LAYER, tile.uniq, tile.objectTileset, tile.objectIndex ) );
     }
     // replace sprite with the one for the new monster
     tile.uniq = 0;
     tile.objectTileset = 48; // MONS32.ICN
     tile.objectIndex = mons.GetSpriteIndex();
 
-    if ( count ) {
-        tile.MonsterSetFixedCount();
+    const bool setDefinedCount = ( count > 0 );
+
+    if ( setDefinedCount ) {
         tile.MonsterSetCount( count );
     }
     else {
@@ -964,18 +936,22 @@ void Maps::Tiles::PlaceMonsterOnTile( Tiles & tile, const Monster & mons, const 
 
     if ( mons.GetID() == Monster::GHOST || mons.isElemental() ) {
         // Ghosts and elementals never join hero's army.
-        tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_SKIP );
+        setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_SKIP );
     }
-    else if ( tile.MonsterFixedCount() || ( world.GetWeekType().GetType() == WeekName::MONSTERS && world.GetWeekType().GetMonster() == mons.GetID() ) ) {
+    else if ( setDefinedCount || ( world.GetWeekType().GetType() == WeekName::MONSTERS && world.GetWeekType().GetMonster() == mons.GetID() ) ) {
+        // Wandering monsters with the number of units specified by the map designer are always considered as "hostile" and always join only for money.
+
         // Monsters will be willing to join for some amount of money.
-        tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
+        setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_MONEY );
     }
     else {
         // 20% chance for join
-        if ( 3 > Rand::Get( 1, 10 ) )
-            tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_FREE );
-        else
-            tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
+        if ( 3 > Rand::Get( 1, 10 ) ) {
+            setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_FREE );
+        }
+        else {
+            setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_MONEY );
+        }
     }
 }
 
@@ -1106,8 +1082,36 @@ void Maps::Tiles::UpdateMonsterPopulation( Tiles & tile )
     if ( troopCount == 0 ) {
         tile.MonsterSetCount( troop.GetRNDSize( false ) );
     }
-    else if ( !tile.MonsterFixedCount() ) {
+    else {
         const uint32_t bonusUnit = ( Rand::Get( 1, 7 ) <= ( troopCount % 7 ) ) ? 1 : 0;
         tile.MonsterSetCount( troopCount * 8 / 7 + bonusUnit );
+    }
+}
+
+namespace Maps
+{
+    void setSpellOnTile( Tiles & tile, const int32_t spellId )
+    {
+        tile.setAdditionalMetadata( spellId );
+    }
+
+    int32_t getSpellIdFromTile( const Tiles & tile )
+    {
+        return tile.getAdditionalMetadata();
+    }
+
+    void setMonsterOnTileJoinCondition( Tiles & tile, const int32_t condition )
+    {
+        tile.setAdditionalMetadata( condition );
+    }
+
+    bool isMonsterOnTileJoinConditionSkip( const Tiles & tile )
+    {
+        return tile.GetObject() == MP2::OBJ_MONSTER && tile.getAdditionalMetadata() == Monster::JOIN_CONDITION_SKIP;
+    }
+
+    bool isMonsterOnTileJoinConditionFree( const Tiles & tile )
+    {
+        return tile.GetObject() == MP2::OBJ_MONSTER && tile.getAdditionalMetadata() == Monster::JOIN_CONDITION_FREE;
     }
 }

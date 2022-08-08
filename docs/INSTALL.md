@@ -23,6 +23,7 @@ Precompiled binaries of the release version are currently available for the foll
 * [**Linux**](#linux)
   * [**AUR package**](#aur-package)
   * [**Homebrew**](#homebrew-linux)
+  * [**Flatpak**](#flatpak-linux)
   * [**Linux ZIP archive**](#linux-zip-archive)
 * [**PlayStation Vita**](#playstation-vita)
 * [**Nintendo Switch**](#nintendo-switch)
@@ -191,6 +192,27 @@ If you have a legally purchased copy of the original game, copy the subdirectori
 be missing depending on the version of the original game) from the original game directory to the `$XDG_DATA_HOME/fheroes2` (usually
 `~/.local/share/fheroes2`) directory. Otherwise, you can download and install the demo version of the original game by running the
 `/usr/share/fheroes2/download_demo_version.sh` script.
+
+<a name="flatpak-linux"></a>
+### Flatpak
+
+If you are using [**Flatpak**](https://flatpak.org) and [**Flathub**](https://flathub.org), you can install the game by running the
+following command:
+
+```sh
+flatpak install flathub io.github.ihhub.Fheroes2
+```
+
+And launch from the start menu or the console:
+
+```sh
+flatpak run io.github.ihhub.Fheroes2
+```
+
+Alternatively, you can use an application manager like Discover, which is also available on Steam Deck.
+
+You have to copy the subdirectories `ANIM`, `DATA`, `MAPS` and `MUSIC` from the original game or demo directory to the
+`~/.var/app/io.github.ihhub.Fheroes2/data/fheroes2` directory. You will be asked when you start the application.
 
 <a name="linux-zip-archive"></a>
 ### Linux ZIP archive

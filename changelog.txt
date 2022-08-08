@@ -1,3 +1,103 @@
+version 0.9.17 (11 July 2022)
+- fix possible crashes during sound playback
+- always ask about rewriting an existing save file
+- allow to remap Hotkeys within the game
+- fix distance evaluation during Scouting
+- fix invalid logic when neutral monsters whose number was set in the Editor did not grow at all
+- add The Price of Loyalty team to credits
+- show a window stating about missing video files for campaigns
+- fix the class of a hero named Joseph
+- fix extra shadow being drawn for Hero Screen dialog on high resolutions
+- align File Options dialog position
+- fix Campaign Window button flickering
+- fix missing column of pixels in Map Scenario Info window
+- update French translation
+- allow different translations of "Red Tower"
+- implement AI courier hero role for better logistics
+- fix situation when MIDI music still continues to play during fast switching between music types
+- fix case when Adventure Map sounds are still being played while opening Main Menu
+- AI should keep some creatures in reserve for castle defence
+- update Ukrainian translation
+- update Norwegian translation
+- increase Genie special ability to 20% like it is done in the original game and correct log messages during battle
+- remember the last open page in Spell Book during battle
+- fix possible synchronization issues for audio playback
+- enhance AI logic towards defending its castles
+- improve usage of spell on Adventure Map by AI
+- fix displaying of negative resources in dialog
+- fix situations when AI was hiring too many heroes
+- respect the Ultimate Artifact's radius specified by the map creator
+- update Polish translation
+- fix the castle's well build logic for AI
+- align hero's button in level-up dialog
+- fix scenarios when ambient sounds from Adventure Map objects are still played while opening a castle's window
+- fix cases when Random Monsters appear from a different level due to invalid format of an object on the map
+- update Mine's sprite properly after defeating Ghosts in Abandoned Mine
+- fix multiple issues related to hero's info popup window and updating his position on a mini-map
+- update sounds and music before a hero making an action
+- add an environmental sound for Freeman's Foundry
+- add initial implementation of true "Evil" interface in the game
+- add missing Ultimate Artifact successful digging sound
+- do not play pre-battle sound if sounds are off
+- fix potential thread-access issues for Nintendo Switch
+- fix possible inter-thread race for Adventure Map Status window
+- fix a delay in game while crossing a terrain and playing MIDI music
+
+version 0.9.16 (12 June 2022)
+- add Flatpak support
+- add Belarusian translation
+- swap spell icons for Death Wave and Death Ripple
+- make the "no interface" mode more usable
+- add music resume ability for MP3, OGG and FLAC formats
+- update translation guide
+- replace "C with cedilla" with "latin C" in the French translation
+- do not auto-save at the end of a turn if the player has been vanquished on that turn
+- fix Puzzle window exit button rendering
+- add sound for rocks in water with seagulls
+- fix Sorceress captain purchase building rendering
+- fix issues with Romanian translation
+- properly deal with human-only colors in single player mode
+- fix the invalid behavior of "no interface" mode
+- introduce 3D audio option
+- change adventure map environment sounds for every step hero moves
+- fix boats being considered as free tiles
+- if attacker is able to attack multiple targets at once and has a built-in spell, then this spell should be applied to any (but only one) of the targets
+- fix some typos in translation texts
+- take into account AI hero's role during meeting
+- fix false highscore entry while cancelling to continue a campaign
+- highlight latest highscore after completion scenario/campaign
+- show evil resolution icon for Evil interface
+- add truncated shadow to Scenario Information window
+- generate missing parts of Red Tower sprite
+- fix incorrect tiles being marked as road
+- fix multiple cases while using Mirror Image and Summon Elemental spells
+- fix the victory/defeat verification logic
+- update error message if hero tries to open a spell book and does not have one
+- improve status text if only one troop is selected
+- fix inability to add new entries with similar high scores
+- add Campaign high scores
+- fix dwelling popup window on adventure map
+- make AI to be aware about map conditions
+- fix incorrect hero icon in adventure interface
+- do not show languages with empty translations
+- add Swedish language option and font support
+- update Ukrainian translation
+- well MAX buy: add condition for not enough room, make recruitment happen in guest hero's army too, more text flexibility
+- add Portuguese language option and initial font generation
+- speed up AI turn
+- impose a limit of turns for an attacking AI-controlled hero
+- cache AI hero's and neutral monsters' strength during AI turn
+- add initial Spanish language support
+- make castle's flags for Knight and Wizard factions appear in a correct color
+- add window header for campaign awards and bonuses
+- update German translation
+- fix plural forms translation for some languages
+- fix character filtering when generating the save file name
+- update Polish translation
+- fix Red Tower rendering with Rainbow
+- expand Hotkey usage on adventure map
+- fix German font support
+
 version 0.9.15 (07 May 2022)
 - add HotKey window and expand the list of system options
 - do not allow higher-level Mage Guilds to be built if the previous-level Mage Guild has not been built yet

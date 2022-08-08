@@ -23,6 +23,7 @@
 #include "audio.h"
 #include "cursor.h"
 #include "dialog.h"
+#include "dialog_audio.h"
 #include "dialog_hotkeys.h"
 #include "dialog_language_selection.h"
 #include "dialog_resolution.h"
@@ -54,12 +55,12 @@ namespace
 
     const fheroes2::Rect languageRoi{ optionOffset.x, optionOffset.y, optionWindowSize, optionWindowSize };
     const fheroes2::Rect resolutionRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect optionsRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect musicVolumeRoi{ optionOffset.x, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect soundVolumeRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
-    const fheroes2::Rect musicTypeRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y + offsetBetweenOptions.height, optionWindowSize,
-                                       optionWindowSize };
-    const fheroes2::Rect hotKeyRoi{ optionOffset.x, optionOffset.y + 2 * offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
+    const fheroes2::Rect audioRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y, optionWindowSize, optionWindowSize };
+    const fheroes2::Rect optionsRoi{ optionOffset.x, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
+    const fheroes2::Rect battleResolveRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + offsetBetweenOptions.height, optionWindowSize,
+                                           optionWindowSize };
+    const fheroes2::Rect hotKeyRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y + offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
+    const fheroes2::Rect interfaceTypeRoi{ optionOffset.x, optionOffset.y + 2 * offsetBetweenOptions.height, optionWindowSize, optionWindowSize };
     const fheroes2::Rect cursorTypeRoi{ optionOffset.x + offsetBetweenOptions.width, optionOffset.y + 2 * offsetBetweenOptions.height, optionWindowSize,
                                         optionWindowSize };
     const fheroes2::Rect textSupportModeRoi{ optionOffset.x + offsetBetweenOptions.width * 2, optionOffset.y + 2 * offsetBetweenOptions.height, optionWindowSize,
@@ -102,53 +103,9 @@ namespace
         drawOption( optionRoi, _( "Settings" ), _( "Experimental" ), ICN::SPANEL, 14 );
     }
 
-    void drawMusicVolumeOptions( const fheroes2::Rect & optionRoi )
+    void drawAudioOptions( const fheroes2::Rect & optionRoi )
     {
-        const Settings & configuration = Settings::Get();
-
-        std::string value;
-        if ( Audio::isValid() && configuration.MusicVolume() ) {
-            value = std::to_string( configuration.MusicVolume() );
-        }
-        else {
-            value = _( "off" );
-        }
-
-        drawOption( optionRoi, _( "Music" ), value.c_str(), ICN::SPANEL, Audio::isValid() ? 1 : 0 );
-    }
-
-    void drawSoundVolumeOptions( const fheroes2::Rect & optionRoi )
-    {
-        const Settings & configuration = Settings::Get();
-
-        std::string value;
-        if ( Audio::isValid() && configuration.SoundVolume() ) {
-            value = std::to_string( configuration.SoundVolume() );
-        }
-        else {
-            value = _( "off" );
-        }
-
-        drawOption( optionRoi, _( "Effects" ), value.c_str(), ICN::SPANEL, Audio::isValid() ? 3 : 2 );
-    }
-
-    void drawMusicTypeOptions( const fheroes2::Rect & optionRoi )
-    {
-        const Settings & configuration = Settings::Get();
-
-        std::string value;
-        const MusicSource musicType = configuration.MusicType();
-        if ( musicType == MUSIC_MIDI_ORIGINAL ) {
-            value = _( "MIDI" );
-        }
-        else if ( musicType == MUSIC_MIDI_EXPANSION ) {
-            value = _( "MIDI Expansion" );
-        }
-        else if ( musicType == MUSIC_EXTERNAL ) {
-            value = _( "External" );
-        }
-
-        drawOption( optionRoi, _( "Music Type" ), value.c_str(), ICN::SPANEL, Audio::isValid() ? 11 : 10 );
+        drawOption( optionRoi, _( "Audio" ), _( "settings" ), ICN::SPANEL, 1 );
     }
 
     void drawHotKeyOptions( const fheroes2::Rect & optionRoi )
@@ -176,6 +133,36 @@ namespace
         }
     }
 
+    void drawInterfaceOptions( const fheroes2::Rect & optionRoi )
+    {
+        const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
+        drawOption( optionRoi, _( "Interface Type" ), isEvilInterface ? _( "Evil" ) : _( "Good" ), ICN::SPANEL, isEvilInterface ? 17 : 16 );
+    }
+
+    void drawBattleResolveOptions( const fheroes2::Rect & optionRoi )
+    {
+        std::string value;
+        int icnId = ICN::UNKNOWN;
+        uint32_t icnIndex = 0;
+
+        const Settings & conf = Settings::Get();
+        if ( conf.BattleAutoResolve() ) {
+            const bool spellcast = conf.BattleAutoSpellcast();
+            value = spellcast ? _( "Auto Resolve" ) : _( "Auto, No Spells" );
+
+            icnId = ICN::CSPANEL;
+            icnIndex = spellcast ? 7 : 6;
+        }
+        else {
+            value = _( "Manual" );
+
+            icnId = ICN::SPANEL;
+            icnIndex = 18;
+        }
+
+        drawOption( optionRoi, _( "Battles" ), value.c_str(), icnId, icnIndex );
+    }
+
     enum class SelectedWindow : int
     {
         Configuration,
@@ -186,6 +173,9 @@ namespace
         CursorType,
         TextSupportMode,
         UpdateSettings,
+        AudioSettings,
+        InterfaceTheme,
+        BattleResolveType,
         Exit
     };
 
@@ -193,7 +183,7 @@ namespace
     {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        Settings & conf = Settings::Get();
+        const Settings & conf = Settings::Get();
         const bool isEvilInterface = conf.ExtGameEvilInterface();
         const int dialogIcnId = isEvilInterface ? ICN::SPANBKGE : ICN::SPANBKG;
         const fheroes2::Sprite & dialog = fheroes2::AGG::GetICN( dialogIcnId, 0 );
@@ -215,22 +205,21 @@ namespace
 
         const fheroes2::Rect windowLanguageRoi( languageRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowResolutionRoi( resolutionRoi + windowRoi.getPosition() );
+        const fheroes2::Rect windowAudioRoi( audioRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowOptionsRoi( optionsRoi + windowRoi.getPosition() );
-        const fheroes2::Rect windowMusicVolumeRoi( musicVolumeRoi + windowRoi.getPosition() );
-        const fheroes2::Rect windowSoundVolumeRoi( soundVolumeRoi + windowRoi.getPosition() );
-        const fheroes2::Rect windowMusicTypeRoi( musicTypeRoi + windowRoi.getPosition() );
-
+        const fheroes2::Rect windowBattleResolveRoi( battleResolveRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowHotKeyRoi( hotKeyRoi + windowRoi.getPosition() );
+        const fheroes2::Rect windowInterfaceTypeRoi( interfaceTypeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowCursorTypeRoi( cursorTypeRoi + windowRoi.getPosition() );
         const fheroes2::Rect windowTextSupportModeRoi( textSupportModeRoi + windowRoi.getPosition() );
 
         drawLanguage( windowLanguageRoi );
         drawResolution( windowResolutionRoi );
+        drawAudioOptions( windowAudioRoi );
         drawExperimentalOptions( windowOptionsRoi );
-        drawMusicVolumeOptions( windowMusicVolumeRoi );
-        drawSoundVolumeOptions( windowSoundVolumeRoi );
-        drawMusicTypeOptions( windowMusicTypeRoi );
+        drawBattleResolveOptions( windowBattleResolveRoi );
         drawHotKeyOptions( windowHotKeyRoi );
+        drawInterfaceOptions( windowInterfaceTypeRoi );
         drawCursorTypeOptions( windowCursorTypeRoi );
         drawTextSupportModeOptions( windowTextSupportModeRoi );
 
@@ -257,71 +246,26 @@ namespace
             if ( le.MouseClickLeft( windowResolutionRoi ) ) {
                 return SelectedWindow::Resolution;
             }
+            if ( le.MouseClickLeft( windowAudioRoi ) ) {
+                return SelectedWindow::AudioSettings;
+            }
             if ( le.MouseClickLeft( windowOptionsRoi ) ) {
                 return SelectedWindow::Options;
             }
+            if ( le.MouseClickLeft( windowBattleResolveRoi ) ) {
+                return SelectedWindow::BattleResolveType;
+            }
             if ( le.MouseClickLeft( windowHotKeyRoi ) ) {
                 return SelectedWindow::HotKeys;
+            }
+            if ( le.MouseClickLeft( windowInterfaceTypeRoi ) ) {
+                return SelectedWindow::InterfaceTheme;
             }
             if ( le.MouseClickLeft( windowCursorTypeRoi ) ) {
                 return SelectedWindow::CursorType;
             }
             if ( le.MouseClickLeft( windowTextSupportModeRoi ) ) {
                 return SelectedWindow::TextSupportMode;
-            }
-            if ( le.MouseClickLeft( windowMusicTypeRoi ) ) {
-                int type = conf.MusicType() + 1;
-                // If there's no expansion files we skip this option
-                if ( type == MUSIC_MIDI_EXPANSION && !conf.isPriceOfLoyaltySupported() ) {
-                    ++type;
-                }
-
-                const Game::MusicRestorer musicRestorer;
-
-                conf.SetMusicType( type > MUSIC_EXTERNAL ? 0 : type );
-
-                Game::SetCurrentMusic( MUS::UNKNOWN );
-
-                return SelectedWindow::UpdateSettings;
-            }
-
-            // Set music or sound volume.
-            if ( Audio::isValid() ) {
-                bool saveMusicVolume = false;
-                bool saveSoundVolume = false;
-                if ( le.MouseClickLeft( windowMusicVolumeRoi ) ) {
-                    conf.SetMusicVolume( ( conf.MusicVolume() + 1 ) % 11 );
-                    saveMusicVolume = true;
-                }
-                else if ( le.MouseWheelUp( windowMusicVolumeRoi ) ) {
-                    conf.SetMusicVolume( conf.MusicVolume() + 1 );
-                    saveMusicVolume = true;
-                }
-                else if ( le.MouseWheelDn( windowMusicVolumeRoi ) ) {
-                    conf.SetMusicVolume( conf.MusicVolume() - 1 );
-                    saveMusicVolume = true;
-                }
-                if ( saveMusicVolume ) {
-                    Music::setVolume( 100 * conf.MusicVolume() / 10 );
-                    return SelectedWindow::UpdateSettings;
-                }
-
-                if ( le.MouseClickLeft( windowSoundVolumeRoi ) ) {
-                    conf.SetSoundVolume( ( conf.SoundVolume() + 1 ) % 11 );
-                    saveSoundVolume = true;
-                }
-                else if ( le.MouseWheelUp( windowSoundVolumeRoi ) ) {
-                    conf.SetSoundVolume( conf.SoundVolume() + 1 );
-                    saveSoundVolume = true;
-                }
-                else if ( le.MouseWheelDn( windowSoundVolumeRoi ) ) {
-                    conf.SetSoundVolume( conf.SoundVolume() - 1 );
-                    saveSoundVolume = true;
-                }
-                if ( saveSoundVolume ) {
-                    Game::EnvironmentSoundMixer();
-                    return SelectedWindow::UpdateSettings;
-                }
             }
 
             if ( le.MousePressRight( windowLanguageRoi ) ) {
@@ -336,33 +280,33 @@ namespace
 
                 fheroes2::showMessage( header, body, 0 );
             }
+            else if ( le.MousePressRight( windowAudioRoi ) ) {
+                fheroes2::Text header( _( "Audio" ), fheroes2::FontType::normalYellow() );
+                fheroes2::Text body( _( "Change audio settings of the game." ), fheroes2::FontType::normalWhite() );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
             else if ( le.MousePressRight( windowOptionsRoi ) ) {
                 fheroes2::Text header( _( "Settings" ), fheroes2::FontType::normalYellow() );
                 fheroes2::Text body( _( "Experimental game settings." ), fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
-            else if ( le.MousePressRight( windowMusicVolumeRoi ) ) {
-                fheroes2::Text header( _( "Music" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Toggle ambient music level." ), fheroes2::FontType::normalWhite() );
-
-                fheroes2::showMessage( header, body, 0 );
-            }
-            else if ( le.MousePressRight( windowSoundVolumeRoi ) ) {
-                fheroes2::Text header( _( "Effects" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Toggle foreground sounds level." ), fheroes2::FontType::normalWhite() );
-
-                fheroes2::showMessage( header, body, 0 );
-            }
-            else if ( le.MousePressRight( windowMusicTypeRoi ) ) {
-                fheroes2::Text header( _( "Music Type" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Change the type of music." ), fheroes2::FontType::normalWhite() );
+            if ( le.MousePressRight( windowBattleResolveRoi ) ) {
+                fheroes2::Text header( _( "Battles" ), fheroes2::FontType::normalYellow() );
+                fheroes2::Text body( _( "Toggle instant battle mode." ), fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
             else if ( le.MousePressRight( windowHotKeyRoi ) ) {
                 fheroes2::Text header( _( "Hot Keys" ), fheroes2::FontType::normalYellow() );
                 fheroes2::Text body( _( "Check all Hot Keys used in the game." ), fheroes2::FontType::normalWhite() );
+
+                fheroes2::showMessage( header, body, 0 );
+            }
+            if ( le.MousePressRight( windowInterfaceTypeRoi ) ) {
+                fheroes2::Text header( _( "Interface Type" ), fheroes2::FontType::normalYellow() );
+                fheroes2::Text body( _( "Toggle the type of interface you want to use." ), fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
@@ -409,14 +353,11 @@ namespace fheroes2
             case SelectedWindow::Resolution:
                 if ( Dialog::SelectResolution() ) {
                     conf.Save( Settings::configFileName );
-                    // force interface to reset area and positions
-                    Interface::Basic::Get().Reset();
                 }
                 drawMainMenuScreen();
                 windowType = SelectedWindow::Configuration;
                 break;
             case SelectedWindow::Language: {
-
                 const std::vector<SupportedLanguage> supportedLanguages = getSupportedLanguages();
 
                 if ( supportedLanguages.size() > 1 ) {
@@ -455,6 +396,30 @@ namespace fheroes2
             case SelectedWindow::UpdateSettings:
                 conf.Save( Settings::configFileName );
                 windowType = SelectedWindow::Configuration;
+                break;
+            case SelectedWindow::AudioSettings:
+                Dialog::openAudioSettingsDialog( false );
+                windowType = SelectedWindow::Configuration;
+                break;
+            case SelectedWindow::InterfaceTheme:
+                conf.SetEvilInterface( !conf.ExtGameEvilInterface() );
+                windowType = SelectedWindow::UpdateSettings;
+                break;
+            case SelectedWindow::BattleResolveType:
+                if ( conf.BattleAutoResolve() ) {
+                    if ( conf.BattleAutoSpellcast() ) {
+                        conf.setBattleAutoSpellcast( false );
+                    }
+                    else {
+                        conf.setBattleAutoResolve( false );
+                    }
+                }
+                else {
+                    conf.setBattleAutoResolve( true );
+                    conf.setBattleAutoSpellcast( true );
+                }
+
+                windowType = SelectedWindow::UpdateSettings;
                 break;
             default:
                 return;

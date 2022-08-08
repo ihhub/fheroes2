@@ -21,6 +21,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <algorithm>
+#include <cassert>
 #include <cstdlib>
 
 #include "agg_image.h"
@@ -43,8 +45,6 @@
 #include "ui_text.h"
 #include "world.h"
 
-#include <cassert>
-
 namespace
 {
     void outputInTextSupportMode( const Maps::Tiles & tile, const std::string & info )
@@ -63,37 +63,40 @@ namespace
     class RadarUpdater
     {
     public:
-        RadarUpdater( const fheroes2::Rect & mainArea, const fheroes2::Point & updatedPosition )
-            : _mainArea( mainArea )
+        RadarUpdater( const bool performUpdate, const fheroes2::Point & updatedPosition, const fheroes2::Rect & areaToRestore )
+            : _performUpdate( performUpdate )
             , _updatedPosition( updatedPosition )
             , _prevPosition( Interface::Basic::Get().GetGameArea().getCurrentCenterInPixels() )
-            , _restorer( fheroes2::Display::instance(), 0, 0, 0, 0 )
+            , _restorer( fheroes2::Display::instance(), areaToRestore.x, areaToRestore.y, areaToRestore.width, areaToRestore.height )
         {
-            if ( _updatedPosition != _prevPosition ) {
-                Interface::Radar & radar = Interface::Basic::Get().GetRadar();
-
-                const fheroes2::Rect commonArea = mainArea ^ radar.GetRect();
-                _restorer.update( commonArea.x, commonArea.y, commonArea.width, commonArea.height );
-
-                Interface::Basic::Get().GetGameArea().SetCenter( updatedPosition );
-                radar.Redraw();
-
-                _restorer.restore();
+            if ( !_performUpdate || _updatedPosition == _prevPosition ) {
+                return;
             }
+
+            Interface::Basic & iface = Interface::Basic::Get();
+
+            iface.GetGameArea().SetCenter( updatedPosition );
+            iface.Redraw( Interface::REDRAW_RADAR );
+
+            _restorer.restore();
         }
 
         void restore()
         {
-            if ( _updatedPosition != _prevPosition ) {
-                Interface::Basic::Get().GetGameArea().SetCenterInPixels( _prevPosition );
-                Interface::Basic::Get().GetRadar().Redraw();
-
-                _restorer.restore();
+            if ( !_performUpdate || _updatedPosition == _prevPosition ) {
+                return;
             }
+
+            Interface::Basic & iface = Interface::Basic::Get();
+
+            iface.GetGameArea().SetCenterInPixels( _prevPosition );
+            iface.Redraw( Interface::REDRAW_RADAR );
+
+            _restorer.restore();
         }
 
     private:
-        const fheroes2::Rect _mainArea;
+        const bool _performUpdate;
         const fheroes2::Point _updatedPosition;
         const fheroes2::Point _prevPosition;
         fheroes2::ImageRestorer _restorer;
@@ -130,7 +133,7 @@ namespace
         }
         else if ( isAbandonnedMine ) {
             const uint8_t spriteIndex = tile.GetObjectSpriteIndex();
-            if ( spriteIndex == 5 ) { // TODO: remove this hardocded value for real abandoned mine.
+            if ( spriteIndex == 5 ) { // TODO: remove this hardcoded value for real abandoned mine.
                 str = MP2::StringObject( objectType );
             }
             else {
@@ -150,7 +153,7 @@ namespace
             }
             else {
                 str.append( _( "guarded by %{count} %{monster}" ) );
-                StringReplace( str, "%{count}", Translation::StringLower( Game::CountScoute( troop.GetCount(), scoutingLevel ) ) );
+                StringReplace( str, "%{count}", Translation::StringLower( Game::formatMonsterCount( troop.GetCount(), scoutingLevel ) ) );
             }
             if ( troop.GetCount() == 1 && scoutingLevel == Skill::Level::EXPERT ) {
                 StringReplace( str, "%{monster}", Translation::StringLower( troop.GetName() ) );
@@ -170,7 +173,7 @@ namespace
         if ( isVisibleFromCrystalBall || ( extendedScoutingOption && basicScoutingLevel > Skill::Level::NONE ) ) {
             std::string str = "%{count} %{monster}";
             const int scoutingLevel = isVisibleFromCrystalBall ? static_cast<int>( Skill::Level::EXPERT ) : basicScoutingLevel;
-            StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), scoutingLevel ) );
+            StringReplace( str, "%{count}", Game::formatMonsterCount( troop.GetCount(), scoutingLevel ) );
             if ( troop.GetCount() == 1 && scoutingLevel == Skill::Level::EXPERT ) {
                 StringReplace( str, "%{monster}", Translation::StringLower( troop.GetName() ) );
             }
@@ -209,7 +212,7 @@ namespace
             if ( extendedScoutingOption && scoutingLevel > Skill::Level::NONE ) {
                 const ResourceCount & rc = tile.QuantityResourceCount();
                 str.append( ": " );
-                str.append( Game::CountScoute( rc.second, scoutingLevel ) );
+                str.append( Game::formatMonsterCount( rc.second, scoutingLevel ) );
             }
         }
         else { // Campfire
@@ -221,14 +224,14 @@ namespace
                 str.append( Resource::String( Resource::GOLD ) );
 
                 str.append( ": " );
-                str.append( Game::CountScoute( funds.gold, scoutingLevel ) );
+                str.append( Game::formatMonsterCount( funds.gold, scoutingLevel ) );
                 str += '\n';
 
                 const ResourceCount & rc = tile.QuantityResourceCount();
                 str.append( Resource::String( rc.first ) );
 
                 str.append( ": " );
-                str.append( Game::CountScoute( rc.second, scoutingLevel ) );
+                str.append( Game::formatMonsterCount( rc.second, scoutingLevel ) );
                 str += ')';
             }
         }
@@ -245,7 +248,7 @@ namespace
             const Troop & troop = tile.QuantityTroop();
             if ( troop.isValid() ) {
                 str.append( _( "(available: %{count})" ) );
-                StringReplace( str, "%{count}", Game::CountScoute( troop.GetCount(), owned ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) );
+                StringReplace( str, "%{count}", Game::formatMonsterCount( troop.GetCount(), owned ? static_cast<int>( Skill::Level::EXPERT ) : scoutingLevel ) );
             }
             else {
                 str.append( _( "(empty)" ) );
@@ -408,7 +411,8 @@ namespace
 
         str.append( "\n \n" );
 
-        if ( tile.GoodForUltimateArtifact() ) {
+        // Original Editor allows to put an Ultimate Artifact on an invalid tile. So checking tile index solves this issue.
+        if ( tile.GoodForUltimateArtifact() || world.GetUltimateArtifact().getPosition() == tile.GetIndex() ) {
             str.append( _( "(digging ok)" ) );
         }
         else {
@@ -446,40 +450,29 @@ namespace
         int32_t ypos = my + TILEWIDTH - ( imageBox.height() / 2 );
 
         // clamp box to edges of adventure screen game area
-        xpos = clamp( xpos, BORDERWIDTH, ( ar.width - imageBox.width() ) + BORDERWIDTH );
-        ypos = clamp( ypos, BORDERWIDTH, ( ar.height - imageBox.height() ) + BORDERWIDTH );
+        assert( ar.width >= imageBox.width() && ar.height >= imageBox.height() );
+        xpos = std::clamp( xpos, BORDERWIDTH, ( ar.width - imageBox.width() ) + BORDERWIDTH );
+        ypos = std::clamp( ypos, BORDERWIDTH, ( ar.height - imageBox.height() ) + BORDERWIDTH );
 
         return { xpos, ypos, imageBox.width(), imageBox.height() };
     }
 
-    uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, uint32_t dst )
+    uint32_t GetHeroScoutingLevelForTile( const Heroes * hero, const uint32_t dst )
     {
         if ( hero == nullptr ) {
             return Skill::Level::NONE;
         }
 
-        const uint32_t scoutingLevel = hero->GetSecondaryValues( Skill::Secondary::SCOUTING );
-        const MP2::MapObjectType objectType = world.GetTiles( dst ).GetObject( false );
-
-        const bool monsterInfo = objectType == MP2::OBJ_MONSTER;
-
-        // TODO check that this logic is what is really intended, it's only used for extended scouting anyway
-        if ( monsterInfo ) {
-            if ( Maps::GetApproximateDistance( hero->GetIndex(), dst ) <= hero->GetVisionsDistance() ) {
-                return scoutingLevel;
-            }
-            else {
-                return Skill::Level::NONE;
-            }
-        }
-        else if ( Settings::Get().ExtWorldScouteExtended() ) {
+        if ( Settings::Get().ExtWorldScouteExtended() ) {
             uint32_t dist = static_cast<uint32_t>( hero->GetScoute() );
-            if ( hero->Modes( Heroes::VISIONS ) && dist < hero->GetVisionsDistance() )
-                dist = hero->GetVisionsDistance();
 
-            if ( Maps::GetApproximateDistance( hero->GetIndex(), dst ) <= dist )
-                return scoutingLevel;
-            return Skill::Level::NONE;
+            if ( hero->Modes( Heroes::VISIONS ) ) {
+                dist = std::max( dist, hero->GetVisionsDistance() );
+            }
+
+            if ( Maps::GetStraightLineDistance( hero->GetIndex(), dst ) <= dist ) {
+                return hero->GetSecondaryValues( Skill::Secondary::SCOUTING );
+            }
         }
 
         return Skill::Level::NONE;
@@ -690,12 +683,13 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
     display.render();
 }
 
-void Dialog::QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea, const fheroes2::Point & position /*= fheroes2::Point()*/ )
+void Dialog::QuickInfo( const Castle & castle, const fheroes2::Point & position /* = {} */, const bool showOnRadar /* = false */,
+                        const fheroes2::Rect & areaToRestore /* = {} */ )
 {
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
 
-    // Update radar.
-    RadarUpdater radarUpdater( activeArea, castle.GetCenter() );
+    // Update radar if needed
+    RadarUpdater radarUpdater( showOnRadar, castle.GetCenter(), areaToRestore );
 
     // image box
     const fheroes2::Sprite & box = fheroes2::AGG::GetICN( ICN::QWIKTOWN, 0 );
@@ -835,21 +829,19 @@ void Dialog::QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea
     // restore background
     back.restore();
 
-    // Restore radar view.
+    // Restore radar view
     radarUpdater.restore();
 
     display.render();
 }
 
-void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Rect & activeArea, const fheroes2::Point & position /*= fheroes2::Point()*/ )
+void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Point & position /* = {} */, const bool showOnRadar /* = false */,
+                        const fheroes2::Rect & areaToRestore /* = {} */ )
 {
     const CursorRestorer cursorRestorer( false, Cursor::POINTER );
 
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const Settings & conf = Settings::Get();
-
-    // Update radar.
-    RadarUpdater radarUpdater( activeArea, hero.GetCenter() );
+    // Update radar if needed
+    RadarUpdater radarUpdater( showOnRadar, hero.GetCenter(), areaToRestore );
 
     const int qwikhero = ICN::QWIKHERO;
 
@@ -859,12 +851,14 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Rect & activeArea
     LocalEvent & le = LocalEvent::Get();
     fheroes2::Rect cur_rt = MakeRectQuickInfo( le, box, position );
 
+    fheroes2::Display & display = fheroes2::Display::instance();
     fheroes2::ImageRestorer restorer( display, cur_rt.x, cur_rt.y, cur_rt.width, cur_rt.height );
     fheroes2::Blit( box, display, cur_rt.x, cur_rt.y );
 
     cur_rt = fheroes2::Rect( restorer.x() + 28, restorer.y() + 10, 146, 144 );
     fheroes2::Point dst_pt;
 
+    const Settings & conf = Settings::Get();
     const Kingdom & kingdom = world.GetKingdom( conf.CurrentColor() );
     const bool isFriend = ColorBase( hero.GetColor() ).isFriends( conf.CurrentColor() );
     const bool isUnderIdentifyHeroSpell = kingdom.Modes( Kingdom::IDENTIFYHERO );
@@ -1050,7 +1044,7 @@ void Dialog::QuickInfo( const HeroBase & hero, const fheroes2::Rect & activeArea
     // restore background
     restorer.restore();
 
-    // Restore radar view.
+    // Restore radar view
     radarUpdater.restore();
 
     display.render();

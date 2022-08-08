@@ -40,8 +40,8 @@ namespace AI
 
     const std::vector<BuildOrder> & GetIncomeStructures( int type )
     {
-        static const std::vector<BuildOrder> standard = {{BUILD_CASTLE, 1}, {BUILD_STATUE, 1}};
-        static const std::vector<BuildOrder> warlock = {{BUILD_CASTLE, 1}, {BUILD_STATUE, 1}, {BUILD_SPEC, 1}};
+        static const std::vector<BuildOrder> standard = { { BUILD_CASTLE, 1 }, { BUILD_STATUE, 1 } };
+        static const std::vector<BuildOrder> warlock = { { BUILD_CASTLE, 1 }, { BUILD_STATUE, 1 }, { BUILD_SPEC, 1 } };
 
         return ( type == Race::WRLK ) ? warlock : standard;
     }
@@ -57,10 +57,11 @@ namespace AI
     const std::vector<BuildOrder> & GetBuildOrder( int type )
     {
         static const std::vector<BuildOrder> genericBuildOrder
-            = {{BUILD_CASTLE, 2},      {BUILD_STATUE, 1},      {DWELLING_UPGRADE7, 1}, {DWELLING_UPGRADE6, 1}, {DWELLING_MONSTER6, 1}, {DWELLING_UPGRADE5, 1},
-               {DWELLING_MONSTER5, 1}, {DWELLING_UPGRADE4, 1}, {DWELLING_MONSTER4, 1}, {DWELLING_UPGRADE3, 2}, {DWELLING_MONSTER3, 2}, {DWELLING_UPGRADE2, 3},
-               {DWELLING_MONSTER2, 3}, {DWELLING_MONSTER1, 4}, {BUILD_MAGEGUILD1, 2},  {BUILD_WEL2, 10},       {BUILD_TAVERN, 5},      {BUILD_THIEVESGUILD, 10},
-               {BUILD_MAGEGUILD2, 3},  {BUILD_MAGEGUILD3, 4},  {BUILD_MAGEGUILD4, 5},  {BUILD_MAGEGUILD5, 5},  {BUILD_SHIPYARD, 4},    {BUILD_MARKETPLACE, 10}};
+            = { { BUILD_CASTLE, 2 },      { BUILD_STATUE, 1 },      { DWELLING_UPGRADE7, 1 },   { DWELLING_UPGRADE6, 1 }, { DWELLING_MONSTER6, 1 },
+                { DWELLING_UPGRADE5, 1 }, { DWELLING_MONSTER5, 1 }, { DWELLING_UPGRADE4, 1 },   { DWELLING_MONSTER4, 1 }, { DWELLING_UPGRADE3, 2 },
+                { DWELLING_MONSTER3, 2 }, { DWELLING_UPGRADE2, 3 }, { DWELLING_MONSTER2, 3 },   { DWELLING_MONSTER1, 4 }, { BUILD_MAGEGUILD1, 2 },
+                { BUILD_WEL2, 10 },       { BUILD_TAVERN, 5 },      { BUILD_THIEVESGUILD, 10 }, { BUILD_MAGEGUILD2, 3 },  { BUILD_MAGEGUILD3, 4 },
+                { BUILD_MAGEGUILD4, 5 },  { BUILD_MAGEGUILD5, 5 },  { BUILD_SHIPYARD, 4 },      { BUILD_MARKETPLACE, 10 } };
 
         static const std::vector<BuildOrder> barbarianBuildOrder
             = { { BUILD_CASTLE, 2 },      { BUILD_STATUE, 1 },      { DWELLING_MONSTER6, 1 }, { DWELLING_UPGRADE5, 1 }, { DWELLING_MONSTER5, 1 },
@@ -79,11 +80,11 @@ namespace AI
         // De-prioritizing dwelling 5 (you can reach 6 without it), 1 and upgrades of 3 and 4
         // Well, tavern and Archery upgrade are more important
         static const std::vector<BuildOrder> knightBuildOrder
-            = {{BUILD_CASTLE, 2},      {BUILD_STATUE, 1},        {DWELLING_UPGRADE6, 2}, {DWELLING_MONSTER6, 1}, {DWELLING_UPGRADE5, 2},
-               {DWELLING_MONSTER5, 2}, {DWELLING_UPGRADE4, 2},   {DWELLING_MONSTER4, 1}, {DWELLING_UPGRADE3, 2}, {DWELLING_MONSTER3, 1},
-               {DWELLING_UPGRADE2, 1}, {DWELLING_MONSTER2, 3},   {DWELLING_MONSTER1, 4}, {BUILD_WELL, 1},        {BUILD_TAVERN, 1},
-               {BUILD_MAGEGUILD1, 2},  {BUILD_MAGEGUILD2, 3},    {BUILD_MAGEGUILD3, 5},  {BUILD_MAGEGUILD4, 5},  {BUILD_MAGEGUILD5, 5},
-               {BUILD_SPEC, 5},        {BUILD_THIEVESGUILD, 10}, {BUILD_WEL2, 20},       {BUILD_SHIPYARD, 4},    {BUILD_MARKETPLACE, 10}};
+            = { { BUILD_CASTLE, 2 },      { BUILD_STATUE, 1 },        { DWELLING_UPGRADE6, 2 }, { DWELLING_MONSTER6, 1 }, { DWELLING_UPGRADE5, 2 },
+                { DWELLING_MONSTER5, 2 }, { DWELLING_UPGRADE4, 2 },   { DWELLING_MONSTER4, 1 }, { DWELLING_UPGRADE3, 2 }, { DWELLING_MONSTER3, 1 },
+                { DWELLING_UPGRADE2, 1 }, { DWELLING_MONSTER2, 3 },   { DWELLING_MONSTER1, 4 }, { BUILD_WELL, 1 },        { BUILD_TAVERN, 1 },
+                { BUILD_MAGEGUILD1, 2 },  { BUILD_MAGEGUILD2, 3 },    { BUILD_MAGEGUILD3, 5 },  { BUILD_MAGEGUILD4, 5 },  { BUILD_MAGEGUILD5, 5 },
+                { BUILD_SPEC, 5 },        { BUILD_THIEVESGUILD, 10 }, { BUILD_WEL2, 20 },       { BUILD_SHIPYARD, 4 },    { BUILD_MARKETPLACE, 10 } };
 
         // Priority on Dwellings 5/6 and Mage guild level 2
         static const std::vector<BuildOrder> necromancerBuildOrder
@@ -95,10 +96,11 @@ namespace AI
 
         // Priority on Mage tower/guild and library
         static const std::vector<BuildOrder> wizardBuildOrder
-            = {{BUILD_CASTLE, 2},      {BUILD_STATUE, 1},        {DWELLING_UPGRADE6, 1}, {DWELLING_MONSTER6, 1}, {DWELLING_UPGRADE5, 1}, {DWELLING_MONSTER5, 1},
-               {DWELLING_MONSTER4, 1}, {DWELLING_MONSTER3, 1},   {DWELLING_MONSTER2, 1}, {DWELLING_MONSTER1, 1}, {BUILD_MAGEGUILD1, 1},  {DWELLING_UPGRADE3, 4},
-               {BUILD_SPEC, 2},        {BUILD_WEL2, 8},          {BUILD_MAGEGUILD2, 3},  {BUILD_MAGEGUILD3, 4},  {BUILD_MAGEGUILD4, 4},  {BUILD_MAGEGUILD5, 4},
-               {BUILD_TAVERN, 10},     {BUILD_THIEVESGUILD, 10}, {BUILD_SHIPYARD, 4},    {BUILD_MARKETPLACE, 10}};
+            = { { BUILD_CASTLE, 2 },      { BUILD_STATUE, 1 },      { DWELLING_UPGRADE6, 1 }, { DWELLING_MONSTER6, 1 }, { DWELLING_UPGRADE5, 1 },
+                { DWELLING_MONSTER5, 1 }, { DWELLING_MONSTER4, 1 }, { DWELLING_MONSTER3, 1 }, { DWELLING_MONSTER2, 1 }, { DWELLING_MONSTER1, 1 },
+                { BUILD_MAGEGUILD1, 1 },  { DWELLING_UPGRADE3, 4 }, { BUILD_SPEC, 2 },        { BUILD_WEL2, 8 },        { BUILD_MAGEGUILD2, 3 },
+                { BUILD_MAGEGUILD3, 4 },  { BUILD_MAGEGUILD4, 4 },  { BUILD_MAGEGUILD5, 4 },  { BUILD_TAVERN, 10 },     { BUILD_THIEVESGUILD, 10 },
+                { BUILD_SHIPYARD, 4 },    { BUILD_MARKETPLACE, 10 } };
 
         switch ( type ) {
         case Race::KNGT:
@@ -136,7 +138,7 @@ namespace AI
 
     bool CastleDevelopment( Castle & castle, int safetyFactor, int spellLevel )
     {
-        if ( !castle.isBuild( BUILD_WELL ) && world.LastDay() ) {
+        if ( castle.isCastle() && !castle.isBuild( BUILD_WELL ) && world.CountDay() > 6 ) {
             // return right away - if you can't buy Well you can't buy anything else
             return BuildIfAvailable( castle, BUILD_WELL );
         }

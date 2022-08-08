@@ -41,10 +41,15 @@ namespace Interface
         STATUS_AITURN
     };
 
-    class StatusWindow : public BorderWindow
+    class StatusWindow final : public BorderWindow
     {
     public:
         explicit StatusWindow( Basic & basic );
+        StatusWindow( const StatusWindow & ) = delete;
+
+        ~StatusWindow() override = default;
+
+        StatusWindow & operator=( const StatusWindow & ) = delete;
 
         void SetPos( int32_t ox, int32_t oy ) override;
         void SavePosition() override;
@@ -52,34 +57,35 @@ namespace Interface
 
         void Reset();
 
-        void Redraw() const;
         void NextState();
 
         void SetState( const StatusType status );
         void SetResource( int, uint32_t );
         void RedrawTurnProgress( uint32_t );
         void QueueEventProcessing();
-
-        static void ResetTimer();
+        void TimerEventProcessing();
 
     private:
+        friend Basic;
+
+        // Do not call this method directly, use Interface::Basic::Redraw() instead
+        // to avoid issues in the "no interface" mode
+        void Redraw() const;
         void DrawKingdomInfo( int oh = 0 ) const;
         void DrawDayInfo( int oh = 0 ) const;
         void DrawArmyInfo( int oh = 0 ) const;
         void DrawResourceInfo( int oh = 0 ) const;
         void DrawBackground() const;
         void DrawAITurns() const;
-        static uint32_t ResetResourceStatus( uint32_t, void * );
 
         Basic & interface;
 
         StatusType _state;
-        StatusType _oldState;
         int lastResource;
         uint32_t countLastResource;
         uint32_t turn_progress;
 
-        fheroes2::Timer timerShowLastResource;
+        fheroes2::TimeDelay showLastResourceDelay;
     };
 }
 

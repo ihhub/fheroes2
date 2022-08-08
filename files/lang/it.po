@@ -1,13 +1,13 @@
 # Italian translation of fheroes2
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# fheroes2 team <fhomm2@gmail.com>, 2021
+# fheroes2 team <fhomm2@gmail.com>, 2021 - 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 17:13+0000\n"
+"POT-Creation-Date: 2022-08-08 11:28+0000\n"
 "PO-Revision-Date: 2022-05-12 17:11+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -160,8 +160,11 @@ msgstr "Sposta %{name}"
 msgid "Set Count"
 msgstr "Seleziona quanti"
 
-msgid "%{name} half the enemy troops!"
-msgstr "Le unità nemiche sono state dimezzate da %{name}!"
+#, fuzzy
+msgid "%{name} destroys half the enemy troops!"
+msgid_plural "%{name} destroy half the enemy troops!"
+msgstr[0] "Le unità nemiche sono state dimezzate da %{name}!"
+msgstr[1] "Le unità nemiche sono state dimezzate da %{name}!"
 
 #, fuzzy
 msgid "%{name} has turned off the auto battle"
@@ -501,8 +504,11 @@ msgstr "%{name} salta il suo turno."
 msgid "%{name} wait their turn."
 msgstr "%{name} rimanda il suo turno."
 
-msgid "%{attacker} do %{damage} damage."
-msgstr "%{attacker} fanno %{damage} danni."
+#, fuzzy
+msgid "%{attacker} does %{damage} damage."
+msgid_plural "%{attacker} do %{damage} damage."
+msgstr[0] "%{attacker} fanno %{damage} danni."
+msgstr[1] "%{attacker} fanno %{damage} danni."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
@@ -1882,7 +1888,8 @@ msgstr "Migl. Dolmen"
 msgid "Fenced Meadow"
 msgstr "Prato Recintato"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Torre Rossa"
 
 msgid "Dungeon"
@@ -1911,6 +1918,10 @@ msgstr "Palude"
 
 msgid "Green Tower"
 msgstr "Torre Verde"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Torre Rossa"
 
 msgid "Black Tower"
 msgstr "Torre Nera"
@@ -2406,20 +2417,53 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "(Grado: %{percent})"
 
-msgid "Total: "
-msgstr "Totale: "
+msgid "off"
+msgstr "Muto"
 
-msgid "No room in"
-msgstr "Non c'è posto"
+msgid "Music"
+msgstr "Musica"
 
-msgid "the garrison"
-msgstr "nella guarnigione"
+msgid "Effects"
+msgstr "Effetti"
+
+msgid "MIDI"
+msgstr "MIDI"
+
+msgid "MIDI Expansion"
+msgstr "Espansione MIDI"
+
+msgid "External"
+msgstr "Esterna"
+
+msgid "Music Type"
+msgstr "Stile di Musica"
+
+msgid "3D Audio"
+msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr ""
+
+msgid "Toggle foreground sounds level."
+msgstr ""
+
+msgid "Change the type of music."
+msgstr ""
+
+msgid "Toggle 3D effects of foreground sounds."
+msgstr ""
+
+msgid "Okay"
+msgstr "Okay"
 
 msgid "Build a new ship:"
 msgstr "Costruisci una nave:"
 
 msgid "Resource cost:"
 msgstr "Costo Risorse:"
+
+msgid "Total: "
+msgstr "Totale: "
 
 msgid "Need: "
 msgstr "Servono: "
@@ -2464,26 +2508,12 @@ msgstr "Sperimentale"
 msgid "Settings"
 msgstr "Impostazioni"
 
-msgid "off"
-msgstr "Muto"
+msgid "Audio"
+msgstr ""
 
-msgid "Music"
-msgstr "Musica"
-
-msgid "Effects"
-msgstr "Effetti"
-
-msgid "MIDI"
-msgstr "MIDI"
-
-msgid "MIDI Expansion"
-msgstr "Espansione MIDI"
-
-msgid "External"
-msgstr "Esterna"
-
-msgid "Music Type"
-msgstr "Stile di Musica"
+#, fuzzy
+msgid "settings"
+msgstr "Impostazioni"
 
 msgid "Hot Keys"
 msgstr ""
@@ -2508,6 +2538,27 @@ msgstr ""
 "Tele-\n"
 "trasporto"
 
+msgid "Evil"
+msgstr "Cattivo"
+
+msgid "Good"
+msgstr "Buono"
+
+msgid "Interface Type"
+msgstr "Stile d'Interfaccia"
+
+msgid "Auto Resolve"
+msgstr "Auto-Risolva"
+
+msgid "Auto, No Spells"
+msgstr "Auto, Senza Magie"
+
+msgid "Manual"
+msgstr "Manuali"
+
+msgid "Battles"
+msgstr "Battaglie"
+
 msgid "Select Game Language"
 msgstr "Scegli lingua del gioco"
 
@@ -2520,19 +2571,20 @@ msgstr "Scegli la risoluzione del gioco"
 msgid "Change resolution of the game."
 msgstr "Cambia la risoluzione del gioco."
 
+#, fuzzy
+msgid "Change audio settings of the game."
+msgstr "Cambia la risoluzione del gioco."
+
 msgid "Experimental game settings."
 msgstr "Impostazioni sperimentali del gioco."
 
-msgid "Toggle ambient music level."
-msgstr ""
-
-msgid "Toggle foreground sounds level."
-msgstr ""
-
-msgid "Change the type of music."
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Check all Hot Keys used in the game."
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid ""
@@ -2544,9 +2596,6 @@ msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
-
-msgid "Okay"
-msgstr "Okay"
 
 msgid "Attention"
 msgstr "Attenzione"
@@ -3009,15 +3058,6 @@ msgstr "Velocità Nemica"
 msgid "Scroll Speed"
 msgstr "Velocità dello Scorrimento"
 
-msgid "Evil"
-msgstr "Cattivo"
-
-msgid "Good"
-msgstr "Buono"
-
-msgid "Interface Type"
-msgstr "Stile d'Interfaccia"
-
 msgid "Hide"
 msgstr "Nascondi"
 
@@ -3026,18 +3066,6 @@ msgstr "Mostra"
 
 msgid "Interface"
 msgstr "Interfaccia"
-
-msgid "Auto Resolve"
-msgstr "Auto-Risolva"
-
-msgid "Auto, No Spells"
-msgstr "Auto, Senza Magie"
-
-msgid "Battles"
-msgstr "Battaglie"
-
-msgid "Manual"
-msgstr "Manuali"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3050,13 +3078,7 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
 msgid "Toggle interface visibility."
-msgstr ""
-
-msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -3190,6 +3212,12 @@ msgstr ""
 msgid "Development"
 msgstr ""
 
+#, fuzzy
+msgid "Dev and Support"
+msgstr ""
+"Tele-\n"
+"trasporto"
+
 msgid "Visit us at "
 msgstr ""
 
@@ -3215,7 +3243,7 @@ msgid "Original project before 0.7"
 msgstr ""
 
 #, fuzzy
-msgid "Original Heroes of Might and Magic II team"
+msgid "Heroes of Might and Magic II: The Succession Wars team"
 msgstr "Esci da fheroes2."
 
 msgid "Designed and Directed"
@@ -3269,6 +3297,73 @@ msgstr ""
 msgid "Scenarios"
 msgstr ""
 
+#, fuzzy
+msgid "Heroes of Might and Magic II: The Price of Loyalty team"
+msgstr "Esci da fheroes2."
+
+msgid "Cyberlore Studios"
+msgstr ""
+
+msgid "Design Lead"
+msgstr ""
+
+msgid "Designers"
+msgstr ""
+
+msgid "Programming Lead"
+msgstr ""
+
+msgid "Art Lead"
+msgstr ""
+
+#, fuzzy
+msgid "Playtesters"
+msgstr "Icona dei Giocatori"
+
+msgid "New World Computing"
+msgstr ""
+
+msgid "Designer"
+msgstr ""
+
+msgid "Producers"
+msgstr ""
+
+#, fuzzy
+msgid "QA Managers"
+msgstr "Cacciatori"
+
+msgid "Sound Design"
+msgstr ""
+
+#, fuzzy
+msgid "Town Themes"
+msgstr "Alle Porte"
+
+msgid "Alto Sax"
+msgstr ""
+
+msgid "Harpsichord and Piano"
+msgstr ""
+
+msgid "Basso Vocal"
+msgstr ""
+
+msgid "Soprano Vocal"
+msgstr ""
+
+msgid "Recorded at Green Street Studios"
+msgstr ""
+
+msgid "German Consultant"
+msgstr ""
+
+msgid "Map Designers"
+msgstr ""
+
+msgid "Package Design"
+msgstr ""
+
 msgid "Unknown Hero"
 msgstr ""
 
@@ -3287,17 +3382,15 @@ msgstr ""
 msgid "View High Scores for Campaigns."
 msgstr ""
 
-msgid ""
-"Invalid file game type. Please ensure that you are running the latest type "
-"of save files."
-msgstr ""
-
 msgid "Warning"
 msgstr ""
 
+msgid "This file contains a save with an invalid game type."
+msgstr ""
+
 msgid ""
-"This file is saved in the \"The Price of Loyalty\" version.\n"
-"Some items may be unavailable."
+"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
+"Some items may not be available."
 msgstr ""
 
 msgid "Usupported save format: "
@@ -3415,6 +3508,11 @@ msgstr "Cambia la risoluzione del gioco."
 #, fuzzy
 msgid "Game Settings"
 msgstr "Impostazioni del gioco."
+
+msgid ""
+"Required video files for campaign selection window are missing. Please make "
+"sure that all necessary files are present in the system."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -8601,9 +8699,6 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "game: always confirm for rewrite savefile"
-msgstr ""
-
 msgid "game: remember last focus"
 msgstr ""
 
@@ -8725,3 +8820,9 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "No room in"
+#~ msgstr "Non c'è posto"
+
+#~ msgid "the garrison"
+#~ msgstr "nella guarnigione"

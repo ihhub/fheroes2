@@ -1,13 +1,13 @@
 # Spanish translation for fheroes2
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
+# fheroes2 team <fhomm2@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 17:13+0000\n"
+"POT-Creation-Date: 2022-08-08 11:28+0000\n"
 "PO-Revision-Date: 2022-05-14 22:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -164,8 +164,11 @@ msgstr "Pierdes el héroe: %{name}."
 msgid "Set Count"
 msgstr ""
 
-msgid "%{name} half the enemy troops!"
-msgstr "%{name} mitad de las tropas enemigas!"
+#, fuzzy
+msgid "%{name} destroys half the enemy troops!"
+msgid_plural "%{name} destroy half the enemy troops!"
+msgstr[0] "%{name} mitad de las tropas enemigas!"
+msgstr[1] "%{name} mitad de las tropas enemigas!"
 
 #, fuzzy
 msgid "%{name} has turned off the auto battle"
@@ -523,8 +526,11 @@ msgstr "%{name} pasa turno."
 msgid "%{name} wait their turn."
 msgstr "%{name} esperando turno."
 
-msgid "%{attacker} do %{damage} damage."
-msgstr "%{attacker} hace %{damage} de daño."
+#, fuzzy
+msgid "%{attacker} does %{damage} damage."
+msgid_plural "%{attacker} do %{damage} damage."
+msgstr[0] "%{attacker} hace %{damage} de daño."
+msgstr[1] "%{attacker} hace %{damage} de daño."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
@@ -1973,7 +1979,8 @@ msgstr "Mej. Mejorado"
 msgid "Fenced Meadow"
 msgstr "Prado Vallado"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Torre Roja"
 
 msgid "Dungeon"
@@ -2002,6 +2009,10 @@ msgstr "Ciénaga"
 
 msgid "Green Tower"
 msgstr "Torre Verde"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Torre Roja"
 
 msgid "Black Tower"
 msgstr "Torre Negra"
@@ -2551,21 +2562,54 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr ""
 
-msgid "Total: "
+msgid "off"
+msgstr "apagado"
+
+msgid "Music"
+msgstr "Música"
+
+msgid "Effects"
 msgstr ""
 
-msgid "No room in"
+msgid "MIDI"
 msgstr ""
 
 #, fuzzy
-msgid "the garrison"
-msgstr "las escaleras"
+msgid "MIDI Expansion"
+msgstr "Mansión"
+
+msgid "External"
+msgstr ""
+
+msgid "Music Type"
+msgstr ""
+
+msgid "3D Audio"
+msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr ""
+
+msgid "Toggle foreground sounds level."
+msgstr ""
+
+msgid "Change the type of music."
+msgstr ""
+
+msgid "Toggle 3D effects of foreground sounds."
+msgstr ""
+
+msgid "Okay"
+msgstr "OK"
 
 msgid "Build a new ship:"
 msgstr "Construir un nuevo barco:"
 
 msgid "Resource cost:"
 msgstr "Coste del recurso:"
+
+msgid "Total: "
+msgstr ""
 
 msgid "Need: "
 msgstr ""
@@ -2614,27 +2658,12 @@ msgstr "Elemental del Aire"
 msgid "Settings"
 msgstr "Ajustes"
 
-msgid "off"
-msgstr "apagado"
-
-msgid "Music"
-msgstr "Música"
-
-msgid "Effects"
-msgstr ""
-
-msgid "MIDI"
+msgid "Audio"
 msgstr ""
 
 #, fuzzy
-msgid "MIDI Expansion"
-msgstr "Mansión"
-
-msgid "External"
-msgstr ""
-
-msgid "Music Type"
-msgstr ""
+msgid "settings"
+msgstr "Ajustes"
 
 #, fuzzy
 msgid "Hot Keys"
@@ -2658,6 +2687,29 @@ msgstr ""
 msgid "Text Support"
 msgstr "Teletransporte"
 
+msgid "Evil"
+msgstr "Mal"
+
+msgid "Good"
+msgstr "Bien"
+
+#, fuzzy
+msgid "Interface Type"
+msgstr "Interfaz"
+
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+#, fuzzy
+msgid "Battles"
+msgstr "Botella"
+
 #, fuzzy
 msgid "Select Game Language"
 msgstr "Descripción seleccionada"
@@ -2672,20 +2724,20 @@ msgstr "Descripción seleccionada"
 msgid "Change resolution of the game."
 msgstr ""
 
+msgid "Change audio settings of the game."
+msgstr ""
+
 #, fuzzy
 msgid "Experimental game settings."
 msgstr "Configuración del juego FHeroes2"
 
-msgid "Toggle ambient music level."
-msgstr ""
-
-msgid "Toggle foreground sounds level."
-msgstr ""
-
-msgid "Change the type of music."
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Check all Hot Keys used in the game."
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid ""
@@ -2697,9 +2749,6 @@ msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
-
-msgid "Okay"
-msgstr "OK"
 
 #, fuzzy
 msgid "Attention"
@@ -3168,16 +3217,6 @@ msgstr "Velocidad"
 msgid "Scroll Speed"
 msgstr "Velocidad de desplazamiento"
 
-msgid "Evil"
-msgstr "Mal"
-
-msgid "Good"
-msgstr "Bien"
-
-#, fuzzy
-msgid "Interface Type"
-msgstr "Interfaz"
-
 msgid "Hide"
 msgstr ""
 
@@ -3186,19 +3225,6 @@ msgstr ""
 
 msgid "Interface"
 msgstr "Interfaz"
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-#, fuzzy
-msgid "Battles"
-msgstr "Botella"
-
-msgid "Manual"
-msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3211,13 +3237,7 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
 msgid "Toggle interface visibility."
-msgstr ""
-
-msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -3354,6 +3374,10 @@ msgstr ""
 msgid "Development"
 msgstr ""
 
+#, fuzzy
+msgid "Dev and Support"
+msgstr "Teletransporte"
+
 msgid "Visit us at "
 msgstr ""
 
@@ -3379,7 +3403,7 @@ msgid "Original project before 0.7"
 msgstr ""
 
 #, fuzzy
-msgid "Original Heroes of Might and Magic II team"
+msgid "Heroes of Might and Magic II: The Succession Wars team"
 msgstr "Salir del juego y volver al sistema operativo."
 
 msgid "Designed and Directed"
@@ -3436,6 +3460,73 @@ msgstr ""
 msgid "Scenarios"
 msgstr "Escenarios"
 
+#, fuzzy
+msgid "Heroes of Might and Magic II: The Price of Loyalty team"
+msgstr "Salir del juego y volver al sistema operativo."
+
+msgid "Cyberlore Studios"
+msgstr ""
+
+msgid "Design Lead"
+msgstr ""
+
+msgid "Designers"
+msgstr ""
+
+msgid "Programming Lead"
+msgstr ""
+
+msgid "Art Lead"
+msgstr ""
+
+#, fuzzy
+msgid "Playtesters"
+msgstr "2 jugadores"
+
+msgid "New World Computing"
+msgstr ""
+
+msgid "Designer"
+msgstr ""
+
+msgid "Producers"
+msgstr ""
+
+#, fuzzy
+msgid "QA Managers"
+msgstr "Cazadores"
+
+msgid "Sound Design"
+msgstr ""
+
+#, fuzzy
+msgid "Town Themes"
+msgstr "Puerta de la Ciudad"
+
+msgid "Alto Sax"
+msgstr ""
+
+msgid "Harpsichord and Piano"
+msgstr ""
+
+msgid "Basso Vocal"
+msgstr ""
+
+msgid "Soprano Vocal"
+msgstr ""
+
+msgid "Recorded at Green Street Studios"
+msgstr ""
+
+msgid "German Consultant"
+msgstr ""
+
+msgid "Map Designers"
+msgstr ""
+
+msgid "Package Design"
+msgstr ""
+
 msgid "Unknown Hero"
 msgstr ""
 
@@ -3457,17 +3548,15 @@ msgstr "Partida de Campaña"
 msgid "View High Scores for Campaigns."
 msgstr "Ver la pantalla de puntuaciones más altas"
 
-msgid ""
-"Invalid file game type. Please ensure that you are running the latest type "
-"of save files."
-msgstr ""
-
 msgid "Warning"
 msgstr "Advertencia"
 
+msgid "This file contains a save with an invalid game type."
+msgstr ""
+
 msgid ""
-"This file is saved in the \"The Price of Loyalty\" version.\n"
-"Some items may be unavailable."
+"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
+"Some items may not be available."
 msgstr ""
 
 msgid "Usupported save format: "
@@ -3581,6 +3670,11 @@ msgstr ""
 #, fuzzy
 msgid "Game Settings"
 msgstr "Ajustes"
+
+msgid ""
+"Required video files for campaign selection window are missing. Please make "
+"sure that all necessary files are present in the system."
+msgstr ""
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
@@ -9348,9 +9442,6 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "game: always confirm for rewrite savefile"
-msgstr "juego: siempre confirmar al sobreescribir una paritda guardada"
-
 msgid "game: remember last focus"
 msgstr "juego: recordar el último foco"
 
@@ -9477,3 +9568,10 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "the garrison"
+#~ msgstr "las escaleras"
+
+#~ msgid "game: always confirm for rewrite savefile"
+#~ msgstr "juego: siempre confirmar al sobreescribir una paritda guardada"

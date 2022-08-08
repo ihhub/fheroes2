@@ -24,6 +24,7 @@
 #include "spell.h"
 #include "artifact.h"
 #include "heroes_base.h"
+#include "monster.h"
 #include "race.h"
 #include "rand.h"
 #include "resource.h"
@@ -88,8 +89,8 @@ spellstats_t spells[] = {
     { gettext_noop( "Cold Ray" ), 6, 0, 0, 36, 20, gettext_noop( "Drains body heat from a single enemy unit." ) },
     { gettext_noop( "Cold Ring" ), 9, 0, 0, 35, 10, gettext_noop( "Drains body heat from all units surrounding the center point, but not including the center point." ) },
     { gettext_noop( "Disrupting Ray" ), 7, 0, 0, 34, 3, gettext_noop( "Reduces the defense rating of an enemy unit by three." ) },
-    { gettext_noop( "Death Ripple" ), 6, 0, 0, 28, 5, gettext_noop( "Damages all living (non-undead) units in the battle." ) },
-    { gettext_noop( "Death Wave" ), 10, 0, 0, 29, 10,
+    { gettext_noop( "Death Ripple" ), 6, 0, 0, 29, 5, gettext_noop( "Damages all living (non-undead) units in the battle." ) },
+    { gettext_noop( "Death Wave" ), 10, 0, 0, 28, 10,
       gettext_noop( "Damages all living (non-undead) units in the battle.  This spell is an improved version of Death Ripple." ) },
     { gettext_noop( "Dragon Slayer" ), 6, 0, 0, 32, 5, gettext_noop( "Greatly increases a unit's attack skill vs. Dragons." ) },
     { gettext_noop( "Blood Lust" ), 3, 0, 0, 27, 3, gettext_noop( "Increases a unit's attack skill." ) },
@@ -200,6 +201,39 @@ uint32_t Spell::spellPoints( const HeroBase * hero ) const
     }
 
     return static_cast<uint32_t>( spellCost );
+}
+
+double Spell::getStrategicValue( double armyStrength, uint32_t currentSpellPoints, int spellPower ) const
+{
+    const uint32_t spellCost = spellPoints();
+    const uint32_t casts = spellCost ? std::min( 10U, currentSpellPoints / spellCost ) : 0;
+
+    // use quadratic formula to diminish returns from subsequent spell casts, (up to x5 when spell has 10 uses)
+    const double amountModifier = ( casts == 1 ) ? 1 : casts - ( 0.05 * casts * casts );
+
+    if ( isAdventure() ) {
+        // AI uses Dimension door and View All only spells right now
+        if ( id == Spell::DIMENSIONDOOR ) {
+            return 500.0 * amountModifier;
+        }
+        if ( id == Spell::VIEWALL ) {
+            return 500.0;
+        }
+        return 0.0;
+    }
+
+    if ( isDamage() ) {
+        // Benchmark for Lightning for 20 power * 20 knowledge (maximum uses) is 2500.0
+        return amountModifier * Damage() * spellPower;
+    }
+    // These high impact spells can turn tide of battle
+    if ( isResurrect() || isMassActions() || id == Spell::BLIND || id == Spell::PARALYZE ) {
+        return armyStrength * 0.1 * amountModifier;
+    }
+    if ( isSummon() ) {
+        return Monster( id ).GetMonsterStrength() * ExtraValue() * spellPower * amountModifier;
+    }
+    return armyStrength * 0.04 * amountModifier;
 }
 
 int Spell::Level() const

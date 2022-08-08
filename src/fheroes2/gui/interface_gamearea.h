@@ -25,6 +25,7 @@
 #define H2INTERFACE_GAMEAREA_H
 
 #include "image.h"
+#include "mp2.h"
 #include "timing.h"
 
 namespace Interface
@@ -45,17 +46,112 @@ namespace Interface
         LEVEL_BOTTOM = 0x01,
         LEVEL_TOP = 0x02,
         LEVEL_HEROES = 0x04,
-        LEVEL_OBJECTS = 0x08,
+        // UNUSED = 0x08,
         LEVEL_FOG = 0x20,
         LEVEL_ROUTES = 0x40,
 
         LEVEL_ALL = 0xFF
     };
 
+    struct BaseObjectAnimationInfo
+    {
+        BaseObjectAnimationInfo() = default;
+
+        BaseObjectAnimationInfo( const uint32_t uid_, const int32_t tileId_, const MP2::MapObjectType type_ )
+            : uid( uid_ )
+            , tileId( tileId_ )
+            , type( type_ )
+        {
+            // Do nothing.
+        }
+
+        BaseObjectAnimationInfo( const BaseObjectAnimationInfo & ) = delete;
+        BaseObjectAnimationInfo & operator=( const BaseObjectAnimationInfo & ) = delete;
+
+        virtual ~BaseObjectAnimationInfo() = default;
+
+        uint32_t uid{ 0 };
+
+        int32_t tileId{ -1 };
+
+        MP2::MapObjectType type{ MP2::OBJ_ZERO };
+
+        uint8_t alphaValue{ 255 };
+
+        virtual bool update() = 0;
+
+        virtual bool isAnimationCompleted() const = 0;
+    };
+
+    struct ObjectFadingOutInfo : public BaseObjectAnimationInfo
+    {
+        using BaseObjectAnimationInfo::BaseObjectAnimationInfo;
+
+        ~ObjectFadingOutInfo() override;
+
+        bool update() override
+        {
+            if ( alphaValue >= alphaStep ) {
+                alphaValue -= alphaStep;
+            }
+            else {
+                alphaValue = 0;
+            }
+
+            return ( alphaValue == 0 );
+        }
+
+        bool isAnimationCompleted() const override
+        {
+            return ( alphaValue == 0 );
+        }
+
+        static const uint8_t alphaStep{ 20 };
+    };
+
+    struct ObjectFadingInInfo : public BaseObjectAnimationInfo
+    {
+        ObjectFadingInInfo() = delete;
+
+        ObjectFadingInInfo( const uint32_t uid_, const int32_t tileId_, const MP2::MapObjectType type_ )
+            : BaseObjectAnimationInfo( uid_, tileId_, type_ )
+        {
+            alphaValue = 0;
+        }
+
+        ~ObjectFadingInInfo() override = default;
+
+        bool update() override
+        {
+            if ( 255 - alphaValue >= alphaStep ) {
+                alphaValue += alphaStep;
+            }
+            else {
+                alphaValue = 255;
+            }
+
+            return ( alphaValue == 255 );
+        }
+
+        bool isAnimationCompleted() const override
+        {
+            return ( alphaValue == 255 );
+        }
+
+        static const uint8_t alphaStep{ 20 };
+    };
+
     class GameArea
     {
     public:
-        explicit GameArea( Basic & );
+        explicit GameArea( Basic & basic );
+        GameArea( const GameArea & ) = default;
+        GameArea( GameArea && ) = delete;
+
+        ~GameArea() = default;
+
+        GameArea & operator=( const GameArea & ) = delete;
+        GameArea & operator=( GameArea && ) = delete;
 
         void generate( const fheroes2::Size & screenSize, const bool withoutBorders );
 
@@ -65,9 +161,16 @@ namespace Interface
         }
 
         // Do NOT use this method directly in heavy computation loops
-        fheroes2::Rect GetVisibleTileROI() const;
+        fheroes2::Rect GetVisibleTileROI() const
+        {
+            return { _getStartTileId(), _visibleTileCount };
+        }
 
-        void ShiftCenter( const fheroes2::Point & offset ); // in pixels
+        // Shift center in pixels.
+        void ShiftCenter( const fheroes2::Point & offset )
+        {
+            SetCenterInPixels( _topLeftTileOffset + _middlePoint() + offset );
+        }
 
         int GetScrollCursor() const;
 
@@ -79,18 +182,23 @@ namespace Interface
         void Scroll();
         void SetScroll( int );
 
-        void SetCenter( const fheroes2::Point & point );
+        void SetCenter( const fheroes2::Point & point )
+        {
+            _setCenterToTile( point );
+
+            scrollDirection = 0;
+        }
 
         // Do not call this method unless it's needed for manual setup of the position
         void SetCenterInPixels( const fheroes2::Point & point );
 
         void SetRedraw() const;
 
+        // Do not call this method directly if the rendering takes place on the screen, use
+        // Interface::Basic::Redraw() instead to avoid issues in the "no interface" mode
         void Redraw( fheroes2::Image & dst, int flag, bool isPuzzleDraw = false ) const;
 
-        void BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const fheroes2::Point & mp, bool flip = false,
-                         uint8_t alpha = 255 ) const;
-        void BlitOnTile( fheroes2::Image & dst, const fheroes2::Sprite & src, const fheroes2::Point & mp ) const;
+        void BlitOnTile( fheroes2::Image & dst, const fheroes2::Image & src, int32_t ox, int32_t oy, const fheroes2::Point & mp, bool flip, uint8_t alpha ) const;
 
         // Use this method to draw TIL images
         void DrawTile( fheroes2::Image & src, const fheroes2::Image & dst, const fheroes2::Point & mp ) const;
@@ -101,8 +209,6 @@ namespace Interface
         }
 
         void QueueEventProcessing();
-
-        fheroes2::Rect RectFixed( fheroes2::Point & dst, int rw, int rh ) const;
 
         static fheroes2::Image GenerateUltimateArtifactAreaSurface( const int32_t index, const fheroes2::Point & offset );
 
@@ -116,7 +222,22 @@ namespace Interface
 
         void SetAreaPosition( int32_t, int32_t, int32_t, int32_t );
 
-        fheroes2::Point getCurrentCenterInPixels() const;
+        fheroes2::Point getCurrentCenterInPixels() const
+        {
+            return _topLeftTileOffset + _middlePoint();
+        }
+
+        void addObjectAnimationInfo( std::shared_ptr<BaseObjectAnimationInfo> info )
+        {
+            _animationInfo.emplace_back( std::move( info ) );
+        }
+
+        uint8_t getObjectAlphaValue( const int32_t tileId, const MP2::MapObjectType type ) const;
+
+        uint8_t getObjectAlphaValue( const uint32_t uid ) const;
+
+        // Make sure you do not have a copy of this object after the execution of the method to avoid incorrect object removal in some cases.
+        void runSingleObjectAnimation( const std::shared_ptr<BaseObjectAnimationInfo> & info );
 
     private:
         Basic & interface;
@@ -138,9 +259,20 @@ namespace Interface
 
         fheroes2::Time scrollTime;
 
-        fheroes2::Point _middlePoint() const; // returns middle point of window ROI
+        // This member needs to be mutable because it is modified during rendering.
+        mutable std::vector<std::shared_ptr<BaseObjectAnimationInfo>> _animationInfo;
+
+        // Returns middle point of window ROI.
+        fheroes2::Point _middlePoint() const
+        {
+            return { _windowROI.width / 2, _windowROI.height / 2 };
+        }
+
         fheroes2::Point _getStartTileId() const;
+
         void _setCenterToTile( const fheroes2::Point & tile ); // set center to the middle of tile (input is tile ID)
+
+        void updateObjectAnimationInfo() const;
     };
 }
 

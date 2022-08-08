@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# fheroes2 team <fhomm2@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 17:13+0000\n"
+"POT-Creation-Date: 2022-08-08 11:28+0000\n"
 "PO-Revision-Date: 2022-05-12 17:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -161,8 +161,11 @@ msgstr "%{name} umstellen"
 msgid "Set Count"
 msgstr "Anzahl festlegen"
 
-msgid "%{name} half the enemy troops!"
-msgstr "%{name} halbieren die feindlichen Truppen!"
+#, fuzzy
+msgid "%{name} destroys half the enemy troops!"
+msgid_plural "%{name} destroy half the enemy troops!"
+msgstr[0] "%{name} halbieren die feindlichen Truppen!"
+msgstr[1] "%{name} halbieren die feindlichen Truppen!"
 
 msgid "%{name} has turned off the auto battle"
 msgstr "%{name} hat den automatischen Kampf ausgeschaltet"
@@ -526,8 +529,11 @@ msgstr "%{name} setzt den Zug aus."
 msgid "%{name} wait their turn."
 msgstr "%{name} wartet auf den Zug."
 
-msgid "%{attacker} do %{damage} damage."
-msgstr "%{attacker} verursachen %{damage} Schaden."
+#, fuzzy
+msgid "%{attacker} does %{damage} damage."
+msgid_plural "%{attacker} do %{damage} damage."
+msgstr[0] "%{attacker} verursachen %{damage} Schaden."
+msgstr[1] "%{attacker} verursachen %{damage} Schaden."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
@@ -2003,7 +2009,8 @@ msgstr "Aufg. Stonehenge"
 msgid "Fenced Meadow"
 msgstr "Eingezäunte Wiese"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Roter Turm"
 
 msgid "Dungeon"
@@ -2032,6 +2039,10 @@ msgstr "Sumpf"
 
 msgid "Green Tower"
 msgstr "Grüner Turm"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Roter Turm"
 
 msgid "Black Tower"
 msgstr "Schwarzer Turm"
@@ -2573,20 +2584,54 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "(Grad: %{percent})"
 
-msgid "Total: "
-msgstr "Insgesamt: "
+msgid "off"
+msgstr "Aus"
 
-msgid "No room in"
-msgstr "Kein Platz in"
+msgid "Music"
+msgstr "Musik"
 
-msgid "the garrison"
-msgstr "der Garnison"
+msgid "Effects"
+msgstr "Effekte"
+
+msgid "MIDI"
+msgstr "MIDI"
+
+msgid "MIDI Expansion"
+msgstr "MIDI Expansion"
+
+msgid "External"
+msgstr "Extern"
+
+msgid "Music Type"
+msgstr "Klangtyp"
+
+msgid "3D Audio"
+msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr "Lautstärke der Umgebungsmusik umschalten."
+
+msgid "Toggle foreground sounds level."
+msgstr "Lautstärke des Vordergrunds umschalten."
+
+msgid "Change the type of music."
+msgstr "Klangtyp ändern."
+
+#, fuzzy
+msgid "Toggle 3D effects of foreground sounds."
+msgstr "Lautstärke des Vordergrunds umschalten."
+
+msgid "Okay"
+msgstr "Okay"
 
 msgid "Build a new ship:"
 msgstr "Ein neues Boot bauen:"
 
 msgid "Resource cost:"
 msgstr "Ressourcenkosten:"
+
+msgid "Total: "
+msgstr "Insgesamt: "
 
 msgid "Need: "
 msgstr "Bedarf: "
@@ -2630,26 +2675,12 @@ msgstr "Experimentelle"
 msgid "Settings"
 msgstr "Einstellungen"
 
-msgid "off"
-msgstr "Aus"
+msgid "Audio"
+msgstr ""
 
-msgid "Music"
-msgstr "Musik"
-
-msgid "Effects"
-msgstr "Effekte"
-
-msgid "MIDI"
-msgstr "MIDI"
-
-msgid "MIDI Expansion"
-msgstr "MIDI Expansion"
-
-msgid "External"
-msgstr "Extern"
-
-msgid "Music Type"
-msgstr "Klangtyp"
+#, fuzzy
+msgid "settings"
+msgstr "Einstellungen"
 
 msgid "Hot Keys"
 msgstr "Hotkeys"
@@ -2669,6 +2700,27 @@ msgstr "Farbe"
 msgid "Text Support"
 msgstr "Text-Unterst."
 
+msgid "Evil"
+msgstr "Böse"
+
+msgid "Good"
+msgstr "Gut"
+
+msgid "Interface Type"
+msgstr "Interface"
+
+msgid "Auto Resolve"
+msgstr "Auto-Auflösen"
+
+msgid "Auto, No Spells"
+msgstr "Auto, ohne Zauber"
+
+msgid "Manual"
+msgstr "Manuell"
+
+msgid "Battles"
+msgstr "Schlachten"
+
 msgid "Select Game Language"
 msgstr "Spielsprache auswählen"
 
@@ -2681,20 +2733,21 @@ msgstr "Spielauflösung wählen"
 msgid "Change resolution of the game."
 msgstr "Auflösung des Spiels ändern."
 
+#, fuzzy
+msgid "Change audio settings of the game."
+msgstr "Sprache, Auflösung und Einstellungen des Spiels ändern."
+
 msgid "Experimental game settings."
 msgstr "Experimentelle Spieleinstellungen."
 
-msgid "Toggle ambient music level."
-msgstr "Lautstärke der Umgebungsmusik umschalten."
-
-msgid "Toggle foreground sounds level."
-msgstr "Lautstärke des Vordergrunds umschalten."
-
-msgid "Change the type of music."
-msgstr "Klangtyp ändern."
+msgid "Toggle instant battle mode."
+msgstr "Sofortigen Kampfmodus umschalten."
 
 msgid "Check all Hot Keys used in the game."
 msgstr "Überprüfen Sie alle im Spiel verwendeten Hotkeys."
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Schaltet die Art der Schnittstelle um, die Sie verwenden möchten."
 
 msgid ""
 "Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
@@ -2709,9 +2762,6 @@ msgid ""
 msgstr ""
 "Schaltet den Textunterstützungsmodus um, um zusätzliche Informationen über "
 "Fenster und Ereignisse im Spiel auszugeben."
-
-msgid "Okay"
-msgstr "Okay"
 
 msgid "Attention"
 msgstr "Achtung"
@@ -3169,15 +3219,6 @@ msgstr "Feindgeschw."
 msgid "Scroll Speed"
 msgstr "Scrollgeschw."
 
-msgid "Evil"
-msgstr "Böse"
-
-msgid "Good"
-msgstr "Gut"
-
-msgid "Interface Type"
-msgstr "Interface"
-
 msgid "Hide"
 msgstr "Ausblenden"
 
@@ -3186,18 +3227,6 @@ msgstr "Einblenden"
 
 msgid "Interface"
 msgstr "Interface"
-
-msgid "Auto Resolve"
-msgstr "Auto-Auflösen"
-
-msgid "Auto, No Spells"
-msgstr "Auto, ohne Zauber"
-
-msgid "Battles"
-msgstr "Schlachten"
-
-msgid "Manual"
-msgstr "Manuell"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3214,14 +3243,8 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr "Legt die Geschwindigkeit fest, mit der Sie das Fenster verschieben."
 
-msgid "Toggle the type of interface you want to use."
-msgstr "Schaltet die Art der Schnittstelle um, die Sie verwenden möchten."
-
 msgid "Toggle interface visibility."
 msgstr "Sichtbarkeit der Interface ändern."
-
-msgid "Toggle instant battle mode."
-msgstr "Sofortigen Kampfmodus umschalten."
 
 msgid "Att."
 msgstr "Angr."
@@ -3353,6 +3376,10 @@ msgstr "QA und Unterstützung"
 msgid "Development"
 msgstr "Entwicklung"
 
+#, fuzzy
+msgid "Dev and Support"
+msgstr "QA und Unterstützung"
+
 msgid "Visit us at "
 msgstr "Besuchen Sie uns bei "
 
@@ -3378,7 +3405,7 @@ msgid "Original project before 0.7"
 msgstr "Ursprüngliches Projekt vor 0.7"
 
 #, fuzzy
-msgid "Original Heroes of Might and Magic II team"
+msgid "Heroes of Might and Magic II: The Succession Wars team"
 msgstr "Original Heroes of Might and Magic II Team"
 
 msgid "Designed and Directed"
@@ -3432,6 +3459,76 @@ msgstr "Handbuch und Hilfedatei"
 msgid "Scenarios"
 msgstr "Szenarien"
 
+#, fuzzy
+msgid "Heroes of Might and Magic II: The Price of Loyalty team"
+msgstr "Original Heroes of Might and Magic II Team"
+
+msgid "Cyberlore Studios"
+msgstr ""
+
+msgid "Design Lead"
+msgstr ""
+
+msgid "Designers"
+msgstr ""
+
+#, fuzzy
+msgid "Programming Lead"
+msgstr "Programmierung und Gestaltung"
+
+msgid "Art Lead"
+msgstr ""
+
+#, fuzzy
+msgid "Playtesters"
+msgstr "2 Spieler"
+
+msgid "New World Computing"
+msgstr ""
+
+msgid "Designer"
+msgstr ""
+
+#, fuzzy
+msgid "Producers"
+msgstr "Produzent"
+
+#, fuzzy
+msgid "QA Managers"
+msgstr "QA-Leiter"
+
+#, fuzzy
+msgid "Sound Design"
+msgstr "Musik und Klanggestaltung"
+
+#, fuzzy
+msgid "Town Themes"
+msgstr "Stadttor"
+
+msgid "Alto Sax"
+msgstr ""
+
+msgid "Harpsichord and Piano"
+msgstr ""
+
+msgid "Basso Vocal"
+msgstr ""
+
+msgid "Soprano Vocal"
+msgstr ""
+
+msgid "Recorded at Green Street Studios"
+msgstr ""
+
+msgid "German Consultant"
+msgstr ""
+
+msgid "Map Designers"
+msgstr ""
+
+msgid "Package Design"
+msgstr ""
+
 msgid "Unknown Hero"
 msgstr "Unbekannter Held"
 
@@ -3452,19 +3549,16 @@ msgstr "Kampagne"
 msgid "View High Scores for Campaigns."
 msgstr "Bestenliste für Kampagnen anzeigen."
 
-msgid ""
-"Invalid file game type. Please ensure that you are running the latest type "
-"of save files."
-msgstr ""
-"Ungültiger Dateityp für das Spiel. Bitte vergewissern Sie sich, dass Sie den "
-"neuesten Typ von Speicherdateien verwenden."
-
 msgid "Warning"
 msgstr "Achtung"
 
+msgid "This file contains a save with an invalid game type."
+msgstr ""
+
+#, fuzzy
 msgid ""
-"This file is saved in the \"The Price of Loyalty\" version.\n"
-"Some items may be unavailable."
+"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
+"Some items may not be available."
 msgstr ""
 "Diese Datei ist in der Version \"The Price of Loyalty\" gespeichert.\n"
 "Einige Artikel sind möglicherweise nicht mehr verfügbar."
@@ -3589,6 +3683,11 @@ msgstr "Sprache, Auflösung und Einstellungen des Spiels ändern."
 
 msgid "Game Settings"
 msgstr "Spieleinstellungen"
+
+msgid ""
+"Required video files for campaign selection window are missing. Please make "
+"sure that all necessary files are present in the system."
+msgstr ""
 
 #, fuzzy
 msgid ""
@@ -9692,9 +9791,6 @@ msgstr ""
 "Dieser Zauberspruch kontrolliert bis zu\n"
 "%{hp} TP."
 
-msgid "game: always confirm for rewrite savefile"
-msgstr "Spiel: immer bestätigen bevor eine Speicherdatei überschrieben ist"
-
 msgid "game: remember last focus"
 msgstr "Spiel: den letzten Fokus merken"
 
@@ -9812,3 +9908,12 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "No room in"
+#~ msgstr "Kein Platz in"
+
+#~ msgid "the garrison"
+#~ msgstr "der Garnison"
+
+#~ msgid "game: always confirm for rewrite savefile"
+#~ msgstr "Spiel: immer bestätigen bevor eine Speicherdatei überschrieben ist"

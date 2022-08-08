@@ -1,7 +1,7 @@
 # Polish translation of fheroes2
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# fheroes2 team <fhomm2@gmail.com>, 2021
+# fheroes2 team <fhomm2@gmail.com>, 2021 - 2022
 # Igor Orlov <igororlov@inbox.ru>, 2009.
 # Andrey Afletdinov <afletdinov@mail.dc.baikal.ru>, 2009.
 #
@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 17:13+0000\n"
-"PO-Revision-Date: 2022-05-19 19:00+0200\n"
+"POT-Creation-Date: 2022-08-08 11:28+0000\n"
+"PO-Revision-Date: 2022-06-05 20:16+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -139,9 +139,8 @@ msgstr "Nieumarli w armii -1"
 msgid "View %{name}"
 msgstr "Obejrzyj jednostkę (%{name})"
 
-#, fuzzy
 msgid "Move the %{name} "
-msgstr "Przenieś %{name}"
+msgstr "Przenieś %{name} "
 
 msgid "Move or right click to redistribute %{name}"
 msgstr "Przenieś lub kliknij prawym aby rozdzielić %{name}"
@@ -158,15 +157,17 @@ msgstr "Wybierz jednostkę (%{name})"
 msgid "Cannot move last troop"
 msgstr "Nie można przenieść ostatniej jednostki"
 
-#, fuzzy
 msgid "Move the %{name}"
 msgstr "Przenieś %{name}"
 
 msgid "Set Count"
 msgstr "Podaj liczbę"
 
-msgid "%{name} half the enemy troops!"
-msgstr "%{name} Połowa żołnierzy wroga!"
+msgid "%{name} destroys half the enemy troops!"
+msgid_plural "%{name} destroy half the enemy troops!"
+msgstr[0] "%{name} niszczy połowę stworów wroga!"
+msgstr[1] "%{name} niszczą połowę stworów wroga!"
+msgstr[2] "%{name} niszczy połowę stworów wroga!"
 
 msgid "%{name} has turned off the auto battle"
 msgstr "%{name} wyłączył automatyczną walkę"
@@ -195,7 +196,7 @@ msgstr "W czasie walki możesz przywołać tylko jeden rodzaj żywiołaka."
 
 msgid "There is no open space adjacent to your hero to summon an Elemental to."
 msgstr ""
-"Obok twojego bohatera nie ma wolnego miejsca gdzie możnaby przywołać "
+"Obok twojego bohatera nie ma wolnego miejsca gdzie można by przywołać "
 "żywiołaki."
 
 msgid ""
@@ -237,7 +238,7 @@ msgstr "Pozwala na ustawienie szybkości akcji i animacji w walce."
 
 msgid "Toggle to display army order during the battle."
 msgstr ""
-"Ukrycie lub pokazanie kolejności wykonywania akcji przez stworyw czasie "
+"Ukrycie lub pokazanie kolejności wykonywania akcji przez stwory w czasie "
 "walki."
 
 msgid ""
@@ -311,7 +312,7 @@ msgstr ""
 "znika."
 
 msgid "You have captured an enemy artifact!"
-msgstr "Udało ci się zdobyć artfeakt przeciwnika!"
+msgstr "Udało ci się zdobyć artefakt przeciwnika!"
 
 msgid "Necromancy!"
 msgstr "Nekromancja!"
@@ -348,7 +349,7 @@ msgid "Luck"
 msgstr "Szczęście"
 
 msgid "Spell Points"
-msgstr "Ptk. magii"
+msgstr "Pkt. magii"
 
 msgid "Hero's Options"
 msgstr "Opcje bohatera"
@@ -372,7 +373,7 @@ msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
 msgstr ""
-"Rzucanie magicznego zalęcia. Możesz rzucić tylko jedno zaklęcie na rundę "
+"Rzucanie magicznego zaklęcia. Możesz rzucić tylko jedno zaklęcie na rundę "
 "walki. Runda kończy się gdy wszystkie stworzenia wykonają ruch."
 
 msgid ""
@@ -422,7 +423,7 @@ msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
 msgstr[0] "(pozostał %{count} strzał)"
 msgstr[1] "(pozostały %{count} strzały)"
-msgstr[2] "(pozostał %{count} strzałów)"
+msgstr[2] "(pozostało %{count} strzałów)"
 
 msgid "Attack %{monster}"
 msgstr "Zaatakuj jednostkę (%{monster})"
@@ -525,8 +526,11 @@ msgstr "%{name} pomija turę."
 msgid "%{name} wait their turn."
 msgstr "%{name} czeka na swoją kolej."
 
-msgid "%{attacker} do %{damage} damage."
-msgstr "Jednostka %{attacker} zadaje %{damage} pkt. obrażeń."
+msgid "%{attacker} does %{damage} damage."
+msgid_plural "%{attacker} do %{damage} damage."
+msgstr[0] "Stworzenie %{attacker} zadaje %{damage} pkt. obrażeń."
+msgstr[1] "Stworzenia %{attacker} zadają %{damage} pkt. obrażeń."
+msgstr[2] "Stworzenia %{attacker} zadają %{damage} pkt. obrażeń."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
@@ -559,8 +563,7 @@ msgid "The %{spell} does %{damage} damage to one undead creature."
 msgstr "Czar %{spell} zadaje %{damage} pkt. obrażeń nieumarłej istocie."
 
 msgid "The %{spell} does %{damage} damage to all undead creatures."
-msgstr ""
-"Czar %{spell} zadaje %{damage} pkt. obrażeń każdej nieumarłej istotcie."
+msgstr "Czar %{spell} zadaje %{damage} pkt. obrażeń każdej nieumarłej istocie."
 
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
 msgstr "Czar %{spell} zadaje %{damage} pkt. obrażeń, %{count} stworzeń ginie."
@@ -574,31 +577,23 @@ msgstr "%{spell} zadaje %{damage} pkt. obrażeń żywej istocie."
 msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} zadaje %{damage} pkt. obrażeń każdej żywej istocie."
 
-#, fuzzy
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr "Atak jednorożców oślepia jednostkę (%{name})!"
+msgstr "Atak %{attacker} oślepia %{target}!"
 
-#, fuzzy
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr "Spojrzenie meduz zamienia jednostkę (%{name}) w kamień!"
+msgstr "Spojrzenie %{attacker} zamienia %{target} w kamień!"
 
-#, fuzzy
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr "Ta jednostka (%{name}) zostaje dotknięta klątwą mumii!"
+msgstr "%{attacker} przeklina %{target}!"
 
-#, fuzzy
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr "Atak cyklopów paraliżuje jednostkę (%{name})!"
+msgstr "%{target} został sparaliżowany przez %{attacker}!"
 
-#, fuzzy
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr ""
-"Arcymagowie rozpraszają wszystkie korzystne zaklęcia u tej jednostki "
-"(%{name})!"
+msgstr "%{attacker} rozpraszają pozytywne zaklęcia u %{target}!"
 
-#, fuzzy
 msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr "%{name} rzuca zaklęcie '%{spell}' na: %{troop}."
+msgstr "%{attacker} rzuca zaklęcie %{spell} na %{target}!"
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "Tej jednostce (%{attacker}) nie sprzyja los."
@@ -781,29 +776,44 @@ msgid ""
 "will spend most of their time fighting with one another.  Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
+"Aby zacząć powstanie, Roland potrzebuje pomocy w pokonaniu lordów w pobliżu "
+"jego zamku. Lordowie ci nie są sprzymierzeni, więc większość czasu spędzą na "
+"potyczkach między sobą. Zwyciężysz, gry pokonasz wszystkich wrogich "
+"bohaterów oraz zdobędziesz ich zamki."
 
 msgid ""
 "The local lords refuse to swear allegiance to Roland, and must be subdued. "
 "They are wealthy and powerful, so be prepared for a tough fight. Capture all "
 "enemy castles to win."
 msgstr ""
+"Miejscowi władcy odmawiają złożenia przysięgi lojalności Rolandowi i muszą "
+"zostać ujarzmieni. Są potężni i bogaci, więc przygotuj się na ciężką walkę. "
+"Aby wygrać, zdobądź wszystkie wrogie zamki."
 
 msgid ""
 "Your task is to defend the Dwarves against Archibald's forces. Capture all "
 "of the enemy towns and castles to win, and be sure not to lose all of the "
 "dwarf towns at once, or the enemy will have won."
 msgstr ""
+"Twoim zadaniem jest obrona krasnoludów przed siłami Archibalda. Aby "
+"zwyciężyć, zdobądź wszystkie zamki i miasta wroga oraz nie pozwól na utratę "
+"wszystkich osad krasnoludów, albo przeciwnik wygra."
 
 msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
+"Staniesz do walki o skarby i surowce z czterema sprzymierzonymi "
+"przeciwnikami. Aby zwyciężyć, zdobądź wszystkie wrogie miasta."
 
 msgid ""
 "Your enemies are allied against you and start close by, so be ready to come "
 "out fighting. You will need to own all four castles in this small valley to "
 "win."
 msgstr ""
+"Twoi wrogowie sprzymierzyli się przeciw tobie i zaczynają blisko twego "
+"zamku, więc przygotuj się na ostrą walkę. Aby zwyciężyć, trzeba będzie "
+"zdobyć wszystkie cztery zamki w tej małej dolinie."
 
 msgid ""
 "The Sorceress' guild of Noraston has requested Roland's aid against an "
@@ -811,6 +821,10 @@ msgid ""
 "don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy "
 "castle on an island in the ocean.)"
 msgstr ""
+"Gildia Czarodziejek z Norastonu poprosiła o pomoc Rolanda w walce z "
+"sojusznikami Archibalda. Zdobądź wszystkie wrogie zamki i nie strać "
+"Norastonu, albo przegrasz. (Wskazówka: jeden z zamków wroga znajduje się na "
+"wyspie wśród oceanu.)"
 
 msgid ""
 "Gather as large an army as possible and capture the enemy castle within 8 "
@@ -818,11 +832,17 @@ msgid ""
 "to the enemy castle. Any troops you have in your army at the end of this "
 "scenario will be with you in the final battle."
 msgstr ""
+"Zbierz armię i w ciągu 8 tygodni zdobądź zamek wroga. Walczysz tylko z "
+"jednym przeciwnikiem, ale musisz pokonać długą drogę, by dostać się do jego "
+"zamku. Jednostki, które będą znajdować się w twojej armii pod koniec "
+"scenariusza, będą walczyć w końcowej bitwie."
 
 msgid ""
 "Find the Crown before Archibald's heroes find it. Roland will need the Crown "
 "for the final battle against Archibald."
 msgstr ""
+"Znajdź koronę zanim zrobią to bohaterowie Archibalda. Roland będzie "
+"potrzebował jej w końcowej bitwie."
 
 msgid ""
 "Three allied enemies stand before you and victory, including Lord Corlagon. "
@@ -830,17 +850,25 @@ msgid ""
 "enemy. Remember that capturing Lord Corlagon will ensure that he will not "
 "fight against you in the final scenario."
 msgstr ""
+"Na twej drodze do zwycięstwa stoi 3 sprzymierzonych wrogów, włączając w to "
+"Lorda Carlagona. Roland jest w swoim zamku na pn/zach. i przegrasz, jeśli "
+"zostanie pokonany. Pamiętaj, że schwytanie Lorda Carlagona sprawi, iż nie "
+"będzie walczył w ostatnim scenariuszu."
 
 msgid ""
 "This is the final battle. Both you and your enemy are armed to the teeth, "
 "and all are allied against you. Capture Archibald to end the war!"
 msgstr ""
+"To ostatnia bitwa. Obie strony są uzbrojone po zęby, a wszyscy sprzymierzyli "
+"się przeciw tobie. Pokonaj Archibalda i zakończ wojnę!"
 
 msgid ""
 "Switching sides leaves you with three castles against the enemy's one.  This "
 "battle will be the easiest one you will face for the rest of the war..."
 "traitor."
 msgstr ""
+"Po zmianie stron będziesz mieć trzy zamki, a przeciwnik tylko jeden. To "
+"będzie najłatwiejsza z czekających cię bitew... zdrajco."
 
 msgid "Barbarian Wars"
 msgstr "Wojny Barbarzyńców"
@@ -875,6 +903,10 @@ msgid ""
 "energy fighting amongst themselves.  You will win when you own all of the "
 "enemy castles and there are no more heroes left to fight."
 msgstr ""
+"Król Archibald życzy sobie, abyś pokonał jego trzech wrogów w tym rejonie. "
+"Nie są sprzymierzeni, więc większość czasu spędzą na potyczkach między sobą. "
+"Wygrasz, jeśli zdobędziesz wszystkie zamki i pokonasz wszystkich bohaterów "
+"przeciwników."
 
 msgid ""
 "You must unify the barbarian tribes of the north by conquering them. As in "
@@ -882,6 +914,10 @@ msgid ""
 "more resources at their disposal. You will win when you own all of the enemy "
 "castles and there are no more heroes left to fight."
 msgstr ""
+"Musisz zjednoczyć plemiona barbarzyńców na północy, podbijając je. Podobnie "
+"jak w poprzednich misjach, wrogowie nie sprzymierzyli się przeciw tobie, ale "
+"mają więcej surowców do dyspozycji. Wygrasz jeśli podbijesz wszystkie wrogie "
+"zamki i pokonasz wszystkich bohaterów."
 
 msgid ""
 "Do-gooder wizards have taken the Necromancers' castle. You must retake it to "
@@ -889,6 +925,10 @@ msgid ""
 "have no castle and must take one within 7 days, or lose this battle. (Hint: "
 "The nearest castle is to the southeast.)"
 msgstr ""
+"Czarodzieje zajęli zamek nekromantów. Musisz go odbić, aby zwyciężyć. "
+"Pamiętaj, że choć zaczynasz z potężną armią, nie masz własnego zamku i "
+"musisz jakiś zdobyć w ciągu 7 dni, albo przegrasz. (Wskazówka: najbliższy "
+"zamek jest na południowym wschodzie)."
 
 msgid ""
 "The dwarves need conquering before they can interfere in King Archibald's "
@@ -896,18 +936,28 @@ msgid ""
 "so be ready for attack from multiple directions. You must capture all of the "
 "enemy towns and castles to claim victory."
 msgstr ""
+"Należy podbić krasnoludy, zanim zdołają przeszkodzić w wykonaniu planów "
+"króla Archibalda. Siły Rolanda posiadają od początku wiele miast i paru "
+"bohaterów, więc przygotuj się na ataki z kilku stron. Aby zwyciężyć, musisz "
+"zdobyć wszystkie wrogie miasta i zamki."
 
 msgid ""
 "You must put down a peasant revolt led by Roland's forces. All are allied "
 "against you, but you have Lord Corlagon, an experienced hero, to help you. "
 "Capture all enemy castles to win."
 msgstr ""
+"Musisz zdławić bunt chłopów podżegany przez siły Rolanda. Wszyscy "
+"sprzymierzyli się przeciw tobie, ale pomaga ci Lord Corlagon - doświadczony "
+"bohater. Aby wygrać, zdobądź wszystkie wrogie zamki."
 
 msgid ""
 "There are two enemies allied against you in this mission. Both are well "
 "armed and seek to evict you from their island. Avoid them and capture Dragon "
 "City to win."
 msgstr ""
+"W tej misji czeka na ciebie dwóch sprzymierzonych przeciwników. Obaj mają "
+"spore siły i chcą usunąć cię z ich wyspy. Postaraj się ich uniknąć i zdobądź "
+"Smocze Miasto, aby wygrać."
 
 msgid ""
 "Your orders are to conquer the country lords that have sworn to serve "
@@ -915,17 +965,26 @@ msgid ""
 "without a castle, you must hurry to capture one before the end of the week. "
 "Capture all enemy castles for victory."
 msgstr ""
+"Masz rozkaz pokonać paru zaściankowych lordów, którzy przysięgli służyć "
+"Rolandowi. Wszyscy przeciwnicy zjednoczyli się przeciw tobie. Ponieważ "
+"zaczynasz bez zamku, musisz się pospieszyć i opanować jakiś przed końcem "
+"tygodnia. Aby wygrać, zdobądź wszystkie wrogie zamki."
 
 msgid ""
 "Find the Crown before Roland's heroes find it. Archibald will need the Crown "
 "for the final battle against Roland."
 msgstr ""
+"Znajdź koronę zanim zrobią to bohaterowie Rolanda. Archibald będzie "
+"potrzebował jej w końcowej bitwie."
 
 msgid ""
 "This is the final battle. Both you and your enemy are armed to the teeth, "
 "and all are allied against you. Capture Roland to win the war, and be sure "
 "not to lose Archibald in the fight!"
 msgstr ""
+"To ostatnia bitwa. Obie strony są uzbrojone po zęby, a wszyscy sprzymierzyli "
+"się przeciw tobie. Schwytaj Rolanda i zakończ wojnę, ale dopilnuj tego, aby "
+"w walce nie stracić Archibalda!"
 
 msgid "Arrow's Flight"
 msgstr "Lot Strzały"
@@ -955,16 +1014,22 @@ msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
 "to operate in this region."
 msgstr ""
+"Podbij nieposłusznych lordów, aby zapewnić Imperium możliwość prowadzenia "
+"operacji w tym regionie."
 
 msgid ""
 "Eliminate all oposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
+"Pozbądź się wszystkich przeciwników na tym terenie, a pierwsza część "
+"artefaktu będzie twoja."
 
 msgid ""
 "The sorceresses to the northeast are rebelling! For the good of the empire "
 "you must quash their feeble uprising on your way to the mountains."
 msgstr ""
+"Czarodziejki z północnego wschodu zaczęły się buntować! Dla dobra Imperium, "
+"podczas podróży w góry, musisz zdławić ich żałosne powstanie."
 
 msgid ""
 "Having prepared for your arrival, Kraeger has arranged for a force of "
@@ -972,27 +1037,39 @@ msgid ""
 "before the first day of the third week, or the Necromancers will be too "
 "strong for you."
 msgstr ""
+"Przygotowawszy się na twe przybycie, Kraeger wspomógł się siłami "
+"nekromantów. Nim nadejdzie pierwszy dzień trzeciego tygodnia musisz zdobyć "
+"zamek Scabsdale, albo nekromanci będą zbyt silni dla ciebie."
 
 msgid ""
 "The barbarian despot in this area is, as yet, ignorant of your presence. "
 "Quickly, build up your forces before you are discovered and attacked! Secure "
 "the region by subduing all enemy forces."
 msgstr ""
+"Barbarzyński władca tego terytorium nie wie na razie o twej obecności. Zanim "
+"cię odkryje i zaatakuje, szybko wzmocnij swoją armię! Zajmij region i "
+"pokonaj wszystkie siły wroga."
 
 msgid ""
 "The Empire is weak in this region. You will be unable to completely subdue "
 "all forces in this area, so take what you can before reprisal strikes. "
 "Remember, your true goal is to claim the Helmet of Anduran."
 msgstr ""
+"W tym regionie wpływy Imperium są słabe. Nie uda ci się całkowicie podbić "
+"tego obszaru, więc zdobądź ile możesz zanim nadejdzie odwet. Pamiętaj, że "
+"twoim prawdziwym celem jest zdobycie Hełmu Andurana."
 
 msgid "For the good of the Empire, eliminate Kraeger."
-msgstr "Dla dobra królestwa, wyeliminuj Kraegera."
+msgstr "Dla dobra Imperium pozbądź się Kraegera."
 
 msgid ""
 "At last, you have the opportunity and the facilities to rid the Empire of "
 "the necromancer's evil. Eradicate them completely, and you will be sung as a "
 "hero for all time."
 msgstr ""
+"Nareszcie masz okazję i środki, by oczyścić Imperium z plugastwa "
+"nekromantów. Zniszcz ich całkowicie, a o twym bohaterstwie będzie się "
+"śpiewać przez wieki."
 
 msgid "Border Towns"
 msgstr "Miasta Graniczne"
@@ -1022,42 +1099,59 @@ msgid ""
 "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the "
 "forefather of all descendants."
 msgstr ""
+"Podbij i zjednocz wszystkie wrogie plemiona. Nie wolno ci utracić Jarkonasa "
+"- przodka całej rodziny."
 
 msgid ""
 "Your rival, the Kingdom of Harondale, is attacking weak towns on your "
 "border! Recover from their first strike and crush them completely!"
 msgstr ""
+"Rywalizujące królestwo Harondale atakuje słabe miasta przy twojej granicy! "
+"Wytrzymaj pierwsze uderzenie i całkowicie zmiażdż wroga!"
 
 msgid ""
 "Find your wayward son Joseph who is rumored to be living in the desolate "
 "lands. Do it before the first day of the third month or it will be of no "
 "help to your family."
 msgstr ""
+"Znajdź swojego krnąbrnego syna, Josepha, który podobno żyje gdzieś na "
+"pustkowiu. Dokonaj tego zanim nastanie pierwszy dzień trzeciego miesiąca, "
+"albo twojej rodzinie już nic nie pomoże."
 
 msgid ""
 "Rescue your crazy uncle Ivan. Find him before the first day of the fourth "
 "month or it will be no help to your kingdom."
 msgstr ""
+"Uratuj swojego szalonego wuja Ivana. Znajdź go nim nadejdzie pierwszy dzień "
+"czwartego miesiąca, albo nic nie pomoże już twemu królestwu."
 
 msgid ""
 "Destroy the barbarians who are attacking the southern border of your "
 "kingdom! Recover your fallen towns, and then invade the jungle kingdom. "
 "Leave no enemy standing."
 msgstr ""
+"Zniszcz barbarzyńców, którzy atakują południową granicę naszego państwa! "
+"Odbij stracone miasta, a następnie uderz na położone w dżungli królestwo. "
+"Pokonaj wszystkich wrogów."
 
 msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
-msgstr ""
+msgstr "Odbij zamek Ivory Gates, który padł z powodu zdrady."
 
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
 "so they will send you wood every 2 weeks. You must complete your mission "
 "before the first day of the seventh month, or the kingdom will surely fall."
 msgstr ""
+"Zyskaj przychylność elfów. Nie pozwalają one na ścinanie drzew, więc co dwa "
+"tygodnie przysyłać będziemy drewno. Musisz wykonać swą misję przed pierwszym "
+"dniem siódmego miesiąca, albo nasze królestwo upadnie."
 
 msgid ""
 "This is the final battle against your rival kingdom of Harondale. Eliminate "
 "everyone, and don't lose the hero Jarkonas VI."
 msgstr ""
+"To ostateczna bitwa przeciw wrogiemu królestwu Harondale. Pokonaj wszystkich "
+"i nie strać Jarkonasa VI."
 
 msgid "Fount of Wizardry"
 msgstr "Źródło Magii"
@@ -1076,11 +1170,15 @@ msgid ""
 "The completion of this task will give you a fighting chance against your "
 "rivals."
 msgstr ""
+"Twoja misja polega na pokonaniu walczących magów na Zamglonych Wyspach. "
+"Wykonanie tego zadania da ci szansę w walce przeciw twoim rywalom."
 
 msgid ""
 "The location of the great library has been discovered! You must make your "
 "way to it, and reclaim the city of Chronos in which it lies."
 msgstr ""
+"Udało się odkryć miejsce położenia biblioteki! Musisz do niej wyruszyć i "
+"zająć miasto Chronos, w którym się znajduje."
 
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
@@ -1088,11 +1186,17 @@ msgid ""
 "Find the orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
+"Znajdź Kulę Negacji, która podobno jest zakopana gdzieś w tej krainie. Na "
+"kamiennych obeliskach znajdują się wskazówki, które cię do niej doprowadzą. "
+"Znajdź Kulę nim nastanie pierwszy dzień szóstego miesiąca, albo twoi rywale "
+"zdobędą ją przed tobą."
 
 msgid ""
 "You must take control of the castle of Magic, where the fount of wizardry "
 "lies. Do this and your victory will be supreme."
 msgstr ""
+"Musisz zająć zaklęty zamek, gdzie znajduje się źródło magii. Dokonaj tego, a "
+"odniesiesz wspaniałe zwycięstwo."
 
 msgid "Blood is Thicker"
 msgstr "Więzy Krwi"
@@ -1118,16 +1222,22 @@ msgid ""
 "Find and defeat Martine, the pirate leader, who resides in Pirates Cove. Do "
 "not lose Gallavant or your quest will be over."
 msgstr ""
+"Znajdź i pokonaj Martina, przywódcę piratów, który przebywa w Zatoce "
+"Piratów. Nie wolno ci stracić Gallavanta, albo twoja przygoda się skończy."
 
 msgid ""
 "Eliminate all the other forces who oppose the rule of Lord Alberon. "
 "Gallavant must not die."
 msgstr ""
+"Pokonaj wszystkie siły sprzeciwiające się rządom Lorda Alberona. Gallavant "
+"nie może zginąć."
 
 msgid ""
 "Overthrow the entrenched monarchy of Lord Alberon, and claim all the land in "
 "your name. Gallavant must not die."
 msgstr ""
+"Obal monarchię Lorda Alberona i zajmij cały kraj w swoim imieniu. Gallavant "
+"nie może zginąć."
 
 msgid " bane"
 msgstr " pogromca"
@@ -1183,7 +1293,7 @@ msgstr ""
 msgid ""
 "The dragons, snarling and growling, agree to join forces with you, their "
 "'Ally'."
-msgstr "Warczące i burczące smoki przystają na dołączenie do twojej armi."
+msgstr "Warczące i burczące smoki przystają na dołączenie do twojej armii."
 
 msgid ""
 "As you approach the group of elves, their leader calls them all to "
@@ -1192,9 +1302,9 @@ msgid ""
 "your ranks."
 msgstr ""
 "Kiedy zbliżasz się do grupy elfów, jej przywódca zwołuje wszystkich i "
-"wykrzykuje, \"Kto jest na tyle odwarzny by dolaczyć do naszego "
+"wykrzykuje, \"Kto jest na tyle odważny by dołączyć do naszego "
 "nieustraszonego sprzymierzeńca?\" Członkowie grupy wiwatują i biegną do "
-"ciebie by dolączyć do twoich szeregów."
+"ciebie by dołączyć do twoich szeregów."
 
 msgid ""
 "The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may "
@@ -1858,12 +1968,12 @@ msgid "Stonehenge"
 msgstr "Kamienny krąg"
 
 msgid "Upg. Stonehenge"
-msgstr "Rozb. kammienny krąg"
+msgstr "Rozb. kamienny krąg"
 
 msgid "Fenced Meadow"
 msgstr "Ogrodzona łąka"
 
-msgid "Red Tower"
+msgid "sorceress|Red Tower"
 msgstr "Czerwona wieża"
 
 msgid "Dungeon"
@@ -1892,6 +2002,9 @@ msgstr "Bagno"
 
 msgid "Green Tower"
 msgstr "Zielona wieża"
+
+msgid "warlock|Red Tower"
+msgstr "Czerwona wieża"
 
 msgid "Black Tower"
 msgstr "Czarna wieża"
@@ -2110,7 +2223,7 @@ msgid ""
 "there and becomes more vulnerable to attack."
 msgstr ""
 "Fosa spowalnia atakujące jednostki. Każdy oddział, który wejdzie do fosy, "
-"musi się w niej zatrzymać i staje się mniej odporny ma ataki."
+"musi się w niej zatrzymać i staje się mniej odporny na ataki."
 
 msgid ""
 "The Castle improves town defense and increases income to %{count} gold per "
@@ -2178,7 +2291,7 @@ msgid ""
 "Unable to merge two armies together. Rearrange monsters manually before "
 "moving the hero to the garrison."
 msgstr ""
-"Nie można połączyć armii. Zmień pozycje potworów w bohaterzeprzed wejściem "
+"Nie można połączyć armii. Zmień pozycje stworzeń w bohaterze przed wejściem "
 "do garnizonu."
 
 msgid "This town may not be upgraded to a castle."
@@ -2266,7 +2379,6 @@ msgstr "Wyjście z zamku"
 msgid "Castle Options"
 msgstr "Opcje zamku"
 
-#, fuzzy
 msgid "Not enough resources to recruit creatures."
 msgstr "Brak zasobów aby kupić stworzenia."
 
@@ -2276,9 +2388,8 @@ msgstr "Nie możesz teraz rekrutować, w twojej armii nie ma już miejsca."
 msgid "No creatures available for purchase."
 msgstr "Brak stworzeń do zakupienia."
 
-#, fuzzy
 msgid "Recruit Creatures"
-msgstr "Zakup stworzeń"
+msgstr "Rekrutuj stworzenia"
 
 msgid "Town Population Information and Statistics"
 msgstr "Statystyki populacji miasta"
@@ -2419,20 +2530,53 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "(Przyłącza się %{percent}% oddziału)"
 
-msgid "Total: "
-msgstr "Masz: "
+msgid "off"
+msgstr "wyłączone"
 
-msgid "No room in"
-msgstr "Brak wolnych "
+msgid "Music"
+msgstr "Muzyka"
 
-msgid "the garrison"
-msgstr "slotów"
+msgid "Effects"
+msgstr "Efekty"
+
+msgid "MIDI"
+msgstr "MIDI"
+
+msgid "MIDI Expansion"
+msgstr "MIDI z dodatku"
+
+msgid "External"
+msgstr "Zewnętrzna"
+
+msgid "Music Type"
+msgstr "Rodzaj muzyki"
+
+msgid "3D Audio"
+msgstr "Dźwięk 3D"
+
+msgid "Toggle ambient music level."
+msgstr "Zmień poziom głośności muzyki."
+
+msgid "Toggle foreground sounds level."
+msgstr "Zmień poziom głośności efektów."
+
+msgid "Change the type of music."
+msgstr "Zmień rodzaj muzyki."
+
+msgid "Toggle 3D effects of foreground sounds."
+msgstr "Włącz lub wyłącz efekty dźwiękowe 3D."
+
+msgid "Okay"
+msgstr "Ok"
 
 msgid "Build a new ship:"
 msgstr "Zbuduj nowy statek:"
 
 msgid "Resource cost:"
 msgstr "Koszt:"
+
+msgid "Total: "
+msgstr "Masz: "
 
 msgid "Need: "
 msgstr "Potrzeba: "
@@ -2461,9 +2605,8 @@ msgstr "Zapisz bieżącą grę."
 msgid "Quit"
 msgstr "Wyjście"
 
-#, fuzzy
 msgid "Quit out of Heroes of Might and Magic II."
-msgstr "Oryginał Heroes of Might and Magic II przygotowali"
+msgstr "Zakończenie gry Heroes of Might and Magic II."
 
 msgid "Language"
 msgstr "Język"
@@ -2477,26 +2620,11 @@ msgstr "Eksperymentalne"
 msgid "Settings"
 msgstr "Ustawienia"
 
-msgid "off"
-msgstr "wyłączone"
+msgid "Audio"
+msgstr ""
 
-msgid "Music"
-msgstr "Muzyka"
-
-msgid "Effects"
-msgstr "Efekty"
-
-msgid "MIDI"
-msgstr "MIDI"
-
-msgid "MIDI Expansion"
-msgstr "MIDI z dodatku"
-
-msgid "External"
-msgstr "Zewnętrzna"
-
-msgid "Music Type"
-msgstr "Rodzaj muzyki"
+msgid "settings"
+msgstr "Ustawienia"
 
 msgid "Hot Keys"
 msgstr "Skróty klaw."
@@ -2505,7 +2633,7 @@ msgid "In-game"
 msgstr "W grze"
 
 msgid "Black & White"
-msgstr "Czarny i biały"
+msgstr "Czarno-biały"
 
 msgid "Mouse Cursor"
 msgstr "Kursor myszki"
@@ -2513,9 +2641,29 @@ msgstr "Kursor myszki"
 msgid "Color"
 msgstr "Kolor"
 
-#, fuzzy
 msgid "Text Support"
-msgstr "QA i wsparcie"
+msgstr "Dodatkowe informacje"
+
+msgid "Evil"
+msgstr "Zły"
+
+msgid "Good"
+msgstr "Dobry"
+
+msgid "Interface Type"
+msgstr "Typ interfejsu"
+
+msgid "Auto Resolve"
+msgstr "Automatyczna"
+
+msgid "Auto, No Spells"
+msgstr "Auto, bez zaklęć"
+
+msgid "Manual"
+msgstr "Ręczna"
+
+msgid "Battles"
+msgstr "Walki"
 
 msgid "Select Game Language"
 msgstr "Wybierz język gry"
@@ -2529,38 +2677,36 @@ msgstr "Wybierz rozdzielczość gry:"
 msgid "Change resolution of the game."
 msgstr "Zmień rozdzielczość gry."
 
+msgid "Change audio settings of the game."
+msgstr "Zmień ustawienia dźwiękowe gry."
+
 msgid "Experimental game settings."
-msgstr "Eksperymentalne ustawienia gry."
+msgstr "Zmień eksperymentalne ustawienia gry."
 
-msgid "Toggle ambient music level."
-msgstr "Zmiana poziomu głośności muzyki."
-
-msgid "Toggle foreground sounds level."
-msgstr "Zmiana poziomu głośności efektów."
-
-msgid "Change the type of music."
-msgstr "Zmienia rodzaj muzyki."
+msgid "Toggle instant battle mode."
+msgstr "Zmień tryb błyskawicznej walki."
 
 msgid "Check all Hot Keys used in the game."
-msgstr ""
+msgstr "Zobacz wszystkie skróty klawiszowe gry."
+
+msgid "Toggle the type of interface you want to use."
+msgstr "Zmień typ interfejsu."
 
 msgid ""
 "Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
 "move as smoothly as black and white ones."
 msgstr ""
+"Zmień kursor na kolorowy lub czarno-biały. Kolorowy kursor wygląda ładniej, "
+"ale czasem nie jest tak płynny jak czarno-biały."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
-msgstr ""
-
-msgid "Okay"
-msgstr "Ok"
+msgstr "Włącza lub wyłącza dodatkowe informacje o oknach i zdarzeniach w grze."
 
 msgid "Attention"
 msgstr "Uwaga"
 
-#, fuzzy
 msgid ""
 "Your version of Heroes of Might and Magic II does not support any other "
 "languages than English."
@@ -2665,7 +2811,7 @@ msgid ""
 "the items you wish to trade with and for."
 msgstr ""
 "Proszę, zapoznaj się z naszą ofertą. Jeśli masz zamiar handlować, kliknij na "
-"towarach które chesz wymienić."
+"towarach które chcesz wymienić."
 
 msgid ""
 "You have received quite a bargain. I expect to make no profit on the deal. "
@@ -2771,10 +2917,10 @@ msgid "Knowledge:"
 msgstr "Wiedza:"
 
 msgid "Spell Points:"
-msgstr "Ptk. magii:"
+msgstr "Pkt. magii:"
 
 msgid "Move Points:"
-msgstr "Ptk. ruchu:"
+msgstr "Pkt. ruchu:"
 
 msgid "Cost per troop:"
 msgstr "Koszt jednostki:"
@@ -3005,15 +3151,6 @@ msgstr "Szybk. wroga"
 msgid "Scroll Speed"
 msgstr "Prędkość przewijania"
 
-msgid "Evil"
-msgstr "Zły"
-
-msgid "Good"
-msgstr "Dobry"
-
-msgid "Interface Type"
-msgstr "Typ intefejsu"
-
 msgid "Hide"
 msgstr "Ukryj"
 
@@ -3021,41 +3158,23 @@ msgid "Show"
 msgstr "Pokaż"
 
 msgid "Interface"
-msgstr "Intefejs"
-
-msgid "Auto Resolve"
-msgstr "Automatyczna"
-
-msgid "Auto, No Spells"
-msgstr "Auto, bez zaklęć"
-
-msgid "Battles"
-msgstr "Walki"
-
-msgid "Manual"
-msgstr "Ręczna"
+msgstr "Interfejs"
 
 msgid "Change the speed at which your heroes move on the main screen."
-msgstr "Zmienia szybkość, z jaką poruszają się Twoi bohaterowie na ekranie."
+msgstr "Zmień szybkość z jaką poruszają się twoi bohaterowie na ekranie."
 
 msgid ""
 "Sets the speed that A.I. heroes move at.  You can also elect not to view A."
 "I. movement at all."
 msgstr ""
-"Zmienia szybkość, z jaką poruszają się bohaterowie sterowani przez A.I."
-"Możesz również wyłączyć podgląd ruchów A.I."
+"Zmień szybkość, z jaką poruszają się bohaterowie sterowani przez A.I. Możesz "
+"również wyłączyć podgląd ruchów A.I."
 
 msgid "Sets the speed at which you scroll the window."
-msgstr "Zmienia prędkość przewijania okna."
-
-msgid "Toggle the type of interface you want to use."
-msgstr "Zmienia typ interfejsu."
+msgstr "Zmień prędkość przewijania okna."
 
 msgid "Toggle interface visibility."
-msgstr "Zmienia widoczność interfejsu."
-
-msgid "Toggle instant battle mode."
-msgstr "Zmienia tryb błyskawicznej walki."
+msgstr "Zmień widoczność interfejsu."
 
 msgid "Att."
 msgstr "Atk."
@@ -3186,6 +3305,9 @@ msgstr "QA i wsparcie"
 msgid "Development"
 msgstr "Development"
 
+msgid "Dev and Support"
+msgstr "Development i wsparcie"
+
 msgid "Visit us at "
 msgstr "Odwiedź nas "
 
@@ -3211,8 +3333,8 @@ msgid "Original project before 0.7"
 msgstr "Przed wersją 0.7"
 
 #, fuzzy
-msgid "Original Heroes of Might and Magic II team"
-msgstr "Oryginał Heroes of Might and Magic II przygotowali"
+msgid "Heroes of Might and Magic II: The Succession Wars team"
+msgstr "Zespół który przygotował oryginalną grę Heroes of Might and Magic II"
 
 msgid "Designed and Directed"
 msgstr "Projekt i kierownictwo projektu"
@@ -3265,37 +3387,104 @@ msgstr "Instrukcja i plik pomocy"
 msgid "Scenarios"
 msgstr "Scenariusze"
 
+#, fuzzy
+msgid "Heroes of Might and Magic II: The Price of Loyalty team"
+msgstr "Zespół który przygotował oryginalną grę Heroes of Might and Magic II"
+
+msgid "Cyberlore Studios"
+msgstr ""
+
+msgid "Design Lead"
+msgstr ""
+
+msgid "Designers"
+msgstr ""
+
+#, fuzzy
+msgid "Programming Lead"
+msgstr "Projekt i programowanie"
+
+msgid "Art Lead"
+msgstr ""
+
+#, fuzzy
+msgid "Playtesters"
+msgstr "2 graczy"
+
+msgid "New World Computing"
+msgstr ""
+
+msgid "Designer"
+msgstr ""
+
+#, fuzzy
+msgid "Producers"
+msgstr "Producent"
+
+#, fuzzy
+msgid "QA Managers"
+msgstr "Kierownik kontroli jakości"
+
+#, fuzzy
+msgid "Sound Design"
+msgstr "Muzyka i projekt dźwięku"
+
+#, fuzzy
+msgid "Town Themes"
+msgstr "Brama do miasta"
+
+msgid "Alto Sax"
+msgstr ""
+
+msgid "Harpsichord and Piano"
+msgstr ""
+
+msgid "Basso Vocal"
+msgstr ""
+
+msgid "Soprano Vocal"
+msgstr ""
+
+msgid "Recorded at Green Street Studios"
+msgstr ""
+
+msgid "German Consultant"
+msgstr ""
+
+msgid "Map Designers"
+msgstr ""
+
+msgid "Package Design"
+msgstr ""
+
 msgid "Unknown Hero"
 msgstr "Nieznany bohater"
 
 msgid "Your Name"
 msgstr "Twoje imię"
 
-#, fuzzy
 msgid "Standard"
-msgstr "Gra standardowa"
+msgstr "Standard"
 
-#, fuzzy
 msgid "View High Scores for Standard Maps."
-msgstr "Obejrzyj najlepsze wyniki kampanii"
+msgstr "Obejrzyj najlepsze wyniki dla pojedynczych scenariuszy."
 
 msgid "Campaign"
 msgstr "Kampania"
 
 msgid "View High Scores for Campaigns."
-msgstr "Obejrzyj najlepsze wyniki kampanii"
-
-msgid ""
-"Invalid file game type. Please ensure that you are running the latest type "
-"of save files."
-msgstr "Ten zapis gry nie jest obsługiwany przez aktualną wersję gry."
+msgstr "Obejrzyj najlepsze wyniki dla kampanii."
 
 msgid "Warning"
 msgstr "Uwaga"
 
+msgid "This file contains a save with an invalid game type."
+msgstr ""
+
+#, fuzzy
 msgid ""
-"This file is saved in the \"The Price of Loyalty\" version.\n"
-"Some items may be unavailable."
+"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
+"Some items may not be available."
 msgstr ""
 "Ten plik jest zapisany w wersji \"Cena Lojalności\".\n"
 "Niektóre elementy mogą być niedostępne."
@@ -3356,11 +3545,12 @@ msgstr "fheroes2 Resurrection Team prezentuje"
 msgid "Greetings!"
 msgstr "Witaj!"
 
-#, fuzzy
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
 "starting the game please choose game resolution."
-msgstr "fheroes2 wita! Przed rozpoczęciem gry wybierz rozdzielczość gry."
+msgstr ""
+"Witamy w grze Heroes of Might and Magic II na silniku fheroes2! Przed "
+"rozpoczęciem wybierz rozdzielczość gry."
 
 msgid "Please Remember"
 msgstr "Pamiętaj"
@@ -3397,9 +3587,9 @@ msgstr ""
 "\n"
 "Przyjemnej zabawy!"
 
-#, fuzzy
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
-msgstr "Zakończenie gry fheroes2 i powrót do systemu operacyjnego."
+msgstr ""
+"Zakończ grę Heroes of Might and Magic II i przejdź do systemu operacyjnego."
 
 msgid "Credits"
 msgstr "Autorzy"
@@ -3420,9 +3610,14 @@ msgid "Game Settings"
 msgstr "Ustawienia gry"
 
 msgid ""
+"Required video files for campaign selection window are missing. Please make "
+"sure that all necessary files are present in the system."
+msgstr ""
+
+msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
 "and Magic II."
-msgstr ""
+msgstr "Kampania Rolanda lub Archibalda z podstawowej wersji gry."
 
 msgid "Original Campaign"
 msgstr "Oryginalna kampania"
@@ -3574,7 +3769,7 @@ msgstr ""
 
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
 msgstr ""
-"Pokonaj wszystkich bohaterów przeciwnika i zajmij wszystkie miasta i zamkni "
+"Pokonaj wszystkich bohaterów przeciwnika i zajmij wszystkie miasta i zamki "
 "wrogów."
 
 msgid "Run out of time. (Fail to win by a certain point.)"
@@ -3602,7 +3797,7 @@ msgid ""
 ", or you may win by defeating all enemy heroes and capturing all enemy towns "
 "and castles."
 msgstr ""
-", możesz także wygrać pokonując wszystkich bohaterów wroga i przechwytując "
+", możesz także wygrać pokonując wszystkich bohaterów wroga i zdobywając "
 "wszystkie jego miasta i zamki."
 
 msgid "Lose the castle '%{name}'."
@@ -3668,7 +3863,7 @@ msgstr ""
 "ta zostanie dodana do wyniku końcowego."
 
 msgid "Click to accept these settings and start a new game."
-msgstr "Klikni, aby użyć tych ustawień i rozpocząć nową grę."
+msgstr "Kliknij, aby użyć tych ustawień i rozpocząć nową grę."
 
 msgid "Click to return to the main menu."
 msgstr "Kliknij, aby wrócić do głównego menu."
@@ -3748,10 +3943,10 @@ msgid "Select the next Hero."
 msgstr "Wybierz następnego bohatera."
 
 msgid "Continue Movement"
-msgstr "Dalszy ruch"
+msgstr "Kontynuuj ruch"
 
 msgid "Continue the Hero's movement along the current path."
-msgstr "Dalszy ruch bohatera wzdłuż wybranej ścieżki."
+msgstr "Kontynuuj ruch bohatera wzdłuż wybranej ścieżki."
 
 msgid "Kingdom Summary"
 msgstr "Przegląd królestwa"
@@ -3889,12 +4084,12 @@ msgid ""
 "changeable. Depending on the scenario, a player may receive additional towns "
 "and/or heroes not of their primary alignment."
 msgstr ""
-"Pozwal ci zmienić klasę gracza. Opcja ta nie zawsze jest aktywna. W "
+"Pozwala ci zmienić klasę gracza. Opcja ta nie zawsze jest aktywna. W "
 "zależności od scenariusza, gracz może otrzymać dodatkowe miasta oraz/lub "
 "bohaterów niezgodne z przynależną im klasą."
 
 msgid "%{color} player"
-msgstr "%{color} Gracz"
+msgstr "%{color} gracz"
 
 msgid "View %{skill} Info"
 msgstr "Wyświetl informacje o %{skill}"
@@ -3942,14 +4137,13 @@ msgid "Romanian"
 msgstr "Rumuński"
 
 msgid "Spanish"
-msgstr ""
+msgstr "Hiszpański"
 
 msgid "Swedish"
-msgstr ""
+msgstr "Szwedzki"
 
-#, fuzzy
 msgid "Portuguese"
-msgstr "Rozbójnicy"
+msgstr "Portugalski"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -4294,16 +4488,16 @@ msgid "Searching inside, you find the %{artifact}."
 msgstr "Przeszukując wnętrze, znajdujesz %{artifact}."
 
 msgid "Inside, you find some of the wagon's cargo still intact."
-msgstr "Wewnatrz, odkrywasz, że część ładunku jest nadal nienaruszona."
+msgstr "Wewnątrz, odkrywasz, że część ładunku jest nadal nienaruszona."
 
 msgid "You search through the flotsam, and find some wood and some gold."
-msgstr "Przeszukujsz wrak i znajdujesz trochę drewna i trochę złota."
+msgstr "Przeszukujesz wrak i znajdujesz trochę drewna i trochę złota."
 
 msgid "You search through the flotsam, and find some wood."
-msgstr "Przeszukujsz wrak i znajdujesz trochę drewna."
+msgstr "Przeszukujesz wrak i znajdujesz trochę drewna."
 
 msgid "You search through the flotsam, but find nothing."
-msgstr "Przeszukujsz wrak, lecz nie znajdujesz niczego"
+msgstr "Przeszukujesz wrak, lecz nie znajdujesz niczego."
 
 msgid "Shrine of the 1st Circle"
 msgstr "Kaplica pierwszego kręgu"
@@ -4885,7 +5079,7 @@ msgstr ""
 "Zgadzasz się?"
 
 msgid "As you approach the dwelling, you notice that there is no one here."
-msgstr "dy zbliżasz się do domostwa, zauważasz, że nikogo tam nie ma."
+msgstr "Gdy zbliżasz się do domostwa, zauważasz, że nikogo tam nie ma."
 
 msgid ""
 "You search the ruins, but the Medusas that used to live here are gone. "
@@ -4899,7 +5093,7 @@ msgid ""
 "army for a price. Do you want to recruit Medusas?"
 msgstr ""
 "Odnajdujesz kilka meduz żyjących wśród ruin. Gotowe są dołączyć do twojej "
-"armi za odpowiednią cenę. Czy chcesz nająć meduzy?"
+"armii za odpowiednią cenę. Czy chcesz nająć meduzy?"
 
 msgid ""
 "You've found a Sprite Tree City. Unfortunately, none of the Sprites living "
@@ -4925,7 +5119,7 @@ msgid ""
 "Distant sounds of music and laughter draw you to a colorful wagon housing "
 "Rogues. Do you wish to have any Rogues join your army?"
 msgstr ""
-"źwięki muzyki i śmiechy prowadzą cię do kolorowego taboru, w którym "
+"Dźwięki muzyki i śmiechy prowadzą cię do kolorowego taboru, w którym "
 "mieszkają rozbójnicy. Czy chcesz, aby przyłączyli się do ciebie?"
 
 msgid ""
@@ -4996,7 +5190,7 @@ msgstr ""
 "mówi: \"Czy chcesz przywołać moce wody?\""
 
 msgid "This burial site is deathly still."
-msgstr "Na cmentarzysku panuje niczym nie zmącona cisza."
+msgstr "Na cmentarzysku panuje niczym niezmącona cisza."
 
 msgid ""
 "Restless spirits of long dead warriors seeking their final resting place "
@@ -5055,8 +5249,8 @@ msgid ""
 "A few Trolls remain, cowering under the bridge. They approach you and offer "
 "to join your forces as mercenaries. Do you want to buy any Trolls?"
 msgstr ""
-"Pod mostem kuli się kilka trolli. Zbliają się do ciebie i proponują dołączyć "
-"się do twojej armii jako najemnicy. Czy chcesz nająć trolle?"
+"Pod mostem kuli się kilka trolli. Zbliżają się do ciebie i proponują "
+"dołączyć się do twojej armii jako najemnicy. Czy chcesz nająć trolle?"
 
 msgid ""
 "The Dragon city has no Dragons willing to join you this week. Perhaps a "
@@ -5277,7 +5471,7 @@ msgid ""
 "The Demon screams its challenge and attacks! After a short, desperate "
 "battle, you slay the monster and receive %{exp} experience points."
 msgstr ""
-"Demon wydaje z siebie wyzywający krzyk i atakuje! Po krótkiej bitwie, "
+"Demon wydaje z siebie wyzywający okrzyk i atakuje! Po krótkiej bitwie, "
 "zabijasz potwora i otrzymjesz %{exp} punktów doświadczenia."
 
 msgid ""
@@ -5369,9 +5563,9 @@ msgid ""
 "would aid your riders greatly. I insist you take them.\""
 msgstr ""
 "Główny koniuszy mówi do ciebie: \"Masz świetnego rumaka. Obawiam się, że nie "
-"mogę dać ci lepszego, ale konie twojej kawalerii zdają się pochodzić z "
-"nienajlepszej hodowli. Mamy wiele szkolony rumaków bojowych, które "
-"przydałyby się twoim jeźdźcom. Weź je, nalegam.\""
+"mogę dać ci lepszego, ale konie twojej kawalerii zdają się pochodzić z nie "
+"najlepszej hodowli. Mamy wiele szkolony rumaków bojowych, które przydałyby "
+"się twoim jeźdźcom. Weź je, nalegam.\""
 
 msgid ""
 "As you approach the stables, the head groom appears, leading a fine looking "
@@ -5539,7 +5733,6 @@ msgstr ""
 "To zaklęcie kosztuje %{mana} pkt. magii. Masz tylko %{point}, więc nie "
 "możesz go rzucić."
 
-#, fuzzy
 msgid "The spell was not found."
 msgstr "Zaklęcie nie zostało znalezione."
 
@@ -5554,7 +5747,7 @@ msgstr ""
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
-"Nie posiadasz w tym momęcie żadnego miasta lub zamku, z tego powodu nie "
+"Nie posiadasz w tym momencie żadnego miasta lub zamku, z tego powodu nie "
 "możesz rzucić zaklęcia."
 
 msgid "This hero is already in a town, so you can't cast the spell."
@@ -5888,7 +6081,7 @@ msgid "Basic Ballistics"
 msgstr "Podstawowa balistyka"
 
 msgid "Basic Eagle Eye"
-msgstr "Podstowowe sokole oko"
+msgstr "Podstawowe sokole oko"
 
 msgid "Expert Ballistics"
 msgstr "Mistrzowska balistyka"
@@ -7105,7 +7298,7 @@ msgid "Vampire Lord"
 msgstr "Wampirzy lord"
 
 msgid "Vampire Lords"
-msgstr "Wampirzy lordowi"
+msgstr "Wampirzy lordowie"
 
 msgid "Lich"
 msgstr "Lisz"
@@ -8221,34 +8414,30 @@ msgstr "Księga magii"
 msgid "The %{name} enables you to cast spells."
 msgstr "%{name} pozwala ci rzucać czary."
 
-#, fuzzy
 msgid "Dummy 1"
-msgstr "Mumia"
+msgstr "Artefakt 1"
 
-#, fuzzy
 msgid "The reserved artifact."
-msgstr "z jednym artefaktem."
+msgstr "Zarezerwowany artefakt."
 
-#, fuzzy
 msgid "Dummy 2"
-msgstr "Mumia"
+msgstr "Artefakt 2"
 
-#, fuzzy
 msgid "Dummy 3"
-msgstr "Mumia"
+msgstr "Artefakt 3"
 
-#, fuzzy
 msgid "Dummy 4"
-msgstr "Mumia"
+msgstr "Artefakt 4"
 
 msgid "Spell Scroll"
 msgstr "Zwój z zaklęciem"
 
-#, fuzzy
 msgid ""
 "This %{name} gives your hero the ability to cast the %{spell} spell if your "
 "hero has a Magic Book."
-msgstr "%{name} daje twojemu bohaterowi mozliwość rzucania czaru %{spell}"
+msgstr ""
+"Ten %{name} daje twojemu bohaterowi możliwość rzucania czaru %{spell} jeśli "
+"bohater posiada księgę zaklęć."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
@@ -8427,8 +8616,8 @@ msgid ""
 msgstr ""
 "Na polu bitwy znajdujesz paladyna, śmiertelnie zranionego przez grupę "
 "zombie. Prosi cię o wzięcie jego młota i dokończenie tego, co zaczął. Gdy "
-"podnosisz młot, rozbrzmiewa dziwnym dźwiękiem, a po chwili wszystko zamazuje "
-"ci się przed oczami. Zombie leżą martwe, a z młota kapie krew."
+"podnosisz młot, rozbrzmiewa dziwnym dźwiękiem, a po chwili wszystko "
+"rozmazuje ci się przed oczami. Zombie leżą martwe, a z młota kapie krew."
 
 msgid "Legendary Scepter"
 msgstr "Legendarne berło"
@@ -9130,9 +9319,6 @@ msgstr ""
 "Zaklęcie kontroluje do\n"
 "%{hp} punktów życia."
 
-msgid "game: always confirm for rewrite savefile"
-msgstr "gra: zawsze potwierdzaj nadpisanie zapisu stanu gry"
-
 msgid "game: remember last focus"
 msgstr "gra: pamiętaj ostatni ekran"
 
@@ -9161,15 +9347,14 @@ msgstr "zamek: zezwól na strażników"
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "bohaterowie: pozwól kupować księgę zaklęć w kaplicach"
 
-#, fuzzy
 msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
-"bohaterowie: zapamiętaj punkty ruchu przy obliczaniu rezultatu ucieczki/"
+"bohaterowie: zapamiętaj punkty ruchu przy obliczaniu rezultatu ucieczki oraz "
 "kapitulacji"
 
 msgid "heroes: allow to choose any primary skill in Arena"
 msgstr ""
-"bohaterowie: pozwól na wybór dowolnej umiejetności podstawowej na arenie"
+"bohaterowie: pozwól na wybór dowolnej umiejętności podstawowej na arenie"
 
 msgid "battle: allow soft wait for troops"
 msgstr "walka: pozwól na delikatne czekanie na jednostki"
@@ -9197,7 +9382,7 @@ msgid "The ultimate artifact is really the %{name}."
 msgstr "%{name} to naprawdę najpotężniejszy artefakt."
 
 msgid "The ultimate artifact may be found in the %{name} regions of the world."
-msgstr "Najpotężniejszy artefakt można znaleść w %{name} części świata."
+msgstr "Najpotężniejszy artefakt można znaleźć w %{name} części świata."
 
 msgid "north-west"
 msgstr "północno-zachodniej"
@@ -9256,3 +9441,12 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "No room in"
+#~ msgstr "Brak wolnych "
+
+#~ msgid "the garrison"
+#~ msgstr "slotów"
+
+#~ msgid "game: always confirm for rewrite savefile"
+#~ msgstr "gra: zawsze potwierdzaj nadpisanie zapisu stanu gry"

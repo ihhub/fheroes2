@@ -151,7 +151,7 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
 
     // hero button
     pt.x = box.GetArea().x + box.GetArea().width / 2 - 18;
-    pt.y = box.GetArea().y + box.GetArea().height - 36;
+    pt.y = box.GetArea().y + box.GetArea().height - 35;
 
     const int icnHeroes = isEvilInterface ? ICN::EVIL_ARMY_BUTTON : ICN::GOOD_ARMY_BUTTON;
     fheroes2::ButtonSprite button_hero
@@ -183,7 +183,7 @@ int DialogSelectSecondary( const std::string & name, const int primarySkillType,
 
         if ( le.MouseClickLeft( button_hero.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) ) {
             LocalEvent::GetClean();
-            hero.OpenDialog( false, true, true, true );
+            hero.OpenDialog( false, true, true, true, true );
             display.render();
         }
 

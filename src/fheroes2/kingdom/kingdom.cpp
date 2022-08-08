@@ -61,7 +61,7 @@ Kingdom::Kingdom()
     , visited_tents_colors( 0 )
     , _topItemInKingdomView( -1 )
 {
-    heroes_cond_loss.reserve( 4 );
+    // Do nothing.
 }
 
 void Kingdom::Init( int clr )
@@ -93,7 +93,6 @@ void Kingdom::clear()
 
     recruits.Reset();
 
-    heroes_cond_loss.clear();
     puzzle_maps.reset();
 }
 
@@ -872,17 +871,20 @@ std::set<Heroes *> Kingdoms::resetRecruits()
     return remainingRecruits;
 }
 
-// Check if tile is visible from any crystal ball of any hero
 bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
 {
     for ( const Heroes * hero : heroes ) {
+        assert( hero != nullptr );
+
         if ( hero->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::VIEW_MONSTER_INFORMATION ) ) {
             const uint32_t crystalBallDistance = hero->GetVisionsDistance();
-            if ( Maps::GetApproximateDistance( hero->GetIndex(), dest ) <= crystalBallDistance ) {
+
+            if ( Maps::GetStraightLineDistance( hero->GetIndex(), dest ) <= crystalBallDistance ) {
                 return true;
             }
         }
     }
+
     return false;
 }
 
@@ -914,28 +916,22 @@ cost_t Kingdom::_getKingdomStartingResources( const int difficulty ) const
 StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
 {
     return msg << kingdom.modes << kingdom.color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
-               << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom.heroes_cond_loss << kingdom._lastBattleWinHeroID
-               << kingdom._topItemInKingdomView;
+               << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom._lastBattleWinHeroID << kingdom._topItemInKingdomView;
 }
 
 StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 {
-    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits;
+    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.visit_object
+        >> kingdom.puzzle_maps >> kingdom.visited_tents_colors;
 
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_0912_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE2_0912_RELEASE ) {
-        int heroId;
-        uint32_t heroSurrenderDay;
+    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0916_RELEASE, "Remove the check below." );
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_0916_RELEASE ) {
+        KingdomHeroes temp;
 
-        msg >> heroId >> heroSurrenderDay;
-
-        if ( heroId != Heroes::UNKNOWN && heroSurrenderDay > 0 ) {
-            kingdom.recruits.SetHero2Tmp( world.GetHeroes( heroId ), heroSurrenderDay );
-        }
+        msg >> temp;
     }
 
-    msg >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom.heroes_cond_loss >> kingdom._lastBattleWinHeroID
-        >> kingdom._topItemInKingdomView;
+    msg >> kingdom._lastBattleWinHeroID >> kingdom._topItemInKingdomView;
 
     return msg;
 }

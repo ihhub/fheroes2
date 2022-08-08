@@ -40,7 +40,6 @@
 #include "settings.h"
 #include "spell.h"
 #include "statusbar.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
@@ -1007,10 +1006,10 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
             else if ( _allowOpeningMagicBook ) {
                 if ( _statusBar != nullptr ) {
                     std::function<void( const std::string & )> statusCallback = [this]( const std::string & status ) { _statusBar->ShowMessage( status ); };
-                    _hero->OpenSpellBook( SpellBook::Filter::ALL, false, &statusCallback );
+                    _hero->OpenSpellBook( SpellBook::Filter::ALL, false, false, &statusCallback );
                 }
                 else {
-                    _hero->OpenSpellBook( SpellBook::Filter::ALL, false, nullptr );
+                    _hero->OpenSpellBook( SpellBook::Filter::ALL, false, false, nullptr );
                 }
             }
             else {

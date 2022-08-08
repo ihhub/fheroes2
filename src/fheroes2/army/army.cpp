@@ -160,6 +160,39 @@ std::string Army::SizeString( uint32_t size )
     return {};
 }
 
+std::pair<uint32_t, uint32_t> Army::SizeRange( const uint32_t count )
+{
+    if ( count < ARMY_SEVERAL ) {
+        return { ARMY_FEW, ARMY_SEVERAL };
+    }
+    if ( count < ARMY_PACK ) {
+        return { ARMY_SEVERAL, ARMY_PACK };
+    }
+    if ( count < ARMY_LOTS ) {
+        return { ARMY_PACK, ARMY_LOTS };
+    }
+    if ( count < ARMY_HORDE ) {
+        return { ARMY_LOTS, ARMY_HORDE };
+    }
+    if ( count < ARMY_THRONG ) {
+        return { ARMY_HORDE, ARMY_THRONG };
+    }
+    if ( count < ARMY_SWARM ) {
+        return { ARMY_THRONG, ARMY_SWARM };
+    }
+    if ( count < ARMY_ZOUNDS ) {
+        return { ARMY_SWARM, ARMY_ZOUNDS };
+    }
+    if ( count < ARMY_LEGION ) {
+        return { ARMY_ZOUNDS, ARMY_LEGION };
+    }
+    if ( count < 5000 ) {
+        return { ARMY_LEGION, 5000 };
+    }
+
+    return { 5000, UINT32_MAX };
+}
+
 Troops::Troops( const Troops & troops )
     : std::vector<Troop *>()
 {
@@ -486,7 +519,7 @@ Troop * Troops::GetWeakestTroop() const
     return *lowest;
 }
 
-const Troop * Troops::GetSlowestTroop() const
+Troop * Troops::GetSlowestTroop() const
 {
     const_iterator first = begin();
     const_iterator last = end();
@@ -549,91 +582,6 @@ Troops Troops::GetOptimized() const
 void Troops::SortStrongest()
 {
     std::sort( begin(), end(), Army::StrongestTroop );
-}
-
-// Pre-battle arrangement for Monster or Neutral troops
-void Troops::ArrangeForBattle( bool upgrade )
-{
-    const Troops & priority = GetOptimized();
-
-    if ( priority.size() == 1 ) {
-        const Monster & m = *priority.back();
-        const uint32_t count = priority.back()->GetCount();
-
-        Clean();
-
-        if ( 49 < count ) {
-            const uint32_t c = count / 5;
-            at( 0 )->Set( m, c );
-            at( 1 )->Set( m, c );
-            at( 2 )->Set( m, c + count - ( c * 5 ) );
-            at( 3 )->Set( m, c );
-            at( 4 )->Set( m, c );
-
-            if ( upgrade && at( 2 )->isAllowUpgrade() )
-                at( 2 )->Upgrade();
-        }
-        else if ( 20 < count ) {
-            const uint32_t c = count / 3;
-            at( 1 )->Set( m, c );
-            at( 2 )->Set( m, c + count - ( c * 3 ) );
-            at( 3 )->Set( m, c );
-
-            if ( upgrade && at( 2 )->isAllowUpgrade() )
-                at( 2 )->Upgrade();
-        }
-        else
-            at( 2 )->Set( m, count );
-    }
-    else {
-        Assign( priority );
-    }
-}
-
-void Troops::ArrangeForWhirlpool()
-{
-    // Make an "optimized" version first (each unit type occupies just one slot)
-    const Troops optimizedTroops = GetOptimized();
-    assert( optimizedTroops.size() > 0 && optimizedTroops.size() <= ARMYMAXTROOPS );
-
-    // Already a full house, there is no room for further optimization
-    if ( optimizedTroops.size() == ARMYMAXTROOPS ) {
-        return;
-    }
-
-    Assign( optimizedTroops );
-
-    // Look for a troop consisting of the weakest units
-    Troop * troopOfWeakestUnits = nullptr;
-
-    for ( Troop * troop : *this ) {
-        assert( troop != nullptr );
-
-        if ( !troop->isValid() ) {
-            continue;
-        }
-
-        if ( troopOfWeakestUnits == nullptr || troopOfWeakestUnits->Monster::GetHitPoints() > troop->Monster::GetHitPoints() ) {
-            troopOfWeakestUnits = troop;
-        }
-    }
-
-    assert( troopOfWeakestUnits != nullptr );
-    assert( troopOfWeakestUnits->GetCount() > 0 );
-
-    // There is already just one unit in this troop, let's leave it as it is
-    if ( troopOfWeakestUnits->GetCount() == 1 ) {
-        return;
-    }
-
-    // Move one unit from this troop's slot...
-    troopOfWeakestUnits->SetCount( troopOfWeakestUnits->GetCount() - 1 );
-
-    // To the separate slot
-    auto emptySlot = std::find_if( begin(), end(), []( const Troop * troop ) { return !troop->isValid(); } );
-    assert( emptySlot != end() );
-
-    ( *emptySlot )->Set( Monster( troopOfWeakestUnits->GetID() ), 1 );
 }
 
 void Troops::JoinStrongest( Troops & troops2, bool saveLast )
@@ -843,50 +791,71 @@ void Army::setFromTile( const Maps::Tiles & tile )
         break;
 
     case MP2::OBJ_GRAVEYARD:
-        at( 0 )->Set( Monster::MUTANT_ZOMBIE, 100 );
-        ArrangeForBattle( false );
+        ArrangeForBattle( Monster::MUTANT_ZOMBIE, 100, tile.GetIndex(), false );
         break;
 
-    case MP2::OBJ_SHIPWRECK:
-        at( 0 )->Set( Monster::GHOST, tile.GetQuantity2() );
-        ArrangeForBattle( false );
+    case MP2::OBJ_SHIPWRECK: {
+        uint32_t count = 0;
+
+        switch ( tile.QuantityVariant() ) {
+        case 0:
+            // Shipwreck guardians were defeated.
+            return;
+        case 1:
+            count = 10;
+            break;
+        case 2:
+            count = 15;
+            break;
+        case 3:
+            count = 25;
+            break;
+        case 4:
+            count = 50;
+            break;
+        default:
+            assert( 0 );
+            break;
+        }
+
+        ArrangeForBattle( Monster::GHOST, count, tile.GetIndex(), false );
+
         break;
+    }
 
     case MP2::OBJ_DERELICTSHIP:
-        at( 0 )->Set( Monster::SKELETON, 200 );
-        ArrangeForBattle( false );
+        ArrangeForBattle( Monster::SKELETON, 200, tile.GetIndex(), false );
         break;
 
     case MP2::OBJ_ARTIFACT:
         switch ( tile.QuantityVariant() ) {
         case 6:
-            at( 0 )->Set( Monster::ROGUE, 50 );
+            ArrangeForBattle( Monster::ROGUE, 50, tile.GetIndex(), false );
             break;
         case 7:
-            at( 0 )->Set( Monster::GENIE, 1 );
+            ArrangeForBattle( Monster::GENIE, 1, tile.GetIndex(), false );
             break;
         case 8:
-            at( 0 )->Set( Monster::PALADIN, 1 );
+            ArrangeForBattle( Monster::PALADIN, 1, tile.GetIndex(), false );
             break;
         case 9:
-            at( 0 )->Set( Monster::CYCLOPS, 1 );
+            ArrangeForBattle( Monster::CYCLOPS, 1, tile.GetIndex(), false );
             break;
         case 10:
-            at( 0 )->Set( Monster::PHOENIX, 1 );
+            ArrangeForBattle( Monster::PHOENIX, 1, tile.GetIndex(), false );
             break;
         case 11:
-            at( 0 )->Set( Monster::GREEN_DRAGON, 1 );
+            ArrangeForBattle( Monster::GREEN_DRAGON, 1, tile.GetIndex(), false );
             break;
         case 12:
-            at( 0 )->Set( Monster::TITAN, 1 );
+            ArrangeForBattle( Monster::TITAN, 1, tile.GetIndex(), false );
             break;
         case 13:
-            at( 0 )->Set( Monster::BONE_DRAGON, 1 );
+            ArrangeForBattle( Monster::BONE_DRAGON, 1, tile.GetIndex(), false );
             break;
         default:
             break;
         }
-        ArrangeForBattle( false );
         break;
 
     case MP2::OBJ_CITYDEAD:
@@ -929,45 +898,30 @@ void Army::setFromTile( const Maps::Tiles & tile )
         at( 3 )->Set( Monster::EARTH_ELEMENT, 2 );
         break;
 
+    case MP2::OBJ_ABANDONEDMINE: {
+        const Troop & troop = world.GetCapturedObject( tile.GetIndex() ).GetTroop();
+        assert( troop.isValid() );
+
+        ArrangeForBattle( troop.GetMonster(), troop.GetCount(), tile.GetIndex(), false );
+
+        break;
+    }
+
     default:
         if ( isCaptureObject ) {
-            CapturedObject & co = world.GetCapturedObject( tile.GetIndex() );
-            const Troop & troop = co.GetTroop();
+            CapturedObject & capturedObject = world.GetCapturedObject( tile.GetIndex() );
+            const Troop & troop = capturedObject.GetTroop();
 
-            switch ( co.GetSplit() ) {
-            case 3:
-                if ( 3 > troop.GetCount() )
-                    at( 0 )->Set( co.GetTroop() );
-                else {
-                    at( 0 )->Set( troop.GetMonster(), troop.GetCount() / 3 );
-                    at( 4 )->Set( troop.GetMonster(), troop.GetCount() / 3 );
-                    at( 2 )->Set( troop.GetMonster(), troop.GetCount() - at( 4 )->GetCount() - at( 0 )->GetCount() );
-                }
-                break;
-
-            case 5:
-                if ( 5 > troop.GetCount() )
-                    at( 0 )->Set( co.GetTroop() );
-                else {
-                    at( 0 )->Set( troop.GetMonster(), troop.GetCount() / 5 );
-                    at( 1 )->Set( troop.GetMonster(), troop.GetCount() / 5 );
-                    at( 3 )->Set( troop.GetMonster(), troop.GetCount() / 5 );
-                    at( 4 )->Set( troop.GetMonster(), troop.GetCount() / 5 );
-                    at( 2 )->Set( troop.GetMonster(), troop.GetCount() - at( 0 )->GetCount() - at( 1 )->GetCount() - at( 3 )->GetCount() - at( 4 )->GetCount() );
-                }
-                break;
-
-            default:
-                at( 0 )->Set( co.GetTroop() );
-                break;
+            if ( troop.isValid() ) {
+                ArrangeForBattle( troop.GetMonster(), troop.GetCount(), capturedObject.GetSplit() );
             }
         }
         else {
-            Troop troop = tile.QuantityTroop();
+            const Troop troop = tile.QuantityTroop();
 
-            at( 0 )->Set( troop );
-            if ( troop.isValid() )
-                ArrangeForBattle( true );
+            if ( troop.isValid() ) {
+                ArrangeForBattle( troop.GetMonster(), troop.GetCount(), tile.GetIndex(), true );
+            }
         }
         break;
     }
@@ -1186,7 +1140,7 @@ std::string Army::String() const
     os << "color(" << Color::String( commander ? commander->GetColor() : color ) << "), ";
 
     if ( GetCommander() )
-        os << "commander(" << GetCommander()->GetName() << "), ";
+        os << "commander(" << GetCommander()->GetName() << ")";
 
     os << ": ";
 
@@ -1334,21 +1288,26 @@ NeutralMonsterJoiningCondition Army::GetJoinSolution( const Heroes & hero, const
         return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
     }
 
-    if ( tile.MonsterJoinConditionSkip() || !troop.isValid() ) {
+    if ( Maps::isMonsterOnTileJoinConditionSkip( tile ) || !troop.isValid() ) {
         return { NeutralMonsterJoiningCondition::Reason::None, 0, nullptr, nullptr };
     }
 
     // Neutral monsters don't care about hero's stats. Ignoring hero's stats makes hero's army strength be smaller in eyes of neutrals and they won't join so often.
     const double armyStrengthRatio = static_cast<const Troops &>( hero.GetArmy() ).GetStrength() / troop.GetStrength();
 
-    if ( armyStrengthRatio > 2 ) {
-        if ( tile.MonsterJoinConditionFree() ) {
+    // The ability to accept monsters (a free slot or a stack of monsters of the same type) is a
+    // mandatory condition for their joining in accordance with the mechanics of the original game
+    if ( armyStrengthRatio > 2 && hero.GetArmy().CanJoinTroop( troop ) ) {
+        if ( Maps::isMonsterOnTileJoinConditionFree( tile ) ) {
             return { NeutralMonsterJoiningCondition::Reason::Free, troop.GetCount(), nullptr, nullptr };
         }
 
         if ( hero.HasSecondarySkill( Skill::Secondary::DIPLOMACY ) ) {
             const uint32_t amountToJoin = Monster::GetCountFromHitPoints( troop, troop.GetHitPoints() * hero.GetSecondaryValues( Skill::Secondary::DIPLOMACY ) / 100 );
-            if ( amountToJoin > 0 ) {
+
+            // The ability to hire the entire stack of monsters is a mandatory condition for their joining
+            // due to hero's Diplomacy skill in accordance with the mechanics of the original game
+            if ( amountToJoin > 0 && hero.GetKingdom().AllowPayment( payment_t( Resource::GOLD, troop.GetTotalCost().gold ) ) ) {
                 return { NeutralMonsterJoiningCondition::Reason::ForMoney, amountToJoin, nullptr, nullptr };
             }
         }
@@ -1408,6 +1367,116 @@ void Army::resetInvalidMonsters() const
     for ( Troop * troop : *this ) {
         if ( troop->GetID() != Monster::UNKNOWN && !troop->isValid() ) {
             troop->Set( Monster::UNKNOWN, 0 );
+        }
+    }
+}
+
+void Army::ArrangeForWhirlpool()
+{
+    // Make an "optimized" version first (each unit type occupies just one slot)
+    const Troops optimizedTroops = GetOptimized();
+    assert( optimizedTroops.Size() > 0 && optimizedTroops.Size() <= ARMYMAXTROOPS );
+
+    // Already a full house, there is no room for further optimization
+    if ( optimizedTroops.Size() == ARMYMAXTROOPS ) {
+        return;
+    }
+
+    Assign( optimizedTroops );
+
+    // Look for a troop consisting of the weakest units
+    Troop * troopOfWeakestUnits = nullptr;
+
+    for ( Troop * troop : *this ) {
+        assert( troop != nullptr );
+
+        if ( !troop->isValid() ) {
+            continue;
+        }
+
+        if ( troopOfWeakestUnits == nullptr || troopOfWeakestUnits->Monster::GetHitPoints() > troop->Monster::GetHitPoints() ) {
+            troopOfWeakestUnits = troop;
+        }
+    }
+
+    assert( troopOfWeakestUnits != nullptr );
+    assert( troopOfWeakestUnits->GetCount() > 0 );
+
+    // There is already just one unit in this troop, let's leave it as it is
+    if ( troopOfWeakestUnits->GetCount() == 1 ) {
+        return;
+    }
+
+    // Move one unit from this troop's slot...
+    troopOfWeakestUnits->SetCount( troopOfWeakestUnits->GetCount() - 1 );
+
+    // To the separate slot
+    auto emptySlot = std::find_if( begin(), end(), []( const Troop * troop ) { return troop->isEmpty(); } );
+    assert( emptySlot != end() );
+
+    ( *emptySlot )->Set( Monster( troopOfWeakestUnits->GetID() ), 1 );
+}
+
+void Army::ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const uint32_t stacksCount )
+{
+    assert( stacksCount > 0 && stacksCount <= size() && size() == ARMYMAXTROOPS );
+    assert( std::all_of( begin(), end(), []( const Troop * troop ) { return troop->isEmpty(); } ) );
+
+    size_t stacks;
+
+    for ( stacks = stacksCount; stacks > 0; --stacks ) {
+        if ( monstersCount / stacks > 0 ) {
+            break;
+        }
+    }
+
+    assert( stacks > 0 );
+
+    const uint32_t quotient = monstersCount / static_cast<uint32_t>( stacks );
+    const uint32_t remainder = monstersCount % static_cast<uint32_t>( stacks );
+
+    assert( quotient > 0 );
+
+    const size_t shift = ( size() - stacksCount ) / 2;
+
+    for ( size_t i = 0; i < stacks; ++i ) {
+        at( i + shift )->Set( monster, i < remainder ? quotient + 1 : quotient );
+    }
+
+    assert( std::accumulate( begin(), end(), 0U, []( const uint32_t count, const Troop * troop ) { return troop->isValid() ? count + troop->GetCount() : count; } )
+            == monstersCount );
+}
+
+void Army::ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const int32_t tileIndex, const bool allowUpgrade )
+{
+    uint32_t stacksCount = 0;
+
+    // Archers should always be divided into as many stacks as possible
+    if ( monster.isArchers() ) {
+        stacksCount = ARMYMAXTROOPS;
+    }
+    else {
+        std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) );
+
+        stacksCount = Rand::GetWithGen( 3, 5, seededGen );
+    }
+
+    ArrangeForBattle( monster, monstersCount, stacksCount );
+
+    if ( allowUpgrade ) {
+        assert( size() % 2 == 1 );
+
+        // An upgraded stack can be located only in the center
+        Troop * troopToUpgrade = at( size() / 2 );
+        assert( troopToUpgrade != nullptr );
+
+        if ( troopToUpgrade->isValid() && troopToUpgrade->isAllowUpgrade() ) {
+            std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) + static_cast<uint32_t>( monster.GetID() ) );
+
+            // 50% chance to get an upgraded stack
+            if ( Rand::Get( 0, 1 ) == 1 ) {
+                troopToUpgrade->Upgrade();
+            }
         }
     }
 }

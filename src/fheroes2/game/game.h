@@ -27,7 +27,6 @@
 #include <cstdint>
 #include <string>
 
-#include "audio_manager.h"
 #include "game_mode.h"
 #include "mp2.h"
 #include "mus.h"
@@ -93,11 +92,13 @@ namespace Game
 
     void EnvironmentSoundMixer();
     void restoreSoundsForCurrentFocus();
+
+    bool UpdateSoundsOnFocusUpdate();
+    void SetUpdateSoundsOnFocusUpdate( const bool update );
+
     int GetKingdomColors();
     int GetActualKingdomColors();
     void DialogPlayers( int color, std::string );
-    void SetCurrentMusic( const int mus );
-    int CurrentMusic();
     uint32_t & MapsAnimationFrame();
     uint32_t GetRating();
     uint32_t GetGameOverScores();
@@ -105,8 +106,6 @@ namespace Game
     uint32_t GetWhirlpoolPercent();
     uint32_t SelectCountPlayers();
     void PlayPickupSound();
-    bool UpdateSoundsOnFocusUpdate();
-    void SetUpdateSoundsOnFocusUpdate( bool update );
     void OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameWorld, bool disableDismiss = false );
     void OpenCastleDialog( Castle & castle, bool updateFocus = true );
     // Returns the difficulty level based on the type of game.
@@ -120,69 +119,12 @@ namespace Game
     std::string GetSaveFileExtension();
     std::string GetSaveFileExtension( const int gameType );
 
-    // Useful for restoring background music after playing short-term music effects
-    class MusicRestorer
-    {
-    public:
-        MusicRestorer()
-            : _music( CurrentMusic() )
-        {}
-
-        MusicRestorer( const MusicRestorer & ) = delete;
-
-        ~MusicRestorer()
-        {
-            if ( _music == MUS::UNUSED || _music == MUS::UNKNOWN ) {
-                SetCurrentMusic( _music );
-
-                return;
-            }
-
-            // Set current music to MUS::UNKNOWN to prevent attempts to play the old music
-            // by new instances of MusicRestorer while the music being currently restored
-            // is starting in the background
-            if ( _music != CurrentMusic() ) {
-                SetCurrentMusic( MUS::UNKNOWN );
-            }
-
-            AudioManager::PlayMusic( _music, true, true );
-        }
-
-        MusicRestorer & operator=( const MusicRestorer & ) = delete;
-
-    private:
-        const int _music;
-    };
-
-    namespace ObjectFadeAnimation
-    {
-        struct FadeTask
-        {
-            FadeTask();
-
-            FadeTask( MP2::MapObjectType object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_, bool fadeOut_,
-                      bool fadeIn_, uint8_t objectTileset_ );
-
-            MP2::MapObjectType object;
-            uint32_t objectIndex;
-            uint32_t animationIndex;
-            int32_t fromIndex;
-            int32_t toIndex;
-            uint8_t alpha;
-            bool fadeOut;
-            bool fadeIn;
-            uint8_t objectTileset;
-        };
-
-        const FadeTask & GetFadeTask();
-
-        void PrepareFadeTask( const MP2::MapObjectType object, int32_t fromTile, int32_t toTile, bool fadeOut, bool fadeIn );
-        void PerformFadeTask();
-    }
-
     int32_t GetStep4Player( const int32_t currentId, const int32_t width, const int32_t totalCount );
-    std::string CountScoute( uint32_t count, int scoute, bool shorts = false );
     std::string CountThievesGuild( uint32_t monsterCount, int guildCount );
+
+    // Returns the string representation of the monster count, formatted according to the scouting level (possibly in
+    // abbreviated form), suitable for use with the WORLD_SCOUTING_EXTENDED option. See the implementation for details.
+    std::string formatMonsterCount( const uint32_t count, const int scoutingLevel, const bool abbreviateNumber = false );
 }
 
 #endif

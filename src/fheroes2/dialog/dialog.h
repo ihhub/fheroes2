@@ -84,10 +84,14 @@ namespace Dialog
     fheroes2::GameMode FileOptions();
     std::string SelectFileLoad();
     std::string SelectFileSave();
-    // show info cell maps
+
     void QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile = false );
-    void QuickInfo( const Castle & castle, const fheroes2::Rect & activeArea, const fheroes2::Point & position = fheroes2::Point() );
-    void QuickInfo( const HeroBase & hero, const fheroes2::Rect & activeArea, const fheroes2::Point & position = fheroes2::Point() );
+
+    // These functions are able to show the location of an object on the radar. If the location should be shown on the radar, then an
+    // additional area, the contents of which should be restored when the radar is redrawn (areaToRestore), can be optionally specified.
+    void QuickInfo( const Castle & castle, const fheroes2::Point & position = {}, const bool showOnRadar = false, const fheroes2::Rect & areaToRestore = {} );
+    void QuickInfo( const HeroBase & hero, const fheroes2::Point & position = {}, const bool showOnRadar = false, const fheroes2::Rect & areaToRestore = {} );
+
     int Message( const std::string &, const std::string &, int ft, int buttons = 0 /* buttons: OK : CANCEL : OK|CANCEL : YES|NO */ );
     void ExtSettings( bool );
     int LevelUpSelectSkill( const std::string & name, const int primarySkillType, const Skill::Secondary & sec1, const Skill::Secondary & sec2, Heroes & hero );
@@ -99,8 +103,8 @@ namespace Dialog
     void DwellingInfo( const Monster &, uint32_t available );
     bool SetGuardian( Heroes &, Troop &, CapturedObject &, bool readonly );
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false );
-    int ArmyJoinFree( const Troop &, Heroes & );
-    int ArmyJoinWithCost( const Troop &, uint32_t join, uint32_t gold, Heroes & );
+    int ArmyJoinFree( const Troop & troop );
+    int ArmyJoinWithCost( const Troop &, const uint32_t join, const uint32_t gold );
     int ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit );
     void Marketplace( Kingdom & kingdom, bool fromTradingPost );
     void MakeGiftResource( Kingdom & kingdom );

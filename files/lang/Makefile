@@ -30,7 +30,7 @@ merge: ../../src/dist/fheroes2.pot
 # In French, accented characters are mapped to unused ASCII characters
 # Non-mapped characters are replaced by their non-accented equivalents
 fr.mo: fr.po
-	sed -e 'y/àâçéèêîïôùûüÉÊÀ/@*^~`|><#&$$uEEA/' -e 's/œ/oe/g' $< | msgfmt - -o $@
+	sed -e 'y/àâçéèêîïôùûüÇÉÊÀ/@*^~`|><#&$$uCEEA/; s/œ/oe/g' $< | msgfmt - -o $@
 
 # Czech, Polish versions use CP1250
 cs.mo pl.mo: %.mo: %.po

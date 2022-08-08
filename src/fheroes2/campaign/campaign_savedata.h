@@ -91,8 +91,6 @@ namespace Campaign
 
         static CampaignSaveData & Get();
 
-        static void loadOldSaveSata( StreamBase & msg, CampaignSaveData & data );
-
     private:
         friend StreamBase & operator<<( StreamBase & msg, const CampaignSaveData & data );
         friend StreamBase & operator>>( StreamBase & msg, CampaignSaveData & data );

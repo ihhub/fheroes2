@@ -146,7 +146,6 @@ void Dialog::ExtSettings( bool readonly )
     std::vector<uint32_t> states;
     states.reserve( 32 );
 
-    states.push_back( Settings::GAME_SAVE_REWRITE_CONFIRM );
     states.push_back( Settings::GAME_REMEMBER_LAST_FOCUS );
     states.push_back( Settings::GAME_SHOW_SYSTEM_INFO );
     states.push_back( Settings::GAME_BATTLE_SHOW_DAMAGE );
@@ -176,10 +175,9 @@ void Dialog::ExtSettings( bool readonly )
     listbox.SetScrollButtonUp( ICN::ESCROLL, 4, 5, { area.x + 295, area.y + 25 } );
     listbox.SetScrollButtonDn( ICN::ESCROLL, 6, 7, { area.x + 295, area.y + ah + 5 } );
 
-    const fheroes2::Sprite & originalSilder = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
-    const fheroes2::Image scrollbarSlider
-        = fheroes2::generateScrollbarSlider( originalSilder, false, ah - 42, ah / 40, static_cast<int32_t>( states.size() ), { 0, 0, originalSilder.width(), 8 },
-                                             { 0, 7, originalSilder.width(), 8 } );
+    const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
+    const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, ah - 42, ah / 40, static_cast<int32_t>( states.size() ),
+                                                                               { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
 
     listbox.setScrollBarArea( { area.x + 298, area.y + 44, 10, ah - 42 } );
     listbox.setScrollBarImage( scrollbarSlider );

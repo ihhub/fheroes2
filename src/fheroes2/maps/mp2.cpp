@@ -181,8 +181,7 @@ int MP2::GetICNObject( const uint8_t tileset )
         break;
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown type: " << static_cast<int>( tileset ) )
-
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "Unknown tileset: " << static_cast<int>( tileset ) )
     return ICN::UNKNOWN;
 }
 

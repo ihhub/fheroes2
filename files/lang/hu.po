@@ -1,13 +1,13 @@
 # Hungarian translation for fheroes2
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
+# fheroes2 team <fhomm2@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-24 17:13+0000\n"
+"POT-Creation-Date: 2022-08-08 11:28+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -167,8 +167,10 @@ msgstr "%{name} ide lép."
 msgid "Set Count"
 msgstr ""
 
-msgid "%{name} half the enemy troops!"
-msgstr ""
+msgid "%{name} destroys half the enemy troops!"
+msgid_plural "%{name} destroy half the enemy troops!"
+msgstr[0] ""
+msgstr[1] ""
 
 #, fuzzy
 msgid "%{name} has turned off the auto battle"
@@ -522,8 +524,11 @@ msgstr "%{name} kör kihagyása."
 msgid "%{name} wait their turn."
 msgstr "%{name} várakozik."
 
-msgid "%{attacker} do %{damage} damage."
-msgstr "A %{attacker} %{damage} sebzett."
+#, fuzzy
+msgid "%{attacker} does %{damage} damage."
+msgid_plural "%{attacker} do %{damage} damage."
+msgstr[0] "A %{attacker} %{damage} sebzett."
+msgstr[1] "A %{attacker} %{damage} sebzett."
 
 #, fuzzy
 msgid "1 creature perishes."
@@ -1985,7 +1990,8 @@ msgstr "Fejlesztett kőkör"
 msgid "Fenced Meadow"
 msgstr "Legelő"
 
-msgid "Red Tower"
+#, fuzzy
+msgid "sorceress|Red Tower"
 msgstr "Vörös torony"
 
 msgid "Dungeon"
@@ -2014,6 +2020,10 @@ msgstr "Mocsár"
 
 msgid "Green Tower"
 msgstr "Zöld torony"
+
+#, fuzzy
+msgid "warlock|Red Tower"
+msgstr "Vörös torony"
 
 msgid "Black Tower"
 msgstr "Fekete torony"
@@ -2549,21 +2559,55 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "(elérhető: %{count})"
 
-msgid "Total: "
+msgid "off"
+msgstr "ki"
+
+#, fuzzy
+msgid "Music"
+msgstr "zene"
+
+msgid "Effects"
 msgstr ""
 
-msgid "No room in"
+msgid "MIDI"
 msgstr ""
 
 #, fuzzy
-msgid "the garrison"
-msgstr "Helyőrség"
+msgid "MIDI Expansion"
+msgstr "Kúria"
+
+msgid "External"
+msgstr ""
+
+msgid "Music Type"
+msgstr ""
+
+msgid "3D Audio"
+msgstr ""
+
+msgid "Toggle ambient music level."
+msgstr ""
+
+msgid "Toggle foreground sounds level."
+msgstr ""
+
+msgid "Change the type of music."
+msgstr ""
+
+msgid "Toggle 3D effects of foreground sounds."
+msgstr ""
+
+msgid "Okay"
+msgstr "Ok"
 
 msgid "Build a new ship:"
 msgstr "Új hajó építése:"
 
 msgid "Resource cost:"
 msgstr "Fejlesztési költség:"
+
+msgid "Total: "
+msgstr ""
 
 msgid "Need: "
 msgstr ""
@@ -2612,28 +2656,12 @@ msgstr "Elemi Gyűrű"
 msgid "Settings"
 msgstr "Beállítások"
 
-msgid "off"
-msgstr "ki"
-
-#, fuzzy
-msgid "Music"
-msgstr "zene"
-
-msgid "Effects"
-msgstr ""
-
-msgid "MIDI"
+msgid "Audio"
 msgstr ""
 
 #, fuzzy
-msgid "MIDI Expansion"
-msgstr "Kúria"
-
-msgid "External"
-msgstr ""
-
-msgid "Music Type"
-msgstr ""
+msgid "settings"
+msgstr "Beállítások"
 
 msgid "Hot Keys"
 msgstr ""
@@ -2656,6 +2684,29 @@ msgstr ""
 msgid "Text Support"
 msgstr "Teleportálás"
 
+msgid "Evil"
+msgstr "Gonosz"
+
+msgid "Good"
+msgstr "Jó"
+
+#, fuzzy
+msgid "Interface Type"
+msgstr "Kezelőfelület"
+
+msgid "Auto Resolve"
+msgstr ""
+
+msgid "Auto, No Spells"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+#, fuzzy
+msgid "Battles"
+msgstr "Üveg"
+
 #, fuzzy
 msgid "Select Game Language"
 msgstr "Kiválasztott Leírás"
@@ -2670,20 +2721,20 @@ msgstr "Kiválasztott Leírás"
 msgid "Change resolution of the game."
 msgstr ""
 
+msgid "Change audio settings of the game."
+msgstr ""
+
 #, fuzzy
 msgid "Experimental game settings."
 msgstr "FHeroes2 játék beállítások."
 
-msgid "Toggle ambient music level."
-msgstr ""
-
-msgid "Toggle foreground sounds level."
-msgstr ""
-
-msgid "Change the type of music."
+msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Check all Hot Keys used in the game."
+msgstr ""
+
+msgid "Toggle the type of interface you want to use."
 msgstr ""
 
 msgid ""
@@ -2695,9 +2746,6 @@ msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
-
-msgid "Okay"
-msgstr "Ok"
 
 #, fuzzy
 msgid "Attention"
@@ -3169,16 +3217,6 @@ msgstr "Sebesség"
 msgid "Scroll Speed"
 msgstr ""
 
-msgid "Evil"
-msgstr "Gonosz"
-
-msgid "Good"
-msgstr "Jó"
-
-#, fuzzy
-msgid "Interface Type"
-msgstr "Kezelőfelület"
-
 #, fuzzy
 msgid "Hide"
 msgstr "50-99"
@@ -3189,19 +3227,6 @@ msgstr "Hó"
 
 msgid "Interface"
 msgstr "Kezelőfelület"
-
-msgid "Auto Resolve"
-msgstr ""
-
-msgid "Auto, No Spells"
-msgstr ""
-
-#, fuzzy
-msgid "Battles"
-msgstr "Üveg"
-
-msgid "Manual"
-msgstr ""
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3214,13 +3239,7 @@ msgstr ""
 msgid "Sets the speed at which you scroll the window."
 msgstr ""
 
-msgid "Toggle the type of interface you want to use."
-msgstr ""
-
 msgid "Toggle interface visibility."
-msgstr ""
-
-msgid "Toggle instant battle mode."
 msgstr ""
 
 msgid "Att."
@@ -3359,6 +3378,10 @@ msgstr ""
 msgid "Development"
 msgstr ""
 
+#, fuzzy
+msgid "Dev and Support"
+msgstr "Teleportálás"
+
 msgid "Visit us at "
 msgstr ""
 
@@ -3384,7 +3407,7 @@ msgid "Original project before 0.7"
 msgstr ""
 
 #, fuzzy
-msgid "Original Heroes of Might and Magic II team"
+msgid "Heroes of Might and Magic II: The Succession Wars team"
 msgstr "Kilépés a játékból és visszatérés az operációs rendszerhez."
 
 msgid "Designed and Directed"
@@ -3443,6 +3466,73 @@ msgid "Scenarios"
 msgstr "Küldetés"
 
 #, fuzzy
+msgid "Heroes of Might and Magic II: The Price of Loyalty team"
+msgstr "Kilépés a játékból és visszatérés az operációs rendszerhez."
+
+msgid "Cyberlore Studios"
+msgstr ""
+
+msgid "Design Lead"
+msgstr ""
+
+msgid "Designers"
+msgstr ""
+
+msgid "Programming Lead"
+msgstr ""
+
+msgid "Art Lead"
+msgstr ""
+
+#, fuzzy
+msgid "Playtesters"
+msgstr "2 játékos"
+
+msgid "New World Computing"
+msgstr ""
+
+msgid "Designer"
+msgstr ""
+
+msgid "Producers"
+msgstr ""
+
+#, fuzzy
+msgid "QA Managers"
+msgstr "Erdész"
+
+msgid "Sound Design"
+msgstr ""
+
+#, fuzzy
+msgid "Town Themes"
+msgstr "Városkapu"
+
+msgid "Alto Sax"
+msgstr ""
+
+msgid "Harpsichord and Piano"
+msgstr ""
+
+msgid "Basso Vocal"
+msgstr ""
+
+msgid "Soprano Vocal"
+msgstr ""
+
+msgid "Recorded at Green Street Studios"
+msgstr ""
+
+msgid "German Consultant"
+msgstr ""
+
+msgid "Map Designers"
+msgstr ""
+
+msgid "Package Design"
+msgstr ""
+
+#, fuzzy
 msgid "Unknown Hero"
 msgstr "Ismeretlen"
 
@@ -3465,17 +3555,15 @@ msgstr "Hadjárat"
 msgid "View High Scores for Campaigns."
 msgstr "Dicsőségtábla megjelenítése."
 
-msgid ""
-"Invalid file game type. Please ensure that you are running the latest type "
-"of save files."
-msgstr ""
-
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
+msgid "This file contains a save with an invalid game type."
+msgstr ""
+
 msgid ""
-"This file is saved in the \"The Price of Loyalty\" version.\n"
-"Some items may be unavailable."
+"This file was saved by the \"The Price of Loyalty\" version of the game.\n"
+"Some items may not be available."
 msgstr ""
 
 msgid "Usupported save format: "
@@ -3585,6 +3673,11 @@ msgstr ""
 #, fuzzy
 msgid "Game Settings"
 msgstr "Beállítások"
+
+msgid ""
+"Required video files for campaign selection window are missing. Please make "
+"sure that all necessary files are present in the system."
+msgstr ""
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
@@ -3725,7 +3818,7 @@ msgid ""
 "You have lost the hero %{name}.\n"
 "Your quest is over."
 msgstr ""
-"Elvestítetted a %{name Hőst}.\n"
+"Elveszítetted a %{name} Hőst.\n"
 "A küldetésed elbukott.."
 
 msgid ""
@@ -9154,9 +9247,6 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "game: always confirm for rewrite savefile"
-msgstr ""
-
 msgid "game: remember last focus"
 msgstr ""
 
@@ -9280,3 +9370,7 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "the garrison"
+#~ msgstr "Helyőrség"

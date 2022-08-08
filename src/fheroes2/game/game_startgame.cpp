@@ -85,8 +85,6 @@ fheroes2::GameMode Game::StartGame()
     if ( !conf.LoadedGameVersion() )
         GameOver::Result::Get().Reset();
 
-    Interface::Basic::Get().Reset();
-
     return Interface::Basic::Get().StartGame();
 }
 
@@ -133,13 +131,12 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // Stop all sounds, but not the music - it will be replaced by the music of the castle
-    Mixer::Stop();
+    AudioManager::stopSounds();
 
     const Settings & conf = Settings::Get();
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
     KingdomCastles::const_iterator it = std::find( myCastles.begin(), myCastles.end(), &castle );
-    Interface::StatusWindow::ResetTimer();
 
     const size_t heroCountBefore = myKingdom.GetHeroes().size();
 
@@ -194,6 +191,7 @@ void Game::OpenCastleDialog( Castle & castle, bool updateFocus /* = true */ )
         restoreSoundsForCurrentFocus();
     }
 
+    // The castle garrison can change
     basicInterface.RedrawFocus();
 }
 
@@ -202,12 +200,9 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    Interface::StatusWindow::ResetTimer();
-
     bool needFade = Settings::ExtGameUseFade() && fheroes2::Display::instance().isDefaultSize();
 
-    Interface::Basic & I = Interface::Basic::Get();
-    const Interface::GameArea & gameArea = I.GetGameArea();
+    Interface::Basic & basicInterface = Interface::Basic::Get();
 
     const KingdomHeroes & myHeroes = hero.GetKingdom().GetHeroes();
     KingdomHeroes::const_iterator it = std::find( myHeroes.begin(), myHeroes.end(), &hero );
@@ -215,7 +210,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
     int result = Dialog::ZERO;
 
     while ( it != myHeroes.end() && result != Dialog::CANCEL ) {
-        result = ( *it )->OpenDialog( false, needFade, disableDismiss );
+        result = ( *it )->OpenDialog( false, needFade, disableDismiss, false, windowIsGameWorld );
         if ( needFade )
             needFade = false;
 
@@ -236,7 +231,7 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
             AudioManager::PlaySound( M82::KILLFADE );
 
             ( *it )->GetPath().Hide();
-            gameArea.SetRedraw();
+            basicInterface.SetRedraw( Interface::REDRAW_GAMEAREA );
 
             if ( windowIsGameWorld ) {
                 ( *it )->FadeOut();
@@ -257,22 +252,23 @@ void Game::OpenHeroesDialog( Heroes & hero, bool updateFocus, bool windowIsGameW
 
     if ( updateFocus ) {
         if ( it != myHeroes.end() ) {
-            I.SetFocus( *it );
+            basicInterface.SetFocus( *it );
         }
         else {
-            I.ResetFocus( GameFocus::HEROES );
+            basicInterface.ResetFocus( GameFocus::HEROES );
         }
     }
 
-    I.RedrawFocus();
+    // The hero's army can change
+    basicInterface.RedrawFocus();
 }
 
 void ShowNewWeekDialog()
 {
     // restore the original music on exit
-    const Game::MusicRestorer musicRestorer;
+    const AudioManager::MusicRestorer musicRestorer;
 
-    AudioManager::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, false );
+    AudioManager::PlayMusic( world.BeginMonth() ? MUS::NEW_MONTH : MUS::NEW_WEEK, Music::PlaybackMode::PLAY_ONCE );
 
     const Week & week = world.GetWeekType();
 
@@ -553,8 +549,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
     Settings & conf = Settings::Get();
     fheroes2::Display & display = fheroes2::Display::instance();
 
-    // draw interface
-    gameArea.generate( { display.width(), display.height() }, conf.ExtGameHideInterface() );
+    Reset();
 
     radar.Build();
     radar.SetHide( true );
@@ -565,9 +560,6 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
     iconsPanel.HideIcons( ICON_ANY );
     statusWindow.Reset();
-
-    if ( conf.ExtGameHideInterface() )
-        SetHideInterface( true );
 
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
@@ -616,8 +608,7 @@ fheroes2::GameMode Interface::Basic::StartGame()
 
                 switch ( kingdom.GetControl() ) {
                 case CONTROL_HUMAN:
-                    // reset environment sounds and music theme at the beginning of the human turn
-                    Game::SetCurrentMusic( MUS::UNKNOWN );
+                    // Reset environment sounds and music theme at the beginning of the human turn
                     AudioManager::ResetAudio();
 
                     if ( conf.IsGameType( Game::TYPE_HOTSEAT ) ) {
@@ -631,9 +622,9 @@ fheroes2::GameMode Interface::Basic::StartGame()
                         display.render();
 
                         // reset the music after closing the dialog
-                        const Game::MusicRestorer musicRestorer;
+                        const AudioManager::MusicRestorer musicRestorer;
 
-                        AudioManager::PlayMusic( MUS::NEW_MONTH, false );
+                        AudioManager::PlayMusic( MUS::NEW_MONTH, Music::PlaybackMode::PLAY_ONCE );
 
                         Game::DialogPlayers( player->GetColor(), _( "%{color} player's turn." ) );
                     }
@@ -655,7 +646,6 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     }
 
                     // Reset environment sounds and music theme at the end of the human turn.
-                    Game::SetCurrentMusic( MUS::UNKNOWN );
                     AudioManager::ResetAudio();
 
                     break;
@@ -753,24 +743,20 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     gameArea.SetUpdateCursor();
     Redraw( REDRAW_GAMEAREA | REDRAW_RADAR | REDRAW_ICONS | REDRAW_BUTTONS | REDRAW_STATUS | REDRAW_BORDER );
 
-    Game::EnvironmentSoundMixer();
-
     fheroes2::Display & display = fheroes2::Display::instance();
 
     display.render();
 
     if ( !isload ) {
-        // new week dialog
         if ( 1 < world.CountWeek() && world.BeginWeek() ) {
             ShowNewWeekDialog();
         }
 
-        // show event day
         ShowEventDayDialog();
 
-        // autosave
-        if ( conf.ExtGameAutosaveBeginOfDay() )
+        if ( conf.ExtGameAutosaveBeginOfDay() ) {
             Game::AutoSave();
+        }
     }
 
     GameOver::Result & gameResult = GameOver::Result::Get();
@@ -778,7 +764,6 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     // check if the game is over at the beginning of each human-controlled player's turn
     res = gameResult.LocalCheckGameOver();
 
-    // warn that all the towns are lost
     if ( res == fheroes2::GameMode::CANCEL && myCastles.empty() ) {
         ShowWarningLostTownsDialog();
     }
@@ -800,8 +785,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     LocalEvent & le = LocalEvent::Get();
     Cursor & cursor = Cursor::Get();
 
-    // startgame loop
-    while ( fheroes2::GameMode::CANCEL == res ) {
+    while ( res == fheroes2::GameMode::CANCEL ) {
         if ( !le.HandleEvents( Game::isDelayNeeded( delayTypes ), true ) ) {
             if ( EventExit() == fheroes2::GameMode::QUIT_GAME ) {
                 res = fheroes2::GameMode::QUIT_GAME;
@@ -810,12 +794,15 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             continue;
         }
 
-        // hot keys
+        // pending timer events
+        statusWindow.TimerEventProcessing();
+
+        // hotkeys
         if ( le.KeyPress() ) {
-            // stop moving hero first if needed
+            // if the hero is currently moving, pressing any key should stop him
             if ( isMovingHero )
                 stopHero = true;
-            // exit dialog
+            // adventure map control
             else if ( HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) )
                 res = EventExit();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::END_TURN ) )
@@ -828,9 +815,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 res = EventNewGame();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::SAVE_GAME ) )
                 EventSaveGame();
-            else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) ) {
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_LOAD_GAME ) )
                 res = EventLoadGame();
-            }
             else if ( HotKeyPressEvent( Game::HotKeyEvent::FILE_OPTIONS ) )
                 res = EventFileDialog();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::ADVENTURE_OPTIONS ) )
@@ -847,17 +833,14 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 EventKingdomInfo();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::VIEW_WORLD ) )
                 EventViewWorld();
-            // show/hide control panel
             else if ( HotKeyPressEvent( Game::HotKeyEvent::CONTROL_PANEL ) )
                 EventSwitchShowControlPanel();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::SHOW_RADAR ) )
                 EventSwitchShowRadar();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::SHOW_BUTTONS ) )
                 EventSwitchShowButtons();
-            // hide/show status window
             else if ( HotKeyPressEvent( Game::HotKeyEvent::SHOW_STATUS ) )
                 EventSwitchShowStatus();
-            // hide/show hero/town icons
             else if ( HotKeyPressEvent( Game::HotKeyEvent::SHOW_ICONS ) )
                 EventSwitchShowIcons();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::CONTINUE_HERO_MOVEMENT ) )
@@ -866,7 +849,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 res = EventDigArtifact();
             else if ( HotKeyPressEvent( Game::HotKeyEvent::SLEEP_HERO ) )
                 EventSwitchHeroSleeping();
-            // move hero
+            // hero movement control
             else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) )
                 EventKeyArrowPress( Direction::LEFT );
             else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) )
@@ -883,7 +866,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 EventKeyArrowPress( Direction::BOTTOM_LEFT );
             else if ( HotKeyPressEvent( Game::HotKeyEvent::MOVE_BOTTOM_RIGHT ) )
                 EventKeyArrowPress( Direction::BOTTOM_RIGHT );
-            // scroll maps
+            // map scrolling control
             else if ( HotKeyPressEvent( Game::HotKeyEvent::SCROLL_LEFT ) )
                 gameArea.SetScroll( SCROLL_LEFT );
             else if ( HotKeyPressEvent( Game::HotKeyEvent::SCROLL_RIGHT ) )
@@ -946,7 +929,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                 cursor.SetThemes( Cursor::WAIT );
             }
 
-            // stop moving hero if needed
+            // if the hero is currently moving, pressing any mouse button should stop him
             if ( le.MouseClickLeft( displayArea ) || le.MousePressRight( displayArea ) ) {
                 stopHero = true;
             }
@@ -1001,7 +984,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             break;
         }
 
-        // heroes move animation
+        // animation of the hero's movement
         if ( Game::validateAnimationDelay( Game::CURRENT_HERO_DELAY ) ) {
             Heroes * hero = GetFocusHeroes();
 
@@ -1111,7 +1094,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             }
         }
 
-        // slow maps objects animation
+        // map objects animation
         if ( Game::validateAnimationDelay( Game::MAPS_DELAY ) ) {
             uint32_t & frame = Game::MapsAnimationFrame();
             ++frame;
@@ -1129,27 +1112,31 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         }
     }
 
-    if ( fheroes2::GameMode::END_TURN == res ) {
-        // these warnings should be shown at the end of the turn
-        if ( myKingdom.isPlay() && myCastles.empty() ) {
-            const uint32_t lostTownDays = myKingdom.GetLostTownDays();
-
-            if ( lostTownDays > Game::GetLostTownDays() ) {
-                Game::DialogPlayers( conf.CurrentColor(),
-                                     _( "%{color} player, you have lost your last town. If you do not conquer another town in next week, you will be eliminated." ) );
-            }
-            else if ( lostTownDays == 1 ) {
-                Game::DialogPlayers( conf.CurrentColor(), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
-            }
-        }
-
+    if ( res == fheroes2::GameMode::END_TURN ) {
         if ( GetFocusHeroes() ) {
             GetFocusHeroes()->ShowPath( false );
-            RedrawFocus();
+
+            SetRedraw( REDRAW_GAMEAREA );
         }
 
-        if ( !conf.ExtGameAutosaveBeginOfDay() )
-            Game::AutoSave();
+        if ( myKingdom.isPlay() ) {
+            // these warnings should be shown at the end of the turn
+            if ( myCastles.empty() ) {
+                const uint32_t lostTownDays = myKingdom.GetLostTownDays();
+
+                if ( lostTownDays > Game::GetLostTownDays() ) {
+                    Game::DialogPlayers( conf.CurrentColor(),
+                                         _( "%{color} player, you have lost your last town. If you do not conquer another town in next week, you will be eliminated." ) );
+                }
+                else if ( lostTownDays == 1 ) {
+                    Game::DialogPlayers( conf.CurrentColor(), _( "%{color} player, your heroes abandon you, and you are banished from this land." ) );
+                }
+            }
+
+            if ( !conf.ExtGameAutosaveBeginOfDay() ) {
+                Game::AutoSave();
+            }
+        }
     }
 
     return res;
@@ -1243,17 +1230,20 @@ void Interface::Basic::MouseCursorAreaPressRight( int32_t index_maps ) const
             case MP2::OBJN_CASTLE:
             case MP2::OBJ_CASTLE: {
                 const Castle * castle = world.getCastle( tile.GetCenter() );
-                if ( castle )
-                    Dialog::QuickInfo( *castle, fheroes2::Rect() );
-                else
+                if ( castle ) {
+                    Dialog::QuickInfo( *castle );
+                }
+                else {
                     Dialog::QuickInfo( tile );
+                }
                 break;
             }
 
             case MP2::OBJ_HEROES: {
                 const Heroes * heroes = tile.GetHeroes();
-                if ( heroes )
-                    Dialog::QuickInfo( *heroes, fheroes2::Rect() );
+                if ( heroes ) {
+                    Dialog::QuickInfo( *heroes );
+                }
                 break;
             }
 
