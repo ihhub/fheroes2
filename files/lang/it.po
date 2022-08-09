@@ -4236,11 +4236,8 @@ msgstr "1"
 msgid "two"
 msgstr "2"
 
-msgid "A whirlpool engulfs your ship."
+msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
 msgstr "Un gorgo travolge la tua nave."
-
-msgid "Some of your army has fallen overboard."
-msgstr ""
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
 msgstr "Rifiutandoli si sono offesi i mostri e ti attaccano!"
@@ -8820,9 +8817,3 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "No room in"
-#~ msgstr "Non c'è posto"
-
-#~ msgid "the garrison"
-#~ msgstr "nella guarnigione"

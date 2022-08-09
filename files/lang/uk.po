@@ -4468,10 +4468,7 @@ msgstr ""
 msgid "two"
 msgstr ""
 
-msgid "A whirlpool engulfs your ship."
-msgstr ""
-
-msgid "Some of your army has fallen overboard."
+msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
 msgstr ""
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"

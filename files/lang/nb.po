@@ -4511,11 +4511,9 @@ msgstr "1"
 msgid "two"
 msgstr "2"
 
-msgid "A whirlpool engulfs your ship."
-msgstr "Virvelstrømmen sluker skipet ditt."
-
-msgid "Some of your army has fallen overboard."
-msgstr "Noen av styrkene dine har falt om bord."
+msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
+msgstr "Virvelstrømmen sluker skipet ditt. Noen av styrkene dine har falt om "
+"bord."
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
 msgstr ""
@@ -9874,12 +9872,3 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "No room in"
-#~ msgstr "Ingen plass i"
-
-#~ msgid "the garrison"
-#~ msgstr "hæren"
-
-#~ msgid "game: always confirm for rewrite savefile"
-#~ msgstr "Parti: Alltid be om bekreftelse ved overskrivning av lagringsfil"

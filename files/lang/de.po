@@ -4482,11 +4482,9 @@ msgstr "1"
 msgid "two"
 msgstr "2"
 
-msgid "A whirlpool engulfs your ship."
-msgstr "Ein Strudel verschlingt Ihr Schiff."
-
-msgid "Some of your army has fallen overboard."
-msgstr "Ein Teil Ihrer Armee ist über Bord gefallen."
+msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
+msgstr "Ein Strudel verschlingt Ihr Schiff. Ein Teil Ihrer Armee ist über "
+"Bord gefallen."
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
 msgstr "Beleidigt durch Ihre Ablehnung ihres Angebots, greifen die Monster an!"
@@ -9908,12 +9906,3 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "No room in"
-#~ msgstr "Kein Platz in"
-
-#~ msgid "the garrison"
-#~ msgstr "der Garnison"
-
-#~ msgid "game: always confirm for rewrite savefile"
-#~ msgstr "Spiel: immer bestätigen bevor eine Speicherdatei überschrieben ist"

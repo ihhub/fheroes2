@@ -4440,11 +4440,8 @@ msgstr "1"
 msgid "two"
 msgstr "2"
 
-msgid "A whirlpool engulfs your ship."
-msgstr "Ваш корабль засосало в водоворот."
-
-msgid "Some of your army has fallen overboard."
-msgstr "Часть Вашей армии смыло за борт."
+msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
+msgstr "Ваш корабль засосало в водоворот. Часть Вашей армии смыло за борт."
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
 msgstr "Оскорблённые Вашим отказом, они напали на Вас!"
@@ -9465,12 +9462,3 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "No room in"
-#~ msgstr "Нет места"
-
-#~ msgid "the garrison"
-#~ msgstr "в отряде"
-
-#~ msgid "game: always confirm for rewrite savefile"
-#~ msgstr "игра: всегда делать запрос на перезапись игры"

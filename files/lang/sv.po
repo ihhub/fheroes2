@@ -4408,11 +4408,9 @@ msgstr "ett"
 msgid "two"
 msgstr "två"
 
-msgid "A whirlpool engulfs your ship."
-msgstr "En strömvirvel uppslukar ditt skepp."
-
-msgid "Some of your army has fallen overboard."
-msgstr "En del av din armé har ramlat överbord."
+msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
+msgstr "En strömvirvel uppslukar ditt skepp. En del av din armé har ramlat "
+"överbord."
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
 msgstr ""
@@ -9297,10 +9295,3 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "the garrison"
-#~ msgstr "trapporna"
-
-#~ msgid "game: always confirm for rewrite savefile"
-#~ msgstr "spel: Tillåt alltid överskrivning av sparfil"
