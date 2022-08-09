@@ -47,21 +47,20 @@ namespace MP2
 namespace Interface
 {
     class GameArea;
-    bool SkipRedrawTileBottom4Hero( const uint8_t tileset, const uint8_t icnIndex, const int passable );
 }
 
 namespace Maps
 {
+    enum ObjectLayerType : uint8_t
+    {
+        OBJECT_LAYER = 0, // main and action objects like mines, forest, mountains, castles and etc.
+        BACKGROUND_LAYER = 1, // background objects like lakes or bushes.
+        SHADOW_LAYER = 2, // shadows and some special objects like castle's entrance road.
+        TERRAIN_LAYER = 3 // roads, water flaws and cracks. Essentially everything what is a part of terrain.
+    };
+
     struct TilesAddon
     {
-        enum level_t : uint8_t
-        {
-            GROUND = 0,
-            DOWN = 1,
-            SHADOW = 2,
-            UPPER = 3
-        };
-
         TilesAddon();
         TilesAddon( const uint8_t lv, const uint32_t uid, const uint8_t obj, const uint32_t index_ );
 
@@ -83,9 +82,8 @@ namespace Maps
 
         static bool isShadow( const TilesAddon & );
 
-        static bool isResource( const TilesAddon & );
-        static bool isArtifact( const TilesAddon & );
-        static bool isFlag32( const TilesAddon & );
+        static bool isResource( const TilesAddon & ta );
+        static bool isArtifact( const TilesAddon & ta );
 
         static bool PredicateSortRules1( const TilesAddon &, const TilesAddon & );
 
@@ -113,12 +111,23 @@ namespace Maps
         }
 
         fheroes2::Point GetCenter() const;
+
         MP2::MapObjectType GetObject( bool ignoreObjectUnderHero = true ) const;
-        uint8_t GetObjectTileset() const;
 
-        uint8_t GetObjectSpriteIndex() const;
+        uint8_t GetObjectTileset() const
+        {
+            return objectTileset;
+        }
 
-        uint32_t GetObjectUID() const;
+        uint8_t GetObjectSpriteIndex() const
+        {
+            return objectIndex;
+        }
+
+        uint32_t GetObjectUID() const
+        {
+            return uniq;
+        }
 
         // Get Tile metadata field #1 (used for things like monster count or resource amount)
         uint8_t GetQuantity1() const
@@ -132,7 +141,11 @@ namespace Maps
             return quantity2;
         }
 
-        uint16_t GetPassable() const;
+        uint16_t GetPassable() const
+        {
+            return tilePassable;
+        }
+
         int GetGround() const;
 
         bool isWater() const
@@ -152,13 +165,30 @@ namespace Maps
 
         const fheroes2::Image & GetTileSurface() const;
 
-        bool isObject( const MP2::MapObjectType objectType ) const;
-        bool hasSpriteAnimation() const;
+        bool isObject( const MP2::MapObjectType objectType ) const
+        {
+            return objectType == mp2_object;
+        }
+
+        bool hasSpriteAnimation() const
+        {
+            return objectTileset & 1;
+        }
+
         // Checks whether it is possible to move into this tile from the specified direction under the specified conditions
         bool isPassableFrom( const int direction, const bool fromWater, const bool skipFog, const int heroColor ) const;
+
         // Checks whether it is possible to exit this tile in the specified direction
-        bool isPassableTo( const int direction ) const;
-        bool isRoad() const;
+        bool isPassableTo( const int direction ) const
+        {
+            return ( direction & tilePassable ) != 0;
+        }
+
+        bool isRoad() const
+        {
+            return tileIsRoad || mp2_object == MP2::OBJ_CASTLE;
+        }
+
         bool isStream() const;
         bool isShadow() const;
         bool GoodForUltimateArtifact() const;
@@ -176,11 +206,20 @@ namespace Maps
 
         void setBoat( int direction );
         int getBoatDirection() const;
-        void resetObjectSprite();
+
+        void resetObjectSprite()
+        {
+            objectTileset = 0;
+            objectIndex = 255;
+        }
 
         void FixObject();
 
-        uint32_t GetRegion() const;
+        uint32_t GetRegion() const
+        {
+            return _region;
+        }
+
         void UpdateRegion( uint32_t newRegionID );
 
         // Set initial passability based on information read from mp2 and addon structures.
@@ -195,27 +234,25 @@ namespace Maps
 
         bool doesObjectExist( const uint32_t uid ) const;
 
-        // ICN::FLAGS32 version
-        void CaptureFlags32( const MP2::MapObjectType objectType, int col );
+        void setOwnershipFlag( const MP2::MapObjectType objectType, const int color );
 
-        // Removes all ICN::FLAGS32 objects from this tile.
-        void removeFlags();
+        void correctOldSaveOwnershipFlag();
+        void correctDiggingHoles();
 
-        void RedrawTile( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
-        static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area );
-        void RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
-        void RedrawBottom4Hero( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
-        void RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const bool isPuzzleDraw, const Interface::GameArea & area ) const;
-        void RedrawTopFromBottom( fheroes2::Image & dst, const Interface::GameArea & area ) const;
-        void RedrawTop4Hero( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool skip_ground, const Interface::GameArea & area ) const;
-        void RedrawObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area ) const;
-        void RedrawBoat( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
-        void RedrawBoatShadow( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
-        void RedrawMonster( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
+        void removeOwnershipFlag( const MP2::MapObjectType objectType );
+
+        static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const Interface::GameArea & area );
+        void redrawTopLayerObjects( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area ) const;
         int GetFogDirections( int color ) const;
+
         void RedrawFogs( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const;
-        void RedrawAddon( fheroes2::Image & dst, const Addons & addon, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area ) const;
-        void RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
+        void RedrawPassable( fheroes2::Image & dst, const Interface::GameArea & area ) const;
+        void redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level ) const;
+
+        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMonsterSpritesPerTile() const;
+        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMonsterShadowSpritesPerTile() const;
+        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getBoatSpritesPerTile() const;
+        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getBoatShadowSpritesPerTile() const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & );
         void AddonsPushLevel1( const MP2::mp2addon_t & );
@@ -248,7 +285,11 @@ namespace Maps
         }
 
         bool isFogAllAround( const int color ) const;
-        void ClearFog( int color );
+
+        void ClearFog( int colors )
+        {
+            fog_colors &= ~colors;
+        }
 
         /* monster operation */
         void MonsterSetCount( uint32_t count );
@@ -329,10 +370,10 @@ namespace Maps
         static int32_t getIndexOfMainTile( const Maps::Tiles & tile );
 
     private:
-        TilesAddon * FindFlags();
+        TilesAddon * getAddonWithFlag( const uint32_t uid );
 
-        // correct flags, ICN::FLAGS32 vesion
-        void CorrectFlags32( const int col, const uint8_t index, const bool up );
+        // Set or remove a flag which belongs to UID of the object.
+        void updateFlag( const int color, const uint8_t objectSpriteIndex, const uint32_t uid, const bool setOnUpperLayer );
         void RemoveJailSprite();
 
         void QuantitySetVariant( int );
@@ -361,6 +402,11 @@ namespace Maps
         {
             return l.GetIndex() < r.GetIndex();
         }
+
+        static void renderAddonObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const TilesAddon & addon );
+        void renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset ) const;
+
+        static bool removeOldFlag( Addons & addons, const uint8_t startIndex, int & ownerColor );
 
         Addons addons_level1; // bottom layer
         Addons addons_level2; // top layer

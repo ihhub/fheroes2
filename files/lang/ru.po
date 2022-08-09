@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-10 14:31+0000\n"
+"POT-Creation-Date: 2022-08-08 11:28+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -2568,15 +2568,6 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "%{percent}% от всех существ"
 
-msgid "Total: "
-msgstr "В казне: "
-
-msgid "No room in"
-msgstr "Нет места"
-
-msgid "the garrison"
-msgstr "в отряде"
-
 msgid "off"
 msgstr "выкл."
 
@@ -2622,6 +2613,9 @@ msgstr "Построить новый корабль:"
 
 msgid "Resource cost:"
 msgstr "Стоимость:"
+
+msgid "Total: "
+msgstr "В казне: "
 
 msgid "Need: "
 msgstr "Необходимо: "
@@ -4446,11 +4440,8 @@ msgstr "1"
 msgid "two"
 msgstr "2"
 
-msgid "A whirlpool engulfs your ship."
-msgstr "Ваш корабль засосало в водоворот."
-
-msgid "Some of your army has fallen overboard."
-msgstr "Часть Вашей армии смыло за борт."
+msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
+msgstr "Ваш корабль засосало в водоворот. Часть Вашей армии смыло за борт."
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
 msgstr "Оскорблённые Вашим отказом, они напали на Вас!"
@@ -9471,6 +9462,3 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "game: always confirm for rewrite savefile"
-#~ msgstr "игра: всегда делать запрос на перезапись игры"

@@ -568,7 +568,7 @@ namespace MP2
 
     const char * StringObject( const MapObjectType objectType, const int count = 1 );
 
-    bool isHiddenForPuzzle( uint8_t tileset, uint8_t index );
+    bool isHiddenForPuzzle( const int terrainType, uint8_t tileset, uint8_t index );
 
     // The method check whether the object is an action object depending on its location. For example, castle can't be located on water.
     bool isActionObject( const MapObjectType objectType, const bool locatesOnWater );
@@ -601,6 +601,10 @@ namespace MP2
 
     // Make sure that you pass a valid action object.
     int getActionObjectDirection( const MapObjectType objectType );
+
+    bool getDiggingHoleSprite( const int terrainType, uint8_t & tileSet, uint32_t & index );
+
+    bool isDiggingHoleSprite( const int terrainType, const uint8_t tileSet, const uint32_t index );
 }
 
 #endif

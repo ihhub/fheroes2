@@ -318,8 +318,15 @@ namespace
 
             const uint32_t distance = Maps::GetStraightLineDistance( boatSource, hero.GetIndex() );
             if ( distance > 1 ) {
-                Game::ObjectFadeAnimation::PrepareFadeTask( MP2::OBJ_BOAT, boatSource, boatDestination, true, true );
-                Game::ObjectFadeAnimation::PerformFadeTask();
+                const Maps::Tiles & tileSource = world.GetTiles( boatSource );
+
+                Interface::GameArea & gameArea = Interface::Basic::Get().GetGameArea();
+                gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingOutInfo>( tileSource.GetObjectUID(), boatSource, MP2::OBJ_BOAT ) );
+
+                Maps::Tiles & tileDest = world.GetTiles( boatDestination );
+                tileDest.setBoat( Direction::RIGHT );
+
+                gameArea.runSingleObjectAnimation( std::make_shared<Interface::ObjectFadingInInfo>( tileDest.GetObjectUID(), boatDestination, MP2::OBJ_BOAT ) );
 
                 return true;
             }
@@ -570,7 +577,7 @@ namespace
 
             if ( spell == Spell::HAUNT ) {
                 world.CaptureObject( tile.GetIndex(), Color::NONE );
-                tile.removeFlags();
+                tile.removeOwnershipFlag( MP2::OBJ_MINES );
                 hero.SetMapsObject( MP2::OBJ_ABANDONEDMINE );
             }
 

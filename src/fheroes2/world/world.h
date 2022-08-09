@@ -187,10 +187,41 @@ public:
         return height;
     }
 
-    const Maps::Tiles & GetTiles( const int32_t x, const int32_t y ) const;
-    Maps::Tiles & GetTiles( const int32_t x, const int32_t y );
-    const Maps::Tiles & GetTiles( const int32_t tileId ) const;
-    Maps::Tiles & GetTiles( const int32_t tileId );
+    const Maps::Tiles & GetTiles( const int32_t x, const int32_t y ) const
+    {
+#ifdef WITH_DEBUG
+        return vec_tiles.at( y * width + x );
+#else
+        return vec_tiles[y * width + x];
+#endif
+    }
+
+    Maps::Tiles & GetTiles( const int32_t x, const int32_t y )
+    {
+#ifdef WITH_DEBUG
+        return vec_tiles.at( y * width + x );
+#else
+        return vec_tiles[y * width + x];
+#endif
+    }
+
+    const Maps::Tiles & GetTiles( const int32_t tileId ) const
+    {
+#ifdef WITH_DEBUG
+        return vec_tiles.at( tileId );
+#else
+        return vec_tiles[tileId];
+#endif
+    }
+
+    Maps::Tiles & GetTiles( const int32_t tileId )
+    {
+#ifdef WITH_DEBUG
+        return vec_tiles.at( tileId );
+#else
+        return vec_tiles[tileId];
+#endif
+    }
 
     void InitKingdoms();
 
@@ -230,7 +261,11 @@ public:
     bool DiggingForUltimateArtifact( const fheroes2::Point & );
 
     // overall number of cells of the world map: width * height
-    size_t getSize() const;
+    size_t getSize() const
+    {
+        return vec_tiles.size();
+    }
+
     int GetDay() const;
     int GetWeek() const;
 
