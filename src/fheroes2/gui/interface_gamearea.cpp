@@ -377,19 +377,19 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     int32_t maxX = tileROI.x + tileROI.width;
     int32_t maxY = tileROI.y + tileROI.height;
 
-    // Ground level. Also find range of X and Y tile positions.
+    // Render terrain.
     for ( int32_t y = 0; y < tileROI.height; ++y ) {
         fheroes2::Point offset( tileROI.x, tileROI.y + y );
 
         if ( offset.y < 0 || offset.y >= world.h() ) {
             for ( ; offset.x < maxX; ++offset.x ) {
-                Maps::Tiles::RedrawEmptyTile( dst, offset, tileROI, *this );
+                Maps::Tiles::RedrawEmptyTile( dst, offset, *this );
             }
         }
         else {
             for ( ; offset.x < maxX; ++offset.x ) {
                 if ( offset.x < 0 || offset.x >= world.w() ) {
-                    Maps::Tiles::RedrawEmptyTile( dst, offset, tileROI, *this );
+                    Maps::Tiles::RedrawEmptyTile( dst, offset, *this );
                 }
                 else {
                     world.GetTiles( offset.x, offset.y ).RedrawTile( dst, tileROI, *this );
@@ -627,6 +627,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             --greenColorSteps;
         }
 
+        // Not all arrows and their shadows fit in 1 tile. We need to consider by 1 tile bigger area to properly render eveything.
+        const fheroes2::Rect extendedVisibleRoi{ tileROI.x - 1, tileROI.y - 1, tileROI.width + 2, tileROI.height + 2 };
+
         for ( ; currentStep != path.end(); ++currentStep ) {
             const int32_t from = currentStep->GetIndex();
             const fheroes2::Point & mp = Maps::GetPoint( from );
@@ -634,7 +637,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             ++nextStep;
             --greenColorSteps;
 
-            if ( !( tileROI & mp ) ) {
+            if ( !( extendedVisibleRoi & mp ) ) {
                 // The mark is on a tile outside the drawing area. Just skip it.
                 continue;
             }
