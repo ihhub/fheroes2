@@ -224,8 +224,8 @@ static void WhirlpoolTroopLoseEffect( Heroes & hero )
     }
 
     if ( 1 == Rand::Get( 1, 3 ) ) {
-        Dialog::Message( MP2::StringObject( MP2::MapObjectType::OBJ_WHIRLPOOL ), _( "A whirlpool engulfs your ship. Some of your army has fallen overboard." ),
-                         Font::BIG, Dialog::OK );
+        Dialog::Message( MP2::StringObject( MP2::MapObjectType::OBJ_WHIRLPOOL ), _( "A whirlpool engulfs your ship. Some of your army has fallen overboard." ), Font::BIG,
+                         Dialog::OK );
 
         if ( weakestTroop->GetCount() == 1 ) {
             DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " lost " << weakestTroop->GetCount() << " " << weakestTroop->GetName() << " in the whirlpool" )
