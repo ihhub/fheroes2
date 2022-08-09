@@ -1261,10 +1261,8 @@ void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point 
 void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const Interface::GameArea & area ) const
 {
 #ifdef WITH_DEBUG
-    const fheroes2::Point & mp = Maps::GetPoint( _index );
-
     if ( ( 0 == tilePassable || DIRECTION_ALL != tilePassable ) ) {
-        area.BlitOnTile( dst, PassableViewSurface( tilePassable ), 0, 0, mp, false, 255 );
+        area.BlitOnTile( dst, PassableViewSurface( tilePassable ), 0, 0, Maps::GetPoint( _index ), false, 255 );
     }
 #else
     (void)dst;
