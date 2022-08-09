@@ -411,7 +411,8 @@ namespace
 
         str.append( "\n \n" );
 
-        if ( tile.GoodForUltimateArtifact() ) {
+        // Original Editor allows to put an Ultimate Artifact on an invalid tile. So checking tile index solves this issue.
+        if ( tile.GoodForUltimateArtifact() || world.GetUltimateArtifact().getPosition() == tile.GetIndex() ) {
             str.append( _( "(digging ok)" ) );
         }
         else {

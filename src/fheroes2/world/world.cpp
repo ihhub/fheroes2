@@ -981,49 +981,15 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
 {
     Maps::Tiles & tile = GetTiles( center.x, center.y );
 
-    // puts hole sprite
+    // Get digging hole sprite.
     uint8_t obj = 0;
     uint32_t idx = 0;
 
-    switch ( tile.GetGround() ) {
-    case Maps::Ground::DESERT:
-        obj = 0xDC; // ICN::OBJNDSRT
-        idx = 68;
-        break;
-    case Maps::Ground::SNOW:
-        obj = 208; // ICN::OBJNSNOW
-        idx = 11;
-        break;
-    case Maps::Ground::SWAMP:
-        obj = 212; // ICN::OBJNSWMP
-        idx = 86;
-        break;
-    case Maps::Ground::WASTELAND:
-        obj = 0xE4; // ICN::OBJNCRCK
-        idx = 70;
-        break;
-    case Maps::Ground::LAVA:
-        obj = 0xD8; // ICN::OBJNLAVA
-        idx = 26;
-        break;
-    case Maps::Ground::DIRT:
-        obj = 0xE0; // ICN::OBJNDIRT
-        idx = 140;
-        break;
-    case Maps::Ground::BEACH:
-    case Maps::Ground::GRASS:
-        // Beach doesn't have its digging hole so we use it from Grass terrain.
-        obj = 0xC0; // ICN::OBJNGRA2
-        idx = 9;
-        break;
-    case Maps::Ground::WATER:
-        // How is it possible to dig on water? Check your logic!
+    if ( !MP2::getDiggingHoleSprite( tile.GetGround(), obj, idx ) ) {
+        // Are you sure that you can dig here?
         assert( 0 );
+
         return false;
-    default:
-        // Did you add a new terrain type? Add the logic above!
-        assert( 0 );
-        break;
     }
 
     tile.AddonsPushLevel1( Maps::TilesAddon( Maps::BACKGROUND_LAYER, GetUniq(), obj, idx ) );

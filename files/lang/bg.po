@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-30 15:14+0000\n"
+"POT-Creation-Date: 2022-08-08 11:28+0000\n"
 "PO-Revision-Date: 2022-07-25 11:28+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2351,15 +2351,6 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr ""
 
-msgid "Total: "
-msgstr ""
-
-msgid "No room in"
-msgstr ""
-
-msgid "the garrison"
-msgstr ""
-
 msgid "off"
 msgstr ""
 
@@ -2403,6 +2394,9 @@ msgid "Build a new ship:"
 msgstr ""
 
 msgid "Resource cost:"
+msgstr ""
+
+msgid "Total: "
 msgstr ""
 
 msgid "Need: "
