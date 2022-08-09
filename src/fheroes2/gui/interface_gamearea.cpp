@@ -392,7 +392,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     Maps::Tiles::RedrawEmptyTile( dst, offset, *this );
                 }
                 else {
-                    world.GetTiles( offset.x, offset.y ).RedrawTile( dst, *this );
+                    DrawTile( dst, world.GetTiles( offset.x, offset.y ).GetTileSurface(), offset );
                 }
             }
         }

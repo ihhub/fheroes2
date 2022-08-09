@@ -241,7 +241,6 @@ namespace Maps
 
         void removeOwnershipFlag( const MP2::MapObjectType objectType );
 
-        void RedrawTile( fheroes2::Image & dst, const Interface::GameArea & area ) const;
         static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const Interface::GameArea & area );
         void redrawTopLayerObjects( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area ) const;
         int GetFogDirections( int color ) const;

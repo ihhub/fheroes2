@@ -1239,11 +1239,6 @@ int Maps::Tiles::GetGround() const
     return Maps::Ground::BEACH;
 }
 
-void Maps::Tiles::RedrawTile( fheroes2::Image & dst, const Interface::GameArea & area ) const
-{
-    area.DrawTile( dst, GetTileSurface(), Maps::GetPoint( _index ) );
-}
-
 void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const Interface::GameArea & area )
 {
     if ( mp.y == -1 && mp.x >= 0 && mp.x < world.w() ) { // top first row
