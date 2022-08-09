@@ -1266,7 +1266,6 @@ void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const Interface::GameAr
     }
 #else
     (void)dst;
-    (void)visibleTileROI;
     (void)area;
 #endif
 }
