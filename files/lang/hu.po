@@ -4430,11 +4430,8 @@ msgstr "egy"
 msgid "two"
 msgstr "kettő"
 
-msgid "A whirlpool engulfs your ship."
-msgstr "Egy örvény elnyeli a hajód."
-
-msgid "Some of your army has fallen overboard."
-msgstr "A csapatod néhány tagja a tengerbe esett."
+msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
+msgstr "Egy örvény elnyeli a hajód. A csapatod néhány tagja a tengerbe esett."
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
 msgstr "Visszautasítottad az ajánlatukat, ezért megtámadnak!"
@@ -9370,7 +9367,3 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "the garrison"
-#~ msgstr "Helyőrség"

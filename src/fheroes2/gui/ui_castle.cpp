@@ -298,11 +298,13 @@ namespace fheroes2
     void drawCastleDialogBuilding( const int32_t icnId, const uint32_t icnIndex, const Castle & castle, const Point & offset, const Rect & renderArea,
                                    const uint8_t alpha )
     {
-        // TODO: remove Fixed4Blit function usage. Use ^ operator for fheroes2::Rect objects.
         const fheroes2::Sprite & image
             = isImagePlayerColorDependent( icnId ) ? getModifiedByColorImage( icnId, icnIndex, castle.GetColor() ) : AGG::GetICN( icnId, icnIndex );
 
-        std::pair<fheroes2::Rect, fheroes2::Point> roi = Fixed4Blit( { offset.x + image.x(), offset.y + image.y(), image.width(), image.height() }, renderArea );
-        fheroes2::AlphaBlit( image, roi.first.x, roi.first.y, fheroes2::Display::instance(), roi.second.x, roi.second.y, roi.first.width, roi.first.height, alpha );
+        const fheroes2::Rect imageRoi{ offset.x + image.x(), offset.y + image.y(), image.width(), image.height() };
+        const fheroes2::Rect overlappedRoi = renderArea ^ imageRoi;
+
+        fheroes2::AlphaBlit( image, overlappedRoi.x - imageRoi.x, overlappedRoi.y - imageRoi.y, fheroes2::Display::instance(), overlappedRoi.x, overlappedRoi.y,
+                             overlappedRoi.width, overlappedRoi.height, alpha );
     }
 }
