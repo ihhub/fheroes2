@@ -2864,42 +2864,37 @@ int32_t Maps::Tiles::getIndexOfMainTile( const Maps::Tiles & tile )
         return tile._index;
     }
 
+    assert( correctedObjectType > objectType );
+
     // This is non-main tile of an action object. We have to find the main tile.
     // Since we don't want to care about the size of every object in the game we should find tiles in a certain radius.
     const int32_t radiusOfSearch = 3;
 
     // It's unknown whether object type belongs to bottom layer or ground. Create a list of UIDs starting from bottom layer.
-    std::vector<uint32_t> uids;
-    const Maps::Addons & level2Addons = tile.getLevel2Addons();
-    const Maps::Addons & level1Addons = tile.getLevel1Addons();
+    std::set<uint32_t> uids;
+    uids.insert( tile.GetObjectUID() );
 
-    for ( auto iter = level2Addons.rbegin(); iter != level2Addons.rend(); ++iter ) {
-        if ( iter->uniq != 0 ) {
-            uids.emplace_back( iter->uniq );
-        }
+    for ( const TilesAddon & addon : tile.getLevel1Addons() ) {
+        uids.insert( addon.uniq );
     }
 
-    if ( tile.GetObjectUID() != 0 ) {
-        uids.emplace_back( tile.GetObjectUID() );
-    }
-
-    for ( auto iter = level1Addons.rbegin(); iter != level1Addons.rend(); ++iter ) {
-        if ( iter->uniq != 0 ) {
-            uids.emplace_back( iter->uniq );
-        }
+    for ( const TilesAddon & addon : tile.getLevel2Addons() ) {
+        uids.insert( addon.uniq );
     }
 
     const int32_t tileIndex = tile.GetIndex();
     const int32_t mapWidth = world.w();
-
-    assert( correctedObjectType > objectType );
 
     for ( int32_t y = -radiusOfSearch; y <= radiusOfSearch; ++y ) {
         for ( int32_t x = -radiusOfSearch; x <= radiusOfSearch; ++x ) {
             const int32_t index = tileIndex + y * mapWidth + x;
             if ( Maps::isValidAbsIndex( index ) ) {
                 const Maps::Tiles & foundTile = world.GetTiles( index );
-                if ( std::find( uids.begin(), uids.end(), foundTile.GetObjectUID() ) != uids.end() && foundTile.GetObject( false ) == correctedObjectType ) {
+                if ( foundTile.GetObject( false ) != correctedObjectType ) {
+                    continue;
+                }
+
+                if ( foundTile.GetObjectUID() != 0 && uids.count( foundTile.GetObjectUID() ) > 0 ) {
                     return foundTile._index;
                 }
             }
