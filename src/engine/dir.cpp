@@ -21,6 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #if defined( _MSC_VER ) || defined( __MINGW32__ )
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #elif defined( TARGET_PS_VITA )
 #include <psp2/io/dirent.h>

@@ -1,3 +1,61 @@
+version 0.9.18 (10 August 2022)
+- speed up rendering of Mini Map area
+- fix missing shadows from path arrows when they are on the edge of screen
+- render correct digging holes for terrains
+- add monster fading animation when both wandering monsters and hero are dying after a battle
+- fix incorrect boat fading animation
+- do not show digging holes on Puzzle Map
+- fix out of view rendering of boats and heroes
+- fix Ultimate Artifact digging conditions
+- fix the logic of joining monsters for free and for money
+- do not draw objects over the map edge if they are in fog
+- fix cases of boats being shifted when a hero boards it
+- fix wrong rendering priority of Hero and Jail
+- do not render shadow of a tall monster over another monster nearby
+- properly render trees and Sawmill
+- fix Fountain being displayed over a moving hero, not under
+- fix certain shadows of objects being too dark
+- fix cases when hero's flag was not being displayed properly when a hero stands near a tall object
+- fix cases when some parts of heroes being displayed over other objects
+- fix monsters being displayed over mountains
+- draw a flag over Magic Garden object
+- draw Adventure Map decors in the same way as in the original game
+- fix flag rendering priority from Windmill
+- fix incorrect moving boat rendering in relation to other boats
+- fix boat being cut near Magellan Maps object
+- fix incorrect boat rendering priority
+- fix wasteland terrain object displayed over hero's sprite
+- fix Mine's flag being displayed over a hero
+- fix cases when a moving hero being drawn over other heroes
+- fix cases when some parts of a ship can be seen through terrain objects
+- fix cases when hero overlaps ship while passing nearby
+- hero does not step on route arrows anymore
+- fix the pre-battle arrangement of neutral troops
+- add separate sound font for SDL 2 builds
+- fix paused music being played with old music volume while restarting it
+- fix hero starting experience values
+- fix amount of experience from Tree of Knowledge
+- fix missing retaliation delay after last animation frame
+- fix music being too quiet while fast switching between music types (Windows OS)
+- fix crashes on Windows 8 using MIDI music
+- fix external audio not always returning to on after turning volume to zero (Windows OS)
+- fix horse's steps being faded while crossing terrain border using MIDI sound (Windows OS)
+- fix sound volume being lower during combat (Windows OS) 
+- fix no sounds situation when music is off even when sounds are not (Windows OS)
+- show correct hero's level and experience on level up
+- fix incorrect castle's area leading to wrong castle's info
+- add missing window frame for hero's dialog during level up
+- fix number of ghosts and splitting for Shipwreck, Haunt and Abandoned Mine cases
+- update Bulgarian Translation
+- update treasure chest AI decision logic
+- fix a case when a hero got 2 Magic Books
+- update Russian and Hungarian translations
+- add support for loading of MIDI sound fonts
+- show upgraded monster images in Adventure Map objects upon a successful upgrade
+- fix redrawing of the status window in cases when the hero's army or the castle garrison change without changing focus
+- make best AI fighter as a champion
+- update Polish translation
+
 version 0.9.17 (11 July 2022)
 - fix possible crashes during sound playback
 - always ask about rewriting an existing save file

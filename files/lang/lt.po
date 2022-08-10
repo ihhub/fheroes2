@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-10 14:31+0000\n"
+"POT-Creation-Date: 2022-08-08 11:28+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -2393,15 +2393,6 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr ""
 
-msgid "Total: "
-msgstr ""
-
-msgid "No room in"
-msgstr ""
-
-msgid "the garrison"
-msgstr ""
-
 msgid "off"
 msgstr ""
 
@@ -2447,6 +2438,9 @@ msgstr "Statyti naują laivą:"
 
 msgid "Resource cost:"
 msgstr "Išteklio kaina:"
+
+msgid "Total: "
+msgstr ""
 
 msgid "Need: "
 msgstr ""
@@ -4178,10 +4172,7 @@ msgstr ""
 msgid "two"
 msgstr ""
 
-msgid "A whirlpool engulfs your ship."
-msgstr ""
-
-msgid "Some of your army has fallen overboard."
+msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
 msgstr ""
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"

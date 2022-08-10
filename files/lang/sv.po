@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-10 14:31+0000\n"
+"POT-Creation-Date: 2022-08-09 03:07+0000\n"
 "PO-Revision-Date: 2022-05-10 16:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -2519,16 +2519,6 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr ""
 
-msgid "Total: "
-msgstr ""
-
-msgid "No room in"
-msgstr ""
-
-#, fuzzy
-msgid "the garrison"
-msgstr "trapporna"
-
 msgid "off"
 msgstr "av"
 
@@ -2574,6 +2564,9 @@ msgstr "Bygg ett nytt skepp:"
 
 msgid "Resource cost:"
 msgstr "Resurskostnad:"
+
+msgid "Total: "
+msgstr ""
 
 msgid "Need: "
 msgstr ""
@@ -4415,11 +4408,9 @@ msgstr "ett"
 msgid "two"
 msgstr "två"
 
-msgid "A whirlpool engulfs your ship."
-msgstr "En strömvirvel uppslukar ditt skepp."
-
-msgid "Some of your army has fallen overboard."
-msgstr "En del av din armé har ramlat överbord."
+msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
+msgstr ""
+"En strömvirvel uppslukar ditt skepp. En del av din armé har ramlat överbord."
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
 msgstr ""
@@ -9304,6 +9295,3 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "game: always confirm for rewrite savefile"
-#~ msgstr "spel: Tillåt alltid överskrivning av sparfil"

@@ -3174,10 +3174,15 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
 
     // targets damage animation loop
     bool finishedAnimation = false;
-    while ( le.HandleEvents() && !finishedAnimation ) {
+    while ( le.HandleEvents() ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_FRAME_DELAY ) ) {
+            if ( finishedAnimation ) {
+                // All frames are rendered.
+                break;
+            }
+
             bool redrawBattleField = false;
 
             if ( attacker != nullptr ) {

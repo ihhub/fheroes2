@@ -12,8 +12,8 @@
       <AdditionalDependencies>SDL.lib;SDL_mixer.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(MSBuildThisFileDirectory)packages\sdl1\lib\$(PlatformTarget)\*.dll" "$(OutDir)"
-xcopy /Y "$(MSBuildThisFileDirectory)packages\sdl1\lib\$(PlatformTarget)\*.pdb" "$(OutDir)"
+      <Command>xcopy /Y /Q "$(MSBuildThisFileDirectory)packages\sdl1\lib\$(PlatformTarget)\*.dll" "$(OutDir)"
+xcopy /Y /Q "$(MSBuildThisFileDirectory)packages\sdl1\lib\$(PlatformTarget)\*.pdb" "$(OutDir)"
 %(Command)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
