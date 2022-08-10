@@ -1239,22 +1239,8 @@ int Maps::Tiles::GetGround() const
     return Maps::Ground::BEACH;
 }
 
-void Maps::Tiles::RedrawTile( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
+void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const Interface::GameArea & area )
 {
-    const fheroes2::Point & mp = Maps::GetPoint( _index );
-
-    if ( !( visibleTileROI & mp ) )
-        return;
-
-    area.DrawTile( dst, GetTileSurface(), mp );
-}
-
-void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area )
-{
-    if ( !( visibleTileROI & mp ) ) {
-        return;
-    }
-
     if ( mp.y == -1 && mp.x >= 0 && mp.x < world.w() ) { // top first row
         area.DrawTile( dst, fheroes2::AGG::GetTIL( TIL::STON, 20 + ( mp.x % 4 ), 0 ), mp );
     }
@@ -1272,30 +1258,23 @@ void Maps::Tiles::RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point 
     }
 }
 
-void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const
+void Maps::Tiles::RedrawPassable( fheroes2::Image & dst, const Interface::GameArea & area ) const
 {
 #ifdef WITH_DEBUG
-    const fheroes2::Point & mp = Maps::GetPoint( _index );
-
-    if ( ( visibleTileROI & mp ) && ( 0 == tilePassable || DIRECTION_ALL != tilePassable ) ) {
-        area.BlitOnTile( dst, PassableViewSurface( tilePassable ), 0, 0, mp, false, 255 );
+    if ( 0 == tilePassable || DIRECTION_ALL != tilePassable ) {
+        area.BlitOnTile( dst, PassableViewSurface( tilePassable ), 0, 0, Maps::GetPoint( _index ), false, 255 );
     }
 #else
     (void)dst;
-    (void)visibleTileROI;
     (void)area;
 #endif
 }
 
-void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, bool isPuzzleDraw, const Interface::GameArea & area,
-                                            const uint8_t level ) const
+void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level ) const
 {
     assert( level <= 0x03 );
 
     const fheroes2::Point & mp = Maps::GetPoint( _index );
-    if ( !( visibleTileROI & mp ) ) {
-        return;
-    }
 
     // Since the original game stores information about objects in a very weird way and this is how it is implemented for us we need to do the following procedure:
     // - run through all bottom objects first which are stored in the addon stack
@@ -1510,12 +1489,9 @@ std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Maps::Tiles::getBoatSh
     return output;
 }
 
-void Maps::Tiles::redrawTopLayerObjects( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const bool isPuzzleDraw, const Interface::GameArea & area ) const
+void Maps::Tiles::redrawTopLayerObjects( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area ) const
 {
     const fheroes2::Point & mp = Maps::GetPoint( _index );
-
-    if ( !( visibleTileROI & mp ) )
-        return;
 
     // Ghost animation is unique and can be rendered in multiple cases.
     bool renderFlyingGhosts = false;
@@ -2888,42 +2864,37 @@ int32_t Maps::Tiles::getIndexOfMainTile( const Maps::Tiles & tile )
         return tile._index;
     }
 
+    assert( correctedObjectType > objectType );
+
     // This is non-main tile of an action object. We have to find the main tile.
     // Since we don't want to care about the size of every object in the game we should find tiles in a certain radius.
     const int32_t radiusOfSearch = 3;
 
     // It's unknown whether object type belongs to bottom layer or ground. Create a list of UIDs starting from bottom layer.
-    std::vector<uint32_t> uids;
-    const Maps::Addons & level2Addons = tile.getLevel2Addons();
-    const Maps::Addons & level1Addons = tile.getLevel1Addons();
+    std::set<uint32_t> uids;
+    uids.insert( tile.GetObjectUID() );
 
-    for ( auto iter = level2Addons.rbegin(); iter != level2Addons.rend(); ++iter ) {
-        if ( iter->uniq != 0 ) {
-            uids.emplace_back( iter->uniq );
-        }
+    for ( const TilesAddon & addon : tile.getLevel1Addons() ) {
+        uids.insert( addon.uniq );
     }
 
-    if ( tile.GetObjectUID() != 0 ) {
-        uids.emplace_back( tile.GetObjectUID() );
-    }
-
-    for ( auto iter = level1Addons.rbegin(); iter != level1Addons.rend(); ++iter ) {
-        if ( iter->uniq != 0 ) {
-            uids.emplace_back( iter->uniq );
-        }
+    for ( const TilesAddon & addon : tile.getLevel2Addons() ) {
+        uids.insert( addon.uniq );
     }
 
     const int32_t tileIndex = tile.GetIndex();
     const int32_t mapWidth = world.w();
-
-    assert( correctedObjectType > objectType );
 
     for ( int32_t y = -radiusOfSearch; y <= radiusOfSearch; ++y ) {
         for ( int32_t x = -radiusOfSearch; x <= radiusOfSearch; ++x ) {
             const int32_t index = tileIndex + y * mapWidth + x;
             if ( Maps::isValidAbsIndex( index ) ) {
                 const Maps::Tiles & foundTile = world.GetTiles( index );
-                if ( std::find( uids.begin(), uids.end(), foundTile.GetObjectUID() ) != uids.end() && foundTile.GetObject( false ) == correctedObjectType ) {
+                if ( foundTile.GetObject( false ) != correctedObjectType ) {
+                    continue;
+                }
+
+                if ( foundTile.GetObjectUID() != 0 && uids.count( foundTile.GetObjectUID() ) > 0 ) {
                     return foundTile._index;
                 }
             }

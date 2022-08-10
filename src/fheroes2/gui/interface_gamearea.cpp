@@ -377,22 +377,22 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     int32_t maxX = tileROI.x + tileROI.width;
     int32_t maxY = tileROI.y + tileROI.height;
 
-    // Ground level. Also find range of X and Y tile positions.
+    // Render terrain.
     for ( int32_t y = 0; y < tileROI.height; ++y ) {
         fheroes2::Point offset( tileROI.x, tileROI.y + y );
 
         if ( offset.y < 0 || offset.y >= world.h() ) {
             for ( ; offset.x < maxX; ++offset.x ) {
-                Maps::Tiles::RedrawEmptyTile( dst, offset, tileROI, *this );
+                Maps::Tiles::RedrawEmptyTile( dst, offset, *this );
             }
         }
         else {
             for ( ; offset.x < maxX; ++offset.x ) {
                 if ( offset.x < 0 || offset.x >= world.w() ) {
-                    Maps::Tiles::RedrawEmptyTile( dst, offset, tileROI, *this );
+                    Maps::Tiles::RedrawEmptyTile( dst, offset, *this );
                 }
                 else {
-                    world.GetTiles( offset.x, offset.y ).RedrawTile( dst, tileROI, *this );
+                    DrawTile( dst, world.GetTiles( offset.x, offset.y ).GetTileSurface(), offset );
                 }
             }
         }
@@ -537,7 +537,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
             // Draw roads, rivers and cracks.
-            tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::TERRAIN_LAYER );
+            tile.redrawBottomLayerObjects( dst, isPuzzleDraw, *this, Maps::TERRAIN_LAYER );
         }
     }
 
@@ -546,7 +546,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
-            tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::BACKGROUND_LAYER );
+            tile.redrawBottomLayerObjects( dst, isPuzzleDraw, *this, Maps::BACKGROUND_LAYER );
 
             // Draw the lower part of tile-unfit object's sprite.
             renderImagesOnTile( dst, tileUnfit.bottomBackgroundImages, { x, y }, *this );
@@ -557,7 +557,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
 
-            tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::SHADOW_LAYER );
+            tile.redrawBottomLayerObjects( dst, isPuzzleDraw, *this, Maps::SHADOW_LAYER );
 
             // Draw all shadows from tile-unfit objects.
             renderImagesOnTile( dst, tileUnfit.shadowImages, { x, y }, *this );
@@ -572,7 +572,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             renderImagesOnTile( dst, tileUnfit.lowPriorityBottomImages, { x, y }, *this );
 
             // TODO: some action objects have tiles above which are still on bottom layer. These images must be drawn last.
-            tile.redrawBottomLayerObjects( dst, tileROI, isPuzzleDraw, *this, Maps::OBJECT_LAYER );
+            tile.redrawBottomLayerObjects( dst, isPuzzleDraw, *this, Maps::OBJECT_LAYER );
 
             // Draw middle part of tile-unfit sprites.
             renderImagesOnTile( dst, tileUnfit.bottomImages, { x, y }, *this );
@@ -597,10 +597,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 // Draw upper part of tile-unfit sprites.
                 renderImagesOnTile( dst, tileUnfit.topImages, { x, y }, *this );
 
-                tile.redrawTopLayerObjects( dst, tileROI, isPuzzleDraw, *this );
+                tile.redrawTopLayerObjects( dst, isPuzzleDraw, *this );
             }
             else {
-                tile.redrawTopLayerObjects( dst, tileROI, isPuzzleDraw, *this );
+                tile.redrawTopLayerObjects( dst, isPuzzleDraw, *this );
 
                 // Draw upper part of tile-unfit sprites.
                 renderImagesOnTile( dst, tileUnfit.topImages, { x, y }, *this );
@@ -627,6 +627,9 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             --greenColorSteps;
         }
 
+        // Not all arrows and their shadows fit in 1 tile. We need to consider by 1 tile bigger area to properly render eveything.
+        const fheroes2::Rect extendedVisibleRoi{ tileROI.x - 1, tileROI.y - 1, tileROI.width + 2, tileROI.height + 2 };
+
         for ( ; currentStep != path.end(); ++currentStep ) {
             const int32_t from = currentStep->GetIndex();
             const fheroes2::Point & mp = Maps::GetPoint( from );
@@ -634,7 +637,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             ++nextStep;
             --greenColorSteps;
 
-            if ( !( tileROI & mp ) ) {
+            if ( !( extendedVisibleRoi & mp ) ) {
                 // The mark is on a tile outside the drawing area. Just skip it.
                 continue;
             }
@@ -666,7 +669,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         if ( flag & LEVEL_ALL ) {
             for ( int32_t y = minY; y < maxY; ++y ) {
                 for ( int32_t x = minX; x < maxX; ++x ) {
-                    world.GetTiles( x, y ).RedrawPassable( dst, tileROI, *this );
+                    world.GetTiles( x, y ).RedrawPassable( dst, *this );
                 }
             }
         }
