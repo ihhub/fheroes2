@@ -1,4 +1,4 @@
-version 0.9.18 (10 July 2022)
+version 0.9.18 (10 August 2022)
 - speed up rendering of Mini Map area
 - fix missing shadows from path arrows when they are on the edge of screen
 - render correct digging holes for terrains
