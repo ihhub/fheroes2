@@ -1680,11 +1680,19 @@ bool Maps::Tiles::GoodForUltimateArtifact() const
         return false;
     }
 
-    if ( objectTileset == 0 || isShadowSprite( objectTileset, objectIndex ) ) {
-        return addons_level1.size() == static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow ) );
+    if ( objectTileset != 0 && !isShadowSprite( objectTileset, objectIndex ) ) {
+        return false;
     }
 
-    return false;
+    if ( static_cast<size_t>( std::count_if( addons_level1.begin(), addons_level1.end(), TilesAddon::isShadow ) ) != addons_level1.size() ) {
+        return false;
+    }
+
+    if ( static_cast<size_t>( std::count_if( addons_level2.begin(), addons_level2.end(), TilesAddon::isShadow ) ) != addons_level2.size() ) {
+        return false;
+    }
+
+    return true;
 }
 
 bool Maps::Tiles::isPassableFrom( const int direction, const bool fromWater, const bool skipFog, const int heroColor ) const
