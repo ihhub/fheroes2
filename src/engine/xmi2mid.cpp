@@ -115,7 +115,9 @@ namespace
         "Guitar Fret Noise", "Breath Noise", "Seashore", "Bird Tweet", "Telephone Ring", "Helicopter", "Applause", "Gunshot" };
 
     // Some (but not all) commonly used MIDI drum kits are listed here: https://en.wikipedia.org/wiki/General_MIDI_Level_2#Drum_sounds
-    const std::map<uint32_t, const char *> drumKitDescription = { { 0, "Standard" }, { 48, "Orchestral" }, { 49, "Fix Room" } };
+    const std::map<uint32_t, const char *> drumKitDescription
+        = { { 0, "Standard Kit" }, { 8, "Room Kit" },   { 16, "Power Kit" },      { 24, "Electronic Kit" }, { 25, "TR-808 Kit" },
+            { 32, "Jazz Kit" },    { 40, "Brush Kit" }, { 48, "Orchestral Kit" }, { 49, "Fix Room Kit" },   { 56, "Sound FX Kit" } };
 
     enum
     {
