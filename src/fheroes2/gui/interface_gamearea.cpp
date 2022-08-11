@@ -269,7 +269,7 @@ namespace
         renderImagesOnTile( output, tileUnfit.topImages, offset, area );
     }
 
-    bool isTallTopLayerSprite( const int32_t x, int32_t y )
+    bool isTallTopLayerObject( const int32_t x, const int32_t y, const uint32_t uid )
     {
         if ( y + 1 >= world.h() ) {
             // There is nothing below so it's not a tall object.
@@ -277,18 +277,13 @@ namespace
         }
 
         // There is a tile below the current.
-        const Maps::Tiles & tile = world.GetTiles( x, y );
         const Maps::Tiles & tileBelow = world.GetTiles( x, y + 1 );
-
-        const Maps::Addons & currentTileAddons = tile.getLevel2Addons();
         const Maps::Addons & lowerTileAddons = tileBelow.getLevel2Addons();
 
-        for ( const Maps::TilesAddon & currentAddon : currentTileAddons ) {
-            for ( const Maps::TilesAddon & lowerAddon : lowerTileAddons ) {
-                if ( lowerAddon.uniq == currentAddon.uniq ) {
-                    // This is a tall object.
-                    return true;
-                }
+        for ( const Maps::TilesAddon & lowerAddon : lowerTileAddons ) {
+            if ( lowerAddon.uniq == uid ) {
+                // This is a tall object.
+                return true;
             }
         }
 
@@ -582,6 +577,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
+    std::vector<const Maps::TilesAddon *> topLayerTallObjects;
+
     for ( int32_t y = minY; y < maxY; ++y ) {
         for ( int32_t x = minX; x < maxX; ++x ) {
             const Maps::Tiles & tile = world.GetTiles( x, y );
@@ -589,21 +586,24 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             // Since some objects are taller than 2 tiles their top layer sprites must be drawn at the very end.
             // For now what we need to do is to run throught all level 2 objects and verify that the tile below doesn't have
             // any other level 2 objects with the same UID.
-            //
-            // TODO: This is a very hacky way to do it since we do not take into consideration that tile-unfit objects might be taller than 2 tiles as well.
-            // TODO: Also some objects in level 2 might be drawn below tile-unfit objects.Find a better way to deal with this situation.
 
-            if ( isTallTopLayerSprite( x, y ) ) {
-                // Draw upper part of tile-unfit sprites.
-                renderImagesOnTile( dst, tileUnfit.topImages, { x, y }, *this );
-
-                tile.redrawTopLayerObjects( dst, isPuzzleDraw, *this );
+            topLayerTallObjects.clear();
+            for ( const Maps::TilesAddon & addon : tile.getLevel2Addons() ) {
+                if ( isTallTopLayerObject( x, y, addon.uniq ) ) {
+                    topLayerTallObjects.emplace_back( &addon );
+                }
+                else {
+                    tile.redrawTopLayerObject( dst, isPuzzleDraw, *this, addon );
+                }
             }
-            else {
-                tile.redrawTopLayerObjects( dst, isPuzzleDraw, *this );
 
-                // Draw upper part of tile-unfit sprites.
-                renderImagesOnTile( dst, tileUnfit.topImages, { x, y }, *this );
+            tile.redrawTopLayerExtraObjects( dst, isPuzzleDraw, *this );
+
+            // Draw upper part of tile-unfit sprites.
+            renderImagesOnTile( dst, tileUnfit.topImages, { x, y }, *this );
+
+            for ( const Maps::TilesAddon * addon : topLayerTallObjects ) {
+                tile.redrawTopLayerObject( dst, isPuzzleDraw, *this, *addon );
             }
         }
     }

@@ -637,11 +637,6 @@ bool Maps::TilesAddon::isRoad() const
     return false;
 }
 
-bool Maps::TilesAddon::hasSpriteAnimation() const
-{
-    return object & 1;
-}
-
 bool Maps::TilesAddon::isResource( const TilesAddon & ta )
 {
     // OBJNRSRC
@@ -773,12 +768,6 @@ std::pair<int, int> Maps::Tiles::ColorRaceFromHeroSprite( const uint32_t heroSpr
     return res;
 }
 
-/* Maps::Addons */
-void Maps::Addons::Remove( uint32_t uniq )
-{
-    remove_if( [uniq]( const TilesAddon & v ) { return v.isUniq( uniq ); } );
-}
-
 void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
 {
     tilePassable = DIRECTION_ALL;
@@ -789,7 +778,7 @@ void Maps::Tiles::Init( int32_t index, const MP2::mp2tile_t & mp2 )
     additionalMetadata = 0;
     fog_colors = Color::ALL;
 
-    SetTile( mp2.surfaceType, mp2.flags );
+    SetTerrain( mp2.surfaceType, mp2.flags );
     SetIndex( index );
     SetObject( static_cast<MP2::MapObjectType>( mp2.mapObjectType ) );
 
@@ -932,7 +921,7 @@ int Maps::Tiles::getBoatDirection() const
     return Direction::UNKNOWN;
 }
 
-void Maps::Tiles::SetTile( uint32_t sprite_index, uint32_t shape )
+void Maps::Tiles::SetTerrain( uint32_t sprite_index, uint32_t shape )
 {
     pack_sprite_index = PackTileSpriteIndex( sprite_index, shape );
 }
@@ -1489,9 +1478,12 @@ std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Maps::Tiles::getBoatSh
     return output;
 }
 
-void Maps::Tiles::redrawTopLayerObjects( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area ) const
+void Maps::Tiles::redrawTopLayerExtraObjects( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area ) const
 {
-    const fheroes2::Point & mp = Maps::GetPoint( _index );
+    if ( isPuzzleDraw ) {
+        // Extra objects should not be shown on Puzzle Map as they are temporary objects appearing under specific conditions like flags.
+        return;
+    }
 
     // Ghost animation is unique and can be rendered in multiple cases.
     bool renderFlyingGhosts = false;
@@ -1529,16 +1521,17 @@ void Maps::Tiles::redrawTopLayerObjects( fheroes2::Image & dst, const bool isPuz
 
         const uint8_t alphaValue = area.getObjectAlphaValue( uniq );
 
-        area.BlitOnTile( dst, image, image.x(), image.y(), mp, false, alphaValue );
+        area.BlitOnTile( dst, image, image.x(), image.y(), Maps::GetPoint( _index ), false, alphaValue );
+    }
+}
+
+void Maps::Tiles::redrawTopLayerObject( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const TilesAddon & addon ) const
+{
+    if ( isPuzzleDraw && MP2::isHiddenForPuzzle( GetGround(), addon.object, addon.index ) ) {
+        return;
     }
 
-    for ( const TilesAddon & addon : addons_level2 ) {
-        if ( isPuzzleDraw && MP2::isHiddenForPuzzle( GetGround(), addon.object, addon.index ) ) {
-            continue;
-        }
-
-        renderAddonObject( dst, area, mp, addon );
-    }
+    renderAddonObject( dst, area, Maps::GetPoint( _index ), addon );
 }
 
 Maps::TilesAddon * Maps::Tiles::FindAddonLevel1( uint32_t uniq1 )
@@ -2141,10 +2134,8 @@ bool Maps::Tiles::isCaptureObjectProtected() const
 
 void Maps::Tiles::Remove( uint32_t uniqID )
 {
-    if ( !addons_level1.empty() )
-        addons_level1.Remove( uniqID );
-    if ( !addons_level2.empty() )
-        addons_level2.Remove( uniqID );
+    addons_level1.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v.isUniq( uniqID ); } );
+    addons_level2.remove_if( [uniqID]( const Maps::TilesAddon & v ) { return v.isUniq( uniqID ); } );
 
     if ( uniq == uniqID ) {
         resetObjectSprite();
