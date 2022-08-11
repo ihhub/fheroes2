@@ -123,6 +123,17 @@ namespace
 
         return COLOR_WHITE;
     }
+
+    bool getCastleColor( uint8_t & fillColor, const fheroes2::Point & position )
+    {
+        const Castle * castle = world.getCastle( position );
+        if ( castle != nullptr ) {
+            fillColor = GetPaletteIndexFromColor( castle->GetColor() );
+            return true;
+        }
+
+        return false;
+    }
 }
 
 Interface::Radar::Radar( Basic & basic )
@@ -309,15 +320,6 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                 }
                 break;
             }
-            case MP2::OBJ_CASTLE:
-            case MP2::OBJN_CASTLE: {
-                if ( visibleTile || revealTowns ) {
-                    const Castle * castle = world.getCastle( tile.GetCenter() );
-                    if ( castle )
-                        fillColor = GetPaletteIndexFromColor( castle->GetColor() );
-                }
-                break;
-            }
             case MP2::OBJ_DRAGONCITY:
             case MP2::OBJ_LIGHTHOUSE:
             case MP2::OBJ_ALCHEMYLAB:
@@ -352,8 +354,14 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                 }
                 break;
             default:
+                // Castles and Towns can be partially covered by other non-action objects so we need to rely on special storage of castle's tiles.
                 if ( visibleTile ) {
-                    continue;
+                    if ( !getCastleColor( fillColor, tile.GetCenter() ) ) {
+                        continue;
+                    }
+                }
+                else if ( revealTowns ) {
+                    getCastleColor( fillColor, tile.GetCenter() );
                 }
             }
 
