@@ -1393,6 +1393,27 @@ void Maps::Tiles::renderMainObject( fheroes2::Image & output, const Interface::G
     }
 }
 
+void Maps::Tiles::drawByIcnId( fheroes2::Image & output, const Interface::GameArea & area, const int32_t icnId ) const
+{
+    const fheroes2::Point & tileOffset = Maps::GetPoint( _index );
+
+    for ( const TilesAddon & addon : addons_level1 ) {
+        if ( MP2::GetICNObject( addon.object ) == icnId ) {
+            renderAddonObject( output, area, tileOffset, addon );
+        }
+    }
+
+    if ( MP2::GetICNObject( objectTileset ) == icnId ) {
+        renderMainObject( output, area, tileOffset );
+    }
+
+    for ( const TilesAddon & addon : addons_level2 ) {
+        if ( MP2::GetICNObject( addon.object ) == icnId ) {
+            renderAddonObject( output, area, tileOffset, addon );
+        }
+    }
+}
+
 std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Maps::Tiles::getMonsterSpritesPerTile() const
 {
     assert( GetObject() == MP2::OBJ_MONSTER );
@@ -2459,7 +2480,7 @@ int Maps::Tiles::GetFogDirections( int color ) const
     return around;
 }
 
-void Maps::Tiles::RedrawFogs( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const
+void Maps::Tiles::drawFog( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const
 {
     const fheroes2::Point & mp = Maps::GetPoint( _index );
 
@@ -2721,6 +2742,12 @@ uint32_t Maps::Tiles::getObjectIdByICNType( const int icnId ) const
     }
 
     for ( const TilesAddon & addon : addons_level1 ) {
+        if ( MP2::GetICNObject( addon.object ) == icnId ) {
+            return addon.uniq;
+        }
+    }
+
+    for ( const TilesAddon & addon : addons_level2 ) {
         if ( MP2::GetICNObject( addon.object ) == icnId ) {
             return addon.uniq;
         }

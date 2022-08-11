@@ -73,56 +73,56 @@ namespace
         COLOR_GRAY = 0x10,
         COLOR_WHITE = 0x0a
     };
-}
 
-uint8_t GetPaletteIndexFromGround( int ground )
-{
-    switch ( ground ) {
-    case Maps::Ground::DESERT:
-        return COLOR_DESERT;
-    case Maps::Ground::SNOW:
-        return COLOR_SNOW;
-    case Maps::Ground::SWAMP:
-        return COLOR_SWAMP;
-    case Maps::Ground::WASTELAND:
-        return COLOR_WASTELAND;
-    case Maps::Ground::BEACH:
-        return COLOR_BEACH;
-    case Maps::Ground::LAVA:
-        return COLOR_LAVA;
-    case Maps::Ground::DIRT:
-        return COLOR_DIRT;
-    case Maps::Ground::GRASS:
-        return COLOR_GRASS;
-    case Maps::Ground::WATER:
-        return COLOR_WATER;
-    default:
-        break;
+    uint8_t GetPaletteIndexFromGround( int ground )
+    {
+        switch ( ground ) {
+        case Maps::Ground::DESERT:
+            return COLOR_DESERT;
+        case Maps::Ground::SNOW:
+            return COLOR_SNOW;
+        case Maps::Ground::SWAMP:
+            return COLOR_SWAMP;
+        case Maps::Ground::WASTELAND:
+            return COLOR_WASTELAND;
+        case Maps::Ground::BEACH:
+            return COLOR_BEACH;
+        case Maps::Ground::LAVA:
+            return COLOR_LAVA;
+        case Maps::Ground::DIRT:
+            return COLOR_DIRT;
+        case Maps::Ground::GRASS:
+            return COLOR_GRASS;
+        case Maps::Ground::WATER:
+            return COLOR_WATER;
+        default:
+            break;
+        }
+
+        return 0;
     }
 
-    return 0;
-}
+    uint8_t GetPaletteIndexFromColor( int color )
+    {
+        switch ( color ) {
+        case Color::BLUE:
+            return COLOR_BLUE;
+        case Color::GREEN:
+            return COLOR_GREEN;
+        case Color::RED:
+            return COLOR_RED;
+        case Color::YELLOW:
+            return COLOR_YELLOW;
+        case Color::ORANGE:
+            return COLOR_ORANGE;
+        case Color::PURPLE:
+            return COLOR_PURPLE;
+        default:
+            break;
+        }
 
-uint8_t GetPaletteIndexFromColor( int color )
-{
-    switch ( color ) {
-    case Color::BLUE:
-        return COLOR_BLUE;
-    case Color::GREEN:
-        return COLOR_GREEN;
-    case Color::RED:
-        return COLOR_RED;
-    case Color::YELLOW:
-        return COLOR_YELLOW;
-    case Color::ORANGE:
-        return COLOR_ORANGE;
-    case Color::PURPLE:
-        return COLOR_PURPLE;
-    default:
-        break;
+        return COLOR_WHITE;
     }
-
-    return COLOR_WHITE;
 }
 
 Interface::Radar::Radar( Basic & basic )
@@ -164,13 +164,14 @@ void Interface::Radar::Generate()
     spriteArea.resize( worldWidth, worldHeight );
     spriteArea.reset();
 
-    for ( int32_t yy = 0; yy < worldHeight; ++yy ) {
-        for ( int32_t xx = 0; xx < worldWidth; ++xx ) {
-            const Maps::Tiles & tile = world.GetTiles( xx, yy );
+    for ( int32_t y = 0; y < worldHeight; ++y ) {
+        for ( int32_t x = 0; x < worldWidth; ++x ) {
+            const Maps::Tiles & tile = world.GetTiles( x, y );
             uint8_t color = 0;
 
-            if ( tile.isRoad() )
+            if ( tile.isRoad() ) {
                 color = COLOR_ROAD;
+            }
             else {
                 color = GetPaletteIndexFromGround( tile.GetGround() );
 
@@ -179,7 +180,7 @@ void Interface::Radar::Generate()
                     color += 3;
             }
 
-            fheroes2::SetPixel( spriteArea, xx, yy, color );
+            fheroes2::SetPixel( spriteArea, x, y, color );
         }
     }
 
@@ -207,11 +208,6 @@ void Interface::Radar::Generate()
         fheroes2::Resize( spriteArea, resized );
         spriteArea = std::move( resized );
     }
-}
-
-void Interface::Radar::SetHide( bool f )
-{
-    hide = f;
 }
 
 void Interface::Radar::SetRedraw() const
@@ -327,6 +323,7 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
             case MP2::OBJ_ALCHEMYLAB:
             case MP2::OBJ_MINES:
             case MP2::OBJ_SAWMILL:
+                // TODO: why Dragon City and Lighthouse are in this category? Verify the logic!
                 if ( visibleTile || revealMines ) {
                     fillColor = GetPaletteIndexFromColor( tile.QuantityColor() );
                 }
@@ -336,6 +333,7 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
             case MP2::OBJN_ALCHEMYLAB:
             case MP2::OBJN_MINES:
             case MP2::OBJN_SAWMILL:
+                // TODO: why Dragon City and Lighthouse are in this category? Verify the logic!
                 if ( visibleTile || revealMines ) {
                     const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
                     if ( mainTileIndex >= 0 ) {
@@ -375,49 +373,36 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
 void Interface::Radar::RedrawCursor( const fheroes2::Rect * roiRectangle /* =nullptr */ )
 {
     const Settings & conf = Settings::Get();
-
-    if ( !conf.ExtGameHideInterface() || conf.ShowRadar() || radarType == RadarType::ViewWorld ) {
-        if ( world.w() < 1 || world.h() < 1 )
-            return;
-
-        const fheroes2::Rect & rect = GetArea();
-        const fheroes2::Rect & rectMaps = roiRectangle == nullptr ? interface.GetGameArea().GetVisibleTileROI() : *roiRectangle;
-
-        const int32_t areaw = rect.width - 2 * offset.x;
-        const int32_t areah = rect.height - 2 * offset.y;
-
-        int32_t xStart = rectMaps.x;
-        int32_t xEnd = rectMaps.x + rectMaps.width;
-        int32_t yStart = rectMaps.y;
-        int32_t yEnd = rectMaps.y + rectMaps.height;
-        if ( xStart < 0 )
-            xStart = 0;
-        if ( yStart < 0 )
-            yStart = 0;
-        if ( xEnd >= world.w() )
-            xEnd = world.w();
-        if ( yEnd >= world.h() )
-            yEnd = world.h();
-
-        const uint32_t width = xEnd - xStart;
-        const uint32_t height = yEnd - yStart;
-
-        const fheroes2::Size sz( ( width * areaw ) / world.w(), ( height * areah ) / world.h() );
-
-        // check change game area
-        if ( cursorArea.width() != sz.width || cursorArea.height() != sz.height ) {
-            cursorArea.resize( sz.width, sz.height );
-            cursorArea.reset();
-            fheroes2::DrawBorder( cursorArea, RADARCOLOR, 6 );
-        }
-
-        cursorArea.setPosition( rect.x + offset.x + ( xStart * areaw ) / world.w(), rect.y + offset.y + ( yStart * areah ) / world.h() );
+    if ( conf.ExtGameHideInterface() && !conf.ShowRadar() && radarType != RadarType::ViewWorld ) {
+        return;
     }
+
+    const fheroes2::Rect worldSize{ 0, 0, world.w(), world.h() };
+    if ( worldSize.width < 1 || worldSize.height < 1 ) {
+        return;
+    }
+
+    const fheroes2::Rect & viewableWorldArea = ( roiRectangle == nullptr ) ? interface.GetGameArea().GetVisibleTileROI() : *roiRectangle;
+    const fheroes2::Rect radarWorldArea = worldSize ^ viewableWorldArea;
+
+    const fheroes2::Rect & totalRenderingArea = GetArea();
+    const fheroes2::Size actualRenderingArea{ totalRenderingArea.width - 2 * offset.x, totalRenderingArea.height - 2 * offset.y };
+
+    const fheroes2::Size cursorSize{ ( radarWorldArea.width * actualRenderingArea.width ) / worldSize.width,
+                                     ( radarWorldArea.height * actualRenderingArea.height ) / worldSize.height };
+
+    if ( cursorArea.width() != cursorSize.width || cursorArea.height() != cursorSize.height ) {
+        cursorArea.resize( cursorSize.width, cursorSize.height );
+        cursorArea.reset();
+        fheroes2::DrawBorder( cursorArea, RADARCOLOR, 6 );
+    }
+
+    cursorArea.setPosition( totalRenderingArea.x + offset.x + ( radarWorldArea.x * actualRenderingArea.width ) / worldSize.width,
+                            totalRenderingArea.y + offset.y + ( radarWorldArea.y * actualRenderingArea.height ) / worldSize.height );
 }
 
 void Interface::Radar::QueueEventProcessing()
 {
-    GameArea & gamearea = interface.GetGameArea();
     const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Rect & rect = GetArea();
@@ -433,6 +418,7 @@ void Interface::Radar::QueueEventProcessing()
             const fheroes2::Point & pt = le.GetMouseCursor();
 
             if ( rect & pt ) {
+                GameArea & gamearea = interface.GetGameArea();
                 fheroes2::Rect visibleROI( gamearea.GetVisibleTileROI() );
                 const fheroes2::Point prev( visibleROI.x, visibleROI.y );
                 gamearea.SetCenter( { ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height } );

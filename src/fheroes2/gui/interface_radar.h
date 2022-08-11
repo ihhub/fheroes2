@@ -50,7 +50,12 @@ namespace Interface
         void SetRedraw() const;
         void Build();
         void RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, ViewWorldMode mode );
-        void SetHide( bool );
+
+        void SetHide( bool f )
+        {
+            hide = f;
+        }
+
         void QueueEventProcessing();
         bool QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & roi ) const;
 

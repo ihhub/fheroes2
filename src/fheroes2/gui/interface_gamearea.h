@@ -43,14 +43,13 @@ namespace Interface
 
     enum RedrawLevelType
     {
-        LEVEL_BOTTOM = 0x01,
-        LEVEL_TOP = 0x02,
-        LEVEL_HEROES = 0x04,
-        // UNUSED = 0x08,
-        LEVEL_FOG = 0x20,
-        LEVEL_ROUTES = 0x40,
+        LEVEL_OBJECTS = 0x00, // we always render objects for each type of view.
+        LEVEL_HEROES = 0x01,
+        LEVEL_FOG = 0x02,
+        LEVEL_ROUTES = 0x04,
+        LEVEL_TOWNS = 0x08, // this level is used only for View All / View Towns spells.
 
-        LEVEL_ALL = 0xFF
+        LEVEL_ALL = LEVEL_OBJECTS | LEVEL_HEROES | LEVEL_FOG | LEVEL_ROUTES
     };
 
     struct BaseObjectAnimationInfo

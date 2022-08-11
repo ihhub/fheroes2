@@ -663,6 +663,8 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
         }
     }
 
+    const bool drawTowns = ( flag & LEVEL_TOWNS );
+
 #ifdef WITH_DEBUG
     if ( IS_DEVEL() ) {
         // redraw grid
@@ -683,7 +685,16 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                 const Maps::Tiles & tile = world.GetTiles( x, y );
 
                 if ( tile.isFog( friendColors ) ) {
-                    tile.RedrawFogs( dst, friendColors, *this );
+                    tile.drawFog( dst, friendColors, *this );
+
+                    if ( drawTowns ) {
+                        tile.drawByIcnId( dst, *this, ICN::OBJNTWBA );
+
+                        const MP2::MapObjectType objectType = tile.GetObject( false );
+                        if ( objectType == MP2::OBJ_CASTLE || objectType == MP2::OBJN_CASTLE ) {
+                            tile.drawByIcnId( dst, *this, ICN::OBJNTOWN );
+                        }
+                    }
                 }
             }
         }
@@ -739,7 +750,7 @@ fheroes2::Image Interface::GameArea::GenerateUltimateArtifactAreaSurface( const 
     const fheroes2::Point pt = Maps::GetPoint( index );
     gamearea.SetCenter( pt + offset );
 
-    gamearea.Redraw( result, LEVEL_BOTTOM | LEVEL_TOP, true );
+    gamearea.Redraw( result, LEVEL_OBJECTS, true );
 
     const fheroes2::Sprite & marker = fheroes2::AGG::GetICN( ICN::ROUTE, 0 );
     const fheroes2::Point markerPos( gamearea.GetRelativeTilePosition( pt ) - gamearea._middlePoint() - fheroes2::Point( gamearea._windowROI.x, gamearea._windowROI.y )

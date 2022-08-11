@@ -33,6 +33,8 @@
 
 int MP2::GetICNObject( const uint8_t tileset )
 {
+    // First 2 bits are used for flags like animation.
+    // TODO: separate these 2 bits and real tile (?) index into 2 variables to avoid this bit shifting operations all over the code.
     switch ( tileset >> 2 ) {
     // reserverd
     case 0:

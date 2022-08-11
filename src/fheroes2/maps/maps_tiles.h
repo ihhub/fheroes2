@@ -246,9 +246,11 @@ namespace Maps
         void redrawTopLayerObject( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const TilesAddon & addon ) const;
         int GetFogDirections( int color ) const;
 
-        void RedrawFogs( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const;
+        void drawFog( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const;
         void RedrawPassable( fheroes2::Image & dst, const Interface::GameArea & area ) const;
         void redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level ) const;
+
+        void drawByIcnId( fheroes2::Image & output, const Interface::GameArea & area, const int32_t icnId ) const;
 
         std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMonsterSpritesPerTile() const;
         std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMonsterShadowSpritesPerTile() const;
