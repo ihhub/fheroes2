@@ -185,8 +185,13 @@ namespace
         }
 
         Battle::Unit * result = GetCurrentUnitForBattleStage( units1, units2, firstStage, preferredColor != army2.GetColor(), false );
+        if ( result == nullptr ) {
+            return result;
+        }
 
-        return result && result->isValid() ? result : nullptr;
+        assert( result->isValid() );
+
+        return result;
     }
 
     void UpdateOrderOfUnits( const Battle::Force & army1, const Battle::Force & army2, const Battle::Unit * currentUnit, int preferredColor,
@@ -202,14 +207,21 @@ namespace
             units1.SortFastest();
             units2.SortFastest();
 
-            Battle::Unit * unit = nullptr;
-
-            while ( ( unit = GetCurrentUnitForBattleStage( units1, units2, true, preferredColor != army2.GetColor(), true ) ) != nullptr ) {
-                if ( unit != currentUnit && unit->isValid() ) {
-                    preferredColor = ( unit->GetArmyColor() == army1.GetColor() ) ? army2.GetColor() : army1.GetColor();
-
-                    orderOfUnits.push_back( unit );
+            while ( true ) {
+                Battle::Unit * unit = GetCurrentUnitForBattleStage( units1, units2, true, preferredColor != army2.GetColor(), true );
+                if ( unit == nullptr ) {
+                    break;
                 }
+
+                assert( unit->isValid() );
+
+                if ( unit == currentUnit ) {
+                    continue;
+                }
+
+                preferredColor = ( unit->GetArmyColor() == army1.GetColor() ) ? army2.GetColor() : army1.GetColor();
+
+                orderOfUnits.push_back( unit );
             }
         }
 
@@ -223,14 +235,21 @@ namespace
             units1.SortSlowest();
             units2.SortSlowest();
 
-            Battle::Unit * unit = nullptr;
-
-            while ( ( unit = GetCurrentUnitForBattleStage( units1, units2, false, preferredColor != army2.GetColor(), true ) ) != nullptr ) {
-                if ( unit != currentUnit && unit->isValid() ) {
-                    preferredColor = ( unit->GetArmyColor() == army1.GetColor() ) ? army2.GetColor() : army1.GetColor();
-
-                    orderOfUnits.push_back( unit );
+            while ( true ) {
+                Battle::Unit * unit = GetCurrentUnitForBattleStage( units1, units2, false, preferredColor != army2.GetColor(), true );
+                if ( unit == nullptr ) {
+                    break;
                 }
+
+                assert( unit->isValid() );
+
+                if ( unit == currentUnit ) {
+                    continue;
+                }
+
+                preferredColor = ( unit->GetArmyColor() == army1.GetColor() ) ? army2.GetColor() : army1.GetColor();
+
+                orderOfUnits.push_back( unit );
             }
         }
     }
