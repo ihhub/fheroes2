@@ -456,7 +456,8 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             actions.emplace_back( CommandType::MSG_BATTLE_MORALE, troop->GetUID(), false );
             end_turn = true;
 
-            // If the unit skips a turn due to bad morale, then the next preferred unit should be from the same army
+            // If unit skips a turn due to bad morale, then the "fastest unit of the opposite army goes first"
+            // logic does not apply, do not switch the preferred color for the next unit
             preferredColor = troop->GetArmyColor();
         }
         else {
@@ -626,8 +627,8 @@ void Battle::Arena::Turns()
             }
         }
 
-        // The last unit in queue is "special": even if it skips his turn due to bad morale, the preferred color
-        // should be switched anyway
+        // The last unit in queue is "special": even if it skips his turn due to bad morale, the "fastest unit of
+        // the opposite army goes first" logic is still applicable
         if ( troop ) {
             preferredColor = ( troop->GetArmyColor() == army1->GetColor() ) ? army2->GetColor() : army1->GetColor();
         }
