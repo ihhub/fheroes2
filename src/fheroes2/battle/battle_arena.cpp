@@ -545,8 +545,8 @@ void Battle::Arena::Turns()
     }
 
     {
-        bool towerMoved = false;
-        bool catapultMoved = false;
+        bool towersActed = false;
+        bool catapultActed = false;
 
         Unit * troop = nullptr;
 
@@ -571,14 +571,14 @@ void Battle::Arena::Turns()
                 UpdateOrderOfUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
             }
 
-            // First turn: castle and catapult action
+            // Castle towers and catapult are acting during the turn of the first unit from the corresponding army
             if ( castle ) {
-                if ( !catapultMoved && troop->GetColor() == army1->GetColor() ) {
+                if ( !catapultActed && troop->GetColor() == army1->GetColor() ) {
                     CatapultAction();
-                    catapultMoved = true;
+                    catapultActed = true;
                 }
 
-                if ( !towerMoved && troop->GetColor() == army2->GetColor() ) {
+                if ( !towersActed && troop->GetColor() == army2->GetColor() ) {
                     if ( towers[1] && towers[1]->isValid() ) {
                         TowerAction( *towers[1] );
 
@@ -603,7 +603,7 @@ void Battle::Arena::Turns()
                             UpdateOrderOfUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
                         }
                     }
-                    towerMoved = true;
+                    towersActed = true;
 
                     // If the towers have killed the last enemy unit, the battle is over
                     if ( !BattleValid() ) {
