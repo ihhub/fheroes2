@@ -504,9 +504,7 @@ void Battle::Arena::ApplyActionSkip( Command & cmd )
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, unit->String() )
         }
         else {
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                       "unit has already completed its turn: "
-                           << "uid: " << GetHexString( uid ) )
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unit has already completed its turn: " << unit->String() )
         }
     }
     else {
@@ -560,9 +558,7 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
     // Good morale
     if ( morale ) {
         if ( !unit->AllModes( TR_MOVED | MORALE_GOOD ) ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                       "unit is in an invalid state: "
-                           << "uid: " << GetHexString( uid ) )
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unit is in an invalid state: " << unit->String( true ) )
 
             return;
         }
@@ -574,9 +570,7 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
     else {
         // A bad morale event cannot happen when a waiting unit gets its turn
         if ( !unit->Modes( MORALE_BAD ) || unit->Modes( TR_MOVED | TR_SKIPMOVE ) ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                       "unit is in an invalid state: "
-                           << "uid: " << GetHexString( uid ) )
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unit is in an invalid state: " << unit->String( true ) )
 
             return;
         }
