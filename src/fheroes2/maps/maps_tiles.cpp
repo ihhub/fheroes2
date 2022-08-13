@@ -1290,7 +1290,7 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzle
         renderAddonObject( dst, area, mp, addon );
     }
 
-    if ( ( _level & 0x03 ) == level && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( GetGround(), objectTileset, objectIndex ) ) ) {
+    if ( objectTileset != 0 && ( _level & 0x03 ) == level && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( GetGround(), objectTileset, objectIndex ) ) ) {
         renderMainObject( dst, area, mp );
     }
 
@@ -1331,6 +1331,8 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzle
 
 void Maps::Tiles::renderAddonObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const TilesAddon & addon )
 {
+    assert( addon.object != 0 && addon.index != 255 );
+
     const int icn = MP2::GetICNObject( addon.object );
     if ( isDirectRenderingRestricted( icn ) ) {
         return;
@@ -1364,6 +1366,8 @@ void Maps::Tiles::renderAddonObject( fheroes2::Image & output, const Interface::
 
 void Maps::Tiles::renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset ) const
 {
+    assert( objectTileset != 0 && objectIndex != 255 );
+
     const int mainObjectIcn = MP2::GetICNObject( objectTileset );
     if ( isDirectRenderingRestricted( mainObjectIcn ) ) {
         return;
