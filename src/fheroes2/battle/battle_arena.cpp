@@ -700,7 +700,7 @@ void Battle::Arena::Turns()
 
 void Battle::Arena::RemoteTurn( const Unit & b, Actions & a )
 {
-    DEBUG_LOG( DBG_BATTLE, DBG_WARN, "switch to AI turn" )
+    DEBUG_LOG( DBG_BATTLE, DBG_WARN, "switching control to AI" )
     AI::Get().BattleTurn( *this, b, a );
 }
 
