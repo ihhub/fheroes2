@@ -194,10 +194,10 @@ namespace Battle
         void RemoteTurn( const Unit &, Actions & );
         void HumanTurn( const Unit &, Actions & );
 
-        // Returns the current unit (whose turn has come) from the turn queue (or nullptr, if there is no such
-        // unit), taking into account the current stage (the first stage is when the usual turns are made, the
-        // second stage is when the waiting units get their turn), as well as the preferred color (all other
-        // things being equal, a unit of this color is returned).
+        // Returns the current unit from the turn queue (or nullptr, if there is no such unit), taking into account the
+        // current stage (the first stage is when the usual unit turns are made, the second stage is when units that chose
+        // to wait in the first stage get their turn), as well as the preferred color (all other conditions being equal, a
+        // unit of this color is returned).
         Unit * GetCurrentUnit( const bool firstStage, const int preferredColor ) const;
 
         void TurnTroop( Unit * troop, const Units & orderHistory );
