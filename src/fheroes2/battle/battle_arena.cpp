@@ -474,10 +474,6 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             // Bad morale, happens only if the unit was not in the waiting state
             actions.emplace_back( CommandType::MSG_BATTLE_MORALE, troop->GetUID(), false );
             end_turn = true;
-
-            // If unit skips a turn due to bad morale, then the "fastest unit of the opposite army goes first"
-            // logic does not apply, do not switch the preferred color for the next unit
-            preferredColor = troop->GetArmyColor();
         }
         else {
             _globalAIPathfinder.calculate( *troop );
@@ -499,8 +495,28 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
         const bool troopHasAlreadySkippedMove = troop->Modes( TR_SKIPMOVE );
 
         while ( !actions.empty() ) {
+            const Command cmd = actions.front();
+
             ApplyAction( actions.front() );
             actions.pop_front();
+
+            // HoMM2-specific quirk: if unit skips a turn due to bad morale, then the "fastest unit of the opposite
+            // army goes first" logic does not apply if and only if there is another unit in the queue from the same
+            // army and with exactly the same speed
+            if ( cmd.GetType() == CommandType::MSG_BATTLE_MORALE ) {
+                assert( cmd.size() == 2 );
+
+                // Bad morale
+                if ( cmd[0] == 0 ) {
+                    assert( troop->isValid() && troop->Modes( TR_MOVED ) );
+
+                    // Bad morale event couldn't happen on the second stage (when waiting units get their turn)
+                    const Unit * nextTroop = GetCurrentUnit( *army1, *army2, true, troop->GetArmyColor() );
+                    if ( nextTroop && nextTroop->GetArmyColor() == troop->GetArmyColor() && nextTroop->GetSpeed() == troop->GetSpeed( false, true ) ) {
+                        preferredColor = troop->GetArmyColor();
+                    }
+                }
+            }
 
             if ( armies_order ) {
                 // Applied action could kill someone or affect the speed of some unit, update the order of units
@@ -568,16 +584,13 @@ void Battle::Arena::Turns()
         bool towersActed = false;
         bool catapultActed = false;
 
-        Unit * troop = nullptr;
-
         while ( BattleValid() ) {
-            Unit * nextTroop = GetCurrentUnit( *army1, *army2, true, preferredColor );
-            if ( nextTroop == nullptr ) {
+            Unit * troop = GetCurrentUnit( *army1, *army2, true, preferredColor );
+            if ( troop == nullptr ) {
                 // All units either finished their turns or decided to wait (if supported)
                 break;
             }
 
-            troop = nextTroop;
             current_color = troop->GetCurrentOrArmyColor();
 
             // Switch the preferred color for the next unit
@@ -644,12 +657,6 @@ void Battle::Arena::Turns()
                     orderHistory.pop_back();
                 }
             }
-        }
-
-        // The last unit in queue is "special": even if it skips his turn due to bad morale, the "fastest unit of
-        // the opposite army goes first" logic is still applicable
-        if ( troop ) {
-            preferredColor = ( troop->GetArmyColor() == army1->GetColor() ) ? army2->GetColor() : army1->GetColor();
         }
     }
 
