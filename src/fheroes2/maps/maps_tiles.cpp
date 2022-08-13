@@ -2892,10 +2892,6 @@ int32_t Maps::Tiles::getIndexOfMainTile( const Maps::Tiles & tile )
 
     assert( correctedObjectType > objectType );
 
-    // This is non-main tile of an action object. We have to find the main tile.
-    // Since we don't want to care about the size of every object in the game we should find tiles in a certain radius.
-    const int32_t radiusOfSearch = 3;
-
     // It's unknown whether object type belongs to bottom layer or ground. Create a list of UIDs starting from bottom layer.
     std::set<uint32_t> uids;
     uids.insert( tile.GetObjectUID() );
@@ -2911,7 +2907,12 @@ int32_t Maps::Tiles::getIndexOfMainTile( const Maps::Tiles & tile )
     const int32_t tileIndex = tile.GetIndex();
     const int32_t mapWidth = world.w();
 
-    for ( int32_t y = -radiusOfSearch; y <= radiusOfSearch; ++y ) {
+    // This is non-main tile of an action object. We have to find the main tile.
+    // Since we don't want to care about the size of every object in the game we should find tiles in a certain radius.
+    const int32_t radiusOfSearch = 3;
+
+    // Main tile is usually at the bottom of the object so let's start from there. Also there are no objects having tiles below more than 1 row.
+    for ( int32_t y = radiusOfSearch; y >= -1; --y ) {
         for ( int32_t x = -radiusOfSearch; x <= radiusOfSearch; ++x ) {
             const int32_t index = tileIndex + y * mapWidth + x;
             if ( Maps::isValidAbsIndex( index ) ) {

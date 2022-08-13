@@ -389,7 +389,14 @@ public:
 
     void AddCastle( Castle * castle );
 
-    Castle * Get( const fheroes2::Point & position ) const;
+    Castle * Get( const fheroes2::Point & position ) const
+    {
+        auto iter = _castleTiles.find( position );
+        if ( iter == _castleTiles.end() )
+            return nullptr;
+
+        return _castles[iter->second];
+    }
 
     void Scoute( int ) const;
 
