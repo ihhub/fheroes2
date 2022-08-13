@@ -475,6 +475,11 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
 
             case MP2::OBJ_BOAT: {
+                if ( !drawHeroes ) {
+                    // Boats can be occupied by heroes so they are considered as the same objects.
+                    continue;
+                }
+
                 const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_BOAT );
 
                 auto spriteInfo = tile.getBoatSpritesPerTile();
