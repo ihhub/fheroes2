@@ -549,59 +549,56 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
 
     Unit * unit = GetTroopUID( uid );
 
-    if ( unit && unit->isValid() ) {
-        // Good morale
-        if ( morale ) {
-            if ( unit->AllModes( TR_MOVED | MORALE_GOOD ) ) {
-                unit->ResetModes( TR_MOVED | MORALE_GOOD );
-                end_turn = false;
-
-                if ( interface ) {
-                    interface->RedrawActionMorale( *unit, true );
-                }
-
-                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "good to " << unit->String() )
-            }
-            else {
-                DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                           "unit is in an invalid state: "
-                               << "uid: " << GetHexString( uid ) )
-            }
-        }
-        // Bad morale
-        else {
-            // A bad morale event cannot happen when a waiting unit gets its turn
-            if ( unit->Modes( MORALE_BAD ) && !unit->Modes( TR_MOVED | TR_SKIPMOVE ) ) {
-                unit->ResetModes( MORALE_BAD );
-                unit->SetModes( TR_MOVED );
-                end_turn = true;
-
-                // HoMM2-specific quirk: if unit skips a turn due to bad morale, then the "fastest unit of the opposite
-                // army goes first" logic does not apply if and only if there is another unit in the queue from the same
-                // army and with exactly the same speed
-                const Unit * nextUnit = GetCurrentUnit( true, unit->GetArmyColor() );
-                if ( nextUnit && nextUnit->GetArmyColor() == unit->GetArmyColor() && nextUnit->GetSpeed() == unit->GetSpeed( false, true ) ) {
-                    _preferredColor = unit->GetArmyColor();
-                }
-
-                if ( interface ) {
-                    interface->RedrawActionMorale( *unit, false );
-                }
-
-                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "bad to " << unit->String() )
-            }
-            else {
-                DEBUG_LOG( DBG_BATTLE, DBG_WARN,
-                           "unit is in an invalid state: "
-                               << "uid: " << GetHexString( uid ) )
-            }
-        }
-    }
-    else {
+    if ( unit == nullptr || !unit->isValid() ) {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN,
                    "incorrect param: "
                        << "uid: " << GetHexString( uid ) )
+
+        return;
     }
+
+    // Good morale
+    if ( morale ) {
+        if ( !unit->AllModes( TR_MOVED | MORALE_GOOD ) ) {
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN,
+                       "unit is in an invalid state: "
+                           << "uid: " << GetHexString( uid ) )
+
+            return;
+        }
+
+        unit->ResetModes( TR_MOVED | MORALE_GOOD );
+        end_turn = false;
+    }
+    // Bad morale
+    else {
+        // A bad morale event cannot happen when a waiting unit gets its turn
+        if ( !unit->Modes( MORALE_BAD ) || unit->Modes( TR_MOVED | TR_SKIPMOVE ) ) {
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN,
+                       "unit is in an invalid state: "
+                           << "uid: " << GetHexString( uid ) )
+
+            return;
+        }
+
+        unit->ResetModes( MORALE_BAD );
+        unit->SetModes( TR_MOVED );
+        end_turn = true;
+
+        // HoMM2-specific quirk: if unit skips a turn due to bad morale, then the "fastest unit of the opposite
+        // army goes first" logic does not apply if and only if there is another unit in the queue from the same
+        // army and with exactly the same speed
+        const Unit * nextUnit = GetCurrentUnit( true, unit->GetArmyColor() );
+        if ( nextUnit && nextUnit->GetArmyColor() == unit->GetArmyColor() && nextUnit->GetSpeed() == unit->GetSpeed( false, true ) ) {
+            _preferredColor = unit->GetArmyColor();
+        }
+    }
+
+    if ( interface ) {
+        interface->RedrawActionMorale( *unit, morale != 0 );
+    }
+
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, ( morale ? "good" : "bad" ) << " to " << unit->String() )
 }
 
 void Battle::Arena::ApplyActionRetreat( const Command & /*cmd*/ )
