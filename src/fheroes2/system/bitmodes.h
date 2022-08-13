@@ -45,9 +45,16 @@ public:
         modes &= ~f;
     }
 
+    // Returns true if any of the requested modes is set, otherwise returns false
     bool Modes( uint32_t f ) const
     {
         return ( modes & f ) != 0;
+    }
+
+    // Returns true if all the requested modes are set, otherwise returns false
+    bool AllModes( uint32_t f ) const
+    {
+        return ( modes & f ) == f;
     }
 
 protected:

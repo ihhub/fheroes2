@@ -194,6 +194,12 @@ namespace Battle
         void RemoteTurn( const Unit &, Actions & );
         void HumanTurn( const Unit &, Actions & );
 
+        // Returns the current unit (whose turn has come) from the turn queue (or nullptr, if there is no such
+        // unit), taking into account the current stage (the first stage is when the usual turns are made, the
+        // second stage is when the waiting units get their turn), as well as the preferred color (all other
+        // things being equal, a unit of this color is returned).
+        Unit * GetCurrentUnit( const bool firstStage, const int preferredColor ) const;
+
         void TurnTroop( Unit * troop, const Units & orderHistory );
         void TowerAction( const Tower & );
 
@@ -241,7 +247,7 @@ namespace Battle
         Units * armies_order;
 
         int current_color;
-        int preferredColor; // preferred color for the next unit in the battle queue
+        int _preferredColor; // Preferred color for the next unit in the battle queue
 
         const Castle * castle;
         const bool _isTown; // If the battle is in town (village or castle).

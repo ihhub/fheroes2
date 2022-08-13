@@ -332,8 +332,8 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
     const int32_t dst = cmd.GetValue();
     const int32_t dir = cmd.GetValue();
 
-    Battle::Unit * attacker = GetTroopUID( attackerUID );
-    Battle::Unit * defender = GetTroopUID( defenderUID );
+    Unit * attacker = GetTroopUID( attackerUID );
+    Unit * defender = GetTroopUID( defenderUID );
 
     if ( attacker && attacker->isValid() && defender && defender->isValid() && ( attacker->GetCurrentColor() != defender->GetColor() ) ) {
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, attacker->String() << " to " << defender->String() )
@@ -378,7 +378,7 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
     const uint32_t uid = cmd.GetValue();
     const int32_t dst = cmd.GetValue();
 
-    Battle::Unit * unit = GetTroopUID( uid );
+    Unit * unit = GetTroopUID( uid );
     const Cell * cell = Board::GetCell( dst );
 
     if ( unit && unit->isValid() && cell && cell->isPassableForUnit( *unit ) ) {
@@ -487,7 +487,7 @@ void Battle::Arena::ApplyActionSkip( Command & cmd )
     const uint32_t uid = cmd.GetValue();
     const int32_t hard = cmd.GetValue();
 
-    Battle::Unit * unit = GetTroopUID( uid );
+    Unit * unit = GetTroopUID( uid );
 
     if ( unit && unit->isValid() ) {
         if ( !unit->Modes( TR_MOVED ) ) {
@@ -504,7 +504,9 @@ void Battle::Arena::ApplyActionSkip( Command & cmd )
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, unit->String() )
         }
         else {
-            DEBUG_LOG( DBG_BATTLE, DBG_WARN, "uid: " << GetHexString( uid ) << " moved" )
+            DEBUG_LOG( DBG_BATTLE, DBG_WARN,
+                       "unit has already completed its turn: "
+                           << "uid: " << GetHexString( uid ) )
         }
     }
     else {
@@ -518,7 +520,7 @@ void Battle::Arena::ApplyActionEnd( Command & cmd )
 {
     const uint32_t uid = cmd.GetValue();
 
-    Battle::Unit * unit = GetTroopUID( uid );
+    Unit * unit = GetTroopUID( uid );
 
     if ( unit ) {
         if ( !unit->Modes( TR_MOVED ) ) {
@@ -545,26 +547,55 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
     const uint32_t uid = cmd.GetValue();
     const int32_t morale = cmd.GetValue();
 
-    Battle::Unit * unit = GetTroopUID( uid );
+    Unit * unit = GetTroopUID( uid );
 
     if ( unit && unit->isValid() ) {
-        // good morale
-        if ( morale && unit->Modes( TR_MOVED ) && unit->Modes( MORALE_GOOD ) ) {
-            unit->ResetModes( TR_MOVED );
-            unit->ResetModes( MORALE_GOOD );
-            end_turn = false;
-        }
-        // bad morale
-        else if ( !morale && !unit->Modes( TR_MOVED ) && unit->Modes( MORALE_BAD ) ) {
-            unit->SetModes( TR_MOVED );
-            unit->ResetModes( MORALE_BAD );
-            end_turn = true;
-        }
+        // Good morale
+        if ( morale ) {
+            if ( unit->AllModes( TR_MOVED | MORALE_GOOD ) ) {
+                unit->ResetModes( TR_MOVED | MORALE_GOOD );
+                end_turn = false;
 
-        if ( interface )
-            interface->RedrawActionMorale( *unit, morale != 0 );
+                if ( interface ) {
+                    interface->RedrawActionMorale( *unit, true );
+                }
 
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, ( morale ? "good" : "bad" ) << " to " << unit->String() )
+                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "good to " << unit->String() )
+            }
+            else {
+                DEBUG_LOG( DBG_BATTLE, DBG_WARN,
+                           "unit is in an invalid state: "
+                               << "uid: " << GetHexString( uid ) )
+            }
+        }
+        // Bad morale
+        else {
+            // A bad morale event cannot happen when a waiting unit gets its turn
+            if ( unit->Modes( MORALE_BAD ) && !unit->Modes( TR_MOVED | TR_SKIPMOVE ) ) {
+                unit->ResetModes( MORALE_BAD );
+                unit->SetModes( TR_MOVED );
+                end_turn = true;
+
+                // HoMM2-specific quirk: if unit skips a turn due to bad morale, then the "fastest unit of the opposite
+                // army goes first" logic does not apply if and only if there is another unit in the queue from the same
+                // army and with exactly the same speed
+                const Unit * nextUnit = GetCurrentUnit( true, unit->GetArmyColor() );
+                if ( nextUnit && nextUnit->GetArmyColor() == unit->GetArmyColor() && nextUnit->GetSpeed() == unit->GetSpeed( false, true ) ) {
+                    _preferredColor = unit->GetArmyColor();
+                }
+
+                if ( interface ) {
+                    interface->RedrawActionMorale( *unit, false );
+                }
+
+                DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "bad to " << unit->String() )
+            }
+            else {
+                DEBUG_LOG( DBG_BATTLE, DBG_WARN,
+                           "unit is in an invalid state: "
+                               << "uid: " << GetHexString( uid ) )
+            }
+        }
     }
     else {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN,
@@ -721,10 +752,10 @@ void Battle::Arena::TargetsApplySpell( const HeroBase * hero, const Spell & spel
 
 std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit )
 {
-    std::vector<Battle::Unit *> result = { firstUnit };
-    std::vector<Battle::Unit *> ignoredTroops = { firstUnit };
+    std::vector<Unit *> result = { firstUnit };
+    std::vector<Unit *> ignoredTroops = { firstUnit };
 
-    std::vector<Battle::Unit *> foundTroops = board.GetNearestTroops( result.back(), ignoredTroops );
+    std::vector<Unit *> foundTroops = board.GetNearestTroops( result.back(), ignoredTroops );
 
     const int heroSpellPower = hero ? hero->GetPower() : 0;
 
@@ -935,7 +966,7 @@ void Battle::Arena::ApplyActionTower( Command & cmd )
     const uint32_t uid = cmd.GetValue();
 
     Tower * tower = GetTower( type );
-    Battle::Unit * unit = GetTroopUID( uid );
+    Unit * unit = GetTroopUID( uid );
 
     if ( unit && unit->isValid() && tower ) {
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "tower: " << type << ", attack to " << unit->String() )
@@ -1152,11 +1183,10 @@ void Battle::Arena::ApplyActionSpellMirrorImage( Command & cmd )
 
         const int32_t centerIndex = unit->GetHeadIndex();
         std::sort( distances.begin(), distances.end(), [centerIndex]( const int32_t index1, const int32_t index2 ) {
-            return Battle::Board::GetDistance( centerIndex, index1 ) < Battle::Board::GetDistance( centerIndex, index2 );
+            return Board::GetDistance( centerIndex, index1 ) < Board::GetDistance( centerIndex, index2 );
         } );
 
-        Indexes::const_iterator it
-            = std::find_if( distances.begin(), distances.end(), [unit]( const int32_t v ) { return Battle::Board::isValidMirrorImageIndex( v, unit ); } );
+        Indexes::const_iterator it = std::find_if( distances.begin(), distances.end(), [unit]( const int32_t v ) { return Board::isValidMirrorImageIndex( v, unit ); } );
         if ( it != distances.end() ) {
             Unit * mirrorUnit = CreateMirrorImage( *unit );
             assert( mirrorUnit != nullptr );
