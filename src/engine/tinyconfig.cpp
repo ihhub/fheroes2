@@ -41,7 +41,7 @@ std::string ModifyKey( const std::string & str )
     key.erase( std::unique( key.begin(), key.end(), SpaceCompare ), key.end() );
 
     // change space
-    std::replace_if( key.begin(), key.end(), ::isspace, static_cast<char>( 0x20 ) );
+    std::replace_if( key.begin(), key.end(), ::isspace, '\x20' );
 
     return key;
 }
