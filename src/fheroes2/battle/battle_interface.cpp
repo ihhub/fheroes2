@@ -4009,7 +4009,8 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, int32_t dst )
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
-    uint32_t currentAlpha = target.GetCustomAlpha();
+    uint8_t currentAlpha = target.GetCustomAlpha();
+    const uint8_t alphaStep = 15;
 
     AudioManager::PlaySound( M82::TELPTOUT );
 
@@ -4018,8 +4019,8 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, int32_t dst )
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( currentAlpha > 0 && Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            currentAlpha -= 15;
+        if ( currentAlpha >= alphaStep && Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
+            currentAlpha -= alphaStep;
             target.SetCustomAlpha( currentAlpha );
             Redraw();
         }
@@ -4034,8 +4035,8 @@ void Battle::Interface::RedrawActionTeleportSpell( Unit & target, int32_t dst )
     while ( le.HandleEvents() && Mixer::isPlaying( -1 ) ) {
         CheckGlobalEvents( le );
 
-        if ( currentAlpha <= 240 && Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            currentAlpha += 15;
+        if ( currentAlpha <= ( 255 - alphaStep ) && Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
+            currentAlpha += alphaStep;
             target.SetCustomAlpha( currentAlpha );
             Redraw();
         }
@@ -4050,17 +4051,18 @@ void Battle::Interface::RedrawActionSummonElementalSpell( Unit & target )
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
-    uint32_t currentAlpha = 0;
+    uint8_t currentAlpha = 0;
+    const uint8_t alphaStep = 20;
 
     AudioManager::PlaySound( M82::SUMNELM );
 
     Game::passAnimationDelay( Game::BATTLE_SPELL_DELAY );
 
-    while ( le.HandleEvents() && currentAlpha < 220 ) {
+    while ( le.HandleEvents() && currentAlpha <= ( 255 - alphaStep ) ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_SPELL_DELAY ) ) {
-            currentAlpha += 20;
+            currentAlpha += alphaStep;
             target.SetCustomAlpha( currentAlpha );
             Redraw();
         }
@@ -4760,20 +4762,23 @@ void Battle::Interface::RedrawActionRemoveMirrorImage( const std::vector<Unit *>
 
     LocalEvent & le = LocalEvent::Get();
 
-    int frame = 10;
-    while ( le.HandleEvents() && frame > 0 ) {
+    uint8_t frameId = 10;
+    const uint8_t alphaStep = 25;
+
+    while ( le.HandleEvents() && frameId > 0 ) {
         CheckGlobalEvents( le );
 
         if ( Game::validateAnimationDelay( Game::BATTLE_FRAME_DELAY ) ) {
-            const uint32_t alpha = static_cast<uint32_t>( frame ) * 25;
-            for ( std::vector<Unit *>::const_iterator it = mirrorImages.begin(); it != mirrorImages.end(); ++it ) {
-                if ( *it )
-                    ( *it )->SetCustomAlpha( alpha );
+            const uint8_t alpha = frameId * alphaStep;
+            for ( Unit * unit : mirrorImages ) {
+                if ( unit != nullptr ) {
+                    unit->SetCustomAlpha( alpha );
+                }
             }
 
             Redraw();
 
-            --frame;
+            --frameId;
         }
     }
     status.SetMessage( _( "The mirror image is destroyed!" ), true );
