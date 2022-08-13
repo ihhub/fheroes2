@@ -471,7 +471,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             end_turn = true;
         }
         else if ( troop->Modes( MORALE_BAD ) && !troop->Modes( TR_SKIPMOVE ) ) {
-            // Bad morale, happens only if the unit wasn't waiting for a turn
+            // Bad morale, happens only if the unit was not in the waiting state
             actions.emplace_back( CommandType::MSG_BATTLE_MORALE, troop->GetUID(), false );
             end_turn = true;
 
@@ -503,7 +503,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             actions.pop_front();
 
             if ( armies_order ) {
-                // Applied action could kill someone or affect the speed of some unit, update units order
+                // Applied action could kill someone or affect the speed of some unit, update the order of units
                 UpdateOrderOfUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
             }
 
@@ -554,13 +554,13 @@ void Battle::Arena::Turns()
     army1->NewTurn();
     army2->NewTurn();
 
-    // Order history on the current turn
+    // History of unit order on the current turn
     Units orderHistory;
 
     if ( armies_order ) {
         orderHistory.reserve( 25 );
 
-        // Build initial units order
+        // Build the initial order of units
         UpdateOrderOfUnits( *army1, *army2, nullptr, preferredColor, orderHistory, *armies_order );
     }
 
@@ -584,10 +584,10 @@ void Battle::Arena::Turns()
             preferredColor = ( troop->GetArmyColor() == army1->GetColor() ) ? army2->GetColor() : army1->GetColor();
 
             if ( armies_order ) {
-                // Add unit to the order history
+                // Add unit to the history
                 orderHistory.push_back( troop );
 
-                // Update units order
+                // Update the order of units
                 UpdateOrderOfUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
             }
 
@@ -603,7 +603,7 @@ void Battle::Arena::Turns()
                         TowerAction( *towers[1] );
 
                         if ( armies_order ) {
-                            // Tower could kill someone, update units order
+                            // Tower could kill someone, update the order of units
                             UpdateOrderOfUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
                         }
                     }
@@ -611,7 +611,7 @@ void Battle::Arena::Turns()
                         TowerAction( *towers[0] );
 
                         if ( armies_order ) {
-                            // Tower could kill someone, update units order
+                            // Tower could kill someone, update the order of units
                             UpdateOrderOfUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
                         }
                     }
@@ -619,7 +619,7 @@ void Battle::Arena::Turns()
                         TowerAction( *towers[2] );
 
                         if ( armies_order ) {
-                            // Tower could kill someone, update units order
+                            // Tower could kill someone, update the order of units
                             UpdateOrderOfUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
                         }
                     }
@@ -639,7 +639,7 @@ void Battle::Arena::Turns()
             TurnTroop( troop, orderHistory );
 
             if ( armies_order ) {
-                // If unit hasn't finished its turn yet, then remove it from the order history
+                // If unit hasn't finished its turn yet, then remove it from the history
                 if ( troop->Modes( TR_SKIPMOVE ) && !troop->Modes( TR_MOVED ) ) {
                     orderHistory.pop_back();
                 }
@@ -667,10 +667,10 @@ void Battle::Arena::Turns()
             preferredColor = ( troop->GetArmyColor() == army1->GetColor() ) ? army2->GetColor() : army1->GetColor();
 
             if ( armies_order ) {
-                // Add unit to the order history
+                // Add unit to the history
                 orderHistory.push_back( troop );
 
-                // Update units order
+                // Update the order of units
                 UpdateOrderOfUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
             }
 
