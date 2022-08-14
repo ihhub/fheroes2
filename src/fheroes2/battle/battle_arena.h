@@ -197,7 +197,8 @@ namespace Battle
         // Returns the current unit from the turn queue (or nullptr, if the queue is empty), taking into account the
         // current stage (the first stage is when units get a turn for the first time, the second (optional) stage is
         // when the units that decided to wait in the first stage get their turn once again), as well as the preferred
-        // color (all other conditions being equal, a unit of this color is returned).
+        // color (all other conditions being equal, a unit of this color is returned if possible, otherwise a unit from
+        // the attacking army is returned).
         Unit * GetCurrentUnit( const bool firstStage, const int preferredColor ) const;
 
         void TurnTroop( Unit * troop, const Units & orderHistory );
