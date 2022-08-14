@@ -167,6 +167,33 @@ namespace
         return result;
     }
 
+    Battle::Unit * GetCurrentUnit( const Battle::Force & army1, const Battle::Force & army2, const bool firstStage, const int preferredColor )
+    {
+        Battle::Units units1( army1.getUnits(), true );
+        Battle::Units units2( army2.getUnits(), true );
+
+        if ( firstStage ) {
+            units1.SortFastest();
+            units2.SortFastest();
+        }
+        else {
+            std::reverse( units1.begin(), units1.end() );
+            std::reverse( units2.begin(), units2.end() );
+
+            units1.SortSlowest();
+            units2.SortSlowest();
+        }
+
+        Battle::Unit * result = GetCurrentUnitForBattleStage( units1, units2, firstStage, preferredColor != army2.GetColor(), false );
+        if ( result == nullptr ) {
+            return result;
+        }
+
+        assert( result->isValid() );
+
+        return result;
+    }
+
     void UpdateOrderOfUnits( const Battle::Force & army1, const Battle::Force & army2, const Battle::Unit * currentUnit, int preferredColor,
                              const Battle::Units & orderHistory, Battle::Units & orderOfUnits )
     {
@@ -286,7 +313,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::Det
     , army2( nullptr )
     , armies_order( nullptr )
     , current_color( Color::NONE )
-    , _preferredColor( -1 ) // be aware of unknown color
+    , _lastActiveUnitArmyColor( -1 ) // Be aware of unknown color
     , castle( world.getCastleEntrance( Maps::GetPoint( index ) ) )
     , _isTown( castle != nullptr )
     , catapult( nullptr )
@@ -418,33 +445,6 @@ Battle::Arena::~Arena()
     arena = nullptr;
 }
 
-Battle::Unit * Battle::Arena::GetCurrentUnit( const bool firstStage, const int preferredColor ) const
-{
-    Units units1( army1->getUnits(), true );
-    Units units2( army2->getUnits(), true );
-
-    if ( firstStage ) {
-        units1.SortFastest();
-        units2.SortFastest();
-    }
-    else {
-        std::reverse( units1.begin(), units1.end() );
-        std::reverse( units2.begin(), units2.end() );
-
-        units1.SortSlowest();
-        units2.SortSlowest();
-    }
-
-    Unit * result = GetCurrentUnitForBattleStage( units1, units2, firstStage, preferredColor != army2->GetColor(), false );
-    if ( result == nullptr ) {
-        return result;
-    }
-
-    assert( result->isValid() );
-
-    return result;
-}
-
 void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
 {
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, troop->String( true ) )
@@ -476,6 +476,9 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             end_turn = true;
         }
         else {
+            // This unit will certainly perform at least one full-fledged action
+            _lastActiveUnitArmyColor = troop->GetArmyColor();
+
             _globalAIPathfinder.calculate( *troop );
 
             if ( troop->isControlRemote() ) {
@@ -500,7 +503,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
 
             if ( armies_order ) {
                 // Applied action could kill someone or affect the speed of some unit, update the order of units
-                UpdateOrderOfUnits( *army1, *army2, troop, _preferredColor, orderHistory, *armies_order );
+                UpdateOrderOfUnits( *army1, *army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *armies_order );
             }
 
             // Check if the battle is over
@@ -557,7 +560,7 @@ void Battle::Arena::Turns()
         orderHistory.reserve( 25 );
 
         // Build the initial order of units
-        UpdateOrderOfUnits( *army1, *army2, nullptr, _preferredColor, orderHistory, *armies_order );
+        UpdateOrderOfUnits( *army1, *army2, nullptr, GetOppositeColor( _lastActiveUnitArmyColor ), orderHistory, *armies_order );
     }
 
     {
@@ -565,7 +568,7 @@ void Battle::Arena::Turns()
         bool catapultActed = false;
 
         while ( BattleValid() ) {
-            Unit * troop = GetCurrentUnit( true, _preferredColor );
+            Unit * troop = GetCurrentUnit( *army1, *army2, true, GetOppositeColor( _lastActiveUnitArmyColor ) );
             if ( troop == nullptr ) {
                 // All units either finished their turns or decided to wait (if supported)
                 break;
@@ -573,15 +576,12 @@ void Battle::Arena::Turns()
 
             current_color = troop->GetCurrentOrArmyColor();
 
-            // Switch the preferred color for the next unit
-            _preferredColor = ( troop->GetArmyColor() == army1->GetColor() ) ? army2->GetColor() : army1->GetColor();
-
             if ( armies_order ) {
                 // Add unit to the history
                 orderHistory.push_back( troop );
 
                 // Update the order of units
-                UpdateOrderOfUnits( *army1, *army2, troop, _preferredColor, orderHistory, *armies_order );
+                UpdateOrderOfUnits( *army1, *army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *armies_order );
             }
 
             // Castle towers and catapult are acting during the turn of the first unit from the corresponding army
@@ -597,7 +597,7 @@ void Battle::Arena::Turns()
 
                         if ( armies_order ) {
                             // Tower could kill someone, update the order of units
-                            UpdateOrderOfUnits( *army1, *army2, troop, _preferredColor, orderHistory, *armies_order );
+                            UpdateOrderOfUnits( *army1, *army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *armies_order );
                         }
                     }
                     if ( towers[0] && towers[0]->isValid() ) {
@@ -605,7 +605,7 @@ void Battle::Arena::Turns()
 
                         if ( armies_order ) {
                             // Tower could kill someone, update the order of units
-                            UpdateOrderOfUnits( *army1, *army2, troop, _preferredColor, orderHistory, *armies_order );
+                            UpdateOrderOfUnits( *army1, *army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *armies_order );
                         }
                     }
                     if ( towers[2] && towers[2]->isValid() ) {
@@ -613,7 +613,7 @@ void Battle::Arena::Turns()
 
                         if ( armies_order ) {
                             // Tower could kill someone, update the order of units
-                            UpdateOrderOfUnits( *army1, *army2, troop, _preferredColor, orderHistory, *armies_order );
+                            UpdateOrderOfUnits( *army1, *army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *armies_order );
                         }
                     }
                     towersActed = true;
@@ -642,7 +642,7 @@ void Battle::Arena::Turns()
 
     if ( conf.ExtBattleSoftWait() ) {
         while ( BattleValid() ) {
-            Unit * troop = GetCurrentUnit( false, _preferredColor );
+            Unit * troop = GetCurrentUnit( *army1, *army2, false, GetOppositeColor( _lastActiveUnitArmyColor ) );
             if ( troop == nullptr ) {
                 // All units have finished their turns
                 break;
@@ -650,15 +650,12 @@ void Battle::Arena::Turns()
 
             current_color = troop->GetCurrentOrArmyColor();
 
-            // Switch the preferred color for the next unit
-            _preferredColor = ( troop->GetArmyColor() == army1->GetColor() ) ? army2->GetColor() : army1->GetColor();
-
             if ( armies_order ) {
                 // Add unit to the history
                 orderHistory.push_back( troop );
 
                 // Update the order of units
-                UpdateOrderOfUnits( *army1, *army2, troop, _preferredColor, orderHistory, *armies_order );
+                UpdateOrderOfUnits( *army1, *army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *armies_order );
             }
 
             if ( bridge ) {
@@ -903,7 +900,7 @@ int Battle::Arena::GetCurrentColor() const
     return current_color;
 }
 
-int Battle::Arena::GetOppositeColor( int col ) const
+int Battle::Arena::GetOppositeColor( const int col ) const
 {
     return col == GetArmyColor1() ? GetArmyColor2() : GetArmyColor1();
 }

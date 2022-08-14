@@ -578,14 +578,6 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
         unit->ResetModes( MORALE_BAD );
         unit->SetModes( TR_MOVED );
         end_turn = true;
-
-        // HoMM2-specific quirk: if unit skips a turn due to bad morale, then the "fastest unit of the opposite
-        // army goes first" logic does not apply if and only if there is another unit in the queue from the same
-        // army and with exactly the same speed
-        const Unit * nextUnit = GetCurrentUnit( true, unit->GetArmyColor() );
-        if ( nextUnit && nextUnit->GetArmyColor() == unit->GetArmyColor() && nextUnit->GetSpeed() == unit->GetSpeed( false, true ) ) {
-            _preferredColor = unit->GetArmyColor();
-        }
     }
 
     if ( interface ) {

@@ -107,7 +107,9 @@ namespace Battle
         int GetArmyColor1() const;
         int GetArmyColor2() const;
         int GetCurrentColor() const;
-        int GetOppositeColor( int ) const;
+        // Returns the color of the army opposite to the army of the given color. If there is no army of the given color,
+        // returns the color of the attacking army.
+        int GetOppositeColor( const int col ) const;
 
         Unit * GetTroopBoard( int32_t );
         const Unit * GetTroopBoard( int32_t ) const;
@@ -133,8 +135,8 @@ namespace Battle
         Indexes GetPath( const Unit &, const Position & ) const;
 
         // Returns the cell nearest to the end of the path to the cell with the given index (according to the AIBattlePathfinder)
-        // and reachable for the current unit (to which the current board passability information relates) or -1 if the cell
-        // with the given index is unreachable in principle
+        // and reachable for the current unit (to which the current board passability information relates) or -1 if the cell with
+        // the given index is unreachable in principle
         int32_t GetNearestReachableCell( const Unit & currentUnit, const int32_t dst ) const;
 
         void ApplyAction( Command & );
@@ -194,13 +196,6 @@ namespace Battle
         void RemoteTurn( const Unit &, Actions & );
         void HumanTurn( const Unit &, Actions & );
 
-        // Returns the current unit from the turn queue (or nullptr, if the queue is empty), taking into account the
-        // current stage (the first stage is when units get a turn for the first time, the second (optional) stage is
-        // when the units that decided to wait in the first stage get their turn once again), as well as the preferred
-        // color (all other conditions being equal, a unit of this color is returned if possible, otherwise a unit from
-        // the attacking army is returned).
-        Unit * GetCurrentUnit( const bool firstStage, const int preferredColor ) const;
-
         void TurnTroop( Unit * troop, const Units & orderHistory );
         void TowerAction( const Tower & );
 
@@ -248,7 +243,9 @@ namespace Battle
         Units * armies_order;
 
         int current_color;
-        int _preferredColor; // Preferred color for the next unit in the battle queue
+        // The color of the army of the last unit that performed a full-fledged action (skipping a turn due to
+        // bad morale is not considered as such)
+        int _lastActiveUnitArmyColor;
 
         const Castle * castle;
         const bool _isTown; // If the battle is in town (village or castle).
