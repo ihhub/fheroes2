@@ -116,7 +116,6 @@ brew install fheroes2
 
 ```sh
 make FHEROES2_MACOS_APP_BUNDLE=ON
-make -C files/lang
 make FHEROES2_MACOS_APP_BUNDLE=ON bundle
 ```
 
