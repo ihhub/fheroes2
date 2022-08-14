@@ -259,7 +259,7 @@ namespace fheroes2
         // round up the integer division
         uint32_t length = 1;
         if ( step > 0 ) {
-            length = std::max( 1u, ( dist + step / 2 ) / step );
+            length = std::max( 1U, ( dist + step / 2 ) / step );
         }
 
         const double moveX = dx / static_cast<double>( length );
