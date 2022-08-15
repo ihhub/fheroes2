@@ -2709,7 +2709,7 @@ void Battle::Interface::EventShowOptions()
 void Battle::Interface::EventAutoSwitch( const Unit & b, Actions & a )
 {
     if ( arena.CanToggleAutoBattle() ) {
-        a.emplace_back( CommandType::MSG_BATTLE_AUTO, b.GetColor() );
+        a.emplace_back( CommandType::MSG_BATTLE_AUTO, b.GetCurrentOrArmyColor() );
     }
 
     humanturn_redraw = true;
