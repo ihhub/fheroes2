@@ -530,7 +530,7 @@ void Battle::Arena::ApplyActionEnd( Command & cmd )
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, unit->String() )
         }
         else {
-            DEBUG_LOG( DBG_BATTLE, DBG_INFO, "uid: " << GetHexString( uid ) << " moved" )
+            DEBUG_LOG( DBG_BATTLE, DBG_INFO, "unit has already completed its turn: " << unit->String() )
         }
     }
     else {
