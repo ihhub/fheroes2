@@ -37,6 +37,7 @@ PROJECT_VERSION := $(file < version.txt)
 
 all:
 	$(MAKE) -C src
+	$(MAKE) -C files/lang
 ifndef FHEROES2_MACOS_APP_BUNDLE
 	@cp src/dist/$(TARGET) .
 endif
@@ -57,5 +58,6 @@ endif
 
 clean:
 	$(MAKE) -C src clean
+	$(MAKE) -C files/lang clean
 	@rm -f ./$(TARGET)
 	@rm -rf ./$(TARGET).app
