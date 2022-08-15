@@ -267,8 +267,6 @@ namespace Battle
         uint32_t current_turn;
         int auto_battle;
 
-        bool end_turn;
-
         Rand::DeterministicRandomGenerator & _randomGenerator;
 
         TroopsUidGenerator _uidGenerator;

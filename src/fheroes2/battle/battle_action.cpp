@@ -564,7 +564,6 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
         }
 
         unit->ResetModes( TR_MOVED | MORALE_GOOD );
-        end_turn = false;
     }
     // Bad morale
     else {
@@ -577,7 +576,6 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
 
         unit->ResetModes( MORALE_BAD );
         unit->SetModes( TR_MOVED );
-        end_turn = true;
     }
 
     if ( interface ) {

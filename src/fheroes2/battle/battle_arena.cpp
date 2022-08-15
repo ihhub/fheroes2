@@ -322,7 +322,6 @@ Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::Det
     , icn_covr( ICN::UNKNOWN )
     , current_turn( 0 )
     , auto_battle( 0 )
-    , end_turn( false )
     , _randomGenerator( randomGenerator )
 {
     usage_spells.reserve( 20 );
@@ -453,9 +452,11 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
         troop->SetRandomMorale();
     }
 
-    end_turn = false;
+    assert( !troop->AllModes( MORALE_GOOD | MORALE_BAD ) );
 
-    while ( !end_turn ) {
+    bool endOfTurn = false;
+
+    while ( !endOfTurn ) {
         Actions actions;
 
         if ( interface ) {
@@ -468,12 +469,11 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
         }
         else if ( !troop->isValid() ) {
             // Looks like the unit is dead
-            end_turn = true;
+            endOfTurn = true;
         }
         else if ( troop->Modes( MORALE_BAD ) && !troop->Modes( TR_SKIPMOVE ) ) {
             // Bad morale, happens only if the unit was not in the waiting state
             actions.emplace_back( CommandType::MSG_BATTLE_MORALE, troop->GetUID(), false );
-            end_turn = true;
         }
         else {
             // This unit will certainly perform at least one full-fledged action
@@ -508,7 +508,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
 
             // Check if the battle is over
             if ( !BattleValid() ) {
-                end_turn = true;
+                endOfTurn = true;
                 break;
             }
 
@@ -516,13 +516,13 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             const bool troopSkipsMove = troopHasAlreadySkippedMove ? troop->Modes( TR_HARDSKIP ) : troop->Modes( TR_SKIPMOVE );
 
             // Good morale
-            if ( !end_turn && troop->isValid() && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD ) && !isImmovable && !troopSkipsMove ) {
+            if ( troop->isValid() && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD ) && !isImmovable && !troopSkipsMove ) {
                 actions.emplace_back( CommandType::MSG_BATTLE_MORALE, troop->GetUID(), true );
             }
         }
 
         if ( troop->Modes( TR_MOVED ) || ( troop->Modes( TR_SKIPMOVE ) && !troopHasAlreadySkippedMove ) ) {
-            end_turn = true;
+            endOfTurn = true;
         }
 
         board.Reset();
