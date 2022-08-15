@@ -588,34 +588,30 @@ void Battle::Arena::Turns()
             if ( castle ) {
                 if ( !catapultActed && troop->GetColor() == army1->GetColor() ) {
                     CatapultAction();
+
                     catapultActed = true;
                 }
 
                 if ( !towersActed && troop->GetColor() == army2->GetColor() ) {
-                    if ( towers[1] && towers[1]->isValid() ) {
-                        TowerAction( *towers[1] );
+                    auto towerAction = [this, &orderHistory, troop]( const size_t idx ) {
+                        assert( idx < std::size( towers ) );
+
+                        if ( towers[idx] == nullptr || !towers[idx]->isValid() ) {
+                            return;
+                        }
+
+                        TowerAction( *towers[idx] );
 
                         if ( armies_order ) {
                             // Tower could kill someone, update the order of units
                             UpdateOrderOfUnits( *army1, *army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *armies_order );
                         }
-                    }
-                    if ( towers[0] && towers[0]->isValid() ) {
-                        TowerAction( *towers[0] );
+                    };
 
-                        if ( armies_order ) {
-                            // Tower could kill someone, update the order of units
-                            UpdateOrderOfUnits( *army1, *army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *armies_order );
-                        }
-                    }
-                    if ( towers[2] && towers[2]->isValid() ) {
-                        TowerAction( *towers[2] );
+                    towerAction( 1 );
+                    towerAction( 0 );
+                    towerAction( 2 );
 
-                        if ( armies_order ) {
-                            // Tower could kill someone, update the order of units
-                            UpdateOrderOfUnits( *army1, *army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *armies_order );
-                        }
-                    }
                     towersActed = true;
 
                     // If the towers have killed the last enemy unit, the battle is over
