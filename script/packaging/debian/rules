@@ -10,4 +10,3 @@ export DEB_CFLAGS_MAINT_APPEND = -DFHEROES2_DATA=/usr/share/games/fheroes2
 
 override_dh_auto_build:
 	dh_auto_build
-	make -C files/lang

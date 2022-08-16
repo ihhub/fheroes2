@@ -1290,7 +1290,7 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzle
         renderAddonObject( dst, area, mp, addon );
     }
 
-    if ( ( _level & 0x03 ) == level && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( GetGround(), objectTileset, objectIndex ) ) ) {
+    if ( objectTileset != 0 && ( _level & 0x03 ) == level && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( GetGround(), objectTileset, objectIndex ) ) ) {
         renderMainObject( dst, area, mp );
     }
 
@@ -1331,6 +1331,8 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzle
 
 void Maps::Tiles::renderAddonObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const TilesAddon & addon )
 {
+    assert( addon.object != 0 && addon.index != 255 );
+
     const int icn = MP2::GetICNObject( addon.object );
     if ( isDirectRenderingRestricted( icn ) ) {
         return;
@@ -1364,6 +1366,8 @@ void Maps::Tiles::renderAddonObject( fheroes2::Image & output, const Interface::
 
 void Maps::Tiles::renderMainObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset ) const
 {
+    assert( objectTileset != 0 && objectIndex != 255 );
+
     const int mainObjectIcn = MP2::GetICNObject( objectTileset );
     if ( isDirectRenderingRestricted( mainObjectIcn ) ) {
         return;
@@ -2892,10 +2896,6 @@ int32_t Maps::Tiles::getIndexOfMainTile( const Maps::Tiles & tile )
 
     assert( correctedObjectType > objectType );
 
-    // This is non-main tile of an action object. We have to find the main tile.
-    // Since we don't want to care about the size of every object in the game we should find tiles in a certain radius.
-    const int32_t radiusOfSearch = 3;
-
     // It's unknown whether object type belongs to bottom layer or ground. Create a list of UIDs starting from bottom layer.
     std::set<uint32_t> uids;
     uids.insert( tile.GetObjectUID() );
@@ -2911,7 +2911,12 @@ int32_t Maps::Tiles::getIndexOfMainTile( const Maps::Tiles & tile )
     const int32_t tileIndex = tile.GetIndex();
     const int32_t mapWidth = world.w();
 
-    for ( int32_t y = -radiusOfSearch; y <= radiusOfSearch; ++y ) {
+    // This is non-main tile of an action object. We have to find the main tile.
+    // Since we don't want to care about the size of every object in the game we should find tiles in a certain radius.
+    const int32_t radiusOfSearch = 3;
+
+    // Main tile is usually at the bottom of the object so let's start from there. Also there are no objects having tiles below more than 1 row.
+    for ( int32_t y = radiusOfSearch; y >= -1; --y ) {
         for ( int32_t x = -radiusOfSearch; x <= radiusOfSearch; ++x ) {
             const int32_t index = tileIndex + y * mapWidth + x;
             if ( Maps::isValidAbsIndex( index ) ) {

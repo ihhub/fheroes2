@@ -263,7 +263,12 @@ void Interface::Radar::RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, cons
 
 void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
 {
+#ifdef WITH_DEBUG
+    const bool revealAll = ( flags == ViewWorldMode::ViewAll ) || IS_DEVEL();
+#else
     const bool revealAll = flags == ViewWorldMode::ViewAll;
+#endif
+
     const bool revealMines = revealAll || ( flags == ViewWorldMode::ViewMines );
     const bool revealHeroes = revealAll || ( flags == ViewWorldMode::ViewHeroes );
     const bool revealTowns = revealAll || ( flags == ViewWorldMode::ViewTowns );
@@ -304,11 +309,8 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
         int tileIndex = y * worldWidth;
         for ( int32_t x = 0; x < worldWidth; x += stepx, tileIndex += stepx ) {
             const Maps::Tiles & tile = world.GetTiles( tileIndex );
-#ifdef WITH_DEBUG
-            const bool visibleTile = revealAll || IS_DEVEL() || !tile.isFog( color );
-#else
             const bool visibleTile = revealAll || !tile.isFog( color );
-#endif
+
             uint8_t fillColor = 0;
 
             switch ( tile.GetObject( revealOnlyVisible || revealHeroes ) ) {
