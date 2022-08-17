@@ -127,7 +127,7 @@ public:
     // Used for cases when heroes are stuck because one hero might be blocking the way and we have to move him.
     int getNearestTileToMove( const Heroes & hero );
 
-    bool isHeroPossiblyBlockingWay( const Heroes & hero ) const;
+    static bool isHeroPossiblyBlockingWay( const Heroes & hero );
 
     std::vector<IndexObject> getObjectsOnTheWay( const int targetIndex, const bool checkAdjacent = false ) const;
 

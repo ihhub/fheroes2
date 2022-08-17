@@ -1734,7 +1734,7 @@ namespace AI
                         continue;
                     }
 
-                    if ( !_pathfinder.isHeroPossiblyBlockingWay( *heroInfo.hero ) ) {
+                    if ( !AIWorldPathfinder::isHeroPossiblyBlockingWay( *heroInfo.hero ) ) {
                         continue;
                     }
 
