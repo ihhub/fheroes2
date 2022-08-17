@@ -677,7 +677,7 @@ int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero )
     return -1;
 }
 
-bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
+bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero ) const
 {
     const int heroIndex = hero.GetIndex();
     const int heroColor = hero.GetColor();
