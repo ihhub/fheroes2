@@ -679,61 +679,108 @@ int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero )
 
 bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
 {
-    // paths have to be pre-calculated to find a spot where we're able to move
-    reEvaluateIfNeeded( hero );
+    const int heroIndex = hero.GetIndex();
+    const int heroColor = hero.GetColor();
 
-    const int32_t start = hero.GetIndex();
+    auto isReachableDirection = [heroIndex, heroColor]( const int direction ) {
+        if ( !Maps::isValidDirection( heroIndex, direction ) ) {
+            return false;
+        }
 
-    const bool leftSideUnreachable = !Maps::isValidDirection( start, Direction::LEFT ) || _cache[start - 1]._cost == 0;
-    const bool rightSideUnreachable = !Maps::isValidDirection( start, Direction::RIGHT ) || _cache[start + 1]._cost == 0;
-    if ( leftSideUnreachable && rightSideUnreachable ) {
+        if ( !isValidPath( heroIndex, direction, heroColor ) ) {
+            return false;
+        }
+
+        return true;
+    };
+
+    const bool leftReachable = isReachableDirection( Direction::LEFT );
+    const bool rightReachable = isReachableDirection( Direction::RIGHT );
+    const bool topReachable = isReachableDirection( Direction::TOP );
+    const bool bottomReachable = isReachableDirection( Direction::BOTTOM );
+    const bool topLeftReachable = isReachableDirection( Direction::TOP_LEFT );
+    const bool topRightReachable = isReachableDirection( Direction::TOP_RIGHT );
+    const bool bottomLeftReachable = isReachableDirection( Direction::BOTTOM_LEFT );
+    const bool bottomRightReachable = isReachableDirection( Direction::BOTTOM_RIGHT );
+
+    // There are multiple cases when a hero might block way.
+    // H - hero
+    // x - unreachable tile
+    // r - always reachable tile
+    // o - optionally reachable tile
+
+    // |   | r |   |
+    // | x | H | x |
+    // |   | r |   |
+    if ( topReachable && bottomReachable && !leftReachable && !rightReachable ) {
         return true;
     }
 
-    const bool topSideUnreachable = !Maps::isValidDirection( start, Direction::TOP ) || _cache[start - world.w()]._cost == 0;
-    const bool bottomSideUnreachable = !Maps::isValidDirection( start, Direction::BOTTOM ) || _cache[start + world.w()]._cost == 0;
-    if ( topSideUnreachable && bottomSideUnreachable ) {
+    // |   | x |   |
+    // | r | H | r |
+    // |   | x |   |
+    if ( leftReachable && rightReachable && !topReachable && !bottomReachable ) {
         return true;
     }
 
-    const bool topLeftSideUnreachable = !Maps::isValidDirection( start, Direction::TOP_LEFT ) || _cache[start - 1 - world.w()]._cost == 0;
-    if ( topLeftSideUnreachable && !leftSideUnreachable && !topSideUnreachable && bottomSideUnreachable ) {
+    // | x | o |   |
+    // | r | H | o |
+    // |   | x |   |
+    if ( leftReachable && ( topReachable || rightReachable ) && !topLeftReachable && !bottomReachable ) {
         return true;
     }
 
-    const bool topRightSideUnreachable = !Maps::isValidDirection( start, Direction::TOP_RIGHT ) || _cache[start + 1 - world.w()]._cost == 0;
-    if ( topRightSideUnreachable && !rightSideUnreachable && !topSideUnreachable && bottomSideUnreachable ) {
+    // |   | o | x |
+    // | o | H | r |
+    // |   | x |   |
+    if ( rightReachable && ( topReachable || leftReachable ) && !topRightReachable && !bottomReachable ) {
         return true;
     }
 
-    const bool bottomLeftSideUnreachable = !Maps::isValidDirection( start, Direction::BOTTOM_LEFT ) || _cache[start - 1 + world.w()]._cost == 0;
-    if ( bottomLeftSideUnreachable && !leftSideUnreachable && !bottomSideUnreachable && topSideUnreachable ) {
+    // |   | x |   |
+    // | r | H | o |
+    // | x | o |   |
+    if ( leftReachable && ( bottomReachable || rightReachable ) && !topReachable && !bottomLeftReachable ) {
         return true;
     }
 
-    const bool bottomRightSideUnreachable = !Maps::isValidDirection( start, Direction::BOTTOM_RIGHT ) || _cache[start + 1 + world.w()]._cost == 0;
-    if ( bottomRightSideUnreachable && !rightSideUnreachable && !bottomSideUnreachable && topSideUnreachable ) {
+    // |   | x |   |
+    // | o | H | r |
+    // |   | o | x |
+    if ( rightReachable && ( bottomReachable || leftReachable ) && !topReachable && !bottomRightReachable ) {
         return true;
     }
 
-    if ( bottomLeftSideUnreachable && topLeftSideUnreachable && !leftSideUnreachable ) {
+    // | x | o |   |
+    // | r | H | o |
+    // | x | o |   |
+    if ( leftReachable && ( topReachable || bottomReachable || rightReachable ) && !topLeftReachable && !bottomLeftReachable ) {
         return true;
     }
 
-    if ( topLeftSideUnreachable && topRightSideUnreachable && !topSideUnreachable ) {
+    // | x | r | x |
+    // | o | H | o |
+    // |   | o |   |
+    if ( topReachable && ( bottomReachable || rightReachable || leftReachable ) && !topLeftReachable && !topRightReachable ) {
         return true;
     }
 
-    if ( bottomRightSideUnreachable && topRightSideUnreachable && !rightSideUnreachable ) {
+    // |   | o | x |
+    // | o | H | r |
+    // |   | o | x |
+    if ( rightReachable && ( topReachable || bottomReachable || leftReachable ) && !topRightReachable && !bottomRightReachable ) {
         return true;
     }
 
-    if ( bottomLeftSideUnreachable && bottomRightSideUnreachable && !bottomSideUnreachable ) {
+    // |   | o |   |
+    // | o | H | o |
+    // | x | r | x |
+    if ( bottomReachable && ( topReachable || leftReachable || rightReachable ) && !bottomLeftReachable && !bottomRightReachable ) {
         return true;
     }
 
     // Is the hero standing on Stoneliths?
-    return world.GetTiles( start ).GetObject( false ) == MP2::OBJ_STONELITHS;
+    return world.GetTiles( heroIndex ).GetObject( false ) == MP2::OBJ_STONELITHS;
 }
 
 std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int targetIndex, const bool checkAdjacent /* = false */ ) const
