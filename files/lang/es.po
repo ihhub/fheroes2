@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-10 14:31+0000\n"
+"POT-Creation-Date: 2022-08-09 03:07+0000\n"
 "PO-Revision-Date: 2022-05-14 22:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -2562,16 +2562,6 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr ""
 
-msgid "Total: "
-msgstr ""
-
-msgid "No room in"
-msgstr ""
-
-#, fuzzy
-msgid "the garrison"
-msgstr "las escaleras"
-
 msgid "off"
 msgstr "apagado"
 
@@ -2617,6 +2607,9 @@ msgstr "Construir un nuevo barco:"
 
 msgid "Resource cost:"
 msgstr "Coste del recurso:"
+
+msgid "Total: "
+msgstr ""
 
 msgid "Need: "
 msgstr ""
@@ -4480,11 +4473,9 @@ msgstr "uno"
 msgid "two"
 msgstr "dos"
 
-msgid "A whirlpool engulfs your ship."
-msgstr "Un remolino engulle tu nave."
-
-msgid "Some of your army has fallen overboard."
-msgstr "Parte de tu ejército ha caído por la borda."
+msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
+msgstr ""
+"Un remolino engulle tu nave. Parte de tu ejército ha caído por la borda."
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
 msgstr "¡Insultados por la negativa a su oferta, los monstruos te atacan!"
@@ -9575,6 +9566,3 @@ msgstr ""
 "Puedes descargar la última versión del juego desde el sítio:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "game: always confirm for rewrite savefile"
-#~ msgstr "juego: siempre confirmar al sobreescribir una paritda guardada"

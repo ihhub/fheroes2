@@ -119,32 +119,6 @@ namespace Game
     std::string GetSaveFileExtension();
     std::string GetSaveFileExtension( const int gameType );
 
-    namespace ObjectFadeAnimation
-    {
-        struct FadeTask
-        {
-            FadeTask();
-
-            FadeTask( MP2::MapObjectType object_, uint32_t objectIndex_, uint32_t animationIndex_, int32_t fromIndex_, int32_t toIndex_, uint8_t alpha_, bool fadeOut_,
-                      bool fadeIn_, uint8_t objectTileset_ );
-
-            MP2::MapObjectType object;
-            uint32_t objectIndex;
-            uint32_t animationIndex;
-            int32_t fromIndex;
-            int32_t toIndex;
-            uint8_t alpha;
-            bool fadeOut;
-            bool fadeIn;
-            uint8_t objectTileset;
-        };
-
-        const FadeTask & GetFadeTask();
-
-        void PrepareFadeTask( const MP2::MapObjectType object, int32_t fromTile, int32_t toTile, bool fadeOut, bool fadeIn );
-        void PerformFadeTask();
-    }
-
     int32_t GetStep4Player( const int32_t currentId, const int32_t width, const int32_t totalCount );
     std::string CountThievesGuild( uint32_t monsterCount, int guildCount );
 

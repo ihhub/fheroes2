@@ -23,6 +23,7 @@
 #include <set>
 #include <tuple>
 
+#include "army.h"
 #include "game_over.h"
 #include "ground.h"
 #include "logging.h"
@@ -453,10 +454,16 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
     // find out if current node is protected by a strong army
     auto protectionCheck = [this]( const int index ) {
         const Maps::Tiles & tile = world.GetTiles( index );
+
         if ( MP2::isProtectedObject( tile.GetObject() ) ) {
-            _temporaryArmy.setFromTile( tile );
-            return _temporaryArmy.GetStrength() * _advantage > _armyStrength;
+            // creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
+            static Army tileArmy;
+
+            tileArmy.setFromTile( tile );
+
+            return tileArmy.GetStrength() * _advantage > _armyStrength;
         }
+
         return false;
     };
 

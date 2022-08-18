@@ -75,9 +75,6 @@ jobs:
       run: |
         make -j 2
       env: ${{ matrix.config.env }}
-    - name: Generate translations
-      run: |
-        make -C files/lang -j 2
     - name: Create app bundle
       if: ${{ matrix.config.os == 'macos-11' }}
       run: |

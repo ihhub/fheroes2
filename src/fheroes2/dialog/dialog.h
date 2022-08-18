@@ -103,8 +103,8 @@ namespace Dialog
     void DwellingInfo( const Monster &, uint32_t available );
     bool SetGuardian( Heroes &, Troop &, CapturedObject &, bool readonly );
     int ArmyInfo( const Troop & troop, int flags, bool isReflected = false );
-    int ArmyJoinFree( const Troop &, Heroes & );
-    int ArmyJoinWithCost( const Troop &, uint32_t join, uint32_t gold, Heroes & );
+    int ArmyJoinFree( const Troop & troop );
+    int ArmyJoinWithCost( const Troop &, const uint32_t join, const uint32_t gold );
     int ArmySplitTroop( uint32_t freeSlots, const uint32_t redistributeMax, uint32_t & redistributeCount, bool & useFastSplit );
     void Marketplace( Kingdom & kingdom, bool fromTradingPost );
     void MakeGiftResource( Kingdom & kingdom );

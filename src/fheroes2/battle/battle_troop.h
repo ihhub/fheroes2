@@ -211,12 +211,12 @@ namespace Battle
             return animation.getFrame();
         }
 
-        uint32_t GetCustomAlpha() const
+        uint8_t GetCustomAlpha() const
         {
             return customAlphaMask;
         }
 
-        void SetCustomAlpha( uint32_t alpha )
+        void SetCustomAlpha( uint8_t alpha )
         {
             customAlphaMask = alpha;
         }
@@ -285,7 +285,7 @@ namespace Battle
         RandomizedDelay idleTimer;
 
         bool blindanswer;
-        uint32_t customAlphaMask;
+        uint8_t customAlphaMask;
 
         const Rand::DeterministicRandomGenerator & _randomGenerator;
     };

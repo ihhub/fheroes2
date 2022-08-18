@@ -118,7 +118,11 @@ namespace fheroes2
             else if ( ( std::max( rowMaxElementWidth.back(), currentElementWidth ) + elementOffsetX ) * ( rowElementCount.back() + 1 ) <= BOXAREA_WIDTH ) {
                 rowElementIndex.emplace_back( rowElementIndex.back() + 1 );
                 rowHeight.back() = std::max( rowHeight.back(), element->area().height );
-                rowId.emplace_back( rowId.back() );
+
+                // We cannot use back() to insert it into the same container as it will be resized upon insertion.
+                const size_t lastRoiId = rowId.back();
+                rowId.emplace_back( lastRoiId );
+
                 rowMaxElementWidth.back() = std::max( rowMaxElementWidth.back(), currentElementWidth );
                 ++rowElementCount.back();
             }

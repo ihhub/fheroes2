@@ -238,13 +238,7 @@ fheroes2::GameMode Game::Load( const std::string & fn )
 
     if ( conf.isCampaignGameType() ) {
         Campaign::CampaignSaveData & saveData = Campaign::CampaignSaveData::Get();
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0912_RELEASE, "Remove the usage of loadOldSaveSata method." );
-        if ( binver < FORMAT_VERSION_0912_RELEASE ) {
-            Campaign::CampaignSaveData::loadOldSaveSata( fz, saveData );
-        }
-        else {
-            fz >> saveData;
-        }
+        fz >> saveData;
 
         if ( !saveData.isStarting() && saveData.getCurrentScenarioInfoId() == saveData.getLastCompletedScenarioInfoID() ) {
             // This is the end of the current scenario. We should show next scenario selection.

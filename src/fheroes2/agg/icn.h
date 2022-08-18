@@ -980,13 +980,15 @@ namespace ICN
         GOOD_CAMPAIGN_BUTTONS,
         EVIL_CAMPAIGN_BUTTONS,
 
+        MINI_MONSTER_IMAGE,
+        MINI_MONSTER_SHADOW,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };
 
     const char * GetString( int );
     uint32_t AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool quantity = false );
-    bool HighlyObjectSprite( int icn, uint32_t );
     int PORTxxxx( int heroId );
 
     int Get4Captain( int race );

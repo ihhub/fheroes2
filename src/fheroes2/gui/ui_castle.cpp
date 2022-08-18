@@ -301,7 +301,10 @@ namespace fheroes2
         const fheroes2::Sprite & image
             = isImagePlayerColorDependent( icnId ) ? getModifiedByColorImage( icnId, icnIndex, castle.GetColor() ) : AGG::GetICN( icnId, icnIndex );
 
-        std::pair<fheroes2::Rect, fheroes2::Point> roi = Fixed4Blit( { offset.x + image.x(), offset.y + image.y(), image.width(), image.height() }, renderArea );
-        fheroes2::AlphaBlit( image, roi.first.x, roi.first.y, fheroes2::Display::instance(), roi.second.x, roi.second.y, roi.first.width, roi.first.height, alpha );
+        const fheroes2::Rect imageRoi{ offset.x + image.x(), offset.y + image.y(), image.width(), image.height() };
+        const fheroes2::Rect overlappedRoi = renderArea ^ imageRoi;
+
+        fheroes2::AlphaBlit( image, overlappedRoi.x - imageRoi.x, overlappedRoi.y - imageRoi.y, fheroes2::Display::instance(), overlappedRoi.x, overlappedRoi.y,
+                             overlappedRoi.width, overlappedRoi.height, alpha );
     }
 }

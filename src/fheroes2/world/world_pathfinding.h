@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include "army.h"
 #include "color.h"
 #include "mp2.h"
 #include "pathfinding.h"
@@ -163,5 +162,4 @@ private:
     double _armyStrength = -1;
     double _advantage = 1.0;
     double _spellPointsReserved = 0.5;
-    Army _temporaryArmy; // for internal calculations
 };
