@@ -120,7 +120,7 @@ struct CapturedObjects : std::map<int32_t, CapturedObject>
 
     CapturedObject & Get( int32_t );
 
-    void tributeCapturedObjects( const int playerColorId, const int objectType, Funds & funds, int & objectCount );
+    void tributeCapturedObjects( const int playerColorId, const MP2::MapObjectType objectType, Funds & funds, int & objectCount );
 
     uint32_t GetCount( int, int ) const;
     uint32_t GetCountMines( int, int ) const;
