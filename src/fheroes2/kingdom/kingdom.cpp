@@ -830,7 +830,8 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
                 }
 
                 world.AddEventDate( event );
-            } else {
+            }
+            else {
                 kingdom.AddFundsResource( funds );
             }
         }
