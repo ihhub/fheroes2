@@ -84,7 +84,7 @@ public:
         // UNUSED = 0x20000800,
         // UNUSED = 0x20001000,
         // UNUSED = 0x20002000,
-        WORLD_SHOW_TERRAIN_PENALTY = 0x20004000,
+        // UNUSED = 0x20004000,
         // UNUSED = 0x20008000,
         // UNUSED = 0x20010000,
         // UNUSED = 0x20020000,
@@ -269,11 +269,6 @@ public:
     bool ExtHeroArenaCanChoiseAnySkills() const
     {
         return ExtModes( HEROES_ARENA_ANY_SKILLS );
-    }
-
-    bool ExtWorldShowTerrainPenalty() const
-    {
-        return ExtModes( WORLD_SHOW_TERRAIN_PENALTY );
     }
 
     bool ExtWorldScouteExtended() const

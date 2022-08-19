@@ -9178,9 +9178,6 @@ msgstr "spel: Kom ihåg senast fokus"
 msgid "battle: show damage info"
 msgstr "spel: Visa systeminfo"
 
-msgid "world: show terrain penalty"
-msgstr ""
-
 msgid "world: Scouting skill shows extended content info"
 msgstr ""
 

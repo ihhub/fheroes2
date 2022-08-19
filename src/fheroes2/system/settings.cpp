@@ -904,8 +904,6 @@ std::string Settings::ExtName( const uint32_t settingId )
         return _( "game: remember last focus" );
     case Settings::GAME_BATTLE_SHOW_DAMAGE:
         return _( "battle: show damage info" );
-    case Settings::WORLD_SHOW_TERRAIN_PENALTY:
-        return _( "world: show terrain penalty" );
     case Settings::WORLD_SCOUTING_EXTENDED:
         return _( "world: Scouting skill shows extended content info" );
     case Settings::WORLD_ALLOW_SET_GUARDIAN:

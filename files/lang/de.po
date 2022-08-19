@@ -9796,9 +9796,6 @@ msgstr "Spiel: den letzten Fokus merken"
 msgid "battle: show damage info"
 msgstr "Kampf: Schadensinformationen anzeigen"
 
-msgid "world: show terrain penalty"
-msgstr "Welt: Geländestrafung anzeigen"
-
 msgid "world: Scouting skill shows extended content info"
 msgstr "Welt: Scouting-Skill zeigt erweiterte Inhaltsangaben"
 

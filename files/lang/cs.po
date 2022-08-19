@@ -8563,9 +8563,6 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr ""
 
-msgid "world: show terrain penalty"
-msgstr ""
-
 msgid "world: Scouting skill shows extended content info"
 msgstr ""
 

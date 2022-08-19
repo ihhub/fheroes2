@@ -151,7 +151,6 @@ void Dialog::ExtSettings( bool readonly )
     states.push_back( Settings::GAME_BATTLE_SHOW_DAMAGE );
     states.push_back( Settings::GAME_AUTOSAVE_BEGIN_DAY );
     states.push_back( Settings::GAME_CONTINUE_AFTER_VICTORY );
-    states.push_back( Settings::WORLD_SHOW_TERRAIN_PENALTY );
     states.push_back( Settings::WORLD_ALLOW_SET_GUARDIAN );
     states.push_back( Settings::WORLD_EXT_OBJECTS_CAPTURED );
     states.push_back( Settings::WORLD_SCOUTING_EXTENDED );
