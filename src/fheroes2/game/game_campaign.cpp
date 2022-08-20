@@ -164,6 +164,21 @@ namespace
         offset.x *= deltaX;
         offset.y *= deltaY;
 
+        // Price of loyalty's track doesn't respect the standard offset between icons.
+        if ( scenarioInfo.campaignId == Campaign::CampaignID::PRICE_OF_LOYALTY_CAMPAIGN && scenarioInfo.scenarioId >= 5 ) {
+            switch ( scenarioInfo.scenarioId ) {
+            case 5:
+                offset.x -= 2;
+                break;
+            case 6:
+                offset.x -= 1;
+                break;
+            case 7:
+                offset.x -= 4;
+                break;
+            }
+        }
+
         offset.x -= 2;
         offset.y -= 2;
 
