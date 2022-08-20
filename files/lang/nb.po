@@ -9762,9 +9762,6 @@ msgstr "Parti: Husk hvor du var sist"
 msgid "battle: show damage info"
 msgstr "Kamp: Vis skadeinfo"
 
-msgid "world: show terrain penalty"
-msgstr "Verden: Vis hvor mye skritt du taper på terrengene"
-
 msgid "world: Scouting skill shows extended content info"
 msgstr "Verden: Speiding gir deg utvidet info"
 

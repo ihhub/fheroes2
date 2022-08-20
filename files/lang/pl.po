@@ -9323,9 +9323,6 @@ msgstr "gra: pamiętaj ostatni ekran"
 msgid "battle: show damage info"
 msgstr "walka: pokaż informacje o obrażeniach"
 
-msgid "world: show terrain penalty"
-msgstr "świat: pokaż karę za poruszanie się po trudnym terenie"
-
 msgid "world: Scouting skill shows extended content info"
 msgstr ""
 "świat: umiejętność zwiedzania pokazuje dodatkowe informacje o zawartości"

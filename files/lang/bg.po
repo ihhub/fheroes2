@@ -8426,8 +8426,6 @@ msgstr ""
 msgid "battle: show damage info"
 msgstr ""
 
-msgid "world: show terrain penalty"
-msgstr "свят: покажи terrain penalty"
 
 msgid "world: Scouting skill shows extended content info"
 msgstr "свят: Скаутските умения показват разширена информация за съдържанието"

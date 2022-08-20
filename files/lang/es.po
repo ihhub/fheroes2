@@ -9447,9 +9447,6 @@ msgstr "juego: recordar el último foco"
 msgid "battle: show damage info"
 msgstr "juego: mostrar información del sistema"
 
-msgid "world: show terrain penalty"
-msgstr ""
-
 msgid "world: Scouting skill shows extended content info"
 msgstr ""
 
