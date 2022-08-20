@@ -9317,9 +9317,6 @@ msgstr ""
 "Zaklęcie kontroluje do\n"
 "%{hp} punktów życia."
 
-msgid "game: remember last focus"
-msgstr "gra: pamiętaj ostatni ekran"
-
 msgid "battle: show damage info"
 msgstr "walka: pokaż informacje o obrażeniach"
 

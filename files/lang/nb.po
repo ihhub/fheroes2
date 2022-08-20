@@ -9756,9 +9756,6 @@ msgstr ""
 "Denne trolldommen gir deg kontroll over\n"
 "opptil %{hp} liv."
 
-msgid "game: remember last focus"
-msgstr "Parti: Husk hvor du var sist"
-
 msgid "battle: show damage info"
 msgstr "Kamp: Vis skadeinfo"
 
