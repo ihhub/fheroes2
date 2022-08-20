@@ -811,8 +811,6 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
                 continue;
             }
 
-            kingdom.AddFundsResource( funds );
-
             // for show dialogs
             if ( funds.GetValidItemsCount() && kingdom.isControlHuman() ) {
                 EventDate event;
@@ -832,6 +830,9 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
                 }
 
                 world.AddEventDate( event );
+            }
+            else {
+                kingdom.AddFundsResource( funds );
             }
         }
     }

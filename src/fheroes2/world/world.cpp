@@ -305,7 +305,7 @@ void CapturedObjects::ResetColor( int color )
     }
 }
 
-void CapturedObjects::tributeCapturedObjects( const int playerColorId, const int objectType, Funds & funds, int & objectCount )
+void CapturedObjects::tributeCapturedObjects( const int playerColorId, const MP2::MapObjectType objectType, Funds & funds, int & objectCount )
 {
     funds = Funds();
     objectCount = 0;
