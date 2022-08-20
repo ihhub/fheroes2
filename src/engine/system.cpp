@@ -401,6 +401,31 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
 
         correctedPath.append( delimiter );
 
+        // Avoid directory traversal and try to probe directory name directly.
+        // Speeds up file lookup when intermediate directories have a lot of
+        // files. Example is NixOS where file layout is:
+        //     /nix/store/...-fheroes2-${ver}/share/fheroes2/files/lang
+        //     /nix/store/...-other-package-1/...
+        //     /nix/store/...-other-package-2/...
+        // It's not uncommon for /nix/store to have tens of thousands files.
+        // GetCaseInsensitivePath() calls become very expensive on such systems.
+        //
+        // The idea is to try to open current subpath as a directory and avoid
+        // directory traversal altogether. Otherwise fall back to linear
+        // case-insensitive search.
+
+        std::string absSubpath = correctedPath + *subPathIter;
+        DIR * de = opendir( absSubpath.c_str() );
+        if ( de ) {
+            correctedPath = std::move( absSubpath );
+
+            closedir( d );
+            d = opendir( correctedPath.c_str() );
+
+            closedir( de );
+            continue;
+        }
+
         const struct dirent * e = readdir( d );
         while ( e ) {
             if ( strcasecmp( ( *subPathIter ).c_str(), e->d_name ) == 0 ) {

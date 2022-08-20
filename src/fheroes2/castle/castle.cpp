@@ -2444,15 +2444,6 @@ void AllCastles::AddCastle( Castle * castle )
     _castleTiles[center + fheroes2::Point( 0, -3 )] = id;
 }
 
-Castle * AllCastles::Get( const fheroes2::Point & position ) const
-{
-    auto iter = _castleTiles.find( position );
-    if ( iter == _castleTiles.end() )
-        return nullptr;
-
-    return _castles[iter->second];
-}
-
 void AllCastles::Scoute( int colors ) const
 {
     for ( auto it = begin(); it != end(); ++it )

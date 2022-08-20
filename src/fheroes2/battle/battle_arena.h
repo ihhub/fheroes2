@@ -107,7 +107,9 @@ namespace Battle
         int GetArmyColor1() const;
         int GetArmyColor2() const;
         int GetCurrentColor() const;
-        int GetOppositeColor( int ) const;
+        // Returns the color of the army opposite to the army of the given color. If there is no army of the given color,
+        // returns the color of the attacking army.
+        int GetOppositeColor( const int col ) const;
 
         Unit * GetTroopBoard( int32_t );
         const Unit * GetTroopBoard( int32_t ) const;
@@ -133,8 +135,8 @@ namespace Battle
         Indexes GetPath( const Unit &, const Position & ) const;
 
         // Returns the cell nearest to the end of the path to the cell with the given index (according to the AIBattlePathfinder)
-        // and reachable for the current unit (to which the current board passability information relates) or -1 if the cell
-        // with the given index is unreachable in principle
+        // and reachable for the current unit (to which the current board passability information relates) or -1 if the cell with
+        // the given index is unreachable in principle
         int32_t GetNearestReachableCell( const Unit & currentUnit, const int32_t dst ) const;
 
         void ApplyAction( Command & );
@@ -241,7 +243,9 @@ namespace Battle
         Units * armies_order;
 
         int current_color;
-        int preferredColor; // preferred color for the next unit in the battle queue
+        // The color of the army of the last unit that performed a full-fledged action (skipping a turn due to
+        // bad morale is not considered as such)
+        int _lastActiveUnitArmyColor;
 
         const Castle * castle;
         const bool _isTown; // If the battle is in town (village or castle).
@@ -262,8 +266,6 @@ namespace Battle
 
         uint32_t current_turn;
         int auto_battle;
-
-        bool end_turn;
 
         Rand::DeterministicRandomGenerator & _randomGenerator;
 

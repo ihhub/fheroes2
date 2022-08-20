@@ -811,8 +811,6 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
                 continue;
             }
 
-            kingdom.AddFundsResource( funds );
-
             // for show dialogs
             if ( funds.GetValidItemsCount() && kingdom.isControlHuman() ) {
                 EventDate event;
@@ -832,6 +830,9 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
                 }
 
                 world.AddEventDate( event );
+            }
+            else {
+                kingdom.AddFundsResource( funds );
             }
         }
     }
@@ -922,16 +923,7 @@ StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
 StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 {
     msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.visit_object
-        >> kingdom.puzzle_maps >> kingdom.visited_tents_colors;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0916_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_0916_RELEASE ) {
-        KingdomHeroes temp;
-
-        msg >> temp;
-    }
-
-    msg >> kingdom._lastBattleWinHeroID >> kingdom._topItemInKingdomView;
+        >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom._lastBattleWinHeroID >> kingdom._topItemInKingdomView;
 
     return msg;
 }

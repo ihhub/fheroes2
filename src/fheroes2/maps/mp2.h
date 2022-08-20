@@ -53,7 +53,7 @@ namespace MP2
         uint8_t objectName2; // Top level object type (first 2 bits) and object tile set (6 bits). Tile set refers to ICN ID.
         uint8_t level2IcnImageIndex; // ICN image index (image index for corresponding ICN Id) for top level object. 255 means it's an empty object.
 
-        // First 2 bits responsible for tile shape (0 - 3). Subsequent 3 bits are still unknown. Possible values are 1 and 5. They are set only for tiles with transition
+        // First 2 bits responsible for tile shape (0 - 3). Subsequent bits are still unknown. Possible values are 1 and 5. They are set only for tiles with transition
         // between land and sea. They can be related to passabilities.
         uint8_t flags;
 
@@ -568,7 +568,7 @@ namespace MP2
 
     const char * StringObject( const MapObjectType objectType, const int count = 1 );
 
-    bool isHiddenForPuzzle( uint8_t tileset, uint8_t index );
+    bool isHiddenForPuzzle( const int terrainType, uint8_t tileset, uint8_t index );
 
     // The method check whether the object is an action object depending on its location. For example, castle can't be located on water.
     bool isActionObject( const MapObjectType objectType, const bool locatesOnWater );
@@ -601,6 +601,10 @@ namespace MP2
 
     // Make sure that you pass a valid action object.
     int getActionObjectDirection( const MapObjectType objectType );
+
+    bool getDiggingHoleSprite( const int terrainType, uint8_t & tileSet, uint32_t & index );
+
+    bool isDiggingHoleSprite( const int terrainType, const uint8_t tileSet, const uint32_t index );
 }
 
 #endif

@@ -791,7 +791,11 @@ void Army::setFromTile( const Maps::Tiles & tile )
         break;
 
     case MP2::OBJ_GRAVEYARD:
-        ArrangeForBattle( Monster::MUTANT_ZOMBIE, 100, tile.GetIndex(), false );
+        at( 0 )->Set( Monster::MUTANT_ZOMBIE, 20 );
+        at( 1 )->Set( Monster::MUTANT_ZOMBIE, 20 );
+        at( 2 )->Set( Monster::MUTANT_ZOMBIE, 20 );
+        at( 3 )->Set( Monster::MUTANT_ZOMBIE, 20 );
+        at( 4 )->Set( Monster::MUTANT_ZOMBIE, 20 );
         break;
 
     case MP2::OBJ_SHIPWRECK: {
@@ -1474,7 +1478,7 @@ void Army::ArrangeForBattle( const Monster & monster, const uint32_t monstersCou
             std::mt19937 seededGen( world.GetMapSeed() + static_cast<uint32_t>( tileIndex ) + static_cast<uint32_t>( monster.GetID() ) );
 
             // 50% chance to get an upgraded stack
-            if ( Rand::Get( 0, 1 ) == 1 ) {
+            if ( Rand::GetWithGen( 0, 1, seededGen ) == 1 ) {
                 troopToUpgrade->Upgrade();
             }
         }

@@ -68,13 +68,13 @@ std::string StringTrim( std::string str )
 
 std::string StringLower( std::string str )
 {
-    std::transform( str.begin(), str.end(), str.begin(), []( const unsigned char c ) { return std::tolower( c ); } );
+    std::transform( str.begin(), str.end(), str.begin(), []( const unsigned char c ) { return static_cast<char>( std::tolower( c ) ); } );
     return str;
 }
 
 std::string StringUpper( std::string str )
 {
-    std::transform( str.begin(), str.end(), str.begin(), []( const unsigned char c ) { return std::toupper( c ); } );
+    std::transform( str.begin(), str.end(), str.begin(), []( const unsigned char c ) { return static_cast<char>( std::toupper( c ) ); } );
     return str;
 }
 
@@ -338,41 +338,6 @@ namespace fheroes2
         }
 
         return -1;
-    }
-
-    std::pair<Rect, Point> Fixed4Blit( const Rect & srcrt, const Rect & dstrt )
-    {
-        if ( srcrt.width <= 0 || srcrt.height <= 0 || srcrt.x + srcrt.width <= dstrt.x || srcrt.y + srcrt.height <= dstrt.y || srcrt.x >= dstrt.x + dstrt.width
-             || srcrt.y >= dstrt.y + dstrt.height ) {
-            return {};
-        }
-
-        std::pair<Rect, Point> res;
-        Rect & srcrtfix = res.first;
-        Point & dstptfix = res.second;
-
-        srcrtfix.width = srcrt.width;
-        srcrtfix.height = srcrt.height;
-        dstptfix.x = srcrt.x;
-        dstptfix.y = srcrt.y;
-
-        if ( srcrt.x < dstrt.x ) {
-            srcrtfix.x = dstrt.x - srcrt.x;
-            dstptfix.x = dstrt.x;
-        }
-
-        if ( srcrt.y < dstrt.y ) {
-            srcrtfix.y = dstrt.y - srcrt.y;
-            dstptfix.y = dstrt.y;
-        }
-
-        if ( dstptfix.x + srcrtfix.width > dstrt.x + dstrt.width )
-            srcrtfix.width = dstrt.x + dstrt.width - dstptfix.x;
-
-        if ( dstptfix.y + srcrtfix.height > dstrt.y + dstrt.height )
-            srcrtfix.height = dstrt.y + dstrt.height - dstptfix.y;
-
-        return res;
     }
 
     Rect getBoundaryRect( const Rect & rt1, const Rect & rt2 )
