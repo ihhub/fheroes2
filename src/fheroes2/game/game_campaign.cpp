@@ -176,6 +176,8 @@ namespace
             case 7:
                 offset.x -= 4;
                 break;
+            default:
+                break;
             }
         }
 
