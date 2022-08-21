@@ -9790,9 +9790,6 @@ msgstr ""
 "Dieser Zauberspruch kontrolliert bis zu\n"
 "%{hp} TP."
 
-msgid "game: remember last focus"
-msgstr "Spiel: den letzten Fokus merken"
-
 msgid "battle: show damage info"
 msgstr "Kampf: Schadensinformationen anzeigen"
 

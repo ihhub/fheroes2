@@ -900,8 +900,6 @@ bool Settings::ExtModes( uint32_t f ) const
 std::string Settings::ExtName( const uint32_t settingId )
 {
     switch ( settingId ) {
-    case Settings::GAME_REMEMBER_LAST_FOCUS:
-        return _( "game: remember last focus" );
     case Settings::GAME_BATTLE_SHOW_DAMAGE:
         return _( "battle: show damage info" );
     case Settings::WORLD_SCOUTING_EXTENDED:

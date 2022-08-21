@@ -9343,9 +9343,6 @@ msgstr ""
 "суммарное здоровье которого не превышает\n"
 "%{hp} здоровья."
 
-msgid "game: remember last focus"
-msgstr "игра: запомнить последнюю позицию фокуса (героя/замка)"
-
 msgid "battle: show damage info"
 msgstr "битва: показывать урон"
 
