@@ -8354,13 +8354,7 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "game: remember last focus"
-msgstr ""
-
 msgid "battle: show damage info"
-msgstr ""
-
-msgid "world: show terrain penalty"
 msgstr ""
 
 msgid "world: Scouting skill shows extended content info"

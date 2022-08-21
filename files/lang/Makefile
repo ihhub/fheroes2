@@ -18,7 +18,8 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-MSGFMT = sed -e '1,20 s/UTF-8/$(1)/' $< | iconv -f utf-8 -t $(1) | msgfmt - -o $@
+ICONV  = iconv
+MSGFMT = sed -e '1,20 s/UTF-8/$(1)/' $< | $(ICONV) -f utf-8 -t $(1) | msgfmt - -o $@
 
 .PHONY: all clean merge
 
@@ -53,7 +54,7 @@ ro.mo: ro.po
 # All other languages: drop accents transliterated with `"` (which breaks translation file format)
 # and transliterate the rest with default iconv rules
 %.mo: %.po
-	sed -e 'y/äëïöőüűÄËÏŐÖÜŰ/aeioouuAEIOOUU/' $< | iconv -f utf-8 -t ascii//TRANSLIT | msgfmt - -o $@
+	sed -e 'y/äëïöőüűÄËÏŐÖÜŰ/aeioouuAEIOOUU/' $< | $(ICONV) -f utf-8 -t ascii//TRANSLIT | msgfmt - -o $@
 
 clean:
 	rm -f *.mo *.po~

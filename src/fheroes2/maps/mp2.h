@@ -53,7 +53,7 @@ namespace MP2
         uint8_t objectName2; // Top level object type (first 2 bits) and object tile set (6 bits). Tile set refers to ICN ID.
         uint8_t level2IcnImageIndex; // ICN image index (image index for corresponding ICN Id) for top level object. 255 means it's an empty object.
 
-        // First 2 bits responsible for tile shape (0 - 3). Subsequent 3 bits are still unknown. Possible values are 1 and 5. They are set only for tiles with transition
+        // First 2 bits responsible for tile shape (0 - 3). Subsequent bits are still unknown. Possible values are 1 and 5. They are set only for tiles with transition
         // between land and sea. They can be related to passabilities.
         uint8_t flags;
 

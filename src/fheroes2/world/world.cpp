@@ -305,7 +305,7 @@ void CapturedObjects::ResetColor( int color )
     }
 }
 
-void CapturedObjects::tributeCapturedObjects( const int playerColorId, const int objectType, Funds & funds, int & objectCount )
+void CapturedObjects::tributeCapturedObjects( const int playerColorId, const MP2::MapObjectType objectType, Funds & funds, int & objectCount )
 {
     funds = Funds();
     objectCount = 0;
@@ -433,21 +433,6 @@ void World::NewMaps( int32_t sw, int32_t sh )
     }
 }
 
-void World::InitKingdoms()
-{
-    vec_kingdoms.Init();
-}
-
-Castle * World::getCastle( const fheroes2::Point & tilePosition )
-{
-    return vec_castles.Get( tilePosition );
-}
-
-const Castle * World::getCastle( const fheroes2::Point & tilePosition ) const
-{
-    return vec_castles.Get( tilePosition );
-}
-
 const Castle * World::getCastleEntrance( const fheroes2::Point & tilePosition ) const
 {
     if ( !isValidCastleEntrance( tilePosition ) ) {
@@ -469,27 +454,6 @@ Castle * World::getCastleEntrance( const fheroes2::Point & tilePosition )
 bool World::isValidCastleEntrance( const fheroes2::Point & tilePosition ) const
 {
     return Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) && ( GetTiles( tilePosition.x, tilePosition.y ).GetObject( false ) == MP2::OBJ_CASTLE );
-}
-
-Heroes * World::GetHeroes( int id )
-{
-    return vec_heroes.Get( id );
-}
-
-const Heroes * World::GetHeroes( int id ) const
-{
-    return vec_heroes.Get( id );
-}
-
-/* get heroes from index maps */
-Heroes * World::GetHeroes( const fheroes2::Point & center )
-{
-    return vec_heroes.Get( center );
-}
-
-const Heroes * World::GetHeroes( const fheroes2::Point & center ) const
-{
-    return vec_heroes.Get( center );
 }
 
 Heroes * World::GetFreemanHeroes( const int race, const int heroIDToIgnore /* = Heroes::UNKNOWN */ ) const

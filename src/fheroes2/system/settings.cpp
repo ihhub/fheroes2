@@ -900,12 +900,8 @@ bool Settings::ExtModes( uint32_t f ) const
 std::string Settings::ExtName( const uint32_t settingId )
 {
     switch ( settingId ) {
-    case Settings::GAME_REMEMBER_LAST_FOCUS:
-        return _( "game: remember last focus" );
     case Settings::GAME_BATTLE_SHOW_DAMAGE:
         return _( "battle: show damage info" );
-    case Settings::WORLD_SHOW_TERRAIN_PENALTY:
-        return _( "world: show terrain penalty" );
     case Settings::WORLD_SCOUTING_EXTENDED:
         return _( "world: Scouting skill shows extended content info" );
     case Settings::WORLD_ALLOW_SET_GUARDIAN:
@@ -1018,21 +1014,6 @@ void Settings::BinaryLoad()
         uint16_t version = 0;
 
         fs >> version >> _optExtGame >> _optExtBalance2 >> _optExtBalance4 >> _optExtBalance3 >> pos_radr >> pos_bttn >> pos_icon >> pos_stat;
-
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0916_RELEASE, "Remove the following code." );
-        if ( version < FORMAT_VERSION_0916_RELEASE ) {
-            // In previous versions, the default values for panel coordinates were {0, 0}, so if all read coordinates
-            // are {0, 0}, then they most likely need to be replaced with the new default coordinates {-1, -1}
-            std::apply(
-                []( auto &... pos ) {
-                    const fheroes2::Point nullPoint{ 0, 0 };
-
-                    if ( ( ( pos == nullPoint ) && ... ) ) {
-                        ( ( pos = { -1, -1 } ), ... );
-                    }
-                },
-                std::tie( pos_radr, pos_bttn, pos_icon, pos_stat ) );
-        }
     }
 }
 

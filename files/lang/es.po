@@ -9440,15 +9440,9 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "game: remember last focus"
-msgstr "juego: recordar el último foco"
-
 #, fuzzy
 msgid "battle: show damage info"
 msgstr "juego: mostrar información del sistema"
-
-msgid "world: show terrain penalty"
-msgstr ""
 
 msgid "world: Scouting skill shows extended content info"
 msgstr ""

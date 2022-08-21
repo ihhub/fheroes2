@@ -139,7 +139,7 @@ namespace
         CacheForMapWithResources() = delete;
 
         // Compute complete world map, and save it for all zoom levels
-        explicit CacheForMapWithResources( const bool revealAll )
+        explicit CacheForMapWithResources( const ViewWorldMode viewMode )
         {
 #ifdef VIEWWORLD_DEBUG_ZOOM_LEVEL
             cachedImages.resize( 4 );
@@ -170,8 +170,11 @@ namespace
             gamearea.SetAreaPosition( 0, 0, blockSizeX, blockSizeY );
 
             int drawingFlags = Interface::RedrawLevelType::LEVEL_ALL & ~Interface::RedrawLevelType::LEVEL_ROUTES;
-            if ( revealAll ) {
+            if ( viewMode == ViewWorldMode::ViewAll ) {
                 drawingFlags &= ~Interface::RedrawLevelType::LEVEL_FOG;
+            }
+            else if ( viewMode == ViewWorldMode::ViewTowns ) {
+                drawingFlags |= Interface::RedrawLevelType::LEVEL_TOWNS;
             }
 
 #if !defined( SAVE_WORLD_MAP )
@@ -506,8 +509,8 @@ fheroes2::Rect ViewWorld::ZoomROIs::GetROIinTiles() const
     fheroes2::Rect result = _roiForZoomLevels[static_cast<int>( _zoomLevel )];
     result.x = result.x / TILEWIDTH;
     result.y = result.y / TILEWIDTH;
-    result.width = result.width / TILEWIDTH;
-    result.height = result.height / TILEWIDTH;
+    result.width = ( result.width + TILEWIDTH - 1 ) / TILEWIDTH;
+    result.height = ( result.height + TILEWIDTH - 1 ) / TILEWIDTH;
     return result;
 }
 
@@ -552,7 +555,7 @@ void ViewWorld::ViewWorldWindow( const int color, const ViewWorldMode mode, Inte
 
     ZoomROIs currentROI( ZoomLevel::ZoomLevel2, viewCenterInPixels );
 
-    CacheForMapWithResources cache( mode == ViewWorldMode::ViewAll );
+    CacheForMapWithResources cache( mode );
 
     DrawWorld( currentROI, cache );
     DrawObjectsIcons( color, mode, currentROI );

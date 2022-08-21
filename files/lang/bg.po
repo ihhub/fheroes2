@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-08 11:28+0000\n"
+"POT-Creation-Date: 2022-08-20 12:38+0000\n"
 "PO-Revision-Date: 2022-07-25 11:28+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -8418,14 +8418,8 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "game: remember last focus"
-msgstr ""
-
 msgid "battle: show damage info"
 msgstr ""
-
-msgid "world: show terrain penalty"
-msgstr "свят: покажи terrain penalty"
 
 msgid "world: Scouting skill shows extended content info"
 msgstr "свят: Скаутските умения показват разширена информация за съдържанието"

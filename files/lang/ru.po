@@ -9343,14 +9343,8 @@ msgstr ""
 "суммарное здоровье которого не превышает\n"
 "%{hp} здоровья."
 
-msgid "game: remember last focus"
-msgstr "игра: запомнить последнюю позицию фокуса (героя/замка)"
-
 msgid "battle: show damage info"
 msgstr "битва: показывать урон"
-
-msgid "world: show terrain penalty"
-msgstr "мир: показывать штраф при перемещении"
 
 msgid "world: Scouting skill shows extended content info"
 msgstr "мир: навык разведки покажет дополнительную информацию"

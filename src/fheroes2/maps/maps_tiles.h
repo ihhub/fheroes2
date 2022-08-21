@@ -68,7 +68,7 @@ namespace Maps
 
         ~TilesAddon() = default;
 
-        TilesAddon & operator=( const TilesAddon & ta ) = delete;
+        TilesAddon & operator=( const TilesAddon & ) = delete;
 
         bool isUniq( const uint32_t id ) const
         {
@@ -76,16 +76,20 @@ namespace Maps
         }
 
         bool isRoad() const;
-        bool hasSpriteAnimation() const;
+
+        bool hasSpriteAnimation() const
+        {
+            return object & 1;
+        }
 
         std::string String( int level ) const;
 
-        static bool isShadow( const TilesAddon & );
+        static bool isShadow( const TilesAddon & ta );
 
         static bool isResource( const TilesAddon & ta );
         static bool isArtifact( const TilesAddon & ta );
 
-        static bool PredicateSortRules1( const TilesAddon &, const TilesAddon & );
+        static bool PredicateSortRules1( const TilesAddon & ta1, const TilesAddon & ta2 );
 
         uint32_t uniq;
         uint8_t level;
@@ -93,10 +97,7 @@ namespace Maps
         uint8_t index;
     };
 
-    struct Addons : public std::list<TilesAddon>
-    {
-        void Remove( uint32_t uniq );
-    };
+    using Addons = std::list<TilesAddon>;
 
     class Tiles
     {
@@ -196,7 +197,6 @@ namespace Maps
         TilesAddon * FindAddonLevel1( uint32_t uniq1 );
         TilesAddon * FindAddonLevel2( uint32_t uniq2 );
 
-        void SetTile( uint32_t sprite_index, uint32_t shape /* 0: none, 1 : vert, 2: horz, 3: both */ );
         void SetObject( const MP2::MapObjectType objectType );
 
         void SetIndex( const uint32_t index )
@@ -242,12 +242,15 @@ namespace Maps
         void removeOwnershipFlag( const MP2::MapObjectType objectType );
 
         static void RedrawEmptyTile( fheroes2::Image & dst, const fheroes2::Point & mp, const Interface::GameArea & area );
-        void redrawTopLayerObjects( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area ) const;
+        void redrawTopLayerExtraObjects( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area ) const;
+        void redrawTopLayerObject( fheroes2::Image & dst, const bool isPuzzleDraw, const Interface::GameArea & area, const TilesAddon & addon ) const;
         int GetFogDirections( int color ) const;
 
-        void RedrawFogs( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const;
+        void drawFog( fheroes2::Image & dst, int color, const Interface::GameArea & area ) const;
         void RedrawPassable( fheroes2::Image & dst, const Interface::GameArea & area ) const;
         void redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzleDraw, const Interface::GameArea & area, const uint8_t level ) const;
+
+        void drawByIcnId( fheroes2::Image & output, const Interface::GameArea & area, const int32_t icnId ) const;
 
         std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMonsterSpritesPerTile() const;
         std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMonsterShadowSpritesPerTile() const;
@@ -386,6 +389,8 @@ namespace Maps
         bool isTallObject() const;
 
         bool isDetachedObject() const;
+
+        void SetTerrain( uint32_t sprite_index, uint32_t shape /* 0: none, 1 : vert, 2: horz, 3: both */ );
 
         static void UpdateMonsterInfo( Tiles & );
         static void UpdateDwellingPopulation( Tiles & tile, bool isFirstLoad );

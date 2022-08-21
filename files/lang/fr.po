@@ -9611,14 +9611,8 @@ msgstr ""
 "Ce sort contrôle jusqu'à\n"
 "%{hp} PV."
 
-msgid "game: remember last focus"
-msgstr "jeu : retenir dernier élément choisi"
-
 msgid "battle: show damage info"
 msgstr "bataille : afficher les informations sur les dégâts"
-
-msgid "world: show terrain penalty"
-msgstr "monde : afficher la pénalité de terrain"
 
 msgid "world: Scouting skill shows extended content info"
 msgstr "monde : Reconnaissance affiche des infos supplémentaires"
