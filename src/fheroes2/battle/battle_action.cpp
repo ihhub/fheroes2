@@ -1001,34 +1001,27 @@ void Battle::Arena::ApplyActionAutoBattle( Command & cmd )
 {
     const int color = cmd.GetValue();
 
-    if ( auto_battle & color ) {
-        if ( interface ) {
-            const Player * player = Players::Get( color );
+    if ( ( color != GetArmyColor1() && color != GetArmyColor2() ) || ( getForce( color ).GetControl() & CONTROL_AI ) ) {
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN,
+                   "incorrect param: "
+                       << "color: " << Color::String( color ) << " (" << color << ")" )
 
-            if ( player ) {
-                std::string msg = _( "%{name} has turned off the auto battle" );
-                StringReplace( msg, "%{name}", player->GetName() );
-
-                interface->SetStatus( msg, true );
-            }
-        }
-
-        auto_battle &= ~color;
+        return;
     }
-    else {
-        if ( interface ) {
-            const Player * player = Players::Get( color );
 
-            if ( player ) {
-                std::string msg = _( "%{name} has turned on the auto battle" );
-                StringReplace( msg, "%{name}", player->GetName() );
+    auto_battle ^= color;
 
-                interface->SetStatus( msg, true );
-            }
-        }
+    if ( interface ) {
+        const Player * player = Players::Get( color );
+        assert( player );
 
-        auto_battle |= color;
+        std::string msg = ( auto_battle & color ) ? _( "%{name} has turned on the auto battle" ) : _( "%{name} has turned off the auto battle" );
+        StringReplace( msg, "%{name}", player->GetName() );
+
+        interface->SetStatus( msg, true );
     }
+
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( color ) << ", status: " << ( ( auto_battle & color ) ? "on" : "off" ) )
 }
 
 void Battle::Arena::ApplyActionSpellSummonElemental( const Command & /*cmd*/, const Spell & spell )
