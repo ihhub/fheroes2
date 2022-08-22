@@ -304,13 +304,7 @@ bool Battle::Arena::isAnyTowerPresent()
 {
     assert( arena != nullptr );
 
-    for ( const auto & tower : arena->_towers ) {
-        if ( tower && tower->isValid() ) {
-            return true;
-        }
-    }
-
-    return false;
+    return std::any_of( arena->_towers.begin(), arena->_towers.end(), []( const auto & twr ) { return twr && twr->isValid(); } );
 }
 
 Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::DeterministicRandomGenerator & randomGenerator )
