@@ -1009,19 +1009,19 @@ void Battle::Arena::ApplyActionAutoBattle( Command & cmd )
         return;
     }
 
-    auto_battle ^= color;
+    _autoBattleColors ^= color;
 
     if ( interface ) {
         const Player * player = Players::Get( color );
         assert( player );
 
-        std::string msg = ( auto_battle & color ) ? _( "%{name} has turned on the auto battle" ) : _( "%{name} has turned off the auto battle" );
+        std::string msg = ( _autoBattleColors & color ) ? _( "%{name} has turned on the auto battle" ) : _( "%{name} has turned off the auto battle" );
         StringReplace( msg, "%{name}", player->GetName() );
 
         interface->SetStatus( msg, true );
     }
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( color ) << ", status: " << ( ( auto_battle & color ) ? "on" : "off" ) )
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( color ) << ", status: " << ( ( _autoBattleColors & color ) ? "on" : "off" ) )
 }
 
 void Battle::Arena::ApplyActionSpellSummonElemental( const Command & /*cmd*/, const Spell & spell )

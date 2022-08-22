@@ -321,7 +321,7 @@ Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::Det
     , interface( nullptr )
     , icn_covr( ICN::UNKNOWN )
     , current_turn( 0 )
-    , auto_battle( 0 )
+    , _autoBattleColors( 0 )
     , _randomGenerator( randomGenerator )
 {
     usage_spells.reserve( 20 );
@@ -357,10 +357,10 @@ Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::Det
     else {
         // no interface - force auto battle mode for human player
         if ( a1.isControlHuman() ) {
-            auto_battle |= a1.GetColor();
+            _autoBattleColors |= a1.GetColor();
         }
         if ( a2.isControlHuman() ) {
-            auto_battle |= a2.GetColor();
+            _autoBattleColors |= a2.GetColor();
         }
     }
 
@@ -484,7 +484,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             if ( troop->isControlRemote() ) {
                 RemoteTurn( *troop, actions );
             }
-            else if ( ( troop->GetCurrentControl() & CONTROL_AI ) || ( troop->GetCurrentColor() & auto_battle ) ) {
+            else if ( ( troop->GetCurrentControl() & CONTROL_AI ) || ( troop->GetCurrentColor() & _autoBattleColors ) ) {
                 AI::Get().BattleTurn( *this, *troop, actions );
             }
             else {
@@ -1375,7 +1375,7 @@ Battle::Result & Battle::Arena::GetResult()
 
 bool Battle::Arena::AutoBattleInProgress() const
 {
-    return ( auto_battle & current_color ) && !( GetCurrentForce().GetControl() & CONTROL_AI );
+    return ( _autoBattleColors & current_color ) && !( GetCurrentForce().GetControl() & CONTROL_AI );
 }
 
 bool Battle::Arena::CanToggleAutoBattle() const

@@ -265,7 +265,8 @@ namespace Battle
         int icn_covr;
 
         uint32_t current_turn;
-        int auto_battle;
+        // A set of colors of players for whom the auto-battle mode is enabled
+        int _autoBattleColors;
 
         Rand::DeterministicRandomGenerator & _randomGenerator;
 
