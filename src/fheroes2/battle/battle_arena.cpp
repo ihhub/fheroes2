@@ -282,7 +282,7 @@ Battle::Graveyard * Battle::Arena::GetGraveyard()
 
 Battle::Interface * Battle::Arena::GetInterface()
 {
-    return arena->interface;
+    return arena->_interface.get();
 }
 
 Battle::Tower * Battle::Arena::GetTower( int type )
@@ -318,7 +318,6 @@ Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::Det
     , _isTown( castle != nullptr )
     , catapult( nullptr )
     , bridge( nullptr )
-    , interface( nullptr )
     , icn_covr( ICN::UNKNOWN )
     , current_turn( 0 )
     , _autoBattleColors( 0 )
@@ -347,12 +346,12 @@ Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::Det
 
     // init interface
     if ( local ) {
-        interface = new Interface( *this, index );
-        board.SetArea( interface->GetArea() );
+        _interface = std::make_unique<Interface>( *this, index );
+        board.SetArea( _interface->GetArea() );
 
         armies_order = new Units();
         armies_order->reserve( 25 );
-        interface->SetArmiesOrder( armies_order );
+        _interface->SetArmiesOrder( armies_order );
     }
     else {
         // no interface - force auto battle mode for human player
@@ -413,13 +412,13 @@ Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::Det
 
     AI::Get().battleBegins();
 
-    if ( interface ) {
+    if ( _interface ) {
         fheroes2::Display & display = fheroes2::Display::instance();
 
         if ( Settings::ExtGameUseFade() )
             fheroes2::FadeDisplay();
 
-        interface->fullRedraw();
+        _interface->fullRedraw();
         display.render();
 
         // Wait for the end of M82::PREBATTL playback
@@ -430,13 +429,14 @@ Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::Det
 
 Battle::Arena::~Arena()
 {
+    // All members should be destroyed before clearing the global pointer to this Arena object
     delete army1;
     delete army2;
     delete towers[0];
     delete towers[1];
     delete towers[2];
     delete catapult;
-    delete interface;
+    _interface.reset();
     delete armies_order;
     delete bridge;
 
@@ -459,8 +459,8 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
     while ( !endOfTurn ) {
         Actions actions;
 
-        if ( interface ) {
-            interface->getPendingActions( actions );
+        if ( _interface ) {
+            _interface->getPendingActions( actions );
         }
 
         if ( !actions.empty() ) {
@@ -526,10 +526,6 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
         }
 
         board.Reset();
-
-        if ( interface ) {
-            fheroes2::delayforMs( 10 );
-        }
     }
 }
 
@@ -546,8 +542,8 @@ void Battle::Arena::Turns()
 
     const Settings & conf = Settings::Get();
 
-    if ( interface ) {
-        interface->RedrawActionNewTurn();
+    if ( _interface ) {
+        _interface->RedrawActionNewTurn();
     }
 
     army1->NewTurn();
@@ -699,8 +695,8 @@ void Battle::Arena::RemoteTurn( const Unit & b, Actions & a )
 
 void Battle::Arena::HumanTurn( const Unit & b, Actions & a )
 {
-    if ( interface )
-        interface->HumanTurn( b, a );
+    if ( _interface )
+        _interface->HumanTurn( b, a );
 }
 
 void Battle::Arena::TowerAction( const Tower & twr )
@@ -927,8 +923,8 @@ const Battle::Unit * Battle::Arena::GetTroopUID( uint32_t uid ) const
 
 void Battle::Arena::FadeArena( bool clearMessageLog ) const
 {
-    if ( interface )
-        interface->FadeArena( clearMessageLog );
+    if ( _interface )
+        _interface->FadeArena( clearMessageLog );
 }
 
 const SpellStorage & Battle::Arena::GetUsageSpells() const
@@ -1152,8 +1148,8 @@ void Battle::Arena::SetCastleTargetValue( int target, uint32_t value )
     case CAT_BRIDGE:
         if ( bridge->isValid() ) {
             if ( !bridge->isDown() ) {
-                if ( interface ) {
-                    interface->RedrawBridgeAnimation( true );
+                if ( _interface ) {
+                    _interface->RedrawBridgeAnimation( true );
                 }
 
                 bridge->SetDown( true );

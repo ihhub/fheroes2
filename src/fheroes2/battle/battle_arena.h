@@ -26,6 +26,7 @@
 
 #include <cstdint>
 #include <list>
+#include <memory>
 #include <utility>
 
 #include "battle.h"
@@ -254,7 +255,7 @@ namespace Battle
         Catapult * catapult;
         Bridge * bridge;
 
-        Interface * interface;
+        std::unique_ptr<Interface> _interface;
         Result result_game;
 
         Graveyard graveyard;
