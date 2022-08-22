@@ -980,7 +980,7 @@ Battle::Interface::Interface( Arena & a, int32_t center )
     , humanturn_redraw( true )
     , animation_flags_frame( 0 )
     , catapult_frame( 0 )
-    , _breakAutoBattleForColor( 0 )
+    , _interruptAutoBattleForColor( 0 )
     , _contourColor( 110 )
     , _brightLandType( false )
     , _currentUnit( nullptr )
@@ -2310,10 +2310,10 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
 
 void Battle::Interface::getPendingActions( Actions & actions )
 {
-    if ( _breakAutoBattleForColor ) {
-        actions.emplace_back( CommandType::MSG_BATTLE_AUTO_SWITCH, _breakAutoBattleForColor );
+    if ( _interruptAutoBattleForColor ) {
+        actions.emplace_back( CommandType::MSG_BATTLE_AUTO_SWITCH, _interruptAutoBattleForColor );
 
-        _breakAutoBattleForColor = 0;
+        _interruptAutoBattleForColor = 0;
     }
 }
 
@@ -5058,34 +5058,39 @@ void Battle::Interface::ResetIdleTroopAnimation() const
 
 void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
 {
-    if ( Game::validateAnimationDelay( Game::BATTLE_SELECTED_UNIT_DELAY ) )
+    // Animation of the currently active unit's contour
+    if ( Game::validateAnimationDelay( Game::BATTLE_SELECTED_UNIT_DELAY ) ) {
         UpdateContourColor();
+    }
 
-    // animate heroes
+    // Animation of heroes
     if ( Game::validateAnimationDelay( Game::BATTLE_OPPONENTS_DELAY ) ) {
-        if ( opponent1 )
+        if ( opponent1 ) {
             opponent1->Update();
+        }
 
-        if ( opponent2 )
+        if ( opponent2 ) {
             opponent2->Update();
+        }
 
         humanturn_redraw = true;
     }
 
-    // flags animation
+    // Animation of flags
     if ( Game::validateAnimationDelay( Game::BATTLE_FLAGS_DELAY ) ) {
         ++animation_flags_frame;
         humanturn_redraw = true;
     }
 
-    // break auto battle
+    // Interrupting auto battle
     if ( arena.AutoBattleInProgress() && arena.CanToggleAutoBattle()
          && ( le.MouseClickLeft( btn_auto.area() )
               || ( le.KeyPress()
                    && ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH )
                         || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL )
-                             && Dialog::YES == Dialog::Message( "", _( "Break auto battle?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) ) ) ) ) {
-        _breakAutoBattleForColor = arena.GetCurrentColor();
+                             && Dialog::Message( "", _( "Are you sure you want to interrupt the auto battle?" ), Font::BIG, Dialog::YES | Dialog::NO )
+                                    == Dialog::YES ) ) ) ) ) {
+        _interruptAutoBattleForColor = arena.GetCurrentColor();
     }
 }
 

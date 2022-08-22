@@ -385,7 +385,7 @@ namespace Battle
         uint32_t animation_flags_frame;
         int catapult_frame;
 
-        int _breakAutoBattleForColor;
+        int _interruptAutoBattleForColor;
 
         uint8_t _contourColor;
         bool _brightLandType; // used to determine current monster contour cycling colors
