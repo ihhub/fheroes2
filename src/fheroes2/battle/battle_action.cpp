@@ -404,23 +404,23 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
             if ( _interface ) {
                 _interface->RedrawActionFly( *unit, pos );
             }
-            else if ( bridge ) {
+            else if ( _bridge ) {
                 const int32_t dstHead = pos.GetHead()->GetIndex();
                 const int32_t dstTail = unit->isWide() ? pos.GetTail()->GetIndex() : -1;
 
                 // open the bridge if the unit should land on it
-                if ( bridge->NeedDown( *unit, dstHead ) ) {
-                    bridge->Action( *unit, dstHead );
+                if ( _bridge->NeedDown( *unit, dstHead ) ) {
+                    _bridge->Action( *unit, dstHead );
                 }
-                else if ( unit->isWide() && bridge->NeedDown( *unit, dstTail ) ) {
-                    bridge->Action( *unit, dstTail );
+                else if ( unit->isWide() && _bridge->NeedDown( *unit, dstTail ) ) {
+                    _bridge->Action( *unit, dstTail );
                 }
 
                 unit->SetPosition( pos );
 
                 // check for possible bridge close action, after unit's end of movement
-                if ( bridge->AllowUp() ) {
-                    bridge->Action( *unit, dstHead );
+                if ( _bridge->AllowUp() ) {
+                    _bridge->Action( *unit, dstHead );
                 }
             }
 
@@ -438,12 +438,12 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
 
             if ( _interface )
                 _interface->RedrawActionMove( *unit, path );
-            else if ( bridge ) {
+            else if ( _bridge ) {
                 for ( Indexes::const_iterator pathIt = path.begin(); pathIt != path.end(); ++pathIt ) {
                     bool doMovement = false;
 
-                    if ( bridge->NeedDown( *unit, *pathIt ) )
-                        bridge->Action( *unit, *pathIt );
+                    if ( _bridge->NeedDown( *unit, *pathIt ) )
+                        _bridge->Action( *unit, *pathIt );
 
                     if ( unit->isWide() ) {
                         if ( unit->GetTailIndex() == *pathIt )
@@ -459,8 +459,8 @@ void Battle::Arena::ApplyActionMove( Command & cmd )
                         unit->SetPosition( *pathIt );
 
                     // check for possible bridge close action, after unit's end of movement
-                    if ( bridge->AllowUp() )
-                        bridge->Action( *unit, *pathIt );
+                    if ( _bridge->AllowUp() )
+                        _bridge->Action( *unit, *pathIt );
                 }
             }
 
@@ -591,10 +591,10 @@ void Battle::Arena::ApplyActionMorale( Command & cmd )
 void Battle::Arena::ApplyActionRetreat( const Command & /*cmd*/ )
 {
     if ( CanRetreatOpponent( current_color ) ) {
-        if ( army1->GetColor() == current_color ) {
+        if ( _army1->GetColor() == current_color ) {
             result_game.army1 = RESULT_RETREAT;
         }
-        else if ( army2->GetColor() == current_color ) {
+        else if ( _army2->GetColor() == current_color ) {
             result_game.army2 = RESULT_RETREAT;
         }
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( current_color ) )
@@ -609,21 +609,21 @@ void Battle::Arena::ApplyActionSurrender( const Command & /*cmd*/ )
     if ( CanSurrenderOpponent( current_color ) ) {
         Funds cost;
 
-        if ( army1->GetColor() == current_color )
-            cost.gold = army1->GetSurrenderCost();
-        else if ( army2->GetColor() == current_color )
-            cost.gold = army2->GetSurrenderCost();
+        if ( _army1->GetColor() == current_color )
+            cost.gold = _army1->GetSurrenderCost();
+        else if ( _army2->GetColor() == current_color )
+            cost.gold = _army2->GetSurrenderCost();
 
         if ( world.GetKingdom( current_color ).AllowPayment( cost ) ) {
-            if ( army1->GetColor() == current_color ) {
+            if ( _army1->GetColor() == current_color ) {
                 result_game.army1 = RESULT_SURRENDER;
                 world.GetKingdom( current_color ).OddFundsResource( cost );
-                world.GetKingdom( army2->GetColor() ).AddFundsResource( cost );
+                world.GetKingdom( _army2->GetColor() ).AddFundsResource( cost );
             }
-            else if ( army2->GetColor() == current_color ) {
+            else if ( _army2->GetColor() == current_color ) {
                 result_game.army2 = RESULT_SURRENDER;
                 world.GetKingdom( current_color ).OddFundsResource( cost );
-                world.GetKingdom( army1->GetColor() ).AddFundsResource( cost );
+                world.GetKingdom( _army1->GetColor() ).AddFundsResource( cost );
             }
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( current_color ) )
         }
@@ -642,7 +642,7 @@ void Battle::Arena::TargetsApplyDamage( Unit & attacker, TargetsInfo & targets )
     }
 }
 
-Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir )
+Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const
 {
     // The attacked unit should be located on the attacked cell
     assert( defender.GetHeadIndex() == dst || defender.GetTailIndex() == dst );
@@ -657,7 +657,7 @@ Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, U
     res.damage = attacker.GetDamage( defender );
 
     // Genie special attack
-    if ( attacker.GetID() == Monster::GENIE && Rand::Get( 1, 10 ) == 2 && defender.GetHitPoints() / 2 > res.damage ) {
+    if ( attacker.GetID() == Monster::GENIE && _randomGenerator.Get( 1, 10 ) == 2 && defender.GetHitPoints() / 2 > res.damage ) {
         // Replaces the damage, not adding to it
         if ( defender.GetCount() == 1 ) {
             res.damage = defender.GetHitPoints();
@@ -759,7 +759,7 @@ std::vector<Battle::Unit *> Battle::Arena::FindChainLightningTargetIndexes( cons
         for ( size_t i = 0; i < foundTroops.size(); ++i ) {
             const int32_t resist = foundTroops[i]->GetMagicResist( Spell::CHAINLIGHTNING, heroSpellPower, hero );
             assert( resist >= 0 );
-            if ( resist < static_cast<int32_t>( Rand::Get( 1, 100 ) ) ) {
+            if ( resist < static_cast<int32_t>( _randomGenerator.Get( 1, 100 ) ) ) {
                 ignoredTroops.push_back( foundTroops[i] );
                 result.push_back( foundTroops[i] );
                 foundTroops.erase( foundTroops.begin() + i );
@@ -974,7 +974,7 @@ void Battle::Arena::ApplyActionTower( Command & cmd )
 
 void Battle::Arena::ApplyActionCatapult( Command & cmd )
 {
-    if ( catapult ) {
+    if ( _catapult ) {
         uint32_t shots = cmd.GetValue();
 
         while ( shots-- ) {
@@ -1146,7 +1146,7 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
         const int wallCondition = board[position].GetObject();
 
         if ( wallCondition > 0 ) {
-            uint32_t wallDamage = Rand::Get( range.first, range.second );
+            uint32_t wallDamage = _randomGenerator.Get( range.first, range.second );
 
             if ( wallDamage > static_cast<uint32_t>( wallCondition ) ) {
                 wallDamage = wallCondition;
@@ -1156,10 +1156,12 @@ void Battle::Arena::ApplyActionSpellEarthQuake( const Command & /*cmd*/ )
         }
     }
 
-    if ( towers[0] && towers[0]->isValid() && Rand::Get( 1 ) )
-        towers[0]->SetDestroy();
-    if ( towers[2] && towers[2]->isValid() && Rand::Get( 1 ) )
-        towers[2]->SetDestroy();
+    if ( _towers[0] && _towers[0]->isValid() && _randomGenerator.Get( 1 ) ) {
+        _towers[0]->SetDestroy();
+    }
+    if ( _towers[2] && _towers[2]->isValid() && _randomGenerator.Get( 1 ) ) {
+        _towers[2]->SetDestroy();
+    }
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "spell: " << Spell( Spell::EARTHQUAKE ).GetName() << ", targets: " << targets.size() )
 }

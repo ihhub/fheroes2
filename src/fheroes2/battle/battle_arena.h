@@ -203,7 +203,7 @@ namespace Battle
         void SetCastleTargetValue( int, uint32_t );
         void CatapultAction();
 
-        static TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir );
+        TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const;
 
         static void TargetsApplyDamage( Unit & attacker, TargetsInfo & targets );
         static void TargetsApplySpell( const HeroBase * hero, const Spell & spell, TargetsInfo & targets );
@@ -240,9 +240,9 @@ namespace Battle
         // position, which should be updated separately.
         Unit * CreateMirrorImage( Unit & unit );
 
-        Force * army1;
-        Force * army2;
-        Units * armies_order;
+        std::unique_ptr<Force> _army1;
+        std::unique_ptr<Force> _army2;
+        std::shared_ptr<Units> _orderOfUnits;
 
         int current_color;
         // The color of the army of the last unit that performed a full-fledged action (skipping a turn due to
@@ -252,9 +252,9 @@ namespace Battle
         const Castle * castle;
         const bool _isTown; // If the battle is in town (village or castle).
 
-        Tower * towers[3];
-        Catapult * catapult;
-        Bridge * bridge;
+        std::unique_ptr<Tower> _towers[3];
+        std::unique_ptr<Catapult> _catapult;
+        std::unique_ptr<Bridge> _bridge;
 
         std::unique_ptr<Interface> _interface;
         Result result_game;

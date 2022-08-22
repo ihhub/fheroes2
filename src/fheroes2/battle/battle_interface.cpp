@@ -809,26 +809,27 @@ void Battle::Status::clear()
 }
 
 Battle::ArmiesOrder::ArmiesOrder()
-    : orders( nullptr )
-    , army_color2( 0 )
+    : _army2Color( 0 )
 {
     // Do nothing.
 }
 
-void Battle::ArmiesOrder::Set( const fheroes2::Rect & rt, const Units * units, int color )
+void Battle::ArmiesOrder::Set( const fheroes2::Rect & rt, const std::shared_ptr<const Units> & units, const int army2Color )
 {
-    area = rt;
-    orders = units;
-    army_color2 = color;
-    if ( units )
-        rects.reserve( units->size() );
+    _area = rt;
+    _orders = units;
+    _army2Color = army2Color;
+
+    if ( units ) {
+        _rects.reserve( units->size() );
+    }
 }
 
 void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const fheroes2::Point & offset )
 {
     LocalEvent & le = LocalEvent::Get();
 
-    for ( std::vector<UnitPos>::const_iterator it = rects.begin(); it != rects.end(); ++it )
+    for ( std::vector<UnitPos>::const_iterator it = _rects.begin(); it != _rects.end(); ++it )
         if ( ( *it ).first ) {
             const fheroes2::Rect unitRoi = ( *it ).second + offset;
             if ( le.MouseCursor( unitRoi ) ) {
@@ -908,32 +909,34 @@ void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::
 
 void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output )
 {
-    if ( orders == nullptr ) {
+    if ( _orders.expired() ) {
         // Nothing to show.
         return;
     }
+
+    const std::shared_ptr<const Units> orders = _orders.lock();
 
     const int32_t validUnitCount = static_cast<int32_t>( std::count_if( orders->begin(), orders->end(), []( const Unit * unit ) {
         assert( unit != nullptr );
         return unit->isValid();
     } ) );
 
-    const int32_t maximumUnitsToDraw = area.width / armyOrderMonsterIconSize;
+    const int32_t maximumUnitsToDraw = _area.width / armyOrderMonsterIconSize;
 
-    int32_t offsetX = area.x;
+    int32_t offsetX = _area.x;
 
     if ( validUnitCount > maximumUnitsToDraw ) {
-        offsetX += ( area.width - armyOrderMonsterIconSize * maximumUnitsToDraw ) / 2;
+        offsetX += ( _area.width - armyOrderMonsterIconSize * maximumUnitsToDraw ) / 2;
     }
     else {
-        offsetX += ( area.width - armyOrderMonsterIconSize * validUnitCount ) / 2;
+        offsetX += ( _area.width - armyOrderMonsterIconSize * validUnitCount ) / 2;
     }
 
     fheroes2::Rect::x = offsetX;
-    fheroes2::Rect::y = area.y;
+    fheroes2::Rect::y = _area.y;
     fheroes2::Rect::height = armyOrderMonsterIconSize;
 
-    rects.clear();
+    _rects.clear();
 
     int32_t unitsDrawn = 0;
     int32_t unitsProcessed = 0;
@@ -953,8 +956,8 @@ void Battle::ArmiesOrder::Redraw( const Unit * current, const uint8_t currentUni
             continue;
         }
 
-        rects.emplace_back( unit, fheroes2::Rect( offsetX, area.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize ) );
-        RedrawUnit( rects.back().second, *unit, unit->GetColor() == army_color2, current == unit, currentUnitColor, output );
+        _rects.emplace_back( unit, fheroes2::Rect( offsetX, _area.y, armyOrderMonsterIconSize, armyOrderMonsterIconSize ) );
+        RedrawUnit( _rects.back().second, *unit, unit->GetColor() == _army2Color, current == unit, currentUnitColor, output );
         offsetX += armyOrderMonsterIconSize;
         fheroes2::Rect::width += armyOrderMonsterIconSize;
 
@@ -1115,7 +1118,7 @@ Battle::Interface::~Interface()
         delete opponent2;
 }
 
-void Battle::Interface::SetArmiesOrder( const Units * units )
+void Battle::Interface::SetOrderOfUnits( const std::shared_ptr<const Units> & units )
 {
     armies_order.Set( GetArea(), units, arena.GetArmyColor2() );
 }

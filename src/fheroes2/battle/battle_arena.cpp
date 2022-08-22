@@ -267,7 +267,7 @@ const Castle * Battle::Arena::GetCastle()
 
 Battle::Bridge * Battle::Arena::GetBridge()
 {
-    return arena->bridge;
+    return arena->_bridge.get();
 }
 
 Battle::Board * Battle::Arena::GetBoard()
@@ -289,11 +289,11 @@ Battle::Tower * Battle::Arena::GetTower( int type )
 {
     switch ( type ) {
     case TWR_LEFT:
-        return arena->towers[0];
+        return arena->_towers[0].get();
     case TWR_CENTER:
-        return arena->towers[1];
+        return arena->_towers[1].get();
     case TWR_RIGHT:
-        return arena->towers[2];
+        return arena->_towers[2].get();
     default:
         break;
     }
@@ -304,20 +304,20 @@ bool Battle::Arena::isAnyTowerPresent()
 {
     assert( arena != nullptr );
 
-    return ( arena->towers[0] != nullptr && arena->towers[0]->isValid() ) || ( arena->towers[1] != nullptr && arena->towers[1]->isValid() )
-           || ( arena->towers[2] != nullptr && arena->towers[2]->isValid() );
+    for ( const auto & tower : arena->_towers ) {
+        if ( tower && tower->isValid() ) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::DeterministicRandomGenerator & randomGenerator )
-    : army1( nullptr )
-    , army2( nullptr )
-    , armies_order( nullptr )
-    , current_color( Color::NONE )
+    : current_color( Color::NONE )
     , _lastActiveUnitArmyColor( -1 ) // Be aware of unknown color
     , castle( world.getCastleEntrance( Maps::GetPoint( index ) ) )
     , _isTown( castle != nullptr )
-    , catapult( nullptr )
-    , bridge( nullptr )
     , icn_covr( ICN::UNKNOWN )
     , current_turn( 0 )
     , _autoBattleColors( 0 )
@@ -328,8 +328,8 @@ Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::Det
     assert( arena == nullptr );
     arena = this;
 
-    army1 = new Force( a1, false, _randomGenerator, _uidGenerator );
-    army2 = new Force( a2, true, _randomGenerator, _uidGenerator );
+    _army1 = std::make_unique<Force>( a1, false, _randomGenerator, _uidGenerator );
+    _army2 = std::make_unique<Force>( a2, true, _randomGenerator, _uidGenerator );
 
     // init castle (interface ahead)
     if ( castle ) {
@@ -349,9 +349,9 @@ Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::Det
         _interface = std::make_unique<Interface>( *this, index );
         board.SetArea( _interface->GetArea() );
 
-        armies_order = new Units();
-        armies_order->reserve( 25 );
-        _interface->SetArmiesOrder( armies_order );
+        _orderOfUnits = std::make_shared<Units>();
+        _orderOfUnits->reserve( 25 );
+        _interface->SetOrderOfUnits( _orderOfUnits );
     }
     else {
         // no interface - force auto battle mode for human player
@@ -363,18 +363,22 @@ Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::Det
         }
     }
 
-    towers[0] = nullptr;
-    towers[1] = nullptr;
-    towers[2] = nullptr;
-
     if ( castle ) {
-        // init
-        towers[0] = castle->isBuild( BUILD_LEFTTURRET ) ? new Tower( *castle, TWR_LEFT, _randomGenerator, _uidGenerator.GetUnique() ) : nullptr;
-        towers[1] = new Tower( *castle, TWR_CENTER, _randomGenerator, _uidGenerator.GetUnique() );
-        towers[2] = castle->isBuild( BUILD_RIGHTTURRET ) ? new Tower( *castle, TWR_RIGHT, _randomGenerator, _uidGenerator.GetUnique() ) : nullptr;
+        if ( castle->isBuild( BUILD_LEFTTURRET ) ) {
+            _towers[0] = std::make_unique<Tower>( *castle, TWR_LEFT, _randomGenerator, _uidGenerator.GetUnique() );
+        }
 
-        catapult = army1->GetCommander() ? new Catapult( *army1->GetCommander(), _randomGenerator ) : nullptr;
-        bridge = new Bridge();
+        _towers[1] = std::make_unique<Tower>( *castle, TWR_CENTER, _randomGenerator, _uidGenerator.GetUnique() );
+
+        if ( castle->isBuild( BUILD_RIGHTTURRET ) ) {
+            _towers[2] = std::make_unique<Tower>( *castle, TWR_RIGHT, _randomGenerator, _uidGenerator.GetUnique() );
+        }
+
+        if ( _army1->GetCommander() ) {
+            _catapult = std::make_unique<Catapult>( *_army1->GetCommander(), _randomGenerator );
+        }
+
+        _bridge = std::make_unique<Bridge>();
 
         // catapult cell
         board[CATAPULT_POS].SetObject( 1 );
@@ -430,15 +434,18 @@ Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::Det
 Battle::Arena::~Arena()
 {
     // All members should be destroyed before clearing the global pointer to this Arena object
-    delete army1;
-    delete army2;
-    delete towers[0];
-    delete towers[1];
-    delete towers[2];
-    delete catapult;
     _interface.reset();
-    delete armies_order;
-    delete bridge;
+
+    _bridge.reset();
+    _catapult.reset();
+
+    for ( auto & tower : _towers ) {
+        tower.reset();
+    }
+
+    _orderOfUnits.reset();
+    _army2.reset();
+    _army1.reset();
 
     assert( arena == this );
     arena = nullptr;
@@ -501,9 +508,9 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
             ApplyAction( actions.front() );
             actions.pop_front();
 
-            if ( armies_order ) {
+            if ( _orderOfUnits ) {
                 // Applied action could kill someone or affect the speed of some unit, update the order of units
-                UpdateOrderOfUnits( *army1, *army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *armies_order );
+                UpdateOrderOfUnits( *_army1, *_army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *_orderOfUnits );
             }
 
             // Check if the battle is over
@@ -531,7 +538,7 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
 
 bool Battle::Arena::BattleValid() const
 {
-    return army1->isValid() && army2->isValid() && 0 == result_game.army1 && 0 == result_game.army2;
+    return _army1->isValid() && _army2->isValid() && 0 == result_game.army1 && 0 == result_game.army2;
 }
 
 void Battle::Arena::Turns()
@@ -546,17 +553,17 @@ void Battle::Arena::Turns()
         _interface->RedrawActionNewTurn();
     }
 
-    army1->NewTurn();
-    army2->NewTurn();
+    _army1->NewTurn();
+    _army2->NewTurn();
 
     // History of unit order on the current turn
     Units orderHistory;
 
-    if ( armies_order ) {
+    if ( _orderOfUnits ) {
         orderHistory.reserve( 25 );
 
         // Build the initial order of units
-        UpdateOrderOfUnits( *army1, *army2, nullptr, GetOppositeColor( _lastActiveUnitArmyColor ), orderHistory, *armies_order );
+        UpdateOrderOfUnits( *_army1, *_army2, nullptr, GetOppositeColor( _lastActiveUnitArmyColor ), orderHistory, *_orderOfUnits );
     }
 
     {
@@ -564,7 +571,7 @@ void Battle::Arena::Turns()
         bool catapultActed = false;
 
         while ( BattleValid() ) {
-            Unit * troop = GetCurrentUnit( *army1, *army2, true, GetOppositeColor( _lastActiveUnitArmyColor ) );
+            Unit * troop = GetCurrentUnit( *_army1, *_army2, true, GetOppositeColor( _lastActiveUnitArmyColor ) );
             if ( troop == nullptr ) {
                 // All units either finished their turns or decided to wait (if supported)
                 break;
@@ -572,35 +579,35 @@ void Battle::Arena::Turns()
 
             current_color = troop->GetCurrentOrArmyColor();
 
-            if ( armies_order ) {
+            if ( _orderOfUnits ) {
                 // Add unit to the history
                 orderHistory.push_back( troop );
 
                 // Update the order of units
-                UpdateOrderOfUnits( *army1, *army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *armies_order );
+                UpdateOrderOfUnits( *_army1, *_army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *_orderOfUnits );
             }
 
             // Castle towers and catapult are acting during the turn of the first unit from the corresponding army
             if ( castle ) {
-                if ( !catapultActed && troop->GetColor() == army1->GetColor() ) {
+                if ( !catapultActed && troop->GetColor() == _army1->GetColor() ) {
                     CatapultAction();
 
                     catapultActed = true;
                 }
 
-                if ( !towersActed && troop->GetColor() == army2->GetColor() ) {
+                if ( !towersActed && troop->GetColor() == _army2->GetColor() ) {
                     auto towerAction = [this, &orderHistory, troop]( const size_t idx ) {
-                        assert( idx < std::size( towers ) );
+                        assert( idx < std::size( _towers ) );
 
-                        if ( towers[idx] == nullptr || !towers[idx]->isValid() ) {
+                        if ( _towers[idx] == nullptr || !_towers[idx]->isValid() ) {
                             return;
                         }
 
-                        TowerAction( *towers[idx] );
+                        TowerAction( *_towers[idx] );
 
-                        if ( armies_order ) {
+                        if ( _orderOfUnits ) {
                             // Tower could kill someone, update the order of units
-                            UpdateOrderOfUnits( *army1, *army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *armies_order );
+                            UpdateOrderOfUnits( *_army1, *_army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *_orderOfUnits );
                         }
                     };
 
@@ -617,13 +624,13 @@ void Battle::Arena::Turns()
                 }
             }
 
-            if ( bridge ) {
-                bridge->SetPassable( *troop );
+            if ( _bridge ) {
+                _bridge->SetPassable( *troop );
             }
 
             TurnTroop( troop, orderHistory );
 
-            if ( armies_order ) {
+            if ( _orderOfUnits ) {
                 // If unit hasn't finished its turn yet, then remove it from the history
                 if ( troop->Modes( TR_SKIPMOVE ) && !troop->Modes( TR_MOVED ) ) {
                     orderHistory.pop_back();
@@ -634,7 +641,7 @@ void Battle::Arena::Turns()
 
     if ( conf.ExtBattleSoftWait() ) {
         while ( BattleValid() ) {
-            Unit * troop = GetCurrentUnit( *army1, *army2, false, GetOppositeColor( _lastActiveUnitArmyColor ) );
+            Unit * troop = GetCurrentUnit( *_army1, *_army2, false, GetOppositeColor( _lastActiveUnitArmyColor ) );
             if ( troop == nullptr ) {
                 // All units have finished their turns
                 break;
@@ -642,16 +649,16 @@ void Battle::Arena::Turns()
 
             current_color = troop->GetCurrentOrArmyColor();
 
-            if ( armies_order ) {
+            if ( _orderOfUnits ) {
                 // Add unit to the history
                 orderHistory.push_back( troop );
 
                 // Update the order of units
-                UpdateOrderOfUnits( *army1, *army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *armies_order );
+                UpdateOrderOfUnits( *_army1, *_army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *_orderOfUnits );
             }
 
-            if ( bridge ) {
-                bridge->SetPassable( *troop );
+            if ( _bridge ) {
+                _bridge->SetPassable( *troop );
             }
 
             TurnTroop( troop, orderHistory );
@@ -659,30 +666,30 @@ void Battle::Arena::Turns()
     }
 
     // Check if the battle is over
-    if ( !army1->isValid() || ( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
+    if ( !_army1->isValid() || ( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
         result_game.army1 |= RESULT_LOSS;
         // Check if any of the original troops in the army2 are still alive
-        result_game.army2 = army2->isValid( false ) ? RESULT_WINS : RESULT_LOSS;
+        result_game.army2 = _army2->isValid( false ) ? RESULT_WINS : RESULT_LOSS;
     }
-    else if ( !army2->isValid() || ( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
+    else if ( !_army2->isValid() || ( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
         result_game.army2 |= RESULT_LOSS;
         // Check if any of the original troops in the army1 are still alive
-        result_game.army1 = army1->isValid( false ) ? RESULT_WINS : RESULT_LOSS;
+        result_game.army1 = _army1->isValid( false ) ? RESULT_WINS : RESULT_LOSS;
     }
 
     // If the battle is over, calculate the experience and the number of units killed
     if ( result_game.army1 || result_game.army2 ) {
-        result_game.exp1 = army2->GetDeadHitPoints();
-        result_game.exp2 = army1->GetDeadHitPoints();
+        result_game.exp1 = _army2->GetDeadHitPoints();
+        result_game.exp2 = _army1->GetDeadHitPoints();
 
-        if ( army1->GetCommander() && !( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
+        if ( _army1->GetCommander() && !( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
             result_game.exp2 += 500;
         }
-        if ( ( _isTown || army2->GetCommander() ) && !( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
+        if ( ( _isTown || _army2->GetCommander() ) && !( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
             result_game.exp1 += 500;
         }
 
-        const Force * army_loss = ( result_game.army1 & RESULT_LOSS ? army1 : ( result_game.army2 & RESULT_LOSS ? army2 : nullptr ) );
+        const Force * army_loss = ( result_game.army1 & RESULT_LOSS ? _army1.get() : ( result_game.army2 & RESULT_LOSS ? _army2.get() : nullptr ) );
         result_game.killed = army_loss ? army_loss->GetDeadCounts() : 0;
     }
 }
@@ -732,8 +739,8 @@ void Battle::Arena::TowerAction( const Tower & twr )
 
 void Battle::Arena::CatapultAction()
 {
-    if ( catapult ) {
-        uint32_t shots = catapult->GetShots();
+    if ( _catapult ) {
+        uint32_t shots = _catapult->GetShots();
         std::vector<uint32_t> values( CAT_CENTRAL_TOWER + 1, 0 );
 
         values[CAT_WALL1] = GetCastleTargetValue( CAT_WALL1 );
@@ -750,9 +757,9 @@ void Battle::Arena::CatapultAction()
         cmd << shots;
 
         while ( shots-- ) {
-            const int target = catapult->GetTarget( values );
-            const uint32_t damage = std::min( catapult->GetDamage(), values[target] );
-            const bool hit = catapult->IsNextShotHit();
+            const int target = _catapult->GetTarget( values );
+            const uint32_t damage = std::min( _catapult->GetDamage(), values[target] );
+            const bool hit = _catapult->IsNextShotHit();
 
             cmd << target << damage << ( hit ? 1 : 0 );
 
@@ -869,22 +876,22 @@ const Battle::Unit * Battle::Arena::GetTroopBoard( int32_t index ) const
 
 const HeroBase * Battle::Arena::GetCommander1() const
 {
-    return army1->GetCommander();
+    return _army1->GetCommander();
 }
 
 const HeroBase * Battle::Arena::GetCommander2() const
 {
-    return army2->GetCommander();
+    return _army2->GetCommander();
 }
 
 int Battle::Arena::GetArmyColor1() const
 {
-    return army1->GetColor();
+    return _army1->GetColor();
 }
 
 int Battle::Arena::GetArmyColor2() const
 {
-    return army2->GetColor();
+    return _army2->GetColor();
 }
 
 int Battle::Arena::GetCurrentColor() const
@@ -899,26 +906,26 @@ int Battle::Arena::GetOppositeColor( const int col ) const
 
 Battle::Unit * Battle::Arena::GetTroopUID( uint32_t uid )
 {
-    Units::iterator it = std::find_if( army1->begin(), army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
+    Units::iterator it = std::find_if( _army1->begin(), _army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
 
-    if ( it != army1->end() )
+    if ( it != _army1->end() )
         return *it;
 
-    it = std::find_if( army2->begin(), army2->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
+    it = std::find_if( _army2->begin(), _army2->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
 
-    return it != army2->end() ? *it : nullptr;
+    return it != _army2->end() ? *it : nullptr;
 }
 
 const Battle::Unit * Battle::Arena::GetTroopUID( uint32_t uid ) const
 {
-    Units::const_iterator it = std::find_if( army1->begin(), army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
+    Units::const_iterator it = std::find_if( _army1->begin(), _army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
 
-    if ( it != army1->end() )
+    if ( it != _army1->end() )
         return *it;
 
-    it = std::find_if( army2->begin(), army2->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
+    it = std::find_if( _army2->begin(), _army2->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
 
-    return it != army2->end() ? *it : nullptr;
+    return it != _army2->end() ? *it : nullptr;
 }
 
 void Battle::Arena::FadeArena( bool clearMessageLog ) const
@@ -935,10 +942,10 @@ const SpellStorage & Battle::Arena::GetUsageSpells() const
 int32_t Battle::Arena::GetFreePositionNearHero( const int heroColor ) const
 {
     std::vector<int> cellIds;
-    if ( army1->GetColor() == heroColor ) {
+    if ( _army1->GetColor() == heroColor ) {
         cellIds = { 11, 22, 33 };
     }
-    else if ( army2->GetColor() == heroColor ) {
+    else if ( _army2->GetColor() == heroColor ) {
         cellIds = { 21, 32, 43 };
     }
     else {
@@ -970,17 +977,17 @@ bool Battle::Arena::CanSurrenderOpponent( int color ) const
 bool Battle::Arena::CanRetreatOpponent( int color ) const
 {
     const HeroBase * hero = getCommander( color );
-    return hero && hero->isHeroes() && ( color == army1->GetColor() || hero->inCastle() == nullptr );
+    return hero && hero->isHeroes() && ( color == _army1->GetColor() || hero->inCastle() == nullptr );
 }
 
 bool Battle::Arena::isSpellcastDisabled() const
 {
-    const HeroBase * hero1 = army1->GetCommander();
+    const HeroBase * hero1 = _army1->GetCommander();
     if ( hero1 != nullptr && hero1->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::DISABLE_ALL_SPELL_COMBAT_CASTING ) ) {
         return true;
     }
 
-    const HeroBase * hero2 = army2->GetCommander();
+    const HeroBase * hero2 = _army2->GetCommander();
     if ( hero2 != nullptr && hero2->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::DISABLE_ALL_SPELL_COMBAT_CASTING ) ) {
         return true;
     }
@@ -1133,29 +1140,29 @@ void Battle::Arena::SetCastleTargetValue( int target, uint32_t value )
         break;
 
     case CAT_TOWER1:
-        if ( towers[0] && towers[0]->isValid() )
-            towers[0]->SetDestroy();
+        if ( _towers[0] && _towers[0]->isValid() )
+            _towers[0]->SetDestroy();
         break;
     case CAT_TOWER2:
-        if ( towers[2] && towers[2]->isValid() )
-            towers[2]->SetDestroy();
+        if ( _towers[2] && _towers[2]->isValid() )
+            _towers[2]->SetDestroy();
         break;
     case CAT_CENTRAL_TOWER:
-        if ( towers[1] && towers[1]->isValid() )
-            towers[1]->SetDestroy();
+        if ( _towers[1] && _towers[1]->isValid() )
+            _towers[1]->SetDestroy();
         break;
 
     case CAT_BRIDGE:
-        if ( bridge->isValid() ) {
-            if ( !bridge->isDown() ) {
+        if ( _bridge->isValid() ) {
+            if ( !_bridge->isDown() ) {
                 if ( _interface ) {
                     _interface->RedrawBridgeAnimation( true );
                 }
 
-                bridge->SetDown( true );
+                _bridge->SetDown( true );
             }
 
-            bridge->SetDestroy();
+            _bridge->SetDestroy();
         }
         break;
 
@@ -1177,14 +1184,14 @@ uint32_t Battle::Arena::GetCastleTargetValue( int target ) const
         return board[CASTLE_FOURTH_TOP_WALL_POS].GetObject();
 
     case CAT_TOWER1:
-        return towers[0] && towers[0]->isValid();
+        return _towers[0] && _towers[0]->isValid() ? 1 : 0;
     case CAT_TOWER2:
-        return towers[2] && towers[2]->isValid();
+        return _towers[2] && _towers[2]->isValid() ? 1 : 0;
     case CAT_CENTRAL_TOWER:
-        return towers[1] && towers[1]->isValid();
+        return _towers[1] && _towers[1]->isValid() ? 1 : 0;
 
     case CAT_BRIDGE:
-        return bridge->isValid();
+        return _bridge->isValid() ? 1 : 0;
 
     default:
         break;
@@ -1208,9 +1215,9 @@ std::vector<int> Battle::Arena::GetCastleTargets() const
         targets.push_back( CAT_WALL4 );
 
     // check right/left towers
-    if ( towers[0] && towers[0]->isValid() )
+    if ( _towers[0] && _towers[0]->isValid() )
         targets.push_back( CAT_TOWER1 );
-    if ( towers[2] && towers[2]->isValid() )
+    if ( _towers[2] && _towers[2]->isValid() )
         targets.push_back( CAT_TOWER2 );
 
     return targets;
@@ -1218,12 +1225,12 @@ std::vector<int> Battle::Arena::GetCastleTargets() const
 
 const HeroBase * Battle::Arena::getCommander( const int color ) const
 {
-    return ( army1->GetColor() == color ) ? army1->GetCommander() : army2->GetCommander();
+    return ( _army1->GetColor() == color ) ? _army1->GetCommander() : _army2->GetCommander();
 }
 
 const HeroBase * Battle::Arena::getEnemyCommander( const int color ) const
 {
-    return ( army1->GetColor() == color ) ? army2->GetCommander() : army1->GetCommander();
+    return ( _army1->GetColor() == color ) ? _army2->GetCommander() : _army1->GetCommander();
 }
 
 const HeroBase * Battle::Arena::GetCurrentCommander() const
@@ -1247,7 +1254,7 @@ Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << idx )
 
-    const bool reflect = ( hero == army2->GetCommander() );
+    const bool reflect = ( hero == _army2->GetCommander() );
     const uint32_t count = fheroes2::getSummonMonsterCount( spell, hero->GetPower(), hero );
 
     Position pos;
@@ -1331,22 +1338,22 @@ bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defen
 
 Battle::Force & Battle::Arena::GetForce1() const
 {
-    return *army1;
+    return *_army1;
 }
 
 Battle::Force & Battle::Arena::GetForce2() const
 {
-    return *army2;
+    return *_army2;
 }
 
 Battle::Force & Battle::Arena::getForce( const int color ) const
 {
-    return ( army1->GetColor() == color ) ? *army1 : *army2;
+    return ( _army1->GetColor() == color ) ? *_army1 : *_army2;
 }
 
 Battle::Force & Battle::Arena::getEnemyForce( const int color ) const
 {
-    return ( army1->GetColor() == color ) ? *army2 : *army1;
+    return ( _army1->GetColor() == color ) ? *_army2 : *_army1;
 }
 
 Battle::Force & Battle::Arena::GetCurrentForce() const
