@@ -24,6 +24,7 @@
 #ifndef H2BATTLE_ARENA_H
 #define H2BATTLE_ARENA_H
 
+#include <array>
 #include <cstdint>
 #include <list>
 #include <memory>
@@ -252,7 +253,7 @@ namespace Battle
         const Castle * castle;
         const bool _isTown; // If the battle is in town (village or castle).
 
-        std::unique_ptr<Tower> _towers[3];
+        std::array<std::unique_ptr<Tower>, 3> _towers;
         std::unique_ptr<Catapult> _catapult;
         std::unique_ptr<Bridge> _bridge;
 
