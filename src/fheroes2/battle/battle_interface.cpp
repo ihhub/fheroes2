@@ -829,21 +829,24 @@ void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const fheroes
 {
     LocalEvent & le = LocalEvent::Get();
 
-    for ( std::vector<UnitPos>::const_iterator it = _rects.begin(); it != _rects.end(); ++it )
-        if ( ( *it ).first ) {
-            const fheroes2::Rect unitRoi = ( *it ).second + offset;
-            if ( le.MouseCursor( unitRoi ) ) {
-                msg = _( "View %{monster} info" );
-                StringReplace( msg, "%{monster}", ( *it ).first->GetName() );
-            }
+    for ( const UnitPos & unitPos : _rects ) {
+        assert( unitPos.first != nullptr );
 
-            const Unit & unit = *( *it ).first;
-
-            if ( le.MouseClickLeft( unitRoi ) )
-                Dialog::ArmyInfo( unit, Dialog::READONLY | Dialog::BUTTONS, unit.isReflect() );
-            else if ( le.MousePressRight( unitRoi ) )
-                Dialog::ArmyInfo( unit, Dialog::READONLY, unit.isReflect() );
+        const fheroes2::Rect unitRoi = unitPos.second + offset;
+        if ( le.MouseCursor( unitRoi ) ) {
+            msg = _( "View %{monster} info" );
+            StringReplace( msg, "%{monster}", unitPos.first->GetName() );
         }
+
+        const Unit & unit = *( unitPos.first );
+
+        if ( le.MouseClickLeft( unitRoi ) ) {
+            Dialog::ArmyInfo( unit, Dialog::READONLY | Dialog::BUTTONS, unit.isReflect() );
+        }
+        else if ( le.MousePressRight( unitRoi ) ) {
+            Dialog::ArmyInfo( unit, Dialog::READONLY, unit.isReflect() );
+        }
+    }
 }
 
 void Battle::ArmiesOrder::RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
