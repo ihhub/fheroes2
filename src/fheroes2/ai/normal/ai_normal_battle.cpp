@@ -241,7 +241,7 @@ namespace AI
             if ( arena.AutoBattleInProgress() && Arena::GetInterface() != nullptr ) {
                 assert( arena.CanToggleAutoBattle() );
 
-                actions.emplace_back( CommandType::MSG_BATTLE_AUTO, currentColor );
+                actions.emplace_back( CommandType::MSG_BATTLE_AUTO_SWITCH, currentColor );
 
                 DEBUG_LOG( DBG_BATTLE, DBG_INFO, Color::String( currentColor ) << " has used up the limit of turns without deaths, auto battle is turned off" )
             }

@@ -270,8 +270,11 @@ void Battle::Arena::ApplyAction( Command & cmd )
         ApplyActionSurrender( cmd );
         break;
 
-    case CommandType::MSG_BATTLE_AUTO:
-        ApplyActionAutoBattle( cmd );
+    case CommandType::MSG_BATTLE_AUTO_SWITCH:
+        ApplyActionAutoSwitch( cmd );
+        break;
+    case CommandType::MSG_BATTLE_AUTO_FINISH:
+        ApplyActionAutoFinish( cmd );
         break;
 
     default:
@@ -997,7 +1000,7 @@ void Battle::Arena::ApplyActionCatapult( Command & cmd )
     }
 }
 
-void Battle::Arena::ApplyActionAutoBattle( Command & cmd )
+void Battle::Arena::ApplyActionAutoSwitch( Command & cmd )
 {
     const int color = cmd.GetValue();
 
@@ -1022,6 +1025,20 @@ void Battle::Arena::ApplyActionAutoBattle( Command & cmd )
     }
 
     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "color: " << Color::String( color ) << ", status: " << ( ( _autoBattleColors & color ) ? "on" : "off" ) )
+}
+
+void Battle::Arena::ApplyActionAutoFinish( const Command & /* cmd */ )
+{
+    if ( !( GetForce1().GetControl() & CONTROL_AI ) ) {
+        _autoBattleColors |= GetForce1().GetColor();
+    }
+    if ( !( GetForce2().GetControl() & CONTROL_AI ) ) {
+        _autoBattleColors |= GetForce2().GetColor();
+    }
+
+    _interface.reset();
+
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "" )
 }
 
 void Battle::Arena::ApplyActionSpellSummonElemental( const Command & /*cmd*/, const Spell & spell )

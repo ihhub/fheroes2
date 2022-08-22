@@ -58,14 +58,14 @@ namespace Battle
 
 namespace
 {
-    // compute a new seed from a list of actions, so random actions happen differently depending on user inputs
+    // Compute a new seed from a list of actions, so random actions happen differently depending on user inputs
     uint32_t UpdateRandomSeed( const uint32_t seed, const Battle::Actions & actions )
     {
         uint32_t newSeed = seed;
 
         for ( const Battle::Command & command : actions ) {
-            if ( command.GetType() == Battle::CommandType::MSG_BATTLE_AUTO ) {
-                continue; // "auto battle" button event is ignored for the purpose of this hash
+            if ( command.GetType() == Battle::CommandType::MSG_BATTLE_AUTO_SWITCH || command.GetType() == Battle::CommandType::MSG_BATTLE_AUTO_FINISH ) {
+                continue; // Events related to the auto battle are ignored for the purpose of this hash
             }
 
             fheroes2::hashCombine( newSeed, command.GetType() );

@@ -344,6 +344,7 @@ namespace Battle
         void ProcessingHeroDialogResult( int, Actions & );
 
         void EventAutoSwitch( const Unit &, Actions & );
+        void EventAutoFinish( Actions & a );
         void EventShowOptions();
         void ButtonAutoAction( const Unit &, Actions & );
         void ButtonSettingsAction();

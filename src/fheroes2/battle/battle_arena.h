@@ -222,7 +222,8 @@ namespace Battle
         void ApplyActionSpellCast( Command & );
         void ApplyActionTower( Command & );
         void ApplyActionCatapult( Command & );
-        void ApplyActionAutoBattle( Command & );
+        void ApplyActionAutoSwitch( Command & cmd );
+        void ApplyActionAutoFinish( const Command & cmd );
 
         // Performs an actual attack of one unit (defender) by another unit (attacker), applying the attacker's
         // built-in magic, if necessary. If the given index of the target cell of the attack (dst) is negative,

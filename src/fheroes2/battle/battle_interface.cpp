@@ -2305,7 +2305,7 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
 void Battle::Interface::getPendingActions( Actions & actions )
 {
     if ( _breakAutoBattleForColor ) {
-        actions.emplace_back( CommandType::MSG_BATTLE_AUTO, _breakAutoBattleForColor );
+        actions.emplace_back( CommandType::MSG_BATTLE_AUTO_SWITCH, _breakAutoBattleForColor );
 
         _breakAutoBattleForColor = 0;
     }
@@ -2387,51 +2387,53 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     const Settings & conf = Settings::Get();
 
     if ( le.KeyPress() ) {
-        // skip
+        // Skip the turn
         if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SKIP ) ) {
             a.emplace_back( CommandType::MSG_BATTLE_SKIP, b.GetUID(), true );
             humanturn_exit = true;
         }
-        else
-            // soft skip
-            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_WAIT ) ) {
+        // Soft skip (wait)
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_WAIT ) ) {
             a.emplace_back( CommandType::MSG_BATTLE_SKIP, b.GetUID(), !conf.ExtBattleSoftWait() );
             humanturn_exit = true;
         }
-        else
-            // options
-            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_OPTIONS ) )
+        // Battle options
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_OPTIONS ) ) {
             EventShowOptions();
-        else
-            // auto switch
-            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTOSWITCH ) )
+        }
+        // Switch the auto battle mode on/off
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTOSWITCH ) ) {
             EventAutoSwitch( b, a );
-        else
-            // cast
-            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::CAST_SPELL ) )
+        }
+        // Finish the battle in auto mode
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTOFINISH ) ) {
+            EventAutoFinish( a );
+        }
+        // Cast the spell
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::CAST_SPELL ) ) {
             ProcessingHeroDialogResult( 1, a );
-        else
-            // retreat
-            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_RETREAT ) )
+        }
+        // Retreat
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_RETREAT ) ) {
             ProcessingHeroDialogResult( 2, a );
-        else
-            // surrender
-            if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SURRENDER ) )
+        }
+        // Surrender
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_SURRENDER ) ) {
             ProcessingHeroDialogResult( 3, a );
+        }
 
-            // debug only
 #ifdef WITH_DEBUG
         if ( IS_DEVEL() )
             switch ( le.KeyValue() ) {
             case fheroes2::Key::KEY_W:
-                // fast wins game
+                // Win the game instantly
                 arena.GetResult().army1 = RESULT_WINS;
                 humanturn_exit = true;
                 a.emplace_back( CommandType::MSG_BATTLE_END_TURN, b.GetUID() );
                 break;
 
             case fheroes2::Key::KEY_L:
-                // fast loss game
+                // Lose the game instantly
                 arena.GetResult().army1 = RESULT_LOSS;
                 humanturn_exit = true;
                 a.emplace_back( CommandType::MSG_BATTLE_END_TURN, b.GetUID() );
@@ -2708,9 +2710,23 @@ void Battle::Interface::EventShowOptions()
 
 void Battle::Interface::EventAutoSwitch( const Unit & b, Actions & a )
 {
-    if ( arena.CanToggleAutoBattle() ) {
-        a.emplace_back( CommandType::MSG_BATTLE_AUTO, b.GetCurrentOrArmyColor() );
+    if ( !arena.CanToggleAutoBattle() ) {
+        return;
     }
+
+    a.emplace_back( CommandType::MSG_BATTLE_AUTO_SWITCH, b.GetCurrentOrArmyColor() );
+
+    humanturn_redraw = true;
+    humanturn_exit = true;
+}
+
+void Battle::Interface::EventAutoFinish( Actions & a )
+{
+    if ( Dialog::Message( "", _( "Are you sure you want to finish the battle in auto mode?" ), Font::BIG, Dialog::YES | Dialog::NO ) != Dialog::YES ) {
+        return;
+    }
+
+    a.emplace_back( CommandType::MSG_BATTLE_AUTO_FINISH );
 
     humanturn_redraw = true;
     humanturn_exit = true;
