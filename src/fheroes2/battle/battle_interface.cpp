@@ -2408,11 +2408,11 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             EventShowOptions();
         }
         // Switch the auto battle mode on/off
-        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTOSWITCH ) ) {
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH ) ) {
             EventAutoSwitch( b, a );
         }
         // Finish the battle in auto mode
-        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTOFINISH ) ) {
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_FINISH ) ) {
             EventAutoFinish( a );
         }
         // Cast the spell
@@ -5082,7 +5082,7 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
     if ( arena.AutoBattleInProgress() && arena.CanToggleAutoBattle()
          && ( le.MouseClickLeft( btn_auto.area() )
               || ( le.KeyPress()
-                   && ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTOSWITCH )
+                   && ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH )
                         || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL )
                              && Dialog::YES == Dialog::Message( "", _( "Break auto battle?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) ) ) ) ) {
         _breakAutoBattleForColor = arena.GetCurrentColor();
