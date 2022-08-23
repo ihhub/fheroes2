@@ -1029,16 +1029,39 @@ void Battle::Arena::ApplyActionAutoSwitch( Command & cmd )
 
 void Battle::Arena::ApplyActionAutoFinish( const Command & /* cmd */ )
 {
-    if ( !( GetForce1().GetControl() & CONTROL_AI ) ) {
-        _autoBattleColors |= GetForce1().GetColor();
+    const int army1Control = GetForce1().GetControl();
+    const int army2Control = GetForce2().GetControl();
+
+    const int army1Color = GetArmyColor1();
+    const int army2Color = GetArmyColor2();
+
+    if ( army1Control & CONTROL_REMOTE ) {
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "remote player: " << Color::String( army1Color ) << ", auto finish disabled" )
+
+        return;
     }
-    if ( !( GetForce2().GetControl() & CONTROL_AI ) ) {
-        _autoBattleColors |= GetForce2().GetColor();
+    if ( army2Control & CONTROL_REMOTE ) {
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "remote player: " << Color::String( army2Color ) << ", auto finish disabled" )
+
+        return;
+    }
+
+    if ( !( army1Control & CONTROL_HUMAN ) && !( army2Control & CONTROL_HUMAN ) ) {
+        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "no local human-controlled player participates in the battle, auto finish disabled" )
+
+        return;
+    }
+
+    if ( army1Control & CONTROL_HUMAN ) {
+        _autoBattleColors |= army1Color;
+    }
+    if ( army2Control & CONTROL_HUMAN ) {
+        _autoBattleColors |= army2Color;
     }
 
     _interface.reset();
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "" )
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "finishing the battle" )
 }
 
 void Battle::Arena::ApplyActionSpellSummonElemental( const Command & /*cmd*/, const Spell & spell )

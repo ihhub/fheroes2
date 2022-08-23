@@ -1372,7 +1372,14 @@ Battle::Result & Battle::Arena::GetResult()
 
 bool Battle::Arena::AutoBattleInProgress() const
 {
-    return ( _autoBattleColors & current_color ) && !( GetCurrentForce().GetControl() & CONTROL_AI );
+    if ( _autoBattleColors & current_color ) {
+        // Auto battle mode cannot be enabled for a player controlled by AI
+        assert( !( GetCurrentForce().GetControl() & CONTROL_AI ) );
+
+        return true;
+    }
+
+    return false;
 }
 
 bool Battle::Arena::CanToggleAutoBattle() const
