@@ -208,7 +208,7 @@ namespace AI
         const int currentColor = arena.GetCurrentColor();
 
         // Not the attacker's turn, no further checks
-        if ( currentColor != arena.GetArmyColor1() ) {
+        if ( currentColor != arena.GetArmy1Color() ) {
             return false;
         }
 

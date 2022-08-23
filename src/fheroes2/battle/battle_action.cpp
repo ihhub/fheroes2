@@ -1004,7 +1004,7 @@ void Battle::Arena::ApplyActionAutoSwitch( Command & cmd )
 {
     const int color = cmd.GetValue();
 
-    if ( ( color != GetArmyColor1() && color != GetArmyColor2() ) || ( getForce( color ).GetControl() & CONTROL_AI ) ) {
+    if ( ( color != GetArmy1Color() && color != GetArmy2Color() ) || ( getForce( color ).GetControl() & CONTROL_AI ) ) {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN,
                    "incorrect param: "
                        << "color: " << Color::String( color ) << " (" << color << ")" )
@@ -1032,8 +1032,8 @@ void Battle::Arena::ApplyActionAutoFinish( const Command & /* cmd */ )
     const int army1Control = GetForce1().GetControl();
     const int army2Control = GetForce2().GetControl();
 
-    const int army1Color = GetArmyColor1();
-    const int army2Color = GetArmyColor2();
+    const int army1Color = GetArmy1Color();
+    const int army2Color = GetArmy2Color();
 
     if ( army1Control & CONTROL_REMOTE ) {
         DEBUG_LOG( DBG_BATTLE, DBG_WARN, "remote player: " << Color::String( army1Color ) << ", auto finish disabled" )

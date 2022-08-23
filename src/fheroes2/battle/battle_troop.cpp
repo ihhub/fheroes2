@@ -177,7 +177,7 @@ void Battle::Unit::SetReflection( bool r )
 void Battle::Unit::UpdateDirection()
 {
     // set auto reflect
-    SetReflection( GetArena()->GetArmyColor1() != GetArmyColor() );
+    SetReflection( GetArena()->GetArmy1Color() != GetArmyColor() );
 }
 
 bool Battle::Unit::UpdateDirection( const fheroes2::Rect & pos )

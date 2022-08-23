@@ -1123,7 +1123,7 @@ Battle::Interface::~Interface()
 
 void Battle::Interface::SetOrderOfUnits( const std::shared_ptr<const Units> & units )
 {
-    armies_order.Set( GetArea(), units, arena.GetArmyColor2() );
+    armies_order.Set( GetArea(), units, arena.GetArmy2Color() );
 }
 
 fheroes2::Point Battle::Interface::GetMouseCursor() const
@@ -1428,7 +1428,7 @@ void Battle::Interface::RedrawOpponentsFlags()
     if ( opponent1 ) {
         int icn = ICN::UNKNOWN;
 
-        switch ( arena.GetArmyColor1() ) {
+        switch ( arena.GetArmy1Color() ) {
         case Color::BLUE:
             icn = ICN::HEROFL00;
             break;
@@ -2514,7 +2514,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     }
     else if ( opponent1 && le.MouseCursor( opponent1->GetArea() + _interfacePosition.getPosition() ) ) {
         const fheroes2::Rect opponent1Area = opponent1->GetArea() + _interfacePosition.getPosition();
-        if ( arena.GetCurrentColor() == arena.GetArmyColor1() ) {
+        if ( arena.GetCurrentColor() == arena.GetArmy1Color() ) {
             msg = _( "View Hero's options" );
             cursor.SetThemes( Cursor::WAR_HERO );
 
@@ -3181,7 +3181,7 @@ void Battle::Interface::RedrawActionWincesKills( const TargetsInfo & targets, Un
     }
 
     if ( deathColor != Color::UNUSED ) {
-        const bool attackersTurn = deathColor == arena.GetArmyColor2();
+        const bool attackersTurn = deathColor == arena.GetArmy2Color();
         OpponentSprite * attackingHero = attackersTurn ? opponent1 : opponent2;
         OpponentSprite * defendingHero = attackersTurn ? opponent2 : opponent1;
         // 60% of joyful animation
@@ -3502,7 +3502,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
 
     // set spell cast animation
     if ( caster ) {
-        OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
+        OpponentSprite * opponent = caster->GetColor() == arena.GetArmy1Color() ? opponent1 : opponent2;
         if ( opponent ) {
             opponent->SetAnimation( spell.isApplyWithoutFocusObject() ? OP_CAST_MASS : OP_CAST_UP );
             AnimateOpponents( opponent );
@@ -3652,7 +3652,7 @@ void Battle::Interface::RedrawActionSpellCastPart1( const Spell & spell, int32_t
     }
 
     if ( caster ) {
-        OpponentSprite * opponent = caster->GetColor() == arena.GetArmyColor1() ? opponent1 : opponent2;
+        OpponentSprite * opponent = caster->GetColor() == arena.GetArmy1Color() ? opponent1 : opponent2;
         if ( opponent ) {
             opponent->SetAnimation( ( target != nullptr ) ? OP_CAST_UP_RETURN : OP_CAST_MASS_RETURN );
             AnimateOpponents( opponent );

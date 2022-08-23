@@ -878,12 +878,12 @@ const HeroBase * Battle::Arena::GetCommander2() const
     return _army2->GetCommander();
 }
 
-int Battle::Arena::GetArmyColor1() const
+int Battle::Arena::GetArmy1Color() const
 {
     return _army1->GetColor();
 }
 
-int Battle::Arena::GetArmyColor2() const
+int Battle::Arena::GetArmy2Color() const
 {
     return _army2->GetColor();
 }
@@ -895,7 +895,7 @@ int Battle::Arena::GetCurrentColor() const
 
 int Battle::Arena::GetOppositeColor( const int col ) const
 {
-    return col == GetArmyColor1() ? GetArmyColor2() : GetArmyColor1();
+    return col == GetArmy1Color() ? GetArmy2Color() : GetArmy1Color();
 }
 
 Battle::Unit * Battle::Arena::GetTroopUID( uint32_t uid )
