@@ -1291,7 +1291,9 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzle
     }
 
     if ( objectTileset != 0 && ( _level & 0x03 ) == level && ( !isPuzzleDraw || !MP2::isHiddenForPuzzle( GetGround(), objectTileset, objectIndex ) ) ) {
-        renderMainObject( dst, area, mp );
+        if ( !isPuzzleDraw && mp2_object == MP2::OBJ_CAMPFIRE ){
+            renderMainObject( dst, area, mp );
+        }
     }
 
     for ( const TilesAddon * addon : postRenderingAddon ) {
