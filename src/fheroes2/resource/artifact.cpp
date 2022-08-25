@@ -838,7 +838,7 @@ ArtifactsBar::ArtifactsBar( const Heroes * hero, const bool mini, const bool ro,
         fheroes2::DrawBorder( backsf, fheroes2::GetColorId( 0xD0, 0xC0, 0x48 ) );
         fheroes2::Blit( sprite, rt.x, rt.y, backsf, 1, 1, rt.width, rt.height );
 
-        SetItemSize( backsf.width(), backsf.height() );
+        setSingleItemSize( { backsf.width(), backsf.height() } );
 
         spcursor.resize( backsf.width(), backsf.height() );
         spcursor.reset();
@@ -846,7 +846,7 @@ ArtifactsBar::ArtifactsBar( const Heroes * hero, const bool mini, const bool ro,
     }
     else {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::ARTIFACT, 0 );
-        SetItemSize( sprite.width(), sprite.height() );
+        setSingleItemSize( { sprite.width(), sprite.height() } );
 
         spcursor.resize( 70, 70 );
         spcursor.reset();

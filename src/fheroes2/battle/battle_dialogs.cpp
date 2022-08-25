@@ -907,7 +907,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
 
         if ( statusMessage != status.GetMessage() ) {
             status.SetMessage( statusMessage );
-            status.Redraw();
+            status.Redraw( display );
         }
     }
 

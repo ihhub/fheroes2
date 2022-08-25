@@ -790,11 +790,10 @@ void Battle::Status::SetMessage( const std::string & str, bool top )
     }
 }
 
-void Battle::Status::Redraw() const
+void Battle::Status::Redraw( fheroes2::Image & output ) const
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-    fheroes2::Blit( back1, display, x, y );
-    fheroes2::Blit( back2, display, x, y + back1.height() );
+    fheroes2::Blit( back1, output, x, y );
+    fheroes2::Blit( back2, output, x, y + back1.height() );
 
     if ( bar1.Size() )
         bar1.Blit( x + ( back1.width() - bar1.w() ) / 2, y + 2 );
@@ -1202,7 +1201,7 @@ void Battle::Interface::RedrawInterface()
 {
     const Settings & conf = Settings::Get();
 
-    status.Redraw();
+    status.Redraw( fheroes2::Display::instance() );
 
     btn_auto.draw();
     btn_settings.draw();
@@ -2664,16 +2663,17 @@ void Battle::Interface::FadeArena( bool clearMessageLog )
 {
     AudioManager::ResetAudio();
 
+    fheroes2::Display & display = fheroes2::Display::instance();
+
     if ( clearMessageLog ) {
         status.clear();
-        status.Redraw();
+        status.Redraw( display );
     }
 
     Redraw();
 
     const fheroes2::Rect srt = border.GetArea();
     fheroes2::Image top( srt.width, srt.height );
-    fheroes2::Display & display = fheroes2::Display::instance();
 
     fheroes2::Copy( display, srt.x, srt.y, top, 0, 0, srt.width, srt.height );
     fheroes2::FadeDisplayWithPalette( top, srt.getPosition(), 5, 300, 5 );
@@ -5084,7 +5084,7 @@ void Battle::Interface::ProcessingHeroDialogResult( int res, Actions & a )
                 else {
                     std::function<void( const std::string & )> statusCallback = [this]( const std::string & statusStr ) {
                         status.SetMessage( statusStr );
-                        status.Redraw();
+                        status.Redraw( fheroes2::Display::instance() );
                     };
 
                     const Spell spell = hero->OpenSpellBook( SpellBook::Filter::CMBT, true, true, &statusCallback );

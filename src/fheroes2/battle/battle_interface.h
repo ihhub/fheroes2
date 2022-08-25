@@ -156,7 +156,7 @@ namespace Battle
         }
 
         void SetMessage( const std::string & message, bool top = false );
-        void Redraw() const;
+        void Redraw( fheroes2::Image & output ) const;
 
         const std::string & GetMessage() const
         {

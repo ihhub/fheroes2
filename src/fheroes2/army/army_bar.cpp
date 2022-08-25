@@ -170,7 +170,7 @@ ArmyBar::ArmyBar( Army * ptr, bool mini, bool ro, bool change /* false */ )
         SetBackground( { 43, 43 }, fheroes2::GetColorId( 0, 45, 0 ) );
     else {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::STRIP, 2 );
-        SetItemSize( sprite.width(), sprite.height() );
+        setSingleItemSize( { sprite.width(), sprite.height() } );
     }
 
     SetArmy( ptr );
@@ -203,18 +203,21 @@ bool ArmyBar::isValid() const
 
 void ArmyBar::SetBackground( const fheroes2::Size & sz, const uint8_t fillColor )
 {
-    if ( use_mini_sprite ) {
-        SetItemSize( sz.width, sz.height );
-
-        backsf.resize( sz.width, sz.height );
-        backsf.fill( fillColor );
-
-        fheroes2::DrawBorder( backsf, fheroes2::GetColorId( 0xd0, 0xc0, 0x48 ) );
-
-        spcursor.resize( sz.width, sz.height );
-        spcursor.reset();
-        fheroes2::DrawBorder( spcursor, 214 );
+    if ( !use_mini_sprite ) {
+        // Nothing to draw.
+        return;
     }
+
+    setSingleItemSize( sz );
+
+    backsf.resize( sz.width, sz.height );
+    backsf.fill( fillColor );
+
+    fheroes2::DrawBorder( backsf, fheroes2::GetColorId( 0xd0, 0xc0, 0x48 ) );
+
+    spcursor.resize( sz.width, sz.height );
+    spcursor.reset();
+    fheroes2::DrawBorder( spcursor, 214 );
 }
 
 void ArmyBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image & dstsf )
@@ -227,38 +230,41 @@ void ArmyBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image & ds
 
 void ArmyBar::RedrawItem( ArmyTroop & troop, const fheroes2::Rect & pos, bool selected, fheroes2::Image & dstsf )
 {
-    if ( troop.isValid() ) {
-        Text text( std::to_string( troop.GetCount() ), ( use_mini_sprite ? Font::SMALL : Font::BIG ) );
+    if ( !troop.isValid() ) {
+        // Nothing to draw.
+        return;
+    }
 
-        if ( use_mini_sprite ) {
-            const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
-            fheroes2::Rect srcrt( 0, 0, mons32.width(), mons32.height() );
+    Text text( std::to_string( troop.GetCount() ), ( use_mini_sprite ? Font::SMALL : Font::BIG ) );
 
-            if ( mons32.width() > pos.width ) {
-                srcrt.x = ( mons32.width() - pos.width ) / 2;
-                srcrt.width = pos.width;
-            }
+    if ( use_mini_sprite ) {
+        const fheroes2::Sprite & mons32 = fheroes2::AGG::GetICN( ICN::MONS32, troop.GetSpriteIndex() );
+        fheroes2::Rect srcrt( 0, 0, mons32.width(), mons32.height() );
 
-            if ( mons32.height() > pos.height ) {
-                srcrt.y = ( mons32.height() - pos.height ) / 2;
-                srcrt.height = pos.height;
-            }
-
-            fheroes2::Blit( mons32, srcrt.x, srcrt.y, dstsf, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - 1, srcrt.width,
-                            srcrt.height );
-
-            text.Blit( pos.x + pos.width - text.w() - 3, pos.y + pos.height - text.h(), dstsf );
-        }
-        else {
-            fheroes2::renderMonsterFrame( troop, dstsf, pos.getPosition() );
-
-            text.Blit( pos.x + pos.width - text.w() - 3, pos.y + pos.height - text.h() - 1, dstsf );
+        if ( mons32.width() > pos.width ) {
+            srcrt.x = ( mons32.width() - pos.width ) / 2;
+            srcrt.width = pos.width;
         }
 
-        if ( selected ) {
-            spcursor.setPosition( pos.x, pos.y );
-            spcursor.show();
+        if ( mons32.height() > pos.height ) {
+            srcrt.y = ( mons32.height() - pos.height ) / 2;
+            srcrt.height = pos.height;
         }
+
+        fheroes2::Blit( mons32, srcrt.x, srcrt.y, dstsf, pos.x + ( pos.width - mons32.width() ) / 2, pos.y + pos.height - mons32.height() - 1, srcrt.width,
+                        srcrt.height );
+
+        text.Blit( pos.x + pos.width - text.w() - 3, pos.y + pos.height - text.h(), dstsf );
+    }
+    else {
+        fheroes2::renderMonsterFrame( troop, dstsf, pos.getPosition() );
+
+        text.Blit( pos.x + pos.width - text.w() - 3, pos.y + pos.height - text.h() - 1, dstsf );
+    }
+
+    if ( selected ) {
+        spcursor.setPosition( pos.x, pos.y );
+        spcursor.show();
     }
 }
 

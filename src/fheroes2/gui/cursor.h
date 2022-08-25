@@ -25,6 +25,11 @@
 
 #include "math_base.h"
 
+namespace fheroes2
+{
+    class Image;
+}
+
 class Cursor
 {
 public:
@@ -179,6 +184,8 @@ public:
     int Themes() const;
     bool SetThemes( int, bool force = false );
 
+    void setCustomImage( const fheroes2::Image & image, const fheroes2::Point & offset );
+
     // Only for software emulation.
     void setVideoPlaybackCursor();
 
@@ -196,8 +203,8 @@ private:
     void Move( int32_t x, int32_t y ) const;
 
     int theme;
-    int32_t offset_x;
-    int32_t offset_y;
+
+    fheroes2::Point _offset;
 
     bool _monochromeCursorThemes;
 };

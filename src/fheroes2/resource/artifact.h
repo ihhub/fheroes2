@@ -326,7 +326,7 @@ public:
     void RedrawItem( Artifact &, const fheroes2::Rect &, bool, fheroes2::Image & ) override;
 
     void ResetSelected();
-    void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
+    void Redraw( fheroes2::Image & dstsf );
 
     bool ActionBarLeftMouseSingleClick( Artifact & artifact ) override;
     bool ActionBarLeftMouseSingleClick( Artifact & artifact1, Artifact & artifact2 ) override;
