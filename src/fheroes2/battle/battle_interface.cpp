@@ -2728,7 +2728,10 @@ void Battle::Interface::EventAutoSwitch( const Unit & b, Actions & a )
 
 void Battle::Interface::EventAutoFinish( Actions & a )
 {
-    if ( Dialog::Message( "", _( "Are you sure you want to finish the battle in auto mode?" ), Font::BIG, Dialog::YES | Dialog::NO ) != Dialog::YES ) {
+    if ( fheroes2::showMessage( fheroes2::Text( "", {} ),
+                                fheroes2::Text( _( "Are you sure you want to finish the battle in auto mode?" ), fheroes2::FontType::normalWhite() ),
+                                Dialog::YES | Dialog::NO )
+         != Dialog::YES ) {
         return;
     }
 
@@ -5088,7 +5091,9 @@ void Battle::Interface::CheckGlobalEvents( LocalEvent & le )
               || ( le.KeyPress()
                    && ( Game::HotKeyPressEvent( Game::HotKeyEvent::BATTLE_AUTO_SWITCH )
                         || ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL )
-                             && Dialog::Message( "", _( "Are you sure you want to interrupt the auto battle?" ), Font::BIG, Dialog::YES | Dialog::NO )
+                             && fheroes2::showMessage( fheroes2::Text( "", {} ),
+                                                       fheroes2::Text( _( "Are you sure you want to interrupt the auto battle?" ), fheroes2::FontType::normalWhite() ),
+                                                       Dialog::YES | Dialog::NO )
                                     == Dialog::YES ) ) ) ) ) {
         _interruptAutoBattleForColor = arena.GetCurrentColor();
     }
