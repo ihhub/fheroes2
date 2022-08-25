@@ -1693,7 +1693,8 @@ int Battle::Unit::GetCurrentColor() const
     if ( Modes( SP_BERSERKER ) ) {
         return -1; // be aware of unknown color
     }
-    else if ( Modes( SP_HYPNOTIZE ) ) {
+
+    if ( Modes( SP_HYPNOTIZE ) ) {
         const Arena * arena = GetArena();
         assert( arena != nullptr );
 
