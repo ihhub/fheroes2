@@ -176,8 +176,10 @@ void Battle::Unit::SetReflection( bool r )
 
 void Battle::Unit::UpdateDirection()
 {
-    // set auto reflect
-    SetReflection( GetArena()->GetArmy1Color() != GetArmyColor() );
+    const Arena * arena = GetArena();
+    assert( arena != nullptr );
+
+    SetReflection( arena->GetArmy1Color() != GetArmyColor() );
 }
 
 bool Battle::Unit::UpdateDirection( const fheroes2::Rect & pos )
@@ -260,11 +262,15 @@ uint32_t Battle::Unit::GetSpeed() const
 
 int Battle::Unit::GetMorale() const
 {
+    const Arena * arena = GetArena();
+    assert( arena != nullptr );
+
     int armyTroopMorale = ArmyTroop::GetMorale();
 
     // enemy Bone dragons affect morale
-    if ( isAffectedByMorale() && GetArena()->getEnemyForce( GetArmyColor() ).HasMonster( Monster::BONE_DRAGON ) && armyTroopMorale > Morale::TREASON )
+    if ( isAffectedByMorale() && arena->getEnemyForce( GetArmyColor() ).HasMonster( Monster::BONE_DRAGON ) && armyTroopMorale > Morale::TREASON ) {
         --armyTroopMorale;
+    }
 
     return armyTroopMorale;
 }
@@ -505,13 +511,18 @@ uint32_t Battle::Unit::CalculateDamageUnit( const Unit & enemy, double dmg ) con
                 dmg += ( dmg * GetCommander()->GetSecondaryValues( Skill::Secondary::ARCHERY ) / 100 );
             }
 
+            const Arena * arena = GetArena();
+            assert( arena != nullptr );
+
             // check castle defense
-            if ( GetArena()->IsShootingPenalty( *this, enemy ) )
+            if ( arena->IsShootingPenalty( *this, enemy ) ) {
                 dmg /= 2;
+            }
 
             // check spell shield
-            if ( enemy.Modes( SP_SHIELD ) )
+            if ( enemy.Modes( SP_SHIELD ) ) {
                 dmg /= Spell( Spell::SHIELD ).ExtraValue();
+            }
         }
         else if ( !isAbilityPresent( fheroes2::MonsterAbilityType::NO_MELEE_PENALTY ) ) {
             dmg /= 2;
@@ -1679,12 +1690,16 @@ int Battle::Unit::GetColor() const
 
 int Battle::Unit::GetCurrentColor() const
 {
-    if ( Modes( SP_BERSERKER ) )
+    if ( Modes( SP_BERSERKER ) ) {
         return -1; // be aware of unknown color
-    else if ( Modes( SP_HYPNOTIZE ) )
-        return GetArena()->GetOppositeColor( GetArmyColor() );
+    }
+    else if ( Modes( SP_HYPNOTIZE ) ) {
+        const Arena * arena = GetArena();
+        assert( arena != nullptr );
 
-    // default
+        return arena->GetOppositeColor( GetArmyColor() );
+    }
+
     return GetColor();
 }
 
@@ -1701,15 +1716,15 @@ int Battle::Unit::GetCurrentOrArmyColor() const
 
 int Battle::Unit::GetCurrentControl() const
 {
-    if ( Modes( SP_BERSERKER ) )
+    if ( Modes( SP_BERSERKER ) ) {
         return CONTROL_AI; // let's say that it belongs to AI which is not present in the battle
+    }
 
     if ( Modes( SP_HYPNOTIZE ) ) {
-        const int color = GetCurrentColor();
-        if ( color == GetArena()->GetForce1().GetColor() )
-            return GetArena()->GetForce1().GetControl();
-        else
-            return GetArena()->GetForce2().GetControl();
+        const Arena * arena = GetArena();
+        assert( arena != nullptr );
+
+        return arena->getForce( GetCurrentColor() ).GetControl();
     }
 
     return GetControl();
@@ -1722,5 +1737,8 @@ const HeroBase * Battle::Unit::GetCommander() const
 
 const HeroBase * Battle::Unit::GetCurrentOrArmyCommander() const
 {
-    return GetArena()->getCommander( GetCurrentOrArmyColor() );
+    const Arena * arena = GetArena();
+    assert( arena != nullptr );
+
+    return arena->getCommander( GetCurrentOrArmyColor() );
 }

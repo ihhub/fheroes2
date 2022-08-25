@@ -104,6 +104,8 @@ void Battle::Board::Reset()
 void Battle::Board::SetPositionQuality( const Unit & b ) const
 {
     const Arena * arena = GetArena();
+    assert( arena != nullptr );
+
     Units enemies( arena->getEnemyForce( b.GetCurrentColor() ).getUnits(), true );
 
     // Make sure archers are first here, so melee unit's score won't be double counted
@@ -135,6 +137,8 @@ void Battle::Board::SetPositionQuality( const Unit & b ) const
 void Battle::Board::SetEnemyQuality( const Unit & unit ) const
 {
     const Arena * arena = GetArena();
+    assert( arena != nullptr );
+
     Units enemies( arena->getEnemyForce( unit.GetColor() ).getUnits(), true );
     if ( unit.Modes( SP_BERSERKER ) ) {
         Units allies( arena->getForce( unit.GetColor() ).getUnits(), true );

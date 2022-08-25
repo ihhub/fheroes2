@@ -262,31 +262,43 @@ Battle::Arena * Battle::GetArena()
 
 const Castle * Battle::Arena::GetCastle()
 {
+    assert( arena != nullptr );
+
     return arena->castle;
 }
 
 Battle::Bridge * Battle::Arena::GetBridge()
 {
+    assert( arena != nullptr );
+
     return arena->_bridge.get();
 }
 
 Battle::Board * Battle::Arena::GetBoard()
 {
+    assert( arena != nullptr );
+
     return &arena->board;
 }
 
 Battle::Graveyard * Battle::Arena::GetGraveyard()
 {
+    assert( arena != nullptr );
+
     return &arena->graveyard;
 }
 
 Battle::Interface * Battle::Arena::GetInterface()
 {
+    assert( arena != nullptr );
+
     return arena->_interface.get();
 }
 
 Battle::Tower * Battle::Arena::GetTower( int type )
 {
+    assert( arena != nullptr );
+
     switch ( type ) {
     case TWR_LEFT:
         return arena->_towers[0].get();
@@ -427,20 +439,6 @@ Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::Det
 
 Battle::Arena::~Arena()
 {
-    // All members should be destroyed before clearing the global pointer to this Arena object
-    _interface.reset();
-
-    _bridge.reset();
-    _catapult.reset();
-
-    for ( auto & tower : _towers ) {
-        tower.reset();
-    }
-
-    _orderOfUnits.reset();
-    _army2.reset();
-    _army1.reset();
-
     assert( arena == this );
     arena = nullptr;
 }
