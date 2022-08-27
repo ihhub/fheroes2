@@ -546,21 +546,16 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             display.render();
         }
         else if ( le.MouseClickLeft( moveArmyToHero2.area() ) ) {
-            if ( selectArmy1.isSelected() ) {
-                const ArmyTroop * troop = selectArmy1.GetSelectedItem();
-                assert( troop != nullptr );
+            const ArmyTroop * keep = nullptr;
 
-                otherHero.GetArmy().MoveTroops( GetArmy(), troop->GetMonster().GetID(), true );
+            if ( selectArmy1.isSelected() ) {
+                keep = selectArmy1.GetSelectedItem();
             }
             else if ( selectArmy2.isSelected() ) {
-                const ArmyTroop * troop = selectArmy2.GetSelectedItem();
-                assert( troop != nullptr );
+                keep = selectArmy2.GetSelectedItem();
+            }
 
-                otherHero.GetArmy().MoveTroops( GetArmy(), troop->GetMonster().GetID(), false );
-            }
-            else {
-                otherHero.GetArmy().MoveTroops( GetArmy() );
-            }
+            otherHero.GetArmy().MoveTroops( GetArmy(), keep ? keep->GetMonster().GetID() : Monster::UNKNOWN );
 
             armyCountBackgroundRestorerLeft.restore();
             armyCountBackgroundRestorerRight.restore();
@@ -576,21 +571,16 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             display.render();
         }
         else if ( le.MouseClickLeft( moveArmyToHero1.area() ) ) {
-            if ( selectArmy1.isSelected() ) {
-                const ArmyTroop * troop = selectArmy1.GetSelectedItem();
-                assert( troop != nullptr );
+            const ArmyTroop * keep = nullptr;
 
-                GetArmy().MoveTroops( otherHero.GetArmy(), troop->GetMonster().GetID(), false );
+            if ( selectArmy1.isSelected() ) {
+                keep = selectArmy1.GetSelectedItem();
             }
             else if ( selectArmy2.isSelected() ) {
-                const ArmyTroop * troop = selectArmy2.GetSelectedItem();
-                assert( troop != nullptr );
+                keep = selectArmy2.GetSelectedItem();
+            }
 
-                GetArmy().MoveTroops( otherHero.GetArmy(), troop->GetMonster().GetID(), true );
-            }
-            else {
-                GetArmy().MoveTroops( otherHero.GetArmy() );
-            }
+            GetArmy().MoveTroops( otherHero.GetArmy(), keep ? keep->GetMonster().GetID() : Monster::UNKNOWN );
 
             armyCountBackgroundRestorerLeft.restore();
             armyCountBackgroundRestorerRight.restore();

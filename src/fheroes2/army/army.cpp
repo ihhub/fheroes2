@@ -415,7 +415,7 @@ void Troops::JoinTroops( Troops & troops2 )
         }
 }
 
-void Troops::MoveTroops( Troops & from, const int monsterToKeep /* = Monster::UNKNOWN */, const bool keepInSrc /* = true */ )
+void Troops::MoveTroops( Troops & from, const int monsterToKeep )
 {
     assert( this != &from );
 
@@ -425,15 +425,13 @@ void Troops::MoveTroops( Troops & from, const int monsterToKeep /* = Monster::UN
 
     assert( isValid() && from.isValid() );
 
-    // The monster to keep is chosen from the destination stack set
-    if ( monsterToKeep != Monster::UNKNOWN && !keepInSrc ) {
+    if ( monsterToKeep != Monster::UNKNOWN ) {
         // Find a troop stack in the destination stack set consisting of monsters we need to keep
         const auto keepIter = std::find_if( begin(), end(), [monsterToKeep]( const Troop * troop ) {
             assert( troop != nullptr );
 
             return troop->isValid() && troop->GetMonster() == monsterToKeep;
         } );
-        assert( keepIter != end() );
 
         // Find a troop stack in the source stack set consisting of monsters of a different type than the monster we need to keep
         const auto destIter = std::find_if( from.begin(), from.end(), [monsterToKeep]( const Troop * troop ) {
@@ -442,10 +440,9 @@ void Troops::MoveTroops( Troops & from, const int monsterToKeep /* = Monster::UN
             return troop->isValid() && troop->GetMonster() != monsterToKeep;
         } );
 
-        // If we found one, then exchange the monster to keep in the destination stack set with this troop stack. If we didn't find
-        // one, then this means that the source stack set after optimization consists of a single troop stack of monsters to keep
-        // and no additional actions are needed.
-        if ( destIter != from.end() ) {
+        // If we found both, then exchange the monster to keep in the destination stack set with the found troop stack in the
+        // source stack set to concentrate all the monsters to keep in the source stack set
+        if ( keepIter != end() && destIter != from.end() ) {
             Troop * keep = *keepIter;
             Troop * dest = *destIter;
 
