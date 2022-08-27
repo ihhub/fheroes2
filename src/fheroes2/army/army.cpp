@@ -490,14 +490,13 @@ void Troops::MoveTroops( Troops & from, const int monsterToKeep /* = Monster::UN
 
             break;
         }
-        else {
-            assert( remaining > 1 );
 
-            if ( JoinTroop( *troop ) ) {
-                troop->Reset();
+        assert( remaining > 1 );
 
-                --remaining;
-            }
+        if ( JoinTroop( *troop ) ) {
+            troop->Reset();
+
+            --remaining;
         }
     }
 
