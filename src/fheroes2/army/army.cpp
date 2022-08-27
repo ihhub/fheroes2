@@ -462,7 +462,7 @@ void Troops::MoveTroops( Troops & from, const int monsterToKeep )
         }
     }
 
-    uint32_t remaining = from.GetCount();
+    uint32_t stacksLeft = from.GetCount();
     Troop * keep = nullptr;
 
     for ( Troop * troop : from ) {
@@ -478,7 +478,7 @@ void Troops::MoveTroops( Troops & from, const int monsterToKeep )
             continue;
         }
 
-        if ( remaining == 1 ) {
+        if ( stacksLeft == 1 ) {
             // This is the last valid troop stack in the source stack set, try to join all but one monsters from this stack and
             // then stop in any case
             if ( JoinTroop( troop->GetMonster(), troop->GetCount() - 1 ) ) {
@@ -488,12 +488,12 @@ void Troops::MoveTroops( Troops & from, const int monsterToKeep )
             break;
         }
 
-        assert( remaining > 1 );
+        assert( stacksLeft > 1 );
 
         if ( JoinTroop( *troop ) ) {
             troop->Reset();
 
-            --remaining;
+            --stacksLeft;
         }
     }
 
