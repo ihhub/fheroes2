@@ -144,9 +144,8 @@ void Dialog::ExtSettings( bool readonly )
     text.Blit( area.x + ( area.width - text.w() ) / 2, area.y + 6 );
 
     std::vector<uint32_t> states;
-    states.reserve( 32 );
+    states.reserve( 16 );
 
-    states.push_back( Settings::GAME_REMEMBER_LAST_FOCUS );
     states.push_back( Settings::GAME_SHOW_SYSTEM_INFO );
     states.push_back( Settings::GAME_BATTLE_SHOW_DAMAGE );
     states.push_back( Settings::GAME_AUTOSAVE_BEGIN_DAY );

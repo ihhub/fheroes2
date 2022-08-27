@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-09 03:07+0000\n"
+"POT-Creation-Date: 2022-08-27 02:47+0000\n"
 "PO-Revision-Date: 2022-07-04 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -522,6 +522,10 @@ msgid "Shows the results of individual monster's actions."
 msgstr ""
 "Affiche le déroulement du combat et indique toutes les actions individuelles."
 
+#, fuzzy
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Êtes vous sûr de vouloir renvoyer cette troupe ?"
+
 msgid "%{name} skip their turn."
 msgstr "%{name} passent le tour."
 
@@ -625,8 +629,9 @@ msgstr "L'image miroir est créée."
 msgid "The mirror image is destroyed!"
 msgstr "L'image miroir est détruite !"
 
-msgid "Break auto battle?"
-msgstr "Arrêter le combat auto ?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto battle?"
+msgstr "Êtes vous sûr de vouloir sonner la retraite ?"
 
 msgid "Error"
 msgstr "Erreur"
@@ -9617,9 +9622,6 @@ msgstr ""
 "Ce sort contrôle jusqu'à\n"
 "%{hp} PV."
 
-msgid "game: remember last focus"
-msgstr "jeu : retenir dernier élément choisi"
-
 msgid "battle: show damage info"
 msgstr "bataille : afficher les informations sur les dégâts"
 
@@ -9736,3 +9738,6 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Break auto battle?"
+#~ msgstr "Arrêter le combat auto ?"

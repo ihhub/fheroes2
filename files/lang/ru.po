@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-08 11:28+0000\n"
+"POT-Creation-Date: 2022-08-27 02:47+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -527,6 +527,10 @@ msgstr ""
 msgid "Shows the results of individual monster's actions."
 msgstr ""
 
+#, fuzzy
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Вы уверены, что хотите распустить этот отряд?"
+
 msgid "%{name} skip their turn."
 msgstr "%{name} пропускают ход."
 
@@ -632,8 +636,9 @@ msgstr "Фантомный отряд создан!"
 msgid "The mirror image is destroyed!"
 msgstr "Фантомный отряд уничтожен!"
 
-msgid "Break auto battle?"
-msgstr "Остановить автобитву?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto battle?"
+msgstr "Вы действительно хотите отступить?"
 
 msgid "Error"
 msgstr "Ошибка"
@@ -9349,9 +9354,6 @@ msgstr ""
 "суммарное здоровье которого не превышает\n"
 "%{hp} здоровья."
 
-msgid "game: remember last focus"
-msgstr "игра: запомнить последнюю позицию фокуса (героя/замка)"
-
 msgid "battle: show damage info"
 msgstr "битва: показывать урон"
 
@@ -9465,3 +9467,6 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Break auto battle?"
+#~ msgstr "Остановить автобитву?"

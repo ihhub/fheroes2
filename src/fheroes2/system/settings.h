@@ -55,7 +55,7 @@ public:
         // game balance and are saved in the binary config file
         //
         GAME_AUTOSAVE_BEGIN_DAY = 0x10000010,
-        GAME_REMEMBER_LAST_FOCUS = 0x10000020,
+        // UNUSED = 0x10000020,
         // UNUSED = 0x10000040,
         GAME_SHOW_SYSTEM_INFO = 0x10000100,
         // UNUSED = 0x10000200,
@@ -309,11 +309,6 @@ public:
     bool ExtBattleDeterministicResult() const
     {
         return ExtModes( BATTLE_DETERMINISTIC_RESULT );
-    }
-
-    bool ExtGameRememberLastFocus() const
-    {
-        return ExtModes( GAME_REMEMBER_LAST_FOCUS );
     }
 
     bool ExtGameContinueAfterVictory() const
