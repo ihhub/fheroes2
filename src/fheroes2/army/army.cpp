@@ -427,7 +427,7 @@ void Troops::MoveTroops( Troops & from, const int monsterToKeep /* = Monster::UN
 
     // The monster to keep is chosen from the destination stack set
     if ( monsterToKeep != Monster::UNKNOWN && !keepFrom ) {
-        // Find a troop stack in the source stack set consisting of monsters we need to keep
+        // Find a troop stack in the destination stack set consisting of monsters we need to keep
         const auto keepIter = std::find_if( begin(), end(), [monsterToKeep]( const Troop * troop ) {
             assert( troop != nullptr );
 
@@ -442,9 +442,9 @@ void Troops::MoveTroops( Troops & from, const int monsterToKeep /* = Monster::UN
             return troop->isValid() && troop->GetMonster() != monsterToKeep;
         } );
 
-        // If we found one, then exchange the monster to keep in the source stack set with this troop stack. If we didn't find one,
-        // then this means that the source stack set after optimization consists of a single troop stack of monsters to keep and no
-        // additional actions are needed.
+        // If we found one, then exchange the monster to keep in the destination stack set with this troop stack. If we didn't find
+        // one, then this means that the source stack set after optimization consists of a single troop stack of monsters to keep
+        // and no additional actions are needed.
         if ( destIter != from.end() ) {
             Troop * keep = *keepIter;
             Troop * dest = *destIter;
