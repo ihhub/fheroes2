@@ -22,6 +22,7 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <string>
 
 #include "agg_image.h"
@@ -545,7 +546,21 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             display.render();
         }
         else if ( le.MouseClickLeft( moveArmyToHero2.area() ) ) {
-            otherHero.GetArmy().MoveTroops( GetArmy() );
+            if ( selectArmy1.isSelected() ) {
+                const ArmyTroop * troop = selectArmy1.GetSelectedItem();
+                assert( troop != nullptr );
+
+                otherHero.GetArmy().MoveTroops( GetArmy(), troop->GetMonster().GetID(), true );
+            }
+            else if ( selectArmy2.isSelected() ) {
+                const ArmyTroop * troop = selectArmy2.GetSelectedItem();
+                assert( troop != nullptr );
+
+                otherHero.GetArmy().MoveTroops( GetArmy(), troop->GetMonster().GetID(), false );
+            }
+            else {
+                otherHero.GetArmy().MoveTroops( GetArmy() );
+            }
 
             armyCountBackgroundRestorerLeft.restore();
             armyCountBackgroundRestorerRight.restore();
@@ -561,7 +576,21 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             display.render();
         }
         else if ( le.MouseClickLeft( moveArmyToHero1.area() ) ) {
-            GetArmy().MoveTroops( otherHero.GetArmy() );
+            if ( selectArmy1.isSelected() ) {
+                const ArmyTroop * troop = selectArmy1.GetSelectedItem();
+                assert( troop != nullptr );
+
+                GetArmy().MoveTroops( otherHero.GetArmy(), troop->GetMonster().GetID(), false );
+            }
+            else if ( selectArmy2.isSelected() ) {
+                const ArmyTroop * troop = selectArmy2.GetSelectedItem();
+                assert( troop != nullptr );
+
+                GetArmy().MoveTroops( otherHero.GetArmy(), troop->GetMonster().GetID(), true );
+            }
+            else {
+                GetArmy().MoveTroops( otherHero.GetArmy() );
+            }
 
             armyCountBackgroundRestorerLeft.restore();
             armyCountBackgroundRestorerRight.restore();

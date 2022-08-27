@@ -73,6 +73,7 @@ public:
     bool HasMonster( const Monster & ) const;
 
     bool AllTroopsAreUndead() const;
+    // Returns true if all valid troops have the same ID or if there are no troops, otherwise returns false
     bool AllTroopsAreTheSame() const;
 
     bool JoinTroop( const Troop & );
@@ -82,8 +83,9 @@ public:
     void JoinTroops( Troops & );
     bool CanJoinTroops( const Troops & ) const;
 
-    // Used only for moving full army in hero's meeting dialog.
-    void MoveTroops( const Troops & from );
+    // Implements the necessary logic to move unit stacks from army to army using the arrow buttons in the
+    // hero's meeting dialog
+    void MoveTroops( Troops & from, const int monsterToKeep = Monster::UNKNOWN, const bool keepFrom = true );
 
     void MergeTroops();
     Troops GetOptimized() const;
