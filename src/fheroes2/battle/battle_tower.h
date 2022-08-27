@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,24 +41,27 @@ namespace Battle
     {
     public:
         Tower( const Castle &, int, const Rand::DeterministicRandomGenerator & randomGenerator, const uint32_t );
+        Tower( const Tower & ) = delete;
 
-        bool isValid( void ) const override;
-        int GetColor( void ) const override;
-        u32 GetType( void ) const;
-        u32 GetBonus( void ) const;
-        u32 GetAttack( void ) const override;
+        Tower & operator=( const Tower & ) = delete;
 
-        const char * GetName( void ) const;
+        bool isValid() const override;
+        int GetColor() const override;
+        uint32_t GetType() const;
+        uint32_t GetBonus() const;
+        uint32_t GetAttack() const override;
 
-        void SetDestroy( void );
-        fheroes2::Point GetPortPosition( void ) const;
+        const char * GetName() const;
+
+        void SetDestroy();
+        fheroes2::Point GetPortPosition() const;
 
         static std::string GetInfo( const Castle & );
 
     private:
         int type;
         int color;
-        u32 bonus;
+        uint32_t bonus;
         bool valid;
     };
 }

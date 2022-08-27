@@ -5,14 +5,15 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)packages\installed\sdl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)packages\sdl1\include\;$(MSBuildThisFileDirectory)packages\sdl1\include\SDL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)packages\installed\sdl\lib\$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL.lib;SDL_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)packages\sdl1\lib\$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL.lib;SDL_mixer.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y "$(MSBuildThisFileDirectory)packages\installed\sdl\lib\$(PlatformTarget)\*" "$(OutDir)"
+      <Command>xcopy /Y /Q "$(MSBuildThisFileDirectory)packages\sdl1\lib\$(PlatformTarget)\*.dll" "$(OutDir)"
+xcopy /Y /Q "$(MSBuildThisFileDirectory)packages\sdl1\lib\$(PlatformTarget)\*.pdb" "$(OutDir)"
 %(Command)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>

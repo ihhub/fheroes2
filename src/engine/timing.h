@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -50,6 +50,11 @@ namespace fheroes2
 
         void setDelay( const uint64_t delayMs );
 
+        uint64_t getDelay() const
+        {
+            return _delayMs;
+        }
+
         bool isPassed() const;
         bool isPassed( const uint64_t delayMs ) const;
 
@@ -62,25 +67,6 @@ namespace fheroes2
     private:
         std::chrono::time_point<std::chrono::steady_clock> _prevTime;
         uint64_t _delayMs;
-    };
-
-    struct TimerImp;
-
-    class Timer
-    {
-    public:
-        Timer();
-        Timer( const Timer & ) = delete;
-        Timer & operator=( const Timer & ) = delete;
-        ~Timer();
-
-        bool valid() const;
-
-        void run( uint32_t interval, uint32_t ( *fn )( uint32_t, void * ), void * param = nullptr );
-        void remove();
-
-    private:
-        TimerImp * _timer;
     };
 
     void delayforMs( const uint32_t delayMs );

@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,27 +26,29 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 
-fheroes2::Image GetBarBackgroundSprite( void )
+#include <cassert>
+
+namespace
 {
-    fheroes2::Image icon( 34, 34 );
-    icon.reset();
-    fheroes2::DrawBorder( icon, fheroes2::GetColorId( 0xD0, 0xC0, 0x48 ) );
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HSICONS, 0 ), 26, 21, icon, 1, 1, 32, 32 );
-    return icon;
+    fheroes2::Image GetBarBackgroundSprite()
+    {
+        fheroes2::Image icon( 34, 34 );
+        icon.reset();
+        fheroes2::DrawBorder( icon, fheroes2::GetColorId( 0xD0, 0xC0, 0x48 ) );
+        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::HSICONS, 0 ), 26, 21, icon, 1, 1, 32, 32 );
+        return icon;
+    }
 }
 
 PrimarySkillsBar::PrimarySkillsBar( const Heroes * hero, bool mini )
     : _hero( hero )
-    , use_mini_sprite( mini )
+    , useSmallSize( mini )
+    , content{ Skill::Primary::ATTACK, Skill::Primary::DEFENSE, Skill::Primary::POWER, Skill::Primary::KNOWLEDGE }
     , toff( 0, 0 )
 {
-    content.push_back( Skill::Primary::ATTACK );
-    content.push_back( Skill::Primary::DEFENSE );
-    content.push_back( Skill::Primary::POWER );
-    content.push_back( Skill::Primary::KNOWLEDGE );
-
-    if ( use_mini_sprite ) {
+    if ( useSmallSize ) {
         backsf = GetBarBackgroundSprite();
         SetItemSize( backsf.width(), backsf.height() );
     }
@@ -58,89 +60,88 @@ PrimarySkillsBar::PrimarySkillsBar( const Heroes * hero, bool mini )
     SetContent( content );
 }
 
-void PrimarySkillsBar::SetTextOff( s32 ox, s32 oy )
+void PrimarySkillsBar::SetTextOff( int32_t ox, int32_t oy )
 {
     toff = fheroes2::Point( ox, oy );
 }
 
 void PrimarySkillsBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image & dstsf )
 {
-    if ( use_mini_sprite )
+    if ( useSmallSize )
         fheroes2::Blit( backsf, dstsf, pos.x, pos.y );
 }
 
 void PrimarySkillsBar::RedrawItem( int & skill, const fheroes2::Rect & pos, fheroes2::Image & dstsf )
 {
-    if ( Skill::Primary::UNKNOWN != skill ) {
-        if ( use_mini_sprite ) {
-            const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
-            const int ww = 32;
-            Text text( "", Font::SMALL );
-            const fheroes2::Point dstpt( pos.x + ( pos.width - ww ) / 2, pos.y + ( pos.height - ww ) / 2 );
+    if ( skill == Skill::Primary::UNKNOWN ) {
+        // Why is the unknown skill here?
+        assert( 0 );
+        return;
+    }
 
+    if ( useSmallSize ) {
+        const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
+        const int ww = 32;
+        Text text( "", Font::SMALL );
+        const fheroes2::Point dstpt( pos.x + ( pos.width - ww ) / 2, pos.y + ( pos.height - ww ) / 2 );
+
+        switch ( skill ) {
+        case Skill::Primary::ATTACK:
+            fheroes2::Blit( backSprite, 217, 52, dstsf, dstpt.x, dstpt.y, ww, ww );
+            if ( _hero )
+                text.Set( std::to_string( _hero->GetAttack() ) );
+            break;
+        case Skill::Primary::DEFENSE:
+            fheroes2::Blit( backSprite, 217, 85, dstsf, dstpt.x, dstpt.y, ww, ww );
+            if ( _hero )
+                text.Set( std::to_string( _hero->GetDefense() ) );
+            break;
+        case Skill::Primary::POWER:
+            fheroes2::Blit( backSprite, 217, 118, dstsf, dstpt.x, dstpt.y, ww, ww );
+            if ( _hero )
+                text.Set( std::to_string( _hero->GetPower() ) );
+            break;
+        case Skill::Primary::KNOWLEDGE:
+            fheroes2::Blit( backSprite, 217, 151, dstsf, dstpt.x, dstpt.y, ww, ww );
+            if ( _hero )
+                text.Set( std::to_string( _hero->GetKnowledge() ) );
+            break;
+        default:
+            // Your primary skill is different. Make sure that the logic is correct!
+            assert( 0 );
+            break;
+        }
+
+        if ( _hero )
+            text.Blit( pos.x + ( pos.width + toff.x - text.w() ) / 2, pos.y + pos.height + toff.y, dstsf );
+    }
+    else {
+        const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::PRIMSKIL, skill - 1 );
+        fheroes2::Blit( sprite, dstsf, pos.x + ( pos.width - sprite.width() ) / 2, pos.y + ( pos.height - sprite.height() ) / 2 );
+
+        Text text( Skill::Primary::String( skill ), Font::SMALL );
+        text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + 4, dstsf );
+
+        if ( _hero ) {
             switch ( skill ) {
             case Skill::Primary::ATTACK:
-                fheroes2::Blit( backSprite, 217, 52, dstsf, dstpt.x, dstpt.y, ww, ww );
-                if ( _hero )
-                    text.Set( std::to_string( _hero->GetAttack() ) );
+                text.Set( std::to_string( _hero->GetAttack() ), Font::BIG );
                 break;
-
             case Skill::Primary::DEFENSE:
-                fheroes2::Blit( backSprite, 217, 85, dstsf, dstpt.x, dstpt.y, ww, ww );
-                if ( _hero )
-                    text.Set( std::to_string( _hero->GetDefense() ) );
+                text.Set( std::to_string( _hero->GetDefense() ), Font::BIG );
                 break;
-
             case Skill::Primary::POWER:
-                fheroes2::Blit( backSprite, 217, 118, dstsf, dstpt.x, dstpt.y, ww, ww );
-                if ( _hero )
-                    text.Set( std::to_string( _hero->GetPower() ) );
+                text.Set( std::to_string( _hero->GetPower() ), Font::BIG );
                 break;
-
             case Skill::Primary::KNOWLEDGE:
-                fheroes2::Blit( backSprite, 217, 151, dstsf, dstpt.x, dstpt.y, ww, ww );
-                if ( _hero )
-                    text.Set( std::to_string( _hero->GetKnowledge() ) );
+                text.Set( std::to_string( _hero->GetKnowledge() ), Font::BIG );
                 break;
-
             default:
+                // Your primary skill is different. Make sure that the logic is correct!
                 break;
             }
 
-            if ( _hero )
-                text.Blit( pos.x + ( pos.width + toff.x - text.w() ) / 2, pos.y + pos.height + toff.y, dstsf );
-        }
-        else {
-            const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::PRIMSKIL, skill - 1 );
-            fheroes2::Blit( sprite, dstsf, pos.x + ( pos.width - sprite.width() ) / 2, pos.y + ( pos.height - sprite.height() ) / 2 );
-
-            Text text( Skill::Primary::String( skill ), Font::SMALL );
-            text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + 4, dstsf );
-
-            if ( _hero ) {
-                switch ( skill ) {
-                case Skill::Primary::ATTACK:
-                    text.Set( std::to_string( _hero->GetAttack() ), Font::BIG );
-                    break;
-
-                case Skill::Primary::DEFENSE:
-                    text.Set( std::to_string( _hero->GetDefense() ), Font::BIG );
-                    break;
-
-                case Skill::Primary::POWER:
-                    text.Set( std::to_string( _hero->GetPower() ), Font::BIG );
-                    break;
-
-                case Skill::Primary::KNOWLEDGE:
-                    text.Set( std::to_string( _hero->GetKnowledge() ), Font::BIG );
-                    break;
-
-                default:
-                    break;
-                }
-
-                text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + pos.height - text.h() - 2, dstsf );
-            }
+            text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + pos.height - text.h() - 2, dstsf );
         }
     }
 }
@@ -222,7 +223,7 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const fheroes2::R
             Text text( Skill::Secondary::String( skill.Skill() ), Font::SMALL );
             text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + 3, dstsf );
 
-            text.Set( Skill::Level::StringWithBonus( _hero, skill.Skill(), skill.Level() ) );
+            text.Set( Skill::Level::StringWithBonus( _hero, skill ) );
             text.Blit( pos.x + ( pos.width - text.w() ) / 2, pos.y + 51, dstsf );
         }
     }
@@ -231,7 +232,7 @@ void SecondarySkillsBar::RedrawItem( Skill::Secondary & skill, const fheroes2::R
 bool SecondarySkillsBar::ActionBarLeftMouseSingleClick( Skill::Secondary & skill )
 {
     if ( skill.isValid() ) {
-        Dialog::SecondarySkillInfo( skill, _hero, true );
+        fheroes2::SecondarySkillDialogElement( skill, _hero ).showPopup( Dialog::OK );
         return true;
     }
     else if ( can_change ) {
@@ -249,10 +250,12 @@ bool SecondarySkillsBar::ActionBarLeftMouseSingleClick( Skill::Secondary & skill
 bool SecondarySkillsBar::ActionBarRightMouseHold( Skill::Secondary & skill )
 {
     if ( skill.isValid() ) {
-        if ( can_change )
+        if ( can_change ) {
             skill.Reset();
-        else
-            Dialog::SecondarySkillInfo( skill, _hero, false );
+        }
+        else {
+            fheroes2::SecondarySkillDialogElement( skill, _hero ).showPopup( Dialog::ZERO );
+        }
         return true;
     }
 
@@ -283,19 +286,19 @@ namespace fheroes2
     void RedrawPrimarySkillInfo( const fheroes2::Point & pos, PrimarySkillsBar * bar1, PrimarySkillsBar * bar2 )
     {
         // attack skill
-        Text text( _( "Attack Skill" ), Font::SMALL );
+        Text text( Skill::Primary::String( Skill::Primary::ATTACK ), Font::SMALL );
         text.Blit( pos.x + 320 - text.w() / 2, pos.y + 64 );
 
         // defense skill
-        text.Set( _( "Defense Skill" ) );
+        text.Set( Skill::Primary::String( Skill::Primary::DEFENSE ) );
         text.Blit( pos.x + 320 - text.w() / 2, pos.y + 96 );
 
         // spell power
-        text.Set( _( "Spell Power" ) );
+        text.Set( Skill::Primary::String( Skill::Primary::POWER ) );
         text.Blit( pos.x + 320 - text.w() / 2, pos.y + 128 );
 
         // knowledge
-        text.Set( _( "Knowledge" ) );
+        text.Set( Skill::Primary::String( Skill::Primary::KNOWLEDGE ) );
         text.Blit( pos.x + 320 - text.w() / 2, pos.y + 160 );
 
         if ( bar1 )

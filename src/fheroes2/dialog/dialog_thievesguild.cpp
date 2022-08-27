@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,6 +29,7 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "kingdom.h"
 #include "monster.h"
@@ -217,7 +219,7 @@ void DrawHeroIcons( const std::vector<ValueColors> & v, const fheroes2::Point & 
     if ( !v.empty() ) {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        for ( u32 ii = 0; ii < v.size(); ++ii ) {
+        for ( uint32_t ii = 0; ii < v.size(); ++ii ) {
             const Heroes * hero = world.GetHeroes( v[ii].first );
             if ( hero ) {
                 int32_t px = pos.x + ii * step;
@@ -288,7 +290,7 @@ void Dialog::ThievesGuild( bool oracle )
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    Dialog::FrameBorder frameborder( fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) );
+    Dialog::FrameBorder frameborder( { fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT } );
     const fheroes2::Point cur_pt( frameborder.GetArea().x, frameborder.GetArea().y );
 
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STONEBAK, 0 ), display, cur_pt.x, cur_pt.y );
@@ -510,7 +512,7 @@ void Dialog::ThievesGuild( bool oracle )
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;
     }
 }

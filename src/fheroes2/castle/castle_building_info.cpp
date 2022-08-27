@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -528,7 +528,7 @@ namespace
         case DWELLING_MONSTER5:
             return _( "Fenced Meadow" );
         case DWELLING_MONSTER6:
-            return _( "Red Tower" );
+            return _( "sorceress|Red Tower" );
         default:
             break;
         }
@@ -560,7 +560,7 @@ namespace
         case DWELLING_MONSTER6:
             return _( "Green Tower" );
         case DWELLING_UPGRADE6:
-            return _( "Red Tower" );
+            return _( "warlock|Red Tower" );
         case DWELLING_UPGRADE7:
             return _( "Black Tower" );
         default:

@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -77,7 +77,7 @@ namespace fheroes2
                 continue;
             }
 
-            _fileNameAndOffset.emplace( std::move( name ), std::make_pair( offset, size ) );
+            _fileNameAndOffset.try_emplace( std::move( name ), std::make_pair( offset, size ) );
         }
 
         return true;
@@ -152,7 +152,7 @@ namespace fheroes2
             return false;
         }
 
-        const auto result = _fileData.emplace( name, data );
+        const auto result = _fileData.try_emplace( name, data );
         return result.second;
     }
 

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,7 +24,7 @@
 #ifndef H2ICN_H
 #define H2ICN_H
 
-#include "types.h"
+#include <cstdint>
 
 namespace ICN
 {
@@ -942,7 +943,8 @@ namespace ICN
         SWAP_ARROW_LEFT_TO_RIGHT,
         SWAP_ARROW_RIGHT_TO_LEFT,
 
-        CURSOR_ADVENTURE_MAP,
+        COLOR_CURSOR_ADVENTURE_MAP,
+        MONO_CURSOR_ADVENTURE_MAP,
 
         DISMISS_HERO_DISABLED_BUTTON,
         NEW_CAMPAIGN_DISABLED_BUTTON,
@@ -962,13 +964,31 @@ namespace ICN
         EVIL_ARMY_BUTTON,
         EVIL_MARKET_BUTTON,
 
+        MONO_CURSOR_ADVMBW,
+        MONO_CURSOR_SPELBW,
+        MONO_CURSOR_CMSSBW,
+
+        ESPANBKG_EVIL,
+        RECR2BKG_EVIL,
+        STONEBAK_EVIL,
+        WELLBKG_EVIL,
+        CASLWIND_EVIL,
+        CASLXTRA_EVIL,
+        RECRBKG_EVIL,
+        STRIP_BACKGROUND_EVIL,
+
+        GOOD_CAMPAIGN_BUTTONS,
+        EVIL_CAMPAIGN_BUTTONS,
+
+        MINI_MONSTER_IMAGE,
+        MINI_MONSTER_SHADOW,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };
 
     const char * GetString( int );
-    u32 AnimationFrame( int icn, u32, u32, bool = false );
-    bool HighlyObjectSprite( int icn, u32 );
+    uint32_t AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool quantity = false );
     int PORTxxxx( int heroId );
 
     int Get4Captain( int race );

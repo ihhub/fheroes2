@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -50,10 +50,39 @@ namespace Campaign
         LOSE_ALL_SORCERESS_VILLAGES = 1
     };
 
+    struct ScenarioInfoId
+    {
+        ScenarioInfoId() = default;
+
+        ScenarioInfoId( const int campaignId_, const int scenarioId_ )
+            : campaignId( campaignId_ )
+            , scenarioId( scenarioId_ )
+        {
+            // Do nothing.
+        }
+
+        bool operator==( const ScenarioInfoId & info ) const
+        {
+            return campaignId == info.campaignId && scenarioId == info.scenarioId;
+        }
+
+        bool operator!=( const ScenarioInfoId & info ) const
+        {
+            return !operator==( info );
+        }
+
+        friend StreamBase & operator<<( StreamBase & msg, const ScenarioInfoId & data );
+        friend StreamBase & operator>>( StreamBase & msg, ScenarioInfoId & data );
+
+        int campaignId{ -1 };
+
+        int scenarioId{ -1 };
+    };
+
     struct ScenarioBonusData
     {
     public:
-        enum BonusType
+        enum BonusType : int32_t
         {
             RESOURCES = 0,
             ARTIFACT,
@@ -65,19 +94,21 @@ namespace Campaign
             STARTING_RACE_AND_ARMY
         };
 
-        uint32_t _type;
-        uint32_t _subType;
-        uint32_t _amount;
+        int32_t _type;
+        int32_t _subType;
+        int32_t _amount;
 
         ScenarioBonusData();
-        ScenarioBonusData( uint32_t type, uint32_t subType, uint32_t amount );
+        ScenarioBonusData( const int32_t type, const int32_t subType, const int32_t amount );
 
         friend StreamBase & operator<<( StreamBase & msg, const ScenarioBonusData & data );
         friend StreamBase & operator>>( StreamBase & msg, ScenarioBonusData & data );
 
-        std::string ToString() const;
+        std::string getName() const;
 
-        static std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const int campaignID, const int scenarioID );
+        std::string getDescription() const;
+
+        static std::vector<Campaign::ScenarioBonusData> getCampaignBonusData( const ScenarioInfoId & scenarioInfo );
     };
 
     struct ScenarioIntroVideoInfo
@@ -92,14 +123,14 @@ namespace Campaign
     {
     public:
         ScenarioData() = delete;
-        ScenarioData( int scenarioID, const std::vector<int> & nextMaps, const std::vector<Campaign::ScenarioBonusData> & bonuses, const std::string & fileName,
-                      const std::string & scenarioName, const std::string & description, const VideoSequence & startScenarioVideoPlayback,
-                      const VideoSequence & endScenarioVideoPlayback, const ScenarioVictoryCondition victoryCondition = ScenarioVictoryCondition::STANDARD,
+        ScenarioData( const ScenarioInfoId & scenarioInfo, std::vector<ScenarioInfoId> && nextScenarios, const std::string & fileName, const std::string & scenarioName,
+                      const std::string & description, const VideoSequence & startScenarioVideoPlayback, const VideoSequence & endScenarioVideoPlayback,
+                      const ScenarioVictoryCondition victoryCondition = ScenarioVictoryCondition::STANDARD,
                       const ScenarioLossCondition lossCondition = ScenarioLossCondition::STANDARD );
 
-        const std::vector<int> & getNextMaps() const
+        const std::vector<ScenarioInfoId> & getNextScenarios() const
         {
-            return _nextMaps;
+            return _nextScenarios;
         }
 
         const std::vector<ScenarioBonusData> & getBonuses() const
@@ -109,18 +140,22 @@ namespace Campaign
 
         int getScenarioID() const
         {
-            return _scenarioID;
+            return _scenarioInfo.scenarioId;
         }
 
-        const std::string & getScenarioName() const
+        int getCampaignId() const
         {
-            return _scenarioName;
+            return _scenarioInfo.campaignId;
         }
 
-        const std::string & getDescription() const
+        const ScenarioInfoId & getScenarioInfoId() const
         {
-            return _description;
+            return _scenarioInfo;
         }
+
+        const char * getScenarioName() const;
+
+        const char * getDescription() const;
 
         ScenarioVictoryCondition getVictoryCondition() const
         {
@@ -146,8 +181,8 @@ namespace Campaign
         Maps::FileInfo loadMap() const;
 
     private:
-        int _scenarioID;
-        std::vector<int> _nextMaps;
+        ScenarioInfoId _scenarioInfo;
+        std::vector<ScenarioInfoId> _nextScenarios;
         std::vector<ScenarioBonusData> _bonuses;
         std::string _fileName;
         // Note: There are inconsistencies with the content of the map file in regards to the map name and description, so we'll be getting them from somewhere else
@@ -159,6 +194,8 @@ namespace Campaign
         VideoSequence _startScenarioVideoPlayback;
         VideoSequence _endScenarioVideoPlayback;
     };
+
+    const char * getCampaignName( const int campaignId );
 }
 
 #endif

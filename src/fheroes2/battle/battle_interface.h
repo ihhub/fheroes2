@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,6 +27,7 @@
 #include <string>
 
 #include "battle_animation.h"
+#include "battle_board.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "spell.h"
@@ -42,18 +44,21 @@ namespace fheroes2
 
 namespace Battle
 {
+    class Actions;
     class Arena;
+    class Board;
+    class Cell;
+    class Position;
+    class StatusListBox;
+    class Tower;
     class Unit;
     class Units;
-    class Tower;
-    class StatusListBox;
-    class Cell;
-    class Actions;
+
     struct TargetInfo;
     struct TargetsInfo;
 
-    void DialogBattleSettings( void );
-    bool DialogBattleSurrender( const HeroBase & hero, u32 cost, Kingdom & kingdom );
+    void DialogBattleSettings();
+    bool DialogBattleSurrender( const HeroBase & hero, uint32_t cost, Kingdom & kingdom );
 
     enum HeroAnimation : uint32_t
     {
@@ -85,16 +90,35 @@ namespace Battle
     {
     public:
         OpponentSprite( const fheroes2::Rect &, const HeroBase *, bool );
+        OpponentSprite( const OpponentSprite & ) = delete;
 
-        const fheroes2::Rect & GetArea( void ) const;
+        OpponentSprite & operator=( const OpponentSprite & ) = delete;
+
+        const fheroes2::Rect & GetArea() const
+        {
+            return pos;
+        }
+
         fheroes2::Point GetCastPosition() const;
         void Redraw( fheroes2::Image & dst ) const;
         void Update();
         void SetAnimation( int rule );
         void IncreaseAnimFrame( bool loop = false );
-        bool isFinishFrame( void ) const;
-        const HeroBase * GetHero( void ) const;
-        fheroes2::Point Offset() const;
+
+        bool isFinishFrame() const
+        {
+            return _currentAnim.isLastFrame();
+        }
+
+        const HeroBase * GetHero() const
+        {
+            return base;
+        }
+
+        fheroes2::Point Offset() const
+        {
+            return _offset;
+        }
 
         enum
         {
@@ -121,16 +145,23 @@ namespace Battle
     {
     public:
         Status();
+        Status( const Status & ) = delete;
 
-        void SetPosition( s32, s32 );
+        Status & operator=( const Status & ) = delete;
+
+        void SetPosition( int32_t, int32_t );
         void SetLogs( StatusListBox * logs )
         {
             listlog = logs;
         }
 
         void SetMessage( const std::string & message, bool top = false );
-        void Redraw( void ) const;
-        const std::string & GetMessage( void ) const;
+        void Redraw() const;
+
+        const std::string & GetMessage() const
+        {
+            return message;
+        }
 
         void clear();
 
@@ -147,20 +178,35 @@ namespace Battle
     {
     public:
         ArmiesOrder();
+        ArmiesOrder( const ArmiesOrder & ) = delete;
+
+        ArmiesOrder & operator=( const ArmiesOrder & ) = delete;
 
         void Set( const fheroes2::Rect &, const Units *, int );
-        void Redraw( const Unit * current, fheroes2::Image & output );
+        void Redraw( const Unit * current, const uint8_t currentUnitColor, fheroes2::Image & output );
         void QueueEventProcessing( std::string & msg, const fheroes2::Point & offset );
 
     private:
+        enum ArmyColor : uint8_t
+        {
+            ARMY_COLOR_BLACK = 0x00,
+            ARMY_COLOR_BLUE = 0x47,
+            ARMY_COLOR_GREEN = 0x67,
+            ARMY_COLOR_RED = 0xbd,
+            ARMY_COLOR_YELLOW = 0x70,
+            ARMY_COLOR_ORANGE = 0xcd,
+            ARMY_COLOR_PURPLE = 0x87,
+            ARMY_COLOR_GRAY = 0x10
+        };
+
         using UnitPos = std::pair<const Unit *, fheroes2::Rect>;
 
-        void RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, bool revert, bool current, fheroes2::Image & output ) const;
+        void RedrawUnit( const fheroes2::Rect & pos, const Battle::Unit & unit, const bool revert, const bool isCurrentUnit, const uint8_t currentUnitColor,
+                         fheroes2::Image & output ) const;
 
         const Units * orders;
         int army_color2;
         fheroes2::Rect area;
-        fheroes2::Image sf_color[3];
         std::vector<UnitPos> rects;
     };
 
@@ -168,12 +214,17 @@ namespace Battle
     {
     public:
         PopupDamageInfo();
+        PopupDamageInfo( const PopupDamageInfo & ) = delete;
 
-        void SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender, const fheroes2::Point & offset );
+        PopupDamageInfo & operator=( const PopupDamageInfo & ) = delete;
+
+        void setBattleUIRect( const fheroes2::Rect & battleUIRect );
+        void SetInfo( const Cell * cell, const Unit * attacker, const Unit * defender );
         void Reset();
-        void Redraw( int, int );
+        void Redraw();
 
     private:
+        fheroes2::Rect _battleUIRect;
         const Cell * _cell;
         const Unit * _attacker;
         const Unit * _defender;
@@ -183,16 +234,26 @@ namespace Battle
     class Interface
     {
     public:
-        Interface( Arena &, s32 );
+        Interface( Arena &, int32_t );
+        Interface( const Interface & ) = delete;
+
         ~Interface();
+
+        Interface & operator=( const Interface & ) = delete;
 
         void fullRedraw(); // only at the start of the battle
         void Redraw();
         void RedrawPartialStart();
         void RedrawPartialFinish();
+
+        void getPendingActions( Actions & actions );
         void HumanTurn( const Unit &, Actions & );
 
-        const fheroes2::Rect & GetArea( void ) const;
+        const fheroes2::Rect & GetArea() const
+        {
+            return _surfaceInnerArea;
+        }
+
         fheroes2::Point GetMouseCursor() const;
 
         void SetStatus( const std::string &, bool = false );
@@ -201,12 +262,12 @@ namespace Battle
 
         void RedrawActionNewTurn() const;
         void RedrawActionAttackPart1( Unit &, Unit &, const TargetsInfo & );
-        void RedrawActionAttackPart2( Unit &, TargetsInfo & );
+        void RedrawActionAttackPart2( Unit & attacker, const TargetsInfo & targets );
         void RedrawActionSpellCastStatus( const Spell & spell, int32_t dst, const std::string & name, const TargetsInfo & targets );
-        void RedrawActionSpellCastPart1( const Spell & spell, s32 dst, const HeroBase * caster, const TargetsInfo & targets );
-        void RedrawActionSpellCastPart2( const Spell &, TargetsInfo & );
+        void RedrawActionSpellCastPart1( const Spell & spell, int32_t dst, const HeroBase * caster, const TargetsInfo & targets );
+        void RedrawActionSpellCastPart2( const Spell & spell, const TargetsInfo & targets );
         void RedrawActionResistSpell( const Unit & target, bool playSound );
-        void RedrawActionMonsterSpellCastStatus( const Unit &, const TargetInfo & );
+        void RedrawActionMonsterSpellCastStatus( const Spell & spell, const Unit & attacker, const TargetInfo & target );
         void RedrawActionMove( Unit &, const Indexes & );
         void RedrawActionFly( Unit &, const Position & );
         void RedrawActionMorale( Unit &, bool );
@@ -214,7 +275,7 @@ namespace Battle
         void RedrawActionTowerPart1( const Tower &, const Unit & );
         void RedrawActionTowerPart2( const Tower &, const TargetInfo & );
         void RedrawActionCatapult( int target, bool hit );
-        void RedrawActionTeleportSpell( Unit &, s32 );
+        void RedrawActionTeleportSpell( Unit &, int32_t );
         void RedrawActionEarthQuakeSpell( const std::vector<int> & );
         void RedrawActionSummonElementalSpell( Unit & target );
         void RedrawActionMirrorImageSpell( const Unit &, const Position & );
@@ -234,31 +295,30 @@ namespace Battle
         void HumanBattleTurn( const Unit &, Actions &, std::string & );
         void HumanCastSpellTurn( const Unit &, Actions &, std::string & );
 
-        void RedrawCover( void );
+        void RedrawCover();
         void RedrawCoverStatic( const Settings & conf, const Board & board );
-        void RedrawLowObjects( s32 );
-        void RedrawHighObjects( s32 );
-        void RedrawCastle1( const Castle & );
-        void RedrawCastle2( const Castle &, int32_t );
+        void RedrawLowObjects( int32_t );
+        void RedrawHighObjects( int32_t );
+        void RedrawCastle( const Castle &, int32_t );
         void RedrawCastleMainTower( const Castle & );
-        void RedrawKilled( void );
-        void RedrawInterface( void );
-        void RedrawOpponents( void );
-        void RedrawOpponentsFlags( void );
-        void RedrawArmies( void );
+        void RedrawKilled();
+        void RedrawInterface();
+        void RedrawOpponents();
+        void RedrawOpponentsFlags();
+        void RedrawArmies();
         void RedrawTroopSprite( const Unit & unit );
 
         fheroes2::Point drawTroopSprite( const Unit & unit, const fheroes2::Sprite & troopSprite );
 
         void RedrawTroopCount( const Unit & unit );
 
-        void RedrawActionWincesKills( TargetsInfo & targets, Unit * attacker = nullptr );
+        void RedrawActionWincesKills( const TargetsInfo & targets, Unit * attacker = nullptr );
         void RedrawActionArrowSpell( const Unit & );
         void RedrawActionColdRaySpell( Unit & );
         void RedrawActionDisruptingRaySpell( const Unit & );
         void RedrawActionBloodLustSpell( const Unit & );
         void RedrawActionStoneSpell( const Unit & target );
-        void RedrawActionColdRingSpell( s32, const TargetsInfo & );
+        void RedrawActionColdRingSpell( int32_t, const TargetsInfo & );
         void RedrawActionElementalStormSpell( const TargetsInfo & );
         void RedrawActionArmageddonSpell();
         void RedrawActionHolyShoutSpell( const TargetsInfo & targets, int strength );
@@ -276,21 +336,21 @@ namespace Battle
         void RedrawTargetsWithFrameAnimation( int32_t dst, const TargetsInfo & targets, int icn, int m82, int repeatCount = 0 );
         void RedrawTargetsWithFrameAnimation( const TargetsInfo &, int, int, bool );
 
-        bool IdleTroopsAnimation( void );
-        void ResetIdleTroopAnimation( void );
+        bool IdleTroopsAnimation() const;
+        void ResetIdleTroopAnimation() const;
         void UpdateContourColor();
         void CheckGlobalEvents( LocalEvent & );
 
         void ProcessingHeroDialogResult( int, Actions & );
 
         void EventAutoSwitch( const Unit &, Actions & );
-        void EventShowOptions( void );
+        void EventShowOptions();
         void ButtonAutoAction( const Unit &, Actions & );
-        void ButtonSettingsAction( void );
+        void ButtonSettingsAction();
         void ButtonSkipAction( Actions & );
         void ButtonWaitAction( Actions & );
-        void MouseLeftClickBoardAction( u32, const Cell &, Actions & );
-        void MousePressRightBoardAction( u32, const Cell & ) const;
+        void MouseLeftClickBoardAction( int themes, const Cell & cell, Actions & a );
+        void MousePressRightBoardAction( const Cell & cell ) const;
 
         int GetBattleCursor( std::string & ) const;
         int GetBattleSpellCursor( std::string & ) const;
@@ -320,8 +380,10 @@ namespace Battle
         Spell humanturn_spell;
         bool humanturn_exit;
         bool humanturn_redraw;
-        u32 animation_flags_frame;
+        uint32_t animation_flags_frame;
         int catapult_frame;
+
+        int _breakAutoBattleForColor;
 
         uint8_t _contourColor;
         bool _brightLandType; // used to determine current monster contour cycling colors
@@ -334,8 +396,8 @@ namespace Battle
         fheroes2::Point _movingPos;
         fheroes2::Point _flyingPos;
 
-        s32 index_pos;
-        s32 teleport_src;
+        int32_t index_pos;
+        int32_t teleport_src;
         fheroes2::Rect main_tower;
 
         StatusListBox * listlog;

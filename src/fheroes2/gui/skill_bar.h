@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@ class PrimarySkillsBar : public Interface::ItemsBar<int>
 public:
     PrimarySkillsBar( const Heroes * hero, bool mini );
 
-    void SetTextOff( s32, s32 );
+    void SetTextOff( int32_t, int32_t );
     void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) override;
     void RedrawItem( int &, const fheroes2::Rect &, fheroes2::Image & ) override;
 
@@ -46,7 +46,7 @@ public:
 private:
     const Heroes * _hero;
     fheroes2::Image backsf;
-    bool use_mini_sprite;
+    const bool useSmallSize;
     std::vector<int> content;
     fheroes2::Point toff;
     std::string msg;

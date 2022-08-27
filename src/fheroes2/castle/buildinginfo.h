@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,24 +34,33 @@ class BuildingInfo
 public:
     BuildingInfo( const Castle & c, const building_t b );
 
-    uint32_t getBuilding( void ) const;
-    void SetPos( s32, s32 );
-    const fheroes2::Rect & GetArea( void ) const;
-    const char * GetName( void ) const;
+    uint32_t getBuilding() const
+    {
+        return building;
+    }
+
+    void SetPos( int32_t, int32_t );
+
+    const fheroes2::Rect & GetArea() const
+    {
+        return area;
+    }
+
+    const char * GetName() const;
     void SetStatusMessage( StatusBar & ) const;
-    bool IsDwelling( void ) const;
-    void Redraw( void ) const;
+    bool IsDwelling() const;
+    void Redraw() const;
     bool QueueEventProcessing( fheroes2::ButtonBase & exitButton ) const;
     bool DialogBuyBuilding( bool buttons ) const;
 
-    static payment_t GetCost( u32, int );
+    static payment_t GetCost( uint32_t, int );
 
 private:
-    void RedrawCaptain( void ) const;
-    std::string GetConditionDescription( void ) const;
+    void RedrawCaptain() const;
+    std::string GetConditionDescription() const;
 
     const Castle & castle;
-    u32 building;
+    uint32_t building;
     std::string description;
     fheroes2::Rect area;
     int bcond;
@@ -58,9 +68,9 @@ private:
 
 struct DwellingItem
 {
-    DwellingItem( const Castle &, u32 dw );
+    DwellingItem( const Castle &, uint32_t dw );
 
-    u32 type;
+    uint32_t type;
     Monster mons;
 };
 

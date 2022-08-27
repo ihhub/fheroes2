@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2022                                                    *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -84,10 +85,10 @@ int main( int argc, char ** argv )
     for ( int ii = 0; ii < count_sprite; ++ii ) {
         const fheroes2::ICNHeader & head = headers[ii];
 
-        u32 data_size = ( ii + 1 != count_sprite ? headers[ii + 1].offsetData - head.offsetData : total_size - head.offsetData );
+        uint32_t data_size = ( ii + 1 != count_sprite ? headers[ii + 1].offsetData - head.offsetData : total_size - head.offsetData );
         sf.seek( save_pos + head.offsetData );
         std::cerr << data_size << std::endl;
-        std::vector<u8> buf = sf.getRaw( data_size );
+        std::vector<uint8_t> buf = sf.getRaw( data_size );
 
         if ( !buf.empty() ) {
             const fheroes2::Sprite image = fheroes2::decodeICNSprite( &buf[0], data_size, head.width, head.height, head.offsetX, head.offsetY );
@@ -96,15 +97,14 @@ int main( int argc, char ** argv )
             os << std::setw( 3 ) << std::setfill( '0' ) << ii;
 
             std::string dstfile = System::ConcatePath( prefix, os.str() );
-            std::string shortdstfile( os.str() ); // the name of destfile without the path
 
-#ifndef FHEROES2_IMAGE_SUPPORT
-            dstfile += ".bmp";
-            shortdstfile += ".bmp";
-#else
-            dstfile += ".png";
-            shortdstfile += ".png";
-#endif
+            if ( fheroes2::isPNGFormatSupported() ) {
+                dstfile += ".png";
+            }
+            else {
+                dstfile += ".bmp";
+            }
+
             std::cout << "Image " << ii + 1 << " has offset of [" << static_cast<int32_t>( head.offsetX ) << ", " << static_cast<int32_t>( head.offsetY ) << "]"
                       << std::endl;
 

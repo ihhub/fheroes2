@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,10 +24,10 @@
 #ifndef H2BATTLE_CELL_H
 #define H2BATTLE_CELL_H
 
+#include <cstdint>
 #include <utility>
 
 #include "math_base.h"
-#include "types.h"
 
 #define CELLW 44
 #define CELLH 52
@@ -54,12 +55,17 @@ namespace Battle
     {
     public:
         explicit Cell( int32_t );
+        Cell( const Cell & ) = delete;
+        Cell( Cell && ) = default;
 
-        void ResetQuality( void );
+        Cell & operator=( const Cell & ) = delete;
+        Cell & operator=( Cell && ) = delete;
+
+        void ResetQuality();
         void resetReachability();
 
         void SetObject( int );
-        void SetQuality( u32 );
+        void SetQuality( uint32_t );
 
         void setReachableForHead();
         void setReachableForTail();
@@ -69,28 +75,32 @@ namespace Battle
         bool isReachableForHead() const;
         bool isReachableForTail() const;
 
-        bool isPassable4( const Unit &, const Cell & ) const;
-        bool isPassable3( const Unit &, bool check_reflect ) const;
-        bool isPassable1( bool check_troop ) const;
+        // Checks that the cell is passable for the given unit located in a certain adjacent cell
+        bool isPassableFromAdjacent( const Unit & unit, const Cell & adjacent ) const;
+        // Checks that the cell is passable for the given unit, i.e. unit can occupy it with his head or tail
+        bool isPassableForUnit( const Unit & unit ) const;
+        // Checks that the cell is passable, i.e. does not contain an obstacle or (optionally) a unit
+        bool isPassable( const bool checkForUnit ) const;
+
         bool isPositionIncludePoint( const fheroes2::Point & ) const;
 
-        s32 GetIndex( void ) const;
-        const fheroes2::Rect & GetPos( void ) const;
-        int GetObject( void ) const;
-        s32 GetQuality( void ) const;
+        int32_t GetIndex() const;
+        const fheroes2::Rect & GetPos() const;
+        int GetObject() const;
+        int32_t GetQuality() const;
         direction_t GetTriangleDirection( const fheroes2::Point & ) const;
 
-        const Unit * GetUnit( void ) const;
-        Unit * GetUnit( void );
+        const Unit * GetUnit() const;
+        Unit * GetUnit();
         void SetUnit( Unit * );
 
     private:
-        s32 index;
+        int32_t index;
         fheroes2::Rect pos;
         int object;
         bool _reachableForHead;
         bool _reachableForTail;
-        s32 quality;
+        int32_t quality;
         Unit * troop;
         fheroes2::Point coord[7];
     };
@@ -102,24 +112,26 @@ namespace Battle
             : std::pair<Cell *, Cell *>( nullptr, nullptr )
         {}
 
-        void Set( s32 head, bool wide, bool reflect );
-        void Swap( void );
-        bool isReflect( void ) const;
+        void Set( const int32_t head, const bool wide, const bool reflect );
+        void Swap();
+        bool isReflect() const;
         bool contains( int cellIndex ) const;
 
-        // Returns the position that the given unit would occupy after moving to the given index
-        static Position GetPositionWhenMoved( const Unit & unit, const int32_t dst );
+        // Returns the position that the given unit would occupy after moving to the
+        // cell with the given index (without taking into account the cell passability
+        // information) or an empty Position object if the given index is unreachable
+        static Position GetPosition( const Unit & unit, const int32_t dst );
 
         // Returns the reachable position for the current unit (to which the current
         // passability information relates) which corresponds to the given index or
         // an empty Position object if the given index is unreachable
-        static Position GetReachable( const Unit & currentUnit, const int32_t dst );
+        static Position GetReachable( const Unit & currentUnit, const int32_t dst, const bool tryHeadFirst = true );
 
-        fheroes2::Rect GetRect( void ) const;
-        Cell * GetHead( void );
-        const Cell * GetHead( void ) const;
-        Cell * GetTail( void );
-        const Cell * GetTail( void ) const;
+        fheroes2::Rect GetRect() const;
+        Cell * GetHead();
+        const Cell * GetHead() const;
+        Cell * GetTail();
+        const Cell * GetTail() const;
     };
 }
 

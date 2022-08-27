@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,10 +27,15 @@
 
 class Castle;
 
-class Captain : public HeroBase
+class Captain final : public HeroBase
 {
 public:
     explicit Captain( Castle & );
+    Captain( const Captain & ) = delete;
+
+    ~Captain() override = default;
+
+    Captain & operator=( const Captain & ) = delete;
 
     bool isValid() const override;
     int GetAttack() const override;

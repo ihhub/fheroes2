@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -80,7 +80,7 @@ namespace fheroes2
             , value( 0 )
         {}
 
-        explicit MonsterAbility( const MonsterAbilityType type_, const uint32_t percentage_, const uint32_t value_ )
+        MonsterAbility( const MonsterAbilityType type_, const uint32_t percentage_, const uint32_t value_ )
             : type( type_ )
             , percentage( percentage_ )
             , value( value_ )
@@ -134,6 +134,8 @@ namespace fheroes2
         uint32_t speed;
         uint32_t shots;
 
+        double monsterBaseStrength;
+
         std::vector<MonsterAbility> abilities;
         std::vector<MonsterWeakness> weaknesses;
     };
@@ -157,6 +159,9 @@ namespace fheroes2
         int movement;
         int wince;
         int rangeAttack;
+        int takeoff;
+        int landing;
+        int explosion;
     };
 
     struct MonsterData

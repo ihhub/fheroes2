@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,21 +32,21 @@
 #include "world.h"
 
 Interface::ButtonsArea::ButtonsArea( Basic & basic )
-    : BorderWindow( fheroes2::Rect( 0, 0, 144, 72 ) )
+    : BorderWindow( { 0, 0, 144, 72 } )
     , interface( basic )
 {}
 
-void Interface::ButtonsArea::SavePosition( void )
+void Interface::ButtonsArea::SavePosition()
 {
     Settings::Get().SetPosButtons( GetRect().getPosition() );
 }
 
-void Interface::ButtonsArea::SetRedraw( void ) const
+void Interface::ButtonsArea::SetRedraw() const
 {
     interface.SetRedraw( REDRAW_BUTTONS );
 }
 
-void Interface::ButtonsArea::SetPos( s32 ox, s32 oy )
+void Interface::ButtonsArea::SetPos( int32_t ox, int32_t oy )
 {
     BorderWindow::SetPosition( ox, oy );
 
@@ -94,7 +95,7 @@ void Interface::ButtonsArea::SetPos( s32 ox, s32 oy )
     systemRect = buttonSystem.area();
 }
 
-void Interface::ButtonsArea::Redraw( void )
+void Interface::ButtonsArea::Redraw()
 {
     const Settings & conf = Settings::Get();
 
@@ -115,7 +116,7 @@ void Interface::ButtonsArea::Redraw( void )
     }
 }
 
-void Interface::ButtonsArea::ResetButtons( void )
+void Interface::ButtonsArea::ResetButtons()
 {
     if ( buttonNextHero.isEnabled() ) {
         buttonNextHero.drawOnRelease();
@@ -136,7 +137,7 @@ void Interface::ButtonsArea::ResetButtons( void )
     LocalEvent::Get().ResetPressLeft();
 }
 
-fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing( void )
+fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
     fheroes2::GameMode res = fheroes2::GameMode::CANCEL;
@@ -152,8 +153,9 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing( void )
     le.MousePressLeft( fileRect ) ? buttonFile.drawOnPress() : buttonFile.drawOnRelease();
     le.MousePressLeft( systemRect ) ? buttonSystem.drawOnPress() : buttonSystem.drawOnRelease();
 
+    // Move border window
     if ( Settings::Get().ShowButtons() && BorderWindow::QueueEventProcessing() ) {
-        // Move border window. No other action is required.
+        SetRedraw();
     }
     else if ( buttonNextHero.isEnabled() && le.MouseClickLeft( nextHeroRect ) ) {
         interface.EventNextHero();
@@ -193,9 +195,9 @@ fheroes2::GameMode Interface::ButtonsArea::QueueEventProcessing( void )
     else if ( le.MousePressRight( adventureRect ) )
         Dialog::Message( _( "Adventure Options" ), _( "Bring up the adventure options menu." ), Font::BIG );
     else if ( le.MousePressRight( fileRect ) )
-        Dialog::Message( _( "File Options" ), _( "Bring up the file options menu, alloving you to load menu, save etc." ), Font::BIG );
+        Dialog::Message( _( "File Options" ), _( "Bring up the file options menu, allowing you to load, save, start a new game or quit." ), Font::BIG );
     else if ( le.MousePressRight( systemRect ) )
-        Dialog::Message( _( "System Options" ), _( "Bring up the system options menu, alloving you to customize your game." ), Font::BIG );
+        Dialog::Message( _( "System Options" ), _( "Bring up the system options menu, allowing you to customize your game." ), Font::BIG );
 
     return res;
 }

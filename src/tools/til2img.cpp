@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2022                                                    *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -80,11 +81,13 @@ int main( int argc, char ** argv )
             stream << std::setw( 3 ) << std::setfill( '0' ) << cur;
             std::string dstfile = System::ConcatePath( prefix, stream.str() );
 
-#ifndef FHEROES2_IMAGE_SUPPORT
-            dstfile += ".bmp";
-#else
-            dstfile += ".png";
-#endif
+            if ( fheroes2::isPNGFormatSupported() ) {
+                dstfile += ".png";
+            }
+            else {
+                dstfile += ".bmp";
+            }
+
             if ( debugMode ) {
                 std::cout << "Saving " << dstfile << std::endl;
             }

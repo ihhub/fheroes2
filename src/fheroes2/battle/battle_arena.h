@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,7 +24,9 @@
 #ifndef H2BATTLE_ARENA_H
 #define H2BATTLE_ARENA_H
 
+#include <cstdint>
 #include <list>
+#include <utility>
 
 #include "battle.h"
 #include "battle_board.h"
@@ -56,6 +59,7 @@ namespace Battle
     public:
         TroopsUidGenerator() = default;
         TroopsUidGenerator( const TroopsUidGenerator & ) = delete;
+
         TroopsUidGenerator & operator=( const TroopsUidGenerator & ) = delete;
 
         uint32_t GetUnique()
@@ -70,44 +74,50 @@ namespace Battle
     class Arena
     {
     public:
-        Arena( Army & army1, Army & army2, s32 index, bool local, Rand::DeterministicRandomGenerator & randomGenerator );
+        Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::DeterministicRandomGenerator & randomGenerator );
+        Arena( const Arena & ) = delete;
+        Arena( Arena && ) = delete;
+
         ~Arena();
 
-        void Turns( void );
-        bool BattleValid( void ) const;
+        Arena & operator=( const Arena & ) = delete;
+        Arena & operator=( Arena && ) = delete;
 
-        bool CanBreakAutoBattle( void ) const;
-        void BreakAutoBattle( void );
+        void Turns();
+        bool BattleValid() const;
 
-        u32 GetCurrentTurn( void ) const;
-        Result & GetResult( void );
+        bool AutoBattleInProgress() const;
+        bool CanToggleAutoBattle() const;
+
+        uint32_t GetCurrentTurn() const;
+        Result & GetResult();
 
         const HeroBase * getCommander( const int color ) const;
         const HeroBase * getEnemyCommander( const int color ) const;
-        const HeroBase * GetCommander1( void ) const;
-        const HeroBase * GetCommander2( void ) const;
-        const HeroBase * GetCurrentCommander( void ) const;
+        const HeroBase * GetCommander1() const;
+        const HeroBase * GetCommander2() const;
+        const HeroBase * GetCurrentCommander() const;
 
-        Force & GetForce1( void );
-        Force & GetForce2( void );
-        Force & getForce( const int color );
-        Force & getEnemyForce( const int color );
-        Force & GetCurrentForce( void );
+        Force & GetForce1() const;
+        Force & GetForce2() const;
+        Force & getForce( const int color ) const;
+        Force & getEnemyForce( const int color ) const;
+        Force & GetCurrentForce() const;
 
-        int GetArmyColor1( void ) const;
-        int GetArmyColor2( void ) const;
-        int GetCurrentColor( void ) const;
-        int GetOppositeColor( int ) const;
+        int GetArmyColor1() const;
+        int GetArmyColor2() const;
+        int GetCurrentColor() const;
+        // Returns the color of the army opposite to the army of the given color. If there is no army of the given color,
+        // returns the color of the attacking army.
+        int GetOppositeColor( const int col ) const;
 
-        Unit * GetTroopBoard( s32 );
-        const Unit * GetTroopBoard( s32 ) const;
+        Unit * GetTroopBoard( int32_t );
+        const Unit * GetTroopBoard( int32_t ) const;
 
-        Unit * GetTroopUID( u32 );
-        const Unit * GetTroopUID( u32 ) const;
+        Unit * GetTroopUID( uint32_t );
+        const Unit * GetTroopUID( uint32_t ) const;
 
-        const Unit * GetEnemyMaxQuality( int ) const;
-
-        const SpellStorage & GetUsageSpells( void ) const;
+        const SpellStorage & GetUsageSpells() const;
 
         bool DialogBattleSummary( const Result & res, const std::vector<Artifact> & artifacts, bool allowToCancel ) const;
         int DialogBattleHero( const HeroBase & hero, const bool buttons, Status & status ) const;
@@ -124,25 +134,22 @@ namespace Battle
         Indexes CalculateTwoMoveOverlap( int32_t indexTo, uint32_t movementRange = 0 ) const;
         Indexes GetPath( const Unit &, const Position & ) const;
 
-        // Returns the cell nearest to the end of the path to the cell with the given index (according to the ArenaPathfinder)
-        // and reachable for the current unit (to which the current board passability information relates) or -1 if the cell
-        // with the given index is unreachable in principle
+        // Returns the cell nearest to the end of the path to the cell with the given index (according to the AIBattlePathfinder)
+        // and reachable for the current unit (to which the current board passability information relates) or -1 if the cell with
+        // the given index is unreachable in principle
         int32_t GetNearestReachableCell( const Unit & currentUnit, const int32_t dst ) const;
 
         void ApplyAction( Command & );
 
-        TargetsInfo GetTargetsForDamage( const Unit &, Unit &, s32 ) const;
-        void TargetsApplyDamage( Unit &, const Unit &, TargetsInfo & ) const;
         TargetsInfo GetTargetsForSpells( const HeroBase * hero, const Spell & spell, int32_t dest, bool * playResistSound = nullptr );
-        void TargetsApplySpell( const HeroBase *, const Spell &, TargetsInfo & ) const;
 
         bool isSpellcastDisabled() const;
-        bool isDisableCastSpell( const Spell &, std::string * msg );
+        bool isDisableCastSpell( const Spell &, std::string * msg = nullptr );
 
-        bool GraveyardAllowResurrect( s32, const Spell & ) const;
-        const Unit * GraveyardLastTroop( s32 ) const;
+        bool GraveyardAllowResurrect( int32_t, const Spell & ) const;
+        const Unit * GraveyardLastTroop( int32_t ) const;
         std::vector<const Unit *> GetGraveyardTroops( const int32_t hexIndex ) const;
-        Indexes GraveyardClosedCells( void ) const;
+        Indexes GraveyardClosedCells() const;
 
         bool CanSurrenderOpponent( int color ) const;
         bool CanRetreatOpponent( int color ) const;
@@ -154,20 +161,22 @@ namespace Battle
         void ApplyActionSpellDefaults( Command &, const Spell & );
 
         bool IsShootingPenalty( const Unit &, const Unit & ) const;
-        int GetICNCovr( void ) const;
+        int GetICNCovr() const;
 
-        u32 GetCastleTargetValue( int ) const;
+        uint32_t GetCastleTargetValue( int ) const;
 
         int32_t GetFreePositionNearHero( const int heroColor ) const;
 
         const Rand::DeterministicRandomGenerator & GetRandomGenerator() const;
 
-        static Board * GetBoard( void );
+        static Board * GetBoard();
         static Tower * GetTower( int );
-        static Bridge * GetBridge( void );
-        static const Castle * GetCastle( void );
-        static Interface * GetInterface( void );
-        static Graveyard * GetGraveyard( void );
+        static Bridge * GetBridge();
+        static const Castle * GetCastle();
+        static Interface * GetInterface();
+        static Graveyard * GetGraveyard();
+
+        static bool isAnyTowerPresent();
 
         enum
         {
@@ -184,22 +193,21 @@ namespace Battle
         };
 
     private:
-        Arena( const Arena & ) = delete;
-        Arena & operator=( const Arena & ) = delete;
-
-        Arena( const Arena && ) = delete;
-        Arena & operator=( const Arena && ) = delete;
-
         void RemoteTurn( const Unit &, Actions & );
         void HumanTurn( const Unit &, Actions & );
 
         void TurnTroop( Unit * troop, const Units & orderHistory );
         void TowerAction( const Tower & );
 
-        void SetCastleTargetValue( int, u32 );
-        void CatapultAction( void );
+        void SetCastleTargetValue( int, uint32_t );
+        void CatapultAction();
 
-        std::vector<int> GetCastleTargets( void ) const;
+        static TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir );
+
+        static void TargetsApplyDamage( Unit & attacker, TargetsInfo & targets );
+        static void TargetsApplySpell( const HeroBase * hero, const Spell & spell, TargetsInfo & targets );
+
+        std::vector<int> GetCastleTargets() const;
         TargetsInfo TargetsForChainLightning( const HeroBase * hero, int32_t attackedTroopIndex );
         std::vector<Unit *> FindChainLightningTargetIndexes( const HeroBase * hero, Unit * firstUnit );
 
@@ -215,17 +223,29 @@ namespace Battle
         void ApplyActionCatapult( Command & );
         void ApplyActionAutoBattle( Command & );
 
-        void BattleProcess( Unit &, Unit & b2, s32 = -1, int = 0 );
+        // Performs an actual attack of one unit (defender) by another unit (attacker), applying the attacker's
+        // built-in magic, if necessary. If the given index of the target cell of the attack (dst) is negative,
+        // then an attempt will be made to calculate it automatically based on the adjacency of the unit cells.
+        // If the given direction of the attack (dir) is negative, then an attempt will be made to calculate it
+        // automatically. When an attack is made by firing a shot, the dir should be UNKNOWN (zero).
+        void BattleProcess( Unit & attacker, Unit & defender, int32_t dst = -1, int dir = -1 );
 
-        Unit * CreateElemental( const Spell & );
-        Unit * CreateMirrorImage( Unit &, s32 );
+        // Creates and returns a fully combat-ready elemental, which will be already placed on the board. It's
+        // the caller's responsibility to make sure that this elemental can be created using the given spell
+        // before calling this method.
+        Unit * CreateElemental( const Spell & spell );
+        // Creates and returns a mirror image of the given unit. The returned mirror image will have an invalid
+        // position, which should be updated separately.
+        Unit * CreateMirrorImage( Unit & unit );
 
         Force * army1;
         Force * army2;
         Units * armies_order;
 
         int current_color;
-        int preferredColor; // preferred color for the next unit in the battle queue
+        // The color of the army of the last unit that performed a full-fledged action (skipping a turn due to
+        // bad morale is not considered as such)
+        int _lastActiveUnitArmyColor;
 
         const Castle * castle;
         const bool _isTown; // If the battle is in town (village or castle).
@@ -241,13 +261,11 @@ namespace Battle
         SpellStorage usage_spells;
 
         Board board;
-        ArenaPathfinder _pathfinder;
+        AIBattlePathfinder _globalAIPathfinder;
         int icn_covr;
 
-        u32 current_turn;
+        uint32_t current_turn;
         int auto_battle;
-
-        bool end_turn;
 
         Rand::DeterministicRandomGenerator & _randomGenerator;
 
@@ -259,7 +277,7 @@ namespace Battle
         };
     };
 
-    Arena * GetArena( void );
+    Arena * GetArena();
 }
 
 #endif

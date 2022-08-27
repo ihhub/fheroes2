@@ -1,5 +1,11 @@
-fheroes2 (0.9.11-1) UNRELEASED; urgency=medium
+fheroes2 (0.9.18-1) UNRELEASED; urgency=medium
 
-  * Initial release
+  * 0.9.18 release
 
- -- fheroes2 team <fhomm2@gmail.com>  Thu, 23 Dec 2021 00:00:00 +0000
+ -- fheroes2 team <fhomm2@gmail.com>  Wed, 10 Aug 2022 00:00:00 +0000
+
+fheroes2 (0.9.17-1) UNRELEASED; urgency=medium
+
+  * 0.9.17 release
+
+ -- fheroes2 team <fhomm2@gmail.com>  Mon, 11 Jul 2022 00:00:00 +0000

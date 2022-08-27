@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -126,7 +127,7 @@ namespace Interface
 
             for ( int32_t y = 0; y < colrows.height; ++y ) {
                 for ( int32_t x = 0; x < colrows.width; ++x ) {
-                    RedrawBackground( fheroes2::Rect( dstpt.x, dstpt.y, itemsz.width, itemsz.height ), dstsf );
+                    RedrawBackground( { dstpt.x, dstpt.y, itemsz.width, itemsz.height }, dstsf );
 
                     dstpt.x += hspace + itemsz.width;
                 }
@@ -143,7 +144,7 @@ namespace Interface
             for ( int32_t y = 0; y < colrows.height; ++y ) {
                 for ( int32_t x = 0; x < colrows.width; ++x ) {
                     if ( posItem != items.end() ) {
-                        RedrawItemIter( posItem, fheroes2::Rect( dstpt.x, dstpt.y, itemsz.width, itemsz.height ), dstsf );
+                        RedrawItemIter( posItem, { dstpt.x, dstpt.y, itemsz.width, itemsz.height }, dstsf );
 
                         ++posItem;
                     }
@@ -156,7 +157,7 @@ namespace Interface
             }
         }
 
-        bool QueueEventProcessing( void )
+        bool QueueEventProcessing()
         {
             const fheroes2::Point & cursor = LocalEvent::Get().GetMouseCursor();
 
@@ -251,7 +252,7 @@ namespace Interface
         }
 
     private:
-        void RescanSize( void )
+        void RescanSize()
         {
             barsz.width = colrows.width ? colrows.width * itemsz.width + ( colrows.width - 1 ) * hspace : 0;
             barsz.height = colrows.height ? colrows.height * itemsz.height + ( colrows.height - 1 ) * vspace : 0;
@@ -371,7 +372,7 @@ namespace Interface
             return &curItemPos.second;
         }
 
-        s32 GetSelectedIndex()
+        int32_t GetSelectedIndex()
         {
             return std::distance( ItemsBar<Item>::GetBeginItemIter(), GetCurItemIter() );
         }

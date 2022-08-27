@@ -1,7 +1,403 @@
+version 0.9.18 (10 August 2022)
+- speed up rendering of Mini Map area
+- fix missing shadows from path arrows when they are on the edge of screen
+- render correct digging holes for terrains
+- add monster fading animation when both wandering monsters and hero are dying after a battle
+- fix incorrect boat fading animation
+- do not show digging holes on Puzzle Map
+- fix out of view rendering of boats and heroes
+- fix Ultimate Artifact digging conditions
+- fix the logic of joining monsters for free and for money
+- do not draw objects over the map edge if they are in fog
+- fix cases of boats being shifted when a hero boards it
+- fix wrong rendering priority of Hero and Jail
+- do not render shadow of a tall monster over another monster nearby
+- properly render trees and Sawmill
+- fix Fountain being displayed over a moving hero, not under
+- fix certain shadows of objects being too dark
+- fix cases when hero's flag was not being displayed properly when a hero stands near a tall object
+- fix cases when some parts of heroes being displayed over other objects
+- fix monsters being displayed over mountains
+- draw a flag over Magic Garden object
+- draw Adventure Map decors in the same way as in the original game
+- fix flag rendering priority from Windmill
+- fix incorrect moving boat rendering in relation to other boats
+- fix boat being cut near Magellan Maps object
+- fix incorrect boat rendering priority
+- fix wasteland terrain object displayed over hero's sprite
+- fix Mine's flag being displayed over a hero
+- fix cases when a moving hero being drawn over other heroes
+- fix cases when some parts of a ship can be seen through terrain objects
+- fix cases when hero overlaps ship while passing nearby
+- hero does not step on route arrows anymore
+- fix the pre-battle arrangement of neutral troops
+- add separate sound font for SDL 2 builds
+- fix paused music being played with old music volume while restarting it
+- fix hero starting experience values
+- fix amount of experience from Tree of Knowledge
+- fix missing retaliation delay after last animation frame
+- fix music being too quiet while fast switching between music types (Windows OS)
+- fix crashes on Windows 8 using MIDI music
+- fix external audio not always returning to on after turning volume to zero (Windows OS)
+- fix horse's steps being faded while crossing terrain border using MIDI sound (Windows OS)
+- fix sound volume being lower during combat (Windows OS) 
+- fix no sounds situation when music is off even when sounds are not (Windows OS)
+- show correct hero's level and experience on level up
+- fix incorrect castle's area leading to wrong castle's info
+- add missing window frame for hero's dialog during level up
+- fix number of ghosts and splitting for Shipwreck, Haunt and Abandoned Mine cases
+- update Bulgarian Translation
+- update treasure chest AI decision logic
+- fix a case when a hero got 2 Magic Books
+- update Russian and Hungarian translations
+- add support for loading of MIDI sound fonts
+- show upgraded monster images in Adventure Map objects upon a successful upgrade
+- fix redrawing of the status window in cases when the hero's army or the castle garrison change without changing focus
+- make best AI fighter as a champion
+- update Polish translation
+
+version 0.9.17 (11 July 2022)
+- fix possible crashes during sound playback
+- always ask about rewriting an existing save file
+- allow to remap Hotkeys within the game
+- fix distance evaluation during Scouting
+- fix invalid logic when neutral monsters whose number was set in the Editor did not grow at all
+- add The Price of Loyalty team to credits
+- show a window stating about missing video files for campaigns
+- fix the class of a hero named Joseph
+- fix extra shadow being drawn for Hero Screen dialog on high resolutions
+- align File Options dialog position
+- fix Campaign Window button flickering
+- fix missing column of pixels in Map Scenario Info window
+- update French translation
+- allow different translations of "Red Tower"
+- implement AI courier hero role for better logistics
+- fix situation when MIDI music still continues to play during fast switching between music types
+- fix case when Adventure Map sounds are still being played while opening Main Menu
+- AI should keep some creatures in reserve for castle defence
+- update Ukrainian translation
+- update Norwegian translation
+- increase Genie special ability to 20% like it is done in the original game and correct log messages during battle
+- remember the last open page in Spell Book during battle
+- fix possible synchronization issues for audio playback
+- enhance AI logic towards defending its castles
+- improve usage of spell on Adventure Map by AI
+- fix displaying of negative resources in dialog
+- fix situations when AI was hiring too many heroes
+- respect the Ultimate Artifact's radius specified by the map creator
+- update Polish translation
+- fix the castle's well build logic for AI
+- align hero's button in level-up dialog
+- fix scenarios when ambient sounds from Adventure Map objects are still played while opening a castle's window
+- fix cases when Random Monsters appear from a different level due to invalid format of an object on the map
+- update Mine's sprite properly after defeating Ghosts in Abandoned Mine
+- fix multiple issues related to hero's info popup window and updating his position on a mini-map
+- update sounds and music before a hero making an action
+- add an environmental sound for Freeman's Foundry
+- add initial implementation of true "Evil" interface in the game
+- add missing Ultimate Artifact successful digging sound
+- do not play pre-battle sound if sounds are off
+- fix potential thread-access issues for Nintendo Switch
+- fix possible inter-thread race for Adventure Map Status window
+- fix a delay in game while crossing a terrain and playing MIDI music
+
+version 0.9.16 (12 June 2022)
+- add Flatpak support
+- add Belarusian translation
+- swap spell icons for Death Wave and Death Ripple
+- make the "no interface" mode more usable
+- add music resume ability for MP3, OGG and FLAC formats
+- update translation guide
+- replace "C with cedilla" with "latin C" in the French translation
+- do not auto-save at the end of a turn if the player has been vanquished on that turn
+- fix Puzzle window exit button rendering
+- add sound for rocks in water with seagulls
+- fix Sorceress captain purchase building rendering
+- fix issues with Romanian translation
+- properly deal with human-only colors in single player mode
+- fix the invalid behavior of "no interface" mode
+- introduce 3D audio option
+- change adventure map environment sounds for every step hero moves
+- fix boats being considered as free tiles
+- if attacker is able to attack multiple targets at once and has a built-in spell, then this spell should be applied to any (but only one) of the targets
+- fix some typos in translation texts
+- take into account AI hero's role during meeting
+- fix false highscore entry while cancelling to continue a campaign
+- highlight latest highscore after completion scenario/campaign
+- show evil resolution icon for Evil interface
+- add truncated shadow to Scenario Information window
+- generate missing parts of Red Tower sprite
+- fix incorrect tiles being marked as road
+- fix multiple cases while using Mirror Image and Summon Elemental spells
+- fix the victory/defeat verification logic
+- update error message if hero tries to open a spell book and does not have one
+- improve status text if only one troop is selected
+- fix inability to add new entries with similar high scores
+- add Campaign high scores
+- fix dwelling popup window on adventure map
+- make AI to be aware about map conditions
+- fix incorrect hero icon in adventure interface
+- do not show languages with empty translations
+- add Swedish language option and font support
+- update Ukrainian translation
+- well MAX buy: add condition for not enough room, make recruitment happen in guest hero's army too, more text flexibility
+- add Portuguese language option and initial font generation
+- speed up AI turn
+- impose a limit of turns for an attacking AI-controlled hero
+- cache AI hero's and neutral monsters' strength during AI turn
+- add initial Spanish language support
+- make castle's flags for Knight and Wizard factions appear in a correct color
+- add window header for campaign awards and bonuses
+- update German translation
+- fix plural forms translation for some languages
+- fix character filtering when generating the save file name
+- update Polish translation
+- fix Red Tower rendering with Rainbow
+- expand Hotkey usage on adventure map
+- fix German font support
+
+version 0.9.15 (07 May 2022)
+- add HotKey window and expand the list of system options
+- do not allow higher-level Mage Guilds to be built if the previous-level Mage Guild has not been built yet
+- Battle Only mode: always assign a random spell to the Spell Scroll
+- add initial support for Romanian language
+- add more conditions to define a blocking AI hero
+- fix incorrect video playback on Descendants campaign, scenario 5
+- change some descriptions of campaign awards and bonuses
+- do not auto save after the completion of the last scenario in a campaign
+- add images and full description of bonuses and awards by right mouse click
+- fix some incorrect campaign bonuses
+- display None if no awards available for the current scenario
+- add hot keys to select bonuses
+- fix rendering of campaign UI window as it was very slow on response on changing bonuses
+- fix missing kingdom income value for scenarios with additional bonus resources
+- game type interface for campaign window must be unique and should not depend on overall game interface
+- allow already selected scenario to appear in ALL scenarios list
+- improved Week of the creature window
+- changed town portal's text and condition to be similar to town gate
+- update Russian translation
+- properly extract animations from the GOG distribution of HoMM2 for Windows
+- update French translation
+- improve search for video files
+- add text truncation method to be used in campaign's choices and awards
+- encourage AI to explore more
+- redesign Hot Key event file handling
+- add double-lined headers to adventure map options
+- add Belarusian, Bulgarian and Ukrainian languages support
+- populate resolution list based till the lowest resolution
+- fix 1000 and 100000 short values display
+- update hero quick info popup dialog
+- disable Town Portal dialog OK button by default
+- changed AI's turn to be repeated multiple times for heroes
+- generate French 'MIN' button
+- generate French 'GIFT' button
+- add Translation Context for Secondary Skill Campaign Bonuses
+- add Ogre Alliance and Dwarfbane full strings for translation
+- fix the positioning of the damage info popup
+- update Norwegian translation
+- fix calculation of morale & luck modifiers for in-castle army without a commander
+- properly calculate the number of travel days to the destination tile for a hero
+- AI should replenish lost spell points more frequently
+- do not allow a hero to have multiple spell books in the "Battle Only" mode
+- fix rendering of the Arm of the Martyr's shadow
+- AI uses View All spell to scout fog
+- hero should have at least 69MP to cast Dimension Door, Town Gate and Town Portal spells
+- fix spacing of player squares in Select Recipients window and properly center resource icons for "Your Funds" and "Planned Gift" horizontally
+- fix French small font Cedilla c rendering
+- update Polish translation
+- reserve half of AI spell points for Dimension Door spell
+- hero should be able to cast spells that consume movement points if he is able to move from his current tile
+- fix MP3 support in Windows SDL1 packages
+- reset the mixer volume before playing video soundtracks
+- expand Test Support mode to cover all campaign related actions
+- add Black-White cursor support
+- add music control options to the configuration dialog
+- fix failing music file search
+- properly work with guardians on the objects that can be captured
+- fix call to get secondary skill name leading to a crash
+- fix multiple issues related to the interface settings
+- allow to change the auto battle settings if player's army doesn't have a commander
+- fix a crash when a hero tries to get a second magic book
+- always grab the mouse in fullscreen mode to properly support devices with notch
+
+version 0.9.14 (09 April 2022)
+- generate Italian "Battle Only" button
+- fix line breaking in welcome message for various languages
+- update and improve Italian translation
+- generate Polish "Battle Only" button
+- fix switching fullscreen mode in Mac OS for certain resolutions
+- generate French "Battle Only" button
+- fix a crash due to an assertion failure when the shooter hits back at a unit under Berserk spell
+- fix scrolling in full-screen mode in case of an aspect ratio mismatch
+- fix rare cases for incorrect letters being generated while switching languages
+- add Norwegian language option and font generation
+- update French translation
+- add initial implementation of Dimension Door spell usage for AI
+- fix Gold Watch artifact invalid bonus
+- rework artifact logic with proper separation and calculations of artifact's bonuses and curses
+- play only one sound while getting ar artifact within an event
+- speed up castle and hero icons on adventure map
+- add "Battle Only" button generation for German version of the game
+- fix Mage Guild bottom status bar rendering
+- fix incorrect artifact discovery description
+- add in-game Italian language option and diacritics
+- fix army order option related crash
+- fix High Score Music after winning scenario
+- adjust AI spell estimates
+- fix rendering of bottom bar in Well dialog
+- update Polish translation
+- remove unnecessary call to play VICTORY music during Campaign intro
+- fix the calculation of the cost of surrender
+- fix Town Gate spell logic
+- prioritize AI castles further from enemy territory
+- take the weekly growth into account when calculating monthly population growth bonuses and fines
+- update minimap colors
+- optimize AI fighter hero priorities
+- add native macOS application generation
+- build player influence map to inform AI kingdom development decisions
+- speed up data reading from AGG files
+- update Norwegian translation
+- add a popup window for battle log
+- add a mandatory requirement of h2d file being present 
+- fix incorrect logic for palette application function
+- fix position of armies for quick info window for both castle and enemy hero
+- set the direction for attacking and defending units in battle in a more OG-like way
+- fix incorrect popup monster window in Well
+- greatly speedup heavy video loading
+- do not render extra frame while playing an audio only video file
+- properly center the first sentence in the battle surrender dialog
+- dynamically update Game Language dialog
+- fix translation and UI in Tavern dialog
+- add MP3 file support
+- increase the number of sound channels to 32
+- allow a hero to surrender to the captain during the siege
+- fix rare case of Shipwreck having no battle
+- display experience amount for Tree of Knowledge
+- fix Witch's Hut message body
+- for Anduran assembly window show artifact name as a title
+- for hero level up window with one secondary skill make the skill right clickable
+- for hero level up window with no secondary skill display the primary skill icon
+- add search for FLAC files if OGG files aren't found
+- add popup dialogs for Arena's skill choices
+
+version 0.9.13 (07 March 2022)
+- show captain quick info dialog in Kingdom Overview
+- add popup windows for campaign awards and bonuses
+- remove Map loading screen
+- add popup windows for campaign scenario dialog buttons
+- remember map size selection in New Game dialog
+- allow selecting options while restarting a campaign scenario
+- display the correct size of player-owned objects on mini-map
+- add base support for text mode
+- fix Sirens logic, AI interaction and UI
+- show missing last frame of wince animation
+- add dynamic generation of scrollbar slider
+- fix Sirens action dialogs
+- add missing artifact discovery event description
+- fix some French translations
+- fix directory and file detection on Windows
+- Kingdom Income window was changed to have Kingdom Income title and Kingdom Income per day to be more obvious for a player
+- events on land and sea now show artifact and resources in one window
+- most of objects related dialogs contain right mouse clickable icons
+- Pyramid visit outcome shows the correct horizontal position of icons and all icons are right mouse clickable
+- fix Artifact frame drawings
+- fix text if translation for a specific language was not found
+- update AI hero recruitment logic
+- allow a short name for all campaign bonus artifacts and spells
+- AI should save current unit if retreating
+- add Czech language support
+- fix monster strength heuristic regression
+- make AI more aggressive in losing situation
+- fix the logic of protecting tiles by neutral monsters
+- change music and surrounding sounds while jumping through Stone Liths
+- fix possible AI pathfinding issues while loading another scenario
+- fix battle grid and ballista info area
+- add popup dialogs for right mouse click in resolution dialog
+- fix hero name not being updated while switching languages
+- fix possible errors for translation related code
+- force to use only the original palette from the game
+- fix lowercase conversion of translations
+- AI archers should not ignore blinded units during battle
+- add missing take-off and landing sounds for Vampire and Vampire Lord
+- reset environment sounds and music theme at the beginning and at the end of the human turn only
+- fix player's allies configuration for 'Defeat the other side' victory condition
+- fix sounds of Lean-To and Skeleton objects
+- rename "Lean To" -> "Lean-To"
+- allow AI fog discovery only for teleport endpoints with reachability information
+- fix missing sounds for some objects on map
+- do not play castle's music if a terrain does not have its own music
+- fix missing sound of player's turn in Hot Seat mode
+- adjust monthly monster spawn
+- fix neutral monster growth formula
+- fix necromancer build order in castles for AI
+- allow a boat to move near the coast above the center of a town
+
+version 0.9.12 (07 February 2022)
+- add a confirmation window for restarting a campaign scenario
+- fix wrong scenario order in "Voyage Home" campaign
+- add Betrayal missing for Roland and Archibald campaigns
+- fix logic for switching on and off Auto battle option
+- fix normal and retaliation attack of monsters with multi-cell attack abilities
+- fix missing logging during certain spell casts in battle
+- implement a heuristic for hiring heroes that does not allow to offer the same heroes for hire in several kingdoms at the same time, if there are enough free heroes
+- use 'r' key instead of Escape to Retreat during battle
+- fix Hydra behavior under Berserk or Hypnotize spell effect
+- add highlighting of cells attacked by a unit capable of attacking all neighboring cells
+- fix a penetrating attack made by a wide unit from the tail cell
+- fix attack cursor display during battle
+- fix cases when no monsters were spawned at the beginning of a month
+- display ? symbol instead of empty space for unrecognized symbols
+- fix crashes while rendering non-English text
+- fix rare cases of a screen being black on a startup of the application
+- make language area and campaign choice selection to cover text too
+- fix campaign text translation
+- modify army order setting
+- add German font generation
+- fix multiple issues related the hero recruitment process
+- update Russian translation
+- show monster info on right click in castle's well
+- fix cases when the last AI hero was blocking an entrance to Stone Liths
+- fix small font positioning for Polish GoG version
+- fix most of existing cases with passabilities
+- fix the display of properties for maps from the list in scenario selection dialog
+- update German translation
+- fix translation of saved default player names
+- improve the AI fog discovery logic
+- AI properly uses Whirlpools for path calculation
+- fix cases when a hero was able to create a path over another hero
+- display dead monster information during battle 
+- fix Mass Dispel usage during battle
+- update Polish translation
+- fix Russian small k per in both fonts
+- AI heroes properly calculate paths through water
+- add translation context for color and syntax flexibility to Traveller's Tent and Barrier
+- fix Knowledge spite rendering for Arena
+- fix sounds after battle cases
+- fix missing Russian letters on Switch
+- changed captain's name spelling
+- adds missing "pourcent" in description of Golden Bow
+- fix cases when a hero was able to walk on water
+- update French translation
+- show in-game only players for Gift marketplace option
+- fix glowing red pixel in Warlock's Red Tower
+- improve AI behavior during castle defence
+- fix CPU player icon's extra color column
+- show proper language name for mismatched by language save files
+- add a spell title when no enough SP window appears
+- fix a possible crash in French letters generation
+- fix usage of plural/singular translations for map's objects
+- update the logic of re-calculating the paths of heroes on the adventure map
+- add support of Buka version of Anim2 directory for video playback
+- always enable autosave
+- generate proper Russian E with 2 dots on top
+- allow translation of "Cost per troop:" text
+- update UI elements in marketplace window
+- fix a crash during AI turn when AI army has an invalid monster slot
+
 version 0.9.11 (23 December 2021)
 - add popup dialog for map information
 - fix hero's path not being updated properly after new monster month event
-- show available game languages in vertical order rather than horizonal
+- show available game languages in vertical order rather than horizontal
 - fix handling of national symbols in the paths to music files on Windows
 - improve AI behavior during castle defence
 - fix pressed buttons' background
@@ -1421,7 +1817,7 @@ version 0.7 (18th April 2020)
 - required building names are displayed on a separate line each
 - fix no building image for already built building for right mouse click
 - fix incorrect image for Captains Quarters
-- renamed 'Free Heroes II' to 'Free Heroes of Might and Magic II'
+- renamed 'Free Heroes II' to 'fheroes2'
 - show disabled "Continue Movement" button for castle 
 - fix number of monsters being displayed in a black box
 - add a script to download a demo version of the original game

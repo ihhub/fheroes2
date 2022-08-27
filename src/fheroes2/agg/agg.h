@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,17 +37,26 @@ namespace AGG
         AGGInitializer( const AGGInitializer & ) = delete;
         AGGInitializer & operator=( const AGGInitializer & ) = delete;
 
-        ~AGGInitializer();
+        ~AGGInitializer() = default;
+
+        const std::string & getOriginalAGGFilePath() const
+        {
+            return _originalAGGFilePath;
+        }
+
+        const std::string & getExpansionAGGFilePath() const
+        {
+            return _expansionAGGFilePath;
+        }
+
+    private:
+        bool init();
+
+        std::string _originalAGGFilePath;
+        std::string _expansionAGGFilePath;
     };
 
-    std::vector<uint8_t> LoadBINFRM( const char * frm_file );
-
-    void LoadLOOPXXSounds( const std::vector<int> & vols, bool asyncronizedCall = false );
-    void PlaySound( int m82, bool asyncronizedCall = false );
-    void PlayMusic( int mus, bool loop = true, bool asyncronizedCall = false );
-    void ResetMixer( bool asyncronizedCall = false );
-
-    std::vector<uint8_t> ReadChunk( const std::string & key );
+    std::vector<uint8_t> getDataFromAggFile( const std::string & key );
 }
 
 #endif

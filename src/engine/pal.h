@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,20 +28,21 @@ namespace PAL
     enum class PaletteType : int
     {
         STANDARD, // default
-        YELLOW_TEXT,
-        WHITE_TEXT,
-        GRAY_TEXT,
-        RED, // blood lust, ...
-        GRAY, // petrify, ...
+        YELLOW_FONT,
+        WHITE_FONT,
+        GRAY_FONT,
+        RED, // for Blood Lust spell animation
+        GRAY, // for Petrify spell effect
         BROWN,
-        TAN, // puzzle
+        TAN, // for Puzzle image generation
         NO_CYCLE,
         MIRROR_IMAGE,
         DARKENING, // for disabled buttons
+        GOOD_TO_EVIL_INTERFACE, // a custom palette for converting Good Interface images into Evil Interface images.
         CUSTOM
     };
 
-    std::vector<uint8_t> GetCyclingPalette( int stepId );
+    std::vector<uint8_t> GetCyclingPalette( const uint32_t stepId );
     const std::vector<uint8_t> & GetPalette( const PaletteType type );
     std::vector<uint8_t> CombinePalettes( const std::vector<uint8_t> & first, const std::vector<uint8_t> & second );
 }

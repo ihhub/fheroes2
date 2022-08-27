@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -65,7 +65,7 @@ namespace Bin_Info
         return fheroes2::getMonsterData( monsterId ).binFileName;
     }
 
-    MonsterAnimInfo::MonsterAnimInfo( int monsterID, const std::vector<u8> & bytes )
+    MonsterAnimInfo::MonsterAnimInfo( int monsterID, const std::vector<uint8_t> & bytes )
         : moveSpeed( 450 )
         , shootSpeed( 0 )
         , flightSpeed( 0 )
@@ -80,7 +80,7 @@ namespace Bin_Info
 
         const uint8_t * data = bytes.data();
 
-        eyePosition = fheroes2::Point( getValue<int16_t>( data, 1 ), getValue<int16_t>( data, 3 ) );
+        eyePosition = { getValue<int16_t>( data, 1 ), getValue<int16_t>( data, 3 ) };
 
         for ( size_t moveID = 0; moveID < 7; ++moveID ) {
             std::vector<int> moveOffset;
@@ -241,13 +241,13 @@ namespace Bin_Info
             return mapIterator->second;
         }
         else {
-            const MonsterAnimInfo info( monsterID, AGG::LoadBINFRM( Bin_Info::GetFilename( monsterID ) ) );
+            const MonsterAnimInfo info( monsterID, AGG::getDataFromAggFile( Bin_Info::GetFilename( monsterID ) ) );
             if ( info.isValid() ) {
                 _animMap[monsterID] = info;
                 return info;
             }
             else {
-                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( monsterID ) << ", index: " << monsterID );
+                DEBUG_LOG( DBG_ENGINE, DBG_WARN, "missing BIN FRM data: " << Bin_Info::GetFilename( monsterID ) << ", index: " << monsterID )
             }
         }
         return MonsterAnimInfo();

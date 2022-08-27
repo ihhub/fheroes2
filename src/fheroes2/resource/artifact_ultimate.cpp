@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +40,7 @@ void UltimateArtifact::Set( const int32_t position, const Artifact & a )
     _index = position;
     _isFound = false;
 
-    // Since artifact cannot be places closer than 9 tiles from any edge and puzzle screen is 14 x 14 tiles it's absolutely safe to put offset within [-2; +2] range.
+    // Since artifact cannot be placed closer than 9 tiles from any edge and puzzle screen is 14 x 14 tiles it's absolutely safe to put offset within [-2; +2] range.
     _offset.x = Rand::Get( 0, 4 ) - 2;
     _offset.y = Rand::Get( 0, 4 ) - 2;
 }
@@ -52,16 +53,6 @@ fheroes2::Image UltimateArtifact::GetPuzzleMapSurface() const
 const Artifact & UltimateArtifact::GetArtifact() const
 {
     return *this;
-}
-
-bool UltimateArtifact::isFound() const
-{
-    return _isFound;
-}
-
-void UltimateArtifact::markAsFound()
-{
-    _isFound = true;
 }
 
 bool UltimateArtifact::isPosition( const int32_t position ) const
@@ -86,15 +77,5 @@ StreamBase & operator<<( StreamBase & msg, const UltimateArtifact & ultimate )
 StreamBase & operator>>( StreamBase & msg, UltimateArtifact & ultimate )
 {
     Artifact & artifact = ultimate;
-    msg >> artifact >> ultimate._index >> ultimate._isFound;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_097_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_PRE_097_RELEASE ) {
-        msg >> ultimate._offset;
-    }
-    else {
-        ultimate._offset = fheroes2::Point();
-    }
-
-    return msg;
+    return msg >> artifact >> ultimate._index >> ultimate._isFound >> ultimate._offset;
 }

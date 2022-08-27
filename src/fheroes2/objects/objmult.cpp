@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,7 +42,7 @@ namespace
 
 int ObjMult::GetPassable( const uint8_t index )
 {
-    const u8 restricted[] = {2, 4, 58, 63, 64, 65, 70, 72, 73, 89, 104};
+    const uint8_t restricted[] = { 2, 4, 58, 63, 64, 65, 70, 72, 73, 89, 104 };
 
     if ( isShadow( index ) )
         return DIRECTION_ALL;
@@ -51,7 +52,7 @@ int ObjMult::GetPassable( const uint8_t index )
     return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
 }
 
-bool ObjMult::isAction( u32 index )
+bool ObjMult::isAction( uint32_t index )
 {
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
@@ -63,8 +64,8 @@ bool ObjMult::isShadow( const uint8_t index )
 
 int ObjMul2::GetPassable( const uint8_t index )
 {
-    const u8 disabled[] = {46, 76, 77, 124, 125, 126, 221, 213};
-    const u8 restricted[] = {16, 18, 19, 25, 27, 51, 52, 53, 55, 57, 78, 79, 81, 98, 105, 128, 136, 187, 207, 209, 214, 215, 217};
+    const uint8_t disabled[] = { 46, 76, 77, 124, 125, 126, 221, 213 };
+    const uint8_t restricted[] = { 16, 18, 19, 25, 27, 51, 52, 53, 55, 57, 78, 79, 81, 98, 105, 128, 136, 187, 207, 209, 214, 215, 217 };
 
     if ( isShadow( index ) )
         return DIRECTION_ALL;
@@ -74,7 +75,7 @@ int ObjMul2::GetPassable( const uint8_t index )
     return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
 }
 
-bool ObjMul2::isAction( u32 index )
+bool ObjMul2::isAction( uint32_t index )
 {
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
@@ -84,7 +85,7 @@ bool ObjMul2::isShadow( const uint8_t index )
     return objMul2ShadowBitset[index];
 }
 
-int ObjMul2::GetActionObject( u32 index )
+int ObjMul2::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 15:
@@ -129,7 +130,7 @@ int ObjMul2::GetActionObject( u32 index )
     return MP2::OBJ_ZERO;
 }
 
-int ObjMult::GetActionObject( u32 index )
+int ObjMult::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 35:

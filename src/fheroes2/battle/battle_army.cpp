@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,72 +32,25 @@
 #include "settings.h"
 #include "speed.h"
 
-#define CAPACITY 16
-
-namespace Battle
+namespace
 {
-    bool AllowPart1( const Unit * b )
-    {
-        return !b->Modes( TR_SKIPMOVE ) && b->GetSpeed() > Speed::STANDING;
-    }
-
-    bool AllowPart2( const Unit * b )
-    {
-        return b->Modes( TR_SKIPMOVE ) && b->GetSpeed() > Speed::STANDING;
-    }
-
-    Unit * ForceGetCurrentUnitPart( Units & units1, Units & units2, bool part1, bool units1_first, bool orders_mode )
-    {
-        auto allowPartFunc = part1 ? AllowPart1 : AllowPart2;
-        Units::iterator it1 = std::find_if( units1.begin(), units1.end(), allowPartFunc );
-        Units::iterator it2 = std::find_if( units2.begin(), units2.end(), allowPartFunc );
-        Unit * result = nullptr;
-
-        if ( it1 != units1.end() && it2 != units2.end() ) {
-            if ( ( *it1 )->GetSpeed() == ( *it2 )->GetSpeed() ) {
-                result = units1_first ? *it1 : *it2;
-            }
-            else if ( part1 || Settings::Get().ExtBattleReverseWaitOrder() ) {
-                if ( ( *it1 )->GetSpeed() > ( *it2 )->GetSpeed() )
-                    result = *it1;
-                else if ( ( *it2 )->GetSpeed() > ( *it1 )->GetSpeed() )
-                    result = *it2;
-            }
-            else {
-                if ( ( *it1 )->GetSpeed() < ( *it2 )->GetSpeed() )
-                    result = *it1;
-                else if ( ( *it2 )->GetSpeed() < ( *it1 )->GetSpeed() )
-                    result = *it2;
-            }
-        }
-        else if ( it1 != units1.end() )
-            result = *it1;
-        else if ( it2 != units2.end() )
-            result = *it2;
-
-        if ( result && orders_mode ) {
-            if ( it1 != units1.end() && result == *it1 )
-                units1.erase( it1 );
-            else if ( it2 != units2.end() && result == *it2 )
-                units2.erase( it2 );
-        }
-
-        return result;
-    }
+    const size_t unitSizeCapacity = 16;
 }
 
 Battle::Units::Units()
 {
-    reserve( CAPACITY );
+    reserve( unitSizeCapacity );
 }
 
-Battle::Units::Units( const Units & units, bool filter )
+Battle::Units::Units( const Units & units, const bool filter )
     : std::vector<Unit *>()
 {
-    reserve( CAPACITY < units.size() ? units.size() : CAPACITY );
+    reserve( unitSizeCapacity < units.size() ? units.size() : unitSizeCapacity );
     assign( units.begin(), units.end() );
-    if ( filter )
+
+    if ( filter ) {
         erase( std::remove_if( begin(), end(), []( const Unit * unit ) { return !unit->isValid(); } ), end() );
+    }
 }
 
 void Battle::Units::SortSlowest()
@@ -109,7 +63,7 @@ void Battle::Units::SortFastest()
     std::stable_sort( begin(), end(), Army::FastestTroop );
 }
 
-void Battle::Units::SortArchers( void )
+void Battle::Units::SortArchers()
 {
     std::sort( begin(), end(), []( const Troop * t1, const Troop * t2 ) { return t1->isArchers() && !t2->isArchers(); } );
 }
@@ -133,18 +87,33 @@ Battle::Force::Force( Army & parent, bool opposite, const Rand::DeterministicRan
 {
     uids.reserve( army.Size() );
 
-    for ( u32 index = 0; index < army.Size(); ++index ) {
-        const Troop * troop = army.GetTroop( index );
-        const u32 position = army.isSpreadFormat() ? index * 22 : 22 + index * 11;
-        u32 uid = 0;
+    for ( size_t i = 0; i < army.Size(); ++i ) {
+        const Troop * troop = army.GetTroop( i );
 
-        if ( troop && troop->isValid() ) {
-            push_back( new Unit( *troop, opposite ? position + 10 : position, opposite, randomGenerator, generator.GetUnique() ) );
-            back()->SetArmy( army );
-            uid = back()->GetUID();
+        if ( troop == nullptr || !troop->isValid() ) {
+            uids.push_back( 0 );
+
+            continue;
         }
 
-        uids.push_back( uid );
+        int32_t idx = army.isSpreadFormat() ? static_cast<int32_t>( i ) * 22 : 22 + static_cast<int32_t>( i ) * 11;
+
+        if ( opposite ) {
+            idx += ( troop->isWide() ? 9 : 10 );
+        }
+        else if ( troop->isWide() ) {
+            idx += 1;
+        }
+
+        Position pos;
+        pos.Set( idx, troop->isWide(), opposite );
+
+        assert( pos.GetHead() != nullptr && ( !troop->isWide() || pos.GetTail() != nullptr ) );
+
+        push_back( new Unit( *troop, pos, opposite, randomGenerator, generator.GetUnique() ) );
+        back()->SetArmy( army );
+
+        uids.push_back( back()->GetUID() );
     }
 }
 
@@ -154,22 +123,27 @@ Battle::Force::~Force()
         delete *it;
 }
 
-const HeroBase * Battle::Force::GetCommander( void ) const
+const HeroBase * Battle::Force::GetCommander() const
 {
     return army.GetCommander();
 }
 
-HeroBase * Battle::Force::GetCommander( void )
+HeroBase * Battle::Force::GetCommander()
 {
     return army.GetCommander();
 }
 
-int Battle::Force::GetColor( void ) const
+const Battle::Units & Battle::Force::getUnits() const
+{
+    return *this;
+}
+
+int Battle::Force::GetColor() const
 {
     return army.GetColor();
 }
 
-int Battle::Force::GetControl( void ) const
+int Battle::Force::GetControl() const
 {
     return army.GetControl();
 }
@@ -182,7 +156,7 @@ bool Battle::Force::isValid( const bool considerBattlefieldArmy /* = true */ ) c
     }
 
     // Consider only the state of the original army
-    for ( uint32_t index = 0; index < army.Size(); ++index ) {
+    for ( size_t index = 0; index < army.Size(); ++index ) {
         const Troop * troop = army.GetTroop( index );
 
         if ( troop && troop->isValid() ) {
@@ -197,20 +171,35 @@ bool Battle::Force::isValid( const bool considerBattlefieldArmy /* = true */ ) c
     return false;
 }
 
-uint32_t Battle::Force::GetSurrenderCost( void ) const
+uint32_t Battle::Force::GetSurrenderCost() const
 {
     double res = 0;
 
-    for ( const_iterator it = begin(); it != end(); ++it )
-        if ( ( *it )->isValid() ) {
-            const payment_t & payment = ( *it )->GetCost();
-            res += payment.gold;
+    // Consider only the units from the original army
+    for ( size_t index = 0; index < army.Size(); ++index ) {
+        const Troop * troop = army.GetTroop( index );
+
+        if ( troop && troop->isValid() ) {
+            const Unit * unit = FindUID( uids.at( index ) );
+
+            if ( unit && unit->isValid() ) {
+                res += unit->GetSurrenderCost().gold;
+            }
         }
+    }
 
     const HeroBase * commander = GetCommander();
+
     if ( commander ) {
-        const Artifact art( Artifact::STATESMAN_QUILL );
-        double mod = commander->hasArtifact( art ) ? art.ExtraValue() / 100.0 : 0.5;
+        const std::vector<int32_t> costReductionPercent
+            = commander->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::SURRENDER_COST_REDUCTION_PERCENT );
+        double mod = 0.5;
+        if ( !costReductionPercent.empty() ) {
+            mod = 1;
+            for ( const int32_t value : costReductionPercent ) {
+                mod = mod * value / 100;
+            }
+        }
 
         switch ( commander->GetLevelSkill( Skill::Secondary::DIPLOMACY ) ) {
         case Skill::Level::BASIC:
@@ -222,14 +211,18 @@ uint32_t Battle::Force::GetSurrenderCost( void ) const
         case Skill::Level::EXPERT:
             mod *= 0.4;
             break;
+        default:
+            break;
         }
+
         res *= mod;
     }
+
     // Total cost should always be at least 1 gold
     return res >= 1 ? static_cast<uint32_t>( res + 0.5 ) : 1;
 }
 
-void Battle::Force::NewTurn( void )
+void Battle::Force::NewTurn()
 {
     if ( GetCommander() )
         GetCommander()->ResetModes( Heroes::SPELLCASTED );
@@ -237,80 +230,7 @@ void Battle::Force::NewTurn( void )
     std::for_each( begin(), end(), []( Unit * unit ) { unit->NewTurn(); } );
 }
 
-void Battle::Force::UpdateOrderUnits( const Force & army1, const Force & army2, const Unit * activeUnit, int preferredColor, const Units & orderHistory, Units & orders )
-{
-    orders.clear();
-    orders.insert( orders.end(), orderHistory.begin(), orderHistory.end() );
-
-    {
-        Units units1( army1, true );
-        Units units2( army2, true );
-
-        units1.SortFastest();
-        units2.SortFastest();
-
-        Unit * unit = nullptr;
-
-        while ( ( unit = ForceGetCurrentUnitPart( units1, units2, true, preferredColor != army2.GetColor(), true ) ) != nullptr ) {
-            if ( unit != activeUnit && unit->isValid() ) {
-                preferredColor = unit->GetArmyColor() == army1.GetColor() ? army2.GetColor() : army1.GetColor();
-
-                orders.push_back( unit );
-            }
-        }
-    }
-
-    if ( Settings::Get().ExtBattleSoftWait() ) {
-        Units units1( army1, true );
-        Units units2( army2, true );
-
-        if ( Settings::Get().ExtBattleReverseWaitOrder() ) {
-            units1.SortFastest();
-            units2.SortFastest();
-        }
-        else {
-            std::reverse( units1.begin(), units1.end() );
-            std::reverse( units2.begin(), units2.end() );
-
-            units1.SortSlowest();
-            units2.SortSlowest();
-        }
-
-        Unit * unit = nullptr;
-
-        while ( ( unit = ForceGetCurrentUnitPart( units1, units2, false, preferredColor != army2.GetColor(), true ) ) != nullptr ) {
-            if ( unit != activeUnit && unit->isValid() ) {
-                preferredColor = unit->GetArmyColor() == army1.GetColor() ? army2.GetColor() : army1.GetColor();
-
-                orders.push_back( unit );
-            }
-        }
-    }
-}
-
-Battle::Unit * Battle::Force::GetCurrentUnit( const Force & army1, const Force & army2, bool part1, int preferredColor )
-{
-    Units units1( army1, true );
-    Units units2( army2, true );
-
-    if ( part1 || Settings::Get().ExtBattleReverseWaitOrder() ) {
-        units1.SortFastest();
-        units2.SortFastest();
-    }
-    else {
-        std::reverse( units1.begin(), units1.end() );
-        std::reverse( units2.begin(), units2.end() );
-
-        units1.SortSlowest();
-        units2.SortSlowest();
-    }
-
-    Unit * result = ForceGetCurrentUnitPart( units1, units2, part1, preferredColor != army2.GetColor(), false );
-
-    return result && result->isValid() ? result : nullptr;
-}
-
-Troops Battle::Force::GetKilledTroops( void ) const
+Troops Battle::Force::GetKilledTroops() const
 {
     Troops killed;
 
@@ -367,9 +287,9 @@ bool Battle::Force::HasMonster( const Monster & mons ) const
     return std::any_of( begin(), end(), [&mons]( const Unit * unit ) { return unit->isMonster( mons.GetID() ); } );
 }
 
-u32 Battle::Force::GetDeadCounts( void ) const
+uint32_t Battle::Force::GetDeadCounts() const
 {
-    u32 res = 0;
+    uint32_t res = 0;
 
     for ( const_iterator it = begin(); it != end(); ++it )
         res += ( *it )->GetDead();
@@ -377,9 +297,9 @@ u32 Battle::Force::GetDeadCounts( void ) const
     return res;
 }
 
-u32 Battle::Force::GetDeadHitPoints( void ) const
+uint32_t Battle::Force::GetDeadHitPoints() const
 {
-    u32 res = 0;
+    uint32_t res = 0;
 
     for ( const_iterator it = begin(); it != end(); ++it ) {
         res += static_cast<Monster *>( *it )->GetHitPoints() * ( *it )->GetDead();
@@ -390,7 +310,7 @@ u32 Battle::Force::GetDeadHitPoints( void ) const
 
 void Battle::Force::SyncArmyCount()
 {
-    for ( u32 index = 0; index < army.Size(); ++index ) {
+    for ( uint32_t index = 0; index < army.Size(); ++index ) {
         Troop * troop = army.GetTroop( index );
 
         if ( troop && troop->isValid() ) {

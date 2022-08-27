@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -64,7 +65,7 @@ struct Focus : std::pair<int, void *>
         : std::pair<int, void *>( FOCUS_UNSEL, nullptr )
     {}
 
-    void Reset( void )
+    void Reset()
     {
         first = FOCUS_UNSEL;
         second = nullptr;
@@ -80,11 +81,11 @@ struct Focus : std::pair<int, void *>
         second = ptr;
     }
 
-    Castle * GetCastle( void )
+    Castle * GetCastle()
     {
         return first == FOCUS_CASTLE && second ? static_cast<Castle *>( second ) : nullptr;
     }
-    Heroes * GetHeroes( void )
+    Heroes * GetHeroes()
     {
         return first == FOCUS_HEROES && second ? static_cast<Heroes *>( second ) : nullptr;
     }
@@ -92,13 +93,13 @@ struct Focus : std::pair<int, void *>
 
 struct Control
 {
-    virtual int GetControl( void ) const = 0;
+    virtual int GetControl() const = 0;
     virtual ~Control() = default;
 
-    bool isControlAI( void ) const;
-    bool isControlHuman( void ) const;
-    bool isControlRemote( void ) const;
-    bool isControlLocal( void ) const;
+    bool isControlAI() const;
+    bool isControlHuman() const;
+    bool isControlRemote() const;
+    bool isControlLocal() const;
 };
 
 class Player : public BitModes, public Control
@@ -107,28 +108,44 @@ public:
     explicit Player( int col = Color::NONE );
     ~Player() override = default;
 
-    bool isColor( int ) const;
-    bool isPlay( void ) const;
+    bool isColor( int col ) const
+    {
+        return col == color;
+    }
+
+    bool isPlay() const;
 
     void SetColor( int );
     void SetRace( int );
     void SetControl( int );
     void SetPlay( bool );
     void SetFriends( int );
-    void SetName( const std::string & );
+    void SetName( const std::string & newName );
 
-    int GetControl( void ) const override;
-    int GetColor( void ) const;
-    int GetRace( void ) const;
-    int GetFriends( void ) const;
+    int GetControl() const override;
+
+    int GetColor() const
+    {
+        return color;
+    }
+
+    int GetRace() const
+    {
+        return race;
+    }
+
+    int GetFriends() const
+    {
+        return friends;
+    }
 
     std::string GetDefaultName() const;
-    const std::string & GetName( void ) const;
+    std::string GetName() const;
 
     std::string GetPersonalityString() const;
 
-    Focus & GetFocus( void );
-    const Focus & GetFocus( void ) const;
+    Focus & GetFocus();
+    const Focus & GetFocus() const;
 
 protected:
     friend StreamBase & operator<<( StreamBase &, const Player & );
@@ -139,7 +156,7 @@ protected:
     int race;
     int friends;
     std::string name;
-    u32 id;
+    uint32_t id;
     Focus focus;
     std::shared_ptr<AI::Base> _ai;
 };
@@ -159,15 +176,17 @@ public:
 
     void Init( int colors );
     void Init( const Maps::FileInfo & );
-    void clear( void );
+    void clear();
 
-    void SetStartGame( void );
+    void SetStartGame();
     int GetColors( int control = 0xFF, bool strong = false ) const;
-    int GetActualColors( void ) const;
-    std::string String( void ) const;
+    int GetActualColors() const;
+    std::string String() const;
 
-    Player * GetCurrent( void );
-    const Player * GetCurrent( void ) const;
+    const std::vector<Player *> & getVector() const;
+
+    Player * GetCurrent();
+    const Player * GetCurrent() const;
 
     static void Set( const int color, Player * player );
     static Player * Get( int color );
@@ -179,8 +198,8 @@ public:
     static void SetPlayerRace( int color, int race );
     static void SetPlayerControl( int color, int ctrl );
     static void SetPlayerInGame( int color, bool );
-    static int HumanColors( void );
-    static int FriendColors( void );
+    static int HumanColors();
+    static int FriendColors();
 
     int current_color;
 };

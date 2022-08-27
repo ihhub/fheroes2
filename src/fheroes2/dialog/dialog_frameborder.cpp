@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -65,7 +66,7 @@ int Dialog::FrameBorder::BorderHeight() const
     return border;
 }
 
-void Dialog::FrameBorder::SetPosition( int32_t posx, int32_t posy, uint32_t encw, uint32_t ench )
+void Dialog::FrameBorder::SetPosition( int32_t posx, int32_t posy, int32_t encw, int32_t ench )
 {
     restorer.restore();
 
@@ -88,7 +89,7 @@ void Dialog::FrameBorder::SetPosition( int32_t posx, int32_t posy, uint32_t encw
     area.x = posx + border;
     area.y = posy + border;
 
-    top = fheroes2::Rect( posx, posy, area.width, border );
+    top = fheroes2::Rect( rect.x, rect.y, rect.width, border );
 }
 
 const fheroes2::Rect & Dialog::FrameBorder::GetTop() const

@@ -40,7 +40,7 @@ try {
 
                     return ($output | Select-String -Pattern "^[0-9A-Fa-f]{64}$").Line.ToUpper()
                 } catch {
-                    Write-Host -ForegroundColor Yellow "WARNING: Neither Get-FileHash cmdlet nor certutil.exe are supported on this system, hash of downloaded file cannot be verified"
+                    Write-Host -ForegroundColor Yellow "WARNING: Neither the Get-FileHash cmdlet nor certutil.exe is supported on this system, the hash of the downloaded file cannot be verified"
 
                     if ($null -Ne $output) {
                         Write-Host -ForegroundColor Yellow (-Join("certutil.exe output: ", ($output | Out-String)))
@@ -62,7 +62,7 @@ try {
     Write-Host -ForegroundColor Green (-Join("This script will download the demo version of the original Heroes of Might and Magic II`r`n", `
                                              "It may take a few minutes, please wait...`r`n"))
 
-    Write-Host "[1/5] determining destination directory"
+    Write-Host "[1/5] determining the destination directory"
 
     $destPath = $null
 
@@ -90,7 +90,7 @@ try {
         }
     } catch {
         if ($null -Eq $Env:APPDATA) {
-            Write-Host -ForegroundColor Red "FATAL ERROR: Unable to determine destination directory"
+            Write-Host -ForegroundColor Red "FATAL ERROR: Unable to determine the destination directory"
 
             return
         }
@@ -104,7 +104,7 @@ try {
 
     Write-Host -ForegroundColor Green (-Join("Destination directory: ", (Resolve-Path $destPath).Path))
 
-    Write-Host "[2/5] downloading demo version"
+    Write-Host "[2/5] downloading the demo version"
 
     $demoPath = "$destPath\demo"
 
@@ -125,7 +125,7 @@ try {
         return
     }
 
-    Write-Host "[3/5] downloading wing32.dll library"
+    Write-Host "[3/5] downloading the wing32.dll library"
 
     Get-FileViaHTTP -URL $wing32URL -FilePath "$demoPath\wing32.zip"
 
@@ -146,13 +146,13 @@ try {
 
     $zip = $shell.NameSpace((Resolve-Path "$demoPath\h2demo.zip").Path)
 
-    foreach ($item in $zip.items()) {
+    foreach ($item in $zip.Items()) {
         $shell.Namespace((Resolve-Path $demoPath).Path).CopyHere($item, 0x14)
     }
 
     $zip = $shell.NameSpace((Resolve-Path "$demoPath\wing32.zip").Path)
 
-    foreach ($item in $zip.items()) {
+    foreach ($item in $zip.Items()) {
         $shell.Namespace((Resolve-Path $demoPath).Path).CopyHere($item, 0x14)
     }
 
@@ -171,10 +171,10 @@ try {
     $data = $shell.NameSpace((Resolve-Path "$demoPath\DATA").Path)
     $maps = $shell.NameSpace((Resolve-Path "$demoPath\MAPS").Path)
 
-    foreach ($item in $data.items()) {
+    foreach ($item in $data.Items()) {
         $shell.Namespace((Resolve-Path $dataPath).Path).CopyHere($item, 0x14)
     }
-    foreach ($item in $maps.items()) {
+    foreach ($item in $maps.Items()) {
         $shell.Namespace((Resolve-Path $mapsPath).Path).CopyHere($item, 0x14)
     }
 } catch {
@@ -182,5 +182,5 @@ try {
 } finally {
     Write-Host "Press any key to exit..."
 
-    [void][System.Console]::ReadKey($true);
+    [void][System.Console]::ReadKey($true)
 }

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,8 +29,8 @@
 #include "battle_cell.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "luck.h"
 #include "monster.h"
@@ -41,6 +42,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 #include "ui_text.h"
 #include "world.h"
 
@@ -99,7 +101,7 @@ namespace
         case Battle::SP_PARALYZE:
             return Spell::PARALYZE;
         case Battle::SP_STONE:
-            return Spell::STONE;
+            return Spell::PETRIFY;
         default:
             // Did you add another mode? Please add a corresponding spell.
             assert( 0 );
@@ -215,25 +217,23 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
             le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
             // upgrade
-            if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::EVENT_UPGRADE_TROOP ) ) ) {
+            if ( buttonUpgrade.isEnabled() && ( le.MouseClickLeft( buttonUpgrade.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::UPGRADE_TROOP ) ) ) {
                 if ( UPGRADE_DISABLE & flags ) {
-                    const std::string msg( _( "You can't afford to upgrade your troops!" ) );
-                    if ( Dialog::YES == Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), Dialog::OK ) ) {
-                        result = Dialog::UPGRADE;
-                        break;
-                    }
+                    const fheroes2::Text description( _( "You can't afford to upgrade your troops!" ), fheroes2::FontType::normalWhite() );
+                    fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::OK, troop.GetTotalUpgradeCost() );
                 }
                 else {
-                    const std::string msg = _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" );
+                    const fheroes2::Text description( _( "Your troops can be upgraded, but it will cost you dearly. Do you wish to upgrade them?" ),
+                                                      fheroes2::FontType::normalWhite() );
 
-                    if ( Dialog::YES == Dialog::ResourceInfo( "", msg, troop.GetUpgradeCost(), Dialog::YES | Dialog::NO ) ) {
+                    if ( fheroes2::showResourceMessage( fheroes2::Text( "", {} ), description, Dialog::YES | Dialog::NO, troop.GetTotalUpgradeCost() ) == Dialog::YES ) {
                         result = Dialog::UPGRADE;
                         break;
                     }
                 }
             }
             // dismiss
-            if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::EVENT_DISMISS_TROOP ) )
+            if ( buttonDismiss.isEnabled() && ( le.MouseClickLeft( buttonDismiss.area() ) || Game::HotKeyPressEvent( Game::HotKeyEvent::DISMISS_TROOP ) )
                  && Dialog::YES
                         == Dialog::Message( troop.GetPluralName( troop.GetCount() ), _( "Are you sure you want to dismiss this army?" ), Font::BIG,
                                             Dialog::YES | Dialog::NO ) ) {
@@ -241,14 +241,14 @@ int Dialog::ArmyInfo( const Troop & troop, int flags, bool isReflected )
                 break;
             }
             // exit
-            if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow ) {
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 result = Dialog::CANCEL;
                 break;
             }
 
             for ( const auto & spellInfo : spellAreas ) {
                 if ( le.MousePressRight( spellInfo.first ) ) {
-                    Dialog::SpellInfo( spellInfo.second, nullptr, false );
+                    fheroes2::SpellDialogElement( spellInfo.second, nullptr ).showPopup( Dialog::ZERO );
                     break;
                 }
             }
@@ -350,7 +350,7 @@ void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
     dst_pt.x = dst.x + offsetX;
     text.Blit( dst_pt.x, dst_pt.y );
 
-    if ( troop.isBattle() ) {
+    if ( troop.isBattle() && troop.GetCount() != 0 ) {
         text.Set( std::string( _( "Hit Points Left" ) ) + ":" );
         dst_pt.x = dst.x - text.w();
         dst_pt.y += offsetY;
@@ -392,7 +392,7 @@ void DrawMonsterStats( const fheroes2::Point & dst, const Troop & troop )
     text.Blit( dst_pt.x, dst_pt.y );
 }
 
-fheroes2::Sprite GetModesSprite( u32 mod )
+fheroes2::Sprite GetModesSprite( uint32_t mod )
 {
     switch ( mod ) {
     case Battle::SP_BLOODLUST:
@@ -436,9 +436,9 @@ std::vector<std::pair<fheroes2::Rect, Spell>> DrawBattleStats( const fheroes2::P
 {
     std::vector<std::pair<fheroes2::Rect, Spell>> output;
 
-    const uint32_t modes[] = { Battle::SP_BLOODLUST,    Battle::SP_BLESS,     Battle::SP_HASTE,     Battle::SP_SHIELD,   Battle::SP_STONESKIN,
-                               Battle::SP_DRAGONSLAYER, Battle::SP_STEELSKIN, Battle::SP_ANTIMAGIC, Battle::SP_CURSE,    Battle::SP_SLOW,
-                               Battle::SP_BERSERKER,    Battle::SP_HYPNOTIZE, Battle::SP_BLIND,     Battle::SP_PARALYZE, Battle::SP_STONE };
+    const uint32_t modes[15] = { Battle::SP_BLOODLUST,    Battle::SP_BLESS,     Battle::SP_HASTE,     Battle::SP_SHIELD,   Battle::SP_STONESKIN,
+                                 Battle::SP_DRAGONSLAYER, Battle::SP_STEELSKIN, Battle::SP_ANTIMAGIC, Battle::SP_CURSE,    Battle::SP_SLOW,
+                                 Battle::SP_BERSERKER,    Battle::SP_HYPNOTIZE, Battle::SP_BLIND,     Battle::SP_PARALYZE, Battle::SP_STONE };
 
     int32_t ow = 0;
     int32_t spritesWidth = 0;
@@ -485,7 +485,7 @@ std::vector<std::pair<fheroes2::Rect, Spell>> DrawBattleStats( const fheroes2::P
             const fheroes2::Point imageOffset( ow, dst.y + maxSpriteHeight - sprite.height() );
 
             fheroes2::Blit( sprite, fheroes2::Display::instance(), imageOffset.x, imageOffset.y );
-            output.emplace_back( std::make_pair( fheroes2::Rect( imageOffset.x, imageOffset.y, sprite.width(), sprite.height() ), modeToSpell( spell.mode ) ) );
+            output.emplace_back( fheroes2::Rect( imageOffset.x, imageOffset.y, sprite.width(), sprite.height() ), modeToSpell( spell.mode ) );
 
             if ( spell.duration > 0 ) {
                 text.Set( std::to_string( spell.duration ), Font::SMALL );
@@ -513,7 +513,7 @@ std::vector<std::pair<fheroes2::Rect, Spell>> DrawBattleStats( const fheroes2::P
             const fheroes2::Point imageOffset( ow - sprite.width(), dst.y + maxSpriteHeight - sprite.height() );
 
             fheroes2::Blit( sprite, fheroes2::Display::instance(), imageOffset.x, imageOffset.y );
-            output.emplace_back( std::make_pair( fheroes2::Rect( imageOffset.x, imageOffset.y, sprite.width(), sprite.height() ), modeToSpell( spellIt->mode ) ) );
+            output.emplace_back( fheroes2::Rect( imageOffset.x, imageOffset.y, sprite.width(), sprite.height() ), modeToSpell( spellIt->mode ) );
 
             if ( spellIt->duration > 0 ) {
                 text.Set( std::to_string( spellIt->duration ), Font::SMALL );
@@ -538,13 +538,13 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
     if ( !descriptions.empty() ) {
         const int32_t descriptionWidth = 210;
         const int32_t maximumRowCount = 3;
-        const int32_t rowHeight = fheroes2::Text( std::string(), { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } ).height();
+        const int32_t rowHeight = fheroes2::Text( std::string(), fheroes2::FontType::smallWhite() ).height();
 
         bool asSolidText = true;
         if ( descriptions.size() <= static_cast<size_t>( maximumRowCount ) ) {
             asSolidText = false;
             for ( const std::string & sentence : descriptions ) {
-                if ( fheroes2::Text( sentence, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } ).width() > descriptionWidth ) {
+                if ( fheroes2::Text( sentence, fheroes2::FontType::smallWhite() ).width() > descriptionWidth ) {
                     asSolidText = true;
                     break;
                 }
@@ -561,7 +561,7 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
                 description += sentence;
             }
 
-            const fheroes2::Text descriptionText( description, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+            const fheroes2::Text descriptionText( description, fheroes2::FontType::smallWhite() );
             const int32_t rowCount = descriptionText.rows( descriptionWidth );
 
             descriptionText.draw( offset.x + 37, offset.y + 185 + ( maximumRowCount - rowCount ) * rowHeight, descriptionWidth, fheroes2::Display::instance() );
@@ -569,7 +569,7 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
         else {
             int32_t sentenceId = maximumRowCount - static_cast<int32_t>( descriptions.size() ); // safe to cast as we check the size before.
             for ( const std::string & sentence : descriptions ) {
-                const fheroes2::Text descriptionText( sentence, { fheroes2::FontSize::SMALL, fheroes2::FontColor::WHITE } );
+                const fheroes2::Text descriptionText( sentence, fheroes2::FontType::smallWhite() );
 
                 descriptionText.draw( offset.x + 37, offset.y + 185 + sentenceId * rowHeight, descriptionWidth, fheroes2::Display::instance() );
                 ++sentenceId;
@@ -578,10 +578,12 @@ void DrawMonsterInfo( const fheroes2::Point & offset, const Troop & troop )
     }
 
     // amount
-    text.Set( std::to_string( troop.GetCount() ), Font::BIG );
-    pos.x = offset.x + offsetXAmountBox + widthAmountBox / 2 - text.w() / 2;
-    pos.y = offset.y + offsetYAmountBox + heightAmountBox / 2 - text.h() / 2;
-    text.Blit( pos.x, pos.y );
+    if ( troop.GetCount() != 0 ) {
+        text.Set( std::to_string( troop.GetCount() ), Font::BIG );
+        pos.x = offset.x + offsetXAmountBox + widthAmountBox / 2 - text.w() / 2;
+        pos.y = offset.y + offsetYAmountBox + heightAmountBox / 2 - text.h() / 2;
+        text.Blit( pos.x, pos.y );
+    }
 }
 
 void DrawMonster( fheroes2::RandomMonsterAnimation & monsterAnimation, const Troop & troop, const fheroes2::Point & offset, bool isReflected, bool isAnimated,
@@ -608,10 +610,9 @@ void DrawMonster( fheroes2::RandomMonsterAnimation & monsterAnimation, const Tro
         monsterAnimation.increment();
 }
 
-int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
+int Dialog::ArmyJoinFree( const Troop & troop )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -619,7 +620,7 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     const Text title( _( "Followers" ), Font::YELLOW_BIG );
 
     std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you.\nDo you accept?" );
-    StringReplace( message, "%{monster}", StringLower( troop.GetMultiName() ) );
+    StringReplace( message, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
 
     TextBox textbox( message, Font::BIG, BOXAREA_WIDTH );
     const int buttons = Dialog::YES | Dialog::NO;
@@ -634,24 +635,8 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     textbox.Blit( pos.x, posy );
 
     fheroes2::ButtonGroup btnGroup( pos, buttons );
-
-    const int armyButtonIcn = isEvilInterface ? ICN::EVIL_ARMY_BUTTON : ICN::GOOD_ARMY_BUTTON;
-    const fheroes2::Sprite & armyButtonReleased = fheroes2::AGG::GetICN( armyButtonIcn, 0 );
-    const fheroes2::Sprite & armyButtonPressed = fheroes2::AGG::GetICN( armyButtonIcn, 1 );
-
-    fheroes2::ButtonSprite btnHeroes = fheroes2::makeButtonWithBackground( pos.x + pos.width / 2 - armyButtonReleased.width() / 2, pos.y + pos.height - 35,
-                                                                           armyButtonReleased, armyButtonPressed, display );
-
-    if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() || hero.GetArmy().HasMonster( troop ) )
-        btnHeroes.disable();
-    else {
-        // TextBox textbox2(_("Not room in\nthe garrison"), Font::SMALL, 100);
-        // textbox2.Blit(btnHeroes.x - 35, btnHeroes.y - 30);
-        btnHeroes.draw();
-        btnGroup.button( 0 ).disable();
-    }
-
     btnGroup.draw();
+
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -660,38 +645,15 @@ int Dialog::ArmyJoinFree( const Troop & troop, Heroes & hero )
     int result = Dialog::ZERO;
 
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        if ( btnHeroes.isEnabled() )
-            le.MousePressLeft( btnHeroes.area() ) ? btnHeroes.drawOnPress() : btnHeroes.drawOnRelease();
-
         result = btnGroup.processEvents();
-
-        if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroes.area() ) ) {
-            LocalEvent::GetClean();
-            hero.OpenDialog( false, false, true, true );
-
-            if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() ) {
-                btnGroup.button( 0 ).enable();
-            }
-            else {
-                btnGroup.button( 0 ).disable();
-            }
-
-            btnGroup.draw();
-
-            display.render();
-        }
-        else if ( le.MousePressRight( btnHeroes.area() ) ) {
-            Dialog::Message( "", _( "View Hero" ), Font::BIG );
-        }
     }
 
     return result;
 }
 
-int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & hero )
+int Dialog::ArmyJoinWithCost( const Troop & troop, const uint32_t join, const uint32_t gold )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
-    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -712,7 +674,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
 
     StringReplace( message, "%{offer}", join );
     StringReplace( message, "%{total}", troop.GetCount() );
-    StringReplace( message, "%{monster}", StringLower( troop.GetPluralName( join ) ) );
+    StringReplace( message, "%{monster}", Translation::StringLower( troop.GetPluralName( join ) ) );
     StringReplace( message, "%{gold}", gold );
 
     TextBox textbox( message, Font::BIG, BOXAREA_WIDTH );
@@ -737,65 +699,9 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     posy += text.h() + 40;
     fheroes2::Blit( sprite, display, pos.x + ( pos.width - sprite.width() ) / 2, posy );
 
-    TextSprite tsTotal( std::to_string( gold ) + " (" + _( "Total: " ) + std::to_string( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")",
-                        Font::SMALL, pos.x + ( pos.width - text.w() ) / 2, posy + sprite.height() + 5 );
-    tsTotal.Show();
-
     fheroes2::ButtonGroup btnGroup( pos, buttons );
-
-    const int icnMarket = isEvilInterface ? ICN::EVIL_MARKET_BUTTON : ICN::GOOD_MARKET_BUTTON;
-    const int icnHeroes = isEvilInterface ? ICN::EVIL_ARMY_BUTTON : ICN::GOOD_ARMY_BUTTON;
-
-    fheroes2::ButtonSprite btnMarket = fheroes2::makeButtonWithBackground( pos.x + pos.width / 2 - 60 - 36, posy, fheroes2::AGG::GetICN( icnMarket, 0 ),
-                                                                           fheroes2::AGG::GetICN( icnMarket, 1 ), display );
-
-    fheroes2::ButtonSprite btnHeroes
-        = fheroes2::makeButtonWithBackground( pos.x + pos.width / 2 + 60, posy, fheroes2::AGG::GetICN( icnHeroes, 0 ), fheroes2::AGG::GetICN( icnHeroes, 1 ), display );
-
-    Kingdom & kingdom = hero.GetKingdom();
-
-    fheroes2::Rect btnMarketArea = btnMarket.area();
-    fheroes2::Rect btnHeroesArea = btnHeroes.area();
-
-    if ( !kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) ) )
-        btnGroup.button( 0 ).disable();
-
-    TextSprite tsNotEnoughGold;
-    tsNotEnoughGold.SetPos( btnMarketArea.x - 25, btnMarketArea.y - 17 );
-
-    fheroes2::ImageRestorer marketButtonRestorer( display, btnMarket.area().x, btnMarket.area().y, btnMarket.area().width, btnMarket.area().height );
-
-    if ( kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) ) || kingdom.GetCountMarketplace() == 0 ) {
-        tsNotEnoughGold.Hide();
-        btnMarket.disable();
-        btnMarket.hide();
-    }
-    else {
-        std::string msg = _( "Not enough gold (%{gold})" );
-        StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
-        tsNotEnoughGold.SetText( msg, Font::SMALL );
-        tsNotEnoughGold.Show();
-        btnMarket.enable();
-        btnMarket.draw();
-    }
-
-    TextSprite noRoom1;
-    noRoom1.SetText( _( "No room in" ), Font::SMALL );
-    noRoom1.SetPos( btnHeroesArea.x - 16, btnHeroesArea.y - 30 );
-    TextSprite noRoom2;
-    noRoom2.SetText( _( "the garrison" ), Font::SMALL );
-    noRoom2.SetPos( btnHeroesArea.x - 23, btnHeroesArea.y - 15 );
-
-    if ( hero.GetArmy().GetCount() < hero.GetArmy().Size() || hero.GetArmy().HasMonster( troop ) )
-        btnHeroes.disable();
-    else {
-        noRoom1.Show();
-        noRoom2.Show();
-        btnHeroes.draw();
-        btnGroup.button( 0 ).disable();
-    }
-
     btnGroup.draw();
+
     display.render();
 
     LocalEvent & le = LocalEvent::Get();
@@ -804,75 +710,7 @@ int Dialog::ArmyJoinWithCost( const Troop & troop, u32 join, u32 gold, Heroes & 
     int result = Dialog::ZERO;
 
     while ( result == Dialog::ZERO && le.HandleEvents() ) {
-        if ( btnMarket.isEnabled() )
-            le.MousePressLeft( btnMarketArea ) ? btnMarket.drawOnPress() : btnMarket.drawOnRelease();
-
-        if ( btnHeroes.isEnabled() )
-            le.MousePressLeft( btnHeroesArea ) ? btnHeroes.drawOnPress() : btnHeroes.drawOnRelease();
-
         result = btnGroup.processEvents();
-
-        bool needRedraw = false;
-
-        if ( btnMarket.isEnabled() && le.MouseClickLeft( btnMarketArea ) ) {
-            Marketplace( kingdom, false );
-
-            needRedraw = true;
-        }
-        else if ( btnHeroes.isEnabled() && le.MouseClickLeft( btnHeroesArea ) ) {
-            LocalEvent::GetClean();
-            hero.OpenDialog( false, false, true, true );
-
-            needRedraw = true;
-        }
-
-        if ( !needRedraw ) {
-            continue;
-        }
-
-        tsTotal.Hide();
-        tsTotal.SetText( std::to_string( gold ) + " (total: " + std::to_string( world.GetKingdom( hero.GetColor() ).GetFunds().Get( Resource::GOLD ) ) + ")" );
-        tsTotal.Show();
-
-        const bool allowPayment = kingdom.AllowPayment( payment_t( Resource::GOLD, gold ) );
-        const bool enoughRoom = hero.GetArmy().GetCount() < hero.GetArmy().Size() || hero.GetArmy().HasMonster( troop );
-
-        if ( allowPayment && enoughRoom ) {
-            btnGroup.button( 0 ).enable();
-        }
-        else {
-            btnGroup.button( 0 ).disable();
-        }
-
-        btnGroup.draw();
-
-        if ( allowPayment || kingdom.GetCountMarketplace() == 0 ) {
-            tsNotEnoughGold.Hide();
-            btnMarket.disable();
-            btnMarket.hide();
-            marketButtonRestorer.restore();
-        }
-        else {
-            std::string msg = _( "Not enough gold (%{gold})" );
-            StringReplace( msg, "%{gold}", gold - kingdom.GetFunds().Get( Resource::GOLD ) );
-            tsNotEnoughGold.SetText( msg, Font::SMALL );
-            tsNotEnoughGold.Show();
-            btnMarket.enable();
-            btnMarket.show();
-        }
-
-        btnMarket.draw();
-
-        if ( enoughRoom ) {
-            noRoom1.Hide();
-            noRoom2.Hide();
-        }
-        else {
-            noRoom1.Show();
-            noRoom2.Show();
-        }
-
-        display.render();
     }
 
     return result;

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,6 +32,11 @@ class MapPosition
 {
 public:
     explicit MapPosition( const fheroes2::Point & = fheroes2::Point( -1, -1 ) );
+    MapPosition( const MapPosition & ) = delete;
+
+    virtual ~MapPosition() = default;
+
+    MapPosition & operator=( const MapPosition & ) = delete;
 
     const fheroes2::Point & GetCenter() const
     {
@@ -42,7 +48,7 @@ public:
     void SetCenter( const fheroes2::Point & );
     void SetIndex( const int32_t index );
 
-    bool isPosition( const fheroes2::Point & pt ) const
+    virtual bool isPosition( const fheroes2::Point & pt ) const
     {
         return pt == center;
     }

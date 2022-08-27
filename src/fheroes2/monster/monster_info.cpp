@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,6 +38,96 @@ namespace
 {
     std::vector<fheroes2::MonsterData> monsterData;
 
+    bool isAbilityPresent( const std::vector<fheroes2::MonsterAbility> & abilities, const fheroes2::MonsterAbilityType abilityType )
+    {
+        return std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( abilityType ) ) != abilities.end();
+    }
+
+    double getMonsterBaseStrength( const fheroes2::MonsterData & data )
+    {
+        const fheroes2::MonsterBattleStats & battleStats = data.battleStats;
+        const std::vector<fheroes2::MonsterAbility> & abilities = battleStats.abilities;
+
+        const double effectiveHP = battleStats.hp * ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION ) ? 1.4 : 1 );
+        const bool isArchers = ( battleStats.shots > 0 );
+
+        double damagePotential = ( battleStats.damageMin + battleStats.damageMax ) / 2.0;
+
+        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK ) ) {
+            // Melee attacker will lose potential on second attack after retaliation
+            damagePotential *= ( isArchers || isAbilityPresent( abilities, fheroes2::MonsterAbilityType::NO_ENEMY_RETALIATION ) ) ? 2 : 1.75;
+        }
+
+        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::DOUBLE_DAMAGE_TO_UNDEAD ) ) {
+            damagePotential *= 1.15; // 15% of all Monsters are Undead, deals double dmg
+        }
+
+        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::TWO_CELL_MELEE_ATTACK ) ) {
+            damagePotential *= 1.2;
+        }
+
+        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::ALWAYS_RETALIATE ) ) {
+            damagePotential *= 1.25;
+        }
+
+        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::ALL_ADJACENT_CELL_MELEE_ATTACK )
+             || isAbilityPresent( abilities, fheroes2::MonsterAbilityType::AREA_SHOT ) ) {
+            damagePotential *= 1.3;
+        }
+
+        double monsterSpecial = 1.0;
+
+        if ( isArchers ) {
+            monsterSpecial += isAbilityPresent( abilities, fheroes2::MonsterAbilityType::NO_MELEE_PENALTY ) ? 0.5 : 0.4;
+        }
+
+        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::FLYING ) ) {
+            monsterSpecial += 0.3;
+        }
+
+        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::ENEMY_HALFING ) ) {
+            monsterSpecial += 1;
+        }
+
+        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::SOUL_EATER ) ) {
+            monsterSpecial += 2;
+        }
+
+        if ( isAbilityPresent( abilities, fheroes2::MonsterAbilityType::HP_DRAIN ) ) {
+            monsterSpecial += 0.3;
+        }
+
+        auto foundAbility = std::find( abilities.begin(), abilities.end(), fheroes2::MonsterAbility( fheroes2::MonsterAbilityType::SPELL_CASTER ) );
+
+        if ( foundAbility != abilities.end() ) {
+            // This is a tricky evaluation. Spell casting ability depends on a type of spell and chance to inflict the spell.
+            switch ( foundAbility->value ) {
+            case Spell::PARALYZE:
+            case Spell::BLIND:
+            case Spell::PETRIFY:
+                monsterSpecial += foundAbility->percentage / 100.0;
+                break;
+            case Spell::DISPEL:
+            case Spell::CURSE:
+                // These spell are very weak and do not impact much during battle.
+                monsterSpecial += foundAbility->percentage / 100.0 / 10.0;
+                break;
+            default:
+                // Did you add a new spell casting ability? Add the logic above!
+                assert( 0 );
+                break;
+            }
+        }
+
+        // Higher speed gives initiative advantage/first attack. Remap speed value to -0.2...+0.15, AVERAGE is 0
+        // Punish slow speeds more as unit won't participate in first rounds and slows down strategic army
+        const int speedDiff = battleStats.speed - Speed::AVERAGE;
+        monsterSpecial += ( speedDiff < 0 ) ? speedDiff * 0.1 : speedDiff * 0.05;
+
+        // Additonal HP and Damage effectiveness diminishes with every combat round; strictly x4 HP == x2 unit count
+        return sqrt( damagePotential * effectiveHP ) * monsterSpecial;
+    }
+
     void populateMonsterData()
     {
         const int monsterIcnIds[Monster::MONSTER_COUNT]
@@ -61,156 +151,156 @@ namespace
                 "FELEMFRM.BIN", "FELEMFRM.BIN", "FELEMFRM.BIN", "FELEMFRM.BIN", "UNKNOWN",      "UNKNOWN",      "UNKNOWN",      "UNKNOWN",      "UNKNOWN" };
 
         const fheroes2::MonsterSound monsterSounds[Monster::MONSTER_COUNT] = {
-            // melee attack | death | movement | wince |ranged attack
-            { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Unknown Monster
-            { M82::PSNTATTK, M82::PSNTKILL, M82::PSNTMOVE, M82::PSNTWNCE, M82::UNKNOWN }, // Peasant
-            { M82::ARCHATTK, M82::ARCHKILL, M82::ARCHMOVE, M82::ARCHWNCE, M82::ARCHSHOT }, // Archer
-            { M82::ARCHATTK, M82::ARCHKILL, M82::ARCHMOVE, M82::ARCHWNCE, M82::ARCHSHOT }, // Ranger
-            { M82::PIKEATTK, M82::PIKEKILL, M82::PIKEMOVE, M82::PIKEWNCE, M82::UNKNOWN }, // Pikeman
-            { M82::PIKEATTK, M82::PIKEKILL, M82::PIKEMOVE, M82::PIKEWNCE, M82::UNKNOWN }, // Veteran Pikeman
-            { M82::SWDMATTK, M82::SWDMKILL, M82::SWDMMOVE, M82::SWDMWNCE, M82::UNKNOWN }, // Swordsman
-            { M82::SWDMATTK, M82::SWDMKILL, M82::SWDMMOVE, M82::SWDMWNCE, M82::UNKNOWN }, // Master Swordsman
-            { M82::CAVLATTK, M82::CAVLKILL, M82::CAVLMOVE, M82::CAVLWNCE, M82::UNKNOWN }, // Cavalry
-            { M82::CAVLATTK, M82::CAVLKILL, M82::CAVLMOVE, M82::CAVLWNCE, M82::UNKNOWN }, // Champion
-            { M82::PLDNATTK, M82::PLDNKILL, M82::PLDNMOVE, M82::PLDNWNCE, M82::UNKNOWN }, // Paladin
-            { M82::PLDNATTK, M82::PLDNKILL, M82::PLDNMOVE, M82::PLDNWNCE, M82::UNKNOWN }, // Crusader
-            { M82::GBLNATTK, M82::GBLNKILL, M82::GBLNMOVE, M82::GBLNWNCE, M82::UNKNOWN }, // Goblin
-            { M82::ORC_ATTK, M82::ORC_KILL, M82::ORC_MOVE, M82::ORC_WNCE, M82::ORC_SHOT }, // Orc
-            { M82::ORC_ATTK, M82::ORC_KILL, M82::ORC_MOVE, M82::ORC_WNCE, M82::ORC_SHOT }, // Orc Chief
-            { M82::WOLFATTK, M82::WOLFKILL, M82::WOLFMOVE, M82::WOLFWNCE, M82::UNKNOWN }, // Wolf
-            { M82::OGREATTK, M82::OGREKILL, M82::OGREMOVE, M82::OGREWNCE, M82::UNKNOWN }, // Ogre
-            { M82::OGREATTK, M82::OGREKILL, M82::OGREMOVE, M82::OGREWNCE, M82::UNKNOWN }, // Ogre Lord
-            { M82::TRLLATTK, M82::TRLLKILL, M82::TRLLMOVE, M82::TRLLWNCE, M82::TRLLSHOT }, // Troll
-            { M82::TRLLATTK, M82::TRLLKILL, M82::TRLLMOVE, M82::TRLLWNCE, M82::TRLLSHOT }, // War Troll
-            { M82::CYCLATTK, M82::CYCLKILL, M82::CYCLMOVE, M82::CYCLWNCE, M82::UNKNOWN }, // Cyclops
-            { M82::SPRTATTK, M82::SPRTKILL, M82::SPRTMOVE, M82::SPRTWNCE, M82::UNKNOWN }, // Sprite
-            { M82::DWRFATTK, M82::DWRFKILL, M82::DWRFMOVE, M82::DWRFWNCE, M82::UNKNOWN }, // Dwarf
-            { M82::DWRFATTK, M82::DWRFKILL, M82::DWRFMOVE, M82::DWRFWNCE, M82::UNKNOWN }, // Battle Dwarf
-            { M82::ELF_ATTK, M82::ELF_KILL, M82::ELF_MOVE, M82::ELF_WNCE, M82::ELF_SHOT }, // Elf
-            { M82::ELF_ATTK, M82::ELF_KILL, M82::ELF_MOVE, M82::ELF_WNCE, M82::ELF_SHOT }, // Grand Elf
-            { M82::DRUIATTK, M82::DRUIKILL, M82::DRUIMOVE, M82::DRUIWNCE, M82::DRUISHOT }, // Druid
-            { M82::DRUIATTK, M82::DRUIKILL, M82::DRUIMOVE, M82::DRUIWNCE, M82::DRUISHOT }, // Greater Druid
-            { M82::UNICATTK, M82::UNICKILL, M82::UNICMOVE, M82::UNICWNCE, M82::UNKNOWN }, // Unicorn
-            { M82::PHOEATTK, M82::PHOEKILL, M82::PHOEMOVE, M82::PHOEWNCE, M82::UNKNOWN }, // Phoenix
-            { M82::CNTRATTK, M82::CNTRKILL, M82::CNTRMOVE, M82::CNTRWNCE, M82::CNTRSHOT }, // Centaur
-            { M82::GARGATTK, M82::GARGKILL, M82::GARGMOVE, M82::GARGWNCE, M82::UNKNOWN }, // Gargoyle
-            { M82::GRIFATTK, M82::GRIFKILL, M82::GRIFMOVE, M82::GRIFWNCE, M82::UNKNOWN }, // Griffin
-            { M82::MINOATTK, M82::MINOKILL, M82::MINOMOVE, M82::MINOWNCE, M82::UNKNOWN }, // Minotaur
-            { M82::MINOATTK, M82::MINOKILL, M82::MINOMOVE, M82::MINOWNCE, M82::UNKNOWN }, // Minotaur King
-            { M82::HYDRATTK, M82::HYDRKILL, M82::HYDRMOVE, M82::HYDRWNCE, M82::UNKNOWN }, // Hydra
-            { M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE, M82::UNKNOWN }, // Green Dragon
-            { M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE, M82::UNKNOWN }, // Red Dragon
-            { M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE, M82::UNKNOWN }, // Black Dragon
-            { M82::HALFATTK, M82::HALFKILL, M82::HALFMOVE, M82::HALFWNCE, M82::HALFSHOT }, // Halfling
-            { M82::BOARATTK, M82::BOARKILL, M82::BOARMOVE, M82::BOARWNCE, M82::UNKNOWN }, // Boar
-            { M82::GOLMATTK, M82::GOLMKILL, M82::GOLMMOVE, M82::GOLMWNCE, M82::UNKNOWN }, // Iron Golem
-            { M82::GOLMATTK, M82::GOLMKILL, M82::GOLMMOVE, M82::GOLMWNCE, M82::UNKNOWN }, // Steel Golem
-            { M82::ROC_ATTK, M82::ROC_KILL, M82::ROC_MOVE, M82::ROC_WNCE, M82::UNKNOWN }, // Roc
-            { M82::MAGEATTK, M82::MAGEKILL, M82::MAGEMOVE, M82::MAGEWNCE, M82::MAGESHOT }, // Mage
-            { M82::MAGEATTK, M82::MAGEKILL, M82::MAGEMOVE, M82::MAGEWNCE, M82::MAGESHOT }, // Archmage
-            { M82::TITNATTK, M82::TITNKILL, M82::TITNMOVE, M82::TITNWNCE, M82::UNKNOWN }, // Giant
-            { M82::TITNATTK, M82::TITNKILL, M82::TITNMOVE, M82::TITNWNCE, M82::TITNSHOT }, // Titan
-            { M82::SKELATTK, M82::SKELKILL, M82::SKELMOVE, M82::SKELWNCE, M82::UNKNOWN }, // Skeleton
-            { M82::ZOMBATTK, M82::ZOMBKILL, M82::ZOMBMOVE, M82::ZOMBWNCE, M82::UNKNOWN }, // Zombie
-            { M82::ZOMBATTK, M82::ZOMBKILL, M82::ZOMBMOVE, M82::ZOMBWNCE, M82::UNKNOWN }, // Mutant Zombie
-            { M82::MUMYATTK, M82::MUMYKILL, M82::MUMYMOVE, M82::MUMYWNCE, M82::UNKNOWN }, // Mummy
-            { M82::MUMYATTK, M82::MUMYKILL, M82::MUMYMOVE, M82::MUMYWNCE, M82::UNKNOWN }, // Royal Mummy
-            { M82::VAMPATTK, M82::VAMPKILL, M82::VAMPMOVE, M82::VAMPWNCE, M82::UNKNOWN }, // Vampire
-            { M82::VAMPATTK, M82::VAMPKILL, M82::VAMPMOVE, M82::VAMPWNCE, M82::UNKNOWN }, // Vampire Lord
-            { M82::LICHATTK, M82::LICHKILL, M82::LICHMOVE, M82::LICHWNCE, M82::LICHSHOT }, // Lich
-            { M82::LICHATTK, M82::LICHKILL, M82::LICHMOVE, M82::LICHWNCE, M82::LICHSHOT }, // Power Lich
-            { M82::BONEATTK, M82::BONEKILL, M82::BONEMOVE, M82::BONEWNCE, M82::UNKNOWN }, // Bone Dragon
-            { M82::ROGUATTK, M82::ROGUKILL, M82::ROGUMOVE, M82::ROGUWNCE, M82::UNKNOWN }, // Rogue
-            { M82::NMADATTK, M82::NMADKILL, M82::NMADMOVE, M82::NMADWNCE, M82::UNKNOWN }, // Nomad
-            { M82::GHSTATTK, M82::GHSTKILL, M82::GHSTMOVE, M82::GHSTWNCE, M82::UNKNOWN }, // Ghost
-            { M82::GENIATTK, M82::GENIKILL, M82::GENIMOVE, M82::GENIWNCE, M82::UNKNOWN }, // Genie
-            { M82::MEDSATTK, M82::MEDSKILL, M82::MEDSMOVE, M82::MEDSWNCE, M82::UNKNOWN }, // Medusa
-            { M82::EELMATTK, M82::EELMKILL, M82::EELMMOVE, M82::EELMWNCE, M82::UNKNOWN }, // Earth Elemental
-            { M82::AELMATTK, M82::AELMKILL, M82::AELMMOVE, M82::AELMWNCE, M82::UNKNOWN }, // Air Elemental
-            { M82::FELMATTK, M82::FELMKILL, M82::FELMMOVE, M82::FELMWNCE, M82::UNKNOWN }, // Fire Elemental
-            { M82::WELMATTK, M82::WELMKILL, M82::WELMMOVE, M82::WELMWNCE, M82::UNKNOWN }, // Water Elemental
-            { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Random Monster
-            { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Random Monster 1
-            { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Random Monster 2
-            { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Random Monster 3
-            { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Random Monster 4
+            // melee attack | death | movement | wince | ranged attack | takeoff | landing | explosion
+            { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Unknown Monster
+            { M82::PSNTATTK, M82::PSNTKILL, M82::PSNTMOVE, M82::PSNTWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Peasant
+            { M82::ARCHATTK, M82::ARCHKILL, M82::ARCHMOVE, M82::ARCHWNCE, M82::ARCHSHOT, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Archer
+            { M82::ARCHATTK, M82::ARCHKILL, M82::ARCHMOVE, M82::ARCHWNCE, M82::ARCHSHOT, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Ranger
+            { M82::PIKEATTK, M82::PIKEKILL, M82::PIKEMOVE, M82::PIKEWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Pikeman
+            { M82::PIKEATTK, M82::PIKEKILL, M82::PIKEMOVE, M82::PIKEWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Veteran Pikeman
+            { M82::SWDMATTK, M82::SWDMKILL, M82::SWDMMOVE, M82::SWDMWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Swordsman
+            { M82::SWDMATTK, M82::SWDMKILL, M82::SWDMMOVE, M82::SWDMWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Master Swordsman
+            { M82::CAVLATTK, M82::CAVLKILL, M82::CAVLMOVE, M82::CAVLWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Cavalry
+            { M82::CAVLATTK, M82::CAVLKILL, M82::CAVLMOVE, M82::CAVLWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Champion
+            { M82::PLDNATTK, M82::PLDNKILL, M82::PLDNMOVE, M82::PLDNWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Paladin
+            { M82::PLDNATTK, M82::PLDNKILL, M82::PLDNMOVE, M82::PLDNWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Crusader
+            { M82::GBLNATTK, M82::GBLNKILL, M82::GBLNMOVE, M82::GBLNWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Goblin
+            { M82::ORC_ATTK, M82::ORC_KILL, M82::ORC_MOVE, M82::ORC_WNCE, M82::ORC_SHOT, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Orc
+            { M82::ORC_ATTK, M82::ORC_KILL, M82::ORC_MOVE, M82::ORC_WNCE, M82::ORC_SHOT, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Orc Chief
+            { M82::WOLFATTK, M82::WOLFKILL, M82::WOLFMOVE, M82::WOLFWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Wolf
+            { M82::OGREATTK, M82::OGREKILL, M82::OGREMOVE, M82::OGREWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Ogre
+            { M82::OGREATTK, M82::OGREKILL, M82::OGREMOVE, M82::OGREWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Ogre Lord
+            { M82::TRLLATTK, M82::TRLLKILL, M82::TRLLMOVE, M82::TRLLWNCE, M82::TRLLSHOT, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Troll
+            { M82::TRLLATTK, M82::TRLLKILL, M82::TRLLMOVE, M82::TRLLWNCE, M82::TRLLSHOT, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // War Troll
+            { M82::CYCLATTK, M82::CYCLKILL, M82::CYCLMOVE, M82::CYCLWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Cyclops
+            { M82::SPRTATTK, M82::SPRTKILL, M82::SPRTMOVE, M82::SPRTWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Sprite
+            { M82::DWRFATTK, M82::DWRFKILL, M82::DWRFMOVE, M82::DWRFWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Dwarf
+            { M82::DWRFATTK, M82::DWRFKILL, M82::DWRFMOVE, M82::DWRFWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Battle Dwarf
+            { M82::ELF_ATTK, M82::ELF_KILL, M82::ELF_MOVE, M82::ELF_WNCE, M82::ELF_SHOT, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Elf
+            { M82::ELF_ATTK, M82::ELF_KILL, M82::ELF_MOVE, M82::ELF_WNCE, M82::ELF_SHOT, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Grand Elf
+            { M82::DRUIATTK, M82::DRUIKILL, M82::DRUIMOVE, M82::DRUIWNCE, M82::DRUISHOT, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Druid
+            { M82::DRUIATTK, M82::DRUIKILL, M82::DRUIMOVE, M82::DRUIWNCE, M82::DRUISHOT, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Greater Druid
+            { M82::UNICATTK, M82::UNICKILL, M82::UNICMOVE, M82::UNICWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Unicorn
+            { M82::PHOEATTK, M82::PHOEKILL, M82::PHOEMOVE, M82::PHOEWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Phoenix
+            { M82::CNTRATTK, M82::CNTRKILL, M82::CNTRMOVE, M82::CNTRWNCE, M82::CNTRSHOT, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Centaur
+            { M82::GARGATTK, M82::GARGKILL, M82::GARGMOVE, M82::GARGWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Gargoyle
+            { M82::GRIFATTK, M82::GRIFKILL, M82::GRIFMOVE, M82::GRIFWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Griffin
+            { M82::MINOATTK, M82::MINOKILL, M82::MINOMOVE, M82::MINOWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Minotaur
+            { M82::MINOATTK, M82::MINOKILL, M82::MINOMOVE, M82::MINOWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Minotaur King
+            { M82::HYDRATTK, M82::HYDRKILL, M82::HYDRMOVE, M82::HYDRWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Hydra
+            { M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Green Dragon
+            { M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Red Dragon
+            { M82::DRGNATTK, M82::DRGNKILL, M82::DRGNMOVE, M82::DRGNWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Black Dragon
+            { M82::HALFATTK, M82::HALFKILL, M82::HALFMOVE, M82::HALFWNCE, M82::HALFSHOT, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Halfling
+            { M82::BOARATTK, M82::BOARKILL, M82::BOARMOVE, M82::BOARWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Boar
+            { M82::GOLMATTK, M82::GOLMKILL, M82::GOLMMOVE, M82::GOLMWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Iron Golem
+            { M82::GOLMATTK, M82::GOLMKILL, M82::GOLMMOVE, M82::GOLMWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Steel Golem
+            { M82::ROC_ATTK, M82::ROC_KILL, M82::ROC_MOVE, M82::ROC_WNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Roc
+            { M82::MAGEATTK, M82::MAGEKILL, M82::MAGEMOVE, M82::MAGEWNCE, M82::MAGESHOT, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Mage
+            { M82::MAGEATTK, M82::MAGEKILL, M82::MAGEMOVE, M82::MAGEWNCE, M82::MAGESHOT, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Archmage
+            { M82::TITNATTK, M82::TITNKILL, M82::TITNMOVE, M82::TITNWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Giant
+            { M82::TITNATTK, M82::TITNKILL, M82::TITNMOVE, M82::TITNWNCE, M82::TITNSHOT, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Titan
+            { M82::SKELATTK, M82::SKELKILL, M82::SKELMOVE, M82::SKELWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Skeleton
+            { M82::ZOMBATTK, M82::ZOMBKILL, M82::ZOMBMOVE, M82::ZOMBWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Zombie
+            { M82::ZOMBATTK, M82::ZOMBKILL, M82::ZOMBMOVE, M82::ZOMBWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Mutant Zombie
+            { M82::MUMYATTK, M82::MUMYKILL, M82::MUMYMOVE, M82::MUMYWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Mummy
+            { M82::MUMYATTK, M82::MUMYKILL, M82::MUMYMOVE, M82::MUMYWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Royal Mummy
+            { M82::VAMPATTK, M82::VAMPKILL, M82::VAMPMOVE, M82::VAMPWNCE, M82::UNKNOWN, M82::VAMPEXT1, M82::VAMPEXT2, M82::UNKNOWN }, // Vampire
+            { M82::VAMPATTK, M82::VAMPKILL, M82::VAMPMOVE, M82::VAMPWNCE, M82::UNKNOWN, M82::VAMPEXT1, M82::VAMPEXT2, M82::UNKNOWN }, // Vampire Lord
+            { M82::LICHATTK, M82::LICHKILL, M82::LICHMOVE, M82::LICHWNCE, M82::LICHSHOT, M82::UNKNOWN, M82::UNKNOWN, M82::LICHEXPL }, // Lich
+            { M82::LICHATTK, M82::LICHKILL, M82::LICHMOVE, M82::LICHWNCE, M82::LICHSHOT, M82::UNKNOWN, M82::UNKNOWN, M82::LICHEXPL }, // Power Lich
+            { M82::BONEATTK, M82::BONEKILL, M82::BONEMOVE, M82::BONEWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Bone Dragon
+            { M82::ROGUATTK, M82::ROGUKILL, M82::ROGUMOVE, M82::ROGUWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Rogue
+            { M82::NMADATTK, M82::NMADKILL, M82::NMADMOVE, M82::NMADWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Nomad
+            { M82::GHSTATTK, M82::GHSTKILL, M82::GHSTMOVE, M82::GHSTWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Ghost
+            { M82::GENIATTK, M82::GENIKILL, M82::GENIMOVE, M82::GENIWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Genie
+            { M82::MEDSATTK, M82::MEDSKILL, M82::MEDSMOVE, M82::MEDSWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Medusa
+            { M82::EELMATTK, M82::EELMKILL, M82::EELMMOVE, M82::EELMWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Earth Elemental
+            { M82::AELMATTK, M82::AELMKILL, M82::AELMMOVE, M82::AELMWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Air Elemental
+            { M82::FELMATTK, M82::FELMKILL, M82::FELMMOVE, M82::FELMWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Fire Elemental
+            { M82::WELMATTK, M82::WELMKILL, M82::WELMMOVE, M82::WELMWNCE, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Water Elemental
+            { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Random Monster
+            { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Random Monster 1
+            { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Random Monster 2
+            { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Random Monster 3
+            { M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN, M82::UNKNOWN }, // Random Monster 4
         };
 
-        // Monster abilities and weaknesses will be added later.
+        // Monster abilities and weaknesses will be added later. Base strength is calculated based on abilities.
         const fheroes2::MonsterBattleStats monsterBattleStats[Monster::MONSTER_COUNT] = {
-            // attack | defence | damageMin | damageMax | hp | speed | shots | abilities | weaknesses
-            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, {}, {} }, // Unknown Monster
-            { 1, 1, 1, 1, 1, Speed::VERYSLOW, 0, {}, {} }, // Peasant
-            { 5, 3, 2, 3, 10, Speed::VERYSLOW, 12, {}, {} }, // Archer
-            { 5, 3, 2, 3, 10, Speed::AVERAGE, 24, {}, {} }, // Ranger
-            { 5, 9, 3, 4, 15, Speed::AVERAGE, 0, {}, {} }, // Pikeman
-            { 5, 9, 3, 4, 20, Speed::FAST, 0, {}, {} }, // Veteran Pikeman
-            { 7, 9, 4, 6, 25, Speed::AVERAGE, 0, {}, {} }, // Swordsman
-            { 7, 9, 4, 6, 30, Speed::FAST, 0, {}, {} }, // Master Swordsman
-            { 10, 9, 5, 10, 30, Speed::VERYFAST, 0, {}, {} }, // Cavalry
-            { 10, 9, 5, 10, 40, Speed::ULTRAFAST, 0, {}, {} }, // Champion
-            { 11, 12, 10, 20, 50, Speed::FAST, 0, {}, {} }, // Paladin
-            { 11, 12, 10, 20, 65, Speed::VERYFAST, 0, {}, {} }, // Crusader
-            { 3, 1, 1, 2, 3, Speed::AVERAGE, 0, {}, {} }, // Goblin
-            { 3, 4, 2, 3, 10, Speed::VERYSLOW, 8, {}, {} }, // Orc
-            { 3, 4, 3, 4, 15, Speed::SLOW, 16, {}, {} }, // Orc Chief
-            { 6, 2, 3, 5, 20, Speed::VERYFAST, 0, {}, {} }, // Wolf
-            { 9, 5, 4, 6, 40, Speed::VERYSLOW, 0, {}, {} }, // Ogre
-            { 9, 5, 5, 7, 60, Speed::AVERAGE, 0, {}, {} }, // Ogre Lord
-            { 10, 5, 5, 7, 40, Speed::AVERAGE, 8, {}, {} }, // Troll
-            { 10, 5, 7, 9, 40, Speed::FAST, 16, {}, {} }, // War Troll
-            { 12, 9, 12, 24, 80, Speed::FAST, 0, {}, {} }, // Cyclops
-            { 4, 2, 1, 2, 2, Speed::AVERAGE, 0, {}, {} }, // Sprite
-            { 6, 5, 2, 4, 20, Speed::VERYSLOW, 0, {}, {} }, // Dwarf
-            { 6, 6, 2, 4, 20, Speed::AVERAGE, 0, {}, {} }, // Battle Dwarf
-            { 4, 3, 2, 3, 15, Speed::AVERAGE, 24, {}, {} }, // Elf
-            { 5, 5, 2, 3, 15, Speed::VERYFAST, 24, {}, {} }, // Grand Elf
-            { 7, 5, 5, 8, 25, Speed::FAST, 8, {}, {} }, // Druid
-            { 7, 7, 5, 8, 25, Speed::VERYFAST, 16, {}, {} }, // Greater Druid
-            { 10, 9, 7, 14, 40, Speed::FAST, 0, {}, {} }, // Unicorn
-            { 12, 10, 20, 40, 100, Speed::ULTRAFAST, 0, {}, {} }, // Phoenix
-            { 3, 1, 1, 2, 5, Speed::AVERAGE, 8, {}, {} }, // Centaur
-            { 4, 7, 2, 3, 15, Speed::VERYFAST, 0, {}, {} }, // Gargoyle
-            { 6, 6, 3, 5, 25, Speed::AVERAGE, 0, {}, {} }, // Griffin
-            { 9, 8, 5, 10, 35, Speed::AVERAGE, 0, {}, {} }, // Minotaur
-            { 9, 8, 5, 10, 45, Speed::VERYFAST, 0, {}, {} }, // Minotaur King
-            { 8, 9, 6, 12, 75, Speed::VERYSLOW, 0, {}, {} }, // Hydra
-            { 12, 12, 25, 50, 200, Speed::AVERAGE, 0, {}, {} }, // Green Dragon
-            { 13, 13, 25, 50, 250, Speed::FAST, 0, {}, {} }, // Red Dragon
-            { 14, 14, 25, 50, 300, Speed::VERYFAST, 0, {}, {} }, // Black Dragon
-            { 2, 1, 1, 3, 3, Speed::SLOW, 12, {}, {} }, // Halfling
-            { 5, 4, 2, 3, 15, Speed::VERYFAST, 0, {}, {} }, // Boar
-            { 5, 10, 4, 5, 30, Speed::VERYSLOW, 0, {}, {} }, // Iron Golem
-            { 7, 10, 4, 5, 35, Speed::SLOW, 0, {}, {} }, // Steel Golem
-            { 7, 7, 4, 8, 40, Speed::AVERAGE, 0, {}, {} }, // Roc
-            { 11, 7, 7, 9, 30, Speed::FAST, 12, {}, {} }, // Mage
-            { 12, 8, 7, 9, 35, Speed::VERYFAST, 24, {}, {} }, // Archmage
-            { 13, 10, 20, 30, 150, Speed::AVERAGE, 0, {}, {} }, // Giant
-            { 15, 15, 20, 30, 300, Speed::VERYFAST, 24, {}, {} }, // Titan
-            { 4, 3, 2, 3, 4, Speed::AVERAGE, 0, {}, {} }, // Skeleton
-            { 5, 2, 2, 3, 15, Speed::VERYSLOW, 0, {}, {} }, // Zombie
-            { 5, 2, 2, 3, 20, Speed::AVERAGE, 0, {}, {} }, // Mutant Zombie
-            { 6, 6, 3, 4, 25, Speed::AVERAGE, 0, {}, {} }, // Mummy
-            { 6, 6, 3, 4, 30, Speed::FAST, 0, {}, {} }, // Royal Mummy
-            { 8, 6, 5, 7, 30, Speed::AVERAGE, 0, {}, {} }, // Vampire
-            { 8, 6, 5, 7, 40, Speed::FAST, 0, {}, {} }, // Vampire Lord
-            { 7, 12, 8, 10, 25, Speed::FAST, 12, {}, {} }, // Lich
-            { 7, 13, 8, 10, 35, Speed::VERYFAST, 24, {}, {} }, // Power Lich
-            { 11, 9, 25, 45, 150, Speed::AVERAGE, 0, {}, {} }, // Bone Dragon
-            { 6, 1, 1, 2, 4, Speed::FAST, 0, {}, {} }, // Rogue
-            { 7, 6, 2, 5, 20, Speed::VERYFAST, 0, {}, {} }, // Nomad
-            { 8, 7, 4, 6, 20, Speed::FAST, 0, {}, {} }, // Ghost
-            { 10, 9, 20, 30, 50, Speed::VERYFAST, 0, {}, {} }, // Genie
-            { 8, 9, 6, 10, 35, Speed::AVERAGE, 0, {}, {} }, // Medusa
-            { 8, 8, 4, 5, 50, Speed::SLOW, 0, {}, {} }, // Earth Elemental
-            { 7, 7, 2, 8, 35, Speed::VERYFAST, 0, {}, {} }, // Air Elemental
-            { 8, 6, 4, 6, 40, Speed::FAST, 0, {}, {} }, // Fire Elemental
-            { 6, 8, 3, 7, 45, Speed::AVERAGE, 0, {}, {} }, // Water Elemental
-            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, {}, {} }, // Random Monster
-            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, {}, {} }, // Random Monster 1
-            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, {}, {} }, // Random Monster 2
-            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, {}, {} }, // Random Monster 3
-            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, {}, {} }, // Random Monster 4
+            // attack | defence | damageMin | damageMax | hp | speed | shots | baseStrength | abilities | weaknesses
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, 0, {}, {} }, // Unknown Monster
+            { 1, 1, 1, 1, 1, Speed::VERYSLOW, 0, 0, {}, {} }, // Peasant
+            { 5, 3, 2, 3, 10, Speed::VERYSLOW, 12, 0, {}, {} }, // Archer
+            { 5, 3, 2, 3, 10, Speed::AVERAGE, 24, 0, {}, {} }, // Ranger
+            { 5, 9, 3, 4, 15, Speed::AVERAGE, 0, 0, {}, {} }, // Pikeman
+            { 5, 9, 3, 4, 20, Speed::FAST, 0, 0, {}, {} }, // Veteran Pikeman
+            { 7, 9, 4, 6, 25, Speed::AVERAGE, 0, 0, {}, {} }, // Swordsman
+            { 7, 9, 4, 6, 30, Speed::FAST, 0, 0, {}, {} }, // Master Swordsman
+            { 10, 9, 5, 10, 30, Speed::VERYFAST, 0, 0, {}, {} }, // Cavalry
+            { 10, 9, 5, 10, 40, Speed::ULTRAFAST, 0, 0, {}, {} }, // Champion
+            { 11, 12, 10, 20, 50, Speed::FAST, 0, 0, {}, {} }, // Paladin
+            { 11, 12, 10, 20, 65, Speed::VERYFAST, 0, 0, {}, {} }, // Crusader
+            { 3, 1, 1, 2, 3, Speed::AVERAGE, 0, 0, {}, {} }, // Goblin
+            { 3, 4, 2, 3, 10, Speed::VERYSLOW, 8, 0, {}, {} }, // Orc
+            { 3, 4, 3, 4, 15, Speed::SLOW, 16, 0, {}, {} }, // Orc Chief
+            { 6, 2, 3, 5, 20, Speed::VERYFAST, 0, 0, {}, {} }, // Wolf
+            { 9, 5, 4, 6, 40, Speed::VERYSLOW, 0, 0, {}, {} }, // Ogre
+            { 9, 5, 5, 7, 60, Speed::AVERAGE, 0, 0, {}, {} }, // Ogre Lord
+            { 10, 5, 5, 7, 40, Speed::AVERAGE, 8, 0, {}, {} }, // Troll
+            { 10, 5, 7, 9, 40, Speed::FAST, 16, 0, {}, {} }, // War Troll
+            { 12, 9, 12, 24, 80, Speed::FAST, 0, 0, {}, {} }, // Cyclops
+            { 4, 2, 1, 2, 2, Speed::AVERAGE, 0, 0, {}, {} }, // Sprite
+            { 6, 5, 2, 4, 20, Speed::VERYSLOW, 0, 0, {}, {} }, // Dwarf
+            { 6, 6, 2, 4, 20, Speed::AVERAGE, 0, 0, {}, {} }, // Battle Dwarf
+            { 4, 3, 2, 3, 15, Speed::AVERAGE, 24, 0, {}, {} }, // Elf
+            { 5, 5, 2, 3, 15, Speed::VERYFAST, 24, 0, {}, {} }, // Grand Elf
+            { 7, 5, 5, 8, 25, Speed::FAST, 8, 0, {}, {} }, // Druid
+            { 7, 7, 5, 8, 25, Speed::VERYFAST, 16, 0, {}, {} }, // Greater Druid
+            { 10, 9, 7, 14, 40, Speed::FAST, 0, 0, {}, {} }, // Unicorn
+            { 12, 10, 20, 40, 100, Speed::ULTRAFAST, 0, 0, {}, {} }, // Phoenix
+            { 3, 1, 1, 2, 5, Speed::AVERAGE, 8, 0, {}, {} }, // Centaur
+            { 4, 7, 2, 3, 15, Speed::VERYFAST, 0, 0, {}, {} }, // Gargoyle
+            { 6, 6, 3, 5, 25, Speed::AVERAGE, 0, 0, {}, {} }, // Griffin
+            { 9, 8, 5, 10, 35, Speed::AVERAGE, 0, 0, {}, {} }, // Minotaur
+            { 9, 8, 5, 10, 45, Speed::VERYFAST, 0, 0, {}, {} }, // Minotaur King
+            { 8, 9, 6, 12, 75, Speed::VERYSLOW, 0, 0, {}, {} }, // Hydra
+            { 12, 12, 25, 50, 200, Speed::AVERAGE, 0, 0, {}, {} }, // Green Dragon
+            { 13, 13, 25, 50, 250, Speed::FAST, 0, 0, {}, {} }, // Red Dragon
+            { 14, 14, 25, 50, 300, Speed::VERYFAST, 0, 0, {}, {} }, // Black Dragon
+            { 2, 1, 1, 3, 3, Speed::SLOW, 12, 0, {}, {} }, // Halfling
+            { 5, 4, 2, 3, 15, Speed::VERYFAST, 0, 0, {}, {} }, // Boar
+            { 5, 10, 4, 5, 30, Speed::VERYSLOW, 0, 0, {}, {} }, // Iron Golem
+            { 7, 10, 4, 5, 35, Speed::SLOW, 0, 0, {}, {} }, // Steel Golem
+            { 7, 7, 4, 8, 40, Speed::AVERAGE, 0, 0, {}, {} }, // Roc
+            { 11, 7, 7, 9, 30, Speed::FAST, 12, 0, {}, {} }, // Mage
+            { 12, 8, 7, 9, 35, Speed::VERYFAST, 24, 0, {}, {} }, // Archmage
+            { 13, 10, 20, 30, 150, Speed::AVERAGE, 0, 0, {}, {} }, // Giant
+            { 15, 15, 20, 30, 300, Speed::VERYFAST, 24, 0, {}, {} }, // Titan
+            { 4, 3, 2, 3, 4, Speed::AVERAGE, 0, 0, {}, {} }, // Skeleton
+            { 5, 2, 2, 3, 15, Speed::VERYSLOW, 0, 0, {}, {} }, // Zombie
+            { 5, 2, 2, 3, 20, Speed::AVERAGE, 0, 0, {}, {} }, // Mutant Zombie
+            { 6, 6, 3, 4, 25, Speed::AVERAGE, 0, 0, {}, {} }, // Mummy
+            { 6, 6, 3, 4, 30, Speed::FAST, 0, 0, {}, {} }, // Royal Mummy
+            { 8, 6, 5, 7, 30, Speed::AVERAGE, 0, 0, {}, {} }, // Vampire
+            { 8, 6, 5, 7, 40, Speed::FAST, 0, 0, {}, {} }, // Vampire Lord
+            { 7, 12, 8, 10, 25, Speed::FAST, 12, 0, {}, {} }, // Lich
+            { 7, 13, 8, 10, 35, Speed::VERYFAST, 24, 0, {}, {} }, // Power Lich
+            { 11, 9, 25, 45, 150, Speed::AVERAGE, 0, 0, {}, {} }, // Bone Dragon
+            { 6, 1, 1, 2, 4, Speed::FAST, 0, 0, {}, {} }, // Rogue
+            { 7, 6, 2, 5, 20, Speed::VERYFAST, 0, 0, {}, {} }, // Nomad
+            { 8, 7, 4, 6, 20, Speed::FAST, 0, 0, {}, {} }, // Ghost
+            { 10, 9, 20, 30, 50, Speed::VERYFAST, 0, 0, {}, {} }, // Genie
+            { 8, 9, 6, 10, 35, Speed::AVERAGE, 0, 0, {}, {} }, // Medusa
+            { 8, 8, 4, 5, 50, Speed::SLOW, 0, 0, {}, {} }, // Earth Elemental
+            { 7, 7, 2, 8, 35, Speed::VERYFAST, 0, 0, {}, {} }, // Air Elemental
+            { 8, 6, 4, 6, 40, Speed::FAST, 0, 0, {}, {} }, // Fire Elemental
+            { 6, 8, 3, 7, 45, Speed::AVERAGE, 0, 0, {}, {} }, // Water Elemental
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, 0, {}, {} }, // Random Monster
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, 0, {}, {} }, // Random Monster 1
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, 0, {}, {} }, // Random Monster 2
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, 0, {}, {} }, // Random Monster 3
+            { 0, 0, 0, 0, 0, Speed::VERYSLOW, 0, 0, {}, {} }, // Random Monster 4
         };
 
         const fheroes2::MonsterGeneralStats monsterGeneralStats[Monster::MONSTER_COUNT]
@@ -425,11 +515,11 @@ namespace
         monsterData[Monster::GHOST].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
         monsterData[Monster::GHOST].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::UNDEAD );
 
-        monsterData[Monster::GENIE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ENEMY_HALFING, 10, 0 );
+        monsterData[Monster::GENIE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ENEMY_HALFING, 20, 0 );
         monsterData[Monster::GENIE].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::FLYING );
 
         monsterData[Monster::MEDUSA].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
-        monsterData[Monster::MEDUSA].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::SPELL_CASTER, 20, Spell::STONE );
+        monsterData[Monster::MEDUSA].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::SPELL_CASTER, 20, Spell::PETRIFY );
 
         monsterData[Monster::NOMAD].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::DOUBLE_HEX_SIZE );
 
@@ -456,6 +546,11 @@ namespace
         monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::ELEMENTAL );
         monsterData[Monster::WATER_ELEMENT].battleStats.abilities.emplace_back( fheroes2::MonsterAbilityType::COLD_SPELL_IMMUNITY );
         monsterData[Monster::WATER_ELEMENT].battleStats.weaknesses.emplace_back( fheroes2::MonsterWeaknessType::EXTRA_DAMAGE_FROM_FIRE_SPELL );
+
+        // Calculate base value of monster strength.
+        for ( fheroes2::MonsterData & data : monsterData ) {
+            data.battleStats.monsterBaseStrength = getMonsterBaseStrength( data );
+        }
 
         // TODO: verify that no duplicates of abilities and weaknesses exist.
     }
@@ -541,7 +636,7 @@ namespace fheroes2
             else if ( ability.value == Spell::PARALYZE ) {
                 return std::to_string( ability.percentage ) + _( "% chance to Paralyze" );
             }
-            else if ( ability.value == Spell::STONE ) {
+            else if ( ability.value == Spell::PETRIFY ) {
                 return std::to_string( ability.percentage ) + _( "% chance to Petrify" );
             }
             else if ( ability.value == Spell::BLIND ) {

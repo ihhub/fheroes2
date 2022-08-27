@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,7 +25,7 @@
 namespace AI
 {
     Normal::Normal()
-        : _pathfinder( ARMY_STRENGTH_ADVANTAGE_LARGE )
+        : _pathfinder( ARMY_ADVANTAGE_LARGE )
     {
         _personality = Rand::Get( AI::WARRIOR, AI::EXPLORER );
     }
@@ -37,6 +37,26 @@ namespace AI
 
     void Normal::revealFog( const Maps::Tiles & tile )
     {
-        _mapObjects.emplace_back( tile.GetIndex(), tile.GetObject() );
+        const MP2::MapObjectType object = tile.GetObject();
+        if ( object != MP2::OBJ_ZERO )
+            _mapObjects.emplace_back( tile.GetIndex(), object );
+    }
+
+    double Normal::getTargetArmyStrength( const Maps::Tiles & tile, const MP2::MapObjectType objectType )
+    {
+        if ( !isMonsterStrengthCacheable( objectType ) ) {
+            return Army( tile ).GetStrength();
+        }
+
+        const int32_t tileId = tile.GetIndex();
+
+        auto iter = _neutralMonsterStrengthCache.find( tileId );
+        if ( iter != _neutralMonsterStrengthCache.end() ) {
+            // Cache hit.
+            return iter->second;
+        }
+
+        auto newEntry = _neutralMonsterStrengthCache.emplace( tileId, Army( tile ).GetStrength() );
+        return newEntry.first->second;
     }
 }

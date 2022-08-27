@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,10 +22,11 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <vector>
 
-#include "agg.h"
 #include "audio.h"
+#include "audio_manager.h"
 #include "cursor.h"
 #include "dialog_system_options.h"
 #include "game.h"
@@ -40,35 +42,42 @@
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 #include "world.h"
 
-void Interface::Basic::CalculateHeroPath( Heroes * hero, s32 destinationIdx ) const
+void Interface::Basic::CalculateHeroPath( Heroes * hero, int32_t destinationIdx ) const
 {
-    if ( ( hero == nullptr ) || hero->Modes( Heroes::GUARDIAN ) )
+    if ( ( hero == nullptr ) || hero->Modes( Heroes::GUARDIAN ) ) {
         return;
+    }
 
     hero->SetMove( false );
+    hero->calculatePath( destinationIdx );
 
     const Route::Path & path = hero->GetPath();
-    if ( destinationIdx == -1 )
-        destinationIdx = path.GetDestinedIndex(); // returns -1 at the time of launching new game (because of no path history)
 
-    if ( destinationIdx != -1 ) {
-        hero->GetPath().setPath( world.getPath( *hero, destinationIdx ), destinationIdx );
-        DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() );
-        gameArea.SetRedraw();
+    if ( destinationIdx < 0 ) {
+        destinationIdx = path.GetDestinationIndex();
+    }
 
-        const fheroes2::Point & mousePos = LocalEvent::Get().GetMouseCursor();
-        if ( gameArea.GetROI() & mousePos ) {
-            const int32_t cursorIndex = gameArea.GetValidTileIdFromPoint( mousePos );
-            Cursor::Get().SetThemes( GetCursorTileIndex( cursorIndex ) );
-        }
+    if ( destinationIdx < 0 ) {
+        return;
+    }
 
-        Interface::Basic::Get().buttonsArea.Redraw();
+    DEBUG_LOG( DBG_GAME, DBG_TRACE, hero->GetName() << ", distance: " << world.getDistance( *hero, destinationIdx ) << ", route: " << path.String() )
+
+    gameArea.SetRedraw();
+    buttonsArea.SetRedraw();
+
+    const fheroes2::Point & mousePos = LocalEvent::Get().GetMouseCursor();
+    if ( gameArea.GetROI() & mousePos ) {
+        const int32_t cursorIndex = gameArea.GetValidTileIdFromPoint( mousePos );
+        Cursor::Get().SetThemes( GetCursorTileIndex( cursorIndex ) );
     }
 }
 
-void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, s32 destinationIdx )
+void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, int32_t destinationIdx )
 {
     if ( !hero || hero->Modes( Heroes::GUARDIAN ) )
         return;
@@ -76,7 +85,7 @@ void Interface::Basic::ShowPathOrStartMoveHero( Heroes * hero, s32 destinationId
     const Route::Path & path = hero->GetPath();
 
     // show path
-    if ( path.GetDestinedIndex() != destinationIdx && path.GetDestinationIndex() != destinationIdx ) {
+    if ( path.GetDestinationIndex() != destinationIdx ) {
         CalculateHeroPath( hero, destinationIdx );
     }
     // start move
@@ -92,7 +101,7 @@ void Interface::Basic::MoveHeroFromArrowKeys( Heroes & hero, int direct )
 {
     const bool fromWater = hero.isShipMaster();
     if ( Maps::isValidDirection( hero.GetIndex(), direct ) ) {
-        s32 dst = Maps::GetDirectionIndex( hero.GetIndex(), direct );
+        int32_t dst = Maps::GetDirectionIndex( hero.GetIndex(), direct );
         const Maps::Tiles & tile = world.GetTiles( dst );
         bool allow = false;
 
@@ -105,7 +114,7 @@ void Interface::Basic::MoveHeroFromArrowKeys( Heroes & hero, int direct )
             break;
 
         default:
-            allow = ( tile.isPassable( Direction::CENTER, fromWater, false, hero.GetColor() ) || MP2::isActionObject( tile.GetObject(), fromWater ) );
+            allow = ( tile.isPassableFrom( Direction::CENTER, fromWater, false, hero.GetColor() ) || MP2::isActionObject( tile.GetObject(), fromWater ) );
             break;
         }
 
@@ -114,7 +123,7 @@ void Interface::Basic::MoveHeroFromArrowKeys( Heroes & hero, int direct )
     }
 }
 
-void Interface::Basic::EventNextHero( void )
+void Interface::Basic::EventNextHero()
 {
     const Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     const KingdomHeroes & myHeroes = myKingdom.GetHeroes();
@@ -148,7 +157,7 @@ void Interface::Basic::EventNextHero( void )
     RedrawFocus();
 }
 
-void Interface::Basic::EventContinueMovement( void ) const
+void Interface::Basic::EventContinueMovement() const
 {
     Heroes * hero = GetFocusHeroes();
 
@@ -157,7 +166,7 @@ void Interface::Basic::EventContinueMovement( void ) const
     }
 }
 
-void Interface::Basic::EventKingdomInfo( void ) const
+void Interface::Basic::EventKingdomInfo() const
 {
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     myKingdom.openOverviewDialog();
@@ -165,21 +174,25 @@ void Interface::Basic::EventKingdomInfo( void ) const
     iconsPanel.SetRedraw();
 }
 
-void Interface::Basic::EventCastSpell( void )
+void Interface::Basic::EventCastSpell()
 {
     Heroes * hero = GetFocusHeroes();
+    if ( hero == nullptr ) {
+        return;
+    }
 
-    if ( hero ) {
-        SetRedraw( REDRAW_ALL );
+    // Center on the hero before opening the spell book
+    gameArea.SetCenter( hero->GetCenter() );
+    Redraw( REDRAW_GAMEAREA | REDRAW_RADAR );
+
+    const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, false, nullptr );
+    if ( spell.isValid() ) {
+        hero->ActionSpellCast( spell );
+
+        // The spell will consume the hero's spell points (and perhaps also movement points) and can move the
+        // hero to another location, so we may have to update the terrain music theme and environment sounds
         ResetFocus( GameFocus::HEROES );
-        Redraw();
-
-        const Spell spell = hero->OpenSpellBook( SpellBook::Filter::ADVN, true, nullptr );
-        // apply cast spell
-        if ( spell.isValid() ) {
-            hero->ActionSpellCast( spell );
-            iconsPanel.SetRedraw();
-        }
+        RedrawFocus();
     }
 }
 
@@ -209,7 +222,7 @@ fheroes2::GameMode Interface::Basic::EventAdventureDialog()
         break;
 
     case Dialog::INFO:
-        return EventGameInfo();
+        return EventScenarioInformation();
 
     case Dialog::DIG:
         return EventDigArtifact();
@@ -244,7 +257,7 @@ fheroes2::GameMode Interface::Basic::EventExit()
     return fheroes2::GameMode::CANCEL;
 }
 
-void Interface::Basic::EventNextTown( void )
+void Interface::Basic::EventNextTown()
 {
     Kingdom & myKingdom = world.GetKingdom( Settings::Get().CurrentColor() );
     KingdomCastles & myCastles = myKingdom.GetCastles();
@@ -279,9 +292,7 @@ fheroes2::GameMode Interface::Basic::EventSaveGame() const
             return fheroes2::GameMode::CANCEL;
         }
 
-        // ask overwrite?
-        const Settings & conf = Settings::Get();
-        if ( System::IsFile( filename ) && conf.ExtGameRewriteConfirm()
+        if ( System::IsFile( filename )
              && Dialog::NO == Dialog::Message( "", _( "Are you sure you want to overwrite the save with this name?" ), Font::BIG, Dialog::YES | Dialog::NO ) ) {
             continue;
         }
@@ -303,18 +314,18 @@ fheroes2::GameMode Interface::Basic::EventLoadGame() const
                : fheroes2::GameMode::CANCEL;
 }
 
-void Interface::Basic::EventPuzzleMaps( void ) const
+void Interface::Basic::EventPuzzleMaps() const
 {
     world.GetKingdom( Settings::Get().CurrentColor() ).PuzzleMaps().ShowMapsDialog();
 }
 
-fheroes2::GameMode Interface::Basic::EventGameInfo()
+fheroes2::GameMode Interface::Basic::EventScenarioInformation()
 {
     if ( Settings::Get().isCampaignGameType() ) {
         fheroes2::Display & display = fheroes2::Display::instance();
         fheroes2::ImageRestorer saver( display, 0, 0, display.width(), display.height() );
 
-        AGG::ResetMixer();
+        AudioManager::ResetAudio();
 
         const fheroes2::GameMode returnMode = Game::SelectCampaignScenario( fheroes2::GameMode::CANCEL, true );
         if ( returnMode == fheroes2::GameMode::CANCEL ) {
@@ -333,7 +344,7 @@ fheroes2::GameMode Interface::Basic::EventGameInfo()
     return fheroes2::GameMode::CANCEL;
 }
 
-void Interface::Basic::EventSwitchHeroSleeping( void )
+void Interface::Basic::EventSwitchHeroSleeping()
 {
     Heroes * hero = GetFocusHeroes();
 
@@ -353,23 +364,35 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
         if ( hero->isShipMaster() )
             Dialog::Message( "", _( "Try looking on land!!!" ), Font::BIG, Dialog::OK );
         else if ( hero->GetMaxMovePoints() <= hero->GetMovePoints() ) {
-            if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() ) {
-                AGG::PlaySound( M82::DIGSOUND );
+            // Original Editor allows to put an Ultimate Artifact on an invalid tile. So checking tile index solves this issue.
+            if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() || world.GetUltimateArtifact().getPosition() == hero->GetIndex() ) {
+                AudioManager::PlaySound( M82::DIGSOUND );
 
                 hero->ResetMovePoints();
 
                 if ( world.DiggingForUltimateArtifact( hero->GetCenter() ) ) {
-                    AGG::PlaySound( M82::TREASURE );
+                    const AudioManager::MusicRestorer musicRestorer;
+
+                    if ( Settings::Get().MusicMIDI() ) {
+                        AudioManager::PlaySound( M82::TREASURE );
+                    }
+                    else {
+                        AudioManager::PlayMusic( MUS::ULTIMATE_ARTIFACT, Music::PlaybackMode::PLAY_ONCE );
+                    }
+
                     const Artifact & ultimate = world.GetUltimateArtifact().GetArtifact();
                     hero->PickupArtifact( ultimate );
                     std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );
                     StringReplace( msg, "%{artifact}", ultimate.GetName() );
-                    Dialog::ArtifactInfo( _( "Congratulations!" ), msg, ultimate.GetID() );
+
+                    const fheroes2::ArtifactDialogElement artifactUI( ultimate.GetID() );
+                    fheroes2::showMessage( fheroes2::Text( _( "Congratulations!" ), fheroes2::FontType::normalYellow() ),
+                                           fheroes2::Text( msg, fheroes2::FontType::normalWhite() ), Dialog::OK, { &artifactUI } );
                 }
                 else
                     Dialog::Message( "", _( "Nothing here. Where could it be?" ), Font::BIG, Dialog::OK );
 
-                iconsPanel.RedrawIcons( ICON_HEROES );
+                Redraw( REDRAW_HEROES );
                 fheroes2::Display::instance().render();
 
                 // check if the game is over due to conditions related to the ultimate artifact
@@ -395,8 +418,10 @@ fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMod
         if ( MP2::isActionObject( hero->GetMapsObject(), hero->isShipMaster() ) ) {
             hero->Action( hero->GetIndex(), true );
 
-            // The action object (e.g. Stables or Well) can alter the status of the hero
-            iconsPanel.RedrawIcons( ICON_HEROES );
+            // The action object can alter the status of the hero (e.g. Stables or Well) or
+            // move it to another location (e.g. Stone Liths or Whirlpool)
+            ResetFocus( GameFocus::HEROES );
+            RedrawFocus();
 
             // If a hero completed an action we must verify the condition for the scenario.
             if ( hero->isAction() ) {
@@ -414,7 +439,7 @@ fheroes2::GameMode Interface::Basic::EventDefaultAction( const fheroes2::GameMod
     return gameMode;
 }
 
-void Interface::Basic::EventOpenFocus( void ) const
+void Interface::Basic::EventOpenFocus() const
 {
     if ( GetFocusHeroes() )
         Game::OpenHeroesDialog( *GetFocusHeroes(), true, true );
@@ -422,7 +447,7 @@ void Interface::Basic::EventOpenFocus( void ) const
         Game::OpenCastleDialog( *GetFocusCastle() );
 }
 
-void Interface::Basic::EventSwitchShowRadar( void ) const
+void Interface::Basic::EventSwitchShowRadar() const
 {
     Settings & conf = Settings::Get();
 
@@ -438,7 +463,7 @@ void Interface::Basic::EventSwitchShowRadar( void ) const
     }
 }
 
-void Interface::Basic::EventSwitchShowButtons( void ) const
+void Interface::Basic::EventSwitchShowButtons() const
 {
     Settings & conf = Settings::Get();
 
@@ -454,7 +479,7 @@ void Interface::Basic::EventSwitchShowButtons( void ) const
     }
 }
 
-void Interface::Basic::EventSwitchShowStatus( void ) const
+void Interface::Basic::EventSwitchShowStatus() const
 {
     Settings & conf = Settings::Get();
 
@@ -470,7 +495,7 @@ void Interface::Basic::EventSwitchShowStatus( void ) const
     }
 }
 
-void Interface::Basic::EventSwitchShowIcons( void )
+void Interface::Basic::EventSwitchShowIcons() const
 {
     Settings & conf = Settings::Get();
 
@@ -481,13 +506,12 @@ void Interface::Basic::EventSwitchShowIcons( void )
         }
         else {
             conf.SetShowIcons( true );
-            iconsPanel.SetCurrentVisible();
             iconsPanel.SetRedraw();
         }
     }
 }
 
-void Interface::Basic::EventSwitchShowControlPanel( void ) const
+void Interface::Basic::EventSwitchShowControlPanel() const
 {
     Settings & conf = Settings::Get();
 

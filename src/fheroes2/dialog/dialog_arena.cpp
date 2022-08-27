@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,7 +24,7 @@
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "localevent.h"
 #include "settings.h"
@@ -31,13 +32,14 @@
 #include "text.h"
 #include "translations.h"
 #include "ui_button.h"
+#include "ui_dialog.h"
 
 void InfoSkillClear( const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect & );
 void InfoSkillSelect( int, const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect &, const fheroes2::Rect & );
 int InfoSkillNext( int );
 int InfoSkillPrev( int );
 
-int Dialog::SelectSkillFromArena( void )
+int Dialog::SelectSkillFromArena()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const int system = Settings::Get().ExtGameEvilInterface() ? ICN::SYSTEME : ICN::SYSTEM;
@@ -116,11 +118,11 @@ int Dialog::SelectSkillFromArena( void )
 
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
-        if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_LEFT ) && Skill::Primary::UNKNOWN != InfoSkillPrev( res ) ) {
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) && Skill::Primary::UNKNOWN != InfoSkillPrev( res ) ) {
             res = InfoSkillPrev( res );
             redraw = true;
         }
-        else if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_RIGHT ) && Skill::Primary::UNKNOWN != InfoSkillNext( res ) ) {
+        else if ( Game::HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) && Skill::Primary::UNKNOWN != InfoSkillNext( res ) ) {
             res = InfoSkillNext( res );
             redraw = true;
         }
@@ -140,6 +142,18 @@ int Dialog::SelectSkillFromArena( void )
             res = Skill::Primary::KNOWLEDGE;
             redraw = true;
         }
+        else if ( le.MousePressRight( rect1 ) ) {
+            fheroes2::PrimarySkillDialogElement( Skill::Primary::ATTACK, "" ).showPopup( Dialog::ZERO );
+        }
+        else if ( le.MousePressRight( rect2 ) ) {
+            fheroes2::PrimarySkillDialogElement( Skill::Primary::DEFENSE, "" ).showPopup( Dialog::ZERO );
+        }
+        else if ( le.MousePressRight( rect3 ) ) {
+            fheroes2::PrimarySkillDialogElement( Skill::Primary::POWER, "" ).showPopup( Dialog::ZERO );
+        }
+        else if ( allSkills && le.MousePressRight( rect4 ) ) {
+            fheroes2::PrimarySkillDialogElement( Skill::Primary::KNOWLEDGE, "" ).showPopup( Dialog::ZERO );
+        }
 
         if ( redraw ) {
             InfoSkillClear( rect1, rect2, rect3, rect4 );
@@ -147,7 +161,7 @@ int Dialog::SelectSkillFromArena( void )
             display.render();
         }
 
-        if ( Game::HotKeyPressEvent( Game::EVENT_DEFAULT_READY ) || le.MouseClickLeft( buttonOk.area() ) )
+        if ( Game::HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_OKAY ) || le.MouseClickLeft( buttonOk.area() ) )
             break;
     }
 
@@ -162,8 +176,15 @@ void InfoSkillClear( const fheroes2::Rect & rect1, const fheroes2::Rect & rect2,
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 1 ), display, rect2.x, rect2.y );
     fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 2 ), display, rect3.x, rect3.y );
 
-    if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() )
-        fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 3 ), display, rect4.x, rect4.y );
+    if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() ) {
+        const int32_t borderWidth = 2;
+        const fheroes2::Sprite & knowledgeICN = fheroes2::AGG::GetICN( ICN::XPRIMARY, 3 );
+
+        fheroes2::Blit( knowledgeICN, display, rect4.x, rect4.y );
+        fheroes2::Blit( knowledgeICN, borderWidth + 1, borderWidth, display, rect4.x + borderWidth, rect4.y + borderWidth, rect4.width - 2 * borderWidth - 1,
+                        rect4.height - 2 * borderWidth );
+        fheroes2::Blit( knowledgeICN, borderWidth, 0, display, rect4.x + rect4.width - borderWidth - 1, rect4.y, 1, rect4.height );
+    }
 }
 
 void InfoSkillSelect( int skill, const fheroes2::Rect & rect1, const fheroes2::Rect & rect2, const fheroes2::Rect & rect3, const fheroes2::Rect & rect4 )
@@ -181,8 +202,16 @@ void InfoSkillSelect( int skill, const fheroes2::Rect & rect1, const fheroes2::R
         fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 6 ), display, rect3.x, rect3.y );
         break;
     case Skill::Primary::KNOWLEDGE:
-        if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() )
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::XPRIMARY, 7 ), display, rect4.x, rect4.y );
+        if ( Settings::Get().ExtHeroArenaCanChoiseAnySkills() ) {
+            const int32_t borderWidth = 2;
+            const fheroes2::Sprite & knowledgeICN = fheroes2::AGG::GetICN( ICN::XPRIMARY, 7 );
+
+            fheroes2::Blit( knowledgeICN, display, rect4.x, rect4.y );
+            fheroes2::Blit( knowledgeICN, borderWidth + 1, borderWidth, display, rect4.x + borderWidth, rect4.y + borderWidth, rect4.width - 2 * borderWidth - 1,
+                            rect4.height - 2 * borderWidth );
+            fheroes2::Blit( knowledgeICN, borderWidth, 0, display, rect4.x + rect4.width - borderWidth - 1, rect4.y, 1, rect4.height );
+        }
+
         break;
     default:
         break;

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +23,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 
 #include "ai.h"
 #include "battle.h"
@@ -59,7 +61,7 @@ Kingdom::Kingdom()
     , visited_tents_colors( 0 )
     , _topItemInKingdomView( -1 )
 {
-    heroes_cond_loss.reserve( 4 );
+    // Do nothing.
 }
 
 void Kingdom::Init( int clr )
@@ -73,11 +75,11 @@ void Kingdom::Init( int clr )
         resource = _getKingdomStartingResources( Game::getDifficulty() );
     }
     else {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" )
     }
 }
 
-void Kingdom::clear( void )
+void Kingdom::clear()
 {
     modes = 0;
 
@@ -91,38 +93,35 @@ void Kingdom::clear( void )
 
     recruits.Reset();
 
-    heroes_cond_loss.clear();
     puzzle_maps.reset();
-
-    ResetLastLostHero();
 }
 
-int Kingdom::GetControl( void ) const
+int Kingdom::GetControl() const
 {
     return Players::GetPlayerControl( color );
 }
 
-int Kingdom::GetColor( void ) const
+int Kingdom::GetColor() const
 {
     return color;
 }
 
-int Kingdom::GetRace( void ) const
+int Kingdom::GetRace() const
 {
     return Players::GetPlayerRace( GetColor() );
 }
 
-bool Kingdom::isLoss( void ) const
+bool Kingdom::isLoss() const
 {
     return castles.empty() && heroes.empty();
 }
 
-bool Kingdom::isPlay( void ) const
+bool Kingdom::isPlay() const
 {
     return Players::GetPlayerInGame( color );
 }
 
-void Kingdom::LossPostActions( void )
+void Kingdom::LossPostActions()
 {
     if ( isPlay() ) {
         Players::SetPlayerInGame( color, false );
@@ -145,13 +144,20 @@ void Kingdom::LossPostActions( void )
     }
 }
 
-void Kingdom::ActionBeforeTurn( void )
+void Kingdom::ActionBeforeTurn()
 {
-    // rescan heroes path
-    std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->RescanPath(); } );
+    if ( isControlHuman() ) {
+        // Recalculate the existing paths of heroes if the kingdom is controlled by a human
+        std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->calculatePath( -1 ); } );
+    }
+    else {
+        // Reset the paths of heroes if the kingdom is controlled by AI, because it uses a
+        // special pathfinder implementation and revises its goals every turn
+        std::for_each( heroes.begin(), heroes.end(), []( Heroes * hero ) { hero->GetPath().Reset(); } );
+    }
 }
 
-void Kingdom::ActionNewDay( void )
+void Kingdom::ActionNewDay()
 {
     // countdown of days since the loss of the last town, first day isn't counted
     if ( world.CountDay() > 1 && castles.empty() && lost_town_days > 0 ) {
@@ -194,14 +200,14 @@ void Kingdom::ActionNewDay( void )
     visit_object.remove_if( Visit::isDayLife );
 }
 
-void Kingdom::ActionNewWeek( void )
+void Kingdom::ActionNewWeek()
 {
     // skip the first week
     if ( world.CountWeek() > 1 ) {
         // debug a gift
         if ( IS_DEVEL() && isControlHuman() ) {
             Funds gift( 20, 20, 10, 10, 10, 10, 5000 );
-            DEBUG_LOG( DBG_GAME, DBG_INFO, "debug gift: " << gift.String() );
+            DEBUG_LOG( DBG_GAME, DBG_INFO, "debug gift: " << gift.String() )
             resource += gift;
         }
     }
@@ -209,10 +215,11 @@ void Kingdom::ActionNewWeek( void )
     // remove week visit object
     visit_object.remove_if( Visit::isWeekLife );
 
-    UpdateRecruits();
+    // Settle a new set of recruits
+    GetRecruits();
 }
 
-void Kingdom::ActionNewMonth( void )
+void Kingdom::ActionNewMonth()
 {
     // remove month visit object
     visit_object.remove_if( Visit::isMonthLife );
@@ -300,28 +307,28 @@ void Kingdom::RemoveCastle( const Castle * castle )
         LossPostActions();
 }
 
-u32 Kingdom::GetCountCastle( void ) const
+uint32_t Kingdom::GetCountCastle() const
 {
     return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), Castle::PredicateIsCastle ) );
 }
 
-u32 Kingdom::GetCountTown( void ) const
+uint32_t Kingdom::GetCountTown() const
 {
     return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), Castle::PredicateIsTown ) );
 }
 
-u32 Kingdom::GetCountMarketplace( void ) const
+uint32_t Kingdom::GetCountMarketplace() const
 {
     return static_cast<uint32_t>(
         std::count_if( castles.begin(), castles.end(), []( const Castle * castle ) { return Castle::PredicateIsBuildBuilding( castle, BUILD_MARKETPLACE ); } ) );
 }
 
-u32 Kingdom::GetCountNecromancyShrineBuild( void ) const
+uint32_t Kingdom::GetCountNecromancyShrineBuild() const
 {
     return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), []( const Castle * castle ) { return castle->isNecromancyShrineBuild(); } ) );
 }
 
-u32 Kingdom::GetCountBuilding( u32 build ) const
+uint32_t Kingdom::GetCountBuilding( uint32_t build ) const
 {
     return static_cast<uint32_t>( std::count_if( castles.begin(), castles.end(), [build]( const Castle * castle ) { return castle->isBuild( build ); } ) );
 }
@@ -354,7 +361,7 @@ bool Kingdom::isVisited( const Maps::Tiles & tile ) const
     return isVisited( tile.GetIndex(), tile.GetObject( false ) );
 }
 
-bool Kingdom::isVisited( s32 index, const MP2::MapObjectType objectType ) const
+bool Kingdom::isVisited( int32_t index, const MP2::MapObjectType objectType ) const
 {
     std::list<IndexObject>::const_iterator it = std::find_if( visit_object.begin(), visit_object.end(), [index]( const IndexObject & v ) { return v.isIndex( index ); } );
     return visit_object.end() != it && ( *it ).isObject( objectType );
@@ -373,7 +380,7 @@ uint32_t Kingdom::CountVisitedObjects( const MP2::MapObjectType objectType ) con
 }
 
 /* set visited cell */
-void Kingdom::SetVisited( s32 index, const MP2::MapObjectType objectType = MP2::OBJ_ZERO )
+void Kingdom::SetVisited( int32_t index, const MP2::MapObjectType objectType = MP2::OBJ_ZERO )
 {
     if ( !isVisited( index, objectType ) && objectType != MP2::OBJ_ZERO )
         visit_object.push_front( IndexObject( index, objectType ) );
@@ -412,7 +419,7 @@ bool Kingdom::isValidKingdomObject( const Maps::Tiles & tile, const MP2::MapObje
     return true;
 }
 
-bool Kingdom::HeroesMayStillMove( void ) const
+bool Kingdom::HeroesMayStillMove() const
 {
     return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->MayStillMove( false, false ); } );
 }
@@ -429,63 +436,58 @@ void Kingdom::OddFundsResource( const Funds & funds )
     resource.Trim();
 }
 
-u32 Kingdom::GetLostTownDays( void ) const
+uint32_t Kingdom::GetLostTownDays() const
 {
     return lost_town_days;
 }
 
-Recruits & Kingdom::GetRecruits( void )
+const Recruits & Kingdom::GetRecruits()
 {
-    // update hero1
-    if ( Heroes::UNKNOWN == recruits.GetID1() || ( recruits.GetHero1() && !recruits.GetHero1()->isFreeman() ) ) {
-        const bool preferNative = recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN;
+    // In the first week, it is necessary to offer one native hero (or a hero given as a campaign award)
+    const bool offerNativeHero = world.CountWeek() < 2 && recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN;
+    // Special hero given as a campaign award
+    Heroes * specialHireableHero = nullptr;
 
-        recruits.SetHero1( world.GetFreemanHeroes( preferNative ? GetRace() : Race::NONE ) );
-    }
-
-    // update hero2
-    if ( Heroes::UNKNOWN == recruits.GetID2() || ( recruits.GetHero2() && !recruits.GetHero2()->isFreeman() ) )
-        recruits.SetHero2( world.GetFreemanHeroes() );
-
-    if ( recruits.GetID1() == recruits.GetID2() )
-        world.UpdateRecruits( recruits );
-
-    return recruits;
-}
-
-void Kingdom::UpdateRecruits( void )
-{
-    bool hasSpecialHireableHero = false;
-    if ( isControlHuman() && ( Settings::Get().isCampaignGameType() ) && world.CountWeek() < 2 ) {
+    if ( isControlHuman() && Settings::Get().isCampaignGameType() && offerNativeHero ) {
         const std::vector<Campaign::CampaignAwardData> obtainedAwards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
 
-        for ( size_t i = 0; i < obtainedAwards.size(); ++i ) {
-            if ( obtainedAwards[i]._type != Campaign::CampaignAwardData::TYPE_HIREABLE_HERO )
+        for ( const auto & obtainedAward : obtainedAwards ) {
+            if ( obtainedAward._type != Campaign::CampaignAwardData::TYPE_HIREABLE_HERO ) {
                 continue;
+            }
 
-            // Use the standard GetHeroes() function instead of GetFreemanHeroesSpecial() and check the hero's freeman status below
-            const Heroes * hero = world.GetHeroes( obtainedAwards[i]._subType );
+            Heroes * hero = world.GetHeroes( obtainedAward._subType );
 
             if ( hero && hero->isFreeman() ) {
-                recruits.SetHero1( hero );
-                hasSpecialHireableHero = true;
-                break;
+                specialHireableHero = hero;
             }
         }
     }
 
-    if ( !hasSpecialHireableHero ) {
-        const bool preferNative = recruits.GetID1() == Heroes::UNKNOWN && recruits.GetID2() == Heroes::UNKNOWN;
-        recruits.SetHero1( world.GetFreemanHeroes( preferNative ? GetRace() : Race::NONE ) );
+    if ( recruits.GetID1() == Heroes::UNKNOWN || ( recruits.GetHero1() && !recruits.GetHero1()->isFreeman() ) ) {
+        if ( specialHireableHero ) {
+            recruits.SetHero1( specialHireableHero );
+        }
+        else {
+            recruits.SetHero1( world.GetFreemanHeroes( offerNativeHero ? GetRace() : Race::NONE, recruits.GetID2() ) );
+        }
     }
 
-    recruits.SetHero2( world.GetFreemanHeroes() );
+    if ( recruits.GetID2() == Heroes::UNKNOWN || ( recruits.GetHero2() && !recruits.GetHero2()->isFreeman() ) ) {
+        recruits.SetHero2( world.GetFreemanHeroes( Race::NONE, recruits.GetID1() ) );
+    }
 
-    if ( recruits.GetID1() == recruits.GetID2() )
-        world.UpdateRecruits( recruits );
+    assert( recruits.GetID1() != recruits.GetID2() && recruits.GetID1() != Heroes::UNKNOWN && recruits.GetID2() != Heroes::UNKNOWN );
+
+    return recruits;
 }
 
-Puzzle & Kingdom::PuzzleMaps( void )
+Recruits & Kingdom::GetCurrentRecruits()
+{
+    return recruits;
+}
+
+Puzzle & Kingdom::PuzzleMaps()
 {
     return puzzle_maps;
 }
@@ -502,12 +504,12 @@ bool Kingdom::IsVisitTravelersTent( int col ) const
     return ( visited_tents_colors & ( 1 << col ) ) != 0;
 }
 
-bool Kingdom::AllowRecruitHero( bool check_payment, int level ) const
+bool Kingdom::AllowRecruitHero( bool check_payment ) const
 {
-    return ( heroes.size() < GetMaxHeroes() ) && ( !check_payment || AllowPayment( PaymentConditions::RecruitHero( level ) ) );
+    return ( heroes.size() < GetMaxHeroes() ) && ( !check_payment || AllowPayment( PaymentConditions::RecruitHero() ) );
 }
 
-void Kingdom::ApplyPlayWithStartingHero( void )
+void Kingdom::ApplyPlayWithStartingHero()
 {
     if ( !isPlay() || castles.empty() )
         return;
@@ -549,12 +551,12 @@ void Kingdom::ApplyPlayWithStartingHero( void )
             first = castles.front();
 
         Heroes * hero = world.GetFreemanHeroes( first->GetRace() );
-        if ( hero && AllowRecruitHero( false, 0 ) )
+        if ( hero && AllowRecruitHero( false ) )
             hero->Recruit( *first );
     }
 }
 
-u32 Kingdom::GetMaxHeroes( void )
+uint32_t Kingdom::GetMaxHeroes()
 {
     return GameStatic::GetKingdomMaxHeroes();
 }
@@ -565,10 +567,10 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
 
     if ( INCOME_CAPTURED & type ) {
         // captured object
-        const int resources[]
-            = {Resource::WOOD, Resource::ORE, Resource::MERCURY, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD, Resource::UNKNOWN};
+        const int resources[8]
+            = { Resource::WOOD, Resource::ORE, Resource::MERCURY, Resource::SULFUR, Resource::CRYSTAL, Resource::GEMS, Resource::GOLD, Resource::UNKNOWN };
 
-        for ( u32 index = 0; resources[index] != Resource::UNKNOWN; ++index )
+        for ( uint32_t index = 0; resources[index] != Resource::UNKNOWN; ++index )
             totalIncome += ProfitConditions::FromMine( resources[index] ) * world.CountCapturedMines( resources[index], GetColor() );
     }
 
@@ -591,24 +593,29 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
     }
 
     if ( INCOME_ARTIFACTS & type ) {
-        // find artifacts
-        const std::array<int, 10> artifacts
-            = { Artifact::GOLDEN_GOOSE,         Artifact::ENDLESS_SACK_GOLD,    Artifact::ENDLESS_BAG_GOLD,   Artifact::ENDLESS_PURSE_GOLD,
-                Artifact::ENDLESS_POUCH_SULFUR, Artifact::ENDLESS_VIAL_MERCURY, Artifact::ENDLESS_POUCH_GEMS, Artifact::ENDLESS_CORD_WOOD,
-                Artifact::ENDLESS_CART_ORE,     Artifact::ENDLESS_POUCH_CRYSTAL };
-
         for ( const Heroes * hero : heroes ) {
-            for ( const int art : artifacts )
-                totalIncome += ProfitConditions::FromArtifact( art ) * hero->artifactCount( Artifact( art ) );
-            // TAX_LIEN
-            totalIncome -= ProfitConditions::FromArtifact( Artifact::TAX_LIEN ) * hero->artifactCount( Artifact( Artifact::TAX_LIEN ) );
+            const BagArtifacts & bag = hero->GetBagArtifacts();
+            for ( const Artifact & artifact : bag ) {
+                totalIncome += ProfitConditions::FromArtifact( artifact.GetID() );
+            }
         }
     }
 
-    if ( INCOME_HEROSKILLS & type ) {
+    if ( INCOME_HERO_SKILLS & type ) {
         // estates skill bonus
         for ( KingdomHeroes::const_iterator ith = heroes.begin(); ith != heroes.end(); ++ith )
             totalIncome.gold += ( **ith ).GetSecondaryValues( Skill::Secondary::ESTATES );
+    }
+
+    if ( ( type & INCOME_CAMPAIGN_BONUS ) && Settings::Get().isCampaignGameType() ) {
+        const std::vector<Campaign::CampaignAwardData> awards = Campaign::CampaignSaveData::Get().getObtainedCampaignAwards();
+        for ( const Campaign::CampaignAwardData & award : awards ) {
+            if ( award._type != Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS ) {
+                continue;
+            }
+
+            totalIncome += Funds( award._subType, award._amount );
+        }
     }
 
     if ( isControlAI() ) {
@@ -641,7 +648,7 @@ Monster Kingdom::GetStrongestMonster() const
     return monster;
 }
 
-double Kingdom::GetArmiesStrength( void ) const
+double Kingdom::GetArmiesStrength() const
 {
     double res = 0;
 
@@ -654,7 +661,7 @@ double Kingdom::GetArmiesStrength( void ) const
     return res;
 }
 
-void Kingdoms::Init( void )
+void Kingdoms::Init()
 {
     const Colors colors( Settings::Get().GetPlayers().GetColors() );
 
@@ -664,13 +671,13 @@ void Kingdoms::Init( void )
         GetKingdom( *it ).Init( *it );
 }
 
-void Kingdoms::clear( void )
+void Kingdoms::clear()
 {
     for ( Kingdom & kingdom : kingdoms )
         kingdom.clear();
 }
 
-void Kingdoms::ApplyPlayWithStartingHero( void )
+void Kingdoms::ApplyPlayWithStartingHero()
 {
     for ( Kingdom & kingdom : kingdoms )
         if ( kingdom.isPlay() )
@@ -721,26 +728,9 @@ Kingdom & Kingdoms::GetKingdom( int color )
     return kingdoms[6];
 }
 
-void Kingdom::SetLastLostHero( const Heroes & hero )
-{
-    lost_hero.id = hero.GetID();
-    lost_hero.date = world.CountDay();
-}
-
 void Kingdom::SetLastBattleWinHero( const Heroes & hero )
 {
     _lastBattleWinHeroID = hero.GetID();
-}
-
-void Kingdom::ResetLastLostHero( void )
-{
-    lost_hero.id = Heroes::UNKNOWN;
-    lost_hero.date = 0;
-}
-
-Heroes * Kingdom::GetLastLostHero( void ) const
-{
-    return Heroes::UNKNOWN != lost_hero.id && world.CountDay() - lost_hero.date < DAYOFWEEK ? world.GetHeroes( lost_hero.id ) : nullptr;
 }
 
 Heroes * Kingdom::GetLastBattleWinHero() const
@@ -748,28 +738,33 @@ Heroes * Kingdom::GetLastBattleWinHero() const
     return Heroes::UNKNOWN != _lastBattleWinHeroID ? world.GetHeroes( _lastBattleWinHeroID ) : nullptr;
 }
 
-void Kingdoms::NewDay( void )
+void Kingdom::appendSurrenderedHero( Heroes & hero )
+{
+    recruits.appendSurrenderedHero( hero, world.CountDay() );
+}
+
+void Kingdoms::NewDay()
 {
     for ( Kingdom & kingdom : kingdoms )
         if ( kingdom.isPlay() )
             kingdom.ActionNewDay();
 }
 
-void Kingdoms::NewWeek( void )
+void Kingdoms::NewWeek()
 {
     for ( Kingdom & kingdom : kingdoms )
         if ( kingdom.isPlay() )
             kingdom.ActionNewWeek();
 }
 
-void Kingdoms::NewMonth( void )
+void Kingdoms::NewMonth()
 {
     for ( Kingdom & kingdom : kingdoms )
         if ( kingdom.isPlay() )
             kingdom.ActionNewMonth();
 }
 
-int Kingdoms::GetNotLossColors( void ) const
+int Kingdoms::GetNotLossColors() const
 {
     int result = 0;
     for ( const Kingdom & kingdom : kingdoms )
@@ -796,7 +791,7 @@ void Kingdoms::AddHeroes( const AllHeroes & heroes )
 
 void Kingdoms::AddCastles( const AllCastles & castles )
 {
-    for ( const auto & castle : castles ) {
+    for ( const Castle * castle : castles ) {
         // skip gray color
         if ( castle->GetColor() )
             GetKingdom( castle->GetColor() ).AddCastle( castle );
@@ -816,8 +811,6 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
                 continue;
             }
 
-            kingdom.AddFundsResource( funds );
-
             // for show dialogs
             if ( funds.GetValidItemsCount() && kingdom.isControlHuman() ) {
                 EventDate event;
@@ -830,7 +823,7 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
                 if ( objectCount > 1 ) {
                     event.title = std::to_string( objectCount );
                     event.title += ' ';
-                    event.title += MP2::getPluralObjectName( objectType, objectCount );
+                    event.title += MP2::StringObject( objectType, objectCount );
                 }
                 else {
                     event.title = MP2::StringObject( objectType );
@@ -838,25 +831,65 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
 
                 world.AddEventDate( event );
             }
+            else {
+                kingdom.AddFundsResource( funds );
+            }
         }
     }
 }
 
-// Check if tile is visible from any crystal ball of any hero
+std::set<Heroes *> Kingdoms::resetRecruits()
+{
+    std::set<Heroes *> remainingRecruits;
+
+    for ( Kingdom & kingdom : kingdoms ) {
+        Recruits & recruits = kingdom.GetCurrentRecruits();
+
+        // Heroes who surrendered on Sunday should still be available for recruitment next week in
+        // the same kingdom, provided that this kingdom is still playable
+        if ( !kingdom.isPlay() || world.CountDay() - recruits.getSurrenderDayOfHero1() > 1 ) {
+            recruits.SetHero1( nullptr );
+        }
+        else {
+            Heroes * hero = recruits.GetHero1();
+
+            if ( hero ) {
+                remainingRecruits.insert( hero );
+            }
+        }
+        if ( !kingdom.isPlay() || world.CountDay() - recruits.getSurrenderDayOfHero2() > 1 ) {
+            recruits.SetHero2( nullptr );
+        }
+        else {
+            Heroes * hero = recruits.GetHero2();
+
+            if ( hero ) {
+                remainingRecruits.insert( hero );
+            }
+        }
+    }
+
+    return remainingRecruits;
+}
+
 bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
 {
     for ( const Heroes * hero : heroes ) {
-        if ( hero->hasArtifact( Artifact::CRYSTAL_BALL ) ) {
+        assert( hero != nullptr );
+
+        if ( hero->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::VIEW_MONSTER_INFORMATION ) ) {
             const uint32_t crystalBallDistance = hero->GetVisionsDistance();
-            if ( Maps::GetApproximateDistance( hero->GetIndex(), dest ) <= crystalBallDistance ) {
+
+            if ( Maps::GetStraightLineDistance( hero->GetIndex(), dest ) <= crystalBallDistance ) {
                 return true;
             }
         }
     }
+
     return false;
 }
 
-cost_t Kingdom::_getKingdomStartingResources( const int difficulty )
+cost_t Kingdom::_getKingdomStartingResources( const int difficulty ) const
 {
     if ( isControlAI() )
         return { 10000, 30, 10, 30, 10, 10, 10 };
@@ -884,22 +917,13 @@ cost_t Kingdom::_getKingdomStartingResources( const int difficulty )
 StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
 {
     return msg << kingdom.modes << kingdom.color << kingdom.resource << kingdom.lost_town_days << kingdom.castles << kingdom.heroes << kingdom.recruits
-               << kingdom.lost_hero << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom.heroes_cond_loss
-               << kingdom._lastBattleWinHeroID << kingdom._topItemInKingdomView;
+               << kingdom.visit_object << kingdom.puzzle_maps << kingdom.visited_tents_colors << kingdom._lastBattleWinHeroID << kingdom._topItemInKingdomView;
 }
 
 StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 {
-    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.lost_hero
-        >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom.heroes_cond_loss >> kingdom._lastBattleWinHeroID;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_097_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_097_RELEASE ) {
-        msg >> kingdom._topItemInKingdomView;
-    }
-    else {
-        kingdom._topItemInKingdomView = -1;
-    }
+    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.visit_object
+        >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom._lastBattleWinHeroID >> kingdom._topItemInKingdomView;
 
     return msg;
 }
@@ -915,23 +939,13 @@ StreamBase & operator<<( StreamBase & msg, const Kingdoms & obj )
 
 StreamBase & operator>>( StreamBase & msg, Kingdoms & obj )
 {
-    u32 kingdomscount = 0;
+    uint32_t kingdomscount = 0;
     msg >> kingdomscount;
 
     if ( kingdomscount <= Kingdoms::_size ) {
-        for ( u32 i = 0; i < kingdomscount; ++i )
+        for ( uint32_t i = 0; i < kingdomscount; ++i )
             msg >> obj.kingdoms[i];
     }
 
     return msg;
-}
-
-StreamBase & operator>>( StreamBase & sb, LastLoseHero & st )
-{
-    return sb >> st.id >> st.date;
-}
-
-StreamBase & operator<<( StreamBase & sb, const LastLoseHero & hero )
-{
-    return sb << hero.id << hero.date;
 }

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,8 +26,269 @@
 #include "pal.h"
 #include "screen.h"
 
+#include <cassert>
+#include <map>
+
 namespace
 {
+    int getSDLKey( const fheroes2::Key key )
+    {
+        switch ( key ) {
+        case fheroes2::Key::NONE:
+        case fheroes2::Key::LAST_KEY:
+            return SDLK_UNKNOWN;
+        case fheroes2::Key::KEY_BACKSPACE:
+            return SDLK_BACKSPACE;
+        case fheroes2::Key::KEY_ENTER:
+            return SDLK_RETURN;
+        case fheroes2::Key::KEY_ESCAPE:
+            return SDLK_ESCAPE;
+        case fheroes2::Key::KEY_SPACE:
+            return SDLK_SPACE;
+        case fheroes2::Key::KEY_EXCLAIM:
+            return SDLK_EXCLAIM;
+        case fheroes2::Key::KEY_DOUBLE_QUOTE:
+            return SDLK_QUOTEDBL;
+        case fheroes2::Key::KEY_HASH:
+            return SDLK_HASH;
+        case fheroes2::Key::KEY_DOLLAR:
+            return SDLK_DOLLAR;
+        case fheroes2::Key::KEY_AMPERSAND:
+            return SDLK_AMPERSAND;
+        case fheroes2::Key::KEY_QUOTE:
+            return SDLK_QUOTE;
+        case fheroes2::Key::KEY_LEFT_PARENTHESIS:
+            return SDLK_LEFTPAREN;
+        case fheroes2::Key::KEY_RIGHT_PARENTHESIS:
+            return SDLK_RIGHTPAREN;
+        case fheroes2::Key::KEY_ASTERISK:
+            return SDLK_ASTERISK;
+        case fheroes2::Key::KEY_PLUS:
+            return SDLK_PLUS;
+        case fheroes2::Key::KEY_COMMA:
+            return SDLK_COMMA;
+        case fheroes2::Key::KEY_MINUS:
+            return SDLK_MINUS;
+        case fheroes2::Key::KEY_PERIOD:
+            return SDLK_PERIOD;
+        case fheroes2::Key::KEY_SLASH:
+            return SDLK_SLASH;
+        case fheroes2::Key::KEY_COLON:
+            return SDLK_COLON;
+        case fheroes2::Key::KEY_SEMICOLON:
+            return SDLK_SEMICOLON;
+        case fheroes2::Key::KEY_LESS:
+            return SDLK_LESS;
+        case fheroes2::Key::KEY_EQUALS:
+            return SDLK_EQUALS;
+        case fheroes2::Key::KEY_GREATER:
+            return SDLK_GREATER;
+        case fheroes2::Key::KEY_QUESTION:
+            return SDLK_QUESTION;
+        case fheroes2::Key::KEY_AT:
+            return SDLK_AT;
+        case fheroes2::Key::KEY_LEFT_BRACKET:
+            return SDLK_LEFTBRACKET;
+        case fheroes2::Key::KEY_BACKSLASH:
+            return SDLK_BACKSLASH;
+        case fheroes2::Key::KEY_RIGHT_BRACKET:
+            return SDLK_RIGHTBRACKET;
+        case fheroes2::Key::KEY_CARET:
+            return SDLK_CARET;
+        case fheroes2::Key::KEY_UNDERSCORE:
+            return SDLK_UNDERSCORE;
+        case fheroes2::Key::KEY_ALT:
+            return SDLK_LALT;
+        case fheroes2::Key::KEY_CONTROL:
+            return SDLK_LCTRL;
+        case fheroes2::Key::KEY_SHIFT:
+            return SDLK_LSHIFT;
+        case fheroes2::Key::KEY_TAB:
+            return SDLK_TAB;
+        case fheroes2::Key::KEY_DELETE:
+            return SDLK_DELETE;
+        case fheroes2::Key::KEY_PAGE_UP:
+            return SDLK_PAGEUP;
+        case fheroes2::Key::KEY_PAGE_DOWN:
+            return SDLK_PAGEDOWN;
+        case fheroes2::Key::KEY_F1:
+            return SDLK_F1;
+        case fheroes2::Key::KEY_F2:
+            return SDLK_F2;
+        case fheroes2::Key::KEY_F3:
+            return SDLK_F3;
+        case fheroes2::Key::KEY_F4:
+            return SDLK_F4;
+        case fheroes2::Key::KEY_F5:
+            return SDLK_F5;
+        case fheroes2::Key::KEY_F6:
+            return SDLK_F6;
+        case fheroes2::Key::KEY_F7:
+            return SDLK_F7;
+        case fheroes2::Key::KEY_F8:
+            return SDLK_F8;
+        case fheroes2::Key::KEY_F9:
+            return SDLK_F9;
+        case fheroes2::Key::KEY_F10:
+            return SDLK_F10;
+        case fheroes2::Key::KEY_F11:
+            return SDLK_F11;
+        case fheroes2::Key::KEY_F12:
+            return SDLK_F12;
+        case fheroes2::Key::KEY_LEFT:
+            return SDLK_LEFT;
+        case fheroes2::Key::KEY_RIGHT:
+            return SDLK_RIGHT;
+        case fheroes2::Key::KEY_UP:
+            return SDLK_UP;
+        case fheroes2::Key::KEY_DOWN:
+            return SDLK_DOWN;
+        case fheroes2::Key::KEY_0:
+            return SDLK_0;
+        case fheroes2::Key::KEY_1:
+            return SDLK_1;
+        case fheroes2::Key::KEY_2:
+            return SDLK_2;
+        case fheroes2::Key::KEY_3:
+            return SDLK_3;
+        case fheroes2::Key::KEY_4:
+            return SDLK_4;
+        case fheroes2::Key::KEY_5:
+            return SDLK_5;
+        case fheroes2::Key::KEY_6:
+            return SDLK_6;
+        case fheroes2::Key::KEY_7:
+            return SDLK_7;
+        case fheroes2::Key::KEY_8:
+            return SDLK_8;
+        case fheroes2::Key::KEY_9:
+            return SDLK_9;
+        case fheroes2::Key::KEY_A:
+            return SDLK_a;
+        case fheroes2::Key::KEY_B:
+            return SDLK_b;
+        case fheroes2::Key::KEY_C:
+            return SDLK_c;
+        case fheroes2::Key::KEY_D:
+            return SDLK_d;
+        case fheroes2::Key::KEY_E:
+            return SDLK_e;
+        case fheroes2::Key::KEY_F:
+            return SDLK_f;
+        case fheroes2::Key::KEY_G:
+            return SDLK_g;
+        case fheroes2::Key::KEY_H:
+            return SDLK_h;
+        case fheroes2::Key::KEY_I:
+            return SDLK_i;
+        case fheroes2::Key::KEY_J:
+            return SDLK_j;
+        case fheroes2::Key::KEY_K:
+            return SDLK_k;
+        case fheroes2::Key::KEY_L:
+            return SDLK_l;
+        case fheroes2::Key::KEY_M:
+            return SDLK_m;
+        case fheroes2::Key::KEY_N:
+            return SDLK_n;
+        case fheroes2::Key::KEY_O:
+            return SDLK_o;
+        case fheroes2::Key::KEY_P:
+            return SDLK_p;
+        case fheroes2::Key::KEY_Q:
+            return SDLK_q;
+        case fheroes2::Key::KEY_R:
+            return SDLK_r;
+        case fheroes2::Key::KEY_S:
+            return SDLK_s;
+        case fheroes2::Key::KEY_T:
+            return SDLK_t;
+        case fheroes2::Key::KEY_U:
+            return SDLK_u;
+        case fheroes2::Key::KEY_V:
+            return SDLK_v;
+        case fheroes2::Key::KEY_W:
+            return SDLK_w;
+        case fheroes2::Key::KEY_X:
+            return SDLK_x;
+        case fheroes2::Key::KEY_Y:
+            return SDLK_y;
+        case fheroes2::Key::KEY_Z:
+            return SDLK_z;
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+        case fheroes2::Key::KEY_PRINT:
+            return SDLK_PRINTSCREEN;
+        case fheroes2::Key::KEY_KP_0:
+            return SDLK_KP_0;
+        case fheroes2::Key::KEY_KP_1:
+            return SDLK_KP_1;
+        case fheroes2::Key::KEY_KP_2:
+            return SDLK_KP_2;
+        case fheroes2::Key::KEY_KP_3:
+            return SDLK_KP_3;
+        case fheroes2::Key::KEY_KP_4:
+            return SDLK_KP_4;
+        case fheroes2::Key::KEY_KP_5:
+            return SDLK_KP_5;
+        case fheroes2::Key::KEY_KP_6:
+            return SDLK_KP_6;
+        case fheroes2::Key::KEY_KP_7:
+            return SDLK_KP_7;
+        case fheroes2::Key::KEY_KP_8:
+            return SDLK_KP_8;
+        case fheroes2::Key::KEY_KP_9:
+            return SDLK_KP_9;
+#else
+        case fheroes2::Key::KEY_PRINT:
+            return SDLK_PRINT;
+        case fheroes2::Key::KEY_KP_0:
+            return SDLK_KP0;
+        case fheroes2::Key::KEY_KP_1:
+            return SDLK_KP1;
+        case fheroes2::Key::KEY_KP_2:
+            return SDLK_KP2;
+        case fheroes2::Key::KEY_KP_3:
+            return SDLK_KP3;
+        case fheroes2::Key::KEY_KP_4:
+            return SDLK_KP4;
+        case fheroes2::Key::KEY_KP_5:
+            return SDLK_KP5;
+        case fheroes2::Key::KEY_KP_6:
+            return SDLK_KP6;
+        case fheroes2::Key::KEY_KP_7:
+            return SDLK_KP7;
+        case fheroes2::Key::KEY_KP_8:
+            return SDLK_KP8;
+        case fheroes2::Key::KEY_KP_9:
+            return SDLK_KP9;
+#endif
+        case fheroes2::Key::KEY_KP_PERIOD:
+            return SDLK_KP_PERIOD;
+        case fheroes2::Key::KEY_KP_DIVIDE:
+            return SDLK_KP_DIVIDE;
+        case fheroes2::Key::KEY_KP_MULTIPLY:
+            return SDLK_KP_MULTIPLY;
+        case fheroes2::Key::KEY_KP_MINUS:
+            return SDLK_KP_MINUS;
+        case fheroes2::Key::KEY_KP_PLUS:
+            return SDLK_KP_PLUS;
+        case fheroes2::Key::KEY_KP_ENTER:
+            return SDLK_KP_ENTER;
+        case fheroes2::Key::KEY_KP_EQUALS:
+            return SDLK_KP_EQUALS;
+        case fheroes2::Key::KEY_HOME:
+            return SDLK_HOME;
+        case fheroes2::Key::KEY_END:
+            return SDLK_END;
+        default:
+            // Did you add a new key? Add the logic above!
+            assert( 0 );
+            break;
+        }
+
+        return SDLK_UNKNOWN;
+    }
+
     enum KeyMod
     {
         MOD_NONE = KMOD_NONE,
@@ -37,181 +299,175 @@ namespace
         MOD_NUM = KMOD_NUM
     };
 
-    char CharFromKeySym( const KeySym sym, const int32_t mod )
+    char getCharacterFromPressedKey( const fheroes2::Key key, const int32_t mod )
     {
-        switch ( sym ) {
-        case KEY_1:
+        switch ( key ) {
+        case fheroes2::Key::KEY_1:
             return ( MOD_SHIFT & mod ? '!' : '1' );
-        case KEY_2:
+        case fheroes2::Key::KEY_2:
             return ( MOD_SHIFT & mod ? '@' : '2' );
-        case KEY_3:
+        case fheroes2::Key::KEY_3:
             return ( MOD_SHIFT & mod ? '#' : '3' );
-        case KEY_4:
+        case fheroes2::Key::KEY_4:
             return ( MOD_SHIFT & mod ? '$' : '4' );
-        case KEY_5:
+        case fheroes2::Key::KEY_5:
             return ( MOD_SHIFT & mod ? '%' : '5' );
-        case KEY_6:
+        case fheroes2::Key::KEY_6:
             return ( MOD_SHIFT & mod ? '^' : '6' );
-        case KEY_7:
+        case fheroes2::Key::KEY_7:
             return ( MOD_SHIFT & mod ? '&' : '7' );
-        case KEY_8:
+        case fheroes2::Key::KEY_8:
             return ( MOD_SHIFT & mod ? '*' : '8' );
-        case KEY_9:
+        case fheroes2::Key::KEY_9:
             return ( MOD_SHIFT & mod ? '(' : '9' );
-        case KEY_0:
+        case fheroes2::Key::KEY_0:
             return ( MOD_SHIFT & mod ? ')' : '0' );
-
-        case KEY_KP0:
+        case fheroes2::Key::KEY_KP_0:
             if ( MOD_NUM & mod )
                 return '0';
             break;
-        case KEY_KP1:
+        case fheroes2::Key::KEY_KP_1:
             if ( MOD_NUM & mod )
                 return '1';
             break;
-        case KEY_KP2:
+        case fheroes2::Key::KEY_KP_2:
             if ( MOD_NUM & mod )
                 return '2';
             break;
-        case KEY_KP3:
+        case fheroes2::Key::KEY_KP_3:
             if ( MOD_NUM & mod )
                 return '3';
             break;
-        case KEY_KP4:
+        case fheroes2::Key::KEY_KP_4:
             if ( MOD_NUM & mod )
                 return '4';
             break;
-        case KEY_KP5:
+        case fheroes2::Key::KEY_KP_5:
             if ( MOD_NUM & mod )
                 return '5';
             break;
-        case KEY_KP6:
+        case fheroes2::Key::KEY_KP_6:
             if ( MOD_NUM & mod )
                 return '6';
             break;
-        case KEY_KP7:
+        case fheroes2::Key::KEY_KP_7:
             if ( MOD_NUM & mod )
                 return '7';
             break;
-        case KEY_KP8:
+        case fheroes2::Key::KEY_KP_8:
             if ( MOD_NUM & mod )
                 return '8';
             break;
-        case KEY_KP9:
+        case fheroes2::Key::KEY_KP_9:
             if ( MOD_NUM & mod )
                 return '9';
             break;
-
-        case KEY_MINUS:
+        case fheroes2::Key::KEY_MINUS:
             return ( MOD_SHIFT & mod ? '_' : '-' );
-        case KEY_EQUALS:
+        case fheroes2::Key::KEY_EQUALS:
             return ( MOD_SHIFT & mod ? '+' : '=' );
-        case KEY_BACKSLASH:
+        case fheroes2::Key::KEY_BACKSLASH:
             return ( MOD_SHIFT & mod ? '|' : '\\' );
-        case KEY_LEFTBRACKET:
+        case fheroes2::Key::KEY_LEFT_BRACKET:
             return ( MOD_SHIFT & mod ? '{' : '[' );
-        case KEY_RIGHTBRACKET:
+        case fheroes2::Key::KEY_RIGHT_BRACKET:
             return ( MOD_SHIFT & mod ? '}' : ']' );
-        case KEY_SEMICOLON:
+        case fheroes2::Key::KEY_SEMICOLON:
             return ( MOD_SHIFT & mod ? ':' : ';' );
-        case KEY_QUOTE:
+        case fheroes2::Key::KEY_QUOTE:
             return ( MOD_SHIFT & mod ? '"' : '\'' );
-        case KEY_COMMA:
+        case fheroes2::Key::KEY_COMMA:
             return ( MOD_SHIFT & mod ? '<' : ',' );
-        case KEY_PERIOD:
+        case fheroes2::Key::KEY_PERIOD:
             return ( MOD_SHIFT & mod ? '>' : '.' );
-        case KEY_SLASH:
+        case fheroes2::Key::KEY_SLASH:
             return ( MOD_SHIFT & mod ? '?' : '/' );
-
-        case KEY_EXCLAIM:
+        case fheroes2::Key::KEY_EXCLAIM:
             return '!';
-        case KEY_AT:
+        case fheroes2::Key::KEY_AT:
             return '@';
-        case KEY_HASH:
+        case fheroes2::Key::KEY_HASH:
             return '#';
-        case KEY_DOLLAR:
+        case fheroes2::Key::KEY_DOLLAR:
             return '$';
-        case KEY_AMPERSAND:
+        case fheroes2::Key::KEY_AMPERSAND:
             return '&';
-        case KEY_ASTERISK:
+        case fheroes2::Key::KEY_ASTERISK:
             return '*';
-        case KEY_LEFTPAREN:
+        case fheroes2::Key::KEY_LEFT_PARENTHESIS:
             return '(';
-        case KEY_RIGHTPAREN:
+        case fheroes2::Key::KEY_RIGHT_PARENTHESIS:
             return ')';
-        case KEY_QUOTEDBL:
+        case fheroes2::Key::KEY_DOUBLE_QUOTE:
             return '"';
-        case KEY_PLUS:
+        case fheroes2::Key::KEY_PLUS:
             return '+';
-        case KEY_COLON:
+        case fheroes2::Key::KEY_COLON:
             return ':';
-        case KEY_LESS:
+        case fheroes2::Key::KEY_LESS:
             return '<';
-        case KEY_GREATER:
+        case fheroes2::Key::KEY_GREATER:
             return '>';
-        case KEY_QUESTION:
+        case fheroes2::Key::KEY_QUESTION:
             return '?';
-        case KEY_CARET:
+        case fheroes2::Key::KEY_CARET:
             return '^';
-        case KEY_UNDERSCORE:
+        case fheroes2::Key::KEY_UNDERSCORE:
             return '_';
-
-        case KEY_SPACE:
+        case fheroes2::Key::KEY_SPACE:
             return ' ';
-
-        case KEY_a:
+        case fheroes2::Key::KEY_A:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'A' : 'a' );
-        case KEY_b:
+        case fheroes2::Key::KEY_B:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'B' : 'b' );
-        case KEY_c:
+        case fheroes2::Key::KEY_C:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'C' : 'c' );
-        case KEY_d:
+        case fheroes2::Key::KEY_D:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'D' : 'd' );
-        case KEY_e:
+        case fheroes2::Key::KEY_E:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'E' : 'e' );
-        case KEY_f:
+        case fheroes2::Key::KEY_F:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'F' : 'f' );
-        case KEY_g:
+        case fheroes2::Key::KEY_G:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'G' : 'g' );
-        case KEY_h:
+        case fheroes2::Key::KEY_H:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'H' : 'h' );
-        case KEY_i:
+        case fheroes2::Key::KEY_I:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'I' : 'i' );
-        case KEY_j:
+        case fheroes2::Key::KEY_J:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'J' : 'j' );
-        case KEY_k:
+        case fheroes2::Key::KEY_K:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'K' : 'k' );
-        case KEY_l:
+        case fheroes2::Key::KEY_L:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'L' : 'l' );
-        case KEY_m:
+        case fheroes2::Key::KEY_M:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'M' : 'm' );
-        case KEY_n:
+        case fheroes2::Key::KEY_N:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'N' : 'n' );
-        case KEY_o:
+        case fheroes2::Key::KEY_O:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'O' : 'o' );
-        case KEY_p:
+        case fheroes2::Key::KEY_P:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'P' : 'p' );
-        case KEY_q:
+        case fheroes2::Key::KEY_Q:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'Q' : 'q' );
-        case KEY_r:
+        case fheroes2::Key::KEY_R:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'R' : 'r' );
-        case KEY_s:
+        case fheroes2::Key::KEY_S:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'S' : 's' );
-        case KEY_t:
+        case fheroes2::Key::KEY_T:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'T' : 't' );
-        case KEY_u:
+        case fheroes2::Key::KEY_U:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'U' : 'u' );
-        case KEY_v:
+        case fheroes2::Key::KEY_V:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'V' : 'v' );
-        case KEY_w:
+        case fheroes2::Key::KEY_W:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'W' : 'w' );
-        case KEY_x:
+        case fheroes2::Key::KEY_X:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'X' : 'x' );
-        case KEY_y:
+        case fheroes2::Key::KEY_Y:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'Y' : 'y' );
-        case KEY_z:
+        case fheroes2::Key::KEY_Z:
             return ( ( MOD_SHIFT | MOD_CAPS ) & mod ? 'Z' : 'z' );
-
         default:
             break;
         }
@@ -219,162 +475,162 @@ namespace
         return 0;
     }
 
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
     const int totalCharactersDPad = 38;
     bool dpadInputActive = false;
     bool currentUpper = false;
     int currentCharIndex = 0;
 
-    const KeySym dPadKeys[totalCharactersDPad] = {
+    const fheroes2::Key dPadKeys[totalCharactersDPad] = {
         // lowercase letters
-        KEY_a, KEY_b, KEY_c, KEY_d, KEY_e, KEY_f, KEY_g, KEY_h, KEY_i, KEY_j, KEY_k, KEY_l, KEY_m, KEY_n, KEY_o, KEY_p, KEY_q, KEY_r, KEY_s, KEY_t, KEY_u, KEY_v, KEY_w,
-        KEY_x, KEY_y, KEY_z,
+        fheroes2::Key::KEY_A, fheroes2::Key::KEY_B, fheroes2::Key::KEY_C, fheroes2::Key::KEY_D, fheroes2::Key::KEY_E, fheroes2::Key::KEY_F, fheroes2::Key::KEY_G,
+        fheroes2::Key::KEY_H, fheroes2::Key::KEY_I, fheroes2::Key::KEY_J, fheroes2::Key::KEY_K, fheroes2::Key::KEY_L, fheroes2::Key::KEY_M, fheroes2::Key::KEY_N,
+        fheroes2::Key::KEY_O, fheroes2::Key::KEY_P, fheroes2::Key::KEY_Q, fheroes2::Key::KEY_R, fheroes2::Key::KEY_S, fheroes2::Key::KEY_T, fheroes2::Key::KEY_U,
+        fheroes2::Key::KEY_V, fheroes2::Key::KEY_W, fheroes2::Key::KEY_X, fheroes2::Key::KEY_Y, fheroes2::Key::KEY_Z,
         // space, underscore
-        KEY_SPACE, KEY_UNDERSCORE,
+        fheroes2::Key::KEY_SPACE, fheroes2::Key::KEY_UNDERSCORE,
         // nums
-        KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9 };
+        fheroes2::Key::KEY_0, fheroes2::Key::KEY_1, fheroes2::Key::KEY_2, fheroes2::Key::KEY_3, fheroes2::Key::KEY_4, fheroes2::Key::KEY_5, fheroes2::Key::KEY_6,
+        fheroes2::Key::KEY_7, fheroes2::Key::KEY_8, fheroes2::Key::KEY_9 };
 
     char GetCurrentDPadChar()
     {
-        return CharFromKeySym( dPadKeys[currentCharIndex], currentUpper ? MOD_CAPS : MOD_NONE );
+        return getCharacterFromPressedKey( dPadKeys[currentCharIndex], currentUpper ? MOD_CAPS : MOD_NONE );
     }
 
-    KeySym KeySymFromChar( char c )
+    fheroes2::Key KeySymFromChar( const char c )
     {
         switch ( c ) {
         case '!':
-            return KEY_EXCLAIM;
+            return fheroes2::Key::KEY_EXCLAIM;
         case '"':
-            return KEY_QUOTEDBL;
+            return fheroes2::Key::KEY_DOUBLE_QUOTE;
         case '#':
-            return KEY_HASH;
+            return fheroes2::Key::KEY_HASH;
         case '$':
-            return KEY_DOLLAR;
+            return fheroes2::Key::KEY_DOLLAR;
         case '&':
-            return KEY_AMPERSAND;
+            return fheroes2::Key::KEY_AMPERSAND;
         case '\'':
-            return KEY_QUOTE;
+            return fheroes2::Key::KEY_QUOTE;
         case '(':
-            return KEY_LEFTPAREN;
+            return fheroes2::Key::KEY_LEFT_PARENTHESIS;
         case ')':
-            return KEY_RIGHTPAREN;
+            return fheroes2::Key::KEY_RIGHT_PARENTHESIS;
         case '*':
-            return KEY_ASTERISK;
+            return fheroes2::Key::KEY_ASTERISK;
         case '+':
-            return KEY_PLUS;
+            return fheroes2::Key::KEY_PLUS;
         case ',':
-            return KEY_COMMA;
+            return fheroes2::Key::KEY_COMMA;
         case '-':
-            return KEY_MINUS;
+            return fheroes2::Key::KEY_MINUS;
         case '.':
-            return KEY_PERIOD;
+            return fheroes2::Key::KEY_PERIOD;
         case '/':
-            return KEY_SLASH;
+            return fheroes2::Key::KEY_SLASH;
         case ':':
-            return KEY_COLON;
+            return fheroes2::Key::KEY_COLON;
         case ';':
-            return KEY_SEMICOLON;
+            return fheroes2::Key::KEY_SEMICOLON;
         case '<':
-            return KEY_LESS;
+            return fheroes2::Key::KEY_LESS;
         case '=':
-            return KEY_EQUALS;
+            return fheroes2::Key::KEY_EQUALS;
         case '>':
-            return KEY_GREATER;
+            return fheroes2::Key::KEY_GREATER;
         case '?':
-            return KEY_QUESTION;
+            return fheroes2::Key::KEY_QUESTION;
         case '@':
-            return KEY_AT;
+            return fheroes2::Key::KEY_AT;
         case '[':
-            return KEY_LEFTBRACKET;
+            return fheroes2::Key::KEY_LEFT_BRACKET;
         case '\\':
-            return KEY_BACKSLASH;
+            return fheroes2::Key::KEY_BACKSLASH;
         case ']':
-            return KEY_RIGHTBRACKET;
+            return fheroes2::Key::KEY_RIGHT_BRACKET;
         case '^':
-            return KEY_CARET;
+            return fheroes2::Key::KEY_CARET;
         case '_':
-            return KEY_UNDERSCORE;
+            return fheroes2::Key::KEY_UNDERSCORE;
         case ' ':
-            return KEY_SPACE;
-
+            return fheroes2::Key::KEY_SPACE;
         case 'a':
-            return KEY_a;
+            return fheroes2::Key::KEY_A;
         case 'b':
-            return KEY_b;
+            return fheroes2::Key::KEY_B;
         case 'c':
-            return KEY_c;
+            return fheroes2::Key::KEY_C;
         case 'd':
-            return KEY_d;
+            return fheroes2::Key::KEY_D;
         case 'e':
-            return KEY_e;
+            return fheroes2::Key::KEY_E;
         case 'f':
-            return KEY_f;
+            return fheroes2::Key::KEY_F;
         case 'g':
-            return KEY_g;
+            return fheroes2::Key::KEY_G;
         case 'h':
-            return KEY_h;
+            return fheroes2::Key::KEY_H;
         case 'i':
-            return KEY_i;
+            return fheroes2::Key::KEY_I;
         case 'j':
-            return KEY_j;
+            return fheroes2::Key::KEY_J;
         case 'k':
-            return KEY_k;
+            return fheroes2::Key::KEY_K;
         case 'l':
-            return KEY_l;
+            return fheroes2::Key::KEY_L;
         case 'm':
-            return KEY_m;
+            return fheroes2::Key::KEY_M;
         case 'n':
-            return KEY_n;
+            return fheroes2::Key::KEY_N;
         case 'o':
-            return KEY_o;
+            return fheroes2::Key::KEY_O;
         case 'p':
-            return KEY_p;
+            return fheroes2::Key::KEY_P;
         case 'q':
-            return KEY_q;
+            return fheroes2::Key::KEY_Q;
         case 'r':
-            return KEY_r;
+            return fheroes2::Key::KEY_R;
         case 's':
-            return KEY_s;
+            return fheroes2::Key::KEY_S;
         case 't':
-            return KEY_t;
+            return fheroes2::Key::KEY_T;
         case 'u':
-            return KEY_u;
+            return fheroes2::Key::KEY_U;
         case 'v':
-            return KEY_v;
+            return fheroes2::Key::KEY_V;
         case 'w':
-            return KEY_w;
+            return fheroes2::Key::KEY_W;
         case 'x':
-            return KEY_x;
+            return fheroes2::Key::KEY_X;
         case 'y':
-            return KEY_y;
+            return fheroes2::Key::KEY_Y;
         case 'z':
-            return KEY_z;
-
+            return fheroes2::Key::KEY_Z;
         case '0':
-            return KEY_0;
+            return fheroes2::Key::KEY_0;
         case '1':
-            return KEY_1;
+            return fheroes2::Key::KEY_1;
         case '2':
-            return KEY_2;
+            return fheroes2::Key::KEY_2;
         case '3':
-            return KEY_3;
+            return fheroes2::Key::KEY_3;
         case '4':
-            return KEY_4;
+            return fheroes2::Key::KEY_4;
         case '5':
-            return KEY_5;
+            return fheroes2::Key::KEY_5;
         case '6':
-            return KEY_6;
+            return fheroes2::Key::KEY_6;
         case '7':
-            return KEY_7;
+            return fheroes2::Key::KEY_7;
         case '8':
-            return KEY_8;
+            return fheroes2::Key::KEY_8;
         case '9':
-            return KEY_9;
-
+            return fheroes2::Key::KEY_9;
         default:
             break;
         }
-        return KEY_NONE;
+        return fheroes2::Key::NONE;
     }
 
     void SetCurrentDPadCharIndex( char currentChar )
@@ -384,7 +640,7 @@ namespace
             currentChar += 32;
         }
 
-        const KeySym keySym = KeySymFromChar( currentChar );
+        const fheroes2::Key keySym = KeySymFromChar( currentChar );
         for ( int i = 0; i < totalCharactersDPad; ++i ) {
             if ( dPadKeys[i] == keySym ) {
                 currentCharIndex = i;
@@ -398,7 +654,7 @@ namespace
 }
 
 // Custom button mapping for Nintendo Switch
-#if defined( __SWITCH__ )
+#if defined( TARGET_NINTENDO_SWITCH )
 #undef SDL_CONTROLLER_BUTTON_A
 #undef SDL_CONTROLLER_BUTTON_B
 #undef SDL_CONTROLLER_BUTTON_DPAD_LEFT
@@ -424,9 +680,237 @@ enum SwitchJoyconKeys
 
 #endif
 
+namespace fheroes2
+{
+    const char * KeySymGetName( const Key key )
+    {
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
+        return SDL_GetKeyName( static_cast<SDL_Keycode>( getSDLKey( key ) ) );
+#else
+        return SDL_GetKeyName( static_cast<SDLKey>( getSDLKey( key ) ) );
+#endif
+    }
+
+    bool PressIntKey( uint32_t max, uint32_t & result )
+    {
+        const LocalEvent & le = LocalEvent::Get();
+
+        if ( le.KeyPress( fheroes2::Key::KEY_BACKSPACE ) ) {
+            result /= 10;
+            return true;
+        }
+
+        if ( !le.KeyPress() ) {
+            // No key is pressed.
+            return false;
+        }
+
+        if ( le.KeyValue() >= fheroes2::Key::KEY_0 && le.KeyValue() <= fheroes2::Key::KEY_9 ) {
+            if ( max <= result ) {
+                // We reached the maximum.
+                return true;
+            }
+
+            result *= 10;
+
+            result += static_cast<uint32_t>( static_cast<int32_t>( le.KeyValue() ) - static_cast<int32_t>( fheroes2::Key::KEY_0 ) );
+
+            if ( result > max ) {
+                result = max;
+            }
+
+            return true;
+        }
+
+        if ( le.KeyValue() >= fheroes2::Key::KEY_KP_0 && le.KeyValue() <= fheroes2::Key::KEY_KP_9 ) {
+            if ( max <= result ) {
+                // We reached the maximum.
+                return true;
+            }
+
+            result *= 10;
+
+            result += static_cast<uint32_t>( static_cast<int32_t>( le.KeyValue() ) - static_cast<int32_t>( fheroes2::Key::KEY_KP_0 ) );
+
+            if ( result > max ) {
+                result = max;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    size_t InsertKeySym( std::string & res, size_t pos, const Key key, const int32_t mod )
+    {
+#if defined( TARGET_PS_VITA )
+        (void)mod;
+
+        // input with D-Pad
+        if ( res.size() ) {
+            SetCurrentDPadCharIndex( res.back() );
+        }
+        else {
+            currentUpper = true;
+            currentCharIndex = 0;
+        }
+
+        switch ( key ) {
+        // delete char
+        case fheroes2::Key::KEY_KP_4: {
+            if ( !res.empty() && pos ) {
+                res.resize( res.size() - 1 );
+                --pos;
+            }
+            break;
+        }
+        // add new char
+        case fheroes2::Key::KEY_KP_6: {
+            currentUpper = res.empty();
+            currentCharIndex = 0;
+
+            const char c = GetCurrentDPadChar();
+            if ( c )
+                res.push_back( c );
+
+            ++pos;
+            break;
+        }
+        // next char
+        case fheroes2::Key::KEY_KP_2: {
+            ++currentCharIndex;
+            if ( currentCharIndex >= totalCharactersDPad )
+                currentCharIndex = 0;
+
+            if ( !res.empty() ) {
+                res.resize( res.size() - 1 );
+            }
+            else {
+                ++pos;
+            }
+
+            const char c = GetCurrentDPadChar();
+            if ( c )
+                res.push_back( c );
+
+            break;
+        }
+        // previous char
+        case fheroes2::Key::KEY_KP_8: {
+            --currentCharIndex;
+            if ( currentCharIndex < 0 )
+                currentCharIndex = totalCharactersDPad - 1;
+
+            if ( !res.empty() ) {
+                res.resize( res.size() - 1 );
+            }
+            else {
+                ++pos;
+            }
+
+            const char c = GetCurrentDPadChar();
+            if ( c )
+                res.push_back( c );
+
+            break;
+        }
+        // switch uppler/lowercase
+        case fheroes2::Key::KEY_SHIFT: {
+            currentUpper = !currentUpper;
+
+            if ( !res.empty() ) {
+                res.resize( res.size() - 1 );
+            }
+            else {
+                ++pos;
+            }
+
+            const char c = GetCurrentDPadChar();
+            if ( c )
+                res.push_back( c );
+
+            break;
+        }
+
+        default:
+            break;
+        }
+#else
+        switch ( key ) {
+        case fheroes2::Key::KEY_BACKSPACE:
+            if ( !res.empty() && pos ) {
+                if ( pos >= res.size() )
+                    res.resize( res.size() - 1 );
+                else
+                    res.erase( pos - 1, 1 );
+                --pos;
+            }
+            break;
+        case fheroes2::Key::KEY_DELETE:
+            if ( !res.empty() ) {
+                if ( pos < res.size() )
+                    res.erase( pos, 1 );
+            }
+            break;
+
+        case fheroes2::Key::KEY_LEFT:
+            if ( pos )
+                --pos;
+            break;
+        case fheroes2::Key::KEY_RIGHT:
+            if ( pos < res.size() )
+                ++pos;
+            break;
+        case fheroes2::Key::KEY_HOME:
+            pos = 0;
+            break;
+        case fheroes2::Key::KEY_END:
+            pos = res.size();
+            break;
+
+        default: {
+            char c = getCharacterFromPressedKey( key, mod );
+
+            if ( c ) {
+                res.insert( pos, 1, c );
+                ++pos;
+            }
+        }
+        }
+#endif
+
+        return pos;
+    }
+
+    Key getKeyFromSDL( int sdlKey )
+    {
+        // SDL interprets keyboard Numpad Enter as a separate key. However, in the game we should handle it in the same way as the normal Enter.
+        if ( sdlKey == SDLK_KP_ENTER ) {
+            sdlKey = SDLK_RETURN;
+        }
+
+        static std::map<int, Key> sdlValueToKey;
+        if ( sdlValueToKey.empty() ) {
+            // The map is empty let's populate it.
+            for ( int32_t i = static_cast<int32_t>( Key::NONE ); i < static_cast<int32_t>( Key::LAST_KEY ); ++i ) {
+                const Key key = static_cast<Key>( i );
+                sdlValueToKey.emplace( getSDLKey( key ), key );
+            }
+        }
+
+        auto iter = sdlValueToKey.find( sdlKey );
+        if ( iter == sdlValueToKey.end() ) {
+            return Key::NONE;
+        }
+
+        return iter->second;
+    }
+}
+
 LocalEvent::LocalEvent()
     : modes( 0 )
-    , key_value( KEY_NONE )
+    , key_value( fheroes2::Key::NONE )
     , mouse_button( 0 )
     , redraw_cursor_func( nullptr )
     , keyboard_filter_func( nullptr )
@@ -457,7 +941,7 @@ void LocalEvent::CloseController()
 
 void LocalEvent::OpenTouchpad()
 {
-#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
     const int touchNumber = SDL_GetNumTouchDevices();
     if ( touchNumber > 0 ) {
         _touchpadAvailable = true;
@@ -468,504 +952,35 @@ void LocalEvent::OpenTouchpad()
     }
 #endif
 }
+
+#else
+void LocalEvent::OpenController()
+{
+    // Do nothing.
+}
+void LocalEvent::CloseController()
+{
+    // Do nothing.
+}
+
+void OpenTouchpad()
+{
+    // Do nothing.
+}
 #endif
 
 void LocalEvent::OpenVirtualKeyboard()
 {
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
     dpadInputActive = true;
 #endif
 }
 
 void LocalEvent::CloseVirtualKeyboard()
 {
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
     dpadInputActive = false;
 #endif
-}
-
-const fheroes2::Point & LocalEvent::GetMousePressLeft( void ) const
-{
-    return mouse_pl;
-}
-
-void LocalEvent::SetModes( flag_t f )
-{
-    modes |= f;
-}
-
-void LocalEvent::ResetModes( flag_t f )
-{
-    modes &= ~f;
-}
-
-const char * KeySymGetName( KeySym sym )
-{
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    return SDL_GetKeyName( static_cast<SDL_Keycode>( sym ) );
-#else
-    return SDL_GetKeyName( static_cast<SDLKey>( sym ) );
-#endif
-}
-
-KeySym GetKeySym( int key )
-{
-    switch ( key ) {
-    default:
-        break;
-
-    case SDLK_RETURN:
-        return KEY_RETURN;
-    case SDLK_LEFT:
-        return KEY_LEFT;
-    case SDLK_RIGHT:
-        return KEY_RIGHT;
-    case SDLK_UP:
-        return KEY_UP;
-    case SDLK_DOWN:
-        return KEY_DOWN;
-
-    case SDLK_ESCAPE:
-        return KEY_ESCAPE;
-    case SDLK_BACKSPACE:
-        return KEY_BACKSPACE;
-    case SDLK_EXCLAIM:
-        return KEY_EXCLAIM;
-    case SDLK_QUOTEDBL:
-        return KEY_QUOTEDBL;
-    case SDLK_HASH:
-        return KEY_HASH;
-    case SDLK_DOLLAR:
-        return KEY_DOLLAR;
-    case SDLK_AMPERSAND:
-        return KEY_AMPERSAND;
-    case SDLK_QUOTE:
-        return KEY_QUOTE;
-    case SDLK_LEFTPAREN:
-        return KEY_LEFTPAREN;
-    case SDLK_RIGHTPAREN:
-        return KEY_RIGHTPAREN;
-    case SDLK_ASTERISK:
-        return KEY_ASTERISK;
-    case SDLK_PLUS:
-        return KEY_PLUS;
-    case SDLK_COMMA:
-        return KEY_COMMA;
-    case SDLK_MINUS:
-        return KEY_MINUS;
-    case SDLK_PERIOD:
-        return KEY_PERIOD;
-    case SDLK_SLASH:
-        return KEY_SLASH;
-    case SDLK_COLON:
-        return KEY_COLON;
-    case SDLK_SEMICOLON:
-        return KEY_SEMICOLON;
-    case SDLK_LESS:
-        return KEY_LESS;
-    case SDLK_EQUALS:
-        return KEY_EQUALS;
-    case SDLK_GREATER:
-        return KEY_GREATER;
-    case SDLK_QUESTION:
-        return KEY_QUESTION;
-    case SDLK_AT:
-        return KEY_AT;
-    case SDLK_LEFTBRACKET:
-        return KEY_LEFTBRACKET;
-    case SDLK_BACKSLASH:
-        return KEY_BACKSLASH;
-    case SDLK_RIGHTBRACKET:
-        return KEY_RIGHTBRACKET;
-    case SDLK_CARET:
-        return KEY_CARET;
-    case SDLK_UNDERSCORE:
-        return KEY_UNDERSCORE;
-    case SDLK_LALT:
-    case SDLK_RALT:
-        return KEY_ALT;
-    case SDLK_LCTRL:
-    case SDLK_RCTRL:
-        return KEY_CONTROL;
-    case SDLK_LSHIFT:
-    case SDLK_RSHIFT:
-        return KEY_SHIFT;
-    case SDLK_TAB:
-        return KEY_TAB;
-    case SDLK_SPACE:
-        return KEY_SPACE;
-    case SDLK_DELETE:
-        return KEY_DELETE;
-    case SDLK_PAGEUP:
-        return KEY_PAGEUP;
-    case SDLK_PAGEDOWN:
-        return KEY_PAGEDOWN;
-    case SDLK_F1:
-        return KEY_F1;
-    case SDLK_F2:
-        return KEY_F2;
-    case SDLK_F3:
-        return KEY_F3;
-    case SDLK_F4:
-        return KEY_F4;
-    case SDLK_F5:
-        return KEY_F5;
-    case SDLK_F6:
-        return KEY_F6;
-    case SDLK_F7:
-        return KEY_F7;
-    case SDLK_F8:
-        return KEY_F8;
-    case SDLK_F9:
-        return KEY_F9;
-    case SDLK_F10:
-        return KEY_F10;
-    case SDLK_F11:
-        return KEY_F11;
-    case SDLK_F12:
-        return KEY_F12;
-    case SDLK_0:
-        return KEY_0;
-    case SDLK_1:
-        return KEY_1;
-    case SDLK_2:
-        return KEY_2;
-    case SDLK_3:
-        return KEY_3;
-    case SDLK_4:
-        return KEY_4;
-    case SDLK_5:
-        return KEY_5;
-    case SDLK_6:
-        return KEY_6;
-    case SDLK_7:
-        return KEY_7;
-    case SDLK_8:
-        return KEY_8;
-    case SDLK_9:
-        return KEY_9;
-    case SDLK_a:
-        return KEY_a;
-    case SDLK_b:
-        return KEY_b;
-    case SDLK_c:
-        return KEY_c;
-    case SDLK_d:
-        return KEY_d;
-    case SDLK_e:
-        return KEY_e;
-    case SDLK_f:
-        return KEY_f;
-    case SDLK_g:
-        return KEY_g;
-    case SDLK_h:
-        return KEY_h;
-    case SDLK_i:
-        return KEY_i;
-    case SDLK_j:
-        return KEY_j;
-    case SDLK_k:
-        return KEY_k;
-    case SDLK_l:
-        return KEY_l;
-    case SDLK_m:
-        return KEY_m;
-    case SDLK_n:
-        return KEY_n;
-    case SDLK_o:
-        return KEY_o;
-    case SDLK_p:
-        return KEY_p;
-    case SDLK_q:
-        return KEY_q;
-    case SDLK_r:
-        return KEY_r;
-    case SDLK_s:
-        return KEY_s;
-    case SDLK_t:
-        return KEY_t;
-    case SDLK_u:
-        return KEY_u;
-    case SDLK_v:
-        return KEY_v;
-    case SDLK_w:
-        return KEY_w;
-    case SDLK_x:
-        return KEY_x;
-    case SDLK_y:
-        return KEY_y;
-    case SDLK_z:
-        return KEY_z;
-
-#if SDL_VERSION_ATLEAST( 2, 0, 0 )
-    case SDLK_PRINTSCREEN:
-        return KEY_PRINT;
-    case SDLK_KP_0:
-        return KEY_KP0;
-    case SDLK_KP_1:
-        return KEY_KP1;
-    case SDLK_KP_2:
-        return KEY_KP2;
-    case SDLK_KP_3:
-        return KEY_KP3;
-    case SDLK_KP_4:
-        return KEY_KP4;
-    case SDLK_KP_5:
-        return KEY_KP5;
-    case SDLK_KP_6:
-        return KEY_KP6;
-    case SDLK_KP_7:
-        return KEY_KP7;
-    case SDLK_KP_8:
-        return KEY_KP8;
-    case SDLK_KP_9:
-        return KEY_KP9;
-#else
-    case SDLK_PRINT:
-        return KEY_PRINT;
-    case SDLK_KP0:
-        return KEY_KP0;
-    case SDLK_KP1:
-        return KEY_KP1;
-    case SDLK_KP2:
-        return KEY_KP2;
-    case SDLK_KP3:
-        return KEY_KP3;
-    case SDLK_KP4:
-        return KEY_KP4;
-    case SDLK_KP5:
-        return KEY_KP5;
-    case SDLK_KP6:
-        return KEY_KP6;
-    case SDLK_KP7:
-        return KEY_KP7;
-    case SDLK_KP8:
-        return KEY_KP8;
-    case SDLK_KP9:
-        return KEY_KP9;
-#endif
-
-    case SDLK_KP_PERIOD:
-        return KEY_KP_PERIOD;
-    case SDLK_KP_DIVIDE:
-        return KEY_KP_DIVIDE;
-    case SDLK_KP_MULTIPLY:
-        return KEY_KP_MULTIPLY;
-    case SDLK_KP_MINUS:
-        return KEY_KP_MINUS;
-    case SDLK_KP_PLUS:
-        return KEY_KP_PLUS;
-    case SDLK_KP_ENTER:
-        return KEY_RETURN; // repath to the normal Enter
-    case SDLK_KP_EQUALS:
-        return KEY_KP_EQUALS;
-    case SDLK_HOME:
-        return KEY_HOME;
-    case SDLK_END:
-        return KEY_END;
-    }
-
-    return KEY_NONE;
-}
-
-bool PressIntKey( u32 max, u32 & result )
-{
-    const LocalEvent & le = LocalEvent::Get();
-
-    if ( le.KeyPress( KEY_BACKSPACE ) ) {
-        result /= 10;
-        return true;
-    }
-    else if ( le.KeyPress() && KEY_0 <= le.KeyValue() && KEY_9 >= le.KeyValue() ) {
-        if ( max > result ) {
-            result *= 10;
-            switch ( le.KeyValue() ) {
-            case KEY_1:
-            case KEY_KP1:
-                result += 1;
-                break;
-            case KEY_2:
-            case KEY_KP2:
-                result += 2;
-                break;
-            case KEY_3:
-            case KEY_KP3:
-                result += 3;
-                break;
-            case KEY_4:
-            case KEY_KP4:
-                result += 4;
-                break;
-            case KEY_5:
-            case KEY_KP5:
-                result += 5;
-                break;
-            case KEY_6:
-            case KEY_KP6:
-                result += 6;
-                break;
-            case KEY_7:
-            case KEY_KP7:
-                result += 7;
-                break;
-            case KEY_8:
-            case KEY_KP8:
-                result += 8;
-                break;
-            case KEY_9:
-            case KEY_KP9:
-                result += 9;
-                break;
-            default:
-                break;
-            }
-            if ( result > max )
-                result = max;
-        }
-        return true;
-    }
-    return false;
-}
-
-size_t InsertKeySym( std::string & res, size_t pos, const KeySym sym, const int32_t mod )
-{
-#if defined( FHEROES2_VITA )
-    (void)mod;
-
-    // input with D-Pad
-    if ( res.size() ) {
-        SetCurrentDPadCharIndex( res.back() );
-    }
-    else {
-        currentUpper = true;
-        currentCharIndex = 0;
-    }
-
-    switch ( sym ) {
-    // delete char
-    case KEY_KP4: {
-        if ( !res.empty() && pos ) {
-            res.resize( res.size() - 1 );
-            --pos;
-        }
-        break;
-    }
-    // add new char
-    case KEY_KP6: {
-        currentUpper = res.empty();
-        currentCharIndex = 0;
-
-        const char c = GetCurrentDPadChar();
-        if ( c )
-            res.push_back( c );
-
-        ++pos;
-        break;
-    }
-    // next char
-    case KEY_KP2: {
-        ++currentCharIndex;
-        if ( currentCharIndex >= totalCharactersDPad )
-            currentCharIndex = 0;
-
-        if ( !res.empty() ) {
-            res.resize( res.size() - 1 );
-        }
-        else {
-            ++pos;
-        }
-
-        const char c = GetCurrentDPadChar();
-        if ( c )
-            res.push_back( c );
-
-        break;
-    }
-    // previous char
-    case KEY_KP8: {
-        --currentCharIndex;
-        if ( currentCharIndex < 0 )
-            currentCharIndex = totalCharactersDPad - 1;
-
-        if ( !res.empty() ) {
-            res.resize( res.size() - 1 );
-        }
-        else {
-            ++pos;
-        }
-
-        const char c = GetCurrentDPadChar();
-        if ( c )
-            res.push_back( c );
-
-        break;
-    }
-    // switch uppler/lowercase
-    case KEY_SHIFT: {
-        currentUpper = !currentUpper;
-
-        if ( !res.empty() ) {
-            res.resize( res.size() - 1 );
-        }
-        else {
-            ++pos;
-        }
-
-        const char c = GetCurrentDPadChar();
-        if ( c )
-            res.push_back( c );
-
-        break;
-    }
-
-    default:
-        break;
-    }
-#else
-    switch ( sym ) {
-    case KEY_BACKSPACE:
-        if ( !res.empty() && pos ) {
-            if ( pos >= res.size() )
-                res.resize( res.size() - 1 );
-            else
-                res.erase( pos - 1, 1 );
-            --pos;
-        }
-        break;
-    case KEY_DELETE:
-        if ( !res.empty() ) {
-            if ( pos < res.size() )
-                res.erase( pos, 1 );
-        }
-        break;
-
-    case KEY_LEFT:
-        if ( pos )
-            --pos;
-        break;
-    case KEY_RIGHT:
-        if ( pos < res.size() )
-            ++pos;
-        break;
-    case KEY_HOME:
-        pos = 0;
-        break;
-    case KEY_END:
-        pos = res.size();
-        break;
-
-    default: {
-        char c = CharFromKeySym( sym, mod );
-
-        if ( c ) {
-            res.insert( pos, 1, c );
-            ++pos;
-        }
-    }
-    }
-#endif
-
-    return pos;
 }
 
 namespace
@@ -1051,14 +1066,14 @@ namespace
     }
 }
 
-LocalEvent & LocalEvent::Get( void )
+LocalEvent & LocalEvent::Get()
 {
     static LocalEvent le;
 
     return le;
 }
 
-void LocalEvent::RegisterCycling( void ( *preRenderDrawing )(), void ( *postRenderDrawing )() ) const
+void LocalEvent::RegisterCycling( void ( *preRenderDrawing )(), void ( *postRenderDrawing )() )
 {
     colorCycling.registerDrawing( preRenderDrawing, postRenderDrawing );
     colorCycling.resume();
@@ -1066,15 +1081,10 @@ void LocalEvent::RegisterCycling( void ( *preRenderDrawing )(), void ( *postRend
     fheroes2::Display::instance().subscribe( ApplyCycling, ResetCycling );
 }
 
-void LocalEvent::PauseCycling() const
+void LocalEvent::PauseCycling()
 {
     colorCycling.pause();
     fheroes2::Display::instance().subscribe( nullptr, nullptr );
-}
-
-void LocalEvent::ResumeCycling() const
-{
-    RegisterCycling();
 }
 
 LocalEvent & LocalEvent::GetClean()
@@ -1292,7 +1302,7 @@ void LocalEvent::HandleTouchEvent( const SDL_TouchFingerEvent & event )
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
 
         if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
-            ( *( redraw_cursor_func ) )( mouse_cu.x, mouse_cu.y );
+            ( *redraw_cursor_func )( mouse_cu.x, mouse_cu.y );
         }
 
         if ( event.type == SDL_FINGERDOWN ) {
@@ -1381,66 +1391,66 @@ void LocalEvent::HandleControllerButtonEvent( const SDL_ControllerButtonEvent & 
         ResetModes( KEY_PRESSED );
     }
     else if ( modes & KEY_PRESSED ) {
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
         if ( dpadInputActive ) {
             if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER || button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
-                key_value = KEY_SHIFT;
+                key_value = fheroes2::Key::KEY_SHIFT;
             }
             else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT ) {
-                key_value = KEY_KP4;
+                key_value = fheroes2::Key::KEY_KP_4;
             }
             else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT ) {
-                key_value = KEY_KP6;
+                key_value = fheroes2::Key::KEY_KP_6;
             }
             else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_UP ) {
-                key_value = KEY_KP8;
+                key_value = fheroes2::Key::KEY_KP_8;
             }
             else if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
-                key_value = KEY_KP2;
+                key_value = fheroes2::Key::KEY_KP_2;
             }
             return;
         }
 #endif
         if ( button.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN ) {
-            key_value = KEY_SPACE;
+            key_value = fheroes2::Key::KEY_SPACE;
         }
         else if ( button.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER ) {
-            key_value = KEY_h;
+            key_value = fheroes2::Key::KEY_H;
         }
         else if ( button.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER ) {
-            key_value = KEY_t;
+            key_value = fheroes2::Key::KEY_T;
         }
         else if ( button.button == SDL_CONTROLLER_BUTTON_X ) {
-            key_value = KEY_e;
+            key_value = fheroes2::Key::KEY_E;
         }
         else if ( button.button == SDL_CONTROLLER_BUTTON_Y ) {
-            key_value = KEY_c;
+            key_value = fheroes2::Key::KEY_C;
         }
         else if ( button.button == SDL_CONTROLLER_BUTTON_BACK ) {
-            key_value = KEY_f;
+            key_value = fheroes2::Key::KEY_F;
         }
         else if ( button.button == SDL_CONTROLLER_BUTTON_START ) {
-            key_value = KEY_RETURN;
+            key_value = fheroes2::Key::KEY_ENTER;
         }
-#if defined( __SWITCH__ )
+#if defined( TARGET_NINTENDO_SWITCH )
         // Custom button mapping for Nintendo Switch
         if ( button.button == SWITCH_BUTTON_Y ) {
-            key_value = KEY_RETURN;
+            key_value = fheroes2::Key::KEY_ENTER;
         }
         else if ( button.button == SWITCH_BUTTON_X ) {
-            key_value = KEY_ESCAPE;
+            key_value = fheroes2::Key::KEY_ESCAPE;
         }
         else if ( button.button == SWITCH_BUTTON_R ) {
-            key_value = KEY_t;
+            key_value = fheroes2::Key::KEY_T;
         }
         else if ( button.button == SWITCH_BUTTON_L ) {
-            key_value = KEY_h;
+            key_value = fheroes2::Key::KEY_H;
         }
         else if ( button.button == SWITCH_BUTTON_MINUS ) {
-            key_value = KEY_e;
+            key_value = fheroes2::Key::KEY_E;
         }
         else if ( button.button == SWITCH_BUTTON_PLUS ) {
-            key_value = KEY_c;
+            key_value = fheroes2::Key::KEY_C;
         }
 #endif
     }
@@ -1476,7 +1486,7 @@ void LocalEvent::ProcessControllerAxisMotion()
         mouse_cu.y = static_cast<int32_t>( _emulatedPointerPosY );
 
         if ( ( modes & MOUSE_MOTION ) && redraw_cursor_func ) {
-            ( *( redraw_cursor_func ) )( mouse_cu.x, mouse_cu.y );
+            ( *redraw_cursor_func )( mouse_cu.x, mouse_cu.y );
         }
     }
 
@@ -1486,13 +1496,13 @@ void LocalEvent::ProcessControllerAxisMotion()
         SetModes( KEY_PRESSED );
 
         if ( _controllerRightXAxis < 0 )
-            key_value = KEY_KP4;
+            key_value = fheroes2::Key::KEY_KP_4;
         else if ( _controllerRightXAxis > 0 )
-            key_value = KEY_KP6;
+            key_value = fheroes2::Key::KEY_KP_6;
         else if ( _controllerRightYAxis < 0 )
-            key_value = KEY_KP8;
+            key_value = fheroes2::Key::KEY_KP_8;
         else if ( _controllerRightYAxis > 0 )
-            key_value = KEY_KP2;
+            key_value = fheroes2::Key::KEY_KP_2;
     }
     else if ( _controllerScrollActive ) {
         ResetModes( KEY_PRESSED );
@@ -1501,45 +1511,43 @@ void LocalEvent::ProcessControllerAxisMotion()
 }
 #endif
 
-bool LocalEvent::MouseMotion( void ) const
-{
-    return ( modes & MOUSE_MOTION ) == MOUSE_MOTION;
-}
-
-bool LocalEvent::MousePressLeft( void ) const
+bool LocalEvent::MousePressLeft() const
 {
     return ( modes & MOUSE_PRESSED ) && SDL_BUTTON_LEFT == mouse_button;
 }
 
-bool LocalEvent::MouseReleaseLeft( void ) const
+bool LocalEvent::MouseReleaseLeft() const
 {
     return ( modes & MOUSE_RELEASED ) && SDL_BUTTON_LEFT == mouse_button;
 }
 
-bool LocalEvent::MousePressRight( void ) const
+bool LocalEvent::MousePressRight() const
 {
     return ( modes & MOUSE_PRESSED ) && SDL_BUTTON_RIGHT == mouse_button;
 }
 
-bool LocalEvent::MouseReleaseRight( void ) const
+bool LocalEvent::MouseReleaseRight() const
 {
     return ( modes & MOUSE_RELEASED ) && SDL_BUTTON_RIGHT == mouse_button;
 }
 
 void LocalEvent::HandleKeyboardEvent( const SDL_KeyboardEvent & event )
 {
-    if ( KEY_NONE != GetKeySym( event.keysym.sym ) ) {
-        if ( event.type == SDL_KEYDOWN ) {
-            SetModes( KEY_PRESSED );
-            SetModes( KEY_HOLD );
-        }
-        else if ( event.type == SDL_KEYUP ) {
-            ResetModes( KEY_PRESSED );
-            ResetModes( KEY_HOLD );
-        }
-
-        key_value = GetKeySym( event.keysym.sym );
+    const fheroes2::Key key = fheroes2::getKeyFromSDL( event.keysym.sym );
+    if ( key == fheroes2::Key::NONE ) {
+        return;
     }
+
+    if ( event.type == SDL_KEYDOWN ) {
+        SetModes( KEY_PRESSED );
+        SetModes( KEY_HOLD );
+    }
+    else if ( event.type == SDL_KEYUP ) {
+        ResetModes( KEY_PRESSED );
+        ResetModes( KEY_HOLD );
+    }
+
+    key_value = key;
 }
 
 void LocalEvent::HandleMouseMotionEvent( const SDL_MouseMotionEvent & motion )
@@ -1630,7 +1638,7 @@ void LocalEvent::HandleMouseWheelEvent( const SDL_MouseWheelEvent & wheel )
 }
 #endif
 
-bool LocalEvent::MouseClickLeft( void )
+bool LocalEvent::MouseClickLeft()
 {
     if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_LEFT == mouse_button ) {
         ResetModes( MOUSE_RELEASED );
@@ -1654,7 +1662,7 @@ bool LocalEvent::MouseClickLeft( const fheroes2::Rect & rt )
     return false;
 }
 
-bool LocalEvent::MouseClickMiddle( void )
+bool LocalEvent::MouseClickMiddle()
 {
     if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_MIDDLE == mouse_button ) {
         ResetModes( MOUSE_RELEASED );
@@ -1666,7 +1674,7 @@ bool LocalEvent::MouseClickMiddle( void )
     return false;
 }
 
-bool LocalEvent::MouseClickRight( void )
+bool LocalEvent::MouseClickRight()
 {
     if ( ( modes & MOUSE_CLICKED ) && SDL_BUTTON_RIGHT == mouse_button ) {
         ResetModes( MOUSE_RELEASED );
@@ -1690,7 +1698,7 @@ bool LocalEvent::MouseClickRight( const fheroes2::Rect & rt )
     return false;
 }
 
-bool LocalEvent::MouseWheelUp( void ) const
+bool LocalEvent::MouseWheelUp() const
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     return ( modes & MOUSE_WHEEL ) && mouse_wm.y > 0;
@@ -1699,7 +1707,7 @@ bool LocalEvent::MouseWheelUp( void ) const
 #endif
 }
 
-bool LocalEvent::MouseWheelDn( void ) const
+bool LocalEvent::MouseWheelDn() const
 {
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
     return ( modes & MOUSE_WHEEL ) && mouse_wm.y < 0;
@@ -1708,75 +1716,9 @@ bool LocalEvent::MouseWheelDn( void ) const
 #endif
 }
 
-bool LocalEvent::MousePressLeft( const fheroes2::Rect & rt ) const
-{
-    return MousePressLeft() && ( rt & mouse_pl );
-}
-
-bool LocalEvent::MousePressRight( const fheroes2::Rect & rt ) const
-{
-    return MousePressRight() && ( rt & mouse_pr );
-}
-
-bool LocalEvent::MouseReleaseLeft( const fheroes2::Rect & rt ) const
-{
-    return MouseReleaseLeft() && ( rt & mouse_rl );
-}
-
-bool LocalEvent::MouseReleaseRight( const fheroes2::Rect & rt ) const
-{
-    return MouseReleaseRight() && ( rt & mouse_rr );
-}
-
-void LocalEvent::ResetPressLeft( void )
-{
-    mouse_pl.x = -1;
-    mouse_pl.y = -1;
-}
-
-bool LocalEvent::MouseWheelUp( const fheroes2::Rect & rt ) const
-{
-    return MouseWheelUp() && ( rt & mouse_cu );
-}
-
-bool LocalEvent::MouseWheelDn( const fheroes2::Rect & rt ) const
-{
-    return MouseWheelDn() && ( rt & mouse_cu );
-}
-
-bool LocalEvent::MouseCursor( const fheroes2::Rect & rt ) const
-{
-    return rt & mouse_cu;
-}
-
-int LocalEvent::KeyMod( void ) const
+int LocalEvent::KeyMod() const
 {
     return SDL_GetModState();
-}
-
-KeySym LocalEvent::KeyValue( void ) const
-{
-    return key_value;
-}
-
-bool LocalEvent::KeyPress( void ) const
-{
-    return modes & KEY_PRESSED;
-}
-
-bool LocalEvent::KeyPress( KeySym key ) const
-{
-    return key == key_value && ( modes & KEY_PRESSED );
-}
-
-void LocalEvent::SetGlobalFilterMouseEvents( void ( *pf )( s32, s32 ) )
-{
-    redraw_cursor_func = pf;
-}
-
-void LocalEvent::SetGlobalFilterKeysEvents( void ( *pf )( int, int ) )
-{
-    keyboard_filter_func = pf;
 }
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -1803,12 +1745,17 @@ int LocalEvent::GlobalFilterEvents( const SDL_Event * event )
     return 1;
 }
 
-void LocalEvent::SetState( u32 type, bool enable )
+void LocalEvent::SetState( const uint32_t type, const bool enable )
 {
+    // SDL 1 and SDL 2 have different input argument types for event state.
+#if SDL_VERSION_ATLEAST( 2, 0, 0 )
     SDL_EventState( type, enable ? SDL_ENABLE : SDL_IGNORE );
+#else
+    SDL_EventState( static_cast<uint8_t>( type ), enable ? SDL_ENABLE : SDL_IGNORE );
+#endif
 }
 
-void LocalEvent::SetStateDefaults( void )
+void LocalEvent::SetStateDefaults()
 {
     SetState( SDL_USEREVENT, true );
     SetState( SDL_KEYDOWN, true );
@@ -1827,7 +1774,7 @@ void LocalEvent::SetStateDefaults( void )
     SetState( SDL_SYSWMEVENT, false );
 
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
-#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
     SetState( SDL_FINGERDOWN, true );
     SetState( SDL_FINGERUP, true );
     SetState( SDL_FINGERMOTION, true );

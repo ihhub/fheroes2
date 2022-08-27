@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,18 +30,18 @@
 #include "mp2.h"
 #include "resource.h"
 
-class IndexObject : public std::pair<s32, int>
+class IndexObject : public std::pair<int32_t, int>
 {
 public:
     IndexObject()
-        : std::pair<s32, int>( -1, MP2::OBJ_ZERO )
+        : std::pair<int32_t, int>( -1, MP2::OBJ_ZERO )
     {}
 
-    IndexObject( s32 index, int object )
-        : std::pair<s32, int>( index, object )
+    IndexObject( int32_t index, int object )
+        : std::pair<int32_t, int>( index, object )
     {}
 
-    bool isIndex( s32 index ) const
+    bool isIndex( int32_t index ) const
     {
         return index == first;
     }
@@ -77,16 +78,16 @@ public:
 
 StreamBase & operator>>( StreamBase &, ObjectColor & );
 
-class ResourceCount : public std::pair<int, u32>
+class ResourceCount : public std::pair<int, uint32_t>
 {
 public:
     ResourceCount() = delete;
 
-    ResourceCount( int res, u32 count )
-        : std::pair<int, u32>( res, count )
+    ResourceCount( int res, uint32_t count )
+        : std::pair<int, uint32_t>( res, count )
     {}
 
-    bool isValid( void ) const
+    bool isValid() const
     {
         return ( first & Resource::ALL ) && second;
     }

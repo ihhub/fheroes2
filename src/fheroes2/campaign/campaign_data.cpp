@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,7 +24,10 @@
 #include "monster.h"
 #include "resource.h"
 #include "spell.h"
+#include "tools.h"
 #include "translations.h"
+
+#include <array>
 #include <cassert>
 
 namespace
@@ -37,10 +40,10 @@ namespace
 
         switch ( scenarioID ) {
         case 2:
-            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::DWARF, _( "Dwarven Alliance" ) );
+            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::DWARF, gettext_noop( "Dwarven Alliance" ) );
             break;
         case 5:
-            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::ELIZA, 0, 0, _( "Sorceress Guild" ) );
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::ELIZA, 0, 0, gettext_noop( "Sorceress Guild" ) );
             break;
         case 6:
             obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES, 0, 0, 9 );
@@ -50,6 +53,8 @@ namespace
             break;
         case 8:
             obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, Heroes::CORLAGON, 0, 9 );
+            break;
+        default:
             break;
         }
 
@@ -62,20 +67,22 @@ namespace
 
         switch ( scenarioID ) {
         case 2:
-            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::BAX, 0, 0, _( "Necromancer Guild" ) );
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::BAX, 0, 0, gettext_noop( "Necromancer Guild" ) );
             break;
         case 3:
-            obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::OGRE );
-            obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_CREATURE_CURSE, Monster::DWARF );
+            obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::OGRE, gettext_noop( "Ogre Alliance" ) );
+            obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_CREATURE_CURSE, Monster::DWARF, gettext_noop( "Dwarfbane" ) );
             break;
         case 6:
-            obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::GREEN_DRAGON, _( "Dragon Alliance" ) );
+            obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::GREEN_DRAGON, gettext_noop( "Dragon Alliance" ) );
             break;
         case 8:
             obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::ULTIMATE_CROWN );
             break;
         case 9:
             obtainableAwards.emplace_back( 6, Campaign::CampaignAwardData::TYPE_CARRY_OVER_FORCES, 0 );
+            break;
+        default:
             break;
         }
 
@@ -91,7 +98,7 @@ namespace
             obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::BREASTPLATE_ANDURAN );
             break;
         case 2:
-            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::ELF, _( "Elven Alliance" ) );
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::ELF, gettext_noop( "Elven Alliance" ) );
             obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_RESOURCE_BONUS, Resource::WOOD, 2 );
             break;
         case 5:
@@ -103,7 +110,9 @@ namespace
             obtainableAwards.emplace_back( 4, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::SWORD_ANDURAN );
 
             // seems that Kraeger is a custom name for Dainwin in this case
-            obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, Heroes::DAINWIN, _( "Kraeger defeated" ) );
+            obtainableAwards.emplace_back( 5, Campaign::CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO, Heroes::DAINWIN, gettext_noop( "Kraeger defeated" ) );
+            break;
+        default:
             break;
         }
 
@@ -121,6 +130,8 @@ namespace
         case 2:
             obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::SPHERE_NEGATION );
             break;
+        default:
+            break;
         }
 
         return obtainableAwards;
@@ -132,16 +143,18 @@ namespace
 
         switch ( scenarioID ) {
         case 2:
-            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::JOSEPH, 0, 0, _( "Wayward Son" ) );
+            obtainableAwards.emplace_back( 0, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::JOSEPH, 0, 0, gettext_noop( "Wayward Son" ) );
             break;
         case 3:
-            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::UNCLEIVAN, 0, 0, _( "Uncle Ivan" ) );
+            obtainableAwards.emplace_back( 1, Campaign::CampaignAwardData::TYPE_HIREABLE_HERO, Heroes::UNCLEIVAN, 0, 0, gettext_noop( "Uncle Ivan" ) );
             break;
         case 5:
             obtainableAwards.emplace_back( 2, Campaign::CampaignAwardData::TYPE_GET_ARTIFACT, Artifact::LEGENDARY_SCEPTER );
             break;
         case 6:
-            obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::ELF, _( "Elven Alliance" ) );
+            obtainableAwards.emplace_back( 3, Campaign::CampaignAwardData::TYPE_CREATURE_ALLIANCE, Monster::ELF, gettext_noop( "Elven Alliance" ) );
+            break;
+        default:
             break;
         }
 
@@ -150,342 +163,421 @@ namespace
 
     Campaign::CampaignData getRolandCampaignData()
     {
-        const std::string rolandCampaignScenarioNames[10]
-            = { _( "Force of Arms" ), _( "Annexation" ),   _( "Save the Dwarves" ), _( "Carator Mines" ),      _( "Turning Point" ),
-                _( "Defender" ),      _( "The Gauntlet" ), _( "The Crown" ),        _( "Corlagon's Defense" ), _( "Final Justice" ) };
-        const std::string rolandCampaignDescription[10] = {
-            _( "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother.  They are not allied with each other, so they will spend"
-               " most of their time fighting with one another.  Victory is yours when you have defeated all of their castles and heroes." ),
-            _( "The local lords refuse to swear allegiance to Roland, and must be subdued. They are wealthy and powerful, so be prepared for a tough fight. Capture all enemy castles to win." ),
-            _( "Your task is to defend the Dwarves against Archibald's forces. Capture all of the enemy towns and castles to win, and be sure not to lose all of the dwarf towns at once, or the enemy will have won." ),
-            _( "You will face four allied enemies in a straightforward fight for resource and treasure. Capture all of the enemy castles for victory." ),
-            _( "Your enemies are allied against you and start close by, so be ready to come out fighting. You will need to own all four castles in this small valley to win." ),
-            _( "The Sorceress' guild of Noraston has requested Roland's aid against an attack from Archibald's allies. Capture all of the enemy castles to win, and don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy castle on an island in the ocean.)" ),
-            _( "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
-            _( "Find the Crown before Archibald's heroes find it. Roland will need the Crown for the final battle against Archibald." ),
-            _( "Three allied enemies stand before you and victory, including Lord Corlagon. Roland is in a castle to the northwest, and you will lose if he falls to the enemy. Remember that capturing Lord Corlagon will ensure that he will not fight against you in the final scenario." ),
-            _( "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Archibald to end the war!" ) };
-        std::vector<Campaign::ScenarioData> scenarioDatas;
-        scenarioDatas.reserve( 10 );
+        const int scenarioCount = 11;
 
-        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 0 ), "CAMPG01.H2C", rolandCampaignScenarioNames[0],
-                                    rolandCampaignDescription[0],
+        const std::array<std::string, scenarioCount> scenarioName
+            = { gettext_noop( "Force of Arms" ),      gettext_noop( "Annexation" ),    gettext_noop( "Save the Dwarves" ), gettext_noop( "Carator Mines" ),
+                gettext_noop( "Turning Point" ),      gettext_noop( "Defender" ),      gettext_noop( "The Gauntlet" ),     gettext_noop( "The Crown" ),
+                gettext_noop( "Corlagon's Defense" ), gettext_noop( "Final Justice" ), gettext_noop( "Betrayal" ) };
+        const std::array<std::string, scenarioCount> scenarioDescription = {
+            gettext_noop(
+                "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother.  They are not allied with each other, so they will spend"
+                " most of their time fighting with one another.  Victory is yours when you have defeated all of their castles and heroes." ),
+            gettext_noop(
+                "The local lords refuse to swear allegiance to Roland, and must be subdued. They are wealthy and powerful, so be prepared for a tough fight. Capture all enemy castles to win." ),
+            gettext_noop(
+                "Your task is to defend the Dwarves against Archibald's forces. Capture all of the enemy towns and castles to win, and be sure not to lose all of the dwarf towns at once, or the enemy will have won." ),
+            gettext_noop( "You will face four allied enemies in a straightforward fight for resource and treasure. Capture all of the enemy castles for victory." ),
+            gettext_noop(
+                "Your enemies are allied against you and start close by, so be ready to come out fighting. You will need to own all four castles in this small valley to win." ),
+            gettext_noop(
+                "The Sorceress' guild of Noraston has requested Roland's aid against an attack from Archibald's allies. Capture all of the enemy castles to win, and don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy castle on an island in the ocean.)" ),
+            gettext_noop(
+                "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
+            gettext_noop( "Find the Crown before Archibald's heroes find it. Roland will need the Crown for the final battle against Archibald." ),
+            gettext_noop(
+                "Three allied enemies stand before you and victory, including Lord Corlagon. Roland is in a castle to the northwest, and you will lose if he falls to the enemy. Remember that capturing Lord Corlagon will ensure that he will not fight against you in the final scenario." ),
+            gettext_noop( "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Archibald to end the war!" ),
+            gettext_noop(
+                "Switching sides leaves you with three castles against the enemy's one.  This battle will be the easiest one you will face for the rest of the war...traitor." ) };
+        std::vector<Campaign::ScenarioData> scenarioDatas;
+        scenarioDatas.reserve( scenarioCount );
+
+        std::vector<Campaign::ScenarioInfoId> scenarioInfo;
+        scenarioInfo.reserve( scenarioCount );
+        for ( int i = 0; i < scenarioCount; ++i ) {
+            scenarioInfo.emplace_back( Campaign::ROLAND_CAMPAIGN, i );
+        }
+
+        scenarioDatas.emplace_back( scenarioInfo[0], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[1] }, "CAMPG01.H2C", scenarioName[0], scenarioDescription[0],
                                     Campaign::VideoSequence{ { "GOOD01V.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD01.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 1 ), "CAMPG02.H2C", rolandCampaignScenarioNames[1],
-                                    rolandCampaignDescription[1],
+        scenarioDatas.emplace_back( scenarioInfo[1], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[2], scenarioInfo[3] }, "CAMPG02.H2C", scenarioName[1],
+                                    scenarioDescription[1],
                                     Campaign::VideoSequence{ { "GOOD02W.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD02.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "GOOD03QW.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD03.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 2, std::vector<int>{ 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 2 ), "CAMPG03.H2C", rolandCampaignScenarioNames[2],
-                                    rolandCampaignDescription[2], emptyPlayback,
+        scenarioDatas.emplace_back( scenarioInfo[2], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[3] }, "CAMPG03.H2C", scenarioName[2], scenarioDescription[2],
+                                    emptyPlayback,
                                     Campaign::VideoSequence{ { "GOOD04W.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD04.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::ScenarioVictoryCondition::STANDARD, Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES );
-        scenarioDatas.emplace_back( 3, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 3 ), "CAMPG04.H2C", rolandCampaignScenarioNames[3],
-                                    rolandCampaignDescription[3], emptyPlayback,
+        scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4], scenarioInfo[10] }, "CAMPG04.H2C", scenarioName[3],
+                                    scenarioDescription[3], emptyPlayback,
                                     Campaign::VideoSequence{ { "GOOD05V.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD05.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 4, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 4 ), "CAMPG05.H2C", rolandCampaignScenarioNames[4],
-                                    rolandCampaignDescription[4], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( 5, std::vector<int>{ 6, 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 5 ), "CAMPG06.H2C", rolandCampaignScenarioNames[5],
-                                    rolandCampaignDescription[5],
+        scenarioDatas.emplace_back( scenarioInfo[4], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[5] }, "CAMPG05.H2C", scenarioName[4], scenarioDescription[4],
+                                    emptyPlayback,
                                     Campaign::VideoSequence{ { "GOOD06AV.SMK", Video::VideoAction::IGNORE_VIDEO },
-                                                             { "GOOD06.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
+                                                             { "GOOD06.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
+        scenarioDatas.emplace_back( scenarioInfo[5], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[6], scenarioInfo[7] }, "CAMPG06.H2C", scenarioName[5],
+                                    scenarioDescription[5], emptyPlayback,
                                     Campaign::VideoSequence{ { "GOOD07QW.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD07.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 6, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 6 ), "CAMPG07.H2C", rolandCampaignScenarioNames[6],
-                                    rolandCampaignDescription[6], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( 7, std::vector<int>{ 8 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 7 ), "CAMPG08.H2C", rolandCampaignScenarioNames[7],
-                                    rolandCampaignDescription[7], emptyPlayback, emptyPlayback, Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN );
-        scenarioDatas.emplace_back( 8, std::vector<int>{ 9 }, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 8 ), "CAMPG09.H2C", rolandCampaignScenarioNames[8],
-                                    rolandCampaignDescription[8],
+        scenarioDatas.emplace_back( scenarioInfo[6], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[8] }, "CAMPG07.H2C", scenarioName[6], scenarioDescription[6],
+                                    emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( scenarioInfo[7], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[8] }, "CAMPG08.H2C", scenarioName[7], scenarioDescription[7],
+                                    emptyPlayback, emptyPlayback, Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN );
+        scenarioDatas.emplace_back( scenarioInfo[8], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[9] }, "CAMPG09.H2C", scenarioName[8], scenarioDescription[8],
                                     Campaign::VideoSequence{ { "GOOD09W.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD09.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( 9, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( 0, 9 ), "CAMPG10.H2C", rolandCampaignScenarioNames[9],
-                                    rolandCampaignDescription[9],
+        scenarioDatas.emplace_back( scenarioInfo[9], std::vector<Campaign::ScenarioInfoId>{}, "CAMPG10.H2C", scenarioName[9], scenarioDescription[9],
                                     Campaign::VideoSequence{ { "GOOD10W.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "GOOD10.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "LIBRARYW.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "LIBRARY.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
 
+        // At the end of the Betrayal scenario we should start an Archibald scenario.
+        scenarioDatas.emplace_back( scenarioInfo[10], std::vector<Campaign::ScenarioInfoId>{ Campaign::ScenarioInfoId( Campaign::ARCHIBALD_CAMPAIGN, 5 ) },
+                                    "CAMPG05B.H2C", scenarioName[10], scenarioDescription[10], emptyPlayback,
+                                    Campaign::VideoSequence{ { "EVIL06BW.SMK", Video::VideoAction::IGNORE_VIDEO },
+                                                             { "EVIL06.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
+
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::ROLAND_CAMPAIGN );
-        campaignData.setCampaignDescription( "Roland Campaign" );
-        campaignData.setCampaignScenarios( scenarioDatas );
+        campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
     }
 
     Campaign::CampaignData getArchibaldCampaignData()
     {
-        const std::string archibaldCampaignScenarioNames[11]
-            = { _( "First Blood" ),   _( "Barbarian Wars" ), _( "Necromancers" ), _( "Slay the Dwarves" ), _( "Turning Point" ), _( "Rebellion" ),
-                _( "Dragon Master" ), _( "Country Lords" ),  _( "The Crown" ),    _( "Greater Glory" ),    _( "Apocalypse" ) };
-        const std::string archibaldCampaignDescription[11] = {
-            _( "King Archibald requires you to defeat the three enemies in this region.  They are not allied with one another, so they will spend most of their energy fighting"
-               " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
-            _( "You must unify the barbarian tribes of the north by conquering them. As in the previous mission, the enemy is not allied against you, but they have more resources at their disposal. You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
-            _( "Do-gooder wizards have taken the Necromancers' castle. You must retake it to achieve victory. Remember that while you start with a powerful army, you have no castle and must take one within 7 days, or lose this battle. (Hint: The nearest castle is to the southeast.)" ),
-            _( "The dwarves need conquering before they can interfere in King Archibald's plans. Roland's forces have more than one hero and many towns to start with, so be ready for attack from multiple directions. You must capture all of the enemy towns and castles to claim victory." ),
-            _( "Your enemies are allied against you and start close by, so be ready to come out fighting. You will need to own all four castles in this small valley to win." ),
-            _( "You must put down a peasant revolt led by Roland's forces. All are allied against you, but you have Lord Corlagon, an experienced hero, to help you. Capture all enemy castles to win." ),
-            _( "There are two enemies allied against you in this mission. Both are well armed and seek to evict you from their island. Avoid them and capture Dragon City to win." ),
-            _( "Your orders are to conquer the country lords that have sworn to serve Roland. All of the enemy castles are unified against you. Since you start without a castle, you must hurry to capture one before the end of the week. Capture all enemy castles for victory." ),
-            _( "Find the Crown before Roland's heroes find it. Archibald will need the Crown for the final battle against Roland." ),
-            _( "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
-            _( "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Roland to win the war, and be sure not to lose Archibald in the fight!" ) };
-        std::vector<Campaign::ScenarioData> scenarioDatas;
-        scenarioDatas.reserve( 11 );
+        const int scenarioCount = 12;
 
-        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 0 ), "CAMPE01.H2C", archibaldCampaignScenarioNames[0],
-                                    archibaldCampaignDescription[0],
+        const std::array<std::string, scenarioCount> scenarioName
+            = { gettext_noop( "First Blood" ),   gettext_noop( "Barbarian Wars" ), gettext_noop( "Necromancers" ),  gettext_noop( "Slay the Dwarves" ),
+                gettext_noop( "Turning Point" ), gettext_noop( "Rebellion" ),      gettext_noop( "Dragon Master" ), gettext_noop( "Country Lords" ),
+                gettext_noop( "The Crown" ),     gettext_noop( "Greater Glory" ),  gettext_noop( "Apocalypse" ),    gettext_noop( "Betrayal" ) };
+        const std::array<std::string, scenarioCount> scenarioDescription = {
+            gettext_noop(
+                "King Archibald requires you to defeat the three enemies in this region.  They are not allied with one another, so they will spend most of their energy fighting"
+                " amongst themselves.  You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
+            gettext_noop(
+                "You must unify the barbarian tribes of the north by conquering them. As in the previous mission, the enemy is not allied against you, but they have more resources at their disposal. You will win when you own all of the enemy castles and there are no more heroes left to fight." ),
+            gettext_noop(
+                "Do-gooder wizards have taken the Necromancers' castle. You must retake it to achieve victory. Remember that while you start with a powerful army, you have no castle and must take one within 7 days, or lose this battle. (Hint: The nearest castle is to the southeast.)" ),
+            gettext_noop(
+                "The dwarves need conquering before they can interfere in King Archibald's plans. Roland's forces have more than one hero and many towns to start with, so be ready for attack from multiple directions. You must capture all of the enemy towns and castles to claim victory." ),
+            gettext_noop(
+                "Your enemies are allied against you and start close by, so be ready to come out fighting. You will need to own all four castles in this small valley to win." ),
+            gettext_noop(
+                "You must put down a peasant revolt led by Roland's forces. All are allied against you, but you have Lord Corlagon, an experienced hero, to help you. Capture all enemy castles to win." ),
+            gettext_noop(
+                "There are two enemies allied against you in this mission. Both are well armed and seek to evict you from their island. Avoid them and capture Dragon City to win." ),
+            gettext_noop(
+                "Your orders are to conquer the country lords that have sworn to serve Roland. All of the enemy castles are unified against you. Since you start without a castle, you must hurry to capture one before the end of the week. Capture all enemy castles for victory." ),
+            gettext_noop( "Find the Crown before Roland's heroes find it. Archibald will need the Crown for the final battle against Roland." ),
+            gettext_noop(
+                "Gather as large an army as possible and capture the enemy castle within 8 weeks. You are opposed by only one enemy, but must travel a long way to get to the enemy castle. Any troops you have in your army at the end of this scenario will be with you in the final battle." ),
+            gettext_noop(
+                "This is the final battle. Both you and your enemy are armed to the teeth, and all are allied against you. Capture Roland to win the war, and be sure not to lose Archibald in the fight!" ),
+            gettext_noop(
+                "Switching sides leaves you with three castles against the enemy's one.  This battle will be the easiest one you will face for the rest of the war...traitor." ) };
+
+        std::vector<Campaign::ScenarioData> scenarioDatas;
+        scenarioDatas.reserve( scenarioCount );
+
+        std::vector<Campaign::ScenarioInfoId> scenarioInfo;
+        scenarioInfo.reserve( scenarioCount );
+        for ( int i = 0; i < scenarioCount; ++i ) {
+            scenarioInfo.emplace_back( Campaign::ARCHIBALD_CAMPAIGN, i );
+        }
+
+        scenarioDatas.emplace_back( scenarioInfo[0], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[1] }, "CAMPE01.H2C", scenarioName[0], scenarioDescription[0],
                                     Campaign::VideoSequence{ { "EVIL01V.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL01.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 1 ), "CAMPE02.H2C",
-                                    archibaldCampaignScenarioNames[1], archibaldCampaignDescription[1],
+        scenarioDatas.emplace_back( scenarioInfo[1], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[2], scenarioInfo[3] }, "CAMPE02.H2C", scenarioName[1],
+                                    scenarioDescription[1],
                                     Campaign::VideoSequence{ { "EVIL02W.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL02.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "EVIL03QW.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL03.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 2, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 2 ), "CAMPE03.H2C", archibaldCampaignScenarioNames[2],
-                                    archibaldCampaignDescription[2], emptyPlayback,
+        scenarioDatas.emplace_back( scenarioInfo[2], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4], scenarioInfo[11] }, "CAMPE03.H2C", scenarioName[2],
+                                    scenarioDescription[2], emptyPlayback,
                                     Campaign::VideoSequence{ { "EVIL05AV.SMK", Video::VideoAction::IGNORE_VIDEO },
+                                                             { "EVIL05.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END },
+                                                             { "SBETRAYV.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL05.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 3, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 3 ), "CAMPE04.H2C", archibaldCampaignScenarioNames[3],
-                                    archibaldCampaignDescription[3], emptyPlayback,
-                                    Campaign::VideoSequence{ { "EVIL05AV.SMK", Video::VideoAction::IGNORE_VIDEO },
+        scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4], scenarioInfo[11] }, "CAMPE04.H2C", scenarioName[3],
+                                    scenarioDescription[3], emptyPlayback,
+                                    Campaign::VideoSequence{ { "EVIL05BV.SMK", Video::VideoAction::IGNORE_VIDEO },
+                                                             { "EVIL05.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END },
+                                                             { "SBETRAYV.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL05.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 4, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 4 ), "CAMPE05.H2C", archibaldCampaignScenarioNames[4],
-                                    archibaldCampaignDescription[4], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( 5, std::vector<int>{ 6, 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 5 ), "CAMPE06.H2C",
-                                    archibaldCampaignScenarioNames[5], archibaldCampaignDescription[5],
+        scenarioDatas.emplace_back( scenarioInfo[4], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[5] }, "CAMPE05.H2C", scenarioName[4], scenarioDescription[4],
+                                    emptyPlayback,
                                     Campaign::VideoSequence{ { "EVIL06AW.SMK", Video::VideoAction::IGNORE_VIDEO },
-                                                             { "EVIL06.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
+                                                             { "EVIL06.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
+        scenarioDatas.emplace_back( scenarioInfo[5], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[6], scenarioInfo[7] }, "CAMPE06.H2C", scenarioName[5],
+                                    scenarioDescription[5], emptyPlayback,
                                     Campaign::VideoSequence{ { "EVIL07W.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL07.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 6, std::vector<int>{ 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 6 ), "CAMPE07.H2C", archibaldCampaignScenarioNames[6],
-                                    archibaldCampaignDescription[6], emptyPlayback, Campaign::VideoSequence{ { "EVIL08.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END } },
+        scenarioDatas.emplace_back( scenarioInfo[6], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[7] }, "CAMPE07.H2C", scenarioName[6], scenarioDescription[6],
+                                    emptyPlayback, Campaign::VideoSequence{ { "EVIL08.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END } },
                                     Campaign::ScenarioVictoryCondition::CAPTURE_DRAGON_CITY );
-        scenarioDatas.emplace_back( 7, std::vector<int>{ 8, 9 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 7 ), "CAMPE08.H2C",
-                                    archibaldCampaignScenarioNames[7], archibaldCampaignDescription[7], emptyPlayback,
+        scenarioDatas.emplace_back( scenarioInfo[7], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[8], scenarioInfo[9] }, "CAMPE08.H2C", scenarioName[7],
+                                    scenarioDescription[7], emptyPlayback,
                                     Campaign::VideoSequence{ { "EVIL09W.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL09.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 8, std::vector<int>{ 10 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 8 ), "CAMPE09.H2C",
-                                    archibaldCampaignScenarioNames[8], archibaldCampaignDescription[8], emptyPlayback, emptyPlayback,
-                                    Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN );
-        scenarioDatas.emplace_back( 9, std::vector<int>{ 10 }, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 9 ), "CAMPE10.H2C",
-                                    archibaldCampaignScenarioNames[9], archibaldCampaignDescription[9], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( 10, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( 1, 10 ), "CAMPE11.H2C", archibaldCampaignScenarioNames[10],
-                                    archibaldCampaignDescription[10],
+        scenarioDatas.emplace_back( scenarioInfo[8], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[10] }, "CAMPE09.H2C", scenarioName[8], scenarioDescription[8],
+                                    emptyPlayback, emptyPlayback, Campaign::ScenarioVictoryCondition::OBTAIN_ULTIMATE_CROWN );
+        scenarioDatas.emplace_back( scenarioInfo[9], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[10] }, "CAMPE10.H2C", scenarioName[9], scenarioDescription[9],
+                                    emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( scenarioInfo[10], std::vector<Campaign::ScenarioInfoId>{}, "CAMPE11.H2C", scenarioName[10], scenarioDescription[10],
                                     Campaign::VideoSequence{ { "EVIL11W.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "EVIL10.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "PRISON.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END } } );
 
+        // At the end of the Betrayal scenario we should start a Roland scenario.
+        scenarioDatas.emplace_back( scenarioInfo[11], std::vector<Campaign::ScenarioInfoId>{ Campaign::ScenarioInfoId( Campaign::ROLAND_CAMPAIGN, 5 ) }, "CAMPE05B.H2C",
+                                    scenarioName[11], scenarioDescription[11], emptyPlayback,
+                                    Campaign::VideoSequence{ { "GOOD06BV.SMK", Video::VideoAction::IGNORE_VIDEO },
+                                                             { "GOOD06.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
+
         Campaign::CampaignData campaignData;
         campaignData.setCampaignID( Campaign::ARCHIBALD_CAMPAIGN );
-        campaignData.setCampaignDescription( "Archibald Campaign" );
-        campaignData.setCampaignScenarios( scenarioDatas );
+        campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
     }
 
     Campaign::CampaignData getPriceOfLoyaltyCampaignData()
     {
-        const std::string priceOfLoyaltyCampaignScenarioNames[8] = { _( "Uprising" ),         _( "Island of Chaos" ), _( "Arrow's Flight" ), _( "The Abyss" ),
-                                                                     _( "The Giant's Pass" ), _( "Aurora Borealis" ), _( "Betrayal's End" ), _( "Corruption's Heart" ) };
-        const std::string priceOfLoyaltyCampaignDescription[8] = {
-            _( "Subdue the unruly local lords in order to provide the Empire with facilities to operate in this region." ),
-            _( "Eliminate all oposition in this area. Then the first piece of the artifact will be yours." ),
-            _( "The sorceresses to the northeast are rebelling! For the good of the empire you must quash their feeble uprising on your way to the mountains." ),
-            _( "Having prepared for your arrival, Kraeger has arranged for a force of necromancers to thwart your quest. You must capture the castle of Scabsdale before the first day of the third week, or the Necromancers will be too strong for you." ),
-            _( "The barbarian despot in this area is, as yet, ignorant of your presence. Quickly, build up your forces before you are discovered and attacked! Secure the region by subduing all enemy forces." ),
-            _( "The Empire is weak in this region. You will be unable to completely subdue all forces in this area, so take what you can before reprisal strikes. Remember, your true goal is to claim the Helmet of Anduran." ),
-            _( "For the good of the Empire, eliminate Kraeger." ),
-            _( "At last, you have the opportunity and the facilities to rid the Empire of the necromancer's evil. Eradicate them completely, and you will be sung as a hero for all time." ) };
+        const int scenarioCount = 8;
+
+        const std::array<std::string, scenarioCount> scenarioName
+            = { gettext_noop( "Uprising" ),         gettext_noop( "Island of Chaos" ), gettext_noop( "Arrow's Flight" ), gettext_noop( "The Abyss" ),
+                gettext_noop( "The Giant's Pass" ), gettext_noop( "Aurora Borealis" ), gettext_noop( "Betrayal's End" ), gettext_noop( "Corruption's Heart" ) };
+        const std::array<std::string, scenarioCount> scenarioDescription = {
+            gettext_noop( "Subdue the unruly local lords in order to provide the Empire with facilities to operate in this region." ),
+            gettext_noop( "Eliminate all oposition in this area. Then the first piece of the artifact will be yours." ),
+            gettext_noop(
+                "The sorceresses to the northeast are rebelling! For the good of the empire you must quash their feeble uprising on your way to the mountains." ),
+            gettext_noop(
+                "Having prepared for your arrival, Kraeger has arranged for a force of necromancers to thwart your quest. You must capture the castle of Scabsdale before the first day of the third week, or the Necromancers will be too strong for you." ),
+            gettext_noop(
+                "The barbarian despot in this area is, as yet, ignorant of your presence. Quickly, build up your forces before you are discovered and attacked! Secure the region by subduing all enemy forces." ),
+            gettext_noop(
+                "The Empire is weak in this region. You will be unable to completely subdue all forces in this area, so take what you can before reprisal strikes. Remember, your true goal is to claim the Helmet of Anduran." ),
+            gettext_noop( "For the good of the Empire, eliminate Kraeger." ),
+            gettext_noop(
+                "At last, you have the opportunity and the facilities to rid the Empire of the necromancer's evil. Eradicate them completely, and you will be sung as a hero for all time." ) };
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 8 );
 
-        const int campaignID = Campaign::PRICE_OF_LOYALTY_CAMPAIGN;
-        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 0 ), "CAMP1_01.HXC",
-                                    priceOfLoyaltyCampaignScenarioNames[0], priceOfLoyaltyCampaignDescription[0],
+        std::vector<Campaign::ScenarioInfoId> scenarioInfo;
+        scenarioInfo.reserve( scenarioCount );
+        for ( int i = 0; i < scenarioCount; ++i ) {
+            scenarioInfo.emplace_back( Campaign::PRICE_OF_LOYALTY_CAMPAIGN, i );
+        }
+
+        scenarioDatas.emplace_back( scenarioInfo[0], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[1] }, "CAMP1_01.HXC", scenarioName[0], scenarioDescription[0],
                                     Campaign::VideoSequence{ { "MIXPOL1.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL1.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 1 ), "CAMP1_02.HXC",
-                                    priceOfLoyaltyCampaignScenarioNames[1], priceOfLoyaltyCampaignDescription[1],
+        scenarioDatas.emplace_back( scenarioInfo[1], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[2], scenarioInfo[3] }, "CAMP1_02.HXC", scenarioName[1],
+                                    scenarioDescription[1],
                                     Campaign::VideoSequence{ { "MIXPOL2.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL2.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "MIXPOL3.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL3.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 2, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 2 ), "CAMP1_03.HXC",
-                                    priceOfLoyaltyCampaignScenarioNames[2], priceOfLoyaltyCampaignDescription[2], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( 3, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 3 ), "CAMP1_04.HXC",
-                                    priceOfLoyaltyCampaignScenarioNames[3], priceOfLoyaltyCampaignDescription[3], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( 4, std::vector<int>{ 5 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 4 ), "CAMP1_05.HXC",
-                                    priceOfLoyaltyCampaignScenarioNames[4], priceOfLoyaltyCampaignDescription[4],
+        scenarioDatas.emplace_back( scenarioInfo[2], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4] }, "CAMP1_03.HXC", scenarioName[2], scenarioDescription[2],
+                                    emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[5] }, "CAMP1_04.HXC", scenarioName[3], scenarioDescription[3],
+                                    emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( scenarioInfo[4], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[5] }, "CAMP1_05.HXC", scenarioName[4], scenarioDescription[4],
                                     Campaign::VideoSequence{ { "MIXPOL4.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL4.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( 5, std::vector<int>{ 6, 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 5 ), "CAMP1_06.HXC",
-                                    priceOfLoyaltyCampaignScenarioNames[5], priceOfLoyaltyCampaignDescription[5],
+        scenarioDatas.emplace_back( scenarioInfo[5], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[6], scenarioInfo[7] }, "CAMP1_06.HXC", scenarioName[5],
+                                    scenarioDescription[5],
                                     Campaign::VideoSequence{ { "MIXPOL5.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL5.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "MIXPOL6.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL6.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 6, std::vector<int>{ 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 6 ), "CAMP1_07.HXC",
-                                    priceOfLoyaltyCampaignScenarioNames[6], priceOfLoyaltyCampaignDescription[6], emptyPlayback,
+        scenarioDatas.emplace_back( scenarioInfo[6], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[7] }, "CAMP1_07.HXC", scenarioName[6], scenarioDescription[6],
+                                    emptyPlayback,
                                     Campaign::VideoSequence{ { "MIXPOL7.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL7.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 7, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 7 ), "CAMP1_08.HXC",
-                                    priceOfLoyaltyCampaignScenarioNames[7], priceOfLoyaltyCampaignDescription[7], emptyPlayback,
+        scenarioDatas.emplace_back( scenarioInfo[7], std::vector<Campaign::ScenarioInfoId>{}, "CAMP1_08.HXC", scenarioName[7], scenarioDescription[7], emptyPlayback,
                                     Campaign::VideoSequence{ { "MIXPOL8.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "POL8.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
 
         Campaign::CampaignData campaignData;
-        campaignData.setCampaignID( campaignID );
-        campaignData.setCampaignScenarios( scenarioDatas );
+        campaignData.setCampaignID( Campaign::PRICE_OF_LOYALTY_CAMPAIGN );
+        campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
     }
 
     Campaign::CampaignData getDescendantsCampaignData()
     {
-        const std::string descendantsCampaignScenarioNames[8] = { _( "Conquer and Unify" ), _( "Border Towns" ), _( "The Wayward Son" ), _( "Crazy Uncle Ivan" ),
-                                                                  _( "The Southern War" ),  _( "Ivory Gates" ),  _( "The Elven Lands" ), _( "The Epic Battle" ) };
-        const std::string descendantsCampaignDescription[8] = {
-            _( "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the forefather of all descendants." ),
-            _( "Your rival, the Kingdom of Harondale, is attacking weak towns on your border! Recover from their first strike and crush them completely!" ),
-            _( "Find your wayward son Joseph who is rumored to be living in the desolate lands. Do it before the first day of the third month or it will be of no help to your family." ),
-            _( "Rescue your crazy uncle Ivan. Find him before the first day of the fourth month or it will be no help to your kingdom." ),
-            _( "Destroy the barbarians who are attacking the southern border of your kingdom! Recover your fallen towns, and then invade the jungle kingdom. Leave no enemy standing." ),
-            _( "Retake the castle of Ivory Gates, which has fallen due to treachery." ),
-            _( "Gain the favor of the elves. They will not allow trees to be chopped down, so they will send you wood every 2 weeks. You must complete your mission before the first day of the seventh month, or the kingdom will surely fall." ),
-            _( "This is the final battle against your rival kingdom of Harondale. Eliminate everyone, and don't lose the hero Jarkonas VI." ) };
+        const int scenarioCount = 8;
+
+        const std::array<std::string, scenarioCount> scenarioName
+            = { gettext_noop( "Conquer and Unify" ), gettext_noop( "Border Towns" ), gettext_noop( "The Wayward Son" ), gettext_noop( "Crazy Uncle Ivan" ),
+                gettext_noop( "The Southern War" ),  gettext_noop( "Ivory Gates" ),  gettext_noop( "The Elven Lands" ), gettext_noop( "The Epic Battle" ) };
+        const std::array<std::string, scenarioCount> scenarioDescription = {
+            gettext_noop( "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the forefather of all descendants." ),
+            gettext_noop( "Your rival, the Kingdom of Harondale, is attacking weak towns on your border! Recover from their first strike and crush them completely!" ),
+            gettext_noop(
+                "Find your wayward son Joseph who is rumored to be living in the desolate lands. Do it before the first day of the third month or it will be of no help to your family." ),
+            gettext_noop( "Rescue your crazy uncle Ivan. Find him before the first day of the fourth month or it will be no help to your kingdom." ),
+            gettext_noop(
+                "Destroy the barbarians who are attacking the southern border of your kingdom! Recover your fallen towns, and then invade the jungle kingdom. Leave no enemy standing." ),
+            gettext_noop( "Retake the castle of Ivory Gates, which has fallen due to treachery." ),
+            gettext_noop(
+                "Gain the favor of the elves. They will not allow trees to be chopped down, so they will send you wood every 2 weeks. You must complete your mission before the first day of the seventh month, or the kingdom will surely fall." ),
+            gettext_noop( "This is the final battle against your rival kingdom of Harondale. Eliminate everyone, and don't lose the hero Jarkonas VI." ) };
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 8 );
 
-        const int campaignID = Campaign::DESCENDANTS_CAMPAIGN;
-        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 0 ), "CAMP2_01.HXC",
-                                    descendantsCampaignScenarioNames[0], descendantsCampaignDescription[0],
+        std::vector<Campaign::ScenarioInfoId> scenarioInfo;
+        scenarioInfo.reserve( scenarioCount );
+        for ( int i = 0; i < scenarioCount; ++i ) {
+            scenarioInfo.emplace_back( Campaign::DESCENDANTS_CAMPAIGN, i );
+        }
+
+        scenarioDatas.emplace_back( scenarioInfo[0], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[1] }, "CAMP2_01.HXC", scenarioName[0], scenarioDescription[0],
                                     Campaign::VideoSequence{ { "MIXDES9.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "DES9.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 1 ), "CAMP2_02.HXC",
-                                    descendantsCampaignScenarioNames[1], descendantsCampaignDescription[1],
+        scenarioDatas.emplace_back( scenarioInfo[1], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[2], scenarioInfo[3] }, "CAMP2_02.HXC", scenarioName[1],
+                                    scenarioDescription[1],
                                     Campaign::VideoSequence{ { "MIXDES10.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "DES10.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "MIXDES11.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "DES11.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 2, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 2 ), "CAMP2_03.HXC",
-                                    descendantsCampaignScenarioNames[2], descendantsCampaignDescription[2], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( 3, std::vector<int>{ 4 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 3 ), "CAMP2_04.HXC",
-                                    descendantsCampaignScenarioNames[3], descendantsCampaignDescription[3], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( 4, std::vector<int>{ 5, 6 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 4 ), "CAMP2_05.HXC",
-                                    descendantsCampaignScenarioNames[4], descendantsCampaignDescription[4],
+        scenarioDatas.emplace_back( scenarioInfo[2], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4] }, "CAMP2_03.HXC", scenarioName[2], scenarioDescription[2],
+                                    emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[4] }, "CAMP2_04.HXC", scenarioName[3], scenarioDescription[3],
+                                    emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( scenarioInfo[4], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[5], scenarioInfo[6] }, "CAMP2_05.HXC", scenarioName[4],
+                                    scenarioDescription[4],
                                     Campaign::VideoSequence{ { "MIXDES12.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "DES12.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
-                                    emptyPlayback );
-        scenarioDatas.emplace_back( 5, std::vector<int>{ 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 5 ), "CAMP2_06.HXC",
-                                    descendantsCampaignScenarioNames[5], descendantsCampaignDescription[5],
                                     Campaign::VideoSequence{ { "MIXDES13.SMK", Video::VideoAction::IGNORE_VIDEO },
-                                                             { "DES13.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
-                                    emptyPlayback );
-        scenarioDatas.emplace_back( 6, std::vector<int>{ 7 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 6 ), "CAMP2_07.HXC",
-                                    descendantsCampaignScenarioNames[6], descendantsCampaignDescription[6], emptyPlayback, emptyPlayback );
-        scenarioDatas.emplace_back( 7, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 7 ), "CAMP2_08.HXC",
-                                    descendantsCampaignScenarioNames[7], descendantsCampaignDescription[7],
+                                                             { "DES13.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
+        scenarioDatas.emplace_back( scenarioInfo[5], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[7] }, "CAMP2_06.HXC", scenarioName[5], scenarioDescription[5],
+                                    emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( scenarioInfo[6], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[7] }, "CAMP2_07.HXC", scenarioName[6], scenarioDescription[6],
+                                    emptyPlayback, emptyPlayback );
+        scenarioDatas.emplace_back( scenarioInfo[7], std::vector<Campaign::ScenarioInfoId>{}, "CAMP2_08.HXC", scenarioName[7], scenarioDescription[7],
                                     Campaign::VideoSequence{ { "MIXDES14.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "DES14.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "MIXDES15.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "DES15.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
 
         Campaign::CampaignData campaignData;
-        campaignData.setCampaignID( campaignID );
-        campaignData.setCampaignScenarios( scenarioDatas );
+        campaignData.setCampaignID( Campaign::DESCENDANTS_CAMPAIGN );
+        campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
     }
 
     Campaign::CampaignData getWizardsIsleCampaignData()
     {
-        const std::string wizardsIsleCampaignScenarioNames[4] = { _( "The Shrouded Isles" ), _( "The Eternal Scrolls" ), _( "Power's End" ), _( "Fount of Wizardry" ) };
-        const std::string wizardsIsleCampaignDescription[4] = {
-            _( "Your mission is to vanquish the warring mages in the magical Shrouded Isles. The completion of this task will give you a fighting chance against your rivals." ),
-            _( "The location of the great library has been discovered! You must make your way to it, and reclaim the city of Chronos in which it lies." ),
-            _( "Find the Orb of negation, which is said to be buried in this land. There are clues inscribed on stone obelisks which will help lead you to your price. Find the orb before the first day of the sixth month, or your rivals will surely have gotten to the fount before you." ),
-            _( "You must take control of the castle of Magic, where the fount of wizardry lies. Do this and your victory will be supreme." ) };
+        const int scenarioCount = 4;
+
+        const std::array<std::string, scenarioCount> scenarioName
+            = { gettext_noop( "The Shrouded Isles" ), gettext_noop( "The Eternal Scrolls" ), gettext_noop( "Power's End" ), gettext_noop( "Fount of Wizardry" ) };
+        const std::array<std::string, scenarioCount> scenarioDescription = {
+            gettext_noop(
+                "Your mission is to vanquish the warring mages in the magical Shrouded Isles. The completion of this task will give you a fighting chance against your rivals." ),
+            gettext_noop( "The location of the great library has been discovered! You must make your way to it, and reclaim the city of Chronos in which it lies." ),
+            gettext_noop(
+                "Find the Orb of negation, which is said to be buried in this land. There are clues inscribed on stone obelisks which will help lead you to your price. Find the orb before the first day of the sixth month, or your rivals will surely have gotten to the fount before you." ),
+            gettext_noop( "You must take control of the castle of Magic, where the fount of wizardry lies. Do this and your victory will be supreme." ) };
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 4 );
 
-        const int campaignID = Campaign::WIZARDS_ISLE_CAMPAIGN;
-        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 0 ), "CAMP3_01.HXC",
-                                    wizardsIsleCampaignScenarioNames[0], wizardsIsleCampaignDescription[0],
+        std::vector<Campaign::ScenarioInfoId> scenarioInfo;
+        scenarioInfo.reserve( scenarioCount );
+        for ( int i = 0; i < scenarioCount; ++i ) {
+            scenarioInfo.emplace_back( Campaign::WIZARDS_ISLE_CAMPAIGN, i );
+        }
+
+        scenarioDatas.emplace_back( scenarioInfo[0], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[1] }, "CAMP3_01.HXC", scenarioName[0], scenarioDescription[0],
                                     Campaign::VideoSequence{ { "MIXWIZ16.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "WIZ16.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 1 ), "CAMP3_02.HXC",
-                                    wizardsIsleCampaignScenarioNames[1], wizardsIsleCampaignDescription[1],
+        scenarioDatas.emplace_back( scenarioInfo[1], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[2], scenarioInfo[3] }, "CAMP3_02.HXC", scenarioName[1],
+                                    scenarioDescription[1],
                                     Campaign::VideoSequence{ { "MIXWIZ17.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "WIZ17.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "MIXWIZ18.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "WIZ18.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 2, std::vector<int>{ 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 2 ), "CAMP3_03.HXC",
-                                    wizardsIsleCampaignScenarioNames[2], wizardsIsleCampaignDescription[2], emptyPlayback,
+        scenarioDatas.emplace_back( scenarioInfo[2], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[3] }, "CAMP3_03.HXC", scenarioName[2], scenarioDescription[2],
+                                    emptyPlayback,
                                     Campaign::VideoSequence{ { "MIXWIZ19.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "WIZ19.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::ScenarioVictoryCondition::OBTAIN_SPHERE_NEGATION );
-        scenarioDatas.emplace_back( 3, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 3 ), "CAMP3_04.HXC",
-                                    wizardsIsleCampaignScenarioNames[3], wizardsIsleCampaignDescription[3], emptyPlayback,
+        scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{}, "CAMP3_04.HXC", scenarioName[3], scenarioDescription[3], emptyPlayback,
                                     Campaign::VideoSequence{ { "MIXWIZ20.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "WIZ20.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
 
         Campaign::CampaignData campaignData;
-        campaignData.setCampaignID( campaignID );
-        campaignData.setCampaignScenarios( scenarioDatas );
+        campaignData.setCampaignID( Campaign::WIZARDS_ISLE_CAMPAIGN );
+        campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
     }
 
     Campaign::CampaignData getVoyageHomeCampaignData()
     {
-        const std::string voyageHomeCampaignScenarioNames[4] = { _( "Stranded" ), _( "Pirate Isles" ), _( "King and Country" ), _( "Blood is Thicker" ) };
-        const std::string voyageHomeCampaignDescription[4] = {
-            _( "Capture the town on the island off the southeast shore in order to construct a boat and travel back towards the mainland. Do not lose the hero Gallavant." ),
-            _( "Find and defeat Martine, the pirate leader, who resides in Pirates Cove. Do not lose Gallavant or your quest will be over." ),
-            _( "Eliminate all the other forces who oppose the rule of Lord Alberon. Gallavant must not die." ),
-            _( "Overthrow the entrenched monarchy of Lord Alberon, and claim all the land in your name. Gallavant must not die." ) };
+        const int scenarioCount = 4;
+
+        const std::array<std::string, scenarioCount> scenarioName
+            = { gettext_noop( "Stranded" ), gettext_noop( "Pirate Isles" ), gettext_noop( "King and Country" ), gettext_noop( "Blood is Thicker" ) };
+        const std::array<std::string, scenarioCount> scenarioDescription = {
+            gettext_noop(
+                "Capture the town on the island off the southeast shore in order to construct a boat and travel back towards the mainland. Do not lose the hero Gallavant." ),
+            gettext_noop( "Find and defeat Martine, the pirate leader, who resides in Pirates Cove. Do not lose Gallavant or your quest will be over." ),
+            gettext_noop( "Eliminate all the other forces who oppose the rule of Lord Alberon. Gallavant must not die." ),
+            gettext_noop( "Overthrow the entrenched monarchy of Lord Alberon, and claim all the land in your name. Gallavant must not die." ) };
         std::vector<Campaign::ScenarioData> scenarioDatas;
         scenarioDatas.reserve( 4 );
 
-        const int campaignID = Campaign::VOYAGE_HOME_CAMPAIGN;
-        scenarioDatas.emplace_back( 0, std::vector<int>{ 1 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 0 ), "CAMP4_01.HXC",
-                                    voyageHomeCampaignScenarioNames[0], voyageHomeCampaignDescription[0],
+        std::vector<Campaign::ScenarioInfoId> scenarioInfo;
+        scenarioInfo.reserve( scenarioCount );
+        for ( int i = 0; i < scenarioCount; ++i ) {
+            scenarioInfo.emplace_back( Campaign::VOYAGE_HOME_CAMPAIGN, i );
+        }
+
+        scenarioDatas.emplace_back( scenarioInfo[0], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[1] }, "CAMP4_01.HXC", scenarioName[0], scenarioDescription[0],
                                     Campaign::VideoSequence{ { "MIXVOY21.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "VOY21.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     emptyPlayback );
-        scenarioDatas.emplace_back( 1, std::vector<int>{ 2, 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 1 ), "CAMP4_02.HXC",
-                                    voyageHomeCampaignScenarioNames[1], voyageHomeCampaignDescription[1],
+        scenarioDatas.emplace_back( scenarioInfo[1], std::vector<Campaign::ScenarioInfoId>{ scenarioInfo[2], scenarioInfo[3] }, "CAMP4_02.HXC", scenarioName[1],
+                                    scenarioDescription[1],
                                     Campaign::VideoSequence{ { "MIXVOY22.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "VOY22.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } },
                                     Campaign::VideoSequence{ { "MIXVOY23.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "VOY23.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 2, std::vector<int>{ 3 }, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 2 ), "CAMP4_03.HXC",
-                                    voyageHomeCampaignScenarioNames[2], voyageHomeCampaignDescription[2], emptyPlayback,
+        scenarioDatas.emplace_back( scenarioInfo[2], std::vector<Campaign::ScenarioInfoId>{}, "CAMP4_03.HXC", scenarioName[2], scenarioDescription[2], emptyPlayback,
                                     Campaign::VideoSequence{ { "MIXVOY24.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "VOY24.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
-        scenarioDatas.emplace_back( 3, std::vector<int>{}, Campaign::ScenarioBonusData::getCampaignBonusData( campaignID, 3 ), "CAMP4_04.HXC",
-                                    voyageHomeCampaignScenarioNames[3], voyageHomeCampaignDescription[3], emptyPlayback,
+        scenarioDatas.emplace_back( scenarioInfo[3], std::vector<Campaign::ScenarioInfoId>{}, "CAMP4_04.HXC", scenarioName[3], scenarioDescription[3], emptyPlayback,
                                     Campaign::VideoSequence{ { "MIXVOY25.SMK", Video::VideoAction::IGNORE_VIDEO },
                                                              { "VOY25.SMK", Video::VideoAction::PLAY_TILL_AUDIO_END } } );
 
         Campaign::CampaignData campaignData;
-        campaignData.setCampaignID( campaignID );
-        campaignData.setCampaignScenarios( scenarioDatas );
+        campaignData.setCampaignID( Campaign::VOYAGE_HOME_CAMPAIGN );
+        campaignData.setCampaignScenarios( std::move( scenarioDatas ) );
 
         return campaignData;
     }
@@ -520,36 +612,35 @@ namespace Campaign
         return std::vector<Campaign::CampaignAwardData>();
     }
 
-    const std::vector<int> & CampaignData::getScenariosAfter( const int scenarioID ) const
+    const std::vector<ScenarioInfoId> & CampaignData::getScenariosAfter( const ScenarioInfoId & scenarioInfo )
     {
-        for ( size_t i = 0; i < _scenarios.size(); ++i ) {
-            if ( _scenarios[i].getScenarioID() == scenarioID )
-                return _scenarios[i].getNextMaps();
-        }
+        const CampaignData & campaignData = getCampaignData( scenarioInfo.campaignId );
+        const std::vector<ScenarioData> & scenarios = campaignData.getAllScenarios();
+        assert( scenarioInfo.scenarioId >= 0 && static_cast<size_t>( scenarioInfo.scenarioId ) < scenarios.size() );
 
-        return _scenarios[scenarioID].getNextMaps();
+        return scenarios[scenarioInfo.scenarioId].getNextScenarios();
     }
 
-    std::vector<int> CampaignData::getStartingScenarios() const
+    std::vector<ScenarioInfoId> CampaignData::getStartingScenarios() const
     {
-        std::vector<int> startingScenarios;
+        std::vector<ScenarioInfoId> startingScenarios;
 
         for ( size_t i = 0; i < _scenarios.size(); ++i ) {
             const int scenarioID = _scenarios[i].getScenarioID();
-            if ( isStartingScenario( scenarioID ) )
-                startingScenarios.emplace_back( scenarioID );
+            if ( isStartingScenario( { _campaignID, scenarioID } ) )
+                startingScenarios.emplace_back( _campaignID, scenarioID );
         }
 
         return startingScenarios;
     }
 
-    bool CampaignData::isStartingScenario( const int scenarioID ) const
+    bool CampaignData::isStartingScenario( const ScenarioInfoId & scenarioInfo ) const
     {
         // starting scenario = a scenario that is never included as a nextMap
         for ( size_t i = 0; i < _scenarios.size(); ++i ) {
-            const std::vector<int> & nextMaps = _scenarios[i].getNextMaps();
+            const std::vector<ScenarioInfoId> & nextMaps = _scenarios[i].getNextScenarios();
 
-            if ( std::find( nextMaps.begin(), nextMaps.end(), scenarioID ) != nextMaps.end() )
+            if ( std::find( nextMaps.begin(), nextMaps.end(), scenarioInfo ) != nextMaps.end() )
                 return false;
         }
 
@@ -566,25 +657,23 @@ namespace Campaign
         return true;
     }
 
-    bool CampaignData::isLastScenario( const int scenarioID ) const
+    bool CampaignData::isLastScenario( const Campaign::ScenarioInfoId & scenarioInfoId ) const
     {
         assert( !_scenarios.empty() );
-        return scenarioID == _scenarios.back().getScenarioID();
+        for ( const ScenarioData & scenario : _scenarios ) {
+            if ( scenario.getScenarioInfoId() == scenarioInfoId ) {
+                if ( scenario.getNextScenarios().empty() ) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
-    void CampaignData::setCampaignID( const int campaignID )
+    void CampaignData::setCampaignScenarios( std::vector<ScenarioData> && scenarios )
     {
-        _campaignID = campaignID;
-    }
-
-    void CampaignData::setCampaignScenarios( const std::vector<ScenarioData> & scenarios )
-    {
-        _scenarios = scenarios;
-    }
-
-    void CampaignData::setCampaignDescription( const std::string & campaignDescription )
-    {
-        _campaignDescription = campaignDescription;
+        _scenarios = std::move( scenarios );
     }
 
     const CampaignData & CampaignData::getCampaignData( const int campaignID )
@@ -624,31 +713,40 @@ namespace Campaign
     }
 
     // default amount to 1 for initialized campaign award data
-    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType )
+    CampaignAwardData::CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType )
         : CampaignAwardData( id, type, subType, 1, 0 )
-    {}
+    {
+        // Do nothing.
+    }
 
-    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount )
+    CampaignAwardData::CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType, const int32_t amount )
         : CampaignAwardData( id, type, subType, amount, 0 )
-    {}
+    {
+        // Do nothing.
+    }
 
-    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType, const std::string & customName )
-        : CampaignAwardData( id, type, subType, 1, 0, customName )
-    {}
+    CampaignAwardData::CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType, std::string customName )
+        : CampaignAwardData( id, type, subType, 1, 0, std::move( customName ) )
+    {
+        // Do nothing.
+    }
 
-    CampaignAwardData::CampaignAwardData( int id, uint32_t type, uint32_t subType, uint32_t amount, int startScenarioID, const std::string & customName )
+    CampaignAwardData::CampaignAwardData( const int32_t id, const int32_t type, const int32_t subType, const int32_t amount, const int32_t startScenarioID,
+                                          std::string customName )
         : _id( id )
         , _type( type )
         , _subType( subType )
         , _amount( amount )
         , _startScenarioID( startScenarioID )
-        , _customName( customName )
-    {}
+        , _customName( std::move( customName ) )
+    {
+        // Do nothing.
+    }
 
-    std::string CampaignAwardData::ToString() const
+    std::string CampaignAwardData::getName() const
     {
         if ( !_customName.empty() )
-            return _customName;
+            return _( _customName );
 
         switch ( _type ) {
         case CampaignAwardData::TYPE_CREATURE_CURSE:
@@ -668,26 +766,98 @@ namespace Campaign
         case CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO:
             return Heroes( _subType, 0 ).GetName() + std::string( _( " defeated" ) );
         default:
-            assert( 0 ); // some new/unhandled award
-            return "";
+            // Did you add a new award? Add the logic above!
+            assert( 0 );
+            break;
         }
+
+        return {};
     }
 
-    std::vector<Campaign::CampaignAwardData> CampaignAwardData::getCampaignAwardData( const int campaignID, const int scenarioID )
+    std::string CampaignAwardData::getDescription() const
     {
-        assert( campaignID >= 0 && scenarioID >= 0 );
+        switch ( _type ) {
+        case CampaignAwardData::TYPE_CREATURE_CURSE: {
+            std::vector<Monster> monsters;
+            monsters.emplace_back( _subType );
+            std::string description( monsters.back().GetMultiName() );
 
-        switch ( campaignID ) {
+            while ( monsters.back() != monsters.back().GetUpgrade() ) {
+                monsters.emplace_back( monsters.back().GetUpgrade() );
+                description += ", ";
+                description += monsters.back().GetMultiName();
+            }
+
+            description += _( " will always run away from your army." );
+            return description;
+        }
+        case CampaignAwardData::TYPE_CREATURE_ALLIANCE: {
+            std::vector<Monster> monsters;
+            monsters.emplace_back( _subType );
+            std::string description( monsters.back().GetMultiName() );
+
+            while ( monsters.back() != monsters.back().GetUpgrade() ) {
+                monsters.emplace_back( monsters.back().GetUpgrade() );
+                description += ", ";
+                description += monsters.back().GetMultiName();
+            }
+
+            description += _( " will be willing to join your army." );
+            return description;
+        }
+        case CampaignAwardData::TYPE_GET_ARTIFACT: {
+            std::string description( _( "\"%{artifact}\" artifact will be carried over the scenario." ) );
+            StringReplace( description, "%{artifact}", Artifact( _subType ).GetName() );
+            return description;
+        }
+        case CampaignAwardData::TYPE_CARRY_OVER_FORCES: {
+            return _( "The army will be carried over the scenario." );
+        }
+        case CampaignAwardData::TYPE_RESOURCE_BONUS: {
+            std::string description( _( "The kingdom will have +%{count} %{resource} each day." ) );
+            StringReplace( description, "%{count}", std::to_string( _amount ) );
+            StringReplace( description, "%{resource}", Resource::String( _subType ) );
+            return description;
+        }
+        case CampaignAwardData::TYPE_GET_SPELL: {
+            std::string description( _( "\"%{spell}\" spell will be carried over the scenario." ) );
+            StringReplace( description, "%{spell}", Spell( _subType ).GetName() );
+            return description;
+        }
+        case CampaignAwardData::TYPE_HIREABLE_HERO: {
+            std::string description( _( "%{hero} can be hired in the scenario." ) );
+            StringReplace( description, "%{hero}", Heroes( _subType, 0 ).GetName() );
+            return description;
+        }
+        case CampaignAwardData::TYPE_DEFEAT_ENEMY_HERO: {
+            std::string description( _( "%{hero} has been defeated and will not appear in the subsequent scenarios." ) );
+            StringReplace( description, "%{hero}", Heroes( _subType, 0 ).GetName() );
+            return description;
+        }
+        default:
+            // Did you add a new award? Add the logic above!
+            assert( 0 );
+            break;
+        }
+
+        return {};
+    }
+
+    std::vector<Campaign::CampaignAwardData> CampaignAwardData::getCampaignAwardData( const ScenarioInfoId & scenarioInfo )
+    {
+        assert( scenarioInfo.campaignId >= 0 && scenarioInfo.scenarioId >= 0 );
+
+        switch ( scenarioInfo.campaignId ) {
         case ROLAND_CAMPAIGN:
-            return getRolandCampaignAwardData( scenarioID );
+            return getRolandCampaignAwardData( scenarioInfo.scenarioId );
         case ARCHIBALD_CAMPAIGN:
-            return getArchibaldCampaignAwardData( scenarioID );
+            return getArchibaldCampaignAwardData( scenarioInfo.scenarioId );
         case PRICE_OF_LOYALTY_CAMPAIGN:
-            return getPriceOfLoyaltyCampaignAwardData( scenarioID );
+            return getPriceOfLoyaltyCampaignAwardData( scenarioInfo.scenarioId );
         case DESCENDANTS_CAMPAIGN:
-            return getDescendantsCampaignAwardData( scenarioID );
+            return getDescendantsCampaignAwardData( scenarioInfo.scenarioId );
         case WIZARDS_ISLE_CAMPAIGN:
-            return getWizardsIsleCampaignAwardData( scenarioID );
+            return getWizardsIsleCampaignAwardData( scenarioInfo.scenarioId );
         case VOYAGE_HOME_CAMPAIGN:
             // No campaign award for voyage home!
             return {};

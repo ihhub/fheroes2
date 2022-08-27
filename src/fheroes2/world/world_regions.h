@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <set>
 #include <vector>
 
@@ -51,7 +52,7 @@ struct MapRegion
 public:
     uint32_t _id = REGION_NODE_FOUND;
     bool _isWater = false;
-    std::set<int> _neighbours;
+    std::set<uint32_t> _neighbours;
     std::vector<MapRegionNode> _nodes;
     size_t _lastProcessedNode = 0;
 

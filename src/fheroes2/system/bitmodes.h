@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,7 +24,7 @@
 #ifndef H2BITMODES_H
 #define H2BITMODES_H
 
-#include "types.h"
+#include <cstdint>
 
 class StreamBase;
 
@@ -34,26 +35,33 @@ public:
         : modes( 0 )
     {}
 
-    void SetModes( u32 f )
+    void SetModes( const uint32_t f )
     {
         modes |= f;
     }
 
-    void ResetModes( u32 f )
+    void ResetModes( const uint32_t f )
     {
         modes &= ~f;
     }
 
-    bool Modes( u32 f ) const
+    // Returns true if any of the requested modes is set, otherwise returns false
+    bool Modes( const uint32_t f ) const
     {
         return ( modes & f ) != 0;
+    }
+
+    // Returns true if all the requested modes are set, otherwise returns false
+    bool AllModes( const uint32_t f ) const
+    {
+        return ( modes & f ) == f && f != 0;
     }
 
 protected:
     friend StreamBase & operator<<( StreamBase &, const BitModes & );
     friend StreamBase & operator>>( StreamBase &, BitModes & );
 
-    u32 modes;
+    uint32_t modes;
 };
 
 StreamBase & operator<<( StreamBase &, const BitModes & );

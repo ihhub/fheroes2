@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -55,7 +55,7 @@ namespace Interface
 
         void RedrawInfo( bool show_play_info = false ) const;
         void resetSelection();
-        bool QueueEventProcessing( void );
+        bool QueueEventProcessing();
 
         bool show_name;
         bool show_race;

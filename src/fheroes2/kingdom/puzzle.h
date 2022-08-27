@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,9 +25,8 @@
 #define H2PUZZLE_H
 
 #include <bitset>
+#include <cstdint>
 #include <vector>
-
-#include "types.h"
 
 #define PUZZLETILES 48
 
@@ -38,8 +38,8 @@ public:
     Puzzle();
     Puzzle & operator=( const char * );
 
-    void Update( u32 open, u32 total );
-    void ShowMapsDialog( void ) const;
+    void Update( uint32_t open, uint32_t total );
+    void ShowMapsDialog() const;
 
     std::vector<uint8_t> zone1_order;
     std::vector<uint8_t> zone2_order;

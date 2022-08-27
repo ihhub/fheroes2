@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -57,19 +58,19 @@ namespace
     {
         switch ( race ) {
         case Race::KNGT:
-            return fheroes2::Point( 43, 9 );
+            return { 43, 9 };
         case Race::BARB:
-            return fheroes2::Point( 42, 8 );
+            return { 42, 8 };
         case Race::SORC:
-            return fheroes2::Point( 43, 9 );
+            return { 43, 9 };
         case Race::WRLK:
-            return fheroes2::Point( 41, 9 );
+            return { 41, 9 };
         case Race::WZRD:
-            return fheroes2::Point( 42, 10 );
+            return { 42, 10 };
         case Race::NECR:
-            return fheroes2::Point( 42, 9 );
+            return { 42, 9 };
         default:
-            return fheroes2::Point();
+            return {};
         }
     }
 }
@@ -81,100 +82,112 @@ Captain::Captain( Castle & cstl )
     SetCenter( home.GetCenter() );
 }
 
-bool Captain::isValid( void ) const
+bool Captain::isValid() const
 {
     return home.isBuild( BUILD_CAPTAIN );
 }
 
-int Captain::GetAttack( void ) const
+int Captain::GetAttack() const
 {
     return attack + GetAttackModificator( nullptr );
 }
 
-int Captain::GetDefense( void ) const
+int Captain::GetDefense() const
 {
     return defense + GetDefenseModificator( nullptr );
 }
 
-int Captain::GetPower( void ) const
+int Captain::GetPower() const
 {
     const int finalPower = power + GetPowerModificator( nullptr );
     return finalPower < 1 ? 1 : ( finalPower > 255 ? 255 : finalPower );
 }
 
-int Captain::GetKnowledge( void ) const
+int Captain::GetKnowledge() const
 {
     return knowledge + GetKnowledgeModificator( nullptr );
 }
 
-int Captain::GetMorale( void ) const
+int Captain::GetMorale() const
 {
     int result = Morale::NORMAL;
 
     // global modificator
     result += GetMoraleModificator( nullptr );
 
-    // result
+    // A special artifact ability presence must be the last check.
+    const Artifact maxMoraleArtifact = bag_artifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_MORALE );
+    if ( maxMoraleArtifact.isValid() ) {
+        result = Morale::BLOOD;
+    }
+
     return Morale::Normalize( result );
 }
 
-int Captain::GetLuck( void ) const
+int Captain::GetLuck() const
 {
     int result = Luck::NORMAL;
 
     // global modificator
     result += GetLuckModificator( nullptr );
 
-    // result
+    // A special artifact ability presence must be the last check.
+    const Artifact maxLuckArtifact = bag_artifacts.getFirstArtifactWithBonus( fheroes2::ArtifactBonusType::MAXIMUM_LUCK );
+    if ( maxLuckArtifact.isValid() ) {
+        result = Luck::IRISH;
+    }
+
     return Luck::Normalize( result );
 }
 
-int Captain::GetRace( void ) const
+int Captain::GetRace() const
 {
     return home.GetRace();
 }
 
-int Captain::GetColor( void ) const
+int Captain::GetColor() const
 {
     return home.GetColor();
 }
 
-const std::string & Captain::GetName( void ) const
+const std::string & Captain::GetName() const
 {
     return home.GetName();
 }
 
-int Captain::GetType( void ) const
+int Captain::GetType() const
 {
     return HeroBase::CAPTAIN;
 }
 
-const Army & Captain::GetArmy( void ) const
+const Army & Captain::GetArmy() const
 {
     return home.GetArmy();
 }
 
-Army & Captain::GetArmy( void )
+Army & Captain::GetArmy()
 {
     return home.GetArmy();
 }
 
-int Captain::GetControl( void ) const
+int Captain::GetControl() const
 {
     return home.GetControl();
 }
 
-void Captain::ActionAfterBattle( void )
+void Captain::ActionAfterBattle()
 {
     SetSpellPoints( GetMaxSpellPoints() );
 }
 
-void Captain::ActionPreBattle( void )
+void Captain::ActionPreBattle()
 {
     SetSpellPoints( GetMaxSpellPoints() );
+
+    spell_book.resetState();
 }
 
-const Castle * Captain::inCastle( void ) const
+const Castle * Captain::inCastle() const
 {
     return &home;
 }
@@ -212,6 +225,8 @@ fheroes2::Sprite Captain::GetPortrait( const PortraitType type ) const
         default:
             break;
         }
+        break;
+    default:
         break;
     }
 

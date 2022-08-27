@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,7 +26,7 @@
 #include "agg_image.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "interface_list.h"
 #include "localevent.h"
@@ -36,16 +37,20 @@
 #include "ui_button.h"
 #include "ui_window.h"
 
-class SettingsListBox : public Interface::ListBox<u32>
+class SettingsListBox : public Interface::ListBox<uint32_t>
 {
 public:
+    using Interface::ListBox<uint32_t>::ActionListDoubleClick;
+    using Interface::ListBox<uint32_t>::ActionListSingleClick;
+    using Interface::ListBox<uint32_t>::ActionListPressRight;
+
     SettingsListBox( const fheroes2::Point & pt, bool f )
-        : Interface::ListBox<u32>( pt )
+        : Interface::ListBox<uint32_t>( pt )
         , readonly( f )
         , _restorer( fheroes2::Display::instance() )
     {}
 
-    void RedrawItem( const u32 &, s32, s32, bool ) override;
+    void RedrawItem( const uint32_t & item, int32_t ox, int32_t oy, bool current ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
     void ActionCurrentUp() override
@@ -58,11 +63,11 @@ public:
         // Do nothing.
     }
 
-    void ActionListDoubleClick( u32 & ) override;
+    void ActionListDoubleClick( uint32_t & item ) override;
 
-    void ActionListSingleClick( u32 & ) override;
+    void ActionListSingleClick( uint32_t & item ) override;
 
-    void ActionListPressRight( u32 & ) override
+    void ActionListPressRight( uint32_t & /* unused */ ) override
     {
         // Do nothing.
     }
@@ -71,7 +76,7 @@ public:
     fheroes2::ImageRestorer _restorer;
 };
 
-void SettingsListBox::RedrawItem( const u32 & item, s32 ox, s32 oy, bool /*current*/ )
+void SettingsListBox::RedrawItem( const uint32_t & item, int32_t ox, int32_t oy, bool /*current*/ )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const Settings & conf = Settings::Get();
@@ -113,29 +118,22 @@ void SettingsListBox::RedrawBackground( const fheroes2::Point & origin )
     fheroes2::Blit( sprite, 0, sprite.height() - scrollbarHeight / 2, display, origin.x + 295, origin.y + 41 + scrollbarHeight / 2, 16, scrollbarHeight / 2 );
 }
 
-void SettingsListBox::ActionListDoubleClick( u32 & item )
+void SettingsListBox::ActionListDoubleClick( uint32_t & item )
 {
     ActionListSingleClick( item );
 }
 
-void SettingsListBox::ActionListSingleClick( u32 & item )
+void SettingsListBox::ActionListSingleClick( uint32_t & item )
 {
     Settings & conf = Settings::Get();
 
     if ( !readonly || conf.CanChangeInGame( item ) ) {
         conf.ExtModes( item ) ? conf.ExtResetModes( item ) : conf.ExtSetModes( item );
-
-        if ( item == Settings::GAME_AUTOSAVE_BEGIN_DAY && conf.ExtModes( Settings::GAME_AUTOSAVE_BEGIN_DAY ) ) {
-            conf.ExtSetModes( Settings::GAME_AUTOSAVE_ON );
-        }
     }
 }
 
 void Dialog::ExtSettings( bool readonly )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-    const Settings & conf = Settings::Get();
-
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
@@ -145,44 +143,23 @@ void Dialog::ExtSettings( bool readonly )
     Text text( _( "Experimental Game Settings" ), Font::YELLOW_BIG );
     text.Blit( area.x + ( area.width - text.w() ) / 2, area.y + 6 );
 
-    std::vector<u32> states;
-    states.reserve( 64 );
+    std::vector<uint32_t> states;
+    states.reserve( 32 );
 
-    states.push_back( Settings::GAME_SAVE_REWRITE_CONFIRM );
     states.push_back( Settings::GAME_REMEMBER_LAST_FOCUS );
     states.push_back( Settings::GAME_SHOW_SYSTEM_INFO );
     states.push_back( Settings::GAME_BATTLE_SHOW_DAMAGE );
-
-    states.push_back( Settings::GAME_AUTOSAVE_ON );
     states.push_back( Settings::GAME_AUTOSAVE_BEGIN_DAY );
-
-    if ( conf.VideoMode() == fheroes2::Size( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT ) )
-        states.push_back( Settings::GAME_USE_FADE );
-
     states.push_back( Settings::GAME_CONTINUE_AFTER_VICTORY );
-    states.push_back( Settings::WORLD_SHOW_TERRAIN_PENALTY );
     states.push_back( Settings::WORLD_ALLOW_SET_GUARDIAN );
     states.push_back( Settings::WORLD_EXT_OBJECTS_CAPTURED );
     states.push_back( Settings::WORLD_SCOUTING_EXTENDED );
-    states.push_back( Settings::WORLD_ARTIFACT_CRYSTAL_BALL );
-    states.push_back( Settings::WORLD_EYE_EAGLE_AS_SCHOLAR );
     states.push_back( Settings::WORLD_SCALE_NEUTRAL_ARMIES );
-    states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_RS );
-    states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_PS );
-    states.push_back( Settings::WORLD_USE_UNIQUE_ARTIFACTS_SS );
-    states.push_back( Settings::WORLD_DISABLE_BARROW_MOUNDS );
     states.push_back( Settings::HEROES_BUY_BOOK_FROM_SHRINES );
-    states.push_back( Settings::HEROES_COST_DEPENDED_FROM_LEVEL );
-    states.push_back( Settings::HEROES_REMEMBER_POINTS_RETREAT );
-    states.push_back( Settings::HEROES_TRANSCRIBING_SCROLLS );
+    states.push_back( Settings::HEROES_REMEMBER_MP_WHEN_RETREATING );
     states.push_back( Settings::HEROES_ARENA_ANY_SKILLS );
-
     states.push_back( Settings::CASTLE_ALLOW_GUARDIANS );
-    states.push_back( Settings::CASTLE_MAGEGUILD_POINTS_TURN );
-
-    states.push_back( Settings::BATTLE_SHOW_ARMY_ORDER );
     states.push_back( Settings::BATTLE_SOFT_WAITING );
-    states.push_back( Settings::BATTLE_REVERSE_WAIT_ORDER );
     states.push_back( Settings::BATTLE_DETERMINISTIC_RESULT );
 
     std::sort( states.begin(), states.end(), []( uint32_t first, uint32_t second ) { return Settings::ExtName( first ) > Settings::ExtName( second ); } );
@@ -194,20 +171,26 @@ void Dialog::ExtSettings( bool readonly )
     const int ah = 340;
 
     listbox.RedrawBackground( area.getPosition() );
-    listbox.SetScrollButtonUp( ICN::ESCROLL, 4, 5, fheroes2::Point( area.x + 295, area.y + 25 ) );
-    listbox.SetScrollButtonDn( ICN::ESCROLL, 6, 7, fheroes2::Point( area.x + 295, area.y + ah + 5 ) );
-    listbox.SetScrollBar( fheroes2::AGG::GetICN( ICN::ESCROLL, 3 ), fheroes2::Rect( area.x + 298, area.y + 44, 10, ah - 42 ) );
+    listbox.SetScrollButtonUp( ICN::ESCROLL, 4, 5, { area.x + 295, area.y + 25 } );
+    listbox.SetScrollButtonDn( ICN::ESCROLL, 6, 7, { area.x + 295, area.y + ah + 5 } );
+
+    const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::ESCROLL, 3 );
+    const fheroes2::Image scrollbarSlider = fheroes2::generateScrollbarSlider( originalSlider, false, ah - 42, ah / 40, static_cast<int32_t>( states.size() ),
+                                                                               { 0, 0, originalSlider.width(), 8 }, { 0, 7, originalSlider.width(), 8 } );
+
+    listbox.setScrollBarArea( { area.x + 298, area.y + 44, 10, ah - 42 } );
+    listbox.setScrollBarImage( scrollbarSlider );
     listbox.SetAreaMaxItems( ah / 40 );
-    listbox.SetAreaItems( fheroes2::Rect( area.x + 10, area.y + 30, 290, ah + 5 ) );
+    listbox.SetAreaItems( { area.x + 10, area.y + 30, 290, ah + 5 } );
     listbox.SetListContent( states );
     listbox.Redraw();
 
-    LocalEvent & le = LocalEvent::Get();
-
     const fheroes2::Rect buttonsArea( area.x + 5, area.y, area.width - 10, area.height - 5 );
 
-    const int buttonIcnId = conf.ExtGameEvilInterface() ? ICN::SPANBTNE : ICN::SPANBTN;
+    const int buttonIcnId = Settings::Get().ExtGameEvilInterface() ? ICN::SPANBTNE : ICN::SPANBTN;
     const fheroes2::Sprite & buttonSprite = fheroes2::AGG::GetICN( buttonIcnId, 0 );
+
+    fheroes2::Display & display = fheroes2::Display::instance();
 
     fheroes2::ButtonSprite buttonOk
         = fheroes2::makeButtonWithShadow( buttonsArea.x + ( buttonsArea.width - buttonSprite.width() ) / 2, buttonsArea.y + buttonsArea.height - buttonSprite.height(),
@@ -217,10 +200,11 @@ void Dialog::ExtSettings( bool readonly )
     display.render();
 
     // message loop
+    LocalEvent & le = LocalEvent::Get();
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonOk.area() ) ? buttonOk.drawOnPress() : buttonOk.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonOk.area() ) || HotKeyCloseWindow ) {
+        if ( le.MouseClickLeft( buttonOk.area() ) || Game::HotKeyCloseWindow() ) {
             break;
         }
 
@@ -234,5 +218,5 @@ void Dialog::ExtSettings( bool readonly )
         display.render();
     }
 
-    Settings::Get().BinarySave();
+    Settings::Get().Save( Settings::configFileName );
 }

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,6 +24,8 @@
 #include "castle.h"
 #include "profit.h"
 #include "race.h"
+
+#include <cassert>
 
 payment_t ProfitConditions::FromBuilding( uint32_t building, int race )
 {
@@ -45,34 +48,48 @@ payment_t ProfitConditions::FromBuilding( uint32_t building, int race )
 
 payment_t ProfitConditions::FromArtifact( int artifact )
 {
-    switch ( artifact ) {
-    case Artifact::TAX_LIEN:
-        return payment_t( cost_t{ 250, 0, 0, 0, 0, 0, 0 } );
-    case Artifact::GOLDEN_GOOSE:
-        return payment_t( cost_t{ 10000, 0, 0, 0, 0, 0, 0 } );
-    case Artifact::ENDLESS_SACK_GOLD:
-        return payment_t( cost_t{ 1000, 0, 0, 0, 0, 0, 0 } );
-    case Artifact::ENDLESS_BAG_GOLD:
-        return payment_t( cost_t{ 750, 0, 0, 0, 0, 0, 0 } );
-    case Artifact::ENDLESS_PURSE_GOLD:
-        return payment_t( cost_t{ 500, 0, 0, 0, 0, 0, 0 } );
-    case Artifact::ENDLESS_POUCH_SULFUR:
-        return payment_t( cost_t{ 0, 0, 0, 0, 1, 0, 0 } );
-    case Artifact::ENDLESS_VIAL_MERCURY:
-        return payment_t( cost_t{ 0, 0, 1, 0, 0, 0, 0 } );
-    case Artifact::ENDLESS_POUCH_GEMS:
-        return payment_t( cost_t{ 0, 0, 0, 0, 0, 0, 1 } );
-    case Artifact::ENDLESS_CORD_WOOD:
-        return payment_t( cost_t{ 0, 1, 0, 0, 0, 0, 0 } );
-    case Artifact::ENDLESS_CART_ORE:
-        return payment_t( cost_t{ 0, 0, 0, 1, 0, 0, 0 } );
-    case Artifact::ENDLESS_POUCH_CRYSTAL:
-        return payment_t( cost_t{ 0, 0, 0, 0, 0, 1, 0 } );
-    default:
-        break;
+    const fheroes2::ArtifactData & data = fheroes2::getArtifactData( artifact );
+    payment_t cost;
+
+    for ( const fheroes2::ArtifactBonus & bonus : data.bonuses ) {
+        switch ( bonus.type ) {
+        case fheroes2::ArtifactBonusType::GOLD_INCOME:
+            cost.gold += bonus.value;
+            break;
+        case fheroes2::ArtifactBonusType::WOOD_INCOME:
+            cost.wood += bonus.value;
+            break;
+        case fheroes2::ArtifactBonusType::ORE_INCOME:
+            cost.ore += bonus.value;
+            break;
+        case fheroes2::ArtifactBonusType::MERCURY_INCOME:
+            cost.mercury += bonus.value;
+            break;
+        case fheroes2::ArtifactBonusType::GEMS_INCOME:
+            cost.gems += bonus.value;
+            break;
+        case fheroes2::ArtifactBonusType::SULFUR_INCOME:
+            cost.sulfur += bonus.value;
+            break;
+        case fheroes2::ArtifactBonusType::CRYSTAL_INCOME:
+            cost.crystal += bonus.value;
+            break;
+        default:
+            break;
+        }
     }
 
-    return {};
+    for ( const fheroes2::ArtifactCurse & curse : data.curses ) {
+        switch ( curse.type ) {
+        case fheroes2::ArtifactCurseType::GOLD_PENALTY:
+            cost.gold -= curse.value;
+            break;
+        default:
+            break;
+        }
+    }
+
+    return cost;
 }
 
 payment_t ProfitConditions::FromMine( int type )
@@ -93,6 +110,8 @@ payment_t ProfitConditions::FromMine( int type )
     case Resource::GOLD:
         return payment_t( cost_t{ 1000, 0, 0, 0, 0, 0, 0 } );
     default:
+        // Did you add a new type of resources? Add the logic here!
+        assert( 0 );
         break;
     }
 

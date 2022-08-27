@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,15 +20,22 @@
 
 #pragma once
 
-enum SaveFileFormat
+#include <cstdint>
+
+enum SaveFileFormat : uint16_t
 {
-    // TODO: if you're adding a new version you must assign it to CURRENT_FORMAT_VERSION located at the bottom.
-    FORMAT_VERSION_097_RELEASE = 9701,
-    FORMAT_VERSION_PRE_097_RELEASE = 9700,
-    FORMAT_VERSION_096_RELEASE = 9600,
-    FORMAT_VERSION_095_RELEASE = 9502,
+    // !!! IMPORTANT !!!
+    // If you're adding a new version you must assign it to CURRENT_FORMAT_VERSION located at the bottom.
+    // If you're removing an old version you must assign the oldest available to LAST_SUPPORTED_FORMAT_VERSION located at the bottom.
 
-    LAST_SUPPORTED_FORMAT_VERSION = FORMAT_VERSION_095_RELEASE,
+    // 10000 value must be used for 1.0 release so all version before it should have lower than this value.
+    FORMAT_VERSION_0918_RELEASE = 9921,
+    FORMAT_VERSION_PRE_0918_RELEASE = 9920,
+    FORMAT_VERSION_0917_RELEASE = 9911,
+    FORMAT_VERSION_PRE_0917_RELEASE = 9910,
+    FORMAT_VERSION_0916_RELEASE = 9901,
 
-    CURRENT_FORMAT_VERSION = FORMAT_VERSION_097_RELEASE
+    LAST_SUPPORTED_FORMAT_VERSION = FORMAT_VERSION_0916_RELEASE,
+
+    CURRENT_FORMAT_VERSION = FORMAT_VERSION_0918_RELEASE
 };

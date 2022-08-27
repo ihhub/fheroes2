@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,7 +20,8 @@
 
 #pragma once
 
-#include "route.h"
+#include <cstdint>
+#include <vector>
 
 // Base representation of the dataset that mirrors the 2D map being traversed
 template <class T>
@@ -51,6 +52,8 @@ template <class T>
 class Pathfinder
 {
 public:
+    virtual ~Pathfinder() = default;
+
     virtual void reset() = 0;
 
     virtual uint32_t getDistance( int targetIndex ) const

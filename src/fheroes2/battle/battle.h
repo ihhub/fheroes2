@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,11 +45,11 @@ namespace Battle
 
     struct Result
     {
-        u32 army1;
-        u32 army2;
-        u32 exp1;
-        u32 exp2;
-        u32 killed;
+        uint32_t army1;
+        uint32_t army2;
+        uint32_t exp1;
+        uint32_t exp2;
+        uint32_t killed;
 
         Result()
             : army1( 0 )
@@ -58,31 +59,29 @@ namespace Battle
             , killed( 0 )
         {}
 
-        bool AttackerWins( void ) const;
-        bool DefenderWins( void ) const;
-        u32 AttackerResult( void ) const;
-        u32 DefenderResult( void ) const;
-        u32 GetExperienceAttacker( void ) const;
-        u32 GetExperienceDefender( void ) const;
+        bool AttackerWins() const;
+        bool DefenderWins() const;
+        uint32_t AttackerResult() const;
+        uint32_t DefenderResult() const;
+        uint32_t GetExperienceAttacker() const;
+        uint32_t GetExperienceDefender() const;
     };
 
-    Result Loader( Army &, Army &, s32 );
+    Result Loader( Army &, Army &, int32_t );
 
     struct TargetInfo
     {
-        Unit * defender;
-        u32 damage;
-        u32 killed;
-        bool resist;
+        Unit * defender = nullptr;
+        uint32_t damage = 0;
+        uint32_t killed = 0;
+        bool resist = false;
 
-        TargetInfo()
-            : defender( nullptr )
-            , damage( 0 )
-            , killed( 0 )
-            , resist( false )
+        TargetInfo() = default;
+
+        explicit TargetInfo( Unit * defender_ )
+            : defender( defender_ )
         {}
 
-        bool operator==( const TargetInfo & ) const;
         static bool isFinishAnimFrame( const TargetInfo & info );
     };
 

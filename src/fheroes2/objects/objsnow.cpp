@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,9 +38,9 @@ namespace
 
 int ObjSnow::GetPassable( const uint8_t index )
 {
-    const u8 disabled[] = {22, 26, 27, 28, 30, 32, 34, 35, 37, 38, 39, 81, 82, 83, 84, 197, 198};
-    const u8 restricted[] = {2,  12, 41, 42, 43, 44, 45, 49, 50, 55,  56,  57,  60,  64,  65,  68,  71,  74,  77,  80, 85,
-                             86, 87, 88, 89, 90, 91, 92, 94, 95, 132, 149, 151, 159, 177, 184, 199, 200, 202, 208, 210};
+    const uint8_t disabled[] = { 22, 26, 27, 28, 30, 32, 34, 35, 37, 38, 39, 81, 82, 83, 84, 197, 198 };
+    const uint8_t restricted[] = { 2,  12, 41, 42, 43, 44, 45, 49, 50, 55,  56,  57,  60,  64,  65,  68,  71,  74,  77,  80, 85,
+                                   86, 87, 88, 89, 90, 91, 92, 94, 95, 132, 149, 151, 159, 177, 184, 199, 200, 202, 208, 210 };
 
     if ( isShadow( index ) )
         return DIRECTION_ALL;
@@ -49,7 +50,7 @@ int ObjSnow::GetPassable( const uint8_t index )
     return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
 }
 
-bool ObjSnow::isAction( u32 index )
+bool ObjSnow::isAction( uint32_t index )
 {
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
@@ -59,7 +60,7 @@ bool ObjSnow::isShadow( const uint8_t index )
     return objSnowShadowBitset[index];
 }
 
-int ObjSnow::GetActionObject( u32 index )
+int ObjSnow::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 3:

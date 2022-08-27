@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,9 +23,9 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <map>
 #include <string>
-#include <vector>
 
 #include "agg_image.h"
 #include "artifact.h"
@@ -38,288 +39,31 @@
 #include "settings.h"
 #include "spell.h"
 #include "statusbar.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 
 namespace
 {
     const std::map<ArtifactSetData, std::vector<uint32_t>> artifactSets
         = { { ArtifactSetData( Artifact::BATTLE_GARB, gettext_noop( "The three Anduran artifacts magically combine into one." ) ),
               { Artifact::HELMET_ANDURAN, Artifact::SWORD_ANDURAN, Artifact::BREASTPLATE_ANDURAN } } };
-}
 
-enum
-{
-    ART_RNDDISABLED = 0x01,
-    ART_RNDUSED = 0x02
-};
+    std::array<uint8_t, Artifact::UNKNOWN + 1> artifactGlobalStatus = {};
 
-enum
-{
-    TYPE0,
-    TYPE1,
-    TYPE2,
-    TYPE3,
-    TYPE4
-}; /*TYPE0: unique, TYPE1: morale/luck, TYPE2: resource, TYPE3: primary/mp/sp, TYPE4: secskills */
-
-struct artifactstats_t
-{
-    uint8_t bits;
-    const uint8_t extra;
-    const uint8_t type;
-    const char * const name;
-    const char * const description;
-};
-
-namespace
-{
-    std::array<artifactstats_t, 104> artifacts = { {
-        { 0, 12, TYPE3, _( "Ultimate Book of Knowledge" ), _( "The %{name} increases your knowledge by %{count}." ) },
-        { 0, 12, TYPE3, _( "Ultimate Sword of Dominion" ), _( "The %{name} increases your attack skill by %{count}." ) },
-        { 0, 12, TYPE3, _( "Ultimate Cloak of Protection" ), _( "The %{name} increases your defense skill by %{count}." ) },
-        { 0, 12, TYPE3, _( "Ultimate Wand of Magic" ), _( "The %{name} increases your spell power by %{count}." ) },
-        { 0, 6, TYPE3, _( "Ultimate Shield" ), _( "The %{name} increases your attack and defense skills by %{count} each." ) },
-        { 0, 6, TYPE3, _( "Ultimate Staff" ), _( "The %{name} increases your spell power and knowledge by %{count} each." ) },
-        { 0, 4, TYPE3, _( "Ultimate Crown" ), _( "The %{name} increases each of your basic skills by %{count} points." ) },
-        { 0, 10, TYPE2, _( "Golden Goose" ), _( "The %{name} brings in an income of %{count} gold per turn." ) },
-        { 0, 4, TYPE3, _( "Arcane Necklace of Magic" ), _( "The %{name} increases your spell power by %{count}." ) },
-        { 0, 2, TYPE3, _( "Caster's Bracelet of Magic" ), _( "The %{name} increases your spell power by %{count}." ) },
-        { 0, 2, TYPE3, _( "Mage's Ring of Power" ), _( "The %{name} increases your spell power by %{count}." ) },
-        { 0, 3, TYPE3, _( "Witch's Broach of Magic" ), _( "The %{name} increases your spell power by %{count}." ) },
-        { 0, 1, TYPE1, _( "Medal of Valor" ), _( "The %{name} increases your morale." ) },
-        { 0, 1, TYPE1, _( "Medal of Courage" ), _( "The %{name} increases your morale." ) },
-        { 0, 1, TYPE1, _( "Medal of Honor" ), _( "The %{name} increases your morale." ) },
-        { 0, 1, TYPE1, _( "Medal of Distinction" ), _( "The %{name} increases your morale." ) },
-        { 0, 2, TYPE1, _( "Fizbin of Misfortune" ), _( "The %{name} greatly decreases your morale by %{count}." ) },
-        { 0, 1, TYPE3, _( "Thunder Mace of Dominion" ), _( "The %{name} increases your attack skill by %{count}." ) },
-        { 0, 1, TYPE3, _( "Armored Gauntlets of Protection" ), _( "The %{name} increase your defense skill by %{count}." ) },
-        { 0, 1, TYPE3, _( "Defender Helm of Protection" ), _( "The %{name} increases your defense skill by %{count}." ) },
-        { 0, 1, TYPE3, _( "Giant Flail of Dominion" ), _( "The %{name} increases your attack skill by %{count}." ) },
-        { 0, 1, TYPE0, _( "Ballista of Quickness" ), _( "The %{name} lets your catapult fire twice per combat round." ) },
-        { 0, 2, TYPE3, _( "Stealth Shield of Protection" ), _( "The %{name} increases your defense skill by %{count}." ) },
-        { 0, 3, TYPE3, _( "Dragon Sword of Dominion" ), _( "The %{name} increases your attack skill by %{count}." ) },
-        { 0, 2, TYPE3, _( "Power Axe of Dominion" ), _( "The %{name} increases your attack skill by %{count}." ) },
-        { 0, 3, TYPE3, _( "Divine Breastplate of Protection" ), _( "The %{name} increases your defense skill by %{count}." ) },
-        { 0, 2, TYPE3, _( "Minor Scroll of Knowledge" ), _( "The %{name} increases your knowledge by %{count}." ) },
-        { 0, 3, TYPE3, _( "Major Scroll of Knowledge" ), _( "The %{name} increases your knowledge by %{count}." ) },
-        { 0, 4, TYPE3, _( "Superior Scroll of Knowledge" ), _( "The %{name} increases your knowledge by %{count}." ) },
-        { 0, 5, TYPE3, _( "Foremost Scroll of Knowledge" ), _( "The %{name} increases your knowledge by %{count}." ) },
-        { 0, 100, TYPE2, _( "Endless Sack of Gold" ), _( "The %{name} provides you with %{count} gold per day." ) },
-        { 0, 75, TYPE2, _( "Endless Bag of Gold" ), _( "The %{name} provides you with %{count} gold per day." ) },
-        { 0, 50, TYPE2, _( "Endless Purse of Gold" ), _( "The %{name} provides you with %{count} gold per day." ) },
-        { 0, 0, TYPE3, _( "Nomad Boots of Mobility" ), _( "The %{name} increase your movement on land." ) },
-        { 0, 0, TYPE3, _( "Traveler's Boots of Mobility" ), _( "The %{name} increase your movement on land." ) },
-        { 0, 1, TYPE1, _( "Lucky Rabbit's Foot" ), _( "The %{name} increases your luck in combat." ) },
-        { 0, 1, TYPE1, _( "Golden Horseshoe" ), _( "The %{name} increases your luck in combat." ) },
-        { 0, 1, TYPE1, _( "Gambler's Lucky Coin" ), _( "The %{name} increases your luck in combat." ) },
-        { 0, 1, TYPE1, _( "Four-Leaf Clover" ), _( "The %{name} increases your luck in combat." ) },
-        { 0, 0, TYPE3, _( "True Compass of Mobility" ), _( "The %{name} increases your movement on land and sea." ) },
-        { 0, 0, TYPE3, _( "Sailor's Astrolabe of Mobility" ), _( "The %{name} increases your movement on sea." ) },
-        { 0, 0, TYPE0, _( "Evil Eye" ), _( "The %{name} reduces the casting cost of curse spells by half." ) },
-        { 0, 2, TYPE0, _( "Enchanted Hourglass" ), _( "The %{name} extends the duration of all your spells by %{count} turns." ) },
-        { 0, 0, TYPE0, _( "Gold Watch" ), _( "The %{name} doubles the effectiveness of your hypnotize spells." ) },
-        { 0, 0, TYPE0, _( "Skullcap" ), _( "The %{name} halves the casting cost of all mind influencing spells." ) },
-        { 0, 50, TYPE0, _( "Ice Cloak" ), _( "The %{name} halves all damage your troops take from cold spells." ) },
-        { 0, 50, TYPE0, _( "Fire Cloak" ), _( "The %{name} halves all damage your troops take from fire spells." ) },
-        { 0, 50, TYPE0, _( "Lightning Helm" ), _( "The %{name} halves all damage your troops take from lightning spells." ) },
-        { 0, 50, TYPE0, _( "Evercold Icicle" ), _( "The %{name} causes your cold spells to do %{count} percent more damage to enemy troops." ) },
-        { 0, 50, TYPE0, _( "Everhot Lava Rock" ), _( "The %{name} causes your fire spells to do %{count} percent more damage to enemy troops." ) },
-        { 0, 50, TYPE0, _( "Lightning Rod" ), _( "The %{name} causes your lightning spells to do %{count} percent more damage to enemy troops." ) },
-        { 0, 0, TYPE0, _( "Snake-Ring" ), _( "The %{name} halves the casting cost of all your bless spells." ) },
-        { 0, 0, TYPE0, _( "Ankh" ), _( "The %{name} doubles the effectiveness of all your resurrect and animate spells." ) },
-        { 0, 0, TYPE0, _( "Book of Elements" ), _( "The %{name} doubles the effectiveness of all your summoning spells." ) },
-        { 0, 0, TYPE0, _( "Elemental Ring" ), _( "The %{name} halves the casting cost of all summoning spells." ) },
-        { 0, 0, TYPE0, _( "Holy Pendant" ), _( "The %{name} makes all your troops immune to curse spells." ) },
-        { 0, 0, TYPE0, _( "Pendant of Free Will" ), _( "The %{name} makes all your troops immune to hypnotize spells." ) },
-        { 0, 0, TYPE0, _( "Pendant of Life" ), _( "The %{name} makes all your troops immune to death spells." ) },
-        { 0, 0, TYPE0, _( "Serenity Pendant" ), _( "The %{name} makes all your troops immune to berserk spells." ) },
-        { 0, 0, TYPE0, _( "Seeing-eye Pendant" ), _( "The %{name} makes all your troops immune to blindness spells." ) },
-        { 0, 0, TYPE0, _( "Kinetic Pendant" ), _( "The %{name} makes all your troops immune to paralyze spells." ) },
-        { 0, 0, TYPE0, _( "Pendant of Death" ), _( "The %{name} makes all your troops immune to holy spells." ) },
-        { 0, 0, TYPE0, _( "Wand of Negation" ), _( "The %{name} protects your troops from the Dispel Magic spell." ) },
-        { 0, 50, TYPE0, _( "Golden Bow" ), _( "The %{name} eliminates the %{count} percent penalty for your troops shooting past obstacles (e.g. castle walls)." ) },
-        { 0, 1, TYPE4, _( "Telescope" ), _( "The %{name} increases the amount of terrain your hero reveals when adventuring by %{count} extra square." ) },
-        { 0, 10, TYPE0, _( "Statesman's Quill" ),
-          _( "The %{name} reduces the cost of surrender to %{count} percent of the total cost of troops you have in your army." ) },
-        { 0, 10, TYPE0, _( "Wizard's Hat" ), _( "The %{name} increases the duration of your spells by %{count} turns." ) },
-        { 0, 2, TYPE4, _( "Power Ring" ), _( "The %{name} returns %{count} extra power points/turn to your hero." ) },
-        { 0, 0, TYPE0, _( "Ammo Cart" ), _( "The %{name} provides endless ammunition for all your troops that shoot." ) },
-        { 0, 25, TYPE2, _( "Tax Lien" ), _( "The %{name} costs you %{count} gold pieces/turn." ) },
-        { 0, 0, TYPE0, _( "Hideous Mask" ), _( "The %{name} prevents all 'wandering' armies from joining your hero." ) },
-        { 0, 1, TYPE2, _( "Endless Pouch of Sulfur" ), _( "The %{name} provides %{count} unit of sulfur per day." ) },
-        { 0, 1, TYPE2, _( "Endless Vial of Mercury" ), _( "The %{name} provides %{count} unit of mercury per day." ) },
-        { 0, 1, TYPE2, _( "Endless Pouch of Gems" ), _( "The %{name} provides %{count} unit of gems per day." ) },
-        { 0, 1, TYPE2, _( "Endless Cord of Wood" ), _( "The %{name} provides %{count} unit of wood per day." ) },
-        { 0, 1, TYPE2, _( "Endless Cart of Ore" ), _( "The %{name} provides %{count} unit of ore per day." ) },
-        { 0, 1, TYPE2, _( "Endless Pouch of Crystal" ), _( "The %{name} provides %{count} unit of crystal/day." ) },
-        { 0, 1, TYPE3, _( "Spiked Helm" ), _( "The %{name} increases your attack and defense skills by %{count} each." ) },
-        { 0, 2, TYPE3, _( "Spiked Shield" ), _( "The %{name} increases your attack and defense skills by %{count} each." ) },
-        { 0, 1, TYPE3, _( "White Pearl" ), _( "The %{name} increases your spell power and knowledge by %{count} each." ) },
-        { 0, 2, TYPE3, _( "Black Pearl" ), _( "The %{name} increases your spell power and knowledge by %{count} each." ) },
-
-        { 0, 0, TYPE0, _( "Magic Book" ), _( "The %{name} enables you to cast spells." ) },
-
-        { 0, 0, TYPE0, "Dummy 1", "The reserved artifact." },
-        { 0, 0, TYPE0, "Dummy 2", "The reserved artifact." },
-        { 0, 0, TYPE0, "Dummy 3", "The reserved artifact." },
-        { 0, 0, TYPE0, "Dummy 4", "The reserved artifact." },
-
-        { 0, 0, TYPE0, _( "Spell Scroll" ), _( "This %{name} gives your hero the ability to cast the %{spell} spell." ) },
-        { 0, 3, TYPE3, _( "Arm of the Martyr" ), _( "The %{name} increases your spell power by %{count} but adds the undead morale penalty." ) },
-        { 0, 5, TYPE3, _( "Breastplate of Anduran" ), _( "The %{name} increases your defense by %{count}." ) },
-        { 0, 50, TYPE3, _( "Broach of Shielding" ),
-          _( "The %{name} provides %{count} percent protection from Armageddon and Elemental Storm, but decreases spell power by 2." ) },
-        { 0, 5, TYPE0, _( "Battle Garb of Anduran" ),
-          _( "The %{name} combines the powers of the three Anduran artifacts.  It provides maximum luck and morale for your troops and gives you the Town Portal spell." ) },
-        { 0, 0, TYPE0, _( "Crystal Ball" ),
-          _( "The %{name} lets you get more specific information about monsters, enemy heroes, and castles nearby the hero who holds it." ) },
-        { 0, 50, TYPE0, _( "Heart of Fire" ), _( "The %{name} provides %{count} percent protection from fire, but doubles the damage taken from cold." ) },
-        { 0, 50, TYPE0, _( "Heart of Ice" ), _( "The %{name} provides %{count} percent protection from cold, but doubles the damage taken from fire." ) },
-        { 0, 5, TYPE3, _( "Helmet of Anduran" ), _( "The %{name} increases your spell power by %{count}." ) },
-        { 0, 5, TYPE3, _( "Holy Hammer" ), _( "The %{name} increases your attack skill by %{count}." ) },
-        { 0, 2, TYPE3, _( "Legendary Scepter" ), _( "The %{name} adds %{count} points to all attributes." ) },
-        { 0, 1, TYPE1, _( "Masthead" ), _( "The %{name} boosts your luck and morale by %{count} each in sea combat." ) },
-        { 0, 0, TYPE0, _( "Sphere of Negation" ), _( "The %{name} disables all spell casting, for both sides, in combat." ) },
-        { 0, 5, TYPE3, _( "Staff of Wizardry" ), _( "The %{name} boosts your spell power by %{count}." ) },
-        { 0, 4, TYPE3, _( "Sword Breaker" ), _( "The %{name} increases your defense by %{count} and attack by 1." ) },
-        { 0, 5, TYPE3, _( "Sword of Anduran" ), _( "The %{name} increases your attack skill by %{count}." ) },
-        { 0, 0, TYPE4, _( "Spade of Necromancy" ), _( "The %{name} gives you increased necromancy skill." ) },
-
-        { 0, 0, TYPE0, "Unknown", "Unknown" },
-    } };
-
-    const char * GetPluralDescription( const Artifact & art, u32 count )
+    enum
     {
-        switch ( art.GetID() ) {
-        case Artifact::ENCHANTED_HOURGLASS:
-            return _n( "The %{name} extends the duration of all your spells by %{count} turn.", "The %{name} extends the duration of all your spells by %{count} turns.",
-                       count );
-        case Artifact::WIZARD_HAT:
-            return _n( "The %{name} increases the duration of your spells by %{count} turn.", "The %{name} increases the duration of your spells by %{count} turns.",
-                       count );
-        case Artifact::POWER_RING:
-            return _n( "The %{name} returns %{count} extra power point/turn to your hero.", "The %{name} returns %{count} extra power points/turn to your hero.", count );
-        case Artifact::ENDLESS_POUCH_SULFUR:
-            return _n( "The %{name} provides %{count} unit of sulfur per day.", "The %{name} provides %{count} units of sulfur per day.", count );
-        case Artifact::ENDLESS_VIAL_MERCURY:
-            return _n( "The %{name} provides %{count} unit of mercury per day.", "The %{name} provides %{count} units of mercury per day.", count );
-        case Artifact::ENDLESS_POUCH_GEMS:
-            return _n( "The %{name} provides %{count} unit of gems per day.", "The %{name} provides %{count} units of gems per day.", count );
-        case Artifact::ENDLESS_CORD_WOOD:
-            return _n( "The %{name} provides %{count} unit of wood per day.", "The %{name} provides %{count} units of wood per day.", count );
-        case Artifact::ENDLESS_CART_ORE:
-            return _n( "The %{name} provides %{count} unit of ore per day.", "The %{name} provides %{count} units of ore per day.", count );
-        case Artifact::ENDLESS_POUCH_CRYSTAL:
-            return _n( "The %{name} provides %{count} unit of crystal per day.", "The %{name} provides %{count} units of crystal per day.", count );
-        default:
-            break;
-        }
-        return _( artifacts[art.GetID()].description );
-    }
+        ART_RNDDISABLED = 0x01,
+        ART_RNDUSED = 0x02
+    };
 }
 
-Artifact::Artifact( int art )
-    : id( art >= 0 && art < UNKNOWN ? art : UNKNOWN )
-    , ext( 0 )
-{}
-
-bool Artifact::operator==( const Spell & spell ) const
+const char * Artifact::GetName() const
 {
-    switch ( id ) {
-    case SPELL_SCROLL:
-        return ext == spell.GetID();
-
-    case Artifact::CRYSTAL_BALL:
-        return spell == Spell::IDENTIFYHERO || spell == Spell::VISIONS;
-
-    case Artifact::BATTLE_GARB:
-        return spell == Spell::TOWNPORTAL;
-
-    default:
-        break;
-    }
-
-    return false;
+    return _( fheroes2::getArtifactData( id ).name );
 }
 
-bool Artifact::operator==( const Artifact & art ) const
-{
-    return id == art.id;
-}
-
-bool Artifact::operator!=( const Artifact & art ) const
-{
-    return id != art.id;
-}
-
-int Artifact::GetID( void ) const
-{
-    return id;
-}
-
-const char * Artifact::GetName( void ) const
-{
-    return _( artifacts[id].name );
-}
-
-int Artifact::Type( void ) const
-{
-    return artifacts[id].type;
-}
-
-std::string Artifact::GetDescription( void ) const
-{
-    u32 count = ExtraValue();
-    std::string str = GetPluralDescription( *this, count );
-
-    StringReplace( str, "%{name}", GetName() );
-
-    if ( id == Artifact::SPELL_SCROLL )
-        StringReplace( str, "%{spell}", Spell( ext ).GetName() );
-    else
-        StringReplace( str, "%{count}", count );
-
-    return str;
-}
-
-u32 Artifact::ExtraValue( void ) const
-{
-    switch ( id ) {
-    case GOLDEN_GOOSE:
-        return 1000 * artifacts[id].extra;
-
-    case ENDLESS_SACK_GOLD:
-    case ENDLESS_BAG_GOLD:
-    case ENDLESS_PURSE_GOLD:
-    case TAX_LIEN:
-        return 10 * artifacts[id].extra;
-
-    default:
-        break;
-    }
-
-    return artifacts[id].extra;
-}
-
-bool Artifact::isAlchemistRemove( void ) const
-{
-    switch ( id ) {
-    case TAX_LIEN:
-    case FIZBIN_MISFORTUNE:
-    case HIDEOUS_MASK:
-    case ARM_MARTYR:
-    case HEART_FIRE:
-    case HEART_ICE:
-    case BROACH_SHIELDING:
-        return true;
-    }
-
-    return false;
-}
-
-bool Artifact::isUltimate( void ) const
+bool Artifact::isUltimate() const
 {
     switch ( id ) {
     case ULTIMATE_BOOK:
@@ -338,12 +82,7 @@ bool Artifact::isUltimate( void ) const
     return false;
 }
 
-bool Artifact::isValid( void ) const
-{
-    return id != UNKNOWN;
-}
-
-int Artifact::LoyaltyLevel( void ) const
+int Artifact::LoyaltyLevel() const
 {
     switch ( id ) {
     case MASTHEAD:
@@ -376,7 +115,7 @@ int Artifact::LoyaltyLevel( void ) const
     return ART_NONE;
 }
 
-int Artifact::Level( void ) const
+int Artifact::Level() const
 {
     if ( isUltimate() ) {
         return ART_ULTIMATE;
@@ -493,9 +232,10 @@ int Artifact::Level( void ) const
     return ART_NONE;
 }
 
-// Convert artifact flags into simple usable level value
 int Artifact::getArtifactValue() const
 {
+    // TODO: this method should return a value of the artifact based on its bonuses and curses.
+    // Right now it is based on a level of an artifact which makes some artifacts with different stats be valued as equal.
     const int level = Level();
 
     if ( level & ART_LEVEL1 ) {
@@ -514,29 +254,14 @@ int Artifact::getArtifactValue() const
     return 0;
 }
 
-/* return index sprite objnarti.icn */
-u32 Artifact::IndexSprite( void ) const
+void Artifact::SetSpell( const int v )
 {
-    return id < UNKNOWN ? id * 2 + 1 : 0;
-}
+    if ( id != SPELL_SCROLL ) {
+        // This method must be called only for Spell Scroll artifact.
+        assert( 0 );
+        return;
+    }
 
-u32 Artifact::IndexSprite32( void ) const
-{
-    return id;
-}
-
-u32 Artifact::IndexSprite64( void ) const
-{
-    return id + 1;
-}
-
-int Artifact::GetSpell( void ) const
-{
-    return id == SPELL_SCROLL ? ext : Spell::NONE;
-}
-
-void Artifact::SetSpell( int v )
-{
     const bool adv = Rand::Get( 1 ) != 0;
 
     switch ( v ) {
@@ -564,10 +289,21 @@ void Artifact::SetSpell( int v )
     }
 }
 
-void Artifact::Reset( void )
+int32_t Artifact::getSpellId() const
 {
-    id = UNKNOWN;
-    ext = 0;
+    const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( id ).bonuses;
+    for ( const fheroes2::ArtifactBonus & bonus : bonuses ) {
+        if ( bonus.type == fheroes2::ArtifactBonusType::ADD_SPELL ) {
+            int32_t spellId = bonus.value;
+            if ( spellId == Spell::NONE ) {
+                spellId = ext;
+            }
+            assert( spellId > Spell::NONE && spellId < Spell::SPELL_COUNT );
+            return spellId;
+        }
+    }
+
+    return Spell::NONE;
 }
 
 /* get rand all artifact */
@@ -577,23 +313,23 @@ int Artifact::Rand( level_t lvl )
     v.reserve( 25 );
 
     // if possibly: make unique on map
-    for ( u32 art = ULTIMATE_BOOK; art < UNKNOWN; ++art )
-        if ( ( lvl & Artifact( art ).Level() ) && !( artifacts[art].bits & ART_RNDDISABLED ) && !( artifacts[art].bits & ART_RNDUSED ) )
+    for ( int art = ULTIMATE_BOOK; art < UNKNOWN; ++art )
+        if ( ( lvl & Artifact( art ).Level() ) && !( artifactGlobalStatus[art] & ART_RNDDISABLED ) && !( artifactGlobalStatus[art] & ART_RNDUSED ) )
             v.push_back( art );
 
     if ( v.empty() ) {
-        for ( u32 art = ULTIMATE_BOOK; art < UNKNOWN; ++art )
-            if ( ( lvl & Artifact( art ).Level() ) && !( artifacts[art].bits & ART_RNDDISABLED ) )
+        for ( int art = ULTIMATE_BOOK; art < UNKNOWN; ++art )
+            if ( ( lvl & Artifact( art ).Level() ) && !( artifactGlobalStatus[art] & ART_RNDDISABLED ) )
                 v.push_back( art );
     }
 
     int res = !v.empty() ? Rand::Get( v ) : Artifact::UNKNOWN;
-    artifacts[res].bits |= ART_RNDUSED;
+    artifactGlobalStatus[res] |= ART_RNDUSED;
 
     return res;
 }
 
-Artifact Artifact::FromMP2IndexSprite( u32 index )
+Artifact Artifact::FromMP2IndexSprite( uint32_t index )
 {
     if ( 0xA2 > index )
         return Artifact( ( index - 1 ) / 2 );
@@ -610,70 +346,14 @@ Artifact Artifact::FromMP2IndexSprite( u32 index )
     else if ( 0xAB == index )
         return Rand( ART_LEVEL3 );
 
-    DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown index: " << static_cast<int>( index ) );
+    DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown index: " << static_cast<int>( index ) )
 
     return Artifact( UNKNOWN );
 }
 
-const char * Artifact::GetScenario( const Artifact & art )
+const char * Artifact::getDiscoveryDescription( const Artifact & art )
 {
-    switch ( art.GetID() ) {
-    case SPELL_SCROLL:
-        return _(
-            "You find an elaborate container which houses an old vellum scroll. The runes on the container are very old, and the artistry with which it was put together is stunning. As you pull the scroll out, you feel imbued with magical power." );
-    case ARM_MARTYR:
-        return _(
-            "One of the less intelligent members of your party picks up an arm off of the ground. Despite its missing a body, it is still moving. Your troops find the dismembered arm repulsive, but you cannot bring yourself to drop it: it seems to hold some sort of magical power that influences your decision making." );
-    case BREASTPLATE_ANDURAN:
-        return _(
-            "You come upon a sign. It reads: \"Here lies the body of Anduran. Bow and swear fealty, and you shall be rewarded.\" You decide to do as it says. As you stand up, you feel a coldness against your skin. Looking down, you find that you are suddenly wearing a gleaming, ornate breastplate." );
-    case BROACH_SHIELDING:
-        return _(
-            "A kindly Sorceress thinks that your army's defenses could use a magical boost. She offers to enchant the Broach that you wear on your cloak, and you accept." );
-    case BATTLE_GARB:
-        return _(
-            "Out of pity for a poor peasant, you purchase a chest of old junk they are hawking for too much gold. Later, as you search through it, you find it contains the 3 pieces of the legendary battle garb of Anduran!" );
-    case CRYSTAL_BALL:
-        return _(
-            "You come upon a caravan of gypsies who are feasting and fortifying their bodies with mead. They call you forward and say \"If you prove that you can dance the Rama-Buta, we will reward you.\" You don't know it, but try anyway. They laugh hysterically, but admire your bravery, giving you a Crystal Ball." );
-    case HEART_FIRE:
-        return _(
-            "You enter a recently burned glade and come upon a Fire Elemental sitting atop a rock. It looks up, its flaming face contorted in a look of severe pain. It then tosses a glowing object at you. You put up your hands to block it, but it passes right through them and sears itself into your chest." );
-    case HEART_ICE:
-        return _(
-            "Suddenly, a biting coldness engulfs your body. You seize up, falling from your horse. The pain subsides, but you still feel as if your chest is frozen.  As you pick yourself up off of the ground, you hear hearty laughter. You turn around just in time to see a Frost Giant run off into the woods and disappear." );
-    case HELMET_ANDURAN:
-        return _(
-            "You spy a gleaming object poking up out of the ground. You send a member of your party over to investigate. He comes back with a golden helmet in his hands. You realize that it must be the helmet of the legendary Anduran, the only man who was known to wear solid gold armor." );
-    case HOLY_HAMMER:
-        return _(
-            "You come upon a battle where a Paladin has been mortally wounded by a group of Zombies. He asks you to take his hammer and finish what he started.  As you pick it up, it begins to hum, and then everything becomes a blur. The Zombies lie dead, the hammer dripping with blood. You strap it to your belt." );
-    case LEGENDARY_SCEPTER:
-        return _(
-            "Upon cresting a small hill, you come upon a ridiculous looking sight. A Sprite is attempting to carry a Scepter that is almost as big as it is. Trying not to laugh, you ask, \"Need help?\" The Sprite glares at you and answers: \"You think this is funny? Fine. You can carry it. I much prefer flying anyway.\"" );
-    case MASTHEAD:
-        return _(
-            "An old seaman tells you a tale of an enchanted masthead that he used in his youth to rally his crew during times of trouble. He then hands you a faded map that shows where he hid it. After much exploring, you find it stashed underneath a nearby dock." );
-    case SPHERE_NEGATION:
-        return _(
-            "You stop to help a Peasant catch a runaway mare. To show his gratitude, he hands you a tiny sphere. As soon as you grasp it, you feel the magical energy drain from your limbs..." );
-    case STAFF_WIZARDRY:
-        return _(
-            "While out scaring up game, your troops find a mysterious staff levitating about three feet off of the ground. They hand it to you, and you notice an inscription. It reads: \"Brains best brawn and magic beats might. Heed my words, and you'll win every fight.\"" );
-    case SWORD_BREAKER:
-        return _( "A former Captain of the Guard admires your quest and gives you the enchanted Sword Breaker that he relied on during his tour of duty." );
-    case SWORD_ANDURAN:
-        return _(
-            "A Troll stops you and says: \"Pay me 5,000 gold, or the Sword of Anduran will slay you where you stand.\" You refuse. The troll grabs the sword hanging from its belt, screams in pain, and runs away. Picking up the fabled sword, you give thanks that half-witted Trolls tend to grab the wrong end of sharp objects." );
-    case SPADE_NECROMANCY:
-        return _(
-            "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, you discover it to be the enchanted shovel of the Gravediggers, long thought lost by mortals." );
-
-    default:
-        break;
-    }
-
-    return nullptr;
+    return _( fheroes2::getArtifactData( art.GetID() ).discoveryEventDescription );
 }
 
 StreamBase & operator<<( StreamBase & msg, const Artifact & art )
@@ -690,9 +370,17 @@ BagArtifacts::BagArtifacts()
     : std::vector<Artifact>( HEROESMAXARTIFACT, Artifact::UNKNOWN )
 {}
 
-bool BagArtifacts::ContainSpell( const Spell & spell ) const
+bool BagArtifacts::ContainSpell( const int spellId ) const
 {
-    return end() != std::find( begin(), end(), spell );
+    assert( spellId > Spell::NONE && spellId < Spell::SPELL_COUNT );
+
+    for ( const Artifact & artifact : *this ) {
+        if ( artifact.getSpellId() == spellId ) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool BagArtifacts::isPresentArtifact( const Artifact & art ) const
@@ -700,26 +388,318 @@ bool BagArtifacts::isPresentArtifact( const Artifact & art ) const
     return end() != std::find( begin(), end(), art );
 }
 
-bool BagArtifacts::PushArtifact( const Artifact & art )
+bool BagArtifacts::isArtifactBonusPresent( const fheroes2::ArtifactBonusType type ) const
 {
-    if ( art.isValid() ) {
-        if ( art.GetID() == Artifact::MAGIC_BOOK && isPresentArtifact( art ) )
-            return false;
-
-        iterator it = std::find( begin(), end(), Artifact( Artifact::UNKNOWN ) );
-        if ( it == end() )
-            return false;
-
-        *it = art;
-
-        // book insert first
-        if ( art.GetID() == Artifact::MAGIC_BOOK )
-            std::swap( *it, front() );
-
-        return true;
+    for ( const Artifact & artifact : *this ) {
+        const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( artifact.GetID() ).bonuses;
+        if ( std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( type ) ) != bonuses.end() ) {
+            return true;
+        }
     }
 
     return false;
+}
+
+bool BagArtifacts::isArtifactCursePresent( const fheroes2::ArtifactCurseType type ) const
+{
+    for ( const Artifact & artifact : *this ) {
+        const std::vector<fheroes2::ArtifactCurse> & curses = fheroes2::getArtifactData( artifact.GetID() ).curses;
+        if ( std::find( curses.begin(), curses.end(), fheroes2::ArtifactCurse( type ) ) != curses.end() ) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactBonusType bonus ) const
+{
+    // If this assertion blows up you're calling the method for a wrong type.
+    assert( !fheroes2::isBonusMultiplied( bonus ) && !fheroes2::isBonusUnique( bonus ) );
+
+    int32_t totalValue = 0;
+
+    if ( fheroes2::isBonusCumulative( bonus ) ) {
+        for ( const Artifact & artifact : *this ) {
+            const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( artifact.GetID() ).bonuses;
+            auto bonusIter = std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( bonus ) );
+            if ( bonusIter != bonuses.end() ) {
+                totalValue += bonusIter->value;
+            }
+        }
+    }
+    else {
+        std::set<int> usedArtifactIds;
+        for ( const Artifact & artifact : *this ) {
+            const int artifactId = artifact.GetID();
+            if ( !usedArtifactIds.insert( artifactId ).second ) {
+                // The artifact is present in multiple copies.
+                continue;
+            }
+
+            const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( artifactId ).bonuses;
+            auto bonusIter = std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( bonus ) );
+            if ( bonusIter != bonuses.end() ) {
+                totalValue += bonusIter->value;
+            }
+        }
+    }
+
+    return totalValue;
+}
+
+int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactBonusType bonus, std::string & description ) const
+{
+    // If this assertion blows up you're calling the method for a wrong type.
+    assert( !fheroes2::isBonusMultiplied( bonus ) && !fheroes2::isBonusUnique( bonus ) );
+
+    int32_t totalValue = 0;
+
+    if ( fheroes2::isBonusCumulative( bonus ) ) {
+        std::map<int, int> artifactValuePerId;
+        for ( const Artifact & artifact : *this ) {
+            const int artifactId = artifact.GetID();
+
+            const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( artifactId ).bonuses;
+            auto bonusIter = std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( bonus ) );
+            if ( bonusIter != bonuses.end() ) {
+                totalValue += bonusIter->value;
+                artifactValuePerId[artifactId] += bonusIter->value;
+            }
+        }
+
+        for ( const auto & artifactInfo : artifactValuePerId ) {
+            description += Artifact( artifactInfo.first ).GetName();
+            description += " +";
+
+            description += std::to_string( artifactInfo.second );
+            description += '\n';
+        }
+    }
+    else {
+        std::set<int> usedArtifactIds;
+        for ( const Artifact & artifact : *this ) {
+            const int artifactId = artifact.GetID();
+            if ( !usedArtifactIds.insert( artifactId ).second ) {
+                // The artifact is present in multiple copies.
+                continue;
+            }
+
+            const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( artifactId ).bonuses;
+            auto bonusIter = std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( bonus ) );
+            if ( bonusIter != bonuses.end() ) {
+                totalValue += bonusIter->value;
+
+                description += artifact.GetName();
+                description += " +"; // to show a positive value.
+
+                description += std::to_string( bonusIter->value );
+                description += '\n';
+            }
+        }
+    }
+
+    return totalValue;
+}
+
+int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactCurseType curse ) const
+{
+    // If this assertion blows up you're calling the method for a wrong type.
+    assert( !fheroes2::isCurseMultiplied( curse ) && !fheroes2::isCurseUnique( curse ) );
+
+    int32_t totalValue = 0;
+
+    if ( fheroes2::isCurseCumulative( curse ) ) {
+        for ( const Artifact & artifact : *this ) {
+            const std::vector<fheroes2::ArtifactCurse> & curses = fheroes2::getArtifactData( artifact.GetID() ).curses;
+            auto curseIter = std::find( curses.begin(), curses.end(), fheroes2::ArtifactCurse( curse ) );
+            if ( curseIter != curses.end() ) {
+                totalValue += curseIter->value;
+            }
+        }
+    }
+    else {
+        std::set<int> usedArtifactIds;
+        for ( const Artifact & artifact : *this ) {
+            const int artifactId = artifact.GetID();
+            if ( !usedArtifactIds.insert( artifactId ).second ) {
+                // The artifact is present in multiple copies.
+                continue;
+            }
+
+            const std::vector<fheroes2::ArtifactCurse> & curses = fheroes2::getArtifactData( artifactId ).curses;
+            auto curseIter = std::find( curses.begin(), curses.end(), fheroes2::ArtifactCurse( curse ) );
+            if ( curseIter != curses.end() ) {
+                totalValue += curseIter->value;
+            }
+        }
+    }
+
+    return totalValue;
+}
+
+int32_t BagArtifacts::getTotalArtifactEffectValue( const fheroes2::ArtifactCurseType curse, std::string & description ) const
+{
+    // If this assertion blows up you're calling the method for a wrong type.
+    assert( !fheroes2::isCurseMultiplied( curse ) && !fheroes2::isCurseUnique( curse ) );
+
+    int32_t totalValue = 0;
+
+    if ( fheroes2::isCurseCumulative( curse ) ) {
+        std::map<int, int> artifactValuePerId;
+        for ( const Artifact & artifact : *this ) {
+            const int artifactId = artifact.GetID();
+
+            const std::vector<fheroes2::ArtifactCurse> & curses = fheroes2::getArtifactData( artifactId ).curses;
+            auto curseIter = std::find( curses.begin(), curses.end(), fheroes2::ArtifactCurse( curse ) );
+            if ( curseIter != curses.end() ) {
+                totalValue += curseIter->value;
+                artifactValuePerId[artifactId] += curseIter->value;
+            }
+        }
+
+        for ( const auto & artifactInfo : artifactValuePerId ) {
+            description += Artifact( artifactInfo.first ).GetName();
+            description += " -";
+
+            description += std::to_string( artifactInfo.second );
+            description += '\n';
+        }
+    }
+    else {
+        std::set<int> usedArtifactIds;
+        for ( const Artifact & artifact : *this ) {
+            const int artifactId = artifact.GetID();
+            if ( !usedArtifactIds.insert( artifactId ).second ) {
+                // The artifact is present in multiple copies.
+                continue;
+            }
+
+            const std::vector<fheroes2::ArtifactCurse> & curses = fheroes2::getArtifactData( artifactId ).curses;
+            auto curseIter = std::find( curses.begin(), curses.end(), fheroes2::ArtifactCurse( curse ) );
+            if ( curseIter != curses.end() ) {
+                totalValue += curseIter->value;
+
+                description += artifact.GetName();
+                description += " -";
+
+                description += std::to_string( curseIter->value );
+                description += '\n';
+            }
+        }
+    }
+
+    return totalValue;
+}
+
+std::vector<int32_t> BagArtifacts::getTotalArtifactMultipliedPercent( const fheroes2::ArtifactBonusType bonus ) const
+{
+    if ( !fheroes2::isBonusMultiplied( bonus ) ) {
+        // You are calling this method for a wrong bonus type!
+        assert( 0 );
+        return {};
+    }
+
+    std::vector<int32_t> values;
+
+    std::set<int> usedArtifactIds;
+    for ( const Artifact & artifact : *this ) {
+        const int artifactId = artifact.GetID();
+        if ( !usedArtifactIds.insert( artifactId ).second ) {
+            // The artifact is present in multiple copies.
+            continue;
+        }
+
+        const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( artifactId ).bonuses;
+        auto bonusIter = std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( bonus ) );
+        if ( bonusIter != bonuses.end() ) {
+            values.emplace_back( bonusIter->value );
+        }
+    }
+
+    return values;
+}
+
+std::vector<int32_t> BagArtifacts::getTotalArtifactMultipliedPercent( const fheroes2::ArtifactCurseType curse ) const
+{
+    if ( !fheroes2::isCurseMultiplied( curse ) ) {
+        // You are calling this method for a wrong curse type!
+        assert( 0 );
+        return {};
+    }
+
+    std::vector<int32_t> values;
+
+    std::set<int> usedArtifactIds;
+    for ( const Artifact & artifact : *this ) {
+        const int artifactId = artifact.GetID();
+        if ( !usedArtifactIds.insert( artifactId ).second ) {
+            // The artifact is present in multiple copies.
+            continue;
+        }
+
+        const std::vector<fheroes2::ArtifactCurse> & curses = fheroes2::getArtifactData( artifactId ).curses;
+        auto curseIter = std::find( curses.begin(), curses.end(), fheroes2::ArtifactCurse( curse ) );
+        if ( curseIter != curses.end() ) {
+            values.emplace_back( curseIter->value );
+        }
+    }
+
+    return values;
+}
+
+Artifact BagArtifacts::getFirstArtifactWithBonus( const fheroes2::ArtifactBonusType bonus ) const
+{
+    for ( const Artifact & artifact : *this ) {
+        const std::vector<fheroes2::ArtifactBonus> & bonuses = fheroes2::getArtifactData( artifact.GetID() ).bonuses;
+        auto bonusIter = std::find( bonuses.begin(), bonuses.end(), fheroes2::ArtifactBonus( bonus ) );
+        if ( bonusIter != bonuses.end() ) {
+            return artifact;
+        }
+    }
+
+    return { Artifact::UNKNOWN };
+}
+
+Artifact BagArtifacts::getFirstArtifactWithCurse( const fheroes2::ArtifactCurseType curse ) const
+{
+    for ( const Artifact & artifact : *this ) {
+        const std::vector<fheroes2::ArtifactCurse> & curses = fheroes2::getArtifactData( artifact.GetID() ).curses;
+        auto curseIter = std::find( curses.begin(), curses.end(), fheroes2::ArtifactCurse( curse ) );
+        if ( curseIter != curses.end() ) {
+            return artifact;
+        }
+    }
+
+    return { Artifact::UNKNOWN };
+}
+
+bool BagArtifacts::PushArtifact( const Artifact & art )
+{
+    if ( !art.isValid() ) {
+        // Why an invalid artifact is being pushed?
+        assert( 0 );
+        return false;
+    }
+
+    if ( art.GetID() == Artifact::MAGIC_BOOK && isPresentArtifact( art ) ) {
+        // We add a magic book while adding a hero on the map.
+        // In case if a map creator set Magic Book to be an artifact of the hero we face two Magic Books situation.
+        return false;
+    }
+
+    iterator it = std::find( begin(), end(), Artifact( Artifact::UNKNOWN ) );
+    if ( it == end() )
+        return false;
+
+    *it = art;
+
+    // Always put Magic Book at first place.
+    if ( art.GetID() == Artifact::MAGIC_BOOK ) {
+        std::swap( *it, front() );
+    }
+
+    return true;
 }
 
 void BagArtifacts::RemoveArtifact( const Artifact & art )
@@ -729,12 +709,12 @@ void BagArtifacts::RemoveArtifact( const Artifact & art )
         ( *it ).Reset();
 }
 
-bool BagArtifacts::isFull( void ) const
+bool BagArtifacts::isFull() const
 {
     return end() == std::find( begin(), end(), Artifact( Artifact::UNKNOWN ) );
 }
 
-u32 BagArtifacts::CountArtifacts( void ) const
+uint32_t BagArtifacts::CountArtifacts() const
 {
     // no way that we have more than 4 billion artifacts so static_cast is totally valid
     return static_cast<uint32_t>( std::count_if( begin(), end(), []( const Artifact & art ) { return art.isValid(); } ) );
@@ -781,44 +761,38 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag )
     }
 }
 
-bool BagArtifacts::ContainUltimateArtifact( void ) const
+bool BagArtifacts::ContainUltimateArtifact() const
 {
     return std::any_of( begin(), end(), []( const Artifact & art ) { return art.isUltimate(); } );
 }
 
-void BagArtifacts::RemoveScroll( const Artifact & art )
-{
-    Spell spell( art.GetSpell() );
-    if ( spell.isValid() ) {
-        iterator it = std::find( begin(), end(), spell );
-        if ( it != end() )
-            ( *it ).Reset();
-    }
-}
-
-std::string BagArtifacts::String( void ) const
+std::string BagArtifacts::String() const
 {
     std::string output;
 
-    for ( const_iterator it = begin(); it != end(); ++it ) {
-        output += it->GetName();
+    for ( const Artifact & art : *this ) {
+        if ( !art.isValid() ) {
+            continue;
+        }
+
+        output += art.GetName();
         output += ", ";
     }
 
     return output;
 }
 
-u32 BagArtifacts::Count( const Artifact & art ) const
+uint32_t BagArtifacts::Count( const Artifact & art ) const
 {
     return static_cast<uint32_t>( std::count( begin(), end(), art ) ); // no way that we have more than 4 billion artifacts
 }
 
-u32 GoldInsteadArtifact( const MP2::MapObjectType objectType )
+uint32_t GoldInsteadArtifact( const MP2::MapObjectType objectType )
 {
     switch ( objectType ) {
     case MP2::OBJ_SKELETON:
     case MP2::OBJ_TREASURECHEST:
-    case MP2::OBJ_SHIPWRECKSURVIROR:
+    case MP2::OBJ_SHIPWRECKSURVIVOR:
         return 1000;
     case MP2::OBJ_WATERCHEST:
         return 1500;
@@ -834,18 +808,16 @@ u32 GoldInsteadArtifact( const MP2::MapObjectType objectType )
 
 void fheroes2::ResetArtifactStats()
 {
-    for ( artifactstats_t & item : artifacts ) {
-        item.bits = 0;
-    }
+    std::fill( artifactGlobalStatus.begin(), artifactGlobalStatus.end(), static_cast<uint8_t>( 0 ) );
 }
 
 void fheroes2::ExcludeArtifactFromRandom( const int artifactID )
 {
     const size_t id = static_cast<size_t>( artifactID );
 
-    assert( id < artifacts.size() );
+    assert( id < artifactGlobalStatus.size() );
 
-    artifacts[id].bits |= ART_RNDDISABLED;
+    artifactGlobalStatus[id] |= ART_RNDDISABLED;
 }
 
 ArtifactsBar::ArtifactsBar( const Heroes * hero, const bool mini, const bool ro, const bool change, const bool allowOpeningMagicBook, StatusBar * bar )
@@ -884,7 +856,7 @@ ArtifactsBar::ArtifactsBar( const Heroes * hero, const bool mini, const bool ro,
     }
 }
 
-void ArtifactsBar::ResetSelected( void )
+void ArtifactsBar::ResetSelected()
 {
     spcursor.hide();
     Interface::ItemsActionBar<Artifact>::ResetSelected();
@@ -940,10 +912,10 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
             else if ( _allowOpeningMagicBook ) {
                 if ( _statusBar != nullptr ) {
                     std::function<void( const std::string & )> statusCallback = [this]( const std::string & status ) { _statusBar->ShowMessage( status ); };
-                    _hero->OpenSpellBook( SpellBook::Filter::ALL, false, &statusCallback );
+                    _hero->OpenSpellBook( SpellBook::Filter::ALL, false, false, &statusCallback );
                 }
                 else {
-                    _hero->OpenSpellBook( SpellBook::Filter::ALL, false, nullptr );
+                    _hero->OpenSpellBook( SpellBook::Filter::ALL, false, false, nullptr );
                 }
             }
             else {
@@ -967,8 +939,20 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
         }
     }
     else {
-        if ( can_change )
-            art = Dialog::SelectArtifact();
+        if ( can_change ) {
+            const Artifact newArtifact = Dialog::SelectArtifact();
+
+            if ( isMagicBook( newArtifact ) ) {
+                const_cast<Heroes *>( _hero )->SpellBookActivate();
+            }
+            else {
+                art = newArtifact;
+
+                if ( art.GetID() == Artifact::SPELL_SCROLL ) {
+                    art.SetSpell( Spell::RANDOM );
+                }
+            }
+        }
 
         return false;
     }
@@ -978,32 +962,8 @@ bool ArtifactsBar::ActionBarLeftMouseSingleClick( Artifact & art )
 
 bool ArtifactsBar::ActionBarLeftMouseDoubleClick( Artifact & art )
 {
-    if ( art.GetID() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && !read_only && _hero->CanTranscribeScroll( art ) ) {
-        Spell spell = art.GetSpell();
-
-        if ( !spell.isValid() ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "invalid spell" );
-        }
-        else if ( _hero->CanLearnSpell( spell ) ) {
-            std::string text = _(
-                "Do you want to use your knowledge of magical secrets to transcribe the %{spell} Scroll into your Magic Book?\nThe Spell Scroll will be consumed.\n Cost in spell points: %{sp}" );
-
-            StringReplace( text, "%{spell}", spell.GetName() );
-            StringReplace( text, "%{sp}", spell.SpellPoint() );
-
-            if ( spell.MovePoint() ) {
-                text += '\n';
-                text.append( _( "Move points: %{mp}" ) );
-                StringReplace( text, "%{mp}", spell.MovePoint() );
-            }
-
-            const uint32_t answer = Dialog::Message( _( "Transcribe Spell Scroll" ), text, Font::BIG, Dialog::YES | Dialog::NO );
-            if ( answer == Dialog::YES )
-                const_cast<Heroes *>( _hero )->TranscribeScroll( art );
-        }
-    }
-    else if ( art.isValid() ) {
-        Dialog::ArtifactInfo( art.GetName(), "", art );
+    if ( art.isValid() ) {
+        fheroes2::ArtifactDialogElement( art ).showPopup( Dialog::OK );
     }
 
     ResetSelected();
@@ -1016,10 +976,12 @@ bool ArtifactsBar::ActionBarRightMouseHold( Artifact & art )
     ResetSelected();
 
     if ( art.isValid() ) {
-        if ( can_change )
+        if ( can_change ) {
             art.Reset();
-        else
-            Dialog::ArtifactInfo( art.GetName(), "", art, 0 );
+        }
+        else {
+            fheroes2::ArtifactDialogElement( art ).showPopup( Dialog::ZERO );
+        }
     }
 
     return true;
@@ -1045,8 +1007,6 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
         if ( &art == art2 ) {
             if ( isMagicBook( art ) )
                 msg = _( "View Spells" );
-            else if ( art.GetID() == Artifact::SPELL_SCROLL && Settings::Get().ExtHeroAllowTranscribingScroll() && !read_only && _hero->CanTranscribeScroll( art ) )
-                msg = _( "Transcribe Spell Scroll" );
             else {
                 msg = _( "View %{name} Info" );
                 StringReplace( msg, "%{name}", art.GetName() );
@@ -1060,7 +1020,7 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
         }
         else if ( !read_only ) {
             if ( isMagicBook( art ) ) {
-                msg = _( "Cannot move artifact" );
+                msg = _( "Cannot move the Spellbook" );
             }
             else {
                 msg = _( "Exchange %{name2} with %{name}" );
@@ -1085,7 +1045,7 @@ bool ArtifactsBar::ActionBarCursor( Artifact & art )
 bool ArtifactsBar::ActionBarCursor( Artifact & art1, Artifact & art2 /* selected */ )
 {
     if ( isMagicBook( art2 ) || isMagicBook( art1 ) )
-        msg = _( "Cannot move artifact" );
+        msg = _( "Cannot move the Spellbook" );
     else if ( art1.isValid() ) {
         msg = _( "Exchange %{name2} with %{name}" );
         StringReplace( msg, "%{name}", art1.GetName() );

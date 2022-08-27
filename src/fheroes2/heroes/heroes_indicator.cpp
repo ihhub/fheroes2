@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -58,7 +59,7 @@ HeroesIndicator::HeroesIndicator( const Heroes * h )
     descriptions.reserve( 256 );
 }
 
-const fheroes2::Rect & HeroesIndicator::GetArea( void ) const
+const fheroes2::Rect & HeroesIndicator::GetArea() const
 {
     return area;
 }
@@ -83,7 +84,7 @@ LuckIndicator::LuckIndicator( const Heroes * h )
     area.height = 26;
 }
 
-void LuckIndicator::Redraw( void )
+void LuckIndicator::Redraw()
 {
     if ( !hero )
         return;
@@ -101,8 +102,8 @@ void LuckIndicator::Redraw( void )
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > luck ? 3 : ( 0 < luck ? 2 : 6 ) ) );
     const int inter = 6;
     int count = ( 0 == luck ? 1 : std::abs( luck ) );
-    s32 cx = area.x + ( area.width - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
-    s32 cy = area.y + ( area.height - sprite.height() ) / 2;
+    int32_t cx = area.x + ( area.width - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
+    int32_t cy = area.y + ( area.height - sprite.height() ) / 2;
 
     if ( !modificators.empty() )
         descriptions.append( modificators );
@@ -134,7 +135,7 @@ MoraleIndicator::MoraleIndicator( const Heroes * h )
     area.height = 26;
 }
 
-void MoraleIndicator::Redraw( void )
+void MoraleIndicator::Redraw()
 {
     if ( !hero )
         return;
@@ -162,8 +163,8 @@ void MoraleIndicator::Redraw( void )
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::HSICONS, ( 0 > morale ? 5 : ( 0 < morale ? 4 : 7 ) ) );
     const int inter = 6;
     int count = ( 0 == morale ? 1 : std::abs( morale ) );
-    s32 cx = area.x + ( area.width - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
-    s32 cy = area.y + ( area.height - sprite.height() ) / 2;
+    int32_t cx = area.x + ( area.width - ( sprite.width() + inter * ( count - 1 ) ) ) / 2;
+    int32_t cy = area.y + ( area.height - sprite.height() ) / 2;
 
     back.restore();
     while ( count-- ) {
@@ -196,7 +197,7 @@ ExperienceIndicator::ExperienceIndicator( const Heroes * h )
     }
 }
 
-void ExperienceIndicator::Redraw( void ) const
+void ExperienceIndicator::Redraw() const
 {
     if ( !hero )
         return;
@@ -208,7 +209,7 @@ void ExperienceIndicator::Redraw( void ) const
     text.Blit( area.x + 17 - text.w() / 2, area.y + 23 );
 }
 
-void ExperienceIndicator::QueueEventProcessing( void ) const
+void ExperienceIndicator::QueueEventProcessing() const
 {
     LocalEvent & le = LocalEvent::Get();
 
@@ -234,7 +235,7 @@ SpellPointsIndicator::SpellPointsIndicator( const Heroes * h )
     }
 }
 
-void SpellPointsIndicator::Redraw( void ) const
+void SpellPointsIndicator::Redraw() const
 {
     if ( !hero )
         return;
@@ -246,7 +247,7 @@ void SpellPointsIndicator::Redraw( void ) const
     text.Blit( area.x + sprite3.width() / 2 - text.w() / 2, area.y + 21 );
 }
 
-void SpellPointsIndicator::QueueEventProcessing( void ) const
+void SpellPointsIndicator::QueueEventProcessing() const
 {
     LocalEvent & le = LocalEvent::Get();
 

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,8 +39,8 @@ namespace
 
 int ObjWat2::GetPassable( const uint8_t index )
 {
-    const u8 disabled[] = {11, 12, 19, 22};
-    const u8 restricted[] = {2, 20};
+    const uint8_t disabled[] = { 11, 12, 19, 22 };
+    const uint8_t restricted[] = { 2, 20 };
 
     if ( isShadow( index ) )
         return DIRECTION_ALL;
@@ -55,8 +56,8 @@ int ObjWat2::GetPassable( const uint8_t index )
 
 int ObjWatr::GetPassable( const uint8_t index )
 {
-    const u8 disabled[] = {11, 12, 19, 22};
-    const u8 restricted[] = {69, 182, 183, 185, 186, 187, 248};
+    const uint8_t disabled[] = { 11, 12, 19, 22 };
+    const uint8_t restricted[] = { 69, 182, 183, 185, 186, 187, 248 };
 
     if ( isShadow( index ) )
         return DIRECTION_ALL;
@@ -66,12 +67,12 @@ int ObjWatr::GetPassable( const uint8_t index )
     return std::end( restricted ) != std::find( restricted, std::end( restricted ), index ) ? DIRECTION_CENTER_ROW | DIRECTION_BOTTOM_ROW : DIRECTION_ALL;
 }
 
-bool ObjWat2::isAction( u32 index )
+bool ObjWat2::isAction( uint32_t index )
 {
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
 
-bool ObjWatr::isAction( u32 index )
+bool ObjWatr::isAction( uint32_t index )
 {
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
@@ -86,7 +87,7 @@ bool ObjWat2::isShadow( const uint8_t index )
     return index == 1;
 }
 
-int ObjWatr::GetActionObject( u32 index )
+int ObjWatr::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 62:
@@ -109,7 +110,7 @@ int ObjWatr::GetActionObject( u32 index )
     return MP2::OBJ_ZERO;
 }
 
-int ObjWat2::GetActionObject( u32 index )
+int ObjWat2::GetActionObject( uint32_t index )
 {
     switch ( index ) {
     case 21:

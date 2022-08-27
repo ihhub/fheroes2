@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,6 +45,8 @@ std::string Color::String( int color )
         return _( "Purple" );
     case Color::UNUSED:
         return "Unknown";
+    default:
+        break;
     }
 
     return "None";
@@ -112,25 +115,51 @@ int Color::GetFirst( int colors )
     return NONE;
 }
 
-const char * BarrierColor::String( int val )
+const char * fheroes2::getBarrierColorName( const int color )
 {
-    switch ( val ) {
+    switch ( color ) {
     case AQUA:
-        return _( "Aqua" );
+        return _( "barrier|Aqua" );
     case BLUE:
-        return _( "Blue" );
+        return _( "barrier|Blue" );
     case BROWN:
-        return _( "Brown" );
+        return _( "barrier|Brown" );
     case GOLD:
-        return _( "Gold" );
+        return _( "barrier|Gold" );
     case GREEN:
-        return _( "Green" );
+        return _( "barrier|Green" );
     case ORANGE:
-        return _( "Orange" );
+        return _( "barrier|Orange" );
     case PURPLE:
-        return _( "Purple" );
+        return _( "barrier|Purple" );
     case RED:
-        return _( "Red" );
+        return _( "barrier|Red" );
+    default:
+        break;
+    }
+
+    return "None";
+}
+
+const char * fheroes2::getTentColorName( const int color )
+{
+    switch ( color ) {
+    case AQUA:
+        return _( "tent|Aqua" );
+    case BLUE:
+        return _( "tent|Blue" );
+    case BROWN:
+        return _( "tent|Brown" );
+    case GOLD:
+        return _( "tent|Gold" );
+    case GREEN:
+        return _( "tent|Green" );
+    case ORANGE:
+        return _( "tent|Orange" );
+    case PURPLE:
+        return _( "tent|Purple" );
+    case RED:
+        return _( "tent|Red" );
     default:
         break;
     }
@@ -166,7 +195,7 @@ void ColorBase::SetColor( int col )
     color = Color::FromInt( col );
 }
 
-Kingdom & ColorBase::GetKingdom( void ) const
+Kingdom & ColorBase::GetKingdom() const
 {
     return world.GetKingdom( color );
 }

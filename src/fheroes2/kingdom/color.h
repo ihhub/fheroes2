@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,9 +28,9 @@
 
 class StreamBase;
 
-namespace BarrierColor
+namespace fheroes2
 {
-    enum
+    enum ObjectColor
     {
         NONE = 0,
         AQUA = 1,
@@ -41,12 +42,13 @@ namespace BarrierColor
         PURPLE = 7,
         RED = 8
     };
-    const char * String( int );
+    const char * getBarrierColorName( const int color );
+    const char * getTentColorName( const int color );
 }
 
 namespace Color
 {
-    enum
+    enum : uint8_t
     {
         NONE = 0x00,
         BLUE = 0x01,
@@ -89,9 +91,9 @@ public:
     bool isFriends( int ) const;
     void SetColor( int );
 
-    Kingdom & GetKingdom( void ) const;
+    Kingdom & GetKingdom() const;
 
-    int GetColor( void ) const
+    int GetColor() const
     {
         return color;
     }

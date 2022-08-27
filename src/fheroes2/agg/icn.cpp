@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -217,7 +218,7 @@ const char * ICN::GetString( int icn )
     return UNKNOWN <= icn && icn < LAST_VALID_FILE_ICN ? icnmap[icn].string : "CUSTOM";
 }
 
-u32 ICN::AnimationFrame( int icn, u32 start, u32 ticket, bool quantity )
+uint32_t ICN::AnimationFrame( int icn, uint32_t start, uint32_t ticket, bool quantity )
 {
     switch ( icn ) {
     case TWNBBOAT:
@@ -871,83 +872,6 @@ int ICN::PORTxxxx( int heroId )
     }
 
     return ICN::UNKNOWN;
-}
-
-bool ICN::HighlyObjectSprite( int icn, u32 index )
-{
-    switch ( icn ) {
-    case OBJNDIRT:
-        // wind mill
-        if ( 154 <= index && index <= 160 )
-            return true;
-        break;
-
-    case OBJNGRA2:
-        // wind mill
-        if ( 24 <= index && index <= 30 )
-            return true;
-        break;
-
-    case OBJNLAV2:
-    case OBJNLAV3:
-        // fog lava
-        return true;
-
-    case OBJNMUL2:
-        // dragon city
-        if ( 35 == index || 37 == index || 38 == index || 40 == index || 41 == index )
-            return true;
-        // ligth
-        if ( 59 == index )
-            return true;
-        // water mill
-        if ( 82 == index )
-            return true;
-        break;
-
-    case OBJNMULT:
-        // fort
-        if ( 36 <= index && index <= 44 )
-            return true;
-        // tree
-        if ( 117 == index || 118 == index )
-            return true;
-        break;
-
-    case OBJNSNOW:
-        // wind mill
-        if ( 97 <= index && index <= 103 )
-            return true;
-        // water mill
-        if ( 161 == index )
-            return true;
-        break;
-
-    case OBJNSWMP:
-        //
-        if ( 35 <= index && index <= 42 )
-            return true;
-        break;
-
-    case OBJNTOWN:
-        if ( 1 <= index && index <= 5 )
-            return true;
-        if ( 32 <= index && index <= 37 )
-            return true;
-        if ( 64 <= index && index <= 69 )
-            return true;
-        if ( 96 <= index && index <= 101 )
-            return true;
-        if ( 128 <= index && index <= 133 )
-            return true;
-        if ( 160 <= index && index <= 165 )
-            return true;
-        break;
-
-    default:
-        break;
-    }
-    return false;
 }
 
 int ICN::Get4Captain( int race )

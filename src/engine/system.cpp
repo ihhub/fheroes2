@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,12 +22,13 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
 #include <cstdlib>
 #include <fstream>
 #include <map>
 #include <memory>
 
-#if defined( ANDROID ) || defined( _MSC_VER )
+#if defined( _MSC_VER )
 #include <clocale>
 #endif
 
@@ -37,8 +39,12 @@
 #include <SDL.h>
 
 #if defined( __MINGW32__ ) || defined( _MSC_VER )
+#define WIN32_LEAN_AND_MEAN
+// clang-format off
+// shellapi.h must be included after windows.h
 #include <windows.h>
 #include <shellapi.h>
+// clang-format on
 #else
 #include <dirent.h>
 #endif
@@ -46,7 +52,13 @@
 #if defined( _MSC_VER )
 #include <io.h>
 #else
+
+#if defined( TARGET_PS_VITA )
+#include <psp2/io/stat.h>
+#else
 #include <sys/stat.h>
+#endif
+
 #include <unistd.h>
 #endif
 
@@ -61,17 +73,30 @@ namespace
 {
     std::string GetHomeDirectory( const std::string & prog )
     {
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
         return "ux0:data/fheroes2";
-#elif defined( __SWITCH__ )
+#elif defined( TARGET_NINTENDO_SWITCH )
         return "/switch/fheroes2";
 #endif
 
-        if ( getenv( "HOME" ) )
-            return System::ConcatePath( getenv( "HOME" ), std::string( "." ).append( prog ) );
+        const char * homeEnvPath = getenv( "HOME" );
 
-        if ( getenv( "APPDATA" ) )
-            return System::ConcatePath( getenv( "APPDATA" ), prog );
+#if defined( MACOS_APP_BUNDLE )
+        if ( homeEnvPath != nullptr ) {
+            return System::ConcatePath( System::ConcatePath( homeEnvPath, "Library/Preferences" ), prog );
+        }
+
+        return {};
+#endif
+
+        if ( homeEnvPath != nullptr ) {
+            return System::ConcatePath( homeEnvPath, std::string( "." ).append( prog ) );
+        }
+
+        const char * dataEnvPath = getenv( "APPDATA" );
+        if ( dataEnvPath != nullptr ) {
+            return System::ConcatePath( dataEnvPath, prog );
+        }
 
         std::string res;
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
@@ -92,7 +117,7 @@ int System::MakeDirectory( const std::string & path )
     return CreateDirectoryA( path.c_str(), nullptr );
 #elif defined( __WIN32__ ) && !defined( _MSC_VER )
     return mkdir( path.c_str() );
-#elif defined( FHEROES2_VITA )
+#elif defined( TARGET_PS_VITA )
     return sceIoMkdir( path.c_str(), 0777 );
 #else
     return mkdir( path.c_str(), S_IRWXU );
@@ -112,15 +137,16 @@ std::string System::ConcatePath( const std::string & str1, const std::string & s
     return temp;
 }
 
-ListDirs System::GetOSSpecificDirectories()
+void System::appendOSSpecificDirectories( std::vector<std::string> & directories )
 {
-    ListDirs dirs;
-
-#if defined( FHEROES2_VITA )
-    dirs.emplace_back( "ux0:app/FHOMM0002" );
+#if defined( TARGET_PS_VITA )
+    const char * path = "ux0:app/FHOMM0002";
+    if ( std::find( directories.begin(), directories.end(), path ) == directories.end() ) {
+        directories.emplace_back( path );
+    }
+#else
+    (void)directories;
 #endif
-
-    return dirs;
 }
 
 std::string System::GetConfigDirectory( const std::string & prog )
@@ -155,7 +181,14 @@ std::string System::GetDataDirectory( const std::string & prog )
         return System::ConcatePath( System::ConcatePath( homeEnv, ".local/share" ), prog );
     }
 
-    return std::string();
+    return {};
+#elif defined( MACOS_APP_BUNDLE )
+    const char * homeEnv = getenv( "HOME" );
+    if ( homeEnv ) {
+        return System::ConcatePath( System::ConcatePath( homeEnv, "Library/Application Support" ), prog );
+    }
+
+    return {};
 #else
     return GetHomeDirectory( prog );
 #endif
@@ -195,31 +228,6 @@ std::string System::GetBasename( const std::string & str )
     return str;
 }
 
-std::string System::GetMessageLocale( int length /* 1, 2, 3 */ )
-{
-    std::string locname;
-#if defined( __MINGW32__ ) || defined( _MSC_VER )
-    char * clocale = std::setlocale( LC_MONETARY, nullptr );
-#elif defined( ANDROID ) || defined( __APPLE__ ) || defined( __clang__ )
-    char * clocale = setlocale( LC_MESSAGES, nullptr );
-#else
-    char * clocale = std::setlocale( LC_MESSAGES, nullptr );
-#endif
-
-    if ( clocale ) {
-        locname = StringLower( clocale );
-        // 3: en_us.utf-8
-        // 2: en_us
-        // 1: en
-        if ( length < 3 ) {
-            std::list<std::string> list = StringSplit( locname, length < 2 ? "_" : "." );
-            return list.empty() ? locname : list.front();
-        }
-    }
-
-    return locname;
-}
-
 int System::GetCommandOptions( int argc, char * const argv[], const char * optstring )
 {
 #if defined( _MSC_VER )
@@ -232,7 +240,7 @@ int System::GetCommandOptions( int argc, char * const argv[], const char * optst
 #endif
 }
 
-char * System::GetOptionsArgument( void )
+char * System::GetOptionsArgument()
 {
 #if defined( _MSC_VER )
     return nullptr;
@@ -243,11 +251,26 @@ char * System::GetOptionsArgument( void )
 
 bool System::IsFile( const std::string & name, bool writable )
 {
+    if ( name.empty() ) {
+        // An empty path cannot be a file.
+        return false;
+    }
+
 #if defined( _MSC_VER )
+    const DWORD fileAttributes = GetFileAttributes( name.c_str() );
+    if ( fileAttributes == INVALID_FILE_ATTRIBUTES ) {
+        // This path doesn't exist.
+        return false;
+    }
+
+    if ( ( fileAttributes & FILE_ATTRIBUTE_DIRECTORY ) != 0 ) {
+        // This is a directory.
+        return false;
+    }
+
     return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 04 ) );
-#elif defined( ANDROID )
-    return writable ? 0 == access( name.c_str(), W_OK ) : true;
-#elif defined( FHEROES2_VITA )
+#elif defined( TARGET_PS_VITA )
+    // TODO: check if it is really a file.
     return writable ? 0 == access( name.c_str(), W_OK ) : 0 == access( name.c_str(), R_OK );
 #else
     std::string correctedPath;
@@ -265,11 +288,26 @@ bool System::IsFile( const std::string & name, bool writable )
 
 bool System::IsDirectory( const std::string & name, bool writable )
 {
+    if ( name.empty() ) {
+        // An empty path cannot be a directory.
+        return false;
+    }
+
 #if defined( _MSC_VER )
+    const DWORD fileAttributes = GetFileAttributes( name.c_str() );
+    if ( fileAttributes == INVALID_FILE_ATTRIBUTES ) {
+        // This path doesn't exist.
+        return false;
+    }
+
+    if ( ( fileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == 0 ) {
+        // Not a directory.
+        return false;
+    }
+
     return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 00 ) );
-#elif defined( ANDROID )
-    return writable ? 0 == access( name.c_str(), W_OK ) : true;
-#elif defined( FHEROES2_VITA )
+#elif defined( TARGET_PS_VITA )
+    // TODO: check if it is really a directory.
     return writable ? 0 == access( name.c_str(), W_OK ) : 0 == access( name.c_str(), R_OK );
 #else
     std::string correctedPath;
@@ -292,14 +330,6 @@ int System::Unlink( const std::string & file )
 #else
     return unlink( file.c_str() );
 #endif
-}
-
-bool System::isEmbededDevice( void )
-{
-#if defined( ANDROID )
-    return true;
-#endif
-    return false;
 }
 
 #if !( defined( _MSC_VER ) || defined( __MINGW32__ ) )
@@ -371,7 +401,32 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
 
         correctedPath.append( delimiter );
 
-        struct dirent * e = readdir( d );
+        // Avoid directory traversal and try to probe directory name directly.
+        // Speeds up file lookup when intermediate directories have a lot of
+        // files. Example is NixOS where file layout is:
+        //     /nix/store/...-fheroes2-${ver}/share/fheroes2/files/lang
+        //     /nix/store/...-other-package-1/...
+        //     /nix/store/...-other-package-2/...
+        // It's not uncommon for /nix/store to have tens of thousands files.
+        // GetCaseInsensitivePath() calls become very expensive on such systems.
+        //
+        // The idea is to try to open current subpath as a directory and avoid
+        // directory traversal altogether. Otherwise fall back to linear
+        // case-insensitive search.
+
+        std::string absSubpath = correctedPath + *subPathIter;
+        DIR * de = opendir( absSubpath.c_str() );
+        if ( de ) {
+            correctedPath = std::move( absSubpath );
+
+            closedir( d );
+            d = opendir( correctedPath.c_str() );
+
+            closedir( de );
+            continue;
+        }
+
+        const struct dirent * e = readdir( d );
         while ( e ) {
             if ( strcasecmp( ( *subPathIter ).c_str(), e->d_name ) == 0 ) {
                 correctedPath += e->d_name;
@@ -439,7 +494,7 @@ std::string System::FileNameToUTF8( const std::string & str )
 
     const int wLen = MultiByteToWideChar( CP_ACP, MB_ERR_INVALID_CHARS, str.c_str(), -1, nullptr, 0 );
     if ( wLen <= 0 ) {
-        ERROR_LOG( getLastErrorStr() );
+        ERROR_LOG( getLastErrorStr() )
 
         return str;
     }
@@ -447,14 +502,14 @@ std::string System::FileNameToUTF8( const std::string & str )
     const std::unique_ptr<wchar_t[]> wStr( new wchar_t[wLen] );
 
     if ( MultiByteToWideChar( CP_ACP, MB_ERR_INVALID_CHARS, str.c_str(), -1, wStr.get(), wLen ) != wLen ) {
-        ERROR_LOG( getLastErrorStr() );
+        ERROR_LOG( getLastErrorStr() )
 
         return str;
     }
 
     const int uLen = WideCharToMultiByte( CP_UTF8, WC_ERR_INVALID_CHARS | WC_NO_BEST_FIT_CHARS, wStr.get(), -1, nullptr, 0, nullptr, nullptr );
     if ( uLen <= 0 ) {
-        ERROR_LOG( getLastErrorStr() );
+        ERROR_LOG( getLastErrorStr() )
 
         return str;
     }
@@ -462,7 +517,7 @@ std::string System::FileNameToUTF8( const std::string & str )
     const std::unique_ptr<char[]> uStr( new char[uLen] );
 
     if ( WideCharToMultiByte( CP_UTF8, WC_ERR_INVALID_CHARS | WC_NO_BEST_FIT_CHARS, wStr.get(), -1, uStr.get(), uLen, nullptr, nullptr ) != uLen ) {
-        ERROR_LOG( getLastErrorStr() );
+        ERROR_LOG( getLastErrorStr() )
 
         return str;
     }
@@ -476,4 +531,25 @@ std::string System::FileNameToUTF8( const std::string & str )
 #else
     return str;
 #endif
+}
+
+tm System::GetTM( const time_t time )
+{
+    tm result = {};
+
+#if defined( __MINGW32__ ) || defined( _MSC_VER )
+    errno_t res = localtime_s( &result, &time );
+
+    if ( res != 0 ) {
+        assert( 0 );
+    }
+#else
+    const tm * res = localtime_r( &time, &result );
+
+    if ( res == nullptr ) {
+        assert( 0 );
+    }
+#endif
+
+    return result;
 }

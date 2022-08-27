@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,12 +25,14 @@
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
+#include "game_hotkeys.h"
 #include "game_interface.h"
 #include "icn.h"
 #include "localevent.h"
 #include "settings.h"
-#include "text.h"
 #include "translations.h"
+#include "ui_dialog.h"
+#include "ui_text.h"
 
 fheroes2::GameMode Dialog::FileOptions()
 {
@@ -41,13 +44,15 @@ fheroes2::GameMode Dialog::FileOptions()
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
-    // image box
-    const fheroes2::Sprite & box = fheroes2::AGG::GetICN( cpanbkg, 0 );
+    // Image sprite.
+    const fheroes2::Sprite & background = fheroes2::AGG::GetICN( cpanbkg, 0 );
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Point rb( ( display.width() - box.width() - BORDERWIDTH ) / 2, ( display.height() - box.height() ) / 2 );
-    fheroes2::ImageRestorer back( display, rb.x, rb.y, box.width(), box.height() );
-    fheroes2::Blit( box, display, rb.x, rb.y );
+
+    // Since the original image contains shadow it is important to remove it from calculation of window's position.
+    const fheroes2::Point rb( ( display.width() - background.width() - BORDERWIDTH ) / 2, ( display.height() - background.height() + BORDERWIDTH ) / 2 );
+    fheroes2::ImageRestorer back( display, rb.x, rb.y, background.width(), background.height() );
+    fheroes2::Blit( background, display, rb.x, rb.y );
 
     LocalEvent & le = LocalEvent::Get();
 
@@ -83,7 +88,8 @@ fheroes2::GameMode Dialog::FileOptions()
         }
         else if ( le.MouseClickLeft( buttonLoad.area() ) ) {
             if ( ListFiles::IsEmpty( Game::GetSaveDir(), Game::GetSaveFileExtension(), false ) ) {
-                Dialog::Message( _( "Load Game" ), _( "No save files to load." ), Font::BIG, Dialog::OK );
+                fheroes2::showMessage( fheroes2::Text( _( "Load Game" ), fheroes2::FontType::normalYellow() ),
+                                       fheroes2::Text( _( "No save files to load." ), fheroes2::FontType::normalWhite() ), Dialog::OK );
             }
             else {
                 result = Interface::Basic::Get().EventLoadGame();
@@ -102,24 +108,29 @@ fheroes2::GameMode Dialog::FileOptions()
                 break;
             }
         }
-        else if ( le.MouseClickLeft( buttonCancel.area() ) || HotKeyCloseWindow ) {
+        else if ( le.MouseClickLeft( buttonCancel.area() ) || Game::HotKeyCloseWindow() ) {
             result = fheroes2::GameMode::CANCEL;
             break;
         }
         else if ( le.MousePressRight( buttonNew.area() ) ) {
-            Dialog::Message( _( "New Game" ), _( "Start a single or multi-player game." ), Font::BIG );
+            fheroes2::showMessage( fheroes2::Text( _( "New Game" ), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( _( "Start a single or multi-player game." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonLoad.area() ) ) {
-            Dialog::Message( _( "Load Game" ), _( "Load a previously saved game." ), Font::BIG );
+            fheroes2::showMessage( fheroes2::Text( _( "Load Game" ), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( _( "Load a previously saved game." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonSave.area() ) ) {
-            Dialog::Message( _( "Save Game" ), _( "Save the current game." ), Font::BIG );
+            fheroes2::showMessage( fheroes2::Text( _( "Save Game" ), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( _( "Save the current game." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonQuit.area() ) ) {
-            Dialog::Message( _( "Quit" ), _( "Quit out of Free Heroes of Might and Magic II." ), Font::BIG );
+            fheroes2::showMessage( fheroes2::Text( _( "Quit" ), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( _( "Quit out of Heroes of Might and Magic II." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
         else if ( le.MousePressRight( buttonCancel.area() ) ) {
-            Dialog::Message( _( "Cancel" ), _( "Exit this menu without doing anything." ), Font::BIG );
+            fheroes2::showMessage( fheroes2::Text( _( "Cancel" ), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( _( "Exit this menu without doing anything." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
     }
 

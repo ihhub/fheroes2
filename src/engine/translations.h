@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,19 +24,20 @@
 #ifndef H2TRANSLATIONS_H
 #define H2TRANSLATIONS_H
 
+#include <string>
+
 namespace Translation
 {
     bool bindDomain( const char * domain, const char * file );
-    bool setDomain( const char * domain );
 
     // Reset any translation to the default language - English.
     void reset();
 
-    void setStripContext( char strip );
-
     const char * gettext( const char * str );
     const char * gettext( const std::string & str );
     const char * ngettext( const char * str, const char * plural, size_t num );
+
+    std::string StringLower( std::string str );
 }
 
 #define _( s ) Translation::gettext( s )

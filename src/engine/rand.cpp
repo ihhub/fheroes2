@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -63,18 +64,18 @@ uint32_t Rand::GetWithGen( uint32_t from, uint32_t to, std::mt19937 & gen )
     return distrib( gen );
 }
 
-Rand::Queue::Queue( u32 size )
+Rand::Queue::Queue( uint32_t size )
 {
     reserve( size );
 }
 
-void Rand::Queue::Push( s32 value, u32 percent )
+void Rand::Queue::Push( int32_t value, uint32_t percent )
 {
     if ( percent > 0 )
         emplace_back( value, percent );
 }
 
-size_t Rand::Queue::Size( void ) const
+size_t Rand::Queue::Size() const
 {
     return size();
 }
@@ -85,7 +86,7 @@ int32_t Rand::Queue::Get( const std::function<uint32_t( uint32_t )> & randomFunc
 
     // get max
     it = begin();
-    u32 max = 0;
+    uint32_t max = 0;
     for ( ; it != end(); ++it )
         max += ( *it ).second;
 
@@ -112,7 +113,7 @@ int32_t Rand::Queue::Get( const std::function<uint32_t( uint32_t )> & randomFunc
             return ( *it ).first;
     }
 
-    ERROR_LOG( "weight not found, return 0" );
+    ERROR_LOG( "weight not found, return 0" )
     return 0;
 }
 
@@ -126,16 +127,16 @@ int32_t Rand::Queue::GetWithSeed( uint32_t seed )
     return Rand::Queue::Get( [seed]( uint32_t max ) { return Rand::GetWithSeed( 0, max, seed ); } );
 }
 
-Rand::DeterministicRandomGenerator::DeterministicRandomGenerator( const size_t initialSeed )
+Rand::DeterministicRandomGenerator::DeterministicRandomGenerator( const uint32_t initialSeed )
     : _currentSeed( initialSeed )
 {}
 
-size_t Rand::DeterministicRandomGenerator::GetSeed() const
+uint32_t Rand::DeterministicRandomGenerator::GetSeed() const
 {
     return _currentSeed;
 }
 
-void Rand::DeterministicRandomGenerator::UpdateSeed( const size_t seed )
+void Rand::DeterministicRandomGenerator::UpdateSeed( const uint32_t seed )
 {
     _currentSeed = seed;
 }
@@ -143,5 +144,5 @@ void Rand::DeterministicRandomGenerator::UpdateSeed( const size_t seed )
 uint32_t Rand::DeterministicRandomGenerator::Get( const uint32_t from, const uint32_t to /*= 0*/ ) const
 {
     ++_currentSeed;
-    return Rand::GetWithSeed( from, to, static_cast<uint32_t>( _currentSeed ) );
+    return Rand::GetWithSeed( from, to, _currentSeed );
 }

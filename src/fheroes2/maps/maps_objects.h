@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,17 +38,19 @@ public:
         : uid( 0 )
         , type( v )
     {}
-    virtual ~MapObjectSimple() = default;
+    ~MapObjectSimple() override = default;
 
-    int GetType( void ) const
+    int GetType() const
     {
         return type;
     }
-    u32 GetUID( void ) const
+
+    uint32_t GetUID() const
     {
         return uid;
     }
-    void SetUID( u32 v )
+
+    void SetUID( uint32_t v )
     {
         uid = v;
     }
@@ -56,7 +59,7 @@ protected:
     friend StreamBase & operator<<( StreamBase &, const MapObjectSimple & );
     friend StreamBase & operator>>( StreamBase &, MapObjectSimple & );
 
-    u32 uid;
+    uint32_t uid;
     int type;
 };
 
@@ -67,7 +70,7 @@ struct MapEvent : public MapObjectSimple
 {
     MapEvent();
 
-    void LoadFromMP2( s32 index, StreamBuf );
+    void LoadFromMP2( int32_t index, StreamBuf );
 
     bool isAllow( int color ) const;
     void SetVisited( int color );
@@ -89,10 +92,10 @@ struct MapSphinx : public MapObjectSimple
 {
     MapSphinx();
 
-    void LoadFromMP2( s32 index, StreamBuf );
+    void LoadFromMP2( int32_t index, StreamBuf );
 
     bool AnswerCorrect( const std::string & answer );
-    void SetQuiet( void );
+    void SetQuiet();
 
     Funds resources;
     Artifact artifact;
@@ -108,7 +111,7 @@ struct MapSign : public MapObjectSimple
 {
     MapSign();
 
-    void LoadFromMP2( s32 index, StreamBuf );
+    void LoadFromMP2( int32_t index, StreamBuf );
 
     std::string message;
 };

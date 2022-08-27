@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,47 +38,57 @@ namespace Interface
 {
     class Basic;
 
-    class ControlPanel : protected fheroes2::Rect
+    class ControlPanel final : protected fheroes2::Rect
     {
     public:
         explicit ControlPanel( Basic & );
+        ControlPanel( const ControlPanel & ) = delete;
+
+        ~ControlPanel() = default;
+
+        ControlPanel & operator=( const ControlPanel & ) = delete;
 
         void SetPos( int32_t, int32_t );
-        void Redraw( void ) const;
-        void ResetTheme( void );
-        fheroes2::GameMode QueueEventProcessing();
+        void ResetTheme();
+        fheroes2::GameMode QueueEventProcessing() const;
 
-        const fheroes2::Rect & GetArea( void ) const;
+        const fheroes2::Rect & GetArea() const;
 
     private:
+        friend Basic;
+
+        // Do not call this method directly, use Interface::Basic::Redraw() instead
+        // to avoid issues in the "no interface" mode
+        void Redraw() const;
+
         Basic & interface;
 
         // We do not want to make a copy of images but to store just references to them.
         struct Buttons
         {
-            Buttons( const fheroes2::Sprite & radar_, const fheroes2::Sprite & icon_, const fheroes2::Sprite & button_, const fheroes2::Sprite & stats_,
-                     const fheroes2::Sprite & quit_ )
+            Buttons( const fheroes2::Sprite & radar_, const fheroes2::Sprite & icons_, const fheroes2::Sprite & buttons_, const fheroes2::Sprite & status_,
+                     const fheroes2::Sprite & end_ )
                 : radar( radar_ )
-                , icon( icon_ )
-                , button( button_ )
-                , stats( stats_ )
-                , quit( quit_ )
+                , icons( icons_ )
+                , buttons( buttons_ )
+                , status( status_ )
+                , end( end_ )
             {}
 
             const fheroes2::Sprite & radar;
-            const fheroes2::Sprite & icon;
-            const fheroes2::Sprite & button;
-            const fheroes2::Sprite & stats;
-            const fheroes2::Sprite & quit;
+            const fheroes2::Sprite & icons;
+            const fheroes2::Sprite & buttons;
+            const fheroes2::Sprite & status;
+            const fheroes2::Sprite & end;
         };
 
         std::unique_ptr<Buttons> _buttons;
 
-        fheroes2::Rect rt_radr;
-        fheroes2::Rect rt_icon;
-        fheroes2::Rect rt_bttn;
-        fheroes2::Rect rt_stat;
-        fheroes2::Rect rt_quit;
+        fheroes2::Rect rt_radar;
+        fheroes2::Rect rt_icons;
+        fheroes2::Rect rt_buttons;
+        fheroes2::Rect rt_status;
+        fheroes2::Rect rt_end;
     };
 }
 

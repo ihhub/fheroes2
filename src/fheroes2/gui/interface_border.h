@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,18 +34,26 @@ namespace Interface
     {
     public:
         explicit BorderWindow( const fheroes2::Rect & );
+        BorderWindow( const BorderWindow & ) = delete;
+
         virtual ~BorderWindow() = default;
 
+        BorderWindow & operator=( const BorderWindow & ) = delete;
+
         virtual void SetPos( int32_t, int32_t ) = 0;
-        virtual void SavePosition( void ) = 0;
+        virtual void SavePosition() = 0;
 
-        void Redraw() const;
-        bool QueueEventProcessing( void );
+        bool QueueEventProcessing();
 
-        const fheroes2::Rect & GetArea( void ) const;
-        const fheroes2::Rect & GetRect( void ) const;
+        const fheroes2::Rect & GetRect() const;
+        const fheroes2::Rect & GetArea() const
+        {
+            return area;
+        }
 
     protected:
+        void Redraw() const;
+
         void SetPosition( int32_t, int32_t, uint32_t, uint32_t );
         void SetPosition( int32_t, int32_t );
 

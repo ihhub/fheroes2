@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,8 +21,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #if defined( _MSC_VER ) || defined( __MINGW32__ )
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#elif defined( FHEROES2_VITA )
+#elif defined( TARGET_PS_VITA )
 #include <psp2/io/dirent.h>
 #else
 #include <dirent.h>
@@ -29,12 +31,12 @@
 
 #include "dir.h"
 #include "system.h"
-#if defined( FHEROES2_VITA )
+#if defined( TARGET_PS_VITA )
 #include "tools.h"
 #endif
 
 #include <cstring>
-#if defined( FHEROES2_VITA ) || defined( __SWITCH__ )
+#if defined( TARGET_PS_VITA ) || defined( TARGET_NINTENDO_SWITCH )
 #include <strings.h> // for strcasecmp
 #endif
 
@@ -74,6 +76,11 @@ namespace
         }
 
         do {
+            if ( data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {
+                // Ignore any internal directories.
+                continue;
+            }
+
             std::string fullname = System::ConcatePath( path, data.cFileName );
 
             // FindFirstFile() searches for both long and short variants of names, so we need additional filtering
@@ -84,7 +91,7 @@ namespace
         } while ( FindNextFile( hFind, &data ) != 0 );
 
         FindClose( hFind );
-#elif defined( FHEROES2_VITA )
+#elif defined( TARGET_PS_VITA )
         // open the directory
         const int uid = sceIoDopen( path.c_str() );
         if ( uid <= 0 )
@@ -123,7 +130,7 @@ namespace
 
         const StrCmp strCmp = sensitive ? strcmp : strcasecmp;
 
-        struct dirent * ep;
+        const struct dirent * ep;
         while ( nullptr != ( ep = readdir( dp ) ) ) {
             std::string fullname = System::ConcatePath( correctedPath, ep->d_name );
 
@@ -161,9 +168,4 @@ bool ListFiles::IsEmpty( const std::string & path, const std::string & filter, b
     ListFiles list;
     list.ReadDir( path, filter, sensitive );
     return list.empty();
-}
-
-void ListDirs::Append( const std::list<std::string> & dirs )
-{
-    insert( end(), dirs.begin(), dirs.end() );
 }

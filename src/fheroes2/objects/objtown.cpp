@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,7 +33,7 @@ namespace
 
 int ObjTown::GetPassable( const uint8_t index0 )
 {
-    u32 index = index0 % 32;
+    uint32_t index = index0 % 32;
 
     // 13, 29, 45, 61, 77, 93, 109, 125, 141, 157, 173, 189
     if ( 13 == index || 29 == index )
@@ -47,7 +48,7 @@ int ObjTown::GetPassable( const uint8_t index0 )
 
 int ObjTwba::GetPassable( const uint8_t index0 )
 {
-    u32 index = index0 % 10;
+    uint32_t index = index0 % 10;
 
     // 2, 12, 22, 32, 42, 52, 62, 72
     if ( index == 2 ) {
@@ -65,12 +66,12 @@ int ObjTwba::GetPassable( const uint8_t index0 )
     }
 }
 
-bool ObjTown::isAction( u32 index )
+bool ObjTown::isAction( uint32_t index )
 {
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
 
-bool ObjTwba::isAction( u32 index )
+bool ObjTwba::isAction( uint32_t index )
 {
     return MP2::OBJ_ZERO != GetActionObject( index );
 }
@@ -85,7 +86,7 @@ bool ObjTwba::isShadow( const uint8_t /*index*/ )
     return false;
 }
 
-int ObjTown::GetActionObject( u32 index )
+int ObjTown::GetActionObject( uint32_t index )
 {
     switch ( index % 32 ) {
     case 13:
@@ -98,7 +99,7 @@ int ObjTown::GetActionObject( u32 index )
     return MP2::OBJ_ZERO;
 }
 
-int ObjTwba::GetActionObject( u32 )
+int ObjTwba::GetActionObject( uint32_t /* unused */ )
 {
     return MP2::OBJ_ZERO;
 }

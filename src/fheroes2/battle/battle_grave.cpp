@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2012 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,7 +26,7 @@
 #include "battle_grave.h"
 #include "battle_troop.h"
 
-Battle::Indexes Battle::Graveyard::GetClosedCells( void ) const
+Battle::Indexes Battle::Graveyard::GetClosedCells() const
 {
     Indexes res;
     res.reserve( size() );
@@ -64,7 +65,7 @@ void Battle::Graveyard::RemoveTroop( const Unit & b )
     }
 }
 
-u32 Battle::Graveyard::GetLastTroopUID( s32 index ) const
+uint32_t Battle::Graveyard::GetLastTroopUID( int32_t index ) const
 {
     for ( const_iterator it = begin(); it != end(); ++it )
         if ( index == ( *it ).first && !( *it ).second.empty() )

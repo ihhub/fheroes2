@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,21 +28,12 @@
 
 using payment_t = Funds;
 
-enum
-{
-    INCOME_CAPTURED = 0x01,
-    INCOME_CASTLES = 0x02,
-    INCOME_ARTIFACTS = 0x04,
-    INCOME_HEROSKILLS = 0x08,
-    INCOME_ALL = 0xFF
-};
-
 namespace PaymentConditions
 {
-    payment_t BuyBuilding( int race, u32 build );
-    payment_t BuyBoat( void );
+    payment_t BuyBuilding( int race, uint32_t build );
+    payment_t BuyBoat();
     payment_t BuySpellBook( int shrine = 0 );
-    payment_t RecruitHero( int level );
+    payment_t RecruitHero();
     payment_t ForAlchemist();
 }
 

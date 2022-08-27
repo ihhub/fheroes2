@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +22,8 @@
  ***************************************************************************/
 
 #include <algorithm>
+#include <cassert>
+#include <type_traits>
 
 #include "artifact.h"
 #include "campaign_data.h"
@@ -62,7 +65,7 @@ namespace
         return Artifact::Rand( Artifact::ART_ULTIMATE );
     }
 
-    void fixCastleNames( AllCastles & castles )
+    void fixCastleNames( const AllCastles & castles )
     {
         // Find castles with no names.
         std::vector<Castle *> castleWithNoName;
@@ -98,7 +101,7 @@ namespace
 
 namespace GameStatic
 {
-    extern u32 uniq;
+    extern uint32_t uniq;
 }
 
 bool World::LoadMapMP2( const std::string & filename )
@@ -108,7 +111,7 @@ bool World::LoadMapMP2( const std::string & filename )
 
     StreamFile fs;
     if ( !fs.open( filename, "rb" ) ) {
-        DEBUG_LOG( DBG_GAME | DBG_ENGINE, DBG_WARN, "file not found " << filename.c_str() );
+        DEBUG_LOG( DBG_GAME | DBG_ENGINE, DBG_WARN, "file not found " << filename.c_str() )
         return false;
     }
 
@@ -165,7 +168,7 @@ bool World::LoadMapMP2( const std::string & filename )
     }
 
     if ( width == 0 || height == 0 || width != height ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "incrrect maps size" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "incorrect map size" )
         return false;
     }
 
@@ -182,7 +185,7 @@ bool World::LoadMapMP2( const std::string & filename )
     }
 
     const size_t endof_addons = fs.tell();
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "read all tiles addons, tellg: " << endof_addons );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "read all tiles addons, tellg: " << endof_addons )
 
     // offset data
     fs.seek( MP2::MP2OFFSETDATA );
@@ -210,7 +213,7 @@ bool World::LoadMapMP2( const std::string & filename )
         size_t addonIndex = mp2tile.nextAddonIndex;
         while ( addonIndex > 0 ) {
             if ( vec_mp2addons.size() <= addonIndex ) {
-                DEBUG_LOG( DBG_GAME, DBG_WARN, "index out of range" );
+                DEBUG_LOG( DBG_GAME, DBG_WARN, "index out of range" )
                 break;
             }
             tile.AddonsPushLevel1( vec_mp2addons[addonIndex] );
@@ -237,7 +240,7 @@ bool World::LoadMapMP2( const std::string & filename )
         }
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "read all tiles, tellg: " << fs.tell() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "read all tiles, tellg: " << fs.tell() )
 
     // after addons
     fs.seek( endof_addons );
@@ -292,14 +295,14 @@ bool World::LoadMapMP2( const std::string & filename )
         default:
             DEBUG_LOG( DBG_GAME, DBG_WARN,
                        "castle block: "
-                           << "unknown id: " << id << ", maps index: " << cx + cy * width );
+                           << "unknown id: " << id << ", maps index: " << cx + cy * width )
             break;
         }
         // preload in to capture objects cache
         map_captureobj.Set( Maps::GetIndexFromAbsPoint( cx, cy ), MP2::OBJ_CASTLE, Color::NONE );
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "read coord castles, tellg: " << fs.tell() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "read coord castles, tellg: " << fs.tell() )
     fs.seek( endof_addons + ( 72 * 3 ) );
 
     // cood resource kingdoms
@@ -349,22 +352,22 @@ bool World::LoadMapMP2( const std::string & filename )
         default:
             DEBUG_LOG( DBG_GAME, DBG_WARN,
                        "kingdom block: "
-                           << "unknown id: " << id << ", maps index: " << cx + cy * width );
+                           << "unknown id: " << id << ", maps index: " << cx + cy * width )
             break;
         }
     }
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "read coord other resource, tellg: " << fs.tell() );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "read coord other resource, tellg: " << fs.tell() )
     fs.seek( endof_addons + ( 72 * 3 ) + ( 144 * 3 ) );
 
     // byte: num obelisks (01 default)
     fs.skip( 1 );
 
     // count final mp2 blocks
-    u32 countblock = 0;
+    uint32_t countblock = 0;
     while ( true ) {
-        const u32 l = fs.get();
-        const u32 h = fs.get();
+        const uint32_t l = fs.get();
+        const uint32_t h = fs.get();
 
         if ( 0 == h && 0 == l )
             break;
@@ -374,18 +377,18 @@ bool World::LoadMapMP2( const std::string & filename )
     }
 
     // castle or heroes or (events, rumors, etc)
-    for ( u32 ii = 0; ii < countblock; ++ii ) {
-        s32 findobject = -1;
+    for ( uint32_t ii = 0; ii < countblock; ++ii ) {
+        int32_t findobject = -1;
 
         // read block
         size_t sizeblock = fs.getLE16();
-        std::vector<u8> pblock = fs.getRaw( sizeblock );
+        std::vector<uint8_t> pblock = fs.getRaw( sizeblock );
 
         for ( MapsIndexes::const_iterator it_index = vec_object.begin(); it_index != vec_object.end() && findobject < 0; ++it_index ) {
             const Maps::Tiles & tile = vec_tiles[*it_index];
 
             // orders(quantity2, quantity1)
-            u32 orders = ( tile.GetQuantity2() ? tile.GetQuantity2() : 0 );
+            uint32_t orders = ( tile.GetQuantity2() ? tile.GetQuantity2() : 0 );
             orders <<= 8;
             orders |= tile.GetQuantity1();
 
@@ -402,7 +405,7 @@ bool World::LoadMapMP2( const std::string & filename )
                 if ( MP2::SIZEOFMP2CASTLE != pblock.size() ) {
                     DEBUG_LOG( DBG_GAME, DBG_WARN,
                                "read castle: "
-                                   << "incorrect size block: " << pblock.size() );
+                                   << "incorrect size block: " << pblock.size() )
                 }
                 else {
                     Castle * castle = getCastleEntrance( Maps::GetPoint( findobject ) );
@@ -413,7 +416,7 @@ bool World::LoadMapMP2( const std::string & filename )
                     else {
                         DEBUG_LOG( DBG_GAME, DBG_WARN,
                                    "load castle: "
-                                       << "not found, index: " << findobject );
+                                       << "not found, index: " << findobject )
                     }
                 }
                 break;
@@ -423,7 +426,7 @@ bool World::LoadMapMP2( const std::string & filename )
                 if ( MP2::SIZEOFMP2CASTLE != pblock.size() ) {
                     DEBUG_LOG( DBG_GAME, DBG_WARN,
                                "read castle: "
-                                   << "incorrect size block: " << pblock.size() );
+                                   << "incorrect size block: " << pblock.size() )
                 }
                 else {
                     // Random castle's entrance tile is marked as OBJ_RNDCASTLE or OBJ_RNDTOWN instead of OBJ_CASTLE.
@@ -437,7 +440,7 @@ bool World::LoadMapMP2( const std::string & filename )
                     else {
                         DEBUG_LOG( DBG_GAME, DBG_WARN,
                                    "load castle: "
-                                       << "not found, index: " << findobject );
+                                       << "not found, index: " << findobject )
                     }
                 }
                 break;
@@ -446,7 +449,7 @@ bool World::LoadMapMP2( const std::string & filename )
                 if ( MP2::SIZEOFMP2HEROES != pblock.size() ) {
                     DEBUG_LOG( DBG_GAME, DBG_WARN,
                                "read heroes: "
-                                   << "incorrect size block: " << pblock.size() );
+                                   << "incorrect size block: " << pblock.size() )
                 }
                 else {
                     int race = Race::KNGT;
@@ -483,7 +486,7 @@ bool World::LoadMapMP2( const std::string & filename )
                 if ( MP2::SIZEOFMP2HEROES != pblock.size() ) {
                     DEBUG_LOG( DBG_GAME, DBG_WARN,
                                "read heroes: "
-                                   << "incorrect size block: " << pblock.size() );
+                                   << "incorrect size block: " << pblock.size() )
                 }
                 else {
                     std::pair<int, int> colorRace = Maps::Tiles::ColorRaceFromHeroSprite( tile.GetObjectSpriteIndex() );
@@ -493,20 +496,20 @@ bool World::LoadMapMP2( const std::string & filename )
                         colorRace.second = kingdom.GetRace();
 
                     // check heroes max count
-                    if ( kingdom.AllowRecruitHero( false, 0 ) ) {
+                    if ( kingdom.AllowRecruitHero( false ) ) {
                         Heroes * hero = nullptr;
 
                         if ( pblock[17] && pblock[18] < Heroes::BAX )
                             hero = vec_heroes.Get( pblock[18] );
 
                         if ( !hero || !hero->isFreeman() )
-                            hero = vec_heroes.GetFreeman( colorRace.second );
+                            hero = GetFreemanHeroes( colorRace.second );
 
                         if ( hero )
                             hero->LoadFromMP2( findobject, colorRace.first, colorRace.second, StreamBuf( pblock ) );
                     }
                     else {
-                        DEBUG_LOG( DBG_GAME, DBG_WARN, "load heroes maximum" );
+                        DEBUG_LOG( DBG_GAME, DBG_WARN, "load heroes maximum" )
                     }
                 }
                 break;
@@ -549,14 +552,14 @@ bool World::LoadMapMP2( const std::string & filename )
             // add rumors
             else if ( MP2::SIZEOFMP2RUMOR - 1 < pblock.size() ) {
                 if ( pblock[8] ) {
-                    vec_rumors.push_back( StreamBuf( &pblock[8], pblock.size() - 8 ).toString() );
-                    DEBUG_LOG( DBG_GAME, DBG_INFO, "add rumors: " << vec_rumors.back() );
+                    _rumors.emplace_back( StreamBuf( &pblock[8], pblock.size() - 8 ).toString() );
+                    DEBUG_LOG( DBG_GAME, DBG_INFO, "add rumors: " << _rumors.back() )
                 }
             }
         }
         // debug
         else {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "read maps: unknown block addons, size: " << pblock.size() );
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "read maps: unknown block addons, size: " << pblock.size() )
         }
     }
 
@@ -576,7 +579,7 @@ bool World::LoadMapMP2( const std::string & filename )
 
     ProcessNewMap();
 
-    DEBUG_LOG( DBG_GAME, DBG_INFO, "end load" );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, "end load" )
     return true;
 }
 
@@ -613,7 +616,7 @@ void World::ProcessNewMap()
         case MP2::OBJ_LEANTO:
         case MP2::OBJ_CAMPFIRE:
         case MP2::OBJ_FLOTSAM:
-        case MP2::OBJ_SHIPWRECKSURVIROR:
+        case MP2::OBJ_SHIPWRECKSURVIVOR:
         case MP2::OBJ_DERELICTSHIP:
         case MP2::OBJ_SHIPWRECK:
         case MP2::OBJ_GRAVEYARD:
@@ -691,56 +694,98 @@ void World::ProcessNewMap()
     }
     if ( GameOver::LOSS_HERO & conf.ConditionLoss() ) {
         Heroes * hero = GetHeroes( conf.LossMapsPositionObject() );
+        heroes_cond_loss = hero ? hero->GetID() : Heroes::UNKNOWN;
+
         if ( hero ) {
-            heroes_cond_loss = hero->GetID();
             hero->SetModes( Heroes::NOTDISMISS | Heroes::NOTDEFAULTS );
         }
     }
 
-    // Set Ultimate Artifact.
-    fheroes2::Point ultimate_pos;
-    MapsTiles::iterator it = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isObject( MP2::OBJ_RNDULTIMATEARTIFACT ); } );
-    if ( vec_tiles.end() == it ) {
-        // generate position for ultimate
-        MapsIndexes pools;
-        pools.reserve( vec_tiles.size() / 2 );
+    // Search for a tile with a predefined Ultimate Artifact
+    const MapsTiles::iterator ultArtTileIter
+        = std::find_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return tile.isObject( MP2::OBJ_RNDULTIMATEARTIFACT ); } );
 
-        for ( size_t i = 0; i < vec_tiles.size(); ++i ) {
-            const Maps::Tiles & tile = vec_tiles[i];
-            const int32_t x = tile.GetIndex() % width;
-            if ( x < ultimateArtifactOffset || x >= width - ultimateArtifactOffset )
-                continue;
-
-            const int32_t y = tile.GetIndex() / width;
-            if ( y < ultimateArtifactOffset || y >= height - ultimateArtifactOffset )
-                continue;
-
-            if ( tile.GoodForUltimateArtifact() )
-                pools.emplace_back( tile.GetIndex() );
+    auto checkTileForSuitabilityForUltArt = [this]( const int32_t idx ) {
+        const int32_t x = idx % width;
+        if ( x < ultimateArtifactOffset || x >= width - ultimateArtifactOffset ) {
+            return false;
         }
 
-        if ( !pools.empty() ) {
-            const int32_t pos = Rand::Get( pools );
+        const int32_t y = idx / width;
+        if ( y < ultimateArtifactOffset || y >= height - ultimateArtifactOffset ) {
+            return false;
+        }
+
+        return GetTiles( idx ).GoodForUltimateArtifact();
+    };
+
+    // There is no tile with a predefined Ultimate Artifact, pick a suitable tile randomly
+    if ( ultArtTileIter == vec_tiles.end() ) {
+        MapsIndexes pool;
+        pool.reserve( vec_tiles.size() / 2 );
+
+        for ( const Maps::Tiles & tile : vec_tiles ) {
+            const int32_t idx = tile.GetIndex();
+
+            if ( checkTileForSuitabilityForUltArt( idx ) ) {
+                pool.push_back( idx );
+            }
+        }
+
+        if ( !pool.empty() ) {
+            const int32_t pos = Rand::Get( pool );
+
             ultimate_artifact.Set( pos, getUltimateArtifact() );
-            ultimate_pos = Maps::GetPoint( pos );
+
+            DEBUG_LOG( DBG_GAME, DBG_INFO, "Ultimate Artifact index: " << pos )
+        }
+        else {
+            DEBUG_LOG( DBG_GAME, DBG_WARN, "no suitable tile to place the Ultimate Artifact was found" )
         }
     }
+    // There is a tile with a predefined Ultimate Artifact, pick a tile nearby in the radius specified in the artifact's properties
     else {
-        // remove ultimate artifact sprite
-        it->Remove( it->GetObjectUID() );
-        it->setAsEmpty();
-        ultimate_artifact.Set( it->GetIndex(), getUltimateArtifact() );
-        ultimate_pos = ( *it ).GetCenter();
+        static_assert( std::is_same_v<decltype( ultArtTileIter->GetQuantity1() ), uint8_t> && std::is_same_v<decltype( ultArtTileIter->GetQuantity2() ), uint8_t>,
+                       "Types of tile's quantities have been changed, check the bitwise arithmetic below" );
+
+        // The radius can be in the range 0 - 127, it is represented by 2 low-order bits of quantity2 and 5 high-order bits of quantity1
+        const int32_t radius = ( ( ultArtTileIter->GetQuantity2() & 0x03 ) << 5 ) + ( ultArtTileIter->GetQuantity1() >> 3 );
+
+        // Remove the predefined Ultimate Artifact object
+        ultArtTileIter->Remove( ultArtTileIter->GetObjectUID() );
+        ultArtTileIter->setAsEmpty();
+
+        // Use the predefined Ultimate Artifact tile index as a fallback
+        int32_t pos = ultArtTileIter->GetIndex();
+
+        if ( radius > 0 ) {
+            MapsIndexes pool = Maps::getAroundIndexes( pos, radius );
+
+            // Maps::getAroundIndexes() results does not include the central index, so we have to append it manually
+            assert( std::find( pool.begin(), pool.end(), pos ) == pool.end() );
+            pool.push_back( pos );
+
+            pool.erase( std::remove_if( pool.begin(), pool.end(),
+                                        [&checkTileForSuitabilityForUltArt]( const int32_t idx ) { return !checkTileForSuitabilityForUltArt( idx ); } ),
+                        pool.end() );
+
+            if ( !pool.empty() ) {
+                pos = Rand::Get( pool );
+            }
+        }
+
+        ultimate_artifact.Set( pos, getUltimateArtifact() );
+
+        DEBUG_LOG( DBG_GAME, DBG_INFO,
+                   "predefined Ultimate Artifact index: " << ultArtTileIter->GetIndex() << ", radius: " << radius << ", Ultimate Artifact index: " << pos )
     }
 
     PostLoad( true );
 
-    // play with hero
     vec_kingdoms.ApplyPlayWithStartingHero();
 
-    // play with debug hero
+    // If we are in developer mode, then add the DEBUG_HERO
     if ( IS_DEVEL() ) {
-        // get first castle position
         Kingdom & kingdom = GetKingdom( Color::GetFirst( Players::HumanColors() ) );
 
         if ( !kingdom.GetCastles().empty() ) {
@@ -748,49 +793,9 @@ void World::ProcessNewMap()
             const fheroes2::Point & cp = castle->GetCenter();
             Heroes * hero = vec_heroes.Get( Heroes::DEBUG_HERO );
 
-            if ( hero && !world.GetTiles( cp.x, cp.y + 1 ).GetHeroes() ) {
-                hero->Recruit( castle->GetColor(), fheroes2::Point( cp.x, cp.y + 1 ) );
+            if ( hero && !GetTiles( cp.x, cp.y + 1 ).GetHeroes() ) {
+                hero->Recruit( castle->GetColor(), { cp.x, cp.y + 1 } );
             }
         }
     }
-
-    vec_rumors.emplace_back( _( "The ultimate artifact is really the %{name}." ) );
-    StringReplace( vec_rumors.back(), "%{name}", ultimate_artifact.GetName() );
-
-    vec_rumors.emplace_back( _( "The ultimate artifact may be found in the %{name} regions of the world." ) );
-
-    if ( height / 3 > ultimate_pos.y ) {
-        if ( width / 3 > ultimate_pos.x )
-            StringReplace( vec_rumors.back(), "%{name}", _( "north-west" ) );
-        else if ( 2 * width / 3 > ultimate_pos.x )
-            StringReplace( vec_rumors.back(), "%{name}", _( "north" ) );
-        else
-            StringReplace( vec_rumors.back(), "%{name}", _( "north-east" ) );
-    }
-    else if ( 2 * height / 3 > ultimate_pos.y ) {
-        if ( width / 3 > ultimate_pos.x )
-            StringReplace( vec_rumors.back(), "%{name}", _( "west" ) );
-        else if ( 2 * width / 3 > ultimate_pos.x )
-            StringReplace( vec_rumors.back(), "%{name}", _( "center" ) );
-        else
-            StringReplace( vec_rumors.back(), "%{name}", _( "east" ) );
-    }
-    else {
-        if ( width / 3 > ultimate_pos.x )
-            StringReplace( vec_rumors.back(), "%{name}", _( "south-west" ) );
-        else if ( 2 * width / 3 > ultimate_pos.x )
-            StringReplace( vec_rumors.back(), "%{name}", _( "south" ) );
-        else
-            StringReplace( vec_rumors.back(), "%{name}", _( "south-east" ) );
-    }
-
-    vec_rumors.emplace_back( _( "The truth is out there." ) );
-    vec_rumors.emplace_back( _( "The dark side is stronger." ) );
-    vec_rumors.emplace_back( _( "The end of the world is near." ) );
-    vec_rumors.emplace_back( _( "The bones of Lord Slayer are buried in the foundation of the arena." ) );
-    vec_rumors.emplace_back( _( "A Black Dragon will take out a Titan any day of the week." ) );
-    vec_rumors.emplace_back( _( "He told her: Yada yada yada...  and then she said: Blah, blah, blah..." ) );
-    vec_rumors.emplace_back( _( "An unknown force is being ressurected..." ) );
-
-    vec_rumors.emplace_back( _( "Check the newest version of game at\nhttps://github.com/ihhub/\nfheroes2/releases" ) );
 }

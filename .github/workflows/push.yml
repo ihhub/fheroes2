@@ -1,0 +1,31 @@
+name: Push
+
+on:
+  push:
+    branches: [ master ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  make:
+    name: Make
+    uses: ./.github/workflows/make.yml
+
+  msvc:
+    name: MSVC
+    uses: ./.github/workflows/msvc.yml
+
+  sonarcloud:
+    name: SonarCloud Analyzer
+    uses: ./.github/workflows/sonarcloud.yml
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  translation:
+    name: Translation update
+    needs:
+    - make
+    - msvc
+    uses: ./.github/workflows/translation_update.yml

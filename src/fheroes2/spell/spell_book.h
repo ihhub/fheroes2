@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,8 +31,9 @@
 
 class HeroBase;
 
-struct SpellBook : public SpellStorage
+class SpellBook : public SpellStorage
 {
+public:
     enum class Filter : int
     {
         ADVN = 0x01,
@@ -39,11 +41,19 @@ struct SpellBook : public SpellStorage
         ALL = ADVN | CMBT
     };
 
-    Spell Open( const HeroBase & hero, const Filter displayableSpells, const bool canselect,
-                const std::function<void( const std::string & )> * statusCallback = nullptr ) const;
+    Spell Open( const HeroBase & hero, const Filter displayableSpells, const bool canCastSpell, const bool restorePreviousState,
+                const std::function<void( const std::string & )> * statusCallback ) const;
+
     void Edit( const HeroBase & hero );
 
+    void resetState();
+
     SpellStorage SetFilter( const Filter filter, const HeroBase * hero = nullptr ) const;
+
+private:
+    mutable size_t _startSpellIndex = 0;
+
+    mutable Filter _spellFilter = Filter::ADVN;
 };
 
 #endif

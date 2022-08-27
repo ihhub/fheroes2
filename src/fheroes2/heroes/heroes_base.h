@@ -1,9 +1,10 @@
 /***************************************************************************
- *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
- *   Copyright (C) 2009 by Josh Matthews  <josh@joshmatthews.net>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Josh Matthews  <josh@joshmatthews.net>          *
+ *   Copyright (C) 2008 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -58,6 +59,8 @@ public:
     HeroBase( const int type, const int race );
     HeroBase();
 
+    ~HeroBase() override = default;
+
     enum
     {
         UNDEFINED,
@@ -73,10 +76,10 @@ public:
     virtual const Army & GetArmy() const = 0;
     virtual Army & GetArmy() = 0;
 
-    virtual u32 GetMaxSpellPoints() const = 0;
+    virtual uint32_t GetMaxSpellPoints() const = 0;
 
     virtual int GetLevelSkill( int skill ) const = 0;
-    virtual u32 GetSecondaryValues( int skill ) const = 0;
+    virtual uint32_t GetSecondaryValues( int skill ) const = 0;
 
     virtual void ActionAfterBattle() = 0;
     virtual void ActionPreBattle() = 0;
@@ -95,30 +98,37 @@ public:
     int GetKnowledgeModificator( std::string * = nullptr ) const;
     int GetMoraleModificator( std::string * = nullptr ) const;
     int GetLuckModificator( std::string * = nullptr ) const;
-    double GetSpellcastStrength( const double armyLimit ) const;
+    double GetMagicStrategicValue( const double armyStrength ) const;
 
     uint32_t GetSpellPoints() const;
     bool HaveSpellPoints( const Spell & spell ) const;
-    bool CanCastSpell( const Spell & spell, std::string * = nullptr ) const;
-    bool CanTeachSpell( const Spell & spell ) const;
+    bool haveMovePoints( const Spell & spell ) const;
+    bool CanCastSpell( const Spell & spell, std::string * res = nullptr ) const;
     bool CanLearnSpell( const Spell & spell ) const;
-    bool CanTranscribeScroll( const Artifact & art ) const;
-    void TranscribeScroll( const Artifact & art );
     void SpellCasted( const Spell & spell );
     void SetSpellPoints( const uint32_t points );
+    bool isPotentSpellcaster() const;
 
     std::vector<Spell> GetSpells( const int lvl = -1 ) const;
     void EditSpellBook();
-    Spell OpenSpellBook( const SpellBook::Filter filter, const bool canSelect, const std::function<void( const std::string & )> * statusCallback ) const;
+    Spell OpenSpellBook( const SpellBook::Filter filter, const bool canCastSpell, const bool restorePreviousState,
+                         const std::function<void( const std::string & )> * statusCallback ) const;
     bool HaveSpellBook() const;
     bool HaveSpell( const Spell &, const bool skip_bag = false ) const;
     void AppendSpellToBook( const Spell &, const bool without_wisdom = false );
     void AppendSpellsToBook( const SpellStorage &, const bool without_wisdom = false );
     bool SpellBookActivate();
 
-    BagArtifacts & GetBagArtifacts();
-    const BagArtifacts & GetBagArtifacts() const;
-    uint32_t artifactCount( const Artifact & art ) const;
+    BagArtifacts & GetBagArtifacts()
+    {
+        return bag_artifacts;
+    }
+
+    const BagArtifacts & GetBagArtifacts() const
+    {
+        return bag_artifacts;
+    }
+
     bool hasArtifact( const Artifact & art ) const;
 
     void LoadDefaults( const int type, const int race );

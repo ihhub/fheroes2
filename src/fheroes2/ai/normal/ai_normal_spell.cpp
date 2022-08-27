@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,7 +41,7 @@ namespace AI
         return Board::DistanceFromOriginX( unit.GetHeadIndex(), unit.isReflect() );
     }
 
-    SpellSelection BattlePlanner::selectBestSpell( Arena & arena, bool retreating ) const
+    SpellSelection BattlePlanner::selectBestSpell( Arena & arena, const Battle::Unit & currentUnit, bool retreating ) const
     {
         // Cast best spell with highest heuristic on target pointer saved
         SpellSelection bestSpell;
@@ -53,8 +53,8 @@ namespace AI
         }
 
         const std::vector<Spell> allSpells = _commander->GetSpells();
-        const Units friendly( arena.getForce( _myColor ), true );
-        const Units enemies( arena.getEnemyForce( _myColor ), true );
+        const Units friendly( arena.getForce( _myColor ).getUnits(), true );
+        const Units enemies( arena.getEnemyForce( _myColor ).getUnits(), true );
 
         // Hero should conserve spellpoints if already spent more than half or his army is stronger
         // Threshold is 0.04 when armies are equal (= 20% of single unit)
@@ -70,10 +70,10 @@ namespace AI
             // Diminish spell effectiveness based on spell point cost
             // 1. Divide cost by 3 to make level 1 spells a baseline (1:1)
             // 2. Use square root to make sure relationship isn't linear for high-level spells
-            const double spellPointValue = retreating ? outcome.value : outcome.value / sqrt( spell.SpellPoint( _commander ) / 3.0 );
+            const double spellPointValue = retreating ? outcome.value : outcome.value / sqrt( spell.spellPoints( _commander ) / 3.0 );
             const bool ignoreThreshold = retreating || spell.isResurrect();
 
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " value is " << spellPointValue << ", best target is " << outcome.cell );
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, spell.GetName() << " value is " << spellPointValue << ", best target is " << outcome.cell )
 
             if ( spellPointValue > bestSpell.value && ( ignoreThreshold || spellPointValue > spellValueThreshold ) ) {
                 bestSpell.spellID = spell.GetID();
@@ -83,11 +83,12 @@ namespace AI
         };
 
         for ( const Spell & spell : allSpells ) {
-            if ( !_commander->HaveSpellPoints( spell ) || !spell.isCombat() || ( !spell.isDamage() && retreating ) )
+            if ( !spell.isCombat() || arena.isDisableCastSpell( spell ) || !_commander->CanCastSpell( spell ) || ( retreating && !spell.isDamage() ) ) {
                 continue;
+            }
 
             if ( spell.isDamage() ) {
-                checkSelectBestSpell( spell, spellDamageValue( spell, arena, friendly, enemies, retreating ) );
+                checkSelectBestSpell( spell, spellDamageValue( spell, arena, currentUnit, friendly, enemies, retreating ) );
             }
             else if ( spell.isEffectDispel() ) {
                 checkSelectBestSpell( spell, spellDispellValue( spell, friendly, enemies ) );
@@ -106,15 +107,16 @@ namespace AI
             }
         }
 
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Spell threshold is " << spellValueThreshold << ", unit ratio is " << ( spellValueThreshold * 5 / _myArmyStrength ) );
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Spell threshold is " << spellValueThreshold << ", unit ratio is " << ( spellValueThreshold * 5 / _myArmyStrength ) )
         if ( bestSpell.spellID != -1 ) {
-            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Best spell is " << Spell( bestSpell.spellID ).GetName() << ", value is " << bestSpell.value );
+            DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "Best spell is " << Spell( bestSpell.spellID ).GetName() << ", value is " << bestSpell.value )
         }
 
         return bestSpell;
     }
 
-    SpellcastOutcome BattlePlanner::spellDamageValue( const Spell & spell, Arena & arena, const Units & friendly, const Units & enemies, bool retreating ) const
+    SpellcastOutcome BattlePlanner::spellDamageValue( const Spell & spell, Arena & arena, const Battle::Unit & currentUnit, const Units & friendly, const Units & enemies,
+                                                      bool retreating ) const
     {
         SpellcastOutcome bestOutcome;
         if ( !spell.isDamage() )
@@ -123,8 +125,8 @@ namespace AI
         const int spellPower = _commander->GetPower();
         const uint32_t totalDamage = spell.Damage() * spellPower;
 
-        auto damageHeuristic = [&totalDamage, &spell, &spellPower, &retreating]( const Unit * unit ) {
-            const uint32_t damage = totalDamage * ( 100 - unit->GetMagicResist( spell, spellPower ) ) / 100;
+        auto damageHeuristic = [this, &totalDamage, &spell, &spellPower, &retreating]( const Unit * unit ) {
+            const uint32_t damage = totalDamage * ( 100 - unit->GetMagicResist( spell, spellPower, _commander ) ) / 100;
             // If we're retreating we don't care about partial damage, only actual units killed
             if ( retreating )
                 return unit->GetMonsterStrength() * unit->HowManyWillKilled( damage );
@@ -150,18 +152,30 @@ namespace AI
                 spellHeuristic += damageHeuristic( enemy );
             }
             for ( const Unit * unit : friendly ) {
-                spellHeuristic -= damageHeuristic( unit );
+                const double valueLost = damageHeuristic( unit );
+                // check if we're retreating and will lose current unit
+                if ( retreating && unit->isUID( currentUnit.GetUID() ) && std::fabs( valueLost - unit->GetStrength() ) < 0.001 ) {
+                    // avoid this spell and return early
+                    return bestOutcome;
+                }
+                spellHeuristic -= valueLost;
             }
 
             bestOutcome.updateOutcome( spellHeuristic, -1 );
         }
         else {
             // Area of effect spells like Fireball
-            auto areaOfEffectCheck = [&damageHeuristic, &bestOutcome]( const TargetsInfo & targets, const int32_t index, int myColor ) {
+            auto areaOfEffectCheck = [&damageHeuristic, &bestOutcome, &currentUnit, &retreating]( const TargetsInfo & targets, const int32_t index, int myColor ) {
                 double spellHeuristic = 0;
                 for ( const TargetInfo & target : targets ) {
                     if ( target.defender->GetCurrentColor() == myColor ) {
-                        spellHeuristic -= damageHeuristic( target.defender );
+                        const double valueLost = damageHeuristic( target.defender );
+                        // check if we're retreating and will lose current unit
+                        if ( retreating && target.defender->isUID( currentUnit.GetUID() ) && std::fabs( valueLost - target.defender->GetStrength() ) < 0.001 ) {
+                            // avoid this spell and return without updating the outcome
+                            return;
+                        }
+                        spellHeuristic -= valueLost;
                     }
                     else {
                         spellHeuristic += damageHeuristic( target.defender );
@@ -193,11 +207,10 @@ namespace AI
         return bestOutcome;
     }
 
-    uint32_t BattlePlanner::spellDurationMultiplier( const Battle::Unit & target ) const
+    int32_t BattlePlanner::spellDurationMultiplier( const Battle::Unit & target ) const
     {
-        uint32_t duration = static_cast<uint32_t>( _commander->GetPower() );
-        for ( const Artifact::type_t art : { Artifact::WIZARD_HAT, Artifact::ENCHANTED_HOURGLASS } )
-            duration += _commander->artifactCount( art ) * Artifact( art ).ExtraValue();
+        int32_t duration = _commander->GetPower();
+        duration += _commander->GetBagArtifacts().getTotalArtifactEffectValue( fheroes2::ArtifactBonusType::EVERY_COMBAT_SPELL_DURATION );
 
         if ( duration < 2 && target.Modes( TR_MOVED ) )
             return 0;
@@ -463,11 +476,18 @@ namespace AI
         return bestOutcome;
     }
 
-    SpellcastOutcome BattlePlanner::spellResurrectValue( const Spell & spell, Battle::Arena & arena ) const
+    SpellcastOutcome BattlePlanner::spellResurrectValue( const Spell & spell, const Battle::Arena & arena ) const
     {
         SpellcastOutcome bestOutcome;
-        const uint32_t ankhModifier = _commander->hasArtifact( Artifact::ANKH ) ? 2 : 1;
-        const uint32_t hpRestored = spell.Resurrect() * _commander->GetPower() * ankhModifier;
+
+        uint32_t hpRestored = spell.Resurrect() * _commander->GetPower();
+
+        const std::vector<int32_t> extraSpellEffectivenessPercent
+            = _commander->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::RESURRECT_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
+
+        for ( const int32_t value : extraSpellEffectivenessPercent ) {
+            hpRestored = hpRestored * ( 100 + value ) / 100;
+        }
 
         // Get friendly units list including the invalid and dead ones
         const Force & friendlyForce = arena.getForce( _myColor );
@@ -505,8 +525,12 @@ namespace AI
             }
 
             uint32_t count = spell.ExtraValue() * _commander->GetPower();
-            if ( _commander->hasArtifact( Artifact::BOOK_ELEMENTS ) )
-                count *= 2;
+            const std::vector<int32_t> summonSpellExtraEffectPercent
+                = _commander->GetBagArtifacts().getTotalArtifactMultipliedPercent( fheroes2::ArtifactBonusType::SUMMONING_SPELL_EXTRA_EFFECTIVENESS_PERCENT );
+
+            for ( const int32_t value : summonSpellExtraEffectPercent ) {
+                count = count * ( 100 + value ) / 100;
+            }
 
             const Troop summon( Monster( spell ), count );
             bestOutcome.value = summon.GetStrengthWithBonus( _commander->GetAttack(), _commander->GetDefense() );
@@ -517,5 +541,20 @@ namespace AI
             }
         }
         return bestOutcome;
+    }
+
+    double BattlePlanner::commanderMaximumSpellDamageValue( const HeroBase & commander )
+    {
+        const std::vector<Spell> & spells = commander.GetSpells();
+        const double spellPower = static_cast<double>( commander.GetPower() );
+
+        double bestValue = 0;
+        for ( const Spell & spell : spells ) {
+            if ( spell.isCombat() && spell.isDamage() && commander.GetSpellPoints() >= spell.spellPoints() ) {
+                bestValue = std::max( bestValue, spell.Damage() * spellPower );
+            }
+        }
+
+        return bestValue;
     }
 }

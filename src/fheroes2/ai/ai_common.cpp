@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2020                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2020 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -52,29 +52,9 @@ namespace AI
         return false;
     }
 
-    uint32_t GetResourceMultiplier( const Castle & castle, uint32_t min, uint32_t max )
+    uint32_t GetResourceMultiplier( uint32_t min, uint32_t max )
     {
-        return castle.isCapital() ? 1 : Rand::Get( min, max );
-    }
-
-    void ReinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget )
-    {
-        if ( !hero.HaveSpellBook() && castle.GetLevelMageGuild() > 0 && !hero.IsFullBagArtifacts() ) {
-            // this call will check if AI kingdom have enough resources to buy book
-            hero.BuySpellBook( &castle );
-        }
-
-        Army & heroArmy = hero.GetArmy();
-        const double armyStrength = heroArmy.GetStrength();
-
-        heroArmy.UpgradeTroops( castle );
-        castle.recruitBestAvailable( budget );
-        heroArmy.JoinStrongestFromArmy( castle.GetArmy() );
-        OptimizeTroopsOrder( heroArmy );
-
-        if ( std::fabs( armyStrength - heroArmy.GetStrength() ) > 0.001 ) {
-            hero.unmarkHeroMeeting();
-        }
+        return Rand::Get( min, max );
     }
 
     void OptimizeTroopsOrder( Army & army )

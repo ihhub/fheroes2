@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2011 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,32 +37,32 @@ public:
         : std::pair<Heroes *, Heroes *>( guest, guard )
     {}
 
-    Heroes * Guest( void )
+    Heroes * Guest()
     {
         return first;
     }
 
-    Heroes * Guard( void )
+    Heroes * Guard()
     {
         return second;
     }
 
-    const Heroes * Guest( void ) const
+    const Heroes * Guest() const
     {
         return first;
     }
 
-    const Heroes * Guard( void ) const
+    const Heroes * Guard() const
     {
         return second;
     }
 
-    Heroes * GuestFirst( void )
+    Heroes * GuestFirst()
     {
         return first ? first : second;
     }
 
-    Heroes * GuardFirst( void )
+    Heroes * GuardFirst()
     {
         return second ? second : first;
     }
@@ -71,17 +72,17 @@ public:
         return first == hero || second == hero;
     }
 
-    void Swap( void )
+    void Swap()
     {
         std::swap( first, second );
     }
 
-    bool FullHouse( void ) const
+    bool FullHouse() const
     {
         return first && second;
     }
 
-    bool IsValid( void ) const
+    bool IsValid() const
     {
         return first || second;
     }

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -64,99 +65,109 @@ namespace
         COLOR_ROAD = 0x7A,
 
         COLOR_BLUE = 0x47,
-        COLOR_GREEN = 0x67,
+        COLOR_GREEN = 0x69,
         COLOR_RED = 0xbd,
         COLOR_YELLOW = 0x70,
         COLOR_ORANGE = 0xcd,
         COLOR_PURPLE = 0x87,
-        COLOR_GRAY = 0x10
+        COLOR_GRAY = 0x10,
+        COLOR_WHITE = 0x0a
     };
-}
 
-uint8_t GetPaletteIndexFromGround( int ground )
-{
-    switch ( ground ) {
-    case Maps::Ground::DESERT:
-        return COLOR_DESERT;
-    case Maps::Ground::SNOW:
-        return COLOR_SNOW;
-    case Maps::Ground::SWAMP:
-        return COLOR_SWAMP;
-    case Maps::Ground::WASTELAND:
-        return COLOR_WASTELAND;
-    case Maps::Ground::BEACH:
-        return COLOR_BEACH;
-    case Maps::Ground::LAVA:
-        return COLOR_LAVA;
-    case Maps::Ground::DIRT:
-        return COLOR_DIRT;
-    case Maps::Ground::GRASS:
-        return COLOR_GRASS;
-    case Maps::Ground::WATER:
-        return COLOR_WATER;
-    default:
-        break;
+    uint8_t GetPaletteIndexFromGround( int ground )
+    {
+        switch ( ground ) {
+        case Maps::Ground::DESERT:
+            return COLOR_DESERT;
+        case Maps::Ground::SNOW:
+            return COLOR_SNOW;
+        case Maps::Ground::SWAMP:
+            return COLOR_SWAMP;
+        case Maps::Ground::WASTELAND:
+            return COLOR_WASTELAND;
+        case Maps::Ground::BEACH:
+            return COLOR_BEACH;
+        case Maps::Ground::LAVA:
+            return COLOR_LAVA;
+        case Maps::Ground::DIRT:
+            return COLOR_DIRT;
+        case Maps::Ground::GRASS:
+            return COLOR_GRASS;
+        case Maps::Ground::WATER:
+            return COLOR_WATER;
+        default:
+            break;
+        }
+
+        return 0;
     }
 
-    return 0;
-}
+    uint8_t GetPaletteIndexFromColor( int color )
+    {
+        switch ( color ) {
+        case Color::BLUE:
+            return COLOR_BLUE;
+        case Color::GREEN:
+            return COLOR_GREEN;
+        case Color::RED:
+            return COLOR_RED;
+        case Color::YELLOW:
+            return COLOR_YELLOW;
+        case Color::ORANGE:
+            return COLOR_ORANGE;
+        case Color::PURPLE:
+            return COLOR_PURPLE;
+        default:
+            break;
+        }
 
-uint8_t GetPaletteIndexFromColor( int color )
-{
-    switch ( color ) {
-    case Color::BLUE:
-        return COLOR_BLUE;
-    case Color::GREEN:
-        return COLOR_GREEN;
-    case Color::RED:
-        return COLOR_RED;
-    case Color::YELLOW:
-        return COLOR_YELLOW;
-    case Color::ORANGE:
-        return COLOR_ORANGE;
-    case Color::PURPLE:
-        return COLOR_PURPLE;
-    default:
-        break;
+        return COLOR_WHITE;
     }
 
-    return COLOR_GRAY;
+    bool getCastleColor( uint8_t & fillColor, const fheroes2::Point & position )
+    {
+        const Castle * castle = world.getCastle( position );
+        if ( castle != nullptr ) {
+            fillColor = GetPaletteIndexFromColor( castle->GetColor() );
+            return true;
+        }
+
+        return false;
+    }
 }
 
 Interface::Radar::Radar( Basic & basic )
-    : BorderWindow( fheroes2::Rect( 0, 0, RADARWIDTH, RADARWIDTH ) )
+    : BorderWindow( { 0, 0, RADARWIDTH, RADARWIDTH } )
     , radarType( RadarType::WorldMap )
     , interface( basic )
     , hide( true )
 {}
 
-Interface::Radar::Radar( const Radar & radar )
-    : BorderWindow( radar.area )
-    , radarType( radar.radarType )
+Interface::Radar::Radar( const Radar & radar, const fheroes2::Display & display )
+    : BorderWindow( { display.width() - BORDERWIDTH - RADARWIDTH, BORDERWIDTH, RADARWIDTH, RADARWIDTH } )
+    , radarType( RadarType::ViewWorld )
     , interface( radar.interface )
     , spriteArea( radar.spriteArea )
-    , hide( radar.hide )
+    , hide( false )
 {}
 
-void Interface::Radar::SavePosition( void )
+void Interface::Radar::SavePosition()
 {
     Settings::Get().SetPosRadar( GetRect().getPosition() );
 }
 
-void Interface::Radar::SetPos( s32 ox, s32 oy )
+void Interface::Radar::SetPos( int32_t ox, int32_t oy )
 {
     BorderWindow::SetPosition( ox, oy );
 }
 
-/* construct gui */
-void Interface::Radar::Build( void )
+void Interface::Radar::Build()
 {
     Generate();
-    RedrawCursor();
+    SetRedraw();
 }
 
-/* generate mini maps */
-void Interface::Radar::Generate( void )
+void Interface::Radar::Generate()
 {
     const int32_t worldWidth = world.w();
     const int32_t worldHeight = world.h();
@@ -164,13 +175,14 @@ void Interface::Radar::Generate( void )
     spriteArea.resize( worldWidth, worldHeight );
     spriteArea.reset();
 
-    for ( int32_t yy = 0; yy < worldHeight; ++yy ) {
-        for ( int32_t xx = 0; xx < worldWidth; ++xx ) {
-            const Maps::Tiles & tile = world.GetTiles( xx, yy );
+    for ( int32_t y = 0; y < worldHeight; ++y ) {
+        for ( int32_t x = 0; x < worldWidth; ++x ) {
+            const Maps::Tiles & tile = world.GetTiles( x, y );
             uint8_t color = 0;
 
-            if ( tile.isRoad() )
+            if ( tile.isRoad() ) {
                 color = COLOR_ROAD;
+            }
             else {
                 color = GetPaletteIndexFromGround( tile.GetGround() );
 
@@ -179,7 +191,7 @@ void Interface::Radar::Generate( void )
                     color += 3;
             }
 
-            fheroes2::SetPixel( spriteArea, xx, yy, color );
+            fheroes2::SetPixel( spriteArea, x, y, color );
         }
     }
 
@@ -209,12 +221,7 @@ void Interface::Radar::Generate( void )
     }
 }
 
-void Interface::Radar::SetHide( bool f )
-{
-    hide = f;
-}
-
-void Interface::Radar::SetRedraw( void ) const
+void Interface::Radar::SetRedraw() const
 {
     interface.SetRedraw( REDRAW_RADAR );
 }
@@ -256,7 +263,12 @@ void Interface::Radar::RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, cons
 
 void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
 {
+#ifdef WITH_DEBUG
+    const bool revealAll = ( flags == ViewWorldMode::ViewAll ) || IS_DEVEL();
+#else
     const bool revealAll = flags == ViewWorldMode::ViewAll;
+#endif
+
     const bool revealMines = revealAll || ( flags == ViewWorldMode::ViewMines );
     const bool revealHeroes = revealAll || ( flags == ViewWorldMode::ViewHeroes );
     const bool revealTowns = revealAll || ( flags == ViewWorldMode::ViewTowns );
@@ -297,11 +309,8 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
         int tileIndex = y * worldWidth;
         for ( int32_t x = 0; x < worldWidth; x += stepx, tileIndex += stepx ) {
             const Maps::Tiles & tile = world.GetTiles( tileIndex );
-#ifdef WITH_DEBUG
-            const bool visibleTile = revealAll || IS_DEVEL() || !tile.isFog( color );
-#else
             const bool visibleTile = revealAll || !tile.isFog( color );
-#endif
+
             uint8_t fillColor = 0;
 
             switch ( tile.GetObject( revealOnlyVisible || revealHeroes ) ) {
@@ -313,42 +322,48 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
                 }
                 break;
             }
-
-            case MP2::OBJ_CASTLE:
-            case MP2::OBJN_CASTLE: {
-                if ( visibleTile || revealTowns ) {
-                    const Castle * castle = world.getCastle( tile.GetCenter() );
-                    if ( castle )
-                        fillColor = GetPaletteIndexFromColor( castle->GetColor() );
-                }
-                break;
-            }
-
             case MP2::OBJ_DRAGONCITY:
             case MP2::OBJ_LIGHTHOUSE:
             case MP2::OBJ_ALCHEMYLAB:
             case MP2::OBJ_MINES:
             case MP2::OBJ_SAWMILL:
+                // TODO: why Dragon City and Lighthouse are in this category? Verify the logic!
                 if ( visibleTile || revealMines ) {
                     fillColor = GetPaletteIndexFromColor( tile.QuantityColor() );
                 }
                 break;
-
+            case MP2::OBJN_DRAGONCITY:
+            case MP2::OBJN_LIGHTHOUSE:
+            case MP2::OBJN_ALCHEMYLAB:
+            case MP2::OBJN_MINES:
+            case MP2::OBJN_SAWMILL:
+                // TODO: why Dragon City and Lighthouse are in this category? Verify the logic!
+                if ( visibleTile || revealMines ) {
+                    const int32_t mainTileIndex = Maps::Tiles::getIndexOfMainTile( tile );
+                    if ( mainTileIndex >= 0 ) {
+                        fillColor = GetPaletteIndexFromColor( world.GetTiles( mainTileIndex ).QuantityColor() );
+                    }
+                }
+                break;
             case MP2::OBJ_ARTIFACT:
                 if ( visibleTile || revealArtifacts ) {
                     fillColor = COLOR_GRAY;
                 }
                 break;
-
             case MP2::OBJ_RESOURCE:
                 if ( visibleTile || revealResources ) {
                     fillColor = COLOR_GRAY;
                 }
                 break;
-
             default:
+                // Castles and Towns can be partially covered by other non-action objects so we need to rely on special storage of castle's tiles.
                 if ( visibleTile ) {
-                    continue;
+                    if ( !getCastleColor( fillColor, tile.GetCenter() ) ) {
+                        continue;
+                    }
+                }
+                else if ( revealTowns ) {
+                    getCastleColor( fillColor, tile.GetCenter() );
                 }
             }
 
@@ -368,88 +383,64 @@ void Interface::Radar::RedrawObjects( int color, ViewWorldMode flags ) const
 void Interface::Radar::RedrawCursor( const fheroes2::Rect * roiRectangle /* =nullptr */ )
 {
     const Settings & conf = Settings::Get();
-
-    if ( !conf.ExtGameHideInterface() || conf.ShowRadar() || radarType == RadarType::ViewWorld ) {
-        if ( world.w() < 1 || world.h() < 1 )
-            return;
-
-        const fheroes2::Rect & rect = GetArea();
-        const fheroes2::Rect & rectMaps = roiRectangle == nullptr ? interface.GetGameArea().GetVisibleTileROI() : *roiRectangle;
-
-        const int32_t areaw = rect.width - 2 * offset.x;
-        const int32_t areah = rect.height - 2 * offset.y;
-
-        int32_t xStart = rectMaps.x;
-        int32_t xEnd = rectMaps.x + rectMaps.width;
-        int32_t yStart = rectMaps.y;
-        int32_t yEnd = rectMaps.y + rectMaps.height;
-        if ( xStart < 0 )
-            xStart = 0;
-        if ( yStart < 0 )
-            yStart = 0;
-        if ( xEnd >= world.w() )
-            xEnd = world.w();
-        if ( yEnd >= world.h() )
-            yEnd = world.h();
-
-        const uint32_t width = xEnd - xStart;
-        const uint32_t height = yEnd - yStart;
-
-        const fheroes2::Size sz( ( width * areaw ) / world.w(), ( height * areah ) / world.h() );
-
-        // check change game area
-        if ( cursorArea.width() != sz.width || cursorArea.height() != sz.height ) {
-            cursorArea.resize( sz.width, sz.height );
-            cursorArea.reset();
-            fheroes2::DrawBorder( cursorArea, RADARCOLOR, 6 );
-        }
-
-        cursorArea.setPosition( rect.x + offset.x + ( xStart * areaw ) / world.w(), rect.y + offset.y + ( yStart * areah ) / world.h() );
+    if ( conf.ExtGameHideInterface() && !conf.ShowRadar() && radarType != RadarType::ViewWorld ) {
+        return;
     }
+
+    const fheroes2::Rect worldSize{ 0, 0, world.w(), world.h() };
+    if ( worldSize.width < 1 || worldSize.height < 1 ) {
+        return;
+    }
+
+    const fheroes2::Rect & viewableWorldArea = ( roiRectangle == nullptr ) ? interface.GetGameArea().GetVisibleTileROI() : *roiRectangle;
+    const fheroes2::Rect radarWorldArea = worldSize ^ viewableWorldArea;
+
+    const fheroes2::Rect & totalRenderingArea = GetArea();
+    const fheroes2::Size actualRenderingArea{ totalRenderingArea.width - 2 * offset.x, totalRenderingArea.height - 2 * offset.y };
+
+    const fheroes2::Size cursorSize{ ( radarWorldArea.width * actualRenderingArea.width ) / worldSize.width,
+                                     ( radarWorldArea.height * actualRenderingArea.height ) / worldSize.height };
+
+    if ( cursorArea.width() != cursorSize.width || cursorArea.height() != cursorSize.height ) {
+        cursorArea.resize( cursorSize.width, cursorSize.height );
+        cursorArea.reset();
+        fheroes2::DrawBorder( cursorArea, RADARCOLOR, 6 );
+    }
+
+    cursorArea.setPosition( totalRenderingArea.x + offset.x + ( radarWorldArea.x * actualRenderingArea.width ) / worldSize.width,
+                            totalRenderingArea.y + offset.y + ( radarWorldArea.y * actualRenderingArea.height ) / worldSize.height );
 }
 
-void Interface::Radar::QueueEventProcessing( void )
+void Interface::Radar::QueueEventProcessing()
 {
-    GameArea & gamearea = interface.GetGameArea();
     const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Rect & rect = GetArea();
 
-    // move border
+    // Move border window
     if ( conf.ShowRadar() && BorderWindow::QueueEventProcessing() ) {
-        RedrawCursor();
+        cursorArea.hide();
+        SetRedraw();
     }
-    // move cursor
     else if ( le.MouseCursor( rect ) ) {
+        // move cursor
         if ( le.MouseClickLeft() || le.MousePressLeft() ) {
             const fheroes2::Point & pt = le.GetMouseCursor();
 
             if ( rect & pt ) {
+                GameArea & gamearea = interface.GetGameArea();
                 fheroes2::Rect visibleROI( gamearea.GetVisibleTileROI() );
                 const fheroes2::Point prev( visibleROI.x, visibleROI.y );
-                gamearea.SetCenter( fheroes2::Point( ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height ) );
+                gamearea.SetCenter( { ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height } );
                 visibleROI = gamearea.GetVisibleTileROI();
                 if ( prev.x != visibleROI.x || prev.y != visibleROI.y ) {
-                    RedrawCursor();
+                    SetRedraw();
                     gamearea.SetRedraw();
                 }
             }
         }
-        else if ( le.MousePressRight( GetRect() ) )
+        else if ( le.MousePressRight( GetRect() ) ) {
             Dialog::Message( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Font::BIG );
-        else if ( conf.ExtGameHideInterface() ) {
-            fheroes2::Size newSize( rect.width, rect.height );
-
-            if ( le.MouseWheelUp() ) {
-                if ( rect.width != world.w() || rect.height != world.h() )
-                    newSize = fheroes2::Size( world.w(), world.h() );
-            }
-            else if ( le.MouseWheelDn() ) {
-                if ( rect.width != RADARWIDTH || rect.height != RADARWIDTH )
-                    newSize = fheroes2::Size( RADARWIDTH, RADARWIDTH );
-            }
-
-            ChangeAreaSize( newSize );
         }
     }
 }
@@ -465,13 +456,13 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
             const fheroes2::Point & pt = le.GetMouseCursor();
 
             if ( rect & pt ) {
-                const fheroes2::Rect initROI = roi.GetROIinPixels();
+                const fheroes2::Rect & initROI = roi.GetROIinPixels();
                 const fheroes2::Point prevCoordsTopLeft( initROI.x, initROI.y );
                 const fheroes2::Point newCoordsCenter( ( pt.x - rect.x ) * world.w() / rect.width, ( pt.y - rect.y ) * world.h() / rect.height );
                 const fheroes2::Point newCoordsTopLeft( newCoordsCenter.x - initROI.width / 2, newCoordsCenter.y - initROI.height / 2 );
 
                 if ( prevCoordsTopLeft != newCoordsTopLeft ) {
-                    return roi.ChangeCenter( fheroes2::Point( newCoordsCenter.x * TILEWIDTH, newCoordsCenter.y * TILEWIDTH ) );
+                    return roi.ChangeCenter( { newCoordsCenter.x * TILEWIDTH, newCoordsCenter.y * TILEWIDTH } );
                 }
             }
         }
@@ -486,32 +477,4 @@ bool Interface::Radar::QueueEventProcessingForWorldView( ViewWorld::ZoomROIs & r
         }
     }
     return false;
-}
-
-void Interface::Radar::ResetAreaSize( void )
-{
-    ChangeAreaSize( fheroes2::Size( RADARWIDTH, RADARWIDTH ) );
-}
-
-void Interface::Radar::ChangeAreaSize( const fheroes2::Size & newSize )
-{
-    if ( newSize.width != area.width || newSize.height != area.height ) {
-        const fheroes2::Rect & rect = GetRect();
-        SetPosition( rect.x < 0 ? 0 : rect.x, rect.y < 0 ? 0 : rect.y, newSize.width, newSize.height );
-        Generate();
-        RedrawCursor();
-        interface.GetGameArea().SetRedraw();
-    }
-}
-
-// New Radar but copy mini-map data
-Interface::Radar Interface::Radar::MakeRadarViewWorld( const Interface::Radar & radar )
-{
-    Radar newRadar( radar );
-    newRadar.hide = false;
-    newRadar.radarType = RadarType::ViewWorld;
-    const fheroes2::Display & display = fheroes2::Display::instance();
-    newRadar.area.x = display.width() - BORDERWIDTH - RADARWIDTH;
-    newRadar.area.y = BORDERWIDTH;
-    return newRadar;
 }

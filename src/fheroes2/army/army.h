@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,6 +25,7 @@
 #define H2ARMY_H
 
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "monster.h"
@@ -50,25 +52,28 @@ public:
     void Assign( const Troop *, const Troop * );
     void Assign( const Troops & );
     void Insert( const Troops & );
-    void PushBack( const Monster &, u32 );
-    void PopBack( void );
+    void PushBack( const Monster &, uint32_t );
+    void PopBack();
 
-    size_t Size( void ) const;
+    size_t Size() const
+    {
+        return size();
+    }
 
     Troop * GetTroop( size_t );
     const Troop * GetTroop( size_t ) const;
 
     void UpgradeMonsters( const Monster & );
-    u32 GetCountMonsters( const Monster & ) const;
+    uint32_t GetCountMonsters( const Monster & ) const;
 
     double getReinforcementValue( const Troops & reinforcement ) const;
 
-    u32 GetCount( void ) const;
-    bool isValid( void ) const;
+    uint32_t GetCount() const;
+    bool isValid() const;
     bool HasMonster( const Monster & ) const;
 
-    bool AllTroopsAreUndead( void ) const;
-    bool AllTroopsAreTheSame( void ) const;
+    bool AllTroopsAreUndead() const;
+    bool AllTroopsAreTheSame() const;
 
     bool JoinTroop( const Troop & );
     bool JoinTroop( const Monster & mons, uint32_t count, bool emptySlotFirst = false );
@@ -78,26 +83,24 @@ public:
     bool CanJoinTroops( const Troops & ) const;
 
     // Used only for moving full army in hero's meeting dialog.
-    void MoveTroops( Troops & from );
+    void MoveTroops( const Troops & from );
 
     void MergeTroops();
-    Troops GetOptimized( void ) const;
+    Troops GetOptimized() const;
 
     virtual double GetStrength() const;
 
-    void Clean( void );
+    void Clean();
     void UpgradeTroops( const Castle & );
 
-    Troop * GetFirstValid( void );
-    Troop * GetWeakestTroop( void );
-    const Troop * GetSlowestTroop() const;
+    Troop * GetFirstValid();
+    Troop * GetWeakestTroop() const;
+    Troop * GetSlowestTroop() const;
 
     void SortStrongest();
-    void ArrangeForBattle( bool = false );
 
     void JoinStrongest( Troops &, bool );
 
-    void DrawMons32Line( int32_t, int32_t, uint32_t, uint32_t, uint32_t, uint32_t, bool, bool ) const;
     void SplitTroopIntoFreeSlots( const Troop & troop, const Troop & selectedSlot, const uint32_t slots );
     void AssignToFirstFreeSlot( const Troop &, const uint32_t splitCount );
     void JoinAllTroopsOfType( const Troop & targetTroop );
@@ -126,8 +129,10 @@ struct NeutralMonsterJoiningCondition
 class Army : public Troops, public Control
 {
 public:
-    static std::string SizeString( u32 );
+    static std::string SizeString( uint32_t );
     static std::string TroopSizeString( const Troop & );
+
+    static std::pair<uint32_t, uint32_t> SizeRange( const uint32_t count );
 
     // compare
     static bool WeakestTroop( const Troop *, const Troop * );
@@ -138,8 +143,8 @@ public:
 
     static NeutralMonsterJoiningCondition GetJoinSolution( const Heroes &, const Maps::Tiles &, const Troop & );
 
-    static void DrawMons32Line( const Troops &, s32, s32, u32, u32 = 0, u32 = 0 );
-    static void DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawPower, bool compact = true,
+    static void drawMiniMonsLine( const Troops & troops, int32_t cx, int32_t cy, uint32_t width, uint32_t first = 0, uint32_t count = 0 );
+    static void DrawMonsterLines( const Troops & troops, int32_t posX, int32_t posY, uint32_t lineWidth, uint32_t drawType, bool compact = true,
                                   bool isScouteView = true );
 
     explicit Army( HeroBase * s = nullptr );
@@ -150,44 +155,68 @@ public:
     Army & operator=( Army && ) = delete;
     ~Army() override;
 
-    void Reset( bool = false ); // reset: soft or hard
+    const Troops & getTroops() const;
+    // Soft reset means reset to the default army (a few T1 and T2 units).
+    // Hard reset means reset to the minimum army (strictly one T1 unit).
+    void Reset( const bool soft = false );
     void setFromTile( const Maps::Tiles & tile );
 
-    int GetColor( void ) const;
-    int GetControl( void ) const override;
+    int GetColor() const;
+    int GetControl() const override;
     uint32_t getTotalCount() const;
 
     double GetStrength() const override;
     bool isStrongerThan( const Army & target, double safetyRatio = 1.0 ) const;
     bool isMeleeDominantArmy() const;
 
-    void SetColor( int );
+    void SetColor( int cl )
+    {
+        color = cl;
+    }
 
-    int GetMorale( void ) const;
-    int GetLuck( void ) const;
-    int GetMoraleModificator( std::string * ) const;
-    int GetLuckModificator( const std::string * ) const;
-    u32 ActionToSirens( void );
+    int GetMorale() const;
+    int GetLuck() const;
+    int GetMoraleModificator( std::string * strs ) const;
+    int GetLuckModificator( std::string * strs ) const;
+    uint32_t ActionToSirens() const;
 
-    const HeroBase * GetCommander( void ) const;
-    HeroBase * GetCommander( void );
-    void SetCommander( HeroBase * );
+    const HeroBase * GetCommander() const;
+    HeroBase * GetCommander();
 
-    const Castle * inCastle( void ) const;
+    void SetCommander( HeroBase * c )
+    {
+        commander = c;
+    }
 
-    std::string String( void ) const;
+    const Castle * inCastle() const;
+
+    std::string String() const;
 
     void JoinStrongestFromArmy( Army & );
 
-    void SetSpreadFormat( bool );
-    bool isSpreadFormat( void ) const;
+    void SetSpreadFormat( bool f )
+    {
+        combat_format = f;
+    }
 
-    bool isFullHouse( void ) const;
-    bool SaveLastTroop( void ) const;
+    bool isSpreadFormat() const
+    {
+        return combat_format;
+    }
+
+    bool isFullHouse() const
+    {
+        return GetCount() == size();
+    }
+
+    bool SaveLastTroop() const;
 
     Monster GetStrongestMonster() const;
 
-    void resetInvalidMonsters();
+    void resetInvalidMonsters() const;
+
+    // Optimizes the arrangement of troops to pass through the whirlpool (moves one weakest unit to a separate slot, if possible)
+    void ArrangeForWhirlpool();
 
 protected:
     friend StreamBase & operator<<( StreamBase &, const Army & );
@@ -196,6 +225,13 @@ protected:
     HeroBase * commander;
     bool combat_format;
     int color;
+
+private:
+    // Performs the pre-battle arrangement of given monsters in a given number, dividing them into a given number of stacks if possible
+    void ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const uint32_t stacksCount );
+    // Performs the pre-battle arrangement of given monsters in a given number, dividing them into a random number of stacks (seeded by
+    // the tile index) with a random chance to get an upgraded stack of monsters in the center (if allowed)
+    void ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const int32_t tileIndex, const bool allowUpgrade );
 };
 
 StreamBase & operator<<( StreamBase &, const Army & );

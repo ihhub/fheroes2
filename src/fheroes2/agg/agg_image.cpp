@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  *
- *   Copyright (C) 2021                                                    *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2021 - 2022                                             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,9 +32,12 @@
 #include "image.h"
 #include "image_tool.h"
 #include "pal.h"
+#include "rand.h"
 #include "screen.h"
 #include "text.h"
 #include "til.h"
+#include "tools.h"
+#include "ui_font.h"
 #include "ui_language.h"
 #include "ui_text.h"
 
@@ -43,7 +46,7 @@ namespace
     const std::array<const char *, TIL::LASTTIL> tilFileName = { "UNKNOWN", "CLOF32.TIL", "GROUND32.TIL", "STON.TIL" };
 
     std::vector<std::vector<fheroes2::Sprite>> _icnVsSprite( ICN::LASTICN );
-    std::vector<std::vector<std::vector<fheroes2::Image>>> _tilVsImage( TIL::LASTTIL );
+    std::array<std::vector<std::vector<fheroes2::Image>>, TIL::LASTTIL> _tilVsImage;
     const fheroes2::Sprite errorImage;
 
     const uint32_t headerSize = 6;
@@ -60,12 +63,12 @@ namespace
         return id >= 0 && static_cast<size_t>( id ) < _tilVsImage.size();
     }
 
-    fheroes2::Image createDigit( const int32_t width, const int32_t height, const std::vector<fheroes2::Point> & points )
+    fheroes2::Image createDigit( const int32_t width, const int32_t height, const std::vector<fheroes2::Point> & points, const uint8_t pixelColor )
     {
         fheroes2::Image digit( width, height );
         digit.reset();
 
-        fheroes2::SetPixel( digit, points, 115 );
+        fheroes2::SetPixel( digit, points, pixelColor );
         fheroes2::Blit( fheroes2::CreateContour( digit, 35 ), digit );
 
         return digit;
@@ -99,6 +102,66 @@ namespace
             image.transform()[position] = 0;
             image.image()[position] = value;
         }
+    }
+
+    void fillRandomPixelsFromImage( const fheroes2::Image & original, const fheroes2::Rect & originalRoi, fheroes2::Image & output, const fheroes2::Rect & outputRoi,
+                                    std::mt19937 & seededGen )
+    {
+        for ( int x = outputRoi.x; x < outputRoi.x + outputRoi.width; ++x ) {
+            for ( int y = outputRoi.y; y < outputRoi.y + outputRoi.height; ++y ) {
+                const fheroes2::Point pixelLocation{ static_cast<int32_t>( Rand::GetWithGen( originalRoi.x, originalRoi.x + originalRoi.width - 1, seededGen ) ),
+                                                     static_cast<int32_t>( Rand::GetWithGen( originalRoi.y, originalRoi.y + originalRoi.height - 1, seededGen ) ) };
+
+                fheroes2::Copy( original, pixelLocation.x, pixelLocation.y, output, x, y, 1, 1 );
+            }
+        }
+    }
+
+    // BMP files within AGG are not Bitmap files.
+    fheroes2::Sprite loadBMPFile( const std::string & path )
+    {
+        const std::vector<uint8_t> & data = AGG::getDataFromAggFile( path );
+        if ( data.size() < 6 ) {
+            // It is an invalid BMP file.
+            return {};
+        }
+
+        StreamBuf imageStream( data );
+
+        const uint8_t blackColor = imageStream.get();
+
+        // Skip the second byte
+        imageStream.get();
+        const uint8_t whiteColor = 11;
+
+        const int32_t width = imageStream.get16();
+        const int32_t height = imageStream.get16();
+
+        if ( static_cast<int32_t>( data.size() ) != 6 + width * height ) {
+            // It is an invalid BMP file.
+            return {};
+        }
+
+        fheroes2::Sprite output( width, height );
+        output.reset();
+
+        const uint8_t * input = data.data() + 6;
+        uint8_t * image = output.image();
+        const uint8_t * imageEnd = image + width * height;
+        uint8_t * transform = output.transform();
+
+        for ( ; image != imageEnd; ++image, ++transform, ++input ) {
+            if ( *input == 1 ) {
+                *image = whiteColor;
+                *transform = 0;
+            }
+            else if ( *input == 2 ) {
+                *image = blackColor;
+                *transform = 0;
+            }
+        }
+
+        return output;
     }
 
     // This class serves the purpose of preserving the original alphabet which is loaded from AGG files for cases when we generate new language alphabet.
@@ -147,1110 +210,6 @@ namespace
 
     OriginalAlphabetPreserver alphabetPreserver;
 
-    void generatePolishAlphabet()
-    {
-        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
-            std::vector<fheroes2::Sprite> & original = _icnVsSprite[icnId];
-
-            original.resize( 96 );
-            original.insert( original.end(), 128, original[0] );
-            original[108] = original[51];
-            original[111] = original[58];
-            original[124] = original[83];
-            original[127] = original[90];
-            original[131] = original[44];
-            original[133] = original[33];
-            original[143] = original[58];
-            original[147] = original[76];
-            original[153] = original[65];
-            original[159] = original[90];
-            original[166] = original[35];
-            original[170] = original[37];
-            original[177] = original[46];
-            original[179] = original[47];
-            original[198] = original[67];
-            original[202] = original[69];
-            original[209] = original[78];
-            original[211] = original[79];
-        }
-
-        // TODO: modify newly added characters accordingly.
-    }
-
-    void generateGermanAlphabet()
-    {
-        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
-            std::vector<fheroes2::Sprite> & original = _icnVsSprite[icnId];
-
-            original.resize( 103 );
-            original[96] = original[65];
-            original[97] = original[79];
-            original[98] = original[85];
-            original[99] = original[34];
-            original[100] = original[33];
-            original[101] = original[47];
-            original[102] = original[53];
-        }
-
-        // TODO: modify newly added characters accordingly.
-    }
-
-    void generateFrenchAlphabet()
-    {
-        // Resize fonts.
-        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
-            _icnVsSprite[icnId].resize( 96 );
-        }
-
-        // Normal font.
-        {
-            std::vector<fheroes2::Sprite> & font = _icnVsSprite[ICN::FONT];
-
-            font[3].resize( font[79].width(), font[79].height() + 3 );
-            font[3].reset();
-            fheroes2::Copy( font[79], 0, 0, font[3], 0, 3, font[79].width(), font[79].height() );
-            // generate ^ on the top.
-            fheroes2::Copy( font[3], 2, 3, font[3], 3, 0, 1, 1 );
-            fheroes2::Copy( font[3], 4, 3, font[3], 4, 0, 1, 1 );
-            fheroes2::Copy( font[3], 2, 3, font[3], 5, 0, 1, 1 );
-            fheroes2::Copy( font[3], 2, 3, font[3], 2, 1, 1, 1 );
-            fheroes2::Copy( font[3], 4, 3, font[3], 3, 1, 1, 1 );
-            fheroes2::Copy( font[3], 4, 3, font[3], 5, 1, 1, 1 );
-            fheroes2::Copy( font[3], 2, 3, font[3], 6, 1, 1, 1 );
-            font[3].setPosition( font[79].x(), font[79].y() - 3 );
-            fheroes2::updateShadow( font[3], { -1, 2 }, 2 );
-
-            font[4].resize( font[85].width(), font[85].height() + 3 );
-            font[4].reset();
-            fheroes2::Copy( font[85], 0, 0, font[4], 0, 3, font[85].width(), font[85].height() );
-            fheroes2::Copy( font[3], 2, 0, font[4], 3, 0, 5, 2 );
-            font[4].setPosition( font[85].x(), font[85].y() - 3 );
-            fheroes2::updateShadow( font[4], { -1, 2 }, 2 );
-
-            font[6].resize( font[85].width(), font[85].height() + 3 );
-            font[6].reset();
-            // generate -_ on the top.
-            fheroes2::Copy( font[85], 0, 0, font[6], 0, 3, font[85].width(), font[85].height() );
-            fheroes2::Copy( font[6], 2, 3, font[6], 4, 0, 1, 1 );
-            fheroes2::Copy( font[6], 2, 4, font[6], 5, 0, 1, 1 );
-            fheroes2::Copy( font[6], 2, 3, font[6], 5, 1, 1, 1 );
-            fheroes2::Copy( font[6], 2, 4, font[6], 6, 1, 1, 1 );
-            fheroes2::Copy( font[6], 3, 3, font[6], 7, 1, 1, 1 );
-            font[6].setPosition( font[85].x(), font[85].y() - 3 );
-            fheroes2::updateShadow( font[6], { -1, 2 }, 2 );
-
-            font[10].resize( font[65].width(), font[65].height() + 3 );
-            font[10].reset();
-            fheroes2::Copy( font[65], 0, 0, font[10], 0, 3, font[65].width(), font[65].height() );
-            fheroes2::Copy( font[3], 2, 0, font[10], 2, 0, 5, 2 );
-            font[10].setPosition( font[65].x(), font[65].y() - 3 );
-            fheroes2::updateShadow( font[10], { -1, 2 }, 2 );
-
-            font[28] = font[73];
-            font[28].image()[2] = 0;
-            font[28].transform()[2] = 1;
-            font[28].image()[2 + font[28].width()] = 0;
-            font[28].transform()[2 + font[28].width()] = 1;
-            fheroes2::Copy( font[28], 3, 0, font[28], 1, 0, 1, 2 );
-            fheroes2::updateShadow( font[28], { -1, 2 }, 2 );
-
-            font[30] = font[73];
-            font[30].image()[1] = 0;
-            font[30].transform()[1] = 1;
-            font[30].image()[3] = 0;
-            font[30].transform()[3] = 1;
-            font[30].image()[2 + font[30].width()] = 0;
-            font[30].transform()[2 + font[30].width()] = 1;
-            fheroes2::Copy( font[30], 2, 0, font[30], 1, 1, 1, 1 );
-            fheroes2::Copy( font[30], 2, 0, font[30], 3, 1, 1, 1 );
-            fheroes2::updateShadow( font[30], { -1, 2 }, 2 );
-
-            font[32].resize( font[65].width(), font[65].height() + 3 );
-            font[32].reset();
-            fheroes2::Copy( font[65], 0, 0, font[32], 0, 3, font[65].width(), font[65].height() );
-            font[32].setPosition( font[65].x(), font[65].y() - 3 );
-            fheroes2::Copy( font[6], 4, 0, font[32], 3, 0, 4, 2 );
-            fheroes2::updateShadow( font[32], { -1, 2 }, 2 );
-
-            font[62].resize( font[67].width(), font[67].height() + 2 );
-            font[62].reset();
-            fheroes2::Copy( font[67], 0, 0, font[62], 0, 0, font[67].width(), font[67].height() );
-            fheroes2::Copy( font[67], 2, 1, font[62], 4, 7, 1, 1 );
-            fheroes2::Copy( font[67], 5, 6, font[62], 5, 7, 1, 1 );
-            fheroes2::Copy( font[67], 2, 6, font[62], 6, 7, 1, 1 );
-            fheroes2::Copy( font[67], 2, 1, font[62], 5, 8, 1, 1 );
-            fheroes2::Copy( font[67], 5, 6, font[62], 6, 8, 1, 1 );
-            fheroes2::Copy( font[67], 2, 1, font[62], 4, 9, 1, 1 );
-            fheroes2::Copy( font[67], 5, 6, font[62], 5, 9, 1, 1 );
-            fheroes2::Copy( font[67], 3, 0, font[62], 6, 9, 1, 1 );
-            font[62].setPosition( font[67].x(), font[67].y() );
-            fheroes2::updateShadow( font[62], { -1, 2 }, 2 );
-
-            font[64].resize( font[69].width(), font[69].height() + 3 );
-            font[64].reset();
-            fheroes2::Copy( font[69], 0, 0, font[64], 0, 3, font[69].width(), font[69].height() );
-            fheroes2::Copy( font[64], 4, 3, font[64], 4, 0, 1, 1 );
-            fheroes2::Copy( font[64], 4, 3, font[64], 5, 1, 1, 1 );
-            fheroes2::Copy( font[64], 8, 6, font[64], 5, 0, 1, 1 );
-            fheroes2::Copy( font[64], 8, 6, font[64], 6, 1, 1, 1 );
-            fheroes2::Copy( font[64], 4, 8, font[64], 6, 2, 1, 1 );
-            font[64].setPosition( font[69].x(), font[69].y() - 3 );
-            fheroes2::updateShadow( font[64], { -1, 2 }, 2 );
-
-            font[91] = font[28];
-
-            font[92].resize( font[69].width(), font[69].height() + 3 );
-            font[92].reset();
-            fheroes2::Copy( font[69], 0, 0, font[92], 0, 3, font[69].width(), font[69].height() );
-            fheroes2::Copy( font[3], 2, 0, font[92], 3, 0, 5, 2 );
-            font[92].setPosition( font[69].x(), font[69].y() - 3 );
-            fheroes2::updateShadow( font[92], { -1, 2 }, 2 );
-
-            font[93] = font[30];
-
-            font[94].resize( font[69].width(), font[69].height() + 3 );
-            font[94].reset();
-            fheroes2::Copy( font[69], 0, 0, font[94], 0, 3, font[69].width(), font[69].height() );
-            fheroes2::Copy( font[94], 4, 8, font[94], 3, 1, 1, 1 );
-            fheroes2::Copy( font[94], 8, 6, font[94], 4, 1, 1, 1 );
-            fheroes2::Copy( font[94], 8, 6, font[94], 5, 0, 1, 1 );
-            fheroes2::Copy( font[94], 4, 3, font[94], 6, 0, 1, 1 );
-            fheroes2::Copy( font[94], 4, 3, font[94], 5, 1, 1, 1 );
-            font[94].setPosition( font[69].x(), font[69].y() - 3 );
-            fheroes2::updateShadow( font[94], { -1, 2 }, 2 );
-
-            font[95] = font[30];
-        }
-
-        // Small font.
-        {
-            std::vector<fheroes2::Sprite> & font = _icnVsSprite[ICN::SMALFONT];
-
-            font[3].resize( font[79].width(), font[79].height() + 2 );
-            font[3].reset();
-            fheroes2::Copy( font[79], 0, 0, font[3], 0, 2, font[79].width(), font[79].height() );
-            font[3].setPosition( font[79].x(), font[79].y() - 2 );
-            fheroes2::Copy( font[3], 2, 2, font[3], 2, 0, 1, 1 );
-            fheroes2::Copy( font[3], 2, 2, font[3], 4, 0, 1, 1 );
-            fheroes2::updateShadow( font[3], { -1, 1 }, 2 );
-
-            font[4].resize( font[85].width(), font[85].height() + 2 );
-            font[4].reset();
-            fheroes2::Copy( font[85], 0, 0, font[4], 0, 2, font[85].width(), font[85].height() );
-            font[4].setPosition( font[85].x(), font[85].y() - 2 );
-            fheroes2::Copy( font[4], 1, 2, font[4], 3, 0, 1, 1 );
-            fheroes2::Copy( font[4], 1, 2, font[4], 5, 0, 1, 1 );
-            fheroes2::updateShadow( font[4], { -1, 1 }, 2 );
-
-            font[6].resize( font[85].width(), font[85].height() + 2 );
-            font[6].reset();
-            fheroes2::Copy( font[85], 0, 0, font[6], 0, 2, font[85].width(), font[85].height() );
-            font[6].setPosition( font[85].x(), font[85].y() - 2 );
-            fheroes2::Copy( font[6], 1, 2, font[6], 4, 0, 1, 1 );
-            fheroes2::updateShadow( font[6], { -1, 1 }, 2 );
-
-            font[10].resize( font[65].width(), font[65].height() + 2 );
-            font[10].reset();
-            fheroes2::Copy( font[65], 0, 0, font[10], 0, 2, font[65].width(), font[65].height() );
-            font[10].setPosition( font[65].x(), font[65].y() - 2 );
-            fheroes2::Copy( font[10], 2, 2, font[10], 2, 1, 1, 1 );
-            fheroes2::Copy( font[10], 2, 2, font[10], 4, 1, 1, 1 );
-            fheroes2::Copy( font[10], 2, 2, font[10], 3, 0, 1, 1 );
-            fheroes2::updateShadow( font[10], { -1, 1 }, 2 );
-
-            font[28] = font[73];
-            fheroes2::FillTransform( font[28], 0, 0, font[28].width(), 2, 1 );
-            fheroes2::Copy( font[28], 1, 2, font[28], 1, 0, 1, 1 );
-            fheroes2::Copy( font[28], 1, 2, font[28], 3, 0, 1, 1 );
-            fheroes2::updateShadow( font[28], { -1, 1 }, 2 );
-
-            font[30] = font[28];
-
-            font[32].resize( font[65].width(), font[65].height() + 2 );
-            font[32].reset();
-            fheroes2::Copy( font[65], 0, 0, font[32], 0, 2, font[65].width(), font[65].height() );
-            font[32].setPosition( font[65].x(), font[65].y() - 2 );
-            fheroes2::Copy( font[32], 2, 2, font[32], 3, 0, 1, 1 );
-            fheroes2::Copy( font[32], 2, 2, font[32], 4, 1, 1, 1 );
-            fheroes2::updateShadow( font[32], { -1, 1 }, 2 );
-
-            font[62].resize( font[67].width(), font[67].height() + 2 );
-            font[62].reset();
-            fheroes2::Copy( font[67], 0, 0, font[62], 0, 0, font[67].width(), font[67].height() );
-            fheroes2::Copy( font[62], 3, 4, font[62], 3, 5, 1, 1 );
-            fheroes2::Copy( font[62], 3, 4, font[62], 2, 6, 1, 1 );
-            fheroes2::updateShadow( font[62], { -1, 1 }, 2 );
-
-            font[64].resize( font[69].width(), font[69].height() + 2 );
-            font[64].reset();
-            fheroes2::Copy( font[69], 0, 0, font[64], 0, 2, font[69].width(), font[69].height() );
-            font[64].setPosition( font[69].x(), font[69].y() - 2 );
-            fheroes2::Copy( font[64], 2, 2, font[64], 2, 0, 1, 1 );
-            fheroes2::Copy( font[64], 2, 2, font[64], 3, 1, 1, 1 );
-            fheroes2::updateShadow( font[64], { -1, 1 }, 2 );
-
-            font[91] = font[28];
-
-            font[92].resize( font[69].width(), font[69].height() + 2 );
-            font[92].reset();
-            fheroes2::Copy( font[69], 0, 0, font[92], 0, 2, font[69].width(), font[69].height() );
-            font[92].setPosition( font[69].x(), font[69].y() - 2 );
-            fheroes2::Copy( font[92], 2, 2, font[92], 3, 0, 1, 1 );
-            fheroes2::Copy( font[92], 2, 2, font[92], 2, 1, 1, 1 );
-            fheroes2::Copy( font[92], 2, 2, font[92], 4, 1, 1, 1 );
-            fheroes2::updateShadow( font[92], { -1, 1 }, 2 );
-
-            font[93] = font[28];
-
-            font[94].resize( font[69].width(), font[69].height() + 2 );
-            font[94].reset();
-            fheroes2::Copy( font[69], 0, 0, font[94], 0, 2, font[69].width(), font[69].height() );
-            font[94].setPosition( font[69].x(), font[69].y() - 2 );
-            fheroes2::Copy( font[94], 2, 2, font[94], 4, 0, 1, 1 );
-            fheroes2::Copy( font[94], 2, 2, font[94], 3, 1, 1, 1 );
-            fheroes2::updateShadow( font[94], { -1, 1 }, 2 );
-
-            font[95] = font[28];
-        }
-    }
-
-    void generateRussianAlphabet()
-    {
-        // Resize fonts.
-        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
-            std::vector<fheroes2::Sprite> & original = _icnVsSprite[icnId];
-
-            original.resize( 96 );
-            original.insert( original.end(), 128, original[0] );
-        }
-
-        // Normal font.
-        {
-            std::vector<fheroes2::Sprite> & font = _icnVsSprite[ICN::FONT];
-
-            size_t offset = 0;
-
-            // E with 2 dots on top.
-            font[168 - 32].resize( font[37 + offset].width(), font[37 + offset].height() + 3 );
-            font[168 - 32].reset();
-            fheroes2::Copy( font[37 + offset], 0, 0, font[168 - 32], 0, 3, font[37 + offset].width(), font[37 + offset].height() );
-            fheroes2::Copy( font[168 - 32], 5, 5, font[168 - 32], 4, 0, 1, 1 );
-            fheroes2::Copy( font[168 - 32], 5, 5, font[168 - 32], 7, 0, 1, 1 );
-            fheroes2::Copy( font[168 - 32], 4, 5, font[168 - 32], 4, 1, 1, 1 );
-            fheroes2::Copy( font[168 - 32], 4, 5, font[168 - 32], 7, 1, 1, 1 );
-            font[168 - 32].setPosition( font[37 + offset].x(), font[37 + offset].y() - 3 );
-            fheroes2::updateShadow( font[168 - 32], { -1, 2 }, 2 );
-
-            font[192 - 32] = font[33];
-
-            font[193 - 32] = font[34 + offset];
-            fheroes2::FillTransform( font[193 - 32], 9, 4, 2, 1, 1 );
-            fheroes2::Copy( font[38], 6, 0, font[193 - 32], 6, 0, 5, 4 );
-            fheroes2::Copy( font[193 - 32], 9, 5, font[193 - 32], 8, 4, 1, 1 );
-            fheroes2::updateShadow( font[193 - 32], { -1, 2 }, 2 );
-
-            font[194 - 32] = font[34 + offset];
-
-            font[195 - 32] = font[38];
-            fheroes2::FillTransform( font[195 - 32], 6, 4, 3, 4, 1 );
-
-            font[196 - 32] = font[36 + offset];
-
-            font[197 - 32] = font[37 + offset];
-
-            // x with | in the middle.
-            font[198 - 32].resize( font[56].width() + 1, font[56].height() );
-            font[198 - 32].reset();
-            fheroes2::Copy( font[56], 1, 0, font[198 - 32], 1, 0, 8, 11 );
-            fheroes2::Copy( font[56], 9, 0, font[198 - 32], 10, 0, 6, 11 );
-            fheroes2::Fill( font[198 - 32], 9, 1, 1, 9, font[198 - 32].image()[1 + font[198 - 32].width()] );
-            font[198 - 32].setPosition( font[56].x(), font[56].y() );
-            fheroes2::updateShadow( font[198 - 32], { -1, 2 }, 2 );
-
-            font[199 - 32].resize( font[19].width() + 1, font[19].height() );
-            font[199 - 32].reset();
-            fheroes2::Copy( font[19], 1, 0, font[199 - 32], 1, 0, 5, 3 );
-            fheroes2::Copy( font[19], 5, 0, font[199 - 32], 6, 0, 3, 4 );
-            fheroes2::Copy( font[19], 3, 5, font[199 - 32], 4, 4, 5, 4 );
-            fheroes2::Copy( font[19], 1, 8, font[199 - 32], 1, 8, 5, 3 );
-            fheroes2::Copy( font[19], 5, 8, font[199 - 32], 6, 8, 3, 3 );
-            fheroes2::FillTransform( font[199 - 32], 2, 6, 5, 3, 1 );
-            font[199 - 32].setPosition( font[19].x(), font[19].y() );
-            fheroes2::updateShadow( font[199 - 32], { -1, 2 }, 2 );
-
-            // Reverted N.
-            font[200 - 32] = font[46];
-            fheroes2::FillTransform( font[200 - 32], 6, 1, 5, 11, 1 );
-            fheroes2::Copy( font[46], 6, 2, font[200 - 32], 6, 6, 1, 3 );
-            fheroes2::Copy( font[46], 7, 3, font[200 - 32], 7, 5, 1, 3 );
-            fheroes2::Copy( font[46], 8, 4, font[200 - 32], 8, 4, 1, 3 );
-            fheroes2::Copy( font[46], 8, 4, font[200 - 32], 9, 3, 1, 3 );
-            fheroes2::Copy( font[46], 8, 4, font[200 - 32], 10, 2, 1, 3 );
-            fheroes2::Copy( font[46], 8, 4, font[200 - 32], 11, 1, 1, 3 );
-            fheroes2::Copy( font[46], 11, 7, font[200 - 32], 11, 8, 1, 1 );
-            fheroes2::Copy( font[46], 13, 9, font[200 - 32], 11, 9, 1, 1 );
-            fheroes2::updateShadow( font[200 - 32], { -1, 2 }, 2 );
-
-            font[201 - 32].resize( font[200 - 32].width(), font[200 - 32].height() + 3 );
-            font[201 - 32].reset();
-            fheroes2::Copy( font[200 - 32], 0, 0, font[201 - 32], 0, 3, font[200 - 32].width(), font[200 - 32].height() );
-            font[201 - 32].setPosition( font[200 - 32].x(), font[200 - 32].y() - 3 );
-            fheroes2::Copy( font[201 - 32], 12, 4, font[201 - 32], 8, 0, 1, 1 );
-            fheroes2::Copy( font[201 - 32], 11, 10, font[201 - 32], 8, 1, 1, 1 );
-            fheroes2::updateShadow( font[201 - 32], { -1, 2 }, 2 );
-
-            font[202 - 32] = font[43 + offset];
-
-            font[204 - 32] = font[45 + offset];
-            font[205 - 32] = font[40 + offset];
-            font[206 - 32] = font[47 + offset];
-
-            font[207 - 32] = font[195 - 32];
-            fheroes2::Copy( font[207 - 32], 4, 1, font[207 - 32], 8, 1, 2, 9 );
-            fheroes2::Copy( font[207 - 32], 4, 9, font[207 - 32], 8, 10, 2, 1 );
-            fheroes2::Copy( font[207 - 32], 6, 0, font[207 - 32], 10, 0, 1, 2 );
-            fheroes2::updateShadow( font[207 - 32], { -1, 2 }, 2 );
-
-            font[203 - 32].resize( font[207 - 32].width() - 1, font[207 - 32].height() );
-            font[203 - 32].reset();
-            fheroes2::Copy( font[207 - 32], 0, 0, font[203 - 32], 0, 0, font[207 - 32].width() - 1, font[207 - 32].height() );
-            fheroes2::FillTransform( font[203 - 32], 0, 0, 4, 6, 1 );
-            fheroes2::FillTransform( font[203 - 32], 4, 0, 3, 2, 1 );
-            fheroes2::Copy( font[203 - 32], 4, 2, font[203 - 32], 5, 1, 2, 1 );
-            fheroes2::Copy( font[203 - 32], 1, 10, font[203 - 32], 5, 0, 2, 1 );
-            font[203 - 32].setPosition( font[207 - 32].x(), font[207 - 32].y() );
-            fheroes2::updateShadow( font[203 - 32], { -1, 2 }, 2 );
-
-            font[208 - 32] = font[48 + offset];
-            font[209 - 32] = font[35 + offset];
-
-            font[210 - 32].resize( font[207 - 32].width() + 4, font[207 - 32].height() );
-            font[210 - 32].reset();
-            fheroes2::Copy( font[207 - 32], 0, 0, font[210 - 32], 0, 0, font[207 - 32].width(), font[207 - 32].height() );
-            fheroes2::Copy( font[210 - 32], 7, 0, font[210 - 32], 11, 0, 4, font[207 - 32].height() );
-            font[210 - 32].setPosition( font[207 - 32].x(), font[207 - 32].y() );
-
-            font[211 - 32] = font[57 + offset];
-
-            font[212 - 32].resize( font[48].width() + 1, font[48].height() );
-            font[212 - 32].reset();
-            fheroes2::Copy( font[48], 0, 0, font[212 - 32], 1, 0, font[48].width(), font[48].height() );
-            {
-                // TODO: add proper Flip function variant.
-                fheroes2::Sprite temp = fheroes2::Crop( font[48], 6, 0, 5, 6 );
-                temp = fheroes2::Flip( temp, true, false );
-                fheroes2::Copy( temp, 0, 0, font[212 - 32], 1, 0, temp.width(), temp.height() );
-            }
-            font[212 - 32].setPosition( font[48].x(), font[48].y() );
-            fheroes2::updateShadow( font[212 - 32], { -1, 2 }, 2 );
-
-            font[213 - 32] = font[56 + offset];
-
-            font[214 - 32].resize( font[53].width() + 2, font[53].height() + 1 );
-            font[214 - 32].reset();
-            fheroes2::Copy( font[53], 0, 0, font[214 - 32], 0, 0, font[52].width(), font[52].height() );
-            fheroes2::Copy( font[214 - 32], 9, 1, font[214 - 32], 11, 9, 1, 1 );
-            fheroes2::Copy( font[214 - 32], 9, 1, font[214 - 32], 12, 8, 1, 1 );
-            fheroes2::Copy( font[214 - 32], 9, 1, font[214 - 32], 12, 10, 1, 2 );
-            fheroes2::Copy( font[214 - 32], 10, 1, font[214 - 32], 12, 9, 1, 1 );
-            fheroes2::Copy( font[214 - 32], 10, 1, font[214 - 32], 13, 8, 1, 4 );
-            font[214 - 32].setPosition( font[53].x(), font[53].y() );
-            fheroes2::updateShadow( font[214 - 32], { -1, 2 }, 2 );
-
-            font[216 - 32].resize( font[53].width() + 2, font[53].height() );
-            font[216 - 32].reset();
-            fheroes2::Copy( font[53], 0, 0, font[216 - 32], 0, 0, 6, 11 );
-            fheroes2::Copy( font[53], 8, 0, font[216 - 32], 7, 0, 3, 11 );
-            fheroes2::Copy( font[53], 8, 0, font[216 - 32], 11, 0, 3, 11 );
-            fheroes2::Copy( font[204 - 32], 10, 0, font[216 - 32], 6, 5, 3, 5 );
-            fheroes2::Copy( font[204 - 32], 10, 0, font[216 - 32], 10, 5, 3, 5 );
-            fheroes2::FillTransform( font[216 - 32], 7, 10, 1, 1, 1 );
-            fheroes2::FillTransform( font[216 - 32], 11, 10, 1, 1, 1 );
-            font[216 - 32].setPosition( font[53].x(), font[53].y() );
-            fheroes2::updateShadow( font[216 - 32], { -1, 2 }, 2 );
-
-            font[215 - 32] = font[53];
-            fheroes2::FillTransform( font[215 - 32], 3, 6, 6, 7, 1 );
-            fheroes2::Copy( font[216 - 32], 4, 5, font[215 - 32], 4, 3, 4, 6 );
-            fheroes2::Copy( font[215 - 32], 6, 5, font[215 - 32], 8, 3, 1, 3 );
-            fheroes2::Copy( font[215 - 32], 7, 4, font[215 - 32], 9, 2, 1, 2 );
-            fheroes2::Copy( font[215 - 32], 9, 8, font[215 - 32], 9, 9, 1, 1 );
-            fheroes2::updateShadow( font[215 - 32], { -1, 2 }, 2 );
-
-            font[217 - 32].resize( font[216 - 32].width() + 2, font[216 - 32].height() + 1 );
-            font[217 - 32].reset();
-            fheroes2::Copy( font[216 - 32], 0, 0, font[217 - 32], 0, 0, font[216 - 32].width(), font[216 - 32].height() );
-            fheroes2::Copy( font[214 - 32], 11, 8, font[217 - 32], 14, 8, 3, 4 );
-            font[217 - 32].setPosition( font[216 - 32].x(), font[216 - 32].y() );
-            fheroes2::updateShadow( font[217 - 32], { -1, 2 }, 2 );
-
-            font[218 - 32].resize( font[193 - 32].width() + 1, font[193 - 32].height() );
-            font[218 - 32].reset();
-            fheroes2::Copy( font[193 - 32], 0, 0, font[218 - 32], 1, 0, font[193 - 32].width(), font[193 - 32].height() );
-            fheroes2::Copy( font[193 - 32], 1, 0, font[218 - 32], 1, 0, 3, 4 );
-            fheroes2::FillTransform( font[218 - 32], 7, 0, 5, 4, 1 );
-            font[218 - 32].setPosition( font[193 - 32].x(), font[193 - 32].y() );
-            fheroes2::updateShadow( font[218 - 32], { -1, 2 }, 2 );
-
-            font[220 - 32] = font[193 - 32];
-            fheroes2::FillTransform( font[220 - 32], 0, 0, 4, 6, 1 );
-            fheroes2::FillTransform( font[220 - 32], 6, 0, 5, 4, 1 );
-            fheroes2::Copy( font[53], 8, 0, font[220 - 32], 3, 0, 3, 1 );
-            fheroes2::updateShadow( font[220 - 32], { -1, 2 }, 2 );
-
-            font[219 - 32].resize( font[220 - 32].width() + 3, font[220 - 32].height() );
-            font[219 - 32].reset();
-            fheroes2::Copy( font[220 - 32], 0, 0, font[219 - 32], 0, 0, font[220 - 32].width(), font[220 - 32].height() );
-            fheroes2::Copy( font[219 - 32], 3, 0, font[219 - 32], 11, 0, 3, 9 );
-            fheroes2::Copy( font[207 - 32], 8, 9, font[219 - 32], 12, 9, 2, 2 );
-            font[219 - 32].setPosition( font[220 - 32].x(), font[220 - 32].y() );
-            fheroes2::updateShadow( font[219 - 32], { -1, 2 }, 2 );
-
-            font[221 - 32].resize( font[47].width() - 3, font[47].height() );
-            font[221 - 32].reset();
-            fheroes2::Copy( font[47], 4, 0, font[221 - 32], 1, 0, 9, 11 );
-            fheroes2::FillTransform( font[221 - 32], 0, 3, 3, 5, 1 );
-            fheroes2::Copy( font[221 - 32], 3, 0, font[221 - 32], 4, 5, 5, 1 );
-            font[221 - 32].setPosition( font[47].x(), font[47].y() );
-            fheroes2::updateShadow( font[221 - 32], { -1, 2 }, 2 );
-
-            font[222 - 32].resize( font[47].width() + 1, font[47].height() );
-            font[222 - 32].reset();
-            fheroes2::Copy( font[193 - 32], 0, 0, font[222 - 32], 0, 0, 6, 13 );
-            fheroes2::Copy( font[47], 4, 1, font[222 - 32], 7, 1, 4, 8 );
-            fheroes2::Copy( font[47], 10, 1, font[222 - 32], 11, 1, 3, 8 );
-            fheroes2::Copy( font[47], 5, 0, font[222 - 32], 8, 0, 3, 1 );
-            fheroes2::Copy( font[47], 10, 0, font[222 - 32], 11, 0, 2, 1 );
-            fheroes2::Copy( font[47], 4, 9, font[222 - 32], 7, 9, 4, 2 );
-            fheroes2::Copy( font[47], 10, 9, font[222 - 32], 11, 9, 3, 2 );
-            fheroes2::Copy( font[222 - 32], 2, 0, font[222 - 32], 6, 5, 2, 1 );
-            font[222 - 32].setPosition( font[193 - 32].x(), font[193 - 32].y() );
-            fheroes2::updateShadow( font[222 - 32], { -1, 2 }, 2 );
-
-            font[223 - 32].resize( font[203 - 32].width() - 1, font[203 - 32].height() );
-            font[223 - 32].reset();
-            fheroes2::Copy( font[33], 0, 5, font[223 - 32], 0, 5, 7, 6 );
-            fheroes2::Copy( font[212 - 32], 0, 0, font[223 - 32], 1, 0, 7, 6 );
-            fheroes2::Copy( font[203 - 32], 8, 0, font[223 - 32], 7, 0, 2, 11 );
-            fheroes2::Copy( font[223 - 32], 6, 5, font[223 - 32], 7, 5, 1, 1 );
-            font[223 - 32].setPosition( font[203 - 32].x(), font[203 - 32].y() );
-            fheroes2::updateShadow( font[223 - 32], { -1, 2 }, 2 );
-
-            offset = 32;
-
-            // e with 2 dots on top.
-            font[184 - 32] = font[37 + offset];
-
-            font[224 - 32] = font[33 + offset];
-
-            font[225 - 32].resize( font[69].width(), font[69].height() + 3 );
-            font[225 - 32].reset();
-            fheroes2::Copy( font[69], 1, 5, font[225 - 32], 1, 8, 8, 2 );
-            fheroes2::Copy( font[69], 1, 0, font[225 - 32], 1, 6, 8, 2 );
-            fheroes2::Copy( font[67], 1, 0, font[225 - 32], 1, 0, 8, 2 );
-            fheroes2::Copy( font[45], 7, 3, font[225 - 32], 1, 2, 3, 1 );
-            fheroes2::Copy( font[45], 7, 3, font[225 - 32], 2, 3, 3, 1 );
-            fheroes2::Copy( font[45], 7, 3, font[225 - 32], 3, 4, 3, 1 );
-            fheroes2::Copy( font[45], 8, 3, font[225 - 32], 6, 5, 2, 1 );
-            fheroes2::Copy( font[45], 7, 3, font[225 - 32], 4, 5, 2, 1 );
-            font[225 - 32].setPosition( font[69].x(), font[69].y() - 3 );
-            fheroes2::updateShadow( font[225 - 32], { -1, 2 }, 2 );
-
-            font[227 - 32] = font[82];
-            fheroes2::Copy( font[227 - 32], 1, 0, font[227 - 32], 3, 0, 2, 1 );
-            fheroes2::Copy( font[227 - 32], 4, 2, font[227 - 32], 4, 1, 1, 1 );
-            fheroes2::SetTransformPixel( font[227 - 32], 4, 2, 1 );
-            fheroes2::updateShadow( font[227 - 32], { -1, 2 }, 2 );
-
-            font[228 - 32] = font[71];
-            font[229 - 32] = font[37 + offset];
-
-            // x with | in the middle.
-            font[230 - 32].resize( font[88].width() + 2, font[88].height() );
-            font[230 - 32].reset();
-            fheroes2::Copy( font[88], 0, 0, font[230 - 32], 0, 0, 6, 7 );
-            fheroes2::Copy( font[88], 5, 0, font[230 - 32], 7, 0, 5, 7 );
-            fheroes2::Fill( font[230 - 32], 6, 1, 1, 5, font[230 - 32].image()[3 + font[230 - 32].width()] );
-            font[230 - 32].setPosition( font[88].x(), font[88].y() );
-            fheroes2::updateShadow( font[230 - 32], { -1, 2 }, 2 );
-
-            // letter 3 (z)
-            font[231 - 32].resize( font[19].width(), font[19].height() - 4 );
-            font[231 - 32].reset();
-            fheroes2::Copy( font[19], 0, 0, font[231 - 32], 0, 0, font[19].width(), 3 );
-            fheroes2::Copy( font[19], 0, 5, font[231 - 32], 0, 3, font[19].width(), 1 );
-            fheroes2::Copy( font[19], 0, 8, font[231 - 32], 0, 4, font[19].width(), 4 );
-            fheroes2::FillTransform( font[231 - 32], 0, 2, 3, 3, 1 );
-            font[231 - 32].setPosition( font[19].x(), font[19].y() + 4 );
-            fheroes2::updateShadow( font[231 - 32], { -1, 2 }, 2 );
-
-            // letter B (v)
-            font[226 - 32].resize( font[231 - 32].width() + 1, font[231 - 32].height() );
-            font[226 - 32].reset();
-            fheroes2::Copy( font[231 - 32], 0, 0, font[226 - 32], 1, 0, font[231 - 32].width(), font[231 - 32].height() );
-            fheroes2::Copy( font[77], 1, 0, font[226 - 32], 1, 0, 3, 7 );
-            fheroes2::Copy( font[226 - 32], 7, 1, font[226 - 32], 3, 0, 1, 1 );
-            fheroes2::Copy( font[226 - 32], 7, 1, font[226 - 32], 3, 6, 1, 1 );
-            fheroes2::Copy( font[226 - 32], 3, 4, font[226 - 32], 3, 5, 1, 1 );
-            font[226 - 32].setPosition( font[231 - 32].x(), font[231 - 32].y() );
-            fheroes2::updateShadow( font[226 - 32], { -1, 2 }, 2 );
-
-            font[232 - 32] = font[85];
-
-            font[233 - 32].resize( font[232 - 32].width(), font[232 - 32].height() + 3 );
-            font[233 - 32].reset();
-            fheroes2::Copy( font[232 - 32], 0, 0, font[233 - 32], 0, 3, font[232 - 32].width(), font[232 - 32].height() );
-            fheroes2::Copy( font[233 - 32], 8, 3, font[233 - 32], 5, 0, 1, 1 );
-            fheroes2::Copy( font[233 - 32], 7, 3, font[233 - 32], 5, 1, 1, 1 );
-            font[233 - 32].setPosition( font[232 - 32].x(), font[232 - 32].y() - 3 );
-            fheroes2::updateShadow( font[233 - 32], { -1, 2 }, 2 );
-
-            // Shorter k.
-            font[234 - 32].resize( font[75].width(), font[75].height() - 4 );
-            font[234 - 32].reset();
-            fheroes2::Copy( font[75], 2, 2, font[234 - 32], 2, 0, 7, 4 );
-            fheroes2::Copy( font[75], 1, 0, font[234 - 32], 1, 0, 3, 1 );
-            fheroes2::Copy( font[75], 0, 7, font[234 - 32], 0, 4, font[75].width(), 2 );
-            fheroes2::Copy( font[75], 0, 10, font[234 - 32], 0, 6, 4, 1 );
-            fheroes2::Copy( font[75], 7, 10, font[234 - 32], 6, 6, 3, 1 );
-            font[234 - 32].setPosition( font[75].x(), font[75].y() + 4 );
-            fheroes2::updateShadow( font[234 - 32], { -1, 2 }, 2 );
-
-            font[235 - 32] = font[78];
-            fheroes2::Copy( font[235 - 32], 3, 0, font[235 - 32], 2, 1, 1, 1 );
-            fheroes2::FillTransform( font[235 - 32], 0, 0, 2, 3, 1 );
-            fheroes2::FillTransform( font[235 - 32], 2, 0, 1, 1, 1 );
-            fheroes2::updateShadow( font[235 - 32], { -1, 2 }, 2 );
-
-            font[236 - 32] = font[45 + offset];
-            fheroes2::Copy( font[87], 9, 0, font[236 - 32], 3, 0, 4, 7 );
-            fheroes2::Copy( font[87], 9, 0, font[236 - 32], 9, 0, 4, 7 );
-            fheroes2::FillTransform( font[236 - 32], 0, 0, 3, 6, 1 );
-            fheroes2::updateShadow( font[236 - 32], { -1, 2 }, 2 );
-
-            font[237 - 32] = font[78];
-            fheroes2::FillTransform( font[237 - 32], 4, 0, 3, 8, 1 );
-            fheroes2::Copy( font[78], 4, 1, font[237 - 32], 4, 3, 1, 2 );
-            fheroes2::Copy( font[78], 4, 1, font[237 - 32], 5, 3, 1, 2 );
-            fheroes2::Copy( font[78], 4, 1, font[237 - 32], 6, 3, 1, 2 );
-            fheroes2::Copy( font[78], 4, 1, font[237 - 32], 7, 3, 1, 1 );
-            fheroes2::updateShadow( font[237 - 32], { -1, 2 }, 2 );
-
-            font[238 - 32] = font[47 + offset];
-
-            font[239 - 32] = font[78];
-
-            font[240 - 32] = font[48 + offset];
-            font[241 - 32] = font[35 + offset];
-            font[242 - 32] = font[77];
-            font[243 - 32] = font[57 + offset];
-
-            font[244 - 32].resize( font[81].width(), font[81].height() );
-            font[244 - 32].reset();
-            fheroes2::Copy( font[80], 1, 0, font[244 - 32], 3, 0, 4, 10 );
-            fheroes2::Copy( font[81], 0, 0, font[244 - 32], 0, 0, 5, 7 );
-            fheroes2::Copy( font[80], 6, 0, font[244 - 32], 7, 0, 4, 7 );
-            font[244 - 32].setPosition( font[81].x(), font[81].y() );
-            fheroes2::updateShadow( font[244 - 32], { -1, 2 }, 2 );
-
-            font[245 - 32] = font[56 + offset];
-
-            font[246 - 32].resize( font[85].width() + 2, font[85].height() + 1 );
-            font[246 - 32].reset();
-            fheroes2::Copy( font[85], 0, 0, font[246 - 32], 0, 0, font[85].width(), font[85].height() );
-            fheroes2::Copy( font[246 - 32], 7, 4, font[246 - 32], 9, 5, 1, 1 );
-            fheroes2::Copy( font[246 - 32], 7, 4, font[246 - 32], 10, 4, 1, 1 );
-            fheroes2::Copy( font[246 - 32], 8, 1, font[246 - 32], 11, 4, 1, 4 );
-            fheroes2::Copy( font[246 - 32], 8, 1, font[246 - 32], 10, 5, 1, 1 );
-            fheroes2::Copy( font[246 - 32], 9, 5, font[246 - 32], 10, 6, 1, 1 );
-            fheroes2::Copy( font[246 - 32], 9, 5, font[246 - 32], 10, 7, 1, 1 );
-            font[246 - 32].setPosition( font[85].x(), font[85].y() );
-            fheroes2::updateShadow( font[246 - 32], { -1, 2 }, 2 );
-
-            font[247 - 32] = font[85];
-            fheroes2::Copy( font[247 - 32], 2, 5, font[247 - 32], 2, 3, 6, 2 );
-            fheroes2::Copy( font[247 - 32], 8, 0, font[247 - 32], 7, 4, 1, 1 );
-            fheroes2::Copy( font[247 - 32], 8, 0, font[247 - 32], 7, 5, 1, 1 );
-            fheroes2::Copy( font[247 - 32], 8, 0, font[247 - 32], 7, 6, 1, 1 );
-            fheroes2::FillTransform( font[247 - 32], 1, 5, 6, 4, 1 );
-            fheroes2::updateShadow( font[247 - 32], { -1, 2 }, 2 );
-
-            font[248 - 32].resize( font[85].width() + 3, font[85].height() );
-            font[248 - 32].reset();
-            fheroes2::Copy( font[85], 0, 0, font[248 - 32], 0, 0, 4, 7 );
-            fheroes2::Copy( font[85], 1, 0, font[248 - 32], 5, 0, 4, 7 );
-            fheroes2::Copy( font[85], 6, 0, font[248 - 32], 9, 0, 4, 7 );
-            fheroes2::Copy( font[248 - 32], 8, 5, font[248 - 32], 4, 5, 4, 2 );
-            font[248 - 32].setPosition( font[85].x(), font[85].y() );
-            fheroes2::updateShadow( font[248 - 32], { -1, 2 }, 2 );
-
-            font[249 - 32].resize( font[248 - 32].width() + 2, font[248 - 32].height() );
-            font[249 - 32].reset();
-            fheroes2::Copy( font[248 - 32], 0, 0, font[249 - 32], 0, 0, 12, 7 );
-            fheroes2::Copy( font[246 - 32], 9, 4, font[249 - 32], 12, 4, 3, 4 );
-            font[249 - 32].setPosition( font[248 - 32].x(), font[248 - 32].y() );
-            fheroes2::updateShadow( font[249 - 32], { -1, 2 }, 2 );
-
-            font[252 - 32] = font[226 - 32];
-            fheroes2::FillTransform( font[252 - 32], 4, 0, 5, 3, 1 );
-
-            font[250 - 32].resize( font[252 - 32].width() + 1, font[252 - 32].height() );
-            font[250 - 32].reset();
-            fheroes2::Copy( font[252 - 32], 0, 0, font[250 - 32], 1, 0, font[252 - 32].width(), font[252 - 32].height() );
-            fheroes2::Copy( font[252 - 32], 1, 0, font[250 - 32], 1, 0, 1, 2 );
-            font[250 - 32].setPosition( font[252 - 32].x(), font[252 - 32].y() );
-            fheroes2::updateShadow( font[250 - 32], { -1, 2 }, 2 );
-
-            font[251 - 32].resize( font[252 - 32].width() + 3, font[252 - 32].height() );
-            font[251 - 32].reset();
-            fheroes2::Copy( font[252 - 32], 0, 0, font[251 - 32], 0, 0, font[252 - 32].width(), font[252 - 32].height() );
-            fheroes2::Copy( font[252 - 32], 2, 0, font[251 - 32], 10, 0, 2, 7 );
-            font[251 - 32].setPosition( font[252 - 32].x(), font[252 - 32].y() );
-            fheroes2::updateShadow( font[251 - 32], { -1, 2 }, 2 );
-
-            font[253 - 32] = font[79];
-            fheroes2::FillTransform( font[253 - 32], 0, 2, 3, 3, 1 );
-            fheroes2::Copy( font[253 - 32], 8, 3, font[253 - 32], 7, 3, 1, 1 );
-            fheroes2::Copy( font[253 - 32], 8, 3, font[253 - 32], 6, 3, 1, 1 );
-            fheroes2::Copy( font[253 - 32], 8, 3, font[253 - 32], 5, 3, 1, 1 );
-            fheroes2::updateShadow( font[253 - 32], { -1, 2 }, 2 );
-
-            font[254 - 32].resize( font[79].width() + 1, font[79].height() );
-            font[254 - 32].reset();
-            fheroes2::Copy( font[251 - 32], 1, 0, font[254 - 32], 1, 0, 3, 7 );
-            fheroes2::Copy( font[79], 2, 1, font[254 - 32], 6, 1, 1, 5 );
-            fheroes2::Copy( font[79], 3, 0, font[254 - 32], 6, 0, 3, 2 );
-            fheroes2::Copy( font[79], 7, 0, font[254 - 32], 9, 0, 1, 2 );
-            fheroes2::Copy( font[79], 8, 2, font[254 - 32], 9, 2, 1, 3 );
-            fheroes2::Copy( font[79], 7, 5, font[254 - 32], 9, 5, 1, 2 );
-            fheroes2::Copy( font[79], 3, 6, font[254 - 32], 6, 6, 3, 1 );
-            fheroes2::Copy( font[254 - 32], 1, 0, font[254 - 32], 4, 3, 2, 1 );
-            font[254 - 32].setPosition( font[251 - 32].x(), font[251 - 32].y() );
-            fheroes2::updateShadow( font[254 - 32], { -1, 2 }, 2 );
-
-            font[255 - 32] = font[65];
-            fheroes2::FillTransform( font[255 - 32], 0, 2, 6, 3, 1 );
-            fheroes2::Copy( font[69], 2, 5, font[255 - 32], 1, 2, 6, 2 );
-            fheroes2::Copy( font[255 - 32], 6, 4, font[255 - 32], 6, 3, 1, 1 );
-            fheroes2::updateShadow( font[255 - 32], { -1, 2 }, 2 );
-        }
-
-        // Small font.
-        {
-            std::vector<fheroes2::Sprite> & font = _icnVsSprite[ICN::SMALFONT];
-
-            size_t offset = 0;
-
-            font[168 - 32] = font[37 + offset];
-
-            font[192 - 32] = font[33 + offset];
-
-            font[193 - 32] = font[34 + offset];
-            fheroes2::FillTransform( font[193 - 32], 5, 1, 2, 2, 1 );
-            fheroes2::Copy( font[193 - 32], 5, 0, font[193 - 32], 6, 0, 1, 1 );
-            fheroes2::updateShadow( font[193 - 32], { -1, 1 }, 2 );
-
-            font[194 - 32] = font[34 + offset];
-
-            font[195 - 32].resize( font[193 - 32].width() + 1, font[193 - 32].height() );
-            font[195 - 32].reset();
-            fheroes2::Copy( font[193 - 32], 0, 0, font[195 - 32], 0, 0, 4, 8 );
-            fheroes2::Copy( font[193 - 32], 3, 0, font[195 - 32], 4, 0, 4, 1 );
-            font[195 - 32].setPosition( font[193 - 32].x(), font[193 - 32].y() );
-            fheroes2::updateShadow( font[195 - 32], { -1, 1 }, 2 );
-
-            font[196 - 32] = font[36 + offset];
-            font[197 - 32] = font[37 + offset];
-
-            font[198 - 32].resize( font[56].width() + 1, font[56].height() );
-            font[198 - 32].reset();
-            fheroes2::Copy( font[56], 1, 0, font[198 - 32], 1, 0, 3, 7 );
-            fheroes2::Copy( font[56], 7, 0, font[198 - 32], 7, 0, 2, 7 );
-            fheroes2::Copy( font[56], 4, 2, font[198 - 32], 3, 2, 1, 3 );
-            fheroes2::Copy( font[56], 6, 2, font[198 - 32], 7, 2, 1, 3 );
-            fheroes2::Copy( font[37], 4, 5, font[198 - 32], 4, 2, 3, 3 );
-            fheroes2::Copy( font[37], 3, 0, font[198 - 32], 5, 0, 1, 7 );
-            fheroes2::Copy( font[56], 8, 0, font[198 - 32], 9, 0, 1, 7 );
-            font[198 - 32].setPosition( font[56].x(), font[56].y() );
-            fheroes2::updateShadow( font[198 - 32], { -1, 1 }, 2 );
-
-            font[199 - 32].resize( font[19].width() + 2, font[19].height() );
-            font[199 - 32].reset();
-            fheroes2::Copy( font[19], 1, 0, font[199 - 32], 1, 0, 3, 2 );
-            fheroes2::Copy( font[19], 2, 0, font[199 - 32], 4, 0, 3, 2 );
-            fheroes2::Copy( font[19], 2, 2, font[199 - 32], 3, 2, 3, 3 );
-            fheroes2::Copy( font[19], 2, 5, font[199 - 32], 4, 5, 3, 2 );
-            fheroes2::Copy( font[19], 1, 5, font[199 - 32], 1, 5, 3, 2 );
-            fheroes2::FillTransform( font[199 - 32], 2, 4, 3, 2, 1 );
-            fheroes2::FillTransform( font[199 - 32], 5, 5, 1, 1, 1 );
-            fheroes2::FillTransform( font[199 - 32], 4, 2, 1, 1, 1 );
-            font[199 - 32].setPosition( font[19].x(), font[19].y() );
-            fheroes2::updateShadow( font[199 - 32], { -1, 1 }, 2 );
-
-            font[200 - 32] = font[40];
-            fheroes2::FillTransform( font[200 - 32], 4, 2, 3, 4, 1 );
-            fheroes2::Copy( font[40], 3, 0, font[200 - 32], 4, 4, 1, 1 );
-            fheroes2::Copy( font[40], 3, 0, font[200 - 32], 5, 3, 1, 1 );
-            fheroes2::Copy( font[40], 3, 0, font[200 - 32], 6, 2, 1, 1 );
-            fheroes2::updateShadow( font[200 - 32], { -1, 1 }, 2 );
-
-            font[201 - 32].resize( font[200 - 32].width(), font[200 - 32].height() + 2 );
-            font[201 - 32].reset();
-            fheroes2::Copy( font[200 - 32], 1, 0, font[201 - 32], 1, 2, 8, 7 );
-            fheroes2::Copy( font[200 - 32], 2, 0, font[201 - 32], 5, 0, 2, 1 );
-            font[201 - 32].setPosition( font[200 - 32].x(), font[200 - 32].y() - 2 );
-            fheroes2::updateShadow( font[201 - 32], { -1, 1 }, 2 );
-
-            font[202 - 32] = font[43 + offset];
-
-            font[203 - 32].resize( font[34].width(), font[34].height() );
-            font[203 - 32].reset();
-            fheroes2::Copy( font[34], 1, 0, font[203 - 32], 1, 0, 3, 7 );
-            fheroes2::Copy( font[34], 3, 0, font[203 - 32], 6, 0, 1, 7 );
-            fheroes2::Copy( font[34], 3, 0, font[203 - 32], 4, 0, 2, 1 );
-            fheroes2::FillTransform( font[203 - 32], 1, 0, 2, 2, 1 );
-            fheroes2::FillTransform( font[203 - 32], 3, 0, 1, 1, 1 );
-            font[203 - 32].setPosition( font[34].x(), font[34].y() );
-            fheroes2::updateShadow( font[203 - 32], { -1, 1 }, 2 );
-
-            font[204 - 32] = font[45 + offset];
-            font[205 - 32] = font[40 + offset];
-            font[206 - 32] = font[47 + offset];
-
-            font[207 - 32] = font[195 - 32];
-            fheroes2::Copy( font[207 - 32], 3, 0, font[207 - 32], 6, 0, 1, 7 );
-            fheroes2::updateShadow( font[207 - 32], { -1, 1 }, 2 );
-
-            font[208 - 32] = font[48 + offset];
-            font[209 - 32] = font[35 + offset];
-
-            font[210 - 32].resize( font[207 - 32].width() + 2, font[207 - 32].height() );
-            font[210 - 32].reset();
-            fheroes2::Copy( font[207 - 32], 0, 0, font[210 - 32], 0, 0, font[207 - 32].width(), font[207 - 32].height() );
-            fheroes2::Copy( font[210 - 32], 5, 0, font[210 - 32], 8, 0, 2, 8 );
-            font[210 - 32].setPosition( font[207 - 32].x(), font[207 - 32].y() );
-
-            font[211 - 32] = font[57 + offset];
-            font[213 - 32] = font[56 + offset];
-
-            font[214 - 32].resize( font[53].width(), font[53].height() + 1 );
-            font[214 - 32].reset();
-            fheroes2::Copy( font[53], 1, 0, font[214 - 32], 1, 0, 8, 7 );
-            fheroes2::Copy( font[214 - 32], 3, 0, font[214 - 32], 9, 5, 1, 3 );
-            font[214 - 32].setPosition( font[53].x(), font[53].y() );
-            fheroes2::updateShadow( font[214 - 32], { -1, 1 }, 2 );
-
-            font[215 - 32] = font[53];
-            fheroes2::Copy( font[53], 3, 5, font[215 - 32], 3, 2, 4, 2 );
-            fheroes2::FillTransform( font[215 - 32], 2, 4, 5, 4, 1 );
-            fheroes2::updateShadow( font[215 - 32], { -1, 1 }, 2 );
-
-            font[216 - 32].resize( font[53].width(), font[53].height() );
-            font[216 - 32].reset();
-            fheroes2::Copy( font[53], 1, 0, font[216 - 32], 1, 0, 4, 7 );
-            fheroes2::Copy( font[53], 7, 1, font[216 - 32], 6, 1, 2, 6 );
-            fheroes2::Copy( font[44], 3, 0, font[216 - 32], 9, 0, 1, 8 );
-            fheroes2::Copy( font[53], 7, 1, font[216 - 32], 5, 5, 1, 1 );
-            fheroes2::Copy( font[53], 7, 1, font[216 - 32], 8, 5, 1, 1 );
-            fheroes2::Copy( font[53], 7, 1, font[216 - 32], 6, 0, 1, 1 );
-            font[216 - 32].setPosition( font[53].x(), font[53].y() );
-            fheroes2::updateShadow( font[216 - 32], { -1, 1 }, 2 );
-
-            font[217 - 32].resize( font[216 - 32].width() + 2, font[216 - 32].height() + 1 );
-            font[217 - 32].reset();
-            fheroes2::Copy( font[216 - 32], 1, 0, font[217 - 32], 1, 0, 9, 7 );
-            fheroes2::Copy( font[216 - 32], 3, 0, font[217 - 32], 10, 6, 1, 1 );
-            fheroes2::Copy( font[216 - 32], 3, 0, font[217 - 32], 11, 5, 1, 3 );
-            font[217 - 32].setPosition( font[216 - 32].x(), font[216 - 32].y() );
-            fheroes2::updateShadow( font[217 - 32], { -1, 1 }, 2 );
-
-            font[220 - 32].resize( font[34].width(), font[34].height() );
-            font[220 - 32].reset();
-            fheroes2::Copy( font[34], 2, 0, font[220 - 32], 1, 0, 2, 7 );
-            fheroes2::Copy( font[34], 4, 3, font[220 - 32], 3, 3, 1, 4 );
-            fheroes2::Copy( font[34], 4, 3, font[220 - 32], 4, 3, 3, 4 );
-            fheroes2::FillTransform( font[220 - 32], 1, 0, 1, 1, 1 );
-            font[220 - 32].setPosition( font[34].x(), font[34].y() );
-            fheroes2::updateShadow( font[220 - 32], { -1, 1 }, 2 );
-
-            font[219 - 32].resize( font[220 - 32].width() + 2, font[220 - 32].height() );
-            font[219 - 32].reset();
-            fheroes2::Copy( font[220 - 32], 1, 0, font[219 - 32], 1, 0, 6, 7 );
-            fheroes2::Copy( font[220 - 32], 2, 0, font[219 - 32], 8, 0, 1, 7 );
-            font[219 - 32].setPosition( font[220 - 32].x(), font[220 - 32].y() );
-            fheroes2::updateShadow( font[219 - 32], { -1, 1 }, 2 );
-
-            font[218 - 32].resize( font[220 - 32].width() + 2, font[220 - 32].height() );
-            font[218 - 32].reset();
-            fheroes2::Copy( font[220 - 32], 1, 0, font[218 - 32], 3, 0, 6, 7 );
-            fheroes2::Copy( font[220 - 32], 2, 3, font[218 - 32], 1, 0, 3, 1 );
-            fheroes2::Copy( font[220 - 32], 2, 3, font[218 - 32], 1, 1, 1, 1 );
-            font[218 - 32].setPosition( font[220 - 32].x(), font[220 - 32].y() );
-            fheroes2::updateShadow( font[218 - 32], { -1, 1 }, 2 );
-
-            font[221 - 32].resize( font[47].width() - 1, font[47].height() );
-            font[221 - 32].reset();
-            fheroes2::Copy( font[47], 2, 0, font[221 - 32], 1, 0, 6, 7 );
-            fheroes2::Copy( font[47], 3, 0, font[221 - 32], 4, 3, 2, 1 );
-            font[221 - 32].setPosition( font[47].x(), font[47].y() );
-            fheroes2::updateShadow( font[221 - 32], { -1, 1 }, 2 );
-
-            font[222 - 32].resize( font[47].width() + 1, font[47].height() );
-            font[222 - 32].reset();
-            fheroes2::Copy( font[44], 2, 0, font[222 - 32], 1, 0, 2, 7 );
-            fheroes2::Copy( font[47], 2, 0, font[222 - 32], 4, 0, 5, 2 );
-            fheroes2::Copy( font[47], 2, 5, font[222 - 32], 4, 5, 5, 2 );
-            fheroes2::Copy( font[222 - 32], 1, 0, font[222 - 32], 3, 3, 1, 1 );
-            fheroes2::Copy( font[222 - 32], 2, 0, font[222 - 32], 4, 2, 1, 3 );
-            fheroes2::Copy( font[222 - 32], 2, 0, font[222 - 32], 8, 2, 1, 3 );
-            font[222 - 32].setPosition( font[47].x(), font[47].y() );
-            fheroes2::updateShadow( font[222 - 32], { -1, 1 }, 2 );
-
-            font[223 - 32].resize( font[48].width() - 1, font[48].height() );
-            font[223 - 32].reset();
-            fheroes2::Copy( font[48], 7, 1, font[223 - 32], 2, 1, 1, 2 );
-            fheroes2::Copy( font[48], 2, 0, font[223 - 32], 3, 0, 3, 1 );
-            fheroes2::Copy( font[48], 2, 0, font[223 - 32], 3, 3, 3, 1 );
-            fheroes2::Copy( font[44], 3, 0, font[223 - 32], 6, 0, 1, 7 );
-            fheroes2::Copy( font[33], 1, 6, font[223 - 32], 1, 6, 2, 1 );
-            fheroes2::Copy( font[33], 1, 6, font[223 - 32], 3, 5, 1, 1 );
-            fheroes2::Copy( font[33], 1, 6, font[223 - 32], 4, 4, 1, 1 );
-            font[223 - 32].setPosition( font[48].x(), font[48].y() );
-            fheroes2::updateShadow( font[223 - 32], { -1, 1 }, 2 );
-
-            offset = 32;
-
-            font[184 - 32] = font[37 + offset];
-
-            font[224 - 32] = font[33 + offset];
-
-            font[225 - 32].resize( font[34].width(), font[34].height() );
-            font[225 - 32].reset();
-            fheroes2::Copy( font[34], 4, 3, font[225 - 32], 4, 3, 3, 4 );
-            fheroes2::Copy( font[65], 1, 2, font[225 - 32], 2, 4, 2, 3 );
-            fheroes2::FillTransform( font[225 - 32], 3, 5, 1, 1, 1 );
-            fheroes2::Copy( font[225 - 32], 2, 5, font[225 - 32], 2, 1, 2, 2 );
-            fheroes2::Copy( font[37], 2, 0, font[225 - 32], 2, 0, 5, 1 );
-            font[225 - 32].setPosition( font[34].x(), font[34].y() );
-            fheroes2::updateShadow( font[225 - 32], { -1, 1 }, 2 );
-
-            font[226 - 32].resize( font[82].width() - 1, font[82].height() );
-            font[226 - 32].reset();
-            fheroes2::Copy( font[82], 1, 0, font[226 - 32], 1, 0, 2, 5 );
-            fheroes2::Copy( font[82], 1, 0, font[226 - 32], 3, 0, 2, 1 );
-            fheroes2::Copy( font[82], 1, 0, font[226 - 32], 3, 2, 2, 1 );
-            fheroes2::Copy( font[82], 1, 0, font[226 - 32], 3, 4, 2, 1 );
-            fheroes2::Copy( font[82], 1, 0, font[226 - 32], 5, 1, 1, 1 );
-            fheroes2::Copy( font[82], 1, 0, font[226 - 32], 5, 3, 1, 1 );
-            font[226 - 32].setPosition( font[82].x(), font[82].y() );
-            fheroes2::updateShadow( font[226 - 32], { -1, 1 }, 2 );
-
-            font[227 - 32] = font[82];
-            fheroes2::Copy( font[227 - 32], 3, 1, font[227 - 32], 3, 0, 1, 1 );
-            fheroes2::FillTransform( font[227 - 32], 3, 1, 1, 1, 1 );
-            fheroes2::updateShadow( font[227 - 32], { -1, 1 }, 2 );
-
-            font[228 - 32] = font[71];
-
-            font[229 - 32] = font[37 + offset];
-
-            font[230 - 32].resize( font[88].width() + 1, font[88].height() );
-            font[230 - 32].reset();
-            fheroes2::Copy( font[88], 0, 0, font[230 - 32], 0, 0, 4, 5 );
-            fheroes2::Copy( font[88], 4, 0, font[230 - 32], 5, 0, 4, 5 );
-            fheroes2::Copy( font[85], 2, 0, font[230 - 32], 4, 0, 1, 4 );
-            fheroes2::Copy( font[85], 2, 0, font[230 - 32], 4, 4, 1, 1 );
-            font[230 - 32].setPosition( font[88].x(), font[88].y() );
-            fheroes2::updateShadow( font[230 - 32], { -1, 1 }, 2 );
-
-            font[232 - 32] = font[85];
-
-            font[233 - 32].resize( font[232 - 32].width(), font[232 - 32].height() + 2 );
-            font[233 - 32].reset();
-            fheroes2::Copy( font[232 - 32], 1, 0, font[233 - 32], 1, 2, 7, 5 );
-            fheroes2::Copy( font[232 - 32], 1, 0, font[233 - 32], 3, 0, 2, 1 );
-            font[233 - 32].setPosition( font[232 - 32].x(), font[232 - 32].y() - 2 );
-            fheroes2::updateShadow( font[233 - 32], { -1, 1 }, 2 );
-
-            font[234 - 32].resize( font[75].width() - 1, font[75].height() - 2 );
-            font[234 - 32].reset();
-            fheroes2::Copy( font[75], 1, 0, font[234 - 32], 1, 0, 2, 5 );
-            fheroes2::Copy( font[75], 4, 1, font[234 - 32], 3, 0, 3, 3 );
-            fheroes2::Copy( font[75], 5, 4, font[234 - 32], 4, 3, 2, 2 );
-            font[234 - 32].setPosition( font[75].x(), font[75].y() + 2 );
-            fheroes2::updateShadow( font[234 - 32], { -1, 1 }, 2 );
-
-            font[235 - 32].resize( font[65].width() - 2, font[65].height() );
-            font[235 - 32].reset();
-            fheroes2::Copy( font[203 - 32], 2, 3, font[235 - 32], 1, 1, 2, 4 );
-            fheroes2::Copy( font[203 - 32], 5, 0, font[235 - 32], 3, 0, 2, 5 );
-            fheroes2::FillTransform( font[235 - 32], 1, 1, 1, 1, 1 );
-            font[235 - 32].setPosition( font[65].x(), font[65].y() );
-            fheroes2::updateShadow( font[235 - 32], { -1, 1 }, 2 );
-
-            font[236 - 32].resize( font[235 - 32].width() + 3, font[235 - 32].height() );
-            font[236 - 32].reset();
-            fheroes2::Copy( font[235 - 32], 4, 0, font[236 - 32], 4, 0, 1, 5 );
-            fheroes2::Copy( font[235 - 32], 1, 0, font[236 - 32], 1, 1, 3, 3 );
-            fheroes2::Copy( font[236 - 32], 2, 0, font[236 - 32], 5, 0, 3, 5 );
-            fheroes2::Copy( font[236 - 32], 4, 0, font[236 - 32], 1, 4, 1, 1 );
-            font[236 - 32].setPosition( font[235 - 32].x(), font[235 - 32].y() );
-            fheroes2::updateShadow( font[236 - 32], { -1, 1 }, 2 );
-
-            font[237 - 32].resize( font[72].width() - 2, font[72].height() - 2 );
-            font[237 - 32].reset();
-            fheroes2::Copy( font[72], 1, 0, font[237 - 32], 1, 0, 2, 5 );
-            fheroes2::Copy( font[72], 2, 0, font[237 - 32], 5, 0, 1, 5 );
-            fheroes2::Copy( font[72], 3, 2, font[237 - 32], 3, 2, 2, 1 );
-            font[237 - 32].setPosition( font[72].x(), font[72].y() + 2 );
-            fheroes2::updateShadow( font[237 - 32], { -1, 1 }, 2 );
-
-            font[238 - 32] = font[47 + offset];
-            font[239 - 32] = font[78];
-            font[240 - 32] = font[48 + offset];
-            font[241 - 32] = font[35 + offset];
-
-            font[242 - 32].resize( font[77].width() - 4, font[77].height() );
-            font[242 - 32].reset();
-            fheroes2::Copy( font[77], 1, 0, font[242 - 32], 1, 0, 2, 5 );
-            fheroes2::Copy( font[77], 6, 1, font[242 - 32], 4, 1, 1, 4 );
-            fheroes2::Copy( font[77], 10, 1, font[242 - 32], 6, 1, 2, 4 );
-            fheroes2::Copy( font[77], 3, 0, font[242 - 32], 2, 0, 3, 1 );
-            fheroes2::Copy( font[77], 3, 0, font[242 - 32], 5, 0, 1, 1 );
-            font[242 - 32].setPosition( font[77].x(), font[77].y() );
-            fheroes2::updateShadow( font[242 - 32], { -1, 1 }, 2 );
-
-            font[243 - 32] = font[57 + offset];
-
-            font[244 - 32].resize( font[81].width() + 3, font[81].height() + 1 );
-            font[244 - 32].reset();
-            fheroes2::Copy( font[81], 1, 0, font[244 - 32], 1, 0, 5, 7 );
-            fheroes2::Copy( font[81], 2, 0, font[244 - 32], 6, 0, 4, 4 );
-            fheroes2::Copy( font[81], 2, 4, font[244 - 32], 6, 4, 3, 1 );
-            fheroes2::Copy( font[81], 2, 4, font[244 - 32], 5, 7, 1, 1 );
-            font[244 - 32].setPosition( font[81].x(), font[81].y() );
-            fheroes2::updateShadow( font[244 - 32], { -1, 1 }, 2 );
-
-            // Bigger letter
-            font[212 - 32] = font[244 - 32];
-            fheroes2::Copy( font[212 - 32], 5, 1, font[212 - 32], 5, 0, 1, 1 );
-            fheroes2::Copy( font[212 - 32], 5, 1, font[212 - 32], 4, 7, 1, 1 );
-            font[212 - 32].setPosition( font[48].x(), font[48].y() ); // copy from a big better
-            fheroes2::updateShadow( font[212 - 32], { -1, 1 }, 2 );
-
-            font[245 - 32] = font[56 + offset];
-
-            font[246 - 32].resize( font[85].width() + 1, font[85].height() + 1 );
-            font[246 - 32].reset();
-            fheroes2::Copy( font[85], 0, 0, font[246 - 32], 0, 0, font[85].width(), font[85].height() );
-            fheroes2::Copy( font[246 - 32], 2, 0, font[246 - 32], 8, 3, 1, 3 );
-            font[246 - 32].setPosition( font[85].x(), font[85].y() );
-            fheroes2::updateShadow( font[246 - 32], { -1, 1 }, 2 );
-
-            font[247 - 32] = font[85];
-            fheroes2::Copy( font[85], 2, 4, font[247 - 32], 2, 2, 4, 1 );
-            fheroes2::Copy( font[85], 1, 0, font[247 - 32], 6, 4, 1, 1 );
-            fheroes2::FillTransform( font[247 - 32], 1, 3, 5, 3, 1 );
-            fheroes2::updateShadow( font[247 - 32], { -1, 1 }, 2 );
-
-            font[248 - 32].resize( font[85].width() + 2, font[85].height() );
-            font[248 - 32].reset();
-            fheroes2::Copy( font[85], 1, 0, font[248 - 32], 1, 0, 3, 5 );
-            fheroes2::Copy( font[85], 6, 0, font[248 - 32], 5, 0, 2, 5 );
-            fheroes2::Copy( font[85], 6, 0, font[248 - 32], 8, 0, 2, 5 );
-            fheroes2::Copy( font[85], 1, 0, font[248 - 32], 4, 4, 1, 1 );
-            fheroes2::Copy( font[85], 1, 0, font[248 - 32], 7, 4, 1, 1 );
-            font[248 - 32].setPosition( font[85].x(), font[85].y() );
-            fheroes2::updateShadow( font[248 - 32], { -1, 1 }, 2 );
-
-            font[249 - 32].resize( font[248 - 32].width() + 1, font[248 - 32].height() );
-            font[249 - 32].reset();
-            fheroes2::Copy( font[248 - 32], 1, 0, font[249 - 32], 1, 0, 9, 5 );
-            fheroes2::Copy( font[248 - 32], 2, 0, font[249 - 32], 10, 3, 1, 3 );
-            font[249 - 32].setPosition( font[248 - 32].x(), font[248 - 32].y() );
-            fheroes2::updateShadow( font[249 - 32], { -1, 1 }, 2 );
-
-            font[252 - 32] = font[226 - 32];
-            fheroes2::Copy( font[252 - 32], 1, 0, font[252 - 32], 5, 4, 1, 1 );
-            fheroes2::FillTransform( font[252 - 32], 0, 0, 2, 2, 1 );
-            fheroes2::FillTransform( font[252 - 32], 3, 0, 3, 2, 1 );
-
-            font[250 - 32].resize( font[252 - 32].width() + 1, font[252 - 32].height() );
-            font[250 - 32].reset();
-            fheroes2::Copy( font[252 - 32], 1, 0, font[250 - 32], 2, 0, 5, 5 );
-            fheroes2::Copy( font[252 - 32], 2, 2, font[250 - 32], 1, 0, 2, 1 );
-            fheroes2::Copy( font[252 - 32], 2, 2, font[250 - 32], 1, 1, 1, 1 );
-            font[250 - 32].setPosition( font[252 - 32].x(), font[252 - 32].y() );
-            fheroes2::updateShadow( font[250 - 32], { -1, 1 }, 2 );
-
-            font[251 - 32].resize( font[252 - 32].width() + 2, font[252 - 32].height() );
-            font[251 - 32].reset();
-            fheroes2::Copy( font[252 - 32], 1, 0, font[251 - 32], 1, 0, 5, 5 );
-            fheroes2::Copy( font[252 - 32], 2, 0, font[251 - 32], 7, 0, 1, 5 );
-            font[251 - 32].setPosition( font[252 - 32].x(), font[252 - 32].y() );
-            fheroes2::updateShadow( font[251 - 32], { -1, 1 }, 2 );
-
-            font[253 - 32].resize( font[79].width() - 1, font[79].height() );
-            font[253 - 32].reset();
-            fheroes2::Copy( font[79], 2, 0, font[253 - 32], 1, 0, 4, 5 );
-            fheroes2::Copy( font[79], 2, 0, font[253 - 32], 2, 2, 2, 1 );
-            font[253 - 32].setPosition( font[79].x(), font[79].y() );
-            fheroes2::updateShadow( font[253 - 32], { -1, 1 }, 2 );
-
-            font[231 - 32] = font[253 - 32];
-            fheroes2::FillTransform( font[231 - 32], 0, 1, 3, 3, 1 );
-            fheroes2::FillTransform( font[231 - 32], 4, 2, 1, 1, 1 );
-            fheroes2::FillTransform( font[231 - 32], 1, 0, 1, 1, 1 );
-            fheroes2::Copy( font[253 - 32], 1, 0, font[231 - 32], 1, 1, 1, 1 );
-            fheroes2::updateShadow( font[231 - 32], { -1, 1 }, 2 );
-
-            font[254 - 32].resize( font[79].width() + 2, font[79].height() );
-            font[254 - 32].reset();
-            fheroes2::Copy( font[82], 1, 0, font[254 - 32], 1, 0, 2, 5 );
-            fheroes2::Copy( font[79], 1, 0, font[254 - 32], 4, 0, 3, 5 );
-            fheroes2::Copy( font[79], 5, 1, font[254 - 32], 7, 1, 1, 3 );
-            fheroes2::Copy( font[79], 5, 1, font[254 - 32], 3, 2, 1, 1 );
-            font[254 - 32].setPosition( font[79].x(), font[79].y() );
-            fheroes2::updateShadow( font[254 - 32], { -1, 1 }, 2 );
-
-            font[255 - 32].resize( font[65].width() - 1, font[65].height() );
-            font[255 - 32].reset();
-            fheroes2::Copy( font[65], 1, 2, font[255 - 32], 2, 0, 3, 3 );
-            fheroes2::Copy( font[235 - 32], 4, 0, font[255 - 32], 5, 0, 1, 5 );
-            fheroes2::Copy( font[33], 1, 5, font[255 - 32], 1, 3, 3, 2 );
-            font[255 - 32].setPosition( font[65].x(), font[65].y() );
-            fheroes2::updateShadow( font[255 - 32], { -1, 1 }, 2 );
-        }
-    }
-
-    void generateAlphabet( const fheroes2::SupportedLanguage language )
-    {
-        switch ( language ) {
-        case fheroes2::SupportedLanguage::Polish:
-            generatePolishAlphabet();
-            break;
-        case fheroes2::SupportedLanguage::German:
-            generateGermanAlphabet();
-            break;
-        case fheroes2::SupportedLanguage::French:
-            generateFrenchAlphabet();
-            break;
-        case fheroes2::SupportedLanguage::Russian:
-            generateRussianAlphabet();
-            break;
-        default:
-            // Add new language generation code!
-            assert( 0 );
-            break;
-        }
-
-        _icnVsSprite[ICN::YELLOW_FONT].clear();
-        _icnVsSprite[ICN::YELLOW_SMALLFONT].clear();
-        _icnVsSprite[ICN::GRAY_FONT].clear();
-        _icnVsSprite[ICN::GRAY_SMALL_FONT].clear();
-        _icnVsSprite[ICN::WHITE_LARGE_FONT].clear();
-    }
-
     void invertTransparency( fheroes2::Image & image )
     {
         if ( image.singleLayer() ) {
@@ -1259,7 +218,7 @@ namespace
         }
 
         uint8_t * transform = image.transform();
-        uint8_t * transformEnd = transform + image.width() * image.height();
+        const uint8_t * transformEnd = transform + image.width() * image.height();
         for ( ; transform != transformEnd; ++transform ) {
             if ( *transform == 0 ) {
                 *transform = 1;
@@ -1270,6 +229,46 @@ namespace
             // Other transform values are not relevant for transparency checks.
         }
     }
+
+    uint8_t getButtonFillingColor( const bool isReleasedState, const bool isGoodInterface = true )
+    {
+        if ( isGoodInterface ) {
+            return isReleasedState ? fheroes2::GetColorId( 216, 184, 152 ) : fheroes2::GetColorId( 184, 136, 96 );
+        }
+        return isReleasedState ? fheroes2::GetColorId( 180, 180, 180 ) : fheroes2::GetColorId( 144, 144, 144 );
+    }
+
+    void convertToEvilInterface( fheroes2::Sprite & image, const fheroes2::Rect & roi )
+    {
+        fheroes2::ApplyPalette( image, roi.x, roi.y, image, roi.x, roi.y, roi.width, roi.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
+    }
+
+    void copyEvilInterfaceElements( fheroes2::Sprite & image, const fheroes2::Rect & roi )
+    {
+        // Evil interface has special elements at each corner of the window.
+        const fheroes2::Sprite & original = fheroes2::AGG::GetICN( ICN::CSPANBKE, 0 );
+
+        // If this assertion blows up you are using some modded resources. Good luck!
+        assert( original.width() == 321 && original.height() == 304 );
+
+        // Top-left corner.
+        fheroes2::Copy( original, 0, 0, image, roi.x, roi.y, 17, 43 );
+        fheroes2::Copy( original, 17, 0, image, roi.x + 17, roi.y, 26, 14 );
+
+        // Top-right corner.
+        fheroes2::Copy( original, original.width() - 43, 0, image, roi.x + roi.width - 43, roi.y, 43, 14 );
+        fheroes2::Copy( original, original.width() - 17, 14, image, roi.x + roi.width - 17, roi.y + 14, 17, 29 );
+
+        // Bottom-right corner.
+        fheroes2::Copy( original, original.width() - 13, original.height() - 43, image, roi.x + roi.width - 13, roi.y + roi.height - 43, 13, 27 );
+        fheroes2::Copy( original, original.width() - 16, original.height() - 16, image, roi.x + roi.width - 16, roi.y + roi.height - 16, 16, 16 );
+        fheroes2::Copy( original, original.width() - 43, original.height() - 13, image, roi.x + roi.width - 43, roi.y + roi.height - 13, 27, 13 );
+
+        // Bottom-left corner.
+        fheroes2::Copy( original, 0, original.height() - 43, image, roi.x, roi.y + roi.height - 43, 13, 27 );
+        fheroes2::Copy( original, 0, original.height() - 16, image, roi.x, roi.y + roi.height - 16, 16, 16 );
+        fheroes2::Copy( original, 16, original.height() - 13, image, roi.x + 16, roi.y + roi.height - 13, 27, 13 );
+    }
 }
 
 namespace fheroes2
@@ -1278,7 +277,7 @@ namespace fheroes2
     {
         void LoadOriginalICN( int id )
         {
-            const std::vector<uint8_t> & body = ::AGG::ReadChunk( ICN::GetString( id ) );
+            const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
 
             if ( body.empty() ) {
                 return;
@@ -1331,6 +330,466 @@ namespace fheroes2
             }
         }
 
+        void generateDefaultImages( const int id )
+        {
+            switch ( id ) {
+            case ICN::BTNBATTLEONLY:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNCOM, i );
+                    // Clean button
+                    Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
+                }
+                break;
+            case ICN::BTNGIFT_GOOD:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::SYSTEM, 11 + i );
+                }
+                break;
+            case ICN::BTNGIFT_EVIL:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::SYSTEME, 11 + i );
+                }
+                break;
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::RECRUIT, 4 + i );
+                    Fill( out, 11 - i, 4 + i, 52, 17, getButtonFillingColor( i == 0 ) );
+                }
+                break;
+            default:
+                // You're calling this function for non-specified ICN id. Check your logic!
+                // Did you add a new image for one language without generating a default
+                // for other languages?
+                assert( 0 );
+                break;
+            }
+        }
+
+        bool generateEnglishSpecificImages( const int id )
+        {
+            switch ( id ) {
+            case ICN::BTNBATTLEONLY:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNNEWGM, 6 + i );
+                    // Clean the button
+                    Fill( out, 25, 18, 88, 23, getButtonFillingColor( i == 0 ) );
+                    // Add 'ba'
+                    Blit( GetICN( ICN::BTNCMPGN, i ), 41 - i, 28, out, 30 - i, 13, 28, 14 );
+                    // Add 'tt'
+                    Blit( GetICN( ICN::BTNNEWGM, i ), 25 - i, 13, out, 57 - i, 13, 13, 14 );
+                    Blit( GetICN( ICN::BTNNEWGM, i ), 25 - i, 13, out, 70 - i, 13, 13, 14 );
+                    // Add 'le'
+                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 97 - i, 21, out, 83 - i, 13, 13, 14 );
+                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 86 - i, 21, out, 96 - i, 13, 13, 14 );
+                    // Add 'on'
+                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 44 - i, 21, out, 40 - i, 28, 31, 14 );
+                    // Add 'ly'
+                    Blit( GetICN( ICN::BTNHOTST, i ), 47 - i, 21, out, 71 - i, 28, 12, 13 );
+                    Blit( GetICN( ICN::BTNHOTST, i ), 72 - i, 21, out, 84 - i, 28, 13, 13 );
+                }
+                return true;
+            case ICN::BTNGIFT_GOOD:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TRADPOST, 17 + i );
+
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 6, 4, 72, 15 );
+
+                    // add 'G'
+                    Blit( GetICN( ICN::CPANEL, i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
+
+                    // add 'I'
+                    Blit( GetICN( ICN::APANEL, 4 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
+
+                    // add 'F'
+                    Blit( GetICN( ICN::APANEL, 4 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
+
+                    // add 'T'
+                    Blit( GetICN( ICN::CPANEL, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
+                }
+                return true;
+            case ICN::BTNGIFT_EVIL:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TRADPOSE, 17 + i );
+
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEME, 11 + i ), 10, 6, out, 6, 4, 72, 15 );
+
+                    // add 'G'
+                    Blit( GetICN( ICN::CPANELE, i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
+
+                    // add 'I'
+                    Blit( GetICN( ICN::APANELE, 4 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
+
+                    // add 'F'
+                    Blit( GetICN( ICN::APANELE, 4 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
+
+                    // add 'T'
+                    Blit( GetICN( ICN::CPANELE, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
+                }
+                return true;
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::RECRUIT, 4 + i );
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6 + i, out, 30 - 2 * i, 5 + i, 31, 15 );
+                    // add 'IN'
+                    Copy( GetICN( ICN::APANEL, 4 + i ), 23 - i, 22 + i, out, 33 - i, 6 + i, 8, 14 ); // letter 'I'
+                    Copy( GetICN( ICN::APANEL, 4 + i ), 31 - i, 22 + i, out, 44 - i, 6 + i, 17, 14 ); // letter 'N'
+                }
+                return true;
+            default:
+                break;
+            }
+            return false;
+        }
+
+        bool generateGermanSpecificImages( const int id )
+        {
+            switch ( id ) {
+            case ICN::BTNBATTLEONLY:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNNEWGM, 6 + i );
+                    // Clean the button
+                    Fill( out, 25, 18, 88, 23, getButtonFillingColor( i == 0 ) );
+                    // Add 'K'
+                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 34 - i, 23, out, 40 - i, 23, 12, 14 );
+                    //'Add 'A'
+                    Blit( GetICN( ICN::BTNNEWGM, 4 + i ), 56 - i, 23, out, 52 - i, 23, 13, 14 );
+                    Blit( out, 20, 20, out, 52 - i + 12, 25, 3, 3 );
+                    // Add 'M'
+                    Blit( GetICN( ICN::BTNNEWGM, 4 + i ), 39 - i, 8, out, 65 - i, 23, 14, 14 );
+                    // Add 'F'
+                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 70 - i, 23, out, 87 - i, 23, 10, 14 );
+                    // Add 'P'
+                    Blit( GetICN( ICN::BTNNEWGM, 4 + i ), 36 - i, 23, out, 78 - i, 23, 10, 14 );
+                }
+                return true;
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::RECRUIT, 4 + i );
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6 + i, out, 30 - 2 * i, 5 + i, 31, 15 );
+                    // add 'IN'
+                    Copy( GetICN( ICN::APANEL, 4 + i ), 23 - i, 22 + i, out, 33 - i, 6 + i, 8, 14 ); // letter 'I'
+                    Copy( GetICN( ICN::APANEL, 4 + i ), 31 - i, 22 + i, out, 44 - i, 6 + i, 17, 14 ); // letter 'N'
+                }
+                return true;
+            default:
+                break;
+            }
+            return false;
+        }
+
+        bool generateFrenchSpecificImages( const int id )
+        {
+            switch ( id ) {
+            case ICN::BTNBATTLEONLY:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNNEWGM, 6 + i );
+                    // Clean the button
+                    Fill( out, 25, 18, 88, 23, getButtonFillingColor( i == 0 ) );
+
+                    const int32_t secondLine = 28;
+                    // Add 'MODE'
+                    Blit( GetICN( ICN::BTNNEWGM, 4 + i ), 40 - i, 13, out, 45 - i, 13, 50, 15 );
+                    // Clean up 'MODE'
+                    Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 114 - i, 18, out, 94 - i, 18, 1, 10 );
+                    // Add 'BA'
+                    Blit( GetICN( ICN::BTNBAUD, 2 + i ), 42 - i, 28, out, 28 - i, secondLine, 22, 15 );
+                    // Clean up 'BA'
+                    Blit( GetICN( ICN::BTNBAUD, 2 + i ), 42 - i, 31, out, 39 - i, secondLine, 1, 1 );
+                    Blit( GetICN( ICN::BTNBAUD, 2 + i ), 39 - i, 31, out, 49 - i, secondLine + 4, 1, 2 );
+                    // Add 'T'
+                    Blit( GetICN( ICN::BTNDC, 2 + i ), 89 - i, 21, out, 50 - i, secondLine, 12, 15 );
+                    // Clean up 'AT'
+                    Blit( GetICN( ICN::BTNDC, 2 + i ), 89 - i, 18, out, 50 - i, secondLine, 1, 1 );
+                    Blit( GetICN( ICN::BTNDC, 2 + i ), 92 - ( 5 * i ), 27 - i, out, 49 - i, secondLine + 4 + i, 1, 3 );
+                    // Add 'AI'.
+                    Blit( GetICN( ICN::BTNMP, 6 + i ), 56 - i, 13, out, 62 - i, secondLine, 18, 15 );
+                    // Clean up 'TA'
+                    Blit( GetICN( ICN::BTNBAUD, 2 + i ), 51 - i, 40, out, 60 - i, secondLine + 12, 3, 3 );
+                    // Add 'LLE'
+                    Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 85 - i, 13, out, 81 - i, secondLine, 31, 15 );
+                    // Clean up "IL"
+                    Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 85 - i, 18, out, 81 - i, secondLine + 7, 1, 1 );
+                    Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 94 - i, 17, out, 80 - i, secondLine + 4, 2, 2 );
+                    Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 93 - i, 25, out, 79 - i, secondLine + 12, 3, 3 );
+                    Blit( GetICN( ICN::BTNDC, 4 + i ), 23 - i, 8, out, 79 - i, secondLine + 5, 1, 10 );
+                    Blit( GetICN( ICN::BTNMP, 6 + i ), 73 - i, 22, out, 79 - i, secondLine + 9, 1, 1 );
+                }
+                return true;
+            case ICN::BTNGIFT_GOOD:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TRADPOST, 17 + i );
+                    // clean the button
+                    Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0 ) );
+
+                    const int32_t offsetY = 5;
+                    // Add 'D'
+                    const int32_t offsetXD = 14;
+                    Blit( GetICN( ICN::CPANEL, 4 + i ), 48 - i, 28 + i, out, offsetXD - i, offsetY + i, 10, 15 );
+                    // Clean up 'D' and restore button ornament
+                    Blit( GetICN( ICN::CPANEL, 4 + i ), 48 - i, 36, out, offsetXD - 1 - i, offsetY + 4 + i, 1, 1 );
+                    Blit( GetICN( ICN::CPANEL, 4 + i ), 48 - i, 35, out, offsetXD - i, offsetY + 9 + i, 1, 2 );
+                    Blit( GetICN( ICN::CPANEL, 4 + i ), 48 - i, 35, out, offsetXD - 1 - i, offsetY + 13 + i, 1, 1 );
+                    Fill( out, offsetXD + 9 - i, offsetY + 13 + i, 1, 1, getButtonFillingColor( i == 0 ) );
+                    Blit( GetICN( ICN::TRADPOST, 17 + i ), offsetXD, offsetY, out, offsetXD, offsetY, 1, 1 );
+                    // Add 'O'
+                    const int32_t offsetXO = 10;
+                    Blit( GetICN( ICN::CAMPXTRG, i ), 40 - ( 7 * i ), 5 + i, out, offsetXD + offsetXO + 1 - i, offsetY + i, 13 - i, 15 );
+                    // Clean up 'DO'
+                    Blit( GetICN( ICN::CPANEL, 4 + i ), 51 - i, 34, out, offsetXD + offsetXO - i, offsetY + 5, 2, 2 );
+                    Blit( GetICN( ICN::CPANEL, 4 + i ), 51 - i, 34, out, offsetXD + offsetXO - i, offsetY + 7, 1, 1 + i );
+                    Blit( GetICN( ICN::CPANEL, 4 + i ), 55 - i, 28 + i, out, offsetXD + 9 - i, offsetY + 2 + i, 3, 3 );
+                    Fill( out, offsetXD + 11 - i, offsetY + i, 2, 2, getButtonFillingColor( i == 0 ) );
+                    // Add 'N'
+                    const int32_t offsetXN = 13;
+                    Blit( GetICN( ICN::TRADPOST, 17 + i ), 50 - i, 5, out, offsetXD + offsetXO + offsetXN - i, offsetY, 14, 15 );
+                    // Clean up 'ON'
+                    Fill( out, offsetXD + offsetXO + offsetXN, offsetY, 1, 1, getButtonFillingColor( i == 0 ) );
+                    Fill( out, offsetXD + offsetXO + offsetXN - i, offsetY + 9, 1, 1, getButtonFillingColor( i == 0 ) );
+                    // Add 'N'
+                    Blit( GetICN( ICN::TRADPOST, 17 + i ), 50 - i, 5, out, offsetXD + 10 + offsetXN + offsetXN - i, offsetY, 14, 15 );
+                    // Clean up 'NN'
+                    Fill( out, offsetXD + offsetXO + offsetXN + offsetXN - i, offsetY + 9, 1, 1, getButtonFillingColor( i == 0 ) );
+                    // Add 'ER'
+                    Blit( GetICN( ICN::CAMPXTRG, 2 + i ), 75 - ( 8 * i ), 5, out, offsetXD + offsetXO + offsetXN + offsetXN + offsetXN - ( 2 * i ), offsetY, 23, 15 );
+                    // Restore button ornament
+                    Blit( GetICN( ICN::TRADPOST, 17 + i ), offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20, offsetY, out,
+                          offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20, offsetY, 1, 1 );
+                    Blit( GetICN( ICN::TRADPOST, 17 + i ), offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21, offsetY + 1, out,
+                          offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21, offsetY + 1, 2, 3 );
+                    Blit( GetICN( ICN::TRADPOST, 17 + i ), offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20, offsetY, out,
+                          offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21, offsetY + 4, 1, 1 );
+                }
+                return true;
+            case ICN::BTNGIFT_EVIL:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::TRADPOSE, 17 + i );
+                    // clean the button
+                    Fill( out, 33, 5, 31, 16, getButtonFillingColor( i == 0, false ) );
+
+                    const int32_t offsetY = 5;
+                    // Add 'D'
+                    const int32_t offsetXD = 14;
+                    Blit( GetICN( ICN::CPANELE, 4 + i ), 48 - i, 28 + i, out, offsetXD - i, offsetY + i, 10, 15 );
+                    // Clean up 'D' and restore button ornament
+                    Blit( GetICN( ICN::CPANELE, 4 + i ), 48 - i, 36, out, offsetXD - 1 - i, offsetY + 4 + i, 1, 1 );
+                    Blit( GetICN( ICN::CPANELE, 4 + i ), 48 - i, 35, out, offsetXD - i, offsetY + 9 + i, 1, 2 );
+                    Blit( GetICN( ICN::CPANELE, 4 + i ), 48 - i, 35, out, offsetXD - 1 - i, offsetY + 13 + i, 1, 1 );
+                    Fill( out, offsetXD + 9 - i, offsetY + 13 + i, 1, 1, getButtonFillingColor( i == 0, false ) );
+                    Blit( GetICN( ICN::TRADPOSE, 17 + i ), offsetXD, offsetY, out, offsetXD, offsetY, 1, 1 );
+                    Fill( out, offsetXD + 9 - i, offsetY + i, 1, 1, getButtonFillingColor( i == 0, false ) );
+                    // Add 'O'
+                    const int32_t offsetXO = 10;
+                    Blit( GetICN( ICN::APANELE, 4 + i ), 50 - i, 20 + i, out, offsetXD + offsetXO + 1 - i, offsetY + i, 13 - i, 14 );
+                    // Clean up 'DO'
+                    Blit( GetICN( ICN::CPANELE, 4 + i ), 51 - i, 34, out, offsetXD + offsetXO - i, offsetY + 5, 2, 2 );
+                    Blit( GetICN( ICN::CPANELE, 4 + i ), 51 - i, 34, out, offsetXD + offsetXO - i, offsetY + 7, 1, 1 + i );
+                    Blit( GetICN( ICN::CPANELE, 4 + i ), 56 - i, 28 + i, out, offsetXD + 10 - i, offsetY + 2 + i, 1, 3 );
+                    Blit( GetICN( ICN::CPANELE, 4 + i ), 56 - i, 28 + i, out, offsetXD + 11 - i, offsetY + 3 + i, 1, 2 );
+                    Fill( out, offsetXD + 11 - i, offsetY + i, 3, 3, getButtonFillingColor( i == 0, false ) );
+                    Fill( out, offsetXD + 12 - i, offsetY + 3 + i, 1, 2, getButtonFillingColor( i == 0, false ) );
+                    // Add 'N'
+                    const int32_t offsetXN = 13;
+                    Blit( GetICN( ICN::TRADPOSE, 17 + i ), 50 - i, 5, out, offsetXD + offsetXO + offsetXN - i, offsetY, 14, 15 );
+                    // Clean up 'ON'
+                    Fill( out, offsetXD + offsetXO + offsetXN - 1 - i, offsetY + 11 + i, 1, 3, getButtonFillingColor( i == 0, false ) );
+                    Fill( out, offsetXD + offsetXO + offsetXN - i, offsetY, 1, 1, getButtonFillingColor( i == 0, false ) );
+                    Fill( out, offsetXD + offsetXO + offsetXN - i, offsetY + 9, 1, 1, getButtonFillingColor( i == 0, false ) );
+                    // Add 'N'
+                    Blit( GetICN( ICN::TRADPOSE, 17 + i ), 50 - i, 5, out, offsetXD + offsetXO + offsetXN + offsetXN - i, offsetY, 13, 15 );
+                    // Clean up 'NN'
+                    Fill( out, offsetXD + offsetXO + offsetXN + offsetXN - i, offsetY + 9, 1, 1, getButtonFillingColor( i == 0, false ) );
+                    // Add 'ER'
+                    Blit( GetICN( ICN::APANELE, 8 + i ), 66 - ( 3 * i ), 5 + ( 2 * i ), out, offsetXD + offsetXO + offsetXN + offsetXN + offsetXN - ( 2 * i ),
+                          offsetY + ( 2 * i ), 23, 14 - i );
+                    // Clean up 'NE'
+                    Blit( GetICN( ICN::TRADPOSE, 17 + i ), 50 - i, 5, out, offsetXD + offsetXO + offsetXN + offsetXN + offsetXN - i, offsetY, 2, 10 );
+                    Fill( out, offsetXD + offsetXO + offsetXN + offsetXN + offsetXN - ( 2 * i ), offsetY + 9 + i, 1 + i, 2 + i, getButtonFillingColor( i == 0, false ) );
+                    // Restore button ornament
+                    Blit( GetICN( ICN::TRADPOSE, 17 + i ), offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20, offsetY, out,
+                          offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20, offsetY, 1, 1 );
+                    Blit( GetICN( ICN::TRADPOSE, 17 + i ), offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21, offsetY + 1, out,
+                          offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21, offsetY + 1, 2, 3 );
+                    Blit( GetICN( ICN::TRADPOSE, 17 + i ), offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 20, offsetY, out,
+                          offsetXD + offsetXO + offsetXN + offsetXN + offsetXN + 21, offsetY + 4, 1, 1 );
+                }
+                return true;
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::RECRUIT, 4 + i );
+                    // Clean the button and leave 'M'
+                    Fill( out, 31 - 2 * i, 5 + i, 25, 15, getButtonFillingColor( i == 0 ) );
+                    Fill( out, 29 - 2 * i, 17 + i, 2, 2, getButtonFillingColor( i == 0 ) );
+                    // Add 'I'
+                    Blit( GetICN( ICN::APANEL, 4 + i ), 25 - i, 19 + i, out, 32 - i, 4 + i, 7 - i, 15 );
+                    Blit( GetICN( ICN::RECRUIT, 4 + i ), 28 - i, 7 + i, out, 36 - i, 7 + i, 3, 9 );
+                    Fill( out, 37 - i, 16 + i, 2, 3, getButtonFillingColor( i == 0 ) );
+                    // Add 'N'
+                    Blit( GetICN( ICN::TRADPOST, 17 + i ), 50 - i, 5, out, 41 - i, 5, 14, 15 );
+                    Fill( out, 41 - i, 5, 1, 1, getButtonFillingColor( i == 0 ) );
+                    Fill( out, 41 - i, 5 + 9, 1, 1, getButtonFillingColor( i == 0 ) );
+                }
+                return true;
+            default:
+                break;
+            }
+            return false;
+        }
+
+        bool generatePolishSpecificImages( const int id )
+        {
+            switch ( id ) {
+            case ICN::BTNBATTLEONLY:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNNEWGM, 6 + i );
+                    // clean the button
+                    Fill( out, 25, 18, 88, 23, getButtonFillingColor( i == 0 ) );
+                    const int32_t offsetX = 46;
+                    const int32_t offsetY = 23;
+                    // Add 'BI'
+                    Blit( GetICN( ICN::BTNMCFG, 2 + i ), 58 - i, 29, out, offsetX - i, offsetY, 14, 11 );
+                    // Add 'T'
+                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 24 - i, 29, out, offsetX + 14 - i, offsetY, 9, 11 );
+                    // Add 'WA'
+                    Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 45 - i, 23, out, offsetX + 23 - i, offsetY, 24, 11 );
+                    // Add pixel to 'W'
+                    Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 47 - i, 23 + i, out, offsetX + 38 - i, offsetY + i, 1, 1 );
+                }
+                return true;
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::RECRUIT, 4 + i );
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6 + i, out, 30 - 2 * i, 5 + i, 31, 15 );
+                    // add 'IN'
+                    Copy( GetICN( ICN::APANEL, 4 + i ), 23 - i, 22 + i, out, 33 - i, 6 + i, 8, 14 ); // letter 'I'
+                    Copy( GetICN( ICN::APANEL, 4 + i ), 31 - i, 22 + i, out, 44 - i, 6 + i, 17, 14 ); // letter 'N'
+                }
+                return true;
+            default:
+                break;
+            }
+            return false;
+        }
+
+        bool generateItalianSpecificImages( const int id )
+        {
+            switch ( id ) {
+            case ICN::BTNBATTLEONLY:
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::BTNNEWGM, 6 + i );
+                    // clean the button
+                    uint8_t buttonFillingColor = getButtonFillingColor( i == 0 );
+                    Fill( out, 25, 18, 88, 23, buttonFillingColor );
+                    const int32_t offsetX = 16;
+                    const int32_t offsetY = 21;
+                    // Add 'B'
+                    Blit( GetICN( ICN::BTNBAUD, 0 + i ), 42 - i, 28, out, offsetX - i, offsetY, 13, 15 );
+                    Fill( out, offsetX + 11, offsetY + 13, 1, 2, buttonFillingColor );
+                    // Add 'A'
+                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 80 - i, 28, out, offsetX + 13 - i, offsetY, 14, 15 );
+                    Fill( out, offsetX + 13 - i, offsetY + 3, 1, 4, buttonFillingColor );
+                    // Add 'T'
+                    Blit( GetICN( ICN::BTNMP, 0 + i ), 74 - i, 5, out, offsetX + 27 - 2 * i, offsetY, 12, 15 );
+                    // Add 'T'
+                    Blit( GetICN( ICN::BTNMP, 0 + i ), 74 - i, 5, out, offsetX + 39 - 2 * i, offsetY, 12, 15 );
+                    // Add 'A'
+                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 80 - i, 28, out, offsetX + 50 - i, offsetY, 14, 15 );
+                    Fill( out, offsetX + 65 - i, offsetY + 5, 1, 2, buttonFillingColor );
+                    Fill( out, offsetX + 65 - i, offsetY + 14, 1, 3, buttonFillingColor );
+                    Fill( out, offsetX + 50 - i, offsetY + 3, 1, 4, buttonFillingColor );
+                    // Add 'G'
+                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 44 - i, 12, out, offsetX + 65 - i, offsetY, 11, 15 );
+                    // Add 'L'
+                    Blit( GetICN( ICN::BTNDC, 4 + i ), 77 - i, 21, out, offsetX + 77 - 2 * i, offsetY, 9, 15 );
+                    // Add 'I'
+                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 56 - i, 12, out, offsetX + 86 - i, offsetY, 7, 15 );
+                    // Add 'A'
+                    Blit( GetICN( ICN::BTNNEWGM, 0 + i ), 80 - i, 28, out, offsetX + 93 - i, offsetY, 14, 15 );
+                    Fill( out, offsetX + 109 - i, offsetY + 5, 1, 2, buttonFillingColor );
+                    Fill( out, offsetX + 93 - i, offsetY + 3, 1, 4, buttonFillingColor );
+                }
+                return true;
+            default:
+                break;
+            }
+            return false;
+        }
+
+        void generateLanguageSpecificImages( int id )
+        {
+            // Language-specific image generators, may fail
+            switch ( fheroes2::getResourceLanguage() ) {
+            case fheroes2::SupportedLanguage::German:
+                if ( generateGermanSpecificImages( id ) ) {
+                    return;
+                }
+                break;
+            case fheroes2::SupportedLanguage::French:
+                if ( generateFrenchSpecificImages( id ) ) {
+                    return;
+                }
+                break;
+            case fheroes2::SupportedLanguage::Polish:
+                if ( generatePolishSpecificImages( id ) ) {
+                    return;
+                }
+                break;
+            case fheroes2::SupportedLanguage::Italian:
+                if ( generateItalianSpecificImages( id ) ) {
+                    return;
+                }
+                break;
+            case fheroes2::SupportedLanguage::English:
+                if ( generateEnglishSpecificImages( id ) ) {
+                    return;
+                }
+                break;
+            default:
+                break;
+            }
+            // Image generator of a last resort, must provide the generation of the "default" variant
+            // for all image ids for which this function can be called, and must not fail.
+            generateDefaultImages( id );
+        }
+
         bool LoadModifiedICN( int id )
         {
             switch ( id ) {
@@ -1340,7 +799,20 @@ namespace fheroes2
             case ICN::FONT:
             case ICN::SMALFONT: {
                 LoadOriginalICN( id );
+
                 auto & imageArray = _icnVsSprite[id];
+
+                if ( id == ICN::SMALFONT ) {
+                    // Small font in official Polish GoG version has all letters to be shifted by 1 pixel lower.
+                    const std::vector<uint8_t> & body = ::AGG::getDataFromAggFile( ICN::GetString( id ) );
+                    const uint32_t crc32 = fheroes2::calculateCRC32( body.data(), body.size() );
+                    if ( crc32 == 0xE9EC7A63 ) {
+                        for ( Sprite & letter : imageArray ) {
+                            letter.setPosition( letter.x(), letter.y() - 1 );
+                        }
+                    }
+                }
+
                 if ( id == ICN::FONT ) {
                     // The original images contain an issue: image layer has value 50 which is '2' in UTF-8. We must correct these (only 3) places
                     for ( size_t i = 0; i < imageArray.size(); ++i ) {
@@ -1349,7 +821,7 @@ namespace fheroes2
                 }
 
                 // Some checks that we really have CP1251 font
-                const int32_t verifiedFontWidth = ( id == ICN::FONT ) ? 19 : 12;
+                int32_t verifiedFontWidth = ( id == ICN::FONT ) ? 19 : 12;
                 if ( imageArray.size() == 162 && imageArray[121].width() == verifiedFontWidth ) {
                     // Engine expects that letter indexes correspond to charcode - 0x20.
                     // In case CP1251 font.icn contains sprites for chars 0x20-0x7F, 0xC0-0xDF, 0xA8, 0xE0-0xFF, 0xB8 (in that order).
@@ -1360,55 +832,32 @@ namespace fheroes2
                     imageArray.pop_back();
                     imageArray.erase( imageArray.begin() + 192 );
                 }
+                // German version uses CP1252
+                verifiedFontWidth = ( id == ICN::FONT ) ? 10 : 7;
+                if ( imageArray.size() == 103 && imageArray[99].width() == verifiedFontWidth ) {
+                    imageArray.insert( imageArray.begin() + 96, 124, imageArray[0] );
+                    std::swap( imageArray[164], imageArray[224] );
+                    std::swap( imageArray[182], imageArray[225] );
+                    std::swap( imageArray[188], imageArray[226] );
+                    std::swap( imageArray[191], imageArray[223] );
+                    std::swap( imageArray[196], imageArray[220] );
+                    std::swap( imageArray[214], imageArray[221] );
+                    std::swap( imageArray[220], imageArray[222] );
+                    imageArray.erase( imageArray.begin() + 221, imageArray.end() );
+                }
                 return true;
             }
             case ICN::YELLOW_FONT:
-                CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::YELLOW_TEXT );
+                CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::YELLOW_FONT );
                 return true;
             case ICN::YELLOW_SMALLFONT:
-                CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::YELLOW_TEXT );
+                CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::YELLOW_FONT );
                 return true;
             case ICN::GRAY_FONT:
-                CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::GRAY_TEXT );
+                CopyICNWithPalette( id, ICN::FONT, PAL::PaletteType::GRAY_FONT );
                 return true;
             case ICN::GRAY_SMALL_FONT:
-                CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::GRAY_TEXT );
-                return true;
-            case ICN::BTNBATTLEONLY:
-                _icnVsSprite[id].resize( 2 );
-                for ( uint32_t i = 0; i < static_cast<uint32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::BTNNEWGM, 6 + i );
-                    // clean the button
-                    Image uniform( 83, 23 );
-                    uniform.fill( ( i == 0 ) ? GetColorId( 216, 184, 152 ) : GetColorId( 184, 136, 96 ) );
-                    Copy( uniform, 0, 0, out, 28, 18, uniform.width(), uniform.height() );
-                    // add 'ba'
-                    Blit( GetICN( ICN::BTNCMPGN, i ), 41 - i, 28, out, 30 - i, 13, 28, 14 );
-                    // add 'tt'
-                    Blit( GetICN( ICN::BTNNEWGM, i ), 25 - i, 13, out, 57 - i, 13, 13, 14 );
-                    Blit( GetICN( ICN::BTNNEWGM, i ), 25 - i, 13, out, 70 - i, 13, 13, 14 );
-                    // add 'le'
-                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 97 - i, 21, out, 83 - i, 13, 13, 14 );
-                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 86 - i, 21, out, 96 - i, 13, 13, 14 );
-                    // add 'on'
-                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 44 - i, 21, out, 40 - i, 28, 31, 14 );
-                    // add 'ly'
-                    Blit( GetICN( ICN::BTNHOTST, i ), 47 - i, 21, out, 71 - i, 28, 12, 13 );
-                    Blit( GetICN( ICN::BTNHOTST, i ), 72 - i, 21, out, 84 - i, 28, 13, 13 );
-                }
-                return true;
-            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
-                _icnVsSprite[id].resize( 2 );
-                for ( uint32_t i = 0; i < static_cast<uint32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::RECRUIT, 4 + i );
-                    // clean the button
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6 + i, out, 30 - 2 * i, 5 + i, 31, 15 );
-                    // add 'IN'
-                    Copy( GetICN( ICN::APANEL, 4 + i ), 23 - i, 22 + i, out, 33 - i, 6 + i, 8, 14 ); // letter 'I'
-                    Copy( GetICN( ICN::APANEL, 4 + i ), 31 - i, 22 + i, out, 44 - i, 6 + i, 17, 14 ); // letter 'N'
-                }
+                CopyICNWithPalette( id, ICN::SMALFONT, PAL::PaletteType::GRAY_FONT );
                 return true;
             case ICN::SPELLS:
                 LoadOriginalICN( id );
@@ -1497,49 +946,11 @@ namespace fheroes2
                     Blit( GetICN( ICN::RECRUIT, 4 + i ), 12, 6, out, 7, 3, 50, 12 );
                 }
                 return true;
+            case ICN::BTNBATTLEONLY:
             case ICN::BTNGIFT_GOOD:
-                _icnVsSprite[id].resize( 2 );
-                for ( uint32_t i = 0; i < 2; ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::TRADPOST, 17 + i );
-
-                    // clean the button
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 6, 4, 72, 15 );
-
-                    // add 'G'
-                    Blit( GetICN( ICN::CPANEL, i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
-
-                    // add 'I'
-                    Blit( GetICN( ICN::APANEL, 4 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
-
-                    // add 'F'
-                    Blit( GetICN( ICN::APANEL, 4 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
-
-                    // add 'T'
-                    Blit( GetICN( ICN::CPANEL, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
-                }
-                return true;
             case ICN::BTNGIFT_EVIL:
-                _icnVsSprite[id].resize( 2 );
-                for ( uint32_t i = 0; i < 2; ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::TRADPOSE, 17 + i );
-
-                    // clean the button
-                    Blit( GetICN( ICN::SYSTEME, 11 + i ), 10, 6, out, 6, 4, 72, 15 );
-
-                    // add 'G'
-                    Blit( GetICN( ICN::CPANELE, i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
-
-                    // add 'I'
-                    Blit( GetICN( ICN::APANELE, 4 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
-
-                    // add 'F'
-                    Blit( GetICN( ICN::APANELE, 4 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
-
-                    // add 'T'
-                    Blit( GetICN( ICN::CPANELE, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
-                }
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
+                generateLanguageSpecificImages( id );
                 return true;
             case ICN::BTNCONFIG:
                 _icnVsSprite[id].resize( 2 );
@@ -1741,7 +1152,7 @@ namespace fheroes2
                     for ( size_t i = 0; i < 62; ++i ) {
                         Sprite & modified = _icnVsSprite[id][i];
                         const Point originalOffset( modified.x(), modified.y() );
-                        Sprite temp = addShadow( modified, Point( -1, 2 ), 2 );
+                        Sprite temp = addShadow( modified, { -1, 2 }, 2 );
                         temp.setPosition( originalOffset.x - 1, originalOffset.y + 2 );
 
                         const Rect area = GetActiveROI( temp, 2 );
@@ -2021,7 +1432,7 @@ namespace fheroes2
                 input[1] = Flip( input[1], true, false );
                 input[3] = Flip( input[3], true, false );
 
-                Image out = ExtractCommonPattern( input );
+                Image out = ExtractCommonPattern( { &input[0], &input[1], &input[2], &input[3] } );
 
                 // Here are 2 pixels which should be removed.
                 if ( out.width() == width && out.height() == height ) {
@@ -2168,8 +1579,9 @@ namespace fheroes2
                     }
                 }
                 return true;
-            case ICN::CURSOR_ADVENTURE_MAP: {
-                // Create needed numbers
+            case ICN::COLOR_CURSOR_ADVENTURE_MAP:
+            case ICN::MONO_CURSOR_ADVENTURE_MAP: {
+                // Create needed digits.
                 const std::vector<Point> twoPoints = { { 2, 1 }, { 3, 1 }, { 1, 2 }, { 4, 2 }, { 3, 3 }, { 2, 4 }, { 1, 5 }, { 2, 5 }, { 3, 5 }, { 4, 5 } };
                 const std::vector<Point> threePoints = { { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 4 }, { 1, 5 }, { 2, 5 }, { 3, 5 } };
                 const std::vector<Point> fourPoints = { { 1, 1 }, { 3, 1 }, { 1, 2 }, { 3, 2 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 3 }, { 3, 4 }, { 3, 5 } };
@@ -2179,24 +1591,29 @@ namespace fheroes2
                 const std::vector<Point> sevenPoints = { { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 1 }, { 4, 2 }, { 3, 3 }, { 2, 4 }, { 2, 5 } };
                 const std::vector<Point> plusPoints = { { 2, 1 }, { 1, 2 }, { 2, 2 }, { 3, 2 }, { 2, 3 } };
 
+                const bool isColorCursor = ( id == ICN::COLOR_CURSOR_ADVENTURE_MAP );
+                const uint8_t digitColor = isColorCursor ? 115 : 11;
+
                 std::vector<Image> digits( 7 );
-                digits[0] = createDigit( 6, 7, twoPoints );
-                digits[1] = createDigit( 6, 7, threePoints );
-                digits[2] = createDigit( 6, 7, fourPoints );
-                digits[3] = createDigit( 6, 7, fivePoints );
-                digits[4] = createDigit( 6, 7, sixPoints );
-                digits[5] = createDigit( 6, 7, sevenPoints );
-                digits[6] = addDigit( digits[5], createDigit( 5, 5, plusPoints ), Point( -1, -1 ) );
+                digits[0] = createDigit( 6, 7, twoPoints, digitColor );
+                digits[1] = createDigit( 6, 7, threePoints, digitColor );
+                digits[2] = createDigit( 6, 7, fourPoints, digitColor );
+                digits[3] = createDigit( 6, 7, fivePoints, digitColor );
+                digits[4] = createDigit( 6, 7, sixPoints, digitColor );
+                digits[5] = createDigit( 6, 7, sevenPoints, digitColor );
+                digits[6] = addDigit( digits[5], createDigit( 5, 5, plusPoints, digitColor ), { -1, -1 } );
 
                 _icnVsSprite[id].reserve( 7 * 8 );
 
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 4 ), digits, Point( -2, 1 ) );
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 5 ), digits, Point( 1, 1 ) );
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 6 ), digits, Point( 0, 1 ) );
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 7 ), digits, Point( -2, 1 ) );
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 8 ), digits, Point( 1, 1 ) );
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 9 ), digits, Point( -6, 1 ) );
-                populateCursorIcons( _icnVsSprite[id], GetICN( ICN::ADVMCO, 28 ), digits, Point( 0, 1 ) );
+                const int originalCursorId = isColorCursor ? ICN::ADVMCO : ICN::MONO_CURSOR_ADVMBW;
+
+                populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 4 ), digits, isColorCursor ? Point( -2, 1 ) : Point( -4, -6 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 5 ), digits, isColorCursor ? Point( 1, 1 ) : Point( -6, -6 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 6 ), digits, isColorCursor ? Point( 0, 1 ) : Point( -8, -7 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 7 ), digits, isColorCursor ? Point( -2, 1 ) : Point( -15, -8 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 8 ), digits, isColorCursor ? Point( 1, 1 ) : Point( -16, -11 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 9 ), digits, isColorCursor ? Point( -6, 1 ) : Point( -8, -1 ) );
+                populateCursorIcons( _icnVsSprite[id], GetICN( originalCursorId, 28 ), digits, isColorCursor ? Point( 0, 1 ) : Point( -8, -7 ) );
 
                 return true;
             }
@@ -2230,7 +1647,7 @@ namespace fheroes2
 
                 ApplyPalette( output, PAL::GetPalette( PAL::PaletteType::DARKENING ) );
 
-                Image common = ExtractCommonPattern( { released, pressed } );
+                Image common = ExtractCommonPattern( { &released, &pressed } );
                 common = FilterOnePixelNoise( common );
                 common = FilterOnePixelNoise( common );
                 common = FilterOnePixelNoise( common );
@@ -2323,7 +1740,7 @@ namespace fheroes2
                         FillTransform( _icnVsSprite[id][0], 0, 57, 56, 62, 1 );
                     }
 
-                    for ( size_t i = 1; i < 7; i++ ) {
+                    for ( size_t i = 1; i < 7; ++i ) {
                         Sprite & original = _icnVsSprite[id][i];
                         if ( original.width() == 121 && original.height() == 151 ) {
                             FillTransform( original, 0, 0, 64, 39, 1 );
@@ -2395,7 +1812,7 @@ namespace fheroes2
                     Sprite released( out.width() + 1, out.height() );
                     released.reset();
                     const uint8_t color = id == ICN::SPANBTN || id == ICN::CSPANBTN ? 57 : 32;
-                    DrawLine( released, Point( 0, 3 ), Point( 0, out.height() - 1 ), color );
+                    DrawLine( released, { 0, 3 }, { 0, out.height() - 1 }, color );
                     Blit( out, released, 1, 0 );
 
                     out = std::move( released );
@@ -2431,10 +1848,27 @@ namespace fheroes2
             }
             case ICN::NGEXTRA: {
                 LoadOriginalICN( id );
-                if ( _icnVsSprite[id].size() >= 70 ) {
+                std::vector<Sprite> & images = _icnVsSprite[id];
+
+                if ( images.size() >= 34 ) {
+                    // Fix extra column at the end of AI controlled player.
+                    for ( size_t i = 27; i < 34; ++i ) {
+                        if ( images[i].width() == 62 && images[i].height() == 58 ) {
+                            Copy( images[i], 58, 44, images[i], 59, 44, 1, 11 );
+                        }
+                    }
+
+                    for ( size_t i = 39; i < 45; ++i ) {
+                        if ( images[i].width() == 62 && images[i].height() == 58 ) {
+                            Copy( images[i], 58, 44, images[i], 59, 44, 1, 11 );
+                        }
+                    }
+                }
+
+                if ( images.size() >= 70 ) {
                     // fix transparent corners on pressed OKAY and CANCEL buttons
-                    CopyTransformLayer( _icnVsSprite[id][66], _icnVsSprite[id][67] );
-                    CopyTransformLayer( _icnVsSprite[id][68], _icnVsSprite[id][69] );
+                    CopyTransformLayer( images[66], images[67] );
+                    CopyTransformLayer( images[68], images[69] );
                 }
                 return true;
             }
@@ -2442,11 +1876,11 @@ namespace fheroes2
                 LoadOriginalICN( id );
                 if ( _icnVsSprite[id].size() >= 4 ) {
                     // extract the EXIT button without background
-                    Image exitReleased = _icnVsSprite[id][2];
-                    Image exitPressed = _icnVsSprite[id][3];
+                    Sprite exitReleased = _icnVsSprite[id][2];
+                    Sprite exitPressed = _icnVsSprite[id][3];
 
                     // make the border parts around EXIT button transparent
-                    Image exitCommonMask = ExtractCommonPattern( { exitReleased, exitPressed } );
+                    Image exitCommonMask = ExtractCommonPattern( { &exitReleased, &exitPressed } );
                     invertTransparency( exitCommonMask );
 
                     CopyTransformLayer( exitCommonMask, exitReleased );
@@ -2472,6 +1906,387 @@ namespace fheroes2
                 }
                 return true;
             }
+            case ICN::TWNWUP_5: {
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() && _icnVsSprite[id].front().width() == 84 && _icnVsSprite[id].front().height() == 256 ) {
+                    // Fix glowing red pixel.
+                    Copy( _icnVsSprite[id].front(), 52, 92, _icnVsSprite[id].front(), 54, 92, 1, 1 );
+                }
+
+                return true;
+            }
+            case ICN::MONO_CURSOR_ADVMBW: {
+                LoadOriginalICN( ICN::ADVMCO );
+
+                _icnVsSprite[id].resize( _icnVsSprite[ICN::ADVMCO].size() );
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    std::string digit;
+                    if ( i < 9 ) {
+                        digit += '0';
+                    }
+                    digit += std::to_string( i + 1 );
+
+                    _icnVsSprite[id][i] = loadBMPFile( std::string( "ADVMBW" ) + digit + ".BMP" );
+                }
+                return true;
+            }
+            case ICN::MONO_CURSOR_SPELBW: {
+                LoadOriginalICN( ICN::SPELCO );
+
+                _icnVsSprite[id].resize( _icnVsSprite[ICN::SPELCO].size() );
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    std::string digit;
+                    if ( i < 10 ) {
+                        digit += '0';
+                    }
+                    digit += std::to_string( i );
+
+                    _icnVsSprite[id][i] = loadBMPFile( std::string( "SPELBW" ) + digit + ".BMP" );
+                }
+                return true;
+            }
+            case ICN::MONO_CURSOR_CMSSBW: {
+                LoadOriginalICN( ICN::CMSECO );
+
+                _icnVsSprite[id].resize( _icnVsSprite[ICN::CMSECO].size() );
+                for ( size_t i = 0; i < _icnVsSprite[id].size(); ++i ) {
+                    std::string digit;
+                    if ( i < 9 ) {
+                        digit += '0';
+                    }
+                    digit += std::to_string( i + 1 );
+
+                    _icnVsSprite[id][i] = loadBMPFile( std::string( "CMSEBW" ) + digit + ".BMP" );
+                }
+                return true;
+            }
+            case ICN::ARTIFACT:
+                LoadOriginalICN( id );
+                // Fix "Arm of the Martyr" artifact rendering.
+                if ( _icnVsSprite[id].size() > 88 ) {
+                    Sprite & originalImage = _icnVsSprite[id][88];
+                    Sprite temp( originalImage.width(), originalImage.height() );
+                    temp.setPosition( originalImage.x(), originalImage.y() );
+                    temp.fill( 0 );
+                    Blit( originalImage, temp );
+                    originalImage = std::move( temp );
+                }
+                return true;
+            case ICN::TWNSDW_5:
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() && _icnVsSprite[id][0].width() == 140 && _icnVsSprite[id][0].height() == 165 ) {
+                    Sprite & image = _icnVsSprite[id][0];
+                    // Red Tower has multiple defects.
+                    // First one is the area between columns in middle of the Tower is prerendered. We need to remove it.
+                    const int32_t windowBottom = 88;
+                    FillTransform( image, 39, 68, 1, windowBottom - 68, 1 );
+                    FillTransform( image, 40, 67, 1, windowBottom - 67, 1 );
+                    FillTransform( image, 41, 66, 1, windowBottom - 66, 1 );
+                    FillTransform( image, 42, 65, 1, windowBottom - 65, 1 );
+                    FillTransform( image, 43, 66, 1, windowBottom - 66, 1 );
+                    FillTransform( image, 44, 67, 1, windowBottom - 67, 1 );
+                    FillTransform( image, 45, 71, 1, windowBottom - 71, 1 );
+                    FillTransform( image, 49, 70, 1, windowBottom - 70, 1 );
+                    FillTransform( image, 50, 68, 2, windowBottom - 68, 1 );
+                    FillTransform( image, 52, 69, 1, windowBottom - 69, 1 );
+                    FillTransform( image, 53, 74, 1, windowBottom - 74, 1 );
+                    FillTransform( image, 57, 70, 1, windowBottom - 70, 1 );
+                    FillTransform( image, 58, 67, 1, windowBottom - 67, 1 );
+                    FillTransform( image, 59, 66, 1, windowBottom - 66, 1 );
+                    FillTransform( image, 60, 65, 2, windowBottom - 65, 1 );
+                    FillTransform( image, 62, 67, 1, windowBottom - 67, 1 );
+                    FillTransform( image, 63, 69, 1, windowBottom - 69, 1 );
+                    FillTransform( image, 64, 72, 1, windowBottom - 72, 1 );
+
+                    // The lower part of the tower is truncated and blocked by partial castle's sprite. The fix is done in multiple stages.
+                    // Fix right red part of the building by copying a piece of the same wall.
+                    Copy( image, 67, 135, image, 67, 119, 1, 1 );
+                    Copy( image, 67, 144, image, 67, 120, 2, 2 );
+                    Copy( image, 67, 134, image, 67, 122, 3, 2 );
+                    Copy( image, 67, 148, image, 67, 125, 1, 4 );
+
+                    // Remove a part of the castle at the bottom left part of the image.
+                    FillTransform( image, 62, 157, 3, 8, 1 );
+
+                    // Top part of the castle's tower touches Red Tower level separation part.
+                    Copy( image, 61, 101, image, 57, 101, 2, 1 );
+                    Copy( image, 52, 100, image, 57, 100, 2, 1 );
+
+                    // Generate programmatically the left part of the building.
+                    std::mt19937 seededGen( 751 ); // 751 is and ID of this sprite. To keep the changes constant we need to hardcode this value.
+
+                    fillRandomPixelsFromImage( image, { 33, 105, 4, 7 }, image, { 33, 117, 4, 39 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 41, 105, 5, 9 }, image, { 41, 121, 5, 36 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 46, 104, 4, 13 }, image, { 46, 118, 4, 39 }, seededGen );
+
+                    Copy( image, 37, 113, image, 37, 115, 1, 2 );
+                    Copy( image, 37, 104, image, 37, 117, 1, 2 );
+                    Copy( image, 38, 104, image, 38, 118, 2, 1 );
+                    Copy( image, 37, 113, image, 38, 117, 1, 1 );
+
+                    // Create a temporary image to be a holder of pixels.
+                    Sprite temp( 4 * 2, 8 );
+                    Copy( image, 33, 105, temp, 0, 0, 4, 8 );
+                    Copy( image, 41, 105, temp, 4, 0, 4, 8 );
+                    fillRandomPixelsFromImage( temp, { 0, 0, temp.width(), temp.height() }, image, { 37, 119, 4, 37 }, seededGen );
+
+                    Copy( image, 35, 131, image, 35, 113, 2, 4 );
+
+                    Copy( image, 43, 133, image, 43, 115, 3, 6 );
+
+                    // Fix the main arc.
+                    Copy( image, 61, 102, image, 56, 102, 3, 1 );
+
+                    // TODO: the distribution of light inside Red Tower is actually not uniform and follows the window on from th left.
+                    // However, generating such complex image requires a lot of code so we simply make the rest of the arc uniformed filled.
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 50, 110, 12, 47 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 52, 107, 9, 3 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 62, 111, 1, 46 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 63, 113, 1, 20 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 63, 141, 1, 16 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 64, 115, 1, 17 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 64, 152, 1, 5 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 65, 116, 1, 15 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 66, 118, 1, 12 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 51, 108, 1, 2 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 55, 103, 5, 4 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 61, 109, 1, 1 }, seededGen );
+                    fillRandomPixelsFromImage( image, { 61, 104, 2, 3 }, image, { 52, 106, 1, 1 }, seededGen );
+                }
+                return true;
+            case ICN::SCENIBKG:
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() && _icnVsSprite[id][0].width() == 436 && _icnVsSprite[id][0].height() == 476 ) {
+                    const Sprite & helper = GetICN( ICN::CSPANBKE, 1 );
+                    if ( !helper.empty() ) {
+                        Sprite & original = _icnVsSprite[id][0];
+                        Sprite temp( original.width(), original.height() + 12 );
+                        temp.reset();
+                        Copy( original, 0, 0, temp, 0, 0, original.width(), original.height() );
+                        Copy( helper, 0, helper.height() - 12, temp, 0, temp.height() - 12, 300, 12 );
+                        Copy( helper, helper.width() - ( temp.width() - 300 ), helper.height() - 12, temp, 300 - 16, temp.height() - 12, temp.width() - 300, 12 );
+                        original = std::move( temp );
+                    }
+                }
+                return true;
+            case ICN::CSTLCAPS:
+                LoadOriginalICN( id );
+                if ( !_icnVsSprite[id].empty() && _icnVsSprite[id][0].width() == 84 && _icnVsSprite[id][0].height() == 81 ) {
+                    const Sprite & castle = GetICN( ICN::TWNSCSTL, 0 );
+                    if ( !castle.empty() ) {
+                        Blit( castle, 206, 106, _icnVsSprite[id][0], 2, 2, 33, 67 );
+                    }
+                }
+                return true;
+            case ICN::LGNDXTRA:
+                // Exit button is too huge due to 1 pixel presence at the bottom of the image.
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 6 ) {
+                    auto & original = _icnVsSprite[id];
+                    if ( original[4].height() == 142 ) {
+                        const Point offset( original[4].x(), original[4].y() );
+                        original[4] = Crop( original[4], 0, 0, original[4].width(), 25 );
+                        original[4].setPosition( offset.x, offset.y );
+                    }
+
+                    if ( original[5].height() == 142 ) {
+                        const Point offset( original[5].x(), original[5].y() );
+                        original[5] = Crop( original[5], 0, 0, original[5].width(), 25 );
+                        original[5].setPosition( offset.x, offset.y );
+                    }
+                }
+                return true;
+            case ICN::LGNDXTRE:
+                // Exit button is too huge due to 1 pixel presence at the bottom of the image.
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() >= 6 ) {
+                    auto & original = _icnVsSprite[id];
+                    if ( original[4].height() == 142 ) {
+                        const Point offset( original[4].x(), original[4].y() );
+                        original[4] = Crop( original[4], 0, 0, original[4].width(), 25 );
+                        original[4].setPosition( offset.x, offset.y );
+                    }
+                }
+                return true;
+            case ICN::ESPANBKG_EVIL: {
+                _icnVsSprite[id].resize( 2 );
+
+                const Rect roi{ 28, 28, 265, 206 };
+
+                Sprite & output = _icnVsSprite[id][0];
+                _icnVsSprite[id][0] = GetICN( ICN::CSPANBKE, 0 );
+                Copy( GetICN( ICN::ESPANBKG, 0 ), roi.x, roi.y, output, roi.x, roi.y, roi.width, roi.height );
+
+                convertToEvilInterface( output, roi );
+
+                _icnVsSprite[id][1] = GetICN( ICN::ESPANBKG, 1 );
+
+                return true;
+            }
+            case ICN::RECR2BKG_EVIL: {
+                GetICN( ICN::RECR2BKG, 0 );
+                _icnVsSprite[id] = _icnVsSprite[ICN::RECR2BKG];
+                if ( !_icnVsSprite[id].empty() ) {
+                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                    convertToEvilInterface( _icnVsSprite[id][0], roi );
+                    copyEvilInterfaceElements( _icnVsSprite[id][0], roi );
+                }
+
+                return true;
+            }
+            case ICN::RECRBKG_EVIL: {
+                GetICN( ICN::RECRBKG, 0 );
+                _icnVsSprite[id] = _icnVsSprite[ICN::RECRBKG];
+                if ( !_icnVsSprite[id].empty() ) {
+                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                    convertToEvilInterface( _icnVsSprite[id][0], roi );
+                    copyEvilInterfaceElements( _icnVsSprite[id][0], roi );
+                }
+
+                return true;
+            }
+            case ICN::STONEBAK_EVIL: {
+                GetICN( ICN::STONEBAK, 0 );
+                _icnVsSprite[id] = _icnVsSprite[ICN::STONEBAK];
+                if ( !_icnVsSprite[id].empty() ) {
+                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                    convertToEvilInterface( _icnVsSprite[id][0], roi );
+                }
+
+                return true;
+            }
+            case ICN::WELLBKG_EVIL: {
+                GetICN( ICN::WELLBKG, 0 );
+                _icnVsSprite[id] = _icnVsSprite[ICN::WELLBKG];
+                if ( !_icnVsSprite[id].empty() ) {
+                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() - 19 );
+                    convertToEvilInterface( _icnVsSprite[id][0], roi );
+                }
+
+                return true;
+            }
+            case ICN::CASLWIND_EVIL: {
+                GetICN( ICN::CASLWIND, 0 );
+                _icnVsSprite[id] = _icnVsSprite[ICN::CASLWIND];
+                if ( !_icnVsSprite[id].empty() ) {
+                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                    convertToEvilInterface( _icnVsSprite[id][0], roi );
+                }
+
+                return true;
+            }
+            case ICN::CASLXTRA_EVIL: {
+                GetICN( ICN::CASLXTRA, 0 );
+                _icnVsSprite[id] = _icnVsSprite[ICN::CASLXTRA];
+                if ( !_icnVsSprite[id].empty() ) {
+                    const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() );
+                    convertToEvilInterface( _icnVsSprite[id][0], roi );
+                }
+
+                return true;
+            }
+            case ICN::STRIP_BACKGROUND_EVIL: {
+                _icnVsSprite[id].resize( 1 );
+                _icnVsSprite[id][0] = GetICN( ICN::STRIP, 11 );
+
+                const Rect roi( 0, 0, _icnVsSprite[id][0].width(), _icnVsSprite[id][0].height() - 7 );
+                convertToEvilInterface( _icnVsSprite[id][0], roi );
+
+                return true;
+            }
+            case ICN::GOOD_CAMPAIGN_BUTTONS:
+            case ICN::EVIL_CAMPAIGN_BUTTONS: {
+                auto & image = _icnVsSprite[id];
+                image.resize( 8 );
+
+                const int originalIcnId = ( id == ICN::GOOD_CAMPAIGN_BUTTONS ) ? ICN::CAMPXTRG : ICN::CAMPXTRE;
+
+                for ( int32_t i = 0; i < 4; ++i ) {
+                    image[2 * i] = GetICN( originalIcnId, 2 * i );
+
+                    const Sprite & original = GetICN( originalIcnId, 2 * i + 1 );
+
+                    Sprite & resized = image[2 * i + 1];
+                    resized.resize( image[2 * i].width(), image[2 * i].height() );
+                    resized.reset();
+
+                    Copy( original, 0, 0, resized, original.x(), original.y(), original.width(), original.height() );
+                }
+
+                return true;
+            }
+            case ICN::B_BFLG32:
+            case ICN::G_BFLG32:
+            case ICN::R_BFLG32:
+            case ICN::Y_BFLG32:
+            case ICN::O_BFLG32:
+            case ICN::P_BFLG32:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 31 && _icnVsSprite[id][31].height() == 248 ) {
+                    Sprite & original = _icnVsSprite[id][31];
+                    Sprite temp = Crop( original, 0, 0, original.width(), 4 );
+                    temp.setPosition( original.x(), original.y() );
+
+                    original = std::move( temp );
+                }
+                return true;
+            case ICN::FLAG32:
+                LoadOriginalICN( id );
+                // Only first 14 images are properly aligned within an Adventure Map tile. The rest of images should be rendered on multiple tiles.
+                // To keep proper rendering logic we are creating new images by diving existing ones into 2 parts and setting up new sprite offsets.
+                // This helps to solve the problem with rendering order.
+                _icnVsSprite[id].resize( 128 + _icnVsSprite[id].size() * 2 );
+                for ( int32_t i = 14; i < 14 + 7; ++i ) {
+                    const Sprite & original = _icnVsSprite[id][i];
+
+                    _icnVsSprite[id][i + 128] = Crop( original, 0, 0, 32 - original.x(), original.height() );
+                    _icnVsSprite[id][i + 128].setPosition( original.x(), 32 + original.y() );
+
+                    _icnVsSprite[id][i + 128 + 7] = Crop( original, 32 - original.x(), 0, original.width(), original.height() );
+                    _icnVsSprite[id][i + 128 + 7].setPosition( 0, 32 + original.y() );
+                }
+
+                for ( int32_t i = 42; i < 42 + 7; ++i ) {
+                    const Sprite & original = _icnVsSprite[id][i];
+
+                    _icnVsSprite[id][i + 128] = Crop( original, 0, 0, -original.x(), original.height() );
+                    _icnVsSprite[id][i + 128].setPosition( 32 + original.x(), original.y() );
+
+                    _icnVsSprite[id][i + 128 + 7] = Crop( original, -original.x(), 0, original.width(), original.height() );
+                    _icnVsSprite[id][i + 128 + 7].setPosition( 0, original.y() );
+                }
+                return true;
+            case ICN::MINI_MONSTER_IMAGE:
+            case ICN::MINI_MONSTER_SHADOW: {
+                // It doesn't matter which image is being called. We are generating both of them at the same time.
+                LoadOriginalICN( ICN::MINIMON );
+
+                // TODO: optimize image sizes.
+                _icnVsSprite[ICN::MINI_MONSTER_IMAGE] = _icnVsSprite[ICN::MINIMON];
+                _icnVsSprite[ICN::MINI_MONSTER_SHADOW] = _icnVsSprite[ICN::MINIMON];
+
+                for ( Sprite & image : _icnVsSprite[ICN::MINI_MONSTER_IMAGE] ) {
+                    uint8_t * transform = image.transform();
+                    const uint8_t * tranformEnd = transform + image.width() * image.height();
+                    for ( ; transform != tranformEnd; ++transform ) {
+                        if ( *transform > 1 ) {
+                            *transform = 1;
+                        }
+                    }
+                }
+
+                for ( Sprite & image : _icnVsSprite[ICN::MINI_MONSTER_SHADOW] ) {
+                    uint8_t * transform = image.transform();
+                    const uint8_t * tranformEnd = transform + image.width() * image.height();
+                    for ( ; transform != tranformEnd; ++transform ) {
+                        if ( *transform == 0 ) {
+                            *transform = 1;
+                        }
+                    }
+                }
+
+                return true;
+            }
             default:
                 break;
             }
@@ -2493,8 +2308,10 @@ namespace fheroes2
             if ( _tilVsImage[id].empty() ) {
                 _tilVsImage[id].resize( 4 ); // 4 possible sides
 
-                const std::vector<uint8_t> & data = ::AGG::ReadChunk( tilFileName[id] );
+                const std::vector<uint8_t> & data = ::AGG::getDataFromAggFile( tilFileName[id] );
                 if ( data.size() < headerSize ) {
+                    // The important resource is absent! Make sure that you are using the correct version of the game.
+                    assert( 0 );
                     return 0;
                 }
 
@@ -2516,7 +2333,7 @@ namespace fheroes2
                     tilImage.resize( width, height );
                     tilImage._disableTransformLayer();
                     memcpy( tilImage.image(), data.data() + headerSize + i * size, size );
-                    std::fill( tilImage.transform(), tilImage.transform() + width * height, 0 );
+                    std::fill( tilImage.transform(), tilImage.transform() + width * height, static_cast<uint8_t>( 0 ) );
                 }
 
                 for ( uint32_t shapeId = 1; shapeId < 4; ++shapeId ) {
@@ -2622,8 +2439,6 @@ namespace fheroes2
 
             // TODO: correct naming and standartise the code
             switch ( fontType ) {
-            case Font::GRAY_BIG:
-                return GetICN( ICN::GRAY_FONT, character - 0x20 );
             case Font::GRAY_SMALL:
                 return GetICN( ICN::GRAY_SMALL_FONT, character - 0x20 );
             case Font::YELLOW_BIG:
@@ -2634,9 +2449,8 @@ namespace fheroes2
                 return GetICN( ICN::FONT, character - 0x20 );
             case Font::SMALL:
                 return GetICN( ICN::SMALFONT, character - 0x20 );
-            case Font::WHITE_LARGE:
-                return GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
             default:
+                assert( 0 );
                 break;
             }
 
@@ -2647,15 +2461,14 @@ namespace fheroes2
         {
             switch ( fontType ) {
             case Font::BIG:
-            case Font::GRAY_BIG:
             case Font::YELLOW_BIG:
-            case Font::WHITE_LARGE:
                 return static_cast<uint32_t>( GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
             case Font::SMALL:
             case Font::GRAY_SMALL:
             case Font::YELLOW_SMALL:
                 return static_cast<uint32_t>( GetMaximumICNIndex( ICN::SMALFONT ) ) + 0x20 - 1;
             default:
+                assert( 0 );
                 return 0;
             }
         }
@@ -2709,6 +2522,8 @@ namespace fheroes2
                 case FontColor::YELLOW:
                     return GetICN( ICN::YELLOW_SMALLFONT, character - 0x20 );
                 default:
+                    // Did you add a new font color? Add the corresponding logic for it!
+                    assert( 0 );
                     break;
                 }
                 break;
@@ -2721,6 +2536,8 @@ namespace fheroes2
                 case FontColor::YELLOW:
                     return GetICN( ICN::YELLOW_FONT, character - 0x20 );
                 default:
+                    // Did you add a new font color? Add the corresponding logic for it!
+                    assert( 0 );
                     break;
                 }
                 break;
@@ -2729,10 +2546,14 @@ namespace fheroes2
                 case FontColor::WHITE:
                     return GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
                 default:
+                    // Did you add a new font color? Add the corresponding logic for it!
+                    assert( 0 );
                     break;
                 }
                 break;
             default:
+                // Did you add a new font size? Add the corresponding logic for it!
+                assert( 0 );
                 break;
             }
 
@@ -2748,23 +2569,10 @@ namespace fheroes2
             }
             else {
                 alphabetPreserver.preserve();
-                generateAlphabet( language );
+                // Restore original letters when changing language to avoid changes to them being carried over.
+                alphabetPreserver.restore();
+                generateAlphabet( language, _icnVsSprite );
             }
-        }
-
-        bool isAlphabetSupported( const SupportedLanguage language )
-        {
-            switch ( language ) {
-            case SupportedLanguage::Polish:
-            case SupportedLanguage::German:
-            case SupportedLanguage::French:
-            case SupportedLanguage::Russian:
-                return true;
-            default:
-                break;
-            }
-
-            return false;
         }
     }
 }

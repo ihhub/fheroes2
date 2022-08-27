@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,16 +24,16 @@
 #include <cassert>
 #include <string>
 
-#include "agg.h"
 #include "agg_image.h"
 #include "army_bar.h"
+#include "audio_manager.h"
 #include "castle.h"
 #include "castle_building_info.h"
-#include "castle_ui.h"
 #include "cursor.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_delays.h"
+#include "game_hotkeys.h"
 #include "heroes.h"
 #include "icn.h"
 #include "kingdom.h"
@@ -42,9 +43,10 @@
 #include "resource.h"
 #include "settings.h"
 #include "statusbar.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_castle.h"
+#include "ui_kingdom.h"
 #include "ui_text.h"
 #include "ui_tool.h"
 #include "ui_window.h"
@@ -56,43 +58,43 @@ namespace
 
     building_t getPressedBuildingHotkey()
     {
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_1 ) ) {
+        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_1 ) ) {
             return DWELLING_MONSTER1;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_2 ) ) {
+        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_2 ) ) {
             return DWELLING_MONSTER2;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_3 ) ) {
+        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_3 ) ) {
             return DWELLING_MONSTER3;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_4 ) ) {
+        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_4 ) ) {
             return DWELLING_MONSTER4;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_5 ) ) {
+        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_5 ) ) {
             return DWELLING_MONSTER5;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_DWELLING_LEVEL_6 ) ) {
+        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_DWELLING_LEVEL_6 ) ) {
             return DWELLING_MONSTER6;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_MARKETPLACE ) ) {
+        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_MARKETPLACE ) ) {
             return BUILD_MARKETPLACE;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_WELL ) ) {
+        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_WELL ) ) {
             return BUILD_WELL;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_MAGE_GUILD ) ) {
+        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_MAGE_GUILD ) ) {
             return BUILD_MAGEGUILD;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_SHIPYARD ) ) {
+        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_SHIPYARD ) ) {
             return BUILD_SHIPYARD;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_THIEVES_GUILD ) ) {
+        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_THIEVES_GUILD ) ) {
             return BUILD_THIEVESGUILD;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_TAVERN ) ) {
+        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_TAVERN ) ) {
             return BUILD_TAVERN;
         }
-        if ( HotKeyPressEvent( Game::EVENT_TOWN_JUMP_TO_BUILD_SELECTION ) ) {
+        if ( HotKeyPressEvent( Game::HotKeyEvent::TOWN_JUMP_TO_BUILD_SELECTION ) ) {
             return BUILD_CASTLE;
         }
 
@@ -162,8 +164,11 @@ namespace
             fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 3 ), display, pt.x + 5, pt.y + 361 );
         }
 
-        if ( !hero2 )
-            fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STRIP, 11 ), display, pt.x + 112, pt.y + 361 );
+        if ( !hero2 ) {
+            const fheroes2::Sprite & backgroundImage = fheroes2::AGG::GetICN( ICN::STRIP, 11 );
+
+            fheroes2::Blit( backgroundImage, display, pt.x + 112, pt.y + 361 );
+        }
     }
 
     std::string getDateString()
@@ -249,13 +254,13 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
     // Fade screen.
-    Settings & conf = Settings::Get();
-    if ( conf.ExtGameUseFade() )
+    const Settings & conf = Settings::Get();
+    if ( Settings::ExtGameUseFade() )
         fheroes2::FadeDisplay();
 
     const fheroes2::StandardWindow background( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
 
-    AGG::PlayMusic( MUS::FromRace( race ), true, true );
+    AudioManager::PlayMusicAsync( MUS::FromRace( race ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
 
     int alphaHero = 255;
     CastleDialog::FadeBuilding fadeBuilding;
@@ -276,7 +281,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
         }
 
         if ( build != BUILD_NOTHING ) {
-            AGG::PlaySound( M82::BUILDTWN );
+            AudioManager::PlaySound( M82::BUILDTWN );
             fadeBuilding.StartFadeBuilding( build );
         }
 
@@ -285,7 +290,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
 
             generateHeroImage( surfaceHero, heroes );
 
-            AGG::PlaySound( M82::BUILDTWN );
+            AudioManager::PlaySound( M82::BUILDTWN );
             alphaHero = 0;
         }
     }
@@ -338,7 +343,6 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
     bottomArmyBar.SetHSpace( 6 );
 
     if ( heroes.Guest() ) {
-        heroes.Guest()->MovePointsScaleFixed();
         bottomArmyBar.SetArmy( &heroes.Guest()->GetArmy() );
 
         if ( alphaHero != 0 ) {
@@ -401,27 +405,28 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
             le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
             // Check buttons for closing this castle's window.
-            if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow ) {
+            if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
                 result = CastleDialogReturnValue::Close;
                 break;
             }
             if ( buttonPrevCastle.isEnabled()
-                 && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVELEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
+                 && ( le.MouseClickLeft( buttonPrevCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_LEFT ) || timedButtonPrevCastle.isDelayPassed() ) ) {
                 result = CastleDialogReturnValue::PreviousCastle;
                 break;
             }
             if ( buttonNextCastle.isEnabled()
-                 && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::EVENT_MOVERIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
+                 && ( le.MouseClickLeft( buttonNextCastle.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MOVE_RIGHT ) || timedButtonNextCastle.isDelayPassed() ) ) {
                 result = CastleDialogReturnValue::NextCastle;
                 break;
             }
 
             if ( le.MouseClickLeft( resActiveArea ) ) {
                 fheroes2::ButtonRestorer exitRestorer( buttonExit );
-                Dialog::ResourceInfo( _( "Income" ), "", GetKingdom().GetIncome( INCOME_ALL ), Dialog::OK );
+
+                fheroes2::showKingdomIncome( GetKingdom(), Dialog::OK );
             }
             else if ( le.MousePressRight( resActiveArea ) ) {
-                Dialog::ResourceInfo( _( "Income" ), "", GetKingdom().GetIncome( INCOME_ALL ), 0 );
+                fheroes2::showKingdomIncome( GetKingdom(), 0 );
             }
             else if ( le.MousePressRight( buttonExit.area() ) ) {
                 Dialog::Message( _( "Exit" ), _( "Exit this menu." ), Font::BIG );
@@ -617,7 +622,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                                 Dialog::Message( _( "Town" ), _( "This town may not be upgraded to a castle." ), Font::BIG, Dialog::OK );
                             }
                             else if ( Dialog::OK == DialogBuyCastle( true ) ) {
-                                AGG::PlaySound( M82::BUILDTWN );
+                                AudioManager::PlaySound( M82::BUILDTWN );
                                 fadeBuilding.StartFadeBuilding( BUILD_CASTLE );
                             }
                             break;
@@ -639,7 +644,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                             }
 
                             if ( build != BUILD_NOTHING ) {
-                                AGG::PlaySound( M82::BUILDTWN );
+                                AudioManager::PlaySound( M82::BUILDTWN );
                                 fadeBuilding.StartFadeBuilding( build );
                             }
 
@@ -653,7 +658,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                                     topArmyBar.Redraw();
                                     RedrawIcons( *this, CastleHeroes( nullptr, heroes.Guard() ), cur_pt );
                                 }
-                                AGG::PlaySound( M82::BUILDTWN );
+                                AudioManager::PlaySound( M82::BUILDTWN );
 
                                 bottomArmyBar.SetArmy( &heroes.Guest()->GetArmy() );
                                 generateHeroImage( surfaceHero, heroes );

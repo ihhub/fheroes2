@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2013 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,8 +32,6 @@
 #include "tools.h"
 #include "translations.h"
 
-#define SIZEMESSAGE 400
-
 StreamBase & operator<<( StreamBase & msg, const MapObjectSimple & obj )
 {
     return msg << obj.type << obj.uid << static_cast<const MapPosition &>( obj );
@@ -50,7 +49,7 @@ MapEvent::MapEvent()
     , colors( 0 )
 {}
 
-void MapEvent::LoadFromMP2( s32 index, StreamBuf st )
+void MapEvent::LoadFromMP2( int32_t index, StreamBuf st )
 {
     // id
     if ( 1 == st.get() ) {
@@ -101,10 +100,10 @@ void MapEvent::LoadFromMP2( s32 index, StreamBuf st )
         message = st.toString();
         DEBUG_LOG( DBG_GAME, DBG_INFO,
                    "event"
-                       << ": " << message );
+                       << ": " << message )
     }
     else {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown id" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown id" )
     }
 }
 
@@ -126,7 +125,7 @@ MapSphinx::MapSphinx()
     , valid( false )
 {}
 
-void MapSphinx::LoadFromMP2( s32 index, StreamBuf st )
+void MapSphinx::LoadFromMP2( int32_t index, StreamBuf st )
 {
     // id
     if ( 0 == st.get() ) {
@@ -146,10 +145,10 @@ void MapSphinx::LoadFromMP2( s32 index, StreamBuf st )
         artifact = st.getLE16();
 
         // count answers
-        u32 count = st.get();
+        uint32_t count = st.get();
 
         // answers
-        for ( u32 i = 0; i < 8; ++i ) {
+        for ( uint32_t i = 0; i < 8; ++i ) {
             std::string answer = st.toString( 13 );
 
             if ( count-- && !answer.empty() )
@@ -162,21 +161,21 @@ void MapSphinx::LoadFromMP2( s32 index, StreamBuf st )
         valid = true;
         DEBUG_LOG( DBG_GAME, DBG_INFO,
                    "sphinx"
-                       << ": " << message );
+                       << ": " << message )
     }
     else {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown id" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown id" )
     }
 }
 
 bool MapSphinx::AnswerCorrect( const std::string & answer )
 {
     const std::string ans = StringLower( answer ).substr( 0, 4 );
-    auto checkAnswer = [ans]( const std::string & str ) { return StringLower( str ).substr( 0, 4 ) == ans; };
+    auto checkAnswer = [&ans]( const std::string & str ) { return StringLower( str ).substr( 0, 4 ) == ans; };
     return std::any_of( answers.begin(), answers.end(), checkAnswer );
 }
 
-void MapSphinx::SetQuiet( void )
+void MapSphinx::SetQuiet()
 {
     valid = false;
     artifact = Artifact::UNKNOWN;
@@ -207,7 +206,7 @@ MapSign::MapSign()
     : MapObjectSimple( MP2::OBJ_SIGN )
 {}
 
-void MapSign::LoadFromMP2( s32 index, StreamBuf st )
+void MapSign::LoadFromMP2( int32_t index, StreamBuf st )
 {
     st.skip( 9 );
     message = st.toString();
@@ -221,7 +220,7 @@ void MapSign::LoadFromMP2( s32 index, StreamBuf st )
     SetUID( index );
     DEBUG_LOG( DBG_GAME, DBG_INFO,
                "sign"
-                   << ": " << message );
+                   << ": " << message )
 }
 
 StreamBase & operator<<( StreamBase & msg, const MapSign & obj )

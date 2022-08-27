@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +23,7 @@
 
 #include "week.h"
 #include "rand.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "tools.h"
 #include "translations.h"
@@ -29,20 +31,19 @@
 
 namespace
 {
-    WeekName WeekRand( const World & worldInstance, const size_t seed )
+    WeekName WeekRand( const World & worldInstance, const uint32_t seed )
     {
-        return ( 0 == ( worldInstance.CountWeek() + 1 ) % 3 ) ? WeekName::MONSTERS : Rand::GetWithSeed( WeekName::ANT, WeekName::CONDOR, static_cast<uint32_t>( seed ) );
+        return ( 0 == ( worldInstance.CountWeek() + 1 ) % 3 ) ? WeekName::MONSTERS : Rand::GetWithSeed( WeekName::ANT, WeekName::CONDOR, seed );
     }
 
-    WeekName MonthRand( const World & worldInstance, const size_t seed )
+    WeekName MonthRand( const World & worldInstance, const uint32_t seed )
     {
-        return ( 0 == ( worldInstance.GetMonth() + 1 ) % 3 ) ? WeekName::MONSTERS
-                                                             : Rand::GetWithSeed( WeekName::PLAGUE, WeekName::CONDOR, static_cast<uint32_t>( seed ) );
+        return ( 0 == ( worldInstance.GetMonth() + 1 ) % 3 ) ? WeekName::MONSTERS : Rand::GetWithSeed( WeekName::PLAGUE, WeekName::CONDOR, seed );
     }
 
-    Monster::monster_t RandomMonsterWeekOf( const size_t seed )
+    Monster::monster_t RandomMonsterWeekOf( const uint32_t seed )
     {
-        switch ( Rand::GetWithSeed( 1, 47, static_cast<uint32_t>( seed ) ) ) {
+        switch ( Rand::GetWithSeed( 1, 47, seed ) ) {
         case 1:
             return Monster::PEASANT;
         case 2:
@@ -143,9 +144,9 @@ namespace
         }
     }
 
-    Monster::monster_t RandomMonsterMonthOf( const size_t seed )
+    Monster::monster_t RandomMonsterMonthOf( const uint32_t seed )
     {
-        switch ( Rand::GetWithSeed( 1, 30, static_cast<uint32_t>( seed ) ) ) {
+        switch ( Rand::GetWithSeed( 1, 30, seed ) ) {
         case 1:
             return Monster::PEASANT;
         case 2:
@@ -213,7 +214,7 @@ namespace
     }
 }
 
-const char * Week::GetName( void ) const
+const char * Week::GetName() const
 {
     switch ( _week ) {
     case WeekName::PLAGUE:
@@ -273,15 +274,15 @@ const char * Week::GetName( void ) const
     return "Unnamed";
 }
 
-Week Week::RandomWeek( const World & worldInstance, const bool isNewMonth, const size_t weekSeed )
+Week Week::RandomWeek( const World & worldInstance, const bool isNewMonth, const uint32_t weekSeed )
 {
-    size_t weekTypeSeed = weekSeed;
+    uint32_t weekTypeSeed = weekSeed;
     fheroes2::hashCombine( weekTypeSeed, 34582445 ); // random value to add salt
 
     const WeekName weekName = isNewMonth ? MonthRand( worldInstance, weekTypeSeed ) : WeekRand( worldInstance, weekTypeSeed );
 
     if ( weekName == WeekName::MONSTERS ) {
-        size_t monsterTypeSeed = weekSeed;
+        uint32_t monsterTypeSeed = weekSeed;
         fheroes2::hashCombine( monsterTypeSeed, 284631 ); // random value to add salt
         if ( isNewMonth ) {
             return { weekName, RandomMonsterMonthOf( monsterTypeSeed ) };
@@ -291,19 +292,4 @@ Week Week::RandomWeek( const World & worldInstance, const bool isNewMonth, const
     }
 
     return { weekName, Monster::UNKNOWN };
-}
-
-StreamBase & operator>>( StreamBase & stream, Week & week )
-{
-    int32_t weekType;
-    int32_t monster;
-    StreamBase & sb = stream >> weekType >> monster;
-    week._week = static_cast<WeekName>( weekType );
-    week._monster = static_cast<Monster::monster_t>( monster );
-    return sb;
-}
-
-StreamBase & operator<<( StreamBase & stream, const Week & week )
-{
-    return stream << static_cast<int32_t>( week.GetType() ) << static_cast<int32_t>( week.GetMonster() );
 }

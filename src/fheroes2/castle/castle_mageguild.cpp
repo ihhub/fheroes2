@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,22 +28,27 @@
 #include "castle.h"
 #include "cursor.h"
 #include "dialog.h"
-#include "game.h"
+#include "game_hotkeys.h"
 #include "icn.h"
 #include "mageguild.h"
 #include "race.h"
+#include "settings.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
+#include "ui_dialog.h"
 
 namespace
 {
+    const int32_t bottomBarOffsetY = 461;
+    const int32_t exitButtonOffsetX = 578;
+
     class RowSpells
     {
     public:
         RowSpells( const fheroes2::Point & pos, const Castle & castle, const int lvl );
-        void Redraw( void );
-        bool QueueEventProcessing( void );
+        void Redraw();
+        bool QueueEventProcessing();
 
     private:
         std::vector<fheroes2::Rect> coords;
@@ -90,7 +96,7 @@ RowSpells::RowSpells( const fheroes2::Point & pos, const Castle & castle, const 
     spells.resize( coords.size(), Spell::NONE );
 }
 
-void RowSpells::Redraw( void )
+void RowSpells::Redraw()
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     const fheroes2::Sprite & roll_show = fheroes2::AGG::GetICN( ICN::TOWNWIND, 0 );
@@ -117,17 +123,17 @@ void RowSpells::Redraw( void )
     }
 }
 
-bool RowSpells::QueueEventProcessing( void )
+bool RowSpells::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
 
-    const s32 index = GetRectIndex( coords, le.GetMouseCursor() );
+    const int32_t index = GetRectIndex( coords, le.GetMouseCursor() );
 
     if ( 0 <= index && ( le.MouseClickLeft() || le.MousePressRight() ) ) {
         const Spell & spell = spells[index];
 
         if ( spell != Spell::NONE ) {
-            Dialog::SpellInfo( spell, nullptr, !le.MousePressRight() );
+            fheroes2::SpellDialogElement( spell, nullptr ).showPopup( le.MousePressRight() ? Dialog::ZERO : Dialog::OK );
             fheroes2::Display::instance().render();
         }
     }
@@ -149,10 +155,18 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
     const fheroes2::Point cur_pt( restorer.x(), restorer.y() );
     fheroes2::Point dst_pt( cur_pt.x, cur_pt.y );
 
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::STONEBAK, 0 ), display, cur_pt.x, cur_pt.y );
+    const bool isEvilInterface = Settings::Get().ExtGameEvilInterface();
 
-    // bar
-    fheroes2::Blit( fheroes2::AGG::GetICN( ICN::WELLXTRA, 2 ), display, cur_pt.x, cur_pt.y + 461 );
+    fheroes2::Blit( fheroes2::AGG::GetICN( isEvilInterface ? ICN::STONEBAK_EVIL : ICN::STONEBAK, 0 ), display, cur_pt.x, cur_pt.y );
+
+    // The original ICN::WELLEXTRA image does not have a yellow outer frame.
+    const int32_t allowedBottomBarWidth = exitButtonOffsetX;
+    const fheroes2::Sprite & bottomBar = fheroes2::AGG::GetICN( ICN::SMALLBAR, 0 );
+
+    // ICN::SMALLBAR image's first column contains all black pixels. This should not be drawn.
+    fheroes2::Blit( bottomBar, 1, 0, display, cur_pt.x, cur_pt.y + bottomBarOffsetY, allowedBottomBarWidth / 2, bottomBar.height() );
+    fheroes2::Blit( bottomBar, bottomBar.width() - ( allowedBottomBarWidth - allowedBottomBarWidth / 2 ) - 1, 0, display, cur_pt.x + allowedBottomBarWidth / 2,
+                    cur_pt.y + bottomBarOffsetY, allowedBottomBarWidth - allowedBottomBarWidth / 2, bottomBar.height() );
 
     // text bar
     Text text;
@@ -194,15 +208,15 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
     fheroes2::Point outPos( cur_pt.x + 100 - area.x - area.width / 2, cur_pt.y + 290 - sprite.height() );
     fheroes2::Size inSize( sprite.width(), sprite.height() );
 
-    if ( fheroes2::FitToRoi( sprite, inPos, display, outPos, inSize, fheroes2::Rect( cur_pt.x, cur_pt.y, 200, fheroes2::Display::DEFAULT_HEIGHT ) ) ) {
+    if ( fheroes2::FitToRoi( sprite, inPos, display, outPos, inSize, { cur_pt.x, cur_pt.y, 200, fheroes2::Display::DEFAULT_HEIGHT } ) ) {
         fheroes2::Blit( sprite, inPos, display, outPos, inSize );
     }
 
-    RowSpells spells5( fheroes2::Point( cur_pt.x + 250, cur_pt.y + 5 ), *this, 5 );
-    RowSpells spells4( fheroes2::Point( cur_pt.x + 250, cur_pt.y + 95 ), *this, 4 );
-    RowSpells spells3( fheroes2::Point( cur_pt.x + 250, cur_pt.y + 185 ), *this, 3 );
-    RowSpells spells2( fheroes2::Point( cur_pt.x + 250, cur_pt.y + 275 ), *this, 2 );
-    RowSpells spells1( fheroes2::Point( cur_pt.x + 250, cur_pt.y + 365 ), *this, 1 );
+    RowSpells spells5( { cur_pt.x + 250, cur_pt.y + 5 }, *this, 5 );
+    RowSpells spells4( { cur_pt.x + 250, cur_pt.y + 95 }, *this, 4 );
+    RowSpells spells3( { cur_pt.x + 250, cur_pt.y + 185 }, *this, 3 );
+    RowSpells spells2( { cur_pt.x + 250, cur_pt.y + 275 }, *this, 2 );
+    RowSpells spells1( { cur_pt.x + 250, cur_pt.y + 365 }, *this, 1 );
 
     spells1.Redraw();
     spells2.Redraw();
@@ -210,8 +224,7 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
     spells4.Redraw();
     spells5.Redraw();
 
-    // button exit
-    fheroes2::Button buttonExit( cur_pt.x + 578, cur_pt.y + 461, ICN::WELLXTRA, 0, 1 );
+    fheroes2::Button buttonExit( cur_pt.x + exitButtonOffsetX, cur_pt.y + bottomBarOffsetY, ICN::WELLXTRA, 0, 1 );
     buttonExit.draw();
 
     display.render();
@@ -222,11 +235,10 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
     while ( le.HandleEvents() ) {
         le.MousePressLeft( buttonExit.area() ) ? buttonExit.drawOnPress() : buttonExit.drawOnRelease();
 
-        if ( le.MouseClickLeft( buttonExit.area() ) || HotKeyCloseWindow )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
             break;
 
-        if ( spells1.QueueEventProcessing() || spells2.QueueEventProcessing() || spells3.QueueEventProcessing() || spells4.QueueEventProcessing()
-             || spells5.QueueEventProcessing() ) {
-        }
+        spells1.QueueEventProcessing() || spells2.QueueEventProcessing() || spells3.QueueEventProcessing() || spells4.QueueEventProcessing()
+            || spells5.QueueEventProcessing();
     }
 }

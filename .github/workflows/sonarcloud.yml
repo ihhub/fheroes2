@@ -1,16 +1,17 @@
 name: SonarCloud Analyzer
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  workflow_call:
+    secrets:
+      SONAR_TOKEN:
+        required: true
 
 jobs:
   sonarcloud:
     name: SonarCloud Analyzer
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository ) }}
+    timeout-minutes: 30
+    if: ${{ github.repository == 'ihhub/fheroes2' && ( github.event_name == 'push' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository ) ) }}
     env:
       SONAR_SCANNER_VERSION: 4.5.0.2216
     steps:
@@ -29,18 +30,23 @@ jobs:
         unzip ~/.sonarcloud/build-wrapper-linux-x86.zip -d ~/.sonarcloud
         unzip ~/.sonarcloud/sonar-scanner-cli-"$SONAR_SCANNER_VERSION"-linux.zip -d ~/.sonarcloud
     - name: Prepare SonarCloud cfamily cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ~/.sonar-cfamily-cache
-        key: sonarcloud-${{ hashFiles( 'src/**/*.c', 'src/**/*.cpp', 'src/**/*.h' ) }}
+        key: sonarcloud-cfamily-cache-${{ hashFiles( 'src/**/*.c', 'src/**/*.cpp', 'src/**/*.h' ) }}
         restore-keys: |
-          sonarcloud-
+          sonarcloud-cfamily-cache-
+    - name: Generate version information
+      run: |
+        sed -i~ "s/%{version}/$(cat version.txt)/" sonar-project.properties
     - name: Build
       run: |
         ~/.sonarcloud/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir bw-output make -j 2
       env:
         FHEROES2_STRICT_COMPILATION: ON
-        WITH_TOOLS: ON
+        FHEROES2_WITH_DEBUG: ON
+        FHEROES2_WITH_IMAGE: ON
+        FHEROES2_WITH_TOOLS: ON
     - name: Analyze
       run: |
         ~/.sonarcloud/sonar-scanner-"$SONAR_SCANNER_VERSION"-linux/bin/sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output \

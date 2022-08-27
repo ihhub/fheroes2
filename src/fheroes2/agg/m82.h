@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,15 +24,14 @@
 #ifndef H2M82_H
 #define H2M82_H
 
-#include "mp2.h"
-#include "types.h"
 #include <cstddef>
+#include <cstdint>
 
-#define LOOPXX_COUNT 28
+#include "mp2.h"
 
 namespace M82
 {
-    enum
+    enum SoundType : int
     {
         AELMATTK,
         AELMKILL,
@@ -160,6 +160,8 @@ namespace M82
         LICHSHOT,
         LICHWNCE,
         LIGHTBLT,
+
+        // These sounds are used for objects on Adventure Map.
         LOOP0000,
         LOOP0001,
         LOOP0002,
@@ -168,7 +170,7 @@ namespace M82
         LOOP0005,
         LOOP0006,
         LOOP0007,
-        LOOP0008,
+        LOOP0008, // UNUSED: sounds of boiling hot liquid. Most likely magma or mercury.
         LOOP0009,
         LOOP0010,
         LOOP0011,
@@ -179,15 +181,16 @@ namespace M82
         LOOP0016,
         LOOP0017,
         LOOP0018,
-        LOOP0019,
-        LOOP0020,
+        LOOP0019, // A sound with seagulls. It is used for rocks with seagulls.
+        LOOP0020, // UNUSED: waves on a beach.
         LOOP0021,
         LOOP0022,
-        LOOP0023,
+        LOOP0023, // UNUSED: a moving wooden structure with water. The most suitable for Water Wheel which uses LOOP0009.
         LOOP0024,
         LOOP0025,
-        LOOP0026,
+        LOOP0026, // moving mechanical parts, ideally for a factory. It is used for Freeman's Foundry.
         LOOP0027,
+
         MAGCAROW,
         MAGEATTK,
         MAGEKILL,
@@ -250,7 +253,7 @@ namespace M82
         PLDNMOVE,
         PLDNWNCE,
         PREBATTL,
-        PROTECT,
+        PROTECT, // UNUSED: some sort of magic.
         PSNTATTK,
         PSNTKILL,
         PSNTMOVE,
@@ -277,7 +280,7 @@ namespace M82
         SPRTMOVE,
         SPRTWNCE,
         STELSKIN,
-        STONESKI,
+        STONESKI, // UNUSED.
         STONSKIN,
         STORM,
         SUMNELM,
@@ -317,6 +320,8 @@ namespace M82
         WOLFKILL,
         WOLFMOVE,
         WOLFWNCE,
+
+        // Hero's movement sounds.
         WSND00,
         WSND01,
         WSND02,
@@ -338,18 +343,20 @@ namespace M82
         WSND24,
         WSND25,
         WSND26,
+
         ZOMBATTK,
         ZOMBKILL,
         ZOMBMOVE,
         ZOMBWNCE,
 
+        // Put all new sounds before this line.
         UNKNOWN
     };
 
-    const char * GetString( int );
-    int FromSpell( int );
-    u32 GetIndexLOOP00XXFromObject( const MP2::MapObjectType objectType );
-    int GetLOOP00XX( const size_t index );
+    const char * GetString( int m82 );
+    int FromSpell( const int spellID );
+
+    SoundType getAdventureMapObjectSound( const MP2::MapObjectType objectType );
 }
 
 #endif

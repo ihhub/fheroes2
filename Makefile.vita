@@ -1,6 +1,6 @@
 ###########################################################################
-#   Free Heroes of Might and Magic II: https://github.com/ihhub/fheroes2  #
-#   Copyright (C) 2021                                                    #
+#   fheroes2: https://github.com/ihhub/fheroes2                           #
+#   Copyright (C) 2021 - 2022                                             #
 #                                                                         #
 #   This program is free software; you can redistribute it and/or modify  #
 #   it under the terms of the GNU General Public License as published by  #
@@ -18,10 +18,17 @@
 #   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             #
 ###########################################################################
 
-TARGET	:= fheroes2
-MAKE	:= make
+# Options:
+#
+# FHEROES2_STRICT_COMPILATION: build in strict compilation mode (turns warnings into errors)
+# FHEROES2_WITH_DEBUG: build in debug mode
+# FHEROES2_WITH_IMAGE: build with SDL2 Image support (requires libpng, libjpeg and libwebp)
+# FHEROES2_DATA: set the built-in path to the fheroes2 data directory (e.g. /usr/share/fheroes2)
 
-PROJECT_TITLE := Free Heroes of Might & Magic II
+TARGET := fheroes2
+MAKE := make
+
+PROJECT_TITLE := fheroes2
 PROJECT_TITLEID := FHOMM0002
 
 .PHONY: all clean $(TARGET).vpk param.sfo $(TARGET).elf translations
@@ -41,7 +48,7 @@ $(TARGET).vpk: eboot.bin param.sfo translations
 	$(TARGET).vpk
 	@rm -r files/lang/vita_temp
 
-translations:
+translations: $(TARGET).elf
 	$(MAKE) -C files/lang
 	mkdir -p files/lang/vita_temp
 	cp files/lang/*.mo files/lang/vita_temp
@@ -57,7 +64,7 @@ $(TARGET).velf: $(TARGET).elf
 	vita-elf-create $< $@
 
 $(TARGET).elf:
-	$(MAKE) -f Makefile -C src FHEROES2_VITA=true
+	$(MAKE) -f Makefile -C src PLATFORM=vita
 	@cp src/dist/$(TARGET) $(TARGET).elf
 
 clean:

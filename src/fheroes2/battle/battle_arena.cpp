@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +23,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <functional>
 
 #include "ai.h"
 #include "army.h"
@@ -40,8 +42,10 @@
 #include "ground.h"
 #include "icn.h"
 #include "logging.h"
+#include "monster.h"
 #include "race.h"
 #include "settings.h"
+#include "speed.h"
 #include "spell_info.h"
 #include "tools.h"
 #include "translations.h"
@@ -55,9 +59,9 @@ namespace Battle
 namespace
 {
     // compute a new seed from a list of actions, so random actions happen differently depending on user inputs
-    size_t UpdateRandomSeed( const size_t seed, const Battle::Actions & actions )
+    uint32_t UpdateRandomSeed( const uint32_t seed, const Battle::Actions & actions )
     {
-        size_t newSeed = seed;
+        uint32_t newSeed = seed;
 
         for ( const Battle::Command & command : actions ) {
             if ( command.GetType() == Battle::CommandType::MSG_BATTLE_AUTO ) {
@@ -120,39 +124,163 @@ namespace
 
         return covrs.empty() ? ICN::UNKNOWN : Rand::GetWithGen( covrs, gen );
     }
+
+    Battle::Unit * GetCurrentUnitForBattleStage( Battle::Units & units1, Battle::Units & units2, const bool firstStage, const bool units1GoFirst, const bool ordersMode )
+    {
+        Battle::Unit * result = nullptr;
+
+        std::function<bool( const Battle::Unit * )> firstStageFilter
+            = []( const Battle::Unit * unit ) { return !unit->Modes( Battle::TR_SKIPMOVE ) && unit->GetSpeed() > Speed::STANDING; };
+        std::function<bool( const Battle::Unit * )> secondStageFilter
+            = []( const Battle::Unit * unit ) { return unit->Modes( Battle::TR_SKIPMOVE ) && unit->GetSpeed() > Speed::STANDING; };
+
+        Battle::Units::iterator it1 = std::find_if( units1.begin(), units1.end(), firstStage ? firstStageFilter : secondStageFilter );
+        Battle::Units::iterator it2 = std::find_if( units2.begin(), units2.end(), firstStage ? firstStageFilter : secondStageFilter );
+
+        if ( it1 != units1.end() && it2 != units2.end() ) {
+            if ( ( *it1 )->GetSpeed() == ( *it2 )->GetSpeed() ) {
+                result = units1GoFirst ? *it1 : *it2;
+            }
+            else if ( firstStage ) {
+                result = ( ( *it1 )->GetSpeed() > ( *it2 )->GetSpeed() ) ? *it1 : *it2;
+            }
+            else {
+                result = ( ( *it1 )->GetSpeed() < ( *it2 )->GetSpeed() ) ? *it1 : *it2;
+            }
+        }
+        else if ( it1 != units1.end() ) {
+            result = *it1;
+        }
+        else if ( it2 != units2.end() ) {
+            result = *it2;
+        }
+
+        if ( result && ordersMode ) {
+            if ( it1 != units1.end() && result == *it1 ) {
+                units1.erase( it1 );
+            }
+            else if ( it2 != units2.end() && result == *it2 ) {
+                units2.erase( it2 );
+            }
+        }
+
+        return result;
+    }
+
+    Battle::Unit * GetCurrentUnit( const Battle::Force & army1, const Battle::Force & army2, const bool firstStage, const int preferredColor )
+    {
+        Battle::Units units1( army1.getUnits(), true );
+        Battle::Units units2( army2.getUnits(), true );
+
+        if ( firstStage ) {
+            units1.SortFastest();
+            units2.SortFastest();
+        }
+        else {
+            std::reverse( units1.begin(), units1.end() );
+            std::reverse( units2.begin(), units2.end() );
+
+            units1.SortSlowest();
+            units2.SortSlowest();
+        }
+
+        Battle::Unit * result = GetCurrentUnitForBattleStage( units1, units2, firstStage, preferredColor != army2.GetColor(), false );
+        if ( result == nullptr ) {
+            return result;
+        }
+
+        assert( result->isValid() );
+
+        return result;
+    }
+
+    void UpdateOrderOfUnits( const Battle::Force & army1, const Battle::Force & army2, const Battle::Unit * currentUnit, int preferredColor,
+                             const Battle::Units & orderHistory, Battle::Units & orderOfUnits )
+    {
+        orderOfUnits.clear();
+        orderOfUnits.insert( orderOfUnits.end(), orderHistory.begin(), orderHistory.end() );
+
+        {
+            Battle::Units units1( army1.getUnits(), true );
+            Battle::Units units2( army2.getUnits(), true );
+
+            units1.SortFastest();
+            units2.SortFastest();
+
+            while ( true ) {
+                Battle::Unit * unit = GetCurrentUnitForBattleStage( units1, units2, true, preferredColor != army2.GetColor(), true );
+                if ( unit == nullptr ) {
+                    break;
+                }
+
+                assert( unit->isValid() );
+
+                if ( unit == currentUnit ) {
+                    continue;
+                }
+
+                preferredColor = ( unit->GetArmyColor() == army1.GetColor() ) ? army2.GetColor() : army1.GetColor();
+
+                orderOfUnits.push_back( unit );
+            }
+        }
+
+        if ( Settings::Get().ExtBattleSoftWait() ) {
+            Battle::Units units1( army1.getUnits(), true );
+            Battle::Units units2( army2.getUnits(), true );
+
+            std::reverse( units1.begin(), units1.end() );
+            std::reverse( units2.begin(), units2.end() );
+
+            units1.SortSlowest();
+            units2.SortSlowest();
+
+            while ( true ) {
+                Battle::Unit * unit = GetCurrentUnitForBattleStage( units1, units2, false, preferredColor != army2.GetColor(), true );
+                if ( unit == nullptr ) {
+                    break;
+                }
+
+                assert( unit->isValid() );
+
+                if ( unit == currentUnit ) {
+                    continue;
+                }
+
+                preferredColor = ( unit->GetArmyColor() == army1.GetColor() ) ? army2.GetColor() : army1.GetColor();
+
+                orderOfUnits.push_back( unit );
+            }
+        }
+    }
 }
 
-bool Battle::TargetInfo::operator==( const TargetInfo & ta ) const
-{
-    return defender == ta.defender;
-}
-
-Battle::Arena * Battle::GetArena( void )
+Battle::Arena * Battle::GetArena()
 {
     return arena;
 }
 
-const Castle * Battle::Arena::GetCastle( void )
+const Castle * Battle::Arena::GetCastle()
 {
     return arena->castle;
 }
 
-Battle::Bridge * Battle::Arena::GetBridge( void )
+Battle::Bridge * Battle::Arena::GetBridge()
 {
     return arena->bridge;
 }
 
-Battle::Board * Battle::Arena::GetBoard( void )
+Battle::Board * Battle::Arena::GetBoard()
 {
     return &arena->board;
 }
 
-Battle::Graveyard * Battle::Arena::GetGraveyard( void )
+Battle::Graveyard * Battle::Arena::GetGraveyard()
 {
     return &arena->graveyard;
 }
 
-Battle::Interface * Battle::Arena::GetInterface( void )
+Battle::Interface * Battle::Arena::GetInterface()
 {
     return arena->interface;
 }
@@ -172,12 +300,20 @@ Battle::Tower * Battle::Arena::GetTower( int type )
     return nullptr;
 }
 
-Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::DeterministicRandomGenerator & randomGenerator )
+bool Battle::Arena::isAnyTowerPresent()
+{
+    assert( arena != nullptr );
+
+    return ( arena->towers[0] != nullptr && arena->towers[0]->isValid() ) || ( arena->towers[1] != nullptr && arena->towers[1]->isValid() )
+           || ( arena->towers[2] != nullptr && arena->towers[2]->isValid() );
+}
+
+Battle::Arena::Arena( Army & a1, Army & a2, int32_t index, bool local, Rand::DeterministicRandomGenerator & randomGenerator )
     : army1( nullptr )
     , army2( nullptr )
     , armies_order( nullptr )
     , current_color( Color::NONE )
-    , preferredColor( -1 ) // be aware of unknown color
+    , _lastActiveUnitArmyColor( -1 ) // Be aware of unknown color
     , castle( world.getCastleEntrance( Maps::GetPoint( index ) ) )
     , _isTown( castle != nullptr )
     , catapult( nullptr )
@@ -186,10 +322,8 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::Determi
     , icn_covr( ICN::UNKNOWN )
     , current_turn( 0 )
     , auto_battle( 0 )
-    , end_turn( false )
     , _randomGenerator( randomGenerator )
 {
-    const Settings & conf = Settings::Get();
     usage_spells.reserve( 20 );
 
     assert( arena == nullptr );
@@ -277,16 +411,18 @@ Battle::Arena::Arena( Army & a1, Army & a2, s32 index, bool local, Rand::Determi
             board.SetCobjObjects( world.GetTiles( index ), seededGen );
     }
 
+    AI::Get().battleBegins();
+
     if ( interface ) {
         fheroes2::Display & display = fheroes2::Display::instance();
 
-        if ( conf.ExtGameUseFade() )
+        if ( Settings::ExtGameUseFade() )
             fheroes2::FadeDisplay();
 
         interface->fullRedraw();
         display.render();
 
-        // pause for play M82::PREBATTL
+        // Wait for the end of M82::PREBATTL playback
         while ( LocalEvent::Get().HandleEvents() && Mixer::isPlaying( -1 ) )
             ;
     }
@@ -310,74 +446,83 @@ Battle::Arena::~Arena()
 
 void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
 {
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, troop->String( true ) );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, troop->String( true ) )
 
     if ( troop->isAffectedByMorale() ) {
         troop->SetRandomMorale();
     }
 
-    end_turn = false;
+    assert( !troop->AllModes( MORALE_GOOD | MORALE_BAD ) );
 
-    while ( !end_turn ) {
+    bool endOfTurn = false;
+
+    while ( !endOfTurn ) {
         Actions actions;
 
-        if ( !troop->isValid() ) { // looks like the unit died
-            end_turn = true;
+        if ( interface ) {
+            interface->getPendingActions( actions );
+        }
+
+        if ( !actions.empty() ) {
+            // Pending actions from the user interface (such as toggling auto battle) have "already occurred" and
+            // therefore should be handled first, before any other actions. Just skip the rest of the branches.
+        }
+        else if ( !troop->isValid() ) {
+            // Looks like the unit is dead
+            endOfTurn = true;
         }
         else if ( troop->Modes( MORALE_BAD ) && !troop->Modes( TR_SKIPMOVE ) ) {
-            // bad morale, happens only if the unit wasn't waiting for a turn
-            actions.push_back( Command( CommandType::MSG_BATTLE_MORALE, troop->GetUID(), false ) );
-            end_turn = true;
+            // Bad morale, happens only if the unit was not in the waiting state
+            actions.emplace_back( CommandType::MSG_BATTLE_MORALE, troop->GetUID(), false );
         }
         else {
-            // re-calculate possible paths in case unit moved or it's a new turn
-            _pathfinder.calculate( *troop );
+            // This unit will certainly perform at least one full-fledged action
+            _lastActiveUnitArmyColor = troop->GetArmyColor();
 
-            // get task from player
-            if ( troop->isControlRemote() )
+            _globalAIPathfinder.calculate( *troop );
+
+            if ( troop->isControlRemote() ) {
                 RemoteTurn( *troop, actions );
+            }
+            else if ( ( troop->GetCurrentControl() & CONTROL_AI ) || ( troop->GetCurrentColor() & auto_battle ) ) {
+                AI::Get().BattleTurn( *this, *troop, actions );
+            }
             else {
-                if ( ( troop->GetCurrentControl() & CONTROL_AI ) || ( troop->GetCurrentColor() & auto_battle ) ) {
-                    AI::Get().BattleTurn( *this, *troop, actions );
-                }
-                else {
-                    HumanTurn( *troop, actions );
-                }
+                HumanTurn( *troop, actions );
             }
         }
 
-        const size_t newSeed = UpdateRandomSeed( _randomGenerator.GetSeed(), actions );
+        const uint32_t newSeed = UpdateRandomSeed( _randomGenerator.GetSeed(), actions );
         _randomGenerator.UpdateSeed( newSeed );
 
         const bool troopHasAlreadySkippedMove = troop->Modes( TR_SKIPMOVE );
-        // apply task
+
         while ( !actions.empty() ) {
-            // apply action
             ApplyAction( actions.front() );
             actions.pop_front();
 
             if ( armies_order ) {
-                // some spell could kill someone or affect the speed of some unit, update units order
-                Force::UpdateOrderUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
+                // Applied action could kill someone or affect the speed of some unit, update the order of units
+                UpdateOrderOfUnits( *army1, *army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *armies_order );
             }
 
-            // check end battle
+            // Check if the battle is over
             if ( !BattleValid() ) {
-                end_turn = true;
+                endOfTurn = true;
                 break;
             }
 
             const bool isImmovable = troop->Modes( SP_BLIND | IS_PARALYZE_MAGIC );
             const bool troopSkipsMove = troopHasAlreadySkippedMove ? troop->Modes( TR_HARDSKIP ) : troop->Modes( TR_SKIPMOVE );
 
-            // good morale
-            if ( !end_turn && troop->isValid() && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD ) && !isImmovable && !troopSkipsMove ) {
+            // Good morale
+            if ( troop->isValid() && troop->Modes( TR_MOVED ) && troop->Modes( MORALE_GOOD ) && !isImmovable && !troopSkipsMove ) {
                 actions.emplace_back( CommandType::MSG_BATTLE_MORALE, troop->GetUID(), true );
             }
         }
 
         if ( troop->Modes( TR_MOVED ) || ( troop->Modes( TR_SKIPMOVE ) && !troopHasAlreadySkippedMove ) ) {
-            end_turn = true;
+            endOfTurn = true;
         }
 
         board.Reset();
@@ -388,16 +533,16 @@ void Battle::Arena::TurnTroop( Unit * troop, const Units & orderHistory )
     }
 }
 
-bool Battle::Arena::BattleValid( void ) const
+bool Battle::Arena::BattleValid() const
 {
     return army1->isValid() && army2->isValid() && 0 == result_game.army1 && 0 == result_game.army2;
 }
 
-void Battle::Arena::Turns( void )
+void Battle::Arena::Turns()
 {
     ++current_turn;
 
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, current_turn );
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, current_turn )
 
     const Settings & conf = Settings::Get();
 
@@ -408,85 +553,82 @@ void Battle::Arena::Turns( void )
     army1->NewTurn();
     army2->NewTurn();
 
-    // order history on the current turn
+    // History of unit order on the current turn
     Units orderHistory;
 
     if ( armies_order ) {
         orderHistory.reserve( 25 );
 
-        // build initial units order
-        Force::UpdateOrderUnits( *army1, *army2, nullptr, preferredColor, orderHistory, *armies_order );
+        // Build the initial order of units
+        UpdateOrderOfUnits( *army1, *army2, nullptr, GetOppositeColor( _lastActiveUnitArmyColor ), orderHistory, *armies_order );
     }
 
     {
-        bool tower_moved = false;
-        bool catapult_moved = false;
+        bool towersActed = false;
+        bool catapultActed = false;
 
-        Unit * troop = nullptr;
+        while ( BattleValid() ) {
+            Unit * troop = GetCurrentUnit( *army1, *army2, true, GetOppositeColor( _lastActiveUnitArmyColor ) );
+            if ( troop == nullptr ) {
+                // All units either finished their turns or decided to wait (if supported)
+                break;
+            }
 
-        while ( BattleValid() && ( troop = Force::GetCurrentUnit( *army1, *army2, true, preferredColor ) ) != nullptr ) {
             current_color = troop->GetCurrentOrArmyColor();
 
-            // switch preferred color for the next unit
-            preferredColor = troop->GetArmyColor() == army1->GetColor() ? army2->GetColor() : army1->GetColor();
-
             if ( armies_order ) {
-                // add unit to the order history
+                // Add unit to the history
                 orderHistory.push_back( troop );
 
-                // update units order
-                Force::UpdateOrderUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
+                // Update the order of units
+                UpdateOrderOfUnits( *army1, *army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *armies_order );
             }
 
-            // first turn: castle and catapult action
+            // Castle towers and catapult are acting during the turn of the first unit from the corresponding army
             if ( castle ) {
-                if ( !catapult_moved && troop->GetColor() == army1->GetColor() ) {
+                if ( !catapultActed && troop->GetColor() == army1->GetColor() ) {
                     CatapultAction();
-                    catapult_moved = true;
+
+                    catapultActed = true;
                 }
 
-                if ( !tower_moved && troop->GetColor() == army2->GetColor() ) {
-                    if ( towers[1] && towers[1]->isValid() ) {
-                        TowerAction( *towers[1] );
+                if ( !towersActed && troop->GetColor() == army2->GetColor() ) {
+                    auto towerAction = [this, &orderHistory, troop]( const size_t idx ) {
+                        assert( idx < std::size( towers ) );
+
+                        if ( towers[idx] == nullptr || !towers[idx]->isValid() ) {
+                            return;
+                        }
+
+                        TowerAction( *towers[idx] );
 
                         if ( armies_order ) {
-                            // tower could kill someone, update units order
-                            Force::UpdateOrderUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
+                            // Tower could kill someone, update the order of units
+                            UpdateOrderOfUnits( *army1, *army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *armies_order );
                         }
-                    }
-                    if ( towers[0] && towers[0]->isValid() ) {
-                        TowerAction( *towers[0] );
+                    };
 
-                        if ( armies_order ) {
-                            // tower could kill someone, update units order
-                            Force::UpdateOrderUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
-                        }
-                    }
-                    if ( towers[2] && towers[2]->isValid() ) {
-                        TowerAction( *towers[2] );
+                    towerAction( 1 );
+                    towerAction( 0 );
+                    towerAction( 2 );
 
-                        if ( armies_order ) {
-                            // tower could kill someone, update units order
-                            Force::UpdateOrderUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
-                        }
-                    }
-                    tower_moved = true;
+                    towersActed = true;
 
-                    // check dead last army from towers
-                    if ( !BattleValid() )
+                    // If the towers have killed the last enemy unit, the battle is over
+                    if ( !BattleValid() ) {
                         break;
+                    }
                 }
             }
 
-            // set bridge passable
-            if ( bridge )
+            if ( bridge ) {
                 bridge->SetPassable( *troop );
+            }
 
-            // turn troop
             TurnTroop( troop, orderHistory );
 
             if ( armies_order ) {
-                // if unit hasn't finished its turn yet, then remove it from the order history
+                // If unit hasn't finished its turn yet, then remove it from the history
                 if ( troop->Modes( TR_SKIPMOVE ) && !troop->Modes( TR_MOVED ) ) {
                     orderHistory.pop_back();
                 }
@@ -494,46 +636,45 @@ void Battle::Arena::Turns( void )
         }
     }
 
-    // can skip move ?
     if ( conf.ExtBattleSoftWait() ) {
-        Unit * troop = nullptr;
-
-        while ( BattleValid() && ( troop = Force::GetCurrentUnit( *army1, *army2, false, preferredColor ) ) != nullptr ) {
-            current_color = troop->GetCurrentOrArmyColor();
-
-            // switch preferred color for the next unit
-            preferredColor = troop->GetArmyColor() == army1->GetColor() ? army2->GetColor() : army1->GetColor();
-
-            if ( armies_order ) {
-                // add unit to the order history
-                orderHistory.push_back( troop );
-
-                // update units order
-                Force::UpdateOrderUnits( *army1, *army2, troop, preferredColor, orderHistory, *armies_order );
+        while ( BattleValid() ) {
+            Unit * troop = GetCurrentUnit( *army1, *army2, false, GetOppositeColor( _lastActiveUnitArmyColor ) );
+            if ( troop == nullptr ) {
+                // All units have finished their turns
+                break;
             }
 
-            // set bridge passable
-            if ( bridge )
-                bridge->SetPassable( *troop );
+            current_color = troop->GetCurrentOrArmyColor();
 
-            // turn troop
+            if ( armies_order ) {
+                // Add unit to the history
+                orderHistory.push_back( troop );
+
+                // Update the order of units
+                UpdateOrderOfUnits( *army1, *army2, troop, GetOppositeColor( troop->GetArmyColor() ), orderHistory, *armies_order );
+            }
+
+            if ( bridge ) {
+                bridge->SetPassable( *troop );
+            }
+
             TurnTroop( troop, orderHistory );
         }
     }
 
-    // end turn: fix result
+    // Check if the battle is over
     if ( !army1->isValid() || ( result_game.army1 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
         result_game.army1 |= RESULT_LOSS;
-        // check if any of the original troops in the army2 are still alive
+        // Check if any of the original troops in the army2 are still alive
         result_game.army2 = army2->isValid( false ) ? RESULT_WINS : RESULT_LOSS;
     }
     else if ( !army2->isValid() || ( result_game.army2 & ( RESULT_RETREAT | RESULT_SURRENDER ) ) ) {
         result_game.army2 |= RESULT_LOSS;
-        // check if any of the original troops in the army1 are still alive
+        // Check if any of the original troops in the army1 are still alive
         result_game.army1 = army1->isValid( false ) ? RESULT_WINS : RESULT_LOSS;
     }
 
-    // fix experience and killed
+    // If the battle is over, calculate the experience and the number of units killed
     if ( result_game.army1 || result_game.army2 ) {
         result_game.exp1 = army2->GetDeadHitPoints();
         result_game.exp2 = army1->GetDeadHitPoints();
@@ -552,7 +693,7 @@ void Battle::Arena::Turns( void )
 
 void Battle::Arena::RemoteTurn( const Unit & b, Actions & a )
 {
-    DEBUG_LOG( DBG_BATTLE, DBG_WARN, "switch to AI turn" );
+    DEBUG_LOG( DBG_BATTLE, DBG_WARN, "switching control to AI" )
     AI::Get().BattleTurn( *this, b, a );
 }
 
@@ -566,19 +707,38 @@ void Battle::Arena::TowerAction( const Tower & twr )
 {
     board.Reset();
     board.SetEnemyQuality( twr );
-    const Unit * enemy = GetEnemyMaxQuality( twr.GetColor() );
 
-    if ( enemy ) {
-        Command cmd( CommandType::MSG_BATTLE_TOWER, twr.GetType(), enemy->GetUID() );
-        ApplyAction( cmd );
+    // Target unit and its quality
+    std::pair<const Unit *, int32_t> targetInfo{ nullptr, INT32_MIN };
+
+    for ( const Cell & cell : board ) {
+        const Unit * unit = cell.GetUnit();
+
+        if ( unit == nullptr || unit->GetColor() == twr.GetColor() || ( unit->isWide() && unit->GetTailIndex() == cell.GetIndex() ) ) {
+            continue;
+        }
+
+        if ( targetInfo.first == nullptr || targetInfo.second < cell.GetQuality() ) {
+            targetInfo = { unit, cell.GetQuality() };
+        }
     }
+
+    if ( targetInfo.first == nullptr ) {
+        DEBUG_LOG( DBG_BATTLE, DBG_INFO, "No target found for the tower" )
+
+        return;
+    }
+
+    Command cmd( CommandType::MSG_BATTLE_TOWER, twr.GetType(), targetInfo.first->GetUID() );
+
+    ApplyAction( cmd );
 }
 
-void Battle::Arena::CatapultAction( void )
+void Battle::Arena::CatapultAction()
 {
     if ( catapult ) {
-        u32 shots = catapult->GetShots();
-        std::vector<u32> values( CAT_CENTRAL_TOWER + 1, 0 );
+        uint32_t shots = catapult->GetShots();
+        std::vector<uint32_t> values( CAT_CENTRAL_TOWER + 1, 0 );
 
         values[CAT_WALL1] = GetCastleTargetValue( CAT_WALL1 );
         values[CAT_WALL2] = GetCastleTargetValue( CAT_WALL2 );
@@ -618,9 +778,9 @@ Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst ) c
 
     if ( !result.empty() && IS_DEBUG( DBG_BATTLE, DBG_TRACE ) ) {
         std::stringstream ss;
-        for ( u32 ii = 0; ii < result.size(); ++ii )
+        for ( uint32_t ii = 0; ii < result.size(); ++ii )
             ss << result[ii] << ", ";
-        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, ss.str() );
+        DEBUG_LOG( DBG_BATTLE, DBG_TRACE, ss.str() )
     }
 
     return result;
@@ -628,7 +788,7 @@ Battle::Indexes Battle::Arena::GetPath( const Unit & b, const Position & dst ) c
 
 Battle::Indexes Battle::Arena::CalculateTwoMoveOverlap( int32_t indexTo, uint32_t movementRange ) const
 {
-    return _pathfinder.findTwoMovesOverlap( indexTo, movementRange );
+    return _globalAIPathfinder.findTwoMovesOverlap( indexTo, movementRange );
 }
 
 std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target ) const
@@ -640,7 +800,7 @@ std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target
     const Cell * tail = pos.GetTail();
 
     if ( head ) {
-        const ArenaNode & headNode = _pathfinder.getNode( head->GetIndex() );
+        const BattleNode & headNode = _globalAIPathfinder.getNode( head->GetIndex() );
         if ( headNode._from != -1 ) {
             result.first = headNode._from;
             result.second = headNode._cost;
@@ -648,7 +808,7 @@ std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target
     }
 
     if ( tail ) {
-        const ArenaNode & tailNode = _pathfinder.getNode( tail->GetIndex() );
+        const BattleNode & tailNode = _globalAIPathfinder.getNode( tail->GetIndex() );
         if ( tailNode._from != -1 && tailNode._cost < result.second ) {
             result.first = tailNode._from;
             result.second = tailNode._cost;
@@ -660,17 +820,17 @@ std::pair<int, uint32_t> Battle::Arena::CalculateMoveToUnit( const Unit & target
 
 uint32_t Battle::Arena::CalculateMoveDistance( int32_t indexTo ) const
 {
-    return Board::isValidIndex( indexTo ) ? _pathfinder.getDistance( indexTo ) : 65535;
+    return Board::isValidIndex( indexTo ) ? _globalAIPathfinder.getDistance( indexTo ) : 65535;
 }
 
 bool Battle::Arena::hexIsPassable( int32_t indexTo ) const
 {
-    return Board::isValidIndex( indexTo ) && _pathfinder.hexIsPassable( indexTo );
+    return Board::isValidIndex( indexTo ) && _globalAIPathfinder.hexIsPassable( indexTo );
 }
 
 Battle::Indexes Battle::Arena::getAllAvailableMoves( uint32_t moveRange ) const
 {
-    return _pathfinder.getAllAvailableMoves( moveRange );
+    return _globalAIPathfinder.getAllAvailableMoves( moveRange );
 }
 
 int32_t Battle::Arena::GetNearestReachableCell( const Unit & currentUnit, const int32_t dst ) const
@@ -682,9 +842,9 @@ int32_t Battle::Arena::GetNearestReachableCell( const Unit & currentUnit, const 
         return dstPos.GetHead()->GetIndex();
     }
 
-    const Indexes path = _pathfinder.buildPath( dst );
+    const Indexes path = _globalAIPathfinder.buildPath( dst );
 
-    // Destination cell is unreachable in principle according to the ArenaPathfinder
+    // Destination cell is unreachable in principle according to the AIBattlePathfinder
     if ( path.empty() ) {
         return -1;
     }
@@ -701,47 +861,47 @@ int32_t Battle::Arena::GetNearestReachableCell( const Unit & currentUnit, const 
     return -1;
 }
 
-Battle::Unit * Battle::Arena::GetTroopBoard( s32 index )
+Battle::Unit * Battle::Arena::GetTroopBoard( int32_t index )
 {
     return Board::isValidIndex( index ) ? board[index].GetUnit() : nullptr;
 }
 
-const Battle::Unit * Battle::Arena::GetTroopBoard( s32 index ) const
+const Battle::Unit * Battle::Arena::GetTroopBoard( int32_t index ) const
 {
     return Board::isValidIndex( index ) ? board[index].GetUnit() : nullptr;
 }
 
-const HeroBase * Battle::Arena::GetCommander1( void ) const
+const HeroBase * Battle::Arena::GetCommander1() const
 {
     return army1->GetCommander();
 }
 
-const HeroBase * Battle::Arena::GetCommander2( void ) const
+const HeroBase * Battle::Arena::GetCommander2() const
 {
     return army2->GetCommander();
 }
 
-int Battle::Arena::GetArmyColor1( void ) const
+int Battle::Arena::GetArmyColor1() const
 {
     return army1->GetColor();
 }
 
-int Battle::Arena::GetArmyColor2( void ) const
+int Battle::Arena::GetArmyColor2() const
 {
     return army2->GetColor();
 }
 
-int Battle::Arena::GetCurrentColor( void ) const
+int Battle::Arena::GetCurrentColor() const
 {
     return current_color;
 }
 
-int Battle::Arena::GetOppositeColor( int col ) const
+int Battle::Arena::GetOppositeColor( const int col ) const
 {
     return col == GetArmyColor1() ? GetArmyColor2() : GetArmyColor1();
 }
 
-Battle::Unit * Battle::Arena::GetTroopUID( u32 uid )
+Battle::Unit * Battle::Arena::GetTroopUID( uint32_t uid )
 {
     Units::iterator it = std::find_if( army1->begin(), army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
 
@@ -753,7 +913,7 @@ Battle::Unit * Battle::Arena::GetTroopUID( u32 uid )
     return it != army2->end() ? *it : nullptr;
 }
 
-const Battle::Unit * Battle::Arena::GetTroopUID( u32 uid ) const
+const Battle::Unit * Battle::Arena::GetTroopUID( uint32_t uid ) const
 {
     Units::const_iterator it = std::find_if( army1->begin(), army1->end(), [uid]( const Unit * unit ) { return unit->isUID( uid ); } );
 
@@ -765,30 +925,13 @@ const Battle::Unit * Battle::Arena::GetTroopUID( u32 uid ) const
     return it != army2->end() ? *it : nullptr;
 }
 
-const Battle::Unit * Battle::Arena::GetEnemyMaxQuality( int my_color ) const
-{
-    const Unit * res = nullptr;
-    s32 quality = 0;
-
-    for ( Board::const_iterator it = board.begin(); it != board.end(); ++it ) {
-        const Unit * enemy = ( *it ).GetUnit();
-
-        if ( enemy && enemy->GetColor() != my_color && ( !enemy->isWide() || enemy->GetTailIndex() != ( *it ).GetIndex() ) && quality < ( *it ).GetQuality() ) {
-            res = enemy;
-            quality = ( *it ).GetQuality();
-        }
-    }
-
-    return res;
-}
-
 void Battle::Arena::FadeArena( bool clearMessageLog ) const
 {
     if ( interface )
         interface->FadeArena( clearMessageLog );
 }
 
-const SpellStorage & Battle::Arena::GetUsageSpells( void ) const
+const SpellStorage & Battle::Arena::GetUsageSpells() const
 {
     return usage_spells;
 }
@@ -810,7 +953,10 @@ int32_t Battle::Arena::GetFreePositionNearHero( const int heroColor ) const
     assert( !cellIds.empty() );
 
     for ( const int cellId : cellIds ) {
-        if ( board[cellId].isPassable1( true ) && board[cellId].GetUnit() == nullptr ) {
+        if ( board[cellId].isPassable( true ) ) {
+            // TODO: remove this temporary assertion
+            assert( board[cellId].GetUnit() == nullptr );
+
             return cellId;
         }
     }
@@ -820,9 +966,9 @@ int32_t Battle::Arena::GetFreePositionNearHero( const int heroColor ) const
 
 bool Battle::Arena::CanSurrenderOpponent( int color ) const
 {
-    const HeroBase * hero1 = getEnemyCommander( color );
-    const HeroBase * hero2 = getCommander( color );
-    return hero1 && hero1->isHeroes() && hero2 && hero2->isHeroes() && !world.GetKingdom( hero2->GetColor() ).GetCastles().empty();
+    const HeroBase * hero = getCommander( color );
+    const HeroBase * enemyHero = getEnemyCommander( color );
+    return hero && hero->isHeroes() && enemyHero && ( enemyHero->isHeroes() || enemyHero->isCaptain() ) && !world.GetKingdom( hero->GetColor() ).GetCastles().empty();
 }
 
 bool Battle::Arena::CanRetreatOpponent( int color ) const
@@ -834,69 +980,61 @@ bool Battle::Arena::CanRetreatOpponent( int color ) const
 bool Battle::Arena::isSpellcastDisabled() const
 {
     const HeroBase * hero1 = army1->GetCommander();
-    const HeroBase * hero2 = army2->GetCommander();
-
-    if ( ( hero1 && hero1->hasArtifact( Artifact::SPHERE_NEGATION ) ) || ( hero2 && hero2->hasArtifact( Artifact::SPHERE_NEGATION ) ) ) {
+    if ( hero1 != nullptr && hero1->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::DISABLE_ALL_SPELL_COMBAT_CASTING ) ) {
         return true;
     }
+
+    const HeroBase * hero2 = army2->GetCommander();
+    if ( hero2 != nullptr && hero2->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::DISABLE_ALL_SPELL_COMBAT_CASTING ) ) {
+        return true;
+    }
+
     return false;
 }
 
-bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg )
+bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg /* = nullptr */ )
 {
-    const HeroBase * current_commander = GetCurrentCommander();
-
     // check sphere negation (only for heroes)
     if ( isSpellcastDisabled() ) {
-        if ( msg )
+        if ( msg ) {
             *msg = _( "The Sphere of Negation artifact is in effect for this battle, disabling all combat spells." );
+        }
         return true;
     }
+
+    const HeroBase * current_commander = GetCurrentCommander();
 
     // check casted
     if ( current_commander ) {
         if ( current_commander->Modes( Heroes::SPELLCASTED ) ) {
-            if ( msg )
+            if ( msg ) {
                 *msg = _( "You have already cast a spell this round." );
+            }
             return true;
         }
 
         if ( spell == Spell::EARTHQUAKE && !castle ) {
-            *msg = _( "That spell will affect no one!" );
+            if ( msg ) {
+                *msg = _( "That spell will affect no one!" );
+            }
             return true;
         }
         else if ( spell.isSummon() ) {
-            const Unit * elem = GetCurrentForce().FindMode( CAP_SUMMONELEM );
-            bool affect = true;
+            const Monster mons( spell );
+            assert( mons.isValid() && mons.isElemental() );
 
-            if ( elem )
-                switch ( spell.GetID() ) {
-                case Spell::SUMMONEELEMENT:
-                    if ( elem->GetID() != Monster::EARTH_ELEMENT )
-                        affect = false;
-                    break;
-                case Spell::SUMMONAELEMENT:
-                    if ( elem->GetID() != Monster::AIR_ELEMENT )
-                        affect = false;
-                    break;
-                case Spell::SUMMONFELEMENT:
-                    if ( elem->GetID() != Monster::FIRE_ELEMENT )
-                        affect = false;
-                    break;
-                case Spell::SUMMONWELEMENT:
-                    if ( elem->GetID() != Monster::WATER_ELEMENT )
-                        affect = false;
-                    break;
-                default:
-                    break;
+            const Unit * elem = GetCurrentForce().FindMode( CAP_SUMMONELEM );
+            if ( elem && elem->GetID() != mons.GetID() ) {
+                if ( msg ) {
+                    *msg = _( "You may only summon one type of elemental per combat." );
                 }
-            if ( !affect ) {
-                *msg = _( "You may only summon one type of elemental per combat." );
                 return true;
             }
 
             if ( 0 > GetFreePositionNearHero( current_color ) ) {
-                *msg = _( "There is no open space adjacent to your hero to summon an Elemental to." );
+                if ( msg ) {
+                    *msg = _( "There is no open space adjacent to your hero to summon an Elemental to." );
+                }
                 return true;
             }
         }
@@ -906,27 +1044,29 @@ bool Battle::Arena::isDisableCastSpell( const Spell & spell, std::string * msg )
                 const Battle::Unit * b = ( *it ).GetUnit();
 
                 if ( b ) {
-                    if ( b->AllowApplySpell( spell, current_commander, nullptr ) )
+                    if ( b->AllowApplySpell( spell, current_commander, nullptr ) ) {
                         return false;
+                    }
                 }
-                else
+                else {
                     // check graveyard
-                    if ( GraveyardAllowResurrect( ( *it ).GetIndex(), spell ) )
-                    return false;
+                    if ( GraveyardAllowResurrect( ( *it ).GetIndex(), spell ) ) {
+                        return false;
+                    }
+                }
             }
-            *msg = _( "That spell will affect no one!" );
+
+            if ( msg ) {
+                *msg = _( "That spell will affect no one!" );
+            }
             return true;
         }
     }
 
-    // may be check other..
-    /*
-     */
-
     return false;
 }
 
-bool Battle::Arena::GraveyardAllowResurrect( s32 index, const Spell & spell ) const
+bool Battle::Arena::GraveyardAllowResurrect( int32_t index, const Spell & spell ) const
 {
     if ( !spell.isResurrect() )
         return false;
@@ -958,7 +1098,7 @@ bool Battle::Arena::GraveyardAllowResurrect( s32 index, const Spell & spell ) co
     return true;
 }
 
-const Battle::Unit * Battle::Arena::GraveyardLastTroop( s32 index ) const
+const Battle::Unit * Battle::Arena::GraveyardLastTroop( int32_t index ) const
 {
     return GetTroopUID( graveyard.GetLastTroopUID( index ) );
 }
@@ -975,12 +1115,12 @@ std::vector<const Battle::Unit *> Battle::Arena::GetGraveyardTroops( const int32
     return units;
 }
 
-Battle::Indexes Battle::Arena::GraveyardClosedCells( void ) const
+Battle::Indexes Battle::Arena::GraveyardClosedCells() const
 {
     return graveyard.GetClosedCells();
 }
 
-void Battle::Arena::SetCastleTargetValue( int target, u32 value )
+void Battle::Arena::SetCastleTargetValue( int target, uint32_t value )
 {
     switch ( target ) {
     case CAT_WALL1:
@@ -1028,7 +1168,7 @@ void Battle::Arena::SetCastleTargetValue( int target, u32 value )
     }
 }
 
-u32 Battle::Arena::GetCastleTargetValue( int target ) const
+uint32_t Battle::Arena::GetCastleTargetValue( int target ) const
 {
     switch ( target ) {
     case CAT_WALL1:
@@ -1056,7 +1196,7 @@ u32 Battle::Arena::GetCastleTargetValue( int target ) const
     return 0;
 }
 
-std::vector<int> Battle::Arena::GetCastleTargets( void ) const
+std::vector<int> Battle::Arena::GetCastleTargets() const
 {
     std::vector<int> targets;
     targets.reserve( 8 );
@@ -1090,94 +1230,60 @@ const HeroBase * Battle::Arena::getEnemyCommander( const int color ) const
     return ( army1->GetColor() == color ) ? army2->GetCommander() : army1->GetCommander();
 }
 
-const HeroBase * Battle::Arena::GetCurrentCommander( void ) const
+const HeroBase * Battle::Arena::GetCurrentCommander() const
 {
     return getCommander( current_color );
 }
 
 Battle::Unit * Battle::Arena::CreateElemental( const Spell & spell )
 {
+    // TODO: this assertion is here to thoroughly check all the complex limitations of the Summon Elemental spell
+    assert( !isDisableCastSpell( spell ) );
+
     const HeroBase * hero = GetCurrentCommander();
-    const int32_t pos = GetFreePositionNearHero( current_color );
+    assert( hero != nullptr );
 
-    if ( pos < 0 || !hero ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" );
-        return nullptr;
-    }
+    const int32_t idx = GetFreePositionNearHero( current_color );
+    assert( Board::isValidIndex( idx ) );
 
-    Force & army = GetCurrentForce();
-    Unit * elem = army.FindMode( CAP_SUMMONELEM );
-    bool affect = true;
+    const Monster mons( spell );
+    assert( mons.isValid() && mons.isElemental() && !mons.isWide() );
 
-    if ( elem )
-        switch ( spell.GetID() ) {
-        case Spell::SUMMONEELEMENT:
-            if ( elem->GetID() != Monster::EARTH_ELEMENT )
-                affect = false;
-            break;
-        case Spell::SUMMONAELEMENT:
-            if ( elem->GetID() != Monster::AIR_ELEMENT )
-                affect = false;
-            break;
-        case Spell::SUMMONFELEMENT:
-            if ( elem->GetID() != Monster::FIRE_ELEMENT )
-                affect = false;
-            break;
-        case Spell::SUMMONWELEMENT:
-            if ( elem->GetID() != Monster::WATER_ELEMENT )
-                affect = false;
-            break;
-        default:
-            break;
-        }
+    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << idx )
 
-    if ( !affect ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "other elemental summon" );
-        return nullptr;
-    }
-
-    Monster mons( spell );
-
-    if ( !mons.isValid() ) {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "unknown id" );
-        return nullptr;
-    }
-
-    DEBUG_LOG( DBG_BATTLE, DBG_TRACE, mons.GetName() << ", position: " << pos );
-
+    const bool reflect = ( hero == army2->GetCommander() );
     const uint32_t count = fheroes2::getSummonMonsterCount( spell, hero->GetPower(), hero );
-    elem = new Unit( Troop( mons, count ), pos, hero == army2->GetCommander(), _randomGenerator, _uidGenerator.GetUnique() );
 
-    if ( elem ) {
-        elem->SetModes( CAP_SUMMONELEM );
-        elem->SetArmy( hero->GetArmy() );
-        army.push_back( elem );
-    }
-    else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "is nullptr" );
-    }
+    Position pos;
+    pos.Set( idx, mons.isWide(), reflect );
+
+    // An elemental could not be a wide unit
+    assert( pos.GetHead() != nullptr && pos.GetTail() == nullptr );
+
+    Unit * elem = new Unit( Troop( mons, count ), pos, reflect, _randomGenerator, _uidGenerator.GetUnique() );
+
+    elem->SetModes( CAP_SUMMONELEM );
+    elem->SetArmy( hero->GetArmy() );
+
+    GetCurrentForce().push_back( elem );
 
     return elem;
 }
 
-Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & b, s32 pos )
+Battle::Unit * Battle::Arena::CreateMirrorImage( Unit & unit )
 {
-    Unit * image = new Unit( b, pos, b.isReflect(), _randomGenerator, _uidGenerator.GetUnique() );
+    Unit * mirrorUnit = new Unit( unit, {}, unit.isReflect(), _randomGenerator, _uidGenerator.GetUnique() );
 
-    if ( image ) {
-        b.SetMirror( image );
-        image->SetArmy( *b.GetArmy() );
-        image->SetMirror( &b );
-        image->SetModes( CAP_MIRRORIMAGE );
-        b.SetModes( CAP_MIRROROWNER );
+    mirrorUnit->SetArmy( *unit.GetArmy() );
+    mirrorUnit->SetMirror( &unit );
+    mirrorUnit->SetModes( CAP_MIRRORIMAGE );
 
-        GetCurrentForce().push_back( image );
-    }
-    else {
-        DEBUG_LOG( DBG_BATTLE, DBG_WARN, "internal error" );
-    }
+    unit.SetMirror( mirrorUnit );
+    unit.SetModes( CAP_MIRROROWNER );
 
-    return image;
+    GetCurrentForce().push_back( mirrorUnit );
+
+    return mirrorUnit;
 }
 
 bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defender ) const
@@ -1195,7 +1301,7 @@ bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defen
     const HeroBase * hero = attacker.GetCommander();
     if ( hero ) {
         // golden bow artifact
-        if ( hero->hasArtifact( Artifact::GOLDEN_BOW ) )
+        if ( hero->GetBagArtifacts().isArtifactBonusPresent( fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY ) )
             return false;
 
         // archery skill
@@ -1227,54 +1333,54 @@ bool Battle::Arena::IsShootingPenalty( const Unit & attacker, const Unit & defen
     return true;
 }
 
-Battle::Force & Battle::Arena::GetForce1( void )
+Battle::Force & Battle::Arena::GetForce1() const
 {
     return *army1;
 }
 
-Battle::Force & Battle::Arena::GetForce2( void )
+Battle::Force & Battle::Arena::GetForce2() const
 {
     return *army2;
 }
 
-Battle::Force & Battle::Arena::getForce( const int color )
+Battle::Force & Battle::Arena::getForce( const int color ) const
 {
     return ( army1->GetColor() == color ) ? *army1 : *army2;
 }
 
-Battle::Force & Battle::Arena::getEnemyForce( const int color )
+Battle::Force & Battle::Arena::getEnemyForce( const int color ) const
 {
     return ( army1->GetColor() == color ) ? *army2 : *army1;
 }
 
-Battle::Force & Battle::Arena::GetCurrentForce( void )
+Battle::Force & Battle::Arena::GetCurrentForce() const
 {
     return getForce( current_color );
 }
 
-int Battle::Arena::GetICNCovr( void ) const
+int Battle::Arena::GetICNCovr() const
 {
     return icn_covr;
 }
 
-u32 Battle::Arena::GetCurrentTurn( void ) const
+uint32_t Battle::Arena::GetCurrentTurn() const
 {
     return current_turn;
 }
 
-Battle::Result & Battle::Arena::GetResult( void )
+Battle::Result & Battle::Arena::GetResult()
 {
     return result_game;
 }
 
-bool Battle::Arena::CanBreakAutoBattle( void ) const
+bool Battle::Arena::AutoBattleInProgress() const
 {
-    return ( auto_battle & current_color ) && GetCurrentCommander() && !GetCurrentCommander()->isControlAI();
+    return ( auto_battle & current_color ) && !( GetCurrentForce().GetControl() & CONTROL_AI );
 }
 
-void Battle::Arena::BreakAutoBattle( void )
+bool Battle::Arena::CanToggleAutoBattle() const
 {
-    auto_battle &= ~current_color;
+    return !( GetCurrentForce().GetControl() & CONTROL_AI );
 }
 
 const Rand::DeterministicRandomGenerator & Battle::Arena::GetRandomGenerator() const

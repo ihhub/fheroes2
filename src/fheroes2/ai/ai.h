@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2010 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,6 +25,7 @@
 #define H2AI_H
 
 #include "gamedefs.h"
+#include "mp2.h"
 #include "rand.h"
 
 class StreamBase;
@@ -33,6 +35,7 @@ class HeroBase;
 class Heroes;
 class Kingdom;
 class Army;
+class Spell;
 struct VecHeroes;
 namespace Maps
 {
@@ -59,32 +62,38 @@ namespace AI
         EXPLORER
     };
 
-    const double ARMY_STRENGTH_ADVANTAGE_SMALL = 1.3;
-    const double ARMY_STRENGTH_ADVANTAGE_MEDUIM = 1.5;
-    const double ARMY_STRENGTH_ADVANTAGE_LARGE = 1.8;
+    // Although AI heroes are capable to find their own tasks strategic AI should be able to focus them on most critical tasks
+    enum class PriorityTask : int
+    {
+        // AI will focus on siegeing or chasing the selected enemy castle or hero.
+        ATTACK,
+
+        // Target will usually be a friendly castle. AI will move heroes to defend and garrison it.
+        DEFEND,
+
+        // Target must be a friendly castle or hero. AI with such priority set should focus on bringing more troops to the target.
+        REINFORCE
+    };
+
+    const double ARMY_ADVANTAGE_DESPERATE = 0.8;
+    const double ARMY_ADVANTAGE_SMALL = 1.3;
+    const double ARMY_ADVANTAGE_MEDIUM = 1.5;
+    const double ARMY_ADVANTAGE_LARGE = 1.8;
 
     class Base
     {
     public:
-        virtual void KingdomTurn( Kingdom & kingdom );
-        virtual void CastleTurn( Castle & castle, bool defensive );
-        virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & unit, Battle::Actions & actions );
-        virtual void HeroTurn( Heroes & hero );
-        virtual bool HeroesTurn( VecHeroes & )
-        {
-            return true;
-        }
+        virtual void KingdomTurn( Kingdom & kingdom ) = 0;
+        virtual void BattleTurn( Battle::Arena & arena, const Battle::Unit & unit, Battle::Actions & actions ) = 0;
 
-        virtual void revealFog( const Maps::Tiles & tile );
+        virtual void revealFog( const Maps::Tiles & tile ) = 0;
 
         virtual void HeroesAdd( const Heroes & hero );
         virtual void HeroesRemove( const Heroes & hero );
         virtual void HeroesPreBattle( HeroBase & hero, bool isAttacking );
         virtual void HeroesAfterBattle( HeroBase & hero, bool wasAttacking );
         virtual void HeroesPostLoad( Heroes & hero );
-        virtual bool HeroesCanMove( const Heroes & hero );
-        virtual bool HeroesGetTask( Heroes & hero );
-        virtual void HeroesActionComplete( Heroes & hero );
+        virtual void HeroesActionComplete( Heroes & hero, int32_t tileIndex, const MP2::MapObjectType objectType );
         virtual void HeroesActionNewPosition( Heroes & hero );
         virtual void HeroesClearTask( const Heroes & hero );
         virtual void HeroesLevelUp( Heroes & hero );
@@ -95,12 +104,15 @@ namespace AI
         virtual void CastlePreBattle( Castle & castle );
         virtual void CastleAfterBattle( Castle & castle, bool attackerWins );
 
-        virtual const char * Type() const;
         virtual int GetPersonality() const; // To be utilized in future.
         virtual std::string GetPersonalityString() const;
 
         virtual void Reset();
         virtual void resetPathfinder() = 0;
+
+        // Should be called at the beginning of the battle even if no AI-controlled players are
+        // involved in the battle - because of the possibility of using instant or auto battle
+        virtual void battleBegins() = 0;
 
         virtual ~Base() = default;
 
@@ -117,14 +129,15 @@ namespace AI
     Base & Get( AI_TYPE type = AI_TYPE::NORMAL );
 
     // functionality in ai_hero_action.cpp
-    void HeroesAction( Heroes & hero, s32 dst_index, bool isDestination );
+    void HeroesAction( Heroes & hero, const int32_t dst_index );
     void HeroesMove( Heroes & hero );
+    void HeroesCastDimensionDoor( Heroes & hero, const int32_t targetIndex );
+    bool HeroesCastAdventureSpell( Heroes & hero, const Spell & spell );
 
     // functionality in ai_common.cpp
     bool BuildIfAvailable( Castle & castle, int building );
     bool BuildIfEnoughResources( Castle & castle, int building, uint32_t minimumMultiplicator );
-    uint32_t GetResourceMultiplier( const Castle & castle, uint32_t min, uint32_t max );
-    void ReinforceHeroInCastle( Heroes & hero, Castle & castle, const Funds & budget );
+    uint32_t GetResourceMultiplier( uint32_t min, uint32_t max );
     void OptimizeTroopsOrder( Army & hero );
 
     StreamBase & operator<<( StreamBase &, const AI::Base & );

@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,6 +20,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
+#include <algorithm>
 
 #include "interface_border.h"
 #include "agg_image.h"
@@ -420,11 +423,6 @@ const fheroes2::Rect & Interface::BorderWindow::GetRect() const
     return Settings::Get().ExtGameHideInterface() && border.isValid() ? border.GetRect() : GetArea();
 }
 
-const fheroes2::Rect & Interface::BorderWindow::GetArea() const
-{
-    return area;
-}
-
 void Interface::BorderWindow::Redraw() const
 {
     Dialog::FrameBorder::RenderRegular( border.GetRect() );
@@ -443,15 +441,8 @@ void Interface::BorderWindow::SetPosition( int32_t px, int32_t py )
     if ( Settings::Get().ExtGameHideInterface() ) {
         const fheroes2::Display & display = fheroes2::Display::instance();
 
-        if ( px + area.width < 0 )
-            px = 0;
-        else if ( px > display.width() - area.width + border.BorderWidth() )
-            px = display.width() - area.width;
-
-        if ( py + area.height < 0 )
-            py = 0;
-        else if ( py > display.height() - area.height + border.BorderHeight() )
-            py = display.height() - area.height;
+        px = std::max( 0, std::min( px, display.width() - ( area.width + border.BorderWidth() * 2 ) ) );
+        py = std::max( 0, std::min( py, display.height() - ( area.height + border.BorderHeight() * 2 ) ) );
 
         area.x = px + border.BorderWidth();
         area.y = py + border.BorderHeight();
@@ -465,7 +456,7 @@ void Interface::BorderWindow::SetPosition( int32_t px, int32_t py )
     }
 }
 
-bool Interface::BorderWindow::QueueEventProcessing( void )
+bool Interface::BorderWindow::QueueEventProcessing()
 {
     const Settings & conf = Settings::Get();
     LocalEvent & le = LocalEvent::Get();
@@ -495,7 +486,6 @@ bool Interface::BorderWindow::QueueEventProcessing( void )
         }
 
         SetPos( mp.x - ox, mp.y - oy );
-        Interface::Basic::Get().SetRedraw( REDRAW_GAMEAREA );
 
         return true;
     }

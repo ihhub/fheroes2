@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>fheroes2.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0</project_license>
+  <name>fheroes2</name>
+  <summary>fheroes2 is a recreation of Heroes of Might and Magic II game engine.</summary>
+  <description>
+    <p>fheroes2 is a recreation of Heroes of Might and Magic II game engine.</p>
+    <p>This open source multiplatform project, written from scratch, is designed to reproduce the original game with significant improvements in the gameplay, graphics and logic (including support for high-resolution graphics, improved AI, numerous fixes and UI improvements), breathing new life into one of the most addictive turn-based strategies.</p>
+  </description>
+  <url type="homepage">https://ihhub.github.io/fheroes2/</url>
+  <url type="bugtracker">https://github.com/ihhub/fheroes2/issues</url>
+  <content_rating type="oars-1.1">
+    <content_attribute id="violence-cartoon">mild</content_attribute>
+    <content_attribute id="violence-fantasy">mild</content_attribute>
+  </content_rating>
+  <releases>
+    <release date="2022-08-10" version="v0.9.18">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/0.9.18</url>
+    </release>
+    <release date="2022-07-11" version="v0.9.17">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/0.9.17</url>
+    </release>
+    <release date="2022-06-12" version="v0.9.16">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/0.9.16</url>
+    </release>
+    <release date="2022-05-07" version="v0.9.15">
+      <url>https://github.com/ihhub/fheroes2/releases/tag/0.9.15</url>
+    </release>
+  </releases>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://github.com/ihhub/fheroes2/blob/master/docs/images/screenshots/screenshot_world_map.png?raw=true</image>
+      <caption>Map-Screen</caption>
+    </screenshot>
+    <screenshot type="default">
+      <image>https://github.com/ihhub/fheroes2/blob/master/docs/images/screenshots/screenshot_castle.png?raw=true</image>
+      <caption>Castle-Screen</caption>
+    </screenshot>
+    <screenshot type="default">
+      <image>https://github.com/ihhub/fheroes2/blob/master/docs/images/screenshots/screenshot_battle.png?raw=true</image>
+      <caption>Battle-Screen</caption>
+    </screenshot>
+  </screenshots>
+</component>

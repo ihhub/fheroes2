@@ -1,8 +1,9 @@
 /***************************************************************************
- *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
+ *   fheroes2: https://github.com/ihhub/fheroes2                           *
+ *   Copyright (C) 2019 - 2022                                             *
  *                                                                         *
- *   Part of the Free Heroes2 Engine:                                      *
- *   http://sourceforge.net/projects/fheroes2                              *
+ *   Free Heroes2 Engine: http://sourceforge.net/projects/fheroes2         *
+ *   Copyright (C) 2009 by Andrey Afletdinov <fheroes2@gmail.com>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,6 +24,8 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <set>
+#include <tuple>
 
 #include "ai.h"
 #include "artifact.h"
@@ -44,6 +47,7 @@
 #include "serialize.h"
 #include "settings.h"
 #include "tools.h"
+#include "translations.h"
 #include "world.h"
 
 namespace
@@ -129,7 +133,7 @@ namespace
 
 namespace GameStatic
 {
-    extern u32 uniq;
+    extern uint32_t uniq;
 }
 
 ListActions::~ListActions()
@@ -137,7 +141,7 @@ ListActions::~ListActions()
     clear();
 }
 
-void ListActions::clear( void )
+void ListActions::clear()
 {
     for ( iterator it = begin(); it != end(); ++it )
         delete *it;
@@ -149,24 +153,24 @@ MapObjects::~MapObjects()
     clear();
 }
 
-void MapObjects::clear( void )
+void MapObjects::clear()
 {
     for ( iterator it = begin(); it != end(); ++it )
         delete ( *it ).second;
-    std::map<u32, MapObjectSimple *>::clear();
+    std::map<uint32_t, MapObjectSimple *>::clear();
 }
 
 void MapObjects::add( MapObjectSimple * obj )
 {
     if ( obj ) {
-        std::map<u32, MapObjectSimple *> & currentMap = *this;
+        std::map<uint32_t, MapObjectSimple *> & currentMap = *this;
         if ( currentMap[obj->GetUID()] )
             delete currentMap[obj->GetUID()];
         currentMap[obj->GetUID()] = obj;
     }
 }
 
-MapObjectSimple * MapObjects::get( u32 uid )
+MapObjectSimple * MapObjects::get( uint32_t uid )
 {
     iterator it = find( uid );
     return it != end() ? ( *it ).second : nullptr;
@@ -181,7 +185,7 @@ std::list<MapObjectSimple *> MapObjects::get( const fheroes2::Point & pos )
     return res;
 }
 
-void MapObjects::remove( u32 uid )
+void MapObjects::remove( uint32_t uid )
 {
     iterator it = find( uid );
     if ( it != end() )
@@ -189,18 +193,18 @@ void MapObjects::remove( u32 uid )
     erase( it );
 }
 
-CapturedObject & CapturedObjects::Get( s32 index )
+CapturedObject & CapturedObjects::Get( int32_t index )
 {
-    std::map<s32, CapturedObject> & my = *this;
+    std::map<int32_t, CapturedObject> & my = *this;
     return my[index];
 }
 
-void CapturedObjects::SetColor( s32 index, int col )
+void CapturedObjects::SetColor( int32_t index, int col )
 {
     Get( index ).SetColor( col );
 }
 
-void CapturedObjects::Set( s32 index, int obj, int col )
+void CapturedObjects::Set( int32_t index, int obj, int col )
 {
     CapturedObject & co = Get( index );
 
@@ -210,9 +214,9 @@ void CapturedObjects::Set( s32 index, int obj, int col )
     co.Set( obj, col );
 }
 
-u32 CapturedObjects::GetCount( int obj, int col ) const
+uint32_t CapturedObjects::GetCount( int obj, int col ) const
 {
-    u32 result = 0;
+    uint32_t result = 0;
 
     const ObjectColor objcol( obj, col );
 
@@ -224,9 +228,9 @@ u32 CapturedObjects::GetCount( int obj, int col ) const
     return result;
 }
 
-u32 CapturedObjects::GetCountMines( int type, int col ) const
+uint32_t CapturedObjects::GetCountMines( int type, int col ) const
 {
-    u32 result = 0;
+    uint32_t result = 0;
 
     const ObjectColor objcol1( MP2::OBJ_MINES, col );
     const ObjectColor objcol2( MP2::OBJ_HEROES, col );
@@ -255,7 +259,7 @@ u32 CapturedObjects::GetCountMines( int type, int col ) const
     return result;
 }
 
-int CapturedObjects::GetColor( s32 index ) const
+int CapturedObjects::GetColor( int32_t index ) const
 {
     const_iterator it = find( index );
     return it != end() ? ( *it ).second.GetColor() : Color::NONE;
@@ -296,12 +300,12 @@ void CapturedObjects::ResetColor( int color )
             const MP2::MapObjectType objectType = static_cast<MP2::MapObjectType>( objcol.first );
 
             objcol.second = objectType == MP2::OBJ_CASTLE ? Color::UNUSED : Color::NONE;
-            world.GetTiles( ( *it ).first ).CaptureFlags32( objectType, objcol.second );
+            world.GetTiles( it->first ).setOwnershipFlag( objectType, objcol.second );
         }
     }
 }
 
-void CapturedObjects::tributeCapturedObjects( const int playerColorId, const int objectType, Funds & funds, int & objectCount )
+void CapturedObjects::tributeCapturedObjects( const int playerColorId, const MP2::MapObjectType objectType, Funds & funds, int & objectCount )
 {
     funds = Funds();
     objectCount = 0;
@@ -321,14 +325,14 @@ void CapturedObjects::tributeCapturedObjects( const int playerColorId, const int
 
 World & world = World::Get();
 
-World & World::Get( void )
+World & World::Get()
 {
     static World insideWorld;
 
     return insideWorld;
 }
 
-void World::Defaults( void )
+void World::Defaults()
 {
     // playing kingdom
     vec_kingdoms.Init();
@@ -337,15 +341,13 @@ void World::Defaults( void )
     // this has to be generated before initializing heroes, as campaign-specific heroes start at a higher level and thus have to simulate level ups
     _seed = Rand::Get( std::numeric_limits<uint32_t>::max() );
 
-    week_next = Week::RandomWeek( *this, false, _weekSeed );
-
     // initialize all heroes
     vec_heroes.Init();
 
     vec_castles.Init();
 }
 
-void World::Reset( void )
+void World::Reset()
 {
     width = 0;
     height = 0;
@@ -360,7 +362,7 @@ void World::Reset( void )
     vec_eventsday.clear();
 
     // rumors
-    vec_rumors.clear();
+    _rumors.clear();
 
     // castles
     vec_castles.Clear();
@@ -378,9 +380,6 @@ void World::Reset( void )
     day = 0;
     week = 0;
     month = 0;
-
-    week_current = Week( WeekName::TORTOISE );
-    week_next = Week::RandomWeek( *this, false, _weekSeed );
 
     heroes_cond_wins = Heroes::UNKNOWN;
     heroes_cond_loss = Heroes::UNKNOWN;
@@ -434,73 +433,6 @@ void World::NewMaps( int32_t sw, int32_t sh )
     }
 }
 
-void World::InitKingdoms( void )
-{
-    vec_kingdoms.Init();
-}
-
-const Maps::Tiles & World::GetTiles( const int32_t x, const int32_t y ) const
-{
-#ifdef WITH_DEBUG
-    return vec_tiles.at( y * width + x );
-#else
-    return vec_tiles[y * width + x];
-#endif
-}
-
-Maps::Tiles & World::GetTiles( const int32_t x, const int32_t y )
-{
-#ifdef WITH_DEBUG
-    return vec_tiles.at( y * width + x );
-#else
-    return vec_tiles[y * width + x];
-#endif
-}
-
-const Maps::Tiles & World::GetTiles( const int32_t tileId ) const
-{
-#ifdef WITH_DEBUG
-    return vec_tiles.at( tileId );
-#else
-    return vec_tiles[tileId];
-#endif
-}
-
-Maps::Tiles & World::GetTiles( const int32_t tileId )
-{
-#ifdef WITH_DEBUG
-    return vec_tiles.at( tileId );
-#else
-    return vec_tiles[tileId];
-#endif
-}
-
-size_t World::getSize() const
-{
-    return vec_tiles.size();
-}
-
-/* get kingdom */
-Kingdom & World::GetKingdom( int color )
-{
-    return vec_kingdoms.GetKingdom( color );
-}
-
-const Kingdom & World::GetKingdom( int color ) const
-{
-    return vec_kingdoms.GetKingdom( color );
-}
-
-Castle * World::getCastle( const fheroes2::Point & tilePosition )
-{
-    return vec_castles.Get( tilePosition );
-}
-
-const Castle * World::getCastle( const fheroes2::Point & tilePosition ) const
-{
-    return vec_castles.Get( tilePosition );
-}
-
 const Castle * World::getCastleEntrance( const fheroes2::Point & tilePosition ) const
 {
     if ( !isValidCastleEntrance( tilePosition ) ) {
@@ -524,38 +456,12 @@ bool World::isValidCastleEntrance( const fheroes2::Point & tilePosition ) const
     return Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) && ( GetTiles( tilePosition.x, tilePosition.y ).GetObject( false ) == MP2::OBJ_CASTLE );
 }
 
-Heroes * World::GetHeroes( int id )
+Heroes * World::GetFreemanHeroes( const int race, const int heroIDToIgnore /* = Heroes::UNKNOWN */ ) const
 {
-    return vec_heroes.Get( id );
+    return vec_heroes.GetFreeman( race, heroIDToIgnore );
 }
 
-const Heroes * World::GetHeroes( int id ) const
-{
-    return vec_heroes.Get( id );
-}
-
-/* get heroes from index maps */
-Heroes * World::GetHeroes( const fheroes2::Point & center )
-{
-    return vec_heroes.Get( center );
-}
-
-const Heroes * World::GetHeroes( const fheroes2::Point & center ) const
-{
-    return vec_heroes.Get( center );
-}
-
-Heroes * World::GetFreemanHeroes( int race ) const
-{
-    return vec_heroes.GetFreeman( race );
-}
-
-Heroes * World::GetFreemanHeroesSpecial( int heroID ) const
-{
-    return vec_heroes.GetFreemanSpecial( heroID );
-}
-
-Heroes * World::FromJailHeroes( s32 index )
+Heroes * World::FromJailHeroes( int32_t index )
 {
     return vec_heroes.FromJail( index );
 }
@@ -565,91 +471,62 @@ CastleHeroes World::GetHeroes( const Castle & castle ) const
     return CastleHeroes( vec_heroes.GetGuest( castle ), vec_heroes.GetGuard( castle ) );
 }
 
-void World::RescanAllHeroesPathPassable() const
-{
-    std::for_each( vec_heroes.begin(), vec_heroes.end(), []( Heroes * hero ) { hero->RescanPathPassable(); } );
-}
-
-int World::GetDay( void ) const
+int World::GetDay() const
 {
     return LastDay() ? DAYOFWEEK : day % DAYOFWEEK;
 }
 
-int World::GetWeek( void ) const
+int World::GetWeek() const
 {
     return LastWeek() ? WEEKOFMONTH : week % WEEKOFMONTH;
 }
 
-int World::GetMonth( void ) const
-{
-    return month;
-}
-
-u32 World::CountDay( void ) const
-{
-    return day;
-}
-
-u32 World::CountWeek( void ) const
-{
-    return week;
-}
-
-bool World::BeginWeek( void ) const
+bool World::BeginWeek() const
 {
     return 1 == ( day % DAYOFWEEK );
 }
 
-bool World::BeginMonth( void ) const
+bool World::BeginMonth() const
 {
     return 1 == ( week % WEEKOFMONTH ) && BeginWeek();
 }
 
-bool World::LastDay( void ) const
+bool World::LastDay() const
 {
     return ( 0 == ( day % DAYOFWEEK ) );
 }
 
-bool World::LastWeek( void ) const
+bool World::FirstWeek() const
+{
+    return ( 1 == ( week % WEEKOFMONTH ) );
+}
+
+bool World::LastWeek() const
 {
     return ( 0 == ( week % WEEKOFMONTH ) );
 }
 
-const Week & World::GetWeekType( void ) const
+const Week & World::GetWeekType() const
 {
-    return week_current;
+    static auto cachedWeekDependencies = std::make_tuple( week, GetWeekSeed() );
+    static Week cachedWeek = Week::RandomWeek( *this, FirstWeek(), GetWeekSeed() );
+
+    const auto currentWeekDependencies = std::make_tuple( week, GetWeekSeed() );
+
+    if ( cachedWeekDependencies != currentWeekDependencies ) {
+        cachedWeekDependencies = currentWeekDependencies;
+        cachedWeek = Week::RandomWeek( *this, FirstWeek(), GetWeekSeed() );
+    }
+
+    return cachedWeek;
 }
 
-void World::pickRumor()
-{
-    if ( vec_rumors.empty() ) {
-        _rumor = nullptr;
-        assert( 0 );
-        return;
-    }
-
-    if ( vec_rumors.size() == 1 ) {
-        _rumor = &vec_rumors.front();
-        assert( 0 );
-        return;
-    }
-
-    const std::string * current = _rumor;
-    while ( current == _rumor ) {
-        // vec_rumors always contain values
-        _rumor = &Rand::Get( vec_rumors );
-    }
-}
-
-/* new day */
-void World::NewDay( void )
+void World::NewDay()
 {
     ++day;
 
     if ( BeginWeek() ) {
         ++week;
-
-        pickRumor();
 
         if ( BeginMonth() ) {
             ++month;
@@ -685,23 +562,12 @@ void World::NewDay( void )
     vec_eventsday.remove_if( [this]( const EventDate & v ) { return v.isDeprecated( day - 1 ); } );
 }
 
-void World::NewWeek( void )
+void World::NewWeek()
 {
-    // update week seed: it depends on the current day and the state of the map
-    _weekSeed = _seed;
-    fheroes2::hashCombine( _weekSeed, day );
-    for ( const Maps::Tiles & tile : vec_tiles ) {
-        fheroes2::hashCombine( _weekSeed, tile.GetQuantity1() );
-    }
-
-    // update week type
-    week_next = Week::RandomWeek( *this, LastWeek(), _weekSeed );
-    week_current = week_next;
-
     // update objects
     if ( week > 1 ) {
         for ( Maps::Tiles & tile : vec_tiles ) {
-            if ( MP2::isWeekLife( ( tile ).GetObject( false ) ) || tile.GetObject() == MP2::OBJ_MONSTER ) {
+            if ( MP2::isWeekLife( tile.GetObject( false ) ) || tile.GetObject() == MP2::OBJ_MONSTER ) {
                 tile.QuantityUpdate( false );
             }
         }
@@ -713,12 +579,25 @@ void World::NewWeek( void )
         vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_WINDMILL );
         vec_kingdoms.AddTributeEvents( map_captureobj, day, MP2::OBJ_MAGICGARDEN );
     }
+
+    // Reset RECRUIT mode for all heroes at once
+    vec_heroes.ResetModes( Heroes::RECRUIT );
+
+    // Reset recruits in all kingdoms at once
+    std::set<Heroes *> remainingRecruits = vec_kingdoms.resetRecruits();
+
+    // Restore the RECRUIT mode for the remaining recruits
+    for ( Heroes * hero : remainingRecruits ) {
+        assert( hero != nullptr );
+
+        hero->SetModes( Heroes::RECRUIT );
+    }
 }
 
-void World::NewMonth( void )
+void World::NewMonth()
 {
-    if ( month > 1 && week_current.GetType() == WeekName::MONSTERS ) {
-        MonthOfMonstersAction( Monster( week_current.GetMonster() ) );
+    if ( month > 1 && GetWeekType().GetType() == WeekName::MONSTERS ) {
+        MonthOfMonstersAction( Monster( GetWeekType().GetMonster() ) );
     }
 }
 
@@ -802,13 +681,14 @@ void World::MonthOfMonstersAction( const Monster & mons )
     Rand::Shuffle( tetriaryTargetTiles );
 
     // Calculate the number of monsters to be placed.
-    uint32_t monstersToBePlaced = 0;
-    if ( primaryTargetTiles.size() < static_cast<size_t>( height ) ) {
-        monstersToBePlaced = static_cast<uint32_t>( height );
+    uint32_t monstersToBePlaced = static_cast<uint32_t>( primaryTargetTiles.size() / 3 );
+    const uint32_t mapMinimum = static_cast<uint32_t>( vec_tiles.size() / 360 );
+
+    if ( monstersToBePlaced < mapMinimum ) {
+        monstersToBePlaced = mapMinimum;
     }
     else {
-        monstersToBePlaced
-            = Rand::GetWithSeed( static_cast<uint32_t>( primaryTargetTiles.size() * 75 / 100 ), static_cast<uint32_t>( primaryTargetTiles.size() * 125 / 100 ), _seed );
+        monstersToBePlaced = Rand::GetWithSeed( monstersToBePlaced * 75 / 100, monstersToBePlaced * 125 / 100, _seed );
     }
 
     // 85% of positions are for primary targets
@@ -842,102 +722,158 @@ void World::MonthOfMonstersAction( const Monster & mons )
     }
 }
 
-const std::string & World::GetRumors( void )
+std::string World::getCurrentRumor() const
 {
-    if ( !_rumor ) {
-        pickRumor();
+    const uint32_t standardRumorCount = 10;
+    const uint32_t totalRumorCount = static_cast<uint32_t>( _rumors.size() ) + standardRumorCount;
+    const uint32_t chosenRumorId = Rand::GetWithSeed( 0, totalRumorCount - 1, GetWeekSeed() );
+
+    switch ( chosenRumorId ) {
+    case 0: {
+        std::string rumor( _( "The ultimate artifact is really the %{name}." ) );
+        StringReplace( rumor, "%{name}", ultimate_artifact.GetName() );
+        return rumor;
     }
-    return *_rumor;
+    case 1: {
+        std::string rumor( _( "The ultimate artifact may be found in the %{name} regions of the world." ) );
+        const int32_t artifactIndex = ultimate_artifact.getPosition();
+        const fheroes2::Point artifactPos = Maps::GetPoint( artifactIndex );
+
+        if ( height / 3 > artifactPos.y ) {
+            if ( width / 3 > artifactPos.x ) {
+                StringReplace( rumor, "%{name}", _( "north-west" ) );
+            }
+            else if ( 2 * width / 3 > artifactPos.x ) {
+                StringReplace( rumor, "%{name}", _( "north" ) );
+            }
+            else {
+                StringReplace( rumor, "%{name}", _( "north-east" ) );
+            }
+        }
+        else if ( 2 * height / 3 > artifactPos.y ) {
+            if ( width / 3 > artifactPos.x ) {
+                StringReplace( rumor, "%{name}", _( "west" ) );
+            }
+            else if ( 2 * width / 3 > artifactPos.x ) {
+                StringReplace( rumor, "%{name}", _( "center" ) );
+            }
+            else {
+                StringReplace( rumor, "%{name}", _( "east" ) );
+            }
+        }
+        else if ( width / 3 > artifactPos.x ) {
+            StringReplace( rumor, "%{name}", _( "south-west" ) );
+        }
+        else if ( 2 * width / 3 > artifactPos.x ) {
+            StringReplace( rumor, "%{name}", _( "south" ) );
+        }
+        else {
+            StringReplace( rumor, "%{name}", _( "south-east" ) );
+        }
+        return rumor;
+    }
+    case 2:
+        return _( "The truth is out there." );
+    case 3:
+        return _( "The dark side is stronger." );
+    case 4:
+        return _( "The end of the world is near." );
+    case 5:
+        return _( "The bones of Lord Slayer are buried in the foundation of the arena." );
+    case 6:
+        return _( "A Black Dragon will take out a Titan any day of the week." );
+    case 7:
+        return _( "He told her: Yada yada yada...  and then she said: Blah, blah, blah..." );
+    case 8:
+        return _( "An unknown force is being resurrected..." );
+    case 9:
+        return _( "Check the newest version of the game at\nhttps://github.com/ihhub/\nfheroes2/releases" );
+    default:
+        break;
+    }
+
+    assert( chosenRumorId >= standardRumorCount && chosenRumorId < totalRumorCount );
+    return _rumors[chosenRumorId - standardRumorCount];
 }
 
-MapsIndexes World::GetTeleportEndPoints( s32 center ) const
+MapsIndexes World::GetTeleportEndPoints( const int32_t index ) const
 {
     MapsIndexes result;
 
-    const Maps::Tiles & entrance = GetTiles( center );
-    if ( _allTeleporters.size() > 1 && entrance.GetObject( false ) == MP2::OBJ_STONELITHS ) {
-        for ( MapsIndexes::const_iterator it = _allTeleporters.begin(); it != _allTeleporters.end(); ++it ) {
-            const Maps::Tiles & tile = GetTiles( *it );
-            if ( *it != center && tile.GetObjectSpriteIndex() == entrance.GetObjectSpriteIndex() && tile.GetObject() != MP2::OBJ_HEROES
-                 && tile.isWater() == entrance.isWater() ) {
-                result.push_back( *it );
-            }
+    const Maps::Tiles & entranceTile = GetTiles( index );
+
+    if ( entranceTile.GetObject( false ) != MP2::OBJ_STONELITHS ) {
+        return result;
+    }
+
+    // The type of destination stone liths must match the type of the source stone liths.
+    for ( const int32_t teleportIndex : _allTeleports.at( entranceTile.GetObjectSpriteIndex() ) ) {
+        const Maps::Tiles & teleportTile = GetTiles( teleportIndex );
+
+        if ( teleportIndex == index || teleportTile.GetHeroes() != nullptr || teleportTile.isWater() != entranceTile.isWater() ) {
+            continue;
         }
+
+        result.push_back( teleportIndex );
     }
 
     return result;
 }
 
-/* return random teleport destination */
-s32 World::NextTeleport( s32 index ) const
+int32_t World::NextTeleport( const int32_t index ) const
 {
     const MapsIndexes teleports = GetTeleportEndPoints( index );
     if ( teleports.empty() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "not found" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "not found" )
         return index;
     }
 
     return Rand::Get( teleports );
 }
 
-MapsIndexes World::GetWhirlpoolEndPoints( s32 center ) const
+MapsIndexes World::GetWhirlpoolEndPoints( const int32_t index ) const
 {
-    if ( MP2::OBJ_WHIRLPOOL == GetTiles( center ).GetObject( false ) ) {
-        std::map<s32, MapsIndexes> uniq_whirlpools;
+    MapsIndexes result;
 
-        for ( MapsIndexes::const_iterator it = _whirlpoolTiles.begin(); it != _whirlpoolTiles.end(); ++it ) {
-            const Maps::Tiles & tile = GetTiles( *it );
-            if ( tile.GetHeroes() != nullptr ) {
-                continue;
-            }
+    const Maps::Tiles & entranceTile = GetTiles( index );
 
-            uniq_whirlpools[tile.GetObjectUID()].push_back( *it );
-        }
-
-        if ( 2 > uniq_whirlpools.size() ) {
-            DEBUG_LOG( DBG_GAME, DBG_WARN, "is empty" );
-            return MapsIndexes();
-        }
-
-        const uint32_t currentUID = GetTiles( center ).GetObjectUID();
-        MapsIndexes uniqs;
-        uniqs.reserve( uniq_whirlpools.size() );
-
-        for ( std::map<s32, MapsIndexes>::const_iterator it = uniq_whirlpools.begin(); it != uniq_whirlpools.end(); ++it ) {
-            const u32 uniq = ( *it ).first;
-            if ( uniq == currentUID )
-                continue;
-            uniqs.push_back( uniq );
-        }
-
-        return uniq_whirlpools[Rand::Get( uniqs )];
+    if ( entranceTile.GetObject( false ) != MP2::OBJ_WHIRLPOOL ) {
+        return result;
     }
 
-    return MapsIndexes();
+    // The exit point from the destination whirlpool must match the entry point in the source whirlpool.
+    for ( const int32_t whirlpoolIndex : _allWhirlpools.at( entranceTile.GetObjectSpriteIndex() ) ) {
+        const Maps::Tiles & whirlpoolTile = GetTiles( whirlpoolIndex );
+
+        if ( whirlpoolTile.GetObjectUID() == entranceTile.GetObjectUID() || whirlpoolTile.GetHeroes() != nullptr ) {
+            continue;
+        }
+
+        result.push_back( whirlpoolIndex );
+    }
+
+    return result;
 }
 
-/* return random whirlpools destination */
-s32 World::NextWhirlpool( s32 index ) const
+int32_t World::NextWhirlpool( const int32_t index ) const
 {
     const MapsIndexes whilrpools = GetWhirlpoolEndPoints( index );
     if ( whilrpools.empty() ) {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "is full" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "not found" )
         return index;
     }
 
     return Rand::Get( whilrpools );
 }
 
-/* return message from sign */
-
 /* return count captured object */
-u32 World::CountCapturedObject( int obj, int col ) const
+uint32_t World::CountCapturedObject( int obj, int col ) const
 {
     return map_captureobj.GetCount( obj, col );
 }
 
 /* return count captured mines */
-u32 World::CountCapturedMines( int type, int color ) const
+uint32_t World::CountCapturedMines( int type, int color ) const
 {
     switch ( type ) {
     case Resource::WOOD:
@@ -952,7 +888,7 @@ u32 World::CountCapturedMines( int type, int color ) const
 }
 
 /* capture object */
-void World::CaptureObject( s32 index, int color )
+void World::CaptureObject( int32_t index, int color )
 {
     const MP2::MapObjectType objectType = GetTiles( index ).GetObject( false );
     map_captureobj.Set( index, objectType, color );
@@ -962,22 +898,22 @@ void World::CaptureObject( s32 index, int color )
         castle->ChangeColor( color );
 
     if ( color & ( Color::ALL | Color::UNUSED ) )
-        GetTiles( index ).CaptureFlags32( objectType, color );
+        GetTiles( index ).setOwnershipFlag( objectType, color );
 }
 
 /* return color captured object */
-int World::ColorCapturedObject( s32 index ) const
+int World::ColorCapturedObject( int32_t index ) const
 {
     return map_captureobj.GetColor( index );
 }
 
-ListActions * World::GetListActions( s32 index )
+ListActions * World::GetListActions( int32_t index )
 {
     MapActions::iterator it = map_actions.find( index );
     return it != map_actions.end() ? &( *it ).second : nullptr;
 }
 
-CapturedObject & World::GetCapturedObject( s32 index )
+CapturedObject & World::GetCapturedObject( int32_t index )
 {
     return map_captureobj.Get( index );
 }
@@ -1000,7 +936,7 @@ void World::ClearFog( int colors )
     map_captureobj.ClearFog( colors );
 }
 
-const UltimateArtifact & World::GetUltimateArtifact( void ) const
+const UltimateArtifact & World::GetUltimateArtifact() const
 {
     return ultimate_artifact;
 }
@@ -1009,34 +945,18 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
 {
     Maps::Tiles & tile = GetTiles( center.x, center.y );
 
-    // puts hole sprite
+    // Get digging hole sprite.
     uint8_t obj = 0;
     uint32_t idx = 0;
 
-    switch ( tile.GetGround() ) {
-    case Maps::Ground::WASTELAND:
-        obj = 0xE4;
-        idx = 70;
-        break; // ICN::OBJNCRCK
-    case Maps::Ground::DIRT:
-        obj = 0xE0;
-        idx = 140;
-        break; // ICN::OBJNDIRT
-    case Maps::Ground::DESERT:
-        obj = 0xDC;
-        idx = 68;
-        break; // ICN::OBJNDSRT
-    case Maps::Ground::LAVA:
-        obj = 0xD8;
-        idx = 26;
-        break; // ICN::OBJNLAVA
-    case Maps::Ground::GRASS:
-    default:
-        obj = 0xC0;
-        idx = 9;
-        break; // ICN::OBJNGRA2
+    if ( !MP2::getDiggingHoleSprite( tile.GetGround(), obj, idx ) ) {
+        // Are you sure that you can dig here?
+        assert( 0 );
+
+        return false;
     }
-    tile.AddonsPushLevel1( Maps::TilesAddon( 0, GetUniq(), obj, idx ) );
+
+    tile.AddonsPushLevel1( Maps::TilesAddon( Maps::BACKGROUND_LAYER, GetUniq(), obj, idx ) );
 
     // reset
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
@@ -1063,7 +983,7 @@ EventsDate World::GetEventsDate( int color ) const
     return res;
 }
 
-std::string World::DateString( void ) const
+std::string World::DateString() const
 {
     std::string output( "month: " );
     output += std::to_string( GetMonth() );
@@ -1075,7 +995,7 @@ std::string World::DateString( void ) const
     return output;
 }
 
-u32 World::CountObeliskOnMaps( void )
+uint32_t World::CountObeliskOnMaps()
 {
     const size_t res = std::count_if( vec_tiles.begin(), vec_tiles.end(), []( const Maps::Tiles & tile ) { return MP2::OBJ_OBELISK == tile.GetObject( false ); } );
     return res > 0 ? static_cast<uint32_t>( res ) : 6;
@@ -1098,7 +1018,7 @@ MapEvent * World::GetMapEvent( const fheroes2::Point & pos )
     return !res.empty() ? static_cast<MapEvent *>( res.front() ) : nullptr;
 }
 
-MapObjectSimple * World::GetMapObject( u32 uid )
+MapObjectSimple * World::GetMapObject( uint32_t uid )
 {
     return uid ? map_objects.get( uid ) : nullptr;
 }
@@ -1109,45 +1029,51 @@ void World::RemoveMapObject( const MapObjectSimple * obj )
         map_objects.remove( obj->GetUID() );
 }
 
-void World::UpdateRecruits( Recruits & recruits ) const
+const Heroes * World::GetHeroesCondWins() const
 {
-    if ( vec_heroes.HaveTwoFreemans() )
-        while ( recruits.GetID1() == recruits.GetID2() )
-            recruits.SetHero2( GetFreemanHeroes() );
-    else
-        recruits.SetHero2( nullptr );
+    return ( ( Settings::Get().ConditionWins() & GameOver::WINS_HERO ) != 0 ) ? GetHeroes( heroes_cond_wins ) : nullptr;
 }
 
-const Heroes * World::GetHeroesCondWins( void ) const
+const Heroes * World::GetHeroesCondLoss() const
 {
-    return GetHeroes( heroes_cond_wins );
+    return ( ( Settings::Get().ConditionLoss() & GameOver::LOSS_HERO ) != 0 ) ? GetHeroes( heroes_cond_loss ) : nullptr;
 }
 
-const Heroes * World::GetHeroesCondLoss( void ) const
-{
-    return GetHeroes( heroes_cond_loss );
-}
-
-bool World::KingdomIsWins( const Kingdom & kingdom, uint32_t wins ) const
+bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 {
     const Settings & conf = Settings::Get();
 
     switch ( wins ) {
     case GameOver::WINS_ALL:
+        // This method should be called with this condition only for a human-controlled kingdom
+        assert( kingdom.isControlHuman() );
+
         return kingdom.GetColor() == vec_kingdoms.GetNotLossColors();
 
     case GameOver::WINS_TOWN: {
         const Castle * town = getCastleEntrance( conf.WinsMapsPositionObject() );
-        // check comp also wins
         return ( kingdom.isControlHuman() || conf.WinsCompAlsoWins() ) && ( town && town->GetColor() == kingdom.GetColor() );
     }
 
     case GameOver::WINS_HERO: {
+        // This method should be called with this condition only for a human-controlled kingdom
+        assert( kingdom.isControlHuman() );
+
+        if ( heroes_cond_wins == Heroes::UNKNOWN ) {
+            return false;
+        }
+
         const Heroes * hero = GetHeroesCondWins();
-        return ( hero && Heroes::UNKNOWN != heroes_cond_wins && hero->isFreeman() && hero->GetKillerColor() == kingdom.GetColor() );
+        assert( hero != nullptr );
+
+        // The hero in question should be either a freeman or be hired by a human-controlled kingdom
+        return ( hero->isFreeman() || GetKingdom( hero->GetColor() ).isControlHuman() );
     }
 
     case GameOver::WINS_ARTIFACT: {
+        // This method should be called with this condition only for a human-controlled kingdom
+        assert( kingdom.isControlHuman() );
+
         const KingdomHeroes & heroes = kingdom.GetHeroes();
         if ( conf.WinsFindUltimateArtifact() ) {
             return std::any_of( heroes.begin(), heroes.end(), []( const Heroes * hero ) { return hero->HasUltimateArtifact(); } );
@@ -1158,14 +1084,15 @@ bool World::KingdomIsWins( const Kingdom & kingdom, uint32_t wins ) const
         }
     }
 
-    case GameOver::WINS_SIDE: {
+    case GameOver::WINS_SIDE:
+        // This method should be called with this condition only for a human-controlled kingdom
+        assert( kingdom.isControlHuman() );
+
         return !( Game::GetActualKingdomColors() & ~Players::GetPlayerFriends( kingdom.GetColor() ) );
-    }
 
     case GameOver::WINS_GOLD:
-        // check comp also wins
         return ( ( kingdom.isControlHuman() || conf.WinsCompAlsoWins() ) && 0 < kingdom.GetFunds().Get( Resource::GOLD )
-                 && static_cast<u32>( kingdom.GetFunds().Get( Resource::GOLD ) ) >= conf.WinsAccumulateGold() );
+                 && static_cast<uint32_t>( kingdom.GetFunds().Get( Resource::GOLD ) ) >= conf.getWinningGoldAccumulationValue() );
 
     default:
         break;
@@ -1174,20 +1101,11 @@ bool World::KingdomIsWins( const Kingdom & kingdom, uint32_t wins ) const
     return false;
 }
 
-bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const
+bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
 {
-    const Colors colors( Game::GetKingdomColors() );
-    for ( const int color : colors ) {
-        const Kingdom & kingdom = world.GetKingdom( color );
-        if ( kingdom.isVisited( dstIndex, objectType ) ) {
-            return true;
-        }
-    }
-    return false;
-}
+    // This method should only be called for a human-controlled kingdom
+    assert( kingdom.isControlHuman() );
 
-bool World::KingdomIsLoss( const Kingdom & kingdom, uint32_t loss ) const
-{
     const Settings & conf = Settings::Get();
 
     switch ( loss ) {
@@ -1200,12 +1118,33 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, uint32_t loss ) const
     }
 
     case GameOver::LOSS_HERO: {
+        if ( heroes_cond_loss == Heroes::UNKNOWN ) {
+            return false;
+        }
+
         const Heroes * hero = GetHeroesCondLoss();
-        return ( hero && Heroes::UNKNOWN != heroes_cond_loss && hero->isFreeman() );
+        assert( hero != nullptr );
+
+        // The hero in question should be either a freeman...
+        if ( hero->isFreeman() ) {
+            return true;
+        }
+
+        // .. or be hired by an AI-controlled kingdom
+        if ( GetKingdom( hero->GetColor() ).isControlAI() ) {
+            // Exception for campaign: hero is not considered lost if he is hired by a friendly AI-controlled kingdom
+            if ( conf.isCampaignGameType() && Players::isFriends( kingdom.GetColor(), hero->GetColor() ) ) {
+                return false;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     case GameOver::LOSS_TIME:
-        return ( CountDay() > conf.LossCountDays() && kingdom.isControlHuman() );
+        return ( CountDay() > conf.LossCountDays() );
 
     default:
         break;
@@ -1216,6 +1155,9 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, uint32_t loss ) const
 
 uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
 {
+    // This method should only be called for a human-controlled kingdom
+    assert( kingdom.isControlHuman() );
+
     const Settings & conf = Settings::Get();
 
     if ( conf.isCampaignGameType() ) {
@@ -1244,12 +1186,13 @@ uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
 
 uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
 {
+    // This method should only be called for a human-controlled kingdom
+    assert( kingdom.isControlHuman() );
+
     const Settings & conf = Settings::Get();
 
-    // first, check if the other players have not completed WINS_TOWN, WINS_HERO, WINS_ARTIFACT or WINS_GOLD yet
+    // First of all, check if the other players have not completed WINS_TOWN or WINS_GOLD yet
     const std::array<std::pair<uint32_t, uint32_t>, 4> enemy_wins = { std::make_pair<uint32_t, uint32_t>( GameOver::WINS_TOWN, GameOver::LOSS_ENEMY_WINS_TOWN ),
-                                                                      std::make_pair<uint32_t, uint32_t>( GameOver::WINS_HERO, GameOver::LOSS_ENEMY_WINS_HERO ),
-                                                                      std::make_pair<uint32_t, uint32_t>( GameOver::WINS_ARTIFACT, GameOver::LOSS_ENEMY_WINS_ARTIFACT ),
                                                                       std::make_pair<uint32_t, uint32_t>( GameOver::WINS_GOLD, GameOver::LOSS_ENEMY_WINS_GOLD ) };
 
     for ( const auto & item : enemy_wins ) {
@@ -1262,7 +1205,7 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
         }
     }
 
-    if ( conf.isCampaignGameType() && kingdom.isControlHuman() ) {
+    if ( conf.isCampaignGameType() ) {
         const Campaign::ScenarioLossCondition lossCondition = Campaign::getCurrentScenarioLossCondition();
         if ( lossCondition == Campaign::ScenarioLossCondition::LOSE_ALL_SORCERESS_VILLAGES ) {
             const KingdomCastles & castles = kingdom.GetCastles();
@@ -1292,7 +1235,7 @@ uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
     return GameOver::COND_NONE;
 }
 
-u32 World::GetUniq( void )
+uint32_t World::GetUniq()
 {
     return ++GameStatic::uniq;
 }
@@ -1330,9 +1273,19 @@ void World::PostLoad( const bool setTilePassabilities )
         }
     }
 
-    // cache data that's accessed often
-    _allTeleporters = Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true );
-    _whirlpoolTiles = Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL, true );
+    // Cache all tiles that that contain stone liths of a certain type (depending on object sprite index).
+    _allTeleports.clear();
+
+    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_STONELITHS, true ) ) {
+        _allTeleports[GetTiles( index ).GetObjectSpriteIndex()].push_back( index );
+    }
+
+    // Cache all tiles that contain a certain part of the whirlpool (depending on object sprite index).
+    _allWhirlpools.clear();
+
+    for ( const int32_t index : Maps::GetObjectPositions( MP2::OBJ_WHIRLPOOL, true ) ) {
+        _allWhirlpools[GetTiles( index ).GetObjectSpriteIndex()].push_back( index );
+    }
 
     resetPathfinder();
     ComputeStaticAnalysis();
@@ -1341,6 +1294,27 @@ void World::PostLoad( const bool setTilePassabilities )
 uint32_t World::GetMapSeed() const
 {
     return _seed;
+}
+
+uint32_t World::GetWeekSeed() const
+{
+    uint32_t weekSeed = _seed;
+
+    fheroes2::hashCombine( weekSeed, week );
+
+    return weekSeed;
+}
+
+bool World::isAnyKingdomVisited( const MP2::MapObjectType objectType, const int32_t dstIndex ) const
+{
+    const Colors colors( Game::GetKingdomColors() );
+    for ( const int color : colors ) {
+        const Kingdom & kingdom = GetKingdom( color );
+        if ( kingdom.isVisited( dstIndex, objectType ) ) {
+            return true;
+        }
+    }
+    return false;
 }
 
 StreamBase & operator<<( StreamBase & msg, const CapturedObject & obj )
@@ -1355,7 +1329,7 @@ StreamBase & operator>>( StreamBase & msg, CapturedObject & obj )
 
 StreamBase & operator<<( StreamBase & msg, const MapObjects & objs )
 {
-    msg << static_cast<u32>( objs.size() );
+    msg << static_cast<uint32_t>( objs.size() );
     for ( MapObjects::const_iterator it = objs.begin(); it != objs.end(); ++it )
         if ( ( *it ).second ) {
             const MapObjectSimple & obj = *( *it ).second;
@@ -1385,13 +1359,13 @@ StreamBase & operator<<( StreamBase & msg, const MapObjects & objs )
 
 StreamBase & operator>>( StreamBase & msg, MapObjects & objs )
 {
-    u32 size = 0;
+    uint32_t size = 0;
     msg >> size;
 
     objs.clear();
 
-    for ( u32 ii = 0; ii < size; ++ii ) {
-        s32 index;
+    for ( uint32_t ii = 0; ii < size; ++ii ) {
+        int32_t index;
         int type;
         msg >> index >> type;
 
@@ -1435,9 +1409,8 @@ StreamBase & operator<<( StreamBase & msg, const World & w )
     const uint16_t width = static_cast<uint16_t>( w.width );
     const uint16_t height = static_cast<uint16_t>( w.height );
 
-    return msg << width << height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w.vec_rumors << w.vec_eventsday << w.map_captureobj
-               << w.ultimate_artifact << w.day << w.week << w.month << w.week_current << w.week_next << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions
-               << w.map_objects << w._seed;
+    return msg << width << height << w.vec_tiles << w.vec_heroes << w.vec_castles << w.vec_kingdoms << w._rumors << w.vec_eventsday << w.map_captureobj
+               << w.ultimate_artifact << w.day << w.week << w.month << w.heroes_cond_wins << w.heroes_cond_loss << w.map_actions << w.map_objects << w._seed;
 }
 
 StreamBase & operator>>( StreamBase & msg, World & w )
@@ -1450,10 +1423,18 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     w.width = width;
     w.height = height;
 
-    msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w.vec_rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month >> w.week_current >> w.week_next >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
+    msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
+        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
 
     w.PostLoad( false );
+
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_0918_RELEASE ) {
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0918_RELEASE, "Remove the code in this block." );
+        for ( Maps::Tiles & tile : world.vec_tiles ) {
+            tile.correctOldSaveOwnershipFlag();
+            tile.correctDiggingHoles();
+        }
+    }
 
     return msg;
 }
@@ -1508,19 +1489,19 @@ void EventDate::LoadFromMP2( StreamBuf st )
         message = st.toString();
         DEBUG_LOG( DBG_GAME, DBG_INFO,
                    "event"
-                       << ": " << message );
+                       << ": " << message )
     }
     else {
-        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown id" );
+        DEBUG_LOG( DBG_GAME, DBG_WARN, "unknown id" )
     }
 }
 
-bool EventDate::isDeprecated( u32 date ) const
+bool EventDate::isDeprecated( uint32_t date ) const
 {
     return 0 == subsequent && first < date;
 }
 
-bool EventDate::isAllow( int col, u32 date ) const
+bool EventDate::isAllow( int col, uint32_t date ) const
 {
     return ( ( first == date || ( subsequent && ( first < date && 0 == ( ( date - first ) % subsequent ) ) ) ) && ( col & colors ) );
 }
@@ -1532,12 +1513,7 @@ StreamBase & operator<<( StreamBase & msg, const EventDate & obj )
 
 StreamBase & operator>>( StreamBase & msg, EventDate & obj )
 {
-    msg >> obj.resource >> obj.computer >> obj.first >> obj.subsequent >> obj.colors >> obj.message;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_096_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() >= FORMAT_VERSION_096_RELEASE ) {
-        msg >> obj.title;
-    }
+    msg >> obj.resource >> obj.computer >> obj.first >> obj.subsequent >> obj.colors >> obj.message >> obj.title;
 
     return msg;
 }
