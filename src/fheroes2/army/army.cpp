@@ -415,7 +415,7 @@ void Troops::JoinTroops( Troops & troops2 )
         }
 }
 
-void Troops::MoveTroops( Troops & from, const int monsterToKeep /* = Monster::UNKNOWN */, const bool keepFrom /* = true */ )
+void Troops::MoveTroops( Troops & from, const int monsterToKeep /* = Monster::UNKNOWN */, const bool keepInSrc /* = true */ )
 {
     assert( this != &from );
 
@@ -426,7 +426,7 @@ void Troops::MoveTroops( Troops & from, const int monsterToKeep /* = Monster::UN
     assert( isValid() && from.isValid() );
 
     // The monster to keep is chosen from the destination stack set
-    if ( monsterToKeep != Monster::UNKNOWN && !keepFrom ) {
+    if ( monsterToKeep != Monster::UNKNOWN && !keepInSrc ) {
         // Find a troop stack in the destination stack set consisting of monsters we need to keep
         const auto keepIter = std::find_if( begin(), end(), [monsterToKeep]( const Troop * troop ) {
             assert( troop != nullptr );
