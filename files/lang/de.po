@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-09 03:07+0000\n"
+"POT-Creation-Date: 2022-08-27 02:47+0000\n"
 "PO-Revision-Date: 2022-05-12 17:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -523,6 +523,10 @@ msgstr "Nachrichtenleiste"
 msgid "Shows the results of individual monster's actions."
 msgstr "Zeigt die Ergebnisse der Aktionen der einzelnen Monster."
 
+#, fuzzy
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Sind Sie sicher, dass Sie diese Armee entlassen wollen?"
+
 msgid "%{name} skip their turn."
 msgstr "%{name} setzt den Zug aus."
 
@@ -623,8 +627,9 @@ msgstr "Das Spiegelbild wird erstellt."
 msgid "The mirror image is destroyed!"
 msgstr "Das Spiegelbild ist zerstört!"
 
-msgid "Break auto battle?"
-msgstr "Autokampf unterbrechen?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto battle?"
+msgstr "Sind Sie sicher, dass Sie sich zurückziehen wollen?"
 
 msgid "Error"
 msgstr "Fehler"
@@ -9901,3 +9906,6 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Break auto battle?"
+#~ msgstr "Autokampf unterbrechen?"

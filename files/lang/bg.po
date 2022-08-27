@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-20 12:38+0000\n"
+"POT-Creation-Date: 2022-08-27 02:47+0000\n"
 "PO-Revision-Date: 2022-07-25 11:28+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -512,6 +512,10 @@ msgstr "Лента за съобщения"
 msgid "Shows the results of individual monster's actions."
 msgstr "Показва резултатите от действията на отделните чудовища."
 
+#, fuzzy
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
+
 msgid "%{name} skip their turn."
 msgstr "%{name} пропускат своя ред."
 
@@ -605,8 +609,9 @@ msgstr "Създава се огледален образ."
 msgid "The mirror image is destroyed!"
 msgstr "Огледалният образ е унищожен!"
 
-msgid "Break auto battle?"
-msgstr "Спри автоматичната битка?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto battle?"
+msgstr "Сигурен ли сте, че искате да се отеглите?"
 
 msgid "Error"
 msgstr "Грешка"
@@ -8530,3 +8535,6 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#~ msgid "Break auto battle?"
+#~ msgstr "Спри автоматичната битка?"
