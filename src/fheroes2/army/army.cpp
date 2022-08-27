@@ -434,7 +434,7 @@ void Troops::MoveTroops( Troops & from, const int monsterIdToKeep )
         } );
 
         // Find a troop stack in the source stack set consisting of monsters of a different type than the monster we need to keep
-        const auto destIter = std::find_if( from.begin(), from.end(), [monsterIdToKeep]( const Troop * troop ) {
+        const auto xchgIter = std::find_if( from.begin(), from.end(), [monsterIdToKeep]( const Troop * troop ) {
             assert( troop != nullptr );
 
             return troop->isValid() && troop->GetID() != monsterIdToKeep;
@@ -442,19 +442,19 @@ void Troops::MoveTroops( Troops & from, const int monsterIdToKeep )
 
         // If we found both, then exchange the monster to keep in the destination stack set with the found troop stack in the
         // source stack set to concentrate all the monsters to keep in the source stack set
-        if ( keepIter != end() && destIter != from.end() ) {
+        if ( keepIter != end() && xchgIter != from.end() ) {
             Troop * keep = *keepIter;
-            Troop * dest = *destIter;
+            Troop * xchg = *xchgIter;
 
             const uint32_t count = keep->GetCount();
 
             keep->Reset();
 
-            if ( !JoinTroop( *dest ) ) {
+            if ( !JoinTroop( *xchg ) ) {
                 assert( 0 );
             }
 
-            dest->Reset();
+            xchg->Reset();
 
             if ( !from.JoinTroop( Monster( monsterIdToKeep ), count ) ) {
                 assert( 0 );
