@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-08 11:28+0000\n"
+"POT-Creation-Date: 2022-08-27 02:47+0000\n"
 "PO-Revision-Date: 2022-05-10 16:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -612,6 +612,10 @@ msgid "Shows the results of individual monster's actions."
 msgstr ""
 
 #, fuzzy
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Ви впевнені, що хочете відступити?"
+
+#, fuzzy
 msgid "%{name} skip their turn."
 msgstr "%{name} пропускає свою чергу."
 
@@ -732,8 +736,8 @@ msgid "The mirror image is destroyed!"
 msgstr "Фантомний загін знищений!"
 
 #, fuzzy
-msgid "Break auto battle?"
-msgstr "Зупинити автобій?"
+msgid "Are you sure you want to interrupt the auto battle?"
+msgstr "Ви впевнені, що хочете відступити?"
 
 #, fuzzy
 msgid "Error"
@@ -9321,3 +9325,7 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Break auto battle?"
+#~ msgstr "Зупинити автобій?"
