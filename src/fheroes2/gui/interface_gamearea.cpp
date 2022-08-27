@@ -132,6 +132,22 @@ namespace
         }
     }
 
+    void populateStaticTileUnfitBackgroundObjectInfo( TileUnfitRenderObjectInfo & tileUnfit, std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> & imageInfo,
+                                                      const fheroes2::Point & offset, const uint8_t alphaValue )
+    {
+        for ( auto & [imagePos, image] : imageInfo ) {
+            if ( imagePos.y > 0 ) {
+                tileUnfit.bottomBackgroundImages[imagePos + offset].emplace_front( std::move( image ), alphaValue );
+            }
+            else if ( imagePos.y == 0 ) {
+                tileUnfit.bottomImages[imagePos + offset].emplace_front( std::move( image ), alphaValue );
+            }
+            else {
+                tileUnfit.topImages[imagePos + offset].emplace_front( std::move( image ), alphaValue );
+            }
+        }
+    }
+
     void populateHeroObjectInfo( TileUnfitRenderObjectInfo & tileUnfit, const Heroes * hero, const Heroes * currentHero )
     {
         assert( hero != nullptr );
@@ -447,10 +463,13 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
     const int32_t roiToRenderMaxX = std::min( maxX + 2, world.w() );
     const int32_t roiToRenderMaxY = std::min( maxY + 2, world.h() );
 
+    // These are parts of original action objects which must be rendered under heroes / boats.
+    std::vector<int32_t> staticActionObjectTiles;
+
     for ( int32_t posY = roiToRenderMinY; posY < roiToRenderMaxY; ++posY ) {
         for ( int32_t posX = roiToRenderMinX; posX < roiToRenderMaxX; ++posX ) {
             const Maps::Tiles & tile = world.GetTiles( posX, posY );
-            const MP2::MapObjectType objectType = tile.GetObject();
+            MP2::MapObjectType objectType = tile.GetObject();
 
             switch ( objectType ) {
             case MP2::OBJ_HEROES: {
@@ -471,7 +490,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, tile.GetCenter(), alphaValue );
 
-                break;
+                continue;
             }
 
             case MP2::OBJ_BOAT: {
@@ -488,12 +507,45 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
 
                 populateStaticTileUnfitObjectInfo( tileUnfit, spriteInfo, spriteShadowInfo, tile.GetCenter(), alphaValue );
 
+                continue;
+            }
+
+            default:
+                break;
+            }
+
+            if ( objectType == MP2::OBJ_HEROES ) {
+                objectType = tile.GetObject( false );
+            }
+
+            switch ( objectType ) {
+            case MP2::OBJ_MINES: {
+                staticActionObjectTiles.push_back( tile.GetIndex() );
                 break;
             }
 
             default:
                 break;
             }
+        }
+    }
+
+    for ( const int32_t tileId : staticActionObjectTiles ) {
+        const Maps::Tiles & tile = world.GetTiles( tileId );
+        MP2::MapObjectType objectType = tile.GetObject( false );
+        switch ( objectType ) {
+        case MP2::OBJ_MINES: {
+            auto spriteInfo = tile.getMineGuardianSpritesPerTile();
+            if ( !spriteInfo.empty() ) {
+                const uint8_t alphaValue = getObjectAlphaValue( tile.GetObjectUID() );
+                populateStaticTileUnfitBackgroundObjectInfo( tileUnfit, spriteInfo, tile.GetCenter(), alphaValue );
+            }
+
+            break;
+        }
+
+        default:
+            break;
         }
     }
 

@@ -1299,34 +1299,6 @@ void Maps::Tiles::redrawBottomLayerObjects( fheroes2::Image & dst, bool isPuzzle
 
         renderAddonObject( dst, area, mp, *addon );
     }
-
-    // Some objects on the map require extra sprites to be rendered.
-    // TODO: consider adding these sprites as a part of Tile addon stack.
-    if ( ( _level & 0x03 ) == level && GetObject( false ) == MP2::OBJ_MINES ) {
-        const int32_t spellID = Maps::getSpellIdFromTile( *this );
-
-        switch ( spellID ) {
-        case Spell::SETEGUARDIAN:
-        case Spell::SETAGUARDIAN:
-        case Spell::SETFGUARDIAN:
-        case Spell::SETWGUARDIAN: {
-            // This is a special case. Guardians should be set only after the main object.
-
-            static_assert( ( Spell::SETWGUARDIAN - Spell::SETEGUARDIAN ) == 3, "Why are you changing the order of spells?! Be extremely careful of what you are doing" );
-            const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNXTRA, spellID - Spell::SETEGUARDIAN );
-
-            // If this assertion blows up we are trying to render an image bigger than a tile. Render this object properly as heroes or monsters!
-            assert( image.width() <= TILEWIDTH && image.height() <= TILEWIDTH );
-
-            const uint8_t alphaValue = area.getObjectAlphaValue( uniq );
-
-            area.BlitOnTile( dst, image, TILEWIDTH, 0, mp, false, alphaValue );
-            break;
-        }
-        default:
-            break;
-        }
-    }
 }
 
 void Maps::Tiles::renderAddonObject( fheroes2::Image & output, const Interface::GameArea & area, const fheroes2::Point & offset, const TilesAddon & addon )
@@ -1499,6 +1471,30 @@ std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Maps::Tiles::getBoatSh
 
     // Shadows cannot be flipped so flip flag is always false.
     fheroes2::DivideImageBySquares( boatShadowSpriteOffset, boatShadowSprite, TILEWIDTH, false, output );
+
+    return output;
+}
+
+std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Maps::Tiles::getMineGuardianSpritesPerTile() const
+{
+    assert( GetObject( false ) == MP2::OBJ_MINES );
+
+    std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> output;
+
+    const int32_t spellID = Maps::getSpellIdFromTile( *this );
+    switch ( spellID ) {
+    case Spell::SETEGUARDIAN:
+    case Spell::SETAGUARDIAN:
+    case Spell::SETFGUARDIAN:
+    case Spell::SETWGUARDIAN: {
+        static_assert( ( Spell::SETWGUARDIAN - Spell::SETEGUARDIAN ) == 3, "Why are you changing the order of spells?! Be extremely careful of what you are doing" );
+        const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNXTRA, spellID - Spell::SETEGUARDIAN );
+        fheroes2::DivideImageBySquares( { image.x(), image.y() }, image, TILEWIDTH, false, output );
+        break;
+    }
+    default:
+        break;
+    }
 
     return output;
 }
