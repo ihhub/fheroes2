@@ -419,9 +419,8 @@ void Troops::MoveTroops( Troops & from, const int monsterIdToKeep )
 {
     assert( this != &from );
 
-    // Make an "optimized" version of each stack set (each unit type occupies just one slot)
-    Assign( GetOptimized() );
-    from.Assign( from.GetOptimized() );
+    // Combine troops of the same type in one slot to leave more room for new troops to join
+    MergeTroops();
 
     assert( isValid() && from.isValid() );
 
@@ -462,50 +461,45 @@ void Troops::MoveTroops( Troops & from, const int monsterIdToKeep )
         }
     }
 
-    uint32_t stacksLeft = from.GetCount();
-    Troop * keep = nullptr;
+    auto moveTroops = [this, &from, monsterIdToKeep]( const bool ignoreMonstersToKeep ) {
+        uint32_t stacksLeft = from.GetCount();
 
-    for ( Troop * troop : from ) {
-        assert( troop != nullptr );
+        for ( Troop * troop : from ) {
+            assert( troop != nullptr );
 
-        if ( troop->isEmpty() ) {
-            continue;
-        }
-
-        if ( troop->GetID() == monsterIdToKeep ) {
-            keep = troop;
-
-            continue;
-        }
-
-        if ( stacksLeft == 1 ) {
-            // This is the last valid troop stack in the source stack set, try to join all but one monsters from this stack and
-            // then stop in any case
-            if ( JoinTroop( troop->GetMonster(), troop->GetCount() - 1 ) ) {
-                troop->SetCount( 1 );
+            if ( troop->isEmpty() ) {
+                continue;
             }
 
-            break;
+            if ( ignoreMonstersToKeep && troop->GetID() == monsterIdToKeep ) {
+                continue;
+            }
+
+            if ( stacksLeft == 1 ) {
+                // This is the last valid troop stack in the source stack set, try to join all but one monsters from this stack and
+                // then stop in any case
+                if ( JoinTroop( troop->GetMonster(), troop->GetCount() - 1 ) ) {
+                    troop->SetCount( 1 );
+                }
+
+                break;
+            }
+
+            assert( stacksLeft > 1 );
+
+            if ( JoinTroop( *troop ) ) {
+                troop->Reset();
+
+                --stacksLeft;
+            }
         }
+    };
 
-        assert( stacksLeft > 1 );
+    // First of all, try to move all the troop stacks except the stacks of monsters that we need to keep
+    moveTroops( true );
 
-        if ( JoinTroop( *troop ) ) {
-            troop->Reset();
-
-            --stacksLeft;
-        }
-    }
-
-    if ( keep == nullptr ) {
-        return;
-    }
-
-    // After we have moved all the troop stacks except the stack of monsters we need to keep, let's try to join all but one from
-    // this stack
-    if ( JoinTroop( keep->GetMonster(), keep->GetCount() - 1 ) ) {
-        keep->SetCount( 1 );
-    }
+    // Then, try to move as much of monsters to keep as we can (except the last one), if there is still a place for them
+    moveTroops( false );
 }
 
 bool Troops::AllTroopsAreTheSame() const
