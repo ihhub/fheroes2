@@ -1149,7 +1149,9 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
         else if ( le.MousePressRight( areaDaysSpent ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Days spent" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "The amount of days spent for campaign walkthrough which will affect the high score." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                                   fheroes2::Text( _( "The amount of days spent for campaign walkthrough which will affect the high score." ),
+                                                   fheroes2::FontType::normalWhite() ),
+                                   Dialog::ZERO );
         }
     }
 
