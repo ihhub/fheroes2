@@ -725,20 +725,25 @@ void ActionToHeroes( Heroes & hero, int32_t dst_index )
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " meeting " << other_hero->GetName() )
         hero.MeetingDialog( *other_hero );
     }
-    else if ( hero.isFriends( other_hero->GetColor() ) && fheroes2::showMessage( fheroes2::Text{ _ ( "Are you sure you want to attack your teammate?" ), fheroes2::FontType::normalWhite() },
-        fheroes2::Text{ "", fheroes2::FontType::normalWhite() }, Dialog::YES | Dialog::NO ) == Dialog::YES ) {
+    else if ( hero.isFriends( other_hero->GetColor() )
+              && fheroes2::showMessage( fheroes2::Text{ _ ( "Are you sure you want to attack your teammate?" ), fheroes2::FontType::normalWhite() },
+                 fheroes2::Text{ "", fheroes2::FontType::normalWhite() }, Dialog::YES | Dialog::NO )
+                     == Dialog::YES ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attack ally hero " << other_hero->GetName() )
 
         auto p1 = Players::Get( hero.GetColor() );
         auto p2 = Players::Get( other_hero->GetColor() );
 
-        at_exit = std::shared_ptr<void>(nullptr, std::bind([]( Player *p1, Player *p2 ){
-            fheroes2::showMessage( fheroes2::Text{ _ ( "You've made yourself another enemy" ), fheroes2::FontType::normalWhite() },
-                fheroes2::Text{ "", fheroes2::FontType::normalWhite() }, Dialog::OK );
+        at_exit = std::shared_ptr<void>( nullptr,
+                                         std::bind(
+                                             []( Player *p1, Player *p2 ) {
+                                                 fheroes2::showMessage( fheroes2::Text{ _ ( "You've made yourself another enemy" ), fheroes2::FontType::normalWhite() },
+                                                                        fheroes2::Text{ "", fheroes2::FontType::normalWhite() }, Dialog::OK );
 
-            p1->SetFriends( p2->GetColor() );
-            p2->SetFriends( p1->GetColor() );
-        }, p1, p2 ) );
+                                                 p1->SetFriends( p2->GetColor() );
+                                                 p2->SetFriends( p1->GetColor() );
+                                             },
+                                             p1, p2 ) );
 
         goto lbattle;
     }
