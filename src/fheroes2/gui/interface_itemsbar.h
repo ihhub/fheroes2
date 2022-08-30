@@ -45,11 +45,11 @@ namespace Interface
         virtual void RedrawBackground( const fheroes2::Rect &, fheroes2::Image & ) = 0;
         virtual void RedrawItem( Item &, const fheroes2::Rect &, fheroes2::Image & ) = 0;
 
-        void setTableSize( fheroes2::Size size )
+        void setTableSize( const fheroes2::Size & size )
         {
             assert( size.width > 0 && size.height > 0 );
 
-            tableSize = std::move( size );
+            tableSize = size;
 
             calculateRoi();
         }
@@ -72,18 +72,18 @@ namespace Interface
             renderingRoi.y = offset.y;
         }
 
-        void setSingleItemSize( fheroes2::Size size )
+        void setSingleItemSize( const fheroes2::Size & size )
         {
             assert( size.width > 0 && size.height > 0 );
 
-            singleItemRoi = std::move( size );
+            singleItemRoi = size;
 
             calculateRoi();
         }
 
-        void setInBetweenItemsOffset( fheroes2::Size offset )
+        void setInBetweenItemsOffset( const fheroes2::Size & offset )
         {
-            offsetBetweenItems = std::move( offset );
+            offsetBetweenItems = offset;
 
             calculateRoi();
         }
