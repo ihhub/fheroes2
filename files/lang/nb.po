@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-09 03:07+0000\n"
+"POT-Creation-Date: 2022-08-27 02:47+0000\n"
 "PO-Revision-Date: 2022-08-20 17:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -517,6 +517,11 @@ msgstr "Kamplogg"
 msgid "Shows the results of individual monster's actions."
 msgstr "Viser en logg over alle krigernes trekk."
 
+# Avskjedige
+#, fuzzy
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Er du sikker på at du vil bortvise denne troppen?"
+
 msgid "%{name} skip their turn."
 msgstr "Troppen med %{name} hopper over turen."
 
@@ -615,8 +620,9 @@ msgstr "Speilbildet ble skapt."
 msgid "The mirror image is destroyed!"
 msgstr "Speilbildet ble ødelagt!"
 
-msgid "Break auto battle?"
-msgstr "Avbryt autotrekk?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto battle?"
+msgstr "Er du sikker på at du vil flykte fra kampen?"
 
 msgid "Error"
 msgstr "Feil"
@@ -9856,3 +9862,6 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Break auto battle?"
+#~ msgstr "Avbryt autotrekk?"
