@@ -2297,8 +2297,8 @@ namespace fheroes2
                 const uint8_t evilPressedColor = 36;
                 const uint8_t contourColor = 10;
 
-                generateBaseButtonFont( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], goodReleasedColor,
-                                        goodPressedColor, contourColor );
+                generateBaseButtonFont( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], goodReleasedColor, goodPressedColor,
+                                        contourColor );
 
                 _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED] = _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED];
                 for ( Sprite & letter : _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED] ) {

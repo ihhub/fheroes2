@@ -794,10 +794,9 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
 
         const fheroes2::Rect buttonMaxRoi( windowRoi.x + 5, windowRoi.y, windowRoi.width - 10, windowRoi.height - 5 );
-        fheroes2::ButtonSprite buttonOk
-            = fheroes2::makeButtonWithShadow( buttonMaxRoi.x + ( buttonMaxRoi.width - buttonSprite.width() ) / 2,
-                                              buttonMaxRoi.y + buttonMaxRoi.height - buttonSprite.height(), fheroes2::AGG::GetICN( buttonIcnId, 0 ),
-                                              fheroes2::AGG::GetICN( buttonIcnId, 1 ), display );
+        fheroes2::ButtonSprite buttonOk = fheroes2::makeButtonWithShadow( buttonMaxRoi.x + ( buttonMaxRoi.width - buttonSprite.width() ) / 2,
+                                                                          buttonMaxRoi.y + buttonMaxRoi.height - buttonSprite.height(),
+                                                                          fheroes2::AGG::GetICN( buttonIcnId, 0 ), fheroes2::AGG::GetICN( buttonIcnId, 1 ), display );
 
         buttonOk.draw();
 
@@ -836,30 +835,30 @@ namespace
             currentDescription = easyDescription;
             selection.setPosition( difficultyArea[0].x, difficultyArea[0].y );
             if ( !isSelectionAllowed ) {
-                fheroes2::ApplyPalette( display, iconArea[1].x, iconArea[1].y, display, iconArea[1].x, iconArea[1].y, iconArea[1].width,
-                                        iconArea[1].height, PAL::GetPalette( PAL::PaletteType::GRAY ) );
-                fheroes2::ApplyPalette( display, iconArea[2].x, iconArea[2].y, display, iconArea[2].x, iconArea[2].y, iconArea[2].width,
-                                        iconArea[2].height, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+                fheroes2::ApplyPalette( display, iconArea[1].x, iconArea[1].y, display, iconArea[1].x, iconArea[1].y, iconArea[1].width, iconArea[1].height,
+                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
+                fheroes2::ApplyPalette( display, iconArea[2].x, iconArea[2].y, display, iconArea[2].x, iconArea[2].y, iconArea[2].width, iconArea[2].height,
+                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
             }
             break;
         case Campaign::CampaignDifficulty::Normal:
             currentDescription = normalDescription;
             selection.setPosition( difficultyArea[1].x, difficultyArea[1].y );
             if ( !isSelectionAllowed ) {
-                fheroes2::ApplyPalette( display, iconArea[0].x, iconArea[0].y, display, iconArea[0].x, iconArea[0].y, iconArea[0].width,
-                                        iconArea[0].height, PAL::GetPalette( PAL::PaletteType::GRAY ) );
-                fheroes2::ApplyPalette( display, iconArea[2].x, iconArea[2].y, display, iconArea[2].x, iconArea[2].y, iconArea[2].width,
-                                        iconArea[2].height, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+                fheroes2::ApplyPalette( display, iconArea[0].x, iconArea[0].y, display, iconArea[0].x, iconArea[0].y, iconArea[0].width, iconArea[0].height,
+                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
+                fheroes2::ApplyPalette( display, iconArea[2].x, iconArea[2].y, display, iconArea[2].x, iconArea[2].y, iconArea[2].width, iconArea[2].height,
+                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
             }
             break;
         case Campaign::CampaignDifficulty::Hard:
             currentDescription = hardDescription;
             selection.setPosition( difficultyArea[2].x, difficultyArea[2].y );
             if ( !isSelectionAllowed ) {
-                fheroes2::ApplyPalette( display, iconArea[0].x, iconArea[0].y, display, iconArea[0].x, iconArea[0].y, iconArea[0].width,
-                                        iconArea[0].height, PAL::GetPalette( PAL::PaletteType::GRAY ) );
-                fheroes2::ApplyPalette( display, iconArea[1].x, iconArea[1].y, display, iconArea[1].x, iconArea[1].y, iconArea[1].width,
-                                        iconArea[1].height, PAL::GetPalette( PAL::PaletteType::GRAY ) );
+                fheroes2::ApplyPalette( display, iconArea[0].x, iconArea[0].y, display, iconArea[0].x, iconArea[0].y, iconArea[0].width, iconArea[0].height,
+                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
+                fheroes2::ApplyPalette( display, iconArea[1].x, iconArea[1].y, display, iconArea[1].x, iconArea[1].y, iconArea[1].width, iconArea[1].height,
+                                        PAL::GetPalette( PAL::PaletteType::GRAY ) );
             }
             break;
         default:

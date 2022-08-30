@@ -2183,7 +2183,7 @@ namespace fheroes2
     }
 
     void generateBaseButtonFont( std::vector<Sprite> & released, std::vector<Sprite> & pressed, const uint8_t releasedFontColor, const uint8_t pressedFontColor,
-                                 const uint8_t releasedCoutourColor  )
+                                 const uint8_t releasedContourColor )
     {
         // Button font does not exist in the original game assets but we can regenerate it from scratch.
         // All letters in buttons have some variations in colors but overall shapes are the same.
@@ -2351,7 +2351,7 @@ namespace fheroes2
         for ( Sprite & letter : released ) {
             updateShadow( letter, { 1, -1 }, 2 );
             updateShadow( letter, { 2, -2 }, 4 );
-            letter = addContour( letter, { -1, 1 }, releasedCoutourColor );
+            letter = addContour( letter, { -1, 1 }, releasedContourColor );
             updateShadow( letter, { -1, 1 }, 7 );
         }
 
