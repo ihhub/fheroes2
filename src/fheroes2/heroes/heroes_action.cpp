@@ -741,12 +741,12 @@ void ActionToHeroes( Heroes & hero, int32_t dst_index )
 
         at_exit = std::shared_ptr<void>( nullptr,
                                          std::bind(
-                                             []( Player * p1, Player * p2 ) {
+                                             []( Player * lp1, Player * lp2 ) {
                                                  fheroes2::showMessage( fheroes2::Text{ _( "You've made yourself another enemy" ), fheroes2::FontType::normalWhite() },
                                                                         fheroes2::Text{ "", fheroes2::FontType::normalWhite() }, Dialog::OK );
 
-                                                 p1->SetFriends( p2->GetColor() );
-                                                 p2->SetFriends( p1->GetColor() );
+                                                 lp1->SetFriends( lp2->GetColor() );
+                                                 lp2->SetFriends( lp1->GetColor() );
                                              },
                                              p1, p2 ) );
     }
