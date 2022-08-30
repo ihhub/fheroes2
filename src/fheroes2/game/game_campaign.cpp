@@ -1034,7 +1034,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         choiceArea[i].width += 170;
     }
 
-    fheroes2::Rect areaDaysSpent( top.x + 413, top.y + 29, 200, 23 );
+    const fheroes2::Rect areaDaysSpent( top.x + 413, top.y + 28, 200, 24 );
 
     const std::array<Game::HotKeyEvent, 3> hotKeyBonusChoice{ Game::HotKeyEvent::CAMPAIGN_SELECT_FIRST_BONUS, Game::HotKeyEvent::CAMPAIGN_SELECT_SECOND_BONUS,
                                                               Game::HotKeyEvent::CAMPAIGN_SELECT_THIRD_BONUS };
@@ -1149,7 +1149,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
         else if ( le.MousePressRight( areaDaysSpent ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Days spent" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "The amount of days spent for campaign walkthrough which will affect the high score." ),
+                                   fheroes2::Text( _( "The number of days spent to complete all previous scenarios." ),
                                                    fheroes2::FontType::normalWhite() ),
                                    Dialog::ZERO );
         }

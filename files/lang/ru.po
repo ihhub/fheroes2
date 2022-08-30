@@ -3361,8 +3361,8 @@ msgstr "Сохранить текущую игру."
 msgid "Are you sure you want to restart this scenario?"
 msgstr "Вы действительно хотите начать этот сценарий сначала?"
 
-msgid "The amount of days spent for campaign walkthrough which will affect the high score."
-msgstr "Количество дней, потраченных на прохождение кампании, которое повлияет на очки рейтинга."
+msgid "The number of days spent to complete all previous scenarios."
+msgstr "Количество дней, затраченных на выполнение всех предыдущих сценариев."
 
 msgid "Campaign Scenario loading failure"
 msgstr "Сбой загрузки сценария кампании"
