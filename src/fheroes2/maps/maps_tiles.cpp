@@ -1487,7 +1487,8 @@ std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> Maps::Tiles::getMineGu
     case Spell::SETAGUARDIAN:
     case Spell::SETFGUARDIAN:
     case Spell::SETWGUARDIAN: {
-        static_assert( ( Spell::SETWGUARDIAN - Spell::SETEGUARDIAN ) == 3, "Why are you changing the order of spells?! Be extremely careful of what you are doing" );
+        static_assert( Spell::SETAGUARDIAN - Spell::SETEGUARDIAN == 1 && Spell::SETFGUARDIAN - Spell::SETEGUARDIAN == 2 && Spell::SETWGUARDIAN - Spell::SETEGUARDIAN == 3,
+                       "Why are you changing the order of spells?! Be extremely careful of what you are doing" );
         const fheroes2::Sprite & image = fheroes2::AGG::GetICN( ICN::OBJNXTRA, spellID - Spell::SETEGUARDIAN );
         fheroes2::DivideImageBySquares( { image.x(), image.y() }, image, TILEWIDTH, false, output );
         break;
