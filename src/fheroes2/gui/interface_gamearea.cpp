@@ -132,16 +132,16 @@ namespace
         }
     }
 
-    void populateHeroObjectInfo( TileUnfitRenderObjectInfo & tileUnfit, const Heroes * hero, const Heroes * currentHero )
+    void populateHeroObjectInfo( TileUnfitRenderObjectInfo & tileUnfit, const Heroes * hero )
     {
         assert( hero != nullptr );
 
         const fheroes2::Point & heroPos = hero->GetCenter();
         fheroes2::Point nextHeroPos = heroPos;
 
-        const bool movingHero = ( currentHero == hero ) && ( hero->isMoveEnabled() );
+        const bool movingHero = hero->isMoveEnabled();
         if ( movingHero ) {
-            const Route::Path & path = currentHero->GetPath();
+            const Route::Path & path = hero->GetPath();
             assert( !path.empty() );
 
             nextHeroPos = Maps::GetPoint( Maps::GetDirectionIndex( hero->GetIndex(), path.GetFrontDirection() ) );
@@ -458,7 +458,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
                     continue;
                 }
 
-                populateHeroObjectInfo( tileUnfit, tile.GetHeroes(), currentHero );
+                populateHeroObjectInfo( tileUnfit, tile.GetHeroes() );
 
                 break;
             }

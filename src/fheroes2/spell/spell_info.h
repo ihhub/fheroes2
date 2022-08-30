@@ -21,6 +21,7 @@
 #ifndef H2_SPELL_INFO_H
 #define H2_SPELL_INFO_H
 
+#include <cstdint>
 #include <string>
 
 class Castle;
