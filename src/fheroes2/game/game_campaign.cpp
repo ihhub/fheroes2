@@ -1034,7 +1034,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         choiceArea[i].width += 170;
     }
 
-    const fheroes2::Rect areaDaysSpent( top.x + 413, top.y + 28, 200, 24 );
+    const fheroes2::Rect areaDaysSpent{ top.x + 413, top.y + 28, 200, 24 };
 
     const std::array<Game::HotKeyEvent, 3> hotKeyBonusChoice{ Game::HotKeyEvent::CAMPAIGN_SELECT_FIRST_BONUS, Game::HotKeyEvent::CAMPAIGN_SELECT_SECOND_BONUS,
                                                               Game::HotKeyEvent::CAMPAIGN_SELECT_THIRD_BONUS };
