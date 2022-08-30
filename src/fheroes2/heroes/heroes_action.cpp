@@ -729,15 +729,15 @@ void ActionToHeroes( Heroes & hero, int32_t dst_index )
     else if ( hero.isFriends( other_hero->GetColor() ) ) {
         if ( fheroes2::showMessage( fheroes2::Text{ _( "Are you sure you want to attack your ally?" ), fheroes2::FontType::normalWhite() },
                                     fheroes2::Text{ "", fheroes2::FontType::normalWhite() }, Dialog::YES | Dialog::NO )
-                                        == Dialog::NO ) {
+             == Dialog::NO ) {
             DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " declined attack ally hero " << other_hero->GetName() )
             return;
         }
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " confirmed attack ally hero " << other_hero->GetName() )
 
-        auto *p1 = Players::Get( hero.GetColor() );
-        auto *p2 = Players::Get( other_hero->GetColor() );
+        auto * p1 = Players::Get( hero.GetColor() );
+        auto * p2 = Players::Get( other_hero->GetColor() );
 
         at_exit = std::shared_ptr<void>( nullptr,
                                          std::bind(
@@ -749,7 +749,6 @@ void ActionToHeroes( Heroes & hero, int32_t dst_index )
                                                  p2->SetFriends( p1->GetColor() );
                                              },
                                              p1, p2 ) );
-
     }
 
     const Castle * other_hero_castle = other_hero->inCastle();
