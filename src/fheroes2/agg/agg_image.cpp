@@ -2287,6 +2287,31 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::BUTTON_GOOD_FONT_RELEASED:
+            case ICN::BUTTON_GOOD_FONT_PRESSED:
+            case ICN::BUTTON_EVIL_FONT_RELEASED:
+            case ICN::BUTTON_EVIL_FONT_PRESSED: {
+                const uint8_t goodReleasedColor = 56;
+                const uint8_t goodPressedColor = 62;
+                const uint8_t evilReleasedColor = 30;
+                const uint8_t evilPressedColor = 36;
+                const uint8_t contourColor = 10;
+
+                generateBaseButtonFont( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], goodReleasedColor,
+                                        goodPressedColor, contourColor );
+
+                _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED] = _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED];
+                for ( Sprite & letter : _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED] ) {
+                    ReplaceColorId( letter, goodReleasedColor, evilReleasedColor );
+                }
+
+                _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] = _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED];
+                for ( Sprite & letter : _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] ) {
+                    ReplaceColorId( letter, goodPressedColor, evilPressedColor );
+                }
+
+                return true;
+            }
             default:
                 break;
             }
@@ -2499,6 +2524,9 @@ namespace fheroes2
             case FontSize::NORMAL:
             case FontSize::LARGE:
                 return static_cast<uint32_t>( GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
+            case FontSize::BUTTON_RELEASED:
+            case FontSize::BUTTON_PRESSED:
+                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::BUTTON_GOOD_FONT_RELEASED ) ) + 0x20 - 1;
             default:
                 assert( 0 ); // Did you add a new font size? Please add implementation.
             }
@@ -2545,6 +2573,30 @@ namespace fheroes2
                 switch ( fontType.color ) {
                 case FontColor::WHITE:
                     return GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
+                default:
+                    // Did you add a new font color? Add the corresponding logic for it!
+                    assert( 0 );
+                    break;
+                }
+                break;
+            case FontSize::BUTTON_RELEASED:
+                switch ( fontType.color ) {
+                case FontColor::WHITE:
+                    return GetICN( ICN::BUTTON_GOOD_FONT_RELEASED, character - 0x20 );
+                case FontColor::GRAY:
+                    return GetICN( ICN::BUTTON_EVIL_FONT_RELEASED, character - 0x20 );
+                default:
+                    // Did you add a new font color? Add the corresponding logic for it!
+                    assert( 0 );
+                    break;
+                }
+                break;
+            case FontSize::BUTTON_PRESSED:
+                switch ( fontType.color ) {
+                case FontColor::WHITE:
+                    return GetICN( ICN::BUTTON_GOOD_FONT_PRESSED, character - 0x20 );
+                case FontColor::GRAY:
+                    return GetICN( ICN::BUTTON_EVIL_FONT_PRESSED, character - 0x20 );
                 default:
                     // Did you add a new font color? Add the corresponding logic for it!
                     assert( 0 );
