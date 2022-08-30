@@ -95,7 +95,7 @@ namespace
         return std::atan2( end.y - start.y, end.x - start.x );
     }
 
-    std::vector<std::pair<LightningPoint, LightningPoint>> GenerateLightning( const fheroes2::Point & src, const fheroes2::Point & dst )
+    std::vector<std::pair<LightningPoint, LightningPoint> > GenerateLightning( const fheroes2::Point & src, const fheroes2::Point & dst )
     {
         const int distance = static_cast<int>( getDistance( src, dst ) );
         const double angle = getAngle( src, dst );
@@ -106,13 +106,13 @@ namespace
         if ( iterationCount > 5 )
             iterationCount = 5;
 
-        std::vector<std::pair<LightningPoint, LightningPoint>> lines;
-        lines.emplace_back( LightningPoint( fheroes2::Point( 0, 0 ), 5 ), LightningPoint( fheroes2::Point( distance, 0 ), 3 ) );
+        std::vector<std::pair<LightningPoint, LightningPoint> > lines;
+        lines.emplace_back( LightningPoint( { 0, 0 }, 5 ), LightningPoint( { distance, 0 }, 3 ) );
 
         int maxOffset = distance;
 
         for ( int step = 0; step < iterationCount; ++step ) {
-            std::vector<std::pair<LightningPoint, LightningPoint>> oldLines;
+            std::vector<std::pair<LightningPoint, LightningPoint> > oldLines;
             std::swap( lines, oldLines );
 
             for ( size_t i = 0; i < oldLines.size(); ++i ) {
@@ -153,7 +153,7 @@ namespace
         return lines;
     }
 
-    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint>> & lightning, uint8_t color, fheroes2::Image & surface,
+    void RedrawLightning( const std::vector<std::pair<LightningPoint, LightningPoint> > & lightning, uint8_t color, fheroes2::Image & surface,
                           const fheroes2::Rect & roi = fheroes2::Rect() )
     {
         for ( size_t i = 0; i < lightning.size(); ++i ) {
@@ -1156,11 +1156,11 @@ void Battle::Interface::UpdateContourColor()
     ++_contourCycle;
 
     if ( _brightLandType ) {
-        static const uint8_t contourColorTable[] = { 108, 115, 122, 129, 122, 115 };
+        static const std::array<const uint8_t, 6> contourColorTable = { 108, 115, 122, 129, 122, 115 };
         _contourColor = contourColorTable[_contourCycle % sizeof( contourColorTable )];
     }
     else {
-        static const uint8_t contourColorTable[] = { 110, 114, 118, 122, 126, 122, 118, 114 };
+        static const std::array<const uint8_t, 8> contourColorTable = { 110, 114, 118, 122, 126, 122, 118, 114 };
         _contourColor = contourColorTable[_contourCycle % sizeof( contourColorTable )];
     }
 }
@@ -2522,7 +2522,7 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     }
     else if ( opponent1 && le.MouseCursor( opponent1->GetArea() + _interfacePosition.getPosition() ) ) {
         const fheroes2::Rect opponent1Area = opponent1->GetArea() + _interfacePosition.getPosition();
-        if ( arena.GetCurrentColor() == arena.GetArmyColor1() ) {
+        if ( arena.GetCurrentColor() == arena.GetArmy1Color() ) {
             if ( opponent1->GetHero()->isCaptain() ) {
                 msg = _( "View Captain's options" );
             }
