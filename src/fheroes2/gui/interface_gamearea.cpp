@@ -464,7 +464,7 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
 
             case MP2::OBJ_MONSTER: {
-                if ( isPuzzleDraw && !drawHeroes ) {
+                if ( isPuzzleDraw ) {
                     continue;
                 }
 
