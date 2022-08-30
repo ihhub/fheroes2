@@ -464,6 +464,10 @@ void Interface::GameArea::Redraw( fheroes2::Image & dst, int flag, bool isPuzzle
             }
 
             case MP2::OBJ_MONSTER: {
+                if ( isPuzzleDraw ) {
+                    continue;
+                }
+
                 const uint8_t alphaValue = getObjectAlphaValue( tile.GetIndex(), MP2::OBJ_MONSTER );
 
                 auto spriteInfo = tile.getMonsterSpritesPerTile();
