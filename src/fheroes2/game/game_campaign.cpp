@@ -754,7 +754,7 @@ namespace
             fillingReleasedArea = { 7, 5, 125, 14 };
             fillingPressedArea = { 6, 6, 128, 14 };
             releasedTextPosition = { 4, 5 };
-            pressedTextPosition = { 3, 6 };
+            pressedTextPosition = { 4, 5 };
             break;
         default:
             // Implementing a new campaign? Add a new case!
