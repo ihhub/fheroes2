@@ -161,7 +161,7 @@ namespace Interface
         }
 
     protected:
-        // Since we store pointers and we know the size of elements (we do not can a single element push method) vector is the most efficient container to be used.
+        // Since we store pointers and the number of elements do not change in a container, vector is the most efficient container to be used.
         using ItemsIterator = typename std::vector<Item *>::iterator;
         using ItemIterPos = std::pair<ItemsIterator, fheroes2::Rect>;
 
