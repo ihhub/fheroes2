@@ -22,7 +22,7 @@
 
 namespace fheroes2
 {
-    void ActionObject::senderUpdate( const ActionObject * )
+    void ActionObject::senderUpdate( const ActionObject * /*unused*/ )
     {
         // Do nothing.
     }
