@@ -37,6 +37,7 @@
 #include "tools.h"
 #include "translations.h"
 #include "ui_dialog.h"
+#include "ui_text.h"
 
 namespace
 {
@@ -240,5 +241,12 @@ void Castle::OpenMageGuild( const CastleHeroes & heroes ) const
 
         spells1.QueueEventProcessing() || spells2.QueueEventProcessing() || spells3.QueueEventProcessing() || spells4.QueueEventProcessing()
             || spells5.QueueEventProcessing();
+
+        if ( le.MousePressRight( buttonExit.area() ) ) {
+            fheroes2::Text header( _( "Exit" ), fheroes2::FontType::normalYellow() );
+            fheroes2::Text body( _( "Exit this menu." ), fheroes2::FontType::normalWhite() );
+
+            fheroes2::showMessage( header, body, 0 );
+        }
     }
 }
