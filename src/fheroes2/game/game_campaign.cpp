@@ -1006,6 +1006,8 @@ namespace
 
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::CAMPAIGN_VIEW_INTRO ) << " to View Intro Video." )
 
+        COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::CAMPAIGN_SELECT_DIFFICULTY ) << " to Select / View Campaign Difficulty." )
+
         COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_CANCEL ) << " to Exit this dialog." )
     }
 }
@@ -1390,7 +1392,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
             playCampaignMusic( chosenCampaignID );
         }
-        else if ( le.MouseClickLeft( buttonDifficulty.area() ) ) {
+        else if ( le.MouseClickLeft( buttonDifficulty.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_SELECT_DIFFICULTY ) ) {
             campaignSaveData.setDifficulty( setCampaignDifficulty( campaignSaveData.getDifficulty(), isDifficultySelectionAllowed ) );
         }
     }

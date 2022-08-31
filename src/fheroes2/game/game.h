@@ -52,7 +52,7 @@ namespace Game
         TYPE_CAMPAIGN = 0x02,
         TYPE_HOTSEAT = 0x04,
         TYPE_NETWORK = 0x08,
-        TYPE_BATTLEONLY = 0x10,
+        // UNUSED = 0x10,
 
         // TYPE_LOADFILE used in the Settings::LoadedGameVersion, if you change that value,
         // change in that function as well.

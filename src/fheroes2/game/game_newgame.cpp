@@ -156,10 +156,9 @@ fheroes2::GameMode Game::NewStandard()
 
 fheroes2::GameMode Game::NewBattleOnly()
 {
-    Settings & conf = Settings::Get();
-    conf.SetGameType( Game::TYPE_BATTLEONLY );
-
-    return fheroes2::GameMode::NEW_MULTI;
+    Settings::Get().SetPreferablyCountPlayers( 2 );
+    world.NewMaps( 10, 10 );
+    return StartBattleOnly();
 }
 
 fheroes2::GameMode Game::NewHotSeat()
@@ -168,19 +167,13 @@ fheroes2::GameMode Game::NewHotSeat()
     if ( conf.isCampaignGameType() )
         conf.SetCurrentFileInfo( Maps::FileInfo() );
 
-    if ( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) {
-        conf.SetPreferablyCountPlayers( 2 );
-        world.NewMaps( 10, 10 );
-        return StartBattleOnly();
+    conf.SetGameType( Game::TYPE_HOTSEAT );
+    const uint32_t select = SelectCountPlayers();
+    if ( select ) {
+        conf.SetPreferablyCountPlayers( select );
+        return fheroes2::GameMode::SELECT_SCENARIO;
     }
-    else {
-        conf.SetGameType( Game::TYPE_HOTSEAT );
-        const uint32_t select = SelectCountPlayers();
-        if ( select ) {
-            conf.SetPreferablyCountPlayers( select );
-            return fheroes2::GameMode::SELECT_SCENARIO;
-        }
-    }
+
     return fheroes2::GameMode::MAIN_MENU;
 }
 
@@ -574,11 +567,6 @@ fheroes2::GameMode Game::NewGame()
 
 fheroes2::GameMode Game::NewMulti()
 {
-    Settings & conf = Settings::Get();
-
-    if ( !( conf.IsGameType( Game::TYPE_BATTLEONLY ) ) )
-        conf.SetGameType( Game::TYPE_STANDARD );
-
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
 
