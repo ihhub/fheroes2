@@ -47,7 +47,7 @@ public:
 
     std::vector<uint8_t> getCurrentPalette() const;
 
-    const std::vector<std::vector<uint8_t> > & getAudioChannels() const
+    const std::vector<std::vector<uint8_t>> & getAudioChannels() const
     {
         return _audioChannel;
     }
