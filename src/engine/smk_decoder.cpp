@@ -204,12 +204,13 @@ void SMKVideoSequence::getNextFrame( fheroes2::Image & image, const int32_t x, c
     width = _width;
     height = _height;
 
-    assert( _heightScaleFactor >= 1 );
+    assert( _heightScaleFactor == 1 || _heightScaleFactor == 2 );
+    assert( ( _height % _heightScaleFactor ) == 0 );
 
     if ( image.width() == _width && image.height() == _height && x == 0 && y == 0 ) {
         const size_t size = static_cast<size_t>( _width ) * _height;
 
-        if ( _heightScaleFactor > 1 ) {
+        if ( _heightScaleFactor == 2 ) {
             const int32_t imageWidth = image.width();
 
             const uint8_t * inY = data;
@@ -236,9 +237,9 @@ void SMKVideoSequence::getNextFrame( fheroes2::Image & image, const int32_t x, c
 
         const int32_t imageWidth = image.width();
         uint8_t * outY = image.image() + x + y * imageWidth;
-        const uint8_t * outYEnd = outY + height * imageWidth;
+        const uint8_t * outYEnd = outY + ( height / 2 ) * 2 * imageWidth;
 
-        if ( _heightScaleFactor > 1 ) {
+        if ( _heightScaleFactor == 2 ) {
             for ( ; outY != outYEnd; outY += 2 * imageWidth, inY += _width ) {
                 std::copy( inY, inY + width, outY );
             }
