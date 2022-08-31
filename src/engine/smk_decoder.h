@@ -47,12 +47,30 @@ public:
 
     std::vector<uint8_t> getCurrentPalette() const;
 
-    const std::vector<std::vector<uint8_t> > & getAudioChannels() const;
+    const std::vector<std::vector<uint8_t> > & getAudioChannels() const
+    {
+        return _audioChannel;
+    }
 
-    int32_t width() const;
-    int32_t height() const;
-    double fps() const;
-    unsigned long frameCount() const;
+    int32_t width() const
+    {
+        return _width;
+    }
+
+    int32_t height() const
+    {
+        return _height;
+    }
+
+    double fps() const
+    {
+        return _fps;
+    }
+
+    unsigned long frameCount() const
+    {
+        return _frameCount;
+    }
 
     unsigned long getCurrentFrame() const
     {
@@ -63,6 +81,7 @@ private:
     std::vector<std::vector<uint8_t> > _audioChannel;
     int32_t _width;
     int32_t _height;
+    int32_t _heightScaleFactor;
     double _fps;
     unsigned long _frameCount;
     unsigned long _currentFrameId;
