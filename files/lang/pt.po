@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-27 02:47+0000\n"
+"POT-Creation-Date: 2022-08-31 01:37+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -2713,10 +2713,6 @@ msgstr ""
 "Condições\n"
 "de\n"
 "Derrota"
-
-#, fuzzy
-msgid "Score: "
-msgstr "pontuação:"
 
 msgid "First select recipients!"
 msgstr ""
@@ -8994,3 +8990,7 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Score: "
+#~ msgstr "pontuação:"
