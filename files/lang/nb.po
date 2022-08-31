@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-27 02:47+0000\n"
+"POT-Creation-Date: 2022-08-31 01:55+0000\n"
 "PO-Revision-Date: 2022-08-20 17:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -2868,9 +2868,6 @@ msgstr ""
 "Taps-\n"
 "vilkår"
 
-msgid "Score: "
-msgstr "Poengsum: "
-
 msgid "First select recipients!"
 msgstr "Velg først mottakere!"
 
@@ -3396,6 +3393,37 @@ msgstr "Umulig"
 msgid "and more..."
 msgstr "og mer..."
 
+msgid "DIFFICULTY"
+msgstr ""
+
+#, fuzzy
+msgid "Campaign Difficulty"
+msgstr "Vanskelighetsgrad"
+
+msgid ""
+"Choose this difficulty if you want to prefer game story over challenge. AI "
+"is weaker in comparison with normal difficulty."
+msgstr ""
+
+msgid ""
+"Choose this difficulty to enjoy the campaign as per the original design."
+msgstr ""
+
+msgid ""
+"Choose this difficulty if you want challenge. AI is stronger in comparison "
+"with normal difficulty."
+msgstr ""
+
+msgid "Easy"
+msgstr ""
+
+#, fuzzy
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Hard"
+msgstr ""
+
 msgid "Start the selected scenario."
 msgstr "Begynn det brettet du har valgt."
 
@@ -3404,6 +3432,9 @@ msgstr "Vis introfilm"
 
 msgid "View Intro videos for the current state of the campaign."
 msgstr "Vis filmen for det nåværende punktet av felttoget."
+
+msgid "Select campaign difficulty. It cannot be changed after."
+msgstr ""
 
 msgid "Restart"
 msgstr "Start på nytt"
@@ -9862,6 +9893,9 @@ msgstr ""
 "Finn den siste oppdateringen av spillet på\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Score: "
+#~ msgstr "Poengsum: "
 
 #~ msgid "Break auto battle?"
 #~ msgstr "Avbryt autotrekk?"
