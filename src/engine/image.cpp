@@ -2348,16 +2348,31 @@ namespace fheroes2
 
     void updateShadow( Image & image, const Point & shadowOffset, const uint8_t transformId )
     {
-        if ( image.empty() || shadowOffset.x > 0 || shadowOffset.y < 0 || ( -shadowOffset.x >= image.width() ) || ( shadowOffset.y >= image.height() ) )
+        if ( image.empty() || ( -shadowOffset.x >= image.width() ) || ( shadowOffset.y >= image.height() ) || shadowOffset == Point() )
             return;
 
-        const int32_t width = image.width() + shadowOffset.x;
-        const int32_t height = image.height() - shadowOffset.y;
+        const int32_t width = image.width() - std::abs( shadowOffset.x );
+        const int32_t height = image.height() - std::abs( shadowOffset.y );
 
         const int32_t imageWidth = image.width();
 
-        const uint8_t * transformInY = image.transform() - shadowOffset.x;
-        uint8_t * transformOutY = image.transform() + imageWidth * shadowOffset.y;
+        const uint8_t * transformInY = image.transform();
+        uint8_t * transformOutY = image.transform();
+
+        if ( shadowOffset.x > 0 ) {
+            transformOutY += shadowOffset.x;
+        }
+        else {
+            transformInY -= shadowOffset.x;
+        }
+
+        if ( shadowOffset.y > 0 ) {
+            transformOutY += imageWidth * shadowOffset.y;
+        }
+        else {
+            transformInY -= imageWidth * shadowOffset.y;
+        }
+
         const uint8_t * transformOutYEnd = transformOutY + imageWidth * height;
 
         for ( ; transformOutY != transformOutYEnd; transformInY += imageWidth, transformOutY += imageWidth ) {

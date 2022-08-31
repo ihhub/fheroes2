@@ -585,10 +585,6 @@ namespace
 
 namespace Campaign
 {
-    CampaignData::CampaignData()
-        : _campaignID( 0 )
-    {}
-
     // this is used to get awards that are not directly obtainable via scenario clear, such as assembling artifacts
     std::vector<Campaign::CampaignAwardData> CampaignAwardData::getExtraCampaignAwardData( const int campaignID )
     {

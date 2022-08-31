@@ -72,7 +72,12 @@ void Kingdom::Init( int clr )
     if ( Color::ALL & color ) {
         heroes.reserve( GetMaxHeroes() );
         castles.reserve( 15 );
-        resource = _getKingdomStartingResources( Game::getDifficulty() );
+
+        // Difficulty calculation is different for campaigns. Difficulty affects only on starting resources for human players.
+        const Settings & configuration = Settings::Get();
+        const int difficultyLevel = ( configuration.isCampaignGameType() ? configuration.CurrentFileInfo().difficulty : configuration.GameDifficulty() );
+
+        resource = _getKingdomStartingResources( difficultyLevel );
     }
     else {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" )
