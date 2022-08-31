@@ -207,7 +207,7 @@ public:
     int Level() const;
     int LoyaltyLevel() const;
 
-    int getArtifactValue() const;
+    double getArtifactValue() const;
 
     // return index of the sprite from objnarti.icn
     uint32_t IndexSprite() const
@@ -305,7 +305,7 @@ public:
 
     void exchangeArtifacts( BagArtifacts & giftBag );
 
-    int getArtifactValue() const;
+    double getArtifactValue() const;
     uint32_t CountArtifacts() const;
     uint32_t Count( const Artifact & ) const;
 
