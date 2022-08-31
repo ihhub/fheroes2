@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-27 02:47+0000\n"
+"POT-Creation-Date: 2022-08-31 01:55+0000\n"
 "PO-Revision-Date: 2022-07-04 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -2803,9 +2803,6 @@ msgstr ""
 "Conditions\n"
 "de Défaite"
 
-msgid "Score: "
-msgstr "Score : "
-
 msgid "First select recipients!"
 msgstr "Sélectionnez d'abord les destinataires !"
 
@@ -3330,6 +3327,37 @@ msgstr "Impossible"
 msgid "and more..."
 msgstr "et plus encore..."
 
+msgid "DIFFICULTY"
+msgstr ""
+
+#, fuzzy
+msgid "Campaign Difficulty"
+msgstr "Difficulté du Jeu"
+
+msgid ""
+"Choose this difficulty if you want to prefer game story over challenge. AI "
+"is weaker in comparison with normal difficulty."
+msgstr ""
+
+msgid ""
+"Choose this difficulty to enjoy the campaign as per the original design."
+msgstr ""
+
+msgid ""
+"Choose this difficulty if you want challenge. AI is stronger in comparison "
+"with normal difficulty."
+msgstr ""
+
+msgid "Easy"
+msgstr ""
+
+#, fuzzy
+msgid "Normal"
+msgstr "Normale"
+
+msgid "Hard"
+msgstr ""
+
 msgid "Start the selected scenario."
 msgstr "Démarrer le scénario sélectionné."
 
@@ -3338,6 +3366,9 @@ msgstr "Voir l'intro"
 
 msgid "View Intro videos for the current state of the campaign."
 msgstr "Voir la vidéo d'introduction du scénario actuel."
+
+msgid "Select campaign difficulty. It cannot be changed after."
+msgstr ""
 
 msgid "Restart"
 msgstr "Recommencer"
@@ -9732,6 +9763,9 @@ msgstr ""
 "Téléchargez la dernière version du jeu sur\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Score: "
+#~ msgstr "Score : "
 
 #~ msgid "Break auto battle?"
 #~ msgstr "Arrêter le combat auto ?"
