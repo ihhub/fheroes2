@@ -688,7 +688,7 @@ DwellingsBar::DwellingsBar( Castle & cstl, const fheroes2::Size & sz )
     SetContent( content );
 
     fheroes2::DrawBorder( backsf, fheroes2::GetColorId( 0xd0, 0xc0, 0x48 ) );
-    SetItemSize( sz.width, sz.height );
+    setSingleItemSize( sz );
 }
 
 void DwellingsBar::RedrawBackground( const fheroes2::Rect & pos, fheroes2::Image & dstsf )
