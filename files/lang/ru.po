@@ -3382,12 +3382,18 @@ msgstr ""
 msgid "Restart"
 msgstr "Начать сначала"
 
+msgid "Days spent"
+msgstr "Затрачено дней"
+
 #, fuzzy
 msgid "Restart the current scenario."
 msgstr "Сохранить текущую игру."
 
 msgid "Are you sure you want to restart this scenario?"
 msgstr "Вы действительно хотите начать этот сценарий сначала?"
+
+msgid "The number of days spent on this campaign."
+msgstr "Количество дней, потраченных на эту кампанию."
 
 msgid "Campaign Scenario loading failure"
 msgstr "Сбой загрузки сценария кампании"
