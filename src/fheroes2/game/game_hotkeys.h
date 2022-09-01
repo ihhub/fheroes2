@@ -104,7 +104,8 @@ namespace Game
 
         BATTLE_RETREAT,
         BATTLE_SURRENDER,
-        BATTLE_AUTOSWITCH,
+        BATTLE_AUTO_SWITCH,
+        BATTLE_AUTO_FINISH,
         BATTLE_OPTIONS,
         BATTLE_SKIP,
         BATTLE_WAIT,

@@ -1526,11 +1526,6 @@ bool LocalEvent::MousePressRight() const
     return ( modes & MOUSE_PRESSED ) && SDL_BUTTON_RIGHT == mouse_button;
 }
 
-bool LocalEvent::MouseReleaseRight() const
-{
-    return ( modes & MOUSE_RELEASED ) && SDL_BUTTON_RIGHT == mouse_button;
-}
-
 void LocalEvent::HandleKeyboardEvent( const SDL_KeyboardEvent & event )
 {
     const fheroes2::Key key = fheroes2::getKeyFromSDL( event.keysym.sym );

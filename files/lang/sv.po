@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-09 03:07+0000\n"
+"POT-Creation-Date: 2022-08-31 01:55+0000\n"
 "PO-Revision-Date: 2022-05-10 16:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -514,6 +514,10 @@ msgstr ""
 msgid "Shows the results of individual monster's actions."
 msgstr ""
 
+#, fuzzy
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Är du säker på att du vill avskeda denna armé?"
+
 msgid "%{name} skip their turn."
 msgstr "%{name} hoppar över rundan."
 
@@ -617,8 +621,8 @@ msgid "The mirror image is destroyed!"
 msgstr ""
 
 #, fuzzy
-msgid "Break auto battle?"
-msgstr "Slå på autostrid"
+msgid "Are you sure you want to interrupt the auto battle?"
+msgstr "Är du säker på att du vill retirera?"
 
 msgid "Error"
 msgstr "Fel"
@@ -2754,9 +2758,6 @@ msgstr ""
 "Förlust\n"
 "Villkor"
 
-msgid "Score: "
-msgstr ""
-
 msgid "First select recipients!"
 msgstr ""
 
@@ -3294,6 +3295,37 @@ msgstr "Omöjligt"
 msgid "and more..."
 msgstr ""
 
+msgid "DIFFICULTY"
+msgstr ""
+
+#, fuzzy
+msgid "Campaign Difficulty"
+msgstr "Spelets svårighet"
+
+msgid ""
+"Choose this difficulty if you want to prefer game story over challenge. AI "
+"is weaker in comparison with normal difficulty."
+msgstr ""
+
+msgid ""
+"Choose this difficulty to enjoy the campaign as per the original design."
+msgstr ""
+
+msgid ""
+"Choose this difficulty if you want challenge. AI is stronger in comparison "
+"with normal difficulty."
+msgstr ""
+
+msgid "Easy"
+msgstr ""
+
+#, fuzzy
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Hard"
+msgstr ""
+
 msgid "Start the selected scenario."
 msgstr ""
 
@@ -3302,6 +3334,9 @@ msgid "View Intro"
 msgstr "Visa hjälte"
 
 msgid "View Intro videos for the current state of the campaign."
+msgstr ""
+
+msgid "Select campaign difficulty. It cannot be changed after."
 msgstr ""
 
 msgid "Restart"
@@ -9289,3 +9324,7 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Break auto battle?"
+#~ msgstr "Slå på autostrid"

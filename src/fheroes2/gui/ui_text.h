@@ -33,7 +33,10 @@ namespace fheroes2
     {
         SMALL,
         NORMAL,
-        LARGE
+        LARGE,
+        // These are special fonts designed only for buttons. Use WHITE font color for Good Interface and GRAY for Evil Interface.
+        BUTTON_RELEASED,
+        BUTTON_PRESSED,
     };
 
     enum class FontColor : uint8_t
@@ -184,4 +187,7 @@ namespace fheroes2
     private:
         std::vector<Text> _texts;
     };
+
+    // This function is usually useful for text generation on buttons as button font is a separate set of sprites.
+    bool isFontAvailable( const std::string & text, const FontType fontType );
 }
