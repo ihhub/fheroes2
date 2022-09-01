@@ -331,7 +331,7 @@ fheroes2::GameMode Game::NewPriceOfLoyaltyCampaign()
     campaignSaveData.reset();
     campaignSaveData.setCurrentScenarioInfoId( { Campaign::PRICE_OF_LOYALTY_CAMPAIGN, 0 } );
 
-    std::array<std::unique_ptr<SMKVideoSequence>, 4> videos{ getVideo( "IVYPOL.SMK" ), getVideo( "IVYVOY.SMK" ), getVideo( "IVYWIZ.SMK" ), getVideo( "IVYDES.SMK" ) };
+    std::array<std::unique_ptr<SMKVideoSequence>, 4> videos{ { getVideo( "IVYPOL.SMK" ), getVideo( "IVYVOY.SMK" ), getVideo( "IVYWIZ.SMK" ), getVideo( "IVYDES.SMK" ) } };
 
     if ( !videos[0] ) {
         // File doesn't exist. Fallback to PoL campaign.
