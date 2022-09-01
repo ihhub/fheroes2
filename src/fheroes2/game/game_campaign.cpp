@@ -1394,8 +1394,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
         else if ( le.MousePressRight( areaDaysSpent ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Days spent" ), fheroes2::FontType::normalYellow() ),
-                                   fheroes2::Text( _( "The number of days spent on this campaign." ), fheroes2::FontType::normalWhite() ),
-                                   Dialog::ZERO );
+                                   fheroes2::Text( _( "The number of days spent on this campaign." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
         else if ( le.MouseClickLeft( buttonDifficulty.area() ) ) {
             campaignSaveData.setDifficulty( setCampaignDifficulty( campaignSaveData.getDifficulty(), isDifficultySelectionAllowed ) );
