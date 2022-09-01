@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-31 01:55+0000\n"
+"POT-Creation-Date: 2022-09-01 16:33+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -3382,9 +3382,6 @@ msgstr ""
 msgid "Restart"
 msgstr "Начать сначала"
 
-msgid "Days spent"
-msgstr "Затрачено дней"
-
 #, fuzzy
 msgid "Restart the current scenario."
 msgstr "Сохранить текущую игру."
@@ -3392,14 +3389,17 @@ msgstr "Сохранить текущую игру."
 msgid "Are you sure you want to restart this scenario?"
 msgstr "Вы действительно хотите начать этот сценарий сначала?"
 
-msgid "The number of days spent on this campaign."
-msgstr "Количество дней, потраченных на эту кампанию."
-
 msgid "Campaign Scenario loading failure"
 msgstr "Сбой загрузки сценария кампании"
 
 msgid "Please make sure that campaign files are correct and present."
 msgstr "Пожалуйста, убедитесь, что файлы кампании верны и присутствуют."
+
+msgid "Days spent"
+msgstr "Затрачено дней"
+
+msgid "The number of days spent on this campaign."
+msgstr "Количество дней, потраченных на эту кампанию."
 
 msgid "Project Coordination and Core Development"
 msgstr "Координатор проекта и основной разработчик"
