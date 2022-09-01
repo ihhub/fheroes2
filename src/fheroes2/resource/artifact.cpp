@@ -232,26 +232,119 @@ int Artifact::Level() const
     return ART_NONE;
 }
 
-int Artifact::getArtifactValue() const
+double Artifact::getArtifactValue() const
 {
-    // TODO: this method should return a value of the artifact based on its bonuses and curses.
-    // Right now it is based on a level of an artifact which makes some artifacts with different stats be valued as equal.
-    const int level = Level();
+    double artifactValue = 0;
+    const fheroes2::ArtifactData & data = fheroes2::getArtifactData( id );
+    const std::vector<fheroes2::ArtifactBonus> & bonuses = data.bonuses;
+    const std::vector<fheroes2::ArtifactCurse> & curses = data.curses;
 
-    if ( level & ART_LEVEL1 ) {
-        return 1;
-    }
-    else if ( level & ART_LEVEL2 ) {
-        return 2;
-    }
-    else if ( level & ART_LEVEL3 ) {
-        return 3;
-    }
-    else if ( level & ART_ULTIMATE ) {
-        return 5;
+    for ( const fheroes2::ArtifactBonus & bonus : bonuses ) {
+        switch ( bonus.type ) {
+        case fheroes2::ArtifactBonusType::GOLD_INCOME:
+            artifactValue += static_cast<double>( bonus.value ) / 800.0;
+            break;
+        case fheroes2::ArtifactBonusType::SEA_MOBILITY:
+            artifactValue += static_cast<double>( bonus.value ) / 500.0;
+            break;
+        case fheroes2::ArtifactBonusType::LAND_MOBILITY:
+            artifactValue += static_cast<double>( bonus.value ) / 200.0;
+            break;
+        case fheroes2::ArtifactBonusType::CURSE_SPELL_COST_REDUCTION_PERCENT:
+        case fheroes2::ArtifactBonusType::BLESS_SPELL_COST_REDUCTION_PERCENT:
+        case fheroes2::ArtifactBonusType::SUMMONING_SPELL_COST_REDUCTION_PERCENT:
+        case fheroes2::ArtifactBonusType::MIND_INFLUENCE_SPELL_COST_REDUCTION_PERCENT:
+        case fheroes2::ArtifactBonusType::COLD_SPELL_DAMAGE_REDUCTION_PERCENT:
+        case fheroes2::ArtifactBonusType::FIRE_SPELL_DAMAGE_REDUCTION_PERCENT:
+        case fheroes2::ArtifactBonusType::LIGHTNING_SPELL_DAMAGE_REDUCTION_PERCENT:
+        case fheroes2::ArtifactBonusType::ELEMENTAL_SPELL_DAMAGE_REDUCTION_PERCENT:
+        case fheroes2::ArtifactBonusType::HYPNOTIZE_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+        case fheroes2::ArtifactBonusType::COLD_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+        case fheroes2::ArtifactBonusType::FIRE_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+        case fheroes2::ArtifactBonusType::LIGHTNING_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+        case fheroes2::ArtifactBonusType::RESURRECT_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+        case fheroes2::ArtifactBonusType::SUMMONING_SPELL_EXTRA_EFFECTIVENESS_PERCENT:
+            artifactValue += static_cast<double>( bonus.value ) / 50.0;
+            break;
+        case fheroes2::ArtifactBonusType::NECROMANCY_SKILL:
+        case fheroes2::ArtifactBonusType::SURRENDER_COST_REDUCTION_PERCENT:
+            artifactValue += static_cast<double>( bonus.value ) / 10.0;
+            break;
+        case fheroes2::ArtifactBonusType::EVERY_COMBAT_SPELL_DURATION:
+        case fheroes2::ArtifactBonusType::SPELL_POINTS_DAILY_GENERATION:
+            artifactValue += static_cast<double>( bonus.value ) / 2.0;
+            break;
+        case fheroes2::ArtifactBonusType::CURSE_SPELL_IMMUNITY:
+        case fheroes2::ArtifactBonusType::HYPNOTIZE_SPELL_IMMUNITY:
+        case fheroes2::ArtifactBonusType::DEATH_SPELL_IMMUNITY:
+        case fheroes2::ArtifactBonusType::BERSERK_SPELL_IMMUNITY:
+        case fheroes2::ArtifactBonusType::BLIND_SPELL_IMMUNITY:
+        case fheroes2::ArtifactBonusType::PARALYZE_SPELL_IMMUNITY:
+        case fheroes2::ArtifactBonusType::HOLY_SPELL_IMMUNITY:
+        case fheroes2::ArtifactBonusType::DISPEL_SPELL_IMMUNITY:
+        case fheroes2::ArtifactBonusType::ENDLESS_AMMUNITION:
+        case fheroes2::ArtifactBonusType::NO_SHOOTING_PENALTY:
+        case fheroes2::ArtifactBonusType::VIEW_MONSTER_INFORMATION:
+        case fheroes2::ArtifactBonusType::ADD_SPELL:
+        case fheroes2::ArtifactBonusType::EXTRA_CATAPULT_SHOTS:
+            artifactValue += 1;
+            break;
+        case fheroes2::ArtifactBonusType::MAXIMUM_MORALE:
+        case fheroes2::ArtifactBonusType::DISABLE_ALL_SPELL_COMBAT_CASTING:
+        case fheroes2::ArtifactBonusType::MAXIMUM_LUCK:
+            artifactValue += 3;
+            break;
+        case fheroes2::ArtifactBonusType::KNOWLEDGE_SKILL:
+        case fheroes2::ArtifactBonusType::ATTACK_SKILL:
+        case fheroes2::ArtifactBonusType::DEFENCE_SKILL:
+        case fheroes2::ArtifactBonusType::SPELL_POWER_SKILL:
+        case fheroes2::ArtifactBonusType::MORALE:
+        case fheroes2::ArtifactBonusType::LUCK:
+        case fheroes2::ArtifactBonusType::AREA_REVEAL_DISTANCE:
+        case fheroes2::ArtifactBonusType::CRYSTAL_INCOME:
+        case fheroes2::ArtifactBonusType::MERCURY_INCOME:
+        case fheroes2::ArtifactBonusType::ORE_INCOME:
+        case fheroes2::ArtifactBonusType::GEMS_INCOME:
+        case fheroes2::ArtifactBonusType::WOOD_INCOME:
+        case fheroes2::ArtifactBonusType::SULFUR_INCOME:
+        case fheroes2::ArtifactBonusType::SEA_BATTLE_LUCK_BOOST:
+        case fheroes2::ArtifactBonusType::SEA_BATTLE_MORALE_BOOST:
+            artifactValue += bonus.value;
+            break;
+        case fheroes2::ArtifactBonusType::NONE:
+            break;
+        default:
+            // Did you add a new artifact ? Add your logic here.
+            assert( 0 );
+            break;
+        }
     }
 
-    return 0;
+    for ( const fheroes2::ArtifactCurse & curse : curses ) {
+        switch ( curse.type ) {
+        case fheroes2::ArtifactCurseType::GOLD_PENALTY:
+            artifactValue -= static_cast<double>( curse.value ) / 200.0;
+            break;
+        case fheroes2::ArtifactCurseType::COLD_SPELL_EXTRA_DAMAGE_PERCENT:
+        case fheroes2::ArtifactCurseType::FIRE_SPELL_EXTRA_DAMAGE_PERCENT:
+            artifactValue -= static_cast<double>( curse.value ) / 100.0;
+            break;
+        case fheroes2::ArtifactCurseType::NO_JOINING_ARMIES:
+        case fheroes2::ArtifactCurseType::UNDEAD_MORALE_PENALTY:
+            artifactValue -= 1;
+            break;
+        case fheroes2::ArtifactCurseType::MORALE:
+        case fheroes2::ArtifactCurseType::SPELL_POWER_SKILL:
+            artifactValue -= curse.value;
+            break;
+        default:
+            // Did you add a new artifact ? Add your logic here.
+            assert( 0 );
+            break;
+        }
+    }
+
+    return artifactValue;
 }
 
 void Artifact::SetSpell( const int v )
@@ -720,9 +813,9 @@ uint32_t BagArtifacts::CountArtifacts() const
     return static_cast<uint32_t>( std::count_if( begin(), end(), []( const Artifact & art ) { return art.isValid(); } ) );
 }
 
-int BagArtifacts::getArtifactValue() const
+double BagArtifacts::getArtifactValue() const
 {
-    int result = 0;
+    double result = 0;
     for ( const Artifact & art : *this ) {
         if ( art.isValid() )
             result += art.getArtifactValue();
@@ -838,7 +931,7 @@ ArtifactsBar::ArtifactsBar( const Heroes * hero, const bool mini, const bool ro,
         fheroes2::DrawBorder( backsf, fheroes2::GetColorId( 0xD0, 0xC0, 0x48 ) );
         fheroes2::Blit( sprite, rt.x, rt.y, backsf, 1, 1, rt.width, rt.height );
 
-        SetItemSize( backsf.width(), backsf.height() );
+        setSingleItemSize( { backsf.width(), backsf.height() } );
 
         spcursor.resize( backsf.width(), backsf.height() );
         spcursor.reset();
@@ -846,7 +939,7 @@ ArtifactsBar::ArtifactsBar( const Heroes * hero, const bool mini, const bool ro,
     }
     else {
         const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( ICN::ARTIFACT, 0 );
-        SetItemSize( sprite.width(), sprite.height() );
+        setSingleItemSize( { sprite.width(), sprite.height() } );
 
         spcursor.resize( 70, 70 );
         spcursor.reset();
