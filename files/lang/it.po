@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-10 14:31+0000\n"
+"POT-Creation-Date: 2022-08-31 01:55+0000\n"
 "PO-Revision-Date: 2022-05-12 17:11+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -498,6 +498,10 @@ msgstr ""
 msgid "Shows the results of individual monster's actions."
 msgstr ""
 
+#, fuzzy
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Sei sicuro di voler congedare queste forze?"
+
 msgid "%{name} skip their turn."
 msgstr "%{name} salta il suo turno."
 
@@ -593,8 +597,9 @@ msgstr ""
 msgid "The mirror image is destroyed!"
 msgstr ""
 
-msgid "Break auto battle?"
-msgstr ""
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto battle?"
+msgstr "Sei sicuro di voler fuggire?"
 
 msgid "Error"
 msgstr ""
@@ -2417,15 +2422,6 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "(Grado: %{percent})"
 
-msgid "Total: "
-msgstr "Totale: "
-
-msgid "No room in"
-msgstr "Non c'è posto"
-
-msgid "the garrison"
-msgstr "nella guarnigione"
-
 msgid "off"
 msgstr "Muto"
 
@@ -2470,6 +2466,9 @@ msgstr "Costruisci una nave:"
 
 msgid "Resource cost:"
 msgstr "Costo Risorse:"
+
+msgid "Total: "
+msgstr "Totale: "
 
 msgid "Need: "
 msgstr "Servono: "
@@ -2655,9 +2654,6 @@ msgid ""
 msgstr ""
 "Condizioni\n"
 "Sconfitta"
-
-msgid "Score: "
-msgstr "Punteggio: "
 
 msgid "First select recipients!"
 msgstr "Prima scegli destinatari!"
@@ -3183,6 +3179,37 @@ msgstr "Impossibile"
 msgid "and more..."
 msgstr ""
 
+msgid "DIFFICULTY"
+msgstr ""
+
+#, fuzzy
+msgid "Campaign Difficulty"
+msgstr "Difficoltà Gioco"
+
+msgid ""
+"Choose this difficulty if you want to prefer game story over challenge. AI "
+"is weaker in comparison with normal difficulty."
+msgstr ""
+
+msgid ""
+"Choose this difficulty to enjoy the campaign as per the original design."
+msgstr ""
+
+msgid ""
+"Choose this difficulty if you want challenge. AI is stronger in comparison "
+"with normal difficulty."
+msgstr ""
+
+msgid "Easy"
+msgstr ""
+
+#, fuzzy
+msgid "Normal"
+msgstr "Normale"
+
+msgid "Hard"
+msgstr ""
+
 msgid "Start the selected scenario."
 msgstr ""
 
@@ -3191,6 +3218,9 @@ msgid "View Intro"
 msgstr "Mostra Eroe"
 
 msgid "View Intro videos for the current state of the campaign."
+msgstr ""
+
+msgid "Select campaign difficulty. It cannot be changed after."
 msgstr ""
 
 msgid "Restart"
@@ -4242,11 +4272,8 @@ msgstr "1"
 msgid "two"
 msgstr "2"
 
-msgid "A whirlpool engulfs your ship."
+msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
 msgstr "Un gorgo travolge la tua nave."
-
-msgid "Some of your army has fallen overboard."
-msgstr ""
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
 msgstr "Rifiutandoli si sono offesi i mostri e ti attaccano!"
@@ -8705,13 +8732,7 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "game: remember last focus"
-msgstr ""
-
 msgid "battle: show damage info"
-msgstr ""
-
-msgid "world: show terrain penalty"
 msgstr ""
 
 msgid "world: Scouting skill shows extended content info"
@@ -8826,3 +8847,6 @@ msgstr ""
 "Scopri l'ultima versione del gioco su\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Score: "
+#~ msgstr "Punteggio: "

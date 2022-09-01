@@ -394,7 +394,7 @@ namespace
         return str;
     }
 
-    std::string ShowGroundInfo( const Maps::Tiles & tile, const bool showTerrainPenaltyOption, const Heroes * hero )
+    std::string ShowGroundInfo( const Maps::Tiles & tile, const Heroes * hero )
     {
         const MP2::MapObjectType objectType = tile.GetObject( false );
 
@@ -411,14 +411,15 @@ namespace
 
         str.append( "\n \n" );
 
-        if ( tile.GoodForUltimateArtifact() ) {
+        // Original Editor allows to put an Ultimate Artifact on an invalid tile. So checking tile index solves this issue.
+        if ( tile.GoodForUltimateArtifact() || world.GetUltimateArtifact().getPosition() == tile.GetIndex() ) {
             str.append( _( "(digging ok)" ) );
         }
         else {
             str.append( _( "(no digging)" ) );
         }
 
-        if ( showTerrainPenaltyOption && hero ) {
+        if ( hero ) {
             const uint32_t cost = tile.isRoad() ? Maps::Ground::roadPenalty : Maps::Ground::GetPenalty( tile, hero->GetLevelSkill( Skill::Secondary::PATHFINDING ) );
             if ( cost > 0 ) {
                 str += '\n';
@@ -518,7 +519,6 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
     // This value is only relevant for the "Extended Scouting" option
     const uint32_t scoutingLevelForTile = isVisibleFromCrystalBall ? static_cast<int>( Skill::Level::EXPERT ) : GetHeroScoutingLevelForTile( from_hero, tile.GetIndex() );
 
-    const bool showTerrainPenaltyOption = settings.ExtWorldShowTerrainPenalty();
     const bool extendedScoutingOption = settings.ExtWorldScouteExtended();
 
     if ( tile.isFog( settings.CurrentColor() ) )
@@ -537,7 +537,7 @@ void Dialog::QuickInfo( const Maps::Tiles & tile, const bool ignoreHeroOnTile )
         case MP2::OBJ_EVENT:
         case MP2::OBJ_ZERO:
         case MP2::OBJ_COAST:
-            name_object = ShowGroundInfo( tile, showTerrainPenaltyOption, from_hero );
+            name_object = ShowGroundInfo( tile, from_hero );
             break;
 
         case MP2::OBJ_DERELICTSHIP:

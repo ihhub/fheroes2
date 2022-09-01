@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-10 14:31+0000\n"
+"POT-Creation-Date: 2022-08-31 01:55+0000\n"
 "PO-Revision-Date: 2022-05-12 17:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -523,6 +523,10 @@ msgstr "Nachrichtenleiste"
 msgid "Shows the results of individual monster's actions."
 msgstr "Zeigt die Ergebnisse der Aktionen der einzelnen Monster."
 
+#, fuzzy
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Sind Sie sicher, dass Sie diese Armee entlassen wollen?"
+
 msgid "%{name} skip their turn."
 msgstr "%{name} setzt den Zug aus."
 
@@ -623,8 +627,9 @@ msgstr "Das Spiegelbild wird erstellt."
 msgid "The mirror image is destroyed!"
 msgstr "Das Spiegelbild ist zerstört!"
 
-msgid "Break auto battle?"
-msgstr "Autokampf unterbrechen?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto battle?"
+msgstr "Sind Sie sicher, dass Sie sich zurückziehen wollen?"
 
 msgid "Error"
 msgstr "Fehler"
@@ -2584,15 +2589,6 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "(Grad: %{percent})"
 
-msgid "Total: "
-msgstr "Insgesamt: "
-
-msgid "No room in"
-msgstr "Kein Platz in"
-
-msgid "the garrison"
-msgstr "der Garnison"
-
 msgid "off"
 msgstr "Aus"
 
@@ -2638,6 +2634,9 @@ msgstr "Ein neues Boot bauen:"
 
 msgid "Resource cost:"
 msgstr "Ressourcenkosten:"
+
+msgid "Total: "
+msgstr "Insgesamt: "
 
 msgid "Need: "
 msgstr "Bedarf: "
@@ -2821,9 +2820,6 @@ msgid ""
 msgstr ""
 "Verlust-\n"
 "bedingungen"
-
-msgid "Score: "
-msgstr "Punkte: "
 
 msgid "First select recipients!"
 msgstr "Wählen Sie zuerst die Empfänger aus!"
@@ -3348,6 +3344,37 @@ msgstr "Unmögl."
 msgid "and more..."
 msgstr "und mehr..."
 
+msgid "DIFFICULTY"
+msgstr ""
+
+#, fuzzy
+msgid "Campaign Difficulty"
+msgstr "Spielschwierigkeit"
+
+msgid ""
+"Choose this difficulty if you want to prefer game story over challenge. AI "
+"is weaker in comparison with normal difficulty."
+msgstr ""
+
+msgid ""
+"Choose this difficulty to enjoy the campaign as per the original design."
+msgstr ""
+
+msgid ""
+"Choose this difficulty if you want challenge. AI is stronger in comparison "
+"with normal difficulty."
+msgstr ""
+
+msgid "Easy"
+msgstr ""
+
+#, fuzzy
+msgid "Normal"
+msgstr "Normales"
+
+msgid "Hard"
+msgstr ""
+
 msgid "Start the selected scenario."
 msgstr "Startet das ausgewählte Szenario."
 
@@ -3356,6 +3383,9 @@ msgstr "Intro ansehen"
 
 msgid "View Intro videos for the current state of the campaign."
 msgstr "Sehen Sie sich die Intro-Videos zum aktuellen Stand der Kampagne an."
+
+msgid "Select campaign difficulty. It cannot be changed after."
+msgstr ""
 
 msgid "Restart"
 msgstr "Neustart"
@@ -4488,11 +4518,10 @@ msgstr "1"
 msgid "two"
 msgstr "2"
 
-msgid "A whirlpool engulfs your ship."
-msgstr "Ein Strudel verschlingt Ihr Schiff."
-
-msgid "Some of your army has fallen overboard."
-msgstr "Ein Teil Ihrer Armee ist über Bord gefallen."
+msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
+msgstr ""
+"Ein Strudel verschlingt Ihr Schiff. Ein Teil Ihrer Armee ist über Bord "
+"gefallen."
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
 msgstr "Beleidigt durch Ihre Ablehnung ihres Angebots, greifen die Monster an!"
@@ -9797,14 +9826,8 @@ msgstr ""
 "Dieser Zauberspruch kontrolliert bis zu\n"
 "%{hp} TP."
 
-msgid "game: remember last focus"
-msgstr "Spiel: den letzten Fokus merken"
-
 msgid "battle: show damage info"
 msgstr "Kampf: Schadensinformationen anzeigen"
-
-msgid "world: show terrain penalty"
-msgstr "Welt: Geländestrafung anzeigen"
 
 msgid "world: Scouting skill shows extended content info"
 msgstr "Welt: Scouting-Skill zeigt erweiterte Inhaltsangaben"
@@ -9915,5 +9938,8 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "game: always confirm for rewrite savefile"
-#~ msgstr "Spiel: immer bestätigen bevor eine Speicherdatei überschrieben ist"
+#~ msgid "Score: "
+#~ msgstr "Punkte: "
+
+#~ msgid "Break auto battle?"
+#~ msgstr "Autokampf unterbrechen?"

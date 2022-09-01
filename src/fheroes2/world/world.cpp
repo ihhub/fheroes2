@@ -300,12 +300,12 @@ void CapturedObjects::ResetColor( int color )
             const MP2::MapObjectType objectType = static_cast<MP2::MapObjectType>( objcol.first );
 
             objcol.second = objectType == MP2::OBJ_CASTLE ? Color::UNUSED : Color::NONE;
-            world.GetTiles( ( *it ).first ).CaptureFlags32( objectType, objcol.second );
+            world.GetTiles( it->first ).setOwnershipFlag( objectType, objcol.second );
         }
     }
 }
 
-void CapturedObjects::tributeCapturedObjects( const int playerColorId, const int objectType, Funds & funds, int & objectCount )
+void CapturedObjects::tributeCapturedObjects( const int playerColorId, const MP2::MapObjectType objectType, Funds & funds, int & objectCount )
 {
     funds = Funds();
     objectCount = 0;
@@ -433,62 +433,6 @@ void World::NewMaps( int32_t sw, int32_t sh )
     }
 }
 
-void World::InitKingdoms()
-{
-    vec_kingdoms.Init();
-}
-
-const Maps::Tiles & World::GetTiles( const int32_t x, const int32_t y ) const
-{
-#ifdef WITH_DEBUG
-    return vec_tiles.at( y * width + x );
-#else
-    return vec_tiles[y * width + x];
-#endif
-}
-
-Maps::Tiles & World::GetTiles( const int32_t x, const int32_t y )
-{
-#ifdef WITH_DEBUG
-    return vec_tiles.at( y * width + x );
-#else
-    return vec_tiles[y * width + x];
-#endif
-}
-
-const Maps::Tiles & World::GetTiles( const int32_t tileId ) const
-{
-#ifdef WITH_DEBUG
-    return vec_tiles.at( tileId );
-#else
-    return vec_tiles[tileId];
-#endif
-}
-
-Maps::Tiles & World::GetTiles( const int32_t tileId )
-{
-#ifdef WITH_DEBUG
-    return vec_tiles.at( tileId );
-#else
-    return vec_tiles[tileId];
-#endif
-}
-
-size_t World::getSize() const
-{
-    return vec_tiles.size();
-}
-
-Castle * World::getCastle( const fheroes2::Point & tilePosition )
-{
-    return vec_castles.Get( tilePosition );
-}
-
-const Castle * World::getCastle( const fheroes2::Point & tilePosition ) const
-{
-    return vec_castles.Get( tilePosition );
-}
-
 const Castle * World::getCastleEntrance( const fheroes2::Point & tilePosition ) const
 {
     if ( !isValidCastleEntrance( tilePosition ) ) {
@@ -510,27 +454,6 @@ Castle * World::getCastleEntrance( const fheroes2::Point & tilePosition )
 bool World::isValidCastleEntrance( const fheroes2::Point & tilePosition ) const
 {
     return Maps::isValidAbsPoint( tilePosition.x, tilePosition.y ) && ( GetTiles( tilePosition.x, tilePosition.y ).GetObject( false ) == MP2::OBJ_CASTLE );
-}
-
-Heroes * World::GetHeroes( int id )
-{
-    return vec_heroes.Get( id );
-}
-
-const Heroes * World::GetHeroes( int id ) const
-{
-    return vec_heroes.Get( id );
-}
-
-/* get heroes from index maps */
-Heroes * World::GetHeroes( const fheroes2::Point & center )
-{
-    return vec_heroes.Get( center );
-}
-
-const Heroes * World::GetHeroes( const fheroes2::Point & center ) const
-{
-    return vec_heroes.Get( center );
 }
 
 Heroes * World::GetFreemanHeroes( const int race, const int heroIDToIgnore /* = Heroes::UNKNOWN */ ) const
@@ -975,7 +898,7 @@ void World::CaptureObject( int32_t index, int color )
         castle->ChangeColor( color );
 
     if ( color & ( Color::ALL | Color::UNUSED ) )
-        GetTiles( index ).CaptureFlags32( objectType, color );
+        GetTiles( index ).setOwnershipFlag( objectType, color );
 }
 
 /* return color captured object */
@@ -1022,34 +945,18 @@ bool World::DiggingForUltimateArtifact( const fheroes2::Point & center )
 {
     Maps::Tiles & tile = GetTiles( center.x, center.y );
 
-    // puts hole sprite
+    // Get digging hole sprite.
     uint8_t obj = 0;
     uint32_t idx = 0;
 
-    switch ( tile.GetGround() ) {
-    case Maps::Ground::WASTELAND:
-        obj = 0xE4;
-        idx = 70;
-        break; // ICN::OBJNCRCK
-    case Maps::Ground::DIRT:
-        obj = 0xE0;
-        idx = 140;
-        break; // ICN::OBJNDIRT
-    case Maps::Ground::DESERT:
-        obj = 0xDC;
-        idx = 68;
-        break; // ICN::OBJNDSRT
-    case Maps::Ground::LAVA:
-        obj = 0xD8;
-        idx = 26;
-        break; // ICN::OBJNLAVA
-    case Maps::Ground::GRASS:
-    default:
-        obj = 0xC0;
-        idx = 9;
-        break; // ICN::OBJNGRA2
+    if ( !MP2::getDiggingHoleSprite( tile.GetGround(), obj, idx ) ) {
+        // Are you sure that you can dig here?
+        assert( 0 );
+
+        return false;
     }
-    tile.AddonsPushLevel1( Maps::TilesAddon( 0, GetUniq(), obj, idx ) );
+
+    tile.AddonsPushLevel1( Maps::TilesAddon( Maps::BACKGROUND_LAYER, GetUniq(), obj, idx ) );
 
     // reset
     if ( ultimate_artifact.isPosition( tile.GetIndex() ) && !ultimate_artifact.isFound() ) {
@@ -1517,18 +1424,17 @@ StreamBase & operator>>( StreamBase & msg, World & w )
     w.height = height;
 
     msg >> w.vec_tiles >> w.vec_heroes >> w.vec_castles >> w.vec_kingdoms >> w._rumors >> w.vec_eventsday >> w.map_captureobj >> w.ultimate_artifact >> w.day >> w.week
-        >> w.month;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE3_0912_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE3_0912_RELEASE ) {
-        Week dummyWeek;
-
-        msg >> dummyWeek >> dummyWeek;
-    }
-
-    msg >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
+        >> w.month >> w.heroes_cond_wins >> w.heroes_cond_loss >> w.map_actions >> w.map_objects >> w._seed;
 
     w.PostLoad( false );
+
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_0918_RELEASE ) {
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0918_RELEASE, "Remove the code in this block." );
+        for ( Maps::Tiles & tile : world.vec_tiles ) {
+            tile.correctOldSaveOwnershipFlag();
+            tile.correctDiggingHoles();
+        }
+    }
 
     return msg;
 }

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-10 14:31+0000\n"
-"PO-Revision-Date: 2022-06-18 17:48+0200\n"
+"POT-Creation-Date: 2022-08-31 01:55+0000\n"
+"PO-Revision-Date: 2022-08-20 17:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 msgid "Warrior"
 msgstr "Kriger"
@@ -159,11 +159,10 @@ msgstr "Flytt %{name}"
 msgid "Set Count"
 msgstr "Velg antall"
 
-#, fuzzy
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
-msgstr[0] "%{name} halverer fiendestyrken!"
-msgstr[1] "%{name} halverer fiendestyrken!"
+msgstr[0] "Troppen med 1 %{name} halverer fiendestyrken!"
+msgstr[1] "Troppen med %{name} halverer fiendestyrken!"
 
 msgid "%{name} has turned off the auto battle"
 msgstr "%{name} har slått av autotrekk"
@@ -518,16 +517,20 @@ msgstr "Kamplogg"
 msgid "Shows the results of individual monster's actions."
 msgstr "Viser en logg over alle krigernes trekk."
 
+# Avskjedige
+#, fuzzy
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Er du sikker på at du vil bortvise denne troppen?"
+
 msgid "%{name} skip their turn."
 msgstr "Troppen med %{name} hopper over turen."
 
 msgid "%{name} wait their turn."
 msgstr "Troppen med %{name} avventer."
 
-#, fuzzy
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
-msgstr[0] "Troppen med %{attacker} gjør %{damage} skadepoeng."
+msgstr[0] "Troppen med 1 %{attacker} gjør %{damage} skadepoeng."
 msgstr[1] "Troppen med %{attacker} gjør %{damage} skadepoeng."
 
 msgid "1 creature perishes."
@@ -617,8 +620,9 @@ msgstr "Speilbildet ble skapt."
 msgid "The mirror image is destroyed!"
 msgstr "Speilbildet ble ødelagt!"
 
-msgid "Break auto battle?"
-msgstr "Avbryt autotrekk?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto battle?"
+msgstr "Er du sikker på at du vil flykte fra kampen?"
 
 msgid "Error"
 msgstr "Feil"
@@ -2064,9 +2068,8 @@ msgstr "Oppg. steinring"
 msgid "Fenced Meadow"
 msgstr "Inngjerdet slette"
 
-#, fuzzy
 msgid "sorceress|Red Tower"
-msgstr "Rødt tårn"
+msgstr "Ildtårn"
 
 msgid "Dungeon"
 msgstr "Skattehvelv"
@@ -2095,7 +2098,6 @@ msgstr "Myr"
 msgid "Green Tower"
 msgstr "Grønt tårn"
 
-#, fuzzy
 msgid "warlock|Red Tower"
 msgstr "Rødt tårn"
 
@@ -2632,15 +2634,6 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "(Grad: %{percent})"
 
-msgid "Total: "
-msgstr "Totalt: "
-
-msgid "No room in"
-msgstr "Ingen plass i"
-
-msgid "the garrison"
-msgstr "hæren"
-
 msgid "off"
 msgstr "av"
 
@@ -2685,6 +2678,9 @@ msgstr "Bygg et nytt skip:"
 
 msgid "Resource cost:"
 msgstr "Pris i råvarer:"
+
+msgid "Total: "
+msgstr "Totalt: "
 
 msgid "Need: "
 msgstr "Trenger: "
@@ -2871,9 +2867,6 @@ msgid ""
 msgstr ""
 "Taps-\n"
 "vilkår"
-
-msgid "Score: "
-msgstr "Poengsum: "
 
 msgid "First select recipients!"
 msgstr "Velg først mottakere!"
@@ -3400,6 +3393,37 @@ msgstr "Umulig"
 msgid "and more..."
 msgstr "og mer..."
 
+msgid "DIFFICULTY"
+msgstr ""
+
+#, fuzzy
+msgid "Campaign Difficulty"
+msgstr "Vanskelighetsgrad"
+
+msgid ""
+"Choose this difficulty if you want to prefer game story over challenge. AI "
+"is weaker in comparison with normal difficulty."
+msgstr ""
+
+msgid ""
+"Choose this difficulty to enjoy the campaign as per the original design."
+msgstr ""
+
+msgid ""
+"Choose this difficulty if you want challenge. AI is stronger in comparison "
+"with normal difficulty."
+msgstr ""
+
+msgid "Easy"
+msgstr ""
+
+#, fuzzy
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Hard"
+msgstr ""
+
 msgid "Start the selected scenario."
 msgstr "Begynn det brettet du har valgt."
 
@@ -3408,6 +3432,9 @@ msgstr "Vis introfilm"
 
 msgid "View Intro videos for the current state of the campaign."
 msgstr "Vis filmen for det nåværende punktet av felttoget."
+
+msgid "Select campaign difficulty. It cannot be changed after."
+msgstr ""
 
 msgid "Restart"
 msgstr "Start på nytt"
@@ -3463,7 +3490,6 @@ msgstr "og mange flere støttespillere!"
 msgid "Original project before 0.7"
 msgstr "Opprinnelig prosjekt før 0.7"
 
-#, fuzzy
 msgid "Heroes of Might and Magic II: The Succession Wars team"
 msgstr "Det opprinnelige Heroes of Might and Magic II-teamet"
 
@@ -3518,75 +3544,69 @@ msgstr "Håndbok og hjelpetekst"
 msgid "Scenarios"
 msgstr "Brett"
 
-#, fuzzy
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
-msgstr "Det opprinnelige Heroes of Might and Magic II-teamet"
+msgstr ""
+"Det opprinnelige Heroes of Might and Magic II: The Price of Loyalty-teamet"
 
 msgid "Cyberlore Studios"
 msgstr ""
 
 msgid "Design Lead"
-msgstr ""
+msgstr "Hoveddesigner"
 
 msgid "Designers"
-msgstr ""
+msgstr "Designere"
 
-#, fuzzy
 msgid "Programming Lead"
-msgstr "Programmering og utforming"
+msgstr "Hovedprogrammerer"
 
 msgid "Art Lead"
-msgstr ""
+msgstr "Artistisk leder"
 
-#, fuzzy
 msgid "Playtesters"
-msgstr "2 Spillere"
+msgstr "Spilltestere"
 
 msgid "New World Computing"
 msgstr ""
 
 msgid "Designer"
-msgstr ""
+msgstr "Designer"
 
-#, fuzzy
 msgid "Producers"
-msgstr "Produsent"
+msgstr "Produsenter"
 
-#, fuzzy
 msgid "QA Managers"
-msgstr "Koordinator for kvalitetssikring"
+msgstr "Kvalitetssikringsledelse"
 
-#, fuzzy
 msgid "Sound Design"
-msgstr "Musikk- og lyddesign"
+msgstr "Lyddesign"
 
-#, fuzzy
 msgid "Town Themes"
-msgstr "Byport"
+msgstr "Musikktema i byer"
 
 msgid "Alto Sax"
-msgstr ""
+msgstr "Altsaksofonist"
 
 msgid "Harpsichord and Piano"
-msgstr ""
+msgstr "Cembalo og piano"
 
 msgid "Basso Vocal"
-msgstr ""
+msgstr "Bass"
 
 msgid "Soprano Vocal"
-msgstr ""
+msgstr "Sopran"
 
 msgid "Recorded at Green Street Studios"
-msgstr ""
+msgstr "Opptak gjort ved Green Street Studios"
 
 msgid "German Consultant"
-msgstr ""
+msgstr "Tyskrådgiver"
 
 msgid "Map Designers"
-msgstr ""
+msgstr "Brettdesignere"
 
 msgid "Package Design"
-msgstr ""
+msgstr "Innpakningsdesign"
 
 msgid "Unknown Hero"
 msgstr "Ukjent helt"
@@ -3611,9 +3631,8 @@ msgid "Warning"
 msgstr "Advarsel"
 
 msgid "This file contains a save with an invalid game type."
-msgstr ""
+msgstr "Denne filen inneholder et lagringspunkt med en ugyldig spillversjon."
 
-#, fuzzy
 msgid ""
 "This file was saved by the \"The Price of Loyalty\" version of the game.\n"
 "Some items may not be available."
@@ -3743,6 +3762,8 @@ msgid ""
 "Required video files for campaign selection window are missing. Please make "
 "sure that all necessary files are present in the system."
 msgstr ""
+"De nødvendige filene for felttogets valgvindu mangler. Vennligst forsikre "
+"deg om at alle nødvendige filer er tilstede i systemet."
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
@@ -4517,11 +4538,9 @@ msgstr "1"
 msgid "two"
 msgstr "2"
 
-msgid "A whirlpool engulfs your ship."
-msgstr "Virvelstrømmen sluker skipet ditt."
-
-msgid "Some of your army has fallen overboard."
-msgstr "Noen av styrkene dine har falt om bord."
+msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
+msgstr ""
+"Virvelstrømmen sluker skipet ditt. Noen av styrkene dine har falt om bord."
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
 msgstr ""
@@ -7602,7 +7621,7 @@ msgid "% magic resistance"
 msgstr "% magimotstand"
 
 msgid "Immune to Mind spells"
-msgstr "Immun mot tankemagi"
+msgstr "Immun mot sinnsmagi"
 
 msgid "Immune to Elemental spells"
 msgstr "Immun mot elementbasert magi"
@@ -9764,14 +9783,8 @@ msgstr ""
 "Denne trolldommen gir deg kontroll over\n"
 "opptil %{hp} liv."
 
-msgid "game: remember last focus"
-msgstr "Parti: Husk hvor du var sist"
-
 msgid "battle: show damage info"
 msgstr "Kamp: Vis skadeinfo"
-
-msgid "world: show terrain penalty"
-msgstr "Verden: Vis hvor mye skritt du taper på terrengene"
 
 msgid "world: Scouting skill shows extended content info"
 msgstr "Verden: Speiding gir deg utvidet info"
@@ -9881,5 +9894,8 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "game: always confirm for rewrite savefile"
-#~ msgstr "Parti: Alltid be om bekreftelse ved overskrivning av lagringsfil"
+#~ msgid "Score: "
+#~ msgstr "Poengsum: "
+
+#~ msgid "Break auto battle?"
+#~ msgstr "Avbryt autotrekk?"

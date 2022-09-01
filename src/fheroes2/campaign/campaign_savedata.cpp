@@ -21,6 +21,7 @@
 #include "campaign_savedata.h"
 #include "army.h"
 #include "campaign_data.h"
+#include "game.h"
 #include "save_format_version.h"
 #include "serialize.h"
 #include <algorithm>
@@ -28,13 +29,6 @@
 
 namespace Campaign
 {
-    CampaignSaveData::CampaignSaveData()
-        : _currentScenarioInfoId( -1, -1 )
-        , _daysPassed( 0 )
-    {
-        // Do nothing.
-    }
-
     CampaignSaveData & Campaign::CampaignSaveData::Get()
     {
         static CampaignSaveData instance;
@@ -81,6 +75,7 @@ namespace Campaign
         _carryOverTroops.clear();
         _currentScenarioInfoId = { -1, -1 };
         _daysPassed = 0;
+        _difficulty = CampaignDifficulty::Normal;
     }
 
     void CampaignSaveData::setCarryOverTroops( const Troops & troops )
@@ -123,30 +118,23 @@ namespace Campaign
     StreamBase & operator<<( StreamBase & msg, const CampaignSaveData & data )
     {
         return msg << data._currentScenarioInfoId.campaignId << data._currentScenarioInfoId.scenarioId << data._currentScenarioBonus << data._finishedMaps
-                   << data._daysPassed << data._obtainedCampaignAwards << data._carryOverTroops;
+                   << data._daysPassed << data._obtainedCampaignAwards << data._carryOverTroops << data._difficulty;
     }
 
     StreamBase & operator>>( StreamBase & msg, CampaignSaveData & data )
     {
-        return msg >> data._currentScenarioInfoId.campaignId >> data._currentScenarioInfoId.scenarioId >> data._currentScenarioBonus >> data._finishedMaps
-               >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops;
-    }
+        msg >> data._currentScenarioInfoId.campaignId >> data._currentScenarioInfoId.scenarioId >> data._currentScenarioBonus >> data._finishedMaps >> data._daysPassed
+            >> data._obtainedCampaignAwards >> data._carryOverTroops;
 
-    void CampaignSaveData::loadOldSaveSata( StreamBase & msg, CampaignSaveData & data )
-    {
-        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0912_RELEASE, "Remove this method." );
-
-        msg >> data._currentScenarioInfoId.scenarioId >> data._currentScenarioBonus;
-
-        std::vector<int> finishedMaps;
-        msg >> finishedMaps;
-
-        msg >> data._currentScenarioInfoId.campaignId >> data._daysPassed >> data._obtainedCampaignAwards >> data._carryOverTroops;
-
-        data._finishedMaps.clear();
-        for ( const int mapId : finishedMaps ) {
-            data._finishedMaps.emplace_back( data._currentScenarioInfoId.campaignId, mapId );
+        static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0919_RELEASE, "Remove the check below." );
+        if ( Game::GetLoadVersion() < FORMAT_VERSION_0919_RELEASE ) {
+            data._difficulty = CampaignDifficulty::Normal;
         }
+        else {
+            msg >> data._difficulty;
+        }
+
+        return msg;
     }
 
     ScenarioVictoryCondition getCurrentScenarioVictoryCondition()

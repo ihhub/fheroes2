@@ -223,7 +223,7 @@ namespace
                         if ( imageWidth % 4 != 0 ) {
                             const int32_t screenWidth = ( imageWidth / 4 ) * 4 + 4;
                             for ( int32_t i = 0; i < imageHeight; ++i ) {
-                                memcpy( reinterpret_cast<int8_t *>( surface->pixels ) + screenWidth * i, imageIn + imageWidth * i, static_cast<size_t>( imageWidth ) );
+                                memcpy( static_cast<uint8_t *>( surface->pixels ) + screenWidth * i, imageIn + imageWidth * i, static_cast<size_t>( imageWidth ) );
                             }
                         }
                         else {
@@ -254,7 +254,7 @@ namespace
                         const int32_t screenOffset = roi.x + roi.y * screenWidth;
                         const int32_t imageOffset = roi.x + roi.y * imageWidth;
                         for ( int32_t i = 0; i < roi.height; ++i ) {
-                            memcpy( reinterpret_cast<int8_t *>( surface->pixels ) + screenWidth * i + screenOffset, imageIn + imageOffset + imageWidth * i,
+                            memcpy( static_cast<uint8_t *>( surface->pixels ) + screenWidth * i + screenOffset, imageIn + imageOffset + imageWidth * i,
                                     static_cast<size_t>( roi.width ) );
                         }
                     }
@@ -905,7 +905,7 @@ namespace
                 if ( _renderer != nullptr )
                     SDL_DestroyRenderer( _renderer );
 
-                // TODO: run throught all drivers and find the one which supports SDL_PIXELFORMAT_INDEX8 and use that driver ID instead of -1.
+                // SDL_PIXELFORMAT_INDEX8 is not supported by SDL 2 even being available in the list of formats.
                 _renderer = SDL_CreateRenderer( _window, -1, renderFlags() );
                 if ( _renderer == nullptr ) {
                     ERROR_LOG( "Failed to create a window renderer. The error: " << SDL_GetError() )
@@ -1011,7 +1011,7 @@ namespace
                 ERROR_LOG( "Chosen rendering driver does not support all rendering flags" )
             }
 
-            // TODO: run throught all drivers and find the one which supports SDL_PIXELFORMAT_INDEX8 and use that driver ID instead of -1.
+            // SDL_PIXELFORMAT_INDEX8 is not supported by SDL 2 even being available in the list of formats.
             _renderer = SDL_CreateRenderer( _window, -1, renderingFlags );
             if ( _renderer == nullptr ) {
                 ERROR_LOG( "Failed to create a window renderer of " << width_ << " x " << height_ << " size. The error: " << SDL_GetError() )

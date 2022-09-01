@@ -725,18 +725,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
     Kingdom & myKingdom = world.GetKingdom( conf.CurrentColor() );
     const KingdomCastles & myCastles = myKingdom.GetCastles();
 
-    // set focus
-    if ( conf.ExtGameRememberLastFocus() ) {
-        if ( GetFocusHeroes() != nullptr )
-            ResetFocus( GameFocus::HEROES );
-        else if ( GetFocusCastle() != nullptr )
-            ResetFocus( GameFocus::CASTLE );
-        else
-            ResetFocus( GameFocus::FIRSTHERO );
-    }
-    else {
-        ResetFocus( GameFocus::FIRSTHERO );
-    }
+    ResetFocus( GameFocus::FIRSTHERO );
 
     radar.SetHide( false );
     statusWindow.Reset();

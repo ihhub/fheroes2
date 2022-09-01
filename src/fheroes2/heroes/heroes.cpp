@@ -325,9 +325,6 @@ void Heroes::LoadFromMP2( int32_t map_index, int cl, int rc, StreamBuf st )
     // Experience
     experience = st.getLE32();
 
-    if ( experience == 0 )
-        experience = GetStartingXp();
-
     // Custom secondary skills
     const bool custom_secskill = ( st.get() != 0 );
 
@@ -1007,10 +1004,18 @@ void Heroes::IncreaseExperience( const uint32_t amount, const bool autoselect )
     int oldLevel = GetLevelFromExperience( experience );
     int newLevel = GetLevelFromExperience( experience + amount );
 
-    for ( int level = oldLevel; level < newLevel; ++level )
-        LevelUp( false, autoselect );
+    const uint32_t updatedExperience = experience + amount;
 
-    experience += amount;
+    for ( int level = oldLevel; level < newLevel - 1; ++level ) {
+        experience = GetExperienceFromLevel( level );
+        LevelUp( false, autoselect );
+    }
+
+    experience = updatedExperience;
+
+    if ( newLevel > oldLevel ) {
+        LevelUp( false, autoselect );
+    }
 }
 
 /* calc level from exp */
@@ -1991,16 +1996,7 @@ StreamBase & operator>>( StreamBase & msg, Heroes & hero )
     msg >> base;
 
     // Heroes
-    msg >> hero.name >> col;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_0916_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE_0916_RELEASE ) {
-        ColorBase dummyColor;
-
-        msg >> dummyColor;
-    }
-
-    msg >> hero.experience;
+    msg >> hero.name >> col >> hero.experience;
 
     static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0917_RELEASE, "Remove the check below." );
     if ( Game::GetLoadVersion() < FORMAT_VERSION_0917_RELEASE ) {

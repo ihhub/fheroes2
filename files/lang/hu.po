@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-10 14:31+0000\n"
+"POT-Creation-Date: 2022-08-31 01:55+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -517,6 +517,10 @@ msgid "Shows the results of individual monster's actions."
 msgstr ""
 
 #, fuzzy
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Biztos vagy benne hogy feloszlatod ezt a sereget?"
+
+#, fuzzy
 msgid "%{name} skip their turn."
 msgstr "%{name} kör kihagyása."
 
@@ -634,8 +638,8 @@ msgid "The mirror image is destroyed!"
 msgstr ""
 
 #, fuzzy
-msgid "Break auto battle?"
-msgstr "Automata harc bekapcsolása"
+msgid "Are you sure you want to interrupt the auto battle?"
+msgstr "Biztos, hogy vissza akarsz vonulni?"
 
 msgid "Error"
 msgstr "Hiba"
@@ -2559,16 +2563,6 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "(elérhető: %{count})"
 
-msgid "Total: "
-msgstr ""
-
-msgid "No room in"
-msgstr ""
-
-#, fuzzy
-msgid "the garrison"
-msgstr "Helyőrség"
-
 msgid "off"
 msgstr "ki"
 
@@ -2615,6 +2609,9 @@ msgstr "Új hajó építése:"
 
 msgid "Resource cost:"
 msgstr "Fejlesztési költség:"
+
+msgid "Total: "
+msgstr ""
 
 msgid "Need: "
 msgstr ""
@@ -2804,9 +2801,6 @@ msgid ""
 msgstr ""
 "Vesztési\n"
 "Feltételek"
-
-msgid "Score: "
-msgstr ""
 
 msgid "First select recipients!"
 msgstr ""
@@ -3349,6 +3343,37 @@ msgstr "nehézség | Lehetetlen"
 msgid "and more..."
 msgstr ""
 
+msgid "DIFFICULTY"
+msgstr ""
+
+#, fuzzy
+msgid "Campaign Difficulty"
+msgstr "Játék nehézsége"
+
+msgid ""
+"Choose this difficulty if you want to prefer game story over challenge. AI "
+"is weaker in comparison with normal difficulty."
+msgstr ""
+
+msgid ""
+"Choose this difficulty to enjoy the campaign as per the original design."
+msgstr ""
+
+msgid ""
+"Choose this difficulty if you want challenge. AI is stronger in comparison "
+"with normal difficulty."
+msgstr ""
+
+msgid "Easy"
+msgstr ""
+
+#, fuzzy
+msgid "Normal"
+msgstr "szerencse|Normál"
+
+msgid "Hard"
+msgstr ""
+
 msgid "Start the selected scenario."
 msgstr ""
 
@@ -3357,6 +3382,9 @@ msgid "View Intro"
 msgstr "Hős mutatása"
 
 msgid "View Intro videos for the current state of the campaign."
+msgstr ""
+
+msgid "Select campaign difficulty. It cannot be changed after."
 msgstr ""
 
 msgid "Restart"
@@ -4437,11 +4465,8 @@ msgstr "egy"
 msgid "two"
 msgstr "kettő"
 
-msgid "A whirlpool engulfs your ship."
-msgstr "Egy örvény elnyeli a hajód."
-
-msgid "Some of your army has fallen overboard."
-msgstr "A csapatod néhány tagja a tengerbe esett."
+msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
+msgstr "Egy örvény elnyeli a hajód. A csapatod néhány tagja a tengerbe esett."
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
 msgstr "Visszautasítottad az ajánlatukat, ezért megtámadnak!"
@@ -9254,13 +9279,7 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "game: remember last focus"
-msgstr ""
-
 msgid "battle: show damage info"
-msgstr ""
-
-msgid "world: show terrain penalty"
 msgstr ""
 
 msgid "world: Scouting skill shows extended content info"
@@ -9377,3 +9396,7 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Break auto battle?"
+#~ msgstr "Automata harc bekapcsolása"

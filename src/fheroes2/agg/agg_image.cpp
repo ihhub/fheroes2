@@ -2215,6 +2215,103 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::B_BFLG32:
+            case ICN::G_BFLG32:
+            case ICN::R_BFLG32:
+            case ICN::Y_BFLG32:
+            case ICN::O_BFLG32:
+            case ICN::P_BFLG32:
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 31 && _icnVsSprite[id][31].height() == 248 ) {
+                    Sprite & original = _icnVsSprite[id][31];
+                    Sprite temp = Crop( original, 0, 0, original.width(), 4 );
+                    temp.setPosition( original.x(), original.y() );
+
+                    original = std::move( temp );
+                }
+                return true;
+            case ICN::FLAG32:
+                LoadOriginalICN( id );
+                // Only first 14 images are properly aligned within an Adventure Map tile. The rest of images should be rendered on multiple tiles.
+                // To keep proper rendering logic we are creating new images by diving existing ones into 2 parts and setting up new sprite offsets.
+                // This helps to solve the problem with rendering order.
+                _icnVsSprite[id].resize( 128 + _icnVsSprite[id].size() * 2 );
+                for ( int32_t i = 14; i < 14 + 7; ++i ) {
+                    const Sprite & original = _icnVsSprite[id][i];
+
+                    _icnVsSprite[id][i + 128] = Crop( original, 0, 0, 32 - original.x(), original.height() );
+                    _icnVsSprite[id][i + 128].setPosition( original.x(), 32 + original.y() );
+
+                    _icnVsSprite[id][i + 128 + 7] = Crop( original, 32 - original.x(), 0, original.width(), original.height() );
+                    _icnVsSprite[id][i + 128 + 7].setPosition( 0, 32 + original.y() );
+                }
+
+                for ( int32_t i = 42; i < 42 + 7; ++i ) {
+                    const Sprite & original = _icnVsSprite[id][i];
+
+                    _icnVsSprite[id][i + 128] = Crop( original, 0, 0, -original.x(), original.height() );
+                    _icnVsSprite[id][i + 128].setPosition( 32 + original.x(), original.y() );
+
+                    _icnVsSprite[id][i + 128 + 7] = Crop( original, -original.x(), 0, original.width(), original.height() );
+                    _icnVsSprite[id][i + 128 + 7].setPosition( 0, original.y() );
+                }
+                return true;
+            case ICN::MINI_MONSTER_IMAGE:
+            case ICN::MINI_MONSTER_SHADOW: {
+                // It doesn't matter which image is being called. We are generating both of them at the same time.
+                LoadOriginalICN( ICN::MINIMON );
+
+                // TODO: optimize image sizes.
+                _icnVsSprite[ICN::MINI_MONSTER_IMAGE] = _icnVsSprite[ICN::MINIMON];
+                _icnVsSprite[ICN::MINI_MONSTER_SHADOW] = _icnVsSprite[ICN::MINIMON];
+
+                for ( Sprite & image : _icnVsSprite[ICN::MINI_MONSTER_IMAGE] ) {
+                    uint8_t * transform = image.transform();
+                    const uint8_t * tranformEnd = transform + image.width() * image.height();
+                    for ( ; transform != tranformEnd; ++transform ) {
+                        if ( *transform > 1 ) {
+                            *transform = 1;
+                        }
+                    }
+                }
+
+                for ( Sprite & image : _icnVsSprite[ICN::MINI_MONSTER_SHADOW] ) {
+                    uint8_t * transform = image.transform();
+                    const uint8_t * tranformEnd = transform + image.width() * image.height();
+                    for ( ; transform != tranformEnd; ++transform ) {
+                        if ( *transform == 0 ) {
+                            *transform = 1;
+                        }
+                    }
+                }
+
+                return true;
+            }
+            case ICN::BUTTON_GOOD_FONT_RELEASED:
+            case ICN::BUTTON_GOOD_FONT_PRESSED:
+            case ICN::BUTTON_EVIL_FONT_RELEASED:
+            case ICN::BUTTON_EVIL_FONT_PRESSED: {
+                const uint8_t goodReleasedColor = 56;
+                const uint8_t goodPressedColor = 62;
+                const uint8_t evilReleasedColor = 30;
+                const uint8_t evilPressedColor = 36;
+                const uint8_t contourColor = 10;
+
+                generateBaseButtonFont( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], goodReleasedColor, goodPressedColor,
+                                        contourColor );
+
+                _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED] = _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED];
+                for ( Sprite & letter : _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED] ) {
+                    ReplaceColorId( letter, goodReleasedColor, evilReleasedColor );
+                }
+
+                _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] = _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED];
+                for ( Sprite & letter : _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] ) {
+                    ReplaceColorId( letter, goodPressedColor, evilPressedColor );
+                }
+
+                return true;
+            }
             default:
                 break;
             }
@@ -2427,6 +2524,9 @@ namespace fheroes2
             case FontSize::NORMAL:
             case FontSize::LARGE:
                 return static_cast<uint32_t>( GetMaximumICNIndex( ICN::FONT ) ) + 0x20 - 1;
+            case FontSize::BUTTON_RELEASED:
+            case FontSize::BUTTON_PRESSED:
+                return static_cast<uint32_t>( GetMaximumICNIndex( ICN::BUTTON_GOOD_FONT_RELEASED ) ) + 0x20 - 1;
             default:
                 assert( 0 ); // Did you add a new font size? Please add implementation.
             }
@@ -2473,6 +2573,30 @@ namespace fheroes2
                 switch ( fontType.color ) {
                 case FontColor::WHITE:
                     return GetICN( ICN::WHITE_LARGE_FONT, character - 0x20 );
+                default:
+                    // Did you add a new font color? Add the corresponding logic for it!
+                    assert( 0 );
+                    break;
+                }
+                break;
+            case FontSize::BUTTON_RELEASED:
+                switch ( fontType.color ) {
+                case FontColor::WHITE:
+                    return GetICN( ICN::BUTTON_GOOD_FONT_RELEASED, character - 0x20 );
+                case FontColor::GRAY:
+                    return GetICN( ICN::BUTTON_EVIL_FONT_RELEASED, character - 0x20 );
+                default:
+                    // Did you add a new font color? Add the corresponding logic for it!
+                    assert( 0 );
+                    break;
+                }
+                break;
+            case FontSize::BUTTON_PRESSED:
+                switch ( fontType.color ) {
+                case FontColor::WHITE:
+                    return GetICN( ICN::BUTTON_GOOD_FONT_PRESSED, character - 0x20 );
+                case FontColor::GRAY:
+                    return GetICN( ICN::BUTTON_EVIL_FONT_PRESSED, character - 0x20 );
                 default:
                     // Did you add a new font color? Add the corresponding logic for it!
                     assert( 0 );

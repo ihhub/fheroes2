@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-10 14:31+0000\n"
+"POT-Creation-Date: 2022-08-31 01:55+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -521,6 +521,10 @@ msgstr ""
 msgid "Shows the results of individual monster's actions."
 msgstr ""
 
+#, fuzzy
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Вы уверены, что хотите распустить этот отряд?"
+
 msgid "%{name} skip their turn."
 msgstr "%{name} пропускают ход."
 
@@ -626,8 +630,9 @@ msgstr "Фантомный отряд создан!"
 msgid "The mirror image is destroyed!"
 msgstr "Фантомный отряд уничтожен!"
 
-msgid "Break auto battle?"
-msgstr "Остановить автобитву?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto battle?"
+msgstr "Вы действительно хотите отступить?"
 
 msgid "Error"
 msgstr "Ошибка"
@@ -2568,15 +2573,6 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "%{percent}% от всех существ"
 
-msgid "Total: "
-msgstr "В казне: "
-
-msgid "No room in"
-msgstr "Нет места"
-
-msgid "the garrison"
-msgstr "в отряде"
-
 msgid "off"
 msgstr "выкл."
 
@@ -2622,6 +2618,9 @@ msgstr "Построить новый корабль:"
 
 msgid "Resource cost:"
 msgstr "Стоимость:"
+
+msgid "Total: "
+msgstr "В казне: "
 
 msgid "Need: "
 msgstr "Необходимо: "
@@ -2806,9 +2805,6 @@ msgid ""
 msgstr ""
 "Условия\n"
 "поражения"
-
-msgid "Score: "
-msgstr "Счёт:"
 
 msgid "First select recipients!"
 msgstr "Сначала выберите получателя!"
@@ -3339,6 +3335,37 @@ msgstr "Невозможная"
 msgid "and more..."
 msgstr "и т.д."
 
+msgid "DIFFICULTY"
+msgstr ""
+
+#, fuzzy
+msgid "Campaign Difficulty"
+msgstr "Сложность игры"
+
+msgid ""
+"Choose this difficulty if you want to prefer game story over challenge. AI "
+"is weaker in comparison with normal difficulty."
+msgstr ""
+
+msgid ""
+"Choose this difficulty to enjoy the campaign as per the original design."
+msgstr ""
+
+msgid ""
+"Choose this difficulty if you want challenge. AI is stronger in comparison "
+"with normal difficulty."
+msgstr ""
+
+msgid "Easy"
+msgstr ""
+
+#, fuzzy
+msgid "Normal"
+msgstr "Нормальная"
+
+msgid "Hard"
+msgstr ""
+
 msgid "Start the selected scenario."
 msgstr ""
 
@@ -3347,6 +3374,9 @@ msgid "View Intro"
 msgstr "Просмотреть героя"
 
 msgid "View Intro videos for the current state of the campaign."
+msgstr ""
+
+msgid "Select campaign difficulty. It cannot be changed after."
 msgstr ""
 
 msgid "Restart"
@@ -4446,11 +4476,8 @@ msgstr "1"
 msgid "two"
 msgstr "2"
 
-msgid "A whirlpool engulfs your ship."
-msgstr "Ваш корабль засосало в водоворот."
-
-msgid "Some of your army has fallen overboard."
-msgstr "Часть Вашей армии смыло за борт."
+msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
+msgstr "Ваш корабль засосало в водоворот. Часть Вашей армии смыло за борт."
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
 msgstr "Оскорблённые Вашим отказом, они напали на Вас!"
@@ -9352,14 +9379,8 @@ msgstr ""
 "суммарное здоровье которого не превышает\n"
 "%{hp} здоровья."
 
-msgid "game: remember last focus"
-msgstr "игра: запомнить последнюю позицию фокуса (героя/замка)"
-
 msgid "battle: show damage info"
 msgstr "битва: показывать урон"
-
-msgid "world: show terrain penalty"
-msgstr "мир: показывать штраф при перемещении"
 
 msgid "world: Scouting skill shows extended content info"
 msgstr "мир: навык разведки покажет дополнительную информацию"
@@ -9472,5 +9493,8 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "game: always confirm for rewrite savefile"
-#~ msgstr "игра: всегда делать запрос на перезапись игры"
+#~ msgid "Score: "
+#~ msgstr "Счёт:"
+
+#~ msgid "Break auto battle?"
+#~ msgstr "Остановить автобитву?"

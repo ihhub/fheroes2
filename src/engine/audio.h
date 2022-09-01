@@ -69,19 +69,31 @@ namespace Music
 {
     enum class PlaybackMode : uint8_t
     {
+        // Play a music track once from the beginning, do not remember the position at which
+        // playback of this track was stopped (rewind it to the beginning when playback stops)
         PLAY_ONCE,
+        // Play a music track in an endless loop, starting from its previously remembered position
+        // (or from the beginning if this track is being played for the first time) and remember
+        // the position at which playback of this track was stopped
         RESUME_AND_PLAY_INFINITE,
+        // Play a music track in an endless loop, starting from the beginning, do not remember
+        // the position at which playback of this track was stopped (rewind it to the beginning
+        // when playback stops)
         REWIND_AND_PLAY_INFINITE
     };
 
-    // Music UID is used to cache existing songs. It is caller's responsibility to generate them.
-    // This function return true in case of music track for corresponding Music UID is cached.
+    // Music UID is used to store metadata of music tracks in the music database. It is caller's
+    // responsibility to generate them. This function searches for a music track with the specified
+    // UID in the database and starts playback if it is found. Returns true if the music track was
+    // found in the database, otherwise returns false.
     bool Play( const uint64_t musicUID, const PlaybackMode playbackMode );
 
-    // Load a music track from memory and play it.
+    // Adds a music track from the memory buffer to the music database and starts playback. A music
+    // track with the specified UID should not already be present in the database.
     void Play( const uint64_t musicUID, const std::vector<uint8_t> & v, const PlaybackMode playbackMode );
 
-    // Load a music track from a file system location and play it.
+    // Adds the music track available in the specified file to the music database and starts playback.
+    // A music track with the specified UID should not already be present in the database.
     void Play( const uint64_t musicUID, const std::string & file, const PlaybackMode playbackMode );
 
     // Returns the previous volume percentage value.

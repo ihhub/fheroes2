@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-10 14:31+0000\n"
+"POT-Creation-Date: 2022-08-31 01:55+0000\n"
 "PO-Revision-Date: 2022-07-04 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -516,6 +516,10 @@ msgid "Shows the results of individual monster's actions."
 msgstr ""
 "Affiche le déroulement du combat et indique toutes les actions individuelles."
 
+#, fuzzy
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Êtes vous sûr de vouloir renvoyer cette troupe ?"
+
 msgid "%{name} skip their turn."
 msgstr "%{name} passent le tour."
 
@@ -619,8 +623,9 @@ msgstr "L'image miroir est créée."
 msgid "The mirror image is destroyed!"
 msgstr "L'image miroir est détruite !"
 
-msgid "Break auto battle?"
-msgstr "Arrêter le combat auto ?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto battle?"
+msgstr "Êtes vous sûr de vouloir sonner la retraite ?"
 
 msgid "Error"
 msgstr "Erreur"
@@ -2570,15 +2575,6 @@ msgstr ""
 msgid "(Rate: %{percent})"
 msgstr "(Taux : %{percent})"
 
-msgid "Total: "
-msgstr "Total : "
-
-msgid "No room in"
-msgstr "Pas de place"
-
-msgid "the garrison"
-msgstr "dans l'armée"
-
 msgid "off"
 msgstr "coupé"
 
@@ -2623,6 +2619,9 @@ msgstr "Construire un nouveau navire :"
 
 msgid "Resource cost:"
 msgstr "Coût en ressources :"
+
+msgid "Total: "
+msgstr "Total : "
 
 msgid "Need: "
 msgstr "Besoin : "
@@ -2803,9 +2802,6 @@ msgid ""
 msgstr ""
 "Conditions\n"
 "de Défaite"
-
-msgid "Score: "
-msgstr "Score : "
 
 msgid "First select recipients!"
 msgstr "Sélectionnez d'abord les destinataires !"
@@ -3331,6 +3327,37 @@ msgstr "Impossible"
 msgid "and more..."
 msgstr "et plus encore..."
 
+msgid "DIFFICULTY"
+msgstr ""
+
+#, fuzzy
+msgid "Campaign Difficulty"
+msgstr "Difficulté du Jeu"
+
+msgid ""
+"Choose this difficulty if you want to prefer game story over challenge. AI "
+"is weaker in comparison with normal difficulty."
+msgstr ""
+
+msgid ""
+"Choose this difficulty to enjoy the campaign as per the original design."
+msgstr ""
+
+msgid ""
+"Choose this difficulty if you want challenge. AI is stronger in comparison "
+"with normal difficulty."
+msgstr ""
+
+msgid "Easy"
+msgstr ""
+
+#, fuzzy
+msgid "Normal"
+msgstr "Normale"
+
+msgid "Hard"
+msgstr ""
+
 msgid "Start the selected scenario."
 msgstr "Démarrer le scénario sélectionné."
 
@@ -3339,6 +3366,9 @@ msgstr "Voir l'intro"
 
 msgid "View Intro videos for the current state of the campaign."
 msgstr "Voir la vidéo d'introduction du scénario actuel."
+
+msgid "Select campaign difficulty. It cannot be changed after."
+msgstr ""
 
 msgid "Restart"
 msgstr "Recommencer"
@@ -4457,11 +4487,10 @@ msgstr "1"
 msgid "two"
 msgstr "2"
 
-msgid "A whirlpool engulfs your ship."
-msgstr "Un tourbillon engloutit votre vaisseau."
-
-msgid "Some of your army has fallen overboard."
-msgstr "Une partie de votre armée est tombée par-dessus du bord."
+msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
+msgstr ""
+"Un tourbillon engloutit votre vaisseau. Une partie de votre armée est tombée "
+"par-dessus du bord."
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
 msgstr "Insultés par votre refus de leur offre, les monstres attaquent !"
@@ -9618,14 +9647,8 @@ msgstr ""
 "Ce sort contrôle jusqu'à\n"
 "%{hp} PV."
 
-msgid "game: remember last focus"
-msgstr "jeu : retenir dernier élément choisi"
-
 msgid "battle: show damage info"
 msgstr "bataille : afficher les informations sur les dégâts"
-
-msgid "world: show terrain penalty"
-msgstr "monde : afficher la pénalité de terrain"
 
 msgid "world: Scouting skill shows extended content info"
 msgstr "monde : Reconnaissance affiche des infos supplémentaires"
@@ -9741,5 +9764,8 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "game: always confirm for rewrite savefile"
-#~ msgstr "jeu : toujours confirmer l'écrasement de la sauvegarde"
+#~ msgid "Score: "
+#~ msgstr "Score : "
+
+#~ msgid "Break auto battle?"
+#~ msgstr "Arrêter le combat auto ?"

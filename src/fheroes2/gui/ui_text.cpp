@@ -22,6 +22,7 @@
 #include "agg_image.h"
 #include "image.h"
 
+#include <algorithm>
 #include <cassert>
 #include <deque>
 
@@ -60,6 +61,8 @@ namespace
         case fheroes2::FontSize::NORMAL:
             return 6;
         case fheroes2::FontSize::LARGE:
+        case fheroes2::FontSize::BUTTON_RELEASED:
+        case fheroes2::FontSize::BUTTON_PRESSED:
             return 12;
         default:
             assert( 0 ); // Did you add a new font size? Please add implementation.
@@ -77,6 +80,9 @@ namespace
             return 13 + 3 + 1;
         case fheroes2::FontSize::LARGE:
             return 26 + 6 + 1;
+        case fheroes2::FontSize::BUTTON_RELEASED:
+        case fheroes2::FontSize::BUTTON_PRESSED:
+            return 16;
         default:
             assert( 0 ); // Did you add a new font size? Please add implementation.
         }
@@ -767,5 +773,28 @@ namespace fheroes2
         }
 
         return output;
+    }
+
+    bool isFontAvailable( const std::string & text, const FontType fontType )
+    {
+        if ( text.empty() ) {
+            return true;
+        }
+
+        // Check that the font exists.
+        const Sprite & commaCharacter = AGG::getChar( ',', fontType );
+        if ( commaCharacter.empty() ) {
+            return false;
+        }
+
+        const CharValidator validator( fontType.size );
+
+        for ( const char letter : text ) {
+            if ( !validator.isValid( static_cast<uint8_t>( letter ) ) ) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

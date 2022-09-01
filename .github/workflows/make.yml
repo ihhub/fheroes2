@@ -33,27 +33,27 @@ jobs:
           dependencies: libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev gettext
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_IMAGE: ON, FHEROES2_WITH_DEBUG: ON, FHEROES2_WITH_TSAN: ON }
         - name: macOS SDL1
-          os: macos-10.15
+          os: macos-11
           dependencies: sdl sdl_mixer
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON }
-          package_name: fheroes2_macos10_15_sdl1_x86-64.zip
+          package_name: fheroes2_macos11_sdl1_x86-64.zip
           package_files: fheroes2 LICENSE script/macos/install_sdl_1.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: MacOS build with SDL 1 support (latest commit)
           release_tag: fheroes2-osx-sdl1_dev
         - name: macOS SDL1 App Bundle
-          os: macos-10.15
+          os: macos-11
           dependencies: sdl sdl_mixer dylibbundler
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_WITH_SDL1: ON, FHEROES2_MACOS_APP_BUNDLE: ON }
         - name: macOS SDL2
-          os: macos-10.15
+          os: macos-11
           dependencies: sdl2 sdl2_mixer
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON }
-          package_name: fheroes2_macos10_15_sdl2_x86-64.zip
+          package_name: fheroes2_macos11_sdl2_x86-64.zip
           package_files: fheroes2 LICENSE script/macos/install_sdl_2.sh download_demo_version.sh extract_homm2_resources.sh changelog.txt README.txt files/lang/*.mo files/data/*.h2d
           release_name: MacOS build with SDL 2 support (latest commit)
           release_tag: fheroes2-osx-sdl2_dev
         - name: macOS SDL2 App Bundle
-          os: macos-10.15
+          os: macos-11
           dependencies: sdl2 sdl2_mixer dylibbundler
           env: { FHEROES2_STRICT_COMPILATION: ON, FHEROES2_WITH_TOOLS: ON, FHEROES2_MACOS_APP_BUNDLE: ON }
     name: Make (${{ matrix.config.name }})
@@ -67,7 +67,7 @@ jobs:
         sudo apt-get -y update
         sudo apt-get -y install ${{ matrix.config.dependencies }}
     - name: Install dependencies (macOS)
-      if: ${{ matrix.config.os == 'macos-10.15' }}
+      if: ${{ matrix.config.os == 'macos-11' }}
       run: |
         brew update
         brew install ${{ matrix.config.dependencies }}
@@ -75,11 +75,8 @@ jobs:
       run: |
         make -j 2
       env: ${{ matrix.config.env }}
-    - name: Generate translations
-      run: |
-        make -C files/lang -j 2
     - name: Create app bundle
-      if: ${{ matrix.config.os == 'macos-10.15' }}
+      if: ${{ matrix.config.os == 'macos-11' }}
       run: |
         make -j 2 bundle
       env: ${{ matrix.config.env }}
@@ -134,6 +131,23 @@ jobs:
         rm -rf ~/.vitasdk-cache
       env:
         VITASDK: /usr/local/vitasdk
+    - name: Apply temporary patches
+      run: |
+        [[ -d ~/.vitasdk-cache ]] && exit 0
+        cd /usr/local/vitasdk
+        patch --force -p0 << EOF
+        --- arm-vita-eabi/include/SDL2/SDL_atomic.h.orig        2022-08-19 23:51:15.143690708 +0300
+        +++ arm-vita-eabi/include/SDL2/SDL_atomic.h     2022-08-19 23:51:40.734117312 +0300
+        @@ -240,7 +240,7 @@
+         /* "REP NOP" is PAUSE, coded for tools that don't know it by that name. */
+         #if (defined(__GNUC__) || defined(__clang__)) && (defined(__i386__) || defined(__x86_64__))
+             #define SDL_CPUPauseInstruction() __asm__ __volatile__("pause\n")  /* Some assemblers can't do REP NOP, so go with PAUSE. */
+        -#elif (defined(__arm__) && __ARM_ARCH__ >= 7) || defined(__aarch64__)
+        +#elif (defined(__arm__) && __ARM_ARCH >= 7) || defined(__aarch64__)
+             #define SDL_CPUPauseInstruction() __asm__ __volatile__("yield" ::: "memory")
+         #elif (defined(__powerpc__) || defined(__powerpc64__))
+             #define SDL_CPUPauseInstruction() __asm__ __volatile__("or 27,27,27");
+        EOF
     - name: Restore Vita SDK from cache
       run: |
         if [[ -d ~/.vitasdk-cache ]]; then

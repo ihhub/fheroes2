@@ -43,7 +43,8 @@ namespace Battle
         MSG_BATTLE_SURRENDER,
         MSG_BATTLE_SKIP,
         MSG_BATTLE_END_TURN,
-        MSG_BATTLE_AUTO
+        MSG_BATTLE_AUTO_SWITCH,
+        MSG_BATTLE_AUTO_FINISH
     };
 
     class Command : public std::vector<int>

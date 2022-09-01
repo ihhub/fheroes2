@@ -203,15 +203,6 @@ public:
         CHAMPION
     };
 
-    struct RedrawIndex
-    {
-        int32_t topOnBottom = -1;
-        int32_t topOnDirectionBottom = -1;
-        int32_t topOnDirection = -1;
-        int32_t objectsOnBottom = -1;
-        int32_t objectsOnDirectionBottom = -1;
-    };
-
     Heroes();
     Heroes( int heroid, int rc );
     Heroes( int heroID, int race, int initialLevel );
@@ -407,14 +398,9 @@ public:
 
     bool MayCastAdventureSpells() const;
 
-    const RedrawIndex & GetRedrawIndex() const;
-    void SetRedrawIndexes();
-    void UpdateRedrawTop( const Maps::Tiles & tile );
-    void UpdateRedrawBottom( const Maps::Tiles & tile );
-    void RedrawTop( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
-    void RedrawBottom( fheroes2::Image & dst, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area, bool isPuzzleDraw ) const;
-    void Redraw( fheroes2::Image & dst, const int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
-    void RedrawShadow( fheroes2::Image & dst, const int32_t dx, int32_t dy, const fheroes2::Rect & visibleTileROI, const Interface::GameArea & area ) const;
+    // Since heroes sprite are much bigger than a tile we need to 'cut' the sprite and the shadow's sprite into pieces. Each piece is for a separate tile.
+    std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getHeroSpritesPerTile() const;
+    std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getHeroShadowSpritesPerTile() const;
 
     void PortraitRedraw( const int32_t px, const int32_t py, const PortraitType type, fheroes2::Image & dstsf ) const override;
 
@@ -489,6 +475,11 @@ public:
         return _aiRole;
     }
 
+    uint8_t getAlphaValue() const
+    {
+        return static_cast<uint8_t>( _alphaValue );
+    }
+
 private:
     friend StreamBase & operator<<( StreamBase &, const Heroes & );
     friend StreamBase & operator>>( StreamBase &, Heroes & );
@@ -546,7 +537,6 @@ private:
     std::list<IndexObject> visit_object;
     uint32_t _lastGroundRegion = 0;
 
-    RedrawIndex _redrawIndex;
 
     mutable int _alphaValue;
 

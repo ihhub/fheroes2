@@ -101,10 +101,6 @@ public:
     Troop * GetSlowestTroop() const;
 
     void SortStrongest();
-    void ArrangeForBattle( bool = false );
-    // Optimizes the arrangement of troops to pass through the whirlpool (moves one weakest unit
-    // to a separate slot, if possible)
-    void ArrangeForWhirlpool();
 
     void JoinStrongest( Troops &, bool );
 
@@ -222,6 +218,9 @@ public:
 
     void resetInvalidMonsters() const;
 
+    // Optimizes the arrangement of troops to pass through the whirlpool (moves one weakest unit to a separate slot, if possible)
+    void ArrangeForWhirlpool();
+
 protected:
     friend StreamBase & operator<<( StreamBase &, const Army & );
     friend StreamBase & operator>>( StreamBase &, Army & );
@@ -229,6 +228,13 @@ protected:
     HeroBase * commander;
     bool combat_format;
     int color;
+
+private:
+    // Performs the pre-battle arrangement of given monsters in a given number, dividing them into a given number of stacks if possible
+    void ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const uint32_t stacksCount );
+    // Performs the pre-battle arrangement of given monsters in a given number, dividing them into a random number of stacks (seeded by
+    // the tile index) with a random chance to get an upgraded stack of monsters in the center (if allowed)
+    void ArrangeForBattle( const Monster & monster, const uint32_t monstersCount, const int32_t tileIndex, const bool allowUpgrade );
 };
 
 StreamBase & operator<<( StreamBase &, const Army & );

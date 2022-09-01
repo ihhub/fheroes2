@@ -649,20 +649,23 @@ namespace AI
             destroy = true;
         }
         else if ( join.reason == NeutralMonsterJoiningCondition::Reason::Free ) {
-            if ( hero.GetArmy().CanJoinTroop( troop ) ) {
-                DEBUG_LOG( DBG_AI, DBG_INFO, troop.GetName() << " join " << hero.GetName() << "." )
-                hero.GetArmy().JoinTroop( troop );
-                destroy = true;
-            }
+            // This condition must already be met if a group of monsters wants to join
+            assert( hero.GetArmy().CanJoinTroop( troop ) );
+
+            DEBUG_LOG( DBG_AI, DBG_INFO, troop.GetName() << " join " << hero.GetName() << "." )
+            hero.GetArmy().JoinTroop( troop );
+            destroy = true;
         }
         else if ( join.reason == NeutralMonsterJoiningCondition::Reason::ForMoney ) {
             const int32_t joiningCost = troop.GetTotalCost().gold;
-            if ( hero.GetKingdom().AllowPayment( payment_t( Resource::GOLD, joiningCost ) ) && hero.GetArmy().CanJoinTroop( troop ) ) {
-                DEBUG_LOG( DBG_AI, DBG_INFO, join.monsterCount << " " << troop.GetName() << " join " << hero.GetName() << " for " << joiningCost << " gold." )
-                hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount );
-                hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
-                destroy = true;
-            }
+
+            // These conditions must already be met if a group of monsters wants to join
+            assert( hero.GetArmy().CanJoinTroop( troop ) && hero.GetKingdom().AllowPayment( payment_t( Resource::GOLD, joiningCost ) ) );
+
+            DEBUG_LOG( DBG_AI, DBG_INFO, join.monsterCount << " " << troop.GetName() << " join " << hero.GetName() << " for " << joiningCost << " gold." )
+            hero.GetArmy().JoinTroop( troop.GetMonster(), join.monsterCount );
+            hero.GetKingdom().OddFundsResource( Funds( Resource::GOLD, joiningCost ) );
+            destroy = true;
         }
         else if ( join.reason == NeutralMonsterJoiningCondition::Reason::RunAway ) {
             // TODO: AI should still chase monsters which it can defeat without losses to get extra experience.
@@ -683,8 +686,9 @@ namespace AI
             else {
                 AIBattleLose( hero, res, true );
                 tile.MonsterSetCount( army.GetCountMonsters( troop.GetMonster() ) );
-                if ( tile.MonsterJoinConditionFree() )
-                    tile.MonsterSetJoinCondition( Monster::JOIN_CONDITION_MONEY );
+                if ( Maps::isMonsterOnTileJoinConditionFree( tile ) ) {
+                    Maps::setMonsterOnTileJoinCondition( tile, Monster::JOIN_CONDITION_MONEY );
+                }
             }
         }
 
@@ -861,7 +865,8 @@ namespace AI
 
                 if ( result.AttackerWins() ) {
                     hero.IncreaseExperience( result.GetExperienceAttacker() );
-                    tile.SetQuantity3( 0 );
+                    // Clear any metadata related to spells.
+                    tile.clearAdditionalMetadata();
                 }
                 else {
                     capture = false;
@@ -1782,11 +1787,17 @@ namespace AI
 
         if ( 1 == Rand::Get( 1, 3 ) ) {
             if ( weakestTroop->GetCount() == 1 ) {
+                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " lost " << weakestTroop->GetCount() << " " << weakestTroop->GetName() << " in the whirlpool" )
+
                 weakestTroop->Reset();
             }
             else {
-                weakestTroop->SetCount( Monster::GetCountFromHitPoints( weakestTroop->GetID(), weakestTroop->GetHitPoints()
-                                                                                                   - weakestTroop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 ) );
+                const uint32_t newCount = Monster::GetCountFromHitPoints( weakestTroop->GetID(), weakestTroop->GetHitPoints()
+                                                                                                     - weakestTroop->GetHitPoints() * Game::GetWhirlpoolPercent() / 100 );
+
+                DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " lost " << weakestTroop->GetCount() - newCount << " " << weakestTroop->GetName() << " in the whirlpool" )
+
+                weakestTroop->SetCount( newCount );
             }
         }
     }
@@ -1840,7 +1851,7 @@ namespace AI
             }
         }
 
-        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " visited Alchemist Tower to remove " << cursed << " artifacts." )
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " visited Alchemist Tower to remove " << cursed << " artifacts." )
     }
 
     void AIToSirens( Heroes & hero, const MP2::MapObjectType objectType, const int32_t objectIndex )
@@ -1854,6 +1865,6 @@ namespace AI
 
         hero.SetVisited( objectIndex );
 
-        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " visited Sirens and got " << experience << " experience." )
+        DEBUG_LOG( DBG_AI, DBG_INFO, hero.GetName() << " visited Sirens and got " << experience << " experience." )
     }
 }

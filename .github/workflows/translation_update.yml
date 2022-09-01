@@ -4,10 +4,10 @@ on:
   workflow_call:
 
 jobs:
-  check:
+  translation:
     name: Translation update
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 10
     if: ${{ github.repository == 'ihhub/fheroes2' && ( github.event_name == 'push' || ( github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository ) ) }}
     steps:
     - uses: actions/checkout@v2

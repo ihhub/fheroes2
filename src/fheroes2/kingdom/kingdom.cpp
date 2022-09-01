@@ -72,7 +72,12 @@ void Kingdom::Init( int clr )
     if ( Color::ALL & color ) {
         heroes.reserve( GetMaxHeroes() );
         castles.reserve( 15 );
-        resource = _getKingdomStartingResources( Game::getDifficulty() );
+
+        // Difficulty calculation is different for campaigns. Difficulty affects only on starting resources for human players.
+        const Settings & configuration = Settings::Get();
+        const int difficultyLevel = ( configuration.isCampaignGameType() ? configuration.CurrentFileInfo().difficulty : configuration.GameDifficulty() );
+
+        resource = _getKingdomStartingResources( difficultyLevel );
     }
     else {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" )
@@ -811,8 +816,6 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
                 continue;
             }
 
-            kingdom.AddFundsResource( funds );
-
             // for show dialogs
             if ( funds.GetValidItemsCount() && kingdom.isControlHuman() ) {
                 EventDate event;
@@ -832,6 +835,9 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
                 }
 
                 world.AddEventDate( event );
+            }
+            else {
+                kingdom.AddFundsResource( funds );
             }
         }
     }
@@ -921,30 +927,8 @@ StreamBase & operator<<( StreamBase & msg, const Kingdom & kingdom )
 
 StreamBase & operator>>( StreamBase & msg, Kingdom & kingdom )
 {
-    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE2_0912_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE2_0912_RELEASE ) {
-        int heroId;
-        uint32_t heroSurrenderDay;
-
-        msg >> heroId >> heroSurrenderDay;
-
-        if ( heroId != Heroes::UNKNOWN && heroSurrenderDay > 0 ) {
-            kingdom.recruits.SetHero2Tmp( world.GetHeroes( heroId ), heroSurrenderDay );
-        }
-    }
-
-    msg >> kingdom.visit_object >> kingdom.puzzle_maps >> kingdom.visited_tents_colors;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_0916_RELEASE, "Remove the check below." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_0916_RELEASE ) {
-        KingdomHeroes temp;
-
-        msg >> temp;
-    }
-
-    msg >> kingdom._lastBattleWinHeroID >> kingdom._topItemInKingdomView;
+    msg >> kingdom.modes >> kingdom.color >> kingdom.resource >> kingdom.lost_town_days >> kingdom.castles >> kingdom.heroes >> kingdom.recruits >> kingdom.visit_object
+        >> kingdom.puzzle_maps >> kingdom.visited_tents_colors >> kingdom._lastBattleWinHeroID >> kingdom._topItemInKingdomView;
 
     return msg;
 }
