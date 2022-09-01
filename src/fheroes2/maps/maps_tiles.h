@@ -256,6 +256,7 @@ namespace Maps
         std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMonsterShadowSpritesPerTile() const;
         std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getBoatSpritesPerTile() const;
         std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getBoatShadowSpritesPerTile() const;
+        std::vector<std::pair<fheroes2::Point, fheroes2::Sprite>> getMineGuardianSpritesPerTile() const;
 
         void AddonsPushLevel1( const MP2::mp2tile_t & );
         void AddonsPushLevel1( const MP2::mp2addon_t & );

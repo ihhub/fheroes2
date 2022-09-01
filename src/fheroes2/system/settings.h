@@ -55,7 +55,7 @@ public:
         // game balance and are saved in the binary config file
         //
         GAME_AUTOSAVE_BEGIN_DAY = 0x10000010,
-        GAME_REMEMBER_LAST_FOCUS = 0x10000020,
+        // UNUSED = 0x10000020,
         // UNUSED = 0x10000040,
         GAME_SHOW_SYSTEM_INFO = 0x10000100,
         // UNUSED = 0x10000200,
@@ -84,7 +84,7 @@ public:
         // UNUSED = 0x20000800,
         // UNUSED = 0x20001000,
         // UNUSED = 0x20002000,
-        WORLD_SHOW_TERRAIN_PENALTY = 0x20004000,
+        // UNUSED = 0x20004000,
         // UNUSED = 0x20008000,
         // UNUSED = 0x20010000,
         // UNUSED = 0x20020000,
@@ -271,11 +271,6 @@ public:
         return ExtModes( HEROES_ARENA_ANY_SKILLS );
     }
 
-    bool ExtWorldShowTerrainPenalty() const
-    {
-        return ExtModes( WORLD_SHOW_TERRAIN_PENALTY );
-    }
-
     bool ExtWorldScouteExtended() const
     {
         return ExtModes( WORLD_SCOUTING_EXTENDED );
@@ -314,11 +309,6 @@ public:
     bool ExtBattleDeterministicResult() const
     {
         return ExtModes( BATTLE_DETERMINISTIC_RESULT );
-    }
-
-    bool ExtGameRememberLastFocus() const
-    {
-        return ExtModes( GAME_REMEMBER_LAST_FOCUS );
     }
 
     bool ExtGameContinueAfterVictory() const

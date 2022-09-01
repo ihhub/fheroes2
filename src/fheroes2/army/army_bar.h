@@ -47,7 +47,7 @@ public:
     bool isValid() const;
 
     void ResetSelected();
-    void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
+    void Redraw( fheroes2::Image & dstsf );
 
     bool ActionBarLeftMouseSingleClick( ArmyTroop & troop ) override;
     bool ActionBarLeftMouseSingleClick( ArmyTroop & destTroop, ArmyTroop & selectedTroop ) override;
