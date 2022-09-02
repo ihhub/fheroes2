@@ -854,6 +854,9 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
             else if ( le.MouseCursor( portraitArea ) && actionHero != nullptr && actionHero->isHeroes() && !readonly ) {
                 statusMessage = _( "Hero Screen" );
             }
+            else if ( hero.isCaptain() ) {
+                statusMessage = _( "Captain's Options" );
+            }
             else {
                 statusMessage = _( "Hero's Options" );
             }

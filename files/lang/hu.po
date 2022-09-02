@@ -501,6 +501,12 @@ msgstr ""
 msgid "View Hero's options"
 msgstr "Hős opciói"
 
+msgid "View Captain's options"
+msgstr ""
+
+msgid "View opposing Captain"
+msgstr ""
+
 msgid "View opposing Hero"
 msgstr "Ellenséges hős megmutatása"
 
