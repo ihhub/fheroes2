@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-01 16:33+0000\n"
+"POT-Creation-Date: 2022-09-02 03:05+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -368,6 +368,10 @@ msgstr "Отмена"
 msgid "Hero Screen"
 msgstr "Экран героя"
 
+#, fuzzy
+msgid "Captain's Options"
+msgstr "Настройки замка"
+
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
@@ -503,11 +507,11 @@ msgstr ""
 "Пропустить ход для текущего отряда. Отряд пропускает ход до начала "
 "следующего раунда."
 
-msgid "View Hero's options"
-msgstr "Опции героя"
-
 msgid "View Captain's options"
 msgstr ""
+
+msgid "View Hero's options"
+msgstr "Опции героя"
 
 msgid "View opposing Captain"
 msgstr ""

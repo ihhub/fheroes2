@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-01 16:33+0000\n"
+"POT-Creation-Date: 2022-09-02 03:05+0000\n"
 "PO-Revision-Date: 2022-05-12 17:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -370,6 +370,10 @@ msgstr "Abbrechen"
 msgid "Hero Screen"
 msgstr "Heldenbildschirm"
 
+#, fuzzy
+msgid "Captain's Options"
+msgstr "Burg Optionen"
+
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
@@ -505,11 +509,11 @@ msgstr ""
 "Aussetzt die aktuelle Kreatur. Die aktuelle Kreatur beendet ihren Zug und "
 "darf erst in der nächsten Runde wieder losziehen."
 
-msgid "View Hero's options"
-msgstr "Optionen für den Helden anzeigen"
-
 msgid "View Captain's options"
 msgstr ""
+
+msgid "View Hero's options"
+msgstr "Optionen für den Helden anzeigen"
 
 msgid "View opposing Captain"
 msgstr ""
