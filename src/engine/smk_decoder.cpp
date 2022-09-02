@@ -181,6 +181,26 @@ SMKVideoSequence::~SMKVideoSequence()
     }
 }
 
+int32_t SMKVideoSequence::width() const
+{
+    return _width;
+}
+
+int32_t SMKVideoSequence::height() const
+{
+    return _height;
+}
+
+double SMKVideoSequence::fps() const
+{
+    return _fps;
+}
+
+unsigned long SMKVideoSequence::frameCount() const
+{
+    return _frameCount;
+}
+
 void SMKVideoSequence::resetFrame()
 {
     if ( _videoFile == nullptr )
@@ -268,4 +288,9 @@ std::vector<uint8_t> SMKVideoSequence::getCurrentPalette() const
     assert( paletteData != nullptr );
 
     return std::vector<uint8_t>( paletteData, paletteData + 256 * 3 );
+}
+
+const std::vector<std::vector<uint8_t> > & SMKVideoSequence::getAudioChannels() const
+{
+    return _audioChannel;
 }
