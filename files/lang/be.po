@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-01 16:33+0000\n"
+"POT-Creation-Date: 2022-09-02 03:05+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -345,6 +345,9 @@ msgstr ""
 msgid "Hero Screen"
 msgstr ""
 
+msgid "Captain's Options"
+msgstr ""
+
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
@@ -466,7 +469,13 @@ msgid ""
 "get to go again until the next round."
 msgstr ""
 
+msgid "View Captain's options"
+msgstr ""
+
 msgid "View Hero's options"
+msgstr ""
+
+msgid "View opposing Captain"
 msgstr ""
 
 msgid "View opposing Hero"
