@@ -448,10 +448,22 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::RECRUIT, 4 + i );
                     // clean the button
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6 + i, out, 30 - 2 * i, 5 + i, 31, 15 );
-                    // add 'IN'
-                    Copy( GetICN( ICN::APANEL, 4 + i ), 23 - i, 22 + i, out, 33 - i, 6 + i, 8, 14 ); // letter 'I'
-                    Copy( GetICN( ICN::APANEL, 4 + i ), 31 - i, 22 + i, out, 44 - i, 6 + i, 17, 14 ); // letter 'N'
+                    Fill( out, 11 - i, 4 + i, 50, 17, getButtonFillingColor( i == 0 ) );
+                    // add 'M'
+                    Copy( GetICN( ICN::RECRUIT, 4 + i ), 11 - i, 5 + i, out, 14 - i, 5 + i, 19, 14 );
+                    // clean up 'M'
+                    Fill( out, 15 - i, 5 + i, 3, 1, getButtonFillingColor( i == 0 ) );
+                    Fill( out, 14 - i, 6 + i, 1, 1, getButtonFillingColor( i == 0 ) );
+                    // add button "flair"
+                    Copy( GetICN( ICN::RECRUIT, 4 + i ), 11 - i, 4 + i, out, 11 - i, 4 + i, 3, 3 );
+                    Copy( GetICN( ICN::RECRUIT, 4 + i ), 13 - i, 2 + i, out, 15 - i, 4 + i, 1, 1 );
+                    Copy( GetICN( ICN::RECRUIT, 4 + i ), 13 - i, 2 + i, out, 14 - i, 5 + i, 1, 1 );
+                    // add 'I'
+                    Copy( GetICN( ICN::APANEL, 4 + i ), 23 - i, 21 + i, out, 33 - i, 5 + i, 8, 14 );
+                    // add 'N'
+                    Copy( GetICN( ICN::APANEL, 4 + i ), 31 - i, 21 + i, out, 40 - i, 5 + i, 18 - i, 14 );
+                    // add button "flair"
+                    Copy( GetICN( ICN::RECRUIT, 4 + i ), 12 - i, 3 + i, out, 54 - i, 4 + i, 1, 1 );
                 }
                 return true;
             default:
