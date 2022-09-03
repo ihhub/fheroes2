@@ -3165,7 +3165,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsI
         status.SetMessage( "", false );
 
         if ( resurrects != 0 ) {
-            auto log = []( Battle::Status &uiel, std::string &lmsg, uint32_t lres, const char *lunit ) {
+            auto log = []( Battle::Status & uiel, std::string & lmsg, uint32_t lres, const char * lunit ) {
                 StringReplace( lmsg, "%{count}", lres );
                 StringReplace( lmsg, "%{unit}", lunit );
 
@@ -3174,17 +3174,17 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsI
             };
 
             switch ( attacker.GetID() ) {
-                case Monster::GHOST:
-                    msg = _n( "1 soul drained.", "%{count} souls drained.", resurrects );
-                    log( status, msg, resurrects, attacker.GetName() );
-                    break;
+            case Monster::GHOST:
+                msg = _n( "1 soul drained.", "%{count} souls drained.", resurrects );
+                log( status, msg, resurrects, attacker.GetName() );
+                break;
 
-                case Monster::VAMPIRE_LORD:
-                    msg = _n( "1 unit rised.", "%{count} units revived.", resurrects );
-                    log( status, msg, resurrects, attacker.GetName() );
-                    break;
-                default:
-                    break;
+            case Monster::VAMPIRE_LORD:
+                msg = _n( "1 unit rised.", "%{count} units revived.", resurrects );
+                log( status, msg, resurrects, attacker.GetName() );
+                break;
+            default:
+                break;
             }
         }
     }
