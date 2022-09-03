@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-02 03:05+0000\n"
-"PO-Revision-Date: 2022-07-04 08:57+0200\n"
+"PO-Revision-Date: 2022-09-03 10:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 msgid "Warrior"
 msgstr "Guerrier"
@@ -160,11 +160,10 @@ msgstr "Déplacer la troupe de %{name}"
 msgid "Set Count"
 msgstr "Régler le nombre"
 
-#, fuzzy
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
-msgstr[0] "%{name} décime la troupe ennemie !"
-msgstr[1] "%{name} décime la troupe ennemie !"
+msgstr[0] "La troupe de %{name} décime la troupe ennemie !"
+msgstr[1] "Les %{name} déciment la troupe ennemie !"
 
 msgid "%{name} has turned off the auto battle"
 msgstr "%{name} a désactivé le combat auto"
@@ -364,9 +363,8 @@ msgstr "Annuler"
 msgid "Hero Screen"
 msgstr "Écran Héros"
 
-#, fuzzy
 msgid "Captain's Options"
-msgstr "Voir les options du capitaine"
+msgstr "Options du capitaine"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
@@ -526,9 +524,8 @@ msgid "Shows the results of individual monster's actions."
 msgstr ""
 "Affiche le déroulement du combat et indique toutes les actions individuelles."
 
-#, fuzzy
 msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Êtes vous sûr de vouloir renvoyer cette troupe ?"
+msgstr "Êtes vous sûr de vouloir finir la bataille dans la mode combat auto ?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} passent le tour."
@@ -537,12 +534,10 @@ msgstr "%{name} passent le tour."
 msgid "%{name} wait their turn."
 msgstr "%{name} attendent."
 
-# if only 1 monster: "... attend"
-#, fuzzy
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
-msgstr[0] "%{attacker} infligent %{damage} de dégâts."
-msgstr[1] "%{attacker} infligent %{damage} de dégâts."
+msgstr[0] "La troupe de %{attacker} inflige %{damage} de dégâts."
+msgstr[1] "Les %{attacker} infligent %{damage} de dégâts."
 
 # if only 1 monster: "... inflige ..."
 msgid "1 creature perishes."
@@ -633,9 +628,8 @@ msgstr "L'image miroir est créée."
 msgid "The mirror image is destroyed!"
 msgstr "L'image miroir est détruite !"
 
-#, fuzzy
 msgid "Are you sure you want to interrupt the auto battle?"
-msgstr "Êtes vous sûr de vouloir sonner la retraite ?"
+msgstr "Êtes vous sûr de vouloir interrompre le combat auto ?"
 
 msgid "Error"
 msgstr "Erreur"
@@ -2013,7 +2007,6 @@ msgstr "Grand cromlech"
 msgid "Fenced Meadow"
 msgstr "Pré"
 
-#, fuzzy
 msgid "sorceress|Red Tower"
 msgstr "Tour rouge"
 
@@ -2044,7 +2037,6 @@ msgstr "Marais"
 msgid "Green Tower"
 msgstr "Tour verte"
 
-#, fuzzy
 msgid "warlock|Red Tower"
 msgstr "Tour rouge"
 
@@ -3338,35 +3330,38 @@ msgid "and more..."
 msgstr "et plus encore..."
 
 msgid "DIFFICULTY"
-msgstr ""
+msgstr "DIFFICULTÉ"
 
-#, fuzzy
 msgid "Campaign Difficulty"
-msgstr "Difficulté du Jeu"
+msgstr "Difficulté de la campagne"
 
 msgid ""
 "Choose this difficulty if you want to prefer game story over challenge. AI "
 "is weaker in comparison with normal difficulty."
 msgstr ""
+"Choisissez cette difficulté si vous préférez l'histoire du jeu au gameplay."
 
 msgid ""
 "Choose this difficulty to enjoy the campaign as per the original design."
 msgstr ""
+"Choisissez cette difficulté si vous préférez la campagne comme elle était "
+"originalement."
 
 msgid ""
 "Choose this difficulty if you want challenge. AI is stronger in comparison "
 "with normal difficulty."
 msgstr ""
+"Choisissez cette difficulté si vous voulez du challenge. L'IA sera plus "
+"forte par rapport à la difficulté normale."
 
 msgid "Easy"
-msgstr ""
+msgstr "Facile"
 
-#, fuzzy
 msgid "Normal"
 msgstr "Normale"
 
 msgid "Hard"
-msgstr ""
+msgstr "Difficile"
 
 msgid "Start the selected scenario."
 msgstr "Démarrer le scénario sélectionné."
@@ -3379,6 +3374,8 @@ msgstr "Voir la vidéo d'introduction du scénario actuel."
 
 msgid "Select campaign difficulty. It cannot be changed after."
 msgstr ""
+"Choisissez la difficulté de la campagne. Il ne peut pas être modifié plus "
+"tard."
 
 msgid "Restart"
 msgstr "Recommencer"
@@ -3396,10 +3393,10 @@ msgid "Please make sure that campaign files are correct and present."
 msgstr "Assurez-vous que les fichiers de campagne sont corrects et présents."
 
 msgid "Days spent"
-msgstr ""
+msgstr "Jours passés"
 
 msgid "The number of days spent on this campaign."
-msgstr ""
+msgstr "Le nombre de jours passés dans cette campagne."
 
 msgid "Project Coordination and Core Development"
 msgstr "Coordination du projet et développement"
@@ -3437,9 +3434,8 @@ msgstr "et beaucoup, beaucoup d'autres supporteurs !"
 msgid "Original project before 0.7"
 msgstr "Projet original avant 0.7"
 
-#, fuzzy
 msgid "Heroes of Might and Magic II: The Succession Wars team"
-msgstr "L'équipe originale de Heroes of Might and Magic II"
+msgstr "L'équipe de Heroes of Might and Magic II"
 
 msgid "Designed and Directed"
 msgstr "Conçu et réalisé"
@@ -3492,75 +3488,68 @@ msgstr "Manuel et fichier d'aide"
 msgid "Scenarios"
 msgstr "Scénarios"
 
-#, fuzzy
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
-msgstr "L'équipe originale de Heroes of Might and Magic II"
+msgstr "L'équipe de Heroes of Might and Magic II"
 
 msgid "Cyberlore Studios"
 msgstr ""
 
 msgid "Design Lead"
-msgstr ""
+msgstr "Chef du design"
 
 msgid "Designers"
-msgstr ""
+msgstr "Concepteurs"
 
-#, fuzzy
 msgid "Programming Lead"
-msgstr "Programmation et conception"
+msgstr "Chef de Programmation"
 
 msgid "Art Lead"
-msgstr ""
+msgstr "Responsable artistique"
 
-#, fuzzy
 msgid "Playtesters"
-msgstr "2 Joueurs"
+msgstr "Testeurs"
 
 msgid "New World Computing"
 msgstr ""
 
 msgid "Designer"
-msgstr ""
+msgstr "Concepteur"
 
-#, fuzzy
 msgid "Producers"
 msgstr "Producteur"
 
-#, fuzzy
 msgid "QA Managers"
-msgstr "Responsable AQ"
+msgstr "Responsables AQ"
 
-#, fuzzy
 msgid "Sound Design"
-msgstr "Musique et conception sonore"
+msgstr "Design sonore"
 
-#, fuzzy
 msgid "Town Themes"
-msgstr "Portes du village"
+msgstr "Thèmes des châteaux"
 
 msgid "Alto Sax"
-msgstr ""
+msgstr "Sax alto"
 
 msgid "Harpsichord and Piano"
-msgstr ""
+msgstr "Clavecin et piano"
 
 msgid "Basso Vocal"
-msgstr ""
+msgstr "Vocal basso"
 
 msgid "Soprano Vocal"
-msgstr ""
+msgstr "Voix de soprano"
 
 msgid "Recorded at Green Street Studios"
-msgstr ""
+msgstr "Enregistrée aux Green Street Studios"
 
 msgid "German Consultant"
-msgstr ""
+msgstr "Consultant de l'allemand"
 
 msgid "Map Designers"
-msgstr ""
+msgstr "Concepteurs de cartes"
 
 msgid "Package Design"
-msgstr ""
+msgstr "Conception de l'emballage"
 
 msgid "Unknown Hero"
 msgstr "Héros Inconnu"
@@ -3584,9 +3573,8 @@ msgid "Warning"
 msgstr "Attention"
 
 msgid "This file contains a save with an invalid game type."
-msgstr ""
+msgstr "Ce fichier contient une sauvegarde avec un type de jeu invalide."
 
-#, fuzzy
 msgid ""
 "This file was saved by the \"The Price of Loyalty\" version of the game.\n"
 "Some items may not be available."
@@ -3718,6 +3706,9 @@ msgid ""
 "Required video files for campaign selection window are missing. Please make "
 "sure that all necessary files are present in the system."
 msgstr ""
+"Les fichiers vidéo requis pour la fenêtre de sélection de la campagne sont "
+"manquants. Assurez-vous que tous les fichiers nécessaires sont présents dans "
+"le système."
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
