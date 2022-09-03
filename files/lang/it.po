@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-31 01:55+0000\n"
+"POT-Creation-Date: 2022-09-02 03:05+0000\n"
 "PO-Revision-Date: 2022-05-12 17:11+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <it@li.org>\n"
@@ -353,6 +353,10 @@ msgstr "Annulla"
 msgid "Hero Screen"
 msgstr "Schermata Eroe"
 
+#, fuzzy
+msgid "Captain's Options"
+msgstr "Opzioni Castello"
+
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
@@ -480,8 +484,16 @@ msgstr ""
 "Salta l'unità attuale. L'unità salta il suo turno senza fare nulla e deve "
 "aspettare per il prossimo round."
 
+#, fuzzy
+msgid "View Captain's options"
+msgstr "Mostra opzioni eroe"
+
 msgid "View Hero's options"
 msgstr "Mostra opzioni eroe"
+
+#, fuzzy
+msgid "View opposing Captain"
+msgstr "Mostra eroe avversario"
 
 msgid "View opposing Hero"
 msgstr "Mostra eroe avversario"
@@ -3237,6 +3249,12 @@ msgid "Campaign Scenario loading failure"
 msgstr ""
 
 msgid "Please make sure that campaign files are correct and present."
+msgstr ""
+
+msgid "Days spent"
+msgstr ""
+
+msgid "The number of days spent on this campaign."
 msgstr ""
 
 msgid "Project Coordination and Core Development"

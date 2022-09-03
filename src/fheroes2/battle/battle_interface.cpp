@@ -397,13 +397,21 @@ namespace Battle
         if ( heroTypeAnim[heroType][animation].empty() ) {
             const int sourceArray[7][9][9] = {
                 //   JOY                CAST_MASS             CAST_UP               CAST_DOWN     IDLE
-                {{6, 7, 8, 9, 8, 9, 8, 7, 6}, {10, 11}, {10}, {6, 12, 13}, {12, 6}, {2, 14}, {2}, {15, 16, 17}, {18, 19}}, // KNIGHT
-                {{6, 7, 8, 9, 9, 8, 7, 6}, {6, 10, 11}, {10, 6}, {6, 12, 13}, {12, 6}, {6, 14}, {6}, {15, 16, 17}, {18}}, // BARBARIAN
-                {{6, 7, 8, 7, 6}, {6, 7, 9}, {7, 6}, {6, 10, 11}, {10, 6}, {6, 12}, {6}, {13, 14, 15}, {16}}, // SORCERESS
-                {{6, 7, 8, 9, 10, 9, 8, 7, 6}, {6, 7, 11, 12}, {11, 6}, {6, 7, 13}, {6}, {6, 14}, {6}, {15, 16}, {6}}, // WARLOCK
-                {{6, 7, 8, 9, 8, 7, 6}, {6, 10, 11, 12, 13}, {12, 11, 10, 6}, {6, 14}, {6}, {6, 15}, {6}, {16, 17}, {18}}, // WIZARD
-                {{6, 7, 6, 7, 6, 7}, {7, 8, 9, 10, 11}, {10, 9, 7}, {7, 12, 13, 14, 15}, {7}, {7, 12, 13, 14, 16}, {7}, {17}, {18, 19}}, // NECROMANCER
-                {{1}, {2, 3, 4}, {3, 2}, {5, 6}, {5}, {5, 7}, {5}, {8, 9}, {10}} // CAPTAIN
+                { { 6, 7, 8, 9, 8, 9, 8, 7, 6 }, { 10, 11 }, { 10 }, { 6, 12, 13 }, { 12, 6 }, { 2, 14 }, { 2 }, { 15, 16, 17 }, { 18, 19 } }, // KNIGHT
+                { { 6, 7, 8, 9, 9, 8, 7, 6 }, { 6, 10, 11 }, { 10, 6 }, { 6, 12, 13 }, { 12, 6 }, { 6, 14 }, { 6 }, { 15, 16, 17 }, { 18 } }, // BARBARIAN
+                { { 6, 7, 8, 7, 6 }, { 6, 7, 9 }, { 7, 6 }, { 6, 10, 11 }, { 10, 6 }, { 6, 12 }, { 6 }, { 13, 14, 15 }, { 16 } }, // SORCERESS
+                { { 6, 7, 8, 9, 10, 9, 8, 7, 6 }, { 6, 7, 11, 12 }, { 11, 6 }, { 6, 7, 13 }, { 6 }, { 6, 14 }, { 6 }, { 15, 16 }, { 6 } }, // WARLOCK
+                { { 6, 7, 8, 9, 8, 7, 6 }, { 6, 10, 11, 12, 13 }, { 12, 11, 10, 6 }, { 6, 14 }, { 6 }, { 6, 15 }, { 6 }, { 16, 17 }, { 18 } }, // WIZARD
+                { { 6, 7, 6, 7, 6, 7 },
+                  { 7, 8, 9, 10, 11 },
+                  { 10, 9, 7 },
+                  { 7, 12, 13, 14, 15 },
+                  { 7 },
+                  { 7, 12, 13, 14, 16 },
+                  { 7 },
+                  { 17 },
+                  { 18, 19 } }, // NECROMANCER
+                { { 1 }, { 2, 3, 4 }, { 3, 2 }, { 5, 6 }, { 5 }, { 5, 7 }, { 5 }, { 8, 9 }, { 10 } } // CAPTAIN
             };
 
             for ( int frame = 0; frame < 9; ++frame ) {
@@ -1147,11 +1155,11 @@ void Battle::Interface::UpdateContourColor()
     ++_contourCycle;
 
     if ( _brightLandType ) {
-        static const uint8_t contourColorTable[] = {108, 115, 122, 129, 122, 115};
+        static const std::array<const uint8_t, 6> contourColorTable = { 108, 115, 122, 129, 122, 115 };
         _contourColor = contourColorTable[_contourCycle % sizeof( contourColorTable )];
     }
     else {
-        static const uint8_t contourColorTable[] = {110, 114, 118, 122, 126, 122, 118, 114};
+        static const std::array<const uint8_t, 8> contourColorTable = { 110, 114, 118, 122, 126, 122, 118, 114 };
         _contourColor = contourColorTable[_contourCycle % sizeof( contourColorTable )];
     }
 }
@@ -2514,7 +2522,12 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     else if ( opponent1 && le.MouseCursor( opponent1->GetArea() + _interfacePosition.getPosition() ) ) {
         const fheroes2::Rect opponent1Area = opponent1->GetArea() + _interfacePosition.getPosition();
         if ( arena.GetCurrentColor() == arena.GetArmy1Color() ) {
-            msg = _( "View Hero's options" );
+            if ( opponent1->GetHero()->isCaptain() ) {
+                msg = _( "View Captain's options" );
+            }
+            else {
+                msg = _( "View Hero's options" );
+            }
             cursor.SetThemes( Cursor::WAR_HERO );
 
             if ( le.MouseClickLeft( opponent1Area ) ) {
@@ -2523,7 +2536,12 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             }
         }
         else {
-            msg = _( "View opposing Hero" );
+            if ( opponent1->GetHero()->isCaptain() ) {
+                msg = _( "View opposing Captain" );
+            }
+            else {
+                msg = _( "View opposing Hero" );
+            }
             cursor.SetThemes( Cursor::WAR_INFO );
 
             if ( le.MouseClickLeft( opponent1Area ) ) {
@@ -2540,7 +2558,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
     else if ( opponent2 && le.MouseCursor( opponent2->GetArea() + _interfacePosition.getPosition() ) ) {
         const fheroes2::Rect opponent2Area = opponent2->GetArea() + _interfacePosition.getPosition();
         if ( arena.GetCurrentColor() == arena.GetForce2().GetColor() ) {
-            msg = _( "View Hero's options" );
+            if ( opponent2->GetHero()->isCaptain() ) {
+                msg = _( "View Captain's options" );
+            }
+            else {
+                msg = _( "View Hero's options" );
+            }
+
             cursor.SetThemes( Cursor::WAR_HERO );
 
             if ( le.MouseClickLeft( opponent2Area ) ) {
@@ -2549,7 +2573,13 @@ void Battle::Interface::HumanBattleTurn( const Unit & b, Actions & a, std::strin
             }
         }
         else {
-            msg = _( "View opposing Hero" );
+            if ( opponent2->GetHero()->isCaptain() ) {
+                msg = _( "View opposing Captain" );
+            }
+            else {
+                msg = _( "View opposing Hero" );
+            }
+
             cursor.SetThemes( Cursor::WAR_INFO );
 
             if ( le.MouseClickLeft( opponent2Area ) ) {
@@ -4148,7 +4178,7 @@ void Battle::Interface::RedrawLightningOnTargets( const std::vector<fheroes2::Po
         const fheroes2::Point & startingPos = points[i - 1];
         const fheroes2::Point & endPos = points[i];
 
-        const std::vector<std::pair<LightningPoint, LightningPoint> > & lightningBolt = GenerateLightning( startingPos + roiOffset, endPos + roiOffset );
+        const std::vector<std::pair<LightningPoint, LightningPoint>> & lightningBolt = GenerateLightning( startingPos + roiOffset, endPos + roiOffset );
         fheroes2::Rect roi;
         const bool isHorizontalBolt = std::abs( startingPos.x - endPos.x ) > std::abs( startingPos.y - endPos.y );
         const bool isForwardDirection = isHorizontalBolt ? ( endPos.x > startingPos.x ) : ( endPos.y > startingPos.y );
@@ -4277,7 +4307,7 @@ void Battle::Interface::RedrawActionBloodLustSpell( const Unit & target )
 
     fheroes2::Sprite unitSprite = fheroes2::AGG::GetICN( target.GetMonsterSprite(), target.GetFrame() );
 
-    std::vector<std::vector<uint8_t> > originalPalette;
+    std::vector<std::vector<uint8_t>> originalPalette;
     if ( target.Modes( SP_STONE ) ) {
         originalPalette.push_back( PAL::GetPalette( PAL::PaletteType::GRAY ) );
     }

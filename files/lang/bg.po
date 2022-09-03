@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-31 01:55+0000\n"
+"POT-Creation-Date: 2022-09-02 03:05+0000\n"
 "PO-Revision-Date: 2022-07-25 11:28+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -361,6 +361,10 @@ msgstr "Отменям"
 msgid "Hero Screen"
 msgstr "Екран на героя"
 
+#, fuzzy
+msgid "Captain's Options"
+msgstr "Опции на героя"
+
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
@@ -494,8 +498,16 @@ msgstr ""
 "Пропуска текущото създание. Текущото създание завършва реда си и не може да "
 "отиде отново до следващия кръг."
 
+#, fuzzy
+msgid "View Captain's options"
+msgstr "Вижте настройките на героя"
+
 msgid "View Hero's options"
 msgstr "Вижте настройките на героя"
+
+#, fuzzy
+msgid "View opposing Captain"
+msgstr "Вижте противниковия герой"
 
 msgid "View opposing Hero"
 msgstr "Вижте противниковия герой"
@@ -781,23 +793,34 @@ msgid ""
 "They are wealthy and powerful, so be prepared for a tough fight. Capture all "
 "enemy castles to win."
 msgstr ""
+"Местните лордове отказват да се закълнат във вярност на Роланд и трябва да "
+"бъдат покорени. Те са богати и могъщи, така че бъди готов за тежка битка. "
+"Превземи всички вражески замъци, за да спечелищ."
 
 msgid ""
 "Your task is to defend the Dwarves against Archibald's forces. Capture all "
 "of the enemy towns and castles to win, and be sure not to lose all of the "
 "dwarf towns at once, or the enemy will have won."
 msgstr ""
+"Твоята задача е да защитиш джуджетата срещу силите на Арчибалд. Превземи "
+"всички вражески градове и замъци, за да спечелиш и бъди сигурен, че няма да "
+"загубиш всички градове на джуджетата наведнъж, или врагът ще е победил."
 
 msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
+"Ще се изправиш срещу четирима съюзнически врагове в директна битка за "
+"ресурси и съкровища. Превземи всички вражески замъци за победа."
 
 msgid ""
 "Your enemies are allied against you and start close by, so be ready to come "
 "out fighting. You will need to own all four castles in this small valley to "
 "win."
 msgstr ""
+"Твойте врагове са съюзени срещу теб и нападат отблизо, така че бъди готов да "
+"излезеш в битка. Ще трябва да притежаваш и четирите замъка в тази малка "
+"долина, за да спечелиш."
 
 msgid ""
 "The Sorceress' guild of Noraston has requested Roland's aid against an "
@@ -805,6 +828,10 @@ msgid ""
 "don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy "
 "castle on an island in the ocean.)"
 msgstr ""
+"Гилдията на магьосниците от Норастън е поискала помощта на Роланд срещу "
+"нападението от съюзниците на Арчибалд. Превземи всички вражески замъци, за "
+"да спечелиш и не губи Норастон, или ще загубиш сценария. (Съвет: Има "
+"вражески замък на остров в океана.)"
 
 msgid ""
 "Gather as large an army as possible and capture the enemy castle within 8 "
@@ -812,11 +839,17 @@ msgid ""
 "to the enemy castle. Any troops you have in your army at the end of this "
 "scenario will be with you in the final battle."
 msgstr ""
+"Събери възможно най-голяма армия и превземи вражеския замък в рамките на 8 "
+"седмици. Ти се противопоставяш само на един враг, но трябва да изминеш дълъг "
+"път, за да стигнеш до вражеския замък. Всички войски, които имаш във своята "
+"армия в края на този сценарий, ще бъдат с теб в последната битка."
 
 msgid ""
 "Find the Crown before Archibald's heroes find it. Roland will need the Crown "
 "for the final battle against Archibald."
 msgstr ""
+"Намери короната, преди героите на Арчибалд да я намерят. Роланд ще се нуждае "
+"от короната за последната битка срещу Арчибалд."
 
 msgid ""
 "Three allied enemies stand before you and victory, including Lord Corlagon. "
@@ -824,17 +857,25 @@ msgid ""
 "enemy. Remember that capturing Lord Corlagon will ensure that he will not "
 "fight against you in the final scenario."
 msgstr ""
+"Трима съюзнически врагове стоят между теб и победата, включително лорд "
+"Корлагон. Роланд е в замък на северозапад и ти ще загубиш, ако той загуби от "
+"врага. Не забравяй, че залавянето на лорд Корлагон ще гарантира, че той няма "
+"да се бие срещу теб в последния сценарий."
 
 msgid ""
 "This is the final battle. Both you and your enemy are armed to the teeth, "
 "and all are allied against you. Capture Archibald to end the war!"
 msgstr ""
+"Това е последната битка. И ти и врагът сте въоръжени до зъби и всички са "
+"обединени срещу вас. Хванете Арчибалд, за да сложите край на войната!"
 
 msgid ""
 "Switching sides leaves you with three castles against the enemy's one.  This "
 "battle will be the easiest one you will face for the rest of the war..."
 "traitor."
 msgstr ""
+"Смяната на отбора те оставя с три замъка срещу единия на врага. Тази битка "
+"ще бъде най-лесната, с която ще се сблъскаш до края на войната... предател."
 
 msgid "Barbarian Wars"
 msgstr "Варварски войни"
@@ -869,6 +910,10 @@ msgid ""
 "energy fighting amongst themselves.  You will win when you own all of the "
 "enemy castles and there are no more heroes left to fight."
 msgstr ""
+"Крал Арчибалд изисква от теб да победиш тримата врагове в този регион. Те не "
+"са съюзници помежду си, така че ще изразходват по-голямата част от енергията "
+"си в битки помежду си. Ще спечелиш, когато притежаваш всички вражески замъци "
+"и няма повече герои, които да се бият."
 
 msgid ""
 "You must unify the barbarian tribes of the north by conquering them. As in "
@@ -876,6 +921,10 @@ msgid ""
 "more resources at their disposal. You will win when you own all of the enemy "
 "castles and there are no more heroes left to fight."
 msgstr ""
+"Трябва да обединиш варварските племена на север, като ги завладееш. Както и "
+"в предишната мисия, врагът не ти е противник, но има повече ресурси на свое "
+"разположение. Ще спечелиш, когато притежаваш всички вражески замъци и няма "
+"повече герои, които да се бият."
 
 msgid ""
 "Do-gooder wizards have taken the Necromancers' castle. You must retake it to "
@@ -883,6 +932,10 @@ msgid ""
 "have no castle and must take one within 7 days, or lose this battle. (Hint: "
 "The nearest castle is to the southeast.)"
 msgstr ""
+"Добрите магьосници са превзели замъка на Некромантите. Трябва да си го "
+"върнеш обратно, за да постигнеш победа. Не забравяй, че макар да започваш с "
+"мощна армия, ти нямаш замък и трябва да превземеш такъв в рамките на 7 дни "
+"или губиш тази битка. (Съвет: Най-близкият замък е на югоизток.)"
 
 msgid ""
 "The dwarves need conquering before they can interfere in King Archibald's "
@@ -890,18 +943,28 @@ msgid ""
 "so be ready for attack from multiple directions. You must capture all of the "
 "enemy towns and castles to claim victory."
 msgstr ""
+"Джуджетата се нуждаят от победа, преди да могат да се намесят в плановете на "
+"крал Арчибалд. Силите на Роланд разполагат с повече от един герой и много "
+"градове, така че бъди готов за атака от различни посоки. Трябва да превземеш "
+"всички вражески градове и замъци, за да победиш."
 
 msgid ""
 "You must put down a peasant revolt led by Roland's forces. All are allied "
 "against you, but you have Lord Corlagon, an experienced hero, to help you. "
 "Capture all enemy castles to win."
 msgstr ""
+"Трябва да потушиш селско въстание, водено от силите на Роланд. Всички са "
+"съюзници срещу теб, но имаш лорд Корлагон, опитен герой, който да ти помага. "
+"Превземи всички вражески замъци, за да спечелиш."
 
 msgid ""
 "There are two enemies allied against you in this mission. Both are well "
 "armed and seek to evict you from their island. Avoid them and capture Dragon "
 "City to win."
 msgstr ""
+"Има двама врагове, обединени срещу теб в тази мисия. И двамата са добре "
+"въоръжени и се стремят да те изгонят от техния остров. Избягвай ги и "
+"превземи Градът на Драконите, за да спечелиш."
 
 msgid ""
 "Your orders are to conquer the country lords that have sworn to serve "
@@ -909,17 +972,26 @@ msgid ""
 "without a castle, you must hurry to capture one before the end of the week. "
 "Capture all enemy castles for victory."
 msgstr ""
+"Твойте заповеди са да завладееш селските господари, които са се заклели да "
+"служат на Роланд. Всички вражески замъци са обединени срещу теб. Тъй като "
+"започваш без замък, трябва да побързаш да првземеш един преди края на "
+"седмицата. Превземи всички вражески замъци за победа."
 
 msgid ""
 "Find the Crown before Roland's heroes find it. Archibald will need the Crown "
 "for the final battle against Roland."
 msgstr ""
+"Намери короната, преди героите на Роланд да я намерят. Арчибалд ще се нуждае "
+"от короната за последната битка срещу Роланд."
 
 msgid ""
 "This is the final battle. Both you and your enemy are armed to the teeth, "
 "and all are allied against you. Capture Roland to win the war, and be sure "
 "not to lose Archibald in the fight!"
 msgstr ""
+"Това е последната битка. И ти, и врагът сте въоръжени до зъби и всички са "
+"обединени срещу теб. Хвани Роланд, за да спечелиш войната и бъди сигурен, че "
+"няма да загубиш Арчибалд в битката!"
 
 msgid "Arrow's Flight"
 msgstr "Полетът на стрелата"
@@ -949,16 +1021,22 @@ msgid ""
 "Subdue the unruly local lords in order to provide the Empire with facilities "
 "to operate in this region."
 msgstr ""
+"Покори непокорните местни лордове, за да осигуриш на Империята съоръжения за "
+"работа в този регион."
 
 msgid ""
 "Eliminate all oposition in this area. Then the first piece of the artifact "
 "will be yours."
 msgstr ""
+"Премахни всяка опозиция в тази област. След това първото парче от артефакта "
+"ще бъде твое."
 
 msgid ""
 "The sorceresses to the northeast are rebelling! For the good of the empire "
 "you must quash their feeble uprising on your way to the mountains."
 msgstr ""
+"Магьосниците на североизток се бунтуват! За доброто на империята трябва да "
+"потушиш слабото им въстание по пътя си към планините."
 
 msgid ""
 "Having prepared for your arrival, Kraeger has arranged for a force of "
@@ -966,27 +1044,39 @@ msgid ""
 "before the first day of the third week, or the Necromancers will be too "
 "strong for you."
 msgstr ""
+"След като се е подготвил за вашето пристигане, Крегер е уредил сила от "
+"некроманти да осуети твоето търсене. Трябва да превземеш замъка Скабсдейл "
+"преди първия ден на третата седмица, или некромантите ще бъдат твърде силни "
+"за теб."
 
 msgid ""
 "The barbarian despot in this area is, as yet, ignorant of your presence. "
 "Quickly, build up your forces before you are discovered and attacked! Secure "
 "the region by subduing all enemy forces."
 msgstr ""
+"Варварският деспот в тази област все още не знае за твоето присъствие. "
+"Бързо, събери силите си, преди да бъдеш открит и нападнат! Осигури региона, "
+"като подчиниш всички вражески сили."
 
 msgid ""
 "The Empire is weak in this region. You will be unable to completely subdue "
 "all forces in this area, so take what you can before reprisal strikes. "
 "Remember, your true goal is to claim the Helmet of Anduran."
 msgstr ""
+"Империята е слаба в този регион. Няма да можеш да покориш напълно всички "
+"сили в тази област, така че вземи каквото можеш, преди да те ударят ответни "
+"удари. Не забравяй, че истинската ти цел е да вземеш шлема на Андуран."
 
 msgid "For the good of the Empire, eliminate Kraeger."
-msgstr ""
+msgstr "За доброто на Империята елиминирай Крегер."
 
 msgid ""
 "At last, you have the opportunity and the facilities to rid the Empire of "
 "the necromancer's evil. Eradicate them completely, and you will be sung as a "
 "hero for all time."
 msgstr ""
+"Най-накрая имаш възможността и съоръженията да отървеш Империята от злото на "
+"некроманта. Изкорени ги напълно и ще бъдеш възпят като герой завинаги."
 
 msgid "Border Towns"
 msgstr "Погранични градове"
@@ -1016,42 +1106,60 @@ msgid ""
 "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the "
 "forefather of all descendants."
 msgstr ""
+"Покори и обедини всички вражески племена. Не губи героя Джарконас, праотецът "
+"на всички потомци."
 
 msgid ""
 "Your rival, the Kingdom of Harondale, is attacking weak towns on your "
 "border! Recover from their first strike and crush them completely!"
 msgstr ""
+"Твоят съперник, Кралство Харондейл, атакува слаби градове на твоята граница! "
+"Възстанови се от първия им удар и ги смажи напълно!"
 
 msgid ""
 "Find your wayward son Joseph who is rumored to be living in the desolate "
 "lands. Do it before the first day of the third month or it will be of no "
 "help to your family."
 msgstr ""
+"Намери своя своенравен син Джоузеф, за когото се говори, че живее в пустите "
+"земи. Направи го преди първия ден на третия месец или няма да е от полза за "
+"твоето семейство."
 
 msgid ""
 "Rescue your crazy uncle Ivan. Find him before the first day of the fourth "
 "month or it will be no help to your kingdom."
 msgstr ""
+"Спаси лудия си чичо Иван. Намери го преди първия ден на четвъртия месец или "
+"той няма да е от полза за твоето кралство."
 
 msgid ""
 "Destroy the barbarians who are attacking the southern border of your "
 "kingdom! Recover your fallen towns, and then invade the jungle kingdom. "
 "Leave no enemy standing."
 msgstr ""
+"Унищожи варварите, които атакуват южната граница на твоето кралство! "
+"Възстанови падналите си градове и след това нахлуй в кралството на "
+"джунглата. Не оставяй нито един враг."
 
 msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
 msgstr ""
+"Върни си отново замъка Портите на Ивъри, който падна поради предателство."
 
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
 "so they will send you wood every 2 weeks. You must complete your mission "
 "before the first day of the seventh month, or the kingdom will surely fall."
 msgstr ""
+"Спечели благоволението на елфите. Те няма да позволят да се изсичат дървета, "
+"така че ще ти изпращат дърва на всеки 2 седмици. Трябва да завършиш мисията "
+"си преди първия ден на седмия месец или кралството със сигурност ще падне."
 
 msgid ""
 "This is the final battle against your rival kingdom of Harondale. Eliminate "
 "everyone, and don't lose the hero Jarkonas VI."
 msgstr ""
+"Това е последната битка срещу съперничещото ти кралство Харондейл. "
+"Елиминирай всички и не губи героя Джарконас VI."
 
 msgid "Fount of Wizardry"
 msgstr "Изворът на магьосничеството"
@@ -1070,11 +1178,16 @@ msgid ""
 "The completion of this task will give you a fighting chance against your "
 "rivals."
 msgstr ""
+"Твоята мисия е да победиш воюващите магове в магическите Забулени острови. "
+"Изпълнението на тази задача ще ти даде шанс да се биеш срещу твойте "
+"съперници."
 
 msgid ""
 "The location of the great library has been discovered! You must make your "
 "way to it, and reclaim the city of Chronos in which it lies."
 msgstr ""
+"Местоположението на великата библиотека е открито! Трябва да стигнеш до него "
+"и да си върнеш града Хронос, в който се намира."
 
 msgid ""
 "Find the Orb of negation, which is said to be buried in this land. There are "
@@ -1082,11 +1195,17 @@ msgid ""
 "Find the orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
+"Намери Кълбото на отрицанието, за което се казва, че е заровено в тази земя. "
+"Има улики, изписани върху каменни обелиски, които ще ти помогнат да разберш "
+"стойността си. Намери кълбото преди първия ден на шестия месец или твойте "
+"съперници със сигурност ще са стигнали до извора преди теб."
 
 msgid ""
 "You must take control of the castle of Magic, where the fount of wizardry "
 "lies. Do this and your victory will be supreme."
 msgstr ""
+"Трябва да поемеш контрола над замъка на магията, където се намира изворът на "
+"магьосничеството. Направи това и твоята победа ще бъде върховна."
 
 msgid "Blood is Thicker"
 msgstr "Кръвта е по-гъста"
@@ -1104,21 +1223,29 @@ msgid ""
 "Capture the town on the island off the southeast shore in order to construct "
 "a boat and travel back towards the mainland. Do not lose the hero Gallavant."
 msgstr ""
+"Превземи града на острова край югоизточния бряг, за да построиш лодка и да "
+"пътуваш обратно към континента. Не губи героя Галавант."
 
 msgid ""
 "Find and defeat Martine, the pirate leader, who resides in Pirates Cove. Do "
 "not lose Gallavant or your quest will be over."
 msgstr ""
+"Намери и победи Мартин, водача на пиратите, който живее в Пиратския залив. "
+"Не губи Галавант или мисията ти ще приключи."
 
 msgid ""
 "Eliminate all the other forces who oppose the rule of Lord Alberon. "
 "Gallavant must not die."
 msgstr ""
+"Елиминирай всички други сили, които се противопоставят на управлението на "
+"лорд Алберон. Галавант не трябва да умира."
 
 msgid ""
 "Overthrow the entrenched monarchy of Lord Alberon, and claim all the land in "
 "your name. Gallavant must not die."
 msgstr ""
+"Пребори утвърдената монархия на лорд Алберон и поискай цялата земя на твое "
+"име. Галавант не трябва да умира."
 
 msgid " bane"
 msgstr " проклятие"
@@ -1167,8 +1294,8 @@ msgstr ""
 
 msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
 msgstr ""
-"Огритата ви разпознават като Джуджеубиец и се натискат да се присъединят към "
-"вас."
+"Огритата ви разпознават като Джуджеубиеца и се натискат да се присъединят "
+"към вас."
 
 msgid ""
 "The dragons, snarling and growling, agree to join forces with you, their "
@@ -1262,485 +1389,490 @@ msgid "campaignBonus|Medal of Valor"
 msgstr "Медал за доблест"
 
 msgid "campaignBonus|Minor Scroll"
-msgstr ""
+msgstr "Малък свитък"
 
 msgid "campaignBonus|Nomad Boots"
-msgstr ""
+msgstr "Номадски ботуши"
 
 msgid "campaignBonus|Power Axe"
-msgstr ""
+msgstr "Брадва на Силата"
 
 msgid "campaignBonus|Spiked Shield"
-msgstr ""
+msgstr "Щит с шипове"
 
 msgid "campaignBonus|Stealth Shield"
-msgstr ""
+msgstr "Стелт щит"
 
 msgid "campaignBonus|Tax Lien"
-msgstr ""
+msgstr "Данъчен залог"
 
 msgid "campaignBonus|Thunder Mace"
-msgstr ""
+msgstr "Гръмотевичен боздуган"
 
 msgid "campaignBonus|Traveler's Boots"
-msgstr ""
+msgstr "Пътнически ботуши"
 
 msgid "campaignBonus|White Pearl"
-msgstr ""
+msgstr "Бяла перла"
 
 msgid "campaignBonus|Basic Archery"
-msgstr ""
+msgstr "Основна стрелба с лък"
 
 msgid "campaignBonus|Advanced Archery"
-msgstr ""
+msgstr "Стрелба с лък за напреднали"
 
 msgid "campaignBonus|Expert Archery"
-msgstr ""
+msgstr "Експертна стрелба с лък"
 
 msgid "campaignBonus|Basic Ballistics"
-msgstr ""
+msgstr "Основна балистика"
 
 msgid "campaignBonus|Advanced Ballistics"
-msgstr ""
+msgstr "Разширена балистика"
 
 msgid "campaignBonus|Expert Ballistics"
-msgstr ""
+msgstr "Експертна балистика"
 
 msgid "campaignBonus|Basic Diplomacy"
-msgstr ""
+msgstr "Основна дипломация"
 
 msgid "campaignBonus|Advanced Diplomacy"
-msgstr ""
+msgstr "Разширена дипломация"
 
 msgid "campaignBonus|Expert Diplomacy"
-msgstr ""
+msgstr "Експертна дипломация"
 
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr ""
+msgstr "Основно орлово око"
 
 msgid "campaignBonus|Advanced Eagle Eye"
-msgstr ""
+msgstr "Разширено орлово око"
 
 msgid "campaignBonus|Expert Eagle Eye"
-msgstr ""
+msgstr "Експертно орлово око"
 
 msgid "campaignBonus|Basic Estates"
-msgstr ""
+msgstr "Основни имоти"
 
 msgid "campaignBonus|Advanced Estates"
-msgstr ""
+msgstr "Разширени имоти"
 
 msgid "campaignBonus|Expert Estates"
-msgstr ""
+msgstr "Експерт имоти"
 
 msgid "campaignBonus|Basic Leadership"
-msgstr ""
+msgstr "Основно лидерство"
 
 msgid "campaignBonus|Advanced Leadership"
-msgstr ""
+msgstr "Разширено лидерство"
 
 msgid "campaignBonus|Expert Leadership"
-msgstr ""
+msgstr "Експертно лидерство"
 
 msgid "campaignBonus|Basic Logistics"
-msgstr ""
+msgstr "Основна логистика"
 
 msgid "campaignBonus|Advanced Logistics"
-msgstr ""
+msgstr "Разширена логистика"
 
 msgid "campaignBonus|Expert Logistics"
-msgstr ""
+msgstr "Експертна логистика"
 
 msgid "campaignBonus|Basic Luck"
-msgstr ""
+msgstr "Основнен късмет"
 
 msgid "campaignBonus|Advanced Luck"
-msgstr ""
+msgstr "Разширен късмет"
 
 msgid "campaignBonus|Expert Luck"
-msgstr ""
+msgstr "Експертен късмет"
 
 msgid "campaignBonus|Basic Mysticism"
-msgstr ""
+msgstr "Основен мистицизъм"
 
 msgid "campaignBonus|Advanced Mysticism"
-msgstr ""
+msgstr "Разширен мистицизъм"
 
 msgid "campaignBonus|Expert Mysticism"
-msgstr ""
+msgstr "Експертен мистицизъм"
 
 msgid "campaignBonus|Basic Navigation"
-msgstr ""
+msgstr "Основна навигация"
 
 msgid "campaignBonus|Advanced Navigation"
-msgstr ""
+msgstr "Разширена навигация"
 
 msgid "campaignBonus|Expert Navigation"
-msgstr ""
+msgstr "Експертна навигация"
 
 msgid "campaignBonus|Basic Necromancy"
-msgstr ""
+msgstr "Основна некромантия"
 
 msgid "campaignBonus|Advanced Necromancy"
-msgstr ""
+msgstr "Разширена некромантия"
 
 msgid "campaignBonus|Expert Necromancy"
-msgstr ""
+msgstr "Експертна некромантия"
 
 msgid "campaignBonus|Basic Pathfinding"
-msgstr ""
+msgstr "Основно намиране на пътя"
 
 msgid "campaignBonus|Advanced Pathfinding"
-msgstr ""
+msgstr "Разширено намиране на пътя"
 
 msgid "campaignBonus|Expert Pathfinding"
-msgstr ""
+msgstr "Експертно намиране на пътя"
 
 msgid "campaignBonus|Basic Scouting"
-msgstr ""
+msgstr "Основно скаутство"
 
 msgid "campaignBonus|Advanced Scouting"
-msgstr ""
+msgstr "Разширено скаутство"
 
 msgid "campaignBonus|Expert Scouting"
-msgstr ""
+msgstr "Експертно скаутство"
 
 msgid "campaignBonus|Basic Wisdom"
-msgstr ""
+msgstr "Основна мъдрост"
 
 msgid "campaignBonus|Advanced Wisdom"
-msgstr ""
+msgstr "Разширена мъдрост"
 
 msgid "campaignBonus|Expert Wisdom"
-msgstr ""
+msgstr "Експертна мъдрост"
 
 msgid "campaignBonus|Animate Dead"
-msgstr ""
+msgstr "Анимирайте мъртвите"
 
 msgid "campaignBonus|Chain Lightning"
-msgstr ""
+msgstr "Верижна светкавица"
 
 msgid "campaignBonus|Fireblast"
-msgstr ""
+msgstr "Огнена експлозия"
 
 msgid "campaignBonus|Mass Curse"
-msgstr ""
+msgstr "Масово проклятие"
 
 msgid "campaignBonus|Mass Haste"
-msgstr ""
+msgstr "Масово бързане"
 
 msgid "campaignBonus|Mirror Image"
-msgstr ""
+msgstr "Огледална картина"
 
 msgid "campaignBonus|Resurrect"
-msgstr ""
+msgstr "Възкръсни"
 
 msgid "campaignBonus|Steelskin"
-msgstr ""
+msgstr "Стоманена кожа"
 
 msgid "campaignBonus|Summon Earth"
-msgstr ""
+msgstr "Призови Земята"
 
 msgid "campaignBonus|View Heroes"
-msgstr ""
+msgstr "Преглед на героите"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
 "scenario."
-msgstr ""
+msgstr "Главният герой ще има артефакт \"%{artifact}\" в началото на сценария."
 
 msgid ""
 "The kingdom will receive %{amount} additional %{resource} at the start of "
 "the scenario."
 msgstr ""
+"Кралството ще получи %{amount} допълнителни %{resource} в началото на "
+"сценария."
 
 msgid ""
 "The kingdom will have %{amount} less %{resource} at the start of the "
 "scenario."
 msgstr ""
+"Кралството ще има %{amount} по-малко %{resource} в началото на сценария."
 
 msgid ""
 "The main hero will have %{count} %{monster} at the start of the scenario."
-msgstr ""
+msgstr "Главният герой ще има %{count} %{monster} в началото на сценария."
 
 msgid ""
 "The main hero will have \"%{spell}\" spell at the start of the scenario."
-msgstr ""
+msgstr "Главният герой ще има заклинание \"%{spell}\" в началото на сценария."
 
 msgid "The starting race of the scenario will be %{race}."
-msgstr ""
+msgstr "Началното състезание на сценария ще бъде %{race}."
 
 msgid ""
 "The main hero will have additional %{count} %{skill} at the start of the "
 "scenario."
 msgstr ""
+"Главният герой ще има допълнителни %{count} %{skill} в началото на сценария."
 
 msgid "The main hero will have %{skill} at the start of the scenario."
-msgstr ""
+msgstr "The main hero will have %{skill} at the start of the scenario."
 
 msgid "Roland"
-msgstr ""
+msgstr "Роланд"
 
 msgid "Archibald"
-msgstr ""
+msgstr "Арчибалд"
 
 msgid "The Price of Loyalty"
-msgstr ""
+msgstr "Цената на лоялността"
 
 msgid "Voyage Home"
-msgstr ""
+msgstr "Пътуване към дома"
 
 msgid "Wizard's Isle"
-msgstr ""
+msgstr "Островът на магьосника"
 
 msgid "Descendants"
-msgstr ""
+msgstr "Потомци"
 
 msgid "The %{building} produces %{monster}."
-msgstr ""
+msgstr "%{building} произвежда %{monster}."
 
 msgid "Requires:"
-msgstr ""
+msgstr "Изисква:"
 
 msgid "Cannot build. You have already built here today."
-msgstr ""
+msgstr "Не може да се строи. Ти вече си построил тук днес."
 
 msgid "For this action it is necessary to build a castle first."
-msgstr ""
+msgstr "За това действие е необходимо първо да построиш замък."
 
 msgid "Cannot build %{name} because castle is too far from water."
 msgstr ""
+"Не може да се построи %{name}, защото замъкът е твърде далеч от водата."
 
 msgid "disable build."
-msgstr ""
+msgstr "спрете изграждането."
 
 msgid "Cannot afford %{name}."
-msgstr ""
+msgstr "Не мога да си позволя %{name}."
 
 msgid "%{name} is already built."
-msgstr ""
+msgstr "%{name} вече е изграден."
 
 msgid "Cannot build %{name}."
-msgstr ""
+msgstr "Не може да се изгради %{name}."
 
 msgid "Build %{name}."
-msgstr ""
+msgstr "Построй %{name}."
 
 msgid "Blackridge"
-msgstr ""
+msgstr "Блекридж"
 
 msgid "Hillstone"
-msgstr ""
+msgstr "Хилстоун"
 
 msgid "Pinehurst"
-msgstr ""
+msgstr "Пайнхърст"
 
 msgid "Whiteshield"
-msgstr ""
+msgstr "Бял щит"
 
 msgid "Woodhaven"
-msgstr ""
+msgstr "Удхейвън"
 
 msgid "Blackwind"
-msgstr ""
+msgstr "Черен вятър"
 
 msgid "Bloodreign"
-msgstr ""
+msgstr "Блъдрейн"
 
 msgid "Dragontooth"
-msgstr ""
+msgstr "Драконов зъб"
 
 msgid "Greywind"
-msgstr ""
+msgstr "Сив вятър"
 
 msgid "Portsmith"
-msgstr ""
+msgstr "Портсмит"
 
 msgid "Atlantium"
-msgstr ""
+msgstr "Атлантиум"
 
 msgid "Middle Gate"
-msgstr ""
+msgstr "Средна порта"
 
 msgid "Sansobar"
-msgstr ""
+msgstr "Сансибар"
 
 msgid "Tundara"
-msgstr ""
+msgstr "Тундара"
 
 msgid "Vulcania"
-msgstr ""
+msgstr "Вулкания"
 
 msgid "Baywatch"
-msgstr ""
+msgstr "Бейвоч"
 
 msgid "Fountainhead"
-msgstr ""
+msgstr "Глава на фонтан"
 
 msgid "Vertigo"
-msgstr ""
+msgstr "Световъртеж"
 
 msgid "Wildabar"
-msgstr ""
+msgstr "Вайлдабар"
 
 msgid "Winterkill"
-msgstr ""
+msgstr "Зимно убийство"
 
 msgid "Brindamoor"
-msgstr ""
+msgstr "Бриндамур"
 
 msgid "Lakeside"
-msgstr ""
+msgstr "Лейксайд"
 
 msgid "Nightshadow"
-msgstr ""
+msgstr "Нощтна сянка"
 
 msgid "Olympus"
-msgstr ""
+msgstr "Олимпус"
 
 msgid "Sandcaster"
-msgstr ""
+msgstr "Пясъчен колело"
 
 msgid "Alamar"
-msgstr ""
+msgstr "Алмар"
 
 msgid "Burlock"
-msgstr ""
+msgstr "Бурлог"
 
 msgid "Dragadune"
-msgstr ""
+msgstr "Драгадюн"
 
 msgid "Kalindra"
-msgstr ""
+msgstr "Калиндра"
 
 msgid "Xabran"
-msgstr ""
+msgstr "Ексабран"
 
 msgid "Algary"
-msgstr ""
+msgstr "Алгари"
 
 msgid "Basenji"
-msgstr ""
+msgstr "Басенджи"
 
 msgid "Blackfang"
-msgstr ""
+msgstr "Черензъб"
 
 msgid "New Dawn"
-msgstr ""
+msgstr "Нова Зора"
 
 msgid "Sorpigal"
-msgstr ""
+msgstr "Сорпигал"
 
 msgid "Avone"
-msgstr ""
+msgstr "Авон"
 
 msgid "Big Oak"
-msgstr ""
+msgstr "Голям Дъб"
 
 msgid "Chandler"
-msgstr ""
+msgstr "Чандлър"
 
 msgid "Erliquin"
-msgstr ""
+msgstr "Ерликвин"
 
 msgid "Hampshire"
-msgstr ""
+msgstr "Хемпшир"
 
 msgid "Antioch"
-msgstr ""
+msgstr "Антиохия"
 
 msgid "Avalon"
-msgstr ""
+msgstr "Авалон"
 
 msgid "Roc Haven"
-msgstr ""
+msgstr "Рок Хейвън"
 
 msgid "South Mill"
-msgstr ""
+msgstr "Южна Мелница"
 
 msgid "Weed Patch"
-msgstr ""
+msgstr "Къс Трева"
 
 msgid "Brownston"
-msgstr ""
+msgstr "Браунстън"
 
 msgid "Hilltop"
-msgstr ""
+msgstr "Хълм"
 
 msgid "Weddington"
-msgstr ""
+msgstr "Уедингтън"
 
 msgid "Westfork"
-msgstr ""
+msgstr "Уестфорк"
 
 msgid "Whittingham"
-msgstr ""
+msgstr "Уитингам"
 
 msgid "Cathcart"
-msgstr ""
+msgstr "Каткарт"
 
 msgid "Elk's Head"
-msgstr ""
+msgstr "Елкова глава"
 
 msgid "Roscomon"
-msgstr ""
+msgstr "Роскомън"
 
 msgid "Sherman"
-msgstr ""
+msgstr "Шърман"
 
 msgid "Yorksford"
-msgstr ""
+msgstr "Йорксфорд"
 
 msgid "Blackburn"
-msgstr ""
+msgstr "Блекбърн"
 
 msgid "Blacksford"
-msgstr ""
+msgstr "Блексфорд"
 
 msgid "Burton"
-msgstr ""
+msgstr "Бъртън"
 
 msgid "Pig's Eye"
-msgstr ""
+msgstr "Свинско Око"
 
 msgid "Viper's Nest"
-msgstr ""
+msgstr "Гнездото на усойница"
 
 msgid "Fenton"
-msgstr ""
+msgstr "Фентън"
 
 msgid "Lankershire"
-msgstr ""
+msgstr "Ланкършър"
 
 msgid "Lombard"
-msgstr ""
+msgstr "Ломбард"
 
 msgid "Timberhill"
-msgstr ""
+msgstr "Тимбърхил"
 
 msgid "Troy"
-msgstr ""
+msgstr "Троя"
 
 msgid "Forder Oaks"
-msgstr ""
+msgstr "Фордър Оукс"
 
 msgid "Meramec"
-msgstr ""
+msgstr "Мерамец"
 
 msgid "Quick Silver"
-msgstr ""
+msgstr "Куиксилвър"
 
 msgid "Westmoor"
-msgstr ""
+msgstr "Западно Тресавище"
 
 msgid "Willow"
-msgstr ""
+msgstr "Уилоу"
 
 msgid "Corackston"
-msgstr ""
+msgstr "Коракстън"
 
 msgid "Sheltemburg"
-msgstr ""
+msgstr "Шелтембург"
 
 msgid "Cannot recruit - guest to guard automove error."
 msgstr ""
@@ -3143,6 +3275,12 @@ msgid "Campaign Scenario loading failure"
 msgstr ""
 
 msgid "Please make sure that campaign files are correct and present."
+msgstr ""
+
+msgid "Days spent"
+msgstr ""
+
+msgid "The number of days spent on this campaign."
 msgstr ""
 
 msgid "Project Coordination and Core Development"

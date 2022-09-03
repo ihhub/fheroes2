@@ -1277,6 +1277,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         choiceArea[i].width += 170;
     }
 
+    const fheroes2::Rect areaDaysSpent{ top.x + 413, top.y + 27, 201, 25 };
+
     const std::array<Game::HotKeyEvent, 3> hotKeyBonusChoice{ Game::HotKeyEvent::CAMPAIGN_SELECT_FIRST_BONUS, Game::HotKeyEvent::CAMPAIGN_SELECT_SECOND_BONUS,
                                                               Game::HotKeyEvent::CAMPAIGN_SELECT_THIRD_BONUS };
 
@@ -1389,6 +1391,10 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
             playCurrentScenarioVideo();
 
             playCampaignMusic( chosenCampaignID );
+        }
+        else if ( le.MousePressRight( areaDaysSpent ) ) {
+            fheroes2::showMessage( fheroes2::Text( _( "Days spent" ), fheroes2::FontType::normalYellow() ),
+                                   fheroes2::Text( _( "The number of days spent on this campaign." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
         }
         else if ( le.MouseClickLeft( buttonDifficulty.area() ) ) {
             campaignSaveData.setDifficulty( setCampaignDifficulty( campaignSaveData.getDifficulty(), isDifficultySelectionAllowed ) );

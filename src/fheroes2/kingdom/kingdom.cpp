@@ -896,8 +896,23 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
 
 cost_t Kingdom::_getKingdomStartingResources( const int difficulty ) const
 {
-    if ( isControlAI() )
+    if ( isControlAI() ) {
+        switch ( difficulty ) {
+        case Difficulty::EASY:
+        case Difficulty::NORMAL:
+            return { 7500, 20, 5, 20, 5, 5, 5 };
+        case Difficulty::HARD:
+        case Difficulty::EXPERT:
+        case Difficulty::IMPOSSIBLE:
+            return { 10000, 30, 10, 30, 10, 10, 10 };
+        default:
+            // Did you add a new difficulty level?
+            assert( 0 );
+            break;
+        }
+
         return { 10000, 30, 10, 30, 10, 10, 10 };
+    }
 
     switch ( difficulty ) {
     case Difficulty::EASY:
