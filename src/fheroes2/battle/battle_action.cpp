@@ -162,10 +162,10 @@ void Battle::Arena::BattleProcess( Unit & attacker, Unit & defender, int32_t dst
         _interface->RedrawActionAttackPart1( attacker, defender, attackTargets );
     }
 
-    TargetsApplyDamage( attacker, attackTargets );
+    uint32_t resurrect = TargetsApplyDamage( attacker, attackTargets );
 
     if ( _interface ) {
-        _interface->RedrawActionAttackPart2( attacker, attackTargets );
+        _interface->RedrawActionAttackPart2( attacker, attackTargets, resurrect );
     }
 
     // Then apply the attacker's built-in spell
@@ -633,13 +633,18 @@ void Battle::Arena::ApplyActionSurrender( const Command & /*cmd*/ )
     }
 }
 
-void Battle::Arena::TargetsApplyDamage( Unit & attacker, TargetsInfo & targets )
+uint32_t Battle::Arena::TargetsApplyDamage( Unit & attacker, TargetsInfo & targets )
 {
+    uint32_t resurrect = 0;
     for ( TargetInfo & target : targets ) {
         assert( target.defender != nullptr && target.defender->isValid() );
 
-        target.killed = target.defender->ApplyDamage( attacker, target.damage );
+        std::pair<uint32_t, uint32_t> results = target.defender->ApplyDamage( attacker, target.damage );
+        target.killed = results.first;
+        resurrect += results.second;
     }
+
+    return resurrect;
 }
 
 Battle::TargetsInfo Battle::Arena::GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const
@@ -961,7 +966,7 @@ void Battle::Arena::ApplyActionTower( Command & cmd )
 
         if ( _interface )
             _interface->RedrawActionTowerPart1( *tower, *unit );
-        target.killed = unit->ApplyDamage( *tower, target.damage );
+        target.killed = unit->ApplyDamage( *tower, target.damage ).first;
         if ( _interface )
             _interface->RedrawActionTowerPart2( *tower, target );
     }

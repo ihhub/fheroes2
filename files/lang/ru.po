@@ -560,6 +560,18 @@ msgstr[0] "%{count} %{defender} погиб."
 msgstr[1] "%{count} %{defender} погибли."
 msgstr[2] "%{count} %{defender} погибли."
 
+msgid "1 unit rised."
+msgid_plural "%{count} units revived."
+msgstr[0] "%{count} %{unit} воскрес."
+msgstr[1] "%{count} %{unit} воскресли."
+msgstr[2] "%{count} %{unit} воскресли."
+
+msgid "1 soul drained."
+msgid_plural "%{count} souls drained."
+msgstr[0] "%{count} душа опустошена."
+msgstr[1] "%{count} душ опустошено."
+msgstr[2] "%{count} душ опустошено."
+
 msgid "Moved %{monster}: %{src}, %{dst}"
 msgstr "%{monster} переместились: %{src}, %{dst}"
 

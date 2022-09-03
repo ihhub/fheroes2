@@ -710,10 +710,10 @@ uint32_t Battle::Unit::Resurrect( uint32_t points, bool allow_overflow, bool ski
     return resurrect;
 }
 
-uint32_t Battle::Unit::ApplyDamage( Unit & enemy, uint32_t dmg )
+std::pair<uint32_t, uint32_t> Battle::Unit::ApplyDamage( Unit & enemy, uint32_t dmg )
 {
     uint32_t killed = ApplyDamage( dmg );
-    uint32_t resurrect;
+    uint32_t resurrect = 0;
 
     if ( killed )
         switch ( enemy.GetID() ) {
@@ -721,21 +721,21 @@ uint32_t Battle::Unit::ApplyDamage( Unit & enemy, uint32_t dmg )
             resurrect = killed * static_cast<Monster &>( enemy ).GetHitPoints();
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrect )
             // grow troop
-            enemy.Resurrect( resurrect, true, false );
+            resurrect = enemy.Resurrect( resurrect, true, false );
             break;
 
         case Monster::VAMPIRE_LORD:
             resurrect = killed * Monster::GetHitPoints();
             DEBUG_LOG( DBG_BATTLE, DBG_TRACE, String() << ", enemy: " << enemy.String() << " resurrect: " << resurrect )
             // restore hit points
-            enemy.Resurrect( resurrect, false, false );
+            resurrect = enemy.Resurrect( resurrect, false, false );
             break;
 
         default:
             break;
         }
 
-    return killed;
+    return std::pair{ killed, resurrect };
 }
 
 bool Battle::Unit::AllowApplySpell( const Spell & spell, const HeroBase * hero, std::string * msg, bool forceApplyToAlly ) const
