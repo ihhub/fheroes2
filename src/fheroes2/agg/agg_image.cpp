@@ -454,16 +454,16 @@ namespace fheroes2
                     // clean up 'M'
                     Fill( out, 15 - i, 5 + i, 3, 1, getButtonFillingColor( i == 0 ) );
                     Fill( out, 14 - i, 6 + i, 1, 1, getButtonFillingColor( i == 0 ) );
-                    // add button "flair"
+                    // add button decorations
                     Copy( GetICN( ICN::RECRUIT, 4 + i ), 11 - i, 4 + i, out, 11 - i, 4 + i, 3, 3 );
-                    Copy( GetICN( ICN::RECRUIT, 4 + i ), 13 - i, 2 + i, out, 15 - i, 4 + i, 1, 1 );
-                    Copy( GetICN( ICN::RECRUIT, 4 + i ), 13 - i, 2 + i, out, 14 - i, 5 + i, 1, 1 );
+                    Copy( GetICN( ICN::RECRUIT, 4 + i ), 13 - i, 2 + 3 * i, out, 15 - i, 4 + i, 1, 1 );
+                    Copy( GetICN( ICN::RECRUIT, 4 + i ), 13 - i, 2 + 3 * i, out, 14 - i, 5 + i, 1, 1 );
                     // add 'I'
                     Copy( GetICN( ICN::APANEL, 4 + i ), 23 - i, 21 + i, out, 33 - i, 5 + i, 8, 14 );
                     // add 'N'
                     Copy( GetICN( ICN::APANEL, 4 + i ), 31 - i, 21 + i, out, 40 - i, 5 + i, 18 - i, 14 );
-                    // add button "flair"
-                    Copy( GetICN( ICN::RECRUIT, 4 + i ), 12 - i, 3 + i, out, 54 - i, 4 + i, 1, 1 );
+                    // add button decorations
+                    Copy( GetICN( ICN::RECRUIT, 4 + i ), 12 - i, 3 + 2 * i, out, 54 - i, 4 + i, 1, 1 );
                 }
                 return true;
             default:
