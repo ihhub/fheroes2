@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-02 03:05+0000\n"
-"PO-Revision-Date: 2022-09-03 10:57+0200\n"
+"PO-Revision-Date: 2022-09-05 20:39+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -361,7 +361,7 @@ msgid "Cancel"
 msgstr "Annuler"
 
 msgid "Hero Screen"
-msgstr "Écran Héros"
+msgstr "Fenêtre du Héros"
 
 msgid "Captain's Options"
 msgstr "Options du capitaine"
@@ -391,7 +391,8 @@ msgstr ""
 
 msgid "Open Hero Screen to view full information about the hero."
 msgstr ""
-"Ouvrir l'écran Héros pour afficher toutes les informations sur le héros."
+"Ouvrir la Fenêtre du Héros pour afficher toutes les informations sur le "
+"héros."
 
 msgid "Return to the battle."
 msgstr "Retourner à la bataille."
@@ -525,7 +526,7 @@ msgstr ""
 "Affiche le déroulement du combat et indique toutes les actions individuelles."
 
 msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Êtes vous sûr de vouloir finir la bataille dans la mode combat auto ?"
+msgstr "Êtes vous sûr de vouloir finir la bataille en mode combat auto ?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} passent le tour."
@@ -536,8 +537,8 @@ msgstr "%{name} attendent."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
-msgstr[0] "La troupe de %{attacker} inflige %{damage} de dégâts."
-msgstr[1] "Les %{attacker} infligent %{damage} de dégâts."
+msgstr[0] "%{attacker} inflige %{damage} dégâts."
+msgstr[1] "Les %{attacker} infligent %{damage} dégâts."
 
 # if only 1 monster: "... inflige ..."
 msgid "1 creature perishes."
@@ -584,28 +585,22 @@ msgid "The %{spell} does %{damage} damage to all living creatures."
 msgstr "%{spell} inflige %{value} dégâts à toutes les créatures vivantes."
 
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr "L'attaque de la troupe de %{attacker} aveugle la troupe de %{target} !"
+msgstr "L'attaque de %{attacker} aveugle %{target} !"
 
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr ""
-"Le regard de la troupe de %{attacker} transforme la troupe de %{target} en "
-"pierre !"
+msgstr "Le regard de %{attacker} transforme %{target} en pierre !"
 
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr ""
-"La malédiction de la troupe de %{attacker} s'abat sur la troupe de "
-"%{target} !"
+msgstr "La malédiction de %{attacker} s'abat sur %{target} !"
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
 msgstr "La troupe de %{target} est paralysée par %{attacker} !"
 
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr ""
-"La troupe de %{attacker} dissipe tous les sorts bénéfiques sur vos "
-"%{target} !"
+msgstr "%{attacker} dissipe tous les sorts bénéfiques sur %{target} !"
 
 msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr "La troupe de %{attacker} lance %{spell} sur la troupe de %{target} !"
+msgstr "%{attacker} lance %{spell} sur %{target} !"
 
 msgid "Bad luck descends on the %{attacker}."
 msgstr "La malchance s'abat sur les %{attacker}."
@@ -3528,16 +3523,16 @@ msgid "Town Themes"
 msgstr "Thèmes des châteaux"
 
 msgid "Alto Sax"
-msgstr "Sax alto"
+msgstr "Saxo alto"
 
 msgid "Harpsichord and Piano"
 msgstr "Clavecin et piano"
 
 msgid "Basso Vocal"
-msgstr "Vocal basso"
+msgstr "Basse (Voix)"
 
 msgid "Soprano Vocal"
-msgstr "Voix de soprano"
+msgstr "Soprano (Voix)"
 
 msgid "Recorded at Green Street Studios"
 msgstr "Enregistrée aux Green Street Studios"
@@ -5969,7 +5964,7 @@ msgid "Set army combat formation to 'Grouped'"
 msgstr "Utiliser la formation de combat 'Groupée'"
 
 msgid "Exit Hero Screen"
-msgstr "Quitter l'écran Héros"
+msgstr "Quitter la Fenêtre du Héros"
 
 msgid "You cannot dismiss a hero in a castle"
 msgstr "Vous ne pouvez pas renvoyer un héros dans un château"
