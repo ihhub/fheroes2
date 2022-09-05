@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-02 03:05+0000\n"
-"PO-Revision-Date: 2022-09-05 20:39+0200\n"
+"PO-Revision-Date: 2022-09-05 21:00+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
@@ -3334,26 +3334,27 @@ msgid ""
 "Choose this difficulty if you want to prefer game story over challenge. AI "
 "is weaker in comparison with normal difficulty."
 msgstr ""
-"Choisissez cette difficulté si vous préférez l'histoire du jeu au gameplay."
+"Choisissez cette difficulté si vous préférez profiter de l'histoire du jeu "
+"sans challenge. L'IA est plus faible dans ce mode de difficulté."
 
 msgid ""
 "Choose this difficulty to enjoy the campaign as per the original design."
 msgstr ""
-"Choisissez cette difficulté si vous préférez la campagne comme elle était "
-"originalement."
+"Choisissez cette difficulté si vous préférez profiter de l'histoire du jeu "
+"d'origine."
 
 msgid ""
 "Choose this difficulty if you want challenge. AI is stronger in comparison "
 "with normal difficulty."
 msgstr ""
-"Choisissez cette difficulté si vous voulez du challenge. L'IA sera plus "
-"forte par rapport à la difficulté normale."
+"Choisissez cette difficulté si vous voulez un vrai challenge. L'IA sera plus "
+"forte dans ce mode de difficulté."
 
 msgid "Easy"
 msgstr "Facile"
 
 msgid "Normal"
-msgstr "Normale"
+msgstr "Normal"
 
 msgid "Hard"
 msgstr "Difficile"
@@ -3369,8 +3370,8 @@ msgstr "Voir la vidéo d'introduction du scénario actuel."
 
 msgid "Select campaign difficulty. It cannot be changed after."
 msgstr ""
-"Choisissez la difficulté de la campagne. Il ne peut pas être modifié plus "
-"tard."
+"Choisissez la difficulté de la campagne. Elle ne pourra pas être modifié par "
+"la suite."
 
 msgid "Restart"
 msgstr "Recommencer"
@@ -3430,7 +3431,7 @@ msgid "Original project before 0.7"
 msgstr "Projet original avant 0.7"
 
 msgid "Heroes of Might and Magic II: The Succession Wars team"
-msgstr "L'équipe de Heroes of Might and Magic II"
+msgstr "L'équipe de Heroes of Might and Magic II: The Succession Wars"
 
 msgid "Designed and Directed"
 msgstr "Conçu et réalisé"
@@ -3484,19 +3485,19 @@ msgid "Scenarios"
 msgstr "Scénarios"
 
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
-msgstr "L'équipe de Heroes of Might and Magic II"
+msgstr "L'équipe de Heroes of Might and Magic II: The Price of Loyalty"
 
 msgid "Cyberlore Studios"
 msgstr ""
 
 msgid "Design Lead"
-msgstr "Chef du design"
+msgstr "Chef du projet"
 
 msgid "Designers"
 msgstr "Concepteurs"
 
 msgid "Programming Lead"
-msgstr "Chef de Programmation"
+msgstr "Responsable de Programmation"
 
 msgid "Art Lead"
 msgstr "Responsable artistique"
@@ -3511,16 +3512,16 @@ msgid "Designer"
 msgstr "Concepteur"
 
 msgid "Producers"
-msgstr "Producteur"
+msgstr "Producteurs"
 
 msgid "QA Managers"
 msgstr "Responsables AQ"
 
 msgid "Sound Design"
-msgstr "Design sonore"
+msgstr "Conception sonore"
 
 msgid "Town Themes"
-msgstr "Thèmes des châteaux"
+msgstr "Thèmes des villages"
 
 msgid "Alto Sax"
 msgstr "Saxo alto"
@@ -3538,13 +3539,13 @@ msgid "Recorded at Green Street Studios"
 msgstr "Enregistrée aux Green Street Studios"
 
 msgid "German Consultant"
-msgstr "Consultant de l'allemand"
+msgstr "Consultant Allemand"
 
 msgid "Map Designers"
 msgstr "Concepteurs de cartes"
 
 msgid "Package Design"
-msgstr "Conception de l'emballage"
+msgstr "Conception du conditionnement"
 
 msgid "Unknown Hero"
 msgstr "Héros Inconnu"
