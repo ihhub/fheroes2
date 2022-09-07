@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-02 03:05+0000\n"
-"PO-Revision-Date: 2022-09-07 12:38+0200\n"
+"PO-Revision-Date: 2022-09-07 12:49+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -369,10 +369,8 @@ msgstr "Anuluj"
 msgid "Hero Screen"
 msgstr "Ekran bohatera"
 
-#, fuzzy
-#| msgid "Castle Options"
 msgid "Captain's Options"
-msgstr "Opcje zamku"
+msgstr "Opcje kapitana"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
@@ -507,18 +505,14 @@ msgstr ""
 "Powoduje pominięcie aktualnej jednostki. Traci ona swoją turę i może ruszyć "
 "się ponownie dopiero w następnej rundzie."
 
-#, fuzzy
-#| msgid "View Hero's options"
 msgid "View Captain's options"
-msgstr "Opcje bohatera"
+msgstr "Opcje kapitana"
 
 msgid "View Hero's options"
 msgstr "Opcje bohatera"
 
-#, fuzzy
-#| msgid "View opposing Hero"
 msgid "View opposing Captain"
-msgstr "Obejrzyj wrogiego bohatera"
+msgstr "Obejrzyj wrogiego kapitana"
 
 msgid "View opposing Hero"
 msgstr "Obejrzyj wrogiego bohatera"
