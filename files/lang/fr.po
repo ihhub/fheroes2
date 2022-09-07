@@ -3539,7 +3539,7 @@ msgid "Recorded at Green Street Studios"
 msgstr "Enregistrée aux Green Street Studios"
 
 msgid "German Consultant"
-msgstr "Consultant Allemand"
+msgstr "Consultant allemand"
 
 msgid "Map Designers"
 msgstr "Concepteurs de cartes"
