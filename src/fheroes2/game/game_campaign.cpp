@@ -1398,6 +1398,7 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
         }
         else if ( le.MouseClickLeft( buttonDifficulty.area() ) ) {
             campaignSaveData.setDifficulty( setCampaignDifficulty( campaignSaveData.getDifficulty(), isDifficultySelectionAllowed ) );
+            display.render();
         }
     }
 
