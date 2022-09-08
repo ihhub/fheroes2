@@ -7909,7 +7909,7 @@ msgstr ""
 "Malutki leprekaun tańczy radośnie wokół magicznego worka. Widząc, że "
 "nadchodzisz zatrzymuje się w pół kroku. Niewielki człowieczek z okrzykiem "
 "tupie nogą, rozpływając się w powietrzu. Przypominając sobie stare "
-"powiedzenie leprekaunów \"Znalezione - nie kradzione\" zabierasz worek i "
+"powiedzenie leprekaunów \"znalezione - nie kradzione\" zabierasz worek i "
 "odchodzisz."
 
 msgid "Endless Bag of Gold"
