@@ -233,13 +233,6 @@ public:
         return MouseReleaseLeft() && ( rt & mouse_rl );
     }
 
-    bool MouseReleaseRight() const;
-
-    bool MouseReleaseRight( const fheroes2::Rect & rt ) const
-    {
-        return MouseReleaseRight() && ( rt & mouse_rr );
-    }
-
     bool MouseWheelUp( const fheroes2::Rect & rt ) const
     {
         return MouseWheelUp() && ( rt & mouse_cu );

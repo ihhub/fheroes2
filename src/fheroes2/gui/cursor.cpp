@@ -31,8 +31,6 @@
 
 Cursor::Cursor()
     : theme( NONE )
-    , offset_x( 0 )
-    , offset_y( 0 )
     , _monochromeCursorThemes( false )
 {
     // Do nothing.
@@ -71,7 +69,7 @@ bool Cursor::SetThemes( int name, bool force )
         }
         const fheroes2::Sprite & spr = fheroes2::AGG::GetICN( icnID, 0xFF & name );
         SetOffset( name, { ( spr.width() - spr.x() ) / 2, ( spr.height() - spr.y() ) / 2 } );
-        fheroes2::cursor().update( spr, -offset_x, -offset_y );
+        fheroes2::cursor().update( spr, -_offset.x, -_offset.y );
 
         // immediately apply new offset, force
         const fheroes2::Point & currentPos = LocalEvent::Get().GetMouseCursor();
@@ -80,6 +78,19 @@ bool Cursor::SetThemes( int name, bool force )
     }
 
     return false;
+}
+
+void Cursor::setCustomImage( const fheroes2::Image & image, const fheroes2::Point & offset )
+{
+    theme = NONE;
+
+    fheroes2::cursor().update( image, 0, 0 );
+
+    // Immediately apply new mouse offset.
+    const fheroes2::Point & currentPos = LocalEvent::Get().GetMouseCursor();
+    _offset = offset;
+
+    Move( currentPos.x, currentPos.y );
 }
 
 void Cursor::Redraw( int32_t x, int32_t y )
@@ -94,7 +105,7 @@ void Cursor::Redraw( int32_t x, int32_t y )
 
 void Cursor::Move( int32_t x, int32_t y ) const
 {
-    fheroes2::cursor().setPosition( x + offset_x, y + offset_y );
+    fheroes2::cursor().setPosition( x + _offset.x, y + _offset.y );
 }
 
 void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
@@ -111,56 +122,46 @@ void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
     case Cursor::CURSOR_HERO_FIGHT_6:
     case Cursor::CURSOR_HERO_FIGHT_7:
     case Cursor::CURSOR_HERO_FIGHT_8:
-        offset_x = 0;
-        offset_y = 0;
+        _offset = { 0, 0 };
         break;
 
     case Cursor::SCROLL_TOPRIGHT:
     case Cursor::SCROLL_RIGHT:
-        offset_x = -15;
-        offset_y = 0;
+        _offset = { -15, 0 };
         break;
 
     case Cursor::SCROLL_BOTTOM:
     case Cursor::SCROLL_BOTTOMLEFT:
-        offset_x = 0;
-        offset_y = -15;
+        _offset = { 0, -15 };
         break;
 
     case Cursor::SCROLL_BOTTOMRIGHT:
     case Cursor::SWORD_BOTTOMRIGHT:
-        offset_x = -20;
-        offset_y = -20;
+        _offset = { -20, -20 };
         break;
 
     case Cursor::SWORD_BOTTOMLEFT:
-        offset_x = -5;
-        offset_y = -20;
+        _offset = { -5, -20 };
         break;
 
     case Cursor::SWORD_TOPLEFT:
-        offset_x = -5;
-        offset_y = -5;
+        _offset = { -5, -5 };
         break;
 
     case Cursor::SWORD_TOPRIGHT:
-        offset_x = -20;
-        offset_y = -5;
+        _offset = { -20, -5 };
         break;
 
     case Cursor::SWORD_LEFT:
-        offset_x = -5;
-        offset_y = -7;
+        _offset = { -5, -7 };
         break;
 
     case Cursor::SWORD_RIGHT:
-        offset_x = -25;
-        offset_y = -7;
+        _offset = { -25, -7 };
         break;
 
     default:
-        offset_x = -defaultOffset.x;
-        offset_y = -defaultOffset.y;
+        _offset = { -defaultOffset.x, -defaultOffset.y };
         break;
     }
 }
@@ -179,10 +180,13 @@ void Cursor::Refresh()
 
 int Cursor::DistanceThemes( const int theme, uint32_t distance )
 {
-    if ( 0 == distance )
+    if ( distance == 0 ) {
         return POINTER;
-    else if ( distance > 8 )
+    }
+
+    if ( distance > 8 ) {
         distance = 8;
+    }
 
     switch ( theme ) {
     case CURSOR_HERO_MOVE:

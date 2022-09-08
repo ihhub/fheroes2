@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-31 01:55+0000\n"
+"POT-Creation-Date: 2022-09-02 03:05+0000\n"
 "PO-Revision-Date: 2022-07-04 08:57+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -364,6 +364,10 @@ msgstr "Annuler"
 msgid "Hero Screen"
 msgstr "Écran Héros"
 
+#, fuzzy
+msgid "Captain's Options"
+msgstr "Voir les options du capitaine"
+
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
@@ -497,8 +501,14 @@ msgid ""
 msgstr ""
 "Le peloton actif passe son tour et ne peut pas jouer avant le prochain tour."
 
+msgid "View Captain's options"
+msgstr "Voir les options du capitaine"
+
 msgid "View Hero's options"
 msgstr "Voir les options du héros"
+
+msgid "View opposing Captain"
+msgstr "Voir le capitaine adverse"
 
 msgid "View opposing Hero"
 msgstr "Voir le héros adverse"
@@ -3384,6 +3394,12 @@ msgstr "Échec du chargement du scénario de campagne"
 
 msgid "Please make sure that campaign files are correct and present."
 msgstr "Assurez-vous que les fichiers de campagne sont corrects et présents."
+
+msgid "Days spent"
+msgstr ""
+
+msgid "The number of days spent on this campaign."
+msgstr ""
 
 msgid "Project Coordination and Core Development"
 msgstr "Coordination du projet et développement"
