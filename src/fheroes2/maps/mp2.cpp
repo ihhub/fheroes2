@@ -191,7 +191,7 @@ int MP2::GetICNObject( const uint8_t tileset )
 bool MP2::isHiddenForPuzzle( const int terrainType, uint8_t tileset, uint8_t index )
 {
     const int icnID = tileset >> 2;
-    if ( icnID < 22 || icnID == 46 || ( icnID == 56 && index == 140 ) ) {
+    if ( icnID < 22 || icnID == 46 || ( icnID == 56 && index == 140 ) || ( icnID == 59 && index >= 124 && index <= 137 ) ) {
         return true;
     }
 

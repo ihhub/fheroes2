@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-08 11:28+0000\n"
+"POT-Creation-Date: 2022-09-02 03:05+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -368,6 +368,10 @@ msgstr "Отмена"
 msgid "Hero Screen"
 msgstr "Экран героя"
 
+#, fuzzy
+msgid "Captain's Options"
+msgstr "Настройки замка"
+
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
@@ -503,8 +507,14 @@ msgstr ""
 "Пропустить ход для текущего отряда. Отряд пропускает ход до начала "
 "следующего раунда."
 
+msgid "View Captain's options"
+msgstr ""
+
 msgid "View Hero's options"
 msgstr "Опции героя"
+
+msgid "View opposing Captain"
+msgstr ""
 
 msgid "View opposing Hero"
 msgstr "Просмотреть вражеского героя"
@@ -520,6 +530,10 @@ msgstr ""
 
 msgid "Shows the results of individual monster's actions."
 msgstr ""
+
+#, fuzzy
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Вы уверены, что хотите распустить этот отряд?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} пропускают ход."
@@ -626,8 +640,9 @@ msgstr "Фантомный отряд создан!"
 msgid "The mirror image is destroyed!"
 msgstr "Фантомный отряд уничтожен!"
 
-msgid "Break auto battle?"
-msgstr "Остановить автобитву?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto battle?"
+msgstr "Вы действительно хотите отступить?"
 
 msgid "Error"
 msgstr "Ошибка"
@@ -2801,9 +2816,6 @@ msgstr ""
 "Условия\n"
 "поражения"
 
-msgid "Score: "
-msgstr "Счёт:"
-
 msgid "First select recipients!"
 msgstr "Сначала выберите получателя!"
 
@@ -3333,6 +3345,37 @@ msgstr "Невозможная"
 msgid "and more..."
 msgstr "и т.д."
 
+msgid "DIFFICULTY"
+msgstr ""
+
+#, fuzzy
+msgid "Campaign Difficulty"
+msgstr "Сложность игры"
+
+msgid ""
+"Choose this difficulty if you want to prefer game story over challenge. AI "
+"is weaker in comparison with normal difficulty."
+msgstr ""
+
+msgid ""
+"Choose this difficulty to enjoy the campaign as per the original design."
+msgstr ""
+
+msgid ""
+"Choose this difficulty if you want challenge. AI is stronger in comparison "
+"with normal difficulty."
+msgstr ""
+
+msgid "Easy"
+msgstr ""
+
+#, fuzzy
+msgid "Normal"
+msgstr "Нормальная"
+
+msgid "Hard"
+msgstr ""
+
 msgid "Start the selected scenario."
 msgstr ""
 
@@ -3341,6 +3384,9 @@ msgid "View Intro"
 msgstr "Просмотреть героя"
 
 msgid "View Intro videos for the current state of the campaign."
+msgstr ""
+
+msgid "Select campaign difficulty. It cannot be changed after."
 msgstr ""
 
 msgid "Restart"
@@ -3358,6 +3404,12 @@ msgstr "Сбой загрузки сценария кампании"
 
 msgid "Please make sure that campaign files are correct and present."
 msgstr "Пожалуйста, убедитесь, что файлы кампании верны и присутствуют."
+
+msgid "Days spent"
+msgstr "Затрачено дней"
+
+msgid "The number of days spent on this campaign."
+msgstr "Количество дней, потраченных на эту кампанию."
 
 msgid "Project Coordination and Core Development"
 msgstr "Координатор проекта и основной разработчик"
@@ -9343,14 +9395,8 @@ msgstr ""
 "суммарное здоровье которого не превышает\n"
 "%{hp} здоровья."
 
-msgid "game: remember last focus"
-msgstr "игра: запомнить последнюю позицию фокуса (героя/замка)"
-
 msgid "battle: show damage info"
 msgstr "битва: показывать урон"
-
-msgid "world: show terrain penalty"
-msgstr "мир: показывать штраф при перемещении"
 
 msgid "world: Scouting skill shows extended content info"
 msgstr "мир: навык разведки покажет дополнительную информацию"
@@ -9462,3 +9508,9 @@ msgstr ""
 "Новую версию игры можно найти на сайте:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Score: "
+#~ msgstr "Счёт:"
+
+#~ msgid "Break auto battle?"
+#~ msgstr "Остановить автобитву?"

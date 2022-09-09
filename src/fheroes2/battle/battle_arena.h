@@ -24,8 +24,10 @@
 #ifndef H2BATTLE_ARENA_H
 #define H2BATTLE_ARENA_H
 
+#include <array>
 #include <cstdint>
 #include <list>
+#include <memory>
 #include <utility>
 
 #include "battle.h"
@@ -104,10 +106,12 @@ namespace Battle
         Force & getEnemyForce( const int color ) const;
         Force & GetCurrentForce() const;
 
-        int GetArmyColor1() const;
-        int GetArmyColor2() const;
+        int GetArmy1Color() const;
+        int GetArmy2Color() const;
         int GetCurrentColor() const;
-        int GetOppositeColor( int ) const;
+        // Returns the color of the army opposite to the army of the given color. If there is no army of the given color,
+        // returns the color of the attacking army.
+        int GetOppositeColor( const int col ) const;
 
         Unit * GetTroopBoard( int32_t );
         const Unit * GetTroopBoard( int32_t ) const;
@@ -133,8 +137,8 @@ namespace Battle
         Indexes GetPath( const Unit &, const Position & ) const;
 
         // Returns the cell nearest to the end of the path to the cell with the given index (according to the AIBattlePathfinder)
-        // and reachable for the current unit (to which the current board passability information relates) or -1 if the cell
-        // with the given index is unreachable in principle
+        // and reachable for the current unit (to which the current board passability information relates) or -1 if the cell with
+        // the given index is unreachable in principle
         int32_t GetNearestReachableCell( const Unit & currentUnit, const int32_t dst ) const;
 
         void ApplyAction( Command & );
@@ -200,7 +204,7 @@ namespace Battle
         void SetCastleTargetValue( int, uint32_t );
         void CatapultAction();
 
-        static TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir );
+        TargetsInfo GetTargetsForDamage( const Unit & attacker, Unit & defender, const int32_t dst, const int dir ) const;
 
         static void TargetsApplyDamage( Unit & attacker, TargetsInfo & targets );
         static void TargetsApplySpell( const HeroBase * hero, const Spell & spell, TargetsInfo & targets );
@@ -219,7 +223,8 @@ namespace Battle
         void ApplyActionSpellCast( Command & );
         void ApplyActionTower( Command & );
         void ApplyActionCatapult( Command & );
-        void ApplyActionAutoBattle( Command & );
+        void ApplyActionAutoSwitch( Command & cmd );
+        void ApplyActionAutoFinish( const Command & cmd );
 
         // Performs an actual attack of one unit (defender) by another unit (attacker), applying the attacker's
         // built-in magic, if necessary. If the given index of the target cell of the attack (dst) is negative,
@@ -236,21 +241,23 @@ namespace Battle
         // position, which should be updated separately.
         Unit * CreateMirrorImage( Unit & unit );
 
-        Force * army1;
-        Force * army2;
-        Units * armies_order;
+        std::unique_ptr<Force> _army1;
+        std::unique_ptr<Force> _army2;
+        std::shared_ptr<Units> _orderOfUnits;
 
         int current_color;
-        int preferredColor; // preferred color for the next unit in the battle queue
+        // The color of the army of the last unit that performed a full-fledged action (skipping a turn due to
+        // bad morale is not considered as such)
+        int _lastActiveUnitArmyColor;
 
         const Castle * castle;
         const bool _isTown; // If the battle is in town (village or castle).
 
-        Tower * towers[3];
-        Catapult * catapult;
-        Bridge * bridge;
+        std::array<std::unique_ptr<Tower>, 3> _towers;
+        std::unique_ptr<Catapult> _catapult;
+        std::unique_ptr<Bridge> _bridge;
 
-        Interface * interface;
+        std::unique_ptr<Interface> _interface;
         Result result_game;
 
         Graveyard graveyard;
@@ -261,9 +268,8 @@ namespace Battle
         int icn_covr;
 
         uint32_t current_turn;
-        int auto_battle;
-
-        bool end_turn;
+        // A set of colors of players for whom the auto-battle mode is enabled
+        int _autoBattleColors;
 
         Rand::DeterministicRandomGenerator & _randomGenerator;
 

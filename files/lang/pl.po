@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-09 03:07+0000\n"
+"POT-Creation-Date: 2022-09-02 03:05+0000\n"
 "PO-Revision-Date: 2022-06-05 20:16+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -369,6 +369,10 @@ msgstr "Anuluj"
 msgid "Hero Screen"
 msgstr "Ekran bohatera"
 
+#, fuzzy
+msgid "Captain's Options"
+msgstr "Opcje kapitana"
+
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
@@ -502,8 +506,14 @@ msgstr ""
 "Powoduje pominięcie aktualnej jednostki. Traci ona swoją turę i może ruszyć "
 "się ponownie dopiero w następnej rundzie."
 
+msgid "View Captain's options"
+msgstr "Opcje kapitana"
+
 msgid "View Hero's options"
 msgstr "Opcje bohatera"
+
+msgid "View opposing Captain"
+msgstr "Obejrzyj wrogiego kapitana"
 
 msgid "View opposing Hero"
 msgstr "Obejrzyj wrogiego bohatera"
@@ -519,6 +529,10 @@ msgstr "Pasek Wiadomości"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Pokazuje rezultat akcji wykonanych przez indywidualną jednostkę."
+
+#, fuzzy
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Czy na pewno chcesz zwolnić ten oddział?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} pomija turę."
@@ -616,8 +630,9 @@ msgstr "Stworzono lustrzane odbicie."
 msgid "The mirror image is destroyed!"
 msgstr "Zniszczono lustrzane odbicie!"
 
-msgid "Break auto battle?"
-msgstr "Zatrzymać automatyczną walkę?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto battle?"
+msgstr "Czy na pewno chcesz się wycofać?"
 
 msgid "Error"
 msgstr "Błąd"
@@ -2755,9 +2770,6 @@ msgstr ""
 "Warunki\n"
 "przegranej"
 
-msgid "Score: "
-msgstr "Wynik: "
-
 msgid "First select recipients!"
 msgstr "Wskaż najpierw odbiorców!"
 
@@ -3272,6 +3284,37 @@ msgstr "Niemożliwy"
 msgid "and more..."
 msgstr "i więcej..."
 
+msgid "DIFFICULTY"
+msgstr ""
+
+#, fuzzy
+msgid "Campaign Difficulty"
+msgstr "Trudność gry"
+
+msgid ""
+"Choose this difficulty if you want to prefer game story over challenge. AI "
+"is weaker in comparison with normal difficulty."
+msgstr ""
+
+msgid ""
+"Choose this difficulty to enjoy the campaign as per the original design."
+msgstr ""
+
+msgid ""
+"Choose this difficulty if you want challenge. AI is stronger in comparison "
+"with normal difficulty."
+msgstr ""
+
+msgid "Easy"
+msgstr ""
+
+#, fuzzy
+msgid "Normal"
+msgstr "Normalne"
+
+msgid "Hard"
+msgstr ""
+
 msgid "Start the selected scenario."
 msgstr "Rozpocznij wybrany scenariusz."
 
@@ -3280,6 +3323,9 @@ msgstr "Zobacz Wprowadzenie"
 
 msgid "View Intro videos for the current state of the campaign."
 msgstr "Zobacz filmy wprowadzające dla obecnego stanu kampanii."
+
+msgid "Select campaign difficulty. It cannot be changed after."
+msgstr ""
 
 msgid "Restart"
 msgstr "Rozpocznij od nowa"
@@ -3295,6 +3341,12 @@ msgstr "Problem z uruchomieniem scenariusza kampanii"
 
 msgid "Please make sure that campaign files are correct and present."
 msgstr "Upewnij się, że pliki kampanii są poprawne."
+
+msgid "Days spent"
+msgstr ""
+
+msgid "The number of days spent on this campaign."
+msgstr ""
 
 msgid "Project Coordination and Core Development"
 msgstr "Koordynacja projektu i development"
@@ -9317,14 +9369,8 @@ msgstr ""
 "Zaklęcie kontroluje do\n"
 "%{hp} punktów życia."
 
-msgid "game: remember last focus"
-msgstr "gra: pamiętaj ostatni ekran"
-
 msgid "battle: show damage info"
 msgstr "walka: pokaż informacje o obrażeniach"
-
-msgid "world: show terrain penalty"
-msgstr "świat: pokaż karę za poruszanie się po trudnym terenie"
 
 msgid "world: Scouting skill shows extended content info"
 msgstr ""
@@ -9439,3 +9485,9 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Score: "
+#~ msgstr "Wynik: "
+
+#~ msgid "Break auto battle?"
+#~ msgstr "Zatrzymać automatyczną walkę?"

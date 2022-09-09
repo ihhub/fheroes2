@@ -145,6 +145,8 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_SELECT_THIRD_BONUS )]
             = { HotKeyCategory::MAIN_GAME, "select third campaign bonus", fheroes2::Key::KEY_3 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_VIEW_INTRO )] = { HotKeyCategory::MAIN_GAME, "view campaign intro", fheroes2::Key::KEY_V };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::CAMPAIGN_SELECT_DIFFICULTY )]
+            = { HotKeyCategory::MAIN_GAME, "select campaign difficulty", fheroes2::Key::KEY_D };
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_OKAY )] = { HotKeyCategory::DEFAULT_EVENTS, "default okay event", fheroes2::Key::KEY_ENTER };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::DEFAULT_CANCEL )] = { HotKeyCategory::DEFAULT_EVENTS, "default cancel event", fheroes2::Key::KEY_ESCAPE };
@@ -160,7 +162,8 @@ namespace
 
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_RETREAT )] = { HotKeyCategory::BATTLE, "retreat from battle", fheroes2::Key::KEY_R };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_SURRENDER )] = { HotKeyCategory::BATTLE, "surrender during battle", fheroes2::Key::KEY_S };
-        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_AUTOSWITCH )] = { HotKeyCategory::BATTLE, "toggle battle auto mode", fheroes2::Key::KEY_A };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_AUTO_SWITCH )] = { HotKeyCategory::BATTLE, "toggle battle auto mode", fheroes2::Key::KEY_A };
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_AUTO_FINISH )] = { HotKeyCategory::BATTLE, "finish the battle in auto mode", fheroes2::Key::KEY_Q };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_OPTIONS )] = { HotKeyCategory::BATTLE, "battle options", fheroes2::Key::KEY_O };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_SKIP )] = { HotKeyCategory::BATTLE, "skip turn in battle", fheroes2::Key::KEY_SPACE };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::BATTLE_WAIT )] = { HotKeyCategory::BATTLE, "wait in battle", fheroes2::Key::KEY_W };

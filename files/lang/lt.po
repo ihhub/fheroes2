@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-08 11:28+0000\n"
+"POT-Creation-Date: 2022-09-02 03:05+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -340,6 +340,10 @@ msgstr "Atsisakyti"
 msgid "Hero Screen"
 msgstr ""
 
+#, fuzzy
+msgid "Captain's Options"
+msgstr "Išeiti iš pilies"
+
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
@@ -463,7 +467,13 @@ msgid ""
 "get to go again until the next round."
 msgstr ""
 
+msgid "View Captain's options"
+msgstr ""
+
 msgid "View Hero's options"
+msgstr ""
+
+msgid "View opposing Captain"
 msgstr ""
 
 msgid "View opposing Hero"
@@ -480,6 +490,11 @@ msgstr ""
 
 msgid "Shows the results of individual monster's actions."
 msgstr ""
+
+#, fuzzy
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr ""
+"Ar tikrai norite perrašyti anksčiau tuo pačiu pavadinimu įrašytą failą?"
 
 msgid "%{name} skip their turn."
 msgstr ""
@@ -580,8 +595,10 @@ msgstr ""
 msgid "The mirror image is destroyed!"
 msgstr ""
 
-msgid "Break auto battle?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto battle?"
 msgstr ""
+"Ar tikrai norite perrašyti anksčiau tuo pačiu pavadinimu įrašytą failą?"
 
 msgid "Error"
 msgstr ""
@@ -2614,9 +2631,6 @@ msgid ""
 "Conditions"
 msgstr ""
 
-msgid "Score: "
-msgstr ""
-
 msgid "First select recipients!"
 msgstr ""
 
@@ -3135,6 +3149,38 @@ msgstr ""
 msgid "and more..."
 msgstr ""
 
+msgid "DIFFICULTY"
+msgstr ""
+
+#, fuzzy
+msgid "Campaign Difficulty"
+msgstr ""
+"Žemėlapis\n"
+"Sudėtingumas"
+
+msgid ""
+"Choose this difficulty if you want to prefer game story over challenge. AI "
+"is weaker in comparison with normal difficulty."
+msgstr ""
+
+msgid ""
+"Choose this difficulty to enjoy the campaign as per the original design."
+msgstr ""
+
+msgid ""
+"Choose this difficulty if you want challenge. AI is stronger in comparison "
+"with normal difficulty."
+msgstr ""
+
+msgid "Easy"
+msgstr ""
+
+msgid "Normal"
+msgstr ""
+
+msgid "Hard"
+msgstr ""
+
 msgid "Start the selected scenario."
 msgstr ""
 
@@ -3143,6 +3189,9 @@ msgid "View Intro"
 msgstr "Rodyti išteklius"
 
 msgid "View Intro videos for the current state of the campaign."
+msgstr ""
+
+msgid "Select campaign difficulty. It cannot be changed after."
 msgstr ""
 
 msgid "Restart"
@@ -3160,6 +3209,12 @@ msgid "Campaign Scenario loading failure"
 msgstr ""
 
 msgid "Please make sure that campaign files are correct and present."
+msgstr ""
+
+msgid "Days spent"
+msgstr ""
+
+msgid "The number of days spent on this campaign."
 msgstr ""
 
 msgid "Project Coordination and Core Development"
@@ -8573,13 +8628,7 @@ msgid ""
 "%{hp} HP."
 msgstr ""
 
-msgid "game: remember last focus"
-msgstr ""
-
 msgid "battle: show damage info"
-msgstr ""
-
-msgid "world: show terrain penalty"
 msgstr ""
 
 msgid "world: Scouting skill shows extended content info"

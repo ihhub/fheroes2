@@ -791,7 +791,11 @@ void Army::setFromTile( const Maps::Tiles & tile )
         break;
 
     case MP2::OBJ_GRAVEYARD:
-        ArrangeForBattle( Monster::MUTANT_ZOMBIE, 100, tile.GetIndex(), false );
+        at( 0 )->Set( Monster::MUTANT_ZOMBIE, 20 );
+        at( 1 )->Set( Monster::MUTANT_ZOMBIE, 20 );
+        at( 2 )->Set( Monster::MUTANT_ZOMBIE, 20 );
+        at( 3 )->Set( Monster::MUTANT_ZOMBIE, 20 );
+        at( 4 )->Set( Monster::MUTANT_ZOMBIE, 20 );
         break;
 
     case MP2::OBJ_SHIPWRECK: {

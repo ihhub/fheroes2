@@ -72,7 +72,12 @@ void Kingdom::Init( int clr )
     if ( Color::ALL & color ) {
         heroes.reserve( GetMaxHeroes() );
         castles.reserve( 15 );
-        resource = _getKingdomStartingResources( Game::getDifficulty() );
+
+        // Difficulty calculation is different for campaigns. Difficulty affects only on starting resources for human players.
+        const Settings & configuration = Settings::Get();
+        const int difficultyLevel = ( configuration.isCampaignGameType() ? configuration.CurrentFileInfo().difficulty : configuration.GameDifficulty() );
+
+        resource = _getKingdomStartingResources( difficultyLevel );
     }
     else {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" )
@@ -811,8 +816,6 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
                 continue;
             }
 
-            kingdom.AddFundsResource( funds );
-
             // for show dialogs
             if ( funds.GetValidItemsCount() && kingdom.isControlHuman() ) {
                 EventDate event;
@@ -832,6 +835,9 @@ void Kingdoms::AddTributeEvents( CapturedObjects & captureobj, const uint32_t da
                 }
 
                 world.AddEventDate( event );
+            }
+            else {
+                kingdom.AddFundsResource( funds );
             }
         }
     }
@@ -890,8 +896,23 @@ bool Kingdom::IsTileVisibleFromCrystalBall( const int32_t dest ) const
 
 cost_t Kingdom::_getKingdomStartingResources( const int difficulty ) const
 {
-    if ( isControlAI() )
+    if ( isControlAI() ) {
+        switch ( difficulty ) {
+        case Difficulty::EASY:
+        case Difficulty::NORMAL:
+            return { 7500, 20, 5, 20, 5, 5, 5 };
+        case Difficulty::HARD:
+        case Difficulty::EXPERT:
+        case Difficulty::IMPOSSIBLE:
+            return { 10000, 30, 10, 30, 10, 10, 10 };
+        default:
+            // Did you add a new difficulty level?
+            assert( 0 );
+            break;
+        }
+
         return { 10000, 30, 10, 30, 10, 10, 10 };
+    }
 
     switch ( difficulty ) {
     case Difficulty::EASY:

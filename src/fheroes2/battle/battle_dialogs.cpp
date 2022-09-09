@@ -406,8 +406,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     LocalEvent & le = LocalEvent::Get();
     const Settings & conf = Settings::Get();
 
-    const Troops killed1 = army1->GetKilledTroops();
-    const Troops killed2 = army2->GetKilledTroops();
+    const Troops killed1 = _army1->GetKilledTroops();
+    const Troops killed2 = _army2->GetKilledTroops();
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
@@ -416,20 +416,20 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     std::string title;
     LoopedAnimationSequence sequence;
 
-    if ( ( res.army1 & RESULT_WINS ) && ( army1->GetControl() & CONTROL_HUMAN ) ) {
-        GetSummaryParams( res.army1, res.army2, army1->GetCommander(), res.exp1, sequence, title, msg );
+    if ( ( res.army1 & RESULT_WINS ) && ( _army1->GetControl() & CONTROL_HUMAN ) ) {
+        GetSummaryParams( res.army1, res.army2, _army1->GetCommander(), res.exp1, sequence, title, msg );
         AudioManager::PlayMusic( MUS::BATTLEWIN, Music::PlaybackMode::PLAY_ONCE );
     }
-    else if ( ( res.army2 & RESULT_WINS ) && ( army2->GetControl() & CONTROL_HUMAN ) ) {
-        GetSummaryParams( res.army2, res.army1, army2->GetCommander(), res.exp2, sequence, title, msg );
+    else if ( ( res.army2 & RESULT_WINS ) && ( _army2->GetControl() & CONTROL_HUMAN ) ) {
+        GetSummaryParams( res.army2, res.army1, _army2->GetCommander(), res.exp2, sequence, title, msg );
         AudioManager::PlayMusic( MUS::BATTLEWIN, Music::PlaybackMode::PLAY_ONCE );
     }
-    else if ( army1->GetControl() & CONTROL_HUMAN ) {
-        GetSummaryParams( res.army1, res.army2, army1->GetCommander(), res.exp1, sequence, title, msg );
+    else if ( _army1->GetControl() & CONTROL_HUMAN ) {
+        GetSummaryParams( res.army1, res.army2, _army1->GetCommander(), res.exp1, sequence, title, msg );
         AudioManager::PlayMusic( MUS::BATTLELOSE, Music::PlaybackMode::PLAY_ONCE );
     }
-    else if ( army2->GetControl() & CONTROL_HUMAN ) {
-        GetSummaryParams( res.army2, res.army1, army2->GetCommander(), res.exp2, sequence, title, msg );
+    else if ( _army2->GetControl() & CONTROL_HUMAN ) {
+        GetSummaryParams( res.army2, res.army1, _army2->GetCommander(), res.exp2, sequence, title, msg );
         AudioManager::PlayMusic( MUS::BATTLELOSE, Music::PlaybackMode::PLAY_ONCE );
     }
     else {
@@ -559,8 +559,8 @@ bool Battle::Arena::DialogBattleSummary( const Result & res, const std::vector<A
     }
 
     if ( !artifacts.empty() ) {
-        const HeroBase * winner = ( res.army1 & RESULT_WINS ? army1->GetCommander() : ( res.army2 & RESULT_WINS ? army2->GetCommander() : nullptr ) );
-        const HeroBase * loser = ( res.army1 & RESULT_LOSS ? army1->GetCommander() : ( res.army2 & RESULT_LOSS ? army2->GetCommander() : nullptr ) );
+        const HeroBase * winner = ( res.army1 & RESULT_WINS ? _army1->GetCommander() : ( res.army2 & RESULT_WINS ? _army2->GetCommander() : nullptr ) );
+        const HeroBase * loser = ( res.army1 & RESULT_LOSS ? _army1->GetCommander() : ( res.army2 & RESULT_LOSS ? _army2->GetCommander() : nullptr ) );
 
         // Can't transfer artifacts
         if ( winner == nullptr || loser == nullptr )
@@ -854,6 +854,9 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
             else if ( le.MouseCursor( portraitArea ) && actionHero != nullptr && actionHero->isHeroes() && !readonly ) {
                 statusMessage = _( "Hero Screen" );
             }
+            else if ( hero.isCaptain() ) {
+                statusMessage = _( "Captain's Options" );
+            }
             else {
                 statusMessage = _( "Hero's Options" );
             }
@@ -907,7 +910,7 @@ int Battle::Arena::DialogBattleHero( const HeroBase & hero, const bool buttons, 
 
         if ( statusMessage != status.GetMessage() ) {
             status.SetMessage( statusMessage );
-            status.Redraw();
+            status.Redraw( display );
         }
     }
 

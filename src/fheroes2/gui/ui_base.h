@@ -26,21 +26,30 @@ namespace fheroes2
     class ActionObject
     {
     public:
-        ActionObject();
+        ActionObject() = default;
         virtual ~ActionObject() = default;
 
-        void subscribe( ActionObject * receiver );
-        void unsubscribe();
-
-    protected:
-        void updateSubscription();
-
-        virtual void senderUpdate( const ActionObject * )
+        void subscribe( ActionObject * receiver )
         {
-            // Do nothing.
+            _receiver = receiver;
         }
 
+        void unsubscribe()
+        {
+            _receiver = nullptr;
+        }
+
+    protected:
+        void notifySubscriber()
+        {
+            if ( _receiver != nullptr ) {
+                _receiver->senderUpdate( this );
+            }
+        }
+
+        virtual void senderUpdate( const ActionObject * );
+
     private:
-        ActionObject * _receiver;
+        ActionObject * _receiver{ nullptr };
     };
 }
