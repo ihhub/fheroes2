@@ -3282,7 +3282,7 @@ msgid "and more..."
 msgstr "i więcej..."
 
 msgid "DIFFICULTY"
-msgstr "STOPIEŃ TRUDNOŚCI"
+msgstr "TRUDNOŚĆ"
 
 msgid "Campaign Difficulty"
 msgstr "Stopień trudności kampanii"
