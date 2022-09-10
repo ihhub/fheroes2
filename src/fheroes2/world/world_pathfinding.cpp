@@ -679,7 +679,7 @@ int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero )
 
 bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
 {
-    const int heroIndex = hero.GetIndex();
+    const int32_t heroIndex = hero.GetIndex();
     const int heroColor = hero.GetColor();
 
     auto isReachableDirection = [heroIndex, heroColor]( const int direction ) {
@@ -776,6 +776,34 @@ bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
     // | o | H | o |
     // | x | r | x |
     if ( bottomReachable && ( topReachable || leftReachable || rightReachable ) && !bottomLeftReachable && !bottomRightReachable ) {
+        return true;
+    }
+
+    // |   | r | x |
+    // | x | H | o |
+    // |   | o |   |
+    if ( topReachable && ( rightReachable || bottomReachable ) && !topRightReachable && !leftReachable ) {
+        return true;
+    }
+
+    // |   | o |   |
+    // | x | H | o |
+    // |   | r | x |
+    if ( bottomReachable && ( rightReachable || topReachable ) && !bottomRightReachable && !leftReachable ) {
+        return true;
+    }
+
+    // | x | r |   |
+    // | o | H | x |
+    // |   | o |   |
+    if ( topReachable && ( leftReachable || bottomReachable ) && !topLeftReachable && !rightReachable ) {
+        return true;
+    }
+
+    // |   | r |   |
+    // | o | H | x |
+    // | x | r |   |
+    if ( bottomReachable && ( leftReachable || topReachable ) && !bottomLeftReachable && !rightReachable ) {
         return true;
     }
 
