@@ -654,8 +654,8 @@ namespace ICN
         SWAPWIN,
         SWORDSM2,
         SWORDSMN,
-        SYSTEME, // contains an empty evil interface buttom in the last two sprites
-        SYSTEM, // contains an empty good interface buttom in the last two sprites
+        SYSTEME, // contains an empty evil interface button in the last two sprites
+        SYSTEM, // contains an empty good interface button in the last two sprites
         TAVWIN,
         TENT,
         TERRAINS,
