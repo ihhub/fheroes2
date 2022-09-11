@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-02 03:05+0000\n"
+"POT-Creation-Date: 2022-09-10 16:23+0000\n"
 "PO-Revision-Date: 2022-07-25 11:28+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -17,6 +17,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
+
+msgid "MIN"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Войн"
@@ -2367,6 +2370,12 @@ msgstr ""
 msgid "Recruit Creatures"
 msgstr ""
 
+msgid "Max"
+msgstr ""
+
+msgid "Hire all creatures in the town."
+msgstr ""
+
 msgid "Town Population Information and Statistics"
 msgstr ""
 
@@ -2772,9 +2781,6 @@ msgid "I can offer you %{count} for 1 unit of %{resfrom}."
 msgstr ""
 
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
-msgstr ""
-
-msgid "Max"
 msgstr ""
 
 msgid "Min"
