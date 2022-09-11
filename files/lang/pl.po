@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-02 03:05+0000\n"
+"POT-Creation-Date: 2022-09-10 16:23+0000\n"
 "PO-Revision-Date: 2022-09-08 16:44+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -21,6 +21,9 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
 "X-Generator: Poedit 3.1.1\n"
+
+msgid "MIN"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Wojownik"
@@ -2403,6 +2406,13 @@ msgstr "Brak stworzeń do zakupienia."
 msgid "Recruit Creatures"
 msgstr "Rekrutuj stworzenia"
 
+msgid "Max"
+msgstr "Maks"
+
+#, fuzzy
+msgid "Hire all creatures in the town."
+msgstr "Utrata wszystkich bohaterów i miast."
+
 msgid "Town Population Information and Statistics"
 msgstr "Statystyki populacji miasta"
 
@@ -2834,9 +2844,6 @@ msgstr "Mogę ci zaproponować %{count} za 1 szt. %{resfrom}."
 
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr "Mogę ci zaproponować 1 szt. %{resto} za %{count} szt. %{resfrom}."
-
-msgid "Max"
-msgstr "Maks"
 
 msgid "Min"
 msgstr "Min"

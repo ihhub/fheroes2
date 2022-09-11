@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-02 03:05+0000\n"
+"POT-Creation-Date: 2022-09-10 16:23+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
@@ -18,6 +18,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
 "X-Generator: Poedit 3.0.1\n"
+
+msgid "MIN"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Guerreiro"
@@ -2346,6 +2349,14 @@ msgstr ""
 msgid "Recruit Creatures"
 msgstr "Recrutar Herói"
 
+#, fuzzy
+msgid "Max"
+msgstr "máximo"
+
+#, fuzzy
+msgid "Hire all creatures in the town."
+msgstr "Perder todos os seus heróis e das cidades."
+
 msgid "Town Population Information and Statistics"
 msgstr "Informações da População da Cidade e Estatísticas"
 
@@ -2794,10 +2805,6 @@ msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr ""
 "Eu posso oferecer a você 1 unidade de %{resto} por %{count} unidade de "
 "%{resfrom}."
-
-#, fuzzy
-msgid "Max"
-msgstr "máximo"
 
 #, fuzzy
 msgid "Min"
