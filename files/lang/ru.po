@@ -1301,7 +1301,7 @@ msgid "\"%{spell}\" spell will be carried over the scenario."
 msgstr ""
 
 msgid "%{hero} can be hired in the scenario."
-msgstr "%{hero} можно быть нанят в этой компании."
+msgstr "%{hero} может быть нанят в этой компании."
 
 msgid ""
 "%{hero} has been defeated and will not appear in the subsequent scenarios."
