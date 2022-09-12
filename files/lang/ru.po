@@ -128,10 +128,10 @@ msgid "army|Legion"
 msgstr "Легион"
 
 msgid "All %{race} troops +1"
-msgstr "Все существа одной фракции +1"
+msgstr "Все существа одной фракции %{race} +1"
 
 msgid "Multiple"
-msgstr "Нейтральный"
+msgstr "Разнообразный"
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Существа %{count} разных фракций -%{penalty}"
@@ -147,10 +147,10 @@ msgid "Move the %{name} "
 msgstr "Переместить %{name}"
 
 msgid "Move or right click to redistribute %{name}"
-msgstr "Перемеcтить отряд или разделить (правой кнопкой)"
+msgstr "Перемеcтить отряд %{name} или разделить (правой кнопкой)"
 
 msgid "Combine %{name} armies"
-msgstr "Объединить отряды или перераспределить (правой кнопкой)"
+msgstr "Объединить отряды %{name} или перераспределить (правой кнопкой)"
 
 msgid "Exchange %{name2} with %{name}"
 msgstr "Переставить отряды"
@@ -330,7 +330,7 @@ msgid "%{name} the %{race}"
 msgstr "%{name} %{race}"
 
 msgid "Captain of %{name}"
-msgstr "Капитан замка %{name}."
+msgstr "Капитан гарнизона замка %{name}."
 
 msgid "Attack"
 msgstr "Атака"
@@ -412,14 +412,14 @@ msgstr "%{name} объявляет:"
 
 #, fuzzy
 msgid "Captain of %{name} states:"
-msgstr "Капитан замка %{name}."
+msgstr "Капитан замка %{name}:"
 
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
 msgstr ""
 "\"Я приму твою капитуляцию и предоставлю безопасный проход тебе и твоим "
-"войскам за %{price} золотом.\""
+"войскам за %{price} золотых.\""
 
 msgid "View %{monster} info"
 msgstr "Показать информацию для %{monster}"
@@ -536,7 +536,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Вы уверены, что хотите распустить этот отряд?"
+msgstr "Вы уверены, что хотите продолжить битву в авторежиме?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} пропускают ход."
@@ -645,7 +645,7 @@ msgstr "Фантомный отряд уничтожен!"
 
 #, fuzzy
 msgid "Are you sure you want to interrupt the auto battle?"
-msgstr "Вы действительно хотите отступить?"
+msgstr "Вы действительно хотите прервать автобитву?"
 
 msgid "Error"
 msgstr "Ошибка"
@@ -1109,7 +1109,7 @@ msgid "Conquer and Unify"
 msgstr "Завоевать и объединить"
 
 msgid "Crazy Uncle Ivan"
-msgstr "Безумный дядя"
+msgstr "Безумный дядя Ваня"
 
 msgid "The Wayward Son"
 msgstr "Блудный сын"
@@ -1295,16 +1295,18 @@ msgstr ""
 
 msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr ""
+"Королевство ежедневно будет получать +%{count} %{resource}."
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
 msgstr ""
 
 msgid "%{hero} can be hired in the scenario."
-msgstr ""
+msgstr "%{hero} можно быть нанят в этой компании."
 
 msgid ""
 "%{hero} has been defeated and will not appear in the subsequent scenarios."
 msgstr ""
+"%{hero} был повержен и впоследстии вы не сможете его нанять."
 
 msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr ""
@@ -1336,7 +1338,7 @@ msgid ""
 "The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may "
 "pass.\""
 msgstr ""
-"Гномы приветствуют Вас: \"Любой друг Роланда - наш друг. Вы можете пройти\"."
+"Гномы приветствуют Вас: \"Друг Роланда - наш друг. Вы можете пройти\"."
 
 msgid ""
 "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
@@ -1429,141 +1431,111 @@ msgstr "Сапоги Путника"
 msgid "campaignBonus|White Pearl"
 msgstr "Бел. Жемчужина"
 
-#, fuzzy
 msgid "campaignBonus|Basic Archery"
-msgstr "Чёрн. Жемчужина"
+msgstr "Базовая стрельба"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Archery"
 msgstr "Продвинутая стрельба"
 
-#, fuzzy
 msgid "campaignBonus|Expert Archery"
-msgstr "Топор Власти"
+msgstr "Экспертная стрельба"
 
-#, fuzzy
 msgid "campaignBonus|Basic Ballistics"
-msgstr "Баллиста"
+msgstr "Базовая баллистика"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Ballistics"
-msgstr "Баллиста"
+msgstr "Продвинутая баллистика"
 
-#, fuzzy
 msgid "campaignBonus|Expert Ballistics"
-msgstr "Баллиста"
+msgstr "Экспертная баллистика"
 
-#, fuzzy
 msgid "campaignBonus|Basic Diplomacy"
-msgstr "Защитный Доспех"
+msgstr "Базовая дипломатия"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Diplomacy"
 msgstr "Продвинутая дипломатия"
 
-#, fuzzy
 msgid "campaignBonus|Expert Diplomacy"
 msgstr "Экспертная дипломатия"
 
-#, fuzzy
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr "Чёрн. Жемчужина"
+msgstr "Базовый орлиный взор"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Eagle Eye"
 msgstr "Продвинутый орлиный взор"
 
-#, fuzzy
 msgid "campaignBonus|Expert Eagle Eye"
 msgstr "Экспертный орлиный взор"
 
-#, fuzzy
 msgid "campaignBonus|Basic Estates"
-msgstr "Баллиста"
+msgstr "Базовое казначейство"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Estates"
-msgstr "Защитный Доспех"
+msgstr "Продвинутое казначейство"
 
-#, fuzzy
 msgid "campaignBonus|Expert Estates"
-msgstr "Защитный Доспех"
+msgstr "Экспертное казначейство"
 
-#, fuzzy
 msgid "campaignBonus|Basic Leadership"
-msgstr "Чёрн. Жемчужина"
+msgstr "Базовое лидерство"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Leadership"
 msgstr "Продвинутое лидерство"
 
-#, fuzzy
 msgid "campaignBonus|Expert Leadership"
 msgstr "Экспертное лидерство"
 
-#, fuzzy
 msgid "campaignBonus|Basic Logistics"
-msgstr "Баллиста"
+msgstr "Базовая логистика"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Logistics"
 msgstr "Продвинутая логистика"
 
-#, fuzzy
 msgid "campaignBonus|Expert Logistics"
 msgstr "Экспертная логистика"
 
 #, fuzzy
 msgid "campaignBonus|Basic Luck"
-msgstr "Общее проклятие"
+msgstr "Базовая удача"
 
 #, fuzzy
 msgid "campaignBonus|Advanced Luck"
-msgstr "Податная"
+msgstr "Продвинутая удача"
 
 #, fuzzy
 msgid "campaignBonus|Expert Luck"
-msgstr "Податная"
+msgstr "Экспертная удача"
 
-#, fuzzy
 msgid "campaignBonus|Basic Mysticism"
-msgstr "Баллиста"
+msgstr "Базовый мистицизм"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Mysticism"
 msgstr "Продвинутый мистицизм"
 
-#, fuzzy
 msgid "campaignBonus|Expert Mysticism"
 msgstr "Экспертный мистицизм"
 
-#, fuzzy
 msgid "campaignBonus|Basic Navigation"
-msgstr "Цепь молний"
+msgstr "Базовая навигация"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Navigation"
 msgstr "Продвинутая навигация"
 
-#, fuzzy
 msgid "campaignBonus|Expert Navigation"
 msgstr "Экспертная навигация"
 
-#, fuzzy
 msgid "campaignBonus|Basic Necromancy"
-msgstr "Чёрн. Жемчужина"
+msgstr "Базовая некромантия"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Necromancy"
 msgstr "Продвинутая некромантия"
 
-#, fuzzy
 msgid "campaignBonus|Expert Necromancy"
 msgstr "Экспертная некромантия"
 
 #, fuzzy
 msgid "campaignBonus|Basic Pathfinding"
-msgstr "Цепь молний"
+msgstr "Базовый следопыт"
 
 #, fuzzy
 msgid "campaignBonus|Advanced Pathfinding"
@@ -1573,29 +1545,23 @@ msgstr "Продвинутый следопыт"
 msgid "campaignBonus|Expert Pathfinding"
 msgstr "Экспертный следопыт"
 
-#, fuzzy
 msgid "campaignBonus|Basic Scouting"
-msgstr "Кольцо Мага"
+msgstr "Базовая разведка"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Scouting"
-msgstr "Кольцо Мага"
+msgstr "Продвинутая разведка"
 
-#, fuzzy
 msgid "campaignBonus|Expert Scouting"
-msgstr "Податная"
+msgstr "Экспертная разведка"
 
-#, fuzzy
 msgid "campaignBonus|Basic Wisdom"
-msgstr "Баллиста"
+msgstr "Базовая мудрость"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Wisdom"
-msgstr "Поднять нежить"
+msgstr "Продвинутая мудрость"
 
-#, fuzzy
 msgid "campaignBonus|Expert Wisdom"
-msgstr "Шипованный Щит"
+msgstr "Экспертная мудрость"
 
 msgid "campaignBonus|Animate Dead"
 msgstr "Поднять нежить"
@@ -2341,6 +2307,7 @@ msgstr "Нажмите, чтобы показать предыдущий гор�
 msgid "Show previous town"
 msgstr "Предыдущий город"
 
+#, fuzzy
 msgid "Army joining"
 msgstr "Гарнизон замка"
 
@@ -2692,9 +2659,8 @@ msgstr ""
 msgid "settings"
 msgstr "Настройки"
 
-#, fuzzy
 msgid "Hot Keys"
-msgstr "За одним компьютером"
+msgstr "Горячие клавиши"
 
 msgid "In-game"
 msgstr ""
@@ -2758,7 +2724,7 @@ msgid "Toggle instant battle mode."
 msgstr "Режим мгновенного боя."
 
 msgid "Check all Hot Keys used in the game."
-msgstr ""
+msgstr "Проверьте все горячие клавиши используемые в игре."
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Переключить тип интерфейса, который Вы хотите использовать."
@@ -2983,19 +2949,19 @@ msgstr "Защита"
 
 #, fuzzy
 msgid "Spell Power:"
-msgstr "Сила магии"
+msgstr "Сила магии:"
 
 #, fuzzy
 msgid "Knowledge:"
-msgstr "Знания"
+msgstr "Знания:"
 
 #, fuzzy
 msgid "Spell Points:"
-msgstr "Очки магии"
+msgstr "Очки магии:"
 
 #, fuzzy
 msgid "Move Points:"
-msgstr "Запас хода"
+msgstr "Запас хода:"
 
 msgid "Cost per troop:"
 msgstr "Цена воина:"
@@ -3554,7 +3520,7 @@ msgstr "Композиторы и звукорежиссёры"
 
 #, fuzzy
 msgid "Town Themes"
-msgstr "Врата в город"
+msgstr "Музыкальные темы городов"
 
 msgid "Alto Sax"
 msgstr ""
@@ -4210,11 +4176,10 @@ msgid "View %{skill} Info"
 msgstr "Информация о навыке %{skill}"
 
 msgid "Kingdom Income"
-msgstr "Доход"
+msgstr "Доход королевства"
 
-#, fuzzy
 msgid "Kingdom Income per day."
-msgstr "Доход"
+msgstr "Ежедневный доход королевства."
 
 msgid "English"
 msgstr "Английский"
@@ -4238,30 +4203,28 @@ msgid "Czech"
 msgstr "Чешский"
 
 msgid "Norwegian"
-msgstr ""
+msgstr "Норвежский"
 
 msgid "Belarusian"
-msgstr ""
+msgstr "Беларуский"
 
-#, fuzzy
 msgid "Bulgarian"
-msgstr "Варвар"
+msgstr "Болгарский"
 
 msgid "Ukrainian"
-msgstr ""
+msgstr "Украинский"
 
 msgid "Romanian"
-msgstr ""
+msgstr "Румынский"
 
 msgid "Spanish"
-msgstr ""
+msgstr "Испанский"
 
 msgid "Swedish"
-msgstr ""
+msgstr "Шведский"
 
-#, fuzzy
 msgid "Portuguese"
-msgstr "Разбойники"
+msgstr "Португальский"
 
 msgid ", FPS: "
 msgstr ", FPS: "
@@ -4471,10 +4434,10 @@ msgid "Martine"
 msgstr "Мартина"
 
 msgid " gives you maximum morale"
-msgstr ""
+msgstr " поднимает вашу мораль до максимума"
 
 msgid " gives you maximum luck"
-msgstr ""
+msgstr " поднимает вашу удачу до максимума"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Вы не можете забрать этот артефакт, у Вас нет свободного места!"
@@ -5864,6 +5827,8 @@ msgstr ""
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
+"Вы не владеете ни одним городом или замком. Потому это заклинание "
+"не сработает."
 
 #, fuzzy
 msgid "This hero is already in a town, so you can't cast the spell."
@@ -5874,6 +5839,9 @@ msgid ""
 " \n"
 "This town is occupied by your hero %{hero}."
 msgstr ""
+"Ближайший к вам город - это %{town}.\n"
+" \n"
+"Этот город занят вашим героем %{hero}."
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race} %{name} (уровень %{level})"
@@ -8387,7 +8355,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Pouch of Sulfur"
-msgstr "Мешочек Серы"
+msgstr "Бездонный мешочек серы"
 
 msgid "The %{name} provides %{count} unit of sulfur per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру серы."
@@ -8399,7 +8367,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Vial of Mercury"
-msgstr "Колба Ртути"
+msgstr "Бездонная колба ртути"
 
 msgid "The %{name} provides %{count} unit of mercury per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру ртути."
@@ -8411,7 +8379,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Pouch of Gems"
-msgstr "Мешочек Самоцветов"
+msgstr "Бездонный мешочек самоцветов"
 
 msgid "The %{name} provides %{count} unit of gems per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру самоцветов."
@@ -8437,7 +8405,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Cart of Ore"
-msgstr "Вагонетка Руды"
+msgstr "Бездонная вагонетка руды"
 
 msgid "The %{name} provides %{count} unit of ore per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру руды."
@@ -8449,7 +8417,7 @@ msgid ""
 msgstr ""
 
 msgid "Endless Pouch of Crystal"
-msgstr "Мешочек Кристаллов"
+msgstr "Бездонный мешочек кристаллов"
 
 msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr "%{name} ежедневно приносит Вам %{count} меру кристаллов."
