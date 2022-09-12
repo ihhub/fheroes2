@@ -57,6 +57,18 @@
 
 namespace
 {
+    // This structure used in cases when an object plays 'music' sound so we need to modify music volume according to sound settings
+    // and then restore it back to the original value.
+    struct MusicVolumeRestorer
+    {
+        MusicVolumeRestorer() = default;
+
+        ~MusicVolumeRestorer()
+        {
+            Music::setVolume( 100 * Settings::Get().MusicVolume() / 10 );
+        }
+    };
+
     void DialogCaptureResourceObject( const std::string & hdr, const std::string & str, const int32_t resourceType )
     {
         const payment_t info = ProfitConditions::FromMine( resourceType );
@@ -265,13 +277,20 @@ void Heroes::Action( int tileIndex, bool isDestination )
 
     // Restore the original music after the action is completed.
     const AudioManager::MusicRestorer musicRestorer;
+    const MusicVolumeRestorer musicVolumeRestorer;
 
     Maps::Tiles & tile = world.GetTiles( tileIndex );
     const MP2::MapObjectType objectType = tile.GetObject( tileIndex != heroPosIndex );
 
     const int objectMusicTrack = MUS::FromMapObject( objectType );
     if ( objectMusicTrack != MUS::UNKNOWN ) {
-        AudioManager::PlayMusic( objectMusicTrack, Music::PlaybackMode::PLAY_ONCE );
+        // 'Music' sounds must use sound volume.
+        const int32_t soundVolume = 100 * Settings::Get().SoundVolume() / 10;
+        if ( soundVolume > 0 ) {
+            // Play the sound only if audio volume is not set to 0.
+            Music::setVolume( soundVolume );
+            AudioManager::PlayMusic( objectMusicTrack, Music::PlaybackMode::PLAY_ONCE );
+        }
     }
 
     if ( MP2::isActionObject( objectType, isShipMaster() ) ) {
