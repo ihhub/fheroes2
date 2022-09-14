@@ -715,8 +715,8 @@ void ActionToMonster( Heroes & hero, int32_t dst_index )
 
 void ActionToHeroes( Heroes & hero, int32_t dst_index )
 {
-    std::shared_ptr<void> at_exit;
     Heroes * other_hero = world.GetTiles( dst_index ).GetHeroes();
+    bool makeAllyEnemy = false;
 
     if ( !other_hero )
         return;
@@ -736,19 +736,7 @@ void ActionToHeroes( Heroes & hero, int32_t dst_index )
 
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " confirmed attack ally hero " << other_hero->GetName() )
 
-        auto * p1 = Players::Get( hero.GetColor() );
-        auto * p2 = Players::Get( other_hero->GetColor() );
-
-        at_exit = std::shared_ptr<void>( nullptr,
-                                         std::bind(
-                                             []( Player * lp1, Player * lp2 ) {
-                                                 fheroes2::showMessage( fheroes2::Text{ _( "You've made yourself another enemy" ), fheroes2::FontType::normalWhite() },
-                                                                        fheroes2::Text{ "", fheroes2::FontType::normalWhite() }, Dialog::OK );
-
-                                                 lp1->SetFriends( lp2->GetColor() );
-                                                 lp2->SetFriends( lp1->GetColor() );
-                                             },
-                                             p1, p2 ) );
+        makeAllyEnemy = true;
     }
 
     const Castle * other_hero_castle = other_hero->inCastle();
@@ -761,6 +749,17 @@ void ActionToHeroes( Heroes & hero, int32_t dst_index )
 
     // new battle
     Battle::Result res = Battle::Loader( hero.GetArmy(), other_hero->GetArmy(), dst_index );
+
+    if ( makeAllyEnemy ) {
+        auto * p1 = Players::Get( hero.GetColor() );
+        auto * p2 = Players::Get( other_hero->GetColor() );
+
+        fheroes2::showMessage( fheroes2::Text{ _( "You've made yourself another enemy" ), fheroes2::FontType::normalWhite() },
+                            fheroes2::Text{ "", fheroes2::FontType::normalWhite() }, Dialog::OK );
+
+        p1->SetFriends( p2->GetColor() );
+        p2->SetFriends( p1->GetColor() );
+    }
 
     // TODO: make fading animation of both heroes together.
 
