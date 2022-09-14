@@ -63,10 +63,14 @@ namespace
     {
         MusicVolumeRestorer() = default;
 
+        MusicVolumeRestorer( const MusicVolumeRestorer & ) = delete;
+
         ~MusicVolumeRestorer()
         {
             Music::setVolume( 100 * Settings::Get().MusicVolume() / 10 );
         }
+
+        MusicVolumeRestorer & operator=( const MusicVolumeRestorer & ) = delete;
     };
 
     void DialogCaptureResourceObject( const std::string & hdr, const std::string & str, const int32_t resourceType )
