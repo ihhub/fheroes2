@@ -654,8 +654,8 @@ namespace ICN
         SWAPWIN,
         SWORDSM2,
         SWORDSMN,
-        SYSTEME,
-        SYSTEM,
+        SYSTEME, // contains an empty evil interface button in the last two sprites
+        SYSTEM, // contains an empty good interface button in the last two sprites
         TAVWIN,
         TENT,
         TERRAINS,
@@ -982,6 +982,11 @@ namespace ICN
 
         MINI_MONSTER_IMAGE,
         MINI_MONSTER_SHADOW,
+
+        BUTTON_GOOD_FONT_RELEASED,
+        BUTTON_GOOD_FONT_PRESSED,
+        BUTTON_EVIL_FONT_RELEASED,
+        BUTTON_EVIL_FONT_PRESSED,
 
         // IMPORTANT! Put any new entry just above this one.
         LASTICN

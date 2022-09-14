@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-09 03:07+0000\n"
+"POT-Creation-Date: 2022-09-10 16:23+0000\n"
 "PO-Revision-Date: 2022-05-12 17:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -17,6 +17,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
+
+msgid "MIN"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Krieger"
@@ -370,6 +373,10 @@ msgstr "Abbrechen"
 msgid "Hero Screen"
 msgstr "Heldenbildschirm"
 
+#, fuzzy
+msgid "Captain's Options"
+msgstr "Burg Optionen"
+
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
@@ -505,8 +512,14 @@ msgstr ""
 "Aussetzt die aktuelle Kreatur. Die aktuelle Kreatur beendet ihren Zug und "
 "darf erst in der nächsten Runde wieder losziehen."
 
+msgid "View Captain's options"
+msgstr ""
+
 msgid "View Hero's options"
 msgstr "Optionen für den Helden anzeigen"
+
+msgid "View opposing Captain"
+msgstr ""
 
 msgid "View opposing Hero"
 msgstr "Gegnerischen Helden anzeigen"
@@ -522,6 +535,10 @@ msgstr "Nachrichtenleiste"
 
 msgid "Shows the results of individual monster's actions."
 msgstr "Zeigt die Ergebnisse der Aktionen der einzelnen Monster."
+
+#, fuzzy
+msgid "Are you sure you want to finish the battle in auto mode?"
+msgstr "Sind Sie sicher, dass Sie diese Armee entlassen wollen?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} setzt den Zug aus."
@@ -623,8 +640,9 @@ msgstr "Das Spiegelbild wird erstellt."
 msgid "The mirror image is destroyed!"
 msgstr "Das Spiegelbild ist zerstört!"
 
-msgid "Break auto battle?"
-msgstr "Autokampf unterbrechen?"
+#, fuzzy
+msgid "Are you sure you want to interrupt the auto battle?"
+msgstr "Sind Sie sicher, dass Sie sich zurückziehen wollen?"
 
 msgid "Error"
 msgstr "Fehler"
@@ -2441,6 +2459,13 @@ msgstr "Keine Kreatur zum Kauf verfügbar."
 msgid "Recruit Creatures"
 msgstr "Kreaturen kaufen"
 
+msgid "Max"
+msgstr "Max"
+
+#, fuzzy
+msgid "Hire all creatures in the town."
+msgstr "Alle Ihre Helden und Städte verlieren."
+
 msgid "Town Population Information and Statistics"
 msgstr "Informationen und Statistiken zur Bevölkerung der Stadt"
 
@@ -2816,9 +2841,6 @@ msgstr ""
 "Verlust-\n"
 "bedingungen"
 
-msgid "Score: "
-msgstr "Punkte: "
-
 msgid "First select recipients!"
 msgstr "Wählen Sie zuerst die Empfänger aus!"
 
@@ -2889,9 +2911,6 @@ msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr ""
 "Ich kann Ihnen 1 Einheit von %{resto} für %{count} Einheiten von %{resfrom} "
 "anbieten."
-
-msgid "Max"
-msgstr "Max"
 
 msgid "Min"
 msgstr "Min"
@@ -3342,6 +3361,37 @@ msgstr "Unmögl."
 msgid "and more..."
 msgstr "und mehr..."
 
+msgid "DIFFICULTY"
+msgstr ""
+
+#, fuzzy
+msgid "Campaign Difficulty"
+msgstr "Spielschwierigkeit"
+
+msgid ""
+"Choose this difficulty if you want to prefer game story over challenge. AI "
+"is weaker in comparison with normal difficulty."
+msgstr ""
+
+msgid ""
+"Choose this difficulty to enjoy the campaign as per the original design."
+msgstr ""
+
+msgid ""
+"Choose this difficulty if you want challenge. AI is stronger in comparison "
+"with normal difficulty."
+msgstr ""
+
+msgid "Easy"
+msgstr ""
+
+#, fuzzy
+msgid "Normal"
+msgstr "Normales"
+
+msgid "Hard"
+msgstr ""
+
 msgid "Start the selected scenario."
 msgstr "Startet das ausgewählte Szenario."
 
@@ -3350,6 +3400,9 @@ msgstr "Intro ansehen"
 
 msgid "View Intro videos for the current state of the campaign."
 msgstr "Sehen Sie sich die Intro-Videos zum aktuellen Stand der Kampagne an."
+
+msgid "Select campaign difficulty. It cannot be changed after."
+msgstr ""
 
 msgid "Restart"
 msgstr "Neustart"
@@ -3366,6 +3419,12 @@ msgstr "Fehler beim Laden des Feldzugspiels"
 msgid "Please make sure that campaign files are correct and present."
 msgstr ""
 "Bitte stellen Sie sicher, dass die Feldzugdateien korrekt und vorhanden sind."
+
+msgid "Days spent"
+msgstr ""
+
+msgid "The number of days spent on this campaign."
+msgstr ""
 
 msgid "Project Coordination and Core Development"
 msgstr "Projektkoordination und Kernentwicklung"
@@ -9790,14 +9849,8 @@ msgstr ""
 "Dieser Zauberspruch kontrolliert bis zu\n"
 "%{hp} TP."
 
-msgid "game: remember last focus"
-msgstr "Spiel: den letzten Fokus merken"
-
 msgid "battle: show damage info"
 msgstr "Kampf: Schadensinformationen anzeigen"
-
-msgid "world: show terrain penalty"
-msgstr "Welt: Geländestrafung anzeigen"
 
 msgid "world: Scouting skill shows extended content info"
 msgstr "Welt: Scouting-Skill zeigt erweiterte Inhaltsangaben"
@@ -9907,3 +9960,9 @@ msgstr ""
 "Die neueste Version des Spiels finden Sie unter\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#~ msgid "Score: "
+#~ msgstr "Punkte: "
+
+#~ msgid "Break auto battle?"
+#~ msgstr "Autokampf unterbrechen?"

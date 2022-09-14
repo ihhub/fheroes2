@@ -23,6 +23,7 @@
 #ifndef H2MAPS_OBJECTS_H
 #define H2MAPS_OBJECTS_H
 
+#include <list>
 #include <string>
 
 #include "artifact.h"

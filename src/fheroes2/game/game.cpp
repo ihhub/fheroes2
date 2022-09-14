@@ -26,6 +26,7 @@
 
 #include "audio.h"
 #include "audio_manager.h"
+#include "campaign_savedata.h"
 #include "cursor.h"
 #include "difficulty.h"
 #include "game.h"
@@ -90,8 +91,14 @@ namespace Game
 int Game::getDifficulty()
 {
     const Settings & configuration = Settings::Get();
+    if ( configuration.isCampaignGameType() ) {
+        int difficulty = configuration.CurrentFileInfo().difficulty;
+        const int difficultyAdjustment = Campaign::CampaignSaveData::Get().getDifficulty();
+        difficulty += difficultyAdjustment;
+        return std::clamp( difficulty, static_cast<int>( Difficulty::EASY ), static_cast<int>( Difficulty::IMPOSSIBLE ) );
+    }
 
-    return ( configuration.isCampaignGameType() ? configuration.CurrentFileInfo().difficulty : configuration.GameDifficulty() );
+    return configuration.GameDifficulty();
 }
 
 void Game::LoadPlayers( const std::string & mapFileName, Players & players )

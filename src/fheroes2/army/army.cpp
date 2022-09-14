@@ -415,35 +415,93 @@ void Troops::JoinTroops( Troops & troops2 )
         }
 }
 
-void Troops::MoveTroops( const Troops & from )
+void Troops::MoveTroops( Troops & from, const int monsterIdToKeep )
 {
-    if ( this == &from )
-        return;
+    assert( this != &from );
 
-    size_t validTroops = 0;
-    for ( const Troop * troop : from ) {
-        if ( troop && troop->isValid() ) {
-            ++validTroops;
+    // Combine troops of the same type in one slot to leave more room for new troops to join
+    MergeTroops();
+
+    assert( isValid() && from.isValid() );
+
+    if ( monsterIdToKeep != Monster::UNKNOWN ) {
+        // Find a troop stack in the destination stack set consisting of monsters we need to keep
+        const auto keepIter = std::find_if( begin(), end(), [monsterIdToKeep]( const Troop * troop ) {
+            assert( troop != nullptr );
+
+            return troop->isValid() && troop->GetID() == monsterIdToKeep;
+        } );
+
+        // Find a troop stack in the source stack set consisting of monsters of a different type than the monster we need to keep
+        const auto xchgIter = std::find_if( from.begin(), from.end(), [monsterIdToKeep]( const Troop * troop ) {
+            assert( troop != nullptr );
+
+            return troop->isValid() && troop->GetID() != monsterIdToKeep;
+        } );
+
+        // If we found both, then exchange the monster to keep in the destination stack set with the found troop stack in the
+        // source stack set to concentrate all the monsters to keep in the source stack set
+        if ( keepIter != end() && xchgIter != from.end() ) {
+            Troop * keep = *keepIter;
+            Troop * xchg = *xchgIter;
+
+            const uint32_t count = keep->GetCount();
+
+            keep->Reset();
+
+            if ( !JoinTroop( *xchg ) ) {
+                assert( 0 );
+            }
+
+            xchg->Reset();
+
+            if ( !from.JoinTroop( Monster( monsterIdToKeep ), count ) ) {
+                assert( 0 );
+            }
         }
     }
 
-    for ( Troop * troop : from ) {
-        if ( troop && troop->isValid() ) {
-            if ( validTroops == 1 ) {
+    auto moveTroops = [this, &from, monsterIdToKeep]( const bool ignoreMonstersToKeep ) {
+        uint32_t stacksLeft = from.GetCount();
+
+        for ( Troop * troop : from ) {
+            assert( troop != nullptr );
+
+            if ( troop->isEmpty() ) {
+                continue;
+            }
+
+            if ( ignoreMonstersToKeep && troop->GetID() == monsterIdToKeep ) {
+                continue;
+            }
+
+            if ( stacksLeft == 1 ) {
+                // This is the last valid troop stack in the source stack set, try to join all but one monsters from this stack and
+                // then stop in any case
                 if ( JoinTroop( troop->GetMonster(), troop->GetCount() - 1 ) ) {
                     troop->SetCount( 1 );
-                    break;
                 }
+
+                break;
             }
-            else if ( JoinTroop( *troop ) ) {
-                --validTroops;
+
+            assert( stacksLeft > 1 );
+
+            if ( JoinTroop( *troop ) ) {
                 troop->Reset();
+
+                --stacksLeft;
             }
         }
-    }
+    };
+
+    // First of all, try to move all the troop stacks except the stacks of monsters that we need to keep
+    moveTroops( true );
+
+    // Then, try to move as much of monsters to keep as we can (except the last one), if there is still a place for them
+    moveTroops( false );
 }
 
-// Return true when all valid troops have the same ID, or when there are no troops
 bool Troops::AllTroopsAreTheSame() const
 {
     int firstMonsterId = Monster::UNKNOWN;
@@ -791,7 +849,11 @@ void Army::setFromTile( const Maps::Tiles & tile )
         break;
 
     case MP2::OBJ_GRAVEYARD:
-        ArrangeForBattle( Monster::MUTANT_ZOMBIE, 100, tile.GetIndex(), false );
+        at( 0 )->Set( Monster::MUTANT_ZOMBIE, 20 );
+        at( 1 )->Set( Monster::MUTANT_ZOMBIE, 20 );
+        at( 2 )->Set( Monster::MUTANT_ZOMBIE, 20 );
+        at( 3 )->Set( Monster::MUTANT_ZOMBIE, 20 );
+        at( 4 )->Set( Monster::MUTANT_ZOMBIE, 20 );
         break;
 
     case MP2::OBJ_SHIPWRECK: {

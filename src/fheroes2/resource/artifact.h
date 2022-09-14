@@ -207,7 +207,7 @@ public:
     int Level() const;
     int LoyaltyLevel() const;
 
-    int getArtifactValue() const;
+    double getArtifactValue() const;
 
     // return index of the sprite from objnarti.icn
     uint32_t IndexSprite() const
@@ -305,7 +305,7 @@ public:
 
     void exchangeArtifacts( BagArtifacts & giftBag );
 
-    int getArtifactValue() const;
+    double getArtifactValue() const;
     uint32_t CountArtifacts() const;
     uint32_t Count( const Artifact & ) const;
 
@@ -326,7 +326,7 @@ public:
     void RedrawItem( Artifact &, const fheroes2::Rect &, bool, fheroes2::Image & ) override;
 
     void ResetSelected();
-    void Redraw( fheroes2::Image & dstsf = fheroes2::Display::instance() );
+    void Redraw( fheroes2::Image & dstsf );
 
     bool ActionBarLeftMouseSingleClick( Artifact & artifact ) override;
     bool ActionBarLeftMouseSingleClick( Artifact & artifact1, Artifact & artifact2 ) override;

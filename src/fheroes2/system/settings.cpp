@@ -900,12 +900,8 @@ bool Settings::ExtModes( uint32_t f ) const
 std::string Settings::ExtName( const uint32_t settingId )
 {
     switch ( settingId ) {
-    case Settings::GAME_REMEMBER_LAST_FOCUS:
-        return _( "game: remember last focus" );
     case Settings::GAME_BATTLE_SHOW_DAMAGE:
         return _( "battle: show damage info" );
-    case Settings::WORLD_SHOW_TERRAIN_PENALTY:
-        return _( "world: show terrain penalty" );
     case Settings::WORLD_SCOUTING_EXTENDED:
         return _( "world: Scouting skill shows extended content info" );
     case Settings::WORLD_ALLOW_SET_GUARDIAN:
@@ -1060,16 +1056,8 @@ StreamBase & operator>>( StreamBase & msg, Settings & conf )
 
     int debug;
 
-    msg >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug;
-
-    static_assert( LAST_SUPPORTED_FORMAT_VERSION < FORMAT_VERSION_PRE_0917_RELEASE, "Remove the following code." );
-    if ( Game::GetLoadVersion() < FORMAT_VERSION_PRE_0917_RELEASE ) {
-        uint32_t dummy;
-
-        msg >> dummy;
-    }
-
-    msg >> conf._optExtBalance2 >> conf._optExtBalance4 >> conf._optExtBalance3 >> conf.players;
+    msg >> conf.current_maps_file >> conf.game_difficulty >> conf.game_type >> conf.preferably_count_players >> debug >> conf._optExtBalance2 >> conf._optExtBalance4
+        >> conf._optExtBalance3 >> conf.players;
 
 #ifndef WITH_DEBUG
     conf.debug = debug;
