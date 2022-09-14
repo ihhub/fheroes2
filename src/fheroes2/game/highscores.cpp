@@ -20,7 +20,6 @@
 
 #include <algorithm>
 #include <array>
-#include <cassert>
 #include <ctime>
 
 #include "highscores.h"
