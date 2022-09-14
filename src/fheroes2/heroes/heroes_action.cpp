@@ -739,6 +739,7 @@ void ActionToMonster( Heroes & hero, int32_t dst_index )
 void ActionToHeroes( Heroes & hero, int32_t dst_index )
 {
     Heroes * other_hero = world.GetTiles( dst_index ).GetHeroes();
+    bool makeAllyEnemy = false;
 
     if ( !other_hero )
         return;
@@ -746,41 +747,61 @@ void ActionToHeroes( Heroes & hero, int32_t dst_index )
     if ( hero.GetColor() == other_hero->GetColor() ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " meeting " << other_hero->GetName() )
         hero.MeetingDialog( *other_hero );
+        return;
     }
     else if ( hero.isFriends( other_hero->GetColor() ) ) {
-        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " disable meeting" )
-    }
-    else {
-        const Castle * other_hero_castle = other_hero->inCastle();
-        if ( other_hero_castle && other_hero == other_hero_castle->GetHeroes().GuardFirst() ) {
-            ActionToCastle( hero, dst_index );
+        if ( fheroes2::showMessage( fheroes2::Text{ _( "Are you sure you want to attack your ally?" ), fheroes2::FontType::normalWhite() },
+                                    fheroes2::Text{ "", fheroes2::FontType::normalWhite() }, Dialog::YES | Dialog::NO )
+             == Dialog::NO ) {
+            DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " declined attack ally hero " << other_hero->GetName() )
             return;
         }
 
-        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy hero " << other_hero->GetName() )
+        DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " confirmed attack ally hero " << other_hero->GetName() )
 
-        // new battle
-        Battle::Result res = Battle::Loader( hero.GetArmy(), other_hero->GetArmy(), dst_index );
+        makeAllyEnemy = true;
+    }
 
-        // TODO: make fading animation of both heroes together.
+    const Castle * other_hero_castle = other_hero->inCastle();
+    if ( other_hero_castle && other_hero == other_hero_castle->GetHeroes().GuardFirst() ) {
+        ActionToCastle( hero, dst_index );
+        return;
+    }
 
-        // loss defender
-        if ( !res.DefenderWins() )
-            BattleLose( *other_hero, res, false );
+    DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " attack enemy hero " << other_hero->GetName() )
 
-        // loss attacker
-        if ( !res.AttackerWins() )
-            BattleLose( hero, res, true );
+    // new battle
+    Battle::Result res = Battle::Loader( hero.GetArmy(), other_hero->GetArmy(), dst_index );
 
-        // wins attacker
-        if ( res.AttackerWins() ) {
-            hero.IncreaseExperience( res.GetExperienceAttacker() );
-        }
-        else
-            // wins defender
-            if ( res.DefenderWins() ) {
-            other_hero->IncreaseExperience( res.GetExperienceDefender() );
-        }
+    if ( makeAllyEnemy ) {
+        auto * p1 = Players::Get( hero.GetColor() );
+        auto * p2 = Players::Get( other_hero->GetColor() );
+
+        fheroes2::showMessage( fheroes2::Text{ _( "You've made yourself another enemy" ), fheroes2::FontType::normalWhite() },
+                               fheroes2::Text{ "", fheroes2::FontType::normalWhite() }, Dialog::OK );
+
+        p1->SetFriends( p2->GetColor() );
+        p2->SetFriends( p1->GetColor() );
+    }
+
+    // TODO: make fading animation of both heroes together.
+
+    // loss defender
+    if ( !res.DefenderWins() )
+        BattleLose( *other_hero, res, false );
+
+    // loss attacker
+    if ( !res.AttackerWins() )
+        BattleLose( hero, res, true );
+
+    // wins attacker
+    if ( res.AttackerWins() ) {
+        hero.IncreaseExperience( res.GetExperienceAttacker() );
+    }
+    else
+        // wins defender
+        if ( res.DefenderWins() ) {
+        other_hero->IncreaseExperience( res.GetExperienceDefender() );
     }
 }
 

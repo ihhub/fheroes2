@@ -149,7 +149,7 @@ bool Player::isPlay() const
 
 void Player::SetFriends( int f )
 {
-    friends = f;
+    friends &= f; // TODO: may be this is dangerous?
 }
 
 void Player::SetName( const std::string & newName )
