@@ -256,16 +256,16 @@ namespace
 
         const std::string contributors( "LeHerosInconnu\n"
                                         "undef21\n"
-                                        "Arkadiy Illarionov\n"
                                         "shprotru\n"
+                                        "Arkadiy Illarionov\n"
                                         "vincent-grosbois\n"
                                         "eos428\n"
                                         "a1exsh\n"
                                         "Vasilenko Alexey\n"
-                                        "Andrii Kurdiumov\n"
                                         "felix642\n"
-                                        "dimag0g\n"
+                                        "Andrii Kurdiumov\n"
                                         "Arthusppp\n"
+                                        "dimag0g\n"
                                         "tau3\n" );
 
         name.Set( contributors + _( "and many other contributors!" ), Font::BIG, textWidth );

@@ -37,6 +37,7 @@
 #include "text.h"
 #include "til.h"
 #include "tools.h"
+#include "translations.h"
 #include "ui_font.h"
 #include "ui_language.h"
 #include "ui_text.h"
@@ -356,14 +357,29 @@ namespace fheroes2
                     out = GetICN( ICN::SYSTEME, 11 + i );
                 }
                 break;
-            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
+            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::RECRUIT, 4 + i );
-                    Fill( out, 11 - i, 4 + i, 52, 17, getButtonFillingColor( i == 0 ) );
+                    // clean the button
+                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10 - i, 4 + i, out, 11 - i, 4 + i, 50, 16 );
                 }
+
+                const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
+                const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::WHITE };
+
+                const char * translatedText = _( "MIN" );
+                const char * text = fheroes2::isFontAvailable( translatedText, releasedFont ) ? translatedText : "MIN";
+
+                fheroes2::Text releasedText( text, releasedFont );
+                fheroes2::Text presesedText( text, pressedFont );
+
+                releasedText.draw( 11 + ( 50 - releasedText.width() ) / 2, 5, _icnVsSprite[id][0] );
+                presesedText.draw( 10 + ( 50 - presesedText.width() ) / 2, 6, _icnVsSprite[id][1] );
+
                 break;
+            }
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 // Did you add a new image for one language without generating a default
@@ -440,18 +456,6 @@ namespace fheroes2
 
                     // add 'T'
                     Blit( GetICN( ICN::CPANELE, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
-                }
-                return true;
-            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
-                _icnVsSprite[id].resize( 2 );
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::RECRUIT, 4 + i );
-                    // clean the button
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6 + i, out, 30 - 2 * i, 5 + i, 31, 15 );
-                    // add 'IN'
-                    Copy( GetICN( ICN::APANEL, 4 + i ), 23 - i, 22 + i, out, 33 - i, 6 + i, 8, 14 ); // letter 'I'
-                    Copy( GetICN( ICN::APANEL, 4 + i ), 31 - i, 22 + i, out, 44 - i, 6 + i, 17, 14 ); // letter 'N'
                 }
                 return true;
             default:
@@ -2310,6 +2314,17 @@ namespace fheroes2
                     ReplaceColorId( letter, goodPressedColor, evilPressedColor );
                 }
 
+                return true;
+            }
+            case ICN::HISCORE: {
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 7 ) {
+                    // Campaign title bar needs to include rating.
+                    Sprite temp = _icnVsSprite[id][7];
+
+                    Copy( temp, 215, 0, _icnVsSprite[id][7], 215 - 57, 0, 300, temp.height() );
+                    Copy( _icnVsSprite[id][6], 324, 0, _icnVsSprite[id][7], 324, 0, _icnVsSprite[id][6].width() - 324, temp.height() );
+                }
                 return true;
             }
             default:
