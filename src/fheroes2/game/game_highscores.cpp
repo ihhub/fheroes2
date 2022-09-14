@@ -62,7 +62,8 @@ namespace
     const int32_t ratingOffset = 484;
 
     void redrawHighScoreScreen( int32_t offsetX, int32_t offsetY, uint32_t & monsterAnimationFrameId, const int32_t selectedScoreIndex,
-                                const std::vector<fheroes2::HighscoreData> & highScores, const uint32_t titleImageIndex, std::function<Monster( size_t )> getMonster )
+                                const std::vector<fheroes2::HighscoreData> & highScores, const uint32_t titleImageIndex,
+                                const std::function<Monster( size_t )> & getMonster )
     {
         ++monsterAnimationFrameId;
 
