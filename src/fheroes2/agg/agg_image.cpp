@@ -2316,6 +2316,17 @@ namespace fheroes2
 
                 return true;
             }
+            case ICN::HISCORE: {
+                LoadOriginalICN( id );
+                if ( _icnVsSprite[id].size() > 7 ) {
+                    // Campaign title bar needs to include rating.
+                    Sprite temp = _icnVsSprite[id][7];
+
+                    Copy( temp, 215, 0, _icnVsSprite[id][7], 215 - 57, 0, 300, temp.height() );
+                    Copy( _icnVsSprite[id][6], 324, 0, _icnVsSprite[id][7], 324, 0, _icnVsSprite[id][6].width() - 324, temp.height() );
+                }
+                return true;
+            }
             default:
                 break;
             }
