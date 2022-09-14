@@ -755,7 +755,7 @@ void ActionToHeroes( Heroes & hero, int32_t dst_index )
         auto * p2 = Players::Get( other_hero->GetColor() );
 
         fheroes2::showMessage( fheroes2::Text{ _( "You've made yourself another enemy" ), fheroes2::FontType::normalWhite() },
-                            fheroes2::Text{ "", fheroes2::FontType::normalWhite() }, Dialog::OK );
+                               fheroes2::Text{ "", fheroes2::FontType::normalWhite() }, Dialog::OK );
 
         p1->SetFriends( p2->GetColor() );
         p2->SetFriends( p1->GetColor() );
