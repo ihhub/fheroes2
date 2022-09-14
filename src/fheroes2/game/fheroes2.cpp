@@ -281,6 +281,8 @@ int main( int argc, char ** argv )
         if ( conf.isShowIntro() ) {
             fheroes2::showTeamInfo();
 
+            Video::ShowVideo( "NWCLOGO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
+            Video::ShowVideo( "CYLOGO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
             Video::ShowVideo( "H2XINTRO.SMK", Video::VideoAction::PLAY_TILL_VIDEO_END );
         }
 

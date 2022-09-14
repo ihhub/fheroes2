@@ -27,9 +27,11 @@
 #include "pal.h"
 #include "settings.h"
 
+#include <cassert>
+
 namespace fheroes2
 {
-    ButtonBase::ButtonBase( int32_t offsetX, int32_t offsetY )
+    ButtonBase::ButtonBase( const int32_t offsetX, const int32_t offsetY )
         : _offsetX( offsetX )
         , _offsetY( offsetY )
         , _isPressed( false )
@@ -39,112 +41,58 @@ namespace fheroes2
         , _disabledSprite()
     {}
 
-    ButtonBase::ButtonBase( ButtonBase && button ) noexcept
-        : ButtonBase()
+    bool ButtonBase::press()
     {
-        _swap( button );
-    }
-
-    ButtonBase & ButtonBase::operator=( ButtonBase && button ) noexcept
-    {
-        if ( this != &button ) {
-            _swap( button );
+        if ( !isEnabled() ) {
+            return false;
         }
-        return *this;
+
+        _isPressed = true;
+        notifySubscriber();
+        return true;
     }
 
-    void ButtonBase::_swap( ButtonBase & button )
+    bool ButtonBase::release()
     {
-        std::swap( _offsetX, button._offsetX );
-        std::swap( _offsetY, button._offsetY );
-        std::swap( _isPressed, button._isPressed );
-        std::swap( _isEnabled, button._isEnabled );
-        std::swap( _isVisible, button._isVisible );
-        std::swap( _releasedSprite, button._releasedSprite );
-        std::swap( _disabledSprite, button._disabledSprite );
-    }
-
-    bool ButtonBase::isEnabled() const
-    {
-        return _isEnabled;
-    }
-
-    bool ButtonBase::isDisabled() const
-    {
-        return !_isEnabled;
-    }
-
-    bool ButtonBase::isPressed() const
-    {
-        return _isPressed;
-    }
-
-    bool ButtonBase::isReleased() const
-    {
-        return !_isPressed;
-    }
-
-    bool ButtonBase::isVisible() const
-    {
-        return _isVisible;
-    }
-
-    bool ButtonBase::isHidden() const
-    {
-        return !_isVisible;
-    }
-
-    void ButtonBase::press()
-    {
-        if ( isEnabled() ) {
-            _isPressed = true;
-            updateSubscription();
+        if ( !isEnabled() ) {
+            return false;
         }
-    }
 
-    void ButtonBase::release()
-    {
-        if ( isEnabled() ) {
-            _isPressed = false;
-            updateSubscription();
-        }
+        _isPressed = false;
+        notifySubscriber();
+        return true;
     }
 
     void ButtonBase::enable()
     {
         _isEnabled = true;
-        updateSubscription();
+        notifySubscriber();
     }
 
     void ButtonBase::disable()
     {
         _isEnabled = false;
         _isPressed = false; // button can't be disabled and pressed
-        updateSubscription();
+        notifySubscriber();
     }
 
     void ButtonBase::show()
     {
         _isVisible = true;
-        updateSubscription();
+        notifySubscriber();
     }
 
     void ButtonBase::hide()
     {
         _isVisible = false;
-        updateSubscription();
+        notifySubscriber();
     }
 
-    void ButtonBase::setPosition( int32_t offsetX_, int32_t offsetY_ )
+    bool ButtonBase::draw( Image & output ) const
     {
-        _offsetX = offsetX_;
-        _offsetY = offsetY_;
-    }
-
-    void ButtonBase::draw( Image & output ) const
-    {
-        if ( !isVisible() )
-            return;
+        if ( !isVisible() ) {
+            return false;
+        }
 
         if ( isPressed() ) {
             // button can't be disabled and pressed
@@ -155,28 +103,42 @@ namespace fheroes2
             const Sprite & sprite = isEnabled() ? _getReleased() : _getDisabled();
             Blit( sprite, output, _offsetX + sprite.x(), _offsetY + sprite.y() );
         }
+
+        return true;
     }
 
-    bool ButtonBase::drawOnPress( Image & output )
-    {
-        if ( !isPressed() ) {
-            press();
-            draw( output );
-            Display::instance().render( area() );
-            return true;
-        }
-        return false;
-    }
-
-    bool ButtonBase::drawOnRelease( Image & output )
+    bool ButtonBase::drawOnPress( Display & output )
     {
         if ( isPressed() ) {
-            release();
-            draw( output );
-            Display::instance().render( area() );
-            return true;
+            return false;
         }
-        return false;
+
+        if ( !press() ) {
+            return false;
+        }
+
+        if ( isVisible() ) {
+            draw( output );
+            output.render( area() );
+        }
+        return true;
+    }
+
+    bool ButtonBase::drawOnRelease( Display & output )
+    {
+        if ( !isPressed() ) {
+            return false;
+        }
+
+        if ( !release() ) {
+            return false;
+        }
+
+        if ( isVisible() ) {
+            draw( output );
+            output.render( area() );
+        }
+        return true;
     }
 
     Rect ButtonBase::area() const
@@ -238,25 +200,6 @@ namespace fheroes2
         , _pressed( pressed )
         , _disabled( disabled )
     {}
-
-    ButtonSprite::ButtonSprite( ButtonSprite && button ) noexcept
-        : ButtonBase( std::move( button ) )
-    {
-        std::swap( _released, button._released );
-        std::swap( _pressed, button._pressed );
-        std::swap( _disabled, button._disabled );
-    }
-
-    ButtonSprite & ButtonSprite::operator=( ButtonSprite && button ) noexcept
-    {
-        if ( this != &button ) {
-            ButtonBase::_swap( button );
-            std::swap( _released, button._released );
-            std::swap( _pressed, button._pressed );
-            std::swap( _disabled, button._disabled );
-        }
-        return *this;
-    }
 
     void ButtonSprite::setSprite( const Sprite & released, const Sprite & pressed, const Sprite & disabled )
     {
@@ -365,17 +308,14 @@ namespace fheroes2
 
     ButtonBase & ButtonGroup::button( size_t id )
     {
+        assert( id < _button.size() );
         return *_button[id];
     }
 
     const ButtonBase & ButtonGroup::button( size_t id ) const
     {
+        assert( id < _button.size() );
         return *_button[id];
-    }
-
-    size_t ButtonGroup::size() const
-    {
-        return _button.size();
     }
 
     int ButtonGroup::processEvents()

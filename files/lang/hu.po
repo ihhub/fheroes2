@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-01 16:33+0000\n"
+"POT-Creation-Date: 2022-09-10 16:23+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -18,6 +18,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2011-06-02 03:12+0000\n"
 "X-Generator: Poedit 3.0.1\n"
+
+msgid "MIN"
+msgstr ""
 
 #, fuzzy
 msgid "Warrior"
@@ -363,6 +366,10 @@ msgid "Hero Screen"
 msgstr ""
 
 #, fuzzy
+msgid "Captain's Options"
+msgstr "Kastély beállítások"
+
+#, fuzzy
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
@@ -497,9 +504,15 @@ msgid ""
 "get to go again until the next round."
 msgstr ""
 
+msgid "View Captain's options"
+msgstr ""
+
 #, fuzzy
 msgid "View Hero's options"
 msgstr "Hős opciói"
+
+msgid "View opposing Captain"
+msgstr ""
 
 msgid "View opposing Hero"
 msgstr "Ellenséges hős megmutatása"
@@ -2421,6 +2434,14 @@ msgstr ""
 msgid "Recruit Creatures"
 msgstr "Hős toborzása"
 
+#, fuzzy
+msgid "Max"
+msgstr "Maximus"
+
+#, fuzzy
+msgid "Hire all creatures in the town."
+msgstr "Összes hős és város elvesztése"
+
 msgid "Town Population Information and Statistics"
 msgstr "A város lakosságának adatai és statisztikái"
 
@@ -2871,10 +2892,6 @@ msgstr ""
 
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr ""
-
-#, fuzzy
-msgid "Max"
-msgstr "Maximus"
 
 #, fuzzy
 msgid "Min"

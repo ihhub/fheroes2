@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-01 16:33+0000\n"
+"POT-Creation-Date: 2022-09-10 16:23+0000\n"
 "PO-Revision-Date: 2022-05-10 16:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -18,6 +18,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
 "X-Generator: Poedit 3.0.1\n"
+
+msgid "MIN"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Krigare"
@@ -360,6 +363,10 @@ msgstr "Avbryt"
 msgid "Hero Screen"
 msgstr "Hjältesskärm"
 
+#, fuzzy
+msgid "Captain's Options"
+msgstr "Slottalternativ"
+
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
@@ -495,9 +502,15 @@ msgid ""
 "get to go again until the next round."
 msgstr ""
 
+msgid "View Captain's options"
+msgstr ""
+
 #, fuzzy
 msgid "View Hero's options"
 msgstr "Hjältealternativ"
+
+msgid "View opposing Captain"
+msgstr ""
 
 msgid "View opposing Hero"
 msgstr "Visa motstående hjälte"
@@ -2383,6 +2396,14 @@ msgstr ""
 msgid "Recruit Creatures"
 msgstr "Rekrytera hjälte"
 
+#, fuzzy
+msgid "Max"
+msgstr "Maximus"
+
+#, fuzzy
+msgid "Hire all creatures in the town."
+msgstr "Förlora alla dina hjältar och städer."
+
 msgid "Town Population Information and Statistics"
 msgstr "Stadsbefolknings- och statistikinfo"
 
@@ -2828,10 +2849,6 @@ msgstr "Jag kan erbjuda dig %{count} för 1 enhet %{resfrom}."
 
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr "Jag kan erbjuda dig 1 enhet %{resto} för %{count} %{resfrom}."
-
-#, fuzzy
-msgid "Max"
-msgstr "Maximus"
 
 #, fuzzy
 msgid "Min"
