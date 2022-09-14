@@ -57,7 +57,7 @@
 
 namespace
 {
-    // This structure used in cases when an object plays 'music' sound so we need to modify music volume according to sound settings
+    // This structure is used in cases when an object plays 'music' sound so we need to modify music volume according to sound settings
     // and then restore it back to the original value.
     struct MusicVolumeRestorer
     {
