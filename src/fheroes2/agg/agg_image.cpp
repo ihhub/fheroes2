@@ -359,8 +359,8 @@ namespace fheroes2
                 fheroes2::Text releasedText( text, releasedFont );
                 fheroes2::Text presesedText( text, pressedFont );
 
-                releasedText.draw( 21 + ( 50 - releasedText.width() ) / 2, 5, _icnVsSprite[id][0] );
-                presesedText.draw( 20 + ( 50 - presesedText.width() ) / 2, 6, _icnVsSprite[id][1] );
+                releasedText.draw( 23 + ( 50 - releasedText.width() ) / 2, 5, _icnVsSprite[id][0] );
+                presesedText.draw( 22 + ( 50 - presesedText.width() ) / 2, 6, _icnVsSprite[id][1] );
 
                 break;
             }
