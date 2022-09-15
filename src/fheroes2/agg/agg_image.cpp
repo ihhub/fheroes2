@@ -435,7 +435,7 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::EVIL_CAMPAIGN_BUTTONS, 0 + i );
+                    out = GetICN( ICN::X_CMPBTN, 0 + i );
                     // clean the button
                     Fill( out, 13 - i, 3 + i, 125, 16, getButtonFillingColor( i == 0, false ) );
                 }
