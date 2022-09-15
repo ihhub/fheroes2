@@ -1102,7 +1102,7 @@ Battle::Interface::Interface( Arena & a, int32_t center )
 
     status.SetPosition( area.x + settingsRect.width, btn_auto.area().y );
 
-    listlog.reset( new StatusListBox() );
+    listlog = std::make_unique<StatusListBox>( new StatusListBox() );
 
     if ( listlog )
         listlog->SetPosition( area.x, area.y + area.height - status.height );
