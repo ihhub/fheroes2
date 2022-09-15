@@ -410,6 +410,25 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_DIFFICULTY_ARCHIBALD: {
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::EVIL_CAMPAIGN_BUTTONS, 4 + i );
+                    // clean the button
+                    Fill( out, 13 - i, 4 + i, 128, 14, getButtonFillingColor( i == 0, false ) );
+                }
+                const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::GRAY };
+                const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::GRAY };
+
+                const char * text = getSupportedText( gettext_noop( "DIFFICULTY" ), releasedFont );
+
+                fheroes2::Text releasedText( text, releasedFont );
+                fheroes2::Text pressedText( text, pressedFont );
+
+                releasedText.draw( 10 + ( 50 - releasedText.width() ) / 2, 5, _icnVsSprite[id][0] );
+                pressedText.draw( 11 + ( 50 - pressedText.width() ) / 2, 6, _icnVsSprite[id][1] );
+            }
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
                 // Did you add a new image for one language without generating a default
