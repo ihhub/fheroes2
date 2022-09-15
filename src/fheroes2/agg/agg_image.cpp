@@ -343,14 +343,28 @@ namespace fheroes2
                     Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
                 }
                 break;
-            case ICN::BTNGIFT_GOOD:
+            case ICN::BTNGIFT_GOOD: {
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::SYSTEM, 11 + i );
                 }
+
+                const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
+                const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::WHITE };
+
+                const char * translatedText = _( "GIFT" );
+                const char * text = fheroes2::isFontAvailable( translatedText, releasedFont ) ? translatedText : "GIFT";
+
+                fheroes2::Text releasedText( text, releasedFont );
+                fheroes2::Text presesedText( text, pressedFont );
+
+                releasedText.draw( 21 + ( 50 - releasedText.width() ) / 2, 5, _icnVsSprite[id][0] );
+                presesedText.draw( 20 + ( 50 - presesedText.width() ) / 2, 6, _icnVsSprite[id][1] );
+
                 break;
-            case ICN::BTNGIFT_EVIL:
+            }
+            case ICN::BTNGIFT_EVIL: 
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
@@ -412,28 +426,6 @@ namespace fheroes2
                     // Add 'ly'
                     Blit( GetICN( ICN::BTNHOTST, i ), 47 - i, 21, out, 71 - i, 28, 12, 13 );
                     Blit( GetICN( ICN::BTNHOTST, i ), 72 - i, 21, out, 84 - i, 28, 13, 13 );
-                }
-                return true;
-            case ICN::BTNGIFT_GOOD:
-                _icnVsSprite[id].resize( 2 );
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::TRADPOST, 17 + i );
-
-                    // clean the button
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 6, 4, 72, 15 );
-
-                    // add 'G'
-                    Blit( GetICN( ICN::CPANEL, i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
-
-                    // add 'I'
-                    Blit( GetICN( ICN::APANEL, 4 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
-
-                    // add 'F'
-                    Blit( GetICN( ICN::APANEL, 4 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
-
-                    // add 'T'
-                    Blit( GetICN( ICN::CPANEL, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
                 }
                 return true;
             case ICN::BTNGIFT_EVIL:
