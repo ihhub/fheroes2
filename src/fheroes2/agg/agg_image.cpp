@@ -364,7 +364,7 @@ namespace fheroes2
 
                 break;
             }
-            case ICN::BTNGIFT_EVIL: 
+            case ICN::BTNGIFT_EVIL:
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
