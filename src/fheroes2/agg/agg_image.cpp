@@ -359,7 +359,6 @@ namespace fheroes2
                 const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
                 const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::WHITE };
 
-
                 const char * text = getSupportedText( gettext_noop( "GIFT" ), releasedFont );
 
                 fheroes2::Text releasedText( text, releasedFont );
