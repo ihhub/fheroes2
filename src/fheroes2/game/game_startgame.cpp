@@ -913,9 +913,9 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         isCursorOverButtons = false;
 
         if ( isMovingHero ) {
-            // hero is moving, set the appropriate cursor
-            if ( cursor.Themes() != Cursor::WAIT ) {
-                cursor.SetThemes( Cursor::WAIT );
+            // A hero is moving, set the appropriate cursor.
+            if ( cursor.Themes() != Cursor::POINTER ) {
+                cursor.SetThemes( Cursor::POINTER );
             }
 
             // if the hero is currently moving, pressing any mouse button should stop him
