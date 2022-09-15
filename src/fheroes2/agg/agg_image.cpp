@@ -414,20 +414,64 @@ namespace fheroes2
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::EVIL_CAMPAIGN_BUTTONS, 4 + i );
+                    out = GetICN( ICN::EVIL_CAMPAIGN_BUTTONS, 0 + i );
                     // clean the button
-                    Fill( out, 13 - i, 4 + i, 128, 14, getButtonFillingColor( i == 0, false ) );
+                    Fill( out, 13 - i, 3 + i, 125, 16, getButtonFillingColor( i == 0, false ) );
                 }
-                const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::GRAY };
-                const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::GRAY };
+                //const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::GRAY };
+                //const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::GRAY };
 
-                const char * text = getSupportedText( gettext_noop( "DIFFICULTY" ), releasedFont );
+                //const char * text = getSupportedText( gettext_noop( "DIFFICULTY" ), releasedFont );
 
-                fheroes2::Text releasedText( text, releasedFont );
-                fheroes2::Text pressedText( text, pressedFont );
+                //fheroes2::Text releasedText( text, releasedFont );
+                //fheroes2::Text pressedText( text, pressedFont );
 
-                releasedText.draw( 10 + ( 50 - releasedText.width() ) / 2, 5, _icnVsSprite[id][0] );
-                pressedText.draw( 11 + ( 50 - pressedText.width() ) / 2, 6, _icnVsSprite[id][1] );
+                //releasedText.draw( 10 /*+ ( 50 - releasedText.width() ) / 2*/, 5, _icnVsSprite[id][0] );
+                //pressedText.draw( 11 /*+ ( 50 - pressedText.width() ) / 2*/, 6, _icnVsSprite[id][1] );
+
+                break;
+            }
+            case ICN::BUTTON_DIFFICULTY_POL: {
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::EVIL_CAMPAIGN_BUTTONS, 0 + i );
+                    // clean the button
+                    Fill( out, 13 - i, 3 + i, 125, 16, getButtonFillingColor( i == 0, false ) );
+                }
+                // const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::GRAY };
+                // const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::GRAY };
+
+                // const char * text = getSupportedText( gettext_noop( "DIFFICULTY" ), releasedFont );
+
+                // fheroes2::Text releasedText( text, releasedFont );
+                // fheroes2::Text pressedText( text, pressedFont );
+
+                // releasedText.draw( 10 /*+ ( 50 - releasedText.width() ) / 2*/, 5, _icnVsSprite[id][0] );
+                // pressedText.draw( 11 /*+ ( 50 - pressedText.width() ) / 2*/, 6, _icnVsSprite[id][1] );
+
+                break;
+            }
+            case ICN::BUTTON_DIFFICULTY_ROLAND: {
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::GOOD_CAMPAIGN_BUTTONS, 0 + i );
+                    // clean the button
+                    Fill( out, 13 - i, 3 + i, 125, 16, getButtonFillingColor( i == 0, false ) );
+                }
+                // const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::GRAY };
+                // const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::GRAY };
+
+                // const char * text = getSupportedText( gettext_noop( "DIFFICULTY" ), releasedFont );
+
+                // fheroes2::Text releasedText( text, releasedFont );
+                // fheroes2::Text pressedText( text, pressedFont );
+
+                // releasedText.draw( 10 /*+ ( 50 - releasedText.width() ) / 2*/, 5, _icnVsSprite[id][0] );
+                // pressedText.draw( 11 /*+ ( 50 - pressedText.width() ) / 2*/, 6, _icnVsSprite[id][1] );
+
+                break;
             }
             default:
                 // You're calling this function for non-specified ICN id. Check your logic!
@@ -959,6 +1003,9 @@ namespace fheroes2
             case ICN::BTNGIFT_GOOD:
             case ICN::BTNGIFT_EVIL:
             case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
+            case ICN::BUTTON_DIFFICULTY_ARCHIBALD:
+            case ICN::BUTTON_DIFFICULTY_POL:
+            case ICN::BUTTON_DIFFICULTY_ROLAND:
                 generateLanguageSpecificImages( id );
                 return true;
             case ICN::BTNCONFIG:
