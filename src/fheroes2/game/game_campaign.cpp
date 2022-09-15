@@ -741,8 +741,8 @@ namespace
         case Campaign::DESCENDANTS_CAMPAIGN:
         case Campaign::WIZARDS_ISLE_CAMPAIGN:
         case Campaign::VOYAGE_HOME_CAMPAIGN:
-            releasedImage = fheroes2::AGG::GetICN( ICN::BUTTON_DIFFICULTY_ARCHIBALD, 0 );
-            pressedImage = fheroes2::AGG::GetICN( ICN::BUTTON_DIFFICULTY_ARCHIBALD, 1 );
+            releasedImage = fheroes2::AGG::GetICN( ICN::BUTTON_DIFFICULTY_POL, 0 );
+            pressedImage = fheroes2::AGG::GetICN( ICN::BUTTON_DIFFICULTY_POL, 1 );
             break;
         default:
             // Implementing a new campaign? Add a new case!
