@@ -458,18 +458,18 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::GOOD_CAMPAIGN_BUTTONS, 0 + i );
                     // clean the button
-                    Fill( out, 13 - i, 3 + i, 125, 16, getButtonFillingColor( i == 0, false ) );
+                    Fill( out, 13, 4 + i, 127, 15, getButtonFillingColor( i == 0 ) );
                 }
-                // const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::GRAY };
-                // const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::GRAY };
+                 const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
+                 const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::WHITE };
 
-                // const char * text = getSupportedText( gettext_noop( "DIFFICULTY" ), releasedFont );
+                 const char * text = getSupportedText( gettext_noop( "DIFFICULTY" ), releasedFont );
 
-                // fheroes2::Text releasedText( text, releasedFont );
-                // fheroes2::Text pressedText( text, pressedFont );
+                 fheroes2::Text releasedText( text, releasedFont );
+                 fheroes2::Text pressedText( text, pressedFont );
 
-                // releasedText.draw( 10 /*+ ( 50 - releasedText.width() ) / 2*/, 5, _icnVsSprite[id][0] );
-                // pressedText.draw( 11 /*+ ( 50 - pressedText.width() ) / 2*/, 6, _icnVsSprite[id][1] );
+                 releasedText.draw( 10 + ( 132 - releasedText.width() ) / 2, 5, _icnVsSprite[id][0] );
+                 pressedText.draw( 9 + ( 132 - pressedText.width() ) / 2, 6, _icnVsSprite[id][1] );
 
                 break;
             }
