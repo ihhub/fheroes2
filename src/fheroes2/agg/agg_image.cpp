@@ -415,19 +415,19 @@ namespace fheroes2
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::EVIL_CAMPAIGN_BUTTONS, 0 + i );
-                    // clean the button
-                    Fill( out, 13 - i, 3 + i, 125, 16, getButtonFillingColor( i == 0, false ) );
+                    // clean the button. Needs to use different color to fill pressed state.
+                    Fill( out, 13 - 2 * i, 3 + 2 * i, 129 + 2 * i, 16, getButtonFillingColor( i == 0, false ) );
                 }
-                //const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::GRAY };
-                //const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::GRAY };
+                const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::GRAY };
+                const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::GRAY };
 
-                //const char * text = getSupportedText( gettext_noop( "DIFFICULTY" ), releasedFont );
+                const char * text = getSupportedText( gettext_noop( "DIFFICULTY" ), releasedFont );
 
-                //fheroes2::Text releasedText( text, releasedFont );
-                //fheroes2::Text pressedText( text, pressedFont );
+                fheroes2::Text releasedText( text, releasedFont );
+                fheroes2::Text pressedText( text, pressedFont );
 
-                //releasedText.draw( 10 /*+ ( 50 - releasedText.width() ) / 2*/, 5, _icnVsSprite[id][0] );
-                //pressedText.draw( 11 /*+ ( 50 - pressedText.width() ) / 2*/, 6, _icnVsSprite[id][1] );
+                releasedText.draw( 10 + ( 132 - releasedText.width() ) / 2, 5, _icnVsSprite[id][0] );
+                pressedText.draw( 10 + ( 132 - pressedText.width() ) / 2, 6, _icnVsSprite[id][1] );
 
                 break;
             }
@@ -436,19 +436,19 @@ namespace fheroes2
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::X_CMPBTN, 0 + i );
-                    // clean the button
-                    Fill( out, 13 - i, 3 + i, 125, 16, getButtonFillingColor( i == 0, false ) );
+                    // clean the button. Needs to use different color to fill pressed state.
+                    Fill( out, 4 - i, 3 + i, 132, 16, getButtonFillingColor( i == 0, false ) );
                 }
-                // const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::GRAY };
-                // const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::GRAY };
+                 const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::GRAY };
+                 const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::GRAY };
 
-                // const char * text = getSupportedText( gettext_noop( "DIFFICULTY" ), releasedFont );
+                 const char * text = getSupportedText( gettext_noop( "DIFFICULTY" ), releasedFont );
 
-                // fheroes2::Text releasedText( text, releasedFont );
-                // fheroes2::Text pressedText( text, pressedFont );
+                 fheroes2::Text releasedText( text, releasedFont );
+                 fheroes2::Text pressedText( text, pressedFont );
 
-                // releasedText.draw( 10 /*+ ( 50 - releasedText.width() ) / 2*/, 5, _icnVsSprite[id][0] );
-                // pressedText.draw( 11 /*+ ( 50 - pressedText.width() ) / 2*/, 6, _icnVsSprite[id][1] );
+                 releasedText.draw( 4 + ( 132 - releasedText.width() ) / 2, 5, _icnVsSprite[id][0] );
+                 pressedText.draw( 4 + ( 132 - pressedText.width() ) / 2, 5, _icnVsSprite[id][1] );
 
                 break;
             }
