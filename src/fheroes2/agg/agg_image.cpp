@@ -239,6 +239,12 @@ namespace
         return isReleasedState ? fheroes2::GetColorId( 180, 180, 180 ) : fheroes2::GetColorId( 144, 144, 144 );
     }
 
+    const char * getSupportedText( const char * text, const fheroes2::FontType & font )
+    {
+        const char * translatedText = _( text );
+        return fheroes2::isFontAvailable( translatedText, font ) ? translatedText : text;
+    }
+
     void convertToEvilInterface( fheroes2::Sprite & image, const fheroes2::Rect & roi )
     {
         fheroes2::ApplyPalette( image, roi.x, roi.y, image, roi.x, roi.y, roi.width, roi.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
@@ -353,8 +359,8 @@ namespace fheroes2
                 const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
                 const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::WHITE };
 
-                const char * translatedText = _( "GIFT" );
-                const char * text = fheroes2::isFontAvailable( translatedText, releasedFont ) ? translatedText : "GIFT";
+
+                const char * text = getSupportedText( gettext_noop( "GIFT" ), releasedFont );
 
                 fheroes2::Text releasedText( text, releasedFont );
                 fheroes2::Text presesedText( text, pressedFont );
@@ -373,8 +379,7 @@ namespace fheroes2
                 const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::GRAY };
                 const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::GRAY };
 
-                const char * translatedText = _( "GIFT" );
-                const char * text = fheroes2::isFontAvailable( translatedText, releasedFont ) ? translatedText : "GIFT";
+                const char * text = getSupportedText( gettext_noop( "GIFT" ), releasedFont );
 
                 fheroes2::Text releasedText( text, releasedFont );
                 fheroes2::Text presesedText( text, pressedFont );
@@ -396,8 +401,7 @@ namespace fheroes2
                 const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
                 const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::WHITE };
 
-                const char * translatedText = _( "MIN" );
-                const char * text = fheroes2::isFontAvailable( translatedText, releasedFont ) ? translatedText : "MIN";
+                const char * text = getSupportedText( gettext_noop( "MIN" ), releasedFont );
 
                 fheroes2::Text releasedText( text, releasedFont );
                 fheroes2::Text presesedText( text, pressedFont );
