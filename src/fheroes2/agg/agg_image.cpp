@@ -2267,9 +2267,8 @@ namespace fheroes2
                     // The pressed state image.
                     const Sprite & original = GetICN( originalIcnId, 2 * i + 1 );
 
-                    // Edit the pressed state image.
                     Sprite & resized = image[2 * i + 1];
-                    // Change pressed state image to have same width and hight as released image
+                    // Change pressed state image to have same width and height as released image
                     resized.resize( image[2 * i].width() + offsetEvilX, image[2 * i].height() );
                     resized.reset();
 
