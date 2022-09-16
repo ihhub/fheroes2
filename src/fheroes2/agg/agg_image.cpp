@@ -416,7 +416,7 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::EVIL_CAMPAIGN_BUTTONS, 0 + i );
                     // clean the button. Needs different color for pressed state so can't use getButtonFillingColor().
-                    Fill( out, 13 - 2 * i, 3 + 2 * i, 129 + 2 * i, 16, out.image()[ 13 - 7 * i  +  ( 5 + i ) * ( 145 - ( 4 * i ) )] );
+                    Fill( out, 13 - 2 * i, 3 + 2 * i, 129 + 2 * i, 16, out.image()[13 - 7 * i + ( 5 + i ) * ( 145 - ( 4 * i ) )] );
                 }
                 const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::GRAY };
                 const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::GRAY };
