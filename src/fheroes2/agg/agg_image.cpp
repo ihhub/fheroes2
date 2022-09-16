@@ -416,7 +416,7 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::EVIL_CAMPAIGN_BUTTONS, 0 + i );
                     // clean the button. Needs different color for pressed state so can't use getButtonFillingColor().
-                    Fill( out, 13 - 2 * i, 3 + 2 * i, 129 + 2 * i, 16, out.image()[13 + 5 * 145] );
+                    Fill( out, 13 - 2 * i, 3 + 2 * i, 129 + 2 * i, 16, out.image()[ 13 - 7 * i  +  ( 5 + i ) * ( 145 - ( 4 * i ) )] );
                 }
                 const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::GRAY };
                 const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::GRAY };
@@ -2257,16 +2257,24 @@ namespace fheroes2
 
                 const int originalIcnId = ( id == ICN::GOOD_CAMPAIGN_BUTTONS ) ? ICN::CAMPXTRG : ICN::CAMPXTRE;
 
+                // The evil buttons' pressed state need to be 2 pixels wider.
+                const int offsetEvilX = ( id == ICN::GOOD_CAMPAIGN_BUTTONS ) ? 0 : 2;
+
                 for ( int32_t i = 0; i < 4; ++i ) {
+                    // The released state image.
                     image[2 * i] = GetICN( originalIcnId, 2 * i );
 
+                    // The pressed state image.
                     const Sprite & original = GetICN( originalIcnId, 2 * i + 1 );
 
+                    // Edit the pressed state image.
                     Sprite & resized = image[2 * i + 1];
-                    resized.resize( image[2 * i].width(), image[2 * i].height() );
+                    // Change pressed state image to have same width and hight as released image
+                    resized.resize( image[2 * i].width() + offsetEvilX, image[2 * i].height() );
                     resized.reset();
 
-                    Copy( original, 0, 0, resized, original.x(), original.y(), original.width(), original.height() );
+                    // Restore content of the pressed state image.
+                    Copy( original, 0, 0, resized, original.x(), original.y(), original.width() + offsetEvilX, original.height() );
                 }
 
                 return true;
