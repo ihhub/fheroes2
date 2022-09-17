@@ -173,11 +173,6 @@ public:
         return focus;
     }
 
-    const Focus & GetFocus() const
-    {
-        return focus;
-    }
-
     uint8_t getHandicapStatus() const
     {
         return _handicapStatus;

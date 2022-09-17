@@ -326,7 +326,7 @@ Funds & Funds::operator*=( uint32_t mul )
     return *this;
 }
 
-Funds & Funds::operator*=( const int32_t div )
+Funds & Funds::operator/=( const int32_t div )
 {
     if ( div == 0 ) {
         assert( 0 );

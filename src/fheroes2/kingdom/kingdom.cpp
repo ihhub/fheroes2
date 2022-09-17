@@ -100,7 +100,7 @@ void Kingdom::Init( int clr )
         resource = _getKingdomStartingResources( difficultyLevel );
 
         // Some human players can have handicap for resources.
-        Player * player = Players::Get( color );
+        const Player * player = Players::Get( color );
         assert( player != nullptr );
         const int32_t handicapPercentage = getHandicapIncomePercentage( player->getHandicapStatus() );
         resource = resource * handicapPercentage / 100;
@@ -653,6 +653,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
         totalIncome.gold = static_cast<int32_t>( totalIncome.gold * Difficulty::GetGoldIncomeBonus( Game::getDifficulty() ) );
     }
 
+    // Some human players can have handicap for resources.
     Player * player = Players::Get( color );
     assert( player != nullptr );
     const int32_t handicapPercentage = getHandicapIncomePercentage( player->getHandicapStatus() );
