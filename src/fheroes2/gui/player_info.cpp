@@ -397,7 +397,8 @@ bool Interface::PlayersInfo::QueueEventProcessing()
                                    fheroes2::Text( _( "This lets you change the handicap of a particular player. Only humans may be handicapped. Handicapped players "
                                                       "start with fewer resources and earn 15 or 30% fewer resources per turn for mild and severe handicaps, "
                                                       "respectively." ),
-                                                   fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                                                   fheroes2::FontType::normalWhite() ),
+                                   Dialog::ZERO );
             return true;
         }
 
