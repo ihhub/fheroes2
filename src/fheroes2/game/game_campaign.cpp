@@ -725,32 +725,27 @@ namespace
 
     fheroes2::ButtonSprite getDifficultyButton( const int campaignId, const fheroes2::Point & offset )
     {
-        fheroes2::Sprite releasedImage;
-        fheroes2::Sprite pressedImage;
+        int icnId = ICN::UNKNOWN;
 
         switch ( campaignId ) {
         case Campaign::ROLAND_CAMPAIGN:
-            releasedImage = fheroes2::AGG::GetICN( ICN::BUTTON_DIFFICULTY_ROLAND, 0 );
-            pressedImage = fheroes2::AGG::GetICN( ICN::BUTTON_DIFFICULTY_ROLAND, 1 );
+            icnId = ICN::BUTTON_DIFFICULTY_ROLAND;
             break;
         case Campaign::ARCHIBALD_CAMPAIGN:
-            releasedImage = fheroes2::AGG::GetICN( ICN::BUTTON_DIFFICULTY_ARCHIBALD, 0 );
-            pressedImage = fheroes2::AGG::GetICN( ICN::BUTTON_DIFFICULTY_ARCHIBALD, 1 );
+            icnId = ICN::BUTTON_DIFFICULTY_ARCHIBALD;
             break;
         case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
         case Campaign::DESCENDANTS_CAMPAIGN:
         case Campaign::WIZARDS_ISLE_CAMPAIGN:
         case Campaign::VOYAGE_HOME_CAMPAIGN:
-            releasedImage = fheroes2::AGG::GetICN( ICN::BUTTON_DIFFICULTY_POL, 0 );
-            pressedImage = fheroes2::AGG::GetICN( ICN::BUTTON_DIFFICULTY_POL, 1 );
+            icnId = ICN::BUTTON_DIFFICULTY_POL;
             break;
         default:
             // Implementing a new campaign? Add a new case!
             assert( 0 );
             break;
         }
-
-        return fheroes2::ButtonSprite( offset.x, offset.y, releasedImage, pressedImage );
+        return fheroes2::ButtonSprite( offset.x, offset.y, fheroes2::AGG::GetICN( icnId, 0 ), fheroes2::AGG::GetICN( icnId, 1 ) );
     }
 
     int32_t setCampaignDifficulty( int32_t currentDifficulty, const bool isSelectionAllowed )
