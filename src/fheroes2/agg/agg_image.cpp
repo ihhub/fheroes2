@@ -459,8 +459,7 @@ namespace fheroes2
                 }
 
                 const fheroes2::FontColor fontColor = ( baseIcnId == ICN::GOOD_CAMPAIGN_BUTTONS ) ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
-                const int textSpaceWidth = 132;
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), textOffsetReleased, textOffsetPressed, textSpaceWidth, fontColor );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), textOffsetReleased, textOffsetPressed, 132, fontColor );
 
                 break;
             }
