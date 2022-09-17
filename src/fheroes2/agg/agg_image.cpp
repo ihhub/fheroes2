@@ -442,8 +442,8 @@ namespace fheroes2
                     baseIcnId = ICN::X_CMPBTN;
                     clearArea[0] = { 4, 3, 132, 16 };
                     clearArea[1] = { 4, 4, 131, 16 };
-                    textOffsetReleased = { 4, 5 };
-                    textOffsetPressed = { 4, 5 };
+                    textOffsetReleased = { 3, 5 };
+                    textOffsetPressed = { 3, 5 };
                     buttonColorFilling[0] = 5 * 132;
                     buttonColorFilling[1] = 5 * 132;
                     break;
