@@ -275,7 +275,7 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
 
         fheroes2::Blit( playerIcon, display, info.playerTypeRoi.x, info.playerTypeRoi.y );
         if ( currentSelectedPlayer != nullptr && info.player == currentSelectedPlayer ) {
-            // TODO: add an overloaded DrawBorder() function to draw a boarder within a bigger image.
+            // TODO: add an overloaded DrawBorder() function to draw a border inside an image.
             fheroes2::Image selection( playerIcon.width(), playerIcon.height() );
             selection.reset();
             fheroes2::DrawBorder( selection, 214 );
