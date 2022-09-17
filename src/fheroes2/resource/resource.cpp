@@ -244,7 +244,7 @@ Funds Funds::operator-( const Funds & pm ) const
 
 Funds Funds::operator/( const int32_t div ) const
 {
-    if (  div == 0 ) {
+    if ( div == 0 ) {
         assert( 0 );
         return {};
     }

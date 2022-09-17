@@ -53,8 +53,7 @@ namespace
 {
     int32_t getHandicapIncomePercentage( const uint8_t handicapStatus )
     {
-        switch ( handicapStatus )
-        {
+        switch ( handicapStatus ) {
         case Player::HandicapStatus::NONE:
             return 100;
         case Player::HandicapStatus::MILD:

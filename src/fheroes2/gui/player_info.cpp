@@ -325,8 +325,8 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
             continue;
         }
 
-        const fheroes2::Sprite & classIcon =  fheroes2::AGG::GetICN( ICN::NGEXTRA, classIcnIndex );
-        const fheroes2::Sprite & classIconShadow =  fheroes2::AGG::GetICN( ICN::NGEXTRA, 61 );
+        const fheroes2::Sprite & classIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, classIcnIndex );
+        const fheroes2::Sprite & classIconShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 61 );
 
         fheroes2::Blit( classIconShadow, display, info.classRoi.x - 5, info.classRoi.y + 3 );
         fheroes2::Blit( classIcon, display, info.classRoi.x, info.classRoi.y );
@@ -396,7 +396,8 @@ bool Interface::PlayersInfo::QueueEventProcessing()
             fheroes2::showMessage( fheroes2::Text( _( "Handicap" ), fheroes2::FontType::normalYellow() ),
                                    fheroes2::Text( _( "This lets you change the handicap of a particular player. Only humans may be handicapped. Handicapped players "
                                                       "start with fewer resources and earn 15 or 30% fewer resources per turn for mild and severe handicaps, "
-                                                      "respectively." ), fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+                                                      "respectively." ),
+                                                   fheroes2::FontType::normalWhite() ), Dialog::ZERO );
             return true;
         }
 
@@ -480,7 +481,6 @@ bool Interface::PlayersInfo::QueueEventProcessing()
 
         return true;
     }
-
 
     player = GetFromClassClick( le.GetMouseCursor() );
     if ( player != nullptr ) {
