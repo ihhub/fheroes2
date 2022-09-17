@@ -30,6 +30,7 @@
 #include "normal/ai_normal.h"
 #include "players.h"
 #include "race.h"
+#include "save_format_version.h"
 #include "serialize.h"
 #include "settings.h"
 #include "world.h"
@@ -106,6 +107,7 @@ Player::Player( int col )
     , friends( col )
     , id( World::GetUniq() )
     , _ai( std::make_shared<AI::Normal>() )
+    , _handicapStatus( HandicapStatus::NONE )
 {}
 
 std::string Player::GetDefaultName() const
@@ -120,16 +122,6 @@ std::string Player::GetName() const
     }
 
     return name;
-}
-
-Focus & Player::GetFocus()
-{
-    return focus;
-}
-
-const Focus & Player::GetFocus() const
-{
-    return focus;
 }
 
 int Player::GetControl() const
@@ -147,11 +139,6 @@ bool Player::isPlay() const
     return Modes( ST_INGAME );
 }
 
-void Player::SetFriends( int f )
-{
-    friends = f;
-}
-
 void Player::SetName( const std::string & newName )
 {
     if ( newName == GetDefaultName() ) {
@@ -160,21 +147,6 @@ void Player::SetName( const std::string & newName )
     else {
         name = newName;
     }
-}
-
-void Player::SetControl( int ctl )
-{
-    control = ctl;
-}
-
-void Player::SetColor( int cl )
-{
-    color = cl;
-}
-
-void Player::SetRace( int r )
-{
-    race = r;
 }
 
 void Player::SetPlay( bool f )
@@ -229,7 +201,7 @@ StreamBase & operator<<( StreamBase & msg, const Player & player )
     const BitModes & modes = player;
 
     assert( player._ai != nullptr );
-    msg << modes << player.id << player.control << player.color << player.race << player.friends << player.name << player.focus << *player._ai;
+    msg << modes << player.id << player.control << player.color << player.race << player.friends << player.name << player.focus << *player._ai << player._handicapStatus;
     return msg;
 }
 
@@ -241,6 +213,13 @@ StreamBase & operator>>( StreamBase & msg, Player & player )
 
     assert( player._ai );
     msg >> *player._ai;
+
+    if ( Game::GetLoadVersion() < FORMAT_VERSION_0920_RELEASE ) {
+        player._handicapStatus = Player::HandicapStatus::NONE;
+    }
+    else {
+        msg >> player._handicapStatus;
+    }
 
     return msg;
 }

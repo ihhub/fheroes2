@@ -93,7 +93,7 @@ void Dialog::GameInfo()
     text.set( _( "Class" ), fheroes2::FontType::smallWhite() );
     text.draw( pt.x + 52, pt.y + 227, 350, display );
 
-    Interface::PlayersInfo playersInfo( true, true, false );
+    Interface::PlayersInfo playersInfo;
 
     playersInfo.UpdateInfo( conf.GetPlayers(), fheroes2::Point( pt.x + 40, pt.y + 165 ), fheroes2::Point( pt.x + 40, pt.y + 240 ) );
     playersInfo.RedrawInfo( true );
@@ -138,6 +138,9 @@ void Dialog::GameInfo()
             fheroes2::Text body( _( "Exit this menu." ), fheroes2::FontType::normalWhite() );
 
             fheroes2::showMessage( header, body, 0 );
+        }
+        else {
+            playersInfo.readOnlyEventProcessing();
         }
     }
 }
