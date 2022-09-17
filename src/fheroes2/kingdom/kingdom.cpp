@@ -654,7 +654,7 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
     }
 
     // Some human players can have handicap for resources.
-    Player * player = Players::Get( color );
+    const Player * player = Players::Get( color );
     assert( player != nullptr );
     const int32_t handicapPercentage = getHandicapIncomePercentage( player->getHandicapStatus() );
     return totalIncome * handicapPercentage / 100;
