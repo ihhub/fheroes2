@@ -251,8 +251,10 @@ namespace
         const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fontColor };
         const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fontColor };
 
-        fheroes2::Text releasedText( text, releasedFont );
-        fheroes2::Text pressedText( text, pressedFont );
+        const char * textSupported = getSupportedText( text, releasedFont );
+
+        fheroes2::Text releasedText( textSupported, releasedFont );
+        fheroes2::Text pressedText( textSupported, pressedFont );
 
         releasedText.draw( releasedTextOffset.x + ( maxTextWidth - releasedText.width() ) / 2, releasedTextOffset.y, releasedState );
         pressedText.draw( pressedTextOffset.x + ( maxTextWidth - pressedText.width() ) / 2, pressedTextOffset.y, pressedState );
