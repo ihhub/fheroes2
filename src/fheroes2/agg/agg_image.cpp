@@ -245,6 +245,19 @@ namespace
         return fheroes2::isFontAvailable( translatedText, font ) ? translatedText : text;
     }
 
+    void renderTextOnButton( fheroes2::Image & releasedState, fheroes2::Image & pressedState, const char * text, const fheroes2::Point & releasedTextOffset,
+                             const fheroes2::Point & pressedTextOffset, const int32_t maxTextWidth, const fheroes2::FontColor fontColor )
+    {
+        const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fontColor };
+        const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fontColor };
+
+        fheroes2::Text releasedText( text, releasedFont );
+        fheroes2::Text pressedText( text, pressedFont );
+
+        releasedText.draw( releasedTextOffset.x + ( maxTextWidth - releasedText.width() ) / 2, releasedTextOffset.y, releasedState );
+        pressedText.draw( pressedTextOffset.x + ( maxTextWidth - pressedText.width() ) / 2, pressedTextOffset.y, pressedState );
+    }
+
     void convertToEvilInterface( fheroes2::Sprite & image, const fheroes2::Rect & roi )
     {
         fheroes2::ApplyPalette( image, roi.x, roi.y, image, roi.x, roi.y, roi.width, roi.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
@@ -349,34 +362,21 @@ namespace fheroes2
                     Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
                 }
                 break;
-            case ICN::BTNGIFT_GOOD: {
-                _icnVsSprite[id].resize( 2 );
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::SYSTEM, 11 + i );
-                }
-
-                const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
-                const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::WHITE };
-
-                const char * text = getSupportedText( gettext_noop( "GIFT" ), releasedFont );
-
-                fheroes2::Text releasedText( text, releasedFont );
-                fheroes2::Text presesedText( text, pressedFont );
-
-                releasedText.draw( 23 + ( 50 - releasedText.width() ) / 2, 5, _icnVsSprite[id][0] );
-                presesedText.draw( 22 + ( 50 - presesedText.width() ) / 2, 6, _icnVsSprite[id][1] );
-
-                break;
-            }
+            case ICN::BTNGIFT_GOOD:
             case ICN::BTNGIFT_EVIL: {
                 _icnVsSprite[id].resize( 2 );
+
+                const bool isGoodInterface = ( id == ICN::BTNGIFT_GOOD );
+                const int baseIcnId = isGoodInterface ? ICN::SYSTEM : ICN::SYSTEME;
+                const fheroes2::FontColor releasedFontColor = ( isGoodInterface ) ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
+
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::SYSTEME, 11 + i );
+                    out = GetICN( baseIcnId, 11 + i );
                 }
-                const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::GRAY };
-                const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::GRAY };
+
+                const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, releasedFontColor };
+                const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, releasedFontColor };
 
                 const char * text = getSupportedText( gettext_noop( "GIFT" ), releasedFont );
 
@@ -410,66 +410,57 @@ namespace fheroes2
 
                 break;
             }
+            case ICN::BUTTON_DIFFICULTY_POL:
+            case ICN::BUTTON_DIFFICULTY_ROLAND:
             case ICN::BUTTON_DIFFICULTY_ARCHIBALD: {
+                std::array<fheroes2::Rect, 2> clearArea;
+                int baseIcnId = ICN::UNKNOWN;
+                fheroes2::Point textOffsetReleased;
+                fheroes2::Point textOffsetPressed;
+                std::array<int, 2> buttonColorFilling;
+
+                switch ( id ) {
+                case ICN::BUTTON_DIFFICULTY_ARCHIBALD:
+                    baseIcnId = ICN::EVIL_CAMPAIGN_BUTTONS;
+                    clearArea[0] = { 13, 3, 129, 16 };
+                    clearArea[1] = { 15, 5, 127, 16 };
+                    textOffsetReleased = { 10, 5 };
+                    textOffsetPressed = { 10, 6 };
+                    buttonColorFilling[0] = 13 + 5 * 145;
+                    buttonColorFilling[1] = 13 - 7 + 6 * 141;
+                    break;
+                case ICN::BUTTON_DIFFICULTY_ROLAND:
+                    baseIcnId = ICN::GOOD_CAMPAIGN_BUTTONS;
+                    clearArea[0] = { 13, 4, 127, 15 };
+                    clearArea[1] = { 13, 5, 127, 15 };
+                    textOffsetReleased = { 11, 5 };
+                    textOffsetPressed = { 10, 6 };
+                    buttonColorFilling[0] = 13 + 5 * 147;
+                    buttonColorFilling[1] = 18 - 7 + 6 * 147;
+                    break;
+                case ICN::BUTTON_DIFFICULTY_POL:
+                    baseIcnId = ICN::X_CMPBTN;
+                    clearArea[0] = { 4, 3, 132, 16 };
+                    clearArea[1] = { 4, 4, 131, 16 };
+                    textOffsetReleased = { 4, 5 };
+                    textOffsetPressed = { 4, 5 };
+                    buttonColorFilling[0] = 5 * 132;
+                    buttonColorFilling[1] = 5 * 132;
+                    break;
+                default:
+                    assert( 0 );
+                    break;
+                }
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::EVIL_CAMPAIGN_BUTTONS, 0 + i );
-                    // clean the button. Needs different color for pressed state so can't use getButtonFillingColor().
-                    Fill( out, 13 - 2 * i, 3 + 2 * i, 129 + 2 * i, 16, out.image()[13 - 7 * i + ( 5 + i ) * ( 145 - ( 4 * i ) )] );
+                    out = GetICN( baseIcnId, 0 + i );
+                    Fill( out, clearArea[i].x, clearArea[i].y, clearArea[i].width, clearArea[i].height, out.image()[buttonColorFilling[i]] );
                 }
-                const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::GRAY };
-                const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::GRAY };
 
-                const char * text = getSupportedText( gettext_noop( "DIFFICULTY" ), releasedFont );
-
-                fheroes2::Text releasedText( text, releasedFont );
-                fheroes2::Text pressedText( text, pressedFont );
-
-                releasedText.draw( 10 + ( 132 - releasedText.width() ) / 2, 5, _icnVsSprite[id][0] );
-                pressedText.draw( 10 + ( 132 - pressedText.width() ) / 2, 6, _icnVsSprite[id][1] );
-
-                break;
-            }
-            case ICN::BUTTON_DIFFICULTY_POL: {
-                _icnVsSprite[id].resize( 2 );
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::X_CMPBTN, 0 + i );
-                    // clean the button. Needs different color for pressed state so can't use getButtonFillingColor().
-                    Fill( out, 4, 3 + i, 132 - i, 16, out.image()[5 * 132] );
-                }
-                const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::GRAY };
-                const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::GRAY };
-
-                const char * text = getSupportedText( gettext_noop( "DIFFICULTY" ), releasedFont );
-
-                fheroes2::Text releasedText( text, releasedFont );
-                fheroes2::Text pressedText( text, pressedFont );
-
-                releasedText.draw( 4 + ( 132 - releasedText.width() ) / 2, 5, _icnVsSprite[id][0] );
-                pressedText.draw( 4 + ( 132 - pressedText.width() ) / 2, 5, _icnVsSprite[id][1] );
-
-                break;
-            }
-            case ICN::BUTTON_DIFFICULTY_ROLAND: {
-                _icnVsSprite[id].resize( 2 );
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::GOOD_CAMPAIGN_BUTTONS, 0 + i );
-                    // clean the button
-                    Fill( out, 13, 4 + i, 127, 15, getButtonFillingColor( i == 0 ) );
-                }
-                const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
-                const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::WHITE };
-
-                const char * text = getSupportedText( gettext_noop( "DIFFICULTY" ), releasedFont );
-
-                fheroes2::Text releasedText( text, releasedFont );
-                fheroes2::Text pressedText( text, pressedFont );
-
-                releasedText.draw( 10 + ( 132 - releasedText.width() ) / 2, 5, _icnVsSprite[id][0] );
-                pressedText.draw( 9 + ( 132 - pressedText.width() ) / 2, 6, _icnVsSprite[id][1] );
+                const fheroes2::FontColor fontColor = ( baseIcnId == ICN::GOOD_CAMPAIGN_BUTTONS ) ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
+                const int textSpaceWidth = 132;
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), textOffsetReleased, textOffsetPressed, textSpaceWidth, fontColor );
 
                 break;
             }
