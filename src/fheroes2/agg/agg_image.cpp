@@ -417,7 +417,7 @@ namespace fheroes2
                 int baseIcnId = ICN::UNKNOWN;
                 fheroes2::Point textOffsetReleased;
                 fheroes2::Point textOffsetPressed;
-                std::array<int, 2> buttonColorFilling;
+                std::array<int, 2> buttonColorFilling{};
 
                 switch ( id ) {
                 case ICN::BUTTON_DIFFICULTY_ARCHIBALD:
