@@ -113,7 +113,9 @@ void Interface::PlayersInfo::UpdateInfo( Players & players, const fheroes2::Poin
     reserve( playerCount );
 
     for ( int32_t i = 0; i < playerCount; ++i ) {
-        PlayerInfo info;
+        emplace_back();
+
+        PlayerInfo & info = back();
 
         info.player = players[i];
         assert( info.player != nullptr );
@@ -124,8 +126,6 @@ void Interface::PlayersInfo::UpdateInfo( Players & players, const fheroes2::Poin
         info.classRoi = { classOffset.x + Game::GetStep4Player( i, classImage.width(), playerCount ), classOffset.y, classImage.width(), classImage.height() };
         info.handicapRoi
             = { classOffset.x + Game::GetStep4Player( i, handicapImage.width(), playerCount ), classOffset.y + 65, handicapImage.width(), handicapImage.height() };
-
-        emplace_back( std::move( info ) );
     }
 }
 
