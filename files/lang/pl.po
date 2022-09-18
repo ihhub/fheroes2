@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-10 16:23+0000\n"
+"POT-Creation-Date: 2022-09-18 13:13+0000\n"
 "PO-Revision-Date: 2022-09-08 16:44+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -22,8 +22,14 @@ msgstr ""
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
 "X-Generator: Poedit 3.1.1\n"
 
+msgid "GIFT"
+msgstr ""
+
 msgid "MIN"
 msgstr ""
+
+msgid "DIFFICULTY"
+msgstr "TRUDNOŚĆ"
 
 msgid "Warrior"
 msgstr "Wojownik"
@@ -3287,9 +3293,6 @@ msgstr "Niemożliwy"
 
 msgid "and more..."
 msgstr "i więcej..."
-
-msgid "DIFFICULTY"
-msgstr "TRUDNOŚĆ"
 
 msgid "Campaign Difficulty"
 msgstr "Stopień trudności kampanii"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-10 16:23+0000\n"
+"POT-Creation-Date: 2022-09-18 13:13+0000\n"
 "PO-Revision-Date: 2022-08-20 17:06+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -18,7 +18,13 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.1.1\n"
 
+msgid "GIFT"
+msgstr ""
+
 msgid "MIN"
+msgstr ""
+
+msgid "DIFFICULTY"
 msgstr ""
 
 msgid "Warrior"
@@ -3409,9 +3415,6 @@ msgstr "Umulig"
 
 msgid "and more..."
 msgstr "og mer..."
-
-msgid "DIFFICULTY"
-msgstr ""
 
 #, fuzzy
 msgid "Campaign Difficulty"
