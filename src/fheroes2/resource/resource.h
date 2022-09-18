@@ -76,8 +76,10 @@ public:
     Funds operator+( const Funds & ) const;
     Funds operator*( uint32_t mul ) const;
     Funds operator-( const Funds & ) const;
+    Funds operator/( const int32_t div ) const;
     Funds & operator+=( const Funds & );
     Funds & operator*=( uint32_t mul );
+    Funds & operator/=( const int32_t div );
     Funds & operator-=( const Funds & );
     Funds & operator=( const cost_t & );
 

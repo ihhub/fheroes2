@@ -31,35 +31,35 @@ namespace Interface
 {
     struct PlayerInfo
     {
-        PlayerInfo()
-            : player( nullptr )
-        {}
-
-        Player * player;
-        fheroes2::Rect rect1; // opponent
-        fheroes2::Rect rect2; // class
-        fheroes2::Rect rect3; // change
+        Player * player{ nullptr };
+        fheroes2::Rect playerTypeRoi;
+        fheroes2::Rect classRoi;
+        fheroes2::Rect nameRoi;
+        fheroes2::Rect handicapRoi;
     };
 
     struct PlayersInfo : std::vector<PlayerInfo>
     {
-        PlayersInfo( bool /* show name */, bool /* show race */, bool /* show swap button */ );
-
-        void UpdateInfo( Players &, const fheroes2::Point & opponents, const fheroes2::Point & classes );
+        void UpdateInfo( Players &, const fheroes2::Point & playerTypeOffset, const fheroes2::Point & classOffset );
         bool SwapPlayers( Player & player1, Player & player2 ) const;
 
         Player * GetFromOpponentClick( const fheroes2::Point & pt );
         Player * GetFromOpponentNameClick( const fheroes2::Point & pt );
-        Player * GetFromOpponentChangeClick( const fheroes2::Point & pt );
         Player * GetFromClassClick( const fheroes2::Point & pt );
+        Player * getPlayerFromHandicapRoi( const fheroes2::Point & point );
 
-        void RedrawInfo( bool show_play_info = false ) const;
-        void resetSelection();
+        // displayInGameInfo: use colored and grayscale race icons to distinguish between players who are still in the game and vanquished players respectively
+        void RedrawInfo( const bool displayInGameInfo ) const;
+
+        void resetSelection()
+        {
+            currentSelectedPlayer = nullptr;
+        }
+
         bool QueueEventProcessing();
 
-        bool show_name;
-        bool show_race;
-        bool show_swap;
-        Player * currentSelectedPlayer;
+        bool readOnlyEventProcessing();
+
+        Player * currentSelectedPlayer{ nullptr };
     };
 }

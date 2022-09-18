@@ -2268,7 +2268,7 @@ namespace fheroes2
         SetPixel( released[38], offset + 6, offset + 3, releasedFontColor );
         SetPixel( released[38], offset + 6, offset + 5, releasedFontColor );
 
-         // G
+        // G
         released[39].resize( 11 + offset * 2, 10 + offset * 2 );
         released[39].reset();
         DrawLine( released[39], { offset + 2, offset + 0 }, { offset + 7, offset + 0 }, releasedFontColor );
