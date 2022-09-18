@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-10 16:23+0000\n"
-"PO-Revision-Date: 2022-09-18 15:02+0100\n"
+"PO-Revision-Date: 2022-09-18 16:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -2192,52 +2192,69 @@ msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
 "percent."
 msgstr ""
+"Светилището увеличава умението за некромантия на всички твой некроманти с 10 "
+"процента."
 
 msgid ""
 "The Thieves' Guild provides information on enemy players. Thieves' Guilds "
 "can also provide scouting information on enemy towns. Additional Guilds "
 "provide more information."
 msgstr ""
+"Гилдията на крадците предоставя информация за вражески играчи. Гилдиите на "
+"крадците също могат да предоставят разузнавателна информация за вражеските "
+"градове. Допълнителните гилдии предоставят повече информация."
 
 msgid "The Tavern increases morale for troops defending the castle."
-msgstr ""
+msgstr "Механата повишава морала на войските, защитаващи замъка."
 
 msgid "The Shipyard allows ships to be built."
-msgstr ""
+msgstr "Корабостроителницата позволява да се строят кораби."
 
 msgid ""
 "The Well increases the growth rate of all dwellings by %{count} creatures "
 "per week."
 msgstr ""
+"Кладенецът увеличава скоростта на растеж във всички жилища с %{count} "
+"същества на седмица."
 
 msgid "The Statue increases your town's income by %{count} per day."
-msgstr ""
+msgstr "Статуята увеличава приходите на вашия град с %{count} на ден."
 
 msgid "The Left Turret provides extra firepower during castle combat."
 msgstr ""
+"Лявата кула осигурява допълнителна огнева мощ по време на битка в замъка."
 
 msgid "The Right Turret provides extra firepower during castle combat."
 msgstr ""
+"Дясната кула осигурява допълнителна огнева мощ по време на битка в замъка."
 
 msgid ""
 "The Marketplace can be used to convert one type of resource into another. "
 "The more marketplaces you control, the better the exchange rate."
 msgstr ""
+"Пазарът може да се използва за преобразуване на един вид ресурс в друг. "
+"Колкото повече пазари контролирате, толкова по-добър е обменният курс."
 
 msgid ""
 "The Moat slows attacking units. Any unit entering the moat must end its turn "
 "there and becomes more vulnerable to attack."
 msgstr ""
+"Ровът забавя атакуващите единици. Всяка единица, влизаща в рова, трябва да "
+"завърши реда си там и да стане по-уязвима за атака."
 
 msgid ""
 "The Castle improves town defense and increases income to %{count} gold per "
 "day."
 msgstr ""
+"Замъкът подобрява защитата на града и увеличава приходите до %{count} злато "
+"на ден."
 
 msgid ""
 "The Tent provides workers to build a castle, provided the materials and the "
 "gold are available."
 msgstr ""
+"Палатката осигурява работници за изграждане на замък, при условие че "
+"материалите и златото са налични."
 
 msgid ""
 "The Captain's Quarters provides a captain to assist in the castle's defense "
@@ -2250,6 +2267,8 @@ msgid ""
 "The Mage Guild allows heroes to learn spells and replenish their spell "
 "points."
 msgstr ""
+"Гилдията на магьосниците позволява на героите да учат заклинания и да "
+"попълват точките си за заклинания."
 
 msgid "Recruit %{name}"
 msgstr "Вербувайте %{name}"
@@ -2261,12 +2280,15 @@ msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
+"Трябва да купиш книга със заклинания, за да използваш магий, но в момента "
+"нямаш място за нея. Опитай се да дадеш един от твойте артефакти на друг "
+"герой."
 
 msgid "Exit"
 msgstr "Изход"
 
 msgid "Exit this menu."
-msgstr ""
+msgstr "Излез от това меню."
 
 msgid "Click to show next town."
 msgstr ""
@@ -2307,10 +2329,10 @@ msgid "Swap Heroes"
 msgstr "Размени героите"
 
 msgid "Meeting Heroes"
-msgstr ""
+msgstr "Срещни герои"
 
 msgid "View Hero"
-msgstr ""
+msgstr "Виж герой"
 
 msgid "The above spells are available here."
 msgstr ""
@@ -2353,7 +2375,7 @@ msgid "Grouped Formation"
 msgstr ""
 
 msgid "Recruit %{name} the %{race}"
-msgstr ""
+msgstr "Вербувай %{name} %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr ""
@@ -2869,7 +2891,7 @@ msgid "Unknown"
 msgstr ""
 
 msgid "%{name} (Level %{level})"
-msgstr ""
+msgstr "%{name} (Ниво %{level})"
 
 msgid "Attack:"
 msgstr ""
@@ -2902,7 +2924,7 @@ msgid "Click to apply the selected resolution."
 msgstr ""
 
 msgid "MAX"
-msgstr "МАК"
+msgstr "МАКС"
 
 msgid "How many troops to move?"
 msgstr ""
@@ -5297,7 +5319,7 @@ msgid ""
 msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
-msgstr ""
+msgstr "%{name} е %{race} (Ниво %{level})"
 
 msgid ""
 "'Grouped' combat formation bunches your army together in the center of your "
@@ -5308,43 +5330,43 @@ msgid "Are you sure you want to dismiss this Hero?"
 msgstr ""
 
 msgid "View Experience Info"
-msgstr ""
+msgstr "Преглед на информация за опит"
 
 msgid "View Spell Points Info"
-msgstr ""
+msgstr "Виж информация за точките за заклинание"
 
 msgid "Set army combat formation to 'Spread'"
-msgstr ""
+msgstr "Задай армейска бойна формация \"Разпръскване\""
 
 msgid "Set army combat formation to 'Grouped'"
-msgstr ""
+msgstr "Задай армейска бойна формация \"Групирана\""
 
 msgid "Exit Hero Screen"
-msgstr ""
+msgstr "Изход от екрана на героя"
 
 msgid "You cannot dismiss a hero in a castle"
-msgstr ""
+msgstr "Не можеш да освободиш герой в замък"
 
 msgid "Dismissal of %{name} the %{race} is prohibited by scenario"
-msgstr ""
+msgstr "Освобождаването на %{name} %{race} е забранено от сценария"
 
 msgid "Dismiss %{name} the %{race}"
-msgstr ""
+msgstr "Освободи %{name} %{race}"
 
 msgid "Show previous hero"
-msgstr ""
+msgstr "Покажи предишния герой"
 
 msgid "Show next hero"
-msgstr ""
+msgstr "Покажи следващия герой"
 
 msgid "Blood Morale"
-msgstr ""
+msgstr "Кръвен морал"
 
 msgid "%{morale} Morale"
-msgstr ""
+msgstr "%{morale} Морал"
 
 msgid "%{luck} Luck"
-msgstr ""
+msgstr "%{luck} Късмет"
 
 msgid "Current Luck Modifiers:"
 msgstr ""
@@ -6994,10 +7016,10 @@ msgid "View Spells"
 msgstr ""
 
 msgid "View %{name} Info"
-msgstr ""
+msgstr "Виж %{name} информация"
 
 msgid "Move %{name}"
-msgstr ""
+msgstr "Премести %{name}"
 
 msgid "Cannot move the Spellbook"
 msgstr ""
@@ -8453,37 +8475,37 @@ msgid "Causes all mines across the land to become visible."
 msgstr ""
 
 msgid "View Mines"
-msgstr ""
+msgstr "Виж мините"
 
 msgid "Causes all resources across the land to become visible."
 msgstr ""
 
 msgid "View Resources"
-msgstr ""
+msgstr "Виж ресурсите"
 
 msgid "Causes all artifacts across the land to become visible."
 msgstr ""
 
 msgid "View Artifacts"
-msgstr ""
+msgstr "Виж артефактите"
 
 msgid "Causes all towns and castles across the land to become visible."
 msgstr ""
 
 msgid "View Towns"
-msgstr ""
+msgstr "Виж градовете"
 
 msgid "Causes all Heroes across the land to become visible."
 msgstr ""
 
 msgid "View Heroes"
-msgstr ""
+msgstr "Виж героите"
 
 msgid "Causes the entire land to become visible."
 msgstr ""
 
 msgid "View All"
-msgstr ""
+msgstr "Виж всичко"
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr ""
