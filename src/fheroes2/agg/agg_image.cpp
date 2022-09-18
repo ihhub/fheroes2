@@ -256,9 +256,8 @@ namespace
         fheroes2::Text releasedText( textSupported, releasedFont );
         fheroes2::Text pressedText( textSupported, pressedFont );
 
-        releasedText.draw( releasedTextOffset.x /*+ ( maxTextWidth - releasedText.width() ) / 2*/, releasedTextOffset.y, maxTextWidth , releasedState );
-        pressedText.draw( pressedTextOffset.x /*+ ( maxTextWidth - pressedText.width() ) / 2*/,
-                          pressedTextOffset.y /*- 6 + ( ( 48 - pressedText.height( pressedText.width() ) ) / 2 )*/, maxTextWidth, pressedState );
+        releasedText.draw( releasedTextOffset.x, releasedTextOffset.y, maxTextWidth, releasedState );
+        pressedText.draw( pressedTextOffset.x, pressedTextOffset.y, maxTextWidth, pressedState );
     }
 
     void convertToEvilInterface( fheroes2::Sprite & image, const fheroes2::Rect & roi )
@@ -365,8 +364,7 @@ namespace fheroes2
                     Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "BATTLE\nMODE" ), { 14, 13 }, { 13, 14 }, 110,
-                                    fheroes2::FontColor::WHITE );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "BATTLE\nMODE" ), { 14, 13 }, { 13, 14 }, 110, fheroes2::FontColor::WHITE );
 
                 break;
             }
