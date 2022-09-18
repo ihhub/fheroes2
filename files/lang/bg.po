@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-10 16:23+0000\n"
-"PO-Revision-Date: 2022-09-18 10:11+0300\n"
+"PO-Revision-Date: 2022-09-18 12:07+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -1902,31 +1902,31 @@ msgid "Archery Range"
 msgstr "Стрелба с лък"
 
 msgid "Upg. Archery Range"
-msgstr "Надстрой стрелба с лък"
+msgstr "Надс. стрелба с лък"
 
 msgid "Blacksmith"
 msgstr "Ковач"
 
 msgid "Upg. Blacksmith"
-msgstr "Надстрой ковач"
+msgstr "Надс. ковач"
 
 msgid "Armory"
 msgstr "Оръжейна"
 
 msgid "Upg. Armory"
-msgstr "Надстрой оръжейна"
+msgstr "Надс. оръжейна"
 
 msgid "Jousting Arena"
 msgstr "Арена за престрелки"
 
 msgid "Upg. Jousting Arena"
-msgstr "Надстрой арена за престрелки"
+msgstr "Надс. арена за престрелки"
 
 msgid "Cathedral"
 msgstr "Катедралата"
 
 msgid "Upg. Cathedral"
-msgstr "Надстрой катедралата"
+msgstr "Надс. катедралата"
 
 msgid "Coliseum"
 msgstr "Колизеум"
@@ -1935,28 +1935,28 @@ msgid "Garbage Heap"
 msgstr "Купчина боклук"
 
 msgid "Hut"
-msgstr "Хижа"
+msgstr "Барака"
 
 msgid "Stick Hut"
-msgstr "Хижа от пръчки"
+msgstr "Колиба"
 
 msgid "Upg. Stick Hut"
-msgstr "Надстрой хижа от пръчки"
+msgstr "Надс. колиба"
 
 msgid "Den"
-msgstr ""
+msgstr "Бърлога"
 
 msgid "Adobe"
 msgstr "Глинена постройка"
 
 msgid "Upg. Adobe"
-msgstr "Надстрой глинена постройка"
+msgstr "Надс. глинена постройка"
 
 msgid "Bridge"
 msgstr "Мост"
 
 msgid "Upg. Bridge"
-msgstr "Надстрой Мост"
+msgstr "Надс. Мост"
 
 msgid "Pyramid"
 msgstr "Пирамида"
@@ -1974,13 +1974,13 @@ msgid "Cottage"
 msgstr "Вила"
 
 msgid "Upg. Cottage"
-msgstr "Надстрой вила"
+msgstr "Надс. вила"
 
 msgid "Stonehenge"
 msgstr "Стоунхендж"
 
 msgid "Upg. Stonehenge"
-msgstr "Надстрой Стоунхендж"
+msgstr "Надс. Стоунхендж"
 
 msgid "Fenced Meadow"
 msgstr "Оградена поляна"
@@ -2007,7 +2007,7 @@ msgid "Maze"
 msgstr "Лабиринт"
 
 msgid "Upg. Maze"
-msgstr "Надстрой лабиринт"
+msgstr "Надс. лабиринт"
 
 msgid "Swamp"
 msgstr "Блато"
@@ -2037,7 +2037,7 @@ msgid "Foundry"
 msgstr "Леярна"
 
 msgid "Upg. Foundry"
-msgstr "Надстрой леярна"
+msgstr "Надс. леярна"
 
 msgid "Cliff Nest"
 msgstr "Скално гнездо"
@@ -2046,13 +2046,13 @@ msgid "Ivory Tower"
 msgstr "Кулата на мечтите"
 
 msgid "Upg. Ivory Tower"
-msgstr "Надстрой Кулата на мечтите"
+msgstr "Надс. Кулата на мечтите"
 
 msgid "Cloud Castle"
 msgstr "Замък в облаците"
 
 msgid "Upg. Cloud Castle"
-msgstr "Надстрой Замък в облаците"
+msgstr "Надс. Замък в облаците"
 
 msgid "Storm"
 msgstr "Буря"
@@ -2067,22 +2067,22 @@ msgid "Graveyard"
 msgstr "Гробище"
 
 msgid "Upg. Graveyard"
-msgstr "Надстрой гробище"
+msgstr "Надс. гробище"
 
 msgid "Upg. Pyramid"
-msgstr "Надстрой пирамида"
+msgstr "Надс. пирамида"
 
 msgid "Mansion"
 msgstr "Имение"
 
 msgid "Upg. Mansion"
-msgstr "Надстрой имение"
+msgstr "Надс. имение"
 
 msgid "Mausoleum"
 msgstr "Мавзолей"
 
 msgid "Upg. Mausoleum"
-msgstr "Надстрой мавзолей"
+msgstr "Надс. мавзолей"
 
 msgid "Laboratory"
 msgstr "Лаборатория"
@@ -2145,7 +2145,7 @@ msgstr ""
 "Купчината черепи увеличава производството на Скелети с %{count} на седмица."
 
 msgid "Thieves' Guild"
-msgstr "Гилдията на крадците"
+msgstr "Гилдия на крадците"
 
 msgid "Tavern"
 msgstr "Кръчма"
@@ -2172,22 +2172,22 @@ msgid "Tent"
 msgstr "Палатка"
 
 msgid "Captain's Quarters"
-msgstr "Капитанската Квартира"
+msgstr "Капитанска Квартира"
 
 msgid "Mage Guild, Level 1"
-msgstr "Гилдия на маговете, ниво 1"
+msgstr "Маг. гилдия, ниво 1"
 
 msgid "Mage Guild, Level 2"
-msgstr "Гилдия на маговете, ниво 2"
+msgstr "Маг. гилдия, ниво 2"
 
 msgid "Mage Guild, Level 3"
-msgstr "Гилдия на маговете, ниво 3"
+msgstr "Маг. гилдия, ниво 3"
 
 msgid "Mage Guild, Level 4"
-msgstr "Гилдия на маговете, ниво 4"
+msgstr "Маг. гилдия, ниво 4"
 
 msgid "Mage Guild, Level 5"
-msgstr "Гилдия на маговете, ниво 5"
+msgstr "Маг. гилдия, ниво 5"
 
 msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
@@ -2302,7 +2302,7 @@ msgid "Exit Town"
 msgstr "Изход от Града"
 
 msgid "Show Income"
-msgstr "Покажи доходи"
+msgstr "Покажи приходи"
 
 msgid "Swap Heroes"
 msgstr "Размени героите"
@@ -2323,7 +2323,7 @@ msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr ""
 
 msgid "Recruit Hero"
-msgstr ""
+msgstr "Вербувай герой"
 
 msgid "%{name} is a level %{value} %{race} "
 msgstr ""
@@ -2363,10 +2363,10 @@ msgid "Set garrison combat formation to 'Grouped'"
 msgstr ""
 
 msgid "Exit Castle Options"
-msgstr ""
+msgstr "Изход от Опции на замъка"
 
 msgid "Castle Options"
-msgstr ""
+msgstr "Опции на замъка"
 
 msgid "Not enough resources to recruit creatures."
 msgstr ""
@@ -2467,7 +2467,7 @@ msgid "Damage"
 msgstr "Щета"
 
 msgid "Hit Points"
-msgstr "Точки при удър"
+msgstr "т. Попадение"
 
 msgid "Hit Points Left"
 msgstr "Оставащи точки при удър"
@@ -2891,13 +2891,13 @@ msgid "Move Points:"
 msgstr ""
 
 msgid "Cost per troop:"
-msgstr "Цена на войска:"
+msgstr "Цена на единица:"
 
 msgid "Available: %{count}"
-msgstr ""
+msgstr "Налични: %{count}"
 
 msgid "Number to buy:"
-msgstr "Номер за покупка:"
+msgstr "Покупка на:"
 
 msgid "Click to apply the selected resolution."
 msgstr ""
@@ -3769,19 +3769,19 @@ msgid "Do you wish to continue the game?"
 msgstr ""
 
 msgid "Scenario:"
-msgstr ""
+msgstr "Сценарий:"
 
 msgid "Game Difficulty:"
-msgstr ""
+msgstr "Трудност на играта:"
 
 msgid "Opponents:"
 msgstr "Противници:"
 
 msgid "Class:"
-msgstr "Вид"
+msgstr "Клас:"
 
 msgid "Rating %{rating}%"
-msgstr ""
+msgstr "Оценка %{rating}%"
 
 msgid "Click here to select which scenario to play."
 msgstr ""
@@ -6518,7 +6518,7 @@ msgid "Goblin"
 msgstr "Гоблин"
 
 msgid "Goblins"
-msgstr "Гобини"
+msgstr "Гоблини"
 
 msgid "Orc"
 msgstr ""
