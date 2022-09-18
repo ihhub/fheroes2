@@ -255,6 +255,7 @@ namespace
 
         fheroes2::Text releasedText( textSupported, releasedFont );
         fheroes2::Text pressedText( textSupported, pressedFont );
+
         releasedText.draw( releasedTextOffset.x, releasedTextOffset.y - ( releasedText.height( maxTextWidth ) / 2 ), maxTextWidth, releasedState );
         pressedText.draw( pressedTextOffset.x, pressedTextOffset.y - ( pressedText.height( maxTextWidth ) / 2 ), maxTextWidth, pressedState );
     }
