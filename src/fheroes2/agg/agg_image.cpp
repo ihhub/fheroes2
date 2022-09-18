@@ -256,8 +256,9 @@ namespace
         fheroes2::Text releasedText( textSupported, releasedFont );
         fheroes2::Text pressedText( textSupported, pressedFont );
 
-        releasedText.draw( releasedTextOffset.x + ( maxTextWidth - releasedText.width() ) / 2, releasedTextOffset.y, releasedState );
-        pressedText.draw( pressedTextOffset.x + ( maxTextWidth - pressedText.width() ) / 2, pressedTextOffset.y, pressedState );
+        releasedText.draw( releasedTextOffset.x /*+ ( maxTextWidth - releasedText.width() ) / 2*/, releasedTextOffset.y, maxTextWidth , releasedState );
+        pressedText.draw( pressedTextOffset.x /*+ ( maxTextWidth - pressedText.width() ) / 2*/,
+                          pressedTextOffset.y /*- 6 + ( ( 48 - pressedText.height( pressedText.width() ) ) / 2 )*/, maxTextWidth, pressedState );
     }
 
     void convertToEvilInterface( fheroes2::Sprite & image, const fheroes2::Rect & roi )
@@ -364,7 +365,8 @@ namespace fheroes2
                     Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "BATTLE MODE" ), { 11, 20 }, { 10, 21 }, 117, fheroes2::FontColor::WHITE );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "BATTLE\nMODE" ), { 14, 13 }, { 13, 14 }, 110,
+                                    fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -381,7 +383,7 @@ namespace fheroes2
                     out = GetICN( baseIcnId, 11 + i );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "GIFT" ), { 23, 5 }, { 22, 6 }, 50, buttonFontColor );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "GIFT" ), { 6, 5 }, { 4, 6 }, 86, buttonFontColor );
 
                 break;
             }
@@ -407,7 +409,7 @@ namespace fheroes2
                     Fill( out, 13 + 2 * i, 3 + 2 * i, 129 - 2 * i, 16, out.image()[13 - 7 * i + ( 5 + i ) * ( 145 - ( 4 * i ) )] );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 10, 5 }, { 10, 6 }, 132, fheroes2::FontColor::GRAY );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 4, 5 }, { 4, 6 }, 145, fheroes2::FontColor::GRAY );
 
                 break;
             }
@@ -420,7 +422,7 @@ namespace fheroes2
                     Fill( out, 13, 4 + i, 127, 15, getButtonFillingColor( i == 0 ) );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 11, 5 }, { 10, 6 }, 132, fheroes2::FontColor::WHITE );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 5, 5 }, { 4, 6 }, 145, fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -433,7 +435,7 @@ namespace fheroes2
                     Fill( out, 4, 3 + i, 132 - i, 16, out.image()[5 * 132] );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 3, 5 }, { 3, 5 }, 132, fheroes2::FontColor::GRAY );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { -2, 5 }, { -2, 5 }, 145, fheroes2::FontColor::GRAY );
 
                 break;
             }
