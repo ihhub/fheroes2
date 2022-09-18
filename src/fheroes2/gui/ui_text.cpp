@@ -781,12 +781,6 @@ namespace fheroes2
             return true;
         }
 
-        // Check that the font exists.
-        const Sprite & commaCharacter = AGG::getChar( ',', fontType );
-        if ( commaCharacter.empty() ) {
-            return false;
-        }
-
         const CharValidator validator( fontType.size );
 
         for ( const char letter : text ) {
