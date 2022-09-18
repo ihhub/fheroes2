@@ -470,6 +470,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
                 count_sell = 0;
                 count_buy = 0;
 
+                cursorFrom.show();
                 cursorFrom.setPosition( rect_from.x - 2, rect_from.y - 2 );
 
                 if ( resourceTo ) {
@@ -503,6 +504,7 @@ void Dialog::Marketplace( Kingdom & kingdom, bool fromTradingPost )
                 count_sell = 0;
                 count_buy = 0;
 
+                cursorTo.show();
                 cursorTo.setPosition( rect_to.x - 2, rect_to.y - 2 );
 
                 if ( resourceFrom ) {
