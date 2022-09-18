@@ -402,9 +402,9 @@ namespace fheroes2
                     // clean the button.
                     Fill( out, 13 + 2 * i, 3 + 2 * i, 129 - 2 * i, 16, out.image()[13 - 7 * i + ( 5 + i ) * ( 145 - ( 4 * i ) )] );
                 }
-                
+
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 10, 5 }, { 10, 6 }, 132, fheroes2::FontColor::GRAY );
-                
+
                 break;
             }
             case ICN::BUTTON_DIFFICULTY_ROLAND: {
@@ -415,9 +415,9 @@ namespace fheroes2
                     // clean the button.
                     Fill( out, 13, 4 + i, 127, 15, getButtonFillingColor( i == 0 ) );
                 }
-                
+
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 11, 5 }, { 10, 6 }, 132, fheroes2::FontColor::WHITE );
-                
+
                 break;
             }
             case ICN::BUTTON_DIFFICULTY_POL: {
@@ -428,9 +428,9 @@ namespace fheroes2
                     // clean the button.
                     Fill( out, 4, 3 + i, 132 - i, 16, out.image()[5 * 132] );
                 }
-                
+
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 3, 5 }, { 3, 5 }, 132, fheroes2::FontColor::GRAY );
-                
+
                 break;
             }
             default:
