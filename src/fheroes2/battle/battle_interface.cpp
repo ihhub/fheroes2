@@ -258,7 +258,6 @@ namespace Battle
             _scrollbar.hide();
             SetAreaItems( { area.x, area.y, area.width - 10, area.height } );
             SetListContent( messages );
-            _scrollbar.show();
         }
 
         const fheroes2::Rect & GetArea() const
@@ -266,14 +265,15 @@ namespace Battle
             return border.GetRect();
         }
 
-        void AddMessage( const std::string & str )
+        void AddMessage( std::string str )
         {
-            messages.push_back( str );
-            SetListContent( messages );
-            SetCurrent( messages.size() - 1 );
+            messages.push_back( std::move( str ) );
             if ( !openlog ) {
                 _scrollbar.hide();
             }
+
+            SetListContent( messages );
+            SetCurrent( messages.size() - 1 );
 
             const int32_t scrollbarSliderAreaLength = buttonPgDn.area().y - ( buttonPgUp.area().y + buttonPgUp.area().height ) - 7;
             const fheroes2::Sprite & originalSlider = fheroes2::AGG::GetICN( ICN::DROPLISL, 13 );
@@ -1102,11 +1102,11 @@ Battle::Interface::Interface( Arena & a, int32_t center )
 
     status.SetPosition( area.x + settingsRect.width, btn_auto.area().y );
 
-    listlog = new StatusListBox();
+    listlog = std::make_unique<StatusListBox>();
 
     if ( listlog )
         listlog->SetPosition( area.x, area.y + area.height - status.height );
-    status.SetLogs( listlog );
+    status.SetLogs( listlog.get() );
 
     AudioManager::ResetAudio();
 
@@ -1120,8 +1120,6 @@ Battle::Interface::~Interface()
 {
     AudioManager::ResetAudio();
 
-    if ( listlog )
-        delete listlog;
     if ( opponent1 )
         delete opponent1;
     if ( opponent2 )
@@ -3027,7 +3025,7 @@ void Battle::Interface::RedrawActionNewTurn() const
     std::string msg = _( "Turn %{turn}" );
     StringReplace( msg, "%{turn}", arena.GetCurrentTurn() );
 
-    listlog->AddMessage( msg );
+    listlog->AddMessage( std::move( msg ) );
 }
 
 void Battle::Interface::RedrawActionAttackPart1( Unit & attacker, Unit & defender, const TargetsInfo & targets )
