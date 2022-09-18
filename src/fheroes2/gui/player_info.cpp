@@ -494,7 +494,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
 
     player = getPlayerFromHandicapRoi( le.GetMouseCursor() );
     if ( player != nullptr ) {
-        if ( player->GetControl() & CONTROL_HUMAN ) {
+        if ( !( player->GetControl() & CONTROL_AI ) ) {
             switch ( player->getHandicapStatus() ) {
             case Player::HandicapStatus::NONE:
                 player->setHandicapStatus( Player::HandicapStatus::MILD );
