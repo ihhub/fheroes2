@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-10 16:23+0000\n"
-"PO-Revision-Date: 2022-09-17 20:38+0100\n"
+"PO-Revision-Date: 2022-09-18 10:11+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -364,7 +364,6 @@ msgstr "Отменям"
 msgid "Hero Screen"
 msgstr "Екран на героя"
 
-#, fuzzy
 msgid "Captain's Options"
 msgstr "Опции на героя"
 
@@ -501,14 +500,12 @@ msgstr ""
 "Пропуска текущото създание. Текущото създание завършва реда си и не може да "
 "отиде отново до следващия кръг."
 
-#, fuzzy
 msgid "View Captain's options"
 msgstr "Вижте настройките на героя"
 
 msgid "View Hero's options"
 msgstr "Вижте настройките на героя"
 
-#, fuzzy
 msgid "View opposing Captain"
 msgstr "Вижте противниковия герой"
 
@@ -527,7 +524,6 @@ msgstr "Лента за съобщения"
 msgid "Shows the results of individual monster's actions."
 msgstr "Показва резултатите от действията на отделните чудовища."
 
-#, fuzzy
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
 
@@ -624,7 +620,6 @@ msgstr "Създава се огледален образ."
 msgid "The mirror image is destroyed!"
 msgstr "Огледалният образ е унищожен!"
 
-#, fuzzy
 msgid "Are you sure you want to interrupt the auto battle?"
 msgstr "Сигурен ли сте, че искате да се отеглите?"
 
@@ -1879,307 +1874,320 @@ msgstr "Шелтембург"
 
 msgid "Cannot recruit - guest to guard automove error."
 msgstr ""
+"Не може да се наеме - грешка при автоматичното преместване на госта в "
+"охраната."
 
 msgid "Cannot recruit - you already have a Hero in this town."
-msgstr ""
+msgstr "Не може да се наеме - вече имате герой в този град."
 
 msgid "Cannot recruit - you have too many Heroes."
-msgstr ""
+msgstr "Не можете да се наеме - имате твърде много герои."
 
 msgid "Cannot afford a Hero"
-msgstr ""
+msgstr "Не мога да си позволя герой"
 
 msgid "There is no room in the garrison for this army."
-msgstr ""
+msgstr "В гарнизона няма място за тази армия."
 
 msgid "Fortifications"
-msgstr ""
+msgstr "Укрепления"
 
 msgid "Farm"
-msgstr ""
+msgstr "Ферма"
 
 msgid "Thatched Hut"
-msgstr ""
+msgstr "Сламена хижа"
 
 msgid "Archery Range"
-msgstr ""
+msgstr "Стрелба с лък"
 
 msgid "Upg. Archery Range"
-msgstr ""
+msgstr "Надстрой стрелба с лък"
 
 msgid "Blacksmith"
-msgstr ""
+msgstr "Ковач"
 
 msgid "Upg. Blacksmith"
-msgstr ""
+msgstr "Надстрой ковач"
 
 msgid "Armory"
-msgstr ""
+msgstr "Оръжейна"
 
 msgid "Upg. Armory"
-msgstr ""
+msgstr "Надстрой оръжейна"
 
 msgid "Jousting Arena"
-msgstr ""
+msgstr "Арена за престрелки"
 
 msgid "Upg. Jousting Arena"
-msgstr ""
+msgstr "Надстрой арена за престрелки"
 
 msgid "Cathedral"
-msgstr ""
+msgstr "Катедралата"
 
 msgid "Upg. Cathedral"
-msgstr ""
+msgstr "Надстрой катедралата"
 
 msgid "Coliseum"
-msgstr ""
+msgstr "Колизеум"
 
 msgid "Garbage Heap"
-msgstr ""
+msgstr "Купчина боклук"
 
 msgid "Hut"
-msgstr ""
+msgstr "Хижа"
 
 msgid "Stick Hut"
-msgstr ""
+msgstr "Хижа от пръчки"
 
 msgid "Upg. Stick Hut"
-msgstr ""
+msgstr "Надстрой хижа от пръчки"
 
 msgid "Den"
 msgstr ""
 
 msgid "Adobe"
-msgstr ""
+msgstr "Глинена постройка"
 
 msgid "Upg. Adobe"
-msgstr ""
+msgstr "Надстрой глинена постройка"
 
 msgid "Bridge"
-msgstr ""
+msgstr "Мост"
 
 msgid "Upg. Bridge"
-msgstr ""
+msgstr "Надстрой Мост"
 
 msgid "Pyramid"
-msgstr ""
+msgstr "Пирамида"
 
 msgid "Rainbow"
-msgstr ""
+msgstr "Дъга"
 
 msgid "Crystal Garden"
-msgstr ""
+msgstr "Кристална градина"
 
 msgid "Treehouse"
-msgstr ""
+msgstr "Къща на дърво"
 
 msgid "Cottage"
-msgstr ""
+msgstr "Вила"
 
 msgid "Upg. Cottage"
-msgstr ""
+msgstr "Надстрой вила"
 
 msgid "Stonehenge"
-msgstr ""
+msgstr "Стоунхендж"
 
 msgid "Upg. Stonehenge"
-msgstr ""
+msgstr "Надстрой Стоунхендж"
 
 msgid "Fenced Meadow"
-msgstr ""
+msgstr "Оградена поляна"
 
 msgid "sorceress|Red Tower"
-msgstr ""
+msgstr "Червена кула"
 
 msgid "Dungeon"
-msgstr ""
+msgstr "Тъмница"
 
 msgid "Waterfall"
-msgstr ""
+msgstr "Водопад"
 
 msgid "Cave"
-msgstr ""
+msgstr "Пещера"
 
 msgid "Crypt"
-msgstr ""
+msgstr "Крипта"
 
 msgid "Nest"
-msgstr ""
+msgstr "Гнездо"
 
 msgid "Maze"
-msgstr ""
+msgstr "Лабиринт"
 
 msgid "Upg. Maze"
-msgstr ""
+msgstr "Надстрой лабиринт"
 
 msgid "Swamp"
-msgstr ""
+msgstr "Блато"
 
 msgid "Green Tower"
-msgstr ""
+msgstr "Зелена кула"
 
 msgid "warlock|Red Tower"
-msgstr ""
+msgstr "Червена кула"
 
 msgid "Black Tower"
-msgstr ""
+msgstr "Черна кула"
 
 msgid "Library"
-msgstr ""
+msgstr "Библиотека"
 
 msgid "Orchard"
-msgstr ""
+msgstr "Овощна градина"
 
 msgid "Habitat"
-msgstr ""
+msgstr "Хабитат"
 
 msgid "Pen"
-msgstr ""
+msgstr "Химикал"
 
 msgid "Foundry"
-msgstr ""
+msgstr "Леярна"
 
 msgid "Upg. Foundry"
-msgstr ""
+msgstr "Надстрой леярна"
 
 msgid "Cliff Nest"
-msgstr ""
+msgstr "Скално гнездо"
 
 msgid "Ivory Tower"
-msgstr ""
+msgstr "Кулата на мечтите"
 
 msgid "Upg. Ivory Tower"
-msgstr ""
+msgstr "Надстрой Кулата на мечтите"
 
 msgid "Cloud Castle"
-msgstr ""
+msgstr "Замък в облаците"
 
 msgid "Upg. Cloud Castle"
-msgstr ""
+msgstr "Надстрой Замък в облаците"
 
 msgid "Storm"
-msgstr ""
+msgstr "Буря"
 
 msgid "Skull Pile"
-msgstr ""
+msgstr "Купчина черепи"
 
 msgid "Excavation"
-msgstr ""
+msgstr "Разкопки"
 
 msgid "Graveyard"
-msgstr ""
+msgstr "Гробище"
 
 msgid "Upg. Graveyard"
-msgstr ""
+msgstr "Надстрой гробище"
 
 msgid "Upg. Pyramid"
-msgstr ""
+msgstr "Надстрой пирамида"
 
 msgid "Mansion"
-msgstr ""
+msgstr "Имение"
 
 msgid "Upg. Mansion"
-msgstr ""
+msgstr "Надстрой имение"
 
 msgid "Mausoleum"
-msgstr ""
+msgstr "Мавзолей"
 
 msgid "Upg. Mausoleum"
-msgstr ""
+msgstr "Надстрой мавзолей"
 
 msgid "Laboratory"
-msgstr ""
+msgstr "Лаборатория"
 
 msgid "Shrine"
-msgstr ""
+msgstr "Светилище"
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
 msgstr ""
+"Укрепленията увеличават здравината на стените, увеличавайки броя на ударите, "
+"необходими за събарянето им."
 
 msgid "The Farm increases production of Peasants by %{count} per week."
-msgstr ""
+msgstr "Фермата увеличава производството на селяни с %{count} на седмица."
 
 msgid ""
 "The Coliseum provides inspiring spectacles to defending troops, raising "
 "their morale by two during combat."
 msgstr ""
+"Колизеумът предоставя вдъхновяващи зрелища на отбраняващите се войски, като "
+"повишава морала им с две по време на битка."
 
 msgid "The Garbage Heap increases production of Goblins by %{count} per week."
 msgstr ""
+"Купчината боклук увеличава производството на Гоблини с %{count} на седмица."
 
 msgid "The Rainbow increases the luck of the defending units by two."
-msgstr ""
+msgstr "Дъгата увеличава късмета на защитаващите се единици с две."
 
 msgid ""
 "The Crystal Garden increases production of Sprites by %{count} per week."
 msgstr ""
+"Кристалната градина увеличава производството на Фей с %{count} на седмица."
 
 msgid "The Dungeon increases the income of the town by %{count} / day."
-msgstr ""
+msgstr "Подземието увеличава доходите на града с %{count} / ден."
 
 msgid "The Waterfall increases production of Centaurs by %{count} per week."
-msgstr ""
+msgstr "Водопадът увеличава производството на Кентаври с %{count} на седмица."
 
 msgid ""
 "The Library increases the number of spells in the Guild by one for each "
 "level of the guild."
 msgstr ""
+"Библиотеката увеличава броя на магиите в гилдията с по една за всяко ниво на "
+"гилдията."
 
 msgid "The Orchard increases production of Halflings by %{count} per week."
 msgstr ""
+"Овощната градина увеличава производството на Полуръстовете с %{count} на "
+"седмица."
 
 msgid "The Storm adds +2 to the power of spells of a defending spell caster."
-msgstr ""
+msgstr "Бурята добавя +2 към силата на заклинанията на защитаващ заклинател."
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr ""
+"Купчината черепи увеличава производството на Скелети с %{count} на седмица."
 
 msgid "Thieves' Guild"
-msgstr ""
+msgstr "Гилдията на крадците"
 
 msgid "Tavern"
-msgstr ""
+msgstr "Кръчма"
 
 msgid "Shipyard"
-msgstr ""
+msgstr "Корабостроителница"
 
 msgid "Well"
-msgstr ""
+msgstr "Кладенец"
 
 msgid "Statue"
-msgstr ""
+msgstr "Статуя"
 
 msgid "Marketplace"
-msgstr ""
+msgstr "Пазар"
 
 msgid "Moat"
-msgstr ""
+msgstr "Ров"
 
 msgid "Castle"
 msgstr "Замък"
 
 msgid "Tent"
-msgstr ""
+msgstr "Палатка"
 
 msgid "Captain's Quarters"
 msgstr "Капитанската Квартира"
 
 msgid "Mage Guild, Level 1"
-msgstr ""
+msgstr "Гилдия на маговете, ниво 1"
 
 msgid "Mage Guild, Level 2"
-msgstr ""
+msgstr "Гилдия на маговете, ниво 2"
 
 msgid "Mage Guild, Level 3"
-msgstr ""
+msgstr "Гилдия на маговете, ниво 3"
 
 msgid "Mage Guild, Level 4"
-msgstr ""
+msgstr "Гилдия на маговете, ниво 4"
 
 msgid "Mage Guild, Level 5"
-msgstr ""
+msgstr "Гилдия на маговете, ниво 5"
 
 msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
