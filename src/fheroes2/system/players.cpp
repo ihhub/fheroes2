@@ -157,6 +157,18 @@ void Player::SetPlay( bool f )
         ResetModes( ST_INGAME );
 }
 
+void Player::setHandicapStatus( const uint8_t status )
+{
+    if ( status == HandicapStatus::NONE ) {
+      _handicapStatus = status;
+      return;
+    }
+
+    assert( control & CONTROL_HUMAN );
+
+    _handicapStatus = status;
+}
+
 StreamBase & operator<<( StreamBase & msg, const Focus & focus )
 {
     msg << focus.first;

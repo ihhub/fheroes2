@@ -48,7 +48,7 @@ namespace Interface
         Player * GetFromClassClick( const fheroes2::Point & pt );
         Player * getPlayerFromHandicapRoi( const fheroes2::Point & point );
 
-        /// show_play_info: show game info with color status (play/not play)
+        // displayInGameInfo: use colored and grayscale race icons to distinguish between players who are still in the game and vanquished players respectively
         void RedrawInfo( const bool displayInGameInfo ) const;
 
         void resetSelection()

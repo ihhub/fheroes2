@@ -178,15 +178,7 @@ public:
         return _handicapStatus;
     }
 
-    void setHandicapStatus( const uint8_t status )
-    {
-        if ( control & CONTROL_HUMAN ) {
-            _handicapStatus = status;
-        }
-        else {
-            _handicapStatus = HandicapStatus::NONE;
-        }
-    }
+    void setHandicapStatus( const uint8_t status );
 
 protected:
     friend StreamBase & operator<<( StreamBase &, const Player & );
