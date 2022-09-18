@@ -433,7 +433,7 @@ namespace fheroes2
                     Fill( out, 4, 3 + i, 132 - i, 16, out.image()[5 * 132] );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { -2, 5 }, { -2, 5 }, 145, fheroes2::FontColor::GRAY );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { -1, 5 }, { -1, 5 }, 142, fheroes2::FontColor::GRAY );
 
                 break;
             }
