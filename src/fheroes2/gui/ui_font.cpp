@@ -2233,7 +2233,7 @@ namespace fheroes2
         SetPixel( released[33], offset + 5, offset + 2, releasedFontColor );
         SetPixel( released[33], offset + 6, offset + 1, releasedFontColor );
         SetPixel( released[33], offset + 6, offset + 0, releasedFontColor );
-        
+
         // B
         released[34].resize( 11 + offset * 2, 10 + offset * 2 );
         released[34].reset();
@@ -2245,7 +2245,6 @@ namespace fheroes2
         DrawLine( released[34], { offset + 10, offset + 6 }, { offset + 10, offset + 7 }, releasedFontColor );
         SetPixel( released[34], offset + 9, offset + 8, releasedFontColor );
         SetPixel( released[34], offset + 9, offset + 1, releasedFontColor );
-        
 
         // C
         released[35].resize( 10 + offset * 2, 10 + offset * 2 );
@@ -2281,7 +2280,7 @@ namespace fheroes2
         SetPixel( released[37], offset + 8, offset + 8, releasedFontColor );
         SetPixel( released[37], offset + 6, offset + 3, releasedFontColor );
         SetPixel( released[37], offset + 6, offset + 5, releasedFontColor );
-        
+
         // F
         released[38].resize( 9 + offset * 2, 10 + offset * 2 );
         released[38].reset();
