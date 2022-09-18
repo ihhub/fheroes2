@@ -988,6 +988,10 @@ namespace ICN
         BUTTON_EVIL_FONT_RELEASED,
         BUTTON_EVIL_FONT_PRESSED,
 
+        BUTTON_DIFFICULTY_ARCHIBALD,
+        BUTTON_DIFFICULTY_ROLAND,
+        BUTTON_DIFFICULTY_POL,
+
         // IMPORTANT! Put any new entry just above this one.
         LASTICN
     };

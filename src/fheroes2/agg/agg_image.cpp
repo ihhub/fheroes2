@@ -239,6 +239,27 @@ namespace
         return isReleasedState ? fheroes2::GetColorId( 180, 180, 180 ) : fheroes2::GetColorId( 144, 144, 144 );
     }
 
+    const char * getSupportedText( const char * text, const fheroes2::FontType & font )
+    {
+        const char * translatedText = _( text );
+        return fheroes2::isFontAvailable( translatedText, font ) ? translatedText : text;
+    }
+
+    void renderTextOnButton( fheroes2::Image & releasedState, fheroes2::Image & pressedState, const char * text, const fheroes2::Point & releasedTextOffset,
+                             const fheroes2::Point & pressedTextOffset, const int32_t maxTextWidth, const fheroes2::FontColor fontColor )
+    {
+        const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fontColor };
+        const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fontColor };
+
+        const char * textSupported = getSupportedText( text, releasedFont );
+
+        fheroes2::Text releasedText( textSupported, releasedFont );
+        fheroes2::Text pressedText( textSupported, pressedFont );
+
+        releasedText.draw( releasedTextOffset.x + ( maxTextWidth - releasedText.width() ) / 2, releasedTextOffset.y, releasedState );
+        pressedText.draw( pressedTextOffset.x + ( maxTextWidth - pressedText.width() ) / 2, pressedTextOffset.y, pressedState );
+    }
+
     void convertToEvilInterface( fheroes2::Sprite & image, const fheroes2::Rect & roi )
     {
         fheroes2::ApplyPalette( image, roi.x, roi.y, image, roi.x, roi.y, roi.width, roi.height, PAL::GetPalette( PAL::PaletteType::GOOD_TO_EVIL_INTERFACE ) );
@@ -344,39 +365,71 @@ namespace fheroes2
                 }
                 break;
             case ICN::BTNGIFT_GOOD:
+            case ICN::BTNGIFT_EVIL: {
                 _icnVsSprite[id].resize( 2 );
+
+                const bool isGoodInterface = ( id == ICN::BTNGIFT_GOOD );
+                const int baseIcnId = isGoodInterface ? ICN::SYSTEM : ICN::SYSTEME;
+                const fheroes2::FontColor buttonFontColor = isGoodInterface ? fheroes2::FontColor::WHITE : fheroes2::FontColor::GRAY;
+
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::SYSTEM, 11 + i );
+                    out = GetICN( baseIcnId, 11 + i );
                 }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "GIFT" ), { 23, 5 }, { 22, 6 }, 50, buttonFontColor );
+
                 break;
-            case ICN::BTNGIFT_EVIL:
-                _icnVsSprite[id].resize( 2 );
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::SYSTEME, 11 + i );
-                }
-                break;
+            }
             case ICN::NON_UNIFORM_GOOD_MIN_BUTTON: {
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::RECRUIT, 4 + i );
-                    // clean the button
+                    // clean the button.
                     Blit( GetICN( ICN::SYSTEM, 11 + i ), 10 - i, 4 + i, out, 11 - i, 4 + i, 50, 16 );
                 }
 
-                const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fheroes2::FontColor::WHITE };
-                const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fheroes2::FontColor::WHITE };
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), { 11, 5 }, { 10, 6 }, 50, fheroes2::FontColor::WHITE );
 
-                const char * translatedText = _( "MIN" );
-                const char * text = fheroes2::isFontAvailable( translatedText, releasedFont ) ? translatedText : "MIN";
+                break;
+            }
+            case ICN::BUTTON_DIFFICULTY_ARCHIBALD: {
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::EVIL_CAMPAIGN_BUTTONS, 0 + i );
+                    // clean the button.
+                    Fill( out, 13 + 2 * i, 3 + 2 * i, 129 - 2 * i, 16, out.image()[13 - 7 * i + ( 5 + i ) * ( 145 - ( 4 * i ) )] );
+                }
 
-                fheroes2::Text releasedText( text, releasedFont );
-                fheroes2::Text presesedText( text, pressedFont );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 10, 5 }, { 10, 6 }, 132, fheroes2::FontColor::GRAY );
 
-                releasedText.draw( 11 + ( 50 - releasedText.width() ) / 2, 5, _icnVsSprite[id][0] );
-                presesedText.draw( 10 + ( 50 - presesedText.width() ) / 2, 6, _icnVsSprite[id][1] );
+                break;
+            }
+            case ICN::BUTTON_DIFFICULTY_ROLAND: {
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::GOOD_CAMPAIGN_BUTTONS, 0 + i );
+                    // clean the button.
+                    Fill( out, 13, 4 + i, 127, 15, getButtonFillingColor( i == 0 ) );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 11, 5 }, { 10, 6 }, 132, fheroes2::FontColor::WHITE );
+
+                break;
+            }
+            case ICN::BUTTON_DIFFICULTY_POL: {
+                _icnVsSprite[id].resize( 2 );
+                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
+                    Sprite & out = _icnVsSprite[id][i];
+                    out = GetICN( ICN::X_CMPBTN, 0 + i );
+                    // clean the button.
+                    Fill( out, 4, 3 + i, 132 - i, 16, out.image()[5 * 132] );
+                }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 3, 5 }, { 3, 5 }, 132, fheroes2::FontColor::GRAY );
 
                 break;
             }
@@ -412,50 +465,6 @@ namespace fheroes2
                     // Add 'ly'
                     Blit( GetICN( ICN::BTNHOTST, i ), 47 - i, 21, out, 71 - i, 28, 12, 13 );
                     Blit( GetICN( ICN::BTNHOTST, i ), 72 - i, 21, out, 84 - i, 28, 13, 13 );
-                }
-                return true;
-            case ICN::BTNGIFT_GOOD:
-                _icnVsSprite[id].resize( 2 );
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::TRADPOST, 17 + i );
-
-                    // clean the button
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6, out, 6, 4, 72, 15 );
-
-                    // add 'G'
-                    Blit( GetICN( ICN::CPANEL, i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
-
-                    // add 'I'
-                    Blit( GetICN( ICN::APANEL, 4 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
-
-                    // add 'F'
-                    Blit( GetICN( ICN::APANEL, 4 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
-
-                    // add 'T'
-                    Blit( GetICN( ICN::CPANEL, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
-                }
-                return true;
-            case ICN::BTNGIFT_EVIL:
-                _icnVsSprite[id].resize( 2 );
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::TRADPOSE, 17 + i );
-
-                    // clean the button
-                    Blit( GetICN( ICN::SYSTEME, 11 + i ), 10, 6, out, 6, 4, 72, 15 );
-
-                    // add 'G'
-                    Blit( GetICN( ICN::CPANELE, i ), 18 - i, 27, out, 20 - i, 4, 15, 15 );
-
-                    // add 'I'
-                    Blit( GetICN( ICN::APANELE, 4 + i ), 22 - i, 20, out, 36 - i, 4, 9, 15 );
-
-                    // add 'F'
-                    Blit( GetICN( ICN::APANELE, 4 + i ), 48 - i, 20, out, 46 - i, 4, 13, 15 );
-
-                    // add 'T'
-                    Blit( GetICN( ICN::CPANELE, 6 + i ), 59 - i, 21, out, 60 - i, 5, 14, 14 );
                 }
                 return true;
             default:
@@ -954,6 +963,9 @@ namespace fheroes2
             case ICN::BTNGIFT_GOOD:
             case ICN::BTNGIFT_EVIL:
             case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
+            case ICN::BUTTON_DIFFICULTY_ARCHIBALD:
+            case ICN::BUTTON_DIFFICULTY_POL:
+            case ICN::BUTTON_DIFFICULTY_ROLAND:
                 generateLanguageSpecificImages( id );
                 return true;
             case ICN::BTNCONFIG:
@@ -2205,16 +2217,23 @@ namespace fheroes2
 
                 const int originalIcnId = ( id == ICN::GOOD_CAMPAIGN_BUTTONS ) ? ICN::CAMPXTRG : ICN::CAMPXTRE;
 
+                // The evil buttons' pressed state need to be 2 pixels wider.
+                const int offsetEvilX = ( id == ICN::GOOD_CAMPAIGN_BUTTONS ) ? 0 : 2;
+
                 for ( int32_t i = 0; i < 4; ++i ) {
+                    // The released state image.
                     image[2 * i] = GetICN( originalIcnId, 2 * i );
 
+                    // The pressed state image.
                     const Sprite & original = GetICN( originalIcnId, 2 * i + 1 );
 
                     Sprite & resized = image[2 * i + 1];
-                    resized.resize( image[2 * i].width(), image[2 * i].height() );
+                    // Change pressed state image to have same width and height as released image
+                    resized.resize( image[2 * i].width() + offsetEvilX, image[2 * i].height() );
                     resized.reset();
 
-                    Copy( original, 0, 0, resized, original.x(), original.y(), original.width(), original.height() );
+                    // Restore content of the pressed state image.
+                    Copy( original, 0, 0, resized, original.x(), original.y(), original.width() + offsetEvilX, original.height() );
                 }
 
                 return true;
