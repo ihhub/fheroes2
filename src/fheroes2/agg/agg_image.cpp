@@ -355,7 +355,7 @@ namespace fheroes2
         void generateDefaultImages( const int id )
         {
             switch ( id ) {
-            case ICN::BTNBATTLEONLY:
+            case ICN::BTNBATTLEONLY: {
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
@@ -363,7 +363,11 @@ namespace fheroes2
                     // Clean button
                     Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
                 }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "BATTLE MODE" ), { 11, 20 }, { 10, 21 }, 117, fheroes2::FontColor::WHITE );
+
                 break;
+            }
             case ICN::BTNGIFT_GOOD:
             case ICN::BTNGIFT_EVIL: {
                 _icnVsSprite[id].resize( 2 );
@@ -440,37 +444,6 @@ namespace fheroes2
                 assert( 0 );
                 break;
             }
-        }
-
-        bool generateEnglishSpecificImages( const int id )
-        {
-            switch ( id ) {
-            case ICN::BTNBATTLEONLY:
-                _icnVsSprite[id].resize( 2 );
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::BTNNEWGM, 6 + i );
-                    // Clean the button
-                    Fill( out, 25, 18, 88, 23, getButtonFillingColor( i == 0 ) );
-                    // Add 'ba'
-                    Blit( GetICN( ICN::BTNCMPGN, i ), 41 - i, 28, out, 30 - i, 13, 28, 14 );
-                    // Add 'tt'
-                    Blit( GetICN( ICN::BTNNEWGM, i ), 25 - i, 13, out, 57 - i, 13, 13, 14 );
-                    Blit( GetICN( ICN::BTNNEWGM, i ), 25 - i, 13, out, 70 - i, 13, 13, 14 );
-                    // Add 'le'
-                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 97 - i, 21, out, 83 - i, 13, 13, 14 );
-                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 86 - i, 21, out, 96 - i, 13, 13, 14 );
-                    // Add 'on'
-                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 44 - i, 21, out, 40 - i, 28, 31, 14 );
-                    // Add 'ly'
-                    Blit( GetICN( ICN::BTNHOTST, i ), 47 - i, 21, out, 71 - i, 28, 12, 13 );
-                    Blit( GetICN( ICN::BTNHOTST, i ), 72 - i, 21, out, 84 - i, 28, 13, 13 );
-                }
-                return true;
-            default:
-                break;
-            }
-            return false;
         }
 
         bool generateGermanSpecificImages( const int id )
@@ -787,11 +760,6 @@ namespace fheroes2
                 break;
             case fheroes2::SupportedLanguage::Italian:
                 if ( generateItalianSpecificImages( id ) ) {
-                    return;
-                }
-                break;
-            case fheroes2::SupportedLanguage::English:
-                if ( generateEnglishSpecificImages( id ) ) {
                     return;
                 }
                 break;
