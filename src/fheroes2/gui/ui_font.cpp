@@ -2238,14 +2238,14 @@ namespace fheroes2
         released[34].resize( 11 + offset * 2, 10 + offset * 2 );
         released[34].reset();
         DrawLine( released[34], { offset + 0, offset + 0 }, { offset + 8, offset + 0 }, releasedFontColor );
-        SetPixel( released[34], offset + 9, offset + 1, releasedFontColor );
-        DrawLine( released[34], { offset + 10, offset + 2 }, { offset + 10, offset + 4 }, releasedFontColor );
-        DrawLine( released[34], { offset + 2, offset + 5 }, { offset + 9, offset + 5 }, releasedFontColor );
-        DrawLine( released[34], { offset + 2, offset + 1 }, { offset + 2, offset + 4 }, releasedFontColor );
-        DrawLine( released[34], { offset + 2, offset + 6 }, { offset + 2, offset + 8 }, releasedFontColor );
         DrawLine( released[34], { offset + 0, offset + 9 }, { offset + 8, offset + 9 }, releasedFontColor );
-        SetPixel( released[34], offset + 9, offset + 8, releasedFontColor );
+        DrawLine( released[34], { offset + 3, offset + 5 }, { offset + 9, offset + 5 }, releasedFontColor );
+        DrawLine( released[34], { offset + 2, offset + 1 }, { offset + 2, offset + 8 }, releasedFontColor );
+        DrawLine( released[34], { offset + 10, offset + 2 }, { offset + 10, offset + 4 }, releasedFontColor );
         DrawLine( released[34], { offset + 10, offset + 6 }, { offset + 10, offset + 7 }, releasedFontColor );
+        SetPixel( released[34], offset + 9, offset + 8, releasedFontColor );
+        SetPixel( released[34], offset + 9, offset + 1, releasedFontColor );
+        
 
         // C
         released[35].resize( 10 + offset * 2, 10 + offset * 2 );
