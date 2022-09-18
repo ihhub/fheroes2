@@ -160,8 +160,8 @@ void Player::SetPlay( bool f )
 void Player::setHandicapStatus( const uint8_t status )
 {
     if ( status == HandicapStatus::NONE ) {
-        _handicapStatus = status;
-        return;
+      _handicapStatus = status;
+      return;
     }
 
     assert( control & CONTROL_HUMAN );
