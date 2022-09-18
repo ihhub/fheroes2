@@ -19,7 +19,7 @@ msgstr ""
 "X-Generator: Poedit 3.0.1\n"
 
 msgid "MIN"
-msgstr "МИНИМАЛНО"
+msgstr "МИН"
 
 msgid "Warrior"
 msgstr "Войн"
@@ -2245,7 +2245,7 @@ msgid ""
 msgstr ""
 
 msgid "Recruit %{name}"
-msgstr "Вербувайте"
+msgstr "Вербувайте %{name}"
 
 msgid "Month: %{month}, Week: %{week}, Day: %{day}"
 msgstr "Месец: %{month}, Седмица: %{week}, Ден: %{day}"
@@ -2450,10 +2450,10 @@ msgid "Defense Skill"
 msgstr "Защита"
 
 msgid "Shots"
-msgstr "Истрели"
+msgstr "Изстрели"
 
 msgid "Shots Left"
-msgstr "Оставащи Истрели"
+msgstr "Оставащи изстрели"
 
 msgid "Damage"
 msgstr "Щета"
@@ -2895,7 +2895,7 @@ msgid "Click to apply the selected resolution."
 msgstr ""
 
 msgid "MAX"
-msgstr "МАКСИМАЛНО"
+msgstr "МАК"
 
 msgid "How many troops to move?"
 msgstr ""
