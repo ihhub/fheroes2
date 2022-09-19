@@ -2456,5 +2456,13 @@ namespace fheroes2
             fheroes2::updateShadow( letter, { -1, 1 }, 7 );
             fheroes2::updateShadow( letter, { -2, 2 }, 8 );
         }
+
+        for ( Sprite & letter : released ) {
+            letter.setPosition( -1, 0 );
+        }
+
+        for ( Sprite & letter : pressed ) {
+            letter.setPosition( -1, 0 );
+        }
     }
 }
