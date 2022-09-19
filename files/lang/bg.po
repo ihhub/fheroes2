@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-10 16:23+0000\n"
+"POT-Creation-Date: 2022-09-18 13:47+0000\n"
 "PO-Revision-Date: 2022-09-18 16:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -18,8 +18,14 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
+msgid "GIFT"
+msgstr ""
+
 msgid "MIN"
 msgstr "МИН"
+
+msgid "DIFFICULTY"
+msgstr "ТРУДНОСТ"
 
 msgid "Warrior"
 msgstr "Войн"
@@ -3259,9 +3265,6 @@ msgstr "Невъзможно"
 msgid "and more..."
 msgstr "и още..."
 
-msgid "DIFFICULTY"
-msgstr "ТРУДНОСТ"
-
 #, fuzzy
 msgid "Campaign Difficulty"
 msgstr ""
@@ -4018,8 +4021,42 @@ msgid ""
 "and/or heroes not of their primary alignment."
 msgstr ""
 
+msgid "Handicap"
+msgstr ""
+
+#
+msgid ""
+"This lets you change the handicap of a particular player. Only humans may be "
+"handicapped. Handicapped players start with fewer resources and earn 15 or "
+"30% fewer resources per turn for mild and severe handicaps, respectively."
+msgstr ""
+
 msgid "%{color} player"
 msgstr "%{color} играч"
+
+msgid "No Handicap"
+msgstr ""
+
+msgid "No special restrictions on start resources and earning them per turn."
+msgstr ""
+
+msgid "Mild Handicap"
+msgstr ""
+
+#
+msgid ""
+"Mild handicapped players start with fewer resources and earn 15% fewer "
+"resources per turn."
+msgstr ""
+
+msgid "Severe Handicap"
+msgstr ""
+
+#
+msgid ""
+"Severe handicapped players start with fewer resources and earn 30% fewer "
+"resources per turn."
+msgstr ""
 
 msgid "View %{skill} Info"
 msgstr ""
