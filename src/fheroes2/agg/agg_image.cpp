@@ -256,11 +256,11 @@ namespace
         fheroes2::Text releasedText( textSupported, releasedFont );
         fheroes2::Text pressedText( textSupported, pressedFont );
 
-        const fheroes2::Size releaseTextSize( releasedText.width( buttonSize.width ), releasedText.height( buttonSize.width ) );
+        const fheroes2::Size releasedTextSize( releasedText.width( buttonSize.width ), releasedText.height( buttonSize.width ) );
         const fheroes2::Size pressedTextSize( pressedText.width( buttonSize.width ), pressedText.height( buttonSize.width ) );
 
-        releasedText.draw( releasedTextOffset.x + ( buttonSize.width - releaseTextSize.width ) / 2,
-                           releasedTextOffset.y + ( buttonSize.height - releaseTextSize.height ) / 2, buttonSize.width, releasedState );
+        releasedText.draw( releasedTextOffset.x + ( buttonSize.width - releasedTextSize.width ) / 2,
+                           releasedTextOffset.y + ( buttonSize.height - releasedTextSize.height ) / 2, buttonSize.width, releasedState );
         pressedText.draw( pressedTextOffset.x + ( buttonSize.width - pressedTextSize.width ) / 2,
                           pressedTextOffset.y + ( buttonSize.height - pressedTextSize.height ) / 2, buttonSize.width, pressedState );
     }
