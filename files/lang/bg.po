@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 13:47+0000\n"
-"PO-Revision-Date: 2022-09-20 15:52+0100\n"
+"PO-Revision-Date: 2022-09-20 16:06+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -1322,8 +1322,8 @@ msgid ""
 "The dwarves hail you, \"Any friend of Roland is a friend of ours.  You may "
 "pass.\""
 msgstr ""
-"Джуджетата ви приветстват: \"Всеки приятел на Роланд е и наш приятел. Може "
-"да преминете.\""
+"Джуджетата те приветстват: \"Всеки приятел на Роланд е и наш приятел. Може "
+"да преминеш.\""
 
 msgid ""
 "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
@@ -1647,7 +1647,7 @@ msgstr ""
 "Не може да се построи %{name}, защото замъкът е твърде далеч от водата."
 
 msgid "disable build."
-msgstr "спрете изграждането."
+msgstr "спри изграждането."
 
 msgid "Cannot afford %{name}."
 msgstr "Не мога да си позволя %{name}."
@@ -1886,7 +1886,7 @@ msgid "Cannot recruit - you already have a Hero in this town."
 msgstr "Не може да се наеме - вече имате герой в този град."
 
 msgid "Cannot recruit - you have too many Heroes."
-msgstr "Не можете да се наеме - имате твърде много герои."
+msgstr "Не може да се наеме - имаш твърде много герои."
 
 msgid "Cannot afford a Hero"
 msgstr "Не мога да си позволя герой"
@@ -2571,10 +2571,10 @@ msgid "Effects"
 msgstr "Ефекти"
 
 msgid "MIDI"
-msgstr "ЦИМИ"
+msgstr "МИДИ"
 
 msgid "MIDI Expansion"
-msgstr "ЦИМИ Продължение"
+msgstr "МИДИ Продължение"
 
 msgid "External"
 msgstr "Външна"
@@ -2622,22 +2622,22 @@ msgid "New Game"
 msgstr "Нова Игра"
 
 msgid "Start a single or multi-player game."
-msgstr "Започнете игра за един или няколко играча."
+msgstr "Започни игра за един или няколко играча."
 
 msgid "Load a previously saved game."
-msgstr "Заредете запазена игра."
+msgstr "Зареди запазена игра."
 
 msgid "Save Game"
 msgstr "Запази играта"
 
 msgid "Save the current game."
-msgstr "Запазете текущата игра."
+msgstr "Запази текущата игра."
 
 msgid "Quit"
 msgstr "Напускане"
 
 msgid "Quit out of Heroes of Might and Magic II."
-msgstr "Напуснете Heroes of Might and Magic II."
+msgstr "Напусни Heroes of Might and Magic II."
 
 msgid "Language"
 msgstr "Език"
@@ -2703,25 +2703,25 @@ msgid "Change language of the game."
 msgstr "Промяна на езика на играта."
 
 msgid "Select Game Resolution"
-msgstr "Изберете резолюция на играта"
+msgstr "Избери резолюция на играта"
 
 msgid "Change resolution of the game."
 msgstr "Промяна на резолюцията на играта."
 
 msgid "Change audio settings of the game."
-msgstr "Променете звуковите настройки на играта."
+msgstr "Промени звуковите настройки на играта."
 
 msgid "Experimental game settings."
 msgstr "Експериментални настройки на играта."
 
 msgid "Toggle instant battle mode."
-msgstr "Превключете режима на незабавна битка."
+msgstr "Превключи режима на незабавна битка."
 
 msgid "Check all Hot Keys used in the game."
-msgstr "Проверете всички горещи клавиши, използвани в играта."
+msgstr "Провери всички горещи клавиши, използвани в играта."
 
 msgid "Toggle the type of interface you want to use."
-msgstr "Превключете типа на интерфейса, който искате да използвате."
+msgstr "Превключи типа на интерфейса, който искаш да използваш."
 
 msgid ""
 "Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
@@ -2734,7 +2734,7 @@ msgid ""
 "Toggle text support mode to output extra information about windows and "
 "events in the game."
 msgstr ""
-"Превключете режима на текстова поддръжка, за да изведете допълнителна "
+"Превключи режима на текстова поддръжка, за да изведеш допълнителна "
 "информация за прозорци и събития в играта."
 
 msgid "Attention"
@@ -8740,17 +8740,17 @@ msgstr ""
 "заснети"
 
 msgid "castle: allow guardians"
-msgstr "замък: позволете пазители"
+msgstr "замък: позволи пазители"
 
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "герои: позволява да купите книга за заклинания от светилища"
 
 msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
-"герои: запомнете точките на движение, когато се оттегляте или се предавате"
+"герои: запомни точките на движение, когато се оттегляте или се предавате"
 
 msgid "heroes: allow to choose any primary skill in Arena"
-msgstr "герои: позволяват да изберете всяко основно умение от Арена"
+msgstr "герои: позволяват да избереш всяко основно умение от Арена"
 
 msgid "battle: allow soft wait for troops"
 msgstr "битка: позволява меко изчакване за войски"
