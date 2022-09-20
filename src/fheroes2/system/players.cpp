@@ -164,7 +164,7 @@ void Player::setHandicapStatus( const uint8_t status )
         return;
     }
 
-    assert( control & CONTROL_HUMAN );
+    assert( !( control & CONTROL_AI ) );
 
     _handicapStatus = status;
 }
