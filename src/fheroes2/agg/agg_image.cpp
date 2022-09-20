@@ -259,8 +259,10 @@ namespace
         const fheroes2::Size releaseTextSize( releasedText.width( buttonSize.width ), releasedText.height( buttonSize.width ) );
         const fheroes2::Size pressedTextSize( pressedText.width( buttonSize.width ), pressedText.height( buttonSize.width ) );
 
-        releasedText.draw( releasedTextOffset.x + ( buttonSize.width - releaseTextSize.width ) / 2, releasedTextOffset.y + ( buttonSize.height - releaseTextSize.height ) / 2, buttonSize.width, releasedState );
-        pressedText.draw( pressedTextOffset.x + (buttonSize.width - pressedTextSize.width ) / 2, pressedTextOffset.y + ( buttonSize.height - pressedTextSize.height ) / 2 , buttonSize.width, pressedState );
+        releasedText.draw( releasedTextOffset.x + ( buttonSize.width - releaseTextSize.width ) / 2,
+                           releasedTextOffset.y + ( buttonSize.height - releaseTextSize.height ) / 2, buttonSize.width, releasedState );
+        pressedText.draw( pressedTextOffset.x + ( buttonSize.width - pressedTextSize.width ) / 2,
+                          pressedTextOffset.y + ( buttonSize.height - pressedTextSize.height ) / 2, buttonSize.width, pressedState );
     }
 
     void convertToEvilInterface( fheroes2::Sprite & image, const fheroes2::Rect & roi )
