@@ -57,22 +57,6 @@
 
 namespace
 {
-    // This structure is used in cases when an object plays 'music' sound so we need to modify music volume according to sound settings
-    // and then restore it back to the original value.
-    struct MusicVolumeRestorer
-    {
-        MusicVolumeRestorer() = default;
-
-        MusicVolumeRestorer( const MusicVolumeRestorer & ) = delete;
-
-        ~MusicVolumeRestorer()
-        {
-            Music::setVolume( 100 * Settings::Get().MusicVolume() / 10 );
-        }
-
-        MusicVolumeRestorer & operator=( const MusicVolumeRestorer & ) = delete;
-    };
-
     void DialogCaptureResourceObject( const std::string & hdr, const std::string & str, const int32_t resourceType )
     {
         const payment_t info = ProfitConditions::FromMine( resourceType );
@@ -187,12 +171,9 @@ void BattleLose( Heroes & hero, const Battle::Result & res, bool attacker )
     const uint32_t reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
     AudioManager::PlaySound( M82::KILLFADE );
+
     hero.FadeOut();
     hero.SetFreeman( reason );
-
-    Interface::Basic & I = Interface::Basic::Get();
-    I.ResetFocus( GameFocus::HEROES );
-    I.RedrawFocus();
 }
 
 void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::string & msg, const Troop & troop, bool remove )
@@ -261,7 +242,6 @@ static void WhirlpoolTroopLoseEffect( Heroes & hero )
     }
 }
 
-// action to next cell
 void Heroes::Action( int tileIndex, bool isDestination )
 {
     if ( GetKingdom().isControlAI() ) {
@@ -271,24 +251,54 @@ void Heroes::Action( int tileIndex, bool isDestination )
         return AI::HeroesAction( *this, tileIndex );
     }
 
-    // Update environment sounds and music before doing the action. Interface::Basic::SetFocus() function is responsible for update them after the action.
     const int32_t heroPosIndex = GetIndex();
     assert( heroPosIndex >= 0 );
+
+    // Update environment sounds and music before performing the action
     if ( Game::UpdateSoundsOnFocusUpdate() ) {
         Game::EnvironmentSoundMixer();
         AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroPosIndex ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
 
-    // Restore the original music after the action is completed.
-    const AudioManager::MusicRestorer musicRestorer;
-    const MusicVolumeRestorer musicVolumeRestorer;
+    // Hero may be lost while performing the action, reset the focus after completing the action (and update environment sounds and music if necessary)
+    const struct FocusUpdater
+    {
+        FocusUpdater() = default;
+
+        FocusUpdater( const FocusUpdater & ) = delete;
+
+        ~FocusUpdater()
+        {
+            Interface::Basic & I = Interface::Basic::Get();
+
+            I.ResetFocus( GameFocus::HEROES );
+            I.RedrawFocus();
+        }
+
+        FocusUpdater & operator=( const FocusUpdater & ) = delete;
+    } focusUpdater;
+
+    // "Musical" sounds use the volume of sounds instead of the volume of music, reset the music volume after completing the action
+    const struct MusicVolumeRestorer
+    {
+        MusicVolumeRestorer() = default;
+
+        MusicVolumeRestorer( const MusicVolumeRestorer & ) = delete;
+
+        ~MusicVolumeRestorer()
+        {
+            Music::setVolume( 100 * Settings::Get().MusicVolume() / 10 );
+        }
+
+        MusicVolumeRestorer & operator=( const MusicVolumeRestorer & ) = delete;
+    } musicVolumeRestorer;
 
     Maps::Tiles & tile = world.GetTiles( tileIndex );
     const MP2::MapObjectType objectType = tile.GetObject( tileIndex != heroPosIndex );
 
     const int objectMusicTrack = MUS::FromMapObject( objectType );
     if ( objectMusicTrack != MUS::UNKNOWN ) {
-        // 'Music' sounds must use sound volume.
+        // "Musical" sounds should use the volume of the sounds instead of the volume of the music
         const int32_t soundVolume = 100 * Settings::Get().SoundVolume() / 10;
         if ( soundVolume > 0 ) {
             // Play the sound only if audio volume is not set to 0.
