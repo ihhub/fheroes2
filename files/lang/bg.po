@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-10 16:23+0000\n"
-"PO-Revision-Date: 2022-07-25 11:28+0100\n"
+"POT-Creation-Date: 2022-09-18 13:47+0000\n"
+"PO-Revision-Date: 2022-09-18 16:05+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -18,8 +18,14 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0.1\n"
 
-msgid "MIN"
+msgid "GIFT"
 msgstr ""
+
+msgid "MIN"
+msgstr "МИН"
+
+msgid "DIFFICULTY"
+msgstr "ТРУДНОСТ"
 
 msgid "Warrior"
 msgstr "Войн"
@@ -139,25 +145,25 @@ msgid "View %{name}"
 msgstr "Преглед на %{name}"
 
 msgid "Move the %{name} "
-msgstr "Преместете %{name} "
+msgstr "Премести %{name} "
 
 msgid "Move or right click to redistribute %{name}"
-msgstr "Преместете или щракнете с десния бутон, за да преразпределите %{name}"
+msgstr "Премести или щракни с десен бутон, за да разпределиш %{name}"
 
 msgid "Combine %{name} armies"
-msgstr "Комбинирайте %{name} армии"
+msgstr "Комбинирай %{name} армии"
 
 msgid "Exchange %{name2} with %{name}"
-msgstr "Разменете %{name2} с %{name}"
+msgstr "Размени %{name2} с %{name}"
 
 msgid "Select %{name}"
-msgstr "Изберете %{name}"
+msgstr "Избери %{name}"
 
 msgid "Cannot move last troop"
 msgstr "Не може да премести последния отряд"
 
 msgid "Move the %{name}"
-msgstr "Преместете %{name}"
+msgstr "Премести %{name}"
 
 msgid "Set Count"
 msgstr "Задаване на броя"
@@ -184,17 +190,16 @@ msgstr ""
 "всички бойни заклинания."
 
 msgid "You have already cast a spell this round."
-msgstr "Вече сте направили магия този рунд."
+msgstr "Вече си направил магия този рунд."
 
 msgid "That spell will affect no one!"
 msgstr "Това заклинание няма да засегне никого!"
 
 msgid "You may only summon one type of elemental per combat."
-msgstr "Можете да призовете само един тип елементал за битка."
+msgstr "Можш да призовш само един тип елементал за битка."
 
 msgid "There is no open space adjacent to your hero to summon an Elemental to."
-msgstr ""
-"Няма открито пространство до вашия герой, където да призовете елементал."
+msgstr "Няма открито пространство до твоя герой, където да призовеш елементал."
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
@@ -231,17 +236,17 @@ msgid "On"
 msgstr "Вкл"
 
 msgid "Set the speed of combat actions and animations."
-msgstr "Задайте скоростта на бойните действия и анимациите."
+msgstr "Задай скоростта на бойните действия и анимациите."
 
 msgid "Toggle to display army order during the battle."
-msgstr "Превключете за показване на армейския ред по време на битката."
+msgstr "Превключи за показване на армейския ред по време на битката."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
 "is on. (Note: This does not affect spell casting for computer players in any "
 "way, nor does it affect quick combat.)"
 msgstr ""
-"Превключете дали компютърът да прави заклинания вместо вас, когато "
+"Превключи дали компютърът да прави заклинания вместо теб, когато "
 "автоматичната битка е включена. (Забележка: Това не влияе по никакъв начин "
 "на правенето на заклинания за компютърни играчи, нито засяга бързата битка.)"
 
@@ -249,22 +254,22 @@ msgid ""
 "Toggle the hex grid on or off. The hex grid always underlies movement, even "
 "if turned off. This switch only determines if the grid is visible."
 msgstr ""
-"Включете или изключете шестнадесетичната мрежа. Шестнадесетичната мрежа "
-"винаги е в основата на движението, дори и да е изключена. Този ключ определя "
-"само дали решетката е видима."
+"Включи или изключи шестнадесетичната мрежа. Шестнадесетичната мрежа винаги е "
+"в основата на движението, дори и да е изключена. Този ключ определя само "
+"дали решетката е видима."
 
 msgid ""
 "Toggle on or off shadows showing where your creatures can move and attack."
 msgstr ""
-"Включете или изключете сенките, показващи къде вашите същества могат да се "
+"Включи или изключи сенките, показващи къде твойте същества могат да се "
 "движат и атакуват."
 
 msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
-"Включете или изключете сянка, показваща текущото шестнадесетично "
-"местоположение на курсора на мишката."
+"Включи или изключи сянка, показваща текущото шестнадесетично местоположение "
+"на курсора на мишката."
 
 msgid "The enemy has surrendered!"
 msgstr "Врагът се предаде!"
@@ -286,10 +291,10 @@ msgstr "%{name} се предава на врага и си тръгва зас�
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
 msgstr ""
-"Вашите сили претърпяват горчиво поражение и %{name} изоставя каузата ви."
+"Твойте сили претърпяват горчиво поражение и %{name} изоставя каузата ви."
 
 msgid "Your force suffer a bitter defeat."
-msgstr "Вашите сили претърпяват горчиво поражение."
+msgstr "Твойте сили претърпяват горчиво поражение."
 
 msgid "Battlefield Casualties"
 msgstr "Жертви на бойното поле"
@@ -301,13 +306,13 @@ msgid "Defender"
 msgstr "Защитник"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
-msgstr "Когато посегнете към %{name}, той мистериозно изчезва."
+msgstr "Когато посягаш към %{name}, той мистериозно изчезва."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
-msgstr "Когато врагът ви посегне към %{name}, той мистериозно изчезва."
+msgstr "Когато врагът ви посега към %{name}, той мистериозно изчезва."
 
 msgid "You have captured an enemy artifact!"
-msgstr "Вие сте заловили вражески артефакт!"
+msgstr "Ти си заловил вражески артефакт!"
 
 msgid "Necromancy!"
 msgstr "Некромантия!"
@@ -316,8 +321,8 @@ msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
 msgstr ""
-"Практикувайки тъмните изкуства на некромантията, можете да съберете %{count} "
-"от мъртвите на врага, за да се върнете под ваша служба като %{monster}."
+"Практикувайки тъмните изкуства на некромантията, можш да събереш %{count} от "
+"мъртвите на врага, за да се върнат под твое командване като %{monster}."
 
 msgid "%{name} the %{race}"
 msgstr "%{name} %{race}"
@@ -332,7 +337,7 @@ msgid "Defense"
 msgstr "Защита"
 
 msgid "Spell Power"
-msgstr "Сила на магията"
+msgstr "Магия"
 
 msgid "Knowledge"
 msgstr "Знание"
@@ -350,7 +355,7 @@ msgid "Hero's Options"
 msgstr "Опции на героя"
 
 msgid "Cast Spell"
-msgstr "Направете заклинание"
+msgstr "Направи заклинание"
 
 msgid "Retreat"
 msgstr "Отстъпление"
@@ -364,7 +369,6 @@ msgstr "Отменям"
 msgid "Hero Screen"
 msgstr "Екран на героя"
 
-#, fuzzy
 msgid "Captain's Options"
 msgstr "Опции на героя"
 
@@ -372,30 +376,30 @@ msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
 msgstr ""
-"Направете магическо заклинание. Можете да правите само едно заклинание на "
-"боен рунд. Рундът се нулира, когато всяко същество е имало ход."
+"Направи магическо заклинание. Можеш да правиш само едно заклинание на боен "
+"рунд. Рундът се нулира, когато всяко същество е имало ход."
 
 msgid ""
 "Retreat your hero, abandoning your creatures. Your hero will be available "
 "for you to recruit again, however, the hero will have only a novice hero's "
 "forces."
 msgstr ""
-"Оттеглете своя герой, изоставяйки своите създания. Вашият герой ще бъде на "
-"разположение, за да го наемете отново, но героят ще разполага само със "
-"силите на начинаещ герой."
+"Оттегли своя герой, изоставяйки своите създания. Твоят герой ще бъде на "
+"разположение, за да го наемш отново, но героят ще разполага само със силите "
+"на начинаещ герой."
 
 msgid ""
 "Surrendering costs gold. However if you pay the ransom, the hero and all of "
 "his or her surviving creatures will be available to recruit again."
 msgstr ""
-"Предаването ще струва злато. Ако обаче платите откупа, героят и всички "
-"негови или нейни оцелели същества ще бъдат на разположение за наемане отново."
+"Предаването ще струва злато. Ако обаче платиш откупа, героят и всички негови "
+"или нейни оцелели същества ще бъдат на разположение за наемане отново."
 
 msgid "Open Hero Screen to view full information about the hero."
-msgstr "Отворете екрана на героя, за да видите пълната информация за героя."
+msgstr "Отвори екрана на героя, за да видиш пълната информация за героя."
 
 msgid "Return to the battle."
-msgstr "Върнете се в битката."
+msgstr "Върни се в битката."
 
 msgid "Not enough gold (%{gold})"
 msgstr "Няма достатъчно злато (%{gold})"
@@ -410,11 +414,11 @@ msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
 msgstr ""
-"\"Ще приема капитулацията ви и ще осигуря на вас и войските ви безопасно "
+"\"Ще приема капитулацията ти и ще осигуря на теб и войските ти безопасно "
 "преминаване на цената на %{price} злато.\""
 
 msgid "View %{monster} info"
-msgstr "Вижте %{monster} информация"
+msgstr "Виж %{monster} информация"
 
 msgid "Shoot %{monster}"
 msgstr "Застреляй %{monster}"
@@ -449,10 +453,10 @@ msgid "Cast %{spell}"
 msgstr "Направи %{spell}"
 
 msgid "Select spell target"
-msgstr "Изберете цел за заклинание"
+msgstr "Избери цел за заклинание"
 
 msgid "View Ballista info"
-msgstr "Вижте информация за Катапулт"
+msgstr "Виж информация за Катапулт"
 
 msgid "Ballista"
 msgstr "Катапулт"
@@ -467,10 +471,10 @@ msgid "Auto Combat"
 msgstr "Авто Сражение"
 
 msgid "Customize system options"
-msgstr "Персонализирайте системните опции"
+msgstr "Персонализирай системните опции"
 
 msgid "Allows you to customize the combat screen."
-msgstr "Позволява ви да персонализирате бойния екран."
+msgstr "Позволява ви да персонализираш бойния екран."
 
 msgid "System Options"
 msgstr "Системни настройки"
@@ -501,14 +505,12 @@ msgstr ""
 "Пропуска текущото създание. Текущото създание завършва реда си и не може да "
 "отиде отново до следващия кръг."
 
-#, fuzzy
 msgid "View Captain's options"
 msgstr "Вижте настройките на героя"
 
 msgid "View Hero's options"
 msgstr "Вижте настройките на героя"
 
-#, fuzzy
 msgid "View opposing Captain"
 msgstr "Вижте противниковия герой"
 
@@ -516,18 +518,17 @@ msgid "View opposing Hero"
 msgstr "Вижте противниковия герой"
 
 msgid "Hide logs"
-msgstr "Скриване на регистрационни файлове"
+msgstr "Скрий регистрационни файлове"
 
 msgid "Show logs"
-msgstr "Показване на регистрационни файлове"
+msgstr "Показжи регистрационни файлове"
 
 msgid "Message Bar"
 msgstr "Лента за съобщения"
 
 msgid "Shows the results of individual monster's actions."
-msgstr "Показва резултатите от действията на отделните чудовища."
+msgstr "Покажи резултатите от действията на отделните чудовища."
 
-#, fuzzy
 msgid "Are you sure you want to finish the battle in auto mode?"
 msgstr "Сигурен ли си че искаш да презапишеш запазената игра с това име?"
 
@@ -624,7 +625,6 @@ msgstr "Създава се огледален образ."
 msgid "The mirror image is destroyed!"
 msgstr "Огледалният образ е унищожен!"
 
-#, fuzzy
 msgid "Are you sure you want to interrupt the auto battle?"
 msgstr "Сигурен ли сте, че искате да се отеглите?"
 
@@ -1879,385 +1879,422 @@ msgstr "Шелтембург"
 
 msgid "Cannot recruit - guest to guard automove error."
 msgstr ""
+"Не може да се наеме - грешка при автоматичното преместване на госта в "
+"охраната."
 
 msgid "Cannot recruit - you already have a Hero in this town."
-msgstr ""
+msgstr "Не може да се наеме - вече имате герой в този град."
 
 msgid "Cannot recruit - you have too many Heroes."
-msgstr ""
+msgstr "Не можете да се наеме - имате твърде много герои."
 
 msgid "Cannot afford a Hero"
-msgstr ""
+msgstr "Не мога да си позволя герой"
 
 msgid "There is no room in the garrison for this army."
-msgstr ""
+msgstr "В гарнизона няма място за тази армия."
 
 msgid "Fortifications"
-msgstr ""
+msgstr "Укрепления"
 
 msgid "Farm"
-msgstr ""
+msgstr "Ферма"
 
 msgid "Thatched Hut"
-msgstr ""
+msgstr "Сламена хижа"
 
 msgid "Archery Range"
-msgstr ""
+msgstr "Стрелба с лък"
 
 msgid "Upg. Archery Range"
-msgstr ""
+msgstr "Надс. стрелба с лък"
 
 msgid "Blacksmith"
-msgstr ""
+msgstr "Ковач"
 
 msgid "Upg. Blacksmith"
-msgstr ""
+msgstr "Надс. ковач"
 
 msgid "Armory"
-msgstr ""
+msgstr "Оръжейна"
 
 msgid "Upg. Armory"
-msgstr ""
+msgstr "Надс. оръжейна"
 
 msgid "Jousting Arena"
-msgstr ""
+msgstr "Арена за престрелки"
 
 msgid "Upg. Jousting Arena"
-msgstr ""
+msgstr "Надс. арена за престрелки"
 
 msgid "Cathedral"
-msgstr ""
+msgstr "Катедралата"
 
 msgid "Upg. Cathedral"
-msgstr ""
+msgstr "Надс. катедралата"
 
 msgid "Coliseum"
-msgstr ""
+msgstr "Колизеум"
 
 msgid "Garbage Heap"
-msgstr ""
+msgstr "Купчина боклук"
 
 msgid "Hut"
-msgstr ""
+msgstr "Барака"
 
 msgid "Stick Hut"
-msgstr ""
+msgstr "Колиба"
 
 msgid "Upg. Stick Hut"
-msgstr ""
+msgstr "Надс. колиба"
 
 msgid "Den"
-msgstr ""
+msgstr "Бърлога"
 
 msgid "Adobe"
-msgstr ""
+msgstr "Глинена постройка"
 
 msgid "Upg. Adobe"
-msgstr ""
+msgstr "Надс. глинена постройка"
 
 msgid "Bridge"
-msgstr ""
+msgstr "Мост"
 
 msgid "Upg. Bridge"
-msgstr ""
+msgstr "Надс. Мост"
 
 msgid "Pyramid"
-msgstr ""
+msgstr "Пирамида"
 
 msgid "Rainbow"
-msgstr ""
+msgstr "Дъга"
 
 msgid "Crystal Garden"
-msgstr ""
+msgstr "Кристална градина"
 
 msgid "Treehouse"
-msgstr ""
+msgstr "Къща на дърво"
 
 msgid "Cottage"
-msgstr ""
+msgstr "Вила"
 
 msgid "Upg. Cottage"
-msgstr ""
+msgstr "Надс. вила"
 
 msgid "Stonehenge"
-msgstr ""
+msgstr "Стоунхендж"
 
 msgid "Upg. Stonehenge"
-msgstr ""
+msgstr "Надс. Стоунхендж"
 
 msgid "Fenced Meadow"
-msgstr ""
+msgstr "Оградена поляна"
 
 msgid "sorceress|Red Tower"
-msgstr ""
+msgstr "Червена кула"
 
 msgid "Dungeon"
-msgstr ""
+msgstr "Тъмница"
 
 msgid "Waterfall"
-msgstr ""
+msgstr "Водопад"
 
 msgid "Cave"
-msgstr ""
+msgstr "Пещера"
 
 msgid "Crypt"
-msgstr ""
+msgstr "Крипта"
 
 msgid "Nest"
-msgstr ""
+msgstr "Гнездо"
 
 msgid "Maze"
-msgstr ""
+msgstr "Лабиринт"
 
 msgid "Upg. Maze"
-msgstr ""
+msgstr "Надс. лабиринт"
 
 msgid "Swamp"
-msgstr ""
+msgstr "Блато"
 
 msgid "Green Tower"
-msgstr ""
+msgstr "Зелена кула"
 
 msgid "warlock|Red Tower"
-msgstr ""
+msgstr "Червена кула"
 
 msgid "Black Tower"
-msgstr ""
+msgstr "Черна кула"
 
 msgid "Library"
-msgstr ""
+msgstr "Библиотека"
 
 msgid "Orchard"
-msgstr ""
+msgstr "Овощна градина"
 
 msgid "Habitat"
-msgstr ""
+msgstr "Хабитат"
 
 msgid "Pen"
-msgstr ""
+msgstr "Химикал"
 
 msgid "Foundry"
-msgstr ""
+msgstr "Леярна"
 
 msgid "Upg. Foundry"
-msgstr ""
+msgstr "Надс. леярна"
 
 msgid "Cliff Nest"
-msgstr ""
+msgstr "Скално гнездо"
 
 msgid "Ivory Tower"
-msgstr ""
+msgstr "Кулата на мечтите"
 
 msgid "Upg. Ivory Tower"
-msgstr ""
+msgstr "Надс. Кулата на мечтите"
 
 msgid "Cloud Castle"
-msgstr ""
+msgstr "Замък в облаците"
 
 msgid "Upg. Cloud Castle"
-msgstr ""
+msgstr "Надс. Замък в облаците"
 
 msgid "Storm"
-msgstr ""
+msgstr "Буря"
 
 msgid "Skull Pile"
-msgstr ""
+msgstr "Купчина черепи"
 
 msgid "Excavation"
-msgstr ""
+msgstr "Разкопки"
 
 msgid "Graveyard"
-msgstr ""
+msgstr "Гробище"
 
 msgid "Upg. Graveyard"
-msgstr ""
+msgstr "Надс. гробище"
 
 msgid "Upg. Pyramid"
-msgstr ""
+msgstr "Надс. пирамида"
 
 msgid "Mansion"
-msgstr ""
+msgstr "Имение"
 
 msgid "Upg. Mansion"
-msgstr ""
+msgstr "Надс. имение"
 
 msgid "Mausoleum"
-msgstr ""
+msgstr "Мавзолей"
 
 msgid "Upg. Mausoleum"
-msgstr ""
+msgstr "Надс. мавзолей"
 
 msgid "Laboratory"
-msgstr ""
+msgstr "Лаборатория"
 
 msgid "Shrine"
-msgstr ""
+msgstr "Светилище"
 
 msgid ""
 "The Fortifications increase the toughness of the walls, increasing the "
 "number of turns it takes to knock them down."
 msgstr ""
+"Укрепленията увеличават здравината на стените, увеличавайки броя на ударите, "
+"необходими за събарянето им."
 
 msgid "The Farm increases production of Peasants by %{count} per week."
-msgstr ""
+msgstr "Фермата увеличава производството на селяни с %{count} на седмица."
 
 msgid ""
 "The Coliseum provides inspiring spectacles to defending troops, raising "
 "their morale by two during combat."
 msgstr ""
+"Колизеумът предоставя вдъхновяващи зрелища на отбраняващите се войски, като "
+"повишава морала им с две по време на битка."
 
 msgid "The Garbage Heap increases production of Goblins by %{count} per week."
 msgstr ""
+"Купчината боклук увеличава производството на Гоблини с %{count} на седмица."
 
 msgid "The Rainbow increases the luck of the defending units by two."
-msgstr ""
+msgstr "Дъгата увеличава късмета на защитаващите се единици с две."
 
 msgid ""
 "The Crystal Garden increases production of Sprites by %{count} per week."
 msgstr ""
+"Кристалната градина увеличава производството на Фей с %{count} на седмица."
 
 msgid "The Dungeon increases the income of the town by %{count} / day."
-msgstr ""
+msgstr "Подземието увеличава доходите на града с %{count} / ден."
 
 msgid "The Waterfall increases production of Centaurs by %{count} per week."
-msgstr ""
+msgstr "Водопадът увеличава производството на Кентаври с %{count} на седмица."
 
 msgid ""
 "The Library increases the number of spells in the Guild by one for each "
 "level of the guild."
 msgstr ""
+"Библиотеката увеличава броя на магиите в гилдията с по една за всяко ниво на "
+"гилдията."
 
 msgid "The Orchard increases production of Halflings by %{count} per week."
 msgstr ""
+"Овощната градина увеличава производството на Полуръстовете с %{count} на "
+"седмица."
 
 msgid "The Storm adds +2 to the power of spells of a defending spell caster."
-msgstr ""
+msgstr "Бурята добавя +2 към силата на заклинанията на защитаващ заклинател."
 
 msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr ""
+"Купчината черепи увеличава производството на Скелети с %{count} на седмица."
 
 msgid "Thieves' Guild"
-msgstr ""
+msgstr "Гилдия на крадците"
 
 msgid "Tavern"
-msgstr ""
+msgstr "Кръчма"
 
 msgid "Shipyard"
-msgstr ""
+msgstr "Корабостроителница"
 
 msgid "Well"
-msgstr ""
+msgstr "Кладенец"
 
 msgid "Statue"
-msgstr ""
+msgstr "Статуя"
 
 msgid "Marketplace"
-msgstr ""
+msgstr "Пазар"
 
 msgid "Moat"
-msgstr ""
+msgstr "Ров"
 
 msgid "Castle"
-msgstr ""
+msgstr "Замък"
 
 msgid "Tent"
-msgstr ""
+msgstr "Палатка"
 
 msgid "Captain's Quarters"
-msgstr ""
+msgstr "Капитанска Квартира"
 
 msgid "Mage Guild, Level 1"
-msgstr ""
+msgstr "Маг. гилдия, ниво 1"
 
 msgid "Mage Guild, Level 2"
-msgstr ""
+msgstr "Маг. гилдия, ниво 2"
 
 msgid "Mage Guild, Level 3"
-msgstr ""
+msgstr "Маг. гилдия, ниво 3"
 
 msgid "Mage Guild, Level 4"
-msgstr ""
+msgstr "Маг. гилдия, ниво 4"
 
 msgid "Mage Guild, Level 5"
-msgstr ""
+msgstr "Маг. гилдия, ниво 5"
 
 msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
 "percent."
 msgstr ""
+"Светилището увеличава умението за некромантия на всички твой некроманти с 10 "
+"процента."
 
 msgid ""
 "The Thieves' Guild provides information on enemy players. Thieves' Guilds "
 "can also provide scouting information on enemy towns. Additional Guilds "
 "provide more information."
 msgstr ""
+"Гилдията на крадците предоставя информация за вражески играчи. Гилдиите на "
+"крадците също могат да предоставят разузнавателна информация за вражеските "
+"градове. Допълнителните гилдии предоставят повече информация."
 
 msgid "The Tavern increases morale for troops defending the castle."
-msgstr ""
+msgstr "Механата повишава морала на войските, защитаващи замъка."
 
 msgid "The Shipyard allows ships to be built."
-msgstr ""
+msgstr "Корабостроителницата позволява да се строят кораби."
 
 msgid ""
 "The Well increases the growth rate of all dwellings by %{count} creatures "
 "per week."
 msgstr ""
+"Кладенецът увеличава скоростта на растеж във всички жилища с %{count} "
+"същества на седмица."
 
 msgid "The Statue increases your town's income by %{count} per day."
-msgstr ""
+msgstr "Статуята увеличава приходите на вашия град с %{count} на ден."
 
 msgid "The Left Turret provides extra firepower during castle combat."
 msgstr ""
+"Лявата кула осигурява допълнителна огнева мощ по време на битка в замъка."
 
 msgid "The Right Turret provides extra firepower during castle combat."
 msgstr ""
+"Дясната кула осигурява допълнителна огнева мощ по време на битка в замъка."
 
 msgid ""
 "The Marketplace can be used to convert one type of resource into another. "
 "The more marketplaces you control, the better the exchange rate."
 msgstr ""
+"Пазарът може да се използва за преобразуване на един вид ресурс в друг. "
+"Колкото повече пазари контролирате, толкова по-добър е обменният курс."
 
 msgid ""
 "The Moat slows attacking units. Any unit entering the moat must end its turn "
 "there and becomes more vulnerable to attack."
 msgstr ""
+"Ровът забавя атакуващите единици. Всяка единица, влизаща в рова, трябва да "
+"завърши реда си там и да стане по-уязвима за атака."
 
 msgid ""
 "The Castle improves town defense and increases income to %{count} gold per "
 "day."
 msgstr ""
+"Замъкът подобрява защитата на града и увеличава приходите до %{count} злато "
+"на ден."
 
 msgid ""
 "The Tent provides workers to build a castle, provided the materials and the "
 "gold are available."
 msgstr ""
+"Палатката осигурява работници за изграждане на замък, при условие че "
+"материалите и златото са налични."
 
 msgid ""
 "The Captain's Quarters provides a captain to assist in the castle's defense "
 "when no hero is present."
 msgstr ""
+"Капитанските квартири осигуряват капитан, който да помага в защитата на "
+"замъка, когато няма герой."
 
 msgid ""
 "The Mage Guild allows heroes to learn spells and replenish their spell "
 "points."
 msgstr ""
+"Гилдията на магьосниците позволява на героите да учат заклинания и да "
+"попълват точките си за заклинания."
 
 msgid "Recruit %{name}"
-msgstr ""
+msgstr "Вербувайте %{name}"
 
 msgid "Month: %{month}, Week: %{week}, Day: %{day}"
-msgstr ""
+msgstr "Месец: %{month}, Седмица: %{week}, Ден: %{day}"
 
 msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
+"Трябва да купиш книга със заклинания, за да използваш магий, но в момента "
+"нямаш място за нея. Опитай се да дадеш един от твойте артефакти на друг "
+"герой."
 
 msgid "Exit"
 msgstr "Изход"
 
 msgid "Exit this menu."
-msgstr ""
+msgstr "Излез от това меню."
 
 msgid "Click to show next town."
 msgstr ""
@@ -2283,25 +2320,25 @@ msgid "This town may not be upgraded to a castle."
 msgstr ""
 
 msgid "Town"
-msgstr ""
+msgstr "Град"
 
 msgid "Exit Castle"
-msgstr ""
+msgstr "Изход от Замъка"
 
 msgid "Exit Town"
-msgstr ""
+msgstr "Изход от Града"
 
 msgid "Show Income"
-msgstr ""
+msgstr "Покажи приходи"
 
 msgid "Swap Heroes"
-msgstr ""
+msgstr "Размени героите"
 
 msgid "Meeting Heroes"
-msgstr ""
+msgstr "Срещни герои"
 
 msgid "View Hero"
-msgstr ""
+msgstr "Виж герой"
 
 msgid "The above spells are available here."
 msgstr ""
@@ -2313,7 +2350,7 @@ msgid "A generous tip for the barkeep yields the following rumor:"
 msgstr ""
 
 msgid "Recruit Hero"
-msgstr ""
+msgstr "Вербувай герой"
 
 msgid "%{name} is a level %{value} %{race} "
 msgstr ""
@@ -2344,7 +2381,7 @@ msgid "Grouped Formation"
 msgstr ""
 
 msgid "Recruit %{name} the %{race}"
-msgstr ""
+msgstr "Вербувай %{name} %{race}"
 
 msgid "Set garrison combat formation to 'Spread'"
 msgstr ""
@@ -2353,10 +2390,10 @@ msgid "Set garrison combat formation to 'Grouped'"
 msgstr ""
 
 msgid "Exit Castle Options"
-msgstr ""
+msgstr "Изход от Опции на замъка"
 
 msgid "Castle Options"
-msgstr ""
+msgstr "Опции на замъка"
 
 msgid "Not enough resources to recruit creatures."
 msgstr ""
@@ -2392,7 +2429,7 @@ msgid "week"
 msgstr ""
 
 msgid "Available"
-msgstr ""
+msgstr "Налични"
 
 msgid "View World"
 msgstr ""
@@ -2442,28 +2479,28 @@ msgid "Are you sure you want to dismiss this army?"
 msgstr ""
 
 msgid "Attack Skill"
-msgstr ""
+msgstr "Атака"
 
 msgid "Defense Skill"
-msgstr ""
+msgstr "Защита"
 
 msgid "Shots"
-msgstr ""
+msgstr "Изстрели"
 
 msgid "Shots Left"
-msgstr ""
+msgstr "Оставащи изстрели"
 
 msgid "Damage"
-msgstr ""
+msgstr "Щета"
 
 msgid "Hit Points"
-msgstr ""
+msgstr "т. Попадение"
 
 msgid "Hit Points Left"
-msgstr ""
+msgstr "Оставащи точки при удър"
 
 msgid "Followers"
-msgstr ""
+msgstr "Последователи"
 
 msgid ""
 "A group of %{monster} with a desire for greater glory wish to join you.\n"
@@ -2713,11 +2750,15 @@ msgid ""
 "Victory\n"
 "Conditions"
 msgstr ""
+"Условия за\n"
+"Победа"
 
 msgid ""
 "Loss\n"
 "Conditions"
 msgstr ""
+"Условия за\n"
+"Загуба"
 
 msgid "First select recipients!"
 msgstr ""
@@ -2856,7 +2897,7 @@ msgid "Unknown"
 msgstr ""
 
 msgid "%{name} (Level %{level})"
-msgstr ""
+msgstr "%{name} (Ниво %{level})"
 
 msgid "Attack:"
 msgstr ""
@@ -2877,19 +2918,19 @@ msgid "Move Points:"
 msgstr ""
 
 msgid "Cost per troop:"
-msgstr ""
+msgstr "Цена на единица:"
 
 msgid "Available: %{count}"
-msgstr ""
+msgstr "Налични: %{count}"
 
 msgid "Number to buy:"
-msgstr ""
+msgstr "Покупка на:"
 
 msgid "Click to apply the selected resolution."
 msgstr ""
 
 msgid "MAX"
-msgstr ""
+msgstr "МАКС"
 
 msgid "How many troops to move?"
 msgstr ""
@@ -3094,25 +3135,25 @@ msgid "Jump"
 msgstr ""
 
 msgid "Hero Speed"
-msgstr ""
+msgstr "Скорост на Героя"
 
 msgid "Don't Show"
 msgstr ""
 
 msgid "Enemy Speed"
-msgstr ""
+msgstr "Скорост на Противник"
 
 msgid "Scroll Speed"
-msgstr ""
+msgstr "Скорост на Превъртане"
 
 msgid "Hide"
-msgstr ""
+msgstr "Скрий"
 
 msgid "Show"
-msgstr ""
+msgstr "Покажи"
 
 msgid "Interface"
-msgstr ""
+msgstr "Интерфейс"
 
 msgid "Change the speed at which your heroes move on the main screen."
 msgstr ""
@@ -3207,25 +3248,22 @@ msgid "Best Monster:"
 msgstr ""
 
 msgid "difficulty|Easy"
-msgstr ""
+msgstr "Лесно"
 
 msgid "difficulty|Normal"
-msgstr ""
+msgstr "Нормално"
 
 msgid "difficulty|Hard"
-msgstr ""
+msgstr "Трудно"
 
 msgid "difficulty|Expert"
-msgstr ""
+msgstr "Експерт"
 
 msgid "difficulty|Impossible"
-msgstr ""
+msgstr "Невъзможно"
 
 msgid "and more..."
-msgstr ""
-
-msgid "DIFFICULTY"
-msgstr ""
+msgstr "и още..."
 
 #, fuzzy
 msgid "Campaign Difficulty"
@@ -3248,13 +3286,13 @@ msgid ""
 msgstr ""
 
 msgid "Easy"
-msgstr ""
+msgstr "Лесно"
 
 msgid "Normal"
-msgstr ""
+msgstr "Нормлано"
 
 msgid "Hard"
-msgstr ""
+msgstr "Трудно"
 
 msgid "Start the selected scenario."
 msgstr ""
@@ -3755,19 +3793,19 @@ msgid "Do you wish to continue the game?"
 msgstr ""
 
 msgid "Scenario:"
-msgstr ""
+msgstr "Сценарий:"
 
 msgid "Game Difficulty:"
-msgstr ""
+msgstr "Трудност на играта:"
 
 msgid "Opponents:"
-msgstr ""
+msgstr "Противници:"
 
 msgid "Class:"
-msgstr ""
+msgstr "Клас:"
 
 msgid "Rating %{rating}%"
-msgstr ""
+msgstr "Оценка %{rating}%"
 
 msgid "Click here to select which scenario to play."
 msgstr ""
@@ -3945,10 +3983,10 @@ msgid "World Map"
 msgstr ""
 
 msgid "Month: %{month} Week: %{week}"
-msgstr ""
+msgstr "Месец: %{month} Седмица: %{week}"
 
 msgid "Day: %{day}"
-msgstr ""
+msgstr "Ден: %{day}"
 
 msgid ""
 "You find a small\n"
@@ -3969,7 +4007,7 @@ msgid ""
 msgstr ""
 
 msgid "Necroman"
-msgstr ""
+msgstr "Некромант"
 
 msgid ""
 "This lets you change player starting positions and colors. A particular "
@@ -3983,17 +4021,51 @@ msgid ""
 "and/or heroes not of their primary alignment."
 msgstr ""
 
+msgid "Handicap"
+msgstr ""
+
+#
+msgid ""
+"This lets you change the handicap of a particular player. Only humans may be "
+"handicapped. Handicapped players start with fewer resources and earn 15 or "
+"30% fewer resources per turn for mild and severe handicaps, respectively."
+msgstr ""
+
 msgid "%{color} player"
 msgstr "%{color} играч"
+
+msgid "No Handicap"
+msgstr ""
+
+msgid "No special restrictions on start resources and earning them per turn."
+msgstr ""
+
+msgid "Mild Handicap"
+msgstr ""
+
+#
+msgid ""
+"Mild handicapped players start with fewer resources and earn 15% fewer "
+"resources per turn."
+msgstr ""
+
+msgid "Severe Handicap"
+msgstr ""
+
+#
+msgid ""
+"Severe handicapped players start with fewer resources and earn 30% fewer "
+"resources per turn."
+msgstr ""
 
 msgid "View %{skill} Info"
 msgstr ""
 
 msgid "Kingdom Income"
-msgstr ""
+msgstr "Приходи на царството"
 
 msgid "Kingdom Income per day."
-msgstr ""
+msgstr "Приходи на царството за ден."
 
 msgid "English"
 msgstr "Английски"
@@ -5284,7 +5356,7 @@ msgid ""
 msgstr ""
 
 msgid "%{name} the %{race} (Level %{level})"
-msgstr ""
+msgstr "%{name} е %{race} (Ниво %{level})"
 
 msgid ""
 "'Grouped' combat formation bunches your army together in the center of your "
@@ -5295,43 +5367,43 @@ msgid "Are you sure you want to dismiss this Hero?"
 msgstr ""
 
 msgid "View Experience Info"
-msgstr ""
+msgstr "Преглед на информация за опит"
 
 msgid "View Spell Points Info"
-msgstr ""
+msgstr "Виж информация за точките за заклинание"
 
 msgid "Set army combat formation to 'Spread'"
-msgstr ""
+msgstr "Задай армейска бойна формация \"Разпръскване\""
 
 msgid "Set army combat formation to 'Grouped'"
-msgstr ""
+msgstr "Задай армейска бойна формация \"Групирана\""
 
 msgid "Exit Hero Screen"
-msgstr ""
+msgstr "Изход от екрана на героя"
 
 msgid "You cannot dismiss a hero in a castle"
-msgstr ""
+msgstr "Не можеш да освободиш герой в замък"
 
 msgid "Dismissal of %{name} the %{race} is prohibited by scenario"
-msgstr ""
+msgstr "Освобождаването на %{name} %{race} е забранено от сценария"
 
 msgid "Dismiss %{name} the %{race}"
-msgstr ""
+msgstr "Освободи %{name} %{race}"
 
 msgid "Show previous hero"
-msgstr ""
+msgstr "Покажи предишния герой"
 
 msgid "Show next hero"
-msgstr ""
+msgstr "Покажи следващия герой"
 
 msgid "Blood Morale"
-msgstr ""
+msgstr "Кръвен морал"
 
 msgid "%{morale} Morale"
-msgstr ""
+msgstr "%{morale} Морал"
 
 msgid "%{luck} Luck"
-msgstr ""
+msgstr "%{luck} Късмет"
 
 msgid "Current Luck Modifiers:"
 msgstr ""
@@ -5703,22 +5775,22 @@ msgid ""
 msgstr ""
 
 msgid "Blue"
-msgstr ""
+msgstr "Син"
 
 msgid "Green"
-msgstr ""
+msgstr "Зелен"
 
 msgid "Red"
-msgstr ""
+msgstr "Червен"
 
 msgid "Yellow"
-msgstr ""
+msgstr "Жълт"
 
 msgid "Orange"
-msgstr ""
+msgstr "Оранжев"
 
 msgid "Purple"
-msgstr ""
+msgstr "Лилав"
 
 msgid "barrier|Aqua"
 msgstr ""
@@ -5769,63 +5841,65 @@ msgid "tent|Red"
 msgstr ""
 
 msgid "Experience"
-msgstr ""
+msgstr "Опит"
 
 msgid ""
 "Experience allows your heroes to go up levels, increasing their primary and "
 "secondary skills."
 msgstr ""
+"Опитът позволява на твойте герои да се изкачват нагоре по нивата, "
+"увеличавайки своите първични и вторични умения."
 
 msgid "Hero/Stats"
-msgstr ""
+msgstr "Герой/Статистика"
 
 msgid "Skills"
-msgstr ""
+msgstr "Умения"
 
 msgid "Artifacts"
-msgstr ""
+msgstr "Артефакти"
 
 msgid "Town/Castle"
-msgstr ""
+msgstr "Град/Замък"
 
 msgid "Garrison"
-msgstr ""
+msgstr "Гарнизон"
 
 msgid "Gold Per Day:"
-msgstr ""
+msgstr "Злато на ден:"
 
 msgid "Heroes"
-msgstr ""
+msgstr "Герой"
 
 msgid "View Heroes."
-msgstr ""
+msgstr "Виж Геройте"
 
 msgid "Towns/Castles"
-msgstr ""
+msgstr "Градове/Замъци"
 
 msgid "View Towns and Castles."
-msgstr ""
+msgstr "Виж Градовете и Замъците."
 
 msgid "luck|Cursed"
-msgstr ""
+msgstr "Прокълнат"
 
 msgid "luck|Awful"
-msgstr ""
+msgstr "Ужасен"
 
 msgid "luck|Bad"
-msgstr ""
+msgstr "Лош"
 
 msgid "luck|Normal"
-msgstr ""
+msgstr "Нормален"
 
 msgid "luck|Good"
-msgstr ""
+msgstr "Добър"
 
 msgid "luck|Great"
-msgstr ""
+msgstr "Чудесен"
 
 msgid "luck|Irish"
-msgstr ""
+msgstr "Ирландски"
 
 msgid ""
 "Bad luck sometimes falls on your armies in combat, causing their attacks to "
@@ -5843,25 +5917,25 @@ msgid ""
 msgstr ""
 
 msgid "morale|Treason"
-msgstr ""
+msgstr "Измяна"
 
 msgid "morale|Awful"
-msgstr ""
+msgstr "Ужасен"
 
 msgid "morale|Poor"
-msgstr ""
+msgstr "Слаб"
 
 msgid "morale|Normal"
-msgstr ""
+msgstr "Нормален"
 
 msgid "morale|Good"
-msgstr ""
+msgstr "Добър"
 
 msgid "morale|Great"
-msgstr ""
+msgstr "Чудесен"
 
 msgid "morale|Blood!"
-msgstr ""
+msgstr "Кървав!"
 
 msgid "Bad morale may cause your armies to freeze in combat."
 msgstr ""
@@ -5875,22 +5949,22 @@ msgid "Good morale may give your armies extra attacks in combat."
 msgstr ""
 
 msgid "Knight"
-msgstr ""
+msgstr "Рицар"
 
 msgid "Barbarian"
-msgstr ""
+msgstr "Варварин"
 
 msgid "Sorceress"
-msgstr ""
+msgstr "Магьосница"
 
 msgid "Warlock"
-msgstr ""
+msgstr "Магьосник"
 
 msgid "Wizard"
-msgstr ""
+msgstr "Вълшебник"
 
 msgid "Necromancer"
-msgstr ""
+msgstr "Некромант"
 
 msgid "Multi"
 msgstr ""
@@ -5902,34 +5976,34 @@ msgid "race|Neutral"
 msgstr ""
 
 msgid "speed|Standing"
-msgstr ""
+msgstr "Стоящ"
 
 msgid "speed|Crawling"
-msgstr ""
+msgstr "Пълзене"
 
 msgid "speed|Very Slow"
-msgstr ""
+msgstr "Много бавно"
 
 msgid "speed|Slow"
-msgstr ""
+msgstr "Бавно"
 
 msgid "speed|Average"
-msgstr ""
+msgstr "Средна"
 
 msgid "speed|Fast"
-msgstr ""
+msgstr "Бързо"
 
 msgid "speed|Very Fast"
-msgstr ""
+msgstr "Много Бързо"
 
 msgid "speed|Ultra Fast"
-msgstr ""
+msgstr "Страшно бързо"
 
 msgid "speed|Blazing"
-msgstr ""
+msgstr "Пламтяща"
 
 msgid "speed|Instant"
-msgstr ""
+msgstr "Мигновено"
 
 msgid "week|PLAGUE"
 msgstr ""
@@ -6499,10 +6573,10 @@ msgid "Crusaders"
 msgstr ""
 
 msgid "Goblin"
-msgstr ""
+msgstr "Гоблин"
 
 msgid "Goblins"
-msgstr ""
+msgstr "Гоблини"
 
 msgid "Orc"
 msgstr ""
@@ -6979,10 +7053,10 @@ msgid "View Spells"
 msgstr ""
 
 msgid "View %{name} Info"
-msgstr ""
+msgstr "Виж %{name} информация"
 
 msgid "Move %{name}"
-msgstr ""
+msgstr "Премести %{name}"
 
 msgid "Cannot move the Spellbook"
 msgstr ""
@@ -8438,37 +8512,37 @@ msgid "Causes all mines across the land to become visible."
 msgstr ""
 
 msgid "View Mines"
-msgstr ""
+msgstr "Виж мините"
 
 msgid "Causes all resources across the land to become visible."
 msgstr ""
 
 msgid "View Resources"
-msgstr ""
+msgstr "Виж ресурсите"
 
 msgid "Causes all artifacts across the land to become visible."
 msgstr ""
 
 msgid "View Artifacts"
-msgstr ""
+msgstr "Виж артефактите"
 
 msgid "Causes all towns and castles across the land to become visible."
 msgstr ""
 
 msgid "View Towns"
-msgstr ""
+msgstr "Виж градовете"
 
 msgid "Causes all Heroes across the land to become visible."
 msgstr ""
 
 msgid "View Heroes"
-msgstr ""
+msgstr "Виж героите"
 
 msgid "Causes the entire land to become visible."
 msgstr ""
 
 msgid "View All"
-msgstr ""
+msgstr "Виж всичко"
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr ""
@@ -8619,7 +8693,7 @@ msgstr ""
 "заснети"
 
 msgid "castle: allow guardians"
-msgstr ""
+msgstr "замък: позволете пазители"
 
 msgid "heroes: allow buy a spellbook from Shrines"
 msgstr "герои: позволява да купите книга за заклинания от светилища"
@@ -8632,25 +8706,25 @@ msgid "heroes: allow to choose any primary skill in Arena"
 msgstr "герои: позволяват да изберете всяко основно умение от Арена"
 
 msgid "battle: allow soft wait for troops"
-msgstr ""
+msgstr "битка: позволява меко изчакване за войски"
 
 msgid "battle: deterministic events"
-msgstr ""
+msgstr "битка: детерминистични събития"
 
 msgid "game: show system info"
-msgstr ""
+msgstr "игра: показва информация за системата"
 
 msgid "game: autosave will be made at the beginning of the day"
-msgstr ""
+msgstr "игра: автоматично запазване ще бъде направено в началото на деня"
 
 msgid "game: use evil interface"
-msgstr ""
+msgstr "игра: използвайте зъл интерфейс"
 
 msgid "game: hide interface"
-msgstr ""
+msgstr "игра: скриване на интерфейса"
 
 msgid "game: offer to continue the game after victory condition"
-msgstr ""
+msgstr "игра: предложение за продължаване на играта след условие за победа"
 
 msgid "The ultimate artifact is really the %{name}."
 msgstr ""
