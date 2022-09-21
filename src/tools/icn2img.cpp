@@ -73,7 +73,7 @@ int main( int argc, char ** argv )
 
     if ( 0 != System::MakeDirectory( prefix ) ) {
         std::cout << "error mkdir: " << prefix << std::endl;
-        return EXIT_SUCCESS;
+        return EXIT_FAILURE;
     }
 
     size_t save_pos = sf.tell();
@@ -105,7 +105,7 @@ int main( int argc, char ** argv )
                 dstfile += ".bmp";
             }
 
-            std::cout << "Image " << ii + 1 << " has offset of [" << static_cast<int32_t>( head.offsetX ) << ", " << static_cast<int32_t>( head.offsetY ) << "]"
+            std::cout << "Image " << ii + 1 << " has offset of [" << static_cast<int16_t>( head.offsetX ) << ", " << static_cast<int16_t>( head.offsetY ) << "]"
                       << std::endl;
 
             fheroes2::Save( image, dstfile, 23 );
