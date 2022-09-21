@@ -51,7 +51,7 @@ If you would like to help translating the project, please read the [**translatio
 
 ## Donation
 
-We accept donations via **Patreon** or **PayPal**. All donations will be used only for the future project development as we do not
+We accept donations via [**Patreon**](https://www.patreon.com/fheroes2) or [**PayPal**](https://www.paypal.com/paypalme/fheroes2). All donations will be used only for the future project development as we do not
 consider this project as a source of income by any means.
 
 [![Donate](https://img.shields.io/badge/Donate-Patreon-green.svg)](https://www.patreon.com/fheroes2)
