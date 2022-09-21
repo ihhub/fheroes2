@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-18 13:47+0000\n"
-"PO-Revision-Date: 2022-09-21 13:53+0100\n"
+"PO-Revision-Date: 2022-09-21 15:22+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -142,7 +142,7 @@ msgid "Some undead in group -1"
 msgstr "Някои немъртви в група -1"
 
 msgid "View %{name}"
-msgstr "Преглед на %{name}"
+msgstr "Виж %{name}"
 
 msgid "Move the %{name} "
 msgstr "Премести %{name} "
@@ -349,7 +349,7 @@ msgid "Luck"
 msgstr "Късмет"
 
 msgid "Spell Points"
-msgstr "Точки за заклинания"
+msgstr "Точки заклинания"
 
 msgid "Hero's Options"
 msgstr "Опции на героя"
@@ -418,7 +418,7 @@ msgstr ""
 "преминаване на цената на %{price} злато.\""
 
 msgid "View %{monster} info"
-msgstr "Виж %{monster} информация"
+msgstr "Виж информация за %{monster} "
 
 msgid "Shoot %{monster}"
 msgstr "Застреляй %{monster}"
@@ -506,16 +506,16 @@ msgstr ""
 "отиде отново до следващия кръг."
 
 msgid "View Captain's options"
-msgstr "Вижте настройките на героя"
+msgstr "Виж настройките на героя"
 
 msgid "View Hero's options"
-msgstr "Вижте настройките на героя"
+msgstr "Виж настройките на героя"
 
 msgid "View opposing Captain"
-msgstr "Вижте противниковия герой"
+msgstr "Виж противниковия герой"
 
 msgid "View opposing Hero"
-msgstr "Вижте противниковия герой"
+msgstr "Виж противниковия герой"
 
 msgid "Hide logs"
 msgstr "Скрий регистрационни файлове"
@@ -1572,7 +1572,7 @@ msgid "campaignBonus|Summon Earth"
 msgstr "Призови Земята"
 
 msgid "campaignBonus|View Heroes"
-msgstr "Преглед на героите"
+msgstr "Виж героите"
 
 msgid ""
 "The main hero will have \"%{artifact}\" artifact at the start of the "
@@ -2499,7 +2499,7 @@ msgid "Shots"
 msgstr "Изстрели"
 
 msgid "Shots Left"
-msgstr "Оставащи изстрели"
+msgstr "Ост. изстрели"
 
 msgid "Damage"
 msgstr "Щета"
@@ -2508,7 +2508,7 @@ msgid "Hit Points"
 msgstr "Живот"
 
 msgid "Hit Points Left"
-msgstr "Оставащи точки при удър"
+msgstr "Ост. живот"
 
 msgid "Followers"
 msgstr "Последователи"
@@ -3099,7 +3099,7 @@ msgid "All Maps"
 msgstr "Всички карти"
 
 msgid "View all maps, regardless of size."
-msgstr "Вижте всички карти, независимо от размера."
+msgstr "Виж всички карти, независимо от размера."
 
 msgid "Players Icon"
 msgstr "Икона на играчи"
@@ -3531,7 +3531,7 @@ msgid "Standard"
 msgstr ""
 
 msgid "View High Scores for Standard Maps."
-msgstr "Вижте високите резултати за стандартни карти."
+msgstr "Виж високите резултати за стандартни карти."
 
 msgid "Campaign"
 msgstr "Кампания"
@@ -4112,7 +4112,7 @@ msgid ""
 msgstr ""
 
 msgid "View %{skill} Info"
-msgstr ""
+msgstr "Виж информация за %{skill}"
 
 msgid "Kingdom Income"
 msgstr "Приходи на царството"
@@ -5420,7 +5420,7 @@ msgid "Are you sure you want to dismiss this Hero?"
 msgstr ""
 
 msgid "View Experience Info"
-msgstr "Преглед на информация за опит"
+msgstr "Виж информация за опит"
 
 msgid "View Spell Points Info"
 msgstr "Виж информация за точките за заклинание"
@@ -5925,13 +5925,13 @@ msgid "Heroes"
 msgstr "Герой"
 
 msgid "View Heroes."
-msgstr "Виж Геройте"
+msgstr "Виж геройте"
 
 msgid "Towns/Castles"
 msgstr "Градове/Замъци"
 
 msgid "View Towns and Castles."
-msgstr "Виж Градовете и Замъците."
+msgstr "Виж градовете и замъците."
 
 msgid "luck|Cursed"
 msgstr "Прокълнат"
@@ -6035,7 +6035,7 @@ msgid "speed|Crawling"
 msgstr "Пълзяща"
 
 msgid "speed|Very Slow"
-msgstr "Много бавна"
+msgstr "Мн. бавна"
 
 msgid "speed|Slow"
 msgstr "Бавна"
@@ -6047,10 +6047,10 @@ msgid "speed|Fast"
 msgstr "Бърза"
 
 msgid "speed|Very Fast"
-msgstr "Много Бърза"
+msgstr "Мн. бърза"
 
 msgid "speed|Ultra Fast"
-msgstr "Страшно бърза"
+msgstr "Суп. бърза"
 
 msgid "speed|Blazing"
 msgstr "Пламтяща"
@@ -7103,10 +7103,10 @@ msgid "The three Anduran artifacts magically combine into one."
 msgstr ""
 
 msgid "View Spells"
-msgstr ""
+msgstr "Преглед на магиите"
 
 msgid "View %{name} Info"
-msgstr "Виж %{name} информация"
+msgstr "Виж информация за %{name}"
 
 msgid "Move %{name}"
 msgstr "Премести %{name}"
@@ -8686,22 +8686,22 @@ msgid "Your hero has %{point} spell points remaining."
 msgstr ""
 
 msgid "View Adventure Spells"
-msgstr ""
+msgstr "Виж приключенски магии"
 
 msgid "View Combat Spells"
-msgstr ""
+msgstr "Виж бойни магии"
 
 msgid "View previous page"
-msgstr ""
+msgstr "Виж предишната страница"
 
 msgid "View next page"
-msgstr ""
+msgstr "Виж следващата страница"
 
 msgid "Close Spellbook"
 msgstr ""
 
 msgid "View %{spell}"
-msgstr ""
+msgstr "Виж %{spell}"
 
 msgid "This spell does %{damage} points of damage."
 msgstr ""
