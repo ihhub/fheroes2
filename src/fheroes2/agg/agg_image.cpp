@@ -246,7 +246,7 @@ namespace
     }
 
     void renderTextOnButton( fheroes2::Image & releasedState, fheroes2::Image & pressedState, const char * text, const fheroes2::Point & releasedTextOffset,
-                             const fheroes2::Point & pressedTextOffset, const int32_t maxTextWidth, const fheroes2::FontColor fontColor )
+                             const fheroes2::Point & pressedTextOffset, const fheroes2::Size buttonSize, const fheroes2::FontColor fontColor )
     {
         const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fontColor };
         const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fontColor };
@@ -256,8 +256,11 @@ namespace
         fheroes2::Text releasedText( textSupported, releasedFont );
         fheroes2::Text pressedText( textSupported, pressedFont );
 
-        releasedText.draw( releasedTextOffset.x + ( maxTextWidth - releasedText.width() ) / 2, releasedTextOffset.y, releasedState );
-        pressedText.draw( pressedTextOffset.x + ( maxTextWidth - pressedText.width() ) / 2, pressedTextOffset.y, pressedState );
+        const fheroes2::Size releasedTextSize( releasedText.width( buttonSize.width ), releasedText.height( buttonSize.width ) );
+        const fheroes2::Size pressedTextSize( pressedText.width( buttonSize.width ), pressedText.height( buttonSize.width ) );
+
+        releasedText.draw( releasedTextOffset.x, releasedTextOffset.y + ( buttonSize.height - releasedTextSize.height ) / 2, buttonSize.width, releasedState );
+        pressedText.draw( pressedTextOffset.x, pressedTextOffset.y + ( buttonSize.height - pressedTextSize.height ) / 2, buttonSize.width, pressedState );
     }
 
     void convertToEvilInterface( fheroes2::Sprite & image, const fheroes2::Rect & roi )
@@ -355,15 +358,20 @@ namespace fheroes2
         void generateDefaultImages( const int id )
         {
             switch ( id ) {
-            case ICN::BTNBATTLEONLY:
+            case ICN::BTNBATTLEONLY: {
                 _icnVsSprite[id].resize( 2 );
                 for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::BTNCOM, i );
-                    // Clean button
+                    // clean button.
                     Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
                 }
+
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "BATTLE\nONLY" ), { 12, 5 }, { 10, 5 }, { 117, 47 },
+                                    fheroes2::FontColor::WHITE );
+
                 break;
+            }
             case ICN::BTNGIFT_GOOD:
             case ICN::BTNGIFT_EVIL: {
                 _icnVsSprite[id].resize( 2 );
@@ -377,7 +385,7 @@ namespace fheroes2
                     out = GetICN( baseIcnId, 11 + i );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "GIFT" ), { 23, 5 }, { 22, 6 }, 50, buttonFontColor );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "GIFT" ), { 7, 5 }, { 6, 6 }, { 86, 16 }, buttonFontColor );
 
                 break;
             }
@@ -390,7 +398,7 @@ namespace fheroes2
                     Blit( GetICN( ICN::SYSTEM, 11 + i ), 10 - i, 4 + i, out, 11 - i, 4 + i, 50, 16 );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), { 11, 5 }, { 10, 6 }, 50, fheroes2::FontColor::WHITE );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), { 12, 5 }, { 11, 6 }, { 50, 16 }, fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -403,7 +411,8 @@ namespace fheroes2
                     Fill( out, 13 + 2 * i, 3 + 2 * i, 129 - 2 * i, 16, out.image()[13 - 7 * i + ( 5 + i ) * ( 145 - ( 4 * i ) )] );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 10, 5 }, { 10, 6 }, 132, fheroes2::FontColor::GRAY );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 11, 5 }, { 11, 6 }, { 131, 17 },
+                                    fheroes2::FontColor::GRAY );
 
                 break;
             }
@@ -416,7 +425,8 @@ namespace fheroes2
                     Fill( out, 13, 4 + i, 127, 15, getButtonFillingColor( i == 0 ) );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 11, 5 }, { 10, 6 }, 132, fheroes2::FontColor::WHITE );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 13, 5 }, { 12, 6 }, { 131, 16 },
+                                    fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -429,7 +439,7 @@ namespace fheroes2
                     Fill( out, 4, 3 + i, 132 - i, 16, out.image()[5 * 132] );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 3, 5 }, { 3, 5 }, 132, fheroes2::FontColor::GRAY );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 5, 5 }, { 5, 5 }, { 132, 17 }, fheroes2::FontColor::GRAY );
 
                 break;
             }
@@ -440,37 +450,6 @@ namespace fheroes2
                 assert( 0 );
                 break;
             }
-        }
-
-        bool generateEnglishSpecificImages( const int id )
-        {
-            switch ( id ) {
-            case ICN::BTNBATTLEONLY:
-                _icnVsSprite[id].resize( 2 );
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::BTNNEWGM, 6 + i );
-                    // Clean the button
-                    Fill( out, 25, 18, 88, 23, getButtonFillingColor( i == 0 ) );
-                    // Add 'ba'
-                    Blit( GetICN( ICN::BTNCMPGN, i ), 41 - i, 28, out, 30 - i, 13, 28, 14 );
-                    // Add 'tt'
-                    Blit( GetICN( ICN::BTNNEWGM, i ), 25 - i, 13, out, 57 - i, 13, 13, 14 );
-                    Blit( GetICN( ICN::BTNNEWGM, i ), 25 - i, 13, out, 70 - i, 13, 13, 14 );
-                    // Add 'le'
-                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 97 - i, 21, out, 83 - i, 13, 13, 14 );
-                    Blit( GetICN( ICN::BTNNEWGM, 6 + i ), 86 - i, 21, out, 96 - i, 13, 13, 14 );
-                    // Add 'on'
-                    Blit( GetICN( ICN::BTNDCCFG, 4 + i ), 44 - i, 21, out, 40 - i, 28, 31, 14 );
-                    // Add 'ly'
-                    Blit( GetICN( ICN::BTNHOTST, i ), 47 - i, 21, out, 71 - i, 28, 12, 13 );
-                    Blit( GetICN( ICN::BTNHOTST, i ), 72 - i, 21, out, 84 - i, 28, 13, 13 );
-                }
-                return true;
-            default:
-                break;
-            }
-            return false;
         }
 
         bool generateGermanSpecificImages( const int id )
@@ -787,11 +766,6 @@ namespace fheroes2
                 break;
             case fheroes2::SupportedLanguage::Italian:
                 if ( generateItalianSpecificImages( id ) ) {
-                    return;
-                }
-                break;
-            case fheroes2::SupportedLanguage::English:
-                if ( generateEnglishSpecificImages( id ) ) {
                     return;
                 }
                 break;

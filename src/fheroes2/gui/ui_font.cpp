@@ -2220,6 +2220,32 @@ namespace fheroes2
         SetPixel( released[17], offset + 1, offset + 1, releasedFontColor );
         SetPixel( released[17], offset + 0, offset + 2, releasedFontColor );
 
+        // A
+        released[33].resize( 13 + offset * 2, 10 + offset * 2 );
+        released[33].reset();
+        DrawLine( released[33], { offset + 0, offset + 9 }, { offset + 4, offset + 9 }, releasedFontColor );
+        DrawLine( released[33], { offset + 8, offset + 9 }, { offset + 12, offset + 9 }, releasedFontColor );
+        DrawLine( released[33], { offset + 5, offset + 5 }, { offset + 8, offset + 5 }, releasedFontColor );
+        DrawLine( released[33], { offset + 2, offset + 8 }, { offset + 4, offset + 5 }, releasedFontColor );
+        DrawLine( released[33], { offset + 7, offset + 1 }, { offset + 10, offset + 8 }, releasedFontColor );
+        SetPixel( released[33], offset + 4, offset + 4, releasedFontColor );
+        SetPixel( released[33], offset + 5, offset + 3, releasedFontColor );
+        SetPixel( released[33], offset + 5, offset + 2, releasedFontColor );
+        SetPixel( released[33], offset + 6, offset + 1, releasedFontColor );
+        SetPixel( released[33], offset + 6, offset + 0, releasedFontColor );
+
+        // B
+        released[34].resize( 11 + offset * 2, 10 + offset * 2 );
+        released[34].reset();
+        DrawLine( released[34], { offset + 0, offset + 0 }, { offset + 8, offset + 0 }, releasedFontColor );
+        DrawLine( released[34], { offset + 0, offset + 9 }, { offset + 8, offset + 9 }, releasedFontColor );
+        DrawLine( released[34], { offset + 3, offset + 5 }, { offset + 9, offset + 5 }, releasedFontColor );
+        DrawLine( released[34], { offset + 2, offset + 1 }, { offset + 2, offset + 8 }, releasedFontColor );
+        DrawLine( released[34], { offset + 10, offset + 2 }, { offset + 10, offset + 4 }, releasedFontColor );
+        DrawLine( released[34], { offset + 10, offset + 6 }, { offset + 10, offset + 7 }, releasedFontColor );
+        SetPixel( released[34], offset + 9, offset + 8, releasedFontColor );
+        SetPixel( released[34], offset + 9, offset + 1, releasedFontColor );
+
         // C
         released[35].resize( 10 + offset * 2, 10 + offset * 2 );
         released[35].reset();
@@ -2242,6 +2268,18 @@ namespace fheroes2
         DrawLine( released[36], { offset + 10, offset + 2 }, { offset + 10, offset + 7 }, releasedFontColor );
         SetPixel( released[36], offset + 9, offset + 1, releasedFontColor );
         SetPixel( released[36], offset + 9, offset + 8, releasedFontColor );
+
+        // E
+        released[37].resize( 9 + offset * 2, 10 + offset * 2 );
+        released[37].reset();
+        DrawLine( released[37], { offset + 0, offset + 0 }, { offset + 8, offset + 0 }, releasedFontColor );
+        DrawLine( released[37], { offset + 0, offset + 9 }, { offset + 8, offset + 9 }, releasedFontColor );
+        DrawLine( released[37], { offset + 2, offset + 1 }, { offset + 2, offset + 8 }, releasedFontColor );
+        DrawLine( released[37], { offset + 3, offset + 4 }, { offset + 6, offset + 4 }, releasedFontColor );
+        SetPixel( released[37], offset + 8, offset + 1, releasedFontColor );
+        SetPixel( released[37], offset + 8, offset + 8, releasedFontColor );
+        SetPixel( released[37], offset + 6, offset + 3, releasedFontColor );
+        SetPixel( released[37], offset + 6, offset + 5, releasedFontColor );
 
         // F
         released[38].resize( 9 + offset * 2, 10 + offset * 2 );
@@ -2267,6 +2305,17 @@ namespace fheroes2
         SetPixel( released[39], offset + 1, offset + 8, releasedFontColor );
         SetPixel( released[39], offset + 8, offset + 1, releasedFontColor );
         SetPixel( released[39], offset + 8, offset + 8, releasedFontColor );
+
+        // H
+        released[40].resize( 14 + offset * 2, 10 + offset * 2 );
+        released[40].reset();
+        DrawLine( released[40], { offset + 0, offset + 0 }, { offset + 4, offset + 0 }, releasedFontColor );
+        DrawLine( released[40], { offset + 0, offset + 9 }, { offset + 4, offset + 9 }, releasedFontColor );
+        DrawLine( released[40], { offset + 2, offset + 1 }, { offset + 2, offset + 8 }, releasedFontColor );
+        DrawLine( released[40], { offset + 8, offset + 0 }, { offset + 12, offset + 0 }, releasedFontColor );
+        DrawLine( released[40], { offset + 8, offset + 9 }, { offset + 12, offset + 9 }, releasedFontColor );
+        DrawLine( released[40], { offset + 10, offset + 1 }, { offset + 10, offset + 8 }, releasedFontColor );
+        DrawLine( released[40], { offset + 3, offset + 5 }, { offset + 9, offset + 5 }, releasedFontColor );
 
         // I
         released[41].resize( 5 + offset * 2, 10 + offset * 2 );
@@ -2329,6 +2378,37 @@ namespace fheroes2
         SetPixel( released[47], offset + 1, offset + 8, releasedFontColor );
         SetPixel( released[47], offset + 8, offset + 8, releasedFontColor );
 
+        // P
+        released[48].resize( 11 + offset * 2, 10 + offset * 2 );
+        released[48].reset();
+        DrawLine( released[48], { offset + 0, offset + 0 }, { offset + 9, offset + 0 }, releasedFontColor );
+        DrawLine( released[48], { offset + 0, offset + 9 }, { offset + 4, offset + 9 }, releasedFontColor );
+        DrawLine( released[48], { offset + 3, offset + 5 }, { offset + 9, offset + 5 }, releasedFontColor );
+        DrawLine( released[48], { offset + 2, offset + 1 }, { offset + 2, offset + 8 }, releasedFontColor );
+        DrawLine( released[48], { offset + 10, offset + 1 }, { offset + 10, offset + 4 }, releasedFontColor );
+
+        // R
+        released[50].resize( 12 + offset * 2, 10 + offset * 2 );
+        released[50].reset();
+        DrawLine( released[50], { offset + 0, offset + 0 }, { offset + 9, offset + 0 }, releasedFontColor );
+        DrawLine( released[50], { offset + 0, offset + 9 }, { offset + 4, offset + 9 }, releasedFontColor );
+        DrawLine( released[50], { offset + 8, offset + 9 }, { offset + 11, offset + 9 }, releasedFontColor );
+        DrawLine( released[50], { offset + 3, offset + 5 }, { offset + 9, offset + 5 }, releasedFontColor );
+        DrawLine( released[50], { offset + 2, offset + 1 }, { offset + 2, offset + 8 }, releasedFontColor );
+        DrawLine( released[50], { offset + 10, offset + 1 }, { offset + 10, offset + 4 }, releasedFontColor );
+        DrawLine( released[50], { offset + 7, offset + 6 }, { offset + 9, offset + 8 }, releasedFontColor );
+
+        // S
+        released[51].resize( 10 + offset * 2, 10 + offset * 2 );
+        released[51].reset();
+        DrawLine( released[51], { offset + 1, offset + 0 }, { offset + 7, offset + 0 }, releasedFontColor );
+        DrawLine( released[51], { offset + 0, offset + 1 }, { offset + 0, offset + 3 }, releasedFontColor );
+        DrawLine( released[51], { offset + 1, offset + 4 }, { offset + 7, offset + 4 }, releasedFontColor );
+        DrawLine( released[51], { offset + 8, offset + 5 }, { offset + 8, offset + 8 }, releasedFontColor );
+        DrawLine( released[51], { offset + 1, offset + 9 }, { offset + 7, offset + 9 }, releasedFontColor );
+        DrawLine( released[51], { offset + 0, offset + 8 }, { offset + 1, offset + 8 }, releasedFontColor );
+        SetPixel( released[51], offset + 8, offset + 1, releasedFontColor );
+
         // T
         released[52].resize( 11 + offset * 2, 10 + offset * 2 );
         released[52].reset();
@@ -2375,6 +2455,14 @@ namespace fheroes2
             fheroes2::updateShadow( letter, { 1, -1 }, 2 );
             fheroes2::updateShadow( letter, { -1, 1 }, 7 );
             fheroes2::updateShadow( letter, { -2, 2 }, 8 );
+        }
+
+        for ( Sprite & letter : released ) {
+            letter.setPosition( -1, 0 );
+        }
+
+        for ( Sprite & letter : pressed ) {
+            letter.setPosition( -1, 0 );
         }
     }
 }
