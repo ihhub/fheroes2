@@ -48,8 +48,8 @@ namespace
 {
     const fheroes2::Size offsetBetweenOptions{ 92, 110 };
 
-    const int32_t titleOffset = 10;
-    const int32_t nameOffset = 10;
+    const int32_t textOffset = 12;
+    const int32_t nameOffset = 6;
     const fheroes2::Point optionOffset{ 36, 47 };
     const int32_t optionWindowSize{ 65 };
 
@@ -72,9 +72,11 @@ namespace
 
         const fheroes2::Text title( titleText, fheroes2::FontType::smallWhite() );
         const fheroes2::Text name( nameText, fheroes2::FontType::smallWhite() );
+        
+        const int16_t textMaxWidth = 87;
 
-        title.draw( optionRoi.x + ( languageRoi.width - title.width() ) / 2, optionRoi.y - titleOffset, display );
-        name.draw( optionRoi.x + ( languageRoi.width - name.width() ) / 2, optionRoi.y + languageRoi.height + nameOffset, display );
+        title.draw( optionRoi.x - textOffset, optionRoi.y - textOffset + title.height() - title.height( textMaxWidth ), textMaxWidth, display );
+        name.draw( optionRoi.x - textOffset, optionRoi.y + languageRoi.height + nameOffset, textMaxWidth, display );
 
         const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( icnId, icnIndex );
         fheroes2::Blit( icon, 0, 0, display, optionRoi.x, optionRoi.y, icon.width(), icon.height() );
