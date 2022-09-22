@@ -48,7 +48,7 @@ namespace
 {
     const fheroes2::Size offsetBetweenOptions{ 92, 110 };
 
-    const fheroes2::Point textOffset = { 11, 12 };
+    const fheroes2::Point textOffset{ 11, 12 };
     const int32_t nameOffset = 6;
     const fheroes2::Point optionOffset{ 36, 47 };
     const int32_t optionWindowSize{ 65 };
@@ -73,7 +73,7 @@ namespace
         const fheroes2::Text title( titleText, fheroes2::FontType::smallWhite() );
         const fheroes2::Text name( nameText, fheroes2::FontType::smallWhite() );
 
-        const int16_t textMaxWidth = 87;
+        const int32_t textMaxWidth = 87;
 
         title.draw( optionRoi.x - textOffset.x, optionRoi.y - textOffset.y + title.height() - title.height( textMaxWidth ), textMaxWidth, display );
         name.draw( optionRoi.x - textOffset.x, optionRoi.y + languageRoi.height + nameOffset, textMaxWidth, display );
@@ -315,7 +315,7 @@ namespace
             else if ( le.MousePressRight( windowCursorTypeRoi ) ) {
                 fheroes2::Text header( _( "Mouse Cursor" ), fheroes2::FontType::normalYellow() );
                 fheroes2::Text
-                    body( _( "Toggle colored cursor on or off. The colored cursor looks nicer, but sometimes it does not move as smoothly as a black and white one." ),
+                    body( _( "Toggle colored cursor on or off. This is only an esthetic choice." ),
                           fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
