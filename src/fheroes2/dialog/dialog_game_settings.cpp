@@ -48,7 +48,7 @@ namespace
 {
     const fheroes2::Size offsetBetweenOptions{ 92, 110 };
 
-    const int32_t textOffset = 12;
+    const fheroes2::Point textOffset = { 11, 12 };
     const int32_t nameOffset = 6;
     const fheroes2::Point optionOffset{ 36, 47 };
     const int32_t optionWindowSize{ 65 };
@@ -75,8 +75,8 @@ namespace
         
         const int16_t textMaxWidth = 87;
 
-        title.draw( optionRoi.x - textOffset, optionRoi.y - textOffset + title.height() - title.height( textMaxWidth ), textMaxWidth, display );
-        name.draw( optionRoi.x - textOffset, optionRoi.y + languageRoi.height + nameOffset, textMaxWidth, display );
+        title.draw( optionRoi.x - textOffset.x, optionRoi.y - textOffset.y + title.height() - title.height( textMaxWidth ), textMaxWidth, display );
+        name.draw( optionRoi.x - textOffset.x, optionRoi.y + languageRoi.height + nameOffset, textMaxWidth, display );
 
         const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( icnId, icnIndex );
         fheroes2::Blit( icon, 0, 0, display, optionRoi.x, optionRoi.y, icon.width(), icon.height() );
@@ -112,7 +112,7 @@ namespace
 
     void drawHotKeyOptions( const fheroes2::Rect & optionRoi )
     {
-        drawOption( optionRoi, _( "Hot Keys" ), _( "In-game" ), ICN::CSPANEL, 5 );
+        drawOption( optionRoi, _( "Hot Keys" ), _( "Configure" ), ICN::CSPANEL, 5 );
     }
 
     void drawCursorTypeOptions( const fheroes2::Rect & optionRoi )
