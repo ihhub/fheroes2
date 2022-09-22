@@ -105,8 +105,7 @@ int main( int argc, char ** argv )
                 dstfile += ".bmp";
             }
 
-            std::cout << "Image " << ii + 1 << " has offset of [" << head.offsetX << ", " << head.offsetY << "]"
-                      << std::endl;
+            std::cout << "Image " << ii + 1 << " has offset of [" << head.offsetX << ", " << head.offsetY << "]" << std::endl;
 
             fheroes2::Save( image, dstfile, 23 );
         }
