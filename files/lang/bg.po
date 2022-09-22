@@ -5562,7 +5562,7 @@ msgid "Current Modifiers:"
 msgstr "Текущи модификатори:"
 
 msgid "skill|Basic"
-msgstr "Osnowen"
+msgstr "Основен"
 
 msgid "skill|Advanced"
 msgstr "Напреднал"
@@ -6679,7 +6679,7 @@ msgid "War Trolls"
 msgstr "Военни тролове"
 
 msgid "Cyclopes"
-msgstr "Cyclopes"
+msgstr "Циклопи"
 
 msgid "Cyclops"
 msgstr "Циклоп"
