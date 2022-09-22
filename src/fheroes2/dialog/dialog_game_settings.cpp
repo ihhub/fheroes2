@@ -72,7 +72,7 @@ namespace
 
         const fheroes2::Text title( titleText, fheroes2::FontType::smallWhite() );
         const fheroes2::Text name( nameText, fheroes2::FontType::smallWhite() );
-        
+
         const int16_t textMaxWidth = 87;
 
         title.draw( optionRoi.x - textOffset.x, optionRoi.y - textOffset.y + title.height() - title.height( textMaxWidth ), textMaxWidth, display );
@@ -314,8 +314,9 @@ namespace
             }
             else if ( le.MousePressRight( windowCursorTypeRoi ) ) {
                 fheroes2::Text header( _( "Mouse Cursor" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Toggle colored cursor on or off. The colored cursor looks nicer, but sometimes it does not move as smoothly as a black and white one." ),
-                                     fheroes2::FontType::normalWhite() );
+                fheroes2::Text
+                    body( _( "Toggle colored cursor on or off. The colored cursor looks nicer, but sometimes it does not move as smoothly as a black and white one." ),
+                          fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
