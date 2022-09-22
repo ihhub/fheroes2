@@ -107,7 +107,7 @@ namespace
 
     void drawAudioOptions( const fheroes2::Rect & optionRoi )
     {
-        drawOption( optionRoi, _( "Audio" ), _( "settings" ), ICN::SPANEL, 1 );
+        drawOption( optionRoi, _( "Audio" ), _( "Settings" ), ICN::SPANEL, 1 );
     }
 
     void drawHotKeyOptions( const fheroes2::Rect & optionRoi )
