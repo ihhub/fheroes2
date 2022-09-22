@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-21 12:23+0000\n"
-"PO-Revision-Date: 2022-09-21 15:22+0100\n"
+"PO-Revision-Date: 2022-09-22 20:41+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -354,7 +354,7 @@ msgid "Luck"
 msgstr "Късмет"
 
 msgid "Spell Points"
-msgstr "Точки заклинания"
+msgstr "Магия"
 
 msgid "Hero's Options"
 msgstr "Опции на героя"
@@ -2278,7 +2278,7 @@ msgid ""
 "points."
 msgstr ""
 "Гилдията на магьосниците позволява на героите да учат заклинания и да "
-"попълват точките си за заклинания."
+"попълват магическите си точки."
 
 msgid "Recruit %{name}"
 msgstr "Вербувайте %{name}"
@@ -2359,7 +2359,7 @@ msgid "Recruit Hero"
 msgstr "Вербувай герой"
 
 msgid "%{name} is a level %{value} %{race} "
-msgstr "%{name} е ниво %{value} %{race}"
+msgstr "%{name} е ниво %{value} %{race} "
 
 msgid "with %{count} artifacts."
 msgstr "с %{count} артефакти."
@@ -2611,10 +2611,10 @@ msgid "Resource cost:"
 msgstr "Разходи за ресурси:"
 
 msgid "Total: "
-msgstr "Обща сума: "
+msgstr "Общо: "
 
 msgid "Need: "
-msgstr "Трябва: "
+msgstr "Още: "
 
 msgid "Load Game"
 msgstr "Зареди Игра"
@@ -2942,16 +2942,16 @@ msgid "Defense:"
 msgstr "Защита:"
 
 msgid "Spell Power:"
-msgstr "Сила на заклинанието:"
+msgstr "Маг. сила:"
 
 msgid "Knowledge:"
 msgstr "Знания:"
 
 msgid "Spell Points:"
-msgstr "Заклинателни точки:"
+msgstr "Магия:"
 
 msgid "Move Points:"
-msgstr "Точки на преместване:"
+msgstr "Ход:"
 
 msgid "Cost per troop:"
 msgstr "Цена на единица:"
@@ -5428,7 +5428,7 @@ msgid "View Experience Info"
 msgstr "Виж информация за опит"
 
 msgid "View Spell Points Info"
-msgstr "Виж информация за точките за заклинание"
+msgstr "Виж информация за магическите точките"
 
 msgid "Set army combat formation to 'Spread'"
 msgstr "Задай армейска бойна формация \"Разпръскване\""
@@ -5562,7 +5562,7 @@ msgid "Current Modifiers:"
 msgstr "Текущи модификатори:"
 
 msgid "skill|Basic"
-msgstr "Osnowen"
+msgstr "Основен"
 
 msgid "skill|Advanced"
 msgstr "Напреднал"
@@ -5616,124 +5616,124 @@ msgid "Advanced Pathfinding"
 msgstr ""
 
 msgid "Basic Archery"
-msgstr ""
+msgstr "Основна стрелба с лък"
 
 msgid "Basic Pathfinding"
-msgstr ""
+msgstr "Основно ориентиране"
 
 msgid "Expert Pathfinding"
-msgstr ""
+msgstr "Експерт ориентиране"
 
 msgid "Advanced Logistics"
-msgstr ""
+msgstr "Напреднала логистика"
 
 msgid "Basic Logistics"
-msgstr ""
+msgstr "Основна логистика"
 
 msgid "Basic Scouting"
-msgstr ""
+msgstr "Основно разузнаване"
 
 msgid "Expert Archery"
-msgstr ""
+msgstr "Експертна стрелба с лък"
 
 msgid "Expert Logistics"
-msgstr ""
+msgstr "Експертна логистика"
 
 msgid "Advanced Diplomacy"
-msgstr ""
+msgstr "Напреднала дипломация"
 
 msgid "Advanced Scouting"
-msgstr ""
+msgstr "Напреднало разузнаване"
 
 msgid "Basic Diplomacy"
-msgstr ""
+msgstr "Основна дипломация"
 
 msgid "Expert Diplomacy"
-msgstr ""
+msgstr "Експертна дипломация"
 
 msgid "Expert Scouting"
-msgstr ""
+msgstr "Експертно разузнаване"
 
 msgid "Advanced Leadership"
-msgstr ""
+msgstr "Напреднало лидерство"
 
 msgid "Advanced Navigation"
-msgstr ""
+msgstr "Напреднала навигация"
 
 msgid "Basic Leadership"
-msgstr ""
+msgstr "Основно лидерство"
 
 msgid "Basic Navigation"
-msgstr ""
+msgstr "Основна навигация"
 
 msgid "Expert Navigation"
-msgstr ""
+msgstr "Експертна навигация"
 
 msgid "Advanced Wisdom"
-msgstr ""
+msgstr "Напреднала мъдрост"
 
 msgid "Basic Mysticism"
-msgstr ""
+msgstr "Основен мистицизъм"
 
 msgid "Basic Wisdom"
-msgstr ""
+msgstr "Основна мъдрост"
 
 msgid "Expert Leadership"
-msgstr ""
+msgstr "Експертно лидерство"
 
 msgid "Expert Wisdom"
-msgstr ""
+msgstr "Експертна мъдрост"
 
 msgid "Advanced Luck"
-msgstr ""
+msgstr "Напреднал късмет"
 
 msgid "Advanced Mysticism"
-msgstr ""
+msgstr "Напреднал мистицизъм"
 
 msgid "Basic Luck"
-msgstr ""
+msgstr "Основен късмет"
 
 msgid "Expert Luck"
-msgstr ""
+msgstr "Експертен късмет"
 
 msgid "Expert Mysticism"
-msgstr ""
+msgstr "Експертен мистицизъм"
 
 msgid "Advanced Ballistics"
-msgstr ""
+msgstr "Напреднала балистика"
 
 msgid "Advanced Eagle Eye"
-msgstr ""
+msgstr "Напреднал орлово око"
 
 msgid "Basic Ballistics"
-msgstr ""
+msgstr "Основна балистика"
 
 msgid "Basic Eagle Eye"
-msgstr ""
+msgstr "Основно орлово око"
 
 msgid "Expert Ballistics"
-msgstr ""
+msgstr "Експертна балистика"
 
 msgid "Advanced Necromancy"
-msgstr ""
+msgstr "Напреднала некромантия"
 
 msgid "Basic Estates"
-msgstr ""
+msgstr "Основни имоти"
 
 msgid "Basic Necromancy"
-msgstr ""
+msgstr "Основна некромантия"
 
 msgid "Expert Eagle Eye"
-msgstr ""
+msgstr "Експертно орлово око"
 
 msgid "Expert Necromancy"
-msgstr ""
+msgstr "Експертна некромантия"
 
 msgid "Advanced Estates"
-msgstr ""
+msgstr "Напреднали имоти"
 
 msgid "Expert Estates"
-msgstr ""
+msgstr "Експерт имоти"
 
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."
@@ -6028,10 +6028,10 @@ msgid "Multi"
 msgstr ""
 
 msgid "race|Random"
-msgstr ""
+msgstr "Случаен"
 
 msgid "race|Neutral"
-msgstr ""
+msgstr "Неутрален"
 
 msgid "speed|Standing"
 msgstr "Стояща"
@@ -6136,418 +6136,418 @@ msgid "week|Condor"
 msgstr ""
 
 msgid "Desert"
-msgstr ""
+msgstr "Пустиня"
 
 msgid "Snow"
-msgstr ""
+msgstr "Сняг"
 
 msgid "Wasteland"
-msgstr ""
+msgstr "Пустош"
 
 msgid "Beach"
-msgstr ""
+msgstr "Плаж"
 
 msgid "Lava"
-msgstr ""
+msgstr "Лава"
 
 msgid "Dirt"
-msgstr ""
+msgstr "Пръст"
 
 msgid "Grass"
-msgstr ""
+msgstr "Трева"
 
 msgid "Ocean"
-msgstr ""
+msgstr "Океан"
 
 msgid "maps|Small"
-msgstr ""
+msgstr "Малка"
 
 msgid "maps|Medium"
-msgstr ""
+msgstr "Средна"
 
 msgid "maps|Large"
-msgstr ""
+msgstr "Голяма"
 
 msgid "maps|Extra Large"
-msgstr ""
+msgstr "Много голяма"
 
 msgid "maps|Custom Size"
-msgstr ""
+msgstr "големина по избор"
 
 msgid "Ore Mine"
-msgstr ""
+msgstr "Мина за руда"
 
 msgid "Sulfur Mine"
-msgstr ""
+msgstr "Мина за сяра"
 
 msgid "Crystal Mine"
-msgstr ""
+msgstr "Мина за кристал"
 
 msgid "Gems Mine"
-msgstr ""
+msgstr "Мина за скъпоценни камъни"
 
 msgid "Gold Mine"
-msgstr ""
+msgstr "Мина за злато"
 
 msgid "Mine"
-msgstr ""
+msgstr "Мина"
 
 msgid "Burma shave."
-msgstr ""
+msgstr "Бирма бръснене."
 
 msgid "Next sign 50 miles."
-msgstr ""
+msgstr "Следваща табела 50 мили."
 
 msgid "See Rock City."
-msgstr ""
+msgstr "Виж скален град."
 
 msgid "This space for rent."
-msgstr ""
+msgstr "Това пространство е под наем."
 
 msgid "No object"
-msgstr ""
+msgstr "Няма обект"
 
 msgid "Alchemist Lab"
-msgstr ""
+msgstr "Алхимична лаборатория"
 
 msgid "Daemon Cave"
-msgstr ""
+msgstr "Демонска пещера"
 
 msgid "Faerie Ring"
-msgstr ""
+msgstr "Приказен пръстен"
 
 msgid "Dragon City"
-msgstr ""
+msgstr "Драконов град"
 
 msgid "Lighthouse"
-msgstr ""
+msgstr "Фар"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Водно колело"
+msgstr[1] "Водни колела"
 
 msgid "Mines"
-msgstr ""
+msgstr "Мини"
 
 msgid "Obelisk"
-msgstr ""
+msgstr "Обелиск"
 
 msgid "Oasis"
-msgstr ""
+msgstr "Оазис"
 
 msgid "Sawmill"
-msgstr ""
+msgstr "Дъскорезница"
 
 msgid "Oracle"
-msgstr ""
+msgstr "Оракул"
 
 msgid "Desert Tent"
-msgstr ""
+msgstr "Пустинна палатка"
 
 msgid "Wagon Camp"
-msgstr ""
+msgstr "Вагонен лагер"
 
 msgid "Windmill"
 msgid_plural "Windmills"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Вятърна мелница"
+msgstr[1] "Вятърни мелници"
 
 msgid "Random Town"
-msgstr ""
+msgstr "Случаен град"
 
 msgid "Random Castle"
-msgstr ""
+msgstr "Случаен замък"
 
 msgid "Watch Tower"
-msgstr ""
+msgstr "Стражева кула"
 
 msgid "Tree City"
-msgstr ""
+msgstr "Град на дърво"
 
 msgid "Tree House"
-msgstr ""
+msgstr "Къща на дърво"
 
 msgid "Ruins"
-msgstr ""
+msgstr "Руини"
 
 msgid "Fort"
-msgstr ""
+msgstr "Укрепление"
 
 msgid "Abandoned Mine"
-msgstr ""
+msgstr "Изоставена мина"
 
 msgid "Tree of Knowledge"
-msgstr ""
+msgstr "Дърво на познанието"
 
 msgid "Witch Doctor's Hut"
-msgstr ""
+msgstr "Хижата на врачката"
 
 msgid "Temple"
-msgstr ""
+msgstr "Храм"
 
 msgid "Hill Fort"
-msgstr ""
+msgstr "Укрепление в хълмовете"
 
 msgid "Halfling Hole"
-msgstr ""
+msgstr "Дупка на Хобити"
 
 msgid "Mercenary Camp"
-msgstr ""
+msgstr "Лагер на наемниците"
 
 msgid "City of the Dead"
-msgstr ""
+msgstr "Градът на мъртвите"
 
 msgid "Sphinx"
-msgstr ""
+msgstr "Сфинкс"
 
 msgid "Troll Bridge"
-msgstr ""
+msgstr "Мостът на троловете"
 
 msgid "Witch's Hut"
-msgstr ""
+msgstr "Хижата на вещиците"
 
 msgid "Xanadu"
-msgstr ""
+msgstr "Ксанаду"
 
 msgid "Magellan's Maps"
-msgstr ""
+msgstr "Картите на Магелан"
 
 msgid "Derelict Ship"
-msgstr ""
+msgstr "Изоставен кораб"
 
 msgid "Shipwreck"
-msgstr ""
+msgstr "Корабокрушение"
 
 msgid "Observation Tower"
-msgstr ""
+msgstr "Наблюдателна кула"
 
 msgid "Freeman's Foundry"
-msgstr ""
+msgstr "Леярна на Фрийман"
 
 msgid "Watering Hole"
-msgstr ""
+msgstr "Дупка за поливане"
 
 msgid "Artesian Spring"
-msgstr ""
+msgstr "Артезиански извор"
 
 msgid "Gazebo"
-msgstr ""
+msgstr "Беседка"
 
 msgid "Archer's House"
-msgstr ""
+msgstr "Къщата на стрелеца"
 
 msgid "Peasant Hut"
-msgstr ""
+msgstr "Селска хижа"
 
 msgid "Dwarf Cottage"
-msgstr ""
+msgstr "Вила на джуджета"
 
 msgid "Stone Liths"
 msgstr ""
 
 msgid "Magic Well"
-msgstr ""
+msgstr "Магически кладенец"
 
 msgid "Sign"
-msgstr ""
+msgstr "Знак"
 
 msgid "Nothing Special"
-msgstr ""
+msgstr "Нищо специално"
 
 msgid "Tar Pit"
-msgstr ""
+msgstr "Катранена яма"
 
 msgid "Mound"
-msgstr ""
+msgstr "Могила"
 
 msgid "Dune"
-msgstr ""
+msgstr "Дюна"
 
 msgid "Stump"
-msgstr ""
+msgstr "Пън"
 
 msgid "Cactus"
-msgstr ""
+msgstr "Кактус"
 
 msgid "Trees"
-msgstr ""
+msgstr "Дървета"
 
 msgid "Dead Tree"
-msgstr ""
+msgstr "Мъртво дърво"
 
 msgid "Mountains"
-msgstr ""
+msgstr "Планини"
 
 msgid "Volcano"
-msgstr ""
+msgstr "Вулкан"
 
 msgid "Rock"
-msgstr ""
+msgstr "Скала"
 
 msgid "Flowers"
-msgstr ""
+msgstr "Цветя"
 
 msgid "Water Lake"
-msgstr ""
+msgstr "Водно езеро"
 
 msgid "Mandrake"
-msgstr ""
+msgstr "Мандрагора"
 
 msgid "Crater"
-msgstr ""
+msgstr "Кратер"
 
 msgid "Lava Pool"
-msgstr ""
+msgstr "Басейн от лава"
 
 msgid "Shrub"
-msgstr ""
+msgstr "Храст"
 
 msgid "Buoy"
-msgstr ""
+msgstr "Шамандура"
 
 msgid "Skeleton"
-msgstr ""
+msgstr "Скелет"
 
 msgid "Treasure Chest"
-msgstr ""
+msgstr "Сандък със съкровище"
 
 msgid "Sea Chest"
-msgstr ""
+msgstr "Морски сандък"
 
 msgid "Campfire"
-msgstr ""
+msgstr "Лагерен огън"
 
 msgid "Fountain"
-msgstr ""
+msgstr "Фонтан"
 
 msgid "Genie Lamp"
-msgstr ""
+msgstr "Джин от лампа"
 
 msgid "Goblin Hut"
-msgstr ""
+msgstr "Хижата на гоблините"
 
 msgid "Monster"
-msgstr ""
+msgstr "Чудовище"
 
 msgid "Resource"
-msgstr ""
+msgstr "Ресурс"
 
 msgid "Whirlpool"
-msgstr ""
+msgstr "Водовъртеж"
 
 msgid "Artifact"
-msgstr ""
+msgstr "Артефакт"
 
 msgid "Boat"
-msgstr ""
+msgstr "Кораб"
 
 msgid "Random Artifact"
-msgstr ""
+msgstr "Случаен артефакт"
 
 msgid "Random Resource"
-msgstr ""
+msgstr "Случаен ресурс"
 
 msgid "Random Monster - weak"
-msgstr ""
+msgstr "Случайно чудовище - слабо"
 
 msgid "Random Monster - medium"
-msgstr ""
+msgstr "Случайно чудовище - средно"
 
 msgid "Random Monster - strong"
-msgstr ""
+msgstr "Случайно чудовище - силно"
 
 msgid "Random Monster - very strong"
-msgstr ""
+msgstr "Случайно чудовище - мн. силно"
 
 msgid "Standing Stones"
-msgstr ""
+msgstr "Изправени камъни"
 
 msgid "Event"
-msgstr ""
+msgstr "Събитие"
 
 msgid "Random Monster"
-msgstr ""
+msgstr "Случайно чудовище"
 
 msgid "Random Ultimate Artifact"
-msgstr ""
+msgstr "Случаен върховен артефакт"
 
 msgid "Idol"
-msgstr ""
+msgstr "Идол"
 
 msgid "Shrine of the First Circle"
-msgstr ""
+msgstr "Светилището на първия кръг"
 
 msgid "Shrine of the Second Circle"
-msgstr ""
+msgstr "Светилището на втория кръг"
 
 msgid "Shrine of the Third Circle"
-msgstr ""
+msgstr "Светилището на третия кръг"
 
 msgid "Wagon"
-msgstr ""
+msgstr "Вагон"
 
 msgid "Lean-To"
-msgstr ""
+msgstr "Наклонена"
 
 msgid "Flotsam"
 msgstr ""
 
 msgid "Shipwreck Survivor"
-msgstr ""
+msgstr "Корабокрушенец"
 
 msgid "Bottle"
-msgstr ""
+msgstr "Бутилка"
 
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Магическа градина"
+msgstr[1] "Магически градини"
 
 msgid "Random Artifact - Treasure"
-msgstr ""
+msgstr "Случаен артефакт - Съкровище"
 
 msgid "Random Artifact - Minor"
-msgstr ""
+msgstr "Случаен артефакт - незначителен"
 
 msgid "Random Artifact - Major"
-msgstr ""
+msgstr "Случаен артефакт - основен"
 
 msgid "Jail"
-msgstr ""
+msgstr "Затвор"
 
 msgid "Traveller's Tent"
-msgstr ""
+msgstr "Палатка на пътешественик"
 
 msgid "Barrier"
-msgstr ""
+msgstr "Бариера"
 
 msgid "Fire Summoning Altar"
-msgstr ""
+msgstr "Олтар за призоваване на огън"
 
 msgid "Air Summoning Altar"
-msgstr ""
+msgstr "Олтар за призоваване на въздух"
 
 msgid "Earth Summoning Altar"
-msgstr ""
+msgstr "Олтар за призоваване на земя"
 
 msgid "Water Summoning Altar"
-msgstr ""
+msgstr "Олтар за призоваване на вода"
 
 msgid "Barrow Mounds"
 msgstr ""
 
 msgid "Stables"
-msgstr ""
+msgstr "Конюшни"
 
 msgid "Alchemist's Tower"
-msgstr ""
+msgstr "Кулата на алхимика"
 
 msgid "Hut of the Magi"
-msgstr ""
+msgstr "Хижата на влъхвите"
 
 msgid "Eye of the Magi"
-msgstr ""
+msgstr "Окото на влъхвите"
 
 msgid "Mermaid"
 msgstr "Русалка"
@@ -6679,7 +6679,7 @@ msgid "War Trolls"
 msgstr "Военни тролове"
 
 msgid "Cyclopes"
-msgstr "Cyclopes"
+msgstr "Циклопи"
 
 msgid "Cyclops"
 msgstr "Циклоп"
@@ -6826,7 +6826,7 @@ msgid "Mage"
 msgstr "Магьосник"
 
 msgid "Magi"
-msgstr "Магьосници"
+msgstr "Влъхва"
 
 msgid "Archmage"
 msgstr "Архимаг"
@@ -8222,25 +8222,25 @@ msgid "Invalid Artifact"
 msgstr ""
 
 msgid "Wood"
-msgstr ""
+msgstr "Дърво"
 
 msgid "Mercury"
-msgstr ""
+msgstr "Живак"
 
 msgid "Ore"
-msgstr ""
+msgstr "Руда"
 
 msgid "Sulfur"
-msgstr ""
+msgstr "Сяра"
 
 msgid "Crystal"
-msgstr ""
+msgstr "Кристал"
 
 msgid "Gems"
-msgstr ""
+msgstr "Скъпоценни камъни"
 
 msgid "Gold"
-msgstr ""
+msgstr "Злато"
 
 msgid ""
 "There are seven resources in Heroes 2, used to build and improves castles, "
