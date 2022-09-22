@@ -272,19 +272,19 @@ namespace
 
             if ( le.MousePressRight( windowLanguageRoi ) ) {
                 fheroes2::Text header( _( "Select Game Language" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Change language of the game." ), fheroes2::FontType::normalWhite() );
+                fheroes2::Text body( _( "Change the language of the game." ), fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
             else if ( le.MousePressRight( windowResolutionRoi ) ) {
                 fheroes2::Text header( _( "Select Game Resolution" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Change resolution of the game." ), fheroes2::FontType::normalWhite() );
+                fheroes2::Text body( _( "Change the resolution of the game." ), fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
             else if ( le.MousePressRight( windowAudioRoi ) ) {
                 fheroes2::Text header( _( "Audio" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Change audio settings of the game." ), fheroes2::FontType::normalWhite() );
+                fheroes2::Text body( _( "Change the audio settings of the game." ), fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
@@ -302,7 +302,7 @@ namespace
             }
             else if ( le.MousePressRight( windowHotKeyRoi ) ) {
                 fheroes2::Text header( _( "Hot Keys" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Check all Hot Keys used in the game." ), fheroes2::FontType::normalWhite() );
+                fheroes2::Text body( _( "Check and configure all the hot keys present in the game." ), fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
@@ -314,7 +314,7 @@ namespace
             }
             else if ( le.MousePressRight( windowCursorTypeRoi ) ) {
                 fheroes2::Text header( _( "Mouse Cursor" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Toggle color cursors on/off. Color cursors look nicer, but sometimes don't move as smoothly as black and white ones." ),
+                fheroes2::Text body( _( "Toggle colored cursor on or off. The colored cursor looks nicer, but sometimes it does not move as smoothly as a black and white one." ),
                                      fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
