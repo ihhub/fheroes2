@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-21 12:23+0000\n"
-"PO-Revision-Date: 2022-09-22 20:41+0100\n"
+"PO-Revision-Date: 2022-09-22 21:10+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -3571,7 +3571,7 @@ msgid "' language, but the current language of the game is '"
 msgstr ""
 
 msgid "Hot Seat"
-msgstr ""
+msgstr "Гореща седалка"
 
 msgid ""
 "Play a Hot Seat game, where 2 to 4 players play around the same computer, "
@@ -3591,7 +3591,7 @@ msgid "A single player game playing through a series of maps."
 msgstr ""
 
 msgid "Campaign Game"
-msgstr ""
+msgstr "Кампания"
 
 msgid ""
 "A multi-player game, with several human players completing against each "
@@ -3605,7 +3605,7 @@ msgid "fheroes2 Resurrection Team presents"
 msgstr "fheroes2 Отбор възкрeсяване представя"
 
 msgid "Greetings!"
-msgstr ""
+msgstr "Поздравления!"
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
@@ -3668,7 +3668,7 @@ msgid "Change language, resolution and settings of the game."
 msgstr ""
 
 msgid "Game Settings"
-msgstr ""
+msgstr "Игрови настройки"
 
 msgid ""
 "Required video files for campaign selection window are missing. Please make "
@@ -3690,7 +3690,7 @@ msgid "One of the four new campaigns from the Price of Loyalty expansion set."
 msgstr ""
 
 msgid "Host"
-msgstr ""
+msgstr "Домакин"
 
 msgid ""
 "The host sets up the game options. There can only be one host per network "
@@ -5571,49 +5571,49 @@ msgid "skill|Expert"
 msgstr "Експерт"
 
 msgid "Pathfinding"
-msgstr ""
+msgstr "Ориентиране"
 
 msgid "Archery"
-msgstr ""
+msgstr "Стрелба с лък"
 
 msgid "Logistics"
-msgstr ""
+msgstr "Логистиката"
 
 msgid "Scouting"
-msgstr ""
+msgstr "Разузнаване"
 
 msgid "Diplomacy"
-msgstr ""
+msgstr "Дипломация"
 
 msgid "Navigation"
-msgstr ""
+msgstr "Навигация"
 
 msgid "Leadership"
-msgstr ""
+msgstr "Лидерство"
 
 msgid "Wisdom"
-msgstr ""
+msgstr "Мъдрост"
 
 msgid "Mysticism"
-msgstr ""
+msgstr "Мистицизъм"
 
 msgid "Ballistics"
-msgstr ""
+msgstr "Балистика"
 
 msgid "Eagle Eye"
-msgstr ""
+msgstr "Орлово око"
 
 msgid "Necromancy"
-msgstr ""
+msgstr "Некромантия"
 
 msgid "Estates"
-msgstr ""
+msgstr "Имоти"
 
 msgid "Advanced Archery"
-msgstr ""
+msgstr "Стрелба с лък за напреднали"
 
 msgid "Advanced Pathfinding"
-msgstr ""
+msgstr "Напреднало ориентиране"
 
 msgid "Basic Archery"
 msgstr "Основна стрелба с лък"
