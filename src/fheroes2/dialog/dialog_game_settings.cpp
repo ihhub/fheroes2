@@ -314,9 +314,7 @@ namespace
             }
             else if ( le.MousePressRight( windowCursorTypeRoi ) ) {
                 fheroes2::Text header( _( "Mouse Cursor" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text
-                    body( _( "Toggle colored cursor on or off. This is only an esthetic choice." ),
-                          fheroes2::FontType::normalWhite() );
+                fheroes2::Text body( _( "Toggle colored cursor on or off. This is only an esthetic choice." ), fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
