@@ -2395,6 +2395,22 @@ namespace fheroes2
         DrawLine( released[48], { offset + 2, offset + 1 }, { offset + 2, offset + 8 }, releasedFontColor );
         DrawLine( released[48], { offset + 10, offset + 1 }, { offset + 10, offset + 4 }, releasedFontColor );
 
+        // Q
+        released[49].resize( 13 + offset * 2, 11 + offset * 2 );
+        released[49].reset();
+        DrawLine( released[49], { offset + 2, offset + 0 }, { offset + 7, offset + 0 }, releasedFontColor );
+        DrawLine( released[49], { offset + 0, offset + 2 }, { offset + 0, offset + 7 }, releasedFontColor );
+        DrawLine( released[49], { offset + 2, offset + 9 }, { offset + 7, offset + 9 }, releasedFontColor );
+        DrawLine( released[49], { offset + 9, offset + 2 }, { offset + 9, offset + 7 }, releasedFontColor );
+        DrawLine( released[49], { offset + 4, offset + 7 }, { offset + 5, offset + 7 }, releasedFontColor );
+        DrawLine( released[49], { offset + 6, offset + 7 }, { offset + 9, offset + 10 }, releasedFontColor );
+        DrawLine( released[49], { offset + 10, offset + 10 }, { offset + 11, offset + 10 }, releasedFontColor );
+        SetPixel( released[49], offset + 1, offset + 1, releasedFontColor );
+        SetPixel( released[49], offset + 8, offset + 1, releasedFontColor );
+        SetPixel( released[49], offset + 1, offset + 8, releasedFontColor );
+        SetPixel( released[49], offset + 8, offset + 8, releasedFontColor );
+        SetPixel( released[49], offset + 12, offset + 9, releasedFontColor );
+
         // R
         released[50].resize( 12 + offset * 2, 10 + offset * 2 );
         released[50].reset();
@@ -2455,6 +2471,16 @@ namespace fheroes2
         DrawLine( released[55], { offset + 8, offset + 1 }, { offset + 6, offset + 7 }, releasedFontColor );
         DrawLine( released[55], { offset + 9, offset + 3 }, { offset + 10, offset + 7 }, releasedFontColor );
         DrawLine( released[55], { offset + 14, offset + 1 }, { offset + 11, offset + 9 }, releasedFontColor );
+
+        // X
+        released[56].resize( 12 + offset * 2, 10 + offset * 2 );
+        released[56].reset();
+        DrawLine( released[56], { offset + 0, offset + 0 }, { offset + 3, offset + 0 }, releasedFontColor );
+        DrawLine( released[56], { offset + 8, offset + 0 }, { offset + 11, offset + 0 }, releasedFontColor );
+        DrawLine( released[56], { offset + 0, offset + 9 }, { offset + 3, offset + 9 }, releasedFontColor );
+        DrawLine( released[56], { offset + 8, offset + 9 }, { offset + 11, offset + 9 }, releasedFontColor );
+        DrawLine( released[56], { offset + 2, offset + 1 }, { offset + 9, offset + 8 }, releasedFontColor );
+        DrawLine( released[56], { offset + 2, offset + 8 }, { offset + 9, offset + 1 }, releasedFontColor );
 
         // Y
         released[57].resize( 11 + offset * 2, 10 + offset * 2 );
