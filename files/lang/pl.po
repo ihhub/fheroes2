@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-21 12:23+0000\n"
-"PO-Revision-Date: 2022-09-08 16:44+0200\n"
+"POT-Creation-Date: 2022-09-23 16:00+0200\n"
+"PO-Revision-Date: 2022-09-23 17:00+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -2656,14 +2656,11 @@ msgstr "Ustawienia"
 msgid "Audio"
 msgstr ""
 
-msgid "settings"
-msgstr "Ustawienia"
+msgid "Configure"
+msgstr ""
 
 msgid "Hot Keys"
 msgstr "Skróty klaw."
-
-msgid "In-game"
-msgstr "W grze"
 
 msgid "Black & White"
 msgstr "Czarno-biały"
@@ -2701,16 +2698,16 @@ msgstr "Walki"
 msgid "Select Game Language"
 msgstr "Wybierz język gry"
 
-msgid "Change language of the game."
+msgid "Change the language of the game."
 msgstr "Zmień język gry."
 
 msgid "Select Game Resolution"
 msgstr "Wybierz rozdzielczość gry:"
 
-msgid "Change resolution of the game."
+msgid "Change the resolution of the game."
 msgstr "Zmień rozdzielczość gry."
 
-msgid "Change audio settings of the game."
+msgid "Change the audio settings of the game."
 msgstr "Zmień ustawienia dźwiękowe gry."
 
 msgid "Experimental game settings."
@@ -2719,15 +2716,15 @@ msgstr "Zmień eksperymentalne ustawienia gry."
 msgid "Toggle instant battle mode."
 msgstr "Zmień tryb błyskawicznej walki."
 
-msgid "Check all Hot Keys used in the game."
+#, fuzzy
+msgid "Check and configure all the hot keys present in the game."
 msgstr "Zobacz wszystkie skróty klawiszowe gry."
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Zmień typ interfejsu."
 
-msgid ""
-"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
-"move as smoothly as black and white ones."
+#, fuzzy
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
 "Zmień kursor na kolorowy lub czarno-biały. Kolorowy kursor wygląda ładniej, "
 "ale czasem nie jest tak płynny jak czarno-biały."
@@ -2957,6 +2954,9 @@ msgstr "Dostępne: %{count}"
 
 msgid "Number to buy:"
 msgstr "Rekrutuj:"
+
+msgid "Select Game Resolution:"
+msgstr "Wybierz rozdzielczość gry:"
 
 msgid "Click to apply the selected resolution."
 msgstr "Użyj wskazanej rozdzielczości."
@@ -9773,9 +9773,3 @@ msgstr ""
 "Możesz pobrać najnowszą wersję gry ze strony:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Score: "
-#~ msgstr "Wynik: "
-
-#~ msgid "Break auto battle?"
-#~ msgstr "Zatrzymać automatyczną walkę?"
