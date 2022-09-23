@@ -2200,6 +2200,11 @@ namespace fheroes2
         // We need 2 pixels from all sides of a letter to add extra effects.
         const int32_t offset = 2;
 
+        // -
+        released[13].resize( 6 + offset * 2, 6 + offset * 2 );
+        released[13].reset();
+        DrawLine( released[13], { offset + 0, offset + 5 }, { offset + 5, offset + 5 }, releasedFontColor );
+        
         // 0
         released[16].resize( 9 + offset * 2, 10 + offset * 2 );
         released[16].reset();
