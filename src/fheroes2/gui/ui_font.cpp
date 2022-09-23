@@ -2497,6 +2497,16 @@ namespace fheroes2
         DrawLine( released[57], { offset + 5, offset + 4 }, { offset + 5, offset + 8 }, releasedFontColor );
         DrawLine( released[57], { offset + 3, offset + 9 }, { offset + 7, offset + 9 }, releasedFontColor );
 
+        // Z
+        released[58].resize( 9 + offset * 2, 10 + offset * 2 );
+        released[58].reset();
+        DrawLine( released[58], { offset + 0, offset + 0 }, { offset + 8, offset + 0 }, releasedFontColor );
+        DrawLine( released[58], { offset + 0, offset + 9 }, { offset + 8, offset + 9 }, releasedFontColor );
+        DrawLine( released[58], { offset + 7, offset + 1 }, { offset + 0, offset + 8 }, releasedFontColor );
+        /*DrawLine( released[58], { offset + 0, offset + 1 }, { offset + 0, offset + 2 }, releasedFontColor );*/
+        SetPixel( released[58], offset + 0, offset + 1, releasedFontColor );
+        SetPixel( released[58], offset + 8, offset + 8, releasedFontColor );
+
         pressed = released;
 
         // Apply all special effects.
