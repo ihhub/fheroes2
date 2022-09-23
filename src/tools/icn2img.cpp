@@ -35,7 +35,7 @@
 int main( int argc, char ** argv )
 {
     if ( argc != 4 ) {
-        std::cout << argv[0] << " inputFile.icn destinationDirectory paletteFileName.pal" << std::endl;
+        std::cout << argv[0] << " inputFile.icn destDirMustExistAndClean paletteFileName.pal" << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -105,8 +105,7 @@ int main( int argc, char ** argv )
                 dstfile += ".bmp";
             }
 
-            std::cout << "Image " << ii + 1 << " has offset of [" << static_cast<int16_t>( head.offsetX ) << ", " << static_cast<int16_t>( head.offsetY ) << "]"
-                      << std::endl;
+            std::cout << "Image " << ii + 1 << " has offset of [" << head.offsetX << ", " << head.offsetY << "]" << std::endl;
 
             fheroes2::Save( image, dstfile, 23 );
         }

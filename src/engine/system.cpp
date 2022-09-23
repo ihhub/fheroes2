@@ -44,6 +44,7 @@
 // shellapi.h must be included after windows.h
 #include <windows.h>
 #include <shellapi.h>
+#include <direct.h>
 // clang-format on
 #else
 #include <dirent.h>
@@ -114,8 +115,7 @@ namespace
 int System::MakeDirectory( const std::string & path )
 {
 #if defined( __WIN32__ ) && defined( _MSC_VER )
-    bool createDir = CreateDirectoryA( path.c_str(), nullptr );
-    return !createDir; // makedir compatible now!
+    return _mkdir( path.c_str() );
 #elif defined( __WIN32__ ) && !defined( _MSC_VER )
     return mkdir( path.c_str() );
 #elif defined( TARGET_PS_VITA )
