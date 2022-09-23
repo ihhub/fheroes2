@@ -2503,7 +2503,6 @@ namespace fheroes2
         DrawLine( released[58], { offset + 0, offset + 0 }, { offset + 8, offset + 0 }, releasedFontColor );
         DrawLine( released[58], { offset + 0, offset + 9 }, { offset + 8, offset + 9 }, releasedFontColor );
         DrawLine( released[58], { offset + 7, offset + 1 }, { offset + 0, offset + 8 }, releasedFontColor );
-        /*DrawLine( released[58], { offset + 0, offset + 1 }, { offset + 0, offset + 2 }, releasedFontColor );*/
         SetPixel( released[58], offset + 0, offset + 1, releasedFontColor );
         SetPixel( released[58], offset + 8, offset + 8, releasedFontColor );
 
