@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-21 12:23+0000\n"
-"PO-Revision-Date: 2022-05-10 16:34+0200\n"
+"POT-Creation-Date: 2022-09-23 16:00+0200\n"
+"PO-Revision-Date: 2022-09-23 16:17+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2011-06-02 03:12+0000\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 msgid ""
 "BATTLE\n"
@@ -2695,14 +2695,10 @@ msgstr "Beállítások"
 msgid "Audio"
 msgstr ""
 
-#, fuzzy
-msgid "settings"
-msgstr "Beállítások"
-
-msgid "Hot Keys"
+msgid "Configure"
 msgstr ""
 
-msgid "In-game"
+msgid "Hot Keys"
 msgstr ""
 
 #, fuzzy
@@ -2747,17 +2743,17 @@ msgstr "Üveg"
 msgid "Select Game Language"
 msgstr "Kiválasztott Leírás"
 
-msgid "Change language of the game."
+msgid "Change the language of the game."
 msgstr ""
 
 #, fuzzy
 msgid "Select Game Resolution"
 msgstr "Kiválasztott Leírás"
 
-msgid "Change resolution of the game."
+msgid "Change the resolution of the game."
 msgstr ""
 
-msgid "Change audio settings of the game."
+msgid "Change the audio settings of the game."
 msgstr ""
 
 #, fuzzy
@@ -2767,15 +2763,13 @@ msgstr "FHeroes2 játék beállítások."
 msgid "Toggle instant battle mode."
 msgstr ""
 
-msgid "Check all Hot Keys used in the game."
+msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
 msgstr ""
 
-msgid ""
-"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
-"move as smoothly as black and white ones."
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
 
 msgid ""
@@ -3020,6 +3014,10 @@ msgstr "Használható: %{count}"
 
 msgid "Number to buy:"
 msgstr "Vétel (db):"
+
+#, fuzzy
+msgid "Select Game Resolution:"
+msgstr "Kiválasztott Leírás"
 
 msgid "Click to apply the selected resolution."
 msgstr ""
@@ -9462,7 +9460,3 @@ msgstr ""
 "Letöltheted a legújabb verziót az oldalról:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Break auto battle?"
-#~ msgstr "Automata harc bekapcsolása"
