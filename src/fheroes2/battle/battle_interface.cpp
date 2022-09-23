@@ -3320,7 +3320,7 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
 #ifdef DEBUG_LOG
     std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
-    StringReplace( msg, "%{monster}", unit.GetName() );
+    StringReplace( msg, "%{monster}", Translation::StringLower( unit.GetName() ) );
     StringReplace( msg, "%{src}", unit.GetHeadIndex() );
 #else
     std::string msg = _( "Moved %{monster}" );
