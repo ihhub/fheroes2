@@ -2453,7 +2453,7 @@ namespace fheroes2
                 return errorImage;
             }
 
-            // TODO: correct naming and standartise the code
+            // TODO: correct naming and standardize the code
             switch ( fontType ) {
             case Font::GRAY_SMALL:
                 return GetICN( ICN::GRAY_SMALL_FONT, character - 0x20 );
