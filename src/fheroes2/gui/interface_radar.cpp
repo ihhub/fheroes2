@@ -426,7 +426,15 @@ void Interface::Radar::QueueEventProcessing()
     }
     else if ( le.MouseCursor( rect ) ) {
         // move cursor
-        if ( le.MouseClickLeft() || le.MousePressLeft() ) {
+       
+        if ( le.MouseDownLeft () ) {
+            _dragScroll = true;
+        }
+        if ( !le.MousePressLeft() ) {
+            _dragScroll = false;
+        }
+        
+        if ( _dragScroll ) {
             const fheroes2::Point & pt = le.GetMouseCursor();
 
             if ( rect & pt ) {
@@ -441,7 +449,7 @@ void Interface::Radar::QueueEventProcessing()
                 }
             }
         }
-        else if ( le.MousePressRight( GetRect() ) ) {
+        if ( le.MousePressRight( GetRect() ) ) {
             Dialog::Message( _( "World Map" ), _( "A miniature view of the known world. Left click to move viewing area." ), Font::BIG );
         }
     }

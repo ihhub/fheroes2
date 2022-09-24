@@ -84,6 +84,8 @@ namespace Interface
         fheroes2::MovableSprite cursorArea;
         fheroes2::Point offset;
         bool hide;
+        
+        bool _dragScroll;
     };
 }
 

@@ -901,7 +901,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             break;
         }
 
-        if ( fheroes2::cursor().isFocusActive() ) {
+        if ( fheroes2::cursor().isFocusActive() && !gameArea.isDragScroll() ) {
             int scrollPosition = SCROLL_NONE;
 
             if ( isScrollLeft( le.GetMouseCursor() ) )
@@ -1094,7 +1094,7 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         }
 
         // fast scroll
-        if ( gameArea.NeedScroll() && !isMovingHero ) {
+        if ( ( gameArea.NeedScroll() && !isMovingHero ) || gameArea.isDragScroll() ) {
             if ( Game::validateAnimationDelay( Game::SCROLL_DELAY ) ) {
                 if ( isScrollLeft( le.GetMouseCursor() ) || isScrollRight( le.GetMouseCursor() ) || isScrollTop( le.GetMouseCursor() )
                      || isScrollBottom( le.GetMouseCursor() ) ) {
