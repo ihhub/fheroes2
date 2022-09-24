@@ -2289,7 +2289,7 @@ namespace fheroes2
             case ICN::BUTTON_EVIL_FONT_RELEASED:
             case ICN::BUTTON_EVIL_FONT_PRESSED: {
                 generateBaseButtonFont( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED],
-                                        _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED]);
+                                        _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
                 return true;
             }
             case ICN::HISCORE: {
