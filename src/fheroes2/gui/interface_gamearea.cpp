@@ -883,7 +883,7 @@ void Interface::GameArea::QueueEventProcessing()
         _dragScrollPos = mp;
     }
     if ( _dragScroll ) {
-        if ( abs( dragScrollPos.x - mp.x ) > 10 || abs( dragScrollPos.y - mp.y ) > 10 ) {
+        if ( abs( _dragScrollPos.x - mp.x ) > 10 || abs( _dragScrollPos.y - mp.y ) > 10 ) {
             _dragScrollHysteresis = true;
         }
     }
