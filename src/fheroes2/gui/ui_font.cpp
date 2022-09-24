@@ -1345,7 +1345,6 @@ namespace
         // Resize fonts.
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
             icnVsSprite[icnId].resize( baseFontSize );
-            // Italian uses CP1252 for special characters so we need to extend the array.
             icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, icnVsSprite[icnId][0] );
         }
 
