@@ -878,7 +878,7 @@ void Interface::GameArea::QueueEventProcessing()
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Point & mp = le.GetMouseCursor();
 
-    if ( le.MouseDownLeft () ) {
+    if ( le.MouseDownLeft() ) {
         _dragScroll = true;
         _dragScrollPos = mp;
     }
