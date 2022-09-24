@@ -2158,12 +2158,12 @@ namespace
     {
         // Button font does not exist in the original game assets but we can regenerate it from scratch.
         // All letters in buttons have some variations in colors but overall shapes are the same.
-        // We want to standartize the font and to use one approach to generate letters.
+        // We want to standardize the font and to use one approach to generate letters.
         // The shape of the letter is defined only by one color (in general). The rest of information is generated from transformations and contours.
         //
         // Another essential difference from normal fonts is that button font has only uppercase letters.
         // This means that we need to generate only 26 letter of English alphabet, 10 digits and few special characters, totalling in about 50 symbols.
-        // The downside of this font is that we have to make released and pressed states of each letter.
+        // The downside of this font is that code is necessary for the generation of released and pressed states of each letter.
 
         released.resize( baseFontSize );
 
