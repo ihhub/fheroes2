@@ -102,7 +102,7 @@ namespace
 
     void applyEvilButtonPressedLetterEffects( fheroes2::Sprite & letter )
     {
-        ReplaceColorId( letter, buttonGoodReleasedColor, buttonEvilReleasedColor );
+        ReplaceColorId( letter, buttonGoodPressedColor, buttonEvilPressedColor );
     }
 
     void generateCP1250Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
