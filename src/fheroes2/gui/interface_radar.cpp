@@ -427,7 +427,7 @@ void Interface::Radar::QueueEventProcessing()
     else if ( le.MouseCursor( rect ) ) {
         // move cursor
 
-        if ( le.MouseDownLeft () ) {
+        if ( le.MouseDownLeft() ) {
             _dragScroll = true;
         }
         if ( !le.MousePressLeft() ) {
