@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-21 12:23+0000\n"
-"PO-Revision-Date: 2022-09-24 11:55+0100\n"
+"PO-Revision-Date: 2022-09-24 12:01+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -1424,7 +1424,7 @@ msgid "campaignBonus|White Pearl"
 msgstr "Бяла перла"
 
 msgid "campaignBonus|Basic Archery"
-msgstr "Основна стрелба с лък"
+msgstr "Начална стрелба с лък"
 
 msgid "campaignBonus|Advanced Archery"
 msgstr "Стрелба с лък за напреднали"
@@ -1433,7 +1433,7 @@ msgid "campaignBonus|Expert Archery"
 msgstr "Експертна стрелба с лък"
 
 msgid "campaignBonus|Basic Ballistics"
-msgstr "Основна балистика"
+msgstr "Начална балистика"
 
 msgid "campaignBonus|Advanced Ballistics"
 msgstr "Разширена балистика"
@@ -1442,7 +1442,7 @@ msgid "campaignBonus|Expert Ballistics"
 msgstr "Експертна балистика"
 
 msgid "campaignBonus|Basic Diplomacy"
-msgstr "Основна дипломация"
+msgstr "Начална дипломация"
 
 msgid "campaignBonus|Advanced Diplomacy"
 msgstr "Разширена дипломация"
@@ -1451,7 +1451,7 @@ msgid "campaignBonus|Expert Diplomacy"
 msgstr "Експертна дипломация"
 
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr "Основно орлово око"
+msgstr "Начално орлово око"
 
 msgid "campaignBonus|Advanced Eagle Eye"
 msgstr "Разширено орлово око"
@@ -1460,7 +1460,7 @@ msgid "campaignBonus|Expert Eagle Eye"
 msgstr "Експертно орлово око"
 
 msgid "campaignBonus|Basic Estates"
-msgstr "Основни имоти"
+msgstr "Начални имоти"
 
 msgid "campaignBonus|Advanced Estates"
 msgstr "Разширени имоти"
@@ -1469,7 +1469,7 @@ msgid "campaignBonus|Expert Estates"
 msgstr "Експерт имоти"
 
 msgid "campaignBonus|Basic Leadership"
-msgstr "Основно лидерство"
+msgstr "Начално лидерство"
 
 msgid "campaignBonus|Advanced Leadership"
 msgstr "Разширено лидерство"
@@ -1478,7 +1478,7 @@ msgid "campaignBonus|Expert Leadership"
 msgstr "Експертно лидерство"
 
 msgid "campaignBonus|Basic Logistics"
-msgstr "Основна логистика"
+msgstr "Начална логистика"
 
 msgid "campaignBonus|Advanced Logistics"
 msgstr "Разширена логистика"
@@ -1487,25 +1487,25 @@ msgid "campaignBonus|Expert Logistics"
 msgstr "Експертна логистика"
 
 msgid "campaignBonus|Basic Luck"
-msgstr "Основнен късмет"
+msgstr "Начален късмет"
 
 msgid "campaignBonus|Advanced Luck"
-msgstr "Разширен късмет"
+msgstr "Напреднал късмет"
 
 msgid "campaignBonus|Expert Luck"
 msgstr "Експертен късмет"
 
 msgid "campaignBonus|Basic Mysticism"
-msgstr "Основен мистицизъм"
+msgstr "Начален мистицизъм"
 
 msgid "campaignBonus|Advanced Mysticism"
-msgstr "Разширен мистицизъм"
+msgstr "Напреднал мистицизъм"
 
 msgid "campaignBonus|Expert Mysticism"
 msgstr "Експертен мистицизъм"
 
 msgid "campaignBonus|Basic Navigation"
-msgstr "Основна навигация"
+msgstr "Начална навигация"
 
 msgid "campaignBonus|Advanced Navigation"
 msgstr "Разширена навигация"
@@ -1514,7 +1514,7 @@ msgid "campaignBonus|Expert Navigation"
 msgstr "Експертна навигация"
 
 msgid "campaignBonus|Basic Necromancy"
-msgstr "Основна некромантия"
+msgstr "Начална некромантия"
 
 msgid "campaignBonus|Advanced Necromancy"
 msgstr "Разширена некромантия"
@@ -1523,7 +1523,7 @@ msgid "campaignBonus|Expert Necromancy"
 msgstr "Експертна некромантия"
 
 msgid "campaignBonus|Basic Pathfinding"
-msgstr "Основно намиране на пътя"
+msgstr "Начално намиране на пътя"
 
 msgid "campaignBonus|Advanced Pathfinding"
 msgstr "Разширено намиране на пътя"
@@ -1532,7 +1532,7 @@ msgid "campaignBonus|Expert Pathfinding"
 msgstr "Експертно намиране на пътя"
 
 msgid "campaignBonus|Basic Scouting"
-msgstr "Основно скаутство"
+msgstr "Начално скаутство"
 
 msgid "campaignBonus|Advanced Scouting"
 msgstr "Разширено скаутство"
@@ -1541,7 +1541,7 @@ msgid "campaignBonus|Expert Scouting"
 msgstr "Експертно скаутство"
 
 msgid "campaignBonus|Basic Wisdom"
-msgstr "Основна мъдрост"
+msgstr "Начална мъдрост"
 
 msgid "campaignBonus|Advanced Wisdom"
 msgstr "Разширена мъдрост"
@@ -5626,7 +5626,7 @@ msgid "Current Modifiers:"
 msgstr "Текущи модификатори:"
 
 msgid "skill|Basic"
-msgstr "Основен"
+msgstr "Начален"
 
 msgid "skill|Advanced"
 msgstr "Напреднал"
@@ -5680,10 +5680,10 @@ msgid "Advanced Pathfinding"
 msgstr "Напреднало ориентиране"
 
 msgid "Basic Archery"
-msgstr "Основна стрелба с лък"
+msgstr "Начална стрелба с лък"
 
 msgid "Basic Pathfinding"
-msgstr "Основно ориентиране"
+msgstr "Начално ориентиране"
 
 msgid "Expert Pathfinding"
 msgstr "Експерт ориентиране"
@@ -5692,10 +5692,10 @@ msgid "Advanced Logistics"
 msgstr "Напреднала логистика"
 
 msgid "Basic Logistics"
-msgstr "Основна логистика"
+msgstr "Начална логистика"
 
 msgid "Basic Scouting"
-msgstr "Основно разузнаване"
+msgstr "Начално разузнаване"
 
 msgid "Expert Archery"
 msgstr "Експертна стрелба с лък"
@@ -5710,7 +5710,7 @@ msgid "Advanced Scouting"
 msgstr "Напреднало разузнаване"
 
 msgid "Basic Diplomacy"
-msgstr "Основна дипломация"
+msgstr "Начална дипломация"
 
 msgid "Expert Diplomacy"
 msgstr "Експертна дипломация"
@@ -5725,10 +5725,10 @@ msgid "Advanced Navigation"
 msgstr "Напреднала навигация"
 
 msgid "Basic Leadership"
-msgstr "Основно лидерство"
+msgstr "Начално лидерство"
 
 msgid "Basic Navigation"
-msgstr "Основна навигация"
+msgstr "Начална навигация"
 
 msgid "Expert Navigation"
 msgstr "Експертна навигация"
@@ -5737,10 +5737,10 @@ msgid "Advanced Wisdom"
 msgstr "Напреднала мъдрост"
 
 msgid "Basic Mysticism"
-msgstr "Основен мистицизъм"
+msgstr "Начален мистицизъм"
 
 msgid "Basic Wisdom"
-msgstr "Основна мъдрост"
+msgstr "Начална мъдрост"
 
 msgid "Expert Leadership"
 msgstr "Експертно лидерство"
@@ -5755,7 +5755,7 @@ msgid "Advanced Mysticism"
 msgstr "Напреднал мистицизъм"
 
 msgid "Basic Luck"
-msgstr "Основен късмет"
+msgstr "Начален късмет"
 
 msgid "Expert Luck"
 msgstr "Експертен късмет"
@@ -5770,10 +5770,10 @@ msgid "Advanced Eagle Eye"
 msgstr "Напреднал орлово око"
 
 msgid "Basic Ballistics"
-msgstr "Основна балистика"
+msgstr "Начална балистика"
 
 msgid "Basic Eagle Eye"
-msgstr "Основно орлово око"
+msgstr "Начално орлово око"
 
 msgid "Expert Ballistics"
 msgstr "Експертна балистика"
@@ -5782,10 +5782,10 @@ msgid "Advanced Necromancy"
 msgstr "Напреднала некромантия"
 
 msgid "Basic Estates"
-msgstr "Основни имоти"
+msgstr "Начални имоти"
 
 msgid "Basic Necromancy"
-msgstr "Основна некромантия"
+msgstr "Начална некромантия"
 
 msgid "Expert Eagle Eye"
 msgstr "Експертно орлово око"
