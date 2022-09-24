@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-21 12:23+0000\n"
-"PO-Revision-Date: 2022-09-24 12:01+0100\n"
+"PO-Revision-Date: 2022-09-24 12:02+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -1436,7 +1436,7 @@ msgid "campaignBonus|Basic Ballistics"
 msgstr "Начална балистика"
 
 msgid "campaignBonus|Advanced Ballistics"
-msgstr "Разширена балистика"
+msgstr "Напреднала балистика"
 
 msgid "campaignBonus|Expert Ballistics"
 msgstr "Експертна балистика"
@@ -1445,7 +1445,7 @@ msgid "campaignBonus|Basic Diplomacy"
 msgstr "Начална дипломация"
 
 msgid "campaignBonus|Advanced Diplomacy"
-msgstr "Разширена дипломация"
+msgstr "Напреднала дипломация"
 
 msgid "campaignBonus|Expert Diplomacy"
 msgstr "Експертна дипломация"
@@ -1454,7 +1454,7 @@ msgid "campaignBonus|Basic Eagle Eye"
 msgstr "Начално орлово око"
 
 msgid "campaignBonus|Advanced Eagle Eye"
-msgstr "Разширено орлово око"
+msgstr "Напреднало орлово око"
 
 msgid "campaignBonus|Expert Eagle Eye"
 msgstr "Експертно орлово око"
@@ -1463,7 +1463,7 @@ msgid "campaignBonus|Basic Estates"
 msgstr "Начални имоти"
 
 msgid "campaignBonus|Advanced Estates"
-msgstr "Разширени имоти"
+msgstr "Напреднали имоти"
 
 msgid "campaignBonus|Expert Estates"
 msgstr "Експерт имоти"
@@ -1472,7 +1472,7 @@ msgid "campaignBonus|Basic Leadership"
 msgstr "Начално лидерство"
 
 msgid "campaignBonus|Advanced Leadership"
-msgstr "Разширено лидерство"
+msgstr "Напреднало лидерство"
 
 msgid "campaignBonus|Expert Leadership"
 msgstr "Експертно лидерство"
@@ -1481,7 +1481,7 @@ msgid "campaignBonus|Basic Logistics"
 msgstr "Начална логистика"
 
 msgid "campaignBonus|Advanced Logistics"
-msgstr "Разширена логистика"
+msgstr "Напреднала логистика"
 
 msgid "campaignBonus|Expert Logistics"
 msgstr "Експертна логистика"
@@ -1508,7 +1508,7 @@ msgid "campaignBonus|Basic Navigation"
 msgstr "Начална навигация"
 
 msgid "campaignBonus|Advanced Navigation"
-msgstr "Разширена навигация"
+msgstr "Напреднала навигация"
 
 msgid "campaignBonus|Expert Navigation"
 msgstr "Експертна навигация"
@@ -1517,7 +1517,7 @@ msgid "campaignBonus|Basic Necromancy"
 msgstr "Начална некромантия"
 
 msgid "campaignBonus|Advanced Necromancy"
-msgstr "Разширена некромантия"
+msgstr "Напреднала некромантия"
 
 msgid "campaignBonus|Expert Necromancy"
 msgstr "Експертна некромантия"
@@ -1526,7 +1526,7 @@ msgid "campaignBonus|Basic Pathfinding"
 msgstr "Начално намиране на пътя"
 
 msgid "campaignBonus|Advanced Pathfinding"
-msgstr "Разширено намиране на пътя"
+msgstr "Напреднало намиране на пътя"
 
 msgid "campaignBonus|Expert Pathfinding"
 msgstr "Експертно намиране на пътя"
@@ -1535,7 +1535,7 @@ msgid "campaignBonus|Basic Scouting"
 msgstr "Начално скаутство"
 
 msgid "campaignBonus|Advanced Scouting"
-msgstr "Разширено скаутство"
+msgstr "Напреднало скаутство"
 
 msgid "campaignBonus|Expert Scouting"
 msgstr "Експертно скаутство"
@@ -1544,7 +1544,7 @@ msgid "campaignBonus|Basic Wisdom"
 msgstr "Начална мъдрост"
 
 msgid "campaignBonus|Advanced Wisdom"
-msgstr "Разширена мъдрост"
+msgstr "Напреднала мъдрост"
 
 msgid "campaignBonus|Expert Wisdom"
 msgstr "Експертна мъдрост"
