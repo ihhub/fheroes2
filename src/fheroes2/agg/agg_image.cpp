@@ -2264,8 +2264,8 @@ namespace fheroes2
 
                 for ( Sprite & image : _icnVsSprite[ICN::MINI_MONSTER_IMAGE] ) {
                     uint8_t * transform = image.transform();
-                    const uint8_t * tranformEnd = transform + image.width() * image.height();
-                    for ( ; transform != tranformEnd; ++transform ) {
+                    const uint8_t * transformEnd = transform + image.width() * image.height();
+                    for ( ; transform != transformEnd; ++transform ) {
                         if ( *transform > 1 ) {
                             *transform = 1;
                         }
@@ -2274,8 +2274,8 @@ namespace fheroes2
 
                 for ( Sprite & image : _icnVsSprite[ICN::MINI_MONSTER_SHADOW] ) {
                     uint8_t * transform = image.transform();
-                    const uint8_t * tranformEnd = transform + image.width() * image.height();
-                    for ( ; transform != tranformEnd; ++transform ) {
+                    const uint8_t * transformEnd = transform + image.width() * image.height();
+                    for ( ; transform != transformEnd; ++transform ) {
                         if ( *transform == 0 ) {
                             *transform = 1;
                         }
@@ -2288,25 +2288,8 @@ namespace fheroes2
             case ICN::BUTTON_GOOD_FONT_PRESSED:
             case ICN::BUTTON_EVIL_FONT_RELEASED:
             case ICN::BUTTON_EVIL_FONT_PRESSED: {
-                const uint8_t goodReleasedColor = 56;
-                const uint8_t goodPressedColor = 62;
-                const uint8_t evilReleasedColor = 30;
-                const uint8_t evilPressedColor = 36;
-                const uint8_t contourColor = 10;
-
-                generateBaseButtonFont( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], goodReleasedColor, goodPressedColor,
-                                        contourColor );
-
-                _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED] = _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED];
-                for ( Sprite & letter : _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED] ) {
-                    ReplaceColorId( letter, goodReleasedColor, evilReleasedColor );
-                }
-
-                _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] = _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED];
-                for ( Sprite & letter : _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] ) {
-                    ReplaceColorId( letter, goodPressedColor, evilPressedColor );
-                }
-
+                generateBaseButtonFont( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED],
+                                        _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
                 return true;
             }
             case ICN::HISCORE: {
