@@ -218,7 +218,7 @@ public:
     {
         return MousePressLeft() && ( rt & mouse_pl );
     }
-    
+
     bool MouseDownLeft() const
     {
         return !mouse_button_ll && MousePressLeft();
@@ -230,7 +230,7 @@ public:
     {
         return MousePressRight() && ( rt & mouse_pr );
     }
-    
+
     bool MouseDownRight() const
     {
         return !mouse_button_lr && MousePressRight();
@@ -368,7 +368,7 @@ private:
     fheroes2::Point mouse_cu; // point cursor
 
     fheroes2::Point mouse_wm; // wheel movement
-    
+
     bool mouse_button_ll; // last left
     bool mouse_button_lr; // last right
 

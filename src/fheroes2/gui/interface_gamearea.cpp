@@ -877,7 +877,7 @@ void Interface::GameArea::QueueEventProcessing()
 {
     LocalEvent & le = LocalEvent::Get();
     const fheroes2::Point & mp = le.GetMouseCursor();
-    
+
     if ( le.MouseDownLeft () ) {
         _dragScroll = true;
         _dragScrollPos = mp;
@@ -891,11 +891,12 @@ void Interface::GameArea::QueueEventProcessing()
         _dragScroll = false;
         _dragScrollHysteresis = false;
     }
-    
+
     if ( _dragScrollHysteresis ) {
         SetCenterInPixels( getCurrentCenterInPixels() + _dragScrollPos - mp );
         _dragScrollPos = mp;
-    } else {
+    }
+    else {
         int32_t index = GetValidTileIdFromPoint( mp );
 
         // change cursor if need

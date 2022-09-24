@@ -237,8 +237,8 @@ namespace Interface
 
         // Make sure you do not have a copy of this object after the execution of the method to avoid incorrect object removal in some cases.
         void runSingleObjectAnimation( const std::shared_ptr<BaseObjectAnimationInfo> & info );
-        
-        bool isDragScroll()
+
+        bool isDragScroll() const
         {
             return _dragScrollHysteresis;
         }
@@ -277,7 +277,7 @@ namespace Interface
         void _setCenterToTile( const fheroes2::Point & tile ); // set center to the middle of tile (input is tile ID)
 
         void updateObjectAnimationInfo() const;
-        
+
         bool _dragScroll;
         bool _dragScrollHysteresis;
         fheroes2::Point _dragScrollPos;
