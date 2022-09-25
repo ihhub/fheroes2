@@ -791,7 +791,17 @@ namespace fheroes2
         const CharValidator validator( fontType.size );
 
         for ( const char letter : text ) {
-            if ( !validator.isValid( static_cast<uint8_t>( letter ) ) ) {
+            const uint8_t character = static_cast<uint8_t>( letter );
+
+            if ( character == lineSeparator ) {
+                continue;
+            }
+
+            if ( isSpaceChar( character ) ) {
+                continue;
+            }
+
+            if ( !validator.isValid( character ) ) {
                 return false;
             }
         }

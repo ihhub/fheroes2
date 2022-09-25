@@ -1865,7 +1865,7 @@ void ActionToArtifact( Heroes & hero, int32_t dst_index )
                 else {
                     msg = _(
                         "Through a clearing you observe an ancient artifact. Unfortunately, it's guarded by a nearby %{monster}. Do you want to fight the %{monster} for the artifact?" );
-                    StringReplace( msg, "%{monster}", troop->GetName() );
+                    StringReplace( msg, "%{monster}", Translation::StringLower( troop->GetName() ) );
                     battle = ( Dialog::YES == Dialog::Message( title, msg, Font::BIG, Dialog::YES | Dialog::NO ) );
                 }
             }
@@ -2257,7 +2257,7 @@ void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType object
 
     if ( troop.isValid() ) {
         std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you. Do you accept?" );
-        StringReplace( message, "%{monster}", troop.GetMultiName() );
+        StringReplace( message, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
 
         AudioManager::PlaySound( M82::EXPERNCE );
 
