@@ -2485,15 +2485,15 @@ namespace
         fheroes2::SetPixel( released[58], offset + 8, offset + 8, buttonGoodReleasedColor );
     }
 
-    void generateGoodCP1252ButtonFont( std::vector<fheroes2::Sprite> & released ) {
-
+    void generateGoodCP1252ButtonFont( std::vector<fheroes2::Sprite> & released )
+    {
         released.insert( released.end(), 160, released[0] );        
 
         const int32_t offset = 2;
 
         // Offset letters with diacritics above them.
         released[165].setPosition( buttonFontOffset.x, -2 );
-        
+
         // A with circle on top
         released[165].resize( 13 + offset * 2, 12 + offset * 2 );
         released[165].reset();
@@ -2530,7 +2530,6 @@ namespace
         fheroes2::SetPixel( released[166], offset + 14, offset + 8, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[166], offset + 12, offset + 3, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[166], offset + 12, offset + 5, buttonGoodReleasedColor );
-
     }
 }
 
@@ -2626,8 +2625,7 @@ namespace fheroes2
     }
 
     void generateBaseButtonFont( const SupportedLanguage language, std::vector<Sprite> & goodReleased, std::vector<Sprite> & goodPressed,
-                                 std::vector<Sprite> & evilReleased,
-                                 std::vector<Sprite> & evilPressed )
+                                 std::vector<Sprite> & evilReleased, std::vector<Sprite> & evilPressed )
     {
         generateGoodButtonFontBaseShape( goodReleased );
 
