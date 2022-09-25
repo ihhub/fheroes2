@@ -48,9 +48,9 @@ class Heroes;
 enum
 {
     CONTROL_NONE = 0,
+    CONTROL_REMOTE = 2, /*, CONTROL_LOCAL = CONTROL_AI | CONTROL_HUMAN */
     CONTROL_HUMAN = 1,
-    CONTROL_AI = 4,
-    CONTROL_REMOTE = 2 /*, CONTROL_LOCAL = CONTROL_AI | CONTROL_HUMAN */
+    CONTROL_AI = 4
 };
 enum
 {
@@ -180,6 +180,14 @@ public:
 
     void setHandicapStatus( const uint8_t status );
 
+    // This mode sets control from a human player to AI so the game will be continued by AI.
+    void setAIAutoControlMode( const bool enable );
+
+    bool isAIAutoControlMode() const
+    {
+        return _isAIAutoControlMode;
+    }
+
 protected:
     friend StreamBase & operator<<( StreamBase &, const Player & );
     friend StreamBase & operator>>( StreamBase &, Player & );
@@ -193,6 +201,9 @@ protected:
     Focus focus;
     std::shared_ptr<AI::Base> _ai;
     uint8_t _handicapStatus;
+
+    // This member should not be saved anywhere.
+    bool _isAIAutoControlMode;
 };
 
 StreamBase & operator<<( StreamBase &, const Player & );

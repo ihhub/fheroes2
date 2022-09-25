@@ -244,22 +244,6 @@ static void WhirlpoolTroopLoseEffect( Heroes & hero )
 
 void Heroes::Action( int tileIndex, bool isDestination )
 {
-    if ( GetKingdom().isControlAI() ) {
-        // Restore the original music after the action is completed.
-        const AudioManager::MusicRestorer musicRestorer;
-
-        return AI::HeroesAction( *this, tileIndex );
-    }
-
-    const int32_t heroPosIndex = GetIndex();
-    assert( heroPosIndex >= 0 );
-
-    // Update environment sounds and music before performing the action
-    if ( Game::UpdateSoundsOnFocusUpdate() ) {
-        Game::EnvironmentSoundMixer();
-        AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroPosIndex ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
-    }
-
     // Hero may be lost while performing the action, reset the focus after completing the action (and update environment sounds and music if necessary)
     const struct FocusUpdater
     {
@@ -276,7 +260,34 @@ void Heroes::Action( int tileIndex, bool isDestination )
         }
 
         FocusUpdater & operator=( const FocusUpdater & ) = delete;
-    } focusUpdater;
+    };
+
+    std::unique_ptr<FocusUpdater> focusUpdater;
+    const bool isAIControlledForHumanPlayer = Players::Get( GetKingdom().GetColor() )->isAIAutoControlMode();
+
+    if ( !GetKingdom().isControlAI() || isAIControlledForHumanPlayer ) {
+        focusUpdater = std::make_unique<FocusUpdater>();
+
+        if ( isAIControlledForHumanPlayer ) {
+            Interface::Basic::Get().SetFocus( this );
+        }
+    }
+
+    if ( GetKingdom().isControlAI() ) {
+        // Restore the original music after the action is completed.
+        const AudioManager::MusicRestorer musicRestorer;
+
+        return AI::HeroesAction( *this, tileIndex );
+    }
+
+    const int32_t heroPosIndex = GetIndex();
+    assert( heroPosIndex >= 0 );
+
+    // Update environment sounds and music before performing the action
+    if ( Game::UpdateSoundsOnFocusUpdate() ) {
+        Game::EnvironmentSoundMixer();
+        AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroPosIndex ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
+    }
 
     // "Musical" sounds use the volume of sounds instead of the volume of music, reset the music volume after completing the action
     const struct MusicVolumeRestorer

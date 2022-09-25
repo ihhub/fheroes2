@@ -102,6 +102,7 @@ namespace Game
         SHOW_BUTTONS,
         SHOW_STATUS,
         SHOW_ICONS,
+        TRANSFER_CONTROL_TO_AI,
 
         BATTLE_RETREAT,
         BATTLE_SURRENDER,
