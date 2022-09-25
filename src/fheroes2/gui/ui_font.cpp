@@ -2507,6 +2507,27 @@ namespace
         fheroes2::SetPixel( released[165], offset + 5, offset + 4, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[165], offset + 6, offset + 3, buttonGoodReleasedColor );
 
+        // A attached to E.
+        released[166].resize( 18 + offset * 2, 12 + offset * 2 );
+        released[166].reset();
+        fheroes2::DrawLine( released[166], { offset + 0, offset + 9 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 8, offset + 9 }, { offset + 12, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 5, offset + 5 }, { offset + 8, offset + 5 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 2, offset + 8 }, { offset + 4, offset + 5 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 7, offset + 1 }, { offset + 10, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 7, offset + 0 }, { offset + 14, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 13, offset + 9 }, { offset + 14, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 9, offset + 4 }, { offset + 12, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 4, offset + 4, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 5, offset + 3, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 5, offset + 2, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 6, offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 6, offset + 0, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 14, offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 14, offset + 8, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 12, offset + 3, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 12, offset + 5, buttonGoodReleasedColor );
+
     }
 }
 
