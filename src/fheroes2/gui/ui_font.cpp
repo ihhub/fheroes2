@@ -2487,7 +2487,7 @@ namespace
 
     void generateGoodCP1252ButtonFont( std::vector<fheroes2::Sprite> & released )
     {
-        released.insert( released.end(), 160, released[0] );        
+        released.insert( released.end(), 160, released[0] );
 
         const int32_t offset = 2;
 
