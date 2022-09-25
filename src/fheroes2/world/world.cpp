@@ -1131,7 +1131,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
         }
 
         // .. or be hired by an AI-controlled kingdom
-        if ( GetKingdom( hero->GetColor() ).isControlAI() ) {
+        if ( GetKingdom( hero->GetColor() ).isControlAI() && !Players::Get( hero->GetColor() )->isAIAutoControlMode() ) {
             // Exception for campaign: hero is not considered lost if he is hired by a friendly AI-controlled kingdom
             if ( conf.isCampaignGameType() && Players::isFriends( kingdom.GetColor(), hero->GetColor() ) ) {
                 return false;
