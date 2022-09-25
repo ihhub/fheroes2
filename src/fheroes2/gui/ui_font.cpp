@@ -2490,6 +2490,9 @@ namespace
         released.insert( released.end(), 160, released[0] );        
 
         const int32_t offset = 2;
+
+        // Offset letters with diacritics above them.
+        released[165].setPosition( buttonFontOffset.x, -2 );
         
         // A with circle on top
         released[165].resize( 13 + offset * 2, 12 + offset * 2 );
