@@ -2484,6 +2484,27 @@ namespace
         fheroes2::SetPixel( released[58], offset + 0, offset + 1, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[58], offset + 8, offset + 8, buttonGoodReleasedColor );
     }
+
+    void generateGoodCP1252ButtonFont( std::vector<fheroes2::Sprite> & released ) {
+
+        released.insert( released.end(), 160, released[0] );        
+
+        const int32_t offset = 2;
+        
+        // A with circle on top
+        released[165].resize( 13 + offset * 2, 10 + offset * 2 );
+        released[165].reset();
+        fheroes2::DrawLine( released[165], { offset + 0, offset + 9 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[165], { offset + 8, offset + 9 }, { offset + 12, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[165], { offset + 5, offset + 5 }, { offset + 8, offset + 5 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[165], { offset + 2, offset + 8 }, { offset + 4, offset + 5 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[165], { offset + 7, offset + 1 }, { offset + 10, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[165], offset + 4, offset + 4, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[165], offset + 5, offset + 3, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[165], offset + 5, offset + 2, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[165], offset + 6, offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[165], offset + 6, offset + 0, buttonGoodReleasedColor );
+    }
 }
 
 namespace fheroes2
@@ -2547,10 +2568,46 @@ namespace fheroes2
         return false;
     }
 
-    void generateBaseButtonFont( std::vector<Sprite> & goodReleased, std::vector<Sprite> & goodPressed, std::vector<Sprite> & evilReleased,
+    void generateExtraButtonFont( const SupportedLanguage language, std::vector<Sprite> & goodReleased )
+    {
+        switch ( language ) {
+        case SupportedLanguage::Polish:
+            // generateGoodCP1250ButtonFont( goodReleased );
+            break;
+        case SupportedLanguage::French:
+            // generateGoodFrenchButtonFont( goodReleased );
+            break;
+        case SupportedLanguage::Belarusian:
+        case SupportedLanguage::Bulgarian:
+        case SupportedLanguage::Russian:
+        case SupportedLanguage::Ukrainian:
+            // generateGoodCP1251ButtonFont( goodReleased );
+            break;
+        case SupportedLanguage::German:
+        case SupportedLanguage::Italian:
+        case SupportedLanguage::Norwegian:
+        case SupportedLanguage::Portuguese:
+        case SupportedLanguage::Spanish:
+        case SupportedLanguage::Swedish:
+            generateGoodCP1252ButtonFont( goodReleased );
+            break;
+        default:
+            // Add new language generation code!
+            assert( 0 );
+            break;
+        }
+    }
+
+    void generateBaseButtonFont( const SupportedLanguage language, std::vector<Sprite> & goodReleased, std::vector<Sprite> & goodPressed,
+                                 std::vector<Sprite> & evilReleased,
                                  std::vector<Sprite> & evilPressed )
     {
         generateGoodButtonFontBaseShape( goodReleased );
+
+        // Check if we need to generate extra font for another language.
+        if ( language != SupportedLanguage::English ) {
+            generateExtraButtonFont( language, goodReleased );
+        }
 
         goodPressed.resize( goodReleased.size() );
         evilReleased.resize( goodReleased.size() );
