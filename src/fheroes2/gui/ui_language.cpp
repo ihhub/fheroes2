@@ -233,4 +233,12 @@ namespace fheroes2
 
         AGG::updateAlphabet( language, isOriginalResourceLanguage );
     }
+
+    SupportedLanguage getCurrentLanguage()
+    {
+        Settings & conf = Settings::Get();
+
+        fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
+        return currentLanguage;
+    }
 }
