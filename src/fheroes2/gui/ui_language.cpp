@@ -236,9 +236,9 @@ namespace fheroes2
 
     SupportedLanguage getCurrentLanguage()
     {
-        Settings & conf = Settings::Get();
+        const Settings & conf = Settings::Get();
 
-        fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
+        const fheroes2::SupportedLanguage currentLanguage = fheroes2::getLanguageFromAbbreviation( conf.getGameLanguage() );
         return currentLanguage;
     }
 }
