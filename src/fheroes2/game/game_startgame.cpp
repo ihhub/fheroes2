@@ -799,7 +799,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
             else if ( HotKeyPressEvent( Game::HotKeyEvent::TRANSFER_CONTROL_TO_AI ) ) {
                 if ( fheroes2::showMessage( fheroes2::Text( _( "Warning" ), fheroes2::FontType::normalYellow() ),
                                             fheroes2::Text( _( "Do you want to transfer control from you into AI?" ), fheroes2::FontType::normalWhite() ),
-                                            Dialog::YES | Dialog::NO ) == Dialog::YES ) {
+                                            Dialog::YES | Dialog::NO )
+                     == Dialog::YES ) {
                     Players::Get( myKingdom.GetColor() )->setAIAutoControlMode( true );
                     return fheroes2::GameMode::END_TURN;
                 }
