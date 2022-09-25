@@ -794,8 +794,11 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         // hotkeys
         if ( le.KeyPress() ) {
             // if the hero is currently moving, pressing any key should stop him
-            if ( isMovingHero )
+            if ( isMovingHero ) {
                 stopHero = true;
+            }
+
+#if defined( WITH_DEBUG )
             else if ( HotKeyPressEvent( Game::HotKeyEvent::TRANSFER_CONTROL_TO_AI ) ) {
                 if ( fheroes2::showMessage( fheroes2::Text( _( "Warning" ), fheroes2::FontType::normalYellow() ),
                                             fheroes2::Text( _( "Do you want to transfer control from you into AI?" ), fheroes2::FontType::normalWhite() ),
@@ -805,6 +808,8 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
                     return fheroes2::GameMode::END_TURN;
                 }
             }
+#endif
+
             // adventure map control
             else if ( HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) )
                 res = EventExit();

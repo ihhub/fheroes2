@@ -1655,6 +1655,7 @@ namespace AI
             const std::vector<Game::DelayType> delayTypes = { Game::CURRENT_AI_DELAY };
 
             while ( LocalEvent::Get().HandleEvents( !hideAIMovements && Game::isDelayNeeded( delayTypes ) ) ) {
+#if defined( WITH_DEBUG )
                 if ( HotKeyPressEvent( Game::HotKeyEvent::TRANSFER_CONTROL_TO_AI ) && Players::Get( hero.GetColor() )->isAIAutoControlMode() ) {
                     if ( fheroes2::showMessage( fheroes2::Text( _( "Warning" ), fheroes2::FontType::normalYellow() ),
                                                 fheroes2::Text( _( "Do you want to regain control from AI?" ), fheroes2::FontType::normalWhite() ),
@@ -1664,6 +1665,7 @@ namespace AI
                         continue;
                     }
                 }
+#endif
 
                 if ( hero.isFreeman() || !hero.isMoveEnabled() ) {
                     break;
