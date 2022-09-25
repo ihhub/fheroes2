@@ -2487,8 +2487,10 @@ namespace
 
     void generateGoodCP1252ButtonFont( std::vector<fheroes2::Sprite> & released )
     {
+        // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
         released.insert( released.end(), 160, released[0] );
 
+        // We need 2 pixels from all sides of a letter to add extra effects.
         const int32_t offset = 2;
 
         // Offset letters with diacritics above them.
@@ -2596,6 +2598,7 @@ namespace fheroes2
 
     void generateExtraButtonFont( const SupportedLanguage language, std::vector<Sprite> & goodReleased )
     {
+        // NOTE: As soon as code structure is agreed on functions for all Code Pages will be added.
         switch ( language ) {
         case SupportedLanguage::Polish:
             // generateGoodCP1250ButtonFont( goodReleased );
@@ -2629,7 +2632,6 @@ namespace fheroes2
     {
         generateGoodButtonFontBaseShape( goodReleased );
 
-        // Check if we need to generate extra font for another language.
         if ( language != SupportedLanguage::English ) {
             generateExtraButtonFont( language, goodReleased );
         }
