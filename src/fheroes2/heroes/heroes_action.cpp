@@ -245,7 +245,7 @@ static void WhirlpoolTroopLoseEffect( Heroes & hero )
 void Heroes::Action( int tileIndex, bool isDestination )
 {
     // Hero may be lost while performing the action, reset the focus after completing the action (and update environment sounds and music if necessary)
-    const struct FocusUpdater
+    struct FocusUpdater
     {
         FocusUpdater() = default;
 
