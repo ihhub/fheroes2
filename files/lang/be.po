@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-21 12:23+0000\n"
+"POT-Creation-Date: 2022-09-26 12:34+0000\n"
 "PO-Revision-Date: 2022-05-10 16:34+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -43,6 +43,14 @@ msgid "Explorer"
 msgstr ""
 
 msgid "None"
+msgstr ""
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
 msgstr ""
 
 msgid ""
@@ -3266,9 +3274,6 @@ msgstr ""
 msgid "View High Scores for Campaigns."
 msgstr ""
 
-msgid "Warning"
-msgstr ""
-
 msgid "This file contains a save with an invalid game type."
 msgstr ""
 
@@ -3646,6 +3651,11 @@ msgid ""
 msgstr ""
 
 msgid "%{color} player's turn."
+msgstr ""
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
 msgstr ""
 
 msgid ""
