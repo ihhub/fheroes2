@@ -194,6 +194,10 @@ namespace
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SCROLL_UP )] = { HotKeyCategory::WORLD_MAP, "scroll up", fheroes2::Key::KEY_KP_8 };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SCROLL_DOWN )] = { HotKeyCategory::WORLD_MAP, "scroll down", fheroes2::Key::KEY_KP_2 };
 
+#if defined( WITH_DEBUG )
+        hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::TRANSFER_CONTROL_TO_AI )] = { HotKeyCategory::WORLD_MAP, "transfer control to ai", fheroes2::Key::KEY_F8 };
+#endif
+
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SPLIT_STACK_BY_HALF )] = { HotKeyCategory::MONSTER, "split stack by half", fheroes2::Key::KEY_SHIFT };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::SPLIT_STACK_BY_ONE )] = { HotKeyCategory::MONSTER, "split stack by one", fheroes2::Key::KEY_CONTROL };
         hotKeyEventInfo[hotKeyEventToInt( Game::HotKeyEvent::JOIN_STACKS )] = { HotKeyCategory::MONSTER, "join stacks", fheroes2::Key::KEY_ALT };

@@ -244,6 +244,35 @@ static void WhirlpoolTroopLoseEffect( Heroes & hero )
 
 void Heroes::Action( int tileIndex, bool isDestination )
 {
+    // Hero may be lost while performing the action, reset the focus after completing the action (and update environment sounds and music if necessary)
+    struct FocusUpdater
+    {
+        FocusUpdater() = default;
+
+        FocusUpdater( const FocusUpdater & ) = delete;
+
+        ~FocusUpdater()
+        {
+            Interface::Basic & I = Interface::Basic::Get();
+
+            I.ResetFocus( GameFocus::HEROES );
+            I.RedrawFocus();
+        }
+
+        FocusUpdater & operator=( const FocusUpdater & ) = delete;
+    };
+
+    std::unique_ptr<FocusUpdater> focusUpdater;
+    const bool isAIControlledForHumanPlayer = Players::Get( GetKingdom().GetColor() )->isAIAutoControlMode();
+
+    if ( !GetKingdom().isControlAI() || isAIControlledForHumanPlayer ) {
+        focusUpdater = std::make_unique<FocusUpdater>();
+
+        if ( isAIControlledForHumanPlayer ) {
+            Interface::Basic::Get().SetFocus( this );
+        }
+    }
+
     if ( GetKingdom().isControlAI() ) {
         // Restore the original music after the action is completed.
         const AudioManager::MusicRestorer musicRestorer;
@@ -259,24 +288,6 @@ void Heroes::Action( int tileIndex, bool isDestination )
         Game::EnvironmentSoundMixer();
         AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroPosIndex ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
-
-    // Hero may be lost while performing the action, reset the focus after completing the action (and update environment sounds and music if necessary)
-    const struct FocusUpdater
-    {
-        FocusUpdater() = default;
-
-        FocusUpdater( const FocusUpdater & ) = delete;
-
-        ~FocusUpdater()
-        {
-            Interface::Basic & I = Interface::Basic::Get();
-
-            I.ResetFocus( GameFocus::HEROES );
-            I.RedrawFocus();
-        }
-
-        FocusUpdater & operator=( const FocusUpdater & ) = delete;
-    } focusUpdater;
 
     // "Musical" sounds use the volume of sounds instead of the volume of music, reset the music volume after completing the action
     const struct MusicVolumeRestorer
