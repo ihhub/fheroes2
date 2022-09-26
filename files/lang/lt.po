@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-23 16:00+0200\n"
-"PO-Revision-Date: 2022-09-23 16:01+0200\n"
+"POT-Creation-Date: 2022-09-26 12:34+0000\n"
+"PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
 "Language: lt\n"
@@ -45,6 +45,14 @@ msgid "Explorer"
 msgstr ""
 
 msgid "None"
+msgstr ""
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
 msgstr ""
 
 msgid ""
@@ -3402,9 +3410,6 @@ msgstr ""
 msgid "View High Scores for Campaigns."
 msgstr ""
 
-msgid "Warning"
-msgstr ""
-
 msgid "This file contains a save with an invalid game type."
 msgstr ""
 
@@ -3795,6 +3800,11 @@ msgstr ""
 "kokio nors miesto, būsi pašalintas."
 
 msgid "%{color} player's turn."
+msgstr ""
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
 msgstr ""
 
 msgid ""

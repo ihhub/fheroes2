@@ -662,6 +662,11 @@ fheroes2::GameMode Interface::Basic::StartGame()
                     statusWindow.Reset();
                     statusWindow.SetState( StatusType::STATUS_AITURN );
 
+                    if ( player->isAIAutoControlMode() ) {
+                        radar.SetHide( false );
+                        radar.SetRedraw();
+                    }
+
                     Redraw();
                     display.render();
 
@@ -789,8 +794,23 @@ fheroes2::GameMode Interface::Basic::HumanTurn( bool isload )
         // hotkeys
         if ( le.KeyPress() ) {
             // if the hero is currently moving, pressing any key should stop him
-            if ( isMovingHero )
+            if ( isMovingHero ) {
                 stopHero = true;
+            }
+
+#if defined( WITH_DEBUG )
+            else if ( HotKeyPressEvent( Game::HotKeyEvent::TRANSFER_CONTROL_TO_AI ) ) {
+                if ( fheroes2::showMessage( fheroes2::Text( _( "Warning" ), fheroes2::FontType::normalYellow() ),
+                                            fheroes2::Text( _( "Do you want to transfer control from you to the AI? The effect will take place only on the next turn." ),
+                                                            fheroes2::FontType::normalWhite() ),
+                                            Dialog::YES | Dialog::NO )
+                     == Dialog::YES ) {
+                    Players::Get( myKingdom.GetColor() )->setAIAutoControlMode( true );
+                    return fheroes2::GameMode::END_TURN;
+                }
+            }
+#endif
+
             // adventure map control
             else if ( HotKeyPressEvent( Game::HotKeyEvent::DEFAULT_CANCEL ) )
                 res = EventExit();
