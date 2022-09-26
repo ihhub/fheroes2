@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-21 12:23+0000\n"
+"POT-Creation-Date: 2022-09-26 12:34+0000\n"
 "PO-Revision-Date: 2022-05-10 16:35+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -44,6 +44,14 @@ msgstr ""
 
 msgid "None"
 msgstr "Inga"
+
+msgid "Warning"
+msgstr "Varning"
+
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
 
 msgid ""
 "A few\n"
@@ -3572,9 +3580,6 @@ msgstr "Kampanjspel"
 msgid "View High Scores for Campaigns."
 msgstr "Visa Poänglistan."
 
-msgid "Warning"
-msgstr "Varning"
-
 msgid "This file contains a save with an invalid game type."
 msgstr ""
 
@@ -4007,6 +4012,11 @@ msgstr ""
 
 msgid "%{color} player's turn."
 msgstr "%{color} spelares tur."
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "

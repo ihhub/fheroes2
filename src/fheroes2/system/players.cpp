@@ -108,7 +108,10 @@ Player::Player( int col )
     , id( World::GetUniq() )
     , _ai( std::make_shared<AI::Normal>() )
     , _handicapStatus( HandicapStatus::NONE )
-{}
+    , _isAIAutoControlMode( false )
+{
+    // Do nothing.
+}
 
 std::string Player::GetDefaultName() const
 {
@@ -126,6 +129,11 @@ std::string Player::GetName() const
 
 int Player::GetControl() const
 {
+    if ( _isAIAutoControlMode ) {
+        assert( ( control & CONTROL_HUMAN ) == CONTROL_HUMAN );
+        return CONTROL_AI;
+    }
+
     return control;
 }
 
@@ -167,6 +175,12 @@ void Player::setHandicapStatus( const uint8_t status )
     assert( !( control & CONTROL_AI ) );
 
     _handicapStatus = status;
+}
+
+void Player::setAIAutoControlMode( const bool enable )
+{
+    assert( ( control & CONTROL_HUMAN ) == CONTROL_HUMAN );
+    _isAIAutoControlMode = enable;
 }
 
 StreamBase & operator<<( StreamBase & msg, const Focus & focus )
