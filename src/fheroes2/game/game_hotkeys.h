@@ -103,6 +103,11 @@ namespace Game
         SHOW_STATUS,
         SHOW_ICONS,
 
+#if defined( WITH_DEBUG )
+        // This hotkey is only for debug mode as of now.
+        TRANSFER_CONTROL_TO_AI,
+#endif
+
         BATTLE_RETREAT,
         BATTLE_SURRENDER,
         BATTLE_AUTO_SWITCH,
