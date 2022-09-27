@@ -2632,10 +2632,6 @@ namespace fheroes2
     {
         generateGoodButtonFontBaseShape( goodReleased );
 
-        if ( language != SupportedLanguage::English ) {
-            generateExtraButtonFont( language, goodReleased );
-        }
-
         goodPressed.resize( goodReleased.size() );
         evilReleased.resize( goodReleased.size() );
         evilPressed.resize( goodReleased.size() );
