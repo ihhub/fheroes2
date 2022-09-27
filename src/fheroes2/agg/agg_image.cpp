@@ -2288,9 +2288,7 @@ namespace fheroes2
             case ICN::BUTTON_GOOD_FONT_PRESSED:
             case ICN::BUTTON_EVIL_FONT_RELEASED:
             case ICN::BUTTON_EVIL_FONT_PRESSED: {
-                const SupportedLanguage currentLanguage = getCurrentLanguage();
-
-                generateBaseButtonFont( currentLanguage, _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED],
+                generateBaseButtonFont( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED],
                                         _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
                 return true;
             }
