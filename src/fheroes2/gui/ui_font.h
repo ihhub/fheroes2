@@ -29,7 +29,7 @@ namespace fheroes2
 
     bool isAlphabetSupported( const SupportedLanguage language );
 
-    void generateBaseButtonFont( const SupportedLanguage language, std::vector<Sprite> & goodReleased, std::vector<Sprite> & goodPressed,
+    void generateBaseButtonFont( std::vector<Sprite> & goodReleased, std::vector<Sprite> & goodPressed,
                                  std::vector<Sprite> & evilReleased, std::vector<Sprite> & evilPressed );
 
     void generateExtraButtonFont( const SupportedLanguage language, std::vector<Sprite> & goodReleased );
