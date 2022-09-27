@@ -2645,8 +2645,8 @@ namespace fheroes2
         }
     }
 
-    void generateBaseButtonFont( std::vector<Sprite> & goodReleased, std::vector<Sprite> & goodPressed,
-                                 std::vector<Sprite> & evilReleased, std::vector<Sprite> & evilPressed )
+    void generateBaseButtonFont( std::vector<Sprite> & goodReleased, std::vector<Sprite> & goodPressed, std::vector<Sprite> & evilReleased,
+                                 std::vector<Sprite> & evilPressed )
     {
         generateGoodButtonFontBaseShape( goodReleased );
 
