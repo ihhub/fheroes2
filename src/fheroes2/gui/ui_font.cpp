@@ -2596,21 +2596,21 @@ namespace fheroes2
         return false;
     }
 
-    void generateExtraButtonFont( const SupportedLanguage language, std::vector<Sprite> & goodReleased )
+    void generateExtraButtonFont( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite )
     {
         // NOTE: As soon as code structure is agreed on functions for all Code Pages will be added.
         switch ( language ) {
         case SupportedLanguage::Polish:
-            // generateGoodCP1250ButtonFont( goodReleased );
+            // generateGoodCP1250ButtonFont( icnVsSprite );
             break;
         case SupportedLanguage::French:
-            // generateGoodFrenchButtonFont( goodReleased );
+            // generateGoodFrenchButtonFont( icnVsSprite );
             break;
         case SupportedLanguage::Belarusian:
         case SupportedLanguage::Bulgarian:
         case SupportedLanguage::Russian:
         case SupportedLanguage::Ukrainian:
-            // generateGoodCP1251ButtonFont( goodReleased );
+            // generateGoodCP1251ButtonFont( icnVsSprite );
             break;
         case SupportedLanguage::German:
         case SupportedLanguage::Italian:
@@ -2618,12 +2618,30 @@ namespace fheroes2
         case SupportedLanguage::Portuguese:
         case SupportedLanguage::Spanish:
         case SupportedLanguage::Swedish:
-            generateGoodCP1252ButtonFont( goodReleased );
+            generateGoodCP1252ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         default:
             // Add new language generation code!
             assert( 0 );
             break;
+        }
+
+        icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED].resize( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED].size() );
+        icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED].resize( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED].size() );
+        icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED].resize( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED].size() );
+
+        for ( size_t i = 0; i < icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED].size(); ++i ) {
+            icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED][i] = icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED][i];
+
+            // Apply special effects on good interface letters first.
+            applyGoodButtonReleasedLetterEffects( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED][i] );
+            applyGoodButtonPressedLetterEffects( icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED][i] );
+
+            icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED][i] = icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED][i];
+            icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED][i] = icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED][i];
+
+            applyEvilButtonReleasedLetterEffects( icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED][i] );
+            applyEvilButtonPressedLetterEffects( icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED][i] );
         }
     }
 
