@@ -82,7 +82,7 @@ namespace Logging
     bool isTextSupportModeEnabled();
 }
 
-#if defined( TARGET_NINTENDO_SWITCH )
+#if defined( TARGET_NINTENDO_SWITCH ) || defined( _WIN32 ) || defined( _WIN64 )
 #include <fstream>
 #include <mutex>
 
