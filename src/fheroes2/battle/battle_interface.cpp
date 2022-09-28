@@ -3318,14 +3318,9 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
-#ifdef DEBUG_LOG
-    std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
+    std::string msg = _( "Moved %{monster}: from [%{src}] to [%{dst}]." );
     StringReplace( msg, "%{monster}", Translation::StringLower( unit.GetName() ) );
-    StringReplace( msg, "%{src}", unit.GetHeadIndex() );
-#else
-    std::string msg = _( "Moved %{monster}" );
-    StringReplace( msg, "%{monster}", Translation::StringLower( unit.GetName() ) );
-#endif
+    StringReplace( msg, "%{src}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
 
     _currentUnit = nullptr;
     _movingUnit = &unit;
@@ -3377,9 +3372,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     _currentUnit = nullptr;
     unit.SwitchAnimation( Monster_Info::STATIC );
 
-#ifdef DEBUG_LOG
-    StringReplace( msg, "%{dst}", unit.GetHeadIndex() );
-#endif
+    StringReplace( msg, "%{dst}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
+
     status.SetMessage( msg, true );
 }
 
@@ -3402,9 +3396,9 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
         targetPos.x -= CELLW; // this is needed to avoid extra cell shifting upon landing when we move to right side
     }
 
-    std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
+    std::string msg = _( "Moved %{monster}: from [%{src}] to [%{dst}]." );
     StringReplace( msg, "%{monster}", Translation::StringLower( unit.GetName() ) );
-    StringReplace( msg, "%{src}", unit.GetHeadIndex() );
+    StringReplace( msg, "%{src}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
@@ -3489,7 +3483,8 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
         bridge->Action( unit, destIndex );
     }
 
-    StringReplace( msg, "%{dst}", unit.GetHeadIndex() );
+    StringReplace( msg, "%{dst}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
+
     status.SetMessage( msg, true );
 }
 
