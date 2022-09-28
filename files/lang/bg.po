@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 msgid ""
 "BATTLE\n"
@@ -2666,14 +2666,11 @@ msgstr "Настойки"
 msgid "Audio"
 msgstr "Звукови"
 
-msgid "settings"
-msgstr "настройки"
+msgid "Configure"
+msgstr ""
 
 msgid "Hot Keys"
 msgstr "Бързи клавиши"
-
-msgid "In-game"
-msgstr "В игра"
 
 msgid "Black & White"
 msgstr "Черно-бял"
@@ -2711,16 +2708,16 @@ msgstr "Сражения"
 msgid "Select Game Language"
 msgstr "Език на играта"
 
-msgid "Change language of the game."
+msgid "Change the language of the game."
 msgstr "Промяна на езика на играта."
 
 msgid "Select Game Resolution"
 msgstr "Избери резолюция на играта"
 
-msgid "Change resolution of the game."
+msgid "Change the resolution of the game."
 msgstr "Промяна на резолюцията на играта."
 
-msgid "Change audio settings of the game."
+msgid "Change the audio settings of the game."
 msgstr "Промени звуковите настройки на играта."
 
 msgid "Experimental game settings."
@@ -2729,15 +2726,15 @@ msgstr "Експериментални настройки на играта."
 msgid "Toggle instant battle mode."
 msgstr "Превключи режима на незабавна битка."
 
-msgid "Check all Hot Keys used in the game."
+#, fuzzy
+msgid "Check and configure all the hot keys present in the game."
 msgstr "Провери всички горещи клавиши, използвани в играта."
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Превключи типа на интерфейса, който искаш да използваш."
 
-msgid ""
-"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
-"move as smoothly as black and white ones."
+#, fuzzy
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
 "Включване/изключване на цветните курсори. Цветните курсори изглеждат по-"
 "хубави, но понякога не се движат толкова гладко, колкото черно-белите."
@@ -2969,6 +2966,9 @@ msgstr "Налични: %{count}"
 
 msgid "Number to buy:"
 msgstr "Покупка на:"
+
+msgid "Select Game Resolution:"
+msgstr "Изберете резолюция на играта:"
 
 msgid "Click to apply the selected resolution."
 msgstr "Кликни, за да приложиш избраната резолюция."
@@ -8917,6 +8917,3 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
-
-#~ msgid "Break auto battle?"
-#~ msgstr "Спри автоматичната битка?"
