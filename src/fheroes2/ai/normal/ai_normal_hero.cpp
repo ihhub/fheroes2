@@ -1536,7 +1536,7 @@ namespace AI
         auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero, leftMovePoints]( const int destination, uint32_t & distance, double & value,
                                                                                                             const bool isDimensionDoor ) {
             if ( !isDimensionDoor ) {
-                // Dimesion door path does not include any objects on the way.
+                // Dimension door path does not include any objects on the way.
                 const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( destination );
                 for ( const IndexObject & pair : list ) {
                     if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) ) {
