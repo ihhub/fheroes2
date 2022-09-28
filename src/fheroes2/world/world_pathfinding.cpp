@@ -188,7 +188,7 @@ namespace
         }
 
         return false;
-    };
+    }
 }
 
 void WorldPathfinder::checkWorldSize()
