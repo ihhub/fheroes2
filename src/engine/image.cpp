@@ -2348,7 +2348,7 @@ namespace fheroes2
 
     void updateShadow( Image & image, const Point & shadowOffset, const uint8_t transformId )
     {
-        if ( image.empty() || ( -shadowOffset.x >= image.width() ) || ( shadowOffset.y >= image.height() ) || shadowOffset == Point() )
+        if ( image.empty() || ( std::abs( shadowOffset.x ) >= image.width() ) || ( std::abs( shadowOffset.y ) >= image.height() ) || shadowOffset == Point() )
             return;
 
         const int32_t width = image.width() - std::abs( shadowOffset.x );
