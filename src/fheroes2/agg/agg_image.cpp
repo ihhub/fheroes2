@@ -178,10 +178,16 @@ namespace
             fheroes2::AGG::GetICN( ICN::FONT, 0 );
             fheroes2::AGG::GetICN( ICN::SMALFONT, 0 );
             fheroes2::AGG::GetICN( ICN::BUTTON_GOOD_FONT_RELEASED, 0 );
+            fheroes2::AGG::GetICN( ICN::BUTTON_GOOD_FONT_PRESSED, 0 );
+            fheroes2::AGG::GetICN( ICN::BUTTON_EVIL_FONT_RELEASED, 0 );
+            fheroes2::AGG::GetICN( ICN::BUTTON_EVIL_FONT_PRESSED, 0 );
 
             _normalFont = _icnVsSprite[ICN::FONT];
             _smallFont = _icnVsSprite[ICN::SMALFONT];
-            _buttonFont = _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED];
+            _buttonGoodReleasedFont = _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED];
+            _buttonGoodPressedFont = _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED];
+            _buttonEvilReleasedFont = _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED];
+            _buttonEvilPressedFont = _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED];
 
             _isPreserved = true;
         }
@@ -195,7 +201,10 @@ namespace
             // Restore the original font.
             _icnVsSprite[ICN::FONT] = _normalFont;
             _icnVsSprite[ICN::SMALFONT] = _smallFont;
-            _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] = _buttonFont;
+            _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] = _buttonGoodReleasedFont;
+            _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED] = _buttonGoodPressedFont;
+            _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED] = _buttonEvilReleasedFont;
+            _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] = _buttonEvilPressedFont;
 
             // Clear modified fonts.
             _icnVsSprite[ICN::YELLOW_FONT].clear();
@@ -203,10 +212,6 @@ namespace
             _icnVsSprite[ICN::GRAY_FONT].clear();
             _icnVsSprite[ICN::GRAY_SMALL_FONT].clear();
             _icnVsSprite[ICN::WHITE_LARGE_FONT].clear();
-
-            _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED].clear();
-            _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED].clear();
-            _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED].clear();
         }
 
     private:
@@ -214,7 +219,10 @@ namespace
 
         std::vector<fheroes2::Sprite> _normalFont;
         std::vector<fheroes2::Sprite> _smallFont;
-        std::vector<fheroes2::Sprite> _buttonFont;
+        std::vector<fheroes2::Sprite> _buttonGoodReleasedFont;
+        std::vector<fheroes2::Sprite> _buttonGoodPressedFont;
+        std::vector<fheroes2::Sprite> _buttonEvilReleasedFont;
+        std::vector<fheroes2::Sprite> _buttonEvilPressedFont;
     };
 
     OriginalAlphabetPreserver alphabetPreserver;

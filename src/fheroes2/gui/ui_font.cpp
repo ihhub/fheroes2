@@ -2629,8 +2629,8 @@ namespace fheroes2
         icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED].resize( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED].size() );
         icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED].resize( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED].size() );
         icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED].resize( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED].size() );
-
-        for ( size_t i = 0; i < icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED].size(); ++i ) {
+        // Apply effects to new letters that are added on top of the base font's 96 letters.
+        for ( size_t i = 96; i < icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED].size(); ++i ) {
             icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED][i] = icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED][i];
 
             // Apply special effects on good interface letters first.
