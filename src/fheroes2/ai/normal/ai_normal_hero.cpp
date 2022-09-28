@@ -148,7 +148,10 @@ namespace
         case MP2::OBJ_WATERCHEST:
         case MP2::OBJ_FLOTSAM:
         case MP2::OBJ_BOTTLE:
-            return hero.isShipMaster();
+        case MP2::OBJ_RESOURCE:
+        case MP2::OBJ_CAMPFIRE:
+        case MP2::OBJ_TREASURECHEST:
+            return true;
 
         case MP2::OBJ_BUOY:
             return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD && !army.AllTroopsAreUndead();
@@ -160,14 +163,14 @@ namespace
             return false;
 
         case MP2::OBJ_MAGELLANMAPS:
-            return hero.isShipMaster() && !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANMAPS, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
+            return !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANMAPS, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
 
         case MP2::OBJ_WHIRLPOOL:
             // AI should never consider a whirlpool as a destination point. It uses them only to make a path.
             return false;
 
         case MP2::OBJ_COAST:
-            // Coast is not an action object. If this assertion blows up then something wrong with the logic above.
+            // Coast is not an action object. If this assertion blows up then something is wrong with the logic above.
             assert( 0 );
             return false;
 
@@ -213,18 +216,10 @@ namespace
                 return true;
             break;
 
-        case MP2::OBJ_RESOURCE:
-        case MP2::OBJ_CAMPFIRE:
-        case MP2::OBJ_TREASURECHEST:
-            return !hero.isShipMaster();
-
         case MP2::OBJ_ARTIFACT: {
             const uint32_t variants = tile.QuantityVariant();
 
             if ( hero.IsFullBagArtifacts() )
-                return false;
-
-            if ( hero.isShipMaster() )
                 return false;
 
             // 1,2,3 - 2000g, 2500g+3res, 3000g+5res
@@ -635,6 +630,7 @@ namespace
     const double freeMonsterUpgradeModifier = 3;
 
     const double dangerousTaskPenalty = 20000.0;
+    const double fogDiscoveryBaseValue = -20000.0;
 
     double ScaleWithDistance( double value, uint32_t distance )
     {
@@ -648,18 +644,18 @@ namespace
     {
         switch ( hero.getAIRole() ) {
         case Heroes::Role::HUNTER:
-            return -dangerousTaskPenalty;
+            return fogDiscoveryBaseValue;
         case Heroes::Role::COURIER:
         case Heroes::Role::FIGHTER:
         case Heroes::Role::CHAMPION:
-            return -dangerousTaskPenalty * 2;
+            return fogDiscoveryBaseValue * 2;
         default:
             // If you set a new type of a hero you must add the logic here.
             assert( 0 );
             break;
         }
 
-        return -dangerousTaskPenalty;
+        return fogDiscoveryBaseValue;
     }
 }
 
@@ -1587,9 +1583,7 @@ namespace AI
             }
         }
 
-        for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
-            const IndexObject & node = _mapObjects[idx];
-
+        for ( const IndexObject & node : _mapObjects ) {
             // Skip if hero in patrol mode and object outside of reach
             if ( heroInPatrolMode && Maps::GetApproximateDistance( node.first, heroInfo.patrolCenter ) > heroInfo.patrolDistance )
                 continue;
