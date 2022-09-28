@@ -27,7 +27,7 @@
 #elif defined( __FreeBSD__ ) || defined( __OpenBSD__ )
 #include <sys/endian.h>
 
-#elif defined( _WIN32 ) || defined( _WIN64 )
+#elif defined( _WIN32 )
 #include <stdlib.h>
 
 #define BIG_ENDIAN 4321
