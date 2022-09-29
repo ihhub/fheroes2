@@ -2631,7 +2631,7 @@ namespace fheroes2
                 // Restore original letters when changing language to avoid changes to them being carried over.
                 alphabetPreserver.restore();
                 generateAlphabet( language, _icnVsSprite );
-                generateExtraButtonFont( language, _icnVsSprite );
+                generateButtonAlphabet( language, _icnVsSprite );
             }
         }
     }
