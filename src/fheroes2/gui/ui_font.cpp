@@ -2661,7 +2661,7 @@ namespace
         // T with cedilla. Only copied from T.
         released[190] = released[52];
     }
-    void generateGoodCP1251ButtonFont( std::vector<fheroes2::Sprite> & released ) 
+    void generateGoodCP1251ButtonFont( std::vector<fheroes2::Sprite> & released )
     {
         // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
         released.insert( released.end(), 160, released[0] );
@@ -2696,7 +2696,7 @@ namespace
         released[143].reset();
         fheroes2::Copy( released[41], 0, 0, released[143], 0, 3, released[41].width(), released[41].height() );
         fheroes2::SetPixel( released[143], offset + 1, offset + 1, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[143], offset + 4,  offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[143], offset + 4, offset + 1, buttonGoodReleasedColor );
 
         // I, Belarusian-Ukrainian I
         released[146] = released[41];
@@ -2726,7 +2726,7 @@ namespace
         fheroes2::Copy( released[168], 0, 0, released[169], 0, 3, released[168].width(), released[168].height() );
         fheroes2::DrawLine( released[169], { offset + 6, offset + 2 }, { offset + 8, offset + 2 }, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[169], offset + 5, offset + 1, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[169], offset + 9,  offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[169], offset + 9, offset + 1, buttonGoodReleasedColor );
 
         // K. Needs to have upper right arm adjusted.
         released[170] = released[43];
@@ -2897,7 +2897,7 @@ namespace fheroes2
         case SupportedLanguage::Bulgarian:
         case SupportedLanguage::Russian:
         case SupportedLanguage::Ukrainian:
-             generateGoodCP1251ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            generateGoodCP1251ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case SupportedLanguage::German:
         case SupportedLanguage::Italian:
