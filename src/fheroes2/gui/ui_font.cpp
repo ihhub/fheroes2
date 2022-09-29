@@ -105,6 +105,28 @@ namespace
         ReplaceColorId( letter, buttonGoodPressedColor, buttonEvilPressedColor );
     }
 
+    void updateButtonFont( std::vector<fheroes2::Sprite> & goodReleased, std::vector<fheroes2::Sprite> & goodPressed, std::vector<fheroes2::Sprite> & evilReleased,
+                           std::vector<fheroes2::Sprite> & evilPressed )
+    {
+        goodPressed.resize( goodReleased.size() );
+        evilReleased.resize( goodReleased.size() );
+        evilPressed.resize( goodReleased.size() );
+
+        for ( size_t i = 0; i < goodReleased.size(); ++i ) {
+            goodPressed[i] = goodReleased[i];
+
+            // Apply special effects on good interface letters first.
+            applyGoodButtonReleasedLetterEffects( goodReleased[i] );
+            applyGoodButtonPressedLetterEffects( goodPressed[i] );
+
+            evilReleased[i] = goodReleased[i];
+            evilPressed[i] = goodPressed[i];
+
+            applyEvilButtonReleasedLetterEffects( evilReleased[i] );
+            applyEvilButtonPressedLetterEffects( evilPressed[i] );
+        }
+    }
+
     void generateCP1250Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
@@ -2601,23 +2623,7 @@ namespace fheroes2
     {
         generateGoodButtonFontBaseShape( goodReleased );
 
-        goodPressed.resize( goodReleased.size() );
-        evilReleased.resize( goodReleased.size() );
-        evilPressed.resize( goodReleased.size() );
-
-        for ( size_t i = 0; i < goodReleased.size(); ++i ) {
-            goodPressed[i] = goodReleased[i];
-
-            // Apply special effects on good interface letters first.
-            applyGoodButtonReleasedLetterEffects( goodReleased[i] );
-            applyGoodButtonPressedLetterEffects( goodPressed[i] );
-
-            evilReleased[i] = goodReleased[i];
-            evilPressed[i] = goodPressed[i];
-
-            applyEvilButtonReleasedLetterEffects( evilReleased[i] );
-            applyEvilButtonPressedLetterEffects( evilPressed[i] );
-        }
+        updateButtonFont( goodReleased, goodPressed, evilReleased, evilPressed );
     }
 
     void generateExtraButtonFont( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite )
@@ -2650,22 +2656,7 @@ namespace fheroes2
             break;
         }
 
-        icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED].resize( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED].size() );
-        icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED].resize( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED].size() );
-        icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED].resize( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED].size() );
-        // Apply effects to new letters that are added on top of the base font's 96 letters.
-        for ( size_t i = 96; i < icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED].size(); ++i ) {
-            icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED][i] = icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED][i];
-
-            // Apply special effects on good interface letters first.
-            applyGoodButtonReleasedLetterEffects( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED][i] );
-            applyGoodButtonPressedLetterEffects( icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED][i] );
-
-            icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED][i] = icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED][i];
-            icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED][i] = icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED][i];
-
-            applyEvilButtonReleasedLetterEffects( icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED][i] );
-            applyEvilButtonPressedLetterEffects( icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED][i] );
-        }
+        updateButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED],
+                          icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
     }
 }
