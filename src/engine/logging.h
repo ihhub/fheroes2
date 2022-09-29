@@ -69,6 +69,7 @@ enum
 #if defined( TARGET_NINTENDO_SWITCH ) || defined( _WIN32 )
 #include <fstream>
 #include <mutex>
+
 namespace Logging
 {
     extern std::ofstream logFile;
@@ -103,9 +104,6 @@ namespace Logging
         std::cerr << x << std::endl;                                                                                                                                     \
     }
 #elif defined( TARGET_NINTENDO_SWITCH ) || defined( _WIN32 )
-#include <fstream>
-#include <mutex>
-
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \
         const std::scoped_lock<std::mutex> _logfile_lock( Logging::logMutex ); /* The name was chosen on purpose to avoid name collisions with outer code blocks. */     \
