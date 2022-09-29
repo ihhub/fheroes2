@@ -437,7 +437,7 @@ void AIWorldPathfinder::reset()
         _maxMovePoints = 0;
 
         _armyStrength = -1;
-         _isArtifactBagFull = false;
+        _isArtifactBagFull = false;
     }
 }
 
