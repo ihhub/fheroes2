@@ -2522,16 +2522,10 @@ namespace
         released[106] = released[51];
 
         // S with acute accent.
-        released[108].resize( 10 + offset * 2, 13 + offset * 2 );
+        released[108].resize( released[51].width(), released[51].height() + 4 );
         released[108].reset();
+        fheroes2::Copy( released[51], 0, 0, released[108], 0, 3, released[51].width(), released[51].height() );
         fheroes2::DrawLine( released[108], { offset + 4, offset + 1 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[108], { offset + 1, offset + 3 }, { offset + 7, offset + 3 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[108], { offset + 0, offset + 4 }, { offset + 0, offset + 6 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[108], { offset + 1, offset + 7 }, { offset + 7, offset + 7 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[108], { offset + 8, offset + 8 }, { offset + 8, offset + 11 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[108], { offset + 1, offset + 12 }, { offset + 7, offset + 12 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[108], { offset + 0, offset + 11 }, { offset + 1, offset + 11 }, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[108], offset + 8, offset + 4, buttonGoodReleasedColor );
 
         // T with caron. Only copied from T.
         released[109] = released[52];
@@ -2579,18 +2573,10 @@ namespace
         released[165] = released[44];
 
         // C with acute accent.
-        released[166].resize( 10 + offset * 2, 13 + offset * 2 );
+        released[166].resize( released[35].width(), released[35].height() + 4 );
         released[166].reset();
+        fheroes2::Copy( released[35], 0, 0, released[166], 0, 3, released[35].width(), released[35].height() );
         fheroes2::DrawLine( released[166], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[166], { offset + 2, offset + 3 }, { offset + 7, offset + 3 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[166], { offset + 0, offset + 5 }, { offset + 0, offset + 10 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[166], { offset + 2, offset + 12 }, { offset + 7, offset + 12 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[166], { offset + 9, offset + 3 }, { offset + 9, offset + 5 }, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[166], offset + 1, offset + 4, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[166], offset + 1, offset + 11, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[166], offset + 8, offset + 4, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[166], offset + 8, offset + 11, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[166], offset + 9, offset + 10, buttonGoodReleasedColor );
 
         // C with cedilla. Only copied from C.
         released[167] = released[35];
