@@ -2518,7 +2518,10 @@ namespace
         released[108].setPosition( buttonFontOffset.x, -3 );
         released[166].setPosition( buttonFontOffset.x, -3 );
 
-        // S with acute accent. Still needs the accent.
+        // S with caron. Only copied from S.
+        released[106] = released[51];
+
+        // S with acute accent.
         released[108].resize( 10 + offset * 2, 13 + offset * 2 );
         released[108].reset();
         fheroes2::DrawLine( released[108], { offset + 4, offset + 1 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
@@ -2530,7 +2533,52 @@ namespace
         fheroes2::DrawLine( released[108], { offset + 0, offset + 11 }, { offset + 1, offset + 11 }, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[108], offset + 8, offset + 4, buttonGoodReleasedColor );
 
-        // C with acute accent. Still needs accent. Generate accent for later use.
+        // T with caron. Only copied from T.
+        released[109] = released[52];
+
+        // Z with caron. Only copied from Z.
+        released[110] = released[58];
+
+        // Z with acute. Only copied from Z.
+        released[111] = released[58];
+
+        // L with stroke. Only copied from L.
+        released[131] = released[44];
+
+        // A with ogonek. Only copied from A.
+        released[133] = released[33];
+
+        // S with cedilla. Only copied from S.
+        released[138] = released[51];
+
+        // Z with dot above. Only copied from Z.
+        released[143] = released[58];
+
+        // Y with diaerisis. Only copied from Y.
+        released[156] = released[57];
+
+        // L with caron. Only copied from L.
+        released[158] = released[44];
+
+        // R with acute. Only copied from R.
+        released[160] = released[50];
+
+        // A with acute. Only copied from A.
+        released[161] = released[33];
+
+        // A with circumflex. Only copied from A.
+        released[162] = released[33];
+
+        // A with breve. Only copied from A.
+        released[163] = released[33];
+
+        // A with diaerisis. Only copied from A.
+        released[164] = released[33];
+
+        // L with acute. Only copied from L.
+        released[165] = released[44];
+
+        // C with acute accent.
         released[166].resize( 10 + offset * 2, 13 + offset * 2 );
         released[166].reset();
         fheroes2::DrawLine( released[166], { offset + 4, offset + 1 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
@@ -2543,6 +2591,75 @@ namespace
         fheroes2::SetPixel( released[166], offset + 8, offset + 4, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[166], offset + 8, offset + 11, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[166], offset + 9, offset + 10, buttonGoodReleasedColor );
+
+        // C with cedilla. Only copied from C.
+        released[167] = released[35];
+
+        // C with caron. Only copied from C.
+        released[168] = released[35];
+
+        // E with acute. Only copied from E.
+        released[169] = released[37];
+
+        // E with ogonek. Only copied from E.
+        released[170] = released[37];
+
+        // E with diaerisis. Only copied from E.
+        released[171] = released[37];
+
+        // E with caron. Only copied from E.
+        released[172] = released[37];
+
+        // I with acute. Only copied from I.
+        released[173] = released[41];
+
+        // I with circumflex. Only copied from I.
+        released[174] = released[41];
+
+        // D with caron. Only copied from D.
+        released[175] = released[36];
+
+        // D with stroke. Only copied from D.
+        released[176] = released[36];
+
+        // N with acute. Only copied from N.
+        released[177] = released[46];
+
+        // N with caron. Only copied from N.
+        released[178] = released[46];
+
+        // O with acute. Only copied from O.
+        released[179] = released[47];
+
+        // O with circumflex. Only copied from O.
+        released[180] = released[47];
+
+        // O with double acute. Only copied from O.
+        released[181] = released[47];
+
+        // O with diaerisis. Only copied from O.
+        released[182] = released[47];
+
+        // R with caron. Only copied from R.
+        released[184] = released[50];
+
+        // U with ring above. Only copied from U.
+        released[185] = released[53];
+
+        // U with acute. Only copied from U.
+        released[186] = released[53];
+
+        // U with double acute. Only copied from U.
+        released[187] = released[53];
+
+        // U with diaerisis. Only copied from U.
+        released[188] = released[53];
+
+        // Y with acute. Only copied from Y.
+        released[189] = released[57];
+
+        // T with cedilla. Only copied from T.
+        released[190] = released[52];
 
     }
     void generateGoodCP1252ButtonFont( std::vector<fheroes2::Sprite> & released )
