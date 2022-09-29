@@ -2515,32 +2515,34 @@ namespace
         const int32_t offset = 2;
 
         // Offset letters with diacritics above them.
-        released[108].setPosition( buttonFontOffset.x, -2 );
-        released[166].setPosition( buttonFontOffset.x, -2 );
+        released[108].setPosition( buttonFontOffset.x, -3 );
+        released[166].setPosition( buttonFontOffset.x, -3 );
 
         // S with acute accent. Still needs the accent.
-        released[108].resize( 10 + offset * 2, 10 + offset * 2 );
+        released[108].resize( 10 + offset * 2, 13 + offset * 2 );
         released[108].reset();
-        fheroes2::DrawLine( released[108], { offset + 1, offset + 0 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[108], { offset + 0, offset + 1 }, { offset + 0, offset + 3 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[108], { offset + 1, offset + 4 }, { offset + 7, offset + 4 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[108], { offset + 8, offset + 5 }, { offset + 8, offset + 8 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[108], { offset + 1, offset + 9 }, { offset + 7, offset + 9 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[108], { offset + 0, offset + 8 }, { offset + 1, offset + 8 }, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[108], offset + 8, offset + 1, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[108], { offset + 4, offset + 1 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[108], { offset + 1, offset + 3 }, { offset + 7, offset + 3 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[108], { offset + 0, offset + 4 }, { offset + 0, offset + 6 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[108], { offset + 1, offset + 7 }, { offset + 7, offset + 7 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[108], { offset + 8, offset + 8 }, { offset + 8, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[108], { offset + 1, offset + 12 }, { offset + 7, offset + 12 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[108], { offset + 0, offset + 11 }, { offset + 1, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[108], offset + 8, offset + 4, buttonGoodReleasedColor );
 
         // C with acute accent. Still needs accent. Generate accent for later use.
-        released[166].resize( 10 + offset * 2, 10 + offset * 2 );
+        released[166].resize( 10 + offset * 2, 13 + offset * 2 );
         released[166].reset();
-        fheroes2::DrawLine( released[166], { offset + 2, offset + 0 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[166], { offset + 0, offset + 2 }, { offset + 0, offset + 7 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[166], { offset + 2, offset + 9 }, { offset + 7, offset + 9 }, buttonGoodReleasedColor );
-        fheroes2::DrawLine( released[166], { offset + 9, offset + 0 }, { offset + 9, offset + 2 }, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[166], offset + 1, offset + 1, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[166], offset + 1, offset + 8, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[166], offset + 8, offset + 1, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[166], offset + 8, offset + 8, buttonGoodReleasedColor );
-        fheroes2::SetPixel( released[166], offset + 9, offset + 7, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 4, offset + 1 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 2, offset + 3 }, { offset + 7, offset + 3 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 0, offset + 5 }, { offset + 0, offset + 10 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 2, offset + 12 }, { offset + 7, offset + 12 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 9, offset + 3 }, { offset + 9, offset + 5 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 1, offset + 4, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 1, offset + 11, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 8, offset + 4, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 8, offset + 11, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 9, offset + 10, buttonGoodReleasedColor );
 
     }
     void generateGoodCP1252ButtonFont( std::vector<fheroes2::Sprite> & released )
