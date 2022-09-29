@@ -7,13 +7,16 @@ set PKG_FILE_SHA256=290F84E793A120E8B555CF7A98D32232BC6E8B4C648EB05A50AD22C32966
 set PKG_URL=https://github.com/fheroes2/fheroes2-prebuilt-deps/releases/download/windows-deps/%PKG_FILE%
 set PKG_TLS=[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-call :install_packages
+set EXIT_CODE=0
+
+call :install_packages || ^
+set EXIT_CODE=1
 
 if not "%CI%" == "true" (
     pause
 )
 
-exit /B
+exit /B %EXIT_CODE%
 
 :install_packages
 
