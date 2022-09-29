@@ -2626,8 +2626,10 @@ namespace fheroes2
         updateButtonFont( goodReleased, goodPressed, evilReleased, evilPressed );
     }
 
-    void generateExtraButtonFont( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite )
+    void generateButtonAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite )
     {
+        generateGoodButtonFontBaseShape( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+
         // NOTE: As soon as code structure is agreed on functions for all Code Pages will be added.
         switch ( language ) {
         case SupportedLanguage::Polish:
