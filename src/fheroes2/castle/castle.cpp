@@ -565,7 +565,7 @@ void Castle::ActionNewWeek()
                     growth += GetGrownWel2();
 
                 if ( isControlAI() )
-                    growth = static_cast<uint32_t>( growth * Difficulty::GetUnitGrowthBonus( Game::getDifficulty() ) );
+                    growth = static_cast<uint32_t>( growth * Difficulty::GetUnitGrowthBonusForAI( Game::getDifficulty() ) );
 
                 // neutral town: half population (normal for begin month)
                 if ( isNeutral && !world.BeginMonth() )
