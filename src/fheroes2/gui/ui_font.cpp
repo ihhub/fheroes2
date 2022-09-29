@@ -105,6 +105,28 @@ namespace
         ReplaceColorId( letter, buttonGoodPressedColor, buttonEvilPressedColor );
     }
 
+    void updateButtonFont( std::vector<fheroes2::Sprite> & goodReleased, std::vector<fheroes2::Sprite> & goodPressed, std::vector<fheroes2::Sprite> & evilReleased,
+                           std::vector<fheroes2::Sprite> & evilPressed )
+    {
+        goodPressed.resize( goodReleased.size() );
+        evilReleased.resize( goodReleased.size() );
+        evilPressed.resize( goodReleased.size() );
+
+        for ( size_t i = 0; i < goodReleased.size(); ++i ) {
+            goodPressed[i] = goodReleased[i];
+
+            // Apply special effects on good interface letters first.
+            applyGoodButtonReleasedLetterEffects( goodReleased[i] );
+            applyGoodButtonPressedLetterEffects( goodPressed[i] );
+
+            evilReleased[i] = goodReleased[i];
+            evilPressed[i] = goodPressed[i];
+
+            applyEvilButtonReleasedLetterEffects( evilReleased[i] );
+            applyEvilButtonPressedLetterEffects( evilPressed[i] );
+        }
+    }
+
     void generateCP1250Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
     {
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
@@ -1345,7 +1367,6 @@ namespace
         // Resize fonts.
         for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
             icnVsSprite[icnId].resize( baseFontSize );
-            // Italian uses CP1252 for special characters so we need to extend the array.
             icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, icnVsSprite[icnId][0] );
         }
 
@@ -2158,12 +2179,12 @@ namespace
     {
         // Button font does not exist in the original game assets but we can regenerate it from scratch.
         // All letters in buttons have some variations in colors but overall shapes are the same.
-        // We want to standartize the font and to use one approach to generate letters.
+        // We want to standardize the font and to use one approach to generate letters.
         // The shape of the letter is defined only by one color (in general). The rest of information is generated from transformations and contours.
         //
         // Another essential difference from normal fonts is that button font has only uppercase letters.
         // This means that we need to generate only 26 letter of English alphabet, 10 digits and few special characters, totalling in about 50 symbols.
-        // The downside of this font is that we have to make released and pressed states of each letter.
+        // The downside of this font is that code is necessary for the generation of released and pressed states of each letter.
 
         released.resize( baseFontSize );
 
@@ -2485,6 +2506,55 @@ namespace
         fheroes2::SetPixel( released[58], offset + 0, offset + 1, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[58], offset + 8, offset + 8, buttonGoodReleasedColor );
     }
+
+    void generateGoodCP1252ButtonFont( std::vector<fheroes2::Sprite> & released )
+    {
+        // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
+        released.insert( released.end(), 160, released[0] );
+
+        // We need 2 pixels from all sides of a letter to add extra effects.
+        const int32_t offset = 2;
+
+        // Offset letters with diacritics above them.
+        released[165].setPosition( buttonFontOffset.x, -2 );
+
+        // A with circle on top
+        released[165].resize( 13 + offset * 2, 12 + offset * 2 );
+        released[165].reset();
+        fheroes2::DrawLine( released[165], { offset + 0, offset + 11 }, { offset + 4, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[165], { offset + 8, offset + 11 }, { offset + 12, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[165], { offset + 5, offset + 7 }, { offset + 8, offset + 7 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[165], { offset + 2, offset + 10 }, { offset + 4, offset + 7 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[165], { offset + 7, offset + 3 }, { offset + 10, offset + 10 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[165], { offset + 5, offset + 1 }, { offset + 5, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[165], { offset + 8, offset + 1 }, { offset + 8, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[165], { offset + 6, offset + 0 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[165], offset + 4, offset + 6, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[165], offset + 5, offset + 5, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[165], offset + 5, offset + 4, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[165], offset + 6, offset + 3, buttonGoodReleasedColor );
+
+        // A attached to E.
+        released[166].resize( 18 + offset * 2, 12 + offset * 2 );
+        released[166].reset();
+        fheroes2::DrawLine( released[166], { offset + 0, offset + 9 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 8, offset + 9 }, { offset + 12, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 5, offset + 5 }, { offset + 8, offset + 5 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 2, offset + 8 }, { offset + 4, offset + 5 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 7, offset + 1 }, { offset + 10, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 7, offset + 0 }, { offset + 14, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 13, offset + 9 }, { offset + 14, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 9, offset + 4 }, { offset + 12, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 4, offset + 4, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 5, offset + 3, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 5, offset + 2, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 6, offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 6, offset + 0, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 14, offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 14, offset + 8, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 12, offset + 3, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 12, offset + 5, buttonGoodReleasedColor );
+    }
 }
 
 namespace fheroes2
@@ -2553,22 +2623,42 @@ namespace fheroes2
     {
         generateGoodButtonFontBaseShape( goodReleased );
 
-        goodPressed.resize( goodReleased.size() );
-        evilReleased.resize( goodReleased.size() );
-        evilPressed.resize( goodReleased.size() );
+        updateButtonFont( goodReleased, goodPressed, evilReleased, evilPressed );
+    }
 
-        for ( size_t i = 0; i < goodReleased.size(); ++i ) {
-            goodPressed[i] = goodReleased[i];
+    void generateButtonAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite )
+    {
+        generateGoodButtonFontBaseShape( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
 
-            // Apply special effects on good interface letters first.
-            applyGoodButtonReleasedLetterEffects( goodReleased[i] );
-            applyGoodButtonPressedLetterEffects( goodPressed[i] );
-
-            evilReleased[i] = goodReleased[i];
-            evilPressed[i] = goodPressed[i];
-
-            applyEvilButtonReleasedLetterEffects( evilReleased[i] );
-            applyEvilButtonPressedLetterEffects( evilPressed[i] );
+        // NOTE: As soon as code structure is agreed on functions for all Code Pages will be added.
+        switch ( language ) {
+        case SupportedLanguage::Polish:
+            // generateGoodCP1250ButtonFont( icnVsSprite );
+            break;
+        case SupportedLanguage::French:
+            // generateGoodFrenchButtonFont( icnVsSprite );
+            break;
+        case SupportedLanguage::Belarusian:
+        case SupportedLanguage::Bulgarian:
+        case SupportedLanguage::Russian:
+        case SupportedLanguage::Ukrainian:
+            // generateGoodCP1251ButtonFont( icnVsSprite );
+            break;
+        case SupportedLanguage::German:
+        case SupportedLanguage::Italian:
+        case SupportedLanguage::Norwegian:
+        case SupportedLanguage::Portuguese:
+        case SupportedLanguage::Spanish:
+        case SupportedLanguage::Swedish:
+            generateGoodCP1252ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            break;
+        default:
+            // Add new language generation code!
+            assert( 0 );
+            break;
         }
+
+        updateButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED],
+                          icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
     }
 }

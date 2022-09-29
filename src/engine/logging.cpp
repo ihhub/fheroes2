@@ -20,7 +20,7 @@
 
 #include <ctime>
 
-#if defined( __MINGW32__ ) || defined( _MSC_VER )
+#if defined( _WIN32 )
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
@@ -38,7 +38,7 @@ namespace
 
     bool textSupportMode = false;
 
-#if defined( __MINGW32__ ) || defined( _MSC_VER )
+#if defined( _WIN32 )
     // Sets the Windows console codepage to the system codepage
     class ConsoleCPSwitcher
     {

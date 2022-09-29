@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-26 12:34+0000\n"
+"POT-Creation-Date: 2022-09-28 22:56+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -572,12 +572,9 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] "en %{defender} dör."
 msgstr[1] "%{count} %{defender} dör."
 
-msgid "Moved %{monster}: %{src}, %{dst}"
-msgstr "Flyttade %{monster}: %{src}, %{dst}"
-
 #, fuzzy
-msgid "Moved %{monster}"
-msgstr "Flytta %{monster} hit"
+msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
+msgstr "Flyttade %{monster}: %{src}, %{dst}"
 
 msgid "The %{name} resist the spell!"
 msgstr "%{name} motstår besvärjelsen!"
@@ -9398,3 +9395,7 @@ msgstr ""
 "Du kan ladda ned det nyaste versionen av spelet från sidan:\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
+
+#, fuzzy
+#~ msgid "Moved %{monster}"
+#~ msgstr "Flytta %{monster} hit"
