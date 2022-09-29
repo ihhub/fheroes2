@@ -2506,7 +2506,7 @@ namespace
         fheroes2::SetPixel( released[58], offset + 0, offset + 1, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[58], offset + 8, offset + 8, buttonGoodReleasedColor );
     }
-    void generateGoodCP1250ButtonFont(std::vector<fheroes2::Sprite>& released)
+    void generateGoodCP1250ButtonFont( std::vector<fheroes2::Sprite>& released )
     {
         // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
         released.insert( released.end(), 160, released[0] );
@@ -2581,7 +2581,7 @@ namespace
         // C with acute accent.
         released[166].resize( 10 + offset * 2, 13 + offset * 2 );
         released[166].reset();
-        fheroes2::DrawLine( released[166], { offset + 4, offset + 1 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[166], { offset + 2, offset + 3 }, { offset + 7, offset + 3 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[166], { offset + 0, offset + 5 }, { offset + 0, offset + 10 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[166], { offset + 2, offset + 12 }, { offset + 7, offset + 12 }, buttonGoodReleasedColor );
