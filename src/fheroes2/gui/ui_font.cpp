@@ -2660,7 +2660,6 @@ namespace
 
         // T with cedilla. Only copied from T.
         released[190] = released[52];
-
     }
     void generateGoodCP1252ButtonFont( std::vector<fheroes2::Sprite> & released )
     {
