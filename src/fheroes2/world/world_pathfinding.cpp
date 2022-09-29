@@ -69,7 +69,7 @@ namespace
         return false;
     }
 
-    bool isTileBlockedForAIWithArmy( int tileIndex, int color, double armyStrength )
+    bool isTileBlockedForAIWithArmy( const int tileIndex, const int color, const double armyStrength, const bool isArtifactBagFull )
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
         const MP2::MapObjectType objectType = tile.GetObject();
@@ -93,6 +93,10 @@ namespace
 
         // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
         if ( MP2::isArtifactObject( objectType ) ) {
+            if ( isArtifactBagFull ) {
+                return true;
+            }
+
             const Artifact art = tile.QuantityArtifact();
 
             if ( art.isValid() && isFindArtifactVictoryConditionForHuman( art ) ) {
@@ -433,14 +437,15 @@ void AIWorldPathfinder::reset()
         _maxMovePoints = 0;
 
         _armyStrength = -1;
+         _isArtifactBagFull = false;
     }
 }
 
 void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 {
-    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength );
+    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength, _isArtifactBagFull );
     const auto newSettings = std::make_tuple( hero.GetIndex(), static_cast<uint8_t>( hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) ), hero.GetColor(),
-                                              hero.GetMovePoints(), hero.GetMaxMovePoints(), hero.GetArmy().GetStrength() );
+                                              hero.GetMovePoints(), hero.GetMaxMovePoints(), hero.GetArmy().GetStrength(), hero.GetBagArtifacts().isFull() );
 
     if ( currentSettings != newSettings ) {
         currentSettings = newSettings;
@@ -449,10 +454,10 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
     }
 }
 
-void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill )
+void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill, const bool isArtifactBagFull )
 {
-    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength );
-    const auto newSettings = std::make_tuple( start, skill, color, 0U, 0U, armyStrength );
+    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength, _isArtifactBagFull );
+    const auto newSettings = std::make_tuple( start, skill, color, 0U, 0U, armyStrength, isArtifactBagFull );
 
     if ( currentSettings != newSettings ) {
         currentSettings = newSettings;
@@ -485,7 +490,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
     }
 
     // always allow move from the starting spot to cover edge case if got there before tile became blocked/protected
-    if ( !isFirstNode && ( isProtected || isTileBlockedForAIWithArmy( currentNodeIdx, _currentColor, _armyStrength ) ) ) {
+    if ( !isFirstNode && ( isProtected || isTileBlockedForAIWithArmy( currentNodeIdx, _currentColor, _armyStrength, _isArtifactBagFull ) ) ) {
         return;
     }
 
@@ -1046,7 +1051,7 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex, cons
 
 uint32_t AIWorldPathfinder::getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill )
 {
-    reEvaluateIfNeeded( start, color, armyStrength, skill );
+    reEvaluateIfNeeded( start, color, armyStrength, skill, false );
 
     return _cache[targetIndex]._cost;
 }
