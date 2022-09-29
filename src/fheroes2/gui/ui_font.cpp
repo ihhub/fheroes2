@@ -2596,6 +2596,30 @@ namespace fheroes2
         return false;
     }
 
+    void generateBaseButtonFont( std::vector<Sprite> & goodReleased, std::vector<Sprite> & goodPressed, std::vector<Sprite> & evilReleased,
+                                 std::vector<Sprite> & evilPressed )
+    {
+        generateGoodButtonFontBaseShape( goodReleased );
+
+        goodPressed.resize( goodReleased.size() );
+        evilReleased.resize( goodReleased.size() );
+        evilPressed.resize( goodReleased.size() );
+
+        for ( size_t i = 0; i < goodReleased.size(); ++i ) {
+            goodPressed[i] = goodReleased[i];
+
+            // Apply special effects on good interface letters first.
+            applyGoodButtonReleasedLetterEffects( goodReleased[i] );
+            applyGoodButtonPressedLetterEffects( goodPressed[i] );
+
+            evilReleased[i] = goodReleased[i];
+            evilPressed[i] = goodPressed[i];
+
+            applyEvilButtonReleasedLetterEffects( evilReleased[i] );
+            applyEvilButtonPressedLetterEffects( evilPressed[i] );
+        }
+    }
+
     void generateExtraButtonFont( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite )
     {
         // NOTE: As soon as code structure is agreed on functions for all Code Pages will be added.
@@ -2642,30 +2666,6 @@ namespace fheroes2
 
             applyEvilButtonReleasedLetterEffects( icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED][i] );
             applyEvilButtonPressedLetterEffects( icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED][i] );
-        }
-    }
-
-    void generateBaseButtonFont( std::vector<Sprite> & goodReleased, std::vector<Sprite> & goodPressed, std::vector<Sprite> & evilReleased,
-                                 std::vector<Sprite> & evilPressed )
-    {
-        generateGoodButtonFontBaseShape( goodReleased );
-
-        goodPressed.resize( goodReleased.size() );
-        evilReleased.resize( goodReleased.size() );
-        evilPressed.resize( goodReleased.size() );
-
-        for ( size_t i = 0; i < goodReleased.size(); ++i ) {
-            goodPressed[i] = goodReleased[i];
-
-            // Apply special effects on good interface letters first.
-            applyGoodButtonReleasedLetterEffects( goodReleased[i] );
-            applyGoodButtonPressedLetterEffects( goodPressed[i] );
-
-            evilReleased[i] = goodReleased[i];
-            evilPressed[i] = goodPressed[i];
-
-            applyEvilButtonReleasedLetterEffects( evilReleased[i] );
-            applyEvilButtonPressedLetterEffects( evilPressed[i] );
         }
     }
 }
