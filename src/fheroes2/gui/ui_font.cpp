@@ -2428,7 +2428,7 @@ namespace
         fheroes2::DrawLine( released[50], { offset + 7, offset + 6 }, { offset + 9, offset + 8 }, buttonGoodReleasedColor );
 
         // S
-        released[51].resize( 10 + offset * 2, 10 + offset * 2 );
+        released[51].resize( 9 + offset * 2, 10 + offset * 2 );
         released[51].reset();
         fheroes2::DrawLine( released[51], { offset + 1, offset + 0 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[51], { offset + 0, offset + 1 }, { offset + 0, offset + 3 }, buttonGoodReleasedColor );
@@ -2661,6 +2661,104 @@ namespace
         // T with cedilla. Only copied from T.
         released[190] = released[52];
     }
+    void generateGoodCP1251ButtonFont( std::vector<fheroes2::Sprite> & released ) 
+    {
+        // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
+        released.insert( released.end(), 160, released[0] );
+
+        // We need 2 pixels from all sides of a letter to add extra effects.
+        const int32_t offset = 2;
+
+        // Offset letters with diacritics above them.
+        released[109].setPosition( buttonFontOffset.x, -3 );
+        released[136].setPosition( buttonFontOffset.x, -3 );
+        released[143].setPosition( buttonFontOffset.x, -3 );
+        released[169].setPosition( buttonFontOffset.x, -3 );
+
+        // K with acute, Cyrillic KJE. Needs to have upper right arm adjusted.
+        released[109].resize( released[43].width(), released[43].height() + 4 );
+        released[109].reset();
+        fheroes2::Copy( released[43], 0, 0, released[109], 0, 3, released[43].width(), released[43].height() );
+        fheroes2::DrawLine( released[109], { offset + 6, offset + 1 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
+
+        // J
+        released[131] = released[42];
+
+        // E with two dots above.
+        released[136].resize( released[37].width(), released[37].height() + 3 );
+        released[136].reset();
+        fheroes2::Copy( released[37], 0, 0, released[136], 0, 3, released[37].width(), released[37].height() );
+        fheroes2::SetPixel( released[136], offset + 3, offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[136], offset + 6, offset + 1, buttonGoodReleasedColor );
+
+        // I with two dots above, Cyrillic YI
+        released[143].resize( released[41].width(), released[41].height() + 3 );
+        released[143].reset();
+        fheroes2::Copy( released[41], 0, 0, released[143], 0, 3, released[41].width(), released[41].height() );
+        fheroes2::SetPixel( released[143], offset + 1, offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[143], offset + 4,  offset + 1, buttonGoodReleasedColor );
+
+        // I, Belarusian-Ukrainian I
+        released[146] = released[41];
+
+        // S
+        released[157] = released[51];
+
+        // A
+        released[160] = released[33];
+
+        // B
+        released[162] = released[34];
+
+        // E
+        released[165] = released[37];
+
+        // Mirrored N, Cyrillic I
+        released[168] = released[46];
+        {
+            fheroes2::Sprite temp = fheroes2::Flip( released[168], true, false );
+            fheroes2::Copy( temp, 0, 0, released[168], 0, 0, temp.width(), temp.height() );
+        }
+
+        // Mirrored N with breve, Cyrillic Short I
+        released[169].resize( released[168].width(), released[168].height() + 4 );
+        released[169].reset();
+        fheroes2::Copy( released[168], 0, 0, released[169], 0, 3, released[168].width(), released[168].height() );
+        fheroes2::DrawLine( released[169], { offset + 6, offset + 2 }, { offset + 8, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[169], offset + 5, offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[169], offset + 9,  offset + 1, buttonGoodReleasedColor );
+
+        // K. Needs to have upper right arm adjusted.
+        released[170] = released[43];
+
+        // M
+        released[172] = released[45];
+
+        // H
+        released[173] = released[40];
+
+        // O
+        released[174] = released[47];
+
+        // P
+        released[176] = released[48];
+
+        // C
+        released[177] = released[35];
+
+        // T
+        released[178] = released[52];
+
+        // X
+        released[181] = released[56];
+
+        // Mirrored R, Cyrillic YA
+        released[191] = released[50];
+        {
+            fheroes2::Sprite temp = fheroes2::Flip( released[191], true, false );
+            fheroes2::Copy( temp, 0, 0, released[191], 0, 0, temp.width(), temp.height() );
+        }
+    }
     void generateGoodCP1252ButtonFont( std::vector<fheroes2::Sprite> & released )
     {
         // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
@@ -2790,13 +2888,16 @@ namespace fheroes2
             generateGoodCP1250ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case SupportedLanguage::French:
+            // TODO: Adjust French to use CP1252 button font.
+            // Currently all French capital letters are replaced with the Latin counterpart during .mo compilation.
+            // Therefore, there is no need to generate a French specific button alphabet.
             // generateGoodFrenchButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case SupportedLanguage::Belarusian:
         case SupportedLanguage::Bulgarian:
         case SupportedLanguage::Russian:
         case SupportedLanguage::Ukrainian:
-            // generateGoodCP1251ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+             generateGoodCP1251ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case SupportedLanguage::German:
         case SupportedLanguage::Italian:
