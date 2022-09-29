@@ -36,6 +36,10 @@
 int _newlib_heap_size_user = 192 * 1024 * 1024;
 #endif
 
+#if defined( _WIN32 ) && !defined( WITH_DEBUG )
+#include <windows.h>
+#endif
+
 namespace
 {
 #if defined( TARGET_PS_VITA )
@@ -119,6 +123,11 @@ namespace
 #if SDL_VERSION_ATLEAST( 2, 0, 0 )
 #else
         SDL_EnableKeyRepeat( SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL );
+#endif
+
+#if defined( _WIN32 ) && !defined( WITH_DEBUG )
+        // Release build on Windows does not need to display the console window.
+        ShowWindow( GetConsoleWindow(), 0 );
 #endif
 
         return true;
