@@ -1533,14 +1533,18 @@ namespace AI
         ObjectValidator objectValidator( hero, _pathfinder, *this );
         ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
-        auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero, leftMovePoints]( const int destination, uint32_t & distance, double & value ) {
-            const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( destination );
-            for ( const IndexObject & pair : list ) {
-                if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) ) {
-                    const double extraValue = valueStorage.value( pair, 0 ); // object is on the way, we don't loose any movement points.
-                    if ( extraValue > 0 ) {
-                        // There is no need to reduce the quality of the object even if the path has others.
-                        value += extraValue;
+        auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero, leftMovePoints]( const int destination, uint32_t & distance, double & value,
+                                                                                                            const bool isDimensionDoor ) {
+            if ( !isDimensionDoor ) {
+                // Dimension door path does not include any objects on the way.
+                const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( destination );
+                for ( const IndexObject & pair : list ) {
+                    if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) ) {
+                        const double extraValue = valueStorage.value( pair, 0 ); // object is on the way, we don't loose any movement points.
+                        if ( extraValue > 0 ) {
+                            // There is no need to reduce the quality of the object even if the path has others.
+                            value += extraValue;
+                        }
                     }
                 }
             }
@@ -1591,17 +1595,19 @@ namespace AI
             if ( objectValidator.isValid( node.first ) ) {
                 uint32_t dist = _pathfinder.getDistance( node.first );
 
+                bool useDimensionDoor = false;
                 const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, node.first ) );
-                if ( dimensionDoorDist && ( !dist || dimensionDoorDist < dist / 2 ) ) {
+                if ( dimensionDoorDist > 0 && ( dist == 0 || dimensionDoorDist < dist / 2 ) ) {
                     dist = dimensionDoorDist;
+                    useDimensionDoor = true;
                 }
 
-                if ( dist == 0 )
+                if ( dist == 0 ) {
                     continue;
+                }
 
                 double value = valueStorage.value( node, dist );
-
-                getObjectValue( node.first, dist, value );
+                getObjectValue( node.first, dist, value, useDimensionDoor );
 
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
@@ -1622,7 +1628,14 @@ namespace AI
         if ( fogDiscoveryTarget >= 0 ) {
             uint32_t distanceToFogDiscovery = _pathfinder.getDistance( fogDiscoveryTarget );
 
-            getObjectValue( fogDiscoveryTarget, distanceToFogDiscovery, fogDiscoveryValue );
+            bool useDimensionDoor = false;
+            const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, fogDiscoveryTarget ) );
+            if ( dimensionDoorDist > 0 && ( distanceToFogDiscovery == 0 || dimensionDoorDist < distanceToFogDiscovery / 2 ) ) {
+                distanceToFogDiscovery = dimensionDoorDist;
+                useDimensionDoor = true;
+            }
+
+            getObjectValue( fogDiscoveryTarget, distanceToFogDiscovery, fogDiscoveryValue, useDimensionDoor );
         }
 
         if ( priorityTarget != -1 ) {
