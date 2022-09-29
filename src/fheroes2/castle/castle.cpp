@@ -590,7 +590,7 @@ void Castle::ActionNewWeek()
         }
 
         // neutral town: increase garrisons
-        if ( isNeutral && !Modes( CUSTOMARMY ) ) {
+        if ( isNeutral ) {
             JoinRNDArmy();
             // if it's a town there's 40% chance (or it's a castle) to get extra troops
             if ( isCastle() || Rand::Get( 1, 100 ) <= 40 )
