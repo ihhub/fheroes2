@@ -2506,7 +2506,43 @@ namespace
         fheroes2::SetPixel( released[58], offset + 0, offset + 1, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[58], offset + 8, offset + 8, buttonGoodReleasedColor );
     }
+    void generateGoodCP1250ButtonFont(std::vector<fheroes2::Sprite>& released)
+    {
+        // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
+        released.insert( released.end(), 160, released[0] );
 
+        // We need 2 pixels from all sides of a letter to add extra effects.
+        const int32_t offset = 2;
+
+        // Offset letters with diacritics above them.
+        released[108].setPosition( buttonFontOffset.x, -2 );
+        released[166].setPosition( buttonFontOffset.x, -2 );
+
+        // S with acute accent. Still needs the accent.
+        released[108].resize( 10 + offset * 2, 10 + offset * 2 );
+        released[108].reset();
+        fheroes2::DrawLine( released[108], { offset + 1, offset + 0 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[108], { offset + 0, offset + 1 }, { offset + 0, offset + 3 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[108], { offset + 1, offset + 4 }, { offset + 7, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[108], { offset + 8, offset + 5 }, { offset + 8, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[108], { offset + 1, offset + 9 }, { offset + 7, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[108], { offset + 0, offset + 8 }, { offset + 1, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[108], offset + 8, offset + 1, buttonGoodReleasedColor );
+
+        // C with acute accent. Still needs accent. Generate accent for later use.
+        released[166].resize( 10 + offset * 2, 10 + offset * 2 );
+        released[166].reset();
+        fheroes2::DrawLine( released[166], { offset + 2, offset + 0 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 0, offset + 2 }, { offset + 0, offset + 7 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 2, offset + 9 }, { offset + 7, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 9, offset + 0 }, { offset + 9, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 1, offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 1, offset + 8, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 8, offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 8, offset + 8, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[166], offset + 9, offset + 7, buttonGoodReleasedColor );
+
+    }
     void generateGoodCP1252ButtonFont( std::vector<fheroes2::Sprite> & released )
     {
         // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
@@ -2633,16 +2669,16 @@ namespace fheroes2
         // NOTE: As soon as code structure is agreed on functions for all Code Pages will be added.
         switch ( language ) {
         case SupportedLanguage::Polish:
-            // generateGoodCP1250ButtonFont( icnVsSprite );
+            generateGoodCP1250ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case SupportedLanguage::French:
-            // generateGoodFrenchButtonFont( icnVsSprite );
+            // generateGoodFrenchButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case SupportedLanguage::Belarusian:
         case SupportedLanguage::Bulgarian:
         case SupportedLanguage::Russian:
         case SupportedLanguage::Ukrainian:
-            // generateGoodCP1251ButtonFont( icnVsSprite );
+            // generateGoodCP1251ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case SupportedLanguage::German:
         case SupportedLanguage::Italian:
