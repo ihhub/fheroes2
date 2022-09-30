@@ -2327,7 +2327,7 @@ namespace fheroes2
                 LoadOriginalICN( id );
 
                 if ( _icnVsSprite[id].size() > 11 ) {
-                    // Replacete petrification spell mini-icon
+                    // Replace petrification spell mini-icon.
                     h2d::readImage( "petrification_spell_icon_mini.image", _icnVsSprite[id][11] );
                 }
 
