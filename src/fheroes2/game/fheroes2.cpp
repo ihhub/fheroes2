@@ -207,7 +207,7 @@ namespace
 #else
 #include <windows.h>
 
-int main(int, char**);
+int main( int, char ** );
 
 INT WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR, INT )
 {
