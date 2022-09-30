@@ -2507,7 +2507,7 @@ namespace
         fheroes2::SetPixel( released[58], offset + 8, offset + 8, buttonGoodReleasedColor );
     }
 
-    void generateGoodCP1250ButtonFont( std::vector<fheroes2::Sprite> & released )
+    void generateCP1250GoodButtonFont( std::vector<fheroes2::Sprite> & released )
     {
         // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
         released.insert( released.end(), 160, released[0] );
@@ -2649,7 +2649,7 @@ namespace
         released[190] = released[52];
     }
 
-    void generateGoodCP1251ButtonFont( std::vector<fheroes2::Sprite> & released )
+    void generateCP1251GoodButtonFont( std::vector<fheroes2::Sprite> & released )
     {
         // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
         released.insert( released.end(), 160, released[0] );
@@ -2748,7 +2748,7 @@ namespace
         }
     }
 
-    void generateGoodCP1252ButtonFont( std::vector<fheroes2::Sprite> & released )
+    void generateCP1252GoodButtonFont( std::vector<fheroes2::Sprite> & released )
     {
         // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
         released.insert( released.end(), 160, released[0] );
@@ -2874,19 +2874,19 @@ namespace fheroes2
         // NOTE: As soon as code structure is agreed on functions for all Code Pages will be added.
         switch ( language ) {
         case SupportedLanguage::Polish:
-            generateGoodCP1250ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            generateCP1250GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case SupportedLanguage::French:
             // TODO: Adjust French to use CP1252 button font.
             // Currently all French capital letters are replaced with the Latin counterpart during .mo compilation.
             // Therefore, there is no need to generate a French specific button alphabet.
-            // generateGoodFrenchButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            // generateFrenchGoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case SupportedLanguage::Belarusian:
         case SupportedLanguage::Bulgarian:
         case SupportedLanguage::Russian:
         case SupportedLanguage::Ukrainian:
-            generateGoodCP1251ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            generateCP1251GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case SupportedLanguage::German:
         case SupportedLanguage::Italian:
@@ -2894,7 +2894,7 @@ namespace fheroes2
         case SupportedLanguage::Portuguese:
         case SupportedLanguage::Spanish:
         case SupportedLanguage::Swedish:
-            generateGoodCP1252ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            generateCP1252GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         default:
             // Add new language generation code!
