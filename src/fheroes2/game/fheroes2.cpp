@@ -201,7 +201,27 @@ namespace
 }
 
 #if defined( _WIN32 )
+
+#if defined( WITH_DEBUG )
 #undef main
+#else
+#include <windows.h>
+
+int main(int, char**);
+
+INT WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR, INT )
+{
+    return main( __argc, __argv );
+}
+
+FILE _iob[] = { *stdin, *stdout, *stderr };
+
+extern "C" FILE * __cdecl __iob_func( void )
+{
+    return _iob;
+}
+#endif
+
 #endif
 
 int main( int argc, char ** argv )

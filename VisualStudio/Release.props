@@ -11,6 +11,9 @@
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <ControlFlowGuard>Guard</ControlFlowGuard>
     </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup>
     <ClCompile>
