@@ -2210,7 +2210,7 @@ namespace
             font[208 - 32].setPosition( font[39].x(), font[39].y() - 3 );
             updateNormalFontLetterShadow( font[208 - 32] );
 
-            // O with diaerisis, two dots above.
+            // O with diaeresis, two dots above.
             font[214 - 32].resize( font[47].width(), font[47].height() + 3 );
             font[214 - 32].reset();
             fheroes2::Copy( font[47], 0, 0, font[214 - 32], 0, 3, font[47].width(), font[47].height() );
@@ -2220,7 +2220,7 @@ namespace
             font[214 - 32].setPosition( font[47].x(), font[47].y() - 3 );
             updateNormalFontLetterShadow( font[214 - 32] );
 
-            // U with diaerisis.
+            // U with diaeresis.
             font[220 - 32].resize( font[53].width(), font[53].height() + 3 );
             font[220 - 32].reset();
             fheroes2::Copy( font[53], 0, 0, font[220 - 32], 0, 3, font[53].width(), font[53].height() );
@@ -2262,7 +2262,7 @@ namespace
             font[240 - 32].setPosition( font[71].x(), font[71].y() - 3 );
             updateNormalFontLetterShadow( font[240 - 32] );
 
-            // o with diaerisis, two dots above.
+            // o with diaeresis, two dots above.
             font[246 - 32].resize( font[79].width(), font[79].height() + 3 );
             font[246 - 32].reset();
             fheroes2::Copy( font[79], 0, 0, font[246 - 32], 0, 3, font[79].width(), font[79].height() );
@@ -2274,7 +2274,7 @@ namespace
             font[246 - 32].setPosition( font[79].x(), font[79].y() - 3 );
             updateNormalFontLetterShadow( font[246 - 32] );
 
-            // u with diaerisis.
+            // u with diaeresis.
             font[252 - 32].resize( font[85].width(), font[85].height() + 3 );
             font[252 - 32].reset();
             fheroes2::Copy( font[85], 0, 0, font[252 - 32], 0, 3, font[85].width(), font[85].height() );
@@ -2310,10 +2310,10 @@ namespace
             // G with breve.
             font[208 - 32] = font[35];
 
-            // O with diaerisis, two dots above.
+            // O with diaeresis, two dots above.
             font[214 - 32] = font[35];
 
-            // U with diaerisis.
+            // U with diaeresis.
             font[220 - 32] = font[35];
 
             // I with dot above.
@@ -2330,10 +2330,10 @@ namespace
             // g with breve.
             font[240 - 32] = font[35];
 
-            // o with diaerisis, two dots above.
+            // o with diaeresis, two dots above.
             font[246 - 32] = font[35];
 
-            // u with diaerisis.
+            // u with diaeresis.
             font[252 - 32] = font[35];
 
             // i without dot above.
