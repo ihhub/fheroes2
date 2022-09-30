@@ -2203,7 +2203,12 @@ namespace
             updateNormalFontLetterShadow( font[199 - 32] );
 
             // G with breve.
-            font[208 - 32] = font[39];
+            font[208 - 32].resize( font[39].width(), font[39].height() + 3 );
+            font[208 - 32].reset();
+            fheroes2::Copy( font[39], 0, 0, font[208 - 32], 0, 3, font[39].width(), font[39].height() );
+            fheroes2::Copy( font[39], 5, 9, font[208 - 32], 5, 0, 7, 2 );
+            font[208 - 32].setPosition( font[39].x(), font[39].y() - 3 );
+            updateNormalFontLetterShadow( font[208 - 32] );
 
             // O with diaerisis, two dots above.
             font[214 - 32].resize( font[47].width(), font[47].height() + 3 );
@@ -2229,6 +2234,7 @@ namespace
             font[221 - 32].resize( font[41].width(), font[41].height() + 3 );
             font[221 - 32].reset();
             fheroes2::Copy( font[41], 0, 0, font[221 - 32], 0, 3, font[41].width(), font[41].height() );
+            fheroes2::Copy( font[73], 1, 0, font[221 - 32], 3, 0, 3, 2 );
             font[221 - 32].setPosition( font[41].x(), font[41].y() - 3 );
             updateNormalFontLetterShadow( font[221 - 32] );
 
@@ -2249,7 +2255,12 @@ namespace
             updateNormalFontLetterShadow( font[231 - 32] );
 
             // g with breve.
-            font[240 - 32] = font[71];
+            font[240 - 32].resize( font[71].width(), font[71].height() + 3 );
+            font[240 - 32].reset();
+            fheroes2::Copy( font[71], 0, 0, font[240 - 32], 0, 3, font[71].width(), font[71].height() );
+            fheroes2::Copy( font[79], 2, 5, font[240 - 32], 2, 0, 6, 2 );
+            font[240 - 32].setPosition( font[71].x(), font[71].y() - 3 );
+            updateNormalFontLetterShadow( font[240 - 32] );
 
             // o with diaerisis, two dots above.
             font[246 - 32].resize( font[79].width(), font[79].height() + 3 );
@@ -2278,6 +2289,7 @@ namespace
             // i without dot above.
             font[253 - 32] = font[73];
             fheroes2::FillTransform( font[253 - 32], 0, 0, font[253 - 32].width(), 3, 1 );
+            fheroes2::Copy( font[83], 2, 0, font[253 - 32], 0, 3, 1, 1 );
             updateNormalFontLetterShadow( font[253 - 32] );
 
             // s with cedilla.
