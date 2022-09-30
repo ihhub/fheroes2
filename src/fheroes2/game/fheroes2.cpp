@@ -200,7 +200,7 @@ namespace
     };
 }
 
-#if defined( _MSC_VER )
+#if defined( _WIN32 )
 #undef main
 #endif
 
@@ -222,6 +222,7 @@ int main( int argc, char ** argv )
         // getopt
         {
             int opt;
+
             while ( ( opt = System::GetCommandOptions( argc, argv, "hd:" ) ) != -1 )
                 switch ( opt ) {
 #ifdef WITH_DEBUG

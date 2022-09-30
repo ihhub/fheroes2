@@ -78,11 +78,11 @@ namespace
 
         // Audio settings.
         const fheroes2::Sprite & audioSettingsIcon = fheroes2::AGG::GetICN( ICN::SPANEL, 1 );
-        drawOption( rects[0], audioSettingsIcon, _( "Audio" ), _( "settings" ) );
+        drawOption( rects[0], audioSettingsIcon, _( "Audio" ), _( "Settings" ) );
 
         // Hot keys.
         const fheroes2::Sprite & hotkeysIcon = fheroes2::AGG::GetICN( ICN::CSPANEL, 5 );
-        drawOption( rects[1], hotkeysIcon, _( "Hot Keys" ), _( "In-game" ) );
+        drawOption( rects[1], hotkeysIcon, _( "Hot Keys" ), _( "Configure" ) );
 
         // Cursor Type.
         const bool isMonoCursor = Settings::Get().isMonochromeCursorEnabled();
@@ -348,21 +348,20 @@ namespace
 
             if ( le.MousePressRight( audioSettingsRoi ) ) {
                 fheroes2::Text header( _( "Audio" ), normalYellow );
-                fheroes2::Text body( _( "Change audio settings of the game." ), normalWhite );
+                fheroes2::Text body( _( "Change the audio settings of the game." ), normalWhite );
 
                 fheroes2::showMessage( header, body, 0 );
             }
 
             else if ( le.MousePressRight( hotkeysRoi ) ) {
                 fheroes2::Text header( _( "Hot Keys" ), normalYellow );
-                fheroes2::Text body( _( "Check all Hot Keys used in the game." ), normalWhite );
+                fheroes2::Text body( _( "Check and configure all the hot keys present in the game." ), normalWhite );
 
                 fheroes2::showMessage( header, body, 0 );
             }
             else if ( le.MousePressRight( cursorTypeRoi ) ) {
                 fheroes2::Text header( _( "Mouse Cursor" ), normalYellow );
-                fheroes2::Text body( _( "Toggle color cursors on/off. Color cursors look nicer, but sometimes don't move as smoothly as black and white ones." ),
-                                     normalWhite );
+                fheroes2::Text body( _( "Toggle colored cursor on or off. This is only an esthetic choice." ), normalWhite );
 
                 fheroes2::showMessage( header, body, 0 );
             }

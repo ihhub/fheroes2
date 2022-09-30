@@ -565,7 +565,7 @@ void Castle::ActionNewWeek()
                     growth += GetGrownWel2();
 
                 if ( isControlAI() )
-                    growth = static_cast<uint32_t>( growth * Difficulty::GetUnitGrowthBonus( Game::getDifficulty() ) );
+                    growth = static_cast<uint32_t>( growth * Difficulty::GetUnitGrowthBonusForAI( Game::getDifficulty() ) );
 
                 // neutral town: half population (normal for begin month)
                 if ( isNeutral && !world.BeginMonth() )
@@ -590,7 +590,7 @@ void Castle::ActionNewWeek()
         }
 
         // neutral town: increase garrisons
-        if ( isNeutral && !Modes( CUSTOMARMY ) ) {
+        if ( isNeutral ) {
             JoinRNDArmy();
             // if it's a town there's 40% chance (or it's a castle) to get extra troops
             if ( isCastle() || Rand::Get( 1, 100 ) <= 40 )

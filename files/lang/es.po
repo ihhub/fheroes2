@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-21 12:23+0000\n"
-"PO-Revision-Date: 2022-05-14 22:35+0200\n"
+"POT-Creation-Date: 2022-09-28 22:56+0000\n"
+"PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 msgid ""
 "BATTLE\n"
@@ -45,6 +45,14 @@ msgstr ""
 
 msgid "None"
 msgstr "Ninguna"
+
+msgid "Warning"
+msgstr "Advertencia"
+
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
 
 msgid ""
 "A few\n"
@@ -570,12 +578,8 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] "Un %{defender} murió."
 msgstr[1] "%{count} %{defender} murieron."
 
-msgid "Moved %{monster}: %{src}, %{dst}"
+msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr ""
-
-#, fuzzy
-msgid "Moved %{monster}"
-msgstr "Mover a %{monster} aquí."
 
 msgid "The %{name} resist the spell!"
 msgstr "¡El %{name} resiste el hechizo!"
@@ -2697,16 +2701,12 @@ msgstr "Ajustes"
 msgid "Audio"
 msgstr ""
 
-#, fuzzy
-msgid "settings"
-msgstr "Ajustes"
+msgid "Configure"
+msgstr ""
 
 #, fuzzy
 msgid "Hot Keys"
 msgstr "Asiento caliente."
-
-msgid "In-game"
-msgstr ""
 
 #, fuzzy
 msgid "Black & White"
@@ -2750,17 +2750,17 @@ msgstr "Botella"
 msgid "Select Game Language"
 msgstr "Descripción seleccionada"
 
-msgid "Change language of the game."
+msgid "Change the language of the game."
 msgstr ""
 
 #, fuzzy
 msgid "Select Game Resolution"
 msgstr "Descripción seleccionada"
 
-msgid "Change resolution of the game."
+msgid "Change the resolution of the game."
 msgstr ""
 
-msgid "Change audio settings of the game."
+msgid "Change the audio settings of the game."
 msgstr ""
 
 #, fuzzy
@@ -2770,15 +2770,13 @@ msgstr "Configuración del juego FHeroes2"
 msgid "Toggle instant battle mode."
 msgstr ""
 
-msgid "Check all Hot Keys used in the game."
+msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
 msgstr ""
 
-msgid ""
-"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
-"move as smoothly as black and white ones."
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
 
 msgid ""
@@ -3016,6 +3014,10 @@ msgstr "Disponible: %{count}"
 
 msgid "Number to buy:"
 msgstr "NÚMERO"
+
+#, fuzzy
+msgid "Select Game Resolution:"
+msgstr "Descripción seleccionada"
 
 msgid "Click to apply the selected resolution."
 msgstr ""
@@ -3614,9 +3616,6 @@ msgstr "Partida de Campaña"
 msgid "View High Scores for Campaigns."
 msgstr "Ver la pantalla de puntuaciones más altas"
 
-msgid "Warning"
-msgstr "Advertencia"
-
 msgid "This file contains a save with an invalid game type."
 msgstr ""
 
@@ -4064,6 +4063,11 @@ msgstr ""
 #, fuzzy
 msgid "%{color} player's turn."
 msgstr "Turno del jugador %{color}"
+
+msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -9663,5 +9667,5 @@ msgstr ""
 "fheroes2/releases"
 
 #, fuzzy
-#~ msgid "Break auto battle?"
-#~ msgstr "Activar combate automático"
+#~ msgid "Moved %{monster}"
+#~ msgstr "Mover a %{monster} aquí."

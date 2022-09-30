@@ -48,8 +48,8 @@ namespace
 {
     const fheroes2::Size offsetBetweenOptions{ 92, 110 };
 
-    const int32_t titleOffset = 10;
-    const int32_t nameOffset = 10;
+    const fheroes2::Point textOffset{ 11, 12 };
+    const int32_t nameOffset = 6;
     const fheroes2::Point optionOffset{ 36, 47 };
     const int32_t optionWindowSize{ 65 };
 
@@ -73,8 +73,10 @@ namespace
         const fheroes2::Text title( titleText, fheroes2::FontType::smallWhite() );
         const fheroes2::Text name( nameText, fheroes2::FontType::smallWhite() );
 
-        title.draw( optionRoi.x + ( languageRoi.width - title.width() ) / 2, optionRoi.y - titleOffset, display );
-        name.draw( optionRoi.x + ( languageRoi.width - name.width() ) / 2, optionRoi.y + languageRoi.height + nameOffset, display );
+        const int32_t textMaxWidth = 87;
+
+        title.draw( optionRoi.x - textOffset.x, optionRoi.y - textOffset.y + title.height() - title.height( textMaxWidth ), textMaxWidth, display );
+        name.draw( optionRoi.x - textOffset.x, optionRoi.y + languageRoi.height + nameOffset, textMaxWidth, display );
 
         const fheroes2::Sprite & icon = fheroes2::AGG::GetICN( icnId, icnIndex );
         fheroes2::Blit( icon, 0, 0, display, optionRoi.x, optionRoi.y, icon.width(), icon.height() );
@@ -105,12 +107,12 @@ namespace
 
     void drawAudioOptions( const fheroes2::Rect & optionRoi )
     {
-        drawOption( optionRoi, _( "Audio" ), _( "settings" ), ICN::SPANEL, 1 );
+        drawOption( optionRoi, _( "Audio" ), _( "Settings" ), ICN::SPANEL, 1 );
     }
 
     void drawHotKeyOptions( const fheroes2::Rect & optionRoi )
     {
-        drawOption( optionRoi, _( "Hot Keys" ), _( "In-game" ), ICN::CSPANEL, 5 );
+        drawOption( optionRoi, _( "Hot Keys" ), _( "Configure" ), ICN::CSPANEL, 5 );
     }
 
     void drawCursorTypeOptions( const fheroes2::Rect & optionRoi )
@@ -270,19 +272,19 @@ namespace
 
             if ( le.MousePressRight( windowLanguageRoi ) ) {
                 fheroes2::Text header( _( "Select Game Language" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Change language of the game." ), fheroes2::FontType::normalWhite() );
+                fheroes2::Text body( _( "Change the language of the game." ), fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
             else if ( le.MousePressRight( windowResolutionRoi ) ) {
                 fheroes2::Text header( _( "Select Game Resolution" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Change resolution of the game." ), fheroes2::FontType::normalWhite() );
+                fheroes2::Text body( _( "Change the resolution of the game." ), fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
             else if ( le.MousePressRight( windowAudioRoi ) ) {
                 fheroes2::Text header( _( "Audio" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Change audio settings of the game." ), fheroes2::FontType::normalWhite() );
+                fheroes2::Text body( _( "Change the audio settings of the game." ), fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
@@ -300,7 +302,7 @@ namespace
             }
             else if ( le.MousePressRight( windowHotKeyRoi ) ) {
                 fheroes2::Text header( _( "Hot Keys" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Check all Hot Keys used in the game." ), fheroes2::FontType::normalWhite() );
+                fheroes2::Text body( _( "Check and configure all the hot keys present in the game." ), fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }
@@ -312,8 +314,7 @@ namespace
             }
             else if ( le.MousePressRight( windowCursorTypeRoi ) ) {
                 fheroes2::Text header( _( "Mouse Cursor" ), fheroes2::FontType::normalYellow() );
-                fheroes2::Text body( _( "Toggle color cursors on/off. Color cursors look nicer, but sometimes don't move as smoothly as black and white ones." ),
-                                     fheroes2::FontType::normalWhite() );
+                fheroes2::Text body( _( "Toggle colored cursor on or off. This is only an esthetic choice." ), fheroes2::FontType::normalWhite() );
 
                 fheroes2::showMessage( header, body, 0 );
             }

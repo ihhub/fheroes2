@@ -177,9 +177,17 @@ namespace
 
             fheroes2::AGG::GetICN( ICN::FONT, 0 );
             fheroes2::AGG::GetICN( ICN::SMALFONT, 0 );
+            fheroes2::AGG::GetICN( ICN::BUTTON_GOOD_FONT_RELEASED, 0 );
+            fheroes2::AGG::GetICN( ICN::BUTTON_GOOD_FONT_PRESSED, 0 );
+            fheroes2::AGG::GetICN( ICN::BUTTON_EVIL_FONT_RELEASED, 0 );
+            fheroes2::AGG::GetICN( ICN::BUTTON_EVIL_FONT_PRESSED, 0 );
 
             _normalFont = _icnVsSprite[ICN::FONT];
             _smallFont = _icnVsSprite[ICN::SMALFONT];
+            _buttonGoodReleasedFont = _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED];
+            _buttonGoodPressedFont = _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED];
+            _buttonEvilReleasedFont = _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED];
+            _buttonEvilPressedFont = _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED];
 
             _isPreserved = true;
         }
@@ -193,6 +201,10 @@ namespace
             // Restore the original font.
             _icnVsSprite[ICN::FONT] = _normalFont;
             _icnVsSprite[ICN::SMALFONT] = _smallFont;
+            _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] = _buttonGoodReleasedFont;
+            _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED] = _buttonGoodPressedFont;
+            _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED] = _buttonEvilReleasedFont;
+            _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] = _buttonEvilPressedFont;
 
             // Clear modified fonts.
             _icnVsSprite[ICN::YELLOW_FONT].clear();
@@ -207,6 +219,10 @@ namespace
 
         std::vector<fheroes2::Sprite> _normalFont;
         std::vector<fheroes2::Sprite> _smallFont;
+        std::vector<fheroes2::Sprite> _buttonGoodReleasedFont;
+        std::vector<fheroes2::Sprite> _buttonGoodPressedFont;
+        std::vector<fheroes2::Sprite> _buttonEvilReleasedFont;
+        std::vector<fheroes2::Sprite> _buttonEvilPressedFont;
     };
 
     OriginalAlphabetPreserver alphabetPreserver;
@@ -367,7 +383,7 @@ namespace fheroes2
                     Fill( out, 13, 11, 113, 31, getButtonFillingColor( i == 0 ) );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "BATTLE\nONLY" ), { 12, 5 }, { 10, 5 }, { 117, 47 },
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "BATTLE\nONLY" ), { 12, 5 }, { 11, 6 }, { 117, 47 },
                                     fheroes2::FontColor::WHITE );
 
                 break;
@@ -411,7 +427,7 @@ namespace fheroes2
                     Fill( out, 13 + 2 * i, 3 + 2 * i, 129 - 2 * i, 16, out.image()[13 - 7 * i + ( 5 + i ) * ( 145 - ( 4 * i ) )] );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 11, 5 }, { 11, 6 }, { 131, 17 },
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 11, 5 }, { 12, 6 }, { 131, 17 },
                                     fheroes2::FontColor::GRAY );
 
                 break;
@@ -2264,8 +2280,8 @@ namespace fheroes2
 
                 for ( Sprite & image : _icnVsSprite[ICN::MINI_MONSTER_IMAGE] ) {
                     uint8_t * transform = image.transform();
-                    const uint8_t * tranformEnd = transform + image.width() * image.height();
-                    for ( ; transform != tranformEnd; ++transform ) {
+                    const uint8_t * transformEnd = transform + image.width() * image.height();
+                    for ( ; transform != transformEnd; ++transform ) {
                         if ( *transform > 1 ) {
                             *transform = 1;
                         }
@@ -2274,8 +2290,8 @@ namespace fheroes2
 
                 for ( Sprite & image : _icnVsSprite[ICN::MINI_MONSTER_SHADOW] ) {
                     uint8_t * transform = image.transform();
-                    const uint8_t * tranformEnd = transform + image.width() * image.height();
-                    for ( ; transform != tranformEnd; ++transform ) {
+                    const uint8_t * transformEnd = transform + image.width() * image.height();
+                    for ( ; transform != transformEnd; ++transform ) {
                         if ( *transform == 0 ) {
                             *transform = 1;
                         }
@@ -2288,25 +2304,8 @@ namespace fheroes2
             case ICN::BUTTON_GOOD_FONT_PRESSED:
             case ICN::BUTTON_EVIL_FONT_RELEASED:
             case ICN::BUTTON_EVIL_FONT_PRESSED: {
-                const uint8_t goodReleasedColor = 56;
-                const uint8_t goodPressedColor = 62;
-                const uint8_t evilReleasedColor = 30;
-                const uint8_t evilPressedColor = 36;
-                const uint8_t contourColor = 10;
-
-                generateBaseButtonFont( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], goodReleasedColor, goodPressedColor,
-                                        contourColor );
-
-                _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED] = _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED];
-                for ( Sprite & letter : _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED] ) {
-                    ReplaceColorId( letter, goodReleasedColor, evilReleasedColor );
-                }
-
-                _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] = _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED];
-                for ( Sprite & letter : _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] ) {
-                    ReplaceColorId( letter, goodPressedColor, evilPressedColor );
-                }
-
+                generateBaseButtonFont( _icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED],
+                                        _icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED], _icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
                 return true;
             }
             case ICN::HISCORE: {
@@ -2470,7 +2469,7 @@ namespace fheroes2
                 return errorImage;
             }
 
-            // TODO: correct naming and standartise the code
+            // TODO: correct naming and standardize the code
             switch ( fontType ) {
             case Font::GRAY_SMALL:
                 return GetICN( ICN::GRAY_SMALL_FONT, character - 0x20 );
@@ -2632,6 +2631,7 @@ namespace fheroes2
                 // Restore original letters when changing language to avoid changes to them being carried over.
                 alphabetPreserver.restore();
                 generateAlphabet( language, _icnVsSprite );
+                generateButtonAlphabet( language, _icnVsSprite );
             }
         }
     }

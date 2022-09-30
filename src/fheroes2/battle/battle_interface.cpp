@@ -842,7 +842,7 @@ void Battle::ArmiesOrder::QueueEventProcessing( std::string & msg, const fheroes
         const fheroes2::Rect unitRoi = unitPos.second + offset;
         if ( le.MouseCursor( unitRoi ) ) {
             msg = _( "View %{monster} info" );
-            StringReplace( msg, "%{monster}", unitPos.first->GetName() );
+            StringReplace( msg, "%{monster}", Translation::StringLower( unitPos.first->GetName() ) );
         }
 
         const Unit & unit = *( unitPos.first );
@@ -2180,7 +2180,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
         if ( b_enemy ) {
             if ( _currentUnit->GetCurrentColor() == b_enemy->GetColor() || ( _currentUnit == b_enemy ) ) {
                 statusMsg = _( "View %{monster} info" );
-                StringReplace( statusMsg, "%{monster}", b_enemy->GetMultiName() );
+                StringReplace( statusMsg, "%{monster}", Translation::StringLower( b_enemy->GetMultiName() ) );
                 return Cursor::WAR_INFO;
             }
             else {
@@ -2188,7 +2188,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                     statusMsg = _( "Shoot %{monster}" );
                     statusMsg.append( " " );
                     statusMsg.append( _n( "(1 shot left)", "(%{count} shots left)", _currentUnit->GetShots() ) );
-                    StringReplace( statusMsg, "%{monster}", b_enemy->GetMultiName() );
+                    StringReplace( statusMsg, "%{monster}", Translation::StringLower( b_enemy->GetMultiName() ) );
                     StringReplace( statusMsg, "%{count}", _currentUnit->GetShots() );
 
                     return arena.IsShootingPenalty( *_currentUnit, *b_enemy ) ? Cursor::WAR_BROKENARROW : Cursor::WAR_ARROW;
@@ -2199,7 +2199,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
 
                     for ( const int direction : { BOTTOM_RIGHT, BOTTOM_LEFT, RIGHT, TOP_RIGHT, TOP_LEFT, LEFT } ) {
                         if ( Board::isValidDirection( index_pos, direction )
-                             && Board::CanAttackUnitFromCell( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) ) ) {
+                             && Board::CanAttackFromCell( *_currentUnit, Board::GetIndexDirection( index_pos, direction ) ) ) {
                             availableAttackDirection.emplace( direction );
                         }
                     }
@@ -2240,7 +2240,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
                         const int cursor = GetSwordCursorDirection( currentDirection );
 
                         statusMsg = _( "Attack %{monster}" );
-                        StringReplace( statusMsg, "%{monster}", b_enemy->GetName() );
+                        StringReplace( statusMsg, "%{monster}", Translation::StringLower( b_enemy->GetName() ) );
 
                         return cursor;
                     }
@@ -2249,7 +2249,7 @@ int Battle::Interface::GetBattleCursor( std::string & statusMsg ) const
         }
         else if ( cell->isReachableForHead() || cell->isReachableForTail() ) {
             statusMsg = _currentUnit->isFlying() ? _( "Fly %{monster} here" ) : _( "Move %{monster} here" );
-            StringReplace( statusMsg, "%{monster}", _currentUnit->GetName() );
+            StringReplace( statusMsg, "%{monster}", Translation::StringLower( _currentUnit->GetName() ) );
             return _currentUnit->isFlying() ? Cursor::WAR_FLY : Cursor::WAR_MOVE;
         }
     }
@@ -2298,7 +2298,7 @@ int Battle::Interface::GetBattleSpellCursor( std::string & statusMsg ) const
         else if ( b_stats && b_stats->AllowApplySpell( spell, _currentUnit->GetCurrentOrArmyCommander() ) ) {
             statusMsg = _( "Cast %{spell} on %{monster}" );
             StringReplace( statusMsg, "%{spell}", spell.GetName() );
-            StringReplace( statusMsg, "%{monster}", b_stats->GetName() );
+            StringReplace( statusMsg, "%{monster}", Translation::StringLower( b_stats->GetName() ) );
             return GetCursorFromSpell( spell.GetID() );
         }
         else if ( !spell.isApplyToFriends() && !spell.isApplyToEnemies() && !spell.isApplyToAnyTroops() ) {
@@ -3155,7 +3155,7 @@ void Battle::Interface::RedrawActionAttackPart2( Unit & attacker, const TargetsI
                 msg.append( " " );
                 msg.append( _n( "1 %{defender} perishes.", "%{count} %{defender} perish.", target.killed ) );
                 StringReplace( msg, "%{count}", target.killed );
-                StringReplace( msg, "%{defender}", target.defender->GetPluralName( target.killed ) );
+                StringReplace( msg, "%{defender}", Translation::StringLower( target.defender->GetPluralName( target.killed ) ) );
             }
         }
 
@@ -3318,14 +3318,9 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
-#ifdef DEBUG_LOG
-    std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
-    StringReplace( msg, "%{monster}", unit.GetName() );
-    StringReplace( msg, "%{src}", unit.GetHeadIndex() );
-#else
-    std::string msg = _( "Moved %{monster}" );
-    StringReplace( msg, "%{monster}", unit.GetName() );
-#endif
+    std::string msg = _( "Moved %{monster}: from [%{src}] to [%{dst}]." );
+    StringReplace( msg, "%{monster}", Translation::StringLower( unit.GetName() ) );
+    StringReplace( msg, "%{src}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
 
     _currentUnit = nullptr;
     _movingUnit = &unit;
@@ -3377,9 +3372,8 @@ void Battle::Interface::RedrawActionMove( Unit & unit, const Indexes & path )
     _currentUnit = nullptr;
     unit.SwitchAnimation( Monster_Info::STATIC );
 
-#ifdef DEBUG_LOG
-    StringReplace( msg, "%{dst}", unit.GetHeadIndex() );
-#endif
+    StringReplace( msg, "%{dst}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
+
     status.SetMessage( msg, true );
 }
 
@@ -3402,9 +3396,9 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
         targetPos.x -= CELLW; // this is needed to avoid extra cell shifting upon landing when we move to right side
     }
 
-    std::string msg = _( "Moved %{monster}: %{src}, %{dst}" );
-    StringReplace( msg, "%{monster}", unit.GetName() );
-    StringReplace( msg, "%{src}", unit.GetHeadIndex() );
+    std::string msg = _( "Moved %{monster}: from [%{src}] to [%{dst}]." );
+    StringReplace( msg, "%{monster}", Translation::StringLower( unit.GetName() ) );
+    StringReplace( msg, "%{src}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
 
@@ -3489,7 +3483,8 @@ void Battle::Interface::RedrawActionFly( Unit & unit, const Position & pos )
         bridge->Action( unit, destIndex );
     }
 
-    StringReplace( msg, "%{dst}", unit.GetHeadIndex() );
+    StringReplace( msg, "%{dst}", std::to_string( ( unit.GetHeadIndex() / ARENAW ) + 1 ) + ", " + std::to_string( ( unit.GetHeadIndex() % ARENAW ) + 1 ) );
+
     status.SetMessage( msg, true );
 }
 
@@ -3499,7 +3494,7 @@ void Battle::Interface::RedrawActionResistSpell( const Unit & target, bool playS
         AudioManager::PlaySound( M82::RSBRYFZL );
     }
     std::string str( _( "The %{name} resist the spell!" ) );
-    StringReplace( str, "%{name}", target.GetName() );
+    StringReplace( str, "%{name}", Translation::StringLower( target.GetName() ) );
     status.SetMessage( str, true );
     status.SetMessage( "", false );
 }
@@ -3512,7 +3507,7 @@ void Battle::Interface::RedrawActionSpellCastStatus( const Spell & spell, int32_
 
     if ( target && ( target->GetHeadIndex() == dst || ( target->isWide() && target->GetTailIndex() == dst ) ) ) {
         msg = _( "%{name} casts %{spell} on the %{troop}." );
-        StringReplace( msg, "%{troop}", target->GetName() );
+        StringReplace( msg, "%{troop}", Translation::StringLower( target->GetName() ) );
     }
     else {
         msg = _( "%{name} casts %{spell}." );
@@ -3827,8 +3822,8 @@ void Battle::Interface::RedrawActionMonsterSpellCastStatus( const Spell & spell,
         break;
     }
 
-    StringReplace( msg, "%{attacker}", attacker.GetMultiName() );
-    StringReplace( msg, "%{target}", target.defender->GetName() );
+    StringReplace( msg, "%{attacker}", Translation::StringLower( attacker.GetMultiName() ) );
+    StringReplace( msg, "%{target}", Translation::StringLower( target.defender->GetName() ) );
 
     status.SetMessage( msg, true );
     status.SetMessage( "", false );
@@ -3842,7 +3837,7 @@ void Battle::Interface::RedrawActionLuck( const Unit & unit )
     const fheroes2::Rect & pos = unit.GetRectPosition();
 
     std::string msg = isGoodLuck ? _( "Good luck shines on the %{attacker}." ) : _( "Bad luck descends on the %{attacker}." );
-    StringReplace( msg, "%{attacker}", unit.GetName() );
+    StringReplace( msg, "%{attacker}", Translation::StringLower( unit.GetName() ) );
     status.SetMessage( msg, true );
 
     Cursor::Get().SetThemes( Cursor::WAR_POINTER );
@@ -3910,13 +3905,13 @@ void Battle::Interface::RedrawActionMorale( Unit & b, bool good )
 
     if ( good ) {
         msg = _( "High morale enables the %{monster} to attack again." );
-        StringReplace( msg, "%{monster}", b.GetName() );
+        StringReplace( msg, "%{monster}", Translation::StringLower( b.GetName() ) );
         status.SetMessage( msg, true );
         RedrawTroopWithFrameAnimation( b, ICN::MORALEG, M82::GOODMRLE, NONE );
     }
     else {
         msg = _( "Low morale causes the %{monster} to freeze in panic." );
-        StringReplace( msg, "%{monster}", b.GetName() );
+        StringReplace( msg, "%{monster}", Translation::StringLower( b.GetName() ) );
         status.SetMessage( msg, true );
         RedrawTroopWithFrameAnimation( b, ICN::MORALEB, M82::BADMRLE, WINCE );
     }
@@ -3954,7 +3949,7 @@ void Battle::Interface::RedrawActionTowerPart2( const Tower & tower, const Targe
         msg += ' ';
         msg.append( _n( "1 %{defender} perishes.", "%{count} %{defender} perish.", target.killed ) );
         StringReplace( msg, "%{count}", target.killed );
-        StringReplace( msg, "%{defender}", target.defender->GetPluralName( target.killed ) );
+        StringReplace( msg, "%{defender}", Translation::StringLower( target.defender->GetPluralName( target.killed ) ) );
     }
 
     if ( !isMirror ) {
