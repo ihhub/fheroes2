@@ -2506,6 +2506,7 @@ namespace
         fheroes2::SetPixel( released[58], offset + 0, offset + 1, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[58], offset + 8, offset + 8, buttonGoodReleasedColor );
     }
+
     void generateGoodCP1250ButtonFont( std::vector<fheroes2::Sprite> & released )
     {
         // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
@@ -2647,6 +2648,7 @@ namespace
         // T with cedilla. Only copied from T.
         released[190] = released[52];
     }
+
     void generateGoodCP1251ButtonFont( std::vector<fheroes2::Sprite> & released )
     {
         // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
@@ -2745,6 +2747,7 @@ namespace
             fheroes2::Copy( temp, 0, 0, released[191], 0, 0, temp.width(), temp.height() );
         }
     }
+
     void generateGoodCP1252ButtonFont( std::vector<fheroes2::Sprite> & released )
     {
         // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
