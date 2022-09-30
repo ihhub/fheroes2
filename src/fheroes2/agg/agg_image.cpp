@@ -894,7 +894,7 @@ namespace fheroes2
                     AddTransparency( image, 1 );
                 }
 
-                // Petrification spell does not have its icon in the original game.
+                // The Petrification spell does not have its own icon in the original game.
                 h2d::readImage( "petrification_spell_icon.image", _icnVsSprite[id][66] );
 
                 return true;
