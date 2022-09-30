@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-26 12:34+0000\n"
-"PO-Revision-Date: 2022-05-10 16:35+0200\n"
+"POT-Creation-Date: 2022-09-28 22:56+0000\n"
+"PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 msgid ""
 "BATTLE\n"
@@ -678,10 +678,7 @@ msgstr[0] "1 %{defender} загинув."
 msgstr[1] "%{count} %{defender} загинули."
 msgstr[2] "%{count} %{defender} загинуло."
 
-msgid "Moved %{monster}: %{src}, %{dst}"
-msgstr ""
-
-msgid "Moved %{monster}"
+msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr ""
 
 #, fuzzy
@@ -2850,13 +2847,10 @@ msgstr ""
 msgid "Audio"
 msgstr ""
 
-msgid "settings"
+msgid "Configure"
 msgstr ""
 
 msgid "Hot Keys"
-msgstr ""
-
-msgid "In-game"
 msgstr ""
 
 msgid "Black & White"
@@ -2896,17 +2890,18 @@ msgstr ""
 msgid "Select Game Language"
 msgstr "Обрати мову гри"
 
-msgid "Change language of the game."
+msgid "Change the language of the game."
 msgstr "Змінити мову гри."
 
 msgid "Select Game Resolution"
 msgstr ""
 
-msgid "Change resolution of the game."
-msgstr ""
+#, fuzzy
+msgid "Change the resolution of the game."
+msgstr "Змінити мову гри."
 
 #, fuzzy
-msgid "Change audio settings of the game."
+msgid "Change the audio settings of the game."
 msgstr "Змінити мову гри."
 
 msgid "Experimental game settings."
@@ -2915,15 +2910,13 @@ msgstr ""
 msgid "Toggle instant battle mode."
 msgstr ""
 
-msgid "Check all Hot Keys used in the game."
+msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
 msgstr ""
 
-msgid ""
-"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
-"move as smoothly as black and white ones."
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
 
 msgid ""
@@ -3151,6 +3144,10 @@ msgstr ""
 
 msgid "Number to buy:"
 msgstr ""
+
+#, fuzzy
+msgid "Select Game Resolution:"
+msgstr "Обрати мову гри:"
 
 msgid "Click to apply the selected resolution."
 msgstr ""
@@ -9434,7 +9431,3 @@ msgstr ""
 "Перевірити нову версію гри на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#, fuzzy
-#~ msgid "Break auto battle?"
-#~ msgstr "Зупинити автобій?"

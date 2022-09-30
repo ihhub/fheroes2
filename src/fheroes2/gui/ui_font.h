@@ -31,4 +31,6 @@ namespace fheroes2
 
     void generateBaseButtonFont( std::vector<Sprite> & goodReleased, std::vector<Sprite> & goodPressed, std::vector<Sprite> & evilReleased,
                                  std::vector<Sprite> & evilPressed );
+
+    void generateButtonAlphabet( const SupportedLanguage language, std::vector<std::vector<Sprite>> & icnVsSprite );
 }

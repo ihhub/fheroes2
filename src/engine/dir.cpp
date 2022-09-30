@@ -20,7 +20,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#if defined( _MSC_VER ) || defined( __MINGW32__ )
+#if defined( _WIN32 )
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #elif defined( TARGET_PS_VITA )
@@ -65,7 +65,7 @@ namespace
 
     void getFilesFromDirectory( const std::string & path, const std::string & name, bool sensitive, bool nameAsFilter, ListFiles & files )
     {
-#if defined( _MSC_VER ) || defined( __MINGW32__ )
+#if defined( _WIN32 )
         (void)sensitive;
 
         const std::string pattern( nameAsFilter ? path + "\\*" + name : path + "\\" + name );

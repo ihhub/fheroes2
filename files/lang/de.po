@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-26 12:34+0000\n"
-"PO-Revision-Date: 2022-05-12 17:06+0200\n"
+"POT-Creation-Date: 2022-09-28 22:56+0000\n"
+"PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 msgid ""
 "BATTLE\n"
@@ -581,11 +581,9 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] "1 %{defender} stirbt."
 msgstr[1] "%{count} %{defender} sterben."
 
-msgid "Moved %{monster}: %{src}, %{dst}"
+#, fuzzy
+msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "Bewegt %{monster}: %{src}, %{dst}"
-
-msgid "Moved %{monster}"
-msgstr "Bewegt %{monster}"
 
 msgid "The %{name} resist the spell!"
 msgstr "Die %{name} widerstehen dem Zauber!"
@@ -2722,15 +2720,11 @@ msgstr "Einstellungen"
 msgid "Audio"
 msgstr ""
 
-#, fuzzy
-msgid "settings"
-msgstr "Einstellungen"
+msgid "Configure"
+msgstr ""
 
 msgid "Hot Keys"
 msgstr "Hotkeys"
-
-msgid "In-game"
-msgstr "Im Spiel"
 
 msgid "Black & White"
 msgstr "Schwarz & Weiß"
@@ -2768,17 +2762,17 @@ msgstr "Schlachten"
 msgid "Select Game Language"
 msgstr "Spielsprache auswählen"
 
-msgid "Change language of the game."
+msgid "Change the language of the game."
 msgstr "Sprache des Spiels ändern."
 
 msgid "Select Game Resolution"
 msgstr "Spielauflösung wählen"
 
-msgid "Change resolution of the game."
+msgid "Change the resolution of the game."
 msgstr "Auflösung des Spiels ändern."
 
 #, fuzzy
-msgid "Change audio settings of the game."
+msgid "Change the audio settings of the game."
 msgstr "Sprache, Auflösung und Einstellungen des Spiels ändern."
 
 msgid "Experimental game settings."
@@ -2787,15 +2781,15 @@ msgstr "Experimentelle Spieleinstellungen."
 msgid "Toggle instant battle mode."
 msgstr "Sofortigen Kampfmodus umschalten."
 
-msgid "Check all Hot Keys used in the game."
+#, fuzzy
+msgid "Check and configure all the hot keys present in the game."
 msgstr "Überprüfen Sie alle im Spiel verwendeten Hotkeys."
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Schaltet die Art der Schnittstelle um, die Sie verwenden möchten."
 
-msgid ""
-"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
-"move as smoothly as black and white ones."
+#, fuzzy
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
 "Schaltet Farbzeiger ein/aus. Farbzeiger sehen schöner aus, bewegen sich aber "
 "manchmal nicht so flüssig wie Schwarz-Weiß-Zeiger."
@@ -3032,6 +3026,9 @@ msgstr "Vorhanden: %{count}"
 
 msgid "Number to buy:"
 msgstr "Anzahl:"
+
+msgid "Select Game Resolution:"
+msgstr "Spielauflösung wählen:"
 
 msgid "Click to apply the selected resolution."
 msgstr "Klicken Sie, um die ausgewählte Auflösung anzuwenden."
@@ -10014,8 +10011,5 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "Score: "
-#~ msgstr "Punkte: "
-
-#~ msgid "Break auto battle?"
-#~ msgstr "Autokampf unterbrechen?"
+#~ msgid "Moved %{monster}"
+#~ msgstr "Bewegt %{monster}"
