@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-28 22:56+0000\n"
-"PO-Revision-Date: 2022-09-30 09:13+0200\n"
+"PO-Revision-Date: 2022-09-30 23:47+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -57,6 +57,8 @@ msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
 msgstr ""
+"Czy chcesz odzyskać kontrolę z rąk AI? Efekt zadziała tylko w następnej "
+"turze."
 
 msgid ""
 "A few\n"
@@ -580,9 +582,8 @@ msgstr[0] "1 %{defender} ginie."
 msgstr[1] "%{count} %{defender} ginie."
 msgstr[2] "%{count} %{defender} ginie."
 
-#, fuzzy
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
-msgstr "Przemieść %{monster}: %{src}, %{dst}"
+msgstr "Przemieszczono %{monster}: %{src}, %{dst}"
 
 msgid "The %{name} resist the spell!"
 msgstr "%{name} odpierają zaklęcie!"
@@ -2296,7 +2297,7 @@ msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
-"Aby korzystać z gildii magów, musisz kupić księgę magii. W tej chwili nie "
+"Aby korzystać z gildii magów, musisz kupić Księgę Zaklęć. W tej chwili nie "
 "masz jednak na nią miejsca. Spróbuj przekazać jeden ze swoich artefaktów "
 "innemu bohaterowi."
 
@@ -2664,7 +2665,7 @@ msgid "Audio"
 msgstr "Dźwięk"
 
 msgid "Configure"
-msgstr ""
+msgstr "Konfiguracja"
 
 msgid "Hot Keys"
 msgstr "Skróty klaw."
@@ -2723,18 +2724,16 @@ msgstr "Zmień eksperymentalne ustawienia gry."
 msgid "Toggle instant battle mode."
 msgstr "Zmień tryb błyskawicznej walki."
 
-#, fuzzy
 msgid "Check and configure all the hot keys present in the game."
-msgstr "Zobacz wszystkie skróty klawiszowe gry."
+msgstr "Zobacz i skonfiguruj wszystkie skróty klawiszowe gry."
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Zmień typ interfejsu."
 
-#, fuzzy
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
-"Zmień kursor na kolorowy lub czarno-biały. Kolorowy kursor wygląda ładniej, "
-"ale czasem nie jest tak płynny jak czarno-biały."
+"Zmień kursor na kolorowy lub czarno-biały. Wybór ma jedynie charakter "
+"estetyczny."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3993,6 +3992,7 @@ msgid ""
 "Do you want to transfer control from you to the AI? The effect will take "
 "place only on the next turn."
 msgstr ""
+"Czy chcesz przekazać AI kontrolę? Efekt zadziała tylko w następnej turze."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -4477,8 +4477,8 @@ msgstr "Nie możesz podnieść tego artefaktu, twój plecak jest pełny!"
 
 msgid "To cast spells, you must first buy a spell book for %{gold} gold."
 msgstr ""
-"Aby móc rzucać zaklęcia, musisz najpierw kupić księgę magii za %{gold} sztuk "
-"złota."
+"Aby móc rzucać zaklęcia, musisz najpierw kupić Księgę Zaklęć za %{gold} "
+"sztuk złota."
 
 msgid "Unfortunately, you seem to be a little short of cash at the moment."
 msgstr ""
@@ -4652,7 +4652,7 @@ msgid ""
 "Unfortunately, you have no Magic Book to record the spell with."
 msgstr ""
 "\n"
-"Niestety nie masz księgi czarów, w której można zapisać zaklęcie."
+"Niestety nie masz Księgi Zaklęć, w której można zapisać zaklęcie."
 
 msgid ""
 "\n"
@@ -4774,7 +4774,7 @@ msgstr ""
 "poznajesz tajemnice zaklęcia."
 
 msgid "Unfortunately, you have no Magic Book to record the spell with."
-msgstr "Niestety nie masz księgi czarów, w której można zapisać zaklęcie."
+msgstr "Niestety nie masz Księgi Zaklęć, w której można zapisać zaklęcie."
 
 msgid ""
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
@@ -5260,7 +5260,7 @@ msgid ""
 msgstr ""
 "Gdy zbliżasz się do jamy pełnej bulgoczącego błota, wygrzebują się z niej "
 "jakieś istoty i ustawiają wokół. Jednym głosem mówią: \"Matka Ziemia "
-"proponuje ci kilka z jej oddziałów. Czy chcesz nająć żywiołaki ziemi?\""
+"proponuje ci kilka z jej oddziałów. Czy chcesz nająć Żywiołaki Ziemi?\""
 
 msgid "You enter the structure of white stone pillars, and find nothing."
 msgstr "Wchodzisz pomiędzy białe kolumny, ale nic nie znajdujesz."
@@ -5280,16 +5280,16 @@ msgstr ""
 "powietrza?\""
 
 msgid "No Fire Elementals approach you from the lava pool."
-msgstr "Z sadzawki lawy nie wychodzi żaden żywiołak ognia."
+msgstr "Z sadzawki lawy nie wychodzi żaden Żywiołak Ognia."
 
 msgid ""
 "Beneath a structure that serves to hold in heat, Fire Elementals move about "
 "in a fiery pool of molten lava. A group of them approach you and offer their "
 "services. Would you like to recruit Fire Elementals?"
 msgstr ""
-"Pod konstrukcją, która służy do utrzymania ciepła, widzisz żywiołaki "
-"powietrza pływające w strumieniach lawy. Część z nich zbliża się do ciebie "
-"proponując swe usługi. Czy chcesz nająć żywiołaki ognia?"
+"Pod konstrukcją, która służy do utrzymania ciepła, widzisz Żywiołaki Ognia "
+"pływające w strumieniach lawy. Część z nich zbliża się do ciebie proponując "
+"swe usługi. Czy chcesz nająć Żywiołaki Ognia?"
 
 msgid "A face forms in the water for a moment, and then is gone."
 msgstr "Przez chwilę w wodzie widoczna jest jakaś twarz, po czym znika."
@@ -5846,7 +5846,7 @@ msgstr ""
 "odpowiedź, której szukasz.\""
 
 msgid "Spell book is not present."
-msgstr "Nie posiadasz księgi magii."
+msgstr "Nie posiadasz Księgi Zaklęć."
 
 msgid ""
 "That spell costs %{mana} mana. You only have %{point} mana, so you can't "
@@ -7471,28 +7471,28 @@ msgid "Medusas"
 msgstr "Meduzy"
 
 msgid "Earth Elemental"
-msgstr "Żywiołak ziemi"
+msgstr "Żywiołak Ziemi"
 
 msgid "Earth Elementals"
-msgstr "Żywiołaki ziemi"
+msgstr "Żywiołaki Ziemi"
 
 msgid "Air Elemental"
-msgstr "Żywiołak powietrza"
+msgstr "Żywiołak Powietrza"
 
 msgid "Air Elementals"
-msgstr "Żywiołaki powietrza"
+msgstr "Żywiołaki Powietrza"
 
 msgid "Fire Elemental"
-msgstr "Żywiołak ognia"
+msgstr "Żywiołak Ognia"
 
 msgid "Fire Elementals"
-msgstr "Żywiołaki ognia"
+msgstr "Żywiołaki Ognia"
 
 msgid "Water Elemental"
-msgstr "Żywiołak wody"
+msgstr "Żywiołak Wody"
 
 msgid "Water Elementals"
-msgstr "Żywiołaki wody"
+msgstr "Żywiołaki Wody"
 
 msgid "Random Monsters"
 msgstr "Losowy potwór"
@@ -7615,7 +7615,7 @@ msgid "% chance to halve enemy"
 msgstr "% szans na unicestwienie połowy atakowanego oddziału"
 
 msgid "Soul Eater"
-msgstr "Pożeracz dusz"
+msgstr "Pożeracz Dusz"
 
 msgid "Elemental"
 msgstr "Żywiołak"
@@ -7654,7 +7654,7 @@ msgid "Move %{name}"
 msgstr "Przenieś %{name}"
 
 msgid "Cannot move the Spellbook"
-msgstr "Nie można przenieść księgi magii"
+msgstr "Nie można przenieść Księgi Zaklęć"
 
 msgid "This item can't be traded."
 msgstr "Nie można wymienić tego przedmiotu."
@@ -8765,7 +8765,7 @@ msgstr ""
 "perły."
 
 msgid "Magic Book"
-msgstr "Księga Magii"
+msgstr "Księga Zaklęć"
 
 msgid "The %{name} enables you to cast spells."
 msgstr "%{name} pozwala ci rzucać czary."
@@ -8793,7 +8793,7 @@ msgid ""
 "hero has a Magic Book."
 msgstr ""
 "Ten %{name} daje twojemu bohaterowi możliwość rzucania czaru %{spell} jeśli "
-"bohater posiada księgę zaklęć."
+"bohater posiada Księgę Zaklęć."
 
 msgid ""
 "You find an elaborate container which houses an old vellum scroll. The runes "
@@ -8920,7 +8920,7 @@ msgid ""
 "pain. It then tosses a glowing object at you. You put up your hands to block "
 "it, but it passes right through them and sears itself into your chest."
 msgstr ""
-"Wchodzisz na świeżo wypaloną łąkę i widzisz żywiołaka ognia, siedzącego na "
+"Wchodzisz na świeżo wypaloną łąkę i widzisz Żywiołaka Ognia, siedzącego na "
 "głazie. Spogląda na ciebie z wyrazem ogromnego bólu na twarzy. Następnie "
 "rzuca w ciebie jakimś błyszczącym przedmiotem. Podnosisz ręce, aby się "
 "osłonić, ale przedmiot przelatuje ci przez dłonie i wtapia ci się w pierś."
@@ -9200,7 +9200,7 @@ msgstr ""
 "Wskrzesza stworzenia z uszkodzonej lub martwej jednostki do końca walki."
 
 msgid "Resurrect True"
-msgstr "Prawdziwe wskrzeszenie"
+msgstr "Prawdziwe Wskrzeszenie"
 
 msgid "Resurrects creatures from a damaged or dead unit permanently."
 msgstr ""
@@ -9459,25 +9459,25 @@ msgid "Summon Earth Elemental"
 msgstr "Przywołanie Żywiołaka Ziemi"
 
 msgid "Summons Earth Elementals to fight for your army."
-msgstr "Przywołuje żywiołaki ziemi, które walczą po twojej stronie."
+msgstr "Przywołuje Żywiołaki Ziemi, które walczą po twojej stronie."
 
 msgid "Summon Air Elemental"
 msgstr "Przywołanie Żywiołaka Powietrza"
 
 msgid "Summons Air Elementals to fight for your army."
-msgstr "Przywołuje żywiołaki powietrza, które walczą po twojej stronie."
+msgstr "Przywołuje Żywiołaki Powietrza, które walczą po twojej stronie."
 
 msgid "Summon Fire Elemental"
 msgstr "Przywołanie Żywiołaka Ognia"
 
 msgid "Summons Fire Elementals to fight for your army."
-msgstr "Przywołuje żywiołaki ognia, które walczą po twojej stronie."
+msgstr "Przywołuje Żywiołaki Ognia, które walczą po twojej stronie."
 
 msgid "Summon Water Elemental"
 msgstr "Przywołanie Żywiołaka Wody"
 
 msgid "Summons Water Elementals to fight for your army."
-msgstr "Przywołuje żywiołaki wody, które walczą po twojej stronie."
+msgstr "Przywołuje Żywiołaki Wody, które walczą po twojej stronie."
 
 msgid "Damages castle walls."
 msgstr "Uszkadza mury zamku."
@@ -9588,29 +9588,29 @@ msgid "Set Earth Guardian"
 msgstr "Ustawienie Strażnika Ziemi"
 
 msgid "Sets Earth Elementals to guard a mine against enemy armies."
-msgstr "Wzywa żywiołaki ziemi, które pilnują kopalni przed wrogimi armiami."
+msgstr "Wzywa Żywiołaki Ziemi, które pilnują kopalni przed wrogimi armiami."
 
 msgid "Set Air Guardian"
 msgstr "Ustawienie Strażnika Powietrza"
 
 msgid "Sets Air Elementals to guard a mine against enemy armies."
 msgstr ""
-"Wzywa żywiołaki powietrza, które pilnują kopalni przed wrogimi armiami."
+"Wzywa Żywiołaki Powietrza, które pilnują kopalni przed wrogimi armiami."
 
 msgid "Set Fire Guardian"
 msgstr "Ustawienie Strażnika Ognia"
 
 msgid "Sets Fire Elementals to guard a mine against enemy armies."
-msgstr "Wzywa żywiołaki ognia, które pilnują kopalni przed wrogimi armiami."
+msgstr "Wzywa Żywiołaki Ognia, które pilnują kopalni przed wrogimi armiami."
 
 msgid "Set Water Guardian"
 msgstr "Ustawienie Strażnika Wody"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
-msgstr "Wzywa żywiołaki wody, które pilnują kopalni przed wrogimi armiami."
+msgstr "Wzywa Żywiołaki Wody, które pilnują kopalni przed wrogimi armiami."
 
 msgid "Petrification"
-msgstr "Petryfikacja"
+msgstr "Zamiana w Kamień"
 
 msgid ""
 "Turns the affected creature into stone.  A petrified creature receives half "
@@ -9620,7 +9620,7 @@ msgstr ""
 "połowę obrażeń z ataku wręcz."
 
 msgid "You have no Magic Book, so you cannot cast a spell."
-msgstr "Nie posiadasz Księgi Magii, więc nie możesz rzucać zaklęć."
+msgstr "Nie posiadasz Księgi Zaklęć, więc nie możesz rzucać zaklęć."
 
 msgid "No spell to cast."
 msgstr "Brak zaklęć."
@@ -9641,7 +9641,7 @@ msgid "View next page"
 msgstr "Obejrzyj następną stronę"
 
 msgid "Close Spellbook"
-msgstr "Zamknij księgę magii"
+msgstr "Zamknij Księgę Zaklęć"
 
 msgid "View %{spell}"
 msgstr "Obejrzyj zaklęcie %{spell}"
@@ -9695,7 +9695,7 @@ msgid "castle: allow guardians"
 msgstr "zamek: zezwól na strażników"
 
 msgid "heroes: allow buy a spellbook from Shrines"
-msgstr "bohaterowie: pozwól kupować księgę zaklęć w kaplicach"
+msgstr "bohaterowie: pozwól kupować Księgę Zaklęć w kaplicach"
 
 msgid "heroes: remember movement points when retreating or surrendering"
 msgstr ""
