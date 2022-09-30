@@ -21,9 +21,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <cassert>
 #include <cstdlib>
 #include <iostream>
 #include <string>
+
+#include <SDL.h>
 
 #include "agg.h"
 #include "audio_manager.h"
@@ -200,32 +203,20 @@ namespace
     };
 }
 
-#if defined( _WIN32 )
-
-#if defined( WITH_DEBUG )
+// SDL1: this app is not linked against the SDLmain.lib, avoid the "unresolved external symbol main" error
+#if defined( _WIN32 ) && !SDL_VERSION_ATLEAST( 2, 0, 0 )
 #undef main
-#else
-#include <windows.h>
-
-int main( int, char ** );
-
-INT WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR, INT )
-{
-    return main( __argc, __argv );
-}
-
-FILE _iob[] = { *stdin, *stdout, *stderr };
-
-extern "C" FILE * __cdecl __iob_func( void )
-{
-    return _iob;
-}
-#endif
-
 #endif
 
 int main( int argc, char ** argv )
 {
+// SDL2main.lib converts argv to UTF-8, but this application expects ANSI, use the original argv
+#if defined( _WIN32 )
+    assert( argc == __argc );
+
+    argv = __argv;
+#endif
+
     try {
         const fheroes2::HardwareInitializer hardwareInitializer;
         Logging::InitLog();
