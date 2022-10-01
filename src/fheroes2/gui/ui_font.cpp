@@ -2736,11 +2736,9 @@ namespace
         fheroes2::DrawLine( released[166], { offset + 2, offset + 8 }, { offset + 5, offset + 5 }, buttonGoodReleasedColor );
 
         // Mirrored N, Cyrillic I
-        released[168] = released[46];
-        {
-            fheroes2::Sprite temp = fheroes2::Flip( released[168], true, false );
-            fheroes2::Copy( temp, 0, 0, released[168], 0, 0, temp.width(), temp.height() );
-        }
+        released[168].resize( released[46].width(), released[46].height() );
+        released[168].reset();
+        fheroes2::Flip( released[46], 0, 0, released[168], 0, 0, released[46].width(), released[46].height(), true, false );
 
         // Mirrored N with breve, Cyrillic Short I
         released[169].resize( released[168].width(), released[168].height() + 4 );
@@ -2795,11 +2793,9 @@ namespace
         released[181] = released[56];
 
         // Mirrored R, Cyrillic YA
-        released[191] = released[50];
-        {
-            fheroes2::Sprite temp = fheroes2::Flip( released[191], true, false );
-            fheroes2::Copy( temp, 0, 0, released[191], 0, 0, temp.width(), temp.height() );
-        }
+        released[191].resize( released[50].width(), released[50].height() );
+        released[191].reset();
+        fheroes2::Flip( released[50], 0, 0, released[191], 0, 0, released[50].width(), released[50].height(), true, false );
 
         // b, Cyrillic soft sign
         released[188].resize( 10 + offset * 2, 10 + offset * 2 );
