@@ -2711,6 +2711,17 @@ namespace
         fheroes2::DrawLine( released[163], { offset + 0, offset + 9 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[163], { offset + 2, offset + 1 }, { offset + 2, offset + 8 }, buttonGoodReleasedColor );
 
+        // Cyrillic DE
+        released[164].resize( 10 + offset * 2, 13 + offset * 2 );
+        released[164].reset();
+        fheroes2::DrawLine( released[164], { offset + 2, offset + 0 }, { offset + 8, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[164], { offset + 8, offset + 1 }, { offset + 8, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[164], { offset + 3, offset + 1 }, { offset + 3, offset + 7 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[164], { offset + 0, offset + 9 }, { offset + 9, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[164], { offset + 0, offset + 10 }, { offset + 0, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[164], { offset + 9, offset + 10 }, { offset + 9, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[164], offset + 2, offset + 8, buttonGoodReleasedColor );
+
         // E
         released[165] = released[37];
 
@@ -2768,6 +2779,17 @@ namespace
 
         // T
         released[178] = released[52];
+
+        // y, Cyrillic U
+        released[179].resize( 11 + offset * 2, 10 + offset * 2 );
+        released[179].reset();
+        fheroes2::DrawLine( released[179], { offset + 0, offset + 0 }, { offset + 3, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[179], { offset + 7, offset + 0 }, { offset + 10, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[179], { offset + 2, offset + 1 }, { offset + 4, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[179], { offset + 6, offset + 5 }, { offset + 8, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[179], { offset + 5, offset + 5 }, { offset + 5, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[179], { offset + 2, offset + 9 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[179], offset + 4, offset + 5, buttonGoodReleasedColor );
 
         // X
         released[181] = released[56];
