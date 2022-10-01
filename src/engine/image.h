@@ -253,6 +253,7 @@ namespace fheroes2
     bool FitToRoi( const Image & in, Point & inPos, const Image & out, Point & outPos, Size & outputSize, const Rect & outputRoi );
 
     Image Flip( const Image & in, bool horizontally, bool vertically );
+    void Flip( const Image & in, int32_t inX, int32_t inY, Image & out, int32_t outX, int32_t outY, int32_t width, int32_t height, bool horizontally, bool vertically );
 
     // Return ROI with pixels which are not skipped and not used for shadow creation. 1 is to skip, 2 - 5 types of shadows
     Rect GetActiveROI( const Image & image, const uint8_t minTransformValue = 6 );

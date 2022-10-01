@@ -584,12 +584,7 @@ namespace
             font[212 - 32].resize( font[48].width() + 1, font[48].height() );
             font[212 - 32].reset();
             fheroes2::Copy( font[48], 0, 0, font[212 - 32], 1, 0, font[48].width(), font[48].height() );
-            {
-                // TODO: add proper Flip function variant.
-                fheroes2::Sprite temp = fheroes2::Crop( font[48], 6, 0, 5, 6 );
-                temp = fheroes2::Flip( temp, true, false );
-                fheroes2::Copy( temp, 0, 0, font[212 - 32], 1, 0, temp.width(), temp.height() );
-            }
+            fheroes2::Flip( font[48], 6, 0, font[212 - 32], 1, 0, 5, 6, true, false );
             font[212 - 32].setPosition( font[48].x(), font[48].y() );
             updateNormalFontLetterShadow( font[212 - 32] );
 
