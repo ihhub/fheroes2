@@ -2438,10 +2438,69 @@ namespace
         // Normal font.
         {
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::FONT];
+
+            // S with comma.
+            font[170 - 32].resize( font[51].width(), font[51].height() + 4 );
+            font[170 - 32].reset();
+            fheroes2::Copy( font[51], 0, 0, font[170 - 32], 0, 0, font[51].width(), font[51].height() );
+            fheroes2::Copy( font[12], 0, 0, font[170 - 32], 3, 12, font[12].width(), font[12].height() );
+            font[170 - 32].setPosition( font[51].x(), font[51].y() );
+            updateNormalFontLetterShadow( font[170 - 32] );
+
+            // A with circonflex and generate the accent for further use.
+            font[194 - 32].resize( font[33].width(), font[33].height() + 3 );
+            font[194 - 32].reset();
+            fheroes2::Copy( font[33], 0, 0, font[194 - 32], 0, 3, font[33].width(), font[33].height() );
+            fheroes2::Copy( font[33], 3, 0, font[194 - 32], 7, 0, 1, 1 );
+            fheroes2::Copy( font[33], 3, 0, font[194 - 32], 6, 1, 1, 1 );
+            fheroes2::Copy( font[33], 3, 0, font[194 - 32], 10, 0, 1, 1 );
+            fheroes2::Copy( font[33], 3, 0, font[194 - 32], 11, 1, 1, 1 );
+            fheroes2::Copy( font[33], 4, 0, font[194 - 32], 8, 0, 1, 1 );
+            fheroes2::Copy( font[33], 4, 0, font[194 - 32], 7, 1, 1, 1 );
+            fheroes2::Copy( font[33], 4, 0, font[194 - 32], 10, 1, 1, 1 );
+            fheroes2::Copy( font[33], 4, 0, font[194 - 32], 9, 0, 1, 1 );
+            font[194 - 32].setPosition( font[33].x(), font[33].y() - 3 );
+            updateNormalFontLetterShadow( font[194 - 32] );
+            
+            // A with breve and generate the accent for further use.
+            font[195 - 32].resize( font[33].width(), font[33].height() + 3 );
+            font[195 - 32].reset();
+            fheroes2::Copy( font[33], 0, 0, font[195 - 32], 0, 3, font[33].width(), font[33].height() );
+            fheroes2::Copy( font[39], 5, 9, font[195 - 32], 5, 0, 7, 2 );
+            fheroes2::FillTransform( font[195 - 32], 7, 0, 3, 1, 1 );
+            font[195 - 32].setPosition( font[33].x(), font[33].y() - 3 );
+            updateNormalFontLetterShadow( font[195 - 32] );
+
+            // T with comma.
+            font[222 - 32].resize( font[52].width(), font[52].height() + 4 );
+            font[222 - 32].reset();
+            fheroes2::Copy( font[52], 0, 0, font[222 - 32], 0, 0, font[52].width(), font[52].height() );
+            fheroes2::Copy( font[12], 0, 0, font[222 - 32], 3, 12, font[12].width(), font[12].height() );
+            font[222 - 32].setPosition( font[52].x(), font[52].y() );
+            updateNormalFontLetterShadow( font[222 - 32] );
+
+            
+
+
+
+            
+
         }
         // Small font.
         {
             std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
+
+             // A with grave accent ` and generate the grave accent for further use.
+            font[192 - 32].resize( font[33].width(), font[33].height() + 3 );
+            font[192 - 32].reset();
+            fheroes2::Copy( font[33], 0, 0, font[192 - 32], 0, 3, font[33].width(), font[33].height() );
+            font[192 - 32].setPosition( font[33].x(), font[33].y() - 3 );
+            fheroes2::Copy( font[192 - 32], 3, 4, font[192 - 32], 7, 0, 1, 1 );
+            fheroes2::Copy( font[192 - 32], 4, 4, font[192 - 32], 8, 0, 1, 1 );
+            fheroes2::Copy( font[192 - 32], 3, 4, font[192 - 32], 8, 1, 1, 1 );
+            fheroes2::Copy( font[192 - 32], 4, 4, font[192 - 32], 9, 1, 1, 1 );
+            fheroes2::Copy( font[192 - 32], 3, 3, font[192 - 32], 10, 1, 1, 1 );
+            updateSmallFontLetterShadow( font[192 - 32] );
         }
     }
 
@@ -3209,7 +3268,7 @@ namespace fheroes2
             generateCP1254Alphabet( icnVsSprite );
             break;
         case SupportedLanguage::Romanian:
-            generateISO8859-16Alphabet( icnVsSprite );
+            generateISO8859_16Alphabet( icnVsSprite );
             break;
         default:
             // Add new language generation code!
