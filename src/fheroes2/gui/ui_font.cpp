@@ -2814,11 +2814,6 @@ namespace
         // X
         released[181] = released[56];
 
-        // Mirrored R, Cyrillic YA
-        released[191].resize( released[50].width(), released[50].height() );
-        released[191].reset();
-        fheroes2::Flip( released[50], 0, 0, released[191], 0, 0, released[50].width(), released[50].height(), true, false );
-
         // b, Cyrillic soft sign
         released[188].resize( 10 + offset * 2, 10 + offset * 2 );
         released[188].reset();
@@ -2827,6 +2822,11 @@ namespace
         fheroes2::DrawLine( released[188], { offset + 2, offset + 1 }, { offset + 2, offset + 8 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[188], { offset + 3, offset + 5 }, { offset + 8, offset + 5 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[188], { offset + 9, offset + 6 }, { offset + 9, offset + 8 }, buttonGoodReleasedColor );
+
+        // Mirrored R, Cyrillic YA
+        released[191].resize( released[50].width(), released[50].height() );
+        released[191].reset();
+        fheroes2::Flip( released[50], 0, 0, released[191], 0, 0, released[50].width(), released[50].height(), true, false );
     }
 
     void generateCP1252GoodButtonFont( std::vector<fheroes2::Sprite> & released )
