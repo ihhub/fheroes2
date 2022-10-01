@@ -2783,7 +2783,6 @@ namespace
         released[188].resize( 10 + offset * 2, 10 + offset * 2 );
         released[188].reset();
         fheroes2::DrawLine( released[188], { offset + 0, offset + 0 }, { offset + 4, offset + 0 }, buttonGoodReleasedColor );
-        /*fheroes2::DrawLine( released[188], { offset + 9, offset + 0 }, { offset + 9, offset + 2 }, buttonGoodReleasedColor );*/
         fheroes2::DrawLine( released[188], { offset + 0, offset + 9 }, { offset + 8, offset + 9 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[188], { offset + 2, offset + 1 }, { offset + 2, offset + 8 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[188], { offset + 3, offset + 5 }, { offset + 8, offset + 5 }, buttonGoodReleasedColor );
