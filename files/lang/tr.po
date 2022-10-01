@@ -3860,7 +3860,7 @@ msgid "Portuguese"
 msgstr ""
 
 msgid "Turkish"
-msgstr "Turkish"
+msgstr "Türkçe"
 
 msgid ", FPS: "
 msgstr ""
