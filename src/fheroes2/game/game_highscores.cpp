@@ -132,7 +132,6 @@ namespace
         switch ( difficulty ) {
         case Campaign::CampaignDifficulty::Easy:
             return daysPassed * 125 / 100;
-            break;
         case Campaign::CampaignDifficulty::Normal:
             // Nothing we need to do here.
             return daysPassed;
