@@ -47,6 +47,10 @@ be.mo bg.mo ru.mo uk.mo: %.mo: %.po
 de.mo es.mo it.mo nb.mo pt.mo sv.mo: %.mo: %.po
 	$(call MSGFMT,CP1252)
 
+# Turkish uses CP1254
+tr.mo: tr.po
+	$(call MSGFMT,CP1254)
+
 # Romanian uses ISO-8859-16
 ro.mo: ro.po
 	$(call MSGFMT,ISO-8859-16)
