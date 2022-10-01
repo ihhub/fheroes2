@@ -28,6 +28,11 @@
 
 #include <SDL.h>
 
+#if defined( _WIN32 ) && !SDL_VERSION_ATLEAST( 2, 0, 0 )
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#endif
+
 #include "agg.h"
 #include "audio_manager.h"
 #include "bin_info.h"
@@ -203,15 +208,22 @@ namespace
     };
 }
 
-// SDL1: this app is not linked against the SDLmain.lib, avoid the "unresolved external symbol main" error
+// SDL1: this app is not linked against the SDLmain.lib, implement our own WinMain
 #if defined( _WIN32 ) && !SDL_VERSION_ATLEAST( 2, 0, 0 )
 #undef main
+
+int main( int argc, char ** argv );
+
+int WINAPI WinMain( HINSTANCE /* hInstance */, HINSTANCE /* hPrevInstance */, LPSTR /* pCmdLine */, int /* nCmdShow */ )
+{
+    main( __argc, __argv );
+}
 #endif
 
 int main( int argc, char ** argv )
 {
 // SDL2main.lib converts argv to UTF-8, but this application expects ANSI, use the original argv
-#if defined( _WIN32 )
+#if defined( _WIN32 ) && SDL_VERSION_ATLEAST( 2, 0, 0 )
     assert( argc == __argc );
 
     argv = __argv;
