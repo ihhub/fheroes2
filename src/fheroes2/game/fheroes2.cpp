@@ -216,7 +216,7 @@ int main( int argc, char ** argv );
 
 int WINAPI WinMain( HINSTANCE /* hInstance */, HINSTANCE /* hPrevInstance */, LPSTR /* pCmdLine */, int /* nCmdShow */ )
 {
-    main( __argc, __argv );
+    return main( __argc, __argv );
 }
 #endif
 
