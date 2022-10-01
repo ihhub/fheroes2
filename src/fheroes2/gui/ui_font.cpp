@@ -3456,7 +3456,7 @@ namespace fheroes2
             // generateGoodCP1254ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case SupportedLanguage::Romanian:
-            // generateGoodISO8859-16ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            // generateGoodISO8859_16ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         default:
             // Add new language generation code!
