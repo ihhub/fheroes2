@@ -2427,6 +2427,24 @@ namespace
         }
     }
 
+    void generateISO8859_16Alphabet(std::vector<std::vector<fheroes2::Sprite>> &icnVsSprite)
+    {
+        // Resize fonts.
+        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            icnVsSprite[icnId].resize( baseFontSize );
+            icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, icnVsSprite[icnId][0] );
+        }
+
+        // Normal font.
+        {
+            std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::FONT];
+        }
+        // Small font.
+        {
+            std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
+        }
+    }
+
     void generateGoodButtonFontBaseShape( std::vector<fheroes2::Sprite> & released )
     {
         // Button font does not exist in the original game assets but we can regenerate it from scratch.
@@ -3190,6 +3208,9 @@ namespace fheroes2
         case SupportedLanguage::Turkish:
             generateCP1254Alphabet( icnVsSprite );
             break;
+        case SupportedLanguage::Romanian:
+            generateISO8859-16Alphabet( icnVsSprite );
+            break;
         default:
             // Add new language generation code!
             assert( 0 );
@@ -3215,6 +3236,7 @@ namespace fheroes2
         case SupportedLanguage::Belarusian:
         case SupportedLanguage::Bulgarian:
         case SupportedLanguage::Portuguese:
+        case SupportedLanguage::Romanian:
         case SupportedLanguage::Spanish:
         case SupportedLanguage::Swedish:
         case SupportedLanguage::Turkish:
@@ -3266,6 +3288,9 @@ namespace fheroes2
             break;
         case SupportedLanguage::Turkish:
             // generateGoodCP1254ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            break;
+        case SupportedLanguage::Romanian:
+            // generateGoodISO8859-16ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         default:
             // Add new language generation code!
