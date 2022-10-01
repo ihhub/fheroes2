@@ -501,75 +501,78 @@ msgstr "Wacht"
 msgid ""
 "Waits the current creature. The current creature delays its turn until after "
 "all other creatures have had their turn."
-msgstr ""
+msgstr "Wacht op het huidige schepsel. Het huidige schepsel stelt zijn beurt uit "
+"tot alle andere schepsels aan de beurt zijn geweest."
 
 msgid "Skip this unit"
-msgstr ""
+msgstr "Deze eenheid overslaan"
 
 msgid "Skip"
-msgstr ""
+msgstr "Overslaan"
 
 msgid ""
 "Skips the current creature. The current creature ends its turn and does not "
 "get to go again until the next round."
 msgstr ""
+"Slaat het huidige schepsel over. Het huidige schepsel eindigt zijn beurt en "
+"mag pas de volgende ronde weer gaan.
 
 msgid "View Captain's options"
-msgstr ""
+msgstr "Bekijk Kapitein's opties"
 
 msgid "View Hero's options"
-msgstr ""
+msgstr "Bekijk Held's opties"
 
 msgid "View opposing Captain"
-msgstr ""
+msgstr "Bekijk tegenstander Kapitein"
 
 msgid "View opposing Hero"
-msgstr ""
+msgstr "Bekijk tegenstander Held"
 
 msgid "Hide logs"
-msgstr ""
+msgstr "Logboeken verbergen"
 
 msgid "Show logs"
-msgstr ""
+msgstr "Logboeken weergeven"
 
 msgid "Message Bar"
-msgstr ""
+msgstr "Brichtenbalk"
 
 msgid "Shows the results of individual monster's actions."
-msgstr ""
+msgstr "Toont de resultaten van de acties van individuele monsters."
 
 msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr ""
+msgstr "Weet je zeker dat je het gevecht in de automatische modus wilt beëindigen?"
 
 msgid "%{name} skip their turn."
-msgstr ""
+msgstr "%{name} slaat zijn beurt over."
 
 msgid "%{name} wait their turn."
-msgstr ""
+msgstr "%{name} wacht op hun beurt"
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%{attacker} doet %{damage} schade."
+msgstr[1] "%{attacker} doet %{damage} schade."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 schepsel vergaat."
+msgstr[1] "%{count} schepsels vergaan."
 
 msgid "1 %{defender} perishes."
 msgid_plural "%{count} %{defender} perish."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 %{defender} vergaat."
+msgstr[1] "%{count} %{defender} vergaan."
 
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
-msgstr ""
+msgstr "Bewoog %{monster}: van [%{src}] naar [%{dst}]"
 
 msgid "The %{name} resist the spell!"
-msgstr ""
+msgstr "De %{name} weerstaat de spreuk!"
 
 msgid "%{name} casts %{spell} on the %{troop}."
-msgstr ""
+msgstr "%{name} spreekt %{spell} uit op %{troop}."
 
 msgid "%{name} casts %{spell}."
 msgstr ""
