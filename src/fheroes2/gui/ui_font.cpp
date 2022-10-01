@@ -2220,6 +2220,17 @@ namespace
         fheroes2::SetPixel( released[17], offset + 1, offset + 1, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[17], offset + 0, offset + 2, buttonGoodReleasedColor );
 
+        // 3
+        released[19].resize( 7 + offset * 2, 10 + offset * 2 );
+        released[19].reset();
+        fheroes2::DrawLine( released[19], { offset + 1, offset + 0 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[19], { offset + 6, offset + 1 }, { offset + 6, offset + 3 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[19], { offset + 2, offset + 4 }, { offset + 5, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[19], { offset + 6, offset + 5 }, { offset + 6, offset + 7 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[19], { offset + 1, offset + 8 }, { offset + 5, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[19], offset + 0, offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[19], offset + 0, offset + 7, buttonGoodReleasedColor );
+
         // A
         released[33].resize( 13 + offset * 2, 10 + offset * 2 );
         released[33].reset();
