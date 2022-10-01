@@ -23,216 +23,241 @@ msgid ""
 "BATTLE\n"
 "ONLY"
 msgstr ""
+"ALLEEN VOOR\n"
+"GEVENCHTEN"
 
 msgid "GIFT"
-msgstr ""
+msgstr "CADEAU"
 
 msgid "MIN"
-msgstr ""
+msgstr "MINIMUM"
 
 msgid "DIFFICULTY"
-msgstr ""
+msgstr "MOEILIJKHEID"
 
 msgid "Warrior"
-msgstr ""
+msgstr "Strijder"
 
 msgid "Builder"
-msgstr ""
+msgstr "Bouwer"
 
 msgid "Explorer"
-msgstr ""
+msgstr "Ontdekker"
 
 msgid "None"
 msgstr "Geen"
 
 msgid "Warning"
-msgstr ""
+msgstr "Waarschuuwing"
 
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
-msgstr ""
+msgstr "Wil je controle terug nemen van de AI? Het effect neemt alleen plaats\n"
+"de volgende ronde."
 
 msgid ""
 "A few\n"
 "%{monster}"
 msgstr ""
+"Een paar\n"
+"%{monster}"
 
 msgid ""
 "Several\n"
 "%{monster}"
 msgstr ""
+"Meerdere"
+"%{monster}"
 
 msgid ""
 "A pack of\n"
 "%{monster}"
 msgstr ""
+"Een groep van\n"
+"%{monster}"
 
 msgid ""
 "Lots of\n"
 "%{monster}"
 msgstr ""
+"Veel\n"
+"%{monster}"
 
 msgid ""
 "A horde of\n"
 "%{monster}"
 msgstr ""
+"Een horde van\n"
+"%{monster}"
 
 msgid ""
 "A throng of\n"
 "%{monster}"
 msgstr ""
+"Een menigte van\n"
+"%{monster}"
 
 msgid ""
 "A swarm of\n"
 "%{monster}"
 msgstr ""
+"Een zwerm van\n"
+"%{monster}"
 
 msgid ""
 "Zounds of\n"
 "%{monster}"
 msgstr ""
+"Zounden van\n"
+"%{monster}"
 
 msgid ""
 "A legion of\n"
 "%{monster}"
 msgstr ""
+"Een legioen van\n"
+"%{monster}"
 
 msgid "army|Few"
-msgstr ""
+msgstr "1-4"
 
 msgid "army|Several"
-msgstr ""
+msgstr "5-9"
 
 msgid "army|Pack"
-msgstr ""
+msgstr "10-19"
 
 msgid "army|Lots"
-msgstr ""
+msgstr "20-49"
 
 msgid "army|Horde"
-msgstr ""
+msgstr "50-99"
 
 msgid "army|Throng"
-msgstr ""
+msgstr "100-249"
 
 msgid "army|Swarm"
-msgstr ""
+msgstr "250-499"
 
 msgid "army|Zounds"
-msgstr ""
+msgstr "500-999"
 
 msgid "army|Legion"
-msgstr ""
+msgstr "1000+"
 
 msgid "All %{race} troops +1"
 msgstr "Alle %{ras} troepen +1"
 
 msgid "Multiple"
-msgstr ""
+msgstr "Meerdere"
 
 msgid "Troops of %{count} alignments -%{penalty}"
-msgstr ""
+msgstr "Troepen van %{count} uitlijningen -%{penalty}"
 
 #, fuzzy
 msgid "Some undead in group -1"
 msgstr "Enkele ondoden in groepen -1"
 
 msgid "View %{name}"
-msgstr ""
+msgstr "Zie %{name}"
 
 msgid "Move the %{name} "
-msgstr ""
+msgstr "Beweeg de %{name} "
 
 msgid "Move or right click to redistribute %{name}"
-msgstr ""
+msgstr "Beweeg of rechter click om %{name} te herverdelen"
 
 msgid "Combine %{name} armies"
-msgstr ""
+msgstr "Combineer %{name} legers"
 
 msgid "Exchange %{name2} with %{name}"
-msgstr ""
+msgstr "Ruil %{name2} met %{name}"
 
 msgid "Select %{name}"
-msgstr ""
+msgstr "Selecteer %{name}"
 
 msgid "Cannot move last troop"
-msgstr ""
+msgstr "Kan laatste troep niet verplaatsen"
 
 msgid "Move the %{name}"
-msgstr ""
+msgstr "Verplaats de %{name}"
 
 msgid "Set Count"
-msgstr ""
+msgstr "Zet Tel"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%{name} vernietigd helft van de veihandelijke troepen!"
+msgstr[1] "%{name} vernietigd helft van de veihandelijke troepen!"
 
 msgid "%{name} has turned off the auto battle"
-msgstr ""
+msgstr "%{name} heeft de automatische wedstrijd uitgezet"
 
 msgid "%{name} has turned on the auto battle"
-msgstr ""
+msgstr "%{name} heeft de automatische wedstrijd aangezet!"
 
 msgid "Spell failed!"
-msgstr ""
+msgstr "Spreuk gefaald!"
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
 "combat spells."
 msgstr ""
+"Het Sphere of Negation artefact is in effect voor deze wedstrijd, alle strijd "
+"spreuken zijn uitgeschakeld."
 
 msgid "You have already cast a spell this round."
-msgstr ""
+msgstr "Je hebt all een spreuk uitgesproken deze ronde."
 
 msgid "That spell will affect no one!"
-msgstr ""
+msgstr "Die spreuk zal niemand beïnvloeden!"
 
 msgid "You may only summon one type of elemental per combat."
-msgstr ""
+msgstr "Je kan maar 1 type van elemental oproepen per strijd."
 
 msgid "There is no open space adjacent to your hero to summon an Elemental to."
-msgstr ""
+msgstr "Er is geen open plek aangrenzend bij je held om een Elemental naar toe te oproepen."
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
 "half movement rate."
 msgstr ""
+"De Moat verminderd by -%{count} de verdedgings vaardigheid van een eenheid en "
+"versloomt naar de helft van de bewegings snelheid"
 
 msgid "Speed"
-msgstr ""
+msgstr "Snelheid"
 
 msgid "Speed: %{speed}"
-msgstr ""
+msgstr "Snelheid: %{speed}"
 
 msgid "Army Order"
-msgstr ""
+msgstr "Legerorde"
 
 msgid "Auto Spell Casting"
-msgstr ""
+msgstr "Automatisch spreuk uitroepen"
 
 msgid "Grid"
-msgstr ""
+msgstr "Rooster"
 
 msgid "Shadow Movement"
-msgstr ""
+msgstr "Schaduw Beweging"
 
 msgid "Shadow Cursor"
-msgstr ""
+msgstr "Schaduw Cursor"
 
 msgid "Off"
-msgstr ""
+msgstr "Uit"
 
 msgid "On"
-msgstr ""
+msgstr "Aan"
 
 msgid "Set the speed of combat actions and animations."
-msgstr ""
+msgstr "Zet de snelheid van gevechts acties en animaties."
 
 msgid "Toggle to display army order during the battle."
-msgstr ""
+msgstr "Schaakel om het legerorde weer te geven tijdens het gevecht."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
