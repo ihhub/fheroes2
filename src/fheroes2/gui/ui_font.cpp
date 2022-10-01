@@ -2478,12 +2478,43 @@ namespace
             fheroes2::Copy( font[12], 0, 0, font[222 - 32], 3, 12, font[12].width(), font[12].height() );
             font[222 - 32].setPosition( font[52].x(), font[52].y() );
             updateNormalFontLetterShadow( font[222 - 32] );
-
             
+            // s with comma.
+            font[186 - 32].resize( font[83].width(), font[83].height() + 4 );
+            font[186 - 32].reset();
+            fheroes2::Copy( font[83], 0, 0, font[186 - 32], 0, 0, font[83].width(), font[83].height() );
+            fheroes2::Copy( font[12], 0, 0, font[186 - 32], 2, 8, font[12].width(), font[12].height() );
+            font[186 - 32].setPosition( font[83].x(), font[83].y() );
+            updateNormalFontLetterShadow( font[186 - 32] );
 
+            // a with circonflex.
+            font[226 - 32].resize( font[65].width(), font[65].height() + 4 );
+            font[226 - 32].reset();
+            fheroes2::Copy( font[65], 0, 0, font[226 - 32], 0, 3, font[65].width(), font[65].height() );
+            fheroes2::Copy( font[194 - 32], 6, 0, font[226 - 32], 2, 0, 3, 2 );
+            fheroes2::Copy( font[194 - 32], 10, 0, font[226 - 32], 5, 0, 2, 2 );
+            font[226 - 32].setPosition( font[65].x(), font[65].y() - 3 );
+            updateNormalFontLetterShadow( font[226 - 32] );
 
+            // a with breve.
+            font[227 - 32].resize( font[65].width(), font[65].height() + 3 );
+            font[227 - 32].reset();
+            fheroes2::Copy( font[65], 0, 0, font[227 - 32], 0, 3, font[65].width(), font[65].height() );
+            fheroes2::Copy( font[65], 2, 0, font[227 - 32], 3, 0, 1, 1 );
+            fheroes2::Copy( font[65], 2, 0, font[227 - 32], 6, 0, 1, 1 );
+            fheroes2::Copy( font[65], 1, 0, font[227 - 32], 3, 1, 1, 1 );
+            fheroes2::Copy( font[65], 2, 0, font[227 - 32], 4, 1, 2, 1 );
+            fheroes2::Copy( font[65], 1, 0, font[227 - 32], 6, 1, 1, 1 );
+            font[227 - 32].setPosition( font[65].x(), font[65].y() - 3 );
+            updateNormalFontLetterShadow( font[227 - 32] );
 
-            
+            // t with comma.
+            font[254 - 32].resize( font[84].width(), font[84].height() + 4 );
+            font[254 - 32].reset();
+            fheroes2::Copy( font[84], 0, 0, font[254 - 32], 0, 0, font[84].width(), font[84].height() );
+            fheroes2::Copy( font[12], 0, 0, font[254 - 32], 1, 12, font[12].width(), font[12].height() );
+            font[254 - 32].setPosition( font[84].x(), font[84].y() );
+            updateNormalFontLetterShadow( font[254 - 32] );
 
         }
         // Small font.
