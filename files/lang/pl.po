@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-28 22:56+0000\n"
-"PO-Revision-Date: 2022-09-23 16:14+0200\n"
+"PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.1\n"
 
 msgid ""
 "BATTLE\n"
@@ -55,6 +55,8 @@ msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
 msgstr ""
+"Chcesz odebrać kontrolę od AI? Efekt będzie miał miejsce tylko w następnej "
+"turze."
 
 msgid ""
 "A few\n"
@@ -578,9 +580,8 @@ msgstr[0] "1 %{defender} ginie."
 msgstr[1] "%{count} %{defender} ginie."
 msgstr[2] "%{count} %{defender} ginie."
 
-#, fuzzy
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
-msgstr "Przemieść %{monster}: %{src}, %{dst}"
+msgstr "Przeniesiono %{monster} z: [%{src}] do [%{dst}]."
 
 msgid "The %{name} resist the spell!"
 msgstr "%{name} odpierają zaklęcie!"
@@ -2426,9 +2427,8 @@ msgstr "Rekrutuj stworzenia"
 msgid "Max"
 msgstr "Maks"
 
-#, fuzzy
 msgid "Hire all creatures in the town."
-msgstr "Utrata wszystkich bohaterów i miast."
+msgstr "Zatrudnij wszystkie stworzenia w mieście."
 
 msgid "Town Population Information and Statistics"
 msgstr "Statystyki populacji miasta"
@@ -2660,10 +2660,10 @@ msgid "Settings"
 msgstr "Ustawienia"
 
 msgid "Audio"
-msgstr ""
+msgstr "Dźwięk"
 
 msgid "Configure"
-msgstr ""
+msgstr "Konfiguruj"
 
 msgid "Hot Keys"
 msgstr "Skróty klaw."
@@ -2722,18 +2722,14 @@ msgstr "Zmień eksperymentalne ustawienia gry."
 msgid "Toggle instant battle mode."
 msgstr "Zmień tryb błyskawicznej walki."
 
-#, fuzzy
 msgid "Check and configure all the hot keys present in the game."
-msgstr "Zobacz wszystkie skróty klawiszowe gry."
+msgstr "Zobacz i skonfiguruj wszystkie skróty klawiszowe gry."
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Zmień typ interfejsu."
 
-#, fuzzy
 msgid "Toggle colored cursor on or off. This is only an esthetic choice."
-msgstr ""
-"Zmień kursor na kolorowy lub czarno-biały. Kolorowy kursor wygląda ładniej, "
-"ale czasem nie jest tak płynny jak czarno-biały."
+msgstr "Wyłącz lub włącz kolorowy kursor. Wybór zmienia tylko wygląd."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -3416,7 +3412,7 @@ msgid "Designed and Directed"
 msgstr "Projekt i kierownictwo projektu"
 
 msgid "Programming and Design"
-msgstr "Projekt i programowanie"
+msgstr "Programowanie i Projektowanie"
 
 msgid "Executive Producer"
 msgstr "Producent wykonawczy"
@@ -3434,7 +3430,7 @@ msgid "Musical Production"
 msgstr "Produkcja muzyczna"
 
 msgid "Music and Sound Design"
-msgstr "Muzyka i projekt dźwięku"
+msgstr "Muzyka i projektowanie dźwięku"
 
 msgid "Vocalists"
 msgstr "Partie wokalne"
@@ -3472,43 +3468,37 @@ msgid "Cyberlore Studios"
 msgstr ""
 
 msgid "Design Lead"
-msgstr ""
+msgstr "Kierownik Projektowania"
 
 msgid "Designers"
-msgstr ""
+msgstr "Projektanci"
 
-#, fuzzy
 msgid "Programming Lead"
-msgstr "Projekt i programowanie"
+msgstr "Kierownik Programowania"
 
 msgid "Art Lead"
-msgstr ""
+msgstr "Kierownik Artystów"
 
-#, fuzzy
 msgid "Playtesters"
-msgstr "2 graczy"
+msgstr "Testerzy gry"
 
 msgid "New World Computing"
 msgstr ""
 
 msgid "Designer"
-msgstr ""
+msgstr "Projektant"
 
-#, fuzzy
 msgid "Producers"
-msgstr "Producent"
+msgstr "Producenci"
 
-#, fuzzy
 msgid "QA Managers"
-msgstr "Kierownik kontroli jakości"
+msgstr "Kierownicy kontroli jakości"
 
-#, fuzzy
 msgid "Sound Design"
-msgstr "Muzyka i projekt dźwięku"
+msgstr "Projektowanie Dźwięku"
 
-#, fuzzy
 msgid "Town Themes"
-msgstr "Brama do miasta"
+msgstr "Motywy Miejskie"
 
 msgid "Alto Sax"
 msgstr ""
@@ -3517,19 +3507,19 @@ msgid "Harpsichord and Piano"
 msgstr ""
 
 msgid "Basso Vocal"
-msgstr ""
+msgstr "Wokal Basowy"
 
 msgid "Soprano Vocal"
-msgstr ""
+msgstr "Wokal Sopranowy"
 
 msgid "Recorded at Green Street Studios"
-msgstr ""
+msgstr "Nagrywano u Green Street Studios"
 
 msgid "German Consultant"
-msgstr ""
+msgstr "Niemiecki Konsultant"
 
 msgid "Map Designers"
-msgstr ""
+msgstr "Projektanci Map"
 
 msgid "Package Design"
 msgstr ""
@@ -3553,14 +3543,13 @@ msgid "View High Scores for Campaigns."
 msgstr "Obejrzyj najlepsze wyniki dla kampanii."
 
 msgid "This file contains a save with an invalid game type."
-msgstr ""
+msgstr "Ten plik zawiera zapis gry z nieprawidłowym typem gry."
 
-#, fuzzy
 msgid ""
 "This file was saved by the \"The Price of Loyalty\" version of the game.\n"
 "Some items may not be available."
 msgstr ""
-"Ten plik jest zapisany w wersji \"Cena Lojalności\".\n"
+"Ten plik jest zapisany w wersji gry \"Cena Lojalności\".\n"
 "Niektóre elementy mogą być niedostępne."
 
 msgid "Usupported save format: "
@@ -4167,9 +4156,8 @@ msgstr ""
 "zależności od scenariusza, gracz może otrzymać dodatkowe miasta oraz/lub "
 "bohaterów niezgodne z przynależną im klasą."
 
-#, fuzzy
 msgid "Handicap"
-msgstr "Mandigal"
+msgstr "Utrudnienie"
 
 #
 msgid ""
@@ -9610,7 +9598,7 @@ msgstr ""
 "połowę obrażeń z ataku wręcz."
 
 msgid "You have no Magic Book, so you cannot cast a spell."
-msgstr ""
+msgstr "Nie posiadasz Magicznej Księgi, więc nie możesz rzucić zaklęcia."
 
 msgid "No spell to cast."
 msgstr "Brak zaklęć."
