@@ -2793,7 +2793,6 @@ namespace
         fheroes2::DrawLine( released[188], { offset + 2, offset + 1 }, { offset + 2, offset + 8 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[188], { offset + 3, offset + 5 }, { offset + 8, offset + 5 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[188], { offset + 9, offset + 6 }, { offset + 9, offset + 8 }, buttonGoodReleasedColor );
-
     }
 
     void generateCP1252GoodButtonFont( std::vector<fheroes2::Sprite> & released )
