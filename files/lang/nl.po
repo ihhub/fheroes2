@@ -257,229 +257,246 @@ msgid "Set the speed of combat actions and animations."
 msgstr "Zet de snelheid van gevechts acties en animaties."
 
 msgid "Toggle to display army order during the battle."
-msgstr "Schaakel om het legerorde weer te geven tijdens het gevecht."
+msgstr "Schakel om het legerorde weer te geven tijdens het gevecht."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
 "is on. (Note: This does not affect spell casting for computer players in any "
 "way, nor does it affect quick combat.)"
 msgstr ""
+"Schakel wel of niet de computer spreuken voor je zal uitspreken waneer automatisch vechten "
+"aan staat. (Opmerking: Dit heeft geen invloed op spreuken uitspreken voor computer spelers "
+"hoe dan ook, het heeft ook geen invloed op snel vechten.)"
 
 msgid ""
 "Toggle the hex grid on or off. The hex grid always underlies movement, even "
 "if turned off. This switch only determines if the grid is visible."
 msgstr ""
+"Schakel het hex raster aan of uit. Het hex raster onderlijnt altijd beweeging, even "
+"als uitgeschakeld. Deze schakel bepaalt alleen of het raster zichtbaar is."
 
 msgid ""
 "Toggle on or off shadows showing where your creatures can move and attack."
 msgstr ""
+"Schakel aan of uit of schaduwen worden weergegeven waar je schepsels kunnen bewegen en aanvallen."
 
 msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
+"Schakel aan of uit een schaduw die de huidige hex-locatie van de muiscursor toont."
 
 msgid "The enemy has surrendered!"
-msgstr ""
+msgstr "De vijand heeft zich overgegeven!"
 
 msgid "The enemy has fled!"
-msgstr ""
+msgstr "De vijand is gevlucht!"
 
 msgid "A glorious victory!"
 msgstr "Een glorieuze overwinning!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
-msgstr ""
+msgstr "Voor moed in de strijd, %{name} ontvangt %{exp} ervaring."
 
 msgid "The cowardly %{name} flees from battle."
-msgstr ""
+msgstr "De laffe %{name} vlucht voor de strijd."
 
 msgid "%{name} surrenders to the enemy, and departs in shame."
-msgstr ""
+msgstr "%{name} geeft zich over aan de vijand en vertrekt in schaamte."
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
-msgstr ""
+msgstr "Je strijdmacht lijdt een bittere nederlaag en %{name} geeft je zaak op."
 
 msgid "Your force suffer a bitter defeat."
-msgstr ""
+msgstr "Je strijdmacht lijdt een bittere nederlaag."
 
 msgid "Battlefield Casualties"
-msgstr ""
+msgstr "Slachtoffers op het slagveld"
 
 msgid "Attacker"
-msgstr ""
+msgstr "Aanvaller"
 
 msgid "Defender"
-msgstr ""
+msgstr "Verdediger"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "Als je naar de %{name} reikt, verdwijnt deze op mysterieuze wijze."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "Als je vijand naar de %{name} reikt, verdwijnt deze op mysterieuze wijze."
 
 msgid "You have captured an enemy artifact!"
-msgstr ""
+msgstr "Je hebt een vijandelijk artefact gevangen!"
 
 msgid "Necromancy!"
-msgstr ""
+msgstr "Necromantie!"
 
 msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
-msgstr ""
+msgstr "Door de duistere kunst van necromantie te beoefenen, ben je in staat "
+"om %{count} van de vijandelijke doden te verhogen om terug te keren onder jouw dienst als %{monster}."
 
 msgid "%{name} the %{race}"
-msgstr ""
+msgstr "%{name} de %{race}"
 
 msgid "Captain of %{name}"
-msgstr ""
+msgstr "Kapitein van %{name}"
 
 msgid "Attack"
-msgstr ""
+msgstr "Aanval"
 
 msgid "Defense"
-msgstr ""
+msgstr "Verdedig"
 
 msgid "Spell Power"
-msgstr ""
+msgstr "Spreuk Kracht"
 
 msgid "Knowledge"
-msgstr ""
+msgstr "Kennis"
 
 msgid "Morale"
-msgstr ""
+msgstr "Moreel"
 
 msgid "Luck"
-msgstr ""
+msgstr "Geluk"
 
 msgid "Spell Points"
-msgstr ""
+msgstr "Spreuk Punten"
 
 msgid "Hero's Options"
-msgstr ""
+msgstr "Held's Opties"
 
 msgid "Cast Spell"
-msgstr ""
+msgstr "Spreuk uitspreken"
 
 msgid "Retreat"
-msgstr ""
+msgstr "Terugtrekken"
 
 msgid "Surrender"
-msgstr ""
+msgstr "Overgave"
 
 msgid "Cancel"
-msgstr ""
+msgstr "Annuleren"
 
 msgid "Hero Screen"
-msgstr ""
+msgstr "Held Scherm"
 
 msgid "Captain's Options"
-msgstr ""
+msgstr "Kapitein's Opties"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
 msgstr ""
+"Spreek een magische spruik uit. Je kan maar 1 spreuk uitspreken per gevechts ronde. "
+"De ronde resets waneer elk schepsel een beurt heeft gehad."
 
 msgid ""
 "Retreat your hero, abandoning your creatures. Your hero will be available "
 "for you to recruit again, however, the hero will have only a novice hero's "
 "forces."
 msgstr ""
+"Trek je held terug en laat je schepsels in de steek. Je held zal beschikbaar "
+"zijn om opnieuw te rekruteren, maar de held zal alleen de troepen van een "
+"beginnende held hebben."
 
 msgid ""
 "Surrendering costs gold. However if you pay the ransom, the hero and all of "
 "his or her surviving creatures will be available to recruit again."
 msgstr ""
+"Overgave kost geld. Echter als je het losgeld betaalt zal de held en "
+"al van de overlevende schepsels beschikbaar zijn om opnieuw te rekruteren."
 
 msgid "Open Hero Screen to view full information about the hero."
-msgstr ""
+msgstr "Open het heldenscherm om volledige informatie over de held te bekijken."
 
 msgid "Return to the battle."
-msgstr ""
+msgstr "Keer terug naar de strijd."
 
 msgid "Not enough gold (%{gold})"
-msgstr ""
+msgstr "Niet genoeg gound (%{gold})"
 
 msgid "%{name} states:"
-msgstr ""
+msgstr "%{name} staat:"
 
 msgid "Captain of %{name} states:"
-msgstr ""
+msgstr "De Kapitein van %{name} staat:"
 
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
 msgstr ""
+"\"Ik zal je overgave accepteren en jou en je troepen een veilige doorgang "
+"geven voor de prijs van %{price} goud.\""
 
 msgid "View %{monster} info"
-msgstr ""
+msgstr "Bekijk de info van %{monster}"
 
 msgid "Shoot %{monster}"
-msgstr ""
+msgstr "Schiet %{monster}"
 
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "(1 schot over)"
+msgstr[1] "(%{count} schoten over)"
 
 msgid "Attack %{monster}"
-msgstr ""
+msgstr "Val %{monster} aan"
 
 msgid "Fly %{monster} here"
-msgstr ""
+msgstr "Vlieg %{monster} hier"
 
 msgid "Move %{monster} here"
-msgstr ""
+msgstr "Beweeg %{monster} hier"
 
 msgid "Turn %{turn}"
-msgstr ""
+msgstr "Draai %{turn}"
 
 msgid "Teleport here"
-msgstr ""
+msgstr "Teleporteer hier"
 
 msgid "Invalid teleport destination"
-msgstr ""
+msgstr "Ongeldige teleporteers bestemming"
 
 msgid "Cast %{spell} on %{monster}"
-msgstr ""
+msgstr "%{spell} uitgesproken op %{monster}"
 
 msgid "Cast %{spell}"
-msgstr ""
+msgstr "%{spell} uitspreken"
 
 msgid "Select spell target"
-msgstr ""
+msgstr "Selecteer spreuk doelwit"
 
 msgid "View Ballista info"
-msgstr ""
+msgstr "Ballista-info bekijken"
 
 msgid "Ballista"
-msgstr ""
+msgstr "Ballista"
 
 msgid "Enable auto combat"
-msgstr ""
+msgstr "Automatische gevechten inschakelen"
 
 msgid "Allows the computer to fight out the battle for you."
-msgstr ""
+msgstr "Hiermee kan de computer de strijd voor je uitvechten."
 
 msgid "Auto Combat"
-msgstr ""
+msgstr "Automatisch Vechten"
 
 msgid "Customize system options"
-msgstr ""
+msgstr "Systeem instellingen aanpassen"
 
 msgid "Allows you to customize the combat screen."
-msgstr ""
+msgstr "Hiermee kan je het gevechts scherm aanpassen"
 
 msgid "System Options"
-msgstr ""
+msgstr "Systeem Instellingen"
 
 msgid "Wait this unit"
-msgstr ""
+msgstr "Wacht deze eenheid"
 
 msgid "Wait"
-msgstr ""
+msgstr "Wacht"
 
 msgid ""
 "Waits the current creature. The current creature delays its turn until after "
