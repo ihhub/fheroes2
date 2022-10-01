@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-28 22:56+0000\n"
-"PO-Revision-Date: 2022-10-01 16:16+0300\n"
+"PO-Revision-Date: 2022-10-01 20:20+0300\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "Language: tr\n"
@@ -22,13 +22,15 @@ msgstr ""
 msgid ""
 "BATTLE\n"
 "ONLY"
-msgstr "SADECE SAVAŞ"
+msgstr ""
+"SADECE \n"
+"SAVAŞ"
 
 msgid "GIFT"
 msgstr "HEDİYE"
 
 msgid "MIN"
-msgstr "MİNİMUM"
+msgstr "MİN"
 
 msgid "DIFFICULTY"
 msgstr "ZORLUK"
@@ -119,31 +121,31 @@ msgstr ""
 "%{monster}"
 
 msgid "army|Few"
-msgstr "ordu|Birkaç"
+msgstr "Birkaç"
 
 msgid "army|Several"
-msgstr "ordu|Birçok"
+msgstr "Birçok"
 
 msgid "army|Pack"
-msgstr "ordu|Yığın"
+msgstr "Yığın"
 
 msgid "army|Lots"
-msgstr "ordu|Fazla"
+msgstr "Fazla"
 
 msgid "army|Horde"
-msgstr "ordu|Sürü"
+msgstr "Sürü"
 
 msgid "army|Throng"
-msgstr "ordu|Çok Fazla"
+msgstr "Çok Fazla"
 
 msgid "army|Swarm"
-msgstr "ordu|Tabur"
+msgstr "Tabur"
 
 msgid "army|Zounds"
-msgstr "ordu|Aşırı"
+msgstr "Aşırı"
 
 msgid "army|Legion"
-msgstr "ordu|Lejyon"
+msgstr "Lejyon"
 
 msgid "All %{race} troops +1"
 msgstr "Bütün %{race} askerler +1"
@@ -167,13 +169,13 @@ msgid "Move or right click to redistribute %{name}"
 msgstr "%{name} Yeniden dağıtmak için oynatın veya sağ tıklayın"
 
 msgid "Combine %{name} armies"
-msgstr "%{name}  orduları birleştir"
+msgstr "%{name} orduları birleştir"
 
 msgid "Exchange %{name2} with %{name}"
-msgstr "%{name2} 'ı   %{name} ile değiştir"
+msgstr "%{name2} 'ı %{name} ile değiştir"
 
 msgid "Select %{name}"
-msgstr "Seç %{name}"
+msgstr "%{name}'ı seç"
 
 msgid "Cannot move last troop"
 msgstr "Son birlik hareket ettirilemiyor"
@@ -297,13 +299,13 @@ msgid "A glorious victory!"
 msgstr "Şanlı bir zafer!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
-msgstr "Savaş cesareti için  %{name}  %{exp} tecrübe kazandı."
+msgstr "Savaş'taki cesareti için %{name} %{exp} tecrübe kazandı."
 
 msgid "The cowardly %{name} flees from battle."
 msgstr "Korkak %{name} savaştan kaçtı."
 
 msgid "%{name} surrenders to the enemy, and departs in shame."
-msgstr "%{name}düşmana teslim oldu, ve utanç içinde ayrıldı."
+msgstr "%{name} düşmana teslim oldu, ve utanç içinde ayrıldı."
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
 msgstr "Kuvvetleriniz acı bir yenilgiye uğradı, ve %{name} davanızı terk etti."
@@ -606,7 +608,7 @@ msgid "The %{attacker}' gaze turns the %{target} to stone!"
 msgstr "%{attacker}'ın bakışları %{target}'ı taşa çevirdi!"
 
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr "%{attacker}''ın laneti %{target}'in üzerine geldi!"
+msgstr "%{attacker}'ın laneti %{target}'in üzerine geldi!"
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
 msgstr "%{attacker}' saldırısı %{target}'ı sakatladı!"
@@ -717,15 +719,16 @@ msgid "Right Turret"
 msgstr "Sağ Taret"
 
 msgid "The %{name} fires with the strength of %{count} Archers"
-msgstr "%{name}  %{count}Okçu gücüyle ateş ediyor"
+msgstr "%{name} %{count} Okçu gücüyle ateş ediyor"
 
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr ""
+msgstr "her biri saldırı becerilerine +%{attack} bonusu ekler."
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
 "spell."
 msgstr ""
+"%{artifact} eseri bu savaşta etkin, %{spell} büyüsünü devre dışı bırakıyor."
 
 msgid "%{count} %{name} rise(s) from the dead!"
 msgstr ""
