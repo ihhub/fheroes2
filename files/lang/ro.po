@@ -27,7 +27,7 @@ msgstr ""
 "BĂTĂLIE"
 
 msgid "GIFT"
-msgstr "CADOU"
+msgstr "OFERĂ"
 
 msgid "MIN"
 msgstr "MIN"
@@ -127,25 +127,25 @@ msgid "army|Several"
 msgstr "Mai multe"
 
 msgid "army|Pack"
-msgstr "O haită de"
+msgstr "Haită"
 
 msgid "army|Lots"
 msgstr "Multe"
 
 msgid "army|Horde"
-msgstr "O hoardă de"
+msgstr "Hoardă"
 
 msgid "army|Throng"
-msgstr "O înghesuială de"
+msgstr "Înghesuială"
 
 msgid "army|Swarm"
-msgstr "Un roi de"
+msgstr "Roi"
 
 msgid "army|Zounds"
 msgstr "Extrem de multe"
 
 msgid "army|Legion"
-msgstr "O legiune de"
+msgstr "Legiune"
 
 msgid "All %{race} troops +1"
 msgstr "Toate %{race} forțele +1"
