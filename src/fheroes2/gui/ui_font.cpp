@@ -2747,6 +2747,15 @@ namespace
         // K. Needs to have upper right arm adjusted.
         released[170] = released[43];
 
+        // Cyrillic EL
+        released[171].resize( 9 + offset * 2, 10 + offset * 2 );
+        released[171].reset();
+        fheroes2::DrawLine( released[171], { offset + 2, offset + 0 }, { offset + 8, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[171], { offset + 8, offset + 1 }, { offset + 8, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[171], { offset + 3, offset + 1 }, { offset + 3, offset + 7 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[171], { offset + 0, offset + 9 }, { offset + 2, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[171], { offset + 6, offset + 9 }, { offset + 7, offset + 9 }, buttonGoodReleasedColor );
+
         // M
         released[172] = released[45];
 
@@ -2774,6 +2783,17 @@ namespace
             fheroes2::Sprite temp = fheroes2::Flip( released[191], true, false );
             fheroes2::Copy( temp, 0, 0, released[191], 0, 0, temp.width(), temp.height() );
         }
+
+        // b, Cyrillic soft sign
+        released[188].resize( 10 + offset * 2, 10 + offset * 2 );
+        released[188].reset();
+        fheroes2::DrawLine( released[188], { offset + 0, offset + 0 }, { offset + 4, offset + 0 }, buttonGoodReleasedColor );
+        /*fheroes2::DrawLine( released[188], { offset + 9, offset + 0 }, { offset + 9, offset + 2 }, buttonGoodReleasedColor );*/
+        fheroes2::DrawLine( released[188], { offset + 0, offset + 9 }, { offset + 8, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[188], { offset + 2, offset + 1 }, { offset + 2, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[188], { offset + 3, offset + 5 }, { offset + 8, offset + 5 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[188], { offset + 9, offset + 6 }, { offset + 9, offset + 8 }, buttonGoodReleasedColor );
+
     }
 
     void generateCP1252GoodButtonFont( std::vector<fheroes2::Sprite> & released )
