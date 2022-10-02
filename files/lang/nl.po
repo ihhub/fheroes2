@@ -575,215 +575,218 @@ msgid "%{name} casts %{spell} on the %{troop}."
 msgstr "%{name} spreekt %{spell} uit op %{troop}."
 
 msgid "%{name} casts %{spell}."
-msgstr ""
+msgstr "%{name} spreekt %{spell}."
 
 msgid "The %{spell} does %{damage} damage to one undead creature."
-msgstr ""
+msgstr "De %{spell} doet %{damage} schade aan een ondode schepsel."
 
 msgid "The %{spell} does %{damage} damage to all undead creatures."
-msgstr ""
+msgstr "De %{spell} richt %{damage} schade aan aan alle ondode schepsels."
 
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
-msgstr ""
+msgstr "De %{spell} richt %{damage} schade aan, %{count} schepsels komen om."
 
 msgid "The %{spell} does %{damage} damage."
-msgstr ""
+msgstr "De %{spell} richt %{damage} schade aan."
 
 msgid "The %{spell} does %{damage} damage to one living creature."
-msgstr ""
+msgstr "De %{spell} richt %{damage} schade aan aan 1 levend schepsel."
 
 msgid "The %{spell} does %{damage} damage to all living creatures."
-msgstr ""
+msgstr "De %{spell} richt %{damage} schade aan aan alle levende schepsels."
 
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr ""
+msgstr "De aanval van %{attacker} verblindt de %{target}!"
 
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr ""
+msgstr "De blik van de %{attacker} verandert het %{target} in steen!"
 
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr ""
+msgstr "De vloek van de %{attacker} valt op de %{target}!"
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr ""
+msgstr "De %{target} zijn verlamd door de %{attacker}!"
 
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr ""
+msgstr "De %{attacker} verdrijft alle goede spreuken op je %{target}!"
 
 msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr ""
+msgstr "De %{attacker} spreekt %{spell} uit op %{target}!"
 
 msgid "Bad luck descends on the %{attacker}."
-msgstr ""
+msgstr "Pech komt neer op de %{attacker}."
 
 msgid "Good luck shines on the %{attacker}."
-msgstr ""
+msgstr "Geluk komt neer op de %{attacker}"
 
 msgid "High morale enables the %{monster} to attack again."
-msgstr ""
+msgstr "Een hoog moreel stelt het %{monster} in staat opnieuw aan te vallen."
 
 msgid "Low morale causes the %{monster} to freeze in panic."
-msgstr ""
+msgstr "Een laag moreel zorgt ervoor dat het %{monster} in paniek bevriest."
 
 msgid "%{tower} does %{damage} damage."
-msgstr ""
+msgstr "%{tower} doet %{damage} schade."
 
 msgid "The mirror image is created."
-msgstr ""
+msgstr "Het spiegelbeeld wordt gecreëerd."
 
 msgid "The mirror image is destroyed!"
-msgstr ""
+msgstr "Het spiegelbeeld is vernietigd!"
 
 msgid "Are you sure you want to interrupt the auto battle?"
-msgstr ""
+msgstr "Are you sure you want to interrupt the auto battle?"
 
 msgid "Error"
-msgstr ""
+msgstr "Fout"
 
 msgid "No spells to cast."
-msgstr ""
+msgstr "Geen spreuken om uit te spreken."
 
 msgid "Are you sure you want to retreat?"
-msgstr ""
+msgstr "Weet je zeker dat je je wilt terugtrekken?"
 
 msgid "Retreat disabled"
-msgstr ""
+msgstr "Terugtrekken uitgeschakeld"
 
 msgid "Surrender disabled"
-msgstr ""
+msgstr "Overgave uitgeschakeld"
 
 msgid "Damage: %{max}"
-msgstr ""
+msgstr "Schade: %{max}"
 
 msgid "Damage: %{min} - %{max}"
-msgstr ""
+msgstr "Schade: %{min} - %{max}"
 
 msgid "Perish: %{max}"
-msgstr ""
+msgstr "Vergaan: %{max}"
 
 msgid "Perish: %{min} - %{max}"
-msgstr ""
+msgstr "Vergaan: %{min} - %{max}"
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
 msgstr ""
+"Door observatie met arendsogen kan %{name} de magische spreuk %{spell} leren."
 
 msgid "Human"
-msgstr ""
+msgstr "Mens"
 
 msgid "AI"
-msgstr ""
+msgstr "Computer"
 
 msgid "Please select another hero."
-msgstr ""
+msgstr "Selecteer een andere held."
 
 msgid "Set Attack Skill"
-msgstr ""
+msgstr "Aanvalsvaardigheid instellen"
 
 msgid "Set Defense Skill"
-msgstr ""
+msgstr "Verdedigingsvaardigheid instellen"
 
 msgid "Set Power Skill"
-msgstr ""
+msgstr "Krachtsvaardigheid instellen"
 
 msgid "Set Knowledge Skill"
-msgstr ""
+msgstr "Kennisvaardigheid instellen"
 
 msgid "%{race1} %{name1}"
-msgstr ""
+msgstr "%{race1} %{name1}"
 
 msgid "vs"
-msgstr ""
+msgstr "tegen"
 
 msgid "%{race2} %{name2}"
-msgstr ""
+msgstr "%{race2} %{name2}"
 
 msgid "Monsters"
-msgstr ""
+msgstr "Monsters"
 
 msgid "N/A"
-msgstr ""
+msgstr "Nvt"
 
 msgid "Left Turret"
-msgstr ""
+msgstr "Linker torentje"
 
 msgid "Right Turret"
-msgstr ""
+msgstr "Rechter torentje"
 
 msgid "The %{name} fires with the strength of %{count} Archers"
-msgstr ""
+msgstr "De %{name} vuurt met de kracht van %{count} Boogschutters"
 
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr ""
+msgstr "elk met een +%{attack} bonus voor hun aanvalsvaardigheid."
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
 "spell."
 msgstr ""
+"Het %{artefact}-artefact is van kracht voor dit gevecht, waardoor de "
+"%{spell}-spreuk wordt uitgeschakeld."
 
 msgid "%{count} %{name} rise(s) from the dead!"
-msgstr ""
+msgstr "%{count} %{name} opstaan uit de dood!"
 
 msgid "Dwarven Alliance"
-msgstr ""
+msgstr "Dwergen Alliantie"
 
 msgid "Sorceress Guild"
-msgstr ""
+msgstr "Tovenares Gilde"
 
 msgid "Necromancer Guild"
-msgstr ""
+msgstr "Necromancer gilde"
 
 msgid "Ogre Alliance"
-msgstr ""
+msgstr "Ogre Alliantie"
 
 msgid "Dwarfbane"
-msgstr ""
+msgstr "Poortwachter"
 
 msgid "Dragon Alliance"
-msgstr ""
+msgstr "Draken Alliantie"
 
 msgid "Elven Alliance"
-msgstr ""
+msgstr "Elven Alliantie"
 
 msgid "Kraeger defeated"
-msgstr ""
+msgstr "Kraeger verslagen"
 
 msgid "Wayward Son"
-msgstr ""
+msgstr "Wayward zoon"
 
 msgid "Uncle Ivan"
-msgstr ""
+msgstr "Oom Ivan"
 
 msgid "Annexation"
-msgstr ""
+msgstr "Annexatie"
 
 msgid "Carator Mines"
-msgstr ""
+msgstr "Caratormijnen"
 
 msgid "Force of Arms"
-msgstr ""
+msgstr "Kracht van Wapens"
 
 msgid "Save the Dwarves"
-msgstr ""
+msgstr "Red de Dwarfen"
 
 msgid "The Crown"
-msgstr ""
+msgstr "De Kroon"
 
 msgid "The Gauntlet"
-msgstr ""
+msgstr "De Handschoen"
 
 msgid "Turning Point"
-msgstr ""
+msgstr "Draai Punt"
 
 msgid "Betrayal"
-msgstr ""
+msgstr "Bedrog"
 
 msgid "Corlagon's Defense"
-msgstr ""
+msgstr "Corlagons Verdediging"
 
 msgid "Final Justice"
-msgstr ""
+msgstr "Laatste Gerechtigheid"
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
@@ -791,6 +794,10 @@ msgid ""
 "will spend most of their time fighting with one another.  Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
+"Roland heeft je nodig om de heren in de buurt van zijn kasteel te verslaan "
+"om zijn rebellie tegen zijn broer te beginnen. Ze zijn niet met elkaar verbonden, "
+"dus zullen ze het grootste deel van hun tijd met elkaar vechten. De overwinning "
+"is van jou als je al hun kastelen en helden hebt verslagen."
 
 msgid ""
 "The local lords refuse to swear allegiance to Roland, and must be subdued. "
