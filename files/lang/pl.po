@@ -3432,7 +3432,7 @@ msgid "Musical Production"
 msgstr "Produkcja muzyczna"
 
 msgid "Music and Sound Design"
-msgstr "Projektowanie Muzyki i Dźwięku"
+msgstr "Muzyka i projekt dźwięku"
 
 msgid "Vocalists"
 msgstr "Partie wokalne"
