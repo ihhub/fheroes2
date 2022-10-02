@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-28 22:56+0000\n"
+"POT-Creation-Date: 2022-10-01 19:29+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -4258,6 +4258,9 @@ msgstr "Szwedzki"
 
 msgid "Portuguese"
 msgstr "Portugalski"
+
+msgid "Turkish"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ", FPS: "
