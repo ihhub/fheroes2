@@ -3507,10 +3507,10 @@ msgid "Harpsichord and Piano"
 msgstr "Klawesyn i fortepian"
 
 msgid "Basso Vocal"
-msgstr "Wokal Basowy"
+msgstr "Bas (partie wokalne)"
 
 msgid "Soprano Vocal"
-msgstr "Wokal Sopranowy"
+msgstr "Sopran (partie wokalne)"
 
 msgid "Recorded at Green Street Studios"
 msgstr "Nagrano w Green Street Studios"
