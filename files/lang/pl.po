@@ -3468,16 +3468,16 @@ msgid "Cyberlore Studios"
 msgstr "Cyberlore Studios"
 
 msgid "Design Lead"
-msgstr "Kierownik Projektowania"
+msgstr "Kierownik projektowania"
 
 msgid "Designers"
 msgstr "Projektanci"
 
 msgid "Programming Lead"
-msgstr "Kierownik Programowania"
+msgstr "Kierownik programowania"
 
 msgid "Art Lead"
-msgstr "Kierownik Artystów"
+msgstr "Kierownik artystów"
 
 msgid "Playtesters"
 msgstr "Testerzy gry"
