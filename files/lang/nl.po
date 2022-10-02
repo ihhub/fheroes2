@@ -2745,348 +2745,368 @@ msgid ""
 "Map\n"
 "Difficulty"
 msgstr ""
+"Kaart\n"
+"Moeilijkeid"
 
 msgid ""
 "Game\n"
 "Difficulty"
 msgstr ""
+"Spel\n"
+"Moeilijkeid"
 
 msgid "Rating"
-msgstr ""
+msgstr "Beoordeling"
 
 msgid "Map Size"
-msgstr ""
+msgstr "Kaart Grote"
 
 msgid "Opponents"
-msgstr ""
+msgstr "Tegenstanders"
 
 msgid "Class"
-msgstr ""
+msgstr "Klasse"
 
 msgid ""
 "Victory\n"
 "Conditions"
 msgstr ""
+"Overwinning\n"
+"Condities"
 
 msgid ""
 "Loss\n"
 "Conditions"
 msgstr ""
+"Verlies\n"
+"Condities"
 
 msgid "First select recipients!"
-msgstr ""
+msgstr "Selecteer eerst ontvangers!"
 
 msgid "You cannot select %{resource}!"
-msgstr ""
+msgstr "Je kan %{resource} niet selecteren!"
 
 msgid "Select count %{resource}:"
-msgstr ""
+msgstr "Selecteer tel %{resource}:"
 
 msgid "Select Recipients"
-msgstr ""
+msgstr "Selecteer Ontvangers"
 
 msgid "Your Funds"
-msgstr ""
+msgstr "Je Fondsen"
 
 msgid "Planned Gift"
-msgstr ""
+msgstr "Gepland Cadeau"
 
 msgid "Gift from %{name}"
-msgstr ""
+msgstr "Cadeau van %{name}"
 
 msgid "Set Guardian"
-msgstr ""
+msgstr "Bewaker Instellen"
 
 msgid "Your army too big!"
-msgstr ""
+msgstr "Je leger te groot!"
 
 msgid "Hot Keys:"
-msgstr ""
+msgstr "Sneltoetsen:"
 
 msgid "Select Game Language:"
-msgstr ""
+msgstr "Selecteer Spel Taal:"
 
 msgid "%{name} has gained a level."
-msgstr ""
+msgstr "%{name} heeft een niveau bereikt."
 
 msgid "%{skill} +1"
-msgstr ""
+msgstr "%{skill} +1"
 
 msgid "You have learned %{skill}."
-msgstr ""
+msgstr "Je hebt %{skill} geleerd."
 
 msgid "You may learn either:"
-msgstr ""
+msgstr "You kunt leren:"
 
 msgid "or"
-msgstr ""
+msgstr "of"
 
 msgid ""
 "Please inspect our fine wares. If you feel like offering a trade, click on "
 "the items you wish to trade with and for."
 msgstr ""
+"Gelieve te inspecteren onze fijne waren. Als u een ruil wilt aanbieden, "
+"klikt u op de items waarmee en waarvoor u wilt ruilen."
 
 msgid ""
 "You have received quite a bargain. I expect to make no profit on the deal. "
 "Can I interest you in any of my other wares?"
 msgstr ""
+"Je hebt een aardig koopje gekregen. Ik verwacht geen winst te maken op de deal. "
+"Kan ik u interesseren voor een van mijn andere waren?"
 
 msgid "I can offer you %{count} for 1 unit of %{resfrom}."
-msgstr ""
+msgstr "Ik kan je %{count} aanbieden voor 1 eenheid van %{resfrom}."
 
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
-msgstr ""
+msgstr "Ik kan je 1 eenheid van %{resto} aanbieden voor %{count} eenheden van %{resfrom}."
 
 msgid "Min"
-msgstr ""
+msgstr "Min"
 
 msgid "Qty to trade"
-msgstr ""
+msgstr "Te ruilen aantal"
 
 msgid "Trading Post"
-msgstr ""
+msgstr "Handelspost"
 
 msgid "Your Resources"
-msgstr ""
+msgstr "Je Bronnen"
 
 msgid "Available Trades"
-msgstr ""
+msgstr "Beschrikbare Handelaars"
 
 msgid "n/a"
-msgstr ""
+msgstr "nvt"
 
 msgid "guarded by "
-msgstr ""
+msgstr "beschermt door "
 
 msgid "guarded by %{count} %{monster}"
-msgstr ""
+msgstr "beschermt door %{count} %{monster}"
 
 msgid "(available: %{count})"
-msgstr ""
+msgstr "(beschikbaar: %{count})"
 
 msgid "(empty)"
-msgstr ""
+msgstr "(leeg)"
 
 msgid "already learned"
-msgstr ""
+msgstr "al geleerd"
 
 msgid "already knows this skill"
-msgstr ""
+msgstr "kent deze vaardigheid al"
 
 msgid "already has max skills"
-msgstr ""
+msgstr "heeft max vaardigheiden al"
 
 msgid "(already visited)"
-msgstr ""
+msgstr "(al bezocht)"
 
 msgid "(not visited)"
-msgstr ""
+msgstr "(not bezocht)"
 
 msgid "%{color} Barrier"
-msgstr ""
+msgstr "%{color} Barriere"
 
 msgid "%{color} Tent"
-msgstr ""
+msgstr "%{color} Tent"
 
 msgid "Road"
-msgstr ""
+msgstr "Straat"
 
 msgid "(digging ok)"
-msgstr ""
+msgstr "(graven oké)"
 
 msgid "(no digging)"
-msgstr ""
+msgstr "(geen graven)"
 
 msgid "penalty: %{cost}"
-msgstr ""
+msgstr "boete: %{cost}"
 
 msgid "Uncharted Territory"
-msgstr ""
+msgstr "Onbekend Terrein"
 
 msgid "Defenders:"
-msgstr ""
+msgstr "Beschermers:"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Onbekend"
 
 msgid "%{name} (Level %{level})"
-msgstr ""
+msgstr "%{name} (Level %{level})"
 
 msgid "Attack:"
-msgstr ""
+msgstr "Aanval:"
 
 msgid "Defense:"
-msgstr ""
+msgstr "Verdediging:"
 
 msgid "Spell Power:"
-msgstr ""
+msgstr "Spreuk Kracht:"
 
 msgid "Knowledge:"
-msgstr ""
+msgstr "Kennis:"
 
 msgid "Spell Points:"
-msgstr ""
+msgstr "Spreuk Punten:"
 
 msgid "Move Points:"
-msgstr ""
+msgstr "Bewegings Punten:"
 
 msgid "Cost per troop:"
-msgstr ""
+msgstr "Kosten per troep:"
 
 msgid "Available: %{count}"
-msgstr ""
+msgstr "Beschrikbaar: %{count}"
 
 msgid "Number to buy:"
-msgstr ""
+msgstr "Hoeveelheid om te kopen:"
 
 msgid "Select Game Resolution:"
-msgstr ""
+msgstr "Selecteer Spel Resolutie:"
 
 msgid "Click to apply the selected resolution."
-msgstr ""
+msgstr "Klik om de geselecteerde resolutie te toepassen."
 
 msgid "MAX"
-msgstr ""
+msgstr "MAX"
 
 msgid "How many troops to move?"
-msgstr ""
+msgstr "Hoe veel troepen te bewegen?"
 
 msgid "Fast separation into slots:"
-msgstr ""
+msgstr "Snelle scheiding in slots:"
 
 msgid "Map: "
-msgstr ""
+msgstr "Kaart: "
 
 msgid ""
 "\n"
 "\n"
 "Location: "
 msgstr ""
+"\n"
+"\n"
+"Locatie: "
 
 msgid "File to Save:"
-msgstr ""
+msgstr "Bestand om op te slaan:"
 
 msgid "File to Load:"
-msgstr ""
+msgstr "Bestand om te laden:"
 
 msgid "Click to save the current game."
-msgstr ""
+msgstr "Kilk om het huidige spel op te slapen."
 
 msgid "Click to load a previously saved game."
-msgstr ""
+msgstr "Klik om een vorig opgeslagen spel te laden."
 
 msgid "Are you sure you want to delete file:"
-msgstr ""
+msgstr "Weet je zeger dat je wilt verwijderen: "
 
 msgid "Warning!"
-msgstr ""
+msgstr "Waarschuuwing!"
 
 msgid "Select Monster:"
-msgstr ""
+msgstr "Selecteer Monsters:"
 
 msgid "Select Hero:"
-msgstr ""
+msgstr "Selecteer Held:"
 
 msgid "Select Artifact:"
-msgstr ""
+msgstr "Selecteer Artefact"
 
 msgid "Select Spell:"
-msgstr ""
+msgstr "Selecteer Spreuk:"
 
 msgid "Select Skill:"
-msgstr ""
+msgstr "Selecteer Vaardigheid:"
 
 msgid "Location: "
-msgstr ""
+msgstr "Locatie: "
 
 msgid ""
 "\n"
 "\n"
 "Map Type:\n"
 msgstr ""
+"\n"
+"\n"
+"Kaart Type:\n"
 
 msgid "The Succession Wars"
-msgstr ""
+msgstr "De Opvolgingsoorlogen"
 
 msgid "Lose all your heroes and towns."
-msgstr ""
+msgstr "Verlies al je helden en steden."
 
 msgid "Lose a specific town."
-msgstr ""
+msgstr "Verlies een specifieke stad:"
 
 msgid "Lose a specific hero."
-msgstr ""
+msgstr "Verlies een specifieke held:"
 
 msgid "Run out of time. Fail to win by a certain point."
-msgstr ""
+msgstr "Geen tijd meer. Niet winnen op een bepaald punt."
 
 msgid "Loss Condition"
-msgstr ""
+msgstr "Verlies Conditie"
 
 msgid "Defeat all enemy heroes and towns."
-msgstr ""
+msgstr "Versla alle veihand helden en dorpen."
 
 msgid "Capture a specific town."
-msgstr ""
+msgstr "Verover een specifiek dorp."
 
 msgid "Defeat a specific hero."
-msgstr ""
+msgstr "Versla een specifieke held."
 
 msgid "Find a specific artifact."
-msgstr ""
+msgstr "Vind een specifiek artefact."
 
 msgid "Your side defeats the opposing side."
-msgstr ""
+msgstr "Jouw kant verslaat de tegenpartij."
 
 msgid "Accumulate a large amount of gold."
-msgstr ""
+msgstr "Verzamel een grote hoeveelheid goud."
 
 msgid "Victory Condition"
-msgstr ""
+msgstr "Overwinnings Conditie"
 
 msgid "Map difficulty:"
-msgstr ""
+msgstr "Kaart moeilijkheid:"
 
 msgid "No maps exist at that size"
-msgstr ""
+msgstr "Geen kaarten bestaan voor die grote"
 
 msgid "Small Maps"
-msgstr ""
+msgstr "Kleine Kaarten"
 
 msgid "View only maps of size small (36 x 36)."
-msgstr ""
+msgstr "Bekijk alleen kaarten van de groote klein (36 x 36)."
 
 msgid "Medium Maps"
-msgstr ""
+msgstr "Medium Kaarten"
 
 msgid "View only maps of size medium (72 x 72)."
-msgstr ""
+msgstr "Bekijk alleen kaarten van de groote medium (72 x 72)."
 
 msgid "Large Maps"
-msgstr ""
+msgstr "Groote Kaarten"
 
 msgid "View only maps of size large (108 x 108)."
-msgstr ""
+msgstr "Bekijk alleen kaarten van de groote groot (108 x 108)."
 
 msgid "Extra Large Maps"
-msgstr ""
+msgstr "Extra Groote Kaarten"
 
 msgid "View only maps of size extra large (144 x 144)."
-msgstr ""
+msgstr "Bekijk alleen kaarten van de groote extra groot (144 x 144)."
 
 msgid "All Maps"
-msgstr ""
+msgstr "Alle Kaarten"
 
 msgid "View all maps, regardless of size."
-msgstr ""
+msgstr "Bekijk alle kaarten, ongeacht de grootte."
 
 msgid "Players Icon"
-msgstr ""
+msgstr "Speler Icoon"
 
 msgid ""
 "Indicates how many players total are in the scenario. Any positions not "
 "occupied by humans will be occupied by computer players."
 msgstr ""
+"Geeft aan hoeveel spelers er in totaal in het scenario zitten. Alle posities "
+"die niet door mensen worden ingenomen, worden ingenomen door computerspelers."
 
 msgid ""
 "Indicates whether the map\n"
@@ -3094,26 +3114,32 @@ msgid ""
 "(72 x 72), large (108 x 108),\n"
 "or extra large (144 x 144)."
 msgstr ""
+"Geeft weer of de kaart\n"
+"klein is (36 x 36), medium\n"
+"(72 x 72), groot (108 x 108),\n"
+"of extra groot (144 x 144)."
 
 msgid "Size Icon"
-msgstr ""
+msgstr "Groote Icoon"
 
 msgid ""
 "Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
 "of Loyalty\" version of the game."
 msgstr ""
+"Geeft aan of de kaart is gemaakt voor de versie \"The Succession Wars\" of "
+"\"The Price of Loyalty"\ van het spel."
 
 msgid "Map Type"
-msgstr ""
+msgstr "Kaart Type"
 
 msgid "Selected Name"
-msgstr ""
+msgstr "Geselecteerde Naam"
 
 msgid "The name of the currently selected map."
-msgstr ""
+msgstr "De naam van de huidig geselecteerde kaart."
 
 msgid "Selected Map Difficulty"
-msgstr ""
+msgstr "Selecteer Kaart Moeilijkheid"
 
 msgid ""
 "The map difficulty of the currently selected map.  The map difficulty is "
@@ -3121,380 +3147,392 @@ msgid ""
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
 msgstr ""
+"De kaart moeilijkheidsgraad van de momenteel geselecteerde kaart. De "
+"moeilijkheidsgraad van de kaart wordt bepaald door de scenarioontwerper. "
+"Moeilijkere kaarten kunnen meer of sterkere vijanden bevatten, minder "
+"middelen of andere speciale omstandigheden die het moeilijker maken "
+"voor de menselijke speler."
 
 msgid "Selected Description"
-msgstr ""
+msgstr "Geselecteerde Beschrijving"
 
 msgid "The description of the currently selected map."
-msgstr ""
+msgstr "De beschrijving van de huidig geselecteerde kaart."
 
 msgid "Accept the choice made."
-msgstr ""
+msgstr "Accepteer de keuze gemaakt."
 
 msgid "Experimental Game Settings"
-msgstr ""
+msgstr "Experimenteele Spel Instellingen"
 
 msgid "Jump"
-msgstr ""
+msgstr "Spring"
 
 msgid "Hero Speed"
-msgstr ""
+msgstr "Held Snelheid"
 
 msgid "Don't Show"
-msgstr ""
+msgstr "Laat niet zien"
 
 msgid "Enemy Speed"
-msgstr ""
+msgstr "Veihand Snelheid"
 
 msgid "Scroll Speed"
-msgstr ""
+msgstr "Rol Snelheid"
 
 #, fuzzy
 msgid "Hide"
 msgstr "Horde"
 
 msgid "Show"
-msgstr ""
+msgstr "Tonen"
 
 msgid "Interface"
-msgstr ""
+msgstr "Interface"
 
 msgid "Change the speed at which your heroes move on the main screen."
-msgstr ""
+msgstr "Verander de snelheid waarmee je helden op het hoofdscherm bewegen."
 
 msgid ""
 "Sets the speed that A.I. heroes move at.  You can also elect not to view A."
 "I. movement at all."
 msgstr ""
+"Stelt de snelheid in waarmee A.I. helden verhuizen naar. U kunt er ook voor "
+"kiezen om A.I. beweging helemaal niet."
 
 msgid "Sets the speed at which you scroll the window."
-msgstr ""
+msgstr "Stelt de snelheid in waarmee u door het venster bladert."
 
 msgid "Toggle interface visibility."
-msgstr ""
+msgstr "Schakel de zichtbaarheid van de interface."
 
 msgid "Att."
-msgstr ""
+msgstr "Att."
 
 msgid "Def."
-msgstr ""
+msgstr "Def.
 
 msgid "Power"
-msgstr ""
+msgstr "Kracht"
 
 msgid "Knowl"
-msgstr ""
+msgstr "Kennis"
 
 msgid "1st"
-msgstr ""
+msgstr "1e"
 
 msgid "2nd"
-msgstr ""
+msgstr "2e"
 
 msgid "3rd"
-msgstr ""
+msgstr "3e"
 
 msgid "4th"
-msgstr ""
+msgstr "4e"
 
 msgid "5th"
-msgstr ""
+msgstr "5e"
 
 msgid "6th"
-msgstr ""
+msgstr "6e"
 
 msgid "Oracle: Player Rankings"
-msgstr ""
+msgstr "Oracle: Speler Rangen"
 
 msgid "Thieves' Guild: Player Rankings"
-msgstr ""
+msgstr "Dievengilde: Speler Rangen"
 
 msgid "Number of Towns:"
-msgstr ""
+msgstr "Nummer van Dorpen:"
 
 msgid "Number of Castles:"
-msgstr ""
+msgstr "Nummer van Kastelen:"
 
 msgid "Number of Heroes:"
-msgstr ""
+msgstr "Nummer van Helden:"
 
 msgid "Gold in Treasury:"
-msgstr ""
+msgstr "Goud in Schatkist"
 
 msgid "Wood & Ore:"
-msgstr ""
+msgstr "Houd & Erts:"
 
 msgid "Gems, Cr, Slf & Mer:"
-msgstr ""
+msgstr "Els, Cr, Slf & Mer:"
 
 msgid "Obelisks Found:"
-msgstr ""
+msgstr "Obelisks Gevonden:"
 
 msgid "Artifacts:"
-msgstr ""
+msgstr "Artefacts:"
 
 msgid "Total Army Strength:"
-msgstr ""
+msgstr "Totale Leger Kracht:"
 
 msgid "Income:"
-msgstr ""
+msgstr "Inkomen:"
 
 msgid "Best Hero:"
-msgstr ""
+msgstr "Beste Held:"
 
 msgid "Best Hero Stats:"
-msgstr ""
+msgstr "Beste Held Statistieken:"
 
 msgid "Personality:"
-msgstr ""
+msgstr "Personaliteit:"
 
 msgid "Best Monster:"
-msgstr ""
+msgstr "Beste Monster:"
 
 msgid "difficulty|Easy"
-msgstr ""
+msgstr "Makkelijk"
 
 msgid "difficulty|Normal"
-msgstr ""
+msgstr "Normaal"
 
 msgid "difficulty|Hard"
-msgstr ""
+msgstr "Moeilijk"
 
 msgid "difficulty|Expert"
-msgstr ""
+msgstr "Expert"
 
 msgid "difficulty|Impossible"
-msgstr ""
+msgstr "Onmogelijk"
 
 msgid "and more..."
-msgstr ""
+msgstr "en meer..."
 
 msgid "Campaign Difficulty"
-msgstr ""
+msgstr "Campagne Moeilijkheid"
 
 msgid ""
 "Choose this difficulty if you want to prefer game story over challenge. AI "
 "is weaker in comparison with normal difficulty."
 msgstr ""
+"Kies deze moeilijkheidsgraad als je de voorkeur geeft aan een spelverhaal boven "
+"een uitdaging. AI is zwakker in vergelijking met normale moeilijkheidsgraad."
 
 msgid ""
 "Choose this difficulty to enjoy the campaign as per the original design."
 msgstr ""
+"Kies deze moeilijkheidsgraad om van de campagne te genieten volgens het originele ontwerp."
 
 msgid ""
 "Choose this difficulty if you want challenge. AI is stronger in comparison "
 "with normal difficulty."
 msgstr ""
+"Kies deze moeilijkheidsgraad als je uitdaging wilt. AI is sterker in vergelijking "
+"met normale moeilijkheidsgraad."
 
 msgid "Easy"
-msgstr ""
+msgstr "Makkelijk"
 
 msgid "Normal"
-msgstr ""
+msgstr "Normaal"
 
 msgid "Hard"
-msgstr ""
+msgstr "Moeilijk"
 
 msgid "Start the selected scenario."
-msgstr ""
+msgstr "Start het geselecteerde scenario."
 
 msgid "View Intro"
-msgstr ""
+msgstr "Bekijk Intro"
 
 msgid "View Intro videos for the current state of the campaign."
-msgstr ""
+msgstr "Bekijk Intro videos voor de huidige staat van de campagne"
 
 msgid "Select campaign difficulty. It cannot be changed after."
-msgstr ""
+msgstr "Selecteer campagne moeilijkheid. Het kan niet later worden gewijzigd."
 
 msgid "Restart"
-msgstr ""
+msgstr "Herstart"
 
 msgid "Restart the current scenario."
-msgstr ""
+msgstr "Hetstart het huidige scenario."
 
 msgid "Are you sure you want to restart this scenario?"
-msgstr ""
+msgstr "Weet je zeker dat je dit scenario wilt herstarten?"
 
 msgid "Campaign Scenario loading failure"
-msgstr ""
+msgstr "Campagne Scenario laad fout."
 
 msgid "Please make sure that campaign files are correct and present."
-msgstr ""
+msgstr "Zorg ervoor dat de campagnebestanden correct en aanwezig zijn."
 
 msgid "Days spent"
-msgstr ""
+msgstr "Dagen besteed"
 
 msgid "The number of days spent on this campaign."
-msgstr ""
+msgstr "Het nummer van dagen besteed op deze campagne"
 
 msgid "Project Coordination and Core Development"
-msgstr ""
+msgstr "Project Coordiantie en Kern Ontwikkelijk"
 
 msgid "QA and Support"
-msgstr ""
+msgstr "QA en Ondersteuning"
 
 msgid "Development"
-msgstr ""
+msgstr "Ontwikkeling"
 
 msgid "Dev and Support"
-msgstr ""
+msgstr "Ontwikkeling en Ondersteuning"
 
 msgid "Visit us at "
-msgstr ""
+msgstr "Bezoek ons op"
 
 msgid "Special Thanks to"
-msgstr ""
+msgstr "Speciale dank aan"
 
 msgid "and many other contributors!"
-msgstr ""
+msgstr "en vele andere bijdragers!"
 
 msgid "Support us at"
-msgstr ""
+msgstr "Steun ons op"
 
 msgid "Connect with us at"
-msgstr ""
+msgstr "Neem contact met ons op via"
 
 msgid "Need help with the game?"
-msgstr ""
+msgstr "Hulp nodig met het spel?"
 
 msgid "and many-many other supporters!"
-msgstr ""
+msgstr "en vele-vele andere supporters!"
 
 msgid "Original project before 0.7"
-msgstr ""
+msgstr "Origineel project vóór 0.7"
 
 msgid "Heroes of Might and Magic II: The Succession Wars team"
-msgstr ""
+msgstr "Heroes of Might and Magic II: The Succession Wars team"
 
 msgid "Designed and Directed"
-msgstr ""
+msgstr "Ontworpen en geregisseerd"
 
 msgid "Programming and Design"
-msgstr ""
+msgstr "Programmeren en Ontwerpen"
 
 msgid "Executive Producer"
-msgstr ""
+msgstr "Uitvoerend Producent"
 
 msgid "Producer"
-msgstr ""
+msgstr "Producent"
 
 msgid "Additional Design"
-msgstr ""
+msgstr "Aanvullend Design"
 
 msgid "Additional Programming"
-msgstr ""
+msgstr "Additional Programmeren"
 
 msgid "Musical Production"
-msgstr ""
+msgstr "Muziek Productie"
 
 msgid "Music and Sound Design"
-msgstr ""
+msgstr "Muziek en Geluid Ontwerp"
 
 msgid "Vocalists"
-msgstr ""
+msgstr "Zangers"
 
 msgid "Art Director"
-msgstr ""
+msgstr "Art Director"
 
 msgid "Assistant Art Director"
-msgstr ""
+msgstr "Assistent Art Director"
 
 msgid "Artists"
-msgstr ""
+msgstr "Artiesten"
 
 msgid "QA Manager"
-msgstr ""
+msgstr "QA Manager"
 
 msgid "QA"
-msgstr ""
+msgstr "QA"
 
 msgid "Writing"
-msgstr ""
+msgstr "Schrijven"
 
 msgid "Manual and Helpfile"
-msgstr ""
+msgstr "Handleiding en Hulpbestand"
 
 msgid "Scenarios"
-msgstr ""
+msgstr "Scenarios"
 
 msgid "Heroes of Might and Magic II: The Price of Loyalty team"
-msgstr ""
+msgstr "Heroes of Might and Magic II: The Price of Loyalty team"
 
 msgid "Cyberlore Studios"
-msgstr ""
+msgstr "Cyberlore Studios"
 
 msgid "Design Lead"
-msgstr ""
+msgstr "Ontwerpleider"
 
 msgid "Designers"
-msgstr ""
+msgstr "Ontwerpers"
 
 msgid "Programming Lead"
-msgstr ""
+msgstr "Programmeerleider"
 
 msgid "Art Lead"
-msgstr ""
+msgstr "Kunstleider"
 
 msgid "Playtesters"
-msgstr ""
+msgstr "Speeltesters"
 
 msgid "New World Computing"
-msgstr ""
+msgstr "New World Computing"
 
 msgid "Designer"
-msgstr ""
+msgstr "Ontwerper"
 
 msgid "Producers"
-msgstr ""
+msgstr "Producenten"
 
 msgid "QA Managers"
-msgstr ""
+msgstr "QA Managers"
 
 msgid "Sound Design"
-msgstr ""
+msgstr "Geluid Ontwerp"
 
 msgid "Town Themes"
-msgstr ""
+msgstr "Dorp Themas"
 
 msgid "Alto Sax"
-msgstr ""
+msgstr "Altsaxofoon"
 
 msgid "Harpsichord and Piano"
-msgstr ""
+msgstr "Klavecimbel en piano"
 
 msgid "Basso Vocal"
-msgstr ""
+msgstr "Bas Zang"
 
 msgid "Soprano Vocal"
-msgstr ""
+msgstr "Sopraan Vocaal"
 
 msgid "Recorded at Green Street Studios"
-msgstr ""
+msgstr "Opgenomen bij Green Street Studios"
 
 msgid "German Consultant"
-msgstr ""
+msgstr "Duitse Adviseur"
 
 msgid "Map Designers"
-msgstr ""
+msgstr "Kaart Ontwerpers"
 
 msgid "Package Design"
-msgstr ""
+msgstr "Pakketontwerp"
 
 msgid "Unknown Hero"
-msgstr ""
+msgstr "Onbekende Held"
 
 msgid "Your Name"
-msgstr ""
+msgstr "Jouw Naam"
 
 msgid "Standard"
-msgstr ""
+msgstr "Standaard"
 
 msgid "View High Scores for Standard Maps."
-msgstr ""
+msgstr "Bekijk High Scores voor Standaard Kaarten."
 
 msgid "Campaign"
-msgstr ""
+msgstr "Campagne"
 
 msgid "View High Scores for Campaigns."
 msgstr ""
