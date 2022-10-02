@@ -414,7 +414,7 @@ namespace fheroes2
                     Blit( GetICN( ICN::SYSTEM, 11 + i ), 10 - i, 4 + i, out, 11 - i, 4 + i, 50, 16 );
                 }
 
-                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), { 12, 5 }, { 11, 6 }, { 50, 16 }, fheroes2::FontColor::WHITE );
+                renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "MIN" ), { 11, 5 }, { 10, 6 }, { 52, 16 }, fheroes2::FontColor::WHITE );
 
                 break;
             }
@@ -864,7 +864,7 @@ namespace fheroes2
                 return true;
             case ICN::SPELLS:
                 LoadOriginalICN( id );
-                _icnVsSprite[id].resize( 66 );
+                _icnVsSprite[id].resize( 67 );
                 for ( uint32_t i = 60; i < 66; ++i ) {
                     int originalIndex = 0;
                     if ( i == 60 ) // Mass Cure
@@ -893,6 +893,10 @@ namespace fheroes2
 
                     AddTransparency( image, 1 );
                 }
+
+                // The Petrification spell does not have its own icon in the original game.
+                h2d::readImage( "petrification_spell_icon.image", _icnVsSprite[id][66] );
+
                 return true;
             case ICN::CSLMARKER:
                 _icnVsSprite[id].resize( 3 );
@@ -2317,6 +2321,16 @@ namespace fheroes2
                     Copy( temp, 215, 0, _icnVsSprite[id][7], 215 - 57, 0, 300, temp.height() );
                     Copy( _icnVsSprite[id][6], 324, 0, _icnVsSprite[id][7], 324, 0, _icnVsSprite[id][6].width() - 324, temp.height() );
                 }
+                return true;
+            }
+            case ICN::SPELLINL: {
+                LoadOriginalICN( id );
+
+                if ( _icnVsSprite[id].size() > 11 ) {
+                    // Replace petrification spell mini-icon.
+                    h2d::readImage( "petrification_spell_icon_mini.image", _icnVsSprite[id][11] );
+                }
+
                 return true;
             }
             default:

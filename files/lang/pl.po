@@ -4259,6 +4259,9 @@ msgstr "Szwedzki"
 msgid "Portuguese"
 msgstr "Portugalski"
 
+msgid "Turkish"
+msgstr ""
+
 msgid ", FPS: "
 msgstr ", FPS: "
 

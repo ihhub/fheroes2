@@ -43,6 +43,7 @@ namespace fheroes2
         Romanian,
         Spanish,
         Swedish,
+        Turkish,
         Ukrainian
     };
 
