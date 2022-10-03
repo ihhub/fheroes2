@@ -121,31 +121,31 @@ msgstr ""
 "%{monster}"
 
 msgid "army|Few"
-msgstr "Câteva"
+msgstr "1-4"
 
 msgid "army|Several"
-msgstr "Mai multe"
+msgstr "4-9"
 
 msgid "army|Pack"
-msgstr "Haită"
+msgstr "10-19"
 
 msgid "army|Lots"
-msgstr "Multe"
+msgstr "20-49"
 
 msgid "army|Horde"
-msgstr "Hoardă"
+msgstr "50-99"
 
 msgid "army|Throng"
-msgstr "Înghesuială"
+msgstr "100-249"
 
 msgid "army|Swarm"
-msgstr "Roi"
+msgstr "1000+"
 
 msgid "army|Zounds"
-msgstr "Extrem de multe"
+msgstr "500-999"
 
 msgid "army|Legion"
-msgstr "Legiune"
+msgstr "250-499"
 
 msgid "All %{race} troops +1"
 msgstr "Toate %{race} forțele +1"
