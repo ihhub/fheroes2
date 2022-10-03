@@ -3535,81 +3535,89 @@ msgid "Campaign"
 msgstr "Campagne"
 
 msgid "View High Scores for Campaigns."
-msgstr ""
+msgstr "Bekijk High Scores for Campagnes."
 
 msgid "This file contains a save with an invalid game type."
-msgstr ""
+msgstr "Dit bestand bevat een spel met in incorrect spel type."
 
 msgid ""
 "This file was saved by the \"The Price of Loyalty\" version of the game.\n"
 "Some items may not be available."
 msgstr ""
+"Dit bestand was opgeslaagen door de \"The Price of Loyalty\" versie van het spel.\n"
+"Sommige voorwerpen zijn mogelijk niet beschrikbaar."
 
 msgid "Usupported save format: "
-msgstr ""
+msgstr "Niet-ondersteunde opslagindeling: "
 
 msgid "Current game version: "
-msgstr ""
+msgstr "Huidige spel versie: "
 
 msgid "Last supported version: "
-msgstr ""
+msgstr "Laats ondersteunde versie: "
 
 msgid "This saved game is localized to '"
-msgstr ""
+msgstr "Dit opgeslagen spel is gelokaliseerd in '"
 
 msgid "' language, but the current language of the game is '"
-msgstr ""
+msgstr "' taal, maar de huidige taal van het spel is '"
 
 msgid "Hot Seat"
-msgstr ""
+msgstr "Hete Stoel"
 
 msgid ""
 "Play a Hot Seat game, where 2 to 4 players play around the same computer, "
 "switching into the 'Hot Seat' when it is their turn."
 msgstr ""
+"Speel een Hete Stoel-spel, waarbij 2 tot 4 spelers rond dezelfde computer "
+"spelen en overschakelen naar de 'Hete Stoel' wanneer het hun beurt is."
 
 msgid "Cancel back to the main menu."
-msgstr ""
+msgstr "Annuleer terug naar het hoofdmenu."
 
 msgid "A single player game playing out a single map."
-msgstr ""
+msgstr "Een spel voor één speler dat een enkele kaart speelt."
 
 msgid "Standard Game"
-msgstr ""
+msgstr "Standaard Spel"
 
 msgid "A single player game playing through a series of maps."
-msgstr ""
+msgstr "Een spel voor één speler dat door een reeks kaarten wordt gespeeld."
 
 msgid "Campaign Game"
-msgstr ""
+msgstr "Campagne Spel"
 
 msgid ""
 "A multi-player game, with several human players completing against each "
 "other on a single map."
 msgstr ""
+"Een spel voor meerdere spelers, waarbij verschillende menselijke spelers "
+"het tegen elkaar opnemen op een enkele kaart."
 
 msgid "Multi-Player Game"
-msgstr ""
+msgstr "Multiplayer-game"
 
 msgid "fheroes2 Resurrection Team presents"
-msgstr ""
+msgstr "Het fheroes2 Ressurection Team presenteert"
 
 msgid "Greetings!"
-msgstr ""
+msgstr "Gegroet!"
 
 msgid ""
 "Welcome to Heroes of Might and Magic II powered by fheroes2 engine! Before "
 "starting the game please choose game resolution."
 msgstr ""
+"Welkom bij Heroes of Might and Magic II aangedreven door fheroes2-engine! "
+"Kies de spelresolutie voordat u het spel start."
 
 msgid "Please Remember"
-msgstr ""
+msgstr "Onthoud alsjeblieft"
 
 msgid "You can always change game resolution by clicking on the "
-msgstr ""
+msgstr "Je kan altijd de spel resolutie weizigen door te drukken op de "
 
 msgid "door"
-msgstr ""
+msgstr "duer"
 
 msgid ""
 " on the left side of main menu.\n"
@@ -3617,272 +3625,316 @@ msgid ""
 "To switch between windowed and full screen modes\n"
 "press "
 msgstr ""
+" op de linker kant van het hoofdmenu.\n"
+"\n"
+"Om te schakelen tussen windowed en volledig scherm modus\n"
+"druk op "
 
 msgid "F4"
-msgstr ""
+msgstr "F4"
 
 msgid ""
 " key on the keyboard.\n"
 "\n"
 "Enjoy the game!"
 msgstr ""
+" toets op het toetsenboord.\n"
+"\n"
+"Geniet van het spel!"
 
 msgid "Quit Heroes of Might and Magic II and return to the operating system."
-msgstr ""
+msgstr "Sluit Heroes of Might and Magic II af en keer terug naar het besturingssysteem."
 
 msgid "Credits"
-msgstr ""
+msgstr "Credits"
 
 msgid "View the credits screen."
-msgstr ""
+msgstr "Bekijk het credits scherm."
 
 msgid "High Scores"
-msgstr ""
+msgstr "High Scores"
 
 msgid "View the high scores screen."
-msgstr ""
+msgstr "Bekijk het high scores scherm."
 
 msgid "Change language, resolution and settings of the game."
-msgstr ""
+msgstr "Weizig de taal, resolutie en instellingen van het spel."
 
 msgid "Game Settings"
-msgstr ""
+msgstr "Spel Instellingen"
 
 msgid ""
 "Required video files for campaign selection window are missing. Please make "
 "sure that all necessary files are present in the system."
 msgstr ""
+"Vereiste videobestanden voor het campagneselectievenster ontbreken. Zorg ervoor "
+"dat alle benodigde bestanden in het systeem aanwezig zijn."
 
 msgid ""
 "Either Roland's or Archibald's campaign from the original Heroes of Might "
 "and Magic II."
 msgstr ""
+"Ofwel de campagne van Roland of Archibald uit de originele Heroes of Might "
+"and Magic II."
 
 msgid "Original Campaign"
-msgstr ""
+msgstr "Orginele Campagne"
 
 msgid "Expansion Campaign"
-msgstr ""
+msgstr "Uitbreiding Capmagne"
 
 msgid "One of the four new campaigns from the Price of Loyalty expansion set."
-msgstr ""
+msgstr "Een van de vier nieuwe campagnes uit de Price of Loyalty-uitbreidingsset."
 
 msgid "Host"
-msgstr ""
+msgstr "Organisator"
 
 msgid ""
 "The host sets up the game options. There can only be one host per network "
 "game."
 msgstr ""
+"De organisator stelt de spel opties in. Er kan maar 1 organisator zijn per "
+"network spel."
 
 msgid "Guest"
-msgstr ""
+msgstr "Gast"
 
 msgid ""
 "The guest waits for the host to set up the game, then is automatically added "
 "in. There can be multiple guests for TCP/IP games."
 msgstr ""
+"De gast wacht op de organisator om het spel in te stellen, daarna wordt de gast "
+"automatisch toegevoegd. Er kunnen meerde gasten zijn voor TCP/IP spellen."
 
 msgid "Battle Only"
-msgstr ""
+msgstr "Alleen vechten"
 
 msgid "Setup and play a battle without loading any map."
-msgstr ""
+msgstr "Stel een gevecht in en speel een gevecht zonder een kaart te laden."
 
 msgid "2 Players"
-msgstr ""
+msgstr "2 Spelers"
 
 msgid ""
 "Play with 2 human players, and optionally, up to 4 additional computer "
 "players."
 msgstr ""
+"Speel met 2 menselijke spelers en optioneel tot 4 extra computerspelers."
 
 msgid "3 Players"
-msgstr ""
+msgstr "3 Spelers"
 
 msgid ""
 "Play with 3 human players, and optionally, up to 3 additional computer "
 "players."
 msgstr ""
+"Speel met 3 menselijke spelers en optioneel tot 3 extra computerspelers."
 
 msgid "4 Players"
-msgstr ""
+msgstr "4 Spelers"
 
 msgid ""
 "Play with 4 human players, and optionally, up to 2 additional computer "
 "players."
 msgstr ""
+"Speel met 4 menselijke spelers en optioneel tot 2 extra computerspelers."
 
 msgid "5 Players"
-msgstr ""
+msgstr "5 Spelers"
 
 msgid ""
 "Play with 5 human players, and optionally, up to 1 additional computer "
 "player."
 msgstr ""
+"Speel met 5 menselijke spelers en optioneel tot 1 extra computerspelers."
 
 msgid "6 Players"
-msgstr ""
+msgstr "6 Spelers"
 
 msgid "Play with 6 human players."
-msgstr ""
+msgstr "Speel met 6 menselijke spelers."
 
 msgid "Dragon city has fallen!  You are now the Master of the Dragons."
-msgstr ""
+msgstr "Drakenstad is gevallen! Je bent nu de Meester van de Draken."
 
 msgid ""
 "You captured %{name}!\n"
 "You are victorious."
 msgstr ""
+"Je hebt %{name} verovert!\n"
+"Je bent overwinnaar!"
 
 msgid ""
 "You have captured the enemy hero %{name}!\n"
 "Your quest is complete."
 msgstr ""
+"Je hebt de vijandelijke held %{name} gevangengenomen!\n"
+"Je zoektocht is voltooid."
 
 msgid ""
 "You have found the %{name}.\n"
 "Your quest is complete."
 msgstr ""
+"Je hebt de %{name} gevonden.\n"
+"Je zoektocht is voltooid."
 
 msgid "Ultimate Artifact"
-msgstr ""
+msgstr "Ultime Artefact"
 
 msgid ""
 "The enemy is beaten.\n"
 "Your side has triumphed!"
 msgstr ""
+"De veihand is verslagen.\n"
+"Jouw kant heeft gezegevierd!"
 
 msgid ""
 "You have built up over %{count} gold in your treasury.\n"
 "All enemies bow before your wealth and power."
 msgstr ""
+"U heeft meer dan %{count} goud in uw schatkist opgebouwd.\n"
+"Alle vijanden buigen voor uw rijkdom en macht."
 
 msgid ""
 "The enemy has captured %{name}!\n"
 "They are triumphant."
 msgstr ""
+"De vijand heeft %{name} veroverd!\n"
+"Ze zijn triomfantelijk."
 
 msgid ""
 "The enemy has built up over %{count} gold in his treasury.\n"
 "You must bow done in defeat before his wealth and power."
 msgstr ""
+"De vijand heeft meer dan %{count} goud in zijn schatkist opgebouwd.\n"
+"Je moet in een nederlaag buigen voor zijn rijkdom en macht."
 
 msgid "You have been eliminated from the game!!!"
-msgstr ""
+msgstr "Je bent geelimineerd van het spel!!!"
 
 msgid ""
 "You have lost the hero %{name}.\n"
 "Your quest is over."
 msgstr ""
+"Je hebt de held %{name} veloren.\n"
+"Je zoektocht is voorbij."
 
 msgid ""
 "You have failed to complete your quest in time.\n"
 "All is lost."
 msgstr ""
+"Je hebt je zoektocht niet op tijd voltooid.\n"
+"Alles is verloren."
 
 msgid "Defeat all enemy heroes and capture all enemy towns and castles."
-msgstr ""
+msgstr "Versla alle vijandelijke helden en verover alle vijandige steden en kastelen."
 
 msgid "Run out of time. (Fail to win by a certain point.)"
-msgstr ""
+msgstr "Geen tijd meer. (Winnen op een bepaald punt lukt niet.)"
 
 msgid "Capture the castle '%{name}'."
-msgstr ""
+msgstr "Verover het kasteel '%{name}'"
 
 msgid "Capture the town '%{name}'."
-msgstr ""
+msgstr "Verover het dorp '%{name}"
 
 msgid "Defeat the hero '%{name}'."
-msgstr ""
+msgstr "Versla de helf '%{name}'"
 
 msgid "Find the ultimate artifact."
-msgstr ""
+msgstr "Find het ultime artefact"
 
 msgid "Find the '%{name}' artifact."
-msgstr ""
+msgstr "Find de '%{name}' artefact"
 
 msgid "Accumulate %{count} gold."
-msgstr ""
+msgstr "Verzamel %{count} goud."
 
 msgid ""
 ", or you may win by defeating all enemy heroes and capturing all enemy towns "
 "and castles."
 msgstr ""
+", of je kunt winnen door alle vijandelijke helden te verslaan en alle vijandige "
+"steden en kastelen te veroveren."
 
 msgid "Lose the castle '%{name}'."
-msgstr ""
+msgstr "Verlies het kasteel '%{name}.'"
 
 msgid "Lose the town '%{name}'."
-msgstr ""
+msgstr "Verlies het dorp '%{name}.'"
 
 msgid "Lose the hero: %{name}."
-msgstr ""
+msgstr "Verlies de held: %{name}."
 
 msgid "Fail to win by the end of month %{month}, week %{week}, day %{day}."
-msgstr ""
+msgstr "Win niet tegen het einde van maand %{month}, week %{week}, dag %{day}."
 
 msgid "%{color} player has been vanquished!"
-msgstr ""
+msgstr "%{color} speler is verslagen!"
 
 msgid "Do you wish to continue the game?"
-msgstr ""
+msgstr "Wil je doorgaan met het spel?"
 
 msgid "Scenario:"
-msgstr ""
+msgstr "Scenario: "
 
 msgid "Game Difficulty:"
-msgstr ""
+msgstr "Spel Moeilijkheid:"
 
 msgid "Opponents:"
-msgstr ""
+msgstr "Tegenstanders:"
 
 msgid "Class:"
-msgstr ""
+msgstr "Klasse:"
 
 msgid "Rating %{rating}%"
-msgstr ""
+msgstr "Beoordeling %{rating}%"
 
 msgid "Click here to select which scenario to play."
-msgstr ""
+msgstr "Klik hier om te selecteren welk scenario te spelen."
 
 msgid "Scenario"
-msgstr ""
+msgstr "Scenario"
 
 msgid "Game Difficulty"
-msgstr ""
+msgstr "Spel Moeilijkheid"
 
 msgid ""
 "This lets you change the starting difficulty at which you will play. Higher "
 "difficulty levels start you of with fewer resources, and at the higher "
 "settings, give extra resources to the computer."
 msgstr ""
+"Hiermee kunt u de moeilijkheidsgraad waarmee u gaat spelen wijzigen. Hogere "
+"moeilijkheidsgraden beginnen je met minder middelen, en bij de hogere "
+"instellingen, geef je extra middelen aan de computer."
 
 msgid "Difficulty Rating"
-msgstr ""
+msgstr "Moeilijkheids Beoordeling"
 
 msgid ""
 "The difficulty rating reflects a combination of various settings for your "
 "game. This number will be applied to your final score."
 msgstr ""
+"De moeilijkheidsgraad weerspiegelt een combinatie van verschillende "
+"instellingen voor je spel. Dit nummer wordt toegepast op je eindscore."
 
 msgid "Click to accept these settings and start a new game."
-msgstr ""
+msgstr "Klik om deze instellingen te accepteren en een nieuw spel te starten."
 
 msgid "Click to return to the main menu."
-msgstr ""
+msgstr "Klik om terug te keren naar het hoofdmenu."
 
 msgid "No maps available!"
-msgstr ""
+msgstr "Geen kaarten beschrikbaar!"
 
 msgid "Astrologers proclaim the Month of the %{name}."
-msgstr ""
+msgstr "Astrologen roepen de maand van de %{name} uit."
 
 msgid "Astrologers proclaim the Week of the %{name}."
-msgstr ""
+msgstr "Astrologen roepen de week van de %{name} uit."
 
 msgid "After regular growth, the population of %{monster} is doubled!"
-msgstr ""
+msgstr "Na regelmatige groei is de populatie van %{monster} verdubbeld!"
 
 msgid ""
 "After regular growth, the population of %{monster} increases by %{count} "
@@ -3891,178 +3943,209 @@ msgid_plural ""
 "After regular growth, the population of %{monster} increases by %{count} "
 "percent!"
 msgstr[0] ""
+"Na regelmatige groei neemt de populatie van %{monster} toe met %{count} "
+"procent!"
 msgstr[1] ""
+"Na regelmatige groei neemt de populatie van %{monster} toe met %{count} "
+"procent!"
 
 msgid "%{monster} growth +%{count}."
-msgstr ""
+msgstr "%{monster} groei +%{count}."
 
 msgid " All populations are halved."
-msgstr ""
+msgstr " Alle populaties zijn gehalveerd."
 
 msgid " All dwellings increase population."
-msgstr ""
+msgstr " Alle woningen vergroten bevolking."
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
 "banished from this land."
 msgstr ""
+"%{color} speler, dit is je laatste dag om een stad te veroveren, anders "
+"word je uit dit land verbannen."
 
 msgid ""
 "%{color} player, you only have %{day} days left to capture a town, or you "
 "will be banished from this land."
 msgstr ""
+"%{color} speler, je hebt nog maar %{day} dagen om een stad te veroveren, "
+"anders word je uit dit land verbannen."
 
 msgid "%{color} player's turn."
-msgstr ""
+msgstr "%{color} speler's beurt."
 
 msgid ""
 "Do you want to transfer control from you to the AI? The effect will take "
 "place only on the next turn."
 msgstr ""
+"Wil je de controle van jou overdragen aan de AI? Het effect zal pas "
+"bij de volgende beurt plaatsvinden."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in next week, you will be eliminated."
 msgstr ""
+"%{color} speler, je bent je laatste stad kwijt. Als je volgende week geen "
+"andere stad verovert, word je geelimineerd."
 
 msgid ""
 "%{color} player, your heroes abandon you, and you are banished from this "
 "land."
 msgstr ""
+"%{color} speler, je helden laten je in de steek en je wordt uit dit "
+"land verbannen."
 
 msgid "Next Hero"
-msgstr ""
+msgstr "Volgende Held"
 
 msgid "Select the next Hero."
-msgstr ""
+msgstr "Selecteer de volgende Held."
 
 msgid "Continue Movement"
-msgstr ""
+msgstr "Vervolg Bewegning"
 
 msgid "Continue the Hero's movement along the current path."
-msgstr ""
+msgstr "Vervolg de beweging van de held langs het huidige pad."
 
 msgid "Kingdom Summary"
-msgstr ""
+msgstr "Koninkrijk Samenvatting"
 
 msgid "View a Summary of your Kingdom."
-msgstr ""
+msgstr "Bekijk een samenvatting van je koninkrijk."
 
 msgid "Cast an adventure spell."
-msgstr ""
+msgstr "Spreek een avonturenspreuk uit."
 
 msgid "End Turn"
-msgstr ""
+msgstr "Beëindig Beurt"
 
 msgid "End your turn and left the computer take its turn."
-msgstr ""
+msgstr "Beëindig je beurt en laat de computer aan de beurt."
 
 msgid "Adventure Options"
-msgstr ""
+msgstr "Avontuur Opties"
 
 msgid "Bring up the adventure options menu."
-msgstr ""
+msgstr "Open het menu met avontuuropties."
 
 msgid ""
 "Bring up the file options menu, allowing you to load, save, start a new game "
 "or quit."
 msgstr ""
+"Open het menu met bestandsopties, zodat u kunt laden, opslaan, een nieuw spel "
+"kunt starten of kunt afsluiten."
 
 msgid "File Options"
-msgstr ""
+msgstr "Bestand Opties"
 
 msgid "Bring up the system options menu, allowing you to customize your game."
-msgstr ""
+msgstr "Open het menu met systeemopties, zodat u uw spel kunt aanpassen."
 
 msgid ""
 "One or more heroes may still move, are you sure you want to end your turn?"
 msgstr ""
+"Een of meer helden mogen nog bewegen, weet je zeker dat je je beurt wilt beëindigen?"
 
 msgid "Are you sure you want to quit?"
-msgstr ""
+msgstr "Weet je zeker dat je wilt stoppen?"
 
 msgid "Are you sure you want to restart? (Your current game will be lost.)"
-msgstr ""
+msgstr "Weet je zeker dat je opnieuw wilt opstarten? (Je huidige spel gaat verloren.)"
 
 msgid "Are you sure you want to overwrite the save with this name?"
-msgstr ""
+msgstr "Weet je zeker dat u de opslag met deze naam wilt overschrijven?"
 
 msgid "Game saved successfully."
-msgstr ""
+msgstr "Spel succesvol opgeslagen."
 
 msgid "There was an issue during saving."
-msgstr ""
+msgstr "Er is een probleem opgetreden tijdens het opslaan."
 
 msgid ""
 "Are you sure you want to load a new game? (Your current game will be lost.)"
 msgstr ""
+"Weet je zeker dat je een nieuw spel wilt laden? (Je huidige spel gaat verloren.)"
 
 msgid "Try looking on land!!!"
-msgstr ""
+msgstr "Probeer op het land te kijken!!!"
 
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
+"Na vele uren hier te hebben gegraven, heb je het %{artefact} ontdekt."
 
 msgid "Congratulations!"
-msgstr ""
+msgstr "Gefeliciteerd!"
 
 msgid "Nothing here. Where could it be?"
-msgstr ""
+msgstr "Niets hier. Waar zou het kunnen zijn?"
 
 msgid "Try searching on clear ground."
-msgstr ""
+msgstr "Probeer te zoeken op onbelemmerd terrein."
 
 msgid "Digging for artifacts requires a whole day, try again tomorrow."
-msgstr ""
+msgstr "Het graven naar artefacten duurt een hele dag, probeer het morgen opnieuw."
 
 msgid "A miniature view of the known world. Left click to move viewing area."
-msgstr ""
+msgstr "Een miniatuurweergave van de bekende wereld. Klik met de linkermuisknop om het weergavegebied te verplaatsen."
 
 msgid "World Map"
-msgstr ""
+msgstr "Wereld Kaart"
 
 msgid "Month: %{month} Week: %{week}"
-msgstr ""
+msgstr "Maand: %{month} Week: %{week}"
 
 msgid "Day: %{day}"
-msgstr ""
+msgstr "Dag: %{day{"
 
 msgid ""
 "You find a small\n"
 "quantity of %{resource}."
 msgstr ""
+"Je hebt een klein\n"
+"beetje van %{resource} gevonden."
 
 msgid "Status Window"
-msgstr ""
+msgstr "Statusvenster"
 
 msgid ""
 "This window provides information on the status of your hero or kingdom, and "
 "shows the date."
 msgstr ""
+"Dit venster geeft informatie over de status van je held of koninkrijk en "
+"toont de datum."
 
 msgid ""
 "This window provides information on the status of your hero or kingdom, and "
 "shows the date. Left click here to cycle through these windows."
 msgstr ""
+"Dit venster geeft informatie over de status van je held of koninkrijk en toont "
+"de datum. Klik hier met de linkermuisknop om door deze vensters te bladeren."
 
 msgid "Necroman"
-msgstr ""
+msgstr "Necroman"
 
 msgid ""
 "This lets you change player starting positions and colors. A particular "
 "color will always start in a particular location. Some positions may only be "
 "played by a computer player or only by a human player."
 msgstr ""
+"Hiermee kun je de startposities en kleuren van spelers veranderen. Een bepaalde "
+"kleur begint altijd op een bepaalde locatie. Sommige posities mogen alleen door "
+"een computerspeler of alleen door een menselijke speler worden gespeeld."
 
 msgid ""
 "This lets you change the class of a player. Classes are not always "
 "changeable. Depending on the scenario, a player may receive additional towns "
 "and/or heroes not of their primary alignment."
 msgstr ""
+"Hiermee kun je de klasse van een speler wijzigen. Klassen zijn niet altijd "
+"veranderlijk. Afhankelijk van het scenario kan een speler extra steden en/of "
+"helden krijgen die niet tot hun primaire groep behoren."
 
 msgid "Handicap"
-msgstr ""
+msgstr "Handicap"
 
 #
 msgid ""
@@ -4070,367 +4153,395 @@ msgid ""
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
 "30% fewer resources per turn for mild and severe handicaps, respectively."
 msgstr ""
+"Hiermee kunt u de handicap van een bepaalde speler wijzigen. Alleen mensen "
+"kunnen gehandicapt zijn. Gehandicapte spelers beginnen met minder middelen "
+"en verdienen respectievelijk 15 of 30% minder middelen per beurt voor milde "
+"en ernstige handicaps."
 
 msgid "%{color} player"
-msgstr ""
+msgstr "%{color} speler"
 
 msgid "No Handicap"
-msgstr ""
+msgstr "Geen Handicap"
 
 msgid "No special restrictions on start resources and earning them per turn."
-msgstr ""
+msgstr "Geen speciale beperkingen op startbronnen en het verdienen ervan per beurt."
 
 msgid "Mild Handicap"
-msgstr ""
+msgstr "Lichte Handicap"
 
 #
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."
 msgstr ""
+"Licht gehandicapte spelers beginnen met minder grondstoffen en verdienen "
+"15% minder "middelen per beurt."
 
 msgid "Severe Handicap"
-msgstr ""
+msgstr "Erge Handicap"
 
 #
 msgid ""
 "Severe handicapped players start with fewer resources and earn 30% fewer "
 "resources per turn."
 msgstr ""
+"Ernstig gehandicapte spelers beginnen met minder middelen en verdienen "
+"30% minder middelen per beurt."
 
 msgid "View %{skill} Info"
-msgstr ""
+msgstr "Bekijk %{skill} Info"
 
 msgid "Kingdom Income"
-msgstr ""
+msgstr "Koninkrijk Inkomen"
 
 msgid "Kingdom Income per day."
-msgstr ""
+msgstr "Koninkrijk Inkomen per dag."
 
 msgid "English"
-msgstr ""
+msgstr "Engels"
 
 msgid "French"
-msgstr ""
+msgstr "Frans"
 
 msgid "Polish"
-msgstr ""
+msgstr "Pools"
 
 msgid "German"
-msgstr ""
+msgstr "Duits"
 
 msgid "Russian"
-msgstr ""
+msgstr "Russisch"
 
 msgid "Italian"
-msgstr ""
+msgstr "Italiaans"
 
 msgid "Czech"
-msgstr ""
+msgstr "Tsjechisch"
 
 msgid "Norwegian"
-msgstr ""
+msgstr "Noors"
 
 msgid "Belarusian"
-msgstr ""
+msgstr "Wit-Russisch"
 
 msgid "Bulgarian"
-msgstr ""
+msgstr "Bulgaars"
 
 msgid "Ukrainian"
-msgstr ""
+msgstr "Oekraïens"
 
 msgid "Romanian"
-msgstr ""
+msgstr "Roemeense"
 
 msgid "Spanish"
-msgstr ""
+msgstr "Spaans"
 
 msgid "Swedish"
-msgstr ""
+msgstr "Zweeds"
 
 msgid "Portuguese"
-msgstr ""
+msgstr "Portugees"
+
+msgid "Dutch"
+msgstr "Nederlands"
 
 msgid ", FPS: "
-msgstr ""
+msgstr ", FPS: "
 
 msgid "%{object} robber"
-msgstr ""
+msgstr "%{object} dief"
 
 msgid "%{object} raided"
-msgstr ""
+msgstr "%{object} overvallen"
 
 msgid "Ector"
-msgstr ""
+msgstr "Ector"
 
 msgid "Gwenneth"
-msgstr ""
+msgstr "Gwenneth"
 
 msgid "Lord Kilburn"
-msgstr ""
+msgstr "Lord Kilburn"
 
 msgid "Sir Gallant"
-msgstr ""
+msgstr "Sir Gallant"
 
 msgid "Tyro"
-msgstr ""
+msgstr "Tyro"
 
 msgid "Ambrose"
-msgstr ""
+msgstr "Ambrose"
 
 msgid "Dimitry"
-msgstr ""
+msgstr "Dimitry"
 
 msgid "Maximus"
-msgstr ""
+msgstr "Maximus"
 
 msgid "Ruby"
-msgstr ""
+msgstr "Ruby"
 
 msgid "Crag Hack"
-msgstr ""
+msgstr "Crag Hack"
 
 msgid "Fineous"
-msgstr ""
+msgstr "Fineous"
 
 msgid "Jezebel"
-msgstr ""
+msgstr "Jezebel"
 
 msgid "Jojosh"
-msgstr ""
+msgstr "Jojosh"
 
 msgid "Thundax"
-msgstr ""
+msgstr "Thundax"
 
 msgid "Atlas"
-msgstr ""
+msgstr "Atlas"
 
 msgid "Ergon"
-msgstr ""
+msgstr "Ergon"
 
 msgid "Jaclyn"
-msgstr ""
+msgstr "Jaclyn"
 
 msgid "Tsabu"
-msgstr ""
+msgstr "Tsabu"
 
 msgid "Astra"
-msgstr ""
+msgstr "Astra"
 
 msgid "Gem"
-msgstr ""
+msgstr "Gem"
 
 msgid "Natasha"
-msgstr ""
+msgstr "Natasha"
 
 msgid "Rebecca"
-msgstr ""
+msgstr "Rebecca"
 
 msgid "Troyan"
-msgstr ""
+msgstr "Troyan"
 
 msgid "Vatawna"
-msgstr ""
+msgstr "Vatawna"
 
 msgid "Ariel"
-msgstr ""
+msgstr "Ariel"
 
 msgid "Carlawn"
-msgstr ""
+msgstr "Carlawn"
 
 msgid "Luna"
-msgstr ""
+msgstr "Luna"
 
 msgid "Arie"
-msgstr ""
+msgstr "Arie"
 
 msgid "Barok"
-msgstr ""
+msgstr "Barok"
 
 msgid "Crodo"
-msgstr ""
+msgstr "Crodo"
 
 msgid "Kastore"
-msgstr ""
+msgstr "Kastore"
 
 msgid "Vesper"
-msgstr ""
+msgstr "Vesper"
 
 msgid "Agar"
-msgstr ""
+msgstr "Agar"
 
 msgid "Falagar"
-msgstr ""
+msgstr "Falagar"
 
 msgid "Wrathmont"
-msgstr ""
+msgstr "Wrathmont"
 
 msgid "Dawn"
-msgstr ""
+msgstr "Dawn"
 
 msgid "Flint"
-msgstr ""
+msgstr "Flint"
 
 msgid "Halon"
-msgstr ""
+msgstr "Halon"
 
 msgid "Myra"
-msgstr ""
+msgstr "Myra"
 
 msgid "Myrini"
-msgstr ""
+msgstr "Myrini"
 
 msgid "Wilfrey"
-msgstr ""
+msgstr "Wilfrey"
 
 msgid "Mandigal"
-msgstr ""
+msgstr "Mandigal"
 
 msgid "Sarakin"
-msgstr ""
+msgstr "Sarakin"
 
 msgid "Charity"
-msgstr ""
+msgstr "Charity"
 
 msgid "Darlana"
-msgstr ""
+msgstr "Darlana"
 
 msgid "Ranloo"
-msgstr ""
+msgstr "Ranloo"
 
 msgid "Rialdo"
-msgstr ""
+msgstr "Rialdo"
 
 msgid "Zam"
-msgstr ""
+msgstr "Zam"
 
 msgid "Zom"
-msgstr ""
+msgstr "Zom"
 
 msgid "Celia"
-msgstr ""
+msgstr "Celia"
 
 msgid "Roxana"
-msgstr ""
+msgstr "Roxana"
 
 msgid "Sandro"
-msgstr ""
+msgstr "Sandro"
 
 msgid "Lord Corlagon"
-msgstr ""
+msgstr "Lord Corlagon"
 
 msgid "Lord Halton"
-msgstr ""
+msgstr "Lord Halton"
 
 msgid "Sister Eliza"
-msgstr ""
+msgstr "Zuster Eliza"
 
 msgid "Brother Brax"
-msgstr ""
+msgstr "Broeder Brax"
 
 msgid "Dainwin"
-msgstr ""
+msgstr "Dainwin"
 
 msgid "Joseph"
-msgstr ""
+msgstr "Joseph"
 
 msgid "Mog"
-msgstr ""
+msgstr "Mog"
 
 msgid "Solmyr"
-msgstr ""
+msgstr "Solmyr"
 
 msgid "Ceallach"
-msgstr ""
+msgstr "Ceallach"
 
 msgid "Drakonia"
-msgstr ""
+msgstr "Drakonia"
 
 msgid "Elderian"
-msgstr ""
+msgstr "Elderian"
 
 msgid "Gallavant"
-msgstr ""
+msgstr "Gallavant"
 
 msgid "Jarkonas"
-msgstr ""
+msgstr "Jarkonas"
 
 msgid "Martine"
-msgstr ""
+msgstr "Martine"
 
 msgid " gives you maximum morale"
-msgstr ""
+msgstr " geeft je maximaal moreel"
 
 msgid " gives you maximum luck"
-msgstr ""
+msgstr " geeft je maximaal geluk"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
-msgstr ""
+msgstr "Je kunt dit artefact niet oppakken, je hebt al een volledige lading!"
 
 msgid "To cast spells, you must first buy a spell book for %{gold} gold."
-msgstr ""
+msgstr "Om spreuken uit te spreken, moet je eerst een spreukenboek kopen voor %{gold} goud."
 
 msgid "Unfortunately, you seem to be a little short of cash at the moment."
-msgstr ""
+msgstr "Helaas lijkt het erop dat je op dit moment wat geld tekort komt."
 
 msgid "Do you wish to buy one?"
-msgstr ""
+msgstr "Wil je er een kopen?"
 
 msgid "%{count} / day"
-msgstr ""
+msgstr "%{count} per dag"
 
 msgid "one"
-msgstr ""
+msgstr "een"
 
 msgid "two"
-msgstr ""
+msgstr "twee"
 
 msgid "A whirlpool engulfs your ship. Some of your army has fallen overboard."
-msgstr ""
+msgstr "Een draaikolk overspoelt uw schip. Een deel van je leger is overboord gevallen."
 
 msgid "Insulted by your refusal of their offer, the monsters attack!"
-msgstr ""
+msgstr "Beledigd door jouw weigering van hun aanbod, vallen de monsters aan!"
 
 msgid ""
 "The %{monster}, awed by the power of your forces, begin to scatter.\n"
 "Do you wish to pursue and engage them?"
 msgstr ""
+"Het %{monster}, onder de indruk van de kracht van je troepen, begint "
+"zich te verspreiden. Wil je ze najagen en betrekken?"
 
 msgid "Ransacking an enemy camp, you discover a hidden cache of treasures."
-msgstr ""
+msgstr "Door een vijandelijk kamp te plunderen, ontdek je een verborgen schatkamer."
 
 msgid ""
 "The keeper of the mill announces:\n"
 "\"Milord, I have been working very hard to provide you with these resources, "
 "come back next week for more.\""
 msgstr ""
+"De molenaar kondigt aan:\n"
+"\"Heer, ik heb heel hard gewerkt om u van deze middelen te voorzien, kom "
+"volgende week terug voor meer.\""
 
 msgid ""
 "The keeper of the mill announces:\n"
 "\"Milord, I am sorry, there are no resources currently available. Please try "
 "again next week.\""
 msgstr ""
+"De molenaar kondigt aan:\n"
+"\"Heer, het spijt me, er zijn momenteel geen middelen beschikbaar. Probeer "
+"het volgende week opnieuw.\""
 
 msgid ""
 "The keeper of the mill announces:\n"
 "\"Milord, I have been working very hard to provide you with this gold, come "
 "back next week for more.\""
 msgstr ""
+"De molenaar kondigt aan:\n"
+"\"Heer, ik heb heel hard gewerkt om u van dit goud te voorzien, kom volgende "
+"week terug voor meer.\""
 
 msgid ""
 "The keeper of the mill announces:\n"
 "\"Milord, I am sorry, there is no gold currently available. Please try again "
 "next week.\""
 msgstr ""
+"De molenaar kondigt aan:\n"
+"\"Heer, het spijt me, er is momenteel geen goud beschikbaar. Probeer het "
+"volgende week opnieuw.\""
 
 msgid ""
 "You've found an abandoned lean-to.\n"
 "Poking about, you discover some resources hidden nearby."
 msgstr ""
+"Je hebt een verlaten afdak gevonden.\n"
+"Als je rondneust, ontdek je enkele bronnen die in de buurt verborgen zijn."
 
 msgid "The lean-to is long abandoned. There is nothing of value here."
 msgstr ""
+"De aanbouw is al lang verlaten. Er is hier niets van waarde."
 
 msgid ""
 "You catch a leprechaun foolishly sleeping amidst a cluster of magic "
@@ -4438,142 +4549,184 @@ msgid ""
 "In exchange for his freedom, he guides you to a small pot filled with "
 "precious things."
 msgstr ""
+"Je betrapt een kabouter die dwaas slaapt tussen een tros magische paddestoelen.\n"
+"In ruil voor zijn vrijheid leidt hij je naar een kleine pot gevuld met kostbare "
+"dingen."
 
 msgid ""
 "You've found a magic garden, the kind of place that leprechauns and faeries "
 "like to cavort in, but there is no one here today.\n"
 "Perhaps you should try again next week."
 msgstr ""
+"Je hebt een magische tuin gevonden, het soort plek waar kabouters en elfen "
+"graag rondscharrelen, maar er is hier niemand vandaag.\n"
+"Misschien moet je het volgende week nog eens proberen."
 
 msgid "You come upon the remains of an unfortunate adventurer."
-msgstr ""
+msgstr "Je komt op de overblijfselen van een ongelukkige avonturier."
 
 msgid "Treasure"
-msgstr ""
+msgstr "Schat"
 
 msgid "Searching through the tattered clothing, you find the %{artifact}."
-msgstr ""
+msgstr "Als je door de gescheurde kleding zoekt, vind je het %{artefact}."
 
 msgid "Searching through the tattered clothing, you find nothing."
-msgstr ""
+msgstr "Zoekend door de gescheurde kleding, vind je niets."
 
 msgid ""
 "You come across an old wagon left by a trader who didn't quite make it to "
 "safe terrain."
 msgstr ""
+"Je komt een oude wagen tegen die is achtergelaten door een handelaar die "
+"niet helemaal veilig op het terrein is gekomen."
 
 msgid "Unfortunately, others have found it first, and the wagon is empty."
-msgstr ""
+msgstr "Helaas hebben anderen het als eerste gevonden en is de wagen leeg."
 
 msgid "Searching inside, you find the %{artifact}."
-msgstr ""
+msgstr "Als je naar binnen zoekt, vind je het %{artefact}."
 
 msgid "Inside, you find some of the wagon's cargo still intact."
-msgstr ""
+msgstr "Binnenin vind je een deel van de lading van de wagen nog intact."
 
 msgid "You search through the flotsam, and find some wood and some gold."
-msgstr ""
+msgstr "Je zoekt door het wrak en vindt wat hout en wat goud."
 
 msgid "You search through the flotsam, and find some wood."
-msgstr ""
+msgstr "Je zoekt door het wrak en vindt wat hout."
 
 msgid "You search through the flotsam, but find nothing."
-msgstr ""
+msgstr "Je zoekt door het wrak, maar vindt niets."
 
 msgid "Shrine of the 1st Circle"
-msgstr ""
+msgstr "Heiligdom van de 1e cirkel"
 
 msgid ""
 "You come across a small shrine attended by a group of novice acolytes.\n"
 "In exchange for your protection, they agree to teach you a simple spell - "
 "'%{spell}'."
 msgstr ""
+"Je komt een klein heiligdom tegen dat wordt bijgewoond door een groep beginnende volgelingen.\n"
+"In ruil voor jouw bescherming komen ze overeen om je een eenvoudige spreuk te "
+"leren - '%{spell}'."
 
 msgid "Shrine of the 2nd Circle"
-msgstr ""
+msgstr "Heiligdom van de 2e cirkel"
 
 msgid ""
 "You come across an ornate shrine attended by a group of rotund friars.\n"
 "In exchange for your protection, they agree to teach you a spell - "
 "'%{spell}'."
 msgstr ""
+"Je komt een sierlijk heiligdom tegen dat wordt bijgewoond door een groep ronde broeders.\n"
+"In ruil voor je bescherming, gaan ze ermee akkoord je een spreuk te "
+"leren - '%{spell}'."
 
 msgid "Shrine of the 3rd Circle"
-msgstr ""
+msgstr "Heiligdom van de 3e cirkel"
 
 msgid ""
 "You come across a lavish shrine attended by a group of high priests.\n"
 "In exchange for your protection, they agree to teach you a sophisticated "
 "spell - '%{spell}'."
 msgstr ""
+"Je komt een weelderig heiligdom tegen dat wordt bijgewoond door een groep hogepriesters.\n"
+"In ruil voor jouw bescherming komen ze overeen om je een verfijnde spreuk "
+"te leren - '%{spell}'."
 
 msgid ""
 "\n"
 "Unfortunately, you have no Magic Book to record the spell with."
 msgstr ""
+"\n"
+"Helaas heb je geen Magisch Boek om de spreuk mee op te nemen."
 
 msgid ""
 "\n"
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
+"\n"
+"Helaas heb je niet de wijsheid om de betovering te begrijpen, en je bent niet "
+"in staat om het te leren."
 
 msgid ""
 "\n"
 "Unfortunately, you already have knowledge of this spell, so there is nothing "
 "more for them to teach you."
 msgstr ""
+"\n"
+"Helaas heb je al kennis van deze spreuk, dus er is niets meer voor hen om je "
+"te leren."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
 "%{skill}.\n"
 " \n"
 msgstr ""
+"Je nadert de hut en ziet een heks binnen die een oud boekdeel bestudeert op "
+"%{skill}.\n"
+" \n"
 
 msgid ""
 "As you approach, she turns and focuses her one glass eye on you.\n"
 "\"You already know everything you deserve to learn!\" the witch screeches. "
 "\"NOW GET OUT OF MY HOUSE!\""
 msgstr ""
+"Als je dichterbij komt, draait ze zich om en richt haar ene glazen oog op je.\n"
+"\"Je weet al alles wat je verdient te leren!\" schreeuwt de heks. "
+"\"GA NU UIT MIJN HUIS!\""
 
 msgid ""
 "As you approach, she turns and speaks.\n"
 "\"You already know that which I would teach you. I can help you no further.\""
 msgstr ""
+"Als je dichterbij komt, draait ze zich om en spreekt.\n"
+"\"Wat ik je zou leren, weet je al. Ik kan je niet verder helpen.\""
 
 msgid ""
 "An ancient and immortal witch living in a hut with bird's legs for stilts "
 "teaches you %{skill} for her own inscrutable purposes."
 msgstr ""
+"Een oude en onsterfelijke heks die in een hut woont met vogelpoten als stelten, "
+"leert je %{vaardigheid} voor haar eigen ondoorgrondelijke doeleinden."
 
 msgid "As you drink the sweet water, you gain luck for your next battle."
-msgstr ""
+msgstr "Terwijl je het zoete water drinkt, krijg je geluk voor je volgende gevecht."
 
 msgid "You drink from the enchanted fountain, but nothing happens."
-msgstr ""
+msgstr "Je drinkt uit de betoverde fontein, maar er gebeurt niets."
 
 msgid ""
 "Upon entering the mystical faerie ring, your army gains luck for its next "
 "battle."
 msgstr ""
+"Bij het betreden van de mystieke elfenring krijgt je leger geluk voor zijn "
+"volgende gevecht."
 
 msgid "You enter the faerie ring, but nothing happens."
-msgstr ""
+msgstr "Je gaat de elfenring binnen, maar er gebeurt niets."
 
 msgid ""
 "You've found an ancient and weathered stone idol.\n"
 "It is supposed to grant luck to visitors, but since the stars are already "
 "smiling upon you, it does nothing."
 msgstr ""
+"Je hebt een oud en verweerd stenen idool gevonden.\n"
+"Het wordt verondersteld om bezoekers geluk te schenken, maar aangezien de "
+"sterren al naar je glimlachen, doet het niets."
 
 msgid ""
 "You've found an ancient and weathered stone idol.\n"
 "Kissing it is supposed to be lucky, so you do. The stone is very cold to the "
 "touch."
 msgstr ""
+"Je hebt een oud en verweerd stenen idool gevonden.\n"
+"Het kussen zou geluk moeten brengen, dus dat doe je. De steen voelt erg koud aan."
 
 msgid "The mermaids silently entice you to return later and be blessed again."
-msgstr ""
+msgstr "De zeemeerminnen verleiden je in stilte om later terug te keren en opnieuw gezegend te worden."
 
 msgid ""
 "The magical, soothing beauty of the Mermaids reaches you and your crew.\n"
@@ -4581,6 +4734,9 @@ msgid ""
 "moment.\n"
 "The mermaids charms bless you with increased luck for your next combat."
 msgstr ""
+"De magische, rustgevende schoonheid van de zeemeerminnen bereikt jou en je bemanning.\n"
+"Even vergeet je je zorgen en koester je de schoonheid van het moment.\n"
+"De charmes van de zeemeerminnen zegenen je met meer geluk voor je volgende gevecht."
 
 msgid ""
 "You come upon the pyramid of a great and ancient king.\n"
@@ -4588,195 +4744,263 @@ msgid ""
 "fearful curses and undead guardians.\n"
 "Will you search?"
 msgstr ""
+"Je komt op de piramide van een grote en oude koning.\n"
+"Je komt in de verleiding om er naar schatten te zoeken, maar alle oude "
+"verhalen waarschuwen voor angstaanjagende vloeken en ondode bewakers.\n"
+"Ga je zoeken?"
 
 msgid ""
 "Upon defeating the monsters, you decipher an ancient glyph on the wall, "
 "telling the secret of the spell - '"
 msgstr ""
+"Nadat je de monsters hebt verslagen, ontcijfer je een oude glyph op de muur, "
+"die het geheim van de spreuk vertelt - '"
 
 msgid "Unfortunately, you have no Magic Book to record the spell with."
-msgstr ""
+msgstr "Helaas heb je geen Magisch Boek om de spreuk mee op te nemen."
 
 msgid ""
 "Unfortunately, you do not have the wisdom to understand the spell, and you "
 "are unable to learn it."
 msgstr ""
+"Helaas heb je niet de wijsheid om de betovering te begrijpen, en je bent "
+"niet in staat om het te leren."
 
 msgid ""
 "You come upon the pyramid of a great and ancient king.\n"
 "Routine exploration reveals that the pyramid is completely empty."
 msgstr ""
+"Je komt op de piramide van een grote en oude koning.\n"
+"Routinematige verkenning onthult dat de piramide helemaal leeg is."
 
 msgid ""
 "A drink at the well is supposed to restore your spell points, but you are "
 "already at maximum."
 msgstr ""
+"Een drankje bij de bron zou je spellpoints moeten herstellen, maar je zit "
+"al aan het maximum."
 
 msgid "A second drink at the well in one day will not help you."
-msgstr ""
+msgstr "Een tweede drankje bij de bron op één dag zal je niet helpen."
 
 msgid "A drink from the well has restored your spell points to maximum."
-msgstr ""
+msgstr "Een drankje uit de put heeft je spreuken weer op het maximum gebracht."
 
 msgid ""
 "\"I'm sorry sir,\" The leader of the soldiers says, \"but you already know "
 "everything we have to teach.\""
 msgstr ""
+"\"Het spijt me meneer,\" zegt de leider van de soldaten, \"maar u weet al "
+"alles wat we moeten leren.\""
 
 msgid "The soldiers living in the fort teach you a few new defensive tricks."
-msgstr ""
+msgstr "De soldaten die in het fort wonen, leren je een paar nieuwe verdedigingstrucs."
 
 msgid ""
 "You've come upon a mercenary camp practicing their tactics. \"You're too "
 "advanced for us,\" the mercenary captain says. \"We can teach nothing more.\""
 msgstr ""
+"Je bent een huurlingenkamp tegengekomen die hun tactieken oefent. \"Je bent "
+"te geavanceerd voor ons,\" zegt de huurlingenkapitein. \"We kunnen niets meer leren.\""
 
 msgid ""
 "You've come upon a mercenary camp practicing their tactics. The mercenaries "
 "welcome you and your troops and invite you to train with them."
 msgstr ""
+"Je bent een huurlingenkamp tegengekomen die hun tactieken oefent. De huurlingen "
+"verwelkomen jou en je troepen en nodigen je uit om met hen te trainen."
 
 msgid "\"Go 'way!\", the witch doctor barks, \"you know all I know.\""
-msgstr ""
+msgstr "\"Ga weg!\", blaft de heksen doctor, \"je weet alles dat ik weet.\""
 
 msgid ""
 "An Orcish witch doctor living in the hut deepens your knowledge of magic by "
 "showing you how to cast stones, read portents, and decipher the intricacies "
 "of chicken entrails."
 msgstr ""
+"Een Orcish-toverdokter die in de hut woont, verdiept je kennis van magie door "
+"je te laten zien hoe je stenen kunt werpen, voortekenen kunt lezen en de fijne "
+"kneepjes van de ingewanden van kippen kunt ontcijferen."
 
 msgid ""
 "You've found a group of Druids worshipping at one of their strange stone "
 "edifices. Silently, the Druids turn you away, indicating they have nothing "
 "new to teach you."
-msgstr ""
+msgstr "
+"Je hebt een groep Druïden gevonden die aanbidden in een van hun vreemde stenen "
+"gebouwen. In stilte wijzen de Druïden je af, wat aangeeft dat ze je niets nieuws "
+"te leren hebben."
 
 msgid ""
 "You've found a group of Druids worshipping at one of their strange stone "
 "edifices. Silently, they teach you new ways to cast spells."
-msgstr ""
+msgstr "Je hebt een groep Druïden gevonden die aanbidden in een van hun "
+"vreemde stenen gebouwen. In stilte leren ze je nieuwe manieren om "
+"spreuken uit te spreken."
 
 msgid ""
 "You tentatively approach the burial ground of ancient warriors. Do you want "
 "to search the graves?"
 msgstr ""
+"Je nadert voorzichtig de begraafplaats van oude krijgers. Wil je de graven "
+"doorzoeken?"
 
 msgid ""
 "You spend several hours searching the graves and find nothing. Such a "
 "despicable act reduces your army's morale."
 msgstr ""
+"Je besteedt enkele uren aan het doorzoeken van de graven en vindt niets. "
+"Zo'n verachtelijke daad verlaagt het moreel van je leger."
 
 msgid "Upon defeating the Zombies you search the graves and find something!"
-msgstr ""
+msgstr "Na het verslaan van de Zombies doorzoek je de graven en vind je iets!"
 
 msgid ""
 "The rotting hulk of a great pirate ship creaks eerily as it is pushed "
 "against the rocks. Do you wish to search the shipwreck?"
 msgstr ""
+"De rottende romp van een groot piratenschip kraakt griezelig als het tegen "
+"de rotsen wordt geduwd. Wilt u het scheepswrak doorzoeken?"
 
 msgid ""
 "You spend several hours sifting through the debris and find nothing. Such a "
 "despicable act reduces your army's morale."
 msgstr ""
+"Je besteedt enkele uren aan het doorzoeken van het puin en vindt niets. Zo'n "
+"verachtelijke daad verlaagt het moreel van je leger."
 
 msgid ""
 "Upon defeating the Ghosts you sift through the debris and find something!"
 msgstr ""
+"Nadat je de Geesten hebt verslagen, doorzoek je het puin en vind je iets!"
 
 msgid ""
 "The rotting hulk of a great pirate ship creaks eerily as it is pushed "
 "against the rocks. Do you wish to search the ship?"
 msgstr ""
+"De rottende romp van een groot piratenschip kraakt griezelig als het tegen "
+"de rotsen wordt geduwd. Wilt u het schip doorzoeken?"
 
 msgid ""
 "Upon defeating the Skeletons you sift through the debris and find something!"
 msgstr ""
+"Nadat je de Skeleten hebt verslagen, doorzoek je het puin en vind je iets!"
 
 msgid "Your men spot a navigational buoy, confirming that you are on course."
-msgstr ""
+msgstr "Je mannen zien een navigatieboei, wat bevestigt dat je op koers zit."
 
 msgid ""
 "Your men spot a navigational buoy, confirming that you are on course and "
 "increasing their morale."
 msgstr ""
+"Je mannen zien een navigatieboei, die bevestigt dat je op koers zit en "
+"hun moreel verhoogt."
 
 msgid ""
 "The drink at the oasis is refreshing, but offers no further benefit. The "
 "oasis might help again if you fought a battle first."
 msgstr ""
+"Het drankje bij de oase is verfrissend, maar biedt verder geen voordeel. "
+"De oase kan misschien weer helpen als je eerst een gevecht hebt geleverd."
 
 msgid ""
 "A drink at the oasis fills your troops with strength and lifts their "
 "spirits.  You can travel a bit further today."
 msgstr ""
+"Een drankje in de oase vervult je troepen met kracht en vrolijkt ze op. "
+"Je kunt vandaag wat verder reizen."
 
 msgid ""
 "The drink at the watering hole is refreshing, but offers no further benefit. "
 "The watering hole might help again if you fought a battle first."
 msgstr ""
+"Het drankje bij de drinkplaats is verfrissend, maar biedt verder geen voordelen. "
+"De waterpoel kan weer helpen als je eerst een gevecht hebt geleverd."
 
 msgid ""
 "A drink at the watering hole fills your troops with strength and lifts their "
 "spirits. You can travel a bit further today."
 msgstr ""
+"Een drankje bij de drinkplaats vervult je troepen met kracht en vrolijkt ze op. "
+"Je kunt vandaag wat verder reizen."
 
 msgid ""
 "It doesn't help to pray twice before a battle. Come back after you've fought."
 msgstr ""
+"Het helpt niet om twee keer te bidden voor een gevecht. Kom terug nadat je gevochten hebt."
 
 msgid "A visit and a prayer at the temple raises the morale of your troops."
-msgstr ""
+msgstr "Een bezoek en een gebed in de tempel verhogen het moreel van je troepen."
 
 msgid ""
 "An old Knight appears on the steps of the gazebo. \"I am sorry, my liege, I "
 "have taught you all I can.\""
 msgstr ""
+"Een oude ridder verschijnt op de trappen van het prieel. \"Het spijt me, "
+"leenheer, ik heb u alles geleerd wat ik kan.\""
 
 msgid ""
 "An old Knight appears on the steps of the gazebo. \"My liege, I will teach "
 "you all that I know to aid you in your travels.\""
 msgstr ""
+"Een oude ridder verschijnt op de trappen van het prieel. \"Mijn leenheer, "
+"ik zal je alles leren wat ik weet om je te helpen op je reizen.\""
 
 msgid ""
 "You've pulled a shipwreck survivor from certain death in an unforgiving "
 "ocean. Grateful, he says, \"I would give you an artifact as a reward, but "
 "you're all full.\""
 msgstr ""
+"Je hebt een overlevende van een schipbreuk gered van een wisse dood in een "
+"meedogenloze oceaan. Dankbaar zegt hij: \"Ik zou je een artefact geven als "
+"beloning, maar je zit helemaal vol.\""
 
 msgid ""
 "You've pulled a shipwreck survivor from certain death in an unforgiving "
 "ocean. Grateful, he rewards you for your act of kindness by giving you the "
 "%{art}."
 msgstr ""
+"Je hebt een overlevende van een schipbreuk gered van een wisse dood in een "
+"meedogenloze oceaan. Dankbaar beloont hij je voor je vriendelijke daad door "
+"je de %{art} te geven."
 
 msgid "A leprechaun offers you the %{art} for the small price of %{gold} Gold."
-msgstr ""
+msgstr "Een kabouter biedt je de %{art} voor de kleine prijs van %{gold} Goud."
 
 msgid ""
 "A leprechaun offers you the %{art} for the small price of %{gold} Gold and "
 "%{count} %{res}."
 msgstr ""
+"Een kabouter biedt je de %{art} aan voor de kleine prijs van %{gold} Goud "
+"en %{count} %{res}."
 
 msgid "Do you wish to buy this artifact?"
-msgstr ""
+msgstr "Wilt u dit artefact kopen?"
 
 msgid ""
 "You try to pay the leprechaun, but realize that you can't afford it. The "
 "leprechaun stamps his foot and ignores you."
 msgstr ""
+"Je probeert de kabouter te betalen, maar realiseert je dat je het niet kunt "
+"betalen. De kabouter stampt met zijn voet en negeert je."
 
 msgid ""
 "Insulted by your refusal of his generous offer, the leprechaun stamps his "
 "foot and ignores you."
 msgstr ""
+"Beledigd door jouw weigering van zijn genereuze aanbod, stampt de kabouter "
+"met zijn voet en negeert hij je."
 
 msgid "You've found the artifact: "
-msgstr ""
+msgstr "Je hebt het artefact gevonden: "
 
 msgid ""
 "You've found the humble dwelling of a withered hermit. The hermit tells you "
 "that he is willing to give the %{art} to the first wise person he meets."
 msgstr ""
+"Je hebt de nederige woning van een verdorde kluizenaar gevonden. De kluizenaar "
+"vertelt je dat hij bereid is om de %{art} te geven aan de eerste wijze persoon "
+"die hij ontmoet."
 
 msgid ""
 "You've come across the spartan quarters of a retired soldier. The soldier "
