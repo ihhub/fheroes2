@@ -121,31 +121,31 @@ msgstr ""
 "%{monster}"
 
 msgid "army|Few"
-msgstr "1-4"
+msgstr "(1-4)"
 
 msgid "army|Several"
-msgstr "4-9"
+msgstr "(4-9)"
 
 msgid "army|Pack"
-msgstr "10-19"
+msgstr "(10-19)"
 
 msgid "army|Lots"
-msgstr "20-49"
+msgstr "(20-49)"
 
 msgid "army|Horde"
-msgstr "50-99"
+msgstr "(50-99)"
 
 msgid "army|Throng"
-msgstr "100-249"
+msgstr "(100-249)"
 
 msgid "army|Swarm"
-msgstr "1000+"
+msgstr "(1000+)"
 
 msgid "army|Zounds"
-msgstr "500-999"
+msgstr "(500-999)"
 
 msgid "army|Legion"
-msgstr "250-499"
+msgstr "(250-499)"
 
 msgid "All %{race} troops +1"
 msgstr "Toate %{race} forțele +1"
