@@ -3964,6 +3964,9 @@ msgstr ""
 msgid "Portuguese"
 msgstr ""
 
+msgid "Turkish"
+msgstr ""
+
 msgid ", FPS: "
 msgstr ""
 
