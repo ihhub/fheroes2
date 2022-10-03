@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <array>
 #include <ctime>
 
 #if defined( _WIN32 )
@@ -102,10 +103,11 @@ namespace Logging
     {
         const tm tmi = System::GetTM( std::time( nullptr ) );
 
-        char buf[13] = {0};
-        std::strftime( buf, sizeof( buf ) - 1, "%X", &tmi );
+        std::array<char, 32> buf{ 0 };
 
-        return std::string( buf );
+        std::strftime( buf.data(), buf.size() - 1, "%x %X", &tmi );
+
+        return std::string( buf.data() );
     }
 
     void InitLog()
