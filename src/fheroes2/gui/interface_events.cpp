@@ -361,8 +361,17 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
     Heroes * hero = GetFocusHeroes();
 
     if ( hero ) {
-        if ( hero->isShipMaster() )
+        if ( hero->isShipMaster() ) {
             Dialog::Message( "", _( "Try looking on land!!!" ), Font::BIG, Dialog::OK );
+        }
+        else if ( hero->GetBagArtifacts().isFull() ) {
+            fheroes2::showMessage(
+                fheroes2::Text( "", {} ),
+                fheroes2::
+                    Text( _( "Searching for the Ultimate Artifact is fruitless. Your hero could not carry it even if he found it - all his artifact slots are full." ),
+                          fheroes2::FontType::normalWhite() ),
+                Dialog::OK );
+        }
         else if ( hero->GetMaxMovePoints() <= hero->GetMovePoints() ) {
             // Original Editor allows to put an Ultimate Artifact on an invalid tile. So checking tile index solves this issue.
             if ( world.GetTiles( hero->GetIndex() ).GoodForUltimateArtifact() || world.GetUltimateArtifact().getPosition() == hero->GetIndex() ) {
