@@ -6799,868 +6799,875 @@ msgid "Artesian Spring"
 msgstr "Artesische lente"
 
 msgid "Gazebo"
-msgstr ""
+msgstr "Prieel"
 
 msgid "Archer's House"
-msgstr ""
+msgstr "Boogschieter's Huis"
 
 msgid "Peasant Hut"
-msgstr ""
+msgstr "Boerenhut"
 
 msgid "Dwarf Cottage"
-msgstr ""
+msgstr "Dwerg huisje"
 
 msgid "Stone Liths"
-msgstr ""
+msgstr "Stenen Lichaamsdelen"
 
 msgid "Magic Well"
-msgstr ""
+msgstr "Magische Put"
 
 msgid "Sign"
-msgstr ""
+msgstr "Bord"
 
 msgid "Nothing Special"
-msgstr ""
+msgstr "Niets Speciaals"
 
 msgid "Tar Pit"
-msgstr ""
+msgstr "Teer Put"
 
 msgid "Mound"
-msgstr ""
+msgstr "Heuvel"
 
 msgid "Dune"
-msgstr ""
+msgstr "Duin"
 
 msgid "Stump"
-msgstr ""
+msgstr "Stomp"
 
 msgid "Cactus"
-msgstr ""
+msgstr "Cactus"
 
 msgid "Trees"
-msgstr ""
+msgstr "Boomen"
 
 msgid "Dead Tree"
-msgstr ""
+msgstr "Dode Boom"
 
 msgid "Mountains"
-msgstr ""
+msgstr "Bergen"
 
 msgid "Volcano"
-msgstr ""
+msgstr "Vulkaan"
 
 msgid "Rock"
-msgstr ""
+msgstr "Steen"
 
 msgid "Flowers"
-msgstr ""
+msgstr "Bloemen"
 
 msgid "Water Lake"
-msgstr ""
+msgstr "Meer"
 
 msgid "Mandrake"
-msgstr ""
+msgstr "Mandrake"
 
 msgid "Crater"
-msgstr ""
+msgstr "Krater"
 
 msgid "Lava Pool"
-msgstr ""
+msgstr "Lavabad"
 
 msgid "Shrub"
-msgstr ""
+msgstr "Struik"
 
 msgid "Buoy"
-msgstr ""
+msgstr "Boei"
 
 msgid "Skeleton"
-msgstr ""
+msgstr "Skelet"
 
 msgid "Treasure Chest"
-msgstr ""
+msgstr "Schatkist"
 
 msgid "Sea Chest"
-msgstr ""
+msgstr "Zeekist"
 
 msgid "Campfire"
-msgstr ""
+msgstr "Kampvuur"
 
 msgid "Fountain"
-msgstr ""
+msgstr "Fontijn"
 
 msgid "Genie Lamp"
-msgstr ""
+msgstr "Geesten Lamp"
 
 msgid "Goblin Hut"
-msgstr ""
+msgstr "Koboldenhut"
 
 msgid "Monster"
-msgstr ""
+msgstr "Monster"
 
 msgid "Resource"
-msgstr ""
+msgstr "Bron"
 
 msgid "Whirlpool"
-msgstr ""
+msgstr "Draaikolk"
 
 msgid "Artifact"
-msgstr ""
+msgstr "Artefact"
 
 msgid "Boat"
-msgstr ""
+msgstr "Boot"
 
 msgid "Random Artifact"
-msgstr ""
+msgstr "Willekurig Artefact"
 
 msgid "Random Resource"
-msgstr ""
+msgstr "Willekurige Bron"
 
 msgid "Random Monster - weak"
-msgstr ""
+msgstr "Willekurig Monster - zwak"
 
 msgid "Random Monster - medium"
-msgstr ""
+msgstr "Willekurig Monster - gemiddeld"
 
 msgid "Random Monster - strong"
-msgstr ""
+msgstr "Willekurig Monster - sterk"
 
 msgid "Random Monster - very strong"
-msgstr ""
+msgstr "Willekurig Monster - heel sterk"
 
 msgid "Standing Stones"
-msgstr ""
+msgstr "Staande Stenen"
 
 msgid "Event"
-msgstr ""
+msgstr "Evenement"
 
 msgid "Random Monster"
-msgstr ""
+msgstr "Willekurig Monster"
 
 msgid "Random Ultimate Artifact"
-msgstr ""
+msgstr "Willekurig Ultiem Artefact"
 
 msgid "Idol"
-msgstr ""
+msgstr "Idool"
 
 msgid "Shrine of the First Circle"
-msgstr ""
+msgstr "Heiligdom van de eerste cirkel"
 
 msgid "Shrine of the Second Circle"
-msgstr ""
+msgstr "Heiligdom van de tweede cirkel"
 
 msgid "Shrine of the Third Circle"
-msgstr ""
+msgstr "Heiligdom van de derde cirkel"
 
 msgid "Wagon"
-msgstr ""
+msgstr "Wagen"
 
 msgid "Lean-To"
-msgstr ""
+msgstr "Afdak"
 
 msgid "Flotsam"
-msgstr ""
+msgstr "Zeedrift"
 
 msgid "Shipwreck Survivor"
-msgstr ""
+msgstr "Scheepsbruk Overlever"
 
 msgid "Bottle"
-msgstr ""
+msgstr "Fles"
 
 msgid "Magic Garden"
 msgid_plural "Magic Gardens"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Magische Tuin"
+msgstr[1] "Magische Tuinen"
 
 msgid "Random Artifact - Treasure"
-msgstr ""
+msgstr "Willekurig Artefact - Schat"
 
 msgid "Random Artifact - Minor"
-msgstr ""
+msgstr "Willekurig Artefact - Klein"
 
 msgid "Random Artifact - Major"
-msgstr ""
+msgstr "Willekurig Artefact - Grood"
 
 msgid "Jail"
-msgstr ""
+msgstr "Gevangenis"
 
 msgid "Traveller's Tent"
-msgstr ""
+msgstr "Reizigerstent"
 
 msgid "Barrier"
-msgstr ""
+msgstr "Barriere"
 
 msgid "Fire Summoning Altar"
-msgstr ""
+msgstr "Altaar voor vuuroproeping"
 
 msgid "Air Summoning Altar"
-msgstr ""
+msgstr "Altaar voor luchtoproeping"
 
 msgid "Earth Summoning Altar"
-msgstr ""
+msgstr "Altaar voor aardeoproeping"
 
 msgid "Water Summoning Altar"
-msgstr ""
+msgstr "Altaar voor wateroproeping"
 
 msgid "Barrow Mounds"
-msgstr ""
+msgstr "Grafheuvels"
 
 msgid "Stables"
-msgstr ""
+msgstr "Stallen"
 
 msgid "Alchemist's Tower"
-msgstr ""
+msgstr "De toren van de alchemist"
 
 msgid "Hut of the Magi"
-msgstr ""
+msgstr "Hut of the Magi"
 
 msgid "Eye of the Magi"
-msgstr ""
+msgstr "Oog of the Magi"
 
 msgid "Mermaid"
-msgstr ""
+msgstr "Meermin"
 
 msgid "Sirens"
-msgstr ""
+msgstr "Sirenes"
 
 msgid "Reefs"
-msgstr ""
+msgstr "Riffen"
 
 msgid "Unknown Monster"
-msgstr ""
+msgstr "Onbekend Monster"
 
 msgid "Unknown Monsters"
-msgstr ""
+msgstr "Onbekende Monsters"
 
 msgid "Peasant"
-msgstr ""
+msgstr "Onderdaan"
 
 msgid "Peasants"
-msgstr ""
+msgstr "Onderdaanen"
 
 msgid "Archer"
-msgstr ""
+msgstr "Boogschutter"
 
 msgid "Archers"
-msgstr ""
+msgstr "Boogschutters"
 
 msgid "Ranger"
-msgstr ""
+msgstr "Ranger"
 
 msgid "Rangers"
-msgstr ""
+msgstr "Rangers"
 
 msgid "Pikeman"
-msgstr ""
+msgstr "Pikeman"
 
 msgid "Pikemen"
-msgstr ""
+msgstr "Pikemanen"
 
 msgid "Veteran Pikeman"
-msgstr ""
+msgstr "Veteranen Pikeman"
 
 msgid "Veteran Pikemen"
-msgstr ""
+msgstr "Veteranen Pikemanen"
 
 msgid "Swordsman"
-msgstr ""
+msgstr "Zwaardvechter"
 
 msgid "Swordsmen"
-msgstr ""
+msgstr "Zwaardvechters"
 
 msgid "Master Swordsman"
-msgstr ""
+msgstr "Meester Zwaardvechter"
 
 msgid "Master Swordsmen"
-msgstr ""
+msgstr "Meester Zwaardvechters"
 
 msgid "Cavalries"
-msgstr ""
+msgstr "Cavalerie"
 
 msgid "Cavalry"
-msgstr ""
+msgstr "Cavalerie"
 
 msgid "Champion"
-msgstr ""
+msgstr "Champioen"
 
 msgid "Champions"
-msgstr ""
+msgstr "Champioenen"
 
 msgid "Paladin"
-msgstr ""
+msgstr "Paladijn"
 
 msgid "Paladins"
-msgstr ""
+msgstr "Paladijnen"
 
 msgid "Crusader"
-msgstr ""
+msgstr "Kruisvaarder"
 
 msgid "Crusaders"
-msgstr ""
+msgstr "Kruisvaarders"
 
 msgid "Goblin"
-msgstr ""
+msgstr "Kobold"
 
 msgid "Goblins"
-msgstr ""
+msgstr "Kobolden"
 
 msgid "Orc"
-msgstr ""
+msgstr "Orc"
 
 msgid "Orcs"
-msgstr ""
+msgstr "Orks"
 
 msgid "Orc Chief"
-msgstr ""
+msgstr "Ork Chief"
 
 msgid "Orc Chiefs"
-msgstr ""
+msgstr "Ork Chiefs"
 
 msgid "Wolf"
-msgstr ""
+msgstr "Wolf"
 
 msgid "Wolves"
-msgstr ""
+msgstr "Wolven"
 
 msgid "Ogre"
-msgstr ""
+msgstr "Ogre"
 
 msgid "Ogres"
-msgstr ""
+msgstr "Ogren"
 
 msgid "Ogre Lord"
-msgstr ""
+msgstr "Ogre Lijder"
 
 msgid "Ogre Lords"
-msgstr ""
+msgstr "Ogre Lijders"
 
 msgid "Troll"
-msgstr ""
+msgstr "Trol"
 
 msgid "Trolls"
-msgstr ""
+msgstr "Trollen"
 
 msgid "War Troll"
-msgstr ""
+msgstr "Oorlogs Trol"
 
 msgid "War Trolls"
-msgstr ""
+msgstr "Oorlogs Trollen"
 
 msgid "Cyclopes"
-msgstr ""
+msgstr "Cyclopen"
 
 msgid "Cyclops"
-msgstr ""
+msgstr "Cycloop"
 
 msgid "Sprite"
-msgstr ""
+msgstr "Sprite"
 
 msgid "Sprites"
-msgstr ""
+msgstr "Spriten"
 
 msgid "Dwarf"
-msgstr ""
+msgstr "Dwerg"
 
 msgid "Dwarves"
-msgstr ""
+msgstr "Dwergen"
 
 msgid "Battle Dwarf"
-msgstr ""
+msgstr "Gevechts Dwerg"
 
 msgid "Battle Dwarves"
-msgstr ""
+msgstr "Gevechts Dwergen"
 
 msgid "Elf"
-msgstr ""
+msgstr "Elf"
 
 msgid "Elves"
-msgstr ""
+msgstr "Elven"
 
 msgid "Grand Elf"
-msgstr ""
+msgstr "Grote Elf"
 
 msgid "Grand Elves"
-msgstr ""
+msgstr "Grote Elven"
 
 msgid "Druid"
-msgstr ""
+msgstr "Druïde"
 
 msgid "Druids"
-msgstr ""
+msgstr "Druïden"
 
 msgid "Greater Druid"
-msgstr ""
+msgstr "Grotere Druïde"
 
 msgid "Greater Druids"
-msgstr ""
+msgstr "Grotere Druïdes"
 
 msgid "Unicorn"
-msgstr ""
+msgstr "Eenhorn"
 
 msgid "Unicorns"
-msgstr ""
+msgstr "Eenhorns"
 
 msgid "Phoenix"
-msgstr ""
+msgstr "Feniks"
 
 msgid "Phoenixes"
-msgstr ""
+msgstr "Feniksen"
 
 msgid "Centaur"
-msgstr ""
+msgstr "Centaur"
 
 msgid "Centaurs"
-msgstr ""
+msgstr "Centaurs"
 
 msgid "Gargoyle"
-msgstr ""
+msgstr "Waterspuwer"
 
 msgid "Gargoyles"
-msgstr ""
+msgstr "Waterspuwers"
 
 msgid "Griffin"
-msgstr ""
+msgstr "Griffioen"
 
 msgid "Griffins"
-msgstr ""
+msgstr "Griffioenen"
 
 msgid "Minotaur"
-msgstr ""
+msgstr "Minotaurus"
 
 msgid "Minotaurs"
-msgstr ""
+msgstr "Minotaurussen"
 
 msgid "Minotaur King"
-msgstr ""
+msgstr "Minotaurus Koning"
 
 msgid "Minotaur Kings"
-msgstr ""
+msgstr "Minotaurussen Koningen"
 
 msgid "Hydra"
-msgstr ""
+msgstr "Hydra"
 
 msgid "Hydras"
-msgstr ""
+msgstr "Hydras"
 
 msgid "Green Dragon"
-msgstr ""
+msgstr "Groene Draak"
 
 msgid "Green Dragons"
-msgstr ""
+msgstr "Groene Draaken"
 
 msgid "Red Dragon"
-msgstr ""
+msgstr "Roode Draak"
 
 msgid "Red Dragons"
-msgstr ""
+msgstr "Roode Draaken"
 
 msgid "Black Dragon"
-msgstr ""
+msgstr "Zwarte Draak"
 
 msgid "Black Dragons"
-msgstr ""
+msgstr "Zwarte Draaken"
 
 msgid "Halfling"
-msgstr ""
+msgstr "Halfling"
 
 msgid "Halflings"
-msgstr ""
+msgstr "Halflingen"
 
 msgid "Boar"
-msgstr ""
+msgstr "Zwijn"
 
 msgid "Boars"
-msgstr ""
+msgstr "Zwijnen"
 
 msgid "Iron Golem"
-msgstr ""
+msgstr "Ijzeren Golem"
 
 msgid "Iron Golems"
-msgstr ""
+msgstr "Ijzeren Golems"
 
 msgid "Steel Golem"
-msgstr ""
+msgstr "Stalen Golem"
 
 msgid "Steel Golems"
-msgstr ""
+msgstr "Stalen Golems"
 
 msgid "Roc"
-msgstr ""
+msgstr "Roc"
 
 msgid "Rocs"
-msgstr ""
+msgstr "Rocken"
 
 msgid "Mage"
-msgstr ""
+msgstr "Magiër"
 
 msgid "Magi"
-msgstr ""
+msgstr "Magi"
 
 msgid "Archmage"
-msgstr ""
+msgstr "Aartsmagiër"
 
 msgid "Archmagi"
-msgstr ""
+msgstr "Aartsmagi"
 
 msgid "Giant"
-msgstr ""
+msgstr "Gigant"
 
 msgid "Giants"
-msgstr ""
+msgstr "Giganten"
 
 msgid "Titan"
-msgstr ""
+msgstr "Titaan"
 
 msgid "Titans"
-msgstr ""
+msgstr "Titanen"
 
 msgid "Skeletons"
-msgstr ""
+msgstr "Skeleten"
 
 msgid "Zombie"
-msgstr ""
+msgstr "Zombie"
 
 msgid "Zombies"
-msgstr ""
+msgstr "Zombies"
 
 msgid "Mutant Zombie"
-msgstr ""
+msgstr "Gemuteerde Zombie"
 
 msgid "Mutant Zombies"
-msgstr ""
+msgstr "Gemuteerde Zombies"
 
 msgid "Mummies"
-msgstr ""
+msgstr "Mummies"
 
 msgid "Mummy"
-msgstr ""
+msgstr "Mummy"
 
 msgid "Royal Mummies"
-msgstr ""
+msgstr "Royaale Mummies"
 
 msgid "Royal Mummy"
-msgstr ""
+msgstr "Royaale Mummy"
 
 msgid "Vampire"
-msgstr ""
+msgstr "Vampier"
 
 msgid "Vampires"
-msgstr ""
+msgstr "Vampieren"
 
 msgid "Vampire Lord"
-msgstr ""
+msgstr "Vampiere Heer"
 
 msgid "Vampire Lords"
-msgstr ""
+msgstr "Vampieren Heren"
 
 msgid "Lich"
-msgstr ""
+msgstr "Lichu"
 
 msgid "Liches"
-msgstr ""
+msgstr "Lichus"
 
 msgid "Power Lich"
-msgstr ""
+msgstr "Kracht Lichu"
 
 msgid "Power Liches"
-msgstr ""
+msgstr "Krachten Lichus"
 
 msgid "Bone Dragon"
-msgstr ""
+msgstr "Botte Draak"
 
 msgid "Bone Dragons"
-msgstr ""
+msgstr "Botte Draaken"
 
 msgid "Rogue"
-msgstr ""
+msgstr "Schurk"
 
 msgid "Rogues"
-msgstr ""
+msgstr "Schurken"
 
 msgid "Nomad"
-msgstr ""
+msgstr "Nomade"
 
 msgid "Nomads"
-msgstr ""
+msgstr "Nomaden"
 
 msgid "Ghost"
-msgstr ""
+msgstr "Geest"
 
 msgid "Ghosts"
-msgstr ""
+msgstr "Geesten"
 
 msgid "Genie"
-msgstr ""
+msgstr "Genie"
 
 msgid "Genies"
-msgstr ""
+msgstr "Genies"
 
 msgid "Medusa"
-msgstr ""
+msgstr "Medusa"
 
 msgid "Medusas"
-msgstr ""
+msgstr "Medusas"
 
 msgid "Earth Elemental"
-msgstr ""
+msgstr "Aarde Elementair"
 
 msgid "Earth Elementals"
-msgstr ""
+msgstr "Aarde Elementairs"
 
 msgid "Air Elemental"
-msgstr ""
+msgstr "Lucht Elementair"
 
 msgid "Air Elementals"
-msgstr ""
+msgstr "Lucht Elementairs"
 
 msgid "Fire Elemental"
-msgstr ""
+msgstr "Vuur Elementair"
 
 msgid "Fire Elementals"
-msgstr ""
+msgstr "Vuur Elementairs"
 
 msgid "Water Elemental"
-msgstr ""
+msgstr "Water Elementair"
 
 msgid "Water Elementals"
-msgstr ""
+msgstr "Water Elementairs"
 
 msgid "Random Monsters"
-msgstr ""
+msgstr "Willekurige Monsters"
 
 msgid "Random Monster 1"
-msgstr ""
+msgstr "Willekurig Monster 1"
 
 msgid "Random Monsters 1"
-msgstr ""
+msgstr "Willekurige Monsters 1"
 
 msgid "Random Monster 2"
-msgstr ""
+msgstr "Willekurig Monster 2"
 
 msgid "Random Monsters 2"
-msgstr ""
+msgstr "Willekurige Monsters 2"
 
 msgid "Random Monster 3"
-msgstr ""
+msgstr "Willekurig Monster 3"
 
 msgid "Random Monsters 3"
-msgstr ""
+msgstr "Willekurige Monsters 3"
 
 msgid "Random Monster 4"
-msgstr ""
+msgstr "Willekurig Monster 4"
 
 msgid "Random Monsters 4"
-msgstr ""
+msgstr "Willekurige Monsters 4"
 
 msgid "Double shot"
-msgstr ""
+msgstr "Dubbel schot"
 
 msgid "2-hex monster"
-msgstr ""
+msgstr "2-hex monster"
 
 msgid "Double strike"
-msgstr ""
+msgstr "Dubbele slag"
 
 msgid "Double damage to Undead"
-msgstr ""
+msgstr "Dubbele schade aan undood"
 
 msgid "% magic resistance"
-msgstr ""
+msgstr "% weerstand tot magie"
 
 msgid "Immune to Mind spells"
-msgstr ""
+msgstr "Immuun tot Verstand spreuken"
 
 msgid "Immune to Elemental spells"
-msgstr ""
+msgstr "Immuun tot Elementaire spreuken"
 
 msgid "Immune to Fire spells"
-msgstr ""
+msgstr "Immuun tot Vuur spreuken"
 
 msgid "Immune to Cold spells"
-msgstr ""
+msgstr "Immuun tot Koud spreuken"
 
 msgid "Immune to "
-msgstr ""
+msgstr "Immuun tot "
 
 msgid "% immunity to %{spell} spell"
-msgstr ""
+msgstr "% immuniteit voor de %{spell} spreuk"
 
 msgid "% damage from Elemental spells"
-msgstr ""
+msgstr "% schade van Elementaire spreuken"
 
 msgid "% chance to Dispel beneficial spells"
-msgstr ""
+msgstr "% kans om gunstige spreuken af te wijzen"
 
 msgid "% chance to Paralyze"
-msgstr ""
+msgstr "% kans om te Paralyzeren"
 
 msgid "% chance to Petrify"
-msgstr ""
+msgstr "% kans om te Verstenen"
 
 msgid "% chance to Blind"
-msgstr ""
+msgstr "% kans om te Verblinden"
 
 msgid "% chance to Curse"
-msgstr ""
+msgstr "% kans om te Vervloeken"
 
 msgid "% chance to cast %{spell} spell"
-msgstr ""
+msgstr "% kans om de spreuk %{spell} uit te spreken"
 
 msgid "HP regeneration"
-msgstr ""
+msgstr "HP regeneratie"
 
 msgid "Two hexes attack"
-msgstr ""
+msgstr "Twee hexadecimale aanvallen"
 
 msgid "Flyer"
-msgstr ""
+msgstr "Vlieger"
 
 msgid "Always retaliates"
-msgstr ""
+msgstr "Neemt altijd wraak"
 
 msgid "Attacks all adjacent enemies"
-msgstr ""
+msgstr "Valt alle aangrenzende vijanden aan"
 
 msgid "No melee penalty"
-msgstr ""
+msgstr "Geen melee-penalty"
 
 msgid "Dragon"
-msgstr ""
+msgstr "Draak"
 
 msgid "Undead"
-msgstr ""
+msgstr "Ondood"
 
 msgid "No enemy retaliation"
-msgstr ""
+msgstr "Geen vijhand wraak"
 
 msgid "HP drain"
-msgstr ""
+msgstr "HP-afvoer"
 
 msgid "Cloud attack"
-msgstr ""
+msgstr "Lucht aanval"
 
 msgid "Decreases enemy's morale by "
-msgstr ""
+msgstr "Vermindert veihandelijk moreel met "
 
 msgid "% chance to halve enemy"
-msgstr ""
+msgstr "% kans om veihand te halveren"
 
 msgid "Soul Eater"
-msgstr ""
+msgstr "Ziel Eter"
 
 msgid "Elemental"
-msgstr ""
+msgstr "Elementair"
 
 msgid "No Morale"
-msgstr ""
+msgstr "Geen Moreel"
 
 msgid "200% damage from Fire spells"
-msgstr ""
+msgstr "200% schade van Vuur Spreuken"
 
 msgid "200% damage from Cold spells"
-msgstr ""
+msgstr "200% schade van Koud Spreuken"
 
 msgid "% damage from %{spell} spell"
-msgstr ""
+msgstr "% schade van de spreuk %{spell}"
 
 msgid "% immunity to "
-msgstr ""
+msgstr "% immuniteit voor "
 
 msgid "Lightning"
-msgstr ""
+msgstr "Bliksem"
 
 msgid "% damage from "
-msgstr ""
+msgstr "% schade van "
 
 msgid "The three Anduran artifacts magically combine into one."
-msgstr ""
+msgstr "De drie Andurese artefacten combineren op magische wijze tot één."
 
 msgid "View Spells"
-msgstr ""
+msgstr "Bekijk Spreuken"
 
 msgid "View %{name} Info"
-msgstr ""
+msgstr "Bekijk info van %{name}"
 
 msgid "Move %{name}"
-msgstr ""
+msgstr "Verplaats %{name}"
 
 msgid "Cannot move the Spellbook"
-msgstr ""
+msgstr "Kan het spreukenboek niet verplaatsen"
 
 msgid "This item can't be traded."
-msgstr ""
+msgstr "Dit voorwerp kan niet worden geruild."
 
 msgid "The %{name} increases your knowledge by %{count}."
-msgstr ""
+msgstr "De %{name} vergroot je kennis met %{count}."
 
 msgid "Ultimate Book of Knowledge"
-msgstr ""
+msgstr "Ultiem Boek van Kennis"
 
 msgid "The %{name} increases your attack skill by %{count}."
-msgstr ""
+msgstr "De %{name} verhoogt je aanvalsvaardigheid met %{count}."
 
 msgid "Ultimate Sword of Dominion"
-msgstr ""
+msgstr "Ultiem Zwaard van Heerschappij"
 
 msgid "The %{name} increases your defense skill by %{count}."
-msgstr ""
+msgstr "De %{name} verhoogt je verdedigingsvaardigheid met %{count}."
 
 msgid "Ultimate Cloak of Protection"
-msgstr ""
+msgstr "Ultieme beschermingsmantel"
 
 msgid "The %{name} increases your spell power by %{count}."
-msgstr ""
+msgstr "De %{name} verhoogt je spreukkracht met %{count}."
 
 msgid "Ultimate Wand of Magic"
-msgstr ""
+msgstr "Ultieme toverstaf"
 
 msgid "The %{name} increases your attack and defense skills by %{count} each."
-msgstr ""
+msgstr "De %{name} verhoogt je aanvals- en verdedigingsvaardigheden met elk %{count}."
 
 msgid "Ultimate Shield"
-msgstr ""
+msgstr "Ultiem schild"
 
 msgid "The %{name} increases your spell power and knowledge by %{count} each."
-msgstr ""
+msgstr De %{name} verhoogt je spellingskracht en kennis elk met %{count}.
 
 msgid "Ultimate Staff"
-msgstr ""
+msgstr "Ultieme staf"
 
 msgid "The %{name} increases each of your basic skills by %{count} points."
-msgstr ""
+msgstr "De %{name} verhoogt elk van je basisvaardigheden met %{count} punten."
 
 msgid "Ultimate Crown"
-msgstr ""
+msgstr "Ultieme Kroon"
 
 msgid "Golden Goose"
-msgstr ""
+msgstr "Gouden Eend"
 
 msgid "The %{name} brings in an income of %{count} gold per day."
-msgstr ""
+msgstr "De %{name} levert een inkomen op van %{count} goud per dag."
 
 msgid "Arcane Necklace of Magic"
-msgstr ""
+msgstr "Arcane Ketting van Magie"
 
 msgid ""
 "After rescuing a Sorceress from a cursed tomb, she rewards your heroism with "
 "an exquisite jeweled necklace."
 msgstr ""
+"Nadat ze een tovenares uit een vervloekt graf heeft gered, beloont ze je "
+"heldhaftigheid met een prachtige halsketting met juwelen."
 
 msgid "Caster's Bracelet of Magic"
-msgstr ""
+msgstr "Caster's armband van magie"
 
 msgid ""
 "While searching through the rubble of a caved-in mine, you free a group of "
 "trapped Dwarves. Grateful, the leader gives you a golden bracelet."
 msgstr ""
+"Terwijl je door het puin van een ingestorte mijn zoekt, bevrijd je een groep "
+"gevangen Dwergen. Dankbaar geeft de leider je een gouden armband."
 
 msgid "Mage's Ring of Power"
-msgstr ""
+msgstr "Magier's Ring van Kracht"
 
 msgid ""
 "A cry of pain leads you to a Centaur, caught in a trap. Upon setting the "
 "creature free, he hands you a small pouch. Emptying the contents, you find a "
 "dazzling jeweled ring."
 msgstr ""
+"Een kreet van pijn leidt je naar een Centaur, gevangen in een val. Nadat hij "
+"het wezen heeft bevrijd, geeft hij je een klein zakje. Als je de inhoud leegmaakt, "
+"vind je een oogverblindende ring met juwelen."
 
 msgid "Witch's Broach of Magic"
 msgstr ""
