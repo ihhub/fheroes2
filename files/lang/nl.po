@@ -6179,596 +6179,624 @@ msgstr "Expert Landgoederen"
 msgid ""
 "%{skill} reduces the movement penalty for rough terrain by %{count} percent."
 msgstr ""
+"%{skill} vermindert de bewegingsstraf voor ruw terrein met %{count} procent."
 
 msgid "%{skill} eliminates the movement penalty for rough terrain."
-msgstr ""
+msgstr "%{skill} elimineert de bewegingsstraf voor ruw terrein."
 
 msgid ""
 "%{skill} increases the damage done by range attacking creatures by %{count} "
 "percent."
 msgstr ""
+"%{skill} verhoogt de schade die wordt aangericht door wezens die het bereik "
+"aanvallen met %{count} procent."
 
 msgid "%{skill} increases your hero's movement points by %{count} percent."
-msgstr ""
+msgstr "%{skill} verhoogt de bewegingspunten van je held met %{count} procent."
 
 msgid "%{skill} increases your hero's viewable area by one square."
 msgid_plural ""
 "%{skill} increases your hero's viewable area by %{count} squares."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%{skill} vergroot het zichtbare gebied van je held met één vierkant."
+msgstr[1] "%{skill} vergroot het zichtbare gebied van je held met %{count} vierkanten."
 
 msgid ""
 "%{skill} allows you to negotiate with monsters who are weaker than your "
 "group. "
 msgstr ""
+"Met %{skill} kun je onderhandelen met monsters die zwakker zijn dan je groep. "
 
 msgid "Approximately %{count} percent of the creatures may offer to join you."
-msgstr ""
+msgstr "Ongeveer %{count} procent van de wezens kan aanbieden om met je mee te doen."
 
 msgid "All of the creatures may offer to join you."
-msgstr ""
+msgstr "Alle wezens kunnen aanbieden om met je mee te doen."
 
 msgid ""
 "%{skill} increases your hero's movement points over water by %{count} "
 "percent."
 msgstr ""
+"%{skill} verhoogt de bewegingspunten van je held boven water met %{count} procent."
 
 msgid "%{skill} increases your hero's troops morale by %{count}."
-msgstr ""
+msgstr "%{skill} verhoogt het moreel van de troepen van je held met %{count}."
 
 msgid "%{skill} allows your hero to learn third level spells."
-msgstr ""
+msgstr "Met %{skill} kan je held spreuken van het derde niveau leren."
 
 msgid "%{skill} allows your hero to learn fourth level spells."
-msgstr ""
+msgstr "Met %{skill} kan je held spreuken van het vierde niveau leren."
 
 msgid "%{skill} allows your hero to learn fifth level spells."
-msgstr ""
+msgstr "Met %{skill} kan je held spreuken van het vijfde niveau leren."
 
 msgid "%{skill} regenerates one of your hero's spell points per day."
 msgid_plural ""
 "%{skill} regenerates %{count} of your hero's spell points per day."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%{skill} regenereert een van de spreukpunten van je held per dag."
+msgstr[1] "%{skill} regenereert %{count} van de spreukpunten van je held per dag."
 
 msgid "%{skill} increases your hero's luck by %{count}."
-msgstr ""
+msgstr "%{skill} verhoogt het geluk van je held met %{count}."
 
 msgid ""
 "%{skill} gives your hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
+"%{skill} geeft de katapultschoten van je held een grotere kans om kasteelmuren "
+"te raken en schade aan te richten."
 
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot has a "
 "greater chance to hit and do damage to castle walls."
 msgstr ""
+"%{skill} geeft de katapult van je held een extra schot, en elk schot heeft "
+"een grotere kans om de kasteelmuren te raken en schade aan te richten."
 
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot "
 "automatically destroys any wall, except a fortified wall in a Knight castle."
 msgstr ""
+"%{skill} geeft de katapult van je held een extra schot en elk schot vernietigt "
+"automatisch elke muur, behalve een versterkte muur in een ridderkasteel."
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 1st or "
 "2nd level enemy spell used against him in a combat."
 msgstr ""
+"%{skill} geeft je held een %{count} procent kans om een bepaalde vijandelijke "
+"spreuk van het 1e of 2e niveau te leren die tegen hem wordt gebruikt in een gevecht."
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 3rd "
 "level spell (or below) used against him in combat."
 msgstr ""
+"%{skill} geeft je held een %{count} procent kans om een bepaalde spreuk van "
+"het derde niveau (of lager) te leren die tegen hem wordt gebruikt in een gevecht."
 
 msgid ""
 "%{skill} gives your hero a %{count} percent chance to learn any given 4th "
 "level spell (or below) used against him in combat."
 msgstr ""
+"%{skill} geeft je held een %{count} procent kans om een bepaalde spreuk van "
+"het 4e niveau (of lager) te leren die tegen hem wordt gebruikt in een gevecht."
 
 msgid ""
 "%{skill} allows %{count} percent of the creatures killed in combat to be "
 "brought back from the dead as Skeletons."
 msgstr ""
+"%{skill} staat toe dat %{count} procent van de wezens die in gevechten zijn "
+"gedood, als skeletten uit de dood worden teruggebracht."
 
 msgid ""
 "Your hero produces %{count} gold pieces per day as tax revenue from estates."
-msgstr ""
+msgstr "Je held produceert %{count} goudstukken per dag als belastinginkomsten uit landgoederen."
 
 msgid "Blue"
-msgstr ""
+msgstr "Blouw"
 
 msgid "Green"
-msgstr ""
+msgstr "Groen"
 
 msgid "Red"
-msgstr ""
+msgstr "Rood"
 
 msgid "Yellow"
-msgstr ""
+msgstr "Geel"
 
 msgid "Orange"
-msgstr ""
+msgstr "Oranje"
 
 msgid "Purple"
-msgstr ""
+msgstr "Paars"
 
 msgid "barrier|Aqua"
-msgstr ""
+msgstr "Aqua"
 
 msgid "barrier|Blue"
-msgstr ""
+msgstr "Blouw"
 
 msgid "barrier|Brown"
-msgstr ""
+msgstr "Bruin"
 
 msgid "barrier|Gold"
-msgstr ""
+msgstr "Goud"
 
 msgid "barrier|Green"
-msgstr ""
+msgstr "Groen"
 
 msgid "barrier|Orange"
-msgstr ""
+msgstr "Orangje"
 
 msgid "barrier|Purple"
-msgstr ""
+msgstr "Paars"
 
 msgid "barrier|Red"
-msgstr ""
+msgstr "Rood"
 
 msgid "tent|Aqua"
-msgstr ""
+msgstr "Aqua"
 
 msgid "tent|Blue"
-msgstr ""
+msgstr "Blouw"
 
 msgid "tent|Brown"
-msgstr ""
+msgstr "Bruin"
 
 msgid "tent|Gold"
-msgstr ""
+msgstr "Goud"
 
 msgid "tent|Green"
-msgstr ""
+msgstr "Groen"
 
 msgid "tent|Orange"
-msgstr ""
+msgstr "Orangje"
 
 msgid "tent|Purple"
-msgstr ""
+msgstr "Paars"
 
 msgid "tent|Red"
-msgstr ""
+msgstr "Rood"
 
 msgid "Experience"
-msgstr ""
+msgstr "Ervaring"
 
 msgid ""
 "Experience allows your heroes to go up levels, increasing their primary and "
 "secondary skills."
 msgstr ""
+"Ervaring stelt je helden in staat om levels omhoog te gaan, waardoor hun primaire "
+"en secundaire vaardigheden toenemen."
 
 msgid "Hero/Stats"
-msgstr ""
+msgstr "Held/Statistieken"
 
 msgid "Skills"
-msgstr ""
+msgstr "Vaardigheden"
 
 msgid "Artifacts"
-msgstr ""
+msgstr "Artefacts"
 
 msgid "Town/Castle"
-msgstr ""
+msgstr "Drop/Kasteel"
 
 msgid "Garrison"
-msgstr ""
+msgstr "Garnizoen"
 
 msgid "Gold Per Day:"
-msgstr ""
+msgstr "Goud per dag:"
 
 msgid "Heroes"
-msgstr ""
+msgstr "Helden"
 
 msgid "View Heroes."
-msgstr ""
+msgstr "Bekijk Helden."
 
 msgid "Towns/Castles"
-msgstr ""
+msgstr "Dorpen/Kastelen"
 
 msgid "View Towns and Castles."
-msgstr ""
+msgstr "Bekijk Dorpen en Kastelen."
 
 msgid "luck|Cursed"
-msgstr ""
+msgstr "Vervloekt"
 
 msgid "luck|Awful"
-msgstr ""
+msgstr "Vreselijk"
 
 msgid "luck|Bad"
-msgstr ""
+msgstr "Slecht"
 
 msgid "luck|Normal"
-msgstr ""
+msgstr "Normaal"
 
 msgid "luck|Good"
-msgstr ""
+msgstr "Goed"
 
 msgid "luck|Great"
-msgstr ""
+msgstr "Super Goed"
 
 msgid "luck|Irish"
-msgstr ""
+msgstr "Fantastisch"
 
 msgid ""
 "Bad luck sometimes falls on your armies in combat, causing their attacks to "
 "only do half damage."
 msgstr ""
+"Pech valt soms op je legers in gevechten, waardoor hun aanvallen slechts halve "
+"schade aanrichten."
 
 msgid ""
 "Neutral luck means your armies will never get lucky or unlucky attacks on "
 "the enemy."
 msgstr ""
+"Neutraal geluk betekent dat je legers nooit gelukkige of ongelukkige aanvallen "
+"op de vijand zullen krijgen."
 
 msgid ""
 "Good luck sometimes lets your armies get lucky attacks (double strength) in "
 "combat."
 msgstr ""
+"Veel geluk laat je legers soms geluksaanvallen (dubbele sterkte) krijgen in gevechten."
 
 msgid "morale|Treason"
-msgstr ""
+msgstr "Landverraad"
 
 msgid "morale|Awful"
-msgstr ""
+msgstr "Vreselijk"
 
 msgid "morale|Poor"
-msgstr ""
+msgstr "Slecht"
 
 msgid "morale|Normal"
-msgstr ""
+msgstr "Normaal"
 
 msgid "morale|Good"
-msgstr ""
+msgstr "Goed"
 
 msgid "morale|Great"
-msgstr ""
+msgstr "Super Goed"
 
 msgid "morale|Blood!"
-msgstr ""
+msgstr "Fantastisch!"
 
 msgid "Bad morale may cause your armies to freeze in combat."
-msgstr ""
+msgstr "Een slecht moreel kan ervoor zorgen dat je legers bevriezen in de strijd."
 
 msgid ""
 "Neutral morale means your armies will never be blessed with extra attacks or "
 "freeze in combat."
 msgstr ""
+"Neutraal moreel betekent dat je legers nooit worden gezegend met extra aanvallen "
+"of bevriezen in gevechten."
 
 msgid "Good morale may give your armies extra attacks in combat."
-msgstr ""
+msgstr "Een goed moreel kan je legers extra aanvallen geven in gevechten."
 
 msgid "Knight"
-msgstr ""
+msgstr "Ridder"
 
 msgid "Barbarian"
-msgstr ""
+msgstr "Barbaar"
 
 msgid "Sorceress"
-msgstr ""
+msgstr "Tovenares"
 
 msgid "Warlock"
-msgstr ""
+msgstr "Tovenaar"
 
 msgid "Wizard"
-msgstr ""
+msgstr "Tovenaar"
 
 msgid "Necromancer"
-msgstr ""
+msgstr "Geestenbezweerder"
 
 msgid "Multi"
-msgstr ""
+msgstr "Multi"
 
 msgid "race|Random"
-msgstr ""
+msgstr "Willekurig"
 
 msgid "race|Neutral"
-msgstr ""
+msgstr "Neutraal"
 
 msgid "speed|Standing"
-msgstr ""
+msgstr "Staand"
 
 msgid "speed|Crawling"
-msgstr ""
+msgstr "Kruipend"
 
 msgid "speed|Very Slow"
-msgstr ""
+msgstr "Heel Sloom"
 
 msgid "speed|Slow"
-msgstr ""
+msgstr "Sloom"
 
 msgid "speed|Average"
-msgstr ""
+msgstr "Gemiddeld"
 
 msgid "speed|Fast"
-msgstr ""
+msgstr "Snel"
 
 msgid "speed|Very Fast"
-msgstr ""
+msgstr "Heel Snel"
 
 msgid "speed|Ultra Fast"
-msgstr ""
+msgstr "Super Snel"
 
 msgid "speed|Blazing"
-msgstr ""
+msgstr "Ontzettend Snel"
 
 msgid "speed|Instant"
-msgstr ""
+msgstr "Ongeloofelijk Snel"
 
 msgid "week|PLAGUE"
-msgstr ""
+msgstr "PLAAG"
 
 msgid "week|Ant"
-msgstr ""
+msgstr "Mier"
 
 msgid "week|Grasshopper"
-msgstr ""
+msgstr "Sprinkhaan"
 
 msgid "week|Dragonfly"
-msgstr ""
+msgstr "Libel"
 
 msgid "week|Spider"
-msgstr ""
+msgstr "Spin"
 
 msgid "week|Butterfly"
-msgstr ""
+msgstr "Vlinder"
 
 msgid "week|Bumblebee"
-msgstr ""
+msgstr "Bij"
 
 msgid "week|Locust"
-msgstr ""
+msgstr "Sprinkhaan"
 
 msgid "week|Earthworm"
-msgstr ""
+msgstr "Worm"
 
 msgid "week|Hornet"
-msgstr ""
+msgstr "Horzel"
 
 msgid "week|Beetle"
-msgstr ""
+msgstr "Kever"
 
 msgid "week|Squirrel"
-msgstr ""
+msgstr "Eekhorn"
 
 msgid "week|Rabbit"
-msgstr ""
+msgstr "Konijn"
 
 msgid "week|Gopher"
-msgstr ""
+msgstr "Gopher"
 
 msgid "week|Badger"
-msgstr ""
+msgstr "Das"
 
 msgid "week|Eagle"
-msgstr ""
+msgstr "Aadelaar"
 
 msgid "week|Weasel"
-msgstr ""
+msgstr "Wezel"
 
 msgid "week|Raven"
-msgstr ""
+msgstr "Raaf"
 
 msgid "week|Mongoose"
-msgstr ""
+msgstr "Mangoest"
 
 msgid "week|Aardvark"
-msgstr ""
+msgstr "Aardvarken"
 
 msgid "week|Lizard"
-msgstr ""
+msgstr "Hagedis"
 
 msgid "week|Tortoise"
-msgstr ""
+msgstr "Schildpad"
 
 msgid "week|Hedgehog"
-msgstr ""
+msgstr "Egel"
 
 msgid "week|Condor"
-msgstr ""
+msgstr "Condor"
 
 msgid "Desert"
-msgstr ""
+msgstr "Woestijn"
 
 msgid "Snow"
-msgstr ""
+msgstr "Sneeuw"
 
 msgid "Wasteland"
-msgstr ""
+msgstr "Woestenij"
 
 msgid "Beach"
-msgstr ""
+msgstr "Strand"
 
 msgid "Lava"
-msgstr ""
+msgstr "Lava"
 
 msgid "Dirt"
-msgstr ""
+msgstr "Aarde"
 
 msgid "Grass"
-msgstr ""
+msgstr "Gras"
 
 msgid "Ocean"
-msgstr ""
+msgstr "Oceaan"
 
 msgid "maps|Small"
-msgstr ""
+msgstr "Klein"
 
 msgid "maps|Medium"
-msgstr ""
+msgstr "Gemiddeld"
 
 msgid "maps|Large"
-msgstr ""
+msgstr "Groot"
 
 msgid "maps|Extra Large"
-msgstr ""
+msgstr "Extra Groot"
 
 msgid "maps|Custom Size"
-msgstr ""
+msgstr "Aangepast"
 
 msgid "Ore Mine"
-msgstr ""
+msgstr "Ertsmijn"
 
 msgid "Sulfur Mine"
-msgstr ""
+msgstr "Zwavelmijn"
 
 msgid "Crystal Mine"
-msgstr ""
+msgstr "Kristalmijn"
 
 msgid "Gems Mine"
-msgstr ""
+msgstr "Edelsteenmijn"
 
 msgid "Gold Mine"
-msgstr ""
+msgstr "Goudmijn"
 
 msgid "Mine"
-msgstr ""
+msgstr "Mijn"
 
 msgid "Burma shave."
-msgstr ""
+msgstr "Birma scheren."
 
 msgid "Next sign 50 miles."
-msgstr ""
+msgstr "Volgende bord 50 mijl."
 
 msgid "See Rock City."
-msgstr ""
+msgstr "Zie Rotsstad."
 
 msgid "This space for rent."
-msgstr ""
+msgstr "Deze plek is te huur."
 
 msgid "No object"
-msgstr ""
+msgstr "Geen object"
 
 msgid "Alchemist Lab"
-msgstr ""
+msgstr "Alchemist Lab"
 
 msgid "Daemon Cave"
-msgstr ""
+msgstr "Daemon-grot"
 
 msgid "Faerie Ring"
-msgstr ""
+msgstr "Elfen Ring"
 
 msgid "Dragon City"
-msgstr ""
+msgstr "Drakenstad"
 
 msgid "Lighthouse"
-msgstr ""
+msgstr "Vuurtoren"
 
 msgid "Water Wheel"
 msgid_plural "Water Wheels"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Waterrad"
+msgstr[1] "Waterradden"
 
 msgid "Mines"
-msgstr ""
+msgstr "Mijnen"
 
 msgid "Obelisk"
-msgstr ""
+msgstr "Obelisk"
 
 msgid "Oasis"
-msgstr ""
+msgstr "Oase"
 
 msgid "Sawmill"
-msgstr ""
+msgstr "Zagerij"
 
 msgid "Oracle"
-msgstr ""
+msgstr "Orakel"
 
 msgid "Desert Tent"
-msgstr ""
+msgstr "Woestijn Tent"
 
 msgid "Wagon Camp"
-msgstr ""
+msgstr "Wagen Kamp"
 
 msgid "Windmill"
 msgid_plural "Windmills"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Windmolen"
+msgstr[1] "Windmolens"
 
 msgid "Random Town"
-msgstr ""
+msgstr "Willekurig Dorp"
 
 msgid "Random Castle"
-msgstr ""
+msgstr "Willekurig Kasteel"
 
 msgid "Watch Tower"
-msgstr ""
+msgstr "uitkijktoren"
 
 msgid "Tree City"
-msgstr ""
+msgstr "Bomen Stad"
 
 msgid "Tree House"
-msgstr ""
+msgstr "Boomhuis"
 
 msgid "Ruins"
-msgstr ""
+msgstr "Ruïnes"
 
 msgid "Fort"
-msgstr ""
+msgstr "Fort"
 
 msgid "Abandoned Mine"
-msgstr ""
+msgstr "Verlaten mijn"
 
 msgid "Tree of Knowledge"
-msgstr ""
+msgstr "Boom van Kennis"
 
 msgid "Witch Doctor's Hut"
-msgstr ""
+msgstr "Witch Doctor's Hut"
 
 msgid "Temple"
-msgstr ""
+msgstr "Tempel"
 
 msgid "Hill Fort"
-msgstr ""
+msgstr "Heuvel Fort"
 
 msgid "Halfling Hole"
-msgstr ""
+msgstr "Halflinggat"
 
 msgid "Mercenary Camp"
-msgstr ""
+msgstr "Huurlingenkamp"
 
 msgid "City of the Dead"
-msgstr ""
+msgstr "Stad van de doden"
 
 msgid "Sphinx"
-msgstr ""
+msgstr "Sphinx"
 
 msgid "Troll Bridge"
-msgstr ""
+msgstr "Trollenbrug"
 
 msgid "Witch's Hut"
-msgstr ""
+msgstr "Heksenhut"
 
 msgid "Xanadu"
-msgstr ""
+msgstr "Xanadu"
 
 msgid "Magellan's Maps"
-msgstr ""
+msgstr "Magellan's Kaarten"
 
 msgid "Derelict Ship"
-msgstr ""
+msgstr "Verlaten schip"
 
 msgid "Shipwreck"
-msgstr ""
+msgstr "Scheepswrak"
 
 msgid "Observation Tower"
-msgstr ""
+msgstr "Observatie toren"
 
 msgid "Freeman's Foundry"
-msgstr ""
+msgstr "Freeman's Foundry"
 
 msgid "Watering Hole"
-msgstr ""
+msgstr "Waterput"
 
 msgid "Artesian Spring"
-msgstr ""
+msgstr "Artesische lente"
 
 msgid "Gazebo"
 msgstr ""
