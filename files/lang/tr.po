@@ -3859,6 +3859,9 @@ msgstr ""
 msgid "Portuguese"
 msgstr ""
 
+msgid "Turkish"
+msgstr "Türkçe"
+
 msgid ", FPS: "
 msgstr ""
 
