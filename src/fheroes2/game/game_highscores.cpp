@@ -180,7 +180,6 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
     }
 
     const bool isAfterGameCompletion = ( ( gameResult.GetResult() & GameOver::WINS ) != 0 );
-    bool askForPlayerName = true;
     if ( isAfterGameCompletion ) {
         // Check whether the game result is good enough to be put on high score board. If not then just skip showing the player name dialog.
         if ( isCampaign ) {
@@ -190,7 +189,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             assert( !campaignHighscoreData.empty() );
 
             if ( campaignHighscoreData.back().rating > rating ) {
-                askForPlayerName = false;
+                return fheroes2::GameMode::MAIN_MENU;
             }
         }
         else {
@@ -199,7 +198,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             assert( !standardHighscoreData.empty() );
 
             if ( standardHighscoreData.back().rating > rating ) {
-                askForPlayerName = false;
+                return fheroes2::GameMode::MAIN_MENU;
             }
         }
     }
@@ -230,7 +229,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     display.render();
 
-    if ( isAfterGameCompletion && askForPlayerName ) {
+    if ( isAfterGameCompletion ) {
         std::string player( _( "Unknown Hero" ) );
         Dialog::InputString( _( "Your Name" ), player, std::string(), 15 );
         if ( player.empty() )
