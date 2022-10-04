@@ -189,6 +189,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             assert( !campaignHighscoreData.empty() );
 
             if ( campaignHighscoreData.back().rating > rating ) {
+                gameResult.ResetResult();
                 return fheroes2::GameMode::MAIN_MENU;
             }
         }
@@ -198,6 +199,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
             assert( !standardHighscoreData.empty() );
 
             if ( standardHighscoreData.back().rating > rating ) {
+                gameResult.ResetResult();
                 return fheroes2::GameMode::MAIN_MENU;
             }
         }
