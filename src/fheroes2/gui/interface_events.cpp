@@ -390,7 +390,11 @@ fheroes2::GameMode Interface::Basic::EventDigArtifact()
                     }
 
                     const Artifact & ultimate = world.GetUltimateArtifact().GetArtifact();
-                    hero->PickupArtifact( ultimate );
+
+                    if ( !hero->PickupArtifact( ultimate ) ) {
+                        assert( 0 );
+                    }
+
                     std::string msg( _( "After spending many hours digging here, you have uncovered the %{artifact}." ) );
                     StringReplace( msg, "%{artifact}", ultimate.GetName() );
 
