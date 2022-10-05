@@ -8005,18 +8005,20 @@ msgid "True Compass of Mobility"
 msgstr "Echt Kompas van Mobiliteit"
 
 msgid "The %{name} increases your movement on land and sea."
-msgstr ""
+msgstr "De %{name} vergroot je bewegingsvrijheid op land en zee."
 
 msgid ""
 "An old man claiming to be an inventor asks you to try his latest invention. "
 "He then hands you a compass."
 msgstr ""
+"Een oude man die beweert een uitvinder te zijn, vraagt je om zijn nieuwste "
+"uitvinding te proberen. Hij geeft je dan een kompas."
 
 msgid "Sailor's Astrolabe of Mobility"
 msgstr ""
 
 msgid "The %{name} increases your movement on sea."
-msgstr ""
+msgstr "De %{naam} verbetert je beweging op zee."
 
 msgid ""
 "An old sea captain is being tortured by Ogres. You save him, and in return "
