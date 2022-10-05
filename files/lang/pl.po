@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-28 22:56+0000\n"
-"PO-Revision-Date: 2022-09-30 23:47+0200\n"
+"PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.1\n"
 
 msgid ""
 "BATTLE\n"
@@ -583,7 +583,7 @@ msgstr[1] "%{count} %{defender} ginie."
 msgstr[2] "%{count} %{defender} ginie."
 
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
-msgstr "Przemieszczono %{monster}: %{src}, %{dst}"
+msgstr "Przeniesiono %{monster} z: [%{src}] do [%{dst}]."
 
 msgid "The %{name} resist the spell!"
 msgstr "%{name} odpierają zaklęcie!"
@@ -2665,7 +2665,7 @@ msgid "Audio"
 msgstr "Dźwięk"
 
 msgid "Configure"
-msgstr "Konfiguracja"
+msgstr "Dostosuj"
 
 msgid "Hot Keys"
 msgstr "Skróty klaw."
@@ -3414,7 +3414,7 @@ msgid "Designed and Directed"
 msgstr "Projekt i kierownictwo projektu"
 
 msgid "Programming and Design"
-msgstr "Projekt i programowanie"
+msgstr "Programowanie i Projektowanie"
 
 msgid "Executive Producer"
 msgstr "Producent wykonawczy"
@@ -3468,34 +3468,34 @@ msgid "Cyberlore Studios"
 msgstr "Cyberlore Studios"
 
 msgid "Design Lead"
-msgstr "Kierownictwo projektu"
+msgstr "Kierownik projektowania"
 
 msgid "Designers"
-msgstr "Zespół projektowy"
+msgstr "Projektanci"
 
 msgid "Programming Lead"
-msgstr "Kierownik działu programowania"
+msgstr "Kierownik programowania"
 
 msgid "Art Lead"
-msgstr "Kierownictwo artystyczne"
+msgstr "Kierownik artystów"
 
 msgid "Playtesters"
-msgstr "Testerzy"
+msgstr "Testerzy gry"
 
 msgid "New World Computing"
 msgstr "New World Computing"
 
 msgid "Designer"
-msgstr "Zaprojektował"
+msgstr "Projektant"
 
 msgid "Producers"
 msgstr "Produkcja"
 
 msgid "QA Managers"
-msgstr "Kierownictwo kontroli jakości"
+msgstr "Kierownicy kontroli jakości"
 
 msgid "Sound Design"
-msgstr "Projekt dźwięku"
+msgstr "Projektowanie Dźwięku"
 
 msgid "Town Themes"
 msgstr "Motywy muzyczne miast"
@@ -3519,7 +3519,7 @@ msgid "German Consultant"
 msgstr "Konsultant ds. j. niemieckiego"
 
 msgid "Map Designers"
-msgstr "Projekt map"
+msgstr "Projektanci Map"
 
 msgid "Package Design"
 msgstr "Projekt opakowania"
@@ -9623,7 +9623,7 @@ msgstr ""
 "połowę obrażeń z ataku wręcz."
 
 msgid "You have no Magic Book, so you cannot cast a spell."
-msgstr "Nie posiadasz Księgi Zaklęć, więc nie możesz rzucać zaklęć."
+msgstr "Nie posiadasz Księgi Zaklęć, więc nie możesz rzucić zaklęcia."
 
 msgid "No spell to cast."
 msgstr "Brak zaklęć."
