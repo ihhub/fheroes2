@@ -48,7 +48,7 @@ public:
     Troops( const Troops & troops );
     virtual ~Troops();
     Troops & operator=( const Troops & rhs );
-    Troops & operator=( Troops && troops );
+    Troops & operator=( Troops && troops ) noexcept;
 
     void Assign( const Troop *, const Troop * );
     void Assign( const Troops & );

@@ -208,7 +208,7 @@ Troops & Troops::operator=( const Troops & rhs )
 }
 
 Troops & Troops::operator=( Troops && troops )
-{
+noexcept {
     static_cast<std::vector<Troop *> &>( *this ) = std::move( troops );
 
     return *this;
