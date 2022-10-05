@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <array>
+#include <cassert>
 #include <ctime>
 
 #if defined( _WIN32 )
@@ -103,9 +104,13 @@ namespace Logging
     {
         const tm tmi = System::GetTM( std::time( nullptr ) );
 
-        std::array<char, 32> buf{ 0 };
+        std::array<char, 256> buf;
 
-        std::strftime( buf.data(), buf.size() - 1, "%x %X", &tmi );
+        const size_t writtenBytes = std::strftime( buf.data(), buf.size() - 1, "%d.%m.%Y %H:%M:%S", &tmi );
+        if ( writtenBytes == 0 ) {
+            assert( 0 );
+            return "<TIMESTAMP ERROR>";
+        }
 
         return std::string( buf.data() );
     }
