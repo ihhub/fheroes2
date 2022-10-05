@@ -55,7 +55,7 @@ target_link_libraries(
 	engine
 	smacker
 	# In the case of SDL1, SDL_LIBRARY contains both SDLmain and SDL libraries
-	$<$<BOOL:${SDL2MAIN_FOUND}>:${${SDL2MAIN_LIBRARY}>
+	$<$<BOOL:${SDL2MAIN_FOUND}>:${SDL2MAIN_LIBRARY}>
 	${${USE_SDL_VERSION}_LIBRARY}
 	${${USE_SDL_VERSION}_MIXER_LIBRARIES}
 	$<$<BOOL:${ENABLE_IMAGE}>:${${USE_SDL_VERSION}_IMAGE_LIBRARIES}>
