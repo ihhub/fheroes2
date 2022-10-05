@@ -48,6 +48,7 @@ public:
     Troops( const Troops & troops );
     virtual ~Troops();
     Troops & operator=( const Troops & rhs );
+    Troops & operator=( Troops && troops );
 
     void Assign( const Troop *, const Troop * );
     void Assign( const Troops & );
@@ -86,6 +87,7 @@ public:
     // Implements the necessary logic to move unit stacks from army to army using the arrow buttons in the
     // hero's meeting dialog
     void MoveTroops( Troops & from, const int monsterIdToKeep );
+    void swap( Troops & troops );
 
     void MergeTroops();
     Troops GetOptimized() const;

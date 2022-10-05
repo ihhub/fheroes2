@@ -207,6 +207,13 @@ Troops & Troops::operator=( const Troops & rhs )
     return *this;
 }
 
+Troops & Troops::operator=( Troops && troops )
+{
+    static_cast<std::vector<Troop *> &>( *this ) = std::move( troops );
+
+    return *this;
+}
+
 Troops::~Troops()
 {
     for ( iterator it = begin(); it != end(); ++it )
@@ -500,6 +507,15 @@ void Troops::MoveTroops( Troops & from, const int monsterIdToKeep )
 
     // Then, try to move as much of monsters to keep as we can (except the last one), if there is still a place for them
     moveTroops( false );
+}
+
+void Troops::swap( Troops & troops )
+{
+    if ( !isValid() || !troops.isValid() ) {
+        return;
+    }
+
+    std::swap( static_cast<std::vector<Troop *> &>( *this ), static_cast<std::vector<Troop *> &>( troops ) );
 }
 
 bool Troops::AllTroopsAreTheSame() const

@@ -446,6 +446,19 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                 need_redraw = true;
             }
 
+            if ( HotKeyPressEvent( Game::HotKeyEvent::SWAP_ARMIES ) || ( !heroes.Guard() && le.MouseClickLeft( rectSign1 ) )
+                 || ( heroes.Guard() && le.MouseClickLeft( buttonSwap.area() ) ) ) {
+                GetArmy().swap( heroes.Guest()->GetArmy() );
+
+                if ( topArmyBar.isSelected() )
+                    topArmyBar.ResetSelected();
+                if ( bottomArmyBar.isSelected() )
+                    bottomArmyBar.ResetSelected();
+                topArmyBar.Redraw(display);
+                bottomArmyBar.Redraw(display);
+                need_redraw = true;
+            }
+
             if ( conf.ExtCastleAllowGuardians() && !readOnly ) {
                 Army * army1 = nullptr;
                 Army * army2 = nullptr;

@@ -403,6 +403,10 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             moveArmyToHero1.drawOnPress();
             moveArmyToHero2.drawOnRelease();
         }
+        else if ( le.MousePressRight( moveArmyToHero2.area() ) || le.MousePressRight( moveArmyToHero1.area() ) || HotKeyHoldEvent( Game::HotKeyEvent::SWAP_ARMIES ) ) {
+            moveArmyToHero1.drawOnPress();
+            moveArmyToHero2.drawOnPress();
+        }
         else {
             moveArmyToHero1.drawOnRelease();
             moveArmyToHero2.drawOnRelease();
@@ -578,6 +582,23 @@ void Heroes::MeetingDialog( Heroes & otherHero )
             }
 
             GetArmy().MoveTroops( otherHero.GetArmy(), keep ? keep->GetID() : Monster::UNKNOWN );
+
+            armyCountBackgroundRestorerLeft.restore();
+            armyCountBackgroundRestorerRight.restore();
+
+            selectArmy1.ResetSelected();
+            selectArmy2.ResetSelected();
+            selectArmy1.Redraw( display );
+            selectArmy2.Redraw( display );
+
+            moraleIndicator1.Redraw();
+            moraleIndicator2.Redraw();
+
+            display.render();
+        }
+        else if ( le.MouseClickRight( moveArmyToHero1.area() ) || le.MouseClickRight( moveArmyToHero2.area() ) || HotKeyPressEvent( Game::HotKeyEvent::SWAP_ARMIES )
+                  || HotKeyPressEvent( Game::HotKeyEvent::SWAP_ARMIES ) ) {
+            GetArmy().swap( otherHero.GetArmy() );
 
             armyCountBackgroundRestorerLeft.restore();
             armyCountBackgroundRestorerRight.restore();
