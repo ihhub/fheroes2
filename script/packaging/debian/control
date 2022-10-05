@@ -4,6 +4,7 @@ Priority: optional
 Maintainer: fheroes2 team <fhomm2@gmail.com>
 Build-Depends: debhelper-compat (=12), libsdl2-dev, libsdl2-mixer-dev, libz-dev
 Standards-Version: 4.5.1
+Rules-Requires-Root: no
 Homepage: https://ihhub.github.io/fheroes2/
 Vcs-Git: https://github.com/ihhub/fheroes2.git
 Vcs-Browser: https://github.com/ihhub/fheroes2
