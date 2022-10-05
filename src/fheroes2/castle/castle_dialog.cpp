@@ -454,8 +454,13 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     topArmyBar.ResetSelected();
                 if ( bottomArmyBar.isSelected() )
                     bottomArmyBar.ResetSelected();
+
+                topArmyBar.SetArmy( &GetArmy() );
+                bottomArmyBar.SetArmy( &heroes.Guest()->GetArmy() );
+
                 topArmyBar.Redraw( display );
                 bottomArmyBar.Redraw( display );
+
                 need_redraw = true;
             }
 

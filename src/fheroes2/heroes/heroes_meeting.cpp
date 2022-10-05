@@ -605,6 +605,10 @@ void Heroes::MeetingDialog( Heroes & otherHero )
 
             selectArmy1.ResetSelected();
             selectArmy2.ResetSelected();
+
+            selectArmy1.SetArmy( &GetArmy() );
+            selectArmy2.SetArmy( &otherHero.GetArmy() );
+
             selectArmy1.Redraw( display );
             selectArmy2.Redraw( display );
 
