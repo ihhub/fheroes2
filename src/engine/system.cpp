@@ -27,7 +27,7 @@
 #include <map>
 #include <memory>
 
-#if defined( _MSC_VER )
+#if defined( _WIN32 )
 #include <clocale>
 #endif
 
@@ -35,7 +35,7 @@
 #include "system.h"
 #include "tools.h"
 
-#if defined( __MINGW32__ ) || defined( _MSC_VER )
+#if defined( _WIN32 )
 #define WIN32_LEAN_AND_MEAN
 // clang-format off
 // shellapi.h must be included after windows.h
@@ -46,7 +46,7 @@
 #include <dirent.h>
 #endif
 
-#if defined( _MSC_VER )
+#if defined( _WIN32 )
 #include <io.h>
 #else
 
@@ -70,10 +70,8 @@
 
 int System::MakeDirectory( const std::string & path )
 {
-#if defined( _WIN32 ) && defined( _MSC_VER )
+#if defined( _WIN32 )
     return CreateDirectoryA( path.c_str(), nullptr );
-#elif defined( _WIN32 ) && !defined( _MSC_VER )
-    return mkdir( path.c_str() );
 #elif defined( TARGET_PS_VITA )
     return sceIoMkdir( path.c_str(), 0777 );
 #else
@@ -130,7 +128,7 @@ std::string System::GetBasename( const std::string & str )
 
 int System::GetCommandOptions( int argc, char * const argv[], const char * optstring )
 {
-#if defined( _MSC_VER )
+#if defined( _WIN32 )
     (void)argc;
     (void)argv;
     (void)optstring;
@@ -142,7 +140,7 @@ int System::GetCommandOptions( int argc, char * const argv[], const char * optst
 
 char * System::GetOptionsArgument()
 {
-#if defined( _MSC_VER )
+#if defined( _WIN32 )
     return nullptr;
 #else
     return optarg;
@@ -156,7 +154,7 @@ bool System::IsFile( const std::string & name, bool writable )
         return false;
     }
 
-#if defined( _MSC_VER )
+#if defined( _WIN32 )
     const DWORD fileAttributes = GetFileAttributes( name.c_str() );
     if ( fileAttributes == INVALID_FILE_ATTRIBUTES ) {
         // This path doesn't exist.
@@ -193,7 +191,7 @@ bool System::IsDirectory( const std::string & name, bool writable )
         return false;
     }
 
-#if defined( _MSC_VER )
+#if defined( _WIN32 )
     const DWORD fileAttributes = GetFileAttributes( name.c_str() );
     if ( fileAttributes == INVALID_FILE_ATTRIBUTES ) {
         // This path doesn't exist.
@@ -225,14 +223,14 @@ bool System::IsDirectory( const std::string & name, bool writable )
 
 int System::Unlink( const std::string & file )
 {
-#if defined( _MSC_VER )
+#if defined( _WIN32 )
     return _unlink( file.c_str() );
 #else
     return unlink( file.c_str() );
 #endif
 }
 
-#if !( defined( _MSC_VER ) || defined( __MINGW32__ ) )
+#if !( defined( _WIN32 ) )
 // splitUnixPath - function for splitting strings by delimiter
 std::vector<std::string> splitUnixPath( const std::string & path, const std::string & delimiter )
 {
@@ -361,7 +359,7 @@ bool System::GetCaseInsensitivePath( const std::string & path, std::string & cor
 
 std::string System::FileNameToUTF8( const std::string & str )
 {
-#if defined( __MINGW32__ ) || defined( _MSC_VER )
+#if defined( _WIN32 )
     if ( str.empty() ) {
         return str;
     }
@@ -436,7 +434,7 @@ std::string System::FileNameToUTF8( const std::string & str )
 std::tm System::GetTM( const std::time_t time )
 {
     std::tm result = {};
-#if defined( __MINGW32__ ) || defined( _MSC_VER )
+#if defined( _WIN32 )
     errno_t res = localtime_s( &result, &time );
     if ( res != 0 ) {
         assert( 0 );

@@ -69,7 +69,7 @@ namespace
         return false;
     }
 
-    bool isTileBlockedForAIWithArmy( int tileIndex, int color, double armyStrength )
+    bool isTileBlockedForAIWithArmy( const int tileIndex, const int color, const double armyStrength, const bool isArtifactBagFull )
     {
         const Maps::Tiles & tile = world.GetTiles( tileIndex );
         const MP2::MapObjectType objectType = tile.GetObject();
@@ -93,6 +93,10 @@ namespace
 
         // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
         if ( MP2::isArtifactObject( objectType ) ) {
+            if ( isArtifactBagFull ) {
+                return true;
+            }
+
             const Artifact art = tile.QuantityArtifact();
 
             if ( art.isValid() && isFindArtifactVictoryConditionForHuman( art ) ) {
@@ -172,6 +176,22 @@ namespace
 
         const Maps::Tiles & toTile = world.GetTiles( Maps::GetDirectionIndex( index, direction ) );
         return toTile.isPassableFrom( Direction::Reflect( direction ), fromWater, false, heroColor );
+    }
+
+    bool isTileProtectedForAI( const int index, const double armyStrength, const double advantage )
+    {
+        const Maps::Tiles & tile = world.GetTiles( index );
+
+        if ( MP2::isProtectedObject( tile.GetObject() ) ) {
+            // creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
+            static Army tileArmy;
+
+            tileArmy.setFromTile( tile );
+
+            return tileArmy.GetStrength() * advantage > armyStrength;
+        }
+
+        return false;
     }
 }
 
@@ -417,14 +437,15 @@ void AIWorldPathfinder::reset()
         _maxMovePoints = 0;
 
         _armyStrength = -1;
+        _isArtifactBagFull = false;
     }
 }
 
 void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
 {
-    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength );
+    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength, _isArtifactBagFull );
     const auto newSettings = std::make_tuple( hero.GetIndex(), static_cast<uint8_t>( hero.GetLevelSkill( Skill::Secondary::PATHFINDING ) ), hero.GetColor(),
-                                              hero.GetMovePoints(), hero.GetMaxMovePoints(), hero.GetArmy().GetStrength() );
+                                              hero.GetMovePoints(), hero.GetMaxMovePoints(), hero.GetArmy().GetStrength(), hero.GetBagArtifacts().isFull() );
 
     if ( currentSettings != newSettings ) {
         currentSettings = newSettings;
@@ -433,10 +454,10 @@ void AIWorldPathfinder::reEvaluateIfNeeded( const Heroes & hero )
     }
 }
 
-void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill )
+void AIWorldPathfinder::reEvaluateIfNeeded( const int start, const int color, const double armyStrength, const uint8_t skill, const bool isArtifactBagFull )
 {
-    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength );
-    const auto newSettings = std::make_tuple( start, skill, color, 0U, 0U, armyStrength );
+    auto currentSettings = std::tie( _pathStart, _pathfindingSkill, _currentColor, _remainingMovePoints, _maxMovePoints, _armyStrength, _isArtifactBagFull );
+    const auto newSettings = std::make_tuple( start, skill, color, 0U, 0U, armyStrength, isArtifactBagFull );
 
     if ( currentSettings != newSettings ) {
         currentSettings = newSettings;
@@ -452,26 +473,11 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
     WorldNode & currentNode = _cache[currentNodeIdx];
 
     // find out if current node is protected by a strong army
-    auto protectionCheck = [this]( const int index ) {
-        const Maps::Tiles & tile = world.GetTiles( index );
-
-        if ( MP2::isProtectedObject( tile.GetObject() ) ) {
-            // creating an Army instance is a relatively heavy operation, so cache it to speed up calculations
-            static Army tileArmy;
-
-            tileArmy.setFromTile( tile );
-
-            return tileArmy.GetStrength() * _advantage > _armyStrength;
-        }
-
-        return false;
-    };
-
-    bool isProtected = protectionCheck( currentNodeIdx );
+    bool isProtected = isTileProtectedForAI( currentNodeIdx, _armyStrength, _advantage );
     if ( !isProtected ) {
         const MapsIndexes & monsters = Maps::getMonstersProtectingTile( currentNodeIdx );
         for ( auto it = monsters.begin(); it != monsters.end(); ++it ) {
-            if ( protectionCheck( *it ) ) {
+            if ( isTileProtectedForAI( *it, _armyStrength, _advantage ) ) {
                 isProtected = true;
                 break;
             }
@@ -484,7 +490,7 @@ void AIWorldPathfinder::processCurrentNode( std::vector<int> & nodesToExplore, i
     }
 
     // always allow move from the starting spot to cover edge case if got there before tile became blocked/protected
-    if ( !isFirstNode && ( isProtected || isTileBlockedForAIWithArmy( currentNodeIdx, _currentColor, _armyStrength ) ) ) {
+    if ( !isFirstNode && ( isProtected || isTileBlockedForAIWithArmy( currentNodeIdx, _currentColor, _armyStrength, _isArtifactBagFull ) ) ) {
         return;
     }
 
@@ -679,61 +685,136 @@ int AIWorldPathfinder::getNearestTileToMove( const Heroes & hero )
 
 bool AIWorldPathfinder::isHeroPossiblyBlockingWay( const Heroes & hero )
 {
-    // paths have to be pre-calculated to find a spot where we're able to move
-    reEvaluateIfNeeded( hero );
+    const int32_t heroIndex = hero.GetIndex();
+    const int heroColor = hero.GetColor();
 
-    const int32_t start = hero.GetIndex();
+    auto isReachableDirection = [heroIndex, heroColor]( const int direction ) {
+        if ( !Maps::isValidDirection( heroIndex, direction ) ) {
+            return false;
+        }
 
-    const bool leftSideUnreachable = !Maps::isValidDirection( start, Direction::LEFT ) || _cache[start - 1]._cost == 0;
-    const bool rightSideUnreachable = !Maps::isValidDirection( start, Direction::RIGHT ) || _cache[start + 1]._cost == 0;
-    if ( leftSideUnreachable && rightSideUnreachable ) {
+        if ( !isValidPath( heroIndex, direction, heroColor ) ) {
+            return false;
+        }
+
+        return true;
+    };
+
+    const bool leftReachable = isReachableDirection( Direction::LEFT );
+    const bool rightReachable = isReachableDirection( Direction::RIGHT );
+    const bool topReachable = isReachableDirection( Direction::TOP );
+    const bool bottomReachable = isReachableDirection( Direction::BOTTOM );
+    const bool topLeftReachable = isReachableDirection( Direction::TOP_LEFT );
+    const bool topRightReachable = isReachableDirection( Direction::TOP_RIGHT );
+    const bool bottomLeftReachable = isReachableDirection( Direction::BOTTOM_LEFT );
+    const bool bottomRightReachable = isReachableDirection( Direction::BOTTOM_RIGHT );
+
+    // There are multiple cases when a hero might block way.
+    // H - hero
+    // x - unreachable tile
+    // r - always reachable tile
+    // o - optionally reachable tile
+
+    // |   | r |   |
+    // | x | H | x |
+    // |   | r |   |
+    if ( topReachable && bottomReachable && !leftReachable && !rightReachable ) {
         return true;
     }
 
-    const bool topSideUnreachable = !Maps::isValidDirection( start, Direction::TOP ) || _cache[start - world.w()]._cost == 0;
-    const bool bottomSideUnreachable = !Maps::isValidDirection( start, Direction::BOTTOM ) || _cache[start + world.w()]._cost == 0;
-    if ( topSideUnreachable && bottomSideUnreachable ) {
+    // |   | x |   |
+    // | r | H | r |
+    // |   | x |   |
+    if ( leftReachable && rightReachable && !topReachable && !bottomReachable ) {
         return true;
     }
 
-    const bool topLeftSideUnreachable = !Maps::isValidDirection( start, Direction::TOP_LEFT ) || _cache[start - 1 - world.w()]._cost == 0;
-    if ( topLeftSideUnreachable && !leftSideUnreachable && !topSideUnreachable && bottomSideUnreachable ) {
+    // | x | o |   |
+    // | r | H | o |
+    // |   | x |   |
+    if ( leftReachable && ( topReachable || rightReachable ) && !topLeftReachable && !bottomReachable ) {
         return true;
     }
 
-    const bool topRightSideUnreachable = !Maps::isValidDirection( start, Direction::TOP_RIGHT ) || _cache[start + 1 - world.w()]._cost == 0;
-    if ( topRightSideUnreachable && !rightSideUnreachable && !topSideUnreachable && bottomSideUnreachable ) {
+    // |   | o | x |
+    // | o | H | r |
+    // |   | x |   |
+    if ( rightReachable && ( topReachable || leftReachable ) && !topRightReachable && !bottomReachable ) {
         return true;
     }
 
-    const bool bottomLeftSideUnreachable = !Maps::isValidDirection( start, Direction::BOTTOM_LEFT ) || _cache[start - 1 + world.w()]._cost == 0;
-    if ( bottomLeftSideUnreachable && !leftSideUnreachable && !bottomSideUnreachable && topSideUnreachable ) {
+    // |   | x |   |
+    // | r | H | o |
+    // | x | o |   |
+    if ( leftReachable && ( bottomReachable || rightReachable ) && !topReachable && !bottomLeftReachable ) {
         return true;
     }
 
-    const bool bottomRightSideUnreachable = !Maps::isValidDirection( start, Direction::BOTTOM_RIGHT ) || _cache[start + 1 + world.w()]._cost == 0;
-    if ( bottomRightSideUnreachable && !rightSideUnreachable && !bottomSideUnreachable && topSideUnreachable ) {
+    // |   | x |   |
+    // | o | H | r |
+    // |   | o | x |
+    if ( rightReachable && ( bottomReachable || leftReachable ) && !topReachable && !bottomRightReachable ) {
         return true;
     }
 
-    if ( bottomLeftSideUnreachable && topLeftSideUnreachable && !leftSideUnreachable ) {
+    // | x | o |   |
+    // | r | H | o |
+    // | x | o |   |
+    if ( leftReachable && ( topReachable || bottomReachable || rightReachable ) && !topLeftReachable && !bottomLeftReachable ) {
         return true;
     }
 
-    if ( topLeftSideUnreachable && topRightSideUnreachable && !topSideUnreachable ) {
+    // | x | r | x |
+    // | o | H | o |
+    // |   | o |   |
+    if ( topReachable && ( bottomReachable || rightReachable || leftReachable ) && !topLeftReachable && !topRightReachable ) {
         return true;
     }
 
-    if ( bottomRightSideUnreachable && topRightSideUnreachable && !rightSideUnreachable ) {
+    // |   | o | x |
+    // | o | H | r |
+    // |   | o | x |
+    if ( rightReachable && ( topReachable || bottomReachable || leftReachable ) && !topRightReachable && !bottomRightReachable ) {
         return true;
     }
 
-    if ( bottomLeftSideUnreachable && bottomRightSideUnreachable && !bottomSideUnreachable ) {
+    // |   | o |   |
+    // | o | H | o |
+    // | x | r | x |
+    if ( bottomReachable && ( topReachable || leftReachable || rightReachable ) && !bottomLeftReachable && !bottomRightReachable ) {
+        return true;
+    }
+
+    // |   | r | x |
+    // | x | H | o |
+    // |   | o |   |
+    if ( topReachable && ( rightReachable || bottomReachable ) && !topRightReachable && !leftReachable ) {
+        return true;
+    }
+
+    // |   | o |   |
+    // | x | H | o |
+    // |   | r | x |
+    if ( bottomReachable && ( rightReachable || topReachable ) && !bottomRightReachable && !leftReachable ) {
+        return true;
+    }
+
+    // | x | r |   |
+    // | o | H | x |
+    // |   | o |   |
+    if ( topReachable && ( leftReachable || bottomReachable ) && !topLeftReachable && !rightReachable ) {
+        return true;
+    }
+
+    // |   | r |   |
+    // | o | H | x |
+    // | x | r |   |
+    if ( bottomReachable && ( leftReachable || topReachable ) && !bottomLeftReachable && !rightReachable ) {
         return true;
     }
 
     // Is the hero standing on Stoneliths?
-    return world.GetTiles( start ).GetObject( false ) == MP2::OBJ_STONELITHS;
+    return world.GetTiles( heroIndex ).GetObject( false ) == MP2::OBJ_STONELITHS;
 }
 
 std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int targetIndex, const bool checkAdjacent /* = false */ ) const
@@ -801,11 +882,13 @@ std::vector<IndexObject> AIWorldPathfinder::getObjectsOnTheWay( const int target
 
 std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & hero, int targetIndex ) const
 {
-    std::list<Route::Step> path;
+    if ( hero.GetIndex() == targetIndex ) {
+        return {};
+    }
 
     const Spell dimensionDoor( Spell::DIMENSIONDOOR );
     if ( !hero.HaveSpell( dimensionDoor ) || !Maps::isValidAbsIndex( targetIndex ) )
-        return path;
+        return {};
 
     uint32_t currentSpellPoints = hero.GetSpellPoints();
 
@@ -815,7 +898,7 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
     // Reserve spell points only if target isn't a well that will replenish lost SP
     if ( objectType != MP2::OBJ_MAGICWELL && objectType != MP2::OBJ_ARTESIANSPRING ) {
         if ( currentSpellPoints < hero.GetMaxSpellPoints() * _spellPointsReserved )
-            return path;
+            return {};
 
         currentSpellPoints -= static_cast<uint32_t>( hero.GetMaxSpellPoints() * _spellPointsReserved );
     }
@@ -827,7 +910,18 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
     if ( tile.GetObject( false ) == MP2::OBJ_CASTLE ) {
         targetIndex = Maps::GetDirectionIndex( targetIndex, Direction::BOTTOM );
         if ( !Maps::isValidAbsIndex( targetIndex ) )
-            return path;
+            return {};
+    }
+
+    // The object requires to stand on it. In this case we need to check if it is protected by monsters.
+    if ( !MP2::isNeedStayFront( objectType ) ) {
+        const MapsIndexes & monsters = Maps::getMonstersProtectingTile( targetIndex );
+        for ( const int32_t monsterIndex : monsters ) {
+            if ( isTileProtectedForAI( monsterIndex, _armyStrength, _advantage ) ) {
+                // The tile is protected by monsters. No reason to try to get it.
+                return {};
+            }
+        }
     }
 
     const fheroes2::Point targetPoint = Maps::GetPoint( targetIndex );
@@ -838,6 +932,8 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
     const bool water = hero.isShipMaster();
     const Directions & directions = Direction::All();
     const int32_t distanceLimit = Spell::CalculateDimensionDoorDistance() / 2;
+
+    std::list<Route::Step> path;
 
     uint32_t spellsUsed = 0;
     while ( maxCasts > spellsUsed ) {
@@ -850,6 +946,9 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
         bool found = Maps::isValidForDimensionDoor( anotherNodeIdx, water );
 
         if ( !found ) {
+            fheroes2::Point bestDirectionDiff;
+            int bestNextIdx = -1;
+
             for ( size_t i = 0; i < directions.size(); ++i ) {
                 if ( !Maps::isValidDirection( anotherNodeIdx, directions[i] ) )
                     continue;
@@ -858,21 +957,30 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
                 if ( !Maps::isValidForDimensionDoor( newIndex, water ) )
                     continue;
 
-                // check if we are near destination - skip if we can't move there after
-                if ( anotherNodeIdx == targetIndex && !isValidPath( anotherNodeIdx, directions[i], _currentColor ) )
+                // If we are near the destination and we cannot reach the cell, skip it.
+                if ( anotherNodeIdx == targetIndex && !isValidPath( anotherNodeIdx, directions[i], _currentColor ) ) {
                     continue;
+                }
 
                 const fheroes2::Point newPoint = Maps::GetPoint( newIndex );
-                if ( std::abs( current.x - newPoint.x ) <= distanceLimit && std::abs( current.y - newPoint.y ) <= distanceLimit ) {
-                    path.emplace_back( newIndex, currentNodeIdx, Direction::CENTER, movementCost );
-                    current = newPoint;
-                    found = true;
-                    break;
+                const fheroes2::Point directionDiff{ std::abs( current.x - newPoint.x ), std::abs( current.y - newPoint.y ) };
+
+                if ( directionDiff.x > distanceLimit || directionDiff.y > distanceLimit ) {
+                    continue;
+                }
+
+                if ( ( bestNextIdx < 0 ) || ( bestDirectionDiff.x + bestDirectionDiff.y > directionDiff.x + directionDiff.y ) ) {
+                    bestNextIdx = newIndex;
+                    bestDirectionDiff = directionDiff;
                 }
             }
 
-            if ( !found )
+            if ( bestNextIdx == -1 ) {
                 return {};
+            }
+
+            path.emplace_back( bestNextIdx, currentNodeIdx, Direction::CENTER, movementCost );
+            current = Maps::GetPoint( bestNextIdx );
         }
         else {
             path.emplace_back( anotherNodeIdx, currentNodeIdx, Direction::CENTER, movementCost );
@@ -883,6 +991,8 @@ std::list<Route::Step> AIWorldPathfinder::getDimensionDoorPath( const Heroes & h
 
         difference = targetPoint - current;
         if ( std::abs( difference.x ) <= 1 && std::abs( difference.y ) <= 1 ) {
+            // If this assertion blows up the logic above is wrong!
+            assert( !path.empty() );
             return path;
         }
     }
@@ -941,7 +1051,7 @@ std::list<Route::Step> AIWorldPathfinder::buildPath( const int targetIndex, cons
 
 uint32_t AIWorldPathfinder::getDistance( int start, int targetIndex, int color, double armyStrength, uint8_t skill )
 {
-    reEvaluateIfNeeded( start, color, armyStrength, skill );
+    reEvaluateIfNeeded( start, color, armyStrength, skill, false );
 
     return _cache[targetIndex]._cost;
 }

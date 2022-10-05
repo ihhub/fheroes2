@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-02 03:05+0000\n"
-"PO-Revision-Date: 2022-08-20 17:06+0200\n"
+"POT-Creation-Date: 2022-10-01 19:29+0000\n"
+"PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -17,6 +17,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.1.1\n"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+
+msgid "GIFT"
+msgstr ""
+
+msgid "MIN"
+msgstr ""
+
+msgid "DIFFICULTY"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Kriger"
@@ -29,6 +43,14 @@ msgstr "Utforsker"
 
 msgid "None"
 msgstr "Ingen"
+
+msgid "Warning"
+msgstr "Advarsel"
+
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
 
 msgid ""
 "A few\n"
@@ -553,11 +575,9 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] "1 %{defender} dør."
 msgstr[1] "%{count} %{defender} dør."
 
-msgid "Moved %{monster}: %{src}, %{dst}"
+#, fuzzy
+msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "Flyttet troppen med %{monster} til rute: %{src}, %{dst}"
-
-msgid "Moved %{monster}"
-msgstr "Flyttet troppen med %{monster}"
 
 msgid "The %{name} resist the spell!"
 msgstr "Troppen med %{name} motstod trolldommen!"
@@ -2500,6 +2520,13 @@ msgstr "Ingen krigere tilgjengelige for verving."
 msgid "Recruit Creatures"
 msgstr "Verv krigere"
 
+msgid "Max"
+msgstr "Maks"
+
+#, fuzzy
+msgid "Hire all creatures in the town."
+msgstr "Mist alle helter og byer."
+
 msgid "Town Population Information and Statistics"
 msgstr "Info og tall om byens bosteder"
 
@@ -2737,14 +2764,11 @@ msgstr "Innstillinger"
 msgid "Audio"
 msgstr "Lyd"
 
-msgid "settings"
-msgstr "Innstillinger"
+msgid "Configure"
+msgstr "Konfigurer"
 
 msgid "Hot Keys"
 msgstr "Hurtigtaster"
-
-msgid "In-game"
-msgstr "I spillet"
 
 msgid "Black & White"
 msgstr "Svart-hvit"
@@ -2784,16 +2808,16 @@ msgstr "Kampstyring"
 msgid "Select Game Language"
 msgstr "Velg spillspråk"
 
-msgid "Change language of the game."
+msgid "Change the language of the game."
 msgstr "Endre språket til spillet."
 
 msgid "Select Game Resolution"
 msgstr "Velg spilloppløsning"
 
-msgid "Change resolution of the game."
+msgid "Change the resolution of the game."
 msgstr "Endre oppløsningen til spillet."
 
-msgid "Change audio settings of the game."
+msgid "Change the audio settings of the game."
 msgstr "Endre lydinnstillingene til spillet."
 
 msgid "Experimental game settings."
@@ -2802,19 +2826,14 @@ msgstr "Innstillinger for utprøvningsvalg."
 msgid "Toggle instant battle mode."
 msgstr "Skift modus for hurtigkamp."
 
-msgid "Check all Hot Keys used in the game."
-msgstr "Kontroller alle hurtigtastene til spillet."
+msgid "Check and configure all the hot keys present in the game."
+msgstr "Kontroller og endre alle hurtigtastene i spillet."
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Velg den typen grensesnitt du ønsker."
 
-msgid ""
-"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
-"move as smoothly as black and white ones."
-msgstr ""
-"Skru farget markør av eller på. Markør med farge ser bedre ut, men den kan "
-"under visse oppsett bevege seg mindre glatt enn det en svart-hvit markør "
-"ville ha gjort."
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
+msgstr "Skru farget markør av eller på. Dette valget er kun for smak og behag."
 
 msgid ""
 "Toggle text support mode to output extra information about windows and "
@@ -2946,9 +2965,6 @@ msgstr "Jeg kan tilby deg %{count} gullstykker for 1 enhet %{resfrom}."
 msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr "Jeg kan tilby deg 1 enhet %{resto} mot %{count} enheter %{resfrom}."
 
-msgid "Max"
-msgstr "Maks"
-
 msgid "Min"
 msgstr "Min"
 
@@ -3052,6 +3068,9 @@ msgstr "Tilgjengelig: %{count}"
 
 msgid "Number to buy:"
 msgstr "Antall valgt:"
+
+msgid "Select Game Resolution:"
+msgstr "Velg spilloppløsning:"
 
 msgid "Click to apply the selected resolution."
 msgstr "Trykk for å bruke den valgte oppløsningen."
@@ -3403,9 +3422,6 @@ msgstr "Umulig"
 msgid "and more..."
 msgstr "og mer..."
 
-msgid "DIFFICULTY"
-msgstr ""
-
 #, fuzzy
 msgid "Campaign Difficulty"
 msgstr "Vanskelighetsgrad"
@@ -3642,9 +3658,6 @@ msgstr "Felttog"
 
 msgid "View High Scores for Campaigns."
 msgstr "Vis rekordtavle for kampanjer."
-
-msgid "Warning"
-msgstr "Advarsel"
 
 msgid "This file contains a save with an invalid game type."
 msgstr "Denne filen inneholder et lagringspunkt med en ugyldig spillversjon."
@@ -4094,6 +4107,11 @@ msgid "%{color} player's turn."
 msgstr "%{color} spillers tur."
 
 msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
+msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in next week, you will be eliminated."
 msgstr ""
@@ -4262,8 +4280,42 @@ msgstr ""
 "byttes. Avhengig av brettet, kan en spiller få flere byer og/eller helter "
 "som ikke er av spillerens hovedtilhørighet."
 
+#, fuzzy
+msgid "Handicap"
+msgstr "Mandigal"
+
+#
+msgid ""
+"This lets you change the handicap of a particular player. Only humans may be "
+"handicapped. Handicapped players start with fewer resources and earn 15 or "
+"30% fewer resources per turn for mild and severe handicaps, respectively."
+msgstr ""
+
 msgid "%{color} player"
 msgstr "%{color} spiller"
+
+msgid "No Handicap"
+msgstr ""
+
+msgid "No special restrictions on start resources and earning them per turn."
+msgstr ""
+
+msgid "Mild Handicap"
+msgstr ""
+
+#
+msgid ""
+"Mild handicapped players start with fewer resources and earn 15% fewer "
+"resources per turn."
+msgstr ""
+
+msgid "Severe Handicap"
+msgstr ""
+
+msgid ""
+"Severe handicapped players start with fewer resources and earn 30% fewer "
+"resources per turn."
+msgstr ""
 
 msgid "View %{skill} Info"
 msgstr "Vis info om %{skill}"
@@ -4317,6 +4369,9 @@ msgid "Swedish"
 msgstr ""
 
 msgid "Portuguese"
+msgstr ""
+
+msgid "Turkish"
 msgstr ""
 
 msgid ", FPS: "
@@ -9910,8 +9965,5 @@ msgstr ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 
-#~ msgid "Score: "
-#~ msgstr "Poengsum: "
-
-#~ msgid "Break auto battle?"
-#~ msgstr "Avbryt autotrekk?"
+#~ msgid "Moved %{monster}"
+#~ msgstr "Flyttet troppen med %{monster}"

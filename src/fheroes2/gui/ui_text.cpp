@@ -90,6 +90,13 @@ namespace
         return 0;
     }
 
+    int32_t getCharWidth( const uint8_t character, const fheroes2::FontType & fontType )
+    {
+        const fheroes2::Sprite & image = fheroes2::AGG::getChar( character, fontType );
+        assert( ( fontType.size != fheroes2::FontSize::BUTTON_RELEASED && fontType.size != fheroes2::FontSize::BUTTON_PRESSED && image.x() >= 0 ) || image.x() < 0 );
+        return image.x() + image.width();
+    }
+
     int32_t getLineWidth( const uint8_t * data, const int32_t size, const fheroes2::FontType & fontType )
     {
         assert( data != nullptr && size > 0 );
@@ -101,13 +108,13 @@ namespace
         const uint8_t * dataEnd = data + size;
         while ( data != dataEnd ) {
             if ( validator.isValid( *data ) ) {
-                width += fheroes2::AGG::getChar( *data, fontType ).width();
+                width += getCharWidth( *data, fontType );
             }
             else if ( isSpaceChar( *data ) ) {
                 width += getSpaceCharWidth( fontType.size );
             }
             else {
-                width += fheroes2::AGG::getChar( invalidChar, fontType ).width();
+                width += getCharWidth( invalidChar, fontType );
             }
             ++data;
         }
@@ -128,13 +135,13 @@ namespace
         const uint8_t * dataEnd = data + size;
         while ( data != dataEnd ) {
             if ( validator.isValid( *data ) ) {
-                width += fheroes2::AGG::getChar( *data, fontType ).width();
+                width += getCharWidth( *data, fontType );
             }
             else if ( isSpaceChar( *data ) ) {
                 width += getSpaceCharWidth( fontType.size );
             }
             else {
-                width += fheroes2::AGG::getChar( invalidChar, fontType ).width();
+                width += getCharWidth( invalidChar, fontType );
             }
 
             if ( width > maxWidth ) {
@@ -169,10 +176,10 @@ namespace
                 spaceWidth = 0;
 
                 if ( validator.isValid( *data ) ) {
-                    width += fheroes2::AGG::getChar( *data, fontType ).width();
+                    width += getCharWidth( *data, fontType );
                 }
                 else {
-                    width += fheroes2::AGG::getChar( invalidChar, fontType ).width();
+                    width += getCharWidth( invalidChar, fontType );
                 }
             }
             ++data;
@@ -222,7 +229,7 @@ namespace
                 ++lineLength;
                 if ( validator.isValid( *character ) ) {
                     ++lastWordLength;
-                    lineWidth += fheroes2::AGG::getChar( *character, fontType ).width();
+                    lineWidth += getCharWidth( *character, fontType );
                 }
                 else if ( isSpaceChar( *character ) ) {
                     lastWordLength = 0;
@@ -230,7 +237,7 @@ namespace
                 }
                 else {
                     ++lastWordLength;
-                    lineWidth += fheroes2::AGG::getChar( invalidChar, fontType ).width();
+                    lineWidth += getCharWidth( invalidChar, fontType );
                 }
 
                 if ( offset->x + lineWidth > maxWidth ) {
@@ -356,7 +363,7 @@ namespace
                 ++lineLength;
                 if ( validator.isValid( *character ) ) {
                     ++lastWordLength;
-                    lineWidth += fheroes2::AGG::getChar( *character, fontType ).width();
+                    lineWidth += getCharWidth( *character, fontType );
                 }
                 else if ( isSpaceChar( *character ) ) {
                     lastWordLength = 0;
@@ -364,7 +371,7 @@ namespace
                 }
                 else {
                     ++lastWordLength;
-                    lineWidth += fheroes2::AGG::getChar( invalidChar, fontType ).width();
+                    lineWidth += getCharWidth( invalidChar, fontType );
                 }
 
                 if ( offset->x + lineWidth > maxWidth ) {
@@ -781,16 +788,20 @@ namespace fheroes2
             return true;
         }
 
-        // Check that the font exists.
-        const Sprite & commaCharacter = AGG::getChar( ',', fontType );
-        if ( commaCharacter.empty() ) {
-            return false;
-        }
-
         const CharValidator validator( fontType.size );
 
         for ( const char letter : text ) {
-            if ( !validator.isValid( static_cast<uint8_t>( letter ) ) ) {
+            const uint8_t character = static_cast<uint8_t>( letter );
+
+            if ( character == lineSeparator ) {
+                continue;
+            }
+
+            if ( isSpaceChar( character ) ) {
+                continue;
+            }
+
+            if ( !validator.isValid( character ) ) {
                 return false;
             }
         }

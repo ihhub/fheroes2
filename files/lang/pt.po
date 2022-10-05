@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-02 03:05+0000\n"
-"PO-Revision-Date: 2022-05-10 16:34+0200\n"
+"POT-Creation-Date: 2022-10-01 19:29+0000\n"
+"PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+
+msgid "GIFT"
+msgstr ""
+
+msgid "MIN"
+msgstr ""
+
+msgid "DIFFICULTY"
+msgstr ""
 
 msgid "Warrior"
 msgstr "Guerreiro"
@@ -30,6 +44,14 @@ msgstr "Explorador"
 
 msgid "None"
 msgstr "Nenhum"
+
+msgid "Warning"
+msgstr "Atenção"
+
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
 
 msgid ""
 "A few\n"
@@ -551,14 +573,8 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Moved %{monster}: %{src}, %{dst}"
+msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr ""
-
-#, fuzzy
-msgid "Moved %{monster}"
-msgstr ""
-"Muitos de\n"
-"%{monster}"
 
 msgid "The %{name} resist the spell!"
 msgstr "%{name} resisitiu ao feitiço!"
@@ -2346,6 +2362,14 @@ msgstr ""
 msgid "Recruit Creatures"
 msgstr "Recrutar Herói"
 
+#, fuzzy
+msgid "Max"
+msgstr "máximo"
+
+#, fuzzy
+msgid "Hire all creatures in the town."
+msgstr "Perder todos os seus heróis e das cidades."
+
 msgid "Town Population Information and Statistics"
 msgstr "Informações da População da Cidade e Estatísticas"
 
@@ -2586,16 +2610,12 @@ msgstr "Configurações"
 msgid "Audio"
 msgstr ""
 
-#, fuzzy
-msgid "settings"
-msgstr "Configurações"
+msgid "Configure"
+msgstr ""
 
 #, fuzzy
 msgid "Hot Keys"
 msgstr "Hot Seat"
-
-msgid "In-game"
-msgstr ""
 
 #, fuzzy
 msgid "Black & White"
@@ -2636,17 +2656,17 @@ msgstr ""
 msgid "Select Game Language"
 msgstr "Selecione o idioma do jogo"
 
-msgid "Change language of the game."
+msgid "Change the language of the game."
 msgstr "Mudar o idioma do jogo."
 
 msgid "Select Game Resolution"
 msgstr "Selecione a resolução do jogo"
 
-msgid "Change resolution of the game."
+msgid "Change the resolution of the game."
 msgstr "Mudar a resolução do jogo."
 
 #, fuzzy
-msgid "Change audio settings of the game."
+msgid "Change the audio settings of the game."
 msgstr "Mudar a resolução do jogo."
 
 msgid "Experimental game settings."
@@ -2655,15 +2675,13 @@ msgstr "Configurações experimentais do jogo."
 msgid "Toggle instant battle mode."
 msgstr ""
 
-msgid "Check all Hot Keys used in the game."
+msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
 msgstr ""
 
-msgid ""
-"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
-"move as smoothly as black and white ones."
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
 
 msgid ""
@@ -2796,10 +2814,6 @@ msgstr ""
 "%{resfrom}."
 
 #, fuzzy
-msgid "Max"
-msgstr "máximo"
-
-#, fuzzy
 msgid "Min"
 msgstr "mínimo"
 
@@ -2913,6 +2927,9 @@ msgstr "Disponível: %{count}"
 
 msgid "Number to buy:"
 msgstr "Qtd. à Comprar:"
+
+msgid "Select Game Resolution:"
+msgstr "Selecione a resolução do jogo:"
 
 msgid "Click to apply the selected resolution."
 msgstr ""
@@ -3270,9 +3287,6 @@ msgstr ""
 msgid "and more..."
 msgstr ""
 
-msgid "DIFFICULTY"
-msgstr ""
-
 #, fuzzy
 msgid "Campaign Difficulty"
 msgstr "Dificuldade do Jogo"
@@ -3516,9 +3530,6 @@ msgstr "Campanha"
 #, fuzzy
 msgid "View High Scores for Campaigns."
 msgstr "Ver a tela de Records."
-
-msgid "Warning"
-msgstr "Atenção"
 
 msgid "This file contains a save with an invalid game type."
 msgstr ""
@@ -3951,6 +3962,11 @@ msgid "%{color} player's turn."
 msgstr "Turno do jogador %{color}"
 
 msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
+msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in next week, you will be eliminated."
 msgstr ""
@@ -4122,9 +4138,43 @@ msgstr ""
 "alteravel. Dependendo do cenário, um jogador não pode receber cidades "
 "adicionais e / ou heróis do seu alinhamento primário."
 
+msgid "Handicap"
+msgstr ""
+
+#
+msgid ""
+"This lets you change the handicap of a particular player. Only humans may be "
+"handicapped. Handicapped players start with fewer resources and earn 15 or "
+"30% fewer resources per turn for mild and severe handicaps, respectively."
+msgstr ""
+
 #, fuzzy
 msgid "%{color} player"
 msgstr "Turno do jogador %{color}"
+
+msgid "No Handicap"
+msgstr ""
+
+msgid "No special restrictions on start resources and earning them per turn."
+msgstr ""
+
+msgid "Mild Handicap"
+msgstr ""
+
+#
+msgid ""
+"Mild handicapped players start with fewer resources and earn 15% fewer "
+"resources per turn."
+msgstr ""
+
+msgid "Severe Handicap"
+msgstr ""
+
+#
+msgid ""
+"Severe handicapped players start with fewer resources and earn 30% fewer "
+"resources per turn."
+msgstr ""
 
 msgid "View %{skill} Info"
 msgstr ""
@@ -4180,6 +4230,9 @@ msgid "Swedish"
 msgstr ""
 
 msgid "Portuguese"
+msgstr ""
+
+msgid "Turkish"
 msgstr ""
 
 msgid ", FPS: "
@@ -9041,5 +9094,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-#~ msgid "Score: "
-#~ msgstr "pontuação:"
+#~ msgid "Moved %{monster}"
+#~ msgstr ""
+#~ "Muitos de\n"
+#~ "%{monster}"

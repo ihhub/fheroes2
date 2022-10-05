@@ -20,7 +20,7 @@
 
 #include <ctime>
 
-#if defined( __MINGW32__ ) || defined( _MSC_VER )
+#if defined( _WIN32 )
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
@@ -38,7 +38,7 @@ namespace
 
     bool textSupportMode = false;
 
-#if defined( __MINGW32__ ) || defined( _MSC_VER )
+#if defined( _WIN32 )
     // Sets the Windows console codepage to the system codepage
     class ConsoleCPSwitcher
     {
@@ -72,7 +72,7 @@ namespace
 
 namespace Logging
 {
-#if defined( TARGET_NINTENDO_SWITCH )
+#if defined( TARGET_NINTENDO_SWITCH ) || defined( _WIN32 )
     std::ofstream logFile;
     // This mutex protects operations with logFile
     std::mutex logMutex;
@@ -114,6 +114,11 @@ namespace Logging
         const std::scoped_lock<std::mutex> lock( logMutex );
 
         logFile.open( "fheroes2.log", std::ofstream::out );
+#elif defined( _WIN32 )
+        const std::scoped_lock<std::mutex> lock( logMutex );
+        const std::string logPath( System::ConcatePath( System::GetConfigDirectory( "fheroes2" ), "fheroes2.log" ) );
+
+        logFile.open( logPath, std::ofstream::out );
 #elif defined( MACOS_APP_BUNDLE )
         openlog( "fheroes2", LOG_CONS | LOG_NDELAY, LOG_USER );
         setlogmask( LOG_UPTO( LOG_WARNING ) );

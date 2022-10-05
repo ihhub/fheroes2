@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-02 03:05+0000\n"
-"PO-Revision-Date: 2022-05-10 16:34+0200\n"
+"POT-Creation-Date: 2022-10-01 19:29+0000\n"
+"PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
@@ -17,7 +17,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2011-06-02 03:12+0000\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+
+msgid "GIFT"
+msgstr ""
+
+msgid "MIN"
+msgstr ""
+
+msgid "DIFFICULTY"
+msgstr ""
 
 #, fuzzy
 msgid "Warrior"
@@ -31,6 +45,14 @@ msgstr ""
 
 msgid "None"
 msgstr "Nincs"
+
+msgid "Warning"
+msgstr "Figyelmeztetés"
+
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
 
 msgid ""
 "A few\n"
@@ -557,11 +579,7 @@ msgstr[0] "egy %{defender} elpusztult."
 msgstr[1] "%{count} %{defender} elpusztult."
 
 #, fuzzy
-msgid "Moved %{monster}: %{src}, %{dst}"
-msgstr "A %{monster} ide menjen."
-
-#, fuzzy
-msgid "Moved %{monster}"
+msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr "A %{monster} ide menjen."
 
 msgid "The %{name} resist the spell!"
@@ -2431,6 +2449,14 @@ msgstr ""
 msgid "Recruit Creatures"
 msgstr "Hős toborzása"
 
+#, fuzzy
+msgid "Max"
+msgstr "Maximus"
+
+#, fuzzy
+msgid "Hire all creatures in the town."
+msgstr "Összes hős és város elvesztése"
+
 msgid "Town Population Information and Statistics"
 msgstr "A város lakosságának adatai és statisztikái"
 
@@ -2673,14 +2699,10 @@ msgstr "Beállítások"
 msgid "Audio"
 msgstr ""
 
-#, fuzzy
-msgid "settings"
-msgstr "Beállítások"
-
-msgid "Hot Keys"
+msgid "Configure"
 msgstr ""
 
-msgid "In-game"
+msgid "Hot Keys"
 msgstr ""
 
 #, fuzzy
@@ -2725,17 +2747,17 @@ msgstr "Üveg"
 msgid "Select Game Language"
 msgstr "Kiválasztott Leírás"
 
-msgid "Change language of the game."
+msgid "Change the language of the game."
 msgstr ""
 
 #, fuzzy
 msgid "Select Game Resolution"
 msgstr "Kiválasztott Leírás"
 
-msgid "Change resolution of the game."
+msgid "Change the resolution of the game."
 msgstr ""
 
-msgid "Change audio settings of the game."
+msgid "Change the audio settings of the game."
 msgstr ""
 
 #, fuzzy
@@ -2745,15 +2767,13 @@ msgstr "FHeroes2 játék beállítások."
 msgid "Toggle instant battle mode."
 msgstr ""
 
-msgid "Check all Hot Keys used in the game."
+msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
 msgstr ""
 
-msgid ""
-"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
-"move as smoothly as black and white ones."
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
 
 msgid ""
@@ -2883,10 +2903,6 @@ msgid "I can offer you 1 unit of %{resto} for %{count} units of %{resfrom}."
 msgstr ""
 
 #, fuzzy
-msgid "Max"
-msgstr "Maximus"
-
-#, fuzzy
 msgid "Min"
 msgstr "Bányák"
 
@@ -3002,6 +3018,10 @@ msgstr "Használható: %{count}"
 
 msgid "Number to buy:"
 msgstr "Vétel (db):"
+
+#, fuzzy
+msgid "Select Game Resolution:"
+msgstr "Kiválasztott Leírás"
 
 msgid "Click to apply the selected resolution."
 msgstr ""
@@ -3353,9 +3373,6 @@ msgstr "nehézség | Lehetetlen"
 msgid "and more..."
 msgstr ""
 
-msgid "DIFFICULTY"
-msgstr ""
-
 #, fuzzy
 msgid "Campaign Difficulty"
 msgstr "Játék nehézsége"
@@ -3605,9 +3622,6 @@ msgstr "Hadjárat"
 #, fuzzy
 msgid "View High Scores for Campaigns."
 msgstr "Dicsőségtábla megjelenítése."
-
-msgid "Warning"
-msgstr "Figyelmeztetés"
 
 msgid "This file contains a save with an invalid game type."
 msgstr ""
@@ -4027,6 +4041,11 @@ msgid "%{color} player's turn."
 msgstr "%{color} játékos köre"
 
 msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
+msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in next week, you will be eliminated."
 msgstr ""
@@ -4181,8 +4200,43 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Handicap"
+msgstr "Mandigal"
+
+#
+msgid ""
+"This lets you change the handicap of a particular player. Only humans may be "
+"handicapped. Handicapped players start with fewer resources and earn 15 or "
+"30% fewer resources per turn for mild and severe handicaps, respectively."
+msgstr ""
+
+#, fuzzy
 msgid "%{color} player"
 msgstr "%{color} játékos köre"
+
+msgid "No Handicap"
+msgstr ""
+
+msgid "No special restrictions on start resources and earning them per turn."
+msgstr ""
+
+msgid "Mild Handicap"
+msgstr ""
+
+#
+msgid ""
+"Mild handicapped players start with fewer resources and earn 15% fewer "
+"resources per turn."
+msgstr ""
+
+msgid "Severe Handicap"
+msgstr ""
+
+#
+msgid ""
+"Severe handicapped players start with fewer resources and earn 30% fewer "
+"resources per turn."
+msgstr ""
 
 #, fuzzy
 msgid "View %{skill} Info"
@@ -4243,6 +4297,9 @@ msgstr ""
 #, fuzzy
 msgid "Portuguese"
 msgstr "Rabló"
+
+msgid "Turkish"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ""
@@ -9414,5 +9471,5 @@ msgstr ""
 "fheroes2/releases"
 
 #, fuzzy
-#~ msgid "Break auto battle?"
-#~ msgstr "Automata harc bekapcsolása"
+#~ msgid "Moved %{monster}"
+#~ msgstr "A %{monster} ide menjen."

@@ -171,12 +171,9 @@ void BattleLose( Heroes & hero, const Battle::Result & res, bool attacker )
     const uint32_t reason = attacker ? res.AttackerResult() : res.DefenderResult();
 
     AudioManager::PlaySound( M82::KILLFADE );
+
     hero.FadeOut();
     hero.SetFreeman( reason );
-
-    Interface::Basic & I = Interface::Basic::Get();
-    I.ResetFocus( GameFocus::HEROES );
-    I.RedrawFocus();
 }
 
 void RecruitMonsterFromTile( Heroes & hero, Maps::Tiles & tile, const std::string & msg, const Troop & troop, bool remove )
@@ -245,9 +242,37 @@ static void WhirlpoolTroopLoseEffect( Heroes & hero )
     }
 }
 
-// action to next cell
 void Heroes::Action( int tileIndex, bool isDestination )
 {
+    // Hero may be lost while performing the action, reset the focus after completing the action (and update environment sounds and music if necessary)
+    struct FocusUpdater
+    {
+        FocusUpdater() = default;
+
+        FocusUpdater( const FocusUpdater & ) = delete;
+
+        ~FocusUpdater()
+        {
+            Interface::Basic & I = Interface::Basic::Get();
+
+            I.ResetFocus( GameFocus::HEROES );
+            I.RedrawFocus();
+        }
+
+        FocusUpdater & operator=( const FocusUpdater & ) = delete;
+    };
+
+    std::unique_ptr<FocusUpdater> focusUpdater;
+    const bool isAIControlledForHumanPlayer = Players::Get( GetKingdom().GetColor() )->isAIAutoControlMode();
+
+    if ( !GetKingdom().isControlAI() || isAIControlledForHumanPlayer ) {
+        focusUpdater = std::make_unique<FocusUpdater>();
+
+        if ( isAIControlledForHumanPlayer ) {
+            Interface::Basic::Get().SetFocus( this );
+        }
+    }
+
     if ( GetKingdom().isControlAI() ) {
         // Restore the original music after the action is completed.
         const AudioManager::MusicRestorer musicRestorer;
@@ -255,23 +280,42 @@ void Heroes::Action( int tileIndex, bool isDestination )
         return AI::HeroesAction( *this, tileIndex );
     }
 
-    // Update environment sounds and music before doing the action. Interface::Basic::SetFocus() function is responsible for update them after the action.
     const int32_t heroPosIndex = GetIndex();
     assert( heroPosIndex >= 0 );
+
+    // Update environment sounds and music before performing the action
     if ( Game::UpdateSoundsOnFocusUpdate() ) {
         Game::EnvironmentSoundMixer();
         AudioManager::PlayMusicAsync( MUS::FromGround( world.GetTiles( heroPosIndex ).GetGround() ), Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
 
-    // Restore the original music after the action is completed.
-    const AudioManager::MusicRestorer musicRestorer;
+    // "Musical" sounds use the volume of sounds instead of the volume of music, reset the music volume after completing the action
+    const struct MusicVolumeRestorer
+    {
+        MusicVolumeRestorer() = default;
+
+        MusicVolumeRestorer( const MusicVolumeRestorer & ) = delete;
+
+        ~MusicVolumeRestorer()
+        {
+            Music::setVolume( 100 * Settings::Get().MusicVolume() / 10 );
+        }
+
+        MusicVolumeRestorer & operator=( const MusicVolumeRestorer & ) = delete;
+    } musicVolumeRestorer;
 
     Maps::Tiles & tile = world.GetTiles( tileIndex );
     const MP2::MapObjectType objectType = tile.GetObject( tileIndex != heroPosIndex );
 
     const int objectMusicTrack = MUS::FromMapObject( objectType );
     if ( objectMusicTrack != MUS::UNKNOWN ) {
-        AudioManager::PlayMusic( objectMusicTrack, Music::PlaybackMode::PLAY_ONCE );
+        // "Musical" sounds should use the volume of the sounds instead of the volume of the music
+        const int32_t soundVolume = 100 * Settings::Get().SoundVolume() / 10;
+        if ( soundVolume > 0 ) {
+            // Play the sound only if audio volume is not set to 0.
+            Music::setVolume( soundVolume );
+            AudioManager::PlayMusic( objectMusicTrack, Music::PlaybackMode::PLAY_ONCE );
+        }
     }
 
     if ( MP2::isActionObject( objectType, isShipMaster() ) ) {
@@ -1832,7 +1876,7 @@ void ActionToArtifact( Heroes & hero, int32_t dst_index )
                 else {
                     msg = _(
                         "Through a clearing you observe an ancient artifact. Unfortunately, it's guarded by a nearby %{monster}. Do you want to fight the %{monster} for the artifact?" );
-                    StringReplace( msg, "%{monster}", troop->GetName() );
+                    StringReplace( msg, "%{monster}", Translation::StringLower( troop->GetName() ) );
                     battle = ( Dialog::YES == Dialog::Message( title, msg, Font::BIG, Dialog::YES | Dialog::NO ) );
                 }
             }
@@ -2224,7 +2268,7 @@ void ActionToDwellingJoinMonster( Heroes & hero, const MP2::MapObjectType object
 
     if ( troop.isValid() ) {
         std::string message = _( "A group of %{monster} with a desire for greater glory wish to join you. Do you accept?" );
-        StringReplace( message, "%{monster}", troop.GetMultiName() );
+        StringReplace( message, "%{monster}", Translation::StringLower( troop.GetMultiName() ) );
 
         AudioManager::PlaySound( M82::EXPERNCE );
 
