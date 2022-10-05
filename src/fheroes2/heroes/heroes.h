@@ -319,7 +319,7 @@ public:
     int GetManaIndexSprite() const;
 
     int OpenDialog( const bool readonly, const bool fade, const bool disableDismiss, const bool disableSwitch, const bool renderBackgroundDialog = false );
-    void MeetingDialog( Heroes & );
+    void MeetingDialog( Heroes & otherHero, const bool renderBackgroundDialog );
 
     bool Recruit( const int col, const fheroes2::Point & pt );
     bool Recruit( const Castle & castle );

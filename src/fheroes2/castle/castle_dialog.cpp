@@ -458,7 +458,7 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                         army2 = &heroes.Guest()->GetArmy();
                     }
                     else if ( le.MouseClickLeft( buttonMeeting.area() ) ) {
-                        heroes.Guest()->MeetingDialog( *heroes.Guard() );
+                        heroes.Guest()->MeetingDialog( *heroes.Guard(), false );
                         need_redraw = true;
                     }
                 }

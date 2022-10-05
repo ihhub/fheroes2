@@ -44,6 +44,7 @@
 #include "ui_button.h"
 #include "ui_dialog.h"
 #include "ui_text.h"
+#include "ui_window.h"
 
 namespace
 {
@@ -225,12 +226,17 @@ private:
     fheroes2::Image _cachedBackground;
 };
 
-void Heroes::MeetingDialog( Heroes & otherHero )
+void Heroes::MeetingDialog( Heroes & otherHero, const bool renderBackgroundDialog )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
 
     // setup cursor
     const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
+    std::unique_ptr<fheroes2::StandardWindow> background;
+    if ( renderBackgroundDialog ) {
+        background = std::make_unique<fheroes2::StandardWindow>( fheroes2::Display::DEFAULT_WIDTH, fheroes2::Display::DEFAULT_HEIGHT );
+    }
 
     const fheroes2::Sprite & backSprite = fheroes2::AGG::GetICN( ICN::SWAPWIN, 0 );
     const fheroes2::Point cur_pt( ( display.width() - backSprite.width() ) / 2, ( display.height() - backSprite.height() ) / 2 );

@@ -766,7 +766,7 @@ void ActionToHeroes( Heroes & hero, int32_t dst_index )
 
     if ( hero.GetColor() == other_hero->GetColor() ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " meeting " << other_hero->GetName() )
-        hero.MeetingDialog( *other_hero );
+        hero.MeetingDialog( *other_hero, true );
     }
     else if ( hero.isFriends( other_hero->GetColor() ) ) {
         DEBUG_LOG( DBG_GAME, DBG_INFO, hero.GetName() << " disable meeting" )
