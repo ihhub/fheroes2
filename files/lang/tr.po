@@ -23,7 +23,7 @@ msgid ""
 "BATTLE\n"
 "ONLY"
 msgstr ""
-"SADECE \n"
+"SADECE\n"
 "SAVAŞ"
 
 msgid "GIFT"
