@@ -106,7 +106,7 @@ namespace Logging
 
         std::array<char, 256> buf;
 
-        const size_t writtenBytes = std::strftime( buf.data(), buf.size() - 1, "%d.%m.%Y %H:%M:%S", &tmi );
+        const size_t writtenBytes = std::strftime( buf.data(), buf.size(), "%d.%m.%Y %H:%M:%S", &tmi );
         if ( writtenBytes == 0 ) {
             assert( 0 );
             return "<TIMESTAMP ERROR>";
