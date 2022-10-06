@@ -235,8 +235,8 @@ std::string GameOver::GetActualDescription( uint32_t cond )
             StringReplace( msg, "%{enemies}", enemiesList );
         }
         else {
-            msg = Translation::ngettext( "You and %{allies}, who is in alliance with you, must defeat the enemy %{enemies}.",
-                                         "You and %{allies}, who is in alliance with you, must defeat the enemy alliance of %{enemies}.", enemiesCount );
+            msg = Translation::ngettext( "The alliance consisting of you, %{allies} must defeat the enemy %{enemies}.",
+                                         "The alliance consisting of you, %{allies} must defeat the enemy alliance of %{enemies}.", enemiesCount );
             StringReplace( msg, "%{allies}", alliesList );
             StringReplace( msg, "%{enemies}", enemiesList );
         }
