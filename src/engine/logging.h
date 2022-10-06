@@ -66,6 +66,18 @@ enum
     DBG_ALL_TRACE = DBG_ENGINE_TRACE | DBG_GAME_TRACE | DBG_BATTLE_TRACE | DBG_AI_TRACE | DBG_NETWORK_TRACE | DBG_OTHER_TRACE
 };
 
+#if defined( TARGET_NINTENDO_SWITCH ) || defined( _WIN32 )
+#include <fstream>
+#include <mutex>
+
+namespace Logging
+{
+    extern std::ofstream logFile;
+    // This mutex protects operations with logFile
+    extern std::mutex logMutex;
+}
+#endif
+
 namespace Logging
 {
     const char * GetDebugOptionName( const int name );
@@ -82,17 +94,16 @@ namespace Logging
     bool isTextSupportModeEnabled();
 }
 
-#if defined( TARGET_NINTENDO_SWITCH )
-#include <fstream>
-#include <mutex>
-
-namespace Logging
-{
-    extern std::ofstream logFile;
-    // This mutex protects operations with logFile
-    extern std::mutex logMutex;
-}
-
+#if defined( _WIN32 ) && defined( WITH_DEBUG )
+#define COUT( x )                                                                                                                                                        \
+    {                                                                                                                                                                    \
+        const std::scoped_lock<std::mutex> _logfile_lock( Logging::logMutex ); /* The name was chosen on purpose to avoid name collisions with outer code blocks. */     \
+                                                                                                                                                                         \
+        Logging::logFile << x << std::endl;                                                                                                                              \
+        Logging::logFile.flush();                                                                                                                                        \
+        std::cerr << x << std::endl;                                                                                                                                     \
+    }
+#elif defined( TARGET_NINTENDO_SWITCH ) || defined( _WIN32 )
 #define COUT( x )                                                                                                                                                        \
     {                                                                                                                                                                    \
         const std::scoped_lock<std::mutex> _logfile_lock( Logging::logMutex ); /* The name was chosen on purpose to avoid name collisions with outer code blocks. */     \

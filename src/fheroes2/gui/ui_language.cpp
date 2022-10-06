@@ -55,7 +55,9 @@ namespace
             { "bg", fheroes2::SupportedLanguage::Bulgarian },  { "bulgarian", fheroes2::SupportedLanguage::Bulgarian },
             { "es", fheroes2::SupportedLanguage::Spanish },    { "spanish", fheroes2::SupportedLanguage::Spanish },
             { "pt", fheroes2::SupportedLanguage::Portuguese }, { "portuguese", fheroes2::SupportedLanguage::Portuguese },
-            { "sv", fheroes2::SupportedLanguage::Swedish },    { "swedish", fheroes2::SupportedLanguage::Swedish } };
+            { "sv", fheroes2::SupportedLanguage::Swedish },    { "swedish", fheroes2::SupportedLanguage::Swedish },
+            { "tr", fheroes2::SupportedLanguage::Turkish },    { "turkish", fheroes2::SupportedLanguage::Turkish },
+            { "ro", fheroes2::SupportedLanguage::Romanian },   { "romanian", fheroes2::SupportedLanguage::Romanian } };
 }
 
 namespace fheroes2
@@ -101,7 +103,7 @@ namespace fheroes2
         const std::set<SupportedLanguage> possibleLanguages{
             SupportedLanguage::French,    SupportedLanguage::Polish,     SupportedLanguage::German,    SupportedLanguage::Russian,   SupportedLanguage::Italian,
             SupportedLanguage::Norwegian, SupportedLanguage::Belarusian, SupportedLanguage::Bulgarian, SupportedLanguage::Ukrainian, SupportedLanguage::Romanian,
-            SupportedLanguage::Spanish,   SupportedLanguage::Portuguese, SupportedLanguage::Swedish,
+            SupportedLanguage::Spanish,   SupportedLanguage::Portuguese, SupportedLanguage::Swedish,   SupportedLanguage::Turkish,
         };
 
         for ( const SupportedLanguage language : possibleLanguages ) {
@@ -162,6 +164,8 @@ namespace fheroes2
             return _( "Swedish" );
         case SupportedLanguage::Portuguese:
             return _( "Portuguese" );
+        case SupportedLanguage::Turkish:
+            return _( "Turkish" );
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -202,6 +206,8 @@ namespace fheroes2
             return "sv";
         case SupportedLanguage::Portuguese:
             return "pt";
+        case SupportedLanguage::Turkish:
+            return "tr";
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );

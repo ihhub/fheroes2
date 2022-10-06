@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-28 22:56+0000\n"
+"POT-Creation-Date: 2022-10-05 15:45+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -4133,6 +4133,11 @@ msgstr ""
 msgid "Try looking on land!!!"
 msgstr ""
 
+msgid ""
+"Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
+"it even if he found it - all his artifact slots are full."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
@@ -4297,6 +4302,9 @@ msgstr ""
 #, fuzzy
 msgid "Portuguese"
 msgstr "Rabló"
+
+msgid "Turkish"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ""
