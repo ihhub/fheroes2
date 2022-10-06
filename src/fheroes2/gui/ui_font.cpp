@@ -584,12 +584,7 @@ namespace
             font[212 - 32].resize( font[48].width() + 1, font[48].height() );
             font[212 - 32].reset();
             fheroes2::Copy( font[48], 0, 0, font[212 - 32], 1, 0, font[48].width(), font[48].height() );
-            {
-                // TODO: add proper Flip function variant.
-                fheroes2::Sprite temp = fheroes2::Crop( font[48], 6, 0, 5, 6 );
-                temp = fheroes2::Flip( temp, true, false );
-                fheroes2::Copy( temp, 0, 0, font[212 - 32], 1, 0, temp.width(), temp.height() );
-            }
+            fheroes2::Flip( font[48], 6, 0, font[212 - 32], 1, 0, 5, 6, true, false );
             font[212 - 32].setPosition( font[48].x(), font[48].y() );
             updateNormalFontLetterShadow( font[212 - 32] );
 
@@ -2175,6 +2170,447 @@ namespace
         }
     }
 
+    void generateCP1254Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
+    {
+        // Resize fonts.
+        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            icnVsSprite[icnId].resize( baseFontSize );
+            icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, icnVsSprite[icnId][0] );
+        }
+
+        // Normal font.
+        {
+            std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::FONT];
+
+            // C with cedilla.
+            font[199 - 32].resize( font[35].width(), font[35].height() + 3 );
+            font[199 - 32].reset();
+            fheroes2::Copy( font[35], 0, 0, font[199 - 32], 0, 0, font[35].width(), font[35].height() );
+            fheroes2::Copy( font[67], 2, 1, font[199 - 32], 7, 11, 1, 1 );
+            fheroes2::Copy( font[67], 5, 6, font[199 - 32], 8, 11, 1, 1 );
+            fheroes2::Copy( font[67], 2, 6, font[199 - 32], 9, 11, 1, 1 );
+            fheroes2::Copy( font[67], 2, 1, font[199 - 32], 8, 12, 1, 1 );
+            fheroes2::Copy( font[67], 5, 6, font[199 - 32], 9, 12, 1, 1 );
+            fheroes2::Copy( font[67], 2, 1, font[199 - 32], 7, 13, 1, 1 );
+            fheroes2::Copy( font[67], 5, 6, font[199 - 32], 8, 13, 1, 1 );
+            fheroes2::Copy( font[67], 3, 0, font[199 - 32], 9, 13, 1, 1 );
+            font[199 - 32].setPosition( font[35].x(), font[35].y() );
+            updateNormalFontLetterShadow( font[199 - 32] );
+
+            // G with breve.
+            font[208 - 32].resize( font[39].width(), font[39].height() + 3 );
+            font[208 - 32].reset();
+            fheroes2::Copy( font[39], 0, 0, font[208 - 32], 0, 3, font[39].width(), font[39].height() );
+            fheroes2::Copy( font[39], 5, 9, font[208 - 32], 5, 0, 7, 2 );
+            fheroes2::FillTransform( font[208 - 32], 7, 0, 3, 1, 1 );
+            font[208 - 32].setPosition( font[39].x(), font[39].y() - 3 );
+            updateNormalFontLetterShadow( font[208 - 32] );
+
+            // O with diaeresis, two dots above.
+            font[214 - 32].resize( font[47].width(), font[47].height() + 3 );
+            font[214 - 32].reset();
+            fheroes2::Copy( font[47], 0, 0, font[214 - 32], 0, 3, font[47].width(), font[47].height() );
+            fheroes2::Copy( font[214 - 32], 1, 2 + 3, font[214 - 32], 5, 0, 1, 1 );
+            fheroes2::Copy( font[214 - 32], 2, 2 + 3, font[214 - 32], 6, 0, 1, 1 );
+            fheroes2::Copy( font[214 - 32], 5, 0, font[214 - 32], 10, 0, 2, 1 );
+            font[214 - 32].setPosition( font[47].x(), font[47].y() - 3 );
+            updateNormalFontLetterShadow( font[214 - 32] );
+
+            // U with diaeresis.
+            font[220 - 32].resize( font[53].width(), font[53].height() + 3 );
+            font[220 - 32].reset();
+            fheroes2::Copy( font[53], 0, 0, font[220 - 32], 0, 3, font[53].width(), font[53].height() );
+            fheroes2::Copy( font[220 - 32], 1, 1 + 3, font[220 - 32], 4, 0, 1, 1 );
+            fheroes2::Copy( font[220 - 32], 2, 1 + 3, font[220 - 32], 5, 0, 1, 1 );
+            fheroes2::Copy( font[220 - 32], 4, 0, font[220 - 32], 9, 0, 2, 1 );
+            font[220 - 32].setPosition( font[53].x(), font[53].y() - 3 );
+            updateNormalFontLetterShadow( font[220 - 32] );
+
+            // I with dot above.
+            font[221 - 32].resize( font[41].width(), font[41].height() + 3 );
+            font[221 - 32].reset();
+            fheroes2::Copy( font[41], 0, 0, font[221 - 32], 0, 3, font[41].width(), font[41].height() );
+            fheroes2::Copy( font[73], 1, 0, font[221 - 32], 3, 0, 3, 2 );
+            font[221 - 32].setPosition( font[41].x(), font[41].y() - 3 );
+            updateNormalFontLetterShadow( font[221 - 32] );
+
+            // S with cedilla.
+            font[222 - 32].resize( font[51].width(), font[51].height() + 3 );
+            font[222 - 32].reset();
+            fheroes2::Copy( font[51], 0, 0, font[222 - 32], 0, 0, font[51].width(), font[51].height() );
+            fheroes2::Copy( font[199 - 32], 7, 11, font[222 - 32], 5, 11, 3, 3 );
+            font[222 - 32].setPosition( font[51].x(), font[51].y() );
+            updateNormalFontLetterShadow( font[222 - 32] );
+
+            // c with cedilla.
+            font[231 - 32].resize( font[67].width(), font[67].height() + 3 );
+            font[231 - 32].reset();
+            fheroes2::Copy( font[67], 0, 0, font[231 - 32], 0, 0, font[67].width(), font[67].height() );
+            fheroes2::Copy( font[199 - 32], 7, 11, font[231 - 32], 4, 7, 3, 3 );
+            font[231 - 32].setPosition( font[67].x(), font[67].y() );
+            updateNormalFontLetterShadow( font[231 - 32] );
+
+            // g with breve.
+            font[240 - 32].resize( font[71].width(), font[71].height() + 3 );
+            font[240 - 32].reset();
+            fheroes2::Copy( font[71], 0, 0, font[240 - 32], 0, 3, font[71].width(), font[71].height() );
+            fheroes2::Copy( font[79], 2, 5, font[240 - 32], 2, 0, 6, 2 );
+            fheroes2::FillTransform( font[240 - 32], 4, 0, 2, 1, 1 );
+            font[240 - 32].setPosition( font[71].x(), font[71].y() - 3 );
+            updateNormalFontLetterShadow( font[240 - 32] );
+
+            // o with diaeresis, two dots above.
+            font[246 - 32].resize( font[79].width(), font[79].height() + 3 );
+            font[246 - 32].reset();
+            fheroes2::Copy( font[79], 0, 0, font[246 - 32], 0, 3, font[79].width(), font[79].height() );
+            fheroes2::Copy( font[246 - 32], 4, 0 + 3, font[246 - 32], 3, 0, 1, 1 );
+            fheroes2::Copy( font[246 - 32], 6, 1 + 3, font[246 - 32], 3, 1, 1, 1 );
+            fheroes2::Copy( font[246 - 32], 6, 1 + 3, font[246 - 32], 2, 0, 1, 1 );
+            fheroes2::Copy( font[246 - 32], 4, 1 + 3, font[246 - 32], 2, 1, 1, 1 );
+            fheroes2::Copy( font[246 - 32], 2, 0, font[246 - 32], 6, 0, 2, 2 );
+            font[246 - 32].setPosition( font[79].x(), font[79].y() - 3 );
+            updateNormalFontLetterShadow( font[246 - 32] );
+
+            // u with diaeresis.
+            font[252 - 32].resize( font[85].width(), font[85].height() + 3 );
+            font[252 - 32].reset();
+            fheroes2::Copy( font[85], 0, 0, font[252 - 32], 0, 3, font[85].width(), font[85].height() );
+            fheroes2::Copy( font[252 - 32], 2, 0 + 3, font[252 - 32], 3, 0, 1, 1 );
+            fheroes2::Copy( font[252 - 32], 2, 1 + 3, font[252 - 32], 3, 1, 1, 1 );
+            fheroes2::Copy( font[252 - 32], 2, 1 + 3, font[252 - 32], 2, 0, 1, 1 );
+            fheroes2::Copy( font[252 - 32], 3, 6 + 3, font[252 - 32], 2, 1, 1, 1 );
+            fheroes2::Copy( font[252 - 32], 2, 0, font[252 - 32], 6, 0, 2, 2 );
+            font[252 - 32].setPosition( font[85].x(), font[85].y() - 3 );
+            updateNormalFontLetterShadow( font[252 - 32] );
+
+            // i without dot above.
+            font[253 - 32] = font[73];
+            fheroes2::FillTransform( font[253 - 32], 0, 0, font[253 - 32].width(), 3, 1 );
+            fheroes2::Copy( font[83], 2, 0, font[253 - 32], 0, 3, 1, 1 );
+            updateNormalFontLetterShadow( font[253 - 32] );
+
+            // s with cedilla.
+            font[254 - 32].resize( font[83].width(), font[83].height() + 3 );
+            font[254 - 32].reset();
+            fheroes2::Copy( font[83], 0, 0, font[254 - 32], 0, 0, font[83].width(), font[83].height() );
+            fheroes2::Copy( font[199 - 32], 7, 11, font[254 - 32], 4, 7, 3, 3 );
+            font[254 - 32].setPosition( font[83].x(), font[83].y() );
+            updateNormalFontLetterShadow( font[254 - 32] );
+
+            // Proper lowercase k. Kept at end in case any letters use it for generation.
+            fheroes2::FillTransform( font[75], 4, 1, 5, 8, 1 );
+            fheroes2::Copy( font[43], 6, 5, font[75], 4, 7, 3, 1 );
+            fheroes2::Copy( font[43], 6, 4, font[75], 4, 6, 4, 1 );
+            fheroes2::Copy( font[43], 7, 4, font[75], 6, 5, 3, 1 );
+            fheroes2::Copy( font[43], 7, 4, font[75], 7, 4, 2, 1 );
+            fheroes2::Copy( font[43], 6, 6, font[75], 4, 8, 4, 1 );
+            font[75].setPosition( font[75].x(), font[75].y() );
+            updateNormalFontLetterShadow( font[75] );
+        }
+        // Small font.
+        {
+            std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
+
+            // C with cedilla.
+            font[199 - 32].resize( font[35].width(), font[35].height() + 3 );
+            font[199 - 32].reset();
+            fheroes2::Copy( font[35], 0, 0, font[199 - 32], 0, 0, font[35].width(), font[35].height() );
+            fheroes2::Copy( font[35], 1, 1, font[199 - 32], 3, 7, 2, 2 );
+            font[199 - 32].setPosition( font[35].x(), font[35].y() );
+            updateSmallFontLetterShadow( font[199 - 32] );
+
+            // G with breve.
+            font[208 - 32].resize( font[39].width(), font[39].height() + 3 );
+            font[208 - 32].reset();
+            fheroes2::Copy( font[39], 0, 0, font[208 - 32], 0, 3, font[39].width(), font[39].height() );
+            fheroes2::Copy( font[35], 2, 5, font[208 - 32], 3, 0, 1, 1 );
+            fheroes2::Copy( font[35], 2, 5, font[208 - 32], 6, 0, 1, 1 );
+            fheroes2::Copy( font[35], 3, 6, font[208 - 32], 4, 1, 2, 1 );
+            font[208 - 32].setPosition( font[39].x(), font[39].y() - 3 );
+            updateSmallFontLetterShadow( font[208 - 32] );
+
+            // O with diaeresis, two dots above.
+            font[214 - 32].resize( font[47].width(), font[47].height() + 2 );
+            font[214 - 32].reset();
+            fheroes2::Copy( font[47], 0, 0, font[214 - 32], 0, 2, font[47].width(), font[47].height() );
+            fheroes2::Copy( font[214 - 32], 3, 0 + 2, font[214 - 32], 3, 0, 1, 1 );
+            fheroes2::Copy( font[214 - 32], 3, 0 + 2, font[214 - 32], 5, 0, 1, 1 );
+            font[214 - 32].setPosition( font[47].x(), font[47].y() - 2 );
+            updateSmallFontLetterShadow( font[214 - 32] );
+
+            // U with diaeresis.
+            font[220 - 32].resize( font[53].width(), font[53].height() + 2 );
+            font[220 - 32].reset();
+            fheroes2::Copy( font[53], 0, 0, font[220 - 32], 0, 2, font[53].width(), font[53].height() );
+            fheroes2::Copy( font[220 - 32], 3, 0 + 2, font[220 - 32], 4, 0, 1, 1 );
+            fheroes2::Copy( font[220 - 32], 3, 0 + 2, font[220 - 32], 6, 0, 1, 1 );
+            font[220 - 32].setPosition( font[53].x(), font[53].y() - 2 );
+            updateSmallFontLetterShadow( font[220 - 32] );
+
+            // I with dot above.
+            font[221 - 32].resize( font[41].width(), font[41].height() + 2 );
+            font[221 - 32].reset();
+            fheroes2::Copy( font[41], 0, 0, font[221 - 32], 0, 2, font[41].width(), font[41].height() );
+            fheroes2::Copy( font[41], 2, 0, font[221 - 32], 2, 0, 2, 1 );
+            font[221 - 32].setPosition( font[41].x(), font[41].y() - 2 );
+            updateSmallFontLetterShadow( font[221 - 32] );
+
+            // S with cedilla.
+            font[222 - 32].resize( font[51].width(), font[51].height() + 3 );
+            font[222 - 32].reset();
+            fheroes2::Copy( font[51], 0, 0, font[222 - 32], 0, 0, font[51].width(), font[51].height() );
+            fheroes2::Copy( font[35], 1, 1, font[222 - 32], 3, 7, 2, 2 );
+            font[222 - 32].setPosition( font[51].x(), font[51].y() );
+            updateSmallFontLetterShadow( font[222 - 32] );
+
+            // c with cedilla.
+            font[231 - 32].resize( font[67].width(), font[67].height() + 3 );
+            font[231 - 32].reset();
+            fheroes2::Copy( font[67], 0, 0, font[231 - 32], 0, 0, font[67].width(), font[67].height() );
+            fheroes2::Copy( font[199 - 32], 1, 1, font[231 - 32], 2, 5, 2, 2 );
+            font[231 - 32].setPosition( font[67].x(), font[67].y() );
+            updateSmallFontLetterShadow( font[231 - 32] );
+
+            // g with breve.
+            font[240 - 32].resize( font[71].width(), font[71].height() + 3 );
+            font[240 - 32].reset();
+            fheroes2::Copy( font[71], 0, 0, font[240 - 32], 0, 3, font[71].width(), font[71].height() );
+            fheroes2::Copy( font[35], 2, 5, font[240 - 32], 2, 0, 1, 1 );
+            fheroes2::Copy( font[35], 2, 5, font[240 - 32], 4, 0, 1, 1 );
+            fheroes2::Copy( font[35], 3, 6, font[240 - 32], 3, 1, 1, 1 );
+            font[240 - 32].setPosition( font[71].x(), font[71].y() - 3 );
+            updateSmallFontLetterShadow( font[240 - 32] );
+
+            // o with diaeresis, two dots above.
+            font[246 - 32].resize( font[79].width(), font[79].height() + 2 );
+            font[246 - 32].reset();
+            fheroes2::Copy( font[79], 0, 0, font[246 - 32], 0, 2, font[79].width(), font[79].height() );
+            fheroes2::Copy( font[246 - 32], 3, 0 + 2, font[246 - 32], 2, 0, 1, 1 );
+            fheroes2::Copy( font[246 - 32], 3, 0 + 2, font[246 - 32], 4, 0, 1, 1 );
+            font[246 - 32].setPosition( font[79].x(), font[79].y() - 2 );
+            updateSmallFontLetterShadow( font[246 - 32] );
+
+            // u with diaeresis.
+            font[252 - 32].resize( font[85].width(), font[85].height() + 2 );
+            font[252 - 32].reset();
+            fheroes2::Copy( font[85], 0, 0, font[252 - 32], 0, 2, font[85].width(), font[85].height() );
+            fheroes2::Copy( font[252 - 32], 2, 0 + 2, font[252 - 32], 2, 0, 1, 1 );
+            fheroes2::Copy( font[252 - 32], 2, 0 + 2, font[252 - 32], 6, 0, 1, 1 );
+            font[252 - 32].setPosition( font[85].x(), font[85].y() - 2 );
+            updateSmallFontLetterShadow( font[252 - 32] );
+
+            // i without dot above.
+            font[253 - 32].resize( font[73].width(), font[73].height() + 1 );
+            font[253 - 32].reset();
+            fheroes2::Copy( font[73], 0, 2, font[253 - 32], 0, 3, font[73].width(), 6 );
+            font[253 - 32].setPosition( font[73].x(), font[73].y() - 1 );
+            updateSmallFontLetterShadow( font[253 - 32] );
+
+            // s with cedilla.
+            font[254 - 32].resize( font[83].width(), font[83].height() + 3 );
+            font[254 - 32].reset();
+            fheroes2::Copy( font[83], 0, 0, font[254 - 32], 0, 0, font[83].width(), font[83].height() );
+            fheroes2::Copy( font[35], 1, 1, font[254 - 32], 2, 5, 2, 2 );
+            font[254 - 32].setPosition( font[83].x(), font[83].y() );
+            updateSmallFontLetterShadow( font[254 - 32] );
+
+            // Proper lowercase k. Kept at end in case any letters use it for generation.
+            font[75].resize( 6, 8 );
+            font[75].reset();
+            fheroes2::Copy( font[76], 1, 0, font[75], 1, 0, 2, 7 );
+            fheroes2::Copy( font[76], 1, 0, font[75], 1, 6, 1, 1 );
+            fheroes2::Copy( font[56], 6, 0, font[75], 3, 2, 3, 3 );
+            fheroes2::Copy( font[65], 2, font[65].height() - 2, font[75], 5, 6, 2, 1 );
+            fheroes2::Copy( font[65], 2, 0, font[75], 4, 5, 1, 1 );
+            font[75].setPosition( font[75].x(), font[75].y() );
+            updateSmallFontLetterShadow( font[75] );
+        }
+    }
+
+    void generateISO8859_16Alphabet( std::vector<std::vector<fheroes2::Sprite>> & icnVsSprite )
+    {
+        // Resize fonts.
+        for ( const int icnId : { ICN::FONT, ICN::SMALFONT } ) {
+            icnVsSprite[icnId].resize( baseFontSize );
+            icnVsSprite[icnId].insert( icnVsSprite[icnId].end(), 160, icnVsSprite[icnId][0] );
+        }
+
+        // Normal font.
+        {
+            std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::FONT];
+
+            // S with comma.
+            font[170 - 32].resize( font[51].width(), font[51].height() + 4 );
+            font[170 - 32].reset();
+            fheroes2::Copy( font[51], 0, 0, font[170 - 32], 0, 0, font[51].width(), font[51].height() );
+            fheroes2::Copy( font[12], 0, 0, font[170 - 32], 3, 12, font[12].width(), font[12].height() );
+            font[170 - 32].setPosition( font[51].x(), font[51].y() );
+            updateNormalFontLetterShadow( font[170 - 32] );
+
+            // A with circonflex and generate the accent for further use.
+            font[194 - 32].resize( font[33].width(), font[33].height() + 3 );
+            font[194 - 32].reset();
+            fheroes2::Copy( font[33], 0, 0, font[194 - 32], 0, 3, font[33].width(), font[33].height() );
+            fheroes2::Copy( font[33], 3, 0, font[194 - 32], 7, 0, 1, 1 );
+            fheroes2::Copy( font[33], 3, 0, font[194 - 32], 6, 1, 1, 1 );
+            fheroes2::Copy( font[33], 3, 0, font[194 - 32], 10, 0, 1, 1 );
+            fheroes2::Copy( font[33], 3, 0, font[194 - 32], 11, 1, 1, 1 );
+            fheroes2::Copy( font[33], 4, 0, font[194 - 32], 8, 0, 1, 1 );
+            fheroes2::Copy( font[33], 4, 0, font[194 - 32], 7, 1, 1, 1 );
+            fheroes2::Copy( font[33], 4, 0, font[194 - 32], 10, 1, 1, 1 );
+            fheroes2::Copy( font[33], 4, 0, font[194 - 32], 9, 0, 1, 1 );
+            font[194 - 32].setPosition( font[33].x(), font[33].y() - 3 );
+            updateNormalFontLetterShadow( font[194 - 32] );
+
+            // A with breve and generate the accent for further use.
+            font[195 - 32].resize( font[33].width(), font[33].height() + 3 );
+            font[195 - 32].reset();
+            fheroes2::Copy( font[33], 0, 0, font[195 - 32], 0, 3, font[33].width(), font[33].height() );
+            fheroes2::Copy( font[39], 5, 9, font[195 - 32], 5, 0, 7, 2 );
+            fheroes2::FillTransform( font[195 - 32], 7, 0, 3, 1, 1 );
+            font[195 - 32].setPosition( font[33].x(), font[33].y() - 3 );
+            updateNormalFontLetterShadow( font[195 - 32] );
+
+            // T with comma.
+            font[222 - 32].resize( font[52].width(), font[52].height() + 4 );
+            font[222 - 32].reset();
+            fheroes2::Copy( font[52], 0, 0, font[222 - 32], 0, 0, font[52].width(), font[52].height() );
+            fheroes2::Copy( font[12], 0, 0, font[222 - 32], 3, 12, font[12].width(), font[12].height() );
+            font[222 - 32].setPosition( font[52].x(), font[52].y() );
+            updateNormalFontLetterShadow( font[222 - 32] );
+
+            // s with comma.
+            font[186 - 32].resize( font[83].width(), font[83].height() + 4 );
+            font[186 - 32].reset();
+            fheroes2::Copy( font[83], 0, 0, font[186 - 32], 0, 0, font[83].width(), font[83].height() );
+            fheroes2::Copy( font[12], 0, 0, font[186 - 32], 2, 8, font[12].width(), font[12].height() );
+            font[186 - 32].setPosition( font[83].x(), font[83].y() );
+            updateNormalFontLetterShadow( font[186 - 32] );
+
+            // a with circonflex.
+            font[226 - 32].resize( font[65].width(), font[65].height() + 4 );
+            font[226 - 32].reset();
+            fheroes2::Copy( font[65], 0, 0, font[226 - 32], 0, 3, font[65].width(), font[65].height() );
+            fheroes2::Copy( font[194 - 32], 6, 0, font[226 - 32], 2, 0, 3, 2 );
+            fheroes2::Copy( font[194 - 32], 10, 0, font[226 - 32], 5, 0, 2, 2 );
+            font[226 - 32].setPosition( font[65].x(), font[65].y() - 3 );
+            updateNormalFontLetterShadow( font[226 - 32] );
+
+            // a with breve.
+            font[227 - 32].resize( font[65].width(), font[65].height() + 3 );
+            font[227 - 32].reset();
+            fheroes2::Copy( font[65], 0, 0, font[227 - 32], 0, 3, font[65].width(), font[65].height() );
+            fheroes2::Copy( font[65], 2, 0, font[227 - 32], 3, 0, 1, 1 );
+            fheroes2::Copy( font[65], 2, 0, font[227 - 32], 6, 0, 1, 1 );
+            fheroes2::Copy( font[65], 1, 0, font[227 - 32], 3, 1, 1, 1 );
+            fheroes2::Copy( font[65], 2, 0, font[227 - 32], 4, 1, 2, 1 );
+            fheroes2::Copy( font[65], 1, 0, font[227 - 32], 6, 1, 1, 1 );
+            font[227 - 32].setPosition( font[65].x(), font[65].y() - 3 );
+            updateNormalFontLetterShadow( font[227 - 32] );
+
+            // t with comma.
+            font[254 - 32].resize( font[84].width(), font[84].height() + 4 );
+            font[254 - 32].reset();
+            fheroes2::Copy( font[84], 0, 0, font[254 - 32], 0, 0, font[84].width(), font[84].height() );
+            fheroes2::Copy( font[12], 0, 0, font[254 - 32], 1, 12, font[12].width(), font[12].height() );
+            font[254 - 32].setPosition( font[84].x(), font[84].y() );
+            updateNormalFontLetterShadow( font[254 - 32] );
+
+            // Proper lowercase k. Kept at end in case any letters use it for generation.
+            fheroes2::FillTransform( font[75], 4, 1, 5, 8, 1 );
+            fheroes2::Copy( font[43], 6, 5, font[75], 4, 7, 3, 1 );
+            fheroes2::Copy( font[43], 6, 4, font[75], 4, 6, 4, 1 );
+            fheroes2::Copy( font[43], 7, 4, font[75], 6, 5, 3, 1 );
+            fheroes2::Copy( font[43], 7, 4, font[75], 7, 4, 2, 1 );
+            fheroes2::Copy( font[43], 6, 6, font[75], 4, 8, 4, 1 );
+            font[75].setPosition( font[75].x(), font[75].y() );
+            updateNormalFontLetterShadow( font[75] );
+        }
+        // Small font.
+        {
+            std::vector<fheroes2::Sprite> & font = icnVsSprite[ICN::SMALFONT];
+
+            // S with comma.
+            font[170 - 32].resize( font[51].width(), font[51].height() + 4 );
+            font[170 - 32].reset();
+            fheroes2::Copy( font[51], 0, 0, font[170 - 32], 0, 0, font[51].width(), font[51].height() );
+            fheroes2::Copy( font[12], 0, 0, font[170 - 32], 2, 8, font[12].width(), font[12].height() );
+            font[170 - 32].setPosition( font[51].x(), font[51].y() );
+            updateSmallFontLetterShadow( font[170 - 32] );
+
+            // A with circonflex and generate the accent for further use.
+            font[194 - 32].resize( font[33].width(), font[33].height() + 3 );
+            font[194 - 32].reset();
+            fheroes2::Copy( font[33], 0, 0, font[194 - 32], 0, 3, font[33].width(), font[33].height() );
+            fheroes2::Copy( font[33], 3, 0, font[194 - 32], 5, 0, 1, 1 );
+            fheroes2::Copy( font[33], 3, 0, font[194 - 32], 4, 1, 1, 1 );
+            fheroes2::Copy( font[33], 3, 0, font[194 - 32], 6, 1, 1, 1 );
+            font[194 - 32].setPosition( font[33].x(), font[33].y() - 3 );
+            updateSmallFontLetterShadow( font[194 - 32] );
+
+            // A with breve and generate the accent for further use.
+            font[195 - 32].resize( font[33].width(), font[33].height() + 3 );
+            font[195 - 32].reset();
+            fheroes2::Copy( font[33], 0, 0, font[195 - 32], 0, 3, font[33].width(), font[33].height() );
+            fheroes2::Copy( font[33], 3, 0, font[195 - 32], 3, 0, 1, 1 );
+            fheroes2::Copy( font[33], 3, 0, font[195 - 32], 4, 1, 2, 1 );
+            fheroes2::Copy( font[33], 3, 0, font[195 - 32], 6, 0, 1, 1 );
+            font[195 - 32].setPosition( font[33].x(), font[33].y() - 3 );
+            updateSmallFontLetterShadow( font[195 - 32] );
+
+            // T with comma.
+            font[222 - 32].resize( font[52].width(), font[52].height() + 4 );
+            font[222 - 32].reset();
+            fheroes2::Copy( font[52], 0, 0, font[222 - 32], 0, 0, font[52].width(), font[52].height() );
+            fheroes2::Copy( font[12], 0, 0, font[222 - 32], 2, 8, font[12].width(), font[12].height() );
+            font[222 - 32].setPosition( font[52].x(), font[52].y() );
+            updateSmallFontLetterShadow( font[222 - 32] );
+
+            // s with comma.
+            font[186 - 32].resize( font[83].width(), font[83].height() + 4 );
+            font[186 - 32].reset();
+            fheroes2::Copy( font[83], 0, 0, font[186 - 32], 0, 0, font[83].width(), font[83].height() );
+            fheroes2::Copy( font[12], 0, 0, font[186 - 32], 1, 6, font[12].width(), font[12].height() );
+            font[186 - 32].setPosition( font[83].x(), font[83].y() );
+            updateSmallFontLetterShadow( font[186 - 32] );
+
+            // a with circonflex.
+            font[226 - 32].resize( font[65].width(), font[65].height() + 4 );
+            font[226 - 32].reset();
+            fheroes2::Copy( font[65], 0, 0, font[226 - 32], 0, 3, font[65].width(), font[65].height() );
+            fheroes2::Copy( font[194 - 32], 4, 0, font[226 - 32], 2, 0, 3, 2 );
+            font[226 - 32].setPosition( font[65].x(), font[65].y() - 3 );
+            updateSmallFontLetterShadow( font[226 - 32] );
+
+            // a with breve.
+            font[227 - 32].resize( font[65].width(), font[65].height() + 3 );
+            font[227 - 32].reset();
+            fheroes2::Copy( font[65], 0, 0, font[227 - 32], 0, 3, font[65].width(), font[65].height() );
+            fheroes2::Copy( font[195 - 32], 3, 0, font[227 - 32], 2, 0, 4, 2 );
+            font[227 - 32].setPosition( font[65].x(), font[65].y() - 3 );
+            updateSmallFontLetterShadow( font[227 - 32] );
+
+            // t with comma.
+            font[254 - 32].resize( font[84].width(), font[84].height() + 4 );
+            font[254 - 32].reset();
+            fheroes2::Copy( font[84], 0, 0, font[254 - 32], 0, 0, font[84].width(), font[84].height() );
+            fheroes2::Copy( font[12], 0, 0, font[254 - 32], 1, 8, font[12].width(), font[12].height() );
+            font[254 - 32].setPosition( font[84].x(), font[84].y() );
+            updateSmallFontLetterShadow( font[254 - 32] );
+
+            // Proper lowercase k. Kept at end in case any letters use it for generation.
+            font[75].resize( 6, 8 );
+            font[75].reset();
+            fheroes2::Copy( font[76], 1, 0, font[75], 1, 0, 2, 7 );
+            fheroes2::Copy( font[76], 1, 0, font[75], 1, 6, 1, 1 );
+            fheroes2::Copy( font[56], 6, 0, font[75], 3, 2, 3, 3 );
+            fheroes2::Copy( font[65], 2, font[65].height() - 2, font[75], 5, 6, 2, 1 );
+            fheroes2::Copy( font[65], 2, 0, font[75], 4, 5, 1, 1 );
+            font[75].setPosition( font[75].x(), font[75].y() );
+            updateSmallFontLetterShadow( font[75] );
+        }
+    }
+
     void generateGoodButtonFontBaseShape( std::vector<fheroes2::Sprite> & released )
     {
         // Button font does not exist in the original game assets but we can regenerate it from scratch.
@@ -2224,6 +2660,17 @@ namespace
         fheroes2::DrawLine( released[17], { offset + 0, offset + 9 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[17], offset + 1, offset + 1, buttonGoodReleasedColor );
         fheroes2::SetPixel( released[17], offset + 0, offset + 2, buttonGoodReleasedColor );
+
+        // 3
+        released[19].resize( 7 + offset * 2, 10 + offset * 2 );
+        released[19].reset();
+        fheroes2::DrawLine( released[19], { offset + 1, offset + 0 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[19], { offset + 6, offset + 1 }, { offset + 6, offset + 3 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[19], { offset + 2, offset + 4 }, { offset + 5, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[19], { offset + 6, offset + 5 }, { offset + 6, offset + 7 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[19], { offset + 1, offset + 8 }, { offset + 5, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[19], offset + 0, offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[19], offset + 0, offset + 7, buttonGoodReleasedColor );
 
         // A
         released[33].resize( 13 + offset * 2, 10 + offset * 2 );
@@ -2428,7 +2875,7 @@ namespace
         fheroes2::DrawLine( released[50], { offset + 7, offset + 6 }, { offset + 9, offset + 8 }, buttonGoodReleasedColor );
 
         // S
-        released[51].resize( 10 + offset * 2, 10 + offset * 2 );
+        released[51].resize( 9 + offset * 2, 10 + offset * 2 );
         released[51].reset();
         fheroes2::DrawLine( released[51], { offset + 1, offset + 0 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
         fheroes2::DrawLine( released[51], { offset + 0, offset + 1 }, { offset + 0, offset + 3 }, buttonGoodReleasedColor );
@@ -2507,7 +2954,349 @@ namespace
         fheroes2::SetPixel( released[58], offset + 8, offset + 8, buttonGoodReleasedColor );
     }
 
-    void generateGoodCP1252ButtonFont( std::vector<fheroes2::Sprite> & released )
+    void generateCP1250GoodButtonFont( std::vector<fheroes2::Sprite> & released )
+    {
+        // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
+        released.insert( released.end(), 160, released[0] );
+
+        // We need 2 pixels from all sides of a letter to add extra effects.
+        const int32_t offset = 2;
+
+        // Offset letters with diacritics above them.
+        released[108].setPosition( buttonFontOffset.x, -3 );
+        released[166].setPosition( buttonFontOffset.x, -3 );
+
+        // S with caron. Only copied from S.
+        released[106] = released[51];
+
+        // S with acute accent.
+        released[108].resize( released[51].width(), released[51].height() + 4 );
+        released[108].reset();
+        fheroes2::Copy( released[51], 0, 0, released[108], 0, 3, released[51].width(), released[51].height() );
+        fheroes2::DrawLine( released[108], { offset + 4, offset + 1 }, { offset + 5, offset + 0 }, buttonGoodReleasedColor );
+
+        // T with caron. Only copied from T.
+        released[109] = released[52];
+
+        // Z with caron. Only copied from Z.
+        released[110] = released[58];
+
+        // Z with acute. Only copied from Z.
+        released[111] = released[58];
+
+        // L with stroke. Only copied from L.
+        released[131] = released[44];
+
+        // A with ogonek. Only copied from A.
+        released[133] = released[33];
+
+        // S with cedilla. Only copied from S.
+        released[138] = released[51];
+
+        // Z with dot above. Only copied from Z.
+        released[143] = released[58];
+
+        // Y with diaerisis. Only copied from Y.
+        released[156] = released[57];
+
+        // L with caron. Only copied from L.
+        released[158] = released[44];
+
+        // R with acute. Only copied from R.
+        released[160] = released[50];
+
+        // A with acute. Only copied from A.
+        released[161] = released[33];
+
+        // A with circumflex. Only copied from A.
+        released[162] = released[33];
+
+        // A with breve. Only copied from A.
+        released[163] = released[33];
+
+        // A with diaerisis. Only copied from A.
+        released[164] = released[33];
+
+        // L with acute. Only copied from L.
+        released[165] = released[44];
+
+        // C with acute accent.
+        released[166].resize( released[35].width(), released[35].height() + 4 );
+        released[166].reset();
+        fheroes2::Copy( released[35], 0, 0, released[166], 0, 3, released[35].width(), released[35].height() );
+        fheroes2::DrawLine( released[166], { offset + 5, offset + 1 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
+
+        // C with cedilla. Only copied from C.
+        released[167] = released[35];
+
+        // C with caron. Only copied from C.
+        released[168] = released[35];
+
+        // E with acute. Only copied from E.
+        released[169] = released[37];
+
+        // E with ogonek. Only copied from E.
+        released[170] = released[37];
+
+        // E with diaerisis. Only copied from E.
+        released[171] = released[37];
+
+        // E with caron. Only copied from E.
+        released[172] = released[37];
+
+        // I with acute. Only copied from I.
+        released[173] = released[41];
+
+        // I with circumflex. Only copied from I.
+        released[174] = released[41];
+
+        // D with caron. Only copied from D.
+        released[175] = released[36];
+
+        // D with stroke. Only copied from D.
+        released[176] = released[36];
+
+        // N with acute. Only copied from N.
+        released[177] = released[46];
+
+        // N with caron. Only copied from N.
+        released[178] = released[46];
+
+        // O with acute. Only copied from O.
+        released[179] = released[47];
+
+        // O with circumflex. Only copied from O.
+        released[180] = released[47];
+
+        // O with double acute. Only copied from O.
+        released[181] = released[47];
+
+        // O with diaerisis. Only copied from O.
+        released[182] = released[47];
+
+        // R with caron. Only copied from R.
+        released[184] = released[50];
+
+        // U with ring above. Only copied from U.
+        released[185] = released[53];
+
+        // U with acute. Only copied from U.
+        released[186] = released[53];
+
+        // U with double acute. Only copied from U.
+        released[187] = released[53];
+
+        // U with diaerisis. Only copied from U.
+        released[188] = released[53];
+
+        // Y with acute. Only copied from Y.
+        released[189] = released[57];
+
+        // T with cedilla. Only copied from T.
+        released[190] = released[52];
+    }
+
+    void generateCP1251GoodButtonFont( std::vector<fheroes2::Sprite> & released )
+    {
+        // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
+        released.insert( released.end(), 160, released[0] );
+
+        // We need 2 pixels from all sides of a letter to add extra effects.
+        const int32_t offset = 2;
+
+        // Offset letters with diacritics above them.
+        released[109].setPosition( buttonFontOffset.x, -3 );
+        released[136].setPosition( buttonFontOffset.x, -3 );
+        released[143].setPosition( buttonFontOffset.x, -3 );
+        released[169].setPosition( buttonFontOffset.x, -3 );
+
+        // K with acute, Cyrillic KJE. Needs to have upper right arm adjusted.
+        released[109].resize( released[43].width(), released[43].height() + 4 );
+        released[109].reset();
+        fheroes2::Copy( released[43], 0, 0, released[109], 0, 3, released[43].width(), released[43].height() );
+        fheroes2::DrawLine( released[109], { offset + 6, offset + 1 }, { offset + 7, offset + 0 }, buttonGoodReleasedColor );
+
+        // J
+        released[131] = released[42];
+
+        // E with two dots above.
+        released[136].resize( released[37].width(), released[37].height() + 3 );
+        released[136].reset();
+        fheroes2::Copy( released[37], 0, 0, released[136], 0, 3, released[37].width(), released[37].height() );
+        fheroes2::SetPixel( released[136], offset + 3, offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[136], offset + 6, offset + 1, buttonGoodReleasedColor );
+
+        // I with two dots above, Cyrillic YI
+        released[143].resize( released[41].width(), released[41].height() + 3 );
+        released[143].reset();
+        fheroes2::Copy( released[41], 0, 0, released[143], 0, 3, released[41].width(), released[41].height() );
+        fheroes2::SetPixel( released[143], offset + 1, offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[143], offset + 4, offset + 1, buttonGoodReleasedColor );
+
+        // I, Belarusian-Ukrainian I
+        released[146] = released[41];
+
+        // S
+        released[157] = released[51];
+
+        // A
+        released[160] = released[33];
+
+        // r with small circle, Cyrillic BE
+        released[161].resize( 10 + offset * 2, 10 + offset * 2 );
+        released[161].reset();
+        fheroes2::DrawLine( released[161], { offset + 0, offset + 0 }, { offset + 9, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[161], { offset + 9, offset + 0 }, { offset + 9, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[161], { offset + 0, offset + 9 }, { offset + 8, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[161], { offset + 2, offset + 1 }, { offset + 2, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[161], { offset + 3, offset + 5 }, { offset + 8, offset + 5 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[161], { offset + 9, offset + 6 }, { offset + 9, offset + 8 }, buttonGoodReleasedColor );
+
+        // B
+        released[162] = released[34];
+
+        // r, Cyrillic GHE
+        released[163].resize( 10 + offset * 2, 10 + offset * 2 );
+        released[163].reset();
+        fheroes2::DrawLine( released[163], { offset + 0, offset + 0 }, { offset + 9, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[163], { offset + 9, offset + 0 }, { offset + 9, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[163], { offset + 0, offset + 9 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[163], { offset + 2, offset + 1 }, { offset + 2, offset + 8 }, buttonGoodReleasedColor );
+
+        // Cyrillic DE
+        released[164].resize( 10 + offset * 2, 13 + offset * 2 );
+        released[164].reset();
+        fheroes2::DrawLine( released[164], { offset + 2, offset + 0 }, { offset + 8, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[164], { offset + 8, offset + 1 }, { offset + 8, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[164], { offset + 3, offset + 1 }, { offset + 3, offset + 7 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[164], { offset + 0, offset + 9 }, { offset + 9, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[164], { offset + 0, offset + 10 }, { offset + 0, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[164], { offset + 9, offset + 10 }, { offset + 9, offset + 11 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[164], offset + 2, offset + 8, buttonGoodReleasedColor );
+
+        // E
+        released[165] = released[37];
+
+        // X with vertical stroke through it, Cyrillic ZHE. Needs to have upper right and left arms adjusted.
+        released[166].resize( released[43].width() + 5 + offset, released[43].height() + offset * 2 );
+        released[166].reset();
+        fheroes2::Copy( released[43], 0, 0, released[166], 7, 0, released[43].width(), released[43].height() );
+        fheroes2::DrawLine( released[166], { offset + 1, offset + 0 }, { offset + 4, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 0, offset + 9 }, { offset + 3, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 6, offset + 4 }, { offset + 8, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 3, offset + 1 }, { offset + 5, offset + 3 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[166], { offset + 2, offset + 8 }, { offset + 5, offset + 5 }, buttonGoodReleasedColor );
+
+        // 3, Cyrillic ZE
+        released[167].resize( released[19].width() + 1, released[19].height() );
+        released[167].reset();
+        fheroes2::DrawLine( released[167], { offset + 1, offset + 0 }, { offset + 6, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[167], { offset + 7, offset + 1 }, { offset + 7, offset + 3 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[167], { offset + 2, offset + 4 }, { offset + 6, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[167], { offset + 7, offset + 5 }, { offset + 7, offset + 7 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[167], { offset + 1, offset + 8 }, { offset + 6, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[167], offset + 0, offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[167], offset + 0, offset + 7, buttonGoodReleasedColor );
+
+        // Mirrored N, Cyrillic I
+        released[168].resize( released[46].width(), released[46].height() );
+        released[168].reset();
+        fheroes2::Flip( released[46], 0, 0, released[168], 0, 0, released[46].width(), released[46].height(), true, false );
+
+        // Mirrored N with breve, Cyrillic Short I
+        released[169].resize( released[168].width(), released[168].height() + 4 );
+        released[169].reset();
+        fheroes2::Copy( released[168], 0, 0, released[169], 0, 3, released[168].width(), released[168].height() );
+        fheroes2::DrawLine( released[169], { offset + 6, offset + 2 }, { offset + 8, offset + 2 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[169], offset + 5, offset + 1, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[169], offset + 9, offset + 1, buttonGoodReleasedColor );
+
+        // K. Needs to have upper right arm adjusted.
+        released[170] = released[43];
+
+        // Cyrillic EL
+        released[171].resize( 9 + offset * 2, 10 + offset * 2 );
+        released[171].reset();
+        fheroes2::DrawLine( released[171], { offset + 2, offset + 0 }, { offset + 8, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[171], { offset + 8, offset + 1 }, { offset + 8, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[171], { offset + 3, offset + 1 }, { offset + 3, offset + 7 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[171], { offset + 0, offset + 9 }, { offset + 2, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[171], { offset + 6, offset + 9 }, { offset + 7, offset + 9 }, buttonGoodReleasedColor );
+
+        // M
+        released[172] = released[45];
+
+        // H
+        released[173] = released[40];
+
+        // O
+        released[174] = released[47];
+
+        // P
+        released[176] = released[48];
+
+        // C
+        released[177] = released[35];
+
+        // T
+        released[178] = released[52];
+
+        // y, Cyrillic U
+        released[179].resize( 11 + offset * 2, 10 + offset * 2 );
+        released[179].reset();
+        fheroes2::DrawLine( released[179], { offset + 0, offset + 0 }, { offset + 3, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[179], { offset + 7, offset + 0 }, { offset + 10, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[179], { offset + 2, offset + 1 }, { offset + 4, offset + 4 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[179], { offset + 6, offset + 5 }, { offset + 8, offset + 1 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[179], { offset + 5, offset + 5 }, { offset + 5, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[179], { offset + 2, offset + 9 }, { offset + 4, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::SetPixel( released[179], offset + 4, offset + 5, buttonGoodReleasedColor );
+
+        // X
+        released[181] = released[56];
+
+        // b, Cyrillic hard sign
+        released[186].resize( 11 + offset * 2, 10 + offset * 2 );
+        released[186].reset();
+        fheroes2::DrawLine( released[186], { offset + 0, offset + 0 }, { offset + 3, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[186], { offset + 1, offset + 9 }, { offset + 9, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[186], { offset + 3, offset + 1 }, { offset + 3, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[186], { offset + 4, offset + 5 }, { offset + 9, offset + 5 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[186], { offset + 10, offset + 6 }, { offset + 10, offset + 8 }, buttonGoodReleasedColor );
+
+        // bI, Cyrillic YERU
+        released[187].resize( 17 + offset * 2, 10 + offset * 2 );
+        released[187].reset();
+        fheroes2::DrawLine( released[187], { offset + 0, offset + 0 }, { offset + 4, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[187], { offset + 0, offset + 9 }, { offset + 8, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[187], { offset + 2, offset + 1 }, { offset + 2, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[187], { offset + 3, offset + 5 }, { offset + 8, offset + 5 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[187], { offset + 9, offset + 6 }, { offset + 9, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::Copy( released[41], 0, 0, released[187], 12, 0, released[41].width(), released[41].height() );
+
+        // b, Cyrillic soft sign
+        released[188].resize( 10 + offset * 2, 10 + offset * 2 );
+        released[188].reset();
+        fheroes2::DrawLine( released[188], { offset + 0, offset + 0 }, { offset + 4, offset + 0 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[188], { offset + 0, offset + 9 }, { offset + 8, offset + 9 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[188], { offset + 2, offset + 1 }, { offset + 2, offset + 8 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[188], { offset + 3, offset + 5 }, { offset + 8, offset + 5 }, buttonGoodReleasedColor );
+        fheroes2::DrawLine( released[188], { offset + 9, offset + 6 }, { offset + 9, offset + 8 }, buttonGoodReleasedColor );
+
+        // IO, Cyrillic YU
+        released[190].resize( released[41].width() + released[47].width(), 10 + offset * 2 );
+        released[190].reset();
+        fheroes2::Copy( released[41], 0, 0, released[190], 0, 0, released[41].width(), released[41].height() );
+        fheroes2::Copy( released[47], 0, 0, released[190], released[41].width() - 1, 0, released[47].width(), released[47].height() );
+        fheroes2::DrawLine( released[190], { offset + 3, offset + 4 }, { offset + 7, offset + 4 }, buttonGoodReleasedColor );
+
+        // Mirrored R, Cyrillic YA
+        released[191].resize( released[50].width(), released[50].height() );
+        released[191].reset();
+        fheroes2::Flip( released[50], 0, 0, released[191], 0, 0, released[50].width(), released[50].height(), true, false );
+    }
+
+    void generateCP1252GoodButtonFont( std::vector<fheroes2::Sprite> & released )
     {
         // Increase size to fit full CP1252 set of characters. Fill with 1px transparent images.
         released.insert( released.end(), 160, released[0] );
@@ -2582,6 +3371,12 @@ namespace fheroes2
         case SupportedLanguage::Swedish:
             generateCP1252Alphabet( icnVsSprite );
             break;
+        case SupportedLanguage::Turkish:
+            generateCP1254Alphabet( icnVsSprite );
+            break;
+        case SupportedLanguage::Romanian:
+            generateISO8859_16Alphabet( icnVsSprite );
+            break;
         default:
             // Add new language generation code!
             assert( 0 );
@@ -2607,8 +3402,10 @@ namespace fheroes2
         case SupportedLanguage::Belarusian:
         case SupportedLanguage::Bulgarian:
         case SupportedLanguage::Portuguese:
+        case SupportedLanguage::Romanian:
         case SupportedLanguage::Spanish:
         case SupportedLanguage::Swedish:
+        case SupportedLanguage::Turkish:
         case SupportedLanguage::Ukrainian:
             return true;
         default:
@@ -2633,16 +3430,19 @@ namespace fheroes2
         // NOTE: As soon as code structure is agreed on functions for all Code Pages will be added.
         switch ( language ) {
         case SupportedLanguage::Polish:
-            // generateGoodCP1250ButtonFont( icnVsSprite );
+            generateCP1250GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case SupportedLanguage::French:
-            // generateGoodFrenchButtonFont( icnVsSprite );
+            // TODO: Adjust French to use CP1252 button font.
+            // Currently all French capital letters are replaced with the Latin counterpart during .mo compilation.
+            // Therefore, there is no need to generate a French specific button alphabet.
+            // generateFrenchGoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case SupportedLanguage::Belarusian:
         case SupportedLanguage::Bulgarian:
         case SupportedLanguage::Russian:
         case SupportedLanguage::Ukrainian:
-            // generateGoodCP1251ButtonFont( icnVsSprite );
+            generateCP1251GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         case SupportedLanguage::German:
         case SupportedLanguage::Italian:
@@ -2650,7 +3450,13 @@ namespace fheroes2
         case SupportedLanguage::Portuguese:
         case SupportedLanguage::Spanish:
         case SupportedLanguage::Swedish:
-            generateGoodCP1252ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            generateCP1252GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            break;
+        case SupportedLanguage::Turkish:
+            // generateGoodCP1254ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
+            break;
+        case SupportedLanguage::Romanian:
+            // generateGoodISO8859_16ButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
         default:
             // Add new language generation code!
