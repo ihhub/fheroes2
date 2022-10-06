@@ -215,7 +215,9 @@ std::string GameOver::GetActualDescription( uint32_t cond )
                 const Player * player = Players::Get( col );
                 assert( player != nullptr );
 
-                if ( ++result.second > 1 ) {
+                ++result.second;
+
+                if ( result.second > 1 ) {
                     result.first += ", ";
                 }
 
