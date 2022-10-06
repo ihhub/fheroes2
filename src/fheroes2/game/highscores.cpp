@@ -135,6 +135,20 @@ namespace fheroes2
             }
         }
 
+        if ( _highScoresStandard.size() < highscoreMaximumEntries ) {
+            populateStandardDefaultHighScores();
+        }
+        else if ( _highScoresStandard.size() > highscoreMaximumEntries ) {
+            _highScoresStandard.resize( highscoreMaximumEntries );
+        }
+
+        if ( _highScoresCampaign.size() < highscoreMaximumEntries ) {
+            populateCampaignDefaultHighScores();
+        }
+        else if ( _highScoresCampaign.size() > highscoreMaximumEntries ) {
+            _highScoresCampaign.resize( highscoreMaximumEntries );
+        }
+
         return !hdata.fail();
     }
 

@@ -122,6 +122,29 @@ namespace
         redrawHighScoreScreen( ox, oy, monsterAnimationFrameId, selectedScoreIndex, highScoreDataContainer.getHighScoresCampaign(), 7,
                                fheroes2::HighScoreDataContainer::getMonsterByDay );
     }
+
+    uint32_t getCampaignRating( const Campaign::CampaignSaveData & campaignSaveData )
+    {
+        const uint32_t daysPassed = campaignSaveData.getDaysPassed();
+
+        // Rating is calculated based on difficulty of campaign.
+        const int32_t difficulty = campaignSaveData.getDifficulty();
+        switch ( difficulty ) {
+        case Campaign::CampaignDifficulty::Easy:
+            return daysPassed * 125 / 100;
+        case Campaign::CampaignDifficulty::Normal:
+            // Nothing we need to do here.
+            return daysPassed;
+        case Campaign::CampaignDifficulty::Hard:
+            return daysPassed * 75 / 100;
+        default:
+            // Did you add a new campaign difficulty? Add the logic above!
+            assert( 0 );
+            break;
+        }
+
+        return daysPassed;
+    }
 }
 
 fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
@@ -147,9 +170,6 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
     }
 #endif
 
-    // setup cursor
-    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
-
     const std::string highScoreDataPath = System::ConcatePath( GetSaveDir(), highScoreFileName );
 
     if ( !highScoreDataContainer.load( highScoreDataPath ) ) {
@@ -159,10 +179,39 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
         highScoreDataContainer.save( highScoreDataPath );
     }
 
+    const bool isAfterGameCompletion = ( ( gameResult.GetResult() & GameOver::WINS ) != 0 );
+    if ( isAfterGameCompletion ) {
+        // Check whether the game result is good enough to be put on high score board. If not then just skip showing the player name dialog.
+        if ( isCampaign ) {
+            const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
+            const uint32_t rating = getCampaignRating( campaignSaveData );
+            const auto & campaignHighscoreData = highScoreDataContainer.getHighScoresCampaign();
+            assert( !campaignHighscoreData.empty() );
+
+            if ( campaignHighscoreData.back().rating > rating ) {
+                gameResult.ResetResult();
+                return fheroes2::GameMode::MAIN_MENU;
+            }
+        }
+        else {
+            const uint32_t rating = GetGameOverScores();
+            const auto & standardHighscoreData = highScoreDataContainer.getHighScoresStandard();
+            assert( !standardHighscoreData.empty() );
+
+            if ( standardHighscoreData.back().rating > rating ) {
+                gameResult.ResetResult();
+                return fheroes2::GameMode::MAIN_MENU;
+            }
+        }
+    }
+
+    // setup cursor
+    const CursorRestorer cursorRestorer( true, Cursor::POINTER );
+
     const fheroes2::Sprite & back = fheroes2::AGG::GetICN( ICN::HSBKG, 0 );
 
     fheroes2::Display & display = fheroes2::Display::instance();
-    const fheroes2::Point top( ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 );
+    const fheroes2::Point top{ ( display.width() - back.width() ) / 2, ( display.height() - back.height() ) / 2 };
     const fheroes2::StandardWindow border( display.DEFAULT_WIDTH, display.DEFAULT_HEIGHT );
 
     int32_t selectedEntryIndex = -1;
@@ -182,7 +231,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
     display.render();
 
-    if ( gameResult.GetResult() & GameOver::WINS ) {
+    if ( isAfterGameCompletion ) {
         std::string player( _( "Unknown Hero" ) );
         Dialog::InputString( _( "Your Name" ), player, std::string(), 15 );
         if ( player.empty() )
@@ -192,25 +241,7 @@ fheroes2::GameMode Game::DisplayHighScores( const bool isCampaign )
 
         if ( isCampaign ) {
             const Campaign::CampaignSaveData & campaignSaveData = Campaign::CampaignSaveData::Get();
-            // Rating is calculated based on difficulty of campaign.
-            uint32_t rating = campaignSaveData.getDaysPassed();
-
-            const int32_t difficulty = campaignSaveData.getDifficulty();
-            switch ( difficulty ) {
-            case Campaign::CampaignDifficulty::Easy:
-                rating = rating * 125 / 100;
-                break;
-            case Campaign::CampaignDifficulty::Normal:
-                // Nothing we need to do here.
-                break;
-            case Campaign::CampaignDifficulty::Hard:
-                rating = rating * 75 / 100;
-                break;
-            default:
-                // Did you add a new campaign difficulty? Add the logic above!
-                assert( 0 );
-                break;
-            }
+            const uint32_t rating = getCampaignRating( campaignSaveData );
 
             selectedEntryIndex = highScoreDataContainer.registerScoreCampaign(
                 { player, Campaign::getCampaignName( campaignSaveData.getCampaignID() ), completionTime, campaignSaveData.getDaysPassed(), rating, world.GetMapSeed() } );
