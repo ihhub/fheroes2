@@ -166,14 +166,13 @@ Spell HeroBase::OpenSpellBook( const SpellBook::Filter filter, const bool canCas
     return spell_book.Open( *this, filter, canCastSpell, restorePreviousState, statusCallback );
 }
 
-bool HeroBase::HaveSpellBook() const
+SpellStorage HeroBase::getAllSpells() const
 {
-    return hasArtifact( Artifact::MAGIC_BOOK );
-}
+    SpellStorage storage;
+    storage.Append( spell_book );
+    storage.Append( bag_artifacts );
 
-std::vector<Spell> HeroBase::GetSpells( const int lvl ) const
-{
-    return spell_book.GetSpells( lvl );
+    return storage;
 }
 
 bool HeroBase::HaveSpell( const Spell & spell, const bool skip_bag ) const
@@ -333,7 +332,7 @@ int HeroBase::GetLuckModificator( std::string * strs ) const
 
 double HeroBase::GetMagicStrategicValue( const double armyStrength ) const
 {
-    const std::vector<Spell> & spells = GetSpells();
+    const SpellStorage spells = getAllSpells();
     const uint32_t currentSpellPoints = GetSpellPoints();
     const int spellPower = GetPower();
 
