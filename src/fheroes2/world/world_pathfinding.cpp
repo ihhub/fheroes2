@@ -91,7 +91,6 @@ namespace
             return otherHero->GetArmy().GetStrength() > armyStrength;
         }
 
-        
         if ( MP2::isArtifactObject( objectType ) ) {
             const Artifact art = tile.QuantityArtifact();
             if ( art.isValid() ) {
