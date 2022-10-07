@@ -332,7 +332,7 @@ int HeroBase::GetLuckModificator( std::string * strs ) const
 
 double HeroBase::GetMagicStrategicValue( const double armyStrength ) const
 {
-    const SpellStorage & spells = getAllSpells();
+    const SpellStorage spells = getAllSpells();
     const uint32_t currentSpellPoints = GetSpellPoints();
     const int spellPower = GetPower();
 

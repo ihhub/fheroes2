@@ -376,7 +376,7 @@ namespace AI
         else if ( spellID == Spell::ANTIMAGIC && !target.Modes( IS_GOOD_MAGIC ) && _enemySpellStrength > antimagicLowLimit ) {
             double ratioLimit = 0.9;
 
-            const SpellStorage & spellList = _commander->getAllSpells();
+            const SpellStorage spellList = _commander->getAllSpells();
             for ( const Spell & otherSpell : spellList ) {
                 if ( otherSpell.isResurrect() && _commander->HaveSpellPoints( otherSpell ) && target.AllowApplySpell( otherSpell, _commander ) ) {
                     // Can resurrect unit in the future, limit the ratio
@@ -545,7 +545,7 @@ namespace AI
 
     double BattlePlanner::commanderMaximumSpellDamageValue( const HeroBase & commander )
     {
-        const SpellStorage & spells = commander.getAllSpells();
+        const SpellStorage spells = commander.getAllSpells();
         const double spellPower = static_cast<double>( commander.GetPower() );
 
         double bestValue = 0;
