@@ -568,9 +568,10 @@ void Castle::ActionNewWeek()
                     growth = static_cast<uint32_t>( growth * Difficulty::GetUnitGrowthBonusForAI( Game::getDifficulty() ) );
                 }
 
-                // neutral town: half population (normal for begin month)
-                if ( isNeutral && !world.BeginMonth() )
+                // Neutral towns always have half population growth.
+                if ( isNeutral ) {
                     growth /= 2;
+                }
 
                 *dw += growth;
             }
