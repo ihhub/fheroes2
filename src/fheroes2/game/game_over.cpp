@@ -21,25 +21,29 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "game_over.h"
+#include <cassert>
+#include <cstddef>
+#include <utility>
+
 #include "audio_manager.h"
 #include "campaign_savedata.h"
 #include "castle.h"
+#include "color.h"
 #include "dialog.h"
 #include "game.h"
 #include "game_interface.h"
+#include "game_over.h"
 #include "game_video.h"
 #include "gamedefs.h"
 #include "kingdom.h"
 #include "mus.h"
+#include "players.h"
 #include "serialize.h"
 #include "settings.h"
 #include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "world.h"
-
-#include <cassert>
 
 namespace
 {
@@ -194,8 +198,51 @@ std::string GameOver::GetActualDescription( uint32_t cond )
     const Settings & conf = Settings::Get();
     std::string msg;
 
-    if ( WINS_ALL == cond || WINS_SIDE == cond )
+    if ( WINS_ALL == cond ) {
         msg = GetString( WINS_ALL );
+    }
+    else if ( cond == WINS_SIDE ) {
+        const Player * currentPlayer = Settings::Get().GetPlayers().GetCurrent();
+        assert( currentPlayer != nullptr );
+
+        const int currentColor = currentPlayer->GetColor();
+        const int friendColors = currentPlayer->GetFriends();
+
+        auto makeListOfPlayers = []( const int colors ) {
+            std::pair<std::string, size_t> result{ {}, 0 };
+
+            for ( const int col : Colors( colors ) ) {
+                const Player * player = Players::Get( col );
+                assert( player != nullptr );
+
+                ++result.second;
+
+                if ( result.second > 1 ) {
+                    result.first += ", ";
+                }
+
+                result.first += player->GetName();
+            }
+
+            return result;
+        };
+
+        const auto [alliesList, alliesCount] = makeListOfPlayers( friendColors & ~currentColor );
+        const auto [enemiesList, enemiesCount] = makeListOfPlayers( Game::GetKingdomColors() & ~friendColors );
+
+        assert( enemiesCount > 0 );
+
+        if ( alliesCount == 0 ) {
+            msg = Translation::ngettext( "You must defeat the enemy %{enemies}.", "You must defeat the enemy alliance of %{enemies}.", enemiesCount );
+            StringReplace( msg, "%{enemies}", enemiesList );
+        }
+        else {
+            msg = Translation::ngettext( "The alliance consisting of %{allies} and you must defeat the enemy %{enemies}.",
+                                         "The alliance consisting of %{allies} and you must defeat the enemy alliance of %{enemies}.", enemiesCount );
+            StringReplace( msg, "%{allies}", alliesList );
+            StringReplace( msg, "%{enemies}", enemiesList );
+        }
+    }
     else if ( WINS_TOWN & cond ) {
         const Castle * town = world.getCastleEntrance( conf.WinsMapsPositionObject() );
         if ( town ) {
