@@ -2,6 +2,7 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # fheroes2 team <fhomm2@gmail.com>, 2022
+# piano1029 <https://github.com/piano1029>, 2022
 #
 msgid ""
 msgstr ""
@@ -9,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-28 22:56+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
-"Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
+"Last-Translator: piano1029 <https://github.com/piano1029>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -8733,10 +8734,10 @@ msgstr ""
 "beïnvloedt."
 
 msgid "Breastplate of Anduran"
-msgstr ""
+msgstr "Borstplaat van Anduran"
 
 msgid "The %{name} increases your defense by %{count}."
-msgstr ""
+msgstr "De %{name} verhoogt je verdediging met %{count}."
 
 msgid ""
 "You come upon a sign. It reads: \"Here lies the body of Anduran. Bow and "
@@ -8744,42 +8745,58 @@ msgid ""
 "you stand up, you feel a coldness against your skin. Looking down, you find "
 "that you are suddenly wearing a gleaming, ornate breastplate."
 msgstr ""
+"Je komt een bord tegen. Er staat: \"Hier ligt het lichaam van Anduran. Buig en "
+"zweer trouw, en je zult beloond worden.\" Je besluit te doen wat er staat. Als "
+"je opstaat, voel je een koude rilling op je huid. Als je naar beneden kijkt, merk "
+"je dat je plotseling een glanzende, sierlijke borstplaat draagt."
 
 msgid "Broach of Shielding"
-msgstr ""
+msgstr "Broche van Afscherming"
 
 msgid ""
 "The %{name} provides %{count} percent protection from Armageddon and "
 "Elemental Storm, but decreases spell power by 2."
 msgstr ""
+"De %{name} biedt %{count} procent bescherming tegen Armageddon en Elemental "
+"Storm, maar vermindert de spellingskracht met 2."
 
 msgid ""
 "A kindly Sorceress thinks that your army's defenses could use a magical "
 "boost. She offers to enchant the Broach that you wear on your cloak, and you "
 "accept."
 msgstr ""
+"Een vriendelijke tovenares denkt dat de verdediging van je leger een magische "
+"boost kan gebruiken. Ze biedt aan om de Broach te betoveren die je op je mantel "
+"draagt, en je accepteert."
 
 msgid "Battle Garb of Anduran"
-msgstr ""
+msgstr "Strijdgewaad van Anduran"
 
 msgid ""
 "The %{name} combines the powers of the three Anduran artifacts.  It provides "
 "maximum luck and morale for your troops and gives you the Town Portal spell."
 msgstr ""
+"De %{name} combineert de krachten van de drie Andurese artefacten.  Het biedt "
+"maximaal geluk en moreel voor je troepen en geeft je de Dorp Portaal spreuk."
 
 msgid ""
 "Out of pity for a poor peasant, you purchase a chest of old junk they are "
 "hawking for too much gold. Later, as you search through it, you find it "
 "contains the 3 pieces of the legendary battle garb of Anduran!"
 msgstr ""
+"Uit medelijden met een arme boer koop je een kist met oude rotzooi die ze "
+"opjagen voor te veel goud. Later, als je er doorheen zoekt, ontdek je dat "
+"het de 3 stukken van het legendarische strijdgewaad van Anduran bevat!"
 
 msgid "Crystal Ball"
-msgstr ""
+msgstr "Kristalbal"
 
 msgid ""
 "The %{name} lets you get more specific information about monsters, enemy "
 "heroes, and castles nearby the hero who holds it."
 msgstr ""
+"De %{name} geeft je meer specifieke informatie over monsters, vijandelijke "
+"helden en kastelen in de buurt van de held die hem vasthoudt."
 
 msgid ""
 "You come upon a caravan of gypsies who are feasting and fortifying their "
@@ -8788,14 +8805,20 @@ msgid ""
 "anyway. They laugh hysterically, but admire your bravery, giving you a "
 "Crystal Ball."
 msgstr ""
+"Je komt een karavaan zigeuners tegen die aan het feesten zijn en hun lichamen "
+"versterken met mede. Ze roepen je naar voren en zeggen: \"Als je bewijst dat je "
+"de Rama-Buta kunt dansen, zullen we je belonen.\" Je weet het niet, maar probeer "
+"het toch. Ze lachen hysterisch, maar bewonderen je moed en geven je een kristallenbal."
 
 msgid "Heart of Fire"
-msgstr ""
+msgstr "Hart van Vuur"
 
 msgid ""
 "The %{name} provides %{count} percent protection from fire, but doubles the "
 "damage taken from cold."
 msgstr ""
+"De %{name} biedt %{count} procent bescherming tegen brand, maar verdubbelt "
+"de schade door kou."
 
 msgid ""
 "You enter a recently burned glade and come upon a Fire Elemental sitting "
@@ -8803,14 +8826,17 @@ msgid ""
 "pain. It then tosses a glowing object at you. You put up your hands to block "
 "it, but it passes right through them and sears itself into your chest."
 msgstr ""
+"Je gaat een onlangs verbrande open plek binnen en komt een Vuur Elementaal "
+"tegen die bovenop een rots zit. Hij kijkt op, zijn vlammende gezicht verwrongen in een blik van hevige pijn. Het gooit dan een gloeiend voorwerp naar je toe. Je steekt je handen op om het te blokkeren, maar het gaat er dwars doorheen en schroeit zichzelf in je borst."
 
 msgid "Heart of Ice"
-msgstr ""
+msgstr "Hart van IJs"
 
 msgid ""
 "The %{name} provides %{count} percent protection from cold, but doubles the "
 "damage taken from fire."
 msgstr ""
+"De %{name} biedt %{count} procent bescherming tegen kou, maar verdubbelt de schade door brand."
 
 msgid ""
 "Suddenly, a biting coldness engulfs your body. You seize up, falling from "
@@ -8819,9 +8845,13 @@ msgid ""
 "laughter. You turn around just in time to see a Frost Giant run off into the "
 "woods and disappear."
 msgstr ""
+"Plotseling overspoelt een bijtende kou je lichaam. Je grijpt vast en valt van "
+"je paard. De pijn neemt af, maar je hebt nog steeds het gevoel alsof je borst "
+"bevroren is. Terwijl je jezelf van de grond tilt, hoor je een hartelijk gelach. "
+"Je draait je net op tijd om en ziet een Frost Giant het bos in rennen en verdwijnen."
 
 msgid "Helmet of Anduran"
-msgstr ""
+msgstr "Helm van Anduran"
 
 msgid ""
 "You spy a gleaming object poking up out of the ground. You send a member of "
@@ -8829,9 +8859,13 @@ msgid ""
 "hands. You realize that it must be the helmet of the legendary Anduran, the "
 "only man who was known to wear solid gold armor."
 msgstr ""
+"Je bespioneert een glimmend object dat uit de grond steekt. Je stuurt een "
+"lid van je partij om het te onderzoeken. Hij komt terug met een gouden helm "
+"in zijn handen. Je realiseert je dat het de helm moet zijn van de legendarische "
+"Anduran, de enige man waarvan bekend was dat hij een massief gouden harnas droeg."
 
 msgid "Holy Hammer"
-msgstr ""
+msgstr "Heilige Hamer"
 
 msgid ""
 "You come upon a battle where a Paladin has been mortally wounded by a group "
@@ -8839,12 +8873,16 @@ msgid ""
 "you pick it up, it begins to hum, and then everything becomes a blur. The "
 "Zombies lie dead, the hammer dripping with blood. You strap it to your belt."
 msgstr ""
+"Je komt terecht in een gevecht waarbij een Paladin dodelijk is gewond door een "
+"groep zombies. Hij vraagt je om zijn hamer te pakken en af te maken waar hij aan "
+"begonnen is. Als je het oppakt, begint het te zoemen, en dan wordt alles een waas. "
+"De zombies liggen dood, de hamer druipt van het bloed. Je maakt hem vast aan je riem."
 
 msgid "Legendary Scepter"
-msgstr ""
+msgstr "Legendarische Schepter"
 
 msgid "The %{name} adds %{count} points to all attributes."
-msgstr ""
+msgstr "De %{name} voegt %{count} punten toe aan alle attributen."
 
 msgid ""
 "Upon cresting a small hill, you come upon a ridiculous looking sight. A "
@@ -8853,12 +8891,17 @@ msgid ""
 "answers: \"You think this is funny? Fine. You can carry it. I much prefer "
 "flying anyway.\""
 msgstr ""
+"Als je een kleine heuvel bereikt, kom je een belachelijk gezicht tegen. "
+"Een Sprite probeert een Scepter te dragen die bijna net zo groot is als "
+"hij is. Terwijl je probeert niet te lachen, vraag je: \"Hulp nodig?\" De "
+"Sprite kijkt je boos aan en antwoordt: \"Vind je dit grappig? Prima. Je "
+"kunt het dragen. Ik vlieg toch liever.\""
 
 msgid "Masthead"
-msgstr ""
+msgstr "Masthoofd"
 
 msgid "The %{name} boosts your luck and morale by %{count} each in sea combat."
-msgstr ""
+msgstr "De %{name} verhoogt je geluk en moreel met %{count} elk in zeegevechten."
 
 msgid ""
 "An old seaman tells you a tale of an enchanted masthead that he used in his "
@@ -8866,24 +8909,29 @@ msgid ""
 "map that shows where he hid it. After much exploring, you find it stashed "
 "underneath a nearby dock."
 msgstr ""
+"Een oude zeeman vertelt je het verhaal van een betoverde masttop die hij in "
+"zijn jeugd gebruikte om zijn bemanning te verzamelen in tijden van "
+"moeilijkheden. Hij overhandigt je dan een vervaagde kaart die laat zien waar "
+"hij het heeft verstopt. Na veel verkennen, vind je het verstopt onder een nabijgelegen dok.
 
 msgid "Sphere of Negation"
-msgstr ""
+msgstr "Gebied van Ontkenning"
 
 msgid "The %{name} disables all spell casting, for both sides, in combat."
-msgstr ""
+msgstr "De %{name} schakelt alle spreuken uit, voor beide partijen, in gevechten."
 
 msgid ""
 "You stop to help a Peasant catch a runaway mare. To show his gratitude, he "
 "hands you a tiny sphere. As soon as you grasp it, you feel the magical "
 "energy drain from your limbs..."
 msgstr ""
+"Je stopt om een boer te helpen een weggelopen merrie te vangen. Als blijk van zijn dankbaarheid overhandigt hij je een bolletje. Zodra je het vastpakt, voel je de magische energie uit je ledematen wegvloeien..."
 
 msgid "Staff of Wizardry"
-msgstr ""
+msgstr "Staf van Tovenarij"
 
 msgid "The %{name} boosts your spell power by %{count}."
-msgstr ""
+msgstr "De %{name} verhoogt je spreukkracht met %{count}."
 
 msgid ""
 "While out scaring up game, your troops find a mysterious staff levitating "
@@ -8891,17 +8939,21 @@ msgid ""
 "inscription. It reads: \"Brains best brawn and magic beats might. Heed my "
 "words, and you'll win every fight.\""
 msgstr ""
+"Terwijl je het spel aan het schrikken bent, vinden je troepen een mysterieuze "
+"staf die ongeveer een meter boven de grond zweeft. Ze overhandigen het aan je en je merkt een inscriptie op. Er staat: \"Brains best brawn and magic beats may. Luister naar mijn woorden, en je zult elk gevecht winnen.\""
 
 msgid "Sword Breaker"
-msgstr ""
+msgstr "Zwaard Breker"
 
 msgid "The %{name} increases your defense by %{count} and attack by 1."
-msgstr ""
+msgstr "De %{name} verhoogt je verdediging met %{count} en aanvalt met 1."
 
 msgid ""
 "A former Captain of the Guard admires your quest and gives you the enchanted "
 "Sword Breaker that he relied on during his tour of duty."
 msgstr ""
+"Een voormalige kapitein van de wacht bewondert je zoektocht en geeft je de "
+"betoverde Zwaardenbreker waarop hij vertrouwde tijdens zijn dienstplicht."
 
 msgid ""
 "A Troll stops you and says: \"Pay me 5,000 gold, or the Sword of Anduran "
@@ -8910,45 +8962,53 @@ msgid ""
 "sword, you give thanks that half-witted Trolls tend to grab the wrong end of "
 "sharp objects."
 msgstr ""
+"Een trol houdt je tegen en zegt: \"Betaal me 5.000 goud, of het zwaard van "
+"Anduran zal je doden waar je staat.\" Je weigert. De trol grijpt het zwaard "
+"dat aan zijn riem hangt, schreeuwt van de pijn en rent weg. Als je het legendarische "
+"zwaard oppakt, bedank je dat halfslachtige trollen de neiging hebben om het verkeerde "
+"uiteinde van scherpe voorwerpen te grijpen."
 
 msgid "Sword of Anduran"
-msgstr ""
+msgstr "Zwaard van Anduran"
 
 msgid "Spade of Necromancy"
-msgstr ""
+msgstr "Spade van Necromantie"
 
 msgid "The %{name} gives you increased necromancy skill."
-msgstr ""
+msgstr "De %{name} geeft je een verhoogde necromantievaardigheid."
 
 msgid ""
 "A dirty shovel has been thrust into a dirt mound nearby. Upon investigation, "
 "you discover it to be the enchanted shovel of the Gravediggers, long thought "
 "lost by mortals."
 msgstr ""
+"Er is een vuile schop in een nabijgelegen zandheuvel gestoken. Na onderzoek "
+"ontdek je dat het de betoverde schop van de Gravediggers is, lang gedacht dat "
+"het door stervelingen verloren was gegaan."
 
 msgid "Invalid Artifact"
-msgstr ""
+msgstr "Invalide Artefact"
 
 msgid "Wood"
-msgstr ""
+msgstr "Hout"
 
 msgid "Mercury"
-msgstr ""
+msgstr "Kwik"
 
 msgid "Ore"
-msgstr ""
+msgstr "Erts"
 
 msgid "Sulfur"
-msgstr ""
+msgstr "Zwavel"
 
 msgid "Crystal"
-msgstr ""
+msgstr "Kristal"
 
 msgid "Gems"
-msgstr ""
+msgstr "Edelstenen"
 
 msgid "Gold"
-msgstr ""
+msgstr "Goud"
 
 msgid ""
 "There are seven resources in Heroes 2, used to build and improves castles, "
@@ -8957,31 +9017,40 @@ msgid ""
 "Mercury, Sulfur and Crystal are rare magical resources used for the most "
 "powerful creatures and buildings."
 msgstr ""
+"Er zijn zeven middelen in het spel Heroes 2, de middelen worden gebruikt om "
+"kastelen te bouwen en te verbeteren, troepen te kopen en helden te rekruteren. "
+"Goud is de meest voorkomende en vereist voor bijna alles. Bij de meesten gebouwen "
+"is er hout en erts nodig. Edelstenen, Kwik, Zwavel en Kristal zijn zeldzame "
+"magische middelen die worden gebruikt voor de meest krachtige wezens en gebouwen."
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
 "creatures."
 msgstr ""
+"Zorgt ervoor dat een gigantische vuurbal het geselecteerde gebied raakt en "
+"alle nabijgelegen wezens beschadigt."
 
 msgid "Fireball"
-msgstr ""
+msgstr "Vuurbal"
 
 msgid "Fireblast"
-msgstr ""
+msgstr "Vuurstraal"
 
 msgid ""
 "An improved version of fireball, fireblast affects two hexes around the "
 "center point of the spell, rather than one."
 msgstr ""
+"Een verbeterde versie van vuurbal, vuurstraal beïnvloedt twee zeshoeken "
+"rond het middelpunt van de spreuk, in plaats van één."
 
 msgid "Causes a bolt of electrical energy to strike the selected creature."
-msgstr ""
+msgstr "Zorgt ervoor dat een straal elektrische energie het geselecteerde wezen treft"
 
 msgid "Lightning Bolt"
-msgstr ""
+msgstr "Bliksem"
 
 msgid "Chain Lightning"
-msgstr ""
+msgstr "Kettingsbliksem"
 
 msgid ""
 "Causes a bolt of electrical energy to strike a selected creature, then "
@@ -8989,242 +9058,261 @@ msgid ""
 "creature with half again damage, and so on, until it becomes too weak to be "
 "harmful.  Warning:  This spell can hit your own creatures!"
 msgstr ""
+"Zorgt ervoor dat een flits van elektrische energie een geselecteerd wezen treft, "
+"vervolgens het dichtstbijzijnde wezen treft met halve schade, dan het VOLGENDE "
+"dichtstbijzijnde wezen treft met de helft opnieuw schade, enzovoort, totdat het "
+"te zwak wordt om schadelijk te zijn. Waarschuwing: deze spreuk kan je eigen wezens raken!"
 
 msgid "Teleport"
-msgstr ""
+msgstr "Teleporteer"
 
 msgid ""
 "Teleports the creature you select to any open position on the battlefield."
 msgstr ""
+"Teleporteert het wezen dat je selecteert naar een open positie op het slagveld."
 
 msgid "Cure"
-msgstr ""
+msgstr "Genezing"
 
 msgid ""
 "Removes all negative spells cast upon one of your units, and restores up to "
 "%{count} HP per level of spell power."
 msgstr ""
+"Verwijdert alle negatieve spreuken op een van je eenheden en herstelt tot "
+"%{count} HP per niveau van spreukkracht."
 
 msgid "Mass Cure"
-msgstr ""
+msgstr "Massa Genezing"
 
 msgid ""
 "Removes all negative spells cast upon your forces, and restores up to "
 "%{count} HP per level of spell power, per creature."
 msgstr ""
+"Verwijdert alle negatieve spreuken op je troepen en herstelt tot %{count} "
+"HP per niveau van spreukkracht, per wezen."
 
 msgid "Resurrect"
-msgstr ""
+msgstr "Herleven"
 
 msgid "Resurrects creatures from a damaged or dead unit until end of combat."
-msgstr ""
+msgstr "Wekt wezens op uit een beschadigde of dode eenheid tot het einde van het gevecht."
 
 msgid "Resurrect True"
-msgstr ""
+msgstr "Herleven Juist"
 
 msgid "Resurrects creatures from a damaged or dead unit permanently."
-msgstr ""
+msgstr "Wekt schepsels permanent op uit een beschadigde of dode eenheid."
 
 msgid "Haste"
-msgstr ""
+msgstr "Haast"
 
 msgid "Increases the speed of any creature by %{count}."
-msgstr ""
+msgstr "Verhoogt de snelheid van elk wezen met %{count}."
 
 msgid "Increases the speed of all of your creatures by %{count}."
-msgstr ""
+msgstr "Verhoogt de snelheid van al je schepsels met %{count}."
 
 msgid "Mass Haste"
-msgstr ""
+msgstr "Massa Haast"
 
 msgid "Slows target to half movement rate."
-msgstr ""
+msgstr "Vertraagt doel tot halve bewegingssnelheid."
 
 msgid "spell|Slow"
-msgstr ""
+msgstr "Sloom"
 
 msgid "Mass Slow"
-msgstr ""
+msgstr "Heel Sloom"
 
 msgid "Slows all enemies to half movement rate."
-msgstr ""
+msgstr "Vertraagt alle vijanden tot de helft van de bewegingssnelheid."
 
 msgid "Clouds the affected creatures' eyes, preventing them from moving."
-msgstr ""
+msgstr "Vertroebelt de ogen van de getroffen schepsels, waardoor ze niet kunnen bewegen."
 
 msgid "spell|Blind"
-msgstr ""
+msgstr "Blind"
 
 msgid "Bless"
-msgstr ""
+msgstr "Zegenen"
 
 msgid "Causes the selected creatures to inflict maximum damage."
-msgstr ""
+msgstr "Zorgt ervoor dat de geselecteerde wezens maximale schade aanrichten."
 
 msgid "Causes all of your units to inflict maximum damage."
-msgstr ""
+msgstr "Zorgt ervoor dat al je eenheden maximale schade aanrichten."
 
 msgid "Mass Bless"
-msgstr ""
+msgstr "Massa Zegenen"
 
 msgid "Magically increases the defense skill of the selected creatures."
-msgstr ""
+msgstr "Verhoogt de verdedigingsvaardigheid van de geselecteerde schepsels met magie."
 
 msgid "Stoneskin"
-msgstr ""
+msgstr "Stenenhuid"
 
 msgid ""
 "Increases the defense skill of the targeted creatures.  This is an improved "
 "version of Stoneskin."
 msgstr ""
+"Verhoogt de verdedigingsvaardigheid van de beoogde wezens. Dit is een verbeterde "
+"versie van Stenenhuid."
 
 msgid "Steelskin"
-msgstr ""
+msgstr "Stalenhuid"
 
 msgid "Causes the selected creatures to inflict minimum damage."
-msgstr ""
+msgstr "Zorgt ervoor dat de geselecteerde schepsels de minimale hoeveelheid schade toebrengen."
 
 msgid "Curse"
-msgstr ""
+msgstr "Vloek"
 
 msgid "Causes all enemy troops to inflict minimum damage."
-msgstr ""
+msgstr "Zorgt ervoor dat alle vijandelijke troepen de minimale hoeveelheid schade aanrichten."
 
 msgid "Mass Curse"
-msgstr ""
+msgstr "Massa Vloek"
 
 msgid "Damages all undead in the battle."
-msgstr ""
+msgstr "Beschadigt alle ondoden in de strijd."
 
 msgid "Holy Word"
-msgstr ""
+msgstr "Heilig Woord"
 
 msgid ""
 "Damages all undead in the battle.  This is an improved version of Holy Word."
 msgstr ""
+"Beschadigt alle ondoden in de strijd. Dit is een verbeterde versie van Helig Woord"
 
 msgid "Holy Shout"
-msgstr ""
+msgstr "Heilige Schreeuw"
 
 msgid "Anti-Magic"
-msgstr ""
+msgstr "Anti-Magie"
 
 msgid "Prevents harmful magic against the selected creatures."
-msgstr ""
+msgstr "Voorkomt schadelijke magie tegen de geselecteerde wezens."
 
 msgid "Dispel Magic"
-msgstr ""
+msgstr "Verdrijf Magie"
 
 msgid "Removes all magic spells from a single target."
-msgstr ""
+msgstr "Verwijdert alle magische spreuken van een enkel doelwit."
 
 msgid "Mass Dispel"
-msgstr ""
+msgstr "Massa Verdrijving"
 
 msgid "Removes all magic spells from all creatures."
-msgstr ""
+msgstr "Verwijdert alle magische spreuken van een enkel doelwit."
 
 msgid "Causes a magic arrow to strike the selected target."
-msgstr ""
+msgstr "Zorgt ervoor dat een magische pijl het geselecteerde doel raakt."
 
 msgid "Magic Arrow"
-msgstr ""
+msgstr "Magische Pijk"
 
 msgid "Berserker"
-msgstr ""
+msgstr "Berserker"
 
 msgid "Causes a creature to attack its nearest neighbor."
-msgstr ""
+msgstr "Zorgt ervoor dat een wezen zijn naaste buur aanvalt."
 
 msgid "Armageddon"
-msgstr ""
+msgstr "Armageddon"
 
 msgid ""
 "Holy terror strikes the battlefield, causing severe damage to all creatures."
 msgstr ""
+"Heilige terreur treft het slagveld en veroorzaakt erge schade aan alle schepsels."
 
 msgid "Elemental Storm"
-msgstr ""
+msgstr "Elementaire Storm"
 
 msgid "Magical elements pour down on the battlefield, damaging all creatures."
-msgstr ""
+msgstr "Magische elementen stromen neer op het slagveld en beschadigt alle schepsels."
 
 msgid ""
 "A rain of rocks strikes an area of the battlefield, damaging all nearby "
 "creatures."
 msgstr ""
+"Een regen van stenen treft een gebied van het slagveld en beschadigt alle nabijgelegen schepsels."
 
 msgid "Meteor Shower"
-msgstr ""
+msgstr "Meteorenregen"
 
 msgid "Paralyze"
-msgstr ""
+msgstr "Paralizeren"
 
 msgid "The targeted creatures are paralyzed, unable to move or retaliate."
-msgstr ""
+msgstr "De beoogde wezens zijn verlamd, niet in staat om te bewegen of wraak te nemen."
 
 msgid "Hypnotize"
-msgstr ""
+msgstr "Hypnotizeren"
 
 msgid ""
 "Brings a single enemy unit under your control if its hits are less than "
 "%{count} times the caster's spell power."
 msgstr ""
+"Brengt een enkele vijandelijke eenheid onder je controle als zijn treffers "
+"minder dan %{count} keer de spreukkracht van de caster zijn."
 
 msgid "Cold Ray"
-msgstr ""
+msgstr "Koude straal"
 
 msgid "Drains body heat from a single enemy unit."
-msgstr ""
+msgstr "Voert lichaamswarmte af van een enkele vijandelijke eenheid."
 
 msgid "Cold Ring"
-msgstr ""
+msgstr "Koude ring"
 
 msgid ""
 "Drains body heat from all units surrounding the center point, but not "
 "including the center point."
 msgstr ""
+"Voert lichaamswarmte af van alle units rond het middelpunt, maar niet het middelpunt."
 
 msgid "Disrupting Ray"
-msgstr ""
+msgstr "Verstorende Straal"
 
 msgid "Reduces the defense rating of an enemy unit by three."
-msgstr ""
+msgstr "Verlaagt de verdedigingsclassificatie van een vijandelijke eenheid met drie."
 
 msgid "Damages all living (non-undead) units in the battle."
-msgstr ""
+msgstr "Beschadigt alle levende (niet-ondode) eenheden in de strijd."
 
 msgid "Death Ripple"
-msgstr ""
+msgstr "Dood Rippel"
 
 msgid "Death Wave"
-msgstr ""
+msgstr "Golf der Dood"
 
 msgid ""
 "Damages all living (non-undead) units in the battle.  This spell is an "
 "improved version of Death Ripple."
 msgstr ""
+"Beschadigt alle levende (niet-ondode) eenheden in de strijd. Deze "
+"spreuk is een verbeterde versie van Golf der Dood."
 
 msgid "Dragon Slayer"
-msgstr ""
+msgstr "Drakendoder"
 
 msgid "Greatly increases a unit's attack skill vs. Dragons."
-msgstr ""
+msgstr "Verhoogt de aanvalsvaardigheid van een eenheid tegen draken aanzienlijk."
 
 msgid "Blood Lust"
-msgstr ""
+msgstr "Bloedlust"
 
 msgid "Increases a unit's attack skill."
 msgstr ""
 
 msgid "Animate Dead"
-msgstr ""
+msgstr "Animeer Doden"
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
 msgstr ""
 
 msgid "Mirror Image"
-msgstr ""
+msgstr "Spiegelbeeld"
 
 msgid ""
 "Creates an illusionary unit that duplicates one of your existing units.  "
@@ -9236,88 +9324,88 @@ msgid "Halves damage received from ranged attacks for a single unit."
 msgstr ""
 
 msgid "Shield"
-msgstr ""
+msgstr "Schild"
 
 msgid "Halves damage received from ranged attacks for all of your units."
 msgstr ""
 
 msgid "Mass Shield"
-msgstr ""
+msgstr "Massa Schild"
 
 msgid "Summon Earth Elemental"
-msgstr ""
+msgstr "Elementair Aarde oproepen"
 
 msgid "Summons Earth Elementals to fight for your army."
 msgstr ""
 
 msgid "Summon Air Elemental"
-msgstr ""
+msgstr "Elementair Lucht oproepen"
 
 msgid "Summons Air Elementals to fight for your army."
 msgstr ""
 
 msgid "Summon Fire Elemental"
-msgstr ""
+msgstr "Elementair Vuur oproepen"
 
 msgid "Summons Fire Elementals to fight for your army."
 msgstr ""
 
 msgid "Summon Water Elemental"
-msgstr ""
+msgstr "Elementair Water oproepen"
 
 msgid "Summons Water Elementals to fight for your army."
 msgstr ""
 
 msgid "Damages castle walls."
-msgstr ""
+msgstr "Beschaadigd kasteel muren."
 
 msgid "Earthquake"
-msgstr ""
+msgstr "Aardbeving"
 
 msgid "Causes all mines across the land to become visible."
 msgstr ""
 
 msgid "View Mines"
-msgstr ""
+msgstr "Bekijk Mijnen"
 
 msgid "Causes all resources across the land to become visible."
 msgstr ""
 
 msgid "View Resources"
-msgstr ""
+msgstr "Bekijk Bronnen"
 
 msgid "Causes all artifacts across the land to become visible."
 msgstr ""
 
 msgid "View Artifacts"
-msgstr ""
+msgstr "Bekijk Artefacten"
 
 msgid "Causes all towns and castles across the land to become visible."
 msgstr ""
 
 msgid "View Towns"
-msgstr ""
+msgstr "Bekijk Dorpen"
 
 msgid "Causes all Heroes across the land to become visible."
 msgstr ""
 
 msgid "View Heroes"
-msgstr ""
+msgstr "Bekijk Helden"
 
 msgid "Causes the entire land to become visible."
 msgstr ""
 
 msgid "View All"
-msgstr ""
+msgstr "Bekijk Al"
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
 msgstr ""
 
 msgid "Identify Hero"
-msgstr ""
+msgstr "Identificeer Held"
 
 msgid "Summon Boat"
-msgstr ""
+msgstr "Boot Oproepen"
 
 msgid ""
 "Summons the nearest unoccupied, friendly boat to an adjacent shore "
@@ -9329,13 +9417,13 @@ msgid "Allows the caster to magically transport to a nearby location."
 msgstr ""
 
 msgid "Dimension Door"
-msgstr ""
+msgstr "Dimensie Deur"
 
 msgid "Returns the caster to any town or castle currently owned."
 msgstr ""
 
 msgid "Town Gate"
-msgstr ""
+msgstr "Dorp Muur"
 
 msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
@@ -9343,14 +9431,14 @@ msgid ""
 msgstr ""
 
 msgid "Visions"
-msgstr ""
+msgstr "Vizioenen"
 
 msgid ""
 "Visions predicts the likely outcome of an encounter with a neutral army camp."
 msgstr ""
 
 msgid "Haunt"
-msgstr ""
+msgstr "Kwellen"
 
 msgid ""
 "Haunts a mine you control with Ghosts.  This mine stops producing "
@@ -9358,31 +9446,31 @@ msgid ""
 msgstr ""
 
 msgid "Set Earth Guardian"
-msgstr ""
+msgstr "Aarde Bewaker Instellen"
 
 msgid "Sets Earth Elementals to guard a mine against enemy armies."
 msgstr ""
 
 msgid "Set Air Guardian"
-msgstr ""
+msgstr "Lucht Bewaker Instellen"
 
 msgid "Sets Air Elementals to guard a mine against enemy armies."
 msgstr ""
 
 msgid "Set Fire Guardian"
-msgstr ""
+msgstr "Vuur Bewaker Instellen"
 
 msgid "Sets Fire Elementals to guard a mine against enemy armies."
 msgstr ""
 
 msgid "Set Water Guardian"
-msgstr ""
+msgstr "Water Bewaker Instellen"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
 msgstr ""
 
 msgid "Petrification"
-msgstr ""
+msgstr "Verstening"
 
 msgid ""
 "Turns the affected creature into stone.  A petrified creature receives half "
@@ -9390,161 +9478,168 @@ msgid ""
 msgstr ""
 
 msgid "You have no Magic Book, so you cannot cast a spell."
-msgstr ""
+msgstr "Je hebt geen Magisch Boek, dus je kunt geen spreuk uitspreken."
 
 msgid "No spell to cast."
-msgstr ""
+msgstr "Geen spreuk om uit te spreken."
 
 msgid "Your hero has %{point} spell points remaining."
-msgstr ""
+msgstr "Je held heeft nog %{point} spreukpunten over."
 
 msgid "View Adventure Spells"
-msgstr ""
+msgstr "Bekijk Avontuur Spreuken"
 
 msgid "View Combat Spells"
-msgstr ""
+msgstr "Bekijk Gevechts Spreuken"
 
 msgid "View previous page"
-msgstr ""
+msgstr "Bekijk vorige pagina"
 
 msgid "View next page"
-msgstr ""
+msgstr "Bekijk volgende pagina"
 
 msgid "Close Spellbook"
-msgstr ""
+msgstr "Sluit spreukenboek"
 
 msgid "View %{spell}"
-msgstr ""
+msgstr "Bekijk %{spell}"
 
 msgid "This spell does %{damage} points of damage."
-msgstr ""
+msgstr "Deze spreuk doet %{damage} schadepunten."
 
 msgid ""
 "This spell summons\n"
 "%{count} %{monster}."
 msgstr ""
+"Deze spreuk roept\n"
+"%{count} %{monster} op"
 
 msgid "This spell restores %{hp} HP."
-msgstr ""
+msgstr "Deze spreuk herstelt %{hp} HP."
 
 msgid "This spell summons %{count} %{monster} to guard the mine."
-msgstr ""
+msgstr "Deze spreuk roept %{count} %{monster} op om de mijn te bewaken."
 
 msgid "The nearest town is %{town}."
-msgstr ""
+msgstr "Het dichtstbijzijnde dorp is %{town}"
 
 msgid "This town is occupied by your hero %{hero}."
-msgstr ""
+msgstr "Deze stad is bezet door je held %{held}."
 
 msgid ""
 "This spell controls up to\n"
 "%{hp} HP."
 msgstr ""
+"Deze spreuk beheert tot\n"
+"%{hp} HP."
 
 msgid "battle: show damage info"
-msgstr ""
+msgstr "gevecht: toon schade info"
 
 msgid "world: Scouting skill shows extended content info"
-msgstr ""
+msgstr "wereld: Scouting-vaardigheid toont uitgebreide inhoudsinfo"
 
 msgid "world: allow to set guardian to objects"
-msgstr ""
+msgstr "wereld: toestaan om voogd in te stellen op objecten"
 
 msgid "world: Neutral armies scale with game difficulty"
-msgstr ""
+msgstr "wereld: Neutrale legers schalen met spelmoeilijkheid"
 
 msgid "world: Windmills, Water Wheels and Magic Gardens can be captured"
-msgstr ""
+msgstr "wereld: windmolens, waterraderen en magische tuinen kunnen worden vastgelegd"
 
 msgid "castle: allow guardians"
-msgstr ""
+msgstr "kasteel: bewakers toestaan"
 
 msgid "heroes: allow buy a spellbook from Shrines"
-msgstr ""
+msgstr "helden: sta toe dat je een spreukenboek van Heiligdommen koopt"
 
 msgid "heroes: remember movement points when retreating or surrendering"
-msgstr ""
+msgstr "helden: onthoud bewegingspunten bij terugtrekken of overgeven"
 
 msgid "heroes: allow to choose any primary skill in Arena"
-msgstr ""
+msgstr "helden: sta toe om elke primaire vaardigheid in Arena te kiezen"
 
 msgid "battle: allow soft wait for troops"
-msgstr ""
+msgstr "strijd: laat zacht wachten op troepen"
 
 msgid "battle: deterministic events"
-msgstr ""
+msgstr "strijd: deterministische gebeurtenissen"
 
 msgid "game: show system info"
-msgstr ""
+msgstr "spel: toon systeeminfo"
 
 msgid "game: autosave will be made at the beginning of the day"
-msgstr ""
+msgstr "spel: automatisch opslaan wordt aan het begin van de dag gedaan"
 
 msgid "game: use evil interface"
-msgstr ""
+msgstr "spel: gebruik kwaadaardige interface"
 
 msgid "game: hide interface"
-msgstr ""
+msgstr "spel: verberg interface"
 
 msgid "game: offer to continue the game after victory condition"
-msgstr ""
+msgstr "spel: bied aan om het spel voort te zetten na overwinningsvoorwaarde"
 
 msgid "The ultimate artifact is really the %{name}."
-msgstr ""
+msgstr "Het ultieme artefact is echt de %{name}."
 
 msgid "The ultimate artifact may be found in the %{name} regions of the world."
-msgstr ""
+msgstr "Het ultieme artefact kan gevonden worden in de %{name} regio's van de wereld."
 
 msgid "north-west"
-msgstr ""
+msgstr "noord-west"
 
 msgid "north"
-msgstr ""
+msgstr "noord"
 
 msgid "north-east"
-msgstr ""
+msgstr "noord-oosten"
 
 msgid "west"
-msgstr ""
+msgstr "westen"
 
 msgid "center"
-msgstr ""
+msgstr "midden"
 
 msgid "east"
-msgstr ""
+msgstr "oost"
 
 msgid "south-west"
-msgstr ""
+msgstr "zuid-westen"
 
 msgid "south"
-msgstr ""
+msgstr "zuid"
 
 msgid "south-east"
-msgstr ""
+msgstr "zuid-westen"
 
 msgid "The truth is out there."
-msgstr ""
+msgstr "De waarheid is daarbuiten."
 
 msgid "The dark side is stronger."
-msgstr ""
+msgstr "De veihandelijke kant is sterker."
 
 msgid "The end of the world is near."
-msgstr ""
+msgstr "Het eind van de wereld is naarbij."
 
 msgid "The bones of Lord Slayer are buried in the foundation of the arena."
-msgstr ""
+msgstr "De botten van Lord Slayer zijn begraven in de arena."
 
 msgid "A Black Dragon will take out a Titan any day of the week."
-msgstr ""
+msgstr "Een Black Dragon schakelt elke dag van de week een Titaan af."
 
 msgid "He told her: Yada yada yada...  and then she said: Blah, blah, blah..."
-msgstr ""
+msgstr "Hij zei tegen haar: Yada yada yada... en zij zei toen: Bla, bla, bla..."
 
 msgid "An unknown force is being resurrected..."
-msgstr ""
+msgstr "Een onbekende kracht wordt opgewekt..."
 
 msgid ""
 "Check the newest version of the game at\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+"De nieuwste versie van het spel is beschrikbaar op\n"
+"https://github.com/inhub/\n"
+"fheroes2/releases"
