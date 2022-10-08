@@ -770,12 +770,6 @@ msgstr "Kracht van Wapens"
 msgid "Save the Dwarves"
 msgstr "Red de Dwarfen"
 
-msgid "The Crown"
-msgstr "De Kroon"
-
-msgid "The Gauntlet"
-msgstr ""
-
 msgid "Turning Point"
 msgstr "Draaipunt"
 
@@ -784,6 +778,12 @@ msgstr "Beschermer"
 
 msgid "Corlagon's Defense"
 msgstr "Corlagons Verdediging"
+
+msgid "The Crown"
+msgstr "De Kroon"
+
+msgid "The Gauntlet"
+msgstr ""
 
 msgid "Betrayal"
 msgstr "Veraad"
