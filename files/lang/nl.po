@@ -27,10 +27,10 @@ msgstr ""
 "STIJD"
 
 msgid "GIFT"
-msgstr "CADEAU"
+msgstr "DONEREN"
 
 msgid "MIN"
-msgstr "MINIMUM"
+msgstr "MIN"
 
 msgid "DIFFICULTY"
 msgstr "MOEILIJKHEID"
@@ -109,7 +109,7 @@ msgid ""
 "Zounds of\n"
 "%{monster}"
 msgstr ""
-"Zounden van\n"
+"Honderden\n"
 "%{monster}"
 
 msgid ""
@@ -415,7 +415,7 @@ msgid "Return to the battle."
 msgstr "Keer terug naar de strijd."
 
 msgid "Not enough gold (%{gold})"
-msgstr "Niet genoeg gound (%{gold})"
+msgstr "Niet genoeg goud (%{gold})"
 
 msgid "%{name} states:"
 msgstr "%{name} staat:"
@@ -578,7 +578,7 @@ msgid "%{name} casts %{spell}."
 msgstr "%{name} spreekt %{spell}."
 
 msgid "The %{spell} does %{damage} damage to one undead creature."
-msgstr "De %{spell} doet %{damage} schade aan een ondode schepsel."
+msgstr "De %{spell} richt %{damage} schade aan een ondode schepsel."
 
 msgid "The %{spell} does %{damage} damage to all undead creatures."
 msgstr "De %{spell} richt %{damage} schade aan aan alle ondode schepsels."
@@ -635,7 +635,7 @@ msgid "The mirror image is destroyed!"
 msgstr "Het spiegelbeeld is vernietigd!"
 
 msgid "Are you sure you want to interrupt the auto battle?"
-msgstr "Are you sure you want to interrupt the auto battle?"
+msgstr "Weet je zeker dat je het automatisch vechten wilt onderbreken?"
 
 msgid "Error"
 msgstr "Fout"
@@ -741,7 +741,7 @@ msgid "Ogre Alliance"
 msgstr "Ogre Alliantie"
 
 msgid "Dwarfbane"
-msgstr "Poortwachter"
+msgstr "Drawven Moordenaar"
 
 msgid "Dragon Alliance"
 msgstr "Draken Alliantie"
@@ -774,10 +774,10 @@ msgid "The Crown"
 msgstr "De Kroon"
 
 msgid "The Gauntlet"
-msgstr "De Handschoen"
+msgstr ""
 
 msgid "Turning Point"
-msgstr "Draai Punt"
+msgstr "Draaipunt"
 
 msgid "scenarioName|Defender"
 msgstr "Beschermer"
@@ -909,7 +909,7 @@ msgid "Country Lords"
 msgstr "Landheren"
 
 msgid "Dragon Master"
-msgstr "Draken Meester"
+msgstr "Drakenmeester"
 
 msgid "Rebellion"
 msgstr "Opstand"
@@ -1013,7 +1013,7 @@ msgstr ""
 "winnen en zorg ervoor dat je Archibald niet verliest in het gevecht!"
 
 msgid "Arrow's Flight"
-msgstr "De vlucht van Arrow"
+msgstr "De vlucht van de Pijl"
 
 msgid "Island of Chaos"
 msgstr "Eiland van Chaos"
@@ -1284,7 +1284,7 @@ msgid " will always run away from your army."
 msgstr " zal altijd wegrennen van je leger."
 
 msgid " will be willing to join your army."
-msgstr " zal bereid zijn om zich bij je leger aan te sluiten.."
+msgstr " zal bereid zijn om zich bij je leger aan te sluiten."
 
 msgid "\"%{artifact}\" artifact will be carried over the scenario."
 msgstr "\"%{artifact}\" artefact zal over het scenario worden overgedragen."
@@ -1369,7 +1369,7 @@ msgid "campaignBonus|Black Pearl"
 msgstr "Zwarte Parel"
 
 msgid "campaignBonus|Caster's Bracelet"
-msgstr "Caster's Armband"
+msgstr "Magiers's Armband"
 
 msgid "campaignBonus|Defender Helm"
 msgstr "Verdediger Helm"
@@ -1378,7 +1378,7 @@ msgid "campaignBonus|Breastplate"
 msgstr "Borstplaat"
 
 msgid "campaignBonus|Dragon Sword"
-msgstr "Draken Zwaard"
+msgstr "Drakenzwaard"
 
 msgid "campaignBonus|Fizbin Medal"
 msgstr "Fizbin Medaille"
@@ -1408,7 +1408,7 @@ msgid "campaignBonus|Nomad Boots"
 msgstr "Nomadenlaarzen"
 
 msgid "campaignBonus|Power Axe"
-msgstr "Macht bijl"
+msgstr "Machtsbijl"
 
 msgid "campaignBonus|Spiked Shield"
 msgstr "Puntig Schild"
@@ -1420,7 +1420,7 @@ msgid "campaignBonus|Tax Lien"
 msgstr "Belastingrecht"
 
 msgid "campaignBonus|Thunder Mace"
-msgstr "Donder Mace"
+msgstr "Donderstaf"
 
 msgid "campaignBonus|Traveler's Boots"
 msgstr "Reizigerslaarzen"
@@ -1646,7 +1646,7 @@ msgid "Descendants"
 msgstr "Afstammelingen"
 
 msgid "The %{building} produces %{monster}."
-msgstr "Het %{gebouw} produceert %{monster}."
+msgstr "Het %{building} produceert %{monster}."
 
 msgid "Requires:"
 msgstr "Vereist:"
@@ -1676,220 +1676,220 @@ msgid "Build %{name}."
 msgstr "Bouw %{name}."
 
 msgid "Blackridge"
-msgstr "Blackridge"
+msgstr ""
 
 msgid "Hillstone"
-msgstr "Hillstone"
+msgstr ""
 
 msgid "Pinehurst"
-msgstr "Pinehurst"
+msgstr ""
 
 msgid "Whiteshield"
-msgstr "Whiteshield"
+msgstr ""
 
 msgid "Woodhaven"
-msgstr "Woodhaven"
+msgstr ""
 
 msgid "Blackwind"
-msgstr "Blackwind"
+msgstr ""
 
 msgid "Bloodreign"
-msgstr "Bloodreign"
+msgstr ""
 
 msgid "Dragontooth"
 msgstr "Drakentand"
 
 msgid "Greywind"
-msgstr "Greywind"
+msgstr ""
 
 msgid "Portsmith"
-msgstr "Portsmith"
+msgstr ""
 
 msgid "Atlantium"
-msgstr "Atlantium"
+msgstr ""
 
 msgid "Middle Gate"
-msgstr "Middle Gate"
+msgstr ""
 
 msgid "Sansobar"
-msgstr "Sansobar"
+msgstr ""
 
 msgid "Tundara"
-msgstr "Tundara"
+msgstr ""
 
 msgid "Vulcania"
-msgstr "Vulcania"
+msgstr ""
 
 msgid "Baywatch"
-msgstr "Baywatch"
+msgstr ""
 
 msgid "Fountainhead"
-msgstr "Fountainhead"
+msgstr ""
 
 msgid "Vertigo"
-msgstr "Vertigo"
+msgstr ""
 
 msgid "Wildabar"
-msgstr "Wildabar"
+msgstr ""
 
 msgid "Winterkill"
-msgstr "Winterkill"
+msgstr ""
 
 msgid "Brindamoor"
-msgstr "Brindamoor"
+msgstr ""
 
 msgid "Lakeside"
-msgstr "Lakeside"
+msgstr ""
 
 msgid "Nightshadow"
-msgstr "Nightshadow"
+msgstr ""
 
 msgid "Olympus"
-msgstr "Olympus"
+msgstr ""
 
 msgid "Sandcaster"
-msgstr "Sandcaster"
+msgstr ""
 
 msgid "Alamar"
-msgstr "Alamar"
+msgstr ""
 
 msgid "Burlock"
-msgstr "Burlock"
+msgstr ""
 
 msgid "Dragadune"
-msgstr "Dragadune"
+msgstr ""
 
 msgid "Kalindra"
-msgstr "Kalindra"
+msgstr ""
 
 msgid "Xabran"
-msgstr "Xabran"
+msgstr ""
 
 msgid "Algary"
-msgstr "Algary"
+msgstr ""
 
 msgid "Basenji"
-msgstr "Basenji"
+msgstr ""
 
 msgid "Blackfang"
-msgstr "Blackfang"
+msgstr ""
 
 msgid "New Dawn"
-msgstr "New Dawn"
+msgstr ""
 
 msgid "Sorpigal"
-msgstr "Sorpigal"
+msgstr ""
 
 msgid "Avone"
-msgstr "Avone"
+msgstr ""
 
 msgid "Big Oak"
-msgstr "Big Oak"
+msgstr ""
 
 msgid "Chandler"
-msgstr "Chandler"
+msgstr ""
 
 msgid "Erliquin"
-msgstr "Erliquin"
+msgstr ""
 
 msgid "Hampshire"
-msgstr "Hampshire"
+msgstr ""
 
 msgid "Antioch"
-msgstr "Antioch"
+msgstr ""
 
 msgid "Avalon"
-msgstr "Avalon"
+msgstr ""
 
 msgid "Roc Haven"
-msgstr "Roc Haven"
+msgstr ""
 
 msgid "South Mill"
-msgstr "South Mill"
+msgstr ""
 
 msgid "Weed Patch"
-msgstr "Weed Patch"
+msgstr ""
 
 msgid "Brownston"
-msgstr "Brownston"
+msgstr ""
 
 msgid "Hilltop"
-msgstr "Hilltop"
+msgstr ""
 
 msgid "Weddington"
-msgstr "Weddington"
+msgstr ""
 
 msgid "Westfork"
-msgstr "Westfork"
+msgstr ""
 
 msgid "Whittingham"
-msgstr "Whittingham"
+msgstr ""
 
 msgid "Cathcart"
-msgstr "Cathcart"
+msgstr ""
 
 msgid "Elk's Head"
-msgstr "Elk's Head"
+msgstr ""
 
 msgid "Roscomon"
-msgstr "Roscomon"
+msgstr ""
 
 msgid "Sherman"
-msgstr "Sherman"
+msgstr ""
 
 msgid "Yorksford"
-msgstr "Yorksford"
+msgstr ""
 
 msgid "Blackburn"
-msgstr "Blackburn"
+msgstr ""
 
 msgid "Blacksford"
-msgstr "Blacksford"
+msgstr ""
 
 msgid "Burton"
-msgstr "Burton"
+msgstr ""
 
 msgid "Pig's Eye"
-msgstr "Pig's Eye"
+msgstr ""
 
 msgid "Viper's Nest"
-msgstr "Viper's Nest"
+msgstr ""
 
 msgid "Fenton"
-msgstr "Fenton"
+msgstr ""
 
 msgid "Lankershire"
-msgstr "Lankershire"
+msgstr ""
 
 msgid "Lombard"
-msgstr "Lombard"
+msgstr ""
 
 msgid "Timberhill"
-msgstr "Timberhill"
+msgstr ""
 
 msgid "Troy"
-msgstr "Troy"
+msgstr ""
 
 msgid "Forder Oaks"
-msgstr "Forder Oaks"
+msgstr ""
 
 msgid "Meramec"
-msgstr "Meramec"
+msgstr ""
 
 msgid "Quick Silver"
-msgstr "Quick Silver"
+msgstr ""
 
 msgid "Westmoor"
-msgstr "Westmoor"
+msgstr ""
 
 msgid "Willow"
-msgstr "Willow"
+msgstr ""
 
 msgid "Corackston"
-msgstr "Corackston"
+msgstr ""
 
 msgid "Sheltemburg"
-msgstr "Sheltemburg"
+msgstr ""
 
 msgid "Cannot recruit - guest to guard automove error."
 msgstr ""
