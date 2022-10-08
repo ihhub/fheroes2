@@ -2,7 +2,6 @@
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the fheroes2 package.
 # fheroes2 team <fhomm2@gmail.com>, 2022
-# piano1029 <https://github.com/piano1029>, 2022
 #
 msgid ""
 msgstr ""
@@ -10,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-08 02:28+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
-"Last-Translator: piano1029 <https://github.com/piano1029>\n"
+"Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -24,8 +23,8 @@ msgid ""
 "BATTLE\n"
 "ONLY"
 msgstr ""
-"ALLEEN VOOR\n"
-"GEVENCHTEN"
+"ALLEEN\n"
+"STIJD"
 
 msgid "GIFT"
 msgstr "CADEAU"
@@ -121,31 +120,31 @@ msgstr ""
 "%{monster}"
 
 msgid "army|Few"
-msgstr "1-4"
+msgstr "Enkele"
 
 msgid "army|Several"
-msgstr "5-9"
+msgstr "Een paar"
 
 msgid "army|Pack"
-msgstr "10-19"
+msgstr "Groep"
 
 msgid "army|Lots"
-msgstr "20-49"
+msgstr "Veel"
 
 msgid "army|Horde"
-msgstr "50-99"
+msgstr "Horde"
 
 msgid "army|Throng"
-msgstr "100-249"
+msgstr "Menigte"
 
 msgid "army|Swarm"
-msgstr "250-499"
+msgstr "Zwerm"
 
 msgid "army|Zounds"
-msgstr "500-999"
+msgstr "Zounds"
 
 msgid "army|Legion"
-msgstr "1000+"
+msgstr "Legioen"
 
 msgid "All %{race} troops +1"
 msgstr "Alle %{ras} troepen +1"
