@@ -964,7 +964,7 @@ namespace
         }
 
         if ( allowToRestart ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_OKAY ) << " to Restart scenario." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::CAMPAIGN_RESTART_SCENARIO ) << " to Restart scenario." )
         }
         else {
             COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_OKAY ) << " to Start scenario." )
@@ -1285,7 +1285,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
         displayScenarioAwardsPopupWindow( campaignSaveData, top ) || displayScenarioBonusPopupWindow( scenario, top );
 
-        const bool restartButtonClicked = ( buttonRestart.isEnabled() && le.MouseClickLeft( buttonRestart.area() ) );
+        const bool restartButtonClicked
+            = ( buttonRestart.isEnabled() && ( le.MouseClickLeft( buttonRestart.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_RESTART_SCENARIO ) ) );
 
         if ( le.MousePressRight( buttonCancel.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Cancel" ), fheroes2::FontType::normalYellow() ),
