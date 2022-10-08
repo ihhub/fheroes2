@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 00:54+0000\n"
+"POT-Creation-Date: 2022-10-08 02:28+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -781,14 +781,23 @@ msgstr "Onkel Ivan"
 msgid "Annexation"
 msgstr "Underleggelse"
 
-msgid "Carator Mines"
-msgstr "Karatorgruvene"
-
 msgid "Force of Arms"
 msgstr "Væpnet maktbruk"
 
 msgid "Save the Dwarves"
 msgstr "Dvergenes unnsetning"
+
+msgid "Carator Mines"
+msgstr "Karatorgruvene"
+
+msgid "Turning Point"
+msgstr "Vendepunktet"
+
+msgid "scenarioName|Defender"
+msgstr ""
+
+msgid "Corlagon's Defense"
+msgstr "Korlagon sitt forsvar"
 
 msgid "The Crown"
 msgstr "Kronen"
@@ -796,14 +805,8 @@ msgstr "Kronen"
 msgid "The Gauntlet"
 msgstr "Kappløpet"
 
-msgid "Turning Point"
-msgstr "Vendepunktet"
-
 msgid "Betrayal"
 msgstr "Forræderi"
-
-msgid "Corlagon's Defense"
-msgstr "Korlagon sitt forsvar"
 
 msgid "Final Justice"
 msgstr "Rettferd, for godt"

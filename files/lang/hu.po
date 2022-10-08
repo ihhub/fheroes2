@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 00:54+0000\n"
+"POT-Creation-Date: 2022-10-08 02:28+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -811,16 +811,27 @@ msgid "Annexation"
 msgstr "animáció"
 
 #, fuzzy
-msgid "Carator Mines"
-msgstr "Kristálybánya"
-
-#, fuzzy
 msgid "Force of Arms"
 msgstr "\"Karok Ereje\""
 
 #, fuzzy
 msgid "Save the Dwarves"
 msgstr "Törp harcos"
+
+#, fuzzy
+msgid "Carator Mines"
+msgstr "Kristálybánya"
+
+#, fuzzy
+msgid "Turning Point"
+msgstr "Fordulópont"
+
+msgid "scenarioName|Defender"
+msgstr ""
+
+#, fuzzy
+msgid "Corlagon's Defense"
+msgstr "Sárkány Szem"
 
 #, fuzzy
 msgid "The Crown"
@@ -830,16 +841,8 @@ msgid "The Gauntlet"
 msgstr ""
 
 #, fuzzy
-msgid "Turning Point"
-msgstr "Fordulópont"
-
-#, fuzzy
 msgid "Betrayal"
 msgstr "\"Árulás!'"
-
-#, fuzzy
-msgid "Corlagon's Defense"
-msgstr "Sárkány Szem"
 
 msgid "Final Justice"
 msgstr ""
