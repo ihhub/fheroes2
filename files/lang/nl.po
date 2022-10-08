@@ -8827,7 +8827,9 @@ msgid ""
 "it, but it passes right through them and sears itself into your chest."
 msgstr ""
 "Je gaat een onlangs verbrande open plek binnen en komt een Vuur Elementaal "
-"tegen die bovenop een rots zit. Hij kijkt op, zijn vlammende gezicht verwrongen in een blik van hevige pijn. Het gooit dan een gloeiend voorwerp naar je toe. Je steekt je handen op om het te blokkeren, maar het gaat er dwars doorheen en schroeit zichzelf in je borst."
+"tegen die bovenop een rots zit. Hij kijkt op, zijn vlammende gezicht verwrongen "
+"in een blik van hevige pijn. Het gooit dan een gloeiend voorwerp naar je toe. Je "
+"steekt je handen op om het te blokkeren, maar het gaat er dwars doorheen en schroeit zichzelf in je borst."
 
 msgid "Heart of Ice"
 msgstr "Hart van IJs"
@@ -9303,13 +9305,13 @@ msgid "Blood Lust"
 msgstr "Bloedlust"
 
 msgid "Increases a unit's attack skill."
-msgstr ""
+msgstr "Verhoogt de aanvalsvaardigheid van een eenheid."
 
 msgid "Animate Dead"
 msgstr "Animeer Doden"
 
 msgid "Resurrects creatures from a damaged or dead undead unit permanently."
-msgstr ""
+msgstr "Wekt permanent wezens op uit een beschadigde of dode ondode eenheid."
 
 msgid "Mirror Image"
 msgstr "Spiegelbeeld"
@@ -9319,15 +9321,18 @@ msgid ""
 "This illusionary unit does the same damages as the original, but will vanish "
 "if it takes any damage."
 msgstr ""
+"Creëert een illusionaire eenheid die een van uw bestaande eenheden dupliceert. "
+"Deze illusionaire eenheid doet dezelfde schade als het origineel, maar zal "
+"verdwijnen als hij schade oploopt."
 
 msgid "Halves damage received from ranged attacks for a single unit."
-msgstr ""
+msgstr "Halveert de schade die is opgelopen door afstandsaanvallen voor een enkele eenheid."
 
 msgid "Shield"
 msgstr "Schild"
 
 msgid "Halves damage received from ranged attacks for all of your units."
-msgstr ""
+msgstr "Halveert de schade die je eenheden ontvangen van aanvallen op afstand."
 
 msgid "Mass Shield"
 msgstr "Massa Schild"
@@ -9336,25 +9341,25 @@ msgid "Summon Earth Elemental"
 msgstr "Elementair Aarde oproepen"
 
 msgid "Summons Earth Elementals to fight for your army."
-msgstr ""
+msgstr "Roept Aarde Elementairen op om te vechten in je leger."
 
 msgid "Summon Air Elemental"
 msgstr "Elementair Lucht oproepen"
 
 msgid "Summons Air Elementals to fight for your army."
-msgstr ""
+msgstr "Summons Lucht Elementals to fight for your army."
 
 msgid "Summon Fire Elemental"
 msgstr "Elementair Vuur oproepen"
 
 msgid "Summons Fire Elementals to fight for your army."
-msgstr ""
+msgstr "Summons Vuur Elementals to fight for your army."
 
 msgid "Summon Water Elemental"
 msgstr "Elementair Water oproepen"
 
 msgid "Summons Water Elementals to fight for your army."
-msgstr ""
+msgstr "Summons Water Elementals to fight for your army."
 
 msgid "Damages castle walls."
 msgstr "Beschaadigd kasteel muren."
@@ -9363,43 +9368,43 @@ msgid "Earthquake"
 msgstr "Aardbeving"
 
 msgid "Causes all mines across the land to become visible."
-msgstr ""
+msgstr "Zorgt ervoor dat alle mijnen over het land zichtbaar worden."
 
 msgid "View Mines"
 msgstr "Bekijk Mijnen"
 
 msgid "Causes all resources across the land to become visible."
-msgstr ""
+msgstr "Zorgt ervoor dat alle bronnen over het land zichtbaar worden."
 
 msgid "View Resources"
 msgstr "Bekijk Bronnen"
 
 msgid "Causes all artifacts across the land to become visible."
-msgstr ""
+msgstr "Zorgt ervoor dat alle artefacten over het land zichtbaar worden."
 
 msgid "View Artifacts"
 msgstr "Bekijk Artefacten"
 
 msgid "Causes all towns and castles across the land to become visible."
-msgstr ""
+msgstr "Zorgt ervoor dat alle dorpen en kastelen over het land zichtbaar worden."
 
 msgid "View Towns"
 msgstr "Bekijk Dorpen"
 
 msgid "Causes all Heroes across the land to become visible."
-msgstr ""
+msgstr "Zorgt ervoor dat alle helden over het land zichtbaar worden."
 
 msgid "View Heroes"
 msgstr "Bekijk Helden"
 
 msgid "Causes the entire land to become visible."
-msgstr ""
+msgstr "Zorgt ervoor dat het hele land zichtbaar wordt."
 
 msgid "View All"
 msgstr "Bekijk Al"
 
 msgid "Allows the caster to view detailed information on enemy Heroes."
-msgstr ""
+msgstr "Hiermee kan de spreker van de spreuk gedetailleerde informatie over vijandelijke helden bekijken."
 
 msgid "Identify Hero"
 msgstr "Identificeer Held"
@@ -9412,15 +9417,18 @@ msgid ""
 "location.  A friendly boat is one which you just built or were the most "
 "recent player to occupy."
 msgstr ""
+"Roept de dichtstbijzijnde onbezette, vriendelijke boot naar een "
+"aangrenzende kustlocatie. Een bevriende boot is er een die je net "
+"hebt gebouwd of de meest recente speler was om te bezetten."
 
 msgid "Allows the caster to magically transport to a nearby location."
-msgstr ""
+msgstr "Hiermee kan de spreker van de spreuk magisch teleporteren naar een locatie in de buurt."
 
 msgid "Dimension Door"
 msgstr "Dimensie Deur"
 
 msgid "Returns the caster to any town or castle currently owned."
-msgstr ""
+msgstr "Brengt de spreker van de spreuk terug naar een stad of kasteel dat momenteel in bezit is."
 
 msgid "Town Gate"
 msgstr "Dorp Muur"
@@ -9429,6 +9437,8 @@ msgid ""
 "Returns the hero to the town or castle of choice, provided it is controlled "
 "by you."
 msgstr ""
+"Brengt de held terug naar een stad of kasteel naar keuze, op voorwaarde "
+"dat het door jou wordt bestuurd."
 
 msgid "Visions"
 msgstr "Vizioenen"
@@ -9436,6 +9446,7 @@ msgstr "Vizioenen"
 msgid ""
 "Visions predicts the likely outcome of an encounter with a neutral army camp."
 msgstr ""
+"Visions voorspelt de waarschijnlijke uitkomst van een ontmoeting met een neutraal legerkamp."
 
 msgid "Haunt"
 msgstr "Kwellen"
@@ -9444,30 +9455,32 @@ msgid ""
 "Haunts a mine you control with Ghosts.  This mine stops producing "
 "resources.  (If I can't keep it, nobody will!)"
 msgstr ""
+"Kwelt een mijn die je bezit met Geesten. Deze mijn zal geen "
+"grondstoffen meer produceeren. (Als ik het niet kan houden, zal niemand het!)"
 
 msgid "Set Earth Guardian"
 msgstr "Aarde Bewaker Instellen"
 
 msgid "Sets Earth Elementals to guard a mine against enemy armies."
-msgstr ""
+msgstr "Stelt Aarde Elementairs in om een mijn te tegen vijandelijke legers te bewaken."
 
 msgid "Set Air Guardian"
 msgstr "Lucht Bewaker Instellen"
 
 msgid "Sets Air Elementals to guard a mine against enemy armies."
-msgstr ""
+msgstr "Stelt Lucht Elementairs in om een mijn te tegen vijandelijke legers te bewaken."
 
 msgid "Set Fire Guardian"
 msgstr "Vuur Bewaker Instellen"
 
 msgid "Sets Fire Elementals to guard a mine against enemy armies."
-msgstr ""
+msgstr "Stelt Vuur Elementairs in om een mijn te tegen vijandelijke legers te bewaken."
 
 msgid "Set Water Guardian"
 msgstr "Water Bewaker Instellen"
 
 msgid "Sets Water Elementals to guard a mine against enemy armies."
-msgstr ""
+msgstr "Stelt Water Elementairs in om een mijn te tegen vijandelijke legers te bewaken."
 
 msgid "Petrification"
 msgstr "Verstening"
@@ -9476,6 +9489,8 @@ msgid ""
 "Turns the affected creature into stone.  A petrified creature receives half "
 "damage from a direct attack."
 msgstr ""
+"Verandert het schepsel in steen. Een versteend wezen ontvangt maar de halve "
+"schade van een directe aanval."
 
 msgid "You have no Magic Book, so you cannot cast a spell."
 msgstr "Je hebt geen Magisch Boek, dus je kunt geen spreuk uitspreken."
