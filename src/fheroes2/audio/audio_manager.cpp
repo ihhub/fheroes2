@@ -419,6 +419,9 @@ namespace
     std::map<M82::SoundType, std::vector<ChannelAudioLoopEffectInfo>> currentAudioLoopEffects;
     bool is3DAudioLoopEffectsEnabled{ false };
 
+    // The music track last requested to be played
+    int lastRequestedMusicTrackId{ MUS::UNKNOWN };
+    // The music track that is currently being played
     std::atomic<int> currentMusicTrackId{ MUS::UNKNOWN };
 
     fheroes2::AGGFile g_midiHeroes2AGG;
@@ -798,25 +801,13 @@ namespace AudioManager
     }
 
     MusicRestorer::MusicRestorer()
-        : _music( currentMusicTrackId )
+        : _music( lastRequestedMusicTrackId )
     {
         // Do nothing.
     }
 
     MusicRestorer::~MusicRestorer()
     {
-        if ( _music == MUS::UNUSED || _music == MUS::UNKNOWN ) {
-            currentMusicTrackId = _music;
-
-            return;
-        }
-
-        // Set current music to MUS::UNKNOWN to prevent attempts to play the old music by new instances of
-        // MusicRestorer while the music being currently restored is starting in the background
-        if ( _music != currentMusicTrackId ) {
-            currentMusicTrackId = MUS::UNKNOWN;
-        }
-
         // It is assumed that the previous track was looped and should be resumed
         PlayMusicAsync( _music, Music::PlaybackMode::RESUME_AND_PLAY_INFINITE );
     }
@@ -863,11 +854,13 @@ namespace AudioManager
 
     void PlayMusic( const int trackId, const Music::PlaybackMode playbackMode )
     {
-        if ( trackId == MUS::UNUSED || trackId == MUS::UNKNOWN ) {
+        if ( !Audio::isValid() ) {
             return;
         }
 
-        if ( !Audio::isValid() ) {
+        lastRequestedMusicTrackId = trackId;
+
+        if ( trackId == MUS::UNUSED || trackId == MUS::UNKNOWN ) {
             return;
         }
 
@@ -879,11 +872,13 @@ namespace AudioManager
 
     void PlayMusicAsync( const int trackId, const Music::PlaybackMode playbackMode )
     {
-        if ( trackId == MUS::UNUSED || trackId == MUS::UNKNOWN ) {
+        if ( !Audio::isValid() ) {
             return;
         }
 
-        if ( !Audio::isValid() ) {
+        lastRequestedMusicTrackId = trackId;
+
+        if ( trackId == MUS::UNUSED || trackId == MUS::UNKNOWN ) {
             return;
         }
 
@@ -940,6 +935,7 @@ namespace AudioManager
         Music::Stop();
         Mixer::Stop();
 
+        lastRequestedMusicTrackId = MUS::UNKNOWN;
         currentMusicTrackId = MUS::UNKNOWN;
     }
 }
