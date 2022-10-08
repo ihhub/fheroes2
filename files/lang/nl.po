@@ -24,7 +24,7 @@ msgid ""
 "ONLY"
 msgstr ""
 "ALLEEN\n"
-"STIJD"
+"STRIJD"
 
 msgid "GIFT"
 msgstr "DONEREN"
