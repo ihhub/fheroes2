@@ -1310,7 +1310,7 @@ msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr "De dwergen herkennen hun bondgenoten en sluiten zich graag bij je aan."
 
 msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
-msgstr "De ogres herkennen je als de Dwergbane en sjokken naar je toe."
+msgstr "De ogres herkennen je als de Drawven Moordenaar en sjokken naar je toe."
 
 msgid ""
 "The dragons, snarling and growling, agree to join forces with you, their "
@@ -1360,7 +1360,7 @@ msgstr ""
 "moge de overwinning van jou zijn.\""
 
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
-msgstr "\"The Dwarfbane!!!!, ren voor je leven.\""
+msgstr "\"De Drawven Moordenaar!!!!, ren voor je leven.\""
 
 msgid "campaignBonus|Ballista"
 msgstr "Ballista"
