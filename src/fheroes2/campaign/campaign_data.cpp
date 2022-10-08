@@ -166,9 +166,10 @@ namespace
         const int scenarioCount = 11;
 
         const std::array<std::string, scenarioCount> scenarioName
-            = { gettext_noop( "Force of Arms" ),      gettext_noop( "Annexation" ),    gettext_noop( "Save the Dwarves" ), gettext_noop( "Carator Mines" ),
-                gettext_noop( "Turning Point" ),      gettext_noop( "Defender" ),      gettext_noop( "The Gauntlet" ),     gettext_noop( "The Crown" ),
-                gettext_noop( "Corlagon's Defense" ), gettext_noop( "Final Justice" ), gettext_noop( "Betrayal" ) };
+            = { gettext_noop( "Force of Arms" ), gettext_noop( "Annexation" ),    gettext_noop( "Save the Dwarves" ),
+                gettext_noop( "Carator Mines" ), gettext_noop( "Turning Point" ), gettext_noop( "scenarioName|Defender" ),
+                gettext_noop( "The Gauntlet" ),  gettext_noop( "The Crown" ),     gettext_noop( "Corlagon's Defense" ),
+                gettext_noop( "Final Justice" ), gettext_noop( "Betrayal" ) };
         const std::array<std::string, scenarioCount> scenarioDescription = {
             gettext_noop(
                 "Roland needs you to defeat the lords near his castle to begin his war of rebellion against his brother.  They are not allied with each other, so they will spend"
