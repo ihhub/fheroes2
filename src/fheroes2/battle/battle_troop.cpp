@@ -1533,9 +1533,9 @@ bool Battle::Unit::isDoubleAttack() const
         return isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK );
     }
 
-    // Archers with double shooting ability can only fire a second shot if they still have ammo
+    // Archers with double shooting ability can only fire a second shot if they have enough ammo
     if ( isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_SHOOTING ) ) {
-        return GetShots() > 0;
+        return GetShots() > 1;
     }
 
     return false;

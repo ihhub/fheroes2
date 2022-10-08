@@ -342,6 +342,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
         DEBUG_LOG( DBG_BATTLE, DBG_TRACE, attacker->String() << " to " << defender->String() )
 
         const bool handfighting = Unit::isHandFighting( *attacker, *defender );
+        const bool doubleAttack = attacker->isDoubleAttack();
 
         if ( attacker->isArchers() || handfighting ) {
             defender->SetBlindAnswer( defender->Modes( SP_BLIND ) );
@@ -356,7 +357,7 @@ void Battle::Arena::ApplyActionAttack( Command & cmd )
 
                 defender->SetBlindAnswer( false );
 
-                if ( attacker->isValid() && attacker->isDoubleAttack() && !attacker->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
+                if ( doubleAttack && attacker->isValid() && !attacker->Modes( SP_BLIND | IS_PARALYZE_MAGIC ) ) {
                     DEBUG_LOG( DBG_BATTLE, DBG_TRACE, "double attack" )
                     BattleProcess( *attacker, *defender, dst, dir );
                 }
