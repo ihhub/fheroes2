@@ -120,10 +120,10 @@ msgstr ""
 "%{monster}"
 
 msgid "army|Few"
-msgstr "Enkele"
+msgstr "Een paar"
 
 msgid "army|Several"
-msgstr "Een paar"
+msgstr "Meerdere"
 
 msgid "army|Pack"
 msgstr "Groep"
