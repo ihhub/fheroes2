@@ -99,7 +99,7 @@ namespace
 
     void replaceTranformPixel( fheroes2::Image & image, const int32_t position, const uint8_t value )
     {
-        if ( image.transform()[position] != 0 ) {
+        if ( ( position < ( image.width() * image.height() ) ) && ( image.transform()[position] != 0 ) ) {
             image.transform()[position] = 0;
             image.image()[position] = value;
         }
@@ -424,7 +424,10 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::EVIL_CAMPAIGN_BUTTONS, 0 + i );
                     // clean the button.
-                    Fill( out, 13 + 2 * i, 3 + 2 * i, 129 - 2 * i, 16, out.image()[13 - 7 * i + ( 5 + i ) * ( 145 - ( 4 * i ) )] );
+                    const int32_t pixelPosition = 13 - 7 * i + ( 5 + i ) * ( 145 - ( 4 * i ) );
+                    if ( pixelPosition < ( out.width() * out.height() ) ) {
+                        Fill( out, 13 + 2 * i, 3 + 2 * i, 129 - 2 * i, 16, out.image()[pixelPosition] );
+                    }
                 }
 
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 11, 5 }, { 12, 6 }, { 131, 17 },
@@ -452,7 +455,10 @@ namespace fheroes2
                     Sprite & out = _icnVsSprite[id][i];
                     out = GetICN( ICN::X_CMPBTN, 0 + i );
                     // clean the button.
-                    Fill( out, 4, 3 + i, 132 - i, 16, out.image()[5 * 132] );
+                    const int32_t pixelPosition = 5 * 132;
+                    if ( pixelPosition < ( out.width() * out.height() ) ) {
+                        Fill( out, 4, 3 + i, 132 - i, 16, out.image()[pixelPosition] );
+                    }
                 }
 
                 renderTextOnButton( _icnVsSprite[id][0], _icnVsSprite[id][1], gettext_noop( "DIFFICULTY" ), { 5, 5 }, { 5, 5 }, { 132, 17 }, fheroes2::FontColor::GRAY );
