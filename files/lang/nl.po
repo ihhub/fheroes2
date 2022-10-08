@@ -141,7 +141,7 @@ msgid "army|Swarm"
 msgstr "Zwerm"
 
 msgid "army|Zounds"
-msgstr "Zounds"
+msgstr "Honderden"
 
 msgid "army|Legion"
 msgstr "Legioen"
