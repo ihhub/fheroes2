@@ -33,7 +33,7 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "DIFFICULTY"
-msgstr "MOEILIJKHEID"
+msgstr "NIVEAU"
 
 msgid "Warrior"
 msgstr "Strijder"
