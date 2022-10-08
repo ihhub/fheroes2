@@ -780,20 +780,11 @@ msgstr "De Handschoen"
 msgid "Turning Point"
 msgstr "Draai Punt"
 
-msgid "Betrayal"
-msgstr "Bedrog"
-
 msgid "scenarioName|Defender"
 msgstr "Beschermer"
 
 msgid "Corlagon's Defense"
 msgstr "Corlagons Verdediging"
-
-msgid "The Crown"
-msgstr "De Kroon"
-
-msgid "The Gauntlet"
-msgstr "De Handschoen"
 
 msgid "Betrayal"
 msgstr "Veraad"
