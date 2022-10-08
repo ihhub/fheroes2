@@ -516,7 +516,7 @@ msgid ""
 "get to go again until the next round."
 msgstr ""
 "Slaat het huidige schepsel over. Het huidige schepsel eindigt zijn beurt en "
-"mag pas de volgende ronde weer gaan.
+"mag pas de volgende ronde weer gaan."
 
 msgid "View Captain's options"
 msgstr "Bekijk Kapitein's opties"
