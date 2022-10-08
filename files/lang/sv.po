@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 00:54+0000\n"
+"POT-Creation-Date: 2022-10-08 02:28+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -792,15 +792,25 @@ msgstr "Farbror Ivan"
 msgid "Annexation"
 msgstr "\"Tillägg\""
 
-#, fuzzy
-msgid "Carator Mines"
-msgstr "Kristallgruva"
-
 msgid "Force of Arms"
 msgstr ""
 
 msgid "Save the Dwarves"
 msgstr "Rädda dvärgarna"
+
+#, fuzzy
+msgid "Carator Mines"
+msgstr "Kristallgruva"
+
+msgid "Turning Point"
+msgstr "Vändpunkt"
+
+msgid "scenarioName|Defender"
+msgstr ""
+
+#, fuzzy
+msgid "Corlagon's Defense"
+msgstr "Draköga"
 
 msgid "The Crown"
 msgstr "Kronan"
@@ -810,16 +820,9 @@ msgstr "Kronan"
 msgid "The Gauntlet"
 msgstr "\"Stridshandsken\""
 
-msgid "Turning Point"
-msgstr "Vändpunkt"
-
 #, fuzzy
 msgid "Betrayal"
 msgstr "\"Förräderi!\""
-
-#, fuzzy
-msgid "Corlagon's Defense"
-msgstr "Draköga"
 
 msgid "Final Justice"
 msgstr ""
