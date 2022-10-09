@@ -809,6 +809,9 @@ msgstr "Переломный момент"
 msgid "Betrayal"
 msgstr "Предательство"
 
+msgid "scenarioName|Defender"
+msgstr "Защитник"
+
 msgid "Corlagon's Defense"
 msgstr "Защита Корлагона"
 
