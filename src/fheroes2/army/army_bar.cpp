@@ -190,7 +190,7 @@ void ArmyBar::SetArmy( Army * ptr )
             assert( troop != nullptr );
 
             troop->SetArmy( *ptr );
-            
+
             items.push_back( troop );
         }
     }
