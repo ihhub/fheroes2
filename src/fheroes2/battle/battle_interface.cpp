@@ -748,7 +748,7 @@ void Battle::OpponentSprite::Redraw( fheroes2::Image & dst ) const
         fheroes2::Blit( hero, dst, offset.x + fheroes2::Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( hero.x() + hero.width() ), offset.y + RIGHT_HERO_Y_OFFSET + hero.y(),
                         reflect );
     else
-        fheroes2::Blit( hero, dst, offset.x + HERO_X_OFFSET + hero.x(), offset.y + LEFT_HERO_Y_OFFSET + hero.y() );
+        fheroes2::Blit( hero, dst, offset.x + HERO_X_OFFSET + hero.x() + 1, offset.y + LEFT_HERO_Y_OFFSET + hero.y() );
 }
 
 void Battle::OpponentSprite::Update()
