@@ -189,6 +189,8 @@ void ArmyBar::SetArmy( Army * ptr )
             ArmyTroop * troop = dynamic_cast<ArmyTroop *>( ptr->GetTroop( ii ) );
             assert( troop != nullptr );
 
+            troop->SetArmy( *ptr );
+            
             items.push_back( troop );
         }
     }
