@@ -547,6 +547,11 @@ namespace AI
                 if ( res.DefenderWins() ) {
                 other_hero->IncreaseExperience( res.GetExperienceDefender() );
             }
+
+            hero.ActionAfterBattle();
+            if ( other_hero->isControlAI() ) {
+                other_hero->ActionAfterBattle();
+            }
         }
     }
 
@@ -623,6 +628,7 @@ namespace AI
                 castle->Scoute();
             }
         }
+        hero.ActionAfterBattle();
     }
 
     void AIToMonster( Heroes & hero, int32_t dst_index )
@@ -698,6 +704,7 @@ namespace AI
             tile.setAsEmpty();
         }
 
+        hero.ActionAfterBattle();
         hero.unmarkHeroMeeting();
     }
 
@@ -1624,6 +1631,9 @@ namespace AI
 
         // TODO: pass heroes instances into this method to identify which artifacts are useful: some might be curses, others could be duplicates with no effects.
         taker.GetBagArtifacts().exchangeArtifacts( giver.GetBagArtifacts() );
+
+        left.ActionAfterBattle();
+        right.ActionAfterBattle();
     }
 
     void HeroesMove( Heroes & hero )
