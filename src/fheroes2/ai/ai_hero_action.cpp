@@ -1627,7 +1627,7 @@ namespace AI
         taker.GetArmy().JoinStrongestFromArmy( giver.GetArmy() );
 
         // TODO: pass heroes instances into this method to identify which artifacts are useful: some might be curses, others could be duplicates with no effects.
-        taker.GetBagArtifacts().exchangeArtifacts( giver.GetBagArtifacts() );
+        taker.GetBagArtifacts().exchangeArtifacts( giver.GetBagArtifacts(), taker, giver );
     }
 
     void HeroesMove( Heroes & hero )

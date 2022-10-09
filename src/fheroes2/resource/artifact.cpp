@@ -56,6 +56,23 @@ namespace
         ART_RNDDISABLED = 0x01,
         ART_RNDUSED = 0x02
     };
+
+    void transferArtifactsByCondition( std::vector<Artifact> & artifacts, BagArtifacts & artifactBag, const std::function<bool( const Artifact & )> & condition )
+    {
+        for ( auto iter = artifacts.begin(); iter != artifacts.end(); ) {
+            if ( condition( *iter ) ) {
+                if ( !artifactBag.PushArtifact( *iter ) ) {
+                    // The bag is full so no need to proceed further.
+                    return;
+                }
+
+                iter = artifacts.erase( iter );
+                continue;
+            }
+
+            ++iter;
+        }
+    }
 }
 
 const char * Artifact::GetName() const
@@ -824,7 +841,7 @@ double BagArtifacts::getArtifactValue() const
     return result;
 }
 
-void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag )
+void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & taker, const Heroes & giver )
 {
     std::vector<Artifact> combined;
     for ( auto it = begin(); it != end(); ++it ) {
@@ -841,7 +858,72 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag )
         }
     }
 
-    // better artifacts at the end
+    auto isPureCursedArtifact = []( const Artifact & artifact ) {
+        const fheroes2::ArtifactData & data = fheroes2::getArtifactData( artifact.GetID() );
+        return !data.curses.empty() && data.bonuses.empty();
+    };
+
+    // Pure cursed artifacts (artifacts with no bonuses) should definitely go to another bag.
+    transferArtifactsByCondition( combined, giftBag, isPureCursedArtifact );
+
+    if ( !taker.HasSecondarySkill( Skill::Secondary::NECROMANCY ) && giver.HasSecondarySkill( Skill::Secondary::NECROMANCY ) ) {
+        auto isNecromancyArtifact = []( const Artifact & artifact ) {
+            const fheroes2::ArtifactData & data = fheroes2::getArtifactData( artifact.GetID() );
+            if ( data.bonuses.empty() ) {
+                return false;
+            }
+
+            for ( const fheroes2::ArtifactBonus & bonus : data.bonuses ) {
+                if ( bonus.type != fheroes2::ArtifactBonusType::NECROMANCY_SKILL ) {
+                    return false;
+                }
+            }
+
+            return true;
+        };
+
+        // Taker hero has Necromancy skill so it would be more useful for him to use Necromancy related artifacts.
+        transferArtifactsByCondition( combined, giftBag, isNecromancyArtifact );
+    }
+
+    // Scrolls are effective if they contain spells which are not present in the book.
+
+    // A unique artifact is an artifact with no curses and all bonuses are unique.
+    auto isUniqueArtifact = []( const Artifact & artifact ) {
+        const fheroes2::ArtifactData & data = fheroes2::getArtifactData( artifact.GetID() );
+        if ( !data.curses.empty() ) {
+            return false;
+        }
+
+        for ( const fheroes2::ArtifactBonus & bonus : data.bonuses ) {
+            if ( fheroes2::isBonusCumulative( bonus.type ) ) {
+                return false;
+            }
+        }
+
+        return true;
+    };
+
+    // Search for copies of unique artifacts. All copies of unique artifact are useless.
+    for ( auto mainIter = combined.begin(); mainIter != combined.end(); ++mainIter ) {
+        if ( isUniqueArtifact( *mainIter ) ) {
+            for ( auto iter = mainIter + 1; iter != combined.end(); ) {
+                if ( *iter == *mainIter ) {
+                    if ( !giftBag.PushArtifact( *iter ) ) {
+                        // The bag is full. No need to proceeed further.
+                        break;
+                    }
+
+                    iter = combined.erase( iter );
+                }
+                else {
+                    ++iter;
+                }
+            }
+        }
+    }
+
+    // Sort artifact by value from lowest to highest since we pick artifacts from the end of container.
     std::sort( combined.begin(), combined.end(), []( const Artifact & left, const Artifact & right ) { return left.getArtifactValue() < right.getArtifactValue(); } );
 
     // reset and clear all current artifacts, put back the best
@@ -852,6 +934,8 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag )
     while ( !combined.empty() && giftBag.PushArtifact( combined.back() ) ) {
         combined.pop_back();
     }
+
+    assert( combined.empty() );
 }
 
 bool BagArtifacts::ContainUltimateArtifact() const
