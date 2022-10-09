@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-01 19:29+0000\n"
+"POT-Creation-Date: 2022-10-08 02:28+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -786,14 +786,23 @@ msgstr "Onkel Ivan"
 msgid "Annexation"
 msgstr "Annektion"
 
-msgid "Carator Mines"
-msgstr "Die Carator-Minen"
-
 msgid "Force of Arms"
 msgstr "Macht des Schwerts"
 
 msgid "Save the Dwarves"
 msgstr "Rettet die Zwerge"
+
+msgid "Carator Mines"
+msgstr "Die Carator-Minen"
+
+msgid "Turning Point"
+msgstr "Wendepunkt"
+
+msgid "scenarioName|Defender"
+msgstr ""
+
+msgid "Corlagon's Defense"
+msgstr "Corlagons Kampf"
 
 msgid "The Crown"
 msgstr "Die Krone"
@@ -801,14 +810,8 @@ msgstr "Die Krone"
 msgid "The Gauntlet"
 msgstr "Fehdehandschuh"
 
-msgid "Turning Point"
-msgstr "Wendepunkt"
-
 msgid "Betrayal"
 msgstr "Verrat"
-
-msgid "Corlagon's Defense"
-msgstr "Corlagons Kampf"
 
 msgid "Final Justice"
 msgstr "Gerechtigkeit"
@@ -3931,6 +3934,21 @@ msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr ""
 "Die Zeit läuft ab. (Nicht mit einem bestimmten Punkt Vorsprung gewinnen.)"
 
+#, fuzzy
+msgid "You must defeat the enemy %{enemies}."
+msgid_plural "You must defeat the enemy alliance of %{enemies}."
+msgstr[0] "Den Helden '%{name}' besiegen."
+msgstr[1] "Den Helden '%{name}' besiegen."
+
+msgid ""
+"The alliance consisting of %{allies} and you must defeat the enemy "
+"%{enemies}."
+msgid_plural ""
+"The alliance consisting of %{allies} and you must defeat the enemy alliance "
+"of %{enemies}."
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Capture the castle '%{name}'."
 msgstr "Die Burg '%{name}' erobern."
 
@@ -4178,6 +4196,11 @@ msgstr ""
 
 msgid "Try looking on land!!!"
 msgstr "Versuchen Sie es, auf dem Land zu suchen!!!"
+
+msgid ""
+"Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
+"it even if he found it - all his artifact slots are full."
+msgstr ""
 
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."

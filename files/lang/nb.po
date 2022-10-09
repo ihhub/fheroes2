@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-01 19:29+0000\n"
+"POT-Creation-Date: 2022-10-08 02:28+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -781,14 +781,23 @@ msgstr "Onkel Ivan"
 msgid "Annexation"
 msgstr "Underleggelse"
 
-msgid "Carator Mines"
-msgstr "Karatorgruvene"
-
 msgid "Force of Arms"
 msgstr "Væpnet maktbruk"
 
 msgid "Save the Dwarves"
 msgstr "Dvergenes unnsetning"
+
+msgid "Carator Mines"
+msgstr "Karatorgruvene"
+
+msgid "Turning Point"
+msgstr "Vendepunktet"
+
+msgid "scenarioName|Defender"
+msgstr ""
+
+msgid "Corlagon's Defense"
+msgstr "Korlagon sitt forsvar"
 
 msgid "The Crown"
 msgstr "Kronen"
@@ -796,14 +805,8 @@ msgstr "Kronen"
 msgid "The Gauntlet"
 msgstr "Kappløpet"
 
-msgid "Turning Point"
-msgstr "Vendepunktet"
-
 msgid "Betrayal"
 msgstr "Forræderi"
-
-msgid "Corlagon's Defense"
-msgstr "Korlagon sitt forsvar"
 
 msgid "Final Justice"
 msgstr "Rettferd, for godt"
@@ -3961,6 +3964,21 @@ msgstr ""
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr "Gå tom for tid. (Mislykkes i å vinne innen en viss tid.)"
 
+#, fuzzy
+msgid "You must defeat the enemy %{enemies}."
+msgid_plural "You must defeat the enemy alliance of %{enemies}."
+msgstr[0] "Slå ut helten kalt %{name}."
+msgstr[1] "Slå ut helten kalt %{name}."
+
+msgid ""
+"The alliance consisting of %{allies} and you must defeat the enemy "
+"%{enemies}."
+msgid_plural ""
+"The alliance consisting of %{allies} and you must defeat the enemy alliance "
+"of %{enemies}."
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Capture the castle '%{name}'."
 msgstr "Overta borgen kalt %{name}."
 
@@ -4203,6 +4221,11 @@ msgstr ""
 
 msgid "Try looking on land!!!"
 msgstr "Prøv å let på land!!!"
+
+msgid ""
+"Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
+"it even if he found it - all his artifact slots are full."
+msgstr ""
 
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-01 19:29+0000\n"
+"POT-Creation-Date: 2022-10-08 02:28+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -814,15 +814,26 @@ msgstr "Uncle Ivan"
 msgid "Annexation"
 msgstr "Anexión"
 
-msgid "Carator Mines"
-msgstr "Minas de Carator"
-
 #, fuzzy
 msgid "Force of Arms"
 msgstr "\"La Fuerza de las Armas\""
 
 msgid "Save the Dwarves"
 msgstr "Salva a los Enanos"
+
+msgid "Carator Mines"
+msgstr "Minas de Carator"
+
+#, fuzzy
+msgid "Turning Point"
+msgstr "\"Punto de retorno\""
+
+msgid "scenarioName|Defender"
+msgstr ""
+
+#, fuzzy
+msgid "Corlagon's Defense"
+msgstr "Corlagon"
 
 msgid "The Crown"
 msgstr "La Corona"
@@ -831,16 +842,8 @@ msgstr "La Corona"
 msgid "The Gauntlet"
 msgstr "\"El Guantelete\""
 
-#, fuzzy
-msgid "Turning Point"
-msgstr "\"Punto de retorno\""
-
 msgid "Betrayal"
 msgstr "Traición"
-
-#, fuzzy
-msgid "Corlagon's Defense"
-msgstr "Corlagon"
 
 msgid "Final Justice"
 msgstr ""
@@ -3909,6 +3912,21 @@ msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr "Agotarse el tiempo. (Fracasando sin ganar por alguna condición.)"
 
 #, fuzzy
+msgid "You must defeat the enemy %{enemies}."
+msgid_plural "You must defeat the enemy alliance of %{enemies}."
+msgstr[0] "Derrota el héroe '%{name}"
+msgstr[1] "Derrota el héroe '%{name}"
+
+msgid ""
+"The alliance consisting of %{allies} and you must defeat the enemy "
+"%{enemies}."
+msgid_plural ""
+"The alliance consisting of %{allies} and you must defeat the enemy alliance "
+"of %{enemies}."
+msgstr[0] ""
+msgstr[1] ""
+
+#, fuzzy
 msgid "Capture the castle '%{name}'."
 msgstr "Captura el castillo de '%{name}'"
 
@@ -4161,6 +4179,11 @@ msgstr ""
 "perderá)"
 
 msgid "Try looking on land!!!"
+msgstr ""
+
+msgid ""
+"Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
+"it even if he found it - all his artifact slots are full."
 msgstr ""
 
 #, fuzzy

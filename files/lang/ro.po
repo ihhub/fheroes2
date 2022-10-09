@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-28 22:56+0000\n"
+"POT-Creation-Date: 2022-10-08 02:28+0000\n"
 "PO-Revision-Date: 2022-09-30 21:13+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -779,14 +779,23 @@ msgstr "Unchiul Ivan"
 msgid "Annexation"
 msgstr "Anexare"
 
-msgid "Carator Mines"
-msgstr "Minele Carator"
-
 msgid "Force of Arms"
 msgstr "Forța armelor"
 
 msgid "Save the Dwarves"
 msgstr "Salvați piticii"
+
+msgid "Carator Mines"
+msgstr "Minele Carator"
+
+msgid "Turning Point"
+msgstr "Punct de cotitură"
+
+msgid "scenarioName|Defender"
+msgstr ""
+
+msgid "Corlagon's Defense"
+msgstr "Apărarea lui Corlagon"
 
 msgid "The Crown"
 msgstr "Coroane"
@@ -794,14 +803,8 @@ msgstr "Coroane"
 msgid "The Gauntlet"
 msgstr "Mănușa"
 
-msgid "Turning Point"
-msgstr "Punct de cotitură"
-
 msgid "Betrayal"
 msgstr "Trădare"
-
-msgid "Corlagon's Defense"
-msgstr "Apărarea lui Corlagon"
 
 msgid "Final Justice"
 msgstr "Justiție finală"
@@ -3598,6 +3601,22 @@ msgstr ""
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr ""
 
+msgid "You must defeat the enemy %{enemies}."
+msgid_plural "You must defeat the enemy alliance of %{enemies}."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid ""
+"The alliance consisting of %{allies} and you must defeat the enemy "
+"%{enemies}."
+msgid_plural ""
+"The alliance consisting of %{allies} and you must defeat the enemy alliance "
+"of %{enemies}."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
 msgid "Capture the castle '%{name}'."
 msgstr ""
 
@@ -3810,6 +3829,11 @@ msgid ""
 msgstr ""
 
 msgid "Try looking on land!!!"
+msgstr ""
+
+msgid ""
+"Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
+"it even if he found it - all his artifact slots are full."
 msgstr ""
 
 msgid ""

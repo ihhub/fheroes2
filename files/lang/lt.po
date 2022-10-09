@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-01 19:29+0000\n"
+"POT-Creation-Date: 2022-10-08 02:28+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -749,14 +749,23 @@ msgstr ""
 msgid "Annexation"
 msgstr ""
 
-#, fuzzy
-msgid "Carator Mines"
-msgstr "Kristalų kasykla"
-
 msgid "Force of Arms"
 msgstr ""
 
 msgid "Save the Dwarves"
+msgstr ""
+
+#, fuzzy
+msgid "Carator Mines"
+msgstr "Kristalų kasykla"
+
+msgid "Turning Point"
+msgstr ""
+
+msgid "scenarioName|Defender"
+msgstr ""
+
+msgid "Corlagon's Defense"
 msgstr ""
 
 #, fuzzy
@@ -766,13 +775,7 @@ msgstr "Rytų miestas."
 msgid "The Gauntlet"
 msgstr ""
 
-msgid "Turning Point"
-msgstr ""
-
 msgid "Betrayal"
-msgstr ""
-
-msgid "Corlagon's Defense"
 msgstr ""
 
 msgid "Final Justice"
@@ -3657,6 +3660,23 @@ msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr ""
 
 #, fuzzy
+msgid "You must defeat the enemy %{enemies}."
+msgid_plural "You must defeat the enemy alliance of %{enemies}."
+msgstr[0] "Prarasti miestą '%{name}'."
+msgstr[1] "Prarasti miestą '%{name}'."
+msgstr[2] "Prarasti miestą '%{name}'."
+
+msgid ""
+"The alliance consisting of %{allies} and you must defeat the enemy "
+"%{enemies}."
+msgid_plural ""
+"The alliance consisting of %{allies} and you must defeat the enemy alliance "
+"of %{enemies}."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, fuzzy
 msgid "Capture the castle '%{name}'."
 msgstr "Užimti pilį '%{name}'"
 
@@ -3886,6 +3906,11 @@ msgstr ""
 "prarastas, jei neįrašėte)"
 
 msgid "Try looking on land!!!"
+msgstr ""
+
+msgid ""
+"Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
+"it even if he found it - all his artifact slots are full."
 msgstr ""
 
 msgid ""
