@@ -90,7 +90,7 @@ std::string System::GetBasename( const std::string & str )
             return str;
         else if ( pos == str.size() - 1 )
             return GetBasename( str.substr( 0, str.size() - 1 ) );
-        else 
+        else
             return str.substr( pos + 1 );
     }
 
