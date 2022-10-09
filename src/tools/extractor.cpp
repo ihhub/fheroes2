@@ -30,7 +30,7 @@
 
 #define FATSIZENAME 15
 
-#if defined( _MSC_VER )
+#if defined( _WIN32 )
 #undef main
 #endif
 

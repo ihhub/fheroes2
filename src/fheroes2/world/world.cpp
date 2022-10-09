@@ -1046,7 +1046,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
     switch ( wins ) {
     case GameOver::WINS_ALL:
         // This method should be called with this condition only for a human-controlled kingdom
-        assert( kingdom.isControlHuman() );
+        assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
 
         return kingdom.GetColor() == vec_kingdoms.GetNotLossColors();
 
@@ -1057,7 +1057,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 
     case GameOver::WINS_HERO: {
         // This method should be called with this condition only for a human-controlled kingdom
-        assert( kingdom.isControlHuman() );
+        assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
 
         if ( heroes_cond_wins == Heroes::UNKNOWN ) {
             return false;
@@ -1072,7 +1072,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 
     case GameOver::WINS_ARTIFACT: {
         // This method should be called with this condition only for a human-controlled kingdom
-        assert( kingdom.isControlHuman() );
+        assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
 
         const KingdomHeroes & heroes = kingdom.GetHeroes();
         if ( conf.WinsFindUltimateArtifact() ) {
@@ -1086,7 +1086,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 
     case GameOver::WINS_SIDE:
         // This method should be called with this condition only for a human-controlled kingdom
-        assert( kingdom.isControlHuman() );
+        assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
 
         return !( Game::GetActualKingdomColors() & ~Players::GetPlayerFriends( kingdom.GetColor() ) );
 
@@ -1104,7 +1104,7 @@ bool World::KingdomIsWins( const Kingdom & kingdom, const uint32_t wins ) const
 bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
 {
     // This method should only be called for a human-controlled kingdom
-    assert( kingdom.isControlHuman() );
+    assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
 
     const Settings & conf = Settings::Get();
 
@@ -1131,7 +1131,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
         }
 
         // .. or be hired by an AI-controlled kingdom
-        if ( GetKingdom( hero->GetColor() ).isControlAI() ) {
+        if ( GetKingdom( hero->GetColor() ).isControlAI() && !Players::Get( hero->GetColor() )->isAIAutoControlMode() ) {
             // Exception for campaign: hero is not considered lost if he is hired by a friendly AI-controlled kingdom
             if ( conf.isCampaignGameType() && Players::isFriends( kingdom.GetColor(), hero->GetColor() ) ) {
                 return false;
@@ -1156,7 +1156,7 @@ bool World::KingdomIsLoss( const Kingdom & kingdom, const uint32_t loss ) const
 uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
 {
     // This method should only be called for a human-controlled kingdom
-    assert( kingdom.isControlHuman() );
+    assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
 
     const Settings & conf = Settings::Get();
 
@@ -1187,7 +1187,7 @@ uint32_t World::CheckKingdomWins( const Kingdom & kingdom ) const
 uint32_t World::CheckKingdomLoss( const Kingdom & kingdom ) const
 {
     // This method should only be called for a human-controlled kingdom
-    assert( kingdom.isControlHuman() );
+    assert( kingdom.isControlHuman() || Players::Get( kingdom.GetColor() )->isAIAutoControlMode() );
 
     const Settings & conf = Settings::Get();
 

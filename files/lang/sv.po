@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-10 16:23+0000\n"
-"PO-Revision-Date: 2022-05-10 16:35+0200\n"
+"POT-Creation-Date: 2022-10-08 02:28+0000\n"
+"PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "Language: sv\n"
@@ -17,9 +17,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2013-10-09 02:01+0000\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+
+msgid "GIFT"
+msgstr ""
 
 msgid "MIN"
+msgstr ""
+
+msgid "DIFFICULTY"
 msgstr ""
 
 msgid "Warrior"
@@ -33,6 +44,14 @@ msgstr ""
 
 msgid "None"
 msgstr "Inga"
+
+msgid "Warning"
+msgstr "Varning"
+
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
+msgstr ""
 
 msgid ""
 "A few\n"
@@ -553,12 +572,9 @@ msgid_plural "%{count} %{defender} perish."
 msgstr[0] "en %{defender} dör."
 msgstr[1] "%{count} %{defender} dör."
 
-msgid "Moved %{monster}: %{src}, %{dst}"
-msgstr "Flyttade %{monster}: %{src}, %{dst}"
-
 #, fuzzy
-msgid "Moved %{monster}"
-msgstr "Flytta %{monster} hit"
+msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
+msgstr "Flyttade %{monster}: %{src}, %{dst}"
 
 msgid "The %{name} resist the spell!"
 msgstr "%{name} motstår besvärjelsen!"
@@ -776,15 +792,25 @@ msgstr "Farbror Ivan"
 msgid "Annexation"
 msgstr "\"Tillägg\""
 
-#, fuzzy
-msgid "Carator Mines"
-msgstr "Kristallgruva"
-
 msgid "Force of Arms"
 msgstr ""
 
 msgid "Save the Dwarves"
 msgstr "Rädda dvärgarna"
+
+#, fuzzy
+msgid "Carator Mines"
+msgstr "Kristallgruva"
+
+msgid "Turning Point"
+msgstr "Vändpunkt"
+
+msgid "scenarioName|Defender"
+msgstr ""
+
+#, fuzzy
+msgid "Corlagon's Defense"
+msgstr "Draköga"
 
 msgid "The Crown"
 msgstr "Kronan"
@@ -794,16 +820,9 @@ msgstr "Kronan"
 msgid "The Gauntlet"
 msgstr "\"Stridshandsken\""
 
-msgid "Turning Point"
-msgstr "Vändpunkt"
-
 #, fuzzy
 msgid "Betrayal"
 msgstr "\"Förräderi!\""
-
-#, fuzzy
-msgid "Corlagon's Defense"
-msgstr "Draköga"
 
 msgid "Final Justice"
 msgstr ""
@@ -2642,16 +2661,12 @@ msgstr "Inställningar"
 msgid "Audio"
 msgstr ""
 
-#, fuzzy
-msgid "settings"
-msgstr "Inställningar"
+msgid "Configure"
+msgstr ""
 
 #, fuzzy
 msgid "Hot Keys"
 msgstr "Heta stolen"
-
-msgid "In-game"
-msgstr ""
 
 #, fuzzy
 msgid "Black & White"
@@ -2694,17 +2709,17 @@ msgstr "Flaska"
 msgid "Select Game Language"
 msgstr "Vald beskrivning"
 
-msgid "Change language of the game."
+msgid "Change the language of the game."
 msgstr ""
 
 #, fuzzy
 msgid "Select Game Resolution"
 msgstr "Vald beskrivning"
 
-msgid "Change resolution of the game."
+msgid "Change the resolution of the game."
 msgstr ""
 
-msgid "Change audio settings of the game."
+msgid "Change the audio settings of the game."
 msgstr ""
 
 #, fuzzy
@@ -2714,15 +2729,13 @@ msgstr "Spelinställningar för FHeroes2."
 msgid "Toggle instant battle mode."
 msgstr ""
 
-msgid "Check all Hot Keys used in the game."
+msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
 msgstr ""
 
-msgid ""
-"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
-"move as smoothly as black and white ones."
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
 
 msgid ""
@@ -2962,6 +2975,10 @@ msgstr "Tillgängligt: %{count}"
 
 msgid "Number to buy:"
 msgstr "Antal att köpa:"
+
+#, fuzzy
+msgid "Select Game Resolution:"
+msgstr "Vald beskrivning"
 
 msgid "Click to apply the selected resolution."
 msgstr ""
@@ -3312,9 +3329,6 @@ msgstr "Omöjligt"
 msgid "and more..."
 msgstr ""
 
-msgid "DIFFICULTY"
-msgstr ""
-
 #, fuzzy
 msgid "Campaign Difficulty"
 msgstr "Spelets svårighet"
@@ -3563,9 +3577,6 @@ msgstr "Kampanjspel"
 #, fuzzy
 msgid "View High Scores for Campaigns."
 msgstr "Visa Poänglistan."
-
-msgid "Warning"
-msgstr "Varning"
 
 msgid "This file contains a save with an invalid game type."
 msgstr ""
@@ -3856,6 +3867,21 @@ msgstr ""
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr "Få slut på tid. (Misslyckas att vinna vid en bestämd punkt.)"
 
+#, fuzzy
+msgid "You must defeat the enemy %{enemies}."
+msgid_plural "You must defeat the enemy alliance of %{enemies}."
+msgstr[0] "Besegra hjälten '%{name}'."
+msgstr[1] "Besegra hjälten '%{name}'."
+
+msgid ""
+"The alliance consisting of %{allies} and you must defeat the enemy "
+"%{enemies}."
+msgid_plural ""
+"The alliance consisting of %{allies} and you must defeat the enemy alliance "
+"of %{enemies}."
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Capture the castle '%{name}'."
 msgstr "Erövra slottet '%{name}'."
 
@@ -4001,6 +4027,11 @@ msgid "%{color} player's turn."
 msgstr "%{color} spelares tur."
 
 msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
+msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in next week, you will be eliminated."
 msgstr ""
@@ -4092,6 +4123,11 @@ msgid "Try looking on land!!!"
 msgstr "Försök att titta på land!!!"
 
 msgid ""
+"Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
+"it even if he found it - all his artifact slots are full."
+msgstr ""
+
+msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
 "Efter att ha spenderat många timmar på att gräva här, har du avtäckt "
@@ -4166,7 +4202,42 @@ msgid ""
 "and/or heroes not of their primary alignment."
 msgstr ""
 
+#, fuzzy
+msgid "Handicap"
+msgstr "Mandigal"
+
+#
+msgid ""
+"This lets you change the handicap of a particular player. Only humans may be "
+"handicapped. Handicapped players start with fewer resources and earn 15 or "
+"30% fewer resources per turn for mild and severe handicaps, respectively."
+msgstr ""
+
 msgid "%{color} player"
+msgstr ""
+
+msgid "No Handicap"
+msgstr ""
+
+msgid "No special restrictions on start resources and earning them per turn."
+msgstr ""
+
+msgid "Mild Handicap"
+msgstr ""
+
+#
+msgid ""
+"Mild handicapped players start with fewer resources and earn 15% fewer "
+"resources per turn."
+msgstr ""
+
+msgid "Severe Handicap"
+msgstr ""
+
+#
+msgid ""
+"Severe handicapped players start with fewer resources and earn 30% fewer "
+"resources per turn."
 msgstr ""
 
 msgid "View %{skill} Info"
@@ -4227,6 +4298,9 @@ msgstr ""
 #, fuzzy
 msgid "Portuguese"
 msgstr "Skurkar"
+
+msgid "Turkish"
+msgstr ""
 
 msgid ", FPS: "
 msgstr ""
@@ -9349,5 +9423,5 @@ msgstr ""
 "fheroes2/releases"
 
 #, fuzzy
-#~ msgid "Break auto battle?"
-#~ msgstr "Slå på autostrid"
+#~ msgid "Moved %{monster}"
+#~ msgstr "Flytta %{monster} hit"

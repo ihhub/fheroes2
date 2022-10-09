@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-10 16:23+0000\n"
-"PO-Revision-Date: 2022-05-12 17:04+0200\n"
+"POT-Creation-Date: 2022-10-08 02:28+0000\n"
+"PO-Revision-Date: 2022-09-23 16:01+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "Language: cs\n"
@@ -17,9 +17,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2010-05-27 09:12+0000\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+
+msgid "GIFT"
+msgstr ""
 
 msgid "MIN"
+msgstr ""
+
+msgid "DIFFICULTY"
 msgstr ""
 
 msgid "Warrior"
@@ -32,6 +43,14 @@ msgid "Explorer"
 msgstr ""
 
 msgid "None"
+msgstr ""
+
+msgid "Warning"
+msgstr ""
+
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
 msgstr ""
 
 msgid ""
@@ -530,14 +549,8 @@ msgstr[0] " %{value} %{name} %{perishes}."
 msgstr[1] " %{value} %{name} %{perishes}."
 msgstr[2] " %{value} %{name} %{perishes}."
 
-msgid "Moved %{monster}: %{src}, %{dst}"
+msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
 msgstr ""
-
-#, fuzzy
-msgid "Moved %{monster}"
-msgstr ""
-"Mračna\n"
-"%{monster}"
 
 msgid "The %{name} resist the spell!"
 msgstr ""
@@ -744,13 +757,22 @@ msgstr ""
 msgid "Annexation"
 msgstr "animace"
 
-msgid "Carator Mines"
-msgstr ""
-
 msgid "Force of Arms"
 msgstr ""
 
 msgid "Save the Dwarves"
+msgstr ""
+
+msgid "Carator Mines"
+msgstr ""
+
+msgid "Turning Point"
+msgstr ""
+
+msgid "scenarioName|Defender"
+msgstr ""
+
+msgid "Corlagon's Defense"
 msgstr ""
 
 msgid "The Crown"
@@ -759,13 +781,7 @@ msgstr ""
 msgid "The Gauntlet"
 msgstr ""
 
-msgid "Turning Point"
-msgstr ""
-
 msgid "Betrayal"
-msgstr ""
-
-msgid "Corlagon's Defense"
 msgstr ""
 
 msgid "Final Justice"
@@ -2522,13 +2538,10 @@ msgstr ""
 msgid "Audio"
 msgstr ""
 
-msgid "settings"
+msgid "Configure"
 msgstr ""
 
 msgid "Hot Keys"
-msgstr ""
-
-msgid "In-game"
 msgstr ""
 
 #, fuzzy
@@ -2569,16 +2582,16 @@ msgstr ""
 msgid "Select Game Language"
 msgstr ""
 
-msgid "Change language of the game."
+msgid "Change the language of the game."
 msgstr ""
 
 msgid "Select Game Resolution"
 msgstr ""
 
-msgid "Change resolution of the game."
+msgid "Change the resolution of the game."
 msgstr ""
 
-msgid "Change audio settings of the game."
+msgid "Change the audio settings of the game."
 msgstr ""
 
 msgid "Experimental game settings."
@@ -2587,15 +2600,13 @@ msgstr ""
 msgid "Toggle instant battle mode."
 msgstr ""
 
-msgid "Check all Hot Keys used in the game."
+msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
 msgstr ""
 
-msgid ""
-"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
-"move as smoothly as black and white ones."
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
 
 msgid ""
@@ -2825,6 +2836,9 @@ msgid "Available: %{count}"
 msgstr ""
 
 msgid "Number to buy:"
+msgstr ""
+
+msgid "Select Game Resolution:"
 msgstr ""
 
 msgid "Click to apply the selected resolution."
@@ -3173,9 +3187,6 @@ msgstr ""
 msgid "and more..."
 msgstr ""
 
-msgid "DIFFICULTY"
-msgstr ""
-
 #, fuzzy
 msgid "Campaign Difficulty"
 msgstr ""
@@ -3415,9 +3426,6 @@ msgid "Campaign"
 msgstr ""
 
 msgid "View High Scores for Campaigns."
-msgstr ""
-
-msgid "Warning"
 msgstr ""
 
 msgid "This file contains a save with an invalid game type."
@@ -3671,6 +3679,22 @@ msgstr ""
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr ""
 
+msgid "You must defeat the enemy %{enemies}."
+msgid_plural "You must defeat the enemy alliance of %{enemies}."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid ""
+"The alliance consisting of %{allies} and you must defeat the enemy "
+"%{enemies}."
+msgid_plural ""
+"The alliance consisting of %{allies} and you must defeat the enemy alliance "
+"of %{enemies}."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
 msgid "Capture the castle '%{name}'."
 msgstr ""
 
@@ -3801,6 +3825,11 @@ msgid "%{color} player's turn."
 msgstr ""
 
 msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
+msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in next week, you will be eliminated."
 msgstr ""
@@ -3882,6 +3911,11 @@ msgid "Try looking on land!!!"
 msgstr ""
 
 msgid ""
+"Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
+"it even if he found it - all his artifact slots are full."
+msgstr ""
+
+msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
 
@@ -3942,7 +3976,41 @@ msgid ""
 "and/or heroes not of their primary alignment."
 msgstr ""
 
+msgid "Handicap"
+msgstr ""
+
+#
+msgid ""
+"This lets you change the handicap of a particular player. Only humans may be "
+"handicapped. Handicapped players start with fewer resources and earn 15 or "
+"30% fewer resources per turn for mild and severe handicaps, respectively."
+msgstr ""
+
 msgid "%{color} player"
+msgstr ""
+
+msgid "No Handicap"
+msgstr ""
+
+msgid "No special restrictions on start resources and earning them per turn."
+msgstr ""
+
+msgid "Mild Handicap"
+msgstr ""
+
+#
+msgid ""
+"Mild handicapped players start with fewer resources and earn 15% fewer "
+"resources per turn."
+msgstr ""
+
+msgid "Severe Handicap"
+msgstr ""
+
+#
+msgid ""
+"Severe handicapped players start with fewer resources and earn 30% fewer "
+"resources per turn."
 msgstr ""
 
 #, fuzzy
@@ -4000,6 +4068,9 @@ msgid "Swedish"
 msgstr ""
 
 msgid "Portuguese"
+msgstr ""
+
+msgid "Turkish"
 msgstr ""
 
 msgid ", FPS: "
@@ -8727,3 +8798,9 @@ msgid ""
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Moved %{monster}"
+#~ msgstr ""
+#~ "Mračna\n"
+#~ "%{monster}"

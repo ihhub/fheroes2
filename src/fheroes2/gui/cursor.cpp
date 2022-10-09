@@ -53,7 +53,8 @@ bool Cursor::SetThemes( int name, bool force )
     if ( force || theme != name ) {
         theme = name;
 
-        int icnID = _monochromeCursorThemes ? ICN::MONO_CURSOR_ADVMBW : ICN::ADVMCO;
+        // Video pointer cannot be properly rendered in black-white so we have to force to use color cursor.
+        int icnID = ( _monochromeCursorThemes && ( name != Cursor::POINTER_VIDEO ) ) ? ICN::MONO_CURSOR_ADVMBW : ICN::ADVMCO;
         switch ( 0xF000 & name ) {
         case 0x3000:
             icnID = _monochromeCursorThemes ? ICN::MONO_CURSOR_SPELBW : ICN::SPELCO;

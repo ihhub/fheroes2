@@ -148,7 +148,10 @@ namespace
         case MP2::OBJ_WATERCHEST:
         case MP2::OBJ_FLOTSAM:
         case MP2::OBJ_BOTTLE:
-            return hero.isShipMaster();
+        case MP2::OBJ_RESOURCE:
+        case MP2::OBJ_CAMPFIRE:
+        case MP2::OBJ_TREASURECHEST:
+            return true;
 
         case MP2::OBJ_BUOY:
             return !hero.isObjectTypeVisited( objectType ) && hero.GetMorale() < Morale::BLOOD && !army.AllTroopsAreUndead();
@@ -160,14 +163,14 @@ namespace
             return false;
 
         case MP2::OBJ_MAGELLANMAPS:
-            return hero.isShipMaster() && !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANMAPS, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
+            return !hero.isObjectTypeVisited( MP2::OBJ_MAGELLANMAPS, Visit::GLOBAL ) && kingdom.AllowPayment( { Resource::GOLD, 1000 } );
 
         case MP2::OBJ_WHIRLPOOL:
             // AI should never consider a whirlpool as a destination point. It uses them only to make a path.
             return false;
 
         case MP2::OBJ_COAST:
-            // Coast is not an action object. If this assertion blows up then something wrong with the logic above.
+            // Coast is not an action object. If this assertion blows up then something is wrong with the logic above.
             assert( 0 );
             return false;
 
@@ -213,18 +216,10 @@ namespace
                 return true;
             break;
 
-        case MP2::OBJ_RESOURCE:
-        case MP2::OBJ_CAMPFIRE:
-        case MP2::OBJ_TREASURECHEST:
-            return !hero.isShipMaster();
-
         case MP2::OBJ_ARTIFACT: {
             const uint32_t variants = tile.QuantityVariant();
 
             if ( hero.IsFullBagArtifacts() )
-                return false;
-
-            if ( hero.isShipMaster() )
                 return false;
 
             // 1,2,3 - 2000g, 2500g+3res, 3000g+5res
@@ -635,6 +630,7 @@ namespace
     const double freeMonsterUpgradeModifier = 3;
 
     const double dangerousTaskPenalty = 20000.0;
+    const double fogDiscoveryBaseValue = -20000.0;
 
     double ScaleWithDistance( double value, uint32_t distance )
     {
@@ -648,18 +644,18 @@ namespace
     {
         switch ( hero.getAIRole() ) {
         case Heroes::Role::HUNTER:
-            return -dangerousTaskPenalty;
+            return fogDiscoveryBaseValue;
         case Heroes::Role::COURIER:
         case Heroes::Role::FIGHTER:
         case Heroes::Role::CHAMPION:
-            return -dangerousTaskPenalty * 2;
+            return fogDiscoveryBaseValue * 2;
         default:
             // If you set a new type of a hero you must add the logic here.
             assert( 0 );
             break;
         }
 
-        return -dangerousTaskPenalty;
+        return fogDiscoveryBaseValue;
     }
 }
 
@@ -1537,14 +1533,18 @@ namespace AI
         ObjectValidator objectValidator( hero, _pathfinder, *this );
         ObjectValueStorage valueStorage( hero, *this, lowestPossibleValue );
 
-        auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero, leftMovePoints]( const int destination, uint32_t & distance, double & value ) {
-            const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( destination );
-            for ( const IndexObject & pair : list ) {
-                if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) ) {
-                    const double extraValue = valueStorage.value( pair, 0 ); // object is on the way, we don't loose any movement points.
-                    if ( extraValue > 0 ) {
-                        // There is no need to reduce the quality of the object even if the path has others.
-                        value += extraValue;
+        auto getObjectValue = [&objectValidator, &valueStorage, this, heroStrength, &hero, leftMovePoints]( const int destination, uint32_t & distance, double & value,
+                                                                                                            const bool isDimensionDoor ) {
+            if ( !isDimensionDoor ) {
+                // Dimension door path does not include any objects on the way.
+                const std::vector<IndexObject> & list = _pathfinder.getObjectsOnTheWay( destination );
+                for ( const IndexObject & pair : list ) {
+                    if ( objectValidator.isValid( pair.first ) && std::binary_search( _mapObjects.begin(), _mapObjects.end(), pair ) ) {
+                        const double extraValue = valueStorage.value( pair, 0 ); // object is on the way, we don't loose any movement points.
+                        if ( extraValue > 0 ) {
+                            // There is no need to reduce the quality of the object even if the path has others.
+                            value += extraValue;
+                        }
                     }
                 }
             }
@@ -1587,9 +1587,7 @@ namespace AI
             }
         }
 
-        for ( size_t idx = 0; idx < _mapObjects.size(); ++idx ) {
-            const IndexObject & node = _mapObjects[idx];
-
+        for ( const IndexObject & node : _mapObjects ) {
             // Skip if hero in patrol mode and object outside of reach
             if ( heroInPatrolMode && Maps::GetApproximateDistance( node.first, heroInfo.patrolCenter ) > heroInfo.patrolDistance )
                 continue;
@@ -1597,17 +1595,19 @@ namespace AI
             if ( objectValidator.isValid( node.first ) ) {
                 uint32_t dist = _pathfinder.getDistance( node.first );
 
+                bool useDimensionDoor = false;
                 const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, node.first ) );
-                if ( dimensionDoorDist && ( !dist || dimensionDoorDist < dist / 2 ) ) {
+                if ( dimensionDoorDist > 0 && ( dist == 0 || dimensionDoorDist < dist / 2 ) ) {
                     dist = dimensionDoorDist;
+                    useDimensionDoor = true;
                 }
 
-                if ( dist == 0 )
+                if ( dist == 0 ) {
                     continue;
+                }
 
                 double value = valueStorage.value( node, dist );
-
-                getObjectValue( node.first, dist, value );
+                getObjectValue( node.first, dist, value, useDimensionDoor );
 
                 if ( dist && value > maxPriority ) {
                     maxPriority = value;
@@ -1628,7 +1628,14 @@ namespace AI
         if ( fogDiscoveryTarget >= 0 ) {
             uint32_t distanceToFogDiscovery = _pathfinder.getDistance( fogDiscoveryTarget );
 
-            getObjectValue( fogDiscoveryTarget, distanceToFogDiscovery, fogDiscoveryValue );
+            bool useDimensionDoor = false;
+            const uint32_t dimensionDoorDist = AIWorldPathfinder::calculatePathPenalty( _pathfinder.getDimensionDoorPath( hero, fogDiscoveryTarget ) );
+            if ( dimensionDoorDist > 0 && ( distanceToFogDiscovery == 0 || dimensionDoorDist < distanceToFogDiscovery / 2 ) ) {
+                distanceToFogDiscovery = dimensionDoorDist;
+                useDimensionDoor = true;
+            }
+
+            getObjectValue( fogDiscoveryTarget, distanceToFogDiscovery, fogDiscoveryValue, useDimensionDoor );
         }
 
         if ( priorityTarget != -1 ) {

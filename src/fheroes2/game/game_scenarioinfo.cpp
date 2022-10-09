@@ -170,7 +170,7 @@ namespace
         Settings & conf = Settings::Get();
         bool resetStartingSettings = conf.MapsFile().empty();
         Players & players = conf.GetPlayers();
-        Interface::PlayersInfo playersInfo( true, true, true );
+        Interface::PlayersInfo playersInfo;
 
         const int humanPlayerCount = Settings::Get().PreferablyCountPlayers();
 
@@ -203,7 +203,7 @@ namespace
         RedrawScenarioStaticInfo( rectPanel, true );
         RedrawDifficultyInfo( pointDifficultyInfo );
 
-        playersInfo.RedrawInfo();
+        playersInfo.RedrawInfo( false );
 
         TextSprite rating;
         rating.SetFont( Font::BIG );
@@ -275,7 +275,7 @@ namespace
                     RedrawScenarioStaticInfo( rectPanel );
                     RedrawDifficultyInfo( pointDifficultyInfo );
                     playersInfo.resetSelection();
-                    playersInfo.RedrawInfo();
+                    playersInfo.RedrawInfo( false );
                     RedrawRatingInfo( rating );
                     levelCursor.setPosition( coordDifficulty[Game::getDifficulty()].x, coordDifficulty[Game::getDifficulty()].y ); // From 0 to 4, see: Difficulty enum
                     buttonOk.draw();
@@ -310,7 +310,7 @@ namespace
                     levelCursor.redraw();
                     RedrawDifficultyInfo( pointDifficultyInfo );
 
-                    playersInfo.RedrawInfo();
+                    playersInfo.RedrawInfo( false );
                     RedrawRatingInfo( rating );
                     buttonOk.draw();
                     buttonCancel.draw();
@@ -325,7 +325,7 @@ namespace
                     levelCursor.redraw();
                     RedrawDifficultyInfo( pointDifficultyInfo );
 
-                    playersInfo.RedrawInfo();
+                    playersInfo.RedrawInfo( false );
                     RedrawRatingInfo( rating );
                     buttonOk.draw();
                     buttonCancel.draw();

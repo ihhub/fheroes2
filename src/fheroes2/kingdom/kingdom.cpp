@@ -49,6 +49,26 @@
 
 #include <cassert>
 
+namespace
+{
+    int32_t getHandicapIncomePercentage( const uint8_t handicapStatus )
+    {
+        switch ( handicapStatus ) {
+        case Player::HandicapStatus::NONE:
+            return 100;
+        case Player::HandicapStatus::MILD:
+            return 85;
+        case Player::HandicapStatus::SEVERE:
+            return 70;
+        default:
+            // Did you add a new handicap status? Add the logic above!
+            break;
+        }
+
+        return 100;
+    }
+}
+
 bool HeroesStrongestArmy( const Heroes * h1, const Heroes * h2 )
 {
     return h1 && h2 && h2->GetArmy().isStrongerThan( h1->GetArmy() );
@@ -78,6 +98,12 @@ void Kingdom::Init( int clr )
         const int difficultyLevel = ( configuration.isCampaignGameType() ? configuration.CurrentFileInfo().difficulty : configuration.GameDifficulty() );
 
         resource = _getKingdomStartingResources( difficultyLevel );
+
+        // Some human players can have handicap for resources.
+        const Player * player = Players::Get( color );
+        assert( player != nullptr );
+        const int32_t handicapPercentage = getHandicapIncomePercentage( player->getHandicapStatus() );
+        resource = resource * handicapPercentage / 100;
     }
     else {
         DEBUG_LOG( DBG_GAME, DBG_WARN, "Kingdom: unknown player: " << Color::String( color ) << "(" << static_cast<int>( color ) << ")" )
@@ -627,7 +653,11 @@ Funds Kingdom::GetIncome( int type /* INCOME_ALL */ ) const
         totalIncome.gold = static_cast<int32_t>( totalIncome.gold * Difficulty::GetGoldIncomeBonus( Game::getDifficulty() ) );
     }
 
-    return totalIncome;
+    // Some human players can have handicap for resources.
+    const Player * player = Players::Get( color );
+    assert( player != nullptr );
+    const int32_t handicapPercentage = getHandicapIncomePercentage( player->getHandicapStatus() );
+    return totalIncome * handicapPercentage / 100;
 }
 
 Heroes * Kingdom::GetBestHero()

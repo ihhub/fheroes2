@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-10 16:23+0000\n"
-"PO-Revision-Date: 2022-06-01 16:28+0200\n"
-"Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
+"POT-Creation-Date: 2022-10-08 02:28+0000\n"
+"PO-Revision-Date: 2022-09-30 21:13+0100\n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
@@ -17,716 +17,797 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n==0 || (n!=1 && n%100>=1 && n"
 "%100<=19) ? 1 : 2);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
+
+msgid ""
+"BATTLE\n"
+"ONLY"
+msgstr ""
+"DOAR\n"
+"BĂTĂLIE"
+
+msgid "GIFT"
+msgstr "OFERĂ"
 
 msgid "MIN"
-msgstr ""
+msgstr "MIN"
+
+msgid "DIFFICULTY"
+msgstr "DIFICULTATE"
 
 msgid "Warrior"
-msgstr ""
+msgstr "Războinic"
 
 msgid "Builder"
-msgstr ""
+msgstr "Constructor"
 
 msgid "Explorer"
-msgstr ""
+msgstr "Explorator"
 
 msgid "None"
+msgstr "Nimic"
+
+msgid "Warning"
+msgstr "Atenție"
+
+msgid ""
+"Do you want to regain control from AI? The effect will take place only on "
+"the next turn."
 msgstr ""
+"Dorești să recâștigi controlul de la AI? Efectul va avea loc doar în "
+"următoarea rundă."
 
 msgid ""
 "A few\n"
 "%{monster}"
 msgstr ""
+"Câțiva\n"
+"%{monster}"
 
 msgid ""
 "Several\n"
 "%{monster}"
 msgstr ""
+"Mai mulți\n"
+"%{monster}"
 
 msgid ""
 "A pack of\n"
 "%{monster}"
 msgstr ""
+"O haita de\n"
+"%{monster}"
 
 msgid ""
 "Lots of\n"
 "%{monster}"
 msgstr ""
+"Mulți\n"
+"%{monster}"
 
 msgid ""
 "A horde of\n"
 "%{monster}"
 msgstr ""
+"O hoardă de\n"
+"%{monster}"
 
 msgid ""
 "A throng of\n"
 "%{monster}"
 msgstr ""
+"O înghesuială de\n"
+"%{monster}"
 
 msgid ""
 "A swarm of\n"
 "%{monster}"
 msgstr ""
+"Un roi de\n"
+"%{monster}"
 
 msgid ""
 "Zounds of\n"
 "%{monster}"
 msgstr ""
+"Extrem de mulți\n"
+"%{monster}"
 
 msgid ""
 "A legion of\n"
 "%{monster}"
 msgstr ""
+"O legiune de\n"
+"%{monster}"
 
 msgid "army|Few"
-msgstr ""
+msgstr "(1-4)"
 
 msgid "army|Several"
-msgstr ""
+msgstr "(4-9)"
 
 msgid "army|Pack"
-msgstr ""
+msgstr "(10-19)"
 
 msgid "army|Lots"
-msgstr ""
+msgstr "(20-49)"
 
 msgid "army|Horde"
-msgstr ""
+msgstr "(50-99)"
 
 msgid "army|Throng"
-msgstr ""
+msgstr "(100-249)"
 
 msgid "army|Swarm"
-msgstr ""
+msgstr "(1000+)"
 
 msgid "army|Zounds"
-msgstr ""
+msgstr "(500-999)"
 
 msgid "army|Legion"
-msgstr ""
+msgstr "(250-499)"
 
 msgid "All %{race} troops +1"
-msgstr ""
+msgstr "Toate %{race} forțele +1"
 
 msgid "Multiple"
-msgstr ""
+msgstr "Multiple"
 
 msgid "Troops of %{count} alignments -%{penalty}"
-msgstr ""
+msgstr "Trupe cu %{count} aliniamente -%{penalty}"
 
 msgid "Some undead in group -1"
-msgstr ""
+msgstr "Niște  strigoi în grup -1"
 
 msgid "View %{name}"
-msgstr ""
+msgstr "Vezi %{name}"
 
 msgid "Move the %{name} "
-msgstr ""
+msgstr "Mută %{name}"
 
 msgid "Move or right click to redistribute %{name}"
-msgstr ""
+msgstr "Mută sau fă click dreapta pentru a redistribui %{name} "
 
 msgid "Combine %{name} armies"
-msgstr ""
+msgstr "Combină  %{name} armate"
 
 msgid "Exchange %{name2} with %{name}"
-msgstr ""
+msgstr "Schimbă %{name2} cu %{name}"
 
 msgid "Select %{name}"
-msgstr ""
+msgstr "Selectează %{name}"
 
 msgid "Cannot move last troop"
-msgstr ""
+msgstr "Nu poți muta ultima trupă"
 
 msgid "Move the %{name}"
-msgstr ""
+msgstr "Mută %{name}"
 
 msgid "Set Count"
-msgstr ""
+msgstr "Setează număratoarea"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%{name} distruge jumătate din trupele inamice!"
+msgstr[1] "%{name} distrug jumătate din trupele inamice!"
+msgstr[2] "%{name} distrug jumătate din trupele inamice!"
 
 msgid "%{name} has turned off the auto battle"
-msgstr ""
+msgstr "%{name} a oprit lupta automată"
 
 msgid "%{name} has turned on the auto battle"
-msgstr ""
+msgstr "%{name} a pornit lupta automată"
 
 msgid "Spell failed!"
-msgstr ""
+msgstr "Vraja a eșuat!"
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
 "combat spells."
 msgstr ""
+"Artefactul Sfera de Negare este în vigoare pentru această bătălie, "
+"dezactivând toate vrăjile de luptă."
 
 msgid "You have already cast a spell this round."
-msgstr ""
+msgstr "Ai aruncat deja o vrajă în această rundă."
 
 msgid "That spell will affect no one!"
-msgstr ""
+msgstr "Vraja aceea nu va afecta pe nimeni!"
 
 msgid "You may only summon one type of elemental per combat."
-msgstr ""
+msgstr "Poți invoca doar un singur tip de elemental pe luptă."
 
 msgid "There is no open space adjacent to your hero to summon an Elemental to."
 msgstr ""
+"Nu există niciun spațiu deschis adiacent eroului tău în care să invoci un "
+"elemental."
 
 msgid ""
 "The Moat reduces by -%{count} the defense skill of any unit and slows to "
 "half movement rate."
 msgstr ""
+"Șanțul reduce cu -%{count} abilitatea de apărare a oricărei unități și "
+"reduce la jumătate viteza de mișcare."
 
 msgid "Speed"
-msgstr ""
+msgstr "Viteză"
 
 msgid "Speed: %{speed}"
-msgstr ""
+msgstr "Viteză: %{speed}"
 
 msgid "Army Order"
-msgstr ""
+msgstr "Ordin al armatei"
 
 msgid "Auto Spell Casting"
-msgstr ""
+msgstr "Aruncarea vrăjilor automata"
 
 msgid "Grid"
-msgstr ""
+msgstr "Grilă"
 
 msgid "Shadow Movement"
-msgstr ""
+msgstr "Mișcare a umbrelor"
 
 msgid "Shadow Cursor"
-msgstr ""
+msgstr "Cursor de umbră"
 
 msgid "Off"
-msgstr ""
+msgstr "Oprit"
 
 msgid "On"
-msgstr ""
+msgstr "Pornit"
 
 msgid "Set the speed of combat actions and animations."
-msgstr ""
+msgstr "Setează viteza acțiunilor de luptă și a animațiilor."
 
 msgid "Toggle to display army order during the battle."
-msgstr ""
+msgstr "Comută pentru a afișa ordinea armatei în timpul bătăliei."
 
 msgid ""
 "Toggle whether or not the computer will cast spells for you when auto combat "
 "is on. (Note: This does not affect spell casting for computer players in any "
 "way, nor does it affect quick combat.)"
 msgstr ""
+"Comută dacă computerul va arunca sau nu vrăji pentru tine atunci când este "
+"activată lupta automată. (Notă: Acest lucru nu afectează în niciun fel "
+"aruncarea de vrăji pentru jucătorii computerului și nici nu afectează lupta "
+"rapidă)."
 
 msgid ""
 "Toggle the hex grid on or off. The hex grid always underlies movement, even "
 "if turned off. This switch only determines if the grid is visible."
 msgstr ""
+"Activează sau dezactivează grila hexagonală. Grila hexagonală se află "
+"întotdeauna la baza mișcării, chiar dacă este dezactivată. Acest comutator "
+"determină doar dacă grila este vizibilă."
 
 msgid ""
 "Toggle on or off shadows showing where your creatures can move and attack."
 msgstr ""
+"Activează sau dezactivează umbrele care arată unde se pot mișca și ataca "
+"creaturile tale."
 
 msgid ""
 "Toggle on or off a shadow showing the current hex location of the mouse "
 "cursor."
 msgstr ""
+"Activează sau dezactivează o umbră care arată locația hexagonală curentă a "
+"cursorului mouse-ului."
 
 msgid "The enemy has surrendered!"
-msgstr ""
+msgstr "Inamicul s-a predat!"
 
 msgid "The enemy has fled!"
-msgstr ""
+msgstr "Inamicul a fugit!"
 
 msgid "A glorious victory!"
-msgstr ""
+msgstr "O victorie glorioasă!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
-msgstr ""
+msgstr "Pentru curaj în luptă, %{name} primește %{exp} experiență."
 
 msgid "The cowardly %{name} flees from battle."
-msgstr ""
+msgstr "Lașul %{name} fuge de luptă."
 
 msgid "%{name} surrenders to the enemy, and departs in shame."
-msgstr ""
+msgstr "%{name} se predă inamicului și pleacă rușinat."
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
 msgstr ""
+"Forțele tale suferă o înfrângere amară, iar %{name} îți abandonează cauza."
 
 msgid "Your force suffer a bitter defeat."
-msgstr ""
+msgstr "Forța ta a suferit o înfrângere amară."
 
 msgid "Battlefield Casualties"
-msgstr ""
+msgstr "Victimele de pe câmpul de luptă"
 
 msgid "Attacker"
-msgstr ""
+msgstr "Atacator"
 
 msgid "Defender"
-msgstr ""
+msgstr "Apărător"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "Atunci când te apropii de %{name}, acesta dispare în mod misterios."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
 msgstr ""
+"În timp ce inamicul tău ajunge la %{name}, acesta dispare în mod misterios."
 
 msgid "You have captured an enemy artifact!"
-msgstr ""
+msgstr "Ai capturat un artefact inamic!"
 
 msgid "Necromancy!"
-msgstr ""
+msgstr "Necromanție!"
 
 msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
 msgstr ""
+"Practicând artele întunecate ale necromanției, ești capabil să trezești "
+"%{numărul} de morți ai inamicului să se întoarcă în slujba ta ca %{monstru}."
 
 msgid "%{name} the %{race}"
-msgstr ""
+msgstr "%{name} cel %{race}"
 
 msgid "Captain of %{name}"
-msgstr ""
+msgstr "Căpitan al %{name}"
 
 msgid "Attack"
-msgstr ""
+msgstr "Atac"
 
 msgid "Defense"
-msgstr ""
+msgstr "Apărare"
 
 msgid "Spell Power"
-msgstr ""
+msgstr "Puterea vrăjii"
 
 msgid "Knowledge"
-msgstr ""
+msgstr "Cunoștințe"
 
 msgid "Morale"
-msgstr ""
+msgstr "Moral"
 
 msgid "Luck"
-msgstr ""
+msgstr "Noroc"
 
 msgid "Spell Points"
-msgstr ""
+msgstr "Puncte de vrajă"
 
 msgid "Hero's Options"
-msgstr ""
+msgstr "Opțiunile eroului"
 
 msgid "Cast Spell"
-msgstr ""
+msgstr "Aruncă vraja"
 
 msgid "Retreat"
-msgstr ""
+msgstr "Retragere"
 
 msgid "Surrender"
-msgstr ""
+msgstr "Predare"
 
 msgid "Cancel"
-msgstr ""
+msgstr "Anulează"
 
 msgid "Hero Screen"
-msgstr ""
+msgstr "Ecranul eroului"
 
 msgid "Captain's Options"
-msgstr ""
+msgstr "Opțiunile căpitanului"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
 msgstr ""
+"Aruncă o vrajă magică. Poți lansa doar o singură vrajă pe rundă de luptă. "
+"Runda se resetează atunci când fiecare creatură a avut o rundă."
 
 msgid ""
 "Retreat your hero, abandoning your creatures. Your hero will be available "
 "for you to recruit again, however, the hero will have only a novice hero's "
 "forces."
 msgstr ""
+"Retrage-ți eroul, abandonându-ți creaturile. Eroul tău va fi disponibil "
+"pentru a fi recrutat din nou, însă eroul va avea doar forțele unui erou "
+"începător."
 
 msgid ""
 "Surrendering costs gold. However if you pay the ransom, the hero and all of "
 "his or her surviving creatures will be available to recruit again."
 msgstr ""
+"Predarea costă aur. Cu toate acestea, dacă plătești răscumpărarea, eroul și "
+"toate creaturile sale supraviețuitoare vor fi disponibile pentru a fi "
+"recrutate din nou."
 
 msgid "Open Hero Screen to view full information about the hero."
 msgstr ""
+"Deschide ecranul eroului pentru a vedea informații complete despre erou."
 
 msgid "Return to the battle."
-msgstr ""
+msgstr "Întoarce-te la luptă."
 
 msgid "Not enough gold (%{gold})"
-msgstr ""
+msgstr "Întoarce-te la luptă.Nu este suficient aur (%{gold})"
 
 msgid "%{name} states:"
-msgstr ""
+msgstr "%{name} declară:"
 
 msgid "Captain of %{name} states:"
-msgstr ""
+msgstr "Căpitanul de stat %{name}:"
 
 msgid ""
 "\"I will accept your surrender and grant you and your troops safe passage "
 "for the price of %{price} gold.\""
 msgstr ""
+"\"Voi accepta capitularea ta și îți voi acorda ție și trupelor tale o "
+"trecere sigură pentru prețul de %{price} aur.\""
 
 msgid "View %{monster} info"
-msgstr ""
+msgstr "Vezi %{monster} info"
 
 msgid "Shoot %{monster}"
-msgstr ""
+msgstr "Trage în %{monster}"
 
 msgid "(1 shot left)"
 msgid_plural "(%{count} shots left)"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "(o lovitură ramasă)"
+msgstr[1] "(%{count} lovituri rămase)"
+msgstr[2] "(%{count} lovituri rămase)"
 
 msgid "Attack %{monster}"
-msgstr ""
+msgstr "Atacă %{monster}"
 
 msgid "Fly %{monster} here"
-msgstr ""
+msgstr "Zboară %{monster} aici"
 
 msgid "Move %{monster} here"
-msgstr ""
+msgstr "Mută %{monster} aici"
 
 msgid "Turn %{turn}"
-msgstr ""
+msgstr "Runda %{turn}"
 
 msgid "Teleport here"
-msgstr ""
+msgstr "Teleportează-te aici"
 
 msgid "Invalid teleport destination"
-msgstr ""
+msgstr "Destinație de teleportare invalidă"
 
 msgid "Cast %{spell} on %{monster}"
-msgstr ""
+msgstr "Aruncă %{spell} pe %{monster}"
 
 msgid "Cast %{spell}"
-msgstr ""
+msgstr "Aruncă %{spell}"
 
 msgid "Select spell target"
-msgstr ""
+msgstr "Selectați ținta vrăjii"
 
 msgid "View Ballista info"
-msgstr ""
+msgstr "Vezi informații despre Ballista"
 
 msgid "Ballista"
-msgstr ""
+msgstr "Ballista"
 
 msgid "Enable auto combat"
-msgstr ""
+msgstr "Activează lupta automată"
 
 msgid "Allows the computer to fight out the battle for you."
-msgstr ""
+msgstr "Permite computerului să lupte în locul tău."
 
 msgid "Auto Combat"
-msgstr ""
+msgstr "Luptă automată"
 
 msgid "Customize system options"
-msgstr ""
+msgstr "Personalizează opțiunile sistemului"
 
 msgid "Allows you to customize the combat screen."
-msgstr ""
+msgstr "Îți permite să personalizezi ecranul de luptă."
 
 msgid "System Options"
-msgstr ""
+msgstr "System Options"
 
 msgid "Wait this unit"
-msgstr ""
+msgstr "Așteaptă această unitate"
 
 msgid "Wait"
-msgstr ""
+msgstr "Așteaptă"
 
 msgid ""
 "Waits the current creature. The current creature delays its turn until after "
 "all other creatures have had their turn."
 msgstr ""
+"Așteaptă creatura curentă. Creatura curentă își amână rândul până după ce "
+"toate celelalte creaturi și-au avut rândul."
 
 msgid "Skip this unit"
-msgstr ""
+msgstr "Sari peste această unitate"
 
 msgid "Skip"
-msgstr ""
+msgstr "Sari"
 
 msgid ""
 "Skips the current creature. The current creature ends its turn and does not "
 "get to go again until the next round."
 msgstr ""
+"Trece peste creatura curentă. Creatura curentă își termină rândul și nu mai "
+"are posibilitatea de a merge din nou până în runda următoare."
 
 msgid "View Captain's options"
-msgstr ""
+msgstr "Vezi opțiunile căpitanului"
 
 msgid "View Hero's options"
-msgstr ""
+msgstr "Vezi opțiunile eroului"
 
 msgid "View opposing Captain"
-msgstr ""
+msgstr "Vezi căpitanul care se opune"
 
 msgid "View opposing Hero"
-msgstr ""
+msgstr "Vezi eroul care se opune"
 
 msgid "Hide logs"
-msgstr ""
+msgstr "Ascunde jurnalele"
 
 msgid "Show logs"
-msgstr ""
+msgstr "Afișează jurnalele"
 
 msgid "Message Bar"
-msgstr ""
+msgstr "Bara de mesaje"
 
 msgid "Shows the results of individual monster's actions."
-msgstr ""
+msgstr "Afișează rezultatele acțiunilor individuale ale monștrilor."
 
 msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr ""
+msgstr "Ești sigur că vrei să termini bătălia în modul automat?"
 
 msgid "%{name} skip their turn."
-msgstr ""
+msgstr "%{name} și-a sărit rândul."
 
 msgid "%{name} wait their turn."
-msgstr ""
+msgstr "%{name} își așteaptă rândul."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%{attacker} provoacă %{damage} pagube."
+msgstr[1] "%{attacker} face %{damage} pagube."
 msgstr[2] ""
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 creatură piere."
+msgstr[1] "%{count} creaturi pier."
+msgstr[2] "%{count} creaturi pier."
 
 msgid "1 %{defender} perishes."
 msgid_plural "%{count} %{defender} perish."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 %{defender} piere."
+msgstr[1] "%{count} %{defender} %{defender} piere."
+msgstr[2] "%{count} %{defender} %{defender} piere."
 
-msgid "Moved %{monster}: %{src}, %{dst}"
-msgstr ""
-
-msgid "Moved %{monster}"
-msgstr ""
+msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
+msgstr "%{monster} mutat: de la [%{src}] la [%{dst}]."
 
 msgid "The %{name} resist the spell!"
-msgstr ""
+msgstr "%{name} rezistă la vrajă!"
 
 msgid "%{name} casts %{spell} on the %{troop}."
-msgstr ""
+msgstr "%{name} aruncă %{spell} asupra lui %{troop}."
 
 msgid "%{name} casts %{spell}."
-msgstr ""
+msgstr "%{name} aruncă %{spell}."
 
 msgid "The %{spell} does %{damage} damage to one undead creature."
-msgstr ""
+msgstr "Vraja %{spell} provoacă daune %{damage} unei creaturi strigoi."
 
 msgid "The %{spell} does %{damage} damage to all undead creatures."
-msgstr ""
+msgstr "Vraja %{spell} provoacă daune %{damage} tuturor creaturilor strigoi."
 
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
-msgstr ""
+msgstr "Vraja %{spell} face daune %{damage}, %{count} creaturi pier."
 
 msgid "The %{spell} does %{damage} damage."
-msgstr ""
+msgstr "Vraja %{spell} face daune %{damage}."
 
 msgid "The %{spell} does %{damage} damage to one living creature."
-msgstr ""
+msgstr "Vraja %{spell} provoacă daune %{damage} unei creaturi vii."
 
 msgid "The %{spell} does %{damage} damage to all living creatures."
-msgstr ""
+msgstr "Vraja %{spell} provoacă daune %{damage} tuturor creaturilor vii."
 
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr ""
+msgstr "Atacul %{attacker}' îl orbește pe %{target}!"
 
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr ""
+msgstr "Privirea %{attacker}' îl transformă pe %{target} în piatră!"
 
 msgid "The %{attacker}' curse falls upon the %{target}!"
-msgstr ""
+msgstr "Blestemul lui %{attacker}' cade asupra lui %{target}!"
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr ""
+msgstr "%{target} sunt paralizați de %{attacker}!"
 
 msgid "The %{attacker} dispel all good spells on your %{target}!"
-msgstr ""
+msgstr "%{attacker} risipește toate vrăjile bune asupra %{target} tale!"
 
 msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr ""
+msgstr "%{attacker} a aruncat %{spell} pe %{target}!"
 
 msgid "Bad luck descends on the %{attacker}."
-msgstr ""
+msgstr "Ghinionul coboară asupra %{attacker}."
 
 msgid "Good luck shines on the %{attacker}."
-msgstr ""
+msgstr "Norocul strălucește asupra %{attacker}."
 
 msgid "High morale enables the %{monster} to attack again."
-msgstr ""
+msgstr "Un moral ridicat permite %{monster} să atace din nou."
 
 msgid "Low morale causes the %{monster} to freeze in panic."
-msgstr ""
+msgstr "Moralul scăzut face ca %{monster} să înghețe de panică."
 
 msgid "%{tower} does %{damage} damage."
-msgstr ""
+msgstr "%{tower} face %{damage} daune."
 
 msgid "The mirror image is created."
-msgstr ""
+msgstr "Se creează o imagine în oglindă."
 
 msgid "The mirror image is destroyed!"
-msgstr ""
+msgstr "Imaginea în oglindă este distrusă!"
 
 msgid "Are you sure you want to interrupt the auto battle?"
-msgstr ""
+msgstr "Ești sigur că vrei să întrerupi lupta automată?"
 
 msgid "Error"
-msgstr ""
+msgstr "Eroare"
 
 msgid "No spells to cast."
-msgstr ""
+msgstr "Nu sunt vrăji de aruncat."
 
 msgid "Are you sure you want to retreat?"
-msgstr ""
+msgstr "Ești sigur că vrei să te retragi?"
 
 msgid "Retreat disabled"
-msgstr ""
+msgstr "Retragerea oprită"
 
 msgid "Surrender disabled"
-msgstr ""
+msgstr "Predarea oprită"
 
 msgid "Damage: %{max}"
-msgstr ""
+msgstr "Daune: %{max}"
 
 msgid "Damage: %{min} - %{max}"
-msgstr ""
+msgstr "Daune: %{min} - %{max}"
 
 msgid "Perish: %{max}"
-msgstr ""
+msgstr "Fatalități: %{max}"
 
 msgid "Perish: %{min} - %{max}"
-msgstr ""
+msgstr "Fatalități: %{min} - %{max}"
 
 msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
 msgstr ""
+"Printr-o observație cu ochi de vultur, %{name} este capabil să învețe vraja "
+"magică %{spell}."
 
 msgid "Human"
-msgstr ""
+msgstr "Om"
 
 msgid "AI"
-msgstr ""
+msgstr "AI"
 
 msgid "Please select another hero."
-msgstr ""
+msgstr "Te rog selectează un alt erou."
 
 msgid "Set Attack Skill"
-msgstr ""
+msgstr "Setează abilitățile de atac"
 
 msgid "Set Defense Skill"
-msgstr ""
+msgstr "Setează abilitățile de apărare"
 
 msgid "Set Power Skill"
-msgstr ""
+msgstr "Setează abilitățile de putere"
 
 msgid "Set Knowledge Skill"
-msgstr ""
+msgstr "Setează abilitățile de cunoaștere"
 
 msgid "%{race1} %{name1}"
-msgstr ""
+msgstr "%{race1} %{name1}"
 
 msgid "vs"
-msgstr ""
+msgstr "contra"
 
 msgid "%{race2} %{name2}"
-msgstr ""
+msgstr "%{race2} %{name2}"
 
 msgid "Monsters"
-msgstr ""
+msgstr "Monștri"
 
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
 msgid "Left Turret"
-msgstr ""
+msgstr "Turela stângă"
 
 msgid "Right Turret"
-msgstr ""
+msgstr "Turela dreaptă"
 
 msgid "The %{name} fires with the strength of %{count} Archers"
-msgstr ""
+msgstr "%{name} trage cu puterea de %{count} arcași"
 
 msgid "each with a +%{attack} bonus to their attack skill."
-msgstr ""
+msgstr "fiecare cu un bonus de +%{attack} la abilitatea lor de atac."
 
 msgid ""
 "The %{artifact} artifact is in effect for this battle, disabling %{spell} "
 "spell."
 msgstr ""
+"Artefactul %{artifact} este în vigoare pentru această bătălie, dezactivând "
+"vraja %{spell}."
 
 msgid "%{count} %{name} rise(s) from the dead!"
-msgstr ""
+msgstr "%{count} %{name} învie din morți!"
 
 msgid "Dwarven Alliance"
-msgstr ""
+msgstr "Alianța Piticilor"
 
 msgid "Sorceress Guild"
-msgstr ""
+msgstr "Breasla Vrăjitoarelor"
 
 msgid "Necromancer Guild"
-msgstr ""
+msgstr "Breasla Necromancerilor"
 
 msgid "Ogre Alliance"
-msgstr ""
+msgstr "Alianța Ogrilor"
 
 msgid "Dwarfbane"
-msgstr ""
+msgstr "Blestemul Piticilor"
 
 msgid "Dragon Alliance"
-msgstr ""
+msgstr "Alianța Dragonilor"
 
 msgid "Elven Alliance"
-msgstr ""
+msgstr "Alianța Elfilor"
 
 msgid "Kraeger defeated"
-msgstr ""
+msgstr "Kraeger este învins"
 
 msgid "Wayward Son"
-msgstr ""
+msgstr "Fiul Rătăcitor"
 
 msgid "Uncle Ivan"
-msgstr ""
+msgstr "Unchiul Ivan"
 
 msgid "Annexation"
-msgstr ""
-
-msgid "Carator Mines"
-msgstr ""
+msgstr "Anexare"
 
 msgid "Force of Arms"
-msgstr ""
+msgstr "Forța armelor"
 
 msgid "Save the Dwarves"
-msgstr ""
+msgstr "Salvați piticii"
 
-msgid "The Crown"
-msgstr ""
-
-msgid "The Gauntlet"
-msgstr ""
+msgid "Carator Mines"
+msgstr "Minele Carator"
 
 msgid "Turning Point"
-msgstr ""
+msgstr "Punct de cotitură"
 
-msgid "Betrayal"
+msgid "scenarioName|Defender"
 msgstr ""
 
 msgid "Corlagon's Defense"
-msgstr ""
+msgstr "Apărarea lui Corlagon"
+
+msgid "The Crown"
+msgstr "Coroane"
+
+msgid "The Gauntlet"
+msgstr "Mănușa"
+
+msgid "Betrayal"
+msgstr "Trădare"
 
 msgid "Final Justice"
-msgstr ""
+msgstr "Justiție finală"
 
 msgid ""
 "Roland needs you to defeat the lords near his castle to begin his war of "
@@ -734,29 +815,45 @@ msgid ""
 "will spend most of their time fighting with one another.  Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
+"Roland are nevoie de tine pentru a-i învinge pe lorzii din apropierea "
+"castelului său pentru a începe războiul de rebeliune împotriva fratelui "
+"său.  Nu sunt aliați între ei, așa că își vor petrece mare parte a timpului "
+"luptându-se unul cu celălalt.  Victoria este a ta atunci când ai învins "
+"toate castelele și eroii lor."
 
 msgid ""
 "The local lords refuse to swear allegiance to Roland, and must be subdued. "
 "They are wealthy and powerful, so be prepared for a tough fight. Capture all "
 "enemy castles to win."
 msgstr ""
+"Lorzii locali refuză să jure credință lui Roland și trebuie supuși. Sunt "
+"bogați și puternici, așa că fii pregătit pentru o luptă grea. Capturează "
+"toate castelele inamice pentru a câștiga."
 
 msgid ""
 "Your task is to defend the Dwarves against Archibald's forces. Capture all "
 "of the enemy towns and castles to win, and be sure not to lose all of the "
 "dwarf towns at once, or the enemy will have won."
 msgstr ""
+"Sarcina ta este de a apăra Piticii împotriva forțelor lui Archibald. "
+"Capturează toate orașele și castelele inamice pentru a câștiga și asigură-te "
+"că nu pierzi toate orașele piticilor deodată, altfel inamicul va câștiga."
 
 msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
+"Te vei confrunta cu patru inamici aliați într-o luptă directă pentru resurse "
+"și comori. Capturează toate castelele inamice pentru a obține victoria."
 
 msgid ""
 "Your enemies are allied against you and start close by, so be ready to come "
 "out fighting. You will need to own all four castles in this small valley to "
 "win."
 msgstr ""
+"Dușmanii tăi sunt aliați împotriva ta și pornesc din apropiere, așa că "
+"pregătește-te să ieși la luptă. Va trebui să deții toate cele patru castele "
+"din această mică vale pentru a câștiga."
 
 msgid ""
 "The Sorceress' guild of Noraston has requested Roland's aid against an "
@@ -764,6 +861,10 @@ msgid ""
 "don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy "
 "castle on an island in the ocean.)"
 msgstr ""
+"Breasla vrăjitoarelor din Noraston a cerut ajutorul lui Roland împotriva "
+"unui atac al aliaților lui Archibald. Capturează toate castelele inamice "
+"pentru a câștiga și nu pierde Noraston, altfel vei pierde scenariul. "
+"(Sugestie: există un castel inamic pe o insulă în ocean)."
 
 msgid ""
 "Gather as large an army as possible and capture the enemy castle within 8 "
@@ -771,11 +872,18 @@ msgid ""
 "to the enemy castle. Any troops you have in your army at the end of this "
 "scenario will be with you in the final battle."
 msgstr ""
+"Adună o armată cât mai numeroasă și cucerește castelul inamic în termen de 8 "
+"săptămâni. Ai un singur inamic ca adversar, dar trebuie să parcurgi un drum "
+"lung pentru a ajunge la castelul inamic. Toate trupele pe care le ai în "
+"armată la sfârșitul acestui scenariu vor fi alături de tine în bătălia "
+"finală."
 
 msgid ""
 "Find the Crown before Archibald's heroes find it. Roland will need the Crown "
 "for the final battle against Archibald."
 msgstr ""
+"Găsește Coroana înainte ca eroii lui Archibald să o găsească. Roland va avea "
+"nevoie de Coroană pentru bătălia finală împotriva lui Archibald."
 
 msgid ""
 "Three allied enemies stand before you and victory, including Lord Corlagon. "
@@ -783,17 +891,27 @@ msgid ""
 "enemy. Remember that capturing Lord Corlagon will ensure that he will not "
 "fight against you in the final scenario."
 msgstr ""
+"Trei inamici aliați se află în fața ta și a victoriei, inclusiv Lordul "
+"Corlagon. Roland se află într-un castel din nord-vest, iar tu vei pierde "
+"dacă va cădea în mâinile inamicului. Nu uita că prin capturarea Lordului "
+"Corlagon te vei asigura că nu va lupta împotriva ta în scenariul final."
 
 msgid ""
 "This is the final battle. Both you and your enemy are armed to the teeth, "
 "and all are allied against you. Capture Archibald to end the war!"
 msgstr ""
+"Aceasta este bătălia finală. Atât tu cât și inamicul tău sunteți înarmați "
+"până în dinți și toți sunt aliați împotriva ta. Capturează-l pe Archibald "
+"pentru a pune capăt războiului!"
 
 msgid ""
 "Switching sides leaves you with three castles against the enemy's one.  This "
 "battle will be the easiest one you will face for the rest of the war..."
 "traitor."
 msgstr ""
+"Schimbarea taberei te lasă cu trei castele împotriva castelului inamicului.  "
+"Această bătălie va fi cea mai ușoară cu care te vei confrunta pentru tot "
+"restul războiului... trădătorule."
 
 msgid "Barbarian Wars"
 msgstr ""
@@ -2394,13 +2512,10 @@ msgstr ""
 msgid "Audio"
 msgstr ""
 
-msgid "settings"
+msgid "Configure"
 msgstr ""
 
 msgid "Hot Keys"
-msgstr ""
-
-msgid "In-game"
 msgstr ""
 
 msgid "Black & White"
@@ -2439,16 +2554,16 @@ msgstr ""
 msgid "Select Game Language"
 msgstr ""
 
-msgid "Change language of the game."
+msgid "Change the language of the game."
 msgstr ""
 
 msgid "Select Game Resolution"
 msgstr ""
 
-msgid "Change resolution of the game."
+msgid "Change the resolution of the game."
 msgstr ""
 
-msgid "Change audio settings of the game."
+msgid "Change the audio settings of the game."
 msgstr ""
 
 msgid "Experimental game settings."
@@ -2457,15 +2572,13 @@ msgstr ""
 msgid "Toggle instant battle mode."
 msgstr ""
 
-msgid "Check all Hot Keys used in the game."
+msgid "Check and configure all the hot keys present in the game."
 msgstr ""
 
 msgid "Toggle the type of interface you want to use."
 msgstr ""
 
-msgid ""
-"Toggle color cursors on/off. Color cursors look nicer, but sometimes don't "
-"move as smoothly as black and white ones."
+msgid "Toggle colored cursor on or off. This is only an esthetic choice."
 msgstr ""
 
 msgid ""
@@ -2677,6 +2790,9 @@ msgid "Available: %{count}"
 msgstr ""
 
 msgid "Number to buy:"
+msgstr ""
+
+msgid "Select Game Resolution:"
 msgstr ""
 
 msgid "Click to apply the selected resolution."
@@ -3005,9 +3121,6 @@ msgstr ""
 msgid "and more..."
 msgstr ""
 
-msgid "DIFFICULTY"
-msgstr ""
-
 msgid "Campaign Difficulty"
 msgstr ""
 
@@ -3236,9 +3349,6 @@ msgid "Campaign"
 msgstr ""
 
 msgid "View High Scores for Campaigns."
-msgstr ""
-
-msgid "Warning"
 msgstr ""
 
 msgid "This file contains a save with an invalid game type."
@@ -3491,6 +3601,22 @@ msgstr ""
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr ""
 
+msgid "You must defeat the enemy %{enemies}."
+msgid_plural "You must defeat the enemy alliance of %{enemies}."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid ""
+"The alliance consisting of %{allies} and you must defeat the enemy "
+"%{enemies}."
+msgid_plural ""
+"The alliance consisting of %{allies} and you must defeat the enemy alliance "
+"of %{enemies}."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
 msgid "Capture the castle '%{name}'."
 msgstr ""
 
@@ -3621,6 +3747,11 @@ msgid "%{color} player's turn."
 msgstr ""
 
 msgid ""
+"Do you want to transfer control from you to the AI? The effect will take "
+"place only on the next turn."
+msgstr ""
+
+msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
 "town in next week, you will be eliminated."
 msgstr ""
@@ -3701,6 +3832,11 @@ msgid "Try looking on land!!!"
 msgstr ""
 
 msgid ""
+"Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
+"it even if he found it - all his artifact slots are full."
+msgstr ""
+
+msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
 msgstr ""
 
@@ -3761,7 +3897,41 @@ msgid ""
 "and/or heroes not of their primary alignment."
 msgstr ""
 
+msgid "Handicap"
+msgstr ""
+
+#
+msgid ""
+"This lets you change the handicap of a particular player. Only humans may be "
+"handicapped. Handicapped players start with fewer resources and earn 15 or "
+"30% fewer resources per turn for mild and severe handicaps, respectively."
+msgstr ""
+
 msgid "%{color} player"
+msgstr ""
+
+msgid "No Handicap"
+msgstr ""
+
+msgid "No special restrictions on start resources and earning them per turn."
+msgstr ""
+
+msgid "Mild Handicap"
+msgstr ""
+
+#
+msgid ""
+"Mild handicapped players start with fewer resources and earn 15% fewer "
+"resources per turn."
+msgstr ""
+
+msgid "Severe Handicap"
+msgstr ""
+
+#
+msgid ""
+"Severe handicapped players start with fewer resources and earn 30% fewer "
+"resources per turn."
 msgstr ""
 
 msgid "View %{skill} Info"
@@ -3816,6 +3986,9 @@ msgid "Swedish"
 msgstr ""
 
 msgid "Portuguese"
+msgstr ""
+
+msgid "Turkish"
 msgstr ""
 
 msgid ", FPS: "

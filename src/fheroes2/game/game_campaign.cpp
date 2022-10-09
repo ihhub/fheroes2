@@ -723,63 +723,29 @@ namespace
         }
     }
 
-    fheroes2::ButtonSprite getDifficultyButton( const int campaignId, const int buttonIconID, const fheroes2::Point & offset )
+    fheroes2::ButtonSprite getDifficultyButton( const int campaignId, const fheroes2::Point & offset )
     {
-        fheroes2::FontColor fontColor{ fheroes2::FontColor::WHITE };
-        fheroes2::Rect fillingReleasedArea;
-        fheroes2::Rect fillingPressedArea;
-        fheroes2::Point releasedTextPosition;
-        fheroes2::Point pressedTextPosition;
+        int icnId = ICN::UNKNOWN;
 
         switch ( campaignId ) {
         case Campaign::ROLAND_CAMPAIGN:
-            fontColor = fheroes2::FontColor::WHITE;
-            fillingReleasedArea = { 13, 4, 128, 16 };
-            fillingPressedArea = { 13, 5, 128, 16 };
-            releasedTextPosition = { 12, 5 };
-            pressedTextPosition = { 11, 6 };
+            icnId = ICN::BUTTON_DIFFICULTY_ROLAND;
             break;
         case Campaign::ARCHIBALD_CAMPAIGN:
-            fontColor = fheroes2::FontColor::GRAY;
-            fillingReleasedArea = { 13, 4, 128, 14 };
-            fillingPressedArea = { 13, 6, 128, 14 };
-            releasedTextPosition = { 10, 5 };
-            pressedTextPosition = { 11, 6 };
+            icnId = ICN::BUTTON_DIFFICULTY_ARCHIBALD;
             break;
         case Campaign::PRICE_OF_LOYALTY_CAMPAIGN:
         case Campaign::DESCENDANTS_CAMPAIGN:
         case Campaign::WIZARDS_ISLE_CAMPAIGN:
         case Campaign::VOYAGE_HOME_CAMPAIGN:
-            fontColor = fheroes2::FontColor::GRAY;
-            fillingReleasedArea = { 7, 5, 125, 14 };
-            fillingPressedArea = { 6, 6, 128, 14 };
-            releasedTextPosition = { 4, 5 };
-            pressedTextPosition = { 4, 5 };
+            icnId = ICN::BUTTON_DIFFICULTY_POL;
             break;
         default:
             // Implementing a new campaign? Add a new case!
             assert( 0 );
             break;
         }
-
-        fheroes2::Sprite releasedImage = fheroes2::AGG::GetICN( buttonIconID, 0 );
-        fheroes2::Sprite pressedImage = fheroes2::AGG::GetICN( buttonIconID, 1 );
-
-        fheroes2::Fill( releasedImage, fillingReleasedArea.x, fillingReleasedArea.y, fillingReleasedArea.width, fillingReleasedArea.height,
-                        releasedImage.image()[fillingReleasedArea.x + fillingReleasedArea.y * releasedImage.width()] );
-        fheroes2::Fill( pressedImage, fillingPressedArea.x, fillingPressedArea.y, fillingPressedArea.width, fillingPressedArea.height,
-                        pressedImage.image()[fillingPressedArea.x + fillingPressedArea.y * pressedImage.width()] );
-
-        const fheroes2::FontType releasedFont{ fheroes2::FontSize::BUTTON_RELEASED, fontColor };
-        const fheroes2::FontType pressedFont{ fheroes2::FontSize::BUTTON_PRESSED, fontColor };
-
-        const char * translatedText = _( "DIFFICULTY" );
-        const char * text = fheroes2::isFontAvailable( translatedText, releasedFont ) ? translatedText : "DIFFICULTY";
-
-        fheroes2::Text( text, releasedFont ).draw( releasedTextPosition.x, releasedTextPosition.y, releasedImage );
-        fheroes2::Text( text, pressedFont ).draw( pressedTextPosition.x, pressedTextPosition.y, pressedImage );
-
-        return fheroes2::ButtonSprite( offset.x, offset.y, releasedImage, pressedImage );
+        return fheroes2::ButtonSprite( offset.x, offset.y, fheroes2::AGG::GetICN( icnId, 0 ), fheroes2::AGG::GetICN( icnId, 1 ) );
     }
 
     int32_t setCampaignDifficulty( int32_t currentDifficulty, const bool isSelectionAllowed )
@@ -998,7 +964,7 @@ namespace
         }
 
         if ( allowToRestart ) {
-            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_OKAY ) << " to Restart scenario." )
+            COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::CAMPAIGN_RESTART_SCENARIO ) << " to Restart scenario." )
         }
         else {
             COUT( "Press " << Game::getHotKeyNameByEventId( Game::HotKeyEvent::DEFAULT_OKAY ) << " to Start scenario." )
@@ -1181,8 +1147,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
     fheroes2::Button buttonOk( top.x + 367, top.y + 431, buttonIconID, 4, 5 );
     fheroes2::Button buttonCancel( top.x + 511, top.y + 431, buttonIconID, 6, 7 );
 
-    // Difficulty button does not present in the original assets so we need to generate it.
-    fheroes2::ButtonSprite buttonDifficulty = getDifficultyButton( chosenCampaignID, buttonIconID, top + fheroes2::Point( 195, 431 ) );
+    // Difficulty button is not present in the original assets so we need to generate it.
+    fheroes2::ButtonSprite buttonDifficulty = getDifficultyButton( chosenCampaignID, top + fheroes2::Point( 195, 431 ) );
 
     // create scenario bonus choice buttons
     fheroes2::ButtonGroup buttonChoices;
@@ -1319,7 +1285,8 @@ fheroes2::GameMode Game::SelectCampaignScenario( const fheroes2::GameMode prevMo
 
         displayScenarioAwardsPopupWindow( campaignSaveData, top ) || displayScenarioBonusPopupWindow( scenario, top );
 
-        const bool restartButtonClicked = ( buttonRestart.isEnabled() && le.MouseClickLeft( buttonRestart.area() ) );
+        const bool restartButtonClicked
+            = ( buttonRestart.isEnabled() && ( le.MouseClickLeft( buttonRestart.area() ) || HotKeyPressEvent( HotKeyEvent::CAMPAIGN_RESTART_SCENARIO ) ) );
 
         if ( le.MousePressRight( buttonCancel.area() ) ) {
             fheroes2::showMessage( fheroes2::Text( _( "Cancel" ), fheroes2::FontType::normalYellow() ),

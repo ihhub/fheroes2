@@ -564,12 +564,14 @@ void Castle::ActionNewWeek()
                 if ( ( dwellings1[ii] == DWELLING_MONSTER1 ) && ( building & BUILD_WEL2 ) )
                     growth += GetGrownWel2();
 
-                if ( isControlAI() )
-                    growth = static_cast<uint32_t>( growth * Difficulty::GetUnitGrowthBonus( Game::getDifficulty() ) );
+                if ( isControlAI() && !isNeutral ) {
+                    growth = static_cast<uint32_t>( growth * Difficulty::GetUnitGrowthBonusForAI( Game::getDifficulty() ) );
+                }
 
-                // neutral town: half population (normal for begin month)
-                if ( isNeutral && !world.BeginMonth() )
+                // Neutral towns always have half population growth.
+                if ( isNeutral ) {
                     growth /= 2;
+                }
 
                 *dw += growth;
             }
@@ -590,7 +592,7 @@ void Castle::ActionNewWeek()
         }
 
         // neutral town: increase garrisons
-        if ( isNeutral && !Modes( CUSTOMARMY ) ) {
+        if ( isNeutral ) {
             JoinRNDArmy();
             // if it's a town there's 40% chance (or it's a castle) to get extra troops
             if ( isCastle() || Rand::Get( 1, 100 ) <= 40 )

@@ -3,8 +3,10 @@
 **fheroes2** is a recreation of the Heroes of Might and Magic II game engine.
 
 This open source multiplatform project, written from scratch, is designed to reproduce the original game with significant
-improvements in the gameplay, graphics and logic (including support for high-resolution graphics, improved AI, numerous fixes
-and UI improvements), breathing new life into one of the most addictive turn-based strategies.
+improvements in gameplay, graphics and logic (including support for high-resolution graphics, improved AI, numerous fixes
+and user interface improvements), breathing new life into one of the most addictive turn-based strategy games.
+
+You can find a complete list of all of our changes and enhancements in [**its own wiki page**](https://github.com/ihhub/fheroes2/wiki/Features-and-enhancements-of-the-project).
 
 <p align="center">
     <img src="docs/images/screenshots/screenshot_world_map.png?raw=true" width="820">
@@ -35,9 +37,9 @@ Initially, the project was developed on [**sourceforge**](https://sourceforge.ne
 
 ## Contribution and Development
 
-This repository is the place for everyone. If you want to contribute, please read more [**here**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.#q-how-can-i-contribute-to-the-project).
+This repository is a place for everyone. If you want to contribute, please read more [**here**](https://github.com/ihhub/fheroes2/wiki/F.A.Q.#q-how-can-i-contribute-to-the-project).
 
-To build the project from source please follow [**this guide**](docs/DEVELOPMENT.md).
+To build the project from source, please follow [**this guide**](docs/DEVELOPMENT.md).
 
 [![Build Status](https://github.com/ihhub/fheroes2/workflows/GitHub%20Actions/badge.svg)](https://github.com/ihhub/fheroes2/actions)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ihhub_fheroes2&metric=bugs)](https://sonarcloud.io/dashboard?id=ihhub_fheroes2)
@@ -49,7 +51,7 @@ If you would like to help translating the project, please read the [**translatio
 
 ## Donation
 
-We accept donations via **Patreon** or **PayPal**. All donations will be used only for the future project development as we do not
+We accept donations via [**Patreon**](https://www.patreon.com/fheroes2) or [**PayPal**](https://www.paypal.com/paypalme/fheroes2). All donations will be used only for the future project development as we do not
 consider this project as a source of income by any means.
 
 [![Donate](https://img.shields.io/badge/Donate-Patreon-green.svg)](https://www.patreon.com/fheroes2)

@@ -49,8 +49,8 @@ enum
 {
     CONTROL_NONE = 0,
     CONTROL_HUMAN = 1,
-    CONTROL_AI = 4,
-    CONTROL_REMOTE = 2 /*, CONTROL_LOCAL = CONTROL_AI | CONTROL_HUMAN */
+    CONTROL_REMOTE = 2, /*, CONTROL_LOCAL = CONTROL_AI | CONTROL_HUMAN */
+    CONTROL_AI = 4
 };
 enum
 {
@@ -105,6 +105,13 @@ struct Control
 class Player : public BitModes, public Control
 {
 public:
+    enum HandicapStatus : uint8_t
+    {
+        NONE, // No strings attached.
+        MILD, // 15% fewer resources per turn
+        SEVERE, // 30% fewer resources per turn
+    };
+
     explicit Player( int col = Color::NONE );
     ~Player() override = default;
 
@@ -115,11 +122,28 @@ public:
 
     bool isPlay() const;
 
-    void SetColor( int );
-    void SetRace( int );
-    void SetControl( int );
+    void SetColor( int cl )
+    {
+        color = cl;
+    }
+
+    void SetRace( int r )
+    {
+        race = r;
+    }
+
+    void SetControl( int ctl )
+    {
+        control = ctl;
+    }
+
     void SetPlay( bool );
-    void SetFriends( int );
+
+    void SetFriends( int f )
+    {
+        friends = f;
+    }
+
     void SetName( const std::string & newName );
 
     int GetControl() const override;
@@ -144,8 +168,25 @@ public:
 
     std::string GetPersonalityString() const;
 
-    Focus & GetFocus();
-    const Focus & GetFocus() const;
+    Focus & GetFocus()
+    {
+        return focus;
+    }
+
+    uint8_t getHandicapStatus() const
+    {
+        return _handicapStatus;
+    }
+
+    void setHandicapStatus( const uint8_t status );
+
+    // This mode sets control from a human player to AI so the game will be continued by AI.
+    void setAIAutoControlMode( const bool enable );
+
+    bool isAIAutoControlMode() const
+    {
+        return _isAIAutoControlMode;
+    }
 
 protected:
     friend StreamBase & operator<<( StreamBase &, const Player & );
@@ -159,6 +200,10 @@ protected:
     uint32_t id;
     Focus focus;
     std::shared_ptr<AI::Base> _ai;
+    uint8_t _handicapStatus;
+
+    // This member should not be saved anywhere.
+    bool _isAIAutoControlMode;
 };
 
 StreamBase & operator<<( StreamBase &, const Player & );

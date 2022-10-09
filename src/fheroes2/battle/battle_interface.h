@@ -151,6 +151,7 @@ namespace Battle
         Status & operator=( const Status & ) = delete;
 
         void SetPosition( int32_t, int32_t );
+
         void SetLogs( StatusListBox * logs )
         {
             listlog = logs;
@@ -402,7 +403,7 @@ namespace Battle
         int32_t teleport_src;
         fheroes2::Rect main_tower;
 
-        StatusListBox * listlog;
+        std::unique_ptr<StatusListBox> listlog;
 
         PopupDamageInfo popup;
         ArmiesOrder armies_order;

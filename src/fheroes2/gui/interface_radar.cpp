@@ -245,6 +245,7 @@ void Interface::Radar::Redraw()
             cursorArea.hide();
             fheroes2::Blit( spriteArea, display, rect.x + offset.x, rect.y + offset.y );
             RedrawObjects( Players::FriendColors(), ViewWorldMode::OnlyVisible );
+            cursorArea.show();
             RedrawCursor();
         }
     }
@@ -258,6 +259,7 @@ void Interface::Radar::RedrawForViewWorld( const ViewWorld::ZoomROIs & roi, cons
     fheroes2::Blit( spriteArea, display, rect.x + offset.x, rect.y + offset.y );
     RedrawObjects( Players::FriendColors(), mode );
     const fheroes2::Rect roiInTiles = roi.GetROIinTiles();
+    cursorArea.show();
     RedrawCursor( &roiInTiles );
 }
 
