@@ -863,7 +863,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
         return !data.curses.empty() && data.bonuses.empty();
     };
 
-    // Pure cursed artifacts (artifacts with no bonuses) should definitely go to another bag.
+    // Pure cursed artifacts (artifacts with no bonuses but only curses) should definitely go to another bag.
     transferArtifactsByCondition( combined, giftBag, isPureCursedArtifact );
 
     if ( !taker.HasSecondarySkill( Skill::Secondary::NECROMANCY ) && giver.HasSecondarySkill( Skill::Secondary::NECROMANCY ) ) {
@@ -910,7 +910,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
         transferArtifactsByCondition( combined, giftBag, isScrollSpellDuplicated );
     }
 
-    // A unique artifact is an artifact with no curses and all bonuses are unique.
+    // A unique artifact is an artifact with no curses and all its bonuses are unique.
     auto isUniqueArtifact = []( const Artifact & artifact ) {
         const fheroes2::ArtifactData & data = fheroes2::getArtifactData( artifact.GetID() );
         if ( !data.curses.empty() ) {
@@ -926,12 +926,13 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
         return true;
     };
 
-    // Search for copies of unique artifacts. All copies of unique artifact are useless.
+    // Search for copies of unique artifacts. All copies of unique artifacts are useless.
     for ( auto mainIter = combined.begin(); mainIter != combined.end(); ++mainIter ) {
         if ( isUniqueArtifact( *mainIter ) ) {
             for ( auto iter = mainIter + 1; iter != combined.end(); ) {
                 if ( *iter == *mainIter ) {
                     // Scrolls are considered as unique artifacts but their internal value might be different.
+                    // If they contain different spells then we should not interpret them as the same.
                     if ( ( iter->GetID() == Artifact::SPELL_SCROLL ) && ( iter->getSpellId() != mainIter->getSpellId() ) ) {
                         ++iter;
                         continue;
@@ -951,7 +952,7 @@ void BagArtifacts::exchangeArtifacts( BagArtifacts & giftBag, const Heroes & tak
         }
     }
 
-    // Sort artifact by value from lowest to highest since we pick artifacts from the end of container.
+    // Sort artifacts by value from lowest to highest since we pick them from the end of container.
     std::sort( combined.begin(), combined.end(), []( const Artifact & left, const Artifact & right ) { return left.getArtifactValue() < right.getArtifactValue(); } );
 
     // TODO: add logic for excessive amount of artifacts and also leave one slot for a magic book if the more powerful hero doesn't have one.
