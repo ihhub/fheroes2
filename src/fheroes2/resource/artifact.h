@@ -303,7 +303,7 @@ public:
     bool isFull() const;
     bool ContainUltimateArtifact() const;
 
-    void exchangeArtifacts( BagArtifacts & giftBag );
+    void exchangeArtifacts( BagArtifacts & giftBag, const Heroes & taker, const Heroes & giver );
 
     double getArtifactValue() const;
     uint32_t CountArtifacts() const;
