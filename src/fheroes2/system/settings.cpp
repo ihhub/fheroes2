@@ -39,7 +39,6 @@
 #include "serialize.h"
 #include "settings.h"
 #include "system.h"
-#include "system_dirs.h"
 #include "tinyconfig.h"
 #include "tools.h"
 #include "translations.h"

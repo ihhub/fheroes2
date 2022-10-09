@@ -36,7 +36,6 @@
 #include "save_format_version.h"
 #include "settings.h"
 #include "system.h"
-#include "system_dirs.h"
 #include "translations.h"
 #include "ui_dialog.h"
 #include "ui_language.h"

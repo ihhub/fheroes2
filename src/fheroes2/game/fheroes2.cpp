@@ -50,7 +50,6 @@
 #include "screen.h"
 #include "settings.h"
 #include "system.h"
-#include "system_dirs.h"
 #ifdef WITH_DEBUG
 #include "tools.h"
 #endif

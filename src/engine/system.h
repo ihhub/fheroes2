@@ -25,17 +25,16 @@
 #define H2SYSTEM_H
 
 #include <ctime>
+#include <string>
 #include <vector>
 
-#include "dir.h"
+#include "system_dir.h"
 
 namespace System
 {
-    int MakeDirectory( const std::string & );
-    std::string ConcatePath( const std::string &, const std::string & );
-
-    std::string GetDirname( const std::string & );
-    std::string GetBasename( const std::string & );
+    void appendOSSpecificDirectories( std::vector<std::string> & directories );
+    std::string GetConfigDirectory( const std::string & prog );
+    std::string GetDataDirectory( const std::string & prog );
 
     int GetCommandOptions( int argc, char * const argv[], const char * optstring );
     char * GetOptionsArgument();
@@ -48,7 +47,7 @@ namespace System
 
     std::string FileNameToUTF8( const std::string & str );
 
-    std::tm GetTM( const std::time_t time );
+    tm GetTM( const time_t time );
 }
 
 #endif

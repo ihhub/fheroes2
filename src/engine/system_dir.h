@@ -21,17 +21,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef H2SYSTEM_DIRS_H
-#define H2SYSTEM_DIRS_H
+#ifndef H2SYSTEM_DIR_H
+#define H2SYSTEM_DIR_H
 
 #include <string>
-#include <vector>
 
 namespace System
 {
-    void appendOSSpecificDirectories( std::vector<std::string> & directories );
-    std::string GetConfigDirectory( const std::string & prog );
-    std::string GetDataDirectory( const std::string & prog );
+    int MakeDirectory( const std::string & );
+    std::string ConcatePath( const std::string &, const std::string & );
+
+    std::string GetDirname( const std::string & );
+    std::string GetBasename( const std::string & );
 }
 
 #endif
