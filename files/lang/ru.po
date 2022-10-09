@@ -801,7 +801,7 @@ msgid "Turning Point"
 msgstr "Переломный момент"
 
 msgid "scenarioName|Defender"
-msgstr ""
+msgstr "Защитник"
 
 msgid "Corlagon's Defense"
 msgstr "Защита Корлагона"
@@ -814,12 +814,6 @@ msgstr "Перчатка"
 
 msgid "Betrayal"
 msgstr "Предательство"
-
-msgid "scenarioName|Defender"
-msgstr "Защитник"
-
-msgid "Corlagon's Defense"
-msgstr "Защита Корлагона"
 
 msgid "Final Justice"
 msgstr "Акт отчаяния"
