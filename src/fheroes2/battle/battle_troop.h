@@ -100,7 +100,6 @@ namespace Battle
         void NewTurn();
 
         bool isValid() const override;
-        bool isArchers() const;
         bool isFlying() const;
         bool isDoubleAttack() const;
 

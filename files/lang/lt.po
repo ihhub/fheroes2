@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 00:54+0000\n"
+"POT-Creation-Date: 2022-10-08 02:28+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
@@ -749,14 +749,23 @@ msgstr ""
 msgid "Annexation"
 msgstr ""
 
-#, fuzzy
-msgid "Carator Mines"
-msgstr "Kristalų kasykla"
-
 msgid "Force of Arms"
 msgstr ""
 
 msgid "Save the Dwarves"
+msgstr ""
+
+#, fuzzy
+msgid "Carator Mines"
+msgstr "Kristalų kasykla"
+
+msgid "Turning Point"
+msgstr ""
+
+msgid "scenarioName|Defender"
+msgstr ""
+
+msgid "Corlagon's Defense"
 msgstr ""
 
 #, fuzzy
@@ -766,13 +775,7 @@ msgstr "Rytų miestas."
 msgid "The Gauntlet"
 msgstr ""
 
-msgid "Turning Point"
-msgstr ""
-
 msgid "Betrayal"
-msgstr ""
-
-msgid "Corlagon's Defense"
 msgstr ""
 
 msgid "Final Justice"
