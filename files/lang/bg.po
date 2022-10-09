@@ -9077,7 +9077,7 @@ msgid ""
 msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
-"fheroes2/издания"
+"fheroes2/releases"
 
 #~ msgid "Moved %{monster}"
 #~ msgstr "Преместено %{monster}"
