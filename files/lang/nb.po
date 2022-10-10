@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-08 02:28+0000\n"
-"PO-Revision-Date: 2022-09-23 16:14+0200\n"
+"PO-Revision-Date: 2022-10-10 13:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -21,16 +21,16 @@ msgstr ""
 msgid ""
 "BATTLE\n"
 "ONLY"
-msgstr ""
+msgstr "KAMP"
 
 msgid "GIFT"
-msgstr ""
+msgstr "SEND"
 
 msgid "MIN"
-msgstr ""
+msgstr "MIN"
 
 msgid "DIFFICULTY"
-msgstr ""
+msgstr "NIVÅ"
 
 msgid "Warrior"
 msgstr "Kriger"
@@ -51,6 +51,8 @@ msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
 msgstr ""
+"Vil du gi styringen til datamaskinen? Dette vil først tre i kraft den neste "
+"runden."
 
 msgid ""
 "A few\n"
@@ -183,24 +185,24 @@ msgstr "Velg antall"
 
 msgid "%{name} destroys half the enemy troops!"
 msgid_plural "%{name} destroy half the enemy troops!"
-msgstr[0] "Troppen med 1 %{name} halverer fiendestyrken!"
-msgstr[1] "Troppen med %{name} halverer fiendestyrken!"
+msgstr[0] "Troppen med 1 %{name} halverte fiendestyrken!"
+msgstr[1] "Troppen med %{name} halverte fiendestyrken!"
 
 msgid "%{name} has turned off the auto battle"
-msgstr "%{name} har slått av autotrekk"
+msgstr "%{name} slo av autotrekk"
 
 msgid "%{name} has turned on the auto battle"
-msgstr "%{name} har slått av autotrekk"
+msgstr "%{name} slo på autotrekk"
 
 msgid "Spell failed!"
-msgstr "Trolldom ble mislykket!"
+msgstr "Trolldommen mislyktes!"
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
 "combat spells."
 msgstr ""
-"Gjenstanden Sfæren av opphevelse er i bruk i denne kampen, dermed forhindres "
-"all kampmagi."
+"Gjenstanden Sfæren av opphevelse er i bruk i denne kampen, og dermed "
+"forhindres all kampmagi."
 
 msgid "You have already cast a spell this round."
 msgstr "Du har allerede brukt trolldom denne runden."
@@ -228,7 +230,9 @@ msgid "Speed: %{speed}"
 msgstr "Hurtighet : %{speed}"
 
 msgid "Army Order"
-msgstr "Turrekkefølge"
+msgstr ""
+"Tur-\n"
+"rekkefølge"
 
 msgid "Auto Spell Casting"
 msgstr ""
@@ -240,12 +244,12 @@ msgstr "Rutenett"
 
 msgid "Shadow Movement"
 msgstr ""
-"Flytte-\n"
-"skygge"
+"Framhevet-\n"
+"rekkevidde"
 
 msgid "Shadow Cursor"
 msgstr ""
-"Skygge-\n"
+"Framhevnings-\n"
 "markør"
 
 msgid "Off"
@@ -311,7 +315,7 @@ msgid "%{name} surrenders to the enemy, and departs in shame."
 msgstr "%{name} gir opp kampen mot fienden og forlater slagmarken i skam."
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
-msgstr "Hæren din lider et bittert nederlag, og %{name} forlater din sak."
+msgstr "Hæren din lider et bittert nederlag. %{name} forlater din sak."
 
 msgid "Your force suffer a bitter defeat."
 msgstr "Styrken din lider et bittert nederlag."
@@ -389,9 +393,8 @@ msgstr "Avbryt"
 msgid "Hero Screen"
 msgstr "Helteskjerm"
 
-#, fuzzy
 msgid "Captain's Options"
-msgstr "Borgvalg"
+msgstr "Innstillinger for kapteinen"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
@@ -526,13 +529,13 @@ msgstr ""
 "turen sin og får ikke en ny tur før neste runde."
 
 msgid "View Captain's options"
-msgstr ""
+msgstr "Vis innstillinger for kapteinen."
 
 msgid "View Hero's options"
 msgstr "Vis helteinnstillinger"
 
 msgid "View opposing Captain"
-msgstr ""
+msgstr "Vis info om motstanderens kaptein"
 
 msgid "View opposing Hero"
 msgstr "Vis motstanderhelt"
@@ -550,99 +553,97 @@ msgid "Shows the results of individual monster's actions."
 msgstr "Viser en logg over alle krigernes trekk."
 
 # Avskjedige
-#, fuzzy
 msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Er du sikker på at du vil bortvise denne troppen?"
+msgstr "Er du sikker på at du vil fullføre kampen med automatiske trekk?"
 
 msgid "%{name} skip their turn."
-msgstr "Troppen med %{name} hopper over turen."
+msgstr "Troppen med %{name} hoppet over turen sin."
 
 msgid "%{name} wait their turn."
-msgstr "Troppen med %{name} avventer."
+msgstr "Troppen med %{name} avventet turen sin."
 
 msgid "%{attacker} does %{damage} damage."
 msgid_plural "%{attacker} do %{damage} damage."
-msgstr[0] "Troppen med 1 %{attacker} gjør %{damage} skadepoeng."
-msgstr[1] "Troppen med %{attacker} gjør %{damage} skadepoeng."
+msgstr[0] "Troppen med 1 %{attacker} gjorde %{damage} skadepoeng."
+msgstr[1] "Troppen med %{attacker} gjorde %{damage} skadepoeng."
 
 msgid "1 creature perishes."
 msgid_plural "%{count} creatures perish."
-msgstr[0] "1 skapning dør."
+msgstr[0] "1 skapning døde."
 msgstr[1] "%{count} skapninger dør."
 
 msgid "1 %{defender} perishes."
 msgid_plural "%{count} %{defender} perish."
-msgstr[0] "1 %{defender} dør."
+msgstr[0] "1 %{defender} døde."
 msgstr[1] "%{count} %{defender} dør."
 
-#, fuzzy
 msgid "Moved %{monster}: from [%{src}] to [%{dst}]."
-msgstr "Flyttet troppen med %{monster} til rute: %{src}, %{dst}"
+msgstr "Flyttet troppen med %{monster} fra [%{src}] til [%{dst}]."
 
 msgid "The %{name} resist the spell!"
 msgstr "Troppen med %{name} motstod trolldommen!"
 
 msgid "%{name} casts %{spell} on the %{troop}."
-msgstr "%{name} bruker %{spell} på troppen med %{troop}."
+msgstr "%{name} brukte %{spell} på troppen med %{troop}."
 
 msgid "%{name} casts %{spell}."
-msgstr "%{name} bruker %{spell}."
+msgstr "%{name} brukte %{spell}."
 
 msgid "The %{spell} does %{damage} damage to one undead creature."
-msgstr "%{spell} gjør %{value} skadepoeng på én vandød skapning."
+msgstr "%{spell} gjorde %{value} skadepoeng på én vandød skapning."
 
 msgid "The %{spell} does %{damage} damage to all undead creatures."
-msgstr "%{spell} gjør %{damage} skadepoeng på alle vandøde."
+msgstr "%{spell} gjorde %{damage} skadepoeng på alle vandøde."
 
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
-msgstr "%{spell} gjør %{value} skadepoeng, %{count} skapninger dør."
+msgstr "%{spell} gjorde %{value} skadepoeng, %{count} skapninger dør."
 
 msgid "The %{spell} does %{damage} damage."
-msgstr "%{spell} gjør %{damage} skadepoeng."
+msgstr "%{spell} gjorde %{damage} skadepoeng."
 
 msgid "The %{spell} does %{damage} damage to one living creature."
-msgstr "%{spell} gjør %{value} skadepoeng på én levende skapning."
+msgstr "%{spell} gjorde %{value} skadepoeng på én levende skapning."
 
 msgid "The %{spell} does %{damage} damage to all living creatures."
-msgstr "%{spell} gjør %{value} skadepoeng på alle levende skapninger."
+msgstr "%{spell} gjorde %{value} skadepoeng på alle levende skapninger."
 
 msgid "The %{attacker}' attack blinds the %{target}!"
-msgstr "Angrepet til troppen med %{attacker} gjør troppen med %{target} blind!"
+msgstr ""
+"Angrepet til troppen med %{attacker} gjorde troppen med %{target} blind!"
 
 msgid "The %{attacker}' gaze turns the %{target} to stone!"
-msgstr "Blikket til troppen med %{attacker} forsteiner troppen med %{target}!"
+msgstr "Blikket til troppen med %{attacker} forsteinet troppen med %{target}!"
 
 msgid "The %{attacker}' curse falls upon the %{target}!"
 msgstr ""
-"Forbannelsen til troppen med %{attacker} legger seg over troppen med "
-"%{target}!"
+"Forbannelsen til troppen med %{attacker} la seg over troppen med %{target}!"
 
 msgid "The %{target} are paralyzed by the %{attacker}!"
-msgstr "Troppen med %{target} blir lammet av troppen med %{attacker}!"
+msgstr "Troppen med %{target} ble lammet av troppen med %{attacker}!"
 
 msgid "The %{attacker} dispel all good spells on your %{target}!"
 msgstr ""
-"Troppen med %{attacker} opphever alle gode trolldommer på dine %{target}!"
+"Troppen med %{attacker} opphevde alle gode trolldommer på dine %{target}!"
 
 msgid "The %{attacker} cast %{spell} on %{target}!"
-msgstr "Gruppen med %{attacker} bruker %{spell} på troppen med %{target}!"
+msgstr "Gruppen med %{attacker} brukte %{spell} på troppen med %{target}!"
 
 # Bestemtform flertall feks. Dvergene får uflaks i stedet for "dverger får uflaks"
 msgid "Bad luck descends on the %{attacker}."
-msgstr "Troppen med %{attacker} får uflaks."
+msgstr "Troppen med %{attacker} fikk uflaks."
 
 msgid "Good luck shines on the %{attacker}."
-msgstr "Troppen med %{attacker} får flaks."
+msgstr "Troppen med %{attacker} fikk flaks."
 
 msgid "High morale enables the %{monster} to attack again."
-msgstr "God kampånd gjør at troppen med %{monster} får en ny tur."
+msgstr "God kampånd gjorde at troppen med %{monster} fikk en ny tur."
 
 msgid "Low morale causes the %{monster} to freeze in panic."
-msgstr "Dårlig kampånd gjør at troppen med %{monster} stivner til av panikk."
+msgstr "Dårlig kampånd gjorde at troppen med %{monster} stivnet av panikk."
 
 # Kan være det venstre tårnet eller Ballisten. Foreløpig best er Borgens ballist gjør...
 msgid "%{tower} does %{damage} damage."
-msgstr "Borgens %{tower} gjør %{damage} skadepoeng."
+msgstr "Borgens %{tower} gjorde %{damage} skadepoeng."
 
 msgid "The mirror image is created."
 msgstr "Speilbildet ble skapt."
@@ -650,9 +651,8 @@ msgstr "Speilbildet ble skapt."
 msgid "The mirror image is destroyed!"
 msgstr "Speilbildet ble ødelagt!"
 
-#, fuzzy
 msgid "Are you sure you want to interrupt the auto battle?"
-msgstr "Er du sikker på at du vil flykte fra kampen?"
+msgstr "Er du sikker på at du vil avbryte de automatiske trekkene?"
 
 msgid "Error"
 msgstr "Feil"
@@ -685,7 +685,7 @@ msgid ""
 "Through eagle-eyed observation, %{name} is able to learn the magic spell "
 "%{spell}."
 msgstr ""
-"Gjennom sitt ørneblikk er %{name} i stand til å plukke opp trolldommen:\n"
+"Gjennom sitt ørneblikk var %{name} i stand til å plukke opp trolldommen:\n"
 " %{spell}."
 
 msgid "Human"
@@ -746,7 +746,7 @@ msgstr ""
 "trolldommen %{spell}."
 
 msgid "%{count} %{name} rise(s) from the dead!"
-msgstr "%{count} %{name} gjenoppstår fra de døde!"
+msgstr "%{count} %{name} gjenoppstod fra de døde!"
 
 msgid "Dwarven Alliance"
 msgstr "Dvergealliansen"
@@ -794,7 +794,7 @@ msgid "Turning Point"
 msgstr "Vendepunktet"
 
 msgid "scenarioName|Defender"
-msgstr ""
+msgstr "Beskytteren"
 
 msgid "Corlagon's Defense"
 msgstr "Korlagon sitt forsvar"
@@ -817,10 +817,11 @@ msgid ""
 "will spend most of their time fighting with one another.  Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
-"Roland trenger at du beseirer krigsherrene nær borgen hans for å kunne "
-"begynne opprørskrigen mot sin bror. Krigsherrene er ikke allierte med "
-"hverandre, så de kommer til å bruke mesteparten av tiden på å kjempe seg "
-"imellom. Seieren vil bli din når du har slått ut alle deres borger og helter."
+"Roland trenger din hjelp til å beseire krigsherrene i området rundt borgen "
+"hans slik at han kan begynne opprørskrigen mot sin bror. Krigsherrene er "
+"ikke allierte, og derfor vil de bruke mesteparten av tiden på å kjempe seg "
+"imellom. Seieren vil bli din når du har beseiret alle borgene og heltene "
+"deres."
 
 msgid ""
 "The local lords refuse to swear allegiance to Roland, and must be subdued. "
@@ -1458,173 +1459,131 @@ msgstr "Vandrerens sko"
 msgid "campaignBonus|White Pearl"
 msgstr "Den hvite perlen"
 
-#, fuzzy
 msgid "campaignBonus|Basic Archery"
-msgstr "Den sorte perlen"
+msgstr "Enkel skyting"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Archery"
 msgstr "Forbedret skyting"
 
-#, fuzzy
 msgid "campaignBonus|Expert Archery"
-msgstr "Styrkeøksa"
+msgstr "Ekspert skyting"
 
-#, fuzzy
 msgid "campaignBonus|Basic Ballistics"
-msgstr "Hurtigballisten"
+msgstr "Enkel ballistikk"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Ballistics"
-msgstr "Hurtigballisten"
+msgstr "Forbedret ballistikk"
 
-#, fuzzy
 msgid "campaignBonus|Expert Ballistics"
-msgstr "Hurtigballisten"
+msgstr "Ekspert ballistikk"
 
-#, fuzzy
 msgid "campaignBonus|Basic Diplomacy"
-msgstr "Brystplate"
+msgstr "Enkel megling"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Diplomacy"
 msgstr "Forbedret megling"
 
-#, fuzzy
 msgid "campaignBonus|Expert Diplomacy"
 msgstr "Ekspert megling"
 
-#, fuzzy
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr "Den sorte perlen"
+msgstr "Enkelt ørneblikk"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Eagle Eye"
 msgstr "Forbedret ørneblikk"
 
-#, fuzzy
 msgid "campaignBonus|Expert Eagle Eye"
 msgstr "Ekspert ørneblikk"
 
-#, fuzzy
 msgid "campaignBonus|Basic Estates"
-msgstr "Hurtigballisten"
+msgstr "Enkel investering"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Estates"
-msgstr "Brystplate"
+msgstr "Forbedret investering"
 
-#, fuzzy
 msgid "campaignBonus|Expert Estates"
-msgstr "Brystplate"
+msgstr "Ekspert investering"
 
-#, fuzzy
 msgid "campaignBonus|Basic Leadership"
-msgstr "Den sorte perlen"
+msgstr "Enkelt lederskap"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Leadership"
 msgstr "Forbedret lederskap"
 
-#, fuzzy
 msgid "campaignBonus|Expert Leadership"
 msgstr "Ekspert lederskap"
 
-#, fuzzy
 msgid "campaignBonus|Basic Logistics"
-msgstr "Hurtigballisten"
+msgstr "Enkel logistikk"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Logistics"
 msgstr "Forbedret logistikk"
 
-#, fuzzy
 msgid "campaignBonus|Expert Logistics"
 msgstr "Ekspert logistikk"
 
-#, fuzzy
 msgid "campaignBonus|Basic Luck"
-msgstr "Masseforbannelse"
+msgstr "Enkel flaks"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Luck"
-msgstr "Skattepant"
+msgstr "Forbedret flaks"
 
-#, fuzzy
 msgid "campaignBonus|Expert Luck"
-msgstr "Skattepant"
+msgstr "Ekspert flaks"
 
-#, fuzzy
 msgid "campaignBonus|Basic Mysticism"
-msgstr "Hurtigballisten"
+msgstr "Enkel mystikk"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Mysticism"
 msgstr "Forbedret mystikk"
 
-#, fuzzy
 msgid "campaignBonus|Expert Mysticism"
 msgstr "Ekspert mystikk"
 
-#, fuzzy
 msgid "campaignBonus|Basic Navigation"
-msgstr "Kjedelyn"
+msgstr "Enkel skipsfart"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Navigation"
 msgstr "Forbedret skipsfart"
 
-#, fuzzy
 msgid "campaignBonus|Expert Navigation"
 msgstr "Ekspert skipsfart"
 
-#, fuzzy
 msgid "campaignBonus|Basic Necromancy"
-msgstr "Den sorte perlen"
+msgstr "Enkel sortekunst"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Necromancy"
 msgstr "Forbedret sortekunst"
 
-#, fuzzy
 msgid "campaignBonus|Expert Necromancy"
 msgstr "Ekspert sortekunst"
 
-#, fuzzy
 msgid "campaignBonus|Basic Pathfinding"
-msgstr "Kjedelyn"
+msgstr "Enkel kartlesing"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Pathfinding"
 msgstr "Forbedret kartlesing"
 
-#, fuzzy
 msgid "campaignBonus|Expert Pathfinding"
 msgstr "Ekspert kartlesing"
 
-#, fuzzy
 msgid "campaignBonus|Basic Scouting"
-msgstr "Magikerens ring"
+msgstr "Enkel speiding"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Scouting"
-msgstr "Magikerens ring"
+msgstr "Forbedret speiding"
 
-#, fuzzy
 msgid "campaignBonus|Expert Scouting"
-msgstr "Skattepant"
+msgstr "Ekspert speiding"
 
-#, fuzzy
 msgid "campaignBonus|Basic Wisdom"
-msgstr "Hurtigballisten"
+msgstr "Enkel visdom"
 
-#, fuzzy
 msgid "campaignBonus|Advanced Wisdom"
-msgstr "Dødebesjelning"
+msgstr "Forbedret visdom"
 
-#, fuzzy
 msgid "campaignBonus|Expert Wisdom"
-msgstr "Piggskjoldet"
+msgstr "Ekspert visdom"
 
 msgid "campaignBonus|Animate Dead"
 msgstr "Dødebesjelning"
@@ -2032,10 +1991,10 @@ msgid "Upg. Armory"
 msgstr "Oppg. rustkammer"
 
 msgid "Jousting Arena"
-msgstr "Turneringsarena"
+msgstr "Ridderbane"
 
 msgid "Upg. Jousting Arena"
-msgstr "Oppg. turneringsarena"
+msgstr "Oppg. ridderbane"
 
 msgid "Cathedral"
 msgstr "Domkirke"
@@ -2317,9 +2276,9 @@ msgid ""
 "can also provide scouting information on enemy towns. Additional Guilds "
 "provide more information."
 msgstr ""
-"Tyvenes forbund skaffer informasjon om motstanderspillerene og borgene "
-"deres. Ytterligere forbundshus hos andre borger øker den tilgjengelige "
-"informasjonen."
+"Tyvenes forbund skaffer informasjon om motstanderspillerne og borgene deres. "
+"Jo flere forbundshus du har, desto mer informasjon får du om de andre "
+"spillerne."
 
 msgid "The Tavern increases morale for troops defending the castle."
 msgstr "Vertshuset styrker kampånden til krigerne som forsvarer borgen."
@@ -2338,7 +2297,7 @@ msgid "The Statue increases your town's income by %{count} per day."
 msgstr "Statuen øker den daglige inntekten til byen med %{count} gullstykker."
 
 msgid "The Left Turret provides extra firepower during castle combat."
-msgstr "Det venstre tårnet gir ekstra ildstyrke under beleiringen av borgen."
+msgstr "Det venstre tårnet gir ekstra ildstyrke når borgen blir beleiret."
 
 msgid "The Right Turret provides extra firepower during castle combat."
 msgstr "Det høyre tårnet gir ekstra ildstyrke under beleiringen av borgen."
@@ -2354,9 +2313,9 @@ msgid ""
 "The Moat slows attacking units. Any unit entering the moat must end its turn "
 "there and becomes more vulnerable to attack."
 msgstr ""
-"Vollgraven stanser angripende styrker. Alle styrker som havner i vollgraven "
-"må avslutte turen sin der, og i tillegg tar de mer skade så lenge de står "
-"der."
+"Vollgraven forsinker angripende styrker. Alle styrker som havner i "
+"vollgraven må avslutte turen sin der, og i tillegg tar de mer skade fra "
+"angrep så lenge de står i den."
 
 msgid ""
 "The Castle improves town defense and increases income to %{count} gold per "
@@ -2383,7 +2342,7 @@ msgid ""
 "The Mage Guild allows heroes to learn spells and replenish their spell "
 "points."
 msgstr ""
-"Hos magikerforbundet kan helten din lære seg trolldommer og få fylt opp "
+"Hos magikerforbundet kan heltene dine lære seg trolldommer og få fylt opp "
 "manaen sin."
 
 msgid "Recruit %{name}"
@@ -2526,9 +2485,8 @@ msgstr "Verv krigere"
 msgid "Max"
 msgstr "Maks"
 
-#, fuzzy
 msgid "Hire all creatures in the town."
-msgstr "Mist alle helter og byer."
+msgstr "Verv alle krigerene som er tilgjengelige i byen."
 
 msgid "Town Population Information and Statistics"
 msgstr "Info og tall om byens bosteder"
@@ -2584,9 +2542,9 @@ msgid ""
 "trainer of gladiators agrees to train you in a skill of your choice."
 msgstr ""
 "Du går inn i arenaen og finner deg selv ansikt til ansikt med en flokk "
-"fryktelige løver. Du tar lett hånd om dem, og publikum roper i jubel. En "
-"aldrende gladiatormester ble imponert av prestasjonen din og går med på å "
-"trene deg opp i en ferdighet etter ditt ønske."
+"blodtørstige løver. Du tar lett hånd om dem og publikum jubler. En gammel "
+"gladiatormester ble så imponert av deg at han går med på å trene deg opp i "
+"én ferdighet etter ditt ønske."
 
 msgid "You can't afford to upgrade your troops!"
 msgstr "Du har ikke råd til å oppgradere troppene dine!"
@@ -2711,7 +2669,7 @@ msgid "Toggle 3D effects of foreground sounds."
 msgstr "Skru 3D-effekten av bakgrunnslyder på eller av."
 
 msgid "Okay"
-msgstr "Okay"
+msgstr "Bekreft"
 
 msgid "Build a new ship:"
 msgstr "Bygg et nytt skip:"
@@ -2726,19 +2684,19 @@ msgid "Need: "
 msgstr "Trenger: "
 
 msgid "Load Game"
-msgstr "Last inn et spill"
+msgstr "Last inn et parti"
 
 msgid "No save files to load."
 msgstr "Ingen lagrede spill å laste inn."
 
 msgid "New Game"
-msgstr "Nytt spill"
+msgstr "Nytt parti"
 
 msgid "Start a single or multi-player game."
 msgstr "Start et enkelt- eller flerspillerparti."
 
 msgid "Load a previously saved game."
-msgstr "Last inn et tidligere lagret spill."
+msgstr "Last inn et tidligere lagret parti."
 
 msgid "Save Game"
 msgstr "Lagre spill"
@@ -2759,7 +2717,9 @@ msgid "Resolution"
 msgstr "Oppløsning"
 
 msgid "Experimental"
-msgstr "Utprøvning"
+msgstr ""
+"Under\n"
+"utvikling"
 
 msgid "Settings"
 msgstr "Innstillinger"
@@ -2792,9 +2752,7 @@ msgid "Good"
 msgstr "God"
 
 msgid "Interface Type"
-msgstr ""
-"Grensesnitts\n"
-"-type"
+msgstr "Grensesnitt"
 
 msgid "Auto Resolve"
 msgstr "Datastyrt"
@@ -2803,7 +2761,7 @@ msgid "Auto, No Spells"
 msgstr "Data, ingen magi"
 
 msgid "Manual"
-msgstr "Manuell"
+msgstr "Manuelt"
 
 msgid "Battles"
 msgstr "Kampstyring"
@@ -2824,7 +2782,7 @@ msgid "Change the audio settings of the game."
 msgstr "Endre lydinnstillingene til spillet."
 
 msgid "Experimental game settings."
-msgstr "Innstillinger for utprøvningsvalg."
+msgstr "Innstillinger for spillet som fortsatt er i utvikling."
 
 msgid "Toggle instant battle mode."
 msgstr "Skift modus for hurtigkamp."
@@ -2931,7 +2889,7 @@ msgid "Hot Keys:"
 msgstr "Hurtigtaster:"
 
 msgid "Select Game Language:"
-msgstr "Velg spillets språk:"
+msgstr "Velg et språk:"
 
 msgid "%{name} has gained a level."
 msgstr "%{name} gikk opp en level."
@@ -3031,7 +2989,7 @@ msgid "(no digging)"
 msgstr "(Ingen graving)"
 
 msgid "penalty: %{cost}"
-msgstr "tap : %{cost}"
+msgstr "Tap av skritt: %{cost}"
 
 msgid "Uncharted Territory"
 msgstr "Ikke kartlagt område"
@@ -3073,7 +3031,7 @@ msgid "Number to buy:"
 msgstr "Antall valgt:"
 
 msgid "Select Game Resolution:"
-msgstr "Velg spilloppløsning:"
+msgstr "Velg en oppløsning:"
 
 msgid "Click to apply the selected resolution."
 msgstr "Trykk for å bruke den valgte oppløsningen."
@@ -3145,7 +3103,7 @@ msgstr ""
 "Brett-type:\n"
 
 msgid "The Succession Wars"
-msgstr "Tronarvingskrigen"
+msgstr "Krigen om tronen"
 
 msgid "Lose all your heroes and towns."
 msgstr "Mist alle helter og byer."
@@ -3157,28 +3115,28 @@ msgid "Lose a specific hero."
 msgstr "Mist en spesifikk helt."
 
 msgid "Run out of time. Fail to win by a certain point."
-msgstr "Gå tom for tid. Mislykkes i å vinne innen en gitt tid."
+msgstr "Gå tom for tid. Mislykkes i å vinne innen et spesifikt antall runder."
 
 msgid "Loss Condition"
 msgstr "Tapsvilkår"
 
 msgid "Defeat all enemy heroes and towns."
-msgstr "Slå ut alle fiendtlige helter og byer."
+msgstr "Beseire alle fiendtlige helter og byer."
 
 msgid "Capture a specific town."
-msgstr "Overta en spesifikk by."
+msgstr "Erobre en spesifikk by."
 
 msgid "Defeat a specific hero."
-msgstr "Slå en spesifikk helt."
+msgstr "Beseire en spesifikk helt."
 
 msgid "Find a specific artifact."
 msgstr "Finn en spesifikk gjenstand."
 
 msgid "Your side defeats the opposing side."
-msgstr "Siden din må slå ut motstandersiden."
+msgstr "Den siden du spiller på må slå motstandersiden."
 
 msgid "Accumulate a large amount of gold."
-msgstr "Samle opp en stor mengde gull."
+msgstr "Samle sammen mer enn en spesifisert mengde gull."
 
 msgid "Victory Condition"
 msgstr "Seiersvilkår"
@@ -3247,8 +3205,8 @@ msgid ""
 "Indicates whether the map is made for \"The Succession Wars\" or \"The Price "
 "of Loyalty\" version of the game."
 msgstr ""
-"Viser om brettet er laget for en av spillutgavene Tronarvingskrigen eller "
-"Prisen for trofasthet."
+"Viser om brettet er laget for spillutgaven \"Krigen om tronen\" eller "
+"\"Prisen for trofasthet\"."
 
 msgid "Map Type"
 msgstr "Brett-type"
@@ -3260,7 +3218,7 @@ msgid "The name of the currently selected map."
 msgstr "Navnet til det utvalgte brettet."
 
 msgid "Selected Map Difficulty"
-msgstr "Utfordringen til det utvalgte brettet"
+msgstr "Brettets utfordring"
 
 msgid ""
 "The map difficulty of the currently selected map.  The map difficulty is "
@@ -3268,19 +3226,19 @@ msgid ""
 "or stronger enemies, fewer resources, or other special conditions making "
 "things tougher for the human player."
 msgstr ""
-"Vanskelighetsgraden til det utvalgte brettet. Utfordringen til brettet er "
+"Dette er utfordringen til det utvalgte brettet. Utfordringen til brettet er "
 "spesifisert av skaperen av brettet. De vanskeligste brettene kan inneholde "
-"sterkere fiender, færre råvarer, eller andre spesielle vilkår som gjør ting "
-"mer utfordrende for den menneskelige spilleren."
+"sterkere fiender, færre råvarer, eller andre spesielle vilkår som skal gjøre "
+"ting mer utfordrende for den menneskelige spilleren."
 
 msgid "Selected Description"
-msgstr "Utvalgt beskrivelse"
+msgstr "Brettets beskrivelse"
 
 msgid "The description of the currently selected map."
 msgstr "Beskrivelse av det utvalgte brettet."
 
 msgid "Accept the choice made."
-msgstr "Bekreft valget."
+msgstr "Bekreft valget og gå videre."
 
 msgid "Experimental Game Settings"
 msgstr "Eksperimentelle innstillinger"
@@ -3425,33 +3383,39 @@ msgstr "Umulig"
 msgid "and more..."
 msgstr "og mer..."
 
-#, fuzzy
 msgid "Campaign Difficulty"
-msgstr "Vanskelighetsgrad"
+msgstr "Felttogets vanskelighetsgrad"
 
 msgid ""
 "Choose this difficulty if you want to prefer game story over challenge. AI "
 "is weaker in comparison with normal difficulty."
 msgstr ""
+"Velg denne vanskelighetsgraden dersom du foretrekker historie framfor "
+"utfordring. Datamaskinspilleren vil være svakere sammenlignet med middels "
+"vanskelighetsgrad."
 
 msgid ""
 "Choose this difficulty to enjoy the campaign as per the original design."
 msgstr ""
+"Velg denne vanskelighetsgraden for å nyte felttoget slik som det opprinnelig "
+"var tiltenkt."
 
 msgid ""
 "Choose this difficulty if you want challenge. AI is stronger in comparison "
 "with normal difficulty."
 msgstr ""
+"Velg denne vanskelighetsgraden dersom du ønsker en utfordring. "
+"Datamaskinspilleren vil være sterkere sammenlignet med middels "
+"vanskelighetsgrad."
 
 msgid "Easy"
-msgstr ""
+msgstr "Enkel"
 
-#, fuzzy
 msgid "Normal"
-msgstr "Normal"
+msgstr "Middels"
 
 msgid "Hard"
-msgstr ""
+msgstr "Vanskelig"
 
 msgid "Start the selected scenario."
 msgstr "Begynn det brettet du har valgt."
@@ -3464,6 +3428,7 @@ msgstr "Vis filmen for det nåværende punktet av felttoget."
 
 msgid "Select campaign difficulty. It cannot be changed after."
 msgstr ""
+"Velg vanskelighetsgrad for felttoget. Dette vil ikke kunne endres senere."
 
 msgid "Restart"
 msgstr "Start på nytt"
@@ -3481,10 +3446,10 @@ msgid "Please make sure that campaign files are correct and present."
 msgstr "Vennligst forsikre deg om at kampanjefilene er riktige og til stede."
 
 msgid "Days spent"
-msgstr ""
+msgstr "Dager brukt"
 
 msgid "The number of days spent on this campaign."
-msgstr ""
+msgstr "Antall dager som har blitt brukt på felttoget så langt."
 
 msgid "Project Coordination and Core Development"
 msgstr ""
@@ -3574,7 +3539,7 @@ msgid "Writing"
 msgstr "Skribent"
 
 msgid "Manual and Helpfile"
-msgstr "Håndbok og hjelpetekst"
+msgstr "Håndbok og hjelpefil"
 
 msgid "Scenarios"
 msgstr "Brett"
@@ -3653,14 +3618,14 @@ msgid "Standard"
 msgstr "Standard"
 
 msgid "View High Scores for Standard Maps."
-msgstr "Vis rekordtavle for standard kart."
+msgstr "Vis rekordtavle for vanlige brett."
 
 # Kampanje?
 msgid "Campaign"
 msgstr "Felttog"
 
 msgid "View High Scores for Campaigns."
-msgstr "Vis rekordtavle for kampanjer."
+msgstr "Vis rekordtavle for felttog."
 
 msgid "This file contains a save with an invalid game type."
 msgstr "Denne filen inneholder et lagringspunkt med en ugyldig spillversjon."
@@ -3785,7 +3750,7 @@ msgid "View the high scores screen."
 msgstr "Vis rekordtavlen."
 
 msgid "Change language, resolution and settings of the game."
-msgstr "Endre språket, oppløsningen og innstillingene til spillet."
+msgstr "Endre språket, oppløsningen og andre spillinnstillinger."
 
 msgid "Game Settings"
 msgstr "Spillinnstillinger"
@@ -3964,11 +3929,10 @@ msgstr ""
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr "Gå tom for tid. (Mislykkes i å vinne innen en viss tid.)"
 
-#, fuzzy
 msgid "You must defeat the enemy %{enemies}."
 msgid_plural "You must defeat the enemy alliance of %{enemies}."
-msgstr[0] "Slå ut helten kalt %{name}."
-msgstr[1] "Slå ut helten kalt %{name}."
+msgstr[0] "Slå ut motstanderen din %{name}."
+msgstr[1] "Slå ut den fiendtlige alliansen bestående av %{name}."
 
 msgid ""
 "The alliance consisting of %{allies} and you must defeat the enemy "
@@ -3977,7 +3941,10 @@ msgid_plural ""
 "The alliance consisting of %{allies} and you must defeat the enemy alliance "
 "of %{enemies}."
 msgstr[0] ""
+"Alliansen som består av %{allies} og deg må slå motstanderen %{enemies}."
 msgstr[1] ""
+"Alliansen som består av %{allies} og deg må slå den fiendtlige alliansen som "
+"består av %{enemies}."
 
 msgid "Capture the castle '%{name}'."
 msgstr "Overta borgen kalt %{name}."
@@ -4064,11 +4031,12 @@ msgid ""
 "The difficulty rating reflects a combination of various settings for your "
 "game. This number will be applied to your final score."
 msgstr ""
-"Utbyttegraderingen gjenspeiler en sammensetting av de forskjellige valgene "
-"for partiet ditt. Dette tallet vil påvirke den endelige poengsummen din."
+"Utbytteprosenten regnes ut som summen av de forskjellige innstilligene du "
+"har valgt for partiet ditt. Denne prosenten påvirker den endelige "
+"poengsummen din dersom du vinner partiet."
 
 msgid "Click to accept these settings and start a new game."
-msgstr "Klikk her for å godta disse valgene og start et nytt parti."
+msgstr "Klikk her for å bekrefte disse valgene og begynne på et nytt parti."
 
 msgid "Click to return to the main menu."
 msgstr "Klikk her for å dra tilbake til hovedmenyen."
@@ -4102,10 +4070,10 @@ msgid "%{monster} growth +%{count}."
 msgstr "Alle befolkninger med %{monster} vokser med +%{count}."
 
 msgid " All populations are halved."
-msgstr " Alle befolkninger blir halverte."
+msgstr " Alle befolkninger halveres."
 
 msgid " All dwellings increase population."
-msgstr " Alle bostedenes befolkninger vokser."
+msgstr " Alle bostedenes befolkninger har vanlig vekst."
 
 msgid ""
 "%{color} player, this is your last day to capture a town, or you will be "
@@ -4128,6 +4096,8 @@ msgid ""
 "Do you want to transfer control from you to the AI? The effect will take "
 "place only on the next turn."
 msgstr ""
+"Ønsker du å ta styringen fra datamaskinen? Dette vil kun tre i kraft den "
+"neste runden."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -4226,6 +4196,9 @@ msgid ""
 "Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
 "it even if he found it - all his artifact slots are full."
 msgstr ""
+"Det er nytteløst å lete etter den ultimate gjenstanden. Helten din vil ikke "
+"kunne ta den med seg dersom du skulle finne den siden det ikke er plass til "
+"flere."
 
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
@@ -4303,9 +4276,8 @@ msgstr ""
 "byttes. Avhengig av brettet, kan en spiller få flere byer og/eller helter "
 "som ikke er av spillerens hovedtilhørighet."
 
-#, fuzzy
 msgid "Handicap"
-msgstr "Mandigal"
+msgstr "Handikap"
 
 #
 msgid ""
@@ -4313,32 +4285,42 @@ msgid ""
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
 "30% fewer resources per turn for mild and severe handicaps, respectively."
 msgstr ""
+"Denne innstillingen lar deg justere handikapet til de forskjellige "
+"spillerne. Kun menneskelige spillere kan ha handikap. Spillere med handikap "
+"begynner brettet med færre råvarer og tjener 15 eller 30% færre råvarer hver "
+"runde for henholdsvis lett og sterkt handikap."
 
 msgid "%{color} player"
 msgstr "%{color} spiller"
 
 msgid "No Handicap"
-msgstr ""
+msgstr "Ingen handikap"
 
 msgid "No special restrictions on start resources and earning them per turn."
 msgstr ""
+"Ingen spesielle begrensninger på hvor mye råvarer man starter med på brettet "
+"og hvor mye man tjener hver runde."
 
 msgid "Mild Handicap"
-msgstr ""
+msgstr "Lett handikap"
 
 #
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."
 msgstr ""
+"Spillere med et lett handikap vil begynne brettet med færre råvarer og tjene "
+"15% mindre råvarer hver runde."
 
 msgid "Severe Handicap"
-msgstr ""
+msgstr "Sterkt handikap"
 
 msgid ""
 "Severe handicapped players start with fewer resources and earn 30% fewer "
 "resources per turn."
 msgstr ""
+"Spillere med sterkt handikap vil begynne brettet med færre råvarer og tjene "
+"30% mindre råvarer hver runde."
 
 msgid "View %{skill} Info"
 msgstr "Vis info om %{skill}"
@@ -4434,7 +4416,7 @@ msgid "Ruby"
 msgstr "Rubin"
 
 msgid "Crag Hack"
-msgstr "Kragg Haachk"
+msgstr "Kragg Hakk"
 
 msgid "Fineous"
 msgstr "Finehas"
@@ -4615,7 +4597,8 @@ msgstr "Du kan ikke plukke opp denne gjenstanden. Du er allerede fullastet!"
 
 msgid "To cast spells, you must first buy a spell book for %{gold} gold."
 msgstr ""
-"For å bruke trolldom må du først kjøpe ei tryllebok for %{gold} gullstykker."
+"For å bruke trolldom må du først kjøpe ei tryllebok. Den koster %{gold} "
+"gullstykker."
 
 msgid "Unfortunately, you seem to be a little short of cash at the moment."
 msgstr "Dessverre ser det ut til at du ikke har råd akkurat nå."
@@ -4660,7 +4643,7 @@ msgid ""
 msgstr ""
 "Vokteren av mølla sier:\n"
 "\"Min herre, jeg har jobbet veldig hardt for å kunne gi deg disse råvarene. "
-"Kom tilbake neste uke for mer.\"."
+"Kom tilbake neste uke for mer.\""
 
 msgid ""
 "The keeper of the mill announces:\n"
@@ -4813,8 +4796,8 @@ msgid ""
 "more for them to teach you."
 msgstr ""
 "\n"
-"Dessverre kjenner du allerede til denne trolldommen, så det er ingenting mer "
-"de kan lære deg."
+"Dessverre kan du allerede denne trolldommen, så det er ingenting mer de kan "
+"lære deg."
 
 msgid ""
 "You approach the hut and observe a witch inside studying an ancient tome on "
@@ -4856,7 +4839,7 @@ msgstr ""
 "slaget ditt."
 
 msgid "You drink from the enchanted fountain, but nothing happens."
-msgstr "Du drikker fra den fortryllede fontenen, men det ingenting skjer."
+msgstr "Du drikker fra den magiske fontenen, men det skjer ingenting."
 
 msgid ""
 "Upon entering the mystical faerie ring, your army gains luck for its next "
@@ -4895,8 +4878,8 @@ msgid ""
 "moment.\n"
 "The mermaids charms bless you with increased luck for your next combat."
 msgstr ""
-"Den magiske og beroligende skjønnheten til havfruene klarer å lokke deg og "
-"mannskapet ditt til seg.\n"
+"Den magiske og beroligende skjønnheten til havfruene klarer å lokke til seg "
+"deg og mannskapet ditt.\n"
 "For et øyeblikk glemmer du bekymringene dine og nyter stunden.\n"
 "Havfruenes fortryllelser velsigner deg med økt flaks til din neste kamp."
 
@@ -4906,7 +4889,7 @@ msgid ""
 "fearful curses and undead guardians.\n"
 "Will you search?"
 msgstr ""
-"Du kommer over pyramiden til en mektig konge av oldtiden.\n"
+"Du kommer over pyramiden til en mektig oldtidskonge.\n"
 "Du er fristet til å lete etter skatter i den, men gamle fortellinger har "
 "advart deg om fryktelige forbannelser og vandøde voktere.\n"
 "Vil du likevel lete gjennom den?"
@@ -4965,16 +4948,17 @@ msgid ""
 "You've come upon a mercenary camp practicing their tactics. \"You're too "
 "advanced for us,\" the mercenary captain says. \"We can teach nothing more.\""
 msgstr ""
-"Du kommer over en leiesoldatleir hvor det drives kamptrening. \"Du har et "
-"mye høyere nivå enn oss,\" sier leiesoldatenes kaptein. \"Det er ingenting "
-"vi kan lære deg.\""
+"Du kommer over leiren til noen leiesoldater som driver med kamptrening. \"Du "
+"har et mye høyere nivå enn oss,\" sier leiesoldatenes kaptein. \"Det er "
+"ingenting vi kan lære deg.\""
 
 msgid ""
 "You've come upon a mercenary camp practicing their tactics. The mercenaries "
 "welcome you and your troops and invite you to train with them."
 msgstr ""
-"Du kommer over en leiesoldatleir hvor det drives kamptrening. Leiesoldatene "
-"ønsker deg og styrkene dine velkomne og inviterer dere til å trene med dem."
+"Du kommer over leiren til noen leiesoldater som driver med kamptrening. "
+"Leiesoldatene ønsker deg og styrkene dine velkomne og inviterer dere til å "
+"sparre med dem."
 
 msgid "\"Go 'way!\", the witch doctor barks, \"you know all I know.\""
 msgstr "\"Gå vekk!\", bjeffer heksedoktoren, \"du kan alt jeg kan.\""
@@ -5069,7 +5053,7 @@ msgid ""
 "increasing their morale."
 msgstr ""
 "Mannskapet ditt får øye på et flytende sjømerke. Det bekrefter at dere er på "
-"rett kurs, og dette styrker kampånden til hele mannskapet."
+"rett kurs og dette styrker kampånden til hele mannskapet."
 
 msgid ""
 "The drink at the oasis is refreshing, but offers no further benefit. The "
@@ -5339,7 +5323,7 @@ msgid ""
 "The lighthouse is now under your control, and all of your ships will now "
 "move further each day."
 msgstr ""
-"Fyrtårnet er herved under din kontroll, og alle skipene dine vil fra nå av "
+"Fyrtårnet er herved under din kontroll og alle skipene dine vil fra nå av "
 "kunne flytte seg lengre hver dag."
 
 msgid "You gain control of a %{name}."
@@ -5395,8 +5379,9 @@ msgid ""
 "Distant sounds of music and laughter draw you to a colorful wagon housing "
 "Rogues. Do you wish to have any Rogues join your army?"
 msgstr ""
-"Musikk og latter i det fjerne trekker deg mot en fargerik kjerre hvor røvere "
-"holder til. Ønsker du å ha røvere i hæren din?"
+"Musikk og latter i det fjerne lokker deg til en fargerik kjerre der det "
+"viser seg at røvere holder til.\n"
+"Vil du å ha røvere i hæren din?"
 
 msgid ""
 "A group of tattered tents, billowing in the sandy wind, beckons you. The "
@@ -5409,8 +5394,8 @@ msgid ""
 "A group of tattered tents, billowing in the sandy wind, beckons you. Do you "
 "wish to have any Nomads join you during your travels?"
 msgstr ""
-"En samling utslitte telt bølger i ørkenvinden og lokker deg til seg. Ønsker "
-"du å ta med deg noen nomader på ferden din?"
+"En samling utslitte telt bølger i ørkenvinden og lokker deg til seg.\n"
+"Ønsker du å ta med deg noen nomader på ferden din?"
 
 msgid "The pit of mud bubbles for a minute and then lies still."
 msgstr "Pytten bobler litt i et minutt før den stilner til."
@@ -5420,7 +5405,7 @@ msgid ""
 "position themselves around it. In unison they say: \"Mother Earth would like "
 "to offer you a few of her troops. Do you want to recruit Earth Elementals?\""
 msgstr ""
-"Idet du kommer nærmere en lavapytt, begynner skapninger å krype ut og stille "
+"Idet du kommer nærmere lavapytten begynner skapninger å krype ut og stille "
 "seg opp rundt den. I ett sier de: \"Moderjord ønsker å tilby deg noen av "
 "sine krigere. Ønsker du å verve jordånder?\""
 
@@ -5438,10 +5423,10 @@ msgid ""
 msgstr ""
 "Hvite steinsøyler støtter opp under et tak som går høyt opp mot himmelen. "
 "Idet du går inn blir den stille luften på utsiden brått om til et virvlende "
-"vindkast som nesten slenger deg tilbake ut. Luftstrømmen omvandles til en "
-"halvgjennomsiktig skikkelse. Den spør, med en stemme som bare kan beskrives "
-"som høy visking: \"Hva bringer deg hit? Er du her for å tilkalle luftens "
-"krefter?\""
+"vindkast som nesten slenger deg ut igjen. Luftstrømmen forvandler seg til en "
+"nesten gjennomsiktig skikkelse. Den spør, med en stemme som bare kan "
+"beskrives som høy visking: \"Hva bringer deg hit? Er du her for å tilkalle "
+"luftens krefter?\""
 
 msgid "No Fire Elementals approach you from the lava pool."
 msgstr "Ingen av ildåndene kommer imot deg fra lavadammen."
@@ -5464,9 +5449,9 @@ msgid ""
 "You peer into the pool, and a face that is not your own peers back. It asks: "
 "\"Would you like to call upon the powers of water?\""
 msgstr ""
-"Gedigne krystaller kaster skygger over en liten blank vanndam. Du stirrer "
-"ned på dammens overflate, og et ansikt annet enn ditt eget stirrer tilbake "
-"på deg. Det spør deg: \"Ønsker du å tilkalle vannets krefter?\""
+"Mektige krystaller kaster skygger over en liten blank vanndam. Du stirrer "
+"ned på vannspeilet og plutselig stirrer et annet ansikt tilbake på deg.\n"
+"Det spør deg: \"Ønsker du å tilkalle vannets krefter?\""
 
 msgid "This burial site is deathly still."
 msgstr "Gravstedet er dødsens rolig."
@@ -5476,8 +5461,9 @@ msgid ""
 "offer to join you in hopes of finding peace. Do you wish to recruit ghosts?"
 msgstr ""
 "De urolige sjelene til for lengst døde krigere søker deres endelige "
-"hvilested, og de tilbyr deg å bli med i hæren din i håp om å endelig finne "
-"fred. Vil du verve gjenferd?"
+"hvilested, og de tilbyr deg å bli med i hæren din i håp om å endelig kunne "
+"finne fred.\n"
+"Vil du verve gjenferd?"
 
 msgid ""
 "The City of the Dead is empty of life, and empty of unlife as well. Perhaps "
@@ -5497,8 +5483,9 @@ msgid ""
 "You've found the ruins of an ancient city, now inhabited solely by the "
 "undead. Will you search?"
 msgstr ""
-"Du har funnet ruinene til en oldtidsby som nå kun er bebodd av vandøde. Vil "
-"du lete gjennom den?"
+"Du har funnet ruinene til en by fra oldtiden. Den er nå kun bebodd av "
+"vandøde.\n"
+"Vil du lete gjennom den?"
 
 msgid ""
 "Some of the surviving Liches are impressed by your victory over their "
@@ -5552,8 +5539,8 @@ msgid ""
 "You stand before the Dragon City, a place off-limits to mere humans. Do you "
 "wish to violate this rule and challenge the Dragons to a fight?"
 msgstr ""
-"Du står overfor Dragenes landsby, et forbudt sted for vanlige mennesker. "
-"Ønsker du å trosse denne regelen og utfordre dragene til kamp?"
+"Du står overfor Dragenes landsby, et forbudt sted for vanlige mennesker.\n"
+"Tør du å trosse denne regelen og utfordre dragene til kamp?"
 
 msgid ""
 "Having defeated the Dragon champions, the city's leaders agree to supply "
@@ -5605,9 +5592,9 @@ msgid ""
 "famous nor diplomatic enough to be admitted to see my master,\" he sniffs. "
 "\"Come back when you think yourself worthy.\""
 msgstr ""
-"Hovmesteren åpner døra og gransker deg opp og ned. \"Du er verken berømt "
-"eller veltalende nok til å få tillatelse til å møte herren min,\" fnyser "
-"han. \"Kom tilbake når du kan anse deg som verdig.\""
+"Hovmesteren åpner døra og skuer deg opp og ned. \"Du er verken berømt eller "
+"veltalende nok til å få tillatelse til å møte herren min,\" fnyser han. "
+"\"Kom tilbake når du er verdig.\""
 
 msgid " and "
 msgstr " og "
@@ -5624,7 +5611,8 @@ msgid ""
 "such troops brought to them. Unfortunately, you have none with you."
 msgstr ""
 "En usedvanlig sammenslåing av orker, ogrer og dverger tilbyr å trene opp "
-"(oppgradere) det du har av samme styrker som dem. Dessverre har du ingen."
+"(oppgradere) det du har av samme styrker som dem. Dessverre har du ingen i "
+"hæren din."
 
 msgid "All of your %{monsters} have been upgraded into %{monsters2}."
 msgstr "Alle dine %{monsters} har blitt oppgradert til %{monsters2}."
@@ -5636,10 +5624,11 @@ msgid ""
 "Unfortunately, you have none of these troops in your army, so he can't help "
 "you."
 msgstr ""
-"På støperiet jobber en smed som tilbyr deg å gjøre alle jernvåpnene til "
-"pikenérene og sverdmennene dine om til stål. Han sier at han også kjenner "
-"til en måte å få gjort jerngolemer om til stålgolemer. Dessverre har du "
-"ingen av disse styrkene i hæren din, så det er lite han kan gjøre for deg."
+"Det jobber en smed på støperiet og han tilbyr deg å gjøre om alle "
+"jernvåpnene til pikenérene og sverdmennene dine til stål. Han sier at han "
+"også vet hvordan man kan gjøre jerngolemer om til stålgolemer. Dessverre har "
+"du ingen av disse styrkene i hæren din, så det er ingenting han kan gjøre "
+"for deg."
 
 msgid ""
 "The captain looks at you with surprise and says:\n"
@@ -5655,8 +5644,8 @@ msgid ""
 "to buy the maps?"
 msgstr ""
 "Kaptein som bor på denne godt vedlikeholdte fiskebrygga tilbyr deg et "
-"komplett sjøkart, som han lagde i sine yngre dager, i bytte mot 1000 "
-"gullstykker.\n"
+"komplett sjøkart som han lagde i sine yngre dager. Han tilbyr å selge deg "
+"det for 1000 gullstykker.\n"
 "Ønsker du å kjøpe kartet?"
 
 msgid ""
@@ -5685,19 +5674,21 @@ msgid ""
 "Upon your approach, the tree opens its eyes in delight. \"It is good to see "
 "you, my student. I hope my teachings have helped you.\""
 msgstr ""
-"Ved din ankomst åpner treet øynene sine i glede. \"Det er godt å se deg, min "
-"elev. Jeg håper lærdommen min har hjulpet deg.\""
+"Du ankommer treet og det åpner øynene sine i glede idet du kommer nærmere. "
+"\"Det er godt å se deg, min elev. Jeg håper lærdommen min har hjulpet deg.\""
 
 msgid ""
 "Upon your approach, the tree opens its eyes in delight. \"Ahh, an "
 "adventurer! Allow me to teach you a little of what I have learned over the "
 "ages.\""
 msgstr ""
-"Ved din ankomst åpner treet øynene sine i glede. \"Ahh, en eventyrer! Tillat "
-"meg å lære deg litt av hva jeg har lært gjennom tidene.\""
+"Du ankommer treet og det åpner øynene sine i glede idet du kommer nærmere. "
+"\"Ahh, en eventyrer! Tillat meg å lære deg litt av hva jeg har lært gjennom "
+"tidene.\""
 
 msgid "Upon your approach, the tree opens its eyes in delight."
-msgstr "Idet du ankommer, åpner treet øynene sine i glede."
+msgstr ""
+"Du ankommer treet og det åpner øynene sine i glede idet du kommer nærmere."
 
 msgid ""
 "\"Ahh, an adventurer! I will be happy to teach you a little of what I have "
@@ -5741,17 +5732,17 @@ msgid ""
 "may fight me, or you may fight my servants. Do you prefer to fight my "
 "servants?\""
 msgstr ""
-"Du finner en sterk og ufyselig djevel i hula. Med skjærende stemme sier den, "
-"\"I dag,\" og den trekker pusten, \"vil du måtte kjempe, og du vil uten tvil "
-"dø. Men jeg vil la deg velge hvordan du vil dø. Du kan enten kjempe mot meg, "
-"eller mot undersåttene mine.\n"
-"Blir det undersåttene mine?"
+"Du finner en sterk og ufyselig djevel i hula. Med en skjærende stemme sier "
+"den: \"I dag,\" og den trekker pusten, \"skal du kjempe, og du vil uten tvil "
+"dø. Men, jeg skal la deg få velge hvordan du vil dø. Du kan enten kjempe mot "
+"meg, eller mot lakeiene mine.\n"
+"Blir det lakeiene?"
 
 msgid ""
 "Upon defeating the daemon's servants, you find a hidden cache with %{count} "
 "gold."
 msgstr ""
-"Etter å ha slått undersåttene til djevelen finner du et bortgjemt lager med "
+"Etter å ha slått lakeiene til djevelen finner du et skjult lager med "
 "%{count} gullstykker."
 
 msgid ""
@@ -5842,7 +5833,7 @@ msgstr ""
 msgid ""
 "You hear a voice from high above in the tower, \"Go away! I can't help you!\""
 msgstr ""
-"Du hører en stemme fra høyt oppe i tårnet, \"Gå vekk! Jeg kan ikke hjelpe "
+"Du hører en stemme fra høyt oppe i tårnet: \"Gå vekk! Jeg kan ikke hjelpe "
 "deg!\""
 
 msgid ""
@@ -5911,8 +5902,8 @@ msgid ""
 "You are now wiser for the visit, and gain %{exp} experience."
 msgstr ""
 "En ulende og nifs sang kommer fra sirenene på svaberget. Flere av mannskapet "
-"ditt blir offer for forhekselsen og stuper ut i sjøen hvor de drukner. "
-"Hendelsen ga deg lærdom, og du får %{exp} erfaringspoeng."
+"ditt blir offer for forhekselsen deres og stuper ut i sjøen hvor de drukner. "
+"Du kommer helberget ut av hendelsen med ny lærdom og %{exp} erfaringspoeng."
 
 msgid ""
 "In a dazzling display of daring, you break into the local jail and free the "
@@ -5935,7 +5926,7 @@ msgid ""
 "You enter a rickety hut and talk to the magician who lives there. He tells "
 "you of places near and far which may aid you in your journeys."
 msgstr ""
-"Du går inn i en skrøpelig hytte og snakker med spåmannen som bor der. Han "
+"Du går inn i ei skrøpelig hytte og snakker med spåmannen som bor der. Han "
 "forteller deg om steder fjerne og nære. Dette vil kunne komme til nytte på "
 "reisene dine."
 
@@ -5947,9 +5938,8 @@ msgid ""
 "shall be rewarded. Answer incorrectly, and you shall be eaten. Do you accept "
 "the challenge?\""
 msgstr ""
-"\"Jeg har en gåte til deg\", sier sfinksen. \"Svar riktig, og du vil bli "
-"belønnet. Svar galt, og du vil bli spist levende. Tar du imot utfordringen?"
-"\"."
+"\"Jeg har en gåte til deg,\" sier sfinksen. \"Svar riktig, og du vil bli "
+"belønnet. Svar galt, og du vil bli spist levende. Tar du imot utfordringen?\""
 
 msgid ""
 "The Sphinx asks you the following riddle:\n"
@@ -5976,9 +5966,9 @@ msgid ""
 "you with a paw, knocking you to the ground. Another blow makes the world go "
 "black, and you know no more."
 msgstr ""
-"\"Du gjettet feil\", sier Sfinksen med et lurt smil. Sfinksen denger til deg "
-"med en pote slik at du går rett i bakken. Nok et slag treffer deg, og det "
-"svartner for deg. Mer får du ikke med deg."
+"\"Du gjettet feil\", sier sfinksen med et lurt smil før den denger til deg "
+"med en av potene slik at du går rett i bakken. Enda et slag treffer deg, og "
+"det svartner for deg. Mer får du ikke med deg."
 
 msgid "You come across a giant Sphinx. The Sphinx remains strangely quiet."
 msgstr "Du kommer over en stor sfinks. Sfinksen forblir merkverdig nok stille."
@@ -5992,7 +5982,7 @@ msgstr ""
 "En magisk barriere rager foran deg og blokkerer veien. Runene på buen dens "
 "sier det følgende:\n"
 "\"Uttal nøkkelordet og du vil få komme forbi.\"\n"
-"Idet du roper ut det magiske ordet oppløses den glødende barrieren til intet."
+"Idet du roper ut det magiske ordet går den glødende barrieren i oppløsning."
 
 msgid ""
 "A magical barrier stands tall before you, blocking your way. Runes on the "
@@ -6012,9 +6002,9 @@ msgid ""
 "oracle taught me his skill. I have the answer you seek.\""
 msgstr ""
 "Du går inn i teltet og ser en gammel dame som stirrer inn i en magisk "
-"edelstein. Hun ser opp og sier,\n"
+"edelstein. Hun ser opp og sier:\n"
 "\"På vandringene mine har jeg lært mye om mørkets kunster. Jeg har gått i "
-"læren hos et dyktig orakel. Her er svaret du leter etter.\""
+"læren hos et dyktig orakel. Du skal få svaret du søker.\""
 
 msgid "Spell book is not present."
 msgstr "Ingen tryllebok er til å finne."
@@ -6133,7 +6123,9 @@ msgid ""
 "occasionally possible to have more than your maximum spell points via "
 "special events."
 msgstr ""
-"%{name} har for øyeblikket %{point} av %{max} mana. Maksimal mana er 10 "
+"%{name} har for øyeblikket %{point} av maks %{max} mana. Den maksimal manaen "
+"til en helt er 10 ganger kunnskapen til helten. I visse tilfeller kan helten "
+"ha mer enn den maksimale manaen."
 
 msgid "%{name1} meets %{name2}"
 msgstr "%{name1} møter %{name2}"
@@ -6462,8 +6454,8 @@ msgid ""
 "%{skill} gives your hero's catapult shots a greater chance to hit and do "
 "damage to castle walls."
 msgstr ""
-"%{skill} gjør at skuddene til helten din sin katapult får større sjanse til "
-"å treffe og skade ringmuren til en borg."
+"%{skill} gjør at skuddene til katapulten din har større sjanse for å treffe "
+"og dermed skade ringmuren til borgene."
 
 msgid ""
 "%{skill} gives your hero's catapult an extra shot, and each shot has a "
@@ -6507,8 +6499,8 @@ msgid ""
 "%{skill} allows %{count} percent of the creatures killed in combat to be "
 "brought back from the dead as Skeletons."
 msgstr ""
-"%{skill} lar %{count} prosent av skapningene drept i kamp bli brakt tilbake "
-"fra de døde som skjeletter."
+"%{skill} gjør at %{count} prosent av skapningene som faller i kamp blir "
+"brakt tilbake fra de døde i form av skjeletter."
 
 msgid ""
 "Your hero produces %{count} gold pieces per day as tax revenue from estates."
@@ -7065,7 +7057,7 @@ msgid "Nothing Special"
 msgstr "Ingenting spesielt"
 
 msgid "Tar Pit"
-msgstr "Tjæredam"
+msgstr "Tjærepytt"
 
 msgid "Mound"
 msgstr "Haug"
@@ -7368,16 +7360,16 @@ msgid "Wolves"
 msgstr "Varger"
 
 msgid "Ogre"
-msgstr "Jotun"
+msgstr "Rise"
 
 msgid "Ogres"
-msgstr "Jotner"
+msgstr "Riser"
 
 msgid "Ogre Lord"
-msgstr "Jotunherjer"
+msgstr "Overrise"
 
 msgid "Ogre Lords"
-msgstr "Jotunherjere"
+msgstr "Overriser"
 
 msgid "Troll"
 msgstr "Troll"
@@ -8673,8 +8665,8 @@ msgid ""
 "The %{name} increases the amount of terrain your hero reveals when "
 "adventuring by %{count} extra square."
 msgstr ""
-"%{name} utvider mengden land som helten din avdekker ved forflytning med "
-"%{count} ekstra grad."
+"%{name} utvider området som helten din avdekker under forflytning med "
+"%{count} ekstra hakk."
 
 msgid ""
 "A merchant from far away lands trades you a new invention of his people for "
@@ -9301,12 +9293,12 @@ msgid ""
 "Mercury, Sulfur and Crystal are rare magical resources used for the most "
 "powerful creatures and buildings."
 msgstr ""
-"Det fins sju råvarer i Heroes II. Disse blir brukt til å bygge på og "
-"forbedre byene, og til å verve stryker og helter. Gull er den vanligste "
-"råvaren og trengs i bunn og grunn til alt. Ved og malm blir brukt til de "
-"fleste bygninger. Edelsteiner, kvikksølv, svovel og krystall er sjeldne "
-"magiske råvarer som trengs for de sterkeste skapningene og mektigste "
-"bygningene."
+"Det fins sju råvarer i Heroes II. Disse brukes til å bygge på og forbedre "
+"byer. I tillegg brukes de til å verve krigere og helter. Gull er den "
+"vanligste råvaren og trengs i bunn og grunn til alt. Ved og malm blir brukt "
+"til de fleste bygninger. Edelsteiner, kvikksølv, svovel og krystall er "
+"sjeldne, magiske råvarer som trengs for de sterkeste skapningene og mest "
+"avanserte bygningene."
 
 msgid ""
 "Causes a giant fireball to strike the selected area, damaging all nearby "
@@ -9329,8 +9321,7 @@ msgstr ""
 "midtpunktet for trolldommen, i stedet for kun én."
 
 msgid "Causes a bolt of electrical energy to strike the selected creature."
-msgstr ""
-"Får et støt av elektrisk kraft til å slå ned på den utvalgte skapningen."
+msgstr "Sender et kraftig elektrisk støt ned på en utvalgt kriger."
 
 msgid "Lightning Bolt"
 msgstr "Lynnedslag"
@@ -9367,7 +9358,7 @@ msgid ""
 "%{count} HP per level of spell power."
 msgstr ""
 "Fjerner alle ugunstige trolldommer fra en av dine krigere og helbreder "
-"%{count} liv for hvert nivå av tryllekraft."
+"%{count} liv for hvert nivå av brukerens tryllekraft."
 
 msgid "Mass Cure"
 msgstr ""
@@ -9492,7 +9483,7 @@ msgstr ""
 
 # en enkelt? flere?
 msgid "Prevents harmful magic against the selected creatures."
-msgstr "Skjermer den utvalgte skapningen fra skadelig magi."
+msgstr "Skjermer den utvalgte krigeren mot skadelig magi."
 
 msgid "Dispel Magic"
 msgstr ""
@@ -9511,7 +9502,7 @@ msgid "Removes all magic spells from all creatures."
 msgstr "Fjerner all trolldom fra alle krigere, både vennlige og fiendtlige."
 
 msgid "Causes a magic arrow to strike the selected target."
-msgstr "Får en magisk pil til å treffe det utvalgte målet."
+msgstr "Skyter en magisk pil på det utvalgte målet."
 
 msgid "Magic Arrow"
 msgstr "Magisk pil"
@@ -9571,7 +9562,7 @@ msgid "Cold Ray"
 msgstr "Kuldestråle"
 
 msgid "Drains body heat from a single enemy unit."
-msgstr "Tapper kroppsvarmen til en enkelt fiendtlig tropp."
+msgstr "Påfører ekstrem kulde på en enkelt fiendtlig kriger."
 
 msgid "Cold Ring"
 msgstr "Kuldesirkel"
@@ -9580,8 +9571,8 @@ msgid ""
 "Drains body heat from all units surrounding the center point, but not "
 "including the center point."
 msgstr ""
-"Tapper kroppsvarmen til alle troppene som omringer midtpunktet, uten å "
-"inkludere midtpunktet."
+"Påfører ekstrem kulde på alle krigerne omkring sentrum av målområdet. "
+"Krigeren i midten unngår skade."
 
 msgid "Disrupting Ray"
 msgstr ""
@@ -9653,7 +9644,7 @@ msgid "Shield"
 msgstr "Skjold"
 
 msgid "Halves damage received from ranged attacks for all of your units."
-msgstr "Halverer skade som fås fra skuddangrep på alle dine styrker."
+msgstr "Halverer skade som mottas fra skuddangrep på alle dine styrker."
 
 msgid "Mass Shield"
 msgstr ""
