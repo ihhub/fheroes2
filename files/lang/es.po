@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 00:54+0000\n"
+"POT-Creation-Date: 2022-10-08 02:28+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -814,15 +814,26 @@ msgstr "Uncle Ivan"
 msgid "Annexation"
 msgstr "Anexión"
 
-msgid "Carator Mines"
-msgstr "Minas de Carator"
-
 #, fuzzy
 msgid "Force of Arms"
 msgstr "\"La Fuerza de las Armas\""
 
 msgid "Save the Dwarves"
 msgstr "Salva a los Enanos"
+
+msgid "Carator Mines"
+msgstr "Minas de Carator"
+
+#, fuzzy
+msgid "Turning Point"
+msgstr "\"Punto de retorno\""
+
+msgid "scenarioName|Defender"
+msgstr ""
+
+#, fuzzy
+msgid "Corlagon's Defense"
+msgstr "Corlagon"
 
 msgid "The Crown"
 msgstr "La Corona"
@@ -831,16 +842,8 @@ msgstr "La Corona"
 msgid "The Gauntlet"
 msgstr "\"El Guantelete\""
 
-#, fuzzy
-msgid "Turning Point"
-msgstr "\"Punto de retorno\""
-
 msgid "Betrayal"
 msgstr "Traición"
-
-#, fuzzy
-msgid "Corlagon's Defense"
-msgstr "Corlagon"
 
 msgid "Final Justice"
 msgstr ""

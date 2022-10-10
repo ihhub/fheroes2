@@ -564,12 +564,14 @@ void Castle::ActionNewWeek()
                 if ( ( dwellings1[ii] == DWELLING_MONSTER1 ) && ( building & BUILD_WEL2 ) )
                     growth += GetGrownWel2();
 
-                if ( isControlAI() )
+                if ( isControlAI() && !isNeutral ) {
                     growth = static_cast<uint32_t>( growth * Difficulty::GetUnitGrowthBonusForAI( Game::getDifficulty() ) );
+                }
 
-                // neutral town: half population (normal for begin month)
-                if ( isNeutral && !world.BeginMonth() )
+                // Neutral towns always have half population growth.
+                if ( isNeutral ) {
                     growth /= 2;
+                }
 
                 *dw += growth;
             }

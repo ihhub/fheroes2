@@ -91,16 +91,18 @@ namespace
             return otherHero->GetArmy().GetStrength() > armyStrength;
         }
 
-        // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player
         if ( MP2::isArtifactObject( objectType ) ) {
-            if ( isArtifactBagFull ) {
-                return true;
-            }
-
             const Artifact art = tile.QuantityArtifact();
+            if ( art.isValid() ) {
+                if ( isFindArtifactVictoryConditionForHuman( art ) ) {
+                    // WINS_ARTIFACT victory condition does not apply to AI-controlled players, we should leave this artifact untouched for the human player.
+                    return true;
+                }
 
-            if ( art.isValid() && isFindArtifactVictoryConditionForHuman( art ) ) {
-                return true;
+                if ( isArtifactBagFull && MP2::isPickupObject( objectType ) ) {
+                    // A hero cannot pickup this object on his way since his artifact bag is full.
+                    return true;
+                }
             }
         }
 

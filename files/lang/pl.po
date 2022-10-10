@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 00:54+0000\n"
+"POT-Creation-Date: 2022-10-08 02:28+0000\n"
 "PO-Revision-Date: 2022-10-01 14:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -778,14 +778,23 @@ msgstr "Wuj Ivan"
 msgid "Annexation"
 msgstr "Aneksja"
 
-msgid "Carator Mines"
-msgstr "Kopalnie Caratora"
-
 msgid "Force of Arms"
 msgstr "Siła oręża"
 
 msgid "Save the Dwarves"
 msgstr "Uratuj Krasnoludy"
+
+msgid "Carator Mines"
+msgstr "Kopalnie Caratora"
+
+msgid "Turning Point"
+msgstr "Punkt Zwrotny"
+
+msgid "scenarioName|Defender"
+msgstr ""
+
+msgid "Corlagon's Defense"
+msgstr "Obrona Corlagona"
 
 msgid "The Crown"
 msgstr "Korona"
@@ -793,14 +802,8 @@ msgstr "Korona"
 msgid "The Gauntlet"
 msgstr "Rękawica"
 
-msgid "Turning Point"
-msgstr "Punkt Zwrotny"
-
 msgid "Betrayal"
 msgstr "Zdrada"
-
-msgid "Corlagon's Defense"
-msgstr "Obrona Corlagona"
 
 msgid "Final Justice"
 msgstr "Ostateczna Sprawiedliwość"
