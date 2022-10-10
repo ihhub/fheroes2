@@ -47,7 +47,7 @@ enum class WeekName : int
     HEDGEHOG,
     CONDOR,
 
-    // A regular first week of a new month (Month Of ...)
+    // A regular first week of the month (Month Of ...)
     ANT,
     GRASSHOPPER,
     DRAGONFLY,
@@ -59,7 +59,7 @@ enum class WeekName : int
     HORNET,
     BEETLE,
 
-    // The Week of / The Month of a monster
+    // The Week of a monster (the Month of a monster, if it's the first week of the month)
     MONSTERS,
 
     // The Month of the Plague
