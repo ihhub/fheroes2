@@ -2458,7 +2458,7 @@ msgid "Max"
 msgstr "Max"
 
 msgid "Hire all creatures in the town."
-msgstr "Recruter tous les créatures disponibles dans la village."
+msgstr "Recruter tous les créatures disponibles dans le village."
 
 msgid "Town Population Information and Statistics"
 msgstr "Informations et statistiques sur la population du village"
