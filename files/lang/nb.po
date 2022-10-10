@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-08 02:28+0000\n"
-"PO-Revision-Date: 2022-10-10 13:06+0200\n"
+"PO-Revision-Date: 2022-10-10 13:28+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -1720,14 +1720,17 @@ msgstr "Hvitskjold"
 msgid "Woodhaven"
 msgstr "Skogheimen"
 
+#, fuzzy
 msgid "Blackwind"
-msgstr ""
+msgstr "Smed"
 
+#, fuzzy
 msgid "Bloodreign"
-msgstr ""
+msgstr "Blodskampånd"
 
+#, fuzzy
 msgid "Dragontooth"
-msgstr ""
+msgstr "Drage"
 
 msgid "Greywind"
 msgstr ""
@@ -1744,17 +1747,20 @@ msgstr ""
 msgid "Sansobar"
 msgstr ""
 
+#, fuzzy
 msgid "Tundara"
-msgstr ""
+msgstr "Tordøks"
 
+#, fuzzy
 msgid "Vulcania"
-msgstr ""
+msgstr "Vulkan"
 
 msgid "Baywatch"
 msgstr ""
 
+#, fuzzy
 msgid "Fountainhead"
-msgstr ""
+msgstr "Fontene"
 
 msgid "Vertigo"
 msgstr ""
@@ -1777,17 +1783,20 @@ msgstr ""
 msgid "Olympus"
 msgstr ""
 
+#, fuzzy
 msgid "Sandcaster"
-msgstr ""
+msgstr "Sandro"
 
 msgid "Alamar"
 msgstr "Alamar"
 
+#, fuzzy
 msgid "Burlock"
-msgstr ""
+msgstr "Trollmann"
 
+#, fuzzy
 msgid "Dragadune"
-msgstr ""
+msgstr "Drage"
 
 msgid "Kalindra"
 msgstr "Kalindra"
@@ -1801,11 +1810,13 @@ msgstr ""
 msgid "Basenji"
 msgstr ""
 
+#, fuzzy
 msgid "Blackfang"
-msgstr ""
+msgstr "Svartdrage"
 
+#, fuzzy
 msgid "New Dawn"
-msgstr ""
+msgstr "Morgengry"
 
 msgid "Sorpigal"
 msgstr ""
@@ -1825,11 +1836,13 @@ msgstr ""
 msgid "Hampshire"
 msgstr ""
 
+#, fuzzy
 msgid "Antioch"
-msgstr ""
+msgstr "Advarsel"
 
+#, fuzzy
 msgid "Avalon"
-msgstr ""
+msgstr "Halon"
 
 msgid "Roc Haven"
 msgstr ""
@@ -1837,14 +1850,17 @@ msgstr ""
 msgid "South Mill"
 msgstr ""
 
+#, fuzzy
 msgid "Weed Patch"
-msgstr ""
+msgstr "Gulluret"
 
+#, fuzzy
 msgid "Brownston"
-msgstr ""
+msgstr "Brun"
 
+#, fuzzy
 msgid "Hilltop"
-msgstr ""
+msgstr "Bergfestning"
 
 msgid "Weddington"
 msgstr ""
@@ -1852,8 +1868,9 @@ msgstr ""
 msgid "Westfork"
 msgstr ""
 
+#, fuzzy
 msgid "Whittingham"
-msgstr ""
+msgstr "Skribent"
 
 msgid "Cathcart"
 msgstr ""
@@ -1864,17 +1881,20 @@ msgstr ""
 msgid "Roscomon"
 msgstr ""
 
+#, fuzzy
 msgid "Sherman"
-msgstr ""
+msgstr "Tysk"
 
 msgid "Yorksford"
 msgstr ""
 
+#, fuzzy
 msgid "Blackburn"
-msgstr ""
+msgstr "Svartdrage"
 
+#, fuzzy
 msgid "Blacksford"
-msgstr ""
+msgstr "Svart tårn"
 
 msgid "Burton"
 msgstr ""
@@ -1888,8 +1908,9 @@ msgstr ""
 msgid "Fenton"
 msgstr ""
 
+#, fuzzy
 msgid "Lankershire"
-msgstr ""
+msgstr "Lederskap"
 
 msgid "Lombard"
 msgstr ""
@@ -1897,11 +1918,13 @@ msgstr ""
 msgid "Timberhill"
 msgstr ""
 
+#, fuzzy
 msgid "Troy"
-msgstr ""
+msgstr "Trojann"
 
+#, fuzzy
 msgid "Forder Oaks"
-msgstr ""
+msgstr "Grensebyene"
 
 msgid "Meramec"
 msgstr ""
@@ -1912,8 +1935,9 @@ msgstr ""
 msgid "Westmoor"
 msgstr ""
 
+#, fuzzy
 msgid "Willow"
-msgstr ""
+msgstr "Gul"
 
 msgid "Corackston"
 msgstr ""
