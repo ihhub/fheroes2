@@ -63,9 +63,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="82m2wav.cpp" />
-	<ClCompile Include="..\engine\logging.cpp" />
-	<ClCompile Include="..\engine\serialize.cpp" />
-	<ClCompile Include="..\engine\system.cpp" />
+    <ClCompile Include="..\engine\serialize.cpp" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

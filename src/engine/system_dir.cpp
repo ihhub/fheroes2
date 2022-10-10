@@ -26,8 +26,9 @@
 #include "system_dir.h"
 
 #if defined( _WIN32 )
-#include <io.h>
-#elseif defined( TARGET_PS_VITA )
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#elif defined( TARGET_PS_VITA )
 #include <psp2/io/stat.h>
 #else
 #include <sys/stat.h>

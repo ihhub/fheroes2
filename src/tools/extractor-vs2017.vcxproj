@@ -62,10 +62,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="extractor.cpp" />
-	<ClCompile Include="..\engine\agg_file.cpp" />
-	<ClCompile Include="..\engine\logging.cpp" />
-	<ClCompile Include="..\engine\serialize.cpp" />
-	<ClCompile Include="..\engine\system.cpp" />
+    <ClCompile Include="..\engine\agg_file.cpp" />
+    <ClCompile Include="..\engine\serialize.cpp" />
+    <ClCompile Include="..\engine\system_dir.cpp" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -27,7 +27,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-	<UseDebugLibraries Condition="'$(Configuration)'=='Debug'">true</UseDebugLibraries>
+    <UseDebugLibraries Condition="'$(Configuration)'=='Debug'">true</UseDebugLibraries>
     <UseDebugLibraries Condition="'$(Configuration)'=='Release'">false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
@@ -59,7 +59,7 @@
       <PreprocessorDefinitions Condition="'$(FHEROES2_BUILD_NUMBER)'!=''">BUILD_VERSION=$(FHEROES2_BUILD_NUMBER);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <TreatSpecificWarningsAsErrors>4018;4028;4100;4114;4189;4245;4267;4309;4319;4389;4552;4456;4458;4459;4554;4457;4592;4702;4706;4715;4800;4834</TreatSpecificWarningsAsErrors>
     </ClCompile>
-	<Link>
+    <Link>
       <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)..\..\VisualStudio\packages\sdl2\lib\$(PlatformTarget);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libpng16.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -73,12 +73,11 @@ xcopy /Y /Q "$(MSBuildThisFileDirectory)..\..\VisualStudio\packages\sdl2\lib\$(P
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="til2img.cpp" />
-	<ClCompile Include="..\engine\image.cpp" />
-	<ClCompile Include="..\engine\image_palette.cpp" />
-	<ClCompile Include="..\engine\image_tool.cpp" />
-	<ClCompile Include="..\engine\logging.cpp" />
-	<ClCompile Include="..\engine\serialize.cpp" />
-	<ClCompile Include="..\engine\system.cpp" />
+   <ClCompile Include="..\engine\image.cpp" />
+   <ClCompile Include="..\engine\image_palette.cpp" />
+   <ClCompile Include="..\engine\image_tool.cpp" />
+   <ClCompile Include="..\engine\serialize.cpp" />
+   <ClCompile Include="..\engine\system_dir.cpp" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
