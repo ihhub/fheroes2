@@ -239,8 +239,8 @@ const char * Week::GetName() const
         return _( "week|Raven" );
     case WeekName::MONGOOSE:
         return _( "week|Mongoose" );
-    case WeekName::HOUND:
-        return _( "week|Hound" );
+    case WeekName::DOG:
+        return _( "week|Dog" );
     case WeekName::AARDVARK:
         return _( "week|Aardvark" );
     case WeekName::LIZARD:

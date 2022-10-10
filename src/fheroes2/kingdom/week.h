@@ -40,7 +40,7 @@ enum class WeekName : int
     WEASEL,
     RAVEN,
     MONGOOSE,
-    HOUND,
+    DOG,
     AARDVARK,
     LIZARD,
     TORTOISE,
