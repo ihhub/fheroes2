@@ -34,12 +34,21 @@ public:
     using Interface::ListBox<Maps::FileInfo>::ActionListSingleClick;
     using Interface::ListBox<Maps::FileInfo>::ActionListPressRight;
 
-    explicit ScenarioListBox( const fheroes2::Point & pt )
+    explicit ScenarioListBox( const fheroes2::Point & pt, fheroes2::Rect playersCount, fheroes2::Rect mapSize, fheroes2::Rect mapType,
+        fheroes2::Rect mapName, fheroes2::Rect winConditions, fheroes2::Rect lossConditions)
         : Interface::ListBox<Maps::FileInfo>( pt )
         , selectOk( false )
-    {}
+    {
+        this->_playersCountCoordX = playersCount.x;
+        this->_mapSizeCoordX = mapSize.x;
+        this->_mapTypeCoordX = mapType.x;
+        this->_mapNameWidth = mapName.width;
+        this->_mapNameCoordX = mapName.x;
+        this->_winConditionsCoordX = winConditions.x;
+        this->_lossConditionsCoordX = lossConditions.x;
+    }
 
-    void RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current ) override;
+    void RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current ) override;    
     void RedrawBackground( const fheroes2::Point & ) override;
 
     void ActionCurrentUp() override
@@ -65,6 +74,18 @@ public:
     }
 
     bool selectOk;
+
+private:
+    int32_t _playersCountCoordX;
+    int32_t _mapSizeCoordX;
+    int32_t _mapTypeCoordX;
+    int32_t _mapNameWidth;
+    int32_t _mapNameCoordX;
+    int32_t _winConditionsCoordX;
+    int32_t _lossConditionsCoordX;
+    const short _offsetY = 4;
+
+    void _renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display );
 };
 
 namespace Dialog
