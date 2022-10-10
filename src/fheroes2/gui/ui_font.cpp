@@ -3363,6 +3363,7 @@ namespace fheroes2
         case SupportedLanguage::Ukrainian:
             generateCP1251Alphabet( icnVsSprite );
             break;
+        case SupportedLanguage::Dutch:
         case SupportedLanguage::German:
         case SupportedLanguage::Italian:
         case SupportedLanguage::Norwegian:
@@ -3407,6 +3408,7 @@ namespace fheroes2
         case SupportedLanguage::Swedish:
         case SupportedLanguage::Turkish:
         case SupportedLanguage::Ukrainian:
+        case SupportedLanguage::Dutch:
             return true;
         default:
             break;
@@ -3444,6 +3446,7 @@ namespace fheroes2
         case SupportedLanguage::Ukrainian:
             generateCP1251GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;
+        case SupportedLanguage::Dutch:
         case SupportedLanguage::German:
         case SupportedLanguage::Italian:
         case SupportedLanguage::Norwegian:

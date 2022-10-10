@@ -57,7 +57,8 @@ namespace
             { "pt", fheroes2::SupportedLanguage::Portuguese }, { "portuguese", fheroes2::SupportedLanguage::Portuguese },
             { "sv", fheroes2::SupportedLanguage::Swedish },    { "swedish", fheroes2::SupportedLanguage::Swedish },
             { "tr", fheroes2::SupportedLanguage::Turkish },    { "turkish", fheroes2::SupportedLanguage::Turkish },
-            { "ro", fheroes2::SupportedLanguage::Romanian },   { "romanian", fheroes2::SupportedLanguage::Romanian } };
+            { "ro", fheroes2::SupportedLanguage::Romanian },   { "romanian", fheroes2::SupportedLanguage::Romanian },
+            { "nl", fheroes2::SupportedLanguage::Dutch },      { "dutch", fheroes2::SupportedLanguage::Dutch } };
 }
 
 namespace fheroes2
@@ -100,11 +101,11 @@ namespace fheroes2
             languages.emplace_back( resourceLanguage );
         }
 
-        const std::set<SupportedLanguage> possibleLanguages{
-            SupportedLanguage::French,    SupportedLanguage::Polish,     SupportedLanguage::German,    SupportedLanguage::Russian,   SupportedLanguage::Italian,
-            SupportedLanguage::Norwegian, SupportedLanguage::Belarusian, SupportedLanguage::Bulgarian, SupportedLanguage::Ukrainian, SupportedLanguage::Romanian,
-            SupportedLanguage::Spanish,   SupportedLanguage::Portuguese, SupportedLanguage::Swedish,   SupportedLanguage::Turkish,
-        };
+        const std::set<SupportedLanguage> possibleLanguages{ SupportedLanguage::French,     SupportedLanguage::Polish,    SupportedLanguage::German,
+                                                             SupportedLanguage::Russian,    SupportedLanguage::Italian,   SupportedLanguage::Norwegian,
+                                                             SupportedLanguage::Belarusian, SupportedLanguage::Bulgarian, SupportedLanguage::Ukrainian,
+                                                             SupportedLanguage::Romanian,   SupportedLanguage::Spanish,   SupportedLanguage::Portuguese,
+                                                             SupportedLanguage::Swedish,    SupportedLanguage::Turkish,   SupportedLanguage::Dutch };
 
         for ( const SupportedLanguage language : possibleLanguages ) {
             if ( language != resourceLanguage && isAlphabetSupported( language ) ) {
@@ -166,6 +167,8 @@ namespace fheroes2
             return _( "Portuguese" );
         case SupportedLanguage::Turkish:
             return _( "Turkish" );
+        case SupportedLanguage::Dutch:
+            return _( "Dutch" );
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
@@ -208,6 +211,8 @@ namespace fheroes2
             return "pt";
         case SupportedLanguage::Turkish:
             return "tr";
+        case SupportedLanguage::Dutch:
+            return "nl";
         default:
             // Did you add a new language? Please add the code to handle it.
             assert( 0 );
