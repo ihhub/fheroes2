@@ -27,6 +27,63 @@
 #include "interface_list.h"
 #include "maps_fileinfo.h"
 
+struct ScenarioListItemCoordinates
+{
+public:
+    int32_t playersCountCoordX;
+    int32_t mapSizeCoordX;
+    int32_t mapTypeCoordX;
+    int32_t mapNameWidth;
+    int32_t mapNameCoordX;
+    int32_t winConditionsCoordX;
+    int32_t lossConditionsCoordX;
+    ScenarioListItemCoordinates() = default;
+
+    ScenarioListItemCoordinates( int32_t playersCountCoordX, int32_t mapSizeCoordX, int32_t mapTypeCoordX, int32_t mapNameWidth, int32_t mapNameCoordX,
+                                 int32_t winConditionsCoordX, int32_t lossConditionsCoordX )
+    {
+        this->playersCountCoordX = playersCountCoordX;
+        this->mapSizeCoordX = mapSizeCoordX;
+        this->mapTypeCoordX = mapTypeCoordX;
+        this->mapNameWidth = mapNameWidth;
+        this->mapNameCoordX = mapNameCoordX;
+        this->winConditionsCoordX = winConditionsCoordX;
+        this->lossConditionsCoordX = lossConditionsCoordX;
+    }
+};
+
+struct SelectedScenarioCoordinates
+{
+public:
+    int32_t playersCountCoordX;
+    int32_t mapSizeCoordX;
+    int32_t mapTypeCoordX;
+    int32_t mapNameWidth;
+    int32_t mapNameCoordX;
+    int32_t winConditionsCoordX;
+    int32_t lossConditionsCoordX;
+    int32_t difficultyCoordX;
+    int32_t difficultyWidth;
+    int32_t descriptionCoordX;
+
+    SelectedScenarioCoordinates() = default;
+
+    SelectedScenarioCoordinates( int32_t playersCountCoordX, int32_t mapSizeCoordX, int32_t mapTypeCoordX, int32_t mapNameWidth, int32_t mapNameCoordX,
+                                 int32_t winConditionsCoordX, int32_t lossConditionsCoordX, int32_t difficultyCoordX, int32_t descriptionCoordX, int32_t difficultyWidth )
+    {
+        this->playersCountCoordX = playersCountCoordX;
+        this->mapSizeCoordX = mapSizeCoordX;
+        this->mapTypeCoordX = mapTypeCoordX;
+        this->mapNameWidth = mapNameWidth;
+        this->mapNameCoordX = mapNameCoordX;
+        this->winConditionsCoordX = winConditionsCoordX;
+        this->lossConditionsCoordX = lossConditionsCoordX;
+        this->difficultyCoordX = difficultyCoordX;
+        this->difficultyWidth = difficultyWidth;
+        this->descriptionCoordX = descriptionCoordX;
+    }
+};
+
 class ScenarioListBox : public Interface::ListBox<Maps::FileInfo>
 {
 public:
@@ -34,21 +91,14 @@ public:
     using Interface::ListBox<Maps::FileInfo>::ActionListSingleClick;
     using Interface::ListBox<Maps::FileInfo>::ActionListPressRight;
 
-    explicit ScenarioListBox( const fheroes2::Point & pt, fheroes2::Rect playersCount, fheroes2::Rect mapSize, fheroes2::Rect mapType,
-        fheroes2::Rect mapName, fheroes2::Rect winConditions, fheroes2::Rect lossConditions)
+    explicit ScenarioListBox( const fheroes2::Point & pt, const ScenarioListItemCoordinates & listItemCoords, const SelectedScenarioCoordinates & selectedCoords )
         : Interface::ListBox<Maps::FileInfo>( pt )
         , selectOk( false )
-    {
-        this->_playersCountCoordX = playersCount.x;
-        this->_mapSizeCoordX = mapSize.x;
-        this->_mapTypeCoordX = mapType.x;
-        this->_mapNameWidth = mapName.width;
-        this->_mapNameCoordX = mapName.x;
-        this->_winConditionsCoordX = winConditions.x;
-        this->_lossConditionsCoordX = lossConditions.x;
-    }
+        , _listItemCoords( listItemCoords )
+        , _selectedCoords( selectedCoords )
+    {}
 
-    void RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current ) override;    
+    void RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current ) override;
     void RedrawBackground( const fheroes2::Point & ) override;
 
     void ActionCurrentUp() override
@@ -76,16 +126,16 @@ public:
     bool selectOk;
 
 private:
-    int32_t _playersCountCoordX;
-    int32_t _mapSizeCoordX;
-    int32_t _mapTypeCoordX;
-    int32_t _mapNameWidth;
-    int32_t _mapNameCoordX;
-    int32_t _winConditionsCoordX;
-    int32_t _lossConditionsCoordX;
+    const ScenarioListItemCoordinates & _listItemCoords;
+    const SelectedScenarioCoordinates & _selectedCoords;
     const short _offsetY = 4;
 
     void _renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display );
+    const fheroes2::Sprite & _getPlayersCountIcon( uint8_t playersCount );
+    const fheroes2::Image & _getMapSizeIcon( uint16_t size );
+    const fheroes2::Sprite & _getMapTypeIcon( GameVersion version );
+    const fheroes2::Sprite & _getWinConditionsIcon( uint8_t condition );
+    const fheroes2::Sprite & _getLossConditionsIcon( uint8_t condition );
 };
 
 namespace Dialog

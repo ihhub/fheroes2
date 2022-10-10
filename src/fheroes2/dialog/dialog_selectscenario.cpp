@@ -154,74 +154,84 @@ namespace
 
         return 0;
     }
+
+    int32_t GetCenteredTextXCoordinate( const int32_t startCoordX, const int32_t textBoxWidth, const int32_t textWidth )
+    {
+        const int32_t centerTransform = textBoxWidth > textWidth ? ( textBoxWidth - textWidth ) / 2 : 0;
+        return startCoordX + centerTransform;
+    }
+
 }
 
 void ScenarioListBox::RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current )
 {
-    fheroes2::Display & display = fheroes2::Display::instance();
-    
-    short playersCountIconIndex = 19 + Color::Count( info.kingdom_colors );
-    
-    dstx;// used to suppress warning about unused dstx parameter
+    dstx; // used to suppress warning about unused dstx parameter
 
+    fheroes2::Display & display = fheroes2::Display::instance();
     dsty = dsty + _offsetY;
 
-    const fheroes2::Sprite & playersCountIcon = fheroes2::AGG::GetICN( ICN::REQUESTS, playersCountIconIndex );
-    fheroes2::Blit( playersCountIcon, display, _playersCountCoordX, dsty );
-
-
-    if ( info.size_w != info.size_h || info.size_w < Maps::SMALL || info.size_w > Maps::XLARGE ) {
-        const fheroes2::Image & nonStandardMapSizeIcon = GetNonStandardSizeIcon();
-
-        fheroes2::Blit( nonStandardMapSizeIcon, display, _mapSizeCoordX, dsty );        
-    }
-    else {
-        short mapIconIndex;
-
-        switch ( info.size_w ) {
-        case Maps::SMALL:
-            mapIconIndex = 26;
-            break;
-        case Maps::MEDIUM:
-            mapIconIndex = 27;
-            break;
-        case Maps::LARGE:
-            mapIconIndex = 28;
-            break;
-        case Maps::XLARGE:
-            mapIconIndex = 29;
-            break;
-        default:
-            throw std::invalid_argument("Incorrect map size");
-        }
-
-        const fheroes2::Sprite & mapSizeIcon = fheroes2::AGG::GetICN( ICN::REQUESTS, mapIconIndex );
-        fheroes2::Blit( mapSizeIcon, display, _mapSizeCoordX, dsty );        
-    }
-
-    const fheroes2::Sprite & mapTypeIcon = fheroes2::AGG::GetICN( ICN::MAP_TYPE_ICON, info._version == GameVersion::PRICE_OF_LOYALTY ? 1 : 0 );
-    fheroes2::Blit( mapTypeIcon, display, _mapTypeCoordX, dsty );
-
+    fheroes2::Blit( _getPlayersCountIcon( info.kingdom_colors ), display, _listItemCoords.playersCountCoordX, dsty );
+    fheroes2::Blit( _getMapSizeIcon( info.size_w ), display, _listItemCoords.mapSizeCoordX, dsty );
+    fheroes2::Blit( _getMapTypeIcon( info._version ), display, _listItemCoords.mapTypeCoordX, dsty );
     _renderMapName( info, current, dsty, display );
+    fheroes2::Blit( _getWinConditionsIcon( info.conditions_wins ), display, _listItemCoords.winConditionsCoordX, dsty );
+    fheroes2::Blit( _getLossConditionsIcon( info.conditions_loss ), display, _listItemCoords.lossConditionsCoordX, dsty );
+}
 
-    short winConditionIconIndex = 30 + info.conditions_wins;
-    const fheroes2::Sprite & spriteWins = fheroes2::AGG::GetICN( ICN::REQUESTS, winConditionIconIndex );
-    fheroes2::Blit( spriteWins, display, _winConditionsCoordX, dsty );
+const fheroes2::Sprite & ScenarioListBox::_getPlayersCountIcon( uint8_t colors )
+{
+    const int iconIndex = 19 + Color::Count( colors );
+    return fheroes2::AGG::GetICN( ICN::REQUESTS, iconIndex );
+}
 
-    short lossConditionIconIndex = 36 + info.conditions_loss;
-    const fheroes2::Sprite & spriteLoss = fheroes2::AGG::GetICN( ICN::REQUESTS, lossConditionIconIndex );
-    fheroes2::Blit( spriteLoss, display, _lossConditionsCoordX, dsty );
+const fheroes2::Image & ScenarioListBox::_getMapSizeIcon( uint16_t size )
+{
+    short mapIconIndex;
+
+    switch ( size ) {
+    case Maps::SMALL:
+        mapIconIndex = 26;
+        break;
+    case Maps::MEDIUM:
+        mapIconIndex = 27;
+        break;
+    case Maps::LARGE:
+        mapIconIndex = 28;
+        break;
+    case Maps::XLARGE:
+        mapIconIndex = 29;
+        break;
+    default:
+        return GetNonStandardSizeIcon();
+    }
+
+    return fheroes2::AGG::GetICN( ICN::REQUESTS, mapIconIndex );
+}
+
+const fheroes2::Sprite & ScenarioListBox::_getMapTypeIcon( GameVersion version )
+{
+    return fheroes2::AGG::GetICN( ICN::MAP_TYPE_ICON, version == GameVersion::PRICE_OF_LOYALTY ? 1 : 0 );
 }
 
 void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display )
-{    
+{
     fheroes2::Text mapName( info.name, { fheroes2::FontSize::NORMAL, ( selected ? fheroes2::FontColor::YELLOW : fheroes2::FontColor::WHITE ) } );
-    const int32_t textWidth = mapName.width();
-    const int32_t centerTransform = _mapNameWidth > textWidth ? (_mapNameWidth - textWidth) / 2 : 0;
-    const int32_t xCoordinate = _mapNameCoordX + centerTransform;
-    const int32_t yCoordinate = baseYOffset + _offsetY -1; 
-    
+    const int32_t xCoordinate = GetCenteredTextXCoordinate( _listItemCoords.mapNameCoordX, _listItemCoords.mapNameWidth, mapName.width() );
+    const int32_t yCoordinate = baseYOffset + _offsetY - 1;
+
     mapName.draw( xCoordinate, yCoordinate, display );
+}
+
+const fheroes2::Sprite & ScenarioListBox::_getWinConditionsIcon( uint8_t condition )
+{
+    short iconIndex = 30 + condition;
+    return fheroes2::AGG::GetICN( ICN::REQUESTS, iconIndex );
+}
+
+const fheroes2::Sprite & ScenarioListBox::_getLossConditionsIcon( uint8_t condition )
+{
+    short iconIndex = 36 + condition;
+    return fheroes2::AGG::GetICN( ICN::REQUESTS, iconIndex );
 }
 
 void ScenarioListBox::ActionListDoubleClick( Maps::FileInfo & )
@@ -237,54 +247,25 @@ void ScenarioListBox::RedrawBackground( const fheroes2::Point & dst )
     if ( isSelected() ) {
         Text text;
         const Maps::FileInfo & info = GetCurrent();
-        int index = 19 + Color::Count( info.kingdom_colors );
 
-        const fheroes2::Sprite & spriteCount = fheroes2::AGG::GetICN( ICN::REQUESTS, index );
-        fheroes2::Blit( spriteCount, display, dst.x + 45, dst.y + 265 );
-
-        switch ( info.size_w ) {
-        case Maps::SMALL:
-            index = 26;
-            break;
-        case Maps::MEDIUM:
-            index = 27;
-            break;
-        case Maps::LARGE:
-            index = 28;
-            break;
-        case Maps::XLARGE:
-            index = 29;
-            break;
-        default:
-            index = 30;
-            break;
-        }
-
-        const fheroes2::Sprite & spriteSize = fheroes2::AGG::GetICN( ICN::REQUESTS, index );
-        fheroes2::Blit( spriteSize, display, dst.x + 45 + spriteCount.width() + 2, dst.y + 265 );
-
-        const fheroes2::Sprite & mapType = fheroes2::AGG::GetICN( ICN::MAP_TYPE_ICON, info._version == GameVersion::PRICE_OF_LOYALTY ? 1 : 0 );
-        fheroes2::Blit( mapType, display, dst.x + 45 + spriteCount.width() + 2 * 2 + spriteSize.width(), dst.y + 265 );
+        fheroes2::Blit( _getPlayersCountIcon( info.kingdom_colors ), display, _selectedCoords.playersCountCoordX, dst.y + 265 );
+        fheroes2::Blit( _getMapSizeIcon( info.size_w ), display, _selectedCoords.mapSizeCoordX, dst.y + 265 );
+        fheroes2::Blit( _getMapTypeIcon( info._version ), display, _selectedCoords.mapTypeCoordX, dst.y + 265 );
 
         text.Set( info.name, Font::BIG );
-        text.Blit( dst.x + 190 - text.w() / 2, dst.y + 266 );
+        text.Blit( GetCenteredTextXCoordinate( _selectedCoords.mapNameCoordX, _selectedCoords.mapNameWidth, text.w() ), dst.y + 266 );
 
-        index = 30 + info.conditions_wins;
-        const fheroes2::Sprite & spriteWins = fheroes2::AGG::GetICN( ICN::REQUESTS, index );
-        fheroes2::Blit( spriteWins, display, dst.x + 276, dst.y + 265 );
-
-        index = 36 + info.conditions_loss;
-        const fheroes2::Sprite & spriteLoss = fheroes2::AGG::GetICN( ICN::REQUESTS, index );
-        fheroes2::Blit( spriteLoss, display, dst.x + 276 + spriteWins.width() + 2, dst.y + 265 );
+        fheroes2::Blit( _getWinConditionsIcon( info.conditions_wins ), display, _selectedCoords.winConditionsCoordX, dst.y + 265 );
+        fheroes2::Blit( _getLossConditionsIcon( info.conditions_loss ), display, _selectedCoords.lossConditionsCoordX, dst.y + 265 );
 
         text.Set( _( "Map difficulty:" ), Font::BIG );
         text.Blit( dst.x + 210 - text.w(), dst.y + 291 );
 
         text.Set( Difficulty::String( info.difficulty ) );
-        text.Blit( dst.x + 276 - text.w() / 2, dst.y + 291 );
+        text.Blit( GetCenteredTextXCoordinate( _selectedCoords.difficultyCoordX, _selectedCoords.difficultyWidth, text.w() ), dst.y + 291 );
 
         TextBox box( info.description, Font::BIG, 290 );
-        box.Blit( dst.x + 45, dst.y + 321 );
+        box.Blit( _selectedCoords.descriptionCoordX, dst.y + 321 );
     }
 }
 
@@ -331,19 +312,20 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
     }
 
     const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::REQSBKG, 0 );
-    const fheroes2::Rect rt( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height());
+    const fheroes2::Rect rt( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
 
     fheroes2::ImageRestorer background( display, rt.x - SHADOWWIDTH, rt.y, rt.width + SHADOWWIDTH, rt.height + SHADOWWIDTH );
 
     const fheroes2::Sprite & shadow = fheroes2::AGG::GetICN( ICN::REQSBKG, 1 );
     fheroes2::Blit( shadow, display, rt.x - SHADOWWIDTH, rt.y + SHADOWWIDTH );
 
-    const fheroes2::Rect countPlayers( rt.x + 48, rt.y + 57, 18, 175 );   
+    const fheroes2::Rect countPlayers( rt.x + 48, rt.y + 57, 18, 175 );
     const fheroes2::Rect sizeMaps( rt.x + 67, rt.y + 57, 18, 175 );
     const fheroes2::Rect mapTypes( rt.x + 86, rt.y + 57, 18, 175 );
     const fheroes2::Rect mapNames( rt.x + 104, rt.y + 57, 160, 175 );
     const fheroes2::Rect victoryConds( rt.x + 266, rt.y + 57, 18, 175 );
     const fheroes2::Rect lossConds( rt.x + 285, rt.y + 57, 18, 175 );
+    ScenarioListItemCoordinates listCoords( countPlayers.x, sizeMaps.x, mapTypes.x, mapNames.width, mapNames.x, victoryConds.x, lossConds.x );
 
     const fheroes2::Rect curCountPlayer( rt.x + 45, rt.y + 264, 18, 18 );
     const fheroes2::Rect curMapSize( rt.x + 64, rt.y + 264, 18, 18 );
@@ -353,6 +335,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
     const fheroes2::Rect curLossCond( rt.x + 294, rt.y + 264, 18, 18 );
     const fheroes2::Rect curDifficulty( rt.x + 220, rt.y + 292, 114, 20 );
     const fheroes2::Rect curDescription( rt.x + 42, rt.y + 316, 292, 90 );
+    SelectedScenarioCoordinates selectedCoords( curCountPlayer.x, curMapSize.x, curMapType.x, curMapName.width, curMapName.x, curVictoryCond.x, curLossCond.x,
+                                                curDifficulty.x, curDescription.x, curDifficulty.width );
 
     fheroes2::Button buttonOk( rt.x + 140, rt.y + 410, ICN::REQUESTS, 1, 2 );
 
@@ -411,7 +395,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
     buttonGroup.addButton( &buttonSelectXLarge );
     buttonGroup.addButton( &buttonSelectAll );
 
-    ScenarioListBox listbox( rt.getPosition(), countPlayers, sizeMaps, mapTypes, mapNames, victoryConds, lossConds );
+    ScenarioListBox listbox( rt.getPosition(), listCoords, selectedCoords );
 
     listbox.RedrawBackground( rt.getPosition() );
     listbox.SetScrollButtonUp( ICN::REQUESTS, 5, 6, { rt.x + 327, rt.y + 55 } );
