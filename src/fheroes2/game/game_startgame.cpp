@@ -1163,6 +1163,7 @@ void Interface::Basic::MouseCursorAreaClickLeft( const int32_t index_maps )
         if ( nullptr != to_hero ) {
             if ( !from_hero || from_hero != to_hero ) {
                 SetFocus( to_hero );
+                CalculateHeroPath( to_hero, -1 );
                 RedrawFocus();
             }
             else {
