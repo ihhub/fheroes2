@@ -36,9 +36,9 @@
 namespace
 {
 #if defined( _WIN32 )
-constexpr char SEPARATOR = '\\';
+    constexpr char SEPARATOR = '\\';
 #else
-constexpr char SEPARATOR = '/';
+    constexpr char SEPARATOR = '/';
 #endif
 }
 
