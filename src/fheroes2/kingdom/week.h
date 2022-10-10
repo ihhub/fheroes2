@@ -29,7 +29,25 @@
 enum class WeekName : int
 {
     UNNAMED,
-    PLAGUE,
+
+    // A regular week (Week Of ...)
+    SQUIRREL,
+    RABBIT,
+    GOPHER,
+    BADGER,
+    RAT,
+    EAGLE,
+    WEASEL,
+    RAVEN,
+    MONGOOSE,
+    HOUND,
+    AARDVARK,
+    LIZARD,
+    TORTOISE,
+    HEDGEHOG,
+    CONDOR,
+
+    // A regular first week of a new month (Month Of ...)
     ANT,
     GRASSHOPPER,
     DRAGONFLY,
@@ -40,23 +58,13 @@ enum class WeekName : int
     EARTHWORM,
     HORNET,
     BEETLE,
-    SQUIRREL,
-    RABBIT,
-    GOPHER,
-    BADGER,
-    EAGLE,
-    WEASEL,
-    RAVEN,
-    MONGOOSE,
-    AARDVARK,
-    LIZARD,
-    TORTOISE,
-    HEDGEHOG,
-    CONDOR,
-    MONSTERS // week of "monster"
-};
 
-class World;
+    // The Week of / The Month of a monster
+    MONSTERS,
+
+    // The Month of the Plague
+    PLAGUE
+};
 
 struct Week
 {
@@ -77,7 +85,7 @@ struct Week
 
     const char * GetName() const;
 
-    static Week RandomWeek( const World & world, const bool isNewMonth, const uint32_t weekSeed );
+    static Week RandomWeek( const bool isNewMonth, const uint32_t weekSeed );
 
 private:
     WeekName _week;

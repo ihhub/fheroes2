@@ -21,29 +21,64 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "week.h"
+#include <cassert>
+
 #include "rand.h"
-#include "save_format_version.h"
-#include "serialize.h"
 #include "tools.h"
 #include "translations.h"
-#include "world.h"
+#include "week.h"
 
 namespace
 {
-    WeekName WeekRand( const World & worldInstance, const uint32_t seed )
+    WeekName WeekRand( const uint32_t seed )
     {
-        return ( 0 == ( worldInstance.CountWeek() + 1 ) % 3 ) ? WeekName::MONSTERS : Rand::GetWithSeed( WeekName::ANT, WeekName::CONDOR, seed );
+        uint32_t weekTypeSeed = seed;
+        fheroes2::hashCombine( weekTypeSeed, 367245 ); // Salt
+
+        uint32_t weekType = Rand::GetWithSeed( 0, 3, weekTypeSeed );
+
+        // A regular week, probability 75%
+        if ( weekType < 3 ) {
+            uint32_t weekSeed = seed;
+            fheroes2::hashCombine( weekSeed, 1946256 ); // Salt
+
+            return Rand::GetWithSeed( WeekName::SQUIRREL, WeekName::CONDOR, weekSeed );
+        }
+
+        // The Week of a monster, probability 25%
+        return WeekName::MONSTERS;
     }
 
-    WeekName MonthRand( const World & worldInstance, const uint32_t seed )
+    WeekName MonthRand( const uint32_t seed )
     {
-        return ( 0 == ( worldInstance.GetMonth() + 1 ) % 3 ) ? WeekName::MONSTERS : Rand::GetWithSeed( WeekName::PLAGUE, WeekName::CONDOR, seed );
+        uint32_t monthTypeSeed = seed;
+        fheroes2::hashCombine( monthTypeSeed, 9536582 ); // Salt
+
+        uint32_t monthType = Rand::GetWithSeed( 0, 9, monthTypeSeed );
+
+        // A regular month, probability 50%
+        if ( monthType < 5 ) {
+            uint32_t monthSeed = seed;
+            fheroes2::hashCombine( monthSeed, 5544783 ); // Salt
+
+            return Rand::GetWithSeed( WeekName::ANT, WeekName::BEETLE, monthSeed );
+        }
+
+        // The Month of a monster, probability 40%
+        if ( monthType < 9 ) {
+            return WeekName::MONSTERS;
+        }
+
+        // The Month of the Plague, probability 10%
+        return WeekName::PLAGUE;
     }
 
     Monster::monster_t RandomMonsterWeekOf( const uint32_t seed )
     {
-        switch ( Rand::GetWithSeed( 1, 47, seed ) ) {
+        uint32_t monsterSeed = seed;
+        fheroes2::hashCombine( monsterSeed, 886473 ); // Salt
+
+        switch ( Rand::GetWithSeed( 1, 47, monsterSeed ) ) {
         case 1:
             return Monster::PEASANT;
         case 2:
@@ -140,85 +175,83 @@ namespace
             return Monster::POWER_LICH;
         default:
             assert( 0 );
-            return Monster::UNKNOWN;
         }
+
+        return Monster::UNKNOWN;
     }
 
     Monster::monster_t RandomMonsterMonthOf( const uint32_t seed )
     {
-        switch ( Rand::GetWithSeed( 1, 30, seed ) ) {
+        uint32_t monsterSeed = seed;
+        fheroes2::hashCombine( monsterSeed, 1130906 ); // Salt
+
+        switch ( Rand::GetWithSeed( 1, 12, monsterSeed ) ) {
         case 1:
             return Monster::PEASANT;
         case 2:
-            return Monster::ARCHER;
-        case 3:
-            return Monster::PIKEMAN;
-        case 4:
-            return Monster::SWORDSMAN;
-        case 5:
-            return Monster::CAVALRY;
-        case 6:
-            return Monster::GOBLIN;
-        case 7:
-            return Monster::ORC;
-        case 8:
             return Monster::WOLF;
-        case 9:
+        case 3:
             return Monster::OGRE;
-        case 10:
+        case 4:
             return Monster::TROLL;
-        case 11:
-            return Monster::SPRITE;
-        case 12:
+        case 5:
             return Monster::DWARF;
-        case 13:
-            return Monster::ELF;
-        case 14:
+        case 6:
             return Monster::DRUID;
-        case 15:
+        case 7:
             return Monster::UNICORN;
-        case 16:
+        case 8:
             return Monster::CENTAUR;
-        case 17:
+        case 9:
             return Monster::GARGOYLE;
-        case 18:
-            return Monster::GRIFFIN;
-        case 19:
-            return Monster::MINOTAUR;
-        case 20:
-            return Monster::HYDRA;
-        case 21:
-            return Monster::HALFLING;
-        case 22:
-            return Monster::BOAR;
-        case 23:
-            return Monster::IRON_GOLEM;
-        case 24:
+        case 10:
             return Monster::ROC;
-        case 25:
-            return Monster::MAGE;
-        case 26:
-            return Monster::SKELETON;
-        case 27:
-            return Monster::ZOMBIE;
-        case 28:
-            return Monster::MUMMY;
-        case 29:
+        case 11:
             return Monster::VAMPIRE;
-        case 30:
+        case 12:
             return Monster::LICH;
         default:
             assert( 0 );
-            return Monster::UNKNOWN;
         }
+
+        return Monster::UNKNOWN;
     }
 }
 
 const char * Week::GetName() const
 {
     switch ( _week ) {
-    case WeekName::PLAGUE:
-        return _( "week|PLAGUE" );
+    case WeekName::SQUIRREL:
+        return _( "week|Squirrel" );
+    case WeekName::RABBIT:
+        return _( "week|Rabbit" );
+    case WeekName::GOPHER:
+        return _( "week|Gopher" );
+    case WeekName::BADGER:
+        return _( "week|Badger" );
+    case WeekName::RAT:
+        return _( "week|Rat" );
+    case WeekName::EAGLE:
+        return _( "week|Eagle" );
+    case WeekName::WEASEL:
+        return _( "week|Weasel" );
+    case WeekName::RAVEN:
+        return _( "week|Raven" );
+    case WeekName::MONGOOSE:
+        return _( "week|Mongoose" );
+    case WeekName::HOUND:
+        return _( "week|Hound" );
+    case WeekName::AARDVARK:
+        return _( "week|Aardvark" );
+    case WeekName::LIZARD:
+        return _( "week|Lizard" );
+    case WeekName::TORTOISE:
+        return _( "week|Tortoise" );
+    case WeekName::HEDGEHOG:
+        return _( "week|Hedgehog" );
+    case WeekName::CONDOR:
+        return _( "week|Condor" );
+
     case WeekName::ANT:
         return _( "week|Ant" );
     case WeekName::GRASSHOPPER:
@@ -239,56 +272,30 @@ const char * Week::GetName() const
         return _( "week|Hornet" );
     case WeekName::BEETLE:
         return _( "week|Beetle" );
-    case WeekName::SQUIRREL:
-        return _( "week|Squirrel" );
-    case WeekName::RABBIT:
-        return _( "week|Rabbit" );
-    case WeekName::GOPHER:
-        return _( "week|Gopher" );
-    case WeekName::BADGER:
-        return _( "week|Badger" );
-    case WeekName::EAGLE:
-        return _( "week|Eagle" );
-    case WeekName::WEASEL:
-        return _( "week|Weasel" );
-    case WeekName::RAVEN:
-        return _( "week|Raven" );
-    case WeekName::MONGOOSE:
-        return _( "week|Mongoose" );
-    case WeekName::AARDVARK:
-        return _( "week|Aardvark" );
-    case WeekName::LIZARD:
-        return _( "week|Lizard" );
-    case WeekName::TORTOISE:
-        return _( "week|Tortoise" );
-    case WeekName::HEDGEHOG:
-        return _( "week|Hedgehog" );
-    case WeekName::CONDOR:
-        return _( "week|Condor" );
+
     case WeekName::MONSTERS:
         return Monster( _monster ).GetName();
+
+    case WeekName::PLAGUE:
+        return _( "week|PLAGUE" );
+
     default:
-        break;
+        assert( 0 );
     }
 
     return "Unnamed";
 }
 
-Week Week::RandomWeek( const World & worldInstance, const bool isNewMonth, const uint32_t weekSeed )
+Week Week::RandomWeek( const bool isNewMonth, const uint32_t weekSeed )
 {
-    uint32_t weekTypeSeed = weekSeed;
-    fheroes2::hashCombine( weekTypeSeed, 34582445 ); // random value to add salt
-
-    const WeekName weekName = isNewMonth ? MonthRand( worldInstance, weekTypeSeed ) : WeekRand( worldInstance, weekTypeSeed );
+    const WeekName weekName = isNewMonth ? MonthRand( weekSeed ) : WeekRand( weekSeed );
 
     if ( weekName == WeekName::MONSTERS ) {
-        uint32_t monsterTypeSeed = weekSeed;
-        fheroes2::hashCombine( monsterTypeSeed, 284631 ); // random value to add salt
         if ( isNewMonth ) {
-            return { weekName, RandomMonsterMonthOf( monsterTypeSeed ) };
+            return { weekName, RandomMonsterMonthOf( weekSeed ) };
         }
 
-        return { weekName, RandomMonsterWeekOf( monsterTypeSeed ) };
+        return { weekName, RandomMonsterWeekOf( weekSeed ) };
     }
 
     return { weekName, Monster::UNKNOWN };
