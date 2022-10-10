@@ -9095,7 +9095,7 @@ msgid "Sword Breaker"
 msgstr "Le briseur d'épée"
 
 msgid "The %{name} increases your defense by %{count} and attack by 1."
-msgstr "%{name} augmente votre attaque et votre défense de 1."
+msgstr "%{name} augmente votre défense de %{count} et votre attaque de 1."
 
 msgid ""
 "A former Captain of the Guard admires your quest and gives you the enchanted "
