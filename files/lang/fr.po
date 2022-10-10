@@ -2760,7 +2760,7 @@ msgid "Toggle instant battle mode."
 msgstr "Change les modes de combat instantané."
 
 msgid "Check and configure all the hot keys present in the game."
-msgstr "Verifier et configurer les raccourcirs clavier du jeu."
+msgstr "Verifier et configurer les raccourcis clavier du jeu."
 
 msgid "Toggle the type of interface you want to use."
 msgstr "Bascule le type d'interface que vous voulez utiliser."
