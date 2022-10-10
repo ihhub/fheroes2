@@ -195,7 +195,7 @@
     <ClCompile Include="src\engine\serialize.cpp" />
     <ClCompile Include="src\engine\smk_decoder.cpp" />
     <ClCompile Include="src\engine\system.cpp" />
-    <ClCompile Include="src\engine\system_dirs.cpp" />
+    <ClCompile Include="src\engine\system_dir.cpp" />
     <ClCompile Include="src\engine\thread.cpp" />
     <ClCompile Include="src\engine\timing.cpp" />
     <ClCompile Include="src\engine\tinyconfig.cpp" />
@@ -422,7 +422,7 @@
     <ClInclude Include="src\engine\serialize.h" />
     <ClInclude Include="src\engine\smk_decoder.h" />
     <ClInclude Include="src\engine\system.h" />
-    <ClInclude Include="src\engine\system_dirs.h" />
+    <ClInclude Include="src\engine\system_dir.h" />
     <ClInclude Include="src\engine\thread.h" />
     <ClInclude Include="src\engine\timing.h" />
     <ClInclude Include="src\engine\tinyconfig.h" />

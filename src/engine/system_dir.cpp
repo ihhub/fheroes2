@@ -33,11 +33,14 @@
 #include <sys/stat.h>
 #endif
 
+namespace
+{
 #if defined( _WIN32 )
-#define SEPARATOR '\\'
+constexpr char SEPARATOR = '\\';
 #else
-#define SEPARATOR '/'
+constexpr char SEPARATOR = '/';
 #endif
+}
 
 int System::MakeDirectory( const std::string & path )
 {
@@ -65,34 +68,28 @@ std::string System::ConcatePath( const std::string & str1, const std::string & s
 
 std::string System::GetDirname( const std::string & str )
 {
-    if ( !str.empty() ) {
-        size_t pos = str.rfind( SEPARATOR );
+    if ( str.empty() )
+        return str;
 
-        if ( std::string::npos == pos )
-            return std::string( "." );
-        else if ( pos == 0 )
-            return std::string( "./" );
-        else if ( pos == str.size() - 1 )
-            return GetDirname( str.substr( 0, str.size() - 1 ) );
-        else
-            return str.substr( 0, pos );
-    }
-
-    return str;
+    size_t pos = str.rfind( SEPARATOR );
+    if ( std::string::npos == pos )
+        return std::string( "." );
+    if ( pos == 0 )
+        return std::string( "./" );
+    if ( pos == str.size() - 1 )
+        return GetDirname( str.substr( 0, str.size() - 1 ) );
+    return str.substr( 0, pos );
 }
 
 std::string System::GetBasename( const std::string & str )
 {
-    if ( !str.empty() ) {
-        size_t pos = str.rfind( SEPARATOR );
+    if ( str.empty() )
+        return str;
 
-        if ( std::string::npos == pos || pos == 0 )
-            return str;
-        else if ( pos == str.size() - 1 )
-            return GetBasename( str.substr( 0, str.size() - 1 ) );
-        else
-            return str.substr( pos + 1 );
-    }
-
-    return str;
+    size_t pos = str.rfind( SEPARATOR );
+    if ( std::string::npos == pos || pos == 0 )
+        return str;
+    if ( pos == str.size() - 1 )
+        return GetBasename( str.substr( 0, str.size() - 1 ) );
+    return str.substr( pos + 1 );
 }

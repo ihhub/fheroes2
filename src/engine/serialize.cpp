@@ -26,7 +26,6 @@
 #include <cstring>
 #include <string>
 
-#include "logging.h"
 #include "serialize.h"
 
 namespace
@@ -487,8 +486,6 @@ StreamFile::~StreamFile()
 bool StreamFile::open( const std::string & fn, const std::string & mode )
 {
     _file = std::fopen( fn.c_str(), mode.c_str() );
-    if ( !_file )
-        ERROR_LOG( fn )
     return _file != nullptr;
 }
 

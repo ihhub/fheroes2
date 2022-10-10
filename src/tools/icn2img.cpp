@@ -30,7 +30,7 @@
 #include "image_palette.h"
 #include "image_tool.h"
 #include "serialize.h"
-#include "system.h"
+#include "system_dir.h"
 
 int main( int argc, char ** argv )
 {

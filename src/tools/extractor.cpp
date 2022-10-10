@@ -26,7 +26,7 @@
 
 #include "agg_file.h"
 #include "serialize.h"
-#include "system.h"
+#include "system_dir.h"
 
 int main( int argc, char ** argv )
 {
