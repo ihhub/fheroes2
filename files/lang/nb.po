@@ -593,7 +593,7 @@ msgid "The %{spell} does %{damage} damage to one undead creature."
 msgstr "%{spell} gjorde %{value} skadepoeng på én vandød skapning."
 
 msgid "The %{spell} does %{damage} damage to all undead creatures."
-msgstr "%{spell} gjode %{damage} skadepoeng på alle vandøde."
+msgstr "%{spell} gjorde %{damage} skadepoeng på alle vandøde."
 
 msgid "The %{spell} does %{damage} damage, %{count} creatures perish."
 msgstr "%{spell} gjorde %{value} skadepoeng, %{count} skapninger dør."
@@ -636,7 +636,7 @@ msgid "Good luck shines on the %{attacker}."
 msgstr "Troppen med %{attacker} fikk flaks."
 
 msgid "High morale enables the %{monster} to attack again."
-msgstr "God kampånd gjode at troppen med %{monster} fikk en ny tur."
+msgstr "God kampånd gjorde at troppen med %{monster} fikk en ny tur."
 
 msgid "Low morale causes the %{monster} to freeze in panic."
 msgstr "Dårlig kampånd gjorde at troppen med %{monster} stivnet av panikk."
