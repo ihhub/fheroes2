@@ -4062,7 +4062,7 @@ msgid ""
 "Do you want to transfer control from you to the AI? The effect will take "
 "place only on the next turn."
 msgstr ""
-"Voulez vous passer le contrôle du jeu à l'IA ? Cela prendra effet au "
+"Voulez-vous passer le contrôle du jeu à l'IA ? Cela prendra effet au "
 "prochain tour."
 
 msgid ""
