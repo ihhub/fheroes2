@@ -8606,7 +8606,7 @@ msgstr "%{name} protège vos troupes des sorts de dissipation."
 
 msgid ""
 "You meet an old Wizard friend of yours traveling in the opposite direction. "
-"He presents you with a gift:  A wand that prevents the use of the dispel "
+"He presents  you with a gift:  A wand that prevents the use of the dispel "
 "magic spell on your allies."
 msgstr ""
 "Vous rencontrez un vieux Sorcier ami qui voyage dans une direction opposée. "
