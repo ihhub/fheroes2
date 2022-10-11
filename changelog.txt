@@ -1,3 +1,48 @@
+version 0.9.20 (10 October 2022)
+- add Russian and French button translations
+- update the Norwegian translation
+- recalculate the hero's path when the hero was selected with the mouse
+- fix stopped music in events of quickly closing dialogs with internal music
+- add proper logic for artifact exchange between AI heroes
+- add Dutch translation
+- do not let the archers perform a double attack if they are out of ammo
+- add Hotkey support for restarting Campaign's Scenario
+- AI heroes now use spells from scrolls
+- fix neutral town unit growth
+- display detailed information about the composition of alliances in the scenario info window
+- add date to logging for the future bug fixing
+- add turkish translation
+- make sure that there is a place for the Ultimate Artifact in the artifact bag before trying to dig it out
+- do not ask player's name if the score is too low for High score board
+- add Romanian translation
+- hide console window for Windows OSes and add log file for this platform
+- add Romanian font and language option
+- update Polish translation
+- add Turkish language option and CP1254 font
+- add proper icons for Petrification spell
+- speed up Adventure Map rendering
+- take into consideration a case with full artifact bag while checking AI hero's path
+- generate button fonts for different code pages
+- apply usual rules for unit growth in neutral towns/castles with custom troops
+- decrease monster growth bonus for AI
+- fix incorrect usage of Dimension Door by AI heroes
+- make logging for monster movement in battle more user-friendly
+- add UI improvements of the Settings dialog
+- fix logic of processing cells containing units available for possible AI unit attack
+- fix incorrect object evaluation for AI heroes on boats
+- add a feature to give human player control to AI (debug build only)
+- make creature names lowercased for certain dialogs
+- generate new Gift button
+- generate full button English alphabet and new Battle Only button
+- fix switching of terrain music in case of hero loss
+- update Bulgarian translation
+- add Handicap feature for single and multiplayer games
+- fix a case when a hidden scrollbar during battle is visible for one frame
+- fix sound volume for objects while using external music type
+- include rating calculation for Campaign's high score
+- fix incorrectly rendered monochrome cursor for campaign selection window
+- update French translation
+
 version 0.9.19 (11 September 2022)
 - add popup dialogs for Well's buttons
 - generate MIN button based on newly added font
