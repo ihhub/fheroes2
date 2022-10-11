@@ -129,7 +129,7 @@ namespace
         Dialog::Message( _( "Victory Condition" ), msg, Font::BIG );
     }
 
-    fheroes2::Image& GetNonStandardSizeIcon()
+    fheroes2::Image GetNonStandardSizeIcon()
     {
         fheroes2::Image icon( 17, 17 );
         icon.reset();
@@ -163,9 +163,9 @@ namespace
 
 }
 
-void ScenarioListBox::RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current )
+void ScenarioListBox::RedrawItem( const Maps::FileInfo & info, int32_t , int32_t dsty, bool current )
 {
-    dstx += 0; // used to suppress warning about unused dstx parameter
+    //dstx += 0; // used to suppress warning about unused dstx parameter
 
     fheroes2::Display & display = fheroes2::Display::instance();
     dsty = dsty + _offsetY;
@@ -218,15 +218,16 @@ void ScenarioListBox::_renderSelectedMapInfo( fheroes2::Display & display, const
     box.Blit( _selectedCoords.descriptionCoordX, dst.y + 321 );
 }
 
-const fheroes2::Sprite & ScenarioListBox::_getPlayersCountIcon( uint8_t colors )
+const fheroes2::Sprite ScenarioListBox::_getPlayersCountIcon( uint8_t colors )
 {
     const int iconIndex = 19 + Color::Count( colors );
     return fheroes2::AGG::GetICN( ICN::REQUESTS, iconIndex );
 }
 
-const fheroes2::Image & ScenarioListBox::_getMapSizeIcon( uint16_t size )
+const fheroes2::Image ScenarioListBox::_getMapSizeIcon( uint16_t size )
 {
     short mapIconIndex;
+    
 
     switch ( size ) {
     case Maps::SMALL:
@@ -248,7 +249,7 @@ const fheroes2::Image & ScenarioListBox::_getMapSizeIcon( uint16_t size )
     return fheroes2::AGG::GetICN( ICN::REQUESTS, mapIconIndex );
 }
 
-const fheroes2::Sprite & ScenarioListBox::_getMapTypeIcon( GameVersion version )
+const fheroes2::Sprite ScenarioListBox::_getMapTypeIcon( GameVersion version )
 {
     return fheroes2::AGG::GetICN( ICN::MAP_TYPE_ICON, version == GameVersion::PRICE_OF_LOYALTY ? 1 : 0 );
 }
@@ -262,15 +263,15 @@ void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected
     mapName.draw( xCoordinate, yCoordinate, display );
 }
 
-const fheroes2::Sprite & ScenarioListBox::_getWinConditionsIcon( uint8_t condition )
+const fheroes2::Sprite ScenarioListBox::_getWinConditionsIcon( uint8_t condition )
 {
-    short iconIndex = 30 + condition;
+    int iconIndex = 30 + condition;
     return fheroes2::AGG::GetICN( ICN::REQUESTS, iconIndex );
 }
 
-const fheroes2::Sprite & ScenarioListBox::_getLossConditionsIcon( uint8_t condition )
+const fheroes2::Sprite ScenarioListBox::_getLossConditionsIcon( uint8_t condition )
 {
-    short iconIndex = 36 + condition;
+    int iconIndex = 36 + condition;
     return fheroes2::AGG::GetICN( ICN::REQUESTS, iconIndex );
 }
 
