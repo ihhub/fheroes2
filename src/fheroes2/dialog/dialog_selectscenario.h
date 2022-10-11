@@ -39,16 +39,16 @@ public:
     int32_t lossConditionsCoordX;
     ScenarioListItemCoordinates() = default;
 
-    ScenarioListItemCoordinates( int32_t playersCountCoordX, int32_t mapSizeCoordX, int32_t mapTypeCoordX, int32_t mapNameWidth, int32_t mapNameCoordX,
-                                 int32_t winConditionsCoordX, int32_t lossConditionsCoordX )
+    ScenarioListItemCoordinates( int32_t playersCountCoordX_, int32_t mapSizeCoordX_, int32_t mapTypeCoordX_, int32_t mapNameWidth_, int32_t mapNameCoordX_,
+                                 int32_t winConditionsCoordX_, int32_t lossConditionsCoordX_ )
     {
-        this->playersCountCoordX = playersCountCoordX;
-        this->mapSizeCoordX = mapSizeCoordX;
-        this->mapTypeCoordX = mapTypeCoordX;
-        this->mapNameWidth = mapNameWidth;
-        this->mapNameCoordX = mapNameCoordX;
-        this->winConditionsCoordX = winConditionsCoordX;
-        this->lossConditionsCoordX = lossConditionsCoordX;
+        this->playersCountCoordX = playersCountCoordX_;
+        this->mapSizeCoordX = mapSizeCoordX_;
+        this->mapTypeCoordX = mapTypeCoordX_;
+        this->mapNameWidth = mapNameWidth_;
+        this->mapNameCoordX = mapNameCoordX_;
+        this->winConditionsCoordX = winConditionsCoordX_;
+        this->lossConditionsCoordX = lossConditionsCoordX_;
     }
 };
 
@@ -68,19 +68,20 @@ public:
 
     SelectedScenarioCoordinates() = default;
 
-    SelectedScenarioCoordinates( int32_t playersCountCoordX, int32_t mapSizeCoordX, int32_t mapTypeCoordX, int32_t mapNameWidth, int32_t mapNameCoordX,
-                                 int32_t winConditionsCoordX, int32_t lossConditionsCoordX, int32_t difficultyCoordX, int32_t descriptionCoordX, int32_t difficultyWidth )
+    SelectedScenarioCoordinates( int32_t playersCountCoordX_, int32_t mapSizeCoordX_, int32_t mapTypeCoordX_, int32_t mapNameWidth_, int32_t mapNameCoordX_,
+                                 int32_t winConditionsCoordX_, int32_t lossConditionsCoordX_, int32_t difficultyCoordX_, int32_t descriptionCoordX_,
+                                 int32_t difficultyWidth_ )
     {
-        this->playersCountCoordX = playersCountCoordX;
-        this->mapSizeCoordX = mapSizeCoordX;
-        this->mapTypeCoordX = mapTypeCoordX;
-        this->mapNameWidth = mapNameWidth;
-        this->mapNameCoordX = mapNameCoordX;
-        this->winConditionsCoordX = winConditionsCoordX;
-        this->lossConditionsCoordX = lossConditionsCoordX;
-        this->difficultyCoordX = difficultyCoordX;
-        this->difficultyWidth = difficultyWidth;
-        this->descriptionCoordX = descriptionCoordX;
+        this->playersCountCoordX = playersCountCoordX_;
+        this->mapSizeCoordX = mapSizeCoordX_;
+        this->mapTypeCoordX = mapTypeCoordX_;
+        this->mapNameWidth = mapNameWidth_;
+        this->mapNameCoordX = mapNameCoordX_;
+        this->winConditionsCoordX = winConditionsCoordX_;
+        this->lossConditionsCoordX = lossConditionsCoordX_;
+        this->difficultyCoordX = difficultyCoordX_;
+        this->difficultyWidth = difficultyWidth_;
+        this->descriptionCoordX = descriptionCoordX_;
     }
 };
 

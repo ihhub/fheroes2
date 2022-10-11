@@ -341,7 +341,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
     const fheroes2::Rect curMapSize( rt.x + 64, rt.y + 264, 18, 18 );
     const fheroes2::Rect curMapType( rt.x + 83, rt.y + 264, 18, 18 );
     const fheroes2::Rect curMapName( rt.x + 107, rt.y + 264, 160, 18 );
-    const fheroes2::Rect curVictoryCond( rt.x + 275, rt.y + 264, 18, 18 );
+    const fheroes2::Rect curVictoryCond( rt.x + 276, rt.y + 264, 18, 18 );
     const fheroes2::Rect curLossCond( rt.x + 294, rt.y + 264, 18, 18 );
     const fheroes2::Rect curDifficulty( rt.x + 220, rt.y + 292, 114, 20 );
     const fheroes2::Rect curDescription( rt.x + 42, rt.y + 316, 292, 90 );
