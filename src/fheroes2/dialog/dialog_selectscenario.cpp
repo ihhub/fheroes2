@@ -139,7 +139,7 @@ namespace
         return icon;
     }
 
-    static fheroes2::Image undefinedMapSizeIcon;
+    fheroes2::Image undefinedMapSizeIcon;
 
     size_t GetSelectedMapId( const MapsFileInfoList & lists )
     {
@@ -285,7 +285,6 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
         return nullptr;
 
     undefinedMapSizeIcon = GetNonStandardSizeIcon();
-
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
 
