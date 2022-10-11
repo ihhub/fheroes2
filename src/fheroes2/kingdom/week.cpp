@@ -122,6 +122,9 @@ namespace
 const char * Week::GetName() const
 {
     switch ( _week ) {
+    case WeekName::UNNAMED:
+        break;
+
     case WeekName::SQUIRREL:
         return _( "week|Squirrel" );
     case WeekName::RABBIT:
@@ -184,7 +187,7 @@ const char * Week::GetName() const
         assert( 0 );
     }
 
-    return "Unnamed";
+    return _( "week|Unnamed" );
 }
 
 Week Week::RandomWeek( const bool isNewMonth, const uint32_t weekSeed )
