@@ -98,8 +98,8 @@ public:
         , _selectedCoords( selectedCoords )
     {}
 
-    void RedrawItem( const Maps::FileInfo & info, int32_t, int32_t dsty, bool current ) override;
-    void RedrawBackground( const fheroes2::Point & dst) override;    
+    void RedrawItem( const Maps::FileInfo & info, int32_t /*dstx*/, int32_t dsty, bool current ) override;
+    void RedrawBackground( const fheroes2::Point & dst ) override;
 
     void ActionCurrentUp() override
     {
@@ -132,12 +132,12 @@ private:
 
     void _renderMapListItem( const Maps::FileInfo & info, fheroes2::Display & display, int32_t & dsty, bool current );
     void _renderSelectedMapInfo( fheroes2::Display & display, const fheroes2::Point & dst );
-    void _renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display );
-    const fheroes2::Sprite _getPlayersCountIcon( uint8_t playersCount );
-    const fheroes2::Image _getMapSizeIcon( uint16_t size );
-    const fheroes2::Sprite _getMapTypeIcon( GameVersion version );
-    const fheroes2::Sprite _getWinConditionsIcon( uint8_t condition );
-    const fheroes2::Sprite _getLossConditionsIcon( uint8_t condition );
+    void _renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display ) const;
+    const fheroes2::Sprite & _getPlayersCountIcon( uint8_t playersCount );
+    const fheroes2::Image & _getMapSizeIcon( uint16_t size );
+    const fheroes2::Sprite & _getMapTypeIcon( GameVersion version );
+    const fheroes2::Sprite & _getWinConditionsIcon( uint8_t condition );
+    const fheroes2::Sprite & _getLossConditionsIcon( uint8_t condition );
 };
 
 namespace Dialog
