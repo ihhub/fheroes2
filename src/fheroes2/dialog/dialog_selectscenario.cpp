@@ -139,6 +139,8 @@ namespace
         return icon;
     }
 
+    static fheroes2::Image undefinedMapSizeIcon;
+
     size_t GetSelectedMapId( const MapsFileInfoList & lists )
     {
         const Settings & conf = Settings::Get();
@@ -163,7 +165,7 @@ namespace
 
 }
 
-void ScenarioListBox::RedrawItem( const Maps::FileInfo & info, int32_t, int32_t dsty, bool current )
+void ScenarioListBox::RedrawItem( const Maps::FileInfo & info, int32_t /*dstx*/, int32_t dsty, bool current )
 {
     fheroes2::Display & display = fheroes2::Display::instance();
     dsty = dsty + _offsetY;
@@ -266,8 +268,7 @@ const fheroes2::Image & ScenarioListBox::_getMapSizeIcon( uint16_t size )
         mapIconIndex = 29;
         break;
     default:
-        fheroes2::Image icon = GetNonStandardSizeIcon();
-        return icon;
+        return undefinedMapSizeIcon;
     }
 
     return fheroes2::AGG::GetICN( ICN::REQUESTS, mapIconIndex );
@@ -282,6 +283,8 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 {
     if ( all.empty() )
         return nullptr;
+
+    undefinedMapSizeIcon = GetNonStandardSizeIcon();
 
     fheroes2::Display & display = fheroes2::Display::instance();
     LocalEvent & le = LocalEvent::Get();
