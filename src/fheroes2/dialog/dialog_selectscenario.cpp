@@ -129,7 +129,7 @@ namespace
         Dialog::Message( _( "Victory Condition" ), msg, Font::BIG );
     }
 
-    fheroes2::Image GetNonStandardSizeIcon()
+    fheroes2::Image& GetNonStandardSizeIcon()
     {
         fheroes2::Image icon( 17, 17 );
         icon.reset();
@@ -165,7 +165,7 @@ namespace
 
 void ScenarioListBox::RedrawItem( const Maps::FileInfo & info, int32_t dstx, int32_t dsty, bool current )
 {
-    dstx; // used to suppress warning about unused dstx parameter
+    dstx += 0; // used to suppress warning about unused dstx parameter
 
     fheroes2::Display & display = fheroes2::Display::instance();
     dsty = dsty + _offsetY;
@@ -173,7 +173,7 @@ void ScenarioListBox::RedrawItem( const Maps::FileInfo & info, int32_t dstx, int
     _renderMapListItem( info, display, dsty, current );
 }
 
-void ScenarioListBox::_renderMapListItem( const Maps::FileInfo & info, fheroes2::Display & display, int32_t & dsty, bool current ) const
+void ScenarioListBox::_renderMapListItem( const Maps::FileInfo & info, fheroes2::Display & display, int32_t & dsty, bool current )
 {
     fheroes2::Blit( _getPlayersCountIcon( info.kingdom_colors ), display, _listItemCoords.playersCountCoordX, dsty );
     fheroes2::Blit( _getMapSizeIcon( info.size_w ), display, _listItemCoords.mapSizeCoordX, dsty );
@@ -218,13 +218,13 @@ void ScenarioListBox::_renderSelectedMapInfo( fheroes2::Display & display, const
     box.Blit( _selectedCoords.descriptionCoordX, dst.y + 321 );
 }
 
-const fheroes2::Sprite & ScenarioListBox::_getPlayersCountIcon( uint8_t colors ) const
+const fheroes2::Sprite & ScenarioListBox::_getPlayersCountIcon( uint8_t colors )
 {
     const int iconIndex = 19 + Color::Count( colors );
     return fheroes2::AGG::GetICN( ICN::REQUESTS, iconIndex );
 }
 
-const fheroes2::Image & ScenarioListBox::_getMapSizeIcon( uint16_t size ) const
+const fheroes2::Image & ScenarioListBox::_getMapSizeIcon( uint16_t size )
 {
     short mapIconIndex;
 
@@ -248,12 +248,12 @@ const fheroes2::Image & ScenarioListBox::_getMapSizeIcon( uint16_t size ) const
     return fheroes2::AGG::GetICN( ICN::REQUESTS, mapIconIndex );
 }
 
-const fheroes2::Sprite & ScenarioListBox::_getMapTypeIcon( GameVersion version ) const
+const fheroes2::Sprite & ScenarioListBox::_getMapTypeIcon( GameVersion version )
 {
     return fheroes2::AGG::GetICN( ICN::MAP_TYPE_ICON, version == GameVersion::PRICE_OF_LOYALTY ? 1 : 0 );
 }
 
-void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display ) const
+void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display )
 {
     fheroes2::Text mapName( info.name, { fheroes2::FontSize::NORMAL, ( selected ? fheroes2::FontColor::YELLOW : fheroes2::FontColor::WHITE ) } );
     const int32_t xCoordinate = GetCenteredTextXCoordinate( _listItemCoords.mapNameCoordX, _listItemCoords.mapNameWidth, mapName.width() );
@@ -262,13 +262,13 @@ void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected
     mapName.draw( xCoordinate, yCoordinate, display );
 }
 
-const fheroes2::Sprite & ScenarioListBox::_getWinConditionsIcon( uint8_t condition ) const
+const fheroes2::Sprite & ScenarioListBox::_getWinConditionsIcon( uint8_t condition )
 {
     short iconIndex = 30 + condition;
     return fheroes2::AGG::GetICN( ICN::REQUESTS, iconIndex );
 }
 
-const fheroes2::Sprite & ScenarioListBox::_getLossConditionsIcon( uint8_t condition ) const
+const fheroes2::Sprite & ScenarioListBox::_getLossConditionsIcon( uint8_t condition )
 {
     short iconIndex = 36 + condition;
     return fheroes2::AGG::GetICN( ICN::REQUESTS, iconIndex );
