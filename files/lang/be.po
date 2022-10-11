@@ -34,19 +34,19 @@ msgid "DIFFICULTY"
 msgstr ""
 
 msgid "Warrior"
-msgstr ""
+msgstr "Ваяр"
 
 msgid "Builder"
-msgstr ""
+msgstr "Будаўнік"
 
 msgid "Explorer"
-msgstr ""
+msgstr "Даследчык"
 
 msgid "None"
 msgstr ""
 
 msgid "Warning"
-msgstr ""
+msgstr "Увага"
 
 msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
@@ -273,13 +273,13 @@ msgid ""
 msgstr ""
 
 msgid "The enemy has surrendered!"
-msgstr "Праціўнік здаўся!"
+msgstr "Вораг здаўся!"
 
 msgid "The enemy has fled!"
-msgstr "Праціўнік уцёк!"
+msgstr "Вораг уцёк!"
 
 msgid "A glorious victory!"
-msgstr "Выдатная перамога!"
+msgstr "Слаўная перамога!"
 
 msgid "For valor in combat, %{name} receives %{exp} experience."
 msgstr "За мужнасць у баі %{name} атрымлівае %{exp} вопыту."
@@ -288,22 +288,22 @@ msgid "The cowardly %{name} flees from battle."
 msgstr "%{name} баязліва ўцякае з поля бітвы."
 
 msgid "%{name} surrenders to the enemy, and departs in shame."
-msgstr "%{name} здаўся праціўніку і пакінуў з ганьбай."
+msgstr "%{name} здаўся ворагу і сышоў з ганьбай."
 
 msgid "Your force suffer a bitter defeat, and %{name} abandons your cause."
-msgstr "Вашы войскі былі знішчаны і %{name} пакідае вас."
+msgstr "Вашыя войскі былі знішчаны, а %{name} пакідае вас."
 
 msgid "Your force suffer a bitter defeat."
-msgstr "Вашы войскі былі знішчаны."
+msgstr "Вашыя войскі былі знішчаны."
 
 msgid "Battlefield Casualties"
-msgstr ""
+msgstr "Страты на полі бою"
 
 msgid "Attacker"
-msgstr ""
+msgstr "Нападнік"
 
 msgid "Defender"
-msgstr ""
+msgstr "Абаронца"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
 msgstr ""
@@ -3889,7 +3889,7 @@ msgid "Norwegian"
 msgstr ""
 
 msgid "Belarusian"
-msgstr "Беларускі"
+msgstr "Беларуская"
 
 msgid "Bulgarian"
 msgstr ""
