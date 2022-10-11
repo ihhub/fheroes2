@@ -162,7 +162,6 @@ namespace
         const int32_t centerTransform = textBoxWidth > textWidth ? ( textBoxWidth - textWidth ) / 2 : 0;
         return startCoordX + centerTransform;
     }
-
 }
 
 void ScenarioListBox::RedrawItem( const Maps::FileInfo & info, int32_t /*dstx*/, int32_t dsty, bool current )
