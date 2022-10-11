@@ -7240,7 +7240,7 @@ msgid "Immune to Cold spells"
 msgstr "Имунитет към ледени магии"
 
 msgid "Immune to "
-msgstr "Имунитет към"
+msgstr "Имунитет към "
 
 msgid "% immunity to %{spell} spell"
 msgstr "% имунитет към %{spell} магия"
@@ -7324,13 +7324,13 @@ msgid "% damage from %{spell} spell"
 msgstr "% щети от %{spell} заклинание"
 
 msgid "% immunity to "
-msgstr "% имунитет към"
+msgstr "% имунитет към "
 
 msgid "Lightning"
 msgstr "Светкавица"
 
 msgid "% damage from "
-msgstr "% щети от"
+msgstr "% щети от "
 
 msgid "The three Anduran artifacts magically combine into one."
 msgstr "Трите артефакта от Андуран магически се комбинират в едно."
@@ -9078,6 +9078,3 @@ msgstr ""
 "Проверете най-новата версия на играта на\n"
 "https://github.com/ihhub/\n"
 "fheroes2/releases"
-
-#~ msgid "Moved %{monster}"
-#~ msgstr "Преместено %{monster}"
