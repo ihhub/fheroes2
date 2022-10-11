@@ -3917,7 +3917,7 @@ msgid "Capture the town '%{name}'."
 msgstr "Capturer le village '%{name}'."
 
 msgid "Defeat the hero '%{name}'."
-msgstr "Défaire le héros '%{name}'."
+msgstr "Vaincre le héros '%{name}'."
 
 msgid "Find the ultimate artifact."
 msgstr "Trouver l'ultime artéfact."
@@ -3961,7 +3961,7 @@ msgid "Game Difficulty:"
 msgstr "Difficulté du jeu :"
 
 msgid "Opponents:"
-msgstr "Opposants :"
+msgstr "Adversaires :"
 
 msgid "Class:"
 msgstr "Alignement :"
@@ -8497,7 +8497,7 @@ msgid ""
 msgstr ""
 "Au cours de vos pérégrinations, vous croisez un hermite qui vit dans une petite cabane bien rangée. "
 "Impressionné par votre mission, il sort quelque temps de sa méditation "
-"pour bénir pour vous offrir un charme contre les malédictions.  "
+"pour vous bénir et pour vous offrir un charme contre les malédictions.  "
 
 msgid "Pendant of Free Will"
 msgstr "Le pendentif du libre arbitre"
