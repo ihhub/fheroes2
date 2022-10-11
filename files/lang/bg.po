@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-07 00:54+0000\n"
-"PO-Revision-Date: 2022-10-10 14:56+0100\n"
+"POT-Creation-Date: 2022-10-08 02:28+0000\n"
+"PO-Revision-Date: 2022-09-24 12:02+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -765,14 +765,23 @@ msgstr "Чичо Иван"
 msgid "Annexation"
 msgstr "Анексирам"
 
-msgid "Carator Mines"
-msgstr "Мините на Каратор"
-
 msgid "Force of Arms"
 msgstr "Насилствено"
 
 msgid "Save the Dwarves"
 msgstr "Спаси джуджетата"
+
+msgid "Carator Mines"
+msgstr "Мините на Каратор"
+
+msgid "Turning Point"
+msgstr "Повратна точка"
+
+msgid "scenarioName|Defender"
+msgstr ""
+
+msgid "Corlagon's Defense"
+msgstr "Защитата на Корлагон"
 
 msgid "The Crown"
 msgstr "Короната"
@@ -780,14 +789,8 @@ msgstr "Короната"
 msgid "The Gauntlet"
 msgstr "Под кръстосан огън"
 
-msgid "Turning Point"
-msgstr "Повратна точка"
-
 msgid "Betrayal"
 msgstr "Предателство"
-
-msgid "Corlagon's Defense"
-msgstr "Защитата на Корлагон"
 
 msgid "Final Justice"
 msgstr "Последна справедливост"
