@@ -38,7 +38,6 @@ public:
         : Interface::ListBox<Maps::FileInfo>( pt )
         , selectOk( false )
         , _x( pt.x )
-        , _y( pt.y )
     {}
 
     void RedrawItem( const Maps::FileInfo & info, int32_t /*dstx*/, int32_t dsty, bool current ) override;
@@ -70,7 +69,6 @@ public:
 
 private:
     const int32_t _x;
-    const int32_t _y;
 
     void _renderScenarioListItem( const Maps::FileInfo & info, fheroes2::Display & display, int32_t & dsty, bool current );
     void _renderSelectedScenarioInfo( fheroes2::Display & display, const fheroes2::Point & dst );
