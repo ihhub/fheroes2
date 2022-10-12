@@ -240,7 +240,7 @@ void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, 
     text.Blit( GetCenteredTextXCoordinate( dst.x + SELECTED_SCENARIO_DIFFICULTY_OFFSET_X, SELECTED_SCENARIO_DIFFICULTY_WIDTH, text.w() ), dst.y + difficultyOffsetY );
 
     TextBox box( info.description, Font::BIG, SELECTED_SCENARIO_DESCRIPTION_WIDTH - 2 );
-    box.Blit( dst.x + SELECTED_SCENARIO_DESCRIPTION_OFFSET_X, dst.y + SELECTED_SCENARIO_DESCRIPTION_OFFSET_Y + 5);
+    box.Blit( dst.x + SELECTED_SCENARIO_DESCRIPTION_OFFSET_X, dst.y + SELECTED_SCENARIO_DESCRIPTION_OFFSET_Y + 5 );
 }
 
 void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display ) const
