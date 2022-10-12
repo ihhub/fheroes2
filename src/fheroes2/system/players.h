@@ -105,7 +105,7 @@ struct Control
 class Player : public BitModes, public Control
 {
 public:
-    enum HandicapStatus : uint8_t
+    enum class HandicapStatus : uint8_t
     {
         NONE, // No strings attached.
         MILD, // 15% fewer resources per turn
@@ -173,12 +173,12 @@ public:
         return focus;
     }
 
-    uint8_t getHandicapStatus() const
+    HandicapStatus getHandicapStatus() const
     {
         return _handicapStatus;
     }
 
-    void setHandicapStatus( const uint8_t status );
+    void setHandicapStatus( const HandicapStatus status );
 
     // This mode sets control from a human player to AI so the game will be continued by AI.
     void setAIAutoControlMode( const bool enable );
@@ -200,7 +200,7 @@ protected:
     uint32_t id;
     Focus focus;
     std::shared_ptr<AI::Base> _ai;
-    uint8_t _handicapStatus;
+    HandicapStatus _handicapStatus;
 
     // This member should not be saved anywhere.
     bool _isAIAutoControlMode;

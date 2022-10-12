@@ -3429,6 +3429,10 @@ namespace fheroes2
 
         // NOTE: As soon as code structure is agreed on functions for all Code Pages will be added.
         switch ( language ) {
+        case SupportedLanguage::English:
+            generateBaseButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED], icnVsSprite[ICN::BUTTON_GOOD_FONT_PRESSED], icnVsSprite[ICN::BUTTON_EVIL_FONT_RELEASED],
+                                    icnVsSprite[ICN::BUTTON_EVIL_FONT_PRESSED] );
+            return;
         case SupportedLanguage::Polish:
             generateCP1250GoodButtonFont( icnVsSprite[ICN::BUTTON_GOOD_FONT_RELEASED] );
             break;

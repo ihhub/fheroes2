@@ -697,18 +697,6 @@ namespace fheroes2
                     Blit( GetICN( ICN::BTNEMAIN, 0 + i ), 47 - i, 23 + i, out, offsetX + 38 - i, offsetY + i, 1, 1 );
                 }
                 return true;
-            case ICN::NON_UNIFORM_GOOD_MIN_BUTTON:
-                _icnVsSprite[id].resize( 2 );
-                for ( int32_t i = 0; i < static_cast<int32_t>( _icnVsSprite[id].size() ); ++i ) {
-                    Sprite & out = _icnVsSprite[id][i];
-                    out = GetICN( ICN::RECRUIT, 4 + i );
-                    // clean the button
-                    Blit( GetICN( ICN::SYSTEM, 11 + i ), 10, 6 + i, out, 30 - 2 * i, 5 + i, 31, 15 );
-                    // add 'IN'
-                    Copy( GetICN( ICN::APANEL, 4 + i ), 23 - i, 22 + i, out, 33 - i, 6 + i, 8, 14 ); // letter 'I'
-                    Copy( GetICN( ICN::APANEL, 4 + i ), 31 - i, 22 + i, out, 44 - i, 6 + i, 17, 14 ); // letter 'N'
-                }
-                return true;
             default:
                 break;
             }
@@ -2645,8 +2633,8 @@ namespace fheroes2
                 // Restore original letters when changing language to avoid changes to them being carried over.
                 alphabetPreserver.restore();
                 generateAlphabet( language, _icnVsSprite );
-                generateButtonAlphabet( language, _icnVsSprite );
             }
+            generateButtonAlphabet( language, _icnVsSprite );
         }
     }
 }
