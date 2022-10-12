@@ -129,16 +129,16 @@ public:
 private:
     const ScenarioListItemCoordinates & _listItemCoords;
     const SelectedScenarioCoordinates & _selectedCoords;
-    const short _offsetY = 4;
+    const uint8_t _offsetY = 4;
 
     void _renderMapListItem( const Maps::FileInfo & info, fheroes2::Display & display, int32_t & dsty, bool current );
     void _renderSelectedMapInfo( fheroes2::Display & display, const fheroes2::Point & dst );
     void _renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display ) const;
-    const fheroes2::Sprite & _getPlayersCountIcon( uint8_t playersCount );
-    const fheroes2::Image & _getMapSizeIcon( uint16_t size );
-    const fheroes2::Sprite & _getMapTypeIcon( GameVersion version );
-    const fheroes2::Sprite & _getWinConditionsIcon( uint8_t condition );
-    const fheroes2::Sprite & _getLossConditionsIcon( uint8_t condition );
+    static const fheroes2::Sprite & _getPlayersCountIcon( const uint8_t playersCount );
+    static const fheroes2::Image & _getMapSizeIcon( const uint16_t size );
+    static const fheroes2::Sprite & _getMapTypeIcon( const GameVersion version );
+    static const fheroes2::Sprite & _getWinConditionsIcon( const uint8_t condition );
+    static const fheroes2::Sprite & _getLossConditionsIcon( const uint8_t condition );
 };
 
 namespace Dialog

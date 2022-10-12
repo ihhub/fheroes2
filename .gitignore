@@ -64,6 +64,7 @@
 *.hs
 *.smk
 *.ogg
+DATA/NETLODR.DAT
 
 # build directory
 build
@@ -83,4 +84,3 @@ VisualStudio/packages
 
 # Mac magic folders
 .DS_Store
-/DATA/NETLODR.DAT
