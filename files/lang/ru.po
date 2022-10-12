@@ -1463,7 +1463,7 @@ msgid "campaignBonus|Advanced Ballistics"
 msgstr "Прод. баллистика"
 
 msgid "campaignBonus|Expert Ballistics"
-msgstr "Эксп. стрельба"
+msgstr "Эксп. баллистика"
 
 msgid "campaignBonus|Basic Diplomacy"
 msgstr "Баз. дипломатия"
