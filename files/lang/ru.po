@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-08 02:28+0000\n"
+"POT-Creation-Date: 2022-10-12 15:21+0000\n"
 "PO-Revision-Date: 2022-10-10 15:27+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: <ru@li.org> <>\n"
@@ -6649,8 +6649,52 @@ msgstr "Молниеносная"
 msgid "speed|Instant"
 msgstr "Мгновенная"
 
-msgid "week|PLAGUE"
-msgstr "ЧУМЫ"
+msgid "week|Squirrel"
+msgstr "Белки"
+
+msgid "week|Rabbit"
+msgstr "Кролика"
+
+msgid "week|Gopher"
+msgstr "Суслика"
+
+msgid "week|Badger"
+msgstr "Барсука"
+
+#, fuzzy
+msgid "week|Rat"
+msgstr "Кролика"
+
+msgid "week|Eagle"
+msgstr "Орла"
+
+msgid "week|Weasel"
+msgstr "Хорька"
+
+msgid "week|Raven"
+msgstr "Ворона"
+
+msgid "week|Mongoose"
+msgstr "Мангуста"
+
+#, fuzzy
+msgid "week|Dog"
+msgstr "Орла"
+
+msgid "week|Aardvark"
+msgstr "Муравьеда"
+
+msgid "week|Lizard"
+msgstr "Ящера"
+
+msgid "week|Tortoise"
+msgstr "Черепахи"
+
+msgid "week|Hedgehog"
+msgstr "Ёжика"
+
+msgid "week|Condor"
+msgstr "Кондора"
 
 msgid "week|Ant"
 msgstr "Муравья"
@@ -6682,44 +6726,12 @@ msgstr "Шершня"
 msgid "week|Beetle"
 msgstr "Жука"
 
-msgid "week|Squirrel"
-msgstr "Белки"
+msgid "week|PLAGUE"
+msgstr "ЧУМЫ"
 
-msgid "week|Rabbit"
-msgstr "Кролика"
-
-msgid "week|Gopher"
-msgstr "Суслика"
-
-msgid "week|Badger"
-msgstr "Барсука"
-
-msgid "week|Eagle"
+#, fuzzy
+msgid "week|Unnamed"
 msgstr "Орла"
-
-msgid "week|Weasel"
-msgstr "Хорька"
-
-msgid "week|Raven"
-msgstr "Ворона"
-
-msgid "week|Mongoose"
-msgstr "Мангуста"
-
-msgid "week|Aardvark"
-msgstr "Муравьеда"
-
-msgid "week|Lizard"
-msgstr "Ящера"
-
-msgid "week|Tortoise"
-msgstr "Черепахи"
-
-msgid "week|Hedgehog"
-msgstr "Ёжика"
-
-msgid "week|Condor"
-msgstr "Кондора"
 
 msgid "Desert"
 msgstr "Пустыня"
