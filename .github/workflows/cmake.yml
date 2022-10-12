@@ -36,7 +36,7 @@ jobs:
     runs-on: ${{ matrix.config.os }}
     timeout-minutes: 30
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Install dependencies (Linux)
       if: ${{ matrix.config.os == 'ubuntu-latest' }}
       run: |
@@ -62,7 +62,7 @@ jobs:
       run:
         shell: bash
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Prepare vcpkg cache
       uses: actions/cache@v3
       with:
