@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-08 02:28+0000\n"
+"POT-Creation-Date: 2022-10-12 15:21+0000\n"
 "PO-Revision-Date: 2022-10-10 15:08+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
@@ -6751,8 +6751,52 @@ msgstr "Foudroyante"
 msgid "speed|Instant"
 msgstr "Téléportée"
 
-msgid "week|PLAGUE"
-msgstr "de la PESTE"
+msgid "week|Squirrel"
+msgstr "de l'Écureuil"
+
+msgid "week|Rabbit"
+msgstr "du Lapin"
+
+msgid "week|Gopher"
+msgstr "de la Gourde"
+
+msgid "week|Badger"
+msgstr "du Blaireau"
+
+#, fuzzy
+msgid "week|Rat"
+msgstr "du Lapin"
+
+msgid "week|Eagle"
+msgstr "de l'Aigle"
+
+msgid "week|Weasel"
+msgstr "de la Belette"
+
+msgid "week|Raven"
+msgstr "du Corbeau"
+
+msgid "week|Mongoose"
+msgstr "de la Mangouste"
+
+#, fuzzy
+msgid "week|Dog"
+msgstr "de l'Aigle"
+
+msgid "week|Aardvark"
+msgstr "de l'Oryctérope du Cap"
+
+msgid "week|Lizard"
+msgstr "du Lézard"
+
+msgid "week|Tortoise"
+msgstr "de la Tortue"
+
+msgid "week|Hedgehog"
+msgstr "du Hérisson"
+
+msgid "week|Condor"
+msgstr "du Condor"
 
 msgid "week|Ant"
 msgstr "de la Fourmi"
@@ -6784,44 +6828,12 @@ msgstr "de la Guêpe"
 msgid "week|Beetle"
 msgstr "de la Coccinelle"
 
-msgid "week|Squirrel"
-msgstr "de l'Écureuil"
+msgid "week|PLAGUE"
+msgstr "de la PESTE"
 
-msgid "week|Rabbit"
-msgstr "du Lapin"
-
-msgid "week|Gopher"
-msgstr "de la Gourde"
-
-msgid "week|Badger"
-msgstr "du Blaireau"
-
-msgid "week|Eagle"
+#, fuzzy
+msgid "week|Unnamed"
 msgstr "de l'Aigle"
-
-msgid "week|Weasel"
-msgstr "de la Belette"
-
-msgid "week|Raven"
-msgstr "du Corbeau"
-
-msgid "week|Mongoose"
-msgstr "de la Mangouste"
-
-msgid "week|Aardvark"
-msgstr "de l'Oryctérope du Cap"
-
-msgid "week|Lizard"
-msgstr "du Lézard"
-
-msgid "week|Tortoise"
-msgstr "de la Tortue"
-
-msgid "week|Hedgehog"
-msgstr "du Hérisson"
-
-msgid "week|Condor"
-msgstr "du Condor"
 
 msgid "Desert"
 msgstr "Désert"

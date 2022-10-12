@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-08 02:28+0000\n"
+"POT-Creation-Date: 2022-10-12 15:21+0000\n"
 "PO-Revision-Date: 2022-09-24 12:02+0100\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
@@ -6294,8 +6294,52 @@ msgstr "Пламтяща"
 msgid "speed|Instant"
 msgstr "Мигновена"
 
-msgid "week|PLAGUE"
-msgstr "ЧУМА"
+msgid "week|Squirrel"
+msgstr "Катерица"
+
+msgid "week|Rabbit"
+msgstr "Заек"
+
+msgid "week|Gopher"
+msgstr "Гризач"
+
+msgid "week|Badger"
+msgstr "Язовец"
+
+#, fuzzy
+msgid "week|Rat"
+msgstr "Заек"
+
+msgid "week|Eagle"
+msgstr "Орел"
+
+msgid "week|Weasel"
+msgstr "Невестулка"
+
+msgid "week|Raven"
+msgstr "Гарван"
+
+msgid "week|Mongoose"
+msgstr "Мангуста"
+
+#, fuzzy
+msgid "week|Dog"
+msgstr "Орел"
+
+msgid "week|Aardvark"
+msgstr "Мравояд"
+
+msgid "week|Lizard"
+msgstr "Гущер"
+
+msgid "week|Tortoise"
+msgstr "Костенурка"
+
+msgid "week|Hedgehog"
+msgstr "Таралеж"
+
+msgid "week|Condor"
+msgstr "Кондор"
 
 msgid "week|Ant"
 msgstr "Мравка"
@@ -6327,44 +6371,12 @@ msgstr "Стършел"
 msgid "week|Beetle"
 msgstr "Бръмбар"
 
-msgid "week|Squirrel"
-msgstr "Катерица"
+msgid "week|PLAGUE"
+msgstr "ЧУМА"
 
-msgid "week|Rabbit"
-msgstr "Заек"
-
-msgid "week|Gopher"
-msgstr "Гризач"
-
-msgid "week|Badger"
-msgstr "Язовец"
-
-msgid "week|Eagle"
+#, fuzzy
+msgid "week|Unnamed"
 msgstr "Орел"
-
-msgid "week|Weasel"
-msgstr "Невестулка"
-
-msgid "week|Raven"
-msgstr "Гарван"
-
-msgid "week|Mongoose"
-msgstr "Мангуста"
-
-msgid "week|Aardvark"
-msgstr "Мравояд"
-
-msgid "week|Lizard"
-msgstr "Гущер"
-
-msgid "week|Tortoise"
-msgstr "Костенурка"
-
-msgid "week|Hedgehog"
-msgstr "Таралеж"
-
-msgid "week|Condor"
-msgstr "Кондор"
 
 msgid "Desert"
 msgstr "Пустиня"

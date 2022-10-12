@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-08 02:28+0000\n"
+"POT-Creation-Date: 2022-10-12 15:21+0000\n"
 "PO-Revision-Date: 2022-09-23 16:14+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -6513,8 +6513,52 @@ msgstr "Blixtsnabb"
 msgid "speed|Instant"
 msgstr "Ögonblicklig"
 
-msgid "week|PLAGUE"
-msgstr "PLÅGA"
+msgid "week|Squirrel"
+msgstr "Ekorre"
+
+msgid "week|Rabbit"
+msgstr "Hare"
+
+msgid "week|Gopher"
+msgstr "Sisel"
+
+msgid "week|Badger"
+msgstr "Grävling"
+
+#, fuzzy
+msgid "week|Rat"
+msgstr "Hare"
+
+msgid "week|Eagle"
+msgstr "Örn"
+
+msgid "week|Weasel"
+msgstr "Vessla"
+
+msgid "week|Raven"
+msgstr "Korp"
+
+msgid "week|Mongoose"
+msgstr "Mungo"
+
+#, fuzzy
+msgid "week|Dog"
+msgstr "Örn"
+
+msgid "week|Aardvark"
+msgstr "Jordsvin"
+
+msgid "week|Lizard"
+msgstr "Ödla"
+
+msgid "week|Tortoise"
+msgstr "Sköldpadda"
+
+msgid "week|Hedgehog"
+msgstr "Igelkott"
+
+msgid "week|Condor"
+msgstr "Kondor"
 
 msgid "week|Ant"
 msgstr "Myra"
@@ -6546,44 +6590,12 @@ msgstr "Bålgeting"
 msgid "week|Beetle"
 msgstr "Skalbagge"
 
-msgid "week|Squirrel"
-msgstr "Ekorre"
+msgid "week|PLAGUE"
+msgstr "PLÅGA"
 
-msgid "week|Rabbit"
-msgstr "Hare"
-
-msgid "week|Gopher"
-msgstr "Sisel"
-
-msgid "week|Badger"
-msgstr "Grävling"
-
-msgid "week|Eagle"
+#, fuzzy
+msgid "week|Unnamed"
 msgstr "Örn"
-
-msgid "week|Weasel"
-msgstr "Vessla"
-
-msgid "week|Raven"
-msgstr "Korp"
-
-msgid "week|Mongoose"
-msgstr "Mungo"
-
-msgid "week|Aardvark"
-msgstr "Jordsvin"
-
-msgid "week|Lizard"
-msgstr "Ödla"
-
-msgid "week|Tortoise"
-msgstr "Sköldpadda"
-
-msgid "week|Hedgehog"
-msgstr "Igelkott"
-
-msgid "week|Condor"
-msgstr "Kondor"
 
 msgid "Desert"
 msgstr "Öken"
