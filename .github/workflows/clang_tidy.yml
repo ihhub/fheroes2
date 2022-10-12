@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 50
     - name: Install dependencies and clang-tidy
@@ -41,7 +41,7 @@ jobs:
         echo "${{ github.event.number }}" > clang-tidy-result/pr-id.txt
         echo "${{ github.event.pull_request.head.repo.full_name }}" > clang-tidy-result/pr-head-repo.txt
         echo "${{ github.event.pull_request.head.ref }}" > clang-tidy-result/pr-head-ref.txt
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: clang-tidy-result
         path: clang-tidy-result/
