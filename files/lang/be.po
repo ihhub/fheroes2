@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-08 02:28+0000\n"
-"PO-Revision-Date: 2022-09-23 16:01+0200\n"
+"PO-Revision-Date: 2022-10-12 18:52+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: be\n"
@@ -165,13 +165,13 @@ msgid "Move or right click to redistribute %{name}"
 msgstr ""
 
 msgid "Combine %{name} armies"
-msgstr ""
+msgstr "Аб’яднаць войскі %{name}"
 
 msgid "Exchange %{name2} with %{name}"
 msgstr ""
 
 msgid "Select %{name}"
-msgstr ""
+msgstr "Выбраць %{name}"
 
 msgid "Cannot move last troop"
 msgstr ""
@@ -220,19 +220,19 @@ msgid ""
 msgstr ""
 
 msgid "Speed"
-msgstr "Скорасць"
+msgstr "Хуткасць"
 
 msgid "Speed: %{speed}"
-msgstr "Скорасць: %{speed}"
+msgstr "Хуткасць: %{speed}"
 
 msgid "Army Order"
-msgstr ""
+msgstr "Парадак войску"
 
 msgid "Auto Spell Casting"
 msgstr ""
 
 msgid "Grid"
-msgstr ""
+msgstr "Сетка"
 
 msgid "Shadow Movement"
 msgstr ""
@@ -241,13 +241,13 @@ msgid "Shadow Cursor"
 msgstr ""
 
 msgid "Off"
-msgstr ""
+msgstr "Выкл"
 
 msgid "On"
-msgstr ""
+msgstr "Укл"
 
 msgid "Set the speed of combat actions and animations."
-msgstr ""
+msgstr "Усталяваць хуткасць баявых дзеянняў і анімацыяў"
 
 msgid "Toggle to display army order during the battle."
 msgstr ""
@@ -306,13 +306,13 @@ msgid "Defender"
 msgstr "Абаронца"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "Як толькі вы дабраліся да %{name}, той містычна знік."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
-msgstr ""
+msgstr "Як толькі вораг дабраўся да %{name}, той містычна знік."
 
 msgid "You have captured an enemy artifact!"
-msgstr ""
+msgstr "Вы захапілі варожы артэфакт!"
 
 msgid "Necromancy!"
 msgstr ""
@@ -321,12 +321,15 @@ msgid ""
 "Practicing the dark arts of necromancy, you are able to raise %{count} of "
 "the enemy's dead to return under your service as %{monster}."
 msgstr ""
+"Практыкуючы цёмнае майстэрства некраманціі, вы можаце павялічыць колькасць "
+"паўшых ворагаў да %{count}, якія будуць далучацца  да вашага войску як "
+"%{monster}."
 
 msgid "%{name} the %{race}"
-msgstr ""
+msgstr "%{race} %{name}"
 
 msgid "Captain of %{name}"
-msgstr ""
+msgstr "Капітан %{name}"
 
 msgid "Attack"
 msgstr "Атака"
@@ -350,7 +353,7 @@ msgid "Spell Points"
 msgstr "Адзінкі магіі"
 
 msgid "Hero's Options"
-msgstr ""
+msgstr "Наладкі героя"
 
 msgid "Cast Spell"
 msgstr ""
@@ -362,18 +365,20 @@ msgid "Surrender"
 msgstr ""
 
 msgid "Cancel"
-msgstr ""
+msgstr "Скасаваць"
 
 msgid "Hero Screen"
-msgstr ""
+msgstr "Экран героя"
 
 msgid "Captain's Options"
-msgstr ""
+msgstr "Наладкі капітана"
 
 msgid ""
 "Cast a magical spell. You may only cast one spell per combat round. The "
 "round is reset when every creature has had a turn."
 msgstr ""
+"Прамовіць магічны загавор. У вас ёсць магчымасць прамаўляць загаворы што "
+"раз, калі ўсе ўдзельнікі боя зробяць свае хады."
 
 msgid ""
 "Retreat your hero, abandoning your creatures. Your hero will be available "
@@ -387,13 +392,13 @@ msgid ""
 msgstr ""
 
 msgid "Open Hero Screen to view full information about the hero."
-msgstr ""
+msgstr "Адчыніце экран героя, каб праглядзець усю інфармацыю аб ім."
 
 msgid "Return to the battle."
-msgstr ""
+msgstr "Вярнуцца да бою."
 
 msgid "Not enough gold (%{gold})"
-msgstr ""
+msgstr "Недастаткова золату (%{gold})"
 
 msgid "%{name} states:"
 msgstr ""
@@ -431,7 +436,7 @@ msgid "Turn %{turn}"
 msgstr ""
 
 msgid "Teleport here"
-msgstr ""
+msgstr "Тэлепартавацца сюды"
 
 msgid "Invalid teleport destination"
 msgstr ""
@@ -452,13 +457,13 @@ msgid "Ballista"
 msgstr ""
 
 msgid "Enable auto combat"
-msgstr ""
+msgstr "Уключыць аўта-бой"
 
 msgid "Allows the computer to fight out the battle for you."
 msgstr ""
 
 msgid "Auto Combat"
-msgstr ""
+msgstr "Аўта-бой"
 
 msgid "Customize system options"
 msgstr ""
@@ -615,10 +620,10 @@ msgid "Are you sure you want to interrupt the auto battle?"
 msgstr ""
 
 msgid "Error"
-msgstr ""
+msgstr "Памылка"
 
 msgid "No spells to cast."
-msgstr ""
+msgstr "Няма загавораў."
 
 msgid "Are you sure you want to retreat?"
 msgstr ""
@@ -647,13 +652,13 @@ msgid ""
 msgstr ""
 
 msgid "Human"
-msgstr ""
+msgstr "Чалавек"
 
 msgid "AI"
-msgstr ""
+msgstr "Кампутар"
 
 msgid "Please select another hero."
-msgstr ""
+msgstr "Калі ласка, выбярыце іншага героя."
 
 msgid "Set Attack Skill"
 msgstr ""
@@ -683,10 +688,10 @@ msgid "N/A"
 msgstr ""
 
 msgid "Left Turret"
-msgstr ""
+msgstr "Левая вежа"
 
 msgid "Right Turret"
-msgstr ""
+msgstr "Правая вежа"
 
 msgid "The %{name} fires with the strength of %{count} Archers"
 msgstr ""
@@ -703,46 +708,46 @@ msgid "%{count} %{name} rise(s) from the dead!"
 msgstr ""
 
 msgid "Dwarven Alliance"
-msgstr ""
+msgstr "Альянс дворфаў"
 
 msgid "Sorceress Guild"
-msgstr ""
+msgstr "Гільдчыя чараўніц"
 
 msgid "Necromancer Guild"
-msgstr ""
+msgstr "Гільдыя некрамантаў"
 
 msgid "Ogre Alliance"
-msgstr ""
+msgstr "Альянс ограў"
 
 msgid "Dwarfbane"
 msgstr ""
 
 msgid "Dragon Alliance"
-msgstr ""
+msgstr "Альянс цмокаў"
 
 msgid "Elven Alliance"
-msgstr ""
+msgstr "Альянс эльфаў"
 
 msgid "Kraeger defeated"
 msgstr ""
 
 msgid "Wayward Son"
-msgstr ""
+msgstr "Сын Вэйуорда"
 
 msgid "Uncle Ivan"
-msgstr ""
+msgstr "Дзядзька Іван"
 
 msgid "Annexation"
-msgstr ""
+msgstr "Анэксія"
 
 msgid "Force of Arms"
-msgstr ""
+msgstr "Узброеныя сілы"
 
 msgid "Save the Dwarves"
-msgstr ""
+msgstr "Абараніце дворфаў"
 
 msgid "Carator Mines"
-msgstr ""
+msgstr "Руднікі Каратора"
 
 msgid "Turning Point"
 msgstr ""
@@ -751,16 +756,16 @@ msgid "scenarioName|Defender"
 msgstr ""
 
 msgid "Corlagon's Defense"
-msgstr ""
+msgstr "Абарона Карлагона"
 
 msgid "The Crown"
-msgstr ""
+msgstr "Карона"
 
 msgid "The Gauntlet"
-msgstr ""
+msgstr "Рукавіца"
 
 msgid "Betrayal"
-msgstr ""
+msgstr "Здраднік"
 
 msgid "Final Justice"
 msgstr ""
@@ -771,29 +776,44 @@ msgid ""
 "will spend most of their time fighting with one another.  Victory is yours "
 "when you have defeated all of their castles and heroes."
 msgstr ""
+"Роланду патрэбна, каб вы перамаглі лордаў каля ягонага замку, каб распачаць "
+"паўстанне супраць брата. Яны не хаўрусьнікі, таму вялікую частку часу будуць "
+"змагацца адзін з адным. Вы скончыце паспяхова місію, як толькі пераможаце "
+"ўсіх лордаў і захопіце іхныя замкі."
 
 msgid ""
 "The local lords refuse to swear allegiance to Roland, and must be subdued. "
 "They are wealthy and powerful, so be prepared for a tough fight. Capture all "
 "enemy castles to win."
 msgstr ""
+"Мясцовыя лорды адмаўляюцца прысягаць на вернасць Роланду, таму іх трэба "
+"ўціхамірыць. Рыхтуйцеся да жорсткай барацьбы, бо яны заможныя і ўплывовыя. "
+"Захапіце варожыя замкі, каб перамагчы."
 
 msgid ""
 "Your task is to defend the Dwarves against Archibald's forces. Capture all "
 "of the enemy towns and castles to win, and be sure not to lose all of the "
 "dwarf towns at once, or the enemy will have won."
 msgstr ""
+"Вашая задача - абараніць дворфаў ад войскаў Арчыбальда. Каб перамагчы - "
+"захапіце ўсе варожыя гарады і замкі. Сачыце за тым, каб не страціць адразу "
+"ўсе гарады дворфаў, іначай вораг пераможа."
 
 msgid ""
 "You will face four allied enemies in a straightforward fight for resource "
 "and treasure. Capture all of the enemy castles for victory."
 msgstr ""
+"Вы сутыкнёцеся з чатырма ворагамі-хаўрусьнікамі ў бітве за рэсурсы і скарбы. "
+"Для перамогі захапіце ўсе варожыя замкі."
 
 msgid ""
 "Your enemies are allied against you and start close by, so be ready to come "
 "out fighting. You will need to own all four castles in this small valley to "
 "win."
 msgstr ""
+"Вашыя ворагі аб’ядналіся супраць вас, і яны побач з вамі, таму рыхтуйцеся "
+"адразу ўступіць у бой. Вам неабходна авалодаць усімі чатырма замкамі ў гэтай "
+"маленькай даліне, каб перамагчы."
 
 msgid ""
 "The Sorceress' guild of Noraston has requested Roland's aid against an "
@@ -801,6 +821,10 @@ msgid ""
 "don't lose Noraston, or you'll lose the scenario. (Hint: There is an enemy "
 "castle on an island in the ocean.)"
 msgstr ""
+"Гільдыя Чараўніц Нарастону звярнулася да Роланда па дапамогу ў абароне ад "
+"нападу хаўрусьнікаў Арчыбальда. Захапіце ўсе варожыя замкі, каб перамагчы, "
+"але не дапусціце страту Нарастону, іначай вы атрымаеце паразу. (Падказка: на "
+"востраве ў акіяне ёсць варожы замак)"
 
 msgid ""
 "Gather as large an army as possible and capture the enemy castle within 8 "
@@ -808,11 +832,17 @@ msgid ""
 "to the enemy castle. Any troops you have in your army at the end of this "
 "scenario will be with you in the final battle."
 msgstr ""
+"Збярыце як мага болей войска, каб за 8 тыдняў захапіць варожы замак. Вам "
+"супрацьстаіць толькі адзін вораг, але вы мусіце прайсці доўгую дарогу да "
+"ягонага замку. Будзь якія войскі, якімі вы авалодаеце напрыканцы сцэнару, "
+"будуць прымаць удзел у рашучым баю."
 
 msgid ""
 "Find the Crown before Archibald's heroes find it. Roland will need the Crown "
 "for the final battle against Archibald."
 msgstr ""
+"Знайдзіце Карону хутчэй за герояў Арчыбальда. Роланду неабходна Карона ў "
+"рашучым баю супраць Арчыбальда."
 
 msgid ""
 "Three allied enemies stand before you and victory, including Lord Corlagon. "
@@ -820,17 +850,26 @@ msgid ""
 "enemy. Remember that capturing Lord Corlagon will ensure that he will not "
 "fight against you in the final scenario."
 msgstr ""
+"Тры ворага-хаўрусьніка разам з Лордам Карлагонам стаяць паміж вамі і вашай "
+"перамогай. Роланд знаходзіцца ў замку на паўночна-заходнім кірунку, і вы "
+"прайграеце, калі яго захопяць. Памятайце, што захоп Лорда Карлагона гарантуе "
+"тое, што ён не будзе змагацца супраць вас у фінальным сцэнары."
 
 msgid ""
 "This is the final battle. Both you and your enemy are armed to the teeth, "
 "and all are allied against you. Capture Archibald to end the war!"
 msgstr ""
+"Гэта рашучы бой. Вы і вашыя ворагі ўзброеныя да зубоў, і яны ўсе аб’ядналіся "
+"супраць вас. Захапіце Арчыбальда, каб скончыць вайну!"
 
 msgid ""
 "Switching sides leaves you with three castles against the enemy's one.  This "
 "battle will be the easiest one you will face for the rest of the war..."
 "traitor."
 msgstr ""
+"Калі вы перакінецеся на іншы бок, у вас застанецца тры замкі супраць замка "
+"ворага. Гэты бой будзе самы лёгкі з тых, з якімі вы сутыкнёцеся да канца "
+"вайны… здраднік."
 
 msgid "Barbarian Wars"
 msgstr ""
@@ -2008,19 +2047,19 @@ msgid "Captain's Quarters"
 msgstr ""
 
 msgid "Mage Guild, Level 1"
-msgstr ""
+msgstr "Гільдыя магаў, узровень I"
 
 msgid "Mage Guild, Level 2"
-msgstr ""
+msgstr "Гільдыя магаў, узровень II"
 
 msgid "Mage Guild, Level 3"
-msgstr ""
+msgstr "Гільдыя магаў, узровень III"
 
 msgid "Mage Guild, Level 4"
-msgstr ""
+msgstr "Гільдыя магаў, узровень IV"
 
 msgid "Mage Guild, Level 5"
-msgstr ""
+msgstr "Гільдыя магаў, узровень V"
 
 msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
