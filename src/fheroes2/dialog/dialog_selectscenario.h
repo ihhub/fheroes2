@@ -134,8 +134,8 @@ private:
     void _renderMapListItem( const Maps::FileInfo & info, fheroes2::Display & display, int32_t & dsty, bool current );
     void _renderSelectedMapInfo( fheroes2::Display & display, const fheroes2::Point & dst );
     void _renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display ) const;
+    void _renderMapIcon( const uint16_t size,  fheroes2::Display & display, const int32_t coordX, const int32_t coordY ) const;
     static const fheroes2::Sprite & _getPlayersCountIcon( const uint8_t playersCount );
-    static const fheroes2::Image & _getMapSizeIcon( const uint16_t size );
     static const fheroes2::Sprite & _getMapTypeIcon( const GameVersion version );
     static const fheroes2::Sprite & _getWinConditionsIcon( const uint8_t condition );
     static const fheroes2::Sprite & _getLossConditionsIcon( const uint8_t condition );
