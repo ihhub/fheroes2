@@ -161,8 +161,8 @@ bool Interface::PlayersInfo::SwapPlayers( Player & player1, Player & player2 ) c
         const int player1Race = player1.GetRace();
         const int player2Race = player2.GetRace();
 
-        const uint8_t player1HandicapStatus = player1.getHandicapStatus();
-        const uint8_t player2HandicapStatus = player2.getHandicapStatus();
+        const Player::HandicapStatus player1HandicapStatus = player1.getHandicapStatus();
+        const Player::HandicapStatus player2HandicapStatus = player2.getHandicapStatus();
 
         player2.setHandicapStatus( player1HandicapStatus );
         player1.setHandicapStatus( player2HandicapStatus );
@@ -456,7 +456,7 @@ bool Interface::PlayersInfo::QueueEventProcessing()
                     Player * currentPlayer = Players::Get( human );
                     Player * nextPlayer = Players::Get( playerColor );
                     assert( currentPlayer != nullptr && nextPlayer != nullptr );
-                    const uint8_t currentHandicapStatus = currentPlayer->getHandicapStatus();
+                    const Player::HandicapStatus currentHandicapStatus = currentPlayer->getHandicapStatus();
 
                     Players::SetPlayerControl( human, CONTROL_AI | CONTROL_HUMAN );
                     Players::SetPlayerControl( playerColor, CONTROL_HUMAN );

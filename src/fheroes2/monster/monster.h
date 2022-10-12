@@ -240,11 +240,6 @@ public:
         return id != GetUpgrade().id;
     }
 
-    bool isDoubleAttack() const
-    {
-        return isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_MELEE_ATTACK ) || isAbilityPresent( fheroes2::MonsterAbilityType::DOUBLE_SHOOTING );
-    }
-
     bool isRegenerating() const
     {
         return isAbilityPresent( fheroes2::MonsterAbilityType::HP_REGENERATION );
