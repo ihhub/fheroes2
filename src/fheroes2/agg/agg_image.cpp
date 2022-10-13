@@ -57,8 +57,13 @@ namespace
 
     // Some resources are language dependent. These are mostly buttons with a text of them.
     // Once a user changes a language we have to update resources. To do this we need to clear the existing images.
-    const std::set<int> languageDependentIcnId{ ICN::BTNBATTLEONLY, ICN::BTNGIFT_GOOD, ICN::BTNGIFT_EVIL, ICN::NON_UNIFORM_GOOD_MIN_BUTTON,
-                                                ICN::BUTTON_DIFFICULTY_ARCHIBALD, ICN::BUTTON_DIFFICULTY_ROLAND, ICN::BUTTON_DIFFICULTY_POL };
+    const std::set<int> languageDependentIcnId{ ICN::BTNBATTLEONLY,
+                                                ICN::BTNGIFT_GOOD,
+                                                ICN::BTNGIFT_EVIL,
+                                                ICN::NON_UNIFORM_GOOD_MIN_BUTTON,
+                                                ICN::BUTTON_DIFFICULTY_ARCHIBALD,
+                                                ICN::BUTTON_DIFFICULTY_ROLAND,
+                                                ICN::BUTTON_DIFFICULTY_POL };
 
     bool isLanguageDependentIcnId( const int id )
     {
