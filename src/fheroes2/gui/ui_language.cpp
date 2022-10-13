@@ -237,6 +237,6 @@ namespace fheroes2
         const SupportedLanguage language = getLanguageFromAbbreviation( abbreviation );
         const bool isOriginalResourceLanguage = ( language == SupportedLanguage::English ) || ( language == getResourceLanguage() );
 
-        AGG::updateAlphabet( language, isOriginalResourceLanguage );
+        AGG::updateLanguageDependentResources( language, isOriginalResourceLanguage );
     }
 }
