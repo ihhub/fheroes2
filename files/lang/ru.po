@@ -2680,7 +2680,7 @@ msgid "Color"
 msgstr "Цветной"
 
 msgid "Text Support"
-msgstr "Текстовая поддержка"
+msgstr "Текстовое сопровождение"
 
 msgid "Evil"
 msgstr "Злой"
@@ -3507,7 +3507,7 @@ msgid "QA Managers"
 msgstr "Менеджеры по контролю качества"
 
 msgid "Sound Design"
-msgstr "Звуковой дизайн"
+msgstr "Звуковое оформление"
 
 msgid "Town Themes"
 msgstr "Музыкальные темы городов"
