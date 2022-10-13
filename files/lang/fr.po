@@ -785,7 +785,7 @@ msgid "Turning Point"
 msgstr "Moment Décisif"
 
 msgid "scenarioName|Defender"
-msgstr ""
+msgstr "Défenseur"
 
 msgid "Corlagon's Defense"
 msgstr "Défense de Corlagon"
@@ -2687,7 +2687,9 @@ msgid "Resolution"
 msgstr "Résolution"
 
 msgid "Experimental"
-msgstr "Expérimentaux"
+msgstr ""
+"Expéri-\n"
+"mentaux"
 
 msgid "Settings"
 msgstr "Paramètres"
@@ -2696,16 +2698,18 @@ msgid "Audio"
 msgstr "Audio"
 
 msgid "Configure"
-msgstr ""
+msgstr "Configurer"
 
 msgid "Hot Keys"
-msgstr "Raccourcis clavier"
+msgstr ""
+"Raccourcis\n"
+"clavier"
 
 msgid "Black & White"
 msgstr "Noir et blanc"
 
 msgid "Mouse Cursor"
-msgstr "Curseur de la souris"
+msgstr "Curseur"
 
 msgid "Color"
 msgstr "Couleur"
@@ -2720,7 +2724,7 @@ msgid "Good"
 msgstr "Bien"
 
 msgid "Interface Type"
-msgstr "Type d'interface"
+msgstr "Interface"
 
 msgid "Auto Resolve"
 msgstr "Combat auto"
@@ -2755,7 +2759,6 @@ msgstr "Paramètres de jeu expérimentaux."
 msgid "Toggle instant battle mode."
 msgstr "Change les modes de combat instantané."
 
-#, fuzzy
 msgid "Check and configure all the hot keys present in the game."
 msgstr "Verifier et configurer les raccourcis clavier du jeu."
 
@@ -3892,13 +3895,11 @@ msgstr "Défaire tous les héros et capturer tous les villages ennemis."
 msgid "Run out of time. (Fail to win by a certain point.)"
 msgstr "Manquer de temps. (Ne pas gagner avant un certain point.)"
 
-#, fuzzy
 msgid "You must defeat the enemy %{enemies}."
 msgid_plural "You must defeat the enemy alliance of %{enemies}."
-msgstr[0] "Défaire le héros '%{name}'."
-msgstr[1] "Défaire le héros '%{name}'."
+msgstr[0] "Défaire l'ennemi %{name}."
+msgstr[1] "Défaire l'alliance ennemie de %{name}."
 
-#, fuzzy
 msgid ""
 "The alliance consisting of %{allies} and you must defeat the enemy "
 "%{enemies}."
@@ -4161,8 +4162,8 @@ msgid ""
 "Searching for the Ultimate Artifact is fruitless. Your hero could not carry "
 "it even if he found it - all his artifact slots are full."
 msgstr ""
-"Rechercher l'artéfact ultime est vain. Même s'il le trouvait, hotre héros "
-"ne pourrait pas le porter - tous ses emplacements d'artefacts sont occupés."
+"Rechercher l'artéfact ultime est vain. Même s'il le trouvait, votre héros "
+"ne pourrait pas le porter - tous ses emplacements d'artéfacts sont occupés."
 
 msgid ""
 "After spending many hours digging here, you have uncovered the %{artifact}."
@@ -4255,27 +4256,35 @@ msgid ""
 "handicapped. Handicapped players start with fewer resources and earn 15 or "
 "30% fewer resources per turn for mild and severe handicaps, respectively."
 msgstr ""
+"Cela vous permet de modifier la pénalité d'un joueur particulier. Seuls les "
+"joueurs humains peuvent avoir une pénalité. Les joueurs avec une pénalité "
+"commencent avec moins de ressources et reçoivent 15 ou 30 % de ressources en "
+"moins à chaque tour pour la pénalité légère et la pénalité sévère."
 
 msgid "%{color} player"
 msgstr "Joueur %{color}"
 
 msgid "No Handicap"
-msgstr ""
+msgstr "Pas de pénalité"
 
 msgid "No special restrictions on start resources and earning them per turn."
-msgstr ""
+msgstr "Pas de diminution des ressources de départ ni de celles reçus à chaque tour."
 
 msgid "Mild Handicap"
-msgstr ""
+msgstr "Pénalité légère"
 
 #
 msgid ""
 "Mild handicapped players start with fewer resources and earn 15% fewer "
 "resources per turn."
 msgstr ""
+"Les joueurs avec la pénalité légère commenceront avec moins de ressources et "
+"recevront 15 % de ressources en moins à chaque tour."
 
 msgid "Severe Handicap"
 msgstr ""
+"Les joueurs avec la pénalité sévère commenceront avec moins de ressources et "
+"recevront 30 % de ressources en moins à chaque tour."
 
 #
 msgid ""
@@ -8423,7 +8432,7 @@ msgstr ""
 "est intact mais vos cheveux se hérissent lorsque vous le touchez."
 
 msgid "Snake-Ring"
-msgstr "L'Anneau-serpent"
+msgstr "L'anneau-serpent"
 
 msgid "The %{name} halves the casting cost of all your bless spells."
 msgstr "%{name} réduit de moitié le coût de tous les sorts de bénédiction."
