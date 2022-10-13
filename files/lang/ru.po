@@ -553,7 +553,7 @@ msgid "Shows the results of individual monster's actions."
 msgstr "Здесь отображаются результаты действий отдельных отрядов."
 
 msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Вы уверены, что хотите завершить бой в автоматическом режиме?"
+msgstr "Вы уверены, что хотите завершить закончить битву в авторежиме?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} пропускают ход."
@@ -1307,18 +1307,18 @@ msgid "The army will be carried over the scenario."
 msgstr "Армия будет перенесена в следующий сценарий."
 
 msgid "The kingdom will have +%{count} %{resource} each day."
-msgstr "Королевство будет каждый день иметь +%{count} %{resource}"
+msgstr "Королевство ежедневно будет получать +%{count} %{resource}"
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
 msgstr "Заклинание \"%{spell}\" будет перенесено в следующий сценарий."
 
 msgid "%{hero} can be hired in the scenario."
-msgstr "%{hero}  может быть нанят в данном сценарии."
+msgstr "%{hero}  может быть нанят в этом сценарии."
 
 msgid ""
 "%{hero} has been defeated and will not appear in the subsequent scenarios."
 msgstr ""
-"%Герой {hero} был побеждён и не появится в последующих сценариях."
+"Герой %{hero} был повержен и не появится в последующих сценариях."
 
 msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr ""
@@ -2668,7 +2668,7 @@ msgid "Configure"
 msgstr "Настроить"
 
 msgid "Hot Keys"
-msgstr "Клавиши"
+msgstr "Горячие клавиши"
 
 msgid "Black & White"
 msgstr "Чёрно-белый"
@@ -2680,7 +2680,7 @@ msgid "Color"
 msgstr "Цветной"
 
 msgid "Text Support"
-msgstr "Доп. текст"
+msgstr "Текстовое сопровождение"
 
 msgid "Evil"
 msgstr "Злой"
@@ -3500,13 +3500,13 @@ msgid "Producers"
 msgstr "Продюсеры"
 
 msgid "QA Managers"
-msgstr "Менеджер по контролю качества"
+msgstr "Менеджеры по контролю качества"
 
 msgid "Sound Design"
-msgstr "Композиторы и звукорежиссёры"
+msgstr "Звуковое оформление"
 
 msgid "Town Themes"
-msgstr "Темы городов"
+msgstr "Музыкальные темы городов"
 
 msgid "Alto Sax"
 msgstr "Альт-саксофон"
@@ -4485,10 +4485,10 @@ msgid "Martine"
 msgstr "Мартина"
 
 msgid " gives you maximum morale"
-msgstr " даёт вам максимальную мораль."
+msgstr " повышает Вашу мораль до максимума"
 
 msgid " gives you maximum luck"
-msgstr " даёт вам максимальную удачу."
+msgstr " повышает Вашу удачу до максимума"
 
 msgid "You cannot pick up this artifact, you already have a full load!"
 msgstr "Вы не можете забрать этот артефакт, у Вас нет свободного места!"
@@ -5878,8 +5878,8 @@ msgstr ""
 msgid ""
 "You do not currently own any town or castle, so you can't cast the spell."
 msgstr ""
-"У вас на данный момент нет ни замка, ни города, поэтому данное заклинание "
-"вам не произнести."
+"Вы не владеете ни одним городом или замком. Потому это заклинание "
+"не сработает."
 
 msgid "This hero is already in a town, so you can't cast the spell."
 msgstr "Этот герой уже в замке, пожтому вам не произнести данное заклинание."
