@@ -22,6 +22,7 @@
 #include <cassert>
 #include <cstring>
 #include <map>
+#include <set>
 #include <vector>
 
 #include "agg.h"
@@ -53,6 +54,16 @@ namespace
     const uint32_t headerSize = 6;
 
     std::map<int, std::vector<fheroes2::Sprite>> _icnVsScaledSprite;
+
+    // Some resources are language dependent. These are mostly buttons with a text of them.
+    // Once a user changes a language we have to update resources. To do this we need to clear the existing images.
+    const std::set<int> languageDependentIcnId{ ICN::BTNBATTLEONLY, ICN::BTNGIFT_GOOD, ICN::BTNGIFT_EVIL, ICN::NON_UNIFORM_GOOD_MIN_BUTTON,
+                                                ICN::BUTTON_DIFFICULTY_ARCHIBALD, ICN::BUTTON_DIFFICULTY_ROLAND, ICN::BUTTON_DIFFICULTY_POL };
+
+    bool isLanguageDependentIcnId( const int id )
+    {
+        return languageDependentIcnId.count( id ) > 0;
+    }
 
     bool IsValidICNId( int id )
     {
@@ -751,6 +762,8 @@ namespace fheroes2
 
         void generateLanguageSpecificImages( int id )
         {
+            assert( isLanguageDependentIcnId( id ) );
+
             // Language-specific image generators, may fail
             switch ( fheroes2::getResourceLanguage() ) {
             case fheroes2::SupportedLanguage::German:
@@ -2623,7 +2636,7 @@ namespace fheroes2
             return errorImage;
         }
 
-        void updateAlphabet( const SupportedLanguage language, const bool loadOriginalAlphabet )
+        void updateLanguageDependentResources( const SupportedLanguage language, const bool loadOriginalAlphabet )
         {
             if ( loadOriginalAlphabet || !isAlphabetSupported( language ) ) {
                 alphabetPreserver.restore();
@@ -2635,6 +2648,11 @@ namespace fheroes2
                 generateAlphabet( language, _icnVsSprite );
             }
             generateButtonAlphabet( language, _icnVsSprite );
+
+            // Clear language dependent resources.
+            for ( const int id : languageDependentIcnId ) {
+                _icnVsSprite[id].clear();
+            }
         }
     }
 }
