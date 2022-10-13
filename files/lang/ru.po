@@ -148,10 +148,10 @@ msgid "army|Legion"
 msgstr "Легион"
 
 msgid "All %{race} troops +1"
-msgstr "Все существа фракции %{race} +1"
+msgstr "%{race}: все существа фракции +1"
 
 msgid "Multiple"
-msgstr "Множественный"
+msgstr "Несколько"
 
 msgid "Troops of %{count} alignments -%{penalty}"
 msgstr "Существа %{count} разных фракций -%{penalty}"
@@ -166,10 +166,10 @@ msgid "Move the %{name} "
 msgstr "Переместить %{name}"
 
 msgid "Move or right click to redistribute %{name}"
-msgstr "Перемеcтить или разделить (правой кнопкой) %{name}"
+msgstr "%{name}: перемеcтить или разделить (правой кнопкой)"
 
 msgid "Combine %{name} armies"
-msgstr "Объединить  или перераспределить (правой кнопкой) %{name}"
+msgstr "%{name}: объединить  или перераспределить (правой кнопкой)"
 
 msgid "Exchange %{name2} with %{name}"
 msgstr "Заменить %{name2} на %{name}"
@@ -553,7 +553,7 @@ msgid "Shows the results of individual monster's actions."
 msgstr "Здесь отображаются результаты действий отдельных отрядов."
 
 msgid "Are you sure you want to finish the battle in auto mode?"
-msgstr "Вы уверены, что хотите завершить закончить битву в авторежиме?"
+msgstr "Вы уверены, что хотите закончить битву в авторежиме?"
 
 msgid "%{name} skip their turn."
 msgstr "%{name} пропускают ход."
@@ -4224,10 +4224,10 @@ msgid "View %{skill} Info"
 msgstr "Информация о навыке %{skill}"
 
 msgid "Kingdom Income"
-msgstr "Доход"
+msgstr "Доход королевства"
 
 msgid "Kingdom Income per day."
-msgstr "Доход королевства за день."
+msgstr "Ежедневный доход королевства."
 
 msgid "English"
 msgstr "Английский"
@@ -5889,9 +5889,9 @@ msgid ""
 " \n"
 "This town is occupied by your hero %{hero}."
 msgstr ""
-"Ближайший город это %{town}.\n"
+"Ближайший к вам город: %{town}.\n"
 "\n"
-"Данный город занят вашим героем %{hero}."
+"В этом городе уже есть ваш герой: %{hero}."
 
 msgid "%{name} the %{race} (Level %{level})"
 msgstr "%{race} %{name} (уровень %{level})"
