@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fheroes2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-12 15:21+0000\n"
-"PO-Revision-Date: 2022-10-12 18:52+0200\n"
+"POT-Creation-Date: 2022-10-08 02:28+0000\n"
+"PO-Revision-Date: 2022-10-13 01:43+0200\n"
 "Last-Translator: fheroes2 team <fhomm2@gmail.com>\n"
 "Language-Team: \n"
 "Language: be\n"
@@ -18,6 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Poedit 3.1.1\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 
 msgid ""
 "BATTLE\n"
@@ -25,13 +26,13 @@ msgid ""
 msgstr ""
 
 msgid "GIFT"
-msgstr ""
+msgstr "ПАДАРУНАК"
 
 msgid "MIN"
-msgstr ""
+msgstr "МІН"
 
 msgid "DIFFICULTY"
-msgstr ""
+msgstr "УЗРОВЕНЬ"
 
 msgid "Warrior"
 msgstr "Ваяр"
@@ -156,7 +157,7 @@ msgid "Some undead in group -1"
 msgstr ""
 
 msgid "View %{name}"
-msgstr ""
+msgstr "Праглядзець %{name}"
 
 msgid "Move the %{name} "
 msgstr ""
@@ -177,7 +178,7 @@ msgid "Cannot move last troop"
 msgstr ""
 
 msgid "Move the %{name}"
-msgstr ""
+msgstr "Рухаць %{name}"
 
 msgid "Set Count"
 msgstr ""
@@ -189,13 +190,13 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "%{name} has turned off the auto battle"
-msgstr ""
+msgstr "%{name} выключыў аўта-бой"
 
 msgid "%{name} has turned on the auto battle"
-msgstr ""
+msgstr "%{name} уключыў аўта-бой"
 
 msgid "Spell failed!"
-msgstr ""
+msgstr "Загавор няўдалы!"
 
 msgid ""
 "The Sphere of Negation artifact is in effect for this battle, disabling all "
@@ -247,7 +248,7 @@ msgid "On"
 msgstr "Укл"
 
 msgid "Set the speed of combat actions and animations."
-msgstr "Усталяваць хуткасць баявых дзеянняў і анімацыяў"
+msgstr "Усталяваць хуткасць баявых дзеянняў і анімацый"
 
 msgid "Toggle to display army order during the battle."
 msgstr ""
@@ -306,10 +307,10 @@ msgid "Defender"
 msgstr "Абаронца"
 
 msgid "As you reach for the %{name}, it mysteriously disappears."
-msgstr "Як толькі вы дабраліся да %{name}, той містычна знік."
+msgstr "Сярод вашых трафеяў апынуўся артэфакт - %{name}! Але як только вы дакрануліся да яго, той містычна знік."
 
 msgid "As your enemy reaches for the %{name}, it mysteriously disappears."
-msgstr "Як толькі вораг дабраўся да %{name}, той містычна знік."
+msgstr "Як толькі вораг дабраўся да артэфакту - %{name}, той містычна знік."
 
 msgid "You have captured an enemy artifact!"
 msgstr "Вы захапілі варожы артэфакт!"
@@ -711,7 +712,7 @@ msgid "Dwarven Alliance"
 msgstr "Альянс дворфаў"
 
 msgid "Sorceress Guild"
-msgstr "Гільдчыя чараўніц"
+msgstr "Гільдыя чараўніц"
 
 msgid "Necromancer Guild"
 msgstr "Гільдыя некрамантаў"
@@ -741,7 +742,7 @@ msgid "Annexation"
 msgstr "Анэксія"
 
 msgid "Force of Arms"
-msgstr "Узброеныя сілы"
+msgstr "Сіла зброі"
 
 msgid "Save the Dwarves"
 msgstr "Абараніце дворфаў"
@@ -1494,13 +1495,14 @@ msgid "The main hero will have %{skill} at the start of the scenario."
 msgstr ""
 
 msgid "Roland"
-msgstr ""
+msgstr "Роланд"
 
 msgid "Archibald"
-msgstr ""
+msgstr "Арчыбальд"
 
+#, fuzzy
 msgid "The Price of Loyalty"
-msgstr ""
+msgstr "Цана вернасці"
 
 msgid "Voyage Home"
 msgstr ""
@@ -1512,19 +1514,19 @@ msgid "Descendants"
 msgstr ""
 
 msgid "The %{building} produces %{monster}."
-msgstr ""
+msgstr "%{building} падрыхтоўвае %{monster}."
 
 msgid "Requires:"
-msgstr ""
+msgstr "Неабходна:"
 
 msgid "Cannot build. You have already built here today."
-msgstr ""
+msgstr "Вы ўжо будавалі сёння ў гэтым замку."
 
 msgid "For this action it is necessary to build a castle first."
 msgstr ""
 
 msgid "Cannot build %{name} because castle is too far from water."
-msgstr ""
+msgstr "Нельга пабудаваць %{name}, бо замак занадта далёка ад вады."
 
 msgid "disable build."
 msgstr ""
@@ -1533,13 +1535,13 @@ msgid "Cannot afford %{name}."
 msgstr ""
 
 msgid "%{name} is already built."
-msgstr ""
+msgstr "%{name} ужо пабудавана."
 
 msgid "Cannot build %{name}."
-msgstr ""
+msgstr "Нельга пабудаваць %{name}."
 
 msgid "Build %{name}."
-msgstr ""
+msgstr "Пабудаваць %{name}."
 
 msgid "Blackridge"
 msgstr ""
@@ -1683,13 +1685,13 @@ msgid "Hilltop"
 msgstr ""
 
 msgid "Weddington"
-msgstr ""
+msgstr "Уэдзінтан"
 
 msgid "Westfork"
-msgstr ""
+msgstr "Уэстфарк"
 
 msgid "Whittingham"
-msgstr ""
+msgstr "Уіцінгэм"
 
 msgid "Cathcart"
 msgstr ""
@@ -1701,13 +1703,13 @@ msgid "Roscomon"
 msgstr ""
 
 msgid "Sherman"
-msgstr ""
+msgstr "Шэрман"
 
 msgid "Yorksford"
-msgstr ""
+msgstr "Ёрксфард"
 
 msgid "Blackburn"
-msgstr ""
+msgstr "Блэкбёрн"
 
 msgid "Blacksford"
 msgstr ""
@@ -1722,19 +1724,19 @@ msgid "Viper's Nest"
 msgstr ""
 
 msgid "Fenton"
-msgstr ""
+msgstr "Фэнтан"
 
 msgid "Lankershire"
-msgstr ""
+msgstr "Ланкершыр"
 
 msgid "Lombard"
 msgstr ""
 
 msgid "Timberhill"
-msgstr ""
+msgstr "Цімберхіл"
 
 msgid "Troy"
-msgstr ""
+msgstr "Троя"
 
 msgid "Forder Oaks"
 msgstr ""
@@ -1746,16 +1748,16 @@ msgid "Quick Silver"
 msgstr ""
 
 msgid "Westmoor"
-msgstr ""
+msgstr "Уэстмур"
 
 msgid "Willow"
-msgstr ""
+msgstr "Уілаў"
 
 msgid "Corackston"
-msgstr ""
+msgstr "Каракстоўн"
 
 msgid "Sheltemburg"
-msgstr ""
+msgstr "Шэлтэмбург"
 
 msgid "Cannot recruit - guest to guard automove error."
 msgstr ""
@@ -1845,7 +1847,7 @@ msgid "Pyramid"
 msgstr ""
 
 msgid "Rainbow"
-msgstr ""
+msgstr "Вясёлка"
 
 msgid "Crystal Garden"
 msgstr ""
@@ -1896,43 +1898,43 @@ msgid "Swamp"
 msgstr ""
 
 msgid "Green Tower"
-msgstr ""
+msgstr "Зялёная вежа"
 
 msgid "warlock|Red Tower"
 msgstr ""
 
 msgid "Black Tower"
-msgstr ""
+msgstr "Чорная вежа"
 
 msgid "Library"
-msgstr ""
+msgstr "Бібліятэка"
 
 msgid "Orchard"
-msgstr ""
+msgstr "Фруктовы сад"
 
 msgid "Habitat"
-msgstr ""
+msgstr "Жыллё"
 
 msgid "Pen"
-msgstr ""
+msgstr "Вальера"
 
 msgid "Foundry"
-msgstr ""
+msgstr "Ліцейны завод"
 
 msgid "Upg. Foundry"
 msgstr ""
 
 msgid "Cliff Nest"
-msgstr ""
+msgstr "Гняздо на кручы"
 
 msgid "Ivory Tower"
-msgstr ""
+msgstr "Вежа са слановай косці"
 
 msgid "Upg. Ivory Tower"
 msgstr ""
 
 msgid "Cloud Castle"
-msgstr ""
+msgstr "Воблачны замак"
 
 msgid "Upg. Cloud Castle"
 msgstr ""
@@ -2006,9 +2008,11 @@ msgid ""
 "The Library increases the number of spells in the Guild by one for each "
 "level of the guild."
 msgstr ""
+"Бібліятэка павялічвае колькасць загавораў у Гільдыі на адзін на кожны "
+"узровень гільдыі."
 
 msgid "The Orchard increases production of Halflings by %{count} per week."
-msgstr ""
+msgstr "Фруктовы сад прываблівае дадатковых %{count} хобітаў штотыдзень."
 
 msgid "The Storm adds +2 to the power of spells of a defending spell caster."
 msgstr ""
@@ -2017,49 +2021,49 @@ msgid "The Skull Pile increases production of Skeletons by %{count} per week."
 msgstr ""
 
 msgid "Thieves' Guild"
-msgstr ""
+msgstr "Гільдыя вароў"
 
 msgid "Tavern"
-msgstr ""
+msgstr "Карчма"
 
 msgid "Shipyard"
-msgstr ""
+msgstr "Верф"
 
 msgid "Well"
-msgstr ""
+msgstr "Калодзеж"
 
 msgid "Statue"
-msgstr ""
+msgstr "Статуя"
 
 msgid "Marketplace"
-msgstr ""
+msgstr "Рынак"
 
 msgid "Moat"
-msgstr ""
+msgstr "Роў"
 
 msgid "Castle"
-msgstr ""
+msgstr "Замак"
 
 msgid "Tent"
-msgstr ""
+msgstr "Шацёр"
 
 msgid "Captain's Quarters"
-msgstr ""
+msgstr "Жыллё капітана"
 
 msgid "Mage Guild, Level 1"
-msgstr "Гільдыя магаў, узровень I"
+msgstr "Гільдыя магаў I"
 
 msgid "Mage Guild, Level 2"
-msgstr "Гільдыя магаў, узровень II"
+msgstr "Гільдыя магаў II"
 
 msgid "Mage Guild, Level 3"
-msgstr "Гільдыя магаў, узровень III"
+msgstr "Гільдыя магаў III"
 
 msgid "Mage Guild, Level 4"
-msgstr "Гільдыя магаў, узровень IV"
+msgstr "Гільдыя магаў IV"
 
 msgid "Mage Guild, Level 5"
-msgstr "Гільдыя магаў, узровень V"
+msgstr "Гільдыя магаў V"
 
 msgid ""
 "The Shrine increases the necromancy skill of all your necromancers by 10 "
@@ -2073,10 +2077,10 @@ msgid ""
 msgstr ""
 
 msgid "The Tavern increases morale for troops defending the castle."
-msgstr ""
+msgstr "Карчма павялічвае мараль вашых войскаў падчас абароны замка."
 
 msgid "The Shipyard allows ships to be built."
-msgstr ""
+msgstr "Верф дазваляе будаваць караблі."
 
 msgid ""
 "The Well increases the growth rate of all dwellings by %{count} creatures "
@@ -2084,28 +2088,34 @@ msgid ""
 msgstr ""
 
 msgid "The Statue increases your town's income by %{count} per day."
-msgstr ""
+msgstr "Статуя павялічвае гарадзкія зборы на %{count} штодзень."
 
 msgid "The Left Turret provides extra firepower during castle combat."
-msgstr ""
+msgstr "Левая вежа забяспечвае дадатковую агнявую моц падчас абароны замка."
 
 msgid "The Right Turret provides extra firepower during castle combat."
-msgstr ""
+msgstr "Правая вежа забяспечвае дадатковую агнявую моц падчас абароны замка."
 
 msgid ""
 "The Marketplace can be used to convert one type of resource into another. "
 "The more marketplaces you control, the better the exchange rate."
 msgstr ""
+"Рынак дазваляе мяняць адзін від рэсурсаў на іншы. "
+"Чым болей рынкаў вы маеце, тым лепей будуць умовы абмену."
 
 msgid ""
 "The Moat slows attacking units. Any unit entering the moat must end its turn "
 "there and becomes more vulnerable to attack."
 msgstr ""
+"Роў запавольвае атакуючыя войскі. Будзь-якое войска, якое ўвайшло ў роў не можа "
+"рухацца далей і павінна скончыць свой ход, а таксама горш абараняецца."
 
 msgid ""
 "The Castle improves town defense and increases income to %{count} gold per "
 "day."
 msgstr ""
+"Замак узмацняе абарону горада і павялічвае гарадзкія зборы да %{count} золата "
+"штодзень."
 
 msgid ""
 "The Tent provides workers to build a castle, provided the materials and the "
@@ -2121,12 +2131,14 @@ msgid ""
 "The Mage Guild allows heroes to learn spells and replenish their spell "
 "points."
 msgstr ""
+"Гільдыя магаў дазваляе героям вучыць загаворы і папаўняць іхныя магічныя "
+"ачкі."
 
 msgid "Recruit %{name}"
-msgstr ""
+msgstr "Рэкрутаваць %{name}"
 
 msgid "Month: %{month}, Week: %{week}, Day: %{day}"
-msgstr ""
+msgstr "Месяц: %{month}, Тыдзень: %{week}, Дзень: %{day}"
 
 msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
@@ -2134,10 +2146,10 @@ msgid ""
 msgstr ""
 
 msgid "Exit"
-msgstr ""
+msgstr "Выхад"
 
 msgid "Exit this menu."
-msgstr ""
+msgstr "Выйсці з меню"
 
 msgid "Click to show next town."
 msgstr ""
@@ -2163,16 +2175,16 @@ msgid "This town may not be upgraded to a castle."
 msgstr ""
 
 msgid "Town"
-msgstr ""
+msgstr "Горад"
 
 msgid "Exit Castle"
-msgstr ""
+msgstr "Пакінуць замак"
 
 msgid "Exit Town"
-msgstr ""
+msgstr "Пакінуць горад"
 
 msgid "Show Income"
-msgstr ""
+msgstr "Паказаць прыбытак"
 
 msgid "Swap Heroes"
 msgstr ""
@@ -2181,7 +2193,7 @@ msgid "Meeting Heroes"
 msgstr ""
 
 msgid "View Hero"
-msgstr ""
+msgstr "Даведацца аб героі"
 
 msgid "The above spells are available here."
 msgstr ""
@@ -2269,10 +2281,10 @@ msgid "Growth"
 msgstr ""
 
 msgid "week"
-msgstr ""
+msgstr "тыдзень"
 
 msgid "Available"
-msgstr ""
+msgstr "Даступна"
 
 msgid "View World"
 msgstr ""
@@ -2414,7 +2426,7 @@ msgid "Toggle 3D effects of foreground sounds."
 msgstr ""
 
 msgid "Okay"
-msgstr ""
+msgstr "Ок"
 
 msgid "Build a new ship:"
 msgstr ""
@@ -2742,13 +2754,13 @@ msgid "Move Points:"
 msgstr ""
 
 msgid "Cost per troop:"
-msgstr ""
+msgstr "Цана за адзінку:"
 
 msgid "Available: %{count}"
-msgstr ""
+msgstr "Даступна: %{count}"
 
 msgid "Number to buy:"
-msgstr ""
+msgstr "Колькасць:"
 
 msgid "Select Game Resolution:"
 msgstr ""
@@ -2757,7 +2769,7 @@ msgid "Click to apply the selected resolution."
 msgstr ""
 
 msgid "MAX"
-msgstr ""
+msgstr "МАКС"
 
 msgid "How many troops to move?"
 msgstr ""
@@ -3104,13 +3116,13 @@ msgid "Normal"
 msgstr "Звычайная"
 
 msgid "Hard"
-msgstr ""
+msgstr "Цяжкая"
 
 msgid "Start the selected scenario."
 msgstr ""
 
 msgid "View Intro"
-msgstr ""
+msgstr "Паглядзець уступ"
 
 msgid "View Intro videos for the current state of the campaign."
 msgstr ""
@@ -3297,7 +3309,7 @@ msgid "Unknown Hero"
 msgstr ""
 
 msgid "Your Name"
-msgstr ""
+msgstr "Вашае імя"
 
 msgid "Standard"
 msgstr ""
@@ -3306,7 +3318,7 @@ msgid "View High Scores for Standard Maps."
 msgstr ""
 
 msgid "Campaign"
-msgstr ""
+msgstr "Кампанія"
 
 msgid "View High Scores for Campaigns."
 msgstr ""
@@ -3335,7 +3347,7 @@ msgid "' language, but the current language of the game is '"
 msgstr ""
 
 msgid "Hot Seat"
-msgstr ""
+msgstr "Гарачы стул"
 
 msgid ""
 "Play a Hot Seat game, where 2 to 4 players play around the same computer, "
@@ -3349,13 +3361,13 @@ msgid "A single player game playing out a single map."
 msgstr ""
 
 msgid "Standard Game"
-msgstr ""
+msgstr "Звычайная гульня"
 
 msgid "A single player game playing through a series of maps."
 msgstr ""
 
 msgid "Campaign Game"
-msgstr ""
+msgstr "Кампанія"
 
 msgid ""
 "A multi-player game, with several human players completing against each "
@@ -3366,7 +3378,7 @@ msgid "Multi-Player Game"
 msgstr ""
 
 msgid "fheroes2 Resurrection Team presents"
-msgstr ""
+msgstr "fheroes2 Resurrection Team прадстаўляе"
 
 msgid "Greetings!"
 msgstr ""
@@ -3619,28 +3631,28 @@ msgid "Do you wish to continue the game?"
 msgstr ""
 
 msgid "Scenario:"
-msgstr ""
+msgstr "Сцэнар:"
 
 msgid "Game Difficulty:"
-msgstr ""
+msgstr "Складанасць:"
 
 msgid "Opponents:"
-msgstr ""
+msgstr "Супраціўнікі:"
 
 msgid "Class:"
-msgstr ""
+msgstr "Клас:"
 
 msgid "Rating %{rating}%"
-msgstr ""
+msgstr "Рэйтынг %{rating}%"
 
 msgid "Click here to select which scenario to play."
-msgstr ""
+msgstr "Пстрыкніце сюды, каб выбраць сцэнар"
 
 msgid "Scenario"
-msgstr ""
+msgstr "Сцэнар"
 
 msgid "Game Difficulty"
-msgstr ""
+msgstr "Складанасць"
 
 msgid ""
 "This lets you change the starting difficulty at which you will play. Higher "
@@ -3649,7 +3661,7 @@ msgid ""
 msgstr ""
 
 msgid "Difficulty Rating"
-msgstr ""
+msgstr "Рэйтынг складанасці"
 
 msgid ""
 "The difficulty rating reflects a combination of various settings for your "
@@ -5848,49 +5860,7 @@ msgstr "Нястрымная"
 msgid "speed|Instant"
 msgstr "Імгненная"
 
-msgid "week|Squirrel"
-msgstr ""
-
-msgid "week|Rabbit"
-msgstr ""
-
-msgid "week|Gopher"
-msgstr ""
-
-msgid "week|Badger"
-msgstr ""
-
-msgid "week|Rat"
-msgstr ""
-
-msgid "week|Eagle"
-msgstr ""
-
-msgid "week|Weasel"
-msgstr ""
-
-msgid "week|Raven"
-msgstr ""
-
-msgid "week|Mongoose"
-msgstr ""
-
-msgid "week|Dog"
-msgstr ""
-
-msgid "week|Aardvark"
-msgstr ""
-
-msgid "week|Lizard"
-msgstr ""
-
-msgid "week|Tortoise"
-msgstr ""
-
-msgid "week|Hedgehog"
-msgstr ""
-
-msgid "week|Condor"
+msgid "week|PLAGUE"
 msgstr ""
 
 msgid "week|Ant"
@@ -5923,10 +5893,43 @@ msgstr ""
 msgid "week|Beetle"
 msgstr ""
 
-msgid "week|PLAGUE"
+msgid "week|Squirrel"
 msgstr ""
 
-msgid "week|Unnamed"
+msgid "week|Rabbit"
+msgstr ""
+
+msgid "week|Gopher"
+msgstr ""
+
+msgid "week|Badger"
+msgstr ""
+
+msgid "week|Eagle"
+msgstr ""
+
+msgid "week|Weasel"
+msgstr ""
+
+msgid "week|Raven"
+msgstr ""
+
+msgid "week|Mongoose"
+msgstr ""
+
+msgid "week|Aardvark"
+msgstr ""
+
+msgid "week|Lizard"
+msgstr ""
+
+msgid "week|Tortoise"
+msgstr ""
+
+msgid "week|Hedgehog"
+msgstr ""
+
+msgid "week|Condor"
 msgstr ""
 
 msgid "Desert"
