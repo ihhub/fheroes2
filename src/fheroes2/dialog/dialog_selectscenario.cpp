@@ -77,7 +77,7 @@ namespace
         ICON_SIZE = 18
     };
 
-    void OnRightClickToolTip( const std::string header, const std::string body )
+    void ShowToolTip( const std::string& header, const std::string& body )
     {
         fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( body, fheroes2::FontType::normalWhite() ), Dialog::ZERO );
     }
@@ -134,7 +134,7 @@ namespace
             return;
         }
 
-        OnRightClickToolTip( _( "Loss Condition" ), msg );
+        ShowToolTip( _( "Loss Condition" ), msg );
     }
 
     void VictoryConditionInfo( const Maps::FileInfo & info )
@@ -165,7 +165,7 @@ namespace
             assert( 0 );
             return;
         }
-        OnRightClickToolTip( _( "Victory Condition" ), msg );
+        ShowToolTip( _( "Victory Condition" ), msg );
     }
 
     size_t GetSelectedMapId( const MapsFileInfoList & lists )
@@ -637,31 +637,31 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
         // right info
         if ( le.MousePressRight( buttonSelectSmall.area() ) )
-            OnRightClickToolTip( _( "Small Maps" ), _( "View only maps of size small (36 x 36)." ) );
+            ShowToolTip( _( "Small Maps" ), _( "View only maps of size small (36 x 36)." ) );
         else if ( le.MousePressRight( buttonSelectMedium.area() ) )
-            OnRightClickToolTip( _( "Medium Maps" ), _( "View only maps of size medium (72 x 72)." ) );
+            ShowToolTip( _( "Medium Maps" ), _( "View only maps of size medium (72 x 72)." ) );
         else if ( le.MousePressRight( buttonSelectLarge.area() ) )
-            OnRightClickToolTip( _( "Large Maps" ), _( "View only maps of size large (108 x 108)." ) );
+            ShowToolTip( _( "Large Maps" ), _( "View only maps of size large (108 x 108)." ) );
         else if ( le.MousePressRight( buttonSelectXLarge.area() ) )
-            OnRightClickToolTip( _( "Extra Large Maps" ), _( "View only maps of size extra large (144 x 144)." ) );
+            ShowToolTip( _( "Extra Large Maps" ), _( "View only maps of size extra large (144 x 144)." ) );
         else if ( le.MousePressRight( buttonSelectAll.area() ) )
-            OnRightClickToolTip( _( "All Maps" ), _( "View all maps, regardless of size." ) );
+            ShowToolTip( _( "All Maps" ), _( "View all maps, regardless of size." ) );
         else if ( le.MousePressRight( countPlayers ) || le.MousePressRight( curCountPlayer ) )
-            OnRightClickToolTip(
+            ShowToolTip(
                 _( "Players Icon" ),
                 _( "Indicates how many players total are in the scenario. Any positions not occupied by humans will be occupied by computer players." ) );
         else if ( le.MousePressRight( sizeMaps ) || le.MousePressRight( curMapSize ) )
-            OnRightClickToolTip( _( "Size Icon" ),
+            ShowToolTip( _( "Size Icon" ),
                                  _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ) );
         else if ( le.MousePressRight( mapTypes ) || le.MousePressRight( curMapType ) )
-            OnRightClickToolTip( _( "Map Type" ), _( "Indicates whether the map is made for \"The Succession Wars\" or \"The Price of Loyalty\" version of the game." ) );
+            ShowToolTip( _( "Map Type" ), _( "Indicates whether the map is made for \"The Succession Wars\" or \"The Price of Loyalty\" version of the game." ) );
         else if ( le.MousePressRight( mapNames ) ) {
             const Maps::FileInfo * item = listbox.GetFromPosition( le.GetMouseCursor() );
             if ( item )
                 mapInfo( *item );
         }
         else if ( le.MousePressRight( curMapName ) )
-            OnRightClickToolTip( _( "Selected Name" ), _( "The name of the currently selected map." ) );
+            ShowToolTip( _( "Selected Name" ), _( "The name of the currently selected map." ) );
         else if ( le.MousePressRight( victoryConds ) ) {
             const Maps::FileInfo * item = listbox.GetFromPosition( le.GetMouseCursor() );
             if ( item )
@@ -677,13 +677,13 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
         else if ( le.MousePressRight( curLossCond ) )
             LossConditionInfo( listbox.GetCurrent() );
         else if ( le.MousePressRight( curDifficulty ) )
-            OnRightClickToolTip(
+            ShowToolTip(
                 _( "Selected Map Difficulty" ),
                 _( "The map difficulty of the currently selected map.  The map difficulty is determined by the scenario designer. More difficult maps might include more or stronger enemies, fewer resources, or other special conditions making things tougher for the human player." ) );
         else if ( le.MousePressRight( curDescription ) )
-            OnRightClickToolTip( _( "Selected Description" ), _( "The description of the currently selected map." ) );
+            ShowToolTip( _( "Selected Description" ), _( "The description of the currently selected map." ) );
         else if ( le.MousePressRight( buttonOk.area() ) )
-            OnRightClickToolTip( _( "Okay" ), _( "Accept the choice made." ) );
+            ShowToolTip( _( "Okay" ), _( "Accept the choice made." ) );
 
         if ( !needRedraw && !listbox.IsNeedRedraw() ) {
             continue;
