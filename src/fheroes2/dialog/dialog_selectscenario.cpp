@@ -184,9 +184,9 @@ namespace
         return 0;
     }
 
-    int32_t GetCenteredTextXCoordinate( const int32_t startCoordX, const int32_t textBoxWidth, const int32_t textWidth )
+    int32_t GetCenteredTextXCoordinate( const int32_t startCoordX, const int32_t areaWidth, const int32_t textWidth )
     {
-        const int32_t centerTransform = textBoxWidth > textWidth ? ( textBoxWidth - textWidth ) / 2 : 0;
+        const int32_t centerTransform = areaWidth > textWidth ? ( areaWidth - textWidth ) / 2 : 0;
         return startCoordX + centerTransform;
     }
 }
