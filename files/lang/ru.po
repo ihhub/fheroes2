@@ -1315,14 +1315,14 @@ msgid "The kingdom will have +%{count} %{resource} each day."
 msgstr "Королевство ежедневно будет получать +%{count} %{resource}."
 
 msgid "\"%{spell}\" spell will be carried over the scenario."
-msgstr "Заклинание \"%{spell}\" будет перенесено в этот сценарий."
+msgstr "Заклинание \"%{spell}\" будет доступно в этом сценарии."
 
 msgid "%{hero} can be hired in the scenario."
 msgstr "%{hero} может быть нанят в этом сценарии."
 
 msgid ""
 "%{hero} has been defeated and will not appear in the subsequent scenarios."
-msgstr "%{hero} был повержен, и впоследстии Вы не сможете его нанять."
+msgstr "%{hero} был повержен, и больше не будет досаждать Вам в этом и последующих сценариях."
 
 msgid "The dwarves recognize their allies and gladly join your forces."
 msgstr ""
