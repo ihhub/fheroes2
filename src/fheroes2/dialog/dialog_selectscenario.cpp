@@ -33,7 +33,6 @@
 #include "maps.h"
 #include "settings.h"
 #include "system.h"
-#include "text.h"
 #include "tools.h"
 #include "translations.h"
 #include "ui_button.h"
@@ -66,14 +65,14 @@ namespace
         SELECTED_SCENARIO_VICTORY_CONDITION_OFFSET_X = 276,
         SELECTED_SCENARIO_LOSS_CONDITION_OFFSET_X = 295,
         SELECTED_SCENARIO_DIFFICULTY_OFFSET_X = 220,
-        SELECTED_SCENARIO_DIFFICULTY_OFFSET_Y = 292,
+        SELECTED_SCENARIO_DIFFICULTY_OFFSET_Y = 293,
         SELECTED_SCENARIO_DIFFICULTY_WIDTH = 114,
         SELECTED_SCENARIO_DIFFICULTY_HEIGHT = 20,
         SELECTED_SCENARIO_DESCRIPTION_OFFSET_X = 42,
-        SELECTED_SCENARIO_DESCRIPTION_OFFSET_Y = 316,
+        SELECTED_SCENARIO_DESCRIPTION_OFFSET_Y = 318,
         SELECTED_SCENARIO_DESCRIPTION_WIDTH = 292,
         SELECTED_SCENARIO_DESCRIPTION_HEIGHT = 90,
-        SELECTED_SCENARIO_GENERAL_OFFSET_Y = 264,
+        SELECTED_SCENARIO_GENERAL_OFFSET_Y = 265,
         // COMMON
         ICON_SIZE = 18
     };
@@ -129,7 +128,8 @@ namespace
             assert( 0 );
             return;
         }
-        Dialog::Message( _( "Loss Condition" ), msg, Font::BIG );
+        fheroes2::showMessage( fheroes2::Text( _( "Loss Condition" ), fheroes2::FontType::normalWhite() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                               Dialog::ZERO );
     }
 
     void VictoryConditionInfo( const Maps::FileInfo & info )
@@ -160,7 +160,8 @@ namespace
             assert( 0 );
             return;
         }
-        Dialog::Message( _( "Victory Condition" ), msg, Font::BIG );
+        fheroes2::showMessage( fheroes2::Text( _( "Victory Condition" ), fheroes2::FontType::normalWhite() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
+                               Dialog::ZERO );
     }
 
     size_t GetSelectedMapId( const MapsFileInfoList & lists )
@@ -183,6 +184,11 @@ namespace
     {
         const int32_t centerTransform = textBoxWidth > textWidth ? ( textBoxWidth - textWidth ) / 2 : 0;
         return startCoordX + centerTransform;
+    }
+
+    void OnRightClickToolTip( const std::string header, const std::string body )
+    {
+        fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalWhite() ), fheroes2::Text( body, fheroes2::FontType::normalWhite() ), Dialog::ZERO );
     }
 }
 
@@ -216,31 +222,32 @@ void ScenarioListBox::_renderScenarioListItem( const Maps::FileInfo & info, fher
 
 void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, const fheroes2::Point & dst )
 {
-    Text text;
     const Maps::FileInfo & info = GetCurrent();
 
     fheroes2::Blit( _getPlayersCountIcon( info.kingdom_colors ), display, dst.x + SELECTED_SCENARIO_COUNT_PLAYERS_OFFSET_X, dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
     _renderMapIcon( info.size_w, display, dst.x + SELECTED_SCENARIO_MAP_SIZE_OFFSET_X, dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
     fheroes2::Blit( _getMapTypeIcon( info._version ), display, dst.x + SELECTED_SCENARIO_MAP_TYPE_OFFSET_X, dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
 
-    text.Set( info.name, Font::BIG );
-    text.Blit( GetCenteredTextXCoordinate( dst.x + SELECTED_SCENARIO_MAP_NAME_OFFSET_X, SELECTED_SCENARIO_MAP_NAME_WIDTH, text.w() ),
-               dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
+    fheroes2::Text mapNameText( info.name, fheroes2::FontType::normalWhite() );
+    mapNameText.draw( GetCenteredTextXCoordinate( dst.x + SELECTED_SCENARIO_MAP_NAME_OFFSET_X, SELECTED_SCENARIO_MAP_NAME_WIDTH, mapNameText.width() ),
+               dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y + 3, display );
 
     fheroes2::Blit( _getWinConditionsIcon( info.conditions_wins ), display, dst.x + SELECTED_SCENARIO_VICTORY_CONDITION_OFFSET_X,
                     dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
     fheroes2::Blit( _getLossConditionsIcon( info.conditions_loss ), display, dst.x + SELECTED_SCENARIO_LOSS_CONDITION_OFFSET_X,
                     dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
 
-    const int32_t difficultyOffsetY = SELECTED_SCENARIO_DIFFICULTY_OFFSET_Y - 1;
-    text.Set( _( "Map difficulty:" ), Font::BIG );
-    text.Blit( dst.x + 210 - text.w(), dst.y + difficultyOffsetY );
+    const int32_t difficultyOffsetY = SELECTED_SCENARIO_DIFFICULTY_OFFSET_Y;
 
-    text.Set( Difficulty::String( info.difficulty ) );
-    text.Blit( GetCenteredTextXCoordinate( dst.x + SELECTED_SCENARIO_DIFFICULTY_OFFSET_X, SELECTED_SCENARIO_DIFFICULTY_WIDTH, text.w() ), dst.y + difficultyOffsetY );
+    fheroes2::Text difficultyLabelText( _( "Map difficulty:" ), fheroes2::FontType::normalWhite() );
+    difficultyLabelText.draw( dst.x + 210 - difficultyLabelText.width(), dst.y + difficultyOffsetY, display );
 
-    TextBox box( info.description, Font::BIG, SELECTED_SCENARIO_DESCRIPTION_WIDTH - 2 );
-    box.Blit( dst.x + SELECTED_SCENARIO_DESCRIPTION_OFFSET_X, dst.y + SELECTED_SCENARIO_DESCRIPTION_OFFSET_Y + 5 );
+    fheroes2::Text difficultyText( Difficulty::String( info.difficulty ), fheroes2::FontType::normalWhite() );
+    difficultyText.draw( GetCenteredTextXCoordinate( dst.x + SELECTED_SCENARIO_DIFFICULTY_OFFSET_X, SELECTED_SCENARIO_DIFFICULTY_WIDTH, difficultyText.width() ), dst.y + difficultyOffsetY,
+               display );
+
+    fheroes2::Text descriptionText( info.description, fheroes2::FontType::normalWhite() );
+    descriptionText.draw( dst.x + SELECTED_SCENARIO_DESCRIPTION_OFFSET_X, dst.y + SELECTED_SCENARIO_DESCRIPTION_OFFSET_Y + 5, SELECTED_SCENARIO_DESCRIPTION_WIDTH - 2, display );
 }
 
 void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display ) const
@@ -277,8 +284,8 @@ void ScenarioListBox::_renderMapIcon( const uint16_t size, fheroes2::Display & d
         fheroes2::Image icon( 17, 17 );
         icon.reset();
         fheroes2::Fill( icon, 1, 1, 15, 15, fheroes2::GetColorId( 0x8D, 0x73, 0xFF ) );
-        Text text( "N", Font::SMALL );
-        text.Blit( ( 17 - text.w() ) / 2, ( 17 - text.h() ) / 2, icon );
+        fheroes2::Text text( _( "N" ), fheroes2::FontType::smallWhite() );
+        text.draw( ( 17 - text.width() ) / 2, ( 17 - text.height() ) / 2, icon );
 
         fheroes2::Blit( icon, display, coordX, coordY );
     }
@@ -520,7 +527,9 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
         if ( le.MouseClickLeft( buttonSelectSmall.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL ) /*&& buttonSelectSmall.isEnabled()*/ ) {
             if ( small.empty() ) {
-                Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
+                fheroes2::Text header( "", fheroes2::FontType::normalWhite() );
+                fheroes2::Text body( _( "No maps exist at that size" ), fheroes2::FontType::normalWhite() );
+                fheroes2::showMessage( header, body, Dialog::OK );
                 currentPressedButton->drawOnPress();
             }
             else {
@@ -542,7 +551,9 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
         else if ( le.MouseClickLeft( buttonSelectMedium.area() )
                   || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_MEDIUM ) /*&& buttonSelectMedium.isEnabled()*/ ) {
             if ( medium.empty() ) {
-                Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
+                fheroes2::Text header( "", fheroes2::FontType::normalWhite() );
+                fheroes2::Text body( _( "No maps exist at that size" ), fheroes2::FontType::normalWhite() );
+                fheroes2::showMessage( header, body, Dialog::OK );
                 currentPressedButton->drawOnPress();
             }
             else {
@@ -564,7 +575,9 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
         else if ( le.MouseClickLeft( buttonSelectLarge.area() )
                   || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_LARGE ) /*&& buttonSelectLarge.isEnabled()*/ ) {
             if ( large.empty() ) {
-                Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
+                fheroes2::Text header( "", fheroes2::FontType::normalWhite() );
+                fheroes2::Text body( _( "No maps exist at that size" ), fheroes2::FontType::normalWhite() );
+                fheroes2::showMessage( header, body, Dialog::OK );
                 currentPressedButton->drawOnPress();
             }
             else {
@@ -586,7 +599,9 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
         else if ( le.MouseClickLeft( buttonSelectXLarge.area() )
                   || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE ) /*&& buttonSelectXLarge.isEnabled()*/ ) {
             if ( xlarge.empty() ) {
-                Dialog::Message( "", _( "No maps exist at that size" ), Font::BIG, Dialog::OK );
+                fheroes2::Text header( "", fheroes2::FontType::normalWhite() );
+                fheroes2::Text body( _( "No maps exist at that size" ), fheroes2::FontType::normalWhite() );
+                fheroes2::showMessage( header, body, Dialog::OK );
                 currentPressedButton->drawOnPress();
             }
             else {
@@ -622,55 +637,49 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
         // right info
         if ( le.MousePressRight( buttonSelectSmall.area() ) )
-            Dialog::Message( _( "Small Maps" ), _( "View only maps of size small (36 x 36)." ), Font::BIG );
-        else if ( le.MousePressRight( buttonSelectMedium.area() ) )
-            Dialog::Message( _( "Medium Maps" ), _( "View only maps of size medium (72 x 72)." ), Font::BIG );
+            OnRightClickToolTip(_("Small Maps"), _( "View only maps of size small (36 x 36)." ));        
+        else if ( le.MousePressRight( buttonSelectMedium.area() ) ) 
+            OnRightClickToolTip( _( "Medium Maps" ), _( "View only maps of size medium (72 x 72)." ));
         else if ( le.MousePressRight( buttonSelectLarge.area() ) )
-            Dialog::Message( _( "Large Maps" ), _( "View only maps of size large (108 x 108)." ), Font::BIG );
+            OnRightClickToolTip( _( "Large Maps" ), _( "View only maps of size large (108 x 108)." ));
         else if ( le.MousePressRight( buttonSelectXLarge.area() ) )
-            Dialog::Message( _( "Extra Large Maps" ), _( "View only maps of size extra large (144 x 144)." ), Font::BIG );
+            OnRightClickToolTip( _( "Extra Large Maps" ), _( "View only maps of size extra large (144 x 144)." ) );
         else if ( le.MousePressRight( buttonSelectAll.area() ) )
-            Dialog::Message( _( "All Maps" ), _( "View all maps, regardless of size." ), Font::BIG );
+            OnRightClickToolTip( _( "All Maps" ), _( "View all maps, regardless of size." ));
         else if ( le.MousePressRight( countPlayers ) || le.MousePressRight( curCountPlayer ) )
-            Dialog::Message( _( "Players Icon" ),
-                             _( "Indicates how many players total are in the scenario. Any positions not occupied by humans will be occupied by computer players." ),
-                             Font::BIG );
+            OnRightClickToolTip( _( "Players Icon" ), _( "Indicates how many players total are in the scenario. Any positions not occupied by humans will be occupied by computer players." ));
         else if ( le.MousePressRight( sizeMaps ) || le.MousePressRight( curMapSize ) )
-            Dialog::Message( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ),
-                             Font::BIG );
+            OnRightClickToolTip( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ));
         else if ( le.MousePressRight( mapTypes ) || le.MousePressRight( curMapType ) )
-            Dialog::Message( _( "Map Type" ), _( "Indicates whether the map is made for \"The Succession Wars\" or \"The Price of Loyalty\" version of the game." ),
-                             Font::BIG );
-        else if ( le.MousePressRight( mapNames ) ) {
+            OnRightClickToolTip( _( "Map Type" ), _( "Indicates whether the map is made for \"The Succession Wars\" or \"The Price of Loyalty\" version of the game." ));
+        else if ( le.MousePressRight( mapNames ) )
+        {
             const Maps::FileInfo * item = listbox.GetFromPosition( le.GetMouseCursor() );
             if ( item )
                 mapInfo( *item );
         }
-        else if ( le.MousePressRight( curMapName ) )
-            Dialog::Message( _( "Selected Name" ), _( "The name of the currently selected map." ), Font::BIG );
-        else if ( le.MousePressRight( victoryConds ) ) {
+        else if ( le.MousePressRight( curMapName ) ) 
+            OnRightClickToolTip( _( "Selected Name" ), _( "The name of the currently selected map." ));
+        else if ( le.MousePressRight( victoryConds ) )
+        {
             const Maps::FileInfo * item = listbox.GetFromPosition( le.GetMouseCursor() );
             if ( item )
                 VictoryConditionInfo( *item );
         }
-        else if ( le.MousePressRight( lossConds ) ) {
+        else if ( le.MousePressRight( lossConds ) )
+        {
             const Maps::FileInfo * item = listbox.GetFromPosition( le.GetMouseCursor() );
             if ( item )
                 LossConditionInfo( *item );
         }
-        else if ( le.MousePressRight( curVictoryCond ) )
-            VictoryConditionInfo( listbox.GetCurrent() );
-        else if ( le.MousePressRight( curLossCond ) )
-            LossConditionInfo( listbox.GetCurrent() );
-        else if ( le.MousePressRight( curDifficulty ) )
-            Dialog::Message(
-                _( "Selected Map Difficulty" ),
-                _( "The map difficulty of the currently selected map.  The map difficulty is determined by the scenario designer. More difficult maps might include more or stronger enemies, fewer resources, or other special conditions making things tougher for the human player." ),
-                Font::BIG );
-        else if ( le.MousePressRight( curDescription ) )
-            Dialog::Message( _( "Selected Description" ), _( "The description of the currently selected map." ), Font::BIG );
-        else if ( le.MousePressRight( buttonOk.area() ) )
-            Dialog::Message( _( "Okay" ), _( "Accept the choice made." ), Font::BIG );
+        else if ( le.MousePressRight( curVictoryCond ) ) VictoryConditionInfo( listbox.GetCurrent() );
+        else if ( le.MousePressRight( curLossCond ) ) LossConditionInfo( listbox.GetCurrent() );
+        else if ( le.MousePressRight( curDifficulty ) ) 
+            OnRightClickToolTip(_( "Selected Map Difficulty" ),_( "The map difficulty of the currently selected map.  The map difficulty is determined by the scenario designer. More difficult maps might include more or stronger enemies, fewer resources, or other special conditions making things tougher for the human player." ));
+        else if ( le.MousePressRight( curDescription ) ) 
+            OnRightClickToolTip( _( "Selected Description" ), _( "The description of the currently selected map." ));
+        else if ( le.MousePressRight( buttonOk.area() ) ) 
+            OnRightClickToolTip( _( "Okay" ), _( "Accept the choice made." ));
 
         if ( !needRedraw && !listbox.IsNeedRedraw() ) {
             continue;
