@@ -73,8 +73,8 @@ private:
     void _renderScenarioListItem( const Maps::FileInfo & info, fheroes2::Display & display, int32_t & dsty, bool current );
     void _renderSelectedScenarioInfo( fheroes2::Display & display, const fheroes2::Point & dst );
     void _renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display ) const;
-    void _renderMapIcon( const uint16_t size, fheroes2::Display & display, const int32_t coordX, const int32_t coordY ) const;
-    static const fheroes2::Sprite & _getPlayersCountIcon( const uint8_t playersCount );
+    static void _renderMapIcon( const uint16_t size, fheroes2::Display & display, const int32_t coordX, const int32_t coordY );
+    static const fheroes2::Sprite & _getPlayersCountIcon( const uint8_t colors );
     static const fheroes2::Sprite & _getMapTypeIcon( const GameVersion version );
     static const fheroes2::Sprite & _getWinConditionsIcon( const uint8_t condition );
     static const fheroes2::Sprite & _getLossConditionsIcon( const uint8_t condition );
