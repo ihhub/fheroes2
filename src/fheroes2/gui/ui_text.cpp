@@ -826,3 +826,9 @@ namespace fheroes2
         return true;
     }
 }
+
+int32_t TextUtils::GetCenteredTextXCoordinate( const int32_t startCoordX, const int32_t areaWidth, const int32_t textWidth )
+{
+    const int32_t centerTransform = areaWidth > textWidth ? ( areaWidth - textWidth ) / 2 : 0;
+    return startCoordX + centerTransform;
+}

@@ -104,29 +104,29 @@ namespace
 
         // text scenario
         fheroes2::Text text( _( "Scenario:" ), normalWhiteFont );
-        text.draw( rt.x + ( rt.width - text.width() ) / 2, rt.y + 25, display );
+        text.draw( TextUtils::GetCenteredTextXCoordinate( rt.x, rt.width, text.width() ), rt.y + 25, display );
 
         // maps name
         text.set( conf.MapsName(), normalWhiteFont );
-        text.draw( rt.x + ( rt.width - text.width() ) / 2, rt.y + 48, display );
+        text.draw( TextUtils::GetCenteredTextXCoordinate( rt.x, rt.width, text.width() ), rt.y + 48, display );
 
         // text game difficulty
         text.set( _( "Game Difficulty:" ), normalWhiteFont );
-        text.draw( rt.x + ( rt.width - text.width() ) / 2, rt.y + 77, display );
+        text.draw( TextUtils::GetCenteredTextXCoordinate( rt.x, rt.width, text.width() ), rt.y + 75, display );
 
         // text opponents
         text.set( _( "Opponents:" ), normalWhiteFont );
-        text.draw( rt.x + ( rt.width - text.width() ) / 2, rt.y + 183, display );
+        text.draw( TextUtils::GetCenteredTextXCoordinate( rt.x, rt.width, text.width() ), rt.y + 180, display );
 
         // text class
         text.set( _( "Class:" ), normalWhiteFont );
-        text.draw( rt.x + ( rt.width - text.width() ) / 2, rt.y + 264, display );
+        text.draw( TextUtils::GetCenteredTextXCoordinate( rt.x, rt.width, text.width() ), rt.y + 264, display );
     }
 
     void RedrawDifficultyInfo( const fheroes2::Point & dst )
     {
         const int32_t width = 77;
-        const int32_t height = 70;
+        const int32_t height = 69;
 
         for ( int32_t current = Difficulty::EASY; current <= Difficulty::IMPOSSIBLE; ++current ) {
             const int32_t offset = width * current;
@@ -136,13 +136,17 @@ namespace
         }
     }
 
-    void RedrawRatingInfo( TextSprite & sprite )
+    fheroes2::Rect RedrawRatingInfo( int32_t x_, int32_t y_, int32_t width_ )
     {
-        sprite.Hide();
         std::string str( _( "Rating %{rating}%" ) );
         StringReplace( str, "%{rating}", Game::GetRating() );
-        sprite.SetText( str );
-        sprite.Show();
+
+        fheroes2::Text text( str, fheroes2::FontType::normalWhite() );
+        const int32_t x = TextUtils::GetCenteredTextXCoordinate( x_, width_, text.width() );
+        const int32_t y = y_ + 385;
+        text.draw( x, y, fheroes2::Display::instance() );
+
+        return fheroes2::Rect( x, y, text.width(), text.height() );
     }
 
     fheroes2::GameMode ChooseNewMap( const MapsFileInfoList & lists )
@@ -153,9 +157,9 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
         const fheroes2::Rect rectPanel( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
-        const fheroes2::Point pointDifficultyInfo( rectPanel.x + 24, rectPanel.y + 93 );
-        const fheroes2::Point pointOpponentInfo( rectPanel.x + 24, rectPanel.y + 202 );
-        const fheroes2::Point pointClassInfo( rectPanel.x + 24, rectPanel.y + 282 );
+        const fheroes2::Point pointDifficultyInfo( rectPanel.x + 24, rectPanel.y + 95 );
+        const fheroes2::Point pointOpponentInfo( rectPanel.x + 24, rectPanel.y + 190 );
+        const fheroes2::Point pointClassInfo( rectPanel.x + 24, rectPanel.y + 270 );
 
         const fheroes2::Sprite & ngextra = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
 
@@ -216,10 +220,7 @@ namespace
 
         playersInfo.RedrawInfo( false );
 
-        TextSprite rating;
-        rating.SetFont( Font::BIG );
-        rating.SetPos( rectPanel.x + 166, rectPanel.y + 383 );
-        RedrawRatingInfo( rating );
+        fheroes2::Rect rating = RedrawRatingInfo( rectPanel.x, rectPanel.y, rectPanel.width );
 
         fheroes2::MovableSprite levelCursor( ngextra );
 
@@ -287,7 +288,7 @@ namespace
                     RedrawDifficultyInfo( pointDifficultyInfo );
                     playersInfo.resetSelection();
                     playersInfo.RedrawInfo( false );
-                    RedrawRatingInfo( rating );
+                    rating = RedrawRatingInfo( rectPanel.x, rectPanel.y, rectPanel.width );
                     levelCursor.setPosition( coordDifficulty[Game::getDifficulty()].x, coordDifficulty[Game::getDifficulty()].y ); // From 0 to 4, see: Difficulty enum
                     buttonOk.draw();
                     buttonCancel.draw();
@@ -312,7 +313,7 @@ namespace
                     levelCursor.setPosition( coordDifficulty[index].x, coordDifficulty[index].y );
                     levelCursor.redraw();
                     Game::saveDifficulty( index );
-                    RedrawRatingInfo( rating );
+                    rating = RedrawRatingInfo( rectPanel.x, rectPanel.y + 383, rectPanel.width );
                     display.render();
                 }
                 // playersInfo
@@ -322,7 +323,7 @@ namespace
                     RedrawDifficultyInfo( pointDifficultyInfo );
 
                     playersInfo.RedrawInfo( false );
-                    RedrawRatingInfo( rating );
+                    rating = RedrawRatingInfo( rectPanel.x, rectPanel.y, rectPanel.width );
                     buttonOk.draw();
                     buttonCancel.draw();
                     display.render();
@@ -337,7 +338,7 @@ namespace
                     RedrawDifficultyInfo( pointDifficultyInfo );
 
                     playersInfo.RedrawInfo( false );
-                    RedrawRatingInfo( rating );
+                    rating = RedrawRatingInfo( rectPanel.x, rectPanel.y, rectPanel.width );
                     buttonOk.draw();
                     buttonCancel.draw();
                     display.render();
@@ -352,7 +353,7 @@ namespace
                         _( "Game Difficulty" ),
                         _( "This lets you change the starting difficulty at which you will play. Higher difficulty levels start you of with fewer resources, and at the higher settings, give extra resources to the computer." ),
                         Font::BIG );
-                else if ( le.MousePressRight( rating.GetRect() ) )
+                else if ( le.MousePressRight( rating ) )
                     Dialog::
                         Message( _( "Difficulty Rating" ),
                                  _( "The difficulty rating reflects a combination of various settings for your game. This number will be applied to your final score." ),

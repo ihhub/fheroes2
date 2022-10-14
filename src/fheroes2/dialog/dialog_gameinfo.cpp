@@ -100,7 +100,7 @@ void Dialog::GameInfo()
 
     Interface::PlayersInfo playersInfo;
 
-    playersInfo.UpdateInfo( conf.GetPlayers(), fheroes2::Point( pt.x + 40, pt.y + 165 ), fheroes2::Point( pt.x + 40, pt.y + 240 ) );
+    playersInfo.UpdateInfo( conf.GetPlayers(), fheroes2::Point( pt.x + 40, pt.y + 158 ), fheroes2::Point( pt.x + 40, pt.y + 229 ) );
     playersInfo.RedrawInfo( true );
 
     text.set( _( "Victory\nConditions" ), fheroes2::FontType::smallWhite() );

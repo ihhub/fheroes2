@@ -129,7 +129,7 @@ void Interface::PlayersInfo::UpdateInfo( Players & players, const fheroes2::Poin
 
         info.playerTypeRoi = { playerTypeOffset.x + Game::GetStep4Player( i, playerTypeImage.width(), playerCount ), playerTypeOffset.y, playerTypeImage.width(),
                                playerTypeImage.height() };
-        info.nameRoi = { info.playerTypeRoi.x, info.playerTypeRoi.y + info.playerTypeRoi.height, info.playerTypeRoi.width, 10 };
+        info.nameRoi = { info.playerTypeRoi.x, info.playerTypeRoi.y + 7 + info.playerTypeRoi.height, info.playerTypeRoi.width, 10 };
         info.classRoi = { classOffset.x + Game::GetStep4Player( i, classImage.width(), playerCount ), classOffset.y, classImage.width(), classImage.height() };
         info.handicapRoi
             = { classOffset.x + Game::GetStep4Player( i, handicapImage.width(), playerCount ), classOffset.y + 65, handicapImage.width(), handicapImage.height() };
@@ -253,10 +253,16 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
     const Maps::FileInfo & fi = conf.CurrentFileInfo();
 
     const uint32_t humanColors = conf.GetPlayers().GetColors( CONTROL_HUMAN, true );
-
+    const size_t totalPlayers = conf.GetPlayers().size();
     // We need to render icon shadows and since shadows are drawn on left side from images we have to render images from right to left.
-    for ( auto iter = crbegin(); iter != crend(); ++iter ) {
-        const PlayerInfo & info = *iter;
+    for (
+        struct {
+            const_reverse_iterator iter;
+            int playerIndex;
+        } s
+        = { crbegin(), 0 };
+        s.iter != crend(); ++s.iter, ++s.playerIndex ) {
+        const PlayerInfo & info = *s.iter;
 
         uint32_t playerTypeIcnIndex = 0;
         if ( humanColors & info.player->GetColor() ) {
@@ -278,15 +284,16 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
         const fheroes2::Sprite & playerIconShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 60 );
         const fheroes2::Sprite & playerIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, playerTypeIcnIndex );
 
-        fheroes2::Blit( playerIconShadow, display, info.playerTypeRoi.x - 5, info.playerTypeRoi.y + 3 );
+        const uint32_t playerIconOffsetY = info.playerTypeRoi.y + 7;
+        fheroes2::Blit( playerIconShadow, display, info.playerTypeRoi.x - 5, playerIconOffsetY + 3 );
 
-        fheroes2::Blit( playerIcon, display, info.playerTypeRoi.x, info.playerTypeRoi.y );
+        fheroes2::Blit( playerIcon, display, info.playerTypeRoi.x, playerIconOffsetY );
         if ( currentSelectedPlayer != nullptr && info.player == currentSelectedPlayer ) {
             // TODO: add an overloaded DrawBorder() function to draw a border inside an image.
             fheroes2::Image selection( playerIcon.width(), playerIcon.height() );
             selection.reset();
             fheroes2::DrawBorder( selection, 214 );
-            fheroes2::Blit( selection, display, info.playerTypeRoi.x, info.playerTypeRoi.y );
+            fheroes2::Blit( selection, display, info.playerTypeRoi.x, playerIconOffsetY );
         }
 
         // draw player name
@@ -294,7 +301,8 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
 
         const int32_t maximumTextWidth = playerIcon.width() - 4;
         const int32_t fitWidth = Text::getFitWidth( info.player->GetName(), Font::SMALL, maximumTextWidth );
-        name.Blit( info.playerTypeRoi.x + 2 + ( maximumTextWidth - fitWidth ) / 2, info.playerTypeRoi.y + info.playerTypeRoi.height - 1, maximumTextWidth );
+
+        name.Blit( info.playerTypeRoi.x + 2 + ( maximumTextWidth - fitWidth ) / 2, playerIconOffsetY + info.playerTypeRoi.height - 1, maximumTextWidth );
 
         // 2. redraw class
         const bool isActivePlayer = displayInGameInfo ? info.player->isPlay() : conf.AllowChangeRace( info.player->GetColor() );
@@ -335,12 +343,16 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
         const fheroes2::Sprite & classIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, classIcnIndex );
         const fheroes2::Sprite & classIconShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 61 );
 
-        fheroes2::Blit( classIconShadow, display, info.classRoi.x - 5, info.classRoi.y + 3 );
-        fheroes2::Blit( classIcon, display, info.classRoi.x, info.classRoi.y );
+        const uint32_t classIconOffsetY = 11;
+        fheroes2::Blit( classIconShadow, display, info.classRoi.x - 5, info.classRoi.y + 3 + classIconOffsetY );
+        fheroes2::Blit( classIcon, display, info.classRoi.x, info.classRoi.y + classIconOffsetY );
 
-        const std::string & className = ( Race::NECR == info.player->GetRace() ? _( "Necroman" ) : Race::String( info.player->GetRace() ) );
-        Text text( className, Font::SMALL );
-        text.Blit( info.classRoi.x + ( info.classRoi.width - text.w() ) / 2, info.classRoi.y + info.classRoi.height + 2 );
+        const uint32_t maxClassNameTextWidth = classIcon.width() + 10;
+        const std::string & className = _( "playerInfo|" + Race::String( info.player->GetRace() ) );
+        fheroes2::Text text( className, fheroes2::FontType::smallWhite() );
+        const uint32_t classNameYOffset = 0;
+        text.draw( TextUtils::GetCenteredTextXCoordinate( info.classRoi.x - 10, info.classRoi.width + 20, maxClassNameTextWidth ),
+                   info.classRoi.y + classIconOffsetY + info.classRoi.height + 4 + classNameYOffset, maxClassNameTextWidth, display );
 
         // Display a handicap icon.
         uint32_t handicapIcnIndex = 0;
@@ -369,8 +381,8 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
         const fheroes2::Sprite & handicapIcon = fheroes2::AGG::GetICN( ICN::NGEXTRA, handicapIcnIndex );
         const fheroes2::Sprite & handicapIconShadow = fheroes2::AGG::GetICN( ICN::NGEXTRA, 59 );
 
-        fheroes2::Blit( handicapIconShadow, display, info.handicapRoi.x - 5, info.handicapRoi.y + 3 );
-        fheroes2::Blit( handicapIcon, display, info.handicapRoi.x, info.handicapRoi.y );
+        fheroes2::Blit( handicapIconShadow, display, info.handicapRoi.x - 5, info.handicapRoi.y + 15 + 3 );
+        fheroes2::Blit( handicapIcon, display, info.handicapRoi.x, info.handicapRoi.y + 15 );
     }
 }
 

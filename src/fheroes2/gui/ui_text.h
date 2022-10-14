@@ -191,3 +191,8 @@ namespace fheroes2
     // This function is usually useful for text generation on buttons as button font is a separate set of sprites.
     bool isFontAvailable( const std::string & text, const FontType fontType );
 }
+
+namespace TextUtils
+{
+    int32_t GetCenteredTextXCoordinate( const int32_t startCoordX, const int32_t areaWidth, const int32_t textWidth );
+}
