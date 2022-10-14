@@ -77,7 +77,7 @@ namespace
         ICON_SIZE = 18
     };
 
-    void ShowToolTip( const std::string& header, const std::string& body )
+    void ShowToolTip( const std::string & header, const std::string & body )
     {
         fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( body, fheroes2::FontType::normalWhite() ), Dialog::ZERO );
     }
@@ -647,12 +647,10 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
         else if ( le.MousePressRight( buttonSelectAll.area() ) )
             ShowToolTip( _( "All Maps" ), _( "View all maps, regardless of size." ) );
         else if ( le.MousePressRight( countPlayers ) || le.MousePressRight( curCountPlayer ) )
-            ShowToolTip(
-                _( "Players Icon" ),
-                _( "Indicates how many players total are in the scenario. Any positions not occupied by humans will be occupied by computer players." ) );
+            ShowToolTip( _( "Players Icon" ),
+                         _( "Indicates how many players total are in the scenario. Any positions not occupied by humans will be occupied by computer players." ) );
         else if ( le.MousePressRight( sizeMaps ) || le.MousePressRight( curMapSize ) )
-            ShowToolTip( _( "Size Icon" ),
-                                 _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ) );
+            ShowToolTip( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ) );
         else if ( le.MousePressRight( mapTypes ) || le.MousePressRight( curMapType ) )
             ShowToolTip( _( "Map Type" ), _( "Indicates whether the map is made for \"The Succession Wars\" or \"The Price of Loyalty\" version of the game." ) );
         else if ( le.MousePressRight( mapNames ) ) {
