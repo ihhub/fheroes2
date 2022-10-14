@@ -77,6 +77,11 @@ namespace
         ICON_SIZE = 18
     };
 
+    void OnRightClickToolTip( const std::string header, const std::string body )
+    {
+        fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( body, fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+    }
+
     void mapInfo( const Maps::FileInfo & info )
     {
         // On some OSes like Windows, the path may contain '\' symbols. This symbol doesn't exist in the resources.
@@ -128,8 +133,8 @@ namespace
             assert( 0 );
             return;
         }
-        fheroes2::showMessage( fheroes2::Text( _( "Loss Condition" ), fheroes2::FontType::normalWhite() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
-                               Dialog::ZERO );
+
+        OnRightClickToolTip( _( "Loss Condition" ), msg );
     }
 
     void VictoryConditionInfo( const Maps::FileInfo & info )
@@ -160,8 +165,7 @@ namespace
             assert( 0 );
             return;
         }
-        fheroes2::showMessage( fheroes2::Text( _( "Victory Condition" ), fheroes2::FontType::normalWhite() ), fheroes2::Text( msg, fheroes2::FontType::normalWhite() ),
-                               Dialog::ZERO );
+        OnRightClickToolTip( _( "Victory Condition" ), msg );
     }
 
     size_t GetSelectedMapId( const MapsFileInfoList & lists )
@@ -184,11 +188,6 @@ namespace
     {
         const int32_t centerTransform = textBoxWidth > textWidth ? ( textBoxWidth - textWidth ) / 2 : 0;
         return startCoordX + centerTransform;
-    }
-
-    void OnRightClickToolTip( const std::string header, const std::string body )
-    {
-        fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalWhite() ), fheroes2::Text( body, fheroes2::FontType::normalWhite() ), Dialog::ZERO );
     }
 }
 
@@ -230,7 +229,7 @@ void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, 
 
     fheroes2::Text mapNameText( info.name, fheroes2::FontType::normalWhite() );
     mapNameText.draw( GetCenteredTextXCoordinate( dst.x + SELECTED_SCENARIO_MAP_NAME_OFFSET_X, SELECTED_SCENARIO_MAP_NAME_WIDTH, mapNameText.width() ),
-               dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y + 3, display );
+                      dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y + 3, display );
 
     fheroes2::Blit( _getWinConditionsIcon( info.conditions_wins ), display, dst.x + SELECTED_SCENARIO_VICTORY_CONDITION_OFFSET_X,
                     dst.y + SELECTED_SCENARIO_GENERAL_OFFSET_Y );
@@ -243,11 +242,12 @@ void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, 
     difficultyLabelText.draw( dst.x + 210 - difficultyLabelText.width(), dst.y + difficultyOffsetY, display );
 
     fheroes2::Text difficultyText( Difficulty::String( info.difficulty ), fheroes2::FontType::normalWhite() );
-    difficultyText.draw( GetCenteredTextXCoordinate( dst.x + SELECTED_SCENARIO_DIFFICULTY_OFFSET_X, SELECTED_SCENARIO_DIFFICULTY_WIDTH, difficultyText.width() ), dst.y + difficultyOffsetY,
-               display );
+    difficultyText.draw( GetCenteredTextXCoordinate( dst.x + SELECTED_SCENARIO_DIFFICULTY_OFFSET_X, SELECTED_SCENARIO_DIFFICULTY_WIDTH, difficultyText.width() ),
+                         dst.y + difficultyOffsetY, display );
 
     fheroes2::Text descriptionText( info.description, fheroes2::FontType::normalWhite() );
-    descriptionText.draw( dst.x + SELECTED_SCENARIO_DESCRIPTION_OFFSET_X, dst.y + SELECTED_SCENARIO_DESCRIPTION_OFFSET_Y + 5, SELECTED_SCENARIO_DESCRIPTION_WIDTH - 2, display );
+    descriptionText.draw( dst.x + SELECTED_SCENARIO_DESCRIPTION_OFFSET_X, dst.y + SELECTED_SCENARIO_DESCRIPTION_OFFSET_Y + 5, SELECTED_SCENARIO_DESCRIPTION_WIDTH - 2,
+                          display );
 }
 
 void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display ) const
@@ -637,49 +637,53 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
         // right info
         if ( le.MousePressRight( buttonSelectSmall.area() ) )
-            OnRightClickToolTip(_("Small Maps"), _( "View only maps of size small (36 x 36)." ));        
-        else if ( le.MousePressRight( buttonSelectMedium.area() ) ) 
-            OnRightClickToolTip( _( "Medium Maps" ), _( "View only maps of size medium (72 x 72)." ));
+            OnRightClickToolTip( _( "Small Maps" ), _( "View only maps of size small (36 x 36)." ) );
+        else if ( le.MousePressRight( buttonSelectMedium.area() ) )
+            OnRightClickToolTip( _( "Medium Maps" ), _( "View only maps of size medium (72 x 72)." ) );
         else if ( le.MousePressRight( buttonSelectLarge.area() ) )
-            OnRightClickToolTip( _( "Large Maps" ), _( "View only maps of size large (108 x 108)." ));
+            OnRightClickToolTip( _( "Large Maps" ), _( "View only maps of size large (108 x 108)." ) );
         else if ( le.MousePressRight( buttonSelectXLarge.area() ) )
             OnRightClickToolTip( _( "Extra Large Maps" ), _( "View only maps of size extra large (144 x 144)." ) );
         else if ( le.MousePressRight( buttonSelectAll.area() ) )
-            OnRightClickToolTip( _( "All Maps" ), _( "View all maps, regardless of size." ));
+            OnRightClickToolTip( _( "All Maps" ), _( "View all maps, regardless of size." ) );
         else if ( le.MousePressRight( countPlayers ) || le.MousePressRight( curCountPlayer ) )
-            OnRightClickToolTip( _( "Players Icon" ), _( "Indicates how many players total are in the scenario. Any positions not occupied by humans will be occupied by computer players." ));
+            OnRightClickToolTip(
+                _( "Players Icon" ),
+                _( "Indicates how many players total are in the scenario. Any positions not occupied by humans will be occupied by computer players." ) );
         else if ( le.MousePressRight( sizeMaps ) || le.MousePressRight( curMapSize ) )
-            OnRightClickToolTip( _( "Size Icon" ), _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ));
+            OnRightClickToolTip( _( "Size Icon" ),
+                                 _( "Indicates whether the map\nis small (36 x 36), medium\n(72 x 72), large (108 x 108),\nor extra large (144 x 144)." ) );
         else if ( le.MousePressRight( mapTypes ) || le.MousePressRight( curMapType ) )
-            OnRightClickToolTip( _( "Map Type" ), _( "Indicates whether the map is made for \"The Succession Wars\" or \"The Price of Loyalty\" version of the game." ));
-        else if ( le.MousePressRight( mapNames ) )
-        {
+            OnRightClickToolTip( _( "Map Type" ), _( "Indicates whether the map is made for \"The Succession Wars\" or \"The Price of Loyalty\" version of the game." ) );
+        else if ( le.MousePressRight( mapNames ) ) {
             const Maps::FileInfo * item = listbox.GetFromPosition( le.GetMouseCursor() );
             if ( item )
                 mapInfo( *item );
         }
-        else if ( le.MousePressRight( curMapName ) ) 
-            OnRightClickToolTip( _( "Selected Name" ), _( "The name of the currently selected map." ));
-        else if ( le.MousePressRight( victoryConds ) )
-        {
+        else if ( le.MousePressRight( curMapName ) )
+            OnRightClickToolTip( _( "Selected Name" ), _( "The name of the currently selected map." ) );
+        else if ( le.MousePressRight( victoryConds ) ) {
             const Maps::FileInfo * item = listbox.GetFromPosition( le.GetMouseCursor() );
             if ( item )
                 VictoryConditionInfo( *item );
         }
-        else if ( le.MousePressRight( lossConds ) )
-        {
+        else if ( le.MousePressRight( lossConds ) ) {
             const Maps::FileInfo * item = listbox.GetFromPosition( le.GetMouseCursor() );
             if ( item )
                 LossConditionInfo( *item );
         }
-        else if ( le.MousePressRight( curVictoryCond ) ) VictoryConditionInfo( listbox.GetCurrent() );
-        else if ( le.MousePressRight( curLossCond ) ) LossConditionInfo( listbox.GetCurrent() );
-        else if ( le.MousePressRight( curDifficulty ) ) 
-            OnRightClickToolTip(_( "Selected Map Difficulty" ),_( "The map difficulty of the currently selected map.  The map difficulty is determined by the scenario designer. More difficult maps might include more or stronger enemies, fewer resources, or other special conditions making things tougher for the human player." ));
-        else if ( le.MousePressRight( curDescription ) ) 
-            OnRightClickToolTip( _( "Selected Description" ), _( "The description of the currently selected map." ));
-        else if ( le.MousePressRight( buttonOk.area() ) ) 
-            OnRightClickToolTip( _( "Okay" ), _( "Accept the choice made." ));
+        else if ( le.MousePressRight( curVictoryCond ) )
+            VictoryConditionInfo( listbox.GetCurrent() );
+        else if ( le.MousePressRight( curLossCond ) )
+            LossConditionInfo( listbox.GetCurrent() );
+        else if ( le.MousePressRight( curDifficulty ) )
+            OnRightClickToolTip(
+                _( "Selected Map Difficulty" ),
+                _( "The map difficulty of the currently selected map.  The map difficulty is determined by the scenario designer. More difficult maps might include more or stronger enemies, fewer resources, or other special conditions making things tougher for the human player." ) );
+        else if ( le.MousePressRight( curDescription ) )
+            OnRightClickToolTip( _( "Selected Description" ), _( "The description of the currently selected map." ) );
+        else if ( le.MousePressRight( buttonOk.area() ) )
+            OnRightClickToolTip( _( "Okay" ), _( "Accept the choice made." ) );
 
         if ( !needRedraw && !listbox.IsNeedRedraw() ) {
             continue;
