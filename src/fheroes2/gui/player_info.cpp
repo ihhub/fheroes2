@@ -338,12 +338,12 @@ void Interface::PlayersInfo::RedrawInfo( const bool displayInGameInfo ) const
         fheroes2::Blit( classIconShadow, display, info.classRoi.x - 5, info.classRoi.y + 3 );
         fheroes2::Blit( classIcon, display, info.classRoi.x, info.classRoi.y );
 
-        const uint32_t maxClassNameTextWidth = classIcon.width() + 10;
+        const int32_t maxClassNameTextWidth = classIcon.width() + 10;
         const std::string & className = _( "playerInfo|" + Race::String( info.player->GetRace() ) );
         fheroes2::Text text( className, fheroes2::FontType::smallWhite() );
-        
+
         text.draw( TextUtils::GetCenteredTextXCoordinate( info.classRoi.x - 10, info.classRoi.width + 20, maxClassNameTextWidth ),
-                   info.classRoi.y + info.classRoi.height + 4 , maxClassNameTextWidth, display );
+                   info.classRoi.y + info.classRoi.height + 4, maxClassNameTextWidth, display );
 
         // Display a handicap icon.
         uint32_t handicapIcnIndex = 0;

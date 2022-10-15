@@ -146,7 +146,7 @@ namespace
         const int32_t y = y_ + 385;
         text.draw( x, y, fheroes2::Display::instance() );
 
-        return fheroes2::Rect( x, y, text.width(), text.height() );
+        return { x, y, text.width(), text.height() };
     }
 
     fheroes2::GameMode ChooseNewMap( const MapsFileInfoList & lists )
