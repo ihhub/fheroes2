@@ -158,8 +158,8 @@ namespace
         const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
         const fheroes2::Rect rectPanel( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
         const fheroes2::Point pointDifficultyInfo( rectPanel.x + 24, rectPanel.y + 95 );
-        const fheroes2::Point pointOpponentInfo( rectPanel.x + 24, rectPanel.y + 190 );
-        const fheroes2::Point pointClassInfo( rectPanel.x + 24, rectPanel.y + 270 );
+        const fheroes2::Point pointOpponentInfo( rectPanel.x + 24, rectPanel.y + 197 );
+        const fheroes2::Point pointClassInfo( rectPanel.x + 24, rectPanel.y + 281 );
 
         const fheroes2::Sprite & ngextra = fheroes2::AGG::GetICN( ICN::NGEXTRA, 62 );
 
