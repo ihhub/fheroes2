@@ -52,8 +52,8 @@ msgid ""
 "Do you want to regain control from AI? The effect will take place only on "
 "the next turn."
 msgstr ""
-"Voulez-vous reprendre le contrôle du jeu de l'IA ? Cela prendra effet au "
-"prochain tour."
+"Voulez-vous reprendre à l'IA le contrôle du jeu ? L'effet aura lieu "
+"uniquement au prochain tour."
 
 msgid ""
 "A few\n"
@@ -740,31 +740,31 @@ msgid "%{count} %{name} rise(s) from the dead!"
 msgstr "%{count} %{name} reviennent à la vie !"
 
 msgid "Dwarven Alliance"
-msgstr "Alliance des Nains"
+msgstr "Alliance des nains"
 
 msgid "Sorceress Guild"
-msgstr "Guilde des Sorcières"
+msgstr "Guilde des sorcières"
 
 msgid "Necromancer Guild"
 msgstr "Guilde des nécromanciens"
 
 msgid "Ogre Alliance"
-msgstr "Alliance des Ogres"
+msgstr "Alliance des ogres"
 
 msgid "Dwarfbane"
-msgstr "Fléau des Nains"
+msgstr "Fléau des nains"
 
 msgid "Dragon Alliance"
-msgstr "Alliance des Dragons"
+msgstr "Alliance des dragons"
 
 msgid "Elven Alliance"
-msgstr "Alliance des Elfes"
+msgstr "Alliance des elfes"
 
 msgid "Kraeger defeated"
 msgstr "Kraeger vaincu"
 
 msgid "Wayward Son"
-msgstr "Fils Dévoyé"
+msgstr "Fils D=dévoyé"
 
 msgid "Uncle Ivan"
 msgstr "Oncle Ivan"
@@ -776,13 +776,13 @@ msgid "Force of Arms"
 msgstr "Force des armes"
 
 msgid "Save the Dwarves"
-msgstr "Sauve les Nains"
+msgstr "Sauve les nains"
 
 msgid "Carator Mines"
 msgstr "Mines de Carator"
 
 msgid "Turning Point"
-msgstr "Moment Décisif"
+msgstr "Moment décisif"
 
 msgid "scenarioName|Defender"
 msgstr "Défenseur"
@@ -791,7 +791,7 @@ msgid "Corlagon's Defense"
 msgstr "Défense de Corlagon"
 
 msgid "The Crown"
-msgstr "La Couronne"
+msgstr "La couronne"
 
 msgid "The Gauntlet"
 msgstr "Le gantelet"
@@ -2326,8 +2326,8 @@ msgid ""
 "You must purchase a spell book to use the mage guild, but you currently have "
 "no room for a spell book. Try giving one of your artifacts to another hero."
 msgstr ""
-"Vous devez acheter un Grimoire pour utiliser la Guilde des magiciens, mais "
-"vous n'avez actuellement pas de place pour un Grimoire. Essayez de donner un "
+"Vous devez acheter un grimoire pour utiliser la guilde des magiciens, mais "
+"vous n'avez actuellement pas de place pour un grimoire. Essayez de donner un "
 "de vos artéfacts à un autre héros."
 
 msgid "Exit"
@@ -4063,7 +4063,7 @@ msgid ""
 "place only on the next turn."
 msgstr ""
 "Voulez-vous laisser l'IA prendre les commandes ? L'effet aura lieu "
-"seulement au prochain tour."
+"uniquement au prochain tour."
 
 msgid ""
 "%{color} player, you have lost your last town. If you do not conquer another "
@@ -8389,7 +8389,7 @@ msgid ""
 msgstr ""
 "Un morceau de glace qui résiste à la forte chaleur du soleil de midi attire "
 "votre attention. Intrigué, vous le détachez, et vous vous rendez compte "
-"qu'elle ne fond pas dans votre main."
+"qu'il ne fond pas dans votre main."
 
 msgid "Everhot Lava Rock"
 msgstr "La pierre de lave brûlante"
