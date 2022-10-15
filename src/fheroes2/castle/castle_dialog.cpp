@@ -181,38 +181,46 @@ namespace
         return output;
     }
 
-    void verifyMagicBookPresence( const Castle & castle, CastleHeroes & heroes )
+    bool purchaseSpellBookIfNecessary( const Castle & castle, CastleHeroes & heroes )
     {
-        bool noFreeSpaceForMagicBook = false;
+        bool spellBookPurchased = false;
+        bool noFreeSpaceForSpellBook = false;
 
-        if ( heroes.Guard() && !heroes.Guard()->HaveSpellBook() ) {
-            if ( heroes.Guard()->IsFullBagArtifacts() ) {
-                noFreeSpaceForMagicBook = true;
+        auto purchaseSpellBookForHero = [&castle, &spellBookPurchased, &noFreeSpaceForSpellBook]( Heroes * hero ) {
+            if ( hero->IsFullBagArtifacts() ) {
+                noFreeSpaceForSpellBook = true;
             }
             else {
-                heroes.Guard()->BuySpellBook( &castle );
+                const bool purchased = hero->BuySpellBook( &castle );
+
+                spellBookPurchased = spellBookPurchased || purchased;
             }
+        };
+
+        if ( heroes.Guard() && !heroes.Guard()->HaveSpellBook() ) {
+            purchaseSpellBookForHero( heroes.Guard() );
         }
 
         if ( heroes.Guest() && !heroes.Guest()->HaveSpellBook() ) {
-            if ( heroes.Guest()->IsFullBagArtifacts() ) {
-                noFreeSpaceForMagicBook = true;
-            }
-            else {
-                heroes.Guest()->BuySpellBook( &castle );
-            }
+            purchaseSpellBookForHero( heroes.Guest() );
         }
 
-        if ( noFreeSpaceForMagicBook ) {
+        if ( noFreeSpaceForSpellBook ) {
             const Heroes * hero = heroes.Guard();
-            if ( !hero || hero->HaveSpellBook() || !hero->IsFullBagArtifacts() )
+
+            if ( !hero || hero->HaveSpellBook() || !hero->IsFullBagArtifacts() ) {
                 hero = heroes.Guest();
+            }
+
+            assert( hero != nullptr );
 
             Dialog::Message(
                 hero->GetName(),
                 _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
                 Font::BIG, Dialog::OK );
         }
+
+        return spellBookPurchased;
     }
 
     void openHeroDialog( ArmyBar & topArmyBar, ArmyBar & bottomArmyBar, Heroes & hero )
@@ -556,7 +564,10 @@ Castle::CastleDialogReturnValue Castle::OpenDialog( const bool readOnly, const b
                     else if ( isMagicGuild ) {
                         fheroes2::ButtonRestorer exitRestorer( buttonExit );
 
-                        verifyMagicBookPresence( *this, heroes );
+                        if ( purchaseSpellBookIfNecessary( *this, heroes ) ) {
+                            // At least one of the castle heroes purchased the spellbook, redraw the resource panel
+                            need_redraw = true;
+                        }
 
                         OpenMageGuild( heroes );
                     }
