@@ -385,7 +385,7 @@ msgid "Cancel"
 msgstr "Annuler"
 
 msgid "Hero Screen"
-msgstr "Fenêtre d'informations du Héros"
+msgstr "Fenêtre d'informations du héros"
 
 msgid "Captain's Options"
 msgstr "Options du capitaine"
@@ -691,16 +691,16 @@ msgid "Please select another hero."
 msgstr "Veuillez choisir un autre héros."
 
 msgid "Set Attack Skill"
-msgstr "Régler Attaque"
+msgstr "Régler attaque"
 
 msgid "Set Defense Skill"
-msgstr "Régler Défense"
+msgstr "Régler défense"
 
 msgid "Set Power Skill"
-msgstr "Régler Puissance"
+msgstr "Régler puissance"
 
 msgid "Set Knowledge Skill"
-msgstr "Régler Connaissance"
+msgstr "Régler connaissance"
 
 msgid "%{race1} %{name1}"
 msgstr "%{race1} le %{name1}"
@@ -764,7 +764,7 @@ msgid "Kraeger defeated"
 msgstr "Kraeger vaincu"
 
 msgid "Wayward Son"
-msgstr "Fils D=dévoyé"
+msgstr "Fils dévoyé"
 
 msgid "Uncle Ivan"
 msgstr "Oncle Ivan"
