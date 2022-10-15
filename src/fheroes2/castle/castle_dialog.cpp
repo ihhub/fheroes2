@@ -184,11 +184,15 @@ namespace
     bool purchaseSpellBookIfNecessary( const Castle & castle, CastleHeroes & heroes )
     {
         bool spellBookPurchased = false;
-        bool noFreeSpaceForSpellBook = false;
 
-        auto purchaseSpellBookForHero = [&castle, &spellBookPurchased, &noFreeSpaceForSpellBook]( Heroes * hero ) {
+        auto purchaseSpellBookForHero = [&castle, &spellBookPurchased]( Heroes * hero ) {
+            assert( hero != nullptr );
+
             if ( hero->IsFullBagArtifacts() ) {
-                noFreeSpaceForSpellBook = true;
+                Dialog::Message(
+                    hero->GetName(),
+                    _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
+                    Font::BIG, Dialog::OK );
             }
             else {
                 const bool purchased = hero->BuySpellBook( &castle );
@@ -203,21 +207,6 @@ namespace
 
         if ( heroes.Guest() && !heroes.Guest()->HaveSpellBook() ) {
             purchaseSpellBookForHero( heroes.Guest() );
-        }
-
-        if ( noFreeSpaceForSpellBook ) {
-            const Heroes * hero = heroes.Guard();
-
-            if ( !hero || hero->HaveSpellBook() || !hero->IsFullBagArtifacts() ) {
-                hero = heroes.Guest();
-            }
-
-            assert( hero != nullptr );
-
-            Dialog::Message(
-                hero->GetName(),
-                _( "You must purchase a spell book to use the mage guild, but you currently have no room for a spell book. Try giving one of your artifacts to another hero." ),
-                Font::BIG, Dialog::OK );
         }
 
         return spellBookPurchased;
