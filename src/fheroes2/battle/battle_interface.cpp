@@ -664,11 +664,11 @@ Battle::OpponentSprite::OpponentSprite( const fheroes2::Rect & area, const HeroB
     const fheroes2::Sprite & sprite = fheroes2::AGG::GetICN( _heroIcnId, _currentAnim.getFrame() );
 
     if ( reflect ) {
-        pos.x = _offset.x + fheroes2::Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( sprite.x() + sprite.width() );
+        pos.x = _offset.x + fheroes2::Display::DEFAULT_WIDTH - RIGHT_HERO_X_OFFSET - ( sprite.x() + sprite.width() );
         pos.y = _offset.y + RIGHT_HERO_Y_OFFSET + sprite.y();
     }
     else {
-        pos.x = _offset.x + HERO_X_OFFSET + sprite.x();
+        pos.x = _offset.x + LEFT_HERO_X_OFFSET + sprite.x();
         pos.y = _offset.y + LEFT_HERO_Y_OFFSET + sprite.y();
     }
 
@@ -745,10 +745,10 @@ void Battle::OpponentSprite::Redraw( fheroes2::Image & dst ) const
     }
 
     if ( reflect )
-        fheroes2::Blit( hero, dst, offset.x + fheroes2::Display::DEFAULT_WIDTH - HERO_X_OFFSET - ( hero.x() + hero.width() ), offset.y + RIGHT_HERO_Y_OFFSET + hero.y(),
+        fheroes2::Blit( hero, dst, offset.x + fheroes2::Display::DEFAULT_WIDTH - RIGHT_HERO_X_OFFSET - ( hero.x() + hero.width() ), offset.y + RIGHT_HERO_Y_OFFSET + hero.y(),
                         reflect );
     else
-        fheroes2::Blit( hero, dst, offset.x + HERO_X_OFFSET + hero.x() + 1, offset.y + LEFT_HERO_Y_OFFSET + hero.y() );
+        fheroes2::Blit( hero, dst, offset.x + LEFT_HERO_X_OFFSET + hero.x(), offset.y + LEFT_HERO_Y_OFFSET + hero.y() );
 }
 
 void Battle::OpponentSprite::Update()
@@ -1458,7 +1458,7 @@ void Battle::Interface::RedrawOpponentsFlags()
         }
 
         const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, 0, animation_flags_frame ) );
-        fheroes2::Blit( flag, _mainSurface, opponent1->Offset().x + OpponentSprite::HERO_X_OFFSET + flag.x(),
+        fheroes2::Blit( flag, _mainSurface, opponent1->Offset().x + OpponentSprite::LEFT_HERO_X_OFFSET + flag.x(),
                         opponent1->Offset().y + OpponentSprite::LEFT_HERO_Y_OFFSET + flag.y() );
     }
 
@@ -1491,7 +1491,7 @@ void Battle::Interface::RedrawOpponentsFlags()
 
         const fheroes2::Sprite & flag = fheroes2::AGG::GetICN( icn, ICN::AnimationFrame( icn, 0, animation_flags_frame ) );
         const fheroes2::Point offset = opponent2->Offset();
-        fheroes2::Blit( flag, _mainSurface, offset.x + fheroes2::Display::DEFAULT_WIDTH - OpponentSprite::HERO_X_OFFSET - ( flag.x() + flag.width() ),
+        fheroes2::Blit( flag, _mainSurface, offset.x + fheroes2::Display::DEFAULT_WIDTH - OpponentSprite::RIGHT_HERO_X_OFFSET - ( flag.x() + flag.width() ),
                         offset.y + OpponentSprite::RIGHT_HERO_Y_OFFSET + flag.y(), true );
     }
 }

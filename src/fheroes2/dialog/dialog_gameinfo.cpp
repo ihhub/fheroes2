@@ -67,7 +67,7 @@ void Dialog::GameInfo()
     text.draw( pt.x + 140, pt.y + 56, 80, display );
 
     text.set( _( "Rating" ), fheroes2::FontType::smallWhite() );
-    text.draw( pt.x + 230, pt.y + 78 - text.height( 80 ), 80, display );
+    text.draw( pt.x + 150, pt.y + 78 - text.height( 80 ), 80, display );
 
     text.set( _( "Map Size" ), fheroes2::FontType::smallWhite() );
     text.draw( pt.x + 322, pt.y + 78 - text.height( 80 ), 80, display );
