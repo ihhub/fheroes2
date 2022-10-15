@@ -79,7 +79,7 @@ namespace
 
     void ShowToolTip( const std::string & header, const std::string & body )
     {
-        fheroes2::showMessage( fheroes2::Text( header, fheroes2::FontType::normalYellow() ), fheroes2::Text( body, fheroes2::FontType::normalWhite() ), Dialog::ZERO );
+        fheroes2::showStandardTextMessage( header, body, Dialog::ZERO );
     }
 
     void mapInfo( const Maps::FileInfo & info )
@@ -211,12 +211,12 @@ void ScenarioListBox::RedrawBackground( const fheroes2::Point & dst )
 
 void ScenarioListBox::_renderScenarioListItem( const Maps::FileInfo & info, fheroes2::Display & display, int32_t & dsty, bool current )
 {
-    fheroes2::Blit( _getPlayersCountIcon( info.kingdom_colors ), display, _x + SCENARIO_LIST_COUNT_PLAYERS_OFFSET_X, dsty );
-    _renderMapIcon( info.size_w, display, _x + SCENARIO_LIST_MAP_SIZE_OFFSET_X, dsty );
-    fheroes2::Blit( _getMapTypeIcon( info._version ), display, _x + SCENARIO_LIST_MAP_TYPE_OFFSET_X, dsty );
+    fheroes2::Blit( _getPlayersCountIcon( info.kingdom_colors ), display, _offsetX + SCENARIO_LIST_COUNT_PLAYERS_OFFSET_X, dsty );
+    _renderMapIcon( info.size_w, display, _offsetX + SCENARIO_LIST_MAP_SIZE_OFFSET_X, dsty );
+    fheroes2::Blit( _getMapTypeIcon( info._version ), display, _offsetX + SCENARIO_LIST_MAP_TYPE_OFFSET_X, dsty );
     _renderMapName( info, current, dsty, display );
-    fheroes2::Blit( _getWinConditionsIcon( info.conditions_wins ), display, _x + SCENARIO_LIST_VICTORY_CONDITION_OFFSET_X, dsty );
-    fheroes2::Blit( _getLossConditionsIcon( info.conditions_loss ), display, _x + SCENARIO_LIST_LOSS_CONDITION_OFFSET_X, dsty );
+    fheroes2::Blit( _getWinConditionsIcon( info.conditions_wins ), display, _offsetX + SCENARIO_LIST_VICTORY_CONDITION_OFFSET_X, dsty );
+    fheroes2::Blit( _getLossConditionsIcon( info.conditions_loss ), display, _offsetX + SCENARIO_LIST_LOSS_CONDITION_OFFSET_X, dsty );
 }
 
 void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, const fheroes2::Point & dst )
@@ -253,7 +253,7 @@ void ScenarioListBox::_renderSelectedScenarioInfo( fheroes2::Display & display, 
 void ScenarioListBox::_renderMapName( const Maps::FileInfo & info, bool selected, const int32_t & baseYOffset, fheroes2::Display & display ) const
 {
     fheroes2::Text mapName( info.name, { fheroes2::FontSize::NORMAL, ( selected ? fheroes2::FontColor::YELLOW : fheroes2::FontColor::WHITE ) } );
-    const int32_t xCoordinate = GetCenteredTextXCoordinate( _x + SCENARIO_LIST_MAP_NAME_OFFSET_X, SCENARIO_LIST_MAP_NAME_WIDTH, mapName.width() );
+    const int32_t xCoordinate = GetCenteredTextXCoordinate( _offsetX + SCENARIO_LIST_MAP_NAME_OFFSET_X, SCENARIO_LIST_MAP_NAME_WIDTH, mapName.width() );
     const int32_t yCoordinate = baseYOffset + MAP_LIST_ROW_SPACING_Y - 1;
 
     mapName.draw( xCoordinate, yCoordinate, display );
@@ -296,7 +296,7 @@ void ScenarioListBox::_renderMapIcon( const uint16_t size, fheroes2::Display & d
 
 const fheroes2::Sprite & ScenarioListBox::_getPlayersCountIcon( const uint8_t colors )
 {
-    const int iconIndex = 19 + Color::Count( colors );
+    const uint32_t iconIndex = 19 + Color::Count( colors );
     return fheroes2::AGG::GetICN( ICN::REQUESTS, iconIndex );
 }
 
@@ -307,13 +307,13 @@ const fheroes2::Sprite & ScenarioListBox::_getMapTypeIcon( const GameVersion ver
 
 const fheroes2::Sprite & ScenarioListBox::_getWinConditionsIcon( const uint8_t condition )
 {
-    int iconIndex = 30 + condition;
+    uint32_t iconIndex = 30 + condition;
     return fheroes2::AGG::GetICN( ICN::REQUESTS, iconIndex );
 }
 
 const fheroes2::Sprite & ScenarioListBox::_getLossConditionsIcon( const uint8_t condition )
 {
-    int iconIndex = 36 + condition;
+    uint32_t iconIndex = 36 + condition;
     return fheroes2::AGG::GetICN( ICN::REQUESTS, iconIndex );
 }
 
@@ -527,9 +527,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
 
         if ( le.MouseClickLeft( buttonSelectSmall.area() ) || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_SMALL ) /*&& buttonSelectSmall.isEnabled()*/ ) {
             if ( small.empty() ) {
-                fheroes2::Text header( "", fheroes2::FontType::normalWhite() );
-                fheroes2::Text body( _( "No maps exist at that size" ), fheroes2::FontType::normalWhite() );
-                fheroes2::showMessage( header, body, Dialog::OK );
+                fheroes2::showStandardTextMessage( "", _( "No maps exist at that size" ), Dialog::OK );
                 currentPressedButton->drawOnPress();
             }
             else {
@@ -551,9 +549,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
         else if ( le.MouseClickLeft( buttonSelectMedium.area() )
                   || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_MEDIUM ) /*&& buttonSelectMedium.isEnabled()*/ ) {
             if ( medium.empty() ) {
-                fheroes2::Text header( "", fheroes2::FontType::normalWhite() );
-                fheroes2::Text body( _( "No maps exist at that size" ), fheroes2::FontType::normalWhite() );
-                fheroes2::showMessage( header, body, Dialog::OK );
+                fheroes2::showStandardTextMessage( "", _( "No maps exist at that size" ), Dialog::OK );
                 currentPressedButton->drawOnPress();
             }
             else {
@@ -575,9 +571,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
         else if ( le.MouseClickLeft( buttonSelectLarge.area() )
                   || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_LARGE ) /*&& buttonSelectLarge.isEnabled()*/ ) {
             if ( large.empty() ) {
-                fheroes2::Text header( "", fheroes2::FontType::normalWhite() );
-                fheroes2::Text body( _( "No maps exist at that size" ), fheroes2::FontType::normalWhite() );
-                fheroes2::showMessage( header, body, Dialog::OK );
+                fheroes2::showStandardTextMessage( "", _( "No maps exist at that size" ), Dialog::OK );
                 currentPressedButton->drawOnPress();
             }
             else {
@@ -599,9 +593,7 @@ const Maps::FileInfo * Dialog::SelectScenario( const MapsFileInfoList & all )
         else if ( le.MouseClickLeft( buttonSelectXLarge.area() )
                   || HotKeyPressEvent( Game::HotKeyEvent::MAIN_MENU_MAP_SIZE_EXTRA_LARGE ) /*&& buttonSelectXLarge.isEnabled()*/ ) {
             if ( xlarge.empty() ) {
-                fheroes2::Text header( "", fheroes2::FontType::normalWhite() );
-                fheroes2::Text body( _( "No maps exist at that size" ), fheroes2::FontType::normalWhite() );
-                fheroes2::showMessage( header, body, Dialog::OK );
+                fheroes2::showStandardTextMessage( "", _( "No maps exist at that size" ), Dialog::OK );
                 currentPressedButton->drawOnPress();
             }
             else {
