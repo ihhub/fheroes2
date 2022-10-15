@@ -908,7 +908,7 @@ msgstr ""
 "la guerre...traitre."
 
 msgid "Barbarian Wars"
-msgstr "Guerres Barbares"
+msgstr "Guerres barbares"
 
 msgid "First Blood"
 msgstr "Premier sang"
@@ -917,13 +917,13 @@ msgid "Necromancers"
 msgstr "Nécromanciens"
 
 msgid "Slay the Dwarves"
-msgstr "Massacre des Nains"
+msgstr "Massacre des nains"
 
 msgid "Country Lords"
-msgstr "Seigneurs du Pays"
+msgstr "Seigneurs du pays"
 
 msgid "Dragon Master"
-msgstr "Maître des Dragons"
+msgstr "Maître des dragons"
 
 msgid "Rebellion"
 msgstr "Rébellion"
@@ -932,7 +932,7 @@ msgid "Apocalypse"
 msgstr "Apocalypse"
 
 msgid "Greater Glory"
-msgstr "Grande Gloire"
+msgstr "Grande gloire"
 
 msgid ""
 "King Archibald requires you to defeat the three enemies in this region.  "
@@ -998,7 +998,7 @@ msgid ""
 msgstr ""
 "Il y a deux ennemis alliés contre vous dans cette mission. Tous deux sont "
 "bien armés et cherchent à vous expulser de leur île. Évitez-les et capturez "
-"Dragon City pour gagner."
+"la cité des dragons pour gagner."
 
 msgid ""
 "Your orders are to conquer the country lords that have sworn to serve "
@@ -3819,7 +3819,7 @@ msgstr "Jouer avec 6 joueurs humains."
 
 msgid "Dragon city has fallen!  You are now the Master of the Dragons."
 msgstr ""
-"La cité des dragons est tombée !  Vous êtes maintenant le Maître des Dragons."
+"La cité des dragons est tombée !  Vous êtes maintenant le Maître des dragons."
 
 msgid ""
 "You captured %{name}!\n"
@@ -5508,7 +5508,7 @@ msgid ""
 "The Dragon city has no Dragons willing to join you this week. Perhaps a "
 "Dragon will become available next week."
 msgstr ""
-"La cité des Dragons n'a pas de Dragons prêts à vous rallier cette semaine. "
+"La cité des dragons n'a pas de Dragons prêts à vous rallier cette semaine. "
 "Peut-être un Dragon sera-t-il disponible la semaine prochaine."
 
 msgid ""
