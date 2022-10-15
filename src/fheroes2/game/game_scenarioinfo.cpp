@@ -121,7 +121,7 @@ namespace
             const int32_t offset = width * current;
 
             fheroes2::Text text( Difficulty::String( current ), fheroes2::FontType::smallWhite() );
-            text.draw( dst.x + 31 + offset - ( (text.width() + 1) / 2 ), dst.y + height, fheroes2::Display::instance() );
+            text.draw( dst.x + 31 + offset - ( text.width() / 2 ), dst.y + height, fheroes2::Display::instance() );
         }
     }
 
@@ -142,7 +142,7 @@ namespace
         fheroes2::Display & display = fheroes2::Display::instance();
         const fheroes2::Sprite & panel = fheroes2::AGG::GetICN( ICN::NGHSBKG, 0 );
         const fheroes2::Rect rectPanel( ( display.width() - panel.width() ) / 2, ( display.height() - panel.height() ) / 2, panel.width(), panel.height() );
-        const fheroes2::Point pointDifficultyInfo( rectPanel.x + 24, rectPanel.y + 95 );
+        const fheroes2::Point pointDifficultyInfo( rectPanel.x + 24, rectPanel.y + 93 );
         const fheroes2::Point pointOpponentInfo( rectPanel.x + 24, rectPanel.y + 202 );
         const fheroes2::Point pointClassInfo( rectPanel.x + 24, rectPanel.y + 282 );
 
@@ -155,11 +155,11 @@ namespace
         std::vector<fheroes2::Rect> coordDifficulty;
         coordDifficulty.reserve( 5 );
 
-        coordDifficulty.emplace_back( rectPanel.x + 21, rectPanel.y + 93, ngextraWidth, ngextraHeight );
-        coordDifficulty.emplace_back( rectPanel.x + 98, rectPanel.y + 93, ngextraWidth, ngextraHeight );
-        coordDifficulty.emplace_back( rectPanel.x + 174, rectPanel.y + 93, ngextraWidth, ngextraHeight );
-        coordDifficulty.emplace_back( rectPanel.x + 251, rectPanel.y + 93, ngextraWidth, ngextraHeight );
-        coordDifficulty.emplace_back( rectPanel.x + 328, rectPanel.y + 93, ngextraWidth, ngextraHeight );
+        coordDifficulty.emplace_back( rectPanel.x + 21, rectPanel.y + 91, ngextraWidth, ngextraHeight );
+        coordDifficulty.emplace_back( rectPanel.x + 98, rectPanel.y + 91, ngextraWidth, ngextraHeight );
+        coordDifficulty.emplace_back( rectPanel.x + 174, rectPanel.y + 91, ngextraWidth, ngextraHeight );
+        coordDifficulty.emplace_back( rectPanel.x + 251, rectPanel.y + 91, ngextraWidth, ngextraHeight );
+        coordDifficulty.emplace_back( rectPanel.x + 328, rectPanel.y + 91, ngextraWidth, ngextraHeight );
 
         fheroes2::Button buttonSelectMaps( rectPanel.x + 309, rectPanel.y + 45, ICN::NGEXTRA, 64, 65 );
         fheroes2::Button buttonOk( rectPanel.x + 31, rectPanel.y + 380, ICN::NGEXTRA, 66, 67 );
@@ -207,7 +207,7 @@ namespace
 
         TextSprite rating;
         rating.SetFont( Font::BIG );
-        rating.SetPos( rectPanel.x + 162, rectPanel.y + 383 );
+        rating.SetPos( rectPanel.x + 166, rectPanel.y + 383 );
         RedrawRatingInfo( rating );
 
         fheroes2::MovableSprite levelCursor( ngextra );
@@ -277,7 +277,7 @@ namespace
                     playersInfo.resetSelection();
                     playersInfo.RedrawInfo( false );
                     RedrawRatingInfo( rating );
-                    //levelCursor.setPosition( coordDifficulty[Game::getDifficulty()].x, coordDifficulty[Game::getDifficulty()].y ); // From 0 to 4, see: Difficulty enum
+                    levelCursor.setPosition( coordDifficulty[Game::getDifficulty()].x, coordDifficulty[Game::getDifficulty()].y ); // From 0 to 4, see: Difficulty enum
                     buttonOk.draw();
                     buttonCancel.draw();
                 }
