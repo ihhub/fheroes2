@@ -20,6 +20,7 @@
 
 #include "h2d.h"
 #include "h2d_file.h"
+#include "logging.h"
 #include "settings.h"
 #include "system.h"
 
@@ -33,7 +34,15 @@ namespace
     {
 #if defined( MACOS_APP_BUNDLE )
         return Settings::findFile( "h2d", fileName, path );
-        const std::string internalDirectory( "h2d" );
+#elif defined( ANDROID )
+        const ListFiles h2dFileNames = Settings::FindFiles( System::ConcatePath( "files", "data" ), fileName, false );
+        if ( h2dFileNames.empty() ) {
+            
+            return false;
+        }
+
+        path = h2dFileNames.front();
+        return true;
 #else
         return Settings::findFile( System::ConcatePath( "files", "data" ), fileName, path );
 #endif
@@ -46,13 +55,16 @@ namespace fheroes2
     {
         H2DInitializer::H2DInitializer()
         {
+            const std::string fileName{ "resurrection.h2d" };
             std::string filePath;
-            if ( !getH2DFilePath( "resurrection.h2d", filePath ) ) {
-                throw std::logic_error( "No H2D data files found." );
+            if ( !getH2DFilePath( fileName, filePath ) ) {
+                VERBOSE_LOG( "'" << fileName << "' file cannot be found in the system.")
+                throw std::logic_error( fileName + " is not found." );
             }
 
             if ( !reader.open( filePath ) ) {
-                throw std::logic_error( "Cannot open H2D file." );
+                VERBOSE_LOG( "Failed to open '" << filePath << "' file." )
+                throw std::logic_error( std::string( "Cannot open file: " ) + filePath );
             }
         }
 

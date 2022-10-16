@@ -187,6 +187,19 @@ std::string System::GetDataDirectory( const std::string & prog )
     }
 
     return {};
+#elif defined( ANDROID )
+    const char * internalDir = SDL_AndroidGetInternalStoragePath();
+    if ( internalDir ) {
+        return System::ConcatePath( internalDir, prog );
+    }
+
+    if ( SDL_ANDROID_EXTERNAL_STORAGE_READ && SDL_AndroidGetExternalStorageState() ) {
+        const char * externalDir = SDL_AndroidGetExternalStoragePath();
+        if ( externalDir ) {
+            return System::ConcatePath( externalDir, prog );
+        }
+    }
+    return {};
 #else
     return GetHomeDirectory( prog );
 #endif
@@ -267,7 +280,7 @@ bool System::IsFile( const std::string & name, bool writable )
     }
 
     return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 04 ) );
-#elif defined( TARGET_PS_VITA )
+#elif defined( TARGET_PS_VITA ) || defined( ANDROID )
     // TODO: check if it is really a file.
     return writable ? 0 == access( name.c_str(), W_OK ) : 0 == access( name.c_str(), R_OK );
 #else
@@ -304,7 +317,7 @@ bool System::IsDirectory( const std::string & name, bool writable )
     }
 
     return writable ? ( 0 == _access( name.c_str(), 06 ) ) : ( 0 == _access( name.c_str(), 00 ) );
-#elif defined( TARGET_PS_VITA )
+#elif defined( TARGET_PS_VITA ) || defined( ANDROID )
     // TODO: check if it is really a directory.
     return writable ? 0 == access( name.c_str(), W_OK ) : 0 == access( name.c_str(), R_OK );
 #else
@@ -330,7 +343,10 @@ int System::Unlink( const std::string & file )
 #endif
 }
 
-#if !( defined( _WIN32 ) )
+#if !defined( _WIN32 ) && !defined( ANDROID )
+// TODO: Android filesystem is case-sensitive so it should use the code below.
+//       However, in Android an application has access only to a specific path on the system.
+
 // splitUnixPath - function for splitting strings by delimiter
 std::vector<std::string> splitUnixPath( const std::string & path, const std::string & delimiter )
 {
