@@ -23,8 +23,8 @@
 
 #include <cassert>
 
-#include "cursor.h"
 #include "agg_image.h"
+#include "cursor.h"
 #include "icn.h"
 #include "localevent.h"
 #include "screen.h"
@@ -106,7 +106,7 @@ void Cursor::Redraw( int32_t x, int32_t y )
 
 void Cursor::Move( int32_t x, int32_t y ) const
 {
-    fheroes2::cursor().setPosition( x + _offset.x, y + _offset.y);
+    fheroes2::cursor().setPosition( x + _offset.x, y + _offset.y );
 }
 
 void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
