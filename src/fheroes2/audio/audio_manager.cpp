@@ -772,7 +772,11 @@ namespace AudioManager
             // Set the volume for all channels to 0. This is required to avoid random volume spikes at the beginning of the game.
             Mixer::setVolume( -1, 0 );
 
-            Music::SetMidiSoundFonts( midiSoundFonts );
+            // Some platforms (e.g. Linux) may have their own predefined soundfonts, don't overwrite them if we don't have our own
+            if ( !midiSoundFonts.empty() ) {
+                Music::SetMidiSoundFonts( midiSoundFonts );
+            }
+
             Music::setVolume( 100 * Settings::Get().MusicVolume() / 10 );
             Music::SetFadeInMs( 900 );
         }
