@@ -34,14 +34,6 @@ namespace
     {
 #if defined( MACOS_APP_BUNDLE )
         return Settings::findFile( "h2d", fileName, path );
-#elif defined( ANDROID )
-        const ListFiles h2dFileNames = Settings::FindFiles( System::ConcatePath( "files", "data" ), fileName, false );
-        if ( h2dFileNames.empty() ) {
-            return false;
-        }
-
-        path = h2dFileNames.front();
-        return true;
 #else
         return Settings::findFile( System::ConcatePath( "files", "data" ), fileName, path );
 #endif

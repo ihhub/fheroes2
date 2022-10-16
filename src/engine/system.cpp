@@ -193,7 +193,7 @@ std::string System::GetDataDirectory( const std::string & prog )
         return System::ConcatePath( internalDir, prog );
     }
 
-    if ( SDL_ANDROID_EXTERNAL_STORAGE_READ && SDL_AndroidGetExternalStorageState() ) {
+    if ( SDL_AndroidGetExternalStorageState() & SDL_ANDROID_EXTERNAL_STORAGE_READ ) {
         const char * externalDir = SDL_AndroidGetExternalStoragePath();
         if ( externalDir ) {
             return System::ConcatePath( externalDir, prog );
