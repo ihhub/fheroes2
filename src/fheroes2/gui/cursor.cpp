@@ -106,7 +106,7 @@ void Cursor::Redraw( int32_t x, int32_t y )
 
 void Cursor::Move( int32_t x, int32_t y ) const
 {
-    fheroes2::cursor().setPosition( x + _offset.x, y + _offset.y );
+    fheroes2::cursor().setPosition( x + _offset.x, y + _offset.y);
 }
 
 void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
@@ -115,6 +115,8 @@ void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
     case Cursor::POINTER:
     case Cursor::POINTER_VIDEO:
     case Cursor::WAR_POINTER:
+        _offset = { 0, 0 };
+        break;
     case Cursor::CURSOR_HERO_FIGHT:
     case Cursor::CURSOR_HERO_FIGHT_2:
     case Cursor::CURSOR_HERO_FIGHT_3:
@@ -123,7 +125,7 @@ void Cursor::SetOffset( int name, const fheroes2::Point & defaultOffset )
     case Cursor::CURSOR_HERO_FIGHT_6:
     case Cursor::CURSOR_HERO_FIGHT_7:
     case Cursor::CURSOR_HERO_FIGHT_8:
-        _offset = { 0, 0 };
+        _offset = { -8, -16 };
         break;
 
     case Cursor::SCROLL_TOPRIGHT:
