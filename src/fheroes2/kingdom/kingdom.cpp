@@ -535,6 +535,18 @@ bool Kingdom::IsVisitTravelersTent( int col ) const
     return ( visited_tents_colors & ( 1 << col ) ) != 0;
 }
 
+void Kingdom::updateTopItemInKingdomView( int32_t value )
+{
+    if ( Modes( KINGDOM_OVERVIEW_CASTLE_SELECTION ) ) {
+        _topItemInKingdomView &= _topItemInKingdomView & 0xFFFF0000;
+        _topItemInKingdomView |= value;
+    }
+    else {
+        _topItemInKingdomView &= 0xFFFF;
+        _topItemInKingdomView |= value << 16;
+    }
+}
+
 bool Kingdom::AllowRecruitHero( bool check_payment ) const
 {
     return ( heroes.size() < GetMaxHeroes() ) && ( !check_payment || AllowPayment( PaymentConditions::RecruitHero() ) );

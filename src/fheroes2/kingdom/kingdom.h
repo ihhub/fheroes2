@@ -164,6 +164,8 @@ public:
     void SetVisitTravelersTent( int color );
     bool IsVisitTravelersTent( int ) const;
 
+    void updateTopItemInKingdomView( int32_t value );
+
     void LossPostActions();
 
     // Checks whether this tile is visible to any hero who has an artifact with the VIEW_MONSTER_INFORMATION
@@ -195,6 +197,7 @@ private:
     uint32_t visited_tents_colors;
 
     // Used to remember which item was selected in Kingdom View dialog.
+    // 16 LSB - castle index, 16 MSB - hero index
     int _topItemInKingdomView;
 };
 

@@ -716,8 +716,6 @@ void Kingdom::openOverviewDialog()
         buttonCastle.press();
         buttonHeroes.release();
 
-        listCastles.setTopVisibleItem( _topItemInKingdomView );
-
         listStats = &listCastles;
     }
     else {
@@ -725,10 +723,11 @@ void Kingdom::openOverviewDialog()
         buttonHeroes.press();
         buttonCastle.release();
 
-        listHeroes.setTopVisibleItem( _topItemInKingdomView );
-
         listStats = &listHeroes;
     }
+
+    listCastles.setTopVisibleItem( _topItemInKingdomView & 0xFFFF );
+    listHeroes.setTopVisibleItem( _topItemInKingdomView >> 16 );
 
     listStats->Redraw();
 
@@ -760,13 +759,16 @@ void Kingdom::openOverviewDialog()
         }
 
         // Exit this dialog.
-        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() )
+        if ( le.MouseClickLeft( buttonExit.area() ) || Game::HotKeyCloseWindow() ) {
+            updateTopItemInKingdomView( listStats->getTopId() );
             break;
+        }
 
         // switch view: heroes/castle
         if ( buttonHeroes.isReleased() && le.MouseClickLeft( buttonHeroes.area() ) ) {
             buttonHeroes.drawOnPress();
             buttonCastle.drawOnRelease();
+            updateTopItemInKingdomView( listStats->getTopId() );
             listStats = &listHeroes;
             ResetModes( KINGDOM_OVERVIEW_CASTLE_SELECTION );
             redraw = true;
@@ -774,6 +776,7 @@ void Kingdom::openOverviewDialog()
         else if ( buttonCastle.isReleased() && le.MouseClickLeft( buttonCastle.area() ) ) {
             buttonCastle.drawOnPress();
             buttonHeroes.drawOnRelease();
+            updateTopItemInKingdomView( listStats->getTopId() );
             listStats = &listCastles;
             SetModes( KINGDOM_OVERVIEW_CASTLE_SELECTION );
             redraw = true;
@@ -812,8 +815,6 @@ void Kingdom::openOverviewDialog()
 
         redraw = false;
     }
-
-    _topItemInKingdomView = listStats->getTopId();
 
     if ( worldMapRedrawMask != 0 ) {
         // Force redraw of all UI elements that changed, that were masked by Kingdom window
