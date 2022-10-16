@@ -190,12 +190,14 @@ std::string System::GetDataDirectory( const std::string & prog )
 #elif defined( ANDROID )
     const char * internalDir = SDL_AndroidGetInternalStoragePath();
     if ( internalDir ) {
+        VERBOSE_LOG( "Internal storage path is " << internalDir )
         return System::ConcatePath( internalDir, prog );
     }
 
     if ( SDL_AndroidGetExternalStorageState() & SDL_ANDROID_EXTERNAL_STORAGE_READ ) {
         const char * externalDir = SDL_AndroidGetExternalStoragePath();
         if ( externalDir ) {
+            VERBOSE_LOG( "External storage path is " << internalDir )
             return System::ConcatePath( externalDir, prog );
         }
     }
