@@ -1112,7 +1112,7 @@ msgid ""
 "hero for all time."
 msgstr ""
 "Vous avez enfin l'occasion et les moyens de débarrasser l'empire du mal des "
-"nécromanciens. Eradiquez-les complètement, et vous serez chanté comme un "
+"nécromanciens. Éradiquez-les complètement, et vous serez chanté comme un "
 "héros pour l'éternité."
 
 msgid "Border Towns"
@@ -1125,19 +1125,19 @@ msgid "Crazy Uncle Ivan"
 msgstr "Oncle Fou Ivan"
 
 msgid "The Wayward Son"
-msgstr "Le Fils Dévoyé"
+msgstr "Le Fils dévoyé"
 
 msgid "Ivory Gates"
-msgstr "Porte d'Ivoire"
+msgstr "Portes d'ivoire"
 
 msgid "The Elven Lands"
-msgstr "Les Terres Elfiques"
+msgstr "Les Terres elfiques"
 
 msgid "The Epic Battle"
-msgstr "Le Combat Épique"
+msgstr "Le Combat épique"
 
 msgid "The Southern War"
-msgstr "La guerre du Sud"
+msgstr "La guerre du sud"
 
 msgid ""
 "Conquer and unite all the enemy tribes. Don't lose the hero Jarkonas, the "
@@ -1180,7 +1180,7 @@ msgstr ""
 
 msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
 msgstr ""
-"Reprendre le château de Ivory Gates, qui est tombé à cause de la trahison."
+"Reprendre le château des portes d'ivoire, qui est tombé à cause de la trahison."
 
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
@@ -1200,16 +1200,16 @@ msgstr ""
 "Éliminez tout le monde et ne perdez pas le héros Jarkonas VI."
 
 msgid "Fount of Wizardry"
-msgstr "Source de la Magie"
+msgstr "Source de magie"
 
 msgid "Power's End"
-msgstr "Fin du Pouvoir"
+msgstr "Fin du pouvoir"
 
 msgid "The Eternal Scrolls"
-msgstr "Parchemins Éternels"
+msgstr "Les parchemins éternels"
 
 msgid "The Shrouded Isles"
-msgstr "Les îles du Linceul"
+msgstr "Les îles du linceul"
 
 msgid ""
 "Your mission is to vanquish the warring mages in the magical Shrouded Isles. "
@@ -1217,7 +1217,7 @@ msgid ""
 "rivals."
 msgstr ""
 "Votre mission est de vaincre les mages en guerre dans les îles magiques "
-"enveloppées. L'achèvement de cette tâche vous donnera une chance de vous "
+"du linceul. L'achèvement de cette tâche vous donnera une chance de vous "
 "battre contre vos rivaux."
 
 msgid ""
@@ -1233,7 +1233,7 @@ msgid ""
 "Find the orb before the first day of the sixth month, or your rivals will "
 "surely have gotten to the fount before you."
 msgstr ""
-"Trouvez l'Orbe de la négation, qui serait enterré dans ce pays. Il y a des "
+"Trouvez l'orbe de la négation, qui serait enterré dans ce pays. Il y a des "
 "indices inscrits sur les obélisques en pierre qui vous aideront à vous "
 "conduire à votre prix. Trouvez l'orbe avant le premier jour du sixième mois, "
 "ou vos rivaux seront sûrement arrivés à la source avant vous."
@@ -1242,17 +1242,17 @@ msgid ""
 "You must take control of the castle of Magic, where the fount of wizardry "
 "lies. Do this and your victory will be supreme."
 msgstr ""
-"Vous devez prendre le contrôle du château de la Magie, où se trouve la "
-"source de la magie. Faites-le et votre victoire sera suprême."
+"Vous devez prendre le contrôle du château de la magie, où se trouve la "
+"source de magie. Faites-le et votre victoire sera suprême."
 
 msgid "Blood is Thicker"
-msgstr "Sang Épais"
+msgstr "Sang épais"
 
 msgid "King and Country"
-msgstr "Roi et Pays"
+msgstr "Roi et pays"
 
 msgid "Pirate Isles"
-msgstr "Iles Pirates"
+msgstr "Iles pirates"
 
 msgid "Stranded"
 msgstr "Échoué"
@@ -1269,7 +1269,7 @@ msgid ""
 "Find and defeat Martine, the pirate leader, who resides in Pirates Cove. Do "
 "not lose Gallavant or your quest will be over."
 msgstr ""
-"Trouvez et battez Martine, le chef pirate, qui réside à Pirates Cove. Ne "
+"Trouvez et battez Martine, la chef des pirates, qui réside à Pirates Cove. Ne "
 "perdez pas Gallavant ou votre quête sera terminée."
 
 msgid ""
@@ -1334,7 +1334,7 @@ msgstr ""
 
 msgid "The ogres recognize you as the Dwarfbane and lumber over to join you."
 msgstr ""
-"Les ogres vous reconnaissent comme le Fléau des Nains et vous rallient."
+"Les ogres vous reconnaissent comme le fléau des nains et vous rallient."
 
 msgid ""
 "The dragons, snarling and growling, agree to join forces with you, their "
@@ -1364,7 +1364,7 @@ msgstr ""
 msgid ""
 "The ogres give you a grunt of recognition, \"Archibald's allies may pass.\""
 msgstr ""
-"Les ogres vous donnent un grognement de reconnaissance, \"Les alliés "
+"Les ogres poussent un grognement de reconnaissance en votre faveur, \"Les alliés "
 "d'Archibald peuvent passer\"."
 
 msgid ""
@@ -1386,7 +1386,7 @@ msgstr ""
 "que la victoire soit vôtre.\""
 
 msgid "\"The Dwarfbane!!!!, run for your lives.\""
-msgstr "\"Le Fléau des Nains !!!!, sauve qui peut.\""
+msgstr "\"Le fléau des nains !!!!, sauve qui peut.\""
 
 msgid "campaignBonus|Ballista"
 msgstr "Baliste"
@@ -1455,61 +1455,61 @@ msgid "campaignBonus|White Pearl"
 msgstr "Perle blanche"
 
 msgid "campaignBonus|Basic Archery"
-msgstr "Principes d'Archerie"
+msgstr "Principes d'archerie"
 
 msgid "campaignBonus|Advanced Archery"
 msgstr "Archerie avancée"
 
 msgid "campaignBonus|Expert Archery"
-msgstr "Experte en Archerie"
+msgstr "Experte en archerie"
 
 msgid "campaignBonus|Basic Ballistics"
-msgstr "Principes de Balistique"
+msgstr "Principes de balistique"
 
 msgid "campaignBonus|Advanced Ballistics"
 msgstr "Balistique avancée"
 
 msgid "campaignBonus|Expert Ballistics"
-msgstr "Expert en Balistique"
+msgstr "Expert en balistique"
 
 msgid "campaignBonus|Basic Diplomacy"
-msgstr "Principes de Diplomatie"
+msgstr "Principes de diplomatie"
 
 msgid "campaignBonus|Advanced Diplomacy"
 msgstr "Diplomatie avancée"
 
 msgid "campaignBonus|Expert Diplomacy"
-msgstr "Expert en Diplomatie"
+msgstr "Expert en diplomatie"
 
 msgid "campaignBonus|Basic Eagle Eye"
-msgstr "Principes d'Oeil d'aigle"
+msgstr "Principes d'oeil d'aigle"
 
 msgid "campaignBonus|Advanced Eagle Eye"
 msgstr "Oeil d'aigle avancé"
 
 msgid "campaignBonus|Expert Eagle Eye"
-msgstr "Expert en Oeil d'aigle"
+msgstr "Expert en oeil d'aigle"
 
 msgid "campaignBonus|Basic Estates"
-msgstr "Principes de Finances"
+msgstr "Principes de finances"
 
 msgid "campaignBonus|Advanced Estates"
 msgstr "Finances avancées"
 
 msgid "campaignBonus|Expert Estates"
-msgstr "Expert en Finances"
+msgstr "Expert en finances"
 
 msgid "campaignBonus|Basic Leadership"
-msgstr "Principes de Charisme"
+msgstr "Principes de charisme"
 
 msgid "campaignBonus|Advanced Leadership"
 msgstr "Charisme avancée"
 
 msgid "campaignBonus|Expert Leadership"
-msgstr "Expert en Charisme"
+msgstr "Expert en charisme"
 
 msgid "campaignBonus|Basic Logistics"
-msgstr "Principes de Logistique"
+msgstr "Principes de logistique"
 
 msgid "campaignBonus|Advanced Logistics"
 msgstr "Logistique avancée"
