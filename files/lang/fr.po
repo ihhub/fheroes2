@@ -1111,7 +1111,7 @@ msgid ""
 "the necromancer's evil. Eradicate them completely, and you will be sung as a "
 "hero for all time."
 msgstr ""
-"Vous avez enfin l'occasion et les moyens de débarrasser l'Empire du mal des "
+"Vous avez enfin l'occasion et les moyens de débarrasser l'empire du mal des "
 "nécromanciens. Eradiquez-les complètement, et vous serez chanté comme un "
 "héros pour l'éternité."
 
