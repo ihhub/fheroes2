@@ -1180,7 +1180,7 @@ msgstr ""
 
 msgid "Retake the castle of Ivory Gates, which has fallen due to treachery."
 msgstr ""
-"Reprendre le château des portes d'ivoire, qui est tombé à cause d'une trahison."
+"Reprendre le château des portes d'ivoire, qui est tombé à la suite d'une trahison."
 
 msgid ""
 "Gain the favor of the elves. They will not allow trees to be chopped down, "
@@ -8756,7 +8756,7 @@ msgstr ""
 "que vous ne pouvez pas espérer régler. Le collecteur de taxes vous prend "
 "en pitié et consent à vous prélever de seulement 250 pièces d'or "
 "par jour jusqu'au restant de votre vie. Vérifiez ici si vous voulez "
-"qu'un dollar aille au financement de la campagne pour l'élection présidentielle."
+"qu'un euro aille au financement de la campagne pour l'élection présidentielle."
 
 msgid "Hideous Mask"
 msgstr "Le masque hideux"
