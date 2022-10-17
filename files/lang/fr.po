@@ -1050,13 +1050,13 @@ msgid "Corruption's Heart"
 msgstr "Coeur de la corruption"
 
 msgid "The Giant's Pass"
-msgstr "Col des Géants"
+msgstr "Col des géants"
 
 msgid ""
-"Subdue the unruly local lords in order to provide the Empire with facilities "
+"Subdue the unruly local lords in order to provide the empire with facilities "
 "to operate in this region."
 msgstr ""
-"Soumettez les seigneurs locaux indisciplinés afin de fournir à l'Empire des "
+"Soumettez les seigneurs locaux indisciplinés afin de fournir à l'empire des "
 "installations pour opérer dans cette région."
 
 msgid ""
@@ -8119,7 +8119,7 @@ msgstr ""
 "caché."
 
 msgid "Endless Sack of Gold"
-msgstr "La besace d'or inépuisable"
+msgstr "La besace d'or sans fin"
 
 msgid "The %{name} provides you with %{count} gold per day."
 msgstr "%{name} vous fournit %{count} pièces d'or par jour."
@@ -8147,7 +8147,7 @@ msgstr ""
 "rempli d'or."
 
 msgid "Endless Purse of Gold"
-msgstr "La bourse d'or inépuisable"
+msgstr "La bourse d'or sans fin"
 
 msgid ""
 "In your travels, you find a leather purse filled with gold that once "
@@ -8526,7 +8526,7 @@ msgid ""
 "magic pendant to let him go."
 msgstr ""
 "Guidé par des appels à l'aide, vous trouvez des fées de rivière "
-"qui s'amusent à plonger un viel homme dans l'eau. Épris de revanche, "
+"qui s'amusent à plonger un vieil homme dans l'eau. Épris de revanche, "
 "vous sauvez l'homme et placez une fée sur la terre ferme pendant quelque temps. "
 "La fée, se sentant mal hors de l'eau, vous donne un pendentif magique "
 "afin de la laisser partir."
@@ -8777,7 +8777,7 @@ msgstr ""
 "et il reste collé à votre visage."
 
 msgid "Endless Pouch of Sulfur"
-msgstr "Le sac de soufre inépuisable"
+msgstr "Le sac de soufre sans fin"
 
 msgid "The %{name} provides %{count} unit of sulfur per day."
 msgstr "%{name} fournit %{count} morceau de soufre par jour."
@@ -8793,7 +8793,7 @@ msgstr ""
 "en tant qu'effort de guerre."
 
 msgid "Endless Vial of Mercury"
-msgstr "La fiole de mercure inépuisable"
+msgstr "La fiole de mercure sans fin"
 
 msgid "The %{name} provides %{count} unit of mercury per day."
 msgstr "%{name} fournit %{count} fiole de mercure par jour."
@@ -8809,7 +8809,7 @@ msgstr ""
 "d'un bouchon et la fourrez dans votre poche."
 
 msgid "Endless Pouch of Gems"
-msgstr "La bourse de rubis inépuisable"
+msgstr "La bourse de rubis sans fin"
 
 msgid "The %{name} provides %{count} unit of gems per day."
 msgstr "%{name} fournit %{count} rubis par jour."
@@ -8827,7 +8827,7 @@ msgstr ""
 "en retour de son or. Vous acceptez."
 
 msgid "Endless Cord of Wood"
-msgstr "Le tas de bois inépuisable"
+msgstr "Le tas de bois sans fin"
 
 msgid "The %{name} provides %{count} unit of wood per day."
 msgstr "%{name} fournit %{count} bûche de bois par jour."
@@ -8845,7 +8845,7 @@ msgstr ""
 "est enchanté, vous l'emportez donc avec vous."
 
 msgid "Endless Cart of Ore"
-msgstr "Le chariot de fer inépuisable"
+msgstr "Le chariot de fer sans fin"
 
 msgid "The %{name} provides %{count} unit of ore per day."
 msgstr "%{name} fournit %{count} morceau de fer par jour."
@@ -8861,7 +8861,7 @@ msgstr ""
 "magique qui ne se vide jamais, rempli de fer."
 
 msgid "Endless Pouch of Crystal"
-msgstr "La bourse de cristal inépuisable"
+msgstr "La bourse de cristal sans fin"
 
 msgid "The %{name} provides %{count} unit of crystal per day."
 msgstr "%{name} fournit %{count} cristal par jour."
