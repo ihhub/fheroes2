@@ -273,7 +273,7 @@ msgid ""
 "Toggle the hex grid on or off. The hex grid always underlies movement, even "
 "if turned off. This switch only determines if the grid is visible."
 msgstr ""
-"Отобразить/скрыть сетку поля боя. Все перемещения на полу боя происходят  "
+"Отобразить/скрыть сетку поля боя. Все перемещения на поле боя происходят  "
 "по гексагональной сетке. Эта опция влияет лишь на внешний вид поля боя."
 
 msgid ""
@@ -6640,7 +6640,7 @@ msgstr "Ёжика"
 msgid "week|Condor"
 msgstr "Кондора"
 
-"week|Ant"
+msgid "week|Ant"
 msgstr "Муравья"
 
 msgid "week|Grasshopper"
