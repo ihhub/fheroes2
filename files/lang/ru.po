@@ -6595,10 +6595,52 @@ msgstr "Молниеносная"
 msgid "speed|Instant"
 msgstr "Мгновенная"
 
-msgid "week|PLAGUE"
-msgstr "ЧУМЫ"
+msgid "week|Squirrel"
+msgstr "Белки"
 
-msgid "week|Ant"
+msgid "week|Rabbit"
+msgstr "Кролика"
+
+msgid "week|Gopher"
+msgstr "Суслика"
+
+msgid "week|Badger"
+msgstr "Барсука"
+
+msgid "week|Rat"
+msgstr "Крысы"
+
+msgid "week|Eagle"
+msgstr "Орла"
+
+msgid "week|Weasel"
+msgstr "Хорька"
+
+msgid "week|Raven"
+msgstr "Ворона"
+
+msgid "week|Mongoose"
+msgstr "Мангуста"
+
+msgid "week|Dog"
+msgstr "Собаки"
+
+msgid "week|Aardvark"
+msgstr "Муравьеда"
+
+msgid "week|Lizard"
+msgstr "Ящера"
+
+msgid "week|Tortoise"
+msgstr "Черепахи"
+
+msgid "week|Hedgehog"
+msgstr "Ёжика"
+
+msgid "week|Condor"
+msgstr "Кондора"
+
+"week|Ant"
 msgstr "Муравья"
 
 msgid "week|Grasshopper"
@@ -6628,44 +6670,11 @@ msgstr "Шершня"
 msgid "week|Beetle"
 msgstr "Жука"
 
-msgid "week|Squirrel"
-msgstr "Белки"
+msgid "week|PLAGUE"
+msgstr "ЧУМЫ"
 
-msgid "week|Rabbit"
-msgstr "Кролика"
-
-msgid "week|Gopher"
-msgstr "Суслика"
-
-msgid "week|Badger"
-msgstr "Барсука"
-
-msgid "week|Eagle"
-msgstr "Орла"
-
-msgid "week|Weasel"
-msgstr "Хорька"
-
-msgid "week|Raven"
-msgstr "Ворона"
-
-msgid "week|Mongoose"
-msgstr "Мангуста"
-
-msgid "week|Aardvark"
-msgstr "Муравьеда"
-
-msgid "week|Lizard"
-msgstr "Ящера"
-
-msgid "week|Tortoise"
-msgstr "Черепахи"
-
-msgid "week|Hedgehog"
-msgstr "Ёжика"
-
-msgid "week|Condor"
-msgstr "Кондора"
+msgid "week|Unnamed"
+msgstr "Без имени"
 
 msgid "Desert"
 msgstr "Пустыня"
